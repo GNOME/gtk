@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-06-19 00:42+0200\n"
+"POT-Creation-Date: 2002-09-10 02:57+0300\n"
 "PO-Revision-Date: 2002-06-19 00:40+0200\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -15,22 +15,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 0.9.5\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:586
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:662
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Неуспех при отваряне на файл '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:596
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:672
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Графичен файл '%s' не съдържа данни"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:183
-#, c-format
-msgid "Don't know how to load the animation in file '%s'"
-msgstr "Не знам как да заредя анимацията във файл '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:641
+#: gdk-pixbuf/gdk-pixbuf-animation.c:195 gdk-pixbuf/gdk-pixbuf-io.c:706
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -38,7 +33,7 @@ msgstr ""
 "Неуспех при зареждане на картинка '%s': неизвестна причина, вероятно "
 "повреден файл"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:233
+#: gdk-pixbuf/gdk-pixbuf-animation.c:223
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
@@ -47,12 +42,12 @@ msgstr ""
 "Неуспех при зареждане на анимация '%s': неизвестна причина, вероятно "
 "повреден анимационен файл"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:359
+#: gdk-pixbuf/gdk-pixbuf-io.c:379
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Не мога да заредя модул за зареждане на картинки: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:378
+#: gdk-pixbuf/gdk-pixbuf-io.c:398
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -61,42 +56,37 @@ msgstr ""
 "Модул за зареждане на картинки %s не експортира подходящ интерфейс: вероятно "
 "е от различна версия на GTK?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:495 gdk-pixbuf/gdk-pixbuf-io.c:521
+#: gdk-pixbuf/gdk-pixbuf-io.c:522 gdk-pixbuf/gdk-pixbuf-io.c:548
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Тип Картинка '%s' не се поддържа"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:543
+#: gdk-pixbuf/gdk-pixbuf-io.c:570
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Не мога да разпозная формата на графичният файл '%s'"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:549
+#: gdk-pixbuf/gdk-pixbuf-io.c:576
 msgid "Unrecognized image file format"
 msgstr "Неразпознаваем графичен формат"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:619
-#, c-format
-msgid "Don't know how to load the image in file '%s'"
-msgstr "Не знам как да заредя картинката във файл '%s'"
-
-#: gdk-pixbuf/gdk-pixbuf-io.c:652
+#: gdk-pixbuf/gdk-pixbuf-io.c:717
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Неуспех при зареждане на картинка '%s': %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:757
+#: gdk-pixbuf/gdk-pixbuf-io.c:822
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Вграденото в 'gdk-pixbuf' не поддържа запазването на графичен формат: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:862
+#: gdk-pixbuf/gdk-pixbuf-io.c:927
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Неуспех при отваряне на'%s' за запис: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:883
+#: gdk-pixbuf/gdk-pixbuf-io.c:948
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -105,12 +95,12 @@ msgstr ""
 "Неуспех при затваряне на '%s' по време на запис ка картинка, всичките дани "
 "могат да не бъдат запазени: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:250
+#: gdk-pixbuf/gdk-pixbuf-loader.c:325
 #, c-format
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr "Нарастващо зареждане на картинка тип '%s' не се поддържа"
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:273 gdk-pixbuf/gdk-pixbuf-loader.c:374
+#: gdk-pixbuf/gdk-pixbuf-loader.c:349 gdk-pixbuf/gdk-pixbuf-loader.c:450
 #, c-format
 msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
@@ -136,15 +126,15 @@ msgstr "Повредени данни за 'pixel' картинка"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "неуспех при заделяне на буфер за картинка от %u байта"
 
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:222 gdk-pixbuf/io-bmp.c:338
 msgid "Not enough memory to load bitmap image"
 msgstr "Няма достатъчно памет за да зареди 'bitmap' картинка"
 
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:262
 msgid "BMP image has unsupported header size"
 msgstr "BMP картинка има неподдържан размер на заглавната част"
 
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:287 gdk-pixbuf/io-bmp.c:310 gdk-pixbuf/io-bmp.c:370
 msgid "BMP image has bogus header data"
 msgstr "BMP картинка има 'фалшива' заглавна част"
 
@@ -153,7 +143,7 @@ msgstr "BMP картинка има 'фалшива' заглавна част"
 msgid "Failure reading GIF: %s"
 msgstr "Неуспех при четене на GIF: %s "
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1543
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF файла има грешни данни (може би е орязан някак си?)"
 
@@ -174,8 +164,8 @@ msgstr "Срещнат е лош код"
 msgid "Circular table entry in GIF file"
 msgstr "Кръгов табличен запис в GIF файла"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1416
+#: gdk-pixbuf/io-gif.c:1531
 msgid "Not enough memory to load GIF file"
 msgstr "Няма достатъчно памет да заредя GIF файла"
 
@@ -212,54 +202,45 @@ msgid ""
 "colormap."
 msgstr "GIF картинката няма глобална цветна карта, както и фрейма вътре в нея."
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1438
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF картинката е орязана или непълна."
 
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Неуспех за четене на ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "ICO има липсващи данни (може би е орязан по някакъв начин?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:276 gdk-pixbuf/io-ico.c:337
+#: gdk-pixbuf/io-ico.c:400 gdk-pixbuf/io-ico.c:417
 msgid "Not enough memory to load icon"
 msgstr "Няма достатъчно памет за зареждане на икона"
 
-#: gdk-pixbuf/io-ico.c:303
+#: gdk-pixbuf/io-ico.c:261
 msgid "Invalid header in icon"
 msgstr "Грешна заглавна част в икона"
 
-#: gdk-pixbuf/io-ico.c:340
+#: gdk-pixbuf/io-ico.c:298
 msgid "Icon has zero width"
 msgstr "Иконата има нулева ширина"
 
-#: gdk-pixbuf/io-ico.c:350
+#: gdk-pixbuf/io-ico.c:308
 msgid "Icon has zero height"
 msgstr "Иконата има нулева височина"
 
-#: gdk-pixbuf/io-ico.c:395
+#: gdk-pixbuf/io-ico.c:352
 msgid "Compressed icons are not supported"
 msgstr "Компресирани икони не се поддържат"
 
-#: gdk-pixbuf/io-ico.c:428
+#: gdk-pixbuf/io-ico.c:385
 msgid "Unsupported icon type"
 msgstr "Неподдържан тип икона"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:464
 msgid "Not enough memory to load ICO file"
 msgstr "Няма достатъчно памет за да заредя ICO файл"
 
-#: gdk-pixbuf/io-jpeg.c:111
+#: gdk-pixbuf/io-jpeg.c:114
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Грешка при интерпретация на JPEG файл с картинка (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:292
+#: gdk-pixbuf/io-jpeg.c:349
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -267,11 +248,16 @@ msgstr ""
 "Незадоволителна памет за да заредя картинка, опитайте се да излезете от "
 "някои приложения за да освободите памет."
 
-#: gdk-pixbuf/io-jpeg.c:402 gdk-pixbuf/io-jpeg.c:585 gdk-pixbuf/io-jpeg.c:752
+#: gdk-pixbuf/io-jpeg.c:382 gdk-pixbuf/io-jpeg.c:743
+#, fuzzy, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Неподдържан тип икона"
+
+#: gdk-pixbuf/io-jpeg.c:480 gdk-pixbuf/io-jpeg.c:672 gdk-pixbuf/io-jpeg.c:857
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не мога да разпределя памет за зареждане на JPEG файл"
 
-#: gdk-pixbuf/io-jpeg.c:706
+#: gdk-pixbuf/io-jpeg.c:811
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -280,7 +266,7 @@ msgstr ""
 "JPEG качеството трябва да бъде между 0 и 100; стойност '%s' не може да бъде "
 "обработена."
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:826
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -316,7 +302,7 @@ msgstr "Фатална грешка в PNG файл с картинка: %s"
 msgid "Insufficient memory to load PNG file"
 msgstr "Недостатъчна памет за зареждане на PNG файл"
 
-#: gdk-pixbuf/io-png.c:604
+#: gdk-pixbuf/io-png.c:605
 #, c-format
 msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
@@ -325,26 +311,26 @@ msgstr ""
 "Недостатъчна памет за запазване на  %ld от %ld картинка; опитайте се да "
 "излезете от някое приложение за да освободите памет."
 
-#: gdk-pixbuf/io-png.c:655
+#: gdk-pixbuf/io-png.c:656
 msgid "Fatal error reading PNG image file"
 msgstr "Фатална грешка при четене на PNG графичен файл"
 
-#: gdk-pixbuf/io-png.c:704
+#: gdk-pixbuf/io-png.c:705
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
 msgstr "Фатална грешка при четене на PNG графичен файл: %s"
 
-#: gdk-pixbuf/io-png.c:770
+#: gdk-pixbuf/io-png.c:771
 msgid ""
 "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Ключовете за PNG текст парчетата трябва да имат поне от 1 до 79 символа."
 
-#: gdk-pixbuf/io-png.c:778
+#: gdk-pixbuf/io-png.c:779
 msgid "Keys for PNG text chunks must be ASCII characters."
 msgstr "Ключовете за PNG текст парчетата трябва да бъдат ASCII символи."
 
-#: gdk-pixbuf/io-png.c:811
+#: gdk-pixbuf/io-png.c:812
 #, c-format
 msgid ""
 "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
@@ -352,83 +338,88 @@ msgstr ""
 "Стойноста на PNG текст парчето %s не може да бъде конвертирана до ISO-8859-1 "
 "кодировка"
 
-#: gdk-pixbuf/io-pnm.c:247
+#: gdk-pixbuf/io-pnm.c:248
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr "PNM зареждането очакваше да намери цяло, но не"
 
-#: gdk-pixbuf/io-pnm.c:279
+#: gdk-pixbuf/io-pnm.c:280
 msgid "PNM file has an incorrect initial byte"
 msgstr "PNM файла има некоректен начален байт"
 
-#: gdk-pixbuf/io-pnm.c:309
+#: gdk-pixbuf/io-pnm.c:310
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "PNM файла не е от познатите PNM под формати"
 
-#: gdk-pixbuf/io-pnm.c:334
+#: gdk-pixbuf/io-pnm.c:335
 msgid "PNM file has an image width of 0"
 msgstr "PNM файла има картинка с ширина 0"
 
-#: gdk-pixbuf/io-pnm.c:355
+#: gdk-pixbuf/io-pnm.c:356
 msgid "PNM file has an image height of 0"
 msgstr "PNM файла има картинка с височина 0"
 
-#: gdk-pixbuf/io-pnm.c:378
+#: gdk-pixbuf/io-pnm.c:379
 msgid "Maximum color value in PNM file is 0"
 msgstr "Максимална стойност на цвят в PNM файла е 0"
 
-#: gdk-pixbuf/io-pnm.c:386
+#: gdk-pixbuf/io-pnm.c:387
 msgid "Maximum color value in PNM file is too large"
 msgstr "Максимална стойност на цвят в PNM файла е твърде голяма"
 
-#: gdk-pixbuf/io-pnm.c:394
+#: gdk-pixbuf/io-pnm.c:395
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr "Не мога да поддържам PNM файлове със стойност за цвят по-голяма от 255"
 
-#: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
+#: gdk-pixbuf/io-pnm.c:434 gdk-pixbuf/io-pnm.c:462 gdk-pixbuf/io-pnm.c:494
 msgid "Raw PNM image type is invalid"
 msgstr "'Суров' PNM тип картинка е невалиден"
 
-#: gdk-pixbuf/io-pnm.c:553 gdk-pixbuf/io-pnm.c:595
+#: gdk-pixbuf/io-pnm.c:554 gdk-pixbuf/io-pnm.c:596
 msgid "PNM image format is invalid"
 msgstr "Формата на PNM картинката е грешен"
 
-#: gdk-pixbuf/io-pnm.c:654
+#: gdk-pixbuf/io-pnm.c:655
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Програмата за зареждане на PNM картинка не подържа този PNM подформат"
 
-#: gdk-pixbuf/io-pnm.c:709
+#: gdk-pixbuf/io-pnm.c:710
 msgid "Premature end-of-file encountered"
 msgstr "Намерен е ненавременно 'край на файл'"
 
-#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
+#: gdk-pixbuf/io-pnm.c:742 gdk-pixbuf/io-pnm.c:962
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "'Сурови' PNM формати изискват точно едно празно преди самите данни"
 
-#: gdk-pixbuf/io-pnm.c:768
+#: gdk-pixbuf/io-pnm.c:769
 msgid "Can't allocate memory for loading PNM image"
 msgstr "Не мога да разпределя памет за зареждане на PNM картинка"
 
-#: gdk-pixbuf/io-pnm.c:817
+#: gdk-pixbuf/io-pnm.c:819
 msgid "Insufficient memory to load PNM context struct"
 msgstr "Недостатъчно памет за да заредя структура на контекста за PNM "
 
-#: gdk-pixbuf/io-pnm.c:867
+#: gdk-pixbuf/io-pnm.c:869
 msgid "Unexpected end of PNM image data"
 msgstr "Неочакван край на данни за PNM картинка"
 
-#: gdk-pixbuf/io-pnm.c:989
+#: gdk-pixbuf/io-pnm.c:991
 msgid "Insufficient memory to load PNM file"
 msgstr "Недостатъчно памет за зареждане на PNM файл"
 
-#: gdk-pixbuf/io-ras.c:158
+#: gdk-pixbuf/io-ras.c:124
 msgid "RAS image has bogus header data"
 msgstr "RAS картинка има 'фралшиви' заглавни данни"
 
-#: gdk-pixbuf/io-ras.c:180
+#: gdk-pixbuf/io-ras.c:146
 msgid "RAS image has unknown type"
 msgstr "RAS картинка е неизвестен тип"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:154
+#, fuzzy
+msgid "unsupported RAS image variation"
+msgstr "Неподържан тип TGA картинка"
+
+#: gdk-pixbuf/io-ras.c:169 gdk-pixbuf/io-ras.c:189
 msgid "Not enough memory to load RAS image"
 msgstr "Няма достатъчно памет за да зареди RAS картинка"
 
@@ -444,151 +435,156 @@ msgstr "Не мога да разпределя паметта за данни �
 msgid "Can't realloc IOBuffer data"
 msgstr "Не мога да преразпределя IOBuffer данни"
 
-#: gdk-pixbuf/io-tga.c:218
+#: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Не мога да разпределя временни IOBuffer данни"
 
-#: gdk-pixbuf/io-tga.c:282
+#: gdk-pixbuf/io-tga.c:283
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr "Грешка fread() -- вероятно е намерен преждевременен 'край на файл'"
 
-#: gdk-pixbuf/io-tga.c:292
+#: gdk-pixbuf/io-tga.c:293
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr "Грешка fseek() -- вероятно е намерен преждевременен 'край на файл'"
 
-#: gdk-pixbuf/io-tga.c:325
+#: gdk-pixbuf/io-tga.c:326
 msgid "Can't allocate new pixbuf"
 msgstr "Невъзможно е да разпределя нов 'pixbuf'"
 
-#: gdk-pixbuf/io-tga.c:638
+#: gdk-pixbuf/io-tga.c:639
 msgid "Can't allocate colormap structure"
 msgstr "Не мога да рзапределя структура на цвтната карта"
 
-#: gdk-pixbuf/io-tga.c:645
+#: gdk-pixbuf/io-tga.c:646
 msgid "Can't allocate colormap entries"
 msgstr "Не мога да рзапределя елемени на цвтната карта"
 
-#: gdk-pixbuf/io-tga.c:667
+#: gdk-pixbuf/io-tga.c:668
 msgid "Unexpected bitdepth for colormap entries"
 msgstr "Неочаквана дълбочина на цвят за елемент от картата на цветовете"
 
-#: gdk-pixbuf/io-tga.c:685
+#: gdk-pixbuf/io-tga.c:686
 msgid "Can't allocate TGA header memory"
 msgstr "Не мога да разпределя памет за заглавната част на формата TGA "
 
-#: gdk-pixbuf/io-tga.c:718
+#: gdk-pixbuf/io-tga.c:719
 msgid "TGA image has invalid dimensions"
 msgstr "TGA картинката има грешни размери"
 
-#: gdk-pixbuf/io-tga.c:724
+#: gdk-pixbuf/io-tga.c:725
 msgid "TGA image comment length is too long"
 msgstr "Коментара на TGA картинката е твърде дълъг"
 
-#: gdk-pixbuf/io-tga.c:733 gdk-pixbuf/io-tga.c:742 gdk-pixbuf/io-tga.c:752
-#: gdk-pixbuf/io-tga.c:762 gdk-pixbuf/io-tga.c:769
+#: gdk-pixbuf/io-tga.c:734 gdk-pixbuf/io-tga.c:743 gdk-pixbuf/io-tga.c:753
+#: gdk-pixbuf/io-tga.c:763 gdk-pixbuf/io-tga.c:770
 msgid "TGA image type not supported"
 msgstr "Тип на картинка TGA не се поддържа"
 
-#: gdk-pixbuf/io-tga.c:814
+#: gdk-pixbuf/io-tga.c:816
 msgid "Can't allocate memory for TGA context struct"
 msgstr "Не мога да разпределя памет за контекстна структура на TGA "
 
-#: gdk-pixbuf/io-tga.c:878
+#: gdk-pixbuf/io-tga.c:880
 msgid "Excess data in file"
 msgstr "Излишък от данни във файл"
 
-#: gdk-pixbuf/io-tga.c:924
+#: gdk-pixbuf/io-tga.c:926
 msgid "Can't allocate memory for TGA header"
 msgstr "Не мога да разпределя памет за заглавна част на TGA "
 
-#: gdk-pixbuf/io-tga.c:934
+#: gdk-pixbuf/io-tga.c:936
 msgid "Too big value in the infolen field of TGA header."
 msgstr "Твърде голяма стойност в полето 'infolen ' за заглавната част на TGA."
 
-#: gdk-pixbuf/io-tga.c:958
+#: gdk-pixbuf/io-tga.c:960
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr "Не мога да разпределя памет за временен буфер cmap на TGA "
 
-#: gdk-pixbuf/io-tga.c:970
+#: gdk-pixbuf/io-tga.c:972
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr ""
 "Не мога да разпределя памет за структурата на цветната карта за TGA формат"
 
-#: gdk-pixbuf/io-tga.c:979
+#: gdk-pixbuf/io-tga.c:981
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Не мога да рзпределя памет за елементи на цветната карта за TGA формат"
 
-#: gdk-pixbuf/io-tga.c:989
+#: gdk-pixbuf/io-tga.c:991
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Неочаквана дълбочина на цвят за елемент на цветната карта на TGA "
 
-#: gdk-pixbuf/io-tga.c:1030
+#: gdk-pixbuf/io-tga.c:1032
 msgid "Pseudo-Color image without colormap"
 msgstr "Псевдо-Цветна картинка без цветна карта"
 
-#: gdk-pixbuf/io-tga.c:1037
+#: gdk-pixbuf/io-tga.c:1039
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 "Не мога да отида на отместването в картинката -- вероятно е намерен 'край на "
 "файл'"
 
-#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
+#: gdk-pixbuf/io-tga.c:1053 gdk-pixbuf/io-tga.c:1155 gdk-pixbuf/io-tga.c:1225
 msgid "Can't allocate pixbuf"
 msgstr "Не мога да разпределя 'pixbuf'"
 
-#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
+#: gdk-pixbuf/io-tga.c:1295 gdk-pixbuf/io-tga.c:1324
 msgid "Unsupported TGA image type"
 msgstr "Неподържан тип TGA картинка"
 
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
 msgstr "Неможах да получа ширина на картинка (лош TIFF файл)"
 
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
 msgstr "Неможах да получа височина на картинка (лош TIFF файл)"
 
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
 msgstr "Височината или ширината на TIFF картинката е нулева"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
 msgstr "Размерите на TIFF картинката са твърде големи"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:553
 msgid "Insufficient memory to open TIFF file"
 msgstr "Недостатъчно памет за отваряне на TIFF файл"
 
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Неуспех при зареждане на RGB данно от TIFF файл"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:266
+#, fuzzy
+msgid "Unsupported TIFF variant"
+msgstr "Неподържан тип TGA картинка"
+
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
 msgstr "Неуспех при отваряне на TIFF картинка"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose операцията пропадна"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:483 gdk-pixbuf/io-tiff.c:496
 msgid "Failed to load TIFF image"
 msgstr "Неуспех при зареждане на TIFF картинка"
 
-#: gdk-pixbuf/io-wbmp.c:278
+#: gdk-pixbuf/io-wbmp.c:245
 msgid "Image has zero width"
 msgstr "Картинката има нулева ширина"
 
-#: gdk-pixbuf/io-wbmp.c:296
+#: gdk-pixbuf/io-wbmp.c:263
 msgid "Image has zero height"
 msgstr "Картинката има нулева височина"
 
-#: gdk-pixbuf/io-wbmp.c:307
+#: gdk-pixbuf/io-wbmp.c:274
 msgid "Not enough memory to load image"
 msgstr "Няма достатъчно памет за зареждане на картинката"
 
-#: gdk-pixbuf/io-wbmp.c:366
+#: gdk-pixbuf/io-wbmp.c:333
 msgid "Couldn't save the rest"
 msgstr "Не можах да запазя останалото"
 
@@ -600,7 +596,7 @@ msgstr "Грешен XBM файл"
 msgid "Insufficient memory to load XBM image file"
 msgstr "Недостатъчно памет за зареждане на XBM графичен файл"
 
-#: gdk-pixbuf/io-xbm.c:429
+#: gdk-pixbuf/io-xbm.c:438
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Неуспех при запис на временен файл при зареждане на XBM картинка"
 
@@ -632,9 +628,18 @@ msgstr "Не мога да чета цветната карта за XPM "
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Не мога да разпределя памет за зареждане на XPM картинка"
 
-#: gdk-pixbuf/io-xpm.c:1498
+#: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Неуспех при запис на временен файл когато зареждам XPM картинка"
+
+#: gdk/gdkdisplaymanager.c:117
+#, fuzzy
+msgid "Default Display"
+msgstr "Интервал по подразбиране"
+
+#: gdk/gdkdisplaymanager.c:118
+msgid "The default display for GDK"
+msgstr ""
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -826,9 +831,10 @@ msgid "Secondary"
 msgstr "Вторичен"
 
 #: gtk/gtkbbox.c:161
+#, fuzzy
 msgid ""
 "If TRUE, the child appears in a secondary group of children, suitable for, e."
-"g., help buttons."
+"g., help buttons"
 msgstr ""
 "Ако TRUE, то вложеният елемент се появява във вторична група от вложени "
 "елементи, например бутоните за помощ."
@@ -838,7 +844,8 @@ msgid "Spacing"
 msgstr "Интервал"
 
 #: gtk/gtkbox.c:126
-msgid "The amount of space between children."
+#, fuzzy
+msgid "The amount of space between children"
 msgstr "Брой интервали между вложени елементи."
 
 #: gtk/gtkbox.c:135 gtk/gtknotebook.c:434
@@ -846,7 +853,8 @@ msgid "Homogeneous"
 msgstr "Хомогенен"
 
 #: gtk/gtkbox.c:136
-msgid "Whether the children should all be the same size."
+#, fuzzy
+msgid "Whether the children should all be the same size"
 msgstr "Дали вложените елементи ще имат еднакъв размер."
 
 #: gtk/gtkbox.c:143 gtk/gtkpreview.c:129
@@ -905,9 +913,10 @@ msgid "Label"
 msgstr "Етикет"
 
 #: gtk/gtkbutton.c:190
+#, fuzzy
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
-"widget."
+"widget"
 msgstr "Текст на етикет вътре в бутон, ако той съдържа такъв"
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
@@ -938,7 +947,8 @@ msgid "Border relief"
 msgstr "Релефни граници"
 
 #: gtk/gtkbutton.c:214
-msgid "The border relief style."
+#, fuzzy
+msgid "The border relief style"
 msgstr "Релефен стил на граници."
 
 #: gtk/gtkbutton.c:265
@@ -1004,7 +1014,8 @@ msgid "xalign"
 msgstr "x-подравняване"
 
 #: gtk/gtkcellrenderer.c:140
-msgid "The x-align."
+#, fuzzy
+msgid "The x-align"
 msgstr "Подравняване по Х"
 
 #: gtk/gtkcellrenderer.c:150
@@ -1012,7 +1023,8 @@ msgid "yalign"
 msgstr "у-подравняване"
 
 #: gtk/gtkcellrenderer.c:151
-msgid "The y-align."
+#, fuzzy
+msgid "The y-align"
 msgstr "Подравняване по У"
 
 #: gtk/gtkcellrenderer.c:161
@@ -1020,7 +1032,8 @@ msgid "xpad"
 msgstr "xpad"
 
 #: gtk/gtkcellrenderer.c:162
-msgid "The xpad."
+#, fuzzy
+msgid "The xpad"
 msgstr "Xpad"
 
 #: gtk/gtkcellrenderer.c:172
@@ -1028,7 +1041,8 @@ msgid "ypad"
 msgstr "ypad"
 
 #: gtk/gtkcellrenderer.c:173
-msgid "The ypad."
+#, fuzzy
+msgid "The ypad"
 msgstr "Ypad"
 
 #: gtk/gtkcellrenderer.c:183
@@ -1036,7 +1050,8 @@ msgid "width"
 msgstr "ширина"
 
 #: gtk/gtkcellrenderer.c:184
-msgid "The fixed width."
+#, fuzzy
+msgid "The fixed width"
 msgstr "Фиксираната ширина."
 
 #: gtk/gtkcellrenderer.c:194
@@ -1044,7 +1059,8 @@ msgid "height"
 msgstr "височина"
 
 #: gtk/gtkcellrenderer.c:195
-msgid "The fixed height."
+#, fuzzy
+msgid "The fixed height"
 msgstr "Фиксираната височина"
 
 #: gtk/gtkcellrenderer.c:205
@@ -1052,7 +1068,8 @@ msgid "Is Expander"
 msgstr "Е Разширител"
 
 #: gtk/gtkcellrenderer.c:206
-msgid "Row has children."
+#, fuzzy
+msgid "Row has children"
 msgstr "Редът има подредове"
 
 #: gtk/gtkcellrenderer.c:215
@@ -1092,7 +1109,8 @@ msgid "Pixbuf Object"
 msgstr "Обект 'Pixbuf'"
 
 #: gtk/gtkcellrendererpixbuf.c:131
-msgid "The pixbuf to render."
+#, fuzzy
+msgid "The pixbuf to render"
 msgstr "'Pixbuf' за рендване"
 
 #: gtk/gtkcellrendererpixbuf.c:139
@@ -1100,7 +1118,8 @@ msgid "Pixbuf Expander Open"
 msgstr "Pixbuf Expander Open"
 
 #: gtk/gtkcellrendererpixbuf.c:140
-msgid "Pixbuf for open expander."
+#, fuzzy
+msgid "Pixbuf for open expander"
 msgstr "Pixbuf for open expander."
 
 #: gtk/gtkcellrendererpixbuf.c:148
@@ -1108,7 +1127,8 @@ msgid "Pixbuf Expander Closed"
 msgstr "Pixbuf Expander Closed"
 
 #: gtk/gtkcellrendererpixbuf.c:149
-msgid "Pixbuf for closed expander."
+#, fuzzy
+msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for closed expander."
 
 #: gtk/gtkcellrendererpixbuf.c:157 gtk/gtkimage.c:170
@@ -1156,7 +1176,8 @@ msgid "Attributes"
 msgstr "Атрибути"
 
 #: gtk/gtkcellrenderertext.c:190
-msgid "A list of style attributes to apply to the text of the renderer."
+#, fuzzy
+msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Списък от атрибути на стил за използване в текста при ренване."
 
 #: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
@@ -1433,20 +1454,22 @@ msgstr "Размер на Индикатор"
 msgid "Spacing around check or radio indicator"
 msgstr "Разстоянието около маркирането или радио индиктора"
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "Активен"
 
 #: gtk/gtkcheckmenuitem.c:116
-msgid "Whether the menu item is checked."
+#, fuzzy
+msgid "Whether the menu item is checked"
 msgstr "Дали обекта на менюто е маркиран"
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "Нечувствителен"
 
 #: gtk/gtkcheckmenuitem.c:124
-msgid "Whether to display an \"inconsistent\" state."
+#, fuzzy
+msgid "Whether to display an \"inconsistent\" state"
 msgstr "Дали да показва състояние \"нечувствителен\""
 
 #: gtk/gtkcolorsel.c:586
@@ -1663,7 +1686,8 @@ msgid "Border width"
 msgstr "Ширина на рамка"
 
 #: gtk/gtkcontainer.c:209
-msgid "The width of the empty border outside the containers children."
+#, fuzzy
+msgid "The width of the empty border outside the containers children"
 msgstr "Ширината на празната рамка извън съдържанието на контейнера."
 
 #: gtk/gtkcontainer.c:217
@@ -1671,7 +1695,8 @@ msgid "Child"
 msgstr "Вграден елемент"
 
 #: gtk/gtkcontainer.c:218
-msgid "Can be used to add a new child to the container."
+#, fuzzy
+msgid "Can be used to add a new child to the container"
 msgstr "Може да бъде използван за добавяне на нов елемент в съдържанието."
 
 #: gtk/gtkcurve.c:121
@@ -1695,7 +1720,8 @@ msgid "Maximum X"
 msgstr "Максимум Х"
 
 #: gtk/gtkcurve.c:141
-msgid "Maximum possible X value."
+#, fuzzy
+msgid "Maximum possible X value"
 msgstr "Максимална възможна стойност за Х"
 
 #: gtk/gtkcurve.c:150
@@ -1751,7 +1777,8 @@ msgid "Cursor Position"
 msgstr "Позиция на Показалеца"
 
 #: gtk/gtkentry.c:436 gtk/gtklabel.c:359
-msgid "The current position of the insertion cursor in chars."
+#, fuzzy
+msgid "The current position of the insertion cursor in chars"
 msgstr "Текущата позиция на мястото за вмъкване в символи."
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
@@ -1759,8 +1786,9 @@ msgid "Selection Bound"
 msgstr "Избор на Рамки"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
+#, fuzzy
 msgid ""
-"The position of the opposite end of the selection from the cursor in chars."
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "Позицията на противоположният край от избраното на показалеца в символи."
 
@@ -1773,7 +1801,8 @@ msgid "Maximum length"
 msgstr "Максимална дължина"
 
 #: gtk/gtkentry.c:464
-msgid "Maximum number of characters for this entry. Zero if no maximum."
+#, fuzzy
+msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Максимален брой символи за този запис. Нула ако няма максимална стойност."
 
@@ -1792,7 +1821,8 @@ msgid "Has Frame"
 msgstr "Има рамка"
 
 #: gtk/gtkentry.c:481
-msgid "FALSE removes outside bevel from entry."
+#, fuzzy
+msgid "FALSE removes outside bevel from entry"
 msgstr "FLASE премахва външното рамка от полето"
 
 #: gtk/gtkentry.c:488
@@ -1810,9 +1840,10 @@ msgid "Activates default"
 msgstr "Активира по подразбиране"
 
 #: gtk/gtkentry.c:497
+#, fuzzy
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
-"dialog) when Enter is pressed."
+"dialog) when Enter is pressed"
 msgstr ""
 "Дали да активира подразбиращите се графични обекти (такива като бутони по "
 "подразбиране в диалог) кагато е натиснат 'Enter'"
@@ -1822,7 +1853,8 @@ msgid "Width in chars"
 msgstr "Ширина в символи"
 
 #: gtk/gtkentry.c:504
-msgid "Number of characters to leave space for in the entry."
+#, fuzzy
+msgid "Number of characters to leave space for in the entry"
 msgstr "Брой символи за които е оставено място в записа"
 
 #: gtk/gtkentry.c:513
@@ -1842,67 +1874,71 @@ msgid "Select on focus"
 msgstr "Избор на фокус"
 
 #: gtk/gtkentry.c:740
-msgid "Whether to select the contents of an entry when it is focused."
+#, fuzzy
+msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Дали избраното съдържание ще се отдели при фокусиране."
 
-#: gtk/gtkentry.c:3878 gtk/gtklabel.c:3188
+#: gtk/gtkentry.c:3906 gtk/gtklabel.c:3195
 msgid "Select All"
 msgstr "Избира Всичко"
 
-#: gtk/gtkentry.c:3888 gtk/gtklabel.c:3198
+#: gtk/gtkentry.c:3916 gtk/gtklabel.c:3205
 msgid "Input Methods"
 msgstr "Режими на въвеждане"
 
-#: gtk/gtkentry.c:3898 gtk/gtktextview.c:6425
+#: gtk/gtkentry.c:3926 gtk/gtktextview.c:6456
 msgid "_Insert Unicode control character"
 msgstr "_Вмъква Уникод контролен символ"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
 msgid "Filename"
 msgstr "Име на файл"
 
-#: gtk/gtkfilesel.c:537
-msgid "The currently selected filename."
+#: gtk/gtkfilesel.c:514
+#, fuzzy
+msgid "The currently selected filename"
 msgstr "Текущото избрано име на файл"
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "Показва файловите операции"
 
-#: gtk/gtkfilesel.c:544
-msgid "Whether buttons for creating/manipulating files should be displayed."
+#: gtk/gtkfilesel.c:521
+#, fuzzy
+msgid "Whether buttons for creating/manipulating files should be displayed"
 msgstr "Дали бутоните за създаване/манипулация на файловете ще бъде показано"
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "Избор на няколко"
 
-#: gtk/gtkfilesel.c:552
-msgid "Whether to allow multiple files to be selected."
+#: gtk/gtkfilesel.c:529
+#, fuzzy
+msgid "Whether to allow multiple files to be selected"
 msgstr "Дали позволява избор на няколко файла."
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "Папки"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "Па_пки"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "Файлове"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "_Файлове"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2154
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2140
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Папката е нечетима: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1913,19 +1949,19 @@ msgstr ""
 "за тази програма.\n"
 "Сигурен ли сте, че искате да го изберете?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "_Нова Папка"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "Из_трива Файл"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "_Преименува Файл"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -1933,7 +1969,7 @@ msgstr ""
 "Името на папката \"%s\" съдържа символи които не са позволени в името на "
 "файловете"
 
-#: gtk/gtkfilesel.c:1390
+#: gtk/gtkfilesel.c:1367
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1942,35 +1978,35 @@ msgstr ""
 "Грешка при създаване на папка \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1391 gtk/gtkfilesel.c:1627
+#: gtk/gtkfilesel.c:1368 gtk/gtkfilesel.c:1604
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 "Вие вероятно използвате символи които не са позволени за името на файл."
 
-#: gtk/gtkfilesel.c:1399
+#: gtk/gtkfilesel.c:1376
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "Грешка при създаване на папка \"%s\": %s\n"
 
-#: gtk/gtkfilesel.c:1433
+#: gtk/gtkfilesel.c:1410
 msgid "New Folder"
 msgstr "Нова Папка"
 
-#: gtk/gtkfilesel.c:1448
+#: gtk/gtkfilesel.c:1425
 msgid "_Folder name:"
 msgstr "_Име на Папка:"
 
-#: gtk/gtkfilesel.c:1474
+#: gtk/gtkfilesel.c:1451
 msgid "Create"
 msgstr "Създава"
 
-#: gtk/gtkfilesel.c:1515
+#: gtk/gtkfilesel.c:1492
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "В името на файла \"%s\" има символи които не са позволени за име на файл"
 
-#: gtk/gtkfilesel.c:1518
+#: gtk/gtkfilesel.c:1495
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1979,31 +2015,31 @@ msgstr ""
 "Грешка при изтриване на файл \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1520 gtk/gtkfilesel.c:1641
+#: gtk/gtkfilesel.c:1497 gtk/gtkfilesel.c:1618
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Вероятно съдържа символи които не са позволени за име на файл."
 
-#: gtk/gtkfilesel.c:1529
+#: gtk/gtkfilesel.c:1506
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "Грешка при изтриване на файл \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1572
+#: gtk/gtkfilesel.c:1549
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "Действително ли да изтрия файл \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1577
+#: gtk/gtkfilesel.c:1554
 msgid "Delete File"
 msgstr "Изтриване на Файл"
 
-#: gtk/gtkfilesel.c:1623 gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1600 gtk/gtkfilesel.c:1614
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 "Името на файл \"%s\" съдържа символи които не са позволени за име на файл"
 
-#: gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1602
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -2012,7 +2048,7 @@ msgstr ""
 "Грешка при преименуване на файл в \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1616
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -2021,29 +2057,29 @@ msgstr ""
 "Грешка при преименуване на файл \"%s\": %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1649
+#: gtk/gtkfilesel.c:1626
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "Грешка при преименуване на файл \"%s\" в \"%s\": %s"
 
-#: gtk/gtkfilesel.c:1696
+#: gtk/gtkfilesel.c:1673
 msgid "Rename File"
 msgstr "Преименува Файл"
 
-#: gtk/gtkfilesel.c:1711
+#: gtk/gtkfilesel.c:1688
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "Преименува файл \"%s\" в:"
 
-#: gtk/gtkfilesel.c:1742
+#: gtk/gtkfilesel.c:1719
 msgid "Rename"
 msgstr "Преименува"
 
-#: gtk/gtkfilesel.c:2133
+#: gtk/gtkfilesel.c:2119
 msgid "Selection: "
 msgstr "Избор:"
 
-#: gtk/gtkfilesel.c:3013
+#: gtk/gtkfilesel.c:2999
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -2052,15 +2088,15 @@ msgstr ""
 "Името на файла \"%s\" не може да бъде конвертирано към UTF-8 (опитайте се да "
 "смените променливата на средата G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3016
+#: gtk/gtkfilesel.c:3002
 msgid "Invalid Utf-8"
 msgstr "Грешен Utf-8"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3868
 msgid "Name too long"
 msgstr "Името е твърде дълго"
 
-#: gtk/gtkfilesel.c:3884
+#: gtk/gtkfilesel.c:3870
 msgid "Couldn't convert filename"
 msgstr "Не мога да конвертирам името на файла"
 
@@ -2091,11 +2127,13 @@ msgid "Font name"
 msgstr "Име на шрифт"
 
 #: gtk/gtkfontsel.c:211
-msgid "The X string that represents this font."
+#, fuzzy
+msgid "The X string that represents this font"
 msgstr "Х низ който представя този шрифт."
 
 #: gtk/gtkfontsel.c:218
-msgid "The GdkFont that is currently selected."
+#, fuzzy
+msgid "The GdkFont that is currently selected"
 msgstr "GdkFont който текущо е избран"
 
 #: gtk/gtkfontsel.c:224
@@ -2103,7 +2141,8 @@ msgid "Preview text"
 msgstr "Преглед на текст"
 
 #: gtk/gtkfontsel.c:225
-msgid "The text to display in order to demonstrate the selected font."
+#, fuzzy
+msgid "The text to display in order to demonstrate the selected font"
 msgstr "Текста за покзване за демонстрация на шрифта"
 
 #: gtk/gtkfontsel.c:332
@@ -2128,7 +2167,8 @@ msgid "Font Selection"
 msgstr "Избор на Шрифт"
 
 #: gtk/gtkframe.c:126
-msgid "Text of the frame's label."
+#, fuzzy
+msgid "Text of the frame's label"
 msgstr "Текст за етикет на рамка."
 
 #: gtk/gtkframe.c:133
@@ -2136,7 +2176,8 @@ msgid "Label xalign"
 msgstr "Изравняване на текста по Х"
 
 #: gtk/gtkframe.c:134
-msgid "The horizontal alignment of the label."
+#, fuzzy
+msgid "The horizontal alignment of the label"
 msgstr "Хоризонтално подравняване на етикета."
 
 #: gtk/gtkframe.c:143
@@ -2144,11 +2185,13 @@ msgid "Label yalign"
 msgstr "Изравняване на текста по У"
 
 #: gtk/gtkframe.c:144
-msgid "The vertical alignment of the label."
+#, fuzzy
+msgid "The vertical alignment of the label"
 msgstr "Вертикално подравняване на етикета."
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:185
-msgid "Deprecated property, use shadow_type instead."
+#, fuzzy
+msgid "Deprecated property, use shadow_type instead"
 msgstr "Ост., вместо това използвайте shadow_type."
 
 #: gtk/gtkframe.c:160
@@ -2156,7 +2199,8 @@ msgid "Frame shadow"
 msgstr "Сянка на рамка"
 
 #: gtk/gtkframe.c:161
-msgid "Appearance of the frame border."
+#, fuzzy
+msgid "Appearance of the frame border"
 msgstr "Появяване граници на рамка."
 
 #: gtk/gtkframe.c:169
@@ -2164,7 +2208,8 @@ msgid "Label widget"
 msgstr "Графичен обект Етикет"
 
 #: gtk/gtkframe.c:170
-msgid "A widget to display in place of the usual frame label."
+#, fuzzy
+msgid "A widget to display in place of the usual frame label"
 msgstr ""
 "Графичен обект за показване в мястото на обикновеният етикет за рамката."
 
@@ -2182,7 +2227,8 @@ msgid "Shadow type"
 msgstr "Тип на сянка"
 
 #: gtk/gtkhandlebox.c:193
-msgid "Appearance of the shadow that surrounds the container."
+#, fuzzy
+msgid "Appearance of the shadow that surrounds the container"
 msgstr "Поява на сянка около контейнера."
 
 #: gtk/gtkhandlebox.c:201
@@ -2190,7 +2236,8 @@ msgid "Handle position"
 msgstr "Подържа позиция"
 
 #: gtk/gtkhandlebox.c:202
-msgid "Position of the handle relative to the child widget."
+#, fuzzy
+msgid "Position of the handle relative to the child widget"
 msgstr "Позиция на манипулатора относно вложения елемент."
 
 #: gtk/gtkhandlebox.c:210
@@ -2198,9 +2245,10 @@ msgid "Snap edge"
 msgstr "Изравняване на края"
 
 #: gtk/gtkhandlebox.c:211
+#, fuzzy
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
-"handlebox."
+"handlebox"
 msgstr ""
 "Страна на манипулаторната кутия, която е подравнена с точката за скачване на "
 "кутията."
@@ -2218,7 +2266,8 @@ msgid "Pixbuf"
 msgstr "Pixbuf"
 
 #: gtk/gtkimage.c:130
-msgid "A GdkPixbuf to display."
+#, fuzzy
+msgid "A GdkPixbuf to display"
 msgstr "GdkPixbuf за показване."
 
 #: gtk/gtkimage.c:137
@@ -2226,7 +2275,8 @@ msgid "Pixmap"
 msgstr "Растерна картинка"
 
 #: gtk/gtkimage.c:138
-msgid "A GdkPixmap to display."
+#, fuzzy
+msgid "A GdkPixmap to display"
 msgstr "Растерна картинка на Gdk за показване."
 
 #: gtk/gtkimage.c:145
@@ -2234,7 +2284,8 @@ msgid "Image"
 msgstr "Картинка"
 
 #: gtk/gtkimage.c:146
-msgid "A GdkImage to display."
+#, fuzzy
+msgid "A GdkImage to display"
 msgstr "Gdk картинка за показване."
 
 #: gtk/gtkimage.c:153
@@ -2246,11 +2297,13 @@ msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Битова маска използвана с GdkImage или GdkPixmap"
 
 #: gtk/gtkimage.c:162
-msgid "Filename to load and display."
+#, fuzzy
+msgid "Filename to load and display"
 msgstr "Име на файл за зареждане или показване."
 
 #: gtk/gtkimage.c:171
-msgid "Stock ID for a stock image to display."
+#, fuzzy
+msgid "Stock ID for a stock image to display"
 msgstr ""
 "ID от номенклатурата за номенклатурната картинка, която да се изобрази."
 
@@ -2259,7 +2312,8 @@ msgid "Icon set"
 msgstr "Набор икони"
 
 #: gtk/gtkimage.c:179
-msgid "Icon set to display."
+#, fuzzy
+msgid "Icon set to display"
 msgstr "Набор от икони за показване"
 
 #: gtk/gtkimage.c:186
@@ -2267,7 +2321,8 @@ msgid "Icon size"
 msgstr "Размер на икона"
 
 #: gtk/gtkimage.c:187
-msgid "Size to use for stock icon or icon set."
+#, fuzzy
+msgid "Size to use for stock icon or icon set"
 msgstr "Размер за използване на икони."
 
 #: gtk/gtkimage.c:195
@@ -2275,7 +2330,8 @@ msgid "Animation"
 msgstr "Анимация"
 
 #: gtk/gtkimage.c:196
-msgid "GdkPixbufAnimation to display."
+#, fuzzy
+msgid "GdkPixbufAnimation to display"
 msgstr "Gdk Анимация за показване."
 
 #: gtk/gtkimage.c:203
@@ -2283,7 +2339,8 @@ msgid "Storage type"
 msgstr "Тип на запазване"
 
 #: gtk/gtkimage.c:204
-msgid "The representation being used for image data."
+#, fuzzy
+msgid "The representation being used for image data"
 msgstr "Презентацията започва с използване на представените данни."
 
 #: gtk/gtkimagemenuitem.c:124
@@ -2375,15 +2432,18 @@ msgid "clear"
 msgstr "чист"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:507
-msgid "The screen where this window will be displayed."
+#, fuzzy
+msgid "The screen where this window will be displayed"
 msgstr "Екранът, където да бъде изобразен този прозорец."
 
 #: gtk/gtklabel.c:281
-msgid "The text of the label."
+#, fuzzy
+msgid "The text of the label"
 msgstr "Текста на етикета"
 
 #: gtk/gtklabel.c:288
-msgid "A list of style attributes to apply to the text of the label."
+#, fuzzy
+msgid "A list of style attributes to apply to the text of the label"
 msgstr "Списък от атрибути на стил за използване в текста на етикетите"
 
 #: gtk/gtklabel.c:294
@@ -2391,7 +2451,8 @@ msgid "Use markup"
 msgstr "Използва отметка"
 
 #: gtk/gtklabel.c:295
-msgid "The text of the label includes XML markup. See pango_parse_markup()."
+#, fuzzy
+msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "Текста на отметката включваща XML. Виж pango_parse_markup()."
 
 #: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
@@ -2399,10 +2460,11 @@ msgid "Justification"
 msgstr "Нагласяване"
 
 #: gtk/gtklabel.c:310
+#, fuzzy
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
-"GtkMisc::xalign for that."
+"GtkMisc::xalign for that"
 msgstr "Подредбата на редовете в етикета един спрямо друг. Виж GtkMisc::xalign"
 
 #: gtk/gtklabel.c:318
@@ -2410,9 +2472,10 @@ msgid "Pattern"
 msgstr "Образец"
 
 #: gtk/gtklabel.c:319
+#, fuzzy
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
-"to underline."
+"to underline"
 msgstr ""
 "Стринг с _ знаци на позиции отговаряши на знаците от от текста, които да се "
 "подчертаят."
@@ -2422,7 +2485,8 @@ msgid "Line wrap"
 msgstr "Прехвърляне на ред"
 
 #: gtk/gtklabel.c:327
-msgid "If set, wrap lines if the text becomes too wide."
+#, fuzzy
+msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Ако е зададен, текта се прехвърля на нов ред ако е твърде дълъг."
 
 #: gtk/gtklabel.c:333
@@ -2430,7 +2494,8 @@ msgid "Selectable"
 msgstr "Избираем"
 
 #: gtk/gtklabel.c:334
-msgid "Whether the label text can be selected with the mouse."
+#, fuzzy
+msgid "Whether the label text can be selected with the mouse"
 msgstr "Дали текста на етикета може да бъде избран с мишката."
 
 #: gtk/gtklabel.c:340
@@ -2438,7 +2503,8 @@ msgid "Mnemonic key"
 msgstr "Мнемоничен клавиш"
 
 #: gtk/gtklabel.c:341
-msgid "The mnemonic accelerator key for this label."
+#, fuzzy
+msgid "The mnemonic accelerator key for this label"
 msgstr "Мнемоничичен ускорителен клавиш за този етикет."
 
 #: gtk/gtklabel.c:349
@@ -2446,7 +2512,8 @@ msgid "Mnemonic widget"
 msgstr "Мнемоничен графичен обект"
 
 #: gtk/gtklabel.c:350
-msgid "The widget to be activated when the label's mnemonic key is pressed."
+#, fuzzy
+msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
 "Графичен обект за активиране когато мнемоничният клавиш на етикет е натиснат."
 
@@ -2455,7 +2522,8 @@ msgid "Horizontal adjustment"
 msgstr "Хоризонтално нагласяване"
 
 #: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
-msgid "The GtkAdjustment for the horizontal position."
+#, fuzzy
+msgid "The GtkAdjustment for the horizontal position"
 msgstr "Нагласяване на Gtk по хоризонталата."
 
 #: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
@@ -2463,7 +2531,8 @@ msgid "Vertical adjustment"
 msgstr "Вертикално нагласяване"
 
 #: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
-msgid "The GtkAdjustment for the vertical position."
+#, fuzzy
+msgid "The GtkAdjustment for the vertical position"
 msgstr "Нагласяване на Gtk по вертикалата."
 
 #: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:200
@@ -2471,7 +2540,8 @@ msgid "Width"
 msgstr "Ширина"
 
 #: gtk/gtklayout.c:640
-msgid "The width of the layout."
+#, fuzzy
+msgid "The width of the layout"
 msgstr "Ширина на подредбата."
 
 #: gtk/gtklayout.c:648
@@ -2479,7 +2549,8 @@ msgid "Height"
 msgstr "Височина"
 
 #: gtk/gtklayout.c:649
-msgid "The height of the layout."
+#, fuzzy
+msgid "The height of the layout"
 msgstr "Височина на подредбата."
 
 #. Translate to default:RTL if you want your widgets
@@ -2487,30 +2558,31 @@ msgstr "Височина на подредбата."
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:724
+#: gtk/gtkmain.c:806
 msgid "default:LTR"
-msgstr "подразбираш:LTR"
+msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:194
+#: gtk/gtkmenu.c:225
 msgid "Tearoff Title"
 msgstr "Откъснато заглавие"
 
-#: gtk/gtkmenu.c:195
+#: gtk/gtkmenu.c:226
+#, fuzzy
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
-"off."
+"off"
 msgstr ""
 "Заглавие което може да се покаже от мениджъра на прозорци когато това меню е "
 "откъснато"
 
-#: gtk/gtkmenu.c:264
+#: gtk/gtkmenu.c:295
 msgid "Can change accelerators"
 msgstr "Може да променя ускорителите"
 
-#: gtk/gtkmenu.c:265
+#: gtk/gtkmenu.c:296
+#, fuzzy
 msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu "
-"item."
+"Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Дали менюто за ускорителите може да бъде променено чрез натискане на клавиш "
 "над обект от менюто."
@@ -2757,11 +2829,11 @@ msgid "Activity mode"
 msgstr "Режим на Активиране"
 
 #: gtk/gtkprogress.c:123
+#, fuzzy
 msgid ""
 "If TRUE the GtkProgress is in activity mode, meaning that it signals "
 "something is happening, but not how much of the activity is finished. This "
-"is used when you're doing something that you don't know how long it will "
-"take."
+"is used when you're doing something that you don't know how long it will take"
 msgstr ""
 "Ако е TRUE, GtkProgress е във режим активеност, което означава, че "
 "сигнализира, когато има някакъв прогрес, но не и каква част от дейността е "
@@ -2948,17 +3020,17 @@ msgid ""
 msgstr ""
 "Колко далече в посока на у се премества стрелката когато е натиснат бутона"
 
-#: gtk/gtkrc.c:2282
+#: gtk/gtkrc.c:2325
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Не мога да намеря файла за включване: \"%s\""
 
-#: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
+#: gtk/gtkrc.c:2967 gtk/gtkrc.c:2970
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Не мога да намеря графичен файл в pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3362
+#: gtk/gtkrc.c:3405
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Път на 'Pixmap' елемент: \"%s\" трябва да е абсолютно, %s, ред %d"
@@ -3083,11 +3155,11 @@ msgid ""
 msgstr ""
 "Втори бутон със стрелка напред от другата страна на лентата за скролиране"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:599 gtk/gtktreeview.c:524
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment"
 msgstr "Хоризонтално Нагласяване"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:607 gtk/gtktreeview.c:532
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:532
 msgid "Vertical Adjustment"
 msgstr "Вертикално Нагласяване"
 
@@ -3208,9 +3280,10 @@ msgid "Mode"
 msgstr "Режим"
 
 #: gtk/gtksizegroup.c:243
+#, fuzzy
 msgid ""
 "The directions in which the size group effects the requested sizes of its "
-"component widgets."
+"component widgets"
 msgstr ""
 "Посока в която тази GtkSizeGroup-a оказва влияние на своите съставни "
 "елементи."
@@ -3538,6 +3611,7 @@ msgid "_Yes"
 msgstr "_Да"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr "Мащаб _100%"
 
@@ -3632,7 +3706,8 @@ msgid "Horizontal options"
 msgstr "Хоризонтални опции"
 
 #: gtk/gtktable.c:229
-msgid "Options specifying the horizontal behaviour of the child."
+#, fuzzy
+msgid "Options specifying the horizontal behaviour of the child"
 msgstr "Опции указващи хоризонталното поведение на вложения елемент."
 
 #: gtk/gtktable.c:235
@@ -3667,27 +3742,27 @@ msgstr ""
 "Допълнително разстояние за добавяне между вложения елемент и неговите горни "
 "и долни съседи, в пиксели"
 
-#: gtk/gtktext.c:600
+#: gtk/gtktext.c:599
 msgid "Horizontal adjustment for the text widget"
 msgstr "Хоризонтално подравняване за текстови графични обекти"
 
-#: gtk/gtktext.c:608
+#: gtk/gtktext.c:607
 msgid "Vertical adjustment for the text widget"
 msgstr "Вертикално подравняване за текстови графични обекти"
 
-#: gtk/gtktext.c:615
+#: gtk/gtktext.c:614
 msgid "Line Wrap"
 msgstr "Прехвърляне на линия"
 
-#: gtk/gtktext.c:616
+#: gtk/gtktext.c:615
 msgid "Whether lines are wrapped at widget edges"
 msgstr "Далили линията ще се прехвърля на края на графичния обект"
 
-#: gtk/gtktext.c:623
+#: gtk/gtktext.c:622
 msgid "Word Wrap"
 msgstr "Прехвърляне на Дума"
 
-#: gtk/gtktext.c:624
+#: gtk/gtktext.c:623
 msgid "Whether words are wrapped at widget edges"
 msgstr "Дали думите ще се прехвърлят на края на графичния обект"
 
@@ -3696,7 +3771,8 @@ msgid "Tag name"
 msgstr "Име на таг"
 
 #: gtk/gtktexttag.c:200
-msgid "Name used to refer to the text tag. NULL for anonymous tags."
+#, fuzzy
+msgid "Name used to refer to the text tag. NULL for anonymous tags"
 msgstr ""
 "Име използвано за обръщение към текстовия етикет. NULL за анонимни етикети."
 
@@ -3747,34 +3823,40 @@ msgid "Font description as a string, e.g. \"Sans Italic 12\""
 msgstr "Описание на шрифт като низ. пр. \"Sans Italic 12\""
 
 #: gtk/gtktexttag.c:311
-msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC."
+#, fuzzy
+msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
 msgstr "Стил на шрифта като PangoStyle, пр. PANGO_STYLE_ITALIC."
 
 #: gtk/gtktexttag.c:320
-msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS."
+#, fuzzy
+msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
 msgstr "Вариант на шрифта като PangoVariant, пр. PANGO_VARIANT_SMALL_CAPS."
 
 #: gtk/gtktexttag.c:329
+#, fuzzy
 msgid ""
 "Font weight as an integer, see predefined values in PangoWeight; for "
-"example, PANGO_WEIGHT_BOLD."
+"example, PANGO_WEIGHT_BOLD"
 msgstr ""
 "Тегло на шрифта като цяло число, виж предефинираните стойности във "
 "PangoWeight. пр. PANGO_WEIGHT_BOLD."
 
 #: gtk/gtktexttag.c:340
-msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED."
+#, fuzzy
+msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
 msgstr "Разтегляне на шрифта като PangoStretch, пр. PANGO_STRETCH_CONDENSED."
 
 #: gtk/gtktexttag.c:349
-msgid "Font size in Pango units."
+#, fuzzy
+msgid "Font size in Pango units"
 msgstr "Размер на шрифт в Pango единици"
 
 #: gtk/gtktexttag.c:359
+#, fuzzy
 msgid ""
 "Font size as a scale factor relative to the default font size. This properly "
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
-"such as PANGO_SCALE_X_LARGE."
+"such as PANGO_SCALE_X_LARGE"
 msgstr ""
 "Размер на шрифта като фактор за промяна на размера относно шрифта по "
 "подразбиране. Това поле се адаптира към промени на темата, затова "
@@ -3790,10 +3872,11 @@ msgid "Language"
 msgstr "Език"
 
 #: gtk/gtktexttag.c:388
+#, fuzzy
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If you don't understand this parameter, you "
-"probably don't need it."
+"probably don't need it"
 msgstr ""
 "Езикът, на който е този текст е ISO код. Pango може да използва това като "
 "подсказка когато изобразява текста. Ако не разбирате този параметър най-"
@@ -4060,7 +4143,7 @@ msgstr "Видим Показалец"
 msgid "If the insertion cursor is shown"
 msgstr "Ако показалеца за вмъкване е показан"
 
-#: gtk/gtktextview.c:6416
+#: gtk/gtktextview.c:6447
 msgid "Input _Methods"
 msgstr "Вх_Методи за Вход"
 
@@ -4073,19 +4156,20 @@ msgstr "Не мога да намеря тема в пътя с модули: \"
 msgid "--- No Tip ---"
 msgstr "--- Няма Подсещане ---"
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "Дали бутона за превключване да бъде включен или не"
 
-#: gtk/gtktogglebutton.c:139
-msgid "If the toggle button is in an \"in between\" state."
+#: gtk/gtktogglebutton.c:142
+#, fuzzy
+msgid "If the toggle button is in an \"in between\" state"
 msgstr "Ако бутона за превключване е в \"междинно\" състояние."
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr "Изчертава Индикатор"
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr "Дали частта за превключване на бутона е видима"
 
@@ -4236,7 +4320,8 @@ msgid "Expander Size"
 msgstr "Големина на разширителя"
 
 #: gtk/gtktreeview.c:603
-msgid "Size of the expander arrow."
+#, fuzzy
+msgid "Size of the expander arrow"
 msgstr "Големина на стрелката на разширителя."
 
 #: gtk/gtktreeview.c:611
@@ -4244,7 +4329,8 @@ msgid "Vertical Separator Width"
 msgstr "Ширина на Вертикален Разделител"
 
 #: gtk/gtktreeview.c:612
-msgid "Vertical space between cells.  Must be an even number."
+#, fuzzy
+msgid "Vertical space between cells.  Must be an even number"
 msgstr "Вертикално разстояние между клетки. Трябва да е четно."
 
 #: gtk/gtktreeview.c:620
@@ -4252,7 +4338,8 @@ msgid "Horizontal Separator Width"
 msgstr "Ширина на Хоризонтален Разделител"
 
 #: gtk/gtktreeview.c:621
-msgid "Horizontal space between cells.  Must be an even number."
+#, fuzzy
+msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Хоризонтално разстояние между клетки. Трябва да е четно."
 
 #: gtk/gtktreeview.c:629
@@ -4260,7 +4347,8 @@ msgid "Allow Rules"
 msgstr "Позволява линия"
 
 #: gtk/gtktreeview.c:630
-msgid "Allow drawing of alternating color rows."
+#, fuzzy
+msgid "Allow drawing of alternating color rows"
 msgstr "Позволява изчертаване на алтернативни цветни редове"
 
 #: gtk/gtktreeview.c:636
@@ -4268,7 +4356,8 @@ msgid "Indent Expanders"
 msgstr "Отместване на разширителите"
 
 #: gtk/gtktreeview.c:637
-msgid "Make the expanders indented."
+#, fuzzy
+msgid "Make the expanders indented"
 msgstr "Отемсти разширителите."
 
 #: gtk/gtktreeviewcolumn.c:185
@@ -4372,19 +4461,22 @@ msgid "Sort direction the sort indicator should indicate"
 msgstr "Посока на сортиране, която е изобразена на индикатора на сортиране"
 
 #: gtk/gtkviewport.c:133
+#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
-"this viewport."
+"this viewport"
 msgstr "GtkAdjustment който определя стойносттая на хоризонталната позиция"
 
 #: gtk/gtkviewport.c:141
+#, fuzzy
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
-"this viewport."
+"this viewport"
 msgstr "GtkAdjustment който определя стойносттая на вертикалната позиция"
 
 #: gtk/gtkviewport.c:149
-msgid "Determines how the shadowed box around the viewport is drawn."
+#, fuzzy
+msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Определя изчертаването на засенчването"
 
 #: gtk/gtkwidget.c:392
@@ -4400,7 +4492,8 @@ msgid "Parent widget"
 msgstr "Бащин графичен обект"
 
 #: gtk/gtkwidget.c:400
-msgid "The parent widget of this widget. Must be a Container widget."
+#, fuzzy
+msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Бащиният графичен обект. Трябва да бъде графичен обект 'контейнер'"
 
 #: gtk/gtkwidget.c:407
@@ -4408,9 +4501,10 @@ msgid "Width request"
 msgstr "Заявена широчина"
 
 #: gtk/gtkwidget.c:408
+#, fuzzy
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
-"used."
+"used"
 msgstr ""
 "Игнорирай заявката за ширина на елемента, или -1 ако трябва да бъде "
 "използвана обикновена заявка."
@@ -4420,9 +4514,10 @@ msgid "Height request"
 msgstr "Заявена височина"
 
 #: gtk/gtkwidget.c:417
+#, fuzzy
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
-"be used."
+"be used"
 msgstr ""
 "Игнорирай заявката за височина на елемента, или -1 ако трябва да бъде "
 "използвана обикновена заявка."
@@ -4492,7 +4587,8 @@ msgid "Receives default"
 msgstr "Получава по подразбиране"
 
 #: gtk/gtkwidget.c:482
-msgid "If TRUE, the widget will receive the default action when it is focused."
+#, fuzzy
+msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Ако е TRUE, графичният обект ще получи подразбиращитете се действия когато е "
 "фокусиран."
@@ -4510,9 +4606,10 @@ msgid "Style"
 msgstr "Стил"
 
 #: gtk/gtkwidget.c:496
+#, fuzzy
 msgid ""
 "The style of the widget, which contains information about how it will look "
-"(colors etc)."
+"(colors etc)"
 msgstr ""
 "Стил на графичния обект, който съдържа информация за това как ще изглежда "
 "(цвят и др)"
@@ -4522,7 +4619,8 @@ msgid "Events"
 msgstr "Събития"
 
 #: gtk/gtkwidget.c:503
-msgid "The event mask that decides what kind of GdkEvents this widget gets."
+#, fuzzy
+msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Маска на събития които определят GdkEvents които този графичен обект "
 "получава."
@@ -4532,7 +4630,8 @@ msgid "Extension events"
 msgstr "Разширени събития"
 
 #: gtk/gtkwidget.c:511
-msgid "The mask that decides what kind of extension events this widget gets."
+#, fuzzy
+msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Маската която определя по какъв начин от разширени събития този обект "
 "получава"
@@ -4542,7 +4641,8 @@ msgid "Interior Focus"
 msgstr "Вътрешен Фокус"
 
 #: gtk/gtkwidget.c:1061
-msgid "Whether to draw the focus indicator inside widgets."
+#, fuzzy
+msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Дали да изчертава индикатор за фокус вътре в графичния обект"
 
 #: gtk/gtkwidget.c:1067
@@ -4550,7 +4650,8 @@ msgid "Focus linewidth"
 msgstr "Ширина на линия за фокус"
 
 #: gtk/gtkwidget.c:1068
-msgid "Width, in pixels, of the focus indicator line."
+#, fuzzy
+msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ширина, в пиксели, за линията на индикатора на фокус."
 
 #: gtk/gtkwidget.c:1074
@@ -4558,7 +4659,8 @@ msgid "Focus line dash pattern"
 msgstr "Линия на фокус с шаблон на тирета"
 
 #: gtk/gtkwidget.c:1075
-msgid "Dash pattern used to draw the focus indicator."
+#, fuzzy
+msgid "Dash pattern used to draw the focus indicator"
 msgstr "Образец с тирета използван за изчертаване на индикатор за фокус."
 
 #: gtk/gtkwidget.c:1080
@@ -4566,7 +4668,8 @@ msgid "Focus padding"
 msgstr "Рамка на фокуса"
 
 #: gtk/gtkwidget.c:1081
-msgid "Width, in pixels, between focus indicator and the widget 'box'."
+#, fuzzy
+msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Ширина в пиксели между индикатора 'фокус' и графичния обект 'box'."
 
 #: gtk/gtkwidget.c:1086
@@ -4582,9 +4685,10 @@ msgid "Secondary cursor color"
 msgstr "Цвят на Втори Показалец"
 
 #: gtk/gtkwidget.c:1093
+#, fuzzy
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
-"right-to-left and left-to-right text."
+"right-to-left and left-to-right text"
 msgstr ""
 "Цвят с който ще се изчертава втирия показалец при смесено редактиране ляво-"
 "дясно и дясно-ляво"
@@ -4618,10 +4722,10 @@ msgid "Allow Shrink"
 msgstr "Позволява Свиване"
 
 #: gtk/gtkwindow.c:430
-#, no-c-format
+#, fuzzy, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
-"time a bad idea."
+"time a bad idea"
 msgstr ""
 "Ако е истина, прозорците нямат минимален размер. Задаването на това като "
 "TRUE е 99% лоша идея"
@@ -4631,13 +4735,15 @@ msgid "Allow Grow"
 msgstr "Позволява Нарастване"
 
 #: gtk/gtkwindow.c:438
-msgid "If TRUE, users can expand the window beyond its minimum size."
+#, fuzzy
+msgid "If TRUE, users can expand the window beyond its minimum size"
 msgstr ""
 "Ако е TRUE потребителя може да разширява прозореца извън неговият минимален "
 "размер."
 
 #: gtk/gtkwindow.c:446
-msgid "If TRUE, users can resize the window."
+#, fuzzy
+msgid "If TRUE, users can resize the window"
 msgstr "Ако е TRUE, потеребителя може да променя големината на прозореца."
 
 #: gtk/gtkwindow.c:453
@@ -4645,9 +4751,10 @@ msgid "Modal"
 msgstr "Модален"
 
 #: gtk/gtkwindow.c:454
+#, fuzzy
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
-"up)."
+"up)"
 msgstr ""
 "Ако е TRUE прозореца е модален (другите прозорци не са използваеми докато "
 "този е активен)"
@@ -4657,7 +4764,8 @@ msgid "Window Position"
 msgstr "Местоположение на Прозорец"
 
 #: gtk/gtkwindow.c:462
-msgid "The initial position of the window."
+#, fuzzy
+msgid "The initial position of the window"
 msgstr "Начално местоположение на прозореца"
 
 #: gtk/gtkwindow.c:470
@@ -4665,8 +4773,8 @@ msgid "Default Width"
 msgstr "Подразбираща се Широчина"
 
 #: gtk/gtkwindow.c:471
-msgid ""
-"The default width of the window, used when initially showing the window."
+#, fuzzy
+msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "Подразбираща се широчина на прозорец, използва се при първоначалното му "
 "показване"
@@ -4676,8 +4784,9 @@ msgid "Default Height"
 msgstr "Подразбираща се Височина"
 
 #: gtk/gtkwindow.c:481
+#, fuzzy
 msgid ""
-"The default height of the window, used when initially showing the window."
+"The default height of the window, used when initially showing the window"
 msgstr ""
 "Подразбираща се височина на прозорец, използва се при първоначалното му "
 "показване"
@@ -4758,6 +4867,18 @@ msgstr "Виетнамска (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Метод за Вход в X "
+
+#~ msgid "Don't know how to load the animation in file '%s'"
+#~ msgstr "Не знам как да заредя анимацията във файл '%s'"
+
+#~ msgid "Don't know how to load the image in file '%s'"
+#~ msgstr "Не знам как да заредя картинката във файл '%s'"
+
+#~ msgid "Failure reading ICO: %s"
+#~ msgstr "Неуспех за четене на ICO: %s"
+
+#~ msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+#~ msgstr "ICO има липсващи данни (може би е орязан по някакъв начин?)"
 
 #~ msgid "Language engine code to use for rendering the text"
 #~ msgstr ""
