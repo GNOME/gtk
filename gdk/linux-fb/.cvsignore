@@ -1,0 +1,8 @@
+*.lo
+Makefile
+Makefile.in
+.deps
+_libs
+.libs
+libgdk-x11.la
+gxid
