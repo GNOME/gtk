@@ -52,15 +52,6 @@
 #endif
 #include	<stdio.h>
 
-#ifdef G_OS_WIN32
-#include	<io.h>		/* For _open and _close */
-
-#ifndef S_ISREG
-#define S_ISREG(mode) ((mode)&_S_IFREG)
-#endif
-#endif
-
-
 /* --- defines --- */
 #define		ITEM_FACTORY_STRING	((gchar*) item_factory_string)
 #define		ITEM_BLOCK_SIZE		(128)

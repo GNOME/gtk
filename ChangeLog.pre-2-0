@@ -1,3 +1,8 @@
+2002-03-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkitemfactory.c: Remove unneeded Win32 stuff inside #ifdef
+	G_OS_WIN32. (Leftover from when gtkitemfactory.c handled files.)
+
 2002-03-01  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkkeys.c (gdk_keyval_convert_case)
