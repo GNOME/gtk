@@ -6,7 +6,58 @@ Extending &gdk-pixbuf;
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
+If &gdk-pixbuf; has been compiled with GModule support, it can be extended by
+modules which can load (and perhaps also save) new image and animation
+formats. Each loadable module must export a
+#GdkPixbufModuleFillInfoFunc function named <function>fill_info</function> and
+a #GdkPixbufModuleFillVtableFunc function named
+<function>fill_vtable</function>.
+</para>
 
+<para>
+In order to make format-checking work before actually loading the modules
+(which may require dlopening image libraries), modules export their 
+signatures (and other information) via the <function>fill_info</function>
+function. An external utility, <command>gdk-pixbuf-query-loaders</command>, uses
+this to create a text file containing a list of all available loaders and 
+their signatures. This file is then read at runtime by &gdk-pixbuf; to obtain
+the list of available loaders and their signatures. 
+</para>
+
+<para>
+Modules may only implement a subset of the functionality available via
+#GdkPixbufModule. If a particular functionality is not implemented, the
+<function>fill_vtable</function> function will simply not set the corresponding
+function pointers of the #GdkPixbufModule structure. If a module supports
+incremental loading (i.e. provides #begin_load, #stop_load and
+#load_increment), it doesn't have to implement #load, since &gdk-pixbuf; can 
+supply a generic #load implementation wrapping the incremental loading. 
+</para>
+
+<para>
+Installing a module is a two-step process:
+<itemizedlist>
+<listitem><para>copy the module file(s) to the loader directory (normally
+<filename><replaceable>libdir</replaceable>/gtk-2.0/<replaceable>version</replaceable>/loaders</filename>,
+unless overridden by the environment variable
+<envar>GDK_PIXBUF_MODULEDIR</envar>) 
+</para></listitem>
+<listitem><para>call <command>gdk-pixbuf-query-loaders</command> to update the
+module file (normally
+<filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gdk-pixbuf.loaders</filename>,
+unless overridden by the environment variable
+<envar>GDK_PIXBUF_MODULE_FILE</envar>)
+</para></listitem>
+</itemizedlist>
+</para>
+
+<para>
+The &gdk-pixbuf; interfaces needed for implementing modules are contained in 
+<filename>gdk-pixbuf-io.h</filename> (and
+<filename>gdk-pixbuf-animation.h</filename> if the module supports animations).
+They are not covered by the same stability guarantees as the regular 
+&gdk-pixbuf; API. To underline this fact, they are protected by 
+<literal>#ifdef GDK_PIXBUF_ENABLE_BACKEND</literal>.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -14,25 +65,122 @@ Extending &gdk-pixbuf;
 
 </para>
 
-<!-- ##### USER_FUNCTION ModuleFillVtableFunc ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_get_formats ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_name ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_description ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_mime_types ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_extensions ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_is_writable ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
+<!-- ##### STRUCT GdkPixbufFormat ##### -->
+<para>
+A #GdkPixbufFormat contains information about the image format accepted by a
+module. Only modules should access the fields directly.
+</para>
+
+@name: the name of the image format
+@signature: the signature of the module
+@domain: the message domain for the @description
+@description: a description of the image format
+@mime_types: a %NULL-terminated array of MIME types for the image format.
+@extensions: a %NULL-terminated array of typical filename extensions for the
+image format.
+@flags: 
+
+<!-- ##### STRUCT GdkPixbufModulePattern ##### -->
+<para>
+The signature of a module is a set of prefixes. Prefixes are encoded as
+pairs of ordinary strings, where the second string, if not %NULL,
+may contain ' ', '!', 'x', 'z', and 'n' to indicate bytes that must be 
+matched, not matched, "don't-care"-bytes, zeros and non-zeros.
+Each prefix has an associated integer that describes the relevance of 
+the prefix, with 0 meaning a mismatch and 100 a "perfect match".
+</para>
+
+<para>
+The signature of a module is stored as an array of 
+#GdkPixbufModulePattern<!-- -->s. 
+</para>
+
+@prefix: the prefix for this pattern
+@mask: mask containing bytes which modify how the prefix is matched against
+  test data
+@relevance: relevance of this pattern
+
+<!-- ##### USER_FUNCTION GdkPixbufModuleFillVtableFunc ##### -->
 <para>
 Defines the type of the function used to set the vtable of a 
-#GdkPixbufModule when it is loaded.
+#GdkPixbufModule when it is loaded. 
 </para>
 
 @module: a #GdkPixbufModule.
 
 
-<!-- ##### USER_FUNCTION ModuleSizeFunc ##### -->
+<!-- ##### USER_FUNCTION GdkPixbufModuleFillInfoFunc ##### -->
+<para>
+Defines the type of the function used to fill a 
+#GdkPixbufFormat structure with information about a module.
+</para>
+
+@info: a #GdkPixbufFormat.
+
+
+<!-- ##### USER_FUNCTION GdkPixbufModuleSizeFunc ##### -->
 <para>
 Defines the type of the function that gets called once the size 
-of the loaded image is known is done.
+of the loaded image is known.
 </para>
 <para>
 The function is expected to set @width and @height to the desired
 size to which the image should be scaled. If a module has no efficient 
 way to achieve the desired scaling during the loading of the image, it may
-either ignore the size request, or only approximate it -- the loader will
+either ignore the size request, or only approximate it -- &gdk-pixbuf; will
 then perform the required scaling on the completely loaded image. 
 </para>
 
@@ -41,7 +189,7 @@ then perform the required scaling on the completely loaded image.
 @user_data: the loader.
 
 
-<!-- ##### USER_FUNCTION ModulePreparedNotifyFunc ##### -->
+<!-- ##### USER_FUNCTION GdkPixbufModulePreparedFunc ##### -->
 <para>
 Defines the type of the function that gets called once the initial 
 setup of @pixbuf is done.
@@ -57,7 +205,7 @@ signal.
 @user_data: the loader.
 
 
-<!-- ##### USER_FUNCTION ModuleUpdatedNotifyFunc ##### -->
+<!-- ##### USER_FUNCTION GdkPixbufModuleUpdatedFunc ##### -->
 <para>
 Defines the type of the function that gets called every time a region
 of @pixbuf is updated.
@@ -83,17 +231,16 @@ images in a certain file format.
 </para>
 <para>
 A #GdkPixbufModule can be loaded dynamically from a #GModule.
-Each loadable module must contain a #ModuleFillVtableFunc function named 
-<function>gdk_pixbuf__<replaceable>module_name</replaceable>_fill_vtable</function>.
-It will get called when the module is loaded and must set the function
-pointers of the #GdkPixbufModule.
+Each loadable module must contain a #GdkPixbufModuleFillVtableFunc function 
+named <function>fill_vtable</function>, which will get called when the module
+is loaded and must set the function pointers of the #GdkPixbufModule. 
 </para>
 
 @module_name: the name of the module, usually the same as the
   usual file extension for images of this type, eg. "xpm", "jpeg" or "png".
-@format_check: checks if the given data is the beginning of a valid image 
-  in the format supported by the module.
+@module_path: the path from which the module is loaded.
 @module: the loaded #GModule.
+@info: a #GdkPixbufFormat holding information about the module.
 @load: loads an image from a file.
 @load_xpm_data: loads an image from data in memory.
 @begin_load: begins an incremental load.
@@ -101,4 +248,10 @@ pointers of the #GdkPixbufModule.
 @load_increment: continues an incremental load.
 @load_animation: loads an animation from a file.
 @save: saves a #GdkPixbuf to a file.
+@_reserved1: 
+@_reserved2: 
+@_reserved3: 
+@_reserved4: 
+@_reserved5: 
+@_reserved6: 
 

@@ -1,3 +1,8 @@
+2002-10-04  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/main.c (main): 
+	* demos/pixbuf-init.c (pixbuf_init): Adjust to gdk-pixbuf changes.
+
 Thu Oct  3 23:53:43 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_destroy): get

@@ -300,12 +300,14 @@ nevertheless.
 </para>
 
 <formalpara>
-  <title><envar>GDK_PIXBUF_MODULEDIR</envar></title>
+  <title><envar>GDK_PIXBUF_MODULE_FILE</envar></title>
 
   <para>
-    Specifies the directory to look for GdkPixbuf loader modules. 
-    By default, GdkPixbuf looks for its loaders in 
-    <filename><replaceable>libdir</replaceable>/gtk-2.0/<replaceable>version</replaceable>/loaders</filename>.
+    Specifies the file listing the GdkPixbuf loader modules to load. 
+    This environment variable overwrites the default value 
+    <filename><replaceable>sysconfdir</replaceable>/gtk-2.0/gdk-pixbuf.loaders</filename>
+    (<replaceable>sysconfdir</replaceable> is the sysconfdir specified when
+	  GTK+ was configured, usually <filename>/usr/local/etc</filename>.)
   </para>
  </formalpara>
 

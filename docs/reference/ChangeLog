@@ -1,3 +1,10 @@
+2002-10-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/running.sgml: Document GDK_PIXBUF_MODULE_FILE.
+
+	* gdk-pixbuf/tmpl/module_interface.sgml: Some information for
+	module writers.
+
 2002-08-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdk-sections.txt: Remove gdk_screen_close, add a section

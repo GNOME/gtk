@@ -15,5 +15,13 @@ void
 pixbuf_init ()
 {
   if (file_exists ("../gdk-pixbuf/libpixbufloader-pnm.la"))
-    putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf");
+    putenv ("GDK_PIXBUF_MODULE_FILE=../gdk-pixbuf/gdk-pixbuf.loaders");
 }
+
+
+
+
+
+
+
+
