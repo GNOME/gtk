@@ -10,8 +10,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.2.2\n"
-"POT-Creation-Date: 2003-06-09 16:30-0400\n"
-"PO-Revision-Date: 2003-05-31 12:04+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-07-29 10:07+0200\n"
+"PO-Revision-Date: 2003-07-39 09:59+0200\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -171,74 +172,64 @@ msgstr "Vorspanndaten des BMP-Bildes sind Unsinn"
 msgid "The BMP image format"
 msgstr "Das BMP-Bildformat"
 
-#: gdk-pixbuf/io-gif.c:219
+#: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
 msgstr "Fehler beim Lesen von GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:491 gdk-pixbuf/io-gif.c:1428 gdk-pixbuf/io-gif.c:1589
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1431 gdk-pixbuf/io-gif.c:1592
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 "Daten in der GIF-Datei unvollständig (vielleicht wurden sie irgendwie "
 "verstümmelt?)"
 
-#: gdk-pixbuf/io-gif.c:500
+#: gdk-pixbuf/io-gif.c:501
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
 msgstr "Interner Fehler im GIF-Lader (%s)"
 
-#: gdk-pixbuf/io-gif.c:574
+#: gdk-pixbuf/io-gif.c:575
 msgid "Stack overflow"
 msgstr "Stack-Überlauf"
 
-#: gdk-pixbuf/io-gif.c:634
+#: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
 msgstr "Der GIF-Bildlader versteht dieses Bild nicht."
 
-#: gdk-pixbuf/io-gif.c:663
+#: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
 msgstr "Fehlerhafte Bilddaten festgestellt"
 
-#: gdk-pixbuf/io-gif.c:673
+#: gdk-pixbuf/io-gif.c:674
 msgid "Circular table entry in GIF file"
 msgstr "Ringschluss in Tabelleneinträgen in GIF-Datei"
 
-#: gdk-pixbuf/io-gif.c:806 gdk-pixbuf/io-gif.c:1416 gdk-pixbuf/io-gif.c:1462
-#: gdk-pixbuf/io-gif.c:1577
+#: gdk-pixbuf/io-gif.c:826 gdk-pixbuf/io-gif.c:1419 gdk-pixbuf/io-gif.c:1465
+#: gdk-pixbuf/io-gif.c:1580
 msgid "Not enough memory to load GIF file"
 msgstr "Nicht genug Speicher, um GIF-Bild zu laden"
 
-#: gdk-pixbuf/io-gif.c:1053
+#: gdk-pixbuf/io-gif.c:1074
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Das GIF-Bild ist defekt (fehlerhafte LZW-Kompression)"
 
-#: gdk-pixbuf/io-gif.c:1103
+#: gdk-pixbuf/io-gif.c:1124
 msgid "File does not appear to be a GIF file"
 msgstr "Datei scheint keine GIF-Datei zu sein"
 
-#: gdk-pixbuf/io-gif.c:1115
+#: gdk-pixbuf/io-gif.c:1136
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Version %s des GIF-Dateiformats wird nicht unterstützt"
 
-#: gdk-pixbuf/io-gif.c:1188
-msgid "GIF image contained a frame with height or width 0."
-msgstr "Die GIF-Datei enthielt ein Einzelbild mit Höhe oder Breite 0."
-
-#: gdk-pixbuf/io-gif.c:1201
+#: gdk-pixbuf/io-gif.c:1211
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr ""
 "Die GIF-Datei enthielt ein Einzelbild, das außerhalb der Bildgrenzen "
 "erscheint."
 
-#: gdk-pixbuf/io-gif.c:1217
-msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
-"Das erste Einzelbild des GIF-Bildes hatte »zum vorigen zurückgehen« als "
-"Verlassensmodus."
-
 # gdk-pixbuf/io-gi178
-#: gdk-pixbuf/io-gif.c:1252
+#: gdk-pixbuf/io-gif.c:1255
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -246,44 +237,44 @@ msgstr ""
 "Das GIF-Bild hat keine globale Farbtabelle, und ein Einzelbild darin hat "
 "keine lokale Farbtabelle."
 
-#: gdk-pixbuf/io-gif.c:1484
+#: gdk-pixbuf/io-gif.c:1487
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-Bild wurde verstümmelt oder ist unvollständig."
 
-#: gdk-pixbuf/io-gif.c:1636
+#: gdk-pixbuf/io-gif.c:1639
 msgid "The GIF image format"
 msgstr "Das GIF-Bildformat"
 
-#: gdk-pixbuf/io-ico.c:218 gdk-pixbuf/io-ico.c:277 gdk-pixbuf/io-ico.c:338
-#: gdk-pixbuf/io-ico.c:401 gdk-pixbuf/io-ico.c:418
+#: gdk-pixbuf/io-ico.c:217 gdk-pixbuf/io-ico.c:269 gdk-pixbuf/io-ico.c:330
+#: gdk-pixbuf/io-ico.c:393 gdk-pixbuf/io-ico.c:410
 msgid "Not enough memory to load icon"
 msgstr "Nicht genug Speicher, um Icon zu laden"
 
-#: gdk-pixbuf/io-ico.c:262
+#: gdk-pixbuf/io-ico.c:254
 msgid "Invalid header in icon"
 msgstr "Ungültiger Vorspann in Icon"
 
-#: gdk-pixbuf/io-ico.c:299
+#: gdk-pixbuf/io-ico.c:291
 msgid "Icon has zero width"
 msgstr "Icon hat Breite null"
 
-#: gdk-pixbuf/io-ico.c:309
+#: gdk-pixbuf/io-ico.c:301
 msgid "Icon has zero height"
 msgstr "Icon hat Höhe null"
 
-#: gdk-pixbuf/io-ico.c:353
+#: gdk-pixbuf/io-ico.c:345
 msgid "Compressed icons are not supported"
 msgstr "Komprimierte Icons werden nicht unterstützt"
 
-#: gdk-pixbuf/io-ico.c:386
+#: gdk-pixbuf/io-ico.c:378
 msgid "Unsupported icon type"
 msgstr "Nicht unterstützter Icontyp"
 
-#: gdk-pixbuf/io-ico.c:466
+#: gdk-pixbuf/io-ico.c:458
 msgid "Not enough memory to load ICO file"
 msgstr "Nicht genug Speicher, um ICO-Bild zu laden"
 
-#: gdk-pixbuf/io-ico.c:872
+#: gdk-pixbuf/io-ico.c:868
 msgid "The ICO image format"
 msgstr "Das ICO-Bildformat"
 
@@ -907,7 +898,7 @@ msgstr "Interne Breitenpolsterung des Kindes"
 
 #: gtk/gtkbbox.c:138
 msgid "Amount to increase child's size on either side"
-msgstr "Ausmaß, um das das Kind nach beiden Seiten vergrößert wird"
+msgstr "Ausmaß, um das das Kind nach beiden Seiten vergrößert werden soll"
 
 #: gtk/gtkbbox.c:146
 msgid "Child internal height padding"
@@ -915,7 +906,7 @@ msgstr "Interne Höhenpolsterung des Kindes"
 
 #: gtk/gtkbbox.c:147
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "Ausmaß, um das das Kind nach oben und unten vergrößert wird"
+msgstr "Ausmaß, um das das Kind nach oben und unten vergrößert werden soll"
 
 #: gtk/gtkbbox.c:155
 msgid "Layout style"
@@ -1068,7 +1059,7 @@ msgid ""
 "border"
 msgstr ""
 "Der zusätzliche Raum für CAN_DEFAULT-Knöpfe, der immer außerhalb des Randes "
-"zugegeben wird"
+"zugegeben werden soll"
 
 #: gtk/gtkbutton.c:284
 msgid "Child X Displacement"
@@ -1779,7 +1770,8 @@ msgstr "Größenänderungsmodus"
 #: gtk/gtkcontainer.c:203
 msgid "Specify how resize events are handled"
 msgstr ""
-"Die Art und Weise, auf die mit Größenänderungsereignissen umgegangen wird"
+"Die Art und Weise, auf die mit Größenänderungsereignissen umgegangen werden "
+"soll"
 
 #: gtk/gtkcontainer.c:210
 msgid "Border width"
@@ -1946,7 +1938,8 @@ msgstr "Breite in Zeichen"
 
 #: gtk/gtkentry.c:508
 msgid "Number of characters to leave space for in the entry"
-msgstr "Die Anzahl der Zeichen, für die in diesem Feld Platz gelassen wird"
+msgstr ""
+"Die Anzahl der Zeichen, für die in diesem Feld Platz gelassen werden soll"
 
 #: gtk/gtkentry.c:517
 msgid "Scroll offset"
@@ -1956,7 +1949,7 @@ msgstr "Rollversatz"
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Die Anzahl der Pixel, um die der Eintrag nach links aus dem Schirm gerollt "
-"wird"
+"werden soll"
 
 #: gtk/gtkentry.c:528
 msgid "The contents of the entry"
@@ -2517,11 +2510,11 @@ msgstr "(unbekannt)"
 #. and clear button
 #: gtk/gtkinputdialog.c:754
 msgid "clear"
-msgstr "gelöscht"
+msgstr "leeren"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:553
 msgid "The screen where this window will be displayed"
-msgstr "Der Bildschirm, auf dem dieses Fenster angezeigt wird"
+msgstr "Der Bildschirm, auf dem dieses Fenster angezeigt werden soll"
 
 #: gtk/gtklabel.c:291
 msgid "The text of the label"
@@ -3543,9 +3536,10 @@ msgstr "_Abbrechen"
 msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
+# CHECK - _Löschen haben wir schon und ist unangebracht
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "_Löschen"
+msgstr "_Leeren"
 
 #: gtk/gtkstock.c:281
 msgid "_Close"
@@ -3605,7 +3599,7 @@ msgstr "_Zurück"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "R_unter"
+msgstr "A_bwärts"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
@@ -3613,7 +3607,7 @@ msgstr "_Vor"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "_Rauf"
+msgstr "A_ufwärts"
 
 #: gtk/gtkstock.c:298
 msgid "_Help"
@@ -3683,9 +3677,11 @@ msgstr "_Drucken"
 msgid "Print Pre_view"
 msgstr "Druck_vorschau"
 
+# Auch wenn im Original die Tastenkürzel kollidieren (_Preferences),
+# wir verwenden Ei_genschaften.
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "_Eigenschaften"
+msgstr "Ei_genschaften"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
@@ -4419,7 +4415,7 @@ msgstr "Die horizontale Stellgröße für das Widget"
 msgid "Vertical Adjustment for the widget"
 msgstr "Die vertikale Stellgröße für das Widget"
 
-#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:433
+#: gtk/gtktreeview.c:544 gtk/gtktreeviewcolumn.c:185 gtk/gtkwidget.c:505
 msgid "Visible"
 msgstr "Sichtbar"
 
@@ -4659,27 +4655,27 @@ msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
 "Legt fest, wie der schattierte Rahmen um das Sichtfeld dargestellt wird"
 
-#: gtk/gtkwidget.c:400
+#: gtk/gtkwidget.c:472
 msgid "Widget name"
 msgstr "Widget-Name"
 
-#: gtk/gtkwidget.c:401
+#: gtk/gtkwidget.c:473
 msgid "The name of the widget"
 msgstr "Der Name des Widgets"
 
-#: gtk/gtkwidget.c:407
+#: gtk/gtkwidget.c:479
 msgid "Parent widget"
 msgstr "Eltern-Widget"
 
-#: gtk/gtkwidget.c:408
+#: gtk/gtkwidget.c:480
 msgid "The parent widget of this widget. Must be a Container widget"
 msgstr "Das Eltern-Widget dieses Widgets. Muss ein Container-Widget sein"
 
-#: gtk/gtkwidget.c:415
+#: gtk/gtkwidget.c:487
 msgid "Width request"
 msgstr "Breitenanforderung"
 
-#: gtk/gtkwidget.c:416
+#: gtk/gtkwidget.c:488
 msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used"
@@ -4687,11 +4683,11 @@ msgstr ""
 "Direkte Angabe für die Breitenanforderung des Widgets; -1, falls die "
 "natürliche Anforderung verwendet werden soll"
 
-#: gtk/gtkwidget.c:424
+#: gtk/gtkwidget.c:496
 msgid "Height request"
 msgstr "Höhenanforderung"
 
-#: gtk/gtkwidget.c:425
+#: gtk/gtkwidget.c:497
 msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used"
@@ -4699,88 +4695,88 @@ msgstr ""
 "Direkte Angabe für die Höhenanforderung des Widgets; -1, falls die "
 "natürliche Anforderung verwendet werden soll"
 
-#: gtk/gtkwidget.c:434
+#: gtk/gtkwidget.c:506
 msgid "Whether the widget is visible"
 msgstr "Soll das Widget sichtbar sein?"
 
-#: gtk/gtkwidget.c:440
+#: gtk/gtkwidget.c:512
 msgid "Sensitive"
 msgstr "Empfindlich"
 
-#: gtk/gtkwidget.c:441
+#: gtk/gtkwidget.c:513
 msgid "Whether the widget responds to input"
 msgstr "Soll das Widget auf Eingaben reagieren?"
 
-#: gtk/gtkwidget.c:447
+#: gtk/gtkwidget.c:519
 msgid "Application paintable"
 msgstr "Direktes Zeichnen"
 
-#: gtk/gtkwidget.c:448
+#: gtk/gtkwidget.c:520
 msgid "Whether the application will paint directly on the widget"
 msgstr "Kann die Anwendung direkt auf das Widget zeichnen?"
 
-#: gtk/gtkwidget.c:454
+#: gtk/gtkwidget.c:526
 msgid "Can focus"
 msgstr "Fokussierbar"
 
-#: gtk/gtkwidget.c:455
+#: gtk/gtkwidget.c:527
 msgid "Whether the widget can accept the input focus"
 msgstr "Soll das Widget den Eingabefokus akzeptieren können?"
 
-#: gtk/gtkwidget.c:461
+#: gtk/gtkwidget.c:533
 msgid "Has focus"
 msgstr "Hat Fokus"
 
-#: gtk/gtkwidget.c:462
+#: gtk/gtkwidget.c:534
 msgid "Whether the widget has the input focus"
 msgstr "Soll das Widget den Eingabefokus haben?"
 
-#: gtk/gtkwidget.c:468
+#: gtk/gtkwidget.c:540
 msgid "Is focus"
 msgstr "Ist Fokus"
 
-#: gtk/gtkwidget.c:469
+#: gtk/gtkwidget.c:541
 msgid "Whether the widget is the focus widget within the toplevel"
 msgstr "Ist das Widget das fokussierte Widget innerhalb der obersten Ebene?"
 
-#: gtk/gtkwidget.c:475
+#: gtk/gtkwidget.c:547
 msgid "Can default"
 msgstr "Kann Vorgabe sein"
 
-#: gtk/gtkwidget.c:476
+#: gtk/gtkwidget.c:548
 msgid "Whether the widget can be the default widget"
 msgstr "Soll das Widget das Vorgabe-Widget sein können?"
 
-#: gtk/gtkwidget.c:482
+#: gtk/gtkwidget.c:554
 msgid "Has default"
 msgstr "Ist Vorgabe"
 
-#: gtk/gtkwidget.c:483
+#: gtk/gtkwidget.c:555
 msgid "Whether the widget is the default widget"
 msgstr "Soll das Widget das Vorgabe-Widget sein?"
 
-#: gtk/gtkwidget.c:489
+#: gtk/gtkwidget.c:561
 msgid "Receives default"
 msgstr "Vorgabe erhalten"
 
-#: gtk/gtkwidget.c:490
+#: gtk/gtkwidget.c:562
 msgid "If TRUE, the widget will receive the default action when it is focused"
 msgstr ""
 "Falls WAHR, erhält das Widget die Vorgabe-Aktion, wenn es fokussiert ist"
 
-#: gtk/gtkwidget.c:496
+#: gtk/gtkwidget.c:568
 msgid "Composite child"
 msgstr "Zusammengesetztes Kind"
 
-#: gtk/gtkwidget.c:497
+#: gtk/gtkwidget.c:569
 msgid "Whether the widget is part of a composite widget"
 msgstr "Ist das Widget Teil eines zusammengesetzten Widgets?"
 
-#: gtk/gtkwidget.c:503
+#: gtk/gtkwidget.c:575
 msgid "Style"
 msgstr "Stil"
 
-#: gtk/gtkwidget.c:504
+#: gtk/gtkwidget.c:576
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
@@ -4788,71 +4784,71 @@ msgstr ""
 "Der Stil des Widgets, der Informationen zu seinem Aussehen enthält (Farben "
 "etc.)"
 
-#: gtk/gtkwidget.c:510
+#: gtk/gtkwidget.c:582
 msgid "Events"
 msgstr "Ereignisse"
 
-#: gtk/gtkwidget.c:511
+#: gtk/gtkwidget.c:583
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 "Die Ereignismaske, die entscheidet, welche GdkEvents dieses Widget erhält"
 
-#: gtk/gtkwidget.c:518
+#: gtk/gtkwidget.c:590
 msgid "Extension events"
 msgstr "Erweiterungsereignisse"
 
-#: gtk/gtkwidget.c:519
+#: gtk/gtkwidget.c:591
 msgid "The mask that decides what kind of extension events this widget gets"
 msgstr ""
 "Die Maske, die festlegt, welche Erweiterungsereignisse dieses Widget erhält"
 
-#: gtk/gtkwidget.c:1098
+#: gtk/gtkwidget.c:1170
 msgid "Interior Focus"
 msgstr "Interner Fokus"
 
-#: gtk/gtkwidget.c:1099
+#: gtk/gtkwidget.c:1171
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Soll der Fokusanzeiger in Widgets dargestellt werden?"
 
-#: gtk/gtkwidget.c:1105
+#: gtk/gtkwidget.c:1177
 msgid "Focus linewidth"
 msgstr "Länge der Fokuszeile"
 
-#: gtk/gtkwidget.c:1106
+#: gtk/gtkwidget.c:1178
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Die Breite der Fokusanzeiger-Linie in Pixel"
 
-#: gtk/gtkwidget.c:1112
+#: gtk/gtkwidget.c:1184
 msgid "Focus line dash pattern"
 msgstr "Strichelmuster der Fokuszeile"
 
-#: gtk/gtkwidget.c:1113
+#: gtk/gtkwidget.c:1185
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Das zum Zeichnen des Fokusanzeigers verwendete Strichelmuster"
 
-#: gtk/gtkwidget.c:1118
+#: gtk/gtkwidget.c:1190
 msgid "Focus padding"
 msgstr "Fokus-Polsterung"
 
-#: gtk/gtkwidget.c:1119
+#: gtk/gtkwidget.c:1191
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Der Abstand zwischen dem Fokusanzeiger und dem »Kasten« um das Widget in "
 "Pixel"
 
-#: gtk/gtkwidget.c:1124
+#: gtk/gtkwidget.c:1196
 msgid "Cursor color"
 msgstr "Cursorfarbe"
 
-#: gtk/gtkwidget.c:1125
+#: gtk/gtkwidget.c:1197
 msgid "Color with which to draw insertion cursor"
-msgstr "Die Farbe, mit der der Einfügecursor gezeichnet wird"
+msgstr "Die Farbe, in der der Einfügecursor gezeichnet werden soll"
 
-#: gtk/gtkwidget.c:1130
+#: gtk/gtkwidget.c:1202
 msgid "Secondary cursor color"
 msgstr "Zweite Cursorfarbe"
 
-#: gtk/gtkwidget.c:1131
+#: gtk/gtkwidget.c:1203
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4860,13 +4856,13 @@ msgstr ""
 "Die Farbe des zweiten Einfügecursors, wenn rechts- und linksläufiger Text "
 "gemischt bearbeitet werden."
 
-#: gtk/gtkwidget.c:1136
+#: gtk/gtkwidget.c:1208
 msgid "Cursor line aspect ratio"
 msgstr "Seitenverhältnis der Cursorzeile"
 
-#: gtk/gtkwidget.c:1137
+#: gtk/gtkwidget.c:1209
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr "Das Seitenverhältnis, in dem der Einfügecursor gezeichnet wird"
+msgstr "Das Seitenverhältnis, in dem der Einfügecursor gezeichnet werden soll"
 
 #: gtk/gtkwindow.c:456
 msgid "Window Type"
@@ -5062,21 +5058,30 @@ msgid "X Input Method"
 msgstr "X-Eingabemethode"
 
 # CHECK
-#: modules/input/gtkimcontextxim.c:263
+#: modules/input/gtkimcontextxim.c:276
 msgid "IM Preedit style"
 msgstr "Im Voraus bearbeiteter EM-Stil"
 
 # CHECK
-#: modules/input/gtkimcontextxim.c:264
+#: modules/input/gtkimcontextxim.c:277
 msgid "How to draw the input method preedit string"
 msgstr ""
 "Wie die im Voraus bearbeitete Eingabemethoden-Zeichenkette gezeichnet werden "
 "soll"
 
-#: modules/input/gtkimcontextxim.c:272
+#: modules/input/gtkimcontextxim.c:285
 msgid "IM Status style"
 msgstr "EM-Statusstil"
 
-#: modules/input/gtkimcontextxim.c:273
+#: modules/input/gtkimcontextxim.c:286
 msgid "How to draw the input method statusbar"
 msgstr "Wie die Eingabemethoden-Statusleiste gezeichnet werden soll"
+
+#~ msgid "GIF image contained a frame with height or width 0."
+#~ msgstr "Die GIF-Datei enthielt ein Einzelbild mit Höhe oder Breite 0."
+
+#~ msgid ""
+#~ "First frame of GIF image had 'revert to previous' as its disposal mode."
+#~ msgstr ""
+#~ "Das erste Einzelbild des GIF-Bildes hatte »zum vorigen zurückgehen« als "
+#~ "Verlassensmodus."
