@@ -31,29 +31,30 @@ static void gtk_separator_class_init (GtkSeparatorClass *klass);
 static void gtk_separator_init       (GtkSeparator      *separator);
 
 
-GtkType
+GType
 gtk_separator_get_type (void)
 {
-  static GtkType separator_type = 0;
+  static GType separator_type = 0;
 
   if (!separator_type)
     {
       static const GTypeInfo separator_info =
       {
 	sizeof (GtkSeparatorClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_separator_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkSeparator),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_separator_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
-      separator_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkSeparator",
-					       &separator_info, G_TYPE_FLAG_ABSTRACT);
+      separator_type =
+	g_type_register_static (GTK_TYPE_WIDGET, "GtkSeparator",
+				&separator_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return separator_type;

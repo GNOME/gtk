@@ -26,33 +26,35 @@
  */
 
 #include "gtkhscrollbar.h"
-#include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
 
 static void     gtk_hscrollbar_class_init       (GtkHScrollbarClass *klass);
 static void     gtk_hscrollbar_init             (GtkHScrollbar      *hscrollbar);
 
-GtkType
+GType
 gtk_hscrollbar_get_type (void)
 {
-  static GtkType hscrollbar_type = 0;
+  static GType hscrollbar_type = 0;
   
   if (!hscrollbar_type)
     {
-      static const GtkTypeInfo hscrollbar_info =
+      static const GTypeInfo hscrollbar_info =
       {
-        "GtkHScrollbar",
-        sizeof (GtkHScrollbar),
         sizeof (GtkHScrollbarClass),
-        (GtkClassInitFunc) gtk_hscrollbar_class_init,
-        (GtkObjectInitFunc) gtk_hscrollbar_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_hscrollbar_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkHScrollbar),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_hscrollbar_init,
       };
       
-      hscrollbar_type = gtk_type_unique (GTK_TYPE_SCROLLBAR, &hscrollbar_info);
+      hscrollbar_type =
+	g_type_register_static (GTK_TYPE_SCROLLBAR, "GtkHScrollbar",
+				&hscrollbar_info, 0);
     }
   
   return hscrollbar_type;
@@ -79,9 +81,9 @@ gtk_hscrollbar_new (GtkAdjustment *adjustment)
 {
   GtkWidget *hscrollbar;
   
-  hscrollbar = gtk_widget_new (GTK_TYPE_HSCROLLBAR,
-			       "adjustment", adjustment,
-			       NULL);
+  hscrollbar = g_object_new (GTK_TYPE_HSCROLLBAR,
+			     "adjustment", adjustment,
+			     NULL);
 
   return hscrollbar;
 }

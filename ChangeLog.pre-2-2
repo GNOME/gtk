@@ -1,3 +1,9 @@
+Fri Oct  4 00:57:53 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtkhscrollbar.[ch] gtkhseparator.[ch] gtkrange.[ch]
+	gtkscrollbar.[ch] gtkseparator.[ch] gtkseparatormenuitem.h
+	gtkvscrollbar.[ch] gtkvseparator.[ch]: Deprecation cleanup
+
 Thu Oct  3 22:38:12 2002  Manish Singh  <yosh@gimp.org>
 
 	* gdk-pixbuf/queryloaders.c: make it legal C

@@ -33,26 +33,29 @@ static gint gtk_vseparator_expose     (GtkWidget          *widget,
 				       GdkEventExpose     *event);
 
 
-GtkType
+GType
 gtk_vseparator_get_type (void)
 {
-  static GtkType vseparator_type = 0;
+  static GType vseparator_type = 0;
 
   if (!vseparator_type)
     {
-      static const GtkTypeInfo vseparator_info =
+      static const GTypeInfo vseparator_info =
       {
-	"GtkVSeparator",
-	sizeof (GtkVSeparator),
 	sizeof (GtkVSeparatorClass),
-	(GtkClassInitFunc) gtk_vseparator_class_init,
-	(GtkObjectInitFunc) gtk_vseparator_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_vseparator_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_init */
+	sizeof (GtkVSeparator),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_vseparator_init,
       };
 
-      vseparator_type = gtk_type_unique (GTK_TYPE_SEPARATOR, &vseparator_info);
+      vseparator_type =
+	g_type_register_static (GTK_TYPE_SEPARATOR, "GtkVSeparator",
+				&vseparator_info, 0);
     }
 
   return vseparator_type;
@@ -78,7 +81,7 @@ gtk_vseparator_init (GtkVSeparator *vseparator)
 GtkWidget*
 gtk_vseparator_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_VSEPARATOR));
+  return g_object_new (GTK_TYPE_VSEPARATOR, NULL);
 }
 
 

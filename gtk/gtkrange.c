@@ -30,7 +30,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkrange.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 
 #define SCROLL_INITIAL_DELAY 250  /* must hold button this long before ... */
@@ -175,25 +174,25 @@ static GtkWidgetClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL];
 
 
-GtkType
+GType
 gtk_range_get_type (void)
 {
-  static GtkType range_type = 0;
+  static GType range_type = 0;
 
   if (!range_type)
     {
       static const GTypeInfo range_info =
       {
 	sizeof (GtkRangeClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_range_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkRange),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_range_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
       range_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkRange",
@@ -243,7 +242,7 @@ gtk_range_class_init (GtkRangeClass *class)
 
   signals[VALUE_CHANGED] =
     g_signal_new ("value_changed",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, value_changed),
                   NULL, NULL,
@@ -252,7 +251,7 @@ gtk_range_class_init (GtkRangeClass *class)
   
   signals[ADJUST_BOUNDS] =
     g_signal_new ("adjust_bounds",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkRangeClass, adjust_bounds),
                   NULL, NULL,
@@ -262,7 +261,7 @@ gtk_range_class_init (GtkRangeClass *class)
   
   signals[MOVE_SLIDER] =
     g_signal_new ("move_slider",
-                  G_TYPE_FROM_CLASS (object_class),
+                  G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkRangeClass, move_slider),
                   NULL, NULL,
@@ -519,25 +518,25 @@ gtk_range_set_adjustment (GtkRange      *range,
     {
       if (range->adjustment)
 	{
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (range->adjustment),
-                                         G_CALLBACK (gtk_range_adjustment_changed),
-					 range);
-          gtk_signal_disconnect_by_func (GTK_OBJECT (range->adjustment),
-                                         G_CALLBACK (gtk_range_adjustment_value_changed),
-					 range);
-	  gtk_object_unref (GTK_OBJECT (range->adjustment));
+	  g_signal_handlers_disconnect_by_func (range->adjustment,
+						gtk_range_adjustment_changed,
+						range);
+	  g_signal_handlers_disconnect_by_func (range->adjustment,
+						gtk_range_adjustment_value_changed,
+						range);
+	  g_object_unref (range->adjustment);
 	}
 
       range->adjustment = adjustment;
-      gtk_object_ref (GTK_OBJECT (adjustment));
+      g_object_ref (adjustment);
       gtk_object_sink (GTK_OBJECT (adjustment));
       
-      gtk_signal_connect (GTK_OBJECT (adjustment), "changed",
-			  (GtkSignalFunc) gtk_range_adjustment_changed,
-			  range);
-      gtk_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-			  (GtkSignalFunc) gtk_range_adjustment_value_changed,
-			  range);
+      g_signal_connect (adjustment, "changed",
+			G_CALLBACK (gtk_range_adjustment_changed),
+			range);
+      g_signal_connect (adjustment, "value_changed",
+			G_CALLBACK (gtk_range_adjustment_value_changed),
+			range);
       
       gtk_range_adjustment_changed (adjustment, range);
       g_object_notify (G_OBJECT (range), "adjustment");
@@ -714,10 +713,13 @@ gtk_range_destroy (GtkObject *object)
   
   if (range->adjustment)
     {
-      if (range->adjustment)
-	gtk_signal_disconnect_by_data (GTK_OBJECT (range->adjustment),
-				       (gpointer) range);
-      gtk_object_unref (GTK_OBJECT (range->adjustment));
+      g_signal_handlers_disconnect_by_func (range->adjustment,
+					    gtk_range_adjustment_changed,
+					    range);
+      g_signal_handlers_disconnect_by_func (range->adjustment,
+					    gtk_range_adjustment_value_changed,
+					    range);
+      g_object_unref (range->adjustment);
       range->adjustment = NULL;
     }
 
@@ -782,7 +784,7 @@ gtk_range_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   widget->window = gtk_widget_get_parent_window (widget);
-  gdk_window_ref (widget->window);
+  g_object_ref (widget->window);
   
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
@@ -1477,7 +1479,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
    * will enforce on the adjustment.
    */
 
-  g_signal_emit (G_OBJECT (range), signals[VALUE_CHANGED], 0);
+  g_signal_emit (range, signals[VALUE_CHANGED], 0);
 }
 
 static void
@@ -2258,7 +2260,7 @@ gtk_range_internal_set_value (GtkRange *range,
                               gdouble   value)
 {
   /* potentially adjust the bounds _before we clamp */
-  g_signal_emit (G_OBJECT (range), signals[ADJUST_BOUNDS], 0, value);
+  g_signal_emit (range, signals[ADJUST_BOUNDS], 0, value);
 
   value = CLAMP (value, range->adjustment->lower,
                  (range->adjustment->upper - range->adjustment->page_size));

@@ -35,29 +35,30 @@ static void gtk_scrollbar_style_set  (GtkWidget         *widget,
 
 static gpointer parent_class;
 
-GtkType
+GType
 gtk_scrollbar_get_type (void)
 {
-  static GtkType scrollbar_type = 0;
+  static GType scrollbar_type = 0;
 
   if (!scrollbar_type)
     {
       static const GTypeInfo scrollbar_info =
       {
 	sizeof (GtkScrollbarClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_scrollbar_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkScrollbar),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_scrollbar_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
 
-      scrollbar_type = g_type_register_static (GTK_TYPE_RANGE, "GtkScrollbar",
-					       &scrollbar_info, G_TYPE_FLAG_ABSTRACT);
+      scrollbar_type =
+	g_type_register_static (GTK_TYPE_RANGE, "GtkScrollbar",
+			        &scrollbar_info, G_TYPE_FLAG_ABSTRACT);
     }
 
   return scrollbar_type;

@@ -26,33 +26,35 @@
  */
 
 #include "gtkvscrollbar.h"
-#include "gtksignal.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkintl.h"
 
 static void     gtk_vscrollbar_class_init       (GtkVScrollbarClass *klass);
 static void     gtk_vscrollbar_init             (GtkVScrollbar      *vscrollbar);
 
-GtkType
+GType
 gtk_vscrollbar_get_type (void)
 {
-  static GtkType vscrollbar_type = 0;
+  static GType vscrollbar_type = 0;
   
   if (!vscrollbar_type)
     {
-      static const GtkTypeInfo vscrollbar_info =
+      static const GTypeInfo vscrollbar_info =
       {
-        "GtkVScrollbar",
-        sizeof (GtkVScrollbar),
         sizeof (GtkVScrollbarClass),
-        (GtkClassInitFunc) gtk_vscrollbar_class_init,
-        (GtkObjectInitFunc) gtk_vscrollbar_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_vscrollbar_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkVScrollbar),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_vscrollbar_init,
       };
       
-      vscrollbar_type = gtk_type_unique (GTK_TYPE_SCROLLBAR, &vscrollbar_info);
+      vscrollbar_type =
+	g_type_register_static (GTK_TYPE_SCROLLBAR, "GtkVScrollbar",
+				&vscrollbar_info, 0);
     }
   
   return vscrollbar_type;
@@ -79,9 +81,9 @@ gtk_vscrollbar_new (GtkAdjustment *adjustment)
 {
   GtkWidget *vscrollbar;
   
-  vscrollbar = gtk_widget_new (GTK_TYPE_VSCROLLBAR,
-			       "adjustment", adjustment,
-			       NULL);
+  vscrollbar = g_object_new (GTK_TYPE_VSCROLLBAR,
+			     "adjustment", adjustment,
+			     NULL);
   
   return vscrollbar;
 }
