@@ -13,6 +13,7 @@ libgdk_pixbuf_xlib_2_0_la_LDFLAGS =         \
 	-version-info $(LT_VERSION_INFO)
 
 libgdk_pixbuf_xlib_2_0_la_LIBADD = \
+        $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la \
 	$(GDK_PIXBUF_XLIB_DEP_LIBS)
 
 libgdk_pixbuf_xlib_2_0_la_SOURCES =         \
