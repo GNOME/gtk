@@ -1,3 +1,12 @@
+Mon Dec 29 12:22:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkuimanager.c (do_updates): 
+	* gtk/gtktoolbar.c (slide_idle_handler): 
+	* gtk/gtkdnd.c (gtk_drag_update_idle): 
+
+	Add GDK_THREADS_ENTER()/GDK_THREADS_LEAVE() pairs around idle
+	functions. (#130157, patch from Olexiy Avramchenko).
+	
 2003-12-29  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkradiotoolbutton.c:

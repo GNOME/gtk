@@ -2243,6 +2243,8 @@ update_node (GtkUIManager *self,
 static gboolean
 do_updates (GtkUIManager *self)
 {
+  GDK_THREADS_ENTER ();
+
   /* this function needs to check through the tree for dirty nodes.
    * For such nodes, it needs to do the following:
    *
@@ -2258,6 +2260,8 @@ do_updates (GtkUIManager *self)
   update_node (self, self->private_data->root_node, FALSE);
 
   self->private_data->update_tag = 0;
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

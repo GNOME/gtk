@@ -1058,8 +1058,12 @@ static gboolean
 slide_idle_handler (gpointer data)
 {
   GtkToolbar *toolbar = data;
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  GtkToolbarPrivate *priv;
   GList *list;
+
+  GDK_THREADS_ENTER ();
+
+  priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
 
   if (priv->need_sync)
     {
@@ -1083,13 +1087,16 @@ slide_idle_handler (gpointer data)
 	   GTK_WIDGET_CHILD_VISIBLE (content->item)))
 	{
 	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+
+	  GDK_THREADS_LEAVE ();
 	  return TRUE;
 	}
     }
 
   priv->is_sliding = FALSE;
   priv->idle_id = 0;
-  
+
+  GDK_THREADS_LEAVE();
   return FALSE;
 }
 

@@ -3147,6 +3147,8 @@ gtk_drag_update_idle (gpointer data)
   GdkDragAction possible_actions;
   guint32 time;
 
+  GDK_THREADS_ENTER ();
+
   info->update_idle = 0;
     
   time = gtk_drag_get_event_time (info->last_event);
@@ -3175,6 +3177,8 @@ gtk_drag_update_idle (gpointer data)
   selection = gdk_drag_get_selection (info->context);
   if (selection)
     gtk_drag_source_check_selection (info, selection, time);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
