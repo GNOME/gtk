@@ -9,6 +9,7 @@
 #include "gtktextbuffer.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include <string.h>
 
 enum {
   INSERT_TEXT,
@@ -384,43 +385,6 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
   gtk_text_buffer_insert(buffer, &iter, text, len);
 }
 
-void
-gtk_text_buffer_insert_at_char         (GtkTextBuffer      *buffer,
-                                        gint                 char_pos,
-                                        const gchar         *text,
-                                        gint                 len)
-{
-  GtkTextIter iter;
-
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-  g_return_if_fail(text != NULL);
-  
-  gtk_text_buffer_get_iter_at_char(buffer, &iter, char_pos);
-
-  gtk_text_buffer_insert(buffer, &iter, text, len);
-}
-
-void
-gtk_text_buffer_insert_after_line(GtkTextBuffer *buffer,
-                                  gint after_this_line,
-                                  const gchar *text,
-                                  gint len)
-{
-  GtkTextIter line;
-  
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-  g_return_if_fail(text != NULL);
-  
-  gtk_text_buffer_get_iter_at_line(buffer,
-                                   &line,
-                                   after_this_line);
-
-  /* Start of the next line */
-  gtk_text_iter_forward_line(&line);
-
-  gtk_text_buffer_insert(buffer, &line, text, len);
-}
-
 /*
  * Deletion
  */
@@ -473,67 +437,6 @@ gtk_text_buffer_delete (GtkTextBuffer *buffer,
   gtk_text_buffer_emit_delete(buffer, start, end);
 }
 
-void
-gtk_text_buffer_delete_chars (GtkTextBuffer      *buffer,
-                              gint                 start_char,
-                              gint                 end_char)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-
-  if (start_char == end_char)
-    return;
-
-  gtk_text_buffer_get_iter_at_char(buffer, &start, start_char);
-  gtk_text_buffer_get_iter_at_char(buffer, &end, end_char);
-
-  gtk_text_buffer_emit_delete(buffer, &start, &end);
-}
-
-void
-gtk_text_buffer_delete_lines(GtkTextBuffer *buffer,
-                             gint start_line,
-                             gint end_line)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-
-  if (start_line == end_line)
-    return;
-
-  /* start of the start line */
-  gtk_text_buffer_get_iter_at_line(buffer, &start, start_line);
-  
-  /* start of the end line; note that we don't delete the end_line, we
-     want to delete up to the start of it */
-  gtk_text_buffer_get_iter_at_line(buffer, &end, end_line);
-  
-  gtk_text_buffer_delete (buffer, &start, &end);
-}
-
-void
-gtk_text_buffer_delete_from_line(GtkTextBuffer *buffer,
-                                 gint line,
-                                 gint start_char, gint end_char)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-  
-  if (start_char == end_char)
-    return;
-
-  gtk_text_buffer_get_iter_at_line_char(buffer, &start, line, start_char);
-  gtk_text_buffer_get_iter_at_line_char(buffer, &end, line, end_char);
-
-  gtk_text_buffer_delete(buffer, &start, &end);
-}
-
 /*
  * Extracting textual buffer contents
  */
@@ -555,49 +458,6 @@ gtk_text_buffer_get_text (GtkTextBuffer      *buffer,
 }
 
 gchar*
-gtk_text_buffer_get_text_chars         (GtkTextBuffer      *buffer,
-                                        gint                 start_char,
-                                        gint                 end_char,
-                                        gboolean             include_hidden_chars)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  
-  if (start_char == end_char)
-    return g_strdup("");
-  
-  gtk_text_buffer_get_iter_at_char (buffer, &start, start_char);
-  gtk_text_buffer_get_iter_at_char (buffer, &end, end_char);
-  
-  return gtk_text_buffer_get_text(buffer, &start, &end,
-                                  include_hidden_chars);
-}
-
-gchar*
-gtk_text_buffer_get_text_from_line    (GtkTextBuffer      *buffer,
-                                       gint                 line,
-                                       gint                 start_char,
-                                       gint                 end_char,
-                                       gboolean             include_hidden_chars)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  
-  if (start_char == end_char)
-    return g_strdup("");
-  
-  gtk_text_buffer_get_iter_at_line_char (buffer, &start, line, start_char);
-  gtk_text_buffer_get_iter_at_line_char (buffer, &end, line, end_char);
-  
-  return gtk_text_buffer_get_text(buffer, &start, &end,
-                                  include_hidden_chars);
-}
-
-gchar*
 gtk_text_buffer_get_slice (GtkTextBuffer      *buffer,
                            const GtkTextIter *start,
                            const GtkTextIter *end,
@@ -611,49 +471,6 @@ gtk_text_buffer_get_slice (GtkTextBuffer      *buffer,
     return gtk_text_iter_get_slice(start, end);
   else
     return gtk_text_iter_get_visible_slice(start, end);
-}
-
-gchar*
-gtk_text_buffer_get_slice_chars         (GtkTextBuffer      *buffer,
-                                         gint                 start_char,
-                                         gint                 end_char,
-                                         gboolean             include_hidden_chars)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  
-  if (start_char == end_char)
-    return g_strdup("");
-  
-  gtk_text_buffer_get_iter_at_char (buffer, &start, start_char);
-  gtk_text_buffer_get_iter_at_char (buffer, &end, end_char);
-  
-  return gtk_text_buffer_get_slice(buffer, &start, &end,
-                                   include_hidden_chars);
-}
-
-gchar*
-gtk_text_buffer_get_slice_from_line    (GtkTextBuffer      *buffer,
-                                        gint                 line,
-                                        gint                 start_char,
-                                        gint                 end_char,
-                                        gboolean             include_hidden_chars)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-  
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), NULL);
-  
-  if (start_char == end_char)
-    return g_strdup("");
-  
-  gtk_text_buffer_get_iter_at_line_char (buffer, &start, line, start_char);
-  gtk_text_buffer_get_iter_at_line_char (buffer, &end, line, end_char);
-  
-  return gtk_text_buffer_get_slice(buffer, &start, &end,
-                                   include_hidden_chars);
 }
 
 /*
@@ -677,22 +494,6 @@ gtk_text_buffer_insert_pixmap         (GtkTextBuffer      *buffer,
   gtk_signal_emit(GTK_OBJECT(buffer), signals[CHANGED]);
   
   gtk_text_buffer_set_modified(buffer, TRUE);
-}
-
-void
-gtk_text_buffer_insert_pixmap_at_char (GtkTextBuffer      *buffer,
-                                       gint                 char_pos,
-                                       GdkPixmap           *pixmap,
-                                       GdkBitmap           *mask)
-{
-  GtkTextIter iter;
-
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
-  g_return_if_fail(pixmap != NULL);
-  
-  gtk_text_buffer_get_iter_at_char(buffer, &iter, char_pos);
-
-  gtk_text_buffer_insert_pixmap(buffer, &iter, pixmap, mask);
 }
 
 /*
@@ -935,71 +736,43 @@ gtk_text_buffer_remove_tag(GtkTextBuffer *buffer,
   gtk_text_buffer_emit_tag(buffer, name, FALSE, start, end);
 }
 
-void
-gtk_text_buffer_apply_tag_to_chars(GtkTextBuffer *buffer,
-                                   const gchar *name,
-                                   gint start_char, gint end_char)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-
-  gtk_text_buffer_get_iter_at_char(buffer, &start, start_char);
-  gtk_text_buffer_get_iter_at_char(buffer, &end, end_char);
-  
-  gtk_text_buffer_apply_tag(buffer, name, &start, &end);
-}
-
-void
-gtk_text_buffer_remove_tag_from_chars(GtkTextBuffer *buffer,
-                                      const gchar *name,
-                                      gint start_char, gint end_char)
-{
-  GtkTextIter start;
-  GtkTextIter end;
-
-  gtk_text_buffer_get_iter_at_char(buffer, &start, start_char);
-  gtk_text_buffer_get_iter_at_char(buffer, &end, end_char);
-  
-  gtk_text_buffer_remove_tag(buffer, name, &start, &end);
-}
-
 /*
  * Obtain various iterators
  */
 
 void
-gtk_text_buffer_get_iter_at_line_char    (GtkTextBuffer      *buffer,
-                                          GtkTextIter        *iter,
-                                          gint                 line_number,
-                                          gint                 char_number)
+gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer      *buffer,
+                                         GtkTextIter        *iter,
+                                         gint                line_number,
+                                         gint                char_offset)
 {  
   g_return_if_fail(iter != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
   gtk_text_btree_get_iter_at_line_char(buffer->tree,
-                                       iter, line_number, char_number);
+                                       iter, line_number, char_offset);
 }
 
 void
 gtk_text_buffer_get_iter_at_line    (GtkTextBuffer      *buffer,
                                      GtkTextIter        *iter,
-                                     gint                 line_number)
+                                     gint                line_number)
 {
   g_return_if_fail(iter != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_buffer_get_iter_at_line_char(buffer, iter, line_number, 0);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, iter, line_number, 0);
 }
 
 void
-gtk_text_buffer_get_iter_at_char         (GtkTextBuffer      *buffer,
-                                          GtkTextIter        *iter,
-                                          gint                 char_index)
+gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
+                                            GtkTextIter        *iter,
+                                            gint                char_offset)
 {
   g_return_if_fail(iter != NULL);
   g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_char(buffer->tree, iter, char_index);
+  gtk_text_btree_get_iter_at_char(buffer->tree, iter, char_offset);
 }
 
 void
@@ -1023,19 +796,6 @@ gtk_text_buffer_get_bounds (GtkTextBuffer *buffer,
 
   gtk_text_btree_get_iter_at_char(buffer->tree, start, 0);
   gtk_text_btree_get_last_iter(buffer->tree, end);
-}
-
-
-gboolean
-gtk_text_buffer_get_iter_from_string(GtkTextBuffer *buffer,
-                                     GtkTextIter *iter,
-                                     const gchar *index_string)
-{
-  g_return_val_if_fail(GTK_IS_TEXT_BUFFER(buffer), FALSE);
-
-  return gtk_text_btree_get_iter_from_string(buffer->tree,
-                                             iter,
-                                             index_string);
 }
 
 /*

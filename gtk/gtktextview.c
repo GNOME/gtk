@@ -57,6 +57,7 @@
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
 #include "gdk/gdkkeysyms.h"
+#include <string.h>
 
 enum {
   MOVE_INSERT,
@@ -423,22 +424,22 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   
   /* Eventually we want to move by display lines, not paragraphs */
   add_move_insert_binding (binding_set, GDK_Up, 0,
-                          GTK_TEXT_MOVEMENT_LINE, -1);
+                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, -1);
   
   add_move_insert_binding (binding_set, GDK_Down, 0,
-                          GTK_TEXT_MOVEMENT_LINE, 1);
+                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, 1);
 
   add_move_insert_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_LINE, -1);
+                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, -1);
   
   add_move_insert_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_LINE, 1);
+                          GTK_TEXT_MOVEMENT_WRAPPED_LINE, 1);
   
   add_move_insert_binding (binding_set, GDK_a, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_PARAGRAPH_ENDS, -1);
+                          GTK_TEXT_MOVEMENT_LINE_ENDS, -1);
 
   add_move_insert_binding (binding_set, GDK_e, GDK_CONTROL_MASK,
-                          GTK_TEXT_MOVEMENT_PARAGRAPH_ENDS, 1);
+                          GTK_TEXT_MOVEMENT_LINE_ENDS, 1);
 
   add_move_insert_binding (binding_set, GDK_f, GDK_MOD1_MASK,
                           GTK_TEXT_MOVEMENT_WORD, 1);
@@ -489,12 +490,12 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   gtk_binding_entry_add_signal (binding_set, GDK_k, GDK_CONTROL_MASK,
 				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_HALF_PARAGRAPH,
+				GTK_TYPE_ENUM, GTK_TEXT_DELETE_HALF_LINE,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_u, GDK_CONTROL_MASK,
 				"delete_text", 2,
-				GTK_TYPE_ENUM, GTK_TEXT_DELETE_WHOLE_PARAGRAPH,
+				GTK_TYPE_ENUM, GTK_TEXT_DELETE_WHOLE_LINE,
 				GTK_TYPE_INT, 1);
 
   gtk_binding_entry_add_signal (binding_set, GDK_space, GDK_MOD1_MASK,
@@ -651,8 +652,6 @@ gtk_text_view_set_buffer (GtkTextView *text_view,
   
   if (buffer != NULL)
     {
-      char *mark_name;
-      
       GtkTextIter start;
       
       gtk_object_ref (GTK_OBJECT (buffer));
@@ -661,7 +660,7 @@ gtk_text_view_set_buffer (GtkTextView *text_view,
       if (text_view->layout)
         gtk_text_layout_set_buffer (text_view->layout, buffer);
 
-      gtk_text_buffer_get_iter_at_char (text_view->buffer, &start, 0);
+      gtk_text_buffer_get_iter_at_offset (text_view->buffer, &start, 0);
       
       text_view->dnd_mark = gtk_text_buffer_create_mark (text_view->buffer,
 							 "__drag_target",
@@ -1756,7 +1755,7 @@ gtk_text_view_move_insert (GtkTextView *text_view,
                                                               "insert"));
   newplace = insert;
 
-  if (step == GTK_TEXT_MOVEMENT_LINE)
+  if (step == GTK_TEXT_MOVEMENT_WRAPPED_LINE)
     gtk_text_view_get_virtual_cursor_pos (text_view, &cursor_x_pos, NULL);
 
   switch (step)
@@ -1777,28 +1776,29 @@ gtk_text_view_move_insert (GtkTextView *text_view,
 	gtk_text_iter_forward_word_ends (&newplace, count);
       break;
 
-    case GTK_TEXT_MOVEMENT_LINE:
+    case GTK_TEXT_MOVEMENT_WRAPPED_LINE:
       gtk_text_view_move_iter_by_lines (text_view, &newplace, count);
       gtk_text_layout_move_iter_to_x (text_view->layout, &newplace, cursor_x_pos);
       break;
       
-    case GTK_TEXT_MOVEMENT_PARAGRAPH:
+    case GTK_TEXT_MOVEMENT_LINE:
       /* This should almost certainly instead be doing the parallel thing to WORD */
-      gtk_text_iter_down_lines (&newplace, count);
+      /*       gtk_text_iter_down_lines (&newplace, count); */
+      /* FIXME */
       break;
       
-    case GTK_TEXT_MOVEMENT_PARAGRAPH_ENDS:
+    case GTK_TEXT_MOVEMENT_LINE_ENDS:
       if (count > 0)
 	gtk_text_iter_forward_to_newline (&newplace);
       else if (count < 0)
-	gtk_text_iter_set_line_char (&newplace, 0);
+	gtk_text_iter_set_line_offset (&newplace, 0);
       break;
       
     case GTK_TEXT_MOVEMENT_BUFFER_ENDS:
       if (count > 0)
 	gtk_text_buffer_get_last_iter (text_view->buffer, &newplace);
       else if (count < 0)
-	gtk_text_buffer_get_iter_at_char (text_view->buffer, &newplace, 0);
+	gtk_text_buffer_get_iter_at_offset (text_view->buffer, &newplace, 0);
       break;
       
     default:
@@ -1819,7 +1819,7 @@ gtk_text_view_move_insert (GtkTextView *text_view,
                                     gtk_text_buffer_get_mark (text_view->buffer,
                                                               "insert"), 0);
 
-      if (step == GTK_TEXT_MOVEMENT_LINE)
+      if (step == GTK_TEXT_MOVEMENT_WRAPPED_LINE)
 	{
 	  gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
 	}
@@ -1859,7 +1859,7 @@ gtk_text_view_scroll_text (GtkTextView *text_view,
     {
     default:
     case GTK_TEXT_SCROLL_TO_TOP:
-      gtk_text_buffer_get_iter_at_char (text_view->buffer, &anchor, 0);
+      gtk_text_buffer_get_iter_at_offset (text_view->buffer, &anchor, 0);
       y0 = 0;
       y1 = adj->page_size;
       break;
@@ -1948,7 +1948,7 @@ find_whitepace_region (const GtkTextIter *center,
   *end = *center;
 
   if (gtk_text_iter_backward_find_char (start, not_whitespace, NULL))
-    gtk_text_iter_forward_char (start); /* we want the first whitespace... */
+    gtk_text_iter_next_char (start); /* we want the first whitespace... */
   if (whitespace (gtk_text_iter_get_char (end), NULL))
     gtk_text_iter_forward_find_char (end, not_whitespace, NULL);
   
@@ -1996,13 +1996,13 @@ gtk_text_view_delete_text (GtkTextView *text_view,
     case GTK_TEXT_DELETE_WHOLE_WORD:
       break;
       
+    case GTK_TEXT_DELETE_HALF_WRAPPED_LINE:
+      break;
+
+    case GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE:
+      break;
+
     case GTK_TEXT_DELETE_HALF_LINE:
-      break;
-
-    case GTK_TEXT_DELETE_WHOLE_LINE:
-      break;
-
-    case GTK_TEXT_DELETE_HALF_PARAGRAPH:
       while (count > 0)
         {
           if (!gtk_text_iter_forward_to_newline (&end))
@@ -2015,10 +2015,10 @@ gtk_text_view_delete_text (GtkTextView *text_view,
          and support that */
       break;
       
-    case GTK_TEXT_DELETE_WHOLE_PARAGRAPH:
+    case GTK_TEXT_DELETE_WHOLE_LINE:
       if (count > 0)
         {
-          gtk_text_iter_set_line_char (&start, 0);
+          gtk_text_iter_set_line_offset (&start, 0);
           gtk_text_iter_forward_to_newline (&end);
 
           /* Do the lines beyond the first. */

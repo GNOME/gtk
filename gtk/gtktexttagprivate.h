@@ -82,7 +82,7 @@ struct _GtkTextStyleValues
   gchar *language;
   
   /* hide the text  */
-  guint elide : 1;
+  guint invisible : 1;
 
   /* Background is fit to full line height rather than
    * baseline +/- ascent/descent (font height) */

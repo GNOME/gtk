@@ -77,7 +77,7 @@ struct _GtkTextTag {
   guint underline_set : 1;
   guint wrap_mode_set : 1;
   guint bg_full_height_set : 1;
-  guint elide_set : 1;
+  guint invisible_set : 1;
   guint editable_set : 1;
   guint language_set : 1;
   guint pad1 : 1;

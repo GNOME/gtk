@@ -290,14 +290,14 @@ msgbox_run (GtkWindow  *parent,
  * Example buffer filling code
  */
 static gint
-blink_timeout(gpointer data)
+blink_timeout (gpointer data)
 {
   GtkTextTag *tag;
   static gboolean flip = FALSE;
   
-  tag = GTK_TEXT_TAG(data);
+  tag = GTK_TEXT_TAG (data);
 
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
                  "foreground", flip ? "blue" : "purple",
                  NULL);
 
@@ -307,37 +307,37 @@ blink_timeout(gpointer data)
 }
 
 static gint
-tag_event_handler(GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
+tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
                   const GtkTextIter *iter, gpointer user_data)
 {
   gint char_index;
 
-  char_index = gtk_text_iter_get_char_index(iter);
+  char_index = gtk_text_buffer_get_offset (iter);
   
   switch (event->type)
     {
     case GDK_MOTION_NOTIFY:
-      printf("Motion event at char %d tag `%s'\n",
+      printf ("Motion event at char %d tag `%s'\n",
              char_index, tag->name);
       break;
         
     case GDK_BUTTON_PRESS:
-      printf("Button press at char %d tag `%s'\n",
+      printf ("Button press at char %d tag `%s'\n",
              char_index, tag->name);
       break;
         
     case GDK_2BUTTON_PRESS:
-      printf("Double click at char %d tag `%s'\n",
+      printf ("Double click at char %d tag `%s'\n",
              char_index, tag->name);
       break;
         
     case GDK_3BUTTON_PRESS:
-      printf("Triple click at char %d tag `%s'\n",
+      printf ("Triple click at char %d tag `%s'\n",
              char_index, tag->name);
       break;
         
     case GDK_BUTTON_RELEASE:
-      printf("Button release at char %d tag `%s'\n",
+      printf ("Button release at char %d tag `%s'\n",
              char_index, tag->name);
       break;
         
@@ -365,12 +365,12 @@ tag_event_handler(GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
 }
 
 static void
-setup_tag(GtkTextTag *tag)
+setup_tag (GtkTextTag *tag)
 {
 
-  gtk_signal_connect(GTK_OBJECT(tag),
+  gtk_signal_connect (GTK_OBJECT (tag),
                      "event",
-                     GTK_SIGNAL_FUNC(tag_event_handler),
+                     GTK_SIGNAL_FUNC (tag_event_handler),
                      NULL);
 }
 
@@ -413,77 +413,77 @@ fill_example_buffer (GtkTextBuffer *buffer)
   int i;
   char *str;
   
-  tag = gtk_text_buffer_create_tag(buffer, "fg_blue");
+  tag = gtk_text_buffer_create_tag (buffer, "fg_blue");
 
-  /*       gtk_timeout_add(1000, blink_timeout, tag); */
+  /*       gtk_timeout_add (1000, blink_timeout, tag); */
       
-  setup_tag(tag);
+  setup_tag (tag);
   
   color.red = color.green = 0;
   color.blue = 0xffff;
   color2.red = 0xfff;
   color2.blue = 0x0;
   color2.green = 0;
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "foreground_gdk", &color,
 		 "background_gdk", &color2,
 		 "font", "Sans 24",
 		 NULL);
 
-  tag = gtk_text_buffer_create_tag(buffer, "fg_red");
+  tag = gtk_text_buffer_create_tag (buffer, "fg_red");
 
-  setup_tag(tag);
+  setup_tag (tag);
       
   color.blue = color.green = 0;
   color.red = 0xffff;
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "offset", -4,
 		 "foreground_gdk", &color,
 		 NULL);
 
-  tag = gtk_text_buffer_create_tag(buffer, "bg_green");
+  tag = gtk_text_buffer_create_tag (buffer, "bg_green");
 
-  setup_tag(tag);
+  setup_tag (tag);
       
   color.blue = color.red = 0;
   color.green = 0xffff;
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "background_gdk", &color,
 		 "font", "Sans 10",
 		 NULL);
 
-  tag = gtk_text_buffer_create_tag(buffer, "overstrike");
+  tag = gtk_text_buffer_create_tag (buffer, "overstrike");
 
-  setup_tag(tag);
+  setup_tag (tag);
       
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "overstrike", TRUE,
 		 NULL);
 
 
-  tag = gtk_text_buffer_create_tag(buffer, "underline");
+  tag = gtk_text_buffer_create_tag (buffer, "underline");
 
-  setup_tag(tag);
+  setup_tag (tag);
       
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "underline", PANGO_UNDERLINE_SINGLE,
 		 NULL);
 
-  setup_tag(tag);
+  setup_tag (tag);
       
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "underline", PANGO_UNDERLINE_SINGLE,
 		 NULL);
 
-  tag = gtk_text_buffer_create_tag(buffer, "centered");
+  tag = gtk_text_buffer_create_tag (buffer, "centered");
       
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "justify", GTK_JUSTIFY_CENTER,
 		 NULL);
 
-  tag = gtk_text_buffer_create_tag(buffer, "rtl_quote");
+  tag = gtk_text_buffer_create_tag (buffer, "rtl_quote");
       
-  gtk_object_set(GTK_OBJECT(tag),
+  gtk_object_set (GTK_OBJECT (tag),
 		 "wrap_mode", GTK_WRAPMODE_WORD,
 		 "direction", GTK_TEXT_DIR_RTL,
 		 "left_wrapped_line_margin", 20,
@@ -492,31 +492,31 @@ fill_example_buffer (GtkTextBuffer *buffer)
 		 NULL);
   
   pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
-						  gtk_widget_get_default_colormap(),
+						  gtk_widget_get_default_colormap (),
 						  &mask,
 						  NULL, book_closed_xpm);
   
-  g_assert(pixmap != NULL);
+  g_assert (pixmap != NULL);
   
   i = 0;
   while (i < 100)
     {
       GtkTextMark * temp_mark;
       
-      gtk_text_buffer_get_iter_at_char(buffer, &iter, 0);
+      gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
           
       gtk_text_buffer_insert_pixmap (buffer, &iter, pixmap, mask);
           
-      str = g_strdup_printf("%d Hello World! blah blah blah blah blah blah blah blah blah blah blah blah\nwoo woo woo woo woo woo woo woo woo woo woo woo woo woo woo\n",
+      str = g_strdup_printf ("%d Hello World! blah blah blah blah blah blah blah blah blah blah blah blah\nwoo woo woo woo woo woo woo woo woo woo woo woo woo woo woo\n",
 			    i);
       
-      gtk_text_buffer_insert(buffer, &iter, str, -1);
+      gtk_text_buffer_insert (buffer, &iter, str, -1);
 
-      g_free(str);
+      g_free (str);
       
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 5);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 5);
           
-      gtk_text_buffer_insert(buffer, &iter,
+      gtk_text_buffer_insert (buffer, &iter,
 			     "(Hello World!)\nfoo foo Hello this is some text we are using to text word wrap. It has punctuation! gee; blah - hmm, great.\nnew line with a significant quantity of text on it. This line really does contain some text. More text! More text! More text!\n"
 			     /* This is UTF8 stuff, Emacs doesn't
 				really know how to display it */
@@ -526,35 +526,35 @@ fill_example_buffer (GtkTextBuffer *buffer)
         gtk_text_buffer_create_mark (buffer, "tmp_mark", &iter, TRUE);
 
 #if 1
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 6);
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 0, 13);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 6);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 0, 13);
 
-      gtk_text_buffer_apply_tag(buffer, "fg_blue", &iter, &iter2);
+      gtk_text_buffer_apply_tag (buffer, "fg_blue", &iter, &iter2);
 
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 1, 10);
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 1, 16);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 10);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 16);
 
-      gtk_text_buffer_apply_tag(buffer, "underline", &iter, &iter2);
+      gtk_text_buffer_apply_tag (buffer, "underline", &iter, &iter2);
 
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 1, 14);
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 1, 24);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 1, 14);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 1, 24);
 
-      gtk_text_buffer_apply_tag(buffer, "overstrike", &iter, &iter2);
+      gtk_text_buffer_apply_tag (buffer, "overstrike", &iter, &iter2);
           
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 9);
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 0, 16);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 0, 9);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 0, 16);
 
-      gtk_text_buffer_apply_tag(buffer, "bg_green", &iter, &iter2);
+      gtk_text_buffer_apply_tag (buffer, "bg_green", &iter, &iter2);
   
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 4, 2);
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 4, 10);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 4, 2);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 4, 10);
 
-      gtk_text_buffer_apply_tag(buffer, "bg_green", &iter, &iter2);
+      gtk_text_buffer_apply_tag (buffer, "bg_green", &iter, &iter2);
 
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 4, 8);
-      gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 4, 15);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter, 4, 8);
+      gtk_text_buffer_get_iter_at_line_offset (buffer, &iter2, 4, 15);
 
-      gtk_text_buffer_apply_tag(buffer, "fg_red", &iter, &iter2);
+      gtk_text_buffer_apply_tag (buffer, "fg_red", &iter, &iter2);
 #endif
 
       gtk_text_buffer_get_iter_at_mark (buffer, &iter, temp_mark);
@@ -572,13 +572,13 @@ fill_example_buffer (GtkTextBuffer *buffer)
       ++i;
     }
 
-  gdk_pixmap_unref(pixmap);
+  gdk_pixmap_unref (pixmap);
   if (mask)
-    gdk_bitmap_unref(mask);
+    gdk_bitmap_unref (mask);
   
-  printf("%d lines %d chars\n",
-	 gtk_text_buffer_get_line_count(buffer),
-	 gtk_text_buffer_get_char_count(buffer));
+  printf ("%d lines %d chars\n",
+	 gtk_text_buffer_get_line_count (buffer),
+	 gtk_text_buffer_get_char_count (buffer));
 
   gtk_text_buffer_set_modified (buffer, FALSE);
 }
@@ -591,7 +591,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
   gint remaining = 0;
   GtkTextIter iter, end;
 
-  f = fopen(filename, "r");
+  f = fopen (filename, "r");
   
   if (f == NULL)
     {
@@ -602,7 +602,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
       return FALSE;
     }
   
-  gtk_text_buffer_get_iter_at_char(buffer, &iter, 0);
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
   while (!feof (f))
     {
       gint count;
@@ -650,7 +650,7 @@ fill_file_buffer (GtkTextBuffer *buffer, const char *filename)
 }
 
 static gint
-delete_event_cb(GtkWidget *window, GdkEventAny *event, gpointer data)
+delete_event_cb (GtkWidget *window, GdkEventAny *event, gpointer data)
 {
   View *view = view_from_widget (window);
 
@@ -801,7 +801,7 @@ do_exit    (gpointer             callback_data,
       tmp_list = tmp_list->next;
     }
 
-  gtk_main_quit();
+  gtk_main_quit ();
   pop_active_window ();
 }
 
@@ -938,7 +938,7 @@ save_buffer (Buffer *buffer)
     }
   else
     {
-      gtk_text_buffer_get_iter_at_char (buffer->buffer, &start, 0);
+      gtk_text_buffer_get_iter_at_offset (buffer->buffer, &start, 0);
       gtk_text_buffer_get_last_iter (buffer->buffer, &end);
   
       chars = gtk_text_buffer_get_slice (buffer->buffer, &start, &end, FALSE);
@@ -988,7 +988,7 @@ save_as_ok_func (const char *filename, gpointer data)
     {
       struct stat statbuf;
 
-      if (stat(filename, &statbuf) == 0)
+      if (stat (filename, &statbuf) == 0)
 	{
 	  gchar *err = g_strdup_printf ("Ovewrite existing file '%s'?", filename);
 	  gint result = msgbox_run (NULL, err, "Yes", "No", NULL, 1);
@@ -1137,7 +1137,7 @@ close_view (View *view)
   g_free (view);
   
   if (!views)
-    gtk_main_quit();
+    gtk_main_quit ();
 }
 
 static void
@@ -1178,7 +1178,7 @@ create_view (Buffer *buffer)
   gtk_object_set_data (GTK_OBJECT (view->window), "view", view);
   
   gtk_signal_connect (GTK_OBJECT (view->window), "delete_event",
-		      GTK_SIGNAL_FUNC(delete_event_cb), NULL);
+		      GTK_SIGNAL_FUNC (delete_event_cb), NULL);
 
   view->accel_group = gtk_accel_group_new ();
   view->item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", view->accel_group);
@@ -1195,8 +1195,8 @@ create_view (Buffer *buffer)
 		      gtk_item_factory_get_widget (view->item_factory, "<main>"),
 		      FALSE, FALSE, 0);
   
-  sw = gtk_scrolled_window_new(NULL, NULL);
-  gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
                                  GTK_POLICY_AUTOMATIC,
                                  GTK_POLICY_AUTOMATIC);
 
@@ -1204,11 +1204,11 @@ create_view (Buffer *buffer)
   gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (view->text_view), GTK_WRAPMODE_WORD);
 
   gtk_box_pack_start (GTK_BOX (vbox), sw, TRUE, TRUE, 0);
-  gtk_container_add(GTK_CONTAINER(sw), view->text_view);
+  gtk_container_add (GTK_CONTAINER (sw), view->text_view);
 
   gtk_window_set_default_size (GTK_WINDOW (view->window), 500, 500);
 
-  gtk_widget_grab_focus(view->text_view);
+  gtk_widget_grab_focus (view->text_view);
 
   view_set_title (view);
   view_init_menus (view);
@@ -1218,13 +1218,13 @@ create_view (Buffer *buffer)
 }
 
 int
-main(int argc, char** argv)
+main (int argc, char** argv)
 {
   Buffer *buffer;
   View *view;
   int i;
   
-  gtk_init(&argc, &argv);
+  gtk_init (&argc, &argv);
 
   buffer = create_buffer ();
   view = create_view (buffer);
@@ -1254,7 +1254,7 @@ main(int argc, char** argv)
     }
   pop_active_window ();
   
-  gtk_main();
+  gtk_main ();
 
   return 0;
 }

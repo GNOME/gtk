@@ -556,12 +556,12 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 	      gtk_text_iter_compare (&selection_end, &line_start) > 0)
 	    {
 	      if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
-		selection_start_index = gtk_text_iter_get_line_byte (&selection_start);
+		selection_start_index = gtk_text_iter_get_line_index (&selection_start);
 	      else
 		selection_start_index = -1;
 
 	      if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
-		selection_end_index = gtk_text_iter_get_line_byte (&selection_end);
+		selection_end_index = gtk_text_iter_get_line_index (&selection_end);
 	      else
 		selection_end_index = byte_count;
 	    }

@@ -51,6 +51,7 @@
 #include "gtktexttypes.h"
 #include "gtktexttagtable.h"
 #include "gtksignal.h"
+#include "gtkmain.h"
 
 #include <stdlib.h>
 
@@ -1286,8 +1287,8 @@ gtk_text_style_values_fill_from_tags(GtkTextStyleValues *dest,
       if (tag->overstrike_set)
         dest->appearance.overstrike = vals->appearance.overstrike;
 
-      if (tag->elide_set)
-        dest->elide = vals->elide;
+      if (tag->invisible_set)
+        dest->invisible = vals->invisible;
 
       if (tag->editable_set)
         dest->editable = vals->editable;

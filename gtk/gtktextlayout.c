@@ -55,6 +55,7 @@
 #include "gtktextiterprivate.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 static GtkTextLineData    *gtk_text_line_data_new                 (GtkTextLayout     *layout,
 								   GtkTextLine       *line);
@@ -527,8 +528,8 @@ gtk_text_layout_real_invalidate (GtkTextLayout *layout,
   gtk_text_view_index_spew (end_index, "invalidate end");
 #endif
   
-  last_line = gtk_text_iter_get_line (end);
-  line = gtk_text_iter_get_line (start);
+  last_line = gtk_text_iter_get_text_line (end);
+  line = gtk_text_iter_get_text_line (start);
 
   while (TRUE)
     {
@@ -629,7 +630,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
   
   /* Validate backwards from the anchor line to y0
    */
-  line = gtk_text_iter_get_line (anchor);
+  line = gtk_text_iter_get_text_line (anchor);
   seen = 0;
   while (line && seen < -y0)
     {
@@ -657,7 +658,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
     }
 
   /* Validate forwards to y1 */
-  line = gtk_text_iter_get_line (anchor);
+  line = gtk_text_iter_get_text_line (anchor);
   seen = 0;
   while (line && seen < y1)
     {
@@ -858,13 +859,13 @@ totally_invisible_line (GtkTextLayout *layout,
   int bytes = 0;
   
   /* If we have a cached style, then we know it does actually apply
-     and we can just see if it is elided. */
+     and we can just see if it is invisible. */
   if (layout->one_style_cache &&
-      !layout->one_style_cache->elide)
+      !layout->one_style_cache->invisible)
     return FALSE;
   /* Without the cache, we check if the first char is visible, if so
      we are partially visible.  Note that we have to check this since
-     we don't know the current elided/nonelided toggle state; this
+     we don't know the current invisible/noninvisible toggle state; this
      function can use the whole btree to get it right. */
   else
     {
@@ -885,16 +886,16 @@ totally_invisible_line (GtkTextLayout *layout,
       /* Note that these two tests can cause us to bail out
          when we shouldn't, because a higher-priority tag
          may override these settings. However the important
-         thing is to only elide really-elided lines, rather
-         than to elide all really-elided lines. */
+         thing is to only invisible really-invisible lines, rather
+         than to invisible all really-invisible lines. */
       
       else if (seg->type == &gtk_text_toggle_on_type)
         {
           invalidate_cached_style (layout);
           
           /* Bail out if an elision-unsetting tag begins */
-          if (seg->body.toggle.info->tag->elide_set &&
-              !seg->body.toggle.info->tag->values->elide)
+          if (seg->body.toggle.info->tag->invisible_set &&
+              !seg->body.toggle.info->tag->values->invisible)
             break;
         }
       else if (seg->type == &gtk_text_toggle_off_type)
@@ -902,8 +903,8 @@ totally_invisible_line (GtkTextLayout *layout,
           invalidate_cached_style (layout);
           
           /* Bail out if an elision-setting tag ends */
-          if (seg->body.toggle.info->tag->elide_set &&
-              seg->body.toggle.info->tag->values->elide)
+          if (seg->body.toggle.info->tag->invisible_set &&
+              seg->body.toggle.info->tag->values->invisible)
             break;
         }
 
@@ -1227,12 +1228,12 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	      para_values_set = TRUE;
 	    }
 
-          /* First see if the chunk is elided, and ignore it if so. Tk
+          /* First see if the chunk is invisible, and ignore it if so. Tk
 	   * looked at tabs, wrap mode, etc. before doing this, but
 	   * that made no sense to me, so I am just skipping the
-	   * elided chunks
+	   * invisible chunks
 	   */
-          if (!style->elide)
+          if (!style->invisible)
             {
 	      if (seg->type == &gtk_text_char_type)
 		{
@@ -1481,7 +1482,7 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
                                    line, byte_index);
 
   while (trailing--)
-    gtk_text_iter_forward_char (target_iter);
+    gtk_text_iter_next_char (target_iter);
   
   gtk_text_layout_free_line_display (layout, display);
 }
@@ -1518,12 +1519,12 @@ gtk_text_layout_get_cursor_locations (GtkTextLayout  *layout,
   g_return_if_fail (layout != NULL);
   g_return_if_fail (iter != NULL);
   
-  line = gtk_text_iter_get_line (iter);
+  line = gtk_text_iter_get_text_line (iter);
   line_top = gtk_text_btree_find_line_top (layout->buffer->tree, line, layout);
 
   display = gtk_text_layout_get_line_display (layout, line, TRUE);
 
-  pango_layout_get_cursor_pos (display->layout, gtk_text_iter_get_line_byte (iter),
+  pango_layout_get_cursor_pos (display->layout, gtk_text_iter_get_line_index (iter),
 			       strong_pos ? &pango_strong_pos : NULL,
 			       weak_pos ? &pango_weak_pos : NULL);
 
@@ -1565,7 +1566,7 @@ gtk_text_layout_get_line_y (GtkTextLayout     *layout,
   g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), 0);
   g_return_val_if_fail (gtk_text_iter_get_btree (iter) == layout->buffer->tree, 0);
   
-  line = gtk_text_iter_get_line (iter);
+  line = gtk_text_iter_get_text_line (iter);
   return gtk_text_btree_find_line_top (layout->buffer->tree, line, layout);
 }
 
@@ -1585,7 +1586,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
   g_return_if_fail (rect != NULL);
   
   tree = gtk_text_iter_get_btree (iter);
-  line = gtk_text_iter_get_line (iter);
+  line = gtk_text_iter_get_text_line (iter);
 
   display = gtk_text_layout_get_line_display (layout, line, TRUE);
 
@@ -1608,7 +1609,7 @@ gtk_text_layout_get_iter_location (GtkTextLayout     *layout,
     }
   else
     {
-      byte_index = gtk_text_iter_get_line_byte (iter);
+      byte_index = gtk_text_iter_get_line_index (iter);
   
       pango_layout_index_to_pos (display->layout, byte_index, &pango_rect);
       
@@ -1748,7 +1749,7 @@ find_display_line_above (GtkTextLayout *layout,
   if (found_line)
     gtk_text_btree_get_iter_at_line (layout->buffer->tree, iter, found_line, found_byte);
   else
-    gtk_text_buffer_get_iter_at_char (layout->buffer, iter, 0);
+    gtk_text_buffer_get_iter_at_offset (layout->buffer, iter, 0);
 }
   
 /**
@@ -1819,8 +1820,8 @@ gtk_text_layout_move_iter_to_previous_line (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (iter != NULL);
   
-  line = gtk_text_iter_get_line (iter);
-  line_byte = gtk_text_iter_get_line_byte (iter);
+  line = gtk_text_iter_get_text_line (iter);
+  line_byte = gtk_text_iter_get_line_offset (iter);
   
   display = gtk_text_layout_get_line_display (layout, line, TRUE);
 
@@ -1905,8 +1906,8 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (iter != NULL);
   
-  line = gtk_text_iter_get_line (iter);
-  line_byte = gtk_text_iter_get_line_byte (iter);
+  line = gtk_text_iter_get_text_line (iter);
+  line_byte = gtk_text_iter_get_line_offset (iter);
   
   while (line && !found_after)
     {
@@ -1965,8 +1966,8 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (iter != NULL);
   
-  line = gtk_text_iter_get_line (iter);
-  line_byte = gtk_text_iter_get_line_byte (iter);
+  line = gtk_text_iter_get_text_line (iter);
+  line_byte = gtk_text_iter_get_line_index (iter);
   
   display = gtk_text_layout_get_line_display (layout, line, TRUE);
 
@@ -2009,7 +2010,7 @@ gtk_text_layout_move_iter_to_x (GtkTextLayout *layout,
 					   line, byte_index);
 	  
 	  while (trailing--)
-	    gtk_text_iter_forward_char (iter);
+	    gtk_text_iter_next_char (iter);
 
 	  break;
 	}
@@ -2050,8 +2051,8 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
   
   while (count != 0)
     {
-      GtkTextLine *line = gtk_text_iter_get_line (iter);
-      gint line_byte = gtk_text_iter_get_line_byte (iter);
+      GtkTextLine *line = gtk_text_iter_get_text_line (iter);
+      gint line_byte = gtk_text_iter_get_line_index (iter);
       GtkTextLineDisplay *display = gtk_text_layout_get_line_display (layout, line, TRUE);
       int byte_count = gtk_text_line_byte_count (line);
       
@@ -2093,7 +2094,7 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
 				       iter,
 				       line, new_index);
       while (new_trailing--)
-	gtk_text_iter_forward_char (iter);
+	gtk_text_iter_next_char (iter);
     }
 
 }

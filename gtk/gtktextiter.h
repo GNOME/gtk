@@ -46,10 +46,10 @@ void         gtk_text_iter_free     (GtkTextIter       *iter);
 /*
  * Convert to different kinds of index
  */
-gint     gtk_text_iter_get_char_index  (const GtkTextIter *iter);
-gint     gtk_text_iter_get_line_number (const GtkTextIter *iter);
-gint     gtk_text_iter_get_line_char   (const GtkTextIter *iter);
-gint     gtk_text_iter_get_line_byte   (const GtkTextIter *iter);
+gint     gtk_text_buffer_get_offset  (const GtkTextIter *iter);
+gint     gtk_text_iter_get_line (const GtkTextIter *iter);
+gint     gtk_text_iter_get_line_offset   (const GtkTextIter *iter);
+gint     gtk_text_iter_get_line_index   (const GtkTextIter *iter);
 
 /*
  * "Dereference" operators
@@ -100,36 +100,32 @@ gint     gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter);
 /*
  * Moving around the buffer
  */
-gboolean gtk_text_iter_forward_char    (GtkTextIter       *iter);
-gboolean gtk_text_iter_backward_char   (GtkTextIter       *iter);
-gboolean gtk_text_iter_forward_chars   (GtkTextIter       *iter,
-                                         gint                count);
-gboolean gtk_text_iter_backward_chars  (GtkTextIter       *iter,
-                                         gint                count);
-gboolean gtk_text_iter_forward_line    (GtkTextIter       *iter);
-gboolean gtk_text_iter_backward_line   (GtkTextIter       *iter);
-gboolean gtk_text_iter_forward_lines   (GtkTextIter       *iter,
-                                         gint                count);
-gboolean gtk_text_iter_backward_lines  (GtkTextIter       *iter,
-                                         gint                count);
-gboolean gtk_text_iter_forward_word_ends(GtkTextIter      *iter,
-                                          gint               count);
-gboolean gtk_text_iter_backward_word_starts(GtkTextIter      *iter,
-                                             gint               count);
-gboolean gtk_text_iter_forward_word_end(GtkTextIter      *iter);
-gboolean gtk_text_iter_backward_word_start(GtkTextIter      *iter);
 
-gboolean gtk_text_iter_up_lines        (GtkTextIter *iter,
-                                         gint count);
+gboolean gtk_text_iter_next_char            (GtkTextIter *iter);
+gboolean gtk_text_iter_prev_char            (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_chars        (GtkTextIter *iter,
+                                             gint         count);
+gboolean gtk_text_iter_backward_chars       (GtkTextIter *iter,
+                                             gint         count);
+gboolean gtk_text_iter_forward_line         (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_line        (GtkTextIter *iter);
+gboolean gtk_text_iter_forward_lines        (GtkTextIter *iter,
+                                             gint         count);
+gboolean gtk_text_iter_backward_lines       (GtkTextIter *iter,
+                                             gint         count);
+gboolean gtk_text_iter_forward_word_ends    (GtkTextIter *iter,
+                                             gint         count);
+gboolean gtk_text_iter_backward_word_starts (GtkTextIter *iter,
+                                             gint         count);
+gboolean gtk_text_iter_forward_word_end     (GtkTextIter *iter);
+gboolean gtk_text_iter_backward_word_start  (GtkTextIter *iter);
 
-gboolean gtk_text_iter_down_lines        (GtkTextIter *iter,
-                                           gint count);
 
-void     gtk_text_iter_set_char_index  (GtkTextIter       *iter,
+void     gtk_text_iter_set_offset  (GtkTextIter       *iter,
                                          gint                char_index);
-void     gtk_text_iter_set_line_number (GtkTextIter       *iter,
+void     gtk_text_iter_set_line (GtkTextIter       *iter,
                                          gint                line_number);
-void     gtk_text_iter_set_line_char   (GtkTextIter       *iter,
+void     gtk_text_iter_set_line_offset   (GtkTextIter       *iter,
                                          gint                char_on_line);
 
 void     gtk_text_iter_forward_to_end  (GtkTextIter       *iter);
@@ -144,14 +140,14 @@ gboolean gtk_text_iter_forward_find_tag_toggle (GtkTextIter *iter,
 gboolean gtk_text_iter_backward_find_tag_toggle (GtkTextIter *iter,
                                                   GtkTextTag  *tag);
 
-typedef gboolean (* GtkTextViewCharPredicate) (gunichar ch, gpointer user_data);
+typedef gboolean (* GtkTextCharPredicate) (gunichar ch, gpointer user_data);
 
 gboolean gtk_text_iter_forward_find_char      (GtkTextIter *iter,
-					       GtkTextViewCharPredicate pred,
+					       GtkTextCharPredicate pred,
 					       gpointer user_data);
 
 gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
-					       GtkTextViewCharPredicate pred,
+					       GtkTextCharPredicate pred,
 					       gpointer user_data);
 
 /*

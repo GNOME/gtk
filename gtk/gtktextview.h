@@ -13,9 +13,9 @@ typedef enum {
   GTK_TEXT_MOVEMENT_CHAR,       /* move by forw/back chars */
   GTK_TEXT_MOVEMENT_POSITIONS,  /* move by left/right chars */
   GTK_TEXT_MOVEMENT_WORD,       /* move by forward/back words */
-  GTK_TEXT_MOVEMENT_LINE,       /* move up/down lines (wrapped lines) */
-  GTK_TEXT_MOVEMENT_PARAGRAPH,  /* move up/down paragraphs (newline-ended lines) */
-  GTK_TEXT_MOVEMENT_PARAGRAPH_ENDS,   /* move to either end of a paragraph */
+  GTK_TEXT_MOVEMENT_WRAPPED_LINE,       /* move up/down lines (wrapped lines) */
+  GTK_TEXT_MOVEMENT_LINE,  /* move up/down paragraphs (newline-ended lines) */
+  GTK_TEXT_MOVEMENT_LINE_ENDS,   /* move to either end of a paragraph */
   GTK_TEXT_MOVEMENT_BUFFER_ENDS       /* move to ends of the buffer */
 } GtkTextViewMovementStep;
 
@@ -32,10 +32,10 @@ typedef enum {
                                  left/right of cursor if we're in the middle
                                  of a word */
   GTK_TEXT_DELETE_WHOLE_WORD,
-  GTK_TEXT_DELETE_HALF_LINE,
-  GTK_TEXT_DELETE_WHOLE_LINE,
-  GTK_TEXT_DELETE_HALF_PARAGRAPH,  /* like C-k in Emacs (or its reverse) */
-  GTK_TEXT_DELETE_WHOLE_PARAGRAPH, /* C-k in pico, kill whole line */
+  GTK_TEXT_DELETE_HALF_WRAPPED_LINE,
+  GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE,
+  GTK_TEXT_DELETE_HALF_LINE,  /* like C-k in Emacs (or its reverse) */
+  GTK_TEXT_DELETE_WHOLE_LINE, /* C-k in pico, kill whole line */
   GTK_TEXT_DELETE_WHITESPACE,      /* M-\ in Emacs */
   GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE /* M-space in Emacs */
 } GtkTextViewDeleteType;
