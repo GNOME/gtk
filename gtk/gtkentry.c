@@ -135,6 +135,7 @@ static gint   gtk_entry_focus_in             (GtkWidget        *widget,
 					      GdkEventFocus    *event);
 static gint   gtk_entry_focus_out            (GtkWidget        *widget,
 					      GdkEventFocus    *event);
+static void   gtk_entry_grab_focus           (GtkWidget        *widget);
 static void   gtk_entry_style_set            (GtkWidget        *widget,
 					      GtkStyle         *previous_style);
 static void   gtk_entry_direction_changed    (GtkWidget        *widget,
@@ -354,6 +355,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->key_press_event = gtk_entry_key_press;
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
+  widget_class->grab_focus = gtk_entry_grab_focus;
   widget_class->style_set = gtk_entry_style_set;
   widget_class->direction_changed = gtk_entry_direction_changed;
   widget_class->state_changed = gtk_entry_state_changed;
@@ -1301,7 +1303,11 @@ gtk_entry_button_press (GtkWidget      *widget,
   entry->button = event->button;
   
   if (!GTK_WIDGET_HAS_FOCUS (widget))
-    gtk_widget_grab_focus (widget);
+    {
+      entry->in_click = TRUE;
+      gtk_widget_grab_focus (widget);
+      entry->in_click = FALSE;
+    }
   
   tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
     
@@ -1484,7 +1490,16 @@ gtk_entry_motion_notify (GtkWidget      *widget,
     }
   else
     {
-      tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
+      gint height;
+      gdk_window_get_size (entry->text_area, NULL, &height);
+
+      if (event->y < 0)
+	tmp_pos = 0;
+      else if (event->y >= height)
+	tmp_pos = entry->text_length;
+      else
+	tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
+      
       gtk_entry_set_positions (entry, tmp_pos, -1);
     }
       
@@ -1555,6 +1570,15 @@ gtk_entry_focus_out (GtkWidget     *widget,
                                         entry);
 
   return FALSE;
+}
+
+static void
+gtk_entry_grab_focus (GtkWidget        *widget)
+{
+   GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
+
+  if (!GTK_ENTRY (widget)->in_click)
+    gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
 }
 
 static void 
@@ -1837,6 +1861,37 @@ gtk_entry_real_delete_text (GtkEntry *entry,
   gtk_entry_recompute (entry);
 }
 
+/* Compute the X position for an offset that corresponds to the "more important
+ * cursor position for that offset. We use this when trying to guess to which
+ * end of the selection we should go to when the user hits the left or
+ * right arrow key.
+ */
+static gint
+get_better_cursor_x (GtkEntry *entry,
+		     gint      offset)
+{
+  GtkTextDirection keymap_direction =
+    (gdk_keymap_get_direction (gdk_keymap_get_default ()) == PANGO_DIRECTION_LTR) ?
+    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+  GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
+  gboolean split_cursor;
+  
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
+  gint index = g_utf8_offset_to_pointer (entry->text, offset) - entry->text;
+  
+  PangoRectangle strong_pos, weak_pos;
+  
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (entry)),
+		"gtk-split-cursor", &split_cursor,
+		NULL);
+
+  pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
+
+  if (split_cursor)
+    return strong_pos.x / PANGO_SCALE;
+  else
+    return (keymap_direction == widget_direction) ? strong_pos.x / PANGO_SCALE : weak_pos.x / PANGO_SCALE;
+}
 
 static void
 gtk_entry_move_cursor (GtkEntry       *entry,
@@ -1847,36 +1902,76 @@ gtk_entry_move_cursor (GtkEntry       *entry,
   gint new_pos = entry->current_pos;
 
   gtk_entry_reset_im_context (entry);
-  
-  switch (step)
+
+  if (entry->current_pos != entry->selection_bound && !extend_selection)
     {
-    case GTK_MOVEMENT_LOGICAL_POSITIONS:
-      new_pos = gtk_entry_move_logically (entry, new_pos, count);
-      break;
-    case GTK_MOVEMENT_VISUAL_POSITIONS:
-      new_pos = gtk_entry_move_visually (entry, new_pos, count);
-      break;
-    case GTK_MOVEMENT_WORDS:
-      while (count > 0)
+      /* If we have a current selection and aren't extending it, move to the
+       * start/or end of the selection as appropriate
+       */
+      switch (step)
 	{
-	  new_pos = gtk_entry_move_forward_word (entry, new_pos);
-	  count--;
+	case GTK_MOVEMENT_VISUAL_POSITIONS:
+	  {
+	    gint current_x = get_better_cursor_x (entry, entry->current_pos);
+	    gint bound_x = get_better_cursor_x (entry, entry->selection_bound);
+
+	    if (count < 0)
+	      new_pos = current_x < bound_x ? entry->current_pos : entry->selection_bound;
+	    else
+	      new_pos = current_x > bound_x ? entry->current_pos : entry->selection_bound;
+
+	    break;
+	  }
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
+	case GTK_MOVEMENT_WORDS:
+	  if (count < 0)
+	    new_pos = MIN (entry->current_pos, entry->selection_bound);
+	  else
+	    new_pos = MAX (entry->current_pos, entry->selection_bound);
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+	case GTK_MOVEMENT_PARAGRAPH_ENDS:
+	case GTK_MOVEMENT_BUFFER_ENDS:
+	  new_pos = count < 0 ? 0 : entry->text_length;
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINES:
+	case GTK_MOVEMENT_PARAGRAPHS:
+	case GTK_MOVEMENT_PAGES:
+	  break;
 	}
-      while (count < 0)
+    }
+  else
+    {
+      switch (step)
 	{
-	  new_pos = gtk_entry_move_backward_word (entry, new_pos);
-	  count++;
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
+	  new_pos = gtk_entry_move_logically (entry, new_pos, count);
+	  break;
+	case GTK_MOVEMENT_VISUAL_POSITIONS:
+	  new_pos = gtk_entry_move_visually (entry, new_pos, count);
+	  break;
+	case GTK_MOVEMENT_WORDS:
+	  while (count > 0)
+	    {
+	      new_pos = gtk_entry_move_forward_word (entry, new_pos);
+	      count--;
+	    }
+	  while (count < 0)
+	    {
+	      new_pos = gtk_entry_move_backward_word (entry, new_pos);
+	      count++;
+	    }
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+	case GTK_MOVEMENT_PARAGRAPH_ENDS:
+	case GTK_MOVEMENT_BUFFER_ENDS:
+	  new_pos = count < 0 ? 0 : entry->text_length;
+	  break;
+	case GTK_MOVEMENT_DISPLAY_LINES:
+	case GTK_MOVEMENT_PARAGRAPHS:
+	case GTK_MOVEMENT_PAGES:
+	  break;
 	}
-      break;
-    case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
-    case GTK_MOVEMENT_PARAGRAPH_ENDS:
-    case GTK_MOVEMENT_BUFFER_ENDS:
-      new_pos = count < 0 ? 0 : entry->text_length;
-      break;
-    case GTK_MOVEMENT_DISPLAY_LINES:
-    case GTK_MOVEMENT_PARAGRAPHS:
-    case GTK_MOVEMENT_PAGES:
-      break;
     }
 
   if (extend_selection)
@@ -2103,7 +2198,7 @@ gtk_entry_set_positions (GtkEntry *entry,
     }
 
   if (selection_bound != -1 &&
-      entry->selection_bound != current_pos)
+      entry->selection_bound != selection_bound)
     {
       entry->selection_bound = selection_bound;
       changed = TRUE;
@@ -3466,6 +3561,7 @@ static gboolean
 gtk_entry_mnemonic_activate (GtkWidget *widget,
 			     gboolean   group_cycling)
 {
+  
   gtk_widget_grab_focus (widget);
   return TRUE;
 }

@@ -1,3 +1,22 @@
+Thu Jul 19 14:24:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_set_positions): Fix
+	typo that sometimes caused selection not to work properly.
+
+	* gtk/gtkentry.c (gtk_entry_grab_focus): Select text in
+	entry when tabbing in. (#57743)
+	
+	* gtk/gtkentry.c (gtk_entry_motion_notify): If the
+	user drags up above or down below the entry, move
+	to the end or the beginning of the entry. (Suggestion
+	from Jay Cox, #50940)
+
+	* gtk/gtkentry.c (gtk_entry_move_cursor): If we have
+	a current selection, then when moving by chars or
+	words, move to the end of the selection rather than
+	from entry->current_pos. (Suggestion from Jay Cox,
+	#50942)
+	
 Thu Jul 19 12:14:28 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_set_decorated): Actualy
