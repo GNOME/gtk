@@ -1,3 +1,20 @@
+2002-04-24  Matthias Clasen  <maclas@gmx.de>
+
+	Merged from HEAD:
+
+	* gtk/tmpl/gtksocket.sgml:
+	* gtk/tmpl/gtkdrawingarea.sgml:
+	* gtk/tmpl/gtktreemodel.sgml:
+	* gtk/tmpl/gtkradiomenuitem.sgml:
+	* gtk/tmpl/gtkwidget.sgml:
+	* gtk/tmpl/gtkdialog.sgml:
+	* gdk-pixbuf/tmpl/gdk-pixbuf-loader.sgml:
+	* gtk/text_widget.sgml:
+	* gtk/tree_widget.sgml:
+	* gtk/gtk-sections.txt:
+	* gdk/tmpl/properties.sgml: Documentation fixes.  (#79001, #67818,
+	#79080, #78661, #78392, #75588, #72312, #74439) 
+
 Tue Mar 26 15:41:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/building.sgml: Add a mention of running ldconfig.

@@ -25,7 +25,7 @@ have been added to its parent.
 <example>
 <title>Obtaining the window ID of a socket.</title>
 <programlisting>
-GtkWidget *socket = gtk_socket_new (<!>);
+GtkWidget *socket = gtk_socket_new (<!-- -->);
 gtk_widget_show (socket);
 gtk_container_add (GTK_CONTAINER (parent), socket);
 
@@ -63,6 +63,13 @@ is running.
 </para>
 
 <para>
+The communication between a #GtkSocket and a #GtkPlug follows the 
+<ulink url="http://www.freedesktop.org/standards/xembed.html">XEmbed</ulink>
+protocol. This protocol has also been implemented in other toolkits, e.g.  
+<application>Qt</application>, allowing the same level of integration
+when embedding a <application>Qt</application> widget in GTK or vice versa.</para>
+
+<para>
 A socket can also be used to swallow arbitrary 
 pre-existing top-level windows using gtk_socket_steal(),
 though the integration when this is done will not be as close
@@ -75,6 +82,11 @@ as between a #GtkPlug and a #GtkSocket.</para>
 <varlistentry>
 <term>#GtkPlug</term>
 <listitem><para>the widget that plugs into a #GtkSocket.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><ulink url="http://www.freedesktop.org/standards/xembed.html">XEmbed</ulink></term>
+<listitem><para>the XEmbed Protocol Specification.</para></listitem>
 </varlistentry>
 
 </variablelist>

@@ -3447,6 +3447,7 @@ gtk_vseparator_get_type
 <FILE>gtkwidget</FILE>
 <TITLE>GtkWidget</TITLE>
 GtkWidget
+GtkWidgetClass
 GtkWidgetFlags
 GTK_WIDGET_TYPE
 GTK_WIDGET_STATE

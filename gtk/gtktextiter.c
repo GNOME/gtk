@@ -4322,8 +4322,9 @@ strbreakup (const char *string,
  * @match_end: return location for end of match, or %NULL
  * @limit: bound for the search, or %NULL for the end of the buffer
  * 
- * Searches forward for @str. Any match is returned as the range
- * @match_start, @match_end. The search will not continue past
+ * Searches forward for @str. Any match is returned by setting 
+ * @match_start to the first character of the match and @match_end to the 
+ * first character after the match. The search will not continue past
  * @limit. Note that a search is a linear or O(n) operation, so you
  * may wish to use @limit to avoid locking up your UI on large
  * buffers.

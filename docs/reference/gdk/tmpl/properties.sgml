@@ -244,10 +244,10 @@ Changes the contents of a property on a window.
 @window: a #GdkWindow.
 @property: the property to change.
 @type: the new type for the property. If @mode is
-       %GDK_PROP_MODE_REPLACE or %GDK_PROP_MODE_APPEND, then this 
+       %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this 
        must match the existing type or an error will occur.
 @format: the new format for the property. If @mode is
-         %GDK_PROP_MODE_REPLACE or %GDK_PROP_MODE_APPEND, then this 
+         %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this 
          must match the existing format or an error will occur.
 @mode: a value describing how the new data is to be combined
        with the current data.

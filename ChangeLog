@@ -1,3 +1,11 @@
+2002-04-24  Matthias Clasen  <maclas@gmx.de>
+
+	Merged from HEAD:
+
+	* gtk/gtktextiter.c:
+	* gtk/gtktreemodelsort.c:
+	* gtk/gtktextview.c: Documentation fixes.  (#62359, #68404, #57929)
+
 2002-04-22  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkentry.c (gtk_entry_drag_data_get): Use 
