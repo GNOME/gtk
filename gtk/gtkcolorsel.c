@@ -478,21 +478,23 @@ color_sample_draw_samples (GtkColorSelection *colorsel)
   color_sample_draw_sample (colorsel, 1);
 }
 
-static void
+static gboolean
 color_old_sample_expose (GtkWidget         *da,
 			 GdkEventExpose    *event,
 			 GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 0);
+  return FALSE;
 }
 
 
-static void
+static gboolean
 color_cur_sample_expose (GtkWidget         *da,
 			 GdkEventExpose    *event,
 			 GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 1);
+  return FALSE;
 }
 
 static void
@@ -813,15 +815,17 @@ palette_set_color (GtkWidget         *drawing_area,
   gtk_object_set_data (GTK_OBJECT (drawing_area), "color_val", new_color);
 }
 
-static void
+static gboolean
 palette_expose (GtkWidget      *drawing_area,
 		GdkEventExpose *event,
 		gpointer        data)
 {
   if (drawing_area->window == NULL)
-    return;
+    return FALSE;
   
   palette_paint (drawing_area, &(event->area), data);
+  
+  return FALSE;
 }
 
 static void

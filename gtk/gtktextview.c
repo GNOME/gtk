@@ -3770,7 +3770,7 @@ gtk_text_view_expose_event (GtkWidget *widget, GdkEventExpose *event)
   if (event->window == widget->window)
     gtk_text_view_draw_focus (widget);
 
-  return TRUE;
+  return FALSE;
 }
 
 static void

@@ -271,5 +271,5 @@ gtk_arrow_expose (GtkWidget      *widget,
 		       x, y, extent, extent);
     }
 
-  return TRUE;
+  return FALSE;
 }

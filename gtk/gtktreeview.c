@@ -2852,7 +2852,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   if (drag_dest_path)
     gtk_tree_path_free (drag_dest_path);
 
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean

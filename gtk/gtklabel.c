@@ -1485,7 +1485,7 @@ gtk_label_size_allocate (GtkWidget     *widget,
   GtkLabel *label;
 
   label = GTK_LABEL (widget);
-  
+
   (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
 
   if (label->select_info && label->select_info->window)
@@ -1765,7 +1765,7 @@ gtk_label_expose (GtkWidget      *widget,
 	gtk_label_draw_cursor (label, x, y);
     }
 
-  return TRUE;
+  return FALSE;
 }
 
 static void

@@ -480,7 +480,7 @@ gtk_toggle_button_expose (GtkWidget      *widget,
 	gtk_container_propagate_expose (GTK_CONTAINER (widget), child, event);
     }
   
-  return TRUE;
+  return FALSE;
 }
 
 static void

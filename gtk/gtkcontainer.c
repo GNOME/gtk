@@ -2165,7 +2165,7 @@ gtk_container_expose (GtkWidget      *widget,
 			    &data);
     }   
   
-  return TRUE;
+  return FALSE;
 }
 
 static void

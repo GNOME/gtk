@@ -345,7 +345,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	}
     }
   
-  return TRUE;
+  return FALSE;
 }
 
 static void
