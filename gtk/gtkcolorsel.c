@@ -1145,9 +1145,13 @@ gtk_color_selection_wheel_timeout (GtkColorSelection *colorsel)
 {
   gint x, y;
 
+  GDK_THREADS_ENTER ();
+
   gdk_window_get_pointer (colorsel->wheel_area->window, &x, &y, NULL);
   gtk_color_selection_update_wheel (colorsel, x, y);
   gtk_color_selection_color_changed (colorsel);
+
+  GDK_THREADS_LEAVE ();
 
   return (TRUE);
 }

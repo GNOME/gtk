@@ -2666,11 +2666,15 @@ gtk_drag_abort_timeout (gpointer data)
   GtkDragSourceInfo *info = data;
   guint32 time = GDK_CURRENT_TIME;
 
+  GDK_THREADS_ENTER ();
+
   if (info->proxy_dest)
     time = info->proxy_dest->proxy_drop_time;
 
   info->drop_timeout = 0;
   gtk_drag_drop_finished (info, FALSE, time);
+  
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }

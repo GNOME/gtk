@@ -1,3 +1,9 @@
+Fri Apr  9 19:22:19 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcolorsel.c gtk/gtkdnd.c gtk/gtkmenuitem.c:
+	Add some missing GDK_THREADS_ENTER()/LEAVE around
+	timeouts. (Patches from Sebastian Wilhelmi <wilhelmi@ira.uka.de>)
+
 Thu Apr  8 20:10:33 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkentry.c (gtk_entry_key_press): use gtk_widget_activate()

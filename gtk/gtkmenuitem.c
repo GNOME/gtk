@@ -63,6 +63,7 @@ static void gtk_real_menu_item_select    (GtkItem          *item);
 static void gtk_real_menu_item_deselect  (GtkItem          *item);
 static void gtk_real_menu_item_activate_item  (GtkMenuItem      *item);
 static gint gtk_menu_item_select_timeout (gpointer          data);
+static void gtk_menu_item_select_timeout_unlocked (gpointer     data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
 					  gint             *y,
@@ -552,7 +553,7 @@ gtk_real_menu_item_select (GtkItem *item)
 					    gtk_menu_item_select_timeout,
 					    menu_item);
       else
-	gtk_menu_item_select_timeout (menu_item);
+	gtk_menu_item_select_timeout_unlocked (menu_item);
       if(event) gdk_event_free(event);
     }
   
@@ -628,9 +629,19 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 static gint
 gtk_menu_item_select_timeout (gpointer data)
 {
-  GtkMenuItem *menu_item;
-
   GDK_THREADS_ENTER ();
+
+  gtk_menu_item_select_timeout_unlocked (data);
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;  
+}
+
+static void
+gtk_menu_item_select_timeout_unlocked (gpointer data)
+{
+  GtkMenuItem *menu_item;
 
   menu_item = GTK_MENU_ITEM (data);
   menu_item->timer = 0;
@@ -655,10 +666,6 @@ gtk_menu_item_select_timeout (gpointer data)
 	    gtk_menu_shell_select_item (submenu, submenu->children->data);
 	}
     }
-  
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
 }
 
 static void
