@@ -1837,7 +1837,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
 {
   gboolean retval = FALSE;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   if (notebook->timer)
     {
@@ -1866,7 +1866,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
 	retval = TRUE;
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return retval;
 }

@@ -176,7 +176,7 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
   if (!tooltips->tip_window)
     {
       tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
-      GTK_WIDGET_SET_FLAGS (tooltips->tip_window, GTK_USER_DRAW);
+      gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
 
       gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
@@ -495,13 +495,13 @@ gtk_tooltips_timeout (gpointer data)
 {
   GtkTooltips *tooltips = (GtkTooltips *) data;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   if (tooltips->active_tips_data != NULL &&
       GTK_WIDGET_DRAWABLE (tooltips->active_tips_data->widget))
     gtk_tooltips_draw_tips (tooltips);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return FALSE;
 }

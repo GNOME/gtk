@@ -295,7 +295,13 @@ stamp-m: @REBUILD@ gtkmarshal.list genmarshal.pl
 	&& echo timestamp > stamp-m
 
 libgtk_la_LDFLAGS = \
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE)
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) -release $(LT_RELEASE) \
+	@GLIB_LIBS@ 			\
+	@x_ldflags@			\
+	@x_libs@ 			\
+	-lm
+#	$(top_builddir)/gdk/libgdk.la
+
 
 # We create a dummy theme for the default GTK+ theme
 

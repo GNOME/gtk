@@ -621,7 +621,7 @@ gtk_menu_item_select_timeout (gpointer data)
 {
   GtkMenuItem *menu_item;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   menu_item = GTK_MENU_ITEM (data);
   menu_item->timer = 0;
@@ -644,7 +644,7 @@ gtk_menu_item_select_timeout (gpointer data)
 	gtk_menu_shell_select_item (submenu, submenu->children->data);
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return FALSE;
 }

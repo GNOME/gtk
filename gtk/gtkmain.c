@@ -43,8 +43,6 @@
 #include "gtkdebug.h"
 #include "gtkintl.h"
 
-extern gboolean gdk_using_threads;
-
 /* Private type definitions
  */
 typedef struct _GtkInitFunction		 GtkInitFunction;
@@ -187,9 +185,9 @@ gtk_init (int	 *argc,
    * single threaded until gtk_init().
    */
 
-  if (g_thread_supported)
+  if (g_thread_supported ())
     gtk_threads_mutex = g_mutex_new ();
-
+  
 #if	0
   g_set_error_handler (gtk_error);
   g_set_warning_handler (gtk_warning);
@@ -461,9 +459,9 @@ gtk_main (void)
   loop = g_main_new ();
   main_loops = g_slist_prepend (main_loops, loop);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
   g_main_run (loop);
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   g_main_destroy (loop);
 
@@ -1075,12 +1073,12 @@ gtk_idle_remove_by_data (gpointer data)
 }
 
 guint
-gtk_input_add_full (gint source,
-		    GdkInputCondition condition,
-		    GdkInputFunction function,
-		    GtkCallbackMarshal marshal,
-		    gpointer data,
-		    GtkDestroyNotify destroy)
+gtk_input_add_full (gint		source,
+		    GdkInputCondition	condition,
+		    GdkInputFunction	function,
+		    GtkCallbackMarshal	marshal,
+		    gpointer		data,
+		    GtkDestroyNotify	destroy)
 {
   if (marshal)
     {
@@ -1111,6 +1109,7 @@ static void
 gtk_destroy_closure (gpointer data)
 {
   GtkClosure *closure = data;
+
   if (closure->destroy)
     (closure->destroy) (closure->data);
   g_free (closure);
@@ -1131,8 +1130,8 @@ gtk_invoke_idle_timeout (gpointer data)
 }
 
 static void
-gtk_invoke_input (gpointer data,
-		  gint source,
+gtk_invoke_input (gpointer	    data,
+		  gint		    source,
 		  GdkInputCondition condition)
 {
   GtkClosure *closure = data;
@@ -1150,7 +1149,7 @@ gtk_invoke_input (gpointer data,
   closure->marshal (NULL, closure->data, 2, args);
 }
 
-GdkEvent *
+GdkEvent*
 gtk_get_current_event (void)
 {
   if (current_events)
@@ -1252,13 +1251,13 @@ gtk_propagate_event (GtkWidget *widget,
 void
 gtk_threads_enter ()
 {
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 }
 
 void
 gtk_threads_leave ()
 {
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 }
 
 #if 0

@@ -1481,13 +1481,13 @@ gtk_entry_timer (gpointer data)
 {
   GtkEntry *entry;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   entry = GTK_ENTRY (data);
   entry->timer = 0;
   gtk_entry_draw_text (entry);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return FALSE;
 }

@@ -7014,7 +7014,7 @@ horizontal_timeout (GtkCList *clist)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   clist->htimer = 0;
   gdk_window_get_pointer (clist->clist_window, &x, &y, &mask);
@@ -7026,7 +7026,7 @@ horizontal_timeout (GtkCList *clist)
 
   gtk_clist_motion (GTK_WIDGET (clist), &event);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
   
   return FALSE;
 }
@@ -7038,7 +7038,7 @@ vertical_timeout (GtkCList *clist)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   clist->vtimer = 0;
   gdk_window_get_pointer (clist->clist_window, &x, &y, &mask);
@@ -7050,7 +7050,7 @@ vertical_timeout (GtkCList *clist)
 
   gtk_clist_motion (GTK_WIDGET (clist), &event);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return FALSE;
 }

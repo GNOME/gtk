@@ -64,14 +64,20 @@ typedef enum
 
 extern GMutex *gtk_threads_mutex;
 
-#define GTK_THREADS_ENTER G_STMT_START { \
-  if (gtk_threads_mutex)                 \
-     g_mutex_lock (gtk_threads_mutex);   \
-                          } G_STMT_END
-#define GTK_THREADS_LEAVE G_STMT_START { \
-  if (gtk_threads_mutex)                 \
-     g_mutex_unlock (gtk_threads_mutex); \
-                          } G_STMT_END
+#ifdef	G_THREADS_ENABLED
+#  define GTK_THREADS_ENTER()	G_STMT_START {	\
+      if (gtk_threads_mutex)                 	\
+        g_mutex_lock (gtk_threads_mutex);   	\
+   } G_STMT_END
+#  define GTK_THREADS_LEAVE()	G_STMT_START { 	\
+      if (gtk_threads_mutex)                 	\
+        g_mutex_unlock (gtk_threads_mutex); 	\
+   } G_STMT_END
+#else	/* !G_THREADS_ENABLED */
+#  define GTK_THREADS_ENTER()
+#  define GTK_THREADS_LEAVE()
+#endif	/* !G_THREADS_ENABLED */
+
 
 #ifdef __cplusplus
 }

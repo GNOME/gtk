@@ -354,9 +354,9 @@ gtk_accel_label_refetch_idle (GtkAccelLabel *accel_label)
 {
   gboolean retval;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   retval = gtk_accel_label_refetch (accel_label);
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return retval;
 }

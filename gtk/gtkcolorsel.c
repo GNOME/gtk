@@ -864,7 +864,7 @@ gtk_color_selection_drag_begin (GtkWidget      *widget,
   GdkColor bg;
 
   window = gtk_window_new(GTK_WINDOW_POPUP);
-  GTK_WIDGET_SET_FLAGS (window, GTK_USER_DRAW);
+  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
   gtk_widget_set_usize (window, 48, 32);
   gtk_widget_realize (window);
 
@@ -1028,13 +1028,13 @@ gtk_color_selection_value_timeout (GtkColorSelection *colorsel)
 {
   gint x, y;
   
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   gdk_window_get_pointer (colorsel->value_area->window, &x, &y, NULL);
   gtk_color_selection_update_value (colorsel, y);
   gtk_color_selection_color_changed (colorsel);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return (TRUE);
 }

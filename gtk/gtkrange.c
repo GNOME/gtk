@@ -1237,7 +1237,7 @@ gtk_real_range_timer (GtkRange *range)
 {
   gint return_val;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   return_val = TRUE;
   if (range->click_child == RANGE_CLASS (range)->slider)
@@ -1259,7 +1259,7 @@ gtk_real_range_timer (GtkRange *range)
 					    (gpointer) range);
 	  else
 	    {
-	      GTK_THREADS_LEAVE;
+	      GTK_THREADS_LEAVE ();
 	      return FALSE;
 	    }
 	  range->need_timer = FALSE;
@@ -1287,7 +1287,7 @@ gtk_real_range_timer (GtkRange *range)
 	return_val = gtk_range_scroll (range, -1);
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return return_val;
 }

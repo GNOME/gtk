@@ -1701,7 +1701,7 @@ gtk_text_scroll_timeout (gpointer data)
   gint x, y;
   GdkModifierType mask;
   
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   text = GTK_TEXT (data);
   
@@ -1718,7 +1718,7 @@ gtk_text_scroll_timeout (gpointer data)
       gtk_text_motion_notify (GTK_WIDGET (text), &event);
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
   
   return FALSE;
 }

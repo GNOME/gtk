@@ -910,7 +910,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 {
   gboolean retval = FALSE;
   
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   if (spin_button->timer)
     {
@@ -943,7 +943,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 	}
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return retval;
 }

@@ -2309,7 +2309,7 @@ gtk_list_horizontal_timeout (GtkWidget *list)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   GTK_LIST (list)->htimer = 0;
   gdk_window_get_pointer (list->window, &x, &y, &mask);
@@ -2321,7 +2321,7 @@ gtk_list_horizontal_timeout (GtkWidget *list)
 
   gtk_list_motion_notify (list, &event);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -2334,7 +2334,7 @@ gtk_list_vertical_timeout (GtkWidget *list)
   GdkEventMotion event;
   GdkModifierType mask;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   GTK_LIST (list)->vtimer = 0;
   gdk_window_get_pointer (list->window, &x, &y, &mask);
@@ -2346,7 +2346,7 @@ gtk_list_vertical_timeout (GtkWidget *list)
 
   gtk_list_motion_notify (list, &event);
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return FALSE;
 }

@@ -1756,7 +1756,7 @@ gtk_drag_set_icon_pixmap  (GdkDragContext    *context,
   gtk_widget_push_colormap (colormap);
 
   window = gtk_window_new (GTK_WINDOW_POPUP);
-  GTK_WIDGET_SET_FLAGS (window, GTK_USER_DRAW);
+  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
 
   gtk_widget_pop_visual ();
   gtk_widget_pop_colormap ();
@@ -2272,7 +2272,7 @@ gtk_drag_anim_timeout (gpointer data)
   gint x, y;
   gboolean retval;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
 
   if (anim->step == anim->n_steps)
     {
@@ -2295,7 +2295,7 @@ gtk_drag_anim_timeout (gpointer data)
       retval = TRUE;
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return retval;
 }

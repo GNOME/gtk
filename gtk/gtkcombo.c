@@ -237,9 +237,9 @@ gtk_combo_focus_idle (GtkCombo * combo)
 {
   if (combo)
     {
-      GTK_THREADS_ENTER;
+      GTK_THREADS_ENTER ();
       gtk_widget_grab_focus (combo->entry);
-      GTK_THREADS_LEAVE;
+      GTK_THREADS_LEAVE ();
     }
   return FALSE;
 }

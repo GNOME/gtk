@@ -102,6 +102,7 @@ enum {
   ARG_HEIGHT,
   ARG_VISIBLE,
   ARG_SENSITIVE,
+  ARG_APP_PAINTABLE,
   ARG_CAN_FOCUS,
   ARG_HAS_FOCUS,
   ARG_CAN_DEFAULT,
@@ -270,6 +271,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_HEIGHT);
   gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBLE);
   gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SENSITIVE);
+  gtk_object_add_arg_type ("GtkWidget::app_paintable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_APP_PAINTABLE);
   gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_FOCUS);
   gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
   gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
@@ -807,6 +809,9 @@ gtk_widget_set_arg (GtkObject   *object,
     case ARG_SENSITIVE:
       gtk_widget_set_sensitive (widget, GTK_VALUE_BOOL (*arg));
       break;
+    case ARG_APP_PAINTABLE:
+      gtk_widget_set_app_paintable (widget, GTK_VALUE_BOOL (*arg));
+      break;
     case ARG_CAN_FOCUS:
       saved_flags = GTK_WIDGET_FLAGS (widget);
       if (GTK_VALUE_BOOL (*arg))
@@ -919,6 +924,9 @@ gtk_widget_get_arg (GtkObject   *object,
       break;
     case ARG_SENSITIVE:
       GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_SENSITIVE (widget) != FALSE);
+      break;
+    case ARG_APP_PAINTABLE:
+      GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_APP_PAINTABLE (widget) != FALSE);
       break;
     case ARG_CAN_FOCUS:
       GTK_VALUE_BOOL (*arg) = (GTK_WIDGET_CAN_FOCUS (widget) != FALSE);
@@ -1950,7 +1958,7 @@ gtk_widget_idle_draw (gpointer data)
   GSList *draw_data_list;
   GtkWidget *widget;
   
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   /* Translate all draw requests to be allocation-relative */
   widget_list = gtk_widget_redraw_queue;
@@ -2133,7 +2141,7 @@ gtk_widget_idle_draw (gpointer data)
   g_slist_free (gtk_widget_redraw_queue);
   gtk_widget_redraw_queue = NULL;
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
   
   return FALSE;
 }
@@ -3036,6 +3044,27 @@ gtk_widget_set_state (GtkWidget           *widget,
 
       gtk_widget_propagate_state (widget, &data);
   
+      if (GTK_WIDGET_DRAWABLE (widget))
+	gtk_widget_queue_clear (widget);
+    }
+}
+
+void
+gtk_widget_set_app_paintable (GtkWidget *widget,
+			      gboolean   app_paintable)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  app_paintable = (app_paintable != FALSE);
+
+  if (GTK_WIDGET_APP_PAINTABLE (widget) != app_paintable)
+    {
+      if (app_paintable)
+	GTK_WIDGET_SET_FLAGS (widget, GTK_APP_PAINTABLE);
+      else
+	GTK_WIDGET_UNSET_FLAGS (widget, GTK_APP_PAINTABLE);
+
       if (GTK_WIDGET_DRAWABLE (widget))
 	gtk_widget_queue_clear (widget);
     }

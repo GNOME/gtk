@@ -51,7 +51,7 @@ typedef enum
   GTK_RC_STYLE	       = 1 << 16,
   GTK_COMPOSITE_CHILD  = 1 << 17,
   GTK_NO_REPARENT      = 1 << 18,
-  GTK_USER_DRAW        = 1 << 19
+  GTK_APP_PAINTABLE    = 1 << 19
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -89,7 +89,7 @@ typedef enum
 #define GTK_WIDGET_HAS_GRAB(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_HAS_GRAB) != 0)
 #define GTK_WIDGET_RC_STYLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_RC_STYLE) != 0)
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
-#define GTK_WIDGET_USER_DRAW(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_USER_DRAW) != 0)
+#define GTK_WIDGET_APP_PAINTABLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_APP_PAINTABLE) != 0)
   
 /* Macros for setting and clearing widget flags.
  */
@@ -499,7 +499,9 @@ gchar*	   gtk_widget_get_name		  (GtkWidget	       *widget);
 void	   gtk_widget_set_state		  (GtkWidget	       *widget,
 					   GtkStateType		state);
 void	   gtk_widget_set_sensitive	  (GtkWidget	       *widget,
-					   gint			sensitive);
+					   gboolean		sensitive);
+void	   gtk_widget_set_app_paintable	  (GtkWidget	       *widget,
+					   gboolean		app_paintable);
 void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 					   GtkWidget	       *parent);
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,

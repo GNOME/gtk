@@ -1092,7 +1092,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
   GList *tmp_list;
   gboolean retval;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
@@ -1129,7 +1129,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
       retval = TRUE;		/* timeout will happen again */
     }
   
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -1334,7 +1334,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
   GList *tmp_list;
   gboolean retval;
 
-  GTK_THREADS_ENTER;
+  GTK_THREADS_ENTER ();
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
@@ -1369,7 +1369,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
       retval =  TRUE;		/* timeout will happen again */
     }
 
-  GTK_THREADS_LEAVE;
+  GTK_THREADS_LEAVE ();
 
   return retval;
 }
