@@ -1,3 +1,15 @@
+2004-07-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkcellview.sgml: New template.
+
+	* gtk/Makefile.am (IGNORE_HFILES): Remove gtkcellview.h
+	and gtkcellviewmenuitem.h
+
+	* gtk/gtk-docs.sgml: Add GtkCellView section.
+
+	* gtk/gtk-sections.txt: Add new entry completion api.
+	Add GtkCellView section.
+
 Sat Jul 17 23:42:09 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_icon_view_[sg]et_orientation.

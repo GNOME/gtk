@@ -1089,11 +1089,16 @@ gtk_entry_completion_set_match_func
 gtk_entry_completion_set_minimum_key_length
 gtk_entry_completion_get_minimum_key_length
 gtk_entry_completion_complete
+gtk_entry_completion_insert_prefix
 gtk_entry_completion_insert_action_text
 gtk_entry_completion_insert_action_markup
 gtk_entry_completion_delete_action
 gtk_entry_completion_set_text_column
 gtk_entry_completion_get_text_column
+gtk_entry_completion_set_inline_completion
+gtk_entry_completion_get_inline_completion
+gtk_entry_completion_set_popup_completion
+gtk_entry_completion_get_popup_completion
 <SUBSECTION Standard>
 GTK_TYPE_ENTRY_COMPLETION
 GTK_ENTRY_COMPLETION
@@ -3976,6 +3981,36 @@ GTK_IS_TREE_VIEW_CLASS
 GTK_TREE_VIEW_GET_CLASS
 <SUBSECTION Private>
 gtk_tree_view_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkcellview</FILE>
+<TITLE>GtkCellView</TITLE>
+GtkCellView
+gtk_cell_view_new
+gtk_cell_view_new_with_text
+gtk_cell_view_new_with_markup
+gtk_cell_view_new_with_pixbuf
+gtk_cell_view_set_value
+gtk_cell_view_set_values
+gtk_cell_view_set_model
+gtk_cell_view_set_displayed_row
+gtk_cell_view_get_displayed_row
+gtk_cell_view_get_size_of_row
+gtk_cell_view_set_background_color
+gtk_cell_view_set_cell_data
+gtk_cell_view_get_cell_renderers
+<SUBSECTION Standard>
+GtkCellViewClass
+GTK_TYPE_CELL_VIEW
+GTK_CELL_VIEW
+GTK_CELL_VIEW_CLASS
+GTK_IS_CELL_VIEW
+GTK_IS_CELL_VIEW_CLASS
+GTK_CELL_VIEW_GET_CLASS
+<SUBSECTION Private>
+GtkCellViewPrivate
+gtk_cell_view_get_type
 </SECTION>
 
 <SECTION>

@@ -126,14 +126,15 @@
 <!ENTITY GtkTreeViewColumn SYSTEM "xml/gtktreeviewcolumn.xml">
 <!ENTITY GtkTreeView SYSTEM "xml/gtktreeview.xml">
 <!ENTITY GtkUIManager SYSTEM "xml/gtkuimanager.xml">
+<!ENTITY GtkCellEditable SYSTEM "xml/gtkcelleditable.xml">
 <!ENTITY GtkCellLayout SYSTEM "xml/gtkcelllayout.xml">
 <!ENTITY GtkCellRenderer SYSTEM "xml/gtkcellrenderer.xml">
-<!ENTITY GtkCellEditable SYSTEM "xml/gtkcelleditable.xml">
 <!ENTITY GtkCellRendererCombo SYSTEM "xml/gtkcellrenderercombo.xml">
 <!ENTITY GtkCellRendererPixbuf SYSTEM "xml/gtkcellrendererpixbuf.xml">
 <!ENTITY GtkCellRendererProgress SYSTEM "xml/gtkcellrendererprogress.xml">
 <!ENTITY GtkCellRendererText SYSTEM "xml/gtkcellrenderertext.xml">
 <!ENTITY GtkCellRendererToggle SYSTEM "xml/gtkcellrenderertoggle.xml">
+<!ENTITY GtkCellView SYSTEM "xml/gtkcellview.xml">
 <!ENTITY GtkListStore SYSTEM "xml/gtkliststore.xml">
 <!ENTITY GtkTreeDND SYSTEM "xml/gtktreednd.xml">
 <!ENTITY GtkVButtonBox SYSTEM "xml/gtkvbbox.xml">
@@ -373,13 +374,14 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     </chapter>
 
     <chapter id="TreeWidgetObjects">
-      <title>Tree and List Widget</title>
+      <title>Tree, List and Icon Grid Widgets</title>
         &gtk-TreeWidget;
         &GtkTreeModel;
         &GtkTreeSelection;
         &GtkTreeViewColumn;
         &GtkTreeView;
         &GtkTreeDND;
+        &GtkCellView;
         &GtkIconView;
 	&GtkTreeSortable;
         &GtkTreeModelSort;
