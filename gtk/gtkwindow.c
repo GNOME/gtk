@@ -961,7 +961,22 @@ gtk_window_set_focus (GtkWindow *window,
   if (focus)
     gtk_widget_grab_focus (focus);
   else
-    _gtk_window_internal_set_focus (window, NULL);
+    {
+      /* Clear the existing focus chain, so that when we focus into
+       * the window again, we start at the beginnning.
+       */
+      GtkWidget *widget = window->focus_widget;
+      if (widget)
+	{
+	  while (widget->parent)
+	    {
+	      widget = widget->parent;
+	      gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
+	    }
+	}
+      
+      _gtk_window_internal_set_focus (window, NULL);
+    }
 }
 
 void

@@ -1,3 +1,10 @@
+Tue Mar  5 19:19:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_focus): When setting
+	the focus to NULL, clear the existing focus chain so
+	that when we focus into the window again, we start
+	at the beginning. (Pointed out by Tim Janik.)
+
 2002-03-06  James Henstridge  <james@daa.com.au>
 
 	* configure.in: libpango is now called libpango-1.0
