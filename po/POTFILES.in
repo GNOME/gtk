@@ -48,6 +48,7 @@ gtk/gtkframe.c
 gtk/gtkgamma.c
 gtk/gtkhandlebox.c
 gtk/gtkiconfactory.c
+gtk/gtkicontheme.c
 gtk/gtkimage.c
 gtk/gtkimagemenuitem.c
 gtk/gtkimmodule.c

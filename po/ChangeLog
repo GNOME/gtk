@@ -1,3 +1,7 @@
+Wed Jul  2 18:00:32 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: add gtkicontheme.c
+
 2003-06-30  Mohammad DAMT  <mdamt@bisnisweb.com>
 
 	* id.po: Updated Indonesian translation
