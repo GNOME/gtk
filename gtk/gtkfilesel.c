@@ -1752,16 +1752,16 @@ cmpl_is_a_completion (PossibleCompletion* pc)
 static CompletionState*
 cmpl_init_state (void)
 {
-  gchar *getcwd_buf;
+  gchar *sys_getcwd_buf;
   gchar *utf8_cwd;
   CompletionState *new_state;
 
   new_state = g_new (CompletionState, 1);
 
-  /* g_get_current_dir() returns a GSystemCodepageString */
-  getcwd_buf = g_get_current_dir ();
-  utf8_cwd = g_filename_to_utf8 (getcwd_buf);
-  g_free (getcwd_buf);
+  /* g_get_current_dir() returns a string in the "system" charset */
+  sys_getcwd_buf = g_get_current_dir ();
+  utf8_cwd = g_filename_to_utf8 (sys_getcwd_buf);
+  g_free (sys_getcwd_buf);
 
 tryagain:
 
@@ -1783,7 +1783,7 @@ tryagain:
   if (!new_state->reference_dir)
     {
       /* Directories changing from underneath us, grumble */
-      strcpy (getcwd_buf, G_DIR_SEPARATOR_S);
+      strcpy (utf8_cwd, G_DIR_SEPARATOR_S);
       goto tryagain;
     }
 
@@ -2051,10 +2051,10 @@ open_ref_dir (gchar           *text_to_complete,
       else
 	{
 	  /* If no possible candidates, use the cwd */
-	  gchar *curdir = g_get_current_dir ();
-	  gchar *utf8_curdir = g_filename_to_utf8 (curdir);
+	  gchar *sys_curdir = g_get_current_dir ();
+	  gchar *utf8_curdir = g_filename_to_utf8 (sys_curdir);
 
-	  g_free (curdir);
+	  g_free (sys_curdir);
 
 	  new_dir = open_dir (utf8_curdir, cmpl_state);
 
@@ -2229,7 +2229,7 @@ open_new_dir (gchar       *dir_name,
 
       if (stat_subdirs)
 	{
-	  /* Here we know path->str is a GSystemCodepageString */
+	  /* Here we know path->str is a "system charset" string */
 	  if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
 	    sent->entries[i].is_dir = TRUE;
 	  else
@@ -2536,17 +2536,17 @@ correct_parent (CompletionDir *cmpl_dir,
 static gchar*
 find_parent_dir_fullname (gchar* dirname)
 {
-  gchar *orig_dir;
+  gchar *sys_orig_dir;
   gchar *result;
   gchar *sys_cwd;
   gchar *sys_dirname;
 
-  orig_dir = g_get_current_dir ();
-
+  sys_orig_dir = g_get_current_dir ();
   sys_dirname = g_filename_from_utf8 (dirname);
   if (chdir (sys_dirname) != 0 || chdir ("..") != 0)
     {
       g_free (sys_dirname);
+      g_free (sys_orig_dir)
       cmpl_errno = errno;
       return NULL;
     }
@@ -2556,13 +2556,14 @@ find_parent_dir_fullname (gchar* dirname)
   result = g_filename_to_utf8 (sys_cwd);
   g_free (sys_cwd);
 
-  if (chdir (orig_dir) != 0)
+  if (chdir (sys_orig_dir) != 0)
     {
       cmpl_errno = errno;
+      g_free (sys_orig_dir)
       return NULL;
     }
 
-  g_free (orig_dir);
+  g_free (sys_orig_dir);
   return result;
 }
 
