@@ -64,6 +64,12 @@ struct _GtkEntryCompletionClass
                                  GtkTreeIter        *iter);
   void     (* action_activated) (GtkEntryCompletion *completion,
                                  gint                index);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved0) (void);
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
 };
 
 /* core */

@@ -1,3 +1,9 @@
+Wed Oct 15 22:31:09 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.h: add padding to the class structure.
+	* gtk/gtkcomboboxentry.h: ditto.
+	* gtk/gtkentrycompletion.h: ditto.
+
 Wed Oct 15 22:04:59 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_get_active),
