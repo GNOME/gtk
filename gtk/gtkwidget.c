@@ -1198,7 +1198,7 @@ gtk_widget_destroy (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  gtk_object_destroy (GTK_OBJECT (widget));
+  gtk_object_destroy ((GtkObject*) widget);
 }
 
 /*****************************************
@@ -4075,26 +4075,20 @@ gtk_widget_dnd_data_set (GtkWidget   *widget,
   gdk_window_dnd_data_set (widget->window, event, data, data_numbytes);
 }
 
-
-#undef	gtk_widget_ref
-#undef	gtk_widget_unref
-
-
 void
 gtk_widget_ref (GtkWidget *widget)
 {
-  volatile GtkObject *object;
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  object = GTK_OBJECT (widget);
-  gtk_object_ref (object);
+  gtk_object_ref ((GtkObject*) widget);
 }
 
 void
 gtk_widget_unref (GtkWidget *widget)
 {
-  volatile GtkObject *object;
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  object = GTK_OBJECT (widget);
-  gtk_object_unref (object);
+  gtk_object_unref ((GtkObject*) widget);
 }
-

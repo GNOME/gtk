@@ -2352,15 +2352,6 @@ gtk_clist_size_allocate (GtkWidget * widget,
   adjust_scrollbars (clist);
 }
 
-gint
-gtk_clist_row_from_ypixel (GtkCList *clist, gint y)
-{
-	g_return_val_if_fail (GTK_IS_CLIST (clist), 0);
-	g_return_val_if_fail (y >= 0, 0);
-
-	return ROW_FROM_YPIXEL (clist, y);
-}
-
 /* 
  * GTKCONTAINER
  *   gtk_clist_foreach

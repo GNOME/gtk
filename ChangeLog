@@ -1,3 +1,16 @@
+Mon Mar 30 21:40:21 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_row_from_ypixel): removed this function,
+	it was unneeded and not exported.
+
+	* gtk/gtkwidget.c (gtk_widget_ref) (gtk_widget_unref): don't check-cast
+	the widgets to volatile GtkObjects (which was there for debugging
+ 	purposes only). these functions should probably be macros, but that
+ 	would break binary compatibility again, sigh.
+	(gtk_widget_destroy): removed superfluous check-casts, since the
+ 	neccessary checks are done in gtk_object_destroy anyways. this should
+	be a macro as well but stays as a function for the above reasoonings.
+
 Mon Mar 30 17:21:27 BST 1998 Tony Gale  <gale@gimp.org>
 
 	* docs/gtk_tut.sgml: reflect the change of meaning
