@@ -1,18 +1,18 @@
 # Czech translation of Gtk+.
 # Copyright (C) 1999 Free Software Foundation, Inc.
-# Copyright (C) 2003, 2004 Miloslav Trmac <mitr@volny.cz>
+# Copyright (C) 2003, 2004, 2005 Miloslav Trmac <mitr@volny.cz>
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
 # Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
 # Jiří Lebl <jirka@5z.com>, 2002.
 # Michal Bukovjan <bukm@centrum.cz>, 2002
-# Miloslav Trmac <mitr@volny.cz>, 2003, 2004.
+# Miloslav Trmac <mitr@volny.cz>, 2003, 2004, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-02 12:25+0100\n"
-"PO-Revision-Date: 2005-01-02 15:08+0100\n"
+"POT-Creation-Date: 2005-01-06 12:23+0100\n"
+"PO-Revision-Date: 2005-01-06 20:45+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -182,20 +182,24 @@ msgstr "Špatně vytvořený kus v animaci"
 msgid "The ANI image format"
 msgstr "Formát obrázku ANI"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
+#: gdk-pixbuf/io-bmp.c:227 gdk-pixbuf/io-bmp.c:383
 msgid "Not enough memory to load bitmap image"
 msgstr "Nedostatek paměti pro načtení bitmapového obrázku"
 
-#: gdk-pixbuf/io-bmp.c:267
+#: gdk-pixbuf/io-bmp.c:269
 msgid "BMP image has unsupported header size"
 msgstr "Obrázek BMP má nepodporovanou velikost hlavičky"
 
-#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
-#: gdk-pixbuf/io-bmp.c:405
+#: gdk-pixbuf/io-bmp.c:288 gdk-pixbuf/io-bmp.c:320 gdk-pixbuf/io-bmp.c:343
+#: gdk-pixbuf/io-bmp.c:424
 msgid "BMP image has bogus header data"
 msgstr "Obrázek formátu BMP má neplatná data v hlavičce"
 
-#: gdk-pixbuf/io-bmp.c:1132
+#: gdk-pixbuf/io-bmp.c:307
+msgid "Topdown BMP images cannot be compressed"
+msgstr "Obrázky BMP shora dolů nelze komprimovat"
+
+#: gdk-pixbuf/io-bmp.c:1154
 msgid "The BMP image format"
 msgstr "Formát obrázku BMP"
 
@@ -1066,25 +1070,25 @@ msgstr "_Vložit řídící znak Unicode"
 msgid "Invalid filename: %s"
 msgstr "Neplatný název souboru: %s"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1227
+#: gtk/gtkfilechooserbutton.c:65
+msgid "Select A File"
+msgstr "Zvolte soubor"
+
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1229
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Domov"
 
-#: gtk/gtkfilechooserbutton.c:63 gtk/gtkfilechooserdefault.c:1250
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1256
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
-#: gtk/gtkfilechooserbutton.c:64
+#: gtk/gtkfilechooserbutton.c:68
 msgid "(None)"
 msgstr "(Žádný)"
 
-#: gtk/gtkfilechooserbutton.c:349
-msgid "Select a File"
-msgstr "Zvolte soubor"
-
-#: gtk/gtkfilechooserbutton.c:1503
+#: gtk/gtkfilechooserbutton.c:1515
 msgid "Other..."
 msgstr "Jiné..."
 
@@ -1112,122 +1116,127 @@ msgstr "Neplatný název souboru"
 msgid "The folder contents could not be displayed"
 msgstr "Obsah adresáře nelze zobrazit"
 
-#: gtk/gtkfilechooserdefault.c:2087
+#: gtk/gtkfilechooserdefault.c:1119
+#, c-format
+msgid "Could not get information about '%s': %s"
+msgstr "Nemohu získat informace o '%s': %s"
+
+#: gtk/gtkfilechooserdefault.c:2095
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Přidat adresář '%s' mezi záložky"
 
-#: gtk/gtkfilechooserdefault.c:2128
+#: gtk/gtkfilechooserdefault.c:2136
 msgid "Add the current folder to the bookmarks"
 msgstr "Přidat aktuální adresář mezi záložky"
 
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2138
 msgid "Add the selected folders to the bookmarks"
 msgstr "Přidat zovlené adresáře mezi záložky"
 
-#: gtk/gtkfilechooserdefault.c:2170
+#: gtk/gtkfilechooserdefault.c:2178
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Odstranit záložku '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2583
+#: gtk/gtkfilechooserdefault.c:2591
 #, c-format
 msgid "Could not add a bookmark for '%s' because it is an invalid path name."
 msgstr "Nemohu přidat záložku pro '%s', protože je to neplatný název cesty."
 
-#: gtk/gtkfilechooserdefault.c:2761
+#: gtk/gtkfilechooserdefault.c:2769
 msgid "Shortcuts"
 msgstr "Zkratky"
 
-#: gtk/gtkfilechooserdefault.c:2815
+#: gtk/gtkfilechooserdefault.c:2823
 msgid "Folder"
 msgstr "Adresář"
 
-#: gtk/gtkfilechooserdefault.c:2867 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2875 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Přidat"
 
-#: gtk/gtkfilechooserdefault.c:2874
+#: gtk/gtkfilechooserdefault.c:2882
 msgid "Add the selected folder to the bookmarks"
 msgstr "Přidat zvolený adresář mezi záložky"
 
-#: gtk/gtkfilechooserdefault.c:2879 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2887 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Odstranit"
 
-#: gtk/gtkfilechooserdefault.c:2886
+#: gtk/gtkfilechooserdefault.c:2894
 msgid "Remove the selected bookmark"
 msgstr "Odstranit zvolenou záložku"
 
-#: gtk/gtkfilechooserdefault.c:2981
+#: gtk/gtkfilechooserdefault.c:2989
 msgid "_Add to Shortcuts"
 msgstr "_Přidat mezi záložky"
 
-#: gtk/gtkfilechooserdefault.c:2995
+#: gtk/gtkfilechooserdefault.c:3003
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: gtk/gtkfilechooserdefault.c:3119 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3127 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Soubory"
 
-#: gtk/gtkfilechooserdefault.c:3150
+#: gtk/gtkfilechooserdefault.c:3158
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkfilechooserdefault.c:3175
+#: gtk/gtkfilechooserdefault.c:3183
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/gtkfilechooserdefault.c:3188
+#: gtk/gtkfilechooserdefault.c:3196
 msgid "Modified"
 msgstr "Změněn"
 
-#: gtk/gtkfilechooserdefault.c:3220
+#: gtk/gtkfilechooserdefault.c:3228
 msgid "Select which types of files are shown"
 msgstr "Vyberte, které typy souborů zobrazovat"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3256
+#: gtk/gtkfilechooserdefault.c:3264
 msgid "Create Fo_lder"
 msgstr "Vytvořit _adresář"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3374
+#: gtk/gtkfilechooserdefault.c:3382
 msgid "_Name:"
 msgstr "_Název:"
 
-#: gtk/gtkfilechooserdefault.c:3414
+#: gtk/gtkfilechooserdefault.c:3422
 msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
-#: gtk/gtkfilechooserdefault.c:3664
+#: gtk/gtkfilechooserdefault.c:3672
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
-#: gtk/gtkfilechooserdefault.c:3666
+#: gtk/gtkfilechooserdefault.c:3674
 msgid "Create in _folder:"
 msgstr "Vytvořit v _adresáři:"
 
-#: gtk/gtkfilechooserdefault.c:4490
+#: gtk/gtkfilechooserdefault.c:4507
 msgid "Cannot change to folder because it is not local"
 msgstr "Nemohu přejít do adresáře, protože není místní"
 
-#: gtk/gtkfilechooserdefault.c:5015
+#: gtk/gtkfilechooserdefault.c:5032
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Zkratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:5475
+#: gtk/gtkfilechooserdefault.c:5492
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nemohu připojit %s"
 
-#: gtk/gtkfilechooserdefault.c:5768
+#: gtk/gtkfilechooserdefault.c:5786
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: gtk/gtkfilechooserdefault.c:5810
+#: gtk/gtkfilechooserdefault.c:5828
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1235,59 +1244,59 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: gtk/gtkfilechooserdefault.c:5812
+#: gtk/gtkfilechooserdefault.c:5830
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5814
+#: gtk/gtkfilechooserdefault.c:5832
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5816
+#: gtk/gtkfilechooserdefault.c:5834
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5868
+#: gtk/gtkfilechooserdefault.c:5886
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:5870
+#: gtk/gtkfilechooserdefault.c:5888
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserdefault.c:5881
+#: gtk/gtkfilechooserdefault.c:5899
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserdefault.c:5951
+#: gtk/gtkfilechooserdefault.c:5969
 msgid "Cannot change folder"
 msgstr "Nemohu změnit adresář"
 
-#: gtk/gtkfilechooserdefault.c:5952
+#: gtk/gtkfilechooserdefault.c:5970
 msgid "The folder you specified is an invalid path."
 msgstr "Určený adresář je neplatná cesta."
 
-#: gtk/gtkfilechooserdefault.c:5991
+#: gtk/gtkfilechooserdefault.c:6009
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nemohu sestavit název souboru z '%s' a '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6027
+#: gtk/gtkfilechooserdefault.c:6045
 msgid "Could not select item"
 msgstr "Nemohu vybrat položku"
 
-#: gtk/gtkfilechooserdefault.c:6067
+#: gtk/gtkfilechooserdefault.c:6085
 msgid "Open Location"
 msgstr "Otevřít umístění"
 
-#: gtk/gtkfilechooserdefault.c:6074
+#: gtk/gtkfilechooserdefault.c:6092
 msgid "Save in Location"
 msgstr "Uložit do umístění"
 
-#: gtk/gtkfilechooserdefault.c:6098
+#: gtk/gtkfilechooserdefault.c:6116
 msgid "_Location:"
 msgstr "_Umístění:"
 
@@ -1474,17 +1483,18 @@ msgid "(Empty)"
 msgstr "(Prázdný)"
 
 #: gtk/gtkfilesystemunix.c:415 gtk/gtkfilesystemunix.c:429
-#: gtk/gtkfilesystemunix.c:626
+#: gtk/gtkfilesystemunix.c:626 gtk/gtkfilesystemwin32.c:482
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Chyba při získávání informací o '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:495
+#: gtk/gtkfilesystemunix.c:495 gtk/gtkfilesystemwin32.c:537
 #, c-format
 msgid "Error creating directory '%s': %s"
 msgstr "Chyba při vytváření adresáře '%s': %s"
 
-#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:515
+#: gtk/gtkfilesystemunix.c:575 gtk/gtkfilesystemwin32.c:597
 msgid "This file system does not support mounting"
 msgstr "Tento systém souborů nepodporuje připojování"
 
@@ -1506,7 +1516,7 @@ msgstr ""
 "Název \"%s\" není platný, protože obsahuje znak \"%s\". Použijte prosím jiný "
 "název."
 
-#: gtk/gtkfilesystemunix.c:1443
+#: gtk/gtkfilesystemunix.c:1443 gtk/gtkfilesystemwin32.c:1004
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Ukládání záložek selhalo: %s"
@@ -1525,30 +1535,6 @@ msgstr "'%s' neexistuje v seznamu záložek"
 #, c-format
 msgid "Error getting information for '%s'"
 msgstr "Chyba při získávání informací o '%s'"
-
-#: gtk/gtkfilesystemwin32.c:407
-#, c-format
-msgid "%s: %s"
-msgstr "%s: %s"
-
-#: gtk/gtkfilesystemwin32.c:414 gtk/gtkfilesystemwin32.c:1384
-#, c-format
-msgid "error getting information for '%s': %s"
-msgstr "chyba při získávání informací o '%s': %s"
-
-#: gtk/gtkfilesystemwin32.c:455
-#, c-format
-msgid "error creating directory '%s': %s"
-msgstr "chyba při vytváření adresáře '%s': %s"
-
-#: gtk/gtkfilesystemwin32.c:928
-#, c-format
-msgid "Bookmark saving failed (%s)"
-msgstr "Ukládání záložek selhalo (%s)"
-
-#: gtk/gtkfilesystemwin32.c:1131
-msgid "This file system does not support icons for everything"
-msgstr "Tento systém souborů nepodporuje ikony pro všechno"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -1606,7 +1592,7 @@ msgstr "Hodnota _gama"
 msgid "Error loading icon: %s"
 msgstr "Chyba při načítání ikony: %s"
 
-#: gtk/gtkicontheme.c:1262
+#: gtk/gtkicontheme.c:1263
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1619,7 +1605,7 @@ msgstr ""
 "Můžete ji získat z:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1327
+#: gtk/gtkicontheme.c:1328
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona '%s' není obsažena v tématu"
@@ -2215,6 +2201,18 @@ msgstr "Vstupní metoda X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Nemohu získat informace o souboru '%s': %s"
+
+#~ msgid "error getting information for '%s': %s"
+#~ msgstr "chyba při získávání informací o '%s': %s"
+
+#~ msgid "error creating directory '%s': %s"
+#~ msgstr "chyba při vytváření adresáře '%s': %s"
+
+#~ msgid "Bookmark saving failed (%s)"
+#~ msgstr "Ukládání záložek selhalo (%s)"
+
+#~ msgid "This file system does not support icons for everything"
+#~ msgstr "Tento systém souborů nepodporuje ikony pro všechno"
 
 #~ msgid ""
 #~ "Could not change the current folder to %s:\n"
