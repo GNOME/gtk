@@ -1,3 +1,8 @@
+Tue Jan  4 16:52:14 2005  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_button_event):
+	only reorder on button 1, part of #141937
+
 Tue Jan  4 11:36:43 2005  Søren Sandmann  <sandmann@redhat.com>
 
 	Bug 162112.

@@ -37,8 +37,8 @@ and #GtkActionGroup.
 
 @path: The id of the message. In #GtkItemFactory this will be a path
   from a #GtkItemFactoryEntry, in #GtkActionGroup, it will be a label
-  or tooltip from a #GtkActionEntry. 
-@func_data: user data passed in when registering the function 
+  or tooltip from a #GtkActionEntry.
+@func_data: user data passed in when registering the function
 @Returns: the translated message
 
 

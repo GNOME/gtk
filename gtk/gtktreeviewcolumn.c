@@ -1048,7 +1048,8 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (event->type == GDK_BUTTON_PRESS &&
-      column->reorderable)
+      column->reorderable &&
+      ((GdkEventButton *)event)->button == 1)
     {
       column->maybe_reordered = TRUE;
       gdk_window_get_pointer (widget->window,
