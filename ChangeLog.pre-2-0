@@ -1,10 +1,17 @@
+Thu Feb  1 18:25:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c: If PATH_MAX and MAXPATHLEN are not
+	defined, define MAXPATHLEN to 2048. (The Hurd doesn't have
+	MAXPATHLEN, but the code here depends on a fixed value.)
+	(#4524)
+
 Wed Jan 31 22:01:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_draw): Remove a dependency
 	on bin->child != NULL. (Basically, just a cleanup)
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): Handle the case
-	where child == NULL and handle_position == RIGHT or BOTTOM. (#8002)
+	where child == NULL and handle_position == RIGHT or BOTTOM. (#8041)
 
 Wed Jan 31 21:20:39 2001  Owen Taylor  <otaylor@redhat.com>
 
