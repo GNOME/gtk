@@ -1,3 +1,8 @@
+Wed Jan 14 21:00:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Don't leak name and stock_id.  (#131358, Morten Welinder)
+
 Wed Jan 14 13:07:30 GMT 2004  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Updates to Section 5

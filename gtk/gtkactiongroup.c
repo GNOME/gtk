@@ -562,8 +562,8 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
   guint  accel_key = 0;
   GdkModifierType accel_mods;
   GtkStockItem stock_item;
-  const gchar *name;
-  const gchar *stock_id;
+  gchar *name;
+  gchar *stock_id;
   
   g_object_get (action, "name", &name, "stock_id", &stock_id, NULL);
 
@@ -582,9 +582,11 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
     gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
 
   gtk_action_set_accel_path (action, accel_path);
-  g_free (accel_path);
-
   gtk_action_group_add_action (action_group, action);
+
+  g_free (accel_path);
+  g_free (stock_id);
+  g_free (name);
 }
 
 /**
