@@ -1,3 +1,29 @@
+Thu Sep 20 18:00:56 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* tests/testgtk.c (struct OptionMenuItem): get rid of it,
+
+	(build_option_menu): add func argument, connect ::changed
+	signal to option menu instead of connecting the ::activate
+	signal to the menu items,
+
+	(toplevel): get rid of RADIOMENUTOGGLED macro,
+
+	(list_toggle_sel_mode), (clist_toggle_sel_mode),
+	(ctree_toggle_line_style), (ctree_toggle_expander_style),
+	(ctree_toggle_justify), (ctree_toggle_sel_mode),
+	(progressbar_toggle_orientation), (progressbar_toggle_bar_style):
+	use gtk_option_menu_get_history() instead of RADIOMENUTOGGLED,
+
+	(notebook_type_changed): merged standard_notebook(),
+	notabs_notebook(), scrollable_notebook() and borderless_notebook()
+	into notebook_type_changed()
+
+	(create_list), (create_ctree), (create_notebook),
+	(create_progress_bar): changed OptionMenuItem arrays into
+	gchar * arrays. Removed "Extended" item where used.
+
+	Fixes bug #59885
+
 2001-09-20  Sven Neumann  <sven@gimp.org>
 
 	* configure.in
