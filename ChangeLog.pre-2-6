@@ -1,3 +1,8 @@
+2002-03-19  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkcombo.c (gtk_combo_find): fix infinite loop when
+	gtk_combo_func() returns NULL (bug #75464)
+
 2002-03-18  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkaspectframe.c (gtk_aspect_frame_class_init): set the
