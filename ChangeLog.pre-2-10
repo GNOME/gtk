@@ -1,3 +1,8 @@
+Wed Sep 25 08:16:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): Don't
+	turn a value of "" into NULL. (#94157, Vitaly Tishkov)
+
 Tue Sep 24 23:43:10 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkfilesel.c: check if last_selected is valid before doing
