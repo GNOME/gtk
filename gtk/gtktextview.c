@@ -326,7 +326,7 @@ static void gtk_text_view_remove (GtkContainer *container,
                                   GtkWidget    *child);
 static void gtk_text_view_forall (GtkContainer *container,
                                   gboolean      include_internals,
-                                  GtkCallback   callback,
+                                 GtkCallback   callback,
                                   gpointer      callback_data);
 
 /* FIXME probably need the focus methods. */
@@ -633,18 +633,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 							 G_PARAM_READWRITE));
 
   
-  /*
-   * Style properties
-   */
-
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("cursor_color",
-							       _("Cursor color"),
-							       _("Color with which to draw insertion cursor"),
-							       GDK_TYPE_COLOR,
-							       G_PARAM_READABLE));
-
-
   /*
    * Signals
    */
@@ -3270,7 +3258,7 @@ gtk_text_view_realize_cursor_gc (GtkTextView *text_view)
   if (text_view->cursor_gc)
     gdk_gc_unref (text_view->cursor_gc);
 
-  gtk_widget_style_get (GTK_WIDGET (text_view), "cursor_color", &cursor_color, NULL);
+  gtk_widget_style_get (GTK_WIDGET (text_view), "cursor-color", &cursor_color, NULL);
 
   if (!cursor_color)
     cursor_color = &red;

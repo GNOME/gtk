@@ -1,3 +1,15 @@
+Thu Feb 14 16:46:48 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c gtk/gtktextdisplay.c gtk/gtklabel.c
+	gtk/gtkstyle.[ch] gtk/gtkwidget.c: Patch from Bill
+	Haneman and Padraig O'Briain to add cursor_aspect_ratio
+	style property to GtkWidget to allow theming the aspect
+	ratio of the cursor.
+
+	* gtk/gtkentry.c gtk/gtktextview.c gtk/gtklabel.c
+	gtk/gtkwidget.c tests/testgtkrc: Move cursor-color style property
+	to GtkWidget.
+
 Thu Feb 14 11:13:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmulticontext.c (gtk_im_multicontext_get_surrounding): 

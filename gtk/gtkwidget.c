@@ -1074,7 +1074,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							     _("Width, in pixels, between focus indicator and the widget 'box'."),
 							     0, G_MAXINT, 1,
 							     G_PARAM_READWRITE));
-
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("cursor-color",
+							       _("Cursor color"),
+							       _("Color with which to draw insertion cursor"),
+							       GDK_TYPE_COLOR,
+							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
+                                           g_param_spec_float ("cursor-aspect-ratio",
+                                                               _("Cursor line aspect ratio"),
+                                                               _("Aspect ratio with which to draw insertion cursor"),
+                                                               0.0, 1.0, 0.033,
+                                                               G_PARAM_READABLE));
 }
 
 static void

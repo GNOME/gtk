@@ -866,7 +866,8 @@ void gtk_paint_string     (GtkStyle        *style,
 			   const gchar     *string);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-void _gtk_draw_insertion_cursor (GdkDrawable      *drawable,
+void _gtk_draw_insertion_cursor (GtkWidget        *widget,
+				 GdkDrawable      *drawable,
 				 GdkGC            *gc,
 				 GdkRectangle     *location,
 				 GtkTextDirection  dir);

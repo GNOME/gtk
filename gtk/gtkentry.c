@@ -524,13 +524,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 							"",
 							G_PARAM_READABLE | G_PARAM_WRITABLE));
   
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("cursor_color",
-							       _("Cursor color"),
-							       _("Color with which to draw insertion cursor"),
-							       GDK_TYPE_COLOR,
-							       G_PARAM_READABLE));
-
   signals[POPULATE_POPUP] =
     gtk_signal_new ("populate_popup",
 		    GTK_RUN_LAST,
@@ -937,7 +930,7 @@ gtk_entry_realize_cursor_gc (GtkEntry *entry)
   if (entry->cursor_gc)
     gdk_gc_unref (entry->cursor_gc);
 
-  gtk_widget_style_get (GTK_WIDGET (entry), "cursor_color", &cursor_color, NULL);
+  gtk_widget_style_get (GTK_WIDGET (entry), "cursor-color", &cursor_color, NULL);
       entry->cursor_gc = gdk_gc_new (entry->text_area);
   if (cursor_color)
     gdk_gc_set_rgb_fg_color (entry->cursor_gc, cursor_color);
@@ -2739,13 +2732,13 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       cursor_location.width = 0;
       cursor_location.height = text_area_height - 2 * INNER_BORDER ;
       
-      _gtk_draw_insertion_cursor (entry->text_area, gc1,
+      _gtk_draw_insertion_cursor (widget, entry->text_area, gc1,
 				  &cursor_location, dir1);
       
       if (gc2)
 	{
 	  cursor_location.x = xoffset + x2;
-	  _gtk_draw_insertion_cursor (entry->text_area, gc2,
+	  _gtk_draw_insertion_cursor (widget, entry->text_area, gc2,
 				      &cursor_location, dir2);
 	}
     }

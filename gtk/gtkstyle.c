@@ -5474,6 +5474,7 @@ gtk_style_set_font (GtkStyle *style,
 
 /**
  * _gtk_draw_insertion_cursor:
+ * @widget: a #GtkWidget
  * @drawable: a #GdkDrawable
  * @gc: a #GdkGC
  * @location: location where to draw the cursor (@location->width is ignored)
@@ -5485,16 +5486,23 @@ gtk_style_set_font (GtkStyle *style,
  * but merely a convenience function for drawing the standard cursor shape.
  **/
 void
-_gtk_draw_insertion_cursor (GdkDrawable      *drawable,
+_gtk_draw_insertion_cursor (GtkWidget        *widget,
+			    GdkDrawable      *drawable,
 			    GdkGC            *gc,
 			    GdkRectangle     *location,
 			    GtkTextDirection  dir)
 {
-  gint stem_width = location->height / 30 + 1;
-  gint arrow_width = stem_width + 1;
+  gint stem_width;
+  gint arrow_width;
   gint x, y;
   gint i;
+  gfloat cursor_aspect_ratio;
 
+  gtk_widget_style_get (widget, "cursor-aspect-ratio", &cursor_aspect_ratio, NULL);
+  
+  stem_width = location->height * cursor_aspect_ratio + 1;
+  arrow_width = stem_width + 1;
+ 
   for (i = 0; i < stem_width; i++)
     gdk_draw_line (drawable, gc,
 		   location->x + i - stem_width / 2, location->y,

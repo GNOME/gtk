@@ -859,7 +859,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
  	      cursor_location.height = cursor->height;
  
 	      gdk_gc_set_clip_rectangle(gc, &clip);
- 	      _gtk_draw_insertion_cursor (drawable, gc, &cursor_location, dir);
+ 	      _gtk_draw_insertion_cursor (widget, drawable, gc, &cursor_location, dir);
               gdk_gc_set_clip_rectangle (gc, NULL);
 
               cursor_list = cursor_list->next;

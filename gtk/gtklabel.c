@@ -373,13 +373,6 @@ gtk_label_class_init (GtkLabelClass *class)
                                                      0,
                                                      G_PARAM_READABLE));
   
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boxed ("cursor_color",
-							       _("Cursor color"),
-							       _("Color with which to draw insertion cursor"),
-							       GDK_TYPE_COLOR,
-							       G_PARAM_READABLE));
-  
   /*
    * Key bindings
    */
@@ -1685,7 +1678,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       cursor_location.width = 0;
       cursor_location.height = PANGO_PIXELS (cursor1->height);
       
-      _gtk_draw_insertion_cursor (widget->window, gc1,
+      _gtk_draw_insertion_cursor (widget, widget->window, gc1,
 				  &cursor_location, dir1);
       
       if (gc2)
@@ -1695,7 +1688,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  cursor_location.width = 0;
 	  cursor_location.height = PANGO_PIXELS (cursor2->height);
 	  
-	  _gtk_draw_insertion_cursor (widget->window, gc2,
+	  _gtk_draw_insertion_cursor (widget, widget->window, gc2,
 				      &cursor_location, dir2);
 	}
     }
@@ -1938,7 +1931,7 @@ gtk_label_realize_cursor_gc (GtkLabel *label)
   if (label->select_info->cursor_gc)
     gdk_gc_unref (label->select_info->cursor_gc);
 
-  gtk_widget_style_get (GTK_WIDGET (label), "cursor_color", &cursor_color, NULL);
+  gtk_widget_style_get (GTK_WIDGET (label), "cursor-color", &cursor_color, NULL);
   label->select_info->cursor_gc = gdk_gc_new (GTK_WIDGET (label)->window);
   if (cursor_color)
     gdk_gc_set_rgb_fg_color (label->select_info->cursor_gc, cursor_color);
