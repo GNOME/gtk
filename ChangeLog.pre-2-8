@@ -1,3 +1,13 @@
+Sat Jul  1 16:28:32 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): When
+	actually returning expose events, make sure to set
+	the count field properly.
+
+	* gdk/x11/gdkgc-x11.c (gdk_x11_gc_values_to_xvalues): Fix
+	accidentally reintroced bug which always cleared
+	the graphics_exposures value. 
+
 Wed Jun 28 18:03:09 BST 2000  Tony Gale <gale@gtk.org>
 
 	* docs/faq/gtk-faq.sgml: Change DocBook layout slightly

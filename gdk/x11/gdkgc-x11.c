@@ -10,8 +10,7 @@ typedef enum {
 static void gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 					  GdkGCValuesMask mask,
 					  XGCValues      *xvalues,
-					  unsigned long  *xvalues_mask,
-					  gboolean        initial);
+					  unsigned long  *xvalues_mask);
 
 static void gdk_x11_gc_get_values (GdkGC           *gc,
 				   GdkGCValues     *values);
@@ -125,10 +124,10 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   xvalues.fill_style = FillSolid;
   xvalues.arc_mode = ArcPieSlice;
   xvalues.subwindow_mode = ClipByChildren;
-  xvalues.graphics_exposures = True;
+  xvalues.graphics_exposures = False;
   xvalues_mask = GCFunction | GCFillStyle | GCArcMode | GCSubwindowMode | GCGraphicsExposures;
 
-  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask, TRUE);
+  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
   
   private->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
                             GDK_DRAWABLE_IMPL_X11 (drawable)->xid,
@@ -359,7 +358,7 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 	}
     }
 
-  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask, FALSE);
+  gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
 
   XChangeGC (GDK_GC_XDISPLAY (gc),
 	     GDK_GC_XGC (gc),
@@ -384,18 +383,10 @@ static void
 gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 			      GdkGCValuesMask mask,
 			      XGCValues      *xvalues,
-			      unsigned long  *xvalues_mask,
-			      gboolean        initial)
+			      unsigned long  *xvalues_mask)
 {
-  if (mask & GDK_GC_EXPOSURES)
-    xvalues->graphics_exposures = values->graphics_exposures;
-  else
-    xvalues->graphics_exposures = False;
-  *xvalues_mask |= GCGraphicsExposures;
-  
   /* Optimization for the common case (gdk_gc_new()) */
-  if (values == NULL ||
-      mask == 0)
+  if (values == NULL || mask == 0)
     return;
   
   if (mask & GDK_GC_FOREGROUND)
@@ -544,11 +535,6 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
   if (mask & GDK_GC_EXPOSURES)
     {
       xvalues->graphics_exposures = values->graphics_exposures;
-      *xvalues_mask |= GCGraphicsExposures;
-    }
-  else if (initial)
-    {
-      xvalues->graphics_exposures = False;
       *xvalues_mask |= GCGraphicsExposures;
     }
 
