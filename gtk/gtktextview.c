@@ -1603,15 +1603,14 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       text_view->buffer == NULL)
     return FALSE;
 
-  if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
-      GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
-    return TRUE;
-
   if (gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
       return TRUE;
     }
+  else if (GTK_WIDGET_CLASS (parent_class)->key_press_event &&
+	   GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event))
+    return TRUE;
   else if (event->keyval == GDK_Return)
     {
       gtk_text_buffer_insert_interactive_at_cursor (text_view->buffer, "\n", 1,

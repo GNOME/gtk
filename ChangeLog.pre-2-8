@@ -1,3 +1,11 @@
+Mon Sep 18 23:56:32 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/{imxim.c,gtkimcontextxim.[ch]}: Start
+	at XIM input method module.
+
+	* gtk/gtktextview.c: Check for bindings after passing
+	events to im context filter.
+
 Mon Sep 18 11:50:51 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c (add_preedit_attrs): Handle
