@@ -1,3 +1,7 @@
+2003-07-08  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkfilesel.sgml: Fix the example.  (#116575)
+
 Wed Jul  2 18:15:21 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am gtk/gtk-docs.sgml gtk/gtksections.txt

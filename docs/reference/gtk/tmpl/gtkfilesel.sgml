@@ -34,7 +34,8 @@ Simple file operations; create directory, delete file, and rename file, are avai
 
 /* The file selection widget and the string to store the chosen filename */
 
-void store_filename (GtkWidget *file_selector, gpointer user_data) {
+void store_filename (GtkWidget *widget, gpointer user_data) {
+   GtkWidget *file_selector = (GtkWidget *)user_data;
    const gchar *selected_filename;
 
    selected_filename = gtk_file_selection_get_filename (GTK_FILE_SELECTION (file_selector));
@@ -52,7 +53,7 @@ void create_file_selection (void) {
    g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (file_selector)->ok_button),
                      "clicked",
                      G_CALLBACK (store_filename),
-                     NULL);
+                     (gpointer) file_selector);
    			   
    /* Ensure that the dialog box is destroyed when the user clicks a button. */
    
