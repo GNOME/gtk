@@ -118,7 +118,7 @@ module_LTLIBRARIES =				\
 	im-viqr.la
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 *.la > gtk.immodules
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules
 
 CLEANFILES = gtk.immodules
 

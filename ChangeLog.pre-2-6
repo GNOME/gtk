@@ -1,3 +1,9 @@
+2004-02-17  Mark McLoughlin  <mark@skynet.ie>
+
+	* modules/input/Makefile.am: only reference input method
+	modules we've actually built. Fixes re-build failure with
+	stale hangul module lying aroung. Bug #134518.
+
 Mon Feb 16 19:13:21 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdraw.c: Revert last commit, please don't commit patches
