@@ -2,6 +2,8 @@ Overview of Changes from GTK+ 2.4.7 to GTK+ 2.4.8
 =================================================
 * GtkFileChooser
  - Fix some memory leaks [Federico Mena Quintero]
+ - Make save mode work with old versions of the gnome-vfs 
+   backend. [Zack Cerza]
 * GtkEntryCompletion
  - Warn if text column has wrong type [Fernando San Martin Woerner,
    Gustavo Carneiro]
