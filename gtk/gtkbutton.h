@@ -52,6 +52,8 @@ struct _GtkButton
 {
   GtkBin bin;
 
+  GdkWindow *event_window;
+
   gchar *label_text;
 
   guint activate_timeout;

@@ -1,3 +1,40 @@
+Thu Nov 15 14:19:34 2001  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gdk/gdkwindow.c (gdk_window_invalidate_maybe_recurse): Cal
+ 	gdk_window_invalidate_maybe_recurse() for recursion.
+ 	(Soeren Sandmann)
+
+ 	* gtk/gtkviewport.c: Make !redraw_on_allocate. (Soeren Sandmann)
+ 
+	* gtk/gtkcontainer.c (gtk_container_expose): Call
+	gtk_container_forall() not _foreach() to propagate,
+	since we need to propagate exposes to internal children
+	as well.
+
+	* gtk/gtkwidget.c (gtk_widget_set_events, gtk_widget_add_events): 
+	Remove the restriction of only being able to call these
+	on window widgets, since we have lots of NO_WINDOW widgets
+	with windows now; for add events, recurse over the children
+	of widget->window to find one owned by the widget.
+
+	* gtk/gtkbutton.[ch]: Make a NO_WINDOW widget, using an input-only
+	window to catch events.
+
+	* gtk/gtktogglebutton.[ch]: Remove the code for switching
+	between NO_WINDOW and WINDOW widgets based on the mode.
+
+	* gtk/gtkcheckbutton.c gtk/gtkoptionmenu.c gtk/gtkclist.c
+	gtk/gtktreeview.c: Adopt to NO_WINDOW change for GtkButton.
+
+	* gtk/gtkrange.[ch]: Make into a NO_WINDOW widget.
+
+	* gtk/gtkhscale.c, gtk/gtkvscale.c: Adopt to NO_WINDOW
+	change for range.
+
+	* gtk/gtknotebook.[ch]: Make into a NO_WINDOW widget.
+ 
+	* docs/Changes-2.0.txt: Add a note about the NO_WINDOW changes.
+
 Thu Nov 15 11:59:35 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmessagedialog.c: Patch from Murray Cumming to add

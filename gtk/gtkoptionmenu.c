@@ -464,6 +464,7 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)
 {
   GtkWidget *child;
+  GtkButton *button = GTK_BUTTON (widget);
   GtkAllocation child_allocation;
   GtkOptionMenuProps props;
   gint border_width;
@@ -473,19 +474,21 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (button->event_window,
 			    allocation->x + border_width, allocation->y + border_width,
 			    allocation->width - border_width * 2, allocation->height - border_width * 2);
 
   child = GTK_BIN (widget)->child;
   if (child && GTK_WIDGET_VISIBLE (child))
     {
-      child_allocation.x = GTK_WIDGET (widget)->style->xthickness + 1;
-      child_allocation.y = GTK_CONTAINER (widget)->border_width + 1;
-      child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2 - border_width * 2 -
+      gint xthickness = GTK_WIDGET (widget)->style->xthickness;
+    
+      child_allocation.x = widget->allocation.x + border_width + xthickness + 1;
+      child_allocation.y = widget->allocation.y + 2 * border_width + 1;
+      child_allocation.width = MAX (1, (gint)allocation->width - (xthickness + 1) * 2 - border_width * 2 -
 				    props.indicator_size.width - props.indicator_spacing.left - props.indicator_spacing.right -
 				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING - 2);
-      child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2 - border_width * 2 -
+      child_allocation.height = MAX (1, (gint)allocation->height - (border_width + 1) * 2 - border_width * 2 -
 				     CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING - 2);
       child_allocation.x += CHILD_LEFT_SPACING;
       child_allocation.y += CHILD_TOP_SPACING;
@@ -510,8 +513,8 @@ gtk_option_menu_paint (GtkWidget    *widget,
       border_width = GTK_CONTAINER (widget)->border_width;
       gtk_option_menu_get_props (GTK_OPTION_MENU (widget), &props);
 
-      button_area.x = 0;
-      button_area.y = 0;
+      button_area.x = widget->allocation.x + border_width;
+      button_area.y = widget->allocation.y + border_width;
       button_area.width = widget->allocation.width - 2 * border_width;
       button_area.height = widget->allocation.height - 2 * border_width;
 
@@ -521,13 +524,6 @@ gtk_option_menu_paint (GtkWidget    *widget,
 	  button_area.y += 1;
 	  button_area.width -= 2;
 	  button_area.height -= 2;
-
-	  /* This is evil, and should be elimated here and in the button
-	   * code. The point is to clear the focus, and make it
-	   * sort of transparent if it isn't there.
-	   */
-	  gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-	  gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 	}
 
       gtk_paint_box (widget->style, widget->window,
@@ -873,6 +869,7 @@ gtk_option_menu_position (GtkMenu  *menu,
   GtkOptionMenu *option_menu;
   GtkWidget *active;
   GtkWidget *child;
+  GtkWidget *widget;
   GtkRequisition requisition;
   GList *children;
   gint screen_width;
@@ -883,14 +880,16 @@ gtk_option_menu_position (GtkMenu  *menu,
   g_return_if_fail (GTK_IS_OPTION_MENU (user_data));
 
   option_menu = GTK_OPTION_MENU (user_data);
+  widget = GTK_WIDGET (option_menu);
 
   gtk_widget_get_child_requisition (GTK_WIDGET (menu), &requisition);
   menu_width = requisition.width;
 
   active = gtk_menu_get_active (GTK_MENU (option_menu->menu));
-  gdk_window_get_origin (GTK_WIDGET (option_menu)->window, &menu_xpos, &menu_ypos);
+  gdk_window_get_origin (widget->window, &menu_xpos, &menu_ypos);
 
-  menu_ypos += GTK_WIDGET (option_menu)->allocation.height / 2 - 2;
+  menu_xpos += widget->allocation.x;
+  menu_ypos += widget->allocation.y + widget->allocation.height / 2 - 2;
 
   if (active != NULL)
     {

@@ -103,6 +103,8 @@ static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
 static void gtk_range_realize        (GtkWidget        *widget);
 static void gtk_range_unrealize      (GtkWidget        *widget);
+static void gtk_range_map            (GtkWidget        *widget);
+static void gtk_range_unmap          (GtkWidget        *widget);
 static gint gtk_range_expose         (GtkWidget        *widget,
                                       GdkEventExpose   *event);
 static gint gtk_range_button_press   (GtkWidget        *widget,
@@ -216,6 +218,8 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->realize = gtk_range_realize;
   widget_class->unrealize = gtk_range_unrealize;  
+  widget_class->map = gtk_range_map;
+  widget_class->unmap = gtk_range_unmap;
   widget_class->expose_event = gtk_range_expose;
   widget_class->button_press_event = gtk_range_button_press;
   widget_class->button_release_event = gtk_range_button_release;
@@ -366,6 +370,8 @@ gtk_range_get_property (GObject      *object,
 static void
 gtk_range_init (GtkRange *range)
 {
+  GTK_WIDGET_SET_FLAGS (range, GTK_NO_WINDOW);
+
   range->adjustment = NULL;
   range->update_policy = GTK_UPDATE_CONTINUOUS;
   range->inverted = FALSE;
@@ -719,10 +725,17 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
   range = GTK_RANGE (widget);
 
+  widget->allocation = *allocation;
+  
   range->need_recalc = TRUE;
   gtk_range_calc_layout (range, range->adjustment->value);
 
-  (* GTK_WIDGET_CLASS (parent_class)->size_allocate) (widget, allocation);
+  if (GTK_WIDGET_REALIZED (range))
+    gdk_window_move_resize (range->event_window,
+			    widget->allocation.x,
+			    widget->allocation.y,
+			    widget->allocation.width,
+			    widget->allocation.height);
 }
 
 static void
@@ -738,14 +751,15 @@ gtk_range_realize (GtkWidget *widget)
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
+  widget->window = gtk_widget_get_parent_window (widget);
+  gdk_window_ref (widget->window);
+  
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
   attributes.width = widget->allocation.width;
   attributes.height = widget->allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
+  attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_BUTTON_PRESS_MASK |
@@ -755,13 +769,13 @@ gtk_range_realize (GtkWidget *widget)
                             GDK_POINTER_MOTION_MASK |
                             GDK_POINTER_MOTION_HINT_MASK);
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, range);
+  range->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
+					&attributes, attributes_mask);
+  gdk_window_set_user_data (range->event_window, range);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, widget->state);
 }
 
 static void
@@ -776,8 +790,36 @@ gtk_range_unrealize (GtkWidget *widget)
   gtk_range_remove_step_timer (range);
   gtk_range_remove_update_timer (range);
   
+  gdk_window_set_user_data (range->event_window, NULL);
+  gdk_window_destroy (range->event_window);
+  range->event_window = NULL;
+  
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+}
+
+static void
+gtk_range_map (GtkWidget *widget)
+{
+  GtkRange *range = GTK_RANGE (widget);
+  
+  g_return_if_fail (GTK_IS_RANGE (widget));
+
+  gdk_window_show (range->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+}
+
+static void
+gtk_range_unmap (GtkWidget *widget)
+{
+  GtkRange *range = GTK_RANGE (widget);
+    
+  g_return_if_fail (GTK_IS_RANGE (widget));
+
+  gdk_window_hide (range->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
 static void
@@ -791,10 +833,14 @@ draw_stepper (GtkRange     *range,
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GdkRectangle intersection;
+  GtkWidget *widget = GTK_WIDGET (range);
 
   /* More to get the right clip region than for efficiency */
   if (!gdk_rectangle_intersect (area, rect, &intersection))
     return;
+
+  intersection.x += widget->allocation.x;
+  intersection.y += widget->allocation.y;
   
   if (!GTK_WIDGET_IS_SENSITIVE (range))
     state_type = GTK_STATE_INSENSITIVE;
@@ -816,7 +862,10 @@ draw_stepper (GtkRange     *range,
                    &intersection, GTK_WIDGET (range),
                    GTK_RANGE_GET_CLASS (range)->stepper_detail,
                    arrow_type,
-                   TRUE, rect->x, rect->y, rect->width, rect->height);
+                   TRUE,
+		   widget->allocation.x + rect->x,
+		   widget->allocation.y + rect->y,
+		   rect->width, rect->height);
 }
 
 static gint
@@ -826,6 +875,7 @@ gtk_range_expose (GtkWidget      *widget,
   GtkRange *range;
   gboolean sensitive;
   GtkStateType state;
+  GdkRectangle expose_area;	/* Relative to widget->allocation */
   GdkRectangle area;
   
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
@@ -833,10 +883,14 @@ gtk_range_expose (GtkWidget      *widget,
 
   range = GTK_RANGE (widget);
 
+  expose_area = event->area;
+  expose_area.x -= widget->allocation.x;
+  expose_area.y -= widget->allocation.y;
+  
   gtk_range_calc_layout (range, range->adjustment->value);
 
   sensitive = GTK_WIDGET_IS_SENSITIVE (widget);
-  
+
   /* Just to be confusing, we draw the trough for the whole
    * range rectangle, not the trough rectangle (the trough
    * rectangle is just for hit detection)
@@ -844,16 +898,19 @@ gtk_range_expose (GtkWidget      *widget,
   /* The gdk_rectangle_intersect is more to get the right
    * clip region (limited to range_rect) than for efficiency
    */
-  if (gdk_rectangle_intersect (&event->area, &range->range_rect,
+  if (gdk_rectangle_intersect (&expose_area, &range->range_rect,
                                &area))
     {
+      area.x += widget->allocation.x;
+      area.y += widget->allocation.y;
+      
       gtk_paint_box (widget->style,
                      widget->window,
                      sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
                      GTK_SHADOW_IN,
                      &area, GTK_WIDGET(range), "trough",
-                     range->range_rect.x,
-                     range->range_rect.y,
+                     widget->allocation.x + range->range_rect.x,
+                     widget->allocation.y + range->range_rect.y,
                      range->range_rect.width,
                      range->range_rect.height);
       
@@ -863,8 +920,8 @@ gtk_range_expose (GtkWidget      *widget,
         gtk_paint_focus (widget->style,
                          widget->window,
                          &area, widget, "trough",
-                         range->range_rect.x,
-                         range->range_rect.y,
+                         widget->allocation.x + range->range_rect.x,
+                         widget->allocation.y + range->range_rect.y,
                          range->range_rect.width,
                          range->range_rect.height);
     }
@@ -876,19 +933,22 @@ gtk_range_expose (GtkWidget      *widget,
   else
     state = GTK_STATE_NORMAL;
 
-  if (gdk_rectangle_intersect (&event->area,
+  if (gdk_rectangle_intersect (&expose_area,
                                &range->layout->slider,
                                &area))
     {
+      area.x += widget->allocation.x;
+      area.y += widget->allocation.y;
+      
       gtk_paint_slider (widget->style,
                         widget->window,
                         state,
                         GTK_SHADOW_OUT,
-                        &event->area,
+                        &area,
                         widget,
                         GTK_RANGE_GET_CLASS (range)->slider_detail,
-                        range->layout->slider.x,
-                        range->layout->slider.y,
+                        widget->allocation.x + range->layout->slider.x,
+                        widget->allocation.y + range->layout->slider.y,
                         range->layout->slider.width,
                         range->layout->slider.height,
                         range->orientation);
@@ -899,28 +959,28 @@ gtk_range_expose (GtkWidget      *widget,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   range->layout->grab_location == MOUSE_STEPPER_A,
                   range->layout->mouse_location == MOUSE_STEPPER_A,
-                  &event->area);
+                  &expose_area);
 
   if (range->has_stepper_b)
     draw_stepper (range, &range->layout->stepper_b,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   range->layout->grab_location == MOUSE_STEPPER_B,
                   range->layout->mouse_location == MOUSE_STEPPER_B,
-                  &event->area);
+                  &expose_area);
 
   if (range->has_stepper_c)
     draw_stepper (range, &range->layout->stepper_c,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_UP : GTK_ARROW_LEFT,
                   range->layout->grab_location == MOUSE_STEPPER_C,
                   range->layout->mouse_location == MOUSE_STEPPER_C,
-                  &event->area);
+                  &expose_area);
 
   if (range->has_stepper_d)
     draw_stepper (range, &range->layout->stepper_d,
                   range->orientation == GTK_ORIENTATION_VERTICAL ? GTK_ARROW_DOWN : GTK_ARROW_RIGHT,
                   range->layout->grab_location == MOUSE_STEPPER_D,
                   range->layout->mouse_location == MOUSE_STEPPER_D,
-                  &event->area);
+                  &expose_area);
   
   return FALSE;
 }
@@ -1291,7 +1351,7 @@ gtk_range_motion_notify (GtkWidget      *widget,
 
   range = GTK_RANGE (widget);
 
-  gdk_window_get_pointer (widget->window, &x, &y, NULL);
+  gdk_window_get_pointer (range->event_window, &x, &y, NULL);
   
   range->layout->mouse_x = x;
   range->layout->mouse_y = y;

@@ -4857,7 +4857,6 @@ gtk_widget_set_events (GtkWidget *widget,
   gint *eventp;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   
   eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
@@ -4895,8 +4894,7 @@ gtk_widget_add_events (GtkWidget *widget,
   gint *eventp;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
-  
+
   eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
   
   if (events)
@@ -4918,8 +4916,25 @@ gtk_widget_add_events (GtkWidget *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      gdk_window_set_events (widget->window,
-			     gdk_window_get_events (widget->window) | events);
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	{
+	  GList *children = gdk_window_get_children (widget->window);
+	  GList *tmp_list = children;
+
+	  while (tmp_list)
+	    {
+	      GdkWindow *window = tmp_list->data;
+	      gpointer user_data;
+
+	      gdk_window_get_user_data (window, &user_data);
+	      if (user_data == widget)
+		gdk_window_set_events (window, gdk_window_get_events (window) | events);
+	    }
+	}
+      else
+	{
+	  gdk_window_set_events (widget->window, gdk_window_get_events (widget->window) | events);
+	}
     }
 
   g_object_notify (G_OBJECT (widget), "events");

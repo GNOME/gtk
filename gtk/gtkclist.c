@@ -4806,6 +4806,19 @@ gtk_clist_expose (GtkWidget      *widget,
 	  (clist, g_list_nth (clist->row_list,
 			      clist->drag_highlight_row)->data,
 	   clist->drag_highlight_row, clist->drag_highlight_pos);
+
+      if (event->window == clist->title_window)
+	{
+	  gint i;
+	  
+	  for (i = 0; i < clist->columns; i++)
+	    {
+	      if (clist->column[i].button)
+		gtk_container_propagate_expose (GTK_CONTAINER (clist),
+						clist->column[i].button,
+						event);
+	    }
+	}
     }
 
   return FALSE;

@@ -97,6 +97,7 @@ struct _GtkRange
   gint slide_initial_slider_position;
   gint slide_initial_coordinate;
   guint update_timeout_id;
+  GdkWindow *event_window;
 };
 
 struct _GtkRangeClass

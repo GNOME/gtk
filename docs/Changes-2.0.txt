@@ -514,3 +514,17 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   If you want to actually draw contents in a widget derived from
   one of these widgets, you'll probably want to change this
   in your init() function.
+
+* A number of widgets are now NO_WINDOW widgets (most importantly
+  GtkButton, but also GtkRange and GtkNotebook)
+
+  This has a couple of effects:
+
+   - If you are deriving from one of these widgets, you need to
+     adapt your code appropriately -- for instance, drawing coordinates
+     start from widget->allocation.x, widget->allocation.y.
+
+   - If you are embedding one of these widgets in a custom widget,
+     you must make sure you call gtk_container_propagate_expose()
+     correctly, as you must for any NO_WINDOW widgets.
+

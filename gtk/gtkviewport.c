@@ -218,6 +218,7 @@ gtk_viewport_init (GtkViewport *viewport)
 {
   GTK_WIDGET_UNSET_FLAGS (viewport, GTK_NO_WINDOW);
 
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (viewport), FALSE);
   gtk_container_set_resize_mode (GTK_CONTAINER (viewport), GTK_RESIZE_QUEUE);
   
   viewport->shadow_type = GTK_SHADOW_IN;
@@ -619,18 +620,11 @@ static void
 gtk_viewport_size_allocate (GtkWidget     *widget,
 			    GtkAllocation *allocation)
 {
-  GtkViewport *viewport;
-  GtkBin *bin;
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  GtkBin *bin = GTK_BIN (widget);
   GtkAllocation child_allocation;
   gint hval, vval;
-  gint border_width;
-
-  g_return_if_fail (GTK_IS_VIEWPORT (widget));
-  g_return_if_fail (allocation != NULL);
-
-  widget->allocation = *allocation;
-  viewport = GTK_VIEWPORT (widget);
-  bin = GTK_BIN (widget);
+  gint border_width = GTK_CONTAINER (widget)->border_width;
 
   /* demand creation */
   if (!viewport->hadjustment)
@@ -638,15 +632,24 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   if (!viewport->vadjustment)
     gtk_viewport_set_hadjustment (viewport, NULL);
 
-  border_width = GTK_CONTAINER (widget)->border_width;
+  /* If our size changed, and we have a shadow, queue a redraw on widget->window to
+   * redraw the shadow correctly.
+   */
+  if (GTK_WIDGET_MAPPED (widget) &&
+      viewport->shadow_type != GTK_SHADOW_NONE &&
+      (widget->allocation.width != allocation->width ||
+       widget->allocation.height != allocation->height))
+    gdk_window_invalidate_rect (widget->window, NULL, FALSE);
+  
+  widget->allocation = *allocation;
 
   child_allocation.x = 0;
   child_allocation.y = 0;
 
   if (viewport->shadow_type != GTK_SHADOW_NONE)
     {
-      child_allocation.x = GTK_WIDGET (viewport)->style->xthickness;
-      child_allocation.y = GTK_WIDGET (viewport)->style->ythickness;
+      child_allocation.x = widget->style->xthickness;
+      child_allocation.y = widget->style->ythickness;
     }
 
   child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2 - border_width * 2);

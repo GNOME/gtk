@@ -212,6 +212,9 @@ gtk_vscale_expose (GtkWidget      *widget,
           break;
         }
       
+      x += widget->allocation.x;
+      y += widget->allocation.y;
+      
       state_type = GTK_STATE_NORMAL;
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
         state_type = GTK_STATE_INSENSITIVE;

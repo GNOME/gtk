@@ -2159,9 +2159,9 @@ gtk_container_expose (GtkWidget      *widget,
       data.container = widget;
       data.event = event;
       
-      gtk_container_foreach (GTK_CONTAINER (widget),
-			     gtk_container_expose_child,
-			     &data);
+      gtk_container_forall (GTK_CONTAINER (widget),
+			    gtk_container_expose_child,
+			    &data);
     }   
   
   return TRUE;

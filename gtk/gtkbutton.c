@@ -76,6 +76,8 @@ static void gtk_button_get_property   (GObject         *object,
                                        GParamSpec      *pspec);
 static void gtk_button_realize        (GtkWidget        *widget);
 static void gtk_button_unrealize      (GtkWidget        *widget);
+static void gtk_button_map            (GtkWidget        *widget);
+static void gtk_button_unmap          (GtkWidget        *widget);
 static void gtk_button_size_request   (GtkWidget        *widget,
 				       GtkRequisition   *requisition);
 static void gtk_button_size_allocate  (GtkWidget        *widget,
@@ -159,6 +161,8 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   widget_class->realize = gtk_button_realize;
   widget_class->unrealize = gtk_button_unrealize;
+  widget_class->map = gtk_button_map;
+  widget_class->unmap = gtk_button_unmap;
   widget_class->size_request = gtk_button_size_request;
   widget_class->size_allocate = gtk_button_size_allocate;
   widget_class->expose_event = gtk_button_expose;
@@ -289,7 +293,7 @@ static void
 gtk_button_init (GtkButton *button)
 {
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_FOCUS | GTK_RECEIVES_DEFAULT);
-  GTK_WIDGET_UNSET_FLAGS (button, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (button, GTK_NO_WINDOW);
 
   button->label_text = NULL;
   
@@ -582,9 +586,7 @@ gtk_button_realize (GtkWidget *widget)
   attributes.y = widget->allocation.y + border_width;
   attributes.width = widget->allocation.width - border_width * 2;
   attributes.height = widget->allocation.height - border_width * 2;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
+  attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_EXPOSURE_MASK |
 			    GDK_BUTTON_PRESS_MASK |
@@ -592,13 +594,16 @@ gtk_button_realize (GtkWidget *widget)
 			    GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gdk_window_set_user_data (widget->window, button);
+  widget->window = gtk_widget_get_parent_window (widget);
+  gdk_window_ref (widget->window);
+  
+  button->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
+					 &attributes, attributes_mask);
+  gdk_window_set_user_data (button->event_window, button);
 
   widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
 
 static void
@@ -608,8 +613,41 @@ gtk_button_unrealize (GtkWidget *widget)
 
   if (button->activate_timeout)
     gtk_button_finish_activate (button, FALSE);
-    
+
+  if (button->event_window)
+    {
+      gdk_window_set_user_data (button->event_window, NULL);
+      gdk_window_destroy (button->event_window);
+      button->event_window = NULL;
+    }
+  
   GTK_WIDGET_CLASS (parent_class)->unrealize (widget);
+}
+
+static void
+gtk_button_map (GtkWidget *widget)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+  
+  g_return_if_fail (GTK_IS_BUTTON (widget));
+
+  if (button->event_window)
+    gdk_window_show (button->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+}
+
+static void
+gtk_button_unmap (GtkWidget *widget)
+{
+  GtkButton *button = GTK_BUTTON (widget);
+    
+  g_return_if_fail (GTK_IS_BUTTON (widget));
+
+  if (button->event_window)
+    gdk_window_hide (button->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
 
 static void
@@ -706,7 +744,7 @@ gtk_button_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
 
   if (GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (widget->window,
+    gdk_window_move_resize (button->event_window,
 			    widget->allocation.x + border_width,
 			    widget->allocation.y + border_width,
 			    widget->allocation.width - border_width * 2,
@@ -714,12 +752,12 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      child_allocation.x = (CHILD_SPACING + xthickness);
-      child_allocation.y = (CHILD_SPACING + ythickness);
+      child_allocation.x = widget->allocation.x + border_width + (CHILD_SPACING + xthickness);
+      child_allocation.y = widget->allocation.y + border_width + (CHILD_SPACING + ythickness);
 
-      child_allocation.width = MAX (1, (gint)widget->allocation.width - child_allocation.x * 2 -
+      child_allocation.width = MAX (1, (gint)widget->allocation.width - (CHILD_SPACING + xthickness) * 2 -
 	                         border_width * 2);
-      child_allocation.height = MAX (1, (gint)widget->allocation.height - child_allocation.y * 2 -
+      child_allocation.height = MAX (1, (gint)widget->allocation.height - (CHILD_SPACING + ythickness) * 2 -
 	                          border_width * 2);
 
       if (GTK_WIDGET_CAN_DEFAULT (button))
@@ -781,23 +819,22 @@ gtk_button_paint (GtkWidget    *widget,
   GtkShadowType shadow_type;
   gint width, height;
   gint x, y;
+  gint border_width;
   GtkBorder default_border;
   GtkBorder default_outside_border;
   gboolean interior_focus;
    
   if (GTK_WIDGET_DRAWABLE (widget))
     {
+      border_width = GTK_CONTAINER (widget)->border_width;
       button = GTK_BUTTON (widget);
 
       gtk_button_get_props (button, &default_border, &default_outside_border, &interior_focus);
 	
-      x = 0;
-      y = 0;
-      width = widget->allocation.width - GTK_CONTAINER (widget)->border_width * 2;
-      height = widget->allocation.height - GTK_CONTAINER (widget)->border_width * 2;
-
-      gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
-      gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+      x = widget->allocation.x + border_width;
+      y = widget->allocation.y + border_width;
+      width = widget->allocation.width - border_width * 2;
+      height = widget->allocation.height - border_width * 2;
 
       if (GTK_WIDGET_HAS_DEFAULT (widget) &&
 	  GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
@@ -1040,7 +1077,7 @@ gtk_real_button_activate (GtkButton *button)
 
   if (GTK_WIDGET_REALIZED (button) && !button->activate_timeout)
     {
-      if (gdk_keyboard_grab (widget->window, TRUE,
+      if (gdk_keyboard_grab (button->event_window, TRUE,
 			     gtk_get_current_event_time ()) == 0)
 	{
 	  gtk_grab_add (widget);

@@ -2498,6 +2498,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
 
   tree_view = GTK_TREE_VIEW (widget);
+
   gtk_widget_style_get (widget,
 			"horizontal_separator", &horizontal_separator,
 			"vertical_separator", &vertical_separator,
@@ -2871,6 +2872,20 @@ gtk_tree_view_expose (GtkWidget      *widget,
 
   if (event->window == tree_view->priv->bin_window)
     return gtk_tree_view_bin_expose (widget, event);
+  else if (event->window == tree_view->priv->header_window)
+    {
+      GList *list;
+      
+      for (list = tree_view->priv->columns; list != NULL; list = list->next)
+	{
+	  GtkTreeViewColumn *column = list->data;
+	  
+	  if (column->visible)
+	    gtk_container_propagate_expose (GTK_CONTAINER (tree_view),
+					    column->button,
+					    event);
+	}
+    }
 
   return TRUE;
 }

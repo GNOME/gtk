@@ -65,7 +65,7 @@ struct _GtkNotebook
   GList *focus_tab;
   
   GtkWidget *menu;
-  GdkWindow *panel;
+  GdkWindow *event_window;
   
   guint32 timer;
   
