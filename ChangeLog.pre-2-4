@@ -1,3 +1,12 @@
+2002-05-10  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktreemodel.c: #define INITIALIZE_TREE_ITER(),
+	which zeroes out all GtkTreeIter fields. (#81380)
+	(gtk_tree_model_get_iter): Use it.
+	(gtk_tree_model_iter_children): ditto
+	(gtk_tree_model_iter_nth_child): ditto
+	(gtk_tree_model_iter_parent): ditto
+
 Thu May  9 23:33:32 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_stop_editing): fixup comment,
