@@ -4095,8 +4095,8 @@ validate_rows (GtkTreeView *tree_view)
       tree_view->priv->validate_rows_timer = 0;
     }
   
-    return retval;
-  }
+  return retval;
+}
 
 static gboolean
 validate_rows_handler (GtkTreeView *tree_view)
