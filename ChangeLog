@@ -1,3 +1,11 @@
+2000-11-13  Havoc Pennington  <hp@pobox.com>
+
+	* demos/gtk-demo/textview.c: spiff up the demo a bit; reveals
+	still more bugs.
+
+	* gtk/gtktextview.c (gtk_text_view_value_changed): don't try to
+	scroll the GdkWindows before realization.
+
 2000-11-13  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextdisplay.c (gtk_text_render_state_update): fix bug 

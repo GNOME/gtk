@@ -4107,7 +4107,7 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
         }
     }
 
-  if (dx != 0 || dy != 0)
+  if (GTK_WIDGET_REALIZED (text_view) && (dx != 0 || dy != 0))
     {
       if (dy != 0)
         {
