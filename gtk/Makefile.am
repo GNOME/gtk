@@ -243,7 +243,7 @@ BUILT_SOURCES = \
 	stamp-m 
 
 # cause the built sources to be rebuild when possible, even with --include-deps
-$(static_sources): $(BUILT_SOURCES)
+$(static_SOURCES): $(BUILT_SOURCES)
 
 # More headers to use when autogenerating.
 gdk_headers = \
@@ -312,17 +312,19 @@ libgtk_la_LDFLAGS = \
 #	$(top_builddir)/gdk/libgdk.la
 
 gtkconfdir = $(sysconfdir)/gtk
-gtkconf_DATA = gtkrc gtkrc.ja gtkrc.ko gtkrc.ru
+gtkconf_DATA = gtkrc.ja gtkrc.ko gtkrc.ru gtkrc.iso-8859-2
 
-gtkrc:
-	:
-	
 # We create a dummy theme for the default GTK+ theme
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk
 	echo "# Empty gtkrc for default theme" > \
 	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
+	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
+	cd $(DESTDIR)$(gtkconfdir) && \
+	  for i in cs hr hu pl sk sl ; do \
+            ln -s -f gtkrc.iso-8859-2 gtkrc.$$i ; \
+          done
 
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc
@@ -358,6 +360,7 @@ EXTRA_DIST = \
 	tree_plus.xbm		\
 	tree_minus.xbm          \
         circles.xbm		\
+	gtkrc.iso-8859-2        \
 	gtkrc.ja 		\
 	gtkrc.ko		\
 	gtkrc.ru

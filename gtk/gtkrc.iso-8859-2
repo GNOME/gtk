@@ -1,0 +1,8 @@
+# RC file for locales using iso-8859-2
+
+style "gtk-default-iso-8859-2" {
+       fontset = "-*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
+		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-2"
+}
+class "GtkWidget" style "gtk-default-iso-8859-2"
+

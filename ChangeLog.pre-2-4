@@ -1,3 +1,27 @@
+Tue May  4 09:32:08 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gtk/gtkrc.iso-8859-2: Add a gtkrc
+	file for iso-8859-2 locales.
+
+	* configure.in (ALL_LINGUAS): ALL_LINGUAS update.
+
+Tue Apr 27 16:38:32 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am: Fix typo of static_sources for static_SOURCES.
+	 (Pointed out by andy@rz.uni-karlsruhe.de and others).
+	 Remove some suspicious and useless lines. 
+
+Tue May  4 08:44:08 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c (gtk_clist_draw, draw_rows): Use 
+	width,height = 0, 0 to mean - here to edge of window,
+	instead of -1, -1, since the former is all we support.
+
+Tue May  4 08:34:43 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_main): Correctly free list nodes
+	when removing from quit_functions list.
+
 Sun May  2 15:29:45 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkdraw.c (gdk_draw_lines): check private->destroyed before
@@ -939,7 +963,7 @@ Wed Feb 10 01:18:22 1999  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): 
 	  Add double-click reattachment.
 
-	* gtk/gtkhandlebox.c: Grab on widget->window,
+v	* gtk/gtkhandlebox.c: Grab on widget->window,
 	  not on handlebox->bin_window. This means we don't 
 	  have to worry about ungrabbing while reparenting.
 
