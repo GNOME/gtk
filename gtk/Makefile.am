@@ -179,7 +179,7 @@ gtkinclude_HEADERS = \
 gtktypebuiltins.c: gtk.defs gentypeinfo.el
 	$(srcdir)/runelisp $(srcdir)/gentypeinfo.el id $< $@
 
-libgtk_la_LDFLAGS = -version-info 1:0:
+libgtk_la_LDFLAGS = -version-info 1:0:0
 
 EXTRA_DIST = \
 	line-arrow.xbm 		\

@@ -5,7 +5,7 @@ AC_INIT(gdk/gdktypes.h)
 AC_CONFIG_SUBDIRS(glib)
 
 dnl Initialize automake stuff
-AM_INIT_AUTOMAKE(gtk+, 971109)
+AM_INIT_AUTOMAKE(gtk+, 971201)
 
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h)

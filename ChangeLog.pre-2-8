@@ -1,3 +1,12 @@
+Sun Nov 30 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtknotebook.c: fixed a old bug where all the notebook pages
+	which were not displayed when the notebook widget was realized were
+	never size allocated when they were realized.
+
+Thr Nov 28 1997 Jay Painter <jpaint@serv.net>
+	* gtk/gtklist.h: removed GtkSelectionMode
+	* gtk/gtkenums.h: added GtkSelectionMode
+
 Fri Nov 28 01:26:55 1997  Tim Janik  <timj@psynet.net>
 
 	* gtk/gtkwindow.c (gtk_window_show): propagate a size_request before

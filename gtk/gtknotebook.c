@@ -201,7 +201,8 @@ gtk_notebook_insert_page (GtkNotebook *notebook,
       if (GTK_WIDGET_REALIZED (notebook) &&
 	  !GTK_WIDGET_REALIZED (child))
 	gtk_widget_realize (child);
-      
+	
+
       if (GTK_WIDGET_MAPPED (notebook) &&
 	  !GTK_WIDGET_MAPPED (child) && notebook->cur_page == page)
 	gtk_widget_map (child);
@@ -551,7 +552,7 @@ gtk_notebook_size_request (GtkWidget      *widget,
       if (GTK_WIDGET_VISIBLE (page->child))
 	{
 	  gtk_widget_size_request (page->child, &page->child->requisition);
-
+	  
 	  widget->requisition.width = MAX (widget->requisition.width,
 					   page->child->requisition.width);
 	  widget->requisition.height = MAX (widget->requisition.height,
@@ -705,7 +706,7 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 	{
 	  page = children->data;
 	  children = children->next;
-
+	  
 	  if (GTK_WIDGET_VISIBLE (page->child))
 	    gtk_widget_size_allocate (page->child, &child_allocation);
 	}
@@ -1041,7 +1042,18 @@ gtk_notebook_switch_page (GtkNotebook     *notebook,
       gtk_notebook_pages_allocate (notebook, &GTK_WIDGET (notebook)->allocation);
 
       if (GTK_WIDGET_MAPPED (notebook))
-	gtk_widget_map (notebook->cur_page->child);
+	{
+	  if (GTK_WIDGET_REALIZED (notebook->cur_page->child))
+	    {
+	      gtk_widget_map (notebook->cur_page->child);
+	    }
+	  else
+	    {
+	      gtk_widget_map (notebook->cur_page->child);
+	      gtk_widget_size_allocate (GTK_WIDGET (notebook), 
+					&GTK_WIDGET (notebook)->allocation);
+	    }
+	}
 
       if (GTK_WIDGET_DRAWABLE (notebook))
 	gtk_widget_queue_draw (GTK_WIDGET (notebook));
