@@ -591,7 +591,7 @@ stamp-gtkmarshalers.h: @REBUILD@ gtkmarshalers.list
 	&& rm -f xgen-gmlh \
 	&& echo timestamp > $(@F)	
 gtkmarshalers.c: @REBUILD@ gtkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body >> xgen-gmlc \
+	(echo "#include \"gtkalias.h\""; $(GLIB_GENMARSHAL) --prefix=_gtk_marshal $(srcdir)/gtkmarshalers.list --body) >> xgen-gmlc \
 	&& cp xgen-gmlc gtkmarshalers.c \
 	&& rm -f xgen-gmlc
 
@@ -605,7 +605,7 @@ stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.list
 	&& rm -f xgen-gmh \
 	&& echo timestamp > $(@F)
 gtkmarshal.c: @REBUILD@ gtkmarshal.list
-	$(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body >> xgen-gmc \
+	(echo "#include \"gtkalias.h\""; $(GLIB_GENMARSHAL) --prefix=gtk_marshal $(srcdir)/gtkmarshal.list --body) >> xgen-gmc \
 	&& cp xgen-gmc gtkmarshal.c \
 	&& rm -f xgen-gmc 
 

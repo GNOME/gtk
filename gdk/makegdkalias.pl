@@ -59,14 +59,12 @@ EOF
 
 print $preamble;
 while (<>) {
-  my $str = $_;
-  chomp($str);
 
   # ignore empty lines
-  if ("$str" eq "") {
-      next;
-  }
+  next if /^\s*$/;
 
+  my $str = $_;
+  chomp($str);
   my $alias = $str."__internal_alias";
   
   print "extern __typeof ($str) $alias __attribute((visibility(\"hidden\"))); \n";

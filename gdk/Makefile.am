@@ -1,6 +1,6 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS = . $(gdktarget)
+SUBDIRS = $(gdktarget)
 DIST_SUBDIRS = linux-fb win32 x11
 
 EXTRA_DIST =			\
@@ -235,7 +235,7 @@ stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) Makefile
 	&& echo timestamp > $(@F)
 gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdk.h\"" \
+			--fhead "#define GDK_ENABLE_BROKEN\n#include \"gdkalias.h\"\n#include \"gdk.h\"" \
 		--fprod "\n/* enumerations from \"@filename@\" */" \
 			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {" \
 			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
@@ -252,7 +252,7 @@ gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
+	(echo "#include \"gdkalias.h\""; $(GLIB_GENMARSHAL) --prefix=gdk_marshal $(srcdir)/gdkmarshalers.list --body) > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
