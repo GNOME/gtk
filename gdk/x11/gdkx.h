@@ -65,6 +65,7 @@ gint     gdk_x11_get_default_screen       (void);
 #include "gdkprivate-x11.h"
 
 #define GDK_ROOT_WINDOW()             _gdk_root_window
+#undef GDK_ROOT_PARENT
 #define GDK_ROOT_PARENT()             ((GdkWindow *)_gdk_parent_root)
 #define GDK_WINDOW_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xdisplay)
 #define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)

@@ -1,3 +1,11 @@
+Sat Sep  8 01:49:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkmain-x11.c (_gdk_windowing_init_check): Prevent a 
+	false alarm  constness warning with a cast.
+
+	* gdk/x11/gdkx.h: Undefine GDK_ROOT_PARENT before redefining it
+	for the inside-gdk case.
+
 Sat Sep  8 01:44:18 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_set_dirty):

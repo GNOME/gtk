@@ -134,7 +134,7 @@ _gdk_windowing_init_check (int argc, char **argv)
 					  10, 10, 10, 10, 0, 0 , 0);
   class_hint = XAllocClassHint();
   class_hint->res_name = g_get_prgname ();
-  class_hint->res_class = gdk_get_program_class ();
+  class_hint->res_class = (char *)gdk_get_program_class ();
   XmbSetWMProperties (gdk_display, _gdk_leader_window,
                       NULL, NULL, argv, argc, 
                       NULL, NULL, class_hint);
