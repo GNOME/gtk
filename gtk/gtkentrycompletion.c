@@ -1324,7 +1324,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     width = -1;
 
-  gtk_tree_view_columns_autosize (completion->priv->tree_view);
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (completion->priv->tree_view));
   gtk_widget_set_size_request (completion->priv->tree_view, width, items * height);
 
   /* default on no match */
