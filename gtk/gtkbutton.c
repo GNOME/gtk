@@ -881,7 +881,10 @@ gtk_real_button_released (GtkButton *button)
       if (GTK_WIDGET_STATE (button) != new_state)
 	{
 	  gtk_widget_set_state (GTK_WIDGET (button), new_state);
-	  gtk_widget_queue_draw (GTK_WIDGET (button));
+	  /* We _draw () instead of queue_draw so that if the operation
+	   * blocks, the label doesn't vanish.
+	   */
+	  gtk_widget_draw (GTK_WIDGET (button), NULL);
 	}
     }
 }

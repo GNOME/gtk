@@ -1,3 +1,16 @@
+Sun Apr  5 19:30:23 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkclist.c: Fixed assignment of adjustment->value
+	to negative values. Moved a few other allocation type things
+	around in ways that may or may matter. Fixed some allocation
+	errors (scrollbars were overlapping main window).
+
+	* gtk/gtkbutton.c (gtk_real_button_released): Small hack to keep
+	button labels from vanishing when the invoked operation blocks.
+
+	* gtk/gtkbox.c (gtk_box_remove): Assigning GTK_WIDGET_VISIBLE (widget)
+	to a gboolean (char) is _bad_. GTK_VISIBLE == 256.
+
 Sun Apr  5 15:08:25 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkmain.c: Reverted broken implementation of removing

@@ -560,7 +560,7 @@ gtk_box_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
-	  gboolean visible;
+	  gint visible;
 
 	  visible = GTK_WIDGET_VISIBLE (widget);
 	  gtk_widget_unparent (widget);
