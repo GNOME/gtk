@@ -246,20 +246,20 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
     case GTK_BUTTONS_YES_NO:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_YES,
-                             GTK_RESPONSE_YES);
-      gtk_dialog_add_button (dialog,
                              GTK_STOCK_NO,
                              GTK_RESPONSE_NO);
+      gtk_dialog_add_button (dialog,
+                             GTK_STOCK_YES,
+                             GTK_RESPONSE_YES);
       break;
 
     case GTK_BUTTONS_OK_CANCEL:
       gtk_dialog_add_button (dialog,
-                             GTK_STOCK_OK,
-                             GTK_RESPONSE_OK);
-      gtk_dialog_add_button (dialog,
                              GTK_STOCK_CANCEL,
                              GTK_RESPONSE_CANCEL);
+      gtk_dialog_add_button (dialog,
+                             GTK_STOCK_OK,
+                             GTK_RESPONSE_OK);
       break;
       
     default:

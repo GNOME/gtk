@@ -1040,22 +1040,21 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   
   /* Create the action area */
   fontseldiag->action_area = dialog->action_area;
-  
-  fontseldiag->ok_button = gtk_dialog_add_button (dialog,
-                                                  GTK_STOCK_OK,
-                                                  GTK_RESPONSE_OK);
-  gtk_widget_grab_default (fontseldiag->ok_button);
-  
+
+  fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
+                                                      GTK_STOCK_CANCEL,
+                                                      GTK_RESPONSE_CANCEL);
+
   fontseldiag->apply_button = gtk_dialog_add_button (dialog,
                                                      GTK_STOCK_APPLY,
                                                      GTK_RESPONSE_APPLY);
   gtk_widget_hide (fontseldiag->apply_button);
 
+  fontseldiag->ok_button = gtk_dialog_add_button (dialog,
+                                                  GTK_STOCK_OK,
+                                                  GTK_RESPONSE_OK);
+  gtk_widget_grab_default (fontseldiag->ok_button);
   
-  fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
-                                                      GTK_STOCK_CANCEL,
-                                                      GTK_RESPONSE_CANCEL);
-
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
                         _("Font Selection"));
 

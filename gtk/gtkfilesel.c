@@ -684,17 +684,16 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   /*  The OK/Cancel button area */
   confirm_area = dialog->action_area;
 
+  /*  The Cancel button  */
+  filesel->cancel_button = gtk_dialog_add_button (dialog,
+                                                  GTK_STOCK_CANCEL,
+                                                  GTK_RESPONSE_CANCEL);
   /*  The OK button  */
   filesel->ok_button = gtk_dialog_add_button (dialog,
                                               GTK_STOCK_OK,
                                               GTK_RESPONSE_OK);
   
   gtk_widget_grab_default (filesel->ok_button);
-
-  /*  The Cancel button  */
-  filesel->cancel_button = gtk_dialog_add_button (dialog,
-                                                  GTK_STOCK_CANCEL,
-                                                  GTK_RESPONSE_CANCEL);
 
   /*  The selection entry widget  */
   entry_vbox = gtk_vbox_new (FALSE, 2);
@@ -1309,15 +1308,6 @@ gtk_file_selection_create_dir (GtkWidget *widget,
   gtk_widget_show (fs->fileop_entry);
   
   /* buttons */
-  button = gtk_button_new_with_label (_("Create"));
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_create_dir_confirmed, 
-		      (gpointer) fs);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_show (button);
-  
   button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
@@ -1330,6 +1320,15 @@ gtk_file_selection_create_dir (GtkWidget *widget,
 
   gtk_widget_grab_focus (fs->fileop_entry);
 
+  button = gtk_button_new_with_label (_("Create"));
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_create_dir_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		     button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_show (button);
+  
   gtk_widget_show (dialog);
 }
 
@@ -1437,15 +1436,6 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   g_free (buf);
   
   /* buttons */
-  button = gtk_button_new_with_label (_("Delete"));
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
-		      (gpointer) fs);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		      button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_show (button);
-  
   button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
@@ -1456,6 +1446,15 @@ gtk_file_selection_delete_file (GtkWidget *widget,
   gtk_widget_grab_default (button);
   gtk_widget_show (button);
 
+  button = gtk_button_new_with_label (_("Delete"));
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_delete_file_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		      button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_show (button);
+  
   gtk_widget_show (dialog);
 
 }
@@ -1591,15 +1590,6 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 			      0, strlen (fs->fileop_file));
 
   /* buttons */
-  button = gtk_button_new_with_label (_("Rename"));
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-		      (GtkSignalFunc) gtk_file_selection_rename_file_confirmed, 
-		      (gpointer) fs);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		      button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_show (button);
-  
   button = gtk_button_new_with_label (_("Cancel"));
   gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
 			     (GtkSignalFunc) gtk_widget_destroy, 
@@ -1612,6 +1602,15 @@ gtk_file_selection_rename_file (GtkWidget *widget,
 
   gtk_widget_grab_focus (fs->fileop_entry);
 
+  button = gtk_button_new_with_label (_("Rename"));
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      (GtkSignalFunc) gtk_file_selection_rename_file_confirmed, 
+		      (gpointer) fs);
+  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
+		      button, TRUE, TRUE, 0);
+  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+  gtk_widget_show (button);
+  
   gtk_widget_show (dialog);
 }
 

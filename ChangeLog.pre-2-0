@@ -1,3 +1,11 @@
+Fri Nov  2 14:55:53 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/{gtkcolorseldialog.c,gtkfilesel.c,gtkfontsel.c,
+	gtkgamma.c,gtkmessagedialog.c}: Go to the GUP
+	proposed ordering of buttons with [OK] in the lower
+	right hand corner. Patch from Gregory Merchan,
+	#56331.
+
 Fri Nov  2 11:51:49 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_select_region_index): remove

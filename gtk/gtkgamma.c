@@ -413,6 +413,12 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  
 	  /* fill in action area: */
 	  hbox = GTK_DIALOG (c->gamma_dialog)->action_area;
+
+	  button = gtk_button_new_with_label (_("Cancel"));
+	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			      (GtkSignalFunc) gamma_cancel_callback, c);
+	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+	  gtk_widget_show (button);
 	  
 	  button = gtk_button_new_with_label (_("OK"));
 	  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
@@ -420,12 +426,6 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 			      (GtkSignalFunc) gamma_ok_callback, c);
 	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 	  gtk_widget_grab_default (button);
-	  gtk_widget_show (button);
-	  
-	  button = gtk_button_new_with_label (_("Cancel"));
-	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			      (GtkSignalFunc) gamma_cancel_callback, c);
-	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 	  gtk_widget_show (button);
 	  
 	  gtk_widget_show (c->gamma_dialog);
