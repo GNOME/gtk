@@ -1915,6 +1915,9 @@ sync_selection (GtkCList * clist,
 void
 gtk_clist_clear (GtkCList * clist)
 {
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+  
   GTK_CLIST_CLASS_FW (clist)->clear (clist);
 }
 
@@ -5906,6 +5909,9 @@ gtk_clist_focus (GtkContainer     * container,
 void
 gtk_clist_unselect_all (GtkCList * clist)
 {
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
   GTK_CLIST_CLASS_FW (clist)->unselect_all (clist);
 }
 
@@ -5959,6 +5965,9 @@ real_unselect_all (GtkCList * clist)
 void
 gtk_clist_select_all (GtkCList * clist)
 {
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
   GTK_CLIST_CLASS_FW (clist)->select_all (clist);
 }
 
@@ -6259,6 +6268,9 @@ gtk_clist_mergesort (GtkCList *clist,
 void
 gtk_clist_sort (GtkCList *clist)
 {
+  g_return_if_fail (clist != NULL);
+  g_return_if_fail (GTK_IS_CLIST (clist));
+
   GTK_CLIST_CLASS_FW (clist)->sort_list (clist);
 }
 

@@ -1,3 +1,10 @@
+Sat Sep 26 06:15:34 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_sort): 
+	(gtk_clist_clear): 
+	(gtk_clist_unselect_all): 
+	(gtk_clist_select_all): adde g_return_if_fail() statements.
+
 Sat Sep 26 04:46:22 1998  Tim Janik  <timj@gtk.org>
 
 	* configure.in: set binary age and interface age to 0.
