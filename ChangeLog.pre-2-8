@@ -1,3 +1,7 @@
+2003-07-30  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Some updates to the DND signal docs.
+
 2003-07-29  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #108007, #112402, #117042: There was confusion in
