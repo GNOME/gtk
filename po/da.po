@@ -1,11 +1,12 @@
 # GTK+ fordansket.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Birger Langkjer <birger.langkjer@image.dk>, 1999.
+# Kenneth Christiansen, 1999-2000
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2000-07-14 16:26-0400\n"
+"POT-Creation-Date: 2000-07-27 14:03+0200\n"
 "PO-Revision-Date: 1999-12-08 17:14+01:00\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <sslug-locale@sslug.dk>\n"
@@ -13,52 +14,51 @@ msgstr ""
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gtk/gtkcolorsel.c:1415
+#: gtk/gtkcolorsel.c:1418
 msgid "Hue:"
 msgstr "Glød:"
 
-#: gtk/gtkcolorsel.c:1416
+#: gtk/gtkcolorsel.c:1419
 msgid "Saturation:"
 msgstr "Mætning:"
 
-#: gtk/gtkcolorsel.c:1417
+#: gtk/gtkcolorsel.c:1420
 msgid "Value:"
 msgstr "Værdi:"
 
-#: gtk/gtkcolorsel.c:1418
+#: gtk/gtkcolorsel.c:1421
 msgid "Red:"
 msgstr "Rød:"
 
-#: gtk/gtkcolorsel.c:1419
+#: gtk/gtkcolorsel.c:1422
 msgid "Green:"
 msgstr "Grøn:"
 
-#: gtk/gtkcolorsel.c:1420
+#: gtk/gtkcolorsel.c:1423
 msgid "Blue:"
 msgstr "Blå:"
 
-#: gtk/gtkcolorsel.c:1423
+#: gtk/gtkcolorsel.c:1426
 msgid "Opacity:"
 msgstr "Gennemsigtighed:"
 
-#: gtk/gtkcolorsel.c:1438
-#, fuzzy
+#: gtk/gtkcolorsel.c:1441
 msgid "Hex Value:"
-msgstr "Værdi:"
+msgstr "Hexværdi:"
 
-#: gtk/gtkcolorsel.c:1459
+#: gtk/gtkcolorsel.c:1462
 msgid "Custom Palette"
-msgstr ""
+msgstr "Personlig palette"
 
-#: gtk/gtkcolorsel.c:1464
+#: gtk/gtkcolorsel.c:1467
 msgid "Set Color"
-msgstr ""
+msgstr "Sæt farve"
 
 #. The OK button
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
-msgstr "OK"
+msgstr "Ok"
 
 #. The Cancel button
 #: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
@@ -144,9 +144,8 @@ msgid "Family:"
 msgstr "Familie:"
 
 #: gtk/gtkfontsel.c:194
-#, fuzzy
 msgid "Style:"
-msgstr "Tilføj stil:"
+msgstr "Stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -176,11 +175,11 @@ msgstr "Gamma-værdi"
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
-msgstr "Input"
+msgstr "Indstrøm"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Ingen inputenheder"
+msgstr "Ingen indenheder"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
@@ -240,7 +239,7 @@ msgstr "Y-hældning"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr ""
+msgstr "Hjul"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
@@ -248,7 +247,7 @@ msgstr "ingen"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(slået fra)"
+msgstr "(deaktiveret)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
@@ -264,17 +263,17 @@ msgstr "ryd"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1875
+#: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1878
+#: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
 
-#: gtk/gtkthemes.c:103
+#: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Kunne ikke finde modul i module_path: \"%s\","
@@ -282,177 +281,3 @@ msgstr "Kunne ikke finde modul i module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
-
-#~ msgid "Foundry:"
-#~ msgstr "Skaber:"
-
-#~ msgid "Weight:"
-#~ msgstr "Vægt:"
-
-#~ msgid "Slant:"
-#~ msgstr "Hældning:"
-
-#~ msgid "Set Width:"
-#~ msgstr "Sæt bredde:"
-
-#~ msgid "Pixel Size:"
-#~ msgstr "Pixelstørrelse:"
-
-#~ msgid "Point Size:"
-#~ msgstr "Punktstørrelse:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Opløsning X:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Opløsning Y:"
-
-#~ msgid "Spacing:"
-#~ msgstr "Breddetype:"
-
-#~ msgid "Average Width:"
-#~ msgstr "Gennemsnitsbredde:"
-
-#~ msgid "Charset:"
-#~ msgstr "Tegnsæt:"
-
-#~ msgid "Font Property"
-#~ msgstr "Skrifttypeegenskab"
-
-#~ msgid "Requested Value"
-#~ msgstr "Ønsket værdi"
-
-#~ msgid "Actual Value"
-#~ msgstr "Egentlig værdi"
-
-#~ msgid "Font"
-#~ msgstr "Skrifttype"
-
-#~ msgid "Font:"
-#~ msgstr "Skrifttype:"
-
-#~ msgid "Font Style:"
-#~ msgstr "Skrifttypestil:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Nulstil filter"
-
-#~ msgid "Metric:"
-#~ msgstr "Metrisk:"
-
-#~ msgid "Points"
-#~ msgstr "Punkter"
-
-#~ msgid "Pixels"
-#~ msgstr "Pixler"
-
-#~ msgid "Font Information"
-#~ msgstr "Skrifttypeinformation"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "Ønsket skrifttypenavn:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Rigtigt skrifttypenavn:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i skrifttyper tilstede med ialt %i stilvarianter."
-
-#~ msgid "Filter"
-#~ msgstr "Filter"
-
-#~ msgid "Font Types:"
-#~ msgstr "Skrifttype-typer:"
-
-#~ msgid "Bitmap"
-#~ msgstr "Bitmap"
-
-#~ msgid "Scalable"
-#~ msgstr "Skalérbar"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Skaleret bitmap"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "(nil)"
-#~ msgstr "(nul)"
-
-#~ msgid "regular"
-#~ msgstr "regulær"
-
-#~ msgid "italic"
-#~ msgstr "kursiv"
-
-#~ msgid "oblique"
-#~ msgstr "skæv"
-
-#~ msgid "reverse italic"
-#~ msgstr "omvendt kursiv"
-
-#~ msgid "reverse oblique"
-#~ msgstr "omvendt skæv"
-
-#~ msgid "other"
-#~ msgstr "andre"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "Den valgte skrifttype er ikke tilstede."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "Du har valgt en ugyldig skrifttype."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Dette er en 2-byte skrifttype, muligvis ser den ikke sådan ud."
-
-#~ msgid "roman"
-#~ msgstr "romansk"
-
-#~ msgid "proportional"
-#~ msgstr "proportionel"
-
-#~ msgid "monospaced"
-#~ msgstr "fast bredde"
-
-#~ msgid "char cell"
-#~ msgstr "konsolskrifttype"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Skrifttype: (Filtreret)"
-
-#~ msgid "heavy"
-#~ msgstr "tung"
-
-#~ msgid "extrabold"
-#~ msgstr "ekstrafed"
-
-#~ msgid "bold"
-#~ msgstr "fed"
-
-#~ msgid "demibold"
-#~ msgstr "halvfed"
-
-#~ msgid "medium"
-#~ msgstr "medium"
-
-#~ msgid "normal"
-#~ msgstr "normal"
-
-#~ msgid "light"
-#~ msgstr "let"
-
-#~ msgid "extralight"
-#~ msgstr "ekstralet"
-
-#~ msgid "thin"
-#~ msgstr "tynd"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS er overskredet. Nogle skrifttyper mangler måske."

@@ -1,5 +1,6 @@
 # Files from the Gtk ditribution which have already been
 # marked to allow runtime translation of messages
+gdk-pixbuf/io-gif.c
 gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
 gtk/gtkfilesel.c
