@@ -189,4 +189,6 @@ EXTRA_DIST = 			\
 	test.xpm		\
 	merge-1.ui		\
 	merge-2.ui		\
-	merge-3.ui
+	merge-3.ui		\
+	makefile.msc
+

@@ -1,3 +1,9 @@
+2004-05-01  Hans Breuer  <hans@breuer.org>
+
+	* tests/Makefile.am : tests/makefile.msc is in CVS for
+	a long time, finally added to EXTRA_DIST : fixes bug 
+	#141334, John Ehresman
+
 2004-04-30  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.4.1 ===
