@@ -26,6 +26,7 @@
 #include <gdk/gdkx.h>
 
 #define PM_SIZE                    8
+#define TAB_SIZE                   (PM_SIZE + 6)
 #define CELL_SPACING               1
 #define CLIST_OPTIMUM_SIZE         512
 #define COLUMN_INSET               3
@@ -1066,7 +1067,7 @@ draw_row (GtkCList     *clist,
       if (gdk_rectangle_intersect 
 	  (area, &row_rectangle, &intersect_rectangle))
 	{
-	  if (clist_row->state == GTK_STATE_SELECTED || clist_row->fg_set)
+	  if (clist_row->state == GTK_STATE_SELECTED || clist_row->bg_set)
 	    gdk_draw_rectangle (clist->clist_window,
 				bg_gc,
 				TRUE,
@@ -1108,7 +1109,7 @@ draw_row (GtkCList     *clist,
 			      cell_rectangle.height);     
 	}	  
 
-      if (clist_row->state == GTK_STATE_SELECTED || clist_row->fg_set)
+      if (clist_row->state == GTK_STATE_SELECTED || clist_row->bg_set)
 	gdk_draw_rectangle (clist->clist_window,
 			    bg_gc,
 			    TRUE,
@@ -1127,6 +1128,7 @@ draw_row (GtkCList     *clist,
   /* iterate and draw all the columns (row cells) and draw their contents */
   for (i = 0; i < clist->columns; i++)
     {
+	
       if (!need_redraw && ctree->tree_column != i)
 	continue;
 
@@ -1138,6 +1140,104 @@ draw_row (GtkCList     *clist,
 	{
 	  clip_rectangle.y -= CELL_SPACING;
 	  clip_rectangle.height += CELL_SPACING;
+	}
+
+      if (i == ctree->tree_column)
+	{
+
+	  if (clist_row->state == GTK_STATE_SELECTED)
+	    {
+	      gdk_gc_set_foreground (ctree->lines_gc, 
+				     &GTK_WIDGET (ctree)->style->
+				     fg[GTK_STATE_SELECTED]);
+	      gdk_gc_set_background (ctree->lines_gc, 
+				     &GTK_WIDGET (ctree)->style->
+				     bg[GTK_STATE_SELECTED]);
+	    }
+	  else
+	    {
+	      gdk_gc_set_foreground (ctree->lines_gc, 
+				     &GTK_WIDGET (ctree)->style->
+				     fg[GTK_STATE_NORMAL]);
+	      if (clist_row->bg_set)
+		gdk_gc_set_background (ctree->lines_gc, 
+				       &clist_row->background);
+	    }
+
+	  if (ctree->line_style == GTK_CTREE_LINES_TABBED)
+	    {
+	      if (clist->column[i].justification == GTK_JUSTIFY_RIGHT)
+		{
+		  xdest = clip_rectangle.x + clip_rectangle.width - 1 -
+		    (((GtkCTreeRow *) clist_row)->level - 1) *
+		    ctree->tree_indent;
+
+		  gdk_draw_line (clist->clist_window,
+				 ctree->lines_gc, 
+				 -1,
+				 row_rectangle.y - 1,
+				 MAX (xdest - TAB_SIZE, clip_rectangle.x - 1),
+				 row_rectangle.y - 1);
+
+		  if (clist_row == clist->row_list_end->data)
+		    gdk_draw_line
+		      (clist->clist_window,
+		       ctree->lines_gc, 
+		       -1,
+		       row_rectangle.y + clist->row_height,
+		       MAX (clip_rectangle.x + clip_rectangle.width -
+			    TAB_SIZE - 1 -
+			    (((GtkCTreeRow *) clist_row)->level > 1) *
+			    MIN (ctree->tree_indent / 2, TAB_SIZE),
+			    clip_rectangle.x - 1),
+		       row_rectangle.y + clist->row_height);
+
+		  if (clist_row->state != GTK_STATE_SELECTED)
+		    gdk_draw_rectangle
+		      (clist->clist_window,
+		       widget->style->bg_gc[GTK_STATE_PRELIGHT],
+		       TRUE,
+		       clip_rectangle.x + clip_rectangle.width,
+		       row_rectangle.y,
+		       CELL_SPACING + COLUMN_INSET,
+		       row_rectangle.height);
+		}
+	      else
+		{
+		  xdest = clip_rectangle.x +
+		    (((GtkCTreeRow *) clist_row)->level - 1) *
+		    ctree->tree_indent;
+		  
+		  gdk_draw_line (clist->clist_window,
+				 ctree->lines_gc, 
+				 MIN (xdest + TAB_SIZE,
+				      clip_rectangle.x + clip_rectangle.width),
+				 row_rectangle.y - 1,
+				 clist->clist_window_width,
+				 row_rectangle.y - 1);
+
+		  if (clist_row == clist->row_list_end->data)
+		    gdk_draw_line
+		      (clist->clist_window, ctree->lines_gc, 
+		       MIN (clip_rectangle.x + TAB_SIZE +
+			    (((GtkCTreeRow *) clist_row)->level > 1) *
+			    MIN (ctree->tree_indent / 2, TAB_SIZE),
+			    clip_rectangle.x + clip_rectangle.width),
+		       row_rectangle.y + clist->row_height,
+		       clist->clist_window_width,
+		       row_rectangle.y + clist->row_height);
+
+		  if (clist_row->state != GTK_STATE_SELECTED)
+		    gdk_draw_rectangle
+		      (clist->clist_window,
+		       widget->style->bg_gc[GTK_STATE_PRELIGHT],
+		       TRUE,
+		       clip_rectangle.x - CELL_SPACING - COLUMN_INSET,
+		       row_rectangle.y,
+		       CELL_SPACING + COLUMN_INSET,
+		       row_rectangle.height);
+		}
+	    }
 	}
 
       if (!area)
@@ -1245,35 +1345,26 @@ draw_row (GtkCList     *clist,
 	{
 	  GdkGC *cgc;
 	  GdkGC *tgc;
+	  GdkGC *mbg_gc;
 	  GList *work;
+	  GList *work2;
 	  gint xoffset;
 	  gint yoffset;
 	  gint xcenter;
 	  gint ycenter;
 	  gint offset_x;
 	  gint offset_y = 0; 
+	  gint next_level;
+	  gint in;
+	  GdkPoint points[6];
 
 	  xsrc = 0;
 	  ysrc = 0;
 
-	  if (clist_row->state == GTK_STATE_SELECTED)
-	    {
-	      gdk_gc_set_foreground (ctree->lines_gc, 
-				     &GTK_WIDGET (ctree)->style->
-				     fg[GTK_STATE_SELECTED]);
-	      gdk_gc_set_background (ctree->lines_gc, 
-				     &GTK_WIDGET (ctree)->style->
-				     bg[GTK_STATE_SELECTED]);
-	    }
-	  else
-	    {
-	      gdk_gc_set_foreground (ctree->lines_gc, 
-				     &GTK_WIDGET (ctree)->style->
-				     fg[GTK_STATE_NORMAL]);
-	      if (clist_row->bg_set)
-		gdk_gc_set_background (ctree->lines_gc, 
-				       &clist_row->background);
-	    }
+	  yoffset = (clip_rectangle.height - PM_SIZE) / 2;
+	  xoffset = (ctree->tree_indent - PM_SIZE) / 2;
+	  ycenter = clip_rectangle.y + (clip_rectangle.height / 2);
+	  ydest = ycenter - height / 2 + clist_row->cell[i].vertical;
 
 	  gdk_gc_set_clip_origin (fg_gc, 0, 0);
 	  gdk_gc_set_clip_rectangle (fg_gc, rect);
@@ -1282,11 +1373,6 @@ draw_row (GtkCList     *clist,
 	      gdk_gc_set_clip_origin (ctree->lines_gc, 0, 0);
 	      gdk_gc_set_clip_rectangle (ctree->lines_gc, rect);
 	    }
-
-	  yoffset = (clip_rectangle.height - PM_SIZE) / 2;
-	  xoffset = (ctree->tree_indent - PM_SIZE) / 2;
-	  ycenter = clip_rectangle.y + (clip_rectangle.height / 2);
-	  ydest = ycenter - height / 2 + clist_row->cell[i].vertical;
 
 	  switch (clist->column[i].justification)
 	    {
@@ -1299,8 +1385,182 @@ draw_row (GtkCList     *clist,
 		(((GtkCTreeRow *) clist_row)->level - 1) * ctree->tree_indent;
 	      xcenter = xdest + (ctree->tree_indent / 2);
 	  
-	      if (ctree->line_style != GTK_CTREE_LINES_NONE)
+	      switch (ctree->line_style)
 		{
+		case GTK_CTREE_LINES_NONE:
+		  break;
+		case GTK_CTREE_LINES_TABBED:
+		  xdest = clip_rectangle.x +
+		    (((GtkCTreeRow *) clist_row)->level - 1) *
+		    ctree->tree_indent;
+		  xcenter = xdest + TAB_SIZE;
+
+		  gdk_gc_set_clip_origin (clist->bg_gc, 0, 0);
+		  gdk_gc_set_clip_rectangle (clist->bg_gc, rect);
+
+		  gdk_gc_set_clip_origin 
+		    (widget->style->bg_gc[GTK_STATE_PRELIGHT], 0, 0);
+		  gdk_gc_set_clip_rectangle 
+		    (widget->style->bg_gc[GTK_STATE_PRELIGHT], rect);
+
+		  work = ((GtkCTreeRow *)clist_row)->parent;
+		  next_level = ((GtkCTreeRow *)clist_row)->level;
+
+		  if (!(((GtkCTreeRow *)clist_row)->sibling ||
+			(((GtkCTreeRow *)clist_row)->children &&
+			 ((GtkCTreeRow *)clist_row)->expanded)))
+		    {
+		      work2 = gtk_ctree_find_glist_ptr
+			(ctree, (GtkCTreeRow *) clist_row);
+
+		      if (work2->next)
+			next_level = GTK_CTREE_ROW (work2->next)->level;
+		      else
+			next_level = 0;
+		    }
+
+		  while (work)
+		    {
+		      xcenter -= ctree->tree_indent;
+
+		      if (GTK_CTREE_ROW(work)->row.bg_set)
+			{
+			  gdk_gc_set_foreground
+			    (clist->bg_gc,
+			     &(GTK_CTREE_ROW(work)->row.background));
+			  mbg_gc = clist->bg_gc;
+			}
+		      else
+			mbg_gc = widget->style->bg_gc[GTK_STATE_PRELIGHT];
+
+		      if (clist_row->state != GTK_STATE_SELECTED)
+			gdk_draw_rectangle (clist->clist_window, mbg_gc, TRUE,
+					    xcenter, rect->y,
+					    ctree->tree_indent, rect->height);
+
+		      if (next_level > GTK_CTREE_ROW (work)->level)
+			gdk_draw_line 
+			  (clist->clist_window, ctree->lines_gc, 
+			   xcenter, rect->y,
+			   xcenter, rect->y + rect->height);
+		      else
+			{
+			  gdk_draw_line (clist->clist_window, ctree->lines_gc, 
+					 xcenter, clip_rectangle.y,
+					 xcenter, ycenter);
+
+			  in = MIN (ctree->tree_indent, 2 * TAB_SIZE);
+
+			  if (clist_row->state != GTK_STATE_SELECTED)
+			    {
+			      if ((work2 = GTK_CTREE_ROW (work)->parent) &&
+				  GTK_CTREE_ROW(work2)->row.bg_set)
+				{
+				  gdk_gc_set_foreground
+				    (clist->bg_gc,
+				     &(GTK_CTREE_ROW(work2)->row.background));
+				  
+				  gdk_draw_rectangle 
+				    (clist->clist_window, clist->bg_gc, TRUE,
+				     xcenter,
+				     ycenter,
+				     in / 2 + in % 2,
+				     row_rectangle.height / 2 + 1);
+
+				  if (GTK_CTREE_ROW(work)->row.bg_set)
+				    gdk_gc_set_foreground
+				      (clist->bg_gc,
+				       &(GTK_CTREE_ROW(work)->row.background));
+				}
+			      else 
+				gdk_draw_rectangle 
+				  (clist->clist_window,
+				   widget->style->bg_gc[GTK_STATE_PRELIGHT],
+				   TRUE,
+				   xcenter,
+				   ycenter,
+				   in / 2 + in % 2,
+				   row_rectangle.height / 2 + 1);
+
+			      gdk_draw_arc (clist->clist_window, mbg_gc,
+					    TRUE,
+					    xcenter, clip_rectangle.y,
+					    in, clist->row_height,
+					    180 * 64, 90 * 64);
+			    }
+
+			  gdk_draw_arc (clist->clist_window, ctree->lines_gc,
+					FALSE,
+					xcenter, clip_rectangle.y,
+					in, clist->row_height,
+					180 * 64, 90 * 64);
+			}
+		      work = GTK_CTREE_ROW (work)->parent;
+		    }
+
+		  if (clist_row->state != GTK_STATE_SELECTED)
+		    gdk_draw_rectangle
+		      (clist->clist_window,
+		       widget->style->bg_gc[GTK_STATE_PRELIGHT], TRUE,
+		       clip_rectangle.x, row_rectangle.y,
+		       TAB_SIZE, row_rectangle.height);
+
+		  xcenter = xdest + (ctree->tree_indent / 2);
+		  
+		  if (clist_row->bg_set)
+		    gdk_gc_set_foreground 
+		      (clist->bg_gc, &clist_row->background);
+		  
+		  if (((GtkCTreeRow *)clist_row)->is_leaf)
+		    {
+		      points[0].x = xdest + TAB_SIZE;
+		      points[0].y = row_rectangle.y - 1;
+		      
+		      points[1].x = points[0].x - 4;
+		      points[1].y = points[0].y;
+		      
+		      points[2].x = points[1].x - 2;
+		      points[2].y = points[1].y + 3;
+
+		      points[3].x = points[2].x;
+		      points[3].y = points[2].y + clist->row_height - 5;
+
+		      points[4].x = points[3].x + 2;
+		      points[4].y = points[3].y + 3;
+
+		      points[5].x = points[4].x + 4;
+		      points[5].y = points[4].y;
+
+		      if (clist_row->state != GTK_STATE_SELECTED)
+			gdk_draw_polygon (clist->clist_window, bg_gc, TRUE,
+					  points, 6);
+
+		      gdk_draw_lines (clist->clist_window, ctree->lines_gc,
+				      points, 6);
+		    }
+		  else 
+		    {
+		      if (clist_row->state != GTK_STATE_SELECTED)
+			gdk_draw_arc (clist->clist_window, bg_gc, TRUE,
+				      xdest, row_rectangle.y - 1,
+				      2 * TAB_SIZE, clist->row_height,
+				      90 * 64, 180 * 64);
+
+		      gdk_draw_arc (clist->clist_window, ctree->lines_gc,
+				    FALSE,
+				    xdest, row_rectangle.y - 1,
+				    2 * TAB_SIZE, clist->row_height,
+				    90 * 64, 180 * 64);
+
+		    }
+
+		  gdk_gc_set_clip_rectangle (ctree->lines_gc, NULL);
+		  gdk_gc_set_clip_rectangle (clist->bg_gc, NULL);
+		  gdk_gc_set_clip_rectangle 
+		    (widget->style->bg_gc[GTK_STATE_PRELIGHT], NULL);
+		  
+		  break;
+		default:
 		  xcenter = xdest + (ctree->tree_indent / 2);
 		  if (ctree->line_style == GTK_CTREE_LINES_DOTTED)
 		    {
@@ -1308,7 +1568,7 @@ draw_row (GtkCList     *clist,
 				       2); 
 		      offset_y = abs ((clip_rectangle.y + clist->voffset) % 2);
 		    }
-
+		  
 		  gdk_draw_line (clist->clist_window, ctree->lines_gc, 
 				 xcenter, clip_rectangle.y + offset_y, xcenter,
 				 (((GtkCTreeRow *)clist_row)->sibling) ?
@@ -1317,7 +1577,7 @@ draw_row (GtkCList     *clist,
 		  gdk_draw_line (clist->clist_window, ctree->lines_gc,
 				 xcenter + offset_x, ycenter,
 				 xcenter + PM_SIZE / 2 + 2, ycenter);
-
+		  
 		  work = ((GtkCTreeRow *)clist_row)->parent;
 		  while (work)
 		    {
@@ -1329,11 +1589,11 @@ draw_row (GtkCList     *clist,
 		      work = GTK_CTREE_ROW (work)->parent;
 		    }
 		  gdk_gc_set_clip_rectangle (ctree->lines_gc, NULL);
+		  break;
 		}
 	  
 	      if (((GtkCTreeRow *)clist_row)->children)
 		{
-	      
 		  if (clist_row->state == GTK_STATE_SELECTED)
 		    {
 		      if (clist_row->fg_set)
@@ -1351,10 +1611,9 @@ draw_row (GtkCList     *clist,
 	      
 		  gdk_gc_set_clip_rectangle (cgc, rect);
 
-		  if (ctree->line_style == GTK_CTREE_LINES_NONE)
+		  switch (ctree->line_style)
 		    {
-		      GdkPoint points[3];
-
+		    case GTK_CTREE_LINES_NONE:
 		      if (!((GtkCTreeRow *)clist_row)->expanded)
 			{
 			  points[0].x = xdest + xoffset + (PM_SIZE+2) / 6 + 2;
@@ -1382,15 +1641,37 @@ draw_row (GtkCList     *clist,
 					TRUE, points, 3);
 		      gdk_draw_polygon (clist->clist_window, tgc, FALSE, 
 					points, 3);
-		    }
-		  else
-		    {
-		      gdk_draw_rectangle (clist->clist_window, 
-					  GTK_WIDGET (clist)->style->
-					  fg_gc[GTK_STATE_SELECTED], TRUE, 
-					  xdest + xoffset, 
-					  clip_rectangle.y + yoffset,
-					  PM_SIZE, PM_SIZE);
+		      break;
+		    case GTK_CTREE_LINES_TABBED:
+		      xcenter = xdest + PM_SIZE + 2;
+		      gdk_draw_arc (clist->clist_window,
+				    GTK_WIDGET (clist)->style->
+				    fg_gc[GTK_STATE_SELECTED],
+				    TRUE,
+				    xcenter - PM_SIZE/2,
+				    ycenter - PM_SIZE/2,
+				    PM_SIZE, PM_SIZE, 0, 360 * 64);
+
+		      gdk_draw_line (clist->clist_window, tgc, 
+				     xcenter - 2,
+				     ycenter,
+				     xcenter + 2,
+				     ycenter);
+		
+		      if (!((GtkCTreeRow *)clist_row)->expanded)
+			gdk_draw_line (clist->clist_window, tgc,
+				       xcenter, clip_rectangle.y + yoffset + 2,
+				       xcenter,
+				       clip_rectangle.y + yoffset + PM_SIZE-2);
+		      break;
+		    default:
+		      gdk_draw_rectangle 
+			(clist->clist_window,
+			 GTK_WIDGET (clist)->style->fg_gc[GTK_STATE_SELECTED],
+			 TRUE,
+			 xdest + xoffset, 
+			 clip_rectangle.y + yoffset,
+			 PM_SIZE, PM_SIZE);
 		
 		      gdk_draw_rectangle (clist->clist_window, tgc, FALSE,
 					  xdest + xoffset, 
@@ -1404,11 +1685,14 @@ draw_row (GtkCList     *clist,
 		      if (!((GtkCTreeRow *)clist_row)->expanded)
 			{
 			  xcenter = xdest + (ctree->tree_indent / 2);
-			  gdk_draw_line (clist->clist_window, tgc, xcenter,
+			  gdk_draw_line (clist->clist_window, tgc,
+					 xcenter,
 					 clip_rectangle.y + yoffset + 2,
-					 xcenter, clip_rectangle.y + yoffset
-					 + PM_SIZE - 2);
+					 xcenter,
+					 clip_rectangle.y + yoffset +
+					 PM_SIZE - 2);
 			}
+		      break;
 		    }
 		  
 		  gdk_gc_set_clip_rectangle (cgc, NULL);
@@ -1429,8 +1713,186 @@ draw_row (GtkCList     *clist,
 	      xdest = clip_rectangle.x + clip_rectangle.width + xoffset - 1 -
 		(((GtkCTreeRow *) clist_row)->level - 1) * ctree->tree_indent;
 	    
-	      if (ctree->line_style != GTK_CTREE_LINES_NONE)
+	      switch (ctree->line_style)
 		{
+		case  GTK_CTREE_LINES_NONE:
+		  break;
+		case GTK_CTREE_LINES_TABBED:
+		  xdest = clip_rectangle.x + clip_rectangle.width - 1
+		    - (((GtkCTreeRow *) clist_row)->level - 1)
+		    * ctree->tree_indent;
+		  xcenter = xdest - TAB_SIZE;
+
+		  gdk_gc_set_clip_origin (clist->bg_gc, 0, 0);
+		  gdk_gc_set_clip_rectangle (clist->bg_gc, rect);
+
+		  gdk_gc_set_clip_origin 
+		    (widget->style->bg_gc[GTK_STATE_PRELIGHT], 0, 0);
+		  gdk_gc_set_clip_rectangle 
+		    (widget->style->bg_gc[GTK_STATE_PRELIGHT], rect);
+
+		  work = ((GtkCTreeRow *)clist_row)->parent;
+		  next_level = ((GtkCTreeRow *)clist_row)->level;
+
+		  if (!(((GtkCTreeRow *)clist_row)->sibling ||
+			(((GtkCTreeRow *)clist_row)->children &&
+			 ((GtkCTreeRow *)clist_row)->expanded)))
+		    {
+		      work2 = gtk_ctree_find_glist_ptr 
+			(ctree, (GtkCTreeRow *) clist_row);
+
+		      if (work2->next)
+			next_level = GTK_CTREE_ROW (work2->next)->level;
+		      else
+			next_level = 0;
+		    }
+
+		  while (work)
+		    {
+		      xcenter += ctree->tree_indent;
+
+		      if (GTK_CTREE_ROW(work)->row.bg_set)
+			{
+			  gdk_gc_set_foreground
+			    (clist->bg_gc,
+			     &(GTK_CTREE_ROW(work)->row.background));
+			  mbg_gc = clist->bg_gc;
+			}
+		      else
+			mbg_gc = widget->style->bg_gc[GTK_STATE_PRELIGHT];
+
+		      if (clist_row->state != GTK_STATE_SELECTED)
+			gdk_draw_rectangle (clist->clist_window,
+					    mbg_gc, TRUE,
+					    xcenter - ctree->tree_indent + 1,
+					    rect->y,
+					    ctree->tree_indent,
+					    rect->height);
+
+		      if (next_level > GTK_CTREE_ROW (work)->level)
+			gdk_draw_line 
+			  (clist->clist_window, ctree->lines_gc, 
+			   xcenter, rect->y,
+			   xcenter, rect->y + rect->height);
+		      else
+			{
+			  gdk_draw_line (clist->clist_window, ctree->lines_gc, 
+					 xcenter, clip_rectangle.y,
+					 xcenter, ycenter);
+
+			  in = MIN (ctree->tree_indent, 2 * TAB_SIZE);
+
+			  if (clist_row->state != GTK_STATE_SELECTED)
+			    {
+			      if ((work2 = GTK_CTREE_ROW (work)->parent) &&
+				  GTK_CTREE_ROW(work2)->row.bg_set)
+				{
+				  gdk_gc_set_foreground
+				    (clist->bg_gc,
+				     &(GTK_CTREE_ROW(work2)->row.background));
+				  
+				  gdk_draw_rectangle 
+				    (clist->clist_window, clist->bg_gc, TRUE,
+				     xcenter + 1 - in / 2 - in % 2,
+				     ycenter,
+				     in / 2 + in % 2,
+				     row_rectangle.height / 2 + 1);
+
+				  if (GTK_CTREE_ROW(work)->row.bg_set)
+				    gdk_gc_set_foreground
+				      (clist->bg_gc,
+				       &(GTK_CTREE_ROW(work)->row.background));
+				}
+			      else 
+				gdk_draw_rectangle 
+				  (clist->clist_window,
+				   widget->style->bg_gc[GTK_STATE_PRELIGHT],
+				   TRUE,
+				   xcenter + 1 - in / 2 - in % 2,
+				   ycenter,
+				   in / 2 + in % 2,
+				   row_rectangle.height / 2 + 1);
+
+			      gdk_draw_arc (clist->clist_window, mbg_gc, TRUE,
+					    xcenter - in, clip_rectangle.y,
+					    in, clist->row_height,
+					    270 * 64, 90 * 64);
+			    }
+
+			  gdk_draw_arc (clist->clist_window, ctree->lines_gc,
+					FALSE,
+					xcenter - in, clip_rectangle.y,
+					in, clist->row_height,
+					270 * 64, 90 * 64);
+			}
+
+		      work = GTK_CTREE_ROW (work)->parent;
+		    }
+
+		  if (clist_row->state != GTK_STATE_SELECTED)
+		    gdk_draw_rectangle
+		      (clist->clist_window,
+		       widget->style->bg_gc[GTK_STATE_PRELIGHT], TRUE,
+		       xcenter + 1, row_rectangle.y,
+		       TAB_SIZE, row_rectangle.height);
+
+		  xcenter = xdest - (ctree->tree_indent / 2);
+		  
+		  if (clist_row->bg_set)
+		    gdk_gc_set_foreground 
+		      (clist->bg_gc, &clist_row->background);
+		  
+		  if (((GtkCTreeRow *)clist_row)->is_leaf)
+		    {
+		      points[0].x = xdest - TAB_SIZE;
+		      points[0].y = row_rectangle.y - 1;
+		      
+		      points[1].x = points[0].x + 4;
+		      points[1].y = points[0].y;
+		      
+		      points[2].x = points[1].x + 2;
+		      points[2].y = points[1].y + 3;
+
+		      points[3].x = points[2].x;
+		      points[3].y = points[2].y + clist->row_height - 5;
+
+		      points[4].x = points[3].x - 2;
+		      points[4].y = points[3].y + 3;
+
+		      points[5].x = points[4].x - 4;
+		      points[5].y = points[4].y;
+
+		      if (clist_row->state != GTK_STATE_SELECTED)
+			gdk_draw_polygon (clist->clist_window, bg_gc, TRUE,
+					  points, 6);
+
+		      gdk_draw_lines (clist->clist_window, ctree->lines_gc,
+				      points, 6);
+		    }
+		  else 
+		    {
+		      if (clist_row->state != GTK_STATE_SELECTED)
+			gdk_draw_arc (clist->clist_window, bg_gc, TRUE,
+				      xdest - 2 * TAB_SIZE,
+				      row_rectangle.y - 1,
+				      2 * TAB_SIZE, clist->row_height,
+				      270 * 64, 180 * 64);
+
+		      gdk_draw_arc (clist->clist_window, ctree->lines_gc,
+				    FALSE,
+				    xdest - 2 * TAB_SIZE,
+				    row_rectangle.y - 1,
+				    2 * TAB_SIZE, clist->row_height,
+				    270 * 64, 180 * 64);
+		    }
+
+		  gdk_gc_set_clip_rectangle (ctree->lines_gc, NULL);
+		  gdk_gc_set_clip_rectangle (clist->bg_gc, NULL);
+		  gdk_gc_set_clip_rectangle 
+		    (widget->style->bg_gc[GTK_STATE_PRELIGHT], NULL);
+		  
+		  break;
+		default:
 		  xcenter = xdest - (ctree->tree_indent / 2);
 		  if (ctree->line_style == GTK_CTREE_LINES_DOTTED)
 		    {
@@ -1438,7 +1900,7 @@ draw_row (GtkCList     *clist,
 				       2); 
 		      offset_y = abs ((clip_rectangle.y + clist->voffset) % 2);
 		    }
-
+		  
 		  gdk_draw_line (clist->clist_window, ctree->lines_gc, 
 				 xcenter,  clip_rectangle.y + offset_y,
 				 xcenter,
@@ -1448,7 +1910,7 @@ draw_row (GtkCList     *clist,
 		  gdk_draw_line (clist->clist_window, ctree->lines_gc, 
 				 xcenter - offset_x, ycenter, 
 				 xcenter - PM_SIZE / 2 - 2, ycenter);
-
+		  
 		  work = ((GtkCTreeRow *)clist_row)->parent;
 		  while (work)
 		    {
@@ -1461,10 +1923,10 @@ draw_row (GtkCList     *clist,
 		    }
 		  gdk_gc_set_clip_rectangle (ctree->lines_gc, NULL);
 		}
+
 	  
 	      if (((GtkCTreeRow *)clist_row)->children)
 		{
-	      
 		  if (clist_row->state == GTK_STATE_SELECTED)
 		    {
 		      if (clist_row->fg_set)
@@ -1482,10 +1944,9 @@ draw_row (GtkCList     *clist,
 	      
 		  gdk_gc_set_clip_rectangle (cgc, rect);
 	      
-		  if (ctree->line_style == GTK_CTREE_LINES_NONE)
+		  switch (ctree->line_style)
 		    {
-		      GdkPoint points[3];
-		      
+		    case GTK_CTREE_LINES_NONE:
 		      if (!((GtkCTreeRow *)clist_row)->expanded)
 			{
 			  points[0].x = xdest - xoffset - (PM_SIZE+2) / 6 - 2;
@@ -1513,9 +1974,33 @@ draw_row (GtkCList     *clist,
 					TRUE, points, 3);
 		      gdk_draw_polygon (clist->clist_window, tgc, FALSE, 
 					points, 3);
-		    }
-		  else
-		    {
+		      break;
+		    case GTK_CTREE_LINES_TABBED:
+		      xcenter = xdest - PM_SIZE - 2;
+
+		      gdk_draw_arc (clist->clist_window,
+				    GTK_WIDGET (clist)->style->
+				    fg_gc[GTK_STATE_SELECTED],
+				    TRUE,
+				    xcenter - PM_SIZE/2,
+				    ycenter - PM_SIZE/2,
+				    PM_SIZE, PM_SIZE, 0, 360 * 64);
+
+		      gdk_draw_line (clist->clist_window, tgc, 
+				     xcenter - 2,
+				     ycenter,
+				     xcenter + 2,
+				     ycenter);
+		
+		      if (!((GtkCTreeRow *)clist_row)->expanded)
+			{
+			  gdk_draw_line (clist->clist_window, tgc, xcenter,
+					 clip_rectangle.y + yoffset + 2,
+					 xcenter, clip_rectangle.y + yoffset
+					 + PM_SIZE - 2);
+			}
+		      break;
+		    default:
 		      gdk_draw_rectangle (clist->clist_window, 
 					  GTK_WIDGET(clist)->style->
 					  fg_gc[GTK_STATE_SELECTED], TRUE, 
@@ -2659,12 +3144,14 @@ ctree_is_hot_spot (GtkCTree *ctree,
 	+ clist->column[ctree->tree_column].area.width + clist->hoffset 
 	/*+ cell->horizontal +*/
 	- (tree_row->level - 1) * ctree->tree_indent 
-	- PM_SIZE - 1;
+	- PM_SIZE - 1 -
+	(ctree->line_style == GTK_CTREE_LINES_TABBED) * ((PM_SIZE / 2) + 1);
     }
   else
     {
       xl = clist->column[ctree->tree_column].area.x + clist->hoffset 
-	+ cell->horizontal + (tree_row->level - 1) * ctree->tree_indent;
+	+ cell->horizontal + (tree_row->level - 1) * ctree->tree_indent +
+	(ctree->line_style == GTK_CTREE_LINES_TABBED) * ((PM_SIZE / 2) + 2);
     }
 
   return (x >= xl && x <= xl + PM_SIZE && y >= yu && y <= yu + PM_SIZE);
@@ -2990,6 +3477,27 @@ gtk_ctree_last (GtkCTree *ctree,
   
   if (GTK_CTREE_ROW (node)->children)
     return gtk_ctree_last (ctree, GTK_CTREE_ROW (node)->children);
+  
+  return node;
+}
+
+GList *
+gtk_ctree_find_glist_ptr (GtkCTree    *ctree,
+			  GtkCTreeRow *ctree_row)
+{
+  GList *node;
+  
+  g_return_val_if_fail (ctree != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), FALSE);
+  g_return_val_if_fail (ctree_row != NULL, FALSE);
+  
+  if (ctree_row->parent)
+    node = GTK_CTREE_ROW(ctree_row->parent)->children;
+  else
+    node = GTK_CLIST (ctree)->row_list;
+
+  while (node->data != ctree_row)
+    node = GTK_CTREE_ROW (node)->sibling;
   
   return node;
 }
@@ -3762,6 +4270,11 @@ gtk_ctree_set_line_style (GtkCTree          *ctree,
 	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
 					GDK_LINE_ON_OFF_DASH, None, None);
 	  gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
+	  break;
+	case GTK_CTREE_LINES_TABBED:
+	  if (GTK_WIDGET_REALIZED (ctree))
+	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, GDK_LINE_SOLID, 
+					None, None);
 	  break;
 	case GTK_CTREE_LINES_NONE:
 	  break;

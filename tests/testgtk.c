@@ -3584,6 +3584,7 @@ static GtkWidget *omenu3;
 static GtkWidget *spin1;
 static GtkWidget *spin2;
 static GtkWidget *spin3;
+static GdkColor  *col_bg;
 
 #define RADIOMENUTOGGLED(_rmi_, __i) { \
   GSList * __g; \
@@ -3800,23 +3801,51 @@ void change_indent (GtkWidget *widget, GtkCTree *ctree)
   gtk_ctree_set_indent (ctree, GTK_ADJUSTMENT (widget)->value);
 }
 
+void change_row_height (GtkWidget *widget, GtkCList *clist)
+{
+  gtk_clist_set_row_height (clist, GTK_ADJUSTMENT (widget)->value);
+}
+
 void toggle_reorderable (GtkWidget *widget, GtkCTree *ctree)
 {
   gtk_ctree_set_reorderable (ctree, GTK_TOGGLE_BUTTON (widget)->active);
+}
+
+void set_background (GtkCTree *ctree, GList *node, gpointer data)
+{
+  if (!node)
+    return;
+  
+  if (ctree->line_style != GTK_CTREE_LINES_TABBED)
+    {
+      if (GTK_CTREE_ROW (node)->is_leaf)
+       gtk_ctree_set_background 
+         (ctree, node,
+          GTK_CTREE_ROW (GTK_CTREE_ROW (node)->parent)->row.data);
+      else
+       gtk_ctree_set_background (ctree, node, GTK_CTREE_ROW (node)->row.data);
+    }
+  else
+    gtk_ctree_set_background (ctree, node, NULL);
 }
 
 void toggle_line_style (GtkWidget *widget, GtkCTree *ctree)
 {
   gint i;
 
-
   if (!GTK_WIDGET_MAPPED (widget))
     return;
 
   RADIOMENUTOGGLED ((GtkRadioMenuItem *)
 		    (((GtkOptionMenu *)omenu2)->menu_item),i);
-
-  gtk_ctree_set_line_style (ctree, (GtkCTreeLineStyle) (2-i));
+  
+  if ((ctree->line_style == GTK_CTREE_LINES_TABBED && 
+       ((GtkCTreeLineStyle) (3-i)) != GTK_CTREE_LINES_TABBED) ||
+      (ctree->line_style != GTK_CTREE_LINES_TABBED && 
+       ((GtkCTreeLineStyle) (3-i)) == GTK_CTREE_LINES_TABBED))
+    gtk_ctree_pre_recursive (ctree, GTK_CLIST (ctree)->row_list,
+			     set_background, NULL);
+  gtk_ctree_set_line_style (ctree, (GtkCTreeLineStyle) (3-i));
 }
 
 void toggle_justify (GtkWidget *widget, GtkCTree *ctree)
@@ -3829,7 +3858,7 @@ void toggle_justify (GtkWidget *widget, GtkCTree *ctree)
   RADIOMENUTOGGLED ((GtkRadioMenuItem *)
 		    (((GtkOptionMenu *)omenu3)->menu_item),i);
 
-  gtk_clist_set_column_justification (GTK_CLIST (ctree), 0, 
+  gtk_clist_set_column_justification (GTK_CLIST (ctree), ctree->tree_column, 
 				      (GtkJustification) (1-i));
 }
 
@@ -3847,7 +3876,6 @@ void toggle_sel_mode (GtkWidget *widget, GtkCTree *ctree)
   after_press (ctree, NULL);
 }
 
-
 void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth, 
 		      gint num_books, gint num_pages, GList *parent)
 {
@@ -3856,7 +3884,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   gchar buf2[60];
   GList *sibling;
   gint i;
-  
+
   text[0] = buf1;
   text[1] = buf2;
   sibling = NULL;
@@ -3868,6 +3896,9 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap3,
 				  mask3, NULL, NULL, TRUE, FALSE);
+
+      if (ctree->line_style == GTK_CTREE_LINES_TABBED)
+	gtk_ctree_set_background (ctree, sibling, col_bg);
     }
 
   if (cur_depth == depth)
@@ -3880,7 +3911,36 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap1,
 				  mask1, pixmap2, mask2, FALSE, FALSE);
-      build_recursive (ctree, cur_depth + 1, depth, num_books, num_pages, sibling);
+
+      col_bg = g_new (GdkColor, 1);
+
+      if (cur_depth % 3 == 0)
+	{
+	  col_bg->red   = 10000 * (cur_depth % 6);
+	  col_bg->green = 0;
+	  col_bg->blue  = 65535 - ((i * 10000) % 65535);
+	}
+      else if (cur_depth % 3 == 1)
+	{
+	  col_bg->red   = 10000 * (cur_depth % 6);
+	  col_bg->green = 65535 - ((i * 10000) % 65535);
+	  col_bg->blue  = 0;
+	}
+      else
+	{
+	  col_bg->red   = 65535 - ((i * 10000) % 65535);
+	  col_bg->green = 0;
+	  col_bg->blue  = 10000 * (cur_depth % 6);
+	}
+	
+      gdk_color_alloc (gtk_widget_get_colormap (GTK_WIDGET (ctree)), col_bg);
+      gtk_ctree_set_row_data_full (ctree, sibling, col_bg, g_free);
+
+      if (ctree->line_style == GTK_CTREE_LINES_TABBED)
+	gtk_ctree_set_background (ctree, sibling, col_bg);
+
+      build_recursive (ctree, cur_depth + 1, depth, num_books, num_pages,
+		       sibling);
     }
 }
 
@@ -3915,6 +3975,15 @@ void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
 
   parent = gtk_ctree_insert (ctree, NULL, NULL, text, 5, pixmap1,
 			     mask1, pixmap2, mask2, FALSE, TRUE);
+
+  col_bg = g_new (GdkColor, 1);
+  col_bg->red   = 0;
+  col_bg->green = 45000;
+  col_bg->blue  = 55000;
+  gdk_color_alloc (gtk_widget_get_colormap (GTK_WIDGET (ctree)), col_bg);
+  gtk_ctree_set_row_data_full (ctree, parent, col_bg, g_free);
+  if (ctree->line_style == GTK_CTREE_LINES_TABBED)
+    gtk_ctree_set_background (ctree, parent, col_bg);
 
   build_recursive (ctree, 1, d, b, p, parent);
   gtk_clist_thaw (GTK_CLIST (ctree));
@@ -3959,9 +4028,7 @@ void create_ctree (void)
       gtk_object_ref (GTK_OBJECT (tooltips));
       gtk_object_sink (GTK_OBJECT (tooltips));
 
-      gtk_object_set_data_full (GTK_OBJECT (window),
-				"tooltips",
-				tooltips,
+      gtk_object_set_data_full (GTK_OBJECT (window), "tooltips", tooltips,
 				(GtkDestroyNotify) gtk_object_unref);
 
       vbox = gtk_vbox_new (FALSE, 0);
@@ -3995,9 +4062,9 @@ void create_ctree (void)
       button = gtk_button_new_with_label ("Close");
       gtk_box_pack_end (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 
-      gtk_signal_connect_object(GTK_OBJECT (button), "clicked",
-				(GtkSignalFunc) gtk_widget_destroy, 
-				GTK_OBJECT(window));
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 (GtkSignalFunc) gtk_widget_destroy,
+				 GTK_OBJECT(window));
 
       button = gtk_button_new_with_label ("Rebuild tree");
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -4017,8 +4084,6 @@ void create_ctree (void)
 				GTK_SIGNAL_FUNC (after_move), NULL);
       gtk_box_pack_start (GTK_BOX (vbox), GTK_WIDGET (ctree), TRUE, TRUE, 0);
       gtk_clist_column_titles_passive (GTK_CLIST (ctree));
-      gtk_clist_set_column_justification (GTK_CLIST (ctree), 2,
-					  GTK_JUSTIFY_RIGHT);
       gtk_clist_set_selection_mode (GTK_CLIST (ctree), GTK_SELECTION_MULTIPLE);
       gtk_clist_set_policy (GTK_CLIST (ctree), GTK_POLICY_ALWAYS, 
 			    GTK_POLICY_AUTOMATIC);
@@ -4050,6 +4115,18 @@ void create_ctree (void)
       hbox = gtk_hbox_new (FALSE, 5);
       gtk_container_border_width (GTK_CONTAINER (hbox), 5);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
+
+      label = gtk_label_new ("Row height :");
+      gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
+      
+      adj = (GtkAdjustment *) gtk_adjustment_new (20, 12, 100, 1, 10, 0);
+      spinner = gtk_spin_button_new (adj, 0, 0);
+      gtk_tooltips_set_tip (tooltips, spinner,
+			    "Row height of list items", NULL);
+      gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+			  GTK_SIGNAL_FUNC (change_row_height), ctree);
+      gtk_box_pack_start (GTK_BOX (hbox), spinner, FALSE, TRUE, 5);
+      gtk_clist_set_row_height ( GTK_CLIST (ctree), adj->value);
 
       button = gtk_button_new_with_label ("Select all");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
@@ -4109,10 +4186,17 @@ void create_ctree (void)
       gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
       group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_append (GTK_MENU (menu), menu_item);
       gtk_check_menu_item_set_state (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
+      gtk_menu_append (GTK_MENU (menu), menu_item);
       gtk_widget_show (menu_item);
-      
+
+      menu_item = gtk_radio_menu_item_new_with_label (group, "Tabbed");
+      gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
+			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);
+      group = gtk_radio_menu_item_group (GTK_RADIO_MENU_ITEM (menu_item));
+      gtk_menu_append (GTK_MENU (menu), menu_item);
+      gtk_widget_show (menu_item);
+
       menu_item = gtk_radio_menu_item_new_with_label (group, "No lines");
       gtk_signal_connect (GTK_OBJECT (menu_item), "activate",
 			  GTK_SIGNAL_FUNC (toggle_line_style), ctree);

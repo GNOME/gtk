@@ -54,6 +54,7 @@ typedef enum
 {
   GTK_CTREE_LINES_SOLID,
   GTK_CTREE_LINES_DOTTED,
+  GTK_CTREE_LINES_TABBED,
   GTK_CTREE_LINES_NONE
 } GtkCTreeLineStyle;
 
@@ -182,6 +183,8 @@ gboolean   gtk_ctree_is_visible             (GtkCTree     *ctree,
 					     GList        *node);
 GList *    gtk_ctree_last                   (GtkCTree     *ctree,
 					     GList        *node);
+GList *    gtk_ctree_find_glist_ptr         (GtkCTree     *ctree,
+					     GtkCTreeRow  *ctree_row);
 gint       gtk_ctree_find                   (GtkCTree     *ctree,
 					     GList        *node,
 					     GList        *child);
