@@ -2103,8 +2103,8 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
     action = GDK_ACTION_MOVE;
   else
     {
-      goto out;
       action = 0;
+      goto out;
     }
 
   shortcuts_compute_drop_position (impl, x, y, &path, &pos);

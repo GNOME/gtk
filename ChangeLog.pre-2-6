@@ -1,3 +1,8 @@
+2004-03-11  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_drag_motion_cb): Oops,
+	initialize "action" before jumping.  Fixes #136900.
+
 2004-03-11  Mark McLoughlin  <mark@skynet.ie>
 
 	* gtk/gtksettings.c: (apply_queued_setting): don't overwrite
