@@ -70,8 +70,6 @@ EXTRA_DIST =			\
 	examples/notebook/notebook.c  \
 	examples/packbox/Makefile  \
 	examples/packbox/packbox.c  \
-	examples/packer/Makefile  \
-	examples/packer/pack.c  \
 	examples/paned/Makefile  \
 	examples/paned/paned.c  \
 	examples/pixmap/Makefile  \
@@ -114,6 +112,9 @@ EXTRA_DIST =			\
 	examples/spinbutton/spinbutton.c  \
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
+
+#	examples/packer/Makefile  \
+#	examples/packer/pack.c  \
 
 GDKTARGET=@gdktarget@
 

@@ -1,3 +1,8 @@
+2002-02-17  jacob berkman  <jacob@ximian.com>
+
+	* Makefile.am: remove the packer example files as they don't exist
+	in CVS.
+
 2002-02-16  Manish Singh  <yosh@gimp.org>
 
 	* tests/testgtk.c: hm, check buttons look better for below.
