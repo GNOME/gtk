@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Benedikt Roth <Benedikt.Roth@gmx.net>>\n"
 "Language-Team: German <de@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
@@ -20,7 +20,7 @@ msgstr "Ton:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Sättigung:"
+msgstr "SÃ¤ttigung:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -32,7 +32,7 @@ msgstr "Rot:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "Grün:"
+msgstr "GrÃ¼n:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
@@ -92,7 +92,7 @@ msgstr "Verzeichnis erstellen"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "Datei löschen"
+msgstr "Datei lÃ¶schen"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
@@ -110,7 +110,7 @@ msgstr "Fehler"
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Schließen"
+msgstr "SchlieÃŸen"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
@@ -128,7 +128,7 @@ msgstr "Erstellen"
 #. buttons
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "Löschen"
+msgstr "LÃ¶schen"
 
 #. buttons
 #: gtk/gtkfilesel.c:1173
@@ -149,7 +149,7 @@ msgstr "Stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Größe:"
+msgstr "GrÃ¶ÃŸe:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
@@ -179,11 +179,11 @@ msgstr "Eingabe"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Keine Eingabegeräte"
+msgstr "Keine EingabegerÃ¤te"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Gerät:"
+msgstr "GerÃ¤t:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
@@ -256,7 +256,7 @@ msgstr "(unbekannt)"
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "gelöscht"
+msgstr "gelÃ¶scht"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
@@ -295,16 +295,16 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "Satzbreite:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Pixelgröße:"
+#~ msgstr "PixelgrÃ¶ÃŸe:"
 
 #~ msgid "Point Size:"
-#~ msgstr "Punktgröße:"
+#~ msgstr "PunktgrÃ¶ÃŸe:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "X Auflösung:"
+#~ msgstr "X AuflÃ¶sung:"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "Y Auflösung:"
+#~ msgstr "Y AuflÃ¶sung:"
 
 #~ msgid "Spacing:"
 #~ msgstr "Leerraum:"
@@ -334,7 +334,7 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "Schriftstil:"
 
 #~ msgid "Reset Filter"
-#~ msgstr "Filter zurücksetzen"
+#~ msgstr "Filter zurÃ¼cksetzen"
 
 #~ msgid "Metric:"
 #~ msgstr "Metrik:"
@@ -355,7 +355,7 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "Aktueller Schriftname:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i Schriften verfügbar mit insgesamt %i Stilen."
+#~ msgstr "%i Schriften verfÃ¼gbar mit insgesamt %i Stilen."
 
 #~ msgid "Filter"
 #~ msgstr "Filter"
@@ -379,19 +379,19 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "(nil)"
 
 #~ msgid "regular"
-#~ msgstr "regulär"
+#~ msgstr "regulÃ¤r"
 
 #~ msgid "italic"
 #~ msgstr "kursiv"
 
 #~ msgid "oblique"
-#~ msgstr "schräg"
+#~ msgstr "schrÃ¤g"
 
 #~ msgid "reverse italic"
 #~ msgstr "umgekehrt kursiv"
 
 #~ msgid "reverse oblique"
-#~ msgstr "umgekehrt schräg"
+#~ msgstr "umgekehrt schrÃ¤g"
 
 #~ msgid "other"
 #~ msgstr "andere"
@@ -403,14 +403,14 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "[C]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "Die gewählte Schrift ist nicht verfügbar."
+#~ msgstr "Die gewÃ¤hlte Schrift ist nicht verfÃ¼gbar."
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "Die gewählte Schrift ist keine gültige Schrift."
+#~ msgstr "Die gewÃ¤hlte Schrift ist keine gÃ¼ltige Schrift."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
 #~ msgstr ""
-#~ "Das ist eine 2-Byte Schrift, die möglicherweise falsch angezeigt wird."
+#~ "Das ist eine 2-Byte Schrift, die mÃ¶glicherweise falsch angezeigt wird."
 
 #~ msgid "roman"
 #~ msgstr "roman"
@@ -452,7 +452,7 @@ msgstr "--- Kein Tip ---"
 #~ msgstr "extra licht"
 
 #~ msgid "thin"
-#~ msgstr "dünn"
+#~ msgstr "dÃ¼nn"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS überschritten. Möglicherweise fehlen einige Schriften."
+#~ msgstr "MAX_FONTS Ã¼berschritten. MÃ¶glicherweise fehlen einige Schriften."

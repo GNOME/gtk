@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Dan Damian <dand@dnttm.ro>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
@@ -19,7 +19,7 @@ msgstr "Ton:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Saturaþie:"
+msgstr "SaturaÅ£ie:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -27,7 +27,7 @@ msgstr "Valoare:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "Roºu:"
+msgstr "RoÅŸu:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
@@ -65,7 +65,7 @@ msgstr "OK"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Renunþã"
+msgstr "RenunÅ£Äƒ"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
@@ -79,7 +79,7 @@ msgstr "Directoare"
 #. The files clist
 #: gtk/gtkfilesel.c:534
 msgid "Files"
-msgstr "Fiºiere"
+msgstr "FiÅŸiere"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -88,15 +88,15 @@ msgstr "Nu pot citi directorul: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
-msgstr "Creeazã Dir"
+msgstr "CreeazÄƒ Dir"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "ªterge fiºier"
+msgstr "Åžterge fiÅŸier"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "Redenumeºte fiºier"
+msgstr "RedenumeÅŸte fiÅŸier"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -110,11 +110,11 @@ msgstr "Eroare"
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Închide"
+msgstr "ÃŽnchide"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
-msgstr "Creeazã director"
+msgstr "CreeazÄƒ director"
 
 #: gtk/gtkfilesel.c:941
 msgid "Directory name:"
@@ -123,21 +123,21 @@ msgstr "Nume director:"
 #. buttons
 #: gtk/gtkfilesel.c:954
 msgid "Create"
-msgstr "Creeazã"
+msgstr "CreeazÄƒ"
 
 #. buttons
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "ªterge"
+msgstr "Åžterge"
 
 #. buttons
 #: gtk/gtkfilesel.c:1173
 msgid "Rename"
-msgstr "Redenumeºte"
+msgstr "RedenumeÅŸte"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "Selecþie: "
+msgstr "SelecÅ£ie: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
@@ -146,11 +146,11 @@ msgstr "Familie:"
 #: gtk/gtkfontsel.c:194
 #, fuzzy
 msgid "Style:"
-msgstr "Adaugã stil:"
+msgstr "AdaugÄƒ stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Mãrime:"
+msgstr "MÄƒrime:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
@@ -159,11 +159,11 @@ msgstr "Previzualizare:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Aplicã"
+msgstr "AplicÄƒ"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "Selecþie font"
+msgstr "SelecÅ£ie font"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -196,7 +196,7 @@ msgstr "Ecran"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "Fereastrã"
+msgstr "FereastrÄƒ"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
@@ -216,7 +216,7 @@ msgstr "Chei"
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:329
 msgid "Save"
-msgstr "Salveazã"
+msgstr "SalveazÄƒ"
 
 #: gtk/gtkinputdialog.c:471
 msgid "X"
@@ -232,11 +232,11 @@ msgstr "Presiune"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "Înclinare X"
+msgstr "ÃŽnclinare X"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Înclinare Y"
+msgstr "ÃŽnclinare Y"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
@@ -257,7 +257,7 @@ msgstr "(necunoscut)"
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "ºterge"
+msgstr "ÅŸterge"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
@@ -267,48 +267,48 @@ msgstr "Pagina %u"
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Nu pot localiza fiºierul imagine în pixmap_path: \"%s\" line %d"
+msgstr "Nu pot localiza fiÅŸierul imagine Ã®n pixmap_path: \"%s\" line %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nu pot localiza fiºierul imagine în pixmap_path: \"%s\""
+msgstr "Nu pot localiza fiÅŸierul imagine Ã®n pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Nu pot localiza modulul încãrcabil în module_path: \"%s\","
+msgstr "Nu pot localiza modulul Ã®ncÄƒrcabil Ã®n module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Nici un tip ---"
 
 #~ msgid "Foundry:"
-#~ msgstr "Producãtor:"
+#~ msgstr "ProducÄƒtor:"
 
 #~ msgid "Weight:"
 #~ msgstr "Lungime:"
 
 #~ msgid "Slant:"
-#~ msgstr "Direcþie:"
+#~ msgstr "DirecÅ£ie:"
 
 #~ msgid "Set Width:"
-#~ msgstr "Seteazã lungimea:"
+#~ msgstr "SeteazÄƒ lungimea:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Mãrime pixel"
+#~ msgstr "MÄƒrime pixel"
 
 #~ msgid "Point Size:"
-#~ msgstr "Mãrime punct:"
+#~ msgstr "MÄƒrime punct:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "Rezoluþie X:"
+#~ msgstr "RezoluÅ£ie X:"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "Rezoluþie Y:"
+#~ msgstr "RezoluÅ£ie Y:"
 
 #~ msgid "Spacing:"
-#~ msgstr "Spaþiere"
+#~ msgstr "SpaÅ£iere"
 
 #~ msgid "Average Width:"
 #~ msgstr "Lungime medie:"
@@ -317,13 +317,13 @@ msgstr "--- Nici un tip ---"
 #~ msgstr "Set caractere:"
 
 #~ msgid "Font Property"
-#~ msgstr "Proprietãþi font"
+#~ msgstr "ProprietÄƒÅ£i font"
 
 #~ msgid "Requested Value"
-#~ msgstr "Valoare cerutã"
+#~ msgstr "Valoare cerutÄƒ"
 
 #~ msgid "Actual Value"
-#~ msgstr "Valoare actualã"
+#~ msgstr "Valoare actualÄƒ"
 
 #~ msgid "Font"
 #~ msgstr "Font"
@@ -335,10 +335,10 @@ msgstr "--- Nici un tip ---"
 #~ msgstr "Stil font:"
 
 #~ msgid "Reset Filter"
-#~ msgstr "Reseteazã filtru:"
+#~ msgstr "ReseteazÄƒ filtru:"
 
 #~ msgid "Metric:"
-#~ msgstr "Metricã:"
+#~ msgstr "MetricÄƒ:"
 
 #~ msgid "Points"
 #~ msgstr "Puncte"
@@ -347,7 +347,7 @@ msgstr "--- Nici un tip ---"
 #~ msgstr "Pixeli"
 
 #~ msgid "Font Information"
-#~ msgstr "Informaþii font"
+#~ msgstr "InformaÅ£ii font"
 
 #~ msgid "Requested Font Name:"
 #~ msgstr "Nume font cerut:"
@@ -411,19 +411,19 @@ msgstr "--- Nici un tip ---"
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
 #~ msgstr ""
-#~ "Acesta este un font de 2-byte ºi s-ar putea sã nu fie afiºat corect."
+#~ "Acesta este un font de 2-byte ÅŸi s-ar putea sÄƒ nu fie afiÅŸat corect."
 
 #~ msgid "roman"
 #~ msgstr "roman"
 
 #~ msgid "proportional"
-#~ msgstr "proporþional"
+#~ msgstr "proporÅ£ional"
 
 #~ msgid "monospaced"
-#~ msgstr "monospaþiat"
+#~ msgstr "monospaÅ£iat"
 
 #~ msgid "char cell"
-#~ msgstr "celulã caracter"
+#~ msgstr "celulÄƒ caracter"
 
 #~ msgid "Font: (Filter Applied)"
 #~ msgstr "Font: (filtru aplicat)"
@@ -432,13 +432,13 @@ msgstr "--- Nici un tip ---"
 #~ msgstr "greu"
 
 #~ msgid "extrabold"
-#~ msgstr "extraîngroºat"
+#~ msgstr "extraÃ®ngroÅŸat"
 
 #~ msgid "bold"
-#~ msgstr "îngroºat"
+#~ msgstr "Ã®ngroÅŸat"
 
 #~ msgid "demibold"
-#~ msgstr "semiîngroºat"
+#~ msgstr "semiÃ®ngroÅŸat"
 
 #~ msgid "medium"
 #~ msgstr "mediu"
@@ -447,13 +447,13 @@ msgstr "--- Nici un tip ---"
 #~ msgstr "normal"
 
 #~ msgid "light"
-#~ msgstr "subþire"
+#~ msgstr "subÅ£ire"
 
 #~ msgid "extralight"
-#~ msgstr "extrasubºire"
+#~ msgstr "extrasubÅŸire"
 
 #~ msgid "thin"
 #~ msgstr "slab"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "S-a depãºit MAX_FONTS. Unele fonturi s-ar putea sã lipseascã."
+#~ msgstr "S-a depÄƒÅŸit MAX_FONTS. Unele fonturi s-ar putea sÄƒ lipseascÄƒ."

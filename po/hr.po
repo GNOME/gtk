@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: Vladimir Vuksan <vuksan@veus.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KTranslator v 0.5.0\n"
 
@@ -23,7 +23,7 @@ msgstr "Nijansa:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Zasiæenost:"
+msgstr "ZasiÄ‡enost:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -69,11 +69,11 @@ msgstr "U redu"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Poni¹ti"
+msgstr "PoniÅ¡ti"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "Pomoæ"
+msgstr "PomoÄ‡"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -88,7 +88,7 @@ msgstr "Datoteke"
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Neèitljiv direktorij: %s"
+msgstr "NeÄitljiv direktorij: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
@@ -96,7 +96,7 @@ msgstr "Napravi direktorij"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "Obri¹i datoteku"
+msgstr "ObriÅ¡i datoteku"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
@@ -109,7 +109,7 @@ msgstr "Promijeni ime datoteci"
 #.
 #: gtk/gtkfilesel.c:828
 msgid "Error"
-msgstr "Gre¹ka"
+msgstr "GreÅ¡ka"
 
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
@@ -132,7 +132,7 @@ msgstr "Napravi"
 #. buttons
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "Obri¹i"
+msgstr "ObriÅ¡i"
 
 #. buttons
 #: gtk/gtkfilesel.c:1173
@@ -154,7 +154,7 @@ msgstr "Dodaj stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Velièina:"
+msgstr "VeliÄina:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
@@ -184,15 +184,15 @@ msgstr "Unos"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Nema ulaznih ureğaja"
+msgstr "Nema ulaznih ureÄ‘aja"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Ureğaj:"
+msgstr "UreÄ‘aj:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Onemoguæen"
+msgstr "OnemoguÄ‡en"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -204,7 +204,7 @@ msgstr "Prozor"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Naèin: "
+msgstr "NaÄin: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
@@ -252,7 +252,7 @@ msgstr "nijedan"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(onemoguæen)"
+msgstr "(onemoguÄ‡en)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
@@ -261,7 +261,7 @@ msgstr "(nepoznat)"
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "obri¹i"
+msgstr "obriÅ¡i"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
@@ -271,17 +271,17 @@ msgstr "Stranica %u"
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\" line %d"
+msgstr "Ne mogu pronaÄ‡i slikovnu datoteku u pixmap_path: \"%s\" line %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\""
+msgstr "Ne mogu pronaÄ‡i slikovnu datoteku u pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Ne mogu pronaæi modul u module_path: \"%s\","
+msgstr "Ne mogu pronaÄ‡i modul u module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -291,19 +291,19 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "Izvor:"
 
 #~ msgid "Weight:"
-#~ msgstr "Te¾ina:"
+#~ msgstr "TeÅ¾ina:"
 
 #~ msgid "Slant:"
-#~ msgstr "Nako¹enost:"
+#~ msgstr "NakoÅ¡enost:"
 
 #~ msgid "Set Width:"
-#~ msgstr "Postavi ¹irinu:"
+#~ msgstr "Postavi Å¡irinu:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Velièina pixela:"
+#~ msgstr "VeliÄina pixela:"
 
 #~ msgid "Point Size:"
-#~ msgstr "Velièina toèke:"
+#~ msgstr "VeliÄina toÄke:"
 
 #~ msgid "Resolution X:"
 #~ msgstr "X rezolucija"
@@ -315,7 +315,7 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "Razmak:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Prosjeèna ¹irina:"
+#~ msgstr "ProsjeÄna Å¡irina:"
 
 #~ msgid "Charset:"
 #~ msgstr "Znakovlje:"
@@ -324,7 +324,7 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "Osobina pisma"
 
 #~ msgid "Requested Value"
-#~ msgstr "Tra¾ena vrijednost"
+#~ msgstr "TraÅ¾ena vrijednost"
 
 #~ msgid "Actual Value"
 #~ msgstr "Stvarna vrijednost"
@@ -345,7 +345,7 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "Metrika:"
 
 #~ msgid "Points"
-#~ msgstr "Toèaka"
+#~ msgstr "ToÄaka"
 
 #~ msgid "Pixels"
 #~ msgstr "Piksela"
@@ -354,13 +354,13 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "Informacija o pismu"
 
 #~ msgid "Requested Font Name:"
-#~ msgstr "Tra¾eno ime pisma:"
+#~ msgstr "TraÅ¾eno ime pisma:"
 
 #~ msgid "Actual Font Name:"
 #~ msgstr "Stvarno ime pisma:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i pisama raspolo¾ivo s ukupno %i stilova"
+#~ msgstr "%i pisama raspoloÅ¾ivo s ukupno %i stilova"
 
 #~ msgid "Filter"
 #~ msgstr "Filter"
@@ -372,10 +372,10 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "Bitna mapa"
 
 #~ msgid "Scalable"
-#~ msgstr "Promjenjive velièine"
+#~ msgstr "Promjenjive veliÄine"
 
 #~ msgid "Scaled Bitmap"
-#~ msgstr "Bitna mapa promjenjene velièine"
+#~ msgstr "Bitna mapa promjenjene veliÄine"
 
 #~ msgid "*"
 #~ msgstr "*"
@@ -390,25 +390,25 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "kurziv"
 
 #~ msgid "oblique"
-#~ msgstr "elektronièko koso pismo"
+#~ msgstr "elektroniÄko koso pismo"
 
 #~ msgid "reverse italic"
 #~ msgstr "obrnuti kurziv"
 
 #~ msgid "reverse oblique"
-#~ msgstr "obrnuto elektronièko koso pismo"
+#~ msgstr "obrnuto elektroniÄko koso pismo"
 
 #~ msgid "other"
 #~ msgstr "drugo"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "Izabrano pismo nije raspolo¾ivo."
+#~ msgstr "Izabrano pismo nije raspoloÅ¾ivo."
 
 #~ msgid "The selected font is not a valid font."
 #~ msgstr "Izabrano pismo je neispravno."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Ovo je dvobajtno pismo i mo¾e biti neispravno prikazano."
+#~ msgstr "Ovo je dvobajtno pismo i moÅ¾e biti neispravno prikazano."
 
 #~ msgid "roman"
 #~ msgstr "rimski"
@@ -417,13 +417,13 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "proporcionalno"
 
 #~ msgid "monospaced"
-#~ msgstr "ispis stalne ¹irine"
+#~ msgstr "ispis stalne Å¡irine"
 
 #~ msgid "Font: (Filter Applied)"
 #~ msgstr "Pismo: (S primjenjenim filterom)"
 
 #~ msgid "heavy"
-#~ msgstr "te¹ko"
+#~ msgstr "teÅ¡ko"
 
 #~ msgid "extrabold"
 #~ msgstr "ekstramasno"
@@ -447,4 +447,4 @@ msgstr "--- Nema savjeta ---"
 #~ msgstr "tanko"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS prekoraèeno. Neka pisma mogu nedostajati."
+#~ msgstr "MAX_FONTS prekoraÄeno. Neka pisma mogu nedostajati."

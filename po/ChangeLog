@@ -1,3 +1,8 @@
+2000-11-12  Robert Brady  <robert@suse.co.uk>
+
+	* *.po: Convert them all to UTF-8. Rename Chinese .po's so
+	they don't have the codeset.
+
 2000-11-10  Robert Brady  <robert@suse.co.uk>
 
 	* update.pl: Module name is "gtk20" now.

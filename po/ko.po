@@ -9,41 +9,41 @@ msgstr ""
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=euc-kr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "»ö»ó:"
+msgstr "ìƒ‰ìƒ:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Ã¤µµ:"
+msgstr "ì±„ë„:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
-msgstr "°ª:"
+msgstr "ê°’:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "»¡°­:"
+msgstr "ë¹¨ê°•:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "ÃÊ·Ï:"
+msgstr "ì´ˆë¡:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
-msgstr "ÆÄ¶û:"
+msgstr "íŒŒë‘:"
 
 #: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
-msgstr "ºÒÅõ¸í:"
+msgstr "ë¶ˆíˆ¬ëª…:"
 
 #: gtk/gtkcolorsel.c:1443
 #, fuzzy
 msgid "Hex Value:"
-msgstr "°ª:"
+msgstr "ê°’:"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
@@ -57,45 +57,45 @@ msgstr ""
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:567 gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
-msgstr "È®ÀÎ"
+msgstr "í™•ì¸"
 
 #. The Cancel button
 #: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:574 gtk/gtkfilesel.c:963
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Ãë¼Ò"
+msgstr "ì·¨ì†Œ"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "µµ¿ò¸»"
+msgstr "ë„ì›€ë§"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "ÀÚ·á¹æ"
+msgstr "ìë£Œë°©"
 
 #. The files clist
 #: gtk/gtkfilesel.c:534
 msgid "Files"
-msgstr "ÆÄÀÏ"
+msgstr "íŒŒì¼"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "ÀÚ·á¹æÀ» ÀĞÀ» ¼ö ¾øÀ½: %s"
+msgstr "ìë£Œë°©ì„ ì½ì„ ìˆ˜ ì—†ìŒ: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
-msgstr "ÀÚ·á¹æ ¸¸µé±â"
+msgstr "ìë£Œë°© ë§Œë“¤ê¸°"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "ÆÄÀÏ Áö¿ì±â"
+msgstr "íŒŒì¼ ì§€ìš°ê¸°"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "ÆÄÀÏ¸í ¹Ù²Ş"
+msgstr "íŒŒì¼ëª… ë°”ê¿ˆ"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -104,118 +104,118 @@ msgstr "ÆÄÀÏ¸í ¹Ù²Ş"
 #.
 #: gtk/gtkfilesel.c:828
 msgid "Error"
-msgstr "¿¡·¯"
+msgstr "ì—ëŸ¬"
 
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "´İ±â"
+msgstr "ë‹«ê¸°"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
-msgstr "ÀÚ·á¹æ ¸¸µê"
+msgstr "ìë£Œë°© ë§Œë“¦"
 
 #: gtk/gtkfilesel.c:941
 msgid "Directory name:"
-msgstr "ÀÚ·á¹æ ÀÌ¸§:"
+msgstr "ìë£Œë°© ì´ë¦„:"
 
 #. buttons
 #: gtk/gtkfilesel.c:954
 msgid "Create"
-msgstr "¸¸µé±â"
+msgstr "ë§Œë“¤ê¸°"
 
 #. buttons
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "Áö¿ì±â"
+msgstr "ì§€ìš°ê¸°"
 
 #. buttons
 #: gtk/gtkfilesel.c:1173
 msgid "Rename"
-msgstr "»õÀÌ¸§"
+msgstr "ìƒˆì´ë¦„"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "¼±ÅÃ:"
+msgstr "ì„ íƒ:"
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
-msgstr "°¡Á·:"
+msgstr "ê°€ì¡±:"
 
 #: gtk/gtkfontsel.c:194
 #, fuzzy
 msgid "Style:"
-msgstr "¸ğ¾ç»õ Ãß°¡:"
+msgstr "ëª¨ì–‘ìƒˆ ì¶”ê°€:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Å©±â"
+msgstr "í¬ê¸°"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "¹Ì¸®º¸±â:"
+msgstr "ë¯¸ë¦¬ë³´ê¸°:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Àû¿ë"
+msgstr "ì ìš©"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "±Û²Ã ¼±ÅÃ"
+msgstr "ê¸€ê¼´ ì„ íƒ"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
-msgstr "°¨¸¶"
+msgstr "ê°ë§ˆ"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "°¨¸¶ °ª"
+msgstr "ê°ë§ˆ ê°’"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
-msgstr "ÀÔ·Â"
+msgstr "ì…ë ¥"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "ÀÔ·Â ÀåÄ¡ ¾øÀ½"
+msgstr "ì…ë ¥ ì¥ì¹˜ ì—†ìŒ"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "ÀåÄ¡:"
+msgstr "ì¥ì¹˜:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "»ç¿ë ¾ÈÇÔ"
+msgstr "ì‚¬ìš© ì•ˆí•¨"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "È­¸é"
+msgstr "í™”ë©´"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "Ã¢"
+msgstr "ì°½"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "¹æ½Ä: "
+msgstr "ë°©ì‹: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
-msgstr "Ãà"
+msgstr "ì¶•"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "±Û¼è"
+msgstr "ê¸€ì‡ "
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:329
 msgid "Save"
-msgstr "ÀúÀå"
+msgstr "ì €ì¥"
 
 #: gtk/gtkinputdialog.c:471
 msgid "X"
@@ -227,15 +227,15 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "¾Ğ·Â"
+msgstr "ì••ë ¥"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "X °¢µµ"
+msgstr "X ê°ë„"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Y °¢µµ"
+msgstr "Y ê°ë„"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
@@ -243,158 +243,158 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "¾øÀ½"
+msgstr "ì—†ìŒ"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(»ç¿ë ¾ÈÇÔ)"
+msgstr "(ì‚¬ìš© ì•ˆí•¨)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(¸ğ¸§)"
+msgstr "(ëª¨ë¦„)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "Áö¿ò"
+msgstr "ì§€ì›€"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "%uÂÊ"
+msgstr "%uìª½"
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "±×¸² ÆÄÀÏÀ» pixmap_path¿¡¼­ Ã£À» ¼ö ¾øÀ½: \"%s\" %d¹øÂ° ÁÙ"
+msgstr "ê·¸ë¦¼ íŒŒì¼ì„ pixmap_pathì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìŒ: \"%s\" %dë²ˆì§¸ ì¤„"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "±×¸² ÆÄÀÏÀ» pixmap_path¿¡¼­ Ã£À» ¼ö ¾øÀ½: \"%s\""
+msgstr "ê·¸ë¦¼ íŒŒì¼ì„ pixmap_pathì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìŒ: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "¸ğµâÀ» module_path¿¡¼­ Ã£À» ¼ö ¾øÀ½: \"%s\","
+msgstr "ëª¨ë“ˆì„ module_pathì—ì„œ ì°¾ì„ ìˆ˜ ì—†ìŒ: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- ÆÁ ¾øÀ½ ---"
+msgstr "--- íŒ ì—†ìŒ ---"
 
 #~ msgid "Foundry:"
-#~ msgstr "¸¸µç°÷:"
+#~ msgstr "ë§Œë“ ê³³:"
 
 #~ msgid "Weight:"
-#~ msgstr "µÎ²²:"
+#~ msgstr "ë‘ê»˜:"
 
 #~ msgid "Slant:"
-#~ msgstr "±â¿ï¾îÁü:"
+#~ msgstr "ê¸°ìš¸ì–´ì§:"
 
 #~ msgid "Set Width:"
-#~ msgstr "Æø °áÁ¤:"
+#~ msgstr "í­ ê²°ì •:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "ÇÈ¼¿ Å©±â:"
+#~ msgstr "í”½ì…€ í¬ê¸°:"
 
 #~ msgid "Point Size:"
-#~ msgstr "Á¡ Å©±â:"
+#~ msgstr "ì  í¬ê¸°:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "°¡·Î ÇØ»óµµ"
+#~ msgstr "ê°€ë¡œ í•´ìƒë„"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "¼¼·Î ÇØ»óµµ"
+#~ msgstr "ì„¸ë¡œ í•´ìƒë„"
 
 #~ msgid "Spacing:"
-#~ msgstr "°£°İ:"
+#~ msgstr "ê°„ê²©:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Æò±Õ Æø:"
+#~ msgstr "í‰ê·  í­:"
 
 #~ msgid "Charset:"
-#~ msgstr "¹®ÀÚ¼Â:"
+#~ msgstr "ë¬¸ìì…‹:"
 
 #~ msgid "Font Property"
-#~ msgstr "±Û²Ã ¼Ó¼º"
+#~ msgstr "ê¸€ê¼´ ì†ì„±"
 
 #~ msgid "Requested Value"
-#~ msgstr "¿äÃ»µÈ °ª"
+#~ msgstr "ìš”ì²­ëœ ê°’"
 
 #~ msgid "Actual Value"
-#~ msgstr "½ÇÁ¦ °ª"
+#~ msgstr "ì‹¤ì œ ê°’"
 
 #~ msgid "Font"
-#~ msgstr "±Û²Ã"
+#~ msgstr "ê¸€ê¼´"
 
 #~ msgid "Font:"
-#~ msgstr "±Û²Ã:"
+#~ msgstr "ê¸€ê¼´:"
 
 #~ msgid "Font Style:"
-#~ msgstr "±Û²Ã ¸ğ¾ç»õ:"
+#~ msgstr "ê¸€ê¼´ ëª¨ì–‘ìƒˆ:"
 
 #~ msgid "Reset Filter"
-#~ msgstr "ÇÊÅÍ ´Ù½Ã °íÄ§"
+#~ msgstr "í•„í„° ë‹¤ì‹œ ê³ ì¹¨"
 
 #~ msgid "Metric:"
-#~ msgstr "¹ÌÅÍ¹ı:"
+#~ msgstr "ë¯¸í„°ë²•:"
 
 #~ msgid "Points"
-#~ msgstr "Æ÷ÀÎÆ®"
+#~ msgstr "í¬ì¸íŠ¸"
 
 #~ msgid "Pixels"
-#~ msgstr "È­¼Ò"
+#~ msgstr "í™”ì†Œ"
 
 #~ msgid "Font Information"
-#~ msgstr "±Û²Ã Á¤º¸"
+#~ msgstr "ê¸€ê¼´ ì •ë³´"
 
 #~ msgid "Requested Font Name:"
-#~ msgstr "¿äÃ»µÈ ±Û²Ã ÀÌ¸§:"
+#~ msgstr "ìš”ì²­ëœ ê¸€ê¼´ ì´ë¦„:"
 
 #~ msgid "Actual Font Name:"
-#~ msgstr "½ÇÁ¦ ±Û²Ã ÀÌ¸§:"
+#~ msgstr "ì‹¤ì œ ê¸€ê¼´ ì´ë¦„:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i°³ÀÇ ÆùÆ®°¡ ÀÖ°í, ÀüºÎ %i°³ÀÇ ¸ğ¾ç»õ°¡ ÀÖ½À´Ï´Ù."
+#~ msgstr "%iê°œì˜ í°íŠ¸ê°€ ìˆê³ , ì „ë¶€ %iê°œì˜ ëª¨ì–‘ìƒˆê°€ ìˆìŠµë‹ˆë‹¤."
 
 #~ msgid "Filter"
-#~ msgstr "ÇÊÅÍ"
+#~ msgstr "í•„í„°"
 
 #~ msgid "Font Types:"
-#~ msgstr "±Û²Ã À¯Çü"
+#~ msgstr "ê¸€ê¼´ ìœ í˜•"
 
 #~ msgid "Bitmap"
-#~ msgstr "ºñÆ®¸Ê"
+#~ msgstr "ë¹„íŠ¸ë§µ"
 
 #~ msgid "Scalable"
-#~ msgstr "Å©±â Á¶Á¤ °¡´É"
+#~ msgstr "í¬ê¸° ì¡°ì • ê°€ëŠ¥"
 
 #~ msgid "Scaled Bitmap"
-#~ msgstr "ºñÆ®¸Ê Å©±â Á¶Á¤"
+#~ msgstr "ë¹„íŠ¸ë§µ í¬ê¸° ì¡°ì •"
 
 #~ msgid "*"
 #~ msgstr "*"
 
 #~ msgid "(nil)"
-#~ msgstr "(¾øÀ½)"
+#~ msgstr "(ì—†ìŒ)"
 
 #~ msgid "regular"
-#~ msgstr "ÀÏ¹İ"
+#~ msgstr "ì¼ë°˜"
 
 #~ msgid "italic"
-#~ msgstr "ÀÌÅÅ¸¯"
+#~ msgstr "ì´íƒ¤ë¦­"
 
 #~ msgid "oblique"
-#~ msgstr "ºñ½ºµë"
+#~ msgstr "ë¹„ìŠ¤ë“¬"
 
 #~ msgid "reverse italic"
-#~ msgstr "¹İ´ë¹æÇâ ÀÌÅÅ¸¯"
+#~ msgstr "ë°˜ëŒ€ë°©í–¥ ì´íƒ¤ë¦­"
 
 #~ msgid "reverse oblique"
-#~ msgstr "¹İ´ë °æ»ç"
+#~ msgstr "ë°˜ëŒ€ ê²½ì‚¬"
 
 #~ msgid "other"
-#~ msgstr "±× ¿Ü"
+#~ msgstr "ê·¸ ì™¸"
 
 #~ msgid "[M]"
 #~ msgstr "[M]"
@@ -403,55 +403,55 @@ msgstr "--- ÆÁ ¾øÀ½ ---"
 #~ msgstr "[C]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "¼±ÅÃµÈ ±Û²ÃÀº »ç¿ëµÉ ¼ö ¾ø½À´Ï´Ù."
+#~ msgstr "ì„ íƒëœ ê¸€ê¼´ì€ ì‚¬ìš©ë  ìˆ˜ ì—†ìŠµë‹ˆë‹¤."
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "¼±ÅÃµÈ ±Û²ÃÀº Á¤»óÀûÀÎ ±Û²ÃÀÌ ¾Æ´Õ´Ï´Ù."
+#~ msgstr "ì„ íƒëœ ê¸€ê¼´ì€ ì •ìƒì ì¸ ê¸€ê¼´ì´ ì•„ë‹™ë‹ˆë‹¤."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "ÀÌ°ÍÀº 2 ¹ÙÀÌÆ® ±Û²ÃÀÌ¸ç Àß¸ø Ãâ·ÂµÉ ¼öµµ ÀÖ½À´Ï´Ù."
+#~ msgstr "ì´ê²ƒì€ 2 ë°”ì´íŠ¸ ê¸€ê¼´ì´ë©° ì˜ëª» ì¶œë ¥ë  ìˆ˜ë„ ìˆìŠµë‹ˆë‹¤."
 
 #~ msgid "roman"
-#~ msgstr "·Î¸¸"
+#~ msgstr "ë¡œë§Œ"
 
 #~ msgid "proportional"
-#~ msgstr "°¡º¯"
+#~ msgstr "ê°€ë³€"
 
 #~ msgid "monospaced"
-#~ msgstr "°°Àº °£°İ"
+#~ msgstr "ê°™ì€ ê°„ê²©"
 
 #~ msgid "char cell"
-#~ msgstr "¹®ÀÚ ¼¿"
+#~ msgstr "ë¬¸ì ì…€"
 
 #~ msgid "Font: (Filter Applied)"
-#~ msgstr "±Û²Ã: (ÇÊÅÍ Àû¿ë)"
+#~ msgstr "ê¸€ê¼´: (í•„í„° ì ìš©)"
 
 #~ msgid "heavy"
-#~ msgstr "¶×¶×ÇÏ°Ô"
+#~ msgstr "ëš±ëš±í•˜ê²Œ"
 
 #~ msgid "extrabold"
-#~ msgstr "¾ÆÁÖ µÎ²¨¿ò"
+#~ msgstr "ì•„ì£¼ ë‘êº¼ì›€"
 
 #~ msgid "bold"
-#~ msgstr "µÎ²¨¿ò"
+#~ msgstr "ë‘êº¼ì›€"
 
 #~ msgid "demibold"
-#~ msgstr "¾à°£ µÎ²¨¿ò"
+#~ msgstr "ì•½ê°„ ë‘êº¼ì›€"
 
 #~ msgid "medium"
-#~ msgstr "Áß°£"
+#~ msgstr "ì¤‘ê°„"
 
 #~ msgid "normal"
-#~ msgstr "º¸Åë"
+#~ msgstr "ë³´í†µ"
 
 #~ msgid "light"
-#~ msgstr "°¡´Ã°Ô"
+#~ msgstr "ê°€ëŠ˜ê²Œ"
 
 #~ msgid "extralight"
-#~ msgstr "¾ÆÁÖ °¡´Ã°Ô"
+#~ msgstr "ì•„ì£¼ ê°€ëŠ˜ê²Œ"
 
 #~ msgid "thin"
-#~ msgstr "³¯¾ÀÇÏ°Ô"
+#~ msgstr "ë‚ ì”¬í•˜ê²Œ"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS ³Ñ¾î°¨. ¸î¸î ±Û²ÃÀº ÀÒ¾î¹ö¸± ¼ö ÀÖÀ½."
+#~ msgstr "MAX_FONTS ë„˜ì–´ê°. ëª‡ëª‡ ê¸€ê¼´ì€ ìƒì–´ë²„ë¦´ ìˆ˜ ìˆìŒ."

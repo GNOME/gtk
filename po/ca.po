@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: Softcatala <linux@softcatala.org>\n"
 "Language-Team: linux-ca@chanae.alphanet.ch\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "Matís:"
+msgstr "MatÃ­s:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Saturació:"
+msgstr "SaturaciÃ³:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -65,7 +65,7 @@ msgstr "Val"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Cancel·lar"
+msgstr "CancelÂ·lar"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
@@ -84,7 +84,7 @@ msgstr "Fitxers"
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "El directori no és legible: %s"
+msgstr "El directori no Ã©s legible: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
@@ -137,11 +137,11 @@ msgstr "Reanomenar"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "Selecció:"
+msgstr "SelecciÃ³:"
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
-msgstr "Família:"
+msgstr "FamÃ­lia:"
 
 #: gtk/gtkfontsel.c:194
 #, fuzzy
@@ -155,7 +155,7 @@ msgstr "Tamany:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Vista prèvia:"
+msgstr "Vista prÃ¨via:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
@@ -163,7 +163,7 @@ msgstr "Aplicar"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "Selecció de fonts"
+msgstr "SelecciÃ³ de fonts"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -228,15 +228,15 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "Pressió"
+msgstr "PressiÃ³"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "Inclinació en X"
+msgstr "InclinaciÃ³ en X"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Inclinació en Y"
+msgstr "InclinaciÃ³ en Y"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
@@ -262,22 +262,22 @@ msgstr "esborrar"
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "Pàgina %u"
+msgstr "PÃ gina %u"
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s», línia %d"
+msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: Â«%sÂ», lÃ­nia %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"
+msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: Â«%sÂ»"
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "No s'ha trobat un mòdul carregable al module_path: «%s»,"
+msgstr "No s'ha trobat un mÃ²dul carregable al module_path: Â«%sÂ»,"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -290,31 +290,31 @@ msgstr "-- Sense pista --"
 #~ msgstr "Pes:"
 
 #~ msgid "Slant:"
-#~ msgstr "Inclinació:"
+#~ msgstr "InclinaciÃ³:"
 
 #~ msgid "Set Width:"
-#~ msgstr "Establir amplària:"
+#~ msgstr "Establir amplÃ ria:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Tamany del píxel:"
+#~ msgstr "Tamany del pÃ­xel:"
 
 #~ msgid "Point Size:"
 #~ msgstr "Tamany del punt:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "Resolució en X:"
+#~ msgstr "ResoluciÃ³ en X:"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "Resolució en Y:"
+#~ msgstr "ResoluciÃ³ en Y:"
 
 #~ msgid "Spacing:"
 #~ msgstr "Espaiat:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Amplària mitjana:"
+#~ msgstr "AmplÃ ria mitjana:"
 
 #~ msgid "Charset:"
-#~ msgstr "Joc de caràcters:"
+#~ msgstr "Joc de carÃ cters:"
 
 #~ msgid "Font Property"
 #~ msgstr "Propietats de la font"
@@ -338,16 +338,16 @@ msgstr "-- Sense pista --"
 #~ msgstr "Reiniciar filtre"
 
 #~ msgid "Metric:"
-#~ msgstr "Mètrica:"
+#~ msgstr "MÃ¨trica:"
 
 #~ msgid "Points"
 #~ msgstr "Punts"
 
 #~ msgid "Pixels"
-#~ msgstr "Píxels"
+#~ msgstr "PÃ­xels"
 
 #~ msgid "Font Information"
-#~ msgstr "Informació de la font"
+#~ msgstr "InformaciÃ³ de la font"
 
 #~ msgid "Requested Font Name:"
 #~ msgstr "Nom de font desitjat:"
@@ -383,16 +383,16 @@ msgstr "-- Sense pista --"
 #~ msgstr "regular"
 
 #~ msgid "italic"
-#~ msgstr "itàlica"
+#~ msgstr "itÃ lica"
 
 #~ msgid "oblique"
-#~ msgstr "oblíqua"
+#~ msgstr "oblÃ­qua"
 
 #~ msgid "reverse italic"
-#~ msgstr "itàlica inversa"
+#~ msgstr "itÃ lica inversa"
 
 #~ msgid "reverse oblique"
-#~ msgstr "oblíqua inversa"
+#~ msgstr "oblÃ­qua inversa"
 
 #~ msgid "other"
 #~ msgstr "altra"
@@ -404,13 +404,13 @@ msgstr "-- Sense pista --"
 #~ msgstr "[C]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "La font seleccionada no està disponible."
+#~ msgstr "La font seleccionada no estÃ  disponible."
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "La font seleccionada no és vàlida."
+#~ msgstr "La font seleccionada no Ã©s vÃ lida."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Aquesta font és de 2 octets i potser no es veja correctament."
+#~ msgstr "Aquesta font Ã©s de 2 octets i potser no es veja correctament."
 
 #~ msgid "roman"
 #~ msgstr "romana"
@@ -422,7 +422,7 @@ msgstr "-- Sense pista --"
 #~ msgstr "monoespaiada"
 
 #~ msgid "char cell"
-#~ msgstr "cel·la de caràcter"
+#~ msgstr "celÂ·la de carÃ cter"
 
 #~ msgid "Font: (Filter Applied)"
 #~ msgstr "Font: (filtre aplicat)"

@@ -10,102 +10,102 @@ msgstr ""
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
+msgstr "A GIF fÃ¡jl egyes adatai hiÃ¡nyoznak (lehet, hogy csonkolÃ³dott a fÃ¡jl?)"
 
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "Belsõ hiba a GIF betöltõben (%s)"
+msgstr "BelsÅ‘ hiba a GIF betÃ¶ltÅ‘ben (%s)"
 
 #: gdk-pixbuf/io-gif.c:584
 msgid "Circular table entry in GIF file"
-msgstr "Körkörös táblázat bejegyzés a GIF fájlban"
+msgstr "KÃ¶rkÃ¶rÃ¶s tÃ¡blÃ¡zat bejegyzÃ©s a GIF fÃ¡jlban"
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
-msgstr "A fájl nem tûnik GIF formátumúnak"
+msgstr "A fÃ¡jl nem tÅ±nik GIF formÃ¡tumÃºnak"
 
 #: gdk-pixbuf/io-gif.c:933
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "A %s verziójú GIF formátum nincs támogatva"
+msgstr "A %s verziÃ³jÃº GIF formÃ¡tum nincs tÃ¡mogatva"
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
-msgstr "A GIF animáció egy nem megfelelõ méretû képkockát tartalmaz"
+msgstr "A GIF animÃ¡ciÃ³ egy nem megfelelÅ‘ mÃ©retÅ± kÃ©pkockÃ¡t tartalmaz"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
-msgstr "Szín:"
+msgstr "SzÃ­n:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
-msgstr "Színesség:"
+msgstr "SzÃ­nessÃ©g:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Value:"
-msgstr "Érték:"
+msgstr "Ã‰rtÃ©k:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Red:"
-msgstr "Vörös:"
+msgstr "VÃ¶rÃ¶s:"
 
 #: gtk/gtkcolorsel.c:1426
 msgid "Green:"
-msgstr "Zöld:"
+msgstr "ZÃ¶ld:"
 
 #: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
-msgstr "Kék:"
+msgstr "KÃ©k:"
 
 #: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
-msgstr "Átlátszóság:"
+msgstr "ÃtlÃ¡tszÃ³sÃ¡g:"
 
 #: gtk/gtkcolorsel.c:1445
 msgid "Hex Value:"
-msgstr "Hexa érték:"
+msgstr "Hexa Ã©rtÃ©k:"
 
 #: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
-msgstr "Egyéni paletta"
+msgstr "EgyÃ©ni paletta"
 
 #: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
-msgstr "Szín beállítása"
+msgstr "SzÃ­n beÃ¡llÃ­tÃ¡sa"
 
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "Könyvtárak"
+msgstr "KÃ¶nyvtÃ¡rak"
 
 #: gtk/gtkfilesel.c:534
 msgid "Files"
-msgstr "Fájlok"
+msgstr "FÃ¡jlok"
 
 #: gtk/gtkfilesel.c:600
 #: gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Olvashatatlan könyvtár: %s"
+msgstr "Olvashatatlan kÃ¶nyvtÃ¡r: %s"
 
 #: gtk/gtkfilesel.c:632
 msgid "Create Dir"
-msgstr "Könyvtár létrehozása"
+msgstr "KÃ¶nyvtÃ¡r lÃ©trehozÃ¡sa"
 
 #: gtk/gtkfilesel.c:643
 #: gtk/gtkfilesel.c:1043
 msgid "Delete File"
-msgstr "Fájl törlése"
+msgstr "FÃ¡jl tÃ¶rlÃ©se"
 
 #: gtk/gtkfilesel.c:654
 #: gtk/gtkfilesel.c:1156
 msgid "Rename File"
-msgstr "Fájl átnevezése"
+msgstr "FÃ¡jl Ã¡tnevezÃ©se"
 
 #: gtk/gtkfilesel.c:824
 #: gtk/gtkstock.c:171
@@ -116,19 +116,19 @@ msgstr "Hiba"
 #: gtk/gtkinputdialog.c:338
 #: gtk/gtkstock.c:181
 msgid "Close"
-msgstr "Bezár"
+msgstr "BezÃ¡r"
 
 #: gtk/gtkfilesel.c:929
 msgid "Create Directory"
-msgstr "Könyvtár létrehozása"
+msgstr "KÃ¶nyvtÃ¡r lÃ©trehozÃ¡sa"
 
 #: gtk/gtkfilesel.c:943
 msgid "Directory name:"
-msgstr "Könyvtár neve:"
+msgstr "KÃ¶nyvtÃ¡r neve:"
 
 #: gtk/gtkfilesel.c:956
 msgid "Create"
-msgstr "Létrehozás"
+msgstr "LÃ©trehozÃ¡s"
 
 #: gtk/gtkfilesel.c:965
 #: gtk/gtkfilesel.c:1074
@@ -136,39 +136,39 @@ msgstr "Létrehozás"
 #: gtk/gtkgamma.c:423
 #: gtk/gtkstock.c:176
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "MÃ©gsem"
 
 #: gtk/gtkfilesel.c:1065
 msgid "Delete"
-msgstr "Törlés"
+msgstr "TÃ¶rlÃ©s"
 
 #: gtk/gtkfilesel.c:1189
 msgid "Rename"
-msgstr "Átnevezés"
+msgstr "ÃtnevezÃ©s"
 
 #: gtk/gtkfilesel.c:1615
 msgid "Selection: "
-msgstr "Kiválasztott: "
+msgstr "KivÃ¡lasztott: "
 
 #: gtk/gtkfontsel.c:190
 msgid "Family:"
-msgstr "Család:"
+msgstr "CsalÃ¡d:"
 
 #: gtk/gtkfontsel.c:195
 msgid "Style:"
-msgstr "Stílus:"
+msgstr "StÃ­lus:"
 
 #: gtk/gtkfontsel.c:200
 msgid "Size:"
-msgstr "Méret:"
+msgstr "MÃ©ret:"
 
 #: gtk/gtkfontsel.c:310
 msgid "Preview:"
-msgstr "Nézet:"
+msgstr "NÃ©zet:"
 
 #: gtk/gtkfontsel.c:966
 msgid "Font Selection"
-msgstr "Betûkészlet választó"
+msgstr "BetÅ±kÃ©szlet vÃ¡lasztÃ³"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -176,7 +176,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "Gamma érték"
+msgstr "Gamma Ã©rtÃ©k"
 
 #: gtk/gtkgamma.c:415
 #: gtk/gtkstock.c:175
@@ -189,11 +189,11 @@ msgstr "Bevitel"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Nincs beviteli eszköz"
+msgstr "Nincs beviteli eszkÃ¶z"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Eszköz:"
+msgstr "EszkÃ¶z:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
@@ -201,7 +201,7 @@ msgstr "Tiltva"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "Képernyõ"
+msgstr "KÃ©pernyÅ‘"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
@@ -209,15 +209,15 @@ msgstr "Ablak"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Mód:"
+msgstr "MÃ³d:"
 
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
-msgstr "Szögek"
+msgstr "SzÃ¶gek"
 
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "Billentyûk"
+msgstr "BillentyÅ±k"
 
 #: gtk/gtkinputdialog.c:329
 #: gtk/gtkstock.c:186
@@ -234,19 +234,19 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "Nyomás"
+msgstr "NyomÃ¡s"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "X döntés"
+msgstr "X dÃ¶ntÃ©s"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Y döntés"
+msgstr "Y dÃ¶ntÃ©s"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr "Görgõ"
+msgstr "GÃ¶rgÅ‘"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
@@ -263,7 +263,7 @@ msgstr "(nem ismert)"
 
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "töröl"
+msgstr "tÃ¶rÃ¶l"
 
 #: gtk/gtkmain.c:417
 msgid "default:LTR"
@@ -271,7 +271,7 @@ msgstr "default:LTR"
 
 #: gtk/gtkstock.c:169
 msgid "Information"
-msgstr "Információ"
+msgstr "InformÃ¡ciÃ³"
 
 #: gtk/gtkstock.c:170
 msgid "Warning"
@@ -279,7 +279,7 @@ msgstr "Figyelem"
 
 #: gtk/gtkstock.c:172
 msgid "Question"
-msgstr "Kérdés"
+msgstr "KÃ©rdÃ©s"
 
 #: gtk/gtkstock.c:174
 msgid "_Apply"
@@ -287,7 +287,7 @@ msgstr "_Alkalmaz"
 
 #: gtk/gtkstock.c:177
 msgid "_Close"
-msgstr "_Bezárás"
+msgstr "_BezÃ¡rÃ¡s"
 
 #: gtk/gtkstock.c:178
 msgid "_Yes"
@@ -299,19 +299,19 @@ msgstr "_Nem"
 
 #: gtk/gtkstock.c:182
 msgid "Quit"
-msgstr "Kilépés"
+msgstr "KilÃ©pÃ©s"
 
 #: gtk/gtkstock.c:183
 msgid "Help"
-msgstr "Súgó"
+msgstr "SÃºgÃ³"
 
 #: gtk/gtkstock.c:184
 msgid "New"
-msgstr "Új"
+msgstr "Ãšj"
 
 #: gtk/gtkstock.c:185
 msgid "Open"
-msgstr "Megnyitás"
+msgstr "MegnyitÃ¡s"
 
 #: gtk/gtknotebook.c:2059
 #: gtk/gtknotebook.c:4131
@@ -322,19 +322,19 @@ msgstr "%u. lap"
 #: gtk/gtkrc.c:1991
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Nem találom a képet a pixmap_path (%s) útvonalon (%d. sor)"
+msgstr "Nem talÃ¡lom a kÃ©pet a pixmap_path (%s) Ãºtvonalon (%d. sor)"
 
 #: gtk/gtkrc.c:1994
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
+msgstr "Nem talÃ¡lom a pixmap_path (%s) Ãºtvonalon a kÃ©pet"
 
 #: gtk/gtkthemes.c:194
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Nem találom a betölthetõ modult a module_path (%s) útvonalon,"
+msgstr "Nem talÃ¡lom a betÃ¶lthetÅ‘ modult a module_path (%s) Ãºtvonalon,"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "-- Nincs segédszöveg --"
+msgstr "-- Nincs segÃ©dszÃ¶veg --"
 

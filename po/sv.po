@@ -1,6 +1,6 @@
 # Swedish translation of GTK+
 # Copyright (C) 1999 Free Software Foundation, Inc.
-# Tomas Ögren <stric@ing.umu.se>, 1999.
+# Tomas Ã–gren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000.
 #
 msgid ""
@@ -11,12 +11,12 @@ msgstr ""
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF-filen saknade en del data (den kanske klipptes på något sätt?)"
+msgstr "GIF-filen saknade en del data (den kanske klipptes pÃ¥ nÃ¥got sÃ¤tt?)"
 
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
@@ -25,7 +25,7 @@ msgstr "Internt fel i GIF-laddaren (%s)"
 
 #: gdk-pixbuf/io-gif.c:584
 msgid "Circular table entry in GIF file"
-msgstr "Cirkulär tabellpost i GIF-filen"
+msgstr "CirkulÃ¤r tabellpost i GIF-filen"
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
@@ -34,11 +34,11 @@ msgstr "Filen verkar inte vara en GIF-fil"
 #: gdk-pixbuf/io-gif.c:933
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "Version %s av GIF-filformatet stöds inte"
+msgstr "Version %s av GIF-filformatet stÃ¶ds inte"
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
-msgstr "GIF-animationen innehöll en ram med en felaktig storlek"
+msgstr "GIF-animationen innehÃ¶ll en ram med en felaktig storlek"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
@@ -46,23 +46,23 @@ msgstr "Nyans:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
-msgstr "Mättnad:"
+msgstr "MÃ¤ttnad:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Value:"
-msgstr "Värde:"
+msgstr "VÃ¤rde:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Red:"
-msgstr "Röd:"
+msgstr "RÃ¶d:"
 
 #: gtk/gtkcolorsel.c:1426
 msgid "Green:"
-msgstr "Grön:"
+msgstr "GrÃ¶n:"
 
 #: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
-msgstr "Blå:"
+msgstr "BlÃ¥:"
 
 #: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
@@ -70,7 +70,7 @@ msgstr "Opacitet:"
 
 #: gtk/gtkcolorsel.c:1445
 msgid "Hex Value:"
-msgstr "Hex-värde:"
+msgstr "Hex-vÃ¤rde:"
 
 #: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
@@ -78,7 +78,7 @@ msgstr "Egen palett"
 
 #: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
-msgstr "Ställ in färg"
+msgstr "StÃ¤ll in fÃ¤rg"
 
 #. The OK button
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
@@ -95,7 +95,7 @@ msgstr "Avbryt"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "Hjälp"
+msgstr "HjÃ¤lp"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:512
@@ -110,7 +110,7 @@ msgstr "Filer"
 #: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Katalogen är oläsbar: %s"
+msgstr "Katalogen Ã¤r olÃ¤sbar: %s"
 
 #: gtk/gtkfilesel.c:635
 msgid "Create Dir"
@@ -122,7 +122,7 @@ msgstr "Ta bort fil"
 
 #: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
 msgid "Rename File"
-msgstr "Döp om fil"
+msgstr "DÃ¶p om fil"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -136,7 +136,7 @@ msgstr "Fel"
 #. close button
 #: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Stäng"
+msgstr "StÃ¤ng"
 
 #: gtk/gtkfilesel.c:932
 msgid "Create Directory"
@@ -159,7 +159,7 @@ msgstr "Ta bort"
 #. buttons
 #: gtk/gtkfilesel.c:1192
 msgid "Rename"
-msgstr "Döp om"
+msgstr "DÃ¶p om"
 
 #: gtk/gtkfilesel.c:1618
 msgid "Selection: "
@@ -180,11 +180,11 @@ msgstr "Storlek:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Förhandsvisning:"
+msgstr "FÃ¶rhandsvisning:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Verkställ"
+msgstr "VerkstÃ¤ll"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
@@ -196,7 +196,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "Gammavärde"
+msgstr "GammavÃ¤rde"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
@@ -213,19 +213,19 @@ msgstr "Enhet:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Avstängd"
+msgstr "AvstÃ¤ngd"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "Skärm"
+msgstr "SkÃ¤rm"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "Fönster"
+msgstr "FÃ¶nster"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Läge: "
+msgstr "LÃ¤ge: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
@@ -273,16 +273,16 @@ msgstr "ingen"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(avstängd)"
+msgstr "(avstÃ¤ngd)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(okänd)"
+msgstr "(okÃ¤nd)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "töm"
+msgstr "tÃ¶m"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format

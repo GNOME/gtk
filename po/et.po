@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Lauris Kaplinski <lauris@ariman.ee>\n"
 "Language-Team: Estonian\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
@@ -19,7 +19,7 @@ msgstr "Toon:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Küllastatus:"
+msgstr "KÃ¼llastatus:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -96,7 +96,7 @@ msgstr "Kustuta fail"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "Nimeta ümber"
+msgstr "Nimeta Ã¼mber"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -133,7 +133,7 @@ msgstr "Kustuta"
 #. buttons
 #: gtk/gtkfilesel.c:1173
 msgid "Rename"
-msgstr "Nimeta ümber"
+msgstr "Nimeta Ã¼mber"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
@@ -155,7 +155,7 @@ msgstr "Suurus:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Näidis:"
+msgstr "NÃ¤idis:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
@@ -171,7 +171,7 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "Gamma väärtus"
+msgstr "Gamma vÃ¤Ã¤rtus"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
@@ -188,7 +188,7 @@ msgstr "Seade:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Välja lülitatud"
+msgstr "VÃ¤lja lÃ¼litatud"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -200,7 +200,7 @@ msgstr "Aken"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Tüüp: "
+msgstr "TÃ¼Ã¼p: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
@@ -248,7 +248,7 @@ msgstr "ei ole"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(välja lülitatud)"
+msgstr "(vÃ¤lja lÃ¼litatud)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
@@ -262,7 +262,7 @@ msgstr "kustuta"
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "Lehekülg %u"
+msgstr "LehekÃ¼lg %u"
 
 #: gtk/gtkrc.c:1872
 #, c-format
@@ -284,7 +284,7 @@ msgid "--- No Tip ---"
 msgstr "--- Vihjet ei ole ---"
 
 #~ msgid "Foundry:"
-#~ msgstr "Päritolu:"
+#~ msgstr "PÃ¤ritolu:"
 
 #~ msgid "Weight:"
 #~ msgstr "Paksus:"
@@ -308,7 +308,7 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "Y Lahutus:"
 
 #~ msgid "Spacing:"
-#~ msgstr "Täheruum:"
+#~ msgstr "TÃ¤heruum:"
 
 #~ msgid "Average Width:"
 #~ msgstr "Keskmine laius:"
@@ -320,10 +320,10 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "Parameeter"
 
 #~ msgid "Requested Value"
-#~ msgstr "Soovitud väärtus"
+#~ msgstr "Soovitud vÃ¤Ã¤rtus"
 
 #~ msgid "Actual Value"
-#~ msgstr "Tegelik väärtus"
+#~ msgstr "Tegelik vÃ¤Ã¤rtus"
 
 #~ msgid "Font"
 #~ msgstr "Shrift"
@@ -338,7 +338,7 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "Nulli filter"
 
 #~ msgid "Metric:"
-#~ msgstr "Ühikud:"
+#~ msgstr "Ãœhikud:"
 
 #~ msgid "Points"
 #~ msgstr "Punktid"
@@ -347,7 +347,7 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "Pikslid"
 
 #~ msgid "Font Information"
-#~ msgstr "Lähem info"
+#~ msgstr "LÃ¤hem info"
 
 #~ msgid "Requested Font Name:"
 #~ msgstr "Soovitud shrifti nimi:"
@@ -362,7 +362,7 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "Filter"
 
 #~ msgid "Font Types:"
-#~ msgstr "Shriftitüübid:"
+#~ msgstr "ShriftitÃ¼Ã¼bid:"
 
 #~ msgid "Bitmap"
 #~ msgstr "Bitmap"
@@ -380,7 +380,7 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "(ei ole)"
 
 #~ msgid "regular"
-#~ msgstr "püstine"
+#~ msgstr "pÃ¼stine"
 
 #~ msgid "italic"
 #~ msgstr "kursiiv"
@@ -419,17 +419,17 @@ msgstr "--- Vihjet ei ole ---"
 #~ msgstr "proportsionaalne"
 
 #~ msgid "monospaced"
-#~ msgstr "ühelaiune"
+#~ msgstr "Ã¼helaiune"
 
 #~ msgid "char cell"
-#~ msgstr "täheruut"
+#~ msgstr "tÃ¤heruut"
 
 #~ msgid "Font: (Filter Applied)"
-#~ msgstr "Shrift: (läbi filtri)"
+#~ msgstr "Shrift: (lÃ¤bi filtri)"
 
 #, fuzzy
 #~ msgid "light"
 #~ msgstr "Paksus:"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS ületatud. Osa shrifte võib puududa."
+#~ msgstr "MAX_FONTS Ã¼letatud. Osa shrifte vÃµib puududa."

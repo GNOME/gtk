@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.1\n"
-"POT-Creation-Date: 2000-10-22 01:23+0100\n"
+"POT-Creation-Date: 2000-11-13 00:26+0000\n"
 "PO-Revision-Date: 2000-10-13 15:00+0330\n"
 "Last-Translator: Roozbeh Pournader <roozbeh@sina.sharif.ac.ir>\n"
 "Language-Team: Persian <fa@li.org>\n"
@@ -79,47 +79,30 @@ msgstr "تخته رنگ دست‌ساز"
 msgid "Set Color"
 msgstr "همین رنگ"
 
-#. The OK button
-#: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
-#: gtk/gtkgamma.c:415
-msgid "OK"
-msgstr "تأیید"
-
-#. The Cancel button
-#: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
-#: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
-#: gtk/gtkgamma.c:423
-msgid "Cancel"
-msgstr "انصراف"
-
-#: gtk/gtkcolorseldialog.c:116
-msgid "Help"
-msgstr "راهنمایی"
-
 #. The directories clist
-#: gtk/gtkfilesel.c:512
+#: gtk/gtkfilesel.c:514
 msgid "Directories"
 msgstr "شاخه‌ها"
 
 #. The files clist
-#: gtk/gtkfilesel.c:532
+#: gtk/gtkfilesel.c:534
 msgid "Files"
 msgstr "پرونده‌ها"
 
-#: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:600 gtk/gtkfilesel.c:1636
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "شاخه‌ی %s قابل خواندن نیست"
 
-#: gtk/gtkfilesel.c:635
+#: gtk/gtkfilesel.c:632
 msgid "Create Dir"
 msgstr "ایجاد شاخه"
 
-#: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
+#: gtk/gtkfilesel.c:643 gtk/gtkfilesel.c:1043
 msgid "Delete File"
 msgstr "حذف پرونده"
 
-#: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
+#: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
 msgstr "تغییر نام پرونده"
 
@@ -128,64 +111,65 @@ msgstr "تغییر نام پرونده"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:827
+#: gtk/gtkfilesel.c:824 gtk/gtkstock.c:171
 msgid "Error"
 msgstr "خطا"
 
 #. close button
-#: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
+#: gtk/gtkfilesel.c:847 gtk/gtkinputdialog.c:338 gtk/gtkstock.c:181
 msgid "Close"
 msgstr "بستن"
 
-#: gtk/gtkfilesel.c:932
+#: gtk/gtkfilesel.c:929
 msgid "Create Directory"
 msgstr "ایجاد شاخه"
 
-#: gtk/gtkfilesel.c:946
+#: gtk/gtkfilesel.c:943
 msgid "Directory name:"
 msgstr "نام شاخه:"
 
 #. buttons
-#: gtk/gtkfilesel.c:959
+#: gtk/gtkfilesel.c:956
 msgid "Create"
 msgstr "ایجاد"
 
+#: gtk/gtkfilesel.c:965 gtk/gtkfilesel.c:1074 gtk/gtkfilesel.c:1198
+#: gtk/gtkgamma.c:423 gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "انصراف"
+
 #. buttons
-#: gtk/gtkfilesel.c:1068
+#: gtk/gtkfilesel.c:1065
 msgid "Delete"
 msgstr "حذف"
 
 #. buttons
-#: gtk/gtkfilesel.c:1192
+#: gtk/gtkfilesel.c:1189
 msgid "Rename"
 msgstr "تغییر نام"
 
-#: gtk/gtkfilesel.c:1618
+#: gtk/gtkfilesel.c:1615
 msgid "Selection: "
 msgstr "انتخاب: "
 
-#: gtk/gtkfontsel.c:189
+#: gtk/gtkfontsel.c:190
 msgid "Family:"
 msgstr "خانواده:"
 
-#: gtk/gtkfontsel.c:194
+#: gtk/gtkfontsel.c:195
 msgid "Style:"
 msgstr "سبک:"
 
-#: gtk/gtkfontsel.c:199
+#: gtk/gtkfontsel.c:200
 msgid "Size:"
 msgstr "اندازه:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:309
+#: gtk/gtkfontsel.c:310
 msgid "Preview:"
 msgstr "پیش‌نمایش:"
 
-#: gtk/gtkfontsel.c:959
-msgid "Apply"
-msgstr "اِعمال"
-
-#: gtk/gtkfontsel.c:981
+#: gtk/gtkfontsel.c:966
 msgid "Font Selection"
 msgstr "انتخاب قلم"
 
@@ -196,6 +180,10 @@ msgstr "گاما"
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
 msgstr "مقدار گاما"
+
+#: gtk/gtkgamma.c:415 gtk/gtkstock.c:175
+msgid "OK"
+msgstr "تأیید"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
@@ -238,7 +226,7 @@ msgstr "کلیدها"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
-#: gtk/gtkinputdialog.c:329
+#: gtk/gtkinputdialog.c:329 gtk/gtkstock.c:186
 msgid "Save"
 msgstr "ذخیره"
 
@@ -287,10 +275,58 @@ msgid "clear"
 msgstr "پاک شود"
 
 #. Translate to default:RTL if you want your widgets
-#. to be RTL, otherwise translate to default:LTR
-#: gtk/gtkmain.c:416
+#. * to be RTL, otherwise translate to default:LTR
+#.
+#: gtk/gtkmain.c:417
 msgid "default:LTR"
 msgstr "default:RTL"
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr ""
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr ""
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr ""
+
+#: gtk/gtkstock.c:174
+#, fuzzy
+msgid "_Apply"
+msgstr "اِعمال"
+
+#: gtk/gtkstock.c:177
+#, fuzzy
+msgid "_Close"
+msgstr "بستن"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr ""
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr ""
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr ""
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "راهنمایی"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr ""
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr ""
 
 # paak kardan, rad kardan, tamiz kardan, door rikhtan, rowshan kardan, towzih daadan
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
@@ -298,21 +334,21 @@ msgstr "default:RTL"
 msgid "Page %u"
 msgstr "صفحه‌ی %u"
 
-#: gtk/gtkrc.c:1978
+#: gtk/gtkrc.c:2042
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "پرونده‌ی تصویری در pixmap_path مقابل یافت نشد: "
 "\"%s\" سطر %d"
 
-#: gtk/gtkrc.c:1981
+#: gtk/gtkrc.c:2045
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr ""
 "پرونده‌ی تصویری در pixmap_path مقابل یافت نشد: "
 "\"%s\""
 
-#: gtk/gtkthemes.c:117
+#: gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr ""
@@ -322,3 +358,21 @@ msgstr ""
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- کمک بی کمک ---"
+
+#~ msgid "0123456789."
+#~ msgstr "۰۱۲۳۴۵۶۷۸۹."
+
+#, fuzzy
+#~ msgid "Unable to load image-loading module: %s: %s"
+#~ msgstr ""
+#~ "واحد بارشونده در module_path مقابل یافت نشد: "
+#~ "\"%s\","
+
+#, fuzzy
+#~ msgid "Font String"
+#~ msgstr "انتخاب قلم"
+
+# hich-yek, hich-kodaam, be-hich-vajh, aslan
+#, fuzzy
+#~ msgid "Editable"
+#~ msgstr "(از کار افتاده)"

@@ -1,6 +1,6 @@
 # gtk+ package traditional Chinese translation file.
 # Copyright (C) 2000 Chinese Linux Extensions Project
-# Translators: ¨¯¥ß¤¯ <hsin@med.cgu.edu.tw>, 2000.
+# Translators: è¾›ç«‹ä» <hsin@med.cgu.edu.tw>, 2000.
 #
 msgid ""
 msgstr ""
@@ -10,55 +10,55 @@ msgstr ""
 "Last-Translator: Chih-Wei Huang <cwhuang@linux.org.tw>\n"
 "Language-Team: Chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=big5\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "¦â¬Û:"
+msgstr "è‰²ç›¸:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "±m«×:"
+msgstr "å½©åº¦:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
-msgstr "©ú«×:"
+msgstr "æ˜åº¦:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "¬õ:"
+msgstr "ç´…:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "ºñ:"
+msgstr "ç¶ :"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
-msgstr "ÂÅ:"
+msgstr "è—:"
 
 #: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
-msgstr "¤£³z©ú«×:"
+msgstr "ä¸é€æ˜åº¦:"
 
 #: gtk/gtkcolorsel.c:1443
 msgid "Hex Value:"
-msgstr "¤Q¤»¶i¦ì­È:"
+msgstr "åå…­é€²ä½å€¼:"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
-msgstr "¦Û­q¦âªO"
+msgstr "è‡ªè¨‚è‰²æ¿"
 
 #: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
-msgstr "³]©w¦â±m"
+msgstr "è¨­å®šè‰²å½©"
 
 #: gtk/gtkcolorseldialog.c:105
 #: gtk/gtkfilesel.c:567
 #: gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
-msgstr "½T©w"
+msgstr "ç¢ºå®š"
 
 #: gtk/gtkcolorseldialog.c:111
 #: gtk/gtkfilesel.c:574
@@ -68,96 +68,96 @@ msgstr "½T©w"
 #: gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "¨ú®ø"
+msgstr "å–æ¶ˆ"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "¨D§U"
+msgstr "æ±‚åŠ©"
 
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "¥Ø¿ı"
+msgstr "ç›®éŒ„"
 
 #: gtk/gtkfilesel.c:534
 msgid "Files"
-msgstr "ÀÉ®×"
+msgstr "æª”æ¡ˆ"
 
 #: gtk/gtkfilesel.c:605
 #: gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "µLªkÅª¨ú¥Ø¿ı: %s"
+msgstr "ç„¡æ³•è®€å–ç›®éŒ„: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
-msgstr "·s¼W¥Ø¿ı"
+msgstr "æ–°å¢ç›®éŒ„"
 
 #: gtk/gtkfilesel.c:648
 #: gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "§R°£ÀÉ®×"
+msgstr "åˆªé™¤æª”æ¡ˆ"
 
 #: gtk/gtkfilesel.c:659
 #: gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "­«·s©R¦W"
+msgstr "é‡æ–°å‘½å"
 
 #: gtk/gtkfilesel.c:828
 msgid "Error"
-msgstr "¿ù»~"
+msgstr "éŒ¯èª¤"
 
 #: gtk/gtkfilesel.c:851
 #: gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Ãö³¬"
+msgstr "é—œé–‰"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
-msgstr "·s¼W¥Ø¿ı"
+msgstr "æ–°å¢ç›®éŒ„"
 
 #: gtk/gtkfilesel.c:941
 msgid "Directory name:"
-msgstr "¥Ø¿ı¦WºÙ:"
+msgstr "ç›®éŒ„åç¨±:"
 
 #: gtk/gtkfilesel.c:954
 msgid "Create"
-msgstr "·s¼W"
+msgstr "æ–°å¢"
 
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "§R°£"
+msgstr "åˆªé™¤"
 
 #: gtk/gtkfilesel.c:1173
 msgid "Rename"
-msgstr "§ó·s"
+msgstr "æ›´æ–°"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "¸ô®|¿ï¶µ: "
+msgstr "è·¯å¾‘é¸é …: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
-msgstr "¦rÅé:"
+msgstr "å­—é«”:"
 
 #: gtk/gtkfontsel.c:194
 msgid "Style:"
-msgstr "®æ¦¡:"
+msgstr "æ ¼å¼:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "¤j¤p:"
+msgstr "å¤§å°:"
 
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "¹wÄı:"
+msgstr "é è¦½:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "®M¥Î"
+msgstr "å¥—ç”¨"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "¦r«¬¿ï¾Ü"
+msgstr "å­—å‹é¸æ“‡"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -165,47 +165,47 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "Gamma ­È"
+msgstr "Gamma å€¼"
 
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
-msgstr "¿é¤J"
+msgstr "è¼¸å…¥"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "¯Ê¤Ö¿é¤J¸Ë¸m"
+msgstr "ç¼ºå°‘è¼¸å…¥è£ç½®"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "¸Ë¸m:"
+msgstr "è£ç½®:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "¤w¥¢®Ä"
+msgstr "å·²å¤±æ•ˆ"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "¿Ã¹õ"
+msgstr "è¢å¹•"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "µøµ¡"
+msgstr "è¦–çª—"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "¼Ò¦¡:"
+msgstr "æ¨¡å¼:"
 
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
-msgstr "¶b"
+msgstr "è»¸"
 
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "«öÁä"
+msgstr "æŒ‰éµ"
 
 #: gtk/gtkinputdialog.c:329
 msgid "Save"
-msgstr "Àx¦s"
+msgstr "å„²å­˜"
 
 #: gtk/gtkinputdialog.c:471
 msgid "X"
@@ -217,59 +217,59 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "¤O«×"
+msgstr "åŠ›åº¦"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "X ¶É±×"
+msgstr "X å‚¾æ–œ"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Y ¶É±×"
+msgstr "Y å‚¾æ–œ"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr "ºu½ü"
+msgstr "æ»¾è¼ª"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "µL"
+msgstr "ç„¡"
 
 #: gtk/gtkinputdialog.c:550
 #: gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(¤w¥¢®Ä)"
+msgstr "(å·²å¤±æ•ˆ)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(¥¼ª¾)"
+msgstr "(æœªçŸ¥)"
 
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "²M°£"
+msgstr "æ¸…é™¤"
 
 #: gtk/gtknotebook.c:2059
 #: gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "²Ä %u ­¶"
+msgstr "ç¬¬ %u é "
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "µLªk¥Ñ pixmap_path §ä¨ì¹ÏÀÉ: \"%s\" ²Ä %d ¦æ"
+msgstr "ç„¡æ³•ç”± pixmap_path æ‰¾åˆ°åœ–æª”: \"%s\" ç¬¬ %d è¡Œ"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "µLªk¥Ñ pixmap_path §ä¨ì¹ÏÀÉ: \"%s\""
+msgstr "ç„¡æ³•ç”± pixmap_path æ‰¾åˆ°åœ–æª”: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "µLªk¥Ñ module_path §ä¨ì¥i¸ü¤J¼Ò²Õ: \"%s\","
+msgstr "ç„¡æ³•ç”± module_path æ‰¾åˆ°å¯è¼‰å…¥æ¨¡çµ„: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- ¤wµL´£¥Ü ---"
+msgstr "--- å·²ç„¡æç¤º ---"
 

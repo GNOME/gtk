@@ -10,16 +10,16 @@ msgstr ""
 "Last-Translator: Stefan Ondrejicka <ondrej@idata.sk>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "Odtieò:"
+msgstr "OdtieÅˆ:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Sıtos»:"
+msgstr "SÃ½tosÅ¥:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -27,19 +27,19 @@ msgstr "Jas:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "Èervená:"
+msgstr "ÄŒervenÃ¡:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "Zelená:"
+msgstr "ZelenÃ¡:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
-msgstr "Modrá:"
+msgstr "ModrÃ¡:"
 
 #: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
-msgstr "Nepriehµadnos»:"
+msgstr "NepriehÄ¾adnosÅ¥:"
 
 #: gtk/gtkcolorsel.c:1443
 #, fuzzy
@@ -65,7 +65,7 @@ msgstr "OK"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Zru¹i»"
+msgstr "ZruÅ¡iÅ¥"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
@@ -74,29 +74,29 @@ msgstr "Pomoc"
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "Adresáre"
+msgstr "AdresÃ¡re"
 
 #. The files clist
 #: gtk/gtkfilesel.c:534
 msgid "Files"
-msgstr "Súbory"
+msgstr "SÃºbory"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Neèitateµnı adresár: %s"
+msgstr "NeÄitateÄ¾nÃ½ adresÃ¡r: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
-msgstr "Vytvori» adresár"
+msgstr "VytvoriÅ¥ adresÃ¡r"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "Zmaza» súbor"
+msgstr "ZmazaÅ¥ sÃºbor"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "Premenova» súbor"
+msgstr "PremenovaÅ¥ sÃºbor"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -110,34 +110,34 @@ msgstr "Chyba"
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Zatvori»"
+msgstr "ZatvoriÅ¥"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
-msgstr "Vytvori» adresár"
+msgstr "VytvoriÅ¥ adresÃ¡r"
 
 #: gtk/gtkfilesel.c:941
 msgid "Directory name:"
-msgstr "Meno adresára:"
+msgstr "Meno adresÃ¡ra:"
 
 #. buttons
 #: gtk/gtkfilesel.c:954
 msgid "Create"
-msgstr "Vytvori»"
+msgstr "VytvoriÅ¥"
 
 #. buttons
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "Zmaza»"
+msgstr "ZmazaÅ¥"
 
 #. buttons
 #: gtk/gtkfilesel.c:1173
 msgid "Rename"
-msgstr "Premenova»"
+msgstr "PremenovaÅ¥"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "Vıber: "
+msgstr "VÃ½ber: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
@@ -146,24 +146,24 @@ msgstr "Rodina:"
 #: gtk/gtkfontsel.c:194
 #, fuzzy
 msgid "Style:"
-msgstr "©tıl:"
+msgstr "Å tÃ½l:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Veµkos»:"
+msgstr "VeÄ¾kosÅ¥:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Náhµad:"
+msgstr "NÃ¡hÄ¾ad:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Pou¾i»"
+msgstr "PouÅ¾iÅ¥"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "Vıber písma"
+msgstr "VÃ½ber pÃ­sma"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -180,7 +180,7 @@ msgstr "Vstup"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Niesú vstupné zariadenia"
+msgstr "NiesÃº vstupnÃ© zariadenia"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
@@ -188,7 +188,7 @@ msgstr "Zariadenie:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Zablokované"
+msgstr "ZablokovanÃ©"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -200,7 +200,7 @@ msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Re¾im: "
+msgstr "ReÅ¾im: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
@@ -210,13 +210,13 @@ msgstr "Osy"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "Klávesy"
+msgstr "KlÃ¡vesy"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:329
 msgid "Save"
-msgstr "Ulo¾i»"
+msgstr "UloÅ¾iÅ¥"
 
 #: gtk/gtkinputdialog.c:471
 msgid "X"
@@ -244,98 +244,98 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "¾iadny"
+msgstr "Å¾iadny"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(blokované)"
+msgstr "(blokovanÃ©)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(neznámy)"
+msgstr "(neznÃ¡my)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "zmaza»"
+msgstr "zmazaÅ¥"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "Stránka %u"
+msgstr "StrÃ¡nka %u"
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Obrázok nebol nájdenı v pixmap_path: \"%s\" riadok %d"
+msgstr "ObrÃ¡zok nebol nÃ¡jdenÃ½ v pixmap_path: \"%s\" riadok %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Obrázok nebol nájdenı v pixmap_path: \"%s\""
+msgstr "ObrÃ¡zok nebol nÃ¡jdenÃ½ v pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Zavádzatelnı modul nebol nájdenı v module_path: \"%s\","
+msgstr "ZavÃ¡dzatelnÃ½ modul nebol nÃ¡jdenÃ½ v module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Bez nápovedy ---"
+msgstr "--- Bez nÃ¡povedy ---"
 
 #~ msgid "Foundry:"
 #~ msgstr "Tvorca:"
 
 #~ msgid "Weight:"
-#~ msgstr "Hrúbka:"
+#~ msgstr "HrÃºbka:"
 
 #~ msgid "Slant:"
 #~ msgstr "Sklon:"
 
 #~ msgid "Set Width:"
-#~ msgstr "©írka:"
+#~ msgstr "Å Ã­rka:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Velkos» v pixeloch:"
+#~ msgstr "VelkosÅ¥ v pixeloch:"
 
 #~ msgid "Point Size:"
-#~ msgstr "Velkos» v bodoch:"
+#~ msgstr "VelkosÅ¥ v bodoch:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "Rozlí¹enie X:"
+#~ msgstr "RozlÃ­Å¡enie X:"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "Rozlí¹enie Y:"
+#~ msgstr "RozlÃ­Å¡enie Y:"
 
 #~ msgid "Spacing:"
 #~ msgstr "Rozostup:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Priemerná ¹írka:"
+#~ msgstr "PriemernÃ¡ Å¡Ã­rka:"
 
 #~ msgid "Charset:"
-#~ msgstr "Znaková sada:"
+#~ msgstr "ZnakovÃ¡ sada:"
 
 #~ msgid "Font Property"
-#~ msgstr "Vlastnosti písma"
+#~ msgstr "Vlastnosti pÃ­sma"
 
 #~ msgid "Requested Value"
-#~ msgstr "Po¾adovaná hodnota"
+#~ msgstr "PoÅ¾adovanÃ¡ hodnota"
 
 #~ msgid "Actual Value"
-#~ msgstr "Aktuálna hodnota"
+#~ msgstr "AktuÃ¡lna hodnota"
 
 #~ msgid "Font"
-#~ msgstr "Písmo"
+#~ msgstr "PÃ­smo"
 
 #~ msgid "Font:"
-#~ msgstr "Písmo:"
+#~ msgstr "PÃ­smo:"
 
 #~ msgid "Font Style:"
-#~ msgstr "©tıl písma:"
+#~ msgstr "Å tÃ½l pÃ­sma:"
 
 #~ msgid "Reset Filter"
-#~ msgstr "Zru¹i» filter"
+#~ msgstr "ZruÅ¡iÅ¥ filter"
 
 #~ msgid "Metric:"
 #~ msgstr "Metrika:"
@@ -347,52 +347,52 @@ msgstr "--- Bez nápovedy ---"
 #~ msgstr "Pixle"
 
 #~ msgid "Font Information"
-#~ msgstr "Informácie o písme"
+#~ msgstr "InformÃ¡cie o pÃ­sme"
 
 #~ msgid "Requested Font Name:"
-#~ msgstr "Po¾adované meno písma:"
+#~ msgstr "PoÅ¾adovanÃ© meno pÃ­sma:"
 
 #~ msgid "Actual Font Name:"
-#~ msgstr "Aktuálne meno písma:"
+#~ msgstr "AktuÃ¡lne meno pÃ­sma:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i písiem je dostopnıch v %i ¹tıloch."
+#~ msgstr "%i pÃ­siem je dostopnÃ½ch v %i Å¡tÃ½loch."
 
 #~ msgid "Filter"
 #~ msgstr "Filter"
 
 #~ msgid "Font Types:"
-#~ msgstr "Typy písma:"
+#~ msgstr "Typy pÃ­sma:"
 
 #~ msgid "Bitmap"
-#~ msgstr "Bitmapové"
+#~ msgstr "BitmapovÃ©"
 
 #~ msgid "Scalable"
-#~ msgstr "Vektorové"
+#~ msgstr "VektorovÃ©"
 
 #~ msgid "Scaled Bitmap"
-#~ msgstr "Prepoèítané bitmapové"
+#~ msgstr "PrepoÄÃ­tanÃ© bitmapovÃ©"
 
 #~ msgid "*"
 #~ msgstr "*"
 
 #~ msgid "regular"
-#~ msgstr "normálny"
+#~ msgstr "normÃ¡lny"
 
 #~ msgid "italic"
-#~ msgstr "kurzíva"
+#~ msgstr "kurzÃ­va"
 
 #~ msgid "oblique"
-#~ msgstr "¹ikmé"
+#~ msgstr "Å¡ikmÃ©"
 
 #~ msgid "reverse italic"
-#~ msgstr "opaèná kurzíva"
+#~ msgstr "opaÄnÃ¡ kurzÃ­va"
 
 #~ msgid "reverse oblique"
-#~ msgstr "opaèné ¹ikmé"
+#~ msgstr "opaÄnÃ© Å¡ikmÃ©"
 
 #~ msgid "other"
-#~ msgstr "iné"
+#~ msgstr "inÃ©"
 
 #~ msgid "[M]"
 #~ msgstr "[M]"
@@ -401,32 +401,32 @@ msgstr "--- Bez nápovedy ---"
 #~ msgstr "[C]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "Vybrané písmo nebolo nájdené."
+#~ msgstr "VybranÃ© pÃ­smo nebolo nÃ¡jdenÃ©."
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "Vybrané písmo nie je platné písmo."
+#~ msgstr "VybranÃ© pÃ­smo nie je platnÃ© pÃ­smo."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Toto je dvoj-bajtové písmo a mô¾e by» zobrazené nesprávne."
+#~ msgstr "Toto je dvoj-bajtovÃ© pÃ­smo a mÃ´Å¾e byÅ¥ zobrazenÃ© nesprÃ¡vne."
 
 #~ msgid "roman"
-#~ msgstr "normálny"
+#~ msgstr "normÃ¡lny"
 
 #~ msgid "proportional"
-#~ msgstr "proporcionálne"
+#~ msgstr "proporcionÃ¡lne"
 
 #~ msgid "monospaced"
-#~ msgstr "s pevnou ¹írkou medzery"
+#~ msgstr "s pevnou Å¡Ã­rkou medzery"
 
 #~ msgid "char cell"
-#~ msgstr "s pevnou ¹írko bunky"
+#~ msgstr "s pevnou Å¡Ã­rko bunky"
 
 #~ msgid "Font: (Filter Applied)"
-#~ msgstr "Písmo: (pou¾itı filter)"
+#~ msgstr "PÃ­smo: (pouÅ¾itÃ½ filter)"
 
 #, fuzzy
 #~ msgid "light"
-#~ msgstr "Hrúbka:"
+#~ msgstr "HrÃºbka:"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "Poèet písem prekroèil MAX_FONTS. Niektoré písma mô¾u chıba»."
+#~ msgstr "PoÄet pÃ­sem prekroÄil MAX_FONTS. NiektorÃ© pÃ­sma mÃ´Å¾u chÃ½baÅ¥."

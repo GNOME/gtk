@@ -11,7 +11,7 @@ msgstr ""
 "Last-Translator: Tomislav Jankovic_<tomaja@net.yu>\n"
 "Language-Team: Serbian(Latin) <tomaja@net.yu>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
@@ -20,7 +20,7 @@ msgstr "Nijansa:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Zasiæenost: "
+msgstr "ZasiÄ‡enost: "
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -48,7 +48,7 @@ msgstr "Hex vrednost:"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
-msgstr "Klasièna paleta "
+msgstr "KlasiÄna paleta "
 
 #: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
@@ -65,7 +65,7 @@ msgstr "U redu"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Poni¹ti"
+msgstr "PoniÅ¡ti"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
@@ -84,7 +84,7 @@ msgstr "Fajlovi"
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Direktorijum %s nije moguæe  proèitati"
+msgstr "Direktorijum %s nije moguÄ‡e  proÄitati"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
@@ -92,7 +92,7 @@ msgstr "Kreiraj direktorijum"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "Izbri¹i fajl"
+msgstr "IzbriÅ¡i fajl"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
@@ -105,7 +105,7 @@ msgstr "Promeni ime fajla"
 #.
 #: gtk/gtkfilesel.c:828
 msgid "Error"
-msgstr "Gre¹ka"
+msgstr "GreÅ¡ka"
 
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
@@ -128,7 +128,7 @@ msgstr "Kreiraj"
 #. buttons
 #: gtk/gtkfilesel.c:1058
 msgid "Delete"
-msgstr "Izbri¹i"
+msgstr "IzbriÅ¡i"
 
 #. buttons
 #: gtk/gtkfilesel.c:1173
@@ -150,7 +150,7 @@ msgstr "Dodaj stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Velièina:"
+msgstr "VeliÄina:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
@@ -180,15 +180,15 @@ msgstr "Unos"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Nema ulaznog ureğaja"
+msgstr "Nema ulaznog ureÄ‘aja"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Ureğaj:"
+msgstr "UreÄ‘aj:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Iskljuèeno"
+msgstr "IskljuÄeno"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -248,7 +248,7 @@ msgstr "Nijedan (nema) "
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(iskljuèeno)"
+msgstr "(iskljuÄeno)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
@@ -257,7 +257,7 @@ msgstr "(nepoznato)"
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "èisto"
+msgstr "Äisto"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
@@ -287,19 +287,19 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "Osnova:"
 
 #~ msgid "Weight:"
-#~ msgstr "Te¾ina:"
+#~ msgstr "TeÅ¾ina:"
 
 #~ msgid "Slant:"
-#~ msgstr "Isko¹enost:"
+#~ msgstr "IskoÅ¡enost:"
 
 #~ msgid "Set Width:"
-#~ msgstr "Podesi ¹irinu:"
+#~ msgstr "Podesi Å¡irinu:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Velièina u pikselima:"
+#~ msgstr "VeliÄina u pikselima:"
 
 #~ msgid "Point Size:"
-#~ msgstr "Velièina u taèkama:"
+#~ msgstr "VeliÄina u taÄkama:"
 
 #~ msgid "Resolution X:"
 #~ msgstr "X rezolucija:"
@@ -311,7 +311,7 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "Razmak:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Proseèna ¹irina:"
+#~ msgstr "ProseÄna Å¡irina:"
 
 #~ msgid "Charset:"
 #~ msgstr "Skup znakova:"
@@ -320,7 +320,7 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "Karakteristike fonta"
 
 #~ msgid "Requested Value"
-#~ msgstr "Tra¾ena vrednost"
+#~ msgstr "TraÅ¾ena vrednost"
 
 #~ msgid "Actual Value"
 #~ msgstr "Stvarna vrednost"
@@ -338,7 +338,7 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "Resetuj filter"
 
 #~ msgid "Metric:"
-#~ msgstr "Metrièki: "
+#~ msgstr "MetriÄki: "
 
 #~ msgid "Points"
 #~ msgstr "Poeni"
@@ -350,7 +350,7 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "Informacije o fontu"
 
 #~ msgid "Requested Font Name:"
-#~ msgstr "Tra¾eno ime fonta:"
+#~ msgstr "TraÅ¾eno ime fonta:"
 
 #~ msgid "Actual Font Name:"
 #~ msgstr "Stvarno ime fonta:"
@@ -410,7 +410,7 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "Selektovani font nije validan font."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Ovo je 2 bitni font i mo¾da neæe biti korektno prikazan"
+#~ msgstr "Ovo je 2 bitni font i moÅ¾da neÄ‡e biti korektno prikazan"
 
 #~ msgid "roman"
 #~ msgstr "rimski"
@@ -419,10 +419,10 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "proporcionalno"
 
 #~ msgid "monospaced"
-#~ msgstr "jedinièni raspored"
+#~ msgstr "jediniÄni raspored"
 
 #~ msgid "char cell"
-#~ msgstr "Znakovna æelija"
+#~ msgstr "Znakovna Ä‡elija"
 
 #~ msgid "Font: (Filter Applied)"
 #~ msgstr "Font (primenjen filter)"
@@ -455,4 +455,4 @@ msgstr "--- Bez tipa ---"
 #~ msgstr "tanko"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS dosegnut.Neki fontovi æe nedostajati"
+#~ msgstr "MAX_FONTS dosegnut.Neki fontovi Ä‡e nedostajati"

@@ -10,92 +10,92 @@ msgstr ""
 "Last-Translator: Yuri Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "В╕дт╕нок:"
+msgstr "п▓я√п╢я┌я√п╫п╬п╨:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "Насичен╕сть:"
+msgstr "п²п╟я│п╦я┤п╣п╫я√я│я┌я▄:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
-msgstr "Значення:"
+msgstr "п≈п╫п╟я┤п╣п╫п╫я▐:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "Червоний:"
+msgstr "п╖п╣я─п╡п╬п╫п╦п╧:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "Зелений:"
+msgstr "п≈п╣п╩п╣п╫п╦п╧:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
-msgstr "Син╕й:"
+msgstr "п║п╦п╫я√п╧:"
 
 #: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
-msgstr "Щ╕льн╕сть:"
+msgstr "п╘я√п╩я▄п╫я√я│я┌я▄:"
 
 #: gtk/gtkcolorsel.c:1443
 msgid "Hex Value:"
-msgstr "Ш╕стнадцяткове значення:"
+msgstr "п╗я√я│я┌п╫п╟п╢я├я▐я┌п╨п╬п╡п╣ п╥п╫п╟я┤п╣п╫п╫я▐:"
 
 #: gtk/gtkcolorsel.c:1464
 msgid "Custom Palette"
-msgstr "╤нша пал╕тра"
+msgstr "п├п╫я┬п╟ п©п╟п╩я√я┌я─п╟"
 
 #: gtk/gtkcolorsel.c:1469
 msgid "Set Color"
-msgstr "Встановити кол╕р"
+msgstr "п▓я│я┌п╟п╫п╬п╡п╦я┌п╦ п╨п╬п╩я√я─"
 
 #. The OK button
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
-msgstr "Гаразд"
+msgstr "п⌠п╟я─п╟п╥п╢"
 
 #. The Cancel button
 #: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
 #: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "В╕дм╕на"
+msgstr "п▓я√п╢п╪я√п╫п╟"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "Дов╕дка"
+msgstr "п■п╬п╡я√п╢п╨п╟"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:512
 msgid "Directories"
-msgstr "Каталоги"
+msgstr "п п╟я┌п╟п╩п╬пЁп╦"
 
 #. The files clist
 #: gtk/gtkfilesel.c:532
 msgid "Files"
-msgstr "Файли"
+msgstr "п╓п╟п╧п╩п╦"
 
 #: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Неможливо зчитати каталог: %s"
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╥я┤п╦я┌п╟я┌п╦ п╨п╟я┌п╟п╩п╬пЁ: %s"
 
 #: gtk/gtkfilesel.c:635
 msgid "Create Dir"
-msgstr "Створити каталог"
+msgstr "п║я┌п╡п╬я─п╦я┌п╦ п╨п╟я┌п╟п╩п╬пЁ"
 
 #: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
 msgid "Delete File"
-msgstr "Видалити файл"
+msgstr "п▓п╦п╢п╟п╩п╦я┌п╦ я└п╟п╧п╩"
 
 #: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
 msgid "Rename File"
-msgstr "Перейменувати файл"
+msgstr "п÷п╣я─п╣п╧п╪п╣п╫я┐п╡п╟я┌п╦ я└п╟п╧п╩"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -104,117 +104,117 @@ msgstr "Перейменувати файл"
 #.
 #: gtk/gtkfilesel.c:827
 msgid "Error"
-msgstr "Помилка"
+msgstr "п÷п╬п╪п╦п╩п╨п╟"
 
 #. close button
 #: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Закрити"
+msgstr "п≈п╟п╨я─п╦я┌п╦"
 
 #: gtk/gtkfilesel.c:932
 msgid "Create Directory"
-msgstr "Створити каталог"
+msgstr "п║я┌п╡п╬я─п╦я┌п╦ п╨п╟я┌п╟п╩п╬пЁ"
 
 #: gtk/gtkfilesel.c:946
 msgid "Directory name:"
-msgstr "Назва каталогу:"
+msgstr "п²п╟п╥п╡п╟ п╨п╟я┌п╟п╩п╬пЁя┐:"
 
 #. buttons
 #: gtk/gtkfilesel.c:959
 msgid "Create"
-msgstr "Створити"
+msgstr "п║я┌п╡п╬я─п╦я┌п╦"
 
 #. buttons
 #: gtk/gtkfilesel.c:1068
 msgid "Delete"
-msgstr "Видалити"
+msgstr "п▓п╦п╢п╟п╩п╦я┌п╦"
 
 #. buttons
 #: gtk/gtkfilesel.c:1192
 msgid "Rename"
-msgstr "Перейменувати"
+msgstr "п÷п╣я─п╣п╧п╪п╣п╫я┐п╡п╟я┌п╦"
 
 #: gtk/gtkfilesel.c:1618
 msgid "Selection: "
-msgstr "Виб╕р: "
+msgstr "п▓п╦п╠я√я─: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
-msgstr "Родина:"
+msgstr "п═п╬п╢п╦п╫п╟:"
 
 #: gtk/gtkfontsel.c:194
 msgid "Style:"
-msgstr "Стиль:"
+msgstr "п║я┌п╦п╩я▄:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Розм╕р:"
+msgstr "п═п╬п╥п╪я√я─:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Перегляд:"
+msgstr "п÷п╣я─п╣пЁп╩я▐п╢:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Застосувати"
+msgstr "п≈п╟я│я┌п╬я│я┐п╡п╟я┌п╦"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "Виб╕р шрифту"
+msgstr "п▓п╦п╠я√я─ я┬я─п╦я└я┌я┐"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
-msgstr "Гама"
+msgstr "п⌠п╟п╪п╟"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "Гама величина"
+msgstr "п⌠п╟п╪п╟ п╡п╣п╩п╦я┤п╦п╫п╟"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
-msgstr "Вв╕д"
+msgstr "п▓п╡я√п╢"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Нема╓ пристро╖в вводу"
+msgstr "п²п╣п╪п╟я■ п©я─п╦я│я┌я─п╬я≈п╡ п╡п╡п╬п╢я┐"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Пристр╕й:"
+msgstr "п÷я─п╦я│я┌я─я√п╧:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Вимкнений"
+msgstr "п▓п╦п╪п╨п╫п╣п╫п╦п╧"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "Екран"
+msgstr "п∙п╨я─п╟п╫"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "В╕кно"
+msgstr "п▓я√п╨п╫п╬"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Режим: "
+msgstr "п═п╣п╤п╦п╪: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
-msgstr "Ос╕"
+msgstr "п·я│я√"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "Клав╕ши"
+msgstr "п п╩п╟п╡я√я┬п╦"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:329
 msgid "Save"
-msgstr "Зберегти"
+msgstr "п≈п╠п╣я─п╣пЁя┌п╦"
 
 #: gtk/gtkinputdialog.c:471
 msgid "X"
@@ -226,57 +226,57 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "Натиск"
+msgstr "п²п╟я┌п╦я│п╨"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "Нахил X"
+msgstr "п²п╟я┘п╦п╩ X"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Нахил Y"
+msgstr "п²п╟я┘п╦п╩ Y"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr "Колесо"
+msgstr "п п╬п╩п╣я│п╬"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "нема╓"
+msgstr "п╫п╣п╪п╟я■"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(вимкнений)"
+msgstr "(п╡п╦п╪п╨п╫п╣п╫п╦п╧)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(нев╕домий)"
+msgstr "(п╫п╣п╡я√п╢п╬п╪п╦п╧)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "очистити"
+msgstr "п╬я┤п╦я│я┌п╦я┌п╦"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "Стор╕нка %u"
+msgstr "п║я┌п╬я─я√п╫п╨п╟ %u"
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Файл ╕з зображенням не знайдено в pixmap_path: \"%s\", рядок %d"
+msgstr "п╓п╟п╧п╩ я√п╥ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐п╪ п╫п╣ п╥п╫п╟п╧п╢п╣п╫п╬ п╡ pixmap_path: \"%s\", я─я▐п╢п╬п╨ %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Файл ╕з зображенням не знайдено в pixmap_path: \"%s\""
+msgstr "п╓п╟п╧п╩ я√п╥ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐п╪ п╫п╣ п╥п╫п╟п╧п╢п╣п╫п╬ п╡ pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Модуль не зайдено в module_path: \"%s\","
+msgstr "п°п╬п╢я┐п╩я▄ п╫п╣ п╥п╟п╧п╢п╣п╫п╬ п╡ module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Нема╓ п╕дказки ---"
+msgstr "--- п²п╣п╪п╟я■ п©я√п╢п╨п╟п╥п╨п╦ ---"

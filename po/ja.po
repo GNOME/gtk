@@ -11,92 +11,92 @@ msgstr ""
 "Last-Translator: Yukihiro Nakai <nakai@gnome.gr.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=EUC-JP\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
-msgstr "¿§Áê:"
+msgstr "è‰²ç›¸:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
-msgstr "ºÌÅÙ:"
+msgstr "å½©åº¦:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Value:"
-msgstr "ÌÀÅÙ:"
+msgstr "æ˜åº¦:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Red:"
-msgstr "ÀÖ:"
+msgstr "èµ¤:"
 
 #: gtk/gtkcolorsel.c:1426
 msgid "Green:"
-msgstr "ÎĞ:"
+msgstr "ç·‘:"
 
 #: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
-msgstr "ÀÄ:"
+msgstr "é’:"
 
 #: gtk/gtkcolorsel.c:1430
 msgid "Opacity:"
-msgstr "ÉÔÆ©ÌÀÅÙ:"
+msgstr "ä¸é€æ˜åº¦:"
 
 #: gtk/gtkcolorsel.c:1445
 msgid "Hex Value:"
-msgstr "ÌÀÅÙ:"
+msgstr "æ˜åº¦:"
 
 #: gtk/gtkcolorsel.c:1466
 msgid "Custom Palette"
-msgstr "¥«¥¹¥¿¥à¥Ñ¥ì¥Ã¥È"
+msgstr "ã‚«ã‚¹ã‚¿ãƒ ãƒ‘ãƒ¬ãƒƒãƒˆ"
 
 #: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
-msgstr "¥«¥é¡¼ÀßÄê"
+msgstr "ã‚«ãƒ©ãƒ¼è¨­å®š"
 
 #. The OK button
 #: gtk/gtkcolorseldialog.c:105 gtk/gtkfilesel.c:565 gtk/gtkfontsel.c:952
 #: gtk/gtkgamma.c:415
 msgid "OK"
-msgstr "Î»²ò"
+msgstr "äº†è§£"
 
 #. The Cancel button
 #: gtk/gtkcolorseldialog.c:111 gtk/gtkfilesel.c:572 gtk/gtkfilesel.c:968
 #: gtk/gtkfilesel.c:1077 gtk/gtkfilesel.c:1201 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "¼è¾Ã"
+msgstr "å–æ¶ˆ"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "¥Ø¥ë¥×"
+msgstr "ãƒ˜ãƒ«ãƒ—"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:512
 msgid "Directories"
-msgstr "¥Ç¥£¥ì¥¯¥È¥ê"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª"
 
 #. The files clist
 #: gtk/gtkfilesel.c:532
 msgid "Files"
-msgstr "¥Õ¥¡¥¤¥ë"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«"
 
 #: gtk/gtkfilesel.c:603 gtk/gtkfilesel.c:1639
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "¥Ç¥£¥ì¥¯¥È¥ê¤¬ÆÉ¤á¤Ş¤»¤ó: %s"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒèª­ã‚ã¾ã›ã‚“: %s"
 
 #: gtk/gtkfilesel.c:635
 msgid "Create Dir"
-msgstr "¥Ç¥£¥ì¥¯¥È¥êºîÀ®"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ"
 
 #: gtk/gtkfilesel.c:646 gtk/gtkfilesel.c:1046
 msgid "Delete File"
-msgstr "¥Õ¥¡¥¤¥ëºï½ü"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤"
 
 #: gtk/gtkfilesel.c:657 gtk/gtkfilesel.c:1159
 msgid "Rename File"
-msgstr "¥Õ¥¡¥¤¥ëÌ¾ÊÑ¹¹"
+msgstr "ãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -105,117 +105,117 @@ msgstr "¥Õ¥¡¥¤¥ëÌ¾ÊÑ¹¹"
 #.
 #: gtk/gtkfilesel.c:827
 msgid "Error"
-msgstr "¥¨¥é¡¼"
+msgstr "ã‚¨ãƒ©ãƒ¼"
 
 #. close button
 #: gtk/gtkfilesel.c:850 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "ÊÄ¤¸¤ë"
+msgstr "é–‰ã˜ã‚‹"
 
 #: gtk/gtkfilesel.c:932
 msgid "Create Directory"
-msgstr "¥Ç¥£¥ì¥¯¥È¥êºîÀ®"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ"
 
 #: gtk/gtkfilesel.c:946
 msgid "Directory name:"
-msgstr "¥Ç¥£¥ì¥¯¥È¥êÌ¾:"
+msgstr "ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå:"
 
 #. buttons
 #: gtk/gtkfilesel.c:959
 msgid "Create"
-msgstr "ºîÀ®"
+msgstr "ä½œæˆ"
 
 #. buttons
 #: gtk/gtkfilesel.c:1068
 msgid "Delete"
-msgstr "ºï½ü"
+msgstr "å‰Šé™¤"
 
 #. buttons
 #: gtk/gtkfilesel.c:1192
 msgid "Rename"
-msgstr "Ì¾¾ÎÊÑ¹¹"
+msgstr "åç§°å¤‰æ›´"
 
 #: gtk/gtkfilesel.c:1618
 msgid "Selection: "
-msgstr "ÁªÂò: "
+msgstr "é¸æŠ: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
-msgstr "½ñÂÎ:"
+msgstr "æ›¸ä½“:"
 
 #: gtk/gtkfontsel.c:194
 msgid "Style:"
-msgstr "ÉÕ²Ã¥¹¥¿¥¤¥ë:"
+msgstr "ä»˜åŠ ã‚¹ã‚¿ã‚¤ãƒ«:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "¥µ¥¤¥º:"
+msgstr "ã‚µã‚¤ã‚º:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "¥×¥ì¥Ó¥å¡¼:"
+msgstr "ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Å¬ÍÑ"
+msgstr "é©ç”¨"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "¥Õ¥©¥ó¥ÈÁªÂò"
+msgstr "ãƒ•ã‚©ãƒ³ãƒˆé¸æŠ"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
-msgstr "¥¬¥ó¥Ş"
+msgstr "ã‚¬ãƒ³ãƒ"
 
 #: gtk/gtkgamma.c:402
 msgid "Gamma value"
-msgstr "¥¬¥ó¥ŞÃÍ"
+msgstr "ã‚¬ãƒ³ãƒå€¤"
 
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
-msgstr "ÆşÎÏ"
+msgstr "å…¥åŠ›"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "ÆşÎÏ¥Ç¥Ğ¥¤¥¹¤¬¤¢¤ê¤Ş¤»¤ó"
+msgstr "å…¥åŠ›ãƒ‡ãƒã‚¤ã‚¹ãŒã‚ã‚Šã¾ã›ã‚“"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "¥Ç¥Ğ¥¤¥¹:"
+msgstr "ãƒ‡ãƒã‚¤ã‚¹:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Ìµ¸ú"
+msgstr "ç„¡åŠ¹"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "¥¹¥¯¥ê¡¼¥ó"
+msgstr "ã‚¹ã‚¯ãƒªãƒ¼ãƒ³"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
-msgstr "¥¦¥£¥ó¥É¥¦"
+msgstr "ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "¥â¡¼¥É: "
+msgstr "ãƒ¢ãƒ¼ãƒ‰: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
 msgid "Axes"
-msgstr "¼´"
+msgstr "è»¸"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "¥­¡¼"
+msgstr "ã‚­ãƒ¼"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:329
 msgid "Save"
-msgstr "ÊİÂ¸"
+msgstr "ä¿å­˜"
 
 #: gtk/gtkinputdialog.c:471
 msgid "X"
@@ -227,57 +227,57 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "°µÎÏ"
+msgstr "åœ§åŠ›"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "X ·¹¤­"
+msgstr "X å‚¾ã"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Y ·¹¤­"
+msgstr "Y å‚¾ã"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
-msgstr "¥Û¥¤¡¼¥ë"
+msgstr "ãƒ›ã‚¤ãƒ¼ãƒ«"
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "Ìµ¤·"
+msgstr "ç„¡ã—"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(Ìµ¸ú)"
+msgstr "(ç„¡åŠ¹)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(ÉÔÌÀ)"
+msgstr "(ä¸æ˜)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "¥¯¥ê¥¢"
+msgstr "ã‚¯ãƒªã‚¢"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "¥Ú¡¼¥¸ %u"
+msgstr "ãƒšãƒ¼ã‚¸ %u"
 
 #: gtk/gtkrc.c:1978
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "²èÁü¥Õ¥¡¥¤¥ë¤¬¸«ÉÕ¤«¤ê¤Ş¤»¤ó piamap_path: \"%s\" %d ¹ÔÌÜ"
+msgstr "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“ piamap_path: \"%s\" %d è¡Œç›®"
 
 #: gtk/gtkrc.c:1981
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "²èÁü¥Õ¥¡¥¤¥ë¤¬¸«ÉÕ¤«¤ê¤Ş¤»¤ó pixmap_path: \"%s\""
+msgstr "ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“ pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "¥í¡¼¥À¥Ö¥ë¥â¥¸¥å¡¼¥ë¤¬¸«ÉÕ¤«¤ê¤Ş¤»¤ó module_path: \"%s\","
+msgstr "ãƒ­ãƒ¼ãƒ€ãƒ–ãƒ«ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒè¦‹ä»˜ã‹ã‚Šã¾ã›ã‚“ module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Tip Ìµ¤· ---"
+msgstr "--- Tip ç„¡ã— ---"

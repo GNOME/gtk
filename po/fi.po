@@ -13,22 +13,22 @@ msgstr ""
 "Last-Translator: Pauli Virtanen <pauli.virtanen@saunalahti.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/io-gif.c:426
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
-"GIF-tiedostosta puuttuu joitakin osia (ehk‰ se on typistynyt jotenkin?)"
+"GIF-tiedostosta puuttuu joitakin osia (ehk√§ se on typistynyt jotenkin?)"
 
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr "Sis‰inen virhe GIF-lataimessa (%s)"
+msgstr "Sis√§inen virhe GIF-lataimessa (%s)"
 
 #: gdk-pixbuf/io-gif.c:584
 msgid "Circular table entry in GIF file"
-msgstr "GIF-tiedostossa on taulukkokeh‰merkint‰"
+msgstr "GIF-tiedostossa on taulukkokeh√§merkint√§"
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
@@ -41,15 +41,15 @@ msgstr "GIF-tiedostomuodon versiota %s ei tueta"
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
-msgstr "GIF-animaatio sis‰lsi v‰‰r‰n kokoisen kuvan"
+msgstr "GIF-animaatio sis√§lsi v√§√§r√§n kokoisen kuvan"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Hue:"
-msgstr "S‰vy:"
+msgstr "S√§vy:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Saturation:"
-msgstr "Kyll‰isyys:"
+msgstr "Kyll√§isyys:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Value:"
@@ -61,7 +61,7 @@ msgstr "Punainen:"
 
 #: gtk/gtkcolorsel.c:1426
 msgid "Green:"
-msgstr "Vihre‰:"
+msgstr "Vihre√§:"
 
 #: gtk/gtkcolorsel.c:1427
 msgid "Blue:"
@@ -81,7 +81,7 @@ msgstr "Mukautettu paletti"
 
 #: gtk/gtkcolorsel.c:1471
 msgid "Set Color"
-msgstr "Aseta v‰ri"
+msgstr "Aseta v√§ri"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
@@ -109,7 +109,7 @@ msgstr "Poista tiedosto"
 
 #: gtk/gtkfilesel.c:654 gtk/gtkfilesel.c:1156
 msgid "Rename File"
-msgstr "Nime‰ tiedosto uudelleen"
+msgstr "Nime√§ tiedosto uudelleen"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -151,7 +151,7 @@ msgstr "Poista"
 #. buttons
 #: gtk/gtkfilesel.c:1189
 msgid "Rename"
-msgstr "Nime‰ uudelleen"
+msgstr "Nime√§ uudelleen"
 
 #: gtk/gtkfilesel.c:1615
 msgid "Selection: "
@@ -193,11 +193,11 @@ msgstr "OK"
 #. shell and main vbox
 #: gtk/gtkinputdialog.c:185
 msgid "Input"
-msgstr "Syˆte"
+msgstr "Sy√∂te"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Ei syˆttˆlaitteita"
+msgstr "Ei sy√∂tt√∂laitteita"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
@@ -209,7 +209,7 @@ msgstr "Poistettu"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "N‰yttˆ"
+msgstr "N√§ytt√∂"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
@@ -265,7 +265,7 @@ msgstr "ei"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(ei k‰ytˆss‰)"
+msgstr "(ei k√§yt√∂ss√§)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
@@ -274,7 +274,7 @@ msgstr "(tuntematon)"
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "tyhjenn‰"
+msgstr "tyhjenn√§"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR
@@ -306,7 +306,7 @@ msgstr "_Sulje"
 
 #: gtk/gtkstock.c:178
 msgid "_Yes"
-msgstr "_Kyll‰"
+msgstr "_Kyll√§"
 
 #: gtk/gtkstock.c:179
 msgid "_No"
@@ -338,23 +338,23 @@ msgstr "Sivu %u"
 #: gtk/gtkrc.c:1991
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Kuvatiedostoa ei lˆytynyt pixmap_path:sta: \"%s\" rivi %d"
+msgstr "Kuvatiedostoa ei l√∂ytynyt pixmap_path:sta: \"%s\" rivi %d"
 
 # , c-format
 #: gtk/gtkrc.c:1994
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kuvatiedostoa ei lˆytynyt pixmap_path:sta: \"%s\""
+msgstr "Kuvatiedostoa ei l√∂ytynyt pixmap_path:sta: \"%s\""
 
 # , c-format
 #: gtk/gtkthemes.c:194
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Ladattavaa moduulia ei lˆytynyt module_path:sta:\"%s\","
+msgstr "Ladattavaa moduulia ei l√∂ytynyt module_path:sta:\"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Ei vinkki‰ ---"
+msgstr "--- Ei vinkki√§ ---"
 
 #~ msgid "Apply"
 #~ msgstr "Toteuta"

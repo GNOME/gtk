@@ -1,0 +1,17 @@
+All the .po files are now in UTF-8!
+
+For information on editing UTF-8 files on Unix, see
+<http://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html>
+
+If you just want to convert it back to your native encoding to
+edit and then convert again to UTF-8 to commit, please see the
+scripts in gnome-i18n/UTF-8, for example
+
+  export ENCODING_TO=ISO-8895-15
+  potoutf.sh fi.po
+  emacs fi.po
+  utftopo fi.po
+  cvs commit fi.po
+
+If you need help with this, ask, but please don't commit
+non-UTF-8 files here.

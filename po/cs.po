@@ -1,7 +1,7 @@
 # This is the Czech locale definition for Gtk+.
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
-# Jiøí Pavlovskı <pavlovsk@ff.cuni.cz>, 1998.
+# JiÅ™Ã­ PavlovskÃ½ <pavlovsk@ff.cuni.cz>, 1998.
 #
 msgid ""
 msgstr ""
@@ -11,12 +11,12 @@ msgstr ""
 "Last-Translator: Stanislav Brabec <utx@k332.feld.cvut.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-2\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "Odstín:"
+msgstr "OdstÃ­n:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
@@ -28,19 +28,19 @@ msgstr "Jas:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "Èervená:"
+msgstr "ÄŒervenÃ¡:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "Zelená:"
+msgstr "ZelenÃ¡:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
-msgstr "Modrá:"
+msgstr "ModrÃ¡:"
 
 #: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
-msgstr "Krytí:"
+msgstr "KrytÃ­:"
 
 #: gtk/gtkcolorsel.c:1443
 #, fuzzy
@@ -66,16 +66,16 @@ msgstr "OK"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Zru¹it"
+msgstr "ZruÅ¡it"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
-msgstr "Nápovìda"
+msgstr "NÃ¡povÄ›da"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:514
 msgid "Directories"
-msgstr "Adresáøe"
+msgstr "AdresÃ¡Å™e"
 
 #. The files clist
 #: gtk/gtkfilesel.c:534
@@ -85,11 +85,11 @@ msgstr "Soubory"
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Adresáø %s je neèitelnı."
+msgstr "AdresÃ¡Å™ %s je neÄitelnÃ½."
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
-msgstr "Vytvoøit adresáø"
+msgstr "VytvoÅ™it adresÃ¡Å™"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
@@ -97,7 +97,7 @@ msgstr "Smazat soubor"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "Pøejmenovat soubor"
+msgstr "PÅ™ejmenovat soubor"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -111,20 +111,20 @@ msgstr "Chyba"
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Zavøít"
+msgstr "ZavÅ™Ã­t"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
-msgstr "Vytvoøit adresáø"
+msgstr "VytvoÅ™it adresÃ¡Å™"
 
 #: gtk/gtkfilesel.c:941
 msgid "Directory name:"
-msgstr "Jméno adresáøe:"
+msgstr "JmÃ©no adresÃ¡Å™e:"
 
 #. buttons
 #: gtk/gtkfilesel.c:954
 msgid "Create"
-msgstr "Vytvoøit"
+msgstr "VytvoÅ™it"
 
 #. buttons
 #: gtk/gtkfilesel.c:1058
@@ -134,11 +134,11 @@ msgstr "Smazat"
 #. buttons
 #: gtk/gtkfilesel.c:1173
 msgid "Rename"
-msgstr "Pøejmenovat"
+msgstr "PÅ™ejmenovat"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "Vıbìr: "
+msgstr "VÃ½bÄ›r: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
@@ -147,7 +147,7 @@ msgstr "Rodina:"
 #: gtk/gtkfontsel.c:194
 #, fuzzy
 msgid "Style:"
-msgstr "Upøesnìní stylu:"
+msgstr "UpÅ™esnÄ›nÃ­ stylu:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -156,15 +156,15 @@ msgstr "Velikost:"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Náhled:"
+msgstr "NÃ¡hled:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Pou¾ít"
+msgstr "PouÅ¾Ã­t"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "Vıbìr písma"
+msgstr "VÃ½bÄ›r pÃ­sma"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -181,11 +181,11 @@ msgstr "Vstup"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Nejsou vstupní zaøízení"
+msgstr "Nejsou vstupnÃ­ zaÅ™Ã­zenÃ­"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Zaøízení:"
+msgstr "ZaÅ™Ã­zenÃ­:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
@@ -201,7 +201,7 @@ msgstr "Okno"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Re¾im: "
+msgstr "ReÅ¾im: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
@@ -211,7 +211,7 @@ msgstr "Osy"
 #. Keys listbox
 #: gtk/gtkinputdialog.c:308
 msgid "Keys"
-msgstr "Klávesy"
+msgstr "KlÃ¡vesy"
 
 #. We create the save button in any case, so that clients can
 #. connect to it, without paying attention to whether it exits
@@ -233,11 +233,11 @@ msgstr "Tlak"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
-msgstr "Horizontální sklon"
+msgstr "HorizontÃ¡lnÃ­ sklon"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y Tilt"
-msgstr "Vertikální sklon"
+msgstr "VertikÃ¡lnÃ­ sklon"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Wheel"
@@ -245,7 +245,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:516
 msgid "none"
-msgstr "¾ádnı"
+msgstr "Å¾Ã¡dnÃ½"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
@@ -253,7 +253,7 @@ msgstr "(vypnuto)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(neznámá)"
+msgstr "(neznÃ¡mÃ¡)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
@@ -268,33 +268,33 @@ msgstr "Strana %u"
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "Obrázek \"%s\" (øádek %d) nebyl nalezen v pixmap_path."
+msgstr "ObrÃ¡zek \"%s\" (Å™Ã¡dek %d) nebyl nalezen v pixmap_path."
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Obrázek \"%s\" nebyl nalezen v pixmap_path."
+msgstr "ObrÃ¡zek \"%s\" nebyl nalezen v pixmap_path."
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Pøípojnı modul \"%s\" nebyl nalezen v module_path."
+msgstr "PÅ™Ã­pojnÃ½ modul \"%s\" nebyl nalezen v module_path."
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Není tip ---"
+msgstr "--- NenÃ­ tip ---"
 
 #~ msgid "Foundry:"
-#~ msgstr "Písmolijna:"
+#~ msgstr "PÃ­smolijna:"
 
 #~ msgid "Weight:"
-#~ msgstr "Øez:"
+#~ msgstr "Å˜ez:"
 
 #~ msgid "Slant:"
 #~ msgstr "Druh sklonu:"
 
 #~ msgid "Set Width:"
-#~ msgstr "Kresebná ¹íøka:"
+#~ msgstr "KresebnÃ¡ Å¡Ã­Å™ka:"
 
 #~ msgid "Pixel Size:"
 #~ msgstr "Velikost v pixelech:"
@@ -303,40 +303,40 @@ msgstr "--- Není tip ---"
 #~ msgstr "Velikost v bodech:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "Horizontální rozli¹ení:"
+#~ msgstr "HorizontÃ¡lnÃ­ rozliÅ¡enÃ­:"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "Vertikální rozli¹ení:"
+#~ msgstr "VertikÃ¡lnÃ­ rozliÅ¡enÃ­:"
 
 #~ msgid "Spacing:"
-#~ msgstr "Typ dle ¹íøky:"
+#~ msgstr "Typ dle Å¡Ã­Å™ky:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Prùmìrná ¹íøka:"
+#~ msgstr "PrÅ¯mÄ›rnÃ¡ Å¡Ã­Å™ka:"
 
 #~ msgid "Charset:"
-#~ msgstr "Znaková sada:"
+#~ msgstr "ZnakovÃ¡ sada:"
 
 #~ msgid "Font Property"
-#~ msgstr "Vlastnosti písma"
+#~ msgstr "Vlastnosti pÃ­sma"
 
 #~ msgid "Requested Value"
-#~ msgstr "Po¾adovaná hodnota"
+#~ msgstr "PoÅ¾adovanÃ¡ hodnota"
 
 #~ msgid "Actual Value"
-#~ msgstr "Souèasná hodnota"
+#~ msgstr "SouÄasnÃ¡ hodnota"
 
 #~ msgid "Font"
-#~ msgstr "Písmo"
+#~ msgstr "PÃ­smo"
 
 #~ msgid "Font:"
-#~ msgstr "Písmo:"
+#~ msgstr "PÃ­smo:"
 
 #~ msgid "Font Style:"
-#~ msgstr "Styl písma:"
+#~ msgstr "Styl pÃ­sma:"
 
 #~ msgid "Reset Filter"
-#~ msgstr "Zru¹it filtr"
+#~ msgstr "ZruÅ¡it filtr"
 
 #~ msgid "Metric:"
 #~ msgstr "Metrika:"
@@ -348,31 +348,31 @@ msgstr "--- Není tip ---"
 #~ msgstr "Pixely"
 
 #~ msgid "Font Information"
-#~ msgstr "Informace o písmu"
+#~ msgstr "Informace o pÃ­smu"
 
 #~ msgid "Requested Font Name:"
-#~ msgstr "Po¾adované jméno písma:"
+#~ msgstr "PoÅ¾adovanÃ© jmÃ©no pÃ­sma:"
 
 #~ msgid "Actual Font Name:"
-#~ msgstr "Souèasné jméno písma:"
+#~ msgstr "SouÄasnÃ© jmÃ©no pÃ­sma:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "Poèet dostupnıch písem/stylù je %i/%i."
+#~ msgstr "PoÄet dostupnÃ½ch pÃ­sem/stylÅ¯ je %i/%i."
 
 #~ msgid "Filter"
 #~ msgstr "Filtr"
 
 #~ msgid "Font Types:"
-#~ msgstr "Typy písma:"
+#~ msgstr "Typy pÃ­sma:"
 
 #~ msgid "Bitmap"
-#~ msgstr "Bitová mapa"
+#~ msgstr "BitovÃ¡ mapa"
 
 #~ msgid "Scalable"
-#~ msgstr "Vektorové"
+#~ msgstr "VektorovÃ©"
 
 #~ msgid "Scaled Bitmap"
-#~ msgstr "Pøepoèítaná bitová mapa"
+#~ msgstr "PÅ™epoÄÃ­tanÃ¡ bitovÃ¡ mapa"
 
 #~ msgid "*"
 #~ msgstr "*"
@@ -381,79 +381,79 @@ msgstr "--- Není tip ---"
 #~ msgstr "(nil)"
 
 #~ msgid "regular"
-#~ msgstr "obyèejnı"
+#~ msgstr "obyÄejnÃ½"
 
 #~ msgid "italic"
-#~ msgstr "kurzíva"
+#~ msgstr "kurzÃ­va"
 
 #~ msgid "oblique"
-#~ msgstr "sklonìnı"
+#~ msgstr "sklonÄ›nÃ½"
 
 #~ msgid "reverse italic"
-#~ msgstr "obrácená kurzíva"
+#~ msgstr "obrÃ¡cenÃ¡ kurzÃ­va"
 
 #~ msgid "reverse oblique"
-#~ msgstr "obrácenì sklonìnı"
+#~ msgstr "obrÃ¡cenÄ› sklonÄ›nÃ½"
 
 #~ msgid "other"
-#~ msgstr "jinı"
+#~ msgstr "jinÃ½"
 
 #~ msgid "[M]"
-#~ msgstr "[P©]"
+#~ msgstr "[PÅ ]"
 
 #~ msgid "[C]"
 #~ msgstr "[PB]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "Vybrané písmo není dostupné."
+#~ msgstr "VybranÃ© pÃ­smo nenÃ­ dostupnÃ©."
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "Vybrané písmo není platnım písmem."
+#~ msgstr "VybranÃ© pÃ­smo nenÃ­ platnÃ½m pÃ­smem."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Toto je dvoubajtové písmo a nemusí bıt zobrazeno správnì."
+#~ msgstr "Toto je dvoubajtovÃ© pÃ­smo a nemusÃ­ bÃ½t zobrazeno sprÃ¡vnÄ›."
 
 #~ msgid "roman"
-#~ msgstr "stojatı"
+#~ msgstr "stojatÃ½"
 
 #~ msgid "proportional"
-#~ msgstr "proporcionální"
+#~ msgstr "proporcionÃ¡lnÃ­"
 
 #~ msgid "monospaced"
-#~ msgstr "pevná ¹íøka"
+#~ msgstr "pevnÃ¡ Å¡Ã­Å™ka"
 
 #~ msgid "char cell"
-#~ msgstr "pevnı blok"
+#~ msgstr "pevnÃ½ blok"
 
 #~ msgid "Font: (Filter Applied)"
-#~ msgstr "Písmo: (pou¾it filtr)"
+#~ msgstr "PÃ­smo: (pouÅ¾it filtr)"
 
 #~ msgid "heavy"
-#~ msgstr "tì¾kı"
+#~ msgstr "tÄ›Å¾kÃ½"
 
 #~ msgid "extrabold"
-#~ msgstr "velmi tuènı"
+#~ msgstr "velmi tuÄnÃ½"
 
 #~ msgid "bold"
-#~ msgstr "tuènı"
+#~ msgstr "tuÄnÃ½"
 
 #~ msgid "demibold"
-#~ msgstr "polotuènı"
+#~ msgstr "polotuÄnÃ½"
 
 #~ msgid "medium"
-#~ msgstr "støední"
+#~ msgstr "stÅ™ednÃ­"
 
 #~ msgid "normal"
-#~ msgstr "bì¾nı"
+#~ msgstr "bÄ›Å¾nÃ½"
 
 #~ msgid "light"
-#~ msgstr "svìtlı"
+#~ msgstr "svÄ›tlÃ½"
 
 #~ msgid "extralight"
-#~ msgstr "velmi svìtlı"
+#~ msgstr "velmi svÄ›tlÃ½"
 
 #~ msgid "thin"
-#~ msgstr "tenkı"
+#~ msgstr "tenkÃ½"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "Pøekroèeno MAX_FONTS. Nìkterá písma mohou chybìt."
+#~ msgstr "PÅ™ekroÄeno MAX_FONTS. NÄ›kterÃ¡ pÃ­sma mohou chybÄ›t."

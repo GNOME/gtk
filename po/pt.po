@@ -10,7 +10,7 @@ msgstr ""
 "Last-Translator: Nuno Ferreira <nmrf@rnl.ist.utl.pt>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
@@ -19,7 +19,7 @@ msgstr "Brilho:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
-msgstr "SaturaÁ„o:"
+msgstr "Satura√ß√£o:"
 
 #: gtk/gtkcolorsel.c:1422
 msgid "Value:"
@@ -84,7 +84,7 @@ msgstr "Ficheiros"
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
 msgid "Directory unreadable: %s"
-msgstr "Directoria ilegÌvel: %s"
+msgstr "Directoria ileg√≠vel: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
@@ -137,11 +137,11 @@ msgstr "Renomear"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "SelecÁ„o: "
+msgstr "Selec√ß√£o: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
-msgstr "FamÌlia:"
+msgstr "Fam√≠lia:"
 
 #: gtk/gtkfontsel.c:194
 #, fuzzy
@@ -163,7 +163,7 @@ msgstr "Aplicar"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
-msgstr "SelecÁ„o de Fonte"
+msgstr "Selec√ß√£o de Fonte"
 
 #: gtk/gtkgamma.c:395
 msgid "Gamma"
@@ -192,7 +192,7 @@ msgstr "Inactivo"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "Ecr„"
+msgstr "Ecr√£"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
@@ -228,7 +228,7 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "Press„o"
+msgstr "Press√£o"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
@@ -262,22 +262,22 @@ msgstr "limpar"
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "P·gina %u"
+msgstr "P√°gina %u"
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "N„o encontrei ficheiro de imagem na pixmap_path: \"%s\" linha %d"
+msgstr "N√£o encontrei ficheiro de imagem na pixmap_path: \"%s\" linha %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "N„o encontrei ficheiro de imagem na pixmap_path: \"%s\""
+msgstr "N√£o encontrei ficheiro de imagem na pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "N„o encontrei mÛdulo na module_path: \"%s\","
+msgstr "N√£o encontrei m√≥dulo na module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -287,10 +287,10 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "Peso:"
 
 #~ msgid "Slant:"
-#~ msgstr "InclinaÁ„o:"
+#~ msgstr "Inclina√ß√£o:"
 
 #~ msgid "Set Width:"
-#~ msgstr "EspaÁamento:"
+#~ msgstr "Espa√ßamento:"
 
 #~ msgid "Pixel Size:"
 #~ msgstr "Tamanho em Pixeis:"
@@ -299,16 +299,16 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "Tamanho em Pontos:"
 
 #~ msgid "Resolution X:"
-#~ msgstr "ResoluÁ„o X:"
+#~ msgstr "Resolu√ß√£o X:"
 
 #~ msgid "Resolution Y:"
-#~ msgstr "ResoluÁ„o Y:"
+#~ msgstr "Resolu√ß√£o Y:"
 
 #~ msgid "Spacing:"
-#~ msgstr "EspaÁamento:"
+#~ msgstr "Espa√ßamento:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Largura MÈdia:"
+#~ msgstr "Largura M√©dia:"
 
 #~ msgid "Charset:"
 #~ msgstr "Charset:"
@@ -335,7 +335,7 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "Limpar Filtro"
 
 #~ msgid "Metric:"
-#~ msgstr "MÈtrica:"
+#~ msgstr "M√©trica:"
 
 #~ msgid "Points"
 #~ msgstr "Pontos"
@@ -344,7 +344,7 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "Pixels"
 
 #~ msgid "Font Information"
-#~ msgstr "InformaÁ„o da Fonte"
+#~ msgstr "Informa√ß√£o da Fonte"
 
 #~ msgid "Requested Font Name:"
 #~ msgstr "Nome de Fonte Pedido:"
@@ -353,7 +353,7 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "Fonte de Nome Real:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i fontes disponÌveis com um total de %i estilos."
+#~ msgstr "%i fontes dispon√≠veis com um total de %i estilos."
 
 #~ msgid "Filter"
 #~ msgstr "Filtro"
@@ -365,7 +365,7 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "Imagem"
 
 #~ msgid "Scalable"
-#~ msgstr "Escal·vel"
+#~ msgstr "Escal√°vel"
 
 #~ msgid "Scaled Bitmap"
 #~ msgstr "Bitmap Escalado"
@@ -377,16 +377,16 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "regular"
 
 #~ msgid "italic"
-#~ msgstr "it·lico"
+#~ msgstr "it√°lico"
 
 #~ msgid "oblique"
-#~ msgstr "oblÌquo"
+#~ msgstr "obl√≠quo"
 
 #~ msgid "reverse italic"
-#~ msgstr "it·lico invertido"
+#~ msgstr "it√°lico invertido"
 
 #~ msgid "reverse oblique"
-#~ msgstr "oblÌquo invertido"
+#~ msgstr "obl√≠quo invertido"
 
 #~ msgid "other"
 #~ msgstr "outro"
@@ -398,13 +398,13 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "[C]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "A fonte seleccionada n„o est· disponÌvel."
+#~ msgstr "A fonte seleccionada n√£o est√° dispon√≠vel."
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "A fonte seleccionada n„o È uma fonte v·lida."
+#~ msgstr "A fonte seleccionada n√£o √© uma fonte v√°lida."
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Esta È uma fonte de 2 bytes e pode n„o ser mostrada correctamente."
+#~ msgstr "Esta √© uma fonte de 2 bytes e pode n√£o ser mostrada correctamente."
 
 #~ msgid "roman"
 #~ msgstr "romano"
@@ -413,7 +413,7 @@ msgstr "--- Sem Ajuda ---"
 #~ msgstr "proporcional"
 
 #~ msgid "monospaced"
-#~ msgstr "monoespaÁada"
+#~ msgstr "monoespa√ßada"
 
 #~ msgid "Font: (Filter Applied)"
 #~ msgstr "Fonte: (Filtro Aplicado)"

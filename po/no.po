@@ -1,4 +1,4 @@
-# Norwegian translation of gtk+ (bokmål dialect).
+# Norwegian translation of gtk+ (bokmÃ¥l dialect).
 # Copyright (C) 1998,1999 Free Software Foundation, Inc.
 # Kjartan Maraas <kmaraas@online.no>, 1998,1999.
 #
@@ -10,12 +10,12 @@ msgstr ""
 "Last-Translator: Kjartan Maraas <kmaraas@online.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
 #: gtk/gtkcolorsel.c:1420
 msgid "Hue:"
-msgstr "Glød:"
+msgstr "GlÃ¸d:"
 
 #: gtk/gtkcolorsel.c:1421
 msgid "Saturation:"
@@ -27,15 +27,15 @@ msgstr "Verdi:"
 
 #: gtk/gtkcolorsel.c:1423
 msgid "Red:"
-msgstr "Rød:"
+msgstr "RÃ¸d:"
 
 #: gtk/gtkcolorsel.c:1424
 msgid "Green:"
-msgstr "Grønn:"
+msgstr "GrÃ¸nn:"
 
 #: gtk/gtkcolorsel.c:1425
 msgid "Blue:"
-msgstr "Blå:"
+msgstr "BlÃ¥:"
 
 #: gtk/gtkcolorsel.c:1428
 msgid "Opacity:"
@@ -148,12 +148,12 @@ msgstr "Stil:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
-msgstr "Størrelse:"
+msgstr "StÃ¸rrelse:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:309
 msgid "Preview:"
-msgstr "Forhåndsvisning:"
+msgstr "ForhÃ¥ndsvisning:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
@@ -186,7 +186,7 @@ msgstr "Enhet:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Slått av"
+msgstr "SlÃ¥tt av"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -246,7 +246,7 @@ msgstr "ingen"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(slått av)"
+msgstr "(slÃ¥tt av)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
@@ -255,7 +255,7 @@ msgstr "(ukjent)"
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "tøm"
+msgstr "tÃ¸m"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format

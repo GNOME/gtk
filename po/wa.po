@@ -1,8 +1,8 @@
 # Translation into the walloon language.
 #
-# Si vos voloz donner on côp di spale pol ratoûrnaedje di Gnome (ou des
-# ôtes libes programes) sicrijhoz-mu a l' adresse emile
-# <srtxg@chanae.alphanet.ch>; nos avans co bråmint di l' ovraedje a fé.
+# Si vos voloz donner on cÃ´p di spale pol ratoÃ»rnaedje di Gnome (ou des
+# Ã´tes libes programes) sicrijhoz-mu a l' adresse emile
+# <srtxg@chanae.alphanet.ch>; nos avans co brÃ¥mint di l' ovraedje a fÃ©.
 #
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch> 1999-2000
@@ -16,7 +16,7 @@ msgstr ""
 "Last-Translator: Pablo Saratxaga <srtxg@chanae.alphanet.ch>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:1420
@@ -71,7 +71,7 @@ msgstr "I Va"
 #: gtk/gtkfilesel.c:1067 gtk/gtkfilesel.c:1182 gtk/gtkfontsel.c:965
 #: gtk/gtkgamma.c:423
 msgid "Cancel"
-msgstr "Rinoncî"
+msgstr "RinoncÃ®"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Help"
@@ -85,7 +85,7 @@ msgstr "Ridants"
 #. The files clist
 #: gtk/gtkfilesel.c:534
 msgid "Files"
-msgstr "Fitchîs"
+msgstr "FitchÃ®s"
 
 #: gtk/gtkfilesel.c:605 gtk/gtkfilesel.c:1621
 #, c-format
@@ -94,15 +94,15 @@ msgstr "Dji n' sai lere li ridant: %s"
 
 #: gtk/gtkfilesel.c:637
 msgid "Create Dir"
-msgstr "Fé on Ridant"
+msgstr "FÃ© on Ridant"
 
 #: gtk/gtkfilesel.c:648 gtk/gtkfilesel.c:1036
 msgid "Delete File"
-msgstr "Rafacer li fitchî"
+msgstr "Rafacer li fitchÃ®"
 
 #: gtk/gtkfilesel.c:659 gtk/gtkfilesel.c:1140
 msgid "Rename File"
-msgstr "Rlomer li fitchî"
+msgstr "Rlomer li fitchÃ®"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -116,11 +116,11 @@ msgstr "Aroke"
 #. close button
 #: gtk/gtkfilesel.c:851 gtk/gtkinputdialog.c:338
 msgid "Close"
-msgstr "Clôre"
+msgstr "ClÃ´re"
 
 #: gtk/gtkfilesel.c:927
 msgid "Create Directory"
-msgstr "Fé on Ridant"
+msgstr "FÃ© on Ridant"
 
 #: gtk/gtkfilesel.c:941
 msgid "Directory name:"
@@ -129,7 +129,7 @@ msgstr "No do ridant:"
 #. buttons
 #: gtk/gtkfilesel.c:954
 msgid "Create"
-msgstr "Fé"
+msgstr "FÃ©"
 
 #. buttons
 #: gtk/gtkfilesel.c:1058
@@ -143,7 +143,7 @@ msgstr "Rlomer"
 
 #: gtk/gtkfilesel.c:1600
 msgid "Selection: "
-msgstr "Tchûze: "
+msgstr "TchÃ»ze: "
 
 #: gtk/gtkfontsel.c:189
 msgid "Family:"
@@ -152,7 +152,7 @@ msgstr "Famile:"
 #: gtk/gtkfontsel.c:194
 #, fuzzy
 msgid "Style:"
-msgstr "Stîle di Rawete:"
+msgstr "StÃ®le di Rawete:"
 
 #: gtk/gtkfontsel.c:199
 msgid "Size:"
@@ -165,7 +165,7 @@ msgstr "Vey divant:"
 
 #: gtk/gtkfontsel.c:959
 msgid "Apply"
-msgstr "Mete èn oûve"
+msgstr "Mete Ã¨n oÃ»ve"
 
 #: gtk/gtkfontsel.c:981
 msgid "Font Selection"
@@ -186,19 +186,19 @@ msgstr "Intreye"
 
 #: gtk/gtkinputdialog.c:193
 msgid "No input devices"
-msgstr "Nole éndjin d' intreye"
+msgstr "Nole Ã©ndjin d' intreye"
 
 #: gtk/gtkinputdialog.c:222
 msgid "Device:"
-msgstr "Éndjin:"
+msgstr "Ã‰ndjin:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr "Essocté"
+msgstr "EssoctÃ©"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
-msgstr "Waitroûle"
+msgstr "WaitroÃ»le"
 
 #: gtk/gtkinputdialog.c:254
 msgid "Window"
@@ -206,7 +206,7 @@ msgstr "Purnea"
 
 #: gtk/gtkinputdialog.c:262
 msgid "Mode: "
-msgstr "Môde: "
+msgstr "MÃ´de: "
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:292
@@ -234,7 +234,7 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:473
 msgid "Pressure"
-msgstr "Tchôke"
+msgstr "TchÃ´ke"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X Tilt"
@@ -254,37 +254,37 @@ msgstr "nole"
 
 #: gtk/gtkinputdialog.c:550 gtk/gtkinputdialog.c:586
 msgid "(disabled)"
-msgstr "(essocté)"
+msgstr "(essoctÃ©)"
 
 #: gtk/gtkinputdialog.c:579
 msgid "(unknown)"
-msgstr "(nén cnoxhu)"
+msgstr "(nÃ©n cnoxhu)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "netyî"
+msgstr "netyÃ®"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
 msgid "Page %u"
-msgstr "Pådje %u"
+msgstr "PÃ¥dje %u"
 
 #: gtk/gtkrc.c:1872
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
-"Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\" al roye %d"
+"Dji n' pout nÃ©n trover on fitchÃ® imÃ¥dje Ã¨ pixmap_path: \"%s\" al roye %d"
 
 #: gtk/gtkrc.c:1875
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Dji n' pout nén trover on fitchî imådje è pixmap_path: \"%s\""
+msgstr "Dji n' pout nÃ©n trover on fitchÃ® imÃ¥dje Ã¨ pixmap_path: \"%s\""
 
 #: gtk/gtkthemes.c:117
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
-msgstr "Dji n' pout nén trover on module tcherdjåve è module_path: \"%s\","
+msgstr "Dji n' pout nÃ©n trover on module tcherdjÃ¥ve Ã¨ module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
@@ -300,13 +300,13 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "Clintchaedje"
 
 #~ msgid "Set Width:"
-#~ msgstr "Lårdjeu:"
+#~ msgstr "LÃ¥rdjeu:"
 
 #~ msgid "Pixel Size:"
-#~ msgstr "Grandeu è Pixels:"
+#~ msgstr "Grandeu Ã¨ Pixels:"
 
 #~ msgid "Point Size:"
-#~ msgstr "Grandeu è Ponts:"
+#~ msgstr "Grandeu Ã¨ Ponts:"
 
 #~ msgid "Resolution X:"
 #~ msgstr "Spexheu x:"
@@ -318,13 +318,13 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "Espacemint:"
 
 #~ msgid "Average Width:"
-#~ msgstr "Emetrinne lårdjeu"
+#~ msgstr "Emetrinne lÃ¥rdjeu"
 
 #~ msgid "Charset:"
-#~ msgstr "Ecôdaeje:"
+#~ msgstr "EcÃ´daeje:"
 
 #~ msgid "Font Property"
-#~ msgstr "Prôpietés del fonte"
+#~ msgstr "PrÃ´pietÃ©s del fonte"
 
 #~ msgid "Requested Value"
 #~ msgstr "Valixhance dimandeye"
@@ -339,7 +339,7 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "Fonte:"
 
 #~ msgid "Font Style:"
-#~ msgstr "Stîle del fonte:"
+#~ msgstr "StÃ®le del fonte:"
 
 #~ msgid "Reset Filter"
 #~ msgstr "Renonder passete"
@@ -354,7 +354,7 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "Pixels"
 
 #~ msgid "Font Information"
-#~ msgstr "Informåcion sol Fonte"
+#~ msgstr "InformÃ¥cion sol Fonte"
 
 #~ msgid "Requested Font Name:"
 #~ msgstr "No del fonte dimandeye:"
@@ -363,22 +363,22 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "Vrai no del fonte:"
 
 #~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i fontes avou on totå di %i stîles."
+#~ msgstr "%i fontes avou on totÃ¥ di %i stÃ®les."
 
 #~ msgid "Filter"
 #~ msgstr "Passete"
 
 #~ msgid "Font Types:"
-#~ msgstr "Sôrtes di Fontes:"
+#~ msgstr "SÃ´rtes di Fontes:"
 
 #~ msgid "Bitmap"
 #~ msgstr "Bitmap"
 
 #~ msgid "Scalable"
-#~ msgstr "Vectoriå"
+#~ msgstr "VectoriÃ¥"
 
 #~ msgid "Scaled Bitmap"
-#~ msgstr "Bitmap al schåle"
+#~ msgstr "Bitmap al schÃ¥le"
 
 #~ msgid "*"
 #~ msgstr "*"
@@ -387,7 +387,7 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "(nole)"
 
 #~ msgid "regular"
-#~ msgstr "normåles"
+#~ msgstr "normÃ¥les"
 
 #~ msgid "italic"
 #~ msgstr "clintcheyes"
@@ -396,13 +396,13 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "oblikes"
 
 #~ msgid "reverse italic"
-#~ msgstr "clintcheyes å rvier"
+#~ msgstr "clintcheyes Ã¥ rvier"
 
 #~ msgid "reverse oblique"
-#~ msgstr "oblikes å rvier"
+#~ msgstr "oblikes Ã¥ rvier"
 
 #~ msgid "other"
-#~ msgstr "ôte"
+#~ msgstr "Ã´te"
 
 #~ msgid "[M]"
 #~ msgstr "[M]"
@@ -411,56 +411,56 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "[C]"
 
 #~ msgid "The selected font is not available."
-#~ msgstr "Vos n' avoz nén li fonte ki vos avoz tchwezi"
+#~ msgstr "Vos n' avoz nÃ©n li fonte ki vos avoz tchwezi"
 
 #~ msgid "The selected font is not a valid font."
-#~ msgstr "Li fonte ki vos avoz tchwezi n' est nén valåbe"
+#~ msgstr "Li fonte ki vos avoz tchwezi n' est nÃ©n valÃ¥be"
 
 #~ msgid "This is a 2-byte font and may not be displayed correctly."
 #~ msgstr ""
-#~ "Ci fonte est ecôdeye so 2 octets, èt mutwet pout nén esse håyneye comufåt"
+#~ "Ci fonte est ecÃ´deye so 2 octets, Ã¨t mutwet pout nÃ©n esse hÃ¥yneye comufÃ¥t"
 
 #~ msgid "roman"
 #~ msgstr "romane"
 
 #~ msgid "proportional"
-#~ msgstr "propôrcionel"
+#~ msgstr "propÃ´rcionel"
 
 #~ msgid "monospaced"
-#~ msgstr "d' espåçmint egål"
+#~ msgstr "d' espÃ¥Ã§mint egÃ¥l"
 
 #~ msgid "char cell"
 #~ msgstr "caracteres-bloc"
 
 #~ msgid "Font: (Filter Applied)"
-#~ msgstr "Fonte: (passete eployî)"
+#~ msgstr "Fonte: (passete eployÃ®)"
 
 #~ msgid "heavy"
 #~ msgstr "pezantes"
 
 #~ msgid "extrabold"
-#~ msgstr "foirt cråsses"
+#~ msgstr "foirt crÃ¥sses"
 
 #~ msgid "bold"
-#~ msgstr "cråsses"
+#~ msgstr "crÃ¥sses"
 
 #~ msgid "demibold"
-#~ msgstr "demi cråsses"
+#~ msgstr "demi crÃ¥sses"
 
 #~ msgid "medium"
-#~ msgstr "moyénnes"
+#~ msgstr "moyÃ©nnes"
 
 #~ msgid "normal"
 #~ msgstr "miernuwes"
 
 #~ msgid "light"
-#~ msgstr "ledjîres"
+#~ msgstr "ledjÃ®res"
 
 #~ msgid "extralight"
-#~ msgstr "foirt ledjîres"
+#~ msgstr "foirt ledjÃ®res"
 
 #~ msgid "thin"
 #~ msgstr "tenes"
 
 #~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS passé. Sacwantès fontes polèt manker"
+#~ msgstr "MAX_FONTS passÃ©. SacwantÃ¨s fontes polÃ¨t manker"
