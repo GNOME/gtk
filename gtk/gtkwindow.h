@@ -185,7 +185,8 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 						GdkWindowHints       geom_mask);
 
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
-void       gtk_window_set_has_frame            (GtkWindow *window);
+void       gtk_window_set_has_frame            (GtkWindow *window, 
+						gboolean   setting);
 void       gtk_window_set_frame_dimensions     (GtkWindow *window, 
 						gint       left,
 						gint       top,

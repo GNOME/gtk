@@ -3096,24 +3096,26 @@ gtk_window_expose (GtkWidget      *widget,
 /**
  * gtk_window_set_has_frame:
  * @window: a #GtkWindow
+ * @setting: a boolean
  * 
- * If this function is called on a window before it is realized
- * or showed it will have a "frame" window around widget-window,
- * accessible in window->frame. Using the signal frame_event
- * you can recieve all events targeted at the frame.
+ * If this function is called on a window with setting of TRUE, before
+ * it is realized or showed, it will have a "frame" window around
+ * widget-window, accessible in window->frame. Using the signal 
+ * frame_event you can recieve all events targeted at the frame.
  * 
  * This function is used by the linux-fb port to implement managed
  * windows, but it could concievably be used by X-programs that
  * want to do their own window decorations.
  **/
 void
-gtk_window_set_has_frame (GtkWindow *window)
+gtk_window_set_has_frame (GtkWindow *window, 
+			  gboolean   setting)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (!GTK_WIDGET_REALIZED (window));
 
-  window->has_frame = TRUE;
+  window->has_frame = setting;
 }
 
 /**
