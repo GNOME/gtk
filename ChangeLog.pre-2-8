@@ -2,7 +2,7 @@ Mon Feb 16 18:26:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_set_child_property): Call
 	gtk_tool_item_set_expand(), not gtk_tool_item_set_homogeneous()
-	in the CHILD_PROP_EXPAND branch. (#134545, Damon Chaplin)
+	in the CHILD_PROP_EXPAND branch. (#134543, Damon Chaplin)
 
 Mon Feb 16 00:04:46 2004  Matthias Clasen  <maclas@gmx.de>
 
