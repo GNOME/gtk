@@ -1,3 +1,10 @@
+Fri May  1 16:36:08 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gutils.c: (g_strcasecmp). Check for isupper before
+	taking tolower, and account for macroized tolower.
+
+	* gutils.c (g_error): Check for recursion.
+
 Thu Apr 30 21:41:30 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gstring.c : Check arguments more carefully, 
