@@ -179,8 +179,8 @@ Window        gdk_get_client_window      (Display  *dpy,
                                           Window    win);
 
 /* Functions to create pixmaps and windows from their X equivalents */
-GdkPixmap   *gdk_pixmap_foreign_new_for_screen (GdkNativeWindow anid,
-						GdkScreen * screen);
+GdkPixmap   *gdk_pixmap_foreign_new_for_screen (GdkScreen * screen,
+						GdkNativeWindow anid);
 
 GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
 GdkWindow    *gdk_window_foreign_new_for_display (GdkDisplay * display,
@@ -194,8 +194,8 @@ guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
 /* returns TRUE if we support the given WM spec feature */
 gboolean      gdk_net_wm_supports      (GdkAtom property);
-gboolean      gdk_net_wm_supports_for_screen (GdkAtom property,
-					      GdkScreen * screen);
+gboolean      gdk_net_wm_supports_for_screen (GdkScreen * screen,
+					      GdkAtom property);
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))

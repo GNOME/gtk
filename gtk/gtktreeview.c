@@ -1757,8 +1757,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  gdk_window_move_resize (tree_view->priv->drag_highlight_window,
 				  tree_view->priv->drag_column_x, 0, width, height);
       
-	  mask = gdk_pixmap_new_for_screen (tree_view->priv->drag_highlight_window,
-					widget->screen,	width, height, 1);
+	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+
 	  gc = gdk_gc_new (mask);
 	  col.pixel = 1;
 	  gdk_gc_set_foreground (gc, &col);
@@ -1819,8 +1819,8 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  tree_view->priv->drag_highlight_window = gdk_window_new_for_screen (widget->screen, NULL, &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
-	  mask = gdk_pixmap_new_for_screen (tree_view->priv->drag_highlight_window, 
-					widget->screen, width, height, 1);
+	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
+
 	  gc = gdk_gc_new (mask);
 	  col.pixel = 1;
 	  gdk_gc_set_foreground (gc, &col);
@@ -7675,11 +7675,8 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gdk_drawable_get_size (tree_view->priv->bin_window,
                          &bin_window_width, NULL);
 
-  drawable = gdk_pixmap_new_for_screen (tree_view->priv->bin_window,
-					widget->screen,
-					bin_window_width + 2,
-					background_area.height + 2,
-					-1);
+  drawable = gdk_pixmap_new (tree_view->priv->bin_window, bin_window_width + 2, background_area.height + 2, -1);
+
 
   gdk_draw_rectangle (drawable,
                       widget->style->base_gc[GTK_WIDGET_STATE (widget)],

@@ -177,9 +177,8 @@ gtk_gc_new (gpointer key)
     {
       drawable = g_new (GtkGCDrawable, 1);
       drawable->depth = keyval->depth;
-      drawable->drawable = gdk_pixmap_new_for_screen (NULL, 
-						      keyval->colormap->screen,
-						      1, 1, drawable->depth);
+      drawable->drawable = gdk_pixmap_new (gdk_screen_get_parent_root(keyval->colormap->screen), 1, 1, drawable->depth);
+
       g_hash_table_insert (ht, &drawable->depth, drawable);
     }
 

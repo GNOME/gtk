@@ -982,8 +982,8 @@ paint_ring (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new_for_screen (NULL,GTK_WIDGET(hsv)->screen,
-				    width, height, 1);
+  mask = gdk_pixmap_new (gdk_screen_get_parent_root(GTK_WIDGET(hsv)->screen), width, height, 1);
+
   gc = gdk_gc_new (mask);
   
   color.pixel = 0;
@@ -1217,8 +1217,8 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new_for_screen (NULL, GTK_WIDGET(hsv)->screen,
-				    width, height, 1);
+  mask = gdk_pixmap_new (gdk_screen_get_parent_root(GTK_WIDGET(hsv)->screen), width, height, 1);
+
   gc = gdk_gc_new (mask);
   
   color.pixel = 0;
@@ -1330,10 +1330,8 @@ gtk_hsv_expose (GtkWidget      *widget,
   if (!gdk_rectangle_intersect (&event->area, &rect, &dest))
     return FALSE;
   
-  pixmap = gdk_pixmap_new_for_screen (widget->window, 
-				      widget->screen,
-				      dest.width, dest.height,
-				      gtk_widget_get_visual (widget)->depth);
+  pixmap = gdk_pixmap_new (widget->window, dest.width, dest.height, gtk_widget_get_visual (widget)->depth);
+
   
   rect = dest;
   rect.x = 0;

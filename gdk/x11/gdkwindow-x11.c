@@ -1161,10 +1161,8 @@ gdk_window_focus (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
-  if (gdk_net_wm_supports_for_screen (
-		gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_ACTIVE_WINDOW", FALSE),
-
-		GDK_WINDOW_SCREEN(window)))
+  if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
+  	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_ACTIVE_WINDOW", FALSE)))
     {
       XEvent xev;
 
@@ -2352,9 +2350,8 @@ gdk_window_set_icon_list (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return FALSE;
 
-  if (!gdk_net_wm_supports_for_screen(gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON", FALSE),
-
-			    GDK_WINDOW_SCREEN(window)))
+  if (!gdk_net_wm_supports_for_screen(GDK_WINDOW_SCREEN(window),
+  	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON", FALSE)))
     return FALSE;
   
   l = pixbufs;
@@ -3891,10 +3888,8 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (gdk_net_wm_supports_for_screen (
-	    gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE),
-
-	    GDK_WINDOW_SCREEN(window)))
+  if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
+	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE)))
     wmspec_resize_drag (window, edge, button, root_x, root_y, timestamp);
   else
     emulate_resize_drag (window, edge, button, root_x, root_y, timestamp);
@@ -3914,10 +3909,8 @@ gdk_window_begin_move_drag (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (gdk_net_wm_supports_for_screen (
-	    gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE),
-
-	    GDK_WINDOW_SCREEN(window)))
+  if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
+	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE)))
     wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE,
                        root_x, root_y, timestamp);
   else

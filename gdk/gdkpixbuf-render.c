@@ -316,9 +316,8 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
     {
       if (alpha_mode == GDK_PIXBUF_ALPHA_BILEVEL)
         {
-          bitmap = gdk_pixmap_new_for_screen (NULL,
-			  gdk_drawable_get_screen(drawable),
-					      width, height, 1);
+          bitmap = gdk_pixmap_new (gdk_screen_get_parent_root(gdk_drawable_get_screen(drawable)), width, height, 1);
+
           gdk_pixbuf_render_threshold_alpha (pixbuf, bitmap,
                                              src_x, src_y,
                                              0, 0,
@@ -419,9 +418,8 @@ gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
     {
       GdkGC *gc;
       
-      *pixmap_return = gdk_pixmap_new_for_screen (NULL, screen,	
-				       pixbuf->width, pixbuf->height,
-				       gdk_rgb_get_visual ()->depth);
+      *pixmap_return = gdk_pixmap_new (gdk_screen_get_parent_root(screen), pixbuf->width, pixbuf->height, gdk_rgb_get_visual ()->depth);
+
       gc = gdk_gc_new (*pixmap_return);
       gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
 				     0, 0, 0, 0,
@@ -435,8 +433,8 @@ gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
     {
       if (pixbuf->has_alpha)
 	{
-	  *mask_return = gdk_pixmap_new_for_screen (NULL, screen,
-					pixbuf->width, pixbuf->height, 1);
+	  *mask_return = gdk_pixmap_new (gdk_screen_get_parent_root(screen), pixbuf->width, pixbuf->height, 1);
+
 	  gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
 					     0, 0, 0, 0,
 					     pixbuf->width, pixbuf->height,

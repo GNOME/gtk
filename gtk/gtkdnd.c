@@ -589,15 +589,11 @@ gtk_drag_get_cursor (GdkDragAction action, GdkScreen *screen)
       GdkColor fg, bg;
 
       GdkPixmap *pixmap = 
-	gdk_bitmap_create_from_data_for_screen (NULL,
-						screen,
-						drag_cursors[i].bits,
-						CURSOR_WIDTH, CURSOR_HEIGHT);
+	gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), drag_cursors[i].bits, CURSOR_WIDTH, CURSOR_HEIGHT);
+
       GdkPixmap *mask = 
-	gdk_bitmap_create_from_data_for_screen (NULL,
-						screen,			
-						drag_cursors[i].mask,
-						CURSOR_WIDTH, CURSOR_HEIGHT);
+	gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), drag_cursors[i].mask, CURSOR_WIDTH, CURSOR_HEIGHT);
+
 
       gdk_color_white (gdk_colormap_get_system_for_screen (screen), &bg);
       gdk_color_black (gdk_colormap_get_system_for_screen (screen), &fg);

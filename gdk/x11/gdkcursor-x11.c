@@ -35,7 +35,8 @@
 #include <gdk/gdkinternals.h>
 
 GdkCursor *
-gdk_cursor_new_for_screen (GdkCursorType cursor_type, GdkScreen * screen)
+gdk_cursor_new_for_screen (GdkScreen * screen, GdkCursorType cursor_type)
+
 {
 
   GdkCursorPrivate *private;
@@ -57,7 +58,8 @@ GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
   GDK_NOTE(MULTIHEAD,g_message("Use gdk_cursor_new_for_screen instead\n"));
-  return gdk_cursor_new_for_screen(cursor_type,DEFAULT_GDK_SCREEN);
+  return gdk_cursor_new_for_screen (DEFAULT_GDK_SCREEN, cursor_type);
+
 }
 
 GdkCursor*

@@ -145,9 +145,8 @@ gdk_pixmap_impl_x11_get_size   (GdkDrawable *drawable,
 }
 
 GdkPixmap *
-gdk_pixmap_new_for_screen (GdkWindow * window,
-			   GdkScreen * screen,
-			   gint width, gint height, gint depth)
+gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
+
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -159,7 +158,11 @@ gdk_pixmap_new_for_screen (GdkWindow * window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
-    window = GDK_SCREEN_IMPL_X11 (screen)->parent_root;
+  {
+    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window",
+		                   "for gdk_pixmap_new to be multihead safe"));
+    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->parent_root;
+  }
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -193,22 +196,11 @@ gdk_pixmap_new_for_screen (GdkWindow * window,
   return pixmap;
 }
 
-
-
-GdkPixmap*
-gdk_pixmap_new (GdkWindow *window,
-		gint       width,
-		gint       height,
-		gint       depth)
-{
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pixmap_new_for_screen instead\n"));
-  return gdk_pixmap_new_for_screen(window,DEFAULT_GDK_SCREEN,width,height,depth);
-}
 GdkPixmap *
-gdk_bitmap_create_from_data_for_screen (GdkWindow * window,
-					GdkScreen * screen,
-					const gchar * data,
-					gint width, gint height)
+gdk_bitmap_create_from_data (GdkWindow   *window,
+			     const gchar *data,
+			     gint         width,
+			     gint         height)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -218,8 +210,12 @@ gdk_bitmap_create_from_data_for_screen (GdkWindow * window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
 
-  if (!window)
-    window = GDK_SCREEN_IMPL_X11 (screen)->parent_root;
+  if (!window) 
+  {
+    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window",
+		                   "for gdk_bitmap_create_from_data to be multihead safe"));
+    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->parent_root;
+  }
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -243,29 +239,16 @@ gdk_bitmap_create_from_data_for_screen (GdkWindow * window,
 
   return pixmap;
 }
-GdkPixmap *
-gdk_bitmap_create_from_data (GdkWindow   *window,
+
+GdkPixmap*
+gdk_pixmap_create_from_data (GdkWindow   *window,
 			     const gchar *data,
 			     gint         width,
-			     gint         height)
+			     gint         height,
+			     gint         depth,
+			     GdkColor    *fg,
+			     GdkColor    *bg)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_bitmap_create_from_data_for_screen instead\n"));
-  return gdk_bitmap_create_from_data_for_screen(window,
-						 DEFAULT_GDK_SCREEN,
-						 data,
-						 width,
-						 height);
-}
-GdkPixmap *
-gdk_pixmap_create_from_data_for_screen (GdkWindow * window,
-					GdkScreen * screen,
-					const gchar * data,
-					gint width,
-					gint height,
-					gint depth,
-					GdkColor * fg, GdkColor * bg)
-{
-
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
   GdkPixmapImplX11 *pix_impl;
@@ -278,7 +261,11 @@ gdk_pixmap_create_from_data_for_screen (GdkWindow * window,
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
 
   if (!window)
-    window = GDK_SCREEN_IMPL_X11 (screen)->parent_root;
+  {
+    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window",
+		                   "for gdk_pixmap_create_from_data to be multihead safe"));
+    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->parent_root;
+  }
 
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
@@ -307,27 +294,8 @@ gdk_pixmap_create_from_data_for_screen (GdkWindow * window,
   return pixmap;
 }
 
-GdkPixmap*
-gdk_pixmap_create_from_data (GdkWindow   *window,
-			     const gchar *data,
-			     gint         width,
-			     gint         height,
-			     gint         depth,
-			     GdkColor    *fg,
-			     GdkColor    *bg)
-{
-   GDK_NOTE(MULTIHEAD,g_message("Use gdk_pixmap_create_from_data_for_screen instead\n"));
-   return gdk_pixmap_create_from_data_for_screen(window,
-						 DEFAULT_GDK_SCREEN,
-						 data,
-						 width,
-						 height,
-						 depth,
-						 fg,
-						 bg);
-}
 GdkPixmap *
-gdk_pixmap_foreign_new_for_screen (GdkNativeWindow anid, GdkScreen * screen)
+gdk_pixmap_foreign_new_for_screen ( GdkScreen * screen, GdkNativeWindow anid)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;
@@ -381,7 +349,8 @@ gdk_pixmap_foreign_new_for_screen (GdkNativeWindow anid, GdkScreen * screen)
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
-   return gdk_pixmap_foreign_new_for_screen(anid,DEFAULT_GDK_SCREEN);
+   GDK_NOTE(MULTIHEAD, g_message("Use gdk_pixmap_foreign_new_for_screen instead\n"));
+   return gdk_pixmap_foreign_new_for_screen(DEFAULT_GDK_SCREEN,anid);
 }
 
 GdkScreen*

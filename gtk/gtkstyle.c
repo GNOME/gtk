@@ -4192,11 +4192,8 @@ get_insensitive_layout (PangoLayout *layout, GdkScreen *screen)
             0x02, 0x01
           };
 
-          stipple = gdk_bitmap_create_from_data_for_screen (NULL,
-							    screen,
-							    gray50_bits,
-							    gray50_width,
-							    gray50_height);
+          stipple = gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), gray50_bits, gray50_width, gray50_height);
+
         }
       
       attr = gdk_pango_attr_stipple_new (stipple);

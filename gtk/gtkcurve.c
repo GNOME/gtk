@@ -470,10 +470,8 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
       /* fall through */
     case GDK_EXPOSE:
       if (!c->pixmap)
-	c->pixmap = gdk_pixmap_new_for_screen (w->window,
-					       w->screen,
-					       w->allocation.width,
-				               w->allocation.height, -1);
+	c->pixmap = gdk_pixmap_new (w->window, w->allocation.width, w->allocation.height, -1);
+
       gtk_curve_draw (c, width, height);
       break;
 

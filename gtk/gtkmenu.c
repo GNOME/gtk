@@ -465,11 +465,8 @@ gtk_menu_tearoff_bg_copy (GtkMenu *menu)
       
       gdk_window_get_size (menu->tearoff_window->window, &width, &height);
       
-      pixmap = gdk_pixmap_new_for_screen (menu->tearoff_window->window,
-					  widget->screen,
-					  width,
-					  height,
-					 -1);
+      pixmap = gdk_pixmap_new (menu->tearoff_window->window, width, height, -1);
+
 
       gdk_draw_pixmap (pixmap, gc,
 		       menu->tearoff_window->window,

@@ -810,9 +810,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
 
       if (new_rect.width > old_rect.width || new_rect.height > old_rect.height)
 	{
-	  paint->pixmap = gdk_pixmap_new_for_screen (window,
-					  gdk_window_get_screen(window),
-                                          new_rect.width, new_rect.height, -1);
+	  paint->pixmap = gdk_pixmap_new (window, new_rect.width, new_rect.height, -1);
+
           tmp_gc = gdk_gc_new (paint->pixmap);
 	  gdk_draw_drawable (paint->pixmap, tmp_gc, tmp_paint->pixmap,
 			     0, 0,
@@ -857,9 +856,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
     {
       paint->x_offset = clip_box.x;
       paint->y_offset = clip_box.y;
-      paint->pixmap = gdk_pixmap_new_for_screen (window,
-			    gdk_window_get_screen(window),  
-			    clip_box.width, clip_box.height, -1);
+      paint->pixmap = gdk_pixmap_new (window, clip_box.width, clip_box.height, -1);
+
     }
 
   if (!gdk_region_empty (init_region))
@@ -1265,10 +1263,8 @@ gdk_window_get_composite_drawable (GdkDrawable *window,
       return GDK_DRAWABLE (g_object_ref (G_OBJECT (window)));
     }
   
-  tmp_pixmap = gdk_pixmap_new_for_screen (window,
-					  gdk_window_get_screen(window),
-					  width, height,
-					  -1);
+  tmp_pixmap = gdk_pixmap_new (window, width, height, -1);
+
 
   tmp_gc = gdk_gc_new (tmp_pixmap);
 

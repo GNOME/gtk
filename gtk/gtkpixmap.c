@@ -284,9 +284,8 @@ build_insensitive_pixmap(GtkPixmap *gtkpixmap)
   g_object_unref (G_OBJECT (pixbuf));
   pixbuf = NULL;
   
-  insensitive = gdk_pixmap_new_for_screen (GTK_WIDGET (gtkpixmap)->window, 
-					   GTK_WIDGET (gtkpixmap)->screen,
-					   w, h, -1);
+  insensitive = gdk_pixmap_new (GTK_WIDGET (gtkpixmap)->window, w, h, -1);
+
 
   gdk_pixbuf_render_to_drawable (stated,
                                  insensitive,

@@ -956,7 +956,8 @@ gtk_entry_realize (GtkWidget *widget)
   
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
-  attributes.cursor = gdk_cursor_new_for_screen (GDK_XTERM, widget->screen);
+  attributes.cursor = gdk_cursor_new_for_screen (widget->screen, GDK_XTERM);
+
   attributes_mask |= GDK_WA_CURSOR;
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);

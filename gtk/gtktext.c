@@ -1357,17 +1357,11 @@ gtk_text_realize (GtkWidget *widget)
   if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
     text->bg_gc = create_bg_gc (text);
   
-  text->line_wrap_bitmap = gdk_bitmap_create_from_data_for_screen (text->text_area,
-								   widget->screen,
-								   (gchar*) line_wrap_bits,
-								   line_wrap_width,
-								   line_wrap_height);
+  text->line_wrap_bitmap = gdk_bitmap_create_from_data (text->text_area, (gchar*) line_wrap_bits, line_wrap_width, line_wrap_height);
+
   
-  text->line_arrow_bitmap = gdk_bitmap_create_from_data_for_screen (text->text_area,
-								    widget->screen,
-								    (gchar*) line_arrow_bits,
-								    line_arrow_width,
-								    line_arrow_height);
+  text->line_arrow_bitmap = gdk_bitmap_create_from_data (text->text_area, (gchar*) line_arrow_bits, line_arrow_width, line_arrow_height);
+
   
   text->gc = gdk_gc_new (text->text_area);
   gdk_gc_set_exposures (text->gc, TRUE);

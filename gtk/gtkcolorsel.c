@@ -1051,15 +1051,11 @@ initialize_cursor (GdkScreen *screen)
   GdkColor fg, bg;
   
   GdkPixmap *pixmap =
-    gdk_bitmap_create_from_data_for_screen (NULL,
-					    screen,
-					    dropper_bits,
-					    DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), dropper_bits, DROPPER_WIDTH, DROPPER_HEIGHT);
+
   GdkPixmap *mask =
-    gdk_bitmap_create_from_data_for_screen (NULL,
-					    screen,
-					    dropper_mask,
-					    DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), dropper_mask, DROPPER_WIDTH, DROPPER_HEIGHT);
+
   
   gdk_color_white (gdk_colormap_get_system_for_screen (screen), &bg);
   gdk_color_black (gdk_colormap_get_system_for_screen (screen), &fg);

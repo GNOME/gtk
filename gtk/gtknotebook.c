@@ -2604,9 +2604,8 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
   w = widget->allocation.width;
   h = widget->allocation.height;
 
-  pm = gdk_pixmap_new_for_screen (widget->window, 
-				  widget->screen,
-				  w, h, 1);
+  pm = gdk_pixmap_new (widget->window, w, h, 1);
+
   pmgc = gdk_gc_new (pm);
 
   /* clear the shape mask */

@@ -1875,7 +1875,7 @@ gdk_x11_get_server_time (GdkWindow *window)
 }
 	
 gboolean
-gdk_net_wm_supports_for_screen (GdkAtom property, GdkScreen * screen)
+gdk_net_wm_supports_for_screen (GdkScreen * screen, GdkAtom property)
 {
   static GdkAtom *atoms = NULL;
   static gulong n_atoms = 0;
@@ -1955,14 +1955,14 @@ gdk_net_wm_supports_for_screen (GdkAtom property, GdkScreen * screen)
   /*
      since wmspec_check_window != None this isn't infinite. ;-) 
    */
-  return gdk_net_wm_supports_for_screen (property, screen);
+  return gdk_net_wm_supports_for_screen (screen, property);
 }
 
 
 gboolean
 gdk_net_wm_supports (GdkAtom property)
 {
-  return gdk_net_wm_supports_for_screen (property,DEFAULT_GDK_SCREEN);
+  return gdk_net_wm_supports_for_screen (DEFAULT_GDK_SCREEN, property);
 }
 
 
