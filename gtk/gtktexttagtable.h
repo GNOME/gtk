@@ -11,7 +11,7 @@ extern "C" {
 
 typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
 
-#define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type())
+#define GTK_TYPE_TEXT_TAG_TABLE            (gtk_text_tag_table_get_type ())
 #define GTK_TEXT_TAG_TABLE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTable))
 #define GTK_TEXT_TAG_TABLE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_TAG_TABLE, GtkTextTagTableClass))
 #define GTK_IS_TEXT_TAG_TABLE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_TAG_TABLE))
@@ -22,7 +22,7 @@ typedef struct _GtkTextTagTableClass GtkTextTagTableClass;
 
 struct _GtkTextTagTable {
   GtkObject parent_instance;
-  
+
   GHashTable *hash;
   GSList *anonymous;
   gint anon_count;
@@ -30,7 +30,7 @@ struct _GtkTextTagTable {
 
 struct _GtkTextTagTableClass {
   GtkObjectClass parent_class;
-  
+
   void (* tag_changed) (GtkTextTagTable *table, GtkTextTag *tag, gboolean size_changed);
   void (* tag_added) (GtkTextTagTable *table, GtkTextTag *tag);
   void (* tag_removed) (GtkTextTagTable *table, GtkTextTag *tag);

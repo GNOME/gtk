@@ -21,7 +21,7 @@ typedef enum
 
 typedef struct _GtkTextAttributes GtkTextAttributes;
 
-#define GTK_TYPE_TEXT_TAG            (gtk_text_tag_get_type())
+#define GTK_TYPE_TEXT_TAG            (gtk_text_tag_get_type ())
 #define GTK_TEXT_TAG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_TAG, GtkTextTag))
 #define GTK_TEXT_TAG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
 #define GTK_IS_TEXT_TAG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_TAG))
@@ -36,12 +36,12 @@ struct _GtkTextTag
   GtkObject parent_instance;
 
   GtkTextTagTable *table;
-  
-  char *name;			/* Name of this tag.  This field is actually
-				 * a pointer to the key from the entry in
-				 * tkxt->tagTable, so it needn't be freed
-				 * explicitly. */
-  int priority;		/* Priority of this tag within widget.  0
+
+  char *name;                   /* Name of this tag.  This field is actually
+                                 * a pointer to the key from the entry in
+                                 * tkxt->tagTable, so it needn't be freed
+                                 * explicitly. */
+  int priority;         /* Priority of this tag within widget.  0
                          * means lowest priority.  Exactly one tag
                          * has each integer value between 0 and
                          * numTags-1. */
@@ -53,8 +53,8 @@ struct _GtkTextTag
    * defaults if no tag specifies an override.
    */
 
-  GtkTextAttributes *values;  
-  
+  GtkTextAttributes *values;
+
   /* Flags for whether a given value is set; if a value is unset, then
    * this tag does not affect it.
    */
@@ -97,11 +97,11 @@ GtkType      gtk_text_tag_get_type     (void) G_GNUC_CONST;
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
 gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,
-					gint               priority);
+                                        gint               priority);
 gint         gtk_text_tag_event        (GtkTextTag        *tag,
-					GtkObject         *event_object,
-					GdkEvent          *event,
-					const GtkTextIter *iter);
+                                        GtkObject         *event_object,
+                                        GdkEvent          *event,
+                                        const GtkTextIter *iter);
 
 /*
  * Style object created by folding a set of tags together
@@ -116,7 +116,7 @@ struct _GtkTextAppearance
   GdkBitmap *bg_stipple;
   GdkBitmap *fg_stipple;
 
-  guint underline : 4;		/* PangoUnderline */
+  guint underline : 4;          /* PangoUnderline */
   guint strikethrough : 1;
 
   /* Whether to use background-related values; this is irrelevant for
@@ -138,21 +138,21 @@ struct _GtkTextAttributes
   guint refcount;
 
   GtkTextAppearance appearance;
-  
+
   GtkJustification justify;
   GtkTextDirection direction;
-  
+
   PangoFontDescription *font_desc;
-  
+
   /* lMargin1 */
   gint left_margin;
-  
+
   /* lMargin2 */
   gint left_wrapped_line_margin;
 
   /* super/subscript offset, can be negative */
   gint offset;
-  
+
   gint right_margin;
 
   gint pixels_above_lines;
@@ -162,14 +162,14 @@ struct _GtkTextAttributes
   gint pixels_inside_wrap;
 
   PangoTabArray *tabs;
-  
-  GtkWrapMode wrap_mode;	/* How to handle wrap-around for this tag.
-				 * Must be GTK_WRAPMODE_CHAR,
-				 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
+
+  GtkWrapMode wrap_mode;        /* How to handle wrap-around for this tag.
+                                 * Must be GTK_WRAPMODE_CHAR,
+                                 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
                                  */
 
   gchar *language;
-  
+
   /* hide the text  */
   guint invisible : 1;
 
@@ -177,7 +177,7 @@ struct _GtkTextAttributes
    * baseline +/- ascent/descent (font height)
    */
   guint bg_full_height : 1;
-  
+
   /* can edit this text */
   guint editable : 1;
 

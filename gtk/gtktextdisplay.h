@@ -7,9 +7,9 @@
  *
  * This file can be used under your choice of two licenses, the LGPL
  * and the original Tk license.
- * 
+ *
  * LGPL:
- * 
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -30,7 +30,7 @@
  * California, Sun Microsystems, Inc., and other parties.  The
  * following terms apply to all files associated with the software
  * unless explicitly disclaimed in individual files.
- * 
+ *
  * The authors hereby grant permission to use, copy, modify,
  * distribute, and license this software and its documentation for any
  * purpose, provided that existing copyright notices are retained in
@@ -40,13 +40,13 @@
  * software may be copyrighted by their authors and need not follow
  * the licensing terms described here, provided that the new terms are
  * clearly indicated on the first page of each file where they apply.
- * 
+ *
  * IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY
  * PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
  * DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION,
  * OR ANY DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
@@ -94,15 +94,15 @@ extern "C" {
  * x/y/width/height  - Region of the layout to render. x,y must be inside
  *                     the drawable.
  */
-void gtk_text_layout_draw (GtkTextLayout	*layout,
-			   GtkWidget		*widget, 
-			   GdkDrawable		*drawable,
-			   gint			 x_offset,
-			   gint			 y_offset,
-			   gint			 x,
-			   gint			 y,
-			   gint			 width,
-			   gint			 height);
+void gtk_text_layout_draw (GtkTextLayout        *layout,
+                           GtkWidget            *widget,
+                           GdkDrawable          *drawable,
+                           gint                  x_offset,
+                           gint                  y_offset,
+                           gint                  x,
+                           gint                  y,
+                           gint                  width,
+                           gint                  height);
 
 
 
@@ -110,4 +110,4 @@ void gtk_text_layout_draw (GtkTextLayout	*layout,
 }
 #endif /* __cplusplus */
 
-#endif	/* GTK_TEXT_DISPLAY_H */
+#endif  /* GTK_TEXT_DISPLAY_H */

@@ -38,34 +38,34 @@ void gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
 
 /* View stuff */
 GtkTextLine *gtk_text_btree_find_line_by_y    (GtkTextBTree      *tree,
-					       gpointer           view_id,
-					       gint               ypixel,
-					       gint              *line_top_y);
+                                               gpointer           view_id,
+                                               gint               ypixel,
+                                               gint              *line_top_y);
 gint         gtk_text_btree_find_line_top     (GtkTextBTree      *tree,
-					       GtkTextLine       *line,
-					       gpointer           view_id);
+                                               GtkTextLine       *line,
+                                               gpointer           view_id);
 void         gtk_text_btree_add_view          (GtkTextBTree      *tree,
-					       GtkTextLayout     *layout);
+                                               GtkTextLayout     *layout);
 void         gtk_text_btree_remove_view       (GtkTextBTree      *tree,
-					       gpointer           view_id);
+                                               gpointer           view_id);
 void         gtk_text_btree_invalidate_region (GtkTextBTree      *tree,
-					       const GtkTextIter *start,
-					       const GtkTextIter *end);
+                                               const GtkTextIter *start,
+                                               const GtkTextIter *end);
 void         gtk_text_btree_get_view_size     (GtkTextBTree      *tree,
-					       gpointer           view_id,
-					       gint              *width,
-					       gint              *height);
+                                               gpointer           view_id,
+                                               gint              *width,
+                                               gint              *height);
 gboolean     gtk_text_btree_is_valid          (GtkTextBTree      *tree,
-					       gpointer           view_id);
+                                               gpointer           view_id);
 gboolean     gtk_text_btree_validate          (GtkTextBTree      *tree,
-					       gpointer           view_id,
-					       gint               max_pixels,
-					       gint              *y,
-					       gint              *old_height,
-					       gint              *new_height);
+                                               gpointer           view_id,
+                                               gint               max_pixels,
+                                               gint              *y,
+                                               gint              *old_height,
+                                               gint              *new_height);
 void         gtk_text_btree_validate_line     (GtkTextBTree      *tree,
-					       GtkTextLine       *line,
-					       gpointer           view_id);
+                                               GtkTextLine       *line,
+                                               gpointer           view_id);
 
 /* Tag */
 
@@ -133,29 +133,29 @@ gboolean gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree       *tree,
 /* Manipulate marks */
 GtkTextMark        *gtk_text_btree_set_mark                (GtkTextBTree       *tree,
                                                             GtkTextMark         *existing_mark,
-							    const gchar        *name,
-							    gboolean            left_gravity,
-							    const GtkTextIter  *index,
+                                                            const gchar        *name,
+                                                            gboolean            left_gravity,
+                                                            const GtkTextIter  *index,
                                                             gboolean           should_exist);
 void                gtk_text_btree_remove_mark_by_name     (GtkTextBTree       *tree,
-							    const gchar        *name);
+                                                            const gchar        *name);
 void                gtk_text_btree_remove_mark             (GtkTextBTree       *tree,
-							    GtkTextMark        *segment);
+                                                            GtkTextMark        *segment);
 gboolean            gtk_text_btree_get_selection_bounds    (GtkTextBTree       *tree,
-							    GtkTextIter        *start,
-							    GtkTextIter        *end);
+                                                            GtkTextIter        *start,
+                                                            GtkTextIter        *end);
 void                gtk_text_btree_place_cursor            (GtkTextBTree       *tree,
-							    const GtkTextIter  *where);
+                                                            const GtkTextIter  *where);
 gboolean            gtk_text_btree_mark_is_insert          (GtkTextBTree       *tree,
-							    GtkTextMark        *segment);
+                                                            GtkTextMark        *segment);
 gboolean            gtk_text_btree_mark_is_selection_bound (GtkTextBTree       *tree,
-							    GtkTextMark        *segment);
+                                                            GtkTextMark        *segment);
 GtkTextMark        *gtk_text_btree_get_mark_by_name        (GtkTextBTree       *tree,
-							    const gchar        *name);
+                                                            const gchar        *name);
 GtkTextLine *       gtk_text_btree_first_could_contain_tag (GtkTextBTree       *tree,
-							    GtkTextTag         *tag);
+                                                            GtkTextTag         *tag);
 GtkTextLine *       gtk_text_btree_last_could_contain_tag  (GtkTextBTree       *tree,
-							    GtkTextTag         *tag);
+                                                            GtkTextTag         *tag);
 
 /* Lines */
 
@@ -177,12 +177,12 @@ struct _GtkTextLineData {
  */
 
 struct _GtkTextLine {
-  GtkTextBTreeNode *parent;		/* Pointer to parent node containing
-                                 * line. */
-  GtkTextLine *next;		/* Next in linked list of lines with
+  GtkTextBTreeNode *parent;             /* Pointer to parent node containing
+                                         * line. */
+  GtkTextLine *next;            /* Next in linked list of lines with
                                  * same parent node in B-tree.  NULL
                                  * means end of list. */
-  GtkTextLineSegment *segments;	/* First in ordered list of segments
+  GtkTextLineSegment *segments; /* First in ordered list of segments
                                  * that make up the line. */
   GtkTextLineData *views;      /* data stored here by views */
 };

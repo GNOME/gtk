@@ -21,7 +21,7 @@ gint                gtk_text_iter_get_segment_char           (const GtkTextIter 
 
 
 /* debug */
-void gtk_text_iter_check(const GtkTextIter *iter);
+void gtk_text_iter_check (const GtkTextIter *iter);
 
 #ifdef __cplusplus
 }

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef GTK_TEXT_VIEW_H
@@ -35,7 +35,7 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_TYPE_TEXT_VIEW             (gtk_text_view_get_type())
+#define GTK_TYPE_TEXT_VIEW             (gtk_text_view_get_type ())
 #define GTK_TEXT_VIEW(obj)             (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_VIEW, GtkTextView))
 #define GTK_TEXT_VIEW_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_VIEW, GtkTextViewClass))
 #define GTK_IS_TEXT_VIEW(obj)          (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_VIEW))
@@ -70,26 +70,26 @@ struct _GtkTextView {
 
   gboolean overwrite_mode;
 
-  GtkWrapMode wrap_mode;	/* Default wrap mode */
+  GtkWrapMode wrap_mode;        /* Default wrap mode */
 
   gboolean editable;            /* default editability */
 
   gboolean cursor_visible;
-  
+
   GtkTextWindow *text_window;
   GtkTextWindow *left_window;
   GtkTextWindow *right_window;
   GtkTextWindow *top_window;
   GtkTextWindow *bottom_window;
-  
+
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
-  gint xoffset;			/* Offsets between widget coordinates and buffer coordinates */
+  gint xoffset;                 /* Offsets between widget coordinates and buffer coordinates */
   gint yoffset;
-  gint width;			/* Width and height of the buffer */
+  gint width;                   /* Width and height of the buffer */
   gint height;
-  
+
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
    *
@@ -99,16 +99,16 @@ struct _GtkTextView {
    * In case a), virtual_cursor_x is preserved, but not virtual_cursor_y
    * In case b), both virtual_cursor_x and virtual_cursor_y are preserved.
    */
-  gint virtual_cursor_x;	   /* -1 means use actual cursor position */
-  gint virtual_cursor_y;	   /* -1 means use actual cursor position */
-  
-  GtkTextMark *first_para_mark;	   /* Mark at the beginning of the first onscreen paragraph */
-  gint first_para_pixels;	   /* Offset of top of screen in the first onscreen paragraph */
+  gint virtual_cursor_x;           /* -1 means use actual cursor position */
+  gint virtual_cursor_y;           /* -1 means use actual cursor position */
+
+  GtkTextMark *first_para_mark;    /* Mark at the beginning of the first onscreen paragraph */
+  gint first_para_pixels;          /* Offset of top of screen in the first onscreen paragraph */
 
   GtkTextMark *dnd_mark;
   guint blink_timeout;
 
-  guint first_validate_idle;     	/* Idle to revalidate onscreen portion, runs before resize */
+  guint first_validate_idle;            /* Idle to revalidate onscreen portion, runs before resize */
   guint incremental_validate_idle;      /* Idle to revalidate offscreen portions, runs after redraw */
 
   GtkIMContext *im_context;
@@ -140,27 +140,27 @@ struct _GtkTextViewClass {
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
   void (* set_scroll_adjustments)   (GtkTextView    *text_view,
-				     GtkAdjustment  *hadjustment,
-				     GtkAdjustment  *vadjustment);
+                                     GtkAdjustment  *hadjustment,
+                                     GtkAdjustment  *vadjustment);
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;
 GtkWidget *    gtk_text_view_new                   (void);
 GtkWidget *    gtk_text_view_new_with_buffer       (GtkTextBuffer *buffer);
 void           gtk_text_view_set_buffer            (GtkTextView   *text_view,
-						    GtkTextBuffer *buffer);
+                                                    GtkTextBuffer *buffer);
 GtkTextBuffer *gtk_text_view_get_buffer            (GtkTextView   *text_view);
 gboolean       gtk_text_view_scroll_to_mark        (GtkTextView   *text_view,
                                                     GtkTextMark   *mark,
-						    gint           mark_within_margin);
+                                                    gint           mark_within_margin);
 gboolean       gtk_text_view_move_mark_onscreen    (GtkTextView   *text_view,
                                                     GtkTextMark   *mark);
 gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 
 void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
-						    GdkRectangle  *visible_rect);
+                                                    GdkRectangle  *visible_rect);
 void           gtk_text_view_set_wrap_mode         (GtkTextView   *text_view,
-						    GtkWrapMode    wrap_mode);
+                                                    GtkWrapMode    wrap_mode);
 GtkWrapMode    gtk_text_view_get_wrap_mode         (GtkTextView   *text_view);
 
 void           gtk_text_view_set_editable          (GtkTextView   *text_view,
@@ -175,9 +175,9 @@ void           gtk_text_view_get_iter_location     (GtkTextView   *text_view,
                                                     const GtkTextIter *iter,
                                                     GdkRectangle  *location);
 void           gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
-						    GtkTextIter   *iter,
-						    gint           x,
-						    gint           y);
+                                                    GtkTextIter   *iter,
+                                                    gint           x,
+                                                    gint           y);
 void           gtk_text_view_get_line_yrange       (GtkTextView       *text_view,
                                                     const GtkTextIter *iter,
                                                     gint              *y,

@@ -83,23 +83,23 @@ struct _GtkTextLineSegmentClass {
   GtkTextSegDeleteFunc deleteFunc;      /* Procedure to call to delete
                                          * segment. */
   GtkTextSegCleanupFunc cleanupFunc;   /* After any change to a line, this
-                                         * procedure is invoked for all
-                                         * segments left in the line to
-                                         * perform any cleanup they wish
-                                         * (e.g. joining neighboring
-                                         * segments). */
+                                        * procedure is invoked for all
+                                        * segments left in the line to
+                                        * perform any cleanup they wish
+                                        * (e.g. joining neighboring
+                                        * segments). */
   GtkTextSegLineChangeFunc lineChangeFunc;
-                                         /* Invoked when a segment is about
-                                          * to be moved from its current line
-                                          * to an earlier line because of
-                                          * a deletion.  The line is that
-                                          * for the segment's old line.
-                                          * CleanupFunc will be invoked after
-                                          * the deletion is finished. */
+  /* Invoked when a segment is about
+   * to be moved from its current line
+   * to an earlier line because of
+   * a deletion.  The line is that
+   * for the segment's old line.
+   * CleanupFunc will be invoked after
+   * the deletion is finished. */
 
   GtkTextSegCheckFunc checkFunc;       /* Called during consistency checks
-                                         * to check internal consistency of
-                                         * segment. */
+                                        * to check internal consistency of
+                                        * segment. */
 };
 
 /*
@@ -113,7 +113,7 @@ struct _GtkTextLineSegment {
                                             * line, or NULL for end of list. */
 
   int char_count;                       /* # of chars of index space occupied */
-  
+
   int byte_count;                       /* Size of this segment (# of bytes
                                          * of index space it occupies). */
   union {

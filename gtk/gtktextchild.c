@@ -9,7 +9,7 @@
  * California, Sun Microsystems, Inc., and other parties.  The
  * following terms apply to all files associated with the software
  * unless explicitly disclaimed in individual files.
- * 
+ *
  * The authors hereby grant permission to use, copy, modify,
  * distribute, and license this software and its documentation for any
  * purpose, provided that existing copyright notices are retained in
@@ -19,13 +19,13 @@
  * software may be copyrighted by their authors and need not follow
  * the licensing terms described here, provided that the new terms are
  * clearly indicated on the first page of each file where they apply.
- * 
+ *
  * IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY
  * PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
  * DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION,
  * OR ANY DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
@@ -44,7 +44,7 @@
  * foregoing, the authors grant the U.S. Government and others acting
  * in its behalf permission to use and distribute the software in
  * accordance with the terms specified in this license.
- * 
+ *
  */
 
 #include "gtktextchild.h"
@@ -59,30 +59,30 @@ pixbuf_segment_cleanup_func (GtkTextLineSegment *seg,
 }
 
 static int
-pixbuf_segment_delete_func(GtkTextLineSegment *seg,
-                           GtkTextLine        *line,
-                           gboolean            tree_gone)
+pixbuf_segment_delete_func (GtkTextLineSegment *seg,
+                            GtkTextLine        *line,
+                            gboolean            tree_gone)
 {
   if (seg->body.pixbuf.pixbuf)
-    g_object_unref(G_OBJECT (seg->body.pixbuf.pixbuf));
+    g_object_unref (G_OBJECT (seg->body.pixbuf.pixbuf));
 
-  g_free(seg);
+  g_free (seg);
 
   return 0;
 }
 
 static void
-pixbuf_segment_check_func(GtkTextLineSegment *seg,
-                          GtkTextLine        *line)
+pixbuf_segment_check_func (GtkTextLineSegment *seg,
+                           GtkTextLine        *line)
 {
   if (seg->next == NULL)
-    g_error("pixbuf segment is the last segment in a line");
+    g_error ("pixbuf segment is the last segment in a line");
 
   if (seg->byte_count != 3)
-    g_error("pixbuf segment has byte count of %d", seg->byte_count);
-  
+    g_error ("pixbuf segment has byte count of %d", seg->byte_count);
+
   if (seg->char_count != 1)
-    g_error("pixbuf segment has char count of %d", seg->char_count);  
+    g_error ("pixbuf segment has char count of %d", seg->char_count);
 }
 
 
@@ -97,8 +97,8 @@ GtkTextLineSegmentClass gtk_text_pixbuf_type = {
 
 };
 
-#define PIXBUF_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET(GtkTextLineSegment, body) \
-	+ sizeof(GtkTextPixbuf)))
+#define PIXBUF_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextPixbuf)))
 
 GtkTextLineSegment *
 _gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
@@ -114,11 +114,11 @@ _gtk_pixbuf_segment_new (GdkPixbuf *pixbuf)
   seg->byte_count = 3; /* We convert to the 0xFFFD "unknown character",
                           a 3-byte sequence in UTF-8 */
   seg->char_count = 1;
-  
+
   seg->body.pixbuf.pixbuf = pixbuf;
 
   g_object_ref (G_OBJECT (pixbuf));
-  
+
   return seg;
 }
 
@@ -128,7 +128,7 @@ child_segment_cleanup_func (GtkTextLineSegment *seg,
                             GtkTextLine        *line)
 {
   seg->body.child.line = line;
-  
+
   return seg;
 }
 
@@ -147,13 +147,13 @@ child_segment_check_func (GtkTextLineSegment *seg,
                           GtkTextLine        *line)
 {
   if (seg->next == NULL)
-    g_error("child segment is the last segment in a line");
+    g_error ("child segment is the last segment in a line");
 
   if (seg->byte_count != 3)
-    g_error("child segment has byte count of %d", seg->byte_count);
-  
+    g_error ("child segment has byte count of %d", seg->byte_count);
+
   if (seg->char_count != 1)
-    g_error("child segment has char count of %d", seg->char_count);  
+    g_error ("child segment has char count of %d", seg->char_count);
 }
 
 GtkTextLineSegmentClass gtk_text_child_type = {
@@ -167,7 +167,7 @@ GtkTextLineSegmentClass gtk_text_child_type = {
 };
 
 #define WIDGET_SEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
-	+ sizeof(GtkTextChildBody)))
+        + sizeof (GtkTextChildBody)))
 
 GtkTextLineSegment *
 _gtk_widget_segment_new (void)
@@ -184,21 +184,21 @@ _gtk_widget_segment_new (void)
                         * a 3-byte sequence in UTF-8
                         */
   seg->char_count = 1;
-  
+
   seg->body.child.ref_count = 1;
   seg->body.child.widgets = NULL;
   seg->body.child.tree = NULL;
   seg->body.child.line = NULL;
-  
+
   return seg;
 }
 
 void
 _gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
-                        GtkWidget          *child)
+                            GtkWidget          *child)
 {
   g_assert (widget_segment->type = &gtk_text_child_type);
-  
+
   widget_segment->body.child.widgets =
     g_slist_prepend (widget_segment->body.child.widgets,
                      child);
@@ -208,7 +208,7 @@ _gtk_widget_segment_add    (GtkTextLineSegment *widget_segment,
 
 void
 _gtk_widget_segment_remove (GtkTextLineSegment *widget_segment,
-                        GtkWidget          *child)
+                            GtkWidget          *child)
 {
   g_assert (widget_segment->type = &gtk_text_child_type);
 
@@ -240,7 +240,7 @@ _gtk_widget_segment_unref (GtkTextLineSegment *widget_segment)
 
       if (widget_segment->body.child.tree == NULL)
         g_warning ("widget segment destroyed while still in btree");
-      
+
       tmp_list = widget_segment->body.child.widgets;
       while (tmp_list)
         {
@@ -259,7 +259,7 @@ void
 gtk_text_child_anchor_ref (GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg = (GtkTextLineSegment *) anchor;
-  
+
   g_return_if_fail (seg->type = &gtk_text_child_type);
   g_return_if_fail (seg->body.child.ref_count > 0);
 
@@ -270,7 +270,7 @@ void
 gtk_text_child_anchor_unref (GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg = (GtkTextLineSegment *) anchor;
-  
+
   g_return_if_fail (seg->type = &gtk_text_child_type);
   g_return_if_fail (seg->body.child.ref_count > 0);
 
@@ -283,9 +283,9 @@ gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor)
   GtkTextLineSegment *seg = (GtkTextLineSegment *) anchor;
   GList *list = NULL;
   GSList *iter;
-  
+
   g_return_val_if_fail (seg->type = &gtk_text_child_type, NULL);
-  
+
   iter = seg->body.child.widgets;
   while (iter != NULL)
     {
@@ -304,7 +304,7 @@ gboolean
 gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg = (GtkTextLineSegment *) anchor;
-  
+
   g_return_val_if_fail (seg->type = &gtk_text_child_type, TRUE);
 
   return seg->body.child.tree == NULL;

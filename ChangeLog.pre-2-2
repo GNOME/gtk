@@ -1,5 +1,20 @@
 2000-10-30  Havoc Pennington  <hp@redhat.com>
 
+	* gtktextbtree.c, gtktextbtree.h, gtktextbuffer.c,
+	gtktextbuffer.h, gtktextchild.c, gtktextchild.h,
+	gtktextchildprivate.h, gtktextdisplay.c, gtktextdisplay.h,
+	gtktextiter.c, gtktextiter.h, gtktextiterprivate.h,
+	gtktextlayout.c, gtktextlayout.h, gtktextmark.c, gtktextmark.h,
+	gtktextmarkprivate.h, gtktextsegment.c, gtktextsegment.h,
+	gtktexttag.c, gtktexttag.h, gtktexttagprivate.h,
+	gtktexttagtable.c, gtktexttagtable.h, gtktexttypes.c,
+	gtktexttypes.h, gtktextview.c, gtktextview.h:
+
+	Massive reindentation and reformatting. Arg alignment and comments
+	still need fixing in various places.
+
+2000-10-30  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextview.h, gtk/gtktextview.c: Change run action signals
 	to be named insert_at_cursor and delete_at_cursor so C++ can
 	handle them.

@@ -12,7 +12,7 @@
  * California, Sun Microsystems, Inc., and other parties.  The
  * following terms apply to all files associated with the software
  * unless explicitly disclaimed in individual files.
- * 
+ *
  * The authors hereby grant permission to use, copy, modify,
  * distribute, and license this software and its documentation for any
  * purpose, provided that existing copyright notices are retained in
@@ -22,13 +22,13 @@
  * software may be copyrighted by their authors and need not follow
  * the licensing terms described here, provided that the new terms are
  * clearly indicated on the first page of each file where they apply.
- * 
+ *
  * IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY
  * PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
  * DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION,
  * OR ANY DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED
  * OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
+ *
  * THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
@@ -47,7 +47,7 @@
  * foregoing, the authors grant the U.S. Government and others acting
  * in its behalf permission to use and distribute the software in
  * accordance with the terms specified in this license.
- * 
+ *
  */
 
 #include "gtktextbtree.h"
@@ -90,18 +90,18 @@
  */
 
 GtkTextLineSegment*
-gtk_text_line_segment_split(const GtkTextIter *iter)
+gtk_text_line_segment_split (const GtkTextIter *iter)
 {
   GtkTextLineSegment *prev, *seg;
   GtkTextBTree *tree;
   GtkTextLine *line;
   int count;
 
-  line = gtk_text_iter_get_text_line(iter);
-  tree = gtk_text_iter_get_btree(iter);
-  
-  count = gtk_text_iter_get_line_index(iter);
-  
+  line = gtk_text_iter_get_text_line (iter);
+  tree = gtk_text_iter_get_btree (iter);
+
+  count = gtk_text_iter_get_line_index (iter);
+
   prev = NULL;
   seg = line->segments;
 
@@ -115,13 +115,13 @@ gtk_text_line_segment_split(const GtkTextIter *iter)
             }
           else
             {
-              g_assert(count != seg->byte_count);
-              g_assert(seg->byte_count > 0);
-              
-              gtk_text_btree_segments_changed(tree);
-              
+              g_assert (count != seg->byte_count);
+              g_assert (seg->byte_count > 0);
+
+              gtk_text_btree_segments_changed (tree);
+
               seg = (*seg->type->splitFunc)(seg, count);
-              
+
               if (prev == NULL)
                 line->segments = seg;
               else
@@ -140,7 +140,7 @@ gtk_text_line_segment_split(const GtkTextIter *iter)
       prev = seg;
       seg = seg->next;
     }
-  g_error("split_segment reached end of line!");
+  g_error ("split_segment reached end of line!");
   return NULL;
 }
 
@@ -149,77 +149,77 @@ gtk_text_line_segment_split(const GtkTextIter *iter)
  * Macros that determine how much space to allocate for new segments:
  */
 
-#define CSEG_SIZE(chars) ((unsigned) (G_STRUCT_OFFSET(GtkTextLineSegment, body) \
+#define CSEG_SIZE(chars) ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
         + 1 + (chars)))
-#define TSEG_SIZE ((unsigned) (G_STRUCT_OFFSET(GtkTextLineSegment, body) \
-        + sizeof(GtkTextToggleBody)))
+#define TSEG_SIZE ((unsigned) (G_STRUCT_OFFSET (GtkTextLineSegment, body) \
+        + sizeof (GtkTextToggleBody)))
 
 /*
  * Type functions
  */
 
 static void
-char_segment_self_check(GtkTextLineSegment *seg)
+char_segment_self_check (GtkTextLineSegment *seg)
 {
   /* This function checks the segment itself, but doesn't
      assume the segment has been validly inserted into
      the btree. */
-  
-  g_assert(seg != NULL);
-  
+
+  g_assert (seg != NULL);
+
   if (seg->byte_count <= 0)
     {
-      g_error("char_segment_check_func: segment has size <= 0");
+      g_error ("char_segment_check_func: segment has size <= 0");
     }
 
-  if (strlen(seg->body.chars) != seg->byte_count)
+  if (strlen (seg->body.chars) != seg->byte_count)
     {
-      g_error("char_segment_check_func: segment has wrong size");
+      g_error ("char_segment_check_func: segment has wrong size");
     }
 
   if (g_utf8_strlen (seg->body.chars, seg->byte_count) != seg->char_count)
     {
-      g_error("char segment has wrong character count");
+      g_error ("char segment has wrong character count");
     }
 }
 
 GtkTextLineSegment*
-_gtk_char_segment_new(const gchar *text, guint len)
+_gtk_char_segment_new (const gchar *text, guint len)
 {
   GtkTextLineSegment *seg;
 
-  g_assert(gtk_text_byte_begins_utf8_char(text));
-  
-  seg = g_malloc(CSEG_SIZE(len));
+  g_assert (gtk_text_byte_begins_utf8_char (text));
+
+  seg = g_malloc (CSEG_SIZE (len));
   seg->type = &gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len;
-  memcpy(seg->body.chars, text, len);
+  memcpy (seg->body.chars, text, len);
   seg->body.chars[len] = '\0';
 
   seg->char_count = g_utf8_strlen (seg->body.chars, seg->byte_count);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    char_segment_self_check(seg);
-  
+    char_segment_self_check (seg);
+
   return seg;
 }
 
 GtkTextLineSegment*
-_gtk_char_segment_new_from_two_strings(const gchar *text1, guint len1,
-                                       const gchar *text2, guint len2)
+_gtk_char_segment_new_from_two_strings (const gchar *text1, guint len1,
+                                        const gchar *text2, guint len2)
 {
   GtkTextLineSegment *seg;
 
-  g_assert(gtk_text_byte_begins_utf8_char(text1));
-  g_assert(gtk_text_byte_begins_utf8_char(text2));
-  
-  seg = g_malloc(CSEG_SIZE(len1+len2));
+  g_assert (gtk_text_byte_begins_utf8_char (text1));
+  g_assert (gtk_text_byte_begins_utf8_char (text2));
+
+  seg = g_malloc (CSEG_SIZE (len1+len2));
   seg->type = &gtk_text_char_type;
   seg->next = NULL;
   seg->byte_count = len1 + len2;
-  memcpy(seg->body.chars, text1, len1);
-  memcpy(seg->body.chars + len1, text2, len2);
+  memcpy (seg->body.chars, text1, len1);
+  memcpy (seg->body.chars + len1, text2, len2);
   seg->body.chars[len1+len2] = '\0';
 
   /* In principle this function could probably take chars1 and chars2
@@ -227,8 +227,8 @@ _gtk_char_segment_new_from_two_strings(const gchar *text1, guint len1,
   seg->char_count = g_utf8_strlen (seg->body.chars, seg->byte_count);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    char_segment_self_check(seg);
-  
+    char_segment_self_check (seg);
+
   return seg;
 }
 
@@ -251,35 +251,35 @@ _gtk_char_segment_new_from_two_strings(const gchar *text1, guint len1,
  */
 
 static GtkTextLineSegment *
-char_segment_split_func(GtkTextLineSegment *seg, int index)
+char_segment_split_func (GtkTextLineSegment *seg, int index)
 {
   GtkTextLineSegment *new1, *new2;
 
-  g_assert(index < seg->byte_count);
-  
+  g_assert (index < seg->byte_count);
+
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     {
-      char_segment_self_check(seg);
+      char_segment_self_check (seg);
     }
-  
+
   new1 = _gtk_char_segment_new (seg->body.chars, index);
   new2 = _gtk_char_segment_new (seg->body.chars + index, seg->byte_count - index);
 
-  g_assert(gtk_text_byte_begins_utf8_char(new1->body.chars));
-  g_assert(gtk_text_byte_begins_utf8_char(new2->body.chars));
-  g_assert(new1->byte_count + new2->byte_count == seg->byte_count);
-  g_assert(new1->char_count + new2->char_count == seg->char_count);
-  
+  g_assert (gtk_text_byte_begins_utf8_char (new1->body.chars));
+  g_assert (gtk_text_byte_begins_utf8_char (new2->body.chars));
+  g_assert (new1->byte_count + new2->byte_count == seg->byte_count);
+  g_assert (new1->char_count + new2->char_count == seg->char_count);
+
   new1->next = new2;
   new2->next = seg->next;
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     {
-      char_segment_self_check(new1);
-      char_segment_self_check(new2);
+      char_segment_self_check (new1);
+      char_segment_self_check (new2);
     }
-  
-  g_free(seg);
+
+  g_free (seg);
   return new1;
 }
 
@@ -303,17 +303,17 @@ char_segment_split_func(GtkTextLineSegment *seg, int index)
 
         /* ARGSUSED */
 static GtkTextLineSegment *
-char_segment_cleanup_func(segPtr, line)
+char_segment_cleanup_func (segPtr, line)
      GtkTextLineSegment *segPtr;           /* Pointer to first of two adjacent
                                          * segments to join. */
      GtkTextLine *line;                /* Line containing segments (not
-                                         * used). */
+                                        * used). */
 {
   GtkTextLineSegment *segPtr2, *newPtr;
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    char_segment_self_check(segPtr);
-  
+    char_segment_self_check (segPtr);
+
   segPtr2 = segPtr->next;
   if ((segPtr2 == NULL) || (segPtr2->type != &gtk_text_char_type))
     {
@@ -327,10 +327,10 @@ char_segment_cleanup_func(segPtr, line)
   newPtr->next = segPtr2->next;
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    char_segment_self_check(newPtr);
-  
-  g_free(segPtr);
-  g_free(segPtr2);
+    char_segment_self_check (newPtr);
+
+  g_free (segPtr);
+  g_free (segPtr2);
   return newPtr;
 }
 
@@ -352,14 +352,14 @@ char_segment_cleanup_func(segPtr, line)
 
         /* ARGSUSED */
 static int
-char_segment_delete_func(segPtr, line, treeGone)
+char_segment_delete_func (segPtr, line, treeGone)
      GtkTextLineSegment *segPtr;           /* Segment to delete. */
      GtkTextLine *line;                /* Line containing segment. */
      int treeGone;                      /* Non-zero means the entire tree is
                                          * being deleted, so everything must
                                          * get cleaned up. */
 {
-  g_free((char*) segPtr);
+  g_free ((char*) segPtr);
   return 0;
 }
 
@@ -383,34 +383,34 @@ char_segment_delete_func(segPtr, line, treeGone)
 
         /* ARGSUSED */
 static void
-char_segment_check_func(segPtr, line)
+char_segment_check_func (segPtr, line)
      GtkTextLineSegment *segPtr;           /* Segment to check. */
      GtkTextLine *line;                /* Line containing segment. */
 {
-  char_segment_self_check(segPtr);
-  
+  char_segment_self_check (segPtr);
+
   if (segPtr->next == NULL)
     {
       if (segPtr->body.chars[segPtr->byte_count-1] != '\n')
         {
-          g_error("char_segment_check_func: line doesn't end with newline");
+          g_error ("char_segment_check_func: line doesn't end with newline");
         }
     }
   else
     {
       if (segPtr->next->type == &gtk_text_char_type)
         {
-          g_error("char_segment_check_func: adjacent character segments weren't merged");
+          g_error ("char_segment_check_func: adjacent character segments weren't merged");
         }
     }
 }
 
 GtkTextLineSegment*
-_gtk_toggle_segment_new(GtkTextTagInfo *info, gboolean on)
+_gtk_toggle_segment_new (GtkTextTagInfo *info, gboolean on)
 {
   GtkTextLineSegment *seg;
 
-  seg = g_malloc(TSEG_SIZE);
+  seg = g_malloc (TSEG_SIZE);
 
   seg->type = on ? &gtk_text_toggle_on_type : &gtk_text_toggle_off_type;
 
@@ -418,7 +418,7 @@ _gtk_toggle_segment_new(GtkTextTagInfo *info, gboolean on)
 
   seg->byte_count = 0;
   seg->char_count = 0;
-  
+
   seg->body.toggle.info = info;
   seg->body.toggle.inNodeCounts = 0;
 
@@ -445,7 +445,7 @@ _gtk_toggle_segment_new(GtkTextTagInfo *info, gboolean on)
  */
 
 static int
-toggle_segment_delete_func(segPtr, line, treeGone)
+toggle_segment_delete_func (segPtr, line, treeGone)
      GtkTextLineSegment *segPtr;           /* Segment to check. */
      GtkTextLine *line;                /* Line containing segment. */
      int treeGone;                      /* Non-zero means the entire tree is
@@ -454,7 +454,7 @@ toggle_segment_delete_func(segPtr, line, treeGone)
 {
   if (treeGone)
     {
-      g_free((char *) segPtr);
+      g_free ((char *) segPtr);
       return 0;
     }
 
@@ -468,8 +468,8 @@ toggle_segment_delete_func(segPtr, line, treeGone)
 
   if (segPtr->body.toggle.inNodeCounts)
     {
-      _gtk_change_node_toggle_count(line->parent,
-                                    segPtr->body.toggle.info, -1);
+      _gtk_change_node_toggle_count (line->parent,
+                                     segPtr->body.toggle.info, -1);
       segPtr->body.toggle.inNodeCounts = 0;
     }
   return 1;
@@ -499,7 +499,7 @@ toggle_segment_delete_func(segPtr, line, treeGone)
  */
 
 static GtkTextLineSegment *
-toggle_segment_cleanup_func(segPtr, line)
+toggle_segment_cleanup_func (segPtr, line)
      GtkTextLineSegment *segPtr;   /* Segment to check. */
      GtkTextLine *line;        /* Line that now contains segment. */
 {
@@ -531,21 +531,21 @@ toggle_segment_cleanup_func(segPtr, line)
             + segPtr2->body.toggle.inNodeCounts;
           if (counts != 0)
             {
-              _gtk_change_node_toggle_count(line->parent,
-                                            segPtr->body.toggle.info, -counts);
+              _gtk_change_node_toggle_count (line->parent,
+                                             segPtr->body.toggle.info, -counts);
             }
           prevPtr->next = segPtr2->next;
-          g_free((char *) segPtr2);
+          g_free ((char *) segPtr2);
           segPtr2 = segPtr->next;
-          g_free((char *) segPtr);
+          g_free ((char *) segPtr);
           return segPtr2;
         }
     }
 
   if (!segPtr->body.toggle.inNodeCounts)
     {
-      _gtk_change_node_toggle_count(line->parent,
-                                    segPtr->body.toggle.info, 1);
+      _gtk_change_node_toggle_count (line->parent,
+                                     segPtr->body.toggle.info, 1);
       segPtr->body.toggle.inNodeCounts = 1;
     }
   return segPtr;
@@ -569,7 +569,7 @@ toggle_segment_cleanup_func(segPtr, line)
  */
 
 static void
-toggle_segment_line_change_func(segPtr, line)
+toggle_segment_line_change_func (segPtr, line)
      GtkTextLineSegment *segPtr;   /* Segment to check. */
      GtkTextLine *line;        /* Line that used to contain segment. */
 {
@@ -606,9 +606,9 @@ GtkTextLineSegmentClass gtk_text_toggle_on_type = {
   0,                                            /* leftGravity */
   NULL,                 /* splitFunc */
   toggle_segment_delete_func,                           /* deleteFunc */
-  toggle_segment_cleanup_func,          		/* cleanupFunc */
-  toggle_segment_line_change_func,			/* lineChangeFunc */
-  _gtk_toggle_segment_check_func			/* checkFunc */
+  toggle_segment_cleanup_func,                          /* cleanupFunc */
+  toggle_segment_line_change_func,                      /* lineChangeFunc */
+  _gtk_toggle_segment_check_func                        /* checkFunc */
 };
 
 /*
@@ -617,11 +617,11 @@ GtkTextLineSegmentClass gtk_text_toggle_on_type = {
  */
 
 GtkTextLineSegmentClass gtk_text_toggle_off_type = {
-  "toggleOff",				/* name */
-  1,						/* leftGravity */
-  NULL,			/* splitFunc */
-  toggle_segment_delete_func,				/* deleteFunc */
-  toggle_segment_cleanup_func,				/* cleanupFunc */
-  toggle_segment_line_change_func,			/* lineChangeFunc */
+  "toggleOff",                          /* name */
+  1,                                            /* leftGravity */
+  NULL,                 /* splitFunc */
+  toggle_segment_delete_func,                           /* deleteFunc */
+  toggle_segment_cleanup_func,                          /* cleanupFunc */
+  toggle_segment_line_change_func,                      /* lineChangeFunc */
   _gtk_toggle_segment_check_func                        /* checkFunc */
 };

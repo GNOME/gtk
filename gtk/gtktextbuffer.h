@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef GTK_TEXT_BUFFER_H
@@ -44,7 +44,7 @@ extern "C" {
 
 typedef struct _GtkTextBTree GtkTextBTree;
 
-#define GTK_TYPE_TEXT_BUFFER            (gtk_text_buffer_get_type())
+#define GTK_TYPE_TEXT_BUFFER            (gtk_text_buffer_get_type ())
 #define GTK_TEXT_BUFFER(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBuffer))
 #define GTK_TEXT_BUFFER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
 #define GTK_IS_TEXT_BUFFER(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_BUFFER))

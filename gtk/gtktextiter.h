@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef GTK_TEXT_ITER_H
@@ -59,7 +59,7 @@ struct _GtkTextIter {
 
 /* This is primarily intended for language bindings that want to avoid
    a "buffer" argument to text insertions, deletions, etc. */
-GtkTextBuffer *gtk_text_iter_get_buffer(const GtkTextIter *iter);
+GtkTextBuffer *gtk_text_iter_get_buffer (const GtkTextIter *iter);
 
 /*
  * Life cycle
@@ -178,12 +178,12 @@ gboolean gtk_text_iter_backward_to_tag_toggle (GtkTextIter *iter,
 typedef gboolean (* GtkTextCharPredicate) (gunichar ch, gpointer user_data);
 
 gboolean gtk_text_iter_forward_find_char      (GtkTextIter *iter,
-					       GtkTextCharPredicate pred,
-					       gpointer user_data);
+                                               GtkTextCharPredicate pred,
+                                               gpointer user_data);
 
 gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
-					       GtkTextCharPredicate pred,
-					       gpointer user_data);
+                                               GtkTextCharPredicate pred,
+                                               gpointer user_data);
 
 gboolean gtk_text_iter_forward_search  (const GtkTextIter *iter,
                                         const gchar       *str,
