@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.3.13\n"
+"Project-Id-Version: gtk+ 1.3.14\n"
 "POT-Creation-Date: 2002-02-27 18:10-0500\n"
-"PO-Revision-Date: 2002-02-16 18:50+0200\n"
+"PO-Revision-Date: 2002-02-28 19:32+0200\n"
 "Last-Translator: Tõivo Leedjärv <leedjarv@interest.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -1390,17 +1390,16 @@ msgid "Amount of blue light in the color."
 msgstr "Sinise valguse kogus värvis."
 
 #: gtk/gtkcolorsel.c:1835
-#, fuzzy
 msgid "_Opacity:"
-msgstr "Katvus:"
+msgstr "Kat_vus:"
 
 #: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
-msgstr ""
+msgstr "Valitud värvi läbipaistvus."
 
 #: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
-msgstr ""
+msgstr "Värvi _nimi:"
 
 #: gtk/gtkcolorsel.c:1870
 msgid ""
@@ -1410,7 +1409,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
-msgstr "_Palett"
+msgstr "Pa_lett"
 
 #: gtk/gtkcombo.c:139
 msgid "Enable arrow keys"
@@ -1871,7 +1870,7 @@ msgstr ""
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:61
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr ""
+msgstr "abcdefghijkõäöü ABCDEFGHIJKÕÄÖÜ"
 
 #: gtk/gtkfontsel.c:194
 msgid "Font name"
