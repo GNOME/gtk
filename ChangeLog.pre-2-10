@@ -1,3 +1,18 @@
+Tue Jan 15 18:10:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_grab_notify): Stop
+	the timer on destroy, or when we are notified that we are
+	shadowed by a modal dialog.
+
+	* gtk/gtkspinbutton.c: Remove explicit gtk_grab_add()/remove() -
+	not needed any more.
+
+	* gtk/gtkmain.c (gtk_grab_notify): Fix problem where notifications
+	weren't sent out for the default grab group.
+
+	* gtk/gtkmain.c (gtk_grab_notify): Fix notification of widgets that
+	were getting events because they were part of the previous grab.
+
 Tue Jan 15 12:23:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_mnemonic_activate_switch_page): 

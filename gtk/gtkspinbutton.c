@@ -72,6 +72,7 @@ static void gtk_spin_button_class_init     (GtkSpinButtonClass *klass);
 static void gtk_spin_button_editable_init  (GtkEditableClass   *iface);
 static void gtk_spin_button_init           (GtkSpinButton      *spin_button);
 static void gtk_spin_button_finalize       (GObject            *object);
+static void gtk_spin_button_destroy        (GtkObject          *object);
 static void gtk_spin_button_set_property   (GObject         *object,
 					    guint            prop_id,
 					    const GValue    *value,
@@ -102,9 +103,12 @@ static gint gtk_spin_button_leave_notify   (GtkWidget          *widget,
 					    GdkEventCrossing   *event);
 static gint gtk_spin_button_focus_out      (GtkWidget          *widget,
 					    GdkEventFocus      *event);
+static void gtk_spin_button_grab_notify    (GtkWidget          *widget,
+					    gboolean            was_grabbed);
 static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
 					    guint               arrow);
 static gint gtk_spin_button_timer          (GtkSpinButton      *spin_button);
+static void gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
 					    GtkSpinButton      *spin_button); 
 static gint gtk_spin_button_key_press      (GtkWidget          *widget,
@@ -186,6 +190,8 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   gobject_class->set_property = gtk_spin_button_set_property;
   gobject_class->get_property = gtk_spin_button_get_property;
 
+  object_class->destroy = gtk_spin_button_destroy;
+
   widget_class->map = gtk_spin_button_map;
   widget_class->unmap = gtk_spin_button_unmap;
   widget_class->realize = gtk_spin_button_realize;
@@ -202,6 +208,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->enter_notify_event = gtk_spin_button_enter_notify;
   widget_class->leave_notify_event = gtk_spin_button_leave_notify;
   widget_class->focus_out_event = gtk_spin_button_focus_out;
+  widget_class->grab_notify = gtk_spin_button_grab_notify;
 
   entry_class->activate = gtk_spin_button_activate;
 
@@ -442,6 +449,14 @@ gtk_spin_button_finalize (GObject *object)
   gtk_object_unref (GTK_OBJECT (GTK_SPIN_BUTTON (object)->adjustment));
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+static void
+gtk_spin_button_destroy (GtkObject *object)
+{
+  gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (object));
+  
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
@@ -891,6 +906,14 @@ gtk_spin_button_focus_out (GtkWidget     *widget,
   return GTK_WIDGET_CLASS (parent_class)->focus_out_event (widget, event);
 }
 
+static void
+gtk_spin_button_grab_notify (GtkWidget *widget,
+			     gboolean   was_grabbed)
+{
+  if (!was_grabbed)
+    gtk_spin_button_stop_spinning (GTK_SPIN_BUTTON (widget));
+}
+
 static gint
 gtk_spin_button_scroll (GtkWidget      *widget,
 			GdkEventScroll *event)
@@ -920,6 +943,40 @@ gtk_spin_button_scroll (GtkWidget      *widget,
   return TRUE;
 }
 
+static void
+gtk_spin_button_stop_spinning(GtkSpinButton *spin)
+{
+  if (spin->timer)
+    {
+      gtk_timeout_remove (spin->timer);
+      spin->timer = 0;
+      spin->timer_calls = 0;
+      spin->need_timer = FALSE;
+    }
+
+  spin->button = 0;
+  spin->timer = 0;
+}
+
+static void
+start_spinning (GtkSpinButton *spin,
+		GtkArrowType   click_child,
+		gfloat         step)
+{
+  spin->click_child = click_child;
+  gtk_spin_button_real_spin (spin, click_child == GTK_ARROW_UP ? step : -step);
+  
+  if (!spin->timer)
+    {
+      spin->timer_step = step;
+      spin->need_timer = TRUE;
+      spin->timer = gtk_timeout_add (SPIN_BUTTON_INITIAL_TIMER_DELAY, 
+				     (GtkFunction) gtk_spin_button_timer, (gpointer) spin);
+    }
+
+  gtk_spin_button_draw_arrow (spin, click_child);
+}
+
 static gint
 gtk_spin_button_button_press (GtkWidget      *widget,
 			      GdkEventButton *event)
@@ -937,7 +994,6 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 	{
 	  if (!GTK_WIDGET_HAS_FOCUS (widget))
 	    gtk_widget_grab_focus (widget);
-	  gtk_grab_add (widget);
 	  spin->button = event->button;
 	  
 	  if (GTK_ENTRY (widget)->editable)
@@ -945,65 +1001,17 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 	  
 	  if (event->y <= widget->requisition.height / 2)
 	    {
-	      spin->click_child = GTK_ARROW_UP;
 	      if (event->button == 1)
-		{
-		 gtk_spin_button_real_spin (spin, 
-					    spin->adjustment->step_increment);
-		  if (!spin->timer)
-		    {
-		      spin->timer_step = spin->adjustment->step_increment;
-		      spin->need_timer = TRUE;
-		      spin->timer = gtk_timeout_add 
-			(SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-			 (GtkFunction) gtk_spin_button_timer, (gpointer) spin);
-		    }
-		}
+		start_spinning (spin, GTK_ARROW_UP, spin->adjustment->step_increment);
 	      else if (event->button == 2)
-		{
-		 gtk_spin_button_real_spin (spin, 
-					    spin->adjustment->page_increment);
-		  if (!spin->timer) 
-		    {
-		      spin->timer_step = spin->adjustment->page_increment;
-		      spin->need_timer = TRUE;
-		      spin->timer = gtk_timeout_add 
-			(SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-			 (GtkFunction) gtk_spin_button_timer, (gpointer) spin);
-		    }
-		}
-	      gtk_spin_button_draw_arrow (spin, GTK_ARROW_UP);
+		start_spinning (spin, GTK_ARROW_UP, spin->adjustment->page_increment);
 	    }
 	  else 
 	    {
-	      spin->click_child = GTK_ARROW_DOWN;
 	      if (event->button == 1)
-		{
-		  gtk_spin_button_real_spin (spin,
-					     -spin->adjustment->step_increment);
-		  if (!spin->timer)
-		    {
-		      spin->timer_step = spin->adjustment->step_increment;
-		      spin->need_timer = TRUE;
-		      spin->timer = gtk_timeout_add 
-			(SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-			 (GtkFunction) gtk_spin_button_timer, (gpointer) spin);
-		    }
-		}      
+		start_spinning (spin, GTK_ARROW_DOWN, spin->adjustment->step_increment);
 	      else if (event->button == 2)
-		{
-		  gtk_spin_button_real_spin (spin,
-					     -spin->adjustment->page_increment);
-		  if (!spin->timer) 
-		    {
-		      spin->timer_step = spin->adjustment->page_increment;
-		      spin->need_timer = TRUE;
-		      spin->timer = gtk_timeout_add 
-			(SPIN_BUTTON_INITIAL_TIMER_DELAY, 
-			 (GtkFunction) gtk_spin_button_timer, (gpointer) spin);
-		    }
-		}
-	      gtk_spin_button_draw_arrow (spin, GTK_ARROW_DOWN);
+		start_spinning (spin, GTK_ARROW_DOWN, spin->adjustment->page_increment);
 	    }
 	  return TRUE;
 	}
@@ -1030,13 +1038,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
     {
       guint click_child;
 
-      if (spin->timer)
-	{
-	  gtk_timeout_remove (spin->timer);
-	  spin->timer = 0;
-	  spin->timer_calls = 0;
-	  spin->need_timer = FALSE;
-	}
+      gtk_spin_button_stop_spinning (spin);
 
       if (event->button == 3)
 	{
@@ -1064,10 +1066,8 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 		}
 	    }
 	}		  
-      gtk_grab_remove (widget);
       click_child = spin->click_child;
       spin->click_child = 2;
-      spin->button = 0;
       gtk_spin_button_draw_arrow (spin, click_child);
       return TRUE;
     }

@@ -1157,9 +1157,19 @@ gtk_main_get_window_group (GtkWidget   *widget)
 
 typedef struct
 {
-  gboolean was_grabbed;
-  GtkWidget *grab_widget;
+  GtkWidget *old_grab_widget;
+  GtkWidget *new_grab_widget;
 } GrabNotifyInfo;
+
+static gboolean
+check_is_grabbed (GtkWidget *widget,
+		  GtkWidget *grab_widget)
+{
+  if (grab_widget)
+    return !(widget == grab_widget || gtk_widget_is_ancestor (widget, grab_widget));
+  else
+    return TRUE;
+}
 
 static void
 gtk_grab_notify_foreach (GtkWidget *child,
@@ -1167,15 +1177,17 @@ gtk_grab_notify_foreach (GtkWidget *child,
                         
 {
   GrabNotifyInfo *info = data;
+  gboolean was_grabbed = check_is_grabbed (child, info->old_grab_widget);
+  gboolean is_grabbed = check_is_grabbed (child, info->new_grab_widget);
 
-  if (child != info->grab_widget)
+  if (was_grabbed != is_grabbed)
     {
       g_object_ref (G_OBJECT (child));
-
-      gtk_signal_emit_by_name (GTK_OBJECT (child), "grab_notify", info->was_grabbed);
-
+      
+      gtk_signal_emit_by_name (GTK_OBJECT (child), "grab_notify", was_grabbed);
+      
       if (GTK_IS_CONTAINER (child))
-       gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
+	gtk_container_foreach (GTK_CONTAINER (child), gtk_grab_notify_foreach, info);
       
       g_object_unref (G_OBJECT (child));
     }
@@ -1189,8 +1201,16 @@ gtk_grab_notify (GtkWindowGroup *group,
   GList *toplevels;
   GrabNotifyInfo info;
 
-  info.grab_widget = grab_widget;
-  info.was_grabbed = was_grabbed;
+  if (was_grabbed)
+    {
+      info.old_grab_widget = grab_widget;
+      info.new_grab_widget = group->grabs ? group->grabs->data : NULL;
+    }
+  else
+    {
+      info.old_grab_widget = (group->grabs && group->grabs->next) ? group->grabs->next->data : NULL;
+      info.new_grab_widget = grab_widget;
+    }
 
   g_object_ref (group);
   g_object_ref (grab_widget);
@@ -1203,7 +1223,7 @@ gtk_grab_notify (GtkWindowGroup *group,
       GtkWindow *toplevel = toplevels->data;
       toplevels = g_list_delete_link (toplevels, toplevels);
 
-      if (group == toplevel->group)
+      if (group == _gtk_window_get_group (toplevel))
 	gtk_container_foreach (GTK_CONTAINER (toplevel), gtk_grab_notify_foreach, &info);
       g_object_unref (toplevel);
     }
@@ -1231,8 +1251,7 @@ gtk_grab_add (GtkWidget *widget)
       gtk_widget_ref (widget);
       group->grabs = g_slist_prepend (group->grabs, widget);
 
-      if (!was_grabbed)
-	gtk_grab_notify (group, widget, FALSE);
+      gtk_grab_notify (group, widget, FALSE);
     }
 }
 
@@ -1264,8 +1283,7 @@ gtk_grab_remove (GtkWidget *widget)
       
       gtk_widget_unref (widget);
 
-      if (!group->grabs)
-	gtk_grab_notify (group, widget, TRUE);
+      gtk_grab_notify (group, widget, TRUE);
     }
 }
 
