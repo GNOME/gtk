@@ -1,5 +1,8 @@
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testentrycompletion.c (animation_timer): Don't try to
+	remove stuff from an empty model.  (#156575, Christian Persch)
+
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
 	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init): 
 	Update doc comments.

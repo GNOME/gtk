@@ -217,7 +217,7 @@ animation_timer (GtkEntryCompletion *completion)
 	{
 	  g_print ("readding model!\n");
 	  
-	  gtk_entry_completion_set_model (completion, GTK_TREE_MODEL(old_store));
+	  gtk_entry_completion_set_model (completion, GTK_TREE_MODEL (old_store));
 	  g_object_unref (old_store);
 	  old_store = NULL;
 	}
@@ -237,8 +237,8 @@ animation_timer (GtkEntryCompletion *completion)
 	}
       else
 	{
-	  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter);
-	  gtk_list_store_remove (store, &iter);
+	  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &iter))
+	    gtk_list_store_remove (store, &iter);
 	}
     }
   
