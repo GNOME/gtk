@@ -70,7 +70,8 @@ enum {
 
 enum {
   PROP_0,
-  PROP_TEXT_POSITION,
+  PROP_CURSOR_POSITION,
+  PROP_SELECTION_BOUND,
   PROP_EDITABLE,
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
@@ -402,14 +403,24 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   
   g_object_class_install_property (gobject_class,
-                                   PROP_TEXT_POSITION,
-                                   g_param_spec_int ("text_position",
-                                                     _("Text Position"),
-                                                     _("The current position of the insertion point"),
+                                   PROP_CURSOR_POSITION,
+                                   g_param_spec_int ("cursor_position",
+                                                     _("Cursor Position"),
+                                                     _("The current position of the insertion cursor in chars."),
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                     G_PARAM_READABLE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_SELECTION_BOUND,
+                                   g_param_spec_int ("selection_bound",
+                                                     _("Selection Bound"),
+                                                     _("The position of the opposite end of the selection from the cursor in chars."),
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_EDITABLE,
@@ -775,11 +786,6 @@ gtk_entry_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_TEXT_POSITION:
-      gtk_editable_set_position (GTK_EDITABLE (object), 
-				 g_value_get_int (value));
-      break;
-
     case PROP_EDITABLE:
       {
         gboolean new_value = g_value_get_boolean (value);
@@ -821,6 +827,7 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_SCROLL_OFFSET:
+    case PROP_CURSOR_POSITION:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -839,8 +846,11 @@ gtk_entry_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_TEXT_POSITION:
+    case PROP_CURSOR_POSITION:
       g_value_set_int (value, entry->current_pos);
+      break;
+    case PROP_SELECTION_BOUND:
+      g_value_set_int (value, entry->selection_bound);
       break;
     case PROP_EDITABLE:
       g_value_set_boolean (value, entry->editable);
@@ -2272,6 +2282,8 @@ gtk_entry_set_positions (GtkEntry *entry,
 			 gint      selection_bound)
 {
   gboolean changed = FALSE;
+
+  g_object_freeze_notify (G_OBJECT (entry));
   
   if (current_pos != -1 &&
       entry->current_pos != current_pos)
@@ -2279,7 +2291,7 @@ gtk_entry_set_positions (GtkEntry *entry,
       entry->current_pos = current_pos;
       changed = TRUE;
 
-      g_object_notify (G_OBJECT (entry), "text_position");
+      g_object_notify (G_OBJECT (entry), "cursor_position");
     }
 
   if (selection_bound != -1 &&
@@ -2287,7 +2299,11 @@ gtk_entry_set_positions (GtkEntry *entry,
     {
       entry->selection_bound = selection_bound;
       changed = TRUE;
+      
+      g_object_notify (G_OBJECT (entry), "selection_bound");
     }
+
+  g_object_thaw_notify (G_OBJECT (entry));
 
   if (changed)
     gtk_entry_recompute (entry);

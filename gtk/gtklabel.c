@@ -66,7 +66,9 @@ enum {
   PROP_WRAP,
   PROP_SELECTABLE,
   PROP_MNEMONIC_KEYVAL,
-  PROP_MNEMONIC_WIDGET
+  PROP_MNEMONIC_WIDGET,
+  PROP_CURSOR_POSITION,
+  PROP_SELECTION_BOUND
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -351,6 +353,26 @@ gtk_label_class_init (GtkLabelClass *class)
 							GTK_TYPE_WIDGET,
 							G_PARAM_READWRITE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_CURSOR_POSITION,
+                                   g_param_spec_int ("cursor_position",
+                                                     _("Cursor Position"),
+                                                     _("The current position of the insertion cursor in chars."),
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_SELECTION_BOUND,
+                                   g_param_spec_int ("selection_bound",
+                                                     _("Selection Bound"),
+                                                     _("The position of the opposite end of the selection from the cursor in chars."),
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE));
+  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("cursor_color",
 							       _("Cursor color"),
@@ -521,6 +543,26 @@ gtk_label_get_property (GObject     *object,
       break;
     case PROP_MNEMONIC_WIDGET:
       g_value_set_object (value, (GObject*) label->mnemonic_widget);
+      break;
+    case PROP_CURSOR_POSITION:
+      if (label->select_info)
+	{
+	  gint offset = g_utf8_pointer_to_offset (label->label,
+						  label->label + label->select_info->selection_end);
+	  g_value_set_int (value, offset);
+	}
+      else
+	g_value_set_int (value, 0);
+      break;
+    case PROP_SELECTION_BOUND:
+      if (label->select_info)
+	{
+	  gint offset = g_utf8_pointer_to_offset (label->label,
+						  label->label + label->select_info->selection_anchor);
+	  g_value_set_int (value, offset);
+	}
+      else
+	g_value_set_int (value, 0);
       break;
 
     default:
@@ -2139,17 +2181,15 @@ gtk_label_button_press (GtkWidget      *widget,
 	  min = MIN (min, index);
 	  max = MAX (max, index);
 	  
-	  gtk_label_select_region_index (label,
-					 min,
-					 max);
-	  
 	  /* ensure the anchor is opposite index */
-	  if (index == label->select_info->selection_anchor)
+	  if (index == min)
 	    {
-	      gint tmp = label->select_info->selection_end;
-	      label->select_info->selection_end = label->select_info->selection_anchor;
-	      label->select_info->selection_anchor = tmp;
+	      gint tmp = min;
+	      min = max;
+	      max = tmp;
 	    }
+	  
+	  gtk_label_select_region_index (label, min, max);
 	}
       else
 	{
@@ -2332,8 +2372,12 @@ gtk_label_set_selectable (GtkLabel *label,
     }
   if (setting != old_setting)
     {
-       g_object_notify (G_OBJECT (label), "selectable");
-       gtk_widget_queue_draw (GTK_WIDGET (label));
+      g_object_freeze_notify (G_OBJECT (label));
+      g_object_notify (G_OBJECT (label), "selectable");
+      g_object_notify (G_OBJECT (label), "cursor_position");
+      g_object_notify (G_OBJECT (label), "selection_bound");
+      g_object_thaw_notify (G_OBJECT (label));
+      gtk_widget_queue_draw (GTK_WIDGET (label));
     }
 }
 
@@ -2451,6 +2495,11 @@ gtk_label_select_region_index (GtkLabel *label,
 
       gtk_label_clear_layout (label);
       gtk_widget_queue_draw (GTK_WIDGET (label));
+
+      g_object_freeze_notify (G_OBJECT (label));
+      g_object_notify (G_OBJECT (label), "cursor_position");
+      g_object_notify (G_OBJECT (label), "selection_bound");
+      g_object_thaw_notify (G_OBJECT (label));
     }
 }
 
