@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-09-03 14:16-0500\n"
-"PO-Revision-Date: 1999-08-20 02:45+0100\n"
+"POT-Creation-Date: 1999-09-06 11:28+0200\n"
+"PO-Revision-Date: 1999-09-03 22:36+0100\n"
 "Last-Translator: Birger Langkjer <birger.langkjer@image.dk>\n"
 "Language-Team: Danish <dltp@lists.wiktor.dk>\n"
 "MIME-Version: 1.0\n"
@@ -248,7 +248,7 @@ msgstr "%i skrifttyper tilstede med ialt %s stilvarianter."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
@@ -256,7 +256,7 @@ msgstr "Skrifttype-typer:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
-msgstr ""
+msgstr "Bitmap"
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
@@ -268,16 +268,16 @@ msgstr "Skaleret bitmap"
 
 #: gtk/gtkfontsel.c:890
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
 msgid "(nil)"
-msgstr ""
+msgstr "(nul)"
 
 #: gtk/gtkfontsel.c:1215
 msgid "regular"
-msgstr "normal"
+msgstr "regulær"
 
 #: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1950
 msgid "italic"
@@ -301,11 +301,11 @@ msgstr "andre"
 
 #: gtk/gtkfontsel.c:1231
 msgid "[M]"
-msgstr ""
+msgstr "[M]"
 
 #: gtk/gtkfontsel.c:1232
 msgid "[C]"
-msgstr ""
+msgstr "[C]"
 
 #: gtk/gtkfontsel.c:1782
 msgid "The selected font is not available."
@@ -410,11 +410,11 @@ msgstr "Gem"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:501
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
@@ -446,12 +446,12 @@ msgstr "ryd"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1627
+#: gtk/gtkrc.c:1570
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1630
+#: gtk/gtkrc.c:1573
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
@@ -464,3 +464,30 @@ msgstr "Kunne ikke finde modul i module_path: \"%s\","
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Ingen hjælp ---"
+
+#~ msgid "heavy"
+#~ msgstr "tung"
+
+#~ msgid "extrabold"
+#~ msgstr "ekstrafed"
+
+#~ msgid "bold"
+#~ msgstr "fed"
+
+#~ msgid "demibold"
+#~ msgstr "halvfed"
+
+#~ msgid "medium"
+#~ msgstr "medium"
+
+#~ msgid "normal"
+#~ msgstr "normal"
+
+#~ msgid "light"
+#~ msgstr "let"
+
+#~ msgid "extralight"
+#~ msgstr "ekstralet"
+
+#~ msgid "thin"
+#~ msgstr "tynd"
