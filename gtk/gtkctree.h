@@ -240,7 +240,16 @@ gboolean gtk_ctree_is_ancestor                   (GtkCTree     *ctree,
 GtkCTreeNode * gtk_ctree_find_by_row_data        (GtkCTree     *ctree,
 					          GtkCTreeNode *node,
 					          gpointer      data);
+/* returns a GList of all GtkCTreeNodes with row->data == data. */
+GList * gtk_ctree_find_all_by_row_data           (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gpointer      data);
 GtkCTreeNode * gtk_ctree_find_by_row_data_custom (GtkCTree     *ctree,
+						  GtkCTreeNode *node,
+						  gpointer      data,
+						  GCompareFunc  func);
+/* returns a GList of all GtkCTreeNodes with row->data == data. */
+GList * gtk_ctree_find_all_by_row_data_custom    (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gpointer      data,
 						  GCompareFunc  func);

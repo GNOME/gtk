@@ -1,3 +1,31 @@
+Wed Oct  7 00:59:46 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.h: new signal GtkCList::resize_column.
+	* gtk/gtkclist.c (draw_row): don't draw invisible columns
+	(size_allocate_title_buttons) (size_allocate_columns):
+	skip invisible columns
+	(new_column_width): take min/max_width into account 
+	(gtk_clist_button_release) (gtk_clist_motion):
+ 	changes due to changed new_column_width function
+	(LIST_WIDTH): changed define to inline function.
+	(real_resize_column): class function for resize_column signal
+	(gtk_clist_motion): fixed autoscrolling for column resizes
+	(gtk_clist_set_column_visibility): don't hide last visible column,
+	changed visible arg to gboolean
+	(gtk_clist_set_column_min_width)(gtk_clist_set_column_max_width):
+	new functions : set min/max width of a column
+	(gtk_clist_set_column_resizeable): new function : enable/disable
+	column resize operations by mouse
+
+	* gtk/gtkctree.c (draw_row): don't draw invisible columns
+	(ctree_is_hot_spot): return FALSE if tree_column is invisible
+	(draw_xor_line)  (draw_xor_rect): draw full rectangle/line if
+	tree_column is invisible
+	(gtk_ctree_find_all_by_row_data)
+	(gtk_ctree_find_all_by_row_data_custom):  new function from
+	Ronan Bourlier <ronan@radioss.com>. Returns a GList of all
+ 	GtkCTreeNodes with row->data == data.
+
 Tue Oct  6 14:05:00 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c (cb_tree_destroy_event): use g_free to free g_malloced

@@ -969,37 +969,41 @@ draw_xor_line (GtkCTree *ctree)
   else 
     y = ROW_TOP_YPIXEL (clist, ctree->drag_row) - 1;
 
-  switch (clist->column[ctree->tree_column].justification)
-    {
-    case GTK_JUSTIFY_CENTER:
-    case GTK_JUSTIFY_FILL:
-    case GTK_JUSTIFY_LEFT:
-      if (ctree->tree_column > 0)
-	gdk_draw_line (clist->clist_window, ctree->xor_gc, 
-		       COLUMN_LEFT_XPIXEL(clist, 0), y,
-		       COLUMN_LEFT_XPIXEL(clist, ctree->tree_column - 1) +
-		       clist->column[ctree->tree_column - 1].area.width, y);
+  if (clist->column[ctree->tree_column].visible)
+    switch (clist->column[ctree->tree_column].justification)
+      {
+      case GTK_JUSTIFY_CENTER:
+      case GTK_JUSTIFY_FILL:
+      case GTK_JUSTIFY_LEFT:
+	if (ctree->tree_column > 0)
+	  gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+			 COLUMN_LEFT_XPIXEL(clist, 0), y,
+			 COLUMN_LEFT_XPIXEL(clist, ctree->tree_column - 1) +
+			 clist->column[ctree->tree_column - 1].area.width, y);
       
-      gdk_draw_line (clist->clist_window, ctree->xor_gc, 
-		     COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) + 
-		     ctree->tree_indent * level -
-		     (ctree->tree_indent - PM_SIZE) / 2, y,
-		     GTK_WIDGET (ctree)->allocation.width, y);
-      break;
-    case GTK_JUSTIFY_RIGHT:
-      if (ctree->tree_column < clist->columns - 1)
 	gdk_draw_line (clist->clist_window, ctree->xor_gc, 
-		       COLUMN_LEFT_XPIXEL(clist, ctree->tree_column + 1), y,
-		       COLUMN_LEFT_XPIXEL(clist, clist->columns - 1) +
-		       clist->column[clist->columns - 1].area.width, y);
+		       COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) + 
+		       ctree->tree_indent * level -
+		       (ctree->tree_indent - PM_SIZE) / 2, y,
+		       GTK_WIDGET (ctree)->allocation.width, y);
+	break;
+      case GTK_JUSTIFY_RIGHT:
+	if (ctree->tree_column < clist->columns - 1)
+	  gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+			 COLUMN_LEFT_XPIXEL(clist, ctree->tree_column + 1), y,
+			 COLUMN_LEFT_XPIXEL(clist, clist->columns - 1) +
+			 clist->column[clist->columns - 1].area.width, y);
       
-      gdk_draw_line (clist->clist_window, ctree->xor_gc, 
-		     0, y, COLUMN_LEFT_XPIXEL(clist, ctree->tree_column)
-		     + clist->column[ctree->tree_column].area.width
-		     - ctree->tree_indent * level +
-		     (ctree->tree_indent - PM_SIZE) / 2, y);
-      break;
-    }
+	gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+		       0, y, COLUMN_LEFT_XPIXEL(clist, ctree->tree_column)
+		       + clist->column[ctree->tree_column].area.width -
+		       ctree->tree_indent * level +
+		       (ctree->tree_indent - PM_SIZE) / 2, y);
+	break;
+      }
+  else
+    gdk_draw_line (clist->clist_window, ctree->xor_gc, 
+		   0, y, clist->clist_window_width, y);
 }
 
 static void
@@ -1017,77 +1021,84 @@ draw_xor_rect (GtkCTree *ctree)
 
   y = ROW_TOP_YPIXEL (clist, ctree->drag_row) + clist->row_height;
 
-  switch (clist->column[ctree->tree_column].justification)
-    {
-    case GTK_JUSTIFY_CENTER:
-    case GTK_JUSTIFY_FILL:
-    case GTK_JUSTIFY_LEFT:
-      points[0].x =  COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) + 
-	ctree->tree_indent * level - (ctree->tree_indent - PM_SIZE) / 2;
-      points[0].y = y;
-      points[3].x = points[0].x;
-      points[3].y = y - clist->row_height - 1;
-      points[1].x = clist->clist_window_width - 1;
-      points[1].y = points[0].y;
-      points[2].x = points[1].x;
-      points[2].y = points[3].y;
+  if (clist->column[ctree->tree_column].visible)
+    switch (clist->column[ctree->tree_column].justification)
+      {
+      case GTK_JUSTIFY_CENTER:
+      case GTK_JUSTIFY_FILL:
+      case GTK_JUSTIFY_LEFT:
+	points[0].x =  COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) + 
+	  ctree->tree_indent * level - (ctree->tree_indent - PM_SIZE) / 2;
+	points[0].y = y;
+	points[3].x = points[0].x;
+	points[3].y = y - clist->row_height - 1;
+	points[1].x = clist->clist_window_width - 1;
+	points[1].y = points[0].y;
+	points[2].x = points[1].x;
+	points[2].y = points[3].y;
 
-      for (i = 0; i < 3; i++)
-	gdk_draw_line (clist->clist_window, ctree->xor_gc,
-		       points[i].x, points[i].y, points[i+1].x, points[i+1].y);
+	for (i = 0; i < 3; i++)
+	  gdk_draw_line (clist->clist_window, ctree->xor_gc,
+			 points[i].x, points[i].y,
+			 points[i+1].x, points[i+1].y);
 
-      if (ctree->tree_column > 0)
-	{
-	  points[0].x = COLUMN_LEFT_XPIXEL(clist, ctree->tree_column - 1) +
-	    clist->column[ctree->tree_column - 1].area.width ;
-	  points[0].y = y;
-	  points[3].x = points[0].x;
-	  points[3].y = y - clist->row_height - 1;
-	  points[1].x = 0;
-	  points[1].y = points[0].y;
-	  points[2].x = 0;
-	  points[2].y = points[3].y;
+	if (ctree->tree_column > 0)
+	  {
+	    points[0].x = COLUMN_LEFT_XPIXEL(clist, ctree->tree_column - 1) +
+	      clist->column[ctree->tree_column - 1].area.width ;
+	    points[0].y = y;
+	    points[3].x = points[0].x;
+	    points[3].y = y - clist->row_height - 1;
+	    points[1].x = 0;
+	    points[1].y = points[0].y;
+	    points[2].x = 0;
+	    points[2].y = points[3].y;
 
-	  for (i = 0; i < 3; i++)
-	    gdk_draw_line (clist->clist_window, ctree->xor_gc,
-			   points[i].x, points[i].y, points[i+1].x, 
-			   points[i+1].y);
-	}
-      break;
-    case GTK_JUSTIFY_RIGHT:
-      points[0].x =  COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) - 
-	ctree->tree_indent * level + (ctree->tree_indent - PM_SIZE) / 2  +
-	clist->column[ctree->tree_column].area.width;
-      points[0].y = y;
-      points[3].x = points[0].x;
-      points[3].y = y - clist->row_height - 1;
-      points[1].x = 0;
-      points[1].y = points[0].y;
-      points[2].x = 0;
-      points[2].y = points[3].y;
+	    for (i = 0; i < 3; i++)
+	      gdk_draw_line (clist->clist_window, ctree->xor_gc,
+			     points[i].x, points[i].y, points[i+1].x, 
+			     points[i+1].y);
+	  }
+	break;
+      case GTK_JUSTIFY_RIGHT:
+	points[0].x =  COLUMN_LEFT_XPIXEL(clist, ctree->tree_column) - 
+	  ctree->tree_indent * level + (ctree->tree_indent - PM_SIZE) / 2  +
+	  clist->column[ctree->tree_column].area.width;
+	points[0].y = y;
+	points[3].x = points[0].x;
+	points[3].y = y - clist->row_height - 1;
+	points[1].x = 0;
+	points[1].y = points[0].y;
+	points[2].x = 0;
+	points[2].y = points[3].y;
 
-      for (i = 0; i < 3; i++)
-	gdk_draw_line (clist->clist_window, ctree->xor_gc,
-		       points[i].x, points[i].y, points[i+1].x, points[i+1].y);
+	for (i = 0; i < 3; i++)
+	  gdk_draw_line (clist->clist_window, ctree->xor_gc,
+			 points[i].x, points[i].y,
+			 points[i+1].x, points[i+1].y);
 
-      if (ctree->tree_column < clist->columns - 1)
-	{
-	  points[0].x = COLUMN_LEFT_XPIXEL(clist, ctree->tree_column + 1);
-	  points[0].y = y;
-	  points[3].x = points[0].x;
-	  points[3].y = y - clist->row_height - 1;
-	  points[1].x = clist->clist_window_width - 1;
-	  points[1].y = points[0].y;
-	  points[2].x = points[1].x;
-	  points[2].y = points[3].y;
+	if (ctree->tree_column < clist->columns - 1)
+	  {
+	    points[0].x = COLUMN_LEFT_XPIXEL(clist, ctree->tree_column + 1);
+	    points[0].y = y;
+	    points[3].x = points[0].x;
+	    points[3].y = y - clist->row_height - 1;
+	    points[1].x = clist->clist_window_width - 1;
+	    points[1].y = points[0].y;
+	    points[2].x = points[1].x;
+	    points[2].y = points[3].y;
 
-	  for (i = 0; i < 3; i++)
-	    gdk_draw_line (clist->clist_window, ctree->xor_gc,
-			   points[i].x, points[i].y, points[i+1].x, 
-			   points[i+1].y);
-	}
-      break;
-    }      
+	    for (i = 0; i < 3; i++)
+	      gdk_draw_line (clist->clist_window, ctree->xor_gc,
+			     points[i].x, points[i].y,
+			     points[i+1].x, points[i+1].y);
+	  }
+	break;
+      }      
+  else
+    gdk_draw_rectangle (clist->clist_window, ctree->xor_gc, FALSE,
+			0, y - clist->row_height,
+			clist->clist_window_width - 1, clist->row_height);
 }
 
 static void
@@ -1266,6 +1277,8 @@ draw_row (GtkCList     *clist,
   /* iterate and draw all the columns (row cells) and draw their contents */
   for (i = 0; i < clist->columns; i++)
     {
+      if (!clist->column[i].visible)
+	continue;
 	
       if (!need_redraw && ctree->tree_column != i)
 	continue;
@@ -3678,6 +3691,9 @@ ctree_is_hot_spot (GtkCTree     *ctree,
   tree_row = GTK_CTREE_ROW (node);
   clist = GTK_CLIST (ctree);
 
+  if (!clist->column[ctree->tree_column].visible)
+    return FALSE;
+
   cell = GTK_CELL_PIXTEXT(tree_row->row.cell[ctree->tree_column]);
 
   yu = ROW_TOP_YPIXEL (clist, row) + (clist->row_height - PM_SIZE) / 2;
@@ -4321,6 +4337,40 @@ gtk_ctree_find_by_row_data (GtkCTree     *ctree,
   return NULL;
 }
 
+GList *
+gtk_ctree_find_all_by_row_data (GtkCTree     *ctree,
+				GtkCTreeNode *node,
+				gpointer      data)
+{
+  GList *list = NULL;
+
+  g_return_val_if_fail (ctree != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
+
+  /* if node == NULL then look in the whole tree */
+  if (!node)
+    node = GTK_CTREE_NODE (GTK_CLIST (ctree)->row_list);
+
+  while (node)
+    {
+      if (GTK_CTREE_ROW (node)->row.data == data)
+        list = g_list_append (list, node);
+
+      if (GTK_CTREE_ROW (node)->children)
+        {
+	  GList *sub_list;
+
+          sub_list = gtk_ctree_find_all_by_row_data (ctree,
+						     GTK_CTREE_ROW
+						     (node)->children,
+						     data);
+          list = g_list_concat (list, sub_list);
+        }
+      node = GTK_CTREE_ROW (node)->sibling;
+    }
+  return list;
+}
+
 GtkCTreeNode *
 gtk_ctree_find_by_row_data_custom (GtkCTree     *ctree,
 				   GtkCTreeNode *node,
@@ -4345,6 +4395,43 @@ gtk_ctree_find_by_row_data_custom (GtkCTree     *ctree,
       node = GTK_CTREE_ROW (node)->sibling;
     }
   return NULL;
+}
+
+GList *
+gtk_ctree_find_all_by_row_data_custom (GtkCTree     *ctree,
+				       GtkCTreeNode *node,
+				       gpointer      data,
+				       GCompareFunc  func)
+{
+  GList *list = NULL;
+
+  g_return_val_if_fail (ctree != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CTREE (ctree), NULL);
+  g_return_val_if_fail (func != NULL, NULL);
+
+  /* if node == NULL then look in the whole tree */
+  if (!node)
+    node = GTK_CTREE_NODE (GTK_CLIST (ctree)->row_list);
+
+  while (node)
+    {
+      if (!func (GTK_CTREE_ROW (node)->row.data, data))
+        list = g_list_append (list, node);
+
+      if (GTK_CTREE_ROW (node)->children)
+        {
+	  GList *sub_list;
+
+          sub_list = gtk_ctree_find_all_by_row_data_custom (ctree,
+							    GTK_CTREE_ROW
+							    (node)->children,
+							    data,
+							    func);
+          list = g_list_concat (list, sub_list);
+        }
+      node = GTK_CTREE_ROW (node)->sibling;
+    }
+  return list;
 }
 
 gboolean
