@@ -707,6 +707,9 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 				&node);
 
       gtk_tree_path_free (anchor_path);
+
+      if (tree == NULL)
+        return FALSE;
       
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
 	{
@@ -976,6 +979,7 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
 	selected = TRUE;
       gtk_tree_path_free (path);
     }
+  
   if (selected == TRUE)
     {
       node->flags ^= GTK_RBNODE_IS_SELECTED;

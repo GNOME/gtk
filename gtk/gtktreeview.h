@@ -155,6 +155,9 @@ void gtk_tree_view_tree_to_widget_coords (GtkTreeView  *tree_view,
                                           gint         *wx,
                                           gint         *wy);
 
+void     gtk_tree_view_set_rules_hint     (GtkTreeView  *tree_view,
+                                           gboolean      setting);
+gboolean gtk_tree_view_get_rules_hint     (GtkTreeView  *tree_view);
 
 
 /* Drag-and-Drop support */

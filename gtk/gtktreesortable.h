@@ -26,6 +26,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef enum
+{
+  GTK_TREE_SORT_ASCENDING,
+  GTK_TREE_SORT_DESCENDING
+} GtkTreeSortOrder;
+
 #define GTK_TYPE_TREE_SORTABLE            (gtk_tree_sortable_get_type ())
 #define GTK_TREE_SORTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_SORTABLE, GtkTreeSortable))
 #define GTK_IS_TREE_SORTABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TREE_SORTABLE))
@@ -38,14 +44,19 @@ struct _GtkTreeSortableIface
 {
   GTypeInterface g_iface;
 
-  /* FIXME think about sorting reverse when the column is clicked
-   * a second time.
-   */
-  gboolean     (* column_sortable) (GtkTreeSortable *sortable,
-                                    gint             column);
-  gint         (* get_sort_column) (GtkTreeSortable *sortable);
-  void         (* set_sort_column) (GtkTreeSortable *sortable,
-                                    gint             column);
+  /* This one is a signal */
+  void         (* sort_column_changed) (GtkTreeSortable  *sortable);
+
+  /* virtual methods */
+  gboolean     (* column_sortable)     (GtkTreeSortable  *sortable,
+                                        gint              column,
+                                        GtkTreeSortOrder  order);
+  void         (* get_sort_column)     (GtkTreeSortable  *sortable,
+                                        gint             *column,
+                                        GtkTreeSortOrder *order);
+  void         (* set_sort_column)     (GtkTreeSortable  *sortable,
+                                        gint              column,
+                                        GtkTreeSortOrder  order);
 };
 
 

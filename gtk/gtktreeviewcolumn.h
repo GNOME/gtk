@@ -23,6 +23,7 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtktreesortable.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -55,9 +56,11 @@ struct _GtkTreeViewColumn
 
   GtkWidget *tree_view;
   GtkWidget *button;
-  GtkWidget *child;
+  GtkWidget *child;  
+  GtkWidget *arrow;
+  GtkWidget *alignment;
   GdkWindow *window;
-  GtkJustification justification;
+  gfloat xalign;
 
   gint id;
 
@@ -71,9 +74,11 @@ struct _GtkTreeViewColumn
   GtkCellRenderer *cell;
   GSList *attributes;
   GtkTreeViewColumnSizing column_type;
+  GtkTreeSortOrder sort_order;
   guint visible       : 1;
   guint button_active : 1;
   guint dirty         : 1;
+  guint show_sort_indicator : 1;
 };
 
 struct _GtkTreeViewColumnClass
@@ -91,6 +96,7 @@ GtkTreeViewColumn *gtk_tree_view_column_new_with_attributes (gchar              
 							     ...);
 void               gtk_tree_view_column_set_cell_renderer   (GtkTreeViewColumn     *tree_column,
 							     GtkCellRenderer       *cell);
+GtkCellRenderer   *gtk_tree_view_column_get_cell_renderer   (GtkTreeViewColumn     *tree_column);
 void               gtk_tree_view_column_add_attribute       (GtkTreeViewColumn     *tree_column,
 							     gchar                 *attribute,
 							     gint                   column);
@@ -121,18 +127,26 @@ void               gtk_tree_view_column_clicked             (GtkTreeViewColumn  
 
 /* Options for manipulating the column headers
  */
-void               gtk_tree_view_column_set_title           (GtkTreeViewColumn     *tree_column,
-							     gchar                 *title);
-gchar             *gtk_tree_view_column_get_title           (GtkTreeViewColumn     *tree_column);
-void               gtk_tree_view_column_set_clickable       (GtkTreeViewColumn     *tree_column,
-                                                             gboolean               active);
-gboolean           gtk_tree_view_column_get_clickable       (GtkTreeViewColumn     *tree_column);
-void               gtk_tree_view_column_set_widget          (GtkTreeViewColumn     *tree_column,
-							     GtkWidget             *widget);
-GtkWidget         *gtk_tree_view_column_get_widget          (GtkTreeViewColumn     *tree_column);
-void               gtk_tree_view_column_set_justification   (GtkTreeViewColumn     *tree_column,
-							     GtkJustification       justification);
-GtkJustification   gtk_tree_view_column_get_justification   (GtkTreeViewColumn     *tree_column);
+void                  gtk_tree_view_column_set_title          (GtkTreeViewColumn *tree_column,
+                                                               gchar             *title);
+G_CONST_RETURN gchar *gtk_tree_view_column_get_title          (GtkTreeViewColumn *tree_column);
+void                  gtk_tree_view_column_set_clickable      (GtkTreeViewColumn *tree_column,
+                                                               gboolean           active);
+gboolean              gtk_tree_view_column_get_clickable      (GtkTreeViewColumn *tree_column);
+void                  gtk_tree_view_column_set_widget         (GtkTreeViewColumn *tree_column,
+                                                               GtkWidget         *widget);
+GtkWidget         *   gtk_tree_view_column_get_widget         (GtkTreeViewColumn *tree_column);
+void                  gtk_tree_view_column_set_alignment      (GtkTreeViewColumn *tree_column,
+                                                               gfloat             xalign);
+gfloat                gtk_tree_view_column_get_alignment      (GtkTreeViewColumn *tree_column);
+void                  gtk_tree_view_column_set_sort_indicator (GtkTreeViewColumn *tree_column,
+                                                               gboolean           setting);
+gboolean              gtk_tree_view_column_get_sort_indicator (GtkTreeViewColumn *tree_column);
+void                  gtk_tree_view_column_set_sort_order     (GtkTreeViewColumn *tree_column,
+                                                               GtkTreeSortOrder   order);
+GtkTreeSortOrder      gtk_tree_view_column_get_sort_order     (GtkTreeViewColumn *tree_column);
+
+
 
 
 

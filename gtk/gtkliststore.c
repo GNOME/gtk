@@ -1250,7 +1250,6 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                     &src_iter,
                                     src_path))
         {
-          g_print ("can't get source path as iter\n");
           goto out;
         }
 
@@ -1266,8 +1265,6 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                   &dest_iter);
           
           retval = TRUE;
-
-          g_print ("prepending to list\n");
         }
       else
         {
@@ -1280,11 +1277,7 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                            &dest_iter,
                                            &tmp_iter);
               retval = TRUE;
-
-              g_print ("inserting into list\n");
             }
-          else
-            g_print ("can't get iter to insert after\n");
         }
 
       gtk_tree_path_free (prev);
@@ -1304,9 +1297,6 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
             {
               copy_iter = _gtk_tree_data_list_node_copy (dl,
                                                          list_store->column_headers[col]);
-
-              g_print ("copied col %d type %s\n", col,
-                       g_type_name (list_store->column_headers[col]));
               
               if (copy_head == NULL)
                 copy_head = copy_iter;
@@ -1332,7 +1322,6 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
       /* FIXME maybe add some data targets eventually, or handle text
        * targets in the simple case.
        */
-      g_print ("not accepting target\n");
     }
 
  out:

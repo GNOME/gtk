@@ -23,6 +23,8 @@
 #include "gtkbutton.h"
 #include "gtkalignment.h"
 #include "gtklabel.h"
+#include "gtkhbox.h"
+#include "gtkarrow.h"
 #include "gtkintl.h"
 
 enum
@@ -38,7 +40,9 @@ enum
   PROP_TITLE,
   PROP_CLICKABLE,
   PROP_WIDGET,
-  PROP_JUSTIFICATION
+  PROP_ALIGNMENT,
+  PROP_SORT_INDICATOR,
+  PROP_SORT_ORDER
 };
 
 enum
@@ -200,13 +204,32 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
-                                   PROP_JUSTIFICATION,
-                                   g_param_spec_enum ("justification",
-                                                      _("Justification"),
-                                                      _("Justification of the column"),
-                                                      GTK_TYPE_JUSTIFICATION,
-                                                      GTK_JUSTIFY_LEFT,
+                                   PROP_ALIGNMENT,
+                                   g_param_spec_float ("alignment",
+                                                       _("Alignment"),
+                                                       _("Alignment of the column header text or widget"),
+                                                       0.0,
+                                                       1.0,
+                                                       0.5,
+                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_SORT_INDICATOR,
+                                   g_param_spec_boolean ("sort_indicator",
+                                                        _("Sort indicator"),
+                                                        _("Whether to show a sort indicator"),
+                                                         FALSE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_SORT_ORDER,
+                                   g_param_spec_enum ("sort_order",
+                                                      _("Sort order"),
+                                                      _("Sort direction the sort indicator should indicate"),
+                                                      GTK_TYPE_TREE_SORT_ORDER,
+                                                      GTK_TREE_SORT_ASCENDING,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
 }
 
 static void
@@ -217,7 +240,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   gtk_object_sink (GTK_OBJECT (tree_column));
   
   tree_column->button = NULL;
-  tree_column->justification = GTK_JUSTIFY_LEFT;
+  tree_column->xalign = 0.0;
   tree_column->width = 1;
   tree_column->min_width = -1;
   tree_column->max_width = -1;
@@ -227,6 +250,8 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->visible = TRUE;
   tree_column->button_active = FALSE;
   tree_column->dirty = TRUE;
+  tree_column->sort_order = GTK_TREE_SORT_ASCENDING;
+  tree_column->show_sort_indicator = FALSE;
 }
 
 static void
@@ -288,11 +313,21 @@ gtk_tree_view_column_set_property (GObject         *object,
                                        (GtkWidget*) g_value_get_object (value));
       break;
 
-    case PROP_JUSTIFICATION:
-      gtk_tree_view_column_set_justification (tree_column,
-                                              g_value_get_enum (value));
+    case PROP_ALIGNMENT:
+      gtk_tree_view_column_set_alignment (tree_column,
+                                          g_value_get_float (value));
       break;
 
+    case PROP_SORT_INDICATOR:
+      gtk_tree_view_column_set_sort_indicator (tree_column,
+                                               g_value_get_boolean (value));
+      break;
+
+    case PROP_SORT_ORDER:
+      gtk_tree_view_column_set_sort_order (tree_column,
+                                           g_value_get_enum (value));
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -313,50 +348,69 @@ gtk_tree_view_column_get_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_CELL_RENDERER:
-      g_value_set_object (value, (GObject*) tree_column->cell);
+      g_value_set_object (value,
+                          (GObject*) gtk_tree_view_column_get_cell_renderer (tree_column));
       break;
 
     case PROP_VISIBLE:
-      g_value_set_boolean (value, tree_column->visible);
+      g_value_set_boolean (value,
+                           gtk_tree_view_column_get_visible (tree_column));
       break;
 
     case PROP_SIZING:
-      g_value_set_enum (value, tree_column->column_type);
+      g_value_set_enum (value,
+                        gtk_tree_view_column_get_sizing (tree_column));
       break;
 
     case PROP_WIDTH:
-      g_value_set_int (value, tree_column->width);
+      g_value_set_int (value,
+                       gtk_tree_view_column_get_width (tree_column));
       break;
 
     case PROP_MIN_WIDTH:
-      g_value_set_int (value, tree_column->min_width);
+      g_value_set_int (value,
+                       gtk_tree_view_column_get_min_width (tree_column));
       break;
 
     case PROP_MAX_WIDTH:
-      g_value_set_int (value, tree_column->max_width);
+      g_value_set_int (value,
+                       gtk_tree_view_column_get_max_width (tree_column));
       break;
 
     case PROP_TITLE:
-      g_value_set_string (value, tree_column->title);
+      g_value_set_string (value,
+                          gtk_tree_view_column_get_title (tree_column));
       break;
 
     case PROP_CLICKABLE:
-      g_value_set_boolean (value, tree_column->button_active);
+      g_value_set_boolean (value,
+                           gtk_tree_view_column_get_clickable (tree_column));
       break;
 
     case PROP_WIDGET:
-      g_warning ("FIXME");
+      g_value_set_object (value,
+                          (GObject*) gtk_tree_view_column_get_widget (tree_column));
       break;
 
-    case PROP_JUSTIFICATION:
-      g_value_set_enum (value, tree_column->justification);
+    case PROP_ALIGNMENT:
+      g_value_set_float (value,
+                         gtk_tree_view_column_get_alignment (tree_column));
       break;
 
+    case PROP_SORT_INDICATOR:
+      g_value_set_boolean (value,
+                           gtk_tree_view_column_get_sort_indicator (tree_column));
+      break;
+
+    case PROP_SORT_ORDER:
+      g_value_set_enum (value,
+                        gtk_tree_view_column_get_sort_order (tree_column));
+      break;
+      
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-
 }
 
 /* used to make the buttons 'unclickable' */
@@ -455,8 +509,8 @@ void
 gtk_tree_view_column_set_cell_renderer (GtkTreeViewColumn *tree_column,
 					GtkCellRenderer   *cell)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
   if (cell)
     g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
 
@@ -469,6 +523,22 @@ gtk_tree_view_column_set_cell_renderer (GtkTreeViewColumn *tree_column,
   tree_column->cell = cell;
 
   g_object_notify (G_OBJECT (tree_column), "cell_renderer");
+}
+
+/**
+ * gtk_tree_view_column_get_cell_renderer:
+ * @tree_column: a #GtkTreeViewColumn
+ * 
+ * Gets the value set with gtk_tree_view_column_set_cell_renderer().
+ * 
+ * Return value: cell renderer for the column, or %NULL if unset
+ **/
+GtkCellRenderer*
+gtk_tree_view_column_get_cell_renderer (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
+  
+  return tree_column->cell;
 }
 
 /**
@@ -788,6 +858,22 @@ gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
 }
 
 /**
+ * gtk_tree_view_column_get_width:
+ * @tree_column: a #GtkTreeViewColumn
+ * 
+ * Gets the value set by gtk_tree_view_column_set_width().
+ * 
+ * Return value: the width of the column
+ **/
+gint
+gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
+
+  return tree_column->width;
+}
+
+/**
  * gtk_tree_view_column_set_min_width:
  * @tree_column: A #GtkTreeViewColumn.
  * @min_width: The minimum width of the column in pixels, or -1.
@@ -923,8 +1009,13 @@ update_button_contents (GtkTreeViewColumn *tree_column)
 {
   if (tree_column->button)
     {
-      GtkWidget *alignment = GTK_BIN (tree_column->button)->child;
+      GtkWidget *hbox = GTK_BIN (tree_column->button)->child;
+      GtkWidget *alignment = tree_column->alignment;
+      GtkWidget *arrow = tree_column->arrow;
       GtkWidget *current_child = GTK_BIN (alignment)->child;
+
+      gtk_alignment_set (GTK_ALIGNMENT (alignment), tree_column->xalign,
+                         0.5, 0.0, 0.0);
       
       if (tree_column->child)
         {
@@ -958,6 +1049,50 @@ update_button_contents (GtkTreeViewColumn *tree_column)
             gtk_label_set_text (GTK_LABEL (current_child),
                                 "");
         }
+
+      switch (tree_column->sort_order)
+        {
+        case GTK_TREE_SORT_ASCENDING:
+          gtk_arrow_set (GTK_ARROW (arrow),
+                         GTK_ARROW_DOWN,
+                         GTK_SHADOW_IN);
+          break;
+
+        case GTK_TREE_SORT_DESCENDING:
+          gtk_arrow_set (GTK_ARROW (arrow),
+                         GTK_ARROW_UP,
+                         GTK_SHADOW_IN);
+          break;
+          
+        default:
+          g_warning (G_STRLOC": bad sort order");
+          break;
+        }
+
+      /* Put arrow on the right if the text is left-or-center justified,
+       * and on the left otherwise; do this by packing boxes, so flipping
+       * text direction will reverse things
+       */
+      gtk_widget_ref (arrow);
+      gtk_container_remove (GTK_CONTAINER (hbox), arrow);
+
+      if (tree_column->xalign <= 0.5)
+        {
+          gtk_box_pack_end (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
+        }
+      else
+        {
+          gtk_box_pack_start (GTK_BOX (hbox), arrow, FALSE, FALSE, 0);
+          /* move it to the front */
+          gtk_box_reorder_child (GTK_BOX (hbox), arrow, 0);
+        }
+
+      gtk_widget_unref (arrow);
+
+      if (tree_column->show_sort_indicator)
+        gtk_widget_show (arrow);
+      else
+        gtk_widget_hide (arrow);
     }
 }
 
@@ -995,7 +1130,7 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
  * 
  * Return value: the title of the column.
  **/
-gchar *
+G_CONST_RETURN gchar *
 gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 {
   g_return_val_if_fail (tree_column != NULL, NULL);
@@ -1120,54 +1255,126 @@ gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
 }
 
 /**
- * gtk_tree_view_column_set_justification:
+ * gtk_tree_view_column_set_alignment:
  * @tree_column: A #GtkTreeViewColumn.
- * @justification: The justification of the title.
+ * @xalign: alignment (0.0 for left, 0.5 for center, 1.0 for right)
  * 
- * Sets the justification of the title inside the column header.  If a custom
- * widget has been set, then this value is discarded.
+ * Sets the alignment of the title or custom widget inside the column header.
  **/
 void
-gtk_tree_view_column_set_justification (GtkTreeViewColumn *tree_column,
-					GtkJustification   justification)
+gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,
+                                    gfloat             xalign)
 {
-  GtkWidget *alignment;
-
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
-  if (tree_column->justification == justification)
+  if (tree_column->xalign == xalign)
     return;
 
-  tree_column->justification = justification;
+  tree_column->xalign = xalign;
 
-  alignment = GTK_BIN (tree_column->button)->child;
+  update_button_contents (tree_column);
 
-  if (GTK_IS_ALIGNMENT (alignment))
+  g_object_notify (G_OBJECT (tree_column), "alignment");
+}
+
+gfloat
+gtk_tree_view_column_get_alignment (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0.5);
+
+  return tree_column->xalign;
+}
+
+/**
+ * gtk_tree_view_column_set_sort_indicator:
+ * @tree_column: a #GtkTreeViewColumn
+ * @setting: %TRUE to display an indicator that the column is sorted
+ *
+ * Call this function with a @setting of %TRUE to display an arrow in
+ * the header button indicating the column is sorted. Call
+ * gtk_tree_view_column_set_sort_order() to change the direction of
+ * the arrow.
+ * 
+ **/
+void
+gtk_tree_view_column_set_sort_indicator (GtkTreeViewColumn     *tree_column,
+                                         gboolean               setting)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  setting = setting != FALSE;
+
+  if (setting != tree_column->show_sort_indicator)
     {
-      switch (tree_column->justification)
-	{
-	case GTK_JUSTIFY_LEFT:
-	  gtk_alignment_set (GTK_ALIGNMENT (alignment), 0.0, 0.5, 0.0, 0.0);
-	  break;
+      tree_column->show_sort_indicator = setting;
 
-	case GTK_JUSTIFY_RIGHT:
-	  gtk_alignment_set (GTK_ALIGNMENT (alignment), 1.0, 0.5, 0.0, 0.0);
-	  break;
-
-	case GTK_JUSTIFY_CENTER:
-	  gtk_alignment_set (GTK_ALIGNMENT (alignment), 0.5, 0.5, 0.0, 0.0);
-	  break;
-
-	case GTK_JUSTIFY_FILL:
-	  gtk_alignment_set (GTK_ALIGNMENT (alignment), 0.5, 0.5, 0.0, 0.0);
-	  break;
-
-	default:
-	  break;
-	}
+      update_button_contents (tree_column);
+      
+      g_object_notify (G_OBJECT (tree_column), "sort_indicator");
     }
+}
 
-  g_object_notify (G_OBJECT (tree_column), "justification");
+/**
+ * gtk_tree_view_column_get_sort_indicator:
+ * @tree_column: a #GtkTreeViewColumn
+ * 
+ * Gets the value set by gtk_tree_view_column_set_sort_indicator().
+ * 
+ * Return value: whether the sort indicator arrow is displayed
+ **/
+gboolean
+gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn     *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
+
+  return tree_column->show_sort_indicator;
+}
+
+/**
+ * gtk_tree_view_column_set_sort_order:
+ * @tree_column: a #GtkTreeViewColumn
+ * @order: sort order that the sort indicator should indicate
+ *
+ * Changes the appearance of the sort indicator. (This <emphasis>does
+ * not</emphasis> actually sort the model - for the models shipped
+ * with GTK+, use at gtk_tree_sortable_set_sort_column() to do
+ * that. For custom models, the mechanism will vary.) The sort
+ * indicator changes direction to indicate normal sort or reverse
+ * sort. Note that you must have the sort indicator enabled to see
+ * anything when calling this function; see
+ * gtk_tree_view_column_set_sort_indicator().
+ * 
+ **/
+void
+gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn     *tree_column,
+                                          GtkTreeSortOrder       order)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  if (order != tree_column->sort_order)
+    {
+      tree_column->sort_order = order;
+
+      update_button_contents (tree_column);
+      
+      g_object_notify (G_OBJECT (tree_column), "sort_order");
+    }
+}
+
+/**
+ * gtk_tree_view_column_get_sort_order:
+ * @tree_column: a #GtkTreeViewColumn
+ * 
+ * Gets the value set by gtk_tree_view_column_set_sort_order().
+ * 
+ * Return value: the sort order the sort indicator is indicating
+ **/
+GtkTreeSortOrder
+gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
+
+  return tree_column->sort_order;
 }
 

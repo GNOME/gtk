@@ -106,8 +106,6 @@ enum {
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
   PROP_FOREGROUND_SET,
-  PROP_BACKGROUND_GDK_SET,
-  PROP_FOREGROUND_GDK_SET,
   PROP_BACKGROUND_STIPPLE_SET,
   PROP_FOREGROUND_STIPPLE_SET,
   PROP_FAMILY_SET,
@@ -507,19 +505,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 _("Background full height set"),
                 _("Whether this tag affects background height"));
 
-  ADD_SET_PROP ("background_gdk_set", PROP_BACKGROUND_GDK_SET,
-                _("Background set"),
-                _("Whether this tag affects the background color"));
-
   ADD_SET_PROP ("background_stipple_set", PROP_BACKGROUND_STIPPLE_SET,
                 _("Background stipple set"),
                 _("Whether this tag affects the background stipple"));  
 
   ADD_SET_PROP ("foreground_set", PROP_FOREGROUND_SET,
-                _("Foreground set"),
-                _("Whether this tag affects the foreground color"));
-
-  ADD_SET_PROP ("foreground_gdk_set", PROP_FOREGROUND_GDK_SET,
                 _("Foreground set"),
                 _("Whether this tag affects the foreground color"));
 
@@ -814,6 +804,8 @@ gtk_text_tag_set_property (GObject      *object,
           set_bg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
+
+        g_object_notify (G_OBJECT (text_tag), "background_gdk");
       }
       break;
 
@@ -825,6 +817,8 @@ gtk_text_tag_set_property (GObject      *object,
           set_fg_color (text_tag, &color);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
+
+        g_object_notify (G_OBJECT (text_tag), "foreground_gdk");
       }
       break;
 
@@ -847,7 +841,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_as_pointer (value);
 
         text_tag->bg_stipple_set = TRUE;
-        g_object_notify (G_OBJECT (text_tag), "bg_stipple_set");
+        g_object_notify (G_OBJECT (text_tag), "background_stipple_set");
         
         if (text_tag->values->appearance.bg_stipple != bitmap)
           {
@@ -867,7 +861,7 @@ gtk_text_tag_set_property (GObject      *object,
         GdkBitmap *bitmap = g_value_get_as_pointer (value);
 
         text_tag->fg_stipple_set = TRUE;
-        g_object_notify (G_OBJECT (text_tag), "fg_stipple_set");
+        g_object_notify (G_OBJECT (text_tag), "foreground_stipple_set");
 
         if (text_tag->values->appearance.fg_stipple != bitmap)
           {
@@ -895,8 +889,8 @@ gtk_text_tag_set_property (GObject      *object,
         set_font_description (text_tag, font_desc);
         
         if (font_desc)
-          pango_font_description_free (font_desc); 
-
+          pango_font_description_free (font_desc);
+        
         size_changed = TRUE;
       }
       break;
@@ -919,6 +913,8 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->font.family_name = g_strdup (g_value_get_string (value));
       text_tag->family_set = TRUE;
       g_object_notify (G_OBJECT (text_tag), "family_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
 
@@ -926,6 +922,8 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->font.style = g_value_get_enum (value);
       text_tag->style_set = TRUE;
       g_object_notify (G_OBJECT (text_tag), "style_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
 
@@ -933,6 +931,8 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->font.variant = g_value_get_enum (value);
       text_tag->variant_set = TRUE;
       g_object_notify (G_OBJECT (text_tag), "variant_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
 
@@ -940,6 +940,8 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->font.weight = g_value_get_int (value);
       text_tag->weight_set = TRUE;
       g_object_notify (G_OBJECT (text_tag), "weight_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
 
@@ -947,20 +949,28 @@ gtk_text_tag_set_property (GObject      *object,
       text_tag->values->font.stretch = g_value_get_enum (value);
       text_tag->stretch_set = TRUE;
       g_object_notify (G_OBJECT (text_tag), "stretch_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
 
     case PROP_SIZE:
       text_tag->values->font.size = g_value_get_int (value);
       text_tag->size_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "size_points");
       g_object_notify (G_OBJECT (text_tag), "size_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
 
     case PROP_SIZE_POINTS:
       text_tag->values->font.size = g_value_get_double (value) * PANGO_SCALE;
       text_tag->size_set = TRUE;
+      g_object_notify (G_OBJECT (text_tag), "size");
       g_object_notify (G_OBJECT (text_tag), "size_set");
+      g_object_notify (G_OBJECT (text_tag), "font_desc");
+      g_object_notify (G_OBJECT (text_tag), "font");
       size_changed = TRUE;
       break;
       
@@ -1086,12 +1096,10 @@ gtk_text_tag_set_property (GObject      *object,
       /* Whether the value should be used... */
 
     case PROP_BACKGROUND_SET:
-    case PROP_BACKGROUND_GDK_SET:
       text_tag->bg_color_set = g_value_get_boolean (value);
       break;
 
     case PROP_FOREGROUND_SET:
-    case PROP_FOREGROUND_GDK_SET:
       text_tag->fg_color_set = g_value_get_boolean (value);
       break;
 
@@ -1289,12 +1297,6 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_FONT:
-      if (tag->family_set &&
-          tag->style_set &&
-          tag->variant_set &&
-          tag->size_set &&
-          tag->stretch_set &&
-          tag->weight_set)
         {
           /* FIXME GValue imposes a totally gratuitous string copy
            * here, we could just hand off string ownership
@@ -1306,13 +1308,7 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_FONT_DESC:
-      if (tag->family_set &&
-          tag->style_set &&
-          tag->variant_set &&
-          tag->size_set &&
-          tag->stretch_set &&
-          tag->weight_set)
-        g_value_set_boxed (value, &tag->values->font);
+      g_value_set_boxed (value, &tag->values->font);
       break;
 
     case PROP_FAMILY:
@@ -1413,12 +1409,10 @@ gtk_text_tag_get_property (GObject      *object,
       break;
       
     case PROP_BACKGROUND_SET:
-    case PROP_BACKGROUND_GDK_SET:
       g_value_set_boolean (value, tag->bg_color_set);
       break;
 
     case PROP_FOREGROUND_SET:
-    case PROP_FOREGROUND_GDK_SET:
       g_value_set_boolean (value, tag->fg_color_set);
       break;
 

@@ -380,11 +380,17 @@ create_tree (void)
     }
 
   cell = gtk_cell_renderer_text_new ();
+
+  g_object_set (G_OBJECT (cell),
+                "style", PANGO_STYLE_ITALIC,
+                NULL);
+  
   column = gtk_tree_view_column_new_with_attributes ("Widget (double click for demo)",
 						     cell,
 						     "text", TITLE_COLUMN,
-						     "italic", ITALIC_COLUMN,
+						     "style_set", ITALIC_COLUMN,
 						     NULL);
+  
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
 			       GTK_TREE_VIEW_COLUMN (column));
 

@@ -175,7 +175,7 @@ timeout (gpointer data)
 					       : MAX (127, fabs (255 * cos (f * 2.0 * M_PI)))));
 	}
 
-	gtk_widget_draw (da, NULL);
+	gtk_widget_queue_draw (da);
 
 	frame_num++;
 	return TRUE;

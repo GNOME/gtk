@@ -4176,9 +4176,16 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
 {
   if (text_view->layout)
     {
-      /* Remove layout from all anchored children */
       GSList *tmp_list;
 
+      if (text_view->incremental_validate_idle)
+        {
+          g_source_remove (text_view->incremental_validate_idle);
+          text_view->incremental_validate_idle = 0;
+        }
+
+      /* Remove layout from all anchored children */
+      
       tmp_list = text_view->children;
       while (tmp_list != NULL)
         {

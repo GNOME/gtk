@@ -1,3 +1,66 @@
+2001-02-08  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_destroy_layout): remove
+	validation idle
+
+	* demos/gtk-demo/main.c (create_tree): adjust to changes in text
+	cell renderer
+
+	* demos/pixbuf-demo.c (timeout): remove deprecated
+	gtk_widget_draw
+
+	* demos/testpixbuf-save.c (main): remove deprecated
+	gtk_drawing_area_size
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): allocate
+	buttons even if the model isn't setup. gtk_tree_view_check_dirty()
+	at the start of the allocation.
+	(gtk_tree_view_check_dirty): handle column->button == NULL, handle
+	unsetup or NULL model.
+
+	* gtk/gtkstyle.c (gtk_default_draw_flat_box): drawing for the 
+	even/odd/sorted cells in the tree view.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_real_unselect_all):
+	bugfixes
+
+	* gtk/gtktreeview.c: assorted bugfixy stuff. Draw the row
+	backgrounds with draw_flat_box using different detail for even/odd
+	rows.
+
+	* gtk/gtkrbtree.c, gtkrbtree.h: Keep track of the parity of each
+	row, so we can draw the alternating colors thing
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property): if we change a
+	property from a synonym property, notify for the synonym.
+	Also, nuke the background_gdk_set and foreground_gdk_set synonyms
+	(gtk_text_tag_get_property): Always return the font, even if
+	all its fields aren't set
+
+	* gtk/gtkcellrenderertext.h (struct _GtkCellRendererText): don't
+	store the attr list; it leaves us with no way to change attributes
+	in _render according to the render flags, and no way to implement
+	get_property. Instead store all the specific text attributes. 
+	Separate whether an attribute is enabled from its value. Sync all
+	properties with GtkTextTag, make them all consistent, etc.
+
+	* gtk/gtkcellrenderer.h: Add a flag GTK_CELL_RENDERER_SORTED so
+	renderers can highlight the sort row/column	
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_get_property): use
+	accessor functions to get values; this has the side effect of
+	showing up which accessor functions were missing. Added those.
+
+	* gtk/gtktreeviewcolumn.h: Replace set_justification with
+	set_alignment, to be consistent with GtkLabel, GtkMisc
+
+	* gtk/gtktreeviewcolumn.c: Added code to display sort indicator
+	arrow.
+
+	* gtk/Makefile.am (gtk_public_h_sources): add gtktreesortable.h
+
+	* gtk/gtktreesortable.h: updates in here
+
 2001-02-07  Sven Neumann  <sven@convergence.de>
 
 	* gtk/gtkentry.c (gtk_entry_draw_text): convert area_height to 

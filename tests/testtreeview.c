@@ -261,12 +261,17 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       col = gtk_tree_view_get_column (tree_view, 0);
     }
 
+  gtk_tree_view_set_rules_hint (tree_view, FALSE);
+  
   switch (type)
     {
     case COLUMNS_NONE:
       break;
 
-    case COLUMNS_LOTS:      
+    case COLUMNS_LOTS:
+      /* with lots of columns we need to turn on rules */
+      gtk_tree_view_set_rules_hint (tree_view, TRUE);
+      
       rend = gtk_cell_renderer_text_new ();
       
       col = gtk_tree_view_column_new_with_attributes ("Column 1",
@@ -691,7 +696,7 @@ main (int    argc,
   gtk_container_add (GTK_CONTAINER (window), table);
 
   tv = gtk_tree_view_new_with_model (models[0]);
-
+  
   gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (tv),
                                       GDK_BUTTON1_MASK,
                                       row_targets,
@@ -1374,6 +1379,28 @@ int_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_unset (&val);
 }
 
+static void
+float_modified (GtkAdjustment *adj, gpointer data)
+{
+  ObjectProperty *p = data;
+
+  g_object_set (p->obj, p->prop, (float) adj->value, NULL);
+}
+
+static void
+float_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkAdjustment *adj = GTK_ADJUSTMENT (data);
+  GValue val = { 0, };  
+
+  g_value_init (&val, G_TYPE_FLOAT);
+  g_object_get_property (object, pspec->name, &val);
+
+  if (g_value_get_float (&val) != (float) adj->value)
+    gtk_adjustment_set_value (adj, g_value_get_float (&val));
+
+  g_value_unset (&val);
+}
 
 static void
 string_modified (GtkEntry *entry, gpointer data)
@@ -1559,6 +1586,34 @@ create_prop_editor (GObject *object)
                                 object, spec->name, (GtkSignalFunc) int_modified);
           break;
 
+        case G_TYPE_FLOAT:
+          hbox = gtk_hbox_new (FALSE, 10);
+          label = gtk_label_new (spec->nick);
+          gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+          gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+          adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_FLOAT (spec)->default_value,
+                                                    G_PARAM_SPEC_FLOAT (spec)->minimum,
+                                                    G_PARAM_SPEC_FLOAT (spec)->maximum,
+                                                    0.1,
+                                                    MAX ((G_PARAM_SPEC_FLOAT (spec)->maximum -
+                                                          G_PARAM_SPEC_FLOAT (spec)->minimum) / 10, 0.1),
+                                                    0.0));
+
+          prop_edit = gtk_spin_button_new (adj, 0.1, 2);
+          
+          gtk_box_pack_end (GTK_BOX (hbox), prop_edit, FALSE, FALSE, 0);
+          
+          gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0); 
+
+          g_object_connect_property (object, spec->name,
+                                     GTK_SIGNAL_FUNC (float_changed),
+                                     adj, G_OBJECT (adj));
+
+          if (can_modify)
+            connect_controller (G_OBJECT (adj), "value_changed",
+                                object, spec->name, (GtkSignalFunc) float_modified);
+          break;
+          
         case G_TYPE_STRING:
           hbox = gtk_hbox_new (FALSE, 10);
           label = gtk_label_new (spec->nick);

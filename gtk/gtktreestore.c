@@ -1061,14 +1061,12 @@ gtk_tree_store_drag_data_delete (GtkTreeDragSource *drag_source,
                                &iter,
                                path))
     {
-      g_print ("data_delete deleting tree row\n");
       gtk_tree_store_remove (GTK_TREE_STORE (drag_source),
                              &iter);
       return TRUE;
     }
   else
     {
-      g_print ("data_delete path not in tree\n");
       return FALSE;
     }
 }
@@ -1117,9 +1115,6 @@ copy_node_data (GtkTreeStore *tree_store,
       copy_iter = _gtk_tree_data_list_node_copy (dl,
                                                  tree_store->column_headers[col]);
 
-      g_print ("copied col %d type %s\n", col,
-               g_type_name (tree_store->column_headers[col]));
-              
       if (copy_head == NULL)
         copy_head = copy_iter;
 
@@ -1205,7 +1200,6 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                     &src_iter,
                                     src_path))
         {
-          g_print ("can't get source path as iter\n");
           goto out;
         }
 
@@ -1240,8 +1234,6 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                   dest_parent_p);
           
           retval = TRUE;
-
-          g_print ("prepending to tree\n");
         }
       else
         {
@@ -1256,10 +1248,7 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                            &tmp_iter);
               retval = TRUE;
 
-              g_print ("inserting into tree\n");
             }
-          else
-            g_print ("can't get iter to insert after\n");
         }
 
       gtk_tree_path_free (prev);
@@ -1280,7 +1269,7 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
       /* FIXME maybe add some data targets eventually, or handle text
        * targets in the simple case.
        */
-      g_print ("not accepting target\n");
+
     }
 
  out:

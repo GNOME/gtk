@@ -110,6 +110,9 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *scroll_to_column;
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
+
+  /* hint to display rows in alternating colors */
+  guint has_rules : 1;
 };
 
 #ifdef __GNUC__

@@ -43,10 +43,37 @@ struct _GtkCellRendererText
 
   /*< private >*/
   gchar *text;
-  PangoAttrList *attr_list;
+  PangoFontDescription font;
+  PangoColor foreground;
+  PangoColor background;
 
+  PangoUnderline underline_style;
+
+  gint rise;
+  
+  guint strikethrough : 1;
+
+  /* editable feature doesn't work */
   guint editable  : 1;
-  guint underline : 1;
+
+  /* font elements set */
+  guint family_set : 1;
+  guint style_set : 1;
+  guint variant_set : 1;
+  guint weight_set : 1;
+  guint stretch_set : 1;
+  guint size_set : 1;
+
+  guint foreground_set : 1;
+  guint background_set : 1;
+  
+  guint underline_set : 1;
+
+  guint rise_set : 1;
+  
+  guint strikethrough_set : 1;
+
+  guint editable_set : 1;
 };
 
 struct _GtkCellRendererTextClass

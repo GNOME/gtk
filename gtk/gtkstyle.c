@@ -2416,6 +2416,29 @@ gtk_default_draw_box (GtkStyle      *style,
                     x, y, width, height);
 }
 
+static GdkGC*
+get_darkened_gc (GdkWindow *window,
+                 GdkColor  *color,
+                 gint       darken_count)
+{
+  GdkColor src = *color;
+  GdkColor shaded;
+  GdkGC *gc;
+  
+  gc = gdk_gc_new (window);
+
+  while (darken_count)
+    {
+      gtk_style_shade (&src, &shaded, 1.3);
+      src = shaded;
+      --darken_count;
+    }
+  
+  gdk_gc_set_rgb_fg_color (gc, &shaded);
+
+  return gc;
+}
+
 static void 
 gtk_default_draw_flat_box (GtkStyle      *style,
                            GdkWindow     *window,
@@ -2430,6 +2453,7 @@ gtk_default_draw_flat_box (GtkStyle      *style,
                            gint           height)
 {
   GdkGC *gc1;
+  GdkGC *freeme = NULL;
   
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (window != NULL);
@@ -2443,14 +2467,60 @@ gtk_default_draw_flat_box (GtkStyle      *style,
   
   if (detail)
     {
-      if (!strcmp ("text", detail) && state_type == GTK_STATE_SELECTED)
-	gc1 = style->bg_gc[GTK_STATE_SELECTED];
-      else if (!strcmp ("viewportbin", detail))
-	gc1 = style->bg_gc[GTK_STATE_NORMAL];
-      else if (!strcmp ("entry_bg", detail))
-	gc1 = style->base_gc[state_type];
+      if (state_type == GTK_STATE_SELECTED)
+        {
+          if (!strcmp ("text", detail))
+            gc1 = style->bg_gc[GTK_STATE_SELECTED];
+          else if (!strcmp ("cell_even_sorted", detail) ||
+                   !strcmp ("cell_odd_sorted", detail) ||
+                   !strcmp ("cell_even_ruled_sorted", detail) ||
+                   !strcmp ("cell_odd_ruled_sorted", detail))
+            {
+              freeme = get_darkened_gc (window, &style->bg[state_type], 1);
+              gc1 = freeme;
+            }
+          else
+            {
+              gc1 = style->bg_gc[state_type];
+            }
+        }
       else
-	gc1 = style->bg_gc[state_type];
+        {
+          if (!strcmp ("viewportbin", detail))
+            gc1 = style->bg_gc[GTK_STATE_NORMAL];
+          else if (!strcmp ("entry_bg", detail))
+            gc1 = style->base_gc[state_type];
+
+          /* For trees: even rows are base color, odd rows are a shade of
+           * the base color, the sort column is a shade of the original color
+           * for that row.
+           */
+
+          /* FIXME when we have style properties, clean this up.
+           */
+          
+          else if (!strcmp ("cell_even", detail) ||
+                   !strcmp ("cell_odd", detail) ||
+                   !strcmp ("cell_even_ruled", detail))
+            {
+              gc1 = style->base_gc[state_type];
+            }
+          else if (!strcmp ("cell_even_sorted", detail) ||
+                   !strcmp ("cell_odd_sorted", detail) ||
+                   !strcmp ("cell_odd_ruled", detail) ||
+                   !strcmp ("cell_even_ruled_sorted", detail))
+            {
+              freeme = get_darkened_gc (window, &style->base[state_type], 1);
+              gc1 = freeme;
+            }
+          else if (!strcmp ("cell_odd_ruled_sorted", detail))
+            {
+              freeme = get_darkened_gc (window, &style->base[state_type], 2);
+              gc1 = freeme;
+            }
+          else
+            gc1 = style->bg_gc[state_type];
+        }
     }
   else
     gc1 = style->bg_gc[state_type];
@@ -2475,6 +2545,10 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     gtk_style_apply_default_background (style, window,
                                         widget && !GTK_WIDGET_NO_WINDOW (widget),
                                         state_type, area, x, y, width, height);
+
+
+  if (freeme)
+    g_object_unref (G_OBJECT (freeme));
 }
 
 static void 

@@ -419,7 +419,7 @@ gtk_tree_model_sort_changed (GtkTreeModel *s_model,
 						 array,
 						 (GtkTreeIter *) elt,
 						 TRUE);
-  g_print ("index is %d\n", index);
+
   gtk_signal_emit_by_name (GTK_OBJECT (data), "changed", path, &iter);
 
   gtk_tree_path_free (path);

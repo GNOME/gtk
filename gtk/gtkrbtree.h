@@ -33,6 +33,7 @@ typedef enum
   GTK_RBNODE_IS_SELECTED = 1 << 3,
   GTK_RBNODE_IS_PRELIT = 1 << 4,
   GTK_RBNODE_IS_VIEW = 1 << 5
+
 } GtkRBNodeColor;
 
 typedef struct _GtkRBTree GtkRBTree;
@@ -53,7 +54,20 @@ struct _GtkRBTree
 
 struct _GtkRBNode
 {
-  guint flags;
+  guint flags : 14;
+
+  /* We keep track of whether the aggregate count of children plus 1
+   * for the node itself comes to an even number.  The parity flag is
+   * the total count of children mod 2, where the total count of
+   * children gets computed in the same way that the total offset gets
+   * computed. i.e. not the same as the "count" field below which
+   * doesn't include children. We could replace parity with a
+   * full-size int field here, and then take % 2 to get the parity flag,
+   * but that would use extra memory.
+   */
+
+  guint parity : 1;
+  
   GtkRBNode *left;
   GtkRBNode *right;
   GtkRBNode *parent;
@@ -62,13 +76,15 @@ struct _GtkRBNode
    * i.e. node->left->count + node->right->count + 1
    */
   gint count;
-
+  
   /* this is the total of sizes of
    * node->left, node->right, our own height, and the height
    * of all trees in ->children, iff children exists because
    * the thing is expanded.
    */
   gint offset;
+
+  /* Child trees */
   GtkRBTree *children;
 };
 
@@ -101,6 +117,8 @@ void       _gtk_rbtree_node_set_height  (GtkRBTree              *tree,
 					 gint                    height);
 gint       _gtk_rbtree_node_find_offset (GtkRBTree              *tree,
 					 GtkRBNode              *node);
+gint       _gtk_rbtree_node_find_parity (GtkRBTree              *tree,
+					 GtkRBNode              *node);
 gint       _gtk_rbtree_find_offset      (GtkRBTree              *tree,
 					 gint                    offset,
 					 GtkRBTree             **new_tree,
@@ -127,7 +145,8 @@ gint       _gtk_rbtree_get_depth        (GtkRBTree              *tree);
 
 /* This func just checks the integrity of the tree */
 /* It will go away later. */
-void       _gtk_rbtree_test             (GtkRBTree              *tree);
+void       _gtk_rbtree_test             (const gchar            *where,
+                                         GtkRBTree              *tree);
 
 
 #ifdef __cplusplus
