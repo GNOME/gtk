@@ -1867,12 +1867,12 @@ gtk_list_store_move (GtkListStore *store,
       if (a == iter->user_data)
         goto free_paths_and_out;
     }
-  else if (before)
+  else if (before && !position)
     {
       if (iter->user_data == store->tail)
         goto free_paths_and_out;
     }
-  else
+  else if (!position)
     {
       if (iter->user_data == store->root)
         goto free_paths_and_out;
@@ -1920,8 +1920,16 @@ gtk_list_store_move (GtkListStore *store,
     }
   else if (!a && before)
     {
-      G_SLIST (store->tail)->next = G_SLIST (iter->user_data);
-      G_SLIST (iter->user_data)->next = NULL;
+      if (position)
+	{
+	  G_SLIST (iter->user_data)->next = G_SLIST (store->root);
+	  store->root = G_SLIST (iter->user_data);
+	} 
+      else 
+	{
+	  G_SLIST (store->tail)->next = G_SLIST (iter->user_data);
+	  G_SLIST (iter->user_data)->next = NULL;
+	}
     }
 
   /* update tail if needed */
