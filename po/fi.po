@@ -1,0 +1,455 @@
+# This is the Finnish locale definition for Gtk+.
+# Copyright (C) 1998 Free Software Foundation, Inc.
+# Mikko Rauhala <mjr@iki.fi>, 1999.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.1.9\n"
+"POT-Creation-Date: 1999-02-25 05:04-0600\n"
+"PO-Revision-Date: 1999-03-14 14:15+0100\n"
+"Last-Translator: Mikko Rauhala <mjr@iki.fi>\n"
+"Language-Team: Finnish <fi@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkcolorsel.c:213
+msgid "Hue:"
+msgstr "Vivahde:"
+
+#: gtk/gtkcolorsel.c:214
+msgid "Saturation:"
+msgstr "Kyll\344isyys:"
+
+#: gtk/gtkcolorsel.c:215
+msgid "Value:"
+msgstr "Arvo:"
+
+#: gtk/gtkcolorsel.c:216
+msgid "Red:"
+msgstr "Punainen:"
+
+#: gtk/gtkcolorsel.c:217
+msgid "Green:"
+msgstr "Vihre\344:"
+
+#: gtk/gtkcolorsel.c:218
+msgid "Blue:"
+msgstr "Sininen:"
+
+#: gtk/gtkcolorsel.c:219
+msgid "Opacity:"
+msgstr "Peittokyky:"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475 gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851 gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3488 gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: gtk/gtkcolorsel.c:1679
+msgid "Help"
+msgstr "Ohje"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:418
+msgid "Directories"
+msgstr "Hakemistot"
+
+#. The files clist
+#: gtk/gtkfilesel.c:437
+msgid "Files"
+msgstr "Tiedostot"
+
+# , c-format
+#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
+msgid "Directory unreadable: %s"
+msgstr "Hakemisto ei luettavissa: %s"
+
+#: gtk/gtkfilesel.c:539
+msgid "Create Dir"
+msgstr "Luo hakemisto"
+
+#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
+msgid "Delete File"
+msgstr "Poista tiedosto"
+
+#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
+msgid "Rename File"
+msgstr "Uudelleennime\344 tiedosto"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:722
+msgid "Error"
+msgstr "Virhe"
+
+#. close button
+#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "Sulje"
+
+#: gtk/gtkfilesel.c:815
+msgid "Create Directory"
+msgstr "Luo hakemisto"
+
+#: gtk/gtkfilesel.c:829
+msgid "Directory name:"
+msgstr "Hakemistonimi:"
+
+#. buttons
+#: gtk/gtkfilesel.c:842
+msgid "Create"
+msgstr "Luo"
+
+#. buttons
+#: gtk/gtkfilesel.c:942
+msgid "Delete"
+msgstr "Poista"
+
+#. buttons
+#: gtk/gtkfilesel.c:1057
+msgid "Rename"
+msgstr "Uudelleennime\344"
+
+#: gtk/gtkfilesel.c:1440
+msgid "Selection: "
+msgstr "Valinta: "
+
+#: gtk/gtkfontsel.c:210
+msgid "Foundry:"
+msgstr "Valmistaja:"
+
+#: gtk/gtkfontsel.c:211
+msgid "Family:"
+msgstr "Perhe:"
+
+#: gtk/gtkfontsel.c:212
+msgid "Weight:"
+msgstr "Painoarvo:"
+
+#: gtk/gtkfontsel.c:213
+msgid "Slant:"
+msgstr "Kallistus:"
+
+#: gtk/gtkfontsel.c:214
+msgid "Set Width:"
+msgstr "Leveysasetus:"
+
+#: gtk/gtkfontsel.c:215
+msgid "Add Style:"
+msgstr "Tyyli:"
+
+#: gtk/gtkfontsel.c:216
+msgid "Pixel Size:"
+msgstr "Pikselikoko:"
+
+#: gtk/gtkfontsel.c:217
+msgid "Point Size:"
+msgstr "Pistekoko:"
+
+#: gtk/gtkfontsel.c:218
+msgid "Resolution X:"
+msgstr "X-resoluutio:"
+
+#: gtk/gtkfontsel.c:219
+msgid "Resolution Y:"
+msgstr "Y-resoluutio:"
+
+#: gtk/gtkfontsel.c:220
+msgid "Spacing:"
+msgstr "V\344li:"
+
+#: gtk/gtkfontsel.c:221
+msgid "Average Width:"
+msgstr "Keskim\344\344r\344inen leveys:"
+
+#: gtk/gtkfontsel.c:222
+msgid "Charset:"
+msgstr "Merkist\366:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:459
+msgid "Font Property"
+msgstr "Kirjasimen ominaisuus"
+
+#: gtk/gtkfontsel.c:460
+msgid "Requested Value"
+msgstr "Pyydetty arvo"
+
+#: gtk/gtkfontsel.c:461
+msgid "Actual Value"
+msgstr "Todellinen arvo"
+
+#: gtk/gtkfontsel.c:494
+msgid "Font"
+msgstr "Kirjasinlaji"
+
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
+msgid "Font:"
+msgstr "Kirjasinlaji:"
+
+#: gtk/gtkfontsel.c:509
+msgid "Font Style:"
+msgstr "Kirjasintyyli:"
+
+#: gtk/gtkfontsel.c:514
+msgid "Size:"
+msgstr "Koko:"
+
+#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
+msgid "Reset Filter"
+msgstr "Alusta suodatin"
+
+#: gtk/gtkfontsel.c:660
+msgid "Metric:"
+msgstr "Mitta:"
+
+#: gtk/gtkfontsel.c:664
+msgid "Points"
+msgstr "Pisteit\344"
+
+#: gtk/gtkfontsel.c:671
+msgid "Pixels"
+msgstr "Pikseleit\344"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:687
+msgid "Preview:"
+msgstr "Esikatselu:"
+
+#: gtk/gtkfontsel.c:716
+msgid "Font Information"
+msgstr "Kirjasintiedot"
+
+#: gtk/gtkfontsel.c:749
+msgid "Requested Font Name:"
+msgstr "Pyydetty kirjasimen nimi:"
+
+#: gtk/gtkfontsel.c:760
+msgid "Actual Font Name:"
+msgstr "Todellinen kirjasimen nimi:"
+
+# , c-format
+#: gtk/gtkfontsel.c:771
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i kirjasinta saatavissa yhteens\344 %i:ll\344 tyylill\344."
+
+#: gtk/gtkfontsel.c:786
+msgid "Filter"
+msgstr "Suodatin"
+
+#: gtk/gtkfontsel.c:799
+msgid "Font Types:"
+msgstr "Kirjasintyypit:"
+
+#: gtk/gtkfontsel.c:807
+msgid "Bitmap"
+msgstr "Bittikartta"
+
+#: gtk/gtkfontsel.c:813
+msgid "Scalable"
+msgstr "Skaalautuva"
+
+#: gtk/gtkfontsel.c:819
+msgid "Scaled Bitmap"
+msgstr "Skaalattu bittikartta"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1215
+msgid "regular"
+msgstr "tavallinen"
+
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1948
+msgid "italic"
+msgstr "kursiivi"
+
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1949
+msgid "oblique"
+msgstr "vino"
+
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1950
+msgid "reverse italic"
+msgstr "k\344\344nteinen kursiivi"
+
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1951
+msgid "reverse oblique"
+msgstr "k\344\344nteinen vino"
+
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
+msgid "other"
+msgstr "muu"
+
+#: gtk/gtkfontsel.c:1231
+msgid "[M]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1232
+msgid "[C]"
+msgstr ""
+
+#: gtk/gtkfontsel.c:1780
+msgid "The selected font is not available."
+msgstr "Valittua kirjasinlajia ei ole saatavissa."
+
+#: gtk/gtkfontsel.c:1786
+msgid "The selected font is not a valid font."
+msgstr "Valittu kirjasinlaji ei ole kelvollinen."
+
+#: gtk/gtkfontsel.c:1844
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "T\344m\344 on 2-tavuinen kirjasinlaji, eik\344 v\344ltt\344m\344tt\344 n\344y oikein"
+
+#: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(tuntematon)"
+
+#: gtk/gtkfontsel.c:1947
+msgid "roman"
+msgstr "suora"
+
+#: gtk/gtkfontsel.c:1959
+msgid "proportional"
+msgstr "suhteellinen"
+
+#: gtk/gtkfontsel.c:1960
+msgid "monospaced"
+msgstr "tasav\344linen"
+
+#: gtk/gtkfontsel.c:1961
+msgid "char cell"
+msgstr "merkkisolu"
+
+#: gtk/gtkfontsel.c:2161
+msgid "Font: (Filter Applied)"
+msgstr "Kirjasinlaji: (suodatettu)"
+
+#: gtk/gtkfontsel.c:2637
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS ylitetty. Joitakin kirjasinlajeja voi puuttua."
+
+#: gtk/gtkfontsel.c:3482
+msgid "Apply"
+msgstr "Toteuta"
+
+#: gtk/gtkfontsel.c:3504
+msgid "Font Selection"
+msgstr "Kirjasimen valinta"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gamma-arvo"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "Sy\366te"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "Ei sy\366tt\366laitteita"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "Laite:"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "Poistettu"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "N\344ytt\366"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "Ikkuna"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr "Tila:"
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "Akselit"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "Avaimet"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "Tallenna"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr "Paine"
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr "X-kallistus"
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr "Y-kallistus"
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "ei"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(poistettu)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "tyhjenn\344"
+
+# , c-format
+#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+msgid "Page %u"
+msgstr "Sivu %u"
+
+# , c-format
+#: gtk/gtkrc.c:1529
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Kuvatiedostoa ei l\366ytynyt pixmap_path:sta: \"%s\" rivi %d"
+
+# , c-format
+#: gtk/gtkrc.c:1532
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Kuvatiedostoa ei l\366ytynyt pixmap_path:sta: \"%s\""
+
+# , c-format
+#: gtk/gtkthemes.c:79
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Ladattavaa moduulia ei l\366ytynyt module_path:sta:\"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Ei vinkki\344 ---"
