@@ -1192,7 +1192,7 @@ draw_box (GtkStyle      *style,
   }
   else if (detail && strcmp (detail, "menuitem") == 0) {
     shadow_type = GTK_SHADOW_NONE;
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_MENUITEM, style, x, y, width, height, state_type, area))
+      if (xp_theme_draw (window, XP_THEME_ELEMENT_MENU_ITEM, style, x, y, width, height, state_type, area))
         {
   		return;
         }
@@ -1562,7 +1562,7 @@ draw_handle (GtkStyle        *style,
 	     gint             height,
 	     GtkOrientation   orientation)
 {
-  if (!GTK_IS_HANDLE_BOX (widget))
+  if (! GTK_IS_HANDLE_BOX (widget))
     {
       XpThemeElement hndl;
 

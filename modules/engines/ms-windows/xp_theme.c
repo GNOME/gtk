@@ -235,10 +235,10 @@ xp_theme_get_handle_by_element (XpThemeElement element)
       klazz = XP_THEME_CLASS_REBAR;
       break;
 
-	case XP_THEME_ELEMENT_STATUS_GRIPPER:
-	case XP_THEME_ELEMENT_STATUS_PANE:
-		klazz = XP_THEME_CLASS_STATUS;
-		break;
+    case XP_THEME_ELEMENT_STATUS_GRIPPER:
+    case XP_THEME_ELEMENT_STATUS_PANE:
+      klazz = XP_THEME_CLASS_STATUS;
+      break;
 
     case XP_THEME_ELEMENT_TOOLBAR:
       klazz = XP_THEME_CLASS_TOOLBAR;
@@ -249,7 +249,7 @@ xp_theme_get_handle_by_element (XpThemeElement element)
       klazz = XP_THEME_CLASS_GLOBALS;
       break;
 
-    case XP_THEME_ELEMENT_MENUITEM:
+    case XP_THEME_ELEMENT_MENU_ITEM:
     case XP_THEME_ELEMENT_MENU_SEPARATOR:
       klazz = XP_THEME_CLASS_MENU;
       break;
@@ -621,7 +621,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 
 #endif
 
-	case XP_THEME_ELEMENT_MENUITEM:
+	case XP_THEME_ELEMENT_MENU_ITEM:
 	case XP_THEME_ELEMENT_MENU_SEPARATOR:
 		switch(state) {
 			case GTK_STATE_SELECTED:
