@@ -1,3 +1,14 @@
+Wed Aug  5 02:57:20 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkctree.h:
+	* gtk/gtkctree.c:
+ 	(gtk_ctree_find): changed to return a gboolean
+	(gtk_ctree_insert_gnode): new function for recursive insertion of a
+	GNode tree.
+	(gtk_ctree_real_select_recursive): fix for extended selection
+	(gtk_ctree_sort_recursive): in case node == NULL, sort root nodes too.
+	(gtk_ctree_set_node_info) (set_node_info): few fixes for expanded flag
+
 Tue Aug  4 16:18:26 1998  Tim Janik  <timj@gtk.org>
 
 	* configure.in: version bump to 1.1.1, binary age 0, interface age 0.
