@@ -1,3 +1,18 @@
+2003-01-09  Tor Lillqvist  <tml@iki.fi>
+
+	Changes for run-time lookup of installation location on Win32:
+	
+	* Makefile.am (INCLUDES): Define PREFIX as $(prefix).
+
+	* gdk-pixbuf-io.c (get_sysconfdir): New function, look up
+	installation location at runtime and deduce GTK_SYSCONFDIR
+	from it.
+	(get_toplevel): Similar, for the top-level installation directory.
+	(correct_prefix): Replace compile-time prefix with run-time
+	prefix.
+	(get_libdir): Remove, not used any longer.
+	(gdk_pixbuf_io_init): Call correct_prefix().
+
 2003-01-05  Tor Lillqvist  <tml@iki.fi>
 
 	* queryloaders.c (query_module): [Win32] Change backslahses into
