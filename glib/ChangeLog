@@ -1,3 +1,12 @@
+Wed Jan 21 01:13:25 1998  Tim Janik  <timj@psynet.net>
+
+	* Applied patch from (Raja R Harinath <harinath@cs.umn.edu>)
+	  to add function g_snprintf.
+        * configure.in (AC_CHECK_FUNCS): Check for vsnprintf.
+        * glib.h: Add prototype for g_snprintf.
+        * glibconfig.h.in: Add HAVE_VSNPRINTF.
+        * gutils.c (g_snprintf): new function.
+
 Sat Jan 17 23:52:40 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gstring.{c,h} gscanner.c:

@@ -804,6 +804,41 @@ g_set_print_handler (GPrintFunc func)
 
   old_print_func = print_func;
   print_func = func;
-
+  
   return old_print_func;
+}
+
+gint
+g_snprintf (gchar       *str,
+	    gulong       n,
+	    gchar const *fmt,
+	    ...)
+{
+#ifdef HAVE_VSNPRINTF
+  va_list args;
+  gint retval;
+  
+  va_start (args, fmt);
+  retval = vsnprintf (str, n, fmt, args);
+  va_end (args);
+
+  return retval;
+
+#else
+  gchar *printed;
+  va_list args, args2;
+
+  va_start (args, fmt);
+  va_start (args2, fmt);
+  
+  printed = g_vsprintf (fmt, &args, &args2);
+  strncpy (str, printed, n);
+  str[n-1] = '\0';
+  
+  va_end (args2);
+  va_end (args);
+
+  return strlen (str);
+
+#endif
 }

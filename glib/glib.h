@@ -630,6 +630,8 @@ gchar*	g_strconcat (const gchar *string1, ...); /* NULL terminated */
 gdouble g_strtod    (const gchar *nptr, gchar **endptr);
 gchar*	g_strerror  (gint errnum);
 gchar*	g_strsignal (gint signum);
+gint    g_snprintf  (gchar *str, gulong n, gchar const *fmt, ...);
+
 
 /* We make the assumption that if memmove isn't available, then
  * bcopy will do the job. This isn't safe everywhere. (bcopy can't

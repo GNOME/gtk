@@ -70,7 +70,7 @@ AC_CHECK_HEADERS(limits.h, AC_DEFINE(HAVE_LIMITS_H))
 AC_CHECK_HEADERS(values.h, AC_DEFINE(HAVE_VALUES_H))
 
 # Check for strerror, strsignal, and memmove functions
-AC_CHECK_FUNCS(strerror strsignal memmove)
+AC_CHECK_FUNCS(strerror strsignal memmove vsnprintf)
 
 # Check for sys_errlist
 AC_MSG_CHECKING(sys_errlist)

@@ -23,6 +23,7 @@
 #undef HAVE_SYS_SELECT_H
 #undef HAVE_STRERROR
 #undef HAVE_STRSIGNAL
+#undef HAVE_VSNPRINTF
 #undef HAVE_VALUES_H
 #undef HAVE_VPRINTF
 
@@ -60,6 +61,9 @@
 
 /* Define if you have the strsignal function.  */
 #undef HAVE_STRSIGNAL
+
+/* Define if you have the vsnprintf function.  */
+#undef HAVE_VSNPRINTF
 
 /* Define if you have the <float.h> header file.  */
 #undef HAVE_FLOAT_H
