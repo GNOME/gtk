@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-09-01 01:55+0900\n"
-"PO-Revision-Date: 2002-09-01 09:47+0900\n"
+"Project-Id-Version: gtk+ 2.0.7\n"
+"POT-Creation-Date: 2002-11-04 11:50+0900\n"
+"PO-Revision-Date: 2002-11-04 12:19+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -152,7 +152,7 @@ msgstr "BMP 画像のヘッダのデータがおかしいです"
 msgid "Failure reading GIF: %s"
 msgstr "GIF 読みこみに失敗: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1542
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1392 gdk-pixbuf/io-gif.c:1552
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIFファイルに何か足りないデータがあります(失われた?)"
 
@@ -161,49 +161,53 @@ msgstr "GIFファイルに何か足りないデータがあります(失われ�
 msgid "Internal error in the GIF loader (%s)"
 msgstr "GIFローダの内部エラー (%s)"
 
-#: gdk-pixbuf/io-gif.c:592
+#: gdk-pixbuf/io-gif.c:541
+msgid "Stack overflow"
+msgstr "スタック溢れ"
+
+#: gdk-pixbuf/io-gif.c:600
 msgid "GIF image loader can't understand this image."
 msgstr "GIF 画像ローダはこの画像を理解できません"
 
-#: gdk-pixbuf/io-gif.c:621
+#: gdk-pixbuf/io-gif.c:629
 msgid "Bad code encountered"
 msgstr "おかしなコードに出会いました"
 
-#: gdk-pixbuf/io-gif.c:630
+#: gdk-pixbuf/io-gif.c:639
 msgid "Circular table entry in GIF file"
 msgstr "GIFファイルの循環テーブルエントリ"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
-#: gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:772 gdk-pixbuf/io-gif.c:1380 gdk-pixbuf/io-gif.c:1425
+#: gdk-pixbuf/io-gif.c:1540
 msgid "Not enough memory to load GIF file"
 msgstr "GIF 画像を読みこむための十分なメモリがありません"
 
-#: gdk-pixbuf/io-gif.c:1009
+#: gdk-pixbuf/io-gif.c:1019
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF 画像が壊れています (おかしな LZW 圧縮です)"
 
-#: gdk-pixbuf/io-gif.c:1059
+#: gdk-pixbuf/io-gif.c:1069
 msgid "File does not appear to be a GIF file"
 msgstr "ファイルが GIF ファイルには見えません"
 
-#: gdk-pixbuf/io-gif.c:1071
+#: gdk-pixbuf/io-gif.c:1081
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF ファイルフォーマットのバージョン %s はサポートしていません"
 
-#: gdk-pixbuf/io-gif.c:1144
+#: gdk-pixbuf/io-gif.c:1154
 msgid "GIF image contained a frame with height or width 0."
 msgstr "GIF 画像に高さか幅が 0 のフレームがあります"
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1167
 msgid "GIF image contained a frame appearing outside the image bounds."
 msgstr "GIF 画像に画像からはみ出るフレームがあります"
 
-#: gdk-pixbuf/io-gif.c:1173
+#: gdk-pixbuf/io-gif.c:1183
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr "GIF 画像の最初のフレームに disposal mode として「前に戻る」があります"
 
-#: gdk-pixbuf/io-gif.c:1208
+#: gdk-pixbuf/io-gif.c:1218
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -211,7 +215,7 @@ msgstr ""
 "GIF 画像にグローバルなカラーマップがありません。そしてフレームにローカルなカ"
 "ラーマップがありません。<"
 
-#: gdk-pixbuf/io-gif.c:1437
+#: gdk-pixbuf/io-gif.c:1447
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 画像が切れたか、不完全になってます"
 
@@ -249,16 +253,16 @@ msgstr "圧縮アイコンはサポートされていません"
 msgid "Unsupported icon type"
 msgstr "サポートされてない種類のアイコンです"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "アイコンファイルを読みこむのに十分なメモリがありません"
 
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG 画像ファイル (%s) の解釈でエラー"
 
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -266,11 +270,16 @@ msgstr ""
 "画像を読みこむのに十分なメモリがありません。アプリケーションをいくつか終了さ"
 "せてメモリを解放してください"
 
-#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "サポートされてない JPEG のカラースペースです (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "JPEG 画像を読みこむための十分なメモリがありません"
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -279,7 +288,7 @@ msgstr ""
 "JPEG の「クオリティ」は 0 から 100 の間の値でなくてはなりません。'%s' という"
 "値はパースできません"
 
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -1182,51 +1191,51 @@ msgstr "このテキストの下線のスタイル"
 
 #: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:512
 msgid "Background set"
-msgstr ""
+msgstr "背景色設定"
 
 #: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
-msgstr "このタグが背景色の影響するかどうか"
+msgstr "このタグが背景色に影響するかどうか"
 
 #: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:524
 msgid "Foreground set"
-msgstr ""
+msgstr "前景色設定"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
-msgstr "このタグが前景色の影響するかどうか"
+msgstr "このタグが前景色に影響するかどうか"
 
 #: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:532
 msgid "Editability set"
-msgstr ""
+msgstr "編集可能性に設定"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
-msgstr ""
+msgstr "このタグがテキストを編集できるかどうかに影響するかどうか"
 
 #: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr ""
+msgstr "フォントファミリ設定"
 
 #: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
-msgstr ""
+msgstr "このタグがフォントファミリに影響するかどうか"
 
 #: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr ""
+msgstr "フォントスタイル設定"
 
 #: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
-msgstr ""
+msgstr "このタグがフォントスタイルに影響するかどうか"
 
 #: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:544
 msgid "Font variant set"
-msgstr ""
+msgstr "フォントバリアント設定"
 
 #: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
-msgstr ""
+msgstr "このタグがフォントバリアントに影響するかどうか"
 
 #: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:548
 msgid "Font weight set"
@@ -1377,7 +1386,7 @@ msgstr "パレットあり"
 
 #: gtk/gtkcolorsel.c:1712
 msgid "Whether a palette should be used"
-msgstr ""
+msgstr "パレットを使うかどうか"
 
 #: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
@@ -1401,19 +1410,22 @@ msgstr "カスタムパレット"
 
 #: gtk/gtkcolorsel.c:1740
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "色選択で使用するパレット"
 
 #: gtk/gtkcolorsel.c:1784
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"外周の輪から希望する色を選んでください。内周の輪で色の暗さ・明るさを選んでく"
+"ださい。"
 
 #: gtk/gtkcolorsel.c:1812
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"スポイトをクリックして、画面上のすきな場所をクリックして色を選んでください。"
 
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
@@ -1421,7 +1433,7 @@ msgstr "色相(_H):"
 
 #: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "色の輪での位置"
 
 #: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
@@ -1480,6 +1492,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"HTML 風の16進数で色の値を入力するか、色の名前、たとえば 'orange'、をこのエン"
+"トリに入力できます。"
 
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
@@ -1487,15 +1501,15 @@ msgstr "パレット(_P)"
 
 #: gtk/gtkcombo.c:139
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "矢印キーを有効に"
 
 #: gtk/gtkcombo.c:140
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "アイテムの一覧をずっと矢印キーが移動するかどうか"
 
 #: gtk/gtkcombo.c:146
 msgid "Always enable arrows"
-msgstr ""
+msgstr "矢印を常に有効に"
 
 #: gtk/gtkcombo.c:147
 msgid ""
@@ -1504,7 +1518,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:153
 msgid "Case sensitive"
-msgstr ""
+msgstr "大文字・小文字を区別"
 
 #: gtk/gtkcombo.c:154
 msgid "Whether list item matching is case sensitive"
@@ -1560,67 +1574,67 @@ msgstr ""
 
 #: gtk/gtkcurve.c:130
 msgid "Minimum X"
-msgstr ""
+msgstr "最小の X"
 
 #: gtk/gtkcurve.c:131
 msgid "Minimum possible value for X"
-msgstr ""
+msgstr "X の最小値"
 
 #: gtk/gtkcurve.c:140
 msgid "Maximum X"
-msgstr ""
+msgstr "最大の X"
 
 #: gtk/gtkcurve.c:141
 msgid "Maximum possible X value."
-msgstr ""
+msgstr "X の最大値"
 
 #: gtk/gtkcurve.c:150
 msgid "Minimum Y"
-msgstr ""
+msgstr "最小の Y"
 
 #: gtk/gtkcurve.c:151
 msgid "Minimum possible value for Y"
-msgstr ""
+msgstr "Y の最小値"
 
 #: gtk/gtkcurve.c:160
 msgid "Maximum Y"
-msgstr ""
+msgstr "最大の Y"
 
 #: gtk/gtkcurve.c:161
 msgid "Maximum possible value for Y"
-msgstr ""
+msgstr "Y の最大値"
 
 #: gtk/gtkdialog.c:128
 msgid "Has separator"
-msgstr ""
+msgstr "区切りあり"
 
 #: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
-msgstr ""
+msgstr "ダイアログのボタンの上に区切り線があるかどうか"
 
 #: gtk/gtkdialog.c:152
 msgid "Content area border"
-msgstr ""
+msgstr "内容エリアの枠"
 
 #: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
-msgstr ""
+msgstr "ダイアログのメインエリアの周りの枠の幅"
 
 #: gtk/gtkdialog.c:160
 msgid "Button spacing"
-msgstr ""
+msgstr "ボタン間隔"
 
 #: gtk/gtkdialog.c:161
 msgid "Spacing between buttons"
-msgstr ""
+msgstr "ボタン同士の間隔"
 
 #: gtk/gtkdialog.c:169
 msgid "Action area border"
-msgstr ""
+msgstr "アクションエリア枠"
 
 #: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
-msgstr ""
+msgstr "ダイアログの下のボタンエリアのまわりの枠の幅"
 
 #: gtk/gtkentry.c:435 gtk/gtklabel.c:358
 msgid "Cursor Position"
@@ -1715,64 +1729,64 @@ msgstr ""
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3902 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "すべて選択"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3912 gtk/gtklabel.c:3189
 msgid "Input Methods"
-msgstr ""
+msgstr "入力メソッド"
 
-#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6425
+#: gtk/gtkentry.c:3922 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "Unicode 制御キャラクタを挿入(_I)"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "ファイル名"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
 msgstr "現在選択されているファイル名。"
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
 msgstr "ファイル操作を表示"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr "ファイルの作成、操作のボタンを表示すべきかどうか"
 
-#: gtk/gtkfilesel.c:551
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
 msgstr "複数選択"
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr "複数のファイルを選択できるようにするかどうか"
 
-#: gtk/gtkfilesel.c:707
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
 msgstr "フォルダ"
 
-#: gtk/gtkfilesel.c:711
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
 msgstr "フォルダ(_D)"
 
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "ファイル"
 
-#: gtk/gtkfilesel.c:746
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
 msgstr "ファイル(_F)"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "フォルダが読めません: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1783,25 +1797,25 @@ msgstr ""
 "用できません。\n"
 "ほんとうに選択したいのですか?"
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
 msgstr "新規フォルダ(_N)"
 
-#: gtk/gtkfilesel.c:1097
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
 msgstr "ファイル削除(_L)"
 
-#: gtk/gtkfilesel.c:1108
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
 msgstr "ファイル名変更(_R)"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "フォルダ名 \"%s\" にファイル名に使えない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
@@ -1810,33 +1824,33 @@ msgstr ""
 "ファルダ \"%s\" の作成中にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr "ファイル名に使えない文字がおそらく使われています"
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr "フォルダ \"%s\" の作成中にエラー: %s\n"
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
 msgstr "新規フォルダ"
 
-#: gtk/gtkfilesel.c:1446
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
 msgstr "フォルダ名(_F):"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
 msgstr "作成"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ファイル名 \"%s\" にはファイル名に使えない文字が含まれています。"
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
@@ -1845,30 +1859,30 @@ msgstr ""
 "\"%s\" の削除中にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "おそらくファイル名に使えない文字を含んでいます。"
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr "\"%s\" の削除中にエラー: %s"
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
 msgstr "ファイル \"%s\" を本当に削除しますか?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
 msgstr "ファイル削除"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "ファイル名 \"%s\" にはファイル名に使えない文字が含まれています"
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
@@ -1877,7 +1891,7 @@ msgstr ""
 "ファイルを \"%s\" へ変更している時にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
@@ -1886,29 +1900,29 @@ msgstr ""
 "ファイル \"%s\" の名前を変更している時にエラー: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr "ファイル \"%s\" を \"%s\" に改名している時にエラー: %s"
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "ファイル名変更"
 
-#: gtk/gtkfilesel.c:1709
+#: gtk/gtkfilesel.c:1686
 #, c-format
 msgid "Rename file \"%s\" to:"
 msgstr "ファイル '%s' の名前を変更:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "名称変更"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "選択: "
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1917,15 +1931,15 @@ msgstr ""
 "ファイル名 \"%s\" hal UTF-8 に変換できませんでした (環境変数 "
 "G_BROKEN_FILENAMES の設定を試してください): %s"
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "UTF-8 としておかしいです"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "名前が長すぎます"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "ファイル名を変換できませんでした"
 
@@ -2073,81 +2087,81 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "アイコンの読み込みでエラー: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "表示すう GdkPixbuf"
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr ""
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr ""
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "画像"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "表示したい GdkImage"
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "マスク"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "GdkImage や GdkPixmap で使用したいマスクのビットマップ"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "ロードして表示したいファイルの名前"
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "ストック ID"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr "表示するストック画像のストック ID"
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "アイコン セット"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "表示するアイコンセットl"
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "アイコンサイズ"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "ストック アイコンやアイコン セットで使用するサイズ"
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "アニメーション"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "表示する GdkPixbufAnimation"
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "保存タイプ"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "画像データに使用する表現"
 
@@ -2312,7 +2326,7 @@ msgstr "ラベルのニーモニック キーが押された時にアクティ�
 msgid "Horizontal adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:233
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
@@ -2320,7 +2334,7 @@ msgstr ""
 msgid "Vertical adjustment"
 msgstr ""
 
-#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:240
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
@@ -2517,7 +2531,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "ページ %u"
@@ -2887,43 +2901,43 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
+#: gtk/gtkscrolledwindow.c:232 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
+#: gtk/gtkscrolledwindow.c:239 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:250
+#: gtk/gtkscrolledwindow.c:246
 msgid "Horizontal Scrollbar Policy"
 msgstr "水平スクロールバーのポリシー"
 
-#: gtk/gtkscrolledwindow.c:251
+#: gtk/gtkscrolledwindow.c:247
 msgid "When the horizontal scrollbar is displayed"
 msgstr "水平スクロールバーをいつ表示するか"
 
-#: gtk/gtkscrolledwindow.c:258
+#: gtk/gtkscrolledwindow.c:254
 msgid "Vertical Scrollbar Policy"
 msgstr "垂直スクロールバーのポリシー"
 
-#: gtk/gtkscrolledwindow.c:259
+#: gtk/gtkscrolledwindow.c:255
 msgid "When the vertical scrollbar is displayed"
 msgstr "垂直スクロールバーをいつ表示するか"
 
-#: gtk/gtkscrolledwindow.c:267
+#: gtk/gtkscrolledwindow.c:263
 msgid "Window Placement"
 msgstr "ウィンドウ配置"
 
-#: gtk/gtkscrolledwindow.c:268
+#: gtk/gtkscrolledwindow.c:264
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:275
+#: gtk/gtkscrolledwindow.c:271
 msgid "Shadow Type"
 msgstr "シャドウの種類"
 
-#: gtk/gtkscrolledwindow.c:276
+#: gtk/gtkscrolledwindow.c:272
 msgid "Style of bevel around the contents"
 msgstr ""
 
@@ -3133,8 +3147,8 @@ msgid "_Copy"
 msgstr "コピー(_C)"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
-msgstr "切り取り(_U)"
+msgid "Cu_t"
+msgstr "切り取り(_T)"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -3334,19 +3348,19 @@ msgstr "はい(_Y)"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr ""
+msgstr "100% の大きさに(_1)"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "大きさを合わせる(_F)"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "ズーム・イン(_I)"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "ズーム・アウト(_O)"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
@@ -3370,7 +3384,7 @@ msgstr "行の間隔"
 
 #: gtk/gtktable.c:175
 msgid "The amount of space between two consecutive rows"
-msgstr ""
+msgstr "2つの連続した行の間の空白の量"
 
 #: gtk/gtktable.c:183
 msgid "Column spacing"
@@ -3378,7 +3392,7 @@ msgstr "列の間隔"
 
 #: gtk/gtktable.c:184
 msgid "The amount of space between two consecutive columns"
-msgstr ""
+msgstr "2つの連続した列の間の空白の量"
 
 #: gtk/gtktable.c:192
 msgid "Homogenous"
@@ -3719,7 +3733,7 @@ msgstr "カーソルを表示"
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6416
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
 msgstr "入力方法(_M)"
 
@@ -4336,17 +4350,17 @@ msgstr "このウインドウのアイコン"
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "アムハラ語 (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
 msgid "Cyrillic (Transliterated)"
-msgstr ""
+msgstr "キリル文字 (翻字)"
 
 #. ID
 #: modules/input/iminuktitut.c:126
 msgid "Inukitut (Transliterated)"
-msgstr ""
+msgstr "イヌクウティトット語 (翻字)"
 
 #. ID
 #: modules/input/imipa.c:144
@@ -4361,12 +4375,12 @@ msgstr "タイ (Broken)"
 #. ID
 #: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "ティグリグナ・エリトリア語 (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "ティグリグナ・エチオピア語 (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
@@ -4376,7 +4390,7 @@ msgstr "ベトナム語 (VIQR)"
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "X Input Method"
 
 #~ msgid "Directories"
 #~ msgstr "ディレクトリ"
