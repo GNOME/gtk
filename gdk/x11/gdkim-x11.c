@@ -26,7 +26,7 @@
 
 #include <locale.h>
 
-#include "gdk.h"		/* For gdk_flush() */
+#include "gdk.h"		/* For gdk_flush () */
 #include "gdkpixmap.h"
 #include "gdki18n.h"
 #include "gdkinternals.h"
@@ -125,8 +125,8 @@ gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
   gchar *mbstr;
-  GdkDisplay *display = gdk_get_default_display();
-  GDK_NOTE(MULTIHEAD, g_message("Don't use gdk_wcstombs for multihead\n"));
+  GdkDisplay *display = gdk_get_default_display ();
+  GDK_NOTE (MULTIHEAD, g_message ("Don't use gdk_wcstombs for multihead\n"));
 
   if (gdk_use_mb) {
     XTextProperty tpr;
@@ -155,7 +155,7 @@ gdk_wcstombs (const GdkWChar *src)
     }
     /*
      * We must copy the string into an area allocated by glib, because
-     * the string 'tpr.value' must be freed by XFree().
+     * the string 'tpr.value' must be freed by XFree ().
      */
     mbstr = g_strdup (tpr.value);
     XFree (tpr.value);
@@ -186,8 +186,8 @@ gdk_wcstombs (const GdkWChar *src)
 gint
 gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
-  GdkDisplay *display = gdk_get_default_display();
-  GDK_NOTE(MULTIHEAD,g_message("Don't use gdk_mbstowcs for multihead\n"));
+  GdkDisplay *display = gdk_get_default_display ();
+  GDK_NOTE (MULTIHEAD,g_message ("Don't use gdk_mbstowcs for multihead\n"));
   if (gdk_use_mb) {
     XTextProperty tpr;
     wchar_t **wstrs, *wstr_src;

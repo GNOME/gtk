@@ -751,7 +751,7 @@ gtk_window_set_title (GtkWindow   *window,
  * always set these to the same value for all windows in an
  * application, and GTK sets them to that value by default, so calling
  * this function is sort of pointless. However, you may want to call
- * gtk_window_set_role() on each window in your application, for the
+ * gtk_window_set_role () on each window in your application, for the
  * benefit of the session manager. Setting the role allows the window
  * manager to restore window positions when loading a saved session.
  * 
@@ -814,7 +814,7 @@ gtk_window_set_role (GtkWindow   *window,
  * If @focus is not the current focus widget, and is focusable, emits
  * the "set_focus" signal to set @focus as the focus widget for the
  * window.  This function is more or less GTK-internal; to focus an
- * entry widget or the like, you should use gtk_widget_grab_focus()
+ * entry widget or the like, you should use gtk_widget_grab_focus ()
  * instead of this function.
  * 
  **/
@@ -845,8 +845,8 @@ gtk_window_set_focus (GtkWindow *window,
  * #GtkWindow about the current default widget; it's really a GTK
  * internal function and you shouldn't need it. Instead, to change the
  * default widget, first set the #GTK_CAN_DEFAULT flag on the widget
- * you'd like to make the default using GTK_WIDGET_SET_FLAGS(), then
- * call gtk_widget_grab_default() to move the default.
+ * you'd like to make the default using GTK_WIDGET_SET_FLAGS (), then
+ * call gtk_widget_grab_default () to move the default.
  * 
  **/
 void
@@ -1101,7 +1101,7 @@ gtk_window_activate_default (GtkWindow *window)
  * Sets a window modal or non-modal. Modal windows prevent interaction
  * with other windows in the same application. To keep modal dialogs
  * on top of main application windows, use
- * gtk_window_set_transient_for() to make the dialog transient for the
+ * gtk_window_set_transient_for () to make the dialog transient for the
  * parent; most window managers will then disallow lowering the dialog
  * below the parent.
  * 
@@ -1207,7 +1207,7 @@ _gtk_window_reposition (GtkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  /* keep this in sync with gtk_window_compute_reposition()
+  /* keep this in sync with gtk_window_compute_reposition ()
    */
   if (GTK_WIDGET_REALIZED (window))
     {
@@ -1320,9 +1320,9 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  * Dialog windows should be set transient for the main application
  * window they were spawned from. This allows window managers to
  * e.g. keep the dialog on top of the main window, or center the
- * dialog over the main window. gtk_dialog_new_with_buttons() and
+ * dialog over the main window. gtk_dialog_new_with_buttons () and
  * other convenience functions in GTK+ will sometimes call
- * gtk_window_set_transient_for() on your behalf.
+ * gtk_window_set_transient_for () on your behalf.
  * 
  **/
 void       
@@ -1380,8 +1380,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
  *
  * This function should be called before the window becomes visible.
  *
- * gtk_dialog_new_with_buttons() and other convenience functions in GTK+
- * will sometimes call gtk_window_set_type_hint() on your behalf.
+ * gtk_dialog_new_with_buttons () and other convenience functions in GTK+
+ * will sometimes call gtk_window_set_type_hint () on your behalf.
  * 
  **/
 void
@@ -1537,7 +1537,7 @@ gtk_window_set_decorated (GtkWindow *window,
  * Sets the default size of a window. If the window's "natural" size
  * (its size request) is larger than the default, the default will be
  * ignored. So the default size is a minimum initial size.  Unlike
- * gtk_widget_set_usize(), which sets a size request for a widget and
+ * gtk_widget_set_usize (), which sets a size request for a widget and
  * thus would keep users from shrinking the window, this function only
  * sets the initial size, just as if the user had resized the window
  * themselves. Users can still shrink the window again as they
@@ -1545,11 +1545,11 @@ gtk_window_set_decorated (GtkWindow *window,
  * "natural" default size (the size request of the window).
  *
  * For more control over a window's initial size and how resizing works,
- * investigate gtk_window_set_geometry_hints().
+ * investigate gtk_window_set_geometry_hints ().
  *
  * A useful feature: if you set the "geometry widget" via
- * gtk_window_set_geometry_hints(), the default size specified by
- * gtk_window_set_default_size() will be the default size of that
+ * gtk_window_set_geometry_hints (), the default size specified by
+ * gtk_window_set_default_size () will be the default size of that
  * widget, not of the entire window.
  * 
  **/
@@ -2121,7 +2121,7 @@ gtk_window_configure_event (GtkWidget         *widget,
    *    accept that size since we don't want to fight neither the
    *    window manager nor the user
    * in the three latter cases we have to reallocate the widget tree,
-   * which happens in gtk_window_move_resize(), so we set a flag for
+   * which happens in gtk_window_move_resize (), so we set a flag for
    * that function and assign the new size. if resize_count > 1,
    * we simply do nothing and wait for more configure events.
    */
@@ -2320,7 +2320,7 @@ gtk_window_read_rcfiles (GtkWidget *widget,
       GdkEventClient sev;
       int i;
       
-      for(i = 0; i < 5; i++)
+      for (i = 0; i < 5; i++)
 	sev.data.l[i] = 0;
       sev.data_format = 32;
       sev.message_type = atom_rcfiles;
@@ -2370,7 +2370,7 @@ gtk_window_client_event (GtkWidget	*widget,
     atom_rcfiles = gdk_display_atom (gtk_widget_get_display(widget), "_GTK_READ_RCFILES", FALSE);
 
 
-  if(event->message_type == atom_rcfiles) 
+  if (event->message_type == atom_rcfiles) 
     gtk_window_read_rcfiles (widget, event);    
 
   return FALSE;
@@ -2872,7 +2872,7 @@ gtk_window_constrain_size (GtkWindow   *window,
 
 /* Compute the set of geometry hints and flags for a window
  * based on the application set geometry, and requisiition
- * of the window. gtk_widget_size_request() must have been
+ * of the window. gtk_widget_size_request () must have been
  * called first.
  */
 static void
@@ -3185,13 +3185,13 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
  * desktop, and/or giving it the keyboard focus, possibly dependent
  * on the user's platform, window manager, and preferences.
  *
- * If @window is hidden, this function calls gtk_widget_show()
+ * If @window is hidden, this function calls gtk_widget_show ()
  * as well.
  * 
  * This function should be used when the user tries to open a window
  * that's already open. Say for example the preferences dialog is
  * currently open, and the user chooses Preferences from the menu
- * a second time; use gtk_window_present() to move the already-open dialog
+ * a second time; use gtk_window_present () to move the already-open dialog
  * where the user can see it.
  * 
  **/
@@ -3210,7 +3210,7 @@ gtk_window_present (GtkWindow *window)
       
       gdk_window_show (widget->window);
 
-      /* note that gdk_window_focus() will also move the window to
+      /* note that gdk_window_focus () will also move the window to
        * the current desktop, for WM spec compliant window managers.
        */
       gdk_window_focus (widget->window,
@@ -3466,7 +3466,7 @@ gtk_window_set_resizeable (GtkWindow *window,
  * gtk_window_get_resizeable:
  * @window: a #GtkWindow
  *
- * Gets the value set by gtk_window_set_resizeable().
+ * Gets the value set by gtk_window_set_resizeable ().
  *
  * Return value: %TRUE if the user can resize the window
  **/
@@ -3477,7 +3477,7 @@ gtk_window_get_resizeable (GtkWindow *window)
 
   /* allow_grow is most likely to indicate the semantic concept we
    * mean by "resizeable" (and will be a reliable indicator if
-   * set_policy() hasn't been called)
+   * set_policy () hasn't been called)
    */
   return window->allow_grow;
 }
@@ -3489,7 +3489,7 @@ gtk_window_get_resizeable (GtkWindow *window)
  *
  * Window gravity defines the "reference point" to be used when
  * positioning or resizing a window. Calls to
- * gtk_widget_set_uposition() will position a different point on the
+ * gtk_widget_set_uposition () will position a different point on the
  * window depending on the window gravity. When the window changes size
  * the reference point determined by the window's gravity will stay in
  * a fixed location.
@@ -3516,7 +3516,7 @@ gtk_window_set_gravity (GtkWindow *window,
     {
       window->gravity = gravity;
 
-      /* gtk_window_move_resize() will adapt gravity
+      /* gtk_window_move_resize () will adapt gravity
        */
       gtk_widget_queue_resize (GTK_WIDGET (window));
     }
@@ -3526,7 +3526,7 @@ gtk_window_set_gravity (GtkWindow *window,
  * gtk_window_get_gravity:
  * @window: a #GtkWindow
  *
- * Gets the value set by gtk_window_set_gravity().
+ * Gets the value set by gtk_window_set_gravity ().
  *
  * Return value: window gravity
  **/

@@ -110,7 +110,7 @@ extern GList *gdk_queued_tail;
 GdkEvent* gdk_event_new (void);
 
 void      gdk_events_init   (GdkDisplay * display);
-/*void      gdk_events_queue  (void);*/
+void      gdk_events_queue  (GdkDisplay * display);
 GdkEvent* gdk_event_unqueue (void);
 
 GList* gdk_event_queue_find_first  (void);

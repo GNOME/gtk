@@ -57,7 +57,7 @@ gdk_cursor_new_for_screen (GdkScreen * screen, GdkCursorType cursor_type)
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_cursor_new_for_screen instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_cursor_new_for_screen instead\n"));
   return gdk_cursor_new_for_screen (gdk_get_default_screen(), cursor_type);
 
 }
@@ -84,7 +84,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   source_pixmap = GDK_PIXMAP_XID (source);
   mask_pixmap = GDK_PIXMAP_XID (mask);
-  screen = GDK_PIXMAP_SCREEN(source);
+  screen = GDK_PIXMAP_SCREEN (source);
 
   xfg.pixel = fg->pixel;
   xfg.red = fg->red;

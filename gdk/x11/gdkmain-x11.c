@@ -77,7 +77,7 @@ struct _GdkErrorTrap
  */
 
 #ifndef HAVE_XCONVERTCASE
-static void	 gdkx_XConvertCase	(KeySym	       symbol,
+static void	 gdkx_XConvertCase	 (KeySym	       symbol,
 					 KeySym	      *lower,
 					 KeySym	      *upper);
 #define XConvertCase gdkx_XConvertCase
@@ -103,7 +103,7 @@ static const GDebugKey gdk_debug_keys[] = {
   {"multihead",	    GDK_DEBUG_MULTIHEAD}
 };
 
-static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
+static const int gdk_ndebug_keys = sizeof (gdk_debug_keys)/sizeof (GDebugKey);
 
 #endif /* G_ENABLE_DEBUG */
 
@@ -132,8 +132,8 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
   if (!gdk_display_manager) {
     gdk_display_manager = g_object_new (gdk_display_manager_type (), NULL);
   }
-  display = GDK_DISPLAY_MGR_GET_CLASS (gdk_display_manager)->open_display (gdk_display_manager, display_name);
-  if(!display)
+  display = GDK_DISPLAY_MANAGER_GET_CLASS (gdk_display_manager)->open_display (gdk_display_manager, display_name);
+  if (!display)
     return NULL;
   dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
 
@@ -234,22 +234,22 @@ GdkDisplay *
 _gdk_windowing_init_check (int argc, char **argv){
   /* This wrapper function is needed because of gdk_display_name exists only
    * in x11 implementation */
-  return _gdk_windowing_init_check_for_display(argc,argv,gdk_display_name);
+  return _gdk_windowing_init_check_for_display (argc,argv,gdk_display_name);
 }
 
 
 GdkDisplay *
-gdk_display_init_new(int argc, char **argv, char *display_name){
+gdk_display_init_new (int argc, char **argv, char *display_name){
   GdkDisplay *dpy = NULL;
   GdkScreen *scr = NULL;
   
-  dpy = _gdk_windowing_init_check_for_display(argc,argv,display_name);
+  dpy = _gdk_windowing_init_check_for_display (argc,argv,display_name);
     if (!dpy)
       return NULL;
-  scr = GDK_DISPLAY_GET_CLASS(dpy)->get_default_screen(dpy);
+  scr = GDK_DISPLAY_GET_CLASS (dpy)->get_default_screen (dpy);
   
   _gdk_visual_init (scr);
-  _gdk_windowing_window_init(scr);
+  _gdk_windowing_window_init (scr);
   _gdk_windowing_image_init (dpy);
   gdk_events_init (dpy);
   gdk_dnd_init (dpy);
@@ -261,15 +261,15 @@ gdk_display_init_new(int argc, char **argv, char *display_name){
 void
 gdk_set_use_xshm (gboolean use_xshm)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_use_xshm_set instead\n"));
-  gdk_display_use_xshm_set (gdk_get_default_display(),use_xshm);
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_set_use_xshm instead\n"));
+  gdk_display_set_use_xshm (gdk_get_default_display(),use_xshm);
 }
 
 gboolean
 gdk_get_use_xshm (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_use_xshm_get instead\n"));
-  return gdk_display_use_xshm_get (gdk_get_default_display());
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_get_use_xshm instead\n"));
+  return gdk_display_get_use_xshm (gdk_get_default_display());
 }
 
 static GdkGrabStatus
@@ -381,7 +381,7 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window))->gdk_xgrab_window = 
+    GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->gdk_xgrab_window = 
 						    (GdkWindowObject *)window;
 
   return gdk_x11_convert_grab_status (return_val);
@@ -405,7 +405,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_pointer_ungrab instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_pointer_ungrab instead\n"));
   gdk_display_pointer_ungrab (gdk_get_default_display(),time);
 }
 
@@ -427,8 +427,8 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_is_pointer_grabbed instead\n"));
-  return gdk_display_is_pointer_grabbed (gdk_get_default_display());
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_pointer_is_grabbed instead\n"));
+  return gdk_display_pointer_is_grabbed (gdk_get_default_display());
 }
 
 
@@ -494,7 +494,7 @@ gdk_keyboard_grab (GdkWindow *	   window,
 void
 gdk_keyboard_ungrab (guint32 time)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_keyboard_ungrab instead\n"));	 
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_keyboard_ungrab instead\n"));	 
   gdk_display_keyboard_ungrab (gdk_get_default_display(),time);
 }
 
@@ -516,7 +516,7 @@ gdk_keyboard_ungrab (guint32 time)
 gint
 gdk_screen_width (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_width instead\n"));  
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_screen_get_width instead\n"));  
   return gdk_screen_get_width (gdk_get_default_screen());
 }
 
@@ -538,7 +538,7 @@ gdk_screen_width (void)
 gint
 gdk_screen_height (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_height instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_screen_get_height instead\n"));
   return gdk_screen_get_height (gdk_get_default_screen());
 }
 
@@ -562,7 +562,7 @@ gdk_screen_height (void)
 gint
 gdk_screen_width_mm (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_width_mm instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_screen_get_width_mm instead\n"));
   return gdk_screen_get_width_mm (gdk_get_default_screen());
 }
 
@@ -584,8 +584,8 @@ gdk_screen_width_mm (void)
 gint
 gdk_screen_height_mm (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_height_mm instead\n"));
-  return gdk_screen_get_height_mm(gdk_get_default_screen());
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_screen_get_height_mm instead\n"));
+  return gdk_screen_get_height_mm (gdk_get_default_screen ());
 }
 
 /*
@@ -613,8 +613,8 @@ gdk_screen_height_mm (void)
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_set_sm_client_id_for_screen instead\n"));
-  gdk_set_sm_client_id_for_screen(gdk_get_default_screen(),sm_client_id);
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_set_sm_client_id_for_screen instead\n"));
+  gdk_set_sm_client_id_for_screen (gdk_get_default_screen (),sm_client_id);
 }
 
 void
@@ -658,15 +658,15 @@ gdk_key_repeat_restore_for_display (GdkDisplay * dpy)
 void
 gdk_key_repeat_disable (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_key_repeat_disable_for_display instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_key_repeat_disable_for_display instead\n"));
   gdk_key_repeat_disable_for_display (gdk_get_default_display());
 }
 
 void
 gdk_key_repeat_restore (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_key_repeat_restore_for_display instead\n"));	
-  gdk_key_repeat_restore_for_display(gdk_get_default_display());
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_key_repeat_restore_for_display instead\n"));	
+  gdk_key_repeat_restore_for_display (gdk_get_default_display ());
 }
 
 */
@@ -675,7 +675,7 @@ gdk_key_repeat_restore (void)
 void
 gdk_beep (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_beep instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_beep instead\n"));
   gdk_display_beep (gdk_get_default_display());
 }
 
@@ -686,7 +686,7 @@ gdk_windowing_exit (void)
 {
   GSList * tmp = gdk_display_manager->open_displays;
     
-  while(tmp != NULL){
+  while (tmp != NULL){
 	  pango_x_shutdown_display(GDK_DISPLAY_XDISPLAY(tmp->data));
 	  XCloseDisplay (GDK_DISPLAY_XDISPLAY (tmp->data));
 	  tmp = tmp->next;
@@ -737,7 +737,7 @@ gdk_x_error (Display	 *display,
                              "   that is, you will receive the error a while after causing it.\n"
                              "   To debug your program, run it with the --sync command line\n"
                              "   option to change this behavior. You can then get a meaningful\n"
-                             "   backtrace from your debugger if you break on the gdk_x_error() function.)",
+                             "   backtrace from your debugger if you break on the gdk_x_error () function.)",
                              g_get_prgname (),
                              buf,
                              error->serial, 
@@ -782,9 +782,9 @@ int
 gdk_x_io_error (Display *display)
 {
   /* This is basically modelled after the code in XLib. We need
-   * an explicit error handler here, so we can disable our atexit()
+   * an explicit error handler here, so we can disable our atexit ()
    * which would otherwise cause a nice segfault.
-   * We fprintf(stderr, instead of g_warning() because g_warning()
+   * We fprintf (stderr, instead of g_warning () because g_warning ()
    * could possibly be redirected to a dialog
    */
   if (errno == EPIPE)
@@ -807,18 +807,18 @@ gdk_x_io_error (Display *display)
   /* Disable the atexit shutdown for GDK */
   gdk_initialized = 0;
   
-  exit(1);
+  exit (1);
 }
 
 gchar *
 gdk_get_display (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_x11_display_impl_get_display_name instead\n"));
-  return gdk_x11_display_impl_get_display_name(gdk_get_default_display());
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_x11_display_impl_get_display_name instead\n"));
+  return gdk_x11_display_impl_get_display_name (gdk_get_default_display ());
 }
 
 gchar *
-gdk_get_display_arg_name(void)
+gdk_get_display_arg_name (void)
 {
 return gdk_display_name;
 }

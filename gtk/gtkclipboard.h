@@ -80,7 +80,7 @@ void gtk_clipboard_request_text     (GtkClipboard                 *clipboard,
 GtkSelectionData *gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 						   GdkAtom       target);
 gchar *         gtk_clipboard_wait_for_text	  (GtkClipboard *clipboard);
-GdkDisplay *	gtk_cliplboard_get_display	  (GtkClipboard *clipboard);
+GdkDisplay *	gtk_clipboard_get_display	  (GtkClipboard *clipboard);
 
 #ifdef __cplusplus
 }

@@ -25,7 +25,8 @@
  */
 
 #include <time.h>
-
+#include <stdlib.h>
+#include <stdio.h>
 #include "gdkcolor.h"
 #include "gdkinternals.h"
 
@@ -1064,7 +1065,7 @@ compare_xcolor_entries (const void *a, const void *b)
 }
 
 static gboolean
-find_color(const char *name,
+find_color (const char *name,
            guint16    *red,
            guint16    *green,
            guint16    *blue)
@@ -1154,6 +1155,6 @@ gboolean
 gdk_color_parse (const gchar *spec,
 		 GdkColor *color)
 {
-  return color_parse(spec, &color->red, &color->green, &color->blue);
+  return color_parse (spec, &color->red, &color->green, &color->blue);
 }
 

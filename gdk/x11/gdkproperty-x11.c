@@ -39,7 +39,7 @@
 GdkAtom
 gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_atom instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_atom instead\n"));
   return gdk_display_atom (gdk_get_default_display(), atom_name, only_if_exists);
 
 }
@@ -47,7 +47,7 @@ gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_display_atom_name instead\n"));
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_display_atom_name instead\n"));
   return gdk_display_atom_name (gdk_get_default_display(), atom);	
 
 }
@@ -114,8 +114,8 @@ gdk_property_get (GdkWindow   *window,
 
       pn = gdk_display_atom_name (GDK_WINDOW_DISPLAY(window), type);
 
-      g_warning("Couldn't match property type %s to %s\n", rn, pn);
-      g_free(rn); g_free(pn);
+      g_warning ("Couldn't match property type %s to %s\n", rn, pn);
+      g_free (rn); g_free (pn);
       return FALSE;
     }
 

@@ -97,10 +97,10 @@ static void     gtk_ctree_init          (GtkCTree              *ctree);
 static GObject* gtk_ctree_constructor   (GType                  type,
 				         guint                  n_construct_properties,
 				         GObjectConstructParam *construct_params);
-static void gtk_ctree_set_arg		(GtkObject      *object,
+static void gtk_ctree_set_arg		 (GtkObject      *object,
 					 GtkArg         *arg,
 					 guint           arg_id);
-static void gtk_ctree_get_arg      	(GtkObject      *object,
+static void gtk_ctree_get_arg      	 (GtkObject      *object,
 					 GtkArg         *arg,
 					 guint           arg_id);
 static void gtk_ctree_realize           (GtkWidget      *widget);
@@ -2478,7 +2478,7 @@ change_focus_row_expansion (GtkCTree          *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 		gdk_window_get_display(GTK_WIDGET(ctree)->window)) && 
       GTK_WIDGET_HAS_GRAB (ctree))
     return;
@@ -3549,7 +3549,7 @@ ctree_is_hot_spot (GtkCTree     *ctree,
 
   tree_row = GTK_CTREE_ROW (node);
 
-  cell = GTK_CELL_PIXTEXT(tree_row->row.cell[ctree->tree_column]);
+  cell = GTK_CELL_PIXTEXT (tree_row->row.cell[ctree->tree_column]);
 
   yu = (ROW_TOP_YPIXEL (clist, row) + (clist->row_height - PM_SIZE) / 2 -
 	(clist->row_height - 1) % 2);
@@ -4122,7 +4122,7 @@ gtk_ctree_find_node_ptr (GtkCTree    *ctree,
   g_return_val_if_fail (ctree_row != NULL, FALSE);
   
   if (ctree_row->parent)
-    node = GTK_CTREE_ROW(ctree_row->parent)->children;
+    node = GTK_CTREE_ROW (ctree_row->parent)->children;
   else
     node = GTK_CTREE_NODE (GTK_CLIST (ctree)->row_list);
 
@@ -4815,7 +4815,7 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
 static void
 remove_grab (GtkCList *clist)
 {
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 		gdk_window_get_display(GTK_WIDGET(clist)->window)) && 
       GTK_WIDGET_HAS_GRAB (clist))
     {

@@ -42,6 +42,7 @@
 #include "gdkwindow-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+#include "gdkdisplaymgr-x11.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -282,7 +283,7 @@ _gdk_windowing_window_init (GdkScreen * scr)
 
   g_assert (scr_impl->root_window == NULL);
 
-  scr_impl->default_colormap = gdk_colormap_get_system_for_screen(scr);
+  scr_impl->default_colormap = gdk_colormap_get_system_for_screen (scr);
 
   XGetGeometry (scr_impl->xdisplay, scr_impl->xroot_window,
 		&scr_impl->xroot_window, &x, &y, &width, &height,
@@ -616,13 +617,13 @@ gdk_window_new (GdkWindow     *parent,
 		gint           attributes_mask)
 {
   GdkScreen *screen;
-  if(parent)
-    screen = GDK_WINDOW_SCREEN(parent);  
+  if (parent)
+    screen = GDK_WINDOW_SCREEN (parent);  
   else{
-    GDK_NOTE(MULTIHEAD, g_message("Use gdk_window_new_for_screen instead instead\n"));
-    screen = gdk_get_default_screen();
+    GDK_NOTE (MULTIHEAD, g_message ("Use gdk_window_new_for_screen instead instead\n"));
+    screen = gdk_get_default_screen ();
   }
-  return gdk_window_new_for_screen(screen, 
+  return gdk_window_new_for_screen (screen, 
 				   parent,
 				   attributes,
 				   attributes_mask);
@@ -712,7 +713,7 @@ gdk_window_foreign_new_for_display (GdkDisplay * display,
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)
 {
-  return gdk_window_foreign_new_for_display(gdk_get_default_display(), anid);
+  return gdk_window_foreign_new_for_display (gdk_get_default_display (), anid);
 }
 
 void
@@ -1076,7 +1077,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
   
   if (!new_parent)
-    new_parent = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->root_window;
+    new_parent = GDK_SCREEN_IMPL_X11 (GDK_WINDOW_SCREEN (window))->root_window;
   
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject*)window_private->parent;
@@ -1322,7 +1323,7 @@ gdk_wmspec_change_state (gboolean add,
   xev.xclient.type = ClientMessage;
   xev.xclient.serial = 0;
   xev.xclient.send_event = True;
-  xev.xclient.display = GDK_WINDOW_XDISPLAY(window);
+  xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
   xev.xclient.window = GDK_WINDOW_XID (window);
   xev.xclient.message_type = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE", FALSE);
 
@@ -1346,7 +1347,7 @@ gdk_wmspec_change_state (gboolean add,
  * way.
  *
  * You should only use this on windows for which you have
- * previously called #gdk_window_set_transient_for()
+ * previously called #gdk_window_set_transient_for ()
  **/
 void
 gdk_window_set_modal_hint (GdkWindow *window,
@@ -1769,7 +1770,7 @@ gdk_window_get_geometry (GdkWindow *window,
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
   if (!window)
   {
-    GDK_NOTE(MULTIHEAD, 
+    GDK_NOTE (MULTIHEAD, 
 	     g_message("Window needs to be defined to be multisafe\n"));
     window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
@@ -1801,7 +1802,7 @@ gdk_window_get_geometry (GdkWindow *window,
  * 
  * Obtains the position of a window in root window coordinates.
  * (Compare with gdk_window_get_position() and
- * gdk_window_get_geometry() which return the position of a window
+ * gdk_window_get_geometry () which return the position of a window
  * relative to its parent window.)
  * 
  * Return value: not meaningful, ignore
@@ -1954,7 +1955,7 @@ gdk_window_get_root_origin (GdkWindow *window,
  * Obtains the bounding box of the window, including window manager
  * titlebar/borders if any. The frame position is given in root window
  * coordinates. To get the position of the window itself (rather than
- * the frame) in root window coordinates, use gdk_window_get_origin().
+ * the frame) in root window coordinates, use gdk_window_get_origin ().
  * 
  **/
 void
@@ -2034,7 +2035,7 @@ gdk_window_get_pointer (GdkWindow       *window,
 
   if (!window)
   {
-    GDK_NOTE(MULTIHEAD, 
+    GDK_NOTE (MULTIHEAD, 
 	     g_message("window arg is need for multihead safe operation\n"));
     window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
@@ -2064,9 +2065,9 @@ GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_screen_get_window_at_pointer instead\n"));
-  return gdk_screen_get_window_at_pointer(gdk_get_default_screen(),win_x,win_y);
+  return gdk_screen_get_window_at_pointer (gdk_get_default_screen (),win_x,win_y);
 }
 
 GdkEventMask  
@@ -2328,7 +2329,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
  * On the X11 backend this call might fail if the window manager
  * doesn't support the Extended Window Manager Hints. Then this
  * function returns FALSE, and the application should fall back
- * to #gdk_window_set_icon().
+ * to #gdk_window_set_icon ().
  **/
 gboolean
 gdk_window_set_icon_list (GdkWindow *window,
@@ -2560,7 +2561,7 @@ gdk_window_stick (GdkWindow *window)
 {
   GdkScreenImplX11 * scr_impl;
   g_return_if_fail (GDK_IS_WINDOW (window));
-  scr_impl = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window));
+  scr_impl = GDK_SCREEN_IMPL_X11 (GDK_WINDOW_SCREEN (window));
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -2836,7 +2837,7 @@ gdk_window_set_decorations (GdkWindow      *window,
  * Returns: TRUE if the window has decorations set, FALSE otherwise.
  **/
 gboolean
-gdk_window_get_decorations(GdkWindow *window,
+gdk_window_get_decorations (GdkWindow *window,
 			   GdkWMDecoration *decorations)
 {
   MotifWmHints *hints;
@@ -3436,7 +3437,7 @@ gdk_window_xid_at_coords_for_screen (gint     x,
   unsigned int num;
   int i;
 
-  window = GDK_SCREEN_IMPL_X11(screen)->root_window;
+  window = GDK_SCREEN_IMPL_X11 (screen)->root_window;
   xdisplay = GDK_WINDOW_XDISPLAY (window);
   root = GDK_WINDOW_XID (window);
   num = g_list_length (excludes);
@@ -3512,7 +3513,7 @@ wmspec_moveresize (GdkWindow *window,
   xev.xclient.type = ClientMessage;
   xev.xclient.serial = 0;
   xev.xclient.send_event = True;
-  xev.xclient.display = GDK_WINDOW_XDISPLAY(window);
+  xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
   xev.xclient.window = GDK_WINDOW_XID (window);
   xev.xclient.message_type = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE);
 
@@ -3602,7 +3603,7 @@ update_pos_for_display (GdkDisplay *display,
 			gint new_root_y)
 {
   gint dx, dy;
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(display);
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (display);
   
   dx = new_root_x - dpy->moveresize_x;
   dy = new_root_y - dpy->moveresize_y;
@@ -3651,7 +3652,7 @@ update_pos_for_display (GdkDisplay *display,
 static void
 finish_drag_for_display (GdkDisplay *display)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(display);
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (display);
   gdk_window_destroy (dpy->moveresize_emulation_window);
   dpy->moveresize_emulation_window = NULL;
   dpy->_gdk_moveresize_window = NULL;
@@ -3668,7 +3669,7 @@ lookahead_motion_predicate (Display *display,
 			    XEvent  *event,
 			    XPointer arg)
 {
-  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay(display);
+  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (display);
   
   gboolean *seen_release = (gboolean *)arg;
   
@@ -3695,7 +3696,7 @@ moveresize_lookahead (XEvent *event)
 {
   XEvent tmp_event;
   gboolean seen_release = FALSE;
-  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay(event->xany.display);
+  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (event->xany.display);
 
   if (dpy->moveresize_process_time)
     {
@@ -3718,7 +3719,7 @@ void
 _gdk_moveresize_handle_event (XEvent *event)
 {
   guint button_mask = 0;
-  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay(event->xany.display);
+  GdkDisplayImplX11 *dpy = gdk_lookup_xdisplay (event->xany.display);
   GdkWindowObject *window_private = (GdkWindowObject *) dpy->_gdk_moveresize_window;
   
   button_mask = GDK_BUTTON1_MASK << (dpy->moveresize_button - 1);
@@ -3765,7 +3766,7 @@ void
 _gdk_moveresize_configure_done_for_display (GdkDisplay *dpy)
 {
   XEvent *tmp_event;
-  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11(dpy);
+  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
   
   if (dpy_impl->moveresize_pending_event)
     {
@@ -3782,8 +3783,8 @@ create_moveresize_window_for_screen (GdkScreen *scr, guint32 timestamp)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGrabStatus status;
-  GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11(scr);
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11(scr_impl->display);
+  GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (scr);
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (scr_impl->display);
 
   g_assert (dpy_impl->moveresize_emulation_window == NULL);
   
@@ -3831,7 +3832,7 @@ emulate_resize_drag (GdkWindow     *window,
                      gint           root_y,
                      guint32        timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window));
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   dpy->is_resize = TRUE;
   dpy->moveresize_button = button;
   dpy->resize_edge = edge;
@@ -3858,7 +3859,7 @@ emulate_move_drag (GdkWindow     *window,
                    gint           root_y,
                    guint32        timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window));
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   dpy->is_resize = FALSE;
   dpy->moveresize_button = button;
   dpy->moveresize_x = root_x;
@@ -3881,7 +3882,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
                               gint           root_y,
                               guint32        timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window));
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (dpy->moveresize_emulation_window == NULL);
   
@@ -3902,7 +3903,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
                             gint       root_y,
                             guint32    timestamp)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window));
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window));
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (dpy->moveresize_emulation_window == NULL);
   
@@ -3929,12 +3930,12 @@ void gdk_window_set_screen (GdkWindow *window, GdkScreen *screen)
 GdkScreen*
 gdk_window_get_screen (GdkWindow *window)
 {
-    return GDK_WINDOW_SCREEN(window);
+    return GDK_WINDOW_SCREEN (window);
 }
 
 GdkDisplay* 
 gdk_window_get_display (GdkWindow *window)
 {
-    return GDK_WINDOW_DISPLAY(window);
+    return GDK_WINDOW_DISPLAY (window);
 }
 

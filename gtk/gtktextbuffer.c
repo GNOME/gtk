@@ -301,7 +301,7 @@ void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents = NULL;
-  buffer->clipboard_display = gdk_get_default_display();
+  buffer->clipboard_display = gdk_get_default_display ();
 }
 
 /**
@@ -558,7 +558,7 @@ gtk_text_buffer_insert_at_cursor (GtkTextBuffer *buffer,
  *
  * @default_editable indicates the editability of text that doesn't
  * have a tag affecting editability applied to it. Typically the
- * result of gtk_text_view_get_editable() is appropriate here.
+ * result of gtk_text_view_get_editable () is appropriate here.
  *
  * Return value: whether text was actually inserted
  **/
@@ -595,7 +595,7 @@ gtk_text_buffer_insert_interactive (GtkTextBuffer *buffer,
  *
  * @default_editable indicates the editability of text that doesn't
  * have a tag affecting editability applied to it. Typically the
- * result of gtk_text_view_get_editable() is appropriate here.
+ * result of gtk_text_view_get_editable () is appropriate here.
  * 
  * Return value: whether text was actually inserted
  **/
@@ -950,11 +950,11 @@ gtk_text_buffer_insert_range (GtkTextBuffer     *buffer,
  * @end: another position in the same buffer as @start
  * @default_editable: default editability of the buffer
  *
- * Same as gtk_text_buffer_insert_range(), but does nothing if the
+ * Same as gtk_text_buffer_insert_range (), but does nothing if the
  * insertion point isn't editable. The @default_editable parameter
  * indicates whether the text is editable at @iter if no tags
  * enclosing @iter affect editability. Typically the result of
- * gtk_text_view_get_editable() is appropriate here.
+ * gtk_text_view_get_editable () is appropriate here.
  *
  * Returns: whether an insertion was possible at @iter
  **/
@@ -1412,8 +1412,8 @@ gtk_text_buffer_real_insert_pixbuf (GtkTextBuffer     *buffer,
  * "object replacement character" 0xFFFC. Note that the "slice"
  * variants for obtaining portions of the buffer as a string include
  * this character for pixbufs, but the "text" variants do
- * not. e.g. see gtk_text_buffer_get_slice() and
- * gtk_text_buffer_get_text().
+ * not. e.g. see gtk_text_buffer_get_slice () and
+ * gtk_text_buffer_get_text ().
  * 
  **/
 void
@@ -1456,9 +1456,9 @@ gtk_text_buffer_real_insert_anchor (GtkTextBuffer      *buffer,
  * by the Unicode "object replacement character" 0xFFFC. Note that the
  * "slice" variants for obtaining portions of the buffer as a string
  * include this character for pixbufs, but the "text" variants do
- * not. e.g. see gtk_text_buffer_get_slice() and
- * gtk_text_buffer_get_text(). Consider
- * gtk_text_buffer_create_child_anchor() as a more convenient
+ * not. e.g. see gtk_text_buffer_get_slice () and
+ * gtk_text_buffer_get_text (). Consider
+ * gtk_text_buffer_create_child_anchor () as a more convenient
  * alternative to this function. The buffer will add a reference to
  * the anchor, so you can unref it after insertion.
  * 
@@ -1483,8 +1483,8 @@ gtk_text_buffer_insert_child_anchor (GtkTextBuffer      *buffer,
  * @iter: location in the buffer
  * 
  * This is a convenience function which simply creates a child anchor
- * with gtk_text_child_anchor_new() and inserts it into the buffer
- * with gtk_text_buffer_insert_child_anchor().
+ * with gtk_text_child_anchor_new () and inserts it into the buffer
+ * with gtk_text_buffer_insert_child_anchor ().
  * 
  * Return value: the created child anchor
  **/
@@ -1903,7 +1903,7 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
  * If @tag_name is %NULL, the tag is anonymous.
  *
  * The @first_property_name argument and subsequent arguments are a list
- * of properties to set on the tag, as with g_object_set().
+ * of properties to set on the tag, as with g_object_set ().
  *
  * Return value: a new tag
  **/
@@ -2042,8 +2042,8 @@ gtk_text_buffer_remove_tag (GtkTextBuffer *buffer,
  * @start: one bound of range to be tagged
  * @end: other bound of range to be tagged
  *
- * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
- * get a #GtkTextTag, then calls gtk_text_buffer_apply_tag().
+ * Calls gtk_text_tag_table_lookup () on the buffer's tag table to
+ * get a #GtkTextTag, then calls gtk_text_buffer_apply_tag ().
  * 
  **/
 void
@@ -2078,8 +2078,8 @@ gtk_text_buffer_apply_tag_by_name (GtkTextBuffer *buffer,
  * @start: one bound of range to be untagged
  * @end: other bound of range to be untagged
  *
- * Calls gtk_text_tag_table_lookup() on the buffer's tag table to
- * get a #GtkTextTag, then calls gtk_text_buffer_remove_tag().
+ * Calls gtk_text_tag_table_lookup () on the buffer's tag table to
+ * get a #GtkTextTag, then calls gtk_text_buffer_remove_tag ().
  * 
  * 
  **/
@@ -2333,7 +2333,7 @@ gtk_text_buffer_get_iter_at_offset         (GtkTextBuffer      *buffer,
  *
  * Initializes @iter with the "end iterator," one past the last valid
  * character in the text buffer. If dereferenced with
- * gtk_text_iter_get_char(), the end iterator has a character value of
+ * gtk_text_iter_get_char (), the end iterator has a character value of
  * 0. The entire buffer lies in the range from the first position in
  * the buffer (call gtk_text_buffer_get_iter_at_offset() to get
  * character position 0) to the end iterator.
@@ -3136,18 +3136,18 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
  * @buffer: a #GtkTextBuffer
  * 
  * Called to indicate that the buffer operations between here and a
- * call to gtk_text_buffer_end_user_action() are part of a single
+ * call to gtk_text_buffer_end_user_action () are part of a single
  * user-visible operation. The operations between
- * gtk_text_buffer_begin_user_action() and
- * gtk_text_buffer_end_user_action() can then be grouped when creating
+ * gtk_text_buffer_begin_user_action () and
+ * gtk_text_buffer_end_user_action () can then be grouped when creating
  * an undo stack. #GtkTextBuffer maintains a count of calls to
- * gtk_text_buffer_begin_user_action() that have not been closed with
- * a call to gtk_text_buffer_end_user_action(), and emits the "begin_user_action"
+ * gtk_text_buffer_begin_user_action () that have not been closed with
+ * a call to gtk_text_buffer_end_user_action (), and emits the "begin_user_action"
  * and "end_user_action" signals only for the outermost pair of calls.
  * This allows you to build user actions from other user actions.
  *
  * The "interactive" buffer mutation functions, such as
- * gtk_text_buffer_insert_interactive(), automatically call begin/end
+ * gtk_text_buffer_insert_interactive (), automatically call begin/end
  * user action around the buffer operations they perform, so there's
  * no need to add extra calls if you user action consists solely of a
  * single call to one of those functions.
@@ -3170,7 +3170,7 @@ gtk_text_buffer_begin_user_action (GtkTextBuffer *buffer)
  * gtk_text_buffer_end_user_action:
  * @buffer: a #GtkTextBuffer
  * 
- * Should be paired with a call to gtk_text_buffer_begin_user_action().
+ * Should be paired with a call to gtk_text_buffer_begin_user_action ().
  * See that function for a full explanation.
  **/
 void

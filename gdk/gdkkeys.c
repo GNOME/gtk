@@ -83,8 +83,6 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 static void
 gdk_keymap_finalize (GObject *object)
 {
-  GdkKeymap *keymap = GDK_KEYMAP (object);
-  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -102,7 +100,7 @@ gdk_keymap_get_default (void)
   static GdkKeymap *keymap = NULL;
 
   if (keymap == NULL)
-    keymap = gdk_keymap_new(gdk_get_default_display());
+    keymap = gdk_keymap_new (gdk_get_default_display ());
 
   return keymap;
 }

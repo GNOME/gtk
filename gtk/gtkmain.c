@@ -179,9 +179,9 @@ gtk_check_version (guint required_major,
 }
 
 #ifdef __EMX__
-static gchar *add_dll_suffix(gchar *module_name)
+static gchar *add_dll_suffix (gchar *module_name)
 {
-    gchar *suffix = strrchr(module_name, '.');
+    gchar *suffix = strrchr (module_name, '.');
     
     if (!suffix || stricmp(suffix, ".dll"))
     {
@@ -420,7 +420,7 @@ gtk_init_check (int	 *argc,
 	  g_free (old);
 	}
 #else
-      module_name = add_dll_suffix(module_name);
+      module_name = add_dll_suffix (module_name);
 #endif
       if (g_module_supported ())
 	{
@@ -454,9 +454,9 @@ gtk_init_check (int	 *argc,
 
 #ifdef ENABLE_NLS
 #  ifndef G_OS_WIN32
-  bindtextdomain(GETTEXT_PACKAGE, GTK_LOCALEDIR);
+  bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
 #    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
-  bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
+  bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #    endif
 #  else /* !G_OS_WIN32 */
   {
@@ -536,7 +536,7 @@ gtk_init (int *argc, char ***argv)
   if (!gtk_init_check (argc, argv))
     {
       g_error ("cannot open display: %s", gdk_get_display_arg_name ());
-      exit(1);
+      exit (1);
     }
 }
 
@@ -577,10 +577,10 @@ gtk_exit (gint errorcode)
 {
   /* Only if "gtk" has been initialized should we de-initialize.
    */
-  /* de-initialisation is done by the gtk_exit_funct(),
+  /* de-initialisation is done by the gtk_exit_funct (),
    * no need to do this here (Alex J.)
    */
-  gdk_exit(errorcode);
+  gdk_exit (errorcode);
 }
 
 gchar*
@@ -715,7 +715,7 @@ gtk_events_pending (void)
   gboolean result;
   
   GDK_THREADS_LEAVE ();  
-  result = g_main_pending();
+  result = g_main_pending ();
   GDK_THREADS_ENTER ();
 
   return result;
@@ -813,7 +813,7 @@ gtk_main_do_event (GdkEvent *event)
     }
   
   /* Push the event onto a stack of current events for
-   * gtk_current_event_get().
+   * gtk_current_event_get ().
    */
   current_events = g_list_prepend (current_events, event);
   
@@ -1274,7 +1274,7 @@ gtk_idle_add (GtkFunction function,
 }
 
 guint	    
-gtk_idle_add_priority	(gint		    priority,
+gtk_idle_add_priority	 (gint		    priority,
 			 GtkFunction	    function,
 			 gpointer	    data)
 {
@@ -1361,10 +1361,10 @@ gtk_invoke_input (gpointer	    data,
   GtkArg args[3];
   args[0].type = GTK_TYPE_INT;
   args[0].name = NULL;
-  GTK_VALUE_INT(args[0]) = source;
+  GTK_VALUE_INT (args[0]) = source;
   args[1].type = GDK_TYPE_INPUT_CONDITION;
   args[1].name = NULL;
-  GTK_VALUE_FLAGS(args[1]) = condition;
+  GTK_VALUE_FLAGS (args[1]) = condition;
   args[2].type = GTK_TYPE_NONE;
   args[2].name = NULL;
 
@@ -1377,7 +1377,7 @@ gtk_invoke_input (gpointer	    data,
  * Obtains a copy of the event currently being processed by GTK+.  For
  * example, if you get a "clicked" signal from #GtkButton, the current
  * event will be the #GdkEventButton that triggered the "clicked"
- * signal. The returned event must be freed with gdk_event_free().
+ * signal. The returned event must be freed with gdk_event_free ().
  * If there is no current event, the function returns %NULL.
  * 
  * Return value: a copy of the current event, or %NULL if no current event.
@@ -1491,20 +1491,20 @@ gtk_quit_invoke_function (GtkQuitFunction *quitf)
  *
  * Sends an event to a widget, propagating the event to parent widgets
  * if the event remains unhandled. Events received by GTK+ from GDK
- * normally begin in gtk_main_do_event(). Depending on the type of
+ * normally begin in gtk_main_do_event (). Depending on the type of
  * event, existence of modal dialogs, grabs, etc., the event may be
- * propagated; if so, this function is used. gtk_propagate_event()
- * calls gtk_widget_event() on each widget it decides to send the
- * event to.  So gtk_widget_event() is the lowest-level function; it
+ * propagated; if so, this function is used. gtk_propagate_event ()
+ * calls gtk_widget_event () on each widget it decides to send the
+ * event to.  So gtk_widget_event () is the lowest-level function; it
  * simply emits the "event" and possibly an event-specific signal on a
- * widget.  gtk_propagate_event() is a bit higher-level, and
- * gtk_main_do_event() is the highest level.
+ * widget.  gtk_propagate_event () is a bit higher-level, and
+ * gtk_main_do_event () is the highest level.
  *
  * All that said, you most likely don't want to use any of these
  * functions; synthesizing events is rarely needed. Consider asking on
  * the mailing list for better ways to achieve your goals. For
- * example, use gdk_window_invalidate_rect() or
- * gtk_widget_queue_draw() instead of making up expose events.
+ * example, use gdk_window_invalidate_rect () or
+ * gtk_widget_queue_draw () instead of making up expose events.
  * 
  **/
 void

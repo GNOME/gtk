@@ -245,7 +245,7 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf   *pixbuf,
  * significant performance penalty depending on the size and the complexity of
  * the alpha channel of the image.  If performance is crucial, consider handling
  * the alpha channel yourself (possibly by caching it in your application) and
- * using gdk_pixbuf_render_to_drawable() or GdkRGB directly instead.
+ * using gdk_pixbuf_render_to_drawable () or GdkRGB directly instead.
  *
  * The #GDK_PIXBUF_ALPHA_FULL mode involves round trips to the X
  * server, and may also be somewhat slow in its current implementation
@@ -279,7 +279,7 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
   g_return_if_fail (src_x >= 0 && src_x + width <= pixbuf->width);
   g_return_if_fail (src_y >= 0 && src_y + height <= pixbuf->height);
 
-  /* Clip to the drawable; this is required for get_from_drawable() so
+  /* Clip to the drawable; this is required for get_from_drawable () so
    * can't be done implicitly
    */
   
@@ -399,8 +399,8 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf   *pixbuf,
  * and @mask_return arguments, respectively, and renders a pixbuf and its
  * corresponding tresholded alpha mask to them.  This is merely a convenience
  * function; applications that need to render pixbufs with dither offsets or to
- * given drawables should use gdk_pixbuf_render_to_drawable_alpha() or
- * gdk_pixbuf_render_to_drawable(), and gdk_pixbuf_render_threshold_alpha().
+ * given drawables should use gdk_pixbuf_render_to_drawable_alpha () or
+ * gdk_pixbuf_render_to_drawable (), and gdk_pixbuf_render_threshold_alpha ().
  *
  * If the pixbuf does not have an alpha channel, then *@mask_return will be set
  * to NULL.
@@ -451,8 +451,8 @@ gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf  *pixbuf,
 				   GdkBitmap **mask_return,
 				   int         alpha_threshold)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_pixbuf_render_pixmap_and_mask_for_screen instead\n"));
-  gdk_pixbuf_render_pixmap_and_mask_for_screen(pixbuf,
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_pixbuf_render_pixmap_and_mask_for_screen instead\n"));
+  gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf,
 					       gdk_get_default_screen(),
 					       pixmap_return,
 					       mask_return,

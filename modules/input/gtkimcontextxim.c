@@ -305,7 +305,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   XIC ic = gtk_im_context_xim_get_ic (context_xim);
   gchar static_buffer[256];
   gchar *buffer = static_buffer;
-  gint buffer_size = sizeof(static_buffer) - 1;
+  gint buffer_size = sizeof (static_buffer) - 1;
   gint num_bytes = 0;
   KeySym keysym;
   Status status;
@@ -321,7 +321,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.send_event = event->send_event;
   xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);
   xevent.window = GDK_DRAWABLE_XID (event->window);
-  xevent.root = GDK_DRAWABLE_XROOTWIN(event->window);
+  xevent.root = GDK_DRAWABLE_XROOTWIN (event->window);
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
   xevent.x = xevent.x_root = 0;
@@ -419,7 +419,7 @@ gtk_im_context_xim_set_cursor_location (GtkIMContext *context,
   XSetICValues (ic,
 		XNPreeditAttributes, preedit_attr,
 		NULL);
-  XFree(preedit_attr);
+  XFree (preedit_attr);
 
   return;
 }
@@ -440,7 +440,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
     return;
   
 
-  preedit_attr = XVaCreateNestedList(0,
+  preedit_attr = XVaCreateNestedList (0,
                                      XNPreeditState, &preedit_state,
                                      0);
   if (!XGetICValues(ic,
@@ -448,19 +448,19 @@ gtk_im_context_xim_reset (GtkIMContext *context)
                     NULL))
     have_preedit_state = TRUE;
 
-  XFree(preedit_attr);
+  XFree (preedit_attr);
 
   result = XmbResetIC (ic);
 
-  preedit_attr = XVaCreateNestedList(0,
+  preedit_attr = XVaCreateNestedList (0,
                                      XNPreeditState, preedit_state,
                                      0);
   if (have_preedit_state)
-    XSetICValues(ic,
+    XSetICValues (ic,
 		 XNPreeditAttributes, preedit_attr,
 		 NULL);
 
-  XFree(preedit_attr);
+  XFree (preedit_attr);
 
   if (result)
     {

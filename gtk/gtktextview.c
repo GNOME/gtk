@@ -50,15 +50,15 @@
  * is to change which lines are onscreen. This happens when the value
  * of a scroll adjustment changes. So the code path begins in
  * gtk_text_view_value_changed() and goes like this:
- *   - gdk_window_scroll() to reflect the new adjustment value
+ *   - gdk_window_scroll () to reflect the new adjustment value
  *   - validate the lines that were moved onscreen
- *   - gdk_window_process_updates() to handle the exposes immediately
+ *   - gdk_window_process_updates () to handle the exposes immediately
  *
  * The second way is that you get the "invalidated" signal from the layout,
  * indicating that lines have become invalid. This code path begins in
- * invalidated_handler() and goes like this:
+ * invalidated_handler () and goes like this:
  *   - install high-priority idle which does the rest of the steps
- *   - if a scroll is pending from scroll_to_mark(), do the scroll,
+ *   - if a scroll is pending from scroll_to_mark (), do the scroll,
  *     jumping to the gtk_text_view_value_changed() code path
  *   - otherwise, validate the onscreen lines
  *   - DO NOT process updates
@@ -915,10 +915,10 @@ gtk_text_view_init (GtkTextView *text_view)
 /**
  * gtk_text_view_new:
  *
- * Creates a new #GtkTextView. If you don't call gtk_text_view_set_buffer()
+ * Creates a new #GtkTextView. If you don't call gtk_text_view_set_buffer ()
  * before using the text view, an empty default buffer will be created
- * for you. Get the buffer with gtk_text_view_get_buffer(). If you want
- * to specify your own buffer, consider gtk_text_view_new_with_buffer().
+ * for you. Get the buffer with gtk_text_view_get_buffer (). If you want
+ * to specify your own buffer, consider gtk_text_view_new_with_buffer ().
  *
  * Return value: a new #GtkTextView
  **/
@@ -935,7 +935,7 @@ gtk_text_view_new (void)
  * Creates a new #GtkTextView widget displaying the buffer
  * @buffer. One buffer can be shared among many widgets.
  * @buffer may be NULL to create a default buffer, in which case
- * this function is equivalent to gtk_text_view_new(). The
+ * this function is equivalent to gtk_text_view_new (). The
  * text view adds its own reference count to the buffer; it does not
  * take over an existing reference.
  *
@@ -1079,7 +1079,7 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
  * coordinates are coordinates for the entire buffer, not just the
  * currently-displayed portion.  If you have coordinates from an
  * event, you have to convert those to buffer coordinates with
- * gtk_text_view_window_to_buffer_coords().
+ * gtk_text_view_window_to_buffer_coords ().
  *
  **/
 void
@@ -1106,7 +1106,7 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
  *
  * Gets a rectangle which roughly contains the character at @iter.
  * The rectangle position is in buffer coordinates; use
- * gtk_text_view_buffer_to_window_coords() to convert these
+ * gtk_text_view_buffer_to_window_coords () to convert these
  * coordinates to coordinates for one of the windows in the text view.
  *
  **/
@@ -1130,7 +1130,7 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
  *
  * Gets the y coordinate of the top of the line containing @iter,
  * and the height of the line. The coordinate is a buffer coordinate;
- * convert to window coordinates with gtk_text_view_buffer_to_window_coords().
+ * convert to window coordinates with gtk_text_view_buffer_to_window_coords ().
  *
  **/
 void
@@ -1157,7 +1157,7 @@ gtk_text_view_get_line_yrange (GtkTextView       *text_view,
  *
  * Gets the #GtkTextIter at the start of the line containing
  * the coordinate @y. @y is in buffer coordinates, convert from
- * window coordinates with gtk_text_view_window_to_buffer_coords().
+ * window coordinates with gtk_text_view_window_to_buffer_coords ().
  * If non-%NULL, @line_top will be filled with the coordinate of the top
  * edge of the line.
  **/
@@ -1215,7 +1215,7 @@ set_adjustment_clamped (GtkAdjustment *adj, gdouble val)
  * lines in the text buffer. Note that line heights are computed
  * in an idle handler; so this function may not have the desired effect
  * if it's called before the height computations. To avoid oddness,
- * consider using gtk_text_view_scroll_to_mark() which saves a point
+ * consider using gtk_text_view_scroll_to_mark () which saves a point
  * to be scrolled to after line validation.
  *
  * Return value: %TRUE if scrolling occurred
@@ -1247,7 +1247,7 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   widget = GTK_WIDGET (text_view);
 
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
@@ -1391,7 +1391,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
 
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
   
   scroll = g_new (GtkTextPendingScroll, 1);
 
@@ -1423,7 +1423,7 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
   gint y0, y1, height;
   gboolean retval;
   
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
   
   if (text_view->pending_scroll == NULL)
     return FALSE;
@@ -1644,7 +1644,7 @@ gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
  *
  * Fills @visible_rect with the currently-visible
  * region of the buffer, in buffer coordinates. Convert to window coordinates
- * with gtk_text_view_buffer_to_window_coords().
+ * with gtk_text_view_buffer_to_window_coords ().
  **/
 void
 gtk_text_view_get_visible_rect (GtkTextView  *text_view,
@@ -1664,7 +1664,7 @@ gtk_text_view_get_visible_rect (GtkTextView  *text_view,
       visible_rect->width = SCREEN_WIDTH (widget);
       visible_rect->height = SCREEN_HEIGHT (widget);
 
-      DV(g_print(" visible rect: %d,%d %d x %d\n",
+      DV (g_print (" visible rect: %d,%d %d x %d\n",
                  visible_rect->x,
                  visible_rect->y,
                  visible_rect->width,
@@ -2400,7 +2400,7 @@ gtk_text_view_validate_children (GtkTextView *text_view)
 {
   GSList *tmp_list;
 
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
   
   tmp_list = text_view->children;
   while (tmp_list != NULL)
@@ -2450,7 +2450,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   
   text_view = GTK_TEXT_VIEW (widget);
 
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
   
   widget->allocation = *allocation;
 
@@ -2663,7 +2663,7 @@ first_validate_callback (gpointer data)
    * keep in sync with that.
    */
   
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
 
   /* Do this first, which means that if an "invalidate"
    * occurs during any of this process, a new first_validate_callback
@@ -2704,7 +2704,7 @@ incremental_validate_callback (gpointer data)
 {
   GtkTextView *text_view = data;
 
-  DV(g_print(G_STRLOC"\n"));
+  DV (g_print (G_STRLOC"\n"));
   
   gtk_text_layout_validate (text_view->layout, 2000);
 
@@ -2770,11 +2770,11 @@ changed_handler (GtkTextLayout *layout,
 
       if (gdk_rectangle_intersect (&redraw_rect, &visible_rect, &redraw_rect))
         {
-          /* text_window_invalidate_rect() takes buffer coordinates */
+          /* text_window_invalidate_rect () takes buffer coordinates */
           text_window_invalidate_rect (text_view->text_window,
                                        &redraw_rect);
 
-          DV(g_print(" invalidated rect: %d,%d %d x %d\n",
+          DV (g_print (" invalidated rect: %d,%d %d x %d\n",
                      redraw_rect.x,
                      redraw_rect.y,
                      redraw_rect.width,
@@ -3691,7 +3691,7 @@ gtk_text_view_check_cursor_blink (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_pend_cursor_blink(GtkTextView *text_view)
+gtk_text_view_pend_cursor_blink (GtkTextView *text_view)
 {
   if (text_view->layout != NULL &&
       text_view->cursor_visible &&
@@ -4287,7 +4287,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       PangoContext *ltr_context, *rtl_context;
       GSList *tmp_list;
 
-      DV(g_print(G_STRLOC"\n"));
+      DV (g_print (G_STRLOC"\n"));
       
       text_view->layout = gtk_text_layout_new ();
 
@@ -5888,7 +5888,7 @@ set_window_width (GtkTextView      *text_view,
           /* if the widget is already realized we need to realize the child manually */
           if (GTK_WIDGET_REALIZED (text_view))
             text_window_realize (*winp,
-                         GTK_WIDGET(text_view)->window);
+                         GTK_WIDGET (text_view)->window);
         }
       else
         {
@@ -5927,7 +5927,7 @@ set_window_height (GtkTextView      *text_view,
           /* if the widget is already realized we need to realize the child manually */
           if (GTK_WIDGET_REALIZED (text_view))
             text_window_realize (*winp,
-                         GTK_WIDGET(text_view)->window);
+                         GTK_WIDGET (text_view)->window);
         }
       else
         {

@@ -992,7 +992,7 @@ convert_real_slow (GdkImage    *image,
   width = image->width;
   height = image->height;
   bpl = image->bpl;
-  v = gdk_colormap_get_visual(cmap);
+  v = gdk_colormap_get_visual (cmap);
 
   d(printf("rgb  mask/shift/prec = %x:%x:%x %d:%d:%d  %d:%d:%d\n",
 	   v->red_mask, v->green_mask, v->blue_mask,
@@ -1075,7 +1075,7 @@ rgbconvert (GdkImage    *image,
 {
   int index = (image->byte_order == GDK_MSB_FIRST) | (alpha != 0) << 1;
   int bank=5;		/* default fallback converter */
-  GdkVisual *v = gdk_colormap_get_visual(cmap);
+  GdkVisual *v = gdk_colormap_get_visual (cmap);
 
   d(printf("masks = %x:%x:%x\n", v->red_mask, v->green_mask, v->blue_mask));
   d(printf("image depth = %d, bits per pixel = %d\n", image->depth, image->bits_per_pixel));
@@ -1128,7 +1128,7 @@ rgbconvert (GdkImage    *image,
 
   if (bank==5)
     {
-      convert_real_slow(image, pixels, rowstride, cmap, alpha);
+      convert_real_slow (image, pixels, rowstride, cmap, alpha);
     }
   else
     {
@@ -1153,7 +1153,7 @@ rgbconvert (GdkImage    *image,
  * @width: Width in pixels of region to get.
  * @height: Height in pixels of region to get.
  *
- * Transfers image data from a Gdk drawable and converts it to an RGB(A)
+ * Transfers image data from a Gdk drawable and converts it to an RGB (A)
  * representation inside a GdkPixbuf.
  *
  * If the drawable @src is a pixmap, then a suitable colormap must be specified,
@@ -1202,7 +1202,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
   g_return_val_if_fail (src != NULL, NULL);
 
   if (GDK_IS_WINDOW (src))
-    /* FIXME: this is not perfect, since is_viewable() only tests
+    /* FIXME: this is not perfect, since is_viewable () only tests
      * recursively up the Gdk parent window tree, but stops at
      * foreign windows or Gdk toplevels.  I.e. if a window manager
      * unmapped one of its own windows, this won't work.
@@ -1225,7 +1225,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
     {
       g_warning ("%s: Source drawable has no colormap; either pass "
                  "in a colormap, or set the colormap on the drawable "
-                 "with gdk_drawable_set_colormap()", G_STRLOC);
+                 "with gdk_drawable_set_colormap ()", G_STRLOC);
       return NULL;
     }
   
@@ -1290,7 +1290,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,
 	      alpha,
 	      cmap);
 
-  gdk_image_destroy(image);
+  gdk_image_destroy (image);
 
   return dest;
 }

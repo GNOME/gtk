@@ -783,72 +783,72 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   GDK_TYPE_EVENT);
   widget_signals[FOCUS_IN_EVENT] =
     g_signal_newc ("focus_in_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, focus_in_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, focus_in_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[FOCUS_OUT_EVENT] =
     g_signal_newc ("focus_out_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, focus_out_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, focus_out_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[MAP_EVENT] =
     g_signal_newc ("map_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, map_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, map_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[UNMAP_EVENT] =
     g_signal_newc ("unmap_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, unmap_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, unmap_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[PROPERTY_NOTIFY_EVENT] =
     g_signal_newc ("property_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, property_notify_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, property_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[SELECTION_CLEAR_EVENT] =
     g_signal_newc ("selection_clear_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, selection_clear_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, selection_clear_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[SELECTION_REQUEST_EVENT] =
     g_signal_newc ("selection_request_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, selection_request_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, selection_request_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[SELECTION_NOTIFY_EVENT] =
     g_signal_newc ("selection_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, selection_notify_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, selection_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
@@ -874,18 +874,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_UINT);
   widget_signals[PROXIMITY_IN_EVENT] =
     g_signal_newc ("proximity_in_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, proximity_in_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, proximity_in_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT);
   widget_signals[PROXIMITY_OUT_EVENT] =
     g_signal_newc ("proximity_out_event",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, proximity_out_event),
+                  G_STRUCT_OFFSET (GtkWidgetClass, proximity_out_event),
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
@@ -925,9 +925,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_MOTION] =
     g_signal_newc ("drag_motion",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, drag_motion),
+                  G_STRUCT_OFFSET (GtkWidgetClass, drag_motion),
                   _gtk_boolean_handled_accumulator, NULL,
 		  gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		  G_TYPE_BOOLEAN, 4,
@@ -937,9 +937,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[DRAG_DROP] =
     g_signal_newc ("drag_drop",
-                  G_TYPE_FROM_CLASS(object_class),
+                  G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, drag_drop),
+                  G_STRUCT_OFFSET (GtkWidgetClass, drag_drop),
                   _gtk_boolean_handled_accumulator, NULL,
 		  gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		  G_TYPE_BOOLEAN, 4,
@@ -1141,7 +1141,7 @@ gtk_widget_set_property (GObject         *object,
       gtk_widget_set_extension_events (widget, g_value_get_enum (value));
       break;
     case PROP_SCREEN:
-      gtk_widget_set_screen(widget, g_value_get_pointer(value));
+      gtk_widget_set_screen (widget, g_value_get_pointer (value));
     default:
       break;
     }
@@ -1256,7 +1256,7 @@ gtk_widget_get_property (GObject         *object,
  	g_value_set_enum (value, (GdkExtensionMode) *modep);
       break;
     case PROP_SCREEN:
-      g_value_set_pointer(value, widget->screen);
+      g_value_set_pointer (value, widget->screen);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1288,7 +1288,7 @@ gtk_widget_init (GtkWidget *widget)
   widget->allocation.height = 1;
   widget->window = NULL;
   widget->parent = NULL;
-  widget->screen = gdk_get_default_screen();
+  widget->screen = gdk_get_default_screen ();
   GTK_WIDGET_SET_FLAGS (widget,
 			GTK_SENSITIVE |
 			GTK_PARENT_SENSITIVE |
@@ -1300,8 +1300,8 @@ gtk_widget_init (GtkWidget *widget)
   
   colormap = gtk_widget_peek_colormap (widget->screen);
 
-  if(colormap->screen != widget->screen)
-    g_error("colormap from stack different from widget's screen !");
+  if (colormap->screen != widget->screen)
+    g_error ("colormap from stack different from widget's screen !");
   
   if (colormap != gdk_screen_get_default_colormap (widget->screen))
     gtk_widget_set_colormap (widget, colormap);
@@ -1318,7 +1318,7 @@ gtk_widget_init (GtkWidget *widget)
  * its properties in one go. For example you might write:
  * gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
  * 0.0, NULL) to create a left-aligned label. Equivalent to
- * gtk_object_new(), but returns a widget so you don't have to
+ * gtk_object_new (), but returns a widget so you don't have to
  * cast the object yourself.
  * 
  * Return value: a new #GtkWidget of type @widget_type
@@ -1346,8 +1346,8 @@ gtk_widget_new (GtkType      type,
  * @first_property_name: name of first property to set
  * @Varargs: value of first property, followed by more properties, NULL-terminated
  * 
- * Like gtk_object_set() - there's no reason to use this instead of
- * gtk_object_set().
+ * Like gtk_object_set () - there's no reason to use this instead of
+ * gtk_object_set ().
  **/
 void
 gtk_widget_set (GtkWidget   *widget,
@@ -1396,13 +1396,13 @@ gtk_widget_unparent (GtkWidget *widget)
   if (widget->parent == NULL)
     return;
   
-  /* keep this function in sync with gtk_menu_detach()
+  /* keep this function in sync with gtk_menu_detach ()
    */
 
   g_object_freeze_notify (G_OBJECT (widget));
 
   /* unset focused and default children properly, this code
-   * should eventually move into some gtk_window_unparent_branch() or
+   * should eventually move into some gtk_window_unparent_branch () or
    * similar function.
    */
   
@@ -1522,7 +1522,7 @@ gtk_widget_unparent (GtkWidget *widget)
  * gtk_widget_destroy:
  * @widget: a #GtkWidget
  *
- * Destroys a widget. Equivalent to gtk_object_destroy(), except that
+ * Destroys a widget. Equivalent to gtk_object_destroy (), except that
  * you don't have to cast the widget to #GtkObject. When a widget is
  * destroyed, it will break any references it holds to other objects.
  * If the widget is inside a container, the widget will be removed
@@ -1531,7 +1531,7 @@ gtk_widget_unparent (GtkWidget *widget)
  * reference GTK+ holds to it will be removed. Removing a
  * widget from its container or the list of toplevels results in the
  * widget being finalized, unless you've added additional references
- * to the widget with gtk_object_ref().
+ * to the widget with gtk_object_ref ().
  *
  * In most cases, only toplevel widgets (windows) require explicit
  * destruction, because when you destroy a toplevel its children will
@@ -1579,7 +1579,7 @@ gtk_widget_destroyed (GtkWidget      *widget,
  * 
  * Flags a widget to be displayed. Any widget that isn't shown will
  * not appear on the screen. If you want to show all the widgets in a
- * container, it's easier to call gtk_widget_show_all() on the
+ * container, it's easier to call gtk_widget_show_all () on the
  * container, instead of individually showing the widgets.
  *
  * Remember that you have to show the containers containing a widget,
@@ -1670,7 +1670,7 @@ gtk_widget_show_now (GtkWidget *widget)
  * gtk_widget_hide:
  * @widget: a #GtkWidget
  * 
- * Reverses the effects of gtk_widget_show(), causing the widget to be
+ * Reverses the effects of gtk_widget_show (), causing the widget to be
  * hidden (invisible to the user).
  **/
 void
@@ -1710,7 +1710,7 @@ gtk_widget_real_hide (GtkWidget *widget)
  * @widget: a #GtkWidget
  * 
  * Utility function; intended to be connected to the "delete_event"
- * signal on a #GtkWindow. The function calls gtk_widget_hide() on its
+ * signal on a #GtkWindow. The function calls gtk_widget_hide () on its
  * argument, then returns %TRUE. If connected to "delete_event",
  * the result is that clicking the window manager close button for
  * will hide but not destroy the window. By default, GTK+ destroys
@@ -1830,7 +1830,7 @@ gtk_widget_unmap (GtkWidget *widget)
  * 
  * Realizing a widget requires all
  * the widget's parent widgets to be realized; calling
- * gtk_widget_realize() realizes the widget's parents in addition to
+ * gtk_widget_realize () realizes the widget's parents in addition to
  * @widget itself. If a widget is not yet inside a toplevel window
  * when you realize it, bad things will happen.
  *
@@ -1838,7 +1838,7 @@ gtk_widget_unmap (GtkWidget *widget)
  * isn't very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
- * "expose_event". Or simply gtk_signal_connect_after() to the
+ * "expose_event". Or simply gtk_signal_connect_after () to the
  * "realize" signal.
  *  
  **/
@@ -1934,7 +1934,7 @@ gtk_widget_unrealize (GtkWidget *widget)
  * @height: height of region to draw
  *
  * Invalidates the rectangular area of @widget defined by @x, @y,
- * @width and @height by calling gdk_window_invalidate_rect() on the
+ * @width and @height by calling gdk_window_invalidate_rect () on the
  * widget's window and all its child windows.  Once the main loop
  * becomes idle (after the current batch of events has been processed,
  * roughly), the window will receive expose events for the union of
@@ -1942,11 +1942,11 @@ gtk_widget_unrealize (GtkWidget *widget)
  *
  * Normally you would only use this function in widget
  * implementations. You might also use it, or
- * gdk_window_invalidate_rect() directly, to schedule a redraw of a
+ * gdk_window_invalidate_rect () directly, to schedule a redraw of a
  * #GtkDrawingArea or some portion thereof.
  *
- * Frequently you can just call gdk_window_invalidate_rect() or
- * gdk_window_invalidate_region() instead of this function. Those
+ * Frequently you can just call gdk_window_invalidate_rect () or
+ * gdk_window_invalidate_region () instead of this function. Those
  * functions will invalidate only a single window, instead of the
  * widget and all its children.
  *
@@ -1972,7 +1972,7 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
  * gtk_widget_queue_draw:
  * @widget: a #GtkWidget
  *
- * Equivalent to calling gtk_widget_queue_draw_area() for the
+ * Equivalent to calling gtk_widget_queue_draw_area () for the
  * entire area of a widget.
  * 
  **/
@@ -1997,11 +1997,11 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * @height: height of region to draw
  * 
  * DEPRECATED. This function is no longer different from
- * gtk_widget_queue_draw_area(), though it once was. Now it just calls
- * gtk_widget_queue_draw_area(). Originally
- * gtk_widget_queue_clear_area() would force a redraw of the
+ * gtk_widget_queue_draw_area (), though it once was. Now it just calls
+ * gtk_widget_queue_draw_area (). Originally
+ * gtk_widget_queue_clear_area () would force a redraw of the
  * background for GTK_NO_WINDOW widgets, and
- * gtk_widget_queue_draw_area() would not. Now both functions ensure
+ * gtk_widget_queue_draw_area () would not. Now both functions ensure
  * the background will be redrawn.
  * 
  **/
@@ -2067,7 +2067,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
  * gtk_widget_queue_clear:
  * @widget: a #GtkWidget
  * 
- * DEPRECATED. Use gtk_widget_queue_draw() instead.
+ * DEPRECATED. Use gtk_widget_queue_draw () instead.
  **/
 void	   
 gtk_widget_queue_clear (GtkWidget *widget)
@@ -2119,10 +2119,10 @@ gtk_widget_queue_resize (GtkWidget *widget)
  * DEPRECATED. In GTK+ 1.2, this function would immediately render the
  * region @area of a widget, by invoking the virtual draw method of a
  * widget. In GTK+ 2.0, the draw method is gone, and instead
- * gtk_widget_draw() simply invalidates the specified region of the
+ * gtk_widget_draw () simply invalidates the specified region of the
  * widget, then updates the invalid region of the widget immediately.
  * Usually you don't want to update the region immediately for
- * performance reasons, so in general gtk_widget_queue_draw_area() is
+ * performance reasons, so in general gtk_widget_queue_draw_area () is
  * a better choice if you want to draw a region of a widget.
  * 
  **/
@@ -2154,7 +2154,7 @@ gtk_widget_draw (GtkWidget    *widget,
  * This function is only used when implementing a #GtkContainer subclass.
  * Obtains the preferred size of a widget. The container uses this
  * information to arrange its child widgets and decide what size allocations
- * to give them with gtk_widget_size_allocate().
+ * to give them with gtk_widget_size_allocate ().
  **/
 void
 gtk_widget_size_request (GtkWidget	*widget,
@@ -2539,9 +2539,9 @@ gtk_widget_real_focus_out_event (GtkWidget     *widget,
  * the event signals on a widget (those signals should never
  * be emitted without using this function to do so).
  * If you want to synthesize an event though, don't use this function;
- * instead, use gtk_main_do_event() so the event will behave as if
+ * instead, use gtk_main_do_event () so the event will behave as if
  * it were in the event queue. Don't synthesize expose events; instead,
- * use gdk_window_invalidate_rect() to invalidate a region of the
+ * use gdk_window_invalidate_rect () to invalidate a region of the
  * window.
  * 
  * Return value: return from the event signal emission (%TRUE if the event was handled)
@@ -2577,9 +2577,9 @@ gtk_widget_event (GtkWidget *widget,
  * that is normally done using gtk_container_propagate_expose.
  *
  * If you want to force an area of a window to be redrawn, 
- * use gdk_window_invalidate_rect() or gdk_window_invalidate_region().
+ * use gdk_window_invalidate_rect () or gdk_window_invalidate_region ().
  * To cause the redraw to be done immediately, follow that call
- * with a call to gdk_window_procss_updates().
+ * with a call to gdk_window_procss_updates ().
  * 
  * Return value: return from the event signal emission (%TRUE if the event was handled)
  **/
@@ -3077,7 +3077,7 @@ gtk_widget_is_focus (GtkWidget *widget)
  * yourself by calling GTK_WIDGET_SET_FLAGS (@widget,
  * GTK_CAN_DEFAULT).  The default widget is activated when the user
  * presses Enter in a window.  Default widgets must be activatable,
- * that is, gtk_widget_activate() should affect them.
+ * that is, gtk_widget_activate () should affect them.
  * 
  **/
 void
@@ -3138,7 +3138,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * @widget: a #GtkWidget
  * 
  * Retrieves the name of a widget. The return value should not be
- * freed. See gtk_widget_set_name() for the significance of widget
+ * freed. See gtk_widget_set_name () for the significance of widget
  * names.
  * 
  * Return value: name of the widget
@@ -3161,7 +3161,7 @@ gtk_widget_get_name (GtkWidget *widget)
  *
  * This function is for use in widget implementations. Sets the state
  * of a widget (insensitive, prelighted, etc.) Usually you should set
- * the state using wrapper functions such as gtk_widget_set_sensitive().
+ * the state using wrapper functions such as gtk_widget_set_sensitive ().
  * 
  **/
 void
@@ -3225,10 +3225,10 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
  *
  * Widgets are double buffered by default; you can use this function
  * to turn off the buffering. "Double buffered" simply means that
- * gdk_window_begin_paint() and gdk_window_end_paint() are called
+ * gdk_window_begin_paint () and gdk_window_end_paint () are called
  * automatically around expose events sent to the
- * widget. gdk_window_begin_paint() diverts all drawing to a widget's
- * window to an offscreen buffer, and gdk_window_end_paint() draws the
+ * widget. gdk_window_begin_paint () diverts all drawing to a widget's
+ * window to an offscreen buffer, and gdk_window_end_paint () draws the
  * buffer to the screen. The result is that users see the window
  * update in one smooth step, and don't see individual graphics
  * primitives being rendered.
@@ -3310,7 +3310,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
  * Sets the container as the parent of @widget, and takes care of
  * some details such as updating the state and style of the child
  * to reflect its new location. The opposite function is
- * gtk_widget_unparent().
+ * gtk_widget_unparent ().
  * 
  **/
 void
@@ -3327,7 +3327,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (parent));
   g_return_if_fail (widget != parent);
 
-  /* keep this function in sync with gtk_menu_attach_to_widget()
+  /* keep this function in sync with gtk_menu_attach_to_widget ()
    */
 
   gtk_widget_ref (widget);
@@ -3350,12 +3350,12 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
 
-  if(widget->screen != parent->screen)
+  if (widget->screen != parent->screen)
   {
     GdkColormap *colormap = gtk_widget_peek_colormap (parent->screen);
-    if(!colormap)
+    if (!colormap)
     {
-      gtk_widget_set_colormap(widget,
+      gtk_widget_set_colormap (widget,
 			      gdk_screen_get_default_colormap(parent->screen));
     }else{
 	if(colormap->screen == parent->screen)
@@ -3363,7 +3363,7 @@ gtk_widget_set_parent (GtkWidget *widget,
     }
   }
   /* propagate the screen information */
-  gtk_widget_set_screen(widget,gtk_widget_get_screen(parent));
+  gtk_widget_set_screen (widget,gtk_widget_get_screen (parent));
 
 }
 
@@ -3380,7 +3380,7 @@ gtk_widget_set_parent (GtkWidget *widget,
  * Sets the #GtkStyle for a widget (widget->style). You probably don't
  * want to use this function; it interacts badly with themes, because
  * themes work by replacing the #GtkStyle. Instead, use
- * gtk_widget_modify_style().
+ * gtk_widget_modify_style ().
  * 
  **/
 void
@@ -3524,19 +3524,19 @@ gtk_widget_get_style (GtkWidget *widget)
  * Modify style values on the widget. Modifications made using this
  * technique take precendence over style values set via an RC file,
  * however, they will be overriden if a style is explicitely set on
- * the widget using gtk_widget_set_style(). The #GtkRcStyle structure
+ * the widget using gtk_widget_set_style (). The #GtkRcStyle structure
  * is designed so each field can either be set or unset, so it is
  * possible, using this function, to modify some style values and
  * leave the others unchanged.
  *
  * Note that modifications made with this function are not cumulative
- * with previous calls to gtk_widget_modify_style() or with such
- * functions as gtk_widget_modify_fg(). If you wish to retain
- * previous values, you must first call gtk_widget_get_modifier_style(),
+ * with previous calls to gtk_widget_modify_style () or with such
+ * functions as gtk_widget_modify_fg (). If you wish to retain
+ * previous values, you must first call gtk_widget_get_modifier_style (),
  * make your modifications to the returned style, then call
- * gtk_widget_modify_style() with that style. On the other hand,
- * if you first call gtk_widget_modify_style(), subsequent calls
- * to such functions gtk_widget_modify_fg() will be have a cumulative
+ * gtk_widget_modify_style () with that style. On the other hand,
+ * if you first call gtk_widget_modify_style (), subsequent calls
+ * to such functions gtk_widget_modify_fg () will be have a cumulative
  * effect with the inital modifications.
  **/
 void       
@@ -3568,21 +3568,21 @@ gtk_widget_modify_style (GtkWidget      *widget,
  * @widget: a #GtkWidget
  * 
  * Return the current modifier style for the widget. (As set by
- * gtk_widget_modify_style().) If no style has previously set, a new
+ * gtk_widget_modify_style ().) If no style has previously set, a new
  * #GtkRcStyle will be created with all values unset, and set as the
  * modifier style for the widget. If you make changes to this rc
- * style, you must call gtk_widget_modify_style(), passing in the
+ * style, you must call gtk_widget_modify_style (), passing in the
  * returned rc style, to make sure that your changes take effect.
  *
- * Caution: passing the style back to gtk_widget_modify_style() will
- * normally end up destroying it, because gtk_widget_modify_style() copies
+ * Caution: passing the style back to gtk_widget_modify_style () will
+ * normally end up destroying it, because gtk_widget_modify_style () copies
  * the passed-in style and sets the copy as the new modifier style,
  * thus dropping any reference to the old modifier style. Add a reference
  * to the modifier style if you want to keep it alive.
  * 
  * Return value: the modifier style for the widget. This rc style is
  *   owned by the widget. If you want to keep a pointer to value this
- *   around, you must add a refcount using gtk_rc_style_ref().
+ *   around, you must add a refcount using gtk_rc_style_ref ().
  **/
 GtkRcStyle *
 gtk_widget_get_modifier_style (GtkWidget      *widget)
@@ -3594,7 +3594,7 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
 
   if (!rc_style)
     {
-      rc_style = gtk_rc_style_new();
+      rc_style = gtk_rc_style_new ();
       gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
 				      quark_rc_style,
 				      rc_style,
@@ -3643,7 +3643,7 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
  * 
  * Set the foreground color for a widget in a particular state.  All
  * other style values are left untouched. See also
- * gtk_widget_modify_style().
+ * gtk_widget_modify_style ().
  **/
 void
 gtk_widget_modify_fg (GtkWidget   *widget,
@@ -3665,7 +3665,7 @@ gtk_widget_modify_fg (GtkWidget   *widget,
  * 
  * Set the background color for a widget in a particular state.  All
  * other style values are left untouched. See also
- * gtk_widget_modify_style().
+ * gtk_widget_modify_style ().
  **/
 void
 gtk_widget_modify_bg (GtkWidget   *widget,
@@ -3689,7 +3689,7 @@ gtk_widget_modify_bg (GtkWidget   *widget,
  * style values are left untouched. The text color is the foreground
  * color used along with the base color (see gtk_widget_modify_base)
  * for widgets such as #GtkEntry and #GtkTextView. See also
- * gtk_widget_modify_style().
+ * gtk_widget_modify_style ().
  **/
 void
 gtk_widget_modify_text (GtkWidget   *widget,
@@ -3713,7 +3713,7 @@ gtk_widget_modify_text (GtkWidget   *widget,
  * All other style values are left untouched. The base color
  * is the background color used along with the text color
  * (see gtk_widget_modify_text) for widgets such as #GtkEntry
- * and #GtkTextView. See also gtk_widget_modify_style().
+ * and #GtkTextView. See also gtk_widget_modify_style ().
  **/
 void
 gtk_widget_modify_base (GtkWidget  *widget,
@@ -3733,7 +3733,7 @@ gtk_widget_modify_base (GtkWidget  *widget,
  * @font_desc: the font description to use
  * 
  * Set the font to use for a widget.  All other style values are left
- * untouched. See also gtk_widget_modify_style().
+ * untouched. See also gtk_widget_modify_style ().
  **/
 void
 gtk_widget_modify_font (GtkWidget            *widget,
@@ -3885,10 +3885,10 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
 }
 
 static GtkStyle * 
-gtk_widget_default_style_get_in_list(GdkDisplay *dpy)
+gtk_widget_default_style_get_in_list (GdkDisplay *dpy)
 {
   GSList *tmp = gtk_default_style_list;
-  while(tmp)
+  while (tmp)
   {
     if(((GtkWidgetDefaultStyle *)tmp->data)->display == dpy)
       return ((GtkWidgetDefaultStyle *)tmp->data);
@@ -3901,7 +3901,7 @@ gtk_widget_default_style_get_in_list(GdkDisplay *dpy)
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-    GtkStyle * default_style = gtk_widget_default_style_get_in_list(style->display);
+    GtkStyle * default_style = gtk_widget_default_style_get_in_list (style->display);
     if (style != default_style)
      {
        if (default_style)
@@ -3918,10 +3918,10 @@ gtk_widget_set_default_style (GtkStyle *style)
 GtkStyle*
 gtk_widget_get_default_style_for_display (GdkDisplay *display)
 {
-  GtkStyle * default_style = gtk_widget_default_style_get_in_list(display);
-  if(default_style)
+  GtkStyle * default_style = gtk_widget_default_style_get_in_list (display);
+  if (default_style)
     return default_style;
-  default_style = gtk_style_new_for_display(display);
+  default_style = gtk_style_new_for_display (display);
   g_slist_append(gtk_default_style_list, default_style);
   return default_style;
 }
@@ -3929,9 +3929,9 @@ gtk_widget_get_default_style_for_display (GdkDisplay *display)
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
-  GTK_NOTE(MULTIHEAD, 
+  GTK_NOTE (MULTIHEAD, 
 	   g_message("Use gtk_widget_get_default_style_for_display instead\n"));
-  return gtk_widget_get_default_style_for_display(gdk_get_default_display());
+  return gtk_widget_get_default_style_for_display (gdk_get_default_display ());
 }
 
 void
@@ -3978,7 +3978,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  * 
  * Get a #PangoContext with the appropriate colormap, font description
  * and base direction for this widget. Unlike the context returned
- * by gtk_widget_create_pango_context(), this context is owned by
+ * by gtk_widget_create_pango_context (), this context is owned by
  * the widget (it can be used as long as widget exists), and will
  * be updated to match any changes to the widget's attributes.
  *
@@ -4013,7 +4013,7 @@ gtk_widget_get_pango_context (GtkWidget *widget)
  * 
  * Create a new pango context with the appropriate colormap,
  * font description, and base direction for drawing text for
- * this widget. See also gtk_widget_get_pango_context()
+ * this widget. See also gtk_widget_get_pango_context ()
  * 
  * Return value: the new #PangoContext
  **/
@@ -4175,8 +4175,8 @@ gtk_widget_set_screen (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   widget->screen = screen;
   /* need to check if the style is Ok for the widget's display */
-  if(gtk_widget_get_display(widget) != widget->style->display)
-    widget->style = gtk_widget_peek_style(widget);
+  if (gtk_widget_get_display (widget) != widget->style->display)
+    widget->style = gtk_widget_peek_style (widget);
   g_object_notify (G_OBJECT (widget), "screen");
   if (GTK_IS_CONTAINER (widget))
      gtk_container_forall (GTK_CONTAINER (widget),
@@ -4219,7 +4219,7 @@ gtk_widget_get_display (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  return gdk_screen_get_display(widget->screen);
+  return gdk_screen_get_display (widget->screen);
 }
 
 
@@ -4251,7 +4251,7 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
 }
 
 /* Update the position from aux_info. Used from gtk_widget_set_uposition
- * and gtk_widget_set_property().
+ * and gtk_widget_set_property ().
  */
 static void
 gtk_widget_do_uposition (GtkWidget *widget)
@@ -4286,9 +4286,9 @@ gtk_widget_do_uposition (GtkWidget *widget)
  *
  * Don't use this function to center dialogs over the main application
  * window; most window managers will do the centering on your behalf
- * if you call gtk_window_set_transient_for(), and it's really not
+ * if you call gtk_window_set_transient_for (), and it's really not
  * possible to get the centering to work correctly in all cases from
- * application code. But if you insist, use gtk_window_set_position()
+ * application code. But if you insist, use gtk_window_set_position ()
  * to set #GTK_WIN_POS_CENTER_ON_PARENT, don't do the centering
  * manually.
  *
@@ -4343,11 +4343,11 @@ gtk_widget_set_uposition (GtkWidget *widget,
  * force a widget to be either larger or smaller than it is. The
  * strange "usize" name dates from the early days of GTK+, and derives
  * from X Window System terminology. In many cases,
- * gtk_window_set_default_size() is a better choice for toplevel
+ * gtk_window_set_default_size () is a better choice for toplevel
  * windows than this function; setting the default size will still
  * allow users to shrink the window. Setting the usize will force them
  * to leave the window at least as large as the usize. When dealing
- * with window sizes, gtk_window_set_geometry_hints() can be a useful
+ * with window sizes, gtk_window_set_geometry_hints () can be a useful
  * function as well.
  * 
  * Note the inherent danger of setting any fixed size - themes,
@@ -4398,7 +4398,7 @@ gtk_widget_set_usize (GtkWidget *widget,
  * that different widgets have different default event masks, and by
  * changing the event mask you may disrupt a widget's functionality,
  * so be careful. This function must be called while a widget is
- * unrealized. Consider gtk_widget_add_events() for widgets that are
+ * unrealized. Consider gtk_widget_add_events () for widgets that are
  * already realized, or if you want to preserve the existing event
  * mask. This function can't be used with #GTK_NO_WINDOW widgets;
  * to get events on those widgets, place them inside a #GtkEventBox
@@ -4441,7 +4441,7 @@ gtk_widget_set_events (GtkWidget *widget,
  * @events: an event mask, see #GdkEventMask
  *
  * Adds the events in the bitfield @events to the event mask for
- * @widget. See gtk_widget_set_events() for details.
+ * @widget. See gtk_widget_set_events () for details.
  * 
  **/
 void
@@ -4488,7 +4488,7 @@ gtk_widget_add_events (GtkWidget *widget,
  * @mode: bitfield of extension events to receive
  *
  * Sets the extension events mask to @mode. See #GdkExtensionMode
- * and gdk_input_set_extension_events().
+ * and gdk_input_set_extension_events ().
  * 
  **/
 void
@@ -4519,7 +4519,7 @@ gtk_widget_set_extension_events (GtkWidget *widget,
  * returned as the topmost widget. No reference will be added to the
  * returned widget; it should not be unreferenced.
  *
- * Note the difference in behavior vs. gtk_widget_get_ancestor();
+ * Note the difference in behavior vs. gtk_widget_get_ancestor ();
  * gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW) would return
  * %NULL if @widget wasn't inside a toplevel window.
  * 
@@ -4671,7 +4671,7 @@ gtk_widget_get_events (GtkWidget *widget)
  * @widget: a #GtkWidget
  * 
  * Retrieves the extension events the widget will receive; see
- * gdk_input_set_extension_events().
+ * gdk_input_set_extension_events ().
  * 
  * Return value: extension events for @widget
  **/
@@ -4810,7 +4810,7 @@ gtk_widget_pop_composite_child (void)
  *
  * Pushes @cmap onto a global stack of colormaps; the topmost
  * colormap on the stack will be used to create all widgets.
- * Remove @cmap with gtk_widget_pop_colormap(). There's little
+ * Remove @cmap with gtk_widget_pop_colormap (). There's little
  * reason to use this function.
  * 
  **/
@@ -4825,7 +4825,7 @@ gtk_widget_push_colormap (GdkColormap *cmap)
 /**
  * gtk_widget_pop_colormap:
  *
- * Removes a colormap pushed with gtk_widget_push_colormap().
+ * Removes a colormap pushed with gtk_widget_push_colormap ().
  * 
  **/
 void
@@ -4846,7 +4846,7 @@ gtk_widget_pop_colormap (void)
  * @colormap: a #GdkColormap
  * 
  * Sets the default colormap to use when creating widgets.
- * gtk_widget_push_colormap() is a better function to use if
+ * gtk_widget_push_colormap () is a better function to use if
  * you only want to affect a few widgets, rather than all widgets.
  * 
  **/
@@ -4872,14 +4872,14 @@ gtk_widget_get_default_colormap (void)
 {
   GTK_NOTE (MISC,
 	    g_message("don't use for multihead !!")); 
-  return gdk_screen_get_default_colormap(gdk_get_default_screen());
+  return gdk_screen_get_default_colormap (gdk_get_default_screen ());
 }
 
 /**
  * gtk_widget_get_default_visual:
  * 
  * Obtains the visual of the default colormap. Not really useful;
- * used to be useful before gdk_colormap_get_visual() existed.
+ * used to be useful before gdk_colormap_get_visual () existed.
  * 
  * Return value: visual of the default colormap
  **/
@@ -4921,7 +4921,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
  * visual rather than logical (such as buttons for text justificiation).
  *
  * If the direction is set to %GTK_TEXT_DIR_NONE, then the value
- * set by gtk_widget_set_default_direction() will be used.
+ * set by gtk_widget_set_default_direction () will be used.
  **/
 void
 gtk_widget_set_direction (GtkWidget        *widget,
@@ -4955,7 +4955,7 @@ gtk_widget_set_direction (GtkWidget        *widget,
  * @widget: a #GtkWidget
  * 
  * Get the reading direction for a particular widget. See
- * gtk_widget_set_direction().
+ * gtk_widget_set_direction ().
  * 
  * Return value: the reading direction for the widget.
  **/
@@ -4995,7 +4995,7 @@ gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
  *        %GTK_TEXT_DIR_NONE.
  * 
  * Set the default reading direction for widgets where the
- * direction has not been explicitly set by gtk_widget_set_direction().
+ * direction has not been explicitly set by gtk_widget_set_direction ().
  **/
 void
 gtk_widget_set_default_direction (GtkTextDirection dir)
@@ -5028,7 +5028,7 @@ gtk_widget_set_default_direction (GtkTextDirection dir)
  * gtk_widget_get_default_direction:
  * 
  * Return value: the current default direction. See
- * gtk_widget_set_direction().
+ * gtk_widget_set_direction ().
  **/
 GtkTextDirection
 gtk_widget_get_default_direction (void)
@@ -5057,7 +5057,7 @@ gtk_widget_real_destroy (GtkObject *object)
   GtkWidget *widget;
   GtkStyle *saved_style;
 
-  /* gtk_object_destroy() will already hold a refcount on object
+  /* gtk_object_destroy () will already hold a refcount on object
    */
   widget = GTK_WIDGET (object);
 
@@ -5216,7 +5216,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
    */
 
    /* We must do unrealize child widget BEFORE container widget.
-    * gdk_window_destroy() destroys specified xwindow and its sub-xwindows.
+    * gdk_window_destroy () destroys specified xwindow and its sub-xwindows.
     * So, unrealizing container widget bofore its children causes the problem 
     * (for example, gdk_ic_destroy () with destroyed window causes crash. )
     */
@@ -5492,7 +5492,7 @@ gtk_widget_reset_shapes (GtkWidget *widget)
  * @widget: a #GtkWidget
  * 
  * Adds a reference to a widget. This function is exactly the same
- * as calling g_object_ref(), and exists mostly for historical
+ * as calling g_object_ref (), and exists mostly for historical
  * reasons. It can still be convenient to avoid casting a widget
  * to a #GObject, it saves a small amount of typing.
  * 
@@ -5510,7 +5510,7 @@ gtk_widget_ref (GtkWidget *widget)
  * gtk_widget_unref:
  * @widget: a #GtkWidget
  *
- * Inverse of gtk_widget_ref(). Equivalent to g_object_unref().
+ * Inverse of gtk_widget_ref (). Equivalent to g_object_unref ().
  * 
  **/
 void
@@ -5682,10 +5682,10 @@ gtk_widget_style_get (GtkWidget   *widget,
  * Obtains the full path to @widget. The path is simply the name of a
  * widget and all its parents in the container hierarchy, separated by
  * periods. The name of a widget comes from
- * gtk_widget_get_name(). Paths are used to apply styles to a widget
+ * gtk_widget_get_name (). Paths are used to apply styles to a widget
  * in gtkrc configuration files.  Widget names are the type of the
  * widget by default (e.g. "GtkButton") or can be set to an
- * application-specific value with gtk_widget_set_name().  By setting
+ * application-specific value with gtk_widget_set_name ().  By setting
  * the name of a widget, you allow users or theme authors to apply
  * styles to that specific widget in their gtkrc
  * file. @path_reversed_p fills in the path in reverse order,
@@ -5754,8 +5754,8 @@ gtk_widget_path (GtkWidget *widget,
  * @path: location to store the class path as an allocated string
  * @path_reversed: location to store the reverse class path as an allocated string
  *
- * Same as gtk_widget_path(), but always uses the name of a widget's type,
- * never uses a custom name set with gtk_widget_set_name().
+ * Same as gtk_widget_path (), but always uses the name of a widget's type,
+ * never uses a custom name set with gtk_widget_set_name ().
  * 
  **/
 void
@@ -5835,7 +5835,7 @@ AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
 
   g_return_val_if_fail (klass->get_accessible != NULL, NULL);
 
-  return klass->get_accessible(widget);
+  return klass->get_accessible (widget);
 }
 
 AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
@@ -5854,7 +5854,7 @@ AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
                                         GTK_OBJECT_TYPE (widget));
     accessible =
       atk_object_factory_create_accessible (factory,
-                                               G_OBJECT(widget));
+                                               G_OBJECT (widget));
     g_object_set_qdata (G_OBJECT (widget), 
                         quark_accessible_object,
                         accessible);
@@ -5873,7 +5873,7 @@ gtk_widget_accessible_interface_init (AtkImplementorIface *iface)
 }
 
 static AtkObject*
-gtk_widget_ref_accessible(AtkImplementor *implementor)
+gtk_widget_ref_accessible (AtkImplementor *implementor)
 {
   AtkObject *accessible;
 

@@ -105,18 +105,18 @@ gtk_gc_release (GdkGC *gc)
 }
 
 static GHashTable*
-gtk_gc_get_drawable_ht(GdkDisplay *display)
+gtk_gc_get_drawable_ht (GdkDisplay *display)
 {
   GtkGcDrawableHash* ht;
   
   GSList *tmp = gc_drawable_ht_list;
-  while(tmp)
+  while (tmp)
   {
     if(((GtkGcDrawableHash*)tmp->data)->display == display)
       return ((GtkGcDrawableHash*)tmp->data)->gc_drawable_ht;
     tmp = tmp->next;
   }
-  ht = g_new(GtkGcDrawableHash, 1);
+  ht = g_new (GtkGcDrawableHash, 1);
   ht->display = display;
   ht->gc_drawable_ht = g_hash_table_new ((GHashFunc) gtk_gc_drawable_hash,
 					 (GEqualFunc) gtk_gc_drawable_equal);  
@@ -171,7 +171,7 @@ gtk_gc_new (gpointer key)
   GHashTable *ht = NULL;
 
   keyval = key;
-  ht = gtk_gc_get_drawable_ht(gdk_screen_get_display(keyval->colormap->screen));
+  ht = gtk_gc_get_drawable_ht (gdk_screen_get_display (keyval->colormap->screen));
   drawable = g_hash_table_lookup (ht, &keyval->depth);
   if (!drawable)
     {

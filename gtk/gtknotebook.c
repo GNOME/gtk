@@ -1711,10 +1711,10 @@ gtk_notebook_focus (GtkContainer     *container,
 #define D(rest) GTK_DIR_##rest
 
   static const GtkDirectionType translate_direction[4][6] = {
-    /* LEFT */   { D(TAB_FORWARD),  D(TAB_BACKWARD), D(LEFT), D(RIGHT), D(UP),   D(DOWN) },
-    /* RIGHT */  { D(TAB_BACKWARD), D(TAB_FORWARD),  D(LEFT), D(RIGHT), D(DOWN), D(UP)   },
-    /* TOP */    { D(TAB_FORWARD),  D(TAB_BACKWARD), D(UP),   D(DOWN),  D(LEFT), D(RIGHT) },
-    /* BOTTOM */ { D(TAB_BACKWARD), D(TAB_FORWARD),  D(DOWN), D(UP),    D(LEFT), D(RIGHT) },
+    /* LEFT */   { D (TAB_FORWARD),  D (TAB_BACKWARD), D (LEFT), D (RIGHT), D (UP),   D (DOWN) },
+    /* RIGHT */  { D (TAB_BACKWARD), D (TAB_FORWARD),  D (LEFT), D (RIGHT), D (DOWN), D (UP)   },
+    /* TOP */    { D (TAB_FORWARD),  D (TAB_BACKWARD), D (UP),   D (DOWN),  D (LEFT), D (RIGHT) },
+    /* BOTTOM */ { D (TAB_BACKWARD), D (TAB_FORWARD),  D (DOWN), D (UP),    D (LEFT), D (RIGHT) },
   };
 
 #undef D  
@@ -2395,7 +2395,7 @@ gtk_notebook_paint (GtkWidget    *widget,
 	  gap_width = notebook->cur_page->allocation.height;
 	  break;
 	}
-      gtk_paint_box_gap(widget->style, widget->window,
+      gtk_paint_box_gap (widget->style, widget->window,
 			GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 			area, widget, "notebook",
 			x, y, width, height,
@@ -2474,7 +2474,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
 	state_type = GTK_STATE_NORMAL;
       else 
 	state_type = GTK_STATE_ACTIVE;
-      gtk_paint_extension(widget->style, widget->window,
+      gtk_paint_extension (widget->style, widget->window,
 			  state_type, GTK_SHADOW_OUT,
 			  area, widget, "tab",
 			  page_area.x, page_area.y,
@@ -2522,7 +2522,7 @@ gtk_notebook_draw_arrow (GtkNotebook *notebook,
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  widget = GTK_WIDGET(notebook);
+  widget = GTK_WIDGET (notebook);
 
   if (GTK_WIDGET_DRAWABLE (notebook))
     {
@@ -2599,7 +2599,7 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
   if (!GTK_WIDGET(notebook)->window)
     return;
 
-  widget = GTK_WIDGET(notebook);
+  widget = GTK_WIDGET (notebook);
 
   w = widget->allocation.width;
   h = widget->allocation.height;
@@ -2611,14 +2611,14 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
   /* clear the shape mask */
   col.pixel = 0;
   gdk_gc_set_foreground(pmgc, &col);
-  gdk_draw_rectangle(pm, pmgc, TRUE, 0, 0, w, h);
+  gdk_draw_rectangle (pm, pmgc, TRUE, 0, 0, w, h);
 
   col.pixel = 1;
   gdk_gc_set_foreground(pmgc, &col);
 
   /* draw the shape for the notebook page itself */
-  x = GTK_CONTAINER(notebook)->border_width;
-  y = GTK_CONTAINER(notebook)->border_width;
+  x = GTK_CONTAINER (notebook)->border_width;
+  y = GTK_CONTAINER (notebook)->border_width;
   width = widget->allocation.width - x * 2;
   height = widget->allocation.height - y * 2;
 
@@ -2677,13 +2677,13 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
 	    }
 	}
     }
-  gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);
+  gdk_draw_rectangle (pm, pmgc, TRUE, x, y, width, height);
 
   /* if theres an area for scrolling arrows draw the shape for them */
   if (notebook->panel && gdk_window_is_visible (notebook->panel))
     {
-      gdk_window_get_geometry(notebook->panel, &x, &y, &width, &height, &depth);
-      gdk_draw_rectangle(pm, pmgc, TRUE, x, y, width, height);
+      gdk_window_get_geometry (notebook->panel, &x, &y, &width, &height, &depth);
+      gdk_draw_rectangle (pm, pmgc, TRUE, x, y, width, height);
     }
 
   /* draw the shapes of all the children */
@@ -2706,9 +2706,9 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
     }
 
   /* set the mask */
-  gdk_window_shape_combine_mask(widget->window, pm, 0, 0);
-  gdk_pixmap_unref(pm);
-  gdk_gc_destroy(pmgc);
+  gdk_window_shape_combine_mask (widget->window, pm, 0, 0);
+  gdk_pixmap_unref (pm);
+  gdk_gc_destroy (pmgc);
 }
 
 /* Private GtkNotebook Size Allocate Functions:
@@ -3617,7 +3617,7 @@ gtk_notebook_menu_label_unparent (GtkWidget *widget,
 				  gpointer  data)
 {
   gtk_widget_unparent (GTK_BIN(widget)->child);
-  GTK_BIN(widget)->child = NULL;
+  GTK_BIN (widget)->child = NULL;
 }
 
 static void
@@ -4151,7 +4151,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  * 
  * Sets whether a bevel will be drawn around the notebook pages.
  * this is only has an effect when the tabs are not shown.
- * See gtk_notebook_set_show_tabs().
+ * See gtk_notebook_set_show_tabs ().
  **/
 void
 gtk_notebook_set_show_border (GtkNotebook *notebook,
@@ -4699,7 +4699,7 @@ gtk_notebook_child_reordered (GtkNotebook     *notebook,
  * @pack_type: the position of the bookmark
  * 
  * Sets the packing parameters for the tab label of the page
- * containing @child. See gtk_box_pack_start() for the exact meaning
+ * containing @child. See gtk_box_pack_start () for the exact meaning
  * of the parameters.
  **/
 void

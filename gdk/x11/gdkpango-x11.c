@@ -51,5 +51,5 @@ gdk_pango_context_get_for_screen (GdkScreen * screen)
 PangoContext *
 gdk_pango_context_get (void)
 {
-    return gdk_pango_context_get_for_screen(gdk_get_default_screen());
+    return gdk_pango_context_get_for_screen (gdk_get_default_screen ());
 }

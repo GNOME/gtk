@@ -97,7 +97,7 @@ gdk_pango_get_gc (GdkScreen      *screen,
       return NULL;
     }
   
-  root_window = GDK_SCREEN_GET_CLASS(screen)->get_root_window(screen);
+  root_window = GDK_SCREEN_GET_CLASS (screen)->get_root_window (screen);
   result = gdk_gc_new (root_window);
   gdk_gc_copy (result, base_gc);
   
@@ -190,7 +190,7 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
   g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (line != NULL);
 
-  screen = gdk_drawable_get_screen(drawable);
+  screen = gdk_drawable_get_screen (drawable);
 
   context = pango_layout_get_context (line->layout);
   
@@ -693,7 +693,7 @@ gdk_pango_attr_embossed_new (gboolean embossed)
  * 
  * Obtains a clip region which contains the areas where the given
  * ranges of text would be drawn. @x_origin and @y_origin are the same
- * position you would pass to gdk_draw_layout_line(). @index_ranges
+ * position you would pass to gdk_draw_layout_line (). @index_ranges
  * should contain ranges of bytes in the layout's text. The clip
  * region will include space to the left or right of the line (to the
  * layout bounding box) if you have indexes above or below the indexes
@@ -771,7 +771,7 @@ gdk_pango_layout_line_get_clip_region (PangoLayoutLine *line,
  * 
  * Obtains a clip region which contains the areas where the given ranges
  * of text would be drawn. @x_origin and @y_origin are the same position
- * you would pass to gdk_draw_layout_line(). @index_ranges should contain
+ * you would pass to gdk_draw_layout_line (). @index_ranges should contain
  * ranges of bytes in the layout's text.
  * 
  * Return value: a clip region containing the given ranges

@@ -5,10 +5,11 @@
 #include <gobject/gobject.h>
 
 #ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+extern "C"
+{
+#endif				/* __cplusplus */
 
-typedef struct _GdkDisplayClass	    GdkDisplayClass;
+  typedef struct _GdkDisplayClass GdkDisplayClass;
 
 #define GDK_TYPE_DISPLAY              (gdk_display_get_type ())
 #define GDK_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY, GdkDisplay))
@@ -18,45 +19,44 @@ typedef struct _GdkDisplayClass	    GdkDisplayClass;
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
 
-struct _GdkDisplay 
-{
-  GObject parent_instance;
-};
+  struct _GdkDisplay
+  {
+    GObject parent_instance;
+  };
 
-struct _GdkDisplayClass
-{
-  GObjectClass 	    parent_class;
-  GdkDisplay *	    (*new_display)	    (gchar * display_name);	    
-  gchar *	    (*get_display_name)	    (GdkDisplay *dpy);	    
-  gint 		    (*get_n_screens)	    (GdkDisplay *dpy);	    
-  GdkScreen *	    (*get_screen)	    (GdkDisplay *dpy,gint screen_num);
-  GdkScreen *	    (*get_default_screen)   (GdkDisplay *dpy);	    
-};
+  struct _GdkDisplayClass
+  {
+    GObjectClass parent_class;
+    GdkDisplay *(*new_display) (gchar * display_name);
+    gchar *(*get_display_name) (GdkDisplay * dpy);
+      gint (*get_n_screens) (GdkDisplay * dpy);
+    GdkScreen *(*get_screen) (GdkDisplay * dpy, gint screen_num);
+    GdkScreen *(*get_default_screen) (GdkDisplay * dpy);
+  };
 
-GType		    gdk_display_get_type	(void);
-GdkDisplay *
-gdk_display_init_new(int argc, char **argv, char *display_name);
+  GType gdk_display_get_type (void);
+  GdkDisplay *gdk_display_init_new (int argc, char **argv,
+				    char *display_name);
 
-GdkDisplay *	gdk_display_new			(gchar * display_name);	    
-gchar *		gdk_display_get_name		(GdkDisplay *dpy);	    
-gint		gdk_display_get_n_screens	(GdkDisplay *dpy);	    
-GdkScreen *	gdk_display_get_screen		(GdkDisplay *dpy, gint screen_num);
-GdkScreen *	gdk_display_get_default_screen	(GdkDisplay *dpy);	  
+  GdkDisplay *gdk_display_new (gchar * display_name);
+  gchar *gdk_display_get_name (GdkDisplay * dpy);
+  gint gdk_display_get_n_screens (GdkDisplay * dpy);
+  GdkScreen *gdk_display_get_screen (GdkDisplay * dpy, gint screen_num);
+  GdkScreen *gdk_display_get_default_screen (GdkDisplay * dpy);
 
-void		gdk_display_use_xshm_set	(GdkDisplay *display, gboolean use_xshm);
-gboolean        gdk_display_use_xshm_get        (GdkDisplay * display);
-void	        gdk_display_pointer_ungrab      (GdkDisplay * display, guint32 time);
-void	        gdk_display_keyboard_ungrab	(GdkDisplay * display, guint32 time);
-gboolean        gdk_display_is_pointer_grabbed  (GdkDisplay * display);
-void		gdk_display_beep		(GdkDisplay * display);
+  void gdk_display_set_use_xshm (GdkDisplay * display, gboolean use_xshm);
+  gboolean gdk_display_get_use_xshm (GdkDisplay * display);
+  void gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time);
+  void gdk_display_keyboard_ungrab (GdkDisplay * display, guint32 time);
+  gboolean gdk_display_pointer_is_grabbed (GdkDisplay * display);
+  void gdk_display_beep (GdkDisplay * display);
 
-GdkAtom		gdk_display_atom		(GdkDisplay * dpy,
-						 const gchar * atom_name,
-						 gboolean only_if_exists);
-gchar *		gdk_display_atom_name		(GdkDisplay * dpy, GdkAtom atom);
-void		gdk_display_sync		(GdkDisplay * display);
+  GdkAtom gdk_display_atom (GdkDisplay * dpy,
+			    const gchar * atom_name, gboolean only_if_exists);
+  gchar *gdk_display_atom_name (GdkDisplay * dpy, GdkAtom atom);
+  void gdk_display_sync (GdkDisplay * display);
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
-#endif /* __GDK_DISPLAY_H__ */
+#endif				/* __cplusplus */
+#endif				/* __GDK_DISPLAY_H__ */

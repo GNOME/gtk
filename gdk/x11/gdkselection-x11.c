@@ -155,8 +155,8 @@ gdk_selection_owner_set (GdkWindow *owner,
 			 guint32    time,
 			 gboolean   send_event)
 {
- GDK_NOTE(MULTIHEAD,g_message("Use gdk_selection_owner_set_for_display instead\n"));
- return gdk_selection_owner_set_for_display(gdk_get_default_display(),owner,
+ GDK_NOTE (MULTIHEAD,g_message ("Use gdk_selection_owner_set_for_display instead\n"));
+ return gdk_selection_owner_set_for_display (gdk_get_default_display (),owner,
 					    selection,time,send_event);
 }
 GdkWindow *
@@ -174,8 +174,8 @@ gdk_selection_owner_get_for_display (GdkDisplay * display, GdkAtom selection)
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_selection_owner_get_for_display instead\n"));
-  return gdk_selection_owner_get_for_display(gdk_get_default_display(),selection);
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_selection_owner_get_for_display instead\n"));
+  return gdk_selection_owner_get_for_display (gdk_get_default_display (),selection);
 }
 
 void
@@ -184,7 +184,7 @@ gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    target,
 		       guint32    time)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(requestor));
+  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (requestor));
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
@@ -208,7 +208,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
   g_return_val_if_fail (requestor != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
-  dpy = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(requestor));
+  dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (requestor));
 
   /* If retrieved chunks are typically small, (and the ICCCM says the
      should be) it would be a win to try first with a buffer of
@@ -299,9 +299,9 @@ gdk_selection_send_notify (guint32  requestor,
 			   GdkAtom  property,
 			   guint32  time)
 {
-    GDK_NOTE(MULTIHEAD,
+    GDK_NOTE (MULTIHEAD,
 	     g_message("Use gdk_selection_send_notify_for_display instead\n"));
-    gdk_selection_send_notify_for_display(gdk_get_default_display(),requestor,
+    gdk_selection_send_notify_for_display (gdk_get_default_display (),requestor,
 					  selection,target,property,time);
 }
 gint
@@ -340,8 +340,8 @@ gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          length,
 				gchar      ***list)
 {
-  GDK_NOTE(MULTIHEAD, g_message(" Use gdk_text_property_to_text_list_for_display instead\n"));
-  return gdk_text_property_to_text_list_for_display(gdk_get_default_display(),encoding,
+  GDK_NOTE (MULTIHEAD, g_message (" Use gdk_text_property_to_text_list_for_display instead\n"));
+  return gdk_text_property_to_text_list_for_display (gdk_get_default_display (),encoding,
 						    format,text,length,list);
 }
 
@@ -501,7 +501,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay *display,
  * @text:     the text to convert
  * @length:   the length of @text, in bytes
  * @list:     location to store the list of strings or %NULL. The
- *            list should be freed with g_strfreev().
+ *            list should be freed with g_strfreev ().
  * 
  * Convert a text property in the giving encoding to
  * a list of UTF-8 strings. 
@@ -516,7 +516,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 				gint           length,
 				gchar       ***list)
 {
-  GDK_NOTE(MULTIHEAD, 
+  GDK_NOTE (MULTIHEAD, 
 	   g_message("Use gdk_text_property_to_utf8_list_for_display instead\n"));
   return gdk_text_property_to_utf8_list_for_display (gdk_get_default_display(),encoding,
 						     format,text,length,list);
@@ -560,9 +560,9 @@ gdk_string_to_compound_text (const gchar *str,
 			     guchar     **ctext,
 			     gint        *length)
 {
-  GDK_NOTE(MULTIHEAD, 
+  GDK_NOTE (MULTIHEAD, 
 	   g_message("Use gdk_string_to_compound_text_for_display instead\n"));
-  return gdk_string_to_compound_text_for_display(gdk_get_default_display(),
+  return gdk_string_to_compound_text_for_display (gdk_get_default_display (),
 						 str,
 						 encoding,
 						 format,

@@ -51,7 +51,7 @@
 
 /* The "background" areas of all rows/cells add up to cover the entire tree.
  * The background includes all inter-row and inter-cell spacing.
- * The "cell" areas are the cell_area passed in to gtk_cell_renderer_render(),
+ * The "cell" areas are the cell_area passed in to gtk_cell_renderer_render (),
  * i.e. just the cells, no spacing.
  */
 #define BACKGROUND_FIRST_PIXEL(tree_view,tree,node) (_gtk_rbtree_node_find_offset ((tree), (node)) + TREE_VIEW_HEADER_HEIGHT ((tree_view)))
@@ -263,7 +263,7 @@ static void     gtk_tree_view_get_arrow_xrange     (GtkTreeView      *tree_view,
 static gint     gtk_tree_view_new_column_width     (GtkTreeView      *tree_view,
 						    gint              i,
 						    gint             *x);
-static void     gtk_tree_view_ensure_scroll_timeout(GtkTreeView      *tree_view,
+static void     gtk_tree_view_ensure_scroll_timeout (GtkTreeView      *tree_view,
 						    GFunc             func);
 static void     gtk_tree_view_adjustment_changed   (GtkAdjustment    *adjustment,
 						    GtkTreeView      *tree_view);
@@ -1294,7 +1294,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	  background_area.width = column->displayed_width;
 	  if (i == tree_view->priv->expander_column &&
-              TREE_VIEW_DRAW_EXPANDERS(tree_view))
+              TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	    {
 	      cell_area = background_area;
 	      cell_area.x += depth*tree_view->priv->tab_offset;
@@ -2422,7 +2422,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
                               background_area.height);
 
 	  if (i == tree_view->priv->expander_column &&
-              TREE_VIEW_DRAW_EXPANDERS(tree_view))
+              TREE_VIEW_DRAW_EXPANDERS (tree_view))
 	    {
 	      cell_area.x += depth*tree_view->priv->tab_offset;
 	      cell_area.width -= depth*tree_view->priv->tab_offset;
@@ -2924,7 +2924,7 @@ check_model_dnd (GtkTreeModel *model,
                  "on GtkTreeView when using models that don't support "
                  "the %s interface and enabling drag-and-drop. The simplest way to do this "
                  "is to connect to '%s' and call "
-                 "gtk_signal_emit_stop_by_name() in your signal handler to prevent "
+                 "gtk_signal_emit_stop_by_name () in your signal handler to prevent "
                  "the default handler from running. Look at the source code "
                  "for the default handler in gtktreeview.c to get an idea what "
                  "your handler should do. (gtktreeview.c is in the GTK source "
@@ -5301,7 +5301,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GtkAllocation allocation;
   gint x, y, width, height;
   GdkScreen *scr = GTK_WIDGET (tree_view)->screen;
-  GdkWindow *root_window = GDK_SCREEN_GET_CLASS(scr)->get_root_window(scr);
+  GdkWindow *root_window = GDK_SCREEN_GET_CLASS (scr)->get_root_window (scr);
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
@@ -6134,7 +6134,7 @@ gtk_tree_view_set_rules_hint (GtkTreeView  *tree_view,
  * gtk_tree_view_get_rules_hint
  * @tree_view: a #GtkTreeView
  *
- * Gets the setting set by gtk_tree_view_set_rules_hint().
+ * Gets the setting set by gtk_tree_view_set_rules_hint ().
  *
  * Return value: %TRUE if rules are useful for the user of this tree
  **/
@@ -6341,7 +6341,7 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
  * Convenience function that inserts a new column into the #GtkTreeView
  * with the given cell renderer and a #GtkCellDataFunc to set cell renderer
  * attributes (normally using data from the model). See also
- * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_set_cell_renderer().
+ * gtk_tree_view_column_set_cell_data_func (), gtk_tree_view_column_set_cell_renderer ().
  * 
  * Return value: number of columns in the tree view post-insert
  **/
@@ -7029,7 +7029,7 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
  * This path should be freed with #gtk_tree_path_free.  If @column is non-NULL,
  * then it will be filled with the column at that point. @cell_x and @cell_y
  * return the coordinates relative to the cell background (i.e. the
- * background_area passed to gtk_cell_renderer_render()).  This function only
+ * background_area passed to gtk_cell_renderer_render ()).  This function only
  * works if @tree_view is realized.
  *
  * Return value: TRUE if a row exists at that coordinate.
@@ -7149,7 +7149,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
  * @column is %NULL, the x and width fields will be filled with 0.  The sum of
  * all cell rects does not cover the entire tree; there are extra pixels in
  * between rows, for example. The returned rectangle is equivalent to the
- * @cell_area passed to gtk_cell_renderer_render().  This function is only valid
+ * @cell_area passed to gtk_cell_renderer_render ().  This function is only valid
  * if #tree_view is realized.
  **/
 void
@@ -7215,10 +7215,10 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
  * rectangle will be filled with 0. If @column is %NULL, the x and
  * width fields will be filled with 0.  The returned rectangle is
  * equivalent to the @background_area passed to
- * gtk_cell_renderer_render().  These background areas tile to cover
+ * gtk_cell_renderer_render ().  These background areas tile to cover
  * the entire tree window (except for the area used for header
  * buttons). Contrast with the cell_area, returned by
- * gtk_tree_view_get_cell_area(), which returns only the cell itself,
+ * gtk_tree_view_get_cell_area (), which returns only the cell itself,
  * excluding surrounding borders and the tree expander area.
  *
  **/
@@ -7273,7 +7273,7 @@ gtk_tree_view_get_background_area (GtkTreeView        *tree_view,
  *
  * Fills @visible_rect with the currently-visible region of the
  * buffer, in tree coordinates. Convert to widget coordinates with
- * gtk_tree_view_tree_to_widget_coords(). Tree coordinates start at
+ * gtk_tree_view_tree_to_widget_coords (). Tree coordinates start at
  * 0,0 for row 0 of the tree, and cover the entire scrollable area of
  * the tree.
  **/
@@ -7717,7 +7717,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
       cell_area.height -= vertical_separator;
 
       if (i == tree_view->priv->expander_column &&
-          TREE_VIEW_DRAW_EXPANDERS(tree_view))
+          TREE_VIEW_DRAW_EXPANDERS (tree_view))
         {
           cell_area.x += depth * tree_view->priv->tab_offset;
           cell_area.width -= depth * tree_view->priv->tab_offset;

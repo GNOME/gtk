@@ -700,7 +700,7 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
 				      guint              time)
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
-  GdkDisplay * display = gtk_widget_get_display(widget);
+  GdkDisplay * display = gtk_widget_get_display (widget);
 
   gchar *text = gtk_selection_data_get_text (selection_data);
 

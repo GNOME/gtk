@@ -24,11 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include "gdkprivate-x11.h"
 #include "gdkregion-generic.h"
 
 #include <pango/pangox.h>
-#include <config.h>
 
 #if HAVE_XFT
 #include <pango/pangoxft.h>
@@ -40,9 +40,7 @@
 #define USE_SHM
 #endif
 
-#ifdef USE_SHM
 #include <X11/extensions/XShm.h>
-#endif /* USE_SHM */
 
 #include "gdkprivate-x11.h"
 #include "gdkdrawable-x11.h"

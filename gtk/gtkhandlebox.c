@@ -729,7 +729,7 @@ static void
 draw_textured_frame (GtkWidget *widget, GdkWindow *window, GdkRectangle *rect, GtkShadowType shadow,
 		     GdkRectangle *clip)
 {
-   gtk_paint_handle(widget->style, window, GTK_STATE_NORMAL, shadow,
+   gtk_paint_handle (widget->style, window, GTK_STATE_NORMAL, shadow,
 		    clip, widget, "handlebox",
 		    rect->x, rect->y, rect->width, rect->height, 
 		    GTK_ORIENTATION_VERTICAL);
@@ -794,14 +794,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
   gdk_window_get_size (hb->bin_window, &width, &height);
   
   if (!event)
-   gtk_paint_box(widget->style,
+   gtk_paint_box (widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
 		 hb->shadow_type,
 		 area, widget, "handlebox_bin",
 		 0, 0, -1, -1);
   else
-   gtk_paint_box(widget->style,
+   gtk_paint_box (widget->style,
 		 hb->bin_window,
 		 GTK_WIDGET_STATE (widget),
 		 hb->shadow_type,
@@ -858,7 +858,7 @@ gtk_handle_box_paint (GtkWidget      *widget,
 	  if (gtk_widget_intersect (bin->child, area, &child_area))
 	    gtk_widget_draw (bin->child, &child_area);
 	}
-      else /* we were called from expose() */
+      else /* we were called from expose () */
 	(* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
     }
 }

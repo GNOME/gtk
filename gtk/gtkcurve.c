@@ -675,8 +675,8 @@ gtk_curve_set_curve_type (GtkCurve *c, GtkCurveType new_type)
     {
       gint width, height;
 
-      width  = GTK_WIDGET(c)->allocation.width - RADIUS * 2;
-      height = GTK_WIDGET(c)->allocation.height - RADIUS * 2;
+      width  = GTK_WIDGET (c)->allocation.width - RADIUS * 2;
+      height = GTK_WIDGET (c)->allocation.height - RADIUS * 2;
 
       if (new_type == GTK_CURVE_TYPE_FREE)
 	{
@@ -721,7 +721,7 @@ gtk_curve_size_graph (GtkCurve *curve)
 {
   gint width, height;
   gfloat aspect;
-  GdkScreen *scr = GTK_WIDGET(curve)->screen; 
+  GdkScreen *scr = GTK_WIDGET (curve)->screen; 
 
   width  = (curve->max_x - curve->min_x) + 1;
   height = (curve->max_y - curve->min_y) + 1;
@@ -852,7 +852,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   GtkCurveType old_type;
   gfloat rx, dx, ry;
   gint i, height;
-  GdkScreen *scr = GTK_WIDGET(c)->screen;
+  GdkScreen *scr = GTK_WIDGET (c)->screen;
 
   old_type = c->curve_type;
   c->curve_type = GTK_CURVE_TYPE_FREE;

@@ -159,8 +159,8 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
 
   if (!window)
   {
-    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window",
-		                   "for gdk_pixmap_new to be multihead safe"));
+    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window \
+		                   for gdk_pixmap_new to be multihead safe"));
     window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
 
@@ -212,8 +212,8 @@ gdk_bitmap_create_from_data (GdkWindow   *window,
 
   if (!window) 
   {
-    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window",
-		                   "for gdk_bitmap_create_from_data to be multihead safe"));
+    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window \
+		                   for gdk_bitmap_create_from_data to be multihead safe"));
     window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
 
@@ -262,8 +262,8 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   if (!window)
   {
-    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window",
-		                   "for gdk_pixmap_create_from_data to be multihead safe"));
+    GDK_NOTE(MULTIHEAD, g_message ("need to specify the screen parent window \
+		                   for gdk_pixmap_create_from_data to be multihead safe"));
     window = GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->root_window;
   }
 
@@ -349,12 +349,12 @@ gdk_pixmap_foreign_new_for_screen ( GdkScreen * screen, GdkNativeWindow anid)
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
-   GDK_NOTE(MULTIHEAD, g_message("Use gdk_pixmap_foreign_new_for_screen instead\n"));
-   return gdk_pixmap_foreign_new_for_screen(gdk_get_default_screen(),anid);
+   GDK_NOTE (MULTIHEAD, g_message ("Use gdk_pixmap_foreign_new_for_screen instead\n"));
+   return gdk_pixmap_foreign_new_for_screen (gdk_get_default_screen (),anid);
 }
 
 GdkScreen*
 gdk_pixmap_get_screen (GdkDrawable *drawable)
 {
-  return GDK_PIXMAP_SCREEN(drawable);
+  return GDK_PIXMAP_SCREEN (drawable);
 }

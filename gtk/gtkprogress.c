@@ -670,7 +670,7 @@ gtk_progress_set_format_string (GtkProgress *progress,
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   /* Turn on format, in case someone called
-   * gtk_progress_bar_set_text() and turned it off.
+   * gtk_progress_bar_set_text () and turned it off.
    */
   progress->use_text_format = TRUE;
   

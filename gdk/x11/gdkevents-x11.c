@@ -35,6 +35,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
+#include "gdkdisplaymgr-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 
@@ -92,7 +93,7 @@ static gint	 gdk_event_translate	 (GdkEvent *event,
 					  XEvent   *xevent,
 					  gboolean  return_exposes);
 #if 0
-static Bool	 gdk_event_get_type	(Display   *display, 
+static Bool	 gdk_event_get_type	 (Display   *display, 
 					 XEvent	   *xevent, 
 					 XPointer   arg);
 #endif
@@ -108,8 +109,8 @@ GdkFilterReturn gdk_wm_protocols_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
 					 gpointer   data);
 
-static GSource * gdk_display_source_new(GdkDisplay* dpy);
-static gboolean gdk_check_xpending();
+static GSource * gdk_display_source_new (GdkDisplay* dpy);
+static gboolean gdk_check_xpending ();
 
 static void gdk_xsettings_watch_cb  (Window            window,
 				     Bool              is_start,
@@ -147,24 +148,24 @@ struct _GdkDisplaySource {
 };
 
 
-static GSource * gdk_display_source_new(GdkDisplay* dpy)
+static GSource * gdk_display_source_new (GdkDisplay* dpy)
 {
   GSource *source = g_source_new (&event_funcs, sizeof (GdkDisplaySource));
   GdkDisplaySource *display_source = (GdkDisplaySource *)source;
   display_source->display = dpy;
   return source;
 }
-static gboolean gdk_check_xpending(GdkDisplaySource* source){
+static gboolean gdk_check_xpending (GdkDisplaySource* source){
   GList *tmp = display_sources;
-  if(!source){
-    while(tmp){
+  if (!source){
+    while (tmp){
 	if(XPending(GDK_DISPLAY_IMPL_X11(((GdkDisplaySource*)tmp)->display)->xdisplay))
 	    return True;
 	tmp = g_list_next(tmp);
     }
     return False;
   }else{
-    return XPending(GDK_DISPLAY_IMPL_X11(source->display)->xdisplay);
+    return XPending (GDK_DISPLAY_IMPL_X11 (source->display)->xdisplay);
   }
 }
 
@@ -178,7 +179,7 @@ gdk_events_init (GdkDisplay* display)
 {
   GSource *source;
   GdkDisplaySource *display_source;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11(display);
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (display);
   
   int connection_number = ConnectionNumber (dpy_impl->xdisplay);
   GDK_NOTE (MISC,g_message ("connection number: %d", connection_number));
@@ -385,7 +386,7 @@ gdk_check_wm_state_changed (GdkWindow *window)
       gulong *desktop;
       
       XGetWindowProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-                          GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(window))->wm_desktop_atom,
+                          GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->wm_desktop_atom,
 			  0, G_MAXLONG, False, XA_CARDINAL, &type, &format, &nitems,
                           &bytes_after, (guchar **)&desktop);
 
@@ -492,10 +493,10 @@ gdk_event_translate (GdkEvent *event,
   window = gdk_window_lookup (xevent->xany.window);
   window_private = (GdkWindowObject *) window;
 
-  scr = GDK_WINDOW_SCREEN(window);
-  scr_impl = GDK_SCREEN_IMPL_X11(scr);
-  dpy = GDK_WINDOW_DISPLAY(window);
-  dpy_impl = GDK_DISPLAY_IMPL_X11(dpy);
+  scr = GDK_WINDOW_SCREEN (window);
+  scr_impl = GDK_SCREEN_IMPL_X11 (scr);
+  dpy = GDK_WINDOW_DISPLAY (window);
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (dpy);
 
   if (window != NULL)
     gdk_window_ref (window);
@@ -1035,7 +1036,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 
 #if 0      
- 	  /* gdk_keyboard_grab() causes following events. These events confuse
+ 	  /* gdk_keyboard_grab () causes following events. These events confuse
  	   * the XIM focus, so ignore them.
  	   */
  	  if (xevent->xfocus.mode == NotifyGrab ||
@@ -1345,7 +1346,7 @@ gdk_event_translate (GdkEvent *event,
       event->property.time = xevent->xproperty.time;
       event->property.state = xevent->xproperty.state;
 
-      if(event->property.atom == dpy_impl->wm_state_atom
+      if (event->property.atom == dpy_impl->wm_state_atom
 	|| event->property.atom == dpy_impl->wm_desktop_atom)
         {
           /* If window state changed, then synthesize those events. */
@@ -1514,7 +1515,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 {
   XEvent *xevent = (XEvent *)xev;
   GdkWindow *win = event->any.window;
-  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11(GDK_WINDOW_DISPLAY(win));
+  GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (win));
 
   if ((Atom) xevent->xclient.data.l[0] == dpy_impl->gdk_wm_delete_window)
     {
@@ -1554,7 +1555,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
     {
       XEvent xev = *xevent;
       
-      xev.xclient.window = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(win))->xroot_window;
+      xev.xclient.window = GDK_SCREEN_IMPL_X11 (GDK_WINDOW_SCREEN (win))->xroot_window;
       XSendEvent (GDK_WINDOW_XDISPLAY(win),
 		  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(win))->xroot_window, 
 		  False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
@@ -1583,12 +1584,12 @@ gdk_event_get_type (Display  *display,
 #endif
 
 void
-gdk_events_queue (GdkDisplaySource* source)
+gdk_events_queue (GdkDisplay *display)
 {
   GList *node;
   GdkEvent *event;
   XEvent xevent;
-  Display *dpy = GDK_DISPLAY_IMPL_X11(source->display)->xdisplay;
+  Display *dpy = GDK_DISPLAY_IMPL_X11 (display)->xdisplay;
 
   while (!gdk_event_queue_find_first() && XPending (dpy))
     {
@@ -1668,8 +1669,8 @@ gdk_event_dispatch (GSource    *source,
  
   GDK_THREADS_ENTER ();
 
-  gdk_events_queue((GdkDisplaySource*)source);
-  event = gdk_event_unqueue();
+  gdk_events_queue (((GdkDisplaySource*)source)->display);
+  event = gdk_event_unqueue ();
 
   if (event)
     {
@@ -1690,14 +1691,14 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
 {
   XEvent sev;
   
-  g_return_val_if_fail(event != NULL, FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
   
   /* Set up our event to send, with the exception of its target window */
   sev.xclient.type = ClientMessage;
-  sev.xclient.display = GDK_WINDOW_XDISPLAY(event->any.window);
+  sev.xclient.display = GDK_WINDOW_XDISPLAY (event->any.window);
   sev.xclient.format = event->client.data_format;
   sev.xclient.window = xid;
-  memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
+  memcpy (&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
   sev.xclient.message_type = event->client.message_type;
   
   return gdk_send_xevent (xid, False, NoEventMask, &sev);
@@ -1719,7 +1720,8 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   gboolean send = FALSE;
   gboolean found = FALSE;
   int i;
-  GdkDisplay *dpy = gdk_x11_display_manager_get_display(gdk_display_manager,xev->xany.display);
+  GdkDisplay *dpy = gdk_x11_display_manager_get_display (gdk_display_manager,
+							 xev->xany.display);
 
   gdk_error_warnings = FALSE;
   gdk_error_code = 0;
@@ -1751,7 +1753,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
 	  return FALSE;
 	}
 
-      for(i = 0; i < ret_nchildren; i++)
+      for (i = 0; i < ret_nchildren; i++)
 	if (gdk_event_send_client_message_to_all_recurse (xev, ret_children[i], level + 1))
 	  found = TRUE;
 
@@ -1761,7 +1763,7 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   if (send || (!found && (level == 1)))
     {
       xev->xclient.window = xid;
-      xev->xclient.display = GDK_DISPLAY_XDISPLAY(dpy);
+      xev->xclient.display = GDK_DISPLAY_XDISPLAY (dpy);
       gdk_send_xevent (xid, False, NoEventMask, xev);
     }
 
@@ -1776,19 +1778,19 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   XEvent sev;
   gint old_warnings = gdk_error_warnings;
 
-  g_return_if_fail(event != NULL);
-  g_return_if_fail(GDK_IS_DRAWABLE(event->any.window));
+  g_return_if_fail (event != NULL);
+  g_return_if_fail (GDK_IS_DRAWABLE (event->any.window));
   
   /* Set up our event to send, with the exception of its target window */
   sev.xclient.type = ClientMessage;
-  sev.xclient.display = GDK_WINDOW_XDISPLAY(event->any.window);
+  sev.xclient.display = GDK_WINDOW_XDISPLAY (event->any.window);
   sev.xclient.format = event->client.data_format;
-  memcpy(&sev.xclient.data, &event->client.data, sizeof(sev.xclient.data));
+  memcpy (&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
   sev.xclient.message_type = event->client.message_type;
 
-  gdk_event_send_client_message_to_all_recurse(
+  gdk_event_send_client_message_to_all_recurse (
     &sev,
-    GDK_WINDOW_XROOTWIN(event->any.window),
+    GDK_WINDOW_XROOTWIN (event->any.window),
     0);
 
   gdk_error_warnings = old_warnings;
@@ -1816,9 +1818,9 @@ void
 gdk_flush (void)
 {
   GSList *tmp_dpy_list = gdk_display_manager->open_displays;
-  while(tmp_dpy_list != NULL){
+  while (tmp_dpy_list != NULL){
     XSync (GDK_DISPLAY_IMPL_X11(tmp_dpy_list->data)->xdisplay, False);
-    tmp_dpy_list = g_slist_next(tmp_dpy_list);
+    tmp_dpy_list = g_slist_next (tmp_dpy_list);
   }
 }
 
@@ -1829,7 +1831,7 @@ timestamp_predicate (Display *display,
 		     XPointer arg)
 {
   Window xwindow = GPOINTER_TO_UINT (arg);
-  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11(gdk_x11_display_manager_get_display(gdk_display_manager,display));
+  GdkDisplayImplX11 * dpy_impl = GDK_DISPLAY_IMPL_X11 (gdk_x11_display_manager_get_display (gdk_display_manager,display));
 
   if (xevent->type == PropertyNotify &&
       xevent->xproperty.window == xwindow &&

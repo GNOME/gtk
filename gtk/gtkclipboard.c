@@ -181,7 +181,7 @@ make_clipboard_widget (gboolean provider)
 
   if (provider)
     {
-      /* We need this for gdk_x11_get_server_time() */
+      /* We need this for gdk_x11_get_server_time () */
       gtk_widget_add_events (widget, GDK_PROPERTY_CHANGE_MASK);
       
       gtk_signal_connect (GTK_OBJECT (widget), "selection_get",
@@ -449,9 +449,9 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_get_owner:
  * @clipboard: a #GtkClipboard
  * 
- * If the clipboard contents callbacks were set with gtk_clipboard_set_owner(),
- * and the gtk_clipboard_set_with_data() or gtk_clipboard_clear() has not
- * subsequently called, returns the @owner set by gtk_clipboard_set_owner().
+ * If the clipboard contents callbacks were set with gtk_clipboard_set_owner (),
+ * and the gtk_clipboard_set_with_data () or gtk_clipboard_clear () has not
+ * subsequently called, returns the @owner set by gtk_clipboard_set_owner ().
  * 
  * Return value: the owner of the clipboard, if any; otherwise %NULL.
  **/
@@ -494,7 +494,7 @@ clipboard_unset (GtkClipboard *clipboard)
  * @clipboard:  a #GtkClipboard
  * 
  * Clear the contents of the clipboard. Generally this should only
- * be called between the time you call gtk_clipboard_set_contents(),
+ * be called between the time you call gtk_clipboard_set_contents (),
  * and when the @clear_func you supplied is called. Otherwise, the
  * clipboard may be owned by someone else.
  **/
@@ -516,7 +516,7 @@ text_get_func (GtkClipboard     *clipboard,
 	       guint             info,
 	       gpointer          data)
 {
-  gtk_selection_data_set_text(selection_data, data);
+  gtk_selection_data_set_text (selection_data, data);
 }
 
 static void 
@@ -531,7 +531,7 @@ text_clear_func (GtkClipboard *clipboard,
  * @clipboard: a #GtkClipboard object
  * @text:      a UTF-8 string.
  * @len:       length of @text, in bytes, or -1, in which case
- *             the length will be determined with strlen().
+ *             the length will be determined with strlen ().
  * 
  * Set the contents of the clipboard to the given UTF-8 string. GTK+ will
  * make a copy of the text and take responsibility for responding
@@ -655,7 +655,7 @@ request_text_received_func (GtkClipboard     *clipboard,
   RequestTextInfo *info = data;
   gchar *result = NULL;
 
-  result = gtk_selection_data_get_text(selection_data);
+  result = gtk_selection_data_get_text (selection_data);
 
   if (!result)
     {
@@ -759,7 +759,7 @@ clipboard_received_func (GtkClipboard     *clipboard,
  * 
  * Return value: a newly allocated #GtkSelectionData object or %NULL
  *               if retrieving the given target failed. If non-%NULL,
- *               this value freed with gtk_selection_data_free() when
+ *               this value freed with gtk_selection_data_free () when
  *               you are finished with it.
  **/
 GtkSelectionData *
@@ -808,7 +808,7 @@ clipboard_text_received_func (GtkClipboard *clipboard,
  * timeouts, etc, may be dispatched during the wait.
  * 
  * Return value: a newly allocated UTF-8 string which must
- *               be freed with g_free(), or %NULL if retrieving
+ *               be freed with g_free (), or %NULL if retrieving
  *               the selection data failed. (This could happen
  *               for various reasons, in particular if the
  *               clipboard was empty or if the contents of the

@@ -201,7 +201,7 @@ gdk_event_handler_set (GdkEventFunc   func,
 GdkEvent*
 gdk_event_get (void)
 {
-  gdk_events_queue ();
+  gdk_events_queue (gdk_get_default_display ());
 
   return gdk_event_unqueue ();
 }

@@ -1073,7 +1073,7 @@ canonical_hex_keyval (GdkEventKey *event)
   /* See if this key would have generated a hex keyval in
    * any other state, and return that hex keyval if so
    */
-  gdk_keymap_get_entries_for_keycode(gdk_keymap_new(gdk_window_get_display(event->window)),
+  gdk_keymap_get_entries_for_keycode (gdk_keymap_new (gdk_window_get_display (event->window)),
 				     event->hardware_keycode,
 				     NULL,
 				     &keyvals, &n_vals);
@@ -1239,7 +1239,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 
   if (attrs)
     {
-      *attrs = pango_attr_list_new();
+      *attrs = pango_attr_list_new ();
       
       if (len)
 	{

@@ -845,7 +845,7 @@ gtk_entry_init (GtkEntry *entry)
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
   /* This object is completely private. No external entity can gain a reference
-   * to it; so we create it here and destroy it in finalize().
+   * to it; so we create it here and destroy it in finalize ().
    */
   entry->im_context = gtk_im_multicontext_new ();
   
@@ -1703,7 +1703,7 @@ gtk_entry_get_selection_bounds (GtkEditable *editable,
 }
 
 static void 
-gtk_entry_style_set	(GtkWidget      *widget,
+gtk_entry_style_set	 (GtkWidget      *widget,
 			 GtkStyle       *previous_style)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
@@ -2876,7 +2876,7 @@ primary_get_cb (GtkClipboard     *clipboard,
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_selection_data_set_text(selection_data, str);
+      gtk_selection_data_set_text (selection_data, str);
       g_free (str);
     }
 }
@@ -3013,7 +3013,7 @@ gtk_entry_set_visibility (GtkEntry *entry,
  * @ch: a Unicode character
  * 
  * Sets the character to use in place of the actual text when
- * gtk_entry_set_visibility() has been called to set text visibility
+ * gtk_entry_set_visibility () has been called to set text visibility
  * to %FALSE. i.e. this is the character used in "password mode" to
  * show the user how many characters have been typed. The default
  * invisible char is an asterisk ('*').  If you set the invisible char
@@ -3036,7 +3036,7 @@ gtk_entry_set_invisible_char (GtkEntry *entry,
 }
 
 void
-gtk_entry_set_editable(GtkEntry *entry,
+gtk_entry_set_editable (GtkEntry *entry,
 		       gboolean  editable)
 {
   g_return_if_fail (entry != NULL);
@@ -3087,7 +3087,7 @@ gtk_entry_set_max_length (GtkEntry     *entry,
  * widget is usually one of the dialog buttons.
  *
  * (For experts: if @setting is %TRUE, the entry calls
- * gtk_window_activate_default() on the window containing the entry, in
+ * gtk_window_activate_default () on the window containing the entry, in
  * the default handler for the "activate" signal.)
  * 
  **/
@@ -3109,7 +3109,7 @@ gtk_entry_set_activates_default (GtkEntry *entry,
  * gtk_entry_get_activates_default:
  * @entry: a #GtkEntry
  * 
- * Retrieves the value set by gtk_entry_set_activates_default().
+ * Retrieves the value set by gtk_entry_set_activates_default ().
  * 
  * Return value: %TRUE if the entry will activate the default widget
  **/
@@ -3151,7 +3151,7 @@ gtk_entry_set_width_chars (GtkEntry *entry,
  * gtk_entry_get_width_chars:
  * @entry: a #GtkEntry
  * 
- * Gets the value set by gtk_entry_set_width_chars().
+ * Gets the value set by gtk_entry_set_width_chars ().
  * 
  * Return value: number of chars to request space for, or negative if unset
  **/
@@ -3186,7 +3186,7 @@ gtk_entry_set_has_frame (GtkEntry *entry,
  * gtk_entry_get_has_frame:
  * @entry: a #GtkEntry
  * 
- * Gets the value set by gtk_entry_set_has_frame().
+ * Gets the value set by gtk_entry_set_has_frame ().
  * 
  * Return value: whether the entry has a beveled frame
  **/
@@ -3317,7 +3317,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
     gtk_widget_destroy (entry->popup_menu);
   
   entry->popup_menu = gtk_menu_new ();
-  gtk_widget_set_screen(entry->popup_menu, gtk_widget_get_screen(entry));
+  gtk_widget_set_screen (entry->popup_menu, gtk_widget_get_screen (entry));
   gtk_widget_set_screen(((GtkMenu*)entry->popup_menu)->toplevel, gtk_widget_get_screen(entry));
 
 
@@ -3341,7 +3341,7 @@ gtk_entry_do_popup (GtkEntry       *entry,
   menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
   gtk_widget_show (menuitem);
   submenu = gtk_menu_new ();
-  gtk_widget_set_screen(submenu, gtk_widget_get_screen(entry));
+  gtk_widget_set_screen (submenu, gtk_widget_get_screen (entry));
   gtk_widget_set_screen(((GtkMenu*)submenu)->toplevel, gtk_widget_get_screen(entry));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
 

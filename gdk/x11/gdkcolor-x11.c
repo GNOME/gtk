@@ -323,7 +323,7 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
   case GDK_VISUAL_PSEUDO_COLOR:
     private->info = g_new0 (GdkColorInfo, colormap->size);
     private->hash = g_hash_table_new ((GHashFunc) gdk_color_hash,
-      				(GEqualFunc) gdk_color_equal);
+      				 (GEqualFunc) gdk_color_equal);
     /*
        Fall through 
      */
@@ -345,14 +345,14 @@ gdk_colormap_get_system_for_screen (GdkScreen * screen)
 GdkColormap*
 gdk_colormap_get_system (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_colormap_get_system_for_screen instead\n"));
-  return gdk_colormap_get_system_for_screen(gdk_get_default_screen());
+  GDK_NOTE (MULTIHEAD,g_message ("Use gdk_colormap_get_system_for_screen instead\n"));
+  return gdk_colormap_get_system_for_screen (gdk_get_default_screen ());
 }
 
 gint
 gdk_colormap_get_system_size (void)
 {
-  GDK_NOTE(MULTIHEAD, g_message(" Use the DisplayCells X call instead\n"));
+  GDK_NOTE (MULTIHEAD, g_message (" Use the DisplayCells X call instead\n"));
   return DisplayCells (GDK_SCREEN_XDISPLAY (gdk_get_default_screen()),
 		       GDK_SCREEN_IMPL_X11 (gdk_get_default_screen())->scr_num);
 }
@@ -609,8 +609,9 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	{
 	  if (private->info[ret->pixel].ref_count) /* got a duplicate */
 	    {
-	      XFreeColors (GDK_SCREEN_IMPL_X11(colormap->screen)->xdisplay, private->xcolormap,
-			   &ret->pixel, 1, 0);
+	      XFreeColors (GDK_SCREEN_IMPL_X11(colormap->screen)->xdisplay,
+			   private->xcolormap,
+			   (unsigned long*)&ret->pixel, 1, 0);
 	    }
 	  else
 	    {

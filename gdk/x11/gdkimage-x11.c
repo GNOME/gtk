@@ -133,7 +133,7 @@ gdk_image_exit (void)
 }
 
 GdkImage *
-gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
+gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
 /*
  * Desc: create a new bitmap image
  */
@@ -162,10 +162,10 @@ gdk_image_new_bitmap(GdkVisual *visual, gpointer data, gint w, gint h)
   image->bpl = private->ximage->bytes_per_line;
   image->bpp = 1;
   return (image);
-} /* gdk_image_new_bitmap() */
+} /* gdk_image_new_bitmap () */
 
 int
-gdk_image_check_xshm(Display *display)
+gdk_image_check_xshm (Display *display)
 /* 
  * Desc: query the server for support for the MIT_SHM extension
  * Return:  0 = not available
@@ -352,7 +352,7 @@ gdk_image_new (GdkImageType  type,
 		      0, width, height, 32, 0);
 
       /*
-         Use malloc, not g_malloc here, because X will call free()
+         Use malloc, not g_malloc here, because X will call free ()
          * on this data
        */
       private->ximage->data = malloc (private->ximage->bytes_per_line *
@@ -396,7 +396,7 @@ _gdk_x11_get_image (GdkDrawable    *drawable,
     {
       g_warning ("To get the image from a drawable, the drawable "
                  "must have a visual and colormap; calling "
-                 "gtk_drawable_set_colormap() on a drawable "
+                 "gtk_drawable_set_colormap () on a drawable "
                  "created without a colormap should solve this problem");
 
       return NULL;
@@ -478,7 +478,7 @@ gdk_x11_image_destroy (GdkImage *image)
 
   if (private == NULL) /* This means that gdk_image_exit() destroyed the
                         * image already, and now we're called a second
-                        * time from _finalize()
+                        * time from _finalize ()
                         */
     return;
   

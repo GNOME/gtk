@@ -49,6 +49,11 @@ void gdk_pixbuf_render_pixmap_and_mask   (GdkPixbuf           *pixbuf,
 					  GdkPixmap          **pixmap_return,
 					  GdkBitmap          **mask_return,
 					  int                  alpha_threshold);
+void gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
+						   GdkScreen  *screen,
+						   GdkPixmap **pixmap_return,
+						   GdkBitmap **mask_return,
+						   int         alpha_threshold);
 
 /* Fetching a region from a drawable */
 GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf   *dest,

@@ -82,6 +82,7 @@ GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
 					      GdkVisualType  visual_type);
 
 GdkVisual *   gdk_visual_get_system_for_screen (GdkScreen * scr);
+GList *	      gdk_list_visuals_for_screen (GdkScreen * scr);
 
 /* Actually, these are no-ops... */
 GdkVisual* gdk_visual_ref (GdkVisual *visual);

@@ -53,14 +53,14 @@
 static inline void
 update_keyrange (void)
 {
-    update_keyrange_for_display(gdk_get_default_display());
+    update_keyrange_for_display (gdk_get_default_display ());
 }
 */
 /* not needed with multihead display 
 static XkbDescPtr
 get_xkb (void)
 {	
-  return get_xkb_for_display(gdk_get_default_display());
+  return get_xkb_for_display (gdk_get_default_display ());
 }
 */
 /*
@@ -214,7 +214,7 @@ get_keymap_for_display (GdkDisplay * display)
  * #GdkEventKey contains a %group field that indicates the active
  * keyboard group. The level is computed from the modifier mask.
  * The returned array should be freed
- * with g_free().
+ * with g_free ().
  *
  * Return value: %TRUE if keys were found and returned
  **/
@@ -359,10 +359,10 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  *
  * Returns the keyvals bound to @hardware_keycode.
  * The Nth #GdkKeymapKey in @keys is bound to the Nth
- * keyval in @keyvals. Free the returned arrays with g_free().
+ * keyval in @keyvals. Free the returned arrays with g_free ().
  * When a keycode is pressed by the user, the keyval from
  * this list of entries is selected by considering the effective
- * keyboard group and level. See gdk_keymap_translate_keyboard_state().
+ * keyboard group and level. See gdk_keymap_translate_keyboard_state ().
  *
  * Returns: %TRUE if there were any entries
  **/
@@ -531,7 +531,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
  * 
  * Looks up the keyval mapped to a keycode/group/level triplet.
  * If no keyval is bound to @key, returns 0. For normal user input,
- * you want to use gdk_keymap_translate_keyboard_state() instead of
+ * you want to use gdk_keymap_translate_keyboard_state () instead of
  * this function, since the effective group/level may not be
  * the same as the current keyboard state.
  * 
@@ -570,7 +570,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * diff against the Xlib sources; don't reformat it.
  */
 Bool
-MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
+MyEnhancedXkbTranslateKeyCode (register XkbDescPtr     xkb,
                               KeyCode                 key,
                               register unsigned int   mods,
                               unsigned int *          mods_rtrn,
@@ -586,20 +586,20 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
     if (mods_rtrn!=NULL)
         *mods_rtrn = 0;
 
-    nKeyGroups= XkbKeyNumGroups(xkb,key);
+    nKeyGroups= XkbKeyNumGroups (xkb,key);
     if ((!XkbKeycodeInRange(xkb,key))||(nKeyGroups==0)) {
         if (keysym_rtrn!=NULL)
             *keysym_rtrn = NoSymbol;
         return False;
     }
 
-    syms = XkbKeySymsPtr(xkb,key);
+    syms = XkbKeySymsPtr (xkb,key);
 
     /* find the offset of the effective group */
     col = 0;
-    effectiveGroup= XkbGroupForCoreState(mods);
+    effectiveGroup= XkbGroupForCoreState (mods);
     if ( effectiveGroup>=nKeyGroups ) {
-        unsigned groupInfo= XkbKeyGroupInfo(xkb,key);
+        unsigned groupInfo= XkbKeyGroupInfo (xkb,key);
         switch (XkbOutOfRangeGroupAction(groupInfo)) {
             default:
                 effectiveGroup %= nKeyGroups;
@@ -608,14 +608,14 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                 effectiveGroup = nKeyGroups-1;
                 break;
             case XkbRedirectIntoRange:
-                effectiveGroup = XkbOutOfRangeGroupNumber(groupInfo);
+                effectiveGroup = XkbOutOfRangeGroupNumber (groupInfo);
                 if (effectiveGroup>=nKeyGroups)
                     effectiveGroup= 0;
                 break;
         }
     }
-    col= effectiveGroup*XkbKeyGroupsWidth(xkb,key);
-    type = XkbKeyKeyType(xkb,key,effectiveGroup);
+    col= effectiveGroup*XkbKeyGroupsWidth (xkb,key);
+    type = XkbKeyKeyType (xkb,key,effectiveGroup);
 
     preserve= 0;
     if (type->map) { /* find the column (shift level) within the group */
@@ -642,7 +642,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
     if (keysym_rtrn!=NULL)
         *keysym_rtrn= syms[col];
     if (mods_rtrn) {
-        *mods_rtrn= type->mods.mask&(~preserve);
+        *mods_rtrn= type->mods.mask& (~preserve);
 
         /* ---- Begin stuff GDK comments out of the original Xlib version ---- */
         /* This is commented out because xkb_info is a private struct */
@@ -689,7 +689,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
  * Translates the contents of a #GdkEventKey into a keyval, effective
  * group, and level. Modifiers that didn't affect the translation and
  * are thus available for application use are returned in
- * @unused_modifiers.  See gdk_keyval_get_keys() for an explanation of
+ * @unused_modifiers.  See gdk_keyval_get_keys () for an explanation of
  * groups and levels.  The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from

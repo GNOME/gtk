@@ -71,19 +71,19 @@
 
 #define MARK_CURRENT_FONT(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FONT) ? \
-         MARK_CURRENT_PROPERTY(mark)->font->gdk_font : \
+         MARK_CURRENT_PROPERTY (mark)->font->gdk_font : \
          GTK_WIDGET (text)->style->font)
 #define MARK_CURRENT_FORE(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FOREGROUND) ? \
-         &MARK_CURRENT_PROPERTY(mark)->fore_color : \
+         &MARK_CURRENT_PROPERTY (mark)->fore_color : \
          &((GtkWidget *)text)->style->text[((GtkWidget *)text)->state])
 #define MARK_CURRENT_BACK(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_BACKGROUND) ? \
-         &MARK_CURRENT_PROPERTY(mark)->back_color : \
+         &MARK_CURRENT_PROPERTY (mark)->back_color : \
          &((GtkWidget *)text)->style->base[((GtkWidget *)text)->state])
 #define MARK_CURRENT_TEXT_FONT(text, mark) \
   ((MARK_CURRENT_PROPERTY(mark)->flags & PROPERTY_FONT) ? \
-         MARK_CURRENT_PROPERTY(mark)->font : \
+         MARK_CURRENT_PROPERTY (mark)->font : \
          text->current_font)
 
 #define TEXT_LENGTH(t)              ((t)->text_end - (t)->gap_size)
@@ -1021,7 +1021,7 @@ gtk_text_insert (GtkText    *text,
 	  memcpy (chars_nt, chars, length);
 	  chars_nt[length] = 0;
 	}
-      numwcs = gdk_mbstowcs(text->text.wc + text->gap_position, 
+      numwcs = gdk_mbstowcs (text->text.wc + text->gap_position, 
 			    chars_nt, length);
       if (chars_nt != chars)
 	g_free(chars_nt);
@@ -1031,7 +1031,7 @@ gtk_text_insert (GtkText    *text,
   else
     {
       numwcs = length;
-      memcpy(text->text.ch + text->gap_position, chars, length);
+      memcpy (text->text.ch + text->gap_position, chars, length);
     }
  
   if (!text->freeze_count && (text->line_start_cache != NULL))
@@ -1140,10 +1140,10 @@ gtk_text_forward_delete (GtkText *text,
   
   if (text->point.index < old_editable->selection_start_pos)
     old_editable->selection_start_pos -= 
-      MIN(nchars, old_editable->selection_start_pos - text->point.index);
+      MIN (nchars, old_editable->selection_start_pos - text->point.index);
   if (text->point.index < old_editable->selection_end_pos)
     old_editable->selection_end_pos -= 
-      MIN(nchars, old_editable->selection_end_pos - text->point.index);
+      MIN (nchars, old_editable->selection_end_pos - text->point.index);
   /* We'll reset the cursor later anyways if we aren't frozen */
   if (text->point.index < text->cursor_mark.index)
     move_mark_n (&text->cursor_mark, 
@@ -1208,7 +1208,7 @@ gtk_text_get_chars (GtkOldEditable *old_editable,
       GdkWChar ch;
       ch = text->text.wc[end_pos];
       text->text.wc[end_pos] = 0;
-      retval = gdk_wcstombs(text->text.wc + start_pos);
+      retval = gdk_wcstombs (text->text.wc + start_pos);
       text->text.wc[end_pos] = ch;
     }
   else
@@ -2340,7 +2340,7 @@ fetch_lines_iterator (GtkText* text, LineParams* lp, void* data)
       break;
     case FetchLinesPixels:
       
-      fldata->data += LINE_HEIGHT(*lp);
+      fldata->data += LINE_HEIGHT (*lp);
       
       if (fldata->data >= fldata->data_max)
 	return TRUE;
@@ -2398,15 +2398,15 @@ fetch_lines_forward (GtkText* text, gint line_count)
   GtkPropertyMark mark;
   GList* line = text->line_start_cache;
   
-  while(line->next)
+  while (line->next)
     line = line->next;
   
-  mark = CACHE_DATA(line).end;
+  mark = CACHE_DATA (line).end;
   
   if (LAST_INDEX (text, mark))
     return;
   
-  advance_mark(&mark);
+  advance_mark (&mark);
   
   line->next = fetch_lines (text, &mark, &CACHE_DATA(line).tab_cont_next, FetchLinesCount, line_count);
   
@@ -2432,7 +2432,7 @@ compute_lines_pixels (GtkText* text, guint char_count,
    */
   for (; line && chars_left >= 0; line = line->next)
     {
-      *pixels += LINE_HEIGHT(CACHE_DATA(line));
+      *pixels += LINE_HEIGHT (CACHE_DATA (line));
       
       if (line == text->current_line)
 	chars_left -= CACHE_DATA(line).end.index - text->point.index + 1;
@@ -2457,7 +2457,7 @@ total_line_height (GtkText* text, GList* line, gint line_count)
   
   for (; line && line_count > 0; line = line->next)
     {
-      height += LINE_HEIGHT(CACHE_DATA(line));
+      height += LINE_HEIGHT (CACHE_DATA (line));
       
       if (!text->line_wrap || !CACHE_DATA(line).wraps)
 	line_count -= 1;
@@ -2534,8 +2534,8 @@ correct_cache_delete (GtkText* text, gint nchars, gint lines)
   
   for (; cache; cache = cache->next)
     {
-      GtkPropertyMark *start = &CACHE_DATA(cache).start;
-      GtkPropertyMark *end = &CACHE_DATA(cache).end;
+      GtkPropertyMark *start = &CACHE_DATA (cache).start;
+      GtkPropertyMark *end = &CACHE_DATA (cache).end;
       
       start->index -= nchars;
       end->index -= nchars;
@@ -2552,8 +2552,8 @@ correct_cache_delete (GtkText* text, gint nchars, gint lines)
       if (end->property == text->point.property)
 	end->offset = end->index - (text->point.index - text->point.offset);
       
-      /*TEXT_ASSERT_MARK(text, start, "start");*/
-      /*TEXT_ASSERT_MARK(text, end, "end");*/
+      /*TEXT_ASSERT_MARK (text, start, "start");*/
+      /*TEXT_ASSERT_MARK (text, end, "end");*/
     }
 }
 
@@ -2572,11 +2572,11 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
   
   correct_cache_delete (text, nchars, old_lines);
   
-  pixel_height = pixel_height_of(text, text->current_line) -
-    LINE_HEIGHT(CACHE_DATA(text->current_line));
+  pixel_height = pixel_height_of (text, text->current_line) -
+    LINE_HEIGHT (CACHE_DATA (text->current_line));
   
   if (CACHE_DATA(text->current_line).start.index == text->point.index)
-    CACHE_DATA(text->current_line).start = text->point;
+    CACHE_DATA (text->current_line).start = text->point;
   
   new_line = fetch_lines (text,
 			  &CACHE_DATA(text->current_line).start,
@@ -2639,7 +2639,7 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
     }
   
   TEXT_ASSERT (text);
-  TEXT_SHOW(text);
+  TEXT_SHOW (text);
 }
 
 /* note, the point has already been moved forward */
@@ -2669,7 +2669,7 @@ correct_cache_insert (GtkText* text, gint nchars)
    * line, we have to correct here, or fetch_lines will
    * fetch junk.
    */
-  start = &CACHE_DATA(text->current_line).start;
+  start = &CACHE_DATA (text->current_line).start;
 
   /* Check if if we split exactly at the beginning of the line:
    * (was_split won't be set if we are inserting at the end of the text, 
@@ -2686,15 +2686,15 @@ correct_cache_insert (GtkText* text, gint nchars)
   /* Now correct the offsets, and check for start or end marks that
    * are after the point, yet point to a property before the point's
    * property. This indicates that they are meant to point to the
-   * second half of a property we split in insert_text_property(), so
+   * second half of a property we split in insert_text_property (), so
    * we fix them up that way.  
    */
   cache = text->current_line->next;
   
   for (; cache; cache = cache->next)
     {
-      start = &CACHE_DATA(cache).start;
-      end = &CACHE_DATA(cache).end;
+      start = &CACHE_DATA (cache).start;
+      end = &CACHE_DATA (cache).end;
       
       if (LAST_INDEX (text, text->point) &&
 	  start->index == text->point.index)
@@ -2736,8 +2736,8 @@ correct_cache_insert (GtkText* text, gint nchars)
 	    }
 	}
       
-      /*TEXT_ASSERT_MARK(text, start, "start");*/
-      /*TEXT_ASSERT_MARK(text, end, "end");*/
+      /*TEXT_ASSERT_MARK (text, start, "start");*/
+      /*TEXT_ASSERT_MARK (text, end, "end");*/
     }
 }
 
@@ -2762,8 +2762,8 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
   
   TEXT_SHOW_ADJ (text, text->vadj, "vadj");
   
-  pixel_height = pixel_height_of(text, text->current_line) -
-    LINE_HEIGHT(CACHE_DATA(text->current_line));
+  pixel_height = pixel_height_of (text, text->current_line) -
+    LINE_HEIGHT (CACHE_DATA (text->current_line));
   
   new_lines = fetch_lines (text,
 			   &CACHE_DATA(text->current_line).start,
@@ -2830,7 +2830,7 @@ insert_expose (GtkText* text, guint old_pixels, gint nchars,
   
   TEXT_SHOW_ADJ (text, text->vadj, "vadj");
   TEXT_ASSERT (text);
-  TEXT_SHOW(text);
+  TEXT_SHOW (text);
 }
 
 /* Text property functions */
@@ -2866,7 +2866,7 @@ get_text_font (GdkFont* gfont)
   tf->gdk_font = gfont;
   gdk_font_ref (gfont);
   
-  for(i = 0; i < 256; i += 1)
+  for (i = 0; i < 256; i += 1)
     tf->char_widths[i] = gdk_char_width (gfont, (char)i);
   
   g_hash_table_insert (font_cache_table, gfont, tf);
@@ -2994,7 +2994,7 @@ new_text_property (GtkText *text, GdkFont *font, GdkColor* fore,
 					     G_ALLOC_AND_FREE);
     }
   
-  prop = g_chunk_new(TextProperty, text_property_chunk);
+  prop = g_chunk_new (TextProperty, text_property_chunk);
 
   prop->flags = 0;
   if (font)
@@ -3077,7 +3077,7 @@ make_forward_space (GtkText* text, guint len)
 {
   if (text->gap_size < len)
     {
-      guint sum = MAX(2*len, MIN_GAP_SIZE) + text->text_end;
+      guint sum = MAX (2*len, MIN_GAP_SIZE) + text->text_end;
       
       if (sum >= text->text_len)
 	{
@@ -3118,8 +3118,8 @@ insert_text_property (GtkText* text, GdkFont* font,
 		      GdkColor *fore, GdkColor* back, guint len)
 {
   GtkPropertyMark *mark = &text->point;
-  TextProperty* forward_prop = MARK_CURRENT_PROPERTY(mark);
-  TextProperty* backward_prop = MARK_PREV_PROPERTY(mark);
+  TextProperty* forward_prop = MARK_CURRENT_PROPERTY (mark);
+  TextProperty* backward_prop = MARK_PREV_PROPERTY (mark);
   
   if (MARK_OFFSET(mark) == 0)
     {
@@ -3296,9 +3296,9 @@ delete_text_property (GtkText* text, guint nchars)
   GList        *tmp;
   gint          is_first;
   
-  for(; nchars; nchars -= 1)
+  for (; nchars; nchars -= 1)
     {
-      prop = MARK_CURRENT_PROPERTY(&text->point);
+      prop = MARK_CURRENT_PROPERTY (&text->point);
       
       prop->length -= 1;
       
@@ -3339,13 +3339,13 @@ delete_text_property (GtkText* text, guint nchars)
       (MARK_PREV_LIST_PTR(&text->point) != NULL))
     {
       tmp = MARK_LIST_PTR (&text->point);
-      prop = MARK_CURRENT_PROPERTY(&text->point);
+      prop = MARK_CURRENT_PROPERTY (&text->point);
       
       MARK_LIST_PTR (&text->point) = MARK_PREV_LIST_PTR (&text->point);
-      MARK_CURRENT_PROPERTY(&text->point)->length += 1;
-      MARK_NEXT_LIST_PTR(&text->point) = NULL;
+      MARK_CURRENT_PROPERTY (&text->point)->length += 1;
+      MARK_NEXT_LIST_PTR (&text->point) = NULL;
       
-      text->point.offset = MARK_CURRENT_PROPERTY(&text->point)->length - 1;
+      text->point.offset = MARK_CURRENT_PROPERTY (&text->point)->length - 1;
       
       if (GTK_WIDGET_REALIZED (text))
 	unrealize_property (text, prop);
@@ -3360,7 +3360,7 @@ init_properties (GtkText *text)
 {
   if (!text->text_properties)
     {
-      text->text_properties = g_list_alloc();
+      text->text_properties = g_list_alloc ();
       text->text_properties->next = NULL;
       text->text_properties->prev = NULL;
       text->text_properties->data = new_text_property (text, NULL, NULL, NULL, 1);
@@ -3381,9 +3381,9 @@ static void
 move_mark_n (GtkPropertyMark* mark, gint n)
 {
   if (n > 0)
-    advance_mark_n(mark, n);
+    advance_mark_n (mark, n);
   else if (n < 0)
-    decrement_mark_n(mark, -n);
+    decrement_mark_n (mark, -n);
 }
 
 static void
@@ -3411,7 +3411,7 @@ advance_mark_n (GtkPropertyMark* mark, gint n)
   g_assert (n > 0);
 
   i = 0;			/* otherwise it migth not be init. */
-  prop = MARK_CURRENT_PROPERTY(mark);
+  prop = MARK_CURRENT_PROPERTY (mark);
 
   if ((prop->length - mark->offset - 1) < n) { /* if we need to change prop. */
     /* to make it easier */
@@ -3621,7 +3621,7 @@ find_char_width (GtkText* text, const GtkPropertyMark *mark, const TabStopMark *
     }
   else
     {
-      return gdk_char_width_wc(MARK_CURRENT_TEXT_FONT(text, mark)->gdk_font, ch);
+      return gdk_char_width_wc (MARK_CURRENT_TEXT_FONT (text, mark)->gdk_font, ch);
     }
 }
 
@@ -3709,7 +3709,7 @@ find_mouse_cursor_at_line (GtkText *text, const LineParams* lp,
   GtkPropertyMark mark     = lp->start;
   TabStopMark  tab_mark = lp->tab_cont.tab_start;
   
-  gint char_width = find_char_width(text, &mark, &tab_mark);
+  gint char_width = find_char_width (text, &mark, &tab_mark);
   gint pixel_width = LINE_START_PIXEL (*lp) + (char_width+1)/2;
   
   text->cursor_pos_y = line_pixel_height;
@@ -3756,7 +3756,7 @@ find_mouse_cursor (GtkText* text, gint x, gint y)
   
   for (; cache; cache = cache->next)
     {
-      pixel_height += LINE_HEIGHT(CACHE_DATA(cache));
+      pixel_height += LINE_HEIGHT (CACHE_DATA (cache));
       
       if (y < pixel_height || !cache->next)
 	{
@@ -4417,7 +4417,7 @@ static gint last_visible_line_height (GtkText* text)
       break;
   
   if (cache)
-    return pixel_height_of(text, cache) - 1;
+    return pixel_height_of (text, cache) - 1;
   else
     return 0;
 }
@@ -4425,7 +4425,7 @@ static gint last_visible_line_height (GtkText* text)
 static gint first_visible_line_height (GtkText* text)
 {
   if (text->first_cut_pixels)
-    return pixel_height_of(text, text->line_start_cache) + 1;
+    return pixel_height_of (text, text->line_start_cache) + 1;
   else
     return 1;
 }
@@ -4488,7 +4488,7 @@ scroll_down (GtkText* text, gint diff0)
       gint cursor_min;
       
       text->cursor_pos_y -= real_diff;
-      cursor_min = drawn_cursor_min(text);
+      cursor_min = drawn_cursor_min (text);
       
       if (cursor_min < 0)
 	find_mouse_cursor (text, text->cursor_pos_x,
@@ -4558,7 +4558,7 @@ scroll_up (GtkText* text, gint diff0)
       gint height;
       
       text->cursor_pos_y += real_diff;
-      cursor_max = drawn_cursor_max(text);
+      cursor_max = drawn_cursor_max (text);
       gdk_window_get_size (text->text_area, NULL, &height);
       
       if (cursor_max >= height)
@@ -4717,7 +4717,7 @@ find_line_params (GtkText* text,
       lp.font_descent = MAX (font->descent, lp.font_descent);
       lp.pixel_width  += ch_width;
       
-      advance_mark(&lp.end);
+      advance_mark (&lp.end);
       advance_tab_mark (text, &tab_mark, ch);
     }
   
@@ -4774,9 +4774,9 @@ draw_bg_rect (GtkText* text, GtkPropertyMark *mark,
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
 
   if ((mark->index >= MIN(old_editable->selection_start_pos, old_editable->selection_end_pos) &&
-       mark->index < MAX(old_editable->selection_start_pos, old_editable->selection_end_pos)))
+       mark->index < MAX (old_editable->selection_start_pos, old_editable->selection_end_pos)))
     {
-      gtk_paint_flat_box(GTK_WIDGET(text)->style, text->text_area,
+      gtk_paint_flat_box (GTK_WIDGET (text)->style, text->text_area,
 			 old_editable->has_selection ?
 			    GTK_STATE_SELECTED : GTK_STATE_ACTIVE, 
 			 GTK_SHADOW_NONE,
@@ -5070,9 +5070,9 @@ undraw_cursor (GtkText* text, gint absolute)
     {
       GdkFont* font;
       
-      g_assert(text->cursor_mark.property);
+      g_assert (text->cursor_mark.property);
 
-      font = MARK_CURRENT_FONT(text, &text->cursor_mark);
+      font = MARK_CURRENT_FONT (text, &text->cursor_mark);
 
       draw_bg_rect (text, &text->cursor_mark, 
 		    text->cursor_pos_x,
@@ -5101,9 +5101,9 @@ drawn_cursor_min (GtkText* text)
 {
   GdkFont* font;
   
-  g_assert(text->cursor_mark.property);
+  g_assert (text->cursor_mark.property);
   
-  font = MARK_CURRENT_FONT(text, &text->cursor_mark);
+  font = MARK_CURRENT_FONT (text, &text->cursor_mark);
   
   return text->cursor_pos_y - text->cursor_char_offset - font->ascent;
 }
@@ -5113,9 +5113,9 @@ drawn_cursor_max (GtkText* text)
 {
   GdkFont* font;
   
-  g_assert(text->cursor_mark.property);
+  g_assert (text->cursor_mark.property);
   
-  font = MARK_CURRENT_FONT(text, &text->cursor_mark);
+  font = MARK_CURRENT_FONT (text, &text->cursor_mark);
   
   return text->cursor_pos_y - text->cursor_char_offset;
 }
@@ -5224,7 +5224,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 	    }
 	}
       
-      pixels += LINE_HEIGHT(CACHE_DATA(cache));
+      pixels += LINE_HEIGHT (CACHE_DATA (cache));
       
       if (!cache->next)
 	{
@@ -5277,7 +5277,7 @@ gtk_text_update_text (GtkOldEditable    *old_editable,
       else
 	break;
       
-      pixels += LINE_HEIGHT(CACHE_DATA(cache));
+      pixels += LINE_HEIGHT (CACHE_DATA (cache));
       
       if (!cache->next)
 	{
@@ -5304,7 +5304,7 @@ recompute_geometry (GtkText* text)
   
   mark = start_mark = set_vertical_scroll (text);
 
-  /* We need a real start of a line when calling fetch_lines().
+  /* We need a real start of a line when calling fetch_lines ().
    * not the start of a wrapped line.
    */
   while (mark.index > 0 &&
@@ -5363,10 +5363,10 @@ gtk_text_set_selection  (GtkOldEditable  *old_editable,
   if (end < 0)
     end = TEXT_LENGTH (text);
   
-  start1 = MIN(start,end);
-  end1 = MAX(start,end);
-  start2 = MIN(old_editable->selection_start_pos, old_editable->selection_end_pos);
-  end2 = MAX(old_editable->selection_start_pos, old_editable->selection_end_pos);
+  start1 = MIN (start,end);
+  end1 = MAX (start,end);
+  start2 = MIN (old_editable->selection_start_pos, old_editable->selection_end_pos);
+  end2 = MAX (old_editable->selection_start_pos, old_editable->selection_end_pos);
   
   if (start2 < start1)
     {
@@ -5402,14 +5402,14 @@ static void
 gtk_text_show_cache_line (GtkText *text, GList *cache,
 			  const char* what, const char* func, gint line)
 {
-  LineParams *lp = &CACHE_DATA(cache);
+  LineParams *lp = &CACHE_DATA (cache);
   gint i;
   
   if (cache == text->line_start_cache)
     g_message ("Line Start Cache: ");
   
   if (cache == text->current_line)
-    g_message("Current Line: ");
+    g_message ("Current Line: ");
   
   g_message ("%s:%d: cache line %s s=%d,e=%d,lh=%d (",
 	     func,
@@ -5477,9 +5477,9 @@ gtk_text_assert (GtkText         *text,
   
   for (; cache; cache = cache->next)
     {
-      after_mark = &CACHE_DATA(cache).end;
+      after_mark = &CACHE_DATA (cache).end;
       gtk_text_assert_mark (text, &CACHE_DATA(cache).start, before_mark, after_mark, msg, "start", line);
-      before_mark = &CACHE_DATA(cache).start;
+      before_mark = &CACHE_DATA (cache).start;
       
       if (cache->next)
 	after_mark = &CACHE_DATA(cache->next).start;
@@ -5487,7 +5487,7 @@ gtk_text_assert (GtkText         *text,
 	after_mark = NULL;
       
       gtk_text_assert_mark (text, &CACHE_DATA(cache).end, before_mark, after_mark, msg, "end", line);
-      before_mark = &CACHE_DATA(cache).end;
+      before_mark = &CACHE_DATA (cache).end;
     }
 }
 

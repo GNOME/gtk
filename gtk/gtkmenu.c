@@ -335,7 +335,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   g_return_if_fail (GTK_IS_WIDGET (attach_widget));
   g_return_if_fail (detacher != NULL);
   
-  /* keep this function in sync with gtk_widget_set_parent()
+  /* keep this function in sync with gtk_widget_set_parent ()
    */
   
   data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
@@ -384,7 +384,7 @@ gtk_menu_detach (GtkMenu *menu)
   g_return_if_fail (menu != NULL);
   g_return_if_fail (GTK_IS_MENU (menu));
   
-  /* keep this function in sync with gtk_widget_unparent()
+  /* keep this function in sync with gtk_widget_unparent ()
    */
   data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
   if (!data)
@@ -405,7 +405,7 @@ gtk_menu_detach (GtkMenu *menu)
 }
 
 void 
-gtk_menu_remove(GtkContainer *container,
+gtk_menu_remove (GtkContainer *container,
 	        GtkWidget    *widget)
 {
   GtkMenu *menu;
@@ -512,7 +512,7 @@ gtk_menu_popup (GtkMenu		    *menu,
    * until we get a MOTION_NOTIFY.  
    */
 
-  current_event = gtk_get_current_event();
+  current_event = gtk_get_current_event ();
   if (current_event)
     {
       if ((current_event->type != GDK_BUTTON_PRESS) &&
@@ -781,7 +781,7 @@ gtk_menu_scrollbar_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_menu_set_tearoff_hints(GtkMenu *menu,
+gtk_menu_set_tearoff_hints (GtkMenu *menu,
 			   gint     width)
 {
   GdkGeometry geometry_hints;
@@ -1999,7 +1999,7 @@ gtk_menu_position (GtkMenu *menu)
   if (scroll_offset > 0)
     scroll_offset += MENU_SCROLL_ARROW_HEIGHT;
   
-  /* FIXME: The MAX() here is because gtk_widget_set_uposition
+  /* FIXME: The MAX () here is because gtk_widget_set_uposition
    * is broken. Once we provide an alternate interface that
    * allows negative values, then we can remove them.
    */

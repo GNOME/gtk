@@ -703,7 +703,7 @@ gtk_drag_finish (GdkDragContext *context,
 		 guint32         time)
 {
   GdkAtom target = GDK_NONE;
-  GdkDisplay *display = gdk_window_get_display(context->source_window);
+  GdkDisplay *display = gdk_window_get_display (context->source_window);
 
   g_return_if_fail (context != NULL);
 
@@ -967,7 +967,7 @@ gtk_drag_dest_get_target_list (GtkWidget *widget)
  * 
  * Sets the target types that this widget can accept from drag-and-drop.
  * The widget must first be made into a drag destination with
- * gtk_drag_dest_set().
+ * gtk_drag_dest_set ().
  **/
 void
 gtk_drag_dest_set_target_list (GtkWidget      *widget,
@@ -1101,7 +1101,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * Looks for a match between @context->targets and the
  * @dest_target_list, returning the first matching target, otherwise
  * returning %GDK_NONE. @dest_target_list should usually be the return
- * value from gtk_drag_dest_get_target_list(), but some widgets may
+ * value from gtk_drag_dest_get_target_list (), but some widgets may
  * have different valid targets for different parts of the widget; in
  * that case, they will have to implement a drag_motion handler that
  * passes the correct target list to this function.
@@ -1757,7 +1757,7 @@ gtk_drag_begin (GtkWidget         *widget,
   g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
   g_return_val_if_fail (target_list != NULL, NULL);
 
-  root_window = gdk_screen_get_root_window(widget->screen);
+  root_window = gdk_screen_get_root_window (widget->screen);
 
   if (event)
     time = gdk_event_get_time (event);
@@ -2300,7 +2300,7 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
 				 guint32            time)
 {
   GList *tmp_list;
-  GdkDisplay *display = gdk_screen_get_display(info->widget->screen);
+  GdkDisplay *display = gdk_screen_get_display (info->widget->screen);
 
   tmp_list = info->selections;
   while (tmp_list)
@@ -2809,11 +2809,11 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 {
   GdkEvent send_event;
   GtkWidget *source_widget = info->widget;
-  GdkWindow *root_window = gdk_screen_get_root_window(source_widget->screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (source_widget->screen);
 
   gdk_display_pointer_ungrab (gdk_window_get_display(source_widget->window),
 				  time);
-  gdk_display_keyboard_ungrab(gdk_window_get_display(source_widget->window),
+  gdk_display_keyboard_ungrab (gdk_window_get_display (source_widget->window),
 				  time);
   gtk_grab_remove (info->ipc_widget);
 
@@ -2826,8 +2826,8 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 
   /* Send on a release pair to the the original 
    * widget to convince it to release its grab. We need to
-   * call gtk_propagate_event() here, instead of 
-   * gtk_widget_event() because widget like GtkList may
+   * call gtk_propagate_event () here, instead of 
+   * gtk_widget_event () because widget like GtkList may
    * expect propagation.
    */
 
@@ -2862,7 +2862,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
   gint x_root, y_root;
-  GdkWindow *root_window = gdk_screen_get_root_window(widget->screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (widget->screen);
 
 
   if (event->is_hint)
@@ -2892,7 +2892,7 @@ gtk_drag_key_cb (GtkWidget         *widget,
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
   GdkModifierType state;
-  GdkWindow *root_window = gdk_screen_get_root_window(widget->screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (widget->screen);
   
   if (event->type == GDK_KEY_PRESS)
     {

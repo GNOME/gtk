@@ -524,7 +524,7 @@ gtk_list_unmap (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 			  gdk_window_get_display(widget->window)) &&
       GTK_WIDGET_HAS_GRAB (list))
     {
@@ -679,7 +679,7 @@ gtk_list_button_press (GtkWidget      *widget,
 	  gtk_grab_add (widget);
 	  list->drag_selection = TRUE;
 	}
-      else if (gdk_display_is_pointer_grabbed (
+      else if (gdk_display_pointer_is_grabbed (
 			  gdk_window_get_display(widget->window)) && 
 	       GTK_WIDGET_HAS_GRAB (list))
 	gtk_list_end_drag_selection (list);
@@ -1516,7 +1516,7 @@ gtk_list_select_all (GtkList *list)
   if (!list->children)
     return;
   
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
       GTK_WIDGET_HAS_GRAB (list))
     gtk_list_end_drag_selection (list);
@@ -1577,7 +1577,7 @@ gtk_list_unselect_all (GtkList *list)
   if (!list->children)
     return;
 
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) &&
       GTK_WIDGET_HAS_GRAB (list))
     gtk_list_end_drag_selection (list);
@@ -1624,7 +1624,7 @@ gtk_list_extend_selection (GtkList       *list,
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if ((gdk_display_is_pointer_grabbed (
+  if ((gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) &&
       GTK_WIDGET_HAS_GRAB (list)) ||
       list->selection_mode != GTK_SELECTION_EXTENDED)
@@ -1679,7 +1679,7 @@ gtk_list_start_selection (GtkList *list)
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
       GTK_WIDGET_HAS_GRAB (list))
     return;
@@ -1705,7 +1705,7 @@ gtk_list_end_selection (GtkList *list)
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if ((gdk_display_is_pointer_grabbed (
+  if ((gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
        GTK_WIDGET_HAS_GRAB (list)) ||
       list->anchor < 0)
@@ -1831,7 +1831,7 @@ gtk_list_toggle_focus_row (GtkList *list)
 
   container = GTK_CONTAINER (list);
 
-  if ((gdk_display_is_pointer_grabbed (
+  if ((gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
       GTK_WIDGET_HAS_GRAB (list)) ||
       !container->focus_child)
@@ -1877,7 +1877,7 @@ gtk_list_toggle_add_mode (GtkList *list)
   g_return_if_fail (list != 0);
   g_return_if_fail (GTK_IS_LIST (list));
   
-  if ((gdk_display_is_pointer_grabbed (
+  if ((gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
       GTK_WIDGET_HAS_GRAB (list)) ||
       list->selection_mode != GTK_SELECTION_EXTENDED)
@@ -1906,7 +1906,7 @@ gtk_list_undo_selection (GtkList *list)
   g_return_if_fail (GTK_IS_LIST (list));
 
   if (list->selection_mode != GTK_SELECTION_EXTENDED ||
-      (gdk_display_is_pointer_grabbed (
+      (gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
        GTK_WIDGET_HAS_GRAB (list)))
     return;
@@ -2189,7 +2189,7 @@ gtk_list_scroll_horizontal (GtkList       *list,
   g_return_if_fail (list != 0);
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
       GTK_WIDGET_HAS_GRAB (list))
     return;
@@ -2238,7 +2238,7 @@ gtk_list_scroll_vertical (GtkList       *list,
   g_return_if_fail (list != NULL);
   g_return_if_fail (GTK_IS_LIST (list));
 
-  if (gdk_display_is_pointer_grabbed (
+  if (gdk_display_pointer_is_grabbed (
 	  gdk_window_get_display(GTK_WIDGET(list)->window)) && 
       GTK_WIDGET_HAS_GRAB (list))
     return;

@@ -33,7 +33,7 @@
 #include "gtkwidget.h"
 #include "gtkthemes.h"
 #include "gtkiconfactory.h"
-#include "gtksettings.h"	/* _gtk_settings_parse_convert() */
+#include "gtksettings.h"	/* _gtk_settings_parse_convert () */
 #include "gdk/gdkscreen.h"
 #include "gdk/gdkdisplay.h"
 #include "gdk/gdkdisplaymgr.h"
@@ -53,10 +53,10 @@ typedef struct {
 
 
 /* --- prototypes --- */
-static void	 gtk_style_init			(GtkStyle	*style);
-static void	 gtk_style_class_init		(GtkStyleClass	*klass);
-static void	 gtk_style_finalize		(GObject	*object);
-static void	 gtk_style_realize		(GtkStyle	*style,
+static void	 gtk_style_init			 (GtkStyle	*style);
+static void	 gtk_style_class_init		 (GtkStyleClass	*klass);
+static void	 gtk_style_finalize		 (GObject	*object);
+static void	 gtk_style_realize		 (GtkStyle	*style,
 						 GdkColormap	*colormap);
 static void      gtk_style_real_realize        (GtkStyle	*style);
 static void      gtk_style_real_unrealize      (GtkStyle	*style);
@@ -306,13 +306,13 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            width,
                                           gint            height);
 
-static void gtk_style_shade		(GdkColor	 *a,
+static void gtk_style_shade		 (GdkColor	 *a,
 					 GdkColor	 *b,
 					 gdouble	  k);
-static void rgb_to_hls			(gdouble	 *r,
+static void rgb_to_hls			 (gdouble	 *r,
 					 gdouble	 *g,
 					 gdouble	 *b);
-static void hls_to_rgb			(gdouble	 *h,
+static void hls_to_rgb			 (gdouble	 *h,
 					 gdouble	 *l,
 					 gdouble	 *s);
 
@@ -428,7 +428,7 @@ typedef struct {
 static GdkFont * 
 gtk_style_default_font_add (GdkDisplay *display)
 {
-  GtkStyleDefaultFont *default_style_font = g_new0(GtkStyleDefaultFont,1);
+  GtkStyleDefaultFont *default_style_font = g_new0 (GtkStyleDefaultFont,1);
   default_style_font->default_font = 
     gdk_font_from_description_for_display (display,
 		  	     pango_font_description_from_string ("Sans 10"));
@@ -448,7 +448,7 @@ static GdkFont*
 gtk_style_default_font_get (GdkDisplay *display)
 {
   GSList *tmp = default_font_list;
-  while(default_font_list)
+  while (default_font_list)
   {
     if(((GtkStyleDefaultFont*)tmp->data)->display == display)
       return ((GtkStyleDefaultFont*)tmp->data)->default_font;
@@ -673,7 +673,7 @@ gtk_style_new_for_display (GdkDisplay *display)
   style = g_object_new (GTK_TYPE_STYLE, NULL);
   
   style->font_desc = pango_font_description_from_string ("Sans 10");
-  style->font = gtk_style_default_font_get(display);
+  style->font = gtk_style_default_font_get (display);
   style->display = display;
   gdk_font_ref (style->font);
   return style;
@@ -682,8 +682,8 @@ gtk_style_new_for_display (GdkDisplay *display)
 GtkStyle*
 gtk_style_new (void)
 {
-  GTK_NOTE(MULTIHEAD, g_message("Use gtk_style_new_for_display instead\n"));
-  return gtk_style_new_for_display(gdk_get_default_display());
+  GTK_NOTE (MULTIHEAD, g_message ("Use gtk_style_new_for_display instead\n"));
+  return gtk_style_new_for_display (gdk_get_default_display ());
 }
 
 /*************************************************************
@@ -1445,7 +1445,7 @@ gtk_style_real_realize (GtkStyle *style)
     }
   else if (style->font->type == GDK_FONT_FONTSET)
     {
-      gc_values.font = gtk_style_default_font_get(gdk_screen_get_display(style->colormap->screen));
+      gc_values.font = gtk_style_default_font_get (gdk_screen_get_display (style->colormap->screen));
     }
   
   gc_values.foreground = style->black;

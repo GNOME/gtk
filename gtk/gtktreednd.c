@@ -265,7 +265,7 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
  * get memory corruption. In the #GtkTreeDragDest drag_data_received handler,
  * you can assume that selection data of type %GTK_TREE_MODEL_ROW is
  * in from the current process. The returned path must be freed with
- * gtk_tree_path_free().
+ * gtk_tree_path_free ().
  * 
  * Return value: %TRUE if @selection_data had target type %GTK_TREE_MODEL_ROW and
  *  is otherwise valid

@@ -948,7 +948,7 @@ paint_ring (GtkHSV      *hsv,
     {
       p = buf + yy * width * 3;
       
-      dy = -(yy + y - center);
+      dy = - (yy + y - center);
       
       for (xx = 0; xx < width; xx++)
 	{

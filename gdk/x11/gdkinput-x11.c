@@ -27,20 +27,20 @@
 #include "gdkinputprivate.h"
 #include "gdkinternals.h"
 #include "gdkx.h"
-#include "gdk.h"		/* For gdk_error_trap_push()/pop() */
+#include "gdk.h"		/* For gdk_error_trap_push ()/pop () */
 
 #include <string.h>
 
 /* Forward declarations */
-static GdkDevicePrivate *gdk_input_device_new(XDeviceInfo *device, 
+static GdkDevicePrivate *gdk_input_device_new (XDeviceInfo *device, 
 					      gint include_core);
-static void gdk_input_translate_coordinates(GdkDevicePrivate *gdkdev,
+static void gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 					    GdkInputWindow   *input_window,
 					    gint             *axis_data,
 					    gdouble          *axis_out,
 					    gdouble          *x_out,
 					    gdouble          *y_out);
-static guint gdk_input_translate_state(guint state, guint device_state);
+static guint gdk_input_translate_state (guint state, guint device_state);
 
 /* Global variables */
 
@@ -60,7 +60,7 @@ gdk_input_find_device (guint32 id)
 }
 
 void
-gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_ret,
+gdk_input_get_root_relative_geometry (Display *dpy, Window w, int *x_ret, int *y_ret,
 				     int *width_ret, int *height_ret)
 {
   Window root, parent, child;
@@ -72,7 +72,7 @@ gdk_input_get_root_relative_geometry(Display *dpy, Window w, int *x_ret, int *y_
    
   XQueryTree (dpy, w, &root, &parent, &children, &nchildren);
   if (children)
-    XFree(children);
+    XFree (children);
   
   XGetGeometry (dpy, w, &root, &x, &y, &width, &height, &border_widthc, &depthc);
 
@@ -96,7 +96,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   XAnyClassPtr class;
   gint i,j;
 
-  gdkdev = g_new(GdkDevicePrivate,1);
+  gdkdev = g_new (GdkDevicePrivate,1);
 
   gdkdev->deviceid = device->id;
   if (device->name[0])
@@ -127,7 +127,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   else
     gdkdev->info.source = GDK_SOURCE_PEN;
 
-  g_free(tmp_name);
+  g_free (tmp_name);
 
   gdkdev->xdevice = NULL;
 
@@ -218,7 +218,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
   if (device->use != IsXPointer)
     {
       gdk_error_trap_push ();
-      gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->deviceid);
+      gdkdev->xdevice = XOpenDevice (gdk_display, gdkdev->deviceid);
 
       /* return NULL if device is not ready */
       if (gdk_error_trap_pop ())
@@ -251,7 +251,7 @@ gdk_input_device_new (XDeviceInfo *device, gint include_core)
 }
 
 void
-gdk_input_common_find_events(GdkWindow *window,
+gdk_input_common_find_events (GdkWindow *window,
 			     GdkDevicePrivate *gdkdev,
 			     gint mask,
 			     XEventClass *classes,
@@ -353,16 +353,16 @@ gdk_input_common_find_events(GdkWindow *window,
 }
 
 void
-gdk_input_common_select_events(GdkWindow *window,
+gdk_input_common_select_events (GdkWindow *window,
 			       GdkDevicePrivate *gdkdev)
 {
   XEventClass classes[GDK_MAX_DEVICE_CLASSES];
   gint num_classes;
 
   if (gdkdev->info.mode == GDK_MODE_DISABLED)
-    gdk_input_common_find_events(window, gdkdev, 0, classes, &num_classes);
+    gdk_input_common_find_events (window, gdkdev, 0, classes, &num_classes);
   else
-    gdk_input_common_find_events(window, gdkdev, 
+    gdk_input_common_find_events (window, gdkdev, 
 				 ((GdkWindowObject *)window)->extension_events,
 				 classes, &num_classes);
   
@@ -372,7 +372,7 @@ gdk_input_common_select_events(GdkWindow *window,
 }
 
 gint 
-gdk_input_common_init(gint include_core)
+gdk_input_common_init (gint include_core)
 {
   char **extensions;
   XDeviceInfo   *devices;
@@ -382,25 +382,25 @@ gdk_input_common_init(gint include_core)
 
   /* Init XInput extension */
   
-  extensions = XListExtensions(display, &num_extensions);
+  extensions = XListExtensions (display, &num_extensions);
   for (loop = 0; loop < num_extensions &&
 	 (strcmp(extensions[loop], "XInputExtension") != 0); loop++);
-  XFreeExtensionList(extensions);
+  XFreeExtensionList (extensions);
   gdk_input_devices = NULL;
   if (loop < num_extensions)
     {
       /* XInput extension found */
 
-      devices = XListInputDevices(display, &num_devices);
+      devices = XListInputDevices (display, &num_devices);
   
-      for(loop=0; loop<num_devices; loop++)
+      for (loop=0; loop<num_devices; loop++)
 	{
 	  GdkDevicePrivate *gdkdev = gdk_input_device_new(&devices[loop],
 						      include_core);
 	  if (gdkdev)
 	    gdk_input_devices = g_list_append(gdk_input_devices, gdkdev);
 	}
-      XFreeDeviceList(devices);
+      XFreeDeviceList (devices);
     }
 
   gdk_input_devices = g_list_append (gdk_input_devices, gdk_core_pointer);
@@ -448,8 +448,8 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 
   if (gdkdev->info.mode == GDK_MODE_SCREEN) 
     {
-      x_scale = gdk_screen_get_width(gdk_window_get_screen(input_window->window)) / device_width;
-      y_scale = gdk_screen_get_height(gdk_window_get_screen(input_window->window)) / device_height;
+      x_scale = gdk_screen_get_width (gdk_window_get_screen (input_window->window)) / device_width;
+      y_scale = gdk_screen_get_height (gdk_window_get_screen (input_window->window)) / device_height;
 
       x_offset = - input_window->root_x;
       y_offset = - input_window->root_y;
@@ -513,7 +513,7 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
  * Any button remapping should go on here.
  */
 static guint
-gdk_input_translate_state(guint state, guint device_state)
+gdk_input_translate_state (guint state, guint device_state)
 {
   return device_state | (state & 0xFF);
 }
@@ -548,7 +548,7 @@ gdk_input_common_other_event (GdkEvent         *event,
       gdk_input_translate_coordinates (gdkdev,input_window, xdbe->axis_data,
 				       event->button.axes, 
 				       &event->button.x,&event->button.y);
-      event->button.state = gdk_input_translate_state(xdbe->state,xdbe->device_state);
+      event->button.state = gdk_input_translate_state (xdbe->state,xdbe->device_state);
       event->button.button = xdbe->button;
 
       GDK_NOTE (EVENTS,
@@ -597,7 +597,7 @@ gdk_input_common_other_event (GdkEvent         *event,
       event->key.window = input_window->window;
       event->key.time = xdke->time;
 
-      event->key.state = gdk_input_translate_state(xdke->state, xdke->device_state)
+      event->key.state = gdk_input_translate_state (xdke->state, xdke->device_state)
 	| gdkdev->info.keys[xdke->keycode - gdkdev->min_keycode].modifiers;
 
       /* Add a string translation for the key event */
@@ -629,14 +629,14 @@ gdk_input_common_other_event (GdkEvent         *event,
       event->motion.device = &gdkdev->info;
       
       event->motion.axes = g_new (gdouble, gdkdev->info.num_axes);
-      gdk_input_translate_coordinates(gdkdev,input_window,xdme->axis_data,
+      gdk_input_translate_coordinates (gdkdev,input_window,xdme->axis_data,
 				      event->motion.axes,
 				      &event->motion.x,&event->motion.y);
 
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = input_window->window;
       event->motion.time = xdme->time;
-      event->motion.state = gdk_input_translate_state(xdme->state,
+      event->motion.state = gdk_input_translate_state (xdme->state,
 						      xdme->device_state);
       event->motion.is_hint = xdme->is_hint;
 

@@ -259,7 +259,7 @@ gtk_pixmap_set_build_insensitive (GtkPixmap *pixmap, gboolean build)
 }
 
 static void
-build_insensitive_pixmap(GtkPixmap *gtkpixmap)
+build_insensitive_pixmap (GtkPixmap *gtkpixmap)
 {
   GdkPixmap *pixmap = gtkpixmap->pixmap;
   GdkPixmap *insensitive;

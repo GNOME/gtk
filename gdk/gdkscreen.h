@@ -6,10 +6,11 @@
 #include "gdk/gdkdisplay.h"
 
 #ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+extern "C"
+{
+#endif				/* __cplusplus */
 
-typedef struct _GdkScreenClass	GdkScreenClass;
+  typedef struct _GdkScreenClass GdkScreenClass;
 
 #define GDK_TYPE_SCREEN              (gdk_screen_get_type ())
 #define GDK_SCREEN(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN, GdkScreen))
@@ -20,52 +21,46 @@ typedef struct _GdkScreenClass	GdkScreenClass;
 
 
 
-struct _GdkScreen
-{
- GObject	parent_instance;
-};
+  struct _GdkScreen
+  {
+    GObject parent_instance;
+  };
 
-struct _GdkScreenClass 
-{
- GObjectClass 	    parent_class;
- GdkDisplay *	    (*get_display)		(GdkScreen * screen);
- gint 		    (*get_width)		(GdkScreen * screen);
- gint 		    (*get_height)		(GdkScreen * screen);
- gint 		    (*get_width_mm)		(GdkScreen * screen);
- gint 		    (*get_height_mm)		(GdkScreen * screen);
- gint 		    (*get_root_depth)		(GdkScreen * screen);
- gint		    (*get_screen_num)		(GdkScreen * screen);
- GdkWindow *	    (*get_root_window)		(GdkScreen * screen);
- GList *	    (*get_list_visuals)		(GdkScreen * screen);
- GdkColormap *	    (*get_default_colormap)	(GdkScreen * screen);
- void		    (*set_default_colormap)	(GdkScreen * screen,
-						 GdkColormap *colormap);
- GdkWindow *	    (*get_window_at_pointer)	(GdkScreen * screen,
-						 gint * win_x,
-						 gint * win_y);
-};
-GType 		    gdk_screen_get_type	(void);
-GdkScreen *	    gdk_screen_ref	(GdkScreen * screen);
-void		    gdk_screen_unref	(GdkScreen * screen);
+  struct _GdkScreenClass
+  {
+    GObjectClass parent_class;
+    GdkDisplay *(*get_display) (GdkScreen * screen);
+      gint (*get_width) (GdkScreen * screen);
+      gint (*get_height) (GdkScreen * screen);
+      gint (*get_width_mm) (GdkScreen * screen);
+      gint (*get_height_mm) (GdkScreen * screen);
+      gint (*get_root_depth) (GdkScreen * screen);
+      gint (*get_screen_num) (GdkScreen * screen);
+    GdkWindow *(*get_root_window) (GdkScreen * screen);
+    GdkColormap *(*get_default_colormap) (GdkScreen * screen);
+    void (*set_default_colormap) (GdkScreen * screen, GdkColormap * colormap);
+    GdkWindow *(*get_window_at_pointer) (GdkScreen * screen,
+					 gint * win_x, gint * win_y);
+  };
 
-GdkColormap *	    gdk_screen_get_default_colormap	(GdkScreen *screen);
-void		    gdk_screen_set_default_colormap	(GdkScreen *screen,
-							 GdkColormap *colormap);
-GdkWindow *	    gdk_screen_get_root_window		(GdkScreen *screen);
-GdkDisplay *	    gdk_screen_get_display		(GdkScreen *screen);
-gint		    gdk_screen_get_screen_num		(GdkScreen *screen);
-GList *		    gdk_screen_get_list_visuals		(GdkScreen *screen);
-GdkWindow *	    gdk_screen_get_window_at_pointer	(GdkScreen *screen,
-							 gint * win_x,
-							 gint * win_y);
+  GType gdk_screen_get_type (void);
 
-gint		    gdk_screen_get_width		(GdkScreen * screen);
-gint		    gdk_screen_get_height		(GdkScreen * screen);
-gint		    gdk_screen_get_width_mm		(GdkScreen * screen);
-gint		    gdk_screen_get_height_mm		(GdkScreen * screen);
+  GdkColormap *gdk_screen_get_default_colormap (GdkScreen * screen);
+  void gdk_screen_set_default_colormap (GdkScreen * screen,
+					GdkColormap * colormap);
+  GdkWindow *gdk_screen_get_root_window (GdkScreen * screen);
+  GdkDisplay *gdk_screen_get_display (GdkScreen * screen);
+  gint gdk_screen_get_number (GdkScreen * screen);
+  GdkWindow *gdk_screen_get_window_at_pointer (GdkScreen * screen,
+					       gint * win_x, gint * win_y);
+
+  gint gdk_screen_get_width (GdkScreen * screen);
+  gint gdk_screen_get_height (GdkScreen * screen);
+  gint gdk_screen_get_width_mm (GdkScreen * screen);
+  gint gdk_screen_get_height_mm (GdkScreen * screen);
 
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
-#endif /* __GDK_SCREEN_H__ */
+#endif				/* __cplusplus */
+#endif				/* __GDK_SCREEN_H__ */

@@ -53,7 +53,7 @@ static const gchar *visual_names[] = {
 #endif /* G_ENABLE_DEBUG */
 
 void
-_gdk_visual_init(GdkScreen * scr)
+_gdk_visual_init (GdkScreen * scr)
 {
   GdkScreenImplX11 *scr_impl = GDK_SCREEN_IMPL_X11 (scr);
 
@@ -263,9 +263,9 @@ gdk_visual_get_best_depth_for_screen (GdkScreen * scr)
 gint
 gdk_visual_get_best_depth (void)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_depth_for_screen instead\n"));
-  return gdk_visual_get_best_depth_for_screen(gdk_get_default_screen());
+  return gdk_visual_get_best_depth_for_screen (gdk_get_default_screen ());
 }
 GdkVisualType
 gdk_visual_get_best_type_for_screen (GdkScreen * scr)
@@ -275,9 +275,9 @@ gdk_visual_get_best_type_for_screen (GdkScreen * scr)
 GdkVisualType
 gdk_visual_get_best_type (void)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_type_for_screen instead\n"));
-  return gdk_visual_get_best_type_for_screen(gdk_get_default_screen());
+  return gdk_visual_get_best_type_for_screen (gdk_get_default_screen ());
 }
 GdkVisual *
 gdk_visual_get_system_for_screen (GdkScreen * scr)
@@ -287,9 +287,9 @@ gdk_visual_get_system_for_screen (GdkScreen * scr)
 GdkVisual*
 gdk_visual_get_system (void)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_visual_get_system_for_screen instead\n"));
-  return gdk_visual_get_system_for_screen(gdk_get_default_screen());
+  return gdk_visual_get_system_for_screen (gdk_get_default_screen ());
 }
 GdkVisual *
 gdk_visual_get_best_for_screen (GdkScreen * scr)
@@ -299,7 +299,7 @@ gdk_visual_get_best_for_screen (GdkScreen * scr)
 GdkVisual*
 gdk_visual_get_best (void)
 {
-  return gdk_visual_get_best_for_screen(gdk_get_default_screen());
+  return gdk_visual_get_best_for_screen (gdk_get_default_screen ());
 }
 GdkVisual *
 gdk_visual_get_best_with_depth_for_screen (GdkScreen * scr, gint depth)
@@ -320,7 +320,7 @@ gdk_visual_get_best_with_depth_for_screen (GdkScreen * scr, gint depth)
 GdkVisual*
 gdk_visual_get_best_with_depth (gint depth)
 {
-  return gdk_visual_get_best_with_depth_for_screen(gdk_get_default_screen(), depth);
+  return gdk_visual_get_best_with_depth_for_screen (gdk_get_default_screen (), depth);
 }
 GdkVisual *
 gdk_visual_get_best_with_type_for_screen (GdkScreen * scr,
@@ -343,9 +343,9 @@ gdk_visual_get_best_with_type_for_screen (GdkScreen * scr,
 GdkVisual*
 gdk_visual_get_best_with_type (GdkVisualType visual_type)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_with_type_for_screen instead\n"));	
-  return gdk_visual_get_best_with_type_for_screen(gdk_get_default_screen(), visual_type);
+  return gdk_visual_get_best_with_type_for_screen (gdk_get_default_screen (), visual_type);
 }
 GdkVisual *
 gdk_visual_get_best_with_both_for_screen (GdkScreen * scr,
@@ -371,9 +371,9 @@ GdkVisual*
 gdk_visual_get_best_with_both (gint          depth,
 			       GdkVisualType visual_type)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_visual_get_best_with_both_for_screen instead\n"));	
-  return gdk_visual_get_best_with_both_for_screen(gdk_get_default_screen(),
+  return gdk_visual_get_best_with_both_for_screen (gdk_get_default_screen (),
 						  depth,
 						  visual_type);
 }
@@ -389,9 +389,9 @@ void
 gdk_query_depths  (gint **depths,
 		   gint  *count)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_query_depths_for_screen instead\n"));
-  gdk_query_depths_for_screen(gdk_get_default_screen(), depths, count);
+  gdk_query_depths_for_screen (gdk_get_default_screen (), depths, count);
 }
 void
 gdk_query_visual_types_for_screen (GdkScreen * scr,
@@ -406,9 +406,9 @@ void
 gdk_query_visual_types (GdkVisualType **visual_types,
 			gint           *count)
 {
-  GDK_NOTE(MULTIHEAD,
+  GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_query_visual_types_for_screen instead\n"));
-  gdk_query_visual_types_for_screen(gdk_get_default_screen(), visual_types, count);
+  gdk_query_visual_types_for_screen (gdk_get_default_screen (), visual_types, count);
 }
 
 GList *
@@ -428,7 +428,7 @@ gdk_list_visuals_for_screen (GdkScreen * scr)
 GList*
 gdk_list_visuals (void)
 {
- return gdk_list_visuals_for_screen(gdk_get_default_screen());
+ return gdk_list_visuals_for_screen (gdk_get_default_screen ());
 }
 
 GdkVisual *
@@ -448,8 +448,8 @@ gdk_visual_lookup_for_screen (GdkScreen * scr, Visual * xvisual)
 GdkVisual*
 gdk_visual_lookup (Visual *xvisual)
 {
-  GDK_NOTE(MULTIHEAD, g_message("Use gdk_visual_lookup_for_screen instead\n"));
-  return gdk_visual_lookup_for_screen(gdk_get_default_screen(), xvisual);
+  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_visual_lookup_for_screen instead\n"));
+  return gdk_visual_lookup_for_screen (gdk_get_default_screen (), xvisual);
 }
 
 GdkVisual *
@@ -468,8 +468,8 @@ gdkx_visual_get_for_screen ( GdkScreen * scr, VisualID xvisualid)
 GdkVisual*
 gdkx_visual_get (VisualID xvisualid)
 {
-  GDK_NOTE(MULTIHEAD, g_message("Use gdkx_visual_get_for_screen instead\n"));
-  return gdkx_visual_get_for_screen(gdk_get_default_screen(), xvisualid);
+  GDK_NOTE (MULTIHEAD, g_message ("Use gdkx_visual_get_for_screen instead\n"));
+  return gdkx_visual_get_for_screen (gdk_get_default_screen (), xvisualid);
 }
 
 

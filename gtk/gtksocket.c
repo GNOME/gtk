@@ -179,7 +179,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
 	child_widget = GTK_WIDGET (socket->plug_window->user_data);
       */
 
-      g_warning("Stealing from same app not yet implemented");
+      g_warning ("Stealing from same app not yet implemented");
       
       socket->same_app = TRUE;
     }
@@ -817,8 +817,8 @@ gtk_socket_send_configure_event (GtkSocket *socket)
 
   event.xconfigure.x = 0;
   event.xconfigure.y = 0;
-  event.xconfigure.width = GTK_WIDGET(socket)->allocation.width;
-  event.xconfigure.height = GTK_WIDGET(socket)->allocation.height;
+  event.xconfigure.width = GTK_WIDGET (socket)->allocation.width;
+  event.xconfigure.height = GTK_WIDGET (socket)->allocation.height;
 
   event.xconfigure.border_width = 0;
   event.xconfigure.above = None;
@@ -886,7 +886,7 @@ send_xembed_message (GtkSocket *socket,
 		     glong      data2,
 		     guint32    time)
 {
-  GTK_NOTE(PLUGSOCKET,
+  GTK_NOTE (PLUGSOCKET,
 	   g_message ("GtkSocket: Sending XEMBED message of type %d", message));
   
   if (socket->plug_window)
@@ -962,7 +962,7 @@ handle_xembed_message (GtkSocket *socket,
       break;
       
     default:
-      GTK_NOTE(PLUGSOCKET,
+      GTK_NOTE (PLUGSOCKET,
 	       g_message ("GtkSocket: Ignoring unknown _XEMBED message of type %ld", message));
       break;
     }

@@ -134,11 +134,11 @@ struct _ColorSelectionPrivate
 };
 
 
-static void gtk_color_selection_init		(GtkColorSelection	 *colorsel);
-static void gtk_color_selection_class_init	(GtkColorSelectionClass	 *klass);
-static void gtk_color_selection_destroy		(GtkObject		 *object);
+static void gtk_color_selection_init		 (GtkColorSelection	 *colorsel);
+static void gtk_color_selection_class_init	 (GtkColorSelectionClass	 *klass);
+static void gtk_color_selection_destroy		 (GtkObject		 *object);
 static void gtk_color_selection_finalize        (GObject		 *object);
-static void update_color			(GtkColorSelection	 *colorsel);
+static void update_color			 (GtkColorSelection	 *colorsel);
 
 static gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
 static gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
@@ -404,7 +404,7 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
   wid = da->allocation.width;
   heig = da->allocation.height;
   
-  buf = g_new(guchar, 3 * wid * heig);
+  buf = g_new (guchar, 3 * wid * heig);
   
 #if 0
   i = COLORSEL_RED;
@@ -442,7 +442,7 @@ color_sample_draw_sample (GtkColorSelection *colorsel, int which)
 	}
     }
   
-  gdk_draw_rgb_image(da->window,
+  gdk_draw_rgb_image (da->window,
 		     da->style->black_gc,
 		     0, 0,
 		     wid, heig,
@@ -463,14 +463,14 @@ color_sample_draw_samples (GtkColorSelection *colorsel)
 }
 
 static void
-color_old_sample_expose(GtkWidget* da, GdkEventExpose* event, GtkColorSelection *colorsel)
+color_old_sample_expose (GtkWidget* da, GdkEventExpose* event, GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 0);
 }
 
 
 static void
-color_cur_sample_expose(GtkWidget* da, GdkEventExpose* event, GtkColorSelection *colorsel)
+color_cur_sample_expose (GtkWidget* da, GdkEventExpose* event, GtkColorSelection *colorsel)
 {
   color_sample_draw_sample (colorsel, 1);
 }
@@ -1079,7 +1079,7 @@ grab_color_at_mouse (GtkWidget *invisible,
   ColorSelectionPrivate *priv;
   GdkColor color;
   GdkColormap *colormap = gdk_colormap_get_system_for_screen (invisible->screen);
-  GdkWindow *root_window = gdk_screen_get_root_window(invisible->screen);
+  GdkWindow *root_window = gdk_screen_get_root_window (invisible->screen);
   
   priv = colorsel->private_data;
   
@@ -1246,7 +1246,7 @@ get_screen_color (GtkWidget *button)
                         picker_cursor,
                         gtk_get_current_event_time ()) != GDK_GRAB_SUCCESS)
     {
-      gdk_display_keyboard_ungrab(gdk_window_get_display(button->window),GDK_CURRENT_TIME);
+      gdk_display_keyboard_ungrab (gdk_window_get_display (button->window),GDK_CURRENT_TIME);
       g_warning ("Failed to grab pointer to do eyedropper");
       return;
     }
@@ -2122,7 +2122,7 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
  * Sets the current color to be @color.  The first time this is called, it will
  * also set the original color to be @color too.
  *
- * This function is deprecated, use gtk_color_selection_set_current_color() instead.
+ * This function is deprecated, use gtk_color_selection_set_current_color () instead.
  *
  **/
 void
@@ -2164,7 +2164,7 @@ gtk_color_selection_set_color (GtkColorSelection    *colorsel,
  *
  * Sets @color to be the current color in the GtkColorSelection widget.
  *
- * This function is deprecated, use gtk_color_selection_get_current_color() instead.
+ * This function is deprecated, use gtk_color_selection_get_current_color () instead.
  **/
 void
 gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
@@ -2475,7 +2475,7 @@ gtk_color_selection_is_adjusting (GtkColorSelection *colorsel)
  * @n_colors: return location for length of array
  * 
  * Parses a color palette string; the string is a colon-separated
- * list of color names readable by gdk_color_parse().
+ * list of color names readable by gdk_color_parse ().
  * 
  * Return value: %TRUE if a palette was successfully parsed
  **/

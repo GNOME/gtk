@@ -428,7 +428,7 @@ gtk_label_new (const gchar *str)
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  * The mnemonic key can be used to activate another widget, chosen automatically,
- * or explicitly using gtk_label_set_mnemonic_widget().
+ * or explicitly using gtk_label_set_mnemonic_widget ().
  **/
 GtkWidget*
 gtk_label_new_with_mnemonic (const gchar *str)
@@ -516,8 +516,8 @@ gtk_label_hierarchy_changed (GtkWidget *widget)
  * @widget: the target #GtkWidget 
  *
  * If the label has been set so that it has an mnemonic key (using
- * i.e.  gtk_label_set_markup_with_mnemonic(),
- * gtk_label_set_text_with_mnemonic(), gtk_label_new_with_mnemonic()
+ * i.e.  gtk_label_set_markup_with_mnemonic (),
+ * gtk_label_set_text_with_mnemonic (), gtk_label_new_with_mnemonic ()
  * or the "use_underline" property) the label can be associated with a
  * widget that is the target of the mnemonic. When the label is inside
  * a widget (like a #GtkButton or a #GtkNotebook tab) it is
@@ -764,7 +764,7 @@ gtk_label_set_markup (GtkLabel    *label,
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
  * The mnemonic key can be used to activate another widget, chosen automatically,
- * or explicitly using gtk_label_set_mnemonic_widget().
+ * or explicitly using gtk_label_set_mnemonic_widget ().
  **/
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
@@ -1461,7 +1461,7 @@ gtk_label_parse_uline (GtkLabel    *label,
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  * The mnemonic key can be used to activate another widget, chosen automatically,
- * or explicitly using gtk_label_set_mnemonic_widget().
+ * or explicitly using gtk_label_set_mnemonic_widget ().
  **/
 void
 gtk_label_set_text_with_mnemonic (GtkLabel    *label,
@@ -1862,7 +1862,7 @@ get_text_callback (GtkClipboard     *clipboard,
       str = g_strndup (label->text + start,
                        end - start);
       
-      gtk_selection_data_set_text(selection_data, str);
+      gtk_selection_data_set_text (selection_data, str);
 
       g_free (str);
     }
@@ -1937,7 +1937,7 @@ gtk_label_select_region_index (GtkLabel *label,
  * @end_offset: end offset (in characters not bytes)
  *
  * Selects a range of characters in the label, if the label is selectable.
- * See gtk_label_set_selectable(). If the label is not selectable,
+ * See gtk_label_set_selectable (). If the label is not selectable,
  * this function has no effect. If @start_offset or
  * @end_offset are -1, then the end of the label will be substituted.
  * 

@@ -100,6 +100,8 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
 
 void     _gdk_moveresize_handle_event      (XEvent *event);
 
+/* from gdkwindow-x11.c */
+void	 _gdk_moveresize_configure_done_for_display (GdkDisplay *dpy);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;

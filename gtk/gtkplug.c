@@ -635,11 +635,11 @@ handle_xembed_message (GtkPlug   *plug,
     case XEMBED_EMBEDDED_NOTIFY:
       break;
     case XEMBED_WINDOW_ACTIVATE:
-      GTK_NOTE(PLUGSOCKET,
+      GTK_NOTE (PLUGSOCKET,
 	       g_message ("GtkPlug: ACTIVATE received"));
       break;
     case XEMBED_WINDOW_DEACTIVATE:
-      GTK_NOTE(PLUGSOCKET,
+      GTK_NOTE (PLUGSOCKET,
 	       g_message ("GtkPlug: DEACTIVATE received"));
       break;
       
@@ -686,7 +686,7 @@ handle_xembed_message (GtkPlug   *plug,
       break;
       
     default:
-      GTK_NOTE(PLUGSOCKET,
+      GTK_NOTE (PLUGSOCKET,
 	       g_message ("GtkPlug: Ignoring unknown _XEMBED message of type %ld", message));
       break;
     }
