@@ -1,3 +1,11 @@
+Wed Nov 13 15:52:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_activate): Fix warning.
+	
+	* gtk/gtkcombo.c: Fix code that was meant to delay
+	grabbing events on the list until we had an enter-notify.
+	(#54353, reported by Mike Fulbright, others)
+
 2002-11-13  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/theme-bits/decompose-bits.c (do_part): Add a const here.

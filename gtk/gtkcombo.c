@@ -601,7 +601,7 @@ gtk_combo_activate (GtkWidget        *widget,
   if (!combo->button->window ||
       !popup_grab_on_window (combo->button->window,
 			     gtk_get_current_event_time ()))
-    return FALSE;
+    return;
 
   gtk_combo_popup_list (combo);
 
@@ -641,8 +641,6 @@ gtk_combo_popup_button_press (GtkWidget        *button,
   gtk_button_pressed (GTK_BUTTON (button));
 
   gtk_grab_add (combo->popwin);
-  GTK_LIST (combo->list)->drag_selection = TRUE;
-  gtk_grab_add (combo->list);
 
   return TRUE;
 }
@@ -759,6 +757,29 @@ gtk_combo_button_event_after (GtkWidget *widget,
   gtk_combo_popdown_list (combo);
 }
 
+static void
+find_child_foreach (GtkWidget *widget,
+		    gpointer   data)
+{
+  GdkEventButton *event = data;
+
+  if (!event->window)
+    {
+      if (event->x >= widget->allocation.x &&
+	  event->x < widget->allocation.x + widget->allocation.width &&
+	  event->y >= widget->allocation.y &&
+	  event->y < widget->allocation.y + widget->allocation.height)
+	event->window = g_object_ref (widget->window);
+    }
+}
+
+static void
+find_child_window (GtkContainer   *container,
+		   GdkEventButton *event)
+{
+  gtk_container_foreach (container, find_child_foreach, event);
+}
+
 static gint         
 gtk_combo_list_enter (GtkWidget        *widget,
 		      GdkEventCrossing *event,
@@ -767,7 +788,7 @@ gtk_combo_list_enter (GtkWidget        *widget,
   GtkWidget *event_widget;
 
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
-  
+
   if ((event_widget == combo->list) &&
       (combo->current_button != 0) && 
       (!GTK_WIDGET_HAS_GRAB (combo->list)))
@@ -783,7 +804,6 @@ gtk_combo_list_enter (GtkWidget        *widget,
        */
       gdk_window_get_pointer (combo->list->window, &x, &y, &mask);
 
-      tmp_event->button.window = g_object_ref (combo->list->window);
       tmp_event->button.send_event = TRUE;
       tmp_event->button.time = GDK_CURRENT_TIME; /* bad */
       tmp_event->button.x = x;
@@ -793,6 +813,19 @@ gtk_combo_list_enter (GtkWidget        *widget,
        */
       tmp_event->button.button = combo->current_button;
       tmp_event->button.state = mask;
+
+      find_child_window (GTK_CONTAINER (combo->list), &tmp_event->button);
+      if (!tmp_event->button.window)
+	{
+	  GtkWidget *child;
+	  
+	  if (GTK_LIST (combo->list)->children)
+	    child = GTK_LIST (combo->list)->children->data;
+	  else
+	    child = combo->list;
+
+	  tmp_event->button.window = g_object_ref (child->window);
+	}
 
       gtk_widget_event (combo->list, tmp_event);
       gdk_event_free (tmp_event);
@@ -915,14 +948,12 @@ gtk_combo_init (GtkCombo * combo)
   g_signal_connect (combo->popwin, "button_press_event",
 		    G_CALLBACK (gtk_combo_button_press), combo);
 
+  g_signal_connect (combo->popwin, "event_after",
+		    G_CALLBACK (gtk_combo_button_event_after), combo);
   g_signal_connect (combo->list, "event_after",
 		    G_CALLBACK (gtk_combo_button_event_after), combo);
 
-  /* We connect here on the button, because we'll have a grab on it
-   * when the event occurs. But we are actually interested in enters
-   * for the combo->list.
-   */
-  g_signal_connect (combo->button, "enter_notify_event",
+  g_signal_connect (combo->list, "enter_notify_event",
 		    G_CALLBACK (gtk_combo_list_enter), combo);
 }
 
