@@ -277,8 +277,12 @@ _gdk_x11_window_tmp_unset_bg (GdkWindow *window,
   
   private = (GdkWindowObject *)window;
 
-  if (private->input_only || private->destroyed || !GDK_WINDOW_IS_MAPPED (window))
-    return;
+  if (private->input_only || private->destroyed ||
+      (private->window_type != GDK_WINDOW_ROOT &&
+       !GDK_WINDOW_IS_MAPPED (window)))
+    {
+      return;
+    }
 
   /* Don't unset the background of windows that don't select for expose
    * events. Such windows don't get drawn, so we need the X server
@@ -310,8 +314,12 @@ _gdk_x11_window_tmp_reset_bg (GdkWindow *window,
 
   private = (GdkWindowObject *)window;
 
-  if (private->input_only || private->destroyed || !GDK_WINDOW_IS_MAPPED (window))
-    return;
+  if (private->input_only || private->destroyed ||
+      (private->window_type != GDK_WINDOW_ROOT &&
+       !GDK_WINDOW_IS_MAPPED (window)))
+    {
+      return;
+    }
 
   if (private->window_type != GDK_WINDOW_ROOT &&
       private->window_type != GDK_WINDOW_FOREIGN &&
