@@ -2181,7 +2181,7 @@ msgstr "Amharic (EZ+)"
 #. ID
 #: modules/input/imcedilla.c:91
 msgid "Cedilla"
-msgstr ""
+msgstr "Cedilla"
 
 #  ID
 #. ID
@@ -2236,13 +2236,3 @@ msgstr ""
 #, fuzzy, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Óþekkt myndsnið í skránni '%s'"
-
-#, fuzzy
-#~ msgid "Could not find the path"
-#~ msgstr "gat ekki vistað afgangnum"
-
-#~ msgid "Input Methods"
-#~ msgstr "Innsláttaraðferðir"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Óþekkt afbrigði við TIFF myndsniðið"
