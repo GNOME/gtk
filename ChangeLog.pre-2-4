@@ -1,3 +1,8 @@
+Wed May 14 16:40:09 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkframe.c (gtk_frame_set_label_widget): Patch
+	from Charles Schmidt to add missing notify (#108305)
+
 Wed May 14 16:00:51 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gdk/x11/gdkgc-x11.c: Remove unecessary g_return_if_fail().

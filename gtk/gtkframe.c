@@ -313,8 +313,6 @@ gtk_frame_set_label (GtkFrame *frame,
 
       gtk_frame_set_label_widget (frame, child);
     }
-
-  g_object_notify (G_OBJECT (frame), "label");
 }
 
 /**
@@ -382,7 +380,10 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
   if (GTK_WIDGET_VISIBLE (frame) && need_resize)
     gtk_widget_queue_resize (GTK_WIDGET (frame));
 
+  g_object_freeze_notify (G_OBJECT (frame));
   g_object_notify (G_OBJECT (frame), "label_widget");
+  g_object_notify (G_OBJECT (frame), "label");
+  g_object_thaw_notify (G_OBJECT (frame));
 }
 
 /**
