@@ -1103,10 +1103,9 @@ canonical_hex_keyval (GdkEventKey *event)
   if (keyval)
     return keyval;
   else
-    /* just return the keyval unchanged, we couldn't figure
-     * out a way to make it a hex digit
+    /* No way to make it a hex digit
      */
-    return event->keyval;
+    return 0;
 }
 
 static gboolean
@@ -1116,6 +1115,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
   GSList *tmp_list;  
   int n_compose = 0;
+  gboolean have_hex_mods;
+  guint hex_keyval;
   int i;
 
   if (event->type == GDK_KEY_RELEASE)
@@ -1144,30 +1145,31 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     if (event->keyval == gtk_compose_ignore[i])
       return FALSE;
 
+  have_hex_mods = (event->state & (ISO_14755_MOD_MASK)) == ISO_14755_MOD_MASK;
+  hex_keyval = canonical_hex_keyval (event);
+
   while (context_simple->compose_buffer[n_compose] != 0)
     n_compose++;
 
-  /* First key in sequence; decide if it's a 14755 hex sequence */
-  if (n_compose == 0)
-    context_simple->in_hex_sequence =
-      ((event->state & (ISO_14755_MOD_MASK)) == ISO_14755_MOD_MASK);
-  
   /* If we are already in a non-hex sequence, or
-   * the 14755 modifiers are not held down, filter all
+   * this keystroke is not 14755 modifiers + hex digit, don't filter 
    * key events with accelerator modifiers held down.
    */
-  if (!context_simple->in_hex_sequence ||
-      ((event->state & (ISO_14755_MOD_MASK)) != ISO_14755_MOD_MASK))
+  if ((n_compose > 0 && !context_simple->in_hex_sequence) || !have_hex_mods || !hex_keyval)
     {
       if (event->state &
           (gtk_accelerator_get_default_mod_mask () & ~GDK_SHIFT_MASK))
         return FALSE;
     }
   
+  /* First key in sequence; decide if it's a 14755 hex sequence */
+  if (n_compose == 0)
+    context_simple->in_hex_sequence = have_hex_mods;
+  
   /* Then, check for compose sequences
    */
   if (context_simple->in_hex_sequence)
-    context_simple->compose_buffer[n_compose++] = canonical_hex_keyval (event);
+    context_simple->compose_buffer[n_compose++] = hex_keyval ? hex_keyval : event->keyval;
   else
     context_simple->compose_buffer[n_compose++] = event->keyval;
 
@@ -1176,7 +1178,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   if (context_simple->in_hex_sequence)
     {
       /* If the modifiers are still held down, consider the sequence again */
-      if ((event->state & (ISO_14755_MOD_MASK)) == ISO_14755_MOD_MASK)
+      if (have_hex_mods)
         {
           /* space ends the sequence, and we eat the space */
           if (n_compose > 1 &&
@@ -1228,7 +1230,7 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
 					  PangoAttrList **attrs,
 					  gint           *cursor_pos)
 {
-  char outbuf[25]; /* up to 4 hex digits */
+  char outbuf[37]; /* up to 6 hex digits */
   int len = 0;
   
   GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (context);
