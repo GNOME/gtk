@@ -63,7 +63,7 @@ struct _GtkSocket
   guint need_map : 1;
   guint is_mapped : 1;
 
-  GHashTable *grabbed_keys;
+  GtkAccelGroup *accel_group;
   GtkWidget *toplevel;
 };
 

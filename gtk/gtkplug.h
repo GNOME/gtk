@@ -56,6 +56,8 @@ struct _GtkPlug
   GdkWindow *socket_window;
   GtkWidget *modality_window;
   GtkWindowGroup *modality_group;
+  GHashTable *grabbed_keys;
+
   guint same_app : 1;
 };
 

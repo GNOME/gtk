@@ -37,6 +37,7 @@
 
 static void            gtk_plug_class_init            (GtkPlugClass     *klass);
 static void            gtk_plug_init                  (GtkPlug          *plug);
+static void            gtk_plug_finalize              (GObject          *object);
 static void            gtk_plug_realize               (GtkWidget        *widget);
 static void            gtk_plug_unrealize             (GtkWidget        *widget);
 static void            gtk_plug_show                  (GtkWidget        *widget);
@@ -47,23 +48,16 @@ static void            gtk_plug_size_allocate         (GtkWidget        *widget,
 						       GtkAllocation    *allocation);
 static gboolean        gtk_plug_key_press_event       (GtkWidget        *widget,
 						       GdkEventKey      *event);
-static void            gtk_plug_forward_key_press     (GtkPlug          *plug,
-						       GdkEventKey      *event);
 static void            gtk_plug_set_focus             (GtkWindow        *window,
 						       GtkWidget        *focus);
 static gboolean        gtk_plug_focus                 (GtkWidget        *widget,
 						       GtkDirectionType  direction);
 static void            gtk_plug_check_resize          (GtkContainer     *container);
-#if 0
-static void            gtk_plug_accel_entries_changed (GtkWindow        *window);
-#endif
+static void            gtk_plug_keys_changed          (GtkWindow        *window);
 static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xevent,
 						       GdkEvent         *event,
 						       gpointer          data);
 
-#if 0
-static void gtk_plug_free_grabbed_keys (GHashTable    *key_table);
-#endif
 static void handle_modality_off        (GtkPlug       *plug);
 static void send_xembed_message        (GtkPlug       *plug,
 					glong          message,
@@ -116,6 +110,7 @@ gtk_plug_get_type ()
 static void
 gtk_plug_class_init (GtkPlugClass *class)
 {
+  GObjectClass *gobject_class = (GObjectClass *)class;
   GtkWidgetClass *widget_class = (GtkWidgetClass *)class;
   GtkWindowClass *window_class = (GtkWindowClass *)class;
   GtkContainerClass *container_class = (GtkContainerClass *)class;
@@ -123,6 +118,8 @@ gtk_plug_class_init (GtkPlugClass *class)
   parent_class = gtk_type_class (GTK_TYPE_WINDOW);
   bin_class = gtk_type_class (GTK_TYPE_BIN);
 
+  gobject_class->finalize = gtk_plug_finalize;
+  
   widget_class->realize = gtk_plug_realize;
   widget_class->unrealize = gtk_plug_unrealize;
   widget_class->key_press_event = gtk_plug_key_press_event;
@@ -138,9 +135,7 @@ gtk_plug_class_init (GtkPlugClass *class)
   container_class->check_resize = gtk_plug_check_resize;
 
   window_class->set_focus = gtk_plug_set_focus;
-#if 0  
-  window_class->accel_entries_changed = gtk_plug_accel_entries_changed;
-#endif
+  window_class->keys_changed = gtk_plug_keys_changed;
 
   plug_signals[EMBEDDED] =
     g_signal_new ("embedded",
@@ -195,6 +190,11 @@ gtk_plug_set_is_child (GtkPlug  *plug,
     }
   else
     {
+      if (GTK_WINDOW (plug)->focus_widget)
+	gtk_window_set_focus (GTK_WINDOW (plug), NULL);
+      if (GTK_WINDOW (plug)->default_widget)
+	gtk_window_set_default (GTK_WINDOW (plug), NULL);
+	  
       plug->modality_group = gtk_window_group_new ();
       gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug));
       
@@ -362,6 +362,20 @@ gtk_plug_get_id (GtkPlug *plug)
     gtk_widget_realize (GTK_WIDGET (plug));
 
   return GDK_WINDOW_XWINDOW (GTK_WIDGET (plug)->window);
+}
+
+static void
+gtk_plug_finalize (GObject *object)
+{
+  GtkPlug *plug = GTK_PLUG (object);
+
+  if (plug->grabbed_keys)
+    {
+      g_hash_table_destroy (plug->grabbed_keys);
+      plug->grabbed_keys = NULL;
+    }
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -568,46 +582,9 @@ gtk_plug_key_press_event (GtkWidget   *widget,
 			  GdkEventKey *event)
 {
   if (GTK_WIDGET_TOPLEVEL (widget))
-    {
-      if (!GTK_WINDOW (widget)->has_focus)
-	{
-	  gtk_plug_forward_key_press (GTK_PLUG (widget), event);
-	  return TRUE;
-	}
-      else
-	return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
-    }
+    return GTK_WIDGET_CLASS (parent_class)->key_press_event (widget, event);
   else
     return FALSE;
-}
-
-static void
-gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
-{
-  XEvent xevent;
-  
-  xevent.xkey.type = KeyPress;
-  xevent.xkey.display = GDK_WINDOW_XDISPLAY (GTK_WIDGET(plug)->window);
-  xevent.xkey.window = GDK_WINDOW_XWINDOW (plug->socket_window);
-  xevent.xkey.root = GDK_ROOT_WINDOW (); /* FIXME */
-  xevent.xkey.time = event->time;
-  /* FIXME, the following might cause big problems for
-   * non-GTK apps */
-  xevent.xkey.x = 0;
-  xevent.xkey.y = 0;
-  xevent.xkey.x_root = 0;
-  xevent.xkey.y_root = 0;
-  xevent.xkey.state = event->state;
-  xevent.xkey.keycode =  XKeysymToKeycode(GDK_DISPLAY(), 
-					  event->keyval);
-  xevent.xkey.same_screen = TRUE; /* FIXME ? */
-
-  gdk_error_trap_push ();
-  XSendEvent (GDK_DISPLAY (),
-	      GDK_WINDOW_XWINDOW (plug->socket_window),
-	      False, NoEventMask, &xevent);
-  gdk_flush ();
-  gdk_error_trap_pop ();
 }
 
 static void
@@ -645,8 +622,6 @@ gtk_plug_set_focus (GtkWindow *window,
     }
 }
 
-#if 0
-
 typedef struct
 {
   guint			 accelerator_key;
@@ -677,7 +652,7 @@ grabbed_key_equal (gconstpointer a, gconstpointer b)
 }
 
 static void
-add_grabbed_keys (gpointer key, gpointer val, gpointer data)
+add_grabbed_key (gpointer key, gpointer val, gpointer data)
 {
   GrabbedKey *grabbed_key = key;
   GtkPlug *plug = data;
@@ -685,14 +660,25 @@ add_grabbed_keys (gpointer key, gpointer val, gpointer data)
   if (!plug->grabbed_keys ||
       !g_hash_table_lookup (plug->grabbed_keys, grabbed_key))
     {
-      send_xembed_message (plug, XEMBED_GRAB_KEY, 0, 
+      send_xembed_message (plug, XEMBED_GTK_GRAB_KEY, 0, 
 			   grabbed_key->accelerator_key, grabbed_key->accelerator_mods,
 			   gtk_get_current_event_time ());
     }
 }
 
 static void
-remove_grabbed_keys (gpointer key, gpointer val, gpointer data)
+add_grabbed_key_always (gpointer key, gpointer val, gpointer data)
+{
+  GrabbedKey *grabbed_key = key;
+  GtkPlug *plug = data;
+
+  send_xembed_message (plug, XEMBED_GTK_GRAB_KEY, 0, 
+		       grabbed_key->accelerator_key, grabbed_key->accelerator_mods,
+		       gtk_get_current_event_time ());
+}
+
+static void
+remove_grabbed_key (gpointer key, gpointer val, gpointer data)
 {
   GrabbedKey *grabbed_key = key;
   GtkPlug *plug = data;
@@ -700,74 +686,50 @@ remove_grabbed_keys (gpointer key, gpointer val, gpointer data)
   if (!plug->grabbed_keys ||
       !g_hash_table_lookup (plug->grabbed_keys, grabbed_key))
     {
-      send_xembed_message (plug, XEMBED_UNGRAB_KEY, 0, 
+      send_xembed_message (plug, XEMBED_GTK_UNGRAB_KEY, 0, 
 			   grabbed_key->accelerator_key, grabbed_key->accelerator_mods,
 			   gtk_get_current_event_time ());
     }
 }
 
 static void
-gtk_plug_free_grabbed_keys (GHashTable *key_table)
+keys_foreach (GtkWindow      *window,
+	      guint           keyval,
+	      GdkModifierType modifiers,
+	      gboolean        is_mnemonic,
+	      gpointer        data)
 {
-  g_hash_table_foreach (key_table, (GHFunc)g_free, NULL);
-  g_hash_table_destroy (key_table);
+  GHashTable *new_grabbed_keys = data;
+  GrabbedKey *key = g_new (GrabbedKey, 1);
+
+  key->accelerator_key = keyval;
+  key->accelerator_mods = modifiers;
+  
+  g_hash_table_replace (new_grabbed_keys, key, key);
 }
 
 static void
-gtk_plug_accel_entries_changed (GtkWindow *window)
+gtk_plug_keys_changed (GtkWindow *window)
 {
   GHashTable *new_grabbed_keys, *old_grabbed_keys;
-  GSList *accel_groups, *tmp_list;
   GtkPlug *plug = GTK_PLUG (window);
 
-  new_grabbed_keys = g_hash_table_new (grabbed_key_hash, grabbed_key_equal);
+  new_grabbed_keys = g_hash_table_new_full (grabbed_key_hash, grabbed_key_equal, (GDestroyNotify)g_free, NULL);
+  _gtk_window_keys_foreach (window, keys_foreach, new_grabbed_keys);
 
-  accel_groups = gtk_accel_groups_from_object (G_OBJECT (window));
-  
-  tmp_list = accel_groups;
-
-  while (tmp_list)
-    {
-      GtkAccelGroup *accel_group = tmp_list->data;
-      gint i, n_entries;
-      GtkAccelEntry *entries;
-
-      gtk_accel_group_get_entries (accel_group, &entries, &n_entries);
-
-      for (i = 0; i < n_entries; i++)
-	{
-	  GdkKeymapKey *keys;
-	  gint n_keys;
-	  
-	  if (gdk_keymap_get_entries_for_keyval (NULL, entries[i].accelerator_key, &keys, &n_keys))
-	    {
-	      GrabbedKey *key = g_new (GrabbedKey, 1);
-	      
-	      key->accelerator_key = keys[0].keycode;
-	      key->accelerator_mods = entries[i].accelerator_mods;
-	      
-	      g_hash_table_insert (new_grabbed_keys, key, key);
-
-	      g_free (keys);
-	    }
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-
-  g_hash_table_foreach (new_grabbed_keys, add_grabbed_keys, plug);
+  if (plug->socket_window)
+    g_hash_table_foreach (new_grabbed_keys, add_grabbed_key, plug);
 
   old_grabbed_keys = plug->grabbed_keys;
   plug->grabbed_keys = new_grabbed_keys;
 
   if (old_grabbed_keys)
     {
-      g_hash_table_foreach (old_grabbed_keys, remove_grabbed_keys, plug);
-      gtk_plug_free_grabbed_keys (old_grabbed_keys);
+      if (plug->socket_window)
+	g_hash_table_foreach (old_grabbed_keys, remove_grabbed_key, plug);
+      g_hash_table_destroy (old_grabbed_keys);
     }
-
 }
-#endif
 
 static gboolean
 gtk_plug_focus (GtkWidget        *widget,
@@ -1009,11 +971,13 @@ handle_xembed_message (GtkPlug   *plug,
 	break;
       }
       
+    case XEMBED_GRAB_KEY:
+    case XEMBED_UNGRAB_KEY:
+    case XEMBED_GTK_GRAB_KEY:
+    case XEMBED_GTK_UNGRAB_KEY:
     case XEMBED_REQUEST_FOCUS:
     case XEMBED_FOCUS_NEXT:
     case XEMBED_FOCUS_PREV:
-    case XEMBED_GRAB_KEY:
-    case XEMBED_UNGRAB_KEY:
       g_warning ("GtkPlug: Invalid _XEMBED message of type %ld received", message);
       break;
       
@@ -1137,7 +1101,8 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		  break;
 	      }
 
-	    /* FIXME: Add grabbed keys here */
+	    if (plug->grabbed_keys)
+	      g_hash_table_foreach (plug->grabbed_keys, add_grabbed_key_always, plug);
 
 	    if (!was_embedded)
 	      g_signal_emit (G_OBJECT (plug), plug_signals[EMBEDDED], 0);

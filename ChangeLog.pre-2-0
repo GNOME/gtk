@@ -1,3 +1,14 @@
+Sat Feb 23 20:33:29 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.[ch] gtk/gtksocket.[ch] gtk/xembed.h: Implement 
+	accelerator propagation using a custom XEMBED_GTK_KEY_GRAB
+	XEMBED_GTK_KEY_UNGRAB pair of messages.
+
+	* gtk/gtkwindow.[ch]: private export _gtk_window_keys_foreach().
+
+	* gtk/gtkplug.c (gtk_plug_set_is_child): Clear focus and default
+	widgets.
+
 2002-02-23  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextbuffer.c (save_range): change gravity of start/end

@@ -5675,12 +5675,6 @@ gtk_window_parse_geometry (GtkWindow   *window,
   return result != 0;
 }
 
-typedef void (*GtkWindowKeysForeach) (GtkWindow      *window,
-				      guint           keyval,
-				      GdkModifierType modifiers,
-				      gboolean        is_mnemonic,
-				      gpointer        data);
-
 static void
 gtk_window_mnemonic_hash_foreach (gpointer key,
 				  gpointer value,
@@ -5688,7 +5682,7 @@ gtk_window_mnemonic_hash_foreach (gpointer key,
 {
   struct {
     GtkWindow *window;
-    GtkWindowKeysForeach func;
+    GtkWindowKeysForeachFunc func;
     gpointer func_data;
   } *info = data;
 
@@ -5698,16 +5692,16 @@ gtk_window_mnemonic_hash_foreach (gpointer key,
     (*info->func) (info->window, mnemonic->keyval, info->window->mnemonic_modifier, TRUE, info->func_data);
 }
 
-static void
-gtk_window_keys_foreach (GtkWindow           *window,
-			 GtkWindowKeysForeach func,
-			 gpointer             func_data)
+void
+_gtk_window_keys_foreach (GtkWindow                *window,
+			  GtkWindowKeysForeachFunc func,
+			  gpointer                 func_data)
 {
   GSList *groups;
 
   struct {
     GtkWindow *window;
-    GtkWindowKeysForeach func;
+    GtkWindowKeysForeachFunc func;
     gpointer func_data;
   } info;
 
@@ -5790,7 +5784,7 @@ gtk_window_get_key_hash (GtkWindow *window)
     return key_hash;
   
   key_hash = _gtk_key_hash_new (gdk_keymap_get_default(), (GDestroyNotify)g_free);
-  gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
+  _gtk_window_keys_foreach (window, add_to_key_hash, key_hash);
   g_object_set_data (G_OBJECT (window), "gtk-window-key-hash", key_hash);
 
   return key_hash;

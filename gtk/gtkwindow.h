@@ -340,6 +340,16 @@ GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
 gboolean        _gtk_window_activate_key       (GtkWindow   *window,
 						GdkEventKey *event);
 
+typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
+					  guint           keyval,
+					  GdkModifierType modifiers,
+					  gboolean        is_mnemonic,
+					  gpointer        data);
+
+void _gtk_window_keys_foreach (GtkWindow               *window,
+			       GtkWindowKeysForeachFunc func,
+			       gpointer                 func_data);
+
 /* --- internal (GtkAcceleratable) --- */
 gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,
 						 guint		 accel_key,
