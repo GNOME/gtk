@@ -467,11 +467,6 @@ gdk_key_repeat_restore (void)
 }
 
 
-void
-gdk_beep (void)
-{
-}
-
 extern void keyboard_shutdown(void);
 
 void

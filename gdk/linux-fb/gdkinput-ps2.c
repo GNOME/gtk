@@ -23,6 +23,7 @@
 #include "gdkkeysyms.h"
 #include "gdkprivate-fb.h"
 #include <unistd.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <time.h>
@@ -1446,6 +1447,22 @@ tty_keyboard_open(void)
   retval->fd_tag = g_io_add_watch(gioc, G_IO_IN|G_IO_ERR|G_IO_HUP|G_IO_NVAL, handle_keyboard_input, retval);
 
   return retval;
+}
+
+void
+gdk_beep (void)
+{
+  static int pitch = 600, duration = 100;
+  gulong arg;
+
+  if(!keyboard)
+    return;
+
+  /* Thank you XFree86 */
+  arg = ((1193190 / pitch) & 0xffff) |
+    (((unsigned long)duration) << 16);
+
+  ioctl(keyboard->fd, KDMKTONE, arg);
 }
 
 void
