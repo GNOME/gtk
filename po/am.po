@@ -1003,7 +1003,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr " ጽሑፍ"
+msgstr "ጽሑፍ"
 
 #: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
@@ -1354,7 +1354,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
-msgstr " የአሁኑን ቀለም"
+msgstr "የአሁኑን ቀለም"
 
 #: gtk/gtkcolorsel.c:1719
 msgid "The current color"
@@ -1946,7 +1946,7 @@ msgstr "_መጠን፦"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
 msgid "_Preview:"
-msgstr " ቅድመ _ዕይታ፦"
+msgstr "ቅድመ _ዕይታ፦"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
@@ -2184,7 +2184,7 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:519
 msgid "none"
-msgstr "ምንም የለም"
+msgstr "ምንም"
 
 #: gtk/gtkinputdialog.c:553 gtk/gtkinputdialog.c:589
 msgid "(disabled)"
@@ -2197,7 +2197,7 @@ msgstr "(ያልታወቀ)"
 #. and clear button
 #: gtk/gtkinputdialog.c:667
 msgid "clear"
-msgstr " ሰርዝ"
+msgstr "ሰርዝ"
 
 #: gtk/gtklabel.c:281
 msgid "The text of the label."
@@ -3047,7 +3047,7 @@ msgstr "ማስጠንቀቂያ"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
-msgstr " ስህተት"
+msgstr "ስህተት"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
@@ -3206,7 +3206,7 @@ msgstr "ለጥፍ (_P)"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr " ምርጫዎች (_P)"
+msgstr "ምርጫዎች (_P)"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
@@ -3218,7 +3218,7 @@ msgstr "የቅድመ ህትመት ዕይታ (_v)"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr " ሁኔታዎች (_P)"
+msgstr "ሁኔታዎች (_P)"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
@@ -3226,7 +3226,7 @@ msgstr "ውጣ (_Q)"
 
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr " እንደገና አድርግ (_R)"
+msgstr "እንደገና አድርግ (_R)"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
@@ -3242,7 +3242,7 @@ msgstr "ወደ ነበረበት መልስ (_R)"
 
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr " አስቀምጥ (_S)"
+msgstr "አስቀምጥ (_S)"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
@@ -3306,7 +3306,7 @@ msgstr "ከቅርበት እይታ (_I)"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr " ከርቀት እይታ (_O)"
+msgstr "ከርቀት እይታ (_O)"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
@@ -4302,7 +4302,7 @@ msgstr ""
 #. ID
 #: modules/input/imipa.c:144
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:177
