@@ -1,3 +1,14 @@
+Mon Dec  8 Owen Taylor <owt1@cornell.edu>
+	* gtk/testselection.c (selection_received): foreward -> forward.
+	* gtk/gtktext.c (gtk_text_forward_delete): Renamed; changed all
+	callers.
+	* gtk/gtktext.h: foreward -> forward.
+          From Tom Tromey  <tromey@cygnus.com>
+
+Mon Dec  8 Owen Taylor <owt1@cornell.edu>
+	* gtk/gtkimage.c: Fixes to expose() handler
+	  From Rob Browning <rlb@cs.utexas.edu>
+	
 Sun Dec  7 Owen Taylor <owt1@cornell.edu>
 	* gdk/gdk.c, gdk/gdk.h, gdk/gdktypes.h: 
 	  Remove dependencies of interfaces on USE_XIM
