@@ -1,3 +1,12 @@
+2004-08-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-zip.sh.in: Fix typo. The gtk.immodules file had never been
+	included in my zipfiles...!
+
+	* gtk/gtkfilesystemwin32.c (extract_icon): Improve handling of
+	icon alpha channel (on Windows XP) and mask (older Windows
+	versions). (#148641, Tim Evans)
+
 Sun Aug 15 02:31:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilesystemunix.c (get_icon_type_from_stat): Make 
