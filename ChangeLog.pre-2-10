@@ -1,5 +1,23 @@
 2004-03-09  Federico Mena Quintero  <federico@ximian.com>
 
+	Fix #136533.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons): New
+	function.
+	(check_icon_theme): New helper function, installs a handler for
+	changes in the icon theme.
+	(gtk_file_chooser_default_style_set): Use check_icon_theme().
+	(gtk_file_chooser_default_screen_changed): Use check_icon_theme().
+	(gtk_file_chooser_default_dispose): Disconnect from GtkSettings.
+	(change_icon_theme): New function, updates impl->icon_size and
+	reloads the icons.
+	(struct _GtkFileChooserDefault): New field settings_signal_id.
+	(struct _GtkFileChooserDefault): New field icon_size.
+	(shortcuts_insert_path): Use impl->icon_size.
+	(list_icon_data_func): Likewise.
+
+2004-03-09  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (get_file_info): Handle the returned
 	parent_path being NULL.  Fixes #136662.
 

@@ -39,6 +39,7 @@
 #include "gtkframe.h"
 #include "gtkhbox.h"
 #include "gtkhpaned.h"
+#include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -142,6 +143,9 @@ struct _GtkFileChooserDefault
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
 
+  guint settings_signal_id;
+  int icon_size;
+
   /* Flags */
 
   guint local_only : 1;
@@ -207,9 +211,9 @@ typedef enum {
   SHORTCUTS_CURRENT_FOLDER
 } ShortcutsIndex;
 
-/* Standard icon size */
-/* FIXME: this should correspond to gtk_icon_size_lookup_for_settings  */
-#define ICON_SIZE 20
+/* Icon size for if we can't get it from the theme */
+#define FALLBACK_ICON_SIZE 20
+
 #define PREVIEW_HBOX_SPACING 12
 #define NUM_LINES 40
 #define NUM_CHARS 60
@@ -507,6 +511,7 @@ gtk_file_chooser_default_init (GtkFileChooserDefault *impl)
   impl->use_preview_label = TRUE;
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
+  impl->icon_size = FALLBACK_ICON_SIZE;
 
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (impl), TRUE);
   gtk_box_set_spacing (GTK_BOX (impl), 12);
@@ -739,6 +744,64 @@ set_preview_widget (GtkFileChooserDefault *impl,
   update_preview_widget_visibility (impl);
 }
 
+/* Re-reads all the icons for the shortcuts, used when the theme changes */
+static void
+shortcuts_reload_icons (GtkFileChooserDefault *impl)
+{
+  GtkTreeIter iter;
+  int i;
+  int bookmarks_separator_idx;
+  int current_folder_separator_idx;
+  int volumes_idx;
+
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (impl->shortcuts_model), &iter))
+    return;
+
+  bookmarks_separator_idx = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS_SEPARATOR);
+  current_folder_separator_idx = shortcuts_get_index (impl, SHORTCUTS_CURRENT_FOLDER_SEPARATOR);
+  volumes_idx = shortcuts_get_index (impl, SHORTCUTS_VOLUMES);
+
+  i = 0;
+
+  do {
+    gpointer data;
+    gboolean pixbuf_visible;
+    GdkPixbuf *pixbuf;
+
+    gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+			SHORTCUTS_COL_PATH, &data,
+			SHORTCUTS_COL_PIXBUF_VISIBLE, &pixbuf_visible,
+			-1);
+
+    if (!pixbuf_visible || !data)
+      goto next_iter;
+
+    if (i >= volumes_idx && i < volumes_idx + impl->num_volumes)
+      {
+	GtkFileSystemVolume *volume;
+
+	volume = data;
+	pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
+						     impl->icon_size, NULL);
+      }
+    else
+      {
+	const GtkFilePath *path;
+
+	path = data;
+	pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
+					      impl->icon_size, NULL);
+      }
+
+    gtk_list_store_set (impl->shortcuts_model, &iter,
+			SHORTCUTS_COL_PIXBUF, pixbuf,
+			-1);
+
+  next_iter:
+    i++;
+  } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
+}
+
 /* Clears the selection in the shortcuts tree */
 static void
 shortcuts_unselect_all (GtkFileChooserDefault *impl)
@@ -802,11 +865,8 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     {
       data = volume;
       label_copy = gtk_file_system_volume_get_display_name (impl->file_system, volume);
-      pixbuf = gtk_file_system_volume_render_icon (impl->file_system,
-						   volume,
-						   GTK_WIDGET (impl),
-						   ICON_SIZE,
-						   NULL);
+      pixbuf = gtk_file_system_volume_render_icon (impl->file_system, volume, GTK_WIDGET (impl),
+						   impl->icon_size, NULL);
     }
   else
     {
@@ -822,7 +882,8 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 	}
 
       data = gtk_file_path_copy (path);
-      pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl), ICON_SIZE, NULL);
+      pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
+					    impl->icon_size, NULL);
     }
 
   if (pos == -1)
@@ -2622,6 +2683,16 @@ gtk_file_chooser_default_dispose (GObject *object)
       g_object_unref (impl->extra_widget);
       impl->extra_widget = NULL;
     }
+
+  if (impl->settings_signal_id)
+    {
+      GtkSettings *settings;
+
+      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+      g_signal_handler_disconnect (settings, impl->settings_signal_id);
+      impl->settings_signal_id = 0;
+    }
+
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
@@ -2640,12 +2711,69 @@ gtk_file_chooser_default_show_all (GtkWidget *widget)
     gtk_widget_show_all (impl->extra_widget);
 }
 
+/* Changes the icons wherever it is needed */
+static void
+change_icon_theme (GtkFileChooserDefault *impl)
+{
+  GtkSettings *settings;
+  gint width, height;
+
+  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+
+  if (gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_SMALL_TOOLBAR, &width, &height))
+    impl->icon_size = MAX (width, height);
+  else
+    impl->icon_size = FALLBACK_ICON_SIZE;
+
+  shortcuts_reload_icons (impl);
+  gtk_widget_queue_resize (impl->browse_files_tree_view);
+}
+
+/* Callback used when a GtkSettings value changes */
+static void
+settings_notify_cb (GObject               *object,
+		    GParamSpec            *pspec,
+		    GtkFileChooserDefault *impl)
+{
+  const char *name;
+
+  name = g_param_spec_get_name (pspec);
+
+  if (strcmp (name, "gtk-icon-theme-name") == 0
+      || strcmp (name, "gtk-icon-sizes") == 0)
+    change_icon_theme (impl);
+}
+
+/* Installs a signal handler for GtkSettings so that we can monitor changes in
+ * the icon theme.
+ */
+static void
+check_icon_theme (GtkFileChooserDefault *impl)
+{
+  GtkSettings *settings;
+
+  if (impl->settings_signal_id)
+    return;
+
+  settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
+  impl->settings_signal_id = g_signal_connect (settings, "notify",
+					       G_CALLBACK (settings_notify_cb), impl);
+
+  change_icon_theme (impl);
+}
+
 static void
 gtk_file_chooser_default_style_set      (GtkWidget *widget,
 					 GtkStyle  *previous_style)
 {
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
   if (GTK_WIDGET_CLASS (parent_class)->style_set)
     GTK_WIDGET_CLASS (parent_class)->style_set (widget, previous_style);
+
+  check_icon_theme (impl);
 
   g_signal_emit_by_name (widget, "default-size-changed");
 }
@@ -2654,8 +2782,14 @@ static void
 gtk_file_chooser_default_screen_changed (GtkWidget *widget,
 					 GdkScreen *previous_screen)
 {
+  GtkFileChooserDefault *impl;
+
+  impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+
   if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
     GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, previous_screen);
+
+  check_icon_theme (impl);
 
   g_signal_emit_by_name (widget, "default-size-changed");
 }
@@ -3917,7 +4051,8 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
     return;
 
   /* FIXME: NULL GError */
-  pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl), ICON_SIZE, NULL);
+  pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
+					impl->icon_size, NULL);
   g_object_set (cell,
 		"pixbuf", pixbuf,
 		NULL);
