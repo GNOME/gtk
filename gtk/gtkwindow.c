@@ -2831,7 +2831,7 @@ gtk_window_set_default_icon_list (GList *list)
 
 /**
  * gtk_window_set_default_icon:
- * @pixbuf: the icon
+ * @icon: the icon
  *
  * Sets an icon to be used as fallback for windows that haven't
  * had gtk_window_set_icon() called on them from a pixbuf.
@@ -2839,13 +2839,13 @@ gtk_window_set_default_icon_list (GList *list)
  * Since: 2.4
  **/
 void
-gtk_window_set_default_icon (GdkPixbuf *pixbuf)
+gtk_window_set_default_icon (GdkPixbuf *icon)
 {
   GList *list;
   
-  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (GDK_IS_PIXBUF (icon));
 
-  list = g_list_prepend (NULL, pixbuf);
+  list = g_list_prepend (NULL, icon);
   gtk_window_set_default_icon_list (list);
   g_list_free (list);
 }

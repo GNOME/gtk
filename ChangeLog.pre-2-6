@@ -1,5 +1,8 @@
 2003-07-31  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkwindow.c (gtk_window_set_default_icon): Rename parameter pixbuf to icon, to 
+	pacify gtk-doc.
+
 	* gtk/gtkwidget.c (gtk_widget_class_init): Fix formatting of drag-motion example.
 
 Thu Jul 31 15:33:33 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
