@@ -255,6 +255,10 @@ static void     gtk_combo_box_cell_layout_clear_attributes   (GtkCellLayout     
 static void     gtk_combo_box_cell_layout_reorder            (GtkCellLayout         *layout,
                                                               GtkCellRenderer       *cell,
                                                               gint                   position);
+#if 1
+static gboolean gtk_combo_box_mnemonic_activate              (GtkWidget    *widget,
+							      gboolean      group_cycling);
+#endif
 
 
 GType
@@ -317,6 +321,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->size_request = gtk_combo_box_size_request;
   widget_class->expose_event = gtk_combo_box_expose_event;
   widget_class->scroll_event = gtk_combo_box_scroll_event;
+  widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
 
   object_class = (GObjectClass *)klass;
   object_class->set_property = gtk_combo_box_set_property;
@@ -2599,7 +2604,8 @@ gtk_combo_box_get_active_iter (GtkComboBox     *combo_box,
  * @combo_box: A #GtkComboBox
  * @iter: The #GtkTreeIter.
  * 
- * Sets the current active item to be the one referenced by @iter.
+ * Sets the current active item to be the one referenced by @iter. 
+ * @iter must correspond to a path of depth one.
  * 
  * Since: 2.4
  **/
@@ -2613,7 +2619,7 @@ gtk_combo_box_set_active_iter (GtkComboBox     *combo_box,
 
   path = gtk_tree_model_get_path (gtk_combo_box_get_model (combo_box), iter);
   g_return_if_fail (path != NULL);
-  g_return_if_fail (gtk_tree_path_get_depth (path) != 1);
+  g_return_if_fail (gtk_tree_path_get_depth (path) == 1);
   
   gtk_combo_box_set_active (combo_box, gtk_tree_path_get_indices (path)[0]);
   gtk_tree_path_free (path);
@@ -2822,3 +2828,15 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
                                      NULL, position))
     gtk_list_store_remove (store, &iter);
 }
+
+
+#if 1
+static gboolean
+gtk_combo_box_mnemonic_activate (GtkWidget *widget,
+				 gboolean   group_cycling)
+{
+  g_print ("I'm here!\n");
+  gtk_widget_grab_focus (GTK_COMBO_BOX (widget)->priv->tree_view);
+  return TRUE;
+}
+#endif

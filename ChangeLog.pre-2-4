@@ -1,3 +1,8 @@
+Thu Feb  5 21:36:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_active_iter): Fix the logic
+	of the depth one check.  (#133488, Christian Persch)
+
 Thu Feb  5 01:50:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_paint): Fix
