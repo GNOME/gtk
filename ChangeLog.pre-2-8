@@ -1,3 +1,8 @@
+Mon Jul 17 13:59:29 BST 2000  Tony Gale <gale@dera.gov.uk>
+
+	* docs/tutorial/gtk-tut.sgml: Initial DocBook version. Lots
+	  of cleaning up to do.
+
 2000-07-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/testgdk.c: New file, quick hack to test backends for
