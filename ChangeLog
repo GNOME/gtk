@@ -1,3 +1,9 @@
+1998-09-17  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gtk/Makefile.am (source_headers): Move `gtkfeature.h' ...
+	(gtkinclude_HEADERS): ... here.
+	(gtk.defs): Pass `g' flag to sed, to replace all occurances.
+
 Thu Sep 17 10:49:51 1998  Raph Levien  <raph@gimp.org>
 
 	* HACKING: added GNU indent, as it is now required to successfully
@@ -39,7 +45,6 @@ Thu Sep 17 05:12:48 1998  Tim Janik  <timj@gtk.org>
 	-- the widget argument is NULL for the first radio button in the
 	group.
 
->>>>>>> 1.636
 Tue Sep 15 13:09:24 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkimage.c (gdk_image_new): Reverted global changes

@@ -138,7 +138,6 @@ source_headers = \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
-	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontsel.h		\
@@ -214,6 +213,7 @@ source_headers = \
 
 gtkinclude_HEADERS = 		\
 	$(source_headers) 	\
+	gtkfeatures.h		\
 	gtkmarshal.h		\
 	gtktypebuiltins.h
 
@@ -232,7 +232,7 @@ gdk_headers = \
 
 # generate gtk.defs file from gtk-boxed.defs and *.h
 gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
-	src_headers=`echo $(source_headers) | sed s%gtk%$(srcdir)/gtk%` ; \
+	src_headers=`echo $(source_headers) | sed s%gtk%$(srcdir)/gtk%g` ; \
 	srcdir=$(srcdir) \
 	  perl $(srcdir)/makeenums.pl defs $$src_headers \
                $(gdk_headers) > gd.tmp
