@@ -802,4 +802,11 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 static void
 gnome_canvas_pixbuf_bounds (GnomeCanvasItem *item, double *x1, double *y1, double *x2, double *y2)
 {
+	GnomeCanvasPixbuf *gcp;
+	PixbufPrivate *priv;
+
+	gcp = GNOME_CANVAS_PIXBUF (item);
+	priv = gcp->priv;
+
+	
 }
