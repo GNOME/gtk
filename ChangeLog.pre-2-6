@@ -1,3 +1,10 @@
+2004-10-23  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Invalidate 
+	the window if the tree is empty, to avoid resizing artifacts
+	from the focus rectangle.  (#155881, Vincent Noel, patch by
+	Billy Biggs)	
+
 Sat Oct 23 16:14:37 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtksequence.c (_gtk_sequence_node_insert_sorted): Remove
