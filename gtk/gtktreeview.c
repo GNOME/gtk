@@ -6665,6 +6665,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   GtkRBNode *tmpnode = NULL;
   gint depth;
   gint i = 0;
+  gint height;
   gboolean free_path = FALSE;
 
   g_return_if_fail (path != NULL || iter != NULL);
@@ -6726,22 +6727,24 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   if (tree == NULL)
     goto done;
 
+  if (tree_view->priv->fixed_height_mode
+      && tree_view->priv->fixed_height >= 0)
+    height = tree_view->priv->fixed_height;
+  else
+    height = 0;
+
   /* ref the node */
   gtk_tree_model_ref_node (tree_view->priv->model, iter);
   if (indices[depth - 1] == 0)
     {
       tmpnode = _gtk_rbtree_find_count (tree, 1);
-      _gtk_rbtree_insert_before (tree, tmpnode, 0, FALSE);
+      _gtk_rbtree_insert_before (tree, tmpnode, height, FALSE);
     }
   else
     {
       tmpnode = _gtk_rbtree_find_count (tree, indices[depth - 1]);
-      _gtk_rbtree_insert_after (tree, tmpnode, 0, FALSE);
-    }
-
-  if (tree_view->priv->fixed_height_mode
-      && tree_view->priv->fixed_height >= 0)
-    _gtk_rbtree_node_set_height (tree, tmpnode, tree_view->priv->fixed_height);
+      _gtk_rbtree_insert_after (tree, tmpnode, height, FALSE);
+    } 
 
  done:
   install_presize_handler (tree_view);
