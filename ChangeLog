@@ -44,6 +44,7 @@ Thu Dec 18 17:52:56 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkicontheme.c (gtk_icon_info_get_embedded_rect):
 	Fix typo that used the wrong x/y values for the x1, y1 point
+	(#129605)
 
 Thu Dec 18 01:41:50 2003  Kristian Rietveld  <kris@gtk.org>
 
