@@ -1,3 +1,9 @@
+2003-02-19  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkkeys.c (gdk_keymap_class_init): Associate the
+	keys_changed virtual function with the keys_changed signal.
+	(#106512, Jeff Franks)
+
 2003-02-15  Larry Ewing  <lewing@ximian.com>
 
         * gdk/gdkevents.c (gdk_event_copy): copy the event axes as well.
