@@ -1,5 +1,15 @@
 2003-05-23  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtknotebook.c: Add support for up to four scroll
+	arrows. Control their display by new style properties
+	"has_forward_stepper", "has_backward_stepper",
+	"has_secondary_forward_stepper" and
+	has_secondary_backward_stepper". (#110540)
+
+	* gtk/gtknotebook.h (struct _GtkNotebook): Make in_child and
+	click_child three bits wide, add
+	has_{before,after}_{previous,next} fields.
+
 	* gtk/gtkcolorsel.c (gtk_color_selection_init): Update color on
 	focus out of hex_entry.  (#112665)
 	(hex_focus_out): New signal handler for focus out of hex entry.

@@ -77,13 +77,18 @@ struct _GtkNotebook
   guint show_border        : 1;
   guint tab_pos            : 2;
   guint scrollable         : 1;
-  guint in_child           : 2;
-  guint click_child        : 2;
+  guint in_child           : 3;
+  guint click_child        : 3;
   guint button             : 2;
   guint need_timer         : 1;
   guint child_has_focus    : 1;
   guint have_visible_child : 1;
   guint focus_out          : 1;	/* Flag used by ::move-focus-out implementation */
+
+  guint has_before_previous : 1;
+  guint has_before_next     : 1;
+  guint has_after_previous  : 1;
+  guint has_after_next      : 1;
 };
 
 struct _GtkNotebookClass
