@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 09:36-0400\n"
-"PO-Revision-Date: 2004-04-16 12:18+0200\n"
-"Last-Translator: Yuri Syrota <rasta@cvs.gnome.org>\n"
+"POT-Creation-Date: 2004-08-27 14:03+0300\n"
+"PO-Revision-Date: 2004-08-27 14:03+0300\n"
+"Last-Translator: Maxim Dziumanenko <mvd@mylinux.com.ua>\n"
 "Language-Team: Ukrainian <linux@linux.org.ua>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,7 +18,7 @@ msgstr ""
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:151 gdk-pixbuf/gdk-pixbuf-io.c:788
-#: gdk-pixbuf/gdk-pixbuf-io.c:935 tests/testfilechooser.c:192
+#: gdk-pixbuf/gdk-pixbuf-io.c:946 tests/testfilechooser.c:192
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Не вдається відкрити файл \"%s\": %s"
@@ -29,7 +29,7 @@ msgid "Image file '%s' contains no data"
 msgstr "Файл зображення \"%s\" не містить даних"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:209 gdk-pixbuf/gdk-pixbuf-io.c:840
-#: gdk-pixbuf/gdk-pixbuf-io.c:978 tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-io.c:990 tests/testfilechooser.c:237
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -79,35 +79,35 @@ msgstr "Нерозпізнаний формат файлу зображення"
 msgid "Failed to load image '%s': %s"
 msgstr "Не вдається завантажити зображення \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1167
+#: gdk-pixbuf/gdk-pixbuf-io.c:1211
 #, c-format
 msgid "Error writing to image file: %s"
 msgstr "Помилка при записуванні файлу зображення: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1211 gdk-pixbuf/gdk-pixbuf-io.c:1327
+#: gdk-pixbuf/gdk-pixbuf-io.c:1255 gdk-pixbuf/gdk-pixbuf-io.c:1371
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
 "Ця збірка gdk-pixbuf не підтримує збереження зображень в такому форматі: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1240
+#: gdk-pixbuf/gdk-pixbuf-io.c:1284
 msgid "Insufficient memory to save image to callback"
 msgstr "Недостатньо пам'яті для збереження файлу зображення"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1252
+#: gdk-pixbuf/gdk-pixbuf-io.c:1296
 msgid "Failed to open temporary file"
 msgstr "Не вдається відкрити тимчасовий файл"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1271
+#: gdk-pixbuf/gdk-pixbuf-io.c:1315
 msgid "Failed to read from temporary file"
 msgstr "Не вдається прочитати тимчасовий файл"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1453
+#: gdk-pixbuf/gdk-pixbuf-io.c:1497
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Не вдається відкрити \"%s\" для запису: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1478
+#: gdk-pixbuf/gdk-pixbuf-io.c:1522
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -116,7 +116,7 @@ msgstr ""
 "Не вдається закрити \"%s\" при записуванні зображення, можливо збережено не "
 "всі дані: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1666 gdk-pixbuf/gdk-pixbuf-io.c:1716
+#: gdk-pixbuf/gdk-pixbuf-io.c:1710 gdk-pixbuf/gdk-pixbuf-io.c:1760
 msgid "Insufficient memory to save image into a buffer"
 msgstr "Недостатньо пам'яті для збереження файлу у буфер"
 
@@ -201,7 +201,7 @@ msgstr "Формат зображень BMP"
 msgid "Failure reading GIF: %s"
 msgstr "Не вдається зчитати GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "Файл формату GIF містив пошкоджені дані (можливо його було обрізано?)"
 
@@ -215,7 +215,6 @@ msgid "Stack overflow"
 msgstr "Стек переповнений"
 
 #: gdk-pixbuf/io-gif.c:635
-#, fuzzy
 msgid "GIF image loader cannot understand this image."
 msgstr "Завантажувач зображень GIF формату не може зрозуміти це зображення."
 
@@ -227,25 +226,25 @@ msgstr "Виявлено неправильний код"
 msgid "Circular table entry in GIF file"
 msgstr "Циклічний табличний запис у файлі формату GIF"
 
-#: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
-#: gdk-pixbuf/io-gif.c:1591
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
+#: gdk-pixbuf/io-gif.c:1584
 msgid "Not enough memory to load GIF file"
 msgstr "Недостатньо пам'яті для завантаження файлу GIF"
 
-#: gdk-pixbuf/io-gif.c:1095
+#: gdk-pixbuf/io-gif.c:1088
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "Зображення GIF пошкоджене (невірне стиснення LZW)"
 
-#: gdk-pixbuf/io-gif.c:1145
+#: gdk-pixbuf/io-gif.c:1138
 msgid "File does not appear to be a GIF file"
 msgstr "Файл не схожий на GIF"
 
-#: gdk-pixbuf/io-gif.c:1157
+#: gdk-pixbuf/io-gif.c:1150
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Формат файлу GIF версії %s не підтримується"
 
-#: gdk-pixbuf/io-gif.c:1266
+#: gdk-pixbuf/io-gif.c:1259
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -253,11 +252,11 @@ msgstr ""
 "Зображення формату GIF не має глобальної мапи кольорів, і кадр в ньому не "
 "має локальної мапи кольорів."
 
-#: gdk-pixbuf/io-gif.c:1498
+#: gdk-pixbuf/io-gif.c:1491
 msgid "GIF image was truncated or incomplete."
 msgstr "Зображення формату GIF обрізане чи незавершене."
 
-#: gdk-pixbuf/io-gif.c:1650
+#: gdk-pixbuf/io-gif.c:1643
 msgid "The GIF image format"
 msgstr "Формат зображень GIF"
 
@@ -461,7 +460,7 @@ msgstr ""
 "набору ASCII."
 
 #: gdk-pixbuf/io-png.c:854
-#, fuzzy, c-format
+#, c-format
 msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 msgstr ""
 "Значення для блоку тексту \"%s\" в зображенні формату PNG не може бути "
@@ -502,11 +501,10 @@ msgid "Maximum color value in PNM file is too large"
 msgstr "Максимальне значення кольору у файлі формату PNM надто велике"
 
 #: gdk-pixbuf/io-pnm.c:396
-#, fuzzy
 msgid "Cannot handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Не вдається обробити файли формату PNM з максимальним значенням кольору "
-"більше, ніж 255"
+"більшим, ніж 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -529,7 +527,6 @@ msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr "Формат Raw PNM вимагає точно один пропуск перед даними зразка"
 
 #: gdk-pixbuf/io-pnm.c:770
-#, fuzzy
 msgid "Cannot allocate memory for loading PNM image"
 msgstr "Не вдається виділити пам'ять для завантаження файлу PNM"
 
@@ -570,37 +567,30 @@ msgid "The Sun raster image format"
 msgstr "Формат растрових зображень компанії Sun"
 
 #: gdk-pixbuf/io-tga.c:159
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer struct"
 msgstr "Не вдається виділити пам'ять для структури IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:178
-#, fuzzy
 msgid "Cannot allocate memory for IOBuffer data"
 msgstr "Не вдається виділити пам'ять для даних IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:189
-#, fuzzy
 msgid "Cannot realloc IOBuffer data"
 msgstr "Не вдається перерозподілити дані структури IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:219
-#, fuzzy
 msgid "Cannot allocate temporary IOBuffer data"
 msgstr "Не вдається виділити пам'ять для тимчасових даних структури IOBuffer"
 
 #: gdk-pixbuf/io-tga.c:353
-#, fuzzy
 msgid "Cannot allocate new pixbuf"
 msgstr "Не вдається виділити новий об'єкт Pixbuf"
 
 #: gdk-pixbuf/io-tga.c:692
-#, fuzzy
 msgid "Cannot allocate colormap structure"
 msgstr "Не вдається виділити пам'ять для структури мапи кольорів"
 
 #: gdk-pixbuf/io-tga.c:699
-#, fuzzy
 msgid "Cannot allocate colormap entries"
 msgstr "Не вдається виділити пам'ять для елементів мапи кольорів"
 
@@ -609,7 +599,6 @@ msgid "Unexpected bitdepth for colormap entries"
 msgstr "Несподівана бітова глибина для елементів мапи кольорів"
 
 #: gdk-pixbuf/io-tga.c:739
-#, fuzzy
 msgid "Cannot allocate TGA header memory"
 msgstr "Не вдається виділити пам'ять для заголовка формату TGA"
 
@@ -623,9 +612,8 @@ msgid "TGA image type not supported"
 msgstr "Тип зображення TGA не підтримується"
 
 #: gdk-pixbuf/io-tga.c:861
-#, fuzzy
 msgid "Cannot allocate memory for TGA context struct"
-msgstr "Не вдається виділити пам'ять для структури вмісту формату TGA"
+msgstr "Не вдається виділити пам'ять для структури контексту формату TGA"
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
@@ -733,12 +721,10 @@ msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM має неправильну кількість байтів на точку"
 
 #: gdk-pixbuf/io-xpm.c:1279
-#, fuzzy
 msgid "Cannot read XPM colormap"
 msgstr "Не вдається зчитати мапу кольорів XPM"
 
 #: gdk-pixbuf/io-xpm.c:1317
-#, fuzzy
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "Не вдається виділити пам'ять для завантаження зображення XPM"
 
@@ -753,46 +739,46 @@ msgstr "Формат зображень XPM"
 
 #: gtk/gtkaboutdialog.c:216 gtk/gtkaboutdialog.c:1724
 msgid "License"
-msgstr ""
+msgstr "Ліцензія"
 
 #: gtk/gtkaboutdialog.c:217
 msgid "The license of the program"
-msgstr ""
+msgstr "Програма ліцензії"
 
 #. Add the credits button
 #: gtk/gtkaboutdialog.c:358
 msgid "_Credits"
-msgstr ""
+msgstr "_Подяки"
 
 #. Add the license button
 #: gtk/gtkaboutdialog.c:367
 msgid "_License"
-msgstr ""
+msgstr "_Ліцензія"
 
 #: gtk/gtkaboutdialog.c:541
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Про %s"
 
 #: gtk/gtkaboutdialog.c:1662
 msgid "Credits"
-msgstr ""
+msgstr "Подяки"
 
 #: gtk/gtkaboutdialog.c:1687
 msgid "Written by"
-msgstr ""
+msgstr "Автор"
 
 #: gtk/gtkaboutdialog.c:1690
 msgid "Documented by"
-msgstr ""
+msgstr "Автор документації"
 
 #: gtk/gtkaboutdialog.c:1701
 msgid "Translated by"
-msgstr ""
+msgstr "Переклад"
 
 #: gtk/gtkaboutdialog.c:1705
 msgid "Artwork by"
-msgstr ""
+msgstr "Графіка"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -968,7 +954,7 @@ msgstr "Вс_тавити керівний символ Юнікоду"
 msgid "Invalid filename: %s"
 msgstr "Неправильна назва файлу: %s"
 
-#: gtk/gtkfilechooserdefault.c:796
+#: gtk/gtkfilechooserdefault.c:802
 #, c-format
 msgid ""
 "Could not retrieve information about %s:\n"
@@ -977,7 +963,7 @@ msgstr ""
 "Не вдається отримати інформацію про %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:807
+#: gtk/gtkfilechooserdefault.c:813
 #, c-format
 msgid ""
 "Could not add a bookmark for %s:\n"
@@ -986,7 +972,7 @@ msgstr ""
 "Не вдається додати закладку для %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:822 gtk/gtkfilechooserdefault.c:5556
+#: gtk/gtkfilechooserdefault.c:828 gtk/gtkfilechooserdefault.c:5570
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -995,7 +981,7 @@ msgstr ""
 "Не вдається утворити назву файлу з '%s' та '%s':\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:838
+#: gtk/gtkfilechooserdefault.c:844
 #, c-format
 msgid ""
 "Could not change the current folder to %s:\n"
@@ -1004,15 +990,15 @@ msgstr ""
 "Не вдається перейти у поточну теку %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1129 gtk/gtkpathbar.c:843
+#: gtk/gtkfilechooserdefault.c:1154 gtk/gtkpathbar.c:845
 msgid "Home"
 msgstr "Домашній каталог"
 
-#: gtk/gtkfilechooserdefault.c:1152 gtk/gtkpathbar.c:845
+#: gtk/gtkfilechooserdefault.c:1177 gtk/gtkpathbar.c:847
 msgid "Desktop"
 msgstr "Стільниця"
 
-#: gtk/gtkfilechooserdefault.c:1550
+#: gtk/gtkfilechooserdefault.c:1575
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -1021,12 +1007,12 @@ msgstr ""
 "Не вдається створити теку %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1730
+#: gtk/gtkfilechooserdefault.c:1755
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "Не вдається додати закладку для %s, тому що це не тека."
 
-#: gtk/gtkfilechooserdefault.c:1842
+#: gtk/gtkfilechooserdefault.c:1867
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1035,92 +1021,91 @@ msgstr ""
 "Не вдається видалити закладку для %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2449
+#: gtk/gtkfilechooserdefault.c:2474
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Не вдається додати закладку для %s, тому що цей шлях - неправильний."
 
-#: gtk/gtkfilechooserdefault.c:2608
+#: gtk/gtkfilechooserdefault.c:2654
 msgid "Shortcuts"
-msgstr ""
+msgstr "Ярлики"
 
-#: gtk/gtkfilechooserdefault.c:2662
+#: gtk/gtkfilechooserdefault.c:2708
 msgid "Folder"
 msgstr "Тека"
 
-#: gtk/gtkfilechooserdefault.c:2714 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2760 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "_Додати"
 
-#: gtk/gtkfilechooserdefault.c:2724 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2770 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "В_идалити"
 
-#: gtk/gtkfilechooserdefault.c:2814
+#: gtk/gtkfilechooserdefault.c:2868
 msgid "_Add to Shortcuts"
-msgstr ""
+msgstr "_Додати до ярликів"
 
-#: gtk/gtkfilechooserdefault.c:2828
+#: gtk/gtkfilechooserdefault.c:2882
 msgid "Show _Hidden Files"
 msgstr "Показати при_ховані файли"
 
-#: gtk/gtkfilechooserdefault.c:2952 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3006 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Файли"
 
-#: gtk/gtkfilechooserdefault.c:2980
+#: gtk/gtkfilechooserdefault.c:3034
 msgid "Name"
-msgstr "Назва кольору:"
+msgstr "Назва"
 
-#: gtk/gtkfilechooserdefault.c:3005
+#: gtk/gtkfilechooserdefault.c:3059
 msgid "Size"
 msgstr "Розмір"
 
-#: gtk/gtkfilechooserdefault.c:3018
+#: gtk/gtkfilechooserdefault.c:3072
 msgid "Modified"
 msgstr "Змінено"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3117
 msgid "Create Fo_lder"
 msgstr "Створити _теку"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3177
+#: gtk/gtkfilechooserdefault.c:3231
 msgid "_Name:"
 msgstr "_Назва:"
 
-#: gtk/gtkfilechooserdefault.c:3221
+#: gtk/gtkfilechooserdefault.c:3275
 msgid "_Browse for other folders"
 msgstr "О_глянути інші теки"
 
-#: gtk/gtkfilechooserdefault.c:3463
+#: gtk/gtkfilechooserdefault.c:3517
 msgid "Save in _folder:"
 msgstr "Зберегти у _теку:"
 
-#: gtk/gtkfilechooserdefault.c:3465
+#: gtk/gtkfilechooserdefault.c:3519
 msgid "Create in _folder:"
 msgstr "Створити у _теці:"
 
-#: gtk/gtkfilechooserdefault.c:4152
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:4206
 msgid "Cannot change to folder because it is not local"
-msgstr "Не вдається перейти у вказану вами теку, тому що вона не локальна"
+msgstr "Не вдається перейти у вказану теку, тому що вона не локальна"
 
-#: gtk/gtkfilechooserdefault.c:4295
+#: gtk/gtkfilechooserdefault.c:4349
 msgid "Could not find the path"
 msgstr "Не вдається знайти шлях"
 
-#: gtk/gtkfilechooserdefault.c:4656
+#: gtk/gtkfilechooserdefault.c:4710
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "ярлика %s не існує"
 
-#: gtk/gtkfilechooserdefault.c:5329
+#: gtk/gtkfilechooserdefault.c:5383
 msgid "Type name of new folder"
 msgstr "Введіть назву нової теки"
 
-#: gtk/gtkfilechooserdefault.c:5358
+#: gtk/gtkfilechooserdefault.c:5412
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1128,38 +1113,38 @@ msgstr[0] "%d байт"
 msgstr[1] "%d байти"
 msgstr[2] "%d байтів"
 
-#: gtk/gtkfilechooserdefault.c:5360
+#: gtk/gtkfilechooserdefault.c:5414
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f Кб"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5416
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f Мб"
 
-#: gtk/gtkfilechooserdefault.c:5364
+#: gtk/gtkfilechooserdefault.c:5418
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f Гб"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5463
 msgid "Today"
 msgstr "Сьогодні"
 
-#: gtk/gtkfilechooserdefault.c:5411
+#: gtk/gtkfilechooserdefault.c:5465
 msgid "Yesterday"
 msgstr "Вчора"
 
-#: gtk/gtkfilechooserdefault.c:5422
+#: gtk/gtkfilechooserdefault.c:5476
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/gtkfilechooserdefault.c:5517
+#: gtk/gtkfilechooserdefault.c:5531
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Не вдається перейти у вказану вами теку, цей шлях неправильний."
 
-#: gtk/gtkfilechooserdefault.c:5594
+#: gtk/gtkfilechooserdefault.c:5608
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1168,15 +1153,15 @@ msgstr ""
 "Неможливо вибрати %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5633
+#: gtk/gtkfilechooserdefault.c:5647
 msgid "Open Location"
 msgstr "Відкрити за адресою"
 
-#: gtk/gtkfilechooserdefault.c:5640
+#: gtk/gtkfilechooserdefault.c:5654
 msgid "Save in Location"
 msgstr "Зберегти за адресою"
 
-#: gtk/gtkfilechooserdefault.c:5659
+#: gtk/gtkfilechooserdefault.c:5673
 msgid "_Location:"
 msgstr "_Адреса:"
 
@@ -1392,9 +1377,9 @@ msgid "Filesystem"
 msgstr "Файлова система"
 
 #: gtk/gtkfilesystemunix.c:736
-#, fuzzy, c-format
+#, c-format
 msgid "Could not get a stock icon for %s"
-msgstr "Не вдається отримати інформацію про файл '%s': %s"
+msgstr "Не вдається отримати вбудований значок '%s'"
 
 #: gtk/gtkfilesystemunix.c:831
 #, c-format
@@ -1643,7 +1628,7 @@ msgstr "Запитання"
 #.
 #: gtk/gtkstock.c:294
 msgid "_About"
-msgstr ""
+msgstr "_Про програму"
 
 #: gtk/gtkstock.c:296
 msgid "_Apply"
@@ -1691,7 +1676,7 @@ msgstr "Вико_нати"
 
 #: gtk/gtkstock.c:307
 msgid "_Edit"
-msgstr ""
+msgstr "_Правка"
 
 #: gtk/gtkstock.c:308
 msgid "_Find"
@@ -1786,30 +1771,26 @@ msgid "_Right"
 msgstr "_Праворуч"
 
 #: gtk/gtkstock.c:332
-#, fuzzy
 msgid "_Next"
-msgstr "_Створити"
+msgstr "Да_лі"
 
 #: gtk/gtkstock.c:333
-#, fuzzy
 msgid "P_ause"
-msgstr "Вст_авити"
+msgstr "П_ауза"
 
 #: gtk/gtkstock.c:334
 msgid "_Play"
-msgstr ""
+msgstr "_Відтворити"
 
 #: gtk/gtkstock.c:335
 msgid "Pre_vious"
-msgstr ""
+msgstr "_Попередній"
 
 #: gtk/gtkstock.c:336
-#, fuzzy
 msgid "_Record"
-msgstr "_Червоний:"
+msgstr "_Запис"
 
 #: gtk/gtkstock.c:337
-#, fuzzy
 msgid "R_ewind"
 msgstr "З_найти"
 
@@ -1843,7 +1824,7 @@ msgstr "Вст_авити"
 
 #: gtk/gtkstock.c:345
 msgid "_Preferences"
-msgstr "Н_астройка"
+msgstr "П_араметри"
 
 #: gtk/gtkstock.c:346
 msgid "_Print"
@@ -1915,7 +1896,7 @@ msgstr "П_ідкреслений"
 
 #: gtk/gtkstock.c:365
 msgid "_Undo"
-msgstr "_Скасувати"
+msgstr "В_ернути"
 
 #: gtk/gtkstock.c:366
 msgid "_Yes"
@@ -2059,15 +2040,3 @@ msgstr "Метод XInput"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Не вдається отримати інформацію про файл '%s': %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Непідтримуваний варіант зображення формату TIFF"
-
-#~ msgid "Shift"
-#~ msgstr "Shift"
-
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
-
-#~ msgid "Alt"
-#~ msgstr "Alt"
