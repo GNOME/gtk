@@ -1,3 +1,7 @@
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/visual_index.xml: Sort alphabetically.
+
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/tmpl/gtkfilefilter.sgml: Add docs.
