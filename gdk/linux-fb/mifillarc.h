@@ -174,51 +174,18 @@ typedef struct _miArcSlice {
 #define miFillInArcLower(slw) (((iny + dy) != 0) && \
 			       ((slw > 1) || (ine != inxk)))
 
-extern int miFreeArcCache(
-#if NeedFunctionPrototypes
-    gpointer /*data*/,
-    guint /*id*/
-#endif
-);
+extern int miFreeArcCache(gpointer data, guint id);
 
-extern struct finalSpan *realAllocSpan(
-#if NeedFunctionPrototypes
-    void
-#endif
-);
+extern struct finalSpan *realAllocSpan(void);
 
-extern void miFillArcSetup(
-#if NeedFunctionPrototypes
-    miArc * /*arc*/,
-    miFillArcRec * /*info*/
-#endif
-);
+extern void miFillArcSetup(miArc *arc, miFillArcRec *info);
 
-extern void miFillArcDSetup(
-#if NeedFunctionPrototypes
-    miArc * /*arc*/,
-    miFillArcDRec * /*info*/
-#endif
-);
+extern void miFillArcDSetup(miArc *arc, miFillArcDRec *info);
 
-extern void miEllipseAngleToSlope(
-#if NeedFunctionPrototypes
-    int /*angle*/,
-    int /*width*/,
-    int /*height*/,
-    int * /*dxp*/,
-    int * /*dyp*/,
-    double * /*d_dxp*/,
-    double * /*d_dyp*/
-#endif
-);
+extern void miEllipseAngleToSlope(int angle, int width, int height, int *dxp,
+                                  int *dyp, double *d_dxp, double *d_dyp);
 
-extern void miFillArcSliceSetup(
-#if NeedFunctionPrototypes
-    miArc * /*arc*/,
-    miArcSliceRec * /*slice*/,
-    GdkGC* /*pGC*/
-#endif
-);
+extern void miFillArcSliceSetup(miArc *arc, miArcSliceRec *slice, GdkGC* pGC);
 
 #endif
+

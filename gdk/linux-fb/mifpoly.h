@@ -69,8 +69,7 @@ SOFTWARE.
 #else
 #ifdef __GNUC__
 #define ICEIL ICIEL
-static __inline int ICEIL(x)
-    double x;
+static __inline int ICEIL(double x)
 {
     int _cTmp = x;
     return ((x == _cTmp) || (x < 0.0)) ? _cTmp : _cTmp+1;
@@ -97,16 +96,14 @@ typedef struct _SppArc {
 /* mifpolycon.c */
 
 extern void miFillSppPoly(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*dst*/,
-    GdkGC* /*pgc*/,
-    int /*count*/,
-    SppPointPtr /*ptsIn*/,
-    int /*xTrans*/,
-    int /*yTrans*/,
-    double /*xFtrans*/,
-    double /*yFtrans*/
-#endif
+    GdkDrawable* dst,
+    GdkGC* pgc,
+    int count,
+    SppPointPtr ptsIn,
+    int xTrans,
+    int yTrans,
+    double xFtrans,
+    double yFtrans
 );
 
 #endif /* MIFPOLY_H */

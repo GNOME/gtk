@@ -2343,7 +2343,7 @@ GdkWindow*
 gdk_window_foreign_new_for_display (GdkDisplay      *display,
 				    GdkNativeWindow  anid)
 {
-  return (GdkWindow*) gdk_drawable_ref (anid);
+  return (GdkWindow*) gdk_drawable_ref ((GdkDrawable *)anid);
 }
 
 GdkWindow*

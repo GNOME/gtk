@@ -54,22 +54,12 @@ SOFTWARE.
 #include <config.h>
 #include "mi.h"
 
-extern gboolean miFillGeneralPoly(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*dst*/,
-    GdkGC* /*pgc*/,
-    int /*count*/,
-    GdkPoint* /*ptsIn*/
-#endif
-);
+extern gboolean miFillGeneralPoly(GdkDrawable* dst, GdkGC* pgc,
+                                  int count, GdkPoint* ptsIn);
 
 void
-miFillPolygon(dst, pgc, shape, mode, count, pPts)
-    GdkDrawable*		dst;
-    register GdkGC*	pgc;
-    int			shape, mode;
-    register int	count;
-    GdkPoint*		pPts;
+miFillPolygon(GdkDrawable *dst, register GdkGC *pgc, int shape,
+              int mode, register int count, GdkPoint *pPts)
 {
     if (count == 0)
 	return;

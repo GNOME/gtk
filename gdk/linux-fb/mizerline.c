@@ -86,12 +86,8 @@ SOFTWARE.
 }
 
 void
-miZeroLine(pDraw, pGC, mode, npt, pptInit)
-    GdkDrawable* pDraw;
-    GdkGC*	pGC;
-    int		mode;		/* Origin or Previous */
-    int		npt;		/* number of points */
-    GdkPoint* pptInit;
+miZeroLine(GdkDrawable *pDraw, GdkGC *pGC,
+           int mode, int npt, GdkPoint *pptInit)
 {
     int Nspans, current_y = 0;
     GdkPoint* ppt; 
@@ -318,12 +314,8 @@ miZeroLine(pDraw, pGC, mode, npt, pptInit)
 }
 
 void
-miZeroDashLine(dst, pgc, mode, nptInit, pptInit)
-GdkDrawable* dst;
-GdkGC* pgc;
-int mode;
-int nptInit;		/* number of points in polyline */
-GdkPoint *pptInit;	/* points in the polyline */
+miZeroDashLine(GdkDrawable *dst, GdkGC *pgc,
+               int mode, int nptInit, GdkPoint *pptInit)
 {
     /* XXX kludge until real zero-width dash code is written */
     GDK_GC_FBDATA(pgc)->values.line_width = 1;

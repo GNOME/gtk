@@ -46,7 +46,8 @@ SOFTWARE.
 #include "mi.h"
 #include "mifpoly.h"
 
-static int GetFPolyYBounds();
+static int
+GetFPolyYBounds(register SppPointPtr pts, int n, double yFtrans, int *by, int *ty);
 
 #ifdef ICEILTEMPDECL
 ICEILTEMPDECL
@@ -228,13 +229,8 @@ miFillSppPoly(GdkDrawable *dst, GdkGC *pgc, int count, SppPointPtr ptsIn, int xT
 
 /* Find the index of the point with the smallest y.also return the
  * smallest and largest y */
-static
-int
-GetFPolyYBounds(pts, n, yFtrans, by, ty)
-    register SppPointPtr	pts;
-    int 			n;
-    double			yFtrans;
-    int 			*by, *ty;
+static int
+GetFPolyYBounds(register SppPointPtr pts, int n, double yFtrans, int *by, int *ty)
 {
     register SppPointPtr	ptMin;
     double 			ymin, ymax;

@@ -357,7 +357,7 @@ gdk_fb_cursor_invalidate (void)
 }
 
 void
-gdk_fb_cursor_unhide()
+gdk_fb_cursor_unhide (void)
 {
   GdkFBDrawingContext *mydc = gdk_fb_cursor_dc;
   GdkCursorPrivateFB *last_private;

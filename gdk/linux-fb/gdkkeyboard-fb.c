@@ -170,7 +170,7 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 }
 
 guint
-gdk_fb_keyboard_modifiers ()
+gdk_fb_keyboard_modifiers (void)
 {
   return gdk_fb_keyboard->modifier_state;
 }

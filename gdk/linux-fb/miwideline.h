@@ -157,8 +157,7 @@ typedef struct _LineFace {
 #else
 #ifdef __GNUC__
 #define ICEIL ICIEL
-static __inline int ICEIL(x)
-    double x;
+static __inline int ICEIL(double x)
 {
     int _cTmp = x;
     return ((x == _cTmp) || (x < 0.0)) ? _cTmp : _cTmp+1;
@@ -170,79 +169,31 @@ static __inline int ICEIL(x)
 #endif
 #endif
 
-extern void miFillPolyHelper(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*pDrawable*/,
-    GdkGC* /*pGC*/,
-    GdkColor * /*pixel*/,
-    SpanDataPtr /*spanData*/,
-    int /*y*/,
-    int /*overall_height*/,
-    PolyEdgePtr /*left*/,
-    PolyEdgePtr /*right*/,
-    int /*left_count*/,
-    int /*right_count*/
-#endif
-);
-extern int miRoundJoinFace(
-#if NeedFunctionPrototypes
-    LineFacePtr /*face*/,
-    PolyEdgePtr /*edge*/,
-    gboolean * /*leftEdge*/
-#endif
-);
+extern void miFillPolyHelper(GdkDrawable* pDrawable, GdkGC* pGC,
+                             GdkColor * pixel, SpanDataPtr spanData, int y,
+                             int overall_height, PolyEdgePtr left,
+                             PolyEdgePtr right, int left_count,
+                             int right_count);
 
-extern void miRoundJoinClip(
-#if NeedFunctionPrototypes
-    LineFacePtr /*pLeft*/,
-    LineFacePtr /*pRight*/,
-    PolyEdgePtr /*edge1*/,
-    PolyEdgePtr /*edge2*/,
-    int * /*y1*/,
-    int * /*y2*/,
-    gboolean * /*left1*/,
-    gboolean * /*left2*/
-#endif
-);
+extern int miRoundJoinFace(LineFacePtr face, PolyEdgePtr edge,
+                           gboolean * leftEdge);
 
-extern int miRoundCapClip(
-#if NeedFunctionPrototypes
-    LineFacePtr /*face*/,
-    gboolean /*isInt*/,
-    PolyEdgePtr /*edge*/,
-    gboolean * /*leftEdge*/
-#endif
-);
+extern void miRoundJoinClip(LineFacePtr pLeft, LineFacePtr pRight,
+                            PolyEdgePtr edge1, PolyEdgePtr edge2, int *y1,
+                            int *y2, gboolean *left1, gboolean *left2);
 
-extern void miLineProjectingCap(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*pDrawable*/,
-    GdkGC* /*pGC*/,
-    GdkColor * /*pixel*/,
-    SpanDataPtr /*spanData*/,
-    LineFacePtr /*face*/,
-    gboolean /*isLeft*/,
-    double /*xorg*/,
-    double /*yorg*/,
-    gboolean /*isInt*/
-#endif
-);
+extern int miRoundCapClip(LineFacePtr face, gboolean isInt, PolyEdgePtr edge,
+                          gboolean *leftEdge);
 
-extern SpanDataPtr miSetupSpanData(
-#if NeedFunctionPrototypes
-    GdkGC* /*pGC*/,
-    SpanDataPtr /*spanData*/,
-    int /*npt*/
-#endif
-);
+extern void miLineProjectingCap(GdkDrawable* pDrawable, GdkGC* pGC,
+                                GdkColor *pixel, SpanDataPtr spanData,
+                                LineFacePtr face, gboolean isLeft,
+                                double xorg, double yorg, gboolean isInt);
 
-extern void miCleanupSpanData(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*pDrawable*/,
-    GdkGC* /*pGC*/,
-    SpanDataPtr /*spanData*/
-#endif
-);
+extern SpanDataPtr miSetupSpanData(GdkGC* pGC, SpanDataPtr spanData, int npt);
+
+extern void miCleanupSpanData(GdkDrawable* pDrawable, GdkGC* pGC,
+                              SpanDataPtr spanData);
 
 extern int miPolyBuildEdge(double x0, double y0, double k, int dx, int dy,
 				int xi, int yi, int left, PolyEdgePtr edge);

@@ -154,24 +154,22 @@ extern void miSetZeroLineBias(
 extern int miZeroLineScreenIndex;
 
 extern int miZeroClipLine(
-#if NeedFunctionPrototypes
-    int /*xmin*/,
-    int /*ymin*/,
-    int /*xmax*/,
-    int /*ymax*/,
-    int * /*new_x1*/,
-    int * /*new_y1*/,
-    int * /*new_x2*/,
-    int * /*new_y2*/,
-    unsigned int /*adx*/,
-    unsigned int /*ady*/,
-    int * /*pt1_clipped*/,
-    int * /*pt2_clipped*/,
-    int /*octant*/,
-    unsigned int /*bias*/,
-    int /*oc1*/,
-    int /*oc2*/
-#endif
+    int xmin,
+    int ymin,
+    int xmax,
+    int ymax,
+    int * new_x1,
+    int * new_y1,
+    int * new_x2,
+    int * new_y2,
+    unsigned int adx,
+    unsigned int ady,
+    int * pt1_clipped,
+    int * pt2_clipped,
+    int octant,
+    unsigned int bias,
+    int oc1,
+    int oc2
 );
 
 #endif /* MILINE_H */

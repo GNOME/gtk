@@ -45,7 +45,8 @@ SOFTWARE.
 #include <config.h>
 #include "mi.h"
 
-static miDashPtr CheckDashStorage();
+static miDashPtr
+CheckDashStorage(miDashPtr *ppseg, int nseg, int *pnsegMax);
 
 /* return a list of DashRec.  there will be an extra
 entry at the end holding the last point of the polyline.
@@ -79,13 +80,8 @@ enum { EVEN_DASH=0, ODD_DASH=1 };
 #define sign(x) ((x)>0)?1:( ((x)<0)?-1:0 )
 
 miDashPtr
-miDashLine(npt, ppt, nDash, pDash, offset, pnseg)
-int npt;
-GdkPoint* ppt;
-unsigned int nDash;
-unsigned char *pDash;
-unsigned int offset;
-int *pnseg;
+miDashLine(int npt, GdkPoint *ppt, unsigned int nDash,
+           unsigned char *pDash, unsigned int offset, int *pnseg)
 {
     GdkPoint pt1, pt2;
     int lenCur;		/* npt used from this dash */
@@ -248,12 +244,13 @@ necessary.  this interface seems unnecessarily cumbersome.
 
 */
 
-static
-miDashPtr
-CheckDashStorage(ppseg, nseg, pnsegMax)
+static miDashPtr
+CheckDashStorage(miDashPtr *ppseg, int nseg, int *pnsegMax)
+#if 0
 miDashPtr *ppseg;		/* base pointer */
 int nseg;			/* number of segment we want to write to */
 int *pnsegMax;			/* size (in segments) of list so far */
+#endif
 {
     if (nseg > *pnsegMax)
     {
@@ -273,12 +270,15 @@ int *pnsegMax;			/* size (in segments) of list so far */
 }
 
 void
-miStepDash (dist, pDashIndex, pDash, numInDashList, pDashOffset)
+miStepDash (int dist, int *pDashIndex, unsigned char *pDash,
+            int numInDashList, int *pDashOffset)
+#if 0
     int dist;			/* distance to step */
     int *pDashIndex;		/* current dash */
     unsigned char *pDash;	/* dash list */
     int numInDashList;		/* total length of dash list */
     int *pDashOffset;		/* offset into current dash */
+#endif
 {
     int	dashIndex, dashOffset;
     int totallen;

@@ -715,7 +715,7 @@ gdk_fb_switch (int sig)
 }
 
 static GdkFBDisplay *
-gdk_fb_display_new ()
+gdk_fb_display_new (void)
 {
   GdkFBDisplay *display;
   gchar *fb_filename;

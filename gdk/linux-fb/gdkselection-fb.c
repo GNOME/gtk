@@ -138,7 +138,7 @@ gdk_selection_convert (GdkWindow *requestor,
       if (event_window)
 	{
 	  event = gdk_event_make (event_window, GDK_SELECTION_REQUEST, TRUE);
-	  event->selection.requestor = requestor;
+	  event->selection.requestor = (unsigned int)requestor;
 	  event->selection.selection = selection;
 	  event->selection.target = target;
 	  event->selection.property = _gdk_selection_property;
@@ -173,7 +173,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
   
   if (!gdk_property_get (requestor,
 			 _gdk_selection_property,
-			 0/*AnyPropertyType?*/,
+			 NULL/*AnyPropertyType?*/,
 			 0, 0,
 			 FALSE,
 			 &prop_type, &prop_format, &prop_len,
@@ -190,7 +190,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 
   if (!gdk_property_get (requestor,
 			 _gdk_selection_property,
-			 0/*AnyPropertyType?*/,
+			 NULL/*AnyPropertyType?*/,
 			 0, prop_len + 1,
 			 FALSE,
 			 &prop_type, &prop_format, &prop_len,
@@ -268,7 +268,7 @@ gchar *
 gdk_utf8_to_string_target (const gchar *str)
 {
   g_warning ("gdk_utf8_to_string_target() not implemented\n");
-  return 0;
+  return NULL;
 }
 
 gboolean

@@ -59,8 +59,7 @@ Written by Joel McCormack, Summer 1989.
 */
 
 
-void miInitSpanGroup(spanGroup)
-    SpanGroup *spanGroup;
+void miInitSpanGroup(SpanGroup *spanGroup)
 {
     spanGroup->size = 0;
     spanGroup->count = 0;
@@ -72,9 +71,7 @@ void miInitSpanGroup(spanGroup)
 #define YMIN(spans) (spans->points[0].y)
 #define YMAX(spans)  (spans->points[spans->count-1].y)
 
-void miSubtractSpans (spanGroup, sub)
-    SpanGroup	*spanGroup;
-    Spans	*sub;
+void miSubtractSpans (SpanGroup *spanGroup, Spans *sub)
 {
     int		i, subCount, spansCount;
     int		ymin, ymax, xmin, xmax;
@@ -164,10 +161,7 @@ void miSubtractSpans (spanGroup, sub)
     }
 }
     
-void miAppendSpans(spanGroup, otherGroup, spans)
-    SpanGroup   *spanGroup;
-    SpanGroup	*otherGroup;
-    Spans       *spans;
+void miAppendSpans(SpanGroup *spanGroup, SpanGroup *otherGroup, Spans *spans)
 {
     register    int ymin, ymax;
     register    int spansCount;
@@ -199,15 +193,12 @@ void miAppendSpans(spanGroup, otherGroup, spans)
     }
 } /* AppendSpans */
 
-void miFreeSpanGroup(spanGroup)
-    SpanGroup   *spanGroup;
+void miFreeSpanGroup(SpanGroup *spanGroup)
 {
     if (spanGroup->group != NULL) g_free(spanGroup->group);
 }
 
-static void QuickSortSpansX(points, numSpans)
-    register GdkSpan        points[];
-    register int	    numSpans;
+static void QuickSortSpansX(register GdkSpan points[], register int numSpans)
 {
     register int	    x;
     register int	    i, j, m;
@@ -286,9 +277,7 @@ static void QuickSortSpansX(points, numSpans)
 } /* QuickSortSpans */
 
 
-static int UniquifySpansX(spans, newPoints, newWidths)
-    Spans		    *spans;
-    register GdkSpan    *newPoints;
+static int UniquifySpansX(Spans *spans, register GdkSpan *newPoints)
 {
     register int newx1, newx2, oldpt, i, y;
     GdkSpan    *oldPoints, *startNewPoints = newPoints;
@@ -331,8 +320,7 @@ static int UniquifySpansX(spans, newPoints, newWidths)
 } /* UniquifySpansX */
 
 void
-miDisposeSpanGroup (spanGroup)
-    SpanGroup	*spanGroup;
+miDisposeSpanGroup (SpanGroup *spanGroup)
 {
     int	    i;
     Spans   *spans;
@@ -344,10 +332,7 @@ miDisposeSpanGroup (spanGroup)
     }
 }
 
-void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
-    GdkDrawable* pDraw;
-    GdkGC*	pGC;
-    SpanGroup   *spanGroup;
+void miFillUniqueSpanGroup(GdkDrawable *pDraw, GdkGC *pGC, SpanGroup *spanGroup)
 {
     register int    i;
     register Spans  *spans;
@@ -485,10 +470,7 @@ void miFillUniqueSpanGroup(pDraw, pGC, spanGroup)
 }
 
 
-void miFillSpanGroup(pDraw, pGC, spanGroup)
-    GdkDrawable* pDraw;
-    GdkGC*	pGC;
-    SpanGroup   *spanGroup;
+void miFillSpanGroup(GdkDrawable *pDraw, GdkGC *pGC, SpanGroup *spanGroup)
 {
     register int    i;
     register Spans  *spans;

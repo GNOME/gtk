@@ -57,16 +57,10 @@ miLineArc (GdkDrawable *pDraw, GdkGC *pGC, GdkColor *pixel, SpanDataPtr spanData
  */
 
 void
-miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
-		  left, right, left_count, right_count)
-    GdkDrawable*	pDrawable;
-    GdkGC*	pGC;
-    GdkColor *pixel;
-    SpanDataPtr	spanData;
-    int		y;			/* start y coordinate */
-    int		overall_height;		/* height of entire segment */
-    PolyEdgePtr	left, right;
-    int		left_count, right_count;
+miFillPolyHelper (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel,
+                  SpanDataPtr spanData, int y, int overall_height,
+		  PolyEdgePtr left, PolyEdgePtr right, int left_count,
+                  int right_count)
 {
     register int left_x = 0, left_e = 0;
     int	left_stepx = 0;
@@ -157,12 +151,8 @@ miFillPolyHelper (pDrawable, pGC, pixel, spanData, y, overall_height,
 }
 
 static void
-miFillRectPolyHelper (pDrawable, pGC, pixel, spanData, x, y, w, h)
-    GdkDrawable*	pDrawable;
-    GdkGC*	pGC;
-    GdkColor*   pixel;
-    SpanDataPtr	spanData;
-    int		x, y, w, h;
+miFillRectPolyHelper (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel,
+                      SpanDataPtr spanData, int x, int y, int w, int h)
 {
     register GdkSpan* ppt;
     GdkColor	oldPixel;
@@ -202,13 +192,9 @@ miFillRectPolyHelper (pDrawable, pGC, pixel, spanData, x, y, w, h)
 }
 
 /* static */ int
-miPolyBuildEdge (x0, y0, k, dx, dy, xi, yi, left, edge)
-    double	x0, y0;
-    double	k;  /* x0 * dy - y0 * dx */
-    register int dx, dy;
-    int		xi, yi;
-    int		left;
-    register PolyEdgePtr edge;
+miPolyBuildEdge (double x0, double y0, double k, register int dx,
+                 register int dy, int xi, int yi, int left,
+                 register PolyEdgePtr edge)
 {
     int	    x, y, e;
     int	    xady;
@@ -261,14 +247,9 @@ miPolyBuildEdge (x0, y0, k, dx, dy, xi, yi, left, edge)
 #define StepAround(v, incr, max) (((v) + (incr) < 0) ? (max - 1) : ((v) + (incr) == max) ? 0 : ((v) + (incr)))
 
 /* static */ int
-miPolyBuildPoly (vertices, slopes, count, xi, yi, left, right, pnleft, pnright, h)
-    register PolyVertexPtr vertices;
-    register PolySlopePtr  slopes;
-    int		    count;
-    int		    xi, yi;
-    PolyEdgePtr	    left, right;
-    int		    *pnleft, *pnright;
-    int		    *h;
+miPolyBuildPoly (register PolyVertexPtr vertices, register PolySlopePtr slopes,
+                 int count, int xi, int yi, PolyEdgePtr left, PolyEdgePtr right,
+                 int *pnleft, int *pnright, int *h)
 {
     int	    top, bottom;
     double  miny, maxy;
@@ -371,12 +352,8 @@ miPolyBuildPoly (vertices, slopes, count, xi, yi, left, right, pnleft, pnright, 
 }
 
 static void
-miLineOnePoint (pDrawable, pGC, pixel, spanData, x, y)
-    GdkDrawable*	    pDrawable;
-    GdkGC*	    pGC;
-    GdkColor*   pixel;
-    SpanDataPtr	    spanData;
-    int		    x, y;
+miLineOnePoint (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel,
+                SpanDataPtr spanData, int x, int y)
 {
     GdkColor oldPixel;
     GdkSpan  span;
@@ -391,7 +368,8 @@ miLineOnePoint (pDrawable, pGC, pixel, spanData, x, y)
 }
 
 static void
-miLineJoin (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel, SpanDataPtr spanData, LineFacePtr pLeft, LineFacePtr pRight)
+miLineJoin (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel,
+            SpanDataPtr spanData, LineFacePtr pLeft, LineFacePtr pRight)
 {
     double	    mx, my;
     double	    denom = 0.0;
@@ -533,11 +511,7 @@ miLineJoin (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel, SpanDataPtr spa
 }
 
 static int
-miLineArcI (pDraw, pGC, xorg, yorg, points)
-    GdkDrawable*	    pDraw;
-    GdkGC*	    pGC;
-    int		    xorg, yorg;
-    GdkSpan*	    points;
+miLineArcI (GdkDrawable *pDraw, GdkGC *pGC, int xorg, int yorg, GdkSpan *points)
 {
     register GdkSpan* tpts, *bpts;
     register int x, y, e, ex, slw;
@@ -610,15 +584,9 @@ miLineArcI (pDraw, pGC, xorg, yorg, points)
     }
 
 static int
-miLineArcD (pDraw, pGC, xorg, yorg, points,
-	    edge1, edgey1, edgeleft1, edge2, edgey2, edgeleft2)
-    GdkDrawable*	    pDraw;
-    GdkGC*	    pGC;
-    double	    xorg, yorg;
-    GdkSpan*        points;
-    PolyEdgePtr	    edge1, edge2;
-    int		    edgey1, edgey2;
-    gboolean	    edgeleft1, edgeleft2;
+miLineArcD (GdkDrawable *pDraw, GdkGC *pGC, double xorg, double yorg, GdkSpan *points,
+	    PolyEdgePtr edge1, int edgey1, gboolean edgeleft1,
+            PolyEdgePtr edge2, int edgey2, gboolean edgeleft2)
 {
     register GdkSpan* pts;
     double radius, x0, y0, el, er, yk, xlk, xrk, k;
@@ -766,10 +734,8 @@ miLineArcD (pDraw, pGC, xorg, yorg, points,
 }
 
 int
-miRoundJoinFace (face, edge, leftEdge)
-    register LineFacePtr face;
-    register PolyEdgePtr edge;
-    gboolean	*leftEdge;
+miRoundJoinFace (register LineFacePtr face, register PolyEdgePtr edge,
+                 gboolean *leftEdge)
 {
     int	    y;
     int	    dx, dy;
@@ -815,11 +781,9 @@ miRoundJoinFace (face, edge, leftEdge)
 }
 
 void
-miRoundJoinClip (pLeft, pRight, edge1, edge2, y1, y2, left1, left2)
-    register LineFacePtr pLeft, pRight;
-    PolyEdgePtr	edge1, edge2;
-    int		*y1, *y2;
-    gboolean	*left1, *left2;
+miRoundJoinClip (register LineFacePtr pLeft, register LineFacePtr pRight,
+                 PolyEdgePtr edge1, PolyEdgePtr edge2, int *y1, int *y2,
+                 gboolean *left1, gboolean *left2)
 {
     double	denom;
 
@@ -840,11 +804,8 @@ miRoundJoinClip (pLeft, pRight, edge1, edge2, y1, y2, left1, left2)
 }
 
 int
-miRoundCapClip (face, isInt, edge, leftEdge)
-    register LineFacePtr face;
-    gboolean	isInt;
-    register PolyEdgePtr edge;
-    gboolean	*leftEdge;
+miRoundCapClip (register LineFacePtr face, gboolean isInt,
+                register PolyEdgePtr edge, gboolean *leftEdge)
 {
     int	    y;
     register int dx, dy;
@@ -890,14 +851,10 @@ miRoundCapClip (face, isInt, edge, leftEdge)
 }
 
 static void
-miLineArc (pDraw, pGC, pixel, spanData, leftFace, rightFace, xorg, yorg, isInt)
-    GdkDrawable*	    pDraw;
-    register GdkGC*  pGC;
-    GdkColor* pixel;
-    SpanDataPtr	    spanData;
-    register LineFacePtr leftFace, rightFace;
-    double	    xorg, yorg;
-    gboolean	    isInt;
+miLineArc (GdkDrawable *pDraw, GdkGC *pGC, GdkColor *pixel,
+           SpanDataPtr spanData, register LineFacePtr leftFace,
+           register LineFacePtr rightFace, double xorg, double yorg,
+           gboolean isInt)
 {
     GdkSpan* points;
     int xorgi = 0, yorgi = 0;
@@ -987,15 +944,9 @@ miLineArc (pDraw, pGC, pixel, spanData, leftFace, rightFace, xorg, yorg, isInt)
 }
 
 void
-miLineProjectingCap (pDrawable, pGC, pixel, spanData, face, isLeft, xorg, yorg, isInt)
-    GdkDrawable*	    pDrawable;
-    register GdkGC*  pGC;
-    GdkColor *pixel;
-    SpanDataPtr	    spanData;
-    register LineFacePtr face;
-    gboolean	    isLeft;
-    double	    xorg, yorg;
-    gboolean	    isInt;
+miLineProjectingCap (GdkDrawable *pDrawable, register GdkGC *pGC, GdkColor *pixel,
+                     SpanDataPtr spanData, register LineFacePtr face,
+                     gboolean isLeft, double xorg, double yorg, gboolean isInt)
 {
     int	xorgi = 0, yorgi = 0;
     int	lw;
@@ -1366,10 +1317,7 @@ miWideSegment (GdkDrawable *pDrawable, GdkGC *pGC, GdkColor *pixel, SpanDataPtr 
 }
 
 SpanDataPtr
-miSetupSpanData (pGC, spanData, npt)
-    register GdkGC* pGC;
-    SpanDataPtr	spanData;
-    int		npt;
+miSetupSpanData (register GdkGC *pGC, SpanDataPtr spanData, int npt)
 {
     if ((npt < 3 && GDK_GC_FBDATA(pGC)->values.cap_style != GDK_CAP_ROUND) || miSpansEasyRop(GDK_GC_FBDATA(pGC)->alu))
 	return (SpanDataPtr) NULL;
@@ -1380,10 +1328,7 @@ miSetupSpanData (pGC, spanData, npt)
 }
 
 void
-miCleanupSpanData (pDrawable, pGC, spanData)
-    GdkDrawable*	pDrawable;
-    GdkGC*	pGC;
-    SpanDataPtr	spanData;
+miCleanupSpanData (GdkDrawable *pDrawable, GdkGC *pGC, SpanDataPtr spanData)
 {
     if (GDK_GC_FBDATA(pGC)->values.line_style == GDK_LINE_DOUBLE_DASH)
     {
@@ -1403,12 +1348,8 @@ miCleanupSpanData (pDrawable, pGC, spanData)
 }
 
 void
-miWideLine (pDrawable, pGC, mode, npt, pPts)
-    GdkDrawable*	pDrawable;
-    register GdkGC* pGC;
-    int		mode;
-    register int npt;
-    register GdkPoint* pPts;
+miWideLine (GdkDrawable *pDrawable, GdkGC *pGC, int mode,
+            register int npt, register GdkPoint *pPts)
 {
     int		    x1, y1, x2, y2;
     SpanDataRec	    spanDataRec;
@@ -1544,15 +1485,11 @@ miWideLine (pDrawable, pGC, mode, npt, pPts)
 #define V_LEFT	    3
 
 static void
-miWideDashSegment (pDrawable, pGC, spanData, pDashOffset, pDashIndex,
-	   x1, y1, x2, y2, projectLeft, projectRight, leftFace, rightFace)
-    GdkDrawable*	    pDrawable;
-    register GdkGC*  pGC;
-    int		    *pDashOffset, *pDashIndex;
-    SpanDataPtr	    spanData;
-    int		    x1, y1, x2, y2;
-    gboolean	    projectLeft, projectRight;
-    LineFacePtr	    leftFace, rightFace;
+miWideDashSegment (GdkDrawable *pDrawable, register GdkGC *pGC,
+                   SpanDataPtr spanData, int *pDashOffset, int *pDashIndex,
+	           int x1, int y1, int x2, int y2, gboolean projectLeft,
+                   gboolean projectRight, LineFacePtr leftFace,
+                   LineFacePtr rightFace)
 {
     int		    dashIndex, dashRemain;
     unsigned char   *pDash;
@@ -1898,12 +1835,8 @@ miWideDashSegment (pDrawable, pGC, spanData, pDashOffset, pDashIndex,
 }
 
 void
-miWideDash (pDrawable, pGC, mode, npt, pPts)
-    GdkDrawable*	pDrawable;
-    register GdkGC* pGC;
-    int		mode;
-    register int npt;
-    register GdkPoint* pPts;
+miWideDash (GdkDrawable *pDrawable, register GdkGC *pGC, int mode,
+            register int npt, register GdkPoint *pPts)
 {
     int		    x1, y1, x2, y2;
     GdkColor pixel;
@@ -2085,11 +2018,11 @@ miWideDash (pDrawable, pGC, mode, npt, pPts)
 /* these are stubs to allow old ddx miValidateGCs to work without change */
 
 void
-miMiter()
+miMiter(void)
 {
 }
 
 void
-miNotMiter()
+miNotMiter(void)
 {
 }

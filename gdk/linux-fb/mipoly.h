@@ -181,50 +181,19 @@ typedef struct _ScanLineListBlock {
 
 /* mipolyutil.c */
 
-extern gboolean miInsertEdgeInET(
-#if NeedFunctionPrototypes
-    EdgeTable * /*ET*/,
-    EdgeTableEntry * /*ETE*/,
-    int /*scanline*/,
-    ScanLineListBlock ** /*SLLBlock*/,
-    int * /*iSLLBlock*/
-#endif
-);
+extern gboolean miInsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE, int scanline,
+                                 ScanLineListBlock **SLLBlock, int *iSLLBlock);
 
-extern gboolean miCreateETandAET(
-#if NeedFunctionPrototypes
-    int /*count*/,
-    GdkPoint* /*pts*/,
-    EdgeTable * /*ET*/,
-    EdgeTableEntry * /*AET*/,
-    EdgeTableEntry * /*pETEs*/,
-    ScanLineListBlock * /*pSLLBlock*/
-#endif
-);
+extern gboolean miCreateETandAET(int count, GdkPoint* pts, EdgeTable *ET,
+                                 EdgeTableEntry *AET, EdgeTableEntry *pETEs,
+                                 ScanLineListBlock *pSLLBlock);
 
-extern void miloadAET(
-#if NeedFunctionPrototypes
-    EdgeTableEntry * /*AET*/,
-    EdgeTableEntry * /*ETEs*/
-#endif
-);
+extern void miloadAET(EdgeTableEntry *AET, EdgeTableEntry *ETEs);
 
-extern void micomputeWAET(
-#if NeedFunctionPrototypes
-    EdgeTableEntry * /*AET*/
-#endif
-);
+extern void micomputeWAET(EdgeTableEntry *AET);
 
-extern int miInsertionSort(
-#if NeedFunctionPrototypes
-    EdgeTableEntry * /*AET*/
-#endif
-);
+extern int miInsertionSort(EdgeTableEntry *AET);
 
-extern void miFreeStorage(
-#if NeedFunctionPrototypes
-    ScanLineListBlock * /*pSLLBlock*/
-#endif
-);
+extern void miFreeStorage(ScanLineListBlock *pSLLBlock);
 
 #endif

@@ -56,70 +56,30 @@ typedef struct {
 } SpanGroup;
 
 /* Initialize SpanGroup.  MUST BE DONE before use. */
-extern void miInitSpanGroup(
-#if NeedFunctionPrototypes
-    SpanGroup * /*spanGroup*/
-#endif
-);
+extern void miInitSpanGroup(SpanGroup *spanGroup);
 
 /* Add a Spans to a SpanGroup. The spans MUST BE in y-sorted order */
-extern void miAppendSpans(
-#if NeedFunctionPrototypes
-    SpanGroup * /*spanGroup*/,
-    SpanGroup * /*otherGroup*/,
-    Spans * /*spans*/
-#endif
-);
+extern void miAppendSpans(SpanGroup *spanGroup, SpanGroup *otherGroup,
+                          Spans *spans);
 
 /* Paint a span group, possibly with some overlap */
-extern void miFillSpanGroup(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*pDraw*/,
-    GdkGC* /*pGC*/,
-    SpanGroup * /*spanGroup*/
-#endif
-);
+extern void miFillSpanGroup(GdkDrawable* pDraw, GdkGC* pGC,
+                            SpanGroup *spanGroup);
 
 /* Paint a span group, insuring that each pixel is painted at most once */
-extern void miFillUniqueSpanGroup(
-#if NeedFunctionPrototypes
-    GdkDrawable* /*pDraw*/,
-    GdkGC* /*pGC*/,
-    SpanGroup * /*spanGroup*/
-#endif
-);
+extern void miFillUniqueSpanGroup(GdkDrawable* pDraw, GdkGC* pGC,
+                                  SpanGroup *spanGroup);
 
 /* Free up data in a span group.  MUST BE DONE or you'll suffer memory leaks */
-extern void miFreeSpanGroup(
-#if NeedFunctionPrototypes
-    SpanGroup * /*spanGroup*/
-#endif
-);
+extern void miFreeSpanGroup(SpanGroup *spanGroup);
 
-extern void miSubtractSpans(
-#if NeedFunctionPrototypes
-    SpanGroup * /*spanGroup*/,
-    Spans * /*sub*/
-#endif
-);
+extern void miSubtractSpans(SpanGroup *spanGroup, Spans *sub);
 
-extern void miDisposeSpanGroup(
-#if NeedFunctionPrototypes
-    SpanGroup * /*spanGroup*/
-#endif
-);
+extern void miDisposeSpanGroup(SpanGroup *spanGroup);
 
-extern int miClipSpans(
-#if NeedFunctionPrototypes
-    GdkRegion* /*prgnDst*/,
-    GdkPoint* /*ppt*/,
-    int * /*pwidth*/,
-    int /*nspans*/,
-    GdkPoint* /*pptNew*/,
-    int * /*pwidthNew*/,
-    int /*fSorted*/
-#endif
-);
+extern int miClipSpans(GdkRegion* prgnDst, GdkPoint* ppt,
+                       int *pwidth, int nspans, GdkPoint* pptNew,
+                       int *pwidthNew, int fSorted);
 
 /* Rops which must use span groups */
 #define miSpansCarefulRop(rop)	(((rop) & 0xc) == 0x8 || ((rop) & 0x3) == 0x2)

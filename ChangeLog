@@ -1,5 +1,8 @@
 2004-11-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/linux-fb/*: Fix many sparse warnings.  (#157253,
+	Kjartan Maraas.
+	
 	* NEWS: Updates
 
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>

@@ -43,9 +43,7 @@ Author:  Bob Scheifler, MIT X Consortium
 #define Dcos(d)	cos((double)d*(M_PI/11520.0))
 
 void
-miFillArcSetup(arc, info)
-    register miArc *arc;
-    register miFillArcRec *info;
+miFillArcSetup(register miArc *arc, register miFillArcRec *info)
 {
     info->y = arc->height >> 1;
     info->dy = arc->height & 1;
@@ -98,9 +96,7 @@ miFillArcSetup(arc, info)
 }
 
 void
-miFillArcDSetup(arc, info)
-    register miArc *arc;
-    register miFillArcDRec *info;
+miFillArcDSetup(register miArc *arc, register miFillArcDRec *info)
 {
     /* h^2 * (2x - 2xorg)^2 = w^2 * h^2 - w^2 * (2y - 2yorg)^2 */
     /* even: xorg = yorg = 0   odd:  xorg = .5, yorg = -.5 */
@@ -130,11 +126,8 @@ miFillArcDSetup(arc, info)
 }
 
 static void
-miGetArcEdge(arc, edge, k, top, left)
-    register miArc *arc;
-    register miSliceEdgePtr edge;
-    int k;
-    gboolean top, left;
+miGetArcEdge(register miArc *arc, register miSliceEdgePtr edge, int k,
+             gboolean top, gboolean left)
 {
     register int xady, y;
 
@@ -178,14 +171,8 @@ miGetArcEdge(arc, edge, k, top, left)
 }
 
 void
-miEllipseAngleToSlope (angle, width, height, dxp, dyp, d_dxp, d_dyp)
-    int	    angle;
-    int	    width;
-    int	    height;
-    int	    *dxp;
-    int	    *dyp;
-    double  *d_dxp;
-    double  *d_dyp;
+miEllipseAngleToSlope (int angle, int width, int height, int *dxp, int *dyp,
+                       double *d_dxp, double *d_dyp)
 {
     int	    dx, dy;
     double  d_dx, d_dy, scale;
@@ -259,16 +246,13 @@ miEllipseAngleToSlope (angle, width, height, dxp, dyp, d_dxp, d_dyp)
 }
 
 static void
-miGetPieEdge(arc, angle, edge, top, left)
-    register miArc *arc;
-    register int angle;
-    register miSliceEdgePtr edge;
-    gboolean top, left;
+miGetPieEdge(register miArc *arc, register int angle,
+             register miSliceEdgePtr edge, gboolean top, gboolean left)
 {
     register int k;
     int	dx, dy;
 
-    miEllipseAngleToSlope (angle, arc->width, arc->height, &dx, &dy, 0, 0);
+    miEllipseAngleToSlope (angle, arc->width, arc->height, &dx, &dy, NULL, NULL);
 
     if (dy == 0)
     {
@@ -303,10 +287,8 @@ miGetPieEdge(arc, angle, edge, top, left)
 }
 
 void
-miFillArcSliceSetup(arc, slice, pGC)
-    register miArc *arc;
-    register miArcSliceRec *slice;
-    GdkGC* pGC;
+miFillArcSliceSetup(register miArc *arc, register miArcSliceRec *slice,
+                    GdkGC *pGC)
 {
     register int angle1, angle2;
 
@@ -532,10 +514,7 @@ miFillArcSliceSetup(arc, slice, pGC)
     }
 
 static void
-miFillEllipseI(pDraw, pGC, arc)
-    GdkDrawable* pDraw;
-    GdkGC* pGC;
-    miArc *arc;
+miFillEllipseI(GdkDrawable *pDraw, GdkGC *pGC, miArc *arc)
 {
     register int x, y, e;
     int yk, xk, ym, xm, dx, dy, xorg, yorg;
@@ -561,10 +540,7 @@ miFillEllipseI(pDraw, pGC, arc)
 }
 
 static void
-miFillEllipseD(pDraw, pGC, arc)
-    GdkDrawable* pDraw;
-    GdkGC* pGC;
-    miArc *arc;
+miFillEllipseD(GdkDrawable *pDraw, GdkGC *pGC, miArc *arc)
 {
     register int x, y;
     int xorg, yorg, dx, dy, slw;
@@ -611,10 +587,7 @@ miFillEllipseD(pDraw, pGC, arc)
     }
 
 static void
-miFillArcSliceI(pDraw, pGC, arc)
-    GdkDrawable* pDraw;
-    GdkGC* pGC;
-    miArc *arc;
+miFillArcSliceI(GdkDrawable *pDraw, GdkGC *pGC, miArc *arc)
 {
     int yk, xk, ym, xm, dx, dy, xorg, yorg, slw;
     register int x, y, e;
@@ -658,10 +631,7 @@ miFillArcSliceI(pDraw, pGC, arc)
 }
 
 static void
-miFillArcSliceD(pDraw, pGC, arc)
-    GdkDrawable* pDraw;
-    GdkGC* pGC;
-    miArc *arc;
+miFillArcSliceD(GdkDrawable *pDraw, GdkGC *pGC, miArc *arc)
 {
     register int x, y;
     int dx, dy, xorg, yorg, slw;
@@ -710,11 +680,7 @@ miFillArcSliceD(pDraw, pGC, arc)
  * fill each arc as it comes.
  */
 void
-miPolyFillArc(pDraw, pGC, narcs, parcs)
-    GdkDrawable*	pDraw;
-    GdkGC*	pGC;
-    int		narcs;
-    miArc	*parcs;
+miPolyFillArc(GdkDrawable *pDraw, GdkGC *pGC, int narcs, miArc *parcs)
 {
     register int i;
     register miArc *arc;

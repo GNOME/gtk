@@ -658,7 +658,7 @@ gdk_fb_mouse_ms_open (GdkFBMouse   *mouse)
     }
 
   while ((i = read (fd, buf, sizeof(buf))) > 0)
-    g_print ("Got %d bytes of junk from %s\n", mouse->file, i);
+    g_print ("Got %d bytes of junk from %s\n", i, mouse->file);
 
   tcgetattr (fd, &tty);
   tty.c_iflag = IGNBRK | IGNPAR;

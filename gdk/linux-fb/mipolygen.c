@@ -56,11 +56,7 @@ SOFTWARE.
  */
 
 gboolean
-miFillGeneralPoly(dst, pgc, count, ptsIn)
-    GdkDrawable* dst;
-    GdkGC*	pgc;
-    int		count;              /* number of points        */
-    GdkPoint* ptsIn;              /* the points              */
+miFillGeneralPoly(GdkDrawable *dst, GdkGC *pgc, int count, GdkPoint *ptsIn)
 {
     register EdgeTableEntry *pAET;  /* the Active Edge Table   */
     register int y;                 /* the current scanline    */

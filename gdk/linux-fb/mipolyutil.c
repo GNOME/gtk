@@ -68,12 +68,8 @@ SOFTWARE.
  *
  */
 gboolean
-miInsertEdgeInET(ET, ETE, scanline, SLLBlock, iSLLBlock)
-    EdgeTable *ET;
-    EdgeTableEntry *ETE;
-    int scanline;
-    ScanLineListBlock **SLLBlock;
-    int *iSLLBlock;
+miInsertEdgeInET(EdgeTable *ET, EdgeTableEntry *ETE, int scanline,
+                 ScanLineListBlock **SLLBlock, int *iSLLBlock)
 {
     register EdgeTableEntry *start, *prev;
     register ScanLineList *pSLL, *pPrevSLL;
@@ -159,13 +155,9 @@ miInsertEdgeInET(ET, ETE, scanline, SLLBlock, iSLLBlock)
  */
 
 gboolean
-miCreateETandAET(count, pts, ET, AET, pETEs, pSLLBlock)
-    register int count;
-    register GdkPoint* pts;
-    EdgeTable *ET;
-    EdgeTableEntry *AET;
-    register EdgeTableEntry *pETEs;
-    ScanLineListBlock   *pSLLBlock;
+miCreateETandAET(register int count, register GdkPoint *pts, EdgeTable *ET,
+                 EdgeTableEntry *AET, register EdgeTableEntry *pETEs,
+                 ScanLineListBlock *pSLLBlock)
 {
     register GdkPoint* top, *bottom;
     register GdkPoint* PrevPt, *CurrPt;
@@ -255,8 +247,7 @@ miCreateETandAET(count, pts, ET, AET, pETEs, pSLLBlock)
  */
 
 void
-miloadAET(AET, ETEs)
-    register EdgeTableEntry *AET, *ETEs;
+miloadAET(register EdgeTableEntry *AET, register EdgeTableEntry *ETEs)
 {
     register EdgeTableEntry *pPrevAET;
     register EdgeTableEntry *tmp;
@@ -303,8 +294,7 @@ miloadAET(AET, ETEs)
  *
  */
 void
-micomputeWAET(AET)
-    register EdgeTableEntry *AET;
+micomputeWAET(register EdgeTableEntry *AET)
 {
     register EdgeTableEntry *pWETE;
     register int inside = 1;
@@ -342,8 +332,7 @@ micomputeWAET(AET)
  */
 
 int
-miInsertionSort(AET)
-    register EdgeTableEntry *AET;
+miInsertionSort(register EdgeTableEntry *AET)
 {
     register EdgeTableEntry *pETEchase;
     register EdgeTableEntry *pETEinsert;
@@ -379,8 +368,7 @@ miInsertionSort(AET)
  *     Clean up our act.
  */
 void
-miFreeStorage(pSLLBlock)
-    register ScanLineListBlock   *pSLLBlock;
+miFreeStorage(register ScanLineListBlock *pSLLBlock)
 {
     register ScanLineListBlock   *tmpSLLBlock;
 
