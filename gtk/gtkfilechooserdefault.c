@@ -667,9 +667,9 @@ error_dialog (GtkFileChooserDefault *impl,
   if (error)
     {
       char *uri = gtk_file_system_path_to_uri (impl->file_system, path);
-      text = g_strdup_printf (msg,
-			      uri,
-			      error->message);
+      char *text = g_strdup_printf (msg,
+				    uri,
+				    error->message);
       error_message (impl, text);
       g_free (text);
       g_free (uri);
