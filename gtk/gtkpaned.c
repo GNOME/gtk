@@ -922,7 +922,7 @@ gtk_paned_compute_position (GtkPaned *paned,
   if (!paned->position_set)
     {
       if (paned->child1_resize && !paned->child2_resize)
-	paned->child1_size = MAX (1, allocation - child2_req);
+	paned->child1_size = MAX (0, allocation - child2_req);
       else if (!paned->child1_resize && paned->child2_resize)
 	paned->child1_size = child1_req;
       else if (child1_req + child2_req != 0)
@@ -947,6 +947,9 @@ gtk_paned_compute_position (GtkPaned *paned,
   paned->child1_size = CLAMP (paned->child1_size,
 			      paned->min_position,
 			      paned->max_position);
+
+  gtk_widget_set_child_visible (paned->child1, paned->child1_size != 0);
+  gtk_widget_set_child_visible (paned->child2, paned->child1_size != allocation);
 
   if (paned->child1_size != old_position)
     g_object_notify (G_OBJECT (paned), "position");

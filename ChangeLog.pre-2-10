@@ -1,3 +1,10 @@
+Mon Oct  7 18:21:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c gtk/gtkpaned.c: Allow the slider
+	to be set all the way to the edge, and if that happens,
+	use gtk_widget_set_child_visible() to hide the 
+	appropriate child. (#72784, request from Darin Adler)
+
 Mon Oct  7 16:28:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (palette_drag_begin): Use
@@ -12,6 +19,9 @@ Mon Oct  7 16:28:11 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcolorsel.c (palette_release): Set the color
 	from the palette on release, not press.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_show_all):
+	Override to simple call show(). (#74173)
 
 	* tests/testgtk.c (create_color_selection): Use 
 	gtk_widget_show_all()
