@@ -1,7 +1,7 @@
 # Canadian English translation of gtk+
 # Copyright (C) 2004 Adam Weinberger and the GNOME Foundation
 # This file is distributed under the same licence as the gtk+ package.
-# Adam Weinberger <adamw@FreeBSD.org>, 2004.
+# Adam Weinberger <adamw@gnome.org>, 2004.
 # 
 # 
 msgid ""
