@@ -50,9 +50,9 @@ struct _GtkExpanderClass
 {
   GtkBinClass    parent_class;
 
-  /* Key binding signal; to get notification on the expansion
-   * state connect to notify::expanded.
-   */
+  /* Key binding signal; to get notification on the expansion
+   * state connect to notify:expanded.
+   */
   void        (* activate) (GtkExpander *expander);
 };
 

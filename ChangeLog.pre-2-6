@@ -1,5 +1,10 @@
 2003-06-30  Mark McLoughlin  <mark@skynet.ie>
 
+	* gtk/gtkexpander.h: kill some stray characters
+	breaking the build.
+
+2003-06-30  Mark McLoughlin  <mark@skynet.ie>
+
 	Add GtkExpander. See discussion in bug #60553.
 
 	* gtk/gtkexpander.[ch]: add.
