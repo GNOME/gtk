@@ -1900,7 +1900,7 @@ gtk_default_render_icon (GtkStyle            *style,
 
   g_return_val_if_fail (base_pixbuf != NULL, NULL);
   
-  if (!gtk_icon_size_lookup (size, &width, &height))
+  if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup (size, &width, &height))
     {
       g_warning (G_STRLOC ": invalid icon size `%d'", size);
       return NULL;

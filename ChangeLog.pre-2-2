@@ -1,3 +1,7 @@
+2002-01-30  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkstyle.c (gtk_default_render_icon): Allow a -1 icon size.
+
 Wed Jan 30 20:29:01 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscale.c (gtk_scale_set_digits): fix revrted bug fix.
