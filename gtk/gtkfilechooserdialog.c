@@ -20,9 +20,9 @@
 
 #include "gtkfilechooserdialog.h"
 #include "gtkfilechooserwidget.h"
-#include "gtkfilechooserenums.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilesystem.h"
+#include "gtktypebuiltins.h"
 
 #include <stdarg.h>
 

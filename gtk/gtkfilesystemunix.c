@@ -21,6 +21,7 @@
 #include "gtkfilesystem.h"
 #include "gtkfilesystemunix.h"
 
+#define XDG_PREFIX _gtk_xdg
 #include "xdgmime/xdgmime.h"
 
 #include <errno.h>

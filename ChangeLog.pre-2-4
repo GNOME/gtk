@@ -1,3 +1,24 @@
+Wed Oct 22 23:20:04 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilechooser.[ch] gtk/gtkfilefilter.[ch] 
+	gtk/gtkfilechooserwidget.[ch] gtk/gtkfilechooserdialog.[ch]:
+	gtk/gtkfilechooserutils.c gtk/gtkfilechooserprivate.[ch]:
+	Basic framework for the new file selector widget.
+
+	* gtk/gtkfilechooserdefault.[ch] gtk/gtkcellrenderersep.[ch] 
+	gtk/gtkfilechooserentry.[ch] gtk/gtkfilesystemmodel.[ch]:
+	Initial implementation of the GtkFileChooser user interface.
+
+	* gtk/gtkfilesystemunix.[ch]: GtkFileSystem implementation
+	for Unix files.
+
+	* configure.in gtk/Makefile.am gtk/xdgmime: Build code
+	for freedesktop.org MIME system on Unix.
+
+	* tests/testfilechooser.c: Test program for GtkFileChooser
+
+	* tests/prop-editor.c: Add support for properties on interfaces.
+
 Tue Oct 21 16:12:51 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/gtk-demo/menus.c (do_menus): Fix some unused

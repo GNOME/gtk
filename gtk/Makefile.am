@@ -2,6 +2,12 @@
 
 SUBDIRS=stock-icons theme-bits
 
+if OS_UNIX
+SUBDIRS += xdgmime
+endif
+
+DIST_SUBDIRS=stock-icons theme-bits xdgmime
+
 INCLUDES =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
@@ -20,6 +26,7 @@ INCLUDES =						\
 	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
 	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED			\
+	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GTK_DEP_CFLAGS)
 
@@ -71,6 +78,10 @@ libadd =								\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
 	$(top_builddir)/gdk/$(gdktargetlib)				\
 	$(GTK_DEP_LIBS)
+
+if OS_UNIX
+libadd += xdgmime/libxdgmime.la
+endif
 
 # common options for the various packages.
 libtool_opts =							\
@@ -133,6 +144,10 @@ gtk_public_h_sources =          \
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
+	gtkfilechooser.h        \
+	gtkfilechooserdialog.h  \
+	gtkfilechooserwidget.h  \
+	gtkfilefilter.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
@@ -212,7 +227,6 @@ gtk_public_h_sources =          \
 	gtktextchild.h		\
 	gtktextdisplay.h	\
 	gtktextiter.h		\
-	gtktextlayout.h		\
 	gtktextmark.h		\
 	gtktexttag.h		\
 	gtktexttagtable.h	\
@@ -249,11 +263,24 @@ gtk_public_h_sources =          \
 	gtkwidget.h		\
 	gtkwindow.h
 
+# Installed header files without compatibility guarantees
+# that are not include in gtk/gtk.h
+gtk_semi_private_h_sources =    \
+	gtktextlayout.h		\
+	gtkfilesystem.h
+
 # GTK+ header files that don't get installed
 gtk_private_h_sources =         \
+	gtkcellrendererseptext.h\
 	gtkcellview.h		\
 	gtkcellviewmenuitem.h	\
 	gtkentryprivate.h	\
+	gtkfilechooserentry.h	\
+	gtkfilechooserdefault.h	\
+	gtkfilechooserprivate.h	\
+	gtkfilechooserutils.h	\
+	gtkfilesystemunix.h	\
+	gtkfilesystemmodel.h	\
 	gtkrbtree.h 		\
 	gtktextbtree.h		\
 	gtktextchildprivate.h   \
@@ -292,6 +319,7 @@ gtk_c_sources =                 \
 	gtkcelllayout.c		\
 	gtkcellrenderer.c	\
 	gtkcellrendererpixbuf.c	\
+	gtkcellrendererseptext.c\
 	gtkcellrenderertext.c	\
 	gtkcellrenderertoggle.c	\
 	gtkcellview.c		\
@@ -317,7 +345,16 @@ gtk_c_sources =                 \
 	gtkentrycompletion.c	\
 	gtkeventbox.c		\
 	gtkexpander.c		\
+	gtkfilechooser.c	\
+	gtkfilechooserdialog.c	\
+	gtkfilechooserentry.c	\
+	gtkfilechooserdefault.c	\
+	gtkfilechooserutils.c	\
+	gtkfilechooserwidget.c	\
+	gtkfilefilter.c		\
 	gtkfilesel.c		\
+	gtkfilesystem.c		\
+	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
 	gtkfontbutton.c         \
 	gtkfontsel.c            \
@@ -451,6 +488,11 @@ gtk_c_sources =                 \
 	gtkwindow.c		\
 	xembed.h
 
+if OS_UNIX
+gtk_private_h_sources += gtkfilesystemunix.h
+gtk_c_sources +=         gtkfilesystemunix.c
+endif
+
 gtk_plug_c_sources =            \
 	gtkplug.c		\
 	gtksocket.c		\
@@ -568,7 +610,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) Makefile
 lib_LTLIBRARIES = $(gtktargetlib)
 
 gtkincludedir = $(includedir)/gtk-2.0/gtk
-gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkversion.h
+gtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_semi_private_h_sources) $(gtk_built_public_sources) gtkversion.h
 
 libgtk_x11_2_0_la_SOURCES = $(gtk_c_sources) $(gtk_plug_c_sources)
 libgtk_linux_fb_2_0_la_SOURCES = $(gtk_c_sources)

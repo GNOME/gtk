@@ -18,10 +18,11 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <string.h>
+
 #include "gtkfilesystemmodel.h"
 #include "gtkfilesystem.h"
-#include <gtk/gtktreemodel.h>
-#include <string.h>
+#include "gtktreemodel.h"
 
 typedef struct _GtkFileSystemModelClass GtkFileSystemModelClass;
 typedef struct _FileModelNode           FileModelNode;

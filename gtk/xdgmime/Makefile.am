@@ -1,4 +1,4 @@
-INCLUDES = -DXDG_PREFIX=_xdg
+INCLUDES = -DXDG_PREFIX=_gtk_xdg
 
 noinst_LTLIBRARIES = libxdgmime.la
 

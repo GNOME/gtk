@@ -20,8 +20,8 @@
 
 #include "gtkfilechooser.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserenums.h"
 #include "gtkfilesystem.h"
+#include "gtktypebuiltins.h"
 
 #define _(str) (str)
 

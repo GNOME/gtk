@@ -18,11 +18,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkfilechooserentry.h"
-
-#include <gtk/gtkentry.h>
-
 #include <string.h>
+
+#include "gtkentry.h"
+#include "gtkfilechooserentry.h"
 
 typedef struct _GtkFileChooserEntryClass GtkFileChooserEntryClass;
 

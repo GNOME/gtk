@@ -18,34 +18,36 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "gtkalignment.h"
+#include "gtkcellrendererpixbuf.h"
 #include "gtkcellrendererseptext.h"
-#include "gtkfilechooserimpldefault.h"
+#include "gtkcellrenderertext.h"
+#include "gtkentry.h"
+#include "gtkfilechooserdefault.h"
 #include "gtkfilechooserentry.h"
-#include "gtkfilechooserenums.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
-
-#include <gtk/gtkalignment.h>
-#include <gtk/gtkcellrendererpixbuf.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkentry.h>
-#include <gtk/gtkframe.h>
-#include <gtk/gtkhbox.h>
-#include <gtk/gtkhpaned.h>
-#include <gtk/gtkicontheme.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkoptionmenu.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtktable.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtktreemodelsort.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtktreestore.h>
-#include <gtk/gtkvbox.h>
+#include "gtkframe.h"
+#include "gtkhbox.h"
+#include "gtkhpaned.h"
+#include "gtkicontheme.h"
+#include "gtkimage.h"
+#include "gtklabel.h"
+#include "gtkmenuitem.h"
+#undef GTK_DISABLE_DEPRECATED
+#include "gtkoptionmenu.h"
+#define GTK_DISABLE_DEPRECATED
+#include "gtkprivate.h"
+#include "gtkscrolledwindow.h"
+#include "gtkstock.h"
+#include "gtktable.h"
+#include "gtktreeview.h"
+#include "gtktreemodelsort.h"
+#include "gtktreeselection.h"
+#include "gtktreestore.h"
+#include "gtktypebuiltins.h"
+#include "gtkvbox.h"
 
 #include <string.h>
 #include <time.h>

@@ -18,11 +18,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gtkfilefilter.h"
-
-#include <gtk/gtkobject.h>
-
 #include <string.h>
+
+#include "gtkfilefilter.h"
+#include "gtkobject.h"
 
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
@@ -317,11 +316,6 @@ gtk_file_filter_get_needed (GtkFileFilter *filter)
   return filter->needed;
 }
 
-/* Remove once we merge into GTK+ and use _gtk_fnmatch().
- */   
-gboolean _gtk_file_chooser_fnmatch (const char *pattern,
-				    const char *string);
-
 /**
  * gtk_file_filter_filter:
  * @filter: a #GtkFileFilter
@@ -359,7 +353,7 @@ gtk_file_filter_filter (GtkFileFilter           *filter,
 	    return TRUE;
 	  break;
 	case FILTER_RULE_PATTERN:
-	  if (_gtk_file_chooser_fnmatch (rule->u.pattern, filter_info->display_name))
+	  if (_gtk_fnmatch (rule->u.pattern, filter_info->display_name))
 	    return TRUE;
 	  break;
 	case FILTER_RULE_CUSTOM:

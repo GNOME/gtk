@@ -21,6 +21,14 @@
 #ifndef __GTK_FILE_SYSTEM_H__
 #define __GTK_FILE_SYSTEM_H__
 
+/* This is a "semi-private" header; it is meant only for
+ * alternate GtkFileChooser backend modules; no stability guarantees 
+ * are made at this point
+ */
+#ifndef GTK_FILE_SYSTEM_ENABLE_UNSUPPORTED
+#error "GtkFileSystem is not supported API for general use"
+#endif
+
 #include <glib-object.h>
 #include <gtk/gtkwidget.h>	/* For icon handling */
 

@@ -6,15 +6,7 @@
 #include <unistd.h>
 
 #include <gtk/gtk.h>
-#include "gtkfilechooserdialog.h"
-#include "gtkfilechooser.h"
 #include "prop-editor.h"
-
-#ifdef USE_GNOME_VFS
-#include "gtkfilesystemgnomevfs.h"
-#else
-#include "gtkfilesystemunix.h"
-#endif
 
 static GtkWidget *preview_label;
 static GtkWidget *preview_image;
@@ -300,22 +292,14 @@ main (int argc, char **argv)
   GtkWidget *button;
   GtkWidget *dialog;
   GtkWidget *prop_editor;
-  GtkFileSystem *file_system;
   GtkFileFilter *filter;
   GtkWidget *preview_vbox;
   GtkWidget *extra;
   
   gtk_init (&argc, &argv);
 
-#ifdef USE_GNOME_VFS
-  file_system = gtk_file_system_gnome_vfs_new ();
-#else  
-  file_system = gtk_file_system_unix_new ();
-#endif
-  
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", GTK_FILE_CHOOSER_ACTION_OPEN,
-			 "file-system", file_system,
 			 "title", "Select a file",
 			 NULL);
 			 

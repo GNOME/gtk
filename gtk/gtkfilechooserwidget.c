@@ -19,10 +19,12 @@
  */
 
 #include "gtkfilechooserwidget.h"
-#include "gtkfilechooserimpldefault.h"
-#include "gtkfilechooserenums.h"
+#include "gtkfilechooserdefault.h"
 #include "gtkfilechooserutils.h"
+#ifdef G_OS_UNIX
 #include "gtkfilesystemunix.h"
+#endif
+#include "gtktypebuiltins.h"
 
 struct _GtkFileChooserWidgetPrivate
 {

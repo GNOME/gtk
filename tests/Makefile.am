@@ -31,6 +31,7 @@ noinst_PROGRAMS =			\
 	testcalendar			\
 	testcombo			\
 	testdnd				\
+	testfilechooser			\
 	testgtk				\
 	testicontheme			\
 	testinput			\
@@ -64,6 +65,7 @@ testicontheme_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
+testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testmenus_DEPENDENCIES = $(TEST_DEPS)
@@ -90,6 +92,7 @@ simple_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testcombo_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
+testfilechooser_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
@@ -118,6 +121,10 @@ pixbuf_randomly_modified_LDADD = $(LDADDS)
 pixbuf_random_LDADD = $(LDADDS)
 testmerge_LDADD = $(LDADDS)
 testactions_LDADD = $(LDADDS)
+
+testfilechooser_SOURCES = 	\
+	prop-editor.c		\
+	testfilechooser.c 	
 
 testgtk_SOURCES =	\
 	prop-editor.c   \

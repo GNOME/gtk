@@ -686,13 +686,20 @@ properties_from_type (GObject     *object,
   GtkWidget *sw;
   GtkWidget *vbox;
   GtkWidget *table;
-  GObjectClass *class;
   GParamSpec **specs;
   gint n_specs;
   int i;
 
-  class = G_OBJECT_CLASS (g_type_class_peek (type));
-  specs = g_object_class_list_properties (class, &n_specs);
+  if (G_TYPE_IS_INTERFACE (type))
+    {
+      gpointer vtable = g_type_default_interface_peek (type);
+      specs = g_object_interface_list_properties (vtable, &n_specs);
+    }
+  else
+    {
+      GObjectClass *class = G_OBJECT_CLASS (g_type_class_peek (type));
+      specs = g_object_class_list_properties (class, &n_specs);
+    }
         
   if (n_specs == 0)
     return NULL;
@@ -775,7 +782,9 @@ create_prop_editor (GObject   *object,
   GtkWidget *properties;
   GtkWidget *label;
   gchar *title;
-
+  GType *ifaces;
+  guint n_ifaces;
+  
   if ((win = g_object_get_data (G_OBJECT (object), "prop-editor-win")))
     {
       gtk_window_present (GTK_WINDOW (win));
@@ -820,6 +829,20 @@ create_prop_editor (GObject   *object,
 	  
 	  type = g_type_parent (type);
 	}
+
+      ifaces = g_type_interfaces (G_TYPE_FROM_INSTANCE (object), &n_ifaces);
+      while (n_ifaces--)
+	{
+	  properties = properties_from_type (object, ifaces[n_ifaces], tips);
+	  if (properties)
+	    {
+	      label = gtk_label_new (g_type_name (ifaces[n_ifaces]));
+	      gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
+					properties, label);
+	    }
+	}
+
+      g_free (ifaces);
     }
   else
     {

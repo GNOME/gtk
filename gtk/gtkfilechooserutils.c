@@ -21,8 +21,8 @@
 
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
-#include "gtkfilechooserenums.h"
 #include "gtkfilesystem.h"
+#include "gtktypebuiltins.h"
 
 static void           delegate_set_current_folder     (GtkFileChooser    *chooser,
 						       const GtkFilePath *path);
