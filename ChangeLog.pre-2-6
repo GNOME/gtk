@@ -16,8 +16,12 @@
 	Reimplement, taking into account the peculiar semantics of
 	GDK_DECOR_ALL and GDK_FUNC_ALL. (#79036)
 
+	(gdk_window_get_decorations): Implement. (#98981)
+	
 	(gdk_window_set_type_hint): When setting
 	GDK_WINDOW_TYPE_HINT_MENU, call gdk_window_set_decorations().
+
+	* gdk/gdk.def: Add gdk_window_get_decorations. (#98981)
 
 2002-12-20  Sven Neumann  <sven@gimp.org>
 

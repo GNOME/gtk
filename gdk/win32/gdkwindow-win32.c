@@ -2185,6 +2185,30 @@ gdk_window_set_decorations (GdkWindow      *window,
 		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
 }
 
+gboolean
+gdk_window_get_decorations(GdkWindow       *window,
+			   GdkWMDecoration *decorations)
+{
+  LONG style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+
+  *decorations = 0;
+
+  if (style & WS_BORDER)
+    *decorations |= GDK_DECOR_BORDER;
+  if (style & WS_THICKFRAME)
+    *decorations |= GDK_DECOR_RESIZEH;
+  if (style & WS_CAPTION)
+    *decorations |= GDK_DECOR_TITLE;
+  if (style & WS_SYSMENU)
+    *decorations |= GDK_DECOR_MENU;
+  if (style & WS_MINIMIZEBOX)
+    *decorations |= GDK_DECOR_MINIMIZE;
+  if (style & WS_MAXIMIZEBOX)
+    *decorations |= GDK_DECOR_MAXIMIZE;
+
+  return *decorations != 0;
+}
+
 void
 gdk_window_set_functions (GdkWindow    *window,
 			  GdkWMFunction functions)
