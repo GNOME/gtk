@@ -63,6 +63,7 @@ static void gtk_window_set_arg            (GtkWindow         *window,
 static void gtk_window_get_arg            (GtkWindow         *window,
 					   GtkArg            *arg,
 					   guint	      arg_id);
+static void gtk_window_shutdown           (GtkObject         *object);
 static void gtk_window_destroy            (GtkObject         *object);
 static void gtk_window_finalize           (GtkObject         *object);
 static void gtk_window_show               (GtkWidget         *widget);
@@ -162,6 +163,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_object_class_add_signals (object_class, window_signals, LAST_SIGNAL);
 
+  object_class->shutdown = gtk_window_shutdown;
   object_class->destroy = gtk_window_destroy;
   object_class->finalize = gtk_window_finalize;
 
@@ -193,6 +195,8 @@ gtk_window_init (GtkWindow *window)
   GTK_WIDGET_UNSET_FLAGS (window, GTK_NO_WINDOW);
   GTK_WIDGET_SET_FLAGS (window, GTK_TOPLEVEL);
 
+  gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
+
   window->title = NULL;
   window->wmclass_name = g_strdup (gdk_progname);
   window->wmclass_class = g_strdup (gdk_progclass);
@@ -207,7 +211,6 @@ gtk_window_init (GtkWindow *window)
   window->position = GTK_WIN_POS_NONE;
   window->use_uposition = TRUE;
   
-  gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
   gtk_container_register_toplevel (GTK_CONTAINER (window));
 }
 
@@ -447,6 +450,22 @@ gtk_window_marshal_signal_2 (GtkObject      *object,
 }
 
 static void
+gtk_window_shutdown (GtkObject *object)
+{
+  GtkWindow *window;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (object));
+
+  window = GTK_WINDOW (object);
+
+  gtk_window_set_focus (window, NULL);
+  gtk_window_set_default (window, NULL);
+
+  GTK_OBJECT_CLASS (parent_class)->shutdown (object);
+}
+
+static void
 gtk_window_destroy (GtkObject *object)
 {
   g_return_if_fail (object != NULL);
@@ -454,8 +473,7 @@ gtk_window_destroy (GtkObject *object)
 
   gtk_container_unregister_toplevel (GTK_CONTAINER (object));
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
@@ -1072,7 +1090,6 @@ gtk_window_move_resize (GtkWindow *window)
       allocation.height = widget->requisition.height;
       
       gtk_widget_size_allocate (widget, &allocation);
-      gtk_container_clear_resize_widgets (GTK_CONTAINER (window));
     }
   else
     {

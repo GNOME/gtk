@@ -26,12 +26,15 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_FRAME(obj)          GTK_CHECK_CAST (obj, gtk_frame_get_type (), GtkFrame)
-#define GTK_FRAME_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_frame_get_type (), GtkFrameClass)
-#define GTK_IS_FRAME(obj)       GTK_CHECK_TYPE (obj, gtk_frame_get_type ())
+#define GTK_TYPE_FRAME                  (gtk_frame_get_type ())
+#define GTK_FRAME(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_FRAME, GtkFrame))
+#define GTK_FRAME_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_FRAME, GtkFrameClass))
+#define GTK_IS_FRAME(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_FRAME))
+#define GTK_IS_FRAME_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_FRAME))
 
 
 typedef struct _GtkFrame       GtkFrame;
@@ -40,7 +43,7 @@ typedef struct _GtkFrameClass  GtkFrameClass;
 struct _GtkFrame
 {
   GtkBin bin;
-
+  
   gchar *label;
   gint16 shadow_type;
   gint16 label_width;
@@ -55,7 +58,7 @@ struct _GtkFrameClass
 };
 
 
-guint      gtk_frame_get_type        (void);
+GtkType    gtk_frame_get_type        (void);
 GtkWidget* gtk_frame_new             (const gchar   *label);
 void       gtk_frame_set_label       (GtkFrame      *frame,
 				      const gchar   *label);

@@ -32,11 +32,13 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TYPE_CONTAINER	      (gtk_container_get_type ())
-#define GTK_CONTAINER(obj)	      (GTK_CHECK_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
-#define GTK_CONTAINER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
-#define GTK_IS_CONTAINER(obj)	      (GTK_CHECK_TYPE ((obj), GTK_TYPE_CONTAINER))
-#define GTK_IS_CONTAINER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
+#define GTK_TYPE_CONTAINER	        (gtk_container_get_type ())
+#define GTK_CONTAINER(obj)	        (GTK_CHECK_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
+#define GTK_CONTAINER_CLASS(klass)      (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
+#define GTK_IS_CONTAINER(obj)	        (GTK_CHECK_TYPE ((obj), GTK_TYPE_CONTAINER))
+#define GTK_IS_CONTAINER_CLASS(klass)   (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
+
+#define GTK_IS_RESIZE_CONTAINER(widget) (GTK_IS_CONTAINER (widget) && ((GtkContainer*) (widget))->resize_mode != GTK_RESIZE_PARENT)
 
 
 typedef struct _GtkContainer	   GtkContainer;
@@ -179,8 +181,9 @@ void    gtk_container_add_with_argv	   (GtkContainer      *container,
 
 
 /* Non-public methods */
+void	gtk_container_queue_resize	   (GtkContainer *container);
 void    gtk_container_clear_resize_widgets (GtkContainer *container);
-
+     
 /* Deprecated methods */
 
 /* completely non-functional */

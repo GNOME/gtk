@@ -109,6 +109,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
   GTK_WIDGET_SET_FLAGS (scrolled_window, GTK_NO_WINDOW);
 
+  gtk_container_set_resize_mode (GTK_CONTAINER (scrolled_window), GTK_RESIZE_QUEUE);
+
   scrolled_window->hscrollbar = NULL;
   scrolled_window->vscrollbar = NULL;
   scrolled_window->hscrollbar_policy = GTK_POLICY_ALWAYS;
@@ -140,6 +142,7 @@ gtk_scrolled_window_construct (GtkScrolledWindow *scrolled_window,
   scrolled_window->viewport = gtk_viewport_new (hadjustment, vadjustment);
   hadjustment = gtk_viewport_get_hadjustment (GTK_VIEWPORT (scrolled_window->viewport));
   vadjustment = gtk_viewport_get_vadjustment (GTK_VIEWPORT (scrolled_window->viewport));
+  gtk_container_set_resize_mode (GTK_CONTAINER (scrolled_window->viewport), GTK_RESIZE_PARENT);
 
   gtk_signal_connect (GTK_OBJECT (hadjustment), "changed",
 		      (GtkSignalFunc) gtk_scrolled_window_adjustment_changed,

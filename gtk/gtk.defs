@@ -20,6 +20,7 @@
 (define-enum GtkCTreeLineStyle
    (solid GTK_CTREE_LINES_SOLID)
    (dotted GTK_CTREE_LINES_DOTTED)
+   (tabbed GTK_CTREE_LINES_TABBED)
    (none GTK_CTREE_LINES_NONE))
 
 ; enumerations from "./gtkdebug.h"
@@ -282,6 +283,15 @@
 (define-enum GtkSpinButtonUpdatePolicy
    (always GTK_UPDATE_ALWAYS)
    (if-valid GTK_UPDATE_IF_VALID))
+
+(define-enum GtkSpinType
+   (step-forward GTK_SPIN_STEP_FORWARD)
+   (step-backward GTK_SPIN_STEP_BACKWARD)
+   (page-forward GTK_SPIN_PAGE_FORWARD)
+   (page-backward GTK_SPIN_PAGE_BACKWARD)
+   (home GTK_SPIN_HOME)
+   (end GTK_SPIN_END)
+   (user-defined GTK_SPIN_USER_DEFINED))
 
 ; enumerations from "./gtktoolbar.h"
 

@@ -6536,7 +6536,7 @@ create_timeout_test (void)
  */
 static int idle = 0;
 
-gint
+static gint
 idle_test (GtkWidget *label)
 {
   static int count = 0;
@@ -6548,7 +6548,7 @@ idle_test (GtkWidget *label)
   return TRUE;
 }
 
-void
+static void
 start_idle_test (GtkWidget *widget,
 		 GtkWidget *label)
 {
@@ -6558,7 +6558,7 @@ start_idle_test (GtkWidget *widget,
     }
 }
 
-void
+static void
 stop_idle_test (GtkWidget *widget,
 		gpointer   data)
 {
@@ -6569,7 +6569,7 @@ stop_idle_test (GtkWidget *widget,
     }
 }
 
-void
+static void
 destroy_idle_test (GtkWidget  *widget,
 		   GtkWidget **window)
 {
@@ -6578,15 +6578,26 @@ destroy_idle_test (GtkWidget  *widget,
   *window = NULL;
 }
 
-void
+static void
+toggle_idle_container (GtkObject *button,
+		       GtkContainer *container)
+{
+  gtk_container_set_resize_mode (container, (guint) gtk_object_get_user_data (button));
+}
+
+static void
 create_idle_test (void)
 {
   static GtkWidget *window = NULL;
   GtkWidget *button;
   GtkWidget *label;
+  GtkWidget *container;
 
   if (!window)
     {
+      GtkWidget *frame;
+      GtkWidget *box;
+
       window = gtk_dialog_new ();
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -6598,9 +6609,59 @@ create_idle_test (void)
 
       label = gtk_label_new ("count: 0");
       gtk_misc_set_padding (GTK_MISC (label), 10, 10);
-      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
-			  label, TRUE, TRUE, 0);
       gtk_widget_show (label);
+      
+      container =
+	gtk_widget_new (GTK_TYPE_HBOX,
+			"GtkWidget::visible", TRUE,
+			/* "GtkContainer::child", gtk_widget_new (GTK_TYPE_HBOX,
+			 * "GtkWidget::visible", TRUE,
+			 */
+			 "GtkContainer::child", label,
+			/* NULL), */
+			NULL);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), 
+			  container, TRUE, TRUE, 0);
+
+      frame =
+	gtk_widget_new (GTK_TYPE_FRAME,
+			"GtkContainer::border_width", 5,
+			"GtkFrame::label", "Label Container",
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", GTK_DIALOG (window)->vbox,
+			NULL);
+      box =
+	gtk_widget_new (GTK_TYPE_VBOX,
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", frame,
+			NULL);
+      button =
+	gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+			"GtkButton::label", "Resize-Parent",
+			"GtkObject::user_data", (void*)GTK_RESIZE_PARENT,
+			"GtkObject::signal::clicked", toggle_idle_container, container,
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", box,
+			NULL);
+      button =
+	gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+			"GtkButton::label", "Resize-Queue",
+			"GtkObject::user_data", (void*)GTK_RESIZE_QUEUE,
+			"GtkObject::signal::clicked", toggle_idle_container, container,
+			"GtkRadioButton::group", button,
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", box,
+			NULL);
+      button =
+	gtk_widget_new (GTK_TYPE_RADIO_BUTTON,
+			"GtkButton::label", "Resize-Immediate",
+			"GtkObject::user_data", (void*)GTK_RESIZE_IMMEDIATE,
+			"GtkObject::signal::clicked", toggle_idle_container, container,
+			"GtkRadioButton::group", button,
+			"GtkWidget::visible", TRUE,
+			"GtkWidget::parent", box,
+			NULL);
+      
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",

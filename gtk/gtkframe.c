@@ -54,10 +54,10 @@ static void gtk_frame_style_set     (GtkWidget      *widget,
 static GtkBinClass *parent_class = NULL;
 
 
-guint
+GtkType
 gtk_frame_get_type (void)
 {
-  static guint frame_type = 0;
+  static GtkType frame_type = 0;
 
   if (!frame_type)
     {

@@ -293,7 +293,7 @@ gtk_table_set_child_arg (GtkContainer   *container,
       break;
     }
   if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (table))
-    gtk_widget_queue_resize (GTK_WIDGET (table));
+    gtk_widget_queue_resize (child);
 }
 
 static void
@@ -522,7 +522,7 @@ gtk_table_attach (GtkTable	  *table,
     }
   
   if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (table))
-    gtk_widget_queue_resize (GTK_WIDGET (table));
+    gtk_widget_queue_resize (child);
 }
 
 void
@@ -850,7 +850,7 @@ gtk_table_remove (GtkContainer *container,
 	  g_free (child);
 	  
 	  if (was_visible && GTK_WIDGET_VISIBLE (container))
-	    gtk_widget_queue_resize (GTK_WIDGET (container));
+	    gtk_container_queue_resize (container);
 	  break;
 	}
     }

@@ -39,7 +39,6 @@ static void gtk_viewport_size_request             (GtkWidget        *widget,
 						   GtkRequisition   *requisition);
 static void gtk_viewport_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
-static void gtk_viewport_check_resize              (GtkContainer     *container);
 static void gtk_viewport_adjustment_changed       (GtkAdjustment    *adjustment,
 						   gpointer          data);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
@@ -95,7 +94,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->size_allocate = gtk_viewport_size_allocate;
 
   container_class->add = gtk_viewport_add;
-  container_class->check_resize = gtk_viewport_check_resize;
 }
 
 static void
@@ -629,25 +627,6 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
     {
       viewport->vadjustment->value = vval;
       gtk_signal_emit_by_name (GTK_OBJECT (viewport->vadjustment), "value_changed");
-    }
-}
-
-static void
-gtk_viewport_check_resize (GtkContainer *container)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (container != NULL);
-  g_return_if_fail (GTK_IS_VIEWPORT (container));
-
-  if (GTK_WIDGET_REALIZED (container))
-    {
-      bin = GTK_BIN (container);
-
-      gtk_widget_size_request (bin->child, &bin->child->requisition);
-
-      gtk_widget_size_allocate (GTK_WIDGET (container),
-				&(GTK_WIDGET (container)->allocation));
     }
 }
 

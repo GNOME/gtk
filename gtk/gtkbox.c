@@ -563,7 +563,7 @@ gtk_box_set_child_packing (GtkBox               *box,
 	child_info->pack = GTK_PACK_START;
 
       if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
-	gtk_widget_queue_resize (GTK_WIDGET (box));
+	gtk_widget_queue_resize (child);
     }
 }
 

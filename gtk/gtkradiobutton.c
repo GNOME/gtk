@@ -21,6 +21,11 @@
 #include "gtksignal.h"
 
 
+enum {
+  ARG_0,
+  ARG_GROUP
+};
+
 #define CHECK_BUTTON_CLASS(w)  GTK_CHECK_BUTTON_CLASS (GTK_OBJECT (w)->klass)
 
 
@@ -30,6 +35,12 @@ static void gtk_radio_button_destroy        (GtkObject            *object);
 static void gtk_radio_button_clicked        (GtkButton            *button);
 static void gtk_radio_button_draw_indicator (GtkCheckButton       *check_button,
 					     GdkRectangle         *area);
+static void gtk_radio_button_set_arg	    (GtkRadioButton	  *radio_button,
+					     GtkArg        	  *arg,
+					     guint         	   arg_id);
+static void gtk_radio_button_get_arg	    (GtkRadioButton	  *radio_button,
+					     GtkArg        	  *arg,
+					     guint         	   arg_id);
 
 
 static GtkCheckButtonClass *parent_class = NULL;
@@ -49,8 +60,8 @@ gtk_radio_button_get_type (void)
 	sizeof (GtkRadioButtonClass),
 	(GtkClassInitFunc) gtk_radio_button_class_init,
 	(GtkObjectInitFunc) gtk_radio_button_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_radio_button_set_arg,
+        (GtkArgGetFunc) gtk_radio_button_get_arg,
       };
 
       radio_button_type = gtk_type_unique (gtk_check_button_get_type (), &radio_button_info);
@@ -72,6 +83,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   parent_class = gtk_type_class (gtk_check_button_get_type ());
 
+  gtk_object_add_arg_type ("GtkRadioButton::group", GTK_TYPE_RADIO_BUTTON, GTK_ARG_WRITABLE, ARG_GROUP);
+
   object_class->destroy = gtk_radio_button_destroy;
 
   button_class->clicked = gtk_radio_button_clicked;
@@ -83,6 +96,40 @@ static void
 gtk_radio_button_init (GtkRadioButton *radio_button)
 {
   radio_button->group = g_slist_prepend (NULL, radio_button);
+}
+
+static void
+gtk_radio_button_set_arg (GtkRadioButton *radio_button,
+			  GtkArg         *arg,
+			  guint           arg_id)
+{
+  switch (arg_id)
+    {
+      GSList *slist;
+
+    case ARG_GROUP:
+      if (GTK_VALUE_OBJECT (*arg))
+	slist = gtk_radio_button_group ((GtkRadioButton*) GTK_VALUE_OBJECT (*arg));
+      else
+	slist = NULL;
+      gtk_radio_button_set_group (radio_button, slist);
+      break;
+    default:
+      break;
+    }
+}
+
+static void
+gtk_radio_button_get_arg (GtkRadioButton *radio_button,
+			  GtkArg         *arg,
+			  guint           arg_id)
+{
+  switch (arg_id)
+    {
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void

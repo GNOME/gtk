@@ -2,6 +2,64 @@ Tue Jun 23 22:21:33 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gtk-boxed.defs: s/GkWidget/GtkWidget/
 
+Wed Jun 24 07:47:29 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c (create_idle_test): added a frame with radio buttons
+	to select the resize_mode for the idle-labels container.
+
+	* gtk/gtkframe.h: 
+	* gtk/gtkframe.c: GtkType and macro corrections.
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_set_arg): new function to
+ 	support radio grouping.
+
+Tue Jun 23 08:01:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c (gtk_container_set_resize_mode): queue a resize
+	unconditionally if resize_mode has changed.
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_init): set
+ 	GTK_RESIZE_QUEUE on the scrolled window.
+	(gtk_scrolled_window_construct): set GTK_RESIZE_PARENT for the vieport.
+
+Tue Jun 23 04:20:30 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.h:
+	* gtk/gtkcontainer.c:
+ 	(GTK_IS_RESIZE_CONTAINER): new macro to find out if
+	a given gtkobject is a container with resize_mode==GTK_RESIZE_PARENT.
+	(gtk_container_queue_resize): new function to queue a container for
+	a *size* reallocation (doesn't affect its position, and thus its
+	parent is left untouched usually).
+	(gtk_container_get_resize_container): new function to retrive the next
+	most resize container which is not itself queued for a resize.
+	(gtk_container_idle_sizer): new function to carefully process the
+ 	container_resize_queue since it can change during invokation of
+ 	gtk_container_check_resize().
+	(gtk_container_resize_children): total rework of this function to
+	properly handle resize containers. makes a lot of assumptions whitch
+	are stated in the comments.
+
+	* gtk/gtkcontainer.c:
+ 	(gtk_container_real_check_resize): only requeue ourselves if we are not
+ 	a resize container.
+	(gtk_container_clear_resize_widgets): care for automatic deletion of our
+	resize_widgets list on size_allocate through a handler connection.
+
+	* gtk/gtkwindow.c (gtk_window_shutdown): new functionm to reset the
+ 	focus and default widget of a window, so to take the burden from
+	gtk_widget_unparent.
+
+	* gtk/gtkviewport.c: removed gtk_viewport_check_resize, which tried
+	to be clever, but actually messed up the resize_children logic and
+	caused unneccessary allocations on its whole branch. besides this,
+	it messed up the display by not invoking a redraw after the allocation.
+
+	* gtk/gtktable.c (gtk_table_set_child_arg): reverted recent change, so
+ 	that it is the child again that is queued for a resize.
+	(gtk_table_attach): likewise.
+	(gtk_table_remove): likewise.
+
 1998-06-22  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gtk/gtkentry.h, gtk/gtkentry.c: Export the

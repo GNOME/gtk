@@ -17,6 +17,7 @@ static GtkEnumValue _gtk_c_tree_pos_values[] = {
 static GtkEnumValue _gtk_c_tree_line_style_values[] = {
   { GTK_CTREE_LINES_SOLID, "GTK_CTREE_LINES_SOLID", "solid" },
   { GTK_CTREE_LINES_DOTTED, "GTK_CTREE_LINES_DOTTED", "dotted" },
+  { GTK_CTREE_LINES_TABBED, "GTK_CTREE_LINES_TABBED", "tabbed" },
   { GTK_CTREE_LINES_NONE, "GTK_CTREE_LINES_NONE", "none" },
   { 0, NULL, NULL }
 };
@@ -306,6 +307,16 @@ static GtkEnumValue _gtk_private_flags_values[] = {
 static GtkEnumValue _gtk_spin_button_update_policy_values[] = {
   { GTK_UPDATE_ALWAYS, "GTK_UPDATE_ALWAYS", "always" },
   { GTK_UPDATE_IF_VALID, "GTK_UPDATE_IF_VALID", "if-valid" },
+  { 0, NULL, NULL }
+};
+static GtkEnumValue _gtk_spin_type_values[] = {
+  { GTK_SPIN_STEP_FORWARD, "GTK_SPIN_STEP_FORWARD", "step-forward" },
+  { GTK_SPIN_STEP_BACKWARD, "GTK_SPIN_STEP_BACKWARD", "step-backward" },
+  { GTK_SPIN_PAGE_FORWARD, "GTK_SPIN_PAGE_FORWARD", "page-forward" },
+  { GTK_SPIN_PAGE_BACKWARD, "GTK_SPIN_PAGE_BACKWARD", "page-backward" },
+  { GTK_SPIN_HOME, "GTK_SPIN_HOME", "home" },
+  { GTK_SPIN_END, "GTK_SPIN_END", "end" },
+  { GTK_SPIN_USER_DEFINED, "GTK_SPIN_USER_DEFINED", "user-defined" },
   { 0, NULL, NULL }
 };
 static GtkEnumValue _gtk_toolbar_child_type_values[] = {
