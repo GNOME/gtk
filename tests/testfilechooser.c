@@ -375,6 +375,18 @@ kill_dependent (GtkWindow *win, GtkObject *dep)
   g_object_unref (dep);
 }
 
+static void
+notify_multiple_cb (GtkWidget  *dialog,
+		    GParamSpec *pspec,
+		    GtkWidget  *button)
+{
+  gboolean multiple;
+
+  multiple = gtk_file_chooser_get_select_multiple (GTK_FILE_CHOOSER (dialog));
+  
+  gtk_widget_set_sensitive (button, multiple);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -510,6 +522,8 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_file_chooser_select_all), dialog);
+  g_signal_connect (dialog, "notify::multiple", 
+		    G_CALLBACK (notify_multiple_cb), button);
   
   button = gtk_button_new_with_mnemonic ("_Unselect all");
   gtk_container_add (GTK_CONTAINER (vbbox), button);

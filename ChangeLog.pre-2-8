@@ -1,3 +1,8 @@
+2004-09-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testfilechooser.c (main): Update sensitivity of the "Select all"
+	button.
+
 Wed Sep  8 18:38:08 2004  Soeren Sandmann  <sandmann@redhat.com>
 
 	Make dropping of expandable items look nicer.
