@@ -1,3 +1,12 @@
+2004-12-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_select_submenu_first): 
+	Return a boolean indicating whether an item in the submenu
+	was selected.
+	(gtk_real_menu_shell_move_current): When going in child 
+	direction, don't get stuck at completely insensitive 
+	submenus.  (#162055, Billy Biggs)	
+
 2004-12-27  Matthias Clasen  <mclasen@redhat.com>
 
 	Make the clipboard image API more robust (#162357, 

@@ -159,7 +159,7 @@ static GtkWidget *gtk_menu_shell_get_item    (GtkMenuShell      *menu_shell,
 static GType    gtk_menu_shell_child_type  (GtkContainer      *container);
 static void gtk_menu_shell_real_select_item  (GtkMenuShell      *menu_shell,
 					      GtkWidget         *menu_item);
-static void gtk_menu_shell_select_submenu_first (GtkMenuShell   *menu_shell); 
+static gboolean gtk_menu_shell_select_submenu_first (GtkMenuShell   *menu_shell); 
 
 static void gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 					      GtkMenuDirectionType direction);
@@ -1062,7 +1062,7 @@ _gtk_menu_shell_select_last (GtkMenuShell *menu_shell,
     gtk_menu_shell_select_item (menu_shell, to_select);
 }
 
-static void
+static gboolean
 gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
 {
   GtkMenuItem *menu_item;
@@ -1073,7 +1073,11 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell     *menu_shell)
     {
       _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item));
       gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
+      if (GTK_MENU_SHELL (menu_item->submenu)->active_menu_item)
+	return TRUE;
     }
+
+  return FALSE;
 }
 
 static void
@@ -1145,28 +1149,27 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	  _gtk_menu_item_is_selectable (menu_shell->active_menu_item) &&
 	  GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
 	{
-	  gtk_menu_shell_select_submenu_first (menu_shell);
+	  if (gtk_menu_shell_select_submenu_first (menu_shell))
+	    break;
 	}
-      else
+
+      /* Try to find a menu running the opposite direction */
+      while (parent_menu_shell && 
+	     (GTK_MENU_SHELL_GET_CLASS (parent_menu_shell)->submenu_placement ==
+	      GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement))
 	{
-	  /* Try to find a menu running the opposite direction */
-	  while (parent_menu_shell && 
-		 (GTK_MENU_SHELL_GET_CLASS (parent_menu_shell)->submenu_placement ==
-		  GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement))
-            {
-              GtkWidget *tmp_widget = parent_menu_shell->parent_menu_shell;
-
-              if (tmp_widget)
-                parent_menu_shell = GTK_MENU_SHELL (tmp_widget);
-              else
-                parent_menu_shell = NULL;
-            }
-
-	  if (parent_menu_shell)
-	    {
-	      gtk_menu_shell_move_selected (parent_menu_shell, 1);
-	      gtk_menu_shell_select_submenu_first (parent_menu_shell);
-	    }
+	  GtkWidget *tmp_widget = parent_menu_shell->parent_menu_shell;
+	  
+	  if (tmp_widget)
+	    parent_menu_shell = GTK_MENU_SHELL (tmp_widget);
+	  else
+	    parent_menu_shell = NULL;
+	}
+      
+      if (parent_menu_shell)
+	{
+	  gtk_menu_shell_move_selected (parent_menu_shell, 1);
+	  gtk_menu_shell_select_submenu_first (parent_menu_shell);
 	}
       break;
       
