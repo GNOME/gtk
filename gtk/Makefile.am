@@ -361,7 +361,6 @@ gtk_c_sources = @STRIP_BEGIN@   \
 @STRIP_END@
 # Extra headers that are used for enum type array/id generation
 gdk_headers = @STRIP_BEGIN@ 	\
-	../gdk/gdkcc.h		\
 	../gdk/gdkcolor.h	\
 	../gdk/gdkcursor.h     	\
 	../gdk/gdkdnd.h		\

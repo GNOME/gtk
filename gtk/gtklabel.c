@@ -501,8 +501,8 @@ gtk_label_size_request (GtkWidget      *widget,
    * don't think it's really that slow.
    */
 
-  requisition->width = label->misc.xpad;
-  requisition->height = label->misc.ypad;
+  requisition->width = label->misc.xpad * 2;
+  requisition->height = label->misc.ypad * 2;
 
   if (!label->layout)
     {

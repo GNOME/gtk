@@ -192,6 +192,49 @@ static gchar *add_dll_suffix(gchar *module_name)
 
 #undef gtk_init_check
 
+/* This checks to see if the process is running suid or sgid
+ * at the current time. If so, we don't allow GTK+ to be initialized.
+ * This is meant to be a mild check - we only error out if we
+ * can prove the programmer is doing something wrong, not if
+ * they could be doing something wrong. For this reason, we
+ * don't use issetugid() on BSD or prctl (PR_GET_DUMPABLE).
+ */
+static gboolean
+check_setugid (void)
+{
+  uid_t ruid, euid, suid; /* Real, effective and saved user ID's */
+  gid_t rgid, egid, sgid; /* Real, effective and saved group ID's */
+  
+#ifdef HAVE_GETRESUID
+  /* These aren't in the header files, so we prototype them here.
+   */
+  int getresuid(uid_t *ruid, uid_t *euid, uid_t *suid);
+  int getresgid(gid_t *rgid, gid_t *egid, gid_t *sgid);
+
+  if (getresuid (&ruid, &euid, &suid) != 0 ||
+      getresgid (&rgid, &egid, &sgid) != 0)
+#endif /* HAVE_GETRESUID */
+    {
+      suid = ruid = getuid ();
+      sgid = rgid = getgid ();
+      euid = geteuid ();
+      egid = getegid ();
+    }
+
+  if (ruid != euid || ruid != suid ||
+      rgid != egid || rgid != sgid)
+    {
+      g_warning ("This process is currently running setuid or setgid.\n"
+		 "This is not a supported use of GTK+. You must create a helper\n"
+		 "program instead. For further details, see:\n\n"
+		 "    http://www.gtk.org/setuid.html\n\n"
+		 "Refusing to initialize GTK+.");
+      exit (1);
+    }
+
+  return TRUE;
+}
+
 gboolean
 gtk_init_check (int	 *argc,
 		char   ***argv)
@@ -203,6 +246,9 @@ gtk_init_check (int	 *argc,
   if (gtk_initialized)
     return TRUE;
 
+  if (!check_setugid ())
+    return FALSE;
+  
 #if	0
   g_set_error_handler (gtk_error);
   g_set_warning_handler (gtk_warning);

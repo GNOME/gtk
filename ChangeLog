@@ -1,3 +1,20 @@
+Mon Feb 12 23:43:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (gdk_headers): Remove gdkcc.h 
+	reference.
+
+	* configure.in gtk/gtkmain.c: Add checks for setuid/setgid,
+	and refuse to initialize GTK+ if they fail.
+
+Mon Feb 12 15:02:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Add check for gtk-doc version.
+
+Thu Feb  8 17:18:26 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_size_request): Fix bug
+	where the xpad/ypad was only being used on one side!
+
 2001-02-11  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkcolor-win32.c (gdk_colormap_query_color): New
