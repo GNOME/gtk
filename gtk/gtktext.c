@@ -159,6 +159,7 @@ struct _LineParams
 static void  gtk_text_class_init     (GtkTextClass   *klass);
 static void  gtk_text_init           (GtkText        *text);
 static void  gtk_text_destroy        (GtkObject      *object);
+static void  gtk_text_finalize       (GtkObject      *object);
 static void  gtk_text_realize        (GtkWidget      *widget);
 static void  gtk_text_unrealize      (GtkWidget      *widget);
 static void  gtk_text_draw_focus     (GtkWidget      *widget);
@@ -272,6 +273,7 @@ static void scroll_int  (GtkText* text, gint diff);
 static void process_exposes (GtkText *text);
 
 /* Cache Management. */
+static void   free_cache        (GtkText* text);
 static GList* remove_cache_line (GtkText* text, GList* list);
 
 /* Key Motion. */
@@ -455,6 +457,7 @@ gtk_text_class_init (GtkTextClass *class)
   parent_class = gtk_type_class (gtk_editable_get_type ());
 
   object_class->destroy = gtk_text_destroy;
+  object_class->finalize = gtk_text_finalize;
 
   widget_class->realize = gtk_text_realize;
   widget_class->unrealize = gtk_text_unrealize;
@@ -920,6 +923,38 @@ gtk_text_destroy (GtkObject *object)
 }
 
 static void
+gtk_text_finalize (GtkObject *object)
+{
+  GtkText *text;
+  GList *tmp_list;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_TEXT (object));
+
+  text = (GtkText *)object;
+
+  /* Clean up the internal structures */
+  g_free (text->text);
+  free_cache (text);
+
+  tmp_list = text->text_properties;
+  while (tmp_list)
+    {
+      g_mem_chunk_free (text_property_chunk, tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+  
+  g_list_free (text->text_properties);
+
+  if (text->scratch_buffer)
+    g_free (text->scratch_buffer);
+
+  g_list_free (text->tab_stops);
+  
+  GTK_OBJECT_CLASS(parent_class)->finalize (object);
+}
+
+static void
 gtk_text_realize (GtkWidget *widget)
 {
   GtkText *text;
@@ -1075,6 +1110,9 @@ gtk_text_unrealize (GtkWidget *widget)
 
   gdk_gc_destroy (text->gc);
   text->gc = NULL;
+
+  gdk_pixmap_unref (text->line_wrap_bitmap);
+  gdk_pixmap_unref (text->line_arrow_bitmap);
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -2325,12 +2363,31 @@ delete_expose (GtkText* text, guint nchars, guint old_lines, guint old_pixels)
 static void
 correct_cache_insert (GtkText* text, gint nchars)
 {
-  GList* cache = text->current_line->next;
+  GList *cache;
+  GtkPropertyMark *start;
+  GtkPropertyMark *end;
+  
+  /* If we split a property exactly at the beginning of the
+   * line, we have to correct here, or fetch_lines will
+   * fetch junk.
+   */
+
+  start = &CACHE_DATA(text->current_line).start;
+  if (start->offset == MARK_CURRENT_PROPERTY (start)->length)
+    SET_PROPERTY_MARK (start, start->property->next, 0);
+
+  /* Now correct the offsets, and check for start or end marks that
+   * are after the point, yet point to a property before the point's
+   * property. This indicates that they are meant to point to the
+   * second half of a property we split in insert_text_property(), so
+   * we fix them up that way.  
+   */
+  cache = text->current_line->next;
 
   for (; cache; cache = cache->next)
     {
-      GtkPropertyMark *start = &CACHE_DATA(cache).start;
-      GtkPropertyMark *end = &CACHE_DATA(cache).end;
+      start = &CACHE_DATA(cache).start;
+      end = &CACHE_DATA(cache).end;
 
       if (LAST_INDEX (text, text->point) &&
 	  start->index == text->point.index)
@@ -2340,7 +2397,16 @@ correct_cache_insert (GtkText* text, gint nchars)
 	  if (start->property == text->point.property)
 	    move_mark_n(start, nchars);
 	  else
-	    start->index += nchars;
+	    {
+	      if (start->property->next &&
+		  (start->property->next->next == text->point.property))
+		{
+		  g_assert (start->offset >=  MARK_CURRENT_PROPERTY (start)->length);
+		  start->offset -= MARK_CURRENT_PROPERTY (start)->length;
+		  start->property = text->point.property;
+		}
+	      start->index += nchars;
+	    }
 	}
 
       if (LAST_INDEX (text, text->point) &&
@@ -2350,8 +2416,17 @@ correct_cache_insert (GtkText* text, gint nchars)
 	{
 	  if (end->property == text->point.property)
 	    move_mark_n(end, nchars);
-	  else
-	    end->index += nchars;
+	  else 
+	    {
+	      if (end->property->next &&
+		  (end->property->next->next == text->point.property))
+		{
+		  g_assert (end->offset >=  MARK_CURRENT_PROPERTY (end)->length);
+		  end->offset -= MARK_CURRENT_PROPERTY (end)->length;
+		  end->property = text->point.property;
+		}
+	      end->index += nchars;
+	    }
 	}
 
       /*TEXT_ASSERT_MARK(text, start, "start");*/
@@ -2486,7 +2561,7 @@ new_text_property (GdkFont* font, GdkColor* fore, GdkColor* back, guint length)
       text_property_chunk = g_mem_chunk_new ("text property mem chunk",
 					     sizeof(TextProperty),
 					     1024*sizeof(TextProperty),
-					     G_ALLOC_ONLY);
+					     G_ALLOC_AND_FREE);
     }
 
   prop = g_chunk_new(TextProperty, text_property_chunk);
@@ -2619,6 +2694,10 @@ insert_text_property (GtkText* text, GdkFont* font,
     }
   else
     {
+      /* The following will screw up the line_start cache,
+       * we'll fix it up in correct_cache_insert
+       */
+      
       /* In the middle of forward_prop, if properties are equal,
        * just add to its length, else split it into two and splice
        * in a new one. */

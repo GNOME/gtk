@@ -1,3 +1,17 @@
+Wed Jul 15 17:44:47 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (new_text_property): We free things from
+	the text property MemChunk, so it needs to be G_ALLOC_AND_FREE.
+
+	* Fix up line start cache when splitting a property
+	during an insert.
+
+Mon Jun 15 15:42:12 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtktext.c (gtk_text_finalize): Free internal
+	structures of text widget. Also, unreference pixmaps
+	when unrealizing.
+	
 Sun Jul 12 06:18:10 1998  Tim Janik  <timj@gtk.org>
 
         * gtk/gtktypeutils.c (gtk_type_new): call the base classes'
