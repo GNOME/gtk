@@ -31,7 +31,8 @@ typedef struct _GtkTextAttributes GtkTextAttributes;
 typedef struct _GtkTextTag GtkTextTag;
 typedef struct _GtkTextTagClass GtkTextTagClass;
 
-struct _GtkTextTag {
+struct _GtkTextTag
+{
   GtkObject parent_instance;
 
   GtkTextTagTable *table;
@@ -58,7 +59,6 @@ struct _GtkTextTag {
    * this tag does not affect it.
    */
   guint bg_color_set : 1;
-  guint relief_set : 1;
   guint bg_stipple_set : 1;
   guint fg_color_set : 1;
   guint font_set : 1;
@@ -139,7 +139,6 @@ struct _GtkTextAttributes
 
   GtkTextAppearance appearance;
   
-  GtkShadowType relief;
   GtkJustification justify;
   GtkTextDirection direction;
   

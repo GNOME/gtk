@@ -1211,7 +1211,7 @@ add_cursor (GtkTextLayout      *layout,
    * user has hidden the cursor.
    */
   if (gtk_text_btree_mark_is_insert (_gtk_text_buffer_get_btree (layout->buffer),
-                                     (GtkTextMark*)seg) &&
+                                     seg->body.mark.obj) &&
       (!layout->cursor_visible ||
        gtk_text_buffer_get_selection_bounds (layout->buffer, NULL, NULL)))
     return;

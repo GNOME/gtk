@@ -134,7 +134,7 @@ iter_set_from_segment(GtkTextRealIter *iter,
       seg = seg->next;
     }
 
-  iter_set_from_byte_offset(iter, line, byte_offset);
+  iter_set_from_byte_offset (iter, line, byte_offset);
 }
 
 /* This function ensures that the segment-dependent information is
@@ -667,7 +667,7 @@ gtk_text_iter_get_line_offset(const GtkTextIter *iter)
  * Return value: distance from start of line, in bytes
  **/
 gint
-gtk_text_iter_get_line_index(const GtkTextIter *iter)
+gtk_text_iter_get_line_index (const GtkTextIter *iter)
 {
   GtkTextRealIter *real;
 
@@ -898,7 +898,7 @@ gtk_text_iter_get_marks (const GtkTextIter *iter)
     {
       if (seg->type == &gtk_text_left_mark_type ||
           seg->type == &gtk_text_right_mark_type)
-        retval = g_slist_prepend(retval, (GtkTextMark*)seg);
+        retval = g_slist_prepend (retval, seg->body.mark.obj);
       
       seg = seg->next;
     }
@@ -2477,7 +2477,35 @@ gtk_text_iter_set_line_offset(GtkTextIter *iter,
 }
 
 void
-gtk_text_iter_set_line(GtkTextIter *iter, gint line_number)
+gtk_text_iter_set_line_index (GtkTextIter *iter,
+                              gint         byte_on_line)
+{
+  GtkTextRealIter *real;
+  
+  g_return_if_fail (iter != NULL);
+  
+  real = gtk_text_iter_make_surreal (iter);
+
+  if (real == NULL)
+    return;
+
+  check_invariants (iter);
+  
+  iter_set_from_byte_offset (real, real->line, byte_on_line);
+
+  if (real->segment->type == &gtk_text_char_type &&
+      (real->segment->body.chars[real->segment_byte_offset] & 0xc0) == 0x80)
+    g_warning ("%s: Incorrect byte offset %d falls in the middle of a UTF-8 "
+               "character; this will crash the text buffer. "
+               "Byte indexes must refer to the start of a character.",
+               G_STRLOC, byte_on_line);
+  
+  check_invariants (iter);
+}
+
+void
+gtk_text_iter_set_line (GtkTextIter *iter,
+                        gint         line_number)
 {
   GtkTextLine *line;
   gint real_line;
@@ -2861,6 +2889,9 @@ lines_match (const GtkTextIter *start,
   
   if (*lines == NULL || **lines == '\0')
     {
+      if (match_start)
+        *match_start = *start;
+      
       if (match_end)
         *match_end = *start;
       return TRUE;
@@ -2904,7 +2935,7 @@ lines_match (const GtkTextIter *start,
     }
 
   if (found == NULL)
-    {
+    {      
       g_free (line_text);
       return FALSE;
     }
@@ -2924,7 +2955,7 @@ lines_match (const GtkTextIter *start,
       forward_chars_with_skipping (match_start, offset,
                                    visible_only, !slice);
     }
-
+  
   /* Go to end of search string */
   offset += g_utf8_strlen (*lines, -1);
 
@@ -3234,9 +3265,9 @@ gtk_text_btree_get_iter_at_line_char (GtkTextBTree *tree,
 
 void
 gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
-				      GtkTextIter    *iter,
-				      gint            line_number,
-				      gint            byte_index)
+                                      GtkTextIter    *iter,
+                                      gint            line_number,
+                                      gint            byte_index)
 {
   GtkTextRealIter *real = (GtkTextRealIter*)iter;
   GtkTextLine *line;
@@ -3252,6 +3283,13 @@ gtk_text_btree_get_iter_at_line_byte (GtkTextBTree   *tree,
   /* We might as well cache this, since we know it. */
   real->cached_line_number = real_line;
 
+  if (real->segment->type == &gtk_text_char_type &&
+      (real->segment->body.chars[real->segment_byte_offset] & 0xc0) == 0x80)
+    g_warning ("%s: Incorrect byte offset %d falls in the middle of a UTF-8 "
+               "character; this will crash the text buffer. "
+               "Byte indexes must refer to the start of a character.",
+               G_STRLOC, byte_index); 
+  
   check_invariants(iter);
 }
 
@@ -3336,32 +3374,34 @@ gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
   g_return_val_if_fail(iter != NULL, FALSE);
   g_return_val_if_fail(tree != NULL, FALSE);
   
-  mark = gtk_text_btree_get_mark_by_name(tree, mark_name);
+  mark = gtk_text_btree_get_mark_by_name (tree, mark_name);
 
   if (mark == NULL)
     return FALSE;
   else
     {
-      gtk_text_btree_get_iter_at_mark(tree, iter, mark);
-      check_invariants(iter);
+      gtk_text_btree_get_iter_at_mark (tree, iter, mark);
+      check_invariants (iter);
       return TRUE;
     }
 }
 
 void
 gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
-                                  GtkTextIter *iter,
-                                  GtkTextMark *mark)
+                                 GtkTextIter *iter,
+                                 GtkTextMark *mark)
 {
-  GtkTextLineSegment *seg = (GtkTextLineSegment*) mark;
+  GtkTextLineSegment *seg;
   
-  g_return_if_fail(iter != NULL);
-  g_return_if_fail(tree != NULL);
-  g_return_if_fail(GTK_IS_TEXT_MARK (mark));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
+
+  seg = mark->segment;
   
-  iter_init_from_segment(iter, tree,
-                         seg->body.mark.line, seg);
-  g_assert(seg->body.mark.line == gtk_text_iter_get_text_line(iter));
+  iter_init_from_segment (iter, tree,
+                          seg->body.mark.line, seg);
+  g_assert (seg->body.mark.line == gtk_text_iter_get_text_line(iter));
   check_invariants(iter);
 }
 
@@ -3431,10 +3471,6 @@ gtk_text_iter_check (const GtkTextIter *iter)
          real->line_byte_offset,
          real->line_char_offset);
 #endif
-
-  if (real->line_byte_offset == 97 &&
-      real->line_char_offset == 95)
-    G_BREAKPOINT();
   
   if (segments_updated)
     {

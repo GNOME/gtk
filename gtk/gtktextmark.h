@@ -56,15 +56,36 @@ extern "C" {
 
 /* The GtkTextMark data type */
 
-typedef struct _GtkTextMark GtkTextMark;
+typedef struct _GtkTextMark      GtkTextMark;
+typedef struct _GtkTextMarkClass GtkTextMarkClass;
+
+#define GTK_TYPE_TEXT_MARK              (gtk_text_mark_get_type ())
+#define GTK_TEXT_MARK(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_TEXT_MARK, GtkTextMark))
+#define GTK_TEXT_MARK_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_MARK, GtkTextMarkClass))
+#define GTK_IS_TEXT_MARK(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_TEXT_MARK))
+#define GTK_IS_TEXT_MARK_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_MARK))
+#define GTK_TEXT_MARK_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_MARK, GtkTextMarkClass))
+
+struct _GtkTextMark
+{
+  GObject parent_instance;  
+
+  gpointer segment;
+};
+
+struct _GtkTextMarkClass
+{
+  GObjectClass parent_class;
+
+};
+
+GType        gtk_text_mark_get_type   (void) G_GNUC_CONST;
 
 void         gtk_text_mark_set_visible (GtkTextMark *mark,
                                         gboolean     setting);
 gboolean     gtk_text_mark_is_visible  (GtkTextMark *mark);
 /* FIXME gconst */
-const char * gtk_text_mark_get_name    (GtkTextMark *mark);
-GtkTextMark *gtk_text_mark_ref         (GtkTextMark *mark);
-void         gtk_text_mark_unref       (GtkTextMark *mark);
+const char  *gtk_text_mark_get_name    (GtkTextMark *mark);
 gboolean     gtk_text_mark_get_deleted (GtkTextMark *mark);
 
 

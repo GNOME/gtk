@@ -22,6 +22,16 @@ displayed by any number of views.
 </para>
 
 <para>
+One of the important things to remember about text in GTK+ is that it's in the
+UTF-8 encoding. This means that one character can be encoded as multiple
+bytes. Character counts are usually referred to as
+<firstterm>offsets</firstterm>, while byte counts are called
+<firstterm>indexes</firstterm>. If you confuse these two, things will work fine
+with ASCII, but as soon as your buffer contains multibyte characters, bad things
+will happen.
+</para>
+
+<para>
 Text in a buffer can be marked with <firstterm>tags</firstterm>. A tag is an
 attribute that can be applied to some range of text. For example, a tag might be
 called "bold" and make the text inside the tag bold. However, the tag concept is

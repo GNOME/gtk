@@ -23,4 +23,7 @@ void                gtk_text_attributes_unrealize (GtkTextAttributes *values,
                                                    GdkColormap       *cmap,
                                                    GdkVisual         *visual);
 
+gboolean gtk_text_tag_affects_size               (GtkTextTag *tag);
+gboolean gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag);
+
 #endif

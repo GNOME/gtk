@@ -1,3 +1,30 @@
+2000-10-24  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_scroll_to_mark_adjusted): make
+	it a static function
+
+	* gtk/gtktextbtree.c (gtk_text_btree_tag): Gee, maybe we should
+	redraw text when a tag is applied to it.
+
+	* gtk/gtktexttag.c (gtk_text_tag_affects_size)
+	(gtk_text_tag_affects_nonsize_appearance): private functions to
+	see if a tag requires various kinds of redraw/layout to be queued
+	up.
+
+	* gtk/gtktexttag.h (struct _GtkTextTag): Remove relief crackrock
+
+	* gtk/testtext.c (fill_example_buffer): Put the cursor 
+	at the start of the buffer, so search works by default
+
+	* gtk/gtktextiter.c (lines_match): init match_start always
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_get_iter_at_line_index): New
+	function, get iter at a line + a byte index
+
+	* gtk/gtktextiter.c (gtk_text_iter_set_line_index): New function,
+	to set byte position within a line
+	(gtk_text_iter_check): remove leftover G_BREAKPOINT thing
+
 2000-10-23  Havoc Pennington  <hp@redhat.com>
 
         * gtk/testtext.c: Re-enable the "find" dialog

@@ -172,8 +172,8 @@ struct _GtkTextBTree {
   GtkTextTagTable *table;
   GHashTable *mark_table;
   guint refcount;
-  GtkTextLineSegment *insert_mark;
-  GtkTextLineSegment *selection_bound_mark;
+  GtkTextMark *insert_mark;
+  GtkTextMark *selection_bound_mark;
   GtkTextBuffer *buffer;
   BTreeView *views;
   GSList *tag_infos;
@@ -321,6 +321,9 @@ static GtkTextTagInfo *gtk_text_btree_get_existing_tag_info (GtkTextBTree   *tre
 static void            gtk_text_btree_remove_tag_info       (GtkTextBTree   *tree,
                                                              GtkTextTag     *tag);
 
+static void redisplay_region (GtkTextBTree      *tree,
+                              const GtkTextIter *start,
+                              const GtkTextIter *end);
 
 /* Inline thingies */
 
@@ -421,33 +424,36 @@ gtk_text_btree_new (GtkTextTagTable *table,
   
   {
     GtkTextIter start;
-
+    GtkTextLineSegment *seg;
+    
     gtk_text_btree_get_iter_at_line_char(tree, &start, 0, 0);
     
 
-    tree->insert_mark =
-      (GtkTextLineSegment*) gtk_text_btree_set_mark(tree,
-                                                    NULL,
-                                                    "insert",
-                                                    FALSE,
-                                                    &start,
-                                                    FALSE);
-    
-    tree->insert_mark->body.mark.not_deleteable = TRUE;
-    tree->insert_mark->body.mark.visible = TRUE;
-    
-    tree->selection_bound_mark =
-      (GtkTextLineSegment*) gtk_text_btree_set_mark(tree,
-                                                    NULL,
-                                                    "selection_bound",
-                                                    FALSE,
-                                                    &start,
-                                                    FALSE);
+    tree->insert_mark = gtk_text_btree_set_mark (tree,
+                                                 NULL,
+                                                 "insert",
+                                                 FALSE,
+                                                 &start,
+                                                 FALSE);
 
-    tree->selection_bound_mark->body.mark.not_deleteable = TRUE;
+    seg = tree->insert_mark->segment;
     
-    _mark_segment_ref(tree->insert_mark);
-    _mark_segment_ref(tree->selection_bound_mark);
+    seg->body.mark.not_deleteable = TRUE;
+    seg->body.mark.visible = TRUE;
+    
+    tree->selection_bound_mark = gtk_text_btree_set_mark (tree,
+                                                          NULL,
+                                                          "selection_bound",
+                                                          FALSE,
+                                                          &start,
+                                                          FALSE);
+
+    seg = tree->selection_bound_mark->segment;
+    
+    seg->body.mark.not_deleteable = TRUE;
+
+    g_object_ref (G_OBJECT (tree->insert_mark));
+    g_object_ref (G_OBJECT (tree->selection_bound_mark));
   }
 
   tree->refcount = 1;
@@ -467,7 +473,11 @@ gtk_text_btree_ref (GtkTextBTree *tree)
 static void
 mark_destroy_foreach (gpointer key, gpointer value, gpointer user_data)
 {
-  _mark_segment_unref (value);
+  GtkTextLineSegment *seg = value;
+
+  g_return_if_fail (seg->body.mark.tree == NULL);
+  
+  g_object_unref (G_OBJECT (seg->body.mark.obj));
 }
 
 void
@@ -479,26 +489,26 @@ gtk_text_btree_unref (GtkTextBTree *tree)
   tree->refcount -= 1;
 
   if (tree->refcount == 0)
-    {      
-      gtk_text_btree_node_destroy(tree, tree->root_node);
+    {
+      gtk_text_btree_node_destroy (tree, tree->root_node);
 
-      g_hash_table_foreach(tree->mark_table,
-                           mark_destroy_foreach,
-                           NULL);
-      g_hash_table_destroy(tree->mark_table);
+      g_hash_table_foreach (tree->mark_table,
+                            mark_destroy_foreach,
+                            NULL);
+      g_hash_table_destroy (tree->mark_table);
       
-      _mark_segment_unref(tree->insert_mark);
-      _mark_segment_unref(tree->selection_bound_mark);
+      g_object_unref (G_OBJECT (tree->insert_mark));
+      g_object_unref (G_OBJECT (tree->selection_bound_mark));
 
-      gtk_signal_disconnect(GTK_OBJECT(tree->table),
-                            tree->tag_changed_handler);
+      gtk_signal_disconnect (GTK_OBJECT(tree->table),
+                             tree->tag_changed_handler);
 
-      gtk_signal_disconnect(GTK_OBJECT(tree->table),
-                            tree->tag_removed_handler);
+      gtk_signal_disconnect (GTK_OBJECT(tree->table),
+                             tree->tag_removed_handler);
       
-      gtk_object_unref(GTK_OBJECT(tree->table));
+      gtk_object_unref (GTK_OBJECT(tree->table));
 
-      g_free(tree);
+      g_free (tree);
     }
 }
 
@@ -1382,8 +1392,8 @@ gtk_text_btree_get_view_size (GtkTextBTree *tree,
   g_return_if_fail(tree != NULL);
   g_return_if_fail(view_id != NULL);
   
-  gtk_text_btree_node_get_size(tree->root_node, view_id,
-			       width, height);  
+  gtk_text_btree_node_get_size (tree->root_node, view_id,
+                                width, height);  
 }
 
 /*
@@ -1461,6 +1471,26 @@ iter_stack_invert(IterStack *stack)
     }
 }
 
+static void
+queue_tag_redisplay (GtkTextBTree      *tree,
+                     GtkTextTag        *tag,
+                     const GtkTextIter *start,
+                     const GtkTextIter *end)
+{
+  if (gtk_text_tag_affects_size (tag))
+    {
+      gtk_text_btree_invalidate_region (tree, start, end);
+               
+    }
+  else if (gtk_text_tag_affects_nonsize_appearance (tag))
+    {
+      /* We only need to queue a redraw, not a relayout */
+      redisplay_region (tree, start, end);
+    }
+
+  /* We don't need to do anything if the tag doesn't affect display */
+}
+
 void
 gtk_text_btree_tag (const GtkTextIter *start_orig,
                     const GtkTextIter *end_orig,
@@ -1502,6 +1532,8 @@ gtk_text_btree_tag (const GtkTextIter *start_orig,
   
   tree = gtk_text_iter_get_btree(&start);
 
+  queue_tag_redisplay (tree, tag, &start, &end);
+  
   info = gtk_text_btree_get_tag_info(tree, tag);
   
   start_line = gtk_text_iter_get_text_line(&start);
@@ -2311,21 +2343,23 @@ redisplay_region (GtkTextBTree      *tree,
       if (ld)
 	end_y += ld->height;
 	  
-      gtk_text_layout_changed (view->layout, start_y, end_y - start_y, end_y - start_y);
+      gtk_text_layout_changed (view->layout, start_y,
+                               end_y - start_y,
+                               end_y - start_y);
 
       view = view->next;
     }
 }
 
 static void
-redisplay_mark(GtkTextLineSegment *mark)
+redisplay_mark (GtkTextLineSegment *mark)
 {
   GtkTextIter iter;
   GtkTextIter end;
     
   gtk_text_btree_get_iter_at_mark(mark->body.mark.tree,
                                   &iter,
-                                  (GtkTextMark*)mark);
+                                  mark->body.mark.obj);
 
   end = iter;
   gtk_text_iter_next_char(&end);
@@ -2370,10 +2404,10 @@ real_set_mark(GtkTextBTree *tree,
   g_return_val_if_fail(gtk_text_iter_get_btree(where) == tree, NULL);
 
   if (existing_mark)
-    mark = (GtkTextLineSegment*) existing_mark;
+    mark = existing_mark->segment;
   else if (name != NULL)
-    mark = g_hash_table_lookup(tree->mark_table,
-                               name);
+    mark = g_hash_table_lookup (tree->mark_table,
+                                name);
   else
     mark = NULL;
   
@@ -2391,12 +2425,13 @@ real_set_mark(GtkTextBTree *tree,
   if (mark != NULL)
     {
       if (redraw_selections &&
-	  (mark == tree->insert_mark ||
-	   mark == tree->selection_bound_mark))
+	  (mark == tree->insert_mark->segment ||
+	   mark == tree->selection_bound_mark->segment))
 	{
 	  GtkTextIter old_pos;
 
-	  gtk_text_btree_get_iter_at_mark (tree, &old_pos, (GtkTextMark*)mark);
+	  gtk_text_btree_get_iter_at_mark (tree, &old_pos,
+                                           mark->body.mark.obj);
 	  redisplay_region (tree, &old_pos, where);
 	}
       
@@ -2411,7 +2446,7 @@ real_set_mark(GtkTextBTree *tree,
         }
 
       /* Redraw the mark's old location. */
-      redisplay_mark_if_visible(mark);
+      redisplay_mark_if_visible (mark);
       
       /* Unlink mark from its current location.
          This could hose our iterator... */
@@ -2432,22 +2467,22 @@ real_set_mark(GtkTextBTree *tree,
       mark->body.mark.line = gtk_text_iter_get_text_line(&iter);
 
       if (mark->body.mark.name)
-        g_hash_table_insert(tree->mark_table,
-                            mark->body.mark.name,
-                            mark);
+        g_hash_table_insert (tree->mark_table,
+                             mark->body.mark.name,
+                             mark);
     }
   
   /* Link mark into new location */
-  gtk_text_btree_link_segment(mark, &iter);
+  gtk_text_btree_link_segment (mark, &iter);
   
   /* Invalidate some iterators. */
-  segments_changed(tree);
+  segments_changed (tree);
   
   /*
    * update the screen at the mark's new location.
    */
 
-  redisplay_mark_if_visible(mark);
+  redisplay_mark_if_visible (mark);
 
   return mark;
 }
@@ -2461,9 +2496,13 @@ gtk_text_btree_set_mark (GtkTextBTree *tree,
                          const GtkTextIter *iter,
                          gboolean should_exist)
 {
-  return (GtkTextMark*)real_set_mark(tree, existing_mark,
-                                     name, left_gravity, iter, should_exist,
-                                     TRUE);  
+  GtkTextLineSegment *seg;
+
+  seg = real_set_mark(tree, existing_mark,
+                      name, left_gravity, iter, should_exist,
+                      TRUE);
+
+  return seg ? seg->body.mark.obj : NULL;
 }
 
 gboolean
@@ -2474,9 +2513,9 @@ gtk_text_btree_get_selection_bounds (GtkTextBTree *tree,
   GtkTextIter tmp_start, tmp_end;
   
   gtk_text_btree_get_iter_at_mark (tree, &tmp_start,
-                                   (GtkTextMark*)tree->insert_mark);
+                                   tree->insert_mark);
   gtk_text_btree_get_iter_at_mark (tree, &tmp_end,
-                                   (GtkTextMark*)tree->selection_bound_mark);
+                                   tree->selection_bound_mark);
   
   if (gtk_text_iter_equal(&tmp_start, &tmp_end))
     {
@@ -2512,10 +2551,10 @@ gtk_text_btree_place_cursor(GtkTextBTree      *tree,
     redisplay_region(tree, &start, &end);
   
   /* Move insert AND selection_bound before we redisplay */
-  real_set_mark(tree, (GtkTextMark*) tree->insert_mark,
-                "insert", FALSE, iter, TRUE, FALSE);
-  real_set_mark(tree, (GtkTextMark*) tree->selection_bound_mark,
-                "selection_bound", FALSE, iter, TRUE, FALSE);
+  real_set_mark (tree, tree->insert_mark,
+                 "insert", FALSE, iter, TRUE, FALSE);
+  real_set_mark (tree, tree->selection_bound_mark,
+                 "selection_bound", FALSE, iter, TRUE, FALSE);
 }
 
 void
@@ -2537,11 +2576,13 @@ void
 gtk_text_btree_remove_mark (GtkTextBTree *tree,
                             GtkTextMark *mark)
 {
-  GtkTextLineSegment *segment = (GtkTextLineSegment*) mark;
+  GtkTextLineSegment *segment;
   
-  g_return_if_fail (segment != NULL);
+  g_return_if_fail (mark != NULL);
   g_return_if_fail (tree != NULL);
 
+  segment = mark->segment;
+  
   if (segment->body.mark.not_deleteable)
     {
       g_warning("Can't delete special mark `%s'", segment->body.mark.name);
@@ -2553,8 +2594,9 @@ gtk_text_btree_remove_mark (GtkTextBTree *tree,
   
   if (segment->body.mark.name)
     g_hash_table_remove (tree->mark_table, segment->body.mark.name);
-  
-  _mark_segment_unref (segment);
+
+  /* Remove the ref on the mark that belonged to the segment. */
+  g_object_unref (G_OBJECT (mark));
 
   segment->body.mark.tree = NULL;
   segment->body.mark.line = NULL;
@@ -2564,24 +2606,28 @@ gboolean
 gtk_text_btree_mark_is_insert (GtkTextBTree *tree,
                                GtkTextMark *segment)
 {
-  return segment == (GtkTextMark*) tree->insert_mark;
+  return segment == tree->insert_mark;
 }
 
 gboolean
 gtk_text_btree_mark_is_selection_bound (GtkTextBTree *tree,
                                         GtkTextMark *segment)
 {
-  return segment == (GtkTextMark*) tree->selection_bound_mark;
+  return segment == tree->selection_bound_mark;
 }
 
 GtkTextMark*
 gtk_text_btree_get_mark_by_name (GtkTextBTree *tree,
                                  const gchar *name)
 {
+  GtkTextLineSegment *seg;
+  
   g_return_val_if_fail(tree != NULL, NULL);
   g_return_val_if_fail(name != NULL, NULL);
 
-  return g_hash_table_lookup(tree->mark_table, name);
+  seg = g_hash_table_lookup (tree->mark_table, name);
+
+  return seg ? seg->body.mark.obj : NULL;
 }
 
 void
@@ -2592,7 +2638,7 @@ gtk_text_mark_set_visible (GtkTextMark       *mark,
   
   g_return_if_fail(mark != NULL);
   
-  seg = (GtkTextLineSegment*)mark;
+  seg = mark->segment;
 
   if (seg->body.mark.visible == setting)
     return;
@@ -4964,7 +5010,15 @@ gtk_text_btree_node_destroy(GtkTextBTree *tree, GtkTextBTreeNode *node)
             {
               seg = line->segments;
               line->segments = seg->next;
-              (*seg->type->deleteFunc)(seg, line, 1);
+
+              if (GTK_IS_TEXT_MARK_SEGMENT (seg))
+                {
+                  /* Set the mark as deleted */
+                  seg->body.mark.tree = NULL;
+                  seg->body.mark.line = NULL;
+                }
+                  
+              (*seg->type->deleteFunc) (seg, line, 1);
             }
           gtk_text_line_destroy(tree, line);
         }
@@ -4977,12 +5031,13 @@ gtk_text_btree_node_destroy(GtkTextBTree *tree, GtkTextBTreeNode *node)
         {
           childPtr = node->children.node;
           node->children.node = childPtr->next;
-          gtk_text_btree_node_destroy(tree, childPtr);
+          gtk_text_btree_node_destroy (tree, childPtr);
         }
     }
-  summary_list_destroy(node->summary);
-  node_data_list_destroy(node->node_data);
-  g_free(node);
+  
+  summary_list_destroy (node->summary);
+  node_data_list_destroy (node->node_data);
+  g_free (node);
 }
 
 static NodeData*
@@ -5111,15 +5166,16 @@ get_tree_bounds(GtkTextBTree *tree,
 }
   
 static void
-tag_changed_cb(GtkTextTagTable *table,
-               GtkTextTag *tag,
-               gboolean size_changed,
-               GtkTextBTree *tree)
+tag_changed_cb (GtkTextTagTable *table,
+                GtkTextTag      *tag,
+                gboolean         size_changed,
+                GtkTextBTree    *tree)
 {
   if (size_changed)
     {
-      /* We need to queue a redisplay on all regions that are tagged with
-         this tag. */
+      /* We need to queue a relayout on all regions that are tagged with
+       * this tag.
+       */
 
       GtkTextIter start;
       GtkTextIter end;
@@ -5127,14 +5183,15 @@ tag_changed_cb(GtkTextTagTable *table,
       if (gtk_text_btree_get_iter_at_first_toggle(tree, &start, tag))
         {
           /* Must be a last toggle if there was a first one. */
-          gtk_text_btree_get_iter_at_last_toggle(tree, &end, tag);
-          gtk_text_btree_invalidate_region(tree,
-                                           &start, &end);
+          gtk_text_btree_get_iter_at_last_toggle (tree, &end, tag);
+          gtk_text_btree_invalidate_region (tree,
+                                            &start, &end);
                
         }
     }
   else
     {
+      /* We only need to queue a redraw, not a relayout */
       BTreeView *view;
       
       view = tree->views;

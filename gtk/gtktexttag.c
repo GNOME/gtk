@@ -1233,10 +1233,7 @@ gtk_text_attributes_fill_from_tags(GtkTextAttributes *dest,
           dest->appearance.bg_color = vals->appearance.bg_color;
           
           dest->appearance.draw_bg = TRUE;
-        }      
-
-      if (tag->relief_set)
-        dest->relief = vals->relief;
+        }
 
       if (tag->bg_stipple_set)
         {
@@ -1326,4 +1323,39 @@ gtk_text_attributes_fill_from_tags(GtkTextAttributes *dest,
       
       ++n;
     }
+}
+
+gboolean
+gtk_text_tag_affects_size (GtkTextTag *tag)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
+
+  return 
+    tag->font_set ||
+    tag->justify_set ||
+    tag->left_margin_set ||
+    tag->left_wrapped_line_margin_set ||
+    tag->offset_set ||
+    tag->right_margin_set ||
+    tag->pixels_above_lines_set ||
+    tag->pixels_below_lines_set ||
+    tag->pixels_inside_wrap_set ||
+    tag->tabs_set ||
+    tag->underline_set ||
+    tag->wrap_mode_set ||
+    tag->invisible_set;
+}
+
+gboolean
+gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_TAG (tag), FALSE);
+
+  return
+    tag->bg_color_set ||
+    tag->bg_stipple_set ||
+    tag->fg_color_set ||
+    tag->fg_stipple_set ||
+    tag->strikethrough_set ||
+    tag->bg_full_height_set;
 }

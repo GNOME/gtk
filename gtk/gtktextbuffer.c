@@ -1072,14 +1072,14 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
      this signal is purely for notification, and not to allow users
      to modify the default behavior. */
 
-  gtk_text_mark_ref (mark);
+  g_object_ref (G_OBJECT (mark));
   
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[MARK_SET],
                   location,
                   mark);
 
-  gtk_text_mark_unref (mark);
+  g_object_unref (G_OBJECT (mark));
 }
 
 /**
@@ -1107,12 +1107,12 @@ gtk_text_buffer_set_mark (GtkTextBuffer *buffer,
   GtkTextIter location;
   GtkTextMark *mark;
   
-  mark = gtk_text_btree_set_mark(get_btree (buffer),
-                                 existing_mark,
-                                 mark_name,
-                                 left_gravity,
-                                 iter,
-                                 should_exist);
+  mark = gtk_text_btree_set_mark (get_btree (buffer),
+                                  existing_mark,
+                                  mark_name,
+                                  left_gravity,
+                                  iter,
+                                  should_exist);
 
   if (gtk_text_btree_mark_is_insert(get_btree (buffer), mark) ||
       gtk_text_btree_mark_is_selection_bound (get_btree (buffer), mark))
@@ -1126,7 +1126,7 @@ gtk_text_buffer_set_mark (GtkTextBuffer *buffer,
   
   gtk_text_buffer_mark_set (buffer, &location, mark);
 
-  return (GtkTextMark*)mark;
+  return mark;
 }
 
 /**
@@ -1182,7 +1182,7 @@ gtk_text_buffer_move_mark (GtkTextBuffer *buffer,
                            GtkTextMark *mark,
                            const GtkTextIter *where)
 {
-  g_return_if_fail (mark != NULL);
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
   g_return_if_fail (!gtk_text_mark_get_deleted (mark));
   g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
   
@@ -1202,7 +1202,7 @@ gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
                                   GtkTextIter *iter,
                                   GtkTextMark *mark)
 {
-  g_return_if_fail (mark != NULL);
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
   g_return_if_fail (!gtk_text_mark_get_deleted (mark));
   g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
 
@@ -1218,7 +1218,7 @@ gtk_text_buffer_get_iter_at_mark (GtkTextBuffer *buffer,
  * 
  * Deletes @mark, so that it's no longer located anywhere in the
  * buffer. Removes the reference the buffer holds to the mark, so if
- * you haven't called gtk_text_mark_ref() the mark will be freed. Even
+ * you haven't called g_object_ref() on the mark, it will be freed. Even
  * if the mark isn't freed, most operations on @mark become
  * invalid. There is no way to undelete a
  * mark. gtk_text_mark_get_deleted() will return TRUE after this
@@ -1230,11 +1230,11 @@ void
 gtk_text_buffer_delete_mark(GtkTextBuffer *buffer,
                             GtkTextMark   *mark)
 {
-  g_return_if_fail (mark != NULL);
+  g_return_if_fail (GTK_IS_TEXT_MARK (mark));
   g_return_if_fail (!gtk_text_mark_get_deleted (mark));
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   
-  gtk_text_mark_ref (mark);
+  g_object_ref (G_OBJECT (mark));
   
   gtk_text_btree_remove_mark (get_btree (buffer), mark);
 
@@ -1245,7 +1245,7 @@ gtk_text_buffer_delete_mark(GtkTextBuffer *buffer,
   gtk_signal_emit (GTK_OBJECT(buffer), signals[MARK_DELETED],
                    mark);
 
-  gtk_text_mark_unref (mark);
+  g_object_unref (G_OBJECT (mark));
 }
 
 /**
@@ -1616,11 +1616,24 @@ gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer      *buffer,
                                          gint                line_number,
                                          gint                char_offset)
 {  
-  g_return_if_fail(iter != NULL);
-  g_return_if_fail(GTK_IS_TEXT_BUFFER(buffer));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
 
-  gtk_text_btree_get_iter_at_line_char(get_btree (buffer),
-                                       iter, line_number, char_offset);
+  gtk_text_btree_get_iter_at_line_char (get_btree (buffer),
+                                        iter, line_number, char_offset);
+}
+
+void
+gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
+                                         GtkTextIter   *iter,
+                                         gint           line_number,
+                                         gint           byte_index)
+{
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (GTK_IS_TEXT_BUFFER(buffer));
+
+  gtk_text_btree_get_iter_at_line_byte (get_btree (buffer),
+                                        iter, line_number, byte_index);
 }
 
 void

@@ -421,6 +421,10 @@ fill_example_buffer (GtkTextBuffer *buffer)
   GdkPixbuf *pixbuf;
   int i;
   char *str;
+
+  /* FIXME this is broken if called twice on a buffer, since
+   * we try to create tags a second time.
+   */
   
   tag = gtk_text_buffer_create_tag (buffer, "fg_blue");
 
@@ -581,9 +585,13 @@ fill_example_buffer (GtkTextBuffer *buffer)
   g_object_unref (G_OBJECT (pixbuf));
   
   printf ("%d lines %d chars\n",
-	 gtk_text_buffer_get_line_count (buffer),
-	 gtk_text_buffer_get_char_count (buffer));
+          gtk_text_buffer_get_line_count (buffer),
+          gtk_text_buffer_get_char_count (buffer));
 
+  /* Move cursor to start */
+  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  gtk_text_buffer_place_cursor (buffer, &iter);
+  
   gtk_text_buffer_set_modified (buffer, FALSE);
 }
 

@@ -160,6 +160,8 @@ void     gtk_text_iter_set_line           (GtkTextIter *iter,
                                            gint         line_number);
 void     gtk_text_iter_set_line_offset    (GtkTextIter *iter,
                                            gint         char_on_line);
+void     gtk_text_iter_set_line_index     (GtkTextIter *iter,
+                                           gint         byte_on_line);
 void     gtk_text_iter_forward_to_end     (GtkTextIter *iter);
 gboolean gtk_text_iter_forward_to_newline (GtkTextIter *iter);
 

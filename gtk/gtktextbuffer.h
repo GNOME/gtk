@@ -263,6 +263,10 @@ void gtk_text_buffer_get_iter_at_line_offset (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
                                               gint           line_number,
                                               gint           char_offset);
+void gtk_text_buffer_get_iter_at_line_index  (GtkTextBuffer *buffer,
+                                              GtkTextIter   *iter,
+                                              gint           line_number,
+                                              gint           byte_index);
 void gtk_text_buffer_get_iter_at_offset      (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
                                               gint           char_offset);

@@ -8,7 +8,7 @@ extern "C" {
 #include <gtk/gtktexttypes.h>
 #include <gtk/gtktextlayout.h>
 
-#define GTK_IS_TEXT_MARK(mark) (((GtkTextLineSegment*)mark)->type == &gtk_text_left_mark_type || \
+#define GTK_IS_TEXT_MARK_SEGMENT(mark) (((GtkTextLineSegment*)mark)->type == &gtk_text_left_mark_type || \
                                 ((GtkTextLineSegment*)mark)->type == &gtk_text_right_mark_type)
 
 /*
@@ -17,7 +17,7 @@ extern "C" {
  */
 
 struct _GtkTextMarkBody {
-  guint refcount;
+  GtkTextMark *obj;
   gchar *name;
   GtkTextBTree *tree;
   GtkTextLine *line;
@@ -28,9 +28,6 @@ struct _GtkTextMarkBody {
 GtkTextLineSegment *_mark_segment_new   (GtkTextBTree       *tree,
                                          gboolean            left_gravity,
                                          const gchar        *name);
-void                _mark_segment_ref   (GtkTextLineSegment *mark);
-void                _mark_segment_unref (GtkTextLineSegment *mark);
-
 
 #ifdef __cplusplus
 }

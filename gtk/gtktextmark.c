@@ -50,12 +50,89 @@
 
 #include "gtktextbtree.h"
 
+static void gtk_text_mark_init       (GtkTextMark      *mark);
+static void gtk_text_mark_class_init (GtkTextMarkClass *klass);
+static void gtk_text_mark_finalize   (GObject          *obj);
+
+
+static gpointer parent_class = NULL;
+
+GType
+gtk_text_mark_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GtkTextMarkClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_text_mark_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkTextMark),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_text_mark_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GtkTextMark",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gtk_text_mark_init (GtkTextMark *mark)
+{
+  mark->segment = NULL;
+}
+
+static void
+gtk_text_mark_class_init (GtkTextMarkClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gtk_text_mark_finalize;
+}
+
+static void
+gtk_text_mark_finalize (GObject *obj)
+{
+  GtkTextMark *mark;
+  GtkTextLineSegment *seg;
+
+  mark = GTK_TEXT_MARK (obj);
+
+  seg = mark->segment;
+
+  if (seg)
+    {
+      g_return_if_fail (seg->body.mark.tree == NULL);
+
+      if (seg->body.mark.tree != NULL)
+        g_warning ("GtkTextMark being finalized while still in the buffer; "
+                   "someone removed a reference they didn't own! Crash "
+                   "impending");
+      
+      g_free (seg->body.mark.name);
+      g_free (seg);
+
+      mark->segment = NULL;
+    }
+}
+
 gboolean
 gtk_text_mark_is_visible(GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
-  seg = (GtkTextLineSegment*)mark;
+  seg = mark->segment;
 
   return seg->body.mark.visible;
 }
@@ -65,32 +142,9 @@ gtk_text_mark_get_name (GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
-  seg = (GtkTextLineSegment*)mark;
+  seg = mark->segment;
 
   return seg->body.mark.name;
-}
-
-
-GtkTextMark *
-gtk_text_mark_ref (GtkTextMark *mark)
-{
-  GtkTextLineSegment *seg;
-
-  seg = (GtkTextLineSegment*)mark;
-
-  _mark_segment_ref (seg);
-
-  return mark;
-}
-
-void
-gtk_text_mark_unref (GtkTextMark *mark)
-{
-  GtkTextLineSegment *seg;
-
-  seg = (GtkTextLineSegment*)mark;
-  
-  _mark_segment_unref (seg);
 }
 
 gboolean
@@ -100,7 +154,10 @@ gtk_text_mark_get_deleted (GtkTextMark *mark)
   
   g_return_val_if_fail (mark != NULL, FALSE);
 
-  seg = (GtkTextLineSegment*)mark;
+  seg = mark->segment;
+
+  if (seg == NULL)
+    return TRUE;
   
   return seg->body.mark.tree == NULL;
 }
@@ -127,51 +184,22 @@ _mark_segment_new (GtkTextBTree *tree,
     mark->type = &gtk_text_left_mark_type;
   else
     mark->type = &gtk_text_right_mark_type;
-
+  
   mark->byte_count = 0;
   mark->char_count = 0;
 
+  mark->body.mark.obj = g_object_new (GTK_TYPE_TEXT_MARK, NULL);
+  mark->body.mark.obj->segment = mark;
+  
   mark->body.mark.tree = tree;
   mark->body.mark.line = NULL;
   mark->next = NULL;
-
-  mark->body.mark.refcount = 1;
 
   mark->body.mark.visible = FALSE;
   mark->body.mark.not_deleteable = FALSE;
   
   return mark;
 }
-
-void
-_mark_segment_ref (GtkTextLineSegment *mark)
-{
-  g_return_if_fail (mark != NULL);
-  g_return_if_fail (mark->type == &gtk_text_right_mark_type ||
-                    mark->type == &gtk_text_left_mark_type);
-  g_return_if_fail (mark->body.mark.refcount > 0);
-  
-  mark->body.mark.refcount += 1;
-}
-
-void
-_mark_segment_unref (GtkTextLineSegment *mark)
-{
-  g_return_if_fail (mark != NULL);
-  g_return_if_fail (mark->type == &gtk_text_right_mark_type ||
-                    mark->type == &gtk_text_left_mark_type);
-  g_return_if_fail (mark->body.mark.refcount > 0);
-
-  mark->body.mark.refcount -= 1;
-
-  if (mark->body.mark.refcount == 0)
-    {
-      g_free(mark->body.mark.name);
-      
-      g_free(mark);
-    }
-}
-
 
 static int                 mark_segment_delete_func  (GtkTextLineSegment *segPtr,
                                                       GtkTextLine        *line,
