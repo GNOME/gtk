@@ -32,7 +32,7 @@ extern GtkTextLineSegmentClass gtk_text_right_mark_type;
 
 /* In gtktextchild.c */
 extern GtkTextLineSegmentClass gtk_text_pixbuf_type;
-extern GtkTextLineSegmentClass gtk_text_view_child_type;
+extern GtkTextLineSegmentClass gtk_text_child_type;
 
 /*
  * UTF 8 Stubs

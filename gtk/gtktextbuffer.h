@@ -1,3 +1,29 @@
+/* GTK - The GIMP Toolkit
+ * gtktextbuffer.h Copyright (C) 2000 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
 #ifndef GTK_TEXT_BUFFER_H
 #define GTK_TEXT_BUFFER_H
 
@@ -5,6 +31,7 @@
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextmark.h>
+#include <gtk/gtktextchild.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -188,6 +215,16 @@ void gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
 GtkTextMark* gtk_text_buffer_get_insert          (GtkTextBuffer *buffer);
 GtkTextMark* gtk_text_buffer_get_selection_bound (GtkTextBuffer *buffer);
 
+/* Child widget anchors */
+
+GtkTextChildAnchor* gtk_text_buffer_create_child_anchor (GtkTextBuffer      *buffer,
+                                                         const GtkTextIter  *where);
+void                gtk_text_buffer_move_child_anchor   (GtkTextBuffer      *buffer,
+                                                         GtkTextChildAnchor *anchor,
+                                                         GtkTextIter        *where);
+void                gtk_text_buffer_delete_child_anchor (GtkTextBuffer      *buffer,
+                                                         GtkTextChildAnchor *anchor);
+
 
 /* efficiently move insert and selection_bound to same location */
 void gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
@@ -241,7 +278,9 @@ void gtk_text_buffer_get_iter_at_mark        (GtkTextBuffer *buffer,
                                               GtkTextIter   *iter,
                                               GtkTextMark   *mark);
 
-
+void gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
+                                               GtkTextIter        *iter,
+                                               GtkTextChildAnchor *anchor);
 
 /* There's no get_first_iter because you just get the iter for
    line or char 0 */

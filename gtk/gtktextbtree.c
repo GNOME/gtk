@@ -447,8 +447,8 @@ gtk_text_btree_new (GtkTextTagTable *table,
 
     tree->selection_bound_mark->body.mark.not_deleteable = TRUE;
     
-    mark_segment_ref(tree->insert_mark);
-    mark_segment_ref(tree->selection_bound_mark);
+    _mark_segment_ref(tree->insert_mark);
+    _mark_segment_ref(tree->selection_bound_mark);
   }
 
   tree->refcount = 1;
@@ -466,9 +466,9 @@ gtk_text_btree_ref (GtkTextBTree *tree)
 }
 
 static void
-mark_destroy_foreach(gpointer key, gpointer value, gpointer user_data)
+mark_destroy_foreach (gpointer key, gpointer value, gpointer user_data)
 {
-  mark_segment_unref(value);
+  _mark_segment_unref (value);
 }
 
 void
@@ -488,8 +488,8 @@ gtk_text_btree_unref (GtkTextBTree *tree)
                            NULL);
       g_hash_table_destroy(tree->mark_table);
       
-      mark_segment_unref(tree->insert_mark);
-      mark_segment_unref(tree->selection_bound_mark);
+      _mark_segment_unref(tree->insert_mark);
+      _mark_segment_unref(tree->selection_bound_mark);
 
       gtk_signal_disconnect(GTK_OBJECT(tree->table),
                             tree->tag_changed_handler);
@@ -1057,7 +1057,7 @@ gtk_text_btree_insert_pixbuf (GtkTextIter *iter,
   tree = gtk_text_iter_get_btree(iter);
   start_byte_offset = gtk_text_iter_get_line_index(iter);
   
-  seg = gtk_text_pixbuf_segment_new (pixbuf);
+  seg = _pixbuf_segment_new (pixbuf);
 
   prevPtr = gtk_text_line_segment_split(iter);
   if (prevPtr == NULL)
@@ -2426,9 +2426,9 @@ real_set_mark(GtkTextBTree *tree,
     }
   else
     {
-      mark = mark_segment_new(tree,
-                              left_gravity,
-                              name);
+      mark = _mark_segment_new (tree,
+                                left_gravity,
+                                name);
 
       mark->body.mark.line = gtk_text_iter_get_text_line(&iter);
 
@@ -2553,7 +2553,7 @@ gtk_text_btree_remove_mark (GtkTextBTree *tree,
   if (segment->body.mark.name)
     g_hash_table_remove (tree->mark_table, segment->body.mark.name);
   
-  mark_segment_unref (segment);
+  _mark_segment_unref (segment);
 
   segment->body.mark.tree = NULL;
   segment->body.mark.line = NULL;

@@ -25,11 +25,11 @@ struct _GtkTextMarkBody {
   guint not_deleteable : 1;
 };
 
-GtkTextLineSegment *mark_segment_new   (GtkTextBTree   *tree,
-                                        gboolean         left_gravity,
-                                        const gchar     *name);
-void             mark_segment_ref   (GtkTextLineSegment *mark);
-void             mark_segment_unref (GtkTextLineSegment *mark);
+GtkTextLineSegment *_mark_segment_new   (GtkTextBTree       *tree,
+                                         gboolean            left_gravity,
+                                         const gchar        *name);
+void                _mark_segment_ref   (GtkTextLineSegment *mark);
+void                _mark_segment_unref (GtkTextLineSegment *mark);
 
 
 #ifdef __cplusplus

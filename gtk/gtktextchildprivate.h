@@ -1,5 +1,5 @@
-/* gtktextmark.h - mark segments
- * 
+/* gtktextchild.c - child pixmaps and widgets
+ *
  * Copyright (c) 1994 The Regents of the University of California.
  * Copyright (c) 1994-1997 Sun Microsystems, Inc.
  * Copyright (c) 2000      Red Hat, Inc.
@@ -47,31 +47,44 @@
  * 
  */
 
-#ifndef GTK_TEXT_MARK_H
-#define GTK_TEXT_MARK_H
+#ifndef GTK_TEXT_CHILD_PRIVATE_H
+#define GTK_TEXT_CHILD_PRIVATE_H
+
+#include <gtk/gtktexttypes.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-/* The GtkTextMark data type */
+typedef struct _GtkTextPixbuf GtkTextPixbuf;
 
-typedef struct _GtkTextMark GtkTextMark;
+struct _GtkTextPixbuf
+{
+  GdkPixbuf *pixbuf;
+};
 
-void         gtk_text_mark_set_visible (GtkTextMark *mark,
-                                        gboolean     setting);
-gboolean     gtk_text_mark_is_visible  (GtkTextMark *mark);
-/* FIXME gconst */
-const char * gtk_text_mark_get_name    (GtkTextMark *mark);
-GtkTextMark *gtk_text_mark_ref         (GtkTextMark *mark);
-void         gtk_text_mark_unref       (GtkTextMark *mark);
-gboolean     gtk_text_mark_get_deleted (GtkTextMark *mark);
+GtkTextLineSegment *_pixbuf_segment_new (GdkPixbuf *pixbuf);
 
+typedef struct _GtkTextChildBody GtkTextChildBody;
+
+struct _GtkTextChildBody
+{
+  guint ref_count;
+  GSList *widgets;
+  GtkTextBTree *tree;
+  GtkTextLine *line;
+};
+
+GtkTextLineSegment *_widget_segment_new    (void);
+void                _widget_segment_add    (GtkTextLineSegment *widget_segment,
+                                            GtkWidget          *child);
+void                _widget_segment_remove (GtkTextLineSegment *widget_segment,
+                                            GtkWidget          *child);
+void                _widget_segment_ref    (GtkTextLineSegment *widget_segment);
+void                _widget_segment_unref  (GtkTextLineSegment *widget_segment);
 
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 
 #endif
-
-

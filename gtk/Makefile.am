@@ -148,6 +148,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
 	gtktextbuffer.h		\
+	gtktextchild.h		\
 	gtktextiter.h		\
 	gtktextmark.h		\
 	gtktexttag.h		\
@@ -189,7 +190,7 @@ gtk_semipublic_h_sources = @STRIP_BEGIN@ \
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtktextbtree.h		\
-	gtktextchild.h		\
+	gtktextchildprivate.h   \
 	gtktextsegment.h	\
 	gtktexttypes.h		\
 	gtktextiterprivate.h	\

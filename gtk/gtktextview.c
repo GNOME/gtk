@@ -1,51 +1,27 @@
-/* gtktext.c - A "view" widget for the GtkTextBuffer object
- * 
- * Copyright (c) 1992-1994 The Regents of the University of California.
- * Copyright (c) 1994-1996 Sun Microsystems, Inc.
- * Copyright (c) 1999 by Scriptics Corporation.
- * Copyright (c) 2000      Red Hat, Inc.
- * Tk -> Gtk port by Havoc Pennington <hp@redhat.com>
+/* GTK - The GIMP Toolkit
+ * gtktextview.c Copyright (C) 2000 Red Hat, Inc.
  *
- * This software is copyrighted by the Regents of the University of
- * California, Sun Microsystems, Inc., and other parties.  The
- * following terms apply to all files associated with the software
- * unless explicitly disclaimed in individual files.
- * 
- * The authors hereby grant permission to use, copy, modify,
- * distribute, and license this software and its documentation for any
- * purpose, provided that existing copyright notices are retained in
- * all copies and that this notice is included verbatim in any
- * distributions. No written agreement, license, or royalty fee is
- * required for any of the authorized uses.  Modifications to this
- * software may be copyrighted by their authors and need not follow
- * the licensing terms described here, provided that the new terms are
- * clearly indicated on the first page of each file where they apply.
- * 
- * IN NO EVENT SHALL THE AUTHORS OR DISTRIBUTORS BE LIABLE TO ANY
- * PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL
- * DAMAGES ARISING OUT OF THE USE OF THIS SOFTWARE, ITS DOCUMENTATION,
- * OR ANY DERIVATIVES THEREOF, EVEN IF THE AUTHORS HAVE BEEN ADVISED
- * OF THE POSSIBILITY OF SUCH DAMAGE.
- * 
- * THE AUTHORS AND DISTRIBUTORS SPECIFICALLY DISCLAIM ANY WARRANTIES,
- * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
- * NON-INFRINGEMENT.  THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS,
- * AND THE AUTHORS AND DISTRIBUTORS HAVE NO OBLIGATION TO PROVIDE
- * MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
  *
- * GOVERNMENT USE: If you are acquiring this software on behalf of the
- * U.S. government, the Government shall have only "Restricted Rights"
- * in the software and related documentation as defined in the Federal
- * Acquisition Regulations (FARs) in Clause 52.227.19 (c) (2).  If you
- * are acquiring the software on behalf of the Department of Defense,
- * the software shall be classified as "Commercial Computer Software"
- * and the Government shall have only "Restricted Rights" as defined
- * in Clause 252.227-7013 (c) (1) of DFARs.  Notwithstanding the
- * foregoing, the authors grant the U.S. Government and others acting
- * in its behalf permission to use and distribute the software in
- * accordance with the terms specified in this license.
- * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
 #include <string.h>
@@ -232,6 +208,44 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
 static GtkAdjustment* get_hadjustment            (GtkTextView       *text_view);
 static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
 
+/* Container methods */
+static void gtk_text_view_add    (GtkContainer *container,
+                                  GtkWidget    *child);
+static void gtk_text_view_remove (GtkContainer *container,
+                                  GtkWidget    *child);
+static void gtk_text_view_forall (GtkContainer *container,
+                                  gboolean      include_internals,
+                                  GtkCallback   callback,
+                                  gpointer      callback_data);
+
+/* FIXME probably need the focus methods. */
+
+typedef struct _GtkTextViewChild GtkTextViewChild;
+
+struct _GtkTextViewChild
+{
+  GtkWidget *widget;
+
+  GtkTextChildAnchor *anchor;
+
+  /* These are ignored if anchor != NULL */
+  GtkTextWindowType type;
+  gint x;
+  gint y;
+};
+
+static GtkTextViewChild* text_view_child_new_anchored (GtkWidget          *child,
+                                                       GtkTextChildAnchor *anchor);
+static GtkTextViewChild* text_view_child_new_window   (GtkWidget          *child,
+                                                       GtkTextWindowType   type,
+                                                       gint                x,
+                                                       gint                y);
+static void              text_view_child_free         (GtkTextViewChild   *child);
+
+static void              text_view_child_realize      (GtkTextView      *text_view,
+                                                       GtkTextViewChild *child);
+static void              text_view_child_unrealize    (GtkTextViewChild *child);
+
 struct _GtkTextWindow
 {
   GtkTextWindowType type;
@@ -242,26 +256,26 @@ struct _GtkTextWindow
   GdkRectangle allocation;
 };
 
-GtkTextWindow *text_window_new             (GtkTextWindowType  type,
-                                            GtkWidget         *widget,
-                                            gint               width_request,
-                                            gint               height_request);
-void           text_window_free            (GtkTextWindow     *win);
-void           text_window_realize         (GtkTextWindow     *win,
-                                            GdkWindow         *parent);
-void           text_window_unrealize       (GtkTextWindow     *win);
-void           text_window_size_allocate   (GtkTextWindow     *win,
-                                            GdkRectangle      *rect);
-void           text_window_scroll          (GtkTextWindow     *win,
-                                            gint               dx,
-                                            gint               dy);
-void           text_window_invalidate_rect (GtkTextWindow     *win,
-                                            GdkRectangle      *rect);
+static GtkTextWindow *text_window_new             (GtkTextWindowType  type,
+                                                   GtkWidget         *widget,
+                                                   gint               width_request,
+                                                   gint               height_request);
+static void           text_window_free            (GtkTextWindow     *win);
+static void           text_window_realize         (GtkTextWindow     *win,
+                                                   GdkWindow         *parent);
+static void           text_window_unrealize       (GtkTextWindow     *win);
+static void           text_window_size_allocate   (GtkTextWindow     *win,
+                                                   GdkRectangle      *rect);
+static void           text_window_scroll          (GtkTextWindow     *win,
+                                                   gint               dx,
+                                                   gint               dy);
+static void           text_window_invalidate_rect (GtkTextWindow     *win,
+                                                   GdkRectangle      *rect);
 
-gint           text_window_get_width       (GtkTextWindow     *win);
-gint           text_window_get_height      (GtkTextWindow     *win);
-void           text_window_get_allocation  (GtkTextWindow     *win,
-                                            GdkRectangle      *rect);
+static gint           text_window_get_width       (GtkTextWindow     *win);
+static gint           text_window_get_height      (GtkTextWindow     *win);
+static void           text_window_get_allocation  (GtkTextWindow     *win,
+                                                   GdkRectangle      *rect);
 
 
 enum {
@@ -336,6 +350,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkBindingSet *binding_set;
   
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
@@ -622,6 +637,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->drag_drop = gtk_text_view_drag_drop;
   widget_class->drag_data_received = gtk_text_view_drag_data_received;
 
+  container_class->add = gtk_text_view_add;
+  container_class->remove = gtk_text_view_remove;
+  container_class->forall = gtk_text_view_forall;
+  
   klass->move = gtk_text_view_move;
   klass->set_anchor = gtk_text_view_set_anchor;
   klass->insert = gtk_text_view_insert;
@@ -2178,6 +2197,86 @@ gtk_text_view_draw_focus (GtkWidget *widget)
 }
 
 /*
+ * Container
+ */
+
+static void
+gtk_text_view_add (GtkContainer *container,
+                   GtkWidget    *child)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  /* This is pretty random. */
+  gtk_text_view_add_child_in_window (GTK_TEXT_VIEW (container),
+                                     child,
+                                     GTK_TEXT_WINDOW_WIDGET,
+                                     0, 0);
+}
+
+static void
+gtk_text_view_remove (GtkContainer *container,
+                      GtkWidget    *child)
+{
+  GSList *iter;
+  GtkTextView *text_view;
+  GtkTextViewChild *vc;
+  
+  g_return_if_fail (GTK_IS_TEXT_VIEW (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (child->parent == (GtkWidget*) container);
+  
+  text_view = GTK_TEXT_VIEW (container);
+
+  vc = NULL;
+  iter = text_view->children;
+
+  while (iter != NULL)
+    {
+      vc = iter->data;
+
+      if (vc->widget == child)
+        break;
+
+      iter = g_slist_next (iter);
+    }
+
+  g_assert (iter != NULL); /* be sure we had the child in the list */
+  
+  text_view->children = g_slist_remove (text_view->children, vc);
+
+  gtk_widget_unparent (vc->widget);
+  
+  text_view_child_free (vc);
+}
+
+static void
+gtk_text_view_forall (GtkContainer *container,
+                      gboolean      include_internals,
+                      GtkCallback   callback,
+                      gpointer      callback_data)
+{
+  GSList *iter;
+  GtkTextView *text_view;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (container));
+  g_return_if_fail (callback != NULL);
+
+  text_view = GTK_TEXT_VIEW (container);
+  
+  iter = text_view->children;
+
+  while (iter != NULL)
+    {
+      GtkTextViewChild *vc = iter->data;
+
+      (* callback) (vc->widget, callback_data);
+      
+      iter = g_slist_next (iter);
+    }
+}
+
+/*
  * Blink!
  */
 
@@ -3437,7 +3536,7 @@ gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
 /* Child GdkWindows */
 
 
-GtkTextWindow*
+static GtkTextWindow*
 text_window_new (GtkTextWindowType  type,
                  GtkWidget         *widget,
                  gint               width_request,
@@ -3461,7 +3560,7 @@ text_window_new (GtkTextWindowType  type,
   return win;
 }
 
-void
+static void
 text_window_free (GtkTextWindow *win)
 {
   if (win->window)
@@ -3470,7 +3569,7 @@ text_window_free (GtkTextWindow *win)
   g_free (win);
 }
 
-void
+static void
 text_window_realize (GtkTextWindow *win,
                      GdkWindow     *parent)
 {
@@ -3546,7 +3645,7 @@ text_window_realize (GtkTextWindow *win,
                       win);
 }
 
-void
+static void
 text_window_unrealize (GtkTextWindow *win)
 {
   if (win->type == GTK_TEXT_WINDOW_TEXT)
@@ -3563,7 +3662,7 @@ text_window_unrealize (GtkTextWindow *win)
   win->bin_window = NULL;
 }
 
-void
+static void
 text_window_size_allocate (GtkTextWindow *win,
                            GdkRectangle  *rect)
 {
@@ -3580,7 +3679,7 @@ text_window_size_allocate (GtkTextWindow *win,
     }
 }
 
-void
+static void
 text_window_scroll        (GtkTextWindow *win,
                            gint           dx,
                            gint           dy)
@@ -3592,26 +3691,26 @@ text_window_scroll        (GtkTextWindow *win,
     }
 }
 
-void
+static void
 text_window_invalidate_rect (GtkTextWindow *win,
                              GdkRectangle  *rect)
 {
   gdk_window_invalidate_rect (win->bin_window, rect, FALSE);
 }
 
-gint
+static gint
 text_window_get_width (GtkTextWindow *win)
 {
   return win->allocation.width;
 }
 
-gint
+static gint
 text_window_get_height (GtkTextWindow *win)
 {
   return win->allocation.height;
 }
 
-void
+static void
 text_window_get_allocation (GtkTextWindow *win,
                             GdkRectangle  *rect)
 {
@@ -4069,4 +4168,174 @@ gtk_text_view_set_text_window_size (GtkTextView *text_view,
 
   gtk_widget_queue_resize (GTK_WIDGET (text_view));
 }
+
+/*
+ * Child widgets
+ */
+
+static GtkTextViewChild*
+text_view_child_new_anchored (GtkWidget          *child,
+                              GtkTextChildAnchor *anchor)
+{
+  GtkTextViewChild *vc;
+
+  vc = g_new (GtkTextViewChild, 1);
+
+  vc->widget = child;
+  vc->anchor = anchor;
+  
+  g_object_ref (G_OBJECT (vc->widget));
+  gtk_text_child_anchor_ref (vc->anchor);
+
+  gtk_object_set_data (GTK_OBJECT (child),
+                       "gtk-text-view-child",
+                       vc);
+  
+  return vc;
+}
+
+static GtkTextViewChild*
+text_view_child_new_window (GtkWidget          *child,
+                            GtkTextWindowType   type,
+                            gint                x,
+                            gint                y)
+{
+  GtkTextViewChild *vc;
+
+  vc = g_new (GtkTextViewChild, 1);
+
+  vc->widget = child;
+  vc->anchor = NULL;
+  
+  g_object_ref (G_OBJECT (vc->widget));
+
+  vc->type = type;
+  vc->x = x;
+  vc->y = y;
+
+  return vc;
+}
+
+static void
+text_view_child_free (GtkTextViewChild *child)
+{
+
+  gtk_object_remove_data (GTK_OBJECT (child->widget),
+                          "gtk-text-view-child");
+  
+  g_object_unref (G_OBJECT (child->widget));
+  gtk_text_child_anchor_unref (child->anchor);
+  
+  g_free (child);
+}
+
+static void
+text_view_child_realize (GtkTextView      *text_view,
+                         GtkTextViewChild *vc)
+{
+  if (vc->anchor)
+    gtk_widget_set_parent_window (vc->widget,
+                                  text_view->text_window->bin_window);
+  else
+    {
+      GdkWindow *window;
+      window = gtk_text_view_get_window (text_view,
+                                         vc->type);
+      gtk_widget_set_parent_window (vc->widget, window);                                    
+    }
+  
+  gtk_widget_realize (vc->widget);
+}
+
+static void
+text_view_child_unrealize (GtkTextViewChild *vc)
+{
+  gtk_widget_unrealize (vc->widget);
+}
+
+static void
+add_child (GtkTextView      *text_view,
+           GtkTextViewChild *vc)
+{
+  text_view->children = g_slist_prepend (text_view->children,
+                                         vc);
+
+  gtk_widget_set_parent (vc->widget, GTK_WIDGET (text_view));
+
+  if (GTK_WIDGET_REALIZED (text_view))
+    text_view_child_realize (text_view, vc);
+    
+  if (GTK_WIDGET_VISIBLE (text_view) && GTK_WIDGET_VISIBLE (vc->widget))
+    {
+      if (GTK_WIDGET_MAPPED (text_view))
+	gtk_widget_map (vc->widget);
+
+      gtk_widget_queue_resize (vc->widget);
+    }
+}
+
+void
+gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
+                                   GtkWidget            *child,
+                                   GtkTextChildAnchor   *anchor)
+{
+  GtkTextViewChild *vc;
+  
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (anchor != NULL);
+  g_return_if_fail (child->parent == NULL);
+  
+  vc = text_view_child_new_anchored (child, anchor);
+
+  add_child (text_view, vc);
+}
+
+void
+gtk_text_view_add_child_in_window (GtkTextView          *text_view,
+                                   GtkWidget            *child,
+                                   GtkTextWindowType     which_window,
+                                   gint                  xpos,
+                                   gint                  ypos)
+{
+  GtkTextViewChild *vc;
+  
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (xpos >= 0);
+  g_return_if_fail (ypos >= 0);
+  g_return_if_fail (child->parent == NULL);
+
+  vc = text_view_child_new_window (child, which_window,
+                                   xpos, ypos);
+
+  add_child (text_view, vc);
+}
+
+void
+gtk_text_view_move_child          (GtkTextView          *text_view,
+                                   GtkWidget            *child,
+                                   gint                  xpos,
+                                   gint                  ypos)
+{
+  GtkTextViewChild *vc;
+  
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (xpos >= 0);
+  g_return_if_fail (ypos >= 0);
+  g_return_if_fail (child->parent == (GtkWidget*) text_view);
+
+  vc = gtk_object_get_data (GTK_OBJECT (child),
+                            "gtk-text-view-child");
+
+  g_assert (vc != NULL);
+
+  vc->x = xpos;
+  vc->y = ypos;
+
+  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (text_view))
+    gtk_widget_queue_resize (child);
+}
+
 

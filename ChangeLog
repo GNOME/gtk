@@ -1,3 +1,29 @@
+2000-10-02  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextview.c: text_window_* weren't static and should have
+	been.
+	Start work on child widgets; not yet complete, syncing to 
+	office computer.
+
+	* gtk/gtktextchild.h: change this to contain a public interface,
+	starting work on child interfaces.
+	* gtk/gtktextchildprivate.h: move private interfaces here
+
+	* gtk/Makefile.am: update to reflect gtktextchildprivate.h
+
+	* gtk/gtktextview.h, gtk/gtktextview.c, gtk/gtktextbuffer.h,
+	gtk/gtktextbuffer.c, gtk/gtktextiter.h, gtk/gtk/textiter.c, 
+	gtk/gtktextmark.c: copyright notices
+
+	* gtk/gtktextmarkprivate.h: reformat, and put _ in front of
+	internal functions	
+
+	* gtk/gtktextchild.c (_pixbuf_segment_new): put _ in front of
+	internal function
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display):
+	Reformatting	
+
 2000-09-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextbtree.c (gtk_text_btree_get_selection_bounds): Handle

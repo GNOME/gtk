@@ -5,6 +5,7 @@
 #include <gtk/gtktextiter.h>
 #include <gtk/gtktextmarkprivate.h>
 #include <gtk/gtktextchild.h>
+#include <gtk/gtktextchildprivate.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -122,21 +123,22 @@ struct _GtkTextLineSegment {
     GtkTextToggleBody toggle;              /* Information about tag toggle. */
     GtkTextMarkBody mark;              /* Information about mark. */
     GtkTextPixbuf pixbuf;              /* Child pixbuf */
-#if 0
-    GtkTextChild child;                /* child widget */
-#endif
+    GtkTextChildBody child;            /* Child widget */
   } body;
 };
 
 
-GtkTextLineSegment  *gtk_text_line_segment_split(const GtkTextIter *iter);
+GtkTextLineSegment  *gtk_text_line_segment_split (const GtkTextIter *iter);
 
-GtkTextLineSegment *char_segment_new(const gchar *text, guint len);
+GtkTextLineSegment *char_segment_new                  (const gchar    *text,
+                                                       guint           len);
+GtkTextLineSegment *char_segment_new_from_two_strings (const gchar    *text1,
+                                                       guint           len1,
+                                                       const gchar    *text2,
+                                                       guint           len2);
+GtkTextLineSegment *toggle_segment_new                (GtkTextTagInfo *info,
+                                                       gboolean        on);
 
-GtkTextLineSegment *char_segment_new_from_two_strings(const gchar *text1, guint len1,
-                                                   const gchar *text2, guint len2);
-
-GtkTextLineSegment *toggle_segment_new(GtkTextTagInfo *info, gboolean on);
 
 #ifdef __cplusplus
 }

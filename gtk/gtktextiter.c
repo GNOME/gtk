@@ -1,3 +1,29 @@
+/* GTK - The GIMP Toolkit
+ * gtktextiter.c Copyright (C) 2000 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ */
+
 #include "gtktextiter.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
@@ -2962,22 +2988,22 @@ gtk_text_iter_spew (const GtkTextIter *iter, const gchar *desc)
   g_return_if_fail(iter != NULL);
 
   if (real->chars_changed_stamp != gtk_text_btree_get_chars_changed_stamp(real->tree))
-    g_print(" %20s: <invalidated iterator>\n", desc);
+    g_print (" %20s: <invalidated iterator>\n", desc);
   else
     {
       check_invariants(iter);
-      g_print(" %20s: line %d / char %d / line char %d / line byte %d\n",
-             desc,
-             gtk_text_iter_get_line(iter),
-             gtk_text_iter_get_offset(iter),
-             gtk_text_iter_get_line_offset(iter),
-             gtk_text_iter_get_line_index(iter));
+      g_print (" %20s: line %d / char %d / line char %d / line byte %d\n",
+               desc,
+               gtk_text_iter_get_line(iter),
+               gtk_text_iter_get_offset(iter),
+               gtk_text_iter_get_line_offset(iter),
+               gtk_text_iter_get_line_index(iter));
       check_invariants(iter);
     }
 }
 
 void
-gtk_text_iter_check(const GtkTextIter *iter)
+gtk_text_iter_check (const GtkTextIter *iter)
 {
   const GtkTextRealIter *real = (const GtkTextRealIter*)iter;
   gint line_char_offset, line_byte_offset, seg_char_offset, seg_byte_offset;

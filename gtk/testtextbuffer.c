@@ -65,6 +65,8 @@ main (int argc, char** argv)
     g_error ("%d chars, expected 1", n);
 
   run_tests (buffer);
+
+  g_print ("All tests passed.\n");
   
   return 0;
 }
@@ -82,7 +84,7 @@ run_tests (GtkTextBuffer *buffer)
   
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   
-  /* Check that walking the tree via chars and via indexes produces
+  /* Check that walking the tree via chars and via iterators produces
    * the same number of indexable locations.
    */
   num_chars = gtk_text_buffer_get_char_count (buffer);
@@ -224,7 +226,7 @@ run_tests (GtkTextBuffer *buffer)
   
   if (i != gtk_text_buffer_get_line_count (buffer))
     g_error ("Counted %d lines, buffer has %d", i,
-            gtk_text_buffer_get_line_count (buffer));
+             gtk_text_buffer_get_line_count (buffer));
 }
 
 

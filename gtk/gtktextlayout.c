@@ -1334,11 +1334,12 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
             {
 	      if (seg->type == &gtk_text_char_type)
 		{
-		  /* We don't want to split segments because of marks, so we scan forward
-		   * for more segments only separated from us by marks. In theory, we
-		   * should also merge segments with identical styles, even if there
-		   * are toggles in-between
-		   */
+		  /* We don't want to split segments because of marks,
+		   * so we scan forward for more segments only
+		   * separated from us by marks. In theory, we should
+		   * also merge segments with identical styles, even
+		   * if there are toggles in-between
+                   */
 
 		  gint byte_count = 0;
 
@@ -1365,12 +1366,15 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 		      seg = seg->next;
 		    }
 		  
-		  add_text_attrs (layout, style, byte_count, attrs, byte_offset - byte_count, size_only);
+		  add_text_attrs (layout, style, byte_count, attrs,
+                                  byte_offset - byte_count, size_only);
 		}
 	      else
 		{
-		  add_pixbuf_attrs (layout, display, style, seg, attrs, byte_offset);
-		  memcpy (text + byte_offset, gtk_text_unknown_char_utf8, seg->byte_count);
+		  add_pixbuf_attrs (layout, display, style,
+                                    seg, attrs, byte_offset);
+		  memcpy (text + byte_offset, gtk_text_unknown_char_utf8,
+                          seg->byte_count);
 		  byte_offset += seg->byte_count;
 		}
 	    }
@@ -1395,7 +1399,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
           if (seg->body.mark.visible)
 	    {
-	      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets, GINT_TO_POINTER (byte_offset));
+	      cursor_byte_offsets = g_slist_prepend (cursor_byte_offsets,
+                                                     GINT_TO_POINTER (byte_offset));
 	      cursor_segs = g_slist_prepend (cursor_segs, seg);
 	    }
         }
