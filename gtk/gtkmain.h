@@ -28,6 +28,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
+typedef gint    (*GtkKeySnoopFunc)      (GtkWidget      *grab_widget,
+					 GdkEventKey    *event,
+					 gpointer        func_data);
+
+
 /* Initialization, exit, mainloop and miscellaneous routines
  */
 void	   gtk_init		 (int	       *argc,
@@ -67,7 +72,10 @@ gint	   gtk_idle_add_interp	   (GtkCallbackMarshal function,
 				    GtkDestroyNotify   destroy);
 void	   gtk_idle_remove	   (gint	   tag);
 void	   gtk_idle_remove_by_data (gpointer	 data);
-
+gint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
+				    gpointer	    func_data);
+void	   gtk_key_snooper_remove  (gint	    snooper_id);
+  
 GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	 (GdkEvent	*event);
 

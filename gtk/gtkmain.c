@@ -35,10 +35,11 @@
 
 /* Private type definitions
  */
-typedef struct _GtkInitFunction	    GtkInitFunction;
-typedef struct _GtkTimeoutFunction  GtkTimeoutFunction;
-typedef struct _GtkIdleFunction	    GtkIdleFunction;
-typedef struct _GtkInputFunction    GtkInputFunction;
+typedef struct _GtkInitFunction	         GtkInitFunction;
+typedef struct _GtkTimeoutFunction       GtkTimeoutFunction;
+typedef struct _GtkIdleFunction	         GtkIdleFunction;
+typedef struct _GtkInputFunction         GtkInputFunction;
+typedef struct _GtkKeySnooperData        GtkKeySnooperData;
 
 struct _GtkInitFunction
 {
@@ -74,10 +75,19 @@ struct _GtkInputFunction
   GtkDestroyNotify destroy;
 };
 
+struct _GtkKeySnooperData
+{
+  GtkKeySnoopFunc func;
+  gpointer func_data;
+  gint id;
+};
+
 static void  gtk_exit_func		 (void);
 static void  gtk_timeout_insert		 (GtkTimeoutFunction *timeoutf);
 static void  gtk_handle_current_timeouts (guint32	      the_time);
 static void  gtk_handle_current_idles	 (void);
+static gint  gtk_invoke_key_snoopers     (GtkWidget          *grab_widget,
+					  GdkEvent           *event);
 static void  gtk_handle_timeouts	 (void);
 static void  gtk_handle_idle		 (void);
 static void  gtk_handle_timer		 (void);
@@ -115,6 +125,8 @@ static GList *current_idles = NULL;
 static GList *current_timeouts = NULL;
 static GMemChunk *timeout_mem_chunk = NULL;
 static GMemChunk *idle_mem_chunk = NULL;
+
+static GSList *key_snoopers = NULL;
 
 static GdkVisual *gtk_visual;		   /* The visual to be used in creating new
 					    *  widgets.
@@ -407,13 +419,19 @@ gtk_main_iteration_do (gboolean blocking)
 	  gtk_widget_event (event_widget, event);
 	  break;
 	  
+	case GDK_KEY_PRESS:
+	case GDK_KEY_RELEASE:
+	  if (key_snoopers)
+	    {
+	      if (gtk_invoke_key_snoopers (grab_widget, event))
+		break;
+	    }
+	  /* else fall through */
 	case GDK_MOTION_NOTIFY:
 	case GDK_BUTTON_PRESS:
 	case GDK_2BUTTON_PRESS:
 	case GDK_3BUTTON_PRESS:
 	case GDK_BUTTON_RELEASE:
-	case GDK_KEY_PRESS:
-	case GDK_KEY_RELEASE:
 	case GDK_PROXIMITY_IN:
 	case GDK_PROXIMITY_OUT:
 	case GDK_OTHER_EVENT:
@@ -489,6 +507,64 @@ gtk_init_add (GtkFunction function,
   init->data = data;
   
   init_functions = g_list_prepend (init_functions, init);
+}
+
+gint
+gtk_key_snooper_install (GtkKeySnoopFunc snooper,
+			 gpointer        func_data)
+{
+  GtkKeySnooperData *data;
+  static guint snooper_id = 1;
+
+  g_return_val_if_fail (snooper != NULL, 0);
+
+  data = g_new (GtkKeySnooperData, 1);
+  data->func = snooper;
+  data->func_data = func_data;
+  data->id = snooper_id++;
+  key_snoopers = g_slist_prepend (key_snoopers, data);
+
+  return data->id;
+}
+
+void
+gtk_key_snooper_remove (gint            snooper_id)
+{
+  GtkKeySnooperData *data = NULL;
+  GSList *slist;
+
+  slist = key_snoopers;
+  while (slist)
+    {
+      data = slist->data;
+      if (data->id == snooper_id)
+	break;
+
+      slist = slist->next;
+      data = NULL;
+    }
+  if (data)
+    key_snoopers = g_slist_remove (key_snoopers, data);
+}
+
+static gint
+gtk_invoke_key_snoopers (GtkWidget *grab_widget,
+			 GdkEvent  *event)
+{
+  GSList *slist;
+  gint return_val = FALSE;
+
+  slist = key_snoopers;
+  while (slist && !return_val)
+    {
+      GtkKeySnooperData *data;
+
+      data = slist->data;
+      slist = slist->next;
+      return_val = (*data->func) (grab_widget, (GdkEventKey*) event, data->func_data);
+    }
+
+  return return_val;
 }
 
 static gint
