@@ -30,8 +30,8 @@
 #include <gdk/gdk.h>
 #include "gdkprivate.h"
 
-#ifndef M_TWOPI
-#define M_TWOPI         (2.0 * 3.14159265358979323846)
+#ifndef G_PI
+#define G_PI 3.14159265358979323846
 #endif
 
 void
@@ -203,22 +203,49 @@ gdk_draw_arc (GdkDrawable *drawable,
   if (height == -1)
     height = drawable_private->height;
 
-  if (width != 0 && height != 0)
+  GDK_NOTE (MISC, g_print ("gdk_draw_arc: %#x  %d,%d,%d,%d  %d %d\n",
+			   drawable_private->xwindow,
+			   x, y, width, height, angle1, angle2));
+
+  if (width != 0 && height != 0 && angle2 != 0)
     {
       hdc = gdk_gc_predraw (drawable_private, gc_private);
 
-      nXStartArc = x + width/2 + (int) (sin(angle1/64.*M_TWOPI)*width);
-      nYStartArc = y + height/2 + (int) (cos(angle1/64.*M_TWOPI)*height);
-      nXEndArc = x + width/2 + (int) (sin(angle2/64.*M_TWOPI)*width);
-      nYEndArc = y + height/2 + (int) (cos(angle2/64.*M_TWOPI)*height);
+      if (angle2 >= 360*64)
+	{
+	  nXStartArc = nYStartArc = nXEndArc = nYEndArc = 0;
+	}
+      else if (angle2 > 0)
+	{
+	  /* The 100. is just an arbitrary value */
+	  nXStartArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
+	  nYStartArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
+	  nXEndArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
+	  nYEndArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+	}
+      else
+	{
+	  nXEndArc = x + width/2 + 100. * cos(angle1/64.*2.*G_PI/360.);
+	  nYEndArc = y + height/2 + -100. * sin(angle1/64.*2.*G_PI/360.);
+	  nXStartArc = x + width/2 + 100. * cos((angle1+angle2)/64.*2.*G_PI/360.);
+	  nYStartArc = y + height/2 + -100. * sin((angle1+angle2)/64.*2.*G_PI/360.);
+	}
 
       if (filled)
 	{
+	  GDK_NOTE (MISC, g_print ("...Pie(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+				   x, y, x+width, y+height,
+				   nXStartArc, nYStartArc,
+				   nXEndArc, nYEndArc));
 	  Pie (hdc, x, y, x+width, y+height,
 	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
 	}
       else
 	{
+	  GDK_NOTE (MISC, g_print ("...Arc(hdc,%d,%d,%d,%d,%d,%d,%d,%d)\n",
+				   x, y, x+width, y+height,
+				   nXStartArc, nYStartArc,
+				   nXEndArc, nYEndArc));
 	  Arc (hdc, x, y, x+width, y+height,
 	       nXStartArc, nYStartArc, nXEndArc, nYEndArc);
 	}

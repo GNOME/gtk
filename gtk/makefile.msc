@@ -44,9 +44,9 @@ GTK_VER=1.3
 
 GDKSYSDEP = ..\gdk\win32
 GLIB = ..\..\glib
-GETTEXT = ..\..\gettext-0.10.35
+INTL = ..\..\gettext-0.10.35
 
-CFLAGS = -I. -I.. -I$(GDKSYSDEP) -I$(GLIB) -I$(GLIB)\gmodule -I$(GETTEXT)\intl -DGTK_DISABLE_COMPAT_H
+CFLAGS = -I. -I.. -I$(GDKSYSDEP) -I$(GLIB) -I$(GLIB)\gmodule -I$(INTL) -DGTK_DISABLE_COMPAT_H
 
 all : \
 	..\config.h	\
@@ -333,7 +333,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GETTEXT)\intl\gnu-intl.lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib $(LDFLAGS) /def:gtk.def
+	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(INTL)\gnu-intl.lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib $(LDFLAGS) /def:gtk.def
 
 # General rule for compiling the objects into the DLL
 .c.obj :

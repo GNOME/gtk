@@ -17,13 +17,15 @@ The tablet support uses the Wintab API. The Wintab development kit can
 be downloaded from http://www.pointing.com. If you don't care for
 that, undefine HAVE_WINTAB in config.h.win32 before building.
 
-GTk+ wants to be built with the GNU gettext library for
+GTk+ wants to be built with the GNU "intl" library for
 internationalisation (i18n). Get the version ported to Win32 (not a
-very big deal) from tml's web site mentioned above. If you don't want
-any i18n stuff, undefine ENABLE_NLS, HAVE_GETTEXT and HAVE_LIBINTL in
-the config.h.win32 file, and remove references to the gnu-intl library
-from the makefiles.
+very big deal) from tml's web site mentioned above. We build the
+"intl" library to a DLL called gnu-intl.dll to reduce name clash
+risks. If you don't want any i18n stuff, undefine ENABLE_NLS,
+HAVE_GETTEXT and HAVE_LIBINTL in the config.h.win32 file, and remove
+references to the gnu-intl library from the makefiles.
 
-Note that GNU gettext is under the GPL, not the LGPL like GTk+ or
-GLib. So, if GPL is a problem to you, follow the above advice to
-remove the use of gettext.
+Note that while the GNU gettext package is under the GPL, the "intl"
+library part as distributed with GNU libc is under the LGPL (like GTk+
+or GLib). We want the LGPL one, even if they are the same, more or
+less.

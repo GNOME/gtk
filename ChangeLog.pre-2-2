@@ -1,3 +1,15 @@
+1999-08-16  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdraw.c (gdk_draw_arc): Fix start and end radial
+	endpoint calculations which were totally wrong. (A little RTFMing
+	helps a lot ;-)
+
+	* gtk/makefile.{cygwin,msc}: Use libintl extracted from glibc
+	from a separate directory, not from gettext, because of licensing
+	issues (we want to use the LGPL version).
+
+	* README.win32: Mention the intl from glibc vs from gettext issue.
+
 1999-08-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents.c (gdk_event_translate): Fix a couple of bugs
