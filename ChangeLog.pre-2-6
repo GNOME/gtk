@@ -1,3 +1,8 @@
+Mon Dec  9 19:31:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (draw_spinbutton_shadow): Remove
+	unused draw_spin_entry_shadow(). (#80229)
+
 Mon Dec  9 18:50:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkinput-x11.c (_gdk_input_common_find_events):
