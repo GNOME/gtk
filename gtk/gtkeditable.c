@@ -626,14 +626,14 @@ gtk_editable_select_region (GtkEditable *editable,
 }
 
 void
-gtk_editable_cut_clipboard (GtkEditable *editable, GdkEventKey *event)
+gtk_editable_cut_clipboard (GtkEditable *editable, guint32 time)
 {
-  gtk_editable_copy_clipboard (editable, event);
+  gtk_editable_copy_clipboard (editable, time);
   gtk_editable_delete_selection (editable);
 }
 
 void
-gtk_editable_copy_clipboard (GtkEditable *editable, GdkEventKey *event)
+gtk_editable_copy_clipboard (GtkEditable *editable, guint32 time)
 {
   gint selection_start_pos; 
   gint selection_end_pos;
@@ -645,7 +645,7 @@ gtk_editable_copy_clipboard (GtkEditable *editable, GdkEventKey *event)
     {
       if (gtk_selection_owner_set (GTK_WIDGET (editable),
 				   clipboard_atom,
-				   event->time))
+				   time))
 	editable->clipboard_text = gtk_editable_get_chars (editable,
 							   selection_start_pos,
 							   selection_end_pos);
@@ -653,10 +653,10 @@ gtk_editable_copy_clipboard (GtkEditable *editable, GdkEventKey *event)
 }
 
 void
-gtk_editable_paste_clipboard (GtkEditable *editable, GdkEventKey *event)
+gtk_editable_paste_clipboard (GtkEditable *editable, guint32 time)
 {
   gtk_selection_convert (GTK_WIDGET(editable), 
-			 clipboard_atom, ctext_atom, event->time);
+			 clipboard_atom, ctext_atom, time);
 }
 
 void

@@ -899,11 +899,11 @@ gtk_entry_key_press (GtkWidget   *widget,
        if (event->state & GDK_SHIFT_MASK)
 	 {
 	   extend_selection = FALSE;
-	   gtk_editable_paste_clipboard (editable, event);
+	   gtk_editable_paste_clipboard (editable, event->time);
 	 }
        else if (event->state & GDK_CONTROL_MASK)
 	 {
-	   gtk_editable_copy_clipboard (editable, event);
+	   gtk_editable_copy_clipboard (editable, event->time);
 	 }
        else
 	 {
@@ -915,7 +915,7 @@ gtk_entry_key_press (GtkWidget   *widget,
       if (event->state & GDK_CONTROL_MASK)
 	gtk_delete_line (entry);
       else if (event->state & GDK_SHIFT_MASK)
-	gtk_editable_cut_clipboard (editable, event);
+	gtk_editable_cut_clipboard (editable, event->time);
       else
 	gtk_delete_forward_character (entry);
       break;
@@ -955,7 +955,7 @@ gtk_entry_key_press (GtkWidget   *widget,
 
 	      if ((key >= 'a') && (key <= 'z') && control_keys[key - 'a'])
 		{
-		  (* control_keys[key - 'a']) (editable, event);
+		  (* control_keys[key - 'a']) (editable, event->time);
 		  return_val = TRUE;
 		}
 	      break;
@@ -967,7 +967,7 @@ gtk_entry_key_press (GtkWidget   *widget,
 
 	      if ((key >= 'a') && (key <= 'z') && alt_keys[key - 'a'])
 		{
-		  (* alt_keys[key - 'a']) (editable, event);
+		  (* alt_keys[key - 'a']) (editable, event->time);
 		  return_val = TRUE;
 		}
 	      break;

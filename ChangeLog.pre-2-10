@@ -1,3 +1,10 @@
+Sun Mar  1 05:18:11 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c gtk/gtktext.c gtkeditable.[ch]
+
+	Changed interface to cut/copy/paste so it makes sense
+	when triggered by say, menu items.
+
 Sun Mar  1 03:20:39 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.[ch] gtk/gtktext.[ch] gtkeditable.[ch]

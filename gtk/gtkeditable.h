@@ -36,7 +36,7 @@ extern "C" {
 typedef struct _GtkEditable       GtkEditable;
 typedef struct _GtkEditableClass  GtkEditableClass;
 
-typedef void (*GtkTextFunction) (GtkEditable  *editable, GdkEventKey *event);
+typedef void (*GtkTextFunction) (GtkEditable  *editable, guint32 time);
 
 struct _GtkEditable
 {
@@ -90,12 +90,12 @@ void       gtk_editable_delete_text    (GtkEditable      *editable,
 gchar *    gtk_editable_get_chars      (GtkEditable      *editable,
 					gint              start_pos,
 					gint              end_pos);
-void       gtk_editable_cut_clipboard  (GtkEditable      *editable, 
-					GdkEventKey      *event);
+void       gtk_editable_cut_clipboard  (GtkEditable      *editable,
+					guint32           time);
 void       gtk_editable_copy_clipboard (GtkEditable      *editable, 
-					GdkEventKey      *event);
+					guint32           time);
 void       gtk_editable_paste_clipboard (GtkEditable     *editable, 
-					 GdkEventKey     *event);
+					 guint32          time);
 void       gtk_editable_claim_selection (GtkEditable     *editable, 
 					 gboolean         claim, 
 					 guint32          time);

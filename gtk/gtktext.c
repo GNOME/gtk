@@ -1549,7 +1549,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	      
 	      if ((key >= 'a') && (key <= 'z') && control_keys[(int) (key - 'a')])
 		{
-		  (* control_keys[(int) (key - 'a')]) (editable, event);
+		  (* control_keys[(int) (key - 'a')]) (editable, event->time);
 		  return_val = TRUE;
 		}
 
@@ -1562,7 +1562,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	      
 	      if ((key >= 'a') && (key <= 'z') && alt_keys[(int) (key - 'a')])
 		{
-		  (* alt_keys[(int) (key - 'a')]) (editable, event);
+		  (* alt_keys[(int) (key - 'a')]) (editable, event->time);
 		  return_val = TRUE;
 		}
 
