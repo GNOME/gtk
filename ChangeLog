@@ -1,3 +1,139 @@
+2001-02-02  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkwindow.c: docs
+
+	* gtk/gtkwidget.c: docs
+	(gtk_widget_set_colormap): add a reference to the colormap
+	(gtk_widget_get_default_colormap): add a reference to the colormap
+
+	* gtk/gtktextbtree.c (gtk_text_mark_set_visible): docs
+
+	* gtk/gtktextiter.c: docs
+
+	* gtk/gtkmain.c (gtk_propagate_event): docs
+
+	* gtk/gtkpaned.c (gtk_paned_get_position): docs
+	(gtk_paned_set_position): docs
+
+	* gtk/gtktreesortable.h (struct _GtkTreeSortableIface): Initial
+	sort interface, no implementation yet.
+
+	* demos/testpixbuf.c (new_testrgb_window): replace
+	gtk_drawing_area_size() with gtk_widget_set_usize()
+
+	* demos/testpixbuf-drawable.c (main): ditto
+	
+	* gtk/testgtk.c: remove use of GtkStatusbarMsg
+
+	* gtk/gtktextbuffer.c: docs
+
+	* gtk/gtkstock.c: docs
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_set_shadow_type): docs
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_history): docs
+
+	* gtk/gtklabel.c (gtk_label_set_markup_with_accel): fix docs
+	
+	* gtk/gtkimage.c: add some docs in here
+	(gtk_image_size_request): change name of
+	gtk_widget_render_stock_icon
+	(gtk_image_get_icon_set): don't dup returned string
+	(gtk_image_get_icon_set): don't dup returned string
+
+	* gtk/gtkwidget.c (gtk_widget_render_icon): rename from 
+	gtk_widget_render_stock_icon(), more consistent with gtkstyle.h
+	and gtkiconfactory.h functions
+
+	* gtk/gtkiconfactory.c: add some docs in here
+
+	* gtk/gtkmain.c (gtk_get_default_language): document
+	(gtk_get_current_event): document
+	(gtk_get_current_event_state): document
+	(gtk_get_event_widget): document
+
+	* gtk/gtkentry.c (gtk_entry_set_invisible_char): document
+
+	* gtk/gtkcontainer.c: Add some documentation
+	(gtk_container_add): give a more explanatory warning on adding an
+	already-parented widget, this is kind of a FAQ and also a common
+	typo that's easier to debug with a nice warning	
+
+	* gtk/gtkcellrenderertoggle.c
+	(gtk_cell_renderer_toggle_get_active): remove, I was on crack
+	adding this, it's useless
+	(gtk_cell_renderer_toggle_set_active): remove
+	(gtk_cell_renderer_toggle_get_radio): add
+
+	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_size): don't allow
+	the NULL cell renderer, that doesn't make any sense to me. 
+
+	* demos/gtk-demo/Makefile.am (INCLUDES): -DGTK_DISABLE_DEPRECATED,
+	demo code should never use deprecated features.
+
+	* demos/Makefile.am (INCLUDES): -DGTK_DISABLE_DEPRECATED, demo
+	code should never use deprecated features.
+
+	* gtk/gtkwidget.h: Mark gtk_widget_draw, gtk_widget_queue_clear,
+	gtk_widget_queue_clear_area deprecated
+
+	* gtk/gtklayout.h: mark gtk_layout_freeze/gtk_layout_thaw
+	deprecated
+
+	* gtk/gtklabel.h: mark gtk_label_get() deprecated
+
+	* gtk/gtkimage.h: mark the legacy GtkImage functions that took 
+	a GdkImage deprecated, replaced by new consistently-named
+	functions	
+
+	* gtk/gtkmain.h: Mark gtk_exit() deprecated
+
+	* gtk/gtkdrawingarea.h: mark gtk_drawing_area_size deprecated
+
+	* gtk/gtkstyle.h: mark gtk_draw_string, gtk_paint_string 
+	deprecated
+
+	* gtk/gtkstatusbar.h: Move GtkStatusbarMsg to the .c file, 
+	so it won't appear in docs and confuse people.
+
+	* gtk/gtkprogressbar.h: Mark all the old methods deprecated
+
+	* gtk/gtkprogress.h: Mark all methods deprecated, mark the cast
+	macros deprecated. (can't mark the type itself deprecated, since
+	GtkProgressBar is not deprecated and we need the type decl to use
+	GtkProgressBar)
+
+	* gtk/gtkpixmap.h: Mark deprecated
+
+	* gtk/gtkoldeditable.h: Mark deprecated
+
+	* gtk/gtklist.h: Mark deprecated
+
+	* gtk/gtklabel.h: delete "GtkLabelWord" typedef, not used 
+	for anything anymore.
+
+	* gtk/gtkctree.h: Mark deprecated
+
+	* gtk/gtkclist.h: Mark deprecated
+
+	* gtk/gtkpreview.h: Mark deprecated
+
+	* gtk/gtkpacker.h: Mark deprecated
+
+	* gtk/gtktipsquery.h: Mark deprecated
+
+	* gtk/gtkinputdialog.h: Add comment that it will move out of GTK
+
+	* gtk/gtkvruler.h: Add comment that it will move out of GTK
+
+	* gtk/gtkhruler.h: Add comment that it will move out of GTK
+
+	* gtk/gtkruler.h: Add comment that it will move out of GTK
+
+	* gtk/gtkgamma.h: Add comment that it will move out of GTK
+
+	* gtk/gtkcurve.h: Add comment that it will move out of GTK
+
 Fri Feb  2 17:16:09 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkcolor-x11.c (gdk_colormap_sync): Make
