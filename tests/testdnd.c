@@ -551,6 +551,17 @@ source_drag_data_delete  (GtkWidget          *widget,
   g_print ("Delete the data!\n");
 }
   
+void
+test_init ()
+{
+  if (g_file_test ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so",
+		   G_FILE_TEST_EXISTS))
+    {
+      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GTK_IM_MODULE_FILE=./gtk.immodules");
+    }
+}
+
 int 
 main (int argc, char **argv)
 {
@@ -562,6 +573,8 @@ main (int argc, char **argv)
   GdkPixmap *drag_icon;
   GdkPixmap *drag_mask;
 
+  test_init ();
+  
   gtk_init (&argc, &argv); 
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);

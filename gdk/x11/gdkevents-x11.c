@@ -756,7 +756,8 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xcrossing.subwindow));
 
       /* Handle focusing (in the case where no window manager is running */
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+      if (window &&
+	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	  xevent->xcrossing.detail != NotifyInferior &&
 	  xevent->xcrossing.focus && !window_impl->has_focus)
 	{
@@ -842,7 +843,8 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xcrossing.detail, xevent->xcrossing.subwindow));
       
       /* Handle focusing (in the case where no window manager is running */
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+      if (window &&
+	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
 	  xevent->xcrossing.detail != NotifyInferior &&
 	  xevent->xcrossing.focus && !window_impl->has_focus)
 	{
@@ -922,7 +924,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_message ("focus in:\t\twindow: %ld", xevent->xfocus.window));
       
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+      if (window && GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 	{
 	  gboolean had_focus = HAS_FOCUS (window_impl);
 	  
@@ -951,7 +953,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_message ("focus out:\t\twindow: %ld", xevent->xfocus.window));
 
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
+      if (window && GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
 	{
 	  gboolean had_focus = HAS_FOCUS (window_impl);
 	    
@@ -1155,7 +1157,7 @@ gdk_event_translate (GdkEvent *event,
        * an unmap, it means we hid the window ourselves, so we
        * will have already flipped the iconified bit off.
        */
-      if (GDK_WINDOW_IS_MAPPED (window))
+      if (window && GDK_WINDOW_IS_MAPPED (window))
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_ICONIFIED);
@@ -1174,7 +1176,7 @@ gdk_event_translate (GdkEvent *event,
       event->any.window = window;
 
       /* Unset iconified if it was set */
-      if (((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_ICONIFIED)
+      if (window && (((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_ICONIFIED))
         gdk_synthesize_window_state (window,
                                      GDK_WINDOW_STATE_ICONIFIED,
                                      0);

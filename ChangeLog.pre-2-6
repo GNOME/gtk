@@ -1,3 +1,34 @@
+Wed Apr 25 12:16:36 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/X11/gdkevents-x11.c (gdk_event_translate): Test for 
+	window == NULL in a number of cases.
+
+	* tests/testdnd.c: Set module path for gdk-pixbuf.
+
+Thu Apr 19 16:11:07 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am xembed.h: File containing #defines
+	for XEMBED protocol.
+
+	* gtk/gtkplug.[ch] gtk/gtksocket.[ch]: 
+
+	- Change protocol from old plug/socket specific protocol
+	  to XEMBED draft
+	- Various fixes to work with GTK+-2.0
+
+	Still quite a bit of work to do here to handle initiation
+	from the socket side (as specified by XEMBED), to handle
+	the more advanced features of XEMBED, and to figure out
+	a good way to handle same-app embedding with less overhead
+	than using full XEMBED.
+
+Wed Apr 18 16:04:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch] (gtk_window_real_set_focus): Keep
+	track of whether the toplevel has the focus; only send
+	focus-in events to the focus widget when the window
+	actually has the focus.
+
 2001-04-25  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkwindow.h: set_decorations_hint and set_functions_hint
