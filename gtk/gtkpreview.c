@@ -1252,28 +1252,28 @@ gtk_trim_cmap (GtkPreviewClass *klass)
 	    }
 	}
     }
-
+  
   if ((nred < 2) || (ngreen < 2) || (nblue < 2) || (ngray < 2))
     {
-      g_print ("Unable to allocate sufficient colormap entries.\n");
-      g_print ("Try exiting other color intensive applications.\n");
+      g_message ("Unable to allocate sufficient colormap entries.\n");
+      g_message ("Try exiting other color intensive applications.\n");
       return;
     }
-
+  
   /*  If any of the shade values has changed, issue a warning  */
   if ((nred != klass->info.nred_shades) ||
       (ngreen != klass->info.ngreen_shades) ||
       (nblue != klass->info.nblue_shades) ||
       (ngray != klass->info.ngray_shades))
     {
-      g_print ("Not enough colors to satisfy requested color cube.\n");
-      g_print ("Reduced color cube shades from\n");
-      g_print ("[%d of Red, %d of Green, %d of Blue, %d of Gray] ==> [%d of Red, %d of Green, %d of Blue, %d of Gray]\n",
-               klass->info.nred_shades, klass->info.ngreen_shades,
-	       klass->info.nblue_shades, klass->info.ngray_shades,
-	       nred, ngreen, nblue, ngray);
+      g_message ("Not enough colors to satisfy requested color cube.\n");
+      g_message ("Reduced color cube shades from\n");
+      g_message ("[%d of Red, %d of Green, %d of Blue, %d of Gray] ==> [%d of Red, %d of Green, %d of Blue, %d of Gray]\n",
+		 klass->info.nred_shades, klass->info.ngreen_shades,
+		 klass->info.nblue_shades, klass->info.ngray_shades,
+		 nred, ngreen, nblue, ngray);
     }
-
+  
   klass->info.nred_shades = nred;
   klass->info.ngreen_shades = ngreen;
   klass->info.nblue_shades = nblue;

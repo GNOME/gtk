@@ -95,19 +95,19 @@ gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
   GtkObject *object;
   
   object = (GtkObject*) value;
-  g_print ("GTK-DEBUG: %p: %s ref_count=%d%s%s\n",
-	   object,
-	   gtk_type_name (GTK_OBJECT_TYPE (object)),
-	   object->ref_count,
-	   GTK_OBJECT_FLOATING (object) ? " (floating)" : "",
-	   GTK_OBJECT_DESTROYED (object) ? " (destroyed)" : "");
+  g_message ("[%p] %s\tref_count=%d%s%s\n",
+	     object,
+	     gtk_type_name (GTK_OBJECT_TYPE (object)),
+	     object->ref_count,
+	     GTK_OBJECT_FLOATING (object) ? " (floating)" : "",
+	     GTK_OBJECT_DESTROYED (object) ? " (destroyed)" : "");
 }
 static void
 gtk_object_debug (void)
 {
   g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
-
-  g_print ("GTK-DEBUG: living objects count = %d\n", obj_count);
+  
+  g_message ("living objects count = %d\n", obj_count);
 }
 #endif	/* G_ENABLE_DEBUG */
 

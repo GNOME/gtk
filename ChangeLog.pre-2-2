@@ -1,3 +1,38 @@
+Tue Aug 18 03:54:43 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c	(gtk_init): restricted the --g*fatal-* arguments
+	to --g-fatal-warnings again. this option now causes log levels of
+	WARNING and CRITICAL to abort().
+
+	* gdk/gdk.c: 
+	* gdk/gdkdnd.c: 
+	* gdk/gdkcc.c: 
+	* gdk/gdkfont.c: 
+	* gdk/gdkwindow.c:
+	* gdk/gdkvisual.c:
+	* gtk/gtkwidget.c:
+	* gtk/gtktypeutils.c:
+	* gtk/gtktree.c:
+	* gtk/gtkfontsel.c:
+	* gtk/gtkmain.c:
+	* gtk/gtkobject.c:
+	* gtk/gtkpreview.c:
+	* gtk/gtkselection.c:
+	* gtk/gtktext.c:
+	* gtk/gtktree.c:
+	* gtk/gtktreeitem.c:
+	did a global search&replace to substitute g_print() calls with
+ 	g_message(). libraries shouldn't use printf(), g_print() or
+	g_printerr() at all.
+	a bunch of the replacements should probably be wrapped into the
+	G{D|T}K_NOTE() macros, so they are special cased for debugging
+	purposes in a sane way, avoiding all the nasty #ifdef DEBUG_MY_TEDDY
+	things.
+
+	* gdk/gdkrgb.c: left this out currently.
+
+	* gdk/gdkdnd.c: added copyright notice.
+
 Mon Aug 17 17:28:00  Raph Levien  <raph@gtk.org>
 
 	* gdk/gdkrgb.c: Further speedups of the 565_d case. It's

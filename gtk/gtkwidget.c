@@ -1510,7 +1510,7 @@ gtk_widget_realize (GtkWidget *widget)
     {
       /*
 	if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-	  g_print ("%s\n", gtk_type_name (GTK_WIDGET_TYPE (widget)));
+	  g_message ("%s\n", gtk_type_name (GTK_WIDGET_TYPE (widget)));
       */
       
       if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))

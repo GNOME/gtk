@@ -924,7 +924,7 @@ gtk_tree_item_destroy (GtkObject *object)
   g_return_if_fail (GTK_IS_TREE_ITEM (object));
 
 #ifdef TREE_DEBUG
-  g_print("+ gtk_tree_item_destroy [object %#x]\n", (int)object);
+  g_message("+ gtk_tree_item_destroy [object %#x]\n", (int)object);
 #endif /* TREE_DEBUG */
 
   item = GTK_TREE_ITEM(object);
@@ -976,7 +976,7 @@ gtk_tree_item_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
   
 #ifdef TREE_DEBUG
-  g_print("- gtk_tree_item_destroy\n");
+  g_message("- gtk_tree_item_destroy\n");
 #endif /* TREE_DEBUG */
 }
 

@@ -413,13 +413,13 @@ gtk_type_describe_heritage (GtkType type)
       if (first)
 	{
 	  first = FALSE;
-	  g_print ("is a ");
+	  g_message ("is a ");
 	}
       
       if (node->type_info.type_name)
-	g_print ("%s\n", node->type_info.type_name);
+	g_message ("%s\n", node->type_info.type_name);
       else
-	g_print ("<unnamed type>\n");
+	g_message ("<unnamed type>\n");
       
       LOOKUP_TYPE_NODE (node, node->parent_type);
     }
@@ -441,17 +441,17 @@ gtk_type_describe_tree (GtkType	 type,
       guint i;
       
       for (i = 0; i < indent; i++)
-	g_print (" ");
+	g_message (" ");
       
       if (node->type_info.type_name)
-	g_print ("%s", node->type_info.type_name);
+	g_message ("%s", node->type_info.type_name);
       else
-	g_print ("(no-name)");
+	g_message ("(no-name)");
       
       if (show_size)
-	g_print (" ( %d bytes )\n", node->type_info.object_size);
+	g_message (" ( %d bytes )\n", node->type_info.object_size);
       else
-	g_print ("\n");
+	g_message ("\n");
       
       old_indent = indent;
       indent += 4;

@@ -211,9 +211,9 @@ gdk_visual_init (void)
 #ifdef G_ENABLE_DEBUG 
   if (gdk_debug_flags & GDK_DEBUG_MISC)
     for (i = 0; i < nvisuals; i++)
-      g_print ("Gdk: visual: %s: %d\n",
-	       visual_names[visuals[i].visual.type],
-	       visuals[i].visual.depth);
+      g_message ("visual: %s: %d",
+		 visual_names[visuals[i].visual.type],
+		 visuals[i].visual.depth);
 #endif /* G_ENABLE_DEBUG */
 
   navailable_depths = 0;

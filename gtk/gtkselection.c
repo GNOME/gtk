@@ -96,7 +96,7 @@ struct _GtkIncrInfo
   GdkWindow *requestor;		/* Requestor window - we create a GdkWindow
 				   so we can receive events */
   GdkAtom    selection;		/* Selection we're sending */
-
+  
   GtkIncrConversion *conversions; /* Information about requested conversions -
 				   * With MULTIPLE requests (benighted 1980's
 				   * hardware idea), there can be more than
@@ -170,7 +170,7 @@ gtk_selection_owner_set (GtkWidget *widget,
   GtkWidget *old_owner;
   GtkSelectionInfo *selection_info;
   GdkWindow *window;
-
+  
   if (widget == NULL)
     window = NULL;
   else
@@ -180,7 +180,7 @@ gtk_selection_owner_set (GtkWidget *widget,
       
       window = widget->window;
     }
-
+  
   tmp_list = current_selections;
   while (tmp_list)
     {
@@ -191,13 +191,13 @@ gtk_selection_owner_set (GtkWidget *widget,
       
       tmp_list = tmp_list->next;
     }
-
+  
   if (tmp_list == NULL)
     selection_info = NULL;
   else
     if (selection_info->widget == widget)
       return TRUE;
-      
+  
   if (gdk_selection_owner_set (window, selection, time, TRUE))
     {
       old_owner = NULL;
@@ -242,7 +242,7 @@ gtk_selection_owner_set (GtkWidget *widget,
 	  event.window = old_owner->window;
 	  event.selection = selection;
 	  event.time = time;
-
+	  
 	  gtk_widget_event (old_owner, (GdkEvent *) &event);
 	}
       return TRUE;
@@ -291,14 +291,14 @@ gtk_selection_add_handler_full (GtkWidget           *widget,
   GList *selection_handlers;
   GList *tmp_list;
   GtkSelectionHandler *handler;
-
+  
   g_return_if_fail (widget != NULL);
   if (initialize)
     gtk_selection_init ();
   
   selection_handlers = gtk_object_get_data (GTK_OBJECT (widget),
 					    gtk_selection_handler_key);
-
+  
   /* Reuse old handler structure, if present */
   tmp_list = selection_handlers;
   while (tmp_list)
@@ -326,7 +326,7 @@ gtk_selection_add_handler_full (GtkWidget           *widget,
 	}
       tmp_list = tmp_list->next;
     }
-
+  
   if (tmp_list == NULL && function)
     {
       handler = g_new (GtkSelectionHandler, 1);
@@ -362,9 +362,9 @@ gtk_selection_remove_all (GtkWidget *widget)
   GtkSelectionInfo *selection_info;
   GList *selection_handlers;
   GtkSelectionHandler *handler;
-
+  
   /* Remove pending requests/incrs for this widget */
-
+  
   tmp_list = current_incrs;
   while (tmp_list)
     {
@@ -377,7 +377,7 @@ gtk_selection_remove_all (GtkWidget *widget)
 	}
       tmp_list = next;
     }
-
+  
   tmp_list = current_retrievals;
   while (tmp_list)
     {
@@ -393,7 +393,7 @@ gtk_selection_remove_all (GtkWidget *widget)
     }
   
   /* Disclaim ownership of any selections */
-
+  
   tmp_list = current_selections;
   while (tmp_list)
     {
@@ -413,27 +413,27 @@ gtk_selection_remove_all (GtkWidget *widget)
       
       tmp_list = next;
     }
-
+  
   /* Now remove all handlers */
-
+  
   selection_handlers = gtk_object_get_data (GTK_OBJECT (widget),
 					    gtk_selection_handler_key);
   gtk_object_remove_data (GTK_OBJECT (widget), gtk_selection_handler_key);
-
+  
   tmp_list = selection_handlers;
   while (tmp_list)
     {
       next = tmp_list->next;
       handler = (GtkSelectionHandler *)tmp_list->data;
-
+      
       if (handler->destroy)
 	(*handler->destroy)(handler->data);
-
+      
       g_free (handler);
-
+      
       tmp_list = next;
     }
-
+  
   g_list_free (selection_handlers);
 }
 
@@ -464,21 +464,21 @@ gtk_selection_convert (GtkWidget *widget,
   GtkRetrievalInfo *info;
   GList *tmp_list;
   GdkWindow *owner_window;
-
+  
   g_return_val_if_fail (widget != NULL, FALSE);
-
+  
   if (initialize)
     gtk_selection_init ();
   
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
-
+  
   /* Check to see if there are already any retrievals in progress for
      this widget. If we changed GDK to use the selection for the 
      window property in which to store the retrieved information, then
      we could support multiple retrievals for different selections.
      This might be useful for DND. */
-
+  
   tmp_list = current_retrievals;
   while (tmp_list)
     {
@@ -487,43 +487,43 @@ gtk_selection_convert (GtkWidget *widget,
 	return FALSE;
       tmp_list = tmp_list->next;
     }
-
+  
   info = g_new (GtkRetrievalInfo, 1);
-
+  
   info->widget = widget;
   info->selection = selection;
   info->target = target;
   info->buffer = NULL;
   info->offset = -1;
-
+  
   /* Check if this process has current owner. If so, call handler
      procedure directly to avoid deadlocks with INCR. */
-
+  
   owner_window = gdk_selection_owner_get (selection);
   
   if (owner_window != NULL)
     {
       GtkWidget *owner_widget;
       GtkSelectionData selection_data;
-
+      
       selection_data.selection = selection;
       selection_data.target = target;
       selection_data.data = NULL;
       selection_data.length = -1;
-
+      
       gdk_window_get_user_data (owner_window, (gpointer *)&owner_widget);
-
+      
       if (owner_widget != NULL)
 	{
 	  gtk_selection_invoke_handler (owner_widget, 
 					&selection_data);
-
+	  
 	  gtk_selection_retrieval_report (info,
 					  selection_data.type, 
 					  selection_data.format,
 					  selection_data.data,
 					  selection_data.length);
-
+	  
 	  g_free (selection_data.data);
 	  
 	  g_free (info);
@@ -532,11 +532,11 @@ gtk_selection_convert (GtkWidget *widget,
     }
   
   /* Otherwise, we need to go through X */
-
+  
   current_retrievals = g_list_append (current_retrievals, info);
   gdk_selection_convert (widget->window, selection, target, time);
   gtk_timeout_add (1000, (GtkFunction) gtk_selection_retrieval_timeout, info);
-
+  
   return TRUE;
 }
 
@@ -562,10 +562,10 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
 {
   if (selection_data->data)
     g_free (selection_data->data);
-
+  
   selection_data->type = type;
   selection_data->format = format;
-
+  
   if (data)
     {
       selection_data->data = g_new (guchar, length+1);
@@ -574,7 +574,7 @@ gtk_selection_data_set (GtkSelectionData *selection_data,
     }
   else
     selection_data->data = NULL;
-
+  
   selection_data->length = length;
 }
 
@@ -614,10 +614,10 @@ gtk_selection_clear (GtkWidget *widget,
      Tk filters based on serial #'s, which aren't retained by
      GTK. Filtering based on time's will be inherently 
      somewhat unreliable. */
-
+  
   GList *tmp_list;
   GtkSelectionInfo *selection_info;
-
+  
   tmp_list = current_selections;
   while (tmp_list)
     {
@@ -629,7 +629,7 @@ gtk_selection_clear (GtkWidget *widget,
       
       tmp_list = tmp_list->next;
     }
-    
+  
   if (tmp_list)
     {
       if (selection_info->time > event->time)
@@ -665,44 +665,44 @@ gtk_selection_request (GtkWidget *widget,
   GList *tmp_list;
   guchar *mult_atoms;
   int i;
-
+  
   /* Check if we own selection */
-
+  
   tmp_list = current_selections;
   while (tmp_list)
     {
       GtkSelectionInfo *selection_info = (GtkSelectionInfo *)tmp_list->data;
-
+      
       if ((selection_info->selection == event->selection) &&
 	  (selection_info->widget == widget))
 	break;
-
+      
       tmp_list = tmp_list->next;
     }
-
+  
   if (tmp_list == NULL)
     return FALSE;
   
   info = g_new(GtkIncrInfo, 1);
-
+  
   info->widget = widget;
   info->selection = event->selection;
   info->num_incrs = 0;
-
+  
   /* Create GdkWindow structure for the requestor */
-
+  
   info->requestor = gdk_window_lookup (event->requestor);
   if (!info->requestor)
     info->requestor = gdk_window_foreign_new (event->requestor);
   
   /* Determine conversions we need to perform */
-
+  
   if (event->target == gtk_selection_atoms[MULTIPLE])
     {
       GdkAtom  type;
       gint     format;
       gint     length;
-
+      
       mult_atoms = NULL;
       if (!gdk_property_get (info->requestor, event->property, GDK_SELECTION_TYPE_ATOM,
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
@@ -715,10 +715,10 @@ gtk_selection_request (GtkWidget *widget,
 	  g_free (info);
 	  return TRUE;
 	}
-
+      
       info->num_conversions = length / (2*sizeof (GdkAtom));
       info->conversions = g_new (GtkIncrConversion, info->num_conversions);
-
+      
       for (i=0; i<info->num_conversions; i++)
 	{
 	  info->conversions[i].target = ((GdkAtom *)mult_atoms)[2*i];
@@ -733,39 +733,39 @@ gtk_selection_request (GtkWidget *widget,
       info->conversions[0].property = event->property;
       mult_atoms = (guchar *)info->conversions;
     }
-
+  
   /* Loop through conversions and determine which of these are big
      enough to require doing them via INCR */
   for (i=0; i<info->num_conversions; i++)
     {
       GtkSelectionData data;
       gint items;
-
+      
       data.selection = event->selection;
       data.target = info->conversions[i].target;
       data.data = NULL;
       data.length = -1;
-
+      
 #ifdef DEBUG_SELECTION
-      g_print("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)\n",
-	      event->selection, info->conversions[i].target,
-	      gdk_atom_name(info->conversions[i].target),
-	      event->requestor, event->property);
+      g_message("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)\n",
+		event->selection, info->conversions[i].target,
+		gdk_atom_name(info->conversions[i].target),
+		event->requestor, event->property);
 #endif
-  
+      
       gtk_selection_invoke_handler (widget, &data);
-
+      
       if (data.length < 0)
 	{
 	  ((GdkAtom *)mult_atoms)[2*i+1] = GDK_NONE;
 	  info->conversions[i].property = GDK_NONE;
 	  continue;
 	}
-
+      
       g_return_val_if_fail ((data.format >= 8) && (data.format % 8 == 0), FALSE);
-
+      
       items = (data.length + data.format/8 - 1) / (data.format/8);
-
+      
       if (data.length > GTK_SELECTION_MAX_SIZE)
 	{
 	  /* Sending via INCR */
@@ -784,37 +784,37 @@ gtk_selection_request (GtkWidget *widget,
       else
 	{
 	  info->conversions[i].offset = -1;
-
+	  
 	  gdk_property_change (info->requestor, 
 			       info->conversions[i].property,
 			       data.type,
 			       data.format,
 			       GDK_PROP_MODE_REPLACE,
 			       data.data, items);
-
+	  
 	  g_free (data.data);
 	}
     }
-
+  
   /* If we have some INCR's, we need to send the rest of the data in
      a callback */
-
+  
   if (info->num_incrs > 0)
     {
       /* FIXME: this could be dangerous if window doesn't still
 	 exist */
-
+      
 #ifdef DEBUG_SELECTION
-      g_print("Starting INCR...\n");
+      g_message("Starting INCR...\n");
 #endif
-
+      
       gdk_window_set_events (info->requestor,
 			     gdk_window_get_events (info->requestor) |
 			     GDK_PROPERTY_CHANGE_MASK);
       current_incrs = g_list_append (current_incrs, info);
       gtk_timeout_add (1000, (GtkFunction)gtk_selection_incr_timeout, info);
     }
-
+  
   /* If it was a MULTIPLE request, set the property to indicate which
      conversions succeeded */
   if (event->target == gtk_selection_atoms[MULTIPLE])
@@ -825,16 +825,16 @@ gtk_selection_request (GtkWidget *widget,
 			   mult_atoms, info->num_conversions);
       g_free (mult_atoms);
     }
-
+  
   gdk_selection_send_notify (event->requestor, event->selection, event->target,
 			     event->property, event->time);
-
+  
   if (info->num_incrs == 0)
     {
       g_free (info->conversions);
       g_free (info);
     }
-
+  
   return TRUE;
 }
 
@@ -861,16 +861,16 @@ gtk_selection_incr_event (GdkWindow        *window,
   GtkIncrInfo *info;
   gint num_bytes;
   guchar *buffer;
-
+  
   int i;
   
   if (event->state != GDK_PROPERTY_DELETE)
     return FALSE;
-
+  
 #ifdef DEBUG_SELECTION
-  g_print("PropertyDelete, property %ld\n", event->atom);
+  g_message("PropertyDelete, property %ld\n", event->atom);
 #endif
-
+  
   /* Now find the appropriate ongoing INCR */
   tmp_list = current_incrs;
   while (tmp_list)
@@ -881,10 +881,10 @@ gtk_selection_incr_event (GdkWindow        *window,
       
       tmp_list = tmp_list->next;
     }
-
+  
   if (tmp_list == NULL)
     return FALSE;
-
+  
   /* Find out which target this is for */
   for (i=0; i<info->num_conversions; i++)
     {
@@ -905,7 +905,7 @@ gtk_selection_incr_event (GdkWindow        *window,
 		info->conversions[i].offset;
 	      buffer = info->conversions[i].data.data + 
 		info->conversions[i].offset;
-
+	      
 	      if (num_bytes > GTK_SELECTION_MAX_SIZE)
 		{
 		  num_bytes = GTK_SELECTION_MAX_SIZE;
@@ -915,9 +915,9 @@ gtk_selection_incr_event (GdkWindow        *window,
 		info->conversions[i].offset = -2;
 	    }
 #ifdef DEBUG_SELECTION
-	  g_print("INCR: put %d bytes (offset = %d) into window 0x%lx , property %ld\n",
-		  num_bytes, info->conversions[i].offset, 
-		  GDK_WINDOW_XWINDOW(info->requestor), event->atom);
+	  g_message("INCR: put %d bytes (offset = %d) into window 0x%lx , property %ld\n",
+		    num_bytes, info->conversions[i].offset, 
+		    GDK_WINDOW_XWINDOW(info->requestor), event->atom);
 #endif
 	  gdk_property_change (info->requestor, event->atom,
 			       info->conversions[i].data.type,
@@ -926,7 +926,7 @@ gtk_selection_incr_event (GdkWindow        *window,
 			       buffer, 
 			       (num_bytes + info->conversions[i].data.format/8 - 1) / 
 			       (info->conversions[i].data.format/8));
-
+	  
 	  if (info->conversions[i].offset == -2)
 	    {
 	      g_free (info->conversions[i].data.data);
@@ -941,9 +941,9 @@ gtk_selection_incr_event (GdkWindow        *window,
 	}
       break;
     }
-
+  
   /* Check if we're finished with all the targets */
-
+  
   if (info->num_incrs == 0)
     {
       current_incrs = g_list_remove_link (current_incrs, tmp_list);
@@ -970,7 +970,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
-
+  
   tmp_list = current_incrs;
   while (tmp_list)
     {
@@ -991,7 +991,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
       g_free (info->conversions);
       /* FIXME: we should check if requestor window is still in use,
 	 and if not, remove it? */
-	 
+      
       g_free (info);
       
       return FALSE;		/* remove timeout */
@@ -1029,8 +1029,8 @@ gtk_selection_notify (GtkWidget        *widget,
   gint    format;
   
 #ifdef DEBUG_SELECTION
-  g_print("Initial receipt of selection %ld, target %ld (property = %ld)\n",
-	  event->selection, event->target, event->property);
+  g_message("Initial receipt of selection %ld, target %ld (property = %ld)\n",
+	    event->selection, event->target, event->property);
 #endif
   
   tmp_list = current_retrievals;
@@ -1041,10 +1041,10 @@ gtk_selection_notify (GtkWidget        *widget,
 	break;
       tmp_list = tmp_list->next;
     }
-
+  
   if (!tmp_list)		/* no retrieval in progress */
     return FALSE;
-
+  
   if (event->property == GDK_NONE)
     {
       current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
@@ -1052,18 +1052,18 @@ gtk_selection_notify (GtkWidget        *widget,
       /* structure will be freed in timeout */
       gtk_selection_retrieval_report (info,
 				      GDK_NONE, 0, NULL, -1);
-
+      
       return TRUE;
     }
   
   length = gdk_selection_property_get (widget->window, &buffer, 
 				       &type, &format);
-
+  
   if (type == gtk_selection_atoms[INCR])
     {
       /* The remainder of the selection will come through PropertyNotify
 	 events */
-
+      
       info->idle_time = 0;
       info->offset = 0;		/* Mark as OK to proceed */
       gdk_window_set_events (widget->window,
@@ -1075,17 +1075,17 @@ gtk_selection_notify (GtkWidget        *widget,
       /* We don't delete the info structure - that will happen in timeout */
       current_retrievals = g_list_remove_link (current_retrievals, tmp_list);
       g_list_free (tmp_list);
-
+      
       info->offset = length;
       gtk_selection_retrieval_report (info,
 				      type, format, 
 				      buffer, length);
     }
-
+  
   gdk_property_delete (widget->window, event->property);
-
+  
   g_free (buffer);
-
+  
   return TRUE;
 }
 
@@ -1112,14 +1112,14 @@ gtk_selection_property_notify (GtkWidget        *widget,
   int length;
   GdkAtom type;
   gint    format;
-
+  
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
       (event->atom != gdk_selection_property)) /* not the right property */
     return FALSE;
-
+  
 #ifdef DEBUG_SELECTION
-  g_print("PropertyNewValue, property %ld\n",
-	  event->atom);
+  g_message("PropertyNewValue, property %ld\n",
+	    event->atom);
 #endif
   
   tmp_list = current_retrievals;
@@ -1130,25 +1130,25 @@ gtk_selection_property_notify (GtkWidget        *widget,
 	break;
       tmp_list = tmp_list->next;
     }
-
+  
   if (!tmp_list)		/* No retrieval in progress */
     return FALSE;
-
+  
   if (info->offset < 0)		/* We haven't got the SelectionNotify
 				   for this retrieval yet */
     return FALSE;
-
+  
   info->idle_time = 0;
   
   length = gdk_selection_property_get (widget->window, &new_buffer, 
 				       &type, &format);
   gdk_property_delete (widget->window, event->atom);
-
+  
   /* We could do a lot better efficiency-wise by paying attention to
      what length was sent in the initial INCR transaction, instead of
      doing memory allocation at every step. But its only guaranteed to
      be a _lower bound_ (pretty useless!) */
-
+  
   if (length == 0 || type == GDK_NONE)		/* final zero length portion */
     {
       /* Info structure will be freed in timeout */
@@ -1164,18 +1164,18 @@ gtk_selection_property_notify (GtkWidget        *widget,
       if (!info->buffer)
 	{
 #ifdef DEBUG_SELECTION
-	  g_print("Start - Adding %d bytes at offset 0\n",
-		  length);
+	  g_message("Start - Adding %d bytes at offset 0\n",
+		    length);
 #endif
 	  info->buffer = new_buffer;
 	  info->offset = length;
 	}
       else
 	{
-
+	  
 #ifdef DEBUG_SELECTION
-	  g_print("Appending %d bytes at offset %d\n",
-		  length,info->offset);
+	  g_message("Appending %d bytes at offset %d\n",
+		    length,info->offset);
 #endif
 	  /* We copy length+1 bytes to preserve guaranteed null termination */
 	  info->buffer = g_realloc (info->buffer, info->offset+length+1);
@@ -1184,7 +1184,7 @@ gtk_selection_property_notify (GtkWidget        *widget,
 	  g_free (new_buffer);
 	}
     }
-
+  
   return TRUE;
 }
 
@@ -1203,7 +1203,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
-
+  
   tmp_list = current_retrievals;
   while (tmp_list)
     {
@@ -1233,7 +1233,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
       
       return TRUE;		/* timeout will happen again */
     }
-
+  
 }
 
 /*************************************************************
@@ -1251,15 +1251,15 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
 				guchar *buffer, gint length)
 {
   GtkSelectionData data;
-
+  
   data.selection = info->selection;
   data.target = info->target;
   data.type = type;
   data.format = format;
-
+  
   data.length = length;
   data.data = buffer;
-
+  
   gtk_signal_emit_by_name (GTK_OBJECT(info->widget),
 			   "selection_received", &data);
 }
@@ -1284,12 +1284,12 @@ gtk_selection_invoke_handler (GtkWidget        *widget,
 {
   GList *tmp_list;
   GtkSelectionHandler *handler;
-
+  
   g_return_if_fail (widget != NULL);
   
   tmp_list = gtk_object_get_data (GTK_OBJECT (widget),
 				  gtk_selection_handler_key);
-
+  
   while (tmp_list)
     {
       handler = (GtkSelectionHandler *)tmp_list->data;
@@ -1298,7 +1298,7 @@ gtk_selection_invoke_handler (GtkWidget        *widget,
 	break;
       tmp_list = tmp_list->next;
     }
-
+  
   if (tmp_list == NULL)
     gtk_selection_default_handler (widget, data);
   else
@@ -1311,7 +1311,7 @@ gtk_selection_invoke_handler (GtkWidget        *widget,
 	  GTK_VALUE_BOXED(args[0]) = data;
 	  args[1].type = GTK_TYPE_NONE;
 	  args[1].name = NULL;
-
+	  
 	  handler->marshal (GTK_OBJECT(widget), handler->data, 1, args);
 	}
       else
@@ -1357,10 +1357,10 @@ gtk_selection_default_handler (GtkWidget        *widget,
 				      sizeof (guint32));
 	      return;
 	    }
-	      
+	  
 	  tmp_list = tmp_list->next;
 	}
-
+      
       data->length = -1;
     }
   else if (data->target == gtk_selection_atoms[TARGETS])
@@ -1370,40 +1370,40 @@ gtk_selection_default_handler (GtkWidget        *widget,
       gint count;
       GList *tmp_list;
       GtkSelectionHandler *handler;
-
+      
       count = 3;
       tmp_list = gtk_object_get_data (GTK_OBJECT(widget),
 				      gtk_selection_handler_key);
       while (tmp_list)
 	{
 	  handler = (GtkSelectionHandler *)tmp_list->data;
-
+	  
 	  if (handler->selection == data->selection)
 	    count++;
 	  
 	  tmp_list = tmp_list->next;
 	}
-
+      
       data->type = GDK_SELECTION_TYPE_ATOM;
       data->format = 8*sizeof (GdkAtom);
       data->length = count*sizeof (GdkAtom);
-
+      
       p = g_new (GdkAtom, count);
       data->data = (guchar *)p;
-
+      
       *p++ = gtk_selection_atoms[TIMESTAMP];
       *p++ = gtk_selection_atoms[TARGETS];
       *p++ = gtk_selection_atoms[MULTIPLE];
-
+      
       tmp_list = gtk_object_get_data (GTK_OBJECT(widget),
 				      gtk_selection_handler_key);
       while (tmp_list)
 	{
 	  handler = (GtkSelectionHandler *)tmp_list->data;
-
+	  
 	  if (handler->selection == data->selection)
 	    *p++ = handler->target;
-
+	  
 	  tmp_list = tmp_list->next;
 	}
     }
@@ -1418,12 +1418,12 @@ GtkSelectioData*
 gtk_selection_data_copy (GtkSelectionData *data)
 {
   GtkSelectionData *new_data;
-
+  
   g_return_val_if_fail (data != NULL, NULL);
-
+  
   new_data = g_new (GtkSelectionData, 1);
   *new_data = *data;
-
+  
   return new_data;
 }
 
@@ -1431,6 +1431,6 @@ void
 gtk_selection_data_free (GtkSelectionData *data)
 {
   g_return_if_fail (data != NULL);
-
+  
   g_free (data);
 }

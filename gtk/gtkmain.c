@@ -361,56 +361,11 @@ gtk_init (int	 *argc,
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
-	      GLogLevelFlags fatal_levels;
+	      GLogLevelFlags fatal_mask;
 
-	      fatal_levels = g_log_set_fatal_mask (g_log_domain_glib, G_LOG_FATAL_MASK);
-	      fatal_levels |= G_LOG_LEVEL_WARNING;
-              g_log_set_fatal_mask (g_log_domain_glib, fatal_levels);
-	      (*argv)[i] = NULL;
-	    }
-	  else if (strcmp ("--gdk-fatal-warnings", (*argv)[i]) == 0)
-	    {
-	      GLogLevelFlags fatal_levels;
-
-	      fatal_levels = g_log_set_fatal_mask ("Gdk", G_LOG_FATAL_MASK);
-	      fatal_levels |= G_LOG_LEVEL_WARNING;
-              g_log_set_fatal_mask ("Gdk", fatal_levels);
-	      (*argv)[i] = NULL;
-	    }
-	  else if (strcmp ("--gtk-fatal-warnings", (*argv)[i]) == 0)
-	    {
-	      GLogLevelFlags fatal_levels;
-
-	      fatal_levels = g_log_set_fatal_mask (G_LOG_DOMAIN, G_LOG_FATAL_MASK);
-	      fatal_levels |= G_LOG_LEVEL_WARNING;
-              g_log_set_fatal_mask (G_LOG_DOMAIN, fatal_levels);
-	      (*argv)[i] = NULL;
-	    }
-	  else if (strcmp ("--g-fatal-checks", (*argv)[i]) == 0)
-	    {
-	      GLogLevelFlags fatal_levels;
-
-	      fatal_levels = g_log_set_fatal_mask (g_log_domain_glib, G_LOG_FATAL_MASK);
-	      fatal_levels |= G_LOG_LEVEL_CRITICAL;
-              g_log_set_fatal_mask (g_log_domain_glib, fatal_levels);
-	      (*argv)[i] = NULL;
-	    }
-	  else if (strcmp ("--gdk-fatal-checks", (*argv)[i]) == 0)
-	    {
-	      GLogLevelFlags fatal_levels;
-
-	      fatal_levels = g_log_set_fatal_mask ("Gdk", G_LOG_FATAL_MASK);
-	      fatal_levels |= G_LOG_LEVEL_CRITICAL;
-              g_log_set_fatal_mask ("Gdk", fatal_levels);
-	      (*argv)[i] = NULL;
-	    }
-	  else if (strcmp ("--gtk-fatal-checks", (*argv)[i]) == 0)
-	    {
-	      GLogLevelFlags fatal_levels;
-
-	      fatal_levels = g_log_set_fatal_mask (G_LOG_DOMAIN, G_LOG_FATAL_MASK);
-	      fatal_levels |= G_LOG_LEVEL_CRITICAL;
-              g_log_set_fatal_mask (G_LOG_DOMAIN, fatal_levels);
+	      fatal_mask = g_log_set_always_fatal (G_LOG_FATAL_MASK);
+	      fatal_mask |= G_LOG_LEVEL_WARNING | G_LOG_LEVEL_CRITICAL;
+              g_log_set_always_fatal (fatal_mask);
 	      (*argv)[i] = NULL;
 	    }
 	  i += 1;
@@ -454,9 +409,10 @@ gtk_init (int	 *argc,
 
   g_free (current_locale);
 
-  GTK_NOTE (MISC, g_print("%s multi-byte string functions.\n", 
-			  gtk_use_mb ? "Using" : "Not using"));
-
+  GTK_NOTE (MISC,
+	    g_message ("%s multi-byte string functions.\n", 
+		       gtk_use_mb ? "Using" : "Not using"));
+  
   /* Initialize the default visual and colormap to be
    *  used in creating widgets. (We want to use the system
    *  defaults so as to be nice to the colormap).
