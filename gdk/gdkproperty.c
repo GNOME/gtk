@@ -54,7 +54,7 @@ gdk_atom_intern (const gchar *atom_name,
   return retval;
 }
 
-gchar *
+gchar*
 gdk_atom_name (GdkAtom atom)
 {
   gchar *t;
@@ -70,7 +70,7 @@ gdk_atom_name (GdkAtom atom)
   t = XGetAtomName (gdk_display, atom);
   gdk_error_warnings = old_error_warnings;
 
-  if (gdk_error_code == -1)
+  if (gdk_error_code)
     {
       if (t)
 	XFree (t);

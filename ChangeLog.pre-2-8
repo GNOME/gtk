@@ -1,3 +1,42 @@
+Thu Jun 24 17:06:23 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkevents.c (gdk_event_translate): removed old ""Got event for
+	unknown window:" message. disabled ConfigureNotify discarding code,
+	because it led to events being processed out of order.
+
+Thu Jun 24 12:22:02 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkglobals.c: preinitialize gdk_error_code to 0.
+
+	* gdk/gdkevents.c (gdk_event_send_client_message_to_all_recurse): since
+	we export this function, supress error warnings and don't reset the
+	error code in the first half of this function.
+
+	* gdk/gdk.c (gdk_x_error): set gdk_error_code to the actuall X error
+	code (instead of just -1) so gdk_error_trap_pop() reveals something
+	actually informative about the error that happened.
+
+	* gdk/*.c:
+	don't rely on gdk_error_code being -1 if an error occoured, but just
+	gdk_error_code != 0.
+
+Thu Jun 24 11:50:07 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkevents.c (gdk_event_apply_filters): advance the filter list
+	pointer *before* invoking the filter function, so we at least don't
+	crash if a filter is removed that is currently executed. window filters
+	*really* need to be made truely reentrant at some point.
+
+Wed Jun 16 20:28:34 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkevents.c (gdk_event_translate): don't segfault for
+	window==NULL in ConfigureNotify.
+
+Mon Jun 14 11:10:15 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkevents.c (gdk_event_translate): print the atom name in the
+	PropertyNotify debug messages.
+
 Thu Jun 17 13:57:31 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* docs/gtk_tut.sgml: Removed references to

@@ -386,7 +386,7 @@ gdk_window_cache_new (void)
 			    xwa.x, xwa.y, xwa.width, xwa.height,
 			    xwa.map_state != IsUnmapped);
 
-      if (gdk_error_code != 0)
+      if (gdk_error_code)
 	gdk_error_code = 0;
       else
 	{
@@ -440,9 +440,10 @@ get_client_window_at_coords_recurse (Window  win,
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
 
@@ -457,9 +458,10 @@ get_client_window_at_coords_recurse (Window  win,
   XTranslateCoordinates (gdk_display, gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
   
@@ -468,7 +470,7 @@ get_client_window_at_coords_recurse (Window  win,
 		 &root, &tmp_parent, &children, &nchildren) == 0)
     return 0;
 
-  if (gdk_error_code == 0)
+  if (!gdk_error_code)
     {
       for (i = nchildren - 1; (i >= 0) && (child == None); i--)
 	{
@@ -476,7 +478,7 @@ get_client_window_at_coords_recurse (Window  win,
 	  
 	  XGetWindowAttributes (gdk_display, children[i], &xwa);
 	  
-	  if (gdk_error_code != 0)
+	  if (gdk_error_code)
 	    gdk_error_code = 0;
 	  else if ((xwa.map_state == IsViewable) && (xwa.class == InputOutput) &&
 		   (x >= xwa.x) && (x < xwa.x + (gint)xwa.width) &&
@@ -565,9 +567,10 @@ get_client_window_at_coords_recurse (Window  win,
 		      wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
   
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
 
@@ -580,9 +583,10 @@ get_client_window_at_coords_recurse (Window  win,
   XTranslateCoordinates (gdk_display, gdk_root_window, win,
 			 x_root, y_root, &dest_x, &dest_y, &child);
 
-  if (gdk_error_code != 0)
+  if (gdk_error_code)
     {
       gdk_error_code = 0;
+
       return None;
     }
 
@@ -619,7 +623,7 @@ get_client_window_at_coords (Window  ignore,
 
 	  XGetWindowAttributes (gdk_display, children[i], &xwa);
 
-	  if (gdk_error_code != 0)
+	  if (gdk_error_code)
 	    gdk_error_code = 0;
 	  else if ((xwa.map_state == IsViewable) &&
 		   (x_root >= xwa.x) && (x_root < xwa.x + (gint)xwa.width) &&

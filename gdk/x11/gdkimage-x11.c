@@ -258,7 +258,7 @@ gdk_image_new (GdkImageType  type,
 	      XSync (private->xdisplay, False);
 
 	      gdk_error_warnings = 1;
-	      if (gdk_error_code == -1)
+	      if (gdk_error_code)
 		{
 		  /* this is the common failure case so omit warning */
 		  XDestroyImage (private->ximage);
@@ -269,6 +269,7 @@ gdk_image_new (GdkImageType  type,
 		  g_free (image);
 
 		  gdk_use_xshm = False;
+
 		  return NULL;
 		}
 	      

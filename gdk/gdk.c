@@ -1035,20 +1035,23 @@ static int
 gdk_x_error (Display	 *display,
 	     XErrorEvent *error)
 {
-  char buf[64];
-  
-  if (gdk_error_warnings)
+  if (error->error_code)
     {
-      XGetErrorText (display, error->error_code, buf, 63);
-      g_error ("%s\n  serial %ld error_code %d request_code %d minor_code %d\n", 
-	       buf, 
-	       error->serial, 
-	       error->error_code, 
-	       error->request_code,
-	       error->minor_code);
+      if (gdk_error_warnings)
+	{
+	  char buf[64];
+	  
+	  XGetErrorText (display, error->error_code, buf, 63);
+	  g_error ("%s\n  serial %ld error_code %d request_code %d minor_code %d\n", 
+		   buf, 
+		   error->serial, 
+		   error->error_code, 
+		   error->request_code,
+		   error->minor_code);
+	}
+      gdk_error_code = error->error_code;
     }
   
-  gdk_error_code = -1;
   return 0;
 }
 
@@ -1107,7 +1110,7 @@ gdk_error_trap_push (void)
     }
   else
     {
-      node = g_slist_alloc();
+      node = g_slist_alloc ();
       node->data = g_new (GdkErrorTrap, 1);
     }
 
@@ -1169,7 +1172,7 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
   XSync (gdk_display, False);
   gdk_error_warnings = old_warnings;
   
-  return result && (gdk_error_code != -1);
+  return result && !gdk_error_code;
 }
 
 #ifndef HAVE_XCONVERTCASE

@@ -933,7 +933,6 @@ gdk_event_apply_filters (XEvent *xevent,
 			 GdkEvent *event,
 			 GList *filters)
 {
-  GdkEventFilter *filter;
   GList *tmp_list;
   GdkFilterReturn result;
   
@@ -941,13 +940,12 @@ gdk_event_apply_filters (XEvent *xevent,
   
   while (tmp_list)
     {
-      filter = (GdkEventFilter*) tmp_list->data;
-      
-      result = (*filter->function) (xevent, event, filter->data);
-      if (result !=  GDK_FILTER_CONTINUE)
-	return result;
+      GdkEventFilter *filter = (GdkEventFilter*) tmp_list->data;
       
       tmp_list = tmp_list->next;
+      result = filter->function (xevent, event, filter->data);
+      if (result !=  GDK_FILTER_CONTINUE)
+	return result;
     }
   
   return GDK_FILTER_CONTINUE;
@@ -1066,9 +1064,6 @@ gdk_event_translate (GdkEvent *event,
 	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
     }
 #endif
-
-  if (window == NULL)
-    g_message ("Got event for unknown window: %#lx\n", xevent->xany.window);
 
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so
@@ -1671,9 +1666,10 @@ gdk_event_translate (GdkEvent *event,
     case ConfigureNotify:
       /* Print debugging info.
        */
-      while ((XPending (gdk_display) > 0) &&
-	     XCheckTypedWindowEvent(gdk_display, xevent->xany.window,
-				    ConfigureNotify, xevent))
+      while (0 && /* don't reorder ConfigureNotify events at all */
+	     XPending (gdk_display) > 0 &&
+	     XCheckTypedWindowEvent (gdk_display, xevent->xany.window,
+				     ConfigureNotify, xevent))
 	{
 	  GdkFilterReturn result;
 	  
@@ -1709,13 +1705,13 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xconfigure.border_width,
 			   xevent->xconfigure.above,
 			   xevent->xconfigure.override_redirect));
-      
-      if (!window_private->destroyed &&
+      if (window &&
+	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.configure_event)
 	gdk_input_vtable.configure_event (&xevent->xconfigure, window);
 
-      if (window_private->window_type == GDK_WINDOW_CHILD)
+      if (!window || window_private->window_type == GDK_WINDOW_CHILD)
 	return_val = FALSE;
       else
 	{
@@ -1761,8 +1757,14 @@ gdk_event_translate (GdkEvent *event,
       /* Print debugging info.
        */
       GDK_NOTE (EVENTS,
-		g_message ("property notify:\twindow: %ld",
-			   xevent->xproperty.window));
+		gchar *atom = gdk_atom_name (xevent->xproperty.atom);
+		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
+			   xevent->xproperty.window,
+			   xevent->xproperty.atom,
+			   atom ? "\"" : "",
+			   atom ? atom : "unknown",
+			   atom ? "\"" : "");
+		);
       
       event->property.type = GDK_PROPERTY_NOTIFY;
       event->property.window = window;
@@ -2145,29 +2147,29 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
 					      guint    level)
 {
   static GdkAtom wm_state_atom = GDK_NONE;
-
   Atom type = None;
   int format;
   unsigned long nitems, after;
   unsigned char *data;
-  
   Window *ret_children, ret_root, ret_parent;
   unsigned int ret_nchildren;
-  int i;
-  
+  gint old_warnings = gdk_error_warnings;
   gboolean send = FALSE;
   gboolean found = FALSE;
+  int i;
 
   if (!wm_state_atom)
     wm_state_atom = gdk_atom_intern ("WM_STATE", FALSE);
 
+  gdk_error_warnings = FALSE;
   gdk_error_code = 0;
   XGetWindowProperty (gdk_display, xid, wm_state_atom, 0, 0, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, &data);
 
   if (gdk_error_code)
     {
-      gdk_error_code = 0;
+      gdk_error_warnings = old_warnings;
+
       return FALSE;
     }
 
@@ -2179,18 +2181,20 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   else
     {
       /* OK, we're all set, now let's find some windows to send this to */
-      if (XQueryTree(gdk_display, xid, &ret_root, &ret_parent,
-		     &ret_children, &ret_nchildren) != True)
-	return FALSE;
-      
-      if (gdk_error_code)
-	return FALSE;
+      if (XQueryTree (gdk_display, xid, &ret_root, &ret_parent,
+		      &ret_children, &ret_nchildren) != True ||
+	  gdk_error_code)
+	{
+	  gdk_error_warnings = old_warnings;
+
+	  return FALSE;
+	}
 
       for(i = 0; i < ret_nchildren; i++)
-	if (gdk_event_send_client_message_to_all_recurse(xev, ret_children[i], level + 1))
+	if (gdk_event_send_client_message_to_all_recurse (xev, ret_children[i], level + 1))
 	  found = TRUE;
 
-      XFree(ret_children);
+      XFree (ret_children);
     }
 
   if (send || (!found && (level == 1)))
@@ -2198,6 +2202,8 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
       xev->xclient.window = xid;
       gdk_send_xevent (xid, False, NoEventMask, xev);
     }
+
+  gdk_error_warnings = old_warnings;
 
   return (send || found);
 }
