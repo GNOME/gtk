@@ -1,5 +1,16 @@
 2004-03-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (update_appearance): Only hide the
+	"create folder" button in OPEN mode; all the others should show it
+	it.
+	(get_paths_foreach): Handle the editable row.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_create_folder):
+	Force a re-get of the folder so that the new directory gets added
+	to its hash table of file info.
+
+2004-03-15  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (update_from_entry): In the Save
 	modes, set the Name entry of the file chooser if we get a
 	nonexistent filename from the file entry.  Fixes #135911.

@@ -1216,7 +1216,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
       GtkFileSystemVolume *volume;
 
       volume = l->data;
-      
+
       if (impl->local_only)
 	{
 	  GtkFilePath *base_path = gtk_file_system_volume_get_base_path (impl->file_system, volume);
@@ -3155,8 +3155,7 @@ update_appearance (GtkFileChooserDefault *impl)
 	_gtk_file_system_model_set_show_files (impl->browse_files_model, TRUE);
     }
 
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN
-      || impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
     gtk_widget_hide (impl->browse_new_folder_button);
   else
     gtk_widget_show (impl->browse_new_folder_button);
@@ -3700,7 +3699,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 		   GTK_FILE_SYSTEM_ERROR,
 		   GTK_FILE_SYSTEM_ERROR_FAILED,
 		   _("Can't change to folder because it isn't local"));
-      
+
       return FALSE;
     }
 
@@ -3913,6 +3912,8 @@ get_paths_foreach (GtkTreeModel *model,
   gtk_tree_model_sort_convert_iter_to_child_iter (info->impl->sort_model, &sel_iter, iter);
 
   file_path = _gtk_file_system_model_get_path (GTK_FILE_SYSTEM_MODEL (fs_model), &sel_iter);
+  if (!file_path)
+    return; /* We are on the editable row */
 
   if (!info->path_from_entry
       || gtk_file_path_compare (info->path_from_entry, file_path) != 0)
@@ -5018,7 +5019,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
     {
       title = _("Open Location");
     }
-  else 
+  else
     {
       g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
@@ -5062,7 +5063,7 @@ location_popup_handler (GtkFileChooserDefault *impl)
 	    {
 	      gtk_widget_grab_focus (impl->browse_files_tree_view);
 	    }
-	  else 
+	  else
 	    {
 	      g_assert (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE
 			|| impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);

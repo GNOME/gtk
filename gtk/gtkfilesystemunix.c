@@ -501,12 +501,31 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
       folder_unix = g_hash_table_lookup (system_unix->folder_hash, parent);
       if (folder_unix)
 	{
+	  GtkFileInfoType types;
+	  GtkFilePath *parent_path;
 	  GSList *paths;
+	  GtkFileFolder *folder;
 
-	  paths = g_slist_append (NULL, (GtkFilePath *) path);
-	  g_signal_emit_by_name (folder_unix, "files-added", paths);
-	  g_slist_free (paths);
+	  /* This is sort of a hack.  We re-get the folder, to ensure that the
+	   * newly-created directory gets read into the folder's info hash table.
+	   */
+
+	  types = folder_unix->types;
+
+	  parent_path = gtk_file_path_new_dup (parent);
+	  folder = gtk_file_system_get_folder (file_system, parent_path, types, NULL);
+	  gtk_file_path_free (parent_path);
+
+	  if (folder)
+	    {
+	      paths = g_slist_append (NULL, (GtkFilePath *) path);
+	      g_signal_emit_by_name (folder, "files-added", paths);
+	      g_slist_free (paths);
+	      g_object_unref (folder);
+	    }
 	}
+
+      g_free (parent);
     }
 
   return TRUE;
