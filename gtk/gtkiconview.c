@@ -3267,7 +3267,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
 
   g_object_notify (G_OBJECT (icon_view), "model");  
 
-  if (GTK_WIDGET_REALIZE (icon_view))
+  if (GTK_WIDGET_REALIZED (icon_view))
     gtk_widget_queue_resize (GTK_WIDGET (icon_view));
 }
 
