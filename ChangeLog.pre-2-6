@@ -1,3 +1,8 @@
+2004-10-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_add_current_folder): 
+	Don't leak volume. (#155400, Morten Welinder)
+
 2004-10-13  Crispin Flowerday  <gnome@flowerday.cx>
 
 	* NEWS: Fix a typo in my name (it's Crispin, not Chrispin)
@@ -10,8 +15,9 @@
 
 	* configure.in: Bump version.
 
-	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Acknowledge the fact
-	that invariants are broken and loop all the way up to the resize container.
+	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Acknowledge 
+	the fact that invariants are broken and loop all the way up to 
+	the resize container.
 
 	* === Released 2.4.12 ===
 
