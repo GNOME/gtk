@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-02-25 10:34+0100\n"
-"PO-Revision-Date: 2002-02-25 10:34+0100\n"
+"POT-Creation-Date: 2002-02-26 11:39+0100\n"
+"PO-Revision-Date: 2002-02-26 11:39+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -102,8 +102,8 @@ msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
 msgstr ""
-"Misslyckades med att stänga \"%s\" vid skrivning av bilden, all data kanske "
-"inte har sparats korrekt: %s"
+"Misslyckades med att stänga \"%s\" när bilden skrevs, all data kanske inte "
+"har sparats korrekt: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -211,7 +211,7 @@ msgstr "Filen verkar inte vara en GIF-fil"
 #: gdk-pixbuf/io-gif.c:1071
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr "Version %s av GIF-filformatet stöds inte"
+msgstr "Version %s av filformatet GIF stöds inte"
 
 #: gdk-pixbuf/io-gif.c:1146
 msgid "GIF image contained a frame appearing outside the image bounds."
@@ -238,7 +238,7 @@ msgstr "GIF-bilden var trunkerad eller ofullständig."
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "Fel vid tolkning av JPEG-fil (%s)"
+msgstr "Fel vid tolkning av JPEG-bildfil (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:234
 msgid ""
@@ -420,7 +420,7 @@ msgstr "Oväntat bitdjup för färgkarteposter"
 
 #: gdk-pixbuf/io-tga.c:607
 msgid "Can't allocate TGA header memory"
-msgstr "Kan inte allokera TGA-huvudmeny"
+msgstr "Kan inte allokera TGA-huvudminne"
 
 #: gdk-pixbuf/io-tga.c:618
 msgid "TGA image has invalid dimensions"
@@ -508,7 +508,7 @@ msgstr "Misslyckades med att öppna TIFF-bild"
 
 #: gdk-pixbuf/io-tiff.c:283
 msgid "TIFFClose operation failed"
-msgstr "Händelsen TIFFClose misslyckades"
+msgstr "Åtgärden TIFFClose misslyckades"
 
 #: gdk-pixbuf/io-tiff.c:416 gdk-pixbuf/io-tiff.c:430
 msgid "Failed to load TIFF image"
@@ -723,19 +723,19 @@ msgstr "Minsta höjd på knappar inuti rutan"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr "Intern utfyllnad i bredd mellan barn"
+msgstr "Intern utfyllnad i bredd runt barn"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
-msgstr "Mängd att minska barnens storlek på var sida"
+msgstr "Mängd att öka barns storlek på var sida"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr "Intern utfyllnad i höjd mellan barn"
+msgstr "Intern utfyllnad i höjd runt barn"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
-msgstr "Mängd att minska barnens storlek överst och nederst"
+msgstr "Mängd att öka barns storlek överst och nederst"
 
 #: gtk/gtkbbox.c:151
 msgid "Layout style"
@@ -1322,7 +1322,7 @@ msgstr "Har palett"
 
 #: gtk/gtkcolorsel.c:1706
 msgid "Whether a palette should be used"
-msgstr "Huruvida en palett ska visas"
+msgstr "Huruvida en palett ska användas"
 
 #: gtk/gtkcolorsel.c:1712
 msgid "Current Color"
@@ -2542,7 +2542,7 @@ msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
 #: gtk/gtkrc.c:3329
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Sökvägselement i bild: \"%s\" måste vara absolut, %s, rad %d"
+msgstr "Sökvägselement till bild: \"%s\" måste vara absolut, %s, rad %d"
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
@@ -3288,7 +3288,7 @@ msgstr "_Återskapa"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr "_Understryk"
+msgstr "_Stryk under"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
@@ -3385,7 +3385,7 @@ msgstr "Taggnamn"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr "Namn som används för att peka på nästa tagg"
+msgstr "Namn som används för att peka på texttaggen"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
@@ -3624,7 +3624,7 @@ msgstr "LRM-märke för _vänster-till-höger"
 
 #: gtk/gtktextutil.c:47
 msgid "RLM _Right-to-left mark"
-msgstr "RLM för _höger-till-vänster"
+msgstr "RLM-märke för _höger-till-vänster"
 
 #: gtk/gtktextutil.c:48
 msgid "LRE Left-to-right _embedding"
@@ -4257,7 +4257,7 @@ msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
-"Om SANT är fönstret modalt (andra fönster är inte användbara då detta "
+"Om SANT är fönstret modalt (andra fönster är inte användbara så länge detta "
 "fönster visas)."
 
 #: gtk/gtkwindow.c:450
@@ -4266,7 +4266,7 @@ msgstr "Fönsterposition"
 
 #: gtk/gtkwindow.c:451
 msgid "The initial position of the window."
-msgstr "Den initiala positionen på fönstret."
+msgstr "Den första positionen på fönstret."
 
 #: gtk/gtkwindow.c:459
 msgid "Default Width"
@@ -4275,7 +4275,7 @@ msgstr "Standardbredd"
 #: gtk/gtkwindow.c:460
 msgid ""
 "The default width of the window, used when initially showing the window."
-msgstr "Standardbredden på fönstret, används då fönster initialt visas."
+msgstr "Standardbredden på fönstret, används då fönstret först visas."
 
 #: gtk/gtkwindow.c:469
 msgid "Default Height"
@@ -4284,7 +4284,7 @@ msgstr "Standardhöjd"
 #: gtk/gtkwindow.c:470
 msgid ""
 "The default height of the window, used when initially showing the window."
-msgstr "Standardhöjden på fönstret, används då fönster initialt visas."
+msgstr "Standardhöjden på fönstret, används då fönstret först visas."
 
 #: gtk/gtkwindow.c:479
 msgid "Destroy with Parent"
