@@ -1,3 +1,12 @@
+Fri Jul  4 22:57:18 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkasync.[ch] (_gdk_send_xevent_async): Add
+	a function to XSendEvent() and call a calback on
+	failure/success.
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_send_xevent): Short-circuit
+	messages to the same process, use _gdk_send_xevent_async().
+
 Fri Jul  4 22:26:27 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.[ch] gdkevents-x11.c: Split

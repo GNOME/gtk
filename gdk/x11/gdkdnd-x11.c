@@ -30,6 +30,7 @@
 
 #include "gdk.h"          /* For gdk_flush() */
 #include "gdkx.h"
+#include "gdkasync.h"
 #include "gdkdnd.h"
 #include "gdkproperty.h"
 #include "gdkprivate-x11.h"
@@ -98,29 +99,24 @@ static GdkFilterReturn motif_dnd_filter (GdkXEvent *xev,
 					 GdkEvent  *event,
 					 gpointer   data);
 
-static GdkFilterReturn xdnd_enter_filter (GdkXEvent *xev,
-					  GdkEvent  *event,
-					  gpointer   data);
-
-static GdkFilterReturn xdnd_leave_filter (GdkXEvent *xev,
-					  GdkEvent  *event,
-					  gpointer   data);
-
+static GdkFilterReturn xdnd_enter_filter    (GdkXEvent *xev,
+					     GdkEvent  *event,
+					     gpointer   data);
+static GdkFilterReturn xdnd_leave_filter    (GdkXEvent *xev,
+					     GdkEvent  *event,
+					     gpointer   data);
 static GdkFilterReturn xdnd_position_filter (GdkXEvent *xev,
 					     GdkEvent  *event,
 					     gpointer   data);
-
-static GdkFilterReturn xdnd_status_filter (GdkXEvent *xev,
-					   GdkEvent  *event,
-					   gpointer   data);
-
+static GdkFilterReturn xdnd_status_filter   (GdkXEvent *xev,
+					     GdkEvent  *event,
+					     gpointer   data);
 static GdkFilterReturn xdnd_finished_filter (GdkXEvent *xev,
-					    GdkEvent  *event,
-					    gpointer   data);
-
-static GdkFilterReturn xdnd_drop_filter (GdkXEvent *xev,
-					 GdkEvent  *event,
-					 gpointer   data);
+					     GdkEvent  *event,
+					     gpointer   data);
+static GdkFilterReturn xdnd_drop_filter     (GdkXEvent *xev,
+					     GdkEvent  *event,
+					     gpointer   data);
 
 static void   xdnd_manage_source_filter (GdkDragContext *context,
 					 GdkWindow      *window,
@@ -133,6 +129,18 @@ static void gdk_drag_context_finalize   (GObject              *object);
 static gpointer parent_class = NULL;
 static GList *contexts;
 
+const static struct {
+  const char *atom_name;
+  GdkFilterFunc func;
+} xdnd_filters[] = {
+  { "XdndEnter",    xdnd_enter_filter },
+  { "XdndLeave",    xdnd_leave_filter },
+  { "XdndPosition", xdnd_position_filter },
+  { "XdndStatus",   xdnd_status_filter },
+  { "XdndFinished", xdnd_finished_filter },
+  { "XdndDrop",     xdnd_drop_filter },
+};
+	      
 GType
 gdk_drag_context_get_type (void)
 {
@@ -2090,28 +2098,116 @@ xdnd_set_actions (GdkDragContext *context)
   private->xdnd_actions = context->actions;
 }
 
-/*************************************************************
- * xdnd_send_xevent:
- *     Like gdk_send_event, but if the target is the root
- *     window, sets an event mask of ButtonPressMask, otherwise
- *     an event mask of 0.
- *   arguments:
- *     
- *   results:
- *************************************************************/
-
-static gboolean
-xdnd_send_xevent (GdkDisplay *display, 
-		  Window      window, 
-		  gboolean    propagate, 
-		  XEvent     *event_send)
+static void
+send_xevent_async_cb (Window   window,
+		      gboolean success,
+		      gpointer data)
 {
-  if (_gdk_x11_display_is_root_window (display, window))
-    return _gdk_send_xevent (display, window, propagate, ButtonPressMask, event_send);
-  else
-    return _gdk_send_xevent (display, window, propagate, 0, event_send);
+  GdkDragContext *context = data;
+  GDK_NOTE (DND,
+	    g_message ("Got async callback for #%lx, success = %d",
+		       window, success));
+
+  /* On failure, we immediately continue with the protocol
+   * so we don't end up blocking for a timeout
+   */
+  if (!success &&
+      context->dest_window &&
+      window == GDK_WINDOW_XID (context->dest_window))
+    {
+      GdkEvent temp_event;
+      GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+
+      g_object_unref (context->dest_window);
+      context->dest_window = NULL;
+      context->action = 0;
+
+      private->drag_status = GDK_DRAG_STATUS_DRAG;
+
+      temp_event.dnd.type = GDK_DRAG_STATUS;
+      temp_event.dnd.window = context->source_window;
+      temp_event.dnd.send_event = TRUE;
+      temp_event.dnd.context = context;
+      temp_event.dnd.time = GDK_CURRENT_TIME;
+
+      gdk_event_put (&temp_event);
+    }
+
+  g_object_unref (context);
 }
 
+
+static GdkDisplay *
+gdk_drag_context_get_display (GdkDragContext *context)
+{
+  if (context->source_window)
+    return GDK_DRAWABLE_DISPLAY (context->source_window);
+  else if (context->dest_window)
+    return GDK_DRAWABLE_DISPLAY (context->dest_window);
+
+  g_assert_not_reached ();
+  return NULL;
+}
+
+static void
+send_xevent_async (GdkDragContext *context,
+		   Window          window, 
+		   gboolean        propagate,
+		   glong           event_mask,
+		   XEvent         *event_send)
+{
+  GdkDisplay *display = gdk_drag_context_get_display (context);
+  
+  g_object_ref (context);
+
+  _gdk_send_xevent_async (display, window, propagate, event_mask, event_send,
+			  send_xevent_async_cb, context);
+}
+
+static gboolean
+xdnd_send_xevent (GdkDragContext *context,
+		  GdkWindow      *window, 
+		  gboolean        propagate,
+		  XEvent         *event_send)
+{
+  GdkDisplay *display = gdk_drag_context_get_display (context);
+  Window xwindow;
+  glong event_mask;
+
+  /* We short-circuit messages to ourselves */
+  if (gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN &&
+      event_send->xany.type == ClientMessage)
+    {
+      gint i;
+      
+      for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
+	{
+	  if (gdk_x11_get_xatom_by_name_for_display (display, xdnd_filters[i].atom_name) ==
+	      event_send->xclient.message_type)
+	    {
+	      GdkEvent temp_event;
+	      temp_event.any.window = window;
+
+	      if  ((*xdnd_filters[i].func) (event_send, &temp_event, NULL) == GDK_FILTER_TRANSLATE)
+		gdk_event_put (&temp_event);
+	      
+	      return TRUE;
+	    }
+	}
+    }
+
+  xwindow = GDK_WINDOW_XWINDOW (window);
+  
+  if (_gdk_x11_display_is_root_window (display, xwindow))
+    event_mask = ButtonPressMask;
+  else
+    event_mask = 0;
+  
+  send_xevent_async (context, xwindow, propagate, event_mask, event_send);
+
+  return TRUE;
+}
+ 
 static void
 xdnd_send_enter (GdkDragContext *context)
 {
@@ -2154,8 +2250,7 @@ xdnd_send_enter (GdkDragContext *context)
 	}
     }
 
-  if (!xdnd_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+  if (!xdnd_send_xevent (context, context->dest_window,
 			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
@@ -2186,8 +2281,7 @@ xdnd_send_leave (GdkDragContext *context)
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+  if (!xdnd_send_xevent (context, context->dest_window,
 			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
@@ -2217,8 +2311,7 @@ xdnd_send_drop (GdkDragContext *context, guint32 time)
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!xdnd_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+  if (!xdnd_send_xevent (context, context->dest_window,
 			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
@@ -2252,8 +2345,7 @@ xdnd_send_motion (GdkDragContext *context,
   xev.xclient.data.l[3] = time;
   xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
 
-  if (!xdnd_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+  if (!xdnd_send_xevent (context, context->dest_window,
 			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
@@ -2700,36 +2792,21 @@ xdnd_drop_filter (GdkXEvent *xev,
 void
 _gdk_dnd_init (GdkDisplay *display)
 {
+  int i;
   init_byte_order ();
 
   gdk_display_add_client_message_filter (
 	display,
 	gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE),
 	motif_dnd_filter, NULL);
-  gdk_display_add_client_message_filter (
-	display,				     
-	gdk_atom_intern ("XdndEnter", FALSE),
-	xdnd_enter_filter, NULL);
-  gdk_display_add_client_message_filter (
-	display,				     
-	gdk_atom_intern ("XdndLeave", FALSE),
-	xdnd_leave_filter, NULL);
-  gdk_display_add_client_message_filter (
+  
+  for (i = 0; i < G_N_ELEMENTS (xdnd_filters); i++)
+    {
+      gdk_display_add_client_message_filter (
 	display,
-	gdk_atom_intern ("XdndPosition", FALSE),
-	xdnd_position_filter, NULL);
-  gdk_display_add_client_message_filter (
-	display,
-	gdk_atom_intern ("XdndStatus", FALSE),
-	xdnd_status_filter, NULL);
-  gdk_display_add_client_message_filter (
-	display,
-	gdk_atom_intern ("XdndFinished", FALSE),
-	xdnd_finished_filter, NULL);
-  gdk_display_add_client_message_filter (
-	display,				     
-	gdk_atom_intern ("XdndDrop", FALSE),
-	xdnd_drop_filter, NULL);
+	gdk_atom_intern (xdnd_filters[i].atom_name, FALSE),
+	xdnd_filters[i].func, NULL);
+    }
 }		      
 
 /* Source side */
@@ -3321,8 +3398,7 @@ gdk_drag_status (GdkDragContext   *context,
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = xdnd_action_to_atom (display, action);
       
-      if (!xdnd_send_xevent (display,
-			     GDK_DRAWABLE_XID (context->source_window),
+      if (!xdnd_send_xevent (context, context->source_window,
 			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
@@ -3421,8 +3497,7 @@ gdk_drop_finish (GdkDragContext   *context,
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
 
-      if (!xdnd_send_xevent (display,
-			     GDK_DRAWABLE_XID (context->source_window),
+      if (!xdnd_send_xevent (context, context->source_window,
 			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",

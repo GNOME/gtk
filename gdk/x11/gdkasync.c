@@ -47,16 +47,154 @@ in this Software without prior written authorization from The Open Group.
 #include "gdkasync.h"
 #include "gdkx.h"
 
+typedef struct _SendEventState SendEventState;
 typedef struct _SetInputFocusState SetInputFocusState;
 
-struct _SetInputFocusState
+struct _SendEventState
 {
   Display *dpy;
   Window window;
   _XAsyncHandler async;
+  gulong send_event_req;
+  gulong get_input_focus_req;
+  gboolean have_error;
+  GdkSendXEventCallback callback;
+  gpointer data;
+};
+
+struct _SetInputFocusState
+{
+  Display *dpy;
+  _XAsyncHandler async;
   gulong set_input_focus_req;
   gulong get_input_focus_req;
 };
+
+static Bool
+send_event_handler (Display *dpy,
+		    xReply  *rep,
+		    char    *buf,
+		    int      len,
+		    XPointer data)
+{
+  SendEventState *state = (SendEventState *)data;  
+
+  if (dpy->last_request_read == state->send_event_req)
+    {
+      if (rep->generic.type == X_Error)
+	{
+	  if (rep->error.errorCode == BadWindow)
+	    {
+	      state->have_error = TRUE;
+	      return True;
+	    }
+	}
+    }
+  else if (dpy->last_request_read == state->get_input_focus_req)
+    {
+      xGetInputFocusReply replbuf;
+      xGetInputFocusReply *repl;
+      
+      if (rep->generic.type != X_Error)
+	{
+	  repl = (xGetInputFocusReply *)
+	    _XGetAsyncReply(dpy, (char *)&replbuf, rep, buf, len,
+			    (sizeof(xGetInputFocusReply) - sizeof(xReply)) >> 2,
+			    True);
+	}
+
+      if (state->callback)
+	state->callback (state->window, !state->have_error, state->data);
+
+      DeqAsyncHandler(state->dpy, &state->async);
+
+      g_free (state);
+      
+      return True;
+    }
+
+  return False;
+}
+
+void
+_gdk_send_xevent_async (GdkDisplay           *display, 
+			Window                window, 
+			gboolean              propagate,
+			glong                 event_mask,
+			XEvent               *event_send,
+			GdkSendXEventCallback callback,
+			gpointer              data)
+{
+  Display *dpy;
+  SendEventState *state;
+  Status status;
+  
+  dpy = GDK_DISPLAY_XDISPLAY (display);
+
+  state = g_new (SendEventState, 1);
+
+  state->dpy = dpy;
+  state->window = window;
+  state->callback = callback;
+  state->data = data;
+  state->have_error = FALSE;
+  
+  LockDisplay(dpy);
+
+  state->async.next = dpy->async_handlers;
+  state->async.handler = send_event_handler;
+  state->async.data = (XPointer) state;
+  dpy->async_handlers = &state->async;
+
+  {
+    register xSendEventReq *req;
+    xEvent ev;
+    register Status (**fp)();
+    
+    /* call through display to find proper conversion routine */
+    
+    fp = &dpy->wire_vec[event_send->type & 0177];
+    if (*fp == NULL) *fp = _XEventToWire;
+    status = (**fp)(dpy, event_send, &ev);
+    
+    if (!status)
+      {
+	g_warning ("Error converting event to wire");
+	DeqAsyncHandler(dpy, &state->async);
+	UnlockDisplay(dpy);
+	SyncHandle();
+	g_free (state);
+
+	return;
+      }
+      
+    GetReq(SendEvent, req);
+    req->destination = window;
+    req->propagate = propagate;
+    req->eventMask = event_mask;
+    /* gross, matches Xproto.h */
+#ifdef WORD64			
+    memcpy ((char *) req->eventdata, (char *) &ev, SIZEOF(xEvent));
+#else    
+    memcpy ((char *) &req->event, (char *) &ev, SIZEOF(xEvent));
+#endif
+    
+    state->send_event_req = dpy->request;
+  }
+
+  /*
+   * XSync (dpy, 0)
+   */
+  {
+    xReq *req;
+    
+    GetEmptyReq(GetInputFocus, req);
+    state->get_input_focus_req = dpy->request;
+  }
+  
+  UnlockDisplay(dpy);
+  SyncHandle();
+}
 
 static Bool
 set_input_focus_handler (Display *dpy,
@@ -119,7 +257,6 @@ _gdk_x11_set_input_focus_safe (GdkDisplay             *display,
   state = g_new (SetInputFocusState, 1);
 
   state->dpy = dpy;
-  state->window = window;
   
   LockDisplay(dpy);
 

@@ -26,10 +26,21 @@
 
 G_BEGIN_DECLS
 
-void _gdk_x11_set_input_focus_safe (GdkDisplay             *display,
-				    Window                  window,
-				    int                     revert_to,
-				    Time                    time);
+typedef void (*GdkSendXEventCallback) (Window   window,
+				       gboolean success,
+				       gpointer data);
+
+void _gdk_send_xevent_async        (GdkDisplay            *display,
+				    Window                 window,
+				    gboolean               propagate,
+				    glong                  event_mask,
+				    XEvent                *event_send,
+				    GdkSendXEventCallback  callback,
+				    gpointer               data);
+void _gdk_x11_set_input_focus_safe (GdkDisplay            *display,
+				    Window                 window,
+				    int                    revert_to,
+				    Time                   time);
 
 G_END_DECLS
 
