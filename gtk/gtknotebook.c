@@ -94,6 +94,8 @@ struct _GtkNotebookPage
 
   GtkRequisition requisition;
   GtkAllocation allocation;
+
+  guint activate_mnemonic_signal;
 };
 
 #ifdef G_DISABLE_CHECKS
@@ -1972,6 +1974,10 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (page->child) && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
 
+  if (page->tab_label && page->activate_mnemonic_signal)
+    gtk_signal_disconnect (page->tab_label,
+			   page->activate_mnemonic_signal);
+
   gtk_widget_unparent (page->child);
 
   if (page->tab_label)
@@ -3618,6 +3624,35 @@ gtk_notebook_insert_page (GtkNotebook *notebook,
   gtk_notebook_insert_page_menu (notebook, child, tab_label, NULL, position);
 }
 
+
+static gint
+gtk_notebook_page_compare_tab (gconstpointer a,
+			       gconstpointer b)
+{
+  return (((GtkNotebookPage *) a)->tab_label != b);
+}
+
+static gboolean
+gtk_notebook_activate_mnemonic_switch_page (GtkWidget *child,
+					    gboolean overload,
+					    gpointer data)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (data);
+  GtkNotebookPage *page;
+  GList *list;
+
+  list = g_list_find_custom (notebook->children, child,
+			     gtk_notebook_page_compare_tab);
+  if (!list)  
+    return TRUE;
+
+
+  page = list->data;
+
+  gtk_notebook_switch_page (notebook, page,  -1);
+  return TRUE;
+}
+
 /**
  * gtk_notebook_insert_page_menu:
  * @notebook: a #GtkNotebook
@@ -3661,6 +3696,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
   page->allocation.height = 0;
   page->default_menu = FALSE;
   page->default_tab = FALSE;
+  page->activate_mnemonic_signal = 0;
    
   nchildren = g_list_length (notebook->children);
   if ((position < 0) || (position > nchildren))
@@ -3741,6 +3777,13 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 	    gtk_widget_hide (tab_label);
 	}
     }
+
+  if (tab_label)
+    page->activate_mnemonic_signal =
+      gtk_signal_connect (GTK_OBJECT (tab_label),
+			  "activate_mnemonic",
+			  (GtkSignalFunc) gtk_notebook_activate_mnemonic_switch_page,
+			  notebook);
 }
 
 /**

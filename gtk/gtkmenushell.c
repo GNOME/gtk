@@ -31,7 +31,7 @@
 #include "gtktearoffmenuitem.h" /* FIXME */
 #include "gtkmenushell.h"
 #include "gtksignal.h"
-
+#include "gtkwindow.h"
 
 #define MENU_SHELL_TIMEOUT   500
 
@@ -551,6 +551,7 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
 			  GdkEventKey *event)
 {
   GtkMenuShell *menu_shell;
+  GtkWidget *toplevel;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_SHELL (widget), FALSE);
@@ -566,6 +567,13 @@ gtk_menu_shell_key_press (GtkWidget	*widget,
 			     event->state))
     return TRUE;
 
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel) &&
+      gtk_window_activate_mnemonic (GTK_WINDOW (toplevel),
+				    event->keyval,
+				    event->state))
+    return TRUE;
+  
   if (gtk_accel_groups_activate (GTK_OBJECT (widget), event->keyval, event->state))
     return TRUE;
 

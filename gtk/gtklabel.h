@@ -29,6 +29,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkmisc.h>
+#include <gtk/gtkwindow.h>
 
 
 #ifdef __cplusplus
@@ -60,13 +61,16 @@ struct _GtkLabel
   guint   use_underline : 1;
   guint   use_markup : 1;
 
-  guint   accel_keyval;
+  guint   mnemonic_keyval;
   
   gchar  *text; 
   PangoAttrList *attrs;
   
   PangoLayout *layout;
 
+  GtkWidget *mnemonic_widget;
+  GtkWindow *mnemonic_window;
+  
   GtkLabelSelectionInfo *select_info;
 };
 
@@ -75,8 +79,9 @@ struct _GtkLabelClass
   GtkMiscClass parent_class;
 };
 
-GtkType    gtk_label_get_type       (void) G_GNUC_CONST;
-GtkWidget *gtk_label_new            (const char       *str);
+GtkType    gtk_label_get_type          (void) G_GNUC_CONST;
+GtkWidget *gtk_label_new               (const char       *str);
+GtkWidget *gtk_label_new_with_mnemonic (const char       *str);
 
 void                  gtk_label_set_text (GtkLabel   *label,
 					  const char *str);
@@ -87,22 +92,26 @@ void       gtk_label_set_attributes (GtkLabel         *label,
 
 void  gtk_label_set_markup            (GtkLabel    *label,
                                        const gchar *str);
-guint gtk_label_set_markup_with_accel (GtkLabel    *label,
-                                       const gchar *str);
-                                            
-guint gtk_label_get_accel_keyval   (GtkLabel    *label);
-void       gtk_label_set_justify   (GtkLabel         *label,
-				    GtkJustification  jtype);
-void       gtk_label_set_pattern   (GtkLabel         *label,
-				    const gchar      *pattern);
-void       gtk_label_set_line_wrap (GtkLabel         *label,
-				    gboolean          wrap);
+void  gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
+					  const gchar *str);
+
+guint gtk_label_get_mnemonic_keyval (GtkLabel    *label);
+void       gtk_label_set_justify    (GtkLabel         *label,
+				     GtkJustification  jtype);
+void       gtk_label_set_pattern    (GtkLabel         *label,
+				     const gchar      *pattern);
+void       gtk_label_set_line_wrap  (GtkLabel         *label,
+				     gboolean          wrap);
 /* Convenience function to set the name and pattern by parsing
  * a string with embedded underscores, and return the appropriate
  * key symbol for the accelerator.
  */
-guint       gtk_label_parse_uline   (GtkLabel         *label,
-				     const gchar      *string);
+guint gtk_label_parse_uline            (GtkLabel    *label,
+					const gchar *string);
+void  gtk_label_set_text_with_mnemonic (GtkLabel    *label,
+					const gchar *string);
+void  gtk_label_set_mnemonic_widget    (GtkLabel    *label,
+					GtkWidget   *widget);
 
 void     gtk_label_set_selectable (GtkLabel *label,
                                    gboolean  setting);

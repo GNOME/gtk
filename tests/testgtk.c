@@ -189,13 +189,13 @@ create_buttons (void)
       gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
 
       button[0] = gtk_button_new_with_label ("button1");
-      button[1] = gtk_button_new_accel ("_button2", accel_group);
+      button[1] = gtk_button_new_with_mnemonic ("_button2");
       button[2] = gtk_button_new_with_label ("button3");
-      button[3] = gtk_button_new_stock (GTK_STOCK_BUTTON_OK, NULL);
+      button[3] = gtk_button_new_from_stock (GTK_STOCK_BUTTON_OK);
       button[4] = gtk_button_new_with_label ("button5");
       button[5] = gtk_button_new_with_label ("button6");
       button[6] = gtk_button_new_with_label ("button7");
-      button[7] = gtk_button_new_stock (GTK_STOCK_BUTTON_CLOSE, accel_group);
+      button[7] = gtk_button_new_from_stock (GTK_STOCK_BUTTON_CLOSE);
       button[8] = gtk_button_new_with_label ("button9");
       
       gtk_signal_connect (GTK_OBJECT (button[0]), "clicked",
@@ -2079,8 +2079,6 @@ void create_labels (void)
   
   if (!window)
     {
-      guint keyval;
-      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
@@ -2188,24 +2186,23 @@ void create_labels (void)
       /* There's also a gtk_label_set_markup() without accel if you
        * don't have an accelerator key
        */
-      keyval =
-        gtk_label_set_markup_with_accel (GTK_LABEL (label),
-                                         "This <span foreground=\"blue\" background=\"orange\">label</span> has "
-                                         "<b>markup</b> _such as "
-                                         "<big><i>Big Italics</i></big>\n"
-                                         "<tt>Monospace font</tt>\n"
-                                         "<u>Underline!</u>\n"
-                                         "foo\n"
-                                         "<span foreground=\"green\" background=\"red\">Ugly colors</span>\n"
-                                         "and nothing on this line,\n"
-                                         "or this.\n"
-                                         "or this either\n"
-                                         "or even on this one\n"
-                                         "la <big>la <big>la <big>la <big>la</big></big></big></big>\n"
-                                         "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
-                                         "<span underline=\"double\">We like <sup>superscript</sup> and <sub>subscript</sub> too</span>");
+      gtk_label_set_markup_with_mnemonic (GTK_LABEL (label),
+					  "This <span foreground=\"blue\" background=\"orange\">label</span> has "
+					  "<b>markup</b> _such as "
+					  "<big><i>Big Italics</i></big>\n"
+					  "<tt>Monospace font</tt>\n"
+					  "<u>Underline!</u>\n"
+					  "foo\n"
+					  "<span foreground=\"green\" background=\"red\">Ugly colors</span>\n"
+					  "and nothing on this line,\n"
+					  "or this.\n"
+					  "or this either\n"
+					  "or even on this one\n"
+					  "la <big>la <big>la <big>la <big>la</big></big></big></big>\n"
+					  "but this _word is <span foreground=\"purple\"><big>purple</big></span>\n"
+					  "<span underline=\"double\">We like <sup>superscript</sup> and <sub>subscript</sub> too</span>");
 
-      g_return_if_fail (keyval == GDK_s);
+      g_assert (gtk_label_get_mnemonic_keyval (GTK_LABEL (label)) == GDK_s);
       
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);

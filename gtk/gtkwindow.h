@@ -99,6 +99,8 @@ struct _GtkWindow
   guint frame_top;
   guint frame_right;
   guint frame_bottom;
+  
+  GdkModifierType mnemonic_modifier;
 };
 
 struct _GtkWindowClass
@@ -174,6 +176,19 @@ GList*	   gtk_window_list_toplevels	       (void);
 
 /* Get the "built-in" accel group (convenience thing) */
 GtkAccelGroup* gtk_window_get_default_accel_group (GtkWindow *window);
+
+void     gtk_window_add_mnemonic          (GtkWindow       *window,
+					   guint            keyval,
+					   GtkWidget       *target);
+void     gtk_window_remove_mnemonic       (GtkWindow       *window,
+					   guint            keyval,
+					   GtkWidget       *target);
+gboolean gtk_window_activate_mnemonic     (GtkWindow       *window,
+					   guint            keyval,
+					   GdkModifierType  modifier);
+void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
+					   GdkModifierType  modifier);
+
 
 void     gtk_window_present       (GtkWindow *window);
 void     gtk_window_iconify       (GtkWindow *window);

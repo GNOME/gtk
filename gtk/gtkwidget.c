@@ -62,6 +62,7 @@ enum {
   DIRECTION_CHANGED,
   ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
+  ACTIVATE_MNEMONIC,
   GRAB_FOCUS,
   EVENT,
   BUTTON_PRESS_EVENT,
@@ -188,6 +189,8 @@ static gint gtk_widget_event_internal            (GtkWidget     *widget,
 
 static void gtk_widget_propagate_hierarchy_changed (GtkWidget *widget,
 						    gpointer   client_data);
+static gboolean gtk_widget_real_activate_mnemonic  (GtkWidget *widget,
+						    gboolean   group_cycling);
 
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
@@ -290,6 +293,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->direction_changed = gtk_widget_direction_changed;
   klass->add_accelerator = (void*) gtk_accel_group_handle_add;
   klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
+  klass->activate_mnemonic = gtk_widget_real_activate_mnemonic;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->event = NULL;
   klass->button_press_event = NULL;
@@ -460,6 +464,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[REMOVE_ACCELERATOR] =
     gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
+  widget_signals[ACTIVATE_MNEMONIC] =
+    gtk_signal_new ("activate_mnemonic",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, activate_mnemonic),
+		    gtk_marshal_BOOLEAN__BOOLEAN,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_BOOL);
   widget_signals[GRAB_FOCUS] =
     gtk_signal_new ("grab_focus",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
@@ -2174,6 +2186,36 @@ gtk_widget_accelerator_signal (GtkWidget           *widget,
     return ac_entry->signal_id;
   return 0;
 }
+
+gboolean
+gtk_widget_activate_mnemonic (GtkWidget *widget,
+                              gboolean   group_cycling)
+{
+  gboolean handled = FALSE;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    return TRUE;
+    
+  gtk_signal_emit_by_name (GTK_OBJECT (widget),
+                           "activate_mnemonic",
+                           group_cycling,
+                           &handled);
+  return handled;
+}
+
+static gboolean
+gtk_widget_real_activate_mnemonic (GtkWidget *widget,
+                                   gboolean   group_cycling)
+{
+  if (group_cycling)
+    gtk_widget_grab_focus (widget);
+  else if (!group_cycling)
+    gtk_widget_activate (widget);
+  return TRUE;
+}
+
 
 static gint
 gtk_widget_real_key_press_event (GtkWidget         *widget,

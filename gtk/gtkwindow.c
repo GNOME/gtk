@@ -99,6 +99,14 @@ typedef struct {
   GtkWindowLastGeometryInfo last;
 } GtkWindowGeometryInfo;
 
+typedef struct {
+  GtkWindow *window;
+  guint keyval;
+
+  GSList *targets;
+} GtkWindowMnemonic;
+
+
 static void gtk_window_class_init         (GtkWindowClass    *klass);
 static void gtk_window_init               (GtkWindow         *window);
 static void gtk_window_shutdown           (GObject           *object);
@@ -182,6 +190,7 @@ static void gtk_window_geometry_destroy  (GtkWindowGeometryInfo *info);
 
 
 static GSList      *toplevel_list = NULL;
+static GHashTable  *mnemonic_hash_table = NULL;
 static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
 
@@ -193,6 +202,36 @@ static void gtk_window_get_property (GObject         *object,
 				     guint            prop_id,
 				     GValue          *value,
 				     GParamSpec      *pspec);
+
+
+static guint
+mnemonic_hash (gconstpointer key)
+{
+  const GtkWindowMnemonic *k;
+  guint h;
+  
+  k = (GtkWindowMnemonic *)key;
+  
+  h = (gulong) k->window;
+  h ^= k->keyval << 16;
+  h ^= k->keyval >> 16;
+
+  return h;
+}
+
+static gboolean
+mnemonic_equal (gconstpointer a, gconstpointer b)
+{
+  const GtkWindowMnemonic *ka;
+  const GtkWindowMnemonic *kb;
+  
+  ka = (GtkWindowMnemonic *)a;
+  kb = (GtkWindowMnemonic *)b;
+
+  return
+    (ka->window == kb->window) &&
+    (ka->keyval == kb->keyval);
+}
 
 GtkType
 gtk_window_get_type (void)
@@ -373,6 +412,11 @@ gtk_window_class_init (GtkWindowClass *klass)
 		    gtk_marshal_BOOLEAN__BOXED,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
+
+
+  if (!mnemonic_hash_table)
+    mnemonic_hash_table = g_hash_table_new (mnemonic_hash,
+					    mnemonic_equal);
 }
 
 static void
@@ -407,6 +451,7 @@ gtk_window_init (GtkWindow *window)
   window->frame_bottom = 0;
   window->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   window->decorated = TRUE;
+  window->mnemonic_modifier = GDK_MOD1_MASK;
   
   gtk_widget_ref (GTK_WIDGET (window));
   gtk_object_sink (GTK_OBJECT (window));
@@ -798,6 +843,132 @@ gtk_window_get_default_accel_group (GtkWindow *window)
     }
 
   return group;
+}
+
+void
+gtk_window_add_mnemonic (GtkWindow *window,
+			 guint      keyval,
+			 GtkWidget *target)
+{
+  GtkWindowMnemonic key;
+  GtkWindowMnemonic *mnemonic;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_IS_WIDGET (target));
+  
+  key.window = window;
+  key.keyval = keyval;
+  
+  mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
+
+  if (mnemonic)
+    mnemonic->targets = g_slist_prepend (mnemonic->targets, target);
+  else
+    {
+      mnemonic = g_new (GtkWindowMnemonic, 1);
+      *mnemonic = key;
+      mnemonic->targets = g_slist_prepend (NULL, target);
+      g_hash_table_insert (mnemonic_hash_table, mnemonic, mnemonic);
+    }
+}
+
+void
+gtk_window_remove_mnemonic (GtkWindow *window,
+			    guint      keyval,
+			    GtkWidget *target)
+{
+  GtkWindowMnemonic key;
+  GtkWindowMnemonic *mnemonic;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_IS_WIDGET (target));
+  
+  key.window = window;
+  key.keyval = keyval;
+  
+  mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
+
+  g_assert (mnemonic);
+
+  if (mnemonic)
+    {
+      mnemonic->targets = g_slist_remove (mnemonic->targets, target);
+      
+      if (mnemonic->targets == NULL)
+	{
+	  g_hash_table_remove (mnemonic_hash_table, mnemonic);
+	  g_free (mnemonic);
+	}
+    }
+}
+
+gboolean
+gtk_window_activate_mnemonic (GtkWindow      *window,
+			      guint           keyval,
+			      GdkModifierType modifier)
+{
+  GtkWindowMnemonic key;
+  GtkWindowMnemonic *mnemonic;
+  GSList *list;
+  GtkWidget *widget, *chosen_widget;
+  gboolean overloaded;
+
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  if (modifier != window->mnemonic_modifier)
+    return FALSE;
+  
+  key.window = window;
+  key.keyval = keyval;
+  
+  mnemonic = g_hash_table_lookup (mnemonic_hash_table, &key);
+
+  if (!mnemonic)
+    return FALSE;
+  
+  overloaded = FALSE;
+  chosen_widget = NULL;
+  list = mnemonic->targets;
+  while (list)
+    {
+      widget = GTK_WIDGET (list->data);
+      
+      if (GTK_WIDGET_IS_SENSITIVE (widget) &&
+	  GTK_WIDGET_MAPPED (widget))
+	{
+	  if (chosen_widget)
+	    {
+	      overloaded = TRUE;
+	      break;
+	    }
+	  else
+	    chosen_widget = widget;
+	}
+      list = g_slist_next (list);
+    }
+
+  if (chosen_widget)
+    {
+      /* For round robin we put the activated entry on
+       * the end of the list after activation */
+      mnemonic->targets = g_slist_remove (mnemonic->targets, chosen_widget);
+      mnemonic->targets = g_slist_append (mnemonic->targets, chosen_widget);
+      return gtk_widget_activate_mnemonic (chosen_widget, overloaded);
+    }
+  return FALSE;
+}
+
+void
+gtk_window_set_mnemonic_modifier (GtkWindow      *window,
+				  GdkModifierType modifier)
+{
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  window->mnemonic_modifier = modifier;
 }
 
 void
@@ -1358,6 +1529,24 @@ gtk_window_destroy (GtkObject *object)
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
+static gboolean
+gtk_window_mnemonic_hash_remove (gpointer	key,
+				 gpointer	value,
+				 gpointer	user)
+{
+  GtkWindowMnemonic *mnemonic = key;
+  GtkWindow *window = user;
+
+  if (mnemonic->window == window)
+    {
+      g_slist_free (mnemonic->targets);
+      g_free (mnemonic);
+      
+      return TRUE;
+    }
+  return FALSE;
+}
+
 static void
 gtk_window_finalize (GObject *object)
 {
@@ -1373,6 +1562,10 @@ gtk_window_finalize (GObject *object)
   g_free (window->wmclass_name);
   g_free (window->wmclass_class);
 
+  g_hash_table_foreach_remove (mnemonic_hash_table,
+			       gtk_window_mnemonic_hash_remove,
+			       window);
+  
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -1877,7 +2070,12 @@ gtk_window_key_press_event (GtkWidget   *widget,
     {
       handled = gtk_widget_event (window->focus_widget, (GdkEvent*) event);
     }
-    
+
+  if (!handled)
+    handled = gtk_window_activate_mnemonic (window,
+					    event->keyval,
+					    event->state);
+
   if (!handled)
     handled = gtk_accel_groups_activate (GTK_OBJECT (window), event->keyval, event->state);
 

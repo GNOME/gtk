@@ -319,9 +319,17 @@ gtk_button_new_with_label (const gchar *label)
   return button;
 }
 
+/**
+ * gtk_button_new_from_stock:
+ * @stock_id: the name of the stock item 
+ * @returns: a new #GtkButton
+ *
+ * Creates a new #GtkButton containing the image and text from a stock item.
+ * Some stock ids have preprocessor macros like #GTK_STOCK_BUTTON_OK and
+ * #GTK_STOCK_BUTTON_APPLY.
+ **/
 GtkWidget*
-gtk_button_new_stock (const gchar   *stock_id,
-                      GtkAccelGroup *accel_group)
+gtk_button_new_from_stock (const gchar   *stock_id)
 {
   GtkWidget *button;
   GtkStockItem item;
@@ -331,34 +339,12 @@ gtk_button_new_stock (const gchar   *stock_id,
       GtkWidget *label;
       GtkWidget *image;
       GtkWidget *hbox;
-      guint keyval;
       
       button = gtk_button_new ();
 
-      label = gtk_label_new (NULL);
-      keyval = gtk_label_parse_uline (GTK_LABEL (label),
-                                      item.label);
+      label = gtk_label_new_with_mnemonic (item.label);
 
-      if (keyval && accel_group)
-        {
-          gtk_widget_add_accelerator (button,
-                                      "clicked",
-                                      accel_group,
-                                      keyval,
-                                      GDK_MOD1_MASK,
-                                      GTK_ACCEL_LOCKED);
-        }
-
-      /* Also add the stock accelerator if one was specified. */
-      if (item.keyval && accel_group)
-        {
-          gtk_widget_add_accelerator (button,
-                                      "clicked",
-                                      accel_group,
-                                      item.keyval,
-                                      item.modifier,
-                                      GTK_ACCEL_LOCKED);
-        }
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), button);
 
       image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
       hbox = gtk_hbox_new (FALSE, 0);
@@ -371,37 +357,37 @@ gtk_button_new_stock (const gchar   *stock_id,
     }
   else
     {
-      button = gtk_button_new_accel (stock_id, accel_group);
+      button = gtk_button_new_with_mnemonic (stock_id);
     }
   
   return button;
 }
 
+/**
+ * gtk_button_new_with_mnemonic:
+ * @label: The text of the button, with an underscore in front of the
+ *         mnemonic character
+ * @returns: a new #GtkButton
+ *
+ * Creates a new #GtkButton containing a label.
+ * If characters in @label are preceded by an underscore, they are underlined
+ * indicating that they represent a keyboard accelerator called a mnemonic.
+ * Pressing Alt and that key activates the button.
+ **/
 GtkWidget*
-gtk_button_new_accel (const gchar   *uline_label,
-                      GtkAccelGroup *accel_group)
+gtk_button_new_with_mnemonic (const gchar *label)
 {
   GtkWidget *button;
-  GtkWidget *label;
-  guint keyval;
+  GtkWidget *label_widget;
 
   button = gtk_button_new ();
   
-  label = gtk_label_new (NULL);
-  keyval = gtk_label_parse_uline (GTK_LABEL (label), uline_label);
+  label_widget = gtk_label_new_with_mnemonic (label);
 
-  if (keyval && accel_group)
-    {
-      gtk_widget_add_accelerator (button,
-                                  "clicked",
-                                  accel_group,
-                                  keyval,
-                                  GDK_MOD1_MASK,
-                                  GTK_ACCEL_LOCKED);
-    }
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label_widget), button);
   
-  gtk_container_add (GTK_CONTAINER (button), label);
-  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (button), label_widget);
+  gtk_widget_show (label_widget);
 
   return button;
 }

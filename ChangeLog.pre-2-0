@@ -1,5 +1,57 @@
 2001-03-21  Alexander Larsson  <alexl@redhat.com>
 
+        * gtk/gtkbutton.[ch]:
+	* gtk/gtkdialog.c:
+	Renamed gtk_button_new_stock() to gtk_button_new_from_stock() and
+	removed accel_group argument. Renamed gtk_button_new_accel() to
+	gtk_button_new_with_mnemonic() and removed accel_group argument.
+
+	* gtk/gtkcheckbutton.[ch]:
+	New function gtk_check_button_new_with_mnemonic().
+
+	* gtk/gtkentry.c:
+	Override activate_mnemonic and just grab focus.
+
+	* gtk/gtkitemfactory.c:
+	Don't add menu uline accel group, instead use mnemonics support.
+
+	* gtk/gtklabel.[ch]:
+	New support for mnemonics.
+
+	* gtk/gtkmarshal.list:
+	Needed BOOLEAN:BOOLEAN for activate_mnemonic.
+
+	* gtk/gtkmenu.[c]:
+	* gtkmenushell.c:
+	Use mnemonics instead of accel groups for uline
+	support in menu items.
+	Removed gtk_menu_get_uline_accel_group() and
+	gtk_menu_ensure_uline_accel_group().
+
+	* gtk/gtkmenuitem.c:
+	Override activate_mnemonic to handle switching between
+	menu items if there are collisions.
+	
+	* gtk/gtknotebook.c:
+	Connect to activate_mnemonic on the tab_label, so that
+	activating it switches to that notebook page.
+
+	* gtk/gtkwidget.[ch]:
+	Add activate_mnemonic signal. New function
+	gtk_widget_activate_mnemonic() to emit it.
+	Default implementation does activate/grab_focus.
+
+	* gtk/gtkwindow.[ch]:
+	Add support for mnemonics in windows.
+	New functions:
+	gtk_window_add_mnemonic, gtk_window_remove_mnemonic,
+	gtk_window_activate_mnemonic, gtk_window_set_mnemonic_modifier
+
+	* gtk/testgtk.c:
+	Update to function name changes.
+	
+2001-03-21  Alexander Larsson  <alexl@redhat.com>
+
 	* gtk/gtkimagemenuitem.[c]:
 	Add gtk_image_menu_item_new_from_stock()
 

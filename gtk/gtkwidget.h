@@ -268,6 +268,10 @@ struct _GtkWidgetClass
 				guint           accel_key,
 				GdkModifierType accel_mods);
 
+  /* Mnemonics */
+  gboolean (* activate_mnemonic) (GtkWidget    *widget,
+				  gboolean      group_cycling);
+  
   /* explicit focus */
   void (* grab_focus)          (GtkWidget      *widget);
   
@@ -464,6 +468,8 @@ guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
 void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
 void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
 gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
+gboolean   gtk_widget_activate_mnemonic   (GtkWidget           *widget,
+					   gboolean             group_cycling);
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 gint       gtk_widget_send_expose         (GtkWidget           *widget,

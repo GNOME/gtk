@@ -26,11 +26,15 @@
 #include <math.h>
 #include <string.h>
 #include "gtklabel.h"
+#include "gtksignal.h"
+#include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkclipboard.h"
 #include "gdk/gdki18n.h"
 #include <pango/pango.h>
 #include "gtkintl.h"
+#include "gtkmenuitem.h"
+#include "gtknotebook.h"
 
 struct _GtkLabelSelectionInfo
 {
@@ -38,6 +42,7 @@ struct _GtkLabelSelectionInfo
   gint selection_anchor;
   gint selection_end;
 };
+
 
 enum {
   PROP_0,
@@ -49,7 +54,7 @@ enum {
   PROP_PATTERN,
   PROP_WRAP,
   PROP_SELECTABLE,
-  PROP_ACCEL_KEYVAL
+  PROP_MNEMONIC_KEYVAL
 };
 
 static void gtk_label_class_init        (GtkLabelClass    *klass);
@@ -57,13 +62,11 @@ static void gtk_label_init              (GtkLabel         *label);
 static void gtk_label_set_property      (GObject          *object,
 					 guint             prop_id,
 					 const GValue     *value,
-					 GParamSpec       *pspec,
-					 const gchar      *trailer);
+					 GParamSpec       *pspec);
 static void gtk_label_get_property      (GObject          *object,
 					 guint             prop_id,
 					 GValue           *value,
-					 GParamSpec       *pspec,
-					 const gchar      *trailer);
+					 GParamSpec       *pspec);
 static void gtk_label_finalize          (GObject          *object);
 static void gtk_label_size_request      (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
@@ -106,6 +109,7 @@ static void set_markup                           (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
+static void gtk_label_hierarchy_changed          (GtkWidget     *widget);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -116,6 +120,9 @@ static void gtk_label_ensure_layout       (GtkLabel *label,
 static void gtk_label_select_region_index (GtkLabel *label,
                                            gint      anchor_index,
                                            gint      end_index);
+
+static gboolean gtk_label_activate_mnemonic (GtkWidget *widget,
+					     gboolean   group_cycling);
 
 
 static GtkMiscClass *parent_class = NULL;
@@ -175,6 +182,8 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->button_press_event = gtk_label_button_press;
   widget_class->button_release_event = gtk_label_button_release;
   widget_class->motion_notify_event = gtk_label_motion;
+  widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
+  widget_class->activate_mnemonic = gtk_label_activate_mnemonic;
 
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
                                    PROP_LABEL,
@@ -201,7 +210,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_USE_UNDERLINE,
                                    g_param_spec_boolean ("use_underline",
 							 _("Use underline"),
-							 _("If set, an underline in the text indicates the next character should be used for the accelerator key"),
+							 _("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
 
@@ -237,22 +246,22 @@ gtk_label_class_init (GtkLabelClass *class)
                                                         FALSE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_KEYVAL,
-                                   g_param_spec_uint ("accel_keyval",
-						      _("Accelerator key value"),
-						      _("The accelerator key for this label."),
+                                   PROP_MNEMONIC_KEYVAL,
+                                   g_param_spec_uint ("mnemonic_keyval",
+						      _("Mnemonic accelerator key value"),
+						      _("The mnemonic accelerator key for this label."),
 						      0,
 						      G_MAXUINT,
 						      GDK_VoidSymbol,
 						      G_PARAM_READABLE));
+
 }
 
 static void 
 gtk_label_set_property (GObject      *object,
 			guint         prop_id,
 			const GValue *value,
-			GParamSpec   *pspec,
-			const gchar  *trailer)
+			GParamSpec   *pspec)
 {
   GtkLabel *label;
   
@@ -298,8 +307,7 @@ static void
 gtk_label_get_property (GObject     *object,
 			guint        prop_id,
 			GValue      *value,
-			GParamSpec  *pspec,
-			const gchar *trailer)
+			GParamSpec  *pspec)
 {
   GtkLabel *label;
   
@@ -328,8 +336,8 @@ gtk_label_get_property (GObject     *object,
     case PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_label_get_selectable (label));
       break;
-    case PROP_ACCEL_KEYVAL:
-      g_value_set_uint (value, label->accel_keyval);
+    case PROP_MNEMONIC_KEYVAL:
+      g_value_set_uint (value, label->mnemonic_keyval);
       break;
 
     default:
@@ -351,14 +359,24 @@ gtk_label_init (GtkLabel *label)
   label->use_underline = FALSE;
   label->use_markup = FALSE;
   
-  label->accel_keyval = GDK_VoidSymbol;
+  label->mnemonic_keyval = GDK_VoidSymbol;
   label->layout = NULL;
   label->text = NULL;
   label->attrs = NULL;
+
+  label->mnemonic_widget = NULL;
+  label->mnemonic_window = NULL;
   
   gtk_label_set_text (label, "");
 }
 
+/**
+ * gtk_label_new:
+ * @str: The text of the label
+ * @returns: a new #GtkLabel
+ *
+ * Creates a new #GtkLabel, containing the text in @str.
+ **/
 GtkWidget*
 gtk_label_new (const gchar *str)
 {
@@ -373,20 +391,138 @@ gtk_label_new (const gchar *str)
 }
 
 /**
- * gtk_label_get_accel_keyval:
+ * gtk_label_new_with_mnemonic:
+ * @str: The text of the label, with an underscore in front of the
+ *       mnemonic character
+ * @returns: a new #GtkLabel
+ *
+ * Creates a new #GtkLabel, containing the text in @str.
+ *
+ * If characters in @str are preceded by an underscore, they are underlined
+ * indicating that they represent a keyboard accelerator called a mnemonic.
+ * The mnemonic key can be used to activate another widget, chosen automatically,
+ * or explicitly using @gtk_label_set_mnemonic_widget.
+ **/
+GtkWidget*
+gtk_label_new_with_mnemonic (const gchar *str)
+{
+  GtkLabel *label;
+  
+  label = gtk_type_new (GTK_TYPE_LABEL);
+
+  if (str && *str)
+    gtk_label_set_text_with_mnemonic (label, str);
+  
+  return GTK_WIDGET (label);
+}
+
+static gboolean
+gtk_label_activate_mnemonic (GtkWidget *widget,
+			     gboolean   group_cycling)
+{
+  GtkWidget *parent;
+
+  if (GTK_LABEL (widget)->mnemonic_widget)
+    return gtk_widget_activate_mnemonic (GTK_LABEL (widget)->mnemonic_widget, group_cycling);
+
+  /* Try to find the widget to activate by traversing the widget
+   * hierarachy.
+   */
+  
+  parent = widget->parent;
+  while (parent)
+    {
+      if (GTK_WIDGET_CAN_FOCUS (parent) ||
+	  (!group_cycling && GTK_WIDGET_GET_CLASS (parent)->activate_signal) ||
+	  (parent->parent && GTK_IS_NOTEBOOK (parent->parent)) ||
+	  (GTK_IS_MENU_ITEM (parent)))
+	return gtk_widget_activate_mnemonic (parent, group_cycling);
+      parent = parent->parent;
+    }
+
+  g_warning ("Couldn't find a target for a mnemonic activation.");
+  gdk_beep ();
+  
+  return FALSE;
+}
+
+static void
+gtk_label_setup_mnemonic (GtkLabel *label, guint last_key)
+{
+  GtkWidget *toplevel;
+
+  if ((last_key != GDK_VoidSymbol) && label->mnemonic_window)
+    gtk_window_remove_mnemonic  (label->mnemonic_window,
+				 last_key,
+				 GTK_WIDGET (label));
+  
+  if (label->mnemonic_keyval == GDK_VoidSymbol)
+    return;
+  
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
+  
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
+			       label->mnemonic_keyval,
+			       GTK_WIDGET (label));
+      label->mnemonic_window = GTK_WINDOW (toplevel);
+    }
+}
+
+static void
+gtk_label_hierarchy_changed (GtkWidget *widget)
+{
+  GtkLabel *label = GTK_LABEL (widget);
+  
+  gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
+}
+
+
+/**
+ * gtk_label_set_mnemonic_widget:
+ * @label: a #GtkLabel
+ * @widget: the target #GtkWidget 
+ *
+ * If the label has been set so that it has an mnemonic key (using i.e.
+ * @gtk_label_set_markup_with_mnemonic, @gtk_label_set_text_with_mnemonic,
+ * @gtk_label_new_with_mnemonic or the use_underline property) the label can be
+ * associated with a widget that is the target of the mnemonic. When the label
+ * is inside a widget (like a #GtkButton or a #GtkNotebook tab) it is automatically
+ * associated with the correct widget, but sometimes (i.e. when the target is
+ * a #GtkEntry next to the label) you need to set it explicitly using this
+ * function.
+ *
+ * The target widget will be accelerated by emitting "activate_mnemonic" on it.
+ * The default handler for this signal will activate the widget if there are no
+ * mnemonic collisions and toggle focus between the colliding widgets otherwise.
+ **/
+void
+gtk_label_set_mnemonic_widget (GtkLabel         *label,
+			       GtkWidget        *widget)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  label->mnemonic_widget = widget;
+}
+
+
+/**
+ * gtk_label_get_mnemonic_keyval:
  * @label: a #GtkLabel
  * @Returns: GDK keyval usable for accelerators, or GDK_VoidSymbol
  *
- * If the label text was set using gtk_label_set_markup_with_accel,
- * gtk_label_parse_uline, or using the use_underline property this function
- * returns the keyval for the first underlined accelerator.
+ * If the label has been set so that it has an mnemonic key this function
+ * returns the keyval used for the mnemonic accelerator. If there is no
+ * mnemonic set up it returns #GDK_VoidSymbol.
  **/
 guint
-gtk_label_get_accel_keyval (GtkLabel *label)
+gtk_label_get_mnemonic_keyval (GtkLabel *label)
 {
   g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
 
-  return label->accel_keyval;
+  return label->mnemonic_keyval;
 }
 
 static void
@@ -446,7 +582,7 @@ gtk_label_set_attributes_internal (GtkLabel         *label,
 }
 
 
-/* Calculates text, attrs and accel_keyval from
+/* Calculates text, attrs and mnemonic_keyval from
  * label, use_underline and use_markup */
 static void
 gtk_label_recalculate (GtkLabel *label)
@@ -465,12 +601,25 @@ gtk_label_recalculate (GtkLabel *label)
     }
 
   if (!label->use_underline)
-    label->accel_keyval = GDK_VoidSymbol;
+    {
+      guint keyval = label->mnemonic_keyval;
+      label->mnemonic_keyval = GDK_VoidSymbol;
+      gtk_label_setup_mnemonic (label, keyval);
+    }
 
   gtk_label_clear_layout (label);  
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
 
+/**
+ * gtk_label_set_text:
+ * label: a #GtkLabel
+ * str: a string
+ *
+ * Sets the text of the label to @str.
+ *
+ * This will also clear any previously set mnemonic accelerators.
+ **/
 void
 gtk_label_set_text (GtkLabel    *label,
 		    const gchar *str)
@@ -538,9 +687,9 @@ set_markup (GtkLabel    *label,
     }
 
   if (accel_char != 0)
-    label->accel_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
+    label->mnemonic_keyval = gdk_keyval_to_lower (gdk_unicode_to_keyval (accel_char));
   else
-    label->accel_keyval = GDK_VoidSymbol;
+    label->mnemonic_keyval = GDK_VoidSymbol;
 }
 
 /**
@@ -565,31 +714,32 @@ gtk_label_set_markup (GtkLabel    *label,
 }
 
 /**
- * gtk_label_set_markup_with_accel:
+ * gtk_label_set_markup_with_mnemonic:
  * @label: a #GtkLabel
  * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
  * 
  * Parses @str which is marked up with the Pango text markup language,
  * setting the label's text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
- * indicating that they represent a keyboard accelerator, and the GDK
- * keyval for the first underlined accelerator is returned. If there are
- * no underlines in the text, GDK_VoidSymbol will be returned.
+ * indicating that they represent a keyboard accelerator called a mnemonic.
  *
- * Return value: GDK keyval for accelerator
+ * The mnemonic key can be used to activate another widget, chosen automatically,
+ * or explicitly using @gtk_label_set_mnemonic_widget.
  **/
-guint
-gtk_label_set_markup_with_accel (GtkLabel    *label,
-                                 const gchar *str)
+void
+gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
+				    const gchar *str)
 {
-  g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
+  guint last_keyval;
+  g_return_if_fail (GTK_IS_LABEL (label));
 
+  last_keyval = label->mnemonic_keyval;
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, TRUE);
   
   gtk_label_recalculate (label);
-  return label->accel_keyval;
+  gtk_label_setup_mnemonic (label, last_keyval);
 }
 
 /**
@@ -741,7 +891,7 @@ gtk_label_finalize (GObject *object)
     pango_attr_list_unref (label->attrs);
 
   g_free (label->select_info);
-  
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
@@ -1207,22 +1357,64 @@ gtk_label_set_uline_text_internal (GtkLabel    *label,
   
   g_free (pattern);
 
-  label->accel_keyval = accel_key;
+  label->mnemonic_keyval = accel_key;
 }
 
 guint      
 gtk_label_parse_uline (GtkLabel    *label,
 		       const gchar *str)
 {
+  guint keyval;
+  guint orig_keyval;
+  
   g_return_val_if_fail (GTK_IS_LABEL (label), GDK_VoidSymbol);
   g_return_val_if_fail (str != NULL, GDK_VoidSymbol);
 
+  orig_keyval = label->mnemonic_keyval;
+  
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, FALSE);
   gtk_label_set_use_underline_internal (label, TRUE);
   
   gtk_label_recalculate (label);
-  return label->accel_keyval;
+
+  keyval = label->mnemonic_keyval;
+  label->mnemonic_keyval = GDK_VoidSymbol;
+  
+  gtk_label_setup_mnemonic (label, orig_keyval);
+  
+  return keyval;
+}
+
+/**
+ * gtk_label_set_text_with_mnemonic:
+ * @label: a #GtkLabel
+ * @str: a string
+ * 
+ * Sets the label's text from the string @str.
+ * If characters in @str are preceded by an underscore, they are underlined
+ * indicating that they represent a keyboard accelerator called a mnemonic.
+ * The mnemonic key can be used to activate another widget, chosen automatically,
+ * or explicitly using @gtk_label_set_mnemonic_widget.
+ **/
+void
+gtk_label_set_text_with_mnemonic (GtkLabel    *label,
+				  const gchar *str)
+{
+  guint last_keyval;
+  
+  g_return_if_fail (GTK_IS_LABEL (label));
+  g_return_if_fail (str != NULL);
+
+  last_keyval = label->mnemonic_keyval;
+  
+  gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
+  gtk_label_set_use_markup_internal (label, FALSE);
+  gtk_label_set_use_underline_internal (label, TRUE);
+  
+  gtk_label_recalculate (label);
+
+  gtk_label_setup_mnemonic (label, last_keyval);
 }
 
 
@@ -1659,8 +1851,6 @@ gtk_label_select_region  (GtkLabel *label,
   
   if (label->text && label->select_info)
     {
-      GtkClipboard *clipboard;
-
       if (start_offset < 0)
         start_offset = 0;
 

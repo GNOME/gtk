@@ -147,12 +147,6 @@ void	       gtk_menu_set_accel_group	  (GtkMenu	       *menu,
 					   GtkAccelGroup       *accel_group);
 GtkAccelGroup* gtk_menu_get_accel_group	  (GtkMenu	       *menu);
 
-/* get the accelerator group that is used internally by the menu for
- * underline accelerators while the menu is popped up.
- */
-GtkAccelGroup* gtk_menu_get_uline_accel_group    (GtkMenu         *menu);
-GtkAccelGroup* gtk_menu_ensure_uline_accel_group (GtkMenu         *menu);
-
 
 /* A reference count is kept for a widget when it is attached to
  * a particular widget. This is typically a menu item; it may also

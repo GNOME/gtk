@@ -116,7 +116,6 @@ static void gtk_menu_remove         (GtkContainer      *menu,
 
 static GtkMenuShellClass *parent_class = NULL;
 static const gchar	 *attach_data_key = "gtk-menu-attach-data";
-static GQuark             quark_uline_accel_group = 0;
 
 GtkType
 gtk_menu_get_type (void)
@@ -248,6 +247,7 @@ gtk_menu_init (GtkMenu *menu)
 				     NULL);
   gtk_window_set_policy (GTK_WINDOW (menu->toplevel),
 			 FALSE, FALSE, TRUE);
+  gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->toplevel), 0);
 
   /* Refloat the menu, so that reference counting for the menu isn't
    * affected by it being a child of the toplevel
@@ -739,38 +739,6 @@ gtk_menu_get_accel_group (GtkMenu *menu)
   return menu->accel_group;
 }
 
-GtkAccelGroup*
-gtk_menu_ensure_uline_accel_group (GtkMenu *menu)
-{
-  GtkAccelGroup *accel_group;
-
-  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
-
-  if (!quark_uline_accel_group)
-    quark_uline_accel_group = g_quark_from_static_string ("GtkMenu-uline-accel-group");
-
-  accel_group = gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_uline_accel_group);
-  if (!accel_group)
-    {
-      accel_group = gtk_accel_group_new ();
-      gtk_accel_group_attach (accel_group, GTK_OBJECT (menu));
-      gtk_object_set_data_by_id_full (GTK_OBJECT (menu),
-				      quark_uline_accel_group,
-				      accel_group,
-				      (GtkDestroyNotify) gtk_accel_group_unref);
-    }
-
-  return accel_group;
-}
-
-GtkAccelGroup*
-gtk_menu_get_uline_accel_group (GtkMenu *menu)
-{
-  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
-
-  return gtk_object_get_data_by_id (GTK_OBJECT (menu), quark_uline_accel_group);
-}
-
 void
 gtk_menu_reposition (GtkMenu *menu)
 {
@@ -844,6 +812,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 						       NULL);
 	      gtk_window_set_type_hint (GTK_WINDOW (menu->tearoff_window),
 					GDK_WINDOW_TYPE_HINT_MENU);
+	      gtk_window_set_mnemonic_modifier (GTK_WINDOW (menu->tearoff_window), 0);
 	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
 	      gtk_signal_connect (GTK_OBJECT (menu->tearoff_window),  
 				  "event",
@@ -1420,7 +1389,6 @@ gtk_menu_key_press (GtkWidget	*widget,
       (delete ||
        (gtk_accelerator_valid (event->keyval, event->state) &&
 	(event->state ||
-	 !gtk_menu_get_uline_accel_group (GTK_MENU (menu_shell)) ||
 	 (event->keyval >= GDK_F1 && event->keyval <= GDK_F35)))))
     {
       GtkMenuItem *menu_item;

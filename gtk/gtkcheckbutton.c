@@ -123,6 +123,35 @@ gtk_check_button_new_with_label (const gchar *label)
   return check_button;
 }
 
+/**
+ * gtk_check_button_new_with_mnemonic:
+ * @label: The text of the button, with an underscore in front of the
+ *         mnemonic character
+ * @returns: a new #GtkCheckButton
+ *
+ * Creates a new #GtkCheckButton containing a label.
+ * If characters in @label are preceded by an underscore, they are underlined
+ * indicating that they represent a keyboard accelerator called a mnemonic.
+ * Pressing Alt and that key activates the checkbutton.
+ **/
+GtkWidget*
+gtk_check_button_new_with_mnemonic (const gchar *label)
+{
+  GtkWidget *check_button;
+  GtkWidget *label_widget;
+  
+  check_button = gtk_check_button_new ();
+  label_widget = gtk_label_new_with_mnemonic (label);
+  gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label_widget), check_button);
+  
+  gtk_container_add (GTK_CONTAINER (check_button), label_widget);
+  gtk_widget_show (label_widget);
+  
+  return check_button;
+}
+
+
 /* This should only be called when toggle_button->draw_indicator
  * is true.
  */

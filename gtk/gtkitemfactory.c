@@ -1228,24 +1228,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      "GtkMisc::xalign", 0.0,
 			      NULL);
       
-      accel_key = gtk_label_parse_uline (GTK_LABEL (label), name);
-      
-      if (accel_key != GDK_VoidSymbol)
-	{
-	  if (GTK_IS_MENU_BAR (parent))
-	    gtk_widget_add_accelerator (widget,
-					"activate_item",
-					ifactory->accel_group,
-					accel_key, GDK_MOD1_MASK,
-					GTK_ACCEL_LOCKED);
-
-	  if (GTK_IS_MENU (parent))
-	    gtk_widget_add_accelerator (widget,
-					"activate_item",
-					gtk_menu_ensure_uline_accel_group (GTK_MENU (parent)),
-					accel_key, 0,
-					GTK_ACCEL_LOCKED);
-	}
+      gtk_label_set_text_with_mnemonic (GTK_LABEL (label), name);
     }
   
   g_free (name);
