@@ -2848,6 +2848,8 @@ _gtk_text_btree_select_range (GtkTextBTree      *tree,
                  "insert", FALSE, ins, TRUE, FALSE);
   real_set_mark (tree, tree->selection_bound_mark,
                  "selection_bound", FALSE, bound, TRUE, FALSE);
+
+  redisplay_region (tree, ins, bound);
 }
 
 

@@ -6774,8 +6774,7 @@ gtk_text_view_select_all (GtkWidget *widget,
   if (select) 
     {
       gtk_text_buffer_get_bounds (buffer, &start_iter, &end_iter);
-      gtk_text_buffer_move_mark_by_name (buffer, "insert", &start_iter);
-      gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &end_iter);
+      gtk_text_buffer_select_range (buffer, &start_iter, &end_iter);
     }
   else 
     {

@@ -1,5 +1,11 @@
 2004-10-30  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktextbtree.c (_gtk_text_btree_select_range): Redisplay
+	the new selection.
+
+	* gtk/gtktextview.c (gtk_text_view_select_all): Use 
+	gtk_text_buffer_select_range().
+
 	* tests/testtext.c: Add a "Select All" menuitem.  (#156792,
 	Paolo Borelli)
 
