@@ -1,4 +1,4 @@
-2002-02-05  Matthias Clasen  <matthias@local>
+2002-02-05  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkrc.sgml: Update the description of RC file loading
 	to match recent code changes. Also document font_name and engine. 

@@ -1,3 +1,8 @@
+2002-02-17  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/tutorial/gtk-tut.sgml, examples/paned/paned.c, 
+	examples/paned/Makefile: Make the paned example deprecation-clean.
+
 2002-02-17  jacob berkman  <jacob@ximian.com>
 
 	* Makefile.am: remove the packer example files as they don't exist
@@ -85,7 +90,7 @@
 
 	* gdk/linux-fb/miarc.c: use fabs() on a double instead of abs()
 
-2002-02-17  Matthias Clasen  <matthias@YAST_ASK>
+2002-02-17  Matthias Clasen  <maclas@gmx.de>
 
 	More work on #71430.
 
@@ -106,11 +111,11 @@ Sun Feb 17 00:13:06 2002  Kristian Rietveld  <kris@gtk.org>
 	(gtk_tree_view_row_changed): update top_row or dy,
 	(gtk_tree_view_rows_reordered): update top_row
 
-2002-02-16  Matthias Clasen  <matthias@YAST_ASK>
+2002-02-16  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/Makefile.am (INCLUDES): add -DGDK_PIXBUF_DISABLE_DEPRECATED.
 
-2002-02-16  Matthias Clasen  <matthias@YAST_ASK>
+2002-02-16  Matthias Clasen  <maclas@gmx.de>
 
 	* examples/extract.awk: rearrange rules to not emit the example 
 	start and end markers.
@@ -179,7 +184,7 @@ Thu Feb 14 21:08:49 2002  Owen Taylor  <otaylor@redhat.com>
 	* gdk/gdkglobals.c: Remove GDKVAR from C file, see
 	if anyone complains. (#71317, Morten Welinder.)
 
-2002-02-14  Matthias Clasen  <matthias@YAST_ASK>
+2002-02-14  Matthias Clasen  <maclas@gmx.de>
 
 	The following changes are the beginning of the work on #71430.
 	

@@ -7325,11 +7325,13 @@ GtkWidget *create_list( void )
 {
 
     GtkWidget *scrolled_window;
-    GtkWidget *list;
-    GtkWidget *list_item;
-   
+    GtkWidget *tree_view;
+    GtkListStore *model;
+    GtkTreeIter iter;
+    GtkCellRenderer *cell;
+    GtkTreeViewColumn *column;
+
     int i;
-    char buffer[16];
    
     /* Create a new scrolled window, with scrollbars only if needed */
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -7337,22 +7339,34 @@ GtkWidget *create_list( void )
 				    GTK_POLICY_AUTOMATIC, 
 				    GTK_POLICY_AUTOMATIC);
    
-    /* Create a new list and put it in the scrolled window */
-    list = gtk_list_new ();
-    gtk_scrolled_window_add_with_viewport (
-               GTK_SCROLLED_WINDOW (scrolled_window), list);
-    gtk_widget_show (list);
+    model = gtk_list_store_new (1, G_TYPE_STRING);
+    tree_view = gtk_tree_view_new ();
+    gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window), 
+                                           tree_view);
+    gtk_tree_view_set_model (GTK_TREE_VIEW (tree_view), GTK_TREE_MODEL (model));
+    gtk_widget_show (tree_view);
    
     /* Add some messages to the window */
-    for (i=0; i<10; i++) {
-
-    	sprintf(buffer,"Message #%d",i);
-    	list_item = gtk_list_item_new_with_label (buffer);
-    	gtk_container_add (GTK_CONTAINER(list), list_item);
-    	gtk_widget_show (list_item);
-
+    for (i = 0; i < 10; i++) {
+        gchar *msg = g_strdup_printf ("Message #%d", i);
+        gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+        gtk_list_store_set (GTK_LIST_STORE (model), 
+	                    &iter,
+                            0, msg,
+	                    -1);
+	g_free (msg);
     }
    
+    cell = gtk_cell_renderer_text_new ();
+
+    column = gtk_tree_view_column_new_with_attributes ("Messages",
+                                                       cell,
+                                                       "text", 0,
+                                                       NULL);
+  
+    gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view),
+	  		         GTK_TREE_VIEW_COLUMN (column));
+
     return scrolled_window;
 }
    
@@ -7361,11 +7375,13 @@ when our window is realized. We could also force our window to be
 realized with gtk_widget_realize, but it would have to be part of
 a hierarchy first */
 
-void realize_text( GtkWidget *text,
-                   gpointer data )
+void insert_text (GtkTextBuffer *buffer)
 {
-    gtk_text_freeze (GTK_TEXT (text));
-    gtk_text_insert (GTK_TEXT (text), NULL, &amp;text->style->black, NULL,
+   GtkTextIter iter;
+ 
+   gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+
+   gtk_text_buffer_insert (buffer, &iter,   
     "From: pathfinder@nasa.gov\n"
     "To: mom@nasa.gov\n"
     "Subject: Made it!\n"
@@ -7374,46 +7390,29 @@ void realize_text( GtkWidget *text,
     "great - clear but cold, and there are lots of fun sights.\n"
     "Sojourner says hi. See you soon.\n"
     " -Path\n", -1);
-   
-    gtk_text_thaw (GTK_TEXT (text));
 }
    
 /* Create a scrolled text area that displays a "message" */
 GtkWidget *create_text( void )
 {
-    GtkWidget *table;
-    GtkWidget *text;
-    GtkWidget *hscrollbar;
-    GtkWidget *vscrollbar;
-   
-    /* Create a table to hold the text widget and scrollbars */
-    table = gtk_table_new (2, 2, FALSE);
-   
-    /* Put a text widget in the upper left hand corner. Note the use of
-     * GTK_SHRINK in the y direction */
-    text = gtk_text_new (NULL, NULL);
-    gtk_table_attach (GTK_TABLE (table), text, 0, 1, 0, 1,
-		      GTK_FILL | GTK_EXPAND,
-		      GTK_FILL | GTK_EXPAND | GTK_SHRINK, 0, 0);
-    gtk_widget_show (text);
-   
-    /* Put a HScrollbar in the lower left hand corner */
-    hscrollbar = gtk_hscrollbar_new (GTK_TEXT (text)->hadj);
-    gtk_table_attach (GTK_TABLE (table), hscrollbar, 0, 1, 1, 2,
-		      GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-    gtk_widget_show (hscrollbar);
-   
-    /* And a VScrollbar in the upper right */
-    vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
-    gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
-		      GTK_FILL, GTK_EXPAND | GTK_FILL | GTK_SHRINK, 0, 0);
-    gtk_widget_show (vscrollbar);
-   
-    /* Add a handler to put a message in the text widget when it is realized */
-    gtk_signal_connect (GTK_OBJECT (text), "realize",
-			GTK_SIGNAL_FUNC (realize_text), NULL);
-   
-    return table;
+   GtkWidget *scrolled_window;
+   GtkWidget *view;
+   GtkTextBuffer *buffer;
+
+   view = gtk_text_view_new ();
+   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+		   	           GTK_POLICY_AUTOMATIC,
+				   GTK_POLICY_AUTOMATIC);
+
+   gtk_container_add (GTK_CONTAINER (scrolled_window), view);
+   insert_text (buffer);
+
+   gtk_widget_show_all (scrolled_window);
+
+   return scrolled_window;
 }
    
 int main( int   argc,
@@ -7428,7 +7427,7 @@ int main( int   argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Paned Windows");
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+    g_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_set_size_request (GTK_WIDGET (window), 450, 400);
@@ -7436,17 +7435,17 @@ int main( int   argc,
     /* create a vpaned widget and add it to our toplevel window */
    
     vpaned = gtk_vpaned_new ();
-    gtk_container_add (GTK_CONTAINER(window), vpaned);
+    gtk_container_add (GTK_CONTAINER (window), vpaned);
     gtk_widget_show (vpaned);
    
     /* Now create the contents of the two halves of the window */
    
     list = create_list ();
-    gtk_paned_add1 (GTK_PANED(vpaned), list);
+    gtk_paned_add1 (GTK_PANED (vpaned), list);
     gtk_widget_show (list);
    
     text = create_text ();
-    gtk_paned_add2 (GTK_PANED(vpaned), text);
+    gtk_paned_add2 (GTK_PANED (vpaned), text);
     gtk_widget_show (text);
     gtk_widget_show (window);
     gtk_main ();
