@@ -1097,10 +1097,12 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       switch (direction) 
 	{
 	case GTK_MENU_DIR_PARENT:
-	  direction = GTK_MENU_DIR_CHILD;
+	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement != GTK_TOP_BOTTOM)
+	    direction = GTK_MENU_DIR_CHILD;
 	  break;
 	case GTK_MENU_DIR_CHILD:
-	  direction = GTK_MENU_DIR_PARENT;
+	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement != GTK_TOP_BOTTOM)
+	    direction = GTK_MENU_DIR_PARENT;
 	  break;
 	case GTK_MENU_DIR_PREV:
 	  if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
