@@ -1,0 +1,3221 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ *
+ * GtkFontSelection widget for Gtk+, by Damon Chaplin, May 1998.
+ * Based on the GnomeFontSelector widget, by Elliot Lee, but major changes.
+ * The GnomeFontSelector was derived from app/text_tool.c in the GIMP.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+/*
+ * Limits:
+ *
+ *  Fontnames	 - A maximum of MAX_FONTS (32767) fontnames will be retrieved
+ *		   from X Windows with XListFonts(). Any more are ignored.
+ *		   I think this limit may have been set because of a limit in
+ *		   GtkList. It could possibly be increased since we are using
+ *		   GtkClists now, but I'd be surprised if it was reached.
+ *  Field length - XLFD_MAX_FIELD_LEN is the maximum length that any field of a
+ *		   fontname can be for it to be considered valid. Others are
+ *		   ignored.
+ *  Properties   - Maximum of 65535 choices for each font property - guint16's
+ *		   are used as indices, e.g. in the FontInfo struct.
+ *  Combinations - Maximum of 65535 combinations of properties for each font
+ *		   family - a guint16 is used in the FontInfo struct.
+ *  Font size    - Minimum font size of 2 pixels/points, since trying to load
+ *		   some fonts with a size of 1 can cause X to hang.
+ *		   (e.g. the Misc Fixed fonts).
+ */
+
+/*
+ * Possible Improvements:
+ *
+ *  Font Styles  - could sort the styles into a reasonable order - regular
+ *		   first, then bold, bold italic etc. Could also try to keep
+ *		   a similar style as the user selects different fonts.
+ *
+ *  I18N	 - the default preview text is not useful for international
+ *		   fonts. Maybe the first few characters of the font could be
+ *		   displayed instead.
+ *		 - fontsets? should these be handled by the font dialog?
+ */
+
+/*
+ * Debugging: compile with -DFONTSEL_DEBUG for lots of debugging output.
+ */
+
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <X11/Xlib.h>
+
+#include "gdk/gdkx.h"
+#include "gdk/gdkkeysyms.h"
+
+#include "gtkbutton.h"
+#include "gtkclist.h"
+#include "gtkentry.h"
+#include "gtkfontsel.h"
+#include "gtkframe.h"
+#include "gtkhbbox.h"
+#include "gtkhbox.h"
+#include "gtklabel.h"
+#include "gtknotebook.h"
+#include "gtkradiobutton.h"
+#include "gtksignal.h"
+#include "gtktable.h"
+#include "gtkvbox.h"
+
+/* The maximum number of fontnames requested with XListFonts(). */
+#define MAX_FONTS 32767
+
+/* This is the largest field length we will accept. If a fontname has a field
+   larger than this we will skip it. */
+#define XLFD_MAX_FIELD_LEN 64
+
+/* These are what we use as the standard font sizes, for the size clist.
+   Note that when using points we still show these integer point values but
+   we work internally in decipoints (and decipoint values can be typed in). */
+static guint16 font_sizes[] = {
+  8, 9, 10, 11, 12, 13, 14, 16, 18, 20, 22, 24, 26, 28,
+  32, 36, 40, 48, 56, 64, 72
+};
+
+/* Initial font metric & size (Remember point sizes are in decipoints).
+   The font size should match one of those in the font_sizes array. */
+#define INITIAL_METRIC		  POINTS_METRIC
+#define INITIAL_FONT_SIZE	  140
+
+/* This is the default text shown in the preview entry, though the user
+   can set it. Remember that some fonts only have capital letters. */
+#define PREVIEW_TEXT "abcdefghijk ABCDEFGHIJK"
+
+/* This is the initial and maximum height of the preview entry (it expands
+   when large font sizes are selected). Initial height is also the minimum. */
+#define INITIAL_PREVIEW_HEIGHT 44
+#define MAX_PREVIEW_HEIGHT 300
+
+/* These are the sizes of the font, style & size clists. */
+#define FONT_LIST_HEIGHT	136
+#define FONT_LIST_WIDTH		180
+#define FONT_STYLE_LIST_WIDTH	160
+#define FONT_SIZE_LIST_WIDTH	60
+
+/* This is the number of fields in an X Logical Font Description font name.
+   Note that we count the registry & encoding as 1. */
+#define GTK_XLFD_NUM_FIELDS 13
+
+/* These are the field numbers in the X Logical Font Description fontnames,
+   e.g. -adobe-courier-bold-o-normal--25-180-100-100-m-150-iso8859-1 */
+typedef enum
+{
+  XLFD_FOUNDRY		= 0,
+  XLFD_FAMILY		= 1,
+  XLFD_WEIGHT		= 2,
+  XLFD_SLANT		= 3,
+  XLFD_SET_WIDTH	= 4,
+  XLFD_ADD_STYLE	= 5,
+  XLFD_PIXELS		= 6,
+  XLFD_POINTS		= 7,
+  XLFD_RESOLUTION_X	= 8,
+  XLFD_RESOLUTION_Y	= 9,
+  XLFD_SPACING		= 10,
+  XLFD_AVERAGE_WIDTH	= 11,
+  XLFD_CHARSET		= 12
+} FontField;
+
+/* These are the names of the fields, used on the info & filter page. */
+static gchar* xlfd_field_names[GTK_XLFD_NUM_FIELDS] = {
+  "Foundry:",
+  "Family:",
+  "Weight:",
+  "Slant:",
+  "Set Width:",
+  "Add Style:",
+  "Pixel Size:",
+  "Point Size:",
+  "Resolution X:",
+  "Resolution Y:",
+  "Spacing:",
+  "Average Width:",
+  "Charset:",
+};
+
+/* These are the array indices of the font properties used in several arrays,
+   and should match the xlfd_index array below. */
+typedef enum
+{
+  WEIGHT	= 0,
+  SLANT		= 1,
+  SET_WIDTH	= 2,
+  SPACING	= 3,
+  CHARSET	= 4,
+  FOUNDRY	= 5
+} PropertyIndexType;
+
+/* This is used to look up a field in a fontname given one of the above
+   property indices. */
+static FontField xlfd_index[GTK_NUM_FONT_PROPERTIES] = {
+  XLFD_WEIGHT,
+  XLFD_SLANT,
+  XLFD_SET_WIDTH,
+  XLFD_SPACING,
+  XLFD_CHARSET,
+  XLFD_FOUNDRY
+};
+
+/* These are the positions of the properties in the filter table - x, y. */
+static gint filter_positions[GTK_NUM_FONT_PROPERTIES][2] = {
+  { 1, 0 }, { 0, 2 }, { 1, 2 }, { 2, 2 }, { 2, 0 }, { 0, 0 }
+};
+static gint filter_heights[GTK_NUM_FONT_PROPERTIES] = {
+  100, 80, 80, 50, 100, 100
+};
+
+/* The initial size and increment of each of the arrays of property values. */
+#define PROPERTY_ARRAY_INCREMENT	16
+
+static void    gtk_font_selection_class_init	     (GtkFontSelectionClass *klass);
+static void    gtk_font_selection_init		     (GtkFontSelection *fontsel);
+static void    gtk_font_selection_destroy	     (GtkObject      *object);
+
+/* These are all used for class initialization - loading in the fonts etc. */
+static void    gtk_font_selection_get_fonts          (GtkFontSelectionClass *klass);
+static void    gtk_font_selection_insert_font        (GtkFontSelectionClass *klass,
+						      GSList         *fontnames[],
+						      gint           *ntable,
+						      gchar          *fontname);
+static gint    gtk_font_selection_insert_field       (GtkFontSelectionClass *klass,
+						      gchar          *fontname,
+						      gint            prop);
+
+/* These are the callbacks & related functions. */
+static void    gtk_font_selection_select_font	     (GtkWidget      *w,
+						      gint	      row,
+						      gint	      column,
+						      GdkEventButton *bevent,
+						      gpointer        data);
+static gint    gtk_font_selection_on_clist_key_press (GtkWidget      *clist,
+						      GdkEventKey    *event,
+						      GtkFontSelection *fs);
+static gboolean gtk_font_selection_select_next	     (GtkFontSelection *fs,
+						      GtkWidget        *clist,
+						      gint		step);
+static void    gtk_font_selection_show_available_styles
+						     (GtkFontSelection *fs);
+static void    gtk_font_selection_select_best_style  (GtkFontSelection *fs);
+
+static void    gtk_font_selection_select_style	     (GtkWidget      *w,
+						      gint	      row,
+						      gint	      column,
+						      GdkEventButton *bevent,
+						      gpointer        data);
+static void    gtk_font_selection_show_available_sizes
+						     (GtkFontSelection *fs);
+static gint    gtk_font_selection_size_key_press     (GtkWidget      *w,
+						      GdkEventKey    *event,
+						      gpointer        data);
+static void    gtk_font_selection_select_best_size   (GtkFontSelection *fs);
+static void    gtk_font_selection_select_size	     (GtkWidget      *w,
+						      gint	      row,
+						      gint	      column,
+						      GdkEventButton *bevent,
+						      gpointer        data);
+
+static void    gtk_font_selection_metric_callback    (GtkWidget      *w,
+						      gpointer        data);
+static void    gtk_font_selection_expose_list	     (GtkWidget	     *w,
+						      GdkEventExpose *event,
+						      gpointer        data);
+
+static void    gtk_font_selection_switch_page	     (GtkWidget      *w,
+						      GtkNotebookPage *page,
+						      gint             page_num,
+						      gpointer         data);
+static void    gtk_font_selection_show_font_info     (GtkFontSelection *fs);
+
+static void    gtk_font_selection_select_filter	     (GtkWidget      *w,
+						      gint	      row,
+						      gint	      column,
+						      GdkEventButton *bevent,
+						      gpointer        data);
+static void    gtk_font_selection_unselect_filter    (GtkWidget      *w,
+						      gint	      row,
+						      gint	      column,
+						      GdkEventButton *bevent,
+						      gpointer        data);
+static void    gtk_font_selection_filter_fonts	     (GtkFontSelection *fs);
+static gboolean gtk_font_selection_style_visible     (GtkFontSelection *fs,
+						      FontInfo       *font,
+						      gint	      style);
+static void    gtk_font_selection_reset_filter	     (GtkWidget      *w,
+						      gpointer        data);
+static void    gtk_font_selection_toggle_filter	     (GtkWidget      *w,
+						      gpointer        data);
+static void    gtk_font_selection_apply_filter       (GtkFontSelection *fs);
+static void    gtk_font_selection_clear_filter       (GtkFontSelection *fs);
+static void    gtk_font_selection_toggle_scaled_bitmaps
+						     (GtkWidget      *w,
+						      gpointer        data);
+
+/* Misc. utility functions. */
+static void    gtk_font_selection_insert_fonts       (GtkFontSelection *fs);
+static gboolean gtk_font_selection_load_font         (GtkFontSelection *fs);
+static void    gtk_font_selection_update_preview     (GtkFontSelection *fs);
+
+static gint    gtk_font_selection_find_font	     (GtkFontSelection *fs,
+						      gchar          *family,
+						      guint16	      foundry);
+static guint16 gtk_font_selection_field_to_index     (gchar         **table,
+						      gint            ntable,
+						      gchar          *field);
+
+static gchar*  gtk_font_selection_expand_slant_code  (gchar          *slant);
+static gchar*  gtk_font_selection_expand_spacing_code(gchar          *spacing);
+
+/* Functions for handling X Logical Font Description fontnames. */
+static gboolean gtk_font_selection_is_xlfd_font_name (const gchar    *fontname);
+static char*   gtk_font_selection_get_xlfd_field     (const gchar    *fontname,
+						      FontField       field_num,
+						      gchar          *buffer);
+static gchar * gtk_font_selection_create_xlfd        (gint            size,
+						      GtkFontMetricType metric,
+						      gchar          *foundry,
+						      gchar          *family,
+						      gchar          *weight,
+						      gchar          *slant,
+						      gchar          *set_width,
+						      gchar          *spacing,
+						      gchar	     *charset);
+
+
+/* FontSelectionDialog */
+static void    gtk_font_selection_dialog_class_init  (GtkFontSelectionDialogClass *klass);
+static void    gtk_font_selection_dialog_init	     (GtkFontSelectionDialog *fontseldiag);
+
+static gint    gtk_font_selection_dialog_on_configure(GtkWidget      *widget,
+						      GdkEventConfigure *event,
+						      GtkFontSelectionDialog *fsd);
+
+static GtkWindowClass *font_selection_parent_class = NULL;
+static GtkNotebookClass *font_selection_dialog_parent_class = NULL;
+
+guint
+gtk_font_selection_get_type()
+{
+  static guint font_selection_type = 0;
+
+  if(!font_selection_type)
+    {
+      GtkTypeInfo fontsel_info =
+      {
+	"GtkFontSelection",
+	sizeof(GtkFontSelection),
+	sizeof(GtkFontSelectionClass),
+	(GtkClassInitFunc) gtk_font_selection_class_init,
+	(GtkObjectInitFunc) gtk_font_selection_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
+      };
+
+      font_selection_type = gtk_type_unique(gtk_notebook_get_type(),
+					    &fontsel_info);
+    }
+
+  return font_selection_type;
+}
+
+static void
+gtk_font_selection_class_init(GtkFontSelectionClass *klass)
+{
+  GtkObjectClass *object_class;
+
+  object_class = (GtkObjectClass *) klass;
+
+  font_selection_parent_class = gtk_type_class (gtk_notebook_get_type ());
+
+  object_class->destroy = gtk_font_selection_destroy;
+
+  gtk_font_selection_get_fonts(klass);
+}
+
+static void
+gtk_font_selection_init(GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  GtkWidget *text_frame;
+  GtkWidget *text_box;
+  GtkWidget *table, *label, *hbox, *hbox2, *clist, *button, *vbox, *alignment;
+  gint i, prop, row;
+  gchar *titles[] = { "Font Property", "Requested Value", "Actual Value" };
+  gchar buffer[128];
+  gchar *size;
+  gint size_to_match;
+  gchar *row_text[3];
+  gchar *property, *text;
+  gboolean inserted;
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+
+  /* Initialize the GtkFontSelection struct. We do this here in case any
+     callbacks are triggered while creating the interface. */
+  fontsel->font = NULL;
+  fontsel->font_index = -1;
+  fontsel->style = -1;
+  fontsel->metric = INITIAL_METRIC;
+  fontsel->size = INITIAL_FONT_SIZE;
+  fontsel->selected_size = INITIAL_FONT_SIZE;
+  fontsel->scale_bitmapped_fonts = FALSE;
+
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      fontsel->property_filters[prop] = NULL;
+      fontsel->property_nfilters[prop] = 0;
+    }
+
+  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+      fontsel->property_values[prop] = 0;
+
+  fontsel->scroll_on_expose = TRUE;
+
+  /* Create the shell and vertical & horizontal boxes */
+  fontsel->main_vbox = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (fontsel->main_vbox);
+  gtk_container_border_width (GTK_CONTAINER (fontsel->main_vbox), 6);
+  label = gtk_label_new("Font");
+  gtk_widget_set_usize (label, 120, -1);
+  gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
+			    fontsel->main_vbox, label);
+
+  /* Create the table of font, style & size. */
+  table = gtk_table_new (3, 3, FALSE);
+  gtk_widget_show (table);
+  gtk_table_set_col_spacings(GTK_TABLE(table), 8);
+  gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), table, TRUE, TRUE, 0);
+
+  fontsel->font_label = gtk_label_new("Font:");
+  gtk_misc_set_alignment (GTK_MISC (fontsel->font_label), 0.0, 0.5);
+  gtk_widget_show (fontsel->font_label);
+  gtk_table_attach (GTK_TABLE (table), fontsel->font_label, 0, 1, 0, 1,
+		    GTK_FILL, 0, 0, 0);
+  label = gtk_label_new("Font Style:");
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_table_attach (GTK_TABLE (table), label, 1, 2, 0, 1,
+		    GTK_FILL, 0, 0, 0);
+  label = gtk_label_new("Size:");
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_table_attach (GTK_TABLE (table), label, 2, 3, 0, 1,
+		    GTK_FILL, 0, 0, 0);
+  
+  fontsel->font_entry = gtk_entry_new();
+  gtk_entry_set_editable(GTK_ENTRY(fontsel->font_entry), FALSE);
+  gtk_widget_set_usize (fontsel->font_entry, 20, -1);
+  gtk_widget_show (fontsel->font_entry);
+  gtk_table_attach (GTK_TABLE (table), fontsel->font_entry, 0, 1, 1, 2,
+		    GTK_FILL, 0, 0, 0);
+  fontsel->font_style_entry = gtk_entry_new();
+  gtk_entry_set_editable(GTK_ENTRY(fontsel->font_style_entry), FALSE);
+  gtk_widget_set_usize (fontsel->font_style_entry, 20, -1);
+  gtk_widget_show (fontsel->font_style_entry);
+  gtk_table_attach (GTK_TABLE (table), fontsel->font_style_entry, 1, 2, 1, 2,
+		    GTK_FILL, 0, 0, 0);
+  fontsel->size_entry = gtk_entry_new();
+  gtk_widget_set_usize (fontsel->size_entry, 20, -1);
+  gtk_widget_show (fontsel->size_entry);
+  gtk_table_attach (GTK_TABLE (table), fontsel->size_entry, 2, 3, 1, 2,
+		    GTK_FILL, 0, 0, 0);
+  gtk_signal_connect (GTK_OBJECT (fontsel->size_entry), "key_press_event",
+		      (GtkSignalFunc) gtk_font_selection_size_key_press,
+		      fontsel);
+
+  /* Create the clists  */
+  fontsel->font_clist = gtk_clist_new(1);
+  gtk_clist_column_titles_hide (GTK_CLIST(fontsel->font_clist));
+  gtk_clist_set_column_width (GTK_CLIST(fontsel->font_clist), 0, 300);
+  gtk_clist_set_policy(GTK_CLIST(fontsel->font_clist), GTK_POLICY_ALWAYS,
+		       GTK_POLICY_AUTOMATIC);
+  gtk_widget_set_usize (fontsel->font_clist, FONT_LIST_WIDTH,
+			FONT_LIST_HEIGHT);
+  gtk_widget_show(fontsel->font_clist);
+  gtk_table_attach (GTK_TABLE (table), fontsel->font_clist, 0, 1, 2, 3,
+		    GTK_EXPAND | GTK_FILL,
+		    GTK_EXPAND | GTK_FILL, 0, 0);
+
+  fontsel->font_style_clist = gtk_clist_new(1);
+  gtk_clist_column_titles_hide (GTK_CLIST(fontsel->font_style_clist));
+  gtk_clist_set_column_width (GTK_CLIST(fontsel->font_style_clist), 0, 300);
+  gtk_clist_set_policy(GTK_CLIST(fontsel->font_style_clist), GTK_POLICY_ALWAYS,
+		       GTK_POLICY_AUTOMATIC);
+  gtk_widget_set_usize (fontsel->font_style_clist, FONT_STYLE_LIST_WIDTH, -1);
+  gtk_widget_show(fontsel->font_style_clist);
+  gtk_table_attach (GTK_TABLE (table), fontsel->font_style_clist, 1, 2, 2, 3,
+		    GTK_EXPAND | GTK_FILL,
+		    GTK_EXPAND | GTK_FILL, 0, 0);
+
+  fontsel->size_clist = gtk_clist_new(1);
+  gtk_clist_column_titles_hide (GTK_CLIST(fontsel->size_clist));
+  gtk_clist_set_policy(GTK_CLIST(fontsel->size_clist), GTK_POLICY_ALWAYS,
+		       GTK_POLICY_AUTOMATIC);
+  gtk_widget_set_usize (fontsel->size_clist, FONT_SIZE_LIST_WIDTH, -1);
+  gtk_widget_show(fontsel->size_clist);
+  gtk_table_attach (GTK_TABLE (table), fontsel->size_clist, 2, 3, 2, 3,
+		    GTK_FILL, GTK_FILL, 0, 0);
+
+
+  /* Insert the fonts. If there exist fonts with the same family but
+     different foundries, then the foundry name is appended in brackets. */
+  gtk_font_selection_insert_fonts(fontsel);
+
+  gtk_signal_connect (GTK_OBJECT (fontsel->font_clist), "select_row",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_select_font),
+		      fontsel);
+  GTK_WIDGET_SET_FLAGS (fontsel->font_clist, GTK_CAN_FOCUS);
+  gtk_signal_connect (GTK_OBJECT (fontsel->font_clist), "key_press_event",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
+		      fontsel);
+  gtk_signal_connect_after (GTK_OBJECT (fontsel->font_clist), "expose_event",
+			    GTK_SIGNAL_FUNC(gtk_font_selection_expose_list),
+			    fontsel);
+
+  gtk_signal_connect (GTK_OBJECT (fontsel->font_style_clist), "select_row",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_select_style),
+		      fontsel);
+  GTK_WIDGET_SET_FLAGS (fontsel->font_style_clist, GTK_CAN_FOCUS);
+  gtk_signal_connect (GTK_OBJECT (fontsel->font_style_clist),
+		      "key_press_event",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
+		      fontsel);
+
+  /* Insert the standard font sizes */
+  gtk_clist_freeze (GTK_CLIST(fontsel->size_clist));
+  size_to_match = INITIAL_FONT_SIZE;
+  if (INITIAL_METRIC == POINTS_METRIC)
+    size_to_match = size_to_match / 10;
+  for (i = 0; i < sizeof(font_sizes) / sizeof(font_sizes[0]); i++)
+    {
+      sprintf(buffer, "%i", font_sizes[i]);
+      size = buffer;
+      gtk_clist_append(GTK_CLIST(fontsel->size_clist), &size);
+      if (font_sizes[i] == size_to_match)
+	{
+	  gtk_clist_select_row(GTK_CLIST(fontsel->size_clist), i, 0);
+	  gtk_entry_set_text(GTK_ENTRY(fontsel->size_entry), buffer);
+	}
+    }
+  gtk_clist_thaw (GTK_CLIST(fontsel->size_clist));
+
+  gtk_signal_connect (GTK_OBJECT (fontsel->size_clist), "select_row",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_select_size),
+		      fontsel);
+  GTK_WIDGET_SET_FLAGS (fontsel->size_clist, GTK_CAN_FOCUS);
+  gtk_signal_connect (GTK_OBJECT (fontsel->size_clist), "key_press_event",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_on_clist_key_press),
+		      fontsel);
+
+
+  /* create the Filter, Scale Bitmaps & Metric buttons */
+  hbox = gtk_hbox_new(FALSE, 8);
+  gtk_widget_show (hbox);
+  gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), hbox, FALSE, TRUE, 0);
+
+  /*
+  fontsel->filter_button = gtk_check_button_new_with_label("Filter fonts");
+  gtk_widget_show(fontsel->filter_button);
+  gtk_box_pack_start (GTK_BOX (hbox), fontsel->filter_button, FALSE, FALSE, 0);
+  gtk_widget_set_sensitive (fontsel->filter_button, FALSE);
+  gtk_signal_connect (GTK_OBJECT (fontsel->filter_button), "clicked",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_toggle_filter),
+		      fontsel);
+		      */
+
+  fontsel->filter_button = gtk_button_new_with_label("  Clear Filter  ");
+  gtk_widget_show(fontsel->filter_button);
+  gtk_box_pack_start (GTK_BOX (hbox), fontsel->filter_button, FALSE, FALSE, 0);
+  gtk_widget_set_sensitive (fontsel->filter_button, FALSE);
+  gtk_signal_connect (GTK_OBJECT (fontsel->filter_button), "clicked",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_toggle_filter),
+		      fontsel);
+
+  fontsel->scaled_bitmaps_button
+    = gtk_check_button_new_with_label("Allow scaled bitmap fonts");
+  gtk_widget_show(fontsel->scaled_bitmaps_button);
+  gtk_box_pack_start (GTK_BOX (hbox), fontsel->scaled_bitmaps_button,
+		      FALSE, FALSE, 0);
+  if (!klass->scaled_bitmaps_available)
+    gtk_widget_set_sensitive (fontsel->scaled_bitmaps_button, FALSE);
+  gtk_signal_connect (GTK_OBJECT (fontsel->scaled_bitmaps_button), "clicked",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_toggle_scaled_bitmaps),
+		      fontsel);
+
+
+  hbox2 = gtk_hbox_new(FALSE, 0);
+  gtk_widget_show (hbox2);
+  gtk_box_pack_end (GTK_BOX (hbox), hbox2, FALSE, FALSE, 0);
+  
+  label = gtk_label_new("Metric:");
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (hbox2), label, FALSE, TRUE, 8);
+
+  fontsel->points_button = gtk_radio_button_new_with_label(NULL, "Points");
+  gtk_widget_show (fontsel->points_button);
+  gtk_box_pack_start (GTK_BOX (hbox2), fontsel->points_button, FALSE, TRUE, 0);
+  if (INITIAL_METRIC == POINTS_METRIC)
+    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->points_button),
+				TRUE);
+
+  fontsel->pixels_button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(fontsel->points_button), "Pixels");
+  gtk_widget_show (fontsel->pixels_button);
+  gtk_box_pack_start (GTK_BOX (hbox2), fontsel->pixels_button, FALSE, TRUE, 0);
+  if (INITIAL_METRIC == PIXELS_METRIC)
+    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->pixels_button),
+				TRUE);
+
+  gtk_signal_connect(GTK_OBJECT(fontsel->points_button), "toggled",
+		     (GtkSignalFunc) gtk_font_selection_metric_callback,
+		     fontsel);
+  gtk_signal_connect(GTK_OBJECT(fontsel->pixels_button), "toggled",
+		     (GtkSignalFunc) gtk_font_selection_metric_callback,
+		     fontsel);
+
+
+  /* create the text entry widget */
+  text_frame = gtk_frame_new ("Preview:");
+  gtk_widget_show (text_frame);
+  gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_ETCHED_IN);
+  gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), text_frame,
+		      FALSE, TRUE, 0);
+
+  /* This is just used to get a 4-pixel space around the preview entry. */
+  text_box = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (text_box);
+  gtk_container_add (GTK_CONTAINER (text_frame), text_box);
+  gtk_container_border_width (GTK_CONTAINER (text_box), 4);
+
+  fontsel->preview_entry = gtk_entry_new ();
+  gtk_widget_show (fontsel->preview_entry);
+  gtk_widget_set_usize (fontsel->preview_entry, -1, INITIAL_PREVIEW_HEIGHT);
+  gtk_box_pack_start (GTK_BOX (text_box), fontsel->preview_entry,
+		      TRUE, TRUE, 0);
+
+  /* Create the message area */
+  fontsel->message_label = gtk_label_new("");
+  gtk_widget_show (fontsel->message_label);
+  gtk_box_pack_start (GTK_BOX (fontsel->main_vbox), fontsel->message_label, 
+		      FALSE, FALSE, 0);
+
+
+  /* Create the font info page */
+  fontsel->info_vbox = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (fontsel->info_vbox);
+  gtk_container_border_width (GTK_CONTAINER (fontsel->info_vbox), 2);
+  label = gtk_label_new("Font Information");
+  gtk_widget_set_usize (label, 120, -1);
+  gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
+			    fontsel->info_vbox, label);
+
+  fontsel->info_clist = gtk_clist_new_with_titles(3, titles);
+  gtk_widget_set_usize (fontsel->info_clist, 390, 150);
+  gtk_clist_set_column_width(GTK_CLIST(fontsel->info_clist), 0, 130);
+  gtk_clist_set_column_width(GTK_CLIST(fontsel->info_clist), 1, 130);
+  gtk_clist_set_column_width(GTK_CLIST(fontsel->info_clist), 2, 130);
+  gtk_clist_column_titles_passive(GTK_CLIST(fontsel->info_clist));
+  gtk_clist_set_policy(GTK_CLIST(fontsel->info_clist), GTK_POLICY_AUTOMATIC,
+		       GTK_POLICY_AUTOMATIC);
+  gtk_widget_show(fontsel->info_clist);
+  gtk_box_pack_start (GTK_BOX (fontsel->info_vbox), fontsel->info_clist,
+		      TRUE, TRUE, 0);
+
+  /* Insert the property names */
+  gtk_clist_freeze (GTK_CLIST(fontsel->info_clist));
+  row_text[1] = "";
+  row_text[2] = "";
+  /* Note: we skip the last field, encoding, since it is shown as part of the
+     charset. */
+  for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
+    {
+      row_text[0] = xlfd_field_names[i];
+      gtk_clist_append(GTK_CLIST(fontsel->info_clist), row_text);
+      gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 0, 0, 4);
+      gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 1, 0, 4);
+      gtk_clist_set_shift(GTK_CLIST(fontsel->info_clist), i, 2, 0, 4);
+    }
+  gtk_clist_thaw (GTK_CLIST(fontsel->info_clist));
+
+  label = gtk_label_new("Requested Font Name:");
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (fontsel->info_vbox), label, FALSE, TRUE, 0);
+
+  fontsel->requested_font_name = gtk_entry_new();
+  gtk_entry_set_editable(GTK_ENTRY(fontsel->requested_font_name), FALSE);
+  gtk_widget_show (fontsel->requested_font_name);
+  gtk_box_pack_start (GTK_BOX (fontsel->info_vbox),
+		      fontsel->requested_font_name, FALSE, TRUE, 0);
+
+  label = gtk_label_new("Actual Font Name:");
+  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (fontsel->info_vbox), label, FALSE, TRUE, 0);
+  
+  fontsel->actual_font_name = gtk_entry_new();
+  gtk_entry_set_editable(GTK_ENTRY(fontsel->actual_font_name), FALSE);
+  gtk_widget_show (fontsel->actual_font_name);
+  gtk_box_pack_start (GTK_BOX (fontsel->info_vbox),
+		      fontsel->actual_font_name, FALSE, TRUE, 0);
+
+  sprintf(buffer, "%i fonts available with a total of %i styles.",
+	  klass->nfonts, klass->nstyles);
+  label = gtk_label_new(buffer);
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (fontsel->info_vbox), label, FALSE, FALSE, 0);
+
+  gtk_signal_connect (GTK_OBJECT (fontsel), "switch_page",
+		      GTK_SIGNAL_FUNC(gtk_font_selection_switch_page),
+		      fontsel);
+
+
+  /* Create the Filter page. */
+  fontsel->filter_vbox = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (fontsel->filter_vbox);
+  gtk_container_border_width (GTK_CONTAINER (fontsel->filter_vbox), 2);
+  label = gtk_label_new("Filter");
+  gtk_widget_set_usize (label, 120, -1);
+  gtk_notebook_append_page (GTK_NOTEBOOK (fontsel),
+			    fontsel->filter_vbox, label);
+
+  table = gtk_table_new (4, 3, FALSE);
+  gtk_table_set_col_spacings(GTK_TABLE(table), 2);
+  gtk_widget_show (table);
+  gtk_box_pack_start (GTK_BOX (fontsel->filter_vbox), table, TRUE, TRUE, 0);
+
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      gint left = filter_positions[prop][0];
+      gint top = filter_positions[prop][1];
+
+      label = gtk_label_new(xlfd_field_names[xlfd_index[prop]]);
+      gtk_misc_set_alignment (GTK_MISC (label), 0.0, 1.0);
+      gtk_misc_set_padding (GTK_MISC (label), 0, 2);
+      gtk_widget_show(label);
+      gtk_table_attach (GTK_TABLE (table), label, left, left + 1,
+			top, top + 1, GTK_FILL, GTK_FILL, 0, 0);
+
+      clist = gtk_clist_new(1);
+      gtk_widget_set_usize (clist, 100, filter_heights[prop]);
+      gtk_clist_set_selection_mode(GTK_CLIST(clist), GTK_SELECTION_MULTIPLE);
+      gtk_clist_column_titles_hide(GTK_CLIST(clist));
+      gtk_clist_set_policy(GTK_CLIST(clist), GTK_POLICY_AUTOMATIC,
+			   GTK_POLICY_AUTOMATIC);
+      gtk_widget_show(clist);
+
+      /* For the bottom-right cell we add the 'Reset' button. */
+      if (top == 2 && left == 2)
+	{
+	  vbox = gtk_vbox_new(FALSE, 0);
+	  gtk_widget_show(vbox);
+	  gtk_table_attach (GTK_TABLE (table), vbox, left, left + 1,
+			    top + 1, top + 2, GTK_FILL, GTK_FILL, 0, 0);
+
+	  gtk_box_pack_start (GTK_BOX (vbox), clist, TRUE, TRUE, 0);
+
+	  alignment = gtk_alignment_new(0.5, 0.0, 0.8, 0.0);
+	  gtk_widget_show(alignment);
+	  gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, TRUE, 4);
+
+	  button = gtk_button_new_with_label("Reset");
+	  gtk_widget_show(button);
+	  gtk_container_add(GTK_CONTAINER(alignment), button);
+	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			      GTK_SIGNAL_FUNC(gtk_font_selection_reset_filter),
+			      fontsel);
+	}
+      else
+	gtk_table_attach (GTK_TABLE (table), clist,
+			  left, left + 1, top + 1, top + 2,
+			  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
+
+      gtk_signal_connect (GTK_OBJECT (clist), "select_row",
+			  GTK_SIGNAL_FUNC(gtk_font_selection_select_filter),
+			  fontsel);
+      gtk_signal_connect (GTK_OBJECT (clist), "unselect_row",
+			  GTK_SIGNAL_FUNC(gtk_font_selection_unselect_filter),
+			  fontsel);
+
+      /* Insert the property names, expanded, and in sorted order.
+	 But we make sure that the wildcard '*' is first. */
+      gtk_clist_freeze (GTK_CLIST(clist));
+      property = "*";
+      gtk_clist_append(GTK_CLIST(clist), &property);
+
+      for (i = 1; i < klass->nproperties[prop]; i++) {
+	property = klass->properties[prop][i];
+	if (prop == SLANT)
+	  property = gtk_font_selection_expand_slant_code(property);
+	else if (prop == SPACING)
+	  property = gtk_font_selection_expand_spacing_code(property);
+
+	inserted = FALSE;
+	for (row = 1; row < GTK_CLIST(clist)->rows; row++)
+	  {
+	    gtk_clist_get_text(GTK_CLIST(clist), row, 0, &text);
+	    if (strcmp(property, text) < 0)
+	      {
+		inserted = TRUE;
+		gtk_clist_insert(GTK_CLIST(clist), row, &property);
+		break;
+	      }
+	  }
+	if (!inserted)
+	  row = gtk_clist_append(GTK_CLIST(clist), &property);
+	gtk_clist_set_row_data(GTK_CLIST(clist), row, (gpointer)i);
+      }
+      gtk_clist_select_row(GTK_CLIST(clist), 0, 0);
+      gtk_clist_thaw (GTK_CLIST(clist));
+      fontsel->filter_clists[prop] = clist;
+    }
+}
+
+GtkWidget *
+gtk_font_selection_new()
+{
+  GtkFontSelection *fontsel;
+
+  fontsel = gtk_type_new (gtk_font_selection_get_type ());
+
+  return GTK_WIDGET (fontsel);
+}
+
+static void
+gtk_font_selection_destroy (GtkObject *object)
+{
+  GtkFontSelection *fontsel;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_FONT_SELECTION (object));
+
+  fontsel = GTK_FONT_SELECTION (object);
+
+  /* All we have to do is unref the font, if we have one. */
+  if (fontsel->font)
+    gdk_font_unref (fontsel->font);
+
+  if (GTK_OBJECT_CLASS (font_selection_parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (font_selection_parent_class)->destroy) (object);
+}
+
+
+/* This inserts all the fonts into the family clist. */
+static void
+gtk_font_selection_insert_fonts (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font_info, *font;
+  gchar font_buffer[XLFD_MAX_FIELD_LEN * 2 + 4];
+  gchar *font_item;
+  gint nfonts, i, row;
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font_info = klass->font_info;
+  nfonts = klass->nfonts;
+
+  gtk_clist_freeze (GTK_CLIST(fontsel->font_clist));
+  gtk_clist_clear (GTK_CLIST(fontsel->font_clist));
+  for (i = 0; i < nfonts; i++)
+    {
+      font = &font_info[i];
+      if ((i > 0 && font->family == font_info[i-1].family)
+	  || (i < nfonts - 1 && font->family == font_info[i+1].family))
+	{
+	  sprintf(font_buffer, "%s (%s)", font->family,
+		  klass->properties[FOUNDRY][font->foundry]);
+	  font_item = font_buffer;
+	  row = gtk_clist_append(GTK_CLIST(fontsel->font_clist), &font_item);
+	}
+      else
+	row = gtk_clist_append(GTK_CLIST(fontsel->font_clist), &font->family);
+      gtk_clist_set_row_data(GTK_CLIST(fontsel->font_clist), row, (gpointer)i);
+    }
+  gtk_clist_thaw (GTK_CLIST(fontsel->font_clist));
+}
+
+
+/* This is called when the clist is exposed. Here we scroll to the current
+   font if necessary. */
+static void
+gtk_font_selection_expose_list (GtkWidget		*widget,
+				GdkEventExpose		*event,
+				gpointer		 data)
+{
+  GtkFontSelection *fontsel;
+  GtkFontSelectionClass *klass;
+  FontInfo *font_info;
+  GList *selection;
+  gint index;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In expose_list\n");
+#endif
+  fontsel = GTK_FONT_SELECTION(data);
+
+  if (fontsel->scroll_on_expose)
+    {
+      fontsel->scroll_on_expose = FALSE;
+
+      klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+      font_info = klass->font_info;
+
+      /* Try to scroll the font family clist to the selected item */
+      selection = GTK_CLIST(fontsel->font_clist)->selection;
+      if (selection)
+	{
+	  index = (gint) selection->data;
+	  gtk_clist_moveto(GTK_CLIST(fontsel->font_clist), index, -1, 0.5, 0);
+	}
+
+      /* Try to scroll the font style clist to the selected item */
+      selection = GTK_CLIST(fontsel->font_style_clist)->selection;
+      if (selection)
+	{
+	  index = (gint) selection->data;
+	  gtk_clist_moveto(GTK_CLIST(fontsel->font_style_clist), index, -1,
+			   0.5, 0);
+	}
+
+      /* Try to scroll the font size clist to the selected item */
+      selection = GTK_CLIST(fontsel->size_clist)->selection;
+      if (selection)
+	{
+	  index = (gint) selection->data;
+	  gtk_clist_moveto(GTK_CLIST(fontsel->size_clist), index, -1, 0.5, 0);
+	}
+    }
+}
+
+
+/* This is called when a family is selected in the list. */
+static void
+gtk_font_selection_select_font (GtkWidget      *w,
+				gint	        row,
+				gint	        column,
+				GdkEventButton *bevent,
+				gpointer        data)
+{
+  GtkFontSelection *fontsel;
+  GtkFontSelectionClass *klass;
+  FontInfo *font_info;
+  FontInfo *font;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In select_font\n");
+#endif
+  fontsel = GTK_FONT_SELECTION(data);
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font_info = klass->font_info;
+
+  if (bevent && !GTK_WIDGET_HAS_FOCUS (w))
+    gtk_widget_grab_focus (w);
+
+  row = (gint)gtk_clist_get_row_data(GTK_CLIST(fontsel->font_clist), row);
+  font = &font_info[row];
+  gtk_entry_set_text(GTK_ENTRY(fontsel->font_entry), font->family);
+
+  /* If it is already the current font, just return. */
+  if (fontsel->font_index == row)
+    return;
+
+  fontsel->font_index = row;
+  gtk_font_selection_show_available_styles (fontsel);
+  gtk_font_selection_select_best_style (fontsel);
+}
+
+
+static gint
+gtk_font_selection_on_clist_key_press (GtkWidget        *clist,
+				       GdkEventKey      *event,
+				       GtkFontSelection *fontsel)
+{
+#ifdef FONTSEL_DEBUG
+  g_print("In on_clist_key_press\n");
+#endif
+  if (event->keyval == GDK_Up)
+    return gtk_font_selection_select_next (fontsel, clist, -1);
+  else if (event->keyval == GDK_Down)
+    return gtk_font_selection_select_next (fontsel, clist, 1);
+  else
+    return FALSE;
+}
+
+
+static gboolean
+gtk_font_selection_select_next (GtkFontSelection *fontsel,
+				GtkWidget        *clist,
+				gint		  step)
+{
+  GList *selection;
+  gint current_row, row;
+
+  selection = GTK_CLIST(clist)->selection;
+  if (!selection)
+    return FALSE;
+  current_row = (gint) selection->data;
+
+  for (row = current_row + step;
+       row >= 0 && row < GTK_CLIST(clist)->rows;
+       row += step)
+    {
+      /* If this is the style clist, make sure that the item is not a charset
+	 entry. */
+      if (clist == fontsel->font_style_clist)
+	if ((gint) gtk_clist_get_row_data(GTK_CLIST(clist), row) == -1)
+	  continue;
+
+      /* Now we've found the row to select. */
+      if (gtk_clist_row_is_visible(GTK_CLIST(clist), row)
+	  != GTK_VISIBILITY_FULL)
+	gtk_clist_moveto(GTK_CLIST(clist), row, -1, (step < 0) ? 0 : 1, 0);
+      gtk_clist_select_row(GTK_CLIST(clist), row, 0);
+      return TRUE;
+    }
+  return FALSE;
+}
+
+
+/* This fills the font style clist with all the possible style combinations
+   for the current font family. */
+static void
+gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font;
+  FontStyle *styles;
+  gint style, tmpstyle, row;
+  gint weight_index, slant_index, set_width_index, spacing_index;
+  gint charset_index;
+  gchar *weight, *slant, *set_width, *spacing;
+  gchar *charset = NULL;
+  gchar *new_item;
+  gchar buffer[XLFD_MAX_FIELD_LEN * 6 + 2];
+  GdkColor *inactive_fg, *inactive_bg;
+  gboolean show_charset;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In show_available_styles\n");
+#endif
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font = &klass->font_info[fontsel->font_index];
+  styles = &klass->font_styles[font->style_index];
+
+  gtk_clist_freeze (GTK_CLIST(fontsel->font_style_clist));
+  gtk_clist_clear (GTK_CLIST(fontsel->font_style_clist));
+
+  /* First we mark all visible styles as not having been displayed yet,
+     and check if every style has the same charset. If not then we will
+     display the charset in the list before the styles. */
+  show_charset = FALSE;
+  charset_index = -1;
+  for (style = 0; style < font->nstyles; style++)
+    {
+      if (gtk_font_selection_style_visible(fontsel, font, style))
+	{
+	  styles[style].flags &= ~DISPLAYED;
+
+	  if (charset_index == -1)
+	    charset_index  = styles[style].properties[CHARSET];
+	  else if (charset_index != styles[style].properties[CHARSET])
+	    show_charset = TRUE;
+	}
+      else
+	styles[style].flags |= DISPLAYED;
+    }
+
+  /* Step through the undisplayed styles, finding the next charset which
+     hasn't been displayed yet. Then display the charset on one line, if
+     necessary, and the visible styles indented beneath it. */
+  inactive_fg = &fontsel->font_style_clist->style->fg[GTK_STATE_INSENSITIVE];
+  inactive_bg = &fontsel->font_style_clist->style->bg[GTK_STATE_INSENSITIVE];
+
+  for (style = 0; style < font->nstyles; style++)
+    {
+      if (styles[style].flags & DISPLAYED) continue;
+
+      if (show_charset)
+	{
+	  charset_index  = styles[style].properties[CHARSET];
+	  charset  = klass->properties[CHARSET] [charset_index];
+	  row = gtk_clist_append(GTK_CLIST(fontsel->font_style_clist),
+				 &charset);
+	  gtk_clist_set_row_data(GTK_CLIST(fontsel->font_style_clist), row,
+				 (gpointer) -1);
+	  gtk_clist_set_foreground(GTK_CLIST(fontsel->font_style_clist),
+				   row, inactive_fg);
+	  gtk_clist_set_background(GTK_CLIST(fontsel->font_style_clist),
+				   row, inactive_bg);
+	}
+
+      for (tmpstyle = style; tmpstyle < font->nstyles; tmpstyle++)
+	{
+	  if (styles[tmpstyle].flags & DISPLAYED
+	      || charset_index != styles[tmpstyle].properties[CHARSET])
+	    continue;
+
+	  styles[tmpstyle].flags |= DISPLAYED;
+
+	  weight_index    = styles[tmpstyle].properties[WEIGHT];
+	  slant_index     = styles[tmpstyle].properties[SLANT];
+	  set_width_index = styles[tmpstyle].properties[SET_WIDTH];
+	  spacing_index   = styles[tmpstyle].properties[SPACING];
+	  weight    = klass->properties[WEIGHT]   [weight_index];
+	  slant     = klass->properties[SLANT]    [slant_index];
+	  set_width = klass->properties[SET_WIDTH][set_width_index];
+	  spacing   = klass->properties[SPACING]  [spacing_index];
+
+	  /* Convert '(nil)' weights to 'regular', since it looks nicer. */
+	  if      (!g_strcasecmp(weight, "(nil)"))	weight = "regular";
+
+	  /* We don't show default values or (nil) in the other properties. */
+	  if      (!g_strcasecmp(slant, "r"))        slant = NULL;
+	  else if (!g_strcasecmp(slant, "(nil)"))    slant = NULL;
+	  else if (!g_strcasecmp(slant, "i"))        slant = "italic";
+	  else if (!g_strcasecmp(slant, "o"))        slant = "oblique";
+	  else if (!g_strcasecmp(slant, "ri"))       slant = "reverse italic";
+	  else if (!g_strcasecmp(slant, "ro"))       slant = "reverse oblique";
+	  else if (!g_strcasecmp(slant, "ot"))       slant = "other";
+
+	  if      (!g_strcasecmp(set_width, "normal")) set_width = NULL;
+	  else if (!g_strcasecmp(set_width, "(nil)"))  set_width = NULL;
+
+	  if      (!g_strcasecmp(spacing, "p"))        spacing = NULL;
+	  else if (!g_strcasecmp(spacing, "(nil)"))    spacing = NULL;
+	  else if (!g_strcasecmp(spacing, "m"))        spacing = "[M]";
+	  else if (!g_strcasecmp(spacing, "c"))        spacing = "[C]";
+
+	  /* Add the strings together, making sure there is 1 space between
+	     them */
+	  strcpy(buffer, weight);
+	  if (slant)
+	    {
+	      strcat(buffer, " ");
+	      strcat(buffer, slant);
+	    }
+	  if (set_width)
+	    {
+	      strcat(buffer, " ");
+	      strcat(buffer, set_width);
+	    }
+	  if (spacing)
+	    {
+	      strcat(buffer, " ");
+	      strcat(buffer, spacing);
+	    }
+
+	  new_item = buffer;
+	  row = gtk_clist_append(GTK_CLIST(fontsel->font_style_clist),
+				 &new_item);
+	  if (show_charset)
+	    gtk_clist_set_shift(GTK_CLIST(fontsel->font_style_clist), row, 0,
+				0, 4);
+	  gtk_clist_set_row_data(GTK_CLIST(fontsel->font_style_clist), row,
+				 (gpointer) tmpstyle);
+	}
+    }
+
+  gtk_clist_thaw (GTK_CLIST(fontsel->font_style_clist));
+}
+
+
+/* This selects a style when the user selects a font. It just uses the first
+   available style at present. I was thinking of trying to maintain the
+   selected style, e.g. bold italic, when the user selects different fonts.
+   However, the interface is so easy to use now I'm not sure it's worth it.
+   Note: This will load a font. */
+static void
+gtk_font_selection_select_best_style(GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font;
+  FontStyle *styles;
+  gint row, prop, style;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In select_best_style\n");
+#endif
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font = &klass->font_info[fontsel->font_index];
+  styles = &klass->font_styles[font->style_index];
+
+  style = -1;			/* Quite warning */
+  for (row = 0; row < GTK_CLIST(fontsel->font_style_clist)->rows; row++)
+    {
+      style = (gint)
+	gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist), row);
+      if (style >= 0)
+	break;
+    }
+  g_return_if_fail (style != -1);
+
+  fontsel->style = style;
+
+  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+    fontsel->property_values[prop] = styles[fontsel->style].properties[prop];
+
+  gtk_clist_select_row(GTK_CLIST(fontsel->font_style_clist), row, 0);
+  gtk_font_selection_show_available_sizes (fontsel);
+  gtk_font_selection_select_best_size (fontsel);
+}
+
+
+/* This is called when a style is selected in the list. */
+static void
+gtk_font_selection_select_style (GtkWidget      *w,
+				 gint	        row,
+				 gint	        column,
+				 GdkEventButton *bevent,
+				 gpointer        data)
+{
+  GtkFontSelection *fontsel;
+  GtkFontSelectionClass *klass;
+  FontInfo *font_info;
+  FontInfo *font;
+  FontStyle *styles;
+  gint style, prop;
+  gchar *text;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In select_style\n");
+#endif
+  fontsel = GTK_FONT_SELECTION(data);
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font_info = klass->font_info;
+  font = &font_info[fontsel->font_index];
+  styles = &klass->font_styles[font->style_index];
+
+  if (bevent && !GTK_WIDGET_HAS_FOCUS (w))
+    gtk_widget_grab_focus (w);
+
+  /* The style index is stored in the row data, so we just need to copy
+     the style values into the fontsel and reload the font. */
+  style = (gint) gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist),
+					row);
+
+  /* Don't allow selection of charset rows. */
+  if (style == -1)
+    {
+      gtk_clist_unselect_row(GTK_CLIST(fontsel->font_style_clist), row, 0);
+      return;
+    }
+
+  gtk_clist_get_text(GTK_CLIST(fontsel->font_style_clist), row, 0, &text);
+  gtk_entry_set_text(GTK_ENTRY(fontsel->font_style_entry), text);
+
+  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+    fontsel->property_values[prop] = styles[style].properties[prop];
+
+  if (fontsel->style == style)
+    return;
+
+  fontsel->style = style;
+  gtk_font_selection_show_available_sizes (fontsel);
+  gtk_font_selection_select_best_size (fontsel);
+}
+
+
+static void
+gtk_font_selection_toggle_scaled_bitmaps (GtkWidget      *w,
+					  gpointer        data)
+{
+  GtkFontSelection *fontsel;
+
+  fontsel = GTK_FONT_SELECTION(data);
+
+  fontsel->scale_bitmapped_fonts
+    = GTK_TOGGLE_BUTTON(w)->active ? TRUE : FALSE;
+  gtk_font_selection_show_available_sizes (fontsel);
+  gtk_font_selection_select_best_size (fontsel);
+}
+
+
+/* This shows all the available sizes in the size clist, according to the
+   current metric and the current font & style. */
+static void
+gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font;
+  FontStyle *styles, *style;
+  guint16 *standard_sizes, *bitmapped_sizes, bitmap_size;
+  gint nstandard_sizes, nbitmapped_sizes;
+  gchar buffer[16], *size;
+  gfloat bitmap_size_float;
+  gboolean can_match;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In show_available_sizes\n");
+#endif
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font = &klass->font_info[fontsel->font_index];
+  styles = &klass->font_styles[font->style_index];
+  style = &styles[fontsel->style];
+
+  standard_sizes = font_sizes;
+  nstandard_sizes = sizeof(font_sizes) / sizeof(font_sizes[0]);
+  if (fontsel->metric == POINTS_METRIC)
+    {
+      bitmapped_sizes = &klass->point_sizes[style->point_sizes_index];
+      nbitmapped_sizes = style->npoint_sizes;
+    }
+  else
+    {
+      bitmapped_sizes = &klass->pixel_sizes[style->pixel_sizes_index];
+      nbitmapped_sizes = style->npixel_sizes;
+    }
+
+  if (!fontsel->scale_bitmapped_fonts && !(style->flags & SCALABLE_FONT))
+    nstandard_sizes = 0;
+
+  gtk_clist_freeze (GTK_CLIST(fontsel->size_clist));
+  gtk_clist_clear (GTK_CLIST(fontsel->size_clist));
+
+  /* Interleave the standard sizes with the bitmapped sizes so we get a list
+     of ascending sizes. If the metric is points, we have to convert the
+     decipoints to points. */
+  while (nstandard_sizes || nbitmapped_sizes)
+    {
+      can_match = TRUE;
+      if (fontsel->metric == POINTS_METRIC)
+	{
+	  if (*bitmapped_sizes % 10 != 0)
+	    can_match = FALSE;
+	  bitmap_size = *bitmapped_sizes / 10;
+	  bitmap_size_float = *bitmapped_sizes / 10;
+	}
+      else
+	{
+	  bitmap_size = *bitmapped_sizes;
+	  bitmap_size_float = *bitmapped_sizes;
+	}
+
+      if (can_match && nstandard_sizes && nbitmapped_sizes
+	  && *standard_sizes == bitmap_size)
+	{
+	  sprintf(buffer, "%i *", *standard_sizes);
+	  standard_sizes++;
+	  nstandard_sizes--;
+	  bitmapped_sizes++;
+	  nbitmapped_sizes--;
+	}
+      else if (nstandard_sizes
+	       && (!nbitmapped_sizes
+		   || (gfloat)*standard_sizes < bitmap_size_float))
+	{
+	  sprintf(buffer, "%i", *standard_sizes);
+	  standard_sizes++;
+	  nstandard_sizes--;
+	}
+      else
+	{
+	  if (fontsel->metric == POINTS_METRIC)
+	    {
+	      if (*bitmapped_sizes % 10 == 0)
+		sprintf(buffer, "%i *", *bitmapped_sizes / 10);
+	      else
+		sprintf(buffer, "%i.%i *", *bitmapped_sizes / 10,
+			*bitmapped_sizes % 10);
+	    }
+	  else
+	    {
+	      sprintf(buffer, "%i *", *bitmapped_sizes);
+	    }
+	  bitmapped_sizes++;
+	  nbitmapped_sizes--;
+	}
+      size = buffer;
+      gtk_clist_append(GTK_CLIST(fontsel->size_clist), &size);
+    }
+  gtk_clist_thaw (GTK_CLIST(fontsel->size_clist));
+}
+
+
+/* If the user hits return in the font size entry, we change to the new font
+   size. */
+static gint
+gtk_font_selection_size_key_press (GtkWidget   *w,
+				   GdkEventKey *event,
+				   gpointer     data)
+{
+  GtkFontSelection *fontsel;
+  gint new_size;
+  gfloat new_size_float;
+  gchar *text;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In size_key_press\n");
+#endif
+  fontsel = GTK_FONT_SELECTION(data);
+
+  if (event->keyval == GDK_Return)
+    {
+      text = gtk_entry_get_text (GTK_ENTRY (fontsel->size_entry));
+      if (fontsel->metric == PIXELS_METRIC)
+	{
+	  new_size = atoi (text);
+	  if (new_size < 2)
+	    new_size = 2;
+	}
+      else
+	{
+	  new_size_float = atof (text) * 10;
+	  new_size = (gint) new_size_float;
+	  if (new_size < 20)
+	    new_size = 20;
+	}
+
+      /* Remember that this size was set explicitly. */
+      fontsel->selected_size = new_size;
+
+      /* Check if the font size has changed, and return if it hasn't. */
+      if (fontsel->size == new_size)
+	return TRUE;
+
+      fontsel->size = new_size;
+      gtk_font_selection_select_best_size (fontsel);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+
+/* This tries to select the closest size to the current size, though it
+   may have to change the size if only unscaled bitmaps are available.
+   Note: this will load a font. */
+static void
+gtk_font_selection_select_best_size(GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font;
+  FontStyle *styles, *style;
+  gchar *text;
+  gint row, best_row = 0, size, size_fraction, best_size = 0, nmatched;
+  gboolean found = FALSE;
+  gchar buffer[32];
+  GList *selection;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In select_best_size\n");
+#endif
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font = &klass->font_info[fontsel->font_index];
+  styles = &klass->font_styles[font->style_index];
+  style = &styles[fontsel->style];
+
+  /* Find the closest size available in the size clist. If the exact size is
+     in the list set found to TRUE. */
+  for (row = 0; row < GTK_CLIST(fontsel->size_clist)->rows; row++)
+    {
+      gtk_clist_get_text(GTK_CLIST(fontsel->size_clist), row, 0, &text);
+      nmatched = sscanf(text, "%i.%i", &size, &size_fraction);
+      if (fontsel->metric == POINTS_METRIC)
+	{
+	  size *= 10;
+	  if (nmatched == 2)
+	    size += size_fraction;
+	}
+
+      if (size == fontsel->selected_size)
+	{
+	  found = TRUE;
+	  best_size = size;
+	  best_row = row;
+	  break;
+	}
+      else if (best_size == 0
+	       || abs(size - fontsel->selected_size)
+	       < (abs(best_size - fontsel->selected_size)))
+	{
+	  best_size = size;
+	  best_row = row;
+	}
+    }
+
+  /* If we aren't scaling bitmapped fonts and this is a bitmapped font, we
+     need to use the closest size found. */
+  if (!fontsel->scale_bitmapped_fonts && !(style->flags & SCALABLE_FONT))
+    found = TRUE;
+
+  if (found)
+    {
+      fontsel->size = best_size;
+      gtk_clist_moveto(GTK_CLIST(fontsel->size_clist), best_row, -1, 0.5, 0);
+      gtk_clist_select_row(GTK_CLIST(fontsel->size_clist), best_row, 0);
+    }
+  else
+    {
+      fontsel->size = fontsel->selected_size;
+      selection = GTK_CLIST(fontsel->size_clist)->selection;
+      if (selection)
+	gtk_clist_unselect_row(GTK_CLIST(fontsel->size_clist),
+			       (gint) selection->data, 0);
+      gtk_clist_moveto(GTK_CLIST(fontsel->size_clist), best_row, -1, 0.5, 0);
+
+      /* Show the size in the size entry. */
+      if (fontsel->metric == PIXELS_METRIC)
+	sprintf(buffer, "%i", fontsel->size);
+      else
+	{
+	  if (fontsel->size % 10 == 0)
+	    sprintf(buffer, "%i", fontsel->size / 10);
+	  else
+	    sprintf(buffer, "%i.%i", fontsel->size / 10, fontsel->size % 10);
+	}
+      gtk_entry_set_text (GTK_ENTRY (fontsel->size_entry), buffer);
+    }
+  gtk_font_selection_load_font (fontsel);
+}
+
+
+/* This is called when a size is selected in the list. */
+static void
+gtk_font_selection_select_size (GtkWidget      *w,
+				gint	        row,
+				gint	        column,
+				GdkEventButton *bevent,
+				gpointer        data)
+{
+  GtkFontSelection *fontsel;
+  gint new_size;
+  gchar *text;
+  gchar buffer[16];
+  gint i;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In select_size\n");
+#endif
+  fontsel = GTK_FONT_SELECTION(data);
+
+  if (bevent && !GTK_WIDGET_HAS_FOCUS (w))
+    gtk_widget_grab_focus (w);
+
+  /* Copy the size from the clist to the size entry, but without the bitmapped
+     marker ('*'). */
+  gtk_clist_get_text(GTK_CLIST(fontsel->size_clist), row, 0, &text);
+  i = 0;
+  while (i < 15 && (text[i] == '.' || (text[i] >= '0' && text[i] <= '9')))
+    {
+      buffer[i] = text[i];
+      i++;
+    }
+  buffer[i] = '\0';
+  gtk_entry_set_text(GTK_ENTRY(fontsel->size_entry), buffer);
+
+  /* Check if the font size has changed, and return if it hasn't. */
+  new_size = atoi(text);
+  if (fontsel->metric == POINTS_METRIC)
+    new_size *= 10;
+
+  if (fontsel->size == new_size)
+    return;
+
+  /* If the size was selected by the user we set the selected_size. */
+  fontsel->selected_size = new_size;
+
+  fontsel->size = new_size;
+  gtk_font_selection_load_font (fontsel);
+}
+
+
+/* This is called when the pixels or points radio buttons are pressed. */
+static void
+gtk_font_selection_metric_callback (GtkWidget *w,
+				    gpointer   data)
+{
+  GtkFontSelection *fontsel = GTK_FONT_SELECTION(data);
+
+#ifdef FONTSEL_DEBUG
+  g_print("In metric_callback\n");
+#endif
+  if (GTK_TOGGLE_BUTTON(fontsel->pixels_button)->active)
+    {
+      if (fontsel->metric == PIXELS_METRIC)
+	return;
+      fontsel->metric = PIXELS_METRIC;
+      fontsel->size = (fontsel->size + 5) / 10;
+      fontsel->selected_size = (fontsel->selected_size + 5) / 10;
+    }
+  else
+    {
+      if (fontsel->metric == POINTS_METRIC)
+	return;
+      fontsel->metric = POINTS_METRIC;
+      fontsel->size *= 10;
+      fontsel->selected_size *= 10;
+    }
+  if (fontsel->font_index != -1)
+    {
+      gtk_font_selection_show_available_sizes (fontsel);
+      gtk_font_selection_select_best_size (fontsel);
+    }
+}
+
+
+/* This searches the given property table and returns the index of the given
+   string, or 0, which is the wildcard '*' index, if it's not found. */
+static guint16
+gtk_font_selection_field_to_index (gchar **table,
+				   gint    ntable,
+				   gchar  *field)
+{
+  gint i;
+
+  for (i = 0; i < ntable; i++)
+    if (strcmp (field, table[i]) == 0)
+      return i;
+
+  return 0;
+}
+
+
+
+/* This attempts to load the current font, and returns TRUE if it succeeds. */
+static gboolean
+gtk_font_selection_load_font (GtkFontSelection *fontsel)
+{
+  GdkFont *font;
+  gchar *fontname, *label_text;
+
+  if (fontsel->font)
+    gdk_font_unref (fontsel->font);
+  fontsel->font = NULL;
+
+  /* If no family has been selected yet, just return FALSE. */
+  if (fontsel->font_index == -1)
+    return FALSE;
+
+  fontname = gtk_font_selection_get_font_name (fontsel);
+  if (fontname)
+    {
+#ifdef FONTSEL_DEBUG
+      g_print("Loading: %s\n", fontname);
+#endif
+      font = gdk_font_load (fontname);
+      g_free(fontname);
+
+      if (font)
+	{
+	  fontsel->font = font;
+	  /* Make sure the message label is empty, but don't change it unless
+	     it's necessary as it results in a resize of the whole window! */
+	  gtk_label_get(GTK_LABEL(fontsel->message_label), &label_text);
+	  if (strcmp(label_text, ""))
+	    gtk_label_set(GTK_LABEL(fontsel->message_label), "");
+	  gtk_font_selection_update_preview (fontsel);
+	  return TRUE;
+	}
+      else 
+	{
+	  gtk_label_set(GTK_LABEL(fontsel->message_label),
+			"The selected font is not available.");
+	}
+    }
+  else
+    {
+      gtk_label_set(GTK_LABEL(fontsel->message_label),
+		    "The selected font is not a valid font.");
+    }
+
+  return FALSE;
+}
+
+
+/* This sets the font in the preview entry to the selected font, and tries to
+   make sure that the preview entry is a reasonable size, i.e. so that the
+   text can be seen with a bit of space to spare. But it tries to avoid
+   resizing the entry every time the font changes.
+   This also used to shrink the preview if the font size was decreased, but
+   that made it awkward if the user wanted to resize the window themself. */
+static void
+gtk_font_selection_update_preview (GtkFontSelection *fontsel)
+{
+  GtkWidget *preview_entry;
+  GtkStyle *style;
+  gint text_height, new_height;
+  gchar *text;
+  XFontStruct *xfs;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In update_preview\n");
+#endif
+  style = gtk_style_new ();
+  gdk_font_unref (style->font);
+  style->font = fontsel->font;
+  gdk_font_ref (style->font);
+
+  preview_entry = fontsel->preview_entry;
+  gtk_widget_set_style (preview_entry, style);
+  gtk_style_unref(style);
+
+  text_height = preview_entry->style->font->ascent
+    + preview_entry->style->font->descent;
+  /* We don't ever want to be over MAX_PREVIEW_HEIGHT pixels high. */
+  new_height = text_height + 20;
+  if (new_height < INITIAL_PREVIEW_HEIGHT)
+    new_height = INITIAL_PREVIEW_HEIGHT;
+  if (new_height > MAX_PREVIEW_HEIGHT)
+    new_height = MAX_PREVIEW_HEIGHT;
+
+  if ((preview_entry->requisition.height < text_height + 10)
+      || (preview_entry->requisition.height > text_height + 40))
+    gtk_widget_set_usize(preview_entry, -1, new_height);
+
+  /* This sets the preview text, if it hasn't been set already. */
+  text = gtk_entry_get_text(GTK_ENTRY(fontsel->preview_entry));
+  if (strlen(text) == 0)
+    gtk_entry_set_text(GTK_ENTRY(fontsel->preview_entry), PREVIEW_TEXT);
+  gtk_entry_set_position(GTK_ENTRY(fontsel->preview_entry), 0);
+
+  /* If this is a 2-byte font display a message to say it may not be
+     displayed properly. */
+  xfs = GDK_FONT_XFONT(fontsel->font);
+  if (xfs->min_byte1 != 0 || xfs->max_byte1 != 0)
+    gtk_label_set(GTK_LABEL(fontsel->message_label),
+		  "This is a 2-byte font and may not be displayed correctly.");
+}
+
+
+static void
+gtk_font_selection_switch_page (GtkWidget       *w,
+				GtkNotebookPage *page,
+				gint             page_num,
+				gpointer         data)
+{
+  GtkFontSelection *fontsel = GTK_FONT_SELECTION(data);
+
+  /* This function strangely gets called when the window is destroyed,
+     so we check here to see if the notebook is visible. */
+  if (!GTK_WIDGET_VISIBLE(w))
+    return;
+
+  if (page_num == 0)
+    gtk_font_selection_filter_fonts(fontsel);
+  else if (page_num == 1)
+    gtk_font_selection_show_font_info(fontsel);
+}
+      
+
+static void
+gtk_font_selection_show_font_info (GtkFontSelection *fontsel)
+{
+  Atom font_atom, atom;
+  Bool status;
+  char *name;
+  gchar *fontname;
+  gchar field_buffer[XLFD_MAX_FIELD_LEN];
+  gchar *field;
+  gint i;
+  gboolean shown_actual_fields = FALSE;
+
+  fontname = gtk_font_selection_get_font_name(fontsel);
+  gtk_entry_set_text(GTK_ENTRY(fontsel->requested_font_name),
+		     fontname ? fontname : "");
+
+  gtk_clist_freeze (GTK_CLIST(fontsel->info_clist));
+  for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
+    {
+      if (fontname)
+	field = gtk_font_selection_get_xlfd_field (fontname, i, field_buffer);
+      else
+	field = NULL;
+      if (field)
+	{
+	  if (i == XLFD_SLANT)
+	    field = gtk_font_selection_expand_slant_code(field);
+	  else if (i == XLFD_SPACING)
+	    field = gtk_font_selection_expand_spacing_code(field);
+	}
+      gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 1,
+			 field ? field : "");
+    }
+
+  if (fontsel->font)
+    {
+      font_atom = XInternAtom(GDK_DISPLAY(), "FONT", True);
+      if (font_atom != None)
+	{
+	  status = XGetFontProperty(GDK_FONT_XFONT(fontsel->font), font_atom,
+				    &atom);
+	  if (status == True)
+	    {
+	      name = XGetAtomName(GDK_DISPLAY(), atom);
+	      gtk_entry_set_text(GTK_ENTRY(fontsel->actual_font_name), name);
+	
+	      for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
+		{
+		  field = gtk_font_selection_get_xlfd_field (name, i,
+							     field_buffer);
+		  if (i == XLFD_SLANT)
+		    field = gtk_font_selection_expand_slant_code(field);
+		  else if (i == XLFD_SPACING)
+		    field = gtk_font_selection_expand_spacing_code(field);
+		  gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 2,
+				     field ? field : "");
+		}
+	      shown_actual_fields = TRUE;
+	      XFree(name);
+	    }
+	}
+    }
+  if (!shown_actual_fields)
+    {
+      for (i = 0; i < GTK_XLFD_NUM_FIELDS; i++)
+	{
+	  gtk_clist_set_text(GTK_CLIST(fontsel->info_clist), i, 2,
+			     fontname ? "(unknown)" : "");
+	}
+    }
+  gtk_clist_thaw (GTK_CLIST(fontsel->info_clist));
+  g_free(fontname);
+}
+
+
+static gchar*
+gtk_font_selection_expand_slant_code(gchar *slant)
+{
+  if      (!g_strcasecmp(slant, "r"))   return("roman");
+  else if (!g_strcasecmp(slant, "i"))   return("italic");
+  else if (!g_strcasecmp(slant, "o"))   return("oblique");
+  else if (!g_strcasecmp(slant, "ri"))  return("reverse italic");
+  else if (!g_strcasecmp(slant, "ro"))  return("reverse oblique");
+  else if (!g_strcasecmp(slant, "ot"))  return("other");
+  return slant;
+}
+
+static gchar*
+gtk_font_selection_expand_spacing_code(gchar *spacing)
+{
+  if      (!g_strcasecmp(spacing, "p")) return("proportional");
+  else if (!g_strcasecmp(spacing, "m")) return("monospaced");
+  else if (!g_strcasecmp(spacing, "c")) return("char cell");
+  return spacing;
+}
+
+
+/*****************************************************************************
+ * These functions all deal with the Filter page.
+ *****************************************************************************/
+
+/* This is called when an item is selected in one of the filter clists.
+   We make sure that the first row of the clist, i.e. the wildcard '*', is
+   selected if and only if none of the other items are selected.
+   We may need to be careful about triggering other signals. */
+static void
+gtk_font_selection_select_filter	     (GtkWidget      *w,
+					      gint	      row,
+					      gint	      column,
+					      GdkEventButton *bevent,
+					      gpointer        data)
+{
+  gint i;
+  
+  if (row == 0)
+    for (i = 1; i < GTK_CLIST(w)->rows; i++)
+      gtk_clist_unselect_row(GTK_CLIST(w), i, 0);
+  else
+    gtk_clist_unselect_row(GTK_CLIST(w), 0, 0);
+}
+
+
+/* Here a filter item is being deselected. If there are now no items selected
+   we select the first '*' item, unless that it is the item being deselected,
+   in which case we select all of the other items. This makes it easy to
+   select all items in the list except one or two. */
+static void
+gtk_font_selection_unselect_filter	     (GtkWidget      *w,
+					      gint	      row,
+					      gint	      column,
+					      GdkEventButton *bevent,
+					      gpointer        data)
+{
+  gint i;
+  if (!GTK_CLIST(w)->selection)
+    {
+      if (row == 0)
+	for (i = 1; i < GTK_CLIST(w)->rows; i++)
+	  gtk_clist_select_row(GTK_CLIST(w), i, 0);
+      else
+	gtk_clist_select_row(GTK_CLIST(w), 0, 0);
+    }
+}
+
+
+/* This is called when the main notebook page is selected. It checks if the
+   filter has changed, an if so it creates the filter settings, and filters the
+   fonts shown. If an empty filter (all '*'s) is applied, then filtering is
+   turned off. */
+static void
+gtk_font_selection_filter_fonts	     (GtkFontSelection *fontsel)
+{
+  GtkWidget *clist;
+  GList *selection;
+  gboolean empty_filter = TRUE, filter_changed = FALSE;
+  gint prop, nselected, i, row, index;
+
+#ifdef FONTSEL_DEBUG
+  g_print("In filter_fonts\n");
+#endif
+
+  /* Check if the filter has changed, and also if it is an empty filter,
+     i.e. all '*'s are selected. */
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      clist = fontsel->filter_clists[prop];
+      selection = GTK_CLIST(clist)->selection;
+      nselected = g_list_length(selection);
+      if (nselected != 1 || (gint)selection->data != 0)
+	{
+	  empty_filter = FALSE;
+
+	  if (fontsel->property_nfilters[prop] != nselected)
+	    filter_changed = TRUE;
+	  else
+	    {
+	      for (i = 0; i < nselected; i++)
+		{
+		  row = (gint)selection->data;
+		  index = (gint)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+		  if (fontsel->property_filters[prop][i] != index)
+		    filter_changed = TRUE;
+		  selection = selection->next;
+		}
+	    }
+	}
+      else
+	{
+	  if (fontsel->property_nfilters[prop] != 0)
+	    filter_changed = TRUE;
+	}
+    }
+
+  /* If the filter hasn't changed we just return. */
+  if (!filter_changed)
+    return;
+
+#ifdef FONTSEL_DEBUG
+  g_print("   filter_fonts: filter has changed\n");
+#endif
+
+  /* Setting the toggle buttons state will trigger the callbacks to clear
+     or apply the filter, unless the font list is already filtered, in
+     which case we have to call apply_filter here. */
+  if (empty_filter)
+    {
+      gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
+      gtk_label_set(GTK_LABEL(fontsel->font_label), "Font:");
+      /*
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->filter_button),
+				  FALSE);
+				  */
+      gtk_font_selection_apply_filter(fontsel);
+    }
+  else
+    {
+      gtk_widget_set_sensitive(fontsel->filter_button, TRUE);
+      gtk_label_set(GTK_LABEL(fontsel->font_label), "Font: [Filtered]");
+      /*
+      if (GTK_TOGGLE_BUTTON(fontsel->filter_button)->active)
+	gtk_font_selection_apply_filter(fontsel);
+      else
+	gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->filter_button),
+				    TRUE);
+				    */
+      gtk_font_selection_apply_filter(fontsel);
+    }
+}  
+
+
+/* This clears the filter, showing all fonts and styles again. */
+static void
+gtk_font_selection_apply_filter     (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font_info, *font;
+  GtkWidget *clist;
+  GList *selection;
+  gint nfonts, prop, nselected, i, j, row, style, index;
+  gchar font_buffer[XLFD_MAX_FIELD_LEN * 2 + 4];
+  gchar *font_item;
+  gboolean matched, matched_style;
+
+#ifdef FONTSEL_DEBUG
+      g_print("In apply_filter\n");
+#endif
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font_info = klass->font_info;
+  nfonts = klass->nfonts;
+
+  /* Free the old filter data and create the new arrays. */
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      g_free(fontsel->property_filters[prop]);
+
+      clist = fontsel->filter_clists[prop];
+      selection = GTK_CLIST(clist)->selection;
+      nselected = g_list_length(selection);
+      if (nselected == 1 && (gint)selection->data == 0)
+	{
+	  fontsel->property_filters[prop] = NULL;
+	  fontsel->property_nfilters[prop] = 0;
+	}
+      else
+	{
+	  fontsel->property_filters[prop] = g_new(guint16, nselected);
+	  fontsel->property_nfilters[prop] = nselected;
+	  for (i = 0; i < nselected; i++)
+	    {
+	      row = (gint)selection->data;
+	      index = (gint)gtk_clist_get_row_data(GTK_CLIST(clist), row);
+	      fontsel->property_filters[prop][i] = index;
+	      selection = selection->next;
+	    }
+	}
+    }
+
+  /* Filter the list of fonts. */
+  gtk_clist_freeze (GTK_CLIST(fontsel->font_clist));
+  gtk_clist_clear (GTK_CLIST(fontsel->font_clist));
+  for (i = 0; i < nfonts; i++)
+    {
+      font = &font_info[i];
+
+      /* Check if the foundry matches. */
+      if (fontsel->property_nfilters[FOUNDRY] != 0)
+	{
+	  matched = FALSE;
+	  for (j = 0; j < fontsel->property_nfilters[FOUNDRY]; j++)
+	    {
+	      if (font->foundry == fontsel->property_filters[FOUNDRY][j])
+		{
+		  matched = TRUE;
+		  break;
+		}
+	    }
+	  if (!matched)
+	    continue;
+	}
+
+      /* Now check if the other properties are matched in at least one style.*/
+      matched_style = FALSE;
+      for (style = 0; style < font->nstyles; style++)
+	{
+	  if (gtk_font_selection_style_visible(fontsel, font, style))
+	    {
+	      matched_style = TRUE;
+	      break;
+	    }
+	}
+      if (!matched_style)
+	continue;
+
+      /* Insert the font in the clist. */
+      if ((i > 0 && font->family == font_info[i-1].family)
+	  || (i < nfonts - 1 && font->family == font_info[i+1].family))
+	{
+	  sprintf(font_buffer, "%s (%s)", font->family,
+		  klass->properties[FOUNDRY][font->foundry]);
+	  font_item = font_buffer;
+	  row = gtk_clist_append(GTK_CLIST(fontsel->font_clist), &font_item);
+	}
+      else
+	{
+	  row = gtk_clist_append(GTK_CLIST(fontsel->font_clist),
+				 &font->family);
+	}
+      gtk_clist_set_row_data(GTK_CLIST(fontsel->font_clist), row,
+			     (gpointer) i);
+    }
+  gtk_clist_thaw (GTK_CLIST(fontsel->font_clist));
+
+  /* Clear the current font and the style clist. */
+  fontsel->font_index = -1;
+  if (fontsel->font)
+    gdk_font_unref(fontsel->font);
+  fontsel->font = NULL;
+  gtk_entry_set_text(GTK_ENTRY(fontsel->font_entry), "");
+  gtk_clist_clear (GTK_CLIST(fontsel->font_style_clist));
+  gtk_entry_set_text(GTK_ENTRY(fontsel->font_style_entry), "");
+}
+
+
+/* Returns TRUE if the style is not currently filtered out. */
+static gboolean
+gtk_font_selection_style_visible(GtkFontSelection *fontsel,
+				 FontInfo         *font,
+				 gint              style)
+{
+  GtkFontSelectionClass *klass;
+  FontStyle *styles;
+  guint16 value;
+  gint prop, j;
+  gboolean matched;
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  styles = &klass->font_styles[font->style_index];
+
+  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+    {
+      value = styles[style].properties[prop];
+
+      if (fontsel->property_nfilters[prop] != 0)
+	{
+	  matched = FALSE;
+	  for (j = 0; j < fontsel->property_nfilters[prop]; j++)
+	    {
+	      if (value == fontsel->property_filters[prop][j])
+		{
+		  matched = TRUE;
+		  break;
+		}
+	    }
+	  if (!matched)
+	    return FALSE;
+	}
+    }
+  return TRUE;
+}
+
+
+/* This resets all the filter clists to the wildcard '*' options. */
+static void
+gtk_font_selection_reset_filter	     (GtkWidget      *w,
+				      gpointer        data)
+{
+  GtkFontSelection *fontsel;
+  gint prop;
+
+  fontsel = GTK_FONT_SELECTION(data);
+
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    gtk_clist_select_row(GTK_CLIST(fontsel->filter_clists[prop]), 0, 0);
+}
+
+
+/* This clears the filter, showing all fonts and styles again. */
+static void
+gtk_font_selection_toggle_filter     (GtkWidget      *w,
+				      gpointer        data)
+{
+  GtkFontSelection *fontsel;
+
+  fontsel = GTK_FONT_SELECTION(data);
+
+  /*
+  if (GTK_TOGGLE_BUTTON(fontsel->filter_button)->active)
+    gtk_font_selection_apply_filter(fontsel);
+  else
+    gtk_font_selection_clear_filter(fontsel);
+    */
+
+  gtk_font_selection_clear_filter(fontsel);
+  gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
+  gtk_label_set(GTK_LABEL(fontsel->font_label), "Font:");
+}
+
+
+/* This clears the filter, showing all fonts and styles again. */
+static void
+gtk_font_selection_clear_filter     (GtkFontSelection *fontsel)
+{
+  gboolean filtered = FALSE, found_style = FALSE;
+  gint prop, row, style;
+
+#ifdef FONTSEL_DEBUG
+      g_print("In clear_filter\n");
+#endif
+  /* Clear the filter data. */
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      if (fontsel->property_filters[prop])
+	filtered = TRUE;
+      g_free(fontsel->property_filters[prop]);
+      fontsel->property_filters[prop] = NULL;
+      fontsel->property_nfilters[prop] = 0;
+    }
+
+  /* TODO: Delete? */
+  /* Select all the '*'s on the filter page. */
+  gtk_font_selection_reset_filter(NULL, fontsel);
+
+  /* If there is no filter at present just return. */
+  if (!filtered)
+    return;
+
+  gtk_font_selection_insert_fonts(fontsel);
+
+  /* Now find the current font & style and select them again. */
+  if (fontsel->font_index != -1)
+    {
+      gtk_clist_select_row(GTK_CLIST(fontsel->font_clist),
+			   fontsel->font_index, 0);
+      if (gtk_clist_row_is_visible(GTK_CLIST(fontsel->font_clist),
+				   fontsel->font_index) != GTK_VISIBILITY_FULL)
+	gtk_clist_moveto(GTK_CLIST(fontsel->font_clist), fontsel->font_index,
+			 -1, 0.5, 0);
+      gtk_font_selection_show_available_styles (fontsel);
+
+      for (row = 0; row < GTK_CLIST(fontsel->font_style_clist)->rows; row++)
+	{
+	  style =
+	    (gint)gtk_clist_get_row_data(GTK_CLIST(fontsel->font_style_clist),
+					 row);
+	  if (style == fontsel->style)
+	    {
+	      found_style = TRUE;
+	      break;
+	    }
+	}
+
+      if (found_style)
+	{
+	  gtk_clist_select_row(GTK_CLIST(fontsel->font_style_clist),
+			       row, 0);
+	  if (gtk_clist_row_is_visible(GTK_CLIST(fontsel->font_style_clist),
+				       row) != GTK_VISIBILITY_FULL)
+	    gtk_clist_moveto(GTK_CLIST(fontsel->font_style_clist), row,
+			     -1, 0.5, 0);
+	}
+    }
+}
+
+
+/*****************************************************************************
+ * These functions all deal with creating the main class arrays containing
+ * the data about all available fonts.
+ *****************************************************************************/
+static void
+gtk_font_selection_get_fonts (GtkFontSelectionClass *klass)
+{
+  gchar **xfontnames;
+  GSList **fontnames;
+  gchar *fontname;
+  GSList * temp_list;
+  gint num_fonts;
+  gint i, prop, style, size;
+  gint npixel_sizes = 0, npoint_sizes = 0;
+  FontInfo *font;
+  FontStyle *current_style, *prev_style, *tmp_style;
+  gboolean matched_style, found_size;
+  gint pixels, points, res_x, res_y;
+  gchar field_buffer[XLFD_MAX_FIELD_LEN];
+  gchar *field;
+  guint8 flags;
+  guint16 *pixel_sizes, *point_sizes, *tmp_sizes;
+
+  /* Get a maximum of MAX_FONTS fontnames from the X server.
+     Use "-*" as the pattern rather than "-*-*-*-*-*-*-*-*-*-*-*-*-*-*" since
+     the latter may result in fonts being returned which don't actually exist.
+     xlsfonts also uses "*" so I think it's OK. "-*" gets rid of aliases. */
+  xfontnames = XListFonts (GDK_DISPLAY(), "-*", MAX_FONTS, &num_fonts);
+  /* Output a warning if we actually get MAX_FONTS fonts. */
+  if (num_fonts == MAX_FONTS)
+    g_warning("MAX_FONTS exceeded. Some fonts may be missing.");
+
+  /* The maximum size of all these tables is the number of font names
+     returned. We realloc them later when we know exactly how many
+     unique entries there are. */
+  klass->font_info = g_new (FontInfo, num_fonts);
+  klass->font_styles = g_new (FontStyle, num_fonts);
+  klass->pixel_sizes = g_new (guint16, num_fonts);
+  klass->point_sizes = g_new (guint16, num_fonts);
+
+  fontnames = g_new (GSList*, num_fonts);
+
+  /* Create the initial arrays for the property value strings, though they
+     may be realloc'ed later. Put the wildcard '*' in the first elements. */
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      klass->properties[prop] = g_new(gchar*, PROPERTY_ARRAY_INCREMENT);
+      klass->space_allocated[prop] = PROPERTY_ARRAY_INCREMENT;
+      klass->nproperties[prop] = 1;
+      klass->properties[prop][0] = "*";
+    }
+
+
+  /* Insert the font families into the main table, sorted by family and
+     foundry (fonts with different foundries are placed in seaparate FontInfos.
+     All fontnames in each family + foundry are placed into the fontnames
+     array of lists. */
+  klass->nfonts = 0;
+  for (i = 0; i < num_fonts; i++)
+    {
+#ifdef FONTSEL_DEBUG
+      g_print("%s\n", xfontnames[i]);
+#endif
+      if (gtk_font_selection_is_xlfd_font_name (xfontnames[i]))
+	gtk_font_selection_insert_font (klass, fontnames,
+					&klass->nfonts, xfontnames[i]);
+      else
+	{
+#ifdef FONTSEL_DEBUG
+	  g_warning("Skipping invalid font: %s", xfontnames[i]);
+#endif
+	}
+    }
+
+
+  /* Since many font names will be in the same FontInfo not all of the
+     allocated FontInfo table will be used, so we will now reallocate it
+     with the real size. */
+  klass->font_info = g_realloc(klass->font_info,
+			       sizeof(FontInfo) * klass->nfonts);
+
+
+  /* Now we work out which choices of weight/slant etc. are valid for each
+     font. */
+  klass->nstyles = 0;
+  current_style = klass->font_styles;
+  for (i = 0; i < klass->nfonts; i++)
+    {
+      font = &klass->font_info[i];
+
+      /* Use the next free position in the styles array. */
+      font->style_index = klass->nstyles;
+
+      /* Now step through each of the fontnames with this family, and create
+	 a style for each fontname. Each style contains the index into the
+	 weights/slants etc. arrays, and a number of pixel/point sizes. */
+      style = 0;
+      temp_list = fontnames[i];
+      while (temp_list)
+	{
+	  fontname = temp_list->data;
+	  temp_list = temp_list->next;
+
+	  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+	    {
+	      current_style->properties[prop]
+		= gtk_font_selection_insert_field (klass, fontname, prop);
+	    }
+	  current_style->pixel_sizes_index = npixel_sizes;
+	  current_style->point_sizes_index = npoint_sizes;
+	  current_style->flags = 0;
+
+
+	  field = gtk_font_selection_get_xlfd_field (fontname, XLFD_PIXELS,
+						     field_buffer);
+	  pixels = atoi(field);
+
+	  field = gtk_font_selection_get_xlfd_field (fontname, XLFD_POINTS,
+						     field_buffer);
+	  points = atoi(field);
+
+	  field = gtk_font_selection_get_xlfd_field (fontname,
+						     XLFD_RESOLUTION_X,
+						     field_buffer);
+	  res_x = atoi(field);
+
+	  field = gtk_font_selection_get_xlfd_field (fontname,
+						     XLFD_RESOLUTION_Y,
+						     field_buffer);
+	  res_y = atoi(field);
+
+	  if (pixels == 0 && points == 0)
+	    if (res_x == 0 && res_y == 0)
+	      flags = SCALABLE_FONT;
+	    else
+	      {
+		flags = SCALABLE_BITMAP_FONT;
+		klass->scaled_bitmaps_available = TRUE;
+	      }
+	  else
+	    flags = BITMAP_FONT;
+
+	  /* Now we check to make sure that the style is unique. If it isn't
+	     we forget it. */
+	  prev_style = klass->font_styles + font->style_index;
+	  matched_style = FALSE;
+	  while (prev_style < current_style)
+	    {
+	      matched_style = TRUE;
+	      for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+		{
+		  if (prev_style->properties[prop]
+		      != current_style->properties[prop])
+		    {
+		      matched_style = FALSE;
+		      break;
+		    }
+		}
+	      if (matched_style)
+		break;
+	      prev_style++;
+	    }
+
+	  /* If we matched an existing style, we need to add the pixels &
+	     point sizes to the style. If not, we insert the pixel & point
+	     sizes into our new style. Note that we don't add sizes for
+	     scalable fonts. */
+	  if (matched_style)
+	    {
+	      prev_style->flags |= flags;
+	      if (flags == BITMAP_FONT)
+		{
+		  pixel_sizes = klass->pixel_sizes
+		    + prev_style->pixel_sizes_index;
+		  found_size = FALSE;
+		  for (size = 0; size < prev_style->npixel_sizes; size++)
+		    {
+		      if (pixels == *pixel_sizes)
+			{
+			  found_size = TRUE;
+			  break;
+			}
+		      else if (pixels < *pixel_sizes)
+			break;
+		      pixel_sizes++;
+		    }
+		  /* We need to move all the following pixel sizes up, and also
+		     update the indexes of any following styles. */
+		  if (!found_size)
+		    {
+		      for (tmp_sizes = klass->pixel_sizes + npixel_sizes;
+			   tmp_sizes > pixel_sizes; tmp_sizes--)
+			*tmp_sizes = *(tmp_sizes - 1);
+
+		      *pixel_sizes = pixels;
+		      npixel_sizes++;
+		      prev_style->npixel_sizes++;
+
+		      tmp_style = prev_style + 1;
+		      while (tmp_style < current_style)
+			{
+			  tmp_style->pixel_sizes_index++;
+			  tmp_style++;
+			}
+		    }
+
+		  point_sizes = klass->point_sizes
+		    + prev_style->point_sizes_index;
+		  found_size = FALSE;
+		  for (size = 0; size < prev_style->npoint_sizes; size++)
+		    {
+		      if (points == *point_sizes)
+			{
+			  found_size = TRUE;
+			  break;
+			}
+		      else if (points < *point_sizes)
+			break;
+		      point_sizes++;
+		    }
+		  /* We need to move all the following point sizes up, and also
+		     update the indexes of any following styles. */
+		  if (!found_size)
+		    {
+		      for (tmp_sizes = klass->point_sizes + npoint_sizes;
+			   tmp_sizes > point_sizes; tmp_sizes--)
+			*tmp_sizes = *(tmp_sizes - 1);
+
+		      *point_sizes = points;
+		      npoint_sizes++;
+		      prev_style->npoint_sizes++;
+
+		      tmp_style = prev_style + 1;
+		      while (tmp_style < current_style)
+			{
+			  tmp_style->point_sizes_index++;
+			  tmp_style++;
+			}
+		    }
+		}
+	    }
+	  else
+	    {
+	      current_style->flags = flags;
+	      if (flags == BITMAP_FONT)
+		{
+		  klass->pixel_sizes[npixel_sizes++] = pixels;
+		  current_style->npixel_sizes = 1;
+		  klass->point_sizes[npoint_sizes++] = points;
+		  current_style->npoint_sizes = 1;
+		}
+	      style++;
+	      klass->nstyles++;
+	      current_style++;
+	    }
+	}
+      g_slist_free(fontnames[i]);
+
+      /* Set nstyles to the real value, minus duplicated fontnames.
+	 Note that we aren't using all the allocated memory if fontnames are
+	 duplicated. */
+      font->nstyles = style;
+    }
+
+  /* Since some repeated styles may be skipped we won't have used all the
+     allocated space, so we will now reallocate it with the real size. */
+  klass->font_styles = g_realloc(klass->font_styles,
+				 sizeof(FontStyle) * klass->nstyles);
+  klass->pixel_sizes = g_realloc(klass->pixel_sizes,
+				 sizeof(guint16) * npixel_sizes);
+  klass->point_sizes = g_realloc(klass->point_sizes,
+				 sizeof(guint16) * npoint_sizes);
+  g_free(fontnames);
+  XFreeFontNames (xfontnames);
+
+
+  /* Debugging Output */
+  /* This outputs all FontInfos. */
+#ifdef FONTSEL_DEBUG
+  g_print("\n\n Font Family           Weight    Slant     Set Width Spacing   Charset\n\n");
+  for (i = 0; i < klass->nfonts; i++)
+    {
+      FontInfo *font = &klass->font_info[i];
+      FontStyle *styles = klass->font_styles + font->style_index;
+      for (style = 0; style < font->nstyles; style++)
+	{
+	  g_print("%5i %-16.16s ", i, font->family);
+	  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+	    g_print("%-9.9s ",
+		    klass->properties[prop][styles->properties[prop]]);
+	  g_print("\n      ");
+
+	  if (styles->flags & BITMAP_FONT)
+	    g_print("Bitmapped font  ");
+	  if (styles->flags & SCALABLE_FONT)
+	    g_print("Scalable font  ");
+	  if (styles->flags & SCALABLE_BITMAP_FONT)
+	    g_print("Scalable-Bitmapped font  ");
+	  g_print("\n");
+
+	  if (styles->npixel_sizes)
+	    {
+	      g_print("      Pixel sizes: ");
+	      tmp_sizes = klass->pixel_sizes + styles->pixel_sizes_index;
+	      for (size = 0; size < styles->npixel_sizes; size++)
+		g_print("%i ", *tmp_sizes++);
+	      g_print("\n");
+	    }
+
+	  if (styles->npoint_sizes)
+	    {
+	      g_print("      Point sizes: ");
+	      tmp_sizes = klass->point_sizes + styles->point_sizes_index;
+	      for (size = 0; size < styles->npoint_sizes; size++)
+		g_print("%i ", *tmp_sizes++);
+	      g_print("\n");
+	    }
+
+	  g_print("\n");
+	  styles++;
+	}
+    }
+  /* This outputs all available properties. */
+  for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
+    {
+      g_print("Property: %s\n", xlfd_field_names[xlfd_index[prop]]);
+      for (i = 0; i < klass->nproperties[prop]; i++)
+        g_print("  %s\n", klass->properties[prop][i]);
+    }
+#endif
+}
+
+/* This inserts the given fontname into the FontInfo table.
+   If a FontInfo already exists with the same family and foundry, then the
+   fontname is added to the FontInfos list of fontnames, else a new FontInfo
+   is created and inserted in alphabetical order in the table. */
+static void
+gtk_font_selection_insert_font (GtkFontSelectionClass *klass,
+				GSList		      *fontnames[],
+				gint		      *ntable,
+				gchar		      *fontname)
+{
+  FontInfo *table;
+  FontInfo temp_info;
+  GSList *temp_fontname;
+  gchar *family;
+  gboolean family_exists = FALSE;
+  gint foundry;
+  gint lower, upper;
+  gint middle, cmp;
+  gchar family_buffer[XLFD_MAX_FIELD_LEN];
+
+  table = klass->font_info;
+
+  /* insert a fontname into a table */
+  family = gtk_font_selection_get_xlfd_field (fontname, XLFD_FAMILY,
+					      family_buffer);
+  if (!family)
+    return;
+
+  foundry = gtk_font_selection_insert_field(klass, fontname, FOUNDRY);
+
+  lower = 0;
+  if (*ntable > 0)
+    {
+      /* Do a binary search to determine if we have already encountered
+       *  a font with this family & foundry. */
+      upper = *ntable;
+      while (lower < upper)
+	{
+	  middle = (lower + upper) >> 1;
+
+	  cmp = strcmp (family, table[middle].family);
+	  /* If the family matches we sort by the foundry. */
+	  if (cmp == 0)
+	    {
+	      family_exists = TRUE;
+	      family = table[middle].family;
+	      cmp = strcmp(klass->properties[FOUNDRY][foundry],
+			   klass->properties[FOUNDRY][table[middle].foundry]);
+	    }
+
+	  if (cmp == 0)
+	    {
+	      fontnames[middle] = g_slist_prepend (fontnames[middle],
+						   fontname);
+	      return;
+	    }
+	  else if (cmp < 0)
+	    upper = middle;
+	  else
+	    lower = middle+1;
+	}
+    }
+
+  /* Add another entry to the table for this new font family */
+  temp_info.family = family_exists ? family : g_strdup(family);
+  temp_info.foundry = foundry;
+  temp_fontname = g_slist_prepend (NULL, fontname);
+
+  (*ntable)++;
+
+  /* Quickly insert the entry into the table in sorted order
+   *  using a modification of insertion sort and the knowledge
+   *  that the entries proper position in the table was determined
+   *  above in the binary search and is contained in the "lower"
+   *  variable. */
+  if (*ntable > 1)
+    {
+      upper = *ntable - 1;
+      while (lower != upper)
+	{
+	  table[upper] = table[upper-1];
+	  fontnames[upper] = fontnames[upper-1];
+	  upper--;
+	}
+    }
+  table[lower] = temp_info;
+  fontnames[lower] = temp_fontname;
+}
+
+
+/* This checks that the specified field of the given fontname is in the
+   appropriate properties array. If not it is added. Thus eventually we get
+   arrays of all possible weights/slants etc. It returns the array index. */
+static gint
+gtk_font_selection_insert_field (GtkFontSelectionClass *klass,
+				 gchar		       *fontname,
+				 gint			prop)
+{
+  gchar field_buffer[XLFD_MAX_FIELD_LEN];
+  gchar *field;
+  guint16 index;
+
+  field = gtk_font_selection_get_xlfd_field (fontname, xlfd_index[prop],
+					     field_buffer);
+  if (!field)
+    return 0;
+
+  /* If the field is already in the array just return its index. */
+  for (index = 0; index < klass->nproperties[prop]; index++)
+    if (!strcmp(field, klass->properties[prop][index]))
+      return index;
+
+  /* Make sure we have enough space to add the field. */
+  if (klass->nproperties[prop] == klass->space_allocated[prop])
+    {
+      klass->space_allocated[prop] += PROPERTY_ARRAY_INCREMENT;
+      klass->properties[prop] = g_realloc(klass->properties[prop],
+					  sizeof(gchar*)
+					  * klass->space_allocated[prop]);
+    }
+
+  /* Add the new field. */
+  index = klass->nproperties[prop];
+  klass->properties[prop][index] = g_strdup(field);
+  klass->nproperties[prop]++;
+  return index;
+}
+
+
+/*****************************************************************************
+ * These functions are the main public interface for getting/setting the font.
+ *****************************************************************************/
+
+GdkFont*
+gtk_font_selection_get_font (GtkFontSelection *fontsel)
+{
+  g_return_val_if_fail (fontsel != NULL, NULL);
+  return fontsel->font;
+}
+
+
+gchar *
+gtk_font_selection_get_font_name (GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font;
+  gchar *family_str, *foundry_str;
+  gchar *property_str[GTK_NUM_STYLE_PROPERTIES];
+  gint prop;
+
+  g_return_val_if_fail (fontsel != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), NULL);
+
+  /* If no family has been selected return NULL. */
+  if (fontsel->font_index == -1)
+    return NULL;
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font = &klass->font_info[fontsel->font_index];
+  family_str = font->family;
+  foundry_str = klass->properties[FOUNDRY][font->foundry];
+
+  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+    {
+      property_str[prop]
+	= klass->properties[prop][fontsel->property_values[prop]];
+      if (strcmp (property_str[prop], "(nil)") == 0)
+	property_str[prop] = "";
+    }
+
+  return gtk_font_selection_create_xlfd (fontsel->size,
+					 fontsel->metric,
+					 foundry_str,
+					 family_str,
+					 property_str[WEIGHT],
+					 property_str[SLANT],
+					 property_str[SET_WIDTH],
+					 property_str[SPACING],
+					 property_str[CHARSET]);
+}
+
+
+/* This returns the style with the best match to the current fontsel setting */
+static gint
+gtk_font_selection_get_best_match(GtkFontSelection *fontsel)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font;
+  FontStyle *styles;
+  gint prop, style, best_style = 0, matched, best_matched = 0;
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font = &klass->font_info[fontsel->font_index];
+  styles = &klass->font_styles[font->style_index];
+
+  /* Find the style with the most matches. */
+  for (style = 0; style < font->nstyles; style++)
+    {
+      matched = 0;
+      for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++)
+	{
+	  if (fontsel->property_values[prop] == styles[style].properties[prop])
+	    matched++;
+	}
+      if (matched > best_matched)
+	{
+	  best_matched = matched;
+	  best_style = style;
+	}
+    }
+
+  return best_style;
+}
+
+
+/* This sets the current font, selecting the appropriate clist rows.
+   First we check the fontname is valid and try to find the font family
+   - i.e. the name in the main list. If we can't find that, then just return.
+   Next we try to set each of the properties according to the fontname.
+   Finally we select the font family & style in the clists.
+   Note that we have to be careful to make sure any callbacks do not try
+   to load the font unless we want them to. This is usually done by
+   setting the font/size in the fontsel struct before selecting rows or
+   buttons in the interface. The callbacks simply return if the value has
+   not changed. */
+gboolean
+gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
+				  const gchar      *fontname)
+{
+  GtkFontSelectionClass *klass;
+  gchar *family, *field;
+  gint index, prop, size;
+  guint16 foundry, value;
+  gchar family_buffer[XLFD_MAX_FIELD_LEN];
+  gchar field_buffer[XLFD_MAX_FIELD_LEN];
+  gchar buffer[16];
+
+  g_return_val_if_fail (fontsel != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_FONT_SELECTION (fontsel), FALSE);
+  g_return_val_if_fail (fontname != NULL, FALSE);
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+
+  /* Check it is a valid fontname. */
+  if (!gtk_font_selection_is_xlfd_font_name(fontname))
+    return FALSE;
+
+  family = gtk_font_selection_get_xlfd_field (fontname, XLFD_FAMILY,
+					      family_buffer);
+  if (!family)
+    return FALSE;
+
+  field = gtk_font_selection_get_xlfd_field (fontname, XLFD_FOUNDRY,
+					       field_buffer);
+  foundry = gtk_font_selection_field_to_index (klass->properties[FOUNDRY],
+					       klass->nproperties[FOUNDRY],
+					       field);
+
+  index = gtk_font_selection_find_font(fontsel, family, foundry);
+  if (index == -1)
+    return FALSE;
+
+  /* Convert the property fields into indices and set them. */
+  for (prop = 0; prop < GTK_NUM_STYLE_PROPERTIES; prop++) 
+    {
+      field = gtk_font_selection_get_xlfd_field (fontname, xlfd_index[prop],
+						 field_buffer);
+      value = gtk_font_selection_field_to_index (klass->properties[prop],
+						 klass->nproperties[prop],
+						 field);
+      fontsel->property_values[prop] = value;
+    }
+
+  field = gtk_font_selection_get_xlfd_field (fontname, XLFD_POINTS,
+					     field_buffer);
+  size = atoi(field);
+  if (size > 0)
+    {
+      if (size < 20)
+	size = 20;
+      fontsel->size = fontsel->selected_size = size;
+      fontsel->metric = POINTS_METRIC;
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->points_button),
+				  TRUE);
+      if (size % 10 == 0)
+	sprintf (buffer, "%i", size / 10);
+      else
+	sprintf (buffer, "%i.%i", size / 10, size % 10);
+    }
+  else
+    {
+      field = gtk_font_selection_get_xlfd_field (fontname, XLFD_PIXELS,
+						 field_buffer);
+      size = atoi(field);
+      if (size < 2)
+	size = 2;
+      fontsel->size = fontsel->selected_size = size;
+      fontsel->metric = PIXELS_METRIC;
+      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->pixels_button),
+				  TRUE);
+      sprintf (buffer, "%i", size);
+    }
+  gtk_entry_set_text (GTK_ENTRY (fontsel->size_entry), buffer);
+
+  /* Clear any current filter. */
+  /* TODO: Delete?
+  gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->filter_button),
+			      FALSE);
+			      */
+  gtk_font_selection_clear_filter(fontsel);
+  gtk_widget_set_sensitive(fontsel->filter_button, FALSE);
+  gtk_label_set(GTK_LABEL(fontsel->font_label), "Font:");
+
+  /* Now find the best style match. */
+  fontsel->font_index = index;
+  gtk_clist_select_row(GTK_CLIST(fontsel->font_clist), index, 0);
+  if (GTK_WIDGET_MAPPED (fontsel->font_clist))
+    gtk_clist_moveto(GTK_CLIST(fontsel->font_clist), index, -1, 0.5, 0);
+  else
+    fontsel->scroll_on_expose = TRUE;
+
+  gtk_font_selection_show_available_styles (fontsel);
+  fontsel->style = gtk_font_selection_get_best_match (fontsel);
+
+  gtk_clist_select_row(GTK_CLIST(fontsel->font_style_clist),
+		       fontsel->style, 0);
+  gtk_font_selection_show_available_sizes (fontsel);
+
+  /* This will load the font. */
+  gtk_font_selection_select_best_size (fontsel);
+
+  return TRUE;
+}
+
+
+/* Returns the index of the given family, or -1 if not found */
+static gint
+gtk_font_selection_find_font (GtkFontSelection *fontsel,
+			      gchar	       *family,
+			      guint16		foundry)
+{
+  GtkFontSelectionClass *klass;
+  FontInfo *font_info;
+  gint lower, upper, middle = -1, cmp, nfonts;
+
+  klass = GTK_FONT_SELECTION_CLASS(GTK_OBJECT(fontsel)->klass);
+  font_info = klass->font_info;
+  nfonts = klass->nfonts;
+  if (nfonts == 0)
+    return -1;
+
+  /* Do a binary search to find the font family. */
+  lower = 0;
+  upper = nfonts;
+  while (lower < upper)
+    {
+      middle = (lower + upper) >> 1;
+      
+      cmp = strcmp (family, font_info[middle].family);
+      if (cmp == 0)
+	cmp = strcmp(klass->properties[FOUNDRY][foundry],
+		     klass->properties[FOUNDRY][font_info[middle].foundry]);
+
+      if (cmp == 0)
+	return middle;
+      else if (cmp < 0)
+	upper = middle;
+      else if (cmp > 0)
+	lower = middle+1;
+    }
+
+  /* If we can't match family & foundry see if just the family matches */
+  if (!strcmp (family, font_info[middle].family))
+    return middle;
+
+  return -1;
+}
+
+
+/* This returns the text in the preview entry. You should copy the returned
+   text if you need it. */
+gchar*
+gtk_font_selection_get_preview_text  (GtkFontSelection *fontsel)
+{
+  return gtk_entry_get_text(GTK_ENTRY(fontsel->preview_entry));
+}
+
+
+/* This sets the text in the preview entry. */
+void
+gtk_font_selection_set_preview_text  (GtkFontSelection *fontsel,
+				      const gchar	  *text)
+{
+  gtk_entry_set_text(GTK_ENTRY(fontsel->preview_entry), text);
+}
+
+
+/*****************************************************************************
+ * These functions all deal with X Logical Font Description (XLFD) fontnames.
+ * See the freely available documentation about this.
+ *****************************************************************************/
+
+/*
+ * Returns TRUE if the fontname is a valid XLFD.
+ * (It just checks if the number of dashes is 14, and that each
+ * field < XLFD_MAX_FIELD_LEN  characters long - that's not in the XLFD but it
+ * makes it easier for me).
+ */
+static gboolean
+gtk_font_selection_is_xlfd_font_name (const gchar *fontname)
+{
+  gint i = 0;
+  gint field_len = 0;
+
+  while (*fontname)
+    {
+      if (*fontname++ == '-')
+	{
+	  if (field_len > XLFD_MAX_FIELD_LEN) return FALSE;
+	  field_len = 0;
+	  i++;
+	}
+      else
+	field_len++;
+    }
+
+  return (i == 14) ? TRUE : FALSE;
+}
+
+/*
+ * This fills the buffer with the specified field from the X Logical Font
+ * Description name, and returns it. If fontname is NULL or the field is
+ * longer than XFLD_MAX_FIELD_LEN it returns NULL.
+ * Note: For the charset field, we also return the encoding, e.g. 'iso8859-1'.
+ */
+static gchar*
+gtk_font_selection_get_xlfd_field (const gchar *fontname,
+				   FontField    field_num,
+				   gchar       *buffer)
+{
+  const gchar *t1, *t2;
+  gint countdown, len, num_dashes;
+
+  if (!fontname)
+    return NULL;
+
+  /* we assume this is a valid fontname...that is, it has 14 fields */
+
+  countdown = field_num;
+  t1 = fontname;
+  while (*t1 && (countdown >= 0))
+    if (*t1++ == '-')
+      countdown--;
+
+  num_dashes = (field_num == XLFD_CHARSET) ? 2 : 1;
+  for (t2 = t1; *t2; t2++)
+    { 
+      if (*t2 == '-' && --num_dashes == 0)
+	break;
+    }
+
+  if (t1 != t2)
+    {
+      /* Check we don't overflow the buffer */
+      len = (long) t2 - (long) t1;
+      if (len > XLFD_MAX_FIELD_LEN - 1)
+	return NULL;
+      strncpy (buffer, t1, len);
+      buffer[len] = 0;
+    }
+  else
+    strcpy(buffer, "(nil)");
+
+  return buffer;
+}
+
+/*
+ * This returns a X Logical Font Description font name, given all the pieces.
+ * Note: this retval must be freed by the caller.
+ */
+static gchar *
+gtk_font_selection_create_xlfd (gint		  size,
+				GtkFontMetricType metric,
+				gchar		  *foundry,
+				gchar		  *family,
+				gchar		  *weight,
+				gchar		  *slant,
+				gchar		  *set_width,
+				gchar		  *spacing,
+				gchar		  *charset)
+{
+  gchar buffer[16];
+  gchar *pixel_size = "*", *point_size = "*", *fontname;
+  gint length;
+
+  if (size <= 0)
+    return NULL;
+
+  sprintf (buffer, "%d", (int) size);
+  if (metric == PIXELS_METRIC)
+    pixel_size = buffer;
+  else
+    point_size = buffer;
+    
+  /* Note: be careful here - don't overrun the allocated memory. */
+  length = strlen(foundry) + strlen(family) + strlen(weight) + strlen(slant)
+    + strlen(set_width) + strlen(pixel_size) + strlen(point_size)
+    + strlen(spacing) + strlen(charset)
+    + 1 + 1 + 1 + 1 + 1 + 3 + 1 + 5 + 3
+    + 1 /* for the terminating '\0'. */;
+
+  fontname = g_new(gchar, length);
+  /* **NOTE**: If you change this string please change length above! */
+  sprintf(fontname, "-%s-%s-%s-%s-%s-*-%s-%s-*-*-%s-*-%s",
+	  foundry, family, weight, slant, set_width, pixel_size,
+	  point_size, spacing, charset);
+  return fontname;
+}
+
+
+
+/*****************************************************************************
+ * GtkFontSelectionDialog
+ *****************************************************************************/
+
+guint
+gtk_font_selection_dialog_get_type	(void)
+{
+  static guint font_selection_dialog_type = 0;
+
+  if (!font_selection_dialog_type)
+    {
+      GtkTypeInfo fontsel_diag_info =
+      {
+	"GtkFontSelectionDialog",
+	sizeof (GtkFontSelectionDialog),
+	sizeof (GtkFontSelectionDialogClass),
+	(GtkClassInitFunc) gtk_font_selection_dialog_class_init,
+	(GtkObjectInitFunc) gtk_font_selection_dialog_init,
+	(GtkArgSetFunc) NULL,
+	(GtkArgGetFunc) NULL,
+      };
+
+      font_selection_dialog_type = gtk_type_unique (gtk_window_get_type (), &fontsel_diag_info);
+    }
+
+  return font_selection_dialog_type;
+}
+
+static void
+gtk_font_selection_dialog_class_init (GtkFontSelectionDialogClass *klass)
+{
+  GtkObjectClass *object_class;
+
+  object_class = (GtkObjectClass*) klass;
+
+  font_selection_dialog_parent_class = gtk_type_class (gtk_window_get_type ());
+}
+
+static void
+gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
+{
+  fontseldiag->dialog_width = -1;
+  fontseldiag->auto_resize = TRUE;
+
+  gtk_widget_set_events(GTK_WIDGET(fontseldiag), GDK_STRUCTURE_MASK);
+  gtk_signal_connect (GTK_OBJECT (fontseldiag), "configure_event",
+		      (GtkSignalFunc) gtk_font_selection_dialog_on_configure,
+		      fontseldiag);
+
+  gtk_container_border_width (GTK_CONTAINER (fontseldiag), 4);
+  gtk_window_set_policy(GTK_WINDOW(fontseldiag), FALSE, TRUE, TRUE);
+
+  fontseldiag->main_vbox = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (fontseldiag->main_vbox);
+  gtk_container_add (GTK_CONTAINER (fontseldiag), fontseldiag->main_vbox);
+
+  fontseldiag->fontsel = gtk_font_selection_new();
+  gtk_widget_show (fontseldiag->fontsel);
+  gtk_box_pack_start (GTK_BOX (fontseldiag->main_vbox),
+		      fontseldiag->fontsel, TRUE, TRUE, 0);
+
+  /* Create the action area */
+  fontseldiag->action_area = gtk_hbutton_box_new ();
+  gtk_button_box_set_layout(GTK_BUTTON_BOX(fontseldiag->action_area),
+			    GTK_BUTTONBOX_END);
+  gtk_button_box_set_spacing(GTK_BUTTON_BOX(fontseldiag->action_area), 5);
+  gtk_box_pack_start (GTK_BOX (fontseldiag->main_vbox),
+		      fontseldiag->action_area, FALSE, FALSE, 0);
+  gtk_widget_show (fontseldiag->action_area);
+
+  fontseldiag->ok_button = gtk_button_new_with_label("OK");
+  GTK_WIDGET_SET_FLAGS (fontseldiag->ok_button, GTK_CAN_DEFAULT);
+  gtk_widget_show(fontseldiag->ok_button);
+  gtk_box_pack_start (GTK_BOX (fontseldiag->action_area),
+		      fontseldiag->ok_button, TRUE, TRUE, 0);
+  gtk_widget_grab_default (fontseldiag->ok_button);
+
+  fontseldiag->apply_button = gtk_button_new_with_label("Apply");
+  GTK_WIDGET_SET_FLAGS (fontseldiag->apply_button, GTK_CAN_DEFAULT);
+  /*gtk_widget_show(fontseldiag->apply_button);*/
+  gtk_box_pack_start (GTK_BOX(fontseldiag->action_area),
+		      fontseldiag->apply_button, TRUE, TRUE, 0);
+
+  fontseldiag->cancel_button = gtk_button_new_with_label("Cancel");
+  GTK_WIDGET_SET_FLAGS (fontseldiag->cancel_button, GTK_CAN_DEFAULT);
+  gtk_widget_show(fontseldiag->cancel_button);
+  gtk_box_pack_start (GTK_BOX(fontseldiag->action_area),
+		      fontseldiag->cancel_button, TRUE, TRUE, 0);
+
+
+}
+
+GtkWidget*
+gtk_font_selection_dialog_new	(const gchar	  *title)
+{
+  GtkFontSelectionDialog *fontseldiag;
+
+  fontseldiag = gtk_type_new (gtk_font_selection_dialog_get_type ());
+  gtk_window_set_title (GTK_WINDOW (fontseldiag),
+			title ? title : "Font Selection");
+
+  return GTK_WIDGET (fontseldiag);
+}
+
+gchar*
+gtk_font_selection_dialog_get_font_name	(GtkFontSelectionDialog *fsd)
+{
+  return gtk_font_selection_get_font_name(GTK_FONT_SELECTION(fsd->fontsel));
+}
+
+GdkFont*
+gtk_font_selection_dialog_get_font	(GtkFontSelectionDialog *fsd)
+{
+  return gtk_font_selection_get_font(GTK_FONT_SELECTION(fsd->fontsel));
+}
+
+gboolean
+gtk_font_selection_dialog_set_font_name	(GtkFontSelectionDialog *fsd,
+					 const gchar	  *fontname)
+{
+  return gtk_font_selection_set_font_name(GTK_FONT_SELECTION(fsd->fontsel),
+					  fontname);
+
+}
+
+gchar*
+gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
+{
+  return gtk_font_selection_get_preview_text(GTK_FONT_SELECTION(fsd->fontsel));
+}
+
+void
+gtk_font_selection_dialog_set_preview_text (GtkFontSelectionDialog *fsd,
+					    const gchar	  *text)
+{
+  gtk_font_selection_set_preview_text(GTK_FONT_SELECTION(fsd->fontsel), text);
+}
+
+
+/* This turns auto-shrink off if the user resizes the width of the dialog.
+   It also turns it back on again if the user resizes it back to its normal
+   width. */
+static gint
+gtk_font_selection_dialog_on_configure (GtkWidget         *widget,
+					GdkEventConfigure *event,
+					GtkFontSelectionDialog *fsd)
+{
+  /* This sets the initial width. */
+  if (fsd->dialog_width == -1)
+    fsd->dialog_width = event->width;
+  else if (fsd->auto_resize && fsd->dialog_width != event->width)
+    {
+      fsd->auto_resize = FALSE;
+      gtk_window_set_policy(GTK_WINDOW(fsd), FALSE, TRUE, FALSE);
+    }
+  else if (!fsd->auto_resize && fsd->dialog_width == event->width)
+    {
+      fsd->auto_resize = TRUE;
+      gtk_window_set_policy(GTK_WINDOW(fsd), FALSE, TRUE, TRUE);
+    }
+
+  return FALSE;
+}
