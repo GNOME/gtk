@@ -1,6 +1,7 @@
 Tue Feb 24 02:24:58 2004  Matthias Clasen  <maclas@gmx.de>
 
-	* NEWS: Additions.
+	* NEWS: Additions. This should be complete for the main ChangeLog
+	now, still need to sift through gdk-pixbuf, docs, and translations.
 
 Mon Feb 23 19:57:45 2004  Jonathan Blandford  <jrb@gnome.org>
 
