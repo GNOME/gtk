@@ -95,10 +95,10 @@ static void     gtk_list_store_sort_iter_changed  (GtkListStore           *list_
 						   gint                    column);
 static gboolean gtk_list_store_get_sort_column_id (GtkTreeSortable        *sortable,
 						   gint                   *sort_column_id,
-						   GtkTreeSortOrder       *order);
+						   GtkSortType            *order);
 static void     gtk_list_store_set_sort_column_id (GtkTreeSortable        *sortable,
 						   gint                    sort_column_id,
-						   GtkTreeSortOrder        order);
+						   GtkSortType             order);
 static void     gtk_list_store_set_sort_func      (GtkTreeSortable        *sortable,
 						   gint                    sort_column_id,
 						   GtkTreeIterCompareFunc  func,
@@ -1391,7 +1391,7 @@ gtk_list_store_compare_func (gconstpointer a,
 			     &iter_a, &iter_b,
 			     header->data);
 
-  if (list_store->order == GTK_TREE_SORT_DESCENDING)
+  if (list_store->order == GTK_SORT_DESCENDING)
     {
       if (retval > 0)
 	retval = -1;
@@ -1530,7 +1530,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
     }
 
 
-  if (list_store->order == GTK_TREE_SORT_DESCENDING)
+  if (list_store->order == GTK_SORT_DESCENDING)
     {
       if (cmp_a < 0)
 	cmp_a = 1;
@@ -1567,7 +1567,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
   list = G_SLIST (list_store->root);
   new_location = 0;
   tmp_iter.user_data = list;
-  if (list_store->order == GTK_TREE_SORT_DESCENDING)
+  if (list_store->order == GTK_SORT_DESCENDING)
     cmp_a = (* header->func) (GTK_TREE_MODEL (list_store),
 			      &tmp_iter, iter, header->data);
   else
@@ -1580,7 +1580,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
       list = list->next;
       new_location++;
       tmp_iter.user_data = list;
-      if (list_store->order == GTK_TREE_SORT_DESCENDING)
+      if (list_store->order == GTK_SORT_DESCENDING)
 	cmp_a = (* header->func) (GTK_TREE_MODEL (list_store),
 				  &tmp_iter, iter, header->data);
       else
@@ -1645,7 +1645,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 static gboolean
 gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 				   gint             *sort_column_id,
-				   GtkTreeSortOrder *order)
+				   GtkSortType      *order)
 {
   GtkListStore *list_store = (GtkListStore *) sortable;
 
@@ -1664,7 +1664,7 @@ gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 static void
 gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
 				   gint              sort_column_id,
-				   GtkTreeSortOrder  order)
+				   GtkSortType       order)
 {
   GtkListStore *list_store = (GtkListStore *) sortable;
   GList *list;

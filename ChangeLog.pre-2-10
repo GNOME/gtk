@@ -1,3 +1,10 @@
+Thu Aug 23 20:01:41 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreemodelsort.[ch], gtk/gtktreesortable.[ch],
+	gtk/gtktreestore.[ch], gtk/gtktreeviewcolumn.[ch],
+	gtk/gtkliststore.[ch]: use GtkSortType instead of GtkTreeSortOrder.
+	(#59173).
+
 Thu Aug 23 16:26:47 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_finalize): 

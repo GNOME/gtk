@@ -26,12 +26,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-typedef enum
-{
-  GTK_TREE_SORT_ASCENDING,
-  GTK_TREE_SORT_DESCENDING
-} GtkTreeSortOrder;
-
 #define GTK_TYPE_TREE_SORTABLE            (gtk_tree_sortable_get_type ())
 #define GTK_TREE_SORTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_SORTABLE, GtkTreeSortable))
 #define GTK_TREE_SORTABLE_CLASS(obj)      (G_TYPE_CHECK_CLASS_CAST ((obj), GTK_TYPE_TREE_SORTABLE, GtkTreeSortableIface))
@@ -58,10 +52,10 @@ struct _GtkTreeSortableIface
   /* virtual table */
   gboolean (* get_sort_column_id) (GtkTreeSortable  *sortable,
 				   gint             *sort_column_id,
-				   GtkTreeSortOrder *order);
+				   GtkSortType      *order);
   void (* set_sort_column_id)     (GtkTreeSortable  *sortable,
 				   gint              sort_column_id,
-				   GtkTreeSortOrder  order);
+				   GtkSortType       order);
   void (* set_sort_func)          (GtkTreeSortable  *sortable,
 				   gint              sort_column_id,
 				   GtkTreeIterCompareFunc func,
@@ -75,10 +69,10 @@ GType    gtk_tree_sortable_get_type                (void) G_GNUC_CONST;
 void     gtk_tree_sortable_sort_column_changed (GtkTreeSortable        *sortable);
 gboolean gtk_tree_sortable_get_sort_column_id  (GtkTreeSortable        *sortable,
 						gint                   *sort_column_id,
-						GtkTreeSortOrder       *order);
+						GtkSortType            *order);
 void     gtk_tree_sortable_set_sort_column_id  (GtkTreeSortable        *sortable,
 						gint                    sort_column_id,
-						GtkTreeSortOrder        order);
+						GtkSortType             order);
 void     gtk_tree_sortable_set_sort_func       (GtkTreeSortable        *sortable,
 						gint                    sort_column_id,
 						GtkTreeIterCompareFunc  func,
