@@ -841,6 +841,7 @@ gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
       if (child)
 	{
 	  gtk_widget_set_sensitive (child, TRUE);
+	  gtk_widget_set_state (child, GTK_STATE_NORMAL);
 	  gtk_widget_reparent (child, option_menu->menu_item);
 	}
 

@@ -1,5 +1,8 @@
 2003-03-29  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkoptionmenu.c (gtk_option_menu_remove_contents): Set state
+	of labels back to normal before reparenting back.  (#102387)
+
 	* gtk/gtkcolorseldialog.c (gtk_color_selection_dialog_init): Set
 	a default window title to match the GtkFontSelectionDialog behavior.
  
