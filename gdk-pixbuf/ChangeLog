@@ -1,4 +1,9 @@
-2003-06-22  Matthias Clasen  <matthias@localhost.localdomain>
+2003-06-23  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (gif_get_frame_info): Remove the pointless refusal to load images with dubious 
+	disposal mode on the first frame. Just ignore it, as everybody else does.
+
+2003-06-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf-loader.[hc] (gdk_pixbuf_loader_new_with_mime_type): New function to obtain a loader for a specific mime 
 	type.  (#105324, Dom Lachowicz)

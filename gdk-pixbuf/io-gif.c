@@ -1227,17 +1227,9 @@ gif_get_frame_info (GifContext *context)
 	if (context->animation->frames == NULL &&
             context->gif89.disposal == 3) {
                 /* First frame can't have "revert to previous" as its
-                 * dispose mode.
+                 * dispose mode. Silently use "retain" instead.
                  */
-                
-		context->state = GIF_DONE;
-
-                g_set_error (context->error,
-                             GDK_PIXBUF_ERROR,
-                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("First frame of GIF image had 'revert to previous' as its disposal mode."));
-                
-		return -2;
+                context->gif89.disposal = 0;
 	}
 
 	context->frame_interlace = BitSet (buf[8], INTERLACE);
