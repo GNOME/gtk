@@ -48,7 +48,7 @@ typedef enum
   PRIVATE_GTK_HAS_SHAPE_MASK	= 1 <<  5,
   PRIVATE_GTK_IN_REPARENT       = 1 <<  6,
   PRIVATE_GTK_DIRECTION_SET     = 1 <<  7,   /* If the reading direction is not DIR_NONE */
-  PRIVATE_GTK_DIRECTION_LTR     = 1 <<  8,   /* If the reading direction is DIR_LTR */
+  PRIVATE_GTK_DIRECTION_LTR     = 1 <<  8    /* If the reading direction is DIR_LTR */
 } GtkPrivateFlags;
 
 /* Macros for extracting a widgets private_flags from GtkWidget.
