@@ -221,6 +221,10 @@
    (dialog GTK_WINDOW_DIALOG)
    (popup GTK_WINDOW_POPUP))
 
+(define-enum GtkSortType
+   (ascending GTK_SORT_ASCENDING)
+   (descending GTK_SORT_DESCENDING))
+
 ; enumerations from "./gtkfontsel.h"
 
 (define-enum GtkFontMetricType

@@ -37,6 +37,7 @@ extern GtkType GTK_TYPE_UPDATE_TYPE;
 extern GtkType GTK_TYPE_VISIBILITY;
 extern GtkType GTK_TYPE_WINDOW_POSITION;
 extern GtkType GTK_TYPE_WINDOW_TYPE;
+extern GtkType GTK_TYPE_SORT_TYPE;
 extern GtkType GTK_TYPE_FONT_METRIC_TYPE;
 extern GtkType GTK_TYPE_OBJECT_FLAGS;
 extern GtkType GTK_TYPE_ARG_FLAGS;
@@ -106,4 +107,4 @@ extern GtkType GTK_TYPE_GDK_WINDOW;
 extern GtkType GTK_TYPE_GDK_EVENT;
 extern GtkType GTK_TYPE_GDK_COLOR;
 
-#define	GTK_TYPE_NUM_BUILTINS	(105)
+#define	GTK_TYPE_NUM_BUILTINS	(106)

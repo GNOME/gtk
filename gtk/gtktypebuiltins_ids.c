@@ -74,6 +74,8 @@
     GTK_TYPE_ENUM, _gtk_window_position_values },
   { "GtkWindowType", &GTK_TYPE_WINDOW_TYPE,
     GTK_TYPE_ENUM, _gtk_window_type_values },
+  { "GtkSortType", &GTK_TYPE_SORT_TYPE,
+    GTK_TYPE_ENUM, _gtk_sort_type_values },
   { "GtkFontMetricType", &GTK_TYPE_FONT_METRIC_TYPE,
     GTK_TYPE_ENUM, _gtk_font_metric_type_values },
   { "GtkObjectFlags", &GTK_TYPE_OBJECT_FLAGS,

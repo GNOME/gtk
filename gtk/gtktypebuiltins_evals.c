@@ -249,6 +249,11 @@ static GtkEnumValue _gtk_window_type_values[] = {
   { GTK_WINDOW_POPUP, "GTK_WINDOW_POPUP", "popup" },
   { 0, NULL, NULL }
 };
+static GtkEnumValue _gtk_sort_type_values[] = {
+  { GTK_SORT_ASCENDING, "GTK_SORT_ASCENDING", "ascending" },
+  { GTK_SORT_DESCENDING, "GTK_SORT_DESCENDING", "descending" },
+  { 0, NULL, NULL }
+};
 static GtkEnumValue _gtk_font_metric_type_values[] = {
   { PIXELS_METRIC, "PIXELS_METRIC", "ixels-metric" },
   { POINTS_METRIC, "POINTS_METRIC", "oints-metric" },
