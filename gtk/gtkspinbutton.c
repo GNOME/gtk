@@ -1049,14 +1049,28 @@ gtk_spin_button_insert_text (GtkEditable *editable,
   if (spin->numeric)
     {
       struct lconv *lc;
-      gboolean minus;
+      gboolean sign;
       gint dotpos = -1;
       gint i;
+      gchar pos_sign;
+      gchar neg_sign;
 
       lc = localeconv ();
 
-      minus = (strchr (entry->text, *(lc->negative_sign)) != 0) ;
-      if (minus && !(*position))
+      if (*(lc->negative_sign))
+	neg_sign = *(lc->negative_sign);
+      else 
+	neg_sign = '-';
+
+      if (*(lc->positive_sign))
+	pos_sign = *(lc->positive_sign);
+      else 
+	pos_sign = '+';
+
+      sign = ((strchr (entry->text, neg_sign) != 0) ||
+	      (strchr (entry->text, pos_sign) != 0));
+
+      if (sign && !(*position))
 	return;
 
       dotpos = strchr (entry->text, *(lc->decimal_point)) - entry->text;
@@ -1067,11 +1081,11 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 
       for (i = 0; i < new_text_length; i++)
 	{
-	  if (new_text[i] == *(lc->negative_sign))
+	  if (new_text[i] == neg_sign || new_text[i] == pos_sign)
 	    {
-	      if (minus || (*position) || i)
+	      if (sign || (*position) || i)
 		return;
-	      minus = TRUE;
+	      sign = TRUE;
 	    }
 	  else if (new_text[i] == *(lc->decimal_point))
 	    {

@@ -586,10 +586,13 @@ gtk_tree_map (GtkWidget *widget)
 	  !GTK_WIDGET_MAPPED (child))
 	gtk_widget_map (child);
 
-      if ((child = GTK_WIDGET(GTK_TREE_ITEM(child)->subtree)) &&
-	  GTK_WIDGET_VISIBLE (child) &&
-	  !GTK_WIDGET_MAPPED (child))
-	gtk_widget_map (child);
+      if (GTK_TREE_ITEM (child)->subtree)
+	{
+	  child = GTK_WIDGET (GTK_TREE_ITEM (child)->subtree);
+
+	  if (GTK_WIDGET_VISIBLE (child) && !GTK_WIDGET_MAPPED (child))
+	    gtk_widget_map (child);
+	}
     }
 }
 

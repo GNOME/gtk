@@ -335,6 +335,11 @@ gtk_statusbar_destroy (GtkObject *object)
   g_slist_free (statusbar->messages);
   statusbar->messages = NULL;
 
+  for (list = statusbar->keys; list; list = list->next)
+    g_free (list->data);
+  g_slist_free (statusbar->keys);
+  statusbar->keys = NULL;
+
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -348,11 +353,6 @@ gtk_statusbar_finalize (GtkObject *object)
   g_return_if_fail (GTK_IS_STATUSBAR (object));
 
   statusbar = GTK_STATUSBAR (object);
-
-  for (list = statusbar->keys; list; list = list->next)
-    g_free (list->data);
-  g_slist_free (statusbar->messages);
-  statusbar->keys = NULL;
 
   GTK_OBJECT_CLASS (parent_class)->finalize (object);
 }

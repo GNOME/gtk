@@ -1398,11 +1398,11 @@ sync_selection (GtkCList * clist,
         switch (mode)
           {
           case SYNC_INSERT:
-            (gint) list->data = (gint) list->data + 1;
+            list->data = ((gchar*) list->data) + 1;
             break;
 
           case SYNC_REMOVE:
-            (gint) list->data = (gint) list->data - 1;
+            list->data = ((gchar*) list->data) - 1;
             break;
 
           default:

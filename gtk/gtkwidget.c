@@ -1553,9 +1553,9 @@ gtk_widget_draw (GtkWidget    *widget,
 		 GdkRectangle *area)
 {
   GdkRectangle temp_area;
-  
+
   g_return_if_fail (widget != NULL);
-  
+
   if (GTK_WIDGET_DRAWABLE (widget) &&
       !GTK_WIDGET_REDRAW_PENDING (widget))
     {
@@ -1571,12 +1571,12 @@ gtk_widget_draw (GtkWidget    *widget,
 	      temp_area.x = 0;
 	      temp_area.y = 0;
 	    }
-	  
+
 	  temp_area.width = widget->allocation.width;
 	  temp_area.height = widget->allocation.height;
 	  area = &temp_area;
 	}
-      
+
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW], area);
     }
 }

@@ -5,11 +5,6 @@ Bugs:
  * pasting into a GtkEntry that already has a very long string,
    causes the app to hang.
  
- * Vertical scrollbar: the expose event looks hosed and is causing 
-   quite a bit of flickering
-   Actually this affects both scrollbar implementation, you can best
-   tell if you run the application with --sync (timj)
-
  * signal parameters don't seem to get refreshed on recursive invokations
    of GTK_NO_RECURSE signals, which causes the restarted emissions to loose
    their actual point, i.e. parameter changes on the restarted emission,
@@ -62,9 +57,6 @@ Bugs:
  * Force paned window handle to be kept on screen
 
 Additions:
- * widgets which are redrawn because of a gtk_widget_draw(,NULL) should
-   be removed from the redraw queue.
-   
  * GScanner: it might be good to ues stdio and getch() instead of 1-character
    reads. so one can take advantage of buffering. Currently each read() takes
    a separate syscall.

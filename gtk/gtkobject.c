@@ -1060,7 +1060,7 @@ gtk_object_set_data_full (GtkObject        *object,
       if (!id)
 	{
 	  id = gtk_object_data_id_alloc ();
-	  g_hash_table_insert (object_data_ht, (gpointer) key, id);
+	  g_hash_table_insert (object_data_ht, (gpointer) g_strdup (key), id);
 	}
 
       odata = object->object_data;

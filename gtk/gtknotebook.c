@@ -360,8 +360,9 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 
   if (!tab_label)
     {
-      tab_label = gtk_label_new ("");
       page->default_tab = TRUE;
+      if (notebook->show_tabs)
+	tab_label = gtk_label_new ("");
     }
   page->tab_label = tab_label;
   page->menu_label = menu_label;
@@ -387,8 +388,11 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
     notebook->focus_tab = notebook->children;
 
   gtk_widget_set_parent (child, GTK_WIDGET (notebook));
-  gtk_widget_set_parent (tab_label, GTK_WIDGET (notebook));
-  gtk_widget_show (tab_label);
+  if (tab_label)
+    {
+      gtk_widget_set_parent (tab_label, GTK_WIDGET (notebook));
+      gtk_widget_show (tab_label);
+    }
 
   if (!notebook->cur_page)
     gtk_notebook_switch_page (notebook, page, 0);
@@ -403,13 +407,16 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 	  !GTK_WIDGET_MAPPED (child) && notebook->cur_page == page)
 	gtk_widget_map (child);
 
-      if (GTK_WIDGET_REALIZED (notebook) &&
-	  !GTK_WIDGET_REALIZED (tab_label))
-	gtk_widget_realize (tab_label);
+      if (tab_label)
+	{
+	  if (GTK_WIDGET_REALIZED (notebook) &&
+	      !GTK_WIDGET_REALIZED (tab_label))
+	    gtk_widget_realize (tab_label);
       
-      if (GTK_WIDGET_MAPPED (notebook) &&
-	  !GTK_WIDGET_MAPPED (tab_label))
-	gtk_widget_map (tab_label);
+	  if (GTK_WIDGET_MAPPED (notebook) &&
+	      !GTK_WIDGET_MAPPED (tab_label))
+	    gtk_widget_map (tab_label);
+	}
     }
 
   if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (notebook))
@@ -511,11 +518,14 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   page = list->data;
   
   if ((GTK_WIDGET_VISIBLE (page->child) || 
-       GTK_WIDGET_VISIBLE (page->tab_label)) && GTK_WIDGET_VISIBLE (notebook))
+       (page->tab_label && GTK_WIDGET_VISIBLE (page->tab_label))) 
+       && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
 
   gtk_widget_unparent (page->child);
-  gtk_widget_unparent (page->tab_label);
+
+  if (page->tab_label)
+    gtk_widget_unparent (page->tab_label);
 
   if (notebook->menu)
     {
@@ -766,7 +776,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  if (notebook->show_tabs == show_tabs || !GTK_WIDGET_VISIBLE (notebook))
+  if (notebook->show_tabs == show_tabs)
     return;
 
   notebook->show_tabs = show_tabs;
@@ -780,7 +790,10 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 	{
 	  page = children->data;
 	  children = children->next;
-	  gtk_widget_hide (page->tab_label);
+	  if (page->default_tab)
+	    gtk_widget_destroy (page->tab_label);
+	  else
+	    gtk_widget_hide (page->tab_label);
 	}
       
       if (notebook->panel)
@@ -788,13 +801,23 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
     }
   else
     {
+      gchar string[32];
+      gint i = 1;
+      
       GTK_WIDGET_SET_FLAGS (notebook, GTK_CAN_FOCUS);
-
+      
       while (children)
 	{
 	  page = children->data;
 	  children = children->next;
+	  if (page->default_tab)
+	    {
+	      sprintf (string, "Page %d", i);
+	      page->tab_label = gtk_label_new (string);
+	      gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
+	    }
 	  gtk_widget_show (page->tab_label);
+	  i++;
 	}
     }
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
@@ -867,7 +890,8 @@ gtk_notebook_map (GtkWidget *widget)
 	  page = children->data;
 	  children = children->next;
 
-	  if (GTK_WIDGET_VISIBLE (page->child) &&
+	  if (page->tab_label && 
+	      GTK_WIDGET_VISIBLE (page->child) && 
 	      !GTK_WIDGET_MAPPED (page->tab_label))
 	    gtk_widget_map (page->tab_label);
 	}
@@ -882,8 +906,8 @@ gtk_notebook_unmap (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
   gdk_window_hide (widget->window);
-  if (GTK_NOTEBOOK(widget)->panel)
-    gdk_window_hide (GTK_NOTEBOOK(widget)->panel);
+  if (GTK_NOTEBOOK (widget)->panel)
+    gdk_window_hide (GTK_NOTEBOOK (widget)->panel);
 }
 
 static void
@@ -1477,7 +1501,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 		}
 	    }
 	  else if (event->button == 2)
-	    gtk_notebook_page_select (GTK_NOTEBOOK(widget));
+	    gtk_notebook_page_select (GTK_NOTEBOOK (widget));
 	  else if (event->button == 3)
 	    gtk_notebook_switch_focus_tab (notebook, notebook->children);
 	  gtk_notebook_draw_arrow (notebook, GTK_ARROW_LEFT);
@@ -1497,7 +1521,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 		}
 	    }      
 	  else if (event->button == 2)
-	    gtk_notebook_page_select (GTK_NOTEBOOK(widget));
+	    gtk_notebook_page_select (GTK_NOTEBOOK (widget));
 	  else if (event->button == 3)
 	    gtk_notebook_switch_focus_tab (notebook, 
 					   g_list_last (notebook->children));
@@ -2606,7 +2630,7 @@ gtk_notebook_focus (GtkContainer     *container,
   g_return_val_if_fail (container != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_NOTEBOOK (container), FALSE);
 
-  notebook = GTK_NOTEBOOK(container);
+  notebook = GTK_NOTEBOOK (container);
 
   if (!GTK_WIDGET_SENSITIVE (container) || !notebook->children)
     return FALSE;
@@ -2816,7 +2840,7 @@ gtk_notebook_key_press (GtkWidget   *widget,
       return TRUE;
     case GDK_Return:
     case GDK_space:
-      gtk_notebook_page_select (GTK_NOTEBOOK(widget));
+      gtk_notebook_page_select (GTK_NOTEBOOK (widget));
       return TRUE;
     default:
       return_val = FALSE;
@@ -2855,7 +2879,7 @@ gtk_notebook_update_labels (GtkNotebook *notebook,
       page = list->data;
       list = list->next;
       sprintf (string, "Page %d", page_num);
-      if (page->default_tab)
+      if (notebook->show_tabs && page->default_tab)
 	gtk_label_set (GTK_LABEL (page->tab_label), string);
       if (notebook->menu && page->default_menu)
 	gtk_label_set (GTK_LABEL (page->menu_label), string);
@@ -2872,7 +2896,7 @@ gtk_notebook_menu_item_create (GtkNotebook     *notebook,
 
   if (page->default_menu)
     {
-      if (GTK_IS_LABEL (page->tab_label))
+      if (page->tab_label && GTK_IS_LABEL (page->tab_label))
 	page->menu_label = gtk_label_new (GTK_LABEL (page->tab_label)->label);
       else
 	page->menu_label = gtk_label_new ("");

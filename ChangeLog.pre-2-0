@@ -1,3 +1,31 @@
+Thu Mar 12 07:43:33 1998  Tim Janik  <timj@gimp.org>
+
+	* gdk/gdk.h:
+	* gdk/gdkvisual.c: applied gtk-shige-980311-0.patch.gz, which removes
+	the erronerous gdk_query_visuals() function in favour of
+	gdk_list_visuals() which does a correct job.
+
+	* gtk/gtkcontainer.h: applied gtk-draco-980311-0.patch.gz which fixes
+	a class cast check.
+
+	* gtk/gtkspinbutton.c: applied gtk-hamann_jeske-980312-0.patch.gz about
+	'+' sign acceptance.
+
+	* gtk/gtknotebook.c: applied gtk-hamann_jeske-980311-1.patch.gz which
+	cares about delayed tab label creation.
+
+Thu Mar 12 06:58:17 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktree.c (gtk_tree_map): avoid warnings about NULL casts.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_destroy): don't leak the context
+ 	id key's slist.
+
+	* gtk/gtkobject.c (gtk_object_set_data_full): duplicate keys that get
+ 	inserted into the hashtable, otherwise this function *forces* the caller
+	to leak memory, for dynamically allocated keys (problem pinpointed by
+	Mattias Gronlund).
+
 Tue Mar 10 23:02:42 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkdnd.c gtk/gtkclist.c gtk/gtksignal.c gtk/testgtk.c:

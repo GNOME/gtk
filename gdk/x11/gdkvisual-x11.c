@@ -350,12 +350,17 @@ gdk_query_visual_types (GdkVisualType **visual_types,
   *visual_types = available_types;
 }
 
-void
-gdk_query_visuals (GdkVisual **visual_return,
-		   gint       *count)
+GList*
+gdk_list_visuals (void)
 {
-  *count = nvisuals;
-  *visual_return = (GdkVisual*) visuals;
+  GList *list;
+  guint i;
+
+  list = NULL;
+  for (i = 0; i < nvisuals; ++i)
+    list = g_list_append (list, (gpointer) &visuals[i]);
+
+  return list;
 }
 
 
