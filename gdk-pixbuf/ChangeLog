@@ -1,3 +1,12 @@
+2000-12-16  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file): ref
+	the pixbuf in the frame, so we can use gdk_pixbuf_frame_free
+	(gdk_pixbuf_frame_copy): new function
+	(gdk_pixbuf_frame_free): new function
+	(gdk_pixbuf_frame_get_type): new function
+	(GDK_TYPE_PIXBUF_FRAME): macro to get type for GdkPixbufFrame
+
 Tue Nov 14 11:51:26 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am: Add -avoid-version for all modules.

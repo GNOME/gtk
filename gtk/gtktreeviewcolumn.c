@@ -607,6 +607,20 @@ gtk_tree_view_column_get_max_width (GtkTreeViewColumn *tree_column)
 }
 
 /**
+ * gtk_tree_view_column_clicked:
+ * @tree_column: a #GtkTreeViewColumn
+ * 
+ * Emits the "clicked" signal on the column.
+ **/
+void
+gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  gtk_signal_emit (GTK_OBJECT (tree_column), tree_column_signals[CLICKED]);
+}
+
+/**
  * gtk_tree_view_column_set_title:
  * @tree_column: A #GtkTreeViewColumn.
  * @title: The title of the @tree_column.

@@ -1,4 +1,4 @@
-/* GdkPixbuf library - Main header file
+/* GdkPixbuf library - Progressive loader object
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -26,27 +26,24 @@
 #ifndef GDK_PIXBUF_LOADER_H
 #define GDK_PIXBUF_LOADER_H
 
-#include <gtk/gtkobject.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
-
 #define GDK_TYPE_PIXBUF_LOADER		   (gdk_pixbuf_loader_get_type ())
-#define GDK_PIXBUF_LOADER(obj)		   (GTK_CHECK_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
-#define GDK_PIXBUF_LOADER_CLASS(klass)	   (GTK_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
-#define GDK_IS_PIXBUF_LOADER(obj)	   (GTK_CHECK_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
-#define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
-#define GDK_PIXBUF_LOADER_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
+#define GDK_PIXBUF_LOADER(obj)		   (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoader))
+#define GDK_PIXBUF_LOADER_CLASS(klass)	   (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
+#define GDK_IS_PIXBUF_LOADER(obj)	   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_PIXBUF_LOADER))
+#define GDK_IS_PIXBUF_LOADER_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXBUF_LOADER))
+#define GDK_PIXBUF_LOADER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXBUF_LOADER, GdkPixbufLoaderClass))
 
 
 typedef struct _GdkPixbufLoader GdkPixbufLoader;
 struct _GdkPixbufLoader
 {
-  GtkObject object;
+  GObject parent_instance;
   
   /*< private >*/
   gpointer private;
@@ -55,7 +52,7 @@ struct _GdkPixbufLoader
 typedef struct _GdkPixbufLoaderClass GdkPixbufLoaderClass;
 struct _GdkPixbufLoaderClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
   
   void (*area_prepared)   (GdkPixbufLoader *loader);
   void (*area_updated)    (GdkPixbufLoader *loader,
@@ -70,7 +67,7 @@ struct _GdkPixbufLoaderClass
 };
 
 
-GtkType              gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
+GType              gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
 GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
 GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type,
                                                       GError    **error);

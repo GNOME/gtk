@@ -29,7 +29,8 @@ extern "C" {
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkrbtree.h>
 
-typedef enum {
+typedef enum
+{
   GTK_TREE_VIEW_IS_LIST = 1 << 0,
   GTK_TREE_VIEW_SHOW_EXPANDERS = 1 << 1,
   GTK_TREE_VIEW_IN_COLUMN_RESIZE = 1 << 2,
@@ -87,8 +88,8 @@ struct _GtkTreeViewPrivate
   GtkTreeSelection *selection;
 
   /* Header information */
-  gint columns;
-  GList *column;
+  gint n_columns;
+  GList *columns;
   gint header_height;
 };
 

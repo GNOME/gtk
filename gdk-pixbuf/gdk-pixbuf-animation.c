@@ -193,6 +193,7 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 
 		frame = g_new (GdkPixbufFrame, 1);
 		frame->pixbuf = pixbuf;
+                g_object_ref (G_OBJECT (frame->pixbuf));
 		frame->x_offset = 0;
 		frame->y_offset = 0;
 		frame->delay_time = -1;
@@ -405,4 +406,61 @@ gdk_pixbuf_frame_get_action (GdkPixbufFrame *frame)
 	g_return_val_if_fail (frame != NULL, GDK_PIXBUF_FRAME_RETAIN);
 
 	return frame->action;
+}
+
+/**
+ * gdk_pixbuf_frame_copy:
+ * @src: a #GdkPixbufFrame to copy
+ * 
+ * Copies a #GdkPixbufFrame. Free the result
+ * with gdk_pixbuf_frame_free().
+ * 
+ * Return value: a new #GdkPixbufFrame
+ **/
+GdkPixbufFrame*
+gdk_pixbuf_frame_copy (GdkPixbufFrame *src)
+{
+  GdkPixbufFrame *frame;
+
+  frame = g_new (GdkPixbufFrame, 1);
+  frame->pixbuf = src->pixbuf;
+  g_object_ref (G_OBJECT (frame->pixbuf));
+  frame->x_offset = src->x_offset;
+  frame->y_offset = src->y_offset;
+  frame->delay_time = src->delay_time;
+  frame->action = src->action;
+  
+  return frame;
+}
+
+/**
+ * gdk_pixbuf_frame_free:
+ * @frame: a #GdkPixbufFrame
+ * 
+ * Frees a #GdkPixbufFrame. Don't do this with frames you got from
+ * #GdkPixbufAnimation, usually the animation owns those (it doesn't
+ * make a copy before returning the frame).
+ **/
+void
+gdk_pixbuf_frame_free (GdkPixbufFrame *frame)
+{
+  g_return_if_fail (frame != NULL);
+
+  g_object_unref (G_OBJECT (frame->pixbuf));
+  g_free (frame);
+}
+
+GType
+gdk_pixbuf_frame_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    {
+      our_type = g_boxed_type_register_static ("GdkPixbufFrame",
+                                               gdk_pixbuf_frame_copy,
+                                               gdk_pixbuf_frame_free);
+    }
+
+  return our_type;
 }

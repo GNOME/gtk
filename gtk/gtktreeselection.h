@@ -67,6 +67,7 @@ struct _GtkTreeSelectionClass
 
 
 GtkType          gtk_tree_selection_get_type            (void);
+/* FIXME return a GtkTreeSelection */
 GtkObject       *gtk_tree_selection_new                 (void);
 void             gtk_tree_selection_set_type            (GtkTreeSelection            *selection,
 							 GtkTreeSelectionType         type);
@@ -102,6 +103,7 @@ void             gtk_tree_selection_select_range        (GtkTreeSelection       
 
 
 /*< private >*/
+/* FIXME underscores, return GtkTreeSelection, rename from_tree_view */
 GtkObject       *gtk_tree_selection_new_with_tree_view  (GtkTreeView                 *tree_view);
 void             gtk_tree_selection_set_tree_view       (GtkTreeSelection            *selection,
 							 GtkTreeView                 *tree_view);

@@ -421,8 +421,9 @@ gdk_event_get_time (GdkEvent *event)
       case GDK_2BUTTON_PRESS:
       case GDK_3BUTTON_PRESS:
       case GDK_BUTTON_RELEASE:
-      case GDK_SCROLL:
 	return event->button.time;
+      case GDK_SCROLL:
+        return event->scroll.time;
       case GDK_KEY_PRESS:
       case GDK_KEY_RELEASE:
 	return event->key.time;
@@ -445,11 +446,87 @@ gdk_event_get_time (GdkEvent *event)
       case GDK_DROP_START:
       case GDK_DROP_FINISHED:
 	return event->dnd.time;
-      default:			/* use current time */
-	break;
+      case GDK_CLIENT_EVENT:
+      case GDK_VISIBILITY_NOTIFY:
+      case GDK_NO_EXPOSE:
+      case GDK_CONFIGURE:
+      case GDK_FOCUS_CHANGE:
+      case GDK_NOTHING:
+      case GDK_DELETE:
+      case GDK_DESTROY:
+      case GDK_EXPOSE:
+      case GDK_MAP:
+      case GDK_UNMAP:
+        /* return current time */
+        break;
       }
   
   return GDK_CURRENT_TIME;
+}
+
+/**
+ * gdk_event_get_state:
+ * @event: a #GdkEvent or NULL
+ * @state: return location for state
+ * 
+ * If the event contains a "state" field, puts that field in @state. Otherwise
+ * stores an empty state (0). Returns %TRUE if there was a state field
+ * in the event.
+ * 
+ * Return value: %TRUE if there was a state field in the event 
+ **/
+gboolean
+gdk_event_get_state (GdkEvent        *event,
+                     GdkModifierType *state)
+{
+  if (event)
+    switch (event->type)
+      {
+      case GDK_MOTION_NOTIFY:
+	return event->motion.state;
+      case GDK_BUTTON_PRESS:
+      case GDK_2BUTTON_PRESS:
+      case GDK_3BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+        return event->button.state;
+      case GDK_SCROLL:
+	return event->scroll.state;
+      case GDK_KEY_PRESS:
+      case GDK_KEY_RELEASE:
+	return event->key.state;
+      case GDK_ENTER_NOTIFY:
+      case GDK_LEAVE_NOTIFY:
+	return event->crossing.state;
+      case GDK_PROPERTY_NOTIFY:
+	return event->property.state;
+      case GDK_VISIBILITY_NOTIFY:
+        return event->visibility.state;
+      case GDK_CLIENT_EVENT:
+      case GDK_NO_EXPOSE:
+      case GDK_CONFIGURE:
+      case GDK_FOCUS_CHANGE:
+      case GDK_SELECTION_CLEAR:
+      case GDK_SELECTION_REQUEST:
+      case GDK_SELECTION_NOTIFY:
+      case GDK_PROXIMITY_IN:
+      case GDK_PROXIMITY_OUT:
+      case GDK_DRAG_ENTER:
+      case GDK_DRAG_LEAVE:
+      case GDK_DRAG_MOTION:
+      case GDK_DRAG_STATUS:
+      case GDK_DROP_START:
+      case GDK_DROP_FINISHED:
+      case GDK_NOTHING:
+      case GDK_DELETE:
+      case GDK_DESTROY:
+      case GDK_EXPOSE:
+      case GDK_MAP:
+      case GDK_UNMAP:
+        /* no state field */
+        break;
+      }
+
+  return 0;
 }
 
 /**

@@ -408,10 +408,13 @@ void      gdk_event_put	 		(GdkEvent  	*event);
 
 GdkEvent* gdk_event_copy     		(GdkEvent 	*event);
 void	  gdk_event_free     		(GdkEvent 	*event);
-guint32   gdk_event_get_time 		(GdkEvent 	*event);
-gboolean  gdk_event_get_axis            (GdkEvent       *event,
-					 GdkAxisUse      axis_use,
-					 gdouble        *value);
+
+guint32   gdk_event_get_time            (GdkEvent        *event);
+gboolean  gdk_event_get_state           (GdkEvent        *event,
+                                         GdkModifierType *state);
+gboolean  gdk_event_get_axis            (GdkEvent        *event,
+                                         GdkAxisUse       axis_use,
+                                         gdouble         *value);
 
 void	  gdk_event_handler_set 	(GdkEventFunc    func,
 					 gpointer        data,

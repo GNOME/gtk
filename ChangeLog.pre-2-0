@@ -1,5 +1,88 @@
 2000-12-16  Havoc Pennington  <hp@pobox.com>
 
+	* gtk/gdk-pixbuf-loader.h, gtk/gdk-pixbuf-loader.c: 
+	Port to GObject, can go back in gdk-pixbuf after setting up 
+	a gdk-pixbuf-marshal.h header over there.
+
+	* gtk/gtktreeview.c: s/SEPERATOR/SEPARATOR/g;
+	(gtk_tree_view_class_init): specify GTK_TYPE_ADJUSTMENT for signal
+	args
+	(gtk_tree_view_init): don't unset GTK_NO_WINDOW, it shouldn't be
+	set
+	(gtk_tree_view_realize_buttons): don't gtk_widget_show() buttons
+	here, do it when we create the buttons later
+	(gtk_tree_view_realize_buttons): add some g_return_if_fail 
+	(gtk_tree_view_map): paranoia checks that column->button is shown 
+	and unmapped
+	(gtk_tree_view_size_request): only request visible children.
+	Move header size calculation in here, for cleanliness, and 
+	to maintain invariants for child widgets if we eventually 
+	let users set different children inside the buttons
+	(gtk_tree_view_map_buttons): factor out code to map buttons,
+	since it was being called several times
+	(gtk_tree_view_size_allocate_buttons): move_resize the drag
+	windows instead of just moving them; their height may change 
+	if we allow random widgets in there, or the theme changes.
+	(gtk_tree_view_size_allocate): move button size allocation 
+	above emitting the scroll signals, to ensure a sane state when we
+	hit user code
+	(gtk_tree_view_button_release): remove queue_resize after
+	tree_view_set_size(), set_size() will handle any resize queuing
+	that's needed
+	(gtk_tree_view_focus_in): just queue a draw, don't fool with
+	draw_focus goo
+	(gtk_tree_view_focus): use gtk_get_current_event() and
+	gdk_event_get_state()
+	(gtk_tree_view_deleted): don't queue_resize() after calling set_size()
+	(gtk_tree_view_build_tree): fix a "if (foo); {}" bug - i.e. remove
+	semicolon
+	(gtk_tree_view_create_button): show the button here
+	(gtk_tree_view_button_clicked): actually emit the clicked signal
+	on the column
+	(_gtk_tree_view_set_size): return right away if the size is
+	unchanged, as a cheesy optimization
+	(gtk_tree_view_setup_model): rename set_model_realized to 
+	setup_model to match the flag that indicates whether we've 
+	called it
+	(gtk_tree_view_get_hadjustment): create adjustment if it doesn't
+	exist, because set_scroll_adjustment does that and it shouldn't
+	matter what order you call these in
+	(gtk_tree_view_get_vadjustment): ditto
+	(gtk_tree_view_set_headers_visible): canonicalize the bool, 
+	for paranoia
+	(gtk_tree_view_set_headers_visible): call
+	gtk_tree_view_map_buttons() instead of using cut-and-paste code
+	(gtk_tree_view_append_column): clarify whether the return value
+	is the count of columns before or after, and do the increment 
+	separately from the return statement so you can tell from the code.
+	(gtk_tree_view_remove_column): ditto
+	(gtk_tree_view_insert_column): ditto
+	(gtk_tree_view_get_column): remove g_return_if_fail for columns
+	outside the existing range, the docs say that outside-range
+	columns are allowed, so we handle them as documented. (Presumably
+	this allows a nice loop with column != NULL as test.)
+	(gtk_tree_view_move_to): document what 0.0, 0.5, 1.0 alignments 
+	mean (left/right/center etc.).
+	(gtk_tree_view_collapse_all): only queue a draw if we're mapped
+	(gtk_tree_view_expand_row): add docs
+	(gtk_tree_view_collapse_row): add docs
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_clicked): new
+	function to emit the clicked signal on a column
+	
+	* gdk/gdkevents.c (gdk_event_get_state): new function, to get the
+	state of an event
+	(gdk_event_get_time): don't treat GDK_SCROLL 
+	as a button event, remove default case from switch so gcc 
+	will whine if we don't explicitly handle all event types
+
+	* gtk/gtktreeselection.h: added some FIXME 
+	
+	* gtk/gtktreeprivate.h (struct _GtkTreeViewPrivate): rename
+	"columns" to "n_columns" and "column" to "columns" for clarity
+
+2000-12-16  Havoc Pennington  <hp@pobox.com>
+	
 	* gtk/gtktextiter.c: General cleanup of the log attr iteration
 	stuff. This should make e.g. the delete key work again in the
 	text widget...

@@ -1,4 +1,4 @@
-/* GdkPixbuf library - Main header file
+/* GdkPixbuf library - Progressive loader object
  *
  * Copyright (C) 1999 The Free Software Foundation
  *
@@ -43,7 +43,6 @@ enum {
 
 static void gdk_pixbuf_loader_class_init    (GdkPixbufLoaderClass   *klass);
 static void gdk_pixbuf_loader_init          (GdkPixbufLoader        *loader);
-static void gdk_pixbuf_loader_destroy       (GtkObject              *loader);
 static void gdk_pixbuf_loader_finalize      (GObject                *loader);
 
 static gpointer parent_class = NULL;
@@ -75,25 +74,29 @@ typedef struct
  *
  * Return value: The type ID of the #GdkPixbufLoader class.
  **/
-GtkType
+GType
 gdk_pixbuf_loader_get_type (void)
 {
-  static GtkType loader_type = 0;
+  static GType loader_type = 0;
   
   if (!loader_type)
     {
-      static const GtkTypeInfo loader_info = {
-	"GdkPixbufLoader",
-	sizeof (GdkPixbufLoader),
-	sizeof (GdkPixbufLoaderClass),
-	(GtkClassInitFunc) gdk_pixbuf_loader_class_init,
-	(GtkObjectInitFunc) gdk_pixbuf_loader_init,
-	/* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+      static const GTypeInfo loader_info = {
+        sizeof (GdkPixbufLoaderClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_pixbuf_loader_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkPixbufLoader),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_pixbuf_loader_init
       };
       
-      loader_type = gtk_type_unique (GTK_TYPE_OBJECT, &loader_info);
+      loader_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkPixbufLoader",
+                                            &loader_info,
+                                            0);
     }
   
   return loader_type;
@@ -102,61 +105,63 @@ gdk_pixbuf_loader_get_type (void)
 static void
 gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
 {
-  GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
+  GObjectClass *object_class;
   
-  object_class = (GtkObjectClass *) class;
-  gobject_class = (GObjectClass *) class;
+  object_class = (GObjectClass *) class;
   
-  parent_class = gtk_type_class (GTK_TYPE_OBJECT);
+  parent_class = g_type_class_peek_parent (class);
   
-  object_class->destroy = gdk_pixbuf_loader_destroy;
-  gobject_class->finalize = gdk_pixbuf_loader_finalize;
+  object_class->finalize = gdk_pixbuf_loader_finalize;
 
   pixbuf_loader_signals[AREA_PREPARED] =
-    gtk_signal_new ("area_prepared",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, area_prepared),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_newc ("area_prepared",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_prepared),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   G_TYPE_NONE, 0);
   
   pixbuf_loader_signals[AREA_UPDATED] =
-    gtk_signal_new ("area_updated",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, area_updated),
-		    gtk_marshal_VOID__INT_INT_INT_INT,
-		    GTK_TYPE_NONE, 4,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT);
+    g_signal_newc ("area_updated",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_updated),
+                   NULL,
+                   gtk_marshal_VOID__INT_INT_INT_INT,
+                   G_TYPE_NONE, 4,
+                   G_TYPE_INT,
+                   G_TYPE_INT,
+                   G_TYPE_INT,
+                   G_TYPE_INT);
   
   pixbuf_loader_signals[FRAME_DONE] =
-    gtk_signal_new ("frame_done",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, frame_done),
-		    gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
+    g_signal_newc ("frame_done",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, frame_done),
+                   NULL,
+                   gtk_marshal_VOID__POINTER,
+                   G_TYPE_NONE, 1,
+                   GDK_TYPE_PIXBUF_FRAME);
   
   pixbuf_loader_signals[ANIMATION_DONE] =
-    gtk_signal_new ("animation_done",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, animation_done),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_newc ("animation_done",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,                   
+                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, animation_done),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   G_TYPE_NONE, 0);
   
   pixbuf_loader_signals[CLOSED] =
-    gtk_signal_new ("closed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GdkPixbufLoaderClass, closed),
-		    gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_newc ("closed",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, closed),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   G_TYPE_NONE, 0);
 }
 
 static void
@@ -169,30 +174,6 @@ gdk_pixbuf_loader_init (GdkPixbufLoader *loader)
 }
 
 static void
-gdk_pixbuf_loader_destroy (GtkObject *object)
-{
-  GdkPixbufLoader *loader;
-  GdkPixbufLoaderPrivate *priv = NULL;
-  
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GDK_IS_PIXBUF_LOADER (object));
-  
-  loader = GDK_PIXBUF_LOADER (object);
-  priv = loader->private;
-  
-  if (!priv->closed)
-    gdk_pixbuf_loader_close (loader);
-  
-  if (priv->animation)
-    gdk_pixbuf_animation_unref (priv->animation);
-  if (priv->pixbuf)
-    gdk_pixbuf_unref (priv->pixbuf);
-  
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    GTK_OBJECT_CLASS (parent_class)->destroy (object);
-}
-
-static void
 gdk_pixbuf_loader_finalize (GObject *object)
 {
   GdkPixbufLoader *loader;
@@ -200,6 +181,15 @@ gdk_pixbuf_loader_finalize (GObject *object)
   
   loader = GDK_PIXBUF_LOADER (object);
   priv = loader->private;
+
+  if (!priv->closed)
+    gdk_pixbuf_loader_close (loader);
+  
+  if (priv->animation)
+    gdk_pixbuf_animation_unref (priv->animation);
+
+  if (priv->pixbuf)
+    gdk_pixbuf_unref (priv->pixbuf);
   
   g_free (priv);
   
@@ -219,7 +209,7 @@ gdk_pixbuf_loader_prepare (GdkPixbuf *pixbuf,
   g_assert (priv->pixbuf == NULL);
   
   priv->pixbuf = pixbuf;
-  gtk_signal_emit (GTK_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED]);
+  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[AREA_PREPARED], 0);
 }
 
 static void
@@ -234,12 +224,13 @@ gdk_pixbuf_loader_update (GdkPixbuf *pixbuf,
   
   priv = GDK_PIXBUF_LOADER (loader)->private;
   
-  gtk_signal_emit (GTK_OBJECT (loader),
-		   pixbuf_loader_signals[AREA_UPDATED],
-		   x, y,
-		   /* sanity check in here.  Defend against an errant loader */
-		   MIN (width, gdk_pixbuf_get_width (priv->pixbuf)),
-		   MIN (height, gdk_pixbuf_get_height (priv->pixbuf)));
+  g_signal_emit (G_OBJECT (loader),
+                 pixbuf_loader_signals[AREA_UPDATED],
+                 0,
+                 x, y,
+                 /* sanity check in here.  Defend against an errant loader */
+                 MIN (width, gdk_pixbuf_get_width (priv->pixbuf)),
+                 MIN (height, gdk_pixbuf_get_height (priv->pixbuf)));
 }
 
 static void
@@ -278,9 +269,10 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame,
   
   priv->animation->frames = g_list_append (priv->animation->frames, frame);
   priv->animation->n_frames++;
-  gtk_signal_emit (GTK_OBJECT (loader),
-		   pixbuf_loader_signals[FRAME_DONE],
-		   frame);
+  g_signal_emit (GTK_OBJECT (loader),
+                 pixbuf_loader_signals[FRAME_DONE],
+                 0,
+                 frame);
 }
 
 static void
@@ -312,7 +304,7 @@ gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf,
       current = current->next;
     }
   
-  gtk_signal_emit (GTK_OBJECT (loader), pixbuf_loader_signals[ANIMATION_DONE]);
+  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[ANIMATION_DONE], 0);
 }
 
 static gint
@@ -605,7 +597,7 @@ gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
  * gdk_pixbuf_loader_close:
  * @loader: A pixbuf loader.
  *
- * Informs a pixbuf loader that no further writes with gdk_pixbuf_load_write()
+ * Informs a pixbuf loader that no further writes with gdk_pixbuf_loader_write()
  * will occur, so that it can free its internal loading structures.
  **/
 void
@@ -630,5 +622,5 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
   
   priv->closed = TRUE;
   
-  gtk_signal_emit (GTK_OBJECT (loader), pixbuf_loader_signals[CLOSED]);
+  g_signal_emit (G_OBJECT (loader), pixbuf_loader_signals[CLOSED], 0);
 }

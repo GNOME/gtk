@@ -114,6 +114,7 @@ void               gtk_tree_view_column_set_max_width       (GtkTreeViewColumn  
 gint               gtk_tree_view_column_get_max_width       (GtkTreeViewColumn     *tree_column);
 
 
+void               gtk_tree_view_column_clicked             (GtkTreeViewColumn     *tree_column);
 
 /* Options for manipulating the column headers
  */
