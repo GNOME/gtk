@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-26 14:14+0900\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-26 16:28+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -95,114 +95,119 @@ msgstr "화면"
 msgid "the GdkScreen for the renderer"
 msgstr "렌더러를 위한 GdkScreen"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:202
 msgid "Program name"
 msgstr "프로그램 이름"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:203
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr "프로그램의 이름. 설정하지 않으면 기본값은 g_get_application_name()입니다"
+msgstr ""
+"프로그램의 이름. 설정하지 않으면 기본값은 g_get_application_name()입니다"
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:217
 msgid "Program version"
 msgstr "프로그램 버전"
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:218
 msgid "The version of the program"
 msgstr "프로그램의 버전"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:232
 msgid "Copyright string"
 msgstr "저작권 문자열"
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:233
 msgid "Copyright information for the program"
 msgstr "프로그램의 저작권 정보"
 
-#: gtk/gtkaboutdialog.c:243
+#: gtk/gtkaboutdialog.c:250
 msgid "Comments string"
 msgstr "설명 문자열"
 
-#: gtk/gtkaboutdialog.c:244
+#: gtk/gtkaboutdialog.c:251
 msgid "Comments about the program"
 msgstr "프로그램 설명"
 
-#: gtk/gtkaboutdialog.c:276
+#: gtk/gtkaboutdialog.c:284
 msgid "Website URL"
 msgstr "웹사이트 URL"
 
-#: gtk/gtkaboutdialog.c:277
+#: gtk/gtkaboutdialog.c:285
 msgid "The URL for the link to the website of the program"
 msgstr "프로그램의 웹사이트로 가는 링크 URL"
 
-#: gtk/gtkaboutdialog.c:293
+#: gtk/gtkaboutdialog.c:301
 msgid "Website label"
 msgstr "웹사이트 레이블"
 
-#: gtk/gtkaboutdialog.c:294
+#: gtk/gtkaboutdialog.c:302
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr "프로그램의 웹사이트로 가는 링크의 레이블. 설정하지 않으면 그 URL을 사용합니다."
+msgstr ""
+"프로그램의 웹사이트로 가는 링크의 레이블. 설정하지 않으면 그 URL을 사용합니"
+"다."
 
-#: gtk/gtkaboutdialog.c:310
+#: gtk/gtkaboutdialog.c:318
 msgid "Authors"
 msgstr "개발자"
 
-#: gtk/gtkaboutdialog.c:311
+#: gtk/gtkaboutdialog.c:319
 msgid "List of authors of the program"
 msgstr "프로그램의 개발자 목록"
 
-#: gtk/gtkaboutdialog.c:327
+#: gtk/gtkaboutdialog.c:335
 msgid "Documenters"
 msgstr "문서 작성자"
 
-#: gtk/gtkaboutdialog.c:328
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people documenting the program"
 msgstr "프로그램의 문서를 작성한 사람 목록"
 
-#: gtk/gtkaboutdialog.c:344
+#: gtk/gtkaboutdialog.c:352
 msgid "Artists"
 msgstr "아티스트"
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:353
 msgid "List of people who have contributed artwork to the program"
 msgstr "프로그램의 아트워크를 만든 사람의 목록"
 
-#: gtk/gtkaboutdialog.c:362
+#: gtk/gtkaboutdialog.c:370
 msgid "Translator credits"
 msgstr "옮긴이"
 
-#: gtk/gtkaboutdialog.c:363
+#: gtk/gtkaboutdialog.c:371
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "옮긴이 크레디트 목록. 이 문자열은 번역할 수 있게 표시해야 합니다"
 
-#: gtk/gtkaboutdialog.c:378
+#: gtk/gtkaboutdialog.c:386
 msgid "Logo"
 msgstr "로고"
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:387
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr "정보 대화 상자의 로고. 설정하지 않으면 기본값은 gtk_window_get_default_icon_list()입니다"
+msgstr ""
+"정보 대화 상자의 로고. 설정하지 않으면 기본값은 "
+"gtk_window_get_default_icon_list()입니다"
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:402
 msgid "Logo Icon Name"
 msgstr "로고 아이콘 이름"
 
-#: gtk/gtkaboutdialog.c:395
+#: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
 msgstr "정보 대화 상자에 로고로 사용할 아이콘 이름."
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
 msgstr "링크 색"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:411
 msgid "Color of hyperlinks"
 msgstr "하이퍼링크 색"
 
@@ -284,7 +289,9 @@ msgstr "넘어갈 경우에 표시"
 msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
-msgstr "참이면, 이 동작에 대한 도구항목 프록시를 도구 모음 넘어감 메뉴에서 표시합니다."
+msgstr ""
+"참이면, 이 동작에 대한 도구항목 프록시를 도구 모음 넘어감 메뉴에서 표시합니"
+"다."
 
 #: gtk/gtkaction.c:258 gtk/gtktoolitem.c:166
 msgid "Visible when vertical"
@@ -1202,7 +1209,9 @@ msgstr "말줄임표"
 msgid ""
 "The preferred place to ellipsize the string, if the cell renderer does not "
 "have enough room to display the entire string, if at all"
-msgstr "말줄임표를 사용할 경우 그 위치. 셀 렌더러에서 전체 문자열을 표시할 공간이 부족할 경우 사용."
+msgstr ""
+"말줄임표를 사용할 경우 그 위치. 셀 렌더러에서 전체 문자열을 표시할 공간이 부"
+"족할 경우 사용."
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
@@ -2445,7 +2454,9 @@ msgstr "이 레이블의 단축 키가 눌렸을 경우 활성화할 위젯"
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string, if at all"
-msgstr "말줄임표의 그 위치. 이 기능을 사용할 경우 레이블에 전체 문자열을 표시할 공간이 부족할 경우 사용합니다."
+msgstr ""
+"말줄임표의 그 위치. 이 기능을 사용할 경우 레이블에 전체 문자열을 표시할 공간"
+"이 부족할 경우 사용합니다."
 
 #: gtk/gtklabel.c:474
 msgid "Single Line Mode"
@@ -2495,37 +2506,37 @@ msgstr "레이아웃의 너비"
 msgid "The height of the layout"
 msgstr "레이아웃의 높이"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Tearoff Title"
 msgstr "떼어내기 제목"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:529
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "이 메뉴를 떼어냈을 때 윈도우매니저에 의해 표시될 제목"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:543
 msgid "Tearoff State"
 msgstr "떼어내기 상태"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:544
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "이 메뉴를 떼어냈는 지 여부를 나타내는 참/거짓 값"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:550
 msgid "Vertical Padding"
 msgstr "세로 여백"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:551
 msgid "Extra space at the top and bottom of the menu"
 msgstr "메뉴의 위쪽/아래쪽에 추가할 공간"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:559
 msgid "Vertical Offset"
 msgstr "세로 방향 오프셋"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:560
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2533,11 +2544,11 @@ msgstr ""
 "메뉴가 하위 메뉴일 경우, 세로 방향의 위치를 이 픽셀 개수만큼의 오프셋으로 합"
 "니다."
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:568
 msgid "Horizontal Offset"
 msgstr "가로 방향 오프셋"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:569
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2545,61 +2556,61 @@ msgstr ""
 "메뉴가 하위 메뉴일 경우, 가로 방향의 위치를 이 픽셀 개수만큼의 오프셋으로 합"
 "니다."
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:579
 msgid "Left Attach"
 msgstr "왼쪽 붙임"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "하위 위젯의 왼쪽을 붙일 열 번호"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:587
 msgid "Right Attach"
 msgstr "오른쪽 붙임"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
 msgstr "하위 위젯의 오른쪽을 붙일 열 번호"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:595
 msgid "Top Attach"
 msgstr "위쪽 붙임"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:596
 msgid "The row number to attach the top of the child to"
 msgstr "하위 위젯의 위쪽을 붙일 행 번호"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:603
 msgid "Bottom Attach"
 msgstr "아래쪽 붙임"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "하위 위젯의 아래쪽을 붙일 행 번호"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
 msgstr "단축키 바꾸기 가능"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "메뉴 항목 위에서 키를 눌러 메뉴 단축키를 바꿀 수 있는지 여부"
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
 msgstr "하위 메뉴가 보이기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:698
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "하위 메뉴가 보이기 전까지 포인터가 메뉴 항목 위에서 기다릴 최소 시간"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
 msgstr "하위 메뉴를 감추기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:706
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -3027,7 +3038,9 @@ msgstr "진행률 표시줄에 표시할 텍스트"
 msgid ""
 "The preferred place to ellipsize the string, if the progressbar does not "
 "have enough room to display the entire string, if at all"
-msgstr "문자열에 말줄임표를 붙일 위치 선택. 이 기능을 사용할 경우 진행 표시줄이 전체 문자열을 표시할 공간이 부족한 경우에 사용합니다."
+msgstr ""
+"문자열에 말줄임표를 붙일 위치 선택. 이 기능을 사용할 경우 진행 표시줄이 전체 "
+"문자열을 표시할 공간이 부족한 경우에 사용합니다."
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3748,7 +3761,9 @@ msgstr "좌, 우, 혹은 가운데 정렬"
 msgid ""
 "The language this text is in, as an ISO code. Pango can use this as a hint "
 "when rendering the text. If not set, an appropriate default will be used."
-msgstr "이 텍스트의 언어 (ISO 코드). 판고는 이 텍스트를 표시할 때 이 언어 값에서 힌트를 얻습니다. 설정하지 않으면 적당한 기본값을 사용합니다."
+msgstr ""
+"이 텍스트의 언어 (ISO 코드). 판고는 이 텍스트를 표시할 때 이 언어 값에서 힌트"
+"를 얻습니다. 설정하지 않으면 적당한 기본값을 사용합니다."
 
 #: gtk/gtktexttag.c:393
 msgid "Left margin"

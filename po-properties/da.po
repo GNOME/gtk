@@ -35,7 +35,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-05 16:13+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -124,11 +124,11 @@ msgstr "Skærm"
 msgid "the GdkScreen for the renderer"
 msgstr "Optegnerens GdkScreen"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:202
 msgid "Program name"
 msgstr "Programnavn"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:203
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -136,43 +136,43 @@ msgstr ""
 "Programmets navn. Hvis dette ikke er angivet benyttes g_get_application_name"
 "()"
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:217
 msgid "Program version"
 msgstr "Programversion"
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:218
 msgid "The version of the program"
 msgstr "Programmets version"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:232
 msgid "Copyright string"
 msgstr "Copyright-streng"
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:233
 msgid "Copyright information for the program"
 msgstr "Copyright-information for programmet"
 
-#: gtk/gtkaboutdialog.c:243
+#: gtk/gtkaboutdialog.c:250
 msgid "Comments string"
 msgstr "Kommentarstreng"
 
-#: gtk/gtkaboutdialog.c:244
+#: gtk/gtkaboutdialog.c:251
 msgid "Comments about the program"
 msgstr "Kommentarer om programmet"
 
-#: gtk/gtkaboutdialog.c:276
+#: gtk/gtkaboutdialog.c:284
 msgid "Website URL"
 msgstr "Websted-adresse"
 
-#: gtk/gtkaboutdialog.c:277
+#: gtk/gtkaboutdialog.c:285
 msgid "The URL for the link to the website of the program"
 msgstr "Adressen til programmets websted"
 
-#: gtk/gtkaboutdialog.c:293
+#: gtk/gtkaboutdialog.c:301
 msgid "Website label"
 msgstr "Websted-etiket"
 
-#: gtk/gtkaboutdialog.c:294
+#: gtk/gtkaboutdialog.c:302
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -180,46 +180,46 @@ msgstr ""
 "Etiketten for adressen til programmets websted. Hvis denne ikke er angivet "
 "benyttes adressen."
 
-#: gtk/gtkaboutdialog.c:310
+#: gtk/gtkaboutdialog.c:318
 msgid "Authors"
 msgstr "Forfattere"
 
-#: gtk/gtkaboutdialog.c:311
+#: gtk/gtkaboutdialog.c:319
 msgid "List of authors of the program"
 msgstr "Liste over programmets forfattere"
 
-#: gtk/gtkaboutdialog.c:327
+#: gtk/gtkaboutdialog.c:335
 msgid "Documenters"
 msgstr "Dokumentører"
 
-#: gtk/gtkaboutdialog.c:328
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people documenting the program"
 msgstr "Liste over programmets dokumentører"
 
-#: gtk/gtkaboutdialog.c:344
+#: gtk/gtkaboutdialog.c:352
 msgid "Artists"
 msgstr "Kunstnere"
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:353
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 "Liste over mennesker der har bidraget med grafik og/eller lyd til programmmet"
 
-#: gtk/gtkaboutdialog.c:362
+#: gtk/gtkaboutdialog.c:370
 msgid "Translator credits"
 msgstr "Bidragydere til oversættelse"
 
-#: gtk/gtkaboutdialog.c:363
+#: gtk/gtkaboutdialog.c:371
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Bidragydere til oversættelse. Denne streng skal markeres som oversætbar"
 
-#: gtk/gtkaboutdialog.c:378
+#: gtk/gtkaboutdialog.c:386
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:387
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -227,19 +227,19 @@ msgstr ""
 "Et logo til om-vinduet. Hvis dette ikke er angivet benyttes "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:402
 msgid "Logo Icon Name"
 msgstr "Logoikonnavn"
 
-#: gtk/gtkaboutdialog.c:395
+#: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
 msgstr "Et navngivetikon der skal bruges som logo for om-vinduet."
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
 msgstr "Link-farve"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:411
 msgid "Color of hyperlinks"
 msgstr "Farven på links"
 
@@ -2051,11 +2051,11 @@ msgstr "Titlen på filvælgervinduet."
 msgid "The desired width of the button widget, in characters."
 msgstr "Den ønskede bredde på knapkontrollen i tegn."
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
 msgstr "Standard-filvælgerbagende"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på den GtkFileChooser-bagende som skal anvendes som standard"
 
@@ -2573,38 +2573,38 @@ msgstr "Bredden af layoutet"
 msgid "The height of the layout"
 msgstr "Højden af layoutet"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Tearoff Title"
 msgstr "Afrivningstitel"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:529
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "En titel som vindueshåndteringen kan vise når denne menu bliver revet af"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:543
 msgid "Tearoff State"
 msgstr "Afrivningstilstand"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:544
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "En sandhedsværdi der indikerer om menuen er afrevet"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:550
 msgid "Vertical Padding"
 msgstr "Lodret udfyldning"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:551
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Ekstra mellemrum i toppen og bunden af menuen"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:559
 msgid "Vertical Offset"
 msgstr "Lodret afstand"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:560
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2612,11 +2612,11 @@ msgstr ""
 "Placér menuen med en afstand på dette antal punkter lodret når menuen er en "
 "undermenu"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:568
 msgid "Horizontal Offset"
 msgstr "Vandret afstand"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:569
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2624,63 +2624,63 @@ msgstr ""
 "Placér menuen med en afstand på dette antal punkter vandret når menuen er en "
 "undermenu"
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:579
 msgid "Left Attach"
 msgstr "Venstre vedhæftning"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Det kolonnenummer som venstre side af barnet skal vedhæftes"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:587
 msgid "Right Attach"
 msgstr "Højre vedhæftning"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
 msgstr "Det kolonnenummer som venstre side af barnet skal vedhæftes"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:595
 msgid "Top Attach"
 msgstr "Topvedhæftning"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:596
 msgid "The row number to attach the top of the child to"
 msgstr "Det rækkenummer som toppen af barnet skal vedhæftes"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:603
 msgid "Bottom Attach"
 msgstr "Bundvedhæftning"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Det rækkenummer som bunden af barnet skal vedhæftes"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
 msgstr "Kan ændre genveje"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "Om menugenveje kan ændres ved at trykke på en tast over menupunktet"
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
 msgstr "Ventetid før undermenuer dukker op"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:698
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Det mindste tidsrum markøren skal befinde sig over et menupunkt før "
 "undermenuen dukker op"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
 msgstr "Ventetid før en undermenu skjules"
 
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:706
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4713,52 +4713,52 @@ msgstr "Ingen vis alle"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Om gtk_widget_show_all() ikke skal påvirke denne kontrol"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1417
 msgid "Interior Focus"
 msgstr "Indvendig fokus"
 
-#: gtk/gtkwidget.c:1408
+#: gtk/gtkwidget.c:1418
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Om fokusindikatoren skal tegnes inde i kontrollen"
 
-#: gtk/gtkwidget.c:1414
+#: gtk/gtkwidget.c:1424
 msgid "Focus linewidth"
 msgstr "Fokuslinjebredde"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1425
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Bredde, i skærmpunkter, af fokuseringsindikatorens linje"
 
-#: gtk/gtkwidget.c:1421
+#: gtk/gtkwidget.c:1431
 msgid "Focus line dash pattern"
 msgstr "Stiplingsmønster til fokuslinje"
 
-#: gtk/gtkwidget.c:1422
+#: gtk/gtkwidget.c:1432
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Stiplingsmønster der bruges til at tegne fokuseringsindikatoren"
 
-#: gtk/gtkwidget.c:1427
+#: gtk/gtkwidget.c:1437
 msgid "Focus padding"
 msgstr "Fokusudfyldning"
 
-#: gtk/gtkwidget.c:1428
+#: gtk/gtkwidget.c:1438
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Bredde, i skærmpunkter, mellem fokuseringsindikatoren og kontrollens 'boks'"
 
-#: gtk/gtkwidget.c:1433
+#: gtk/gtkwidget.c:1443
 msgid "Cursor color"
 msgstr "Markørfarve"
 
-#: gtk/gtkwidget.c:1434
+#: gtk/gtkwidget.c:1444
 msgid "Color with which to draw insertion cursor"
 msgstr "Farve som indtastningsmarkøren skal tegnes med"
 
-#: gtk/gtkwidget.c:1439
+#: gtk/gtkwidget.c:1449
 msgid "Secondary cursor color"
 msgstr "Sekundær markørfarve"
 
-#: gtk/gtkwidget.c:1440
+#: gtk/gtkwidget.c:1450
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4766,11 +4766,11 @@ msgstr ""
 "Farve som bruges til at tegne den sekundære indtastningsmarkør ved "
 "redigering af blandet højre-mod-venstre- og venstre-mod-højre-tekst"
 
-#: gtk/gtkwidget.c:1445
+#: gtk/gtkwidget.c:1455
 msgid "Cursor line aspect ratio"
 msgstr "Formatforhold for markørlinje"
 
-#: gtk/gtkwidget.c:1446
+#: gtk/gtkwidget.c:1456
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Det formatforhold indtastningsmarkøren skal tegnes med"
 

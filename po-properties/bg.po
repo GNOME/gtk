@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+-properties 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 22:52+0200\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-08 22:51+0200\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
@@ -99,11 +99,11 @@ msgstr "Екран"
 msgid "the GdkScreen for the renderer"
 msgstr "Екранът GdkScreen на изобразяващия модул"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:202
 msgid "Program name"
 msgstr "Име на програмата"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:203
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -111,43 +111,43 @@ msgstr ""
 "Името на програмата. Ако не е зададено, по подразбиране се взима "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:217
 msgid "Program version"
 msgstr "Версия на програмата"
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:218
 msgid "The version of the program"
 msgstr "Версията на програмата"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:232
 msgid "Copyright string"
 msgstr "Авторски права"
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:233
 msgid "Copyright information for the program"
 msgstr "Информация за авторските права върху програмата"
 
-#: gtk/gtkaboutdialog.c:243
+#: gtk/gtkaboutdialog.c:250
 msgid "Comments string"
 msgstr "Коментар"
 
-#: gtk/gtkaboutdialog.c:244
+#: gtk/gtkaboutdialog.c:251
 msgid "Comments about the program"
 msgstr "Коментари за програмата"
 
-#: gtk/gtkaboutdialog.c:276
+#: gtk/gtkaboutdialog.c:284
 msgid "Website URL"
 msgstr "Адрес на уебсайт"
 
-#: gtk/gtkaboutdialog.c:277
+#: gtk/gtkaboutdialog.c:285
 msgid "The URL for the link to the website of the program"
 msgstr "URL към уебсайта на програмата"
 
-#: gtk/gtkaboutdialog.c:293
+#: gtk/gtkaboutdialog.c:301
 msgid "Website label"
 msgstr "Етикет на интернет страница"
 
-#: gtk/gtkaboutdialog.c:294
+#: gtk/gtkaboutdialog.c:302
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -155,46 +155,46 @@ msgstr ""
 "Етикетът за хипервръзката към уебсайта на програмата. Ако не е зададен, по "
 "подразбиране е URL-то"
 
-#: gtk/gtkaboutdialog.c:310
+#: gtk/gtkaboutdialog.c:318
 msgid "Authors"
 msgstr "Автори"
 
-#: gtk/gtkaboutdialog.c:311
+#: gtk/gtkaboutdialog.c:319
 msgid "List of authors of the program"
 msgstr "Списък на авторите на програмата"
 
-#: gtk/gtkaboutdialog.c:327
+#: gtk/gtkaboutdialog.c:335
 msgid "Documenters"
 msgstr "Документатори"
 
-#: gtk/gtkaboutdialog.c:328
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people documenting the program"
 msgstr "Списък на хората, които са написали документацията на програмата"
 
-#: gtk/gtkaboutdialog.c:344
+#: gtk/gtkaboutdialog.c:352
 msgid "Artists"
 msgstr "Дизайнери"
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:353
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 "Списък на хората, които са допринесли за художественото оформление на "
 "програмата"
 
-#: gtk/gtkaboutdialog.c:362
+#: gtk/gtkaboutdialog.c:370
 msgid "Translator credits"
 msgstr "Преводачи"
 
-#: gtk/gtkaboutdialog.c:363
+#: gtk/gtkaboutdialog.c:371
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Списък с преводачи. Низът трябва да е отбелязан за превод"
 
-#: gtk/gtkaboutdialog.c:378
+#: gtk/gtkaboutdialog.c:386
 msgid "Logo"
 msgstr "Лого"
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:387
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -202,21 +202,21 @@ msgstr ""
 "Лого за диалоговата кутия \"Относно\". Ако не е зададено, по подразбиране се "
 "задава gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:402
 msgid "Logo Icon Name"
 msgstr "Име на иконата за логото"
 
-#: gtk/gtkaboutdialog.c:395
+#: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
 msgstr ""
 "Именована икона, която да се използва като лого за диалоговата кутия "
 "\"Относно\"."
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
 msgstr "Цвят на връзката"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:411
 msgid "Color of hyperlinks"
 msgstr "Цветът на хипервръзките"
 
@@ -2044,11 +2044,11 @@ msgstr "Заглавието на диалоговата кутия за изб�
 msgid "The desired width of the button widget, in characters."
 msgstr "Желаната широчина на бутона, в символи"
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
 msgstr "Модулът за файлова система по подразбиране"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Име на модула за GtkFileChooser, който да се използва по подразбиране"
 
@@ -2564,11 +2564,11 @@ msgstr "Ширината на подредбата"
 msgid "The height of the layout"
 msgstr "Височината на подредбата"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Tearoff Title"
 msgstr "Откъснато заглавие"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:529
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2576,27 +2576,27 @@ msgstr ""
 "Заглавие, което може да се покаже от мениджъра на прозорци, когато това меню "
 "е отделено"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:543
 msgid "Tearoff State"
 msgstr "Откъснато"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:544
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Булева стойност указваща дали заглавието е откъснато"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:550
 msgid "Vertical Padding"
 msgstr "Вертикална обшивка"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:551
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Допълнително място над и под менюто"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:559
 msgid "Vertical Offset"
 msgstr "Вертикален отстъп"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:560
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2604,11 +2604,11 @@ msgstr ""
 "Когато менюто е подменю, да се разположи отместено на определен брой пиксели "
 "вертикално"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:568
 msgid "Horizontal Offset"
 msgstr "Хоризонтален отстъп"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:569
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2616,69 +2616,69 @@ msgstr ""
 "Когато менюто е подменю, да се разположи отместено на определен брой пиксели "
 "хоризонтално"
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:579
 msgid "Left Attach"
 msgstr "Ляво прикрепяне"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "Номер на колоната, към който да се прикрепи лявата страна на вложения елемент"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:587
 msgid "Right Attach"
 msgstr "Дясно прикрепяне"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 "Номер на колоната, към който да се прикрепи лявата страна на вложения елемент"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:595
 msgid "Top Attach"
 msgstr "Горно прикрепяне"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:596
 msgid "The row number to attach the top of the child to"
 msgstr ""
 "Номер на реда, към който да се прикрепи долната страна на вложения елемент"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:603
 msgid "Bottom Attach"
 msgstr "Долно прикрепяне"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 "Номер на реда, към който да се прикрепи долната страна на вложения елемент"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
 msgstr "Може да променя ускорителите"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Дали ускорителите за менюта могат да бъдат променяни чрез натискане на "
 "клавиш над обект от менюто."
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
 msgstr "Закъснение преди появяване на подменюта"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:698
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Минимално време, през което показалеца трябва да остане над обект от меню "
 "преди да се появи подменюто"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
 msgstr "Закъснение преди скриване на подменю"
 
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:706
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4710,52 +4710,52 @@ msgstr "Да не се показва"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Дали gtk_widget_show_all() да не влияе на този обект"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1417
 msgid "Interior Focus"
 msgstr "Вътрешен Фокус"
 
-#: gtk/gtkwidget.c:1408
+#: gtk/gtkwidget.c:1418
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Дали да изчертава индикатор за фокус вътре в графични обекти"
 
-#: gtk/gtkwidget.c:1414
+#: gtk/gtkwidget.c:1424
 msgid "Focus linewidth"
 msgstr "Ширина на линия за фокус"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1425
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Ширина, в пиксели, за линията на индикатора на фокус"
 
-#: gtk/gtkwidget.c:1421
+#: gtk/gtkwidget.c:1431
 msgid "Focus line dash pattern"
 msgstr "Линия на фокус с шаблон на тирета"
 
-#: gtk/gtkwidget.c:1422
+#: gtk/gtkwidget.c:1432
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Образец с тирета използван за изчертаване на индикатор за фокус"
 
-#: gtk/gtkwidget.c:1427
+#: gtk/gtkwidget.c:1437
 msgid "Focus padding"
 msgstr "Рамка на фокуса"
 
-#: gtk/gtkwidget.c:1428
+#: gtk/gtkwidget.c:1438
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Ширина в пиксели между индикатора 'фокус' и 'box'-ът на графичния обект"
 
-#: gtk/gtkwidget.c:1433
+#: gtk/gtkwidget.c:1443
 msgid "Cursor color"
 msgstr "Цвят на Показалец"
 
-#: gtk/gtkwidget.c:1434
+#: gtk/gtkwidget.c:1444
 msgid "Color with which to draw insertion cursor"
 msgstr "Цвят, с който ще се изчертава показалеца"
 
-#: gtk/gtkwidget.c:1439
+#: gtk/gtkwidget.c:1449
 msgid "Secondary cursor color"
 msgstr "Цвят на Втори Показалец"
 
-#: gtk/gtkwidget.c:1440
+#: gtk/gtkwidget.c:1450
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4763,11 +4763,11 @@ msgstr ""
 "Цвят, с който ще се изчертава втория показалец при редактиране на смесен "
 "ляво-десен и дясно-ляв текст"
 
-#: gtk/gtkwidget.c:1445
+#: gtk/gtkwidget.c:1455
 msgid "Cursor line aspect ratio"
 msgstr "Пропорция на показалеца"
 
-#: gtk/gtkwidget.c:1446
+#: gtk/gtkwidget.c:1456
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Пропорция на показалеца"
 

@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-02 15:09+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -102,54 +102,54 @@ msgstr "Obrazovka"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen pro vykreslovač"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:202
 msgid "Program name"
 msgstr "Název programu"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:203
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 "Název programu. Pokud není nastaven, je implicitně g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:217
 msgid "Program version"
 msgstr "Verze programu"
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:218
 msgid "The version of the program"
 msgstr "Verze programu"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:232
 msgid "Copyright string"
 msgstr "Řetězec copyrightu"
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:233
 msgid "Copyright information for the program"
 msgstr "Informace o copyrightu na program"
 
-#: gtk/gtkaboutdialog.c:243
+#: gtk/gtkaboutdialog.c:250
 msgid "Comments string"
 msgstr "Řetězec poznámek"
 
-#: gtk/gtkaboutdialog.c:244
+#: gtk/gtkaboutdialog.c:251
 msgid "Comments about the program"
 msgstr "Poznámky o programu"
 
-#: gtk/gtkaboutdialog.c:276
+#: gtk/gtkaboutdialog.c:284
 msgid "Website URL"
 msgstr "URL WWW stránek"
 
-#: gtk/gtkaboutdialog.c:277
+#: gtk/gtkaboutdialog.c:285
 msgid "The URL for the link to the website of the program"
 msgstr "URL pro odkaz na WWW stránky programu"
 
-#: gtk/gtkaboutdialog.c:293
+#: gtk/gtkaboutdialog.c:301
 msgid "Website label"
 msgstr "Popisek WWW stránek"
 
-#: gtk/gtkaboutdialog.c:294
+#: gtk/gtkaboutdialog.c:302
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -157,45 +157,45 @@ msgstr ""
 "Popisek pro odkaz na WWW stránky programu. Není-li nastaven, je implicitně "
 "roven URL"
 
-#: gtk/gtkaboutdialog.c:310
+#: gtk/gtkaboutdialog.c:318
 msgid "Authors"
 msgstr "Autoři"
 
-#: gtk/gtkaboutdialog.c:311
+#: gtk/gtkaboutdialog.c:319
 msgid "List of authors of the program"
 msgstr "Seznam autorů programu"
 
-#: gtk/gtkaboutdialog.c:327
+#: gtk/gtkaboutdialog.c:335
 msgid "Documenters"
 msgstr "Dokumentátoři"
 
-#: gtk/gtkaboutdialog.c:328
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people documenting the program"
 msgstr "Seznam lidí dokumentujících program"
 
-#: gtk/gtkaboutdialog.c:344
+#: gtk/gtkaboutdialog.c:352
 msgid "Artists"
 msgstr "Umělci"
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:353
 msgid "List of people who have contributed artwork to the program"
 msgstr "Seznam lidí, kteří pro program tvořili grafiku"
 
-#: gtk/gtkaboutdialog.c:362
+#: gtk/gtkaboutdialog.c:370
 msgid "Translator credits"
 msgstr "Kredity překladatelů"
 
-#: gtk/gtkaboutdialog.c:363
+#: gtk/gtkaboutdialog.c:371
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 "Kredity překladatelů. Tento řetězec by měl být označen jako přeložitelný"
 
-#: gtk/gtkaboutdialog.c:378
+#: gtk/gtkaboutdialog.c:386
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:387
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -203,19 +203,19 @@ msgstr ""
 "Logo pro dialog o aplikaci. Pokud není nastaveno, je implicitně "
 "gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:402
 msgid "Logo Icon Name"
 msgstr "Název ikony s logem"
 
-#: gtk/gtkaboutdialog.c:395
+#: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
 msgstr "Pojmenovaná ikona, kterou použávat jako logo pro dialog o aplikaci."
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
 msgstr "Barva odkazu"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:411
 msgid "Color of hyperlinks"
 msgstr "Barva odkazů"
 
@@ -2009,11 +2009,11 @@ msgstr "Titulek dialogu výběru souborů."
 msgid "The desired width of the button widget, in characters."
 msgstr "Požadovaná šířka widgetu tlačítka ve znacích."
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
 msgstr "Implicitní backend výběru souborů"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Název backendu GtkFileChooser, který používat implicitně"
 
@@ -2525,111 +2525,111 @@ msgstr "Šířka rozložení"
 msgid "The height of the layout"
 msgstr "Výška rozložení"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Tearoff Title"
 msgstr "Titulek pro odtrhnutí"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:529
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Titulek, který může být zobrazen správcem oken, když je toto menu odtrženo"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:543
 msgid "Tearoff State"
 msgstr "Stav odtrhnutí"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:544
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Booleovská hodnota, která určuje, jestli je menu odtrženo"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:550
 msgid "Vertical Padding"
 msgstr "Svislé doplnění"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:551
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Místo navíc nad a pod menu"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:559
 msgid "Vertical Offset"
 msgstr "Svislé posunutí"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:560
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Když menu je podmenu, umístit je svisle posunuté o tolik pixelů"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:568
 msgid "Horizontal Offset"
 msgstr "Vodorovné posunutí"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:569
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Když menu je podmenu, umístit je vodorovně posunuté o tolik pixelů"
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:579
 msgid "Left Attach"
 msgstr "Připevnění vlevo"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Číslo sloupce, ke kterému připevnit levou stranu potomka"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:587
 msgid "Right Attach"
 msgstr "Připevnění vpravo"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
 msgstr "Číslo sloupce, ke kterému připevnit pravou stranu potomka"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:595
 msgid "Top Attach"
 msgstr "Připevnění nahoře"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:596
 msgid "The row number to attach the top of the child to"
 msgstr "Číslo řádku, ke kterému připevnit horní stranu potomka"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:603
 msgid "Bottom Attach"
 msgstr "Připevnění dole"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Číslo řádku, ke kterému připevnit dolní stranu potomka"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
 msgstr "Lze měnit akcelerátory"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Jestli mohou akcelerátory menu být změněny stiskem klávesy nad položkou menu"
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
 msgstr "Prodleva před zobrazením podmenu"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:698
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimální doba, kterou musí zůstat ukazatel nad položku menu, než se objeví "
 "podmenu"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
 msgstr "Prodleva před skrytím podmenu"
 
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:706
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4618,51 +4618,51 @@ msgstr "Nezobrazovat se všemi"
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr "Jestli by gtk_widget_show_all() nemělo mít vliv na tento widget"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1417
 msgid "Interior Focus"
 msgstr "Vnitřní fokus"
 
-#: gtk/gtkwidget.c:1408
+#: gtk/gtkwidget.c:1418
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Jestli vykreslovat indikátor fokusu ve widgetech"
 
-#: gtk/gtkwidget.c:1414
+#: gtk/gtkwidget.c:1424
 msgid "Focus linewidth"
 msgstr "Šířka čáry fokusu"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1425
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Šířka čáry indikátoru fokusu, v bodech"
 
-#: gtk/gtkwidget.c:1421
+#: gtk/gtkwidget.c:1431
 msgid "Focus line dash pattern"
 msgstr "Vzorek čáry indikátoru fokusu"
 
-#: gtk/gtkwidget.c:1422
+#: gtk/gtkwidget.c:1432
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Vzorek používaný při kreslení čáry indikátoru fokusu"
 
-#: gtk/gtkwidget.c:1427
+#: gtk/gtkwidget.c:1437
 msgid "Focus padding"
 msgstr "Doplnění fokusu"
 
-#: gtk/gtkwidget.c:1428
+#: gtk/gtkwidget.c:1438
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Mezera mezi indikátorem fokusu a boxem widgetu, v pixelech"
 
-#: gtk/gtkwidget.c:1433
+#: gtk/gtkwidget.c:1443
 msgid "Cursor color"
 msgstr "Barva kurzoru"
 
-#: gtk/gtkwidget.c:1434
+#: gtk/gtkwidget.c:1444
 msgid "Color with which to draw insertion cursor"
 msgstr "Barva, kterou kreslit vkládací kurzor"
 
-#: gtk/gtkwidget.c:1439
+#: gtk/gtkwidget.c:1449
 msgid "Secondary cursor color"
 msgstr "Barva sekundárního kurzoru"
 
-#: gtk/gtkwidget.c:1440
+#: gtk/gtkwidget.c:1450
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4670,11 +4670,11 @@ msgstr ""
 "Barva, kterou kreslit sekundární kurzor při editaci kombinovaného textu "
 "zleva doprava a zprava doleva"
 
-#: gtk/gtkwidget.c:1445
+#: gtk/gtkwidget.c:1455
 msgid "Cursor line aspect ratio"
 msgstr "Poměr čáry kurzoru"
 
-#: gtk/gtkwidget.c:1446
+#: gtk/gtkwidget.c:1456
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Poměr, kterým kreslit kurzor pro vkládání"
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-26 13:38+0900\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-26 14:08+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -812,46 +812,46 @@ msgstr "<색>"
 msgid "Make X calls synchronous"
 msgstr "동기 X 호출을 합니다"
 
-#: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1939
+#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
 msgid "License"
 msgstr "사용권"
 
-#: gtk/gtkaboutdialog.c:261
+#: gtk/gtkaboutdialog.c:269
 msgid "The license of the program"
 msgstr "프로그램의 사용권"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:482
+#: gtk/gtkaboutdialog.c:489
 msgid "_Credits"
 msgstr "만든 사람(_C)"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:491
+#: gtk/gtkaboutdialog.c:498
 msgid "_License"
 msgstr "사용권(_L)"
 
-#: gtk/gtkaboutdialog.c:682
+#: gtk/gtkaboutdialog.c:720
 #, c-format
 msgid "About %s"
 msgstr "%s 정보"
 
-#: gtk/gtkaboutdialog.c:1876
+#: gtk/gtkaboutdialog.c:1942
 msgid "Credits"
 msgstr "만든 사람"
 
-#: gtk/gtkaboutdialog.c:1901
+#: gtk/gtkaboutdialog.c:1968
 msgid "Written by"
 msgstr "개발자"
 
-#: gtk/gtkaboutdialog.c:1904
+#: gtk/gtkaboutdialog.c:1971
 msgid "Documented by"
 msgstr "문서화"
 
-#: gtk/gtkaboutdialog.c:1916
+#: gtk/gtkaboutdialog.c:1983
 msgid "Translated by"
 msgstr "번역자"
 
-#: gtk/gtkaboutdialog.c:1920
+#: gtk/gtkaboutdialog.c:1987
 msgid "Artwork by"
 msgstr "아트워크"
 
@@ -1043,15 +1043,15 @@ msgstr "색상환"
 msgid "Color Selection"
 msgstr "색 선택"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
 msgid "Input _Methods"
 msgstr "입력기(_M)"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
 msgstr "유니코드 제어 문자 넣기(_I)"
 
@@ -1217,83 +1217,83 @@ msgstr "폴더에 저장(_F):"
 msgid "Create in _folder:"
 msgstr "폴더에 만들기(_F):"
 
-#: gtk/gtkfilechooserdefault.c:4715
+#: gtk/gtkfilechooserdefault.c:4734
 msgid "Cannot change to folder because it is not local"
 msgstr "폴더로 옮길 수 없습니다 - 로컬 폴더가 아닙니다"
 
-#: gtk/gtkfilechooserdefault.c:5231
+#: gtk/gtkfilechooserdefault.c:5249
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "%s 바로 가기가 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:5695
+#: gtk/gtkfilechooserdefault.c:5713
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s을(를) 마운트할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:5988
+#: gtk/gtkfilechooserdefault.c:6006
 msgid "Type name of new folder"
 msgstr "새 폴더의 이름을 넣으십시오"
 
-#: gtk/gtkfilechooserdefault.c:6030
+#: gtk/gtkfilechooserdefault.c:6048
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d바이트"
 
-#: gtk/gtkfilechooserdefault.c:6032
+#: gtk/gtkfilechooserdefault.c:6050
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6034
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6036
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6088
+#: gtk/gtkfilechooserdefault.c:6106
 msgid "Today"
 msgstr "오늘"
 
-#: gtk/gtkfilechooserdefault.c:6090
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Yesterday"
 msgstr "어제"
 
-#: gtk/gtkfilechooserdefault.c:6101
+#: gtk/gtkfilechooserdefault.c:6119
 msgid "Unknown"
 msgstr "모름"
 
-#: gtk/gtkfilechooserdefault.c:6171
+#: gtk/gtkfilechooserdefault.c:6189
 msgid "Cannot change folder"
 msgstr "폴더를 바꿀 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6172
+#: gtk/gtkfilechooserdefault.c:6190
 msgid "The folder you specified is an invalid path."
 msgstr "선택한 폴더는 경로 이름이 잘못되었습니다."
 
-#: gtk/gtkfilechooserdefault.c:6211
+#: gtk/gtkfilechooserdefault.c:6229
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "'%s', '%s'에서 파일 이름을 만들 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6247
+#: gtk/gtkfilechooserdefault.c:6265
 msgid "Could not select item"
 msgstr "항목을 선택할 수 없습니다"
 
-#: gtk/gtkfilechooserdefault.c:6287
+#: gtk/gtkfilechooserdefault.c:6305
 msgid "Open Location"
 msgstr "위치 열기"
 
-#: gtk/gtkfilechooserdefault.c:6294
+#: gtk/gtkfilechooserdefault.c:6312
 msgid "Save in Location"
 msgstr "위치에 저장"
 
-#: gtk/gtkfilechooserdefault.c:6318
+#: gtk/gtkfilechooserdefault.c:6336
 msgid "_Location:"
 msgstr "위치(_L):"
 
@@ -1589,7 +1589,7 @@ msgstr "감마 값(_G)"
 msgid "Error loading icon: %s"
 msgstr "아이콘 읽는 중 오류: %s"
 
-#: gtk/gtkicontheme.c:1263
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1602,7 +1602,7 @@ msgstr ""
 "다음에서 테마를 구할 수 있습니다:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1328
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "테마에 '%s' 아이콘이 없습니다"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-12 08:33+0100\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnomepl.org>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -100,11 +100,11 @@ msgstr "Ekran"
 msgid "the GdkScreen for the renderer"
 msgstr "GdkScreen dla elementu rendereującego"
 
-#: gtk/gtkaboutdialog.c:195
+#: gtk/gtkaboutdialog.c:202
 msgid "Program name"
 msgstr "Nazwa programu"
 
-#: gtk/gtkaboutdialog.c:196
+#: gtk/gtkaboutdialog.c:203
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
@@ -112,43 +112,43 @@ msgstr ""
 "Nazwa programu. Jeżeli nie jest ustawiona, domyślnie zostanie użyta funkcja "
 "g_get_application_name()"
 
-#: gtk/gtkaboutdialog.c:210
+#: gtk/gtkaboutdialog.c:217
 msgid "Program version"
 msgstr "Wersja programu"
 
-#: gtk/gtkaboutdialog.c:211
+#: gtk/gtkaboutdialog.c:218
 msgid "The version of the program"
 msgstr "Wersja programu"
 
-#: gtk/gtkaboutdialog.c:225
+#: gtk/gtkaboutdialog.c:232
 msgid "Copyright string"
 msgstr "Prawa autorskie"
 
-#: gtk/gtkaboutdialog.c:226
+#: gtk/gtkaboutdialog.c:233
 msgid "Copyright information for the program"
 msgstr "Informacje o prawach autorskich programu"
 
-#: gtk/gtkaboutdialog.c:243
+#: gtk/gtkaboutdialog.c:250
 msgid "Comments string"
 msgstr "Ciąg opisowy"
 
-#: gtk/gtkaboutdialog.c:244
+#: gtk/gtkaboutdialog.c:251
 msgid "Comments about the program"
 msgstr "Opis programu"
 
-#: gtk/gtkaboutdialog.c:276
+#: gtk/gtkaboutdialog.c:284
 msgid "Website URL"
 msgstr "Adres strony domowej"
 
-#: gtk/gtkaboutdialog.c:277
+#: gtk/gtkaboutdialog.c:285
 msgid "The URL for the link to the website of the program"
 msgstr "Adres URL odnośnika do strony domowej programu"
 
-#: gtk/gtkaboutdialog.c:293
+#: gtk/gtkaboutdialog.c:301
 msgid "Website label"
 msgstr "Etykieta strony domowej"
 
-#: gtk/gtkaboutdialog.c:294
+#: gtk/gtkaboutdialog.c:302
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
@@ -156,44 +156,44 @@ msgstr ""
 "Etykieta odnośnika do strony domowej programu. Jeżeli nie jest ustawiona, "
 "domyślnie przedstawia adres URL"
 
-#: gtk/gtkaboutdialog.c:310
+#: gtk/gtkaboutdialog.c:318
 msgid "Authors"
 msgstr "Autorzy"
 
-#: gtk/gtkaboutdialog.c:311
+#: gtk/gtkaboutdialog.c:319
 msgid "List of authors of the program"
 msgstr "Lista autorów programu"
 
-#: gtk/gtkaboutdialog.c:327
+#: gtk/gtkaboutdialog.c:335
 msgid "Documenters"
 msgstr "Autorzy dokumentacji"
 
-#: gtk/gtkaboutdialog.c:328
+#: gtk/gtkaboutdialog.c:336
 msgid "List of people documenting the program"
 msgstr "Lista osób tworzących dokumentację programu"
 
-#: gtk/gtkaboutdialog.c:344
+#: gtk/gtkaboutdialog.c:352
 msgid "Artists"
 msgstr "Artyści"
 
-#: gtk/gtkaboutdialog.c:345
+#: gtk/gtkaboutdialog.c:353
 msgid "List of people who have contributed artwork to the program"
 msgstr "Lista osób współpracujących przy tworzeniu szaty graficznej programu"
 
-#: gtk/gtkaboutdialog.c:362
+#: gtk/gtkaboutdialog.c:370
 msgid "Translator credits"
 msgstr "Zasługi tłumaczy"
 
-#: gtk/gtkaboutdialog.c:363
+#: gtk/gtkaboutdialog.c:371
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr "Zasługi tłumaczy. Ten ciąg powinien zostać oznaczony do tłumaczenia"
 
-#: gtk/gtkaboutdialog.c:378
+#: gtk/gtkaboutdialog.c:386
 msgid "Logo"
 msgstr "Logo"
 
-#: gtk/gtkaboutdialog.c:379
+#: gtk/gtkaboutdialog.c:387
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
@@ -201,19 +201,19 @@ msgstr ""
 "Logo do okna z informacją o programie. Jeżeli nie jest ustawione, domyślnie "
 "przyjmuje wartość gtk_window_get_default_icon_list()"
 
-#: gtk/gtkaboutdialog.c:394
+#: gtk/gtkaboutdialog.c:402
 msgid "Logo Icon Name"
 msgstr "Nazwa ikony logo"
 
-#: gtk/gtkaboutdialog.c:395
+#: gtk/gtkaboutdialog.c:403
 msgid "A named icon to use as the logo for the about box."
 msgstr "Ikona używana jako logo w oknie z informacją o programie."
 
-#: gtk/gtkaboutdialog.c:402
+#: gtk/gtkaboutdialog.c:410
 msgid "Link Color"
 msgstr "Kolor odnośnika"
 
-#: gtk/gtkaboutdialog.c:403
+#: gtk/gtkaboutdialog.c:411
 msgid "Color of hyperlinks"
 msgstr "Kolor hyperodnośników"
 
@@ -2067,11 +2067,11 @@ msgstr "Tytuł okna dialogowego wyboru plików."
 msgid "The desired width of the button widget, in characters."
 msgstr "Żądana szerokość widgetu przycisku (w znakach)."
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:622
 msgid "Default file chooser backend"
 msgstr "Domyślne wsparcie wybierania plików"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:623
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nazwa domyślnie używanego wsparcia GtkFileChooser"
 
@@ -2589,114 +2589,114 @@ msgstr "Szerokość układu"
 msgid "The height of the layout"
 msgstr "Wysokość układu"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Tearoff Title"
 msgstr "Tytuł przy oderwaniu"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:529
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Tytuł wyświetlany przez menedżera okien, kiedy menu jest oderwane"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:543
 msgid "Tearoff State"
 msgstr "Stan oderwania"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:544
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Wartość logiczna wskazująca, czy menu jest oderwane"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:550
 msgid "Vertical Padding"
 msgstr "Wyściółka pionowa"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:551
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Dodatkowa przestrzeń na górze i dole menu"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:559
 msgid "Vertical Offset"
 msgstr "Przesunięcie w pionie"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:560
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 "Gdy menu jest podmenu, przesuwane jest w pionie o wybraną liczbę pikseli"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:568
 msgid "Horizontal Offset"
 msgstr "Przesunięcie w poziomie"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:569
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 "Gdy menu jest podmenu, przesuwane jest w poziomie o wybraną liczbę pikseli"
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:579
 msgid "Left Attach"
 msgstr "Przyłączenie lewe"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Liczba kolumn przyłączanych z lewej strony widgetu potomnego"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:587
 msgid "Right Attach"
 msgstr "Przyłączenie prawe"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
 msgstr "Liczba kolumn przyłączanych z prawej strony widgetu potomnego"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:595
 msgid "Top Attach"
 msgstr "Przyłączenie górne"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:596
 msgid "The row number to attach the top of the child to"
 msgstr "Liczba wierszy przyłączanych od góry widgetu potomnego"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:603
 msgid "Bottom Attach"
 msgstr "Przyłączenie dolne"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Liczba wierszy przyłączanych od dołu widgetu potomnego"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
 msgstr "Możliwa zmiana akceleratorów"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Określa, czy możliwa jest zmiana akceleratorów poprzez przyciśnięcie "
 "klawisza przy zaznaczonym elemencie menu"
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
 msgstr "Opóźnienie pojawienia się podmenu"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:698
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimalny okres czasu, przez jaki wskaźnik musi znajdować się nad elementem, "
 "zanim zostanie wyświetlone menu podrzędne"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
 msgstr "Opóźnienie ukrycia podmenu"
 
 # to jakiś bełkot jest
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:706
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4775,53 +4775,53 @@ msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 "Określa czy funkcja gtk_widget_show_all() powinna mieć wpływ na ten widget"
 
-#: gtk/gtkwidget.c:1407
+#: gtk/gtkwidget.c:1417
 msgid "Interior Focus"
 msgstr "Wewnętrzne skupienie"
 
-#: gtk/gtkwidget.c:1408
+#: gtk/gtkwidget.c:1418
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Określa, czy należy rysować wskaźnik skupienie wewnątrz widgetów"
 
-#: gtk/gtkwidget.c:1414
+#: gtk/gtkwidget.c:1424
 msgid "Focus linewidth"
 msgstr "Szerokość linii skupienia"
 
-#: gtk/gtkwidget.c:1415
+#: gtk/gtkwidget.c:1425
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Szerokość linii wskazującej skupienie, liczona w pikselach"
 
-#: gtk/gtkwidget.c:1421
+#: gtk/gtkwidget.c:1431
 msgid "Focus line dash pattern"
 msgstr "Wzór linii skupienia"
 
-#: gtk/gtkwidget.c:1422
+#: gtk/gtkwidget.c:1432
 msgid "Dash pattern used to draw the focus indicator"
 msgstr "Wzór linii przerywanej używanej przy rysowaniu skupienia"
 
-#: gtk/gtkwidget.c:1427
+#: gtk/gtkwidget.c:1437
 msgid "Focus padding"
 msgstr "Wyściółka skupienia"
 
-#: gtk/gtkwidget.c:1428
+#: gtk/gtkwidget.c:1438
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 "Szerokość odstępu pomiędzy wskaźnikiem skupienia a prostokątem okalającym "
 "skupienie, liczona w pikselach"
 
-#: gtk/gtkwidget.c:1433
+#: gtk/gtkwidget.c:1443
 msgid "Cursor color"
 msgstr "Kolor kursora"
 
-#: gtk/gtkwidget.c:1434
+#: gtk/gtkwidget.c:1444
 msgid "Color with which to draw insertion cursor"
 msgstr "Kolor, przy użyciu którego powinien być rysowany kursor wstawiania"
 
-#: gtk/gtkwidget.c:1439
+#: gtk/gtkwidget.c:1449
 msgid "Secondary cursor color"
 msgstr "Drugi kolor kursora"
 
-#: gtk/gtkwidget.c:1440
+#: gtk/gtkwidget.c:1450
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -4829,11 +4829,11 @@ msgstr ""
 "Kolor pomocniczego kursora wstawiania, używanego przy redagowaniu tekstu z "
 "przemieszanymi fragmentami pisanymi od-lewej-do-prawej i od-prawej-do-lewej"
 
-#: gtk/gtkwidget.c:1445
+#: gtk/gtkwidget.c:1455
 msgid "Cursor line aspect ratio"
 msgstr "Proporcje prostokąta kursora"
 
-#: gtk/gtkwidget.c:1446
+#: gtk/gtkwidget.c:1456
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Współczynnik proporcji kursora wstawiania"
 

@@ -1,3 +1,7 @@
+2005-02-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.6.2 ===
+
 2005-01-22  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_new_with_type) 

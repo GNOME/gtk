@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-31 11:37+0200\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-31 12:10+0200\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
@@ -2356,8 +2356,8 @@ msgstr "Ikonos dydis"
 #: gtk/gtkimage.c:216
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
-"Simbolinis dydis naudojamas standartinėms ikonoms, ikonų rinkiniams "
-"ar vardinėms ikonoms"
+"Simbolinis dydis naudojamas standartinėms ikonoms, ikonų rinkiniams ar "
+"vardinėms ikonoms"
 
 #: gtk/gtkimage.c:232
 msgid "Pixel size"
@@ -2528,37 +2528,37 @@ msgstr "Išdėstymo plotis"
 msgid "The height of the layout"
 msgstr "Išdėstymo aukštis"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Tearoff Title"
 msgstr "Nutraukimo Pavadinimas"
 
-#: gtk/gtkmenu.c:527
+#: gtk/gtkmenu.c:529
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Pavadinimas rodomas langų tvarkyklės, kai šis meniu yra nuplėštas"
 
-#: gtk/gtkmenu.c:541
+#: gtk/gtkmenu.c:543
 msgid "Tearoff State"
 msgstr "Atkabinimo būsena"
 
-#: gtk/gtkmenu.c:542
+#: gtk/gtkmenu.c:544
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr "Loginė reikšmė, nurodanti ar meniu yra atkabinamas"
 
-#: gtk/gtkmenu.c:548
+#: gtk/gtkmenu.c:550
 msgid "Vertical Padding"
 msgstr "Vertikalus apvalkalas"
 
-#: gtk/gtkmenu.c:549
+#: gtk/gtkmenu.c:551
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Tarpas pridedamas meniu viršuje ir apačioje"
 
-#: gtk/gtkmenu.c:557
+#: gtk/gtkmenu.c:559
 msgid "Vertical Offset"
 msgstr "Vertikalus atitraukimas"
 
-#: gtk/gtkmenu.c:558
+#: gtk/gtkmenu.c:560
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2566,11 +2566,11 @@ msgstr ""
 "Kai meniu yra antrinė meniu dalis, atitraukti jį per nustatytą pikselių "
 "kiekį vertikaliai"
 
-#: gtk/gtkmenu.c:566
+#: gtk/gtkmenu.c:568
 msgid "Horizontal Offset"
 msgstr "Horizontalus atitraukimas"
 
-#: gtk/gtkmenu.c:567
+#: gtk/gtkmenu.c:569
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2578,65 +2578,65 @@ msgstr ""
 "Kai meniu yra antrinė meniu dalis, atitraukti jį per nustatytą pikselių "
 "kiekį horizontaliai"
 
-#: gtk/gtkmenu.c:577
+#: gtk/gtkmenu.c:579
 msgid "Left Attach"
 msgstr "Kairysis Priedas"
 
-#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr "Stulpelis, prie kurio reikia prijungti kairę susijusio objekto pusę"
 
-#: gtk/gtkmenu.c:585
+#: gtk/gtkmenu.c:587
 msgid "Right Attach"
 msgstr "Dešinysis Priedas"
 
-#: gtk/gtkmenu.c:586
+#: gtk/gtkmenu.c:588
 msgid "The column number to attach the right side of the child to"
 msgstr "Stulpelis, prie kurio reikia prijungti dešinę susijusio objekto pusę"
 
-#: gtk/gtkmenu.c:593
+#: gtk/gtkmenu.c:595
 msgid "Top Attach"
 msgstr "Viršutinis Priedas"
 
-#: gtk/gtkmenu.c:594
+#: gtk/gtkmenu.c:596
 msgid "The row number to attach the top of the child to"
 msgstr "Eilutė, prie kurios reikia prijungti susijusio objekto viršų"
 
-#: gtk/gtkmenu.c:601
+#: gtk/gtkmenu.c:603
 msgid "Bottom Attach"
 msgstr "Apatinis Priedas"
 
-#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr "Eilutė, prie kurios reikia prijungti susijusio objekto apačią"
 
-#: gtk/gtkmenu.c:689
+#: gtk/gtkmenu.c:691
 msgid "Can change accelerators"
 msgstr "Gali keisti sparčius klavišus"
 
-#: gtk/gtkmenu.c:690
+#: gtk/gtkmenu.c:692
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Ar meniu trumpi klavišai gali būti pakeisti paspaudus klavišą virš meniu "
 "punkto"
 
-#: gtk/gtkmenu.c:695
+#: gtk/gtkmenu.c:697
 msgid "Delay before submenus appear"
 msgstr "Pauzė prieš išskleidžiant žemesnio lygio meniu"
 
-#: gtk/gtkmenu.c:696
+#: gtk/gtkmenu.c:698
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Mažiausias laiko tarpas, kurį rodyklė turi praleisti virš meniu punkto, tam "
 "kad išsiskleistų žemesnio lygio meniu"
 
-#: gtk/gtkmenu.c:703
+#: gtk/gtkmenu.c:705
 msgid "Delay before hiding a submenu"
 msgstr "Pauzė prieš paslepiant žemesnio lygio meniu"
 
-#: gtk/gtkmenu.c:704
+#: gtk/gtkmenu.c:706
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"

@@ -8,14 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-31 12:13+0200\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-31 12:16+0200\n"
 "Last-Translator: Žygimantas Beručka <uid0@akl.lt>\n"
 "Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:153 gdk-pixbuf/gdk-pixbuf-io.c:838
 #: gdk-pixbuf/gdk-pixbuf-io.c:1069 tests/testfilechooser.c:199
@@ -1055,15 +1056,15 @@ msgstr "Spalvų ratas"
 msgid "Color Selection"
 msgstr "Spalvos pasirinkimas"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
 msgid "Input _Methods"
 msgstr "Įvesties _metodai"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
 msgstr "Įterpt_i Unicode valdymo simbolį"
 
@@ -1225,25 +1226,25 @@ msgstr "Išsaugoti _aplanke:"
 msgid "Create in _folder:"
 msgstr "Sukurti _aplanke:"
 
-#: gtk/gtkfilechooserdefault.c:4715
+#: gtk/gtkfilechooserdefault.c:4734
 msgid "Cannot change to folder because it is not local"
 msgstr "Negalima pakeisti į nurodytą aplanką, nes jis nėra vietinis"
 
-#: gtk/gtkfilechooserdefault.c:5230
+#: gtk/gtkfilechooserdefault.c:5249
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Nuoroda %s neegzistuoja"
 
-#: gtk/gtkfilechooserdefault.c:5694
+#: gtk/gtkfilechooserdefault.c:5713
 #, c-format
 msgid "Could not mount %s"
 msgstr "Nepavyko prijungti %s"
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:6006
 msgid "Type name of new folder"
 msgstr "Naujo aplanko tipo pavadinimas"
 
-#: gtk/gtkfilechooserdefault.c:6029
+#: gtk/gtkfilechooserdefault.c:6048
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1251,59 +1252,59 @@ msgstr[0] "%d baitas"
 msgstr[1] "%d baitai"
 msgstr[2] "%d baitų"
 
-#: gtk/gtkfilechooserdefault.c:6031
+#: gtk/gtkfilechooserdefault.c:6050
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6033
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6035
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6087
+#: gtk/gtkfilechooserdefault.c:6106
 msgid "Today"
 msgstr "Šiandien"
 
-#: gtk/gtkfilechooserdefault.c:6089
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Yesterday"
 msgstr "Vakar"
 
-#: gtk/gtkfilechooserdefault.c:6100
+#: gtk/gtkfilechooserdefault.c:6119
 msgid "Unknown"
 msgstr "Nežinomas"
 
-#: gtk/gtkfilechooserdefault.c:6170
+#: gtk/gtkfilechooserdefault.c:6189
 msgid "Cannot change folder"
 msgstr "Nepavyko pakeisti aplanko"
 
-#: gtk/gtkfilechooserdefault.c:6171
+#: gtk/gtkfilechooserdefault.c:6190
 msgid "The folder you specified is an invalid path."
 msgstr "Kelias iki nurodyto aplanko yra neteisingas."
 
-#: gtk/gtkfilechooserdefault.c:6210
+#: gtk/gtkfilechooserdefault.c:6229
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Nepavyko suformuoti bylos vardo iš „%s“ ir „%s“"
 
-#: gtk/gtkfilechooserdefault.c:6246
+#: gtk/gtkfilechooserdefault.c:6265
 msgid "Could not select item"
 msgstr "Nepavyko pasirinkti elemento"
 
-#: gtk/gtkfilechooserdefault.c:6286
+#: gtk/gtkfilechooserdefault.c:6305
 msgid "Open Location"
 msgstr "Atidaryti vietą"
 
-#: gtk/gtkfilechooserdefault.c:6293
+#: gtk/gtkfilechooserdefault.c:6312
 msgid "Save in Location"
 msgstr "Išsaugoti vietoje"
 
-#: gtk/gtkfilechooserdefault.c:6317
+#: gtk/gtkfilechooserdefault.c:6336
 msgid "_Location:"
 msgstr "_Vieta: "
 
@@ -1596,7 +1597,7 @@ msgstr "_Gamos reikšmė"
 msgid "Error loading icon: %s"
 msgstr "Įvyko klaida įkeliant piktogramą: %s"
 
-#: gtk/gtkicontheme.c:1263
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1609,7 +1610,7 @@ msgstr ""
 "Jūs galite gauti kopiją:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1328
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Piktogramos „%s“ temoje nėra"

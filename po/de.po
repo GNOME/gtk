@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-25 15:23+0100\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-25 15:23+0100\n"
 "Last-Translator: Frank Arnold <frank@scirocco-5v-turbo.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
@@ -845,46 +845,46 @@ msgstr "FARBEN"
 msgid "Make X calls synchronous"
 msgstr "X-Aufrufe synchron verarbeiten"
 
-#: gtk/gtkaboutdialog.c:260 gtk/gtkaboutdialog.c:1939
+#: gtk/gtkaboutdialog.c:268 gtk/gtkaboutdialog.c:2014
 msgid "License"
 msgstr "Lizenz"
 
-#: gtk/gtkaboutdialog.c:261
+#: gtk/gtkaboutdialog.c:269
 msgid "The license of the program"
 msgstr "Die Lizenz des Programms"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:482
+#: gtk/gtkaboutdialog.c:489
 msgid "_Credits"
 msgstr "_Mitwirkende"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:491
+#: gtk/gtkaboutdialog.c:498
 msgid "_License"
 msgstr "_Lizenz"
 
-#: gtk/gtkaboutdialog.c:682
+#: gtk/gtkaboutdialog.c:720
 #, c-format
 msgid "About %s"
 msgstr "Info zu %s"
 
-#: gtk/gtkaboutdialog.c:1876
+#: gtk/gtkaboutdialog.c:1942
 msgid "Credits"
 msgstr "Mitwirkende"
 
-#: gtk/gtkaboutdialog.c:1901
+#: gtk/gtkaboutdialog.c:1968
 msgid "Written by"
 msgstr "Programm von"
 
-#: gtk/gtkaboutdialog.c:1904
+#: gtk/gtkaboutdialog.c:1971
 msgid "Documented by"
 msgstr "Dokumentation von"
 
-#: gtk/gtkaboutdialog.c:1916
+#: gtk/gtkaboutdialog.c:1983
 msgid "Translated by"
 msgstr "Übersetzung von"
 
-#: gtk/gtkaboutdialog.c:1920
+#: gtk/gtkaboutdialog.c:1987
 msgid "Artwork by"
 msgstr "Grafiken von"
 
@@ -1078,15 +1078,15 @@ msgstr "Farbrad"
 msgid "Color Selection"
 msgstr "Schriftwahl"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
 msgid "Select _All"
 msgstr "A_lles markieren"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
 msgstr "_Unicode-Steuerzeichen einfügen"
 
@@ -1252,88 +1252,88 @@ msgstr "In _Ordner speichern:"
 msgid "Create in _folder:"
 msgstr "In _Ordner anlegen"
 
-#: gtk/gtkfilechooserdefault.c:4715
+#: gtk/gtkfilechooserdefault.c:4734
 msgid "Cannot change to folder because it is not local"
 msgstr ""
 "Es konnte nicht in den angegebenen Ordner gewechselt werden, da dieser nicht "
 "lokal ist."
 
 # CHECK - shortcuts == Lesezeichen?
-#: gtk/gtkfilechooserdefault.c:5231
+#: gtk/gtkfilechooserdefault.c:5249
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Lesezeichen %s existiert nicht"
 
-#: gtk/gtkfilechooserdefault.c:5695
+#: gtk/gtkfilechooserdefault.c:5713
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s konnte nicht eingebunden werden"
 
 # CHECK
-#: gtk/gtkfilechooserdefault.c:5988
+#: gtk/gtkfilechooserdefault.c:6006
 msgid "Type name of new folder"
 msgstr "Ordnername eingeben"
 
-#: gtk/gtkfilechooserdefault.c:6030
+#: gtk/gtkfilechooserdefault.c:6048
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d Byte"
 msgstr[1] "%d Bytes"
 
-#: gtk/gtkfilechooserdefault.c:6032
+#: gtk/gtkfilechooserdefault.c:6050
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:6034
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6036
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6088
+#: gtk/gtkfilechooserdefault.c:6106
 msgid "Today"
 msgstr "Heute"
 
-#: gtk/gtkfilechooserdefault.c:6090
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Yesterday"
 msgstr "Gestern"
 
-#: gtk/gtkfilechooserdefault.c:6101
+#: gtk/gtkfilechooserdefault.c:6119
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: gtk/gtkfilechooserdefault.c:6171
+#: gtk/gtkfilechooserdefault.c:6189
 msgid "Cannot change folder"
 msgstr "Ordner kann nicht gewechselt werden"
 
-#: gtk/gtkfilechooserdefault.c:6172
+#: gtk/gtkfilechooserdefault.c:6190
 msgid "The folder you specified is an invalid path."
 msgstr "Der angegebene Ordner ist ein ungültiger Pfad."
 
-#: gtk/gtkfilechooserdefault.c:6211
+#: gtk/gtkfilechooserdefault.c:6229
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Der Dateiname konnte nicht aus »%s« und »%s« konstruiert werden."
 
-#: gtk/gtkfilechooserdefault.c:6247
+#: gtk/gtkfilechooserdefault.c:6265
 msgid "Could not select item"
 msgstr "Das Objekt konnte nicht gewählt werden"
 
-#: gtk/gtkfilechooserdefault.c:6287
+#: gtk/gtkfilechooserdefault.c:6305
 msgid "Open Location"
 msgstr "Ort öffnen"
 
-#: gtk/gtkfilechooserdefault.c:6294
+#: gtk/gtkfilechooserdefault.c:6312
 msgid "Save in Location"
 msgstr "An Ort speichern"
 
-#: gtk/gtkfilechooserdefault.c:6318
+#: gtk/gtkfilechooserdefault.c:6336
 msgid "_Location:"
 msgstr "_Ort:"
 
@@ -1631,7 +1631,7 @@ msgstr "_Gamma-Wert"
 msgid "Error loading icon: %s"
 msgstr "Fehler beim Laden des Symbols: %s"
 
-#: gtk/gtkicontheme.c:1263
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1644,7 +1644,7 @@ msgstr ""
 "Sie können sich eine Kopie herunterladen unter:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1328
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Symbol »%s« nicht im Thema vorhanden"

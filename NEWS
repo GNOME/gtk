@@ -2,11 +2,13 @@ Overview of Changes from GTK+ 2.6.1 to GTK+ 2.6.2
 =================================================
 * Speed up size allocation of labels, progress bars and
   text cell renderers [Anders Carlsson]
+* Add a --quiet option to gtk-update-icon-cache [Matthias]
 * GtkFileChooser
  - Bug fixes [Federico Mena Quintero]
  - Don't overwrite the contents of the name entry 
    when changing folders in save mode.  [Federico]
  - Don't return nonexisting folders in save mode [Jean Marie Favreau]
+ - Fix a size allocation loop [Milosz Derezynski, Robert Ögren]
 * GtkAboutDialog
  - Better HIG compliance [Jorn Baayen]
 * GDK
@@ -14,20 +16,21 @@ Overview of Changes from GTK+ 2.6.1 to GTK+ 2.6.2
    of the Render extension [Albert Chin]
  - Respect _NET_VIRTUAL_ROOTS [Carsten Haitzler]
 * Win32
- - Bug fixes [Tor Lillqvist, Ivan Wong, David Neary, Daniel Atallah]
+ - Bug fixes [Tor Lillqvist, Ivan Wong, David Neary, Daniel Atallah,
+   Takuro Ashie]
  - Make keyboard input work in Indic languages [Tor]
+ - Initialize extended input devices lazily  [Robert Ögren]
 * Other bug fixes [Owen Taylor, Richard Hult, Phil Blundell,
   Jens Finke, Michael Natterer, Manish Singh, Kjartan Maraas,
-  Priit Laes, Dennis Cranston, Remus Draica, Matthias Clasen,
+  Priit Laes, Dennis Cranston, Remus Draica, Matthias,
   Jeff Franks, Elijah Newren, Damon Chaplin, Vincent Ladeuil,
-  Carlos Garnacho Parro, Thomas Zajic, Crispin Flowerday]
+  Carlos Garnacho Parro, Thomas Zajic, Crispin Flowerday,
+  Tommi Komulainen, Søren Sandmann, Chris Lee, Mark McLoughlin]
 * Documentation improvements [Murray Cumming, Matthias, Alex Graveley,
   Jeff Franks, Christian Rose, Masao Mutoh, Karel Kulhavy, Roger 
   Light]
-* New and improved translations (bg,ca,cs,cy,da,de,en_CA,es,et,hu,it,
+* New and improved translations (bg,ca,cs,cy,da,de,el,en_CA,es,et,hu,it,
   ja,ko,lt,nb,nl,nn,no,pl,pt,pt_BR,sk,sq,sv,zh_CN)
-
-Bugs fixed: 163035,163319,163851,164125,164290,162617,164376,164427,163910,162443,161814,164669,162676,163702,164448,164859,162790,164884.164893,164222,147785,165131,165203,165163,165180,165012,165194,163979,165213,165683,165723,165815,165877,165770,165556,165800,165950,164915,164147,164108,164347,165823
 
 Overview of Changes from GTK+ 2.6.0 to GTK+ 2.6.1
 =================================================

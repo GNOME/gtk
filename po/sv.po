@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-28 21:30+0100\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-28 21:30+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -1057,15 +1057,15 @@ msgstr "Färghjul"
 msgid "Color Selection"
 msgstr "Färgval"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
 msgid "Select _All"
 msgstr "Markera _allt"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -1229,84 +1229,84 @@ msgstr "Spara i _mappen:"
 msgid "Create in _folder:"
 msgstr "Skapa i _mappen:"
 
-#: gtk/gtkfilechooserdefault.c:4715
+#: gtk/gtkfilechooserdefault.c:4734
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan inte byta till mappen eftersom den inte är lokal"
 
-#: gtk/gtkfilechooserdefault.c:5230
+#: gtk/gtkfilechooserdefault.c:5249
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Genvägen %s finns inte"
 
-#: gtk/gtkfilechooserdefault.c:5694
+#: gtk/gtkfilechooserdefault.c:5713
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunde inte montera %s"
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:6006
 msgid "Type name of new folder"
 msgstr "Ange namnet på den nya mappen"
 
-#: gtk/gtkfilechooserdefault.c:6029
+#: gtk/gtkfilechooserdefault.c:6048
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:6031
+#: gtk/gtkfilechooserdefault.c:6050
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f kB"
 
-#: gtk/gtkfilechooserdefault.c:6033
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:6035
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:6087
+#: gtk/gtkfilechooserdefault.c:6106
 msgid "Today"
 msgstr "Idag"
 
-#: gtk/gtkfilechooserdefault.c:6089
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Yesterday"
 msgstr "Igår"
 
-#: gtk/gtkfilechooserdefault.c:6100
+#: gtk/gtkfilechooserdefault.c:6119
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/gtkfilechooserdefault.c:6170
+#: gtk/gtkfilechooserdefault.c:6189
 msgid "Cannot change folder"
 msgstr "Kan inte byta mapp"
 
-#: gtk/gtkfilechooserdefault.c:6171
+#: gtk/gtkfilechooserdefault.c:6190
 msgid "The folder you specified is an invalid path."
 msgstr "Mappen du angav är en ogiltig sökväg."
 
-#: gtk/gtkfilechooserdefault.c:6210
+#: gtk/gtkfilechooserdefault.c:6229
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Kunde inte bygga filnamnet från \"%s\" och \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:6246
+#: gtk/gtkfilechooserdefault.c:6265
 msgid "Could not select item"
 msgstr "Kunde inte välja objekt"
 
-#: gtk/gtkfilechooserdefault.c:6286
+#: gtk/gtkfilechooserdefault.c:6305
 msgid "Open Location"
 msgstr "Öppna plats"
 
-#: gtk/gtkfilechooserdefault.c:6293
+#: gtk/gtkfilechooserdefault.c:6312
 msgid "Save in Location"
 msgstr "Spara på plats"
 
-#: gtk/gtkfilechooserdefault.c:6317
+#: gtk/gtkfilechooserdefault.c:6336
 msgid "_Location:"
 msgstr "_Plats:"
 
@@ -1598,7 +1598,7 @@ msgstr "_Gammavärde"
 msgid "Error loading icon: %s"
 msgstr "Fel vid inläsning av ikonen: %s"
 
-#: gtk/gtkicontheme.c:1263
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1611,7 +1611,7 @@ msgstr ""
 "Du kan få tag i en kopia från:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1328
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonen \"%s\" finns inte i temat"

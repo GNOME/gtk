@@ -32,7 +32,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-31 11:58+0100\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-01-31 11:59+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -936,6 +936,11 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
+#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr "%d %%"
+
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
 msgstr "Vælg en farve"
@@ -1072,15 +1077,15 @@ msgstr "Farvehjul"
 msgid "Color Selection"
 msgstr "Farvevælger"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
 msgid "Input _Methods"
 msgstr "Indtastnings_metoder"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
 msgstr "_Indsæt Unicode-kontroltegn"
 
@@ -1243,84 +1248,84 @@ msgstr "Gem i _mappe:"
 msgid "Create in _folder:"
 msgstr "Opret i _mappe:"
 
-#: gtk/gtkfilechooserdefault.c:4715
+#: gtk/gtkfilechooserdefault.c:4734
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke skifte til mappen fordi den ikke er lokal"
 
-#: gtk/gtkfilechooserdefault.c:5230
+#: gtk/gtkfilechooserdefault.c:5249
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Genvejen %s findes ikke"
 
-#: gtk/gtkfilechooserdefault.c:5694
+#: gtk/gtkfilechooserdefault.c:5713
 #, c-format
 msgid "Could not mount %s"
 msgstr "Kunne ikke montere %s"
 
-#: gtk/gtkfilechooserdefault.c:5987
+#: gtk/gtkfilechooserdefault.c:6006
 msgid "Type name of new folder"
 msgstr "Indtast navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:6029
+#: gtk/gtkfilechooserdefault.c:6048
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:6031
+#: gtk/gtkfilechooserdefault.c:6050
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f k"
 
-#: gtk/gtkfilechooserdefault.c:6033
+#: gtk/gtkfilechooserdefault.c:6052
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:6035
+#: gtk/gtkfilechooserdefault.c:6054
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:6087
+#: gtk/gtkfilechooserdefault.c:6106
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:6089
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:6100
+#: gtk/gtkfilechooserdefault.c:6119
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: gtk/gtkfilechooserdefault.c:6170
+#: gtk/gtkfilechooserdefault.c:6189
 msgid "Cannot change folder"
 msgstr "Kan ikke skifte mappe"
 
-#: gtk/gtkfilechooserdefault.c:6171
+#: gtk/gtkfilechooserdefault.c:6190
 msgid "The folder you specified is an invalid path."
 msgstr "Mappen du har angivet har en ugyldig sti."
 
-#: gtk/gtkfilechooserdefault.c:6210
+#: gtk/gtkfilechooserdefault.c:6229
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Kunne ikke opbygge filnavn fra \"%s\" og \"%s\""
 
-#: gtk/gtkfilechooserdefault.c:6246
+#: gtk/gtkfilechooserdefault.c:6265
 msgid "Could not select item"
 msgstr "Kunne ikke vælge element"
 
-#: gtk/gtkfilechooserdefault.c:6286
+#: gtk/gtkfilechooserdefault.c:6305
 msgid "Open Location"
 msgstr "Åbn placering"
 
-#: gtk/gtkfilechooserdefault.c:6293
+#: gtk/gtkfilechooserdefault.c:6312
 msgid "Save in Location"
 msgstr "Åbn i placering"
 
-#: gtk/gtkfilechooserdefault.c:6317
+#: gtk/gtkfilechooserdefault.c:6336
 msgid "_Location:"
 msgstr "_Sted:"
 
@@ -1614,7 +1619,7 @@ msgstr "_Gammaværdi"
 msgid "Error loading icon: %s"
 msgstr "Fejl ved indlæsning af ikon: %s"
 
-#: gtk/gtkicontheme.c:1263
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1627,7 +1632,7 @@ msgstr ""
 "installere det. Du kan få en kopi fra:\n"
 "           %s"
 
-#: gtk/gtkicontheme.c:1328
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikonet \"%s\" er ikke tilgængeligt i tema"
@@ -2224,9 +2229,6 @@ msgstr "X-indtastningsmetode"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunne ikke indhente oplysninger om filen \"%s\": %s"
-
-#~ msgid "progress bar label|%d %%"
-#~ msgstr "%d %%"
 
 #~ msgid "Error getting information for '%s'"
 #~ msgstr "Fejl ved indhentning af oplysninger om \"%s\""

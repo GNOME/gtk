@@ -1,5 +1,11 @@
 2005-02-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* === Released 2.6.2 ===
+
+	* NEWS: Updates
+
+2005-02-04  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkpaned.c (gtk_paned_compute_position): Work better
 	when there is not enough space. This avoids a nasty size
 	allocation loop in the file chooser.  (#154007, reported 

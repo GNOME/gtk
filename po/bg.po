@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.4.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-02 20:56+0200\n"
+"POT-Creation-Date: 2005-02-04 13:26-0500\n"
 "PO-Revision-Date: 2005-02-02 20:56+0200\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -913,6 +913,11 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
+#: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr ""
+
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
 msgstr "Избиране на Цвят"
@@ -1048,15 +1053,15 @@ msgstr "Цветна палитра"
 msgid "Color Selection"
 msgstr "Избор на цвят"
 
-#: gtk/gtkentry.c:4507 gtk/gtktextview.c:7030
+#: gtk/gtkentry.c:4510 gtk/gtktextview.c:7030
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: gtk/gtkentry.c:4517 gtk/gtktextview.c:7040
+#: gtk/gtkentry.c:4520 gtk/gtktextview.c:7040
 msgid "Input _Methods"
 msgstr "_Методи за вход"
 
-#: gtk/gtkentry.c:4528 gtk/gtktextview.c:7051
+#: gtk/gtkentry.c:4531 gtk/gtktextview.c:7051
 msgid "_Insert Unicode Control Character"
 msgstr "_Вмъкване на уникод контролен символ"
 
@@ -1593,7 +1598,7 @@ msgstr "_Гама стойност"
 msgid "Error loading icon: %s"
 msgstr "Грешка при зареждането на икона: %s"
 
-#: gtk/gtkicontheme.c:1260
+#: gtk/gtkicontheme.c:1259
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1606,7 +1611,7 @@ msgstr ""
 "You·can·get·a·copy·from:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1325
+#: gtk/gtkicontheme.c:1324
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Иконата \"%s\" не е част от темата"
