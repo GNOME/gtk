@@ -64,7 +64,7 @@ int main( int   argc,
 			GTK_SIGNAL_FUNC (destroy), NULL);
     
     /* Sets the border width of the window. */
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* Creates a new button with the label "Hello World". */
     button = gtk_button_new_with_label ("Hello World");

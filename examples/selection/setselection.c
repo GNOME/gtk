@@ -15,7 +15,7 @@ selection_toggled (GtkWidget *widget, gint *have_selection)
       /* if claiming the selection failed, we return the button to
 	 the out state */
       if (!*have_selection)
-	gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON(widget), FALSE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
     }
   else
     {
@@ -37,7 +37,7 @@ selection_clear (GtkWidget *widget, GdkEventSelection *event,
 		 gint *have_selection)
 {
   *have_selection = FALSE;
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON(widget), FALSE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget), FALSE);
 
   return TRUE;
 }
@@ -75,7 +75,7 @@ main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
-  gtk_container_border_width (GTK_CONTAINER (window), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (gtk_exit), NULL);

@@ -43,7 +43,7 @@ int main( int   argc,
 			GTK_SIGNAL_FUNC (delete_event), NULL);
 
     /* Sets the border width of the window. */
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
     /* We create a box to pack widgets into.  This is described in detail
      * in the "packing" section. The box is not really visible, it

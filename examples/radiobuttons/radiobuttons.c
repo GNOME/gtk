@@ -29,14 +29,14 @@ int main( int   argc,
                         NULL);
 
     gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
-    gtk_container_border_width (GTK_CONTAINER (window), 0);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
     box1 = gtk_vbox_new (FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), box1);
     gtk_widget_show (box1);
 
     box2 = gtk_vbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
@@ -46,7 +46,7 @@ int main( int   argc,
 
     group = gtk_radio_button_group (GTK_RADIO_BUTTON (button));
     button = gtk_radio_button_new_with_label(group, "button2");
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
 
@@ -61,7 +61,7 @@ int main( int   argc,
     gtk_widget_show (separator);
 
     box2 = gtk_vbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
     gtk_widget_show (box2);
 

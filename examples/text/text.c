@@ -51,7 +51,7 @@ int main (int argc, char *argv[])
 		      GTK_SIGNAL_FUNC(close_application),
 		      NULL);
   gtk_window_set_title (GTK_WINDOW (window), "Text Widget Example");
-  gtk_container_border_width (GTK_CONTAINER (window), 0);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 0);
   
   
   box1 = gtk_vbox_new (FALSE, 0);
@@ -60,7 +60,7 @@ int main (int argc, char *argv[])
   
   
   box2 = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
   gtk_widget_show (box2);
   
@@ -145,13 +145,13 @@ int main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT(check), "toggled",
 		      GTK_SIGNAL_FUNC(text_toggle_editable), text);
-  gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
   gtk_widget_show (check);
   check = gtk_check_button_new_with_label("Wrap Words");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
   gtk_signal_connect (GTK_OBJECT(check), "toggled",
 		      GTK_SIGNAL_FUNC(text_toggle_word_wrap), text);
-  gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), FALSE);
+  gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), FALSE);
   gtk_widget_show (check);
 
   separator = gtk_hseparator_new ();
@@ -159,7 +159,7 @@ int main (int argc, char *argv[])
   gtk_widget_show (separator);
 
   box2 = gtk_vbox_new (FALSE, 10);
-  gtk_container_border_width (GTK_CONTAINER (box2), 10);
+  gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
   gtk_widget_show (box2);
   
@@ -176,6 +176,6 @@ int main (int argc, char *argv[])
 
   gtk_main ();
   
-  return 0;       
+  return(0);       
 }
 /* example-end */

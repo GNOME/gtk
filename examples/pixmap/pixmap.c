@@ -54,7 +54,7 @@ int main( int argc, char *argv[] )
     window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     gtk_signal_connect( GTK_OBJECT (window), "delete_event",
                         GTK_SIGNAL_FUNC (close_application), NULL );
-    gtk_container_border_width( GTK_CONTAINER (window), 10 );
+    gtk_container_set_border_width( GTK_CONTAINER (window), 10 );
     gtk_widget_show( window );
 
     /* now for the pixmap from gdk */

@@ -1,19 +1,13 @@
 
 CC = gcc
 
-all: menu menufactory
+all: menu itemfactory
 
 menu: menu.c 
 	$(CC) `gtk-config --cflags` menu.c -o menu `gtk-config --libs`
 
-menufactory: menufactory.o mfmain.o
-	$(CC) `gtk-config --libs` menufactory.o mfmain.o -o menufactory
-
-menufactory.o: menufactory.c mfmain.h
-	$(CC) `gtk-config --cflags` -c menufactory.c -o menufactory.o
-
-mfmain.o: mfmain.c mfmain.h menufactory.h
-	$(CC) `gtk-config --cflags` -c mfmain.c -o mfmain.o
+itemfactory: itemfactory.c
+	$(CC) `gtk-config --cflags` itemfactory.c -o itemfactory `gtk-config --libs`
 
 clean: 
-	rm -f *.o menu menufactory
+	rm -f *.o menu itemfactory

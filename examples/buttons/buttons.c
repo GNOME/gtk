@@ -18,7 +18,7 @@ GtkWidget *xpm_label_box( GtkWidget *parent,
 
     /* Create box for xpm and label */
     box1 = gtk_hbox_new (FALSE, 0);
-    gtk_container_border_width (GTK_CONTAINER (box1), 2);
+    gtk_container_set_border_width (GTK_CONTAINER (box1), 2);
 
     /* Get the style of the button to get the
      * background color. */
@@ -77,7 +77,7 @@ int main( int   argc,
 
 
     /* Sets the border width of the window. */
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_realize(window);
 
     /* Create a new button */

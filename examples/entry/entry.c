@@ -64,14 +64,14 @@ int main (int argc, char *argv[])
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
     gtk_signal_connect (GTK_OBJECT(check), "toggled",
 			GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
-    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
     gtk_widget_show (check);
     
     check = gtk_check_button_new_with_label("Visible");
     gtk_box_pack_start (GTK_BOX (hbox), check, TRUE, TRUE, 0);
     gtk_signal_connect (GTK_OBJECT(check), "toggled",
 			GTK_SIGNAL_FUNC(entry_toggle_visibility), entry);
-    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
     gtk_widget_show (check);
                                    
     button = gtk_button_new_with_label ("Close");

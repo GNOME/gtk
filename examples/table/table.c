@@ -39,7 +39,7 @@ int main( int   argc,
                         GTK_SIGNAL_FUNC (delete_event), NULL);
 
     /* Sets the border width of the window. */
-    gtk_container_border_width (GTK_CONTAINER (window), 20);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 20);
 
     /* Create a 2x2 table */
     table = gtk_table_new (2, 2, TRUE);

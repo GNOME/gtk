@@ -61,7 +61,7 @@ gint main (int    argc,
     /* Inside the window we need a box to arrange the widgets
      * vertically */
     vbox=gtk_vbox_new(FALSE, 5);
-    gtk_container_border_width(GTK_CONTAINER(vbox), 5);
+    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
@@ -88,7 +88,7 @@ gint main (int    argc,
     /* We create a "Prison" to put a list item in ;) */
     frame=gtk_frame_new("Prison");
     gtk_widget_set_usize(frame, 200, 50);
-    gtk_container_border_width(GTK_CONTAINER(frame), 5);
+    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
     gtk_frame_set_shadow_type(GTK_FRAME(frame), GTK_SHADOW_OUT);
     gtk_container_add(GTK_CONTAINER(vbox), frame);
     gtk_widget_show(frame);

@@ -26,13 +26,13 @@ int main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			(GtkSignalFunc) destroy, NULL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
-    gtk_container_border_width (GTK_CONTAINER (window), 0);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 0);
     gtk_widget_set_usize(window, 300, 300);
     
     /* create a new scrolled window. */
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     
-    gtk_container_border_width (GTK_CONTAINER (scrolled_window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (scrolled_window), 10);
     
     /* the policy is one of GTK_POLICY AUTOMATIC, or GTK_POLICY_ALWAYS.
      * GTK_POLICY_AUTOMATIC will automatically decide whether you need

@@ -115,7 +115,7 @@ tictactoe_clear (Tictactoe *ttt)
     for (j=0;j<3;j++)
       {
 	gtk_signal_handler_block_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
-	gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
 				     FALSE);
 	gtk_signal_handler_unblock_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
       }

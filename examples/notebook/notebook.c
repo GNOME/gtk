@@ -59,7 +59,7 @@ int main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete), NULL);
     
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
     table = gtk_table_new(3,6,FALSE);
     gtk_container_add (GTK_CONTAINER (window), table);
@@ -76,7 +76,7 @@ int main (int argc, char *argv[])
 	sprintf(bufferl, "Page %d", i+1);
 	
 	frame = gtk_frame_new (bufferf);
-	gtk_container_border_width (GTK_CONTAINER (frame), 10);
+	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 	gtk_widget_set_usize (frame, 100, 75);
 	gtk_widget_show (frame);
 	
@@ -102,7 +102,7 @@ int main (int argc, char *argv[])
 	sprintf(bufferl, "PPage %d", i+1);
 	
 	frame = gtk_frame_new (bufferf);
-	gtk_container_border_width (GTK_CONTAINER (frame), 10);
+	gtk_container_set_border_width (GTK_CONTAINER (frame), 10);
 	gtk_widget_set_usize (frame, 100, 75);
 	gtk_widget_show (frame);
 	
@@ -139,22 +139,22 @@ int main (int argc, char *argv[])
     gtk_widget_show(button);
     
     button = gtk_button_new_with_label ("tab position");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) rotate_book, GTK_OBJECT(notebook));
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        (GtkSignalFunc) rotate_book, GTK_OBJECT(notebook));
     gtk_table_attach_defaults(GTK_TABLE(table), button, 3,4,1,2);
     gtk_widget_show(button);
     
     button = gtk_button_new_with_label ("tabs/border on/off");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) tabsborder_book,
-			       GTK_OBJECT (notebook));
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        (GtkSignalFunc) tabsborder_book,
+                        GTK_OBJECT (notebook));
     gtk_table_attach_defaults(GTK_TABLE(table), button, 4,5,1,2);
     gtk_widget_show(button);
     
     button = gtk_button_new_with_label ("remove page");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-			       (GtkSignalFunc) remove_book,
-			       GTK_OBJECT(notebook));
+    gtk_signal_connect (GTK_OBJECT (button), "clicked",
+                        (GtkSignalFunc) remove_book,
+                        GTK_OBJECT(notebook));
     gtk_table_attach_defaults(GTK_TABLE(table), button, 5,6,1,2);
     gtk_widget_show(button);
     

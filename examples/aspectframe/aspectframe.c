@@ -14,7 +14,7 @@ main (int argc, char *argv[])
     gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
                         GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
    
     /* Create an aspect_frame and add it to our toplevel window */
    

@@ -22,7 +22,7 @@ int main( int argc, char *argv[] ) {
     window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
             GTK_SIGNAL_FUNC( close_application ), NULL);
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
     /* Create a table for placing the ruler and the drawing area */
     table = gtk_table_new( 3, 2, FALSE );

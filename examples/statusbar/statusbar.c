@@ -11,14 +11,14 @@ void push_item (GtkWidget *widget, gpointer data)
   char buff[20];
 
   g_snprintf(buff, 20, "Item %d", count++);
-  gtk_statusbar_push( GTK_STATUSBAR(status_bar), (guint) &data, buff);
+  gtk_statusbar_push( GTK_STATUSBAR(status_bar), GPOINTER_TO_INT(data), buff);
 
   return;
 }
 
 void pop_item (GtkWidget *widget, gpointer data)
 {
-  gtk_statusbar_pop( GTK_STATUSBAR(status_bar), (guint) &data );
+  gtk_statusbar_pop( GTK_STATUSBAR(status_bar), GPOINTER_TO_INT(data) );
   return;
 }
 
@@ -29,7 +29,7 @@ int main (int argc, char *argv[])
     GtkWidget *vbox;
     GtkWidget *button;
 
-    int context_id;
+    gint context_id;
 
     gtk_init (&argc, &argv);
 
@@ -52,13 +52,13 @@ int main (int argc, char *argv[])
 
     button = gtk_button_new_with_label("push item");
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
-        GTK_SIGNAL_FUNC (push_item), &context_id);
+        GTK_SIGNAL_FUNC (push_item), GINT_TO_POINTER(context_id) );
     gtk_box_pack_start(GTK_BOX(vbox), button, TRUE, TRUE, 2);
     gtk_widget_show(button);              
 
     button = gtk_button_new_with_label("pop last item");
     gtk_signal_connect(GTK_OBJECT(button), "clicked",
-        GTK_SIGNAL_FUNC (pop_item), &context_id);
+        GTK_SIGNAL_FUNC (pop_item), GINT_TO_POINTER(context_id) );
     gtk_box_pack_start(GTK_BOX(vbox), button, TRUE, TRUE, 2);
     gtk_widget_show(button);              
 

@@ -18,7 +18,7 @@ main (int argc, char *argv[])
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (gtk_exit), NULL);
     
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* Create an EventBox and add it to our toplevel window */
     
@@ -49,6 +49,6 @@ main (int argc, char *argv[])
     
     gtk_main ();
     
-    return 0;
+    return(0);
 }
 /* example-end */

@@ -71,7 +71,7 @@ int main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_signal_connect (GTK_OBJECT(window), "delete_event",
 		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
-  gtk_container_border_width (GTK_CONTAINER(window), 5);
+  gtk_container_set_border_width (GTK_CONTAINER(window), 5);
 
   /* A generic scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);

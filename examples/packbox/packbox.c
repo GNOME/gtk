@@ -96,7 +96,7 @@ int main( int   argc,
      * behavior */
     gtk_signal_connect (GTK_OBJECT (window), "delete_event",
 			GTK_SIGNAL_FUNC (delete_event), NULL);
-    gtk_container_border_width (GTK_CONTAINER (window), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* We create a vertical box (vbox) to pack the horizontal boxes into.
      * This allows us to stack the horizontal boxes filled with buttons one

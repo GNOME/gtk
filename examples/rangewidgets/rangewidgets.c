@@ -98,7 +98,7 @@ void create_range_controls( void )
     gtk_widget_show (box1);
 
     box2 = gtk_hbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
@@ -134,20 +134,20 @@ void create_range_controls( void )
     gtk_widget_show (scrollbar);
 
     box2 = gtk_hbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
     /* A checkbutton to control whether the value is displayed or not */
     button = gtk_check_button_new_with_label("Display value on scale widgets");
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     gtk_signal_connect (GTK_OBJECT (button), "toggled",
                         GTK_SIGNAL_FUNC(cb_draw_value), NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
   
     box2 = gtk_hbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
     /* An option menu to change the position of the value */
     label = gtk_label_new ("Scale Value Position:");
@@ -182,7 +182,7 @@ void create_range_controls( void )
     gtk_widget_show (box2);
 
     box2 = gtk_hbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
     /* Yet another option menu, this time for the update policy of the
      * scale widgets */
@@ -216,7 +216,7 @@ void create_range_controls( void )
     gtk_widget_show (box2);
 
     box2 = gtk_hbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   
     /* A GtkHScale widget for adjusting the number of digits on the
      * sample scales. */
@@ -236,7 +236,7 @@ void create_range_controls( void )
     gtk_widget_show (box2);
   
     box2 = gtk_hbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   
     /* And, one last GtkHScale widget for adjusting the page size of the
      * scrollbar. */
@@ -260,7 +260,7 @@ void create_range_controls( void )
     gtk_widget_show (separator);
 
     box2 = gtk_vbox_new (FALSE, 10);
-    gtk_container_border_width (GTK_CONTAINER (box2), 10);
+    gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
     gtk_widget_show (box2);
 
