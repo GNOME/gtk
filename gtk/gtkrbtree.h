@@ -171,10 +171,11 @@ void       _gtk_rbtree_prev_full        (GtkRBTree              *tree,
 gint       _gtk_rbtree_get_depth        (GtkRBTree              *tree);
 
 /* This func checks the integrity of the tree */
+#ifdef G_ENABLE_DEBUG  
 void       _gtk_rbtree_test             (const gchar            *where,
                                          GtkRBTree              *tree);
 void       _gtk_rbtree_debug_spew       (GtkRBTree              *tree);
-
+#endif
 
 #ifdef __cplusplus
 }
