@@ -256,8 +256,14 @@ gdk_pixmap_read_string (FILE  *infile,
     {
       if (cnt == (*buffer_size))
 	{
-	  (*buffer_size) *= 2;
- 	  (*buffer) = (gchar *) g_realloc ((*buffer), *buffer_size);	}
+	  guint new_size = (*buffer_size) * 2;
+	  if (new_size > (*buffer_size))
+	    *buffer_size = new_size;
+	  else
+	    return FALSE;
+	  
+ 	  (*buffer) = (gchar *) g_realloc ((*buffer), *buffer_size);	
+	}
 
       if (c != '"')
         (*buffer)[cnt++] = c;
@@ -399,6 +405,11 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
               gdk_pixmap_read_string (infile, &buffer, &buffer_size);
 
               sscanf (buffer,"%d %d %d %d", &width, &height, &num_cols, &cpp);
+	      if (cpp >= 32)
+		{
+		  g_warning ("Pixmap has more than 31 characters per color\n");
+		  return NULL;
+		}
 
               colors = g_new(_GdkPixmapColor, num_cols);
 
@@ -574,6 +585,11 @@ gdk_pixmap_colormap_create_from_xpm_d (GdkWindow  *window,
   i = 0;
   buffer = data[i++];
   sscanf (buffer,"%d %d %d %d", &width, &height, &num_cols, &cpp);
+  if (cpp >= 32)
+    {
+      g_warning ("Pixmap has more than 31 characters per color\n");
+      return NULL;
+    }
 
   colors = g_new(_GdkPixmapColor, num_cols);
 

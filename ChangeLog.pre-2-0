@@ -1,3 +1,50 @@
+Sun May  3 17:20:50 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* configure.in acheader.h gdk/gdkwindow.c 
+	Check for Shape extension both on the client and server
+	side. (And, more importantly, check for the shape extension
+	so we may include -lXext even when compiling with --disable-xshm)
+
+	* gdk/gdkwindow.c: Set ->colormap to NULL for root 
+	and foreign windows. Use this to check if we
+	need to get the colormap from X.
+
+Sun May  3 14:55:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* docs/gtkfaq.sgml (CPPFLAGS): Added a FAQ entry about
+	"glibconfig.h" and another about writing another IRC
+	client.
+
+Fri May  1 16:40:57 1998  Owen Taylor  <otaylor@gtk.org>
+	[ security-audit changes from Alan Cox ]
+	
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_create_from_xpmp[_d]):
+	  Fix a buffer overflow on pixmaps that claim to have
+	  more than 31 characters per pixel.
+
+	  (gdk_pixmap_read_string): Don't wrap around strings longer
+ 	  than half of address space ;-)
+
+	* gtk/gtk[vh]ruler.c gtk/gtkinputdialog.c: Expand some buffers
+	that were used for printing integers.
+
+	* gdk/gxid.c (handle_claim_device): Some extra checks.
+	It isn't safe against being fed bad X id's, but at
+	least it should be safe against deleting all your
+	files.
+
+Sat May  2 23:14:34 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkcurve.c (gtk_curve_graph_events): Ignore
+	Configure events that would result in a negative
+	size.
+
+Sat May  2 00:14:05 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkpreview.c (gtk_trim_cmap): Make sure the
+	parameters to log are doubles. Digital Unix apparently
+	is missing the argument in its prototype.
+
 Fri May  1 22:45:55 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_allocate):

@@ -128,7 +128,7 @@ gtk_input_dialog_get_device_info(guint32 deviceid)
 }
 
 guint
-gtk_input_dialog_get_type ()
+gtk_input_dialog_get_type (void)
 {
   static guint input_dialog_type = 0;
 
@@ -650,7 +650,7 @@ gtk_input_dialog_fill_keys(GtkInputDialog *inputd, GdkDeviceInfo *info)
   GtkWidget *label;
   GtkWidget *button;
 
-  char buffer[16];
+  char buffer[32];
   
   /* remove all the old items */
   if (inputd->keys_list)

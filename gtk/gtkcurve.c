@@ -294,6 +294,9 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
   width = w->allocation.width - RADIUS * 2;
   height = w->allocation.height - RADIUS * 2;
 
+  if ((width < 0) || (height < 0))
+    return FALSE;
+
   /*  get the pointer position  */
   gdk_window_get_pointer (w->window, &tx, &ty, NULL);
   x = CLAMP ((tx - RADIUS), 0, width-1);

@@ -1238,7 +1238,7 @@ gtk_trim_cmap (GtkPreviewClass *klass)
 	    nred = nred - 1;
 	  else
 	    {
-	      tmp = log (ngray) / log (2);
+	      tmp = log ((gdouble)ngray) / log (2.0);
 
 	      if (ngreen >= tmp)
 		ngreen = ngreen - 1;

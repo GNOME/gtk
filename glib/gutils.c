@@ -22,6 +22,7 @@
 #include <string.h>
 #include <locale.h>
 #include <ctype.h>		/* For tolower() */
+#include <unistd.h>
 #include "glib.h"
 
 
@@ -675,7 +676,14 @@ g_error (gchar *format, ...)
 {
   va_list args, args2;
   char *buf;
+  static gboolean errored = 0;
 
+  if (errored++)
+    {
+      write (2, "g_error: recursed!\n", 19);
+      return;
+    }
+  
   va_start (args, format);
   va_start (args2, format);
   buf = g_vsprintf (format, &args, &args2);
@@ -688,9 +696,10 @@ g_error (gchar *format, ...)
     }
   else
     {
-      fputs ("\n** ERROR **: ", stderr);
-      fputs (buf, stderr);
-      fputc ('\n', stderr);
+      /* Use write() here because we might be out of memory */
+      write (2, "\n** ERROR **: ", 14);
+      write (2, buf, strlen(buf));
+      write (2, "\n", 1);
     }
 
   abort ();
@@ -855,9 +864,14 @@ g_strcasecmp (const gchar *s1, const gchar *s2)
 
   while (*s1 && *s2)
     {
-      c1 = tolower((guchar)(*s1++)); c2 = tolower((guchar)(*s2++));
+      /* According to A. Cox, some platforms have islower's that
+       * don't work right on non-uppercase
+       */
+      c1 = isupper ((guchar)*s1) ? tolower ((guchar)*s1) : *s1;
+      c2 = isupper ((guchar)*s2) ? tolower ((guchar)*s2) : *s2;
       if (c1 != c2)
         return (c1 - c2);
+      s1++; s2++;
     }
 
   return (((gint)(guchar) *s1) - ((gint)(guchar) *s2));
