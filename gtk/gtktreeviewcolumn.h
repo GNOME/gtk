@@ -70,6 +70,10 @@ struct _GtkTreeViewColumn
   gint max_width;
   gint displayed_width;
 
+  /* dragging columns */
+  gint drag_x;
+  gint drag_y;
+
   GtkCellDataFunc func;
   gpointer func_data;
   GtkDestroyNotify destroy;
@@ -88,6 +92,8 @@ struct _GtkTreeViewColumn
   guint button_active : 1;
   guint dirty         : 1;
   guint show_sort_indicator : 1;
+  guint maybe_reordered     : 1;
+  guint reorderable   : 1;
 };
 
 struct _GtkTreeViewColumnClass

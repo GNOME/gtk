@@ -64,7 +64,6 @@ gtk_tree_model_get_type (void)
   return tree_model_type;
 }
 
-
 static void
 gtk_tree_model_base_init (gpointer g_class)
 {

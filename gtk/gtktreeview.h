@@ -79,6 +79,22 @@ struct _GtkTreeViewClass
   
 };
 
+
+typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView       *tree_view,
+						GtkTreeViewColumn *column,
+						GtkTreeViewColumn *prev_column,
+						GtkTreeViewColumn *next_column,
+						gpointer           data);
+typedef gboolean (* GtkTreeViewDraggableFunc)  (GtkTreeView       *tree_view,
+                                                GdkDragContext    *context,
+                                                GtkTreePath       *path,
+						gpointer           user_data);
+typedef void (* GtkTreeViewMappingFunc) (GtkTreeView *tree_view,
+					 GtkTreePath *path,
+					 gpointer     user_data);
+
+
+
 GtkType                gtk_tree_view_get_type                      (void);
 GtkWidget             *gtk_tree_view_new                           (void);
 GtkWidget             *gtk_tree_view_new_with_model                (GtkTreeModel       *model);
@@ -110,6 +126,10 @@ gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView 
 								    gchar              *title,
 								    GtkCellRenderer    *cell,
 								    ...);
+void                   gtk_tree_view_move_column                   (GtkTreeView        *tree_view,
+								    GtkTreeViewColumn  *column,
+								    GtkTreeViewColumn  *base_column,
+								    gint                side);
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView        *tree_view,
 								    gint                n);
 void                   gtk_tree_view_set_expander_column           (GtkTreeView        *tree_view,
@@ -152,6 +172,9 @@ gboolean               gtk_tree_view_collapse_row                  (GtkTreeView 
 void                   gtk_tree_view_row_activated                 (GtkTreeView        *tree_view,
 								    GtkTreePath        *path,
 								    GtkTreeViewColumn  *column);
+void                   gtk_tree_view_map_open_rows                 (GtkTreeView        *tree_view,
+								    GtkTreeViewMappingFunc func,
+								    gpointer            data);
 
 void gtk_tree_view_get_visible_rect      (GtkTreeView  *tree_view,
                                           GdkRectangle *visible_rect);
@@ -172,12 +195,6 @@ gboolean gtk_tree_view_get_rules_hint     (GtkTreeView  *tree_view);
 
 
 /* Drag-and-Drop support */
-
-typedef gboolean (* GtkTreeViewDraggableFunc) (GtkTreeView    *tree_view,
-                                               GdkDragContext *context,
-                                               GtkTreePath    *path,
-                                               gpointer        user_data);
-
 /* this func can change "pos" if it likes, in addition to returning
  * true/false for whether a drop is possible
  */

@@ -741,6 +741,7 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
 	  break;
 	}
 
+      /* FIXME: instead of calling this n times, refactor with above */
       gtk_tree_store_set_value (tree_store,
 				iter,
 				column,

@@ -10285,7 +10285,7 @@ create_main_window (void)
   gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
   gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
 
-  button = gtk_button_new_with_label ("close");
+  button = gtk_button_new_with_mnemonic ("_Close");
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (do_exit),
 		      window);

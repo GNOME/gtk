@@ -723,6 +723,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 	  break;
 	}
 
+      /* FIXME: instead of calling this n times, refactor with above */
       gtk_list_store_set_value (list_store,
 				iter,
 				column,

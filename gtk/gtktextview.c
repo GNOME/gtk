@@ -516,7 +516,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                            GTK_ARG_READWRITE, ARG_RIGHT_MARGIN);
   gtk_object_add_arg_type ("GtkTextView::indent", GTK_TYPE_INT,
                            GTK_ARG_READWRITE, ARG_INDENT);
-  gtk_object_add_arg_type ("GtkTextView::tabs", GTK_TYPE_POINTER, /* FIXME */
+  gtk_object_add_arg_type ("GtkTextView::tabs", GTK_TYPE_PANGO_TAB_ARRAY,
                            GTK_ARG_READWRITE, ARG_TABS);
 
   /*

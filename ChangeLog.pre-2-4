@@ -1,3 +1,19 @@
+Sun Apr  8 05:36:06 2001  Jonathan Blandford  <jrb@webwynk.net>
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): fix a fixme.
+
+	* gtk/gtkcellrendertoggle.c: change GTK_TYPE_POINTER to
+	GTK_TYPE_STRING.
+
+	* gtk/gtktreeview.c: New functions to allow initial column
+	dragging work.
+
+	* gtk/gtktreeviewcolumn.c: Initial column dragging support.
+
+	* tests/testtreefocus.c: give dave some love.
+
+	* tests/testtreesort.c: Modify test to check really long samples.
+
 2001-04-11  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk-2.0.m4: Pass pkg-config options

@@ -12,7 +12,7 @@ struct _ListSort
 
 static ListSort data[] =
 {
-  { "Apples", "Transmorgrify", "Exculpatory", "Gesundheit"},
+  { "Apples", "Transmorgrify long word to demonstrate weirdness", "Exculpatory", "Gesundheit"},
   { "Oranges", "Wicker", "Adamantine", "Convivial" },
   { "Bovine Spongiform Encephilopathy", "Sleazebucket", "Mountaineer", "Pander" },
   { "Foot and Mouth", "Lampshade", "Skim Milk\nFull Milk", "Viewless" },
@@ -48,11 +48,12 @@ main (int argc, char *argv[])
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
-  gint i;
+  gint i, j;
 
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Words, words, words");
   gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
@@ -65,20 +66,22 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), scrolled_window, TRUE, TRUE, 0);
 
   model = gtk_list_store_new_with_types (NUM_COLUMNS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-					0, GTK_TREE_SORT_ASCENDING);
-  for (i = 0; data[i].word_1 != NULL; i++)
-    {
-      gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-      gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-			  WORD_COLUMN_1, data[i].word_1,
-			  WORD_COLUMN_2, data[i].word_2,
-			  WORD_COLUMN_3, data[i].word_3,
-			  WORD_COLUMN_4, data[i].word_4,
-			  -1);
-    }
-
+  //  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model), 0, GTK_TREE_SORT_ASCENDING);
+  g_print ("start model\n");
   tree_view = gtk_tree_view_new_with_model (model);
+  for (j = 0; j < 2; j++)
+    for (i = 0; data[i].word_1 != NULL; i++)
+      {
+	gtk_list_store_prepend (GTK_LIST_STORE (model), &iter);
+	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+			    WORD_COLUMN_1, data[i].word_1,
+			    WORD_COLUMN_2, data[i].word_2,
+			    WORD_COLUMN_3, data[i].word_3,
+			    WORD_COLUMN_4, data[i].word_4,
+			    -1);
+      }
+  g_print ("done with model\n");
+
   g_object_unref (G_OBJECT (model));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
 
@@ -105,7 +108,7 @@ main (int argc, char *argv[])
   column = gtk_tree_view_column_new_with_attributes ("Third Word", renderer,
 						     "text", WORD_COLUMN_3,
 						     NULL);
-  gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_1);
+  gtk_tree_view_column_set_sort_column_id (column, WORD_COLUMN_3);
   gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
   g_object_unref (column);
   g_object_unref (renderer);

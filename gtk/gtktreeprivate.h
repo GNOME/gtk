@@ -87,6 +87,8 @@ struct _GtkTreeViewPrivate
 
   GdkWindow *bin_window;
   GdkWindow *header_window;
+  GdkWindow *drag_window;
+  GtkTreeViewColumn *drag_column;
 
   gint expander_column;
 
@@ -116,6 +118,8 @@ struct _GtkTreeViewPrivate
   gint n_columns;
   GList *columns;
   gint header_height;
+  GtkTreeViewColumnDropFunc *column_drop_func;
+  GList *column_drag_info;
 
   /* Scroll timeout (e.g. during dnd) */
   guint scroll_timeout;
@@ -232,7 +236,8 @@ void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 					     GtkTreeView       *tree_view);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
-
+void _gtk_tree_view_column_start_drag       (GtkTreeView       *tree_view,
+					     GtkTreeViewColumn *column);
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

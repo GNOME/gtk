@@ -28,6 +28,7 @@
 #include "gtkarrow.h"
 #include "gtkintl.h"
 #include <string.h>
+
 enum
 {
   PROP_0,
@@ -259,6 +260,8 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->sort_clicked_signal = 0;
   tree_column->sort_column_changed_signal = 0;
   tree_column->sort_column_id = -1;
+  tree_column->reorderable = 1;
+  tree_column->maybe_reordered = 0;
 }
 
 static void
@@ -470,6 +473,57 @@ gtk_tree_view_column_button_clicked (GtkWidget *widget, gpointer data)
   g_signal_emit_by_name (G_OBJECT (data), "clicked");
 }
 
+static void
+gtk_tree_view_column_button_released (GtkWidget *widget, gpointer data)
+{
+  GtkTreeViewColumn *column = (GtkTreeViewColumn *) data;
+
+  gtk_widget_show (widget);
+  column->maybe_reordered = FALSE;
+}
+static gint
+gtk_tree_view_column_button_motion_event (GtkWidget      *widget,
+					  GdkEventMotion *event,
+					  gpointer        data)
+{
+  GtkTreeViewColumn *column = (GtkTreeViewColumn *) data;
+
+  if ((column->maybe_reordered) &&
+      (gtk_drag_check_threshold (widget,
+				 column->drag_x,
+				 column->drag_y,
+				 (gint) event->x,
+				 (gint) event->y)))
+    {
+      column->maybe_reordered = FALSE;
+      _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view),
+					column);
+    }
+
+  return TRUE;
+}
+
+static void
+gtk_tree_view_column_button_realize (GtkWidget *widget, gpointer data)
+{
+  gdk_window_set_events (widget->window, gdk_window_get_events (widget->window) | GDK_POINTER_MOTION_MASK);
+}
+
+static void
+gtk_tree_view_column_button_pressed (GtkWidget *widget, gpointer data)
+{
+  GtkTreeViewColumn *column = (GtkTreeViewColumn *) data;
+
+  if (! column->reorderable)
+    return;
+
+  column->maybe_reordered = TRUE;
+  gdk_window_get_pointer (widget->window,
+			  &column->drag_x,
+			  &column->drag_y,
+			  NULL);
+}
+
 void
 _gtk_tree_view_column_create_button (GtkTreeViewColumn *column)
 {
@@ -490,8 +544,20 @@ _gtk_tree_view_column_create_button (GtkTreeViewColumn *column)
   /* make sure we own a reference to it as well. */
   gtk_widget_set_parent (column->button, GTK_WIDGET (tree_view));
   
+  gtk_signal_connect (GTK_OBJECT (column->button), "realize",
+		      (GtkSignalFunc) gtk_tree_view_column_button_realize,
+		      NULL);
   gtk_signal_connect (GTK_OBJECT (column->button), "clicked",
 		      (GtkSignalFunc) gtk_tree_view_column_button_clicked,
+		      (gpointer) column);
+  gtk_signal_connect (GTK_OBJECT (column->button), "pressed",
+		      (GtkSignalFunc) gtk_tree_view_column_button_pressed,
+		      (gpointer) column);
+  gtk_signal_connect (GTK_OBJECT (column->button), "motion_notify_event",
+		      (GtkSignalFunc) gtk_tree_view_column_button_motion_event,
+		      (gpointer) column);
+  gtk_signal_connect (GTK_OBJECT (column->button), "released",
+		      (GtkSignalFunc) gtk_tree_view_column_button_released,
 		      (gpointer) column);
 
   column->alignment = gtk_alignment_new (column->xalign, 0.5, 0.0, 0.0);
@@ -1608,6 +1674,7 @@ sort_clicked_func (GtkTreeViewColumn *tree_column,
 
       list = list->next;
     }
+
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
 					tree_column->sort_column_id,
 					tree_column->sort_order);
