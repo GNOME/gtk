@@ -96,7 +96,8 @@ programming.  </para></listitem>
 <varlistentry>
 <term><ulink url="mailto:gtk-devel-list@gnome.org">gtk-devel-list@gnome.org</ulink></term>
 <listitem><para>
-gtk-devel-list is for discussion of work on GTK+ itself, it is NOT for
+gtk-devel-list is for discussion of work on GTK+ itself, it is 
+<emphasis>not</emphasis> for
 asking questions about how to use GTK+ in applications. gtk-devel-list 
 is appropriate for discussion of patches, bugs, proposed features, 
 and so on.
