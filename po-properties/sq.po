@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-27 16:36-0400\n"
-"PO-Revision-Date: 2004-10-22 10:22+0200\n"
+"POT-Creation-Date: 2004-11-01 05:17+0100\n"
+"PO-Revision-Date: 2004-11-01 10:50+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bit"
 
 #: gdk-pixbuf/gdk-pixbuf.c:102
 msgid "Number of Channels"
@@ -194,13 +194,12 @@ msgstr ""
 "vendoset gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:280
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "Emri i ikonës"
+msgstr "Emri i ikonës së stemës"
 
 #: gtk/gtkaboutdialog.c:281
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "Një ikonë me emër për tu përdorur si stemë e dritares së dialogut të informacioneve."
 
 #: gtk/gtkaboutdialog.c:288
 msgid "Link Color"
@@ -954,30 +953,29 @@ msgstr "Rregullimi i sfondit të kutisë"
 msgid "Whether this tag affects the cell background color"
 msgstr "Nëse ky tag ndikon apo jo tek ngjyrat e sfondit të kutive"
 
-#: gtk/gtkcellrenderercombo.c:89
+#: gtk/gtkcellrenderercombo.c:88
 msgid "Model"
 msgstr "Modeli"
 
-#: gtk/gtkcellrenderercombo.c:90
+#: gtk/gtkcellrenderercombo.c:89
 msgid "The model containing the possible values for the combo box"
 msgstr "Modeli që përmban vlerat e mundëshme të kutisë së kombinuar"
 
-#: gtk/gtkcellrenderercombo.c:108 gtk/gtkcomboboxentry.c:114
+#: gtk/gtkcellrenderercombo.c:106 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
 msgstr "Kollona teksti"
 
-#: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:115
+#: gtk/gtkcellrenderercombo.c:107 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolona tek modeli i buruesit të të dhënave nga do të merren vlerat"
 
-#: gtk/gtkcellrenderercombo.c:127
+#: gtk/gtkcellrenderercombo.c:124
 msgid "Has Entry"
 msgstr "Ka zë"
 
-#: gtk/gtkcellrenderercombo.c:128
-#, c-format
-msgid "If %FALSE, don't allow to enter strings other than the chosen ones"
-msgstr "Nëse %FALSE, nuk lejon shtimin e vlera me përjashtim të së zgjedhurës"
+#: gtk/gtkcellrenderercombo.c:125
+msgid "If FALSE, don't allow to enter strings other than the chosen ones"
+msgstr "Nëse FALSE, nuk lejon shtimin e vlera me përjashtim të së zgjedhurës"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1032,7 +1030,7 @@ msgid "Value of the progress bar"
 msgstr "Vlera e shtyllës së përparimit"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:204
-#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:219
+#: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
 msgid "Text"
 msgstr "Teksti"
 
@@ -1212,7 +1210,7 @@ msgstr ""
 "ndihmëz kur shfaq tekstin. Nëse nuk e kuptoni këtë parametër, ka mundësi të "
 "mos keni nevojë për të"
 
-#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413
+#: gtk/gtkcellrenderertext.c:407 gtk/gtklabel.c:413 gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr "Sfazimi"
 
@@ -1805,44 +1803,44 @@ msgstr "Zgjidh në fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Nëse të zgjidhen përmbajtjet e një zëri kur ky fokusohet"
 
-#: gtk/gtkentrycompletion.c:273
+#: gtk/gtkentrycompletion.c:272
 msgid "Completion Model"
 msgstr "Modeli i plotësimit"
 
-#: gtk/gtkentrycompletion.c:274
+#: gtk/gtkentrycompletion.c:273
 msgid "The model to find matches in"
 msgstr "Modeli për gjetje përputhjesh në"
 
-#: gtk/gtkentrycompletion.c:280
+#: gtk/gtkentrycompletion.c:279
 msgid "Minimum Key Length"
 msgstr "Gjatësia më e Vogël e Kyçit"
 
-#: gtk/gtkentrycompletion.c:281
+#: gtk/gtkentrycompletion.c:280
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 "Gjatësia më e vogël e kyçit të kërkimit që të mund të kërkohen përputhje"
 
-#: gtk/gtkentrycompletion.c:296 gtk/gtkiconview.c:361
+#: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:361
 msgid "Text column"
 msgstr "Kollona tekstit"
 
-#: gtk/gtkentrycompletion.c:297
+#: gtk/gtkentrycompletion.c:296
 msgid "The column of the model containing the strings."
 msgstr "Kollona e modelit që përmban vlerat."
 
-#: gtk/gtkentrycompletion.c:315
+#: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
 msgstr "Plotësimi direkt"
 
-#: gtk/gtkentrycompletion.c:316
+#: gtk/gtkentrycompletion.c:314
 msgid "Whether the common prefix should be inserted automatically"
 msgstr "Nëse prefiksi i zakonshëm duhet shtuar automatikisht"
 
-#: gtk/gtkentrycompletion.c:330
+#: gtk/gtkentrycompletion.c:328
 msgid "Popup completion"
 msgstr "Plotësimi popup"
 
-#: gtk/gtkentrycompletion.c:331
+#: gtk/gtkentrycompletion.c:329
 msgid "Whether the completions should be shown in a popup window"
 msgstr "Nëse plotësimet duhen shfaqur tek një dritare popup"
 
@@ -2017,13 +2015,12 @@ msgid "Whether the browse dialog is visible or not."
 msgstr "Nëse dritarja e dialogut të shfletimit duhet të jetë e dukshme apo jo."
 
 #: gtk/gtkfilechooserbutton.c:262
-#, fuzzy
 msgid "Width In Characters"
-msgstr "Gjerësia në karaktere"
+msgstr "Gjerësia llogaritur në gërma"
 
 #: gtk/gtkfilechooserbutton.c:263
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Gjerësia e dëshiruar e pulsantit, në gërma."
 
 #: gtk/gtkfilechooserdefault.c:589
 msgid "Default file chooser backend"
@@ -2248,7 +2245,7 @@ msgstr "Modeli i paraqitjes së ikonës"
 msgid "The model for the icon view"
 msgstr "Modeli për paraqitjen me ikona"
 
-#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:151 gtk/gtktoolbar.c:507
+#: gtk/gtkiconview.c:397 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientimi"
 
@@ -2327,21 +2324,18 @@ msgid "Icon size"
 msgstr "Madhësia e ikonës"
 
 #: gtk/gtkimage.c:216
-#, fuzzy
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
-"Madhësia që duhet përdorur për ikonat në stok apo për bashkësinë e ikonave"
+"Madhësi simbolike  që duhet përdorur për ikonat e stock apo për ikonat me emër"
 
 #: gtk/gtkimage.c:232
-#, fuzzy
 msgid "Pixel size"
-msgstr "Pixels"
+msgstr "Madhësia e pixel"
 
 #: gtk/gtkimage.c:233
-#, fuzzy
 msgid "Pixel size to use for named icon"
 msgstr ""
-"Madhësia që duhet përdorur për ikonat në stok apo për bashkësinë e ikonave"
+"Madhësia e pixel që duhet përdorur për ikonat me emër"
 
 #: gtk/gtkimage.c:241
 msgid "Animation"
@@ -2356,9 +2350,8 @@ msgid "Icon Name"
 msgstr "Emri i ikonës"
 
 #: gtk/gtkimage.c:258
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "Emri i gërmave të zgjedhura"
+msgstr "Emri i ikonës nga tema e ikonës"
 
 #: gtk/gtkimage.c:265
 msgid "Storage type"
@@ -2468,13 +2461,12 @@ msgstr ""
 "mjaftueshme për të shfaqur tekstin e plotë"
 
 #: gtk/gtklabel.c:431
-#, fuzzy
 msgid "Width In Chararacters"
-msgstr "Gjerësia në karaktere"
+msgstr "Gjerësia në gërma"
 
 #: gtk/gtklabel.c:432
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "Gjerësia e dëshiruar e etiketës, në gërma"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2982,40 +2974,40 @@ msgstr ""
 "Një numër nga 0.0 në 1.0 që përcakton drejtimin vertikal të tekstit në "
 "\"widget\"-in në rrugë e sipër"
 
-#: gtk/gtkprogressbar.c:143 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
+#: gtk/gtkprogressbar.c:144 gtk/gtkrange.c:334 gtk/gtkspinbutton.c:242
 msgid "Adjustment"
 msgstr "Përshtatja"
 
-#: gtk/gtkprogressbar.c:144
+#: gtk/gtkprogressbar.c:145
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 "Widget GtkAdjustment i lidhur me shtyllën e progresit (nuk përdoret më)"
 
-#: gtk/gtkprogressbar.c:152
+#: gtk/gtkprogressbar.c:153
 msgid "Orientation and growth direction of the progress bar"
 msgstr "Orientimi dhe drejtimi në rritje në shtyllën e përparimit"
 
-#: gtk/gtkprogressbar.c:160
+#: gtk/gtkprogressbar.c:161
 msgid "Bar style"
 msgstr "Stili i kollonës"
 
-#: gtk/gtkprogressbar.c:161
+#: gtk/gtkprogressbar.c:162
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
 msgstr "Përcakton stilin pamor të kollonës në mënyrën përqindje (E papëlqyer)"
 
-#: gtk/gtkprogressbar.c:169
+#: gtk/gtkprogressbar.c:170
 msgid "Activity Step"
 msgstr "Hap Veprimi"
 
-#: gtk/gtkprogressbar.c:170
+#: gtk/gtkprogressbar.c:171
 msgid "The increment used for each iteration in activity mode (Deprecated)"
 msgstr "Rritja e përdorur për çdo ripërsëritje në mënyrën veprim (E papëlqyer)"
 
-#: gtk/gtkprogressbar.c:179
+#: gtk/gtkprogressbar.c:180
 msgid "Activity Blocks"
 msgstr "Blloqe Veprimi"
 
-#: gtk/gtkprogressbar.c:180
+#: gtk/gtkprogressbar.c:181
 msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
@@ -3023,11 +3015,11 @@ msgstr ""
 "Numër blloqesh që mund të hyjnë në zonën e kollonës së përparimit në mënyrën "
 "veprim (E papëlqyer)"
 
-#: gtk/gtkprogressbar.c:189
+#: gtk/gtkprogressbar.c:190
 msgid "Discrete Blocks"
 msgstr "Blloqe të Dallueshëm"
 
-#: gtk/gtkprogressbar.c:190
+#: gtk/gtkprogressbar.c:191
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
@@ -3035,27 +3027,35 @@ msgstr ""
 "Numri i blloqeve të dallueshëm në një shtyllë përparimi (kur tregohen në "
 "stil dallueshëm)"
 
-#: gtk/gtkprogressbar.c:199
+#: gtk/gtkprogressbar.c:200
 msgid "Fraction"
 msgstr "Fraksioni"
 
-#: gtk/gtkprogressbar.c:200
+#: gtk/gtkprogressbar.c:201
 msgid "The fraction of total work that has been completed"
 msgstr "Pjesa e punës së plotë që është përmbushur"
 
-#: gtk/gtkprogressbar.c:209
+#: gtk/gtkprogressbar.c:210
 msgid "Pulse Step"
 msgstr "Hap Pulsimi"
 
-#: gtk/gtkprogressbar.c:210
+#: gtk/gtkprogressbar.c:211
 msgid "The fraction of total progress to move the bouncing block when pulsed"
 msgstr ""
 "Pjesë e përparimit të plotë me të cilën të zhvendosen blloqet kërcyes kur "
 "pulsojnë"
 
-#: gtk/gtkprogressbar.c:220
+#: gtk/gtkprogressbar.c:221
 msgid "Text to be displayed in the progress bar"
 msgstr "Tekst për t'u shfaqur në shtyllën e përparimit"
+
+#: gtk/gtkprogressbar.c:243
+msgid ""
+"The preferred place to ellipsize the string, if the progressbar does not "
+"have enough room to display the entire string, if at all"
+msgstr ""
+"Vendi i preferuar ku do të sfazohet teksti, nëse shtylla e progresit nuk ka hapësirë të "
+"mjaftueshme për të shfaqur tekstin e plotë"
 
 #: gtk/gtkradioaction.c:139
 msgid "The value"
@@ -3478,12 +3478,11 @@ msgstr ""
 
 #: gtk/gtksettings.c:432
 msgid "Alternative button order"
-msgstr ""
+msgstr "Rreshtimi i pulsantëve alternativë"
 
 #: gtk/gtksettings.c:433
-#, fuzzy
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr "Nëse duhen apo jo treguar ikonat rezervë në butonë"
+msgstr "Nëse pulsantët në dialogë duhet të përdorin pulsantin e rreshtimit alternativ"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -4921,3 +4920,4 @@ msgstr "Gjendja e stilit IM"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
+
