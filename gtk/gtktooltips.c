@@ -537,7 +537,7 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
   gtk_tooltips_destroy_data (tooltipsdata);
 }
 
-void
+gboolean
 _gtk_tooltips_show_tip (GtkWidget *widget)
 {
   /* Showing the tip from the keyboard */
@@ -551,10 +551,11 @@ _gtk_tooltips_show_tip (GtkWidget *widget)
   tooltipsdata = gtk_tooltips_data_get (widget);
 
   if (tooltipsdata == NULL)
-    return;
+    return FALSE;
 
   gtk_tooltips_set_active_widget (tooltipsdata->tooltips,
                                   widget);
 
   gtk_tooltips_timeout (tooltipsdata->tooltips);
+  return TRUE;
 }

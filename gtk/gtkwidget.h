@@ -394,7 +394,7 @@ struct _GtkWidgetClass
    * sense, should cycle through them showing each tip alongside
    * whatever piece of the widget it applies to.
    */
-  void (* show_help)               (GtkWidget          *widget,
+  gboolean (* show_help)           (GtkWidget          *widget,
                                     GtkWidgetHelpType   help_type);
   
   /* accessibility support 

@@ -1,6 +1,17 @@
 2002-02-07 Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkwidget.[ch]:
+	Change show_help signal to return gboolean instead of void. This
+	allows the keypress which invokes the signal to be propagated to the
+	focus widgets ancestors if not handled by the focus widget.
+	
+	* gtk/gtktoolips.[ch]
+	Change _gtk_tooltips_show_tip () to return a gboolean indicating
+	whether widget has tooltip to display.
+	
+2002-02-07 Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkwidget.[ch]:
 	Change popup_menu signal to return gboolean instead of void. This
 	allows the keypress which invokes the signal to be propagated to the
 	focus widgets ancestors if not handled by the focus widget.

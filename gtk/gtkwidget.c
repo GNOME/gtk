@@ -179,7 +179,7 @@ static void	gtk_widget_direction_changed	 (GtkWidget	    *widget,
 						  GtkTextDirection   previous_direction);
 
 static void	gtk_widget_real_grab_focus	 (GtkWidget         *focus_widget);
-static void     gtk_widget_real_show_help        (GtkWidget         *widget,
+static gboolean gtk_widget_real_show_help        (GtkWidget         *widget,
                                                   GtkWidgetHelpType  help_type);
 
 static void	gtk_widget_dispatch_child_properties_changed	(GtkWidget        *object,
@@ -1010,12 +1010,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
   widget_signals[SHOW_HELP] =
-    gtk_signal_new ("show_help",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show_help),
-                    _gtk_marshal_NONE__ENUM,
-		    GTK_TYPE_NONE, 1, GTK_TYPE_WIDGET_HELP_TYPE);
+    g_signal_new ("show_help",
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  GTK_SIGNAL_OFFSET (GtkWidgetClass, show_help),
+		  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__ENUM,
+		  G_TYPE_BOOLEAN, 1, GTK_TYPE_WIDGET_HELP_TYPE);
   widget_signals[ACCEL_CLOSURES_CHANGED] =
     gtk_signal_new ("accel_closures_changed",
 		    0,
@@ -3394,12 +3395,14 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
     }
 }
 
-static void
+static gboolean
 gtk_widget_real_show_help (GtkWidget        *widget,
                            GtkWidgetHelpType help_type)
 {
   if (help_type == GTK_WIDGET_HELP_TOOLTIP)
-    _gtk_tooltips_show_tip (widget);
+     return _gtk_tooltips_show_tip (widget);
+  else
+     return FALSE;
 }
 
 static gboolean
