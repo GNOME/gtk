@@ -1,3 +1,7 @@
+2005-04-05  Matthias Clasen  <mclasen@redhat.com>
+
+	* NEWS: Updates
+
 2005-04-05  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkvisual-win32.c (_gdk_visual_init): Handle 16 colour
