@@ -210,6 +210,54 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
 }
     </programlisting>
   </section>
+
+  <section id="checklist-modifiers">
+    <title>Test for modifier keys correctly</title>
+
+    <formalpara>
+      <title>Why</title>
+      <para>
+	With <constant>GDK_MODIFIER_MASK</constant> you can test for
+	modifier keys reliably; this way your key event handlers will
+	work correctly even if <keycap>NumLock</keycap> or
+	<keycap>CapsLock</keycap> are activated.
+      </para>
+    </formalpara>
+
+    <para>
+      In a <structname>GdkEventKey</structname>, the
+      <structfield>state</structfield> field is a bit mask which
+      indicates the modifier state at the time the key was pressed.
+      Modifiers are keys like <keycap>Control</keycap>, and
+      <keycap>NumLock</keycap>.  When implementing a <link
+      linkend="GtkWidget-key-press-event">GtkWidget::key_press_event</link>
+      handler, you should use the
+      <constant>GDK_MODIFIER_MASK</constant> constant to test against
+      modifier keys.  This value encompasses all the modifiers which
+      the user may be actively pressing, such as
+      <keycap>Control</keycap> and <keycap>Shift</keycap>, but ignores
+      "inocuous" modifiers such as <keycap>NumLock</keycap> and
+      <keycap>CapsLock</keycap>.  The following example tests for
+      <keycombo>
+      <keycap>Control</keycap><keycap>F10</keycap></keycombo> being
+      pressed.
+    </para>
+
+    <programlisting id="GDK_MODIFIER_MASK">
+static gboolean
+my_widget_key_press_handler (GtkWidget *widget, GdkEventKey *event)
+{
+  if (event-&gt;keysym == GDK_F10
+      &amp;&amp; (event-&gt;state &amp; GDK_MODIFIER_MASK) == GDK_CONTROL_MASK)
+    {
+      g_print ("Control-F10 was pressed\n");
+      return TRUE;
+    }
+
+  return FALSE;
+}
+    </programlisting>
+  </section>
 </chapter>
 
 <!--

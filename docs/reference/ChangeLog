@@ -3,6 +3,8 @@
 	* gdk/tmpl/windows.sgml: Added an example of how to use
 	GDK_MODIFIER_MASK to test for modifier keys correctly.
 
+	* gtk/migrating-checklist.sgml: Likewise.
+
 Sun Feb 15 23:51:08 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcomboboxentry.sgml: 
