@@ -1,3 +1,8 @@
+Mon Mar  2 19:57:27 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdkproperty.c (gdk_atom_name): Initialize gdk_error_code to
+	zero before calling the X routine.
+
 Tue Mar  3 01:22:25 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkspinbutton.c: applied patch from lars and steffan to proper
@@ -28,6 +33,7 @@ Mon Mar  2 17:48:38 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/testgtk.c: GList where there should have been GSList
 
+>>>>>>> 1.174
 Mon Mar  2 12:26:59 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkentry.c: Changed 'entry != NULL' to 'editable != NULL'

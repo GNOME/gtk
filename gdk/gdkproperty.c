@@ -39,6 +39,7 @@ gdk_atom_name (GdkAtom atom)
      we take precautions */
 
   gdk_error_warnings = 0;
+  gdk_error_code = 0;
   t = XGetAtomName (gdk_display, atom);
   gdk_error_warnings = 1;
 
