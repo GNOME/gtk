@@ -296,8 +296,11 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   GTK_PRIVATE_UNSET_FLAG (plug, GTK_IN_REPARENT);
   
   socket->plug_widget = NULL;
-  g_object_unref (socket->plug_window);
-  socket->plug_window = NULL;
+  if (socket->plug_window != NULL)
+    {
+      g_object_unref (socket->plug_window);
+      socket->plug_window = NULL;
+    }
   
   socket->same_app = FALSE;
 

@@ -1,3 +1,8 @@
+Thu Feb 19 00:32:21 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkplug.c (_gtk_plug_remove_from_socket): Avoid errors when
+	removing the plug from the socket.  (#128546, Christopher Blizzard)
+
 Thu Feb 19 00:09:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkradiomenuitem.h:
