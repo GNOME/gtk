@@ -1,14 +1,9 @@
 style "wimp-default"
 {
   GtkWidget::interior_focus = 1
-  GtkButton::default_border = { 1, 1, 1, 1 }
-  GtkButton::default_outside_border = { 0, 0, 0, 0 }
   GtkOptionMenu::indicator_size = { 9, 5 }
   GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
   GtkSpinButton::shadow-type = in
-
-  GtkButton::child_displacement_x = 1
-  GtkButton::child_displacement_y = 1
 
   GtkTreeView::allow-rules = 0
 
@@ -28,4 +23,3 @@ style "wimp-scrollbar"
 }
 
 class "GtkScrollbar" style "wimp-scrollbar"
-

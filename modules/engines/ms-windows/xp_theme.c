@@ -29,7 +29,6 @@
 
 #include <stdio.h>
 
-
 static LPCWSTR class_descriptors[] =
 {
   L"Scrollbar",
@@ -77,7 +76,6 @@ static const short element_part_map[]=
   PP_BARVERT,
 };
 
-
 static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
 
@@ -101,13 +99,13 @@ void
 xp_theme_init()
 {
   int i;
-  
+
   if (uxtheme_dll)
     return;
-  
+
   uxtheme_dll = LoadLibrary("uxtheme.dll");
   memset(open_themes, 0, sizeof(open_themes));
-  
+
   open_theme_data_func = (OpenThemeDataFunc) GetProcAddress(uxtheme_dll, "OpenThemeData");
   close_theme_data_func = (CloseThemeDataFunc) GetProcAddress(uxtheme_dll, "CloseThemeData");
   draw_theme_background_func = (DrawThemeBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeBackground");
@@ -119,7 +117,7 @@ void
 xp_theme_exit()
 {
   int i;
-  
+
   if(! uxtheme_dll)
     return;
 
@@ -171,31 +169,31 @@ xp_theme_get_handle_by_element(XpThemeElement element)
     case XP_THEME_ELEMENT_LIST_HEADER:
       klazz = XP_THEME_CLASS_HEADER;
       break;
-      
+
     case XP_THEME_ELEMENT_COMBOBUTTON:
       klazz = XP_THEME_CLASS_COMBOBOX;
       break;
-      
+
     case XP_THEME_ELEMENT_BODY:
     case XP_THEME_ELEMENT_TAB_ITEM:
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
     case XP_THEME_ELEMENT_TAB_PANE:
       klazz = XP_THEME_CLASS_TAB;
       break;
-      
+
     case XP_THEME_ELEMENT_SCROLLBAR_V:
     case XP_THEME_ELEMENT_SCROLLBAR_H:
-    case XP_THEME_ELEMENT_ARROW_UP: 
+    case XP_THEME_ELEMENT_ARROW_UP:
     case XP_THEME_ELEMENT_ARROW_DOWN:
     case XP_THEME_ELEMENT_ARROW_LEFT:
-    case XP_THEME_ELEMENT_ARROW_RIGHT: 
-    case XP_THEME_ELEMENT_GRIP_V: 
-    case XP_THEME_ELEMENT_GRIP_H: 
+    case XP_THEME_ELEMENT_ARROW_RIGHT:
+    case XP_THEME_ELEMENT_GRIP_V:
+    case XP_THEME_ELEMENT_GRIP_H:
     case XP_THEME_ELEMENT_TROUGH_V:
     case XP_THEME_ELEMENT_TROUGH_H:
       klazz = XP_THEME_CLASS_SCROLLBAR;
       break;
-      
+
     case XP_THEME_ELEMENT_EDIT_TEXT:
       klazz = XP_THEME_CLASS_EDIT;
       break;
@@ -226,7 +224,7 @@ xp_theme_get_handle_by_element(XpThemeElement element)
 }
 
 
-static int 
+static int
 xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
 {
   int ret;
@@ -236,7 +234,7 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
     case XP_THEME_ELEMENT_TAB_PANE:
       ret = 0;
       break;
-      
+
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
     case XP_THEME_ELEMENT_TAB_ITEM:
       switch(state)
@@ -459,9 +457,9 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
     case XP_THEME_ELEMENT_PROGRESS_BAR_V:
     case XP_THEME_ELEMENT_PROGRESS_TROUGH_H:
     case XP_THEME_ELEMENT_PROGRESS_TROUGH_V:
-      ret = 0;
+      ret = 1;
       break;
-      
+
     default:
       switch(state)
         {
@@ -479,7 +477,7 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
         }
     }
   return ret;
-}  
+}
 
 gboolean
 xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
@@ -491,7 +489,7 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
   HDC dc;
   GdkDrawable *drawable;
   int part_state;
-  
+
   if (!uxtheme_dll)
     return FALSE;
 
@@ -499,7 +497,7 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
   if (!theme)
     return FALSE;
 
-  // FIXME: Recheck its function
+  /* FIXME: Recheck its function */
   enable_theme_dialog_texture_func(GDK_WINDOW_HWND(win), ETDT_ENABLETAB);
 
   if (!GDK_IS_WINDOW(win))
@@ -533,7 +531,7 @@ gboolean
 xp_theme_is_drawable(XpThemeElement element)
 {
   gboolean ret = FALSE;
-  
+
   if (uxtheme_dll)
     {
       ret = xp_theme_get_handle_by_element(element) != NULL;

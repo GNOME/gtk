@@ -39,7 +39,6 @@ static GtkBorder default_option_indicator_spacing = { 7, 5, 2, 2 };
 
 static GtkStyleClass *parent_class;
 
-
 typedef enum {
   CHECK_AA,
   CHECK_BASE,
@@ -117,7 +116,6 @@ static struct {
   { radio_text_bits, NULL }
 };
 
-
 static gboolean
 get_system_font(LOGFONT *lf)
 {
@@ -160,15 +158,14 @@ get_system_font(LOGFONT *lf)
   return ok;
 }
 
-
 static void
 setup_system_font(GtkStyle *style)
 {
   LOGFONT lf;
-  
+
   if (get_system_font(&lf))
     {
-      char buf[64]; // It's okay, lfFaceName is smaller than 32 chars
+      char buf[64]; /* It's okay, lfFaceName is smaller than 32 chars */
       int pt_size;
 
       pt_size = -MulDiv(lf.lfHeight, 72,
@@ -178,8 +175,6 @@ setup_system_font(GtkStyle *style)
       style->font_desc = pango_font_description_from_string(buf);
     }
 }
-  
-
 
 static void
 sys_color_to_gtk_color(int id, GdkColor *pcolor)
@@ -192,7 +187,7 @@ sys_color_to_gtk_color(int id, GdkColor *pcolor)
 }
 
 static void
-setup_system_colors(GtkStyle *style)
+setup_system_styles(GtkStyle *style)
 {
   char buf[1024];
   GdkColor menu_color;
@@ -201,6 +196,11 @@ setup_system_colors(GtkStyle *style)
   GdkColor bg_prelight;
   GdkColor base_prelight;
   GdkColor text_prelight;
+  GdkColor tooltip_back;
+  GdkColor tooltip_fore;
+  GdkColor btn_fore;
+  GdkColor progress_back;
+
   int i;
 
   /* Default forgeground */
@@ -230,7 +230,7 @@ setup_system_colors(GtkStyle *style)
   sys_color_to_gtk_color(COLOR_WINDOWTEXT, &style->text[GTK_STATE_PRELIGHT]);
   sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &style->text[GTK_STATE_SELECTED]);
   sys_color_to_gtk_color(COLOR_GRAYTEXT, &style->text[GTK_STATE_INSENSITIVE]);
-  
+
   /* Prelight */
   sys_color_to_gtk_color(COLOR_HIGHLIGHTTEXT, &fg_prelight);
   sys_color_to_gtk_color(COLOR_HIGHLIGHT, &bg_prelight);
@@ -240,12 +240,27 @@ setup_system_colors(GtkStyle *style)
   sys_color_to_gtk_color(COLOR_MENUTEXT, &menu_text_color);
   sys_color_to_gtk_color(COLOR_MENU, &menu_color);
 
+  /* tooltips */
+  sys_color_to_gtk_color(COLOR_INFOTEXT, &tooltip_fore);
+  sys_color_to_gtk_color(COLOR_INFOBK, &tooltip_back);
+
+  /* text on push buttons. TODO: button shadows, backgrounds, and highlights */
+  sys_color_to_gtk_color(COLOR_BTNTEXT, &btn_fore);
+
+  /* progress bar background color */
+  sys_color_to_gtk_color(COLOR_HIGHLIGHT, &progress_back);
+
+  /* TODO: scrollbars
+  http://lxr.mozilla.org/mozilla/source/gfx/src/windows/nsNativeThemeWin.cpp#1317
+  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getsystemmetrics.asp
+  http://developer.gnome.org/doc/API/2.0/gtk/GtkRange.html
+  */
 
   for (i = 0; i < 5; i++)
     {
       sys_color_to_gtk_color(COLOR_3DSHADOW, &style->dark[i]);
       sys_color_to_gtk_color(COLOR_3DHILIGHT, &style->light[i]);
-      
+
       style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
       style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
       style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
@@ -254,8 +269,8 @@ setup_system_colors(GtkStyle *style)
       style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
       style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
     }
-  
-  // Enable coloring for menus.
+
+  /* Enable coloring for menus. */
   sprintf(buf, "style \"wimp-menu\"\n"
           "{fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -283,13 +298,45 @@ setup_system_colors(GtkStyle *style)
           menu_color.green,
           menu_color.blue);
   gtk_rc_parse_string(buf);
+
+  /* enable coloring for tooltips */
+  sprintf(buf, "style \"wimp-tooltips\"\n"
+	  "{fg[NORMAL] = { %d, %d, %d }\n"
+	  "bg[NORMAL] = { %d, %d, %d }\n"
+	  "}widget \"*gtk-tooltips*\" style \"wimp-tooltips\"\n",
+          tooltip_fore.red,
+          tooltip_fore.green,
+          tooltip_fore.blue,
+          tooltip_back.red,
+          tooltip_back.green,
+          tooltip_back.blue);
+  gtk_rc_parse_string(buf);
+
+  /* enable coloring for text on buttons
+     TODO: use GetThemeMetric for the border and outside border */
+  sprintf(buf, "style \"wimp-button\"\n"
+	  "fg[NORMAL] = { %d, %d, %d }\n"
+	  "default_border = { 1, 1, 1, 1 }\n"
+	  "default_outside_border = { 0, 0, 0, 0 }\n"
+	  "child_displacement_x = 1\n"
+  	  "child_displacement_y = 1\n"
+	  "}widget_class \"*GtkButton*\" style \"wimp-button\"\n",
+	  btn_fore.red,
+      btn_fore.green,
+      btn_fore.blue);
+  gtk_rc_parse_string(buf);
+
+  /* enable coloring for progress bars */
+  sprintf(buf, "style \"wimp-progress\"\n"
+	  "{bg[PRELIGHT] = { %d, %d, %d }\n"
+	  "}widget_class \"*GtkProgress*\" style \"wimp-progress\"\n",
+	  progress_back.red,
+      progress_back.green,
+      progress_back.blue);
+  gtk_rc_parse_string(buf);
 }
 
-
-
-
-
-static gboolean 
+static gboolean
 sanitize_size (GdkWindow *window,
 	       gint      *width,
 	       gint      *height)
@@ -340,7 +387,7 @@ draw_part (GdkDrawable  *drawable,
 {
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
-  
+
   if (!parts[part].bmap)
       parts[part].bmap = gdk_bitmap_create_from_data (drawable,
 						      parts[part].bits,
@@ -373,7 +420,7 @@ draw_check(GtkStyle      *style,
 {
   x -= (1 + PART_SIZE - width) / 2;
   y -= (1 + PART_SIZE - height) / 2;
-      
+
   if (detail && strcmp (detail, "check") == 0)	/* Menu item */
     {
       if (shadow == GTK_SHADOW_IN)
@@ -397,7 +444,7 @@ draw_check(GtkStyle      *style,
           draw_part (window, style->mid_gc[state], area, x, y, CHECK_MID);
           draw_part (window, style->light_gc[state], area, x, y, CHECK_LIGHT);
           draw_part (window, style->base_gc[state], area, x, y, CHECK_BASE);
-      
+
           if (shadow == GTK_SHADOW_IN)
             {
               draw_part (window, style->text_gc[state], area, x, y, CHECK_TEXT);
@@ -437,7 +484,7 @@ draw_expander(GtkStyle      *style,
       xp_expander = XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED;
       break;
     }
-  
+
   if (xp_theme_draw(window, xp_expander, style,
                     x, y - expander_size / 2,
                     expander_size, expander_size, state))
@@ -471,7 +518,7 @@ draw_expander(GtkStyle      *style,
 
   if (success)
     gdk_gc_set_foreground (style->fg_gc[state], &values.foreground);
-  
+
   gdk_draw_line
     (window, style->fg_gc[state], x + 2, y + expander_semi_size,
      x + expander_size - 2, y + expander_semi_size);
@@ -505,7 +552,7 @@ draw_option(GtkStyle      *style,
 {
   x -= (1 + PART_SIZE - width) / 2;
   y -= (1 + PART_SIZE - height) / 2;
-      
+
   if (detail && strcmp (detail, "option") == 0)	/* Menu item */
     {
       if (shadow == GTK_SHADOW_IN)
@@ -525,7 +572,7 @@ draw_option(GtkStyle      *style,
 	  draw_part (window, style->mid_gc[state], area, x, y, RADIO_MID);
 	  draw_part (window, style->light_gc[state], area, x, y, RADIO_LIGHT);
 	  draw_part (window, style->base_gc[state], area, x, y, RADIO_BASE);
-      
+
 	  if (shadow == GTK_SHADOW_IN)
 	    draw_part (window, style->text_gc[state], area, x, y, RADIO_TEXT);
 	}
@@ -549,9 +596,9 @@ draw_varrow (GdkWindow     *window,
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
-  
+
   width = width + width % 2 - 1;	/* Force odd */
-  
+
   steps = 1 + width / 2;
 
   extra = height - steps;
@@ -581,7 +628,7 @@ draw_varrow (GdkWindow     *window,
 		     x + (i - extra),              y_start + i * y_increment,
 		     x + width - (i - extra) - 1,  y_start + i * y_increment);
     }
-  
+
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
@@ -604,9 +651,9 @@ draw_harrow (GdkWindow     *window,
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, area);
-  
+
   height = height + height % 2 - 1;	/* Force odd */
-  
+
   steps = 1 + height / 2;
 
   extra = width - steps;
@@ -636,7 +683,7 @@ draw_harrow (GdkWindow     *window,
 		     x_start + i * x_increment, y + (i - extra),
 		     x_start + i * x_increment, y + height - (i - extra) - 1);
     }
-  
+
 
   if (area)
     gdk_gc_set_clip_rectangle (gc, NULL);
@@ -660,7 +707,7 @@ reverse_engineer_stepper_box (GtkWidget    *range,
   gint slider_width = 14, stepper_size = 14;
   gint box_width;
   gint box_height;
-  
+
   if (range)
     {
       gtk_widget_style_get (range,
@@ -668,7 +715,7 @@ reverse_engineer_stepper_box (GtkWidget    *range,
 			    "stepper_size", &stepper_size,
 			    NULL);
     }
-	
+
   if (arrow_type == GTK_ARROW_UP || arrow_type == GTK_ARROW_DOWN)
     {
       box_width = slider_width;
@@ -703,7 +750,7 @@ draw_arrow (GtkStyle      *style,
 	    gint           height)
 {
   sanitize_size (window, &width, &height);
-  
+
   if (detail && strcmp (detail, "spinbutton") == 0)
     {
       if (xp_theme_is_drawable(XP_THEME_ELEMENT_SPIN_BUTTON_UP))
@@ -774,7 +821,7 @@ draw_arrow (GtkStyle      *style,
 	{
 	  x += (width - 7) / 2;
 	  y += (height - 5) / 2;
-	  
+
 	  draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
 		       x, y, 7, 5);
 	}
@@ -782,7 +829,7 @@ draw_arrow (GtkStyle      *style,
 	{
 	  x += (width - 5) / 2;
 	  y += (height - 7) / 2;
-	  
+
 	  draw_harrow (window, style->fg_gc[state], shadow, area, arrow_type,
 		       x, y, 5, 7);
 	}
@@ -796,9 +843,9 @@ option_menu_get_props (GtkWidget      *widget,
 {
   GtkRequisition *tmp_size = NULL;
   GtkBorder *tmp_spacing = NULL;
-  
+
   if (widget)
-    gtk_widget_style_get (widget, 
+    gtk_widget_style_get (widget,
 			  "indicator_size", &tmp_size,
 			  "indicator_spacing", &tmp_spacing,
 			  NULL);
@@ -820,7 +867,7 @@ option_menu_get_props (GtkWidget      *widget,
     *indicator_spacing = default_option_indicator_spacing;
 }
 
-static void 
+static void
 draw_box (GtkStyle      *style,
 	  GdkWindow     *window,
 	  GtkStateType   state_type,
@@ -862,7 +909,7 @@ draw_box (GtkStyle      *style,
   else if (detail && (!strcmp (detail, "spinbutton_up")
                       || !strcmp (detail, "spinbutton_down")))
     {
-      if (xp_theme_draw(window, 
+      if (xp_theme_draw(window,
                         (! strcmp (detail, "spinbutton_up"))
                         ? XP_THEME_ELEMENT_SPIN_BUTTON_UP
                         : XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
@@ -877,7 +924,7 @@ draw_box (GtkStyle      *style,
       if (GTK_IS_SCROLLBAR(widget))
         {
           GtkScrollbar * scrollbar = GTK_SCROLLBAR(widget);
-          if (xp_theme_draw(window, 
+          if (xp_theme_draw(window,
                             (! GTK_IS_VSCROLLBAR(widget))
                             ? XP_THEME_ELEMENT_SCROLLBAR_V
                             : XP_THEME_ELEMENT_SCROLLBAR_H,
@@ -901,9 +948,9 @@ draw_box (GtkStyle      *style,
         }
     }
 
-  if (detail && strcmp (detail, "menuitem") == 0) 
+  if (detail && strcmp (detail, "menuitem") == 0)
     shadow_type = GTK_SHADOW_NONE;
-  
+
   if (detail && !strcmp (detail, "trough"))
     {
       if (widget && GTK_IS_PROGRESS_BAR (widget))
@@ -917,13 +964,13 @@ draw_box (GtkStyle      *style,
             }
           else
             {
-              // Blank in classic Windows
+              /* Blank in classic Windows */
             }
         }
       else
         {
           gboolean is_vertical = GTK_IS_VSCROLLBAR(widget);
-          
+
           if (GTK_IS_RANGE(widget)
               && xp_theme_draw(window,
                                is_vertical
@@ -941,7 +988,7 @@ draw_box (GtkStyle      *style,
               GdkPixmap *pixmap;
 
               sanitize_size (window, &width, &height);
-	  
+
               pixmap = gdk_pixmap_new (window, 2, 2, -1);
 
               gdk_draw_point (pixmap, style->bg_gc[GTK_STATE_NORMAL], 0, 0);
@@ -958,12 +1005,12 @@ draw_box (GtkStyle      *style,
 
               if (area)
                 gdk_gc_set_clip_rectangle (gc, area);
-      
+
               gdk_draw_rectangle (window, gc, TRUE, x, y, width, height);
 
               gdk_gc_unref (gc);
               gdk_pixmap_unref (pixmap);
-      
+
               return;
             }
         }
@@ -989,10 +1036,10 @@ draw_box (GtkStyle      *style,
       option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
       sanitize_size (window, &width, &height);
-  
+
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
 	vline_x = x + indicator_size.width + indicator_spacing.left + indicator_spacing.right;
-      else 
+      else
 	vline_x = x + width - (indicator_size.width + indicator_spacing.left + indicator_spacing.right) - style->xthickness;
 
       parent_class->draw_vline (style, window, state_type, area, widget,
@@ -1018,9 +1065,9 @@ draw_tab (GtkStyle      *style,
 {
   GtkRequisition indicator_size;
   GtkBorder indicator_spacing;
-  
+
   gint arrow_height;
-  
+
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
 
@@ -1041,14 +1088,13 @@ draw_tab (GtkStyle      *style,
 
   x += (width - indicator_size.width) / 2;
   arrow_height = (indicator_size.width + 1) / 2;
-  
+
   y += (height - arrow_height) / 2;
 
   draw_varrow (window, style->black_gc, shadow, area, GTK_ARROW_DOWN,
 	       x, y, indicator_size.width, arrow_height);
 }
 
-  
 static void
 draw_extension(GtkStyle *style,
                GdkWindow *window,
@@ -1081,7 +1127,7 @@ draw_extension(GtkStyle *style,
           return;
         }
     }
-  parent_class->draw_extension 
+  parent_class->draw_extension
     (style, window, state_type, shadow_type, area, widget, detail,
      	 x, y, width, height, gap_side);
 }
@@ -1125,14 +1171,13 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
         }
     }
 
-  //      gtk_style_apply_default_background (style, window,
-  //				  widget && !GTK_WIDGET_NO_WINDOW (widget),
-  //				  state_type, area, x, y, width, height);
-  
+  /*      gtk_style_apply_default_background (style, window,
+  				  widget && !GTK_WIDGET_NO_WINDOW (widget),
+  				  state_type, area, x, y, width, height);
+  */
   parent_class->draw_flat_box(style, window, state_type, shadow_type,
                               area, widget, detail, x, y, width, height);
 }
-
 
 static void
 draw_shadow (GtkStyle      *style,
@@ -1165,12 +1210,11 @@ draw_shadow (GtkStyle      *style,
                              detail, x, y, width, height);
 }
 
-
 static void
 wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
   setup_system_font (style);
-  setup_system_colors (style);
+  setup_system_styles (style);
   parent_class->init_from_rc(style, rc_style);
 }
 
@@ -1217,7 +1261,7 @@ wimp_style_register_type (GTypeModule *module)
     0,              /* n_preallocs */
     (GInstanceInitFunc) wimp_style_init,
   };
-  
+
   wimp_type_style = g_type_module_register_type (module,
 						   GTK_TYPE_STYLE,
 						   "WimpStyle",
