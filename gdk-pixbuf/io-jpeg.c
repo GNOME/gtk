@@ -67,10 +67,13 @@ GdkPixBuf *image_load(FILE *f)
 	jpeg_create_decompress(&cinfo);
 	jpeg_stdio_src(&cinfo, f);
 	jpeg_read_header(&cinfo, TRUE);
+	jpeg_start_decompress(&cinfo);
 	cinfo.do_fancy_upsampling = FALSE;
 	cinfo.do_block_smoothing = FALSE;
+
 	w = cinfo.output_width;
 	h = cinfo.output_height;
+	g_print("w: %d h: %d\n", w, h);
 
 	pixels = art_alloc(h * w * 3);
 	if (pixels == NULL) {
@@ -80,7 +83,6 @@ GdkPixBuf *image_load(FILE *f)
 	dptr = pixels;
 
 	/* decompress all the lines, a few at a time */
-	jpeg_start_decompress(&cinfo);
 
 	while (cinfo.output_scanline < cinfo.output_height) {
 		lptr = lines;
