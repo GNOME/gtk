@@ -1,3 +1,7 @@
+Mon Jan 26 16:54:02 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+	* docs/gtk.texi: additions/changes from Gregory A. McLean
+
 Mon Jan 26 02:15:29 1998  Tim Janik  <timj@gimp.org>
 
 	* gdk/gdkdraw.c:
