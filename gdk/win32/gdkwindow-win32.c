@@ -470,10 +470,11 @@ RegisterGdkClass (GdkWindowType wtype)
   return klass;
 }
 
-GdkWindow*
-gdk_window_new (GdkWindow     *parent,
-		GdkWindowAttr *attributes,
-		gint           attributes_mask)
+static GdkWindow*
+gdk_window_new_internal (GdkWindow     *parent,
+			 GdkWindowAttr *attributes,
+			 gint           attributes_mask,
+			 gboolean       from_set_skip_taskbar_hint)
 {
   HANDLE hparent;
   ATOM klass = 0;
@@ -734,11 +735,22 @@ gdk_window_new (GdkWindow     *parent,
       return NULL;
     }
 
+  if (!from_set_skip_taskbar_hint && private->window_type == GDK_WINDOW_TEMP)
+    gdk_window_set_skip_taskbar_hint (window, TRUE);
+
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
 				  NULL));
 
   return window;
+}
+
+GdkWindow*
+gdk_window_new (GdkWindow     *parent,
+		GdkWindowAttr *attributes,
+		gint           attributes_mask)
+{
+  return gdk_window_new_internal (parent, attributes, attributes_mask, FALSE);
 }
 
 GdkWindow *
@@ -3151,7 +3163,7 @@ gdk_window_set_skip_taskbar_hint (GdkWindow *window,
 	  wa.wclass = GDK_INPUT_OUTPUT;
 	  wa.width = wa.height = 1;
 	  wa.event_mask = 0;
-	  owner = gdk_window_new (NULL, &wa, 0);
+	  owner = gdk_window_new_internal (NULL, &wa, 0, TRUE);
 	}
 
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_HWNDPARENT,
