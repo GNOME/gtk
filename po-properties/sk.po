@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-03-24 12:40+0100\n"
 "Last-Translator: Stanislav Visnovsky <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@linux.sk>\n"
@@ -869,7 +869,7 @@ msgstr "Detaily"
 msgid "Render detail to pass to the theme engine"
 msgstr "Detaily zobrazenia predané kódu pre tému"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Text"
 
@@ -933,7 +933,7 @@ msgstr "Farba popredia"
 msgid "Foreground color as a GdkColor"
 msgstr "Meno popredia ako GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Upraviteľné"
@@ -943,7 +943,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Či môže používateľ meniť text"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Písmo"
 
@@ -1499,67 +1499,67 @@ msgstr "Okraj plochy akcií"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Šírka okraja okolo tlačidiel v dolnej časti dialógu"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Pozícia kurzora"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Aktuálna pozícia kurzoru pre vkladanie v znakoch"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Okraje výberu"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozícia druhého konca výberu od kurzoru v znakoch"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Či je možné obsah položky upravovať"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Maximálna dĺžka"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maximálny počet znakov tejto položky. 0 znamená bez obmedzenia"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Viditeľnosť"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "FALSE zobrazí \"neviditeľný znak\" namiesto zadaného textu (režim hesiel)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Má rám"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE odstráni vonkajší rám okolo položky"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "Neviditeľný znak"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Znak použitý pre skrytie obsahu poľa (v \"režime hesiel\")"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "Aktivuje implicitný"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1567,42 +1567,42 @@ msgstr ""
 "Či aktivovať implicitný prvok (napríklad implicitné tlačidlo dialógu) pri "
 "stlačení Enter"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "Šírka v znakoch"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "Počet znakov, na ktoré sa má nechať priestor v položke"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "Posun"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Počet bodov položka bude posunutá mimo obrazovky vľavo"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "Obsah prvku"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X zarovnanie"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "Horizontálne zarovnanie od 0 (vľavo) do 1 (vpravo)"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Vybrať pri fokuse"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Či sa má obsah položky vybrať, ak získa fokus"
 
@@ -1790,11 +1790,11 @@ msgstr "Zobraziť text"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Či majú byť zobrazené tlačidlá pre vytváranie/prácu so súbormi"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Meno použitého štandardného písma"
@@ -1840,7 +1840,7 @@ msgstr "Y pozícia potomka"
 msgid "The title of the font selection dialog"
 msgstr "Text titulku okna"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Meno písma"
 
@@ -1892,19 +1892,19 @@ msgstr "Zobraziť text"
 msgid "Whether selected font size is shown in the label"
 msgstr "Či sa má priebeh zobraziť ako text"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "Reťazec systému X reprezentujúci toto písmo"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont, ktoré je aktuálne vybrané"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Text náhľadu"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Text zobrazený pre demonštráciu vybraného písma"
 

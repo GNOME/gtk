@@ -1,3 +1,7 @@
+2004-08-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.6 ===
+
 Thu Aug 12 22:19:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-bmp.c (DecodeHeader): Properly determine the number of 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.gtk-2-2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-03-18 10:45+0600\n"
 "Last-Translator: Progga <progga@BengaLinux.Org>\n"
 "Language-Team: Bangla <gnome-translation@BengaLinux.Org>\n"
@@ -841,7 +841,7 @@ msgstr "বিস্তারিত"
 msgid "Render detail to pass to the theme engine"
 msgstr "থিম ইঞ্জিনের নিকট অঙ্কন সম্পর্কিত যে বিস্তারিত তথ্য প্রেরণ করা হবে"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "টেক্সট"
 
@@ -905,7 +905,7 @@ msgstr "পুরোভূমির রং"
 msgid "Foreground color as a GdkColor"
 msgstr "GdkColor হিসেবে পুরোভূমির রং"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "সম্পাদনযোগ্য"
@@ -915,7 +915,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "ব্যবহারকারি এই টেক্সকে বদলাতে পারবেন কিনা"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "ফন্ট"
 
@@ -1467,40 +1467,40 @@ msgstr "কর্মক্ষেত্রের (Action area) প্রান্
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ডায়ালগের নিচের দিকে অবস্থিত বাটনের চারপাশের প্রস্থ"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "কার্সারের অবস্থান"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "অক্ষর হিসেবে লেখা ঢোকানোর (Insertion) কার্সারের অবস্থান"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "চিহ্নিত করার সীমানা"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "অক্ষর হিসেবে চিহ্নিত অংশের বিপরীত প্রান্তের অবস্থান"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তু (Content) এডিট করা যাবে কিনা"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "সর্বোচ্চ দৈর্ঘ্য"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "এই অন্তর্ভুক্তির জন্য সর্বোচ্চ সংখ্যক অক্ষর। এর মান শূণ্য হতে পারবেন না"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "দৃষ্টিগ্রাহ্যতা"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1508,69 +1508,69 @@ msgstr ""
 "যদি FALSE হয় তবে প্রকৃত টেক্সটের পরিবর্তে \"অদৃশ্য অক্ষর\" দেখা যায় (পাসওয়ার্ডের "
 "ক্ষেত্রে প্রযোজ্য)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "ফ্রেম আছে"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FASLE তালিকা থেকে বহিঃস্থ বেভেলকে অপসারণ করে"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "অদৃশ্য অক্ষর"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "অন্তর্ভুক্তির (Entry) বিষয়বস্তু আড়াল করার জন্য ব্যবহৃত অক্ষর (\"পাসওয়ার্ড মোড\" এ ব্যবহৃত)"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "ডিফল্টকে সক্রিয় করে"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 "Enter বাটন চাপলে ডিফল্টকে সক্রিয় করা হবে কিনা (যেমন কোন ডায়ালগের ডিফল্ট বাটন)"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "অক্ষরের প্রস্থ"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "প্রতি অন্তর্ভুক্তিতে যত অক্ষর ফাঁকা রাখা হবে"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "স্ক্রল অফসেট"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "অন্তর্ভুক্তির (Entry) যে সংখ্যক পিক্সেলকে পর্দার বামে সরিয়ে নিয়ে যাওয়া হয়েছে"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তু"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "এক্স অক্ষ"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "অনুভূমিক অ্যালাইনমেন্ট, ০ (বাম) থেকে ১ (ডান)।  RTL-এর জন্য উল্টা"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "ফোকাস করলে চিহ্নিত হবে"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "কোন অন্তর্ভুক্তির (Entry) অভ্যন্তরীণ বস্তুকে ফোকাস করলে তা চিহ্নিত হবে কিনা"
 
@@ -1743,11 +1743,11 @@ msgstr "লুক্কায়িত জিনিষ প্রদর্শন ক
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "লুক্কায়িত ফাইল ও ফোল্ডার প্রদর্শন করা হবে কিনা"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr "স্বাভাবিক অবস্থায় ব্যবহৃত ফাইল বাছাইকারী ব্যাকএন্ড"
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "স্বাভাবিক অবস্থায় যে GtkFileChooser ব্যাকএন্ড ব্যবহার করা হবে তার নাম"
 
@@ -1791,7 +1791,7 @@ msgstr "চাইল্ড উইজেটের ওয়াই অক্ষ ব�
 msgid "The title of the font selection dialog"
 msgstr "ফন্ট নির্বাচক ডায়ালগের শিরোনাম"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "ফন্টের নাম"
 
@@ -1836,19 +1836,19 @@ msgid "Whether selected font size is shown in the label"
 msgstr "নির্বাচিত ফন্টের আকার লেবেলে প্রদর্শন করা হবে কিনা"
 
 # FIXME
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "যে এক্স অক্ষীয় পঙ্‌ক্তিটি এই ফন্টের প্রতিনিধিত্ব করে"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "বর্তমানে বাছাইকৃত জিডিকে-ফন্ট"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "প্রাকদর্শনে ব্যবহৃত টেক্সট"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "চিহ্নিত ফন্টকে প্রদর্শনীর উদ্দেশ্যে যে টেক্সট লেখা হবে"
 

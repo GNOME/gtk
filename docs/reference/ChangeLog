@@ -1,3 +1,7 @@
+2004-08-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.6 ===
+
 Thu Aug 12 00:06:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkuimanager.sgml: Add some information about

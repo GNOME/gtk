@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -874,7 +874,7 @@ msgstr "Detaļas"
 msgid "Render detail to pass to the theme engine"
 msgstr "Attēlot detaļas, ko pievadīt tēmas dzinējam"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Teksts"
 
@@ -938,7 +938,7 @@ msgstr "Priekšplāna krāsa"
 msgid "Foreground color as a GdkColor"
 msgstr "Priekšplāna krāsa kā GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Rediģējams"
@@ -948,7 +948,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Vai tekstu var modificēt lietotājs"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Fonts"
 
@@ -1504,68 +1504,68 @@ msgstr "Darbības laukuma robeža"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Robežas platums ap pogu laukumu dialoga apakšā"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Kursora Pozīcija"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Pašreizējā iespraušanas kursora pozīcijia rakstzīmēs"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Izvēles Ierobežojums"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Izvēles iespējamā beigu pozīcija no kursora rakstzīmēs"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Vai ieraksta saturs var tikt rediģēts"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Maksimālais garums"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "Maksimālais rakstzimju daudzums šim ierakstam. Nulle, ja nav maksimuma"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Redzamība"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "FALSE parāda \"neredzamo rakstzīmi\" īstā teksta vietā (paroles režīms)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Ir Rāmis"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE izņem ārpuses konusu no ieraksta"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "Neredzamā rakstzīme"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Rakstzīme, ko izmanto, slēpjot ievades saturu (piem., \"paroles režīmā\")"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "Aktivizē noklusēto"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1573,42 +1573,42 @@ msgstr ""
 "Vai aktivizēt noklusēto logdaļu (tādu, kā noklusētā poga dialogā), kad tiek "
 "nospiests Ievades taustiņš"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "Platums rakszīmēs"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "Rakstzīmju daudzums tam, cik lielu vietu atstāt ierakstam"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "Ritināšanas nobīde"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Pikseļu skaits par kādu ieraksts noritināts no ekrāna pa kreisi"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "Ieraksta saturs"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X centrēšana"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "Horizontālā centrēšana, no 0 (pa kreisi) līdz 1 (pa labi)"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Izvēlēties pie fokusēšanas"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Vai izvēlēties ieraksta saturu, kad tas tiek fokusēts"
 
@@ -1796,11 +1796,11 @@ msgstr "Parādīt tekstu"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Vai pogas failu izveidošanai/manipulācijai būtu jāparāda"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Noklusētā fonta nosaukums"
@@ -1846,7 +1846,7 @@ msgstr "Bērna logdaļas Y pozīcija"
 msgid "The title of the font selection dialog"
 msgstr "Loga visraksts"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Fonta nosaukums"
 
@@ -1897,19 +1897,19 @@ msgstr "Parādīt tekstu"
 msgid "Whether selected font size is shown in the label"
 msgstr "Vai progress tiek parādīts kā teksts"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "X virkne, kas pārstāv šo fontu"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont, kas šobrīd ir izvēlēts"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Pirmsapskates teksts"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teksts, ko parādīt, lai demonstrētu izvēlēto fontu"
 

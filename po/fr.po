@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-01 11:30+0200\n"
+"POT-Creation-Date: 2004-08-13 14:10-0400\n"
 "PO-Revision-Date: 2004-08-01 11:26+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -183,7 +183,7 @@ msgstr "Chunk malformé dans l'animation"
 msgid "The ANI image format"
 msgstr "Le format d'image ANI"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
+#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "Pas essez de mémoire pour charger l'image bitmap"
 
@@ -191,12 +191,12 @@ msgstr "Pas essez de mémoire pour charger l'image bitmap"
 msgid "BMP image has unsupported header size"
 msgstr "L'image BMP a une taille d'en-tête non supportée"
 
-#: gdk-pixbuf/io-bmp.c:282 gdk-pixbuf/io-bmp.c:307 gdk-pixbuf/io-bmp.c:330
-#: gdk-pixbuf/io-bmp.c:401
+#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
+#: gdk-pixbuf/io-bmp.c:405
 msgid "BMP image has bogus header data"
 msgstr "L'image BMP a un en-tête erronné"
 
-#: gdk-pixbuf/io-bmp.c:1118
+#: gdk-pixbuf/io-bmp.c:1122
 msgid "The BMP image format"
 msgstr "Le format d'image BMP"
 
@@ -929,15 +929,15 @@ msgstr "Cercle des couleurs"
 msgid "Color Selection"
 msgstr "Sélecteur de couleurs"
 
-#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4324 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "_Tout sélectionner"
 
-#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4334 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "_Méthodes de saisie"
 
-#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4344 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Insérer un caractère de contrôle Unicode"
 
@@ -965,7 +965,7 @@ msgstr ""
 "Impossible d'ajouter un signet pour %s :\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5402
+#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5422
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1070,76 +1070,76 @@ msgstr "Créer un _dossier"
 msgid "_Name:"
 msgstr "_Nom :"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3096
 msgid "_Browse for other folders"
 msgstr "_Parcourir pour d'autres dossiers"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3333
 msgid "Save in _folder:"
 msgstr "Enregistrer dans le _dossier :"
 
-#: gtk/gtkfilechooserdefault.c:3333
+#: gtk/gtkfilechooserdefault.c:3335
 msgid "Create in _folder:"
 msgstr "Créer dans le _dossier :"
 
-#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkfilechooserdefault.c:4022
 msgid "Can't change to folder because it isn't local"
 msgstr "Impossible d'aller au dossier car il n'est pas local"
 
-#: gtk/gtkfilechooserdefault.c:4157
+#: gtk/gtkfilechooserdefault.c:4165
 msgid "Could not find the path"
 msgstr "Impossible de trouver le chemin"
 
-#: gtk/gtkfilechooserdefault.c:4508
+#: gtk/gtkfilechooserdefault.c:4521
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "le raccourci %s n'existe pas"
 
-#: gtk/gtkfilechooserdefault.c:5175
+#: gtk/gtkfilechooserdefault.c:5195
 msgid "Type name of new folder"
 msgstr "Saisissez le nom du nouveau dossier"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5224
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5226
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f k"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5228
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5210
+#: gtk/gtkfilechooserdefault.c:5230
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5275
 msgid "Today"
 msgstr "Aujourd'hui"
 
-#: gtk/gtkfilechooserdefault.c:5257
+#: gtk/gtkfilechooserdefault.c:5277
 msgid "Yesterday"
 msgstr "Hier"
 
-#: gtk/gtkfilechooserdefault.c:5268
+#: gtk/gtkfilechooserdefault.c:5288
 msgid "Unknown"
 msgstr "Inconnu"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: gtk/gtkfilechooserdefault.c:5383
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Impossible d'aller au dossier que vous avez spécifié car le chemin d'accès "
 "n'est pas valide."
 
-#: gtk/gtkfilechooserdefault.c:5440
+#: gtk/gtkfilechooserdefault.c:5460
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1148,15 +1148,15 @@ msgstr ""
 "Impossible de sélectionner %s :\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5479
+#: gtk/gtkfilechooserdefault.c:5499
 msgid "Open Location"
 msgstr "Ouvrir un emplacement"
 
-#: gtk/gtkfilechooserdefault.c:5486
+#: gtk/gtkfilechooserdefault.c:5506
 msgid "Save in Location"
 msgstr "Enregistrer dans un emplacement"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5525
 msgid "_Location:"
 msgstr "_Emplacement :"
 
@@ -1570,7 +1570,7 @@ msgstr "Méthodes de saisie"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:854
+#: gtk/gtkmain.c:855
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -1929,22 +1929,22 @@ msgstr "Impossible de trouver le moteur de thème dans module_path : « %s »
 msgid "--- No Tip ---"
 msgstr "--- Pas de conseil du jour ---"
 
-#: gtk/gtkuimanager.c:1099
+#: gtk/gtkuimanager.c:1100
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "Attribut « %s » inconnu à la ligne %d caractère %d"
 
-#: gtk/gtkuimanager.c:1317
+#: gtk/gtkuimanager.c:1318
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Balise de début innatendue « %s » à la ligne %d caractère %d"
 
-#: gtk/gtkuimanager.c:1402
+#: gtk/gtkuimanager.c:1403
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Donnée caractère innatendue à la ligne %d caractère %d"
 
-#: gtk/gtkuimanager.c:2188
+#: gtk/gtkuimanager.c:2189
 msgid "Empty"
 msgstr "Vide"
 

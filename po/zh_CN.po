@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-01 20:01+0200\n"
+"POT-Creation-Date: 2004-08-13 14:10-0400\n"
 "PO-Revision-Date: 2004-08-02 02:17+0800\n"
 "Last-Translator: Funda Wang <fundawang@linux.net.cn>\n"
 "Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
@@ -169,7 +169,7 @@ msgstr "动画中的块格式错误"
 msgid "The ANI image format"
 msgstr "ANI 图像格式"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
+#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "内存不足以载入位图图像"
 
@@ -177,12 +177,12 @@ msgstr "内存不足以载入位图图像"
 msgid "BMP image has unsupported header size"
 msgstr "不支持的 BMP 图像头大小"
 
-#: gdk-pixbuf/io-bmp.c:282 gdk-pixbuf/io-bmp.c:307 gdk-pixbuf/io-bmp.c:330
-#: gdk-pixbuf/io-bmp.c:401
+#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
+#: gdk-pixbuf/io-bmp.c:405
 msgid "BMP image has bogus header data"
 msgstr "BMP 图像有伪造的头数据"
 
-#: gdk-pixbuf/io-bmp.c:1118
+#: gdk-pixbuf/io-bmp.c:1122
 msgid "The BMP image format"
 msgstr "BMP 图像格式"
 
@@ -878,15 +878,15 @@ msgstr "着色轮"
 msgid "Color Selection"
 msgstr "颜色选择"
 
-#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4324 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4334 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "输入法(_M)"
 
-#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4344 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "插入 Unicode 控制字符(_I)"
 
@@ -914,7 +914,7 @@ msgstr ""
 "无法为 %s 添加书签：\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5402
+#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5422
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1017,73 +1017,73 @@ msgstr "创建文件夹(_L)"
 msgid "_Name:"
 msgstr "名称(_N)："
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3096
 msgid "_Browse for other folders"
 msgstr "浏览其它文件夹(_B)"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3333
 msgid "Save in _folder:"
 msgstr "保存于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:3333
+#: gtk/gtkfilechooserdefault.c:3335
 msgid "Create in _folder:"
 msgstr "创建于文件夹(_F)："
 
-#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkfilechooserdefault.c:4022
 msgid "Can't change to folder because it isn't local"
 msgstr "无法更改文件夹，因为该文件夹并非本地"
 
-#: gtk/gtkfilechooserdefault.c:4157
+#: gtk/gtkfilechooserdefault.c:4165
 msgid "Could not find the path"
 msgstr "找不到路径"
 
-#: gtk/gtkfilechooserdefault.c:4508
+#: gtk/gtkfilechooserdefault.c:4521
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "快捷方式 %s 不存在"
 
-#: gtk/gtkfilechooserdefault.c:5175
+#: gtk/gtkfilechooserdefault.c:5195
 msgid "Type name of new folder"
 msgstr "输入新建文件夹的类型"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5224
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d 字节"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5226
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5228
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5210
+#: gtk/gtkfilechooserdefault.c:5230
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5275
 msgid "Today"
 msgstr "今天"
 
-#: gtk/gtkfilechooserdefault.c:5257
+#: gtk/gtkfilechooserdefault.c:5277
 msgid "Yesterday"
 msgstr "昨天"
 
-#: gtk/gtkfilechooserdefault.c:5268
+#: gtk/gtkfilechooserdefault.c:5288
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: gtk/gtkfilechooserdefault.c:5383
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "无法更改为您指定的文件夹，因为该文件夹的路径无效。"
 
-#: gtk/gtkfilechooserdefault.c:5440
+#: gtk/gtkfilechooserdefault.c:5460
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1092,15 +1092,15 @@ msgstr ""
 "无法选择 %s：\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5479
+#: gtk/gtkfilechooserdefault.c:5499
 msgid "Open Location"
 msgstr "打开位置"
 
-#: gtk/gtkfilechooserdefault.c:5486
+#: gtk/gtkfilechooserdefault.c:5506
 msgid "Save in Location"
 msgstr "保存于位置"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5525
 msgid "_Location:"
 msgstr "位置(_L)："
 
@@ -1499,7 +1499,7 @@ msgstr "输入法"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:854
+#: gtk/gtkmain.c:855
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -1857,22 +1857,22 @@ msgstr "无法在模块路径中找到主题引擎：“%s”，"
 msgid "--- No Tip ---"
 msgstr "--- 无提示 ---"
 
-#: gtk/gtkuimanager.c:1099
+#: gtk/gtkuimanager.c:1100
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "在第%2$d行第%3$d个字符处有未知属性“%1$s”"
 
-#: gtk/gtkuimanager.c:1317
+#: gtk/gtkuimanager.c:1318
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "在第%2$d行第%3$d个字符处有未预期的开始标签“%1$s”"
 
-#: gtk/gtkuimanager.c:1402
+#: gtk/gtkuimanager.c:1403
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "在第%d行第%d个字符处有未预期的字符"
 
-#: gtk/gtkuimanager.c:2188
+#: gtk/gtkuimanager.c:2189
 msgid "Empty"
 msgstr "空"
 

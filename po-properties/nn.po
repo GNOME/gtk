@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-01-03 23:53+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
@@ -868,7 +868,7 @@ msgstr "Detalj"
 msgid "Render detail to pass to the theme engine"
 msgstr "Teikningsdetalj som skal sendast til draktmotoren"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Tekst"
 
@@ -933,7 +933,7 @@ msgstr "Framgrunnsfarge"
 msgid "Foreground color as a GdkColor"
 msgstr "Framgrunnsfarge, som ein GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Kan redigerast"
@@ -943,7 +943,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Om teksten kan endrast av brukaren"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Skrifttype"
 
@@ -1494,42 +1494,42 @@ msgstr "Kant rundt handlingsområde"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Breidde på kanten rundt knappeområdet i botnen av dialogen"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Markørplassering"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Den noverande plasseringa til innsetjingsmarkøren, i teikn"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Utvalsgrense"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisjonen til den andre enden av utvalet, målt i teikn frå markøren"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Om innhaldet i oppføringa kan redigerast"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Største lengde"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Øvre grense for tal på teikn for denne oppføringa. Null dersom ikkje noko "
 "øvre grense"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Synleg"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1537,27 +1537,27 @@ msgstr ""
 "Dersom usann, vert «usynleg tekst» vist i staden for den faktiske teksten "
 "(passordmodus)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Har ramme"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "Dersom usann, vert den ytre kanten fjerna frå oppføringa"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "Usynleg teikn"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Teiknet som skal brukast til å gøyma innhaldet i felt (i passordmodus)"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "Bruk forvald"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1565,43 +1565,43 @@ msgstr ""
 "Om det forvalde skjermelementet (t.d. den forvalde knappen i ein dialog) "
 "skal brukast når Enter vert trykt"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "Breidde i teikn"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "Tal på teikn som det skal setjast av plass til i feltet"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "Utrulla"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Kor mange pikslar av oppføringa som har rulla av venstre sida av skjermen"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "Innhaldet i oppføringa"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X-justering"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "Den vassrette justeringa, frå 0 (venstre) til 1 (høgre)"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Vel når fokusert"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Om innhaldet i ei oppføring skal merkast når oppføringa vert fokusert"
 
@@ -1773,11 +1773,11 @@ msgstr "Vis skjulte"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Om skjulte filer og mapper skal visast"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Namn på ikondrakta som skal brukast"
@@ -1822,7 +1822,7 @@ msgstr "Y-posisjonen til barneskjermelementet"
 msgid "The title of the font selection dialog"
 msgstr "Tittelen på skrifttypeveljardialogen"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Skriftnamn"
 
@@ -1866,19 +1866,19 @@ msgstr "Vis storleik"
 msgid "Whether selected font size is shown in the label"
 msgstr "Om den valte skriftstorleiken vert vist i merkelappen"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "X-strengen som representerer denne skrifta"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont som er vald no"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Førehandsvisning av tekst"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teksten som skal brukast til å visa den valte skrifttypen"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2003-03-31 07:40+0300\n"
 "Last-Translator: Ales Nyakhaychyk <nab@mail.by>\n"
 "Language-Team: Belarusian <i18n@mova.org>\n"
@@ -878,7 +878,7 @@ msgstr "Дэталь"
 msgid "Render detail to pass to the theme engine"
 msgstr "Дэталь адлюстраваньня для перадачы рухавіку тэмы"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Тэкст"
 
@@ -942,7 +942,7 @@ msgstr "Асноўны колер"
 msgid "Foreground color as a GdkColor"
 msgstr "Асноўны колер як GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Рэдактыруемы"
@@ -952,7 +952,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Ці можа тэкст быць зьменены карыстальнікам"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Шрыфт"
 
@@ -1511,42 +1511,42 @@ msgstr "Мяжы обласьці дзеяньня"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Шырыня мяжы вакол кнопкі ўнізе дыялёгу"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Становішча курсору"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Бягучае становішча курсора ўстаўкі ў знаках."
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Мяжа вызначэньня"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Становішча супрацьлеглага канчатку абраньня ад курсора ў знаках."
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Ці можна рэдагаваць зьмест запісу"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Найбольшая даўжыня"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Найбольшая колькасьць знакаў для гэтага запісу. Нуль - калі няма "
 "абьмежаваньняў."
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Бачнасьць"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1554,28 +1554,28 @@ msgstr ""
 "FALSE адлюстроўвае \"нябачныя знакі\" замес� рэчаіснага тэксту (рэжым уводу "
 "паролю)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Мае кадар"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE прыбірае зьнешнюю рамку з запісу."
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "Нябачны знак"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "Знак, выкарыстоўвываемы для хаваньня зьместа ўводу (у \"рэжыме пароль\")"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "Задзейнічаць дапомны"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1583,43 +1583,43 @@ msgstr ""
 "Ці задзейнічаць дапомны віджэт (такі як дапомная кнопка ў дыялёгу), калі "
 "націснулі Enter."
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "Шырыня ў знаках"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "Колькасьць знакаў для якіх пакінута прастора ў запісы."
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "Зьмяшчэньне пры пракручваньні"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "Колькасьць піксэлаў запісу, пайшоўшых за левую мяжу экрана пры пракручваньні"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "Зьмест запісу"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "Выроўніваньне па X"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "Гарызантальнае выроўніваньне, ад 0 (зьлев�) да 1 (зправа)"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Адзначэньне пры засяроджваньні"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Ці зьмест запісу адзначаецца пры засяроджваньні."
 
@@ -1809,11 +1809,11 @@ msgstr "Адлюстраваць тэкст"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Ці павінны быць адлюстраваны кнопкі для стварэньня/зьмяненьня файла."
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Назва звычайнага шрыфту"
@@ -1859,7 +1859,7 @@ msgstr "Y пазіцыя віджэта-нашчадка"
 msgid "The title of the font selection dialog"
 msgstr "Назоў гэтага акна"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Назоў шрыфта"
 
@@ -1910,19 +1910,19 @@ msgstr "Адлюстраваць тэкст"
 msgid "Whether selected font size is shown in the label"
 msgstr "Ці будзе посьпех адлюстроўвацца як тэкст"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "X-радок, што выяўляе гэты шрыфт."
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont, што вылучаны ў бягучы момант."
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Прыклад тэксту"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr ""
 "Тэкст, што выкарыстоўваецца для азнакамляльнага паказу абранага шрыфту."

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2003-11-14 17:38+0100\n"
 "Last-Translator: Gnome PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
@@ -869,7 +869,7 @@ msgstr "Szczegółowość"
 msgid "Render detail to pass to the theme engine"
 msgstr "Szczegółowość renderowania, przekazywana do mechanizmu motywu"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "Tekst"
 
@@ -933,7 +933,7 @@ msgstr "Kolor elementu"
 msgid "Foreground color as a GdkColor"
 msgstr "Kolor elementu jako GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "Modyfikowalny"
@@ -943,7 +943,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Określa, czy tekst może być modyfikowany przez użytkownika"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Czcionka"
 
@@ -1503,44 +1503,44 @@ msgstr ""
 "Szerokość krawędzi wokół obszaru z przyciskami w dolnej części okna "
 "dialogowego"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "Pozycja kursora"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "Bieżące położenie kursora wstawiania, liczone w znakach"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "Granica zaznaczenia"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "Położenie końca zaznaczenia przeciwnego w stosunku do kursora, liczone w "
 "znakach"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "Określa, czy treść wejścia może być redagowana"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "Maksymalna długość"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "Maksymalna liczba znaków dla tego wejścia. Wartość zero oznacza brak "
 "maksimum."
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "Widoczność"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1549,30 +1549,30 @@ msgstr ""
 "wówczas tekst będzie widoczny w postaci ciągu \"niewidocznych znaków\", co "
 "jest przydatne przy wprowadzaniu haseł."
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "Z ramką"
 
 # tutaj entry to chyba nie miało być wejście a element
 # coś jak entry ID from list, nawet jezeli jest to element do 
 # wprowadzania tekstu
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "Określa, czy powinien być wyświetlany kant wokół elementu"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "Niewidoczny znak"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "Znak używany przy maskowaniu zawartości wejścia (w trybie hasła)"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "Uaktywnia domyślny"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1580,32 +1580,32 @@ msgstr ""
 "Określa, czy przy przyciśnięciu klawisza Enter powinien być uaktywniony "
 "domyślny widget (np. domyślny przycisk w oknie dialogowym)"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "Szerokość w znakach"
 
 # Czy to wejście to nie nazwać lepiej polem wejściowym?
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "Liczba znaków, na jaką powinno pozostać miejsce w wejściu"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "Rozmiar przewinięcia"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Liczba pikseli wejścia przewiniętych w lewo za jego obszar"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "Zawartość wejścia"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "Wyrównanie poziome"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
@@ -1613,11 +1613,11 @@ msgstr ""
 "Wyrównanie poziome, od 0 (do lewej) do 1 (do prawej). Odwrócone dla układów "
 "RTL (od prawej do lewej)"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Zaznaczanie przy skupieniu"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Określa, czy zawartość wejścia powinna być zaznaczana przy otrzymaniu "
@@ -1792,11 +1792,11 @@ msgstr "Wyświetlanie ukrytych"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Określa, czy powinny być wyświetlane ukryte pliki i foldery"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr "Domyślne wsparcie wybierania plików"
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nazwa domyślnie używanego wsparcia GtkFileChooser"
 
@@ -1842,7 +1842,7 @@ msgstr "Pionowe położenie widgetu potomnego"
 msgid "The title of the font selection dialog"
 msgstr "Tytuł okna dialogowego wyboru czcionki"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Nazwa czcionki"
 
@@ -1887,19 +1887,19 @@ msgstr "Wyświetlanie rozmiaru"
 msgid "Whether selected font size is shown in the label"
 msgstr "Określa, czy wybrany rozmiar czcionki jest wyświetlany w etykiecie"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "Napis X reprezentujący tę czcionkę"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "Aktualnie wybrany GdkFont"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Tekst na podglądzie"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Tekst wyświetlany w celu wizualizacji wybranej czcionki"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-03 12:26+0200\n"
+"POT-Creation-Date: 2004-08-13 14:10-0400\n"
 "PO-Revision-Date: 2004-08-03 18:20+0200\n"
 "Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -172,7 +172,7 @@ msgstr ""
 msgid "The ANI image format"
 msgstr "ANI képformátum"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
+#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "Nincs elég memória a kép betöltéséhez"
 
@@ -180,12 +180,12 @@ msgstr "Nincs elég memória a kép betöltéséhez"
 msgid "BMP image has unsupported header size"
 msgstr "A BMP-kép fejlécmérete nem támogatott"
 
-#: gdk-pixbuf/io-bmp.c:282 gdk-pixbuf/io-bmp.c:307 gdk-pixbuf/io-bmp.c:330
-#: gdk-pixbuf/io-bmp.c:401
+#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
+#: gdk-pixbuf/io-bmp.c:405
 msgid "BMP image has bogus header data"
 msgstr "A BMP-kép fejlécadata hibás"
 
-#: gdk-pixbuf/io-bmp.c:1118
+#: gdk-pixbuf/io-bmp.c:1122
 msgid "The BMP image format"
 msgstr "BMP képformátum"
 
@@ -936,7 +936,7 @@ msgstr ""
 "Nem adható könyvjelző ehhez: %s\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5402
+#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5422
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1039,76 +1039,76 @@ msgstr "Mappa _létrehozása"
 msgid "_Name:"
 msgstr "_Név:"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3096
 msgid "_Browse for other folders"
 msgstr "Más mappák _tallózása"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3333
 msgid "Save in _folder:"
 msgstr "Mentés _mappába:"
 
-#: gtk/gtkfilechooserdefault.c:3333
+#: gtk/gtkfilechooserdefault.c:3335
 msgid "Create in _folder:"
 msgstr "Létrehozás _mappában:"
 
-#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkfilechooserdefault.c:4022
 msgid "Can't change to folder because it isn't local"
 msgstr "Nem lehet megváltoztatni a mappát, mert az nem helyi"
 
-#: gtk/gtkfilechooserdefault.c:4157
+#: gtk/gtkfilechooserdefault.c:4165
 msgid "Could not find the path"
 msgstr "Az útvonal nem található"
 
-#: gtk/gtkfilechooserdefault.c:4508
+#: gtk/gtkfilechooserdefault.c:4521
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "%s gyorsbillentyű nem létezik"
 
-#: gtk/gtkfilechooserdefault.c:5175
+#: gtk/gtkfilechooserdefault.c:5195
 msgid "Type name of new folder"
 msgstr "Új mappa típusának neve"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5224
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d bájt"
 msgstr[1] "%d bájt"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5226
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5228
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5210
+#: gtk/gtkfilechooserdefault.c:5230
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5275
 msgid "Today"
 msgstr "Ma"
 
-#: gtk/gtkfilechooserdefault.c:5257
+#: gtk/gtkfilechooserdefault.c:5277
 msgid "Yesterday"
 msgstr "Tegnap"
 
-#: gtk/gtkfilechooserdefault.c:5268
+#: gtk/gtkfilechooserdefault.c:5288
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: gtk/gtkfilechooserdefault.c:5383
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Nem lehet az ön által megadott mappába lépni mivel az egy érvénytelen "
 "útvonal."
 
-#: gtk/gtkfilechooserdefault.c:5440
+#: gtk/gtkfilechooserdefault.c:5460
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1117,15 +1117,15 @@ msgstr ""
 "Nem lehet kijelölni a(z) %s-t:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5479
+#: gtk/gtkfilechooserdefault.c:5499
 msgid "Open Location"
 msgstr "Hely megnyitása"
 
-#: gtk/gtkfilechooserdefault.c:5486
+#: gtk/gtkfilechooserdefault.c:5506
 msgid "Save in Location"
 msgstr "Mentés helye"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5525
 msgid "_Location:"
 msgstr "He_ly:"
 
@@ -1528,7 +1528,7 @@ msgstr "Beviteli módszerek"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:854
+#: gtk/gtkmain.c:855
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -1886,22 +1886,22 @@ msgstr ""
 msgid "--- No Tip ---"
 msgstr "-- Nincs segédszöveg --"
 
-#: gtk/gtkuimanager.c:1099
+#: gtk/gtkuimanager.c:1100
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1317
+#: gtk/gtkuimanager.c:1318
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:1402
+#: gtk/gtkuimanager.c:1403
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 
-#: gtk/gtkuimanager.c:2188
+#: gtk/gtkuimanager.c:2189
 msgid "Empty"
 msgstr "Üres"
 

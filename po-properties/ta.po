@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tamil Gtk 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-02-21 18:21-0600\n"
 "Last-Translator: Dinesh Nadarajah <dinesh_list@sbcglobal.net>\n"
 "Language-Team: Tamil <tamilinix@yahoogroups.com>\n"
@@ -863,7 +863,7 @@ msgstr "விவரங்கள்"
 msgid "Render detail to pass to the theme engine"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "உரை"
 
@@ -928,7 +928,7 @@ msgstr "முன்னணி வண்ணம்"
 msgid "Foreground color as a GdkColor"
 msgstr "முன்னணி வண்ணம் ஓர் GdkColorராக"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "பதிப்பிக்கக்கூடியது"
@@ -938,7 +938,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "பயனரால் மாற்றக்கூடிய உரையாக இருகக்கூடும்"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "எழுத்து வகை"
 
@@ -1494,43 +1494,43 @@ msgstr "செயல் பரப்பு எல்லை"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Width of border around the button area at the bottom of the dialog"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "இடம்-காட்டி இடம்"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 #, fuzzy
 msgid "The current position of the insertion cursor in chars"
 msgstr "செருகுமிடத்தின் தற்போதைய இடம்"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 #, fuzzy
 msgid "Selection Bound"
 msgstr "தெரிவு செய்தது: "
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "மிகக்கூடிய நீட்டம்"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 #, fuzzy
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "இந்த உள்ளீட்டத்திற்கு மிகக்கூடிய வரியுரு எண்"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "பார்கக்கூடியது"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
@@ -1538,72 +1538,72 @@ msgstr ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "சட்டம் கொன்டது"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr ""
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "பார்க்கமுடியாத வரியுரு"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "உள்ளீடு பொருற்களை மறைக்கும்போது பயன்படுத்த வேண்டிய வரியுரு (\"password mode\" இனுல்)"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "கொடா நிலையை தொடங்கும்"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
 msgstr ""
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "charsஇல் அகலம்"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 #, fuzzy
 msgid "Number of characters to leave space for in the entry"
 msgstr "`உள்லீட்டத்தில் இடைவிட வேண்டிய வரியுருகளின் எண்"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "திரை உருளல் ஒதுக்கம்"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "Number of pixels of the entry scrolled off the screen to the left"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 #, fuzzy
 msgid "The contents of the entry"
 msgstr "அடையாளத்தின் உரை"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X align"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "கிடைதிசை நேர்ப்படுத்தல், 0 (இடது) இலிருந்து 1 (வலது) வரை"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 #, fuzzy
 msgid "Select on focus"
 msgstr "தெரிவு செய்தது: "
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 #, fuzzy
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "உள்ளீடு பொருற்களை பதிப்பிற்க முடியுமா"
@@ -1786,11 +1786,11 @@ msgstr "மறைந்திருப்பதை காண்பிக்க�
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "கோப்புகளை படைக்கும்/கையாளும் பொத்தான்களை காண்பிக்கப்பட வேண்டுமா."
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of theme RC file to load"
@@ -1838,7 +1838,7 @@ msgstr "சேய் விட்செட்டின் Y இடம்"
 msgid "The title of the font selection dialog"
 msgstr "சாளரத்தின் தலைப்பு"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "எழுத்து வகை பெயர்"
 
@@ -1887,19 +1887,19 @@ msgstr "«Ç× ¸¡ñÀ¢க்கவும்"
 msgid "Whether selected font size is shown in the label"
 msgstr "முன்னேற்றம் உரையைக் காண்பிக்கப்படுமோ"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "இந்த எழுத்து வகையின் X சரம் வகையான பிரதிநிதி"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "தற்போது தெரிவு செய்யப்பட்டுல்ல GdkFont"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "உரை முன்-காட்சி"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 #, fuzzy
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "தெரிவு செய்யப்பட்டுல்ல எழுத்து வகையை எடுத்துக் காட்ட பயன்படுத்த வேண்டிய உரை."

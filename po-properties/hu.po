@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-13 04:48+0200\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-07-13 17:18+0200\n"
 "Last-Translator: Laszlo Dvornik <dvornik@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
@@ -69,7 +69,8 @@ msgid "Rowstride"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:166
-msgid "The number of bytes between the start of a row and the start of the next row"
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:176
@@ -526,7 +527,8 @@ msgid "Use stock"
 msgstr ""
 
 #: gtk/gtkbutton.c:229
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
 #: gtk/gtkbutton.c:236
@@ -576,7 +578,8 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:364
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:371
@@ -584,7 +587,8 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:372
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:379
@@ -879,7 +883,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "A szöveg szerkeszthető-e a felhasználó által"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "Betűkészlet"
 
@@ -945,7 +949,8 @@ msgid "Rise"
 msgstr "Elhelyezés"
 
 #: gtk/gtkcellrenderertext.c:360
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:464
@@ -1433,7 +1438,8 @@ msgid "Selection Bound"
 msgstr "Kijelölés mérete"
 
 #: gtk/gtkentry.c:474 gtk/gtklabel.c:381
-msgid "The position of the opposite end of the selection from the cursor in chars"
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 
 #: gtk/gtkentry.c:484
@@ -1504,21 +1510,21 @@ msgstr ""
 msgid "The contents of the entry"
 msgstr ""
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr ""
 
-#: gtk/gtkentry.c:560 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr ""
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr ""
 
-#: gtk/gtkentry.c:794
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 
@@ -1647,7 +1653,8 @@ msgid "Preview Widget Active"
 msgstr ""
 
 #: gtk/gtkfilechooser.c:207
-msgid "Whether the application supplied widget for custom previews should be shown."
+msgid ""
+"Whether the application supplied widget for custom previews should be shown."
 msgstr ""
 
 #: gtk/gtkfilechooser.c:212
@@ -1682,11 +1689,11 @@ msgstr "Rejtett megjelenítése"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
 
@@ -1730,7 +1737,7 @@ msgstr ""
 msgid "The title of the font selection dialog"
 msgstr "A betűkészlet-választó párbeszédablak címe"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "Betűtípus"
 
@@ -1774,19 +1781,19 @@ msgstr "Méret megjelenítése"
 msgid "Whether selected font size is shown in the label"
 msgstr ""
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr ""
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr ""
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "Minta szöveg"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr ""
 
@@ -2119,7 +2126,8 @@ msgid "Can change accelerators"
 msgstr ""
 
 #: gtk/gtkmenu.c:667
-msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
 #: gtk/gtkmenu.c:672
@@ -2127,7 +2135,8 @@ msgid "Delay before submenus appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:673
-msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
 #: gtk/gtkmenu.c:680
@@ -2173,7 +2182,8 @@ msgid "Use separator"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:124
-msgid "Whether to put a separator between the message dialog's text and the buttons"
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:130
@@ -2205,7 +2215,8 @@ msgid "X pad"
 msgstr "X-helykitöltés"
 
 #: gtk/gtkmisc.c:120
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:129
@@ -2213,7 +2224,8 @@ msgid "Y pad"
 msgstr "Y-helykitöltés"
 
 #: gtk/gtkmisc.c:130
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:397
@@ -2335,7 +2347,8 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtknotebook.c:529
-msgid "Display a second backward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 
 #: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
@@ -2343,7 +2356,8 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtknotebook.c:546
-msgid "Display a second forward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
@@ -2379,7 +2393,8 @@ msgid "Spacing around indicator"
 msgstr ""
 
 #: gtk/gtkpaned.c:240
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:248
@@ -2431,7 +2446,8 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
 #: gtk/gtkpreview.c:133
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:130
@@ -2624,7 +2640,8 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:341
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:348
@@ -2632,7 +2649,8 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:349
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkruler.c:119
@@ -2720,11 +2738,13 @@ msgid "Don't change slider size, just lock it to the minimum length"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:115
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:123
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
@@ -2982,7 +3002,8 @@ msgid "Update Policy"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:294
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:303
@@ -3283,7 +3304,8 @@ msgid "Wrap mode"
 msgstr "Sortörés módja"
 
 #: gtk/gtktexttag.c:482 gtk/gtktextview.c:596
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:491 gtk/gtktextview.c:643
@@ -3555,7 +3577,8 @@ msgid "Toolbar style"
 msgstr "Eszköztár stílusa"
 
 #: gtk/gtktoolbar.c:582
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:588
@@ -4144,7 +4167,8 @@ msgid "Default Height"
 msgstr "Alapértelmezett magasság"
 
 #: gtk/gtkwindow.c:518
-msgid "The default height of the window, used when initially showing the window"
+msgid ""
+"The default height of the window, used when initially showing the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:527

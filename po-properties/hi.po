@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD.hi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-21 04:24+0200\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-07-19 21:37+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@yahoo.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
@@ -1016,7 +1016,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "क्या उपयोगकर्ता द्वारा पाठ परिवर्धित किया गया है"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "फ़ॉन्ट"
 
@@ -1679,21 +1679,21 @@ msgstr "इस प्रविष्टि में कितने पिक�
 msgid "The contents of the entry"
 msgstr "इस प्रविष्टि में क्या समाहित है"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "x"
 
-#: gtk/gtkentry.c:560 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr ""
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "फोकस करने पर चयन करें"
 
-#: gtk/gtkentry.c:794
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "जब कोई प्रविष्टि फोकस हो तब क्या उसके Contents को चयनित किया जाना है?"
 
@@ -1879,12 +1879,12 @@ msgstr "छुपा दिखाएँ"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "क्या फ़ाइलों के निर्माण/हस्तांतरण करने हेतु बटन प्रदर्शित किए जाएँ"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 #, fuzzy
 msgid "Default file chooser backend"
 msgstr "इस फ़ाइल हेतु डिफ़ॉल्ट"
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr ""
@@ -1931,7 +1931,7 @@ msgstr "चाइल्ड विज़ेट की y स्थिति"
 msgid "The title of the font selection dialog"
 msgstr "फ़ॉन्ट चयन संवाद का शीर्षक"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "फ़ॉन्ट नाम"
 
@@ -1979,20 +1979,20 @@ msgstr "आकार दिखाएँ"
 msgid "Whether selected font size is shown in the label"
 msgstr "क्या लेबल चयनित फ़ॉन्ट आकार में दर्शाया गया है?"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "इस फ़ॉन्ट को प्रस्तुत करने वाली x स्ट्रिंग"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 #, fuzzy
 msgid "The GdkFont that is currently selected"
 msgstr "<p>यह वर्तमान चयनित फ़ॉन्ट फैमिली है</p>"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "पाठ पूर्वावलोकन"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "चयनित फ़ॉन्ट को दर्शाने हेतु प्रदर्शित किए जाने वाला पाठ"
 

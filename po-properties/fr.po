@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+_properties 2.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-01 14:07+0200\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-08-01 11:31+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
@@ -1591,22 +1591,22 @@ msgstr "Nombre de pixels de l'entrée à défiler hors de l'écran vers la gauch
 msgid "The contents of the entry"
 msgstr "Le contenu de l'entrée"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "Alignement X"
 
-#: gtk/gtkentry.c:560 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "Alignement horizontal, de 0 (gauche) à 1 (droite)"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "Sélection sur le focus"
 
-#: gtk/gtkentry.c:794
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr ""
 "Indique si le contenu de l'entrée de texte doit être sélectionné quand elle "

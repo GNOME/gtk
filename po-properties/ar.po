@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-03-17 08:30+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -831,7 +831,7 @@ msgstr "التفاصيل"
 msgid "Render detail to pass to the theme engine"
 msgstr "تفاصيل الترجمة لتمريرها لمحرك التيمات"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "النص"
 
@@ -895,7 +895,7 @@ msgstr "لون الواجهة الأمامية"
 msgid "Foreground color as a GdkColor"
 msgstr "لون الواجهة الأمامية كـ GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "قابل للتحرير"
@@ -905,7 +905,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "فيما إذا يمكن تعديل النص عن طريق المستخدم"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "الخط"
 
@@ -1448,66 +1448,66 @@ msgstr "حد منطقة العمل"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "عرض حد منطقة الزر أسفل الصندوق"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "موقع المؤشر"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "الموقع الحالي لمؤشر الإدخال في الرموز"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "قيد المنتقى"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "موقع النهاية المعكوسة للمنتقى من المؤشر في الرموز"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "فيما إذا كانت محتويات الخانة قابلة للتحرير"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "الارتفاع الأقصى"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "العدد الأقصى للرموز لهذا المدخل. صفر إذا لم يكن أقصى"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "الرؤية"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "FALSE سيعرض \"الرمز المخفي\" بدلاً من النص الحالي (نمط كلمة السر)"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "له إطار"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "FALSE يحذف الحافة الخارجية من الخانة"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "رمز مخفي"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "الرمز الذي سيستخدم لاخفاء محتويات الخانة (في \"نمط كلمة السر\")"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "تنشيط الافتراضات"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1515,41 +1515,41 @@ msgstr ""
 "فيما اذا وجب تنشيط القطعة الافتراضية (مثل الزر الافتراضي في حوار ما)عند نقر "
 "زر الادخال"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "العرض بالرموز"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "عدد الرموز التي ستترك لها فراغات في الخانة"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "تكافؤ اللف"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "عدد بكسلات الخانة الملفوفة خارج الشاشة إلى اليسار"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "محتويات الخانة"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "تنسيق س"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "الترصيف الأفقي، من 0 (يسار) إلى 1 (يمين). مقلوب لتصاميم RTL"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "اختيار عند التركيز"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
 
@@ -1718,11 +1718,11 @@ msgstr "اظهار المخفي"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "فيما اذا وجب عرض الملفات و الدلائل المخفية"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr "خلفيّة منتقي الملفات الإفتراضيّة"
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
@@ -1766,7 +1766,7 @@ msgstr "موقع ص للقطعة الابنة"
 msgid "The title of the font selection dialog"
 msgstr "عنوان حوار انتقاء الخطوط"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "اسم الخط"
 
@@ -1810,19 +1810,19 @@ msgstr "اظهار الحجم"
 msgid "Whether selected font size is shown in the label"
 msgstr "فيما إذا سيعرض حجم الخط المنتقى في العلامة"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "سلسلة X التي ستعرض هذا الخط"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "خط Gdk المنتقى حالياً"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "نص اللمحة"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "النص الذي سيعرض لتقديم الخط المنتقى"
 

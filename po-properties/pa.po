@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.HEAD VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2004-03-14 16:47+0530\n"
 "Last-Translator: Amanpreet Singh Alam <amanlinux@netscape.net>\n"
 "Language-Team: Punjabi <indlinux-punjabi@lists.sourceforge.net>\n"
@@ -821,7 +821,7 @@ msgstr "ਵੇਰਵਾ"
 msgid "Render detail to pass to the theme engine"
 msgstr "ਸਰੂਪ ੲਿੰਜਣ ਨੰੂ ਦੇਣ ਲੲੀ ਪੇਸ਼ਕਾਰੀ ਵੇਰਵਾ"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "ਪਾਠ"
 
@@ -885,7 +885,7 @@ msgstr "ਅਗਲਾ ਰੰਗ"
 msgid "Foreground color as a GdkColor"
 msgstr "ਅਗਲਾ ਰੰਗ GdkColor ਵ੾ਗ"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "ਸੋਧਯੋਗ"
@@ -895,7 +895,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "ਕੀ ਪਾਠ ਵਰਤਣਵਾਲਾ ਸੋਧ ਸਕੇ ਜ੾ ਨਾ"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "ਫੋਟ"
 
@@ -1436,66 +1436,66 @@ msgstr "ਕਾਰਵਾੲੀ ਖੇਤਰ ਦਾ ਹਾਸ਼ੀਅਾ"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ਤੱਖਤੀ ਦੇ ਹੇਠ ਬਟਨ੾ ਦੇ ਖੇਤਰ ਦੁਅਾਲੇ ਹਾਸ਼ੀੲੇ ਦੀ ਚੌੜਾੲੀ"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "ਕਰਸਰ ਦੀ ਸਥਿਤੀ"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "ਅੱਖਰ੾ ਵਿੱਚ ਵਿਚਕਾਰਲੀ ਕਰਸਰ ਦੀ ਮੌਜੂਦਾ ਸਥਿਤੀ"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "ਚੋਣ ਸੀਮਾ"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "ਕਰਸਰ ਤੋ ਚੋਣ ਦੀ ਵਿਰੋਧੀ ਸਿਰਿਅਾ ਤੱਕ ਦੀ ਸਥਿਤੀ ਅੱਖਰ੾ ਵਿੱਚ"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "ਕੀ ੲਿੰਦਰਾਜ਼ ਹਿੱਸੇ ਨੰੁ ਸੋਧਿਅਾ ਜਾ ਸਕਦਾ ਹੈ"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "ਵੱਧ ਤੋ ਵੱਧ ਲੰਬਾੲੀ"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr "ਿੲਸ ੲਿੰਦਰਾਜ਼ ਲੲੀ ਵੱਧ ਤੋ ਵੱਧ ਅੱਖਰ੾ ਦੀ ਥ੾ ੤ 0 ਜੇਕਰ ਕੋੲੀ ਵੱਧ ਤੋ ਵੱਧ ਨਹੀ ਹੈ ੤"
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "ਵੇਖਣਯੋਗਤਾ"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr "ਗਲਤ, ਅਸਲੀ ਸ਼ਬਦ੾(ਗੁਪਤ ਕੋਡ)  ਦੀ ਬਜਾੲੇ \"ਲੁਕਵੇ ਅੱਖਰ\" ਵੇਖਾਵੇਗਾ"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "ਫਰੇਮ ਹੈ"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "ਗਲਤ ਿੲੰਦਰਾਜ਼ ਵਿਚੋ ਬਾਹਰੀ bevel ਨੰੂ ਹਟਾ ਦੇਵੇਗਾ"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "ਅਦਿੱਖ ਅੱਖਰ"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr "ਅੱਖਰ, ਜੋ ਕਿ ੲਿੰਦਰਾਜ਼ ਦੇ ਸ਼ਬਦ੾ ਨੰੂ ਲੁਕੳੁਣ ਦੇ ਕੰਮ ਲੲੀ ਵਰਤਿਅਾ ਜਾਵੇਗਾ (\"ਗੁਪਤ ਕੋਡ\" ਵਿੱਚ)"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "ਮੂਲ ਸਰਗਰਮ"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1503,41 +1503,41 @@ msgstr ""
 "ਕੀ ਮੂਲ ਵਿਦਗਿਟ ਹੀ ਸਰਗਰਮ ਕਰਨਾ ਹੈ, ( ਜਿਵੇ ਕਿ ਤੱਖਤੀ ਵਿੱਚ ਮੂਲ ਬਟਨ)ਜਦੋ ਕਿ ਅੈਟਰ ਨੰੂ ਦਬਾੲਿਅਾ "
 "ਜਾਵੇ"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "ਅੱਖਰ੾ ਵਿੱਚ ਚੌੜਾੲੀ"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "ੲਿੰਦਰਾਜ਼ ਵਿੱਚ ਖਾਲੀ ਥ੾ ਛੱਡਣ ਲੲੀ ਅੱਖਰ੾ ਦੀ ਗਿਣਤੀ"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "ਸੰਤੁਲਿਤ ਸਕਰੋਲ"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr "ਪਿਕਸਲ੾ ਦੀ ਗਿਣਤੀ ਜੋ ਕਿ ਪਰਦੇ ਦੇ ਖੱਬਿੳੁ ੲਿੰਦਰਾਜ਼ ਵਿੱਚ ਸੰਤੁਲਿਤ ਸਕਰੋਲ ਹੋਣ"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "ੲਿੰਦਰਾਜ਼ ਦਾ ਪਾਠ"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "X ਸਫ਼ਬੰਦੀ"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "ਲੇਟਵੀ ਸਫ਼ਬੰਦੀ, 0 (ਖੱਬਿੳੁ) ਤੋ 1 (ਸੱਜਿੳੁ) ੤ ਅਾਰਟੀਅੈਲਖਾਕੇ ਲੲੀ ੳੁਲਟ ਹੈ"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "ਕੇਦਰਿਤ ਨੰੂ ਚੁਣੋ"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "ਕੀ ੲਿੰਦਰਾਜ਼ ਵਿੱਚਲੇ ਹਿੱਸੇ ਨੰੂ ਚੁਣਾ ਹੈ, ਜਦੋ ਕਿ ੲਿਹ ਕੇਦਰਿਤ ਹੋ ਜਾਵੇ"
 
@@ -1704,11 +1704,11 @@ msgstr "ਲੁਕਵੀਅ੾ ਵੇਖਾੳੁ"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "ਕੀ ਲੁਕਵੀਅਾ ਫਾੲਿਲ੾ ਅਤੇ ਫੋਲਡਰ੾ ਨੰੂ ਵੇਖਾੳੁਣੇ ਹਨ ੤"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr "ਮੂਲ ਫਾੲਿਲ ਚੋਣ ਬੈਕਅੈਡ"
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "GtkFileChooser ਦਾ ਨਾੳੁ ਜੋ ਕਿ ਮੂਲ ਰੂਪ ਵਿੱਚ ਵਰਤਣਾ ਹੈ"
 
@@ -1752,7 +1752,7 @@ msgstr "ਚਲਾੲਿਡ ਵਿਦਗਿਟ ਦੀ Y ਸਥਿਤੀ"
 msgid "The title of the font selection dialog"
 msgstr "ਫੋਟ ਚੋਣਕਾਰ ਤਖਤੀ ਦਾ ਸਿਰਲੇਖ"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "ਫੋਟ ਨਾੳੁ"
 
@@ -1796,19 +1796,19 @@ msgstr "ਅਕਾਰ ਵੇਖਾੳੁ"
 msgid "Whether selected font size is shown in the label"
 msgstr "ਕੀ ਚੁਣੇ ਫੋਟ ਅਕਾਰ ਨੰੂ ਲੇਬਲ ਵਿੱਚ ਵੇਖਾੲਿਅਾ ਜਾਵੇ ੤"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "X ਸਤਰ ਜੋੋ ਕਿ ੲਿਸ ਫੋਟ ਨੰੂ ਵੇਖਾਵੇ"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "GdkFont ਜੋ ਹੁਣ ਚੁਣੇ ਗੲੇ ਹਨ "
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "ਪਾਠ ਦਾ ਨਮੂਨਾ"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "ਚੁਣੇ ਫੋਟ੾ ਲੲੀ ਨਮੂਨਾ ਵੇਖਾੳੁਣ ਲੲੀ ਪਾਠ"
 

@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-02 13:44+0200\n"
+"POT-Creation-Date: 2004-08-13 14:10-0400\n"
 "PO-Revision-Date: 2004-08-02 13:45+0200\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -178,7 +178,7 @@ msgstr "Bloc erroni en l'animació"
 msgid "The ANI image format"
 msgstr "El format d'imatge ANI"
 
-#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
+#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "No hi ha memòria suficient per carregar la imatge en mapa de bits"
 
@@ -186,12 +186,12 @@ msgstr "No hi ha memòria suficient per carregar la imatge en mapa de bits"
 msgid "BMP image has unsupported header size"
 msgstr "La imatge BMP té una mida de capçalera no implementada"
 
-#: gdk-pixbuf/io-bmp.c:282 gdk-pixbuf/io-bmp.c:307 gdk-pixbuf/io-bmp.c:330
-#: gdk-pixbuf/io-bmp.c:401
+#: gdk-pixbuf/io-bmp.c:286 gdk-pixbuf/io-bmp.c:311 gdk-pixbuf/io-bmp.c:334
+#: gdk-pixbuf/io-bmp.c:405
 msgid "BMP image has bogus header data"
 msgstr "La imatge BMP conté dades de capçalera errònies"
 
-#: gdk-pixbuf/io-bmp.c:1118
+#: gdk-pixbuf/io-bmp.c:1122
 msgid "The BMP image format"
 msgstr "El format d'imatge BMP"
 
@@ -949,7 +949,7 @@ msgstr ""
 "No s'ha pogut afegir una adreça d'interés per a %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5402
+#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5422
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1055,75 +1055,75 @@ msgstr "Crea una ca_rpeta"
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3096
 msgid "_Browse for other folders"
 msgstr "Na_vega per a altres carpetes"
 
-#: gtk/gtkfilechooserdefault.c:3331
+#: gtk/gtkfilechooserdefault.c:3333
 msgid "Save in _folder:"
 msgstr "De_sa en una carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:3333
+#: gtk/gtkfilechooserdefault.c:3335
 msgid "Create in _folder:"
 msgstr "Crea en una _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:4019
+#: gtk/gtkfilechooserdefault.c:4022
 msgid "Can't change to folder because it isn't local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:4157
+#: gtk/gtkfilechooserdefault.c:4165
 msgid "Could not find the path"
 msgstr "No s'ha pogut trobar el camí"
 
-#: gtk/gtkfilechooserdefault.c:4508
+#: gtk/gtkfilechooserdefault.c:4521
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "la drecera %s no existeix"
 
-#: gtk/gtkfilechooserdefault.c:5175
+#: gtk/gtkfilechooserdefault.c:5195
 msgid "Type name of new folder"
 msgstr "Nom del tipus de la nova carpeta"
 
-#: gtk/gtkfilechooserdefault.c:5204
+#: gtk/gtkfilechooserdefault.c:5224
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d octet"
 msgstr[1] "%d octets"
 
-#: gtk/gtkfilechooserdefault.c:5206
+#: gtk/gtkfilechooserdefault.c:5226
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f KB"
 
-#: gtk/gtkfilechooserdefault.c:5208
+#: gtk/gtkfilechooserdefault.c:5228
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f MB"
 
-#: gtk/gtkfilechooserdefault.c:5210
+#: gtk/gtkfilechooserdefault.c:5230
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f GB"
 
-#: gtk/gtkfilechooserdefault.c:5255
+#: gtk/gtkfilechooserdefault.c:5275
 msgid "Today"
 msgstr "Avuí"
 
-#: gtk/gtkfilechooserdefault.c:5257
+#: gtk/gtkfilechooserdefault.c:5277
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: gtk/gtkfilechooserdefault.c:5268
+#: gtk/gtkfilechooserdefault.c:5288
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:5363
+#: gtk/gtkfilechooserdefault.c:5383
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "No es pot canviar a la carpeta que heu especificat ja que és un camí invàlid."
 
-#: gtk/gtkfilechooserdefault.c:5440
+#: gtk/gtkfilechooserdefault.c:5460
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1132,15 +1132,15 @@ msgstr ""
 "No s'ha pogut seleccionar %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5479
+#: gtk/gtkfilechooserdefault.c:5499
 msgid "Open Location"
 msgstr "Obre una ubicació"
 
-#: gtk/gtkfilechooserdefault.c:5486
+#: gtk/gtkfilechooserdefault.c:5506
 msgid "Save in Location"
 msgstr "Desa en una ubicació"
 
-#: gtk/gtkfilechooserdefault.c:5505
+#: gtk/gtkfilechooserdefault.c:5525
 msgid "_Location:"
 msgstr "_Ubicació:"
 
@@ -1552,7 +1552,7 @@ msgstr "Mètodes d'entrada"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:854
+#: gtk/gtkmain.c:855
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -1915,24 +1915,24 @@ msgstr "No s'ha trobat el motor de tema al module_path: \"%s\","
 msgid "--- No Tip ---"
 msgstr "-- Sense pista --"
 
-#: gtk/gtkuimanager.c:1099
+#: gtk/gtkuimanager.c:1100
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
 msgstr "L'atribut «%s» en la línia %d, caràcter %d és desconegut"
 
-#: gtk/gtkuimanager.c:1317
+#: gtk/gtkuimanager.c:1318
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "S'ha trobat una etiqueta d'inici «%s» inesperada en la línia %d, caràcter %d"
 
-#: gtk/gtkuimanager.c:1402
+#: gtk/gtkuimanager.c:1403
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr ""
 "S'han trobat dades de caràcters inesperades en la línia %d, caràcter %d"
 
-#: gtk/gtkuimanager.c:2188
+#: gtk/gtkuimanager.c:2189
 msgid "Empty"
 msgstr "Buit"
 

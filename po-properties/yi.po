@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 00:22-0400\n"
+"POT-Creation-Date: 2004-08-13 14:11-0400\n"
 "PO-Revision-Date: 2003-02-11\n"
 "Last-Translator: Raphael Finkel <raphael@cs.uky.edu>\n"
 "Language-Team: None <>\n"
@@ -872,7 +872,7 @@ msgstr "פּרטים"
 msgid "Render detail to pass to the theme engine"
 msgstr "פֿאָרמיר פּרטים צו געבן צום טעמע־מאָטאָר"
 
-#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:550 gtk/gtkprogressbar.c:218
+#: gtk/gtkcellrenderertext.c:193 gtk/gtkentry.c:551 gtk/gtkprogressbar.c:218
 msgid "Text"
 msgstr "טעקסט"
 
@@ -936,7 +936,7 @@ msgstr "פֿאַר־פֿאַרב"
 msgid "Foreground color as a GdkColor"
 msgstr "פֿאַר־פֿאַרב װי אַ GdkColor"
 
-#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:482 gtk/gtktexttag.c:274
+#: gtk/gtkcellrenderertext.c:259 gtk/gtkentry.c:483 gtk/gtktexttag.c:274
 #: gtk/gtktextview.c:587
 msgid "Editable"
 msgstr "רעדאַגירעװדיק"
@@ -946,7 +946,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "צי דער ניצער מעג ענדערן דעם טעקסט"
 
 #: gtk/gtkcellrenderertext.c:267 gtk/gtkcellrenderertext.c:275
-#: gtk/gtkfontsel.c:218 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
+#: gtk/gtkfontsel.c:221 gtk/gtktexttag.c:282 gtk/gtktexttag.c:290
 msgid "Font"
 msgstr "שריפֿט"
 
@@ -1501,72 +1501,72 @@ msgstr "אַקציע־שטח צאַמרינע"
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "ברײט פֿון צאַמרינע אַרום קנעפּל־שטח צום פֿוס פֿון דיִאַלאָג"
 
-#: gtk/gtkentry.c:462 gtk/gtklabel.c:370
+#: gtk/gtkentry.c:463 gtk/gtklabel.c:370
 msgid "Cursor Position"
 msgstr "לױפֿער פּאָזיציע"
 
-#: gtk/gtkentry.c:463 gtk/gtklabel.c:371
+#: gtk/gtkentry.c:464 gtk/gtklabel.c:371
 msgid "The current position of the insertion cursor in chars"
 msgstr "איצטיקע פּאָזיציע פֿון אַרײַנלײג־לױפֿער אין שריפֿטצײכנס"
 
-#: gtk/gtkentry.c:472 gtk/gtklabel.c:380
+#: gtk/gtkentry.c:473 gtk/gtklabel.c:380
 msgid "Selection Bound"
 msgstr "סעלעקציע גרענעץ"
 
-#: gtk/gtkentry.c:473 gtk/gtklabel.c:381
+#: gtk/gtkentry.c:474 gtk/gtklabel.c:381
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr ""
 "די פּאָזיציע פֿון דער צװײטער עק פֿון סעלעקציע, מעסטנדיק פֿון לױפֿער, אין שריפֿטצײכנס"
 
-#: gtk/gtkentry.c:483
+#: gtk/gtkentry.c:484
 msgid "Whether the entry contents can be edited"
 msgstr "צי מען מעג רעדאַגירן די אַרײַנשרײַב אינהאַלט"
 
-#: gtk/gtkentry.c:490
+#: gtk/gtkentry.c:491
 msgid "Maximum length"
 msgstr "גרעסטע לענג"
 
-#: gtk/gtkentry.c:491
+#: gtk/gtkentry.c:492
 msgid "Maximum number of characters for this entry. Zero if no maximum"
 msgstr ""
 "גרעסטע צאָל פֿון שריפֿטצײכנס פֿאַר דעם דאָזיקן אַרײַנשרײַב־אָרט; נול אױב ניט "
 "פֿאַרגרענעצט."
 
-#: gtk/gtkentry.c:499
+#: gtk/gtkentry.c:500
 msgid "Visibility"
 msgstr "זעעװדיקײט"
 
-#: gtk/gtkentry.c:500
+#: gtk/gtkentry.c:501
 msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
 "\"פֿאַלש\" װײַזט אַן אומזעעװדיקן שריפֿטצײכן אַנשטאָט דעם טעקסט גופֿא (שפּריכװאָרט מאָדע"
 
-#: gtk/gtkentry.c:507
+#: gtk/gtkentry.c:508
 msgid "Has Frame"
 msgstr "האָט אַ ראָם"
 
-#: gtk/gtkentry.c:508
+#: gtk/gtkentry.c:509
 msgid "FALSE removes outside bevel from entry"
 msgstr "\"פֿאַלש\" נעמט אַװעק אױסערלעכער שרעגפֿלאַך פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkentry.c:515
+#: gtk/gtkentry.c:516
 msgid "Invisible character"
 msgstr "אומזעעװדיקער שריפֿטצײכן"
 
-#: gtk/gtkentry.c:516
+#: gtk/gtkentry.c:517
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
 "דער שריפֿטצײכן צו נוצן װען מען מאַסקירט די אַרײַנשרײַב־אָרט אינהאַלט (װי אין "
 "שפּריכװאָרט מאָדע"
 
-#: gtk/gtkentry.c:523
+#: gtk/gtkentry.c:524
 msgid "Activates default"
 msgstr "אַקטיװירט דעם געװײנטלעכן מצבֿ"
 
-#: gtk/gtkentry.c:524
+#: gtk/gtkentry.c:525
 msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed"
@@ -1574,44 +1574,44 @@ msgstr ""
 "צי מען זאָל אַקטיװירן דאָס געװײנטלעכע צעפּיכעסל (למשל, דאָס געװײנטלעך קנעפּל אין אַ "
 "דיִאַלאָג) װען מען דריקט Enter"
 
-#: gtk/gtkentry.c:530
+#: gtk/gtkentry.c:531
 msgid "Width in chars"
 msgstr "ברײט אין שריפֿטצײכנס"
 
-#: gtk/gtkentry.c:531
+#: gtk/gtkentry.c:532
 msgid "Number of characters to leave space for in the entry"
 msgstr "װיפֿל שריפֿטצײכנס צו לאָזן אָרט פֿאַר זײ אין דער פּאָזיציע"
 
-#: gtk/gtkentry.c:540
+#: gtk/gtkentry.c:541
 msgid "Scroll offset"
 msgstr "דורכבלעטער צולײג"
 
-#: gtk/gtkentry.c:541
+#: gtk/gtkentry.c:542
 msgid "Number of pixels of the entry scrolled off the screen to the left"
 msgstr ""
 "װיפֿל בילדצעלן פֿון אַרײַנשרײַב־אָרט זײַנען דורכגעבלעטערט אַװעק פֿון דעם עקראַן אױף "
 "לינקס"
 
-#: gtk/gtkentry.c:551
+#: gtk/gtkentry.c:552
 msgid "The contents of the entry"
 msgstr "דער אינהאַלט פֿון אַרײַנשרײַב־אָרט"
 
-#: gtk/gtkentry.c:558 gtk/gtkmisc.c:99
+#: gtk/gtkentry.c:567 gtk/gtkmisc.c:99
 msgid "X align"
 msgstr "ה' אױסגלײַכונג"
 
-#: gtk/gtkentry.c:559 gtk/gtkmisc.c:100
+#: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
 #, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr "די האָריזאָנטאַלישע אױסגלײַכונג, פֿון 0 (לינקס) ביז 1 (רעכטס)"
 
-#: gtk/gtkentry.c:792
+#: gtk/gtkentry.c:801
 msgid "Select on focus"
 msgstr "קלײַב אױס װען פֿאָקוסירט"
 
-#: gtk/gtkentry.c:793
+#: gtk/gtkentry.c:802
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "צי מען װיל סעלעקטירן דעם אינהאַלט פֿון אַ פּאָזיציע װען זי איז פֿאָקוסירט"
 
@@ -1800,11 +1800,11 @@ msgstr "װײַז טעקסט"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "צי די קנעפּלעך װאָס שאַפֿן און אָפּערירן אױף טעקעס זאָלן זיך לאָזן װײַזן"
 
-#: gtk/gtkfilechooserdefault.c:563
+#: gtk/gtkfilechooserdefault.c:569
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:564
+#: gtk/gtkfilechooserdefault.c:570
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "נאָמען פֿון דער געװײנטלעכער שריפֿט"
@@ -1850,7 +1850,7 @@ msgstr "װ' פּאָזיציע פֿון קינד־צעפּיכעסל"
 msgid "The title of the font selection dialog"
 msgstr "דער טיטל פֿונעם פֿענצטער"
 
-#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:211
+#: gtk/gtkfontbutton.c:191 gtk/gtkfontsel.c:214
 msgid "Font name"
 msgstr "שריפֿט נאָמען"
 
@@ -1901,19 +1901,19 @@ msgstr "װײַז טעקסט"
 msgid "Whether selected font size is shown in the label"
 msgstr "אױב פּראָגרעס לאָזט זיך װײַזן װי טעקסט"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:215
 msgid "The X string that represents this font"
 msgstr "די X אות־פֿאָדעם װאָס רעפּרעזענטירט די־אָ שריפֿט"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:222
 msgid "The GdkFont that is currently selected"
 msgstr "די איצטיקע־סעלעקטירטע Gdk שריפֿט"
 
-#: gtk/gtkfontsel.c:225
+#: gtk/gtkfontsel.c:228
 msgid "Preview text"
 msgstr "טעקסט פֿאָרױסװײַז"
 
-#: gtk/gtkfontsel.c:226
+#: gtk/gtkfontsel.c:229
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "טעקסט פֿאָרױסצוּװײַזן כּדי צו דעמאָנסטרירן די סעלעקטירטע שריפֿט"
 
