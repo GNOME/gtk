@@ -1,3 +1,9 @@
+2004-09-18  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystem.h: Removed the GTK_FILE_PATH() and
+	GTK_IS_FILE_PATH() macros.  They are not supposed to exist, as
+	GtkFilePath is not an object.  And they never worked, anyway.
+
 2004-09-18  Matthias Clasen  <mclasen@redhat.com>
 	
 	* configure.in: Bump version.
