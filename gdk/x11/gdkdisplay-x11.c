@@ -199,8 +199,8 @@ gdk_display_open (const gchar *display_name)
 
             XkbSelectEvents (display_x11->xdisplay,
                              XkbUseCoreKbd,
-                             XkbMapNotifyMask | XkbStateNotifyMask,
-                             XkbMapNotifyMask | XkbStateNotifyMask);
+                             XkbNewKeyboardNotifyMask | XkbMapNotifyMask | XkbStateNotifyMask,
+                             XkbNewKeyboardNotifyMask | XkbMapNotifyMask | XkbStateNotifyMask);
 
 	    XkbSetDetectableAutoRepeat (display_x11->xdisplay,
 					True,

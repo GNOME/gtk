@@ -1,3 +1,10 @@
+Fri Apr 18 14:15:09 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): 
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): You
+	don't get a XkbMapNotify event if you get a XkbNewKeyboardNotify 
+	event, so select for both. (#108406, Egmont Koblinger)
+
 Thu Apr 17 09:57:44 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (validate_visible_area): remove infinite loop
