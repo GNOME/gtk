@@ -274,7 +274,7 @@ update_keymap (void)
 		  gint k = ToAsciiEx (vk, scancode, key_state,
 				      (LPWORD) chars, 0, _gdk_input_locale);
 #if 0
-		  g_print ("ToAsciiEx(%02x: %d: %d: %d, %02x%02x\n",
+		  g_print ("ToAsciiEx(%02x, %d: %d): %d, %02x%02x\n",
 			   vk, scancode, shift, k, chars[0], chars[1]);
 #endif
 		  if (k == 1)
@@ -292,6 +292,8 @@ update_keymap (void)
 		    }
 		  else if (k == -1)
 		    {
+		      guint keysym;
+
 		      MultiByteToWideChar (_gdk_input_codepage, 0,
 					   chars, 1, wcs, 1);
 
@@ -315,7 +317,8 @@ update_keymap (void)
 				 _gdk_input_locale);
 		      
 		      /* Use dead keysyms instead of "undead" ones */
-		      switch (gdk_unicode_to_keyval (wcs[0]))
+		      keysym = gdk_unicode_to_keyval (wcs[0]);
+		      switch (keysym)
 			{
 			case '"': /* 0x022 */
 			  *ksymp = GDK_dead_diaeresis; break;
@@ -347,13 +350,16 @@ update_keymap (void)
 			  *ksymp = GDK_dead_doubleacute; break;
 			case GDK_abovedot: /* 0x1ff */
 			  *ksymp = GDK_dead_abovedot; break;
+			case 0x1000384: /* Greek tonos */
+			  *ksymp = GDK_dead_acute; break;
 			case GDK_Greek_accentdieresis: /* 0x7ae */
 			  *ksymp = GDK_Greek_accentdieresis; break;
 			default:
 			  GDK_NOTE (EVENTS,
-				    g_print ("Unhandled dead key cp:%d vk:%02x, sc:%x, ch:%02x%s%s\n",
+				    g_print ("Unhandled dead key cp:%d vk:%02x sc:%x ch:%02x wc:%04x keysym:%04x%s%s\n",
 					     _gdk_input_codepage, vk,
 					     scancode, chars[0],
+					     wcs[0], keysym,
 					     (shift&0x1 ? " shift" : ""),
 					     (shift&0x2 ? " altgr" : "")));
 			}
