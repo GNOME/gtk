@@ -333,7 +333,7 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 				    + (event->area.x * pixbuf->art_pixbuf->n_channels),
 				    pixbuf->art_pixbuf->rowstride);
 	}
-}  
+}
 
 static void
 config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)

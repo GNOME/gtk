@@ -6,7 +6,6 @@
 	code into separate function
 	(png_info_callback): Use setup_png_transformations
 	
-
 1999-10-27  Havoc Pennington  <hp@pobox.com>
 
 	* src/gdk-pixbuf-io.c (gdk_pixbuf_new_from_xpm_data): Check
