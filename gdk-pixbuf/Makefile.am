@@ -212,6 +212,11 @@ man_MANS = gdk-pixbuf-csource.1
 #
 
 
+gdk_pixbuf_built_headers = gdk-pixbuf-enum-types.h
+gdk_pixbuf_built_cfiles = gdk-pixbuf-enum-types.c
+
+$(OBJECTS): $(gdk_pixbuf_built_headers)
+
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
 
 libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
@@ -224,6 +229,7 @@ libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
 	gdk-pixbuf-scale.c	\
 	gdk-pixbuf-util.c	\
 	gdk-pixdata.c		\
+	$(gdk_pixbuf_built_cfiles) \
 @STRIP_END@
 
 
@@ -237,15 +243,49 @@ libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
 libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
 libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
 
-libgdk_pixbufinclude_HEADERS =  \
+gdk_pixbuf_headers = \
 	gdk-pixbuf.h		\
 	gdk-pixbuf-loader.h	\
-	gdk-pixbuf-features.h	\
+	gdk-pixbuf-features.h
+
+libgdk_pixbufinclude_HEADERS =  \
+	$(gdk_pixbuf_headers)		\
+	$(gdk_pixbuf_built_headers)	\
 	gdk-pixdata.h
 
 noinst_HEADERS = 		\
 	gdk-pixbuf-io.h		\
 	gdk-pixbuf-private.h
+
+gdk-pixbuf-enum-types.h: s-enum-types-h
+	@true
+
+s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) Makefile
+	( cd $(srcdir) && glib-mkenums \
+			--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
+			--fprod "/* enumerations from \"@filename@\" */\n" \
+			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
+			--ftail "#endif /* __GDK_PIXBUF_ENUM_TYPES_H__ */" \
+		$(gdk_pixbuf_headers) ) > tmp-gdk-pixbuf-enum-types.h \
+	&& (cmp -s tmp-gdk-pixbuf-enum-types.h $(srcdir)/gdk-pixbuf-enum-types.h || cp tmp-gdk-pixbuf-enum-types.h $(srcdir)/gdk-pixbuf-enum-types.h ) \
+	&& rm -f tmp-gdk-pixbuf-enum-types.h \
+	&& echo timestamp > $(@F)
+
+gdk-pixbuf-enum-types.c: s-enum-types-c
+	@true
+
+s-enum-types-c: @REBUILD@ $(gdk_pixbuf_headers) Makefile
+	( cd $(srcdir) && glib-mkenums \
+			--fhead "#include <gdk-pixbuf/gdk-pixbuf.h>" \
+			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const GEnumValue values[] = {"       \
+			--vprod "      { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+			--vtail "      { 0, NULL, NULL }\n    };\n    etype = g_enum_register_static (\"@EnumName@\", values);\n  }\n  return etype;\n}\n" \
+		$(gdk_pixbuf_headers) ) > tmp-gdk-pixbuf-enum-types.c \
+	&& (cmp -s tmp-gdk-pixbuf-enum-types.c $(srcdir)/gdk-pixbuf-enum-types.c || cp tmp-gdk-pixbuf-enum-types.c $(srcdir)/gdk-pixbuf-enum-types.c ) \
+	&& rm -f tmp-gdk-pixbuf-enum-types.c \
+	&& echo timestamp > $(@F)
+
 
 EXTRA_DIST =			\
         gdk-pixbuf-csource.1    \

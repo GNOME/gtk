@@ -1,3 +1,11 @@
+2001-09-16  James Henstridge  <james@daa.com.au>
+
+	* .cvsignore: add generated files to ignore list.
+
+	* gdk-pixbuf.h: include gdk-pixbuf-enum-types.h
+
+	* Makefile.am: add rules to build gdk-pixbuf-enum-types.[ch]
+
 Fri Sep 14 23:22:12 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* io-pnm.c (pnm_read_header): Use GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
