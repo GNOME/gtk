@@ -1,3 +1,8 @@
+2003-04-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimcontext.c (gtk_im_context_focus_in): Fix docs.
+	(#109510, Noah Levitt)
+
 Mon Mar 31 13:52:13 2003  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): null initialize reorder's
