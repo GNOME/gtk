@@ -1,3 +1,33 @@
+2000-03-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h (struct _GdkWindowWin32Data): Store
+	just pixel value of background colour.
+
+	* gdk/win32/gdkgc-win32.c (gdk_colormap_color): New function
+	containing code snippet previously duplicated in a couple of
+	places.
+	
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_points): Use
+	gdk_colormap_color.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Generate
+	GDK_SCROLL events for WM_MOUSEWHEEL messages. Don't generate
+	events for autorepeated Shift, Control and Alt keys. Use
+	gdk_colormap_color.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_cursor): If the
+	pointer is inside the window the cursor of which we are setting,
+	call SetCursor immediately.
+
+	* gdk/win32/makefile.cygwin
+	* gtk/makefile.cygwin: If we don't have the build number stamp
+	file, use zero.
+
+	* gtk/gtkcompat.h.in: Define gtk_paned_gutter_size and
+	gtk_paned_set_gutter_size as empty.
+
+	* gtk/gtk.def: Remove gtk_paned_set_gutter_size.
+	
 Tue Feb 29 13:10:00 GMT 2000  Tony Gale <gale@gtk.org>
 
 	* gdk/gdkwindow.h gdk/x11/gxid.c gtk/gtkclist.c gtk/gtkclist.h

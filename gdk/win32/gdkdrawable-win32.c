@@ -726,26 +726,26 @@ gdk_win32_draw_points (GdkDrawable *drawable,
 		       GdkPoint    *points,
 		       gint         npoints)
 {
-  GdkGCPrivate *gc_private = (GdkGCPrivate*) gc;
-  GdkGCWin32Data *gc_data = GDK_GC_WIN32DATA (gc_private);
   HDC hdc;
   COLORREF fg;
+  GdkGCPrivate *gc_private = (GdkGCPrivate*) gc;
+  GdkGCWin32Data *gc_data = GDK_GC_WIN32DATA (gc_private);
+  GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
+  GdkColormapPrivateWin32 *colormap_private =
+    (GdkColormapPrivateWin32 *) drawable_private->colormap;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x destdc: (%d) %#x "
-			   "npoints: %d\n",
-			   GDK_DRAWABLE_XID (drawable),
-			   gc_private, hdc,
-			   npoints));
+  hdc = gdk_gc_predraw (drawable, gc_private, 0);
+  
+  fg = gdk_colormap_color (colormap_private, gc_data->foreground);
 
-  hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND);
-  fg = GetTextColor (hdc);
+  GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
+			   GDK_DRAWABLE_XID (drawable), npoints, fg));
 
   for (i = 0; i < npoints; i++)
-    {
-      SetPixel (hdc, points[i].x, points[i].y, fg);
-    }
-  gdk_gc_postdraw (drawable, gc_private, GDK_GC_FOREGROUND);
+    SetPixel (hdc, points[i].x, points[i].y, fg);
+
+  gdk_gc_postdraw (drawable, gc_private, 0);
 }
 
 static void

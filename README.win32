@@ -5,10 +5,8 @@ http://www.iki.fi/tml/gimp/win32/ .
 
 To build GTk+ on Win32, you need either the Microsoft compiler and
 tools, or gcc-2.95 or later running under cygwin-b20.1 or
-later. Compile in gdk\win32 and gtk with `nmake -f makefile.msc` or
-`make -f makefile.cygwin`. Before doing a install, check the BIN
-definition in gdk\win32\makefile.msc (or makefile.cygwin) and
-gtk\makefile.msc (or makefile.cygwin).
+later. Compile in gdk\win32, gdk and gtk with `nmake -f makefile.msc` or
+`make -f makefile.cygwin`.
 
 See the README.win32 file in the GLib distribution for instructions
 how to build with gcc.

@@ -196,7 +196,7 @@ struct _GdkWindowWin32Data
 
   /* We draw the background ourselves at WM_ERASEBKGND  */
   guchar bg_type;
-  GdkColor bg_pixel;
+  gulong bg_pixel;		/* GdkColor pixel, not COLORREF */
   GdkPixmap *bg_pixmap;
 
   HCURSOR xcursor;
@@ -277,6 +277,8 @@ gpointer gdk_xid_table_lookup    (HANDLE xid);
 GdkGC *  _gdk_win32_gc_new       (GdkDrawable        *drawable,
 				  GdkGCValues        *values,
 				  GdkGCValuesMask     values_mask);
+COLORREF gdk_colormap_color      (GdkColormapPrivateWin32 *colormap_private,
+				  gulong                   pixel);
 HDC	gdk_gc_predraw           (GdkDrawable        *drawable,
 				  GdkGCPrivate       *gc_private,
 				  GdkGCValuesMask     usage);

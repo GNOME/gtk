@@ -1414,7 +1414,7 @@ gdk_window_set_background (GdkWindow *window,
 	  GDK_WINDOW_WIN32DATA (window)->bg_type = GDK_WIN32_BG_NORMAL;
 	}
       GDK_WINDOW_WIN32DATA (window)->bg_type = GDK_WIN32_BG_PIXEL;
-      GDK_WINDOW_WIN32DATA (window)->bg_pixel = *color;
+      GDK_WINDOW_WIN32DATA (window)->bg_pixel = color->pixel;
     }
 }
 
@@ -1464,6 +1464,7 @@ gdk_window_set_cursor (GdkWindow *window,
 {
   GdkCursorPrivate *cursor_private;
   HCURSOR xcursor;
+  POINT pt;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1480,6 +1481,10 @@ gdk_window_set_cursor (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("gdk_window_set_cursor: %#x %#x\n",
 			       GDK_DRAWABLE_XID (window), xcursor));
       GDK_WINDOW_WIN32DATA (window)->xcursor = xcursor;
+
+      GetCursorPos (&pt);
+      if (ChildWindowFromPoint (GDK_DRAWABLE_XID (window), pt) == GDK_DRAWABLE_XID (window))
+	SetCursor (xcursor);
     }
 }
 

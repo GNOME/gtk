@@ -714,7 +714,30 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
     gdk_drawable_ref (dst_data->stipple);
 }
 
-static guint mask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
+static guint bitmask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
+
+COLORREF
+gdk_colormap_color (GdkColormapPrivateWin32 *colormap_private,
+		    gulong                   pixel)
+{
+  GdkVisual *visual;
+  guchar r, g, b;
+
+  if (colormap_private == NULL || colormap_private->xcolormap->rc_palette)
+    return PALETTEINDEX (pixel);
+  else
+    {
+      visual = colormap_private->base.visual;
+      r = (pixel & visual->red_mask) >> visual->red_shift;
+      r = (r * 255) / bitmask[visual->red_prec];
+      g = (pixel & visual->green_mask) >> visual->green_shift;
+      g = (g * 255) / bitmask[visual->green_prec];
+      b = (pixel & visual->blue_mask) >> visual->blue_shift;
+      b = (b * 255) / bitmask[visual->blue_prec];
+
+      return RGB (r, g, b);
+    }
+}
 
 static void
 predraw_set_foreground (GdkGCWin32Data          *data,
@@ -724,8 +747,6 @@ predraw_set_foreground (GdkGCWin32Data          *data,
   LOGBRUSH logbrush;
   HPEN hpen;
   HBRUSH hbr;
-  GdkVisual *visual;
-  guchar r, g, b;
 
   if (colormap_private == NULL)
     {
@@ -774,20 +795,9 @@ predraw_set_foreground (GdkGCWin32Data          *data,
       g_print ("Selected palette %#x for gc %#x, realized %d colors\n",
 	       colormap_private->xcolormap->palette, data->xgc, k);
 #endif
-      fg = PALETTEINDEX (data->foreground);
     }
-  else
-    {
-      visual = colormap_private->base.visual;
-      r = (data->foreground & visual->red_mask) >> visual->red_shift;
-      r = (r * 255) / mask[visual->red_prec];
-      g = (data->foreground & visual->green_mask) >> visual->green_shift;
-      g = (g * 255) / mask[visual->green_prec];
-      b = (data->foreground & visual->blue_mask) >> visual->blue_shift;
-      b = (b * 255) / mask[visual->blue_prec];
 
-      fg = GetNearestColor (data->xgc, RGB (r, g, b));
-    }
+  fg = gdk_colormap_color (colormap_private, data->foreground);
 
   if (SetTextColor (data->xgc, fg) == CLR_INVALID)
     WIN32_API_FAILED ("SetTextColor");
@@ -829,35 +839,11 @@ void
 predraw_set_background (GdkGCWin32Data          *data,
 			GdkColormapPrivateWin32 *colormap_private)
 {
-  COLORREF bg;
-  GdkVisual *visual;
-  guchar r, g, b;
+  COLORREF bg = gdk_colormap_color (colormap_private, data->background);
 
-  if (colormap_private == NULL)
-    {
-      /* a bitmap */
-      bg = PALETTEINDEX (data->background);
-    }
-  else if (colormap_private->xcolormap->rc_palette)
-    {
-      bg = PALETTEINDEX (data->background);
-    }
-  else
-    {
-      visual = colormap_private->base.visual;
-      r = (data->background & visual->red_mask) >> visual->red_shift;
-      r = (r * 255) / mask[visual->red_prec];
-      g = (data->background & visual->green_mask) >> visual->green_shift;
-      g = (g * 255) / mask[visual->green_prec];
-      b = (data->background & visual->blue_mask) >> visual->blue_shift;
-      b = (b * 255) / mask[visual->green_prec];
-
-      bg = GetNearestColor (data->xgc, RGB (r, g, b));
-    }
   if (SetBkColor (data->xgc, bg) == CLR_INVALID)
     WIN32_API_FAILED ("SetBkColor");
 }
-
 
 HDC
 gdk_gc_predraw (GdkDrawable    *drawable,
@@ -912,7 +898,7 @@ gdk_gc_predraw (GdkDrawable    *drawable,
     if (SetROP2 (data->xgc, data->rop2) == 0)
       WIN32_API_FAILED ("SetROP2");
 
-  if (data->values_mask & GDK_GC_CLIP_MASK
+  if ((data->values_mask & GDK_GC_CLIP_MASK)
       && data->clip_region != NULL)
     {
       if (data->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
@@ -975,7 +961,7 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
     if (!DeleteObject (hbr))
       WIN32_API_FAILED ("DeleteObject #2");
 
-  if (data->values_mask & GDK_GC_CLIP_MASK
+  if ((data->values_mask & GDK_GC_CLIP_MASK)
       && data->clip_region != NULL
       && (data->values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN)))
     OffsetRgn (data->clip_region,

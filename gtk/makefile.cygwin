@@ -340,10 +340,19 @@ gtk-win32res.o : gtk.rc gtk-build.tmp
 	windres --include-dir $(WIN32APIHEADERS) gtk-win32res.rc gtk-win32res.o
 	rm gtk-build.tmp gtk-win32res.rc
 
+# The *.stamp files aren't distributed. Thus, this takes care of only
+# tml building libraries with nonzero build number.
+
+ifeq ($(wildcard gtk-build.stamp),gtk-build.stamp)
 # Magic to bump the build number
 gtk-build.tmp :
 	bash -c "read number && echo $$[number+1]" <gtk-build.stamp >gtk-build.tmp
 	cp gtk-build.tmp gtk-build.stamp
+else
+# Use zero as build number.
+gtk-build.tmp :
+	echo 0 >gtk-build.tmp
+endif
 
 # General rule for compiling the objects into the DLL
 .c.o :
