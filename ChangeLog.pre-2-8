@@ -1,3 +1,14 @@
+Thu Oct 17 16:13:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c gtk/gtkradiobutton.c: Make
+	the widgets work reasonably when they don't have
+	children -- draw the focus around the indicator, 
+	and position the indicator symmetrically.
+	(#74830, Dave Camp)
+
+	* tests/testgtk.c: Add no-child portions to check and radio 
+	button tests.
+
 Thu Oct 17 22:09:05 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (gtk_menu_scroll_to): Take arrows into

@@ -568,6 +568,62 @@ create_toggle_buttons (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+static GtkWidget *
+create_widget_grid (GType widget_type)
+{
+  GtkWidget *table;
+  GtkWidget *group_widget = NULL;
+  gint i, j;
+  
+  table = gtk_table_new (FALSE, 3, 3);
+  
+  for (i = 0; i < 5; i++)
+    {
+      for (j = 0; j < 5; j++)
+	{
+	  GtkWidget *widget;
+	  char *tmp;
+	  
+	  if (i == 0 && j == 0)
+	    {
+	      widget = NULL;
+	    }
+	  else if (i == 0)
+	    {
+	      tmp = g_strdup_printf ("%d", j);
+	      widget = gtk_label_new (tmp);
+	      g_free (tmp);
+	    }
+	  else if (j == 0)
+	    {
+	      tmp = g_strdup_printf ("%c", 'A' + i - 1);
+	      widget = gtk_label_new (tmp);
+	      g_free (tmp);
+	    }
+	  else
+	    {
+	      widget = g_object_new (widget_type, NULL);
+	      
+	      if (g_type_is_a (widget_type, GTK_TYPE_RADIO_BUTTON))
+		{
+		  if (!group_widget)
+		    group_widget = widget;
+		  else
+		    g_object_set (widget, "group", group_widget, NULL);
+		}
+	    }
+	  
+	  if (widget)
+	    gtk_table_attach (GTK_TABLE (table), widget,
+			      i, i + 1, j, j + 1,
+			      0,        0,
+			      0,        0);
+	}
+    }
+
+  return table;
+}
+
 /*
  * GtkCheckButton
  */
@@ -580,23 +636,28 @@ create_check_buttons (GtkWidget *widget)
   GtkWidget *box2;
   GtkWidget *button;
   GtkWidget *separator;
+  GtkWidget *table;
   
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_dialog_new_with_buttons ("Check Buttons",
+                                            NULL, 0,
+                                            GTK_STOCK_CLOSE,
+                                            GTK_RESPONSE_NONE,
+                                            NULL);
+
       gtk_window_set_screen (GTK_WINDOW (window), 
 			     gtk_widget_get_screen (widget));
 
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
+      g_signal_connect (window, "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
 
-      gtk_window_set_title (GTK_WINDOW (window), "GtkCheckButton");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
-      box1 = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
-
+      box1 = GTK_DIALOG (window)->vbox;
+      
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
@@ -613,21 +674,13 @@ create_check_buttons (GtkWidget *widget)
       button = gtk_check_button_new_with_label ("inconsistent");
       gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      
+
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-      gtk_widget_grab_default (button);
+      table = create_widget_grid (GTK_TYPE_CHECK_BUTTON);
+      gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+      gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))
@@ -648,10 +701,15 @@ create_radio_buttons (GtkWidget *widget)
   GtkWidget *box2;
   GtkWidget *button;
   GtkWidget *separator;
+  GtkWidget *table;
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      window = gtk_dialog_new_with_buttons ("Radio Buttons",
+                                            NULL, 0,
+                                            GTK_STOCK_CLOSE,
+                                            GTK_RESPONSE_NONE,
+                                            NULL);
 
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
@@ -659,12 +717,11 @@ create_radio_buttons (GtkWidget *widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
+      g_signal_connect (window, "response",
+                        G_CALLBACK (gtk_widget_destroy),
+                        NULL);
 
-      gtk_window_set_title (GTK_WINDOW (window), "radio buttons");
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
-      box1 = gtk_vbox_new (FALSE, 0);
-      gtk_container_add (GTK_CONTAINER (window), box1);
+      box1 = GTK_DIALOG (window)->vbox;
 
       box2 = gtk_vbox_new (FALSE, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
@@ -717,17 +774,9 @@ create_radio_buttons (GtkWidget *widget)
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
-      box2 = gtk_vbox_new (FALSE, 10);
-      gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
-      gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
-
-      button = gtk_button_new_with_label ("close");
-      g_signal_connect_swapped (button, "clicked",
-			        G_CALLBACK (gtk_widget_destroy),
-				window);
-      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
-      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-      gtk_widget_grab_default (button);
+      table = create_widget_grid (GTK_TYPE_RADIO_BUTTON);
+      gtk_container_set_border_width (GTK_CONTAINER (table), 10);
+      gtk_box_pack_start (GTK_BOX (box1), table, TRUE, TRUE, 0);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

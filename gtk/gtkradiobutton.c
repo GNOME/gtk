@@ -599,6 +599,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 				 GdkRectangle   *area)
 {
   GtkWidget *widget;
+  GtkWidget *child;
   GtkButton *button;
   GtkToggleButton *toggle_button;
   GtkStateType state_type;
@@ -626,7 +627,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       x = widget->allocation.x + indicator_spacing + GTK_CONTAINER (widget)->border_width;
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
 
-      if (!interior_focus)
+      child = GTK_BIN (check_button)->child;
+      if (!interior_focus || !(child && GTK_WIDGET_VISIBLE (child)))
 	x += focus_width + focus_pad;      
 
       if (toggle_button->inconsistent)
