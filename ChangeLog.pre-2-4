@@ -1,3 +1,9 @@
+Mon May 20 11:38:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c (cell_size_request): Fix bug where
+	size request for text cells was being overwritten.
+	(#82264, Graham Swallow.)
+
 2002-05-18  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Check for endianness.
@@ -31,7 +37,7 @@ Fri May 17 14:40:24 2002  Owen Taylor  <otaylor@redhat.com>
 	* modules/input/gtkimcontextxim.c (status_window_free): 
 	Patch from Federico Mena Quintero to fix problem where
 	references to IMContextXIM were kept around after
-	module was unloaded.
+	module was unloaded. (#77008)
 
 	* gtk/gtkdnd.c (gtk_drag_dest_set): NULL initialize
 	proxy window.
