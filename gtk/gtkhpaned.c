@@ -133,6 +133,7 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
   GtkPaned *paned;
   GtkAllocation child1_allocation;
   GtkAllocation child2_allocation;
+  GdkRectangle old_groove_rectangle;
   guint16 border_width;
 
   g_return_if_fail (widget != NULL);
@@ -165,26 +166,37 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
       gdk_window_move (paned->handle, paned->handle_xpos, paned->handle_ypos);
     }
 
-  if (GTK_WIDGET_MAPPED (widget))
-    {
-      gdk_window_clear_area (widget->window,
-			     paned->groove_rectangle.x,
-			     paned->groove_rectangle.y,
-			     paned->groove_rectangle.width,
-			     paned->groove_rectangle.height);
-    }
-  
   child1_allocation.height = child2_allocation.height = MAX (1, (gint)allocation->height - border_width * 2);
   child1_allocation.width = paned->child1_size;
   child1_allocation.x = border_width;
   child1_allocation.y = child2_allocation.y = border_width;
   
+  old_groove_rectangle = paned->groove_rectangle;
+
   paned->groove_rectangle.x = child1_allocation.x 
     + child1_allocation.width + paned->gutter_size / 2 - 1;
   paned->groove_rectangle.y = 0;
   paned->groove_rectangle.width = 2;
   paned->groove_rectangle.height = allocation->height;
       
+  if (GTK_WIDGET_DRAWABLE (widget) &&
+      ((paned->groove_rectangle.x != old_groove_rectangle.x) ||
+       (paned->groove_rectangle.y != old_groove_rectangle.y) ||
+       (paned->groove_rectangle.width != old_groove_rectangle.width) ||
+       (paned->groove_rectangle.height != old_groove_rectangle.height)))
+    {
+      gtk_widget_queue_clear_area (widget,
+				   old_groove_rectangle.x,
+				   old_groove_rectangle.y,
+				   old_groove_rectangle.width,
+				   old_groove_rectangle.height);
+      gtk_widget_queue_draw_area (widget,
+				  paned->groove_rectangle.x,
+				  paned->groove_rectangle.y,
+				  paned->groove_rectangle.width,
+				  paned->groove_rectangle.height);
+    }
+  
   child2_allocation.x = paned->groove_rectangle.x + paned->gutter_size / 2 + 1;
   child2_allocation.width = MAX (1, (gint)allocation->width
     - child2_allocation.x - border_width);

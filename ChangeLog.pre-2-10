@@ -1,3 +1,10 @@
+1999-02-05  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtk[hv]paned.c (gtk_[hv]paned_size_allocate): 
+	Don't assume any more that the gtkwidget.c code
+	will queue a redraw on us during a size_allocate -
+	queue clear/draws as appropriate for our groove.
+
 1999-02-04  Christopher Blizzard  <blizzard@redhat.com>
 
 	* gtk+.spec (Packager): Change my email address.
