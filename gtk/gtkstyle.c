@@ -1453,8 +1453,7 @@ gtk_draw_layout (GtkStyle        *style,
  * @style: a #GtkStyle
  * @window: a #GdkWindow
  * @state_type: a state
- * @edge: the edge in which to draw the resize grip, currently only
- *    %GTK_WINDOW_EDGE_SOUTH_EAST is implemented
+ * @edge: the edge in which to draw the resize grip
  * @x: the x origin of the rectangle in which to draw the resize grip
  * @y: the y origin of the rectangle in which to draw the resize grip
  * @width: the width of the rectangle in which to draw the resize grip
