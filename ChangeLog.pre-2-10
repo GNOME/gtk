@@ -1,3 +1,11 @@
+Sun Jan 17 12:01:57 1999  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkrc.c (gtk_rc_style_init): Allow a bg_pixmap
+	of "<none>", as there was no way to set the background
+	on all widget but some widgets. This is important
+	because Text widgets with background images are
+	slow and possibly ugly.
+
 1999-01-17  Nat Friedman  <nat@nat.org>
 
 	* gtk/gtkscrolledwindow.c (DEFAULT_SCROLLBAR_SPACING): New macro.

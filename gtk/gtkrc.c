@@ -1120,6 +1120,14 @@ gtk_rc_style_init (GSList *rc_styles)
 	  tmp_styles = tmp_styles->next;
 	}
 
+      for (i=0; i<5; i++)
+	if (proto_style->bg_pixmap_name[i] &&
+	    (strcmp (proto_style->bg_pixmap_name[i], "<none>") == 0))
+	  {
+	    g_free (proto_style->bg_pixmap_name[i]);
+	    proto_style->bg_pixmap_name[i] = NULL;
+	  }
+
       style = gtk_rc_style_to_style (proto_style);
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
@@ -1467,7 +1475,8 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
   
-  if (strcmp (scanner->value.v_string, "<parent>") == 0)
+  if ((strcmp (scanner->value.v_string, "<parent>") == 0) ||
+      (strcmp (scanner->value.v_string, "<none>") == 0))
     pixmap_file = g_strdup (scanner->value.v_string);
   else
     pixmap_file = gtk_rc_find_pixmap_in_path (scanner, scanner->value.v_string);
