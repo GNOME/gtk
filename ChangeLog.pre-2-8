@@ -1,3 +1,9 @@
+2005-03-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_popup): Don't 
+	segfault if somebody tries to popup an unrealized
+	combo box.  (#172031, Felipe Heidrich)
+
 2005-03-30  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkevents-win32.c (build_pointer_event_state): The

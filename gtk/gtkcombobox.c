@@ -1589,6 +1589,9 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
+  if (!GTK_WIDGET_REALIZED (combo_box))
+    return;
+
   if (GTK_WIDGET_MAPPED (combo_box->priv->popup_widget))
     return;
 
