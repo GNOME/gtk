@@ -104,20 +104,24 @@ _gdk_image_exit (void)
     }
 }
 
-GdkImage *
-_gdk_win32_setup_pixmap_image (GdkPixmap   *pixmap,
-			       GdkDrawable *drawable,
-			       gint         width,
-			       gint         height,
-			       gint         depth,
-			       guchar      *bits)
+/*
+ * Create a GdkImage _without_ an associated GdkPixmap. The caller is
+ * responsible for creating a GdkPixmap object and making the association.
+ */
+
+static GdkImage *
+_gdk_win32_new_image (GdkVisual *visual,
+		      gint       width,
+		      gint       height,
+		      gint       depth,
+		      guchar    *bits)
 {
   GdkImage *image;
 
   image = g_object_new (gdk_image_get_type (), NULL);
-  image->windowing_data = pixmap;
+  image->windowing_data = NULL;
   image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_drawable_get_visual (drawable);
+  image->visual = visual;
   image->byte_order = GDK_LSB_FIRST;
   image->width = width;
   image->height = height;
@@ -143,7 +147,7 @@ _gdk_win32_setup_pixmap_image (GdkPixmap   *pixmap,
       image->bpp = 4;
       break;
     default:
-      g_warning ("_gdk_win32_setup_pixmap_image: depth=%d", image->depth);
+      g_warning ("_gdk_win32_new_image: depth=%d", image->depth);
       g_assert_not_reached ();
     }
   if (depth == 1)
@@ -166,6 +170,7 @@ gdk_image_new_bitmap (GdkVisual *visual,
 {
   GdkPixmap *pixmap;
   GdkImage *image;
+  guchar *bits;
   gint data_bpl = (w-1)/8 + 1;
   gint i;
 
@@ -174,10 +179,12 @@ gdk_image_new_bitmap (GdkVisual *visual,
   if (pixmap == NULL)
     return NULL;
 
-  image = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->image;
-
   GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d=%p\n",
 			    w, h, GDK_PIXMAP_HBITMAP (pixmap)));
+
+  bits = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->bits;
+  image = _gdk_win32_new_image (visual, w, h, 1, bits);
+  image->windowing_data = pixmap;
   
   if (data_bpl != image->bpl)
     {
@@ -205,6 +212,8 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
 			  gint          depth)
 {
   GdkPixmap *pixmap;
+  GdkImage *image;
+  guchar *bits;
 
   g_return_val_if_fail (!visual || GDK_IS_VISUAL (visual), NULL);
   g_return_val_if_fail (visual || depth != -1, NULL);
@@ -221,7 +230,11 @@ _gdk_image_new_for_depth (GdkScreen    *screen,
   GDK_NOTE (IMAGE, g_print ("_gdk_image_new_for_depth: %dx%dx%d=%p\n",
 			    width, height, depth, GDK_PIXMAP_HBITMAP (pixmap)));
   
-  return GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->image;
+  bits = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->bits;
+  image = _gdk_win32_new_image (visual, width, height, depth, bits);
+  image->windowing_data = pixmap;
+  
+  return image;
 }
 
 GdkImage*

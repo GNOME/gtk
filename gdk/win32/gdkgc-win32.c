@@ -1079,12 +1079,17 @@ _gdk_win32_bitmap_to_hrgn (GdkPixmap *pixmap)
   HRGN h;
   DWORD maxRects;
   RGNDATA *pData;
-  GdkImage *image;
+  guchar *bits;
+  gint width, height, bpl;
   guchar *p;
   gint x, y;
 
-  image = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->image;
-  g_assert (image->depth == 1);
+  g_assert (GDK_PIXMAP_OBJECT(pixmap)->depth == 1);
+
+  bits = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->bits;
+  width = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->width;
+  height = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->height;
+  bpl = ((width - 1)/32 + 1)*4;
 
   /* For better performances, we will use the ExtCreateRegion()
    * function to create the region. This function take a RGNDATA
@@ -1100,15 +1105,15 @@ _gdk_win32_bitmap_to_hrgn (GdkPixmap *pixmap)
   pData->rdh.nCount = pData->rdh.nRgnSize = 0;
   SetRect (&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
-  for (y = 0; y < image->height; y++)
+  for (y = 0; y < height; y++)
     {
       /* Scan each bitmap row from left to right*/
-      p = (guchar *) image->mem + y * image->bpl;
-      for (x = 0; x < image->width; x++)
+      p = (guchar *) bits + y * bpl;
+      for (x = 0; x < width; x++)
 	{
 	  /* Search for a continuous range of "non transparent pixels"*/
 	  gint x0 = x;
-	  while (x < image->width)
+	  while (x < width)
 	    {
 	      if ((((p[x/8])>>(7-(x%8)))&1) == 0)
 		/* This pixel is "transparent"*/

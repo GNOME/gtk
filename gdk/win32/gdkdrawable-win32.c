@@ -1450,13 +1450,13 @@ blit_from_pixmap (gboolean              use_fg_bg,
     WIN32_GDI_FAILED ("SelectObject");
   else
     {
-      if (src->image->depth <= 8)
+      if (GDK_PIXMAP_OBJECT (src->parent_instance.wrapper)->depth <= 8)
 	{
 	  /* Blitting from a 1, 4 or 8-bit pixmap */
 
 	  if ((oldtable_size = GetDIBColorTable (srcdc, 0, 256, oldtable)) == 0)
 	    WIN32_GDI_FAILED ("GetDIBColorTable");
-	  else if (src->image->depth == 1)
+	  else if (GDK_PIXMAP_OBJECT (src->parent_instance.wrapper)->depth == 1)
 	    {
 	      /* Blitting from an 1-bit pixmap */
 
@@ -1472,9 +1472,9 @@ blit_from_pixmap (gboolean              use_fg_bg,
 		  bgix = 0;
 		  fgix = 1;
 		}
-
+	      
 	      if (GDK_IS_PIXMAP_IMPL_WIN32 (dest) &&
-		  ((GdkPixmapImplWin32 *) dest)->image->depth <= 8)
+		  GDK_PIXMAP_OBJECT (dest->wrapper)->depth <= 8)
 		{
 		  /* Destination is also pixmap, get fg and bg from
 		   * its palette. Either use the foreground and

@@ -129,7 +129,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   GdkPixmapImplWin32 *source_impl, *mask_impl;
-  GdkImage *source_image, *mask_image;
+  guchar *source_bits, *mask_bits;
+  gint source_bpl, mask_bpl;
   HCURSOR hcursor;
   guchar *p, *q, *xor_mask, *and_mask;
   gint width, height, cursor_width, cursor_height;
@@ -158,11 +159,15 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   residue = (1 << ((8-(width%8))%8)) - 1;
 
-  source_image = source_impl->image;
-  mask_image = mask_impl->image;
+  source_bits = source_impl->bits;
+  mask_bits = mask_impl->bits;
 
-  g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
+  g_return_val_if_fail (GDK_PIXMAP_OBJECT (source)->depth == 1
+  			&& GDK_PIXMAP_OBJECT (mask)->depth == 1,
 			NULL);
+
+  source_bpl = ((width - 1)/32 + 1)*4;
+  mask_bpl = ((mask_impl->width - 1)/32 + 1)*4;
 
 #ifdef G_ENABLE_DEBUG
   if (_gdk_debug_flags & GDK_DEBUG_CURSOR)
@@ -174,7 +179,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 	  if (iy == 16)
 	    break;
 
-	  p = (guchar *) source_image->mem + iy*source_image->bpl;
+	  p = source_bits + iy*source_bpl;
 	  for (ix = 0; ix < width; ix++)
 	    {
 	      if (ix == 79)
@@ -191,7 +196,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 	  if (iy == 16)
 	    break;
 
-	  p = (guchar *) mask_image->mem + iy*source_image->bpl;
+	  p = mask_bits + iy*source_bpl;
 	  for (ix = 0; ix < width; ix++)
 	    {
 	      if (ix == 79)
@@ -222,8 +227,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
    */
   for (iy = 0; iy < height; iy++)
     {
-      p = (guchar *) source_image->mem + iy*source_image->bpl;
-      q = (guchar *) mask_image->mem + iy*mask_image->bpl;
+      p = source_bits + iy*source_bpl;
+      q = mask_bits + iy*mask_bpl;
       
       for (ix = 0; ix < ((width-1)/8+1); ix++)
 	if (bg_is_white)
@@ -237,7 +242,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   for (iy = 0; iy < height; iy++)
     {
-      p = (guchar *) source_image->mem + iy*source_image->bpl;
+      p = source_bits + iy*source_bpl;
       q = xor_mask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
@@ -255,7 +260,7 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   for (iy = 0; iy < height; iy++)
     {
-      p = (guchar *) mask_image->mem + iy*mask_image->bpl;
+      p = mask_bits + iy*mask_bpl;
       q = and_mask + iy*cursor_width/8;
 
       for (ix = 0; ix < ((width-1)/8+1); ix++)
