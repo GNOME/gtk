@@ -1,3 +1,11 @@
+Thu May 29 18:23:01 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): put the focus
+	grab separate, the user might clear the tree in the focus-in
+	callback. (Fixes #113086, testcase from Felipe Heidrich).
+
 Thu May 29 18:06:26 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
