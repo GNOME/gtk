@@ -141,9 +141,9 @@ gtk_check_button_draw (GtkWidget    *widget,
 
 	  gtk_check_button_draw_indicator (check_button, area);
 
-	  if (button->child && GTK_WIDGET_NO_WINDOW (button->child) &&
-	      gtk_widget_intersect (button->child, area, &child_area))
-	    gtk_widget_draw (button->child, &child_area);
+	  if (GTK_BIN (button)->child && GTK_WIDGET_NO_WINDOW (GTK_BIN (button)->child) &&
+	      gtk_widget_intersect (GTK_BIN (button)->child, area, &child_area))
+	    gtk_widget_draw (GTK_BIN (button)->child, &child_area);
 
 	  gtk_widget_draw_focus (widget);
 	}
@@ -245,7 +245,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 
       button = GTK_BUTTON (widget);
 
-      if (button->child && GTK_WIDGET_VISIBLE (button->child))
+      if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
 	{
 	  child_allocation.x = (GTK_CONTAINER (widget)->border_width +
 				CHECK_BUTTON_CLASS (widget)->indicator_size +
@@ -255,7 +255,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 				    GTK_CONTAINER (widget)->border_width - 1);
 	  child_allocation.height = MAX (1, allocation->height - child_allocation.y * 2);
 
-	  gtk_widget_size_allocate (button->child, &child_allocation);
+	  gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
 	}
     }
   else
@@ -288,9 +288,9 @@ gtk_check_button_expose (GtkWidget      *widget,
 	  gtk_check_button_draw_indicator (check_button, &event->area);
 
 	  child_event = *event;
-	  if (button->child && GTK_WIDGET_NO_WINDOW (button->child) &&
-	      gtk_widget_intersect (button->child, &event->area, &child_event.area))
-	    gtk_widget_event (button->child, (GdkEvent*) &child_event);
+	  if (GTK_BIN (button)->child && GTK_WIDGET_NO_WINDOW (GTK_BIN (button)->child) &&
+	      gtk_widget_intersect (GTK_BIN (button)->child, &event->area, &child_event.area))
+	    gtk_widget_event (GTK_BIN (button)->child, (GdkEvent*) &child_event);
 
 	  gtk_widget_draw_focus (widget);
 	}

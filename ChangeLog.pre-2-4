@@ -1,3 +1,14 @@
+Mon Jul  6 18:30:48 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbutton.h:
+	* gtk/gtkbutton.c: GtkButtons are now derived from GtkBin. we mirror
+	GTK_BIN (button)->child to button->child to keep source compatibility.
+
+	* gtk/gtkoptionmenu.c:
+	* gtk/gtkclist.c:
+	* gtkcheckbutton.c: don't refer to button->child, but
+ 	GTK_BIN (button)->child instead.
+
 Mon Jul  6 12:06:23 BST 1998  Tony Gale  <gale@gtk.org>
 
 	* docs/gtkfaq.sgml: update anon CVS info

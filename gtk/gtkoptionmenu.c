@@ -295,7 +295,7 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 			    allocation->x, allocation->y,
 			    allocation->width, allocation->height);
 
-  child = GTK_BUTTON (widget)->child;
+  child = GTK_BIN (widget)->child;
   if (child && GTK_WIDGET_VISIBLE (child))
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
@@ -369,7 +369,7 @@ gtk_option_menu_draw (GtkWidget    *widget,
     {
       gtk_option_menu_paint (widget, area);
 
-      child = GTK_BUTTON (widget)->child;
+      child = GTK_BIN (widget)->child;
       if (child && gtk_widget_intersect (child, area, &child_area))
 	gtk_widget_draw (child, &child_area);
     }
@@ -427,7 +427,7 @@ gtk_option_menu_expose (GtkWidget      *widget,
 	gtk_option_menu_remove_contents (GTK_OPTION_MENU (widget));
 #else
       remove_child = FALSE;
-      child = GTK_BUTTON (widget)->child;
+      child = GTK_BIN (widget)->child;
       child_event = *event;
       if (child && GTK_WIDGET_NO_WINDOW (child) &&
 	  gtk_widget_intersect (child, &event->area, &child_event.area))
@@ -493,9 +493,9 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	  if (child)
 	    {
 	      gtk_container_block_resize (GTK_CONTAINER (option_menu));
-	      if (GTK_BUTTON (option_menu)->child)
+	      if (GTK_BIN (option_menu)->child)
 		gtk_container_remove (GTK_CONTAINER (option_menu),
-				      GTK_BUTTON (option_menu)->child);
+				      GTK_BIN (option_menu)->child);
 	      if (GTK_WIDGET (option_menu)->state != child->state)
 		gtk_widget_set_state (child, GTK_WIDGET (option_menu)->state);
 	      gtk_widget_reparent (child, GTK_WIDGET (option_menu));
@@ -518,13 +518,13 @@ gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
   g_return_if_fail (option_menu != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
 
-  if (GTK_BUTTON (option_menu)->child)
+  if (GTK_BIN (option_menu)->child)
     {
       gtk_container_block_resize (GTK_CONTAINER (option_menu));
-      if (GTK_WIDGET (option_menu->menu_item)->state != GTK_BUTTON (option_menu)->child->state)
-	gtk_widget_set_state (GTK_BUTTON (option_menu)->child,
+      if (GTK_WIDGET (option_menu->menu_item)->state != GTK_BIN (option_menu)->child->state)
+	gtk_widget_set_state (GTK_BIN (option_menu)->child,
 			      GTK_WIDGET (option_menu->menu_item)->state);
-      gtk_widget_reparent (GTK_BUTTON (option_menu)->child, option_menu->menu_item);
+      gtk_widget_reparent (GTK_BIN (option_menu)->child, option_menu->menu_item);
       gtk_widget_unref (option_menu->menu_item);
       option_menu->menu_item = NULL;
       gtk_container_unblock_resize (GTK_CONTAINER (option_menu));

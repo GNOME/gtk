@@ -21,7 +21,7 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtkcontainer.h>
+#include <gtk/gtkbin.h>
 #include <gtk/gtkenums.h>
 
 
@@ -42,9 +42,11 @@ typedef struct _GtkButtonClass  GtkButtonClass;
 
 struct _GtkButton
 {
-  GtkContainer container;
+  GtkBin bin;
 
-  GtkWidget *child;
+  GtkWidget *child /* deprecapted field,
+		    * use GTK_BIN (button)->child instead
+		    */;
 
   guint in_button : 1;
   guint button_down : 1;
@@ -53,7 +55,7 @@ struct _GtkButton
 
 struct _GtkButtonClass
 {
-  GtkContainerClass parent_class;
+  GtkBinClass        parent_class;
   
   void (* pressed)  (GtkButton *button);
   void (* released) (GtkButton *button);

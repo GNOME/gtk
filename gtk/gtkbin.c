@@ -203,61 +203,61 @@ gtk_bin_expose (GtkWidget      *widget,
 
 static void
 gtk_bin_add (GtkContainer *container,
-	     GtkWidget    *widget)
+	     GtkWidget    *child)
 {
   GtkBin *bin;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
   g_return_if_fail (bin->child == NULL);
 
-  gtk_widget_set_parent (widget, GTK_WIDGET (container));
-  
-  if (GTK_WIDGET_VISIBLE (widget->parent))
+  gtk_widget_set_parent (child, GTK_WIDGET (bin));
+  bin->child = child;
+
+  if (GTK_WIDGET_VISIBLE (child->parent))
     {
-      if (GTK_WIDGET_REALIZED (widget->parent) &&
-	  !GTK_WIDGET_REALIZED (widget))
-	gtk_widget_realize (widget);
+      if (GTK_WIDGET_REALIZED (child->parent) &&
+	  !GTK_WIDGET_REALIZED (child))
+	gtk_widget_realize (child);
       
-      if (GTK_WIDGET_MAPPED (widget->parent) &&
-	  !GTK_WIDGET_MAPPED (widget))
-	gtk_widget_map (widget);
+      if (GTK_WIDGET_MAPPED (child->parent) &&
+	  !GTK_WIDGET_MAPPED (child))
+	gtk_widget_map (child);
     }
   
-  bin->child = widget;
-  
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
-    gtk_widget_queue_resize (widget);
+  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (container))
+    gtk_widget_queue_resize (child);
 }
 
 static void
 gtk_bin_remove (GtkContainer *container,
-		GtkWidget    *widget)
+		GtkWidget    *child)
 {
   GtkBin *bin;
+  gboolean widget_was_visible;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
+  g_return_if_fail (bin->child == child);
 
-  if (bin->child == widget)
-    {
-      gboolean widget_was_visible = GTK_WIDGET_VISIBLE (widget);
-
-      gtk_widget_unparent (widget);
-      bin->child = NULL;
-
-      /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
-       * since that's what is needed by toplevels, which derive from GtkBin.
-       */
-      if (widget_was_visible)
-        gtk_widget_queue_resize (GTK_WIDGET (container));
-    }
+  widget_was_visible = GTK_WIDGET_VISIBLE (child);
+  
+  gtk_widget_unparent (child);
+  bin->child = NULL;
+  
+  /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
+   * since that's what is needed by toplevels, which derive from GtkBin.
+   */
+  if (widget_was_visible)
+    gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 
 static void
