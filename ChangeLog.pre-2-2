@@ -4,6 +4,13 @@
 	  question mark with a sans-serif one.
 	* gtk/stock-icons/stock_top.png, stock_bottom.png,
      stock_first.png, stock_last.png: using the new style arrows
+	* gtk/stock-icons/stock_font.png: simple one to replace the ugly
+     colors.
+	* gtk/stock-icons/stock_refresh.png: anti-aliased and changed
+     color.
+	* gtk/stock-icons/stock_zoom*: anti-aliased
+	* gtk/stock-icons/dialog_error.png, dialog_warning.png: confused
+     '-' with a '_', removed the wrong files
 
 Sat Sep  8 16:19:02 2001  Owen Taylor  <otaylor@redhat.com>
  
