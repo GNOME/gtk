@@ -1,3 +1,19 @@
+Sun Apr 18 16:15:15 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Support for _NET_WM_USER_TIME (bug 115650). Patch by Elijah
+	Newren.
+	
+	* gdk/x11/gdkwindow-x11.[ch]: Add new internal function
+	_gdk_x11_set_user_time() to set the _NET_WM_USER_TIME property.
+
+	* gdk/x11/gdkdisplay-x11.h (struct _GdkDisplayX11): Add user_time field
+
+	* gdk/x11/gdkdisplay-x11.c: Add _NET_WM_USER_TIME to list of
+	precached atoms.
+	
+	* gdk/x11/gdkinput-x11.c, gdk/x11/gdkevents-x11.c: Set the
+	property on user interaction.
+
 2004-04-15  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilesel.c (open_new_dir): Tell the user to use

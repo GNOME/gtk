@@ -802,6 +802,23 @@ static const char notify_details[][22] = {
 };
 #endif
 
+void
+set_user_time (GdkWindow *window,
+	       GdkEvent  *event)
+{
+  g_return_if_fail (event != NULL);
+
+  window = gdk_window_get_toplevel (event->client.window);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  /* If an event doesn't have a valid timestamp, we shouldn't use it
+   * to update the latest user interaction time.
+   */
+  if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+    _gdk_x11_window_set_user_time (gdk_window_get_toplevel (window),
+				   gdk_event_get_time (event));
+}
+
 static gboolean
 gdk_event_translate (GdkDisplay *display,
 		     GdkEvent   *event,
@@ -995,6 +1012,7 @@ gdk_event_translate (GdkDisplay *display,
           break;
         }
       translate_key_event (display, event, xevent);
+      set_user_time (window, event);
       break;
 
     case KeyRelease:
@@ -1093,6 +1111,7 @@ gdk_event_translate (GdkDisplay *display,
           break;
 	}
 
+      set_user_time (window, event);
       break;
       
     case ButtonRelease:

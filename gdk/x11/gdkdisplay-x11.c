@@ -81,6 +81,7 @@ static const char *const precache_atoms[] = {
   "_NET_WM_STATE_FULLSCREEN",
   "_NET_WM_WINDOW_TYPE",
   "_NET_WM_WINDOW_TYPE_NORMAL",
+  "_NET_WM_USER_TIME",
 };
 
 GType
@@ -217,6 +218,9 @@ gdk_display_open (const gchar *display_name)
 		   display_x11->leader_window,
 		   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PID"),
 		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
+
+  /* We don't yet know a valid time. */
+  display_x11->user_time = 0;
   
 #ifdef HAVE_XKB
   {

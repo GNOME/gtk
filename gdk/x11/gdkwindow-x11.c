@@ -457,6 +457,9 @@ setup_toplevel_window (GdkWindow *window, GdkWindow *parent)
 		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "WM_CLIENT_LEADER"),
 		   XA_WINDOW, 32, PropModeReplace,
 		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
+
+  if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
+    _gdk_x11_window_set_user_time (window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
 }
 
 /**
@@ -3308,6 +3311,48 @@ gdk_window_set_accept_focus (GdkWindow *window,
     }
 }
 
+/**
+ * _gdk_x11_window_set_user_time:
+ * @window: A toplevel #GdkWindow
+ * @timestamp: An XServer timestamp to which the property should be set
+ *
+ * The application can use this call to update the _NET_WM_USER_TIME
+ * property on a toplevel window.  This property stores an Xserver
+ * time which represents the time of the last user input event
+ * received for this window.  This property may be used by the window
+ * manager to alter the focus, stacking, and/or placement behavior of
+ * windows when they are mapped depending on whether the new window
+ * was created by a user action or is a "pop-up" window activated by a
+ * timer or some other event.
+ *
+ * Note that this property is automatically updated by GDK, so this
+ * function should only be used by applications which handle input
+ * events bypassing GDK.
+ **/
+void
+_gdk_x11_window_set_user_time (GdkWindow *window,
+			       guint32    timestamp)
+{
+  GdkDisplay *display;
+  GdkDisplayX11 *display_x11;
+
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  display = gdk_drawable_get_display (window);
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
+                   gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_USER_TIME"),
+                   XA_CARDINAL, 32, PropModeReplace,
+                   (guchar *)&timestamp, 1);
+
+  if (timestamp != GDK_CURRENT_TIME)
+    display_x11->user_time = timestamp;
+}
 
 /**
  * gdk_window_set_icon_list:

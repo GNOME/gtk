@@ -138,6 +138,9 @@ struct _GdkDisplayX11
   /* Startup notification */
   gchar *startup_notification_id;
 
+  /* Time of most recent user interaction. */
+  gulong user_time;
+
   /* Sets of atoms for DND */
   guint base_dnd_atoms_precached : 1;
   guint xdnd_atoms_precached : 1;

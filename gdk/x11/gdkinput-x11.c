@@ -584,6 +584,12 @@ _gdk_input_common_other_event (GdkEvent         *event,
 		 event->button.x, event->button.y,
 		 xdbe->button));
 
+      /* Update the timestamp of the latest user interaction, if the event has
+       * a valid timestamp.
+       */
+      if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+        gdk_x11_window_set_user_time (gdk_window_get_toplevel (input_window->window),
+                                      gdk_event_get_time (event));
       return TRUE;
   }
 
@@ -644,6 +650,12 @@ _gdk_input_common_other_event (GdkEvent         *event,
 		 event->key.keyval,
 		 event->key.state));
 
+      /* Update the timestamp of the latest user interaction, if the event has
+       * a valid timestamp.
+       */
+      if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+        gdk_x11_window_set_user_time (gdk_window_get_toplevel (input_window->window),
+                                      gdk_event_get_time (event));
       return TRUE;
     }
 
@@ -674,6 +686,12 @@ _gdk_input_common_other_event (GdkEvent         *event,
 		 (xdme->is_hint) ? "true" : "false"));
       
       
+      /* Update the timestamp of the latest user interaction, if the event has
+       * a valid timestamp.
+       */
+      if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+        gdk_x11_window_set_user_time (gdk_window_get_toplevel (input_window->window),
+                                      gdk_event_get_time (event));
       return TRUE;
     }
 
@@ -688,6 +706,12 @@ _gdk_input_common_other_event (GdkEvent         *event,
       event->proximity.window = input_window->window;
       event->proximity.time = xpne->time;
       
+      /* Update the timestamp of the latest user interaction, if the event has
+       * a valid timestamp.
+       */
+      if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
+        gdk_x11_window_set_user_time (gdk_window_get_toplevel (input_window->window),
+                                      gdk_event_get_time (event));
       return TRUE;
   }
 
