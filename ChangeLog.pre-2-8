@@ -1,3 +1,12 @@
+Wed Nov 18 11:54:57 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdnd.c (gtk_drag_find_widget): Accept drops
+	that are sent to a toplevel but are not within the
+	toplevels bounds.
+
+	* gdk/gdkdnd.c gdk/gdk.h: Added support for a
+	XdndProxy atom which proxies the drag to another window.
+
 Tue Nov 17 1998 The Rasterman <raster@redhat.com>
 	* gdk/gdk.h, gdk/gdkwindow.c: Added gdk_window_get_deskrelative_origin
 	  function to correctly determine gdk window position relative to
@@ -81,8 +90,7 @@ Tue Nov 17 00:06:29 1998  Lars Hamann  <lars@gtk.org>
 
 Mon Nov 16 15:10:33 1998  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtktext.c: Optimizations for moving point n
-	places. 
+	* gtk/gtktext.c: Optimizations for [advance/decrement]_mark_n.
 	(gtk-mailund-980718-0, Thomas Mailund Jensen <mailund@daimi.aau.dk>)
 
 	* gtk/gtkfixed.c: Removed gtk_fixed_umap, which was 

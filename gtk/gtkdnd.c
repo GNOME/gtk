@@ -121,6 +121,7 @@ struct _GtkDragFindData {
   GdkDragContext *context;
   GtkDragDestInfo *info;
   gboolean found;
+  gboolean toplevel;
   gboolean (*callback) (GtkWidget *widget, GdkDragContext *context,
 			gint x, gint y, guint32 time);
   guint32 time;
@@ -829,9 +830,10 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
 	data.x = event->dnd.x_root - tx;
 	data.y = event->dnd.y_root - ty;
-	data.context = context;
+ 	data.context = context;
 	data.info = info;
 	data.found = FALSE;
+	data.toplevel = TRUE;
 	data.callback = (event->type == GDK_DRAG_MOTION) ?
 	  gtk_drag_dest_motion : gtk_drag_dest_drop;
 	data.time = event->dnd.time;
@@ -1048,9 +1050,10 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	}
     }
 
-  if ((data->x >= new_allocation.x) && (data->y >= new_allocation.y) &&
-      (data->x < new_allocation.x + new_allocation.width) && 
-      (data->y < new_allocation.y + new_allocation.height))
+  if (data->toplevel ||
+      ((data->x >= new_allocation.x) && (data->y >= new_allocation.y) &&
+       (data->x < new_allocation.x + new_allocation.width) && 
+       (data->y < new_allocation.y + new_allocation.height)))
     {
       /* First, check if the drag is in a valid drop site in
        * one of our children 
@@ -1062,6 +1065,7 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	  new_data.x -= x_offset;
 	  new_data.y -= y_offset;
 	  new_data.found = FALSE;
+	  new_data.toplevel = FALSE;
 	  
 	  gtk_container_foreach (GTK_CONTAINER (widget),
 				 (GtkCallback)gtk_drag_find_widget,

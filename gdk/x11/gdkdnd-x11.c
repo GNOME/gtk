@@ -1214,7 +1214,7 @@ motif_set_targets (GdkDragContext *context)
   private->motif_targets_set = 1;
 }
 
-gboolean
+guint32
 motif_check_dest (Window win)
 {
   gboolean retval = FALSE;
@@ -1225,7 +1225,7 @@ motif_check_dest (Window win)
 
   if (!motif_drag_receiver_info_atom)
     motif_drag_receiver_info_atom = gdk_atom_intern ("_MOTIF_DRAG_RECEIVER_INFO", FALSE);
-  
+
   XGetWindowProperty (gdk_display, win, 
 		      motif_drag_receiver_info_atom, 
 		      0, (sizeof(*info)+3)/4, False, AnyPropertyType,
@@ -1251,7 +1251,7 @@ motif_check_dest (Window win)
       XFree (info);
     }
 
-  return retval;
+  return retval ? win : GDK_NONE;
   
 }
 
@@ -2098,7 +2098,7 @@ xdnd_send_motion (GdkDragContext *context,
   private->drag_status = GDK_DRAG_STATUS_MOTION_WAIT;
 }
 
-static gboolean
+static guint32
 xdnd_check_dest (Window win)
 {
   gboolean retval = FALSE;
@@ -2106,31 +2106,70 @@ xdnd_check_dest (Window win)
   int format;
   unsigned long nitems, after;
   GdkAtom *version;
+  Window *proxy_data;
+  Window proxy;
+  static GdkAtom xdnd_proxy_atom = GDK_NONE;
+
+  gint old_warnings = gdk_error_warnings;
+
+  if (!xdnd_proxy_atom)
+    xdnd_proxy_atom = gdk_atom_intern ("XdndProxy", FALSE);
 
   if (!xdnd_aware_atom)
     xdnd_aware_atom = gdk_atom_intern ("XdndAware", FALSE);
 
+  proxy = GDK_NONE;
+  
+  gdk_error_code = 0;
+  gdk_error_warnings = 0;
+
   XGetWindowProperty (gdk_display, win, 
-		      xdnd_aware_atom, 0, 
+		      xdnd_proxy_atom, 0, 
 		      1, False, AnyPropertyType,
 		      &type, &format, &nitems, &after, 
-		      (guchar **)&version);
-  
-  if (type != None)
-    {
-      if ((format == 32) && (nitems == 1))
-	{
-	  if (*version == 3)
-	    retval = TRUE;
-	}
-      else
-	GDK_NOTE (DND, 
-		  g_warning ("Invalid XdndAware property on window %ld\n", win));
+		      (guchar **)&proxy_data);
 
-      XFree (version);
+  if (!gdk_error_code)
+    {
+      if (type != None)
+	{
+	  if ((format == 32) && (nitems == 1))
+	    {
+	      proxy = *proxy_data;
+	    }
+	  else
+	    GDK_NOTE (DND, 
+		      g_warning ("Invalid XdndOwner property on window %ld\n", win));
+	  
+	  XFree (proxy_data);
+	}
+      
+      XGetWindowProperty (gdk_display, proxy ? proxy : win,
+			  xdnd_aware_atom, 0, 
+			  1, False, AnyPropertyType,
+			  &type, &format, &nitems, &after, 
+			  (guchar **)&version);
+      
+      if (!gdk_error_code && type != None)
+	{
+	  if ((format == 32) && (nitems == 1))
+	    {
+	      if (*version == 3)
+		retval = TRUE;
+	    }
+	  else
+	    GDK_NOTE (DND, 
+		      g_warning ("Invalid XdndAware property on window %ld\n", win));
+	  
+	  XFree (version);
+	}
+      
     }
 
-  return retval;
+  gdk_error_warnings = old_warnings;
+  gdk_error_code = 0;
+  
+  return retval ? (proxy ? proxy : win) : GDK_NONE;
 }
 
 /* Target side */
@@ -2423,21 +2462,23 @@ gdk_drag_begin (GdkWindow     *window,
   return new_context;
 }
 
-gboolean         
+guint32
 gdk_drag_get_protocol (guint32          xid,
 		       GdkDragProtocol *protocol)
 {
-  if (xdnd_check_dest (xid))
+  guint32 retval;
+  
+  if ((retval = xdnd_check_dest (xid)))
     {
       *protocol = GDK_DRAG_PROTO_XDND;
       GDK_NOTE (DND, g_message ("Entering dnd window %#x\n", xid));
-      return TRUE;
+      return retval;
     }
-  else if (motif_check_dest (xid))
+  else if ((retval = motif_check_dest (xid)))
     {
       *protocol = GDK_DRAG_PROTO_MOTIF;
       GDK_NOTE (DND, g_message ("Entering motif window %#x\n", xid));
-      return TRUE;
+      return retval;
     }
   else
     {
@@ -2491,11 +2532,11 @@ gdk_drag_get_protocol (guint32          xid,
       if (rootwin)
 	{
 	  *protocol = GDK_DRAG_PROTO_ROOTWIN;
-	  return TRUE;
+	  return xid;
 	}
     }
 
-  return FALSE;
+  return GDK_NONE;
 }
 
 void
@@ -2519,17 +2560,18 @@ gdk_drag_find_window (GdkDragContext  *context,
 
   if (private->dest_xid != dest)
     {
+      Window recipient;
       private->dest_xid = dest;
 
       /* Check if new destination accepts drags, and which protocol */
 
-      if (gdk_drag_get_protocol (dest, protocol))
+      if ((recipient = gdk_drag_get_protocol (dest, protocol)))
 	{
-	  *dest_window = gdk_window_lookup (dest);
+	  *dest_window = gdk_window_lookup (recipient);
 	  if (*dest_window)
 	    gdk_window_ref (*dest_window);
 	  else
-	    *dest_window = gdk_window_foreign_new (dest);
+	    *dest_window = gdk_window_foreign_new (recipient);
 	}
       else
 	*dest_window = NULL;
