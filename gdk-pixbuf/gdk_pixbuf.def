@@ -42,6 +42,7 @@ EXPORTS
 	gdk_pixbuf_loader_get_type
 	gdk_pixbuf_loader_new
 	gdk_pixbuf_loader_new_with_type
+	gdk_pixbuf_loader_set_size
 	gdk_pixbuf_loader_write
 	gdk_pixbuf_new
 	gdk_pixbuf_new_from_data
