@@ -346,7 +346,7 @@ gdk_image_get (GdkWindow *window,
 
   g_return_val_if_fail (window != NULL, NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   private = g_new (GdkImagePrivateX, 1);
@@ -473,7 +473,7 @@ gdk_image_put_normal (GdkImage    *image,
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
+  if (GDK_WINDOW_DESTROYED (drawable))
     return;
   image_private = (GdkImagePrivateX*) image;
 
@@ -502,8 +502,9 @@ gdk_image_put_shared (GdkImage    *image,
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
+  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return;
+  
   image_private = (GdkImagePrivateX*) image;
 
   g_return_if_fail (image->type == GDK_IMAGE_SHARED);

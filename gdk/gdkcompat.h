@@ -15,7 +15,8 @@ extern "C" {
 #define gdk_draw_bitmap                gdk_draw_drawable
 
 #define gdk_window_get_size            gdk_drawable_get_size
-#define gdk_window_get_type            gdk_drawable_get_type
+/* We can't really be compatible here, due to GObject */
+/* #define gdk_window_get_type            gdk_drawable_get_type */
 #define gdk_window_get_colormap        gdk_drawable_get_colormap
 #define gdk_window_set_colormap        gdk_drawable_set_colormap
 #define gdk_window_get_visual          gdk_drawable_get_visual

@@ -2423,16 +2423,10 @@ xdnd_manage_source_filter (GdkDragContext *context,
 			   gboolean        add_filter)
 {
   gint old_warnings = 0;	/* quiet gcc */
-			       
-  gboolean is_foreign = GDK_DRAWABLE_TYPE (window);
 
-  if (is_foreign)
-    {
-      old_warnings = gdk_error_warnings;
-      gdk_error_warnings = 0;
-    }
+  gdk_error_trap_push ();
 
-  if (!GDK_DRAWABLE_DESTROYED (window))
+  if (!GDK_WINDOW_DESTROYED (window))
     {
       if (add_filter)
 	{
@@ -2454,11 +2448,8 @@ xdnd_manage_source_filter (GdkDragContext *context,
 	}
     }
 
-  if (is_foreign)
-    {
-      gdk_flush();
-      gdk_error_warnings = old_warnings;
-    }
+  gdk_flush ();
+  gdk_error_trap_pop ();  
 }
 
 static GdkFilterReturn 

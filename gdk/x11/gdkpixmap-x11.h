@@ -28,6 +28,7 @@
 #define __GDK_PIXMAP_X11_H__
 
 #include <gdk/x11/gdkdrawable-x11.h>
+#include <gdk/gdkpixmap.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +51,8 @@ struct _GdkPixmapImpl
 {
   GdkDrawableImpl parent_instance;
 
+  gint width;
+  gint height;
 };
  
 struct _GdkPixmapImplClass 

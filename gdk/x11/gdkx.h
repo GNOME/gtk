@@ -37,7 +37,6 @@
 #include <gdk/x11/gdkpixmap-x11.h>
 
 typedef struct _GdkGCXData          GdkGCXData;
-typedef struct _GdkXPositionInfo    GdkXPositionInfo;
 typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
 typedef struct _GdkCursorPrivate    GdkCursorPrivate;
 typedef struct _GdkFontPrivateX     GdkFontPrivateX;
@@ -57,21 +56,6 @@ struct _GdkGCXData
   Display *xdisplay;
   GdkRegion *clip_region;
   guint dirty_mask;
-};
-
-struct _GdkXPositionInfo
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint x_offset;		/* Offsets to add to X coordinates within window */
-  gint y_offset;		/*   to get GDK coodinates within window */
-  gboolean big : 1;
-  gboolean mapped : 1;
-  gboolean no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
-  GdkRectangle clip_rect;	/* visible rectangle of window */
 };
 
 struct _GdkCursorPrivate
@@ -152,6 +136,7 @@ struct _GdkICPrivate
 
 #define GDK_GC_XGC(gc)       (GDK_GC_XDATA(gc)->xgc)
 #define GDK_GC_GET_XGC(gc)   (GDK_GC_XDATA(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
+#define GDK_WINDOW_XWINDOW    GDK_WINDOW_XID
 
 extern Display		*gdk_display;
 extern Window		 gdk_root_window;

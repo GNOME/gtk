@@ -33,6 +33,24 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef struct _GdkXPositionInfo    GdkXPositionInfo;
+
+struct _GdkXPositionInfo
+{
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+  gint x_offset;		/* Offsets to add to X coordinates within window */
+  gint y_offset;		/*   to get GDK coodinates within window */
+  gboolean big : 1;
+  gboolean mapped : 1;
+  gboolean no_bg : 1;	        /* Set when the window background is temporarily
+				 * unset during resizing and scaling */
+  GdkRectangle clip_rect;	/* visible rectangle of window */
+};
+
+
 /* Window implementation for X11
  */
 

@@ -50,6 +50,6 @@ GdkICPrivate     *gdk_xim_ic;		/* currently using IC */
 #endif /* USE_XIM */
 GdkWindow        *gdk_xim_window;		/* currently using Widow */
 
-GdkWindowPrivate *gdk_xgrab_window = NULL;  /* Window that currently holds the
-					     *	x pointer grab
-					     */
+GdkWindowObject *gdk_xgrab_window = NULL;  /* Window that currently holds the
+                                            *	x pointer grab
+                                            */

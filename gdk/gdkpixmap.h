@@ -2,6 +2,7 @@
 #define __GDK_PIXMAP_H__
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkdrawable.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,6 +23,8 @@ struct _GdkPixmapObject
   GdkDrawable parent_instance;
   
   GdkDrawable *impl;  /* window-system-specific delegate object */
+
+  gint depth;
 };
 
 struct _GdkPixmapObjectClass

@@ -51,7 +51,7 @@ gdk_gc_new (GdkDrawable *drawable)
 {
   g_return_val_if_fail (drawable != NULL, NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
+  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
 
   return gdk_gc_new_with_values (drawable, NULL, 0);
@@ -67,12 +67,12 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 
   g_return_val_if_fail (drawable != NULL, NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
+  if (GDK_IS_WINDOW (drawable) && GDK_WINDOW_DESTROYED (drawable))
     return NULL;
 
-  gc = ((GdkDrawablePrivate *)drawable)->klass->create_gc (drawable,
-							   values,
-							   values_mask);
+  gc = GDK_DRAWABLE_GET_CLASS (drawable)->create_gc (drawable,
+                                                     values,
+                                                     values_mask);
   private = (GdkGCPrivate *)gc;
   
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)

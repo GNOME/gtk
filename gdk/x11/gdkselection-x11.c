@@ -45,11 +45,11 @@ gdk_selection_owner_set (GdkWindow *owner,
 
   if (owner)
     {
-      if (GDK_DRAWABLE_DESTROYED (owner))
+      if (GDK_WINDOW_DESTROYED (owner))
 	return FALSE;
 
-      xdisplay = GDK_DRAWABLE_XDISPLAY (owner);
-      xwindow = GDK_DRAWABLE_XID (owner);
+      xdisplay = GDK_WINDOW_XDISPLAY (owner);
+      xwindow = GDK_WINDOW_XID (owner);
     }
   else
     {

@@ -44,8 +44,8 @@ extern "C" {
 #define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
 #define GDK_NO_BG ((GdkPixmap *)2L)
 
-#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(d))->window_type)
-#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(d))->destroyed)
+#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
+#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))

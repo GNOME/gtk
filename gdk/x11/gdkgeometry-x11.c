@@ -87,11 +87,10 @@ _gdk_windowing_window_get_offsets (GdkWindow *window,
 				   gint      *x_offset,
 				   gint      *y_offset)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data = (GdkWindowXData *)private->drawable.klass_data;
+  GdkWindowImpl *impl = GDK_WINDOW_IMPL (((GdkWindowObject *) window)->impl);
 
-  *x_offset = data->position_info.x_offset;
-  *y_offset = data->position_info.y_offset;
+  *x_offset = impl->position_info.x_offset;
+  *y_offset = impl->position_info.y_offset;
 }
 
 void
@@ -105,7 +104,7 @@ _gdk_window_init_position (GdkWindow *window)
   impl = GDK_WINDOW_IMPL (((GdkWindowObject*)window)->impl);
   
   gdk_window_compute_parent_pos (impl, &parent_pos);
-  gdk_window_compute_position (impl, &parent_pos, &window->position_info);
+  gdk_window_compute_position (impl, &parent_pos, &impl->position_info);
 }
 
 void
@@ -115,10 +114,10 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowImpl *impl;
+  GdkWindowObject *obj;
   GdkXPositionInfo new_info;
   GdkWindowParentPos parent_pos;
-  GdkWindowXData *data;
   GList *tmp_list;
   
   gint d_xoffset, d_yoffset;
@@ -129,35 +128,36 @@ _gdk_window_move_resize_child (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  data = (GdkWindowXData *)private->drawable.klass_data;
-
-  dx = x - private->x;
-  dy = y - private->y;
+  impl = GDK_WINDOW_IMPL (((GdkWindowObject *) window)->impl);
+  obj = (GdkWindowObject *) window;
+  
+  dx = x - obj->x;
+  dy = y - obj->y;
   
   is_move = dx != 0 || dy != 0;
-  is_resize = private->drawable.width != width || private->drawable.height != height;
+  is_resize = impl->width != width || impl->height != height;
 
   if (!is_move && !is_resize)
     return;
   
-  private->x = x;
-  private->y = y;
-  private->drawable.width = width;
-  private->drawable.height = height;
+  obj->x = x;
+  obj->y = y;
+  impl->width = width;
+  impl->height = height;
 
-  gdk_window_compute_parent_pos (window, &parent_pos);
-  gdk_window_compute_position (window, &parent_pos, &new_info);
+  gdk_window_compute_parent_pos (impl, &parent_pos);
+  gdk_window_compute_position (impl, &parent_pos, &new_info);
 
-  gdk_window_clip_changed (window, &data->position_info.clip_rect, &new_info.clip_rect);
+  gdk_window_clip_changed (window, &impl->position_info.clip_rect, &new_info.clip_rect);
 
-  parent_pos.x += private->x;
-  parent_pos.y += private->y;
+  parent_pos.x += obj->x;
+  parent_pos.y += obj->y;
   parent_pos.x11_x += new_info.x;
   parent_pos.x11_y += new_info.y;
   parent_pos.clip_rect = new_info.clip_rect;
 
-  d_xoffset = new_info.x_offset - data->position_info.x_offset;
-  d_yoffset = new_info.y_offset - data->position_info.y_offset;
+  d_xoffset = new_info.x_offset - impl->position_info.x_offset;
+  d_yoffset = new_info.y_offset - impl->position_info.y_offset;
   
   if (d_xoffset != 0 || d_yoffset != 0)
     {
@@ -170,57 +170,57 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	
       if (d_xoffset < 0)
 	{
-	  new_x0 = data->position_info.x + d_xoffset;
-	  new_x1 = data->position_info.x + data->position_info.width;
+	  new_x0 = impl->position_info.x + d_xoffset;
+	  new_x1 = impl->position_info.x + impl->position_info.width;
 	}
       else
 	{
-	  new_x0 = data->position_info.x;
-	  new_x1 = data->position_info.x + new_info.width + d_xoffset;
+	  new_x0 = impl->position_info.x;
+	  new_x1 = impl->position_info.x + new_info.width + d_xoffset;
 	}
 
       if (d_yoffset < 0)
 	{
-	  new_y0 = data->position_info.y + d_yoffset;
-	  new_y1 = data->position_info.y + data->position_info.height;
+	  new_y0 = impl->position_info.y + d_yoffset;
+	  new_y1 = impl->position_info.y + impl->position_info.height;
 	}
       else
 	{
-	  new_y0 = data->position_info.y;
-	  new_y1 = data->position_info.y + new_info.height + d_yoffset;
+	  new_y0 = impl->position_info.y;
+	  new_y1 = impl->position_info.y + new_info.height + d_yoffset;
 	}
       
-      XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
-			 GDK_DRAWABLE_XID (window),
+      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+			 GDK_WINDOW_XID (window),
 			 new_x0, new_y0, new_x1 - new_x0, new_y1 - new_y0);
       
-      tmp_list = private->children;
+      tmp_list = obj->children;
       while (tmp_list)
 	{
 	  gdk_window_premove (tmp_list->data, &parent_pos);
 	  tmp_list = tmp_list->next;
 	}
 
-      XMoveWindow (GDK_DRAWABLE_XDISPLAY (window),
-		   GDK_DRAWABLE_XID (window),
+      XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+		   GDK_WINDOW_XID (window),
 		   new_x0 + dx, new_y0 + dy);
       
       if (d_xoffset > 0 || d_yoffset > 0)
 	gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
       
-      XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
-			 GDK_DRAWABLE_XID (window),
+      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+			 GDK_WINDOW_XID (window),
 			 new_info.x, new_info.y, new_info.width, new_info.height);
       
-      if (data->position_info.no_bg)
+      if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
 
-      if (!data->position_info.mapped && new_info.mapped && private->mapped)
-	XMapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
+      if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
       
-      data->position_info = new_info;
+      impl->position_info = new_info;
       
-      tmp_list = private->children;
+      tmp_list = obj->children;
       while (tmp_list)
 	{
 	  gdk_window_postmove (tmp_list->data, &parent_pos);
@@ -232,10 +232,10 @@ _gdk_window_move_resize_child (GdkWindow *window,
       if (is_move && is_resize)
 	gdk_window_set_static_gravities (window, FALSE);
 
-      if (data->position_info.mapped && !new_info.mapped)
-	XUnmapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
+      if (impl->position_info.mapped && !new_info.mapped)
+	XUnmapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
       
-      tmp_list = private->children;
+      tmp_list = obj->children;
       while (tmp_list)
 	{
 	  gdk_window_premove (tmp_list->data, &parent_pos);
@@ -243,28 +243,28 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	}
 
       if (is_resize)
-	XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
-			   GDK_DRAWABLE_XID (window),
+	XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+			   GDK_WINDOW_XID (window),
 			   new_info.x, new_info.y, new_info.width, new_info.height);
       else
-	XMoveWindow (GDK_DRAWABLE_XDISPLAY (window),
-		     GDK_DRAWABLE_XID (window),
+	XMoveWindow (GDK_WINDOW_XDISPLAY (window),
+		     GDK_WINDOW_XID (window),
 		     new_info.x, new_info.y);
 
-      tmp_list = private->children;
+      tmp_list = obj->children;
       while (tmp_list)
 	{
 	  gdk_window_postmove (tmp_list->data, &parent_pos);
 	  tmp_list = tmp_list->next;
 	}
 
-      if (data->position_info.no_bg)
+      if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
 
-      if (!data->position_info.mapped && new_info.mapped && private->mapped)
-	XMapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
+      if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
+	XMapWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 
-      data->position_info = new_info;
+      impl->position_info = new_info;
     }
 }
 
@@ -315,7 +315,7 @@ gdk_window_compute_position (GdkWindowImpl      *window,
       if (parent_pos->y + wrapper->y < -16384)
 	{
 	  if (parent_pos->y + wrapper->y + window->height < 16384)
-	    info->y = parent_pos->y + wrapper->y + wrapper->drawable.height - 32768 - parent_pos->x11_y;
+	    info->y = parent_pos->y + wrapper->y + window->height - 32768 - parent_pos->x11_y;
 	  else
 	    info->y = -16384 - parent_pos->x11_y;
 	}
@@ -416,8 +416,8 @@ gdk_window_compute_parent_pos (GdkWindowImpl      *window,
 
       parent_pos->x += parent->x;
       parent_pos->y += parent->y;
-      parent_pos->x11_x += data->position_info.x;
-      parent_pos->x11_y += data->position_info.y;
+      parent_pos->x11_x += window->position_info.x;
+      parent_pos->x11_y += window->position_info.y;
 
       clip_xoffset += parent->x;
       clip_yoffset += parent->y;
@@ -430,28 +430,31 @@ static void
 gdk_window_premove (GdkWindow          *window,
 		    GdkWindowParentPos *parent_pos)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data = GDK_WINDOW_XDATA (window);
+  GdkWindowImpl *impl;
+  GdkWindowObject *obj;
   GdkXPositionInfo new_info;
   GList *tmp_list;
   gint d_xoffset, d_yoffset;
   GdkWindowParentPos this_pos;
+
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL (obj->impl);
   
-  gdk_window_compute_position (window, parent_pos, &new_info);
+  gdk_window_compute_position (impl, parent_pos, &new_info);
 
-  gdk_window_clip_changed (window, &data->position_info.clip_rect, &new_info.clip_rect);
+  gdk_window_clip_changed (window, &impl->position_info.clip_rect, &new_info.clip_rect);
 
-  this_pos.x = parent_pos->x + private->x;
-  this_pos.y = parent_pos->y + private->y;
+  this_pos.x = parent_pos->x + obj->x;
+  this_pos.y = parent_pos->y + obj->y;
   this_pos.x11_x = parent_pos->x11_x + new_info.x;
   this_pos.x11_y = parent_pos->x11_y + new_info.y;
   this_pos.clip_rect = new_info.clip_rect;
 
-  if (data->position_info.mapped && !new_info.mapped)
+  if (impl->position_info.mapped && !new_info.mapped)
     XUnmapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
 
-  d_xoffset = new_info.x_offset - data->position_info.x_offset;
-  d_yoffset = new_info.y_offset - data->position_info.y_offset;
+  d_xoffset = new_info.x_offset - impl->position_info.x_offset;
+  d_yoffset = new_info.y_offset - impl->position_info.y_offset;
   
   if (d_xoffset != 0 || d_yoffset != 0)
     {
@@ -462,24 +465,24 @@ gdk_window_premove (GdkWindow          *window,
 	
       if (d_xoffset < 0)
 	{
-	  new_x0 = data->position_info.x + d_xoffset;
-	  new_x1 = data->position_info.x + data->position_info.width;
+	  new_x0 = impl->position_info.x + d_xoffset;
+	  new_x1 = impl->position_info.x + impl->position_info.width;
 	}
       else
 	{
-	  new_x0 = data->position_info.x;
-	  new_x1 = data->position_info.x + new_info.width + d_xoffset;
+	  new_x0 = impl->position_info.x;
+	  new_x1 = impl->position_info.x + new_info.width + d_xoffset;
 	}
 
       if (d_yoffset < 0)
 	{
-	  new_y0 = data->position_info.y + d_yoffset;
-	  new_y1 = data->position_info.y + data->position_info.height;
+	  new_y0 = impl->position_info.y + d_yoffset;
+	  new_y1 = impl->position_info.y + impl->position_info.height;
 	}
       else
 	{
-	  new_y0 = data->position_info.y;
-	  new_y1 = data->position_info.y + new_info.height + d_yoffset;
+	  new_y0 = impl->position_info.y;
+	  new_y1 = impl->position_info.y + new_info.height + d_yoffset;
 	}
 
       XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
@@ -487,7 +490,7 @@ gdk_window_premove (GdkWindow          *window,
 			 new_x0, new_y0, new_x1 - new_x0, new_y1 - new_y0);
     }
 
-  tmp_list = private->children;
+  tmp_list = obj->children;
   while (tmp_list)
     {
       gdk_window_premove (tmp_list->data, &this_pos);
@@ -499,23 +502,26 @@ static void
 gdk_window_postmove (GdkWindow          *window,
 		     GdkWindowParentPos *parent_pos)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data = (GdkWindowXData *)private->drawable.klass_data;
+  GdkWindowImpl *impl;
+  GdkWindowObject *obj;
   GdkXPositionInfo new_info;
   GList *tmp_list;
   gint d_xoffset, d_yoffset;
   GdkWindowParentPos this_pos;
-  
-  gdk_window_compute_position (window, parent_pos, &new_info);
 
-  this_pos.x = parent_pos->x + private->x;
-  this_pos.y = parent_pos->y + private->y;
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL (obj->impl);
+  
+  gdk_window_compute_position (impl, parent_pos, &new_info);
+
+  this_pos.x = parent_pos->x + obj->x;
+  this_pos.y = parent_pos->y + obj->y;
   this_pos.x11_x = parent_pos->x11_x + new_info.x;
   this_pos.x11_y = parent_pos->x11_y + new_info.y;
   this_pos.clip_rect = new_info.clip_rect;
 
-  d_xoffset = new_info.x_offset - data->position_info.x_offset;
-  d_yoffset = new_info.y_offset - data->position_info.y_offset;
+  d_xoffset = new_info.x_offset - impl->position_info.x_offset;
+  d_yoffset = new_info.y_offset - impl->position_info.y_offset;
   
   if (d_xoffset != 0 || d_yoffset != 0)
     {
@@ -527,15 +533,15 @@ gdk_window_postmove (GdkWindow          *window,
 			 new_info.x, new_info.y, new_info.width, new_info.height);
     }
 
-  if (!data->position_info.mapped && new_info.mapped && private->mapped)
+  if (!impl->position_info.mapped && new_info.mapped && obj->mapped)
     XMapWindow (GDK_DRAWABLE_XDISPLAY (window), GDK_DRAWABLE_XID (window));
 
-  if (data->position_info.no_bg)
+  if (impl->position_info.no_bg)
     gdk_window_tmp_reset_bg (window);
 
-  data->position_info = new_info;
+  impl->position_info = new_info;
 
-  tmp_list = private->children;
+  tmp_list = obj->children;
   while (tmp_list)
     {
       gdk_window_postmove (tmp_list->data, &this_pos);
@@ -580,12 +586,13 @@ _gdk_window_process_expose (GdkWindow    *window,
 			    gulong        serial,
 			    GdkRectangle *area)
 {
-  GdkWindowXData *data = GDK_WINDOW_XDATA (window);
+  GdkWindowImpl *impl;
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
-
   GSList *tmp_list = translate_queue;
 
+  impl = GDK_WINDOW_IMPL (((GdkWindowObject *) window)->impl);
+  
   while (tmp_list)
     {
       GdkWindowQueueItem *item = tmp_list->data;
@@ -616,7 +623,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 	}
     }
 
-  clip_region = gdk_region_rectangle (&data->position_info.clip_rect);
+  clip_region = gdk_region_rectangle (&impl->position_info.clip_rect);
   gdk_region_intersect (invalidate_region, clip_region);
 
   if (!gdk_region_empty (invalidate_region))
@@ -629,12 +636,15 @@ _gdk_window_process_expose (GdkWindow    *window,
 static void
 gdk_window_tmp_unset_bg (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data = GDK_WINDOW_XDATA (window);
+  GdkWindowImpl *impl;
+  GdkWindowObject *obj;
 
-  data->position_info.no_bg = TRUE;
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL (obj->impl);
 
-  if (private->bg_pixmap != GDK_NO_BG)
+  impl->position_info.no_bg = TRUE;
+
+  if (obj->bg_pixmap != GDK_NO_BG)
     XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
 				GDK_DRAWABLE_XID (window), None);
 }
@@ -642,22 +652,25 @@ gdk_window_tmp_unset_bg (GdkWindow *window)
 static void
 gdk_window_tmp_reset_bg (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkWindowXData *data = GDK_WINDOW_XDATA (window);
+  GdkWindowImpl *impl;
+  GdkWindowObject *obj;
 
-  data->position_info.no_bg = FALSE;
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL (obj->impl);
 
-  if (private->bg_pixmap == GDK_NO_BG)
+  impl->position_info.no_bg = FALSE;
+
+  if (obj->bg_pixmap == GDK_NO_BG)
     return;
   
-  if (private->bg_pixmap)
+  if (obj->bg_pixmap)
     {
       Pixmap xpixmap;
 
-      if (private->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+      if (obj->bg_pixmap == GDK_PARENT_RELATIVE_BG)
 	xpixmap = ParentRelative;
       else 
-	xpixmap = GDK_DRAWABLE_XID (private->bg_pixmap);
+	xpixmap = GDK_DRAWABLE_XID (obj->bg_pixmap);
 
       XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
 				  GDK_DRAWABLE_XID (window), xpixmap);
@@ -666,28 +679,31 @@ gdk_window_tmp_reset_bg (GdkWindow *window)
     {
       XSetWindowBackground (GDK_DRAWABLE_XDISPLAY (window),
 			    GDK_DRAWABLE_XID (window),
-			    private->bg_color.pixel);
+			    obj->bg_color.pixel);
     }
 }
 
 static void
 gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle *new_clip)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-
+  GdkWindowImpl *impl;
+  GdkWindowObject *obj;
   GdkRegion *old_clip_region;
   GdkRegion *new_clip_region;
-
-  if (private->input_only)
+  
+  if (((GdkWindowObject *)window)->input_only)
     return;
-    
+
+  obj = (GdkWindowObject *) window;
+  impl = GDK_WINDOW_IMPL (obj->impl);
+  
   old_clip_region = gdk_region_rectangle (old_clip);
   new_clip_region = gdk_region_rectangle (new_clip);
 
   /* Trim invalid region of window to new clip rectangle
    */
-  if (private->update_area)
-    gdk_region_intersect (private->update_area, new_clip_region);
+  if (obj->update_area)
+    gdk_region_intersect (obj->update_area, new_clip_region);
 
   /* Invalidate newly exposed portion of window
    */

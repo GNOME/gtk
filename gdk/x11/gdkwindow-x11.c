@@ -255,6 +255,9 @@ gdk_windowing_window_init (void)
   draw_impl->wrapper = GDK_DRAWABLE (private);
   
   private->window_type = GDK_WINDOW_ROOT;
+  private->depth = depth;
+  impl->width = width;
+  impl->height = height;
   
   gdk_xid_table_insert (&gdk_root_window, gdk_parent_root);
 }
@@ -304,6 +307,7 @@ gdk_window_new (GdkWindow     *parent,
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL (private->impl);
+  draw_impl->wrapper = GDK_DRAWABLE (window);
   
   draw_impl->xdisplay = GDK_WINDOW_XDISPLAY (parent); 
   
@@ -582,6 +586,7 @@ gdk_window_foreign_new (guint32 anid)
   private = (GdkWindowObject *)window;
   impl = GDK_WINDOW_IMPL (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL (private->impl);
+  draw_impl->wrapper = GDK_DRAWABLE (window);
   
   private->parent = gdk_xid_table_lookup (parent);
   
@@ -600,6 +605,7 @@ gdk_window_foreign_new (guint32 anid)
   private->window_type = GDK_WINDOW_FOREIGN;
   private->destroyed = FALSE;
   private->mapped = (attrs.map_state != IsUnmapped);
+  private->depth = attrs.depth;
   
   gdk_drawable_ref (window);
   gdk_xid_table_insert (&GDK_WINDOW_XID (window), window);

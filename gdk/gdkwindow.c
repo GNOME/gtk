@@ -741,11 +741,11 @@ gdk_window_end_paint (GdkWindow *window)
   gdk_gc_set_clip_region (tmp_gc, paint->region);
   gdk_gc_set_clip_origin (tmp_gc, -x_offset, -y_offset);
 
-  _gdk_windowing_window_class.draw_drawable (window, tmp_gc, paint->pixmap,
-					     clip_box.x - paint->x_offset,
-					     clip_box.y - paint->y_offset,
-					     clip_box.x - x_offset, clip_box.y - y_offset,
-					     clip_box.width, clip_box.height);
+  gdk_draw_drawable (private->impl, tmp_gc, paint->pixmap,
+                     clip_box.x - paint->x_offset,
+                     clip_box.y - paint->y_offset,
+                     clip_box.x - x_offset, clip_box.y - y_offset,
+                     clip_box.width, clip_box.height);
   gdk_gc_unref (tmp_gc);
 
   if (private->paint_stack)
@@ -837,10 +837,13 @@ gdk_window_create_gc (GdkDrawable     *drawable,
                       GdkGCValues     *values,
                       GdkGCValuesMask  mask)
 {
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
+  
   if (GDK_WINDOW_DESTROYED (drawable))
     return NULL;
-  
-  return _gdk_windowing_window_class.create_gc (drawable, values, mask);
+
+  return gdk_gc_new_with_values (((GdkWindowObject *) drawable)->impl,
+                                 values, mask);
 }
 
 static void

@@ -156,15 +156,6 @@ void _gdk_colormap_real_destroy (GdkColormap *colormap);
 
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
-/* Class supplied by windowing-system-dependent code for GdkWindow.
- */
-extern GdkDrawableClass _gdk_windowing_window_class;
-
-/* Class for covering over windowing-system-dependent and backing-store
- * code for GdkWindow
- */
-extern GdkDrawableClass _gdk_window_class;
-
 extern GdkArgDesc _gdk_windowing_args[];
 gboolean _gdk_windowing_init_check              (int         argc,
 						 char      **argv);
