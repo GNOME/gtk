@@ -922,12 +922,7 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTreeView:indent-expanders ##### -->
+<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
 <para>
 
 </para>
@@ -942,7 +937,12 @@ Function used for #gtk_tree_view_map_expanded_rows.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:vertical-separator ##### -->
+<!-- ##### ARG GtkTreeView:indent-expanders ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeView:horizontal-separator ##### -->
 <para>
 
 </para>

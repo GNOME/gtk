@@ -119,19 +119,10 @@ functions such as g_signal_connect().
 
 <!-- ##### FUNCTION gtk_init_check ##### -->
 <para>
-This function does the same work as gtk_init() with only 
-a single change: It does not terminate the program if the GUI can't be 
-initialized. Instead it returns %FALSE on failure.
-</para>
-<para>
-This way the application can fall back to some other means of communication 
-with the user - for example a curses or command line interface.
 </para>
 
-@argc: A reference to the <parameter>argc</parameter> of the 
-<function>main()</function> function.
-@argv: A reference to the <parameter>argv</parameter> of the 
-<function>main()</function> function.
+@argc: 
+@argv: 
 @Returns: 
 
 

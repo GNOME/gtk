@@ -142,6 +142,22 @@ widget.
 @GTK_EXPANDER_SEMI_EXPANDED: 
 @GTK_EXPANDER_EXPANDED: 
 
+<!-- ##### ENUM GtkIMPreeditStyle ##### -->
+<para>
+
+</para>
+
+@GTK_IM_PREEDIT_NOTHING: 
+@GTK_IM_PREEDIT_CALLBACK: 
+
+<!-- ##### ENUM GtkIMStatusStyle ##### -->
+<para>
+
+</para>
+
+@GTK_IM_STATUS_NOTHING: 
+@GTK_IM_STATUS_CALLBACK: 
+
 <!-- ##### ENUM GtkJustification ##### -->
 <para>
 Used for justifying the text inside a #GtkLabel widget. (See also

@@ -286,7 +286,6 @@ called by applications.
 
 <!-- ##### FUNCTION gtk_selection_clear ##### -->
 <para>
-Internal function.
 </para>
 
 @widget: 

@@ -4293,6 +4293,8 @@ GtkCurveType
 GtkDeleteType
 GtkDirectionType
 GtkExpanderStyle
+GtkIMPreeditStyle
+GtkIMStatusStyle
 GtkJustification
 GtkMatchType
 GtkMetricType

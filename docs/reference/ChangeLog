@@ -1,3 +1,11 @@
+Mon Oct 14 19:16:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk-sections.txt: Update.
+
+	* gdk/tmpl/images.sgml gtk/tmpl/gtkmain.sgml 
+	gtk/tmpl/gtkselection.sgml: Remove docs that were moved
+	the the C files.
+
 2002-10-14  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/Makefile.am (dist-hook): 
