@@ -366,11 +366,11 @@ gdk_selection_send_notify (guint32  requestor,
 }
 
 gint
-gdk_text_property_to_text_list (GdkAtom  encoding,
-				gint     format, 
-				guchar  *text,
-				gint     length,
-				gchar ***list)
+gdk_text_property_to_text_list (GdkAtom       encoding,
+				gint          format, 
+				const guchar *text,
+				gint          length,
+				gchar      ***list)
 {
   GDK_NOTE (MISC,
 	    g_print ("gdk_text_property_to_text_list not implemented\n"));
@@ -387,11 +387,11 @@ gdk_free_text_list (gchar **list)
 }
 
 gint
-gdk_string_to_compound_text (gchar   *str,
-			     GdkAtom *encoding,
-			     gint    *format,
-			     guchar **ctext,
-			     gint    *length)
+gdk_string_to_compound_text (const gchar *str,
+			     GdkAtom     *encoding,
+			     gint        *format,
+			     guchar     **ctext,
+			     gint        *length)
 {
   g_warning ("gdk_string_to_compound_text: Not implemented");
 

@@ -27,8 +27,6 @@
 
 #include "config.h"
 
-#define USE_DISPATCHMESSAGE
-
 /* Cannot use TrackMouseEvent, as the stupid WM_MOUSELEAVE message
  * doesn't tell us where the mouse has gone. Thus we cannot use it to
  * generate a correct GdkNotifyType. Pity, as using TrackMouseEvent
@@ -2943,24 +2941,6 @@ gdk_event_translate (GdkEvent *event,
   if (ret_val_flagp)
     *ret_val_flagp = FALSE;
 
-#ifndef USE_DISPATCHMESSAGE
-  if (xevent->message == gdk_ping_msg)
-    {
-      /* Messages we post ourselves just to wakeup WaitMessage.  */
-      GDK_NOTE (EVENTS, g_print ("gdk_ping_msg\n"));
-
-      return FALSE;
-    }
-  else if (xevent->message == g_pipe_readable_msg)
-    {
-      GDK_NOTE (EVENTS, g_print ("g_pipe_readable_msg: %d %d\n",
-				 xevent->wParam, xevent->lParam));
-
-      g_io_channel_win32_pipe_readable (xevent->wParam, xevent->lParam);
-      return FALSE;
-    }
-#endif
-
   window = gdk_window_lookup (xevent->hwnd);
   orig_window = window;
   
@@ -4258,7 +4238,7 @@ gdk_events_queue (void)
   MSG msg;
   LRESULT lres;
 
-  while (!gdk_event_queue_find_first()
+  while (!gdk_event_queue_find_first ()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
       GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %#x\n",
@@ -4268,7 +4248,6 @@ gdk_events_queue (void)
 	  || (paimmmpo->lpVtbl->OnTranslateMessage) (paimmmpo, &msg) != S_OK)
 	TranslateMessage (&msg);
 
-#ifdef USE_DISPATCHMESSAGE
       if (msg.message == g_pipe_readable_msg)
 	{
 	  GDK_NOTE (EVENTS, g_print ("g_pipe_readable_msg: %d %d\n",
@@ -4280,33 +4259,6 @@ gdk_events_queue (void)
 	}
       
       DispatchMessage (&msg);
-#else
-      event = gdk_event_new ();
-      
-      event->any.type = GDK_NOTHING;
-      event->any.window = NULL;
-      event->any.send_event = FALSE;
-
-      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
-
-      gdk_event_queue_append (event);
-      node = gdk_queued_tail;
-
-      if (gdk_event_translate (event, &msg, NULL, NULL))
-	((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-      else
-	{
-	  if (paimmapp == NULL
-	      || (paimmapp->lpVtbl->OnDefWindowProc) (paimmapp, msg.hwnd,
-						      msg.message,
-						      msg.wParam, msg.lParam,
-						      &lres) == S_FALSE)
-	    DefWindowProc (msg.hwnd, msg.message, msg.wParam, msg.lParam);
-	  gdk_event_queue_remove_link (node);
-	  g_list_free_1 (node);
-	  gdk_event_free (event);
-	}
-#endif
     }
 }
 

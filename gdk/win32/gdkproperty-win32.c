@@ -131,13 +131,13 @@ gdk_property_get (GdkWindow   *window,
 }
 
 void
-gdk_property_change (GdkWindow   *window,
-		     GdkAtom      property,
-		     GdkAtom      type,
-		     gint         format,
-		     GdkPropMode  mode,
-		     guchar      *data,
-		     gint         nelements)
+gdk_property_change (GdkWindow    *window,
+		     GdkAtom       property,
+		     GdkAtom       type,
+		     gint          format,
+		     GdkPropMode   mode,
+		     const guchar *data,
+		     gint          nelements)
 {
   HGLOBAL hdata;
   gint i, length;
@@ -170,9 +170,8 @@ gdk_property_change (GdkWindow   *window,
       && mode == GDK_PROP_MODE_REPLACE)
     {
       length = nelements;
-      ptr = data;
       for (i = 0; i < nelements; i++)
-	if (*ptr++ == '\n')
+	if (data[i] == '\n')
 	  length++;
 #if 1      
       GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",

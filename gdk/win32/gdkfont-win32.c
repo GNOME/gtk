@@ -1506,7 +1506,7 @@ gdk_font_load (const gchar *font_name)
 }
 
 GdkFont*
-gdk_fontset_load (gchar *fontset_name)
+gdk_fontset_load (const gchar *fontset_name)
 {
   GdkFont *font;
   GdkFontPrivateWin32 *private;

@@ -1840,8 +1840,8 @@ gdk_window_set_icon (GdkWindow *window,
 }
 
 void
-gdk_window_set_icon_name (GdkWindow *window, 
-			  gchar     *name)
+gdk_window_set_icon_name (GdkWindow   *window, 
+			  const gchar *name)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));

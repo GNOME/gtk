@@ -1,3 +1,14 @@
+2000-03-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c: Remove the #ifndef
+	USE_DISPATCHMESSAGE sections, we do want to use DispatchMessage.
+
+	* gdk/win32/gdkfont-win32.c
+	* gdk/win32/gdkproperty-win32.c
+	* gdk/win32/gdkselection-win32.c
+	* gdk/win32/gdkwindow-win32.c: Add const to some arguments that are
+	now declared such.
+
 Wed Mar 15 02:59:38 PST 2000 Manish Singh <yosh@gimp.org>
 
 	* gtk/gtkvpaned.c: removed stray gutter_size reference, a 1.2 relic
