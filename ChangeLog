@@ -1,3 +1,8 @@
+Sat Jul 19 16:26:02 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbutton.c (gtk_tool_button_construct_contents): don't
+	attempt to add a NULL icon to the box.
+
 Sat Jul 19 12:13:20 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtknotebook.c (gtk_notebook_focus_in|out): only redraw tabs
