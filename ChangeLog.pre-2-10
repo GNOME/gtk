@@ -1,3 +1,8 @@
+Thu Jun  6 17:27:01 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkrbtree.c (_gtk_rbtree_reorder): don't leak the GArray
+	(figured out by Matthias Clasen, fixes #82026).
+
 Wed Jun  5 18:34:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Changes multihead reorganizing code for win32 support,
