@@ -61,9 +61,9 @@ GtkType    gtk_toggle_button_get_type       (void);
 GtkWidget* gtk_toggle_button_new            (void);
 GtkWidget* gtk_toggle_button_new_with_label (const gchar     *label);
 void       gtk_toggle_button_set_mode       (GtkToggleButton *toggle_button,
-					     gint             draw_indicator);
-void       gtk_toggle_button_set_state      (GtkToggleButton *toggle_button,
-					     gint             state);
+					     gboolean         draw_indicator);
+void       gtk_toggle_button_set_active     (GtkToggleButton *toggle_button,
+					     gboolean         is_active);
 void       gtk_toggle_button_toggled        (GtkToggleButton *toggle_button);
 
 

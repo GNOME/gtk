@@ -329,7 +329,7 @@ button_toggled_callback (GtkWidget *w, gpointer data)
       break;
 
   if (i < 3)
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (c->button[i]), FALSE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c->button[i]), FALSE);
 
   switch (active)
     {
@@ -444,7 +444,7 @@ curve_type_changed_callback (GtkWidget *w, gpointer data)
     default:		        active = 2; break;
     }
   if (!GTK_TOGGLE_BUTTON (c->button[active])->active)
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (c->button[active]), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (c->button[active]), TRUE);
 }
 
 GtkWidget*

@@ -1466,10 +1466,10 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
   if (token != G_TOKEN_STRING)
     return G_TOKEN_STRING;
   
-  if (strcmp (scanner->value.v_string, "<parent>"))
-    pixmap_file = gtk_rc_find_pixmap_in_path (scanner, scanner->value.v_string);
-  else
+  if (strcmp (scanner->value.v_string, "<parent>") == 0)
     pixmap_file = g_strdup (scanner->value.v_string);
+  else
+    pixmap_file = gtk_rc_find_pixmap_in_path (scanner, scanner->value.v_string);
   
   if (pixmap_file)
     {

@@ -410,7 +410,7 @@ create_radio_buttons (void)
       button = gtk_radio_button_new_with_label (
 	         gtk_radio_button_group (GTK_RADIO_BUTTON (button)),
 		 "button2");
-      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
       button = gtk_radio_button_new_with_label (
@@ -1429,12 +1429,12 @@ create_tree_mode_window(void)
       /* create check button */
       button = gtk_check_button_new_with_label("Draw line");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button), TRUE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
       sTreeSampleSelection.draw_line_button = button;
   
       button = gtk_check_button_new_with_label("View Line mode");
       gtk_box_pack_start(GTK_BOX(box4), button, TRUE, TRUE, 0);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(button), TRUE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
       sTreeSampleSelection.view_line_button = button;
   
       button = gtk_check_button_new_with_label("Without Root item");
@@ -2779,21 +2779,21 @@ create_entry (void)
       gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_editable), entry);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(editable_check), TRUE);
       gtk_widget_show (editable_check);
 
       editable_check = gtk_check_button_new_with_label("Visible");
       gtk_box_pack_start (GTK_BOX (box2), editable_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(editable_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_visibility), entry);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(editable_check), TRUE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(editable_check), TRUE);
       gtk_widget_show (editable_check);
 
       sensitive_check = gtk_check_button_new_with_label("Sensitive");
       gtk_box_pack_start (GTK_BOX (box2), sensitive_check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(sensitive_check), "toggled",
 			  GTK_SIGNAL_FUNC(entry_toggle_sensitive), entry);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(sensitive_check), TRUE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sensitive_check), TRUE);
       gtk_widget_show (sensitive_check);
 
       separator = gtk_hseparator_new ();
@@ -3000,14 +3000,14 @@ create_spins (void)
 			  GTK_SIGNAL_FUNC (toggle_snap),
 			  spinner1);
       gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
       button = gtk_check_button_new_with_label ("Numeric only input mode");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",
 			  GTK_SIGNAL_FUNC (toggle_numeric),
 			  spinner1);
       gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
-      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
 
       val_label = gtk_label_new ("");
 
@@ -4107,7 +4107,7 @@ create_clist (void)
       gtk_signal_connect (GTK_OBJECT (check), "clicked",
 			  GTK_SIGNAL_FUNC (toggle_reorderable), clist);
       gtk_box_pack_start (GTK_BOX (box2), check, FALSE, TRUE, 0);
-      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (box2), label, FALSE, TRUE, 0);
@@ -5002,7 +5002,7 @@ void create_ctree (void)
       gtk_signal_connect (GTK_OBJECT (check), "clicked",
 			  GTK_SIGNAL_FUNC (toggle_reorderable), ctree);
       gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
-      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
 
       hbox = gtk_hbox_new (TRUE, 5);
       gtk_box_pack_start (GTK_BOX (mbox), hbox, FALSE, FALSE, 0);
@@ -5798,14 +5798,14 @@ create_text (void)
       gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
       gtk_signal_connect (GTK_OBJECT(check), "toggled",
 			  GTK_SIGNAL_FUNC(text_toggle_editable), text);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), TRUE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), TRUE);
       gtk_widget_show (check);
 
       check = gtk_check_button_new_with_label("Wrap Words");
       gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
       gtk_signal_connect (GTK_OBJECT(check), "toggled",
 			  GTK_SIGNAL_FUNC(text_toggle_word_wrap), text);
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(check), FALSE);
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check), FALSE);
       gtk_widget_show (check);
 
       separator = gtk_hseparator_new ();
@@ -5947,7 +5947,7 @@ create_pages (GtkNotebook *notebook, gint start, gint end)
 
       button = gtk_check_button_new_with_label ("Fill Tab");
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
-      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (button), TRUE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_signal_connect (GTK_OBJECT (button), "toggled",
 			  GTK_SIGNAL_FUNC (tab_fill), child);
 
@@ -6254,7 +6254,7 @@ create_pane_options (GtkPaned *paned,
   check_button = gtk_check_button_new_with_label ("Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     0, 1, 2, 3);
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check_button),
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_shrink),
@@ -6267,7 +6267,7 @@ create_pane_options (GtkPaned *paned,
   check_button = gtk_check_button_new_with_label ("Resize");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 1, 2);
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check_button),
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_resize),
@@ -6276,7 +6276,7 @@ create_pane_options (GtkPaned *paned,
   check_button = gtk_check_button_new_with_label ("Shrink");
   gtk_table_attach_defaults (GTK_TABLE (table), check_button,
 			     1, 2, 2, 3);
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check_button),
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button),
 			       TRUE);
   gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
 		      GTK_SIGNAL_FUNC (toggle_shrink),

@@ -1,3 +1,25 @@
+Mon Jan 11 15:23:32 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktogglebutton.c: eliminated some queue_draws when invoking
+	gtk_widget_set_state, since that cares about redrawing already.
+	some code cleanups.
+
+	* gtk/gtktogglebutton.[hc]:
+	* gtk/gtkfontsel.c:
+	* gtkgamma.c:
+	s/gtk_toggle_button_set_state/gtk_toggle_button_set_active/ since
+	set_state is already taken by gtkwidget.h.
+
+	* gtk/gtkcompat.h: #define gtk_toggle_button_set_state
+        gtk_toggle_button_set_active.
+        
+        * gtk/gtkstyle.c: some indentation cleanups.
+
+Mon Jan 11 15:12:33 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_set_mode): take previous
+	visibility state into account when unrealizing.
+
 Mon Jan 11 10:45:28 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c: Only remove handlers for motion/button_release

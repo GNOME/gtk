@@ -658,14 +658,14 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_widget_show (fontsel->points_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->points_button, FALSE, TRUE, 0);
   if (INITIAL_METRIC == GTK_FONT_METRIC_POINTS)
-    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->points_button),
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fontsel->points_button),
 				TRUE);
   
   fontsel->pixels_button = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(fontsel->points_button), _("Pixels"));
   gtk_widget_show (fontsel->pixels_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->pixels_button, FALSE, TRUE, 0);
   if (INITIAL_METRIC == GTK_FONT_METRIC_PIXELS)
-    gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->pixels_button),
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fontsel->pixels_button),
 				TRUE);
   
   gtk_signal_connect(GTK_OBJECT(fontsel->points_button), "toggled",
@@ -798,13 +798,13 @@ gtk_font_selection_init(GtkFontSelection *fontsel)
   gtk_box_pack_start (GTK_BOX (hbox), hbox2, FALSE, TRUE, 0);
 
   fontsel->type_bitmaps_button = gtk_check_button_new_with_label (_("Bitmap"));
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), TRUE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), TRUE);
   gtk_widget_show (fontsel->type_bitmaps_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->type_bitmaps_button,
 		      FALSE, TRUE, 0);
 
   fontsel->type_scalable_button = gtk_check_button_new_with_label (_("Scalable"));
-  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), TRUE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), TRUE);
   gtk_widget_show (fontsel->type_scalable_button);
   gtk_box_pack_start (GTK_BOX (hbox2), fontsel->type_scalable_button,
 		      FALSE, TRUE, 0);
@@ -2326,11 +2326,11 @@ gtk_font_selection_reset_filter	     (GtkWidget      *w,
 
   base_font_type = fontsel->filters[GTK_FONT_FILTER_BASE].font_type;
   if (base_font_type & GTK_FONT_BITMAP)
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), TRUE);
   if (base_font_type & GTK_FONT_SCALABLE)
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), TRUE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), TRUE);
   if (base_font_type & GTK_FONT_SCALABLE_BITMAP)
-    gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), FALSE);
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), FALSE);
   
   for (prop = 0; prop < GTK_NUM_FONT_PROPERTIES; prop++)
     gtk_clist_select_row(GTK_CLIST(fontsel->filter_clists[prop]), 0, 0);
@@ -2461,47 +2461,47 @@ gtk_font_selection_set_filter	(GtkFontSelection *fontsel,
       if (font_type & GTK_FONT_BITMAP)
 	{
 	  gtk_widget_set_sensitive (fontsel->type_bitmaps_button, TRUE);
-	  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), user_font_type & GTK_FONT_BITMAP);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), user_font_type & GTK_FONT_BITMAP);
 	}
       else
 	{
 	  gtk_widget_set_sensitive (fontsel->type_bitmaps_button, FALSE);
-	  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), FALSE);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), FALSE);
 	}
       
       if (font_type & GTK_FONT_SCALABLE)
 	{
 	  gtk_widget_set_sensitive (fontsel->type_scalable_button, TRUE);
-	  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), user_font_type & GTK_FONT_SCALABLE);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), user_font_type & GTK_FONT_SCALABLE);
 	}
       else
 	{
 	  gtk_widget_set_sensitive (fontsel->type_scalable_button, FALSE);
-	  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), FALSE);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), FALSE);
 	}
 
       if (font_type & GTK_FONT_SCALABLE_BITMAP)
 	{
 	  gtk_widget_set_sensitive (fontsel->type_scaled_bitmaps_button, TRUE);
-	  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), user_font_type & GTK_FONT_SCALABLE_BITMAP);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), user_font_type & GTK_FONT_SCALABLE_BITMAP);
 	}
       else
 	{
 	  gtk_widget_set_sensitive (fontsel->type_scaled_bitmaps_button, FALSE);
-	  gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), FALSE);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), FALSE);
 	}
     }
   else
     {
       base_font_type = fontsel->filters[GTK_FONT_FILTER_BASE].font_type;
       if (base_font_type & GTK_FONT_BITMAP)
-	gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), font_type & GTK_FONT_BITMAP);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_bitmaps_button), font_type & GTK_FONT_BITMAP);
 
       if (base_font_type & GTK_FONT_SCALABLE)
-	gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), font_type & GTK_FONT_SCALABLE);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scalable_button), font_type & GTK_FONT_SCALABLE);
 
       if (base_font_type & GTK_FONT_SCALABLE_BITMAP)
-	gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), font_type & GTK_FONT_SCALABLE_BITMAP);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (fontsel->type_scaled_bitmaps_button), font_type & GTK_FONT_SCALABLE_BITMAP);
 
       /* If the user filter is not the default, make the 'Reset Filter' button
 	 sensitive. */
@@ -3163,7 +3163,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 	size = 20;
       fontsel->size = fontsel->selected_size = size;
       fontsel->metric = GTK_FONT_METRIC_POINTS;
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->points_button),
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fontsel->points_button),
 				  TRUE);
       if (size % 10 == 0)
 	sprintf (buffer, "%i", size / 10);
@@ -3179,7 +3179,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 	size = 2;
       fontsel->size = fontsel->selected_size = size;
       fontsel->metric = GTK_FONT_METRIC_PIXELS;
-      gtk_toggle_button_set_state(GTK_TOGGLE_BUTTON(fontsel->pixels_button),
+      gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(fontsel->pixels_button),
 				  TRUE);
       sprintf (buffer, "%i", size);
     }

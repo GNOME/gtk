@@ -26,8 +26,14 @@ class "GtkWidget" style "defaultfont"
 
 style "window"
 {
-#  bg_pixmap[NORMAL] = "warning.xpm"
+#  bg_pixmap[NORMAL] = "marble.xpm"
 }
+
+style "pix"
+{
+#  bg_pixmap[NORMAL] = "<parent>" # "marble.xpm" # "test.xpm"
+}
+widget_class "*Button*" style "pix"
 
 style "scale"
 {
