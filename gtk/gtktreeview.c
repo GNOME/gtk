@@ -1811,6 +1811,18 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 			"horizontal_separator", &horizontal_separator,
 			NULL);
 
+  /* put this separate, because the user might remove the latest
+   * treeview node in the focus-in-event callback. If so, the code
+   * flow won't enter the second if.
+   */
+  if (event->window == tree_view->priv->bin_window &&
+      tree_view->priv->tree != NULL)
+    {
+      if (!GTK_WIDGET_HAS_FOCUS (widget))
+	gtk_widget_grab_focus (widget);
+      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+    }
+
   if (event->window == tree_view->priv->bin_window &&
       tree_view->priv->tree != NULL)
     {
@@ -1827,10 +1839,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       GtkCellRenderer *focus_cell = NULL;
       gint column_handled_click = FALSE;
       gboolean emit_row_activated = FALSE;
-
-      if (!GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_widget_grab_focus (widget);
-      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
 
       /* are we in an arrow? */
       if (tree_view->priv->prelight_node &&
