@@ -2478,7 +2478,7 @@ change_focus_row_expansion (GtkCTree          *ctree,
 
   clist = GTK_CLIST (ctree);
 
-  if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (ctree)) && 
+  if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (GTK_WIDGET (ctree))) && 
       GTK_WIDGET_HAS_GRAB (ctree))
     return;
   
@@ -4814,11 +4814,11 @@ gtk_ctree_node_set_shift (GtkCTree     *ctree,
 static void
 remove_grab (GtkCList *clist)
 {
-  if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (clist)) && 
+  if (gdk_display_pointer_is_grabbed (gtk_widget_get_display (GTK_WIDGET (clist))) && 
       GTK_WIDGET_HAS_GRAB (clist))
     {
       gtk_grab_remove (GTK_WIDGET (clist));
-      gdk_display_pointer_ungrab (gtk_widget_get_display (clist),
+      gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (clist)),
 				  GDK_CURRENT_TIME);
     }
 
@@ -6039,8 +6039,7 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
   if (GTK_CLIST_REORDERABLE (clist))
     {
       GList *list;
-      GdkAtom atom = gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE);
-
+      GdkAtom atom = gdk_atom_intern ("gtk-clist-drag-reorder", FALSE);
 
       list = context->targets;
       while (list)
@@ -6129,8 +6128,7 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
   if (GTK_CLIST_REORDERABLE (clist) &&
       gtk_drag_get_source_widget (context) == widget &&
       selection_data->target ==
-      gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE) &&
-
+      gdk_atom_intern ("gtk-clist-drag-reorder", FALSE) &&
       selection_data->format == GTK_TYPE_POINTER &&
       selection_data->length == sizeof (GtkCListCellInfo))
     {

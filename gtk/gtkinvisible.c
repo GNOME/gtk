@@ -90,6 +90,7 @@ gtk_invisible_init (GtkInvisible *invisible)
   gtk_object_sink (GTK_OBJECT (invisible));
 
   invisible->has_user_ref_count = TRUE;
+  invisible->screen = gdk_get_default_screen ();
 }
 
 static void
@@ -102,6 +103,15 @@ gtk_invisible_destroy (GtkObject *object)
       invisible->has_user_ref_count = FALSE;
       gtk_widget_unref (GTK_WIDGET (invisible));
     }
+}
+
+GtkWidget* 
+gtk_invisible_new_for_screen (GdkScreen *screen)
+{
+  GtkWidget *result = GTK_WIDGET (gtk_type_new (GTK_TYPE_INVISIBLE));
+  GTK_INVISIBLE (result)->screen = screen;
+  gtk_widget_realize (result);
+  return result;
 }
 
 GtkWidget*
@@ -135,7 +145,7 @@ gtk_invisible_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
 
-  widget->window = gdk_window_new_for_screen (widget->screen,
+  widget->window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
   					      NULL,
 					      &attributes,
 					      attributes_mask);

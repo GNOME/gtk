@@ -198,7 +198,7 @@ gdk_events_init (GdkDisplay* display)
 
   display_sources = g_list_prepend(display_sources,display_source);
 
-  gdk_add_client_message_filter (dpy_impl->gdk_wm_protocols, 
+  gdk_add_client_message_filter (gdk_x11_get_virtual_atom (display, dpy_impl->gdk_wm_protocols), 
 				 gdk_wm_protocols_filter, NULL);
   xsettings_client = xsettings_client_new (dpy_impl->xdisplay,
 				DefaultScreen (dpy_impl->xdisplay),
@@ -303,7 +303,7 @@ gdk_event_apply_filters (XEvent *xevent,
   
   return GDK_FILTER_CONTINUE;
 }
-
+/* Expect X Atoms for message_type */
 void 
 gdk_add_client_message_filter (GdkAtom       message_type,
 			       GdkFilterFunc func,
@@ -344,11 +344,14 @@ gdk_check_wm_state_changed (GdkWindow *window)
   if (type != None)
     {
 
-      sticky_atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_STICKY", FALSE);
+      sticky_atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), 
+						   "_NET_WM_STATE_STICKY");
 
-      maxvert_atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+      maxvert_atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						    "_NET_WM_STATE_MAXIMIZED_VERT");
 
-      maxhorz_atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);    
+      maxhorz_atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), 
+						    "_NET_WM_STATE_MAXIMIZED_HORZ");    
 
 
       found_sticky = FALSE;
@@ -1329,8 +1332,8 @@ gdk_event_translate (GdkEvent *event,
       
     case PropertyNotify:
       GDK_NOTE (EVENTS,
-		gchar *atom = gdk_display_atom_name (GDK_WINDOW_DISPLAY(window), xevent->xproperty.atom);
-
+		gchar *atom = gdk_x11_get_real_atom_name (GDK_WINDOW_DISPLAY(window),
+							  xevent->xproperty.atom);
 		g_message ("property notify:\twindow: %ld, atom(%ld): %s%s%s",
 			   xevent->xproperty.window,
 			   xevent->xproperty.atom,
@@ -1342,12 +1345,12 @@ gdk_event_translate (GdkEvent *event,
       
       event->property.type = GDK_PROPERTY_NOTIFY;
       event->property.window = window;
-      event->property.atom = xevent->xproperty.atom;
+      event->property.atom = gdk_x11_get_virtual_atom (dpy, xevent->xproperty.atom);
       event->property.time = xevent->xproperty.time;
       event->property.state = xevent->xproperty.state;
 
-      if (event->property.atom == dpy_impl->wm_state_atom
-	|| event->property.atom == dpy_impl->wm_desktop_atom)
+      if (xevent->xproperty.atom == dpy_impl->wm_state_atom
+	|| xevent->xproperty.atom == dpy_impl->wm_desktop_atom)
         {
           /* If window state changed, then synthesize those events. */
           gdk_check_wm_state_changed (event->property.window);
@@ -1364,7 +1367,9 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  event->selection.type = GDK_SELECTION_CLEAR;
 	  event->selection.window = window;
-	  event->selection.selection = xevent->xselectionclear.selection;
+	  event->selection.selection = 
+		  gdk_x11_get_virtual_atom (GDK_WINDOW_DISPLAY(window), 
+					    xevent->xselectionclear.selection);
 	  event->selection.time = xevent->xselectionclear.time;
 	}
       else
@@ -1379,9 +1384,12 @@ gdk_event_translate (GdkEvent *event,
       
       event->selection.type = GDK_SELECTION_REQUEST;
       event->selection.window = window;
-      event->selection.selection = xevent->xselectionrequest.selection;
-      event->selection.target = xevent->xselectionrequest.target;
-      event->selection.property = xevent->xselectionrequest.property;
+      event->selection.selection = 
+	      gdk_x11_get_virtual_atom (dpy, xevent->xselectionrequest.selection);
+      event->selection.target = 
+	      gdk_x11_get_virtual_atom (dpy, xevent->xselectionrequest.target);
+      event->selection.property =
+	      gdk_x11_get_virtual_atom (dpy, xevent->xselectionrequest.property);
       event->selection.requestor = xevent->xselectionrequest.requestor;
       event->selection.time = xevent->xselectionrequest.time;
       
@@ -1395,9 +1403,12 @@ gdk_event_translate (GdkEvent *event,
       
       event->selection.type = GDK_SELECTION_NOTIFY;
       event->selection.window = window;
-      event->selection.selection = xevent->xselection.selection;
-      event->selection.target = xevent->xselection.target;
-      event->selection.property = xevent->xselection.property;
+      event->selection.selection = 
+	      gdk_x11_get_virtual_atom (dpy, xevent->xselection.selection);
+      event->selection.target = 
+	      gdk_x11_get_virtual_atom (dpy, xevent->xselection.target);
+      event->selection.property = 
+	      gdk_x11_get_virtual_atom (dpy, xevent->xselection.property);
       event->selection.time = xevent->xselection.time;
       
       break;
@@ -1424,7 +1435,8 @@ gdk_event_translate (GdkEvent *event,
 	while (tmp_list)
 	  {
 	    GdkClientFilter *filter = tmp_list->data;
-	    if (filter->type == xevent->xclient.message_type)
+	    if (filter->type == gdk_x11_get_virtual_atom (dpy, 
+		xevent->xclient.message_type))
 	      {
 		result = (*filter->function) (xevent, event, filter->data);
 		break;
@@ -1445,7 +1457,8 @@ gdk_event_translate (GdkEvent *event,
 	    /* Send unknown ClientMessage's on to Gtk for it to use */
 	    event->client.type = GDK_CLIENT_EVENT;
 	    event->client.window = window;
-	    event->client.message_type = xevent->xclient.message_type;
+	    event->client.message_type = 
+		    gdk_x11_get_virtual_atom (dpy, xevent->xclient.message_type);
 	    event->client.data_format = xevent->xclient.format;
 	    memcpy(&event->client.data, &xevent->xclient.data,
 		   sizeof(event->client.data));
@@ -1699,7 +1712,8 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
   sev.xclient.format = event->client.data_format;
   sev.xclient.window = xid;
   memcpy (&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
-  sev.xclient.message_type = event->client.message_type;
+  sev.xclient.message_type = gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (event->any.window),
+						    event->client.message_type, FALSE);
   
   return gdk_send_xevent (xid, False, NoEventMask, &sev);
 }
@@ -1786,7 +1800,8 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   sev.xclient.display = GDK_WINDOW_XDISPLAY (event->any.window);
   sev.xclient.format = event->client.data_format;
   memcpy (&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
-  sev.xclient.message_type = event->client.message_type;
+  sev.xclient.message_type = gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (event->any.window),
+						    event->client.message_type, FALSE);
 
   gdk_event_send_client_message_to_all_recurse (
     &sev,
@@ -1896,7 +1911,8 @@ gdk_net_wm_supports_for_screen (GdkScreen * screen, GdkAtom property)
 
     i = 0;
     while (i < n_atoms) {
-      if (atoms[i] == property)
+      if (atoms[i] == gdk_x11_get_real_atom (gdk_screen_get_display (screen), 
+					     property, FALSE))
 	return TRUE;
 
       ++i;

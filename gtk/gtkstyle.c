@@ -33,12 +33,7 @@
 #include "gtkwidget.h"
 #include "gtkthemes.h"
 #include "gtkiconfactory.h"
-#include "gtksettings.h"	/* _gtk_settings_parse_convert () */
-#include "gdk/gdkscreen.h"
-#include "gdk/gdkdisplay.h"
-#include "gdk/gdkdisplaymgr.h"
-#include "gdk/gdkprivate.h"
-
+#include "gtksettings.h"	/* _gtk_settings_parse_convert() */
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
@@ -53,10 +48,10 @@ typedef struct {
 
 
 /* --- prototypes --- */
-static void	 gtk_style_init			 (GtkStyle	*style);
-static void	 gtk_style_class_init		 (GtkStyleClass	*klass);
-static void	 gtk_style_finalize		 (GObject	*object);
-static void	 gtk_style_realize		 (GtkStyle	*style,
+static void	 gtk_style_init			(GtkStyle	*style);
+static void	 gtk_style_class_init		(GtkStyleClass	*klass);
+static void	 gtk_style_finalize		(GObject	*object);
+static void	 gtk_style_realize		(GtkStyle	*style,
 						 GdkColormap	*colormap);
 static void      gtk_style_real_realize        (GtkStyle	*style);
 static void      gtk_style_real_unrealize      (GtkStyle	*style);
@@ -306,13 +301,13 @@ static void gtk_default_draw_resize_grip (GtkStyle       *style,
                                           gint            width,
                                           gint            height);
 
-static void gtk_style_shade		 (GdkColor	 *a,
+static void gtk_style_shade		(GdkColor	 *a,
 					 GdkColor	 *b,
 					 gdouble	  k);
-static void rgb_to_hls			 (gdouble	 *r,
+static void rgb_to_hls			(gdouble	 *r,
 					 gdouble	 *g,
 					 gdouble	 *b);
-static void hls_to_rgb			 (gdouble	 *h,
+static void hls_to_rgb			(gdouble	 *h,
 					 gdouble	 *l,
 					 gdouble	 *s);
 
@@ -416,46 +411,45 @@ static GdkColor gtk_default_insensitive_bg = { 0, 0xd6d6, 0xd6d6, 0xd6d6 };
 
 static gpointer parent_class = NULL;
 
-static GSList *default_font_list = NULL;
-
 typedef struct {
-  GdkDisplay *display;
-  GdkFont *default_font;
-} GtkStyleDefaultFont;
-
-/* --- functions --- */
-
-static GdkFont * 
-gtk_style_default_font_add (GdkDisplay *display)
-{
-  GtkStyleDefaultFont *default_style_font = g_new0 (GtkStyleDefaultFont,1);
-  default_style_font->default_font = 
-    gdk_font_from_description_for_display (display,
-		  	     pango_font_description_from_string ("Sans 10"));
-
-  if (!default_style_font->default_font) 
-    default_style_font->default_font = gdk_font_load ("fixed");
-
-  if (!default_style_font->default_font) 
-    g_error ("Unable to load \"fixed\" font");
-
-  default_style_font->display = display;
-  g_slist_append (default_font_list, default_style_font);
-  return default_style_font->default_font;
-}
+    GdkFont    	*font;
+    GdkDisplay  *display;
+} _GtkStyleDefaultFont;
 
 static GdkFont*
-gtk_style_default_font_get (GdkDisplay *display)
+_get_default_font (GtkStyle *style, GdkDisplay *display)
 {
-  GSList *tmp = default_font_list;
-  while (default_font_list)
+  static GSList *static_default_font_list = NULL;
+  _GtkStyleDefaultFont *default_font = NULL;
+  if (static_default_font_list)
   {
-    if(((GtkStyleDefaultFont*)tmp->data)->display == display)
-      return ((GtkStyleDefaultFont*)tmp->data)->default_font;
+    GSList *tmp = static_default_font_list;
+    while (tmp)
+    {
+      if(((_GtkStyleDefaultFont*)tmp->data)->display == display)
+      {
+        gdk_font_ref (((_GtkStyleDefaultFont*)tmp->data)->font);
+        return ((_GtkStyleDefaultFont*)tmp->data)->font;
+      }
+      tmp = tmp->next;
+    }
   }
-  return gtk_style_default_font_add(display);
+  default_font = g_new0 (_GtkStyleDefaultFont, 1);
+  default_font->display = display;
+  default_font->font = gdk_font_from_description (style->font_desc);
+  if (!default_font->font) 
+    default_font->font = gdk_font_load_for_display (display, "fixed");
+  if (!default_font->font) 
+	g_error ("Unable to load \"fixed\" font");
+
+  static_default_font_list = g_slist_append (static_default_font_list, default_font);
+
+  gdk_font_ref (default_font->font);
+  return default_font->font;
 }
 
+
+/* --- functions --- */
 GType
 gtk_style_get_type (void)
 {
@@ -489,6 +483,8 @@ gtk_style_init (GtkStyle *style)
 {
   gint i;
   
+  style->font_desc = pango_font_description_from_string ("Sans 10");
+
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;
@@ -665,25 +661,15 @@ gtk_style_duplicate (GtkStyle *style)
   
   return new_style;
 }
+
 GtkStyle*
-gtk_style_new_for_display (GdkDisplay *display)
+gtk_style_new (void)
 {
   GtkStyle *style;
   
   style = g_object_new (GTK_TYPE_STYLE, NULL);
   
-  style->font_desc = pango_font_description_from_string ("Sans 10");
-  style->font = gtk_style_default_font_get (display);
-  style->display = display;
-  gdk_font_ref (style->font);
   return style;
-}
-
-GtkStyle*
-gtk_style_new (void)
-{
-  GTK_NOTE (MULTIHEAD, g_message ("Use gtk_style_new_for_display instead\n"));
-  return gtk_style_new_for_display (gdk_get_default_display ());
 }
 
 /*************************************************************
@@ -1439,14 +1425,18 @@ gtk_style_real_realize (GtkStyle *style)
   gdk_color_white (style->colormap, &style->white);
   
   gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_FONT;
+
+  if (!style->font)
+    style->font = _get_default_font (style, gdk_screen_get_display (style->colormap->screen));
+  
   if (style->font->type == GDK_FONT_FONT)
-    {
-      gc_values.font = style->font;
-    }
+  {
+    gc_values.font = style->font;
+  }
   else if (style->font->type == GDK_FONT_FONTSET)
-    {
-      gc_values.font = gtk_style_default_font_get (gdk_screen_get_display (style->colormap->screen));
-    }
+  {
+    gc_values.font = _get_default_font (style, gdk_screen_get_display (style->colormap->screen));
+  }
   
   gc_values.foreground = style->black;
   style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
@@ -4089,7 +4079,7 @@ range_new (guint start,
 }
 
 static PangoLayout*
-get_insensitive_layout (PangoLayout *layout, GdkScreen *screen)
+get_insensitive_layout (PangoLayout *layout)
 {
   GSList *embossed_ranges = NULL;
   GSList *stippled_ranges = NULL;
@@ -4192,8 +4182,9 @@ get_insensitive_layout (PangoLayout *layout, GdkScreen *screen)
             0x02, 0x01
           };
 
-          stipple = gdk_bitmap_create_from_data (gdk_screen_get_root_window(screen), gray50_bits, gray50_width, gray50_height);
-
+          stipple = gdk_bitmap_create_from_data (NULL,
+                                                 gray50_bits, gray50_width,
+                                                 gray50_height);
         }
       
       attr = gdk_pango_attr_stipple_new (stipple);
@@ -4242,7 +4233,7 @@ gtk_default_draw_layout (GtkStyle        *style,
     {
       PangoLayout *ins;
 
-      ins = get_insensitive_layout (layout, widget->screen);
+      ins = get_insensitive_layout (layout);
       
       gdk_draw_layout (window, gc, x, y, ins);
 

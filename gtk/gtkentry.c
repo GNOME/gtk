@@ -956,7 +956,7 @@ gtk_entry_realize (GtkWidget *widget)
   
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
-  attributes.cursor = gdk_cursor_new_for_screen (widget->screen, GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (widget), GDK_XTERM);
 
   attributes_mask |= GDK_WA_CURSOR;
 
@@ -971,6 +971,8 @@ gtk_entry_realize (GtkWidget *widget)
 
   gdk_window_set_background (widget->window, &widget->style->base[GTK_WIDGET_STATE (widget)]);
   gdk_window_set_background (entry->text_area, &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  
+  gtk_entry_update_primary_selection (entry);
 
   gdk_window_show (entry->text_area);
 
@@ -1456,12 +1458,10 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 				    event->x + entry->scroll_offset, event->y))
 	{
 	  GdkDragContext *context;
-	  GtkTargetList *target_list = gtk_target_list_new_for_display (gtk_widget_get_display(widget), target_table, G_N_ELEMENTS (target_table));
-
+	  GtkTargetList *target_list = gtk_target_list_new (target_table, G_N_ELEMENTS (target_table));
 	  
 	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY | GDK_ACTION_MOVE,
 			  entry->button, (GdkEvent *)event);
-
 	  
 	  entry->in_drag = FALSE;
 	  entry->button = 0;
@@ -1686,7 +1686,8 @@ gtk_entry_set_selection_bounds (GtkEditable *editable,
 			   MIN (end, entry->text_length),
 			   MIN (start, entry->text_length));
 
-  gtk_entry_update_primary_selection (entry);
+  if (GTK_WIDGET_REALIZED (entry))
+    gtk_entry_update_primary_selection (entry);
 }
 
 static gboolean
@@ -1814,7 +1815,8 @@ gtk_entry_real_delete_text (GtkEntry *entry,
 
   /* We might have deleted the selection
    */
-  gtk_entry_update_primary_selection (entry);
+  if(GTK_WIDGET_REALIZED (entry))
+    gtk_entry_update_primary_selection (entry);
 
   gtk_entry_recompute (entry);
 }
@@ -3300,8 +3302,8 @@ popup_position_func (GtkMenu   *menu,
   *x += widget->allocation.width / 2;
   *y += widget->allocation.height;
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (widget->screen) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (widget->screen) - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (gtk_widget_get_screen (widget)) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (gtk_widget_get_screen (widget)) - req.height));
 }
 
 static void
@@ -3317,9 +3319,6 @@ gtk_entry_do_popup (GtkEntry       *entry,
     gtk_widget_destroy (entry->popup_menu);
   
   entry->popup_menu = gtk_menu_new ();
-  gtk_widget_set_screen (entry->popup_menu, gtk_widget_get_screen (entry));
-  gtk_widget_set_screen(((GtkMenu*)entry->popup_menu)->toplevel, gtk_widget_get_screen(entry));
-
 
   gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
                              GTK_WIDGET (entry),
@@ -3341,8 +3340,6 @@ gtk_entry_do_popup (GtkEntry       *entry,
   menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
   gtk_widget_show (menuitem);
   submenu = gtk_menu_new ();
-  gtk_widget_set_screen (submenu, gtk_widget_get_screen (entry));
-  gtk_widget_set_screen(((GtkMenu*)submenu)->toplevel, gtk_widget_get_screen(entry));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);

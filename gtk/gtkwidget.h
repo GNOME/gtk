@@ -210,11 +210,6 @@ struct _GtkWidget
   /* The widgets parent.
    */
   GtkWidget *parent;
-
-  /* The widget screen.
-   */
-  GdkScreen *screen;
-  
 };
 
 struct _GtkWidgetClass
@@ -525,8 +520,6 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
-void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
-					   GdkScreen	       *screen);
 GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
 GdkDisplay*gtk_widget_get_display	  (GtkWidget	       *widget);
 void	   gtk_widget_set_uposition	  (GtkWidget	       *widget,

@@ -329,8 +329,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   
   widget = tooltips->active_tips_data->widget;
 
-  scr_w = gdk_screen_get_width (widget->screen);
-  scr_h = gdk_screen_get_height (widget->screen);
+  scr_w = gdk_screen_get_width (gtk_widget_get_screen (widget));
+  scr_h = gdk_screen_get_height (gtk_widget_get_screen (widget));
 
   data = tooltips->active_tips_data;
 
@@ -340,7 +340,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   w = requisition.width;
   h = requisition.height;
 
-  gdk_window_get_pointer (gdk_screen_get_root_window(widget->screen),
+  gdk_window_get_pointer (gdk_screen_get_root_window(gtk_widget_get_screen (widget)),
 			  &x, NULL, NULL);
   gdk_window_get_origin (widget->window, NULL, &y);
   if (GTK_WIDGET_NO_WINDOW (widget))

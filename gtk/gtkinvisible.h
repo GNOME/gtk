@@ -45,19 +45,23 @@ extern "C" {
 typedef struct _GtkInvisible	   GtkInvisible;
 typedef struct _GtkInvisibleClass  GtkInvisibleClass;
 
-struct _GtkInvisible
-{
-  GtkWidget widget;
-  gboolean has_user_ref_count;
-};
+  struct _GtkInvisible
+  {
+    GtkWidget widget;
+    gboolean has_user_ref_count;
+    GdkScreen* screen;
+  };
 
 struct _GtkInvisibleClass
 {
   GtkWidgetClass parent_class;
 };
 
-GtkType	       gtk_invisible_get_type	     (void) G_GNUC_CONST;
-GtkWidget*     gtk_invisible_new	     (void);
+GtkType	   gtk_invisible_get_type   (void) G_GNUC_CONST;
+GtkWidget* gtk_invisible_new            (void);
+GtkWidget* gtk_invisible_new_for_screen (GdkScreen *screen);
+
+
 
 #ifdef __cplusplus
 }

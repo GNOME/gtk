@@ -29,32 +29,32 @@ extern "C"
     GObjectClass parent_class;
     GdkDisplay *(*new_display) (gchar * display_name);
     gchar *(*get_display_name) (GdkDisplay * dpy);
-      gint (*get_n_screens) (GdkDisplay * dpy);
+    gint (*get_n_screens) (GdkDisplay * dpy);
     GdkScreen *(*get_screen) (GdkDisplay * dpy, gint screen_num);
     GdkScreen *(*get_default_screen) (GdkDisplay * dpy);
   };
 
-  GType gdk_display_get_type (void);
-  GdkDisplay *gdk_display_init_new (int argc, char **argv,
-				    char *display_name);
+GType       gdk_display_get_type           (void);
+GdkDisplay *gdk_display_init_new           (int          argc,
+					    char       **argv,
+					    char        *display_name);
+GdkDisplay *gdk_display_new                (gchar       *display_name);
+gchar *     gdk_display_get_name           (GdkDisplay  *dpy);
+gint        gdk_display_get_n_screens      (GdkDisplay  *dpy);
+GdkScreen * gdk_display_get_screen         (GdkDisplay  *dpy,
+					    gint         screen_num);
+GdkScreen * gdk_display_get_default_screen (GdkDisplay  *dpy);
+void        gdk_display_set_use_xshm       (GdkDisplay  *display,
+					    gboolean     use_xshm);
+gboolean    gdk_display_get_use_xshm       (GdkDisplay  *display);
+void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
+					    guint32      time);
+void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
+					    guint32      time);
+gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
+void        gdk_display_beep               (GdkDisplay  *display);
+void        gdk_display_sync               (GdkDisplay  *display);
 
-  GdkDisplay *gdk_display_new (gchar * display_name);
-  gchar *gdk_display_get_name (GdkDisplay * dpy);
-  gint gdk_display_get_n_screens (GdkDisplay * dpy);
-  GdkScreen *gdk_display_get_screen (GdkDisplay * dpy, gint screen_num);
-  GdkScreen *gdk_display_get_default_screen (GdkDisplay * dpy);
-
-  void gdk_display_set_use_xshm (GdkDisplay * display, gboolean use_xshm);
-  gboolean gdk_display_get_use_xshm (GdkDisplay * display);
-  void gdk_display_pointer_ungrab (GdkDisplay * display, guint32 time);
-  void gdk_display_keyboard_ungrab (GdkDisplay * display, guint32 time);
-  gboolean gdk_display_pointer_is_grabbed (GdkDisplay * display);
-  void gdk_display_beep (GdkDisplay * display);
-
-  GdkAtom gdk_display_atom (GdkDisplay * dpy,
-			    const gchar * atom_name, gboolean only_if_exists);
-  gchar *gdk_display_atom_name (GdkDisplay * dpy, GdkAtom atom);
-  void gdk_display_sync (GdkDisplay * display);
 
 #ifdef __cplusplus
 }

@@ -36,9 +36,6 @@ extern "C"
     GdkDragAction action;
   };
 
-
-
-
   struct _GdkDisplayImplX11
   {
     GdkDisplay parent_instance;
@@ -93,22 +90,12 @@ extern "C"
     GdkScreen *dnd_default_screen;
     GdkDragContext *current_dest_drag;
 
-    /* data needed for XDnD */
-
-    Xdnd_Action *xdnd_actions_table;
-    gint xdnd_n_actions;
-    gboolean xdnd_actions_initialized;
-    GdkAtom xdnd_aware_atom;
-    GdkAtom xdnd_proxy_atom;
-
     /* data needed for MOTIF DnD */
 
     Atom motif_drag_window_atom;
     Window motif_drag_window;
     GdkWindow *motif_drag_gdk_window;
-    GdkAtom motif_drag_targets_atom;
-    GdkAtom motif_drag_receiver_info_atom;
-    GdkAtom motif_drag_initiator_info;
+    Atom motif_drag_targets_atom;
     GList **motif_target_lists;
     gint motif_n_target_lists;
 
@@ -122,17 +109,16 @@ extern "C"
     GdkDisplayClass parent_class;
   };
 
-  GdkDisplay *gdk_x11_display_impl_display_new (gchar * display_name);
-  char *gdk_x11_display_impl_get_display_name (GdkDisplay * dpy);
-  gint gdk_x11_display_impl_get_n_screens (GdkDisplay * dpy);
-  GdkScreen *gdk_x11_display_impl_get_screen (GdkDisplay * dpy,
-					      gint screen_num);
-  GdkScreen *gdk_x11_display_impl_get_default_screen (GdkDisplay * dpy);
-  void gdk_x11_display_impl_class_init (GdkDisplayImplX11Class * class);
-  GType gdk_x11_display_impl_get_type ();
-  gboolean gdk_x11_display_impl_is_root_window (GdkDisplay * dpy,
-						Window xroot_window);
-
+GdkDisplay *gdk_x11_display_impl_display_new        (gchar                  *display_name);
+char *      gdk_x11_display_impl_get_display_name   (GdkDisplay             *dpy);
+gint        gdk_x11_display_impl_get_n_screens      (GdkDisplay             *dpy);
+GdkScreen * gdk_x11_display_impl_get_screen         (GdkDisplay             *dpy,
+						     gint                    screen_num);
+GdkScreen * gdk_x11_display_impl_get_default_screen (GdkDisplay             *dpy);
+void        gdk_x11_display_impl_class_init         (GdkDisplayImplX11Class *class);
+GType       gdk_x11_display_impl_get_type           (void);
+gboolean    gdk_x11_display_impl_is_root_window     (GdkDisplay             *dpy,
+						     Window                  xroot_window);
 
 #define DEFAULT_X_DISPLAY   GDK_DISPLAY_IMPL_X11(gdk_get_default_display())->xdisplay
 #define GDK_DISPLAY_XDISPLAY(dpy)  (GDK_DISPLAY_IMPL_X11(dpy)->xdisplay)

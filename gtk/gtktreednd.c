@@ -221,7 +221,7 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
   g_return_val_if_fail (path != NULL, FALSE);
 
   if (selection_data->target != 
-      gdk_display_atom (selection_data->display, "GTK_TREE_MODEL_ROW", FALSE))
+      gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
 
     return FALSE;
   
@@ -240,7 +240,7 @@ gtk_selection_data_set_tree_row (GtkSelectionData *selection_data,
   trd->model = tree_model;
   
   gtk_selection_data_set (selection_data,
-                          gdk_display_atom (selection_data->display, "GTK_TREE_MODEL_ROW", FALSE),
+                          gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE),
 
                           8, /* bytes */
                           (void*)trd,
@@ -286,7 +286,7 @@ gtk_selection_data_get_tree_row (GtkSelectionData *selection_data,
     *path = NULL;
   
   if (selection_data->target != 
-      gdk_display_atom (selection_data->display, "GTK_TREE_MODEL_ROW", FALSE))
+      gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
 
     return FALSE;
 

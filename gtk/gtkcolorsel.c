@@ -363,8 +363,7 @@ color_sample_drag_handle (GtkWidget        *widget,
   vals[3] = priv->has_opacity ? colsrc[COLORSEL_OPACITY] * 0xffff : 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_display_atom (gtk_widget_get_display(widget), "application/x-color", FALSE),
-
+			  gdk_atom_intern ("application/x-color", FALSE),
 			  16, (guchar *)vals, 8);
 }
 
@@ -684,8 +683,7 @@ palette_drag_handle (GtkWidget        *widget,
   vals[3] = 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_display_atom (gtk_widget_get_display(widget), "application/x-color", FALSE),
-
+			  gdk_atom_intern ("application/x-color", FALSE),
 			  16, (guchar *)vals, 8);
 }
 
@@ -829,8 +827,8 @@ popup_position_func (GtkMenu   *menu,
   *y = root_y + widget->allocation.height / 2;
 
   /* Ensure sanity */
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (widget->screen) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (widget->screen) - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (gtk_widget_get_screen (widget)) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (gtk_widget_get_screen (widget)) - req.height));
 }
 
 static void
@@ -1078,8 +1076,8 @@ grab_color_at_mouse (GtkWidget *invisible,
   GtkColorSelection *colorsel = data;
   ColorSelectionPrivate *priv;
   GdkColor color;
-  GdkColormap *colormap = gdk_colormap_get_system_for_screen (invisible->screen);
-  GdkWindow *root_window = gdk_screen_get_root_window (invisible->screen);
+  GdkColormap *colormap = gdk_colormap_get_system_for_screen (gtk_widget_get_screen (invisible));
+  GdkWindow *root_window = gdk_screen_get_root_window (gtk_widget_get_screen (invisible));
   
   priv = colorsel->private_data;
   
@@ -1218,12 +1216,12 @@ get_screen_color (GtkWidget *button)
   
   if (picker_cursor == NULL)
     {
-      initialize_cursor (button->screen);
+      initialize_cursor (gtk_widget_get_screen (button));
     }
 
   if (priv->dropper_grab_widget == NULL)
     {
-      priv->dropper_grab_widget = gtk_invisible_new ();
+      priv->dropper_grab_widget = gtk_invisible_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (button)));
 
       gtk_widget_add_events (priv->dropper_grab_widget,
                              GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK);

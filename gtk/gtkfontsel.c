@@ -318,47 +318,49 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   
   /* Create the clists  */
   fontsel->font_clist = gtk_clist_new (1);
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_table_attach (GTK_TABLE (table), scrolled_win, 0, 1, 2, 3,
+		    GTK_EXPAND | GTK_FILL,
+		    GTK_EXPAND | GTK_FILL, 0, 0);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->font_clist);
+  
   gtk_clist_column_titles_hide (GTK_CLIST (fontsel->font_clist));
   gtk_clist_set_column_auto_resize (GTK_CLIST (fontsel->font_clist), 0, TRUE);
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrolled_win, FONT_LIST_WIDTH, FONT_LIST_HEIGHT);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->font_clist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_widget_show (fontsel->font_clist);
   gtk_widget_show (scrolled_win);
-
-  gtk_table_attach (GTK_TABLE (table), scrolled_win, 0, 1, 2, 3,
-		    GTK_EXPAND | GTK_FILL,
-		    GTK_EXPAND | GTK_FILL, 0, 0);
   
   fontsel->font_style_clist = gtk_clist_new (1);
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->font_style_clist);
+  gtk_table_attach (GTK_TABLE (table), scrolled_win, 1, 2, 2, 3,
+		    GTK_EXPAND | GTK_FILL,
+		    GTK_EXPAND | GTK_FILL, 0, 0);
   gtk_clist_column_titles_hide (GTK_CLIST (fontsel->font_style_clist));
   gtk_clist_set_column_auto_resize (GTK_CLIST (fontsel->font_style_clist),
 				    0, TRUE);
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrolled_win, FONT_STYLE_LIST_WIDTH, -1);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->font_style_clist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_widget_show (fontsel->font_style_clist);
   gtk_widget_show (scrolled_win);
-  gtk_table_attach (GTK_TABLE (table), scrolled_win, 1, 2, 2, 3,
-		    GTK_EXPAND | GTK_FILL,
-		    GTK_EXPAND | GTK_FILL, 0, 0);
   
   fontsel->size_clist = gtk_clist_new (1);
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->size_clist);
+  gtk_table_attach (GTK_TABLE (table), scrolled_win, 2, 3, 2, 3,
+		    GTK_FILL, GTK_FILL, 0, 0);
   gtk_clist_column_titles_hide (GTK_CLIST(fontsel->size_clist));
   gtk_clist_set_column_width (GTK_CLIST(fontsel->size_clist), 0, 20);
-  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_usize (scrolled_win, FONT_SIZE_LIST_WIDTH, -1);
-  gtk_container_add (GTK_CONTAINER (scrolled_win), fontsel->size_clist);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
   gtk_widget_show (fontsel->size_clist);
   gtk_widget_show (scrolled_win);
-  gtk_table_attach (GTK_TABLE (table), scrolled_win, 2, 3, 2, 3,
-		    GTK_FILL, GTK_FILL, 0, 0);
+
+  g_object_set_data (G_OBJECT (fontsel), "screen", gdk_get_default_screen ());
   
   /* Insert the fonts. If there exist fonts with the same family but
      different foundries, then the foundry name is appended in brackets. */

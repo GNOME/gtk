@@ -156,42 +156,40 @@ _gdk_windowing_init_check_for_display (int argc, char **argv, char *display_name
   pid = getpid ();
   XChangeProperty (dpy_impl->xdisplay,
 		   DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY (display)->
-		   leader_window, gdk_display_atom (display, "_NET_WM_PID", FALSE),
-
+		   leader_window, gdk_x11_get_real_atom_by_name (display, "_NET_WM_PID"),
 		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
 
   dpy_impl->gdk_wm_delete_window =
-    gdk_display_atom (display, "WM_DELETE_WINDOW", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "WM_DELETE_WINDOW");
 
   dpy_impl->gdk_wm_take_focus =
-    gdk_display_atom (display, "WM_TAKE_FOCUS", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "WM_TAKE_FOCUS");
 
   dpy_impl->gdk_wm_protocols =
-    gdk_display_atom (display, "WM_PROTOCOLS", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "WM_PROTOCOLS");
 
   dpy_impl->gdk_wm_window_protocols[0] = dpy_impl->gdk_wm_delete_window;
   dpy_impl->gdk_wm_window_protocols[1] = dpy_impl->gdk_wm_take_focus;
   dpy_impl->gdk_wm_window_protocols[2] =
-    gdk_display_atom (display, "_NET_WM_PING", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "_NET_WM_PING");
 
   dpy_impl->gdk_selection_property =
-    gdk_display_atom (display, "GDK_SELECTION", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "GDK_SELECTION");
 
   dpy_impl->wm_state_atom =
-    gdk_display_atom (display, "_NET_WM_STATE", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "_NET_WM_STATE");
 
   dpy_impl->wm_desktop_atom =
-    gdk_display_atom (display, "_NET_WM_DESKTOP", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "_NET_WM_DESKTOP");
 
   dpy_impl->timestamp_prop_atom =
-    gdk_display_atom (display, "GDK_TIMESTAMP_PROP", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "GDK_TIMESTAMP_PROP");
 
   dpy_impl->wmspec_check_atom =
-    gdk_display_atom (display, "_NET_SUPPORTING_WM_CHECK", FALSE);
-
+    gdk_x11_get_real_atom_by_name (display, "_NET_SUPPORTING_WM_CHECK");
 
   dpy_impl->wmspec_supported_atom =
-    gdk_display_atom (display, "_NET_SUPPORTED", FALSE);
+    gdk_x11_get_real_atom_by_name (display, "_NET_SUPPORTED");
 
 
   XGetKeyboardControl (dpy_impl->xdisplay, &keyboard_state);
@@ -252,7 +250,7 @@ gdk_display_init_new (int argc, char **argv, char *display_name){
   _gdk_windowing_window_init (scr);
   _gdk_windowing_image_init (dpy);
   gdk_events_init (dpy);
-  gdk_dnd_init (dpy);
+  gdk_dnd_init ();
   return dpy;
 }
 
@@ -626,14 +624,13 @@ gdk_set_sm_client_id_for_screen (GdkScreen * screen,
 
   if (sm_client_id && strcmp (sm_client_id, "")) {
     XChangeProperty (scr_impl->xdisplay, scr_impl->leader_window,
-		     gdk_display_atom (scr_impl->display, "SM_CLIENT_ID", FALSE),
-
+		     gdk_x11_get_real_atom_by_name (scr_impl->display, "SM_CLIENT_ID"),
 		     XA_STRING, 8, PropModeReplace, sm_client_id,
 		     strlen (sm_client_id));
   }
   else
     XDeleteProperty (scr_impl->xdisplay, scr_impl->leader_window,
-		     gdk_display_atom (scr_impl->display, "SM_CLIENT_ID", FALSE));
+		     gdk_x11_get_real_atom_by_name (scr_impl->display, "SM_CLIENT_ID"));
 
 }
 /*

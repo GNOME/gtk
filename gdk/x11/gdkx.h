@@ -153,20 +153,15 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
 #define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
-/*extern Display		*gdk_display;
-extern Window		 gdk_xroot_window;
-extern gint		 gdk_screen;*/
 extern gchar		*gdk_display_name;
-/*extern Window		 gdk_leader_window;*/
 extern GdkDisplayManager *gdk_display_manager;
-
 extern Atom		 gdk_selection_property;
-
 extern gchar		*gdk_progclass;
 
-GdkVisual*   gdkx_visual_get_for_screen (GdkScreen * scr,
-					 VisualID xvisualid);
-GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
+GdkVisual* gdkx_visual_get_for_screen (GdkScreen *scr,
+				       VisualID   xvisualid);
+GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
+
 /* XXX: Do not use this function until it is fixed. An X Colormap
  *      is useless unless we also have the visual. */
 GdkColormap* gdkx_colormap_get (Colormap xcolormap);
@@ -190,16 +185,30 @@ gpointer      gdk_xid_table_lookup     (XID              xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
 /* returns TRUE if we support the given WM spec feature */
-gboolean      gdk_net_wm_supports      (GdkAtom property);
-gboolean      gdk_net_wm_supports_for_screen (GdkScreen * screen,
-					      GdkAtom property);
+gboolean gdk_net_wm_supports            (GdkAtom    property);
+gboolean gdk_net_wm_supports_for_screen (GdkScreen *screen,
+					 GdkAtom    property);
+
 
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
-GC _gdk_x11_gc_flush (GdkGC *gc);
+GC     _gdk_x11_gc_flush           (GdkGC     *gc);
+GList *gdk_list_visuals_for_screen (GdkScreen *scr);
 
-GList *gdk_list_visuals_for_screen (GdkScreen * scr);
+
+/* Functions to get the X Atom equivalent to the GdkAtom */
+GdkAtom      gdk_x11_get_real_atom         (GdkDisplay  *display,
+					    GdkAtom      virtual_atom,
+					    gboolean     only_if_exists);
+GdkAtom      gdk_x11_get_virtual_atom      (GdkDisplay  *display,
+					    GdkAtom      xatom);
+GdkAtom      gdk_x11_get_real_atom_by_name (GdkDisplay  *display,
+					    const gchar *atom_name);
+gchar	      *gdk_x11_get_real_atom_name    (GdkDisplay  *display,
+					      GdkAtom      xatom);
+
+
 
 #endif /* __GDK_X_H__ */

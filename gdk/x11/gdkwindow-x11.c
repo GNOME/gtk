@@ -581,7 +581,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
 
   if (!GDK_DISPLAY_IMPL_X11 (scr_impl->display)->wm_client_leader_atom)
     GDK_DISPLAY_IMPL_X11 (scr_impl->display)->wm_client_leader_atom =
-      gdk_display_atom (scr_impl->display, "WM_CLIENT_LEADER", FALSE);
+      gdk_x11_get_real_atom_by_name (scr_impl->display, "WM_CLIENT_LEADER");
 
 
   XChangeProperty (GDK_WINDOW_XDISPLAY (window),
@@ -825,25 +825,27 @@ set_initial_hints (GdkWindow *window)
 
   if (private->state & GDK_WINDOW_STATE_MAXIMIZED)
     {
-      atoms[i] = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT", FALSE);
+      atoms[i] = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						"_NET_WM_STATE_MAXIMIZED_VERT");
 
       ++i;
-      atoms[i] = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ", FALSE);
+      atoms[i] = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						"_NET_WM_STATE_MAXIMIZED_HORZ");
 
       ++i;
     }
 
   if (private->state & GDK_WINDOW_STATE_STICKY)
     {
-      atoms[i] = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_STICKY", FALSE);
-
+      atoms[i] = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						"_NET_WM_STATE_STICKY");
       ++i;
     }
 
   if (private->modal_hint)
     {
-      atoms[i] = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MODAL", FALSE);
-
+      atoms[i] = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					        "_NET_WM_STATE_MODAL");
       ++i;
     }
 
@@ -851,8 +853,8 @@ set_initial_hints (GdkWindow *window)
     {
       XChangeProperty (GDK_WINDOW_XDISPLAY (window),
                        GDK_WINDOW_XID (window),
-                       gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE", FALSE),
-
+                       gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						      "_NET_WM_STATE"),
                        XA_ATOM, 32, PropModeReplace,
                        (guchar*) atoms, i);
     }
@@ -862,8 +864,8 @@ set_initial_hints (GdkWindow *window)
       atoms[0] = 0xFFFFFFFF;
       XChangeProperty (GDK_WINDOW_XDISPLAY (window),
                        GDK_WINDOW_XID (window),
-                       gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_DESKTOP", FALSE),
-
+                       gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						      "_NET_WM_DESKTOP"),
                        XA_CARDINAL, 32, PropModeReplace,
                        (guchar*) atoms, 1);
     }
@@ -1163,7 +1165,7 @@ gdk_window_focus (GdkWindow *window,
     return;
   
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
-  	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_ACTIVE_WINDOW", FALSE)))
+  	gdk_atom_intern ("_NET_ACTIVE_WINDOW", FALSE)))
     {
       XEvent xev;
 
@@ -1172,8 +1174,8 @@ gdk_window_focus (GdkWindow *window,
       xev.xclient.send_event = True;
       xev.xclient.window = GDK_WINDOW_XWINDOW (window);
       xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
-      xev.xclient.message_type = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_ACTIVE_WINDOW", FALSE);
-
+      xev.xclient.message_type = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+								"_NET_ACTIVE_WINDOW");
       xev.xclient.format = 32;
       xev.xclient.data.l[0] = 0;
       
@@ -1275,30 +1277,30 @@ gdk_window_set_type_hint (GdkWindow        *window,
   switch (hint)
     {
     case GDK_WINDOW_TYPE_HINT_DIALOG:
-      atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_WINDOW_TYPE_DIALOG", FALSE);
-
+      atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					    "_NET_WM_WINDOW_TYPE_DIALOG");
       break;
     case GDK_WINDOW_TYPE_HINT_MENU:
-      atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_WINDOW_TYPE_MENU", FALSE);
-
+      atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					    "_NET_WM_WINDOW_TYPE_MENU");
       break;
     case GDK_WINDOW_TYPE_HINT_TOOLBAR:
-      atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_WINDOW_TYPE_TOOLBAR", FALSE);
-
+      atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					    "_NET_WM_WINDOW_TYPE_TOOLBAR");
       break;
     default:
       g_warning ("Unknown hint %d passed to gdk_window_set_type_hint", hint);
       /* Fall thru */
     case GDK_WINDOW_TYPE_HINT_NORMAL:
-      atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_WINDOW_TYPE_NORMAL", FALSE);
-
+      atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), 
+					    "_NET_WM_WINDOW_TYPE_NORMAL");
       break;
     }
 
   XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
-		   gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_WINDOW_TYPE", FALSE),
-
+		   gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					          "_NET_WM_WINDOW_TYPE"),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)&atom, 1);
 }
@@ -1314,18 +1316,18 @@ gdk_wmspec_change_state (gboolean add,
   Atom op;
 
   if (add)
-    op = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_ADD", FALSE);
-
+    op = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					"_NET_WM_STATE_ADD");
   else
-    op = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_REMOVE", FALSE);
-
-  
+    op = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					"_NET_WM_STATE_REMOVE");
   xev.xclient.type = ClientMessage;
   xev.xclient.serial = 0;
   xev.xclient.send_event = True;
   xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
   xev.xclient.window = GDK_WINDOW_XID (window);
-  xev.xclient.message_type = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE", FALSE);
+  xev.xclient.message_type = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), 
+							    "_NET_WM_STATE");
 
   xev.xclient.format = 32;
   xev.xclient.data.l[0] = op;
@@ -1367,8 +1369,8 @@ gdk_window_set_modal_hint (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (modal, window,
-			     gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MODAL", FALSE),
-
+			     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), 
+							    "_NET_WM_STATE_MODAL"),
 			     0);
 }
 
@@ -1593,30 +1595,33 @@ gdk_window_set_title (GdkWindow   *window,
   
   XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
-		   gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_NAME", FALSE),
-
-		   gdk_display_atom (GDK_WINDOW_DISPLAY(window), "UTF8_STRING", FALSE), 8,
-
+		   gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						  "_NET_WM_NAME"),
+		   gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						  "UTF8_STRING"),
+		   8,
 		   PropModeReplace, title,
 		   strlen (title));
 
-  set_text_property (window, gdk_display_atom (GDK_WINDOW_DISPLAY(window), "WM_NAME", FALSE),
-
+  set_text_property (window, 
+		     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						    "WM_NAME"),
 		     title);
   if (!gdk_window_icon_name_set (window))
     {
       XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		       GDK_WINDOW_XID (window),
-		       gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON_NAME", FALSE),
-
-		       gdk_display_atom (GDK_WINDOW_DISPLAY(window), "UTF8_STRING", FALSE),
-
+		       gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						      "_NET_WM_ICON_NAME"),
+		       gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						      "UTF8_STRING"),
 		       8,
 		       PropModeReplace,
 		       title,
 		       strlen (title));
-      set_text_property (window, gdk_display_atom (GDK_WINDOW_DISPLAY(window), "WM_ICON_NAME", FALSE),
-
+      set_text_property (window,
+			 gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+							"WM_ICON_NAME"),
 			 title);
     }
 }
@@ -1632,13 +1637,12 @@ gdk_window_set_role (GdkWindow   *window,
     {
       if (role)
 	XChangeProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-			 gdk_display_atom (GDK_WINDOW_DISPLAY(window), "WM_WINDOW_ROLE", FALSE),
-
+			 gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "WM_WINDOW_ROLE"),
 			 XA_STRING,
 			 8, PropModeReplace, role, strlen (role));
       else
 	XDeleteProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
-			 gdk_display_atom (GDK_WINDOW_DISPLAY(window), "WM_WINDOW_ROLE", FALSE));
+			 gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "WM_WINDOW_ROLE"));
 
     }
 }
@@ -1865,7 +1869,7 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
   gint tx = 0;
   gint ty = 0;
   Atom type_return;
-  static Atom atom = 0;
+  Atom atom;
   gulong number_return, bytes_after_return;
   guchar *data_return;
   
@@ -1874,9 +1878,8 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      if (!atom)
-	atom = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "ENLIGHTENMENT_DESKTOP", FALSE);
-
+      atom = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+					    "ENLIGHTENMENT_DESKTOP");
       win = GDK_WINDOW_XID (window);
       
       while (XQueryTree (GDK_WINDOW_XDISPLAY (window), win, &root, &parent,
@@ -2352,7 +2355,7 @@ gdk_window_set_icon_list (GdkWindow *window,
     return FALSE;
 
   if (!gdk_net_wm_supports_for_screen(GDK_WINDOW_SCREEN(window),
-  	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON", FALSE)))
+				      gdk_atom_intern ("_NET_WM_ICON", FALSE)))
     return FALSE;
   
   l = pixbufs;
@@ -2412,8 +2415,7 @@ gdk_window_set_icon_list (GdkWindow *window,
 
   XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
-		   gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON", FALSE),
-
+		   gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON"),
 		   XA_CARDINAL, 32,
 		   PropModeReplace,
 		   (guchar*) data, size);
@@ -2485,15 +2487,14 @@ gdk_window_set_icon_name (GdkWindow   *window,
 
   XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		   GDK_WINDOW_XID (window),
-		   gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON_NAME", FALSE),
-
-		   gdk_display_atom (GDK_WINDOW_DISPLAY(window), "UTF8_STRING", FALSE),
-
+		   gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_ICON_NAME"),
+		   gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "UTF8_STRING"),
 		   8,
 		   PropModeReplace, name,
 		   strlen (name));
-  set_text_property (window, gdk_display_atom (GDK_WINDOW_DISPLAY(window), "WM_ICON_NAME", FALSE),
-
+  set_text_property (window,
+		     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window),
+						    "WM_ICON_NAME"),
 		     name);
 }
 
@@ -2576,8 +2577,7 @@ gdk_window_stick (GdkWindow *window)
 
       /* Request stick during viewport scroll */
       gdk_wmspec_change_state (TRUE, window,
-			       gdk_display_atom (scr_impl->display, "_NET_WM_STATE_STICKY", FALSE),
-
+			       gdk_x11_get_real_atom_by_name (scr_impl->display, "_NET_WM_STATE_STICKY"),
 			       0);
 
       /* Request desktop 0xFFFFFFFF */
@@ -2586,7 +2586,7 @@ gdk_window_stick (GdkWindow *window)
       xev.xclient.send_event = True;
       xev.xclient.window = GDK_WINDOW_XWINDOW (window);
       xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
-      xev.xclient.message_type = gdk_display_atom (scr_impl->display, "_NET_WM_DESKTOP", FALSE);
+      xev.xclient.message_type = gdk_x11_get_real_atom_by_name (scr_impl->display, "_NET_WM_DESKTOP");
 
       xev.xclient.format = 32;
 
@@ -2624,17 +2624,14 @@ gdk_window_unstick (GdkWindow *window)
       
       /* Request unstick from viewport */
       gdk_wmspec_change_state (FALSE, window,
-			       gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_STICKY", FALSE),
-
-			       0);
+			       gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_STICKY"), 0);
 
       /* Get current desktop, then set it; this is a race, but not
        * one that matters much in practice.
        */
       XGetWindowProperty (GDK_WINDOW_XDISPLAY (window),
 			  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->xroot_window,
-                          gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_CURRENT_DESKTOP", FALSE),
-
+                          gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_CURRENT_DESKTOP"),
                           0, G_MAXLONG,
                           False, XA_CARDINAL, &type, &format, &nitems,
                           &bytes_after, (guchar **)&current_desktop);
@@ -2646,10 +2643,8 @@ gdk_window_unstick (GdkWindow *window)
           xev.xclient.send_event = True;
           xev.xclient.window = GDK_WINDOW_XWINDOW (window);
           xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
-          xev.xclient.message_type = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_DESKTOP", FALSE);
-
+          xev.xclient.message_type = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_DESKTOP");
           xev.xclient.format = 32;
-
           xev.xclient.data.l[0] = *current_desktop;
       
           XSendEvent (GDK_WINDOW_XDISPLAY (window),
@@ -2681,10 +2676,8 @@ gdk_window_maximize (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (TRUE, window,
-			     gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT", FALSE),
-
-			     gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ", FALSE));
-
+			     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT"),
+			     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
     gdk_synthesize_window_state (window,
 				 0,
@@ -2701,10 +2694,8 @@ gdk_window_unmaximize (GdkWindow *window)
 
   if (GDK_WINDOW_IS_MAPPED (window))
     gdk_wmspec_change_state (FALSE, window,
-			     gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT", FALSE),
-
-			     gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ", FALSE));
-
+			     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_VERT"),
+			     gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_STATE_MAXIMIZED_HORZ"));
   else
     gdk_synthesize_window_state (window,
 				 GDK_WINDOW_STATE_MAXIMIZED,
@@ -3515,8 +3506,7 @@ wmspec_moveresize (GdkWindow *window,
   xev.xclient.send_event = True;
   xev.xclient.display = GDK_WINDOW_XDISPLAY (window);
   xev.xclient.window = GDK_WINDOW_XID (window);
-  xev.xclient.message_type = gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE);
-
+  xev.xclient.message_type = gdk_x11_get_real_atom_by_name (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE");
   xev.xclient.format = 32;
   xev.xclient.data.l[0] = root_x;
   xev.xclient.data.l[1] = root_y;
@@ -3940,7 +3930,7 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
 		     moveresize->_gdk_moveresize_window);
 
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
-	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE)))
+				      gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
     wmspec_resize_drag (window, edge, button, root_x, root_y, timestamp);
   else
     emulate_resize_drag (window, edge, button, root_x, root_y, timestamp);
@@ -3968,7 +3958,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
 		     moveresize->_gdk_moveresize_window);
 
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN(window),
-	gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_WM_MOVERESIZE", FALSE)))
+				      gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
     wmspec_moveresize (window, _NET_WM_MOVERESIZE_MOVE,
                        root_x, root_y, timestamp);
   else

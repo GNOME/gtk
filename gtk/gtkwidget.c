@@ -47,6 +47,7 @@
 #include "gtkintl.h"
 #include "gtkaccessible.h"
 #include "gtkdebug.h"
+#include "gtkinvisible.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -131,7 +132,6 @@ enum {
   PROP_STYLE,
   PROP_EVENTS,
   PROP_EXTENSION_EVENTS,
-  PROP_SCREEN
 };
 
 typedef	struct	_GtkStateData	 GtkStateData;
@@ -183,7 +183,7 @@ static void gtk_widget_direction_changed	 (GtkWidget	    *widget,
 static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
 static GdkColormap*  gtk_widget_peek_colormap      (GdkScreen *screen);
-static GtkStyle*     gtk_widget_peek_style         (GtkWidget *widget);
+static GtkStyle*     gtk_widget_peek_style         (void);
 static PangoContext *gtk_widget_peek_pango_context (GtkWidget *widget);
 
 static void gtk_widget_reparent_container_child  (GtkWidget     *widget,
@@ -215,13 +215,6 @@ static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk       *aux_info_mem_chunk = NULL;
-
-typedef struct {
-  GdkDisplay *display;
-  GtkStyle   *default_style;
-} GtkWidgetDefaultStyle;
-
-static GSList	       *gtk_default_style_list = NULL;
 static GtkStyle        *gtk_default_style = NULL;
 static GSList          *colormap_stack = NULL;
 static GSList          *style_stack = NULL;
@@ -536,13 +529,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						      GDK_TYPE_EXTENSION_MODE,
  						      GDK_EXTENSION_EVENTS_NONE,
  						      G_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_SCREEN,
-				   g_param_spec_pointer ("screen",
- 							_("Screen"),
- 							_("The screen of the widget that decides which where to display the widget."),
- 							G_PARAM_READWRITE));
-
 
   widget_signals[SHOW] =
     gtk_signal_new ("show",
@@ -1140,8 +1126,6 @@ gtk_widget_set_property (GObject         *object,
     case PROP_EXTENSION_EVENTS:
       gtk_widget_set_extension_events (widget, g_value_get_enum (value));
       break;
-    case PROP_SCREEN:
-      gtk_widget_set_screen (widget, g_value_get_pointer (value));
     default:
       break;
     }
@@ -1255,8 +1239,6 @@ gtk_widget_get_property (GObject         *object,
       else
  	g_value_set_enum (value, (GdkExtensionMode) *modep);
       break;
-    case PROP_SCREEN:
-      g_value_set_pointer (value, widget->screen);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1274,8 +1256,6 @@ gtk_widget_get_property (GObject         *object,
 static void
 gtk_widget_init (GtkWidget *widget)
 {
-  GdkColormap *colormap;
-  
   GTK_PRIVATE_FLAGS (widget) = 0;
   widget->state = GTK_STATE_NORMAL;
   widget->saved_state = GTK_STATE_NORMAL;
@@ -1288,23 +1268,15 @@ gtk_widget_init (GtkWidget *widget)
   widget->allocation.height = 1;
   widget->window = NULL;
   widget->parent = NULL;
-  widget->screen = gdk_get_default_screen ();
   GTK_WIDGET_SET_FLAGS (widget,
 			GTK_SENSITIVE |
 			GTK_PARENT_SENSITIVE |
 			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
 			GTK_DOUBLE_BUFFERED);
+  widget->style = NULL;
 
-  widget->style = gtk_widget_peek_style (widget);
+  widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
-  
-  colormap = gtk_widget_peek_colormap (widget->screen);
-
-  if (colormap->screen != widget->screen)
-    g_error ("colormap from stack different from widget's screen !");
-  
-  if (colormap != gdk_screen_get_default_colormap (widget->screen))
-    gtk_widget_set_colormap (widget, colormap);
 }
 
 
@@ -1848,7 +1820,8 @@ gtk_widget_realize (GtkWidget *widget)
   gint events;
   GdkExtensionMode mode;
   GtkWidgetShapeInfo *shape_info;
-  
+  GdkColormap *colormap;
+  GdkScreen *screen;
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
@@ -1864,6 +1837,14 @@ gtk_widget_realize (GtkWidget *widget)
         g_warning ("Calling gtk_widget_realize() on a widget that isn't "
                    "inside a toplevel window is not going to work very well. "
                    "Widgets must be inside a toplevel container before realizing them.");
+
+      screen = gtk_widget_get_screen (widget);
+
+      /* initialize the default colormap if needed */
+      colormap = gtk_widget_peek_colormap (screen);
+  
+      if (colormap != gdk_screen_get_default_colormap (screen))
+	gtk_widget_set_colormap (widget, colormap);
       
       if (widget->parent && !GTK_WIDGET_REALIZED (widget->parent))
 	gtk_widget_realize (widget->parent);
@@ -3349,22 +3330,6 @@ gtk_widget_set_parent (GtkWidget *widget,
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
   gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
-
-  if (widget->screen != parent->screen)
-  {
-    GdkColormap *colormap = gtk_widget_peek_colormap (parent->screen);
-    if (!colormap)
-    {
-      gtk_widget_set_colormap (widget,
-			      gdk_screen_get_default_colormap(parent->screen));
-    }else{
-	if(colormap->screen == parent->screen)
-	  gtk_widget_set_colormap(widget, colormap);
-    }
-  }
-  /* propagate the screen information */
-  gtk_widget_set_screen (widget,gtk_widget_get_screen (parent));
-
 }
 
 /*****************************************
@@ -3884,54 +3849,29 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
   gtk_widget_set_style_recurse (widget, NULL);
 }
 
-static GtkStyle * 
-gtk_widget_default_style_get_in_list (GdkDisplay *dpy)
-{
-  GSList *tmp = gtk_default_style_list;
-  while (tmp)
-  {
-    if(((GtkWidgetDefaultStyle *)tmp->data)->display == dpy)
-      return ((GtkWidgetDefaultStyle *)tmp->data);
-
-    tmp = tmp->next;
-  }
-  return NULL;
-}
-
 void
 gtk_widget_set_default_style (GtkStyle *style)
 {
-    GtkStyle * default_style = gtk_widget_default_style_get_in_list (style->display);
-    if (style != default_style)
+  if (style != gtk_default_style)
      {
-       if (default_style)
-       {
-	 g_slist_remove(gtk_default_style_list,default_style);
+       if (gtk_default_style)
 	 gtk_style_unref (gtk_default_style);
-       }
-       g_slist_append(gtk_default_style_list, style);
-       if (style)
-	 gtk_style_ref (style);
+       gtk_default_style = style;
+       if (gtk_default_style)
+	 gtk_style_ref (gtk_default_style);
      }
-}
-
-GtkStyle*
-gtk_widget_get_default_style_for_display (GdkDisplay *display)
-{
-  GtkStyle * default_style = gtk_widget_default_style_get_in_list (display);
-  if (default_style)
-    return default_style;
-  default_style = gtk_style_new_for_display (display);
-  g_slist_append(gtk_default_style_list, default_style);
-  return default_style;
 }
 
 GtkStyle*
 gtk_widget_get_default_style (void)
 {
-  GTK_NOTE (MULTIHEAD, 
-	   g_message("Use gtk_widget_get_default_style_for_display instead\n"));
-  return gtk_widget_get_default_style_for_display (gdk_get_default_display ());
+  if (!gtk_default_style)
+    {
+      gtk_default_style = gtk_style_new ();
+      gtk_style_ref (gtk_default_style);
+    }
+  
+  return gtk_default_style;
 }
 
 void
@@ -3944,12 +3884,12 @@ gtk_widget_push_style (GtkStyle *style)
 }
 
 static GtkStyle*
-gtk_widget_peek_style (GtkWidget *widget)
+gtk_widget_peek_style ()
 {
   if (style_stack)
     return (GtkStyle*) style_stack->data;
   else
-    return gtk_widget_get_default_style_for_display (gtk_widget_get_display(widget));
+    return gtk_widget_get_default_style ();
 }
 
 void
@@ -4025,7 +3965,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  context = gdk_pango_context_get_for_screen (widget->screen);
+  context = gdk_pango_context_get_for_screen (gtk_widget_get_screen (widget));
 
   gdk_pango_context_set_colormap (context, gtk_widget_get_colormap (widget));
   pango_context_set_base_dir (context,
@@ -4157,36 +4097,9 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
 }
 
 /*************************************************************
- * gtk_widget_set_screen :
- *     Set a non default screen for the widget
- *
- *   arguments: GdkScreen
- *     widget:
- *     
- *     
- *   results:
- *************************************************************/
-
-void
-gtk_widget_set_screen (GtkWidget    *widget,
-		       GdkScreen    *screen)
-{
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  widget->screen = screen;
-  /* need to check if the style is Ok for the widget's display */
-  if (gtk_widget_get_display (widget) != widget->style->display)
-    widget->style = gtk_widget_peek_style (widget);
-  g_object_notify (G_OBJECT (widget), "screen");
-  if (GTK_IS_CONTAINER (widget))
-     gtk_container_forall (GTK_CONTAINER (widget),
-			  (GtkCallback) gtk_widget_set_screen,
-			   screen);
-
-}
-/*************************************************************
  * gtk_widget_get_screen :
- *     Get the screen for the widget
+ *     Get the GdkScreen from the toplevel window associated 
+ *     with this widget
  *
  *   arguments: 
  *     widget:
@@ -4195,12 +4108,35 @@ gtk_widget_set_screen (GtkWidget    *widget,
  *   results: screen
  *************************************************************/
 
-GdkScreen *
+GdkScreen*
 gtk_widget_get_screen (GtkWidget *widget)
 {
+  GtkWidget *toplevel = NULL;
+  GdkScreen *screen = NULL;
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  return widget->screen;
+
+  toplevel = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
+
+  if (!toplevel)
+  {
+    /* GtkInvisible is a standalone widget not link to a toplevel as such */
+    if (GTK_IS_INVISIBLE (widget))
+     return GTK_INVISIBLE (widget)->screen;
+    /* Check if an widget in the tree has screen information attached to it */
+    while (widget)
+    {
+      screen = g_object_get_data (G_OBJECT (widget), "screen");
+      if (screen)
+        return screen;
+      widget = widget->parent;
+    }
+	
+    g_warning ("Can't get associated screen for a widget unless it is inside a toplevel GtkWindow");
+    return NULL;
+  }
+  
+  return GTK_WINDOW (toplevel)->screen;
 }
 
 /*************************************************************
@@ -4219,7 +4155,7 @@ gtk_widget_get_display (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  return gdk_screen_get_display (widget->screen);
+  return gdk_screen_get_display (gtk_widget_get_screen (widget));
 }
 
 
@@ -4594,7 +4530,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
   if (colormap)
     return colormap;
 
-  return gdk_screen_get_default_colormap (widget->screen);
+  return gdk_screen_get_default_colormap (gtk_widget_get_screen (widget));
 }
 
 /**
@@ -4870,8 +4806,7 @@ gtk_widget_set_default_colormap (GdkColormap *colormap)
 GdkColormap*
 gtk_widget_get_default_colormap (void)
 {
-  GTK_NOTE (MISC,
-	    g_message("don't use for multihead !!")); 
+  GTK_NOTE (MISC,g_message("don't use this for multihead ")); 
   return gdk_screen_get_default_colormap (gdk_get_default_screen ());
 }
 
@@ -5072,7 +5007,7 @@ gtk_widget_real_destroy (GtkObject *object)
     }
 
   gtk_style_unref (widget->style);
-  widget->style = gtk_widget_peek_style (widget);
+  widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);

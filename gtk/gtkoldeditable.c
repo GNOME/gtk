@@ -700,8 +700,6 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
 				      guint              time)
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (widget);
-  GdkDisplay * display = gtk_widget_get_display (widget);
-
   gchar *text = gtk_selection_data_get_text (selection_data);
 
   if (!text)
@@ -710,17 +708,14 @@ gtk_old_editable_selection_received  (GtkWidget         *widget,
        * for text and didn't get it, try string.  If we asked for
        * anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_display_atom (display, "UTF8_STRING", FALSE))
-
+      if (selection_data->target == gdk_atom_intern ("UTF8_STRING", FALSE))
 	{
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_display_atom (display, "TEXT", FALSE),
-
+				 gdk_atom_intern ("TEXT", FALSE),
 				 time);
 	  return;
 	}
-      else if (selection_data->target == gdk_display_atom (display, "TEXT", FALSE))
-
+      else if (selection_data->target == gdk_atom_intern ("TEXT", FALSE))
 	{
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
 				 GDK_TARGET_STRING,

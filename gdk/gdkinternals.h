@@ -199,7 +199,7 @@ GType _gdk_pixmap_impl_get_type (void) G_GNUC_CONST;
 
 void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_visual_init (GdkScreen *screen);
-void gdk_dnd_init    (GdkDisplay *display);
+void gdk_dnd_init    ();
 
 void _gdk_windowing_image_init  (GdkDisplay *display);
 void gdk_image_exit  (void);

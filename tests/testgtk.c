@@ -9700,11 +9700,11 @@ create_gamma_curve (void)
     }
 
   max = 127 + (count % 2)*128;
-  gtk_curve_set_range (GTK_CURVE (GTK_GAMMA_CURVE (curve)->curve),
+  gtk_curve_set_range (curve,
 		       0, max, 0, max);
   for (i = 0; i < max; ++i)
     vec[i] = (127 / sqrt (max)) * sqrt (i);
-  gtk_curve_set_vector (GTK_CURVE (GTK_GAMMA_CURVE (curve)->curve),
+  gtk_curve_set_vector (curve,
 			max, vec);
 
   if (!GTK_WIDGET_VISIBLE (window))

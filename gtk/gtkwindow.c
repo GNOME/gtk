@@ -74,7 +74,8 @@ enum {
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
-
+  
+  PROP_SCREEN,
   LAST_ARG
 };
 
@@ -401,6 +402,14 @@ gtk_window_class_init (GtkWindowClass *klass)
 							 _("If this window should be destroyed when the parent is destroyed,"),
                                                          FALSE,
 							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_SCREEN,
+				   g_param_spec_pointer ("screen",
+ 							_("Screen"),
+ 							_("The screen representing where this window will be displayed."),
+ 							G_PARAM_READWRITE));
+
+  
 
   /* Style props are set or not */
 
@@ -553,6 +562,7 @@ gtk_window_init (GtkWindow *window)
   window->gravity = GDK_GRAVITY_NORTH_WEST;
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
+  window->screen = gdk_get_default_screen ();
   
   gtk_widget_ref (GTK_WIDGET (window));
   gtk_object_sink (GTK_OBJECT (window));
@@ -612,6 +622,8 @@ gtk_window_set_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       gtk_window_set_destroy_with_parent (window, g_value_get_boolean (value));
       break;
+    case PROP_SCREEN:
+      gtk_window_set_screen (window, g_value_get_pointer (value));
     default:
       break;
     }
@@ -668,6 +680,8 @@ gtk_window_get_property (GObject      *object,
     case PROP_DESTROY_WITH_PARENT:
       g_value_set_boolean (value, window->destroy_with_parent);
       break;
+    case PROP_SCREEN:
+      g_value_set_pointer (value, window->screen);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1285,8 +1299,7 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
 					GtkWidget *window)
 {
   if (GTK_WIDGET_REALIZED (window))
-    gdk_property_delete (window->window, 
-			 gdk_display_atom (gtk_widget_get_display(parent), "WM_TRANSIENT_FOR", FALSE));
+    gdk_property_delete (window->window, gdk_atom_intern ("WM_TRANSIENT_FOR", FALSE));
 
 }
 
@@ -1881,7 +1894,7 @@ gtk_window_realize (GtkWidget *widget)
       
       attributes_mask = GDK_WA_VISUAL | GDK_WA_COLORMAP;
       
-      window->frame = gdk_window_new_for_screen (widget->screen, 
+      window->frame = gdk_window_new_for_screen (gtk_widget_get_screen (widget), 
       						 NULL,
 						 &attributes,
 						 attributes_mask);
@@ -1915,7 +1928,7 @@ gtk_window_realize (GtkWidget *widget)
   attributes_mask |= GDK_WA_VISUAL | GDK_WA_COLORMAP;
   attributes_mask |= (window->title ? GDK_WA_TITLE : 0);
   attributes_mask |= (window->wmclass_name ? GDK_WA_WMCLASS : 0);
-  widget->window = gdk_window_new_for_screen (widget->screen,
+  widget->window = gdk_window_new_for_screen (gtk_widget_get_screen (widget),
 					      parent_window,
 					      &attributes,
 					      attributes_mask);
@@ -2367,7 +2380,7 @@ gtk_window_client_event (GtkWidget	*widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (!atom_rcfiles)
-    atom_rcfiles = gdk_display_atom (gtk_widget_get_display(widget), "_GTK_READ_RCFILES", FALSE);
+    atom_rcfiles = gdk_atom_intern ("_GTK_READ_RCFILES", FALSE);
 
 
   if (event->message_type == atom_rcfiles) 
@@ -3007,8 +3020,8 @@ gtk_window_compute_reposition (GtkWindow *window,
     case GTK_WIN_POS_CENTER_ALWAYS:
       if (window->use_uposition)
 	{
-	  gint screen_width = gdk_screen_get_width (widget->screen);
-	  gint screen_height = gdk_screen_get_height (widget->screen);
+	  gint screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
+	  gint screen_height = gdk_screen_get_height (gtk_widget_get_screen (widget));
 	  
 	  *x = (screen_width - new_width) / 2;
 	  *y = (screen_height - new_height) / 2;
@@ -3032,8 +3045,8 @@ gtk_window_compute_reposition (GtkWindow *window,
     case GTK_WIN_POS_MOUSE:
       if (window->use_uposition)
 	{
-	  gint screen_width = gdk_screen_get_width (widget->screen);
-	  gint screen_height = gdk_screen_get_height (widget->screen);
+	  gint screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
+	  gint screen_height = gdk_screen_get_height (gtk_widget_get_screen (widget));
 	  
 	  gdk_window_get_pointer (window, x, y, NULL);
 	  *x -= new_width / 2;
@@ -3621,4 +3634,25 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                               button,
                               root_x, root_y,
                               timestamp);
+}
+
+void
+gtk_window_set_screen (GtkWindow *window,
+		       GdkScreen *screen)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  if(GTK_WIDGET_VISIBLE(window))
+  {
+    g_warning("Trying to change the window's screen while widget is visible");
+    return;
+  }
+  window->screen = screen;
+}
+
+GdkScreen*
+gtk_window_get_screen (GtkWindow *window)
+{
+   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+   return window->screen;
 }

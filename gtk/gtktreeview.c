@@ -1816,7 +1816,7 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new_for_screen (widget->screen, NULL, &attributes, attributes_mask);
+	  tree_view->priv->drag_highlight_window = gdk_window_new_for_screen (gtk_widget_get_screen (widget), NULL, &attributes, attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
@@ -1890,10 +1890,11 @@ gtk_tree_view_motion_draw_column_motion_arrow (GtkTreeView *tree_view)
 	  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 	  attributes.width = width;
 	  attributes.height = height;
-	  tree_view->priv->drag_highlight_window = gdk_window_new_for_screen (GTK_WIDGET(tree_view)->screen,
-	  								      NULL,
-									      &attributes,
-									      attributes_mask);
+	  tree_view->priv->drag_highlight_window =
+	    gdk_window_new_for_screen (gtk_widget_get_screen (GTK_WIDGET(tree_view)),
+				       NULL,
+				       &attributes,
+				       attributes_mask);
 	  gdk_window_set_user_data (tree_view->priv->drag_highlight_window, GTK_WIDGET (tree_view));
 
 	  mask = gdk_pixmap_new (tree_view->priv->drag_highlight_window, width, height, 1);
@@ -3261,7 +3262,7 @@ gtk_tree_view_drag_data_get (GtkWidget        *widget,
 
   /* If drag_data_get does nothing, try providing row data. */
   if (selection_data->target == 
-      gdk_display_atom (gtk_widget_get_display(widget), "GTK_TREE_MODEL_ROW", FALSE))
+      gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
 
     {
       gtk_selection_data_set_tree_row (selection_data,
@@ -3363,7 +3364,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
             gtk_timeout_add (500, open_row_timeout, tree_view);
         }
 
-      if (target == gdk_display_atom (gtk_widget_get_display(widget), "GTK_TREE_MODEL_ROW", FALSE))
+      if (target == gdk_atom_intern ("GTK_TREE_MODEL_ROW", FALSE))
 
         {
           /* Request data so we can use the source row when
@@ -5300,8 +5301,8 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GdkEvent send_event;
   GtkAllocation allocation;
   gint x, y, width, height;
-  GdkScreen *scr = GTK_WIDGET (tree_view)->screen;
-  GdkWindow *root_window = GDK_SCREEN_GET_CLASS (scr)->get_root_window (scr);
+  GdkScreen *scr = gtk_widget_get_screen (GTK_WIDGET (tree_view));
+  GdkWindow *root_window = gdk_screen_get_root_window (scr);
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
@@ -5328,9 +5329,9 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
     }
 
-  gdk_display_pointer_ungrab (gtk_widget_get_display (tree_view), 
+  gdk_display_pointer_ungrab (gtk_widget_get_display (GTK_WIDGET (tree_view)), 
 			      GDK_CURRENT_TIME);
-  gdk_display_keyboard_ungrab (gtk_widget_get_display (tree_view),
+  gdk_display_keyboard_ungrab (gtk_widget_get_display (GTK_WIDGET (tree_view)),
 			       GDK_CURRENT_TIME);
 
   gtk_grab_remove (column->button);
@@ -7378,8 +7379,7 @@ gtk_tree_view_set_rows_drag_source (GtkTreeView              *tree_view,
   clear_source_info (di);
 
   di->start_button_mask = start_button_mask;
-  di->source_target_list = gtk_target_list_new_for_display (gtk_widget_get_display(tree_view), targets, n_targets);
-
+  di->source_target_list = gtk_target_list_new (targets, n_targets);
   di->source_actions = actions;
 
   if (row_draggable_func)
@@ -7415,8 +7415,7 @@ gtk_tree_view_set_rows_drag_dest (GtkTreeView              *tree_view,
   clear_dest_info (di);
 
   if (targets)
-    di->dest_target_list = gtk_target_list_new_for_display (gtk_widget_get_display(tree_view), targets, n_targets);
-
+    di->dest_target_list = gtk_target_list_new (targets, n_targets);
 
   if (location_droppable_func)
     {

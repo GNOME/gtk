@@ -1733,8 +1733,7 @@ gtk_text_button_press (GtkWidget      *widget,
 	    }
 	  
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_display_atom (gtk_widget_get_display(widget), "UTF8_STRING", FALSE),
-
+				 gdk_atom_intern ("UTF8_STRING", FALSE),
 				 event->time);
 	}
       else

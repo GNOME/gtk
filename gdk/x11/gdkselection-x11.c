@@ -319,7 +319,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay * display,
     return 0;
 
   property.value = (guchar *) text;
-  property.encoding = encoding;
+  property.encoding = gdk_x11_get_real_atom (display, encoding, FALSE);
   property.format = format;
   property.nitems = length;
   res =
@@ -434,8 +434,7 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay *display,
   if (encoding == GDK_TARGET_STRING) {
     return make_list ((gchar *) text, length, TRUE, list);
   }
-  else if (encoding ==
-	   gdk_display_atom (display, "UTF8_STRING", FALSE)) {
+  else if (encoding == gdk_atom_intern ("UTF8_STRING", FALSE)) {
 
     return make_list ((gchar *) text, length, FALSE, list);
   }

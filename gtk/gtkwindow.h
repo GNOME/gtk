@@ -65,6 +65,7 @@ struct _GtkWindow
   GtkWindow *transient_parent;
   GtkWindowGeometryInfo *geometry_info;
   GdkWindow *frame;
+  GdkScreen *screen;
 
   guint16 resize_count;
 
@@ -162,6 +163,10 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 						GtkWidget           *geometry_widget,
 						GdkGeometry         *geometry,
 						GdkWindowHints       geom_mask);
+
+void	   gtk_window_set_screen	       (GtkWindow	    *window,
+						GdkScreen	    *screen);
+GdkScreen* gtk_window_get_screen	       (GtkWindow	    *window);
 
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
 void       gtk_window_set_has_frame            (GtkWindow *window);
