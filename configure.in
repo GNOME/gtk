@@ -409,9 +409,9 @@ if test "x$gdktarget" = "xx11"; then
 
   if $have_xft = 'true' ; then
     X_LIBS="-lXft -lXrender -lXext $X_LIBS"
+    AC_DEFINE(HAVE_XFT)
   fi
 
-  AC_DEFINE(HAVE_XFT)
   AM_CONDITIONAL(HAVE_XFT, $have_xft) 
 
   # Check for XIM support.

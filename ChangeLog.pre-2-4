@@ -1,3 +1,8 @@
+2000-12-14  Havoc Pennington  <hp@pobox.com>
+
+	* configure.in: only AC_DEFINE(HAVE_XFT) if we actually determined
+	that we have Xrender
+
 Thu Dec 14 20:22:31 2000  Owen Taylor  <otaylor@redhat.com>
 
         * gdk/{gdkdrawable.[ch],gdkpixmap.c,gdkwindow.c,x11/gdkwindow.c}:
