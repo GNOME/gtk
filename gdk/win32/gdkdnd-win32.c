@@ -93,8 +93,9 @@ struct _GdkDragContextPrivateWin32 {
 #endif
   guint16 last_x;		/* Coordinates from last event */
   guint16 last_y;
-  HWND    dest_xid;
-  guint   drag_status;		/* Current status of drag */
+  HWND dest_xid;
+  guint drag_status : 4;	/* Current status of drag */
+  guint drop_failed : 1;	/* Whether the drop was unsuccessful */
 };
 
 #define GDK_DRAG_CONTEXT_PRIVATE_DATA(context) ((GdkDragContextPrivateWin32 *) GDK_DRAG_CONTEXT (context)->windowing_data)
@@ -1730,4 +1731,17 @@ gdk_drag_get_selection (GdkDragContext *context)
     return _gdk_ole2_dnd;
   else
     return GDK_NONE;
+}
+
+gboolean 
+gdk_drag_drop_succeeded (GdkDragContext *context)
+{
+  GdkDragContextPrivateWin32 *private;
+
+  g_return_val_if_fail (context != NULL, FALSE);
+
+  private = GDK_DRAG_CONTEXT_PRIVATE_DATA (context);
+
+  /* FIXME: Can we set drop_failed when the drop has failed? */
+  return !private->drop_failed;
 }

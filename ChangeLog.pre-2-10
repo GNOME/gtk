@@ -1,3 +1,9 @@
+2004-08-27  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (GdkDragContextPrivateWin32): Add
+	drop_failed, like in the X11 backend. Nothing sets it, though.
+	(gdk_drag_drop_succeeded): Copy from X11 backend.
+
 Thu Aug 26 23:58:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_key_press): Don't crash
