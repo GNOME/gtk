@@ -1,3 +1,8 @@
+2003-05-08  Sven Neumann  <sven@gimp.org>
+
+	* configure.in: set the HAVE_X11R6 automake conditional to false
+	if not compiling for X11.
+
 2003-05-06  Tor Lillqvist  <tml@iki.fi>
 
 	Fix for #110165 (thanks to Arnaud Charlet):
