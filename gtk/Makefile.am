@@ -515,7 +515,7 @@ gtkconf_DATA = gtkrc.az gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW.big5 \
 	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
 	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii \
-	gtkrc.cp1251
+	gtkrc.cp1251 gtk.immodules
 
 # We create a dummy theme for the default GTK+ theme
 install-data-local:
