@@ -1,3 +1,8 @@
+2002-07-16  Sven Neumann  <sven@gimp.org>
+
+	* gdk/tmpl/rgb.sgml: fixed the example code (return TRUE from the
+	expose_event handler).
+
 2002-04-24  Matthias Clasen  <maclas@gmx.de>
 
 	Merged from HEAD:
