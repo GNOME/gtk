@@ -1543,6 +1543,10 @@ egg_icon_list_adjustment_changed (GtkAdjustment *adjustment,
       gdk_window_move (icon_list->priv->bin_window,
 		       - icon_list->priv->hadjustment->value,
 		       - icon_list->priv->vadjustment->value);
+
+      if (icon_list->priv->rubberbanding)
+	rubberbanding (GTK_WIDGET (icon_list));
+
       gdk_window_process_updates (icon_list->priv->bin_window, TRUE);
     }
 }
