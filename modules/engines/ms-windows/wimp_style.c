@@ -255,12 +255,14 @@ setup_system_colors(GtkStyle *style)
       style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
     }
   
-  // Enable prelighting for menus.
+  // Enable coloring for menus.
   sprintf(buf, "style \"wimp-menu\"\n"
           "{fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
           "text[PRELIGHT] = { %d, %d, %d }\n"
           "base[PRELIGHT] = { %d, %d, %d }\n"
+          "fg[NORMAL] = { %d, %d, %d }\n"
+          "bg[NORMAL] = { %d, %d, %d }\n"
           "}widget_class \"*GtkMenu*\" style \"wimp-menu\"\n",
           fg_prelight.red,
           fg_prelight.green,
@@ -273,7 +275,13 @@ setup_system_colors(GtkStyle *style)
           text_prelight.blue,
           base_prelight.red,
           base_prelight.green,
-          base_prelight.blue);
+          base_prelight.blue,
+          menu_text_color.red,
+          menu_text_color.green,
+          menu_text_color.blue,
+          menu_color.red,
+          menu_color.green,
+          menu_color.blue);
   gtk_rc_parse_string(buf);
 }
 
