@@ -1,5 +1,12 @@
 2004-08-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testiconview.c: Add buttons to select and unselect all
+	nodes, make the popup menu actually work.
+
+	* gtk/gtkiconview.c: Make GTK_SELECTION_BROWSE work as intended,
+	let button 3 presses through to the app, to make popup menus
+	work.
+
 	* tests/Makefile.am: Add testiconview.
 	* tests/testiconview.c: A test for GtkIconView
 	* tests/gnome-textfile.png: ...which uses this image.

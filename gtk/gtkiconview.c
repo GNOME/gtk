@@ -971,7 +971,8 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	    }
 	  else 
 	    {
-	      if (icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE &&
+	      if ((icon_view->priv->selection_mode == GTK_SELECTION_MULTIPLE ||
+		  ((icon_view->priv->selection_mode == GTK_SELECTION_SINGLE) && item->selected)) &&
 		  (event->state & GDK_CONTROL_MASK))
 		{
 		  item->selected = !item->selected;
@@ -1038,7 +1039,7 @@ gtk_icon_view_button_press (GtkWidget      *widget,
   if (dirty)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
 
-  return TRUE;
+  return event->button == 1;
 }
 
 static gboolean
@@ -1277,10 +1278,9 @@ gtk_icon_view_unselect_all_internal (GtkIconView  *icon_view)
   gboolean dirty = FALSE;
   GList *items;
 
-  if (icon_view->priv->selection_mode == GTK_SELECTION_NONE ||
-      icon_view->priv->selection_mode == GTK_SELECTION_BROWSE)
+  if (icon_view->priv->selection_mode == GTK_SELECTION_NONE)
     return FALSE;
-  
+
   for (items = icon_view->priv->items; items; items = items->next)
     {
       GtkIconViewItem *item = items->data;
@@ -1365,9 +1365,6 @@ gtk_icon_view_real_select_all (GtkIconView *icon_view)
 static void
 gtk_icon_view_real_unselect_all (GtkIconView *icon_view)
 {
-  if (icon_view->priv->selection_mode == GTK_SELECTION_BROWSE)
-    return;
-
   gtk_icon_view_unselect_all (icon_view);
 }
 
@@ -3344,6 +3341,9 @@ gtk_icon_view_unselect_all (GtkIconView *icon_view)
   gboolean dirty = FALSE;
   
   g_return_if_fail (GTK_IS_ICON_VIEW (icon_view));
+
+  if (icon_view->priv->selection_mode == GTK_SELECTION_BROWSE)
+    return;
 
   dirty = gtk_icon_view_unselect_all_internal (icon_view);
 

@@ -134,6 +134,17 @@ add_many (GtkWidget *button, GtkIconView *icon_list)
     }
 }
 
+static void
+select_all (GtkWidget *button, GtkIconView *icon_list)
+{
+  gtk_icon_view_select_all (icon_list);
+}
+
+static void
+unselect_all (GtkWidget *button, GtkIconView *icon_list)
+{
+  gtk_icon_view_unselect_all (icon_list);
+}
 
 static void
 selection_changed (GtkIconView *icon_list)
@@ -141,21 +152,32 @@ selection_changed (GtkIconView *icon_list)
   g_print ("Selection changed!\n");
 }
 
+typedef struct {
+  GtkIconView     *icon_list;
+  GtkTreePath     *path;
+} ItemData;
+
 static void
-item_cb (GtkWidget       *menuitem,
-	 GtkTreePath     *path,
-	 GtkIconView     *icon_list)
+free_item_data (ItemData *data)
+{
+  gtk_tree_path_free (data->path);
+  g_free (data);
+}
+
+static void
+item_cb (GtkWidget *menuitem,
+	 ItemData  *data)
 {
   GtkTreeIter iter;
   GtkTreeModel *model;
   gchar *text;
-  model = gtk_icon_view_get_model (icon_list);
+  model = gtk_icon_view_get_model (data->icon_list);
   
-  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get_iter (model, &iter, data->path);
 
-  gtk_tree_model_get (model, &iter,
-		      1, &text, -1);
+  gtk_tree_model_get (model, &iter, 1, &text, -1);
   g_print ("Item activated, text is %s\n", text);
+  g_free (text);
 }
 
 static void
@@ -166,6 +188,7 @@ do_popup_menu (GtkWidget      *icon_list,
   GtkWidget *menuitem;
   GtkTreePath *path;
   int button, event_time;
+  ItemData *data;
 
   path = gtk_icon_view_get_path_at_pos (GTK_ICON_VIEW (icon_list), 
                                         event->x, event->y);
@@ -176,10 +199,15 @@ do_popup_menu (GtkWidget      *icon_list,
 
   menu = gtk_menu_new ();
 
+  data = g_new0 (ItemData, 1);
+  data->icon_list = GTK_ICON_VIEW (icon_list);
+  data->path = path;
+  g_object_set_data_full (G_OBJECT (menu), "item-path", data, free_item_data);
+
   menuitem = gtk_menu_item_new_with_label ("Activate");
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-  g_signal_connect (menuitem, "activate", G_CALLBACK (item_cb), path);
+  g_signal_connect (menuitem, "activate", G_CALLBACK (item_cb), data);
 
   if (event)
     {
@@ -194,7 +222,6 @@ do_popup_menu (GtkWidget      *icon_list,
 
   gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
                   button, event_time);
-  gtk_tree_path_free (path);
 }
 	
 
@@ -279,6 +306,14 @@ main (gint argc, gchar **argv)
 
   button = gtk_button_new_with_label ("Remove selected");
   g_signal_connect (button, "clicked", G_CALLBACK (foreach_selected_remove), icon_list);
+  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+
+  button = gtk_button_new_with_label ("Select all");
+  g_signal_connect (button, "clicked", G_CALLBACK (select_all), icon_list);
+  gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
+
+  button = gtk_button_new_with_label ("Unselect all");
+  g_signal_connect (button, "clicked", G_CALLBACK (unselect_all), icon_list);
   gtk_box_pack_start_defaults (GTK_BOX (bbox), button);
   
   gtk_paned_pack1 (GTK_PANED (paned), vbox, TRUE, FALSE);
