@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-03-16 16:33+0100\n"
-"Last-Translator: Christian Meyer <chrisime@gnome.org>\n"
+"POT-Creation-Date: 2002-08-07 15:44+0200\n"
+"PO-Revision-Date: 2002-08-07 15:43+0100\n"
+"Last-Translator: Christian Neumair <christian-neumair@web.de>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -298,25 +298,26 @@ msgstr ""
 "erlaubt."
 
 #: gdk-pixbuf/io-png.c:55
-#, fuzzy
 msgid "Bits per channel of PNG image is invalid."
-msgstr "Roher PNM-Bildtyp ist ungültig"
+msgstr "Bits pro Kanal des PNG-Bilds sind ungültig"
 
 #: gdk-pixbuf/io-png.c:136
 msgid "Transformed PNG has zero width or height."
-msgstr ""
+msgstr "Die Höhe oder Breite des transformierten PNGs beträgt 0."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
+msgstr "Bits pro Kanal des transformierten PNGs sind nicht 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
-msgstr ""
+msgstr "Das transformierte PNG ist weder RGB oder RGBA."
 
 #: gdk-pixbuf/io-png.c:162
 msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
 msgstr ""
+"Das transformierte PNG hat eine nicht unterstützte Anzahl von Kanälen, muss "
+"3 oder 4 sein."
 
 #: gdk-pixbuf/io-png.c:183
 #, c-format
@@ -431,24 +432,20 @@ msgid "Insufficient memory to load PNM file"
 msgstr "Ungenügender Speichern, um PNM-Datei zu laden"
 
 #: gdk-pixbuf/io-ras.c:158
-#, fuzzy
 msgid "RAS image has bogus header data"
-msgstr "Vorspanndaten des BMP-Bildes sind Unsinn"
+msgstr "RAS-Bild hat fehlerhafte Kopfdaten"
 
 #: gdk-pixbuf/io-ras.c:180
-#, fuzzy
 msgid "RAS image has unknown type"
-msgstr "Bildformat unbekannt"
+msgstr "Bildformat des RAS-Bildes unbekannt"
 
 #: gdk-pixbuf/io-ras.c:188
-#, fuzzy
 msgid "unsupported RAS image variation"
-msgstr "Nicht unterstützter TGA-Bildtyp"
+msgstr "Nicht unterstützte RAS-Bildvariante"
 
 #: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
-#, fuzzy
 msgid "Not enough memory to load RAS image"
-msgstr "Nicht genug Speicher, um Bild zu laden"
+msgstr "Nicht genug Speicher, um das des RAS-Bild zu laden"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -572,7 +569,7 @@ msgstr "Breite oder Höhe des TIFF-Bildes ist Null"
 
 #: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Abmessungen des TIFF-Bilds zu groß"
 
 #: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
@@ -583,9 +580,8 @@ msgid "Failed to load RGB data from TIFF file"
 msgstr "RGB-Daten konnten nicht aus TIFF-Datei geladen werden"
 
 #: gdk-pixbuf/io-tiff.c:266
-#, fuzzy
 msgid "Unsupported TIFF variant"
-msgstr "Nicht unterstützter TGA-Bildtyp"
+msgstr "Nicht unterstützte TIFF-Variante."
 
 #: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
@@ -1793,7 +1789,7 @@ msgstr "Alles auswählen"
 msgid "Input Methods"
 msgstr "Eingabemethoden"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6407
 msgid "_Insert Unicode control character"
 msgstr "Unicode-Steuerzeichen _einfügen"
 
@@ -1843,14 +1839,14 @@ msgid "Folder unreadable: %s"
 msgstr "Ordner nicht lesbar: %s"
 
 #: gtk/gtkfilesel.c:953
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Die Datei »%s« liegt auf einer anderen Maschine (namens %s) und könnte für "
-"dieses Programm nicht verfügbar sein.\n"
+"Die Datei »%s« befindet sich auf einer anderen Maschine (namens %s) und ist "
+"möglicherweise für dieses Programm nicht verfügbar.\n"
 "Sind Sie sicher, dass Sie sie auswählen wollen?"
 
 #: gtk/gtkfilesel.c:1086
@@ -1984,18 +1980,17 @@ msgid "Selection: "
 msgstr "Auswahl:"
 
 #: gtk/gtkfilesel.c:3011
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
-"Der Dateiname %s konnte nicht in UTF-8 umgewandelt werden. Versuchen Sie, "
-"die Umgebungsvariable G_BROKEN_FILENAMES zu setzen."
+"Der Dateiname »%s« konnte nicht in UTF-8 konvertiert werden (Versuchen Sie, "
+"die Umgebungsvariable G_BROKEN_FILENAMES zu setzen): %s"
 
 #: gtk/gtkfilesel.c:3014
-#, fuzzy
 msgid "Invalid Utf-8"
-msgstr "Ungültige XBM-Datei"
+msgstr "Ungültiges UTF-8"
 
 #: gtk/gtkfilesel.c:3880
 msgid "Name too long"
@@ -3823,9 +3818,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS Leerraum mit _Nullbreite"
 
 #: gtk/gtktextutil.c:54
-#, fuzzy
 msgid "ZWJ Zero width _joiner"
-msgstr "ZWN _Verbinder mit Nullbreite"
+msgstr "ZWJ-_Verbinder mit Nullbreite"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
@@ -3864,7 +3858,7 @@ msgid "If the insertion cursor is shown"
 msgstr "Soll der Einfügecursor gezeigt werden?"
 
 # gtk/gtkentry.c:3567 gtk/gtktextview
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6398
 msgid "Input _Methods"
 msgstr "Eingabe_methoden"
 
@@ -4306,9 +4300,8 @@ msgid "Composite child"
 msgstr "Zusammengesetztes Kind"
 
 #: gtk/gtkwidget.c:480
-#, fuzzy
 msgid "Whether the widget is part of a composite widget"
-msgstr "Ist das Widget aus anderen Widgets zusammengesetzt?"
+msgstr "Ob das Widget Teil eines zusammengesetzten Widgets ist"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
@@ -4547,7 +4540,3 @@ msgstr "Vietnamesisch (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-Input-Methode"
-
-#, fuzzy
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Ungenügender Speicher, um PNG-Datei zu laden"
