@@ -184,18 +184,22 @@ gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (menu_item);
 
+  *requisition = 0;
+
   if (image_menu_item->image)
     {
-      guint toggle_spacing;
+      guint image_width = image_menu_item->image->requisition.width;
 
-      gtk_widget_style_get (GTK_WIDGET (menu_item),
-			    "toggle_spacing", &toggle_spacing,
-			    NULL);
-      
-      *requisition = image_menu_item->image->requisition.width + toggle_spacing;
+      if (image_width > 0)
+	{
+	  guint toggle_spacing;
+	  gtk_widget_style_get (GTK_WIDGET (menu_item),
+				"toggle_spacing", &toggle_spacing,
+				NULL);
+	  
+	  *requisition = image_width + toggle_spacing;
+	}
     }
-  else
-    *requisition = 0;
 }
 
 
