@@ -2841,9 +2841,11 @@ gtk_window_set_default_icon_list (GList *list)
 void
 gtk_window_set_default_icon (GdkPixbuf *pixbuf)
 {
+  GList *list;
+  
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
-  GList *list = g_list_prepend (NULL, pixbuf);
+  list = g_list_prepend (NULL, pixbuf);
   gtk_window_set_default_icon_list (list);
   g_list_free (list);
 }

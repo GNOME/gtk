@@ -216,6 +216,7 @@ static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
 static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
 								 GdkRegion        *region);
 static GdkScreen *      gtk_widget_get_screen_unchecked         (GtkWidget        *widget);
+static void		gtk_widget_queue_shallow_draw		(GtkWidget        *widget);
 
 static void gtk_widget_set_usize_internal (GtkWidget *widget,
 					   gint       width,
@@ -2253,16 +2254,10 @@ gtk_widget_queue_clear (GtkWidget *widget)
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
-  GdkRegion *region;
-  
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (GTK_WIDGET_REALIZED (widget))
-    {
-      region = gdk_region_rectangle (&widget->allocation);
-      gtk_widget_invalidate_widget_windows (widget, region);
-      gdk_region_destroy (region);
-    }
+    gtk_widget_queue_shallow_draw (widget);
       
   _gtk_size_group_queue_resize (widget);
 }
@@ -2412,6 +2407,25 @@ gtk_widget_invalidate_widget_windows (GtkWidget *widget,
 
   gdk_window_invalidate_maybe_recurse (widget->window, region,
 				       invalidate_predicate, widget);
+}
+
+/**
+ * gtk_widget_queue_shallow_draw:
+ * @widget: a #GtkWidget
+ *
+ * Like gtk_widget_queue_draw(), but only windows owned
+ * by @widget are invalidated.
+ **/
+static void
+gtk_widget_queue_shallow_draw (GtkWidget *widget)
+{
+  GdkRegion *region;
+  
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  
+  region = gdk_region_rectangle (&widget->allocation);
+  gtk_widget_invalidate_widget_windows (widget, region);
+  gdk_region_destroy (region);
 }
 
 /**
@@ -3045,7 +3059,7 @@ static gboolean
 gtk_widget_real_focus_in_event (GtkWidget     *widget,
                                 GdkEventFocus *event)
 {
-  gtk_widget_queue_draw (widget);
+  gtk_widget_queue_shallow_draw (widget);
 
   return FALSE;
 }
@@ -3054,7 +3068,7 @@ static gboolean
 gtk_widget_real_focus_out_event (GtkWidget     *widget,
                                  GdkEventFocus *event)
 {
-  gtk_widget_queue_draw (widget);
+  gtk_widget_queue_shallow_draw (widget);
 
   return FALSE;
 }

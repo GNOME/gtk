@@ -1,3 +1,12 @@
+Sat Jul 19 00:18:40 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkwindow.c (gtk_window_set_default_icon): Fix C99
+	declaration
+
+	* gtk/gtkwidget.c (gtk_widget_queue_shallow_draw): new function
+	(gtk_widget_real_focus_{in|out}_event): queue shallow draws
+	instead of full draws.
+
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwindow.c: Add properties decorated and gravity.  (#80234)
