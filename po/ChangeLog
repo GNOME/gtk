@@ -1,3 +1,7 @@
+Wed Sep 26 15:34:46 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.in.in (distclean): Add pot2bl.sed
+
 2001-09-26  Stanislav Visnovsky  <visnovsky@nenya.ms.mff.cuni.cz>
 
 	* sk.po: Finished Slovak translation.
