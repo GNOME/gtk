@@ -9,10 +9,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+_properties 2.4.5\n"
+"Project-Id-Version: gtk+_properties 2.4.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-10-08 15:41-0400\n"
-"PO-Revision-Date: 2004-08-01 11:31+0200\n"
+"POT-Creation-Date: 2004-10-10 16:39+0200\n"
+"PO-Revision-Date: 2004-10-10 16:17+0200\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@redfoxcenter.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -69,9 +69,8 @@ msgid "The number of rows of the pixbuf"
 msgstr "Le nombre de lignes du pixbuf"
 
 #: gdk-pixbuf/gdk-pixbuf.c:165
-#, fuzzy
 msgid "Rowstride"
-msgstr "Lignes"
+msgstr "Pas d'une rangée"
 
 #: gdk-pixbuf/gdk-pixbuf.c:166
 msgid ""
@@ -1356,22 +1355,20 @@ msgid "Wrap width for layouting the items in a grid"
 msgstr "Largeur de la coupure pour l'agencement des éléments dans une grille"
 
 #: gtk/gtkcombobox.c:482
-#, fuzzy
 msgid "Row span column"
-msgstr "Espacement des colonnes"
+msgstr "Colonne de l'étalement des rangées"
 
 #: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
-msgstr ""
+msgstr "Colonne TreeModel contenant les valeurs de l'étalement des rangées"
 
 #: gtk/gtkcombobox.c:492
-#, fuzzy
 msgid "Column span column"
-msgstr "Espacement des colonnes"
+msgstr "Colonne de l'étalement des colonnes"
 
 #: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
-msgstr ""
+msgstr "Colonne TreeModel contenant les valeurs de l'étalement des colonnes"
 
 #: gtk/gtkcombobox.c:502
 msgid "Active item"
@@ -1388,6 +1385,8 @@ msgstr "Apparait en tant que liste"
 #: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
+"Indique si les éléments d'une combobox doivent ressembler plus à une liste "
+"qu'a un menu"
 
 #: gtk/gtkcomboboxentry.c:110
 msgid "Text Column"
@@ -1396,6 +1395,8 @@ msgstr "Colonne de texte"
 #: gtk/gtkcomboboxentry.c:111
 msgid "A column in the data source model to get the strings from"
 msgstr ""
+"Une colonne dans le modèle de source de données de laquelle obtenir les "
+"chaînes"
 
 #: gtk/gtkcontainer.c:204
 msgid "Resize mode"
@@ -1596,11 +1597,12 @@ msgid "X align"
 msgstr "Alignement X"
 
 #: gtk/gtkentry.c:568 gtk/gtkmisc.c:100
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "Alignement horizontal, de 0 (gauche) à 1 (droite)"
+msgstr ""
+"L'alignement horizontal, de 0 (gauche) à 1 (droite). Inversé pour les "
+"agencements RTL"
 
 #: gtk/gtkentry.c:801
 msgid "Select on focus"
@@ -1617,9 +1619,8 @@ msgid "Completion Model"
 msgstr "Modèle de complétion"
 
 #: gtk/gtkentrycompletion.c:230
-#, fuzzy
 msgid "The model to find matches in"
-msgstr "Modèle pour la vue de l'arbre"
+msgstr "Le modèle dans lequel trouver des correspondances"
 
 #: gtk/gtkentrycompletion.c:236
 msgid "Minimum Key Length"
@@ -1628,6 +1629,8 @@ msgstr "Longueur minimale de la clé"
 #: gtk/gtkentrycompletion.c:237
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
+"La longueur minimale de la clé de recherche afin de trouver des "
+"correspondances"
 
 #: gtk/gtkeventbox.c:120
 msgid "Visible Window"
@@ -1638,6 +1641,8 @@ msgid ""
 "Whether the event box is visible, as opposed to invisible and only used to "
 "trap events."
 msgstr ""
+"Indique si la boîte d'événements est visible, a l'opposé d'invisible et "
+"seulement utilisé pour capturer les événements."
 
 #: gtk/gtkeventbox.c:127
 msgid "Above child"
@@ -1648,6 +1653,8 @@ msgid ""
 "Whether the event-trapping window of the eventbox is above the window of the "
 "child widget as opposed to below it."
 msgstr ""
+"Indique si la fenêtre de capture d'événements de la boîte d'événements est "
+"au-dessus de la fenêtre du composant graphique fils a l'opposé d'au-dessous."
 
 #: gtk/gtkexpander.c:197
 msgid "Expanded"
@@ -2485,24 +2492,21 @@ msgid "Secondary backward stepper"
 msgstr "Bouton secondaire inversé"
 
 #: gtk/gtknotebook.c:529
-#, fuzzy
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
-"Afficher un second bouton fléché inversé au coté opposé de la barre de "
-"défilement"
+"Afficher un second bouton fléché inversé au coté opposé de l'aire de "
+"tabulation"
 
 #: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
 msgid "Secondary forward stepper"
 msgstr "Bouton secondaire avant"
 
 #: gtk/gtknotebook.c:546
-#, fuzzy
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
-"Afficher un second bouton fléché avant au coté opposé de la barre de "
-"défilement"
+"Afficher un second bouton fléché avant au coté opposé de l'aire de tabulation"
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
 msgid "Backward stepper"
@@ -3718,14 +3722,14 @@ msgid "Color with which to draw error-indication underlines"
 msgstr "Couleur utilisée pour dessiner le soulignement indiquant des erreurs"
 
 #: gtk/gtktoggleaction.c:129
-#, fuzzy
 msgid "Create the same proxies as a radio action"
-msgstr "Dessine le bouton de bascule comme bouton radio"
+msgstr "Créer les mêmes proxies en tant qu'action radio"
 
 #: gtk/gtktoggleaction.c:130
-#, fuzzy
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr "Indique si l'élément de menu est coché"
+msgstr ""
+"Indique si les proxies pour cette action ressemble a des proxies d'action "
+"radio"
 
 #: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
@@ -3832,13 +3836,13 @@ msgid "Text to show in the item."
 msgstr "Texte à afficher dans l'élément."
 
 #: gtk/gtktoolbutton.c:188
-#, fuzzy
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
 "Si défini, un soulignement dans le texte indique que le caractère suivant "
-"doit être utilisé comme touche d'accélération mnémonique"
+"doit être utilisé comme touche d'accélération mnémonique dans le texte du "
+"menu"
 
 #: gtk/gtktoolbutton.c:195
 msgid "Widget to use as the item label"
@@ -4064,6 +4068,7 @@ msgstr "Titre à afficher dans l'en-tête de la colonne"
 #: gtk/gtktreeviewcolumn.c:296
 msgid "Column gets share of extra width allocated to the widget"
 msgstr ""
+"La colonne partage l'espace supplémentaire alooué au composant graphique"
 
 #: gtk/gtktreeviewcolumn.c:303
 msgid "Clickable"
