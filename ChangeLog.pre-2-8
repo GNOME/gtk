@@ -4,6 +4,12 @@
 
 2005-02-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_handle_scrolling): Don't do
+	one roundtrip per motion event.  (#166173, pointed out
+	by Chris Lee, patch by Søren Sandmann)
+
+2005-02-03  Matthias Clasen  <mclasen@redhat.com>
+
 	* gdk/gdkkeynames.c: Make the gdk_key array const (#166075,
 	Tommi Komulainen)
 

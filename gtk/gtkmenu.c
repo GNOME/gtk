@@ -189,7 +189,9 @@ static void     gtk_menu_real_insert       (GtkMenuShell     *menu_shell,
 static void     gtk_menu_scrollbar_changed (GtkAdjustment    *adjustment,
 					    GtkMenu          *menu);
 static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
-					    gboolean         enter);
+					    gint	      event_x,
+					    gint	      event_y,
+					    gboolean          enter);
 static void     gtk_menu_set_tearoff_hints (GtkMenu          *menu,
 					    gint             width);
 static void     gtk_menu_style_set         (GtkWidget        *widget,
@@ -2763,7 +2765,7 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
   gboolean need_enter;
 
   if (GTK_IS_MENU (widget))
-    gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+    gtk_menu_handle_scrolling (GTK_MENU (widget), event->x_root, event->y_root, TRUE);
 
   /* We received the event for one of two reasons:
    *
@@ -2917,20 +2919,23 @@ gtk_menu_scroll (GtkWidget	*widget,
 }
 
 static void
-gtk_menu_handle_scrolling (GtkMenu *menu, gboolean enter)
+gtk_menu_handle_scrolling (GtkMenu *menu,
+			   gint x,
+			   gint y,
+			   gboolean enter)
 {
   GtkMenuShell *menu_shell;
   gint width, height;
-  gint x, y;
   gint border;
   GdkRectangle rect;
   gboolean in_arrow;
   gboolean scroll_fast = FALSE;
   guint vertical_padding;
+  gint top_x, top_y;
+  gint win_x, win_y;
 
   menu_shell = GTK_MENU_SHELL (menu);
 
-  gdk_window_get_pointer (GTK_WIDGET (menu)->window, &x, &y, NULL);
   gdk_drawable_get_size (GTK_WIDGET (menu)->window, &width, &height);
 
   gtk_widget_style_get (GTK_WIDGET (menu),
@@ -2940,10 +2945,15 @@ gtk_menu_handle_scrolling (GtkMenu *menu, gboolean enter)
   border = GTK_CONTAINER (menu)->border_width +
     GTK_WIDGET (menu)->style->ythickness + vertical_padding;
 
+  gdk_window_get_position (menu->toplevel->window, &top_x, &top_y);
+  gdk_window_get_position (GTK_WIDGET (menu)->window, &win_x, &win_y);
+  win_x += top_x;
+  win_y += top_y;
+  
   if (menu->upper_arrow_visible && !menu->tearoff_active)
     {
-      rect.x = 0;
-      rect.y = 0;
+      rect.x = win_x;
+      rect.y = win_y;
       rect.width = width;
       rect.height = MENU_SCROLL_ARROW_HEIGHT + border;
       
@@ -2981,8 +2991,8 @@ gtk_menu_handle_scrolling (GtkMenu *menu, gboolean enter)
   
   if (menu->lower_arrow_visible && !menu->tearoff_active)
     {
-      rect.x = 0;
-      rect.y = height - border - MENU_SCROLL_ARROW_HEIGHT;
+      rect.x = win_x;
+      rect.y = win_y + height - border - MENU_SCROLL_ARROW_HEIGHT;
       rect.width = width;
       rect.height = MENU_SCROLL_ARROW_HEIGHT + border;
 
@@ -3031,7 +3041,7 @@ gtk_menu_enter_notify (GtkWidget        *widget,
       GtkMenuShell *menu_shell = GTK_MENU_SHELL (widget);
 
       if (!menu_shell->ignore_enter)
-	gtk_menu_handle_scrolling (GTK_MENU (widget), TRUE);
+	gtk_menu_handle_scrolling (GTK_MENU (widget), event->x_root, event->y_root, TRUE);
     }
 
   if (menu_item && GTK_IS_MENU_ITEM (menu_item))
@@ -3096,7 +3106,7 @@ gtk_menu_leave_notify (GtkWidget        *widget,
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
     return TRUE; 
 
-  gtk_menu_handle_scrolling (menu, FALSE);
+  gtk_menu_handle_scrolling (menu, event->x_root, event->y_root, FALSE);
   
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
   
