@@ -1,3 +1,8 @@
+2004-08-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtksizegroup.c (gtk_size_group_add_widget): Fix
+	a typo, noticed by Tim Janik.
+
 Wed Aug 25 15:15:56 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_size_allocate): Change the Down

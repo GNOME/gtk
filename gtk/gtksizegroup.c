@@ -415,7 +415,7 @@ gtk_size_group_add_widget (GtkSizeGroup     *size_group,
   
   groups = get_size_groups (widget);
 
-  if (!g_slist_find (groups, widget))
+  if (!g_slist_find (groups, size_group))
     {
       groups = g_slist_prepend (groups, size_group);
       set_size_groups (widget, groups);
