@@ -1,3 +1,9 @@
+2003-12-09  Noah Levitt  <nlevitt@columbia.edu>
+
+	* gdk/gdkkeysyms.h:
+	* gdk/gdkkeyuni.c: Add keysyms Ukrainian_ghe_with_upturn,
+	Ukrainian_GHE_WITH_UPTURN. (#128529)
+
 2003-12-08  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdisplay-win32.c: Use <multimon.h> when compiling
