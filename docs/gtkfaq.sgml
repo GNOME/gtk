@@ -9,7 +9,7 @@
 <!-- NOTE: Use only one author tag, otherwise sgml2txt barfs - TRG --> 
 <author>Nathan Froyd, Tony Gale, Shawn T. Amundson, Emmanuel Deloget
 
-<date>August 28th 1999
+<date>August 29th 1999
 
 <abstract> This document is intended to answer questions that are likely to be 
 frequently asked by programmers using GTK+ or people who are just looking at 
@@ -2090,6 +2090,7 @@ parse_symbol (GScanner *scanner)
 
   return G_TOKEN_NONE;
 }
+
 int
 main (int argc, char *argv[])
 {
@@ -2151,6 +2152,73 @@ main (int argc, char *argv[])
   return 0;
 }
 </verb>
+
+You need to understand that the scanner will parse it's input and
+tokenize it, it is up to you to interpret these tokens, not define
+their types before they get parsed, e.g. watch gscanner parse a string:
+ 
+<verb>
+"hi i am 17"
+ |  | |  |
+ |  | |  v
+ |  | v  TOKEN_INT, value: 17
+ |  v TOKEN_IDENTIFIER, value: "am"
+ v  TOKEN_CHAR, value: 'i'
+TOKEN_IDENTIFIER, value: "hi"
+</verb>
+
+If you configure the scanner with:
+<verb>
+scanner->config->int_2_float = TRUE;
+scanner->config->char_2_token = TRUE;
+scanner->config->scan_symbols = TRUE;
+</verb>
+
+and add "am" as a symbol with
+<verb>
+g_scanner_add_symbol (scanner, "am", "symbol value");
+</verb>
+
+GScanner will parse it as
+
+<verb>
+"hi i am 17"
+ |  | |  |
+ |  | |  v
+ |  | v  TOKEN_FLOAT, value: 17.0  (automatic int->float conversion)
+ |  | TOKEN_SYMBOL, value: "symbol value"  (a successfull hash table lookup
+ |  |                                       turned a TOKEN_IDENTIFIER into a
+ |  |                                       TOKEN_SYMBOL and took over the
+ |  v                                       symbol's value)
+ v  'i'  ('i' can be a valid token as well, as all chars >0 and <256)
+TOKEN_IDENTIFIER, value: "hi"
+</verb>
+
+You need to match the token sequence with your code, and if you encounter
+something that you don't want, you error out:
+
+<verb>
+/* expect an identifier ("hi") */
+g_scanner_get_next_token (scanner);
+if (scanner->token != G_TOKEN_IDENTIFIER)
+  return G_TOKEN_IDENTIFIER;
+/* expect a token 'i' */
+g_scanner_get_next_token (scanner);
+if (scanner->token != 'i')
+  return 'i';
+/* expect a symbol ("am") */
+g_scanner_get_next_token (scanner);
+if (scanner->token != G_TOKEN_SYMBOL)
+  return G_TOKEN_SYMBOL;
+/* expect a float (17.0) */
+g_scanner_get_next_token (scanner);
+if (scanner->token != G_TOKEN_FLOAT)
+  return G_TOKEN_FLOAT;
+</verb>
+
+If you got past here, you have parsed "hi i am 17" and would have
+accepted "dooh i am 42" and  "bah i am 0.75" as well, but you would
+have not accepted "hi 7 am 17" or "hi i hi 17".
 
 <!-- ***************************************************************** -->
 <sect>GTK+ FAQ Contributions, Maintainers and Copyright
