@@ -446,7 +446,7 @@ gdk_fb_mouse_ms_open (GdkFBMouse   *mouse)
   guchar buf[7];
   struct termios tty;
 
-  fd = gdk_fb_mouse_dev_open ("/dev/ttyS0", O_RDWR);
+  fd = gdk_fb_mouse_dev_open ("/dev/mouse", O_RDWR);
   if (fd < 0)
     return FALSE;
   

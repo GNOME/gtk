@@ -1,5 +1,10 @@
 2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
 
+	* gdk/linux-fb/gdkmouse-fb.c (gdk_fb_mouse_ms_open):
+	/dev/ttyS0 -> /dev/mouse
+
+2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
+
 	* gdk/linux-fb/gdkfont-fb.c (gdk_fontset_load):
 	Added dummy gdk_fontset_load.
 
