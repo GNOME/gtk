@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-09 11:16-0500\n"
-"PO-Revision-Date: 2004-03-07 15:25+0100\n"
+"POT-Creation-Date: 2004-03-09 04:14+0100\n"
+"PO-Revision-Date: 2004-03-09 20:50+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -961,7 +961,7 @@ msgstr ""
 "Nemohu změnit aktuální adresář na %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:859 gtk/gtkpathbar.c:652
+#: gtk/gtkfilechooserdefault.c:859
 msgid "Home"
 msgstr "Domov"
 
@@ -1039,14 +1039,12 @@ msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
 #: gtk/gtkfilechooserdefault.c:2381
-#, fuzzy
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
 #: gtk/gtkfilechooserdefault.c:2383
-#, fuzzy
 msgid "Create in _folder:"
-msgstr "Vytvořit _adresář"
+msgstr "Vytvořit v _adresáři:"
 
 #: gtk/gtkfilechooserdefault.c:3322
 #, c-format
