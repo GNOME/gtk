@@ -343,7 +343,6 @@ target_drag_data_received  (GtkWidget          *widget,
 {
   if ((data->length >= 0) && (data->format == 8))
     {
-      char buf[1024];
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }

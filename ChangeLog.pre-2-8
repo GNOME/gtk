@@ -1,3 +1,15 @@
+Wed Oct 28 19:04:49 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: AIX has libpthreads, to make sure you can have
+	more than one thread. Also add -D_THREAD_SAFE, and reorder
+	configure.in so CFLAGS doesn't get clobbered when we actually
+	want to modify it
+
+	* gdk/gdkimage.c: initialize the bpp and byte_order fields properly
+	in gdk_image_get
+
+	* gtk/testdnd.c: removed unused variable "buf"
+
 Mon Oct 26 16:46:15 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcontainer.c (gtk_container_unregister_toplevel): 
