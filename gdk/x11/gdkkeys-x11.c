@@ -231,7 +231,7 @@ update_keymaps (void)
 	       */
 	      if (mask == GDK_CONTROL_MASK || mask == GDK_SHIFT_MASK ||
 		  mask == GDK_LOCK_MASK || mask == GDK_MOD1_MASK)
-		continue;
+		goto next;
 	      
               while (j < keysyms_per_keycode)
                 {
@@ -251,7 +251,8 @@ update_keymaps (void)
                   ++j;
                 }
             }
-      
+
+	next:
           ++i;
         }
     }
