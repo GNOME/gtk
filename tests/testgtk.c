@@ -4086,6 +4086,7 @@ create_dnd ()
   if (!window)
     {
       GdkPoint hotspot = {5,5};
+      
       gdk_dnd_set_drag_shape(modeller->window,
 			     &hotspot,
 			     rings->window,

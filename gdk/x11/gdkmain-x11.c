@@ -1671,9 +1671,11 @@ gdk_event_translate (GdkEvent *event,
 #endif
   gint return_val;
 
-  /* Are static variables used for this purpose thread-safe? */
-
   return_val = FALSE;
+
+  /* We need to play catch-up with the dnd motion events */
+  if(gdk_dnd.drag_really && xevent->type == MotionNotify)
+	while (XCheckTypedEvent(xevent->xany.display,MotionNotify,xevent));
 
   /* Find the GdkWindow that this event occurred in.
    * All events occur in some GdkWindow (otherwise, why
@@ -2030,7 +2032,6 @@ gdk_event_translate (GdkEvent *event,
     case MotionNotify:
       /* Print debugging info.
        */
-       while (XCheckTypedEvent(xevent->xmotion.display,xevent->type,xevent));
       GDK_NOTE (EVENTS,
 	g_print ("motion notify:\t\twindow: %ld  x,y: %d %d  hint: %s d:%d r%d\n",
 		 xevent->xmotion.window - base_id,

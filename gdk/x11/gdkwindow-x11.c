@@ -1367,6 +1367,9 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 
   g_return_if_fail (window != NULL);
 
+  /* This is needed, according to raster */
+  gdk_window_set_override_redirect(window, TRUE);
+
   window_private = (GdkWindowPrivate*) window;
   if (window_private->destroyed)
     return;
