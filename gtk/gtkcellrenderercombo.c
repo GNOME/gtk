@@ -321,6 +321,8 @@ find_text (GtkTreeModel *model,
       search_data->iter = *iter;
       search_data->found = TRUE;
     }
+
+  g_free (text);
   
   return search_data->found;
 }

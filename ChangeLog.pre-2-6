@@ -1,3 +1,8 @@
+2004-10-25  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkcellrenderercombo.c (find_text): Don't leak text. (#156325,
+	Olivier Andrieu)
+
 2004-10-25  Anders Carlsson  <andersca@imendio.com>
 
 	* gdk/gdk.symbols: 
