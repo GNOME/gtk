@@ -425,10 +425,10 @@ void	   gdk_bitmap_unref		(GdkBitmap  *pixmap);
 
 /* Images
  */
-GdkImage* gdk_image_new_bitmap(GdkVisual *,
-				gpointer,
-				gint,
-				gint);
+GdkImage* gdk_image_new_bitmap(GdkVisual     *visual,
+				gpointer      data,
+				gint          width,
+				gint          height);
 GdkImage*  gdk_image_new       (GdkImageType  type,
 				GdkVisual    *visual,
 				gint	      width,

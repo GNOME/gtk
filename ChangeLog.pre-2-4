@@ -1,3 +1,7 @@
+Fri Sep 18 19:11:10 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h: Add names to prototype for gdk_image_new_bitmap.
+
 Fri Sep 18 18:54:59 1998  Jay Cox  (jaycox@earthlink.net)
 
 	* gtk/Makefile.am: use $(AWK) instead of awk
