@@ -1,5 +1,16 @@
 2005-01-20  Matthias Clasen  <mclasen@redhat.com>
 
+	Support tinting in GtkCellRendererPixbuf (#162903, Jorn Baayen):
+	
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init) 
+	Add a follow-state property which when TRUE causes the pixbuf
+	to be tinted according to state.
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): 
+	Use follow-state and colorize the pixbuf when appropriate.	
+	
+2005-01-20  Matthias Clasen  <mclasen@redhat.com>
+
 	Support wrapping in GtkCellRendererText  (#163608):
 	
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): 

@@ -60,7 +60,8 @@ enum {
 	PROP_PIXBUF_EXPANDER_CLOSED,
 	PROP_STOCK_ID,
 	PROP_STOCK_SIZE,
-	PROP_STOCK_DETAIL
+	PROP_STOCK_DETAIL,
+	PROP_FOLLOW_STATE
 };
 
 static gpointer parent_class;
@@ -74,6 +75,7 @@ struct _GtkCellRendererPixbufPrivate
   gchar *stock_id;
   GtkIconSize stock_size;
   gchar *stock_detail;
+  gboolean follow_state;
 };
 
 
@@ -183,6 +185,24 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							NULL,
 							G_PARAM_READWRITE));
 
+  /**
+   * GtkCellRendererPixbuf:follow-state:
+   *
+   * Specifies whether the rendered pixbuf should be colorized
+   * according to the #GtkCellRendererState.
+   *
+   * Since: 2.8
+   */
+  g_object_class_install_property (object_class,
+				   PROP_FOLLOW_STATE,
+				   g_param_spec_boolean ("follow_state",
+ 							 P_("Follow State"),
+ 							 P_("Whether the rendered pixbuf should be "
+							    "colorized according to the state"),
+ 							 FALSE,
+ 							 G_PARAM_READWRITE));
+
+
   g_type_class_add_private (object_class, sizeof (GtkCellRendererPixbufPrivate));
 }
 
@@ -239,6 +259,9 @@ gtk_cell_renderer_pixbuf_get_property (GObject        *object,
       break;
     case PROP_STOCK_DETAIL:
       g_value_set_string (value, priv->stock_detail);
+      break;
+    case PROP_FOLLOW_STATE:
+      g_value_set_boolean (value, priv->follow_state);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -305,6 +328,9 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
         g_free (priv->stock_detail);
       priv->stock_detail = g_strdup (g_value_get_string (value));
       break;
+    case PROP_FOLLOW_STATE:
+      priv->follow_state = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -352,6 +378,53 @@ gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
                                                priv->stock_size,
                                                priv->stock_detail);
 }
+
+static GdkPixbuf *
+create_colorized_pixbuf (GdkPixbuf *src, 
+			 GdkColor  *new_color)
+{
+  gint i, j;
+  gint width, height, has_alpha, src_row_stride, dst_row_stride;
+  gint red_value, green_value, blue_value;
+  guchar *target_pixels;
+  guchar *original_pixels;
+  guchar *pixsrc;
+  guchar *pixdest;
+  GdkPixbuf *dest;
+  
+  red_value = new_color->red / 255.0;
+  green_value = new_color->green / 255.0;
+  blue_value = new_color->blue / 255.0;
+  
+  dest = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (src),
+			 gdk_pixbuf_get_has_alpha (src),
+			 gdk_pixbuf_get_bits_per_sample (src),
+			 gdk_pixbuf_get_width (src),
+			 gdk_pixbuf_get_height (src));
+  
+  has_alpha = gdk_pixbuf_get_has_alpha (src);
+  width = gdk_pixbuf_get_width (src);
+  height = gdk_pixbuf_get_height (src);
+  src_row_stride = gdk_pixbuf_get_rowstride (src);
+  dst_row_stride = gdk_pixbuf_get_rowstride (dest);
+  target_pixels = gdk_pixbuf_get_pixels (dest);
+  original_pixels = gdk_pixbuf_get_pixels (src);
+  
+  for (i = 0; i < height; i++) {
+    pixdest = target_pixels + i*dst_row_stride;
+    pixsrc = original_pixels + i*src_row_stride;
+    for (j = 0; j < width; j++) {		
+      *pixdest++ = (*pixsrc++ * red_value) >> 8;
+      *pixdest++ = (*pixsrc++ * green_value) >> 8;
+      *pixdest++ = (*pixsrc++ * blue_value) >> 8;
+      if (has_alpha) {
+	*pixdest++ = *pixsrc++;
+      }
+    }
+  }
+  return dest;
+}
+
 
 static void
 gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
@@ -434,6 +507,7 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GtkCellRendererPixbufPrivate *priv;
   GdkPixbuf *pixbuf;
   GdkPixbuf *invisible = NULL;
+  GdkPixbuf *colorized = NULL;
   GdkRectangle pix_rect;
   GdkRectangle draw_rect;
   gboolean stock_pixbuf = FALSE;
@@ -470,6 +544,10 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   pix_rect.width  -= cell->xpad * 2;
   pix_rect.height -= cell->ypad * 2;
 
+  if (!gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) ||
+      !gdk_rectangle_intersect (expose_area, &draw_rect, &draw_rect))
+    return;
+
   if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE || !cell->sensitive)
     {
       GtkIconSource *source;
@@ -496,22 +574,43 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
      
      pixbuf = invisible;
     }
+  else if (priv->follow_state && 
+	   (flags & (GTK_CELL_RENDERER_SELECTED|GTK_CELL_RENDERER_PRELIT) != 0))
+    {
+      GtkStateType state;
 
-  if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect) &&
-      gdk_rectangle_intersect (expose_area, &draw_rect, &draw_rect))
-    gdk_draw_pixbuf (window,
-		     widget->style->black_gc,
-		     pixbuf,
-		     /* pixbuf 0, 0 is at pix_rect.x, pix_rect.y */
-		     draw_rect.x - pix_rect.x,
-		     draw_rect.y - pix_rect.y,
-		     draw_rect.x,
-		     draw_rect.y,
-		     draw_rect.width,
-		     draw_rect.height,
-		     GDK_RGB_DITHER_NORMAL,
-		     0, 0);
+      if (flags & GTK_CELL_RENDERER_SELECTED != 0)
+	{
+	  if (GTK_WIDGET_HAS_FOCUS (widget))
+	    state = GTK_STATE_SELECTED;
+	  else
+	    state = GTK_STATE_ACTIVE;
+	}
+      else
+	state = GTK_STATE_PRELIGHT;
+
+      colorized = create_colorized_pixbuf (pixbuf,
+					   &widget->style->base[state]);
+
+      pixbuf = colorized;
+    }
+
+  gdk_draw_pixbuf (window,
+		   widget->style->black_gc,
+		   pixbuf,
+		   /* pixbuf 0, 0 is at pix_rect.x, pix_rect.y */
+		   draw_rect.x - pix_rect.x,
+		   draw_rect.y - pix_rect.y,
+		   draw_rect.x,
+		   draw_rect.y,
+		   draw_rect.width,
+		   draw_rect.height,
+		   GDK_RGB_DITHER_NORMAL,
+		   0, 0);
   
   if (invisible)
     g_object_unref (invisible);
+
+  if (colorized)
+    g_object_unref (colorized);
 }
