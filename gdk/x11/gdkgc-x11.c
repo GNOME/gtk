@@ -389,6 +389,17 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 			      XGCValues      *xvalues,
 			      unsigned long  *xvalues_mask)
 {
+  if (mask & GDK_GC_EXPOSURES)
+    xvalues->graphics_exposures = values->graphics_exposures;
+  else
+    xvalues->graphics_exposures = False;
+  *xvalues_mask |= GCGraphicsExposures;
+  
+  /* Optimization for the common case (gdk_gc_new()) */
+  if (values == NULL ||
+      mask == 0)
+    return;
+  
   if (mask & GDK_GC_FOREGROUND)
     {
       xvalues->foreground = values->foreground.pixel;
@@ -528,12 +539,6 @@ gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
       xvalues->clip_y_origin = values->clip_y_origin;
       *xvalues_mask |= GCClipYOrigin;
     }
-
-  if (mask & GDK_GC_EXPOSURES)
-    xvalues->graphics_exposures = values->graphics_exposures;
-  else
-    xvalues->graphics_exposures = False;
-  *xvalues_mask |= GCGraphicsExposures;
 
   if (mask & GDK_GC_LINE_WIDTH)
     {
