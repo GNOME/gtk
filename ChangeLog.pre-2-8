@@ -1,3 +1,8 @@
+Sun Jun  8 11:27:29 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkviewport.c (viewport_set_adjustment): Fix bug with 
+	set_adjustment (viewport, NULL);
+
 Fri Jun  6 16:25:44 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkviewport.c: Many fixes, along with extensive cleanups and 
