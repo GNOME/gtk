@@ -464,6 +464,7 @@ void	   gtk_widget_set_style		(GtkWidget	*widget,
 void	   gtk_widget_set_rc_style	(GtkWidget	*widget);
 void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
+void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 
 /* Tell other Gtk applications to use the same default colors.
  */
