@@ -1,6 +1,7 @@
 #ifndef _GDK_PIXBUF_H_
 #define _GDK_PIXBUF_H_
 
+#include <libart_lgpl/art_misc.h>
 #include <libart_lgpl/art_pixbuf.h>
 
 typedef struct {

@@ -2,7 +2,6 @@
  * io-png.c: GdkPixBuf image loader for PNG files.
  *
  * Author:
- *    Rasterman (raster@redhat.com).
  *    Miguel de Icaza (miguel@gnu.org)
  *
  */
@@ -19,6 +18,8 @@ image_load (FILE *f);
 	png_structp png;
 	png_infop   info_ptr, end_info;
 	int width, height, depth, color_type, interlace_type;
+	int have_alpha, number_passes;
+	art_u8 *data;
 	
 	g_return_val_if_fail (filename != NULL, NULL);
 
@@ -50,13 +51,40 @@ image_load (FILE *f);
 
 	if (color_type == color_type == PNG_COLOR_TYPE_PALETTE)
 		png_set_expand (png);
-	
-	png_set_strip_16 (png);
-	png_set_packing (png);
-	if (png_get_valid (png, info_ptr, PNG_INFO_tRNS))
-		png_set_expand (png);
 
+	/*
+	 * Strip 16 bit information to 8 bit
+	 */
+	png_set_strip_16 (png);
+
+	/*
+	 * Extract multiple pixels with bit depths 1, 2 and 4 from a single
+	 * byte into separate bytes
+	 */
+	png_set_packing (png);
+
+	/*
+	 * Makes the PNG file to be rendered into RGB or RGBA
+	 * modes (no matter of the bit depth nor the image
+	 * mode
+	 */
+	png_set_expand (png);
+
+	/*
+	 * Simplify loading by always having 4 bytes
+	 */
 	png_set_filler (png, 0xff, PNG_FILLER_AFTER);
 
-	/* FIXME finish this */
+	if (color_type & PNG_COLOR_MASK_ALPHA)
+		have_alpha = 1
+	else
+		have_alpha = 0;
+	
+	data = art_alloc (width * height * (3 + have_alpha));
+	if (!data){
+		png_destroy_read_struct (&png, &info_ptr, &end_info);
+		return NULL;
+	}
+
+	number_passes = png_set_interlace_handling (png);
 }
