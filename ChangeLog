@@ -1,5 +1,11 @@
 2004-11-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_activate): 
+	Queue the resize before setting the tearoff state, to 
+	make sure the torn-off menu picks up the size increase due
+	to the arrow in the torn off menu item.  (#157286, Adam
+	Hooper, fix proposed by Owen Taylor)
+
 	* gtk/gtkmenu.c (menu_change_screen): Don't unnecessarily
 	call gtk_menu_position(), since that function has issues
 	when called on a menu whose parent is unrealized.  (#157354,

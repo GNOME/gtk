@@ -249,11 +249,10 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
     {
       GtkMenu *menu = GTK_MENU (GTK_WIDGET (menu_item)->parent);
       
+      gtk_widget_queue_resize (GTK_WIDGET (menu_item));
       gtk_menu_set_tearoff_state (GTK_MENU (GTK_WIDGET (menu_item)->parent),
 				  !menu->torn_off);
     }
-
-  gtk_widget_queue_resize (GTK_WIDGET (menu_item));
 }
 
 static void
