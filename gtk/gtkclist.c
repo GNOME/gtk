@@ -4510,7 +4510,8 @@ gtk_clist_realize (GtkWidget *widget)
   /* We'll use this gc to do scrolling as well */
   gdk_gc_set_exposures (clist->fg_gc, TRUE);
 
-  values.foreground = widget->style->white;
+  values.foreground = (widget->style->white.pixel==0 ?
+		       widget->style->black:widget->style->white);
   values.function = GDK_XOR;
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
   clist->xor_gc = gdk_gc_new_with_values (widget->window,

@@ -283,18 +283,16 @@ gtk_hpaned_xor_line (GtkPaned *paned)
 
   if (!paned->xor_gc)
     {
-      values.foreground = widget->style->white;
-      values.function = GDK_XOR;
+      values.function = GDK_INVERT;
       values.subwindow_mode = GDK_INCLUDE_INFERIORS;
       paned->xor_gc = gdk_gc_new_with_values (widget->window,
 					      &values,
-					      GDK_GC_FOREGROUND |
 					      GDK_GC_FUNCTION |
 					      GDK_GC_SUBWINDOW);
     }
 
   xpos = paned->child1_size
-    + GTK_CONTAINER(paned)->border_width + paned->gutter_size / 2;
+    + GTK_CONTAINER (paned)->border_width + paned->gutter_size / 2;
 
   gdk_draw_line (widget->window, paned->xor_gc,
 		 xpos,
