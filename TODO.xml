@@ -1,0 +1,236 @@
+<todo>
+
+  <section>
+    <title>GDK</title>
+
+    <entry size="medium" status="70%" target="1.4">
+      <title>Add backing store support</title>
+      <description>
+	<p>
+	  GTK+'s drawing model involves clearing to a background, and
+	  then drawing widgets on top of this. Without having
+	  backing-store support, this results in flickering in various
+	  situations. Backing store cannot be added widget-by-widget,
+	  because the drawing in a particular window is not confined
+	  to a single widget. Instead it needs to be added per GDK
+	  window. 
+	</p>
+	<p>
+	  The way this is done is by having
+	  <tt>gdk_window_begin_paint()</tt>
+	  and <tt>gdk_window_end_paint()</tt> functions that
+	  redirect all drawing to a particular window to an offscreen
+	  pixmap, and then copy that offscreen pixmap back onto the
+	  screen when the paint operation is done. The implementation
+	  of this is mostly complete in the <tt>gtk-no-flicker</tt> branch of
+	  GTK+.
+	</p>
+      </description>
+      <url>http://www.gtk.org/~otaylor/gtk/1.4/gdk-drawing.html</url>
+      <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
+    </entry>
+
+    <entry size="medium" status="70%" target="1.4">
+      <title>32 Bit Coordinates</title>
+      <description>
+	<p>
+	  GTK+-1.2 and earlier share X's limitation on the
+	  size of coordinates and restrict all dimensions
+	  to 16 bit quantities. By clever use of X it is
+	  possible to lift this restriction and present a
+	  full 32-bit space to the user.
+	</p>
+      </description>
+      <url>http://www.gtk.org/~otaylor/gtk/1.4/gdk-drawing.html</url>
+      <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
+    </entry>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Customizable double-click timeout</title>
+      <description>
+	<p>
+	  The current fixed double-click timeout in GTK+
+	  is too small for some users. This needs to be
+	  customizable
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+      <bugs>#3958</bugs>
+    </entry>
+  </section>
+
+  <section>
+    <title>Internationalization</title>
+    
+    <entry size="big" status="0%" target="1.4">
+      <title>Integrate Pango</title>
+      <description>
+	<p>
+	  The purpose of the Pango project is to provide a system for
+	  layout and rendering of internationlized text. It handles
+	  most of the issues necessary to 
+	</p>
+      </description>
+      <url>http://www.pango.org</url>
+      <contact>gtk-i18n-list@redhat.com</contact>
+    </entry>
+
+    <entry size="medium" status="20%" target="1.4">
+      <title>Switch to using UTF-8</title>
+      <description>
+	<p>
+	  This is closely related to Pango integration. Pango deals
+	  with all strings in terms of UTF-8; by switching GTK+ over
+	  to UTF-8 we make it considerably simpler for developers to
+	  support multiple languages properly while still retaining
+	  a large degree of compatiblity with existing programs.
+	</p>
+	<p>
+	  Some work has already been done on this as part of the Win32
+	  port, since the Win32 port is currently using UTF-8 for all
+	  strings. In general, this should be an easy job; the hardest
+	  parts are places like GtkFileSelection, cut and paste, and
+	  input method support where there is interaction between GTK+
+	  and the operating system.
+	</p>
+      </description>
+      <contact>gtk-i18n-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="1.4">
+      <title>Rewrite Input Method Support</title>
+      <description>
+	<p>
+	  Current support for Input Methods is done via XIM, with
+	  supported styles being over-the-spot and the root-window
+	  styles. However, the over-the-spot style is not going to
+	  work well with the Pango integration, since it relies on the
+	  text rendering in the program being done in the standard
+	  Xlib style, so it will be necessary to also support
+	  on-the-spot input. On-the-spot input is done by supplying a
+	  set of callbacks that are invoked by the input methods.
+	</p>
+	<p>
+	  While adding the above support, it may be desirable to
+	  generalize the input-method support to the point where 
+	</p>
+      </description>
+      <contact>gtk-i18n-list@redhat.com</contact>
+    </entry>
+  </section>
+
+  <section>
+    <title>GTK+ Core</title>
+
+    <entry size="big" status="25%" target="1.4">
+      <title>Split GtkObject out</title>
+      <description>
+	<p>
+	  The GTK+ object system is already in use in quite a few different
+	  non-GUI applications; it would be desirable for these uses
+	  to have the object system separated from the GUI portions
+	  of GTK+.
+	</p>
+      </description>
+      <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="1.4">
+      <title>Allow argument customization</title>
+      <description>
+	<p>
+	  Many types of object arguments (expander style in the CList,
+	  default padding in button boxes, etc), conceptually go with
+	  the theme, or as user preferences; they should not be set by
+	  a particular program.
+	</p>
+	<p>
+	  There needs to be a mechanism for themes to be able to
+	  control these arguments from the RC file. 
+	</p>
+      </description>
+    </entry>
+
+    <entry size="medium" status="0%" target="1.4">
+      <title>Allow global customization</title>
+      <description>
+	<p>
+	  There are a number of global parameters in GTK+ and GDK that should be
+	  customizable by the user, such as the double-click timeout,
+	  or whether widgets should be backing-stored by default. 
+	</p>
+	<p>
+	  If we had argument customization from an RC file, it might
+	  be possible to do this simply with a global object with
+	  arguments for the various global parameters that was
+	  customized in the same fashion as object arguments.
+	</p>
+      </description>
+    </entry>
+  </section>
+
+  <section>
+    <title>GTK+ Widgets</title>
+
+    <entry size="small" status="0%" target="1.4">
+      <title>Make GtkFrame use a label</title>
+      <description>
+	<p>
+	  The title of a frame should simply be another child widget
+	  which, by default, holds a label widget. This will important
+	  with Pango where proper text behavior will be more complex to
+	  implement, but is also useful for certain user-interface
+	  designs. (It can be useful, for example, to put a checkbutton
+	  in that slot.)
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="50%" target="1.4">
+      <title>Replace GtkText Widget</title>
+      <description>
+	<p>
+	  The GtkText widget is badly in need of replacement, since it is
+	  buggy and insufficiently feature rich. There are a number
+	  of possible candidates for a replacement, with the most
+	  promising at the current time being Havoc Pennington's
+	  (hp@redhat.com) port of the Tk Text widget.
+	</p>
+	<p>
+	  As part of this job it will be necessary to add
+	  <a href="http://www.pango.org">Pango</a> support to the
+	  replacement. The structure of the Tk text widget port seems
+	  suited to this as it works paragraph-by-paragraph, and
+	  Pango works at a sub-paragraph scale.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="big" status="0%" target="> 1.4">
+      <title>Add unified set of List/Tree/Grid widgets</title>
+      <description>
+	<p>
+	  Currently, GTK+ has a large number of list and tree widgets
+	  (GtkList, GtkTree, GtkCList, GtkCTree), non of which are
+	  ideal. The GtkList and GtkTree widgets perform badly on large
+	  sets. (GtkTree widget is also quite buggy.) GtkCList
+	  and GtkCTree mostly solve the size problem, but are quite
+	  complex and, despite that, not very flexible. They are limited to
+	  displaying pixmaps and text, and neither support arbitrary
+	  widgets nor custom drawing functions.
+	</p>
+	<p>
+	  In addition to list and tree widgets, a closely related need
+	  is a sheet widget that displays a (possibly editable) 2-D grid.
+	  It would be desirable to have a complete set of widgets that
+	  could be presented as the one-true-solution for these needs.
+	  Model/View techniques could be used effectively to increase
+	  both the simplicity and power of the interfaces.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+  </section>
+</todo>

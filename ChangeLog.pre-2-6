@@ -1,3 +1,9 @@
+Wed Feb 23 22:59:50 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* TODO.xml: Added XML-structured TODO file.
+	* docs/make-todo: python script to turn TODO.xml into
+	  pretty XML output. 
+
 2000-02-23  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkstyle.c (gtk_default_draw_handle): add a 'paned' mode to
