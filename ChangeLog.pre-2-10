@@ -1,3 +1,9 @@
+Fri Apr 18 15:11:50 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c (_gdk_display_x11_get_type)
+	gdk/x11/gdkscreen-x11.c (_gdk_screen_x11_get_type): Fix
+	wrong use of base_finalize. (#105126, Sven Neumann)
+
 Fri Apr 18 15:06:00 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_constrain_size): Fix

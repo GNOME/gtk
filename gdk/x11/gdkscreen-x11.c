@@ -70,7 +70,7 @@ _gdk_screen_x11_get_type ()
 	{
 	  sizeof (GdkScreenX11Class),
 	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) gdk_screen_x11_finalize,
+	  (GBaseFinalizeFunc) NULL,
 	  (GClassInitFunc) gdk_screen_x11_class_init,
 	  NULL,			/* class_finalize */
 	  NULL,			/* class_data */
