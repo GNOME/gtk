@@ -781,6 +781,7 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
 	  child->widget = gtk_radio_button_new (widget
 						? gtk_radio_button_group (GTK_RADIO_BUTTON (widget))
 						: NULL);
+	  gtk_button_set_relief (GTK_BUTTON (child->widget), toolbar->relief);
 	  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (child->widget), FALSE);
 	}
 
@@ -911,6 +912,7 @@ gtk_toolbar_set_button_relief (GtkToolbar *toolbar,
 	{
 	  child = children->data;
 	  if (child->type == GTK_TOOLBAR_CHILD_BUTTON ||
+	      child->type == GTK_TOOLBAR_CHILD_RADIOBUTTON ||
 	      child->type == GTK_TOOLBAR_CHILD_TOGGLEBUTTON)
 	    gtk_button_set_relief (GTK_BUTTON (child->widget), relief);
 	}
