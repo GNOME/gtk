@@ -1,3 +1,7 @@
+2004-10-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtk-sections.txt: Add new DND functions.
+
 2004-10-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-update-icon-cache.xml: A man page for gtk-update-icon-cache.

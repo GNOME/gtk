@@ -3414,6 +3414,7 @@ gtk_tool_item_get_relief_style
 gtk_tool_item_retrieve_proxy_menu_item
 gtk_tool_item_get_proxy_menu_item
 gtk_tool_item_set_proxy_menu_item
+gtk_tool_item_rebuild_menu
 
 <SUBSECTION Standard>
 GTK_TYPE_TOOL_ITEM
@@ -3487,6 +3488,7 @@ gtk_menu_tool_button_new
 gtk_menu_tool_button_new_from_stock
 gtk_menu_tool_button_set_menu
 gtk_menu_tool_button_get_menu
+gtk_menu_tool_button_set_arrow_tooltip
 
 <SUBSECTION Standard>
 GtkMenuToolButtonClass
@@ -4735,6 +4737,8 @@ gtk_get_default_language
 gtk_parse_args
 gtk_init
 gtk_init_check
+gtk_init_with_args
+gtk_get_option_group
 gtk_exit
 gtk_events_pending
 gtk_main
@@ -4991,6 +4995,8 @@ gtk_target_list_unref
 gtk_target_list_add
 gtk_target_list_add_table
 gtk_target_list_add_text_targets
+gtk_target_list_add_image_targets
+gtk_target_list_add_uri_targets
 gtk_target_list_remove
 gtk_target_list_find
 gtk_selection_owner_set
@@ -5002,6 +5008,10 @@ gtk_selection_convert
 gtk_selection_data_set
 gtk_selection_data_set_text
 gtk_selection_data_get_text
+gtk_selection_data_set_pixbuf
+gtk_selection_data_get_pixbuf
+gtk_selection_data_set_uris
+gtk_selection_data_get_uris
 gtk_selection_data_get_targets
 gtk_selection_data_targets_include_text
 gtk_selection_remove_all
@@ -5060,6 +5070,8 @@ gtk_drag_dest_find_target
 gtk_drag_dest_get_target_list
 gtk_drag_dest_set_target_list
 gtk_drag_dest_add_text_targets
+gtk_drag_dest_add_image_targets
+gtk_drag_dest_add_uri_targets
 gtk_drag_finish
 gtk_drag_get_data
 gtk_drag_get_source_widget
