@@ -29,18 +29,18 @@
 #include <stdio.h>
 #include <gdk/gdk.h>
 
-#include "gdkprivate.h"
+#include "gdkprivate-win32.h"
 
-static guint gdk_xid_hash    (XID *xid);
-static gint  gdk_xid_compare (XID *a,
-			      XID *b);
+static guint gdk_xid_hash    (HANDLE *xid);
+static gint  gdk_xid_compare (HANDLE *a,
+			      HANDLE *b);
 
 
 static GHashTable *xid_ht = NULL;
 
 
 void
-gdk_xid_table_insert (XID      *xid,
+gdk_xid_table_insert (HANDLE   *xid,
 		      gpointer  data)
 {
   g_return_if_fail (xid != NULL);
@@ -53,7 +53,7 @@ gdk_xid_table_insert (XID      *xid,
 }
 
 void
-gdk_xid_table_remove (XID xid)
+gdk_xid_table_remove (HANDLE xid)
 {
   if (!xid_ht)
     xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
@@ -63,7 +63,7 @@ gdk_xid_table_remove (XID xid)
 }
 
 gpointer
-gdk_xid_table_lookup (XID xid)
+gdk_xid_table_lookup (HANDLE xid)
 {
   gpointer data = NULL;
 
@@ -75,14 +75,14 @@ gdk_xid_table_lookup (XID xid)
 
 
 static guint
-gdk_xid_hash (XID *xid)
+gdk_xid_hash (HANDLE *xid)
 {
   return (guint) *xid;
 }
 
 static gint
-gdk_xid_compare (XID *a,
-		 XID *b)
+gdk_xid_compare (HANDLE *a,
+		 HANDLE *b)
 {
   return (*a == *b);
 }

@@ -261,8 +261,8 @@ struct _GdkRegionPrivate
   HRGN xregion;
 };
 
-void gdk_selection_init (void);
-void gdk_dnd_exit (void);
+void gdk_win32_selection_init (void);
+void gdk_win32_dnd_exit (void);
 
 GdkColormap* gdk_colormap_lookup (Colormap  xcolormap);
 GdkVisual*   gdk_visual_lookup	 (Visual   *xvisual);
@@ -309,6 +309,7 @@ char *gdk_color_to_string        (const GdkColor *);
 
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
 
+extern GdkDrawableClass  _gdk_win32_drawable_class;
 extern HWND		 gdk_root_window;
 GDKVAR ATOM		 gdk_selection_property;
 GDKVAR gchar		*gdk_progclass;

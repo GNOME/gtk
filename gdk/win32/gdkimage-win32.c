@@ -29,17 +29,24 @@
 #include "gdk.h"		/* For gdk_error_trap_* / gdk_flush_* */
 #include "gdkimage.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkwin32.h"
 
-static void gdk_image_put_normal (GdkDrawable *drawable,
-				  GdkGC       *gc,
-				  GdkImage    *image,
-				  gint         xsrc,
-				  gint         ysrc,
-				  gint         xdest,
-				  gint         ydest,
-				  gint         width,
-				  gint         height);
+static void gdk_win32_image_destroy (GdkImage    *image);
+static void gdk_image_put  (GdkImage    *image,
+			    GdkDrawable *drawable,
+			    GdkGC       *gc,
+			    gint         xsrc,
+			    gint         ysrc,
+			    gint         xdest,
+			    gint         ydest,
+			    gint         width,
+			    gint         height);
+
+static GdkImageClass image_class = {
+  gdk_win32_image_destroy,
+  gdk_image_put
+};
+
 static GList *image_list = NULL;
 
 void
@@ -50,7 +57,7 @@ gdk_image_exit (void)
   while (image_list)
     {
       image = image_list->data;
-      gdk_image_destroy (image);
+      gdk_win32_image_destroy (image);
     }
 }
 
@@ -62,7 +69,7 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
 {
   Visual *xvisual;
   GdkImage *image;
-  GdkImagePrivate *private;
+  GdkImagePrivateWin32 *private;
   struct {
     BITMAPINFOHEADER bmiHeader;
     union {
@@ -74,9 +81,11 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
   int bpl = (w-1)/8 + 1;
   int bpl32 = ((w-1)/32 + 1)*4;
 
-  private = g_new(GdkImagePrivate, 1);
+  private = g_new (GdkImagePrivateWin32, 1);
   image = (GdkImage *) private;
-  private->image_put = gdk_image_put_normal;
+  private->base.ref_count = 1;
+  private->base.klass = &image_class;
+
   image->type = GDK_IMAGE_SHARED;
   image->visual = visual;
   image->width = w;
@@ -140,7 +149,7 @@ gdk_image_new_with_depth (GdkImageType  type,
 			  gint		depth)
 {
   GdkImage *image;
-  GdkImagePrivate *private;
+  GdkImagePrivateWin32 *private;
   Visual *xvisual;
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -162,10 +171,11 @@ gdk_image_new_with_depth (GdkImageType  type,
 			    (type == GDK_IMAGE_SHARED_PIXMAP ? "shared_pixmap" :
 			     "???"))));
 
-  private = g_new (GdkImagePrivate, 1);
-  image = (GdkImage*) private;
+  private = g_new (GdkImagePrivateWin32, 1);
+  image = (GdkImage *) private;
 
-  private->image_put = NULL;
+  private->base.ref_count = 1;
+  private->base.klass = &image_class;
 
   image->type = type;
   image->visual = visual;
@@ -175,8 +185,6 @@ gdk_image_new_with_depth (GdkImageType  type,
   
   xvisual = ((GdkVisualPrivate*) visual)->xvisual;
   
-  private->image_put = gdk_image_put_normal;
-      
   bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
   bmi.bmiHeader.biWidth = width;
   bmi.bmiHeader.biHeight = -height;
@@ -300,7 +308,7 @@ gdk_image_get (GdkWindow *window,
 	       gint       height)
 {
   GdkImage *image;
-  GdkImagePrivate *private;
+  GdkImagePrivateWin32 *private;
   HDC hdc, memdc;
   struct {
     BITMAPINFOHEADER bmiHeader;
@@ -323,10 +331,11 @@ gdk_image_get (GdkWindow *window,
   GDK_NOTE (MISC, g_print ("gdk_image_get: %#x %dx%d@+%d+%d\n",
 			   GDK_DRAWABLE_XID (window), width, height, x, y));
 
-  private = g_new (GdkImagePrivate, 1);
+  private = g_new (GdkImagePrivateWin32, 1);
   image = (GdkImage*) private;
 
-  private->image_put = gdk_image_put_normal;
+  private->base.ref_count = 1;
+  private->base.klass = &image_class;
 
   image->type = GDK_IMAGE_SHARED;
   image->visual = gdk_window_get_visual (window);
@@ -540,11 +549,8 @@ gdk_image_get_pixel (GdkImage *image,
 		     gint y)
 {
   guint32 pixel;
-  GdkImagePrivate *private;
 
   g_return_val_if_fail (image != NULL, 0);
-
-  private = (GdkImagePrivate *) image;
 
   g_return_val_if_fail (x >= 0 && x < image->width
 			&& y >= 0 && y < image->height, 0);
@@ -585,11 +591,7 @@ gdk_image_put_pixel (GdkImage *image,
 		     gint y,
 		     guint32 pixel)
 {
-  GdkImagePrivate *private;
-
   g_return_if_fail (image != NULL);
-
-  private = (GdkImagePrivate *) image;
 
   g_return_if_fail (x >= 0 && x < image->width && y >= 0 && y < image->height);
 
@@ -617,16 +619,16 @@ gdk_image_put_pixel (GdkImage *image,
     }
 }
 
-void
-gdk_image_destroy (GdkImage *image)
+static void
+gdk_win32_image_destroy (GdkImage *image)
 {
-  GdkImagePrivate *private;
+  GdkImagePrivateWin32 *private;
 
   g_return_if_fail (image != NULL);
 
-  private = (GdkImagePrivate*) image;
+  private = (GdkImagePrivateWin32 *) image;
 
-  GDK_NOTE (MISC, g_print ("gdk_image_destroy: %#x%s\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x%s\n",
 			   private->ximage,
 			   (image->type == GDK_IMAGE_SHARED_PIXMAP ?
 			    " (shared pixmap)" : "")));
@@ -641,7 +643,7 @@ gdk_image_destroy (GdkImage *image)
 
     case GDK_IMAGE_SHARED:
       if (!DeleteObject (private->ximage))
-	g_warning ("gdk_image_destroy: DeleteObject failed");
+	g_warning ("gdk_win32_image_destroy: DeleteObject failed");
       break;
 
     default:
@@ -652,21 +654,21 @@ gdk_image_destroy (GdkImage *image)
 }
 
 static void
-gdk_image_put_normal (GdkDrawable *drawable,
-		      GdkGC       *gc,
-		      GdkImage    *image,
-		      gint         xsrc,
-		      gint         ysrc,
-		      gint         xdest,
-		      gint         ydest,
-		      gint         width,
-		      gint         height)
+gdk_image_put (GdkImage    *image,
+	       GdkDrawable *drawable,
+	       GdkGC       *gc,
+	       gint         xsrc,
+	       gint         ysrc,
+	       gint         xdest,
+	       gint         ydest,
+	       gint         width,
+	       gint         height)
 {
   GdkDrawablePrivate *drawable_private;
-  GdkImagePrivate *image_private;
+  GdkImagePrivateWin32 *image_private;
   GdkGCPrivate *gc_private;
   HDC hdc;
-  GdkColormapPrivate *colormap_private;
+  GdkColormapPrivateWin32 *colormap_private;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (image != NULL);
@@ -674,14 +676,14 @@ gdk_image_put_normal (GdkDrawable *drawable,
 
   if (GDK_DRAWABLE_DESTROYED (drawable))
     return;
-  image_private = (GdkImagePrivate*) image;
-  drawable_private = (GdkDrawablePrivate*) drawable;
-  gc_private = (GdkGCPrivate*) gc;
+  image_private = (GdkImagePrivateWin32 *) image;
+  drawable_private = (GdkDrawablePrivate *) drawable;
+  gc_private = (GdkGCPrivate *) gc;
 
   /* The image can in fact be "shared", so don't test */
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
-  colormap_private = (GdkColormapPrivate *) drawable_private->colormap;
+  hdc = gdk_gc_predraw (drawable, gc_private);
+  colormap_private = (GdkColormapPrivateWin32 *) drawable_private->colormap;
   if (colormap_private && colormap_private->xcolormap->rc_palette)
     {
       DIBSECTION ds;
@@ -702,7 +704,7 @@ gdk_image_put_normal (GdkDrawable *drawable,
       if (GetObject (image_private->ximage, sizeof (DIBSECTION),
 		     &ds) != sizeof (DIBSECTION))
 	{
-	  g_warning ("gdk_image_put_normal: GetObject failed");
+	  g_warning ("gdk_image_put: GetObject failed");
 	}
 #if 0
       g_print("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
@@ -734,26 +736,27 @@ gdk_image_put_normal (GdkDrawable *drawable,
 
       if ((memdc = CreateCompatibleDC (hdc)) == NULL)
 	{
-	  g_warning ("gdk_image_put_normal: CreateCompatibleDC failed");
-	  gdk_gc_postdraw (drawable_private, gc_private);
+	  g_warning ("gdk_image_put: CreateCompatibleDC failed");
+	  gdk_gc_postdraw (drawable, gc_private);
 	  return;
 	}
 
       if ((oldbitmap = SelectObject (memdc, image_private->ximage)) == NULL)
 	{
-	  g_warning ("gdk_image_put_normal: SelectObject #1 failed");
-	  gdk_gc_postdraw (drawable_private, gc_private);
+	  g_warning ("gdk_image_put: SelectObject #1 failed");
+	  gdk_gc_postdraw (drawable, gc_private);
 	  return;
 	}
+
       if (!BitBlt (hdc, xdest, ydest, width, height,
 		   memdc, xsrc, ysrc, SRCCOPY))
-	g_warning ("gdk_image_put_normal: BitBlt failed");
+	g_warning ("gdk_image_put: BitBlt failed");
 
       if (SelectObject (memdc, oldbitmap) == NULL)
 	g_warning ("gdk_image_put_normal: SelectObject #2 failed");
 
       if (!DeleteDC (memdc))
-	g_warning ("gdk_image_put_normal: DeleteDC failed");
+	g_warning ("gdk_image_put: DeleteDC failed");
     }
-  gdk_gc_postdraw (drawable_private, gc_private);
+  gdk_gc_postdraw (drawable, gc_private);
 }

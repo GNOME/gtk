@@ -178,8 +178,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   if (source_image->depth != 1 || mask_image->depth != 1)
     {
-    gdk_image_destroy (source_image);
-    gdk_image_destroy (mask_image);
+    gdk_image_unref (source_image);
+    gdk_image_unref (mask_image);
     g_return_val_if_fail (source_image->depth == 1 && mask_image->depth == 1,
 			  NULL);
     }
@@ -243,8 +243,8 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   g_free (XORmask);
   g_free (ANDmask);
 
-  gdk_image_destroy (source_image);
-  gdk_image_destroy (mask_image);
+  gdk_image_unref (source_image);
+  gdk_image_unref (mask_image);
 
   private = g_new (GdkCursorPrivate, 1);
   private->xcursor = xcursor;

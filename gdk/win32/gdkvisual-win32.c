@@ -27,7 +27,7 @@
 #include "config.h"
 
 #include "gdkvisual.h"
-#include "gdkprivate.h"
+#include "gdkprivate-win32.h"
 
 static void  gdk_visual_decompose_mask (gulong     mask,
 					gint      *shift,

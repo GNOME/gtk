@@ -69,8 +69,6 @@
 typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
-gint gdk_event_func_from_window_proc = FALSE;
-
 typedef enum
 {
   /* Following flag is set for events on the event queue during
@@ -667,54 +665,6 @@ gdk_io_invoke (GIOChannel   *source,
     closure->function (closure->data, g_io_channel_unix_get_fd (source), gdk_cond);
 
   return TRUE;
-}
-
-gint
-gdk_input_add_full (gint	      source,
-		    GdkInputCondition condition,
-		    GdkInputFunction  function,
-		    gpointer	      data,
-		    GdkDestroyNotify  destroy)
-{
-  guint result;
-  GdkIOClosure *closure = g_new (GdkIOClosure, 1);
-  GIOChannel *channel;
-  GIOCondition cond = 0;
-
-  closure->function = function;
-  closure->condition = condition;
-  closure->notify = destroy;
-  closure->data = data;
-
-  if (condition & GDK_INPUT_READ)
-    cond |= (G_IO_IN | G_IO_PRI);
-  if (condition & GDK_INPUT_WRITE)
-    cond |= G_IO_OUT;
-  if (condition & GDK_INPUT_EXCEPTION)
-    cond |= G_IO_ERR|G_IO_HUP|G_IO_NVAL;
-
-  channel = g_io_channel_unix_new (source);
-  result = g_io_add_watch_full (channel, G_PRIORITY_DEFAULT, cond,
-				gdk_io_invoke,
-				closure, gdk_io_destroy);
-  g_io_channel_unref (channel);
-
-  return result;
-}
-
-gint
-gdk_input_add (gint		 source,
-	       GdkInputCondition condition,
-	       GdkInputFunction	 function,
-	       gpointer		 data)
-{
-  return gdk_input_add_full (source, condition, function, data, NULL);
-}
-
-void
-gdk_input_remove (gint tag)
-{
-  g_source_remove (tag);
 }
 
 static GdkFilterReturn
@@ -4660,3 +4610,8 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   /* XXX */
 }
 
+void
+gdk_flush (void)
+{
+  GdiFlush ();
+}

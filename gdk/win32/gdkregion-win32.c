@@ -27,7 +27,7 @@
 #include "config.h"
 
 #include "gdk.h"
-#include "gdkprivate.h"
+#include "gdkprivate-win32.h"
 
 
 GdkRegion*
@@ -274,9 +274,10 @@ gdk_region_union_with_rect (GdkRegion      *region,
   return res;
 }
 
-GdkRegion*    
-gdk_regions_intersect (GdkRegion      *source1,
-                       GdkRegion      *source2)
+static GdkRegion *
+gdk_regions_op  (GdkRegion *source1,
+		 GdkRegion *source2,
+		 guint      op)
 {
   GdkRegionPrivate *private1;
   GdkRegionPrivate *private2;
@@ -292,76 +293,34 @@ gdk_regions_intersect (GdkRegion      *source1,
   res = gdk_region_new ();
   res_private = (GdkRegionPrivate *) res;
   
-  CombineRgn (res_private->xregion, private1->xregion, private2->xregion,
-	      RGN_AND);
+  CombineRgn (res_private->xregion, private1->xregion, private2->xregion, op);
   return res;
 }
 
-GdkRegion* 
-gdk_regions_union (GdkRegion      *source1,
-                   GdkRegion      *source2)
+GdkRegion*    
+gdk_regions_intersect (GdkRegion *source1,
+                       GdkRegion *source2)
 {
-  GdkRegionPrivate *private1;
-  GdkRegionPrivate *private2;
-  GdkRegion *res;
-  GdkRegionPrivate *res_private;
+  return gdk_regions_op (source1, source2, RGN_AND);
+}
 
-  g_return_val_if_fail (source1 != NULL, NULL);
-  g_return_val_if_fail (source2 != NULL, NULL);
-
-  private1 = (GdkRegionPrivate *) source1;
-  private2 = (GdkRegionPrivate *) source2;
-
-  res = gdk_region_new ();
-  res_private = (GdkRegionPrivate *) res;
-  
-  CombineRgn (res_private->xregion, private1->xregion, private2->xregion,
-	      RGN_OR);
-  return res;
+GdkRegion* 
+gdk_regions_union (GdkRegion *source1,
+                   GdkRegion *source2)
+{
+  return gdk_regions_op (source1, source2, RGN_OR);
 }
 
 GdkRegion*    
 gdk_regions_subtract (GdkRegion      *source1,
                       GdkRegion      *source2)
 {
-  GdkRegionPrivate *private1;
-  GdkRegionPrivate *private2;
-  GdkRegion *res;
-  GdkRegionPrivate *res_private;
-
-  g_return_val_if_fail (source1 != NULL, NULL);
-  g_return_val_if_fail (source2 != NULL, NULL);
-
-  private1 = (GdkRegionPrivate *) source1;
-  private2 = (GdkRegionPrivate *) source2;
-
-  res = gdk_region_new ();
-  res_private = (GdkRegionPrivate *) res;
-  
-  CombineRgn (res_private->xregion, private1->xregion, private2->xregion,
-	      RGN_DIFF);
-  return res;
+  return gdk_regions_op (source1, source2, RGN_DIFF);
 }
 
 GdkRegion*    
 gdk_regions_xor (GdkRegion      *source1,
                  GdkRegion      *source2)
 {
-  GdkRegionPrivate *private1;
-  GdkRegionPrivate *private2;
-  GdkRegion *res;
-  GdkRegionPrivate *res_private;
-
-  g_return_val_if_fail (source1 != NULL, NULL);
-  g_return_val_if_fail (source2 != NULL, NULL);
-
-  private1 = (GdkRegionPrivate *) source1;
-  private2 = (GdkRegionPrivate *) source2;
-
-  res = gdk_region_new ();
-  res_private = (GdkRegionPrivate *) res;
-  
-  CombineRgn (res_private->xregion, private1->xregion, private2->xregion,
-	      RGN_XOR);
-  return res;
+  return gdk_regions_op (source1, source2, RGN_XOR);
 }

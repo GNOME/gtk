@@ -3,8 +3,6 @@ EXPORTS
 	gdk_atom_name
 	gdk_beep
 	gdk_bitmap_create_from_data
-	gdk_bitmap_ref
-	gdk_bitmap_unref
 	gdk_char_height
 	gdk_char_measure
 	gdk_char_width
@@ -55,7 +53,6 @@ EXPORTS
 	gdk_draw_indexed_image
 	gdk_draw_line
 	gdk_draw_lines
-	gdk_draw_pixmap
 	gdk_draw_point
 	gdk_draw_points
 	gdk_draw_polygon
@@ -103,7 +100,6 @@ EXPORTS
 	gdk_free_compound_text
 	gdk_free_text_list
 	gdk_gc_copy
-	gdk_gc_destroy
 	gdk_gc_get_values
 	gdk_gc_new
 	gdk_gc_new_with_values
@@ -142,7 +138,6 @@ EXPORTS
 	gdk_im_ready
 	gdk_im_set_best_style
 	gdk_image_bitmap_new
-	gdk_image_destroy
 	gdk_image_get
 	gdk_image_get_pixel
 	gdk_image_new
@@ -184,8 +179,6 @@ EXPORTS
 	gdk_pixmap_create_on_shared_image
 	gdk_pixmap_foreign_new
 	gdk_pixmap_new
-	gdk_pixmap_ref
-	gdk_pixmap_unref
 	gdk_pointer_grab
 	gdk_pointer_is_grabbed
 	gdk_pointer_ungrab
@@ -212,18 +205,6 @@ EXPORTS
 	gdk_regions_subtract
 	gdk_regions_union
 	gdk_regions_xor
-	gdk_rgb_cmap_free
-	gdk_rgb_cmap_new
-	gdk_rgb_ditherable
-	gdk_rgb_gc_set_background
-	gdk_rgb_gc_set_foreground
-	gdk_rgb_get_cmap
-	gdk_rgb_get_visual
-	gdk_rgb_init
-	gdk_rgb_set_install
-	gdk_rgb_set_min_colors
-	gdk_rgb_set_verbose
-	gdk_rgb_xpixel_from_rgb
 	gdk_root_parent
 	gdk_screen_height
 	gdk_screen_height_mm
@@ -291,7 +272,6 @@ EXPORTS
 	gdk_window_move_resize
 	gdk_window_new
 	gdk_window_raise
-	gdk_window_ref
 	gdk_window_register_dnd
 	gdk_window_remove_filter
 	gdk_window_reparent
@@ -316,7 +296,6 @@ EXPORTS
 	gdk_window_set_user_data
 	gdk_window_shape_combine_mask
 	gdk_window_show
-	gdk_window_unref
 	gdk_window_withdraw
 	gdk_xid_table_insert
 	gdk_xid_table_lookup

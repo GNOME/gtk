@@ -31,7 +31,7 @@
 #include "gdkproperty.h"
 #include "gdkselection.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkwin32.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -119,6 +119,12 @@ gdk_property_get (GdkWindow   *window,
 		  gint        *actual_length,
 		  guchar     **data)
 {
+  g_return_val_if_fail (window != NULL, FALSE);
+  g_return_val_if_fail (!GDK_IS_WINDOW (window), FALSE);
+
+  if (GDK_DRAWABLE_DESTROYED (window))
+    return FALSE;
+
   g_warning ("gdk_property_get: Not implemented");
 
   return FALSE;
@@ -138,10 +144,13 @@ gdk_property_change (GdkWindow   *window,
   gchar *prop_name, *type_name;
   guchar *ptr;
 
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (!GDK_IS_WINDOW (window));
+
   if (GDK_DRAWABLE_DESTROYED (window))
     return;
 
-  GDK_NOTE (SELECTION,
+  GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     type_name = gdk_atom_name (type),
 	     g_print ("gdk_property_change: %#x %#x (%s) %#x (%s) %s %d*%d bytes %.10s\n",
@@ -166,8 +175,8 @@ gdk_property_change (GdkWindow   *window,
 	if (*ptr++ == '\n')
 	  length++;
 #if 1      
-      GDK_NOTE (SELECTION, g_print ("...OpenClipboard(%#x)\n",
-				    GDK_DRAWABLE_XID (window)));
+      GDK_NOTE (MISC, g_print ("...OpenClipboard(%#x)\n",
+			       GDK_DRAWABLE_XID (window)));
       if (!OpenClipboard (GDK_DRAWABLE_XID (window)))
 	{
 	  g_warning ("gdk_property_change: OpenClipboard failed");
@@ -176,7 +185,7 @@ gdk_property_change (GdkWindow   *window,
 #endif
       hdata = GlobalAlloc (GMEM_MOVEABLE|GMEM_DDESHARE, length + 1);
       ptr = GlobalLock (hdata);
-      GDK_NOTE (SELECTION, g_print ("...hdata=%#x, ptr=%#x\n", hdata, ptr));
+      GDK_NOTE (MISC, g_print ("...hdata=%#x, ptr=%#x\n", hdata, ptr));
 
       for (i = 0; i < nelements; i++)
 	{
@@ -186,13 +195,13 @@ gdk_property_change (GdkWindow   *window,
 	}
       *ptr++ = '\0';
       GlobalUnlock (hdata);
-      GDK_NOTE (SELECTION, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
-				    hdata));
+      GDK_NOTE (MISC, g_print ("...SetClipboardData(CF_TEXT, %#x)\n",
+			       hdata));
       if (!SetClipboardData(CF_TEXT, hdata))
 	g_warning ("gdk_property_change: SetClipboardData failed: %d",
 		   GetLastError ());
 #if 1
-      GDK_NOTE (SELECTION, g_print ("...CloseClipboard()\n"));
+      GDK_NOTE (MISC, g_print ("...CloseClipboard()\n"));
       if (!CloseClipboard ())
 	{
 	  g_warning ("gdk_property_change: CloseClipboard failed");
@@ -211,10 +220,10 @@ gdk_property_delete (GdkWindow *window,
   gchar *prop_name, *type_name;
   extern void gdk_selection_property_delete (GdkWindow *);
 
-  if (GDK_DRAWABLE_DESTROYED (window))
-    return;
+  g_return_if_fail (window != NULL);
+  g_return_if_fail (!GDK_IS_WINDOW (window));
 
-  GDK_NOTE (SELECTION,
+  GDK_NOTE (MISC,
 	    (prop_name = gdk_atom_name (property),
 	     g_print ("gdk_property_delete: %#x %#x (%s)\n",
 		      (window ? GDK_DRAWABLE_XID (window) : 0),

@@ -741,7 +741,7 @@ gdk_dnd_init (void)
 }      
 
 void
-gdk_dnd_exit (void)
+gdk_win32_dnd_exit (void)
 {
 #ifdef OLE2_DND
   OleUninitialize ();

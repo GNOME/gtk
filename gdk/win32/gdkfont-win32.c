@@ -918,6 +918,16 @@ _gdk_font_destroy (GdkFont *font)
 }
 
 gint
+_gdk_font_strlen (GdkFont     *font,
+		  const gchar *str)
+{
+  g_return_val_if_fail (font != NULL, -1);
+  g_return_val_if_fail (str != NULL, -1);
+
+  return strlen (str);
+}
+
+gint
 gdk_font_id (const GdkFont *font)
 {
   const GdkFontPrivateWin32 *private;

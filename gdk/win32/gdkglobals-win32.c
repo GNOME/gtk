@@ -25,12 +25,10 @@
  */
 
 #include "gdktypes.h"
-#include "gdkprivate.h"
+#include "gdkprivate-win32.h"
 
-guint             gdk_debug_flags = 0;
 HWND              gdk_root_window = NULL;
-HWND              gdk_leader_window;
-GDKVAR GdkWindowPrivate *gdk_root_parent = NULL;
+gint              gdk_event_func_from_window_proc = FALSE;
 HDC		  gdk_DC;
 HINSTANCE	  gdk_DLLInstance;
 HINSTANCE	  gdk_ProgInstance;
@@ -40,12 +38,7 @@ UINT		  gdk_selection_clear_msg;
 GdkAtom		  gdk_clipboard_atom;
 GdkAtom		  gdk_win32_dropfiles_atom;
 GdkAtom		  gdk_ole2_dnd_atom;
-Atom              gdk_selection_property;
-gchar            *gdk_progclass = NULL;
-gint              gdk_error_code;
-gint              gdk_error_warnings = TRUE;
+ATOM              gdk_selection_property;
 gint              gdk_null_window_warnings = TRUE;
-
-GMutex           *gdk_threads_mutex = NULL;
 
 DWORD		  windows_version = 0;

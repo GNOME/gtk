@@ -155,7 +155,7 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   if (values_mask & GDK_GC_TILE)
     {
       data->tile = values->tile;
-      gdk_pixmap_ref (data->tile);
+      gdk_drawable_ref (data->tile);
       GDK_NOTE (MISC, g_print (" tile=%#x", GDK_DRAWABLE_XID (data->tile)));
     }
   else
@@ -164,7 +164,7 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   if (values_mask & GDK_GC_STIPPLE)
     {
       data->stipple = values->stipple;
-      gdk_pixmap_ref (data->stipple);
+      gdk_drawable_ref (data->stipple);
       GDK_NOTE (MISC, g_print (" stipple=%#x", GDK_DRAWABLE_XID (data->stipple)));
     }
   else
@@ -288,10 +288,10 @@ gdk_win32_gc_destroy (GdkGC *gc)
     gdk_font_unref (data->font);
   
   if (data->values_mask & GDK_GC_TILE)
-    gdk_pixmap_unref (data->tile);
+    gdk_drawable_unref (data->tile);
   
   if (data->values_mask & GDK_GC_STIPPLE)
-    gdk_pixmap_unref (data->stipple);
+    gdk_drawable_unref (data->stipple);
   
   if (data->values_mask & GDK_GC_CLIP_MASK)
     DeleteObject (data->clip_region);
@@ -506,13 +506,13 @@ gdk_win32_gc_set_values (GdkGC           *gc,
   if (values_mask & GDK_GC_TILE)
     {
       if (data->tile != NULL)
-	gdk_pixmap_unref (data->tile);
+	gdk_drawable_unref (data->tile);
       data->tile = values->tile;
       if (data->tile != NULL)
 	{
 	  GDK_NOTE (MISC, g_print ("tile = %#x ",
 				   GDK_DRAWABLE_XID (values->tile)));
-	  gdk_pixmap_ref (data->tile);
+	  gdk_drawable_ref (data->tile);
 	  data->values_mask |= GDK_GC_TILE;
 	}
       else
@@ -525,13 +525,13 @@ gdk_win32_gc_set_values (GdkGC           *gc,
   if (values_mask & GDK_GC_STIPPLE)
     {
       if (data->stipple != NULL)
-	gdk_pixmap_unref (data->stipple);
+	gdk_drawable_unref (data->stipple);
       data->stipple = values->stipple;
       if (data->stipple != NULL)
 	{
 	  GDK_NOTE (MISC, g_print ("stipple = %#x ",
 				   GDK_DRAWABLE_XID (values->stipple)));
-	  gdk_pixmap_ref (data->stipple);
+	  gdk_drawable_ref (data->stipple);
 	  data->values_mask |= GDK_GC_STIPPLE;
 	}
       else
@@ -741,18 +741,18 @@ gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
   if (dst_data->font)
     gdk_font_unref (dst_data->font);
   if (dst_data->tile)
-    gdk_pixmap_unref (dst_data->tile);
+    gdk_drawable_unref (dst_data->tile);
   if (dst_data->stipple)
-    gdk_pixmap_unref (dst_data->stipple);
+    gdk_drawable_unref (dst_data->stipple);
   
   *dst_data = *src_data;
   
   if (dst_data->font)
     gdk_font_ref (dst_data->font);
   if (dst_data->tile)
-    gdk_pixmap_ref (dst_data->tile);
+    gdk_drawable_ref (dst_data->tile);
   if (dst_data->stipple)
-    gdk_pixmap_ref (dst_data->stipple);
+    gdk_drawable_ref (dst_data->stipple);
 }
 
 HDC

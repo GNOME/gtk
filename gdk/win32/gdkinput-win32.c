@@ -34,7 +34,7 @@
 #include "gdk.h"
 #include "gdkinput.h"
 #include "gdkprivate.h"
-#include "gdkx.h"
+#include "gdkwin32.h"
 
 #ifdef HAVE_WINTAB
 #include <wintab.h>
@@ -78,8 +78,8 @@ struct _GdkDevicePrivate {
 #endif
 };
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
+#ifndef G_PI
+#define G_PI 3.14159265358979323846
 #endif
 
 /* If USE_SYSCONTEXT is on, we open the Wintab device (hmm, what if
@@ -94,7 +94,7 @@ struct _GdkDevicePrivate {
 #define DEBUG_WINTAB 1
 #endif
 
-#define TWOPI (2.*M_PI)
+#define TWOPI (2.*G_PI)
 
 #define PING() g_print("%s: %d\n",__FILE__,__LINE__)
 
@@ -289,7 +289,6 @@ gdk_input_init (void)
   guint32 deviceid_counter = 0;
 #ifdef HAVE_WINTAB
   GdkDevicePrivate *gdkdev;
-  GdkDrawablePrivate *window_private;
   GdkWindowAttr wa;
   WORD specversion;
   LOGCONTEXT defcontext;
@@ -341,7 +340,6 @@ gdk_input_init (void)
 	  return;
 	}
       gdk_window_ref (wintab_window);
-      window_private = (GdkDrawablePrivate *) wintab_window;
       
       for (devix = 0; devix < ndevices; devix++)
 	{
@@ -420,7 +418,7 @@ gdk_input_init (void)
 			   print_lc(&lc)));
 #endif
 	  hctx = g_new (HCTX, 1);
-          if ((*hctx = WTOpen (window_private->xwindow, &lc, TRUE)) == NULL)
+          if ((*hctx = WTOpen (GDK_DRAWABLE_XID (wintab_window), &lc, TRUE)) == NULL)
 	    {
 	      g_warning ("gdk_input_init: WTOpen failed");
 	      return;
@@ -991,7 +989,6 @@ gdk_input_win32_other_event (GdkEvent  *event,
   GdkWindow *current_window;
   GdkInputWindow *input_window;
   GdkWindow *window;
-  GdkWindowPrivate *window_private;
   GdkDevicePrivate *gdkdev;
   GdkEventMask masktest;
   POINT pt;
@@ -1009,11 +1006,9 @@ gdk_input_win32_other_event (GdkEvent  *event,
 #if USE_SYSCONTEXT
   window = gdk_window_at_pointer (&x, &y);
   if (window == NULL)
-    window = (GdkWindow *) gdk_root_parent;
+    window = gdk_parent_root;
 
   gdk_window_ref (window);
-
-  window_private = (GdkWindowPrivate *) window;
 
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n",
@@ -1039,7 +1034,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
   switch (xevent->message)
     {
     case WT_PACKET:
-      if (window_private == gdk_root_parent)
+      if (window == gdk_parent_root)
 	{
 	  GDK_NOTE (EVENTS, g_print ("...is root\n"));
 	  return FALSE;
@@ -1102,21 +1097,20 @@ gdk_input_win32_other_event (GdkEvent  *event,
        * propagate if necessary.
        */
     dijkstra:
-      if (!window_private->extension_events_selected
-	  || !(window_private->extension_events & masktest))
+      if (!GDK_WINDOW_WIN32DATA (window)->extension_events_selected
+	  || !(GDK_WINDOW_WIN32DATA (window)->extension_events & masktest))
 	{
 	  GDK_NOTE (EVENTS, g_print ("...not selected\n"));
 
-	  if (window_private->parent == (GdkWindow *) gdk_root_parent)
+	  if (((GdkWindowPrivate *) window)->parent == gdk_parent_root)
 	    return FALSE;
 	  
 	  pt.x = x;
 	  pt.y = y;
 	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
 	  gdk_window_unref (window);
-	  window = window_private->parent;
+	  window = ((GdkWindowPrivate *) window)->parent;
 	  gdk_window_ref (window);
-	  window_private = (GdkWindowPrivate *) window;
 	  ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
 	  x = pt.x;
 	  y = pt.y;
@@ -1263,9 +1257,7 @@ static gint
 gdk_input_win32_enable_window (GdkWindow        *window,
 			       GdkDevicePrivate *gdkdev)
 {
-  GdkWindowPrivate *window_private = (GdkWindowPrivate *) window;
-
-  window_private->extension_events_selected = TRUE;
+  GDK_WINDOW_WIN32DATA (window)->extension_events_selected = TRUE;
   return TRUE;
 }
 
@@ -1273,9 +1265,7 @@ static gint
 gdk_input_win32_disable_window (GdkWindow        *window,
 			        GdkDevicePrivate *gdkdev)
 {
-  GdkWindowPrivate *window_private = (GdkWindowPrivate *) window;
-
-  window_private->extension_events_selected = FALSE;
+  GDK_WINDOW_WIN32DATA (window)->extension_events_selected = FALSE;
   return TRUE;
 }
 
@@ -1483,23 +1473,19 @@ gdk_input_window_find (GdkWindow *window)
 static GdkInputWindow *
 gdk_input_window_find_within (GdkWindow *window)
 {
-  GList *tmp_list;
-  GdkWindowPrivate *window_private;
-  GdkWindowPrivate *tmp_private;
+  GList *list;
+  GdkWindow *tmpw;
   GdkInputWindow *candidate = NULL;
 
-  window_private = (GdkWindowPrivate *) window;
-
-  for (tmp_list=gdk_input_windows; tmp_list; tmp_list=tmp_list->next)
+  for (list = gdk_input_windows; list != NULL; list = list->next)
     {
-      (GdkWindowPrivate *) tmp_private =
-	(GdkWindowPrivate *) (((GdkInputWindow *)(tmp_list->data))->window);
-      if (tmp_private == window_private
-	  || IsChild (window_private->xwindow, tmp_private->xwindow))
+      tmpw = ((GdkInputWindow *) (tmp_list->data))->window;
+      if (tmpw == window
+	  || IsChild (GDK_DRAWABLE_XID (window), GDK_DRAWABLE_XID (tmpw)))
 	{
 	  if (candidate)
 	    return NULL;		/* Multiple hits */
-	  candidate = (GdkInputWindow *)(tmp_list->data);
+	  candidate = (GdkInputWindow *) (list->data);
 	}
     }
 
