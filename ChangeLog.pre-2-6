@@ -1,3 +1,7 @@
+2003-02-24  Sven Neumann  <sven@gimp.org>
+
+        * gtk/gtkmain.c (gtk_get_default_language): fixed documentation.
+
 2003-02-20  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 
