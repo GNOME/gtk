@@ -1,3 +1,10 @@
+Thu Aug 21 16:00:36 2003  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkrc.c: Keep a list of current GtkRcFiles
+ 	being parsed, not just the directories for those
+ 	files. Use that to catch recursion. (Part of
+ 	#114988)
+ 
 Thu Aug 21 21:27:45 2003  Kristian Rietveld  <kris@gtk.org>A
 
 	Merge from stable.
