@@ -1,3 +1,7 @@
+Fri Dec 10 13:59:32 2004  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtk.symbols: add recent new functions.
+
 2004-12-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkwindow.c: Revert the patch which added no-alt 
