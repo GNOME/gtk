@@ -1170,17 +1170,17 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
   filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
   g_return_if_fail (filename_utf8 != NULL);
 
-  last_slash = strrchr (filename, G_DIR_SEPARATOR);
+  last_slash = strrchr (filename_utf8, G_DIR_SEPARATOR);
 
   if (!last_slash)
     {
       buf = g_strdup ("");
-      name = filename;
+      name = filename_utf8;
     }
   else
     {
-      buf = g_strdup (filename);
-      buf[last_slash - filename + 1] = 0;
+      buf = g_strdup (filename_utf8);
+      buf[last_slash - filename_utf8 + 1] = 0;
       name = last_slash + 1;
     }
 

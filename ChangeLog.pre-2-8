@@ -1,3 +1,12 @@
+Sat Jun 15 23:53:03 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_set_filename): 
+	Actually use the UTF-8 filename, so we actually
+	fix #83386.
+
+	* tests/testgtk.c: Remember the directory as a
+	test of gtk_file_selection_set_filename().
+
 Sat Jun 15 23:05:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilesel.c (gtk_file_selection_set_filename):
@@ -260,6 +269,7 @@ Tue Jun  4 17:39:34 2002  Owen Taylor  <otaylor@redhat.com>
 	* gdk/gdkpixbuf-drawable.c (rgb565msb): Fix the MSB -> MSB case.
 	Fixes #79190.
 
+>>>>>>> 1.3338.2.117
 Sat Jun  1 10:38:24 2002  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
@@ -361,6 +371,7 @@ Thu May 23 17:19:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* NEWS: Updated.
 
+>>>>>>> 1.3338.2.79
 2002-05-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Use correct path to the loaders and immodules
@@ -376,6 +387,7 @@ Wed May 22 12:29:20 2002  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_init): remove
 	GTK_RESIZE_QUEUE setting.
 
+>>>>>>> 1.3338.2.67
 Tue May 21 16:46:15 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkmain-x11.c (gdk_internal_connection_watch): 
