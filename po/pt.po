@@ -1,0 +1,88 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.1.7\n"
+"POT-Creation-Date: 1998-12-14 22:02+0000\n"
+"PO-Revision-Date: 1998-12-14 22:07+00:00\n"
+"Last-Translator: Nuno Ferreira <nmrf@rnl.ist.utl.pt>\n"
+"Language-Team: Portuguese <pt@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gtk/gtkfilesel.c:419
+msgid "Directories"
+msgstr "Directorias"
+
+#. The files clist
+#: gtk/gtkfilesel.c:430
+msgid "Files"
+msgstr "Ficheiros"
+
+#. The OK button
+#: gtk/gtkfilesel.c:462
+msgid "OK"
+msgstr "OK"
+
+#. The Cancel button
+#: gtk/gtkfilesel.c:469 gtk/gtkfilesel.c:844 gtk/gtkfilesel.c:944
+#: gtk/gtkfilesel.c:1059
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: gtk/gtkfilesel.c:500 gtk/gtkfilesel.c:1455
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Directoria ilegível: %s"
+
+#: gtk/gtkfilesel.c:532
+msgid "Create Dir"
+msgstr "Criar Directoria"
+
+#: gtk/gtkfilesel.c:543 gtk/gtkfilesel.c:913
+msgid "Delete File"
+msgstr "Apagar Ficheiro"
+
+#: gtk/gtkfilesel.c:554 gtk/gtkfilesel.c:1017
+msgid "Rename File"
+msgstr "Renomear Ficheiro"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:715
+msgid "Error"
+msgstr "Erro"
+
+#. close button
+#: gtk/gtkfilesel.c:733
+msgid "Close"
+msgstr "Fechar"
+
+#: gtk/gtkfilesel.c:808
+msgid "Create Directory"
+msgstr "Criar Directoria"
+
+#: gtk/gtkfilesel.c:822
+msgid "Directory name:"
+msgstr "Nome da directoria:"
+
+#. buttons
+#: gtk/gtkfilesel.c:835
+msgid "Create"
+msgstr "Criar"
+
+#. buttons
+#: gtk/gtkfilesel.c:935
+msgid "Delete"
+msgstr "Apagar"
+
+#. buttons
+#: gtk/gtkfilesel.c:1050
+msgid "Rename"
+msgstr "Renomear"

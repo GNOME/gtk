@@ -1,3 +1,9 @@
+1998-12-14  Nuno Ferreira  <nmrf@rnl.ist.utl.pt>
+
+	* configure.in (ALL_LINGUAS): Added 'pt'.
+
+	* po/pt.po: Added Portuguese translation.
+
 Mon Dec 14 20:04:31 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkspinbutton.c: Only call gtk_spin_button_update if

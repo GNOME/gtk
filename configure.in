@@ -130,7 +130,7 @@ fi
 AC_SUBST(REBUILD)
 
 # i18n stuff
-ALL_LINGUAS="de"
+ALL_LINGUAS="de pt"
 AM_GNU_GETTEXT
 
 dnl The DU4 header files don't provide library prototypes unless 
