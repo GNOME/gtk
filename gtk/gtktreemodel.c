@@ -1277,7 +1277,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
       refs = g_new (RowRefList, 1);
       refs->list = NULL;
 
-      if (model == proxy)
+      if (G_OBJECT (model) == proxy)
 	connect_ref_callbacks (model);
 
       g_object_set_data_full (G_OBJECT (proxy),

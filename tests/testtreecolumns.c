@@ -1,19 +1,26 @@
 #include <gtk/gtk.h>
 
+
 GtkWidget *left_tree_view;
-GtkWidget *right_tree_view;
+GtkWidget *top_right_tree_view;
+GtkWidget *bottom_right_tree_view;
 GtkTreeModel *left_tree_model;
-GtkTreeModel *right_tree_model;
+GtkTreeModel *top_right_tree_model;
+GtkTreeModel *bottom_right_tree_model;
+GtkWidget *sample_tree_view_top;
+GtkWidget *sample_tree_view_bottom;
 
 static void
 add_clicked (GtkWidget *button, gpointer data)
 {
   GtkTreeIter iter;
   GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
   static gint i = 0;
-
   gchar *label = g_strdup_printf ("Column %d", i);
-  column = gtk_tree_view_column_new ();
+
+  cell = gtk_cell_renderer_text_new ();
+  column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
   g_free (label);
@@ -21,10 +28,69 @@ add_clicked (GtkWidget *button, gpointer data)
 }
 
 static void
+get_visible (GtkTreeViewColumn *tree_column,
+	     GtkCellRenderer   *cell,
+	     GtkTreeModel      *tree_model,
+	     GtkTreeIter       *iter,
+	     gpointer           data)
+{
+  GtkTreeViewColumn *column;
+
+  gtk_tree_model_get (tree_model, iter, 1, &column, -1);
+  if (column)
+    gtk_cell_renderer_toggle_set_active (GTK_CELL_RENDERER_TOGGLE (cell),
+					 column->visible);
+}
+
+static void
+set_visible (GtkCellRendererToggle *cell,
+	     gchar                 *path_str,
+	     gpointer               data)
+{
+  GtkTreeView *tree_view = (GtkTreeView *) data;
+  GtkTreeViewColumn *column;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_str);
+
+  model = gtk_tree_view_get_model (tree_view);
+
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, 1, &column, -1);
+
+  if (column)
+    {
+      gtk_tree_view_column_set_visible (column, ! gtk_tree_view_column_get_visible (column));
+      gtk_tree_model_changed (model, path, &iter);
+    }
+  gtk_tree_path_free (path);
+}
+
+static void
 add_left_clicked (GtkWidget *button, gpointer data)
 {
+  GtkTreeIter iter;
+  gchar *label;
+  GtkTreeViewColumn *column;
 
+  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data));
+
+  gtk_tree_selection_get_selected (selection, NULL, &iter);
+  gtk_tree_model_get (gtk_tree_view_get_model (GTK_TREE_VIEW (data)),
+		      &iter, 0, &label, 1, &column, -1);
+
+  if (GTK_WIDGET (data) == top_right_tree_view)
+    gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_top), column);
+  else
+    gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_bottom), column);
+
+  gtk_list_store_remove (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);
+
+  gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
+  gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
+  g_free (label);
 }
+
 
 
 static void
@@ -41,8 +107,13 @@ add_right_clicked (GtkWidget *button, gpointer data)
 		      &iter, 0, &label, 1, &column, -1);
   gtk_list_store_remove (GTK_LIST_STORE (left_tree_model), &iter);
 
-  gtk_list_store_append (GTK_LIST_STORE (right_tree_model), &iter);
-  gtk_list_store_set (GTK_LIST_STORE (right_tree_model), &iter, 0, label, 1, column, -1);
+  gtk_list_store_append (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);
+  gtk_list_store_set (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter, 0, label, 1, column, -1);
+
+  if (GTK_WIDGET (data) == top_right_tree_view)
+    gtk_tree_view_append_column (GTK_TREE_VIEW (sample_tree_view_top), column);
+  else
+    gtk_tree_view_append_column (GTK_TREE_VIEW (sample_tree_view_bottom), column);
   g_free (label);
 }
 
@@ -59,14 +130,50 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
-  GtkWidget *hbox, *vbox, *bbox;
+  GtkWidget *hbox, *vbox;
+  GtkWidget *vbox2, *bbox;
   GtkWidget *button;
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
   GtkWidget *swindow;
+  GtkTreeModel *sample_model;
+  gint i;
 
   gtk_init (&argc, &argv);
 
+  /* First initialize all the models for signal purposes */
+  left_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
+  top_right_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
+  bottom_right_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
+  top_right_tree_view = gtk_tree_view_new_with_model (top_right_tree_model);
+  bottom_right_tree_view = gtk_tree_view_new_with_model (bottom_right_tree_model);
+  sample_model = (GtkTreeModel *) gtk_list_store_new_with_types (1, G_TYPE_STRING);
+
+  for (i = 0; i < 10; i++)
+    {
+      GtkTreeIter iter;
+      gchar *string = g_strdup_printf ("%d", i);
+      gtk_list_store_append (GTK_LIST_STORE (sample_model), &iter);
+      gtk_list_store_set (GTK_LIST_STORE (sample_model), &iter, 0, string, -1);
+      g_free (string);
+    }
+
+  /* Set up the test windows. */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  swindow = gtk_scrolled_window_new (NULL, NULL);
+  sample_tree_view_top = gtk_tree_view_new_with_model (sample_model);
+  gtk_container_add (GTK_CONTAINER (window), swindow);
+  gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_top);
+  gtk_widget_show_all (window);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  swindow = gtk_scrolled_window_new (NULL, NULL);
+  sample_tree_view_bottom = gtk_tree_view_new_with_model (sample_model);
+  gtk_container_add (GTK_CONTAINER (window), swindow);
+  gtk_container_add (GTK_CONTAINER (swindow), sample_tree_view_bottom);
+  gtk_widget_show_all (window);
+
+  /* Set up the main window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
   vbox = gtk_vbox_new (FALSE, 8);
@@ -76,42 +183,89 @@ main (int argc, char *argv[])
   hbox = gtk_hbox_new (FALSE, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 
+  /* Left Pane */
   cell = gtk_cell_renderer_text_new ();
-  g_object_set (G_OBJECT (cell), "foreground", "black", NULL);
-  left_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
+
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   left_tree_view = gtk_tree_view_new_with_model (left_tree_model);
   gtk_container_add (GTK_CONTAINER (swindow), left_tree_view);
-  column = gtk_tree_view_column_new_with_attributes ("Unattached Columns", cell, "text", 0, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (left_tree_view), -1,
+					       "Unattached Columns", cell, "text", 0, NULL);
+  cell = gtk_cell_renderer_toggle_new ();
+  g_signal_connect (G_OBJECT (cell), "toggled", set_visible, left_tree_view);
+  column = gtk_tree_view_column_new_with_attributes ("Visible", cell, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (left_tree_view), column);
+  g_object_unref (G_OBJECT (column));
+  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
   gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
 
+  /* Middle Pane */
+  vbox2 = gtk_vbox_new (FALSE, 8);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
+  
   bbox = gtk_vbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), 0, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), bbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_label ("<<");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), NULL);
+  gtk_widget_set_sensitive (button, FALSE);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), top_right_tree_view);
+  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (top_right_tree_view))),
+		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label (">>");
   gtk_widget_set_sensitive (button, FALSE);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), NULL);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), top_right_tree_view);
   gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
 		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
   gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
 
+  bbox = gtk_vbutton_box_new ();
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_SPREAD);
+  gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), 0, 0);
+  gtk_box_pack_start (GTK_BOX (vbox2), bbox, TRUE, TRUE, 0);
+
+  button = gtk_button_new_with_label ("<<");
+  gtk_widget_set_sensitive (button, FALSE);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_left_clicked), bottom_right_tree_view);
+  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (bottom_right_tree_view))),
+		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label (">>");
+  gtk_widget_set_sensitive (button, FALSE);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked", GTK_SIGNAL_FUNC (add_right_clicked), bottom_right_tree_view);
+  gtk_signal_connect (GTK_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view))),
+		      "selection-changed", GTK_SIGNAL_FUNC (selection_changed), button);
+  gtk_box_pack_start (GTK_BOX (bbox), button, FALSE, FALSE, 0);
+
+  
+  /* Right Pane */
+  vbox2 = gtk_vbox_new (FALSE, 8);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 0);
+
   swindow = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  right_tree_model = (GtkTreeModel *) gtk_list_store_new_with_types (2, G_TYPE_STRING, GTK_TYPE_POINTER);
-  right_tree_view = gtk_tree_view_new_with_model (right_tree_model);
-  column = gtk_tree_view_column_new_with_attributes ("Unattached Columns", cell, "text", 0, NULL);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (right_tree_view), column);
-  gtk_container_add (GTK_CONTAINER (swindow), right_tree_view);
-  gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (top_right_tree_view), FALSE);
+  cell = gtk_cell_renderer_text_new ();
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (top_right_tree_view), -1,
+					       NULL, cell, "text", 0, NULL);
+  gtk_container_add (GTK_CONTAINER (swindow), top_right_tree_view);
+  gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
 
+  swindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (swindow), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (bottom_right_tree_view), FALSE);
+  cell = gtk_cell_renderer_text_new ();
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (bottom_right_tree_view), -1,
+					       NULL, cell, "text", 0, NULL);
+  gtk_container_add (GTK_CONTAINER (swindow), bottom_right_tree_view);
+  gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
+
+  
   gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
 
   hbox = gtk_hbox_new (FALSE, 8);

@@ -99,6 +99,12 @@ gint                   gtk_tree_view_remove_column       (GtkTreeView        *tr
 gint                   gtk_tree_view_insert_column       (GtkTreeView        *tree_view,
 							  GtkTreeViewColumn  *column,
 							  gint                position);
+gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
+								    gint             position,
+								    gchar           *title,
+								    GtkCellRenderer *cell,
+								    ...);
+
 GtkTreeViewColumn     *gtk_tree_view_get_column          (GtkTreeView        *tree_view,
 							  gint                n);
 

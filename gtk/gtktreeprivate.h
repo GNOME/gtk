@@ -29,6 +29,25 @@ extern "C" {
 #include <gtk/gtktreeselection.h>
 #include <gtk/gtkrbtree.h>
 
+
+/* the width of the column resize windows */
+#define TREE_VIEW_EXPANDER_WIDTH 14
+#define TREE_VIEW_EXPANDER_HEIGHT 14
+
+/* The TREE_VIEW_VERTICAL_SEPARATOR is the space between rows. The
+ * GTK_RBNODE_GET_HEIGHT() value includes the separators; the offset
+ * of each row points to the center of the inter-row space. For an odd
+ * separator, the extra pixel by convention goes _below_ the row.  So
+ * a node in the rbtree owns TREE_VIEW_VERTICAL_SEPARATOR/2 pixels
+ * above the row, and TREE_VIEW_VERTICAL_SEPARATOR/2 +
+ * TREE_VIEW_VERTICAL_SEPARATOR%2 pixels below the row. 
+ */
+
+#define TREE_VIEW_VERTICAL_SEPARATOR 2
+#define TREE_VIEW_HORIZONTAL_SEPARATOR 0
+
+#define TREE_VIEW_DRAG_WIDTH 6
+
 typedef enum
 {
   GTK_TREE_VIEW_IS_LIST = 1 << 0,
@@ -202,8 +221,13 @@ GtkTreePath *_gtk_tree_view_find_path                 (GtkTreeView       *tree_v
 void         _gtk_tree_view_update_size               (GtkTreeView       *tree_view);
 
 
-void _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
-					  GtkTreeView       *tree_view);
+void _gtk_tree_view_column_create_button    (GtkTreeViewColumn *column);
+void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
+void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
+void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
+					     GtkTreeView       *tree_view);
+void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
+
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

@@ -347,3 +347,20 @@ gtk_cell_renderer_toggle_get_radio (GtkCellRendererToggle *toggle)
 
   return toggle->radio;
 }
+
+gboolean
+gtk_cell_renderer_toggle_get_active (GtkCellRendererToggle *toggle)
+{
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle), FALSE);
+
+  return toggle->active;
+}
+
+void
+gtk_cell_renderer_toggle_set_active (GtkCellRendererToggle *toggle,
+				     gboolean               setting)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER_TOGGLE (toggle));
+
+  g_object_set (G_OBJECT (toggle), "active", setting, NULL);
+}

@@ -1,3 +1,14 @@
+Thu Mar  1 19:50:56 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_realize_button):
+	Move handling of buttons fully in gtktreeviewcolumn.  This code is
+	less interrelated then it was, but it still requires the
+	GtkTreeView to map it.
+
+	* test/testtreecolumn.c: Now I can add a column to one view,
+	remove it, add it to the another view, remove it, then re-add it
+	to the first.  Nifty.
+
 Thu Mar  1 13:14:27 GMT 2001  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: Minor corrections
