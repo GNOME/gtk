@@ -3,7 +3,8 @@
 	* src/xp_theme.c: Internal redesign: extracted XP specific theming
 	from wimp_style.c, improved code.
 
-	* src/wimp_style.c: Added XP theming support for list headers.
+	* src/wimp_style.c: Added XP theming support for list headers, and
+	entry widgets.
 
 2003-08-03  Raymond Penners <raymond@dotsphinx.com>
 

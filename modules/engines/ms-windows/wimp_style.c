@@ -1081,6 +1081,39 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
                               area, widget, detail, x, y, width, height);
 }
 
+
+static void
+draw_shadow (GtkStyle      *style,
+             GdkWindow     *window,
+             GtkStateType   state_type,
+             GtkShadowType  shadow_type,
+             GdkRectangle  *area,
+             GtkWidget     *widget,
+             const gchar   *detail,
+             gint           x,
+             gint           y,
+             gint           width,
+             gint           height)
+{
+  if(detail && ! strcmp(detail, "entry"))
+    {
+      /* Is this necessary?
+      if(GTK_IS_COMBO(widget->parent))
+        width += 10;
+      if(GTK_WIDGET_HAS_FOCUS (widget))
+        state_type = GTK_STATE_PRELIGHT;
+      */
+      if (xp_theme_draw(window, XP_THEME_ELEMENT_EDIT_TEXT, style,
+                        x, y, width, height, state_type))
+        {
+          return;
+        }
+    }
+  parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget,
+                             detail, x, y, width, height);
+}
+
+
 static void
 wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
@@ -1092,7 +1125,6 @@ wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 static void
 wimp_style_init (WimpStyle * style)
 {
-  //  uxtheme_dll = LoadLibrary("uxtheme.dll");
   xp_theme_init ();
 }
 
@@ -1113,6 +1145,7 @@ wimp_style_class_init (WimpStyleClass *klass)
   style_class->draw_expander   = draw_expander;
   style_class->draw_extension = draw_extension;
   style_class->draw_box_gap = draw_box_gap;
+  style_class->draw_shadow = draw_shadow;
 }
 
 GType wimp_type_style = 0;
