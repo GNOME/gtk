@@ -184,7 +184,7 @@ static void gtk_notebook_real_switch_page    (GtkNotebook      *notebook,
 /** GtkNotebook Page Switch Functions **/
 static void gtk_notebook_switch_page         (GtkNotebook      *notebook,
 					      GtkNotebookPage  *page,
-					      guint             page_num);
+					      gint              page_num);
 static gint gtk_notebook_page_select         (GtkNotebook      *notebook);
 static void gtk_notebook_switch_focus_tab    (GtkNotebook      *notebook,
                                               GList            *new_child);
@@ -3152,7 +3152,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
 static void
 gtk_notebook_switch_page (GtkNotebook     *notebook,
 			  GtkNotebookPage *page,
-			  guint            page_num)
+			  gint             page_num)
 { 
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));

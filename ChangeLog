@@ -1,3 +1,9 @@
+1998-11-26  Michael Krause  <m.krause@tu-harburg.de>
+
+        * gtk/gtknotebook.c (gtk_notebook_switch_page): made 'page_num'
+        argument a gint: switch_page signal delivers valid page numbers
+        again.
+
 Sun Nov 29 06:12:01 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_set_[hv]adjustment): 
