@@ -11,6 +11,7 @@
 2003-10-07  Dom Lachowicz <cinamod@hotmail.com>
 
 	* Added new mingw based build system, tidied up other missing bits
+	* src/xp_theme.c: Tidied up some return cases
 	
 2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
 

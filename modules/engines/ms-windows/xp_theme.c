@@ -118,7 +118,7 @@ static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
 static IsThemeActiveFunc is_theme_active_func = NULL;
 
-static  gboolean was_theming_active = FALSE;
+static gboolean was_theming_active = FALSE;
 
 static void
 xp_theme_close_open_handles (void)
@@ -156,7 +156,6 @@ xp_theme_init (void)
       was_theming_active = (*is_theme_active_func) ();
     }
 }
-
 
 void
 xp_theme_reset (void)
@@ -667,8 +666,6 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 gboolean
 xp_theme_is_drawable (XpThemeElement element)
 {
-  gboolean ret = FALSE;
-  
   if (is_theme_active_func)
     {
       gboolean active = (*is_theme_active_func) ();
@@ -683,10 +680,11 @@ xp_theme_is_drawable (XpThemeElement element)
       
       if (active)
         {
-          ret = (xp_theme_get_handle_by_element (element) != NULL);
+          return (xp_theme_get_handle_by_element (element) != NULL);
         }
     }
-  return ret;
+
+  return FALSE;
 }
 
 gboolean
