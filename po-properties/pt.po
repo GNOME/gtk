@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2004-03-05 01:35+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
@@ -205,7 +205,7 @@ msgstr "Sensível"
 msgid "Whether the action is enabled."
 msgstr "Se a acção está ou não activa."
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Visível"
@@ -1319,51 +1319,51 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Se valores inseridos têm ou não de já existir na lista"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa de selecção única"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 msgid "Wrap width"
 msgstr "Largura de quebra"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Largura de quebra para dispôr os itens numa grelha"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 msgid "Row span column"
 msgstr "Coluna de abrangência de linha"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de linha"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 msgid "Column span column"
 msgstr "Coluna de abrangência de coluna"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de coluna"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 msgid "Active item"
 msgstr "Item activo"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 msgid "The item which is currently active"
 msgstr "O item actualmente activo"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr "Apresentar como lista"
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "Se caixas de lista deverão ter a aparência de listas em vez de menus"
 
@@ -1581,19 +1581,19 @@ msgstr "Seleccionar no foco"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Se seleccionar ou não o conteúdo da entrada quando esta obtém o foco"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr "Modelo de Completar"
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 msgid "The model to find matches in"
 msgstr "O modelo onde procurar equivalências"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 msgid "Minimum Key Length"
 msgstr "Comprimento Mínimo da Chave"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Comprimento mínimo da chave de pesquisa para procurar equivalências"
 
@@ -1653,11 +1653,11 @@ msgstr "Etiqueta de widget"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Um widget a apresentar em vez da etiqueta de moldura comum"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "Tamanho do Expansor"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "Tamanho da seta do expansor"
 
@@ -1750,11 +1750,11 @@ msgstr "Mostrar Escondidos"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Se mostrar ou não os ficheiros e pastas escondidos"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr "Motor por omissão de selecção de ficheiro"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nome do motor a utilizar por omissão para o GtkFileChooser"
 
@@ -2121,11 +2121,11 @@ msgstr "A largura da disposição"
 msgid "The height of the layout"
 msgstr "A altura da disposição"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "Título Destacado"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2133,19 +2133,19 @@ msgstr ""
 "Um título que pode ser apresentado pelo gestor de janelas quando este menu é "
 "destacado"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid "Vertical Padding"
 msgstr "Espaçamento Vertical"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Extra space at the top and bottom of the menu"
 msgstr "O espaço extra acima e abaixo do menu"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 msgid "Vertical Offset"
 msgstr "Deslocamento Vertical"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2153,11 +2153,11 @@ msgstr ""
 "Quando o menu é um submenu, posicioná-lo deslocando-o verticalmente este "
 "número de pixels"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 msgid "Horizontal Offset"
 msgstr "Deslocamento Horizontal"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2165,65 +2165,65 @@ msgstr ""
 "Quando o menu é um submenu, posicioná-lo deslocando-o horizontalmente este "
 "número de pixels"
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 msgid "Left Attach"
 msgstr "Anexar à Esquerda"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "O número da coluna a que anexar o lado esquerdo do filho"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 msgid "Right Attach"
 msgstr "Anexar à Direita"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 msgid "The column number to attach the right side of the child to"
 msgstr "O número da coluna a que anexar o lado direito do filho"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 msgid "Top Attach"
 msgstr "Anexar ao Topo"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 msgid "The row number to attach the top of the child to"
 msgstr "O número da linha a que anexar o topo do filho"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 msgid "Bottom Attach"
 msgstr "Anexar ao Fundo"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "O número da linha a que anexar o fundo do filho"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Pode alterar teclas de atalho"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Se os atalhos dos menus podem ou não ser alterados ao ser primida uma tecla "
 "sobre o item de menu"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Atraso antes de aparecerem os submenus"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Tempo mínimo que o cursor tem de estar sobre um item de menu antes do "
 "submenu aparecer"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Atraso antes de esconder um submenu"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2872,11 +2872,11 @@ msgstr ""
 "Mostrar um segundo botão de seta de avanço no extremo oposto da barra de "
 "rolamento"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "Ajustamento Horizontal"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "Ajustamento Vertical"
 
@@ -3810,128 +3810,128 @@ msgstr "Modelo TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "O modelo para a ordenação da TreeModelSort"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "Modelo TreeView"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "O modelo para a vista em árvore"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "Ajustamento Horizontal para o widget"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "Ajustamento Vertical para o widget"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "Mostrar os botões de cabeçalho de coluna"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "Cabeçalhos Clicáveis"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "Os cabeçalhos de coluna respondem a eventos de clique"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "Coluna de Expansão"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "Definir a coluna para a coluna de expansão"
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Reordenável"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "A vista é reordenável"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "Dica de Réguas"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Definir uma dica para motor de temas desenhar as linhas em cores alternadas"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "Activar Procura"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr "Vista permite que utilizador procure interactivamente pelas colunas"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "Procurar Coluna"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "Coluna modelo onde procurar ao fazê-lo pelo código"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 msgid "Fixed Height Mode"
 msgstr "Modo de Altura Fixa"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Acelera o GtkTreeView assumindo que todas as linhas têm a mesma altura"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "Largura de Separador Vertical"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Espaço vertical entre células. Tem de ser um número par"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "Largura de Separador Horizontal"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Espaço horizontal entre células. Tem de ser um número par"
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "Permitir Réguas"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "Permitir desenhar linhas em cores alternadas"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "Indentar Expansores"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "Criar os expansores indentados"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "Cor de Linha Par"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "Cor a utilizar para linhas pares"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "Cor de Linha Ímpar"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "Cor a utilizar para linhas ímpares"
 

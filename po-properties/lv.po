@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2002-12-19 16:10+0200\n"
 "Last-Translator: Artis Trops <hornet@navigator.lv>\n"
 "Language-Team: Latvian <ll10nt@os.lv>\n"
@@ -202,7 +202,7 @@ msgstr "Jūtīga"
 msgid "Whether the action is enabled."
 msgstr "Vai logdaļa ir redzama"
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Redzams"
@@ -1345,57 +1345,57 @@ msgstr "Vērtība sarakstā"
 msgid "Whether entered values must already be present in the list"
 msgstr "Vai ievadītajai vērtībai jau jābūt pašreizējaja sarakstā"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Koka skata modelis"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 #, fuzzy
 msgid "Wrap width"
 msgstr "Platums"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 #, fuzzy
 msgid "Row span column"
 msgstr "Rindu atstarpe"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 #, fuzzy
 msgid "Column span column"
 msgstr "Kolonnu atstarpe"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 #, fuzzy
 msgid "Active item"
 msgstr "Aktīvs"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "GdkFont, kas šobrīd ir izvēlēts"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -1612,21 +1612,21 @@ msgstr "Izvēlēties pie fokusēšanas"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Vai izvēlēties ieraksta saturu, kad tas tiek fokusēts"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "Koka skata modelis"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "Minimālais Slīdņa Garums"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
@@ -1689,11 +1689,11 @@ msgstr "Iezīmes logdaļa"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Logdaļa, ko attēlot parasta rāmja iezīmes vietā"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "Paplašinātāja Izmērs"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "Paplašinātāja bultas izmērs"
 
@@ -1796,11 +1796,11 @@ msgstr "Parādīt tekstu"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Vai pogas failu izveidošanai/manipulācijai būtu jāparāda"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Noklusētā fonta nosaukums"
@@ -2178,115 +2178,115 @@ msgstr "Izkārtojuma platums"
 msgid "The height of the layout"
 msgstr "Izkārtojuma augstums"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "Izslēgšanas Virsraksts"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Virsraksts, ko var parādīt logu pārvaldnieks, kad šī izvēlne ir izslēgta"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Vertikālā papildināšana"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr ""
 "Atstarpes apmērs, kādu pievienot uz augšu un apakšu no logdaļas, pikseļos"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Vertikālais mērogs"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Horizontālais mērogs"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 #, fuzzy
 msgid "Left Attach"
 msgstr "Kreisā piesaiste"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Kolonnas numurs, ko piesaistīt bērnam kreisajā pusē"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 #, fuzzy
 msgid "Right Attach"
 msgstr "Labā piesaiste"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "Kolonnas numurs, ko piesaistīt bērnam kreisajā pusē"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 #, fuzzy
 msgid "Top Attach"
 msgstr "Augšas piesaiste"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "Rindas numurs, ko piesaistīt bērna apagšas logdaļai"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Apakšas piesaiste"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "Rindas numurs, ko piesaistīt bērna apagšas logdaļai"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Var mainīt paātrinātājus"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Vai izvēlņu paātrinātāji var tikt mainīti, nospiežot taustiņu virs izvēlnes "
 "priekšmeta"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Aizture pirms parādās apakšizvēlne"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Minimums laika, cik ilgi kursoram jāatrodas uz izvēlnes pirms parādās "
 "apakšizvēlne"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Aizture pirms apakšizvēlnes paslēpšanas"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2917,11 +2917,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Parādīt otru uz priekšu vērstās bultas pogu pretējā ritjoslas galā"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "Horizontālais Noregulējums"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "Vertikālais Noregulējums"
 
@@ -3856,128 +3856,128 @@ msgstr "TreeModelSort Modelis"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modelis KokaModelisKārtot, ko kārtot"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "TreeView Modelis"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "Koka skata modelis"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "Logdaļas Horizontālais Noregulējums"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "Logdaļas Vertikālais Noregulējums"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "Rādīt kolonnas galvenes pogas"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "Galvenes Klikšķināmas"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "Kolonnu galvenes atbild klikšķu notikumiem"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "Paplašinātāja Kolonna"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "Iestatīt kolonnu kā paplašinātāja kolonnu"
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Ierakstāms"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "Skats ir ierakstāms"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "Robežsvītru Mājiens"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Iestatīt mājienu tēmu dzinējam zīmēt rindas mainīgās krāsās"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "Aktivizēt Meklēšanu"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr "Skats ļauj lietotājam caurmeklēt kolonnu interaktīvi"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "Meklēšanas Kolonna"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "Šablona kolonna, kuru caurmeklēt, kad pārmeklē kodu"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "Fiksēts augstums"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "Verikālā Atdalītāja Platums"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Vertikālā atstarpe starp šūnām. Jābūt pāra skaitlim"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "Horizontālā Atdalītāja Platums"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Horizontālā atstarpe starp šūnām. Jābūt pāra skaitlim"
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "Atļaut Robežsvītras"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "Atļaut zīmēt mainīgu krāsu rindas"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "Atkāpes Paplašinātājiem"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "Salikt atkāpes paplašinātājiem"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "Pāra Rindas Krāsa"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "Krāsa, kādu lietot pāra rindām"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "Nepāra Rindas Krāsa"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "Krāsa, kādu lietot nepāra rindām"
 

@@ -170,8 +170,10 @@ A function which decides whether the row indicated by @iter matches a given
 </para>
 
 @completion: 
-@index: 
+@index_: 
 @text: 
+<!-- # Unused Parameters # -->
+@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_insert_action_markup ##### -->
@@ -180,8 +182,10 @@ A function which decides whether the row indicated by @iter matches a given
 </para>
 
 @completion: 
-@index: 
+@index_: 
 @markup: 
+<!-- # Unused Parameters # -->
+@index: 
 
 
 <!-- ##### FUNCTION gtk_entry_completion_delete_action ##### -->
@@ -190,6 +194,8 @@ A function which decides whether the row indicated by @iter matches a given
 </para>
 
 @completion: 
+@index_: 
+<!-- # Unused Parameters # -->
 @index: 
 
 

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properrties 2.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2004-03-04 01:54+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: GNOME Korea <gnome-kr-hackers@lists.kldp.net>\n"
@@ -193,7 +193,7 @@ msgstr "반응"
 msgid "Whether the action is enabled."
 msgstr "이 동작을 사용할 지 여부."
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "보임"
@@ -1294,51 +1294,51 @@ msgstr "목록에 있는 값"
 msgid "Whether entered values must already be present in the list"
 msgstr "입력된 값이 목록에 이미 있는 값이어야 하는 지 여부"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr "콤보 상자 모델"
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 msgid "The model for the combo box"
 msgstr "콤보 상자를 위한 모델"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 msgid "Wrap width"
 msgstr "줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr "각 항목을 격자에 배치할 때 줄바꿈 너비"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 msgid "Row span column"
 msgstr "행 범위 열"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr "행 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 msgid "Column span column"
 msgstr "열 범위 열"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr "열 범위 값이 들어 있는 트리모델 열"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 msgid "Active item"
 msgstr "활성 항목"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 msgid "The item which is currently active"
 msgstr "현재 활성화된 항목"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr "목록으로 표시"
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "콤보 상자 드롭다운을 메뉴가 아니라 목록으로 표시할 지 여부"
 
@@ -1553,19 +1553,19 @@ msgstr "포커스시 선택"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "포커스될 때 항목의 내용을 선택할 것인지 여부"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr "완성 모델"
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 msgid "The model to find matches in"
 msgstr "일치하는 텍스트를 찾는 모델"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 msgid "Minimum Key Length"
 msgstr "최소 키 길이"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "일치하는 텍스트를 찾을 때 쓸 찾기 키의 최소 길이"
 
@@ -1625,11 +1625,11 @@ msgstr "레이블 위젯"
 msgid "A widget to display in place of the usual expander label"
 msgstr "일반적인 확장 단추 레이블 대신에 표시할 위젯"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "확장 단추 크기"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "확장 화살표의 크기"
 
@@ -1719,11 +1719,11 @@ msgstr "숨겨진 파일 표시"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "숨겨진 파일과 폴더를 표시할 지 여부"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr "기본 파일 선택창 백엔드"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "기본적으로 사용할 GtkFileChooser 백엔드의 이름"
 
@@ -2088,29 +2088,29 @@ msgstr "레이아웃의 너비"
 msgid "The height of the layout"
 msgstr "레이아웃의 높이"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "떼어내기 제목"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "이 메뉴를 떼어냈을 때 윈도우매니저에 의해 표시될 제목"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid "Vertical Padding"
 msgstr "세로 여백"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Extra space at the top and bottom of the menu"
 msgstr "메뉴의 위쪽/아래쪽에 추가할 공간"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 msgid "Vertical Offset"
 msgstr "세로 방향 오프셋"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
@@ -2118,11 +2118,11 @@ msgstr ""
 "메뉴가 하위 메뉴일 경우, 세로 방향의 위치를 이 픽셀 개수만큼의 오프셋으로 합"
 "니다."
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 msgid "Horizontal Offset"
 msgstr "가로 방향 오프셋"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
@@ -2130,61 +2130,61 @@ msgstr ""
 "메뉴가 하위 메뉴일 경우, 가로 방향의 위치를 이 픽셀 개수만큼의 오프셋으로 합"
 "니다."
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 msgid "Left Attach"
 msgstr "왼쪽 붙임"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "하위 위젯의 왼쪽을 붙일 열 번호"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 msgid "Right Attach"
 msgstr "오른쪽 붙임"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 msgid "The column number to attach the right side of the child to"
 msgstr "하위 위젯의 오른쪽을 붙일 열 번호"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 msgid "Top Attach"
 msgstr "위쪽 붙임"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 msgid "The row number to attach the top of the child to"
 msgstr "하위 위젯의 위쪽을 붙일 행 번호"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 msgid "Bottom Attach"
 msgstr "아래쪽 붙임"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "하위 위젯의 아래쪽을 붙일 행 번호"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "단축키 바꾸기 가능"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr "메뉴 항목 위에서 키를 눌러 메뉴 단축키를 바꿀 수 있는지 여부"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "하위 메뉴가 보이기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr "하위 메뉴가 보이기 전까지 포인터가 메뉴 항목 위에서 기다릴 최소 시간"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "하위 메뉴를 감추기 전까지의 지연 시간"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2797,11 +2797,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "스크롤 막대의 반대쪽 끝에 표준 앞으로 가기 화살표 단추를 표시합니다"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "가로 조정"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "세로 조정"
 
@@ -3702,127 +3702,127 @@ msgstr "트리모델소트 모델"
 msgid "The model for the TreeModelSort to sort"
 msgstr "트리모델소트에서 정렬할 때 쓰는 모델"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "트리보기 모델"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "트리 보기를 위한 모델"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "위젯의 가로 조정"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "위젯의 세로 조정"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "열 헤더 단추 표시"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "헤더 클릭 가능"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "열 헤더가 클릭 이벤트에 반응하기"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "확장 열"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "이 열을 확장 열로 사용합니다."
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "순서 바꾸기 가능"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "뷰가 순서 바꾸기가 가능한지 여부"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "눈금자 힌트"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "테마 엔진에 별도의 색으로 행을 그리는 힌트를 부여합니다"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "찾기 사용"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr "사용자가 뷰의 컬럼에서 대화적으로 찾기를 할 수 있도록 합니다"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "찾기 열"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "찾기를 할 때 기준으로 삼을 모델 열"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 msgid "Fixed Height Mode"
 msgstr "고정 높이 모드"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "모든 열의 높이가 같다고 가정합니다 - GtkTreeView의 속도를 높입니다"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "세로 구분선 너비"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "셀 사이의 세로 방향 공간.  짝수이어야 합니다."
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "가로 구분선 너비"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "셀 사이의 가로 방향 공간.  짝수이어야 합니다."
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "자 허용"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "엇갈리는 색의 열을 그리도록 허용합니다"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "확장 들여쓰기"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "확장을 들여씀"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "짝수 열 색"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "짝수 열에 사용할 색"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "홀수 열 색"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "홀수 열에 사용할 색"
 

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2004-03-06 02:53+0100\n"
 "Last-Translator: Aleksandar Urošević <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -204,7 +204,7 @@ msgstr "Osetljivo"
 msgid "Whether the action is enabled."
 msgstr "Da li je akcija uključena."
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Vidljivo"
@@ -1322,51 +1322,51 @@ msgstr "Vrednost sa spiska"
 msgid "Whether entered values must already be present in the list"
 msgstr "Da li unete vrednosti moraju već biti prisutne na spisku"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr "Model padajuće liste"
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 msgid "The model for the combo box"
 msgstr "Model za padajuću listu"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 msgid "Wrap width"
 msgstr "Širina za prelom"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Širina za prelom pri raspoređivanju stavki u mreži"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 msgid "Row span column"
 msgstr "Red obuhvata kolonu"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr "Model kolone stabla koji sadrži vrednosti obuhvatanja redova"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 msgid "Column span column"
 msgstr "Kolona obuhvata kolonu"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr "Model kolone stabla koji sadrži vrednosti obuhvatanja kolona"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 msgid "Active item"
 msgstr "Aktivna stavka"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 msgid "The item which is currently active"
 msgstr "Stavka koja je trenutno aktivna"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr "Izgleda kao spisak"
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr "Da li padajuća polja za unos izgledaju kao spiskovi umesto kao meniji"
 
@@ -1585,19 +1585,19 @@ msgstr "Izaberi kad je u žiži"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Da li izabrati sadržaj kada polje pređe u žižu"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr "Model dopunjavanja"
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 msgid "The model to find matches in"
 msgstr "Model po kojem se traže poklapanja"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 msgid "Minimum Key Length"
 msgstr "Najmanja dužina ključa"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Najmanja dužina ključa za pretragu radi nalaženja poklapanja"
 
@@ -1658,11 +1658,11 @@ msgid "A widget to display in place of the usual expander label"
 msgstr "Element koji se prikazuje namesto uobičajene oznake razgranika"
 
 # Ovo je LOSE!
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "Veličina razgranika"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "Veličina strelice za grananje"
 
@@ -1751,11 +1751,11 @@ msgstr "Prikaži sakrivene"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Da li se prikazuju sakrivene datoteke i direktorijumi"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr "Podrazumevana podrška za izbor datoteka"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Ime podrške koju podrazumevano koristi GtkFileChooser"
 
@@ -2119,102 +2119,102 @@ msgstr "Širina prikaza"
 msgid "The height of the layout"
 msgstr "Visina prikaza"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "Naslov otcepljenog"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "Naslov koji može prikazati upravnik prozora kada se ovaj meni otcepi"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid "Vertical Padding"
 msgstr "Uspravna popuna"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Količina razmaka koji se dodaje na vrhu i na dnu menija"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 msgid "Vertical Offset"
 msgstr "Uspravni pomeraj"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr "Kada je meni zapravo podmeni, pomeri ga uspravno za ovaj broj tačaka"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 msgid "Horizontal Offset"
 msgstr "Vodoravni pomeraj"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "Kada je meni zapravo podmeni, pomeri ga vodoravno za ovaj broj tačaka"
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 msgid "Left Attach"
 msgstr "Levo pripajanje"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Broj kolone za koju prikačiti levu stranu sadržanog elementa"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 msgid "Right Attach"
 msgstr "Desno pripajanje"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 msgid "The column number to attach the right side of the child to"
 msgstr "Broj kolone za koju prikačiti desnu stranu sadržanog elementa"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 msgid "Top Attach"
 msgstr "Gornje pripajanje"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 msgid "The row number to attach the top of the child to"
 msgstr "Broj reda za koji prikačiti gornju stranu sadržanog elementa"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 msgid "Bottom Attach"
 msgstr "Donje pripajanje"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "Broj reda za koji prikačiti donju stranu sadržanog elementa"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Dozvoljena izmena prečica"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Da li je dozvoljena izmena prečica pritiskom na tastere nad stavkom menija"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Vreme pre pojave podmenija"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Najmanje vreme koje se pokazivač miša mora zadržati preko stavke menija da "
 "bi se pojavio podmeni"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Vreme pre skrivanja podmenija"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2850,11 +2850,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Prikaži drugu strelicu unapred na suprotnoj strani klizača"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "Vodoravna popravka"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "Uspravna popravka"
 
@@ -3770,129 +3770,129 @@ msgstr "TreeModelSort model"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Model koji treba urediti pomoću TreeModelSort-a"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "Model TreeView-a"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "Model za razgranati pregled"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "Vodoravna popravka za element"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "Uspravna popravka za element"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "Prikaži dugmiće za zaglavlje kolona"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "Zaglavlja se mogu kliknuti"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "Zaglavlja kolona odgovaraju na pritiske mišem"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "Kolona grananja"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "Postavite kolonu u kojoj se vrši grananje"
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Redosled promenljiv"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "Dozvoljena je izmena redosleda"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "Nagoveštaj za linije"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Postavite nagoveštaj za motor teme radi iscrtavanja redova u naizmeničnim "
 "bojama"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "Omogući pretragu"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr "Pregled dozvoljava korisnicima da traže interaktivno kroz kolone"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "Kolona za pretragu"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "Kolona kroz koju se pretražuje kada se pretražuje pomoću koda"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 msgid "Fixed Height Mode"
 msgstr "Utvrđena visina reda"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "Ubrzava prikaz pretpostavljanjem da svi redovi imaju istu visinu"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "Širina uspravnih razdvojnika"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Uspravni razmak između polja. Mora biti paran broj"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "Širina vodoravnih razdvojnika"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Vodoravni razmak između polja. Mora biti paran broj"
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "Dozvoli linije"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "Dozvoli iscrtavanje redova u naizmeničnim bojama"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "Uvlačenje za grananje"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "Postaviti da grananje bude uvučeno"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "Boja parnog reda"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "Boja za parne redove"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "Boja neparnog reda"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "Boja za neparne redove"
 

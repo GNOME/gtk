@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2004-03-17 08:30+0100\n"
 "Last-Translator: Arafat Medini <lumina@silverpen.de>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
@@ -200,7 +200,7 @@ msgstr "حساس"
 msgid "Whether the action is enabled."
 msgstr "فيما إذا كانت العملية مفعلة."
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "مرئي"
@@ -1294,51 +1294,51 @@ msgstr "القيمة في القائمة"
 msgid "Whether entered values must already be present in the list"
 msgstr "فيما إذا وجب على القيم المدخلة أن تكون موجودةً في القائمة"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr "نموذج ComboBox"
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 msgid "The model for the combo box"
 msgstr "نموذج لصندوق المجموعات"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 msgid "Wrap width"
 msgstr "عرض اللف"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr "عرض اللف عند تصميم العناصر في الشبكة"
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 msgid "Row span column"
 msgstr "عمود إمتداد السطر"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr "عمود نموذج الشجرة المحتوي على قيم إمتداد السطر"
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 msgid "Column span column"
 msgstr "عمود إمتداد العمود"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr "عمود TreeModel الحاوي لقيم مدى العمود"
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 msgid "Active item"
 msgstr "العنصر النشط"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 msgid "The item which is currently active"
 msgstr "العنصر النشط حاليا"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr "يظهر كقائمة"
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 "فما إذا القوائم النازلة لصناديق المجموعات يجب أن تكون قوائم بسيطة عوض قوائم "
@@ -1553,19 +1553,19 @@ msgstr "اختيار عند التركيز"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "فيما اذا سيقع انتقاء محتويات خانة عند تركيزها"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr "نمط الانهاء"
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 msgid "The model to find matches in"
 msgstr "النموذج الذي فيه توجد المقابلات"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 msgid "Minimum Key Length"
 msgstr "الطول الأدنى للمفتاح"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "الطول الأدنى لمفتاح البحث حتى يمكن البحث عن المتطابقات"
 
@@ -1625,11 +1625,11 @@ msgstr "قطعة الشارة"
 msgid "A widget to display in place of the usual expander label"
 msgstr "القطعة التي ستعرض عوض شارة الموسع الاعتادية"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "حجم الموسع"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "حجم سهم الموسع"
 
@@ -1718,11 +1718,11 @@ msgstr "اظهار المخفي"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "فيما اذا وجب عرض الملفات و الدلائل المخفية"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr "خلفيّة منتقي الملفات الإفتراضيّة"
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "اسم خلفية GtkFileChooser التي ستستخدم إفتراضيّا"
 
@@ -2082,103 +2082,103 @@ msgstr "عرض التصميم"
 msgid "The height of the layout"
 msgstr "ارتفاع التصميم"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "قطف العنوان"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr "عنوان قد يعرض من قبل مدير النوافذ عند قطف هذه القائمة"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 msgid "Vertical Padding"
 msgstr "الحشو العمودي"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Extra space at the top and bottom of the menu"
 msgstr "مساحة اضافية لأعلى وأسفل القائمة"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 msgid "Vertical Offset"
 msgstr "التكافؤ العمودي"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 "عندما تكون القائمة قائمة فرعيّة تموقع هذا العدد من البكسلات عموديّا كتعويض"
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 msgid "Horizontal Offset"
 msgstr "التكافؤ العمودي"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr "عندما·تكون·القائمة·قائمة·فرعيّة·تموقع·هذا·العدد·من·البكسلات·أفقيّا·كتعويض"
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 msgid "Left Attach"
 msgstr "ربط على اليسار"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "رقم العمود الذي إليه ستربط الجهة اليسرى للإبن"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 msgid "Right Attach"
 msgstr "ربط على اليمين"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 msgid "The column number to attach the right side of the child to"
 msgstr "رقم·العمود·الذي·إليه·ستربط·الجهة·اليمنى·للإبن"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 msgid "Top Attach"
 msgstr "ربط بالأعلى"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 msgid "The row number to attach the top of the child to"
 msgstr "رقم·السطر·الذي·إليه·ستربط·الجهة·العليا·للإبن"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 msgid "Bottom Attach"
 msgstr "ربط بالأسفل"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "رقم·السطر·الذي·إليه·ستربط·الجهة·السفلى·للإبن"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "من الممكن تغيير مفاتيح الاختصار"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "فيما اذا كان من الممكن تغيير مفاتيح اختصار القوائم بضغط مفتاح فوق عنصر "
 "القائمة"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "التأخير قبل ظهور القوائم المحوية"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "الوقت الأدنى الذي يجب أن يبقى فيه المؤشر فوق عنصر قائمة لتظهر القائمة المحوية"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "التأخير قبل اخفاء قائمة محوية"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2790,11 +2790,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "عرض زر سهم تقدم ثان عند النهاية المعاكسة لعمود التدرج"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "ضبط أفقي"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "ضبط عمودي"
 
@@ -3690,127 +3690,127 @@ msgstr "نمط ترتيب العرض الشجري"
 msgid "The model for the TreeModelSort to sort"
 msgstr "نمط فرز العرض الشجري المستخدم للفرز"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "نمط العرض الشجري"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "نمط عرض الشجرة"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "الضبط الأفقي للكائن"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "الضبط العمودي للكائن"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "أظهر أزرار رؤوس العمود"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "الرؤوس قابلة للنقر"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "رؤوس العمود تستجيب لأحداث النقر"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "عمود موسع"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "تعين العمود للعمود الموسع"
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "قابل لإعادة الترتيب"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "العرض قابل لإعادة الترتيب"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "تلميحة القواعد"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "تعين تلميحة لآلة التيمة حتى ترسم صفوفا بألوان متغايرة"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "تفعيل البحث"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr "عرض يسمح للمستخدم بالبحث خلال الأعمدة بتفاعل"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "عمود بحث"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "عمود النمط الذي يتم البحث خلاله أثناء البحث خلال الكود"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 msgid "Fixed Height Mode"
 msgstr "نسق الارتفاع الثابت"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr "يسرع GtkTreeView باعتبار جميع الأعمدة ذات إرتفاع موحد"
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "العرض العمودي للفاصل"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "الفراغ العمودي بين الخلايا. يجب أن يكون رقما زوجيا"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "العرض الأفقي للفاصل"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "الفراغ الأفقي بين الخلايا. يجب أن يكون رقما زوجيا"
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "اسمح بالقواعد"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "السماح برسم أعمدة ملونة متوالية"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "إزاحة الموسعات"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "جعل الموسعات مجوفة"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "لون السطر الزوجي"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "اللون للاستخدام للسطور الزوجية"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "لون السطر الغريب"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "اللون للاستخدام للسطور الغريبة"
 

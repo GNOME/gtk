@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2003-04-13 23:29-0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -205,7 +205,7 @@ msgstr "Herkkä"
 msgid "Whether the action is enabled."
 msgstr "Onko tämä säädin näkyvä"
 
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Näkyvä"
@@ -1344,57 +1344,57 @@ msgstr "Arvo listassa"
 msgid "Whether entered values must already be present in the list"
 msgstr "Täytyykö syötettyjen arvojen olla jo luettelossa"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Puunäkymän malli"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 #, fuzzy
 msgid "Wrap width"
 msgstr "Leveys"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 #, fuzzy
 msgid "Row span column"
 msgstr "Rivivälit"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 #, fuzzy
 msgid "Column span column"
 msgstr "Sarakeväli"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 #, fuzzy
 msgid "Active item"
 msgstr "Aktiivinen"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "Nyt valittu GdkFont"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -1612,21 +1612,21 @@ msgstr "Valitse kohdistettaessa"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Muuttuuko sisältö valituksi, kun kenttä saa syöttökohdistuksen"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "Puunäkymän malli"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "Pienin liukusäätimen pituus"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
@@ -1689,11 +1689,11 @@ msgstr "Nimiösäädin"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Kehyksen tavallisen nimiön korvaava oleva säädin"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "Laajentimen koko"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "Laajenninnuolen koko"
 
@@ -1796,11 +1796,11 @@ msgstr "Näytä teksti"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Näkyvätkö tiedostojen luonti- ja muokkauspainikkeet"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Oletuskirjasimen nimi"
@@ -2176,113 +2176,113 @@ msgstr "Asetelman leveys"
 msgid "The height of the layout"
 msgstr "Asetelman korkeus"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "Irrotettava otsikko"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 "Otsikko, jonka ikkunointiohjelma voi näyttää, kun tämä valikko on irrotettu"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Pystytäyte"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Säätimen ylä- ja alapuolelle lisättävä väli kuvapisteinä."
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Pystyskaalaus"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Vaakaskaalaus"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 #, fuzzy
 msgid "Left Attach"
 msgstr "Vasen kiinnitys"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "Sen sarakkeen numero, johon lapsen vasen sivu kiinnittyy"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 #, fuzzy
 msgid "Right Attach"
 msgstr "Oikea kiinnitys"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "Sen sarakkeen numero, johon lapsen vasen sivu kiinnittyy"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 #, fuzzy
 msgid "Top Attach"
 msgstr "Yläkiinnitys"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "Sen rivin numero, johon lapsen alasivu kiinnittyy"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Alakiinnitys"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "Sen rivin numero, johon lapsen alasivu kiinnittyy"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Voi muuttaa pikavalintoja"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Voiko valikon pikavalintoja muuttaa painamalla näppäintä valikkokohdan päällä"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Alivalikkojen ilmestymisviive"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Aika, jonka osoittimen täytyy olla valikkokohdan yllä ennen alivalikon "
 "ilmestymistä"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Alivalikon piilotusviive"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2921,11 +2921,11 @@ msgstr ""
 "Näytä toissijainen eteenpäin-nuolipainike vierityspalkin vastakkaisessa "
 "päässä"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "Vaakasäätö"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "Pystysäätö"
 
@@ -3859,130 +3859,130 @@ msgstr "TreeModelSort-malli"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Malli, jonka TreeModelSort järjestää"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "TreeView-malli"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "Puunäkymän malli"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "Säätimen vaakasäätö"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "Säätimen pystysäätö"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "Näytä sarakkeiden otsakkepainikkeet"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "Napsautettavat otsakkeet"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "Sarakkeiden otsakkeet vastaavat napsautustapahtumiin"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "Laajenninsarake"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "Aseta sarake laajenninsaraketta varten"
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Uudelleenjärjesteltävä"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "Näkymä on uudelleenjärjesteltävä"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "Viivavihje"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Aseta vihje teemamoottorille rivien vuorottelevilla väreillä piirtämistä "
 "varten"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "Salli etsintä"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr "Näkymä mahdollistaa käyttäjän etsiä sarakkeista interaktiivisesti"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "Etsintäsarake"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "Mallisarake, josta etsitään, kun etsitään koodista"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "Vakiokorkeus."
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "Vaakaerottimen leveys"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Solujen pystyväli. Täytyy olla parillinen luku"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "Pystyerottimen leveys"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Solujen vaakaväli. Täytyy olla parillinen luku."
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "Salli viivat"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "Salli rivien värien vaihtelu"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "Sisennä laajentimet"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "Sisennä laajentimet"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "Parillisen rivin väri"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "Parillisten rivien väri"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "Parittoman rivin väri"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "Parittomien rivien väri"
 

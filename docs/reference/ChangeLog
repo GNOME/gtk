@@ -1,3 +1,7 @@
+2004-06-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.4.2 ===
+
 Mon May 31 00:18:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtktable.sgml: Document the default attach

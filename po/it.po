@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-05-25 22:25+0200\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2004-04-16 17:59+0200\n"
 "Last-Translator: Alessio Dessì <alessiodessi@tiscali.it>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
@@ -927,15 +927,15 @@ msgstr "Anello del colore"
 msgid "Color Selection"
 msgstr "Selezione colore"
 
-#: gtk/gtkentry.c:4215 gtk/gtktextview.c:6925
+#: gtk/gtkentry.c:4226 gtk/gtktextview.c:6925
 msgid "Select _All"
 msgstr "_Seleziona tutto"
 
-#: gtk/gtkentry.c:4225 gtk/gtktextview.c:6935
+#: gtk/gtkentry.c:4236 gtk/gtktextview.c:6935
 msgid "Input _Methods"
 msgstr "_Metodi di input"
 
-#: gtk/gtkentry.c:4235 gtk/gtktextview.c:6946
+#: gtk/gtkentry.c:4246 gtk/gtktextview.c:6946
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserisci carattere di controllo unicode"
 
@@ -989,7 +989,7 @@ msgstr "Home"
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserdefault.c:1510
+#: gtk/gtkfilechooserdefault.c:1511
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -998,13 +998,13 @@ msgstr ""
 "Impossibile creare la cartella «%s»:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1657
+#: gtk/gtkfilechooserdefault.c:1655
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr ""
 "Impossibile aggiungere il segnalibro per «%s» poiché non è una cartella."
 
-#: gtk/gtkfilechooserdefault.c:1735
+#: gtk/gtkfilechooserdefault.c:1733
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1013,25 +1013,25 @@ msgstr ""
 "Impossibile rimuovere il segnalibro per %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2329
+#: gtk/gtkfilechooserdefault.c:2327
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Impossibile aggiungere un segnalibro per «%s» perché è un nome di percorso "
 "non valido."
 
-#: gtk/gtkfilechooserdefault.c:2520
+#: gtk/gtkfilechooserdefault.c:2518
 msgid "Folder"
 msgstr "Cartella"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2567 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2565 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "A_ggiungi"
 
-#: gtk/gtkfilechooserdefault.c:2577 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2575 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Rimuovi"
 
@@ -1422,7 +1422,7 @@ msgstr "_Dimensione:"
 msgid "_Preview:"
 msgstr "A_nteprima:"
 
-#: gtk/gtkfontsel.c:1318
+#: gtk/gtkfontsel.c:1327
 msgid "Font Selection"
 msgstr "Selezione tipo di carattere"
 

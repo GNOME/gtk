@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-06-01 02:54+0200\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2004-06-01 15:08+0300\n"
 "Last-Translator: Rostislav Raikov <zbrox@i-space.org>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit"
+"Content-Transfer-Encoding: 8bit\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
 msgid "Number of Channels"
@@ -71,8 +71,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf.c:165
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr ""
-"Брой байтове между началото на ред и началото на следващия."
+msgstr "Брой байтове между началото на ред и началото на следващия."
 
 #: gdk-pixbuf/gdk-pixbuf.c:175
 msgid "Pixels"
@@ -1247,8 +1246,8 @@ msgstr "Текущата Алфа"
 
 #: gtk/gtkcolorbutton.c:248
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Избраната стойност на непрозрачност (0 пълна прозрачност, 6553"
-"5 пълна "
+msgstr ""
+"Избраната стойност на непрозрачност (0 пълна прозрачност, 65535 пълна "
 "непрозрачност)"
 
 #: gtk/gtkcolorsel.c:1767
@@ -1581,8 +1580,8 @@ msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
 msgstr ""
-"Хоризонталното подравняване, от 0 (ляво) до 1 (дясно). Обърнато за "
-"RTL подредби"
+"Хоризонталното подравняване, от 0 (ляво) до 1 (дясно). Обърнато за RTL "
+"подредби"
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1705,7 +1704,8 @@ msgstr "Само локални"
 
 #: gtk/gtkfilechooser.c:195
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "Дали избраните файлове да бъдат ограничени само до локални файлове: URL-та"
+msgstr ""
+"Дали избраните файлове да бъдат ограничени само до локални файлове: URL-та"
 
 #: gtk/gtkfilechooser.c:200
 #, fuzzy
@@ -2132,11 +2132,11 @@ msgstr "Ширината на подредбата"
 msgid "The height of the layout"
 msgstr "Височината на подредбата"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "Откъснато заглавие"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2144,106 +2144,106 @@ msgstr ""
 "Заглавие което може да се покаже от мениджъра на прозорци когато това меню е "
 "откъснато"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Вертикално разстояние"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 msgid "Extra space at the top and bottom of the menu"
 msgstr "Допълнително място над и под менюто"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Вертикално мащабиране"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Хоризонтално мащабиране"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 #, fuzzy
 msgid "Left Attach"
 msgstr "Ляво прикачване"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 "Номер на колоната към който да се прикачи лявата страна на вложения елемент"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 #, fuzzy
 msgid "Right Attach"
 msgstr "Дясно прикачване"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 "Номер на колоната към който да се прикачи лявата страна на вложения елемент"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 #, fuzzy
 msgid "Top Attach"
 msgstr "Горно прикачване"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr ""
 "Номер на реда към който да се прикачи долната страна на вложения елемент"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Долно прикачване"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 "Номер на реда към който да се прикачи долната страна на вложения елемент"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Може да променя ускорителите"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Дали ускорителите за менюта могат да бъдат променяни чрез натискане на "
 "клавиш над обект от менюто."
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Закъснение преди появяване на подменюта"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Минимално време през което показалеца трябва да остане над обект от меню "
 "преди  да се появи подменюто"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Закъснение преди скриване на подменю"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2456,8 +2456,7 @@ msgstr "Втора стрелка назад"
 #: gtk/gtknotebook.c:529
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
-msgstr ""
-"Втори бутон със стрелка назад от другата страна на лентата с табове"
+msgstr "Втори бутон със стрелка назад от другата страна на лентата с табове"
 
 #: gtk/gtknotebook.c:545 gtk/gtkscrollbar.c:122
 msgid "Secondary forward stepper"
@@ -2466,8 +2465,7 @@ msgstr "Втора стрелка напред"
 #: gtk/gtknotebook.c:546
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
-msgstr ""
-"Втори бутон със стрелка напред от другата страна на лентата с табовете"
+msgstr "Втори бутон със стрелка напред от другата страна на лентата с табовете"
 
 #: gtk/gtknotebook.c:561 gtk/gtkscrollbar.c:98
 msgid "Backward stepper"
@@ -3157,7 +3155,9 @@ msgstr ""
 
 #: gtk/gtkstatusbar.c:174
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "Дали лентата за състоянието има хватка за осъразмеряването на най-горното ниво"
+msgstr ""
+"Дали лентата за състоянието има хватка за осъразмеряването на най-горното "
+"ниво"
 
 #: gtk/gtkstatusbar.c:201
 msgid "Style of bevel around the statusbar text"
@@ -3872,7 +3872,8 @@ msgstr "Режим \"постоянна височина\""
 
 #: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr "Забързва GtkTreeView като предполага, че всички редове имат същата височина"
+msgstr ""
+"Забързва GtkTreeView като предполага, че всички редове имат същата височина"
 
 #: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"

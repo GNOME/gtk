@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-04-30 12:06-0400\n"
+"POT-Creation-Date: 2004-06-04 10:49-0400\n"
 "PO-Revision-Date: 2003-11-13 15:21+0100\n"
 "Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -207,7 +207,7 @@ msgid "Whether the action is enabled."
 msgstr "Si el giny és visible"
 
 #
-#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:556
+#: gtk/gtkaction.c:264 gtk/gtkactiongroup.c:148 gtk/gtktreeview.c:561
 #: gtk/gtktreeviewcolumn.c:223 gtk/gtkwidget.c:442
 msgid "Visible"
 msgstr "Visible"
@@ -1353,57 +1353,57 @@ msgstr "Valor a la llista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Com els valors introduïts poden ésser presents a la llista"
 
-#: gtk/gtkcombobox.c:462
+#: gtk/gtkcombobox.c:464
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:463
+#: gtk/gtkcombobox.c:465
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "El model per la vista d'arbre"
 
-#: gtk/gtkcombobox.c:470
+#: gtk/gtkcombobox.c:472
 #, fuzzy
 msgid "Wrap width"
 msgstr "Amplada"
 
-#: gtk/gtkcombobox.c:471
+#: gtk/gtkcombobox.c:473
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:480
+#: gtk/gtkcombobox.c:482
 #, fuzzy
 msgid "Row span column"
 msgstr "Espaiat de files"
 
-#: gtk/gtkcombobox.c:481
+#: gtk/gtkcombobox.c:483
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:490
+#: gtk/gtkcombobox.c:492
 #, fuzzy
 msgid "Column span column"
 msgstr "Espaiat de columnes"
 
-#: gtk/gtkcombobox.c:491
+#: gtk/gtkcombobox.c:493
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:500
+#: gtk/gtkcombobox.c:502
 #, fuzzy
 msgid "Active item"
 msgstr "Actiu"
 
-#: gtk/gtkcombobox.c:501
+#: gtk/gtkcombobox.c:503
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "El GdkFont actualment està seleccionat"
 
-#: gtk/gtkcombobox.c:509
+#: gtk/gtkcombobox.c:511
 msgid "Appears as list"
 msgstr ""
 
-#: gtk/gtkcombobox.c:510
+#: gtk/gtkcombobox.c:512
 msgid "Whether combobox dropdowns should look like lists rather than menus"
 msgstr ""
 
@@ -1620,21 +1620,21 @@ msgstr "Selecciona en el focus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Si s'ha de seleccionar els continguts d'una entrada quan és enfocada"
 
-#: gtk/gtkentrycompletion.c:223
+#: gtk/gtkentrycompletion.c:224
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:224
+#: gtk/gtkentrycompletion.c:225
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "El model per la vista d'arbre"
 
-#: gtk/gtkentrycompletion.c:230
+#: gtk/gtkentrycompletion.c:231
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "Llargària mínima del lliscador"
 
-#: gtk/gtkentrycompletion.c:231
+#: gtk/gtkentrycompletion.c:232
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
@@ -1699,11 +1699,11 @@ msgstr "Giny etiqueta"
 msgid "A widget to display in place of the usual expander label"
 msgstr "Un giny a visualitzar en lloc del típic marc d'etiqueta"
 
-#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:626
+#: gtk/gtkexpander.c:246 gtk/gtktreeview.c:642
 msgid "Expander Size"
 msgstr "Mida de l'expansor"
 
-#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:627
+#: gtk/gtkexpander.c:247 gtk/gtktreeview.c:643
 msgid "Size of the expander arrow"
 msgstr "Mida de la fila expansora"
 
@@ -1805,11 +1805,11 @@ msgstr "Mostra el contorn"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Si s'han de visualitzar els botons per crear/manipular fitxers"
 
-#: gtk/gtkfilechooserdefault.c:559
+#: gtk/gtkfilechooserdefault.c:560
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:560
+#: gtk/gtkfilechooserdefault.c:561
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Nom per defecte del tipus de lletra a utilitzar"
@@ -2187,11 +2187,11 @@ msgstr "L'amplada de la disposició"
 msgid "The height of the layout"
 msgstr "L'alçada de la disposició"
 
-#: gtk/gtkmenu.c:518
+#: gtk/gtkmenu.c:520
 msgid "Tearoff Title"
 msgstr "Títol de Tearoff"
 
-#: gtk/gtkmenu.c:519
+#: gtk/gtkmenu.c:521
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
@@ -2199,103 +2199,103 @@ msgstr ""
 "Un títol que s'ha de visualitzar mitjançant el gestor de finestres quan "
 "aquest menú es desactivi"
 
-#: gtk/gtkmenu.c:525
+#: gtk/gtkmenu.c:527
 #, fuzzy
 msgid "Vertical Padding"
 msgstr "Separació vertical"
 
-#: gtk/gtkmenu.c:526
+#: gtk/gtkmenu.c:528
 #, fuzzy
 msgid "Extra space at the top and bottom of the menu"
 msgstr "L'alineació d'espai a afegir de dalt a baix del giny, en punts"
 
-#: gtk/gtkmenu.c:534
+#: gtk/gtkmenu.c:536
 #, fuzzy
 msgid "Vertical Offset"
 msgstr "Escala vertical"
 
-#: gtk/gtkmenu.c:535
+#: gtk/gtkmenu.c:537
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:545
 #, fuzzy
 msgid "Horizontal Offset"
 msgstr "Escala horitzontal"
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:546
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:554
+#: gtk/gtkmenu.c:556
 #, fuzzy
 msgid "Left Attach"
 msgstr "Fitxer adjunt esquerre"
 
-#: gtk/gtkmenu.c:555 gtk/gtktable.c:204
+#: gtk/gtkmenu.c:557 gtk/gtktable.c:204
 msgid "The column number to attach the left side of the child to"
 msgstr "El número de columna per adjuntar la banda esquerra del fill a"
 
-#: gtk/gtkmenu.c:562
+#: gtk/gtkmenu.c:564
 #, fuzzy
 msgid "Right Attach"
 msgstr "Fitxer adjunt dret"
 
-#: gtk/gtkmenu.c:563
+#: gtk/gtkmenu.c:565
 #, fuzzy
 msgid "The column number to attach the right side of the child to"
 msgstr "El número de columna per adjuntar la banda esquerra del fill a"
 
-#: gtk/gtkmenu.c:570
+#: gtk/gtkmenu.c:572
 #, fuzzy
 msgid "Top Attach"
 msgstr "Fitxer adjunt superior"
 
-#: gtk/gtkmenu.c:571
+#: gtk/gtkmenu.c:573
 #, fuzzy
 msgid "The row number to attach the top of the child to"
 msgstr "El número de fila per adjuntar la part inferior del fill a"
 
-#: gtk/gtkmenu.c:578
+#: gtk/gtkmenu.c:580
 #, fuzzy
 msgid "Bottom Attach"
 msgstr "Fitxer adjunt inferior"
 
-#: gtk/gtkmenu.c:579 gtk/gtktable.c:225
+#: gtk/gtkmenu.c:581 gtk/gtktable.c:225
 msgid "The row number to attach the bottom of the child to"
 msgstr "El número de fila per adjuntar la part inferior del fill a"
 
-#: gtk/gtkmenu.c:666
+#: gtk/gtkmenu.c:668
 msgid "Can change accelerators"
 msgstr "Poden canviar els acceleradors"
 
-#: gtk/gtkmenu.c:667
+#: gtk/gtkmenu.c:669
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Si els acceleradors del menú es poden canviar prement una tecla sobre l'ítem "
 "del menú"
 
-#: gtk/gtkmenu.c:672
+#: gtk/gtkmenu.c:674
 msgid "Delay before submenus appear"
 msgstr "Retard abans de que apareguen els submenús"
 
-#: gtk/gtkmenu.c:673
+#: gtk/gtkmenu.c:675
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Temps mínim que ha d'estar el punter sobre un element de menú abans que "
 "aparegui el submenú"
 
-#: gtk/gtkmenu.c:680
+#: gtk/gtkmenu.c:682
 msgid "Delay before hiding a submenu"
 msgstr "Retard abans d'amagar un submenú"
 
-#: gtk/gtkmenu.c:681
+#: gtk/gtkmenu.c:683
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -2947,11 +2947,11 @@ msgstr ""
 "Mostra un botó secundari de desplaçament endavant a l'altra banda de la "
 "barra de desplaçament"
 
-#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:540
+#: gtk/gtkscrolledwindow.c:237 gtk/gtktext.c:602 gtk/gtktreeview.c:545
 msgid "Horizontal Adjustment"
 msgstr "Ajust horitzontal"
 
-#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:548
+#: gtk/gtkscrolledwindow.c:244 gtk/gtktext.c:610 gtk/gtktreeview.c:553
 msgid "Vertical Adjustment"
 msgstr "Ajust vertical"
 
@@ -3892,132 +3892,132 @@ msgstr "Model TreeModelSort"
 msgid "The model for the TreeModelSort to sort"
 msgstr "El model per a TreeModelSort a ordenar"
 
-#: gtk/gtktreeview.c:532
+#: gtk/gtktreeview.c:537
 msgid "TreeView Model"
 msgstr "Model de vista d'arbre"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:538
 msgid "The model for the tree view"
 msgstr "El model per la vista d'arbre"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:546
 msgid "Horizontal Adjustment for the widget"
 msgstr "Ajustament horitzontal pel giny"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:554
 msgid "Vertical Adjustment for the widget"
 msgstr "Ajustament vertical pel giny"
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:562
 msgid "Show the column header buttons"
 msgstr "Mostra botons en els encapçalaments de columna"
 
-#: gtk/gtktreeview.c:564
+#: gtk/gtktreeview.c:569
 msgid "Headers Clickable"
 msgstr "Capçaleres cliquejables"
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:570
 msgid "Column headers respond to click events"
 msgstr "Els encapçalaments de columna responen als clics"
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:577
 msgid "Expander Column"
 msgstr "Columna expansora"
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:578
 msgid "Set the column for the expander column"
 msgstr "Especifica la columna per a la columna expansora"
 
-#: gtk/gtktreeview.c:580 gtk/gtktreeviewcolumn.c:330
+#: gtk/gtktreeview.c:585 gtk/gtktreeviewcolumn.c:330
 msgid "Reorderable"
 msgstr "Reordenable"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:586
 msgid "View is reorderable"
 msgstr "Vista és reordenable"
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:593
 msgid "Rules Hint"
 msgstr "Indicació de les regles"
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:594
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 "Estableix una pista en el motor de temes per dibuixar files en colors "
 "alternants"
 
-#: gtk/gtktreeview.c:596
+#: gtk/gtktreeview.c:601
 msgid "Enable Search"
 msgstr "Habilita cerca"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:602
 msgid "View allows user to search through columns interactively"
 msgstr ""
 "La visualització permet a l'usuari cercar interactivament a través de "
 "columnes"
 
-#: gtk/gtktreeview.c:604
+#: gtk/gtktreeview.c:609
 msgid "Search Column"
 msgstr "Cerca columna"
 
-#: gtk/gtktreeview.c:605
+#: gtk/gtktreeview.c:610
 msgid "Model column to search through when searching through code"
 msgstr "Columna model a cercar mitjantçant recerca amb codi"
 
-#: gtk/gtktreeview.c:614
+#: gtk/gtktreeview.c:630
 #, fuzzy
 msgid "Fixed Height Mode"
 msgstr "L'alçada fixada"
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:631
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
 msgstr ""
 
-#: gtk/gtktreeview.c:635
+#: gtk/gtktreeview.c:651
 msgid "Vertical Separator Width"
 msgstr "Amplada del separador vertical"
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:652
 msgid "Vertical space between cells.  Must be an even number"
 msgstr "Espai vertical entre cel·les. Ha de ser un número parell"
 
-#: gtk/gtktreeview.c:644
+#: gtk/gtktreeview.c:660
 msgid "Horizontal Separator Width"
 msgstr "Amplada del separador horitzontal"
 
-#: gtk/gtktreeview.c:645
+#: gtk/gtktreeview.c:661
 msgid "Horizontal space between cells.  Must be an even number"
 msgstr "Espai horitzontal entre cel·les. Ha de ser un número parell"
 
-#: gtk/gtktreeview.c:653
+#: gtk/gtktreeview.c:669
 msgid "Allow Rules"
 msgstr "Permet regles"
 
-#: gtk/gtktreeview.c:654
+#: gtk/gtktreeview.c:670
 msgid "Allow drawing of alternating color rows"
 msgstr "Permet el dibuix de les files del color que s'alternen"
 
-#: gtk/gtktreeview.c:660
+#: gtk/gtktreeview.c:676
 msgid "Indent Expanders"
 msgstr "Ampliadors de sagnat"
 
-#: gtk/gtktreeview.c:661
+#: gtk/gtktreeview.c:677
 msgid "Make the expanders indented"
 msgstr "Fes els descompressors sagnats"
 
-#: gtk/gtktreeview.c:667
+#: gtk/gtktreeview.c:683
 msgid "Even Row Color"
 msgstr "Color de la fila parell"
 
-#: gtk/gtktreeview.c:668
+#: gtk/gtktreeview.c:684
 msgid "Color to use for even rows"
 msgstr "Color a utilitzar a les files parells"
 
-#: gtk/gtktreeview.c:674
+#: gtk/gtktreeview.c:690
 msgid "Odd Row Color"
 msgstr "Color de la fila imparell"
 
-#: gtk/gtktreeview.c:675
+#: gtk/gtktreeview.c:691
 msgid "Color to use for odd rows"
 msgstr "Color a utilitzar a les files imparells"
 

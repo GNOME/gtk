@@ -1,3 +1,39 @@
+Overview of Changes from GTK+ 2.4.1 to GTK+ 2.4.2
+=================================================
+* GtkUIManager
+ - Install signals correctly [Michael Natterer]
+ - Make the output of gtk_ui_manager_get_ui() parsable. [Michael]
+ - Add a way to suppress stock accelerators. [David A Knight]
+* GtkClipboard
+ - Fix INCRemental transfer of MULTIPLE targets [Matthias Clasen]
+ - Increase the chunk size for INCRemental transfers [Matthias]
+* GtkFileChooser
+ - Hide the combo box when appropriate [Christian Neumair]
+ - bug fixes [Federico Mena Quintero]
+* GtkComboBox
+ - add mouse/wheel bindings on the cellview [Matthias]
+ - improve positioning of popup [Matthias]
+ - make the selection follow the mouse [Matthias]
+* GtkEntryCompletion
+ - make the selection follow the mouse [Matthias]
+ - restrict popup size to monitor size [Matthias, DmD Ljungmark]
+ - don't complete on paste [Anders Carlsson]
+* Win32
+ - bug fixes [Benoît Carpentier, Hans Breuer, John Ehresman, 
+   Tor Lillqvist, Robert Ögren]
+* GtkButton/GtkArrow
+ - Don't draw the focus over the button child [Matthias]
+ - Increase default arrow size to compensate [Matthias]
+* Documentation improvements [Doug Quale, Matthias, 
+  Steffen Röcker, Steve Chaplin, Tommi Komulainen]
+* Other bug fixes [Billy Biggs, Crispin Flowerday, 
+  David Hawthorne, Federico, Havoc Pennington, John Finlay, 
+  Kouichirou Hiratsuka, Mark McLoughlin, Matthias, Michael, 
+  Michal Pasternak, Morten Welinder, Olivier Andrieu, 
+  Owen Taylor, Padraig O'Briain, Sam Stevenson, Scott Tsai, 
+  Soeren Sandmann, Sven Neumann]
+* Updated translations (bg,it,nl,tk,wa,zh_CN)
+
 Overview of Changes from GTK+ 2.4.0 to GTK+ 2.4.1
 =================================================
 * GtkFileChooser
