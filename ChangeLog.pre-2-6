@@ -1,3 +1,8 @@
+Fri Jun 25 22:49:58 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktreestore.c (gtk_tree_store_move): Avoid uninitialized
+	use of &parent_iter. (#145007, John Finlay)
+
 2004-06-25  Bastien Nocera  <hadess@hadess.net>
 
 	reviewed by: Matthias Clasen  <maclas@gmx.de>
