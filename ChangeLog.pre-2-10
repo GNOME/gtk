@@ -1,3 +1,9 @@
+Mon Mar  4 10:35:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_set_current_page): Fix docs
+	in terms of what out of range @page_num does. (#73371,
+	Vitaly Tishkov.)
+
 2002-03-02  Havoc Pennington  <hp@pobox.com>
 
 	* demos/gtk-demo/editable_cells.c (cell_edited): const fix

@@ -4159,8 +4159,9 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
  * gtk_notebook_set_current_page:
  * @notebook: a #GtkNotebook
  * @page_num: index of the page to switch to, starting from 0.
- *            If negative, or greater than the number of pages
- *            in the notebook the last page will be used.
+ *            If negative, the last page will be used. If greater
+ *            than the number of pages in the notebook, nothing
+ *            will be done.
  *                
  * Switches to the page number @page_num.
  **/
