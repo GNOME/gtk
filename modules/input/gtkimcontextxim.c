@@ -41,6 +41,8 @@ struct _GtkXIMInfo
   gulong preedit_set;
   XIMStyles *xim_styles;
   GSList *ics;
+
+  guint reconnecting :1;
 };
 
 /* A context status window; these are kept in the status_windows list. */
@@ -85,6 +87,10 @@ static void status_window_show     (GtkIMContextXIM *context_xim);
 static void status_window_hide     (GtkIMContextXIM *context_xim);
 static void status_window_set_text (GtkIMContextXIM *context_xim,
 				    const gchar     *text);
+
+static void xim_destroy_callback   (XIM      xim,
+				    XPointer client_data,
+				    XPointer call_data);
 
 static XIC       gtk_im_context_xim_get_ic            (GtkIMContextXIM *context_xim);
 static GObjectClass *parent_class;
@@ -250,9 +256,16 @@ static void
 setup_im (GtkXIMInfo *info)
 {
   XIMValuesList *ic_values = NULL;
+  XIMCallback im_destroy_callback;
 
   if (info->im == NULL)
     return;
+
+  im_destroy_callback.client_data = (XPointer)info;
+  im_destroy_callback.callback = (XIMProc)xim_destroy_callback;
+  XSetIMValues (info->im,
+		XNDestroyCallback, &im_destroy_callback,
+		NULL);
 
   XGetIMValues (info->im,
 		XNQueryInputStyle, &info->xim_styles,
@@ -335,45 +348,107 @@ xim_info_display_closed (GdkDisplay *display,
   g_free (info);
 }
 
+static void
+xim_instantiate_callback (Display *display, XPointer client_data,
+			  XPointer call_data)
+{
+  GtkXIMInfo *info = (GtkXIMInfo*)client_data;
+  XIM im = NULL;
+
+  im = XOpenIM (display, NULL, NULL, NULL);
+
+  if (!im)
+    return;
+
+  info->im = im;
+  setup_im (info);
+
+  XUnregisterIMInstantiateCallback (display, NULL, NULL, NULL,
+				    xim_instantiate_callback,
+				    (XPointer)info);
+  info->reconnecting = FALSE;
+}
+
+/* initialize info->im */
+static void
+xim_info_try_im (GtkXIMInfo *info)
+{
+  GdkScreen *screen = info->screen;
+  GdkDisplay *display = gdk_screen_get_display (screen);
+
+  g_assert (info->im == NULL);
+  if (info->reconnecting)
+    return;
+
+  if (XSupportsLocale ())
+    {
+      if (!XSetLocaleModifiers (""))
+	g_warning ("Unable to set locale modifiers with XSetLocaleModifiers()");
+      info->im = XOpenIM (GDK_DISPLAY_XDISPLAY (display), NULL, NULL, NULL);
+      if (!info->im)
+	{
+	  XRegisterIMInstantiateCallback (GDK_DISPLAY_XDISPLAY(display),
+					  NULL, NULL, NULL,
+					  xim_instantiate_callback,
+					  (XPointer)info);
+	  info->reconnecting = TRUE;
+	  return;
+	}
+      setup_im (info);
+
+      g_signal_connect (display, "closed",
+			G_CALLBACK (xim_info_display_closed), info);
+    }
+}
+
+static void
+xim_destroy_callback (XIM      xim,
+		      XPointer client_data,
+		      XPointer call_data)
+{
+  GtkXIMInfo *info = (GtkXIMInfo*)client_data;
+
+  info->im = NULL;
+
+  g_signal_handler_disconnect (info->settings, info->status_set);
+  g_signal_handler_disconnect (info->settings, info->preedit_set);
+
+  reinitialize_all_ics (info);
+  xim_info_try_im (info);
+  return;
+} 
+
 static GtkXIMInfo *
 get_im (GdkWindow *client_window,
 	const char *locale)
 {
   GSList *tmp_list;
   GtkXIMInfo *info;
-  XIM im = NULL;
   GdkScreen *screen = gdk_drawable_get_screen (client_window);
-  GdkDisplay *display = gdk_screen_get_display (screen);
 
+  info = NULL;
   tmp_list = open_ims;
   while (tmp_list)
     {
       info = tmp_list->data;
       if (info->screen == screen &&
 	  strcmp (info->locale, locale) == 0)
-	return info;
-
+	{
+	  if (info->im)
+	    return info;
+	  else
+	    break;
+	}
       tmp_list = tmp_list->next;
     }
 
-  info = NULL;
-
-  if (XSupportsLocale ())
+  if (info == NULL)
     {
-      if (!XSetLocaleModifiers (""))
-	g_warning ("Unable to set locale modifiers with XSetLocaleModifiers()");
-      
-      im = XOpenIM (GDK_DISPLAY_XDISPLAY (display), NULL, NULL, NULL);
-      
-      if (!im)
-	g_warning ("Unable to open XIM input method, falling back to XLookupString()");
-
       info = g_new (GtkXIMInfo, 1);
       open_ims = g_slist_prepend (open_ims, info);
 
       info->screen = screen;
       info->locale = g_strdup (locale);
-      info->im = im;
       info->xim_styles = NULL;
       info->preedit_style_setting = 0;
       info->status_style_setting = 0;
@@ -381,13 +456,11 @@ get_im (GdkWindow *client_window,
       info->preedit_set = 0;
       info->status_set = 0;
       info->ics = NULL;
-
-      setup_im (info);
-
-      g_signal_connect (display, "closed",
-			G_CALLBACK (xim_info_display_closed), info);
+      info->reconnecting = FALSE;
+      info->im = NULL;
     }
 
+  xim_info_try_im (info);
   return info;
 }
 
@@ -448,6 +521,11 @@ reinitialize_ic (GtkIMContextXIM *context_xim)
 	    g_signal_emit_by_name (context_xim, "preedit_changed");
 	}
     }
+  /* 
+     reset filter_key_release flag, otherwise keystrokes will be doubled
+     until reconnecting to XIM.
+  */
+  context_xim->filter_key_release = FALSE;
 }
 
 static void
@@ -1078,85 +1156,80 @@ set_status_callback (GtkIMContextXIM *context_xim)
 			      NULL);
 }
 
-static XIC
-get_ic_real (GtkIMContextXIM *context_xim)
-{
-  XIC xic = 0;
-  const char *name1 = NULL;
-  XVaNestedList list1 = NULL;
-  const char *name2 = NULL;
-  XVaNestedList list2 = NULL;
-  XIMStyle im_style = 0;
-
-  if (context_xim->im_info->im == NULL)
-    return (XIC)0;
-
-  if (context_xim->use_preedit &&
-      (context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
-    {
-      im_style |= XIMPreeditCallbacks;
-      name1 = XNPreeditAttributes;
-      list1 = set_preedit_callback (context_xim);
-    }
-  else if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditNone)
-    im_style |= XIMPreeditNone;
-  else
-    im_style |= XIMPreeditNothing;
-
-  if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks)
-    {
-      im_style |= XIMStatusCallbacks;
-      if (name1 == NULL)
-	{
-	  name1 = XNStatusAttributes;
-	  list1 = set_status_callback (context_xim);
-	}
-      else
-	{
-	  name2 = XNStatusAttributes;
-	  list2 = set_status_callback (context_xim);
-	}
-    }
-  else if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusNone)
-    im_style |= XIMStatusNone;
-  else
-    im_style |= XIMStatusNothing;
-
-  xic = XCreateIC (context_xim->im_info->im,
-		   XNInputStyle, im_style,
-		   XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
-		   name1, list1,
-		   name2, list2,
-		   NULL);
-  if (list1)
-    XFree (list1);
-  if (list2)
-    XFree (list2);
-
-  if (xic)
-    {
-      /* Don't filter key released events with XFilterEvents unless
-       * input methods ask for. This is a workaround for Solaris input
-       * method bug in C and European locales. It doubles each key
-       * stroke if both key pressed and released events are filtered.
-       * (bugzilla #81759)
-       */
-      guint32 mask = 0;
-      XGetICValues (xic,
-		    XNFilterEvents, &mask,
-		    NULL);
-      context_xim->filter_key_release = (mask & KeyReleaseMask);
-    }
-
-  return xic;
-}
 
 static XIC
 gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 {
-  if (!context_xim->ic && context_xim->im_info)
-    context_xim->ic = get_ic_real (context_xim);
-  
+  if (context_xim->im_info == NULL || context_xim->im_info->im == NULL)
+    return NULL;
+
+  if (!context_xim->ic)
+    {
+      const char *name1 = NULL;
+      XVaNestedList list1 = NULL;
+      const char *name2 = NULL;
+      XVaNestedList list2 = NULL;
+      XIMStyle im_style = 0;
+      XIC xic = 0;
+
+      if (context_xim->use_preedit &&
+	  (context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
+	{
+	  im_style |= XIMPreeditCallbacks;
+	  name1 = XNPreeditAttributes;
+	  list1 = set_preedit_callback (context_xim);
+	}
+      else if ((context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditNone)
+	im_style |= XIMPreeditNone;
+      else
+	im_style |= XIMPreeditNothing;
+
+      if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks)
+	{
+	  im_style |= XIMStatusCallbacks;
+	  if (name1 == NULL)
+	    {
+	      name1 = XNStatusAttributes;
+	      list1 = set_status_callback (context_xim);
+	    }
+	  else
+	    {
+	      name2 = XNStatusAttributes;
+	      list2 = set_status_callback (context_xim);
+	    }
+	}
+      else if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusNone)
+	im_style |= XIMStatusNone;
+      else
+	im_style |= XIMStatusNothing;
+
+      xic = XCreateIC (context_xim->im_info->im,
+		       XNInputStyle, im_style,
+		       XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
+		       name1, list1,
+		       name2, list2,
+		       NULL);
+      if (list1)
+	XFree (list1);
+      if (list2)
+	XFree (list2);
+
+      if (xic)
+	{
+	  /* Don't filter key released events with XFilterEvents unless
+	   * input methods ask for. This is a workaround for Solaris input
+	   * method bug in C and European locales. It doubles each key
+	   * stroke if both key pressed and released events are filtered.
+	   * (bugzilla #81759)
+	   */
+	  guint32 mask = 0;
+	  XGetICValues (xic,
+			XNFilterEvents, &mask,
+			NULL);
+	  context_xim->filter_key_release = (mask & KeyReleaseMask);
+	}
+      context_xim->ic = xic;
+    }
   return context_xim->ic;
 }
 

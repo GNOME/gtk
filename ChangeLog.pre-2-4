@@ -1,3 +1,26 @@
+Tue Jun 10 11:23:48 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c (xim_instantiate_callback): New
+	function for XIM instantiate callback.
+	* modules/input/gtkimcontextxim.c (xim_info_try_im): New function
+	where call to XOpenIM() or XRegisterIMInstantiateCallback() is
+	actually made.
+	* modules/input/gtkimcontextxim.c (xim_destroy_callback): New function
+	for XIM's destroy callback.
+	* modules/input/gtkimcontextxim.c (get_im): add a check if info->im 
+	is set or not - if it's not set, call xim_info_try_im() to try to
+	initiaize it.
+	* modules/input/gtkimcontextxim.c (reinitialize_ic): reset
+	filter_key_release flag of the context.
+	* modules/input/gtkimcontextxim.c (get_ic_real): removed
+	* modules/input/gtkimcontextxim.c (gtk_im_context_xim_get_ic): move
+	code from the removed get_ic_real().
+
+	For XIM instantiation, destruction and re-instantiation. With
+	this, Gtk+ apps will be able to connect or reconnect to the XIM,
+	when it starts after the apps, or when the XIM gets lost and recover.
+	(#113099, #107782).
+
 Mon Jun 10 01:12:31 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.
