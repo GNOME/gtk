@@ -2,6 +2,8 @@
 
 	* gtk/gtklabel.c (gtk_label_do_popup): Adjust to the current
 	entry popup menu.
+	(gtk_label_button_press, gtk_label_button_release) 
+	(gtk_label_drag_data_get): Implement DND for selectable labels.
 
 	Make GDK+ compile with X11R5 (#148032)
 	

@@ -57,6 +57,11 @@ struct _GtkLabelSelectionInfo
   gint selection_anchor;
   gint selection_end;
   GtkWidget *popup_menu;
+  
+  gint drag_start_x;
+  gint drag_start_y;
+
+  guint in_drag : 1;
 };
 
 enum {
@@ -160,6 +165,12 @@ static gboolean gtk_label_mnemonic_activate (GtkWidget         *widget,
 					     gboolean           group_cycling);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *label,
 					     guint              last_key);
+static void     gtk_label_drag_data_get     (GtkWidget         *widget,
+					     GdkDragContext    *context,
+					     GtkSelectionData  *selection_data,
+					     guint              info,
+					     guint              time);
+
 
 /* For selectable lables: */
 static void gtk_label_move_cursor        (GtkLabel        *label,
@@ -261,6 +272,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
   widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
+  widget_class->drag_data_get = gtk_label_drag_data_get;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
@@ -2497,12 +2509,14 @@ gtk_label_button_press (GtkWidget      *widget,
 {
   GtkLabel *label;
   gint index = 0;
+  gint min, max;  
   
   label = GTK_LABEL (widget);
 
   if (label->select_info == NULL)
     return FALSE;
 
+  label->select_info->in_drag = FALSE;
   if (event->button == 1)
     {
       if (!GTK_WIDGET_HAS_FOCUS (widget))
@@ -2522,18 +2536,16 @@ gtk_label_button_press (GtkWidget      *widget,
       
       get_layout_index (label, event->x, event->y, &index);
       
+      min = MIN (label->select_info->selection_anchor,
+		 label->select_info->selection_end);
+      max = MAX (label->select_info->selection_anchor,
+		 label->select_info->selection_end);
+	  
       if ((label->select_info->selection_anchor !=
 	   label->select_info->selection_end) &&
 	  (event->state & GDK_SHIFT_MASK))
 	{
-	  gint min, max;
-	  
 	  /* extend (same as motion) */
-	  min = MIN (label->select_info->selection_anchor,
-		     label->select_info->selection_end);
-	  max = MAX (label->select_info->selection_anchor,
-		     label->select_info->selection_end);
-	  
 	  min = MIN (min, index);
 	  max = MAX (max, index);
 	  
@@ -2547,13 +2559,19 @@ gtk_label_button_press (GtkWidget      *widget,
 	  
 	  gtk_label_select_region_index (label, min, max);
 	}
-      else
+      else 
 	{
 	  if (event->type == GDK_3BUTTON_PRESS)
-	      gtk_label_select_region_index (label, 0, strlen (label->text));
+	    gtk_label_select_region_index (label, 0, strlen (label->text));
 	  else if (event->type == GDK_2BUTTON_PRESS)
-	      gtk_label_select_word (label);
-	  else 
+	    gtk_label_select_word (label);
+	  else if (min < max && min <= index && index <= max)
+	    {
+	      label->select_info->in_drag = TRUE;
+	      label->select_info->drag_start_x = event->x;
+	      label->select_info->drag_start_y = event->y;
+	    }
+	  else
 	    /* start a replacement */
 	    gtk_label_select_region_index (label, index, index);
 	}
@@ -2575,13 +2593,22 @@ gtk_label_button_release (GtkWidget      *widget,
                           GdkEventButton *event)
 
 {
-  GtkLabel *label;
-
-  label = GTK_LABEL (widget);
+  GtkLabel *label = GTK_LABEL (widget);
+  gint index;
   
   if (label->select_info == NULL)
     return FALSE;
   
+  if (label->select_info->in_drag)
+    {
+      label->select_info->in_drag = 0;
+
+      get_layout_index (label, event->x, event->y, &index);
+      gtk_label_select_region_index (label, index, index);
+      
+      return FALSE;
+    }
+
   if (event->button != 1)
     return FALSE;
   
@@ -2605,18 +2632,45 @@ gtk_label_motion (GtkWidget      *widget,
   if (label->select_info == NULL)
     return FALSE;  
 
+
   if ((event->state & GDK_BUTTON1_MASK) == 0)
     return FALSE;
 
   gdk_window_get_pointer (label->select_info->window,
                           &x, &y, NULL);
   
-  get_layout_index (label, x, y, &index);
+  if (label->select_info->in_drag)
+    {
+      if (gtk_drag_check_threshold (widget,
+				    label->select_info->drag_start_x, 
+				    label->select_info->drag_start_y,
+				    event->x, event->y))
+	{
+	  GdkDragContext *context;
+	  GtkTargetList *target_list = gtk_target_list_new (NULL, 0);
 
-  gtk_label_select_region_index (label,
-                                 label->select_info->selection_anchor,
-                                 index);
-  
+	  gtk_target_list_add_text_targets (target_list, 0);
+
+	  context = gtk_drag_begin (widget, target_list, 
+				    GDK_ACTION_COPY,
+				    1, (GdkEvent *)event);
+
+	  
+	  label->select_info->in_drag = FALSE;
+	  
+	  gtk_target_list_unref (target_list);
+	  gtk_drag_set_icon_default (context);
+	}
+    }
+  else
+    {
+      get_layout_index (label, x, y, &index);
+      
+      gtk_label_select_region_index (label,
+				     label->select_info->selection_anchor,
+				     index);
+    }
+
   return TRUE;
 }
 
@@ -2753,15 +2807,9 @@ gtk_label_get_selectable (GtkLabel *label)
 }
 
 static void
-get_text_callback (GtkClipboard     *clipboard,
-                   GtkSelectionData *selection_data,
-                   guint             info,
-                   gpointer          user_data_or_owner)
+gtk_label_set_selection_text (GtkLabel         *label,
+			      GtkSelectionData *selection_data)
 {
-  GtkLabel *label;
-  
-  label = GTK_LABEL (user_data_or_owner);
-  
   if ((label->select_info->selection_anchor !=
        label->select_info->selection_end) &&
       label->text)
@@ -2773,19 +2821,38 @@ get_text_callback (GtkClipboard     *clipboard,
                    label->select_info->selection_end);
       end = MAX (label->select_info->selection_anchor,
                  label->select_info->selection_end);
-
+      
       len = strlen (label->text);
-
+      
       if (end > len)
         end = len;
-
+      
       if (start > len)
         start = len;
-
+      
       gtk_selection_data_set_text (selection_data,
 				   label->text + start,
 				   end - start);
     }
+}
+
+static void
+gtk_label_drag_data_get (GtkWidget        *widget,
+			 GdkDragContext   *context,
+			 GtkSelectionData *selection_data,
+			 guint             info,
+			 guint             time)
+{
+  gtk_label_set_selection_text (GTK_LABEL (widget), selection_data);
+}
+
+static void
+get_text_callback (GtkClipboard     *clipboard,
+                   GtkSelectionData *selection_data,
+                   guint             info,
+                   gpointer          user_data_or_owner)
+{
+  gtk_label_set_selection_text (GTK_LABEL (user_data_or_owner), selection_data);
 }
 
 static void
