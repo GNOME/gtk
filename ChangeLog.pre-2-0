@@ -1,3 +1,27 @@
+2001-06-22  Hans Breuer  <hans@breuer.org>
+
+	* gdk/gdk.def : updated externals
+
+	* gdk/win32/gdkdrawable-win32.c : corrected some casts
+	in GDK_NOTEs
+
+	* gdk/win32/gdkevents-win32.c : use _gdk_windowing_window_get_offsets
+	to translate coordinates to the internal > 16 bit system
+	Try to handle WM_WINDOWPOSCHANGED to get better performance for
+	when moving/resizing
+
+	* gdk/win32/gdkkeys-win32.c : implement gdk_keymap_get_default ()
+	and gdk_keymap_get_direction (). The latter is untested for
+	the RTL case
+
+	* gtk/gtk.def : updated externals
+
+	* gtk/gtkmain.c : gtk_get_default_language () should reurn the result
+	from pango_language_from_string (), not an already freed pointer
+
+	* gtk/stock-icons/stock_menu_sort_ascending.png : PNGs need to be 
+	binary (-kb) to be useable on windoze
+ 
 2001-06-21  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkfont-fb.c (gdk_font_from_description): 

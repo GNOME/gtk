@@ -615,7 +615,7 @@ gtk_get_default_language (void)
   result = pango_language_from_string (lang);
   g_free (lang);
   
-  return lang;
+  return result;
 }
 
 void

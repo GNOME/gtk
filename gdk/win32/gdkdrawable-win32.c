@@ -332,7 +332,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
   int nXStartArc, nYStartArc, nXEndArc, nYEndArc;
 
   GDK_NOTE (MISC, g_print ("gdk_draw_arc: %#x  %d,%d,%d,%d  %d %d\n",
-			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,
 			   x, y, width, height, angle1, angle2));
 
   /* Seems that drawing arcs with width or height <= 2 fails, at least
@@ -403,7 +403,7 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   int i;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %#x (%p) %d\n",
-			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,
 			   gc_private,
 			   npoints));
 
@@ -812,7 +812,7 @@ gdk_win32_draw_points (GdkDrawable *drawable,
   fg = gdk_colormap_color (impl->colormap, gc_private->foreground);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
-			   (guint) GDK_DRAWABLE_HANDLE (drawable),
+			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,
 			   npoints, (guint) fg));
 
   for (i = 0; i < npoints; i++)
@@ -834,7 +834,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   int i;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x nsegs: %d\n",
-			   (guint) GDK_DRAWABLE_HANDLE (drawable), nsegs));
+			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle, nsegs));
 
   hdc = gdk_win32_hdc_get (drawable, gc, mask);
 

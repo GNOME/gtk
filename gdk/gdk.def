@@ -181,6 +181,7 @@ EXPORTS
 	gdk_keyboard_grab
 	gdk_keyboard_ungrab
 	gdk_keymap_get_default
+	gdk_keymap_get_direction
 	gdk_keymap_get_entries_for_keycode
 	gdk_keymap_get_entries_for_keyval
 	gdk_keymap_get_type
@@ -225,6 +226,7 @@ EXPORTS
 	gdk_property_get
 	gdk_query_depths
 	gdk_query_visual_types
+	gdk_rectangle_get_type
 	gdk_rectangle_intersect
 	gdk_rectangle_union
 	gdk_region_destroy
