@@ -1,3 +1,13 @@
+2002-02-22  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/stock-icons/*: Rename icons.
+	
+	* gtk/stock-icons/Makefile.am: Update for new icon names.
+
+	* gtk/gtkiconfactory.c (init_icon_sizes): Set the 
+	GTK_ICON_SIZE_BUTTON size to be 20x20.
+	(get_default_icons): Change stock names.
+
 Fri Feb 22 22:39:59 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeprivate.h: add last_single_clicked and
