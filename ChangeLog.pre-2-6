@@ -1,3 +1,8 @@
+Tue Jan  8 14:42:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c: Fix leaks of results of
+	gtk_container_get_children(). (#68199, Damon Chaplin.)
+
 Tue Jan  8 14:19:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c (gtk_check_button_size_allocate): 
