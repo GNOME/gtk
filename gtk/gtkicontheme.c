@@ -1897,7 +1897,12 @@ theme_lookup_icon (IconTheme          *theme,
       icon_info->cp_filename = g_locale_from_utf8 (icon_info->filename,
 						   -1, NULL, NULL, NULL);
 #endif
-      if (min_dir->cache && has_icon_file)
+      
+      if (min_dir->icon_data != NULL)
+	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
+      
+      if (icon_info->data == NULL &&
+	  min_dir->cache && has_icon_file)
 	{
 	  gchar *icon_file_name, *icon_file_path;
 
@@ -1910,13 +1915,12 @@ theme_lookup_icon (IconTheme          *theme,
 		min_dir->icon_data = g_hash_table_new_full (g_str_hash, g_str_equal,
 							    g_free, (GDestroyNotify)icon_data_free);
 	      load_icon_data (min_dir, icon_file_path, icon_file_name);
+	      
+	      icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
 	    }
 	  g_free (icon_file_name);
 	  g_free (icon_file_path);
 	}
-      
-      if (min_dir->icon_data != NULL)
-	icon_info->data = g_hash_table_lookup (min_dir->icon_data, icon_name);
 
       icon_info->dir_type = min_dir->type;
       icon_info->dir_size = min_dir->size;
