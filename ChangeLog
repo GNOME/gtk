@@ -1,3 +1,10 @@
+Tue Oct 22 15:55:08 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktoolbar.c: Fix handling of getting the 
+	default style/icon size from the correct 
+	GtkSettings. (#82184, reported by Vitaly Tishkov,
+	help from Soeren Sandmann)
+
 Tue Oct 22 15:32:31 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c: Actively monitor the screen of the

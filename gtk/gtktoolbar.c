@@ -45,6 +45,7 @@
 #define DEFAULT_SPACE_STYLE GTK_TOOLBAR_SPACE_LINE
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_LARGE_TOOLBAR
+#define DEFAULT_TOOLBAR_STYLE GTK_TOOLBAR_BOTH
 
 #define SPACE_LINE_DIVISION 10
 #define SPACE_LINE_START    3
@@ -288,14 +289,14 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
                                                     _("Toolbar style"),
                                                     _("Whether default toolbars have text only, text and icons, icons only, etc."),
                                                     GTK_TYPE_TOOLBAR_STYLE,
-                                                    GTK_TOOLBAR_BOTH,
+                                                    DEFAULT_TOOLBAR_STYLE,
                                                     G_PARAM_READWRITE));
 
   gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-icon-size",
                                                     _("Toolbar icon size"),
                                                     _("Size of icons in default toolbars"),
                                                     GTK_TYPE_ICON_SIZE,
-                                                    GTK_ICON_SIZE_LARGE_TOOLBAR,
+                                                    DEFAULT_ICON_SIZE,
                                                     G_PARAM_READWRITE));  
 }
 
@@ -321,10 +322,16 @@ icon_size_change_notify (GtkToolbar *toolbar)
     }
 }
 
+static GtkSettings *
+toolbar_get_settings (GtkToolbar *toolbar)
+{
+  return g_object_get_data (G_OBJECT (toolbar), "gtk-toolbar-settings");
+}
+
 static void
 toolbar_screen_changed (GtkToolbar *toolbar)
 {
-  GtkSettings *old_settings = g_object_get_data (G_OBJECT (toolbar), "gtk-toolbar-settings");
+  GtkSettings *old_settings = toolbar_get_settings (toolbar);
   GtkSettings *settings;
 
   if (gtk_widget_has_screen (GTK_WIDGET (toolbar)))
@@ -360,12 +367,12 @@ toolbar_screen_changed (GtkToolbar *toolbar)
 
       g_object_ref (settings);
       g_object_set_data (G_OBJECT (toolbar), "gtk-toolbar-settings", settings);
-
-      style_change_notify (toolbar);
-      icon_size_change_notify (toolbar);
     }
   else
     g_object_set_data (G_OBJECT (toolbar), "gtk-toolbar-settings", NULL);
+
+  style_change_notify (toolbar);
+  icon_size_change_notify (toolbar);
 }
 
 static void
@@ -399,6 +406,7 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->children     = NULL;
   toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
   toolbar->icon_size    = DEFAULT_ICON_SIZE;
+  toolbar->style        = DEFAUL_TOOLBAR_STYLE;
   toolbar->tooltips     = gtk_tooltips_new ();
   g_object_ref (toolbar->tooltips);
   gtk_object_sink (GTK_OBJECT (toolbar->tooltips));
@@ -1040,7 +1048,7 @@ gtk_toolbar_set_icon_size (GtkToolbar  *toolbar,
 GtkIconSize
 gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
 {
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_ICON_SIZE_LARGE_TOOLBAR);
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), DEFAULT_ICON_SIZE);
 
   return toolbar->icon_size;
 }
@@ -1059,9 +1067,14 @@ gtk_toolbar_unset_icon_size (GtkToolbar  *toolbar)
 
   if (toolbar->icon_size_set)
     {
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (toolbar)),
-                    "gtk-toolbar-icon-size", &size,
-		    NULL);
+      GtkSettings *settings = toolbar_get_settings (toolbar);
+
+      if (settings)
+	g_object_get (settings,
+		      "gtk-toolbar-icon-size", &size,
+		      NULL);
+      else
+	size = DEFAULT_ICON_SIZE;
 
       if (size != toolbar->icon_size)
         gtk_toolbar_set_icon_size (toolbar, size);
@@ -1534,7 +1547,7 @@ gtk_toolbar_set_style (GtkToolbar      *toolbar,
 GtkToolbarStyle
 gtk_toolbar_get_style (GtkToolbar *toolbar)
 {
-  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH);
+  g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), DEFAULT_TOOLBAR_STYLE);
 
   return toolbar->style;
 }
@@ -1555,9 +1568,14 @@ gtk_toolbar_unset_style (GtkToolbar *toolbar)
 
   if (toolbar->style_set)
     {
-      g_object_get (gtk_widget_get_settings (GTK_WIDGET (toolbar)),
-                    "gtk-toolbar-style", &style,
-                    NULL);
+      GtkSettings *settings = toolbar_get_settings (toolbar);
+
+      if (settings)
+	g_object_get (settings,
+		      "gtk-toolbar-style", &style,
+		      NULL);
+      else
+	style = DEFAULT_TOOLBAR_STYLE;
 
       if (style != toolbar->style)
         g_signal_emit (toolbar, toolbar_signals[STYLE_CHANGED], 0, style);
