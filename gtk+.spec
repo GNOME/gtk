@@ -15,7 +15,7 @@ Obsoletes: gtk
 Packager: Marc Ewing <marc@redhat.com>
 URL: http://www.gtk.org
 Prereq: /sbin/install-info
-Requires: glib
+Requires: glib = %{PACKAGE_VERSION}
 Docdir: %{prefix}/doc
 
 %description
@@ -25,7 +25,7 @@ several other programs as well.
 %package devel
 Summary: GIMP Toolkit and GIMP Drawing Kit
 Group: X11/Libraries
-Requires: gtk+
+Requires: gtk+ = %{PACKAGE_VERSION}
 Obsoletes: gtk-devel
 PreReq: /sbin/install-info
 
@@ -46,49 +46,42 @@ are in gtk+-devel.
 
 %changelog
 
-* Sun Jul 26 1998 Shawn T. Amundson <amundson@gtk.org>
+* Fri Sep 11 1998 Owen Taylor <otaylor@redhat.com>
+- Install glib.info
+- Require matching glib and gtk-devel versions
 
+* Sun Jul 26 1998 Shawn T. Amundson <amundson@gtk.org>
 -Changed version to 1.0.5
 
 * Mon Jun  1 1998 Shawn T. Amundson <amundson@gtk.org>
-
 -Changed version to 1.0.4
 
 * Sat May 23 1998 Shawn T. Amundson <amundson@gtk.org>
-
 - Changed version to 1.0.3
 
 * Wed May 13 1998 Owen Taylor <otaylor@gtk.org>
-
 - Changed version to 1.0.2
 
 * Sun May  3 1998 Shawn T. Amundson <amundson@gtk.org>
-
 - Changed version to 1.0.1
 
 * Mon Apr 13 1998 Marc Ewing <marc@redhat.com>
-
 - Split out glib package
 
 * Tue Apr  8 1998 Shawn T. Amundson <amundson@gtk.org>
-
 - Changed version to 1.0.0
 
 * Tue Apr  7 1998 Owen Taylor <otaylor@gtk.org>
-
 - Changed version to 0.99.10
 
 * Thu Mar 19 1998 Shawn T. Amundson <amundson@gimp.org>
-
 - Changed version to 0.99.9
 - Changed gtk home page to www.gtk.org
 
 * Thu Mar 19 1998 Shawn T. Amundson <amundson@gimp.org>
-
 - Changed version to 0.99.8
 
 * Sun Mar 15 1998 Marc Ewing <marc@redhat.com>
-
 - Added aclocal and bin stuff to file list.
 
 - Added -k to the SMP make line.
@@ -151,11 +144,13 @@ rm -rf $RPM_BUILD_ROOT
 %post devel
 /sbin/install-info %{prefix}/info/gdk.info.gz %{prefix}/info/dir
 /sbin/install-info %{prefix}/info/gtk.info.gz %{prefix}/info/dir
+/sbin/install-info %{prefix}/info/glib.info.gz %{prefix}/info/dir
 
 %postun devel
 if [ $1 = 0 ]; then
     /sbin/install-info --delete %{prefix}/info/gdk.info.gz %{prefix}/info/dir
     /sbin/install-info --delete %{prefix}/info/gtk.info.gz %{prefix}/info/dir
+    /sbin/install-info --delete %{prefix}/info/glib.info.gz %{prefix}/info/dir
 fi
 
 %files

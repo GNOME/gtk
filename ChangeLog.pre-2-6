@@ -1,3 +1,63 @@
+Thu Sep 10 22:19:35 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: - Save first_cut_pixels when switching
+	sizes, so that if we switch to the _same_ size,
+	we don't move lines around.
+
+	- Make sure that the text area always has a size of at
+	least 1x1, then do all computations when realized.
+
+        - When fetching lines in recompute_geometry, make
+	sure we fetch enough lines to cover the screen.
+	
+Thu Aug 20 20:08:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c ([un]draw_cursor): Check to see if we've
+	computed our geometry yet, and if not, ignore the request.
+
+	* gtk/gtktext.c (correct_cache_insert): Fiddled around
+	some more. All the bug-test codes seem to work at once
+	now. (fingers crossed...)
+
+Tue Aug 25 16:52:47 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (recompute_geometry): Make sure the
+	mark we pass to line start is the beginning of a 
+	real line, not a wrapped one.
+
+Fri Sep 11 15:36:33 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkinputgxi.h (gdk_input_gxi_grab_pointer): Hopefully
+	now at least compiles again.
+
+	* gdk/gdk.c (gdk_event_translate): Don't pass events
+	on destroyed widgets to the gdk_input layer.
+
+Sat Sep  5 16:01:19 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkinputxfree.h gdk/gdk.c gdk/gdkinputgxi.h:
+	When the pointer is grabbed on an input window,
+	either explicitely, or through press-grab, and
+	then grabbed on a non-input window, ungrab the
+	devices.
+
+Fri Sep 11 15:26:06 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_event_translate): Don't pass events
+	for destroyed windows onto gdk_input layer.
+
+Tue Sep  8 12:41:20 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk[hv]paned.c: Use GDK_INVERT instead of GDK_XOR
+	because we can't assume white pixel has any particular value.
+
+Tue Sep  8 12:38:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* Call XFilterEvent() on events we get for unknown
+        windows, since it may be the window Xlib uses to
+	communicate with the IM. 
+	(From Yung-Ching Hsiao <yhsiao@cae.wisc.edu>)
+
 Tue Sep  8 02:09:33 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: added -posix check for NeXTStep

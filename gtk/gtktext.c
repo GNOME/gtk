@@ -500,6 +500,9 @@ gtk_text_init (GtkText *text)
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
 
+  text->line_start_cache = NULL;
+  text->first_cut_pixels = 0;
+
   text->line_wrap = TRUE;
   text->word_wrap = FALSE;
   
@@ -999,8 +1002,8 @@ gtk_text_realize (GtkWidget *widget)
 
   attributes.x = (widget->style->klass->xthickness + TEXT_BORDER_ROOM);
   attributes.y = (widget->style->klass->ythickness + TEXT_BORDER_ROOM);
-  attributes.width = widget->allocation.width - attributes.x * 2;
-  attributes.height = widget->allocation.height - attributes.y * 2;
+  attributes.width = MAX (1, (gint)widget->allocation.width - (gint)attributes.x * 2);
+  attributes.height = MAX (1, (gint)widget->allocation.height - (gint)attributes.y * 2);
 
   text->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (text->text_area, text);
@@ -1097,8 +1100,7 @@ gtk_text_realize (GtkWidget *widget)
   if (editable->selection_start_pos != editable->selection_end_pos)
     gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
 
-  if ((widget->allocation.width > 1) || (widget->allocation.height > 1))
-    recompute_geometry (text);
+  recompute_geometry (text);
 }
 
 static void
@@ -1308,10 +1310,10 @@ gtk_text_size_allocate (GtkWidget     *widget,
       gdk_window_move_resize (text->text_area,
 			      widget->style->klass->xthickness + TEXT_BORDER_ROOM,
 			      widget->style->klass->ythickness + TEXT_BORDER_ROOM,
-			      widget->allocation.width - (widget->style->klass->xthickness +
-							  TEXT_BORDER_ROOM) * 2,
-			      widget->allocation.height - (widget->style->klass->ythickness +
-							   TEXT_BORDER_ROOM) * 2);
+			      MAX (1, (gint)widget->allocation.width - (gint)(widget->style->klass->xthickness +
+							  (gint)TEXT_BORDER_ROOM) * 2),
+			      MAX (1, (gint)widget->allocation.height - (gint)(widget->style->klass->ythickness +
+							   (gint)TEXT_BORDER_ROOM) * 2));
 
 #ifdef USE_XIM
       if (editable->ic && (gdk_ic_get_style (editable->ic) & GdkIMPreeditPosition))
@@ -1941,11 +1943,8 @@ gtk_text_adjustment (GtkAdjustment *adjustment,
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
 
-  /* Just ignore it if we haven't been size-allocated yet, or
-   * if something weird has happened */
-  if ((text->line_start_cache == NULL) || 
-      (GTK_WIDGET (text)->allocation.height <= 1) || 
-      (GTK_WIDGET (text)->allocation.width <= 1))
+  /* Just ignore it if we haven't been size-allocated and realized yet */
+  if (text->line_start_cache == NULL) 
     return;
 
   if (adjustment == text->hadj)
@@ -2386,25 +2385,23 @@ correct_cache_insert (GtkText* text, gint nchars)
     }
   
   /* If we inserted a property exactly at the beginning of the
-   * line, we have to correct here, or fetch_lines will
-   * fetch junk.
-   *
-   * This also handles the case when we split exactly
-   *  at the beginning and start->offset is now invalid
-   */
-
+     * line, we have to correct here, or fetch_lines will
+     * fetch junk.
+     */
   start = &CACHE_DATA(text->current_line).start;
-  if (was_split)
-    {
-      /* If we split exactly at the beginning... */
-      if (start->offset ==  MARK_CURRENT_PROPERTY (start)->length)
-	SET_PROPERTY_MARK (start, start->property->next, 0);
-      /* If we inserted a property at the beginning of the text... */
-      else if ((start->property == text->point.property) &&
-	       (start->index == text->point.index - nchars))
-	SET_PROPERTY_MARK (start, start->property->prev, 0);
-    }
-
+ 
+  /* Check if if we split exactly at the beginning of the line:
+    * (was_split won't be set if we are inserting at the end of the text, 
+    *  so we don't check)
+    */
+  if (start->offset ==  MARK_CURRENT_PROPERTY (start)->length)
+    SET_PROPERTY_MARK (start, start->property->next, 0);
+  /* Check if we inserted a property at the beginning of the text: */
+  else if (was_split &&
+ 	   (start->property == text->point.property) &&
+	   (start->index == text->point.index - nchars))
+    SET_PROPERTY_MARK (start, start->property->prev, 0);
+    
   /* Now correct the offsets, and check for start or end marks that
    * are after the point, yet point to a property before the point's
    * property. This indicates that they are meant to point to the
@@ -3726,7 +3723,7 @@ set_vertical_scroll_iterator (GtkText* text, LineParams* lp, void* data)
   gint *pixel_count = (gint*) data;
 
   if (text->first_line_start_index == lp->start.index)
-    text->vadj->value = (float) *pixel_count;
+    text->vadj->value = (float) *pixel_count + text->first_cut_pixels;
 
   *pixel_count += LINE_HEIGHT (*lp);
 
@@ -3791,7 +3788,6 @@ set_vertical_scroll (GtkText* text)
   text->vadj->value          = MAX (text->vadj->value, 0.0);
 
   text->last_ver_value = (gint)text->vadj->value;
-  text->first_cut_pixels = 0;
 
   gtk_signal_emit_by_name (GTK_OBJECT (text->vadj), "changed");
 
@@ -4073,7 +4069,8 @@ find_line_params (GtkText* text,
 
       ch_width = find_char_width (text, &lp.end, &tab_mark);
 
-      if (ch_width + lp.pixel_width > max_display_pixels)
+      if ((ch_width + lp.pixel_width > max_display_pixels) &&
+	  (lp.end.index > lp.start.index))
 	{
 	  lp.wraps = 1;
 
@@ -4455,7 +4452,7 @@ undraw_cursor (GtkText* text, gint absolute)
   if ((text->cursor_drawn_level ++ == 0) &&
       text->has_cursor && 
       (editable->selection_start_pos == editable->selection_end_pos) &&
-      GTK_WIDGET_DRAWABLE (text))
+      GTK_WIDGET_DRAWABLE (text) && text->line_start_cache)
     {
       GdkFont* font;
 
@@ -4548,7 +4545,7 @@ draw_cursor (GtkText* text, gint absolute)
       text->has_cursor && 
       editable->editable &&
       (editable->selection_start_pos == editable->selection_end_pos) &&
-      GTK_WIDGET_DRAWABLE (text))
+      GTK_WIDGET_DRAWABLE (text) && text->line_start_cache)
     {
       GdkFont* font;
 
@@ -4722,22 +4719,55 @@ gtk_text_update_text    (GtkEditable       *editable,
 static void
 recompute_geometry (GtkText* text)
 {
-  GtkPropertyMark start_mark;
+  GtkPropertyMark mark, start_mark;
+  GList *new_lines;
   gint height;
   gint width;
-
+    
   free_cache (text);
-
-  start_mark = set_vertical_scroll (text);
-
+    
+  mark = start_mark = set_vertical_scroll (text);
+   
+  /* We need a real start of a line when calling fetch_lines().
+   * not the start of a wrapped line.
+   */
+  while (mark.index > 0 &&
+ 	 GTK_TEXT_INDEX (text, mark.index - 1) != LINE_DELIM)
+    decrement_mark (&mark);
+ 
   gdk_window_get_size (text->text_area, &width, &height);
 
-  text->line_start_cache = fetch_lines (text,
-					&start_mark,
-					NULL,
-					FetchLinesPixels,
-					height + text->first_cut_pixels);
+  /* Fetch an entire line, to make sure that we get all the text
+   * we backed over above, in addition to enough text to fill up
+   * the space vertically
+   */
 
+  new_lines = fetch_lines (text,
+ 			   &mark,
+			   NULL,
+			   FetchLinesCount,
+			   1);
+
+  mark = CACHE_DATA (g_list_last (new_lines)).end;
+  if (!LAST_INDEX (text, mark))
+    {
+      advance_mark (&mark);
+
+      new_lines = g_list_concat (new_lines, 
+				 fetch_lines (text,
+					      &mark,
+					      NULL,
+					      FetchLinesPixels,
+					      height + text->first_cut_pixels));
+    }
+ 
+  /* Now work forward to the actual first onscreen line */
+ 
+  while (CACHE_DATA (new_lines).start.index < start_mark.index)
+    new_lines = new_lines->next;
+   
+  text->line_start_cache = new_lines;
+    
   find_cursor (text, TRUE);
 }
 

@@ -827,6 +827,7 @@ gdk_event_get (void)
 #else
       XNextEvent (gdk_display, &xevent);
 #endif
+      
       event = gdk_event_new ();
 
       event->any.type = GDK_NOTHING;
@@ -1306,8 +1307,7 @@ gdk_pointer_grab (GdkWindow *     window,
 	xevent_mask |= event_mask_table[i];
     }
 
-  if (((GdkWindowPrivate *)window)->extension_events &&
-      gdk_input_vtable.grab_pointer)
+  if (gdk_input_vtable.grab_pointer)
     return_val = gdk_input_vtable.grab_pointer (window,
 						owner_events,
 						event_mask,
@@ -1727,6 +1727,10 @@ gdk_event_translate (GdkEvent *event,
 
   if (window != NULL)
     gdk_window_ref (window);
+#ifdef USE_XIM
+  else if (XFilterEvent(xevent, None)) /* for xlib XIM handling */
+    return FALSE;
+#endif
   else if(gdk_null_window_warnings) /* Special purpose programs that
 				       get events for other windows may
 				       want to disable this */
@@ -2205,6 +2209,7 @@ gdk_event_translate (GdkEvent *event,
 
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
+	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.enter_event)
 	gdk_input_vtable.enter_event (&xevent->xcrossing, window);
@@ -2582,7 +2587,8 @@ gdk_event_translate (GdkEvent *event,
       
       if (window_private)
 	{
-	  if ((window_private->extension_events != 0) &&
+	  if (!window_private->destroyed &&
+	      (window_private->extension_events != 0) &&
 	      gdk_input_vtable.configure_event)
 	    gdk_input_vtable.configure_event (&xevent->xconfigure, window);
 	  
@@ -2945,6 +2951,7 @@ gdk_event_translate (GdkEvent *event,
       /* something else - (e.g., a Xinput event) */
 
       if (window_private &&
+	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.other_event)
 	return_val = gdk_input_vtable.other_event(event, xevent, window);
