@@ -368,6 +368,13 @@ refetch_widget_accel_closure (GtkAccelLabel *accel_label)
   gtk_accel_label_set_accel_closure (accel_label, closure);
 }
 
+/**
+ * gtk_accel_label_set_accel_widget:
+ * @accel_label: a #GtkAccelLabel
+ * @accel_widget: the widget to be monitored.
+ *
+ * Sets the widget to be monitored by this accelerator label. 
+ **/
 void
 gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
 				  GtkWidget     *accel_widget)
