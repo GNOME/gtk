@@ -1246,13 +1246,13 @@ gtk_widget_hide (GtkWidget *widget)
 }
 
 gint
-gtk_widget_delete_hides (GtkWidget      *widget)
+gtk_widget_hide_on_delete (GtkWidget      *widget)
 {
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
+  
   gtk_widget_hide (widget);
-
+  
   return TRUE;
 }
 

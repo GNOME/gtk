@@ -2104,9 +2104,17 @@ create_entry ()
 
   if (!window)
     {
-      cbitems = g_list_append(cbitems, "item1");
-      cbitems = g_list_append(cbitems, "item2");
-      cbitems = g_list_append(cbitems, "and item3");
+      cbitems = g_list_append(cbitems, "item0");
+      cbitems = g_list_append(cbitems, "item1 item1");
+      cbitems = g_list_append(cbitems, "item2 item2 item2");
+      cbitems = g_list_append(cbitems, "item3 item3 item3 item3");
+      cbitems = g_list_append(cbitems, "item4 item4 item4 item4 item4");
+      cbitems = g_list_append(cbitems, "item5 item5 item5 item5 item5 item5");
+      cbitems = g_list_append(cbitems, "item6 item6 item6 item6 item6");
+      cbitems = g_list_append(cbitems, "item7 item7 item7 item7");
+      cbitems = g_list_append(cbitems, "item8 item8 item8");
+      cbitems = g_list_append(cbitems, "item9 item9");
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",

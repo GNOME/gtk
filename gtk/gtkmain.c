@@ -936,6 +936,40 @@ gtk_quit_destroy (GtkQuitFunction *quitf)
   g_mem_chunk_free (quit_mem_chunk, quitf);
 }
 
+static gint
+gtk_quit_destructor (GtkObject **object_p)
+{
+  if (*object_p)
+    {
+      if (GTK_IS_WIDGET (*object_p))
+	gtk_widget_destroy ((GtkWidget*) *object_p);
+      else
+	gtk_object_destroy (*object_p);
+    }
+  g_free (object_p);
+
+  return FALSE;
+}
+
+void
+gtk_quit_add_destroy (guint              main_level,
+		      GtkObject         *object)
+{
+  GtkObject **object_p;
+
+  g_return_if_fail (main_level > 0);
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
+  object_p = g_new (GtkObject*, 1);
+  *object_p = object;
+  gtk_signal_connect (object,
+		      "destroy",
+		      GTK_SIGNAL_FUNC (gtk_widget_destroyed),
+		      object_p);
+  gtk_quit_add (main_level, (GtkFunction) gtk_quit_destructor, object_p);
+}
+
 guint
 gtk_quit_add (guint	  main_level,
 	      GtkFunction function,

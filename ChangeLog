@@ -1,3 +1,15 @@
+Fri Mar 13 18:25:07 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkcombo.c: fix popup calculations (removal
+	of FIXMEs), changes from Lars Hamann.
+
+Fri Mar 13 10:25:16 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h: 
+	* gtk/gtkwidget.c: renamed gtk_widget_delete_hides to
+ 	gtk_widget_hide_on_delete at owens request, and because the
+	new name is much more descriptive.
+
 Fri Mar 13 17:33:56 GMT 1998 Tony Gale <gale@gimp.org>
 
 	docs/gtkfaq.sgml: fix the spelling of Helge Hess's name

@@ -461,7 +461,7 @@ gint	     gtk_widget_is_child	(GtkWidget	*widget,
 
 /* Hide widget and return TRUE.
  */
-gint	   gtk_widget_delete_hides	(GtkWidget	*widget);
+gint	   gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
 /* Widget styles.
  */
