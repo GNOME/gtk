@@ -1,3 +1,7 @@
+Fri Sep 18 18:54:59 1998  Jay Cox  (jaycox@earthlink.net)
+
+	* gtk/Makefile.am: use $(AWK) instead of awk
+
 1998-09-18  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gtk/Makefile.am (gdk_headers): 

@@ -240,19 +240,19 @@ gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(source_headers) $(gdk_headers)
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 gtktypebuiltins.h: @REBUILD@ gtk.defs maketypes.awk
 	cd $(srcdir) \
-	&& awk -f maketypes.awk gtk.defs macros > s-gtb \
+	&& $(AWK) -f maketypes.awk gtk.defs macros > s-gtb \
 	&& mv s-gtb gtktypebuiltins.h
 
 # generate type identifier variables (GTK_TYPE_WIDGET_FLAGS)
 gtktypebuiltins_vars.c: @REBUILD@ gtk.defs maketypes.awk
 	cd $(srcdir) \
-	&& awk -f maketypes.awk gtk.defs variables > s-gtbv \
+	&& $(AWK) -f maketypes.awk gtk.defs variables > s-gtbv \
 	&& mv s-gtbv gtktypebuiltins_vars.c
 
 # generate type entries for type-id registration
 gtktypebuiltins_ids.c: @REBUILD@ gtk.defs maketypes.awk
 	cd $(srcdir) \
-	&& awk -f maketypes.awk gtk.defs entries > s-gtbi \
+	&& $(AWK) -f maketypes.awk gtk.defs entries > s-gtbi \
 	&& mv s-gtbi gtktypebuiltins_ids.c 
 
 # generate enum value arrays
