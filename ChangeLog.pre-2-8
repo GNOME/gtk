@@ -1,5 +1,13 @@
 2001-05-25  Havoc Pennington  <hp@redhat.com>
-	
+
+	* gtk/gtkiconfactory.c: fix so that default icons are created if 
+	you call gtk_stock_list_ids()
+
+	* demos/gtk-demo/stock_browser.c (create_model): sort stock items
+	in list
+
+2001-05-25  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtkiconfactory.c (gtk_icon_set_get_sizes): get sizes an icon
 	set can render without falling back to missing image icon
 

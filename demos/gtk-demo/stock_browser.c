@@ -1,9 +1,12 @@
 /* Stock Item/Icon Browser
  *
  * This source code for this demo doesn't demonstrate anything
- * particularly useful in applications, it just lets you scan the
- * available stock icons and stock items.
+ * particularly useful in applications. The purpose of the "demo" is
+ * just to provide a handy place to browse the available stock icons
+ * and stock items.
  */
+
+#include <string.h>
 
 #include <gtk/gtk.h>
 
@@ -134,6 +137,7 @@ create_model (void)
   store = gtk_list_store_new_with_types (1, STOCK_ITEM_INFO_TYPE);
 
   ids = gtk_stock_list_ids ();
+  ids = g_slist_sort (ids, (GCompareFunc) strcmp);
   tmp_list = ids;
   while (tmp_list != NULL)
     {

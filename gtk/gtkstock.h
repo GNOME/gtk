@@ -62,8 +62,6 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 
 
 /* Stock IDs (not all are stock items; some are images only) */
-#define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
-
 #define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
 #define GTK_STOCK_DIALOG_WARNING   "gtk-dialog-warning"
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
@@ -101,6 +99,7 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_JUSTIFY_FILL     "gtk-justify-fill"
 #define GTK_STOCK_JUSTIFY_LEFT     "gtk-justify-left"
 #define GTK_STOCK_JUSTIFY_RIGHT    "gtk-justify-right"
+#define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
 #define GTK_STOCK_NEW              "gtk-new"
 #define GTK_STOCK_NO               "gtk-no"
 #define GTK_STOCK_OK               "gtk-ok"
