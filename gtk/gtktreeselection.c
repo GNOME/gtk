@@ -455,7 +455,7 @@ gtk_tree_selection_get_selected_rows (GtkTreeSelection   *selection,
         {
 	  GtkTreePath *path;
 
-	  path = gtk_tree_model_get_path (*model, &iter);
+	  path = gtk_tree_model_get_path (selection->tree_view->priv->model, &iter);
 	  list = g_list_append (list, path);
 
 	  return list;

@@ -1,3 +1,8 @@
+Sun Mar 30 03:57:42 2003  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_get_selected_rows):
+	fix crash.  Patch from Markus Lausser <sgop@users.sourceforge.net>
+
 2003-03-29  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_remove_contents): Set state
