@@ -796,6 +796,33 @@ static struct {
   { 0x20aa, 0x20aa }, /*               NewSheqelSign ₪ NEW SHEQEL SIGN */
   { 0x20ab, 0x20ab }, /*                    DongSign ₫ DONG SIGN */
   { 0x20ac, 0x20ac }, /*                    EuroSign € EURO SIGN */
+
+
+  /* Following items added to GTK, not in the xterm table */
+
+  /* Numeric keypad */
+  
+  { 0xFF80 /* Space */, ' ' },
+  { 0xFF89 /* Tab */, '\t' },
+  { 0xFF8D /* Enter */, '\n' },
+  { 0xFFAA /* Multiply */, '*' },
+  { 0xFFAB /* Add */, '+' },
+  { 0xFFAD /* Subtract */, '-' },
+  { 0xFFAE /* Decimal */, '.' },
+  { 0xFFAF /* Divide */, '/' },
+  { 0xFFB0 /* 0 */, '0' },
+  { 0xFFB1 /* 1 */, '1' },
+  { 0xFFB2 /* 2 */, '2' },
+  { 0xFFB3 /* 3 */, '3' },
+  { 0xFFB4 /* 4 */, '4' },
+  { 0xFFB5 /* 5 */, '5' },
+  { 0xFFB6 /* 6 */, '6' },
+  { 0xFFB7 /* 7 */, '7' },
+  { 0xFFB8 /* 8 */, '8' },
+  { 0xFFB9 /* 9 */, '9' },
+  { 0xFFBD /* Equal */, '=' },  
+
+  /* End numeric keypad */
 };
 
 /**

@@ -1,5 +1,9 @@
 2001-04-18  Havoc Pennington  <hp@redhat.com>
 
+	* gdk/gdkkeyuni.c: Handle numeric keypad keysyms; bug #50201
+
+2001-04-18  Havoc Pennington  <hp@redhat.com>
+
         Close bug #50615:
 	
 	* gtk/gtkstyle.c (gtk_default_draw_layout): Use text_gc to draw
