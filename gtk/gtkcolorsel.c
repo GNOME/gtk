@@ -1293,12 +1293,10 @@ gtk_color_selection_eval_wheel (gint     x,  gint     y,
 				gdouble  cx, gdouble  cy,
 				gdouble *h,  gdouble *s)
 {
-  gdouble d, r, rx, ry, l;
+  gdouble r, rx, ry;
 
   rx = ((gdouble) x - cx);
   ry = ((gdouble) y - cy);
-
-  d = (SQR (cy) * SQR (rx) + SQR (cx) * SQR (ry) - SQR (cx) * SQR (cy));
 
   rx = rx/cx;
   ry = ry/cy;
@@ -1316,11 +1314,11 @@ gtk_color_selection_eval_wheel (gint     x,  gint     y,
   if (*s == 0.0)
     *s = 0.00001;
   else if (*s > 1.0)
-  {
-    *s = 1.0;
-    return 1;
-  }
-  return 0;
+    {
+      *s = 1.0;
+      return TRUE;
+    }
+  return FALSE;
 }
 
 static void
