@@ -1,5 +1,11 @@
 2004-07-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/linux-fb/gdkprivate-fb.h: Make the fb backend compile against
+	current freetype.  (#148558, Nicolas Deves)
+
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_background): Fix
+	prototype mismatch.  (#148589, Nicolas Deves)
+
 	* gtk/gtkuimanager.c: Warning fixes.
 
 Fri Jul 23 11:00:17 2004  Matthias Clasen  <maclas@gmx.de>

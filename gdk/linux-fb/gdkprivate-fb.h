@@ -38,7 +38,8 @@
 #include "gdkregion-generic.h"
 #include <linux/fb.h>
 #include <stdio.h>
-#include <freetype/freetype.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 #define GDK_TYPE_DRAWABLE_IMPL_FBDATA (gdk_drawable_impl_fb_get_type ())
 #define GDK_DRAWABLE_IMPL_FBDATA(win) ((GdkDrawableFBData *)((GdkWindowObject *)(win))->impl)
