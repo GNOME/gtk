@@ -3165,6 +3165,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gboolean allow_rules;
   gboolean has_special_cell;
   gboolean rtl;
+  gint n_visible_columns;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
 
@@ -3227,6 +3228,16 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
   gdk_drawable_get_size (tree_view->priv->bin_window,
                          &bin_window_width, NULL);
 
+
+  n_visible_columns = 0;
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      if (! GTK_TREE_VIEW_COLUMN (list->data)->visible)
+	continue;
+      n_visible_columns ++;
+    }
+
+  /* Find the last column */
   for (last_column = rtl ? g_list_first (tree_view->priv->columns) : g_list_last (tree_view->priv->columns);
        last_column &&
 	 !(GTK_TREE_VIEW_COLUMN (last_column->data)->visible) &&
@@ -3283,7 +3294,7 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 	    }
 
           if (column->show_sort_indicator)
-            flags |= GTK_CELL_RENDERER_SORTED;
+	    flags |= GTK_CELL_RENDERER_SORTED;
           else
             flags &= ~GTK_CELL_RENDERER_SORTED;
 
@@ -3319,7 +3330,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
            */
           if (allow_rules && tree_view->priv->has_rules)
             {
-              if (flags & GTK_CELL_RENDERER_SORTED)
+              if ((flags & GTK_CELL_RENDERER_SORTED) &&
+		  n_visible_columns >= 3)
                 {
                   if (parity)
                     detail = "cell_odd_ruled_sorted";
@@ -3336,7 +3348,8 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
             }
           else
             {
-              if (flags & GTK_CELL_RENDERER_SORTED)
+              if ((flags & GTK_CELL_RENDERER_SORTED) &&
+		  n_visible_columns >= 3)
                 {
                   if (parity)
                     detail = "cell_odd_sorted";

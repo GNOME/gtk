@@ -1,3 +1,8 @@
+Tue Feb 24 14:43:07 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_bin_expose): only draw the sort
+	column as different if there are 3 or more visible columns.
+
 2004-02-24  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c: (shortcuts_insert_separator):
