@@ -1,11 +1,11 @@
 # Translation of gtk+-properties to Croatiann
 # Copyright (C) Croatiann team
-# Translators: Automatski Prijevod <>,pr pr <delacko@192.168.0.1>,
+# Translators: Automatski Prijevod <>,Robert Sedak <robert.sedak@sk.tel.hr>,
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
-"POT-Creation-Date: 2004-02-08 00:20+0100\n"
-"PO-Revision-Date: 2004-02-08 00:21+CET\n"
+"POT-Creation-Date: 2004-02-09 09:38+0100\n"
+"PO-Revision-Date: 2004-02-09 09:38+CET\n"
 "Last-Translator: auto\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
 "MIME-Version: 1.0\n"
@@ -520,7 +520,6 @@ msgid "RAS image has unknown type"
 msgstr "RAS slika je nepoznate vrste"
 
 #: gdk-pixbuf/io-ras.c:156
-#, fuzzy
 msgid "unsupported RAS image variation"
 msgstr "nepodržana vrsta RAS slike"
 
@@ -598,7 +597,6 @@ msgid "Could not get image height (bad TIFF file)"
 msgstr "Ne može se saznati visina slike (neispravna TIFF datoteka)"
 
 #: gdk-pixbuf/io-tiff.c:207
-#, fuzzy
 msgid "Width or height of TIFF image is zero"
 msgstr "Visina ili širina TIFF slike je nula"
 
@@ -675,24 +673,20 @@ msgid "No XPM header found"
 msgstr "Nije nađeno XPM zaglavlje"
 
 #: gdk-pixbuf/io-xpm.c:1237
-#, fuzzy
 msgid "XPM file has image width <= 0"
-msgstr "XPM slika je širine ≤0"
+msgstr "XPM datoteka ima sliku širine <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1245
-#, fuzzy
 msgid "XPM file has image height <= 0"
-msgstr "XPM slika je visine ≤0"
+msgstr "XPM datoteka ima sliku visine <= 0"
 
 #: gdk-pixbuf/io-xpm.c:1253
-#, fuzzy
 msgid "XPM file has invalid number of colors"
 msgstr "XPM datoteka ima neispravan broj boja"
 
 #: gdk-pixbuf/io-xpm.c:1261
-#, fuzzy
 msgid "XPM has invalid number of chars per pixel"
-msgstr "XPM ima neispravan broj znakova po tački"
+msgstr "XPM ima neispravan broj znakova po pikselu"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
@@ -750,9 +744,8 @@ msgstr "calendar:MY"
 #.  * first day of the week to calendar:week_start:1 if you want Monday
 #.  * to be the first day of the week, and so on.
 #: gtk/gtkcalendar.c:719
-#, fuzzy
 msgid "calendar:week_start:0"
-msgstr "calendar:week_start:1"
+msgstr "calendar:week_start:0"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
@@ -781,9 +774,8 @@ msgstr ""
 "sačuvali za naknadnu upotrebu."
 
 #: gtk/gtkcolorsel.c:927
-#, fuzzy
 msgid "_Save color here"
-msgstr "_Sačuvaj ovdje boju"
+msgstr "Ovdje _sapremi boju"
 
 #: gtk/gtkcolorsel.c:1132
 msgid ""
@@ -823,9 +815,8 @@ msgid "_Saturation:"
 msgstr "_Zasićennje:"
 
 #: gtk/gtkcolorsel.c:1877
-#, fuzzy
 msgid "\"Deepness\" of the color."
-msgstr "„Dubina“ boja."
+msgstr "\"Dubina\" boja."
 
 #: gtk/gtkcolorsel.c:1878
 msgid "_Value:"
@@ -865,20 +856,19 @@ msgstr "_Prozirnost:"
 
 #: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
 msgid "Transparency of the color."
-msgstr ""
+msgstr "Prozirnost boje."
 
 #: gtk/gtkcolorsel.c:1914
 msgid "Color _Name:"
 msgstr "_Ime boje:"
 
 #: gtk/gtkcolorsel.c:1929
-#, fuzzy
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Ovdje možete unijeti boju na HTML način kao heksadecimalnu vrijednost, ili "
-"jednostavno englesko ime boje kao što je „orange“."
+"Možete upisati boju na HTML način kao heksadecimalnu vrijednost ili "
+"jednostavno englesko ime boje kao što je 'orange'."
 
 #: gtk/gtkcolorsel.c:1948
 msgid "_Palette"
@@ -897,9 +887,8 @@ msgid "Input _Methods"
 msgstr "_Ulazne metode"
 
 #: gtk/gtkentry.c:4099 gtk/gtktextview.c:6896
-#, fuzzy
 msgid "_Insert Unicode Control Character"
-msgstr "_Ubaciti Unikod kontrolni znak"
+msgstr "_Ubaciti Unicode kontrolni znak"
 
 #: gtk/gtkfilechooser.c:1452 gtk/gtkfilechooser.c:1496
 #: gtk/gtkfilechooser.c:1571 gtk/gtkfilechooser.c:1615
@@ -1019,9 +1008,8 @@ msgstr "Pregled"
 
 #. Change the current folder label
 #: gtk/gtkfilechooserdefault.c:2133
-#, fuzzy, c-format
 msgid "Current folder: %s"
-msgstr "Trenutna boja"
+msgstr "Trenutna mapa: %s"
 
 #: gtk/gtkfilechooserdefault.c:2536
 #, c-format
@@ -1029,9 +1017,8 @@ msgid "shortcut %s does not exist"
 msgstr "Ne postoji kratica %s"
 
 #: gtk/gtkfilechooserdefault.c:3086
-#, fuzzy
 msgid "Type name of new folder"
-msgstr "Ime forme"
+msgstr "Upišite ime nove mape"
 
 #. plural form
 #: gtk/gtkfilechooserdefault.c:3113
@@ -1060,18 +1047,16 @@ msgid "Today"
 msgstr "Danas"
 
 #: gtk/gtkfilechooserdefault.c:3166
-#, fuzzy
 msgid "Yesterday"
-msgstr "Juče"
+msgstr "Jučer"
 
 #: gtk/gtkfilechooserdefault.c:3174
-#, fuzzy
 msgid "%d/%b/%Y"
-msgstr "%d.%b.%Y."
+msgstr "%d/%b/%Y"
 
 #: gtk/gtkfilechooserdefault.c:3177
 msgid "Unknown"
-msgstr "Napoznato"
+msgstr "Nepoznato"
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
@@ -1131,9 +1116,8 @@ msgstr ""
 "%s"
 
 #: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
-#, fuzzy
 msgid "You probably used symbols not allowed in filenames."
-msgstr "Vjerojatno ste koristili nedozvoljene simbole u imenu."
+msgstr "Vjerojatno ste koristili nedozvoljene simbole u imenu datoteke."
 
 #: gtk/gtkfilesel.c:1450
 #, c-format
@@ -1249,7 +1233,6 @@ msgid "Couldn't convert filename"
 msgstr "Ne mogu konvertirati ime datoteke"
 
 #: gtk/gtkfilesystemmodel.c:1118
-#, fuzzy
 msgid "(Empty)"
 msgstr "(Prazno)"
 
@@ -1260,7 +1243,7 @@ msgstr "Greška kod stvarnja mape '%s': %s"
 
 #: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
-msgstr ""
+msgstr "Ovaj datotečni sustav ne podržava montiranje."
 
 #: gtk/gtkfilesystemunix.c:448
 msgid "Filesystem"
@@ -1279,7 +1262,7 @@ msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
 #: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
-msgstr ""
+msgstr "Ovaj datotečni sustav ne podržava sličice za sve"
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
@@ -1449,9 +1432,8 @@ msgid "default:LTR"
 msgstr "default:LTR"
 
 #: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5072
-#, fuzzy, c-format
 msgid "Page %u"
-msgstr "Stranica"
+msgstr "Stranica %u"
 
 #: gtk/gtkrc.c:2380
 #, c-format
@@ -1504,9 +1486,8 @@ msgid "_Cancel"
 msgstr "_Odustani"
 
 #: gtk/gtkstock.c:279
-#, fuzzy
 msgid "_CD-Rom"
-msgstr "_CD uređaj"
+msgstr "_CD-rom uređaj"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
@@ -1582,7 +1563,7 @@ msgstr "_Gore"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
-msgstr ""
+msgstr "_Tvrdi disk"
 
 #: gtk/gtkstock.c:299
 msgid "_Help"
@@ -1609,9 +1590,8 @@ msgid "_Italic"
 msgstr "_Ukošeno"
 
 #: gtk/gtkstock.c:305
-#, fuzzy
 msgid "_Jump to"
-msgstr "_Idi na"
+msgstr "_Skoči na"
 
 #: gtk/gtkstock.c:306
 msgid "_Center"
@@ -1714,7 +1694,6 @@ msgid "_Descending"
 msgstr "_Silazno"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Spell Check"
 msgstr "_Provjera pravopisa"
 
@@ -1787,17 +1766,14 @@ msgid "PDF _Pop directional formatting"
 msgstr "PDF _Počni usmjeren zapis"
 
 #: gtk/gtktextutil.c:53
-#, fuzzy
 msgid "ZWS _Zero width space"
 msgstr "ZWS _razmak bez širine"
 
 #: gtk/gtktextutil.c:54
-#, fuzzy
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ _spojnica bez širine"
 
 #: gtk/gtktextutil.c:55
-#, fuzzy
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ _nespojnica bez širine"
 
@@ -1870,13 +1846,11 @@ msgstr "Tigrigna-Etiopijski (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:243
-#, fuzzy
 msgid "Vietnamese (VIQR)"
 msgstr "Vijetnamski (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
-#, fuzzy
 msgid "X Input Method"
 msgstr "X način unosa (XIM)"
 
