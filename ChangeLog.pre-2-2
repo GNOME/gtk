@@ -1,3 +1,10 @@
+Fri Feb 15 19:38:00 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreestore.c (gtk_tree_store_clear_traverse): new function
+	(gtk_tree_store_clear): traverse the tree, so we emit row_deleted
+	for every node. This way we don't have confused row refs crashing the
+	application. (#70631)
+
 2002-02-14  Richard Hult  <rhult@codefactory.se>
 
 	* gtk/gtkpaned.c (gtk_paned_enter): Only queue a draw on the
