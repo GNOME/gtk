@@ -1,5 +1,8 @@
 2005-03-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtklabel.c (gtk_label_set_markup): Fix formatting
+	in example in the docs.  (#170611, Jianfei Wang)
+
 	* gtk/gtkiconview.c (gtk_icon_view_size_allocate): Clamp
 	adjustment values on resize.  (#170567, Tomislav Jonjic)
 

@@ -1301,7 +1301,7 @@ set_markup (GtkLabel    *label,
  * <informalexample><programlisting>
  * char *markup;
  * <!-- -->
- * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;%s&lt;/span&gt;", str);
+ * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;&percnt;s&lt;/span&gt;", str);
  * gtk_label_set_markup (GTK_LABEL (label), markup);
  * g_free (markup);
  * </programlisting></informalexample>
