@@ -2093,7 +2093,6 @@ column_button_create (GtkCList *clist,
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
 		      (GtkSignalFunc) column_button_clicked,
 		      (gpointer) clist);
-
   gtk_widget_show (button);
 }
 
@@ -4557,8 +4556,12 @@ gtk_clist_unrealize (GtkWidget *widget)
   /* freeze the list */
   clist->freeze_count++;
 
-  /* detach optional row/cell styles */
+  if (GTK_WIDGET_MAPPED (widget))
+    gtk_clist_unmap (widget);
 
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+
+  /* detach optional row/cell styles */
   if (GTK_WIDGET_REALIZED (widget))
     {
       GtkCListRow *clist_row;
@@ -4585,12 +4588,16 @@ gtk_clist_unrealize (GtkWidget *widget)
   gdk_gc_destroy (clist->bg_gc);
 
   for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].window)
-      {
-	gdk_window_set_user_data (clist->column[i].window, NULL);
-	gdk_window_destroy (clist->column[i].window);
-	clist->column[i].window = NULL;
-      }
+    {
+      if (clist->column[i].button)
+	gtk_widget_unrealize (clist->column[i].button);
+      if (clist->column[i].window)
+	{
+	  gdk_window_set_user_data (clist->column[i].window, NULL);
+	  gdk_window_destroy (clist->column[i].window);
+	  clist->column[i].window = NULL;
+	}
+    }
 
   gdk_window_set_user_data (clist->clist_window, NULL);
   gdk_window_destroy (clist->clist_window);
@@ -4626,10 +4633,12 @@ gtk_clist_map (GtkWidget *widget)
 
       /* map column buttons */
       for (i = 0; i < clist->columns; i++)
-	if (clist->column[i].button &&
-	    GTK_WIDGET_VISIBLE (clist->column[i].button) &&
-	    !GTK_WIDGET_MAPPED (clist->column[i].button))
-	  gtk_widget_map (clist->column[i].button);
+	{
+	  if (clist->column[i].button &&
+	      GTK_WIDGET_VISIBLE (clist->column[i].button) &&
+	      !GTK_WIDGET_MAPPED (clist->column[i].button))
+	    gtk_widget_map (clist->column[i].button);
+	}
       
       for (i = 0; i < clist->columns; i++)
 	if (clist->column[i].window && clist->column[i].button)

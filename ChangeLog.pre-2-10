@@ -1,3 +1,8 @@
+Mon Mar 22 00:41:39 1999  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_unrealize): unmap clist if neccessary,
+	unrealize title buttons.
+
 Fri Mar 19 16:45:27 PST 1999 Manish Singh <yosh@gimp.org>
 
         * acinclude.m4
