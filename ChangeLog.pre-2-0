@@ -1,3 +1,8 @@
+2001-09-10  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkstyle.c (_gtk_style_peek_property_value)
+	Amend previous change to avoid runtime error in g_param_spec_ref()
+
 Mon Sep 10 06:58:56 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (insert_rc_property): Fix blank line

@@ -1300,13 +1300,14 @@ _gtk_style_peek_property_value (GtkStyle           *style,
   g_return_val_if_fail (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET), NULL);
   g_return_val_if_fail (g_type_is_a (widget_type, pspec->owner_type), NULL);
 
+  key.widget_type = widget_type;
+  key.pspec = pspec;
+
   /* need value cache array */
   if (!style->property_cache)
     style->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
   else
     {
-      key.widget_type = widget_type;
-      key.pspec = pspec;
       pcache = bsearch (&key,
 			style->property_cache->data, style->property_cache->len,
 			sizeof (PropertyValue), style_property_values_cmp);
