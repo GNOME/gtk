@@ -135,7 +135,7 @@ Wed May 21 15:53:14 2003  Owen Taylor  <otaylor@redhat.com>
  	gtk_progress_set_show_text): Always queue a resize ... 
  	we rely on the size-allocate to do the update, plus a 
  	different format can actually change our size requisition.
- 	(#111052)
+	(#111052, Vasco Alexandre da Silva Costa)
  
 	* gtk/gtkprogress.c (gtk_progress_changed): Track
  	::changed as well as ::value_changed, and queue a
