@@ -63,7 +63,7 @@ struct _GtkTreeModelIface
   void         (* inserted)          (GtkTreeModel *tree_model,
 				      GtkTreePath  *path,
 				      GtkTreeIter  *iter);
-  void         (* child_toggled)     (GtkTreeModel *tree_model,
+  void         (* has_child_toggled) (GtkTreeModel *tree_model,
 				      GtkTreePath  *path,
 				      GtkTreeIter  *iter);
   void         (* deleted)           (GtkTreeModel *tree_model,
@@ -207,17 +207,18 @@ void              gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 
 
 /* Signals */
-void gtk_tree_model_changed       (GtkTreeModel *tree_model,
-				   GtkTreePath  *path,
-				   GtkTreeIter  *iter);
-void gtk_tree_model_inserted      (GtkTreeModel *tree_model,
-				   GtkTreePath  *path,
-				   GtkTreeIter  *iter);
-void gtk_tree_model_child_toggled (GtkTreeModel *tree_model,
-				   GtkTreePath  *path,
-				   GtkTreeIter  *iter);
-void gtk_tree_model_deleted       (GtkTreeModel *tree_model,
-				   GtkTreePath  *path);
+void gtk_tree_model_changed           (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeIter  *iter);
+void gtk_tree_model_inserted          (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeIter  *iter);
+void gtk_tree_model_has_child_toggled (GtkTreeModel *tree_model,
+				       GtkTreePath  *path,
+				       GtkTreeIter  *iter);
+void gtk_tree_model_deleted           (GtkTreeModel *tree_model,
+				       GtkTreePath  *path);
+
 
 
 #ifdef __cplusplus

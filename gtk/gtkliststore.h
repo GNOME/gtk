@@ -54,17 +54,17 @@ struct _GtkListStoreClass
 
   /* signals */
   /* Will be moved into the GtkTreeModelIface eventually */
-  void (* changed)       (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter);
-  void (* inserted)      (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter);
-  void (* child_toggled) (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter);
-  void (* deleted)       (GtkTreeModel *tree_model,
-			  GtkTreePath  *path);
+  void (* changed)           (GtkTreeModel *tree_model,
+			      GtkTreePath  *path,
+			      GtkTreeIter  *iter);
+  void (* inserted)          (GtkTreeModel *tree_model,
+			      GtkTreePath  *path,
+			      GtkTreeIter  *iter);
+  void (* has_child_toggled) (GtkTreeModel *tree_model,
+			      GtkTreePath  *path,
+			      GtkTreeIter  *iter);
+  void (* deleted)           (GtkTreeModel *tree_model,
+			      GtkTreePath  *path);
 };
 
 

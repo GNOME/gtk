@@ -21,6 +21,7 @@ add_clicked (GtkWidget *button, gpointer data)
 
   cell = gtk_cell_renderer_text_new ();
   column = gtk_tree_view_column_new_with_attributes (label, cell, "text", 0, NULL);
+  gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_RESIZEABLE);
   gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
   g_free (label);
@@ -38,8 +39,10 @@ get_visible (GtkTreeViewColumn *tree_column,
 
   gtk_tree_model_get (tree_model, iter, 1, &column, -1);
   if (column)
-    gtk_cell_renderer_toggle_set_active (GTK_CELL_RENDERER_TOGGLE (cell),
-					 column->visible);
+    {
+      gtk_cell_renderer_toggle_set_active (GTK_CELL_RENDERER_TOGGLE (cell),
+					   column->visible);
+    }
 }
 
 static void
@@ -160,6 +163,7 @@ main (int argc, char *argv[])
 
   /* Set up the test windows. */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Top Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
   sample_tree_view_top = gtk_tree_view_new_with_model (sample_model);
   gtk_container_add (GTK_CONTAINER (window), swindow);
@@ -167,6 +171,7 @@ main (int argc, char *argv[])
   gtk_widget_show_all (window);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Bottom Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
   sample_tree_view_bottom = gtk_tree_view_new_with_model (sample_model);
   gtk_container_add (GTK_CONTAINER (window), swindow);
@@ -253,6 +258,12 @@ main (int argc, char *argv[])
   cell = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (top_right_tree_view), -1,
 					       NULL, cell, "text", 0, NULL);
+  cell = gtk_cell_renderer_toggle_new ();
+  g_signal_connect (G_OBJECT (cell), "toggled", set_visible, top_right_tree_view);
+  column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (top_right_tree_view), column);
+
   gtk_container_add (GTK_CONTAINER (swindow), top_right_tree_view);
   gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
 
@@ -262,6 +273,11 @@ main (int argc, char *argv[])
   cell = gtk_cell_renderer_text_new ();
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (bottom_right_tree_view), -1,
 					       NULL, cell, "text", 0, NULL);
+  cell = gtk_cell_renderer_toggle_new ();
+  g_signal_connect (G_OBJECT (cell), "toggled", set_visible, bottom_right_tree_view);
+  column = gtk_tree_view_column_new_with_attributes (NULL, cell, NULL);
+  gtk_tree_view_column_set_cell_data_func (column, get_visible, NULL, NULL);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (bottom_right_tree_view), column);
   gtk_container_add (GTK_CONTAINER (swindow), bottom_right_tree_view);
   gtk_box_pack_start (GTK_BOX (vbox2), swindow, TRUE, TRUE, 0);
 

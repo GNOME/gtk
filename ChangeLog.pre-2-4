@@ -1,3 +1,15 @@
+Mon Mar  5 14:38:54 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c: renamed "child_toggled" to
+	"has_child_toggled".
+
+	* gtk/gtktreeview.c: Handle removing columns better.  Updated to
+	handle new signal name.
+
+	* gtk/gtktreestore.c: Updated to handle new signal name.
+	* gtk/gtklisttore.c: Updated to handle new signal name.
+	* gtk/gtktreemodelsort.c: Updated to handle new signal name.
+
 2001-03-05  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state):

@@ -150,7 +150,7 @@ static void     gtk_tree_view_inserted             (GtkTreeModel     *model,
 						    GtkTreePath      *path,
 						    GtkTreeIter      *iter,
 						    gpointer          data);
-static void     gtk_tree_view_child_toggled        (GtkTreeModel     *model,
+static void     gtk_tree_view_has_child_toggled    (GtkTreeModel     *model,
 						    GtkTreePath      *path,
 						    GtkTreeIter      *iter,
 						    gpointer          data);
@@ -2346,18 +2346,32 @@ gtk_tree_view_remove (GtkContainer *container,
     {
       child = tmp_list->data;
       if (child->widget == widget)
-	break;
+	{
+	  gtk_widget_unparent (widget);
+
+	  tree_view->priv->children = g_list_remove_link (tree_view->priv->children, tmp_list);
+	  g_list_free_1 (tmp_list);
+	  g_free (child);
+	  return;
+	}
+
       tmp_list = tmp_list->next;
     }
 
-  if (tmp_list)
-    {
-      gtk_widget_unparent (widget);
+  tmp_list = tree_view->priv->columns;
 
-      tree_view->priv->children = g_list_remove_link (tree_view->priv->children, tmp_list);
-      g_list_free_1 (tmp_list);
-      g_free (child);
+  while (tmp_list)
+    {
+      GtkTreeViewColumn *column;
+      column = tmp_list->data;      
+      if (column->button == widget)
+	{
+	  gtk_widget_unparent (widget);
+	  return;
+	}
+      tmp_list = tmp_list->next;
     }
+
 }
 
 static void
@@ -2508,13 +2522,13 @@ gtk_tree_view_inserted (GtkTreeModel *model,
       else if (!GTK_RBNODE_FLAG_SET (tmpnode, GTK_RBNODE_IS_PARENT))
 	{
           /* FIXME enforce correct behavior on model, probably */
-	  /* In theory, the model should have emitted child_toggled here.  We
+	  /* In theory, the model should have emitted has_child_toggled here.  We
 	   * try to catch it anyway, just to be safe, in case the model hasn't.
 	   */
 	  GtkTreePath *tmppath = _gtk_tree_view_find_path (tree_view,
 							   tree,
 							   tmpnode);
-	  gtk_tree_view_child_toggled (model, tmppath, NULL, data);
+	  gtk_tree_view_has_child_toggled (model, tmppath, NULL, data);
 	  gtk_tree_path_free (tmppath);
           goto done;
 	}
@@ -2552,10 +2566,10 @@ gtk_tree_view_inserted (GtkTreeModel *model,
 }
 
 static void
-gtk_tree_view_child_toggled (GtkTreeModel *model,
-			     GtkTreePath  *path,
-			     GtkTreeIter  *iter,
-			     gpointer      data)
+gtk_tree_view_has_child_toggled (GtkTreeModel *model,
+				 GtkTreePath  *path,
+				 GtkTreeIter  *iter,
+				 gpointer      data)
 {
   GtkTreeView *tree_view = (GtkTreeView *)data;
   GtkTreeIter real_iter;
@@ -3494,8 +3508,8 @@ gtk_tree_view_setup_model (GtkTreeView *tree_view)
 		    gtk_tree_view_inserted,
 		    tree_view);
   g_signal_connect (tree_view->priv->model,
-		    "child_toggled",
-		    gtk_tree_view_child_toggled,
+		    "has_child_toggled",
+		    gtk_tree_view_has_child_toggled,
 		    tree_view);
   g_signal_connect (tree_view->priv->model,
 		    "deleted",
@@ -3550,7 +3564,7 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
 						G_SIGNAL_MATCH_FUNC,
 						0, 0, NULL,
-						gtk_tree_view_child_toggled, NULL);
+						gtk_tree_view_has_child_toggled, NULL);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
 						G_SIGNAL_MATCH_FUNC,
 						0, 0, NULL,
@@ -3920,14 +3934,32 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), -1);
   g_return_val_if_fail (column->tree_view == GTK_WIDGET (tree_view), -1);
 
-  tree_view->priv->columns = g_list_remove (tree_view->priv->columns,
-                                           column);
-  column->tree_view = NULL;
   _gtk_tree_view_column_unset_tree_view (column);
+
+  tree_view->priv->columns = g_list_remove (tree_view->priv->columns, column);
 
   g_object_unref (G_OBJECT (column));
 
   tree_view->priv->n_columns--;
+
+  if (GTK_WIDGET_REALIZED (tree_view))
+    {
+      GList *list;
+
+      for (list = tree_view->priv->columns; list; list = list->next)
+	{
+	  column = GTK_TREE_VIEW_COLUMN (list->data);
+	  if (column->visible)
+	    column->dirty = TRUE;
+	}
+
+      if (tree_view->priv->n_columns == 0 &&
+	  gtk_tree_view_get_headers_visible (tree_view))
+	gdk_window_hide (tree_view->priv->header_window);
+
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    }
+
   
   return tree_view->priv->n_columns;
 }
@@ -3956,16 +3988,34 @@ gtk_tree_view_insert_column (GtkTreeView       *tree_view,
 
   g_object_ref (G_OBJECT (column));
 
+  if (tree_view->priv->n_columns == 0 &&
+      GTK_WIDGET_REALIZED (tree_view) &&
+      gtk_tree_view_get_headers_visible (tree_view))
+    {
+      gdk_window_show (tree_view->priv->header_window);
+    }
+
   tree_view->priv->columns = g_list_insert (tree_view->priv->columns,
 					    column, position);
-
   _gtk_tree_view_column_set_tree_view (column, tree_view);
-
   _gtk_tree_view_column_create_button (column);
 
   tree_view->priv->n_columns++;
 
-  
+
+  if (GTK_WIDGET_REALIZED (tree_view))
+    {
+      GList *list;
+
+      for (list = tree_view->priv->columns; list; list = list->next)
+	{
+	  column = GTK_TREE_VIEW_COLUMN (list->data);
+	  if (column->visible)
+	    column->dirty = TRUE;
+	}
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+    }
+
   return tree_view->priv->n_columns;
 }
 

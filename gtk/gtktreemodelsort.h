@@ -52,27 +52,13 @@ struct _GtkTreeModelSort
 
   guint changed_id;
   guint inserted_id;
-  guint child_toggled_id;
+  guint has_child_toggled_id;
   guint deleted_id;
 };
 
 struct _GtkTreeModelSortClass
 {
   GObjectClass parent_class;
-
-  /* signals */
-  /* Will be moved into the GtkTreeModelIface eventually */
-  void (* changed)       (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter);
-  void (* inserted)      (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter);
-  void (* child_toggled) (GtkTreeModel *tree_model,
-			  GtkTreePath  *path,
-			  GtkTreeIter  *iter);
-  void (* deleted)       (GtkTreeModel *tree_model,
-			  GtkTreePath  *path);
 };
 
 

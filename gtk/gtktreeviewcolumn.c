@@ -583,7 +583,6 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
   if (column->tree_view && column->button)
     {
       gtk_container_remove (GTK_CONTAINER (column->tree_view), column->button);
-      g_print ("removing the button\n");
     }
 
   column->tree_view = NULL;
@@ -897,13 +896,13 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
       if (visible)
 	{
 	  gtk_widget_show (tree_column->button);
-	  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+	  if (GTK_WIDGET_REALIZED (tree_column->tree_view) && tree_column->window)
 	    gdk_window_show (tree_column->window);
 	}
       else
 	{
 	  gtk_widget_hide (tree_column->button);
-	  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+	  if (GTK_WIDGET_REALIZED (tree_column->tree_view) && tree_column->window)
 	    gdk_window_hide (tree_column->window);
 	}
 
@@ -950,6 +949,12 @@ gtk_tree_view_column_set_sizing (GtkTreeViewColumn     *tree_column,
     return;
 
   tree_column->column_type = type;
+
+  g_object_notify (G_OBJECT (tree_column), "sizing");
+
+  if (tree_column->tree_view == NULL)
+    return;
+
   switch (type)
     {
     case GTK_TREE_VIEW_COLUMN_AUTOSIZE:
@@ -968,8 +973,6 @@ gtk_tree_view_column_set_sizing (GtkTreeViewColumn     *tree_column,
     }
 
   gtk_widget_queue_resize (tree_column->tree_view);
-
-  g_object_notify (G_OBJECT (tree_column), "sizing");
 }
 
 /**
@@ -1035,11 +1038,15 @@ gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
     return;
   
   tree_column->width = size;
-  
-  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
-    gtk_widget_queue_resize (tree_column->tree_view);
+
   
   g_object_notify (G_OBJECT (tree_column), "width");
+
+  if (tree_column->tree_view == NULL)
+    return;
+
+  if (GTK_WIDGET_REALIZED (tree_column->tree_view))
+    gtk_widget_queue_resize (tree_column->tree_view);
 }
 
 /**

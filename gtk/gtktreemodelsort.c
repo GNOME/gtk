@@ -62,10 +62,10 @@ static void         gtk_tree_model_sort_inserted        (GtkTreeModel          *
 							 GtkTreePath           *path,
 							 GtkTreeIter           *iter,
 							 gpointer               data);
-static void         gtk_tree_model_sort_child_toggled   (GtkTreeModel          *model,
-							 GtkTreePath           *path,
-							 GtkTreeIter           *iter,
-							 gpointer               data);
+static void         gtk_tree_model_sort_has_child_toggled   (GtkTreeModel          *model,
+							     GtkTreePath           *path,
+							     GtkTreeIter           *iter,
+							     gpointer               data);
 static void         gtk_tree_model_sort_deleted         (GtkTreeModel          *model,
 							 GtkTreePath           *path,
 							 gpointer               data);
@@ -240,7 +240,7 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
       g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
 				   tree_model_sort->inserted_id);
       g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
-				   tree_model_sort->child_toggled_id);
+				   tree_model_sort->has_child_toggled_id);
       g_signal_handler_disconnect (G_OBJECT (tree_model_sort->child_model),
 				   tree_model_sort->deleted_id);
 
@@ -261,10 +261,10 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 			  "inserted",
 			  gtk_tree_model_sort_inserted,
 			  tree_model_sort);
-      tree_model_sort->child_toggled_id = 
+      tree_model_sort->has_child_toggled_id = 
 	g_signal_connect (child_model,
-			  "child_toggled",
-			  gtk_tree_model_sort_child_toggled,
+			  "has_child_toggled",
+			  gtk_tree_model_sort_has_child_toggled,
 			  tree_model_sort);
       tree_model_sort->deleted_id =
 	g_signal_connect (child_model,
@@ -492,10 +492,10 @@ gtk_tree_model_sort_inserted (GtkTreeModel *s_model,
 }
 
 static void
-gtk_tree_model_sort_child_toggled (GtkTreeModel *s_model,
-				   GtkTreePath  *s_path,
-				   GtkTreeIter  *s_iter,
-				   gpointer      data)
+gtk_tree_model_sort_has_child_toggled (GtkTreeModel *s_model,
+				       GtkTreePath  *s_path,
+				       GtkTreeIter  *s_iter,
+				       gpointer      data)
 {
   GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (data);
   GtkTreePath *path;
@@ -521,7 +521,7 @@ gtk_tree_model_sort_child_toggled (GtkTreeModel *s_model,
     return;
   gtk_tree_model_get_iter (GTK_TREE_MODEL (data), &iter, path);
   g_signal_emit_by_name (G_OBJECT (data),
-			   "child_toggled",
+			   "has_child_toggled",
 			   path, &iter);
   gtk_tree_path_free (path);
   if (free_s_path)

@@ -90,10 +90,10 @@ gtk_tree_model_base_init (gpointer g_class)
 		     G_TYPE_NONE, 2,
 		     GTK_TYPE_TREE_PATH,
 		     GTK_TYPE_TREE_ITER);
-      g_signal_newc ("child_toggled",
+      g_signal_newc ("has_child_toggled",
 		     GTK_TYPE_TREE_MODEL,
 		     G_SIGNAL_RUN_LAST,
-		     G_STRUCT_OFFSET (GtkTreeModelIface, child_toggled),
+		     G_STRUCT_OFFSET (GtkTreeModelIface, has_child_toggled),
 		     NULL,
 		     gtk_marshal_VOID__BOXED_BOXED,
 		     G_TYPE_NONE, 2,
@@ -1027,16 +1027,16 @@ gtk_tree_model_inserted (GtkTreeModel *tree_model,
 }
 
 void
-gtk_tree_model_child_toggled (GtkTreeModel *tree_model,
-			      GtkTreePath  *path,
-			      GtkTreeIter  *iter)
+gtk_tree_model_has_child_toggled (GtkTreeModel *tree_model,
+				  GtkTreePath  *path,
+				  GtkTreeIter  *iter)
 {
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (path != NULL);
   g_return_if_fail (iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "child_toggled", path, iter);
+  g_signal_emit_by_name (tree_model, "has_child_toggled", path, iter);
 }
 
 void
