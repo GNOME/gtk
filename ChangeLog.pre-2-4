@@ -1,3 +1,10 @@
+Thu Apr 23 23:44:17 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkobject.c (gtk_object_finalize): Notify all weak references
+	before object removing data. This change fixes a bug where 
+	removing the last weak references would cause it to be 
+	triggered.
+
 Fri Apr 24 01:29:04 1998  Tim Janik  <timj@gtk.org>
 	
         * gtk/gtkaccelerator.h (struct _GtkAcceleratorTable): changed ref_count
