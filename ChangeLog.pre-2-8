@@ -1,9 +1,18 @@
 2003-03-06  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Return gboolean, not gint.
+	(#107664, Morten Welinder)
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_deskrelative_origin): 
+	* gdk/x11/gdkfont-x11.c (gdk_font_equal): 
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_get_protocol_for_display): 
+	Fix TRUE/1 and FALSE/0 confusion.  (#107664, Morten Welinder)
+
 	* gtk/gtktextmark.c (gtk_text_mark_get_buffer): 
 	* gtk/gtkeditable.c (gtk_editable_get_chars): 
 	* gtk/gtkctree.c (gtk_ctree_find_node_ptr): 
 	* demos/gtk-demo/main.c (demo_find_file): Fix NULL/FALSE confusion
+	(#107648, Morten Welinder)Fix NULL/FALSE confusion
 	(#107648, Morten Welinder)
 
 2003-03-04  Matthias Clasen  <maclas@gmx.de>

@@ -553,7 +553,7 @@ gdk_font_equal (const GdkFont *fonta,
     }
   else
     /* fontset != font */
-    return 0;
+    return FALSE;
 }
 
 /**

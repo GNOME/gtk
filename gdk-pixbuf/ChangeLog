@@ -1,3 +1,7 @@
+2003-03-06  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (gif_read): Fix 0/FALSE confusion (#107664, Morten Welinder)
+
 2003-02-20  Matthias Clasen  <maclas@gmx.de>
 
 	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): 

@@ -250,7 +250,7 @@ gif_read (GifContext *context, guchar *buffer, size_t len)
 		}
 		context->amount_needed = len - (context->size - context->ptr);
 	}
-	return 0;
+	return FALSE;
 }
 
 /* Changes the stage to be GIF_GET_COLORMAP */

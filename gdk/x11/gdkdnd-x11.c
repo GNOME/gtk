@@ -2803,7 +2803,7 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
 				   GdkDragProtocol *protocol)
 {
   guint32 retval;
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), TRUE);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), None);
   
   if ((retval = xdnd_check_dest (display, xid)))
     {
