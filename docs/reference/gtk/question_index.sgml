@@ -122,6 +122,138 @@ threading primitives.
 
 </qandaentry>
 
+<qandaentry>
+<question><para>
+How do I internationalize a GTK+ program?
+</para></question>
+
+<answer>
+<para>
+Most people use <ulink url="http://www.gnu.org/software/gettext/">GNU
+gettext</ulink>, already required in order to install GLib. On a UNIX
+or Linux system with gettext installed, type <literal>info
+gettext</literal> to read the documentation.
+</para>
+<para>
+The short checklist on how to use gettext is: call
+<function>bindtextdomain()</function> so gettext can find the files
+containing your translations, call <function>textdomain()</function>
+to set the default translation domain, then call
+<function>gettext()</function> to look up each string to be translated
+in the default domain. Conventionally, people define macros as
+follows for convenience:
+<informalexample>
+<programlisting>
+  #define  _(x)  gettext (x)
+  #define N_(x)  x
+</programlisting>
+</informalexample>
+You use <function>N_()</function> (N stands for no-op) to mark 
+a string for translation in a context where a function call 
+to <function>gettext()</function> is not allowed, such as in 
+an array initializer. You eventually have to call
+<function>gettext()</function> on the string to actually fetch the
+translation.  <function>_()</function> both marks the string for 
+translation and actually translates it.
+</para>
+<para>
+Code using these macros ends up looking like this:
+<informalexample>
+<programlisting>
+ #include &lt;libintl.h&gt;
+
+ #define  _(x)  gettext (x)
+ #define N_(x)  x
+
+ static const char *global_variable = N_("Translate this string");
+
+ static void
+ make_widgets (void)
+ {
+    GtkWidget *label1;
+    GtkWidget *label2;
+
+    label1 = gtk_label_new (_("Another string to translate"));
+    label2 = gtk_label_new (_(global_variable));
+...
+</programlisting>
+</informalexample>
+</para>
+<para>
+Libraries using gettext should use <function>dgettext()</function>
+instead of <function>gettext()</function>, which allows
+them to specify the translation domain each time they 
+ask for a translation. Libraries should also avoid calling 
+<function>textdomain()</function>, since they'll be specifying 
+the domain instead of using the default.
+For <function>dgettext()</function> the <function>_()</function> macro
+can be defined as:
+<informalexample>
+<programlisting>
+  #define _(x) dgettext ("MyDomain", x)
+</programlisting>
+</informalexample>
+</para>
+</answer>
+</qandaentry>
+
+<qandaentry>
+<question><para>
+How do I use GTK+ with C++?
+</para></question>
+
+<answer>
+<para>
+There are two ways to approach this. The GTK+ header files use the subset 
+of C that's also valid C++, so you can simply use the normal GTK+ API 
+in a C++ program. Alternatively, you can use a "C++ binding" 
+such as <ulink url="http://gtkmm.sourceforge.net/">gtkmm</ulink>
+which provides a C++-native API.
+</para>
+<para>
+When using GTK+ directly, keep in mind that only functions can be
+connected to signals, not methods. So you will need to use global
+functions or "static" class functions for signal connections.
+</para>
+<para>
+Another common issue when using GTK+ directly is that 
+C++ will not implicitly convert an integer to an enumeration. 
+This comes up when using bitfields; in C you can write the following
+code:
+<informalexample>
+<programlisting>
+  gdk_window_set_events (gdk_window, 
+                         GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+</programlisting>
+</informalexample>
+while in C++ you must write:
+<informalexample>
+<programlisting>
+  gdk_window_set_events (gdk_window, 
+                         (GdkEventMask) GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
+</programlisting>
+</informalexample>
+There are very few functions that require this cast, however.
+</para>
+</answer>
+
+</qandaentry>
+
+<qandaentry>
+<question><para>
+How do I use GTK+ with other non-C languages?
+</para></question>
+
+<answer>
+<para>
+See the <ulink url="http://www.gtk.org/bindings.html">list of language
+bindings</ulink> on <ulink
+                           url="http://www.gtk.org">http://www.gtk.org</ulink>.
+</para>
+
+</answer>
+
+</qandaentry>
 
 <qandaentry>
 <question><para>
