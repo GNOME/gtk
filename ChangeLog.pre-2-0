@@ -1,3 +1,8 @@
+2001-11-16  Sven Neumann  <sven@gimp.org>
+
+	* demos/gtk-demo/appwindow.c
+	* demos/gtk-demo/menus.c: reduce compiler warnings
+
 Thu Nov 15 19:47:09 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/gtk-demo/main.c (button_press_event_cb): Remove 

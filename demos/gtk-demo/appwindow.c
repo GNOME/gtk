@@ -213,7 +213,7 @@ do_appwindow (void)
        */
       
       accel_group = gtk_accel_group_new ();
-      gtk_window_add_accel_group (window, accel_group);
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
       g_object_unref (accel_group);
       
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
