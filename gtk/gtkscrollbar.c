@@ -81,7 +81,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 							     _("Minimum length of scrollbar slider"),
 							     0,
 							     G_MAXINT,
-							     7,
+							     21,
 							     G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -163,5 +163,3 @@ gtk_scrollbar_style_set  (GtkWidget *widget,
   
   (* GTK_WIDGET_CLASS (parent_class)->style_set) (widget, previous);
 }
-
-
