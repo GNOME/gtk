@@ -15,7 +15,9 @@ File selection dialogs are created with a call to gtk_file_selection_new().
 The default filename can be set using gtk_file_selection_set_filename() and the selected filename retrieved using gtk_file_selection_get_filename().
 </para>
 <para>
-Use gtk_file_selection_complete() to display files that match a given pattern. This can be used for example, to show only *.txt files, or only files beginning with gtk*.
+Use gtk_file_selection_complete() to display files and directories
+that match a given pattern. This can be used for example, to show only
+*.txt files, or only files beginning with gtk*.
 </para>
 <para>
 Simple file operations; create directory, delete file, and rename file, are available from buttons at the top of the dialog. These can be hidden using gtk_file_selection_hide_fileop_buttons() and shown again using gtk_file_selection_show_fileop_buttons().
@@ -141,8 +143,10 @@ Retrieves the currently selected filename from the file selection dialog. If no 
 
 <!-- ##### FUNCTION gtk_file_selection_complete ##### -->
 <para>
-Will attempt to match @pattern to a valid filename in the current directory. If a match can be made, the matched filename will appear in the text entry field of the file selection dialog.
-If a partial match can be made, the "Files" list will contain those file names which have been partially matched.
+Will attempt to match @pattern to a valid filenames or subdirectories in the current directory. If a match can be made, the matched filename will appear in the text entry field of the file selection dialog.
+If a partial match can be made, the "Files" list will contain those
+file names which have been partially matched, and the "Directories"
+list those directories which have been partially matched.
 </para>
 
 @filesel: a #GtkFileSelection.

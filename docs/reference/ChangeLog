@@ -1,3 +1,11 @@
+Thu Nov 30 00:53:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkfilesel.sgml: Fix to say that file_selection_complete()
+	filters both files and directories.
+
+	* gtk/tmpl/gtktogglebutton.sgml: Fix description
+	of gtk_toggle_button_toggled().
+
 Fri Nov 17 17:31:30 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (content_files): Add a couple
