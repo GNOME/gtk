@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-05 22:52-0500\n"
-"PO-Revision-Date: 2005-01-05 03:57-0400\n"
+"POT-Creation-Date: 2005-01-06 17:46-0500\n"
+"PO-Revision-Date: 2005-01-06 03:57-0400\n"
 "Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
@@ -1066,25 +1066,25 @@ msgstr "_Insert Unicode Control Character"
 msgid "Invalid filename: %s"
 msgstr "Invalid filename: %s"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1229
+#: gtk/gtkfilechooserbutton.c:65
+msgid "Select A File"
+msgstr "Select A File"
+
+#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1229
 #: gtk/gtkpathbar.c:982
 msgid "Home"
 msgstr "Home"
 
-#: gtk/gtkfilechooserbutton.c:66 gtk/gtkfilechooserdefault.c:1256
+#: gtk/gtkfilechooserbutton.c:67 gtk/gtkfilechooserdefault.c:1256
 #: gtk/gtkpathbar.c:984
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserbutton.c:67
+#: gtk/gtkfilechooserbutton.c:68
 msgid "(None)"
 msgstr "(None)"
 
-#: gtk/gtkfilechooserbutton.c:352
-msgid "Select a File"
-msgstr "Select a File"
-
-#: gtk/gtkfilechooserbutton.c:1514
+#: gtk/gtkfilechooserbutton.c:1515
 msgid "Other..."
 msgstr "Other..."
 
@@ -1164,134 +1164,138 @@ msgstr "_Remove"
 msgid "Remove the selected bookmark"
 msgstr "Remove the selected bookmark"
 
-#: gtk/gtkfilechooserdefault.c:2989
+#: gtk/gtkfilechooserdefault.c:2997
 msgid "_Add to Shortcuts"
 msgstr "_Add to Shortcuts"
 
-#: gtk/gtkfilechooserdefault.c:3003
+#: gtk/gtkfilechooserdefault.c:3007
+msgid "Open _Location"
+msgstr "Open _Location"
+
+#: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
 msgstr "Show _Hidden Files"
 
-#: gtk/gtkfilechooserdefault.c:3127 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:3143 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Files"
 
-#: gtk/gtkfilechooserdefault.c:3158
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Name"
 msgstr "Name"
 
-#: gtk/gtkfilechooserdefault.c:3183
+#: gtk/gtkfilechooserdefault.c:3199
 msgid "Size"
 msgstr "Size"
 
-#: gtk/gtkfilechooserdefault.c:3196
+#: gtk/gtkfilechooserdefault.c:3212
 msgid "Modified"
 msgstr "Modified"
 
-#: gtk/gtkfilechooserdefault.c:3228
+#: gtk/gtkfilechooserdefault.c:3244
 msgid "Select which types of files are shown"
 msgstr "Select which types of files are shown"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3264
+#: gtk/gtkfilechooserdefault.c:3280
 msgid "Create Fo_lder"
 msgstr "Create Fo_lder"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3382
+#: gtk/gtkfilechooserdefault.c:3398
 msgid "_Name:"
 msgstr "_Name:"
 
-#: gtk/gtkfilechooserdefault.c:3422
+#: gtk/gtkfilechooserdefault.c:3438
 msgid "_Browse for other folders"
 msgstr "_Browse for other folders"
 
-#: gtk/gtkfilechooserdefault.c:3672
+#: gtk/gtkfilechooserdefault.c:3688
 msgid "Save in _folder:"
 msgstr "Save in _folder:"
 
-#: gtk/gtkfilechooserdefault.c:3674
+#: gtk/gtkfilechooserdefault.c:3690
 msgid "Create in _folder:"
 msgstr "Create in _folder:"
 
-#: gtk/gtkfilechooserdefault.c:4507
+#: gtk/gtkfilechooserdefault.c:4523
 msgid "Cannot change to folder because it is not local"
 msgstr "Cannot change to folder because it is not local"
 
-#: gtk/gtkfilechooserdefault.c:5032
+#: gtk/gtkfilechooserdefault.c:5048
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Shortcut %s does not exist"
 
-#: gtk/gtkfilechooserdefault.c:5492
+#: gtk/gtkfilechooserdefault.c:5508
 #, c-format
 msgid "Could not mount %s"
 msgstr "Could not mount %s"
 
-#: gtk/gtkfilechooserdefault.c:5786
+#: gtk/gtkfilechooserdefault.c:5802
 msgid "Type name of new folder"
 msgstr "Type name of new folder"
 
-#: gtk/gtkfilechooserdefault.c:5828
+#: gtk/gtkfilechooserdefault.c:5844
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5830
+#: gtk/gtkfilechooserdefault.c:5846
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5832
+#: gtk/gtkfilechooserdefault.c:5848
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5834
+#: gtk/gtkfilechooserdefault.c:5850
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5886
+#: gtk/gtkfilechooserdefault.c:5902
 msgid "Today"
 msgstr "Today"
 
-#: gtk/gtkfilechooserdefault.c:5888
+#: gtk/gtkfilechooserdefault.c:5904
 msgid "Yesterday"
 msgstr "Yesterday"
 
-#: gtk/gtkfilechooserdefault.c:5899
+#: gtk/gtkfilechooserdefault.c:5915
 msgid "Unknown"
 msgstr "Unknown"
 
-#: gtk/gtkfilechooserdefault.c:5969
+#: gtk/gtkfilechooserdefault.c:5985
 msgid "Cannot change folder"
 msgstr "Cannot change folder"
 
-#: gtk/gtkfilechooserdefault.c:5970
+#: gtk/gtkfilechooserdefault.c:5986
 msgid "The folder you specified is an invalid path."
 msgstr "The folder you specified is an invalid path."
 
-#: gtk/gtkfilechooserdefault.c:6009
+#: gtk/gtkfilechooserdefault.c:6025
 #, c-format
 msgid "Could not build file name from '%s' and '%s'"
 msgstr "Could not build file name from '%s' and '%s'"
 
-#: gtk/gtkfilechooserdefault.c:6045
+#: gtk/gtkfilechooserdefault.c:6061
 msgid "Could not select item"
 msgstr "Could not select item"
 
-#: gtk/gtkfilechooserdefault.c:6085
+#: gtk/gtkfilechooserdefault.c:6101
 msgid "Open Location"
 msgstr "Open Location"
 
-#: gtk/gtkfilechooserdefault.c:6092
+#: gtk/gtkfilechooserdefault.c:6108
 msgid "Save in Location"
 msgstr "Save in Location"
 
-#: gtk/gtkfilechooserdefault.c:6116
+#: gtk/gtkfilechooserdefault.c:6132
 msgid "_Location:"
 msgstr "_Location:"
 
