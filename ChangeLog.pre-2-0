@@ -1,3 +1,18 @@
+Wed Sep  1 10:38:37 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_compute_hints): Removed
+	  GTK_WIDGET_REALIZED() assertion - we can compute the
+	  hints before we are realized.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Reorder
+	  hint changing so that we have a value of hints_changed
+	  when we decide whether to constrain the window size.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Spelling fix.
+
+	* gtk/gtkwindow.c (gtk_window_constrain_size): cleanups,
+	change back to G_MAXINT.
+
 Wed Sep  1 14:26:45 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
 
         * po/da.po,configure.in: aded danish file from

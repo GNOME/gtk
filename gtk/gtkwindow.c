@@ -1516,6 +1516,13 @@ gtk_window_move_resize (GtkWindow *window)
   /* Compute new set of hints for the window
    */
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
+  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
+				 &new_geometry, new_flags))
+    {
+      hints_changed = TRUE;
+      info->last_geometry = new_geometry;
+      info->last_flags = new_flags;
+    }
 
   gtk_widget_size_request (widget, NULL);
   gtk_window_compute_default_size (window, &new_width, &new_height);
@@ -1559,19 +1566,15 @@ gtk_window_move_resize (GtkWindow *window)
 
   /* Now set hints if necessary, including new position
    */
-  if (x != 1 && y != -1)
-    new_flags |= GDK_HINT_POS;
-  
-  if (!gtk_window_compare_hints (&info->last_geometry, info->last_flags,
-				 &new_geometry, new_flags))
+  if (x != 1 && y != -1 && !(new_flags & GDK_HINT_POS))
     {
+      new_flags |= GDK_HINT_POS;
       hints_changed = TRUE;
-      gdk_window_set_geometry_hints (widget->window,
-				     &new_geometry,
-				     new_flags);
-      info->last_geometry = new_geometry;
-      info->last_flags = new_flags;
     }
+  if (hints_changed)
+    gdk_window_set_geometry_hints (widget->window,
+				   &new_geometry,
+				   new_flags);
 
   if (x != -1 && y != -1)
     {
@@ -1591,7 +1594,7 @@ gtk_window_move_resize (GtkWindow *window)
   else
     gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
   
-  /* handle actuall resizing:
+  /* handle actual resizing:
    * - handle reallocations due to configure events
    * - figure whether we need to request a new window size
    * - handle simple resizes within our widget tree
@@ -1750,8 +1753,14 @@ gtk_window_constrain_size (GtkWindow   *window,
 			   gint        *new_width,
 			   gint        *new_height)
 {
-  gint min_width = 0, min_height = 0, base_width = 0, base_height = 0;
-  gint xinc = 1, yinc = 1, max_width, max_height;
+  gint min_width = 0;
+  gint min_height = 0;
+  gint base_width = 0;
+  gint base_height = 0;
+  gint xinc = 1;
+  gint yinc = 1;
+  gint max_width = G_MAXINT;
+  gint max_height = G_MAXINT;
   
 #define FLOOR(value, base)	( ((gint) ((value) / (base))) * (base) )
 
@@ -1776,9 +1785,12 @@ gtk_window_constrain_size (GtkWindow   *window,
       min_width = geometry->min_width;
       min_height = geometry->min_height;
     }
-  
-  max_width = (flags & GDK_HINT_MAX_SIZE) ? geometry->max_width : 32767;
-  max_height = (flags & GDK_HINT_MAX_SIZE) ? geometry->max_height : 32767;
+
+  if (flags & GDK_HINT_MAX_SIZE)
+    {
+      max_width = geometry->max_width ;
+      max_height = geometry->max_height;
+    }
 
   if (flags & GDK_HINT_RESIZE_INC)
     {
@@ -1861,7 +1873,6 @@ gtk_window_compute_hints (GtkWindow   *window,
   GtkRequisition requisition;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_WIDGET_REALIZED (window));
 
   widget = GTK_WIDGET (window);
   
