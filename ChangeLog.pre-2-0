@@ -1,3 +1,8 @@
+2002-01-02  jacob berkman  <jacob@ximian.com>
+
+	* gtk/Makefile.am (LDFLAGS): automake still doesn't support
+	libsomething_la_LDFLAGS, so fix the build again
+
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_expose_event): propagate
