@@ -1,3 +1,8 @@
+1999-10-25  Federico Mena Quintero  <federico@redhat.com>
+
+	* configure.in (CFLAGS): Patch from Uwe Koloska
+	<koloska@Rcs1.urz.tu-dresden.de> to fix a stupid typo of mine.
+
 1999-10-22  Havoc Pennington  <hp@pobox.com>
 
 	* src/io-xpm.c (mem_buffer): Clean up stupid
