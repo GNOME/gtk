@@ -1,3 +1,9 @@
+Overview of Changes in GTK+ 1.0.1:
+
+* Significant speedups to widget creation and destruction
+* Upgrade to libtool-1.2
+* Lots of bug fixes, including one that fixed a major memory leak 
+  in 1.0.0.
 
 Overview of Changes in GTK+ 1.0.0:
 

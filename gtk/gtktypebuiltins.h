@@ -56,5 +56,4 @@
 #define GTK_TYPE_GDK_WINDOW (gtk_type_builtins[53])
 #define GTK_TYPE_GDK_EVENT (gtk_type_builtins[54])
 #define GTK_TYPE_GDK_COLOR (gtk_type_builtins[55])
-#define GTK_TYPE_TOOLTIPS (gtk_type_builtins[56])
-#define GTK_TYPE_NUM_BUILTINS 57
+#define GTK_TYPE_NUM_BUILTINS 56
