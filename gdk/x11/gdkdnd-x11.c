@@ -3761,9 +3761,11 @@ gdk_drag_get_selection (GdkDragContext *context)
 gboolean 
 gdk_drag_drop_succeeded (GdkDragContext *context)
 {
+  GdkDragContextPrivateX11 *private;
+
   g_return_val_if_fail (context != NULL, FALSE);
 
-  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+  private = PRIVATE_DATA (context);
 
   return !private->drop_failed;
 }

@@ -1,3 +1,7 @@
+2004-08-09  Morten Welinder  <terra@gnome.org>
+
+	* gdk/x11/gdkdnd-x11.c (gdk_drag_drop_succeeded): Fix C99ism.
+
 Mon Aug  9 15:27:01 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/makegtkalias.pl: Also revert 
