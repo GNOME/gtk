@@ -1,7 +1,7 @@
 Fri Jan 11 18:05:07 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/pixops.c: Fix integer overflow for the values
-	passed to the pixel functions. (#55148)
+	passed to the pixel functions. (#55148, fix from Michael Hore)
 
 Fri Jan 11 17:53:58 2002  Owen Taylor  <otaylor@redhat.com>
 
@@ -13,7 +13,7 @@ Fri Jan 11 17:53:58 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* pixops/{scale_line_22_33_mmx.S, composite_line_22_4a4_mmx.S:
 	composite_line_color_22_4a4_mmx.S}: Handle the case where
-	dest <= dest_end properly. (#52001)
+	dest <= dest_end properly. (#52001, fix from Michael Hore)
 
 Thu Jan 10 16:48:30 2002  Owen Taylor  <otaylor@redhat.com>
 
