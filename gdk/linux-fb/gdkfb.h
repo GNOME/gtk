@@ -12,10 +12,7 @@ extern GdkFBDisplay *gdk_display;
 #define GDK_ROOT_WINDOW()             gdk_root_window
 #define GDK_DISPLAY()                 gdk_display
 
-#define gdk_window_foreign_new(xid) gdk_window_ref(xid)
-#define gdk_window_lookup(xid)	   ((GdkWindow*) (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) (xid))
-#define gdk_font_lookup(xid)	   ((GdkFont*) (xid))
+#define gdk_font_lookup(xid)       ((GdkFont*) (xid))
 
 typedef enum {
   GDK_FB_0_DEGREES,

@@ -286,13 +286,16 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
 /**
  * gdk_pixmap_foreign_new:
- * @anid: an X window ID for a pixmap
+ * @anid: a native pixmap handle.
  * 
- * Creates a #GdkPixmap for the Xlib pixmap ID @anid.
- * If the Xlib pixmap is destroyed while creating
- * the #GdkPixmap, this function returns %NULL.
- * 
- * Return value: a new #GdkPixmap
+ * Wraps a native window in a #GdkPixmap.
+ * This may fail if the pixmap has been destroyed.
+ *
+ * For example in the X backend, a native pixmap handle is an Xlib
+ * <type>XID</type>.
+ *
+ * Return value: the newly-created #GdkPixmap wrapper for the 
+ *    native pixmap or %NULL if the pixmap has been destroyed.
  **/
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
@@ -335,4 +338,22 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   gdk_xid_table_insert(&draw_impl->xid, pixmap);
 
   return pixmap;
+}
+
+/**
+ * gdk_pixmap_lookup:
+ * @anid: a native pixmap handle.
+ * 
+ * Looks up the #GdkPixmap that wraps the given native pixmap handle.
+ *
+ * For example in the X backend, a native pixmap handle is an Xlib
+ * <type>XID</type>.
+ *
+ * Return value: the #GdkWindow wrapper for the native window,
+ *    or %NULL if there is none.
+ **/
+GdkPixmap*
+gdk_pixmap_lookup (GdkNativeWindow anid)
+{
+  return (GdkPixmap*) gdk_xid_table_lookup (xid);
 }

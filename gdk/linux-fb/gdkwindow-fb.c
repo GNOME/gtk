@@ -2229,3 +2229,16 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 
   return TRUE;
 }
+
+GdkWindow*
+gdk_window_foreign_new (GdkNativeWindow anid)
+{
+  return (GdkWindow*) gdk_drawable_ref (anid);
+}
+
+GdkWindow*
+gdk_window_lookup (GdkNativeWindow anid)
+{
+  return (GdkWindow*) (anid);
+}
+

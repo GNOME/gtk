@@ -55,14 +55,6 @@
 #include <string.h>
 #include "gdk.h"
 
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"		/* For gdk_window_lookup() */
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"	/* For gdk_window_lookup() */
-#endif
-
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
@@ -979,14 +971,9 @@ gtk_selection_request (GtkWidget *widget,
   info->num_incrs = 0;
   
   /* Create GdkWindow structure for the requestor */
-  
-#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_FB) 
   info->requestor = gdk_window_lookup (event->requestor);
   if (!info->requestor)
     info->requestor = gdk_window_foreign_new (event->requestor);
-#else
-  info->requestor = NULL;
-#endif
   
   /* Determine conversions we need to perform */
   

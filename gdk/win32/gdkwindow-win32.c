@@ -738,6 +738,12 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   return window;
 }
 
+GdkWindow*
+gdk_window_lookup (GdkNativeWindow hwnd)
+{
+  return (GdkWindow*) gdk_win32_handle_table_lookup (hwnd); 
+}
+
 void
 _gdk_windowing_window_destroy (GdkWindow *window,
 			       gboolean   recursing,

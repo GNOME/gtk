@@ -100,10 +100,6 @@ GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
  *      is useless unless we also have the visual. */
 GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 
-/* Functions to create pixmaps and windows from their X equivalents */
-GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
-GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
-
 /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup     (XID              xid);
 
@@ -115,9 +111,6 @@ void          gdk_x11_ungrab_server    (void);
 
 /* returns TRUE if we support the given WM spec feature */
 gboolean      gdk_net_wm_supports      (GdkAtom property);
-
-#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 
 #ifndef GDK_DISABLE_DEPRECATED
 

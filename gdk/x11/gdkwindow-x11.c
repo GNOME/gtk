@@ -628,12 +628,16 @@ gdk_window_new (GdkWindow     *parent,
 
 /**
  * gdk_window_foreign_new:
- * @anid: an Xlib window ID
+ * @anid: a native window handle.
  * 
- * Wraps an X window ID (from Xlib) with a #GdkWindow.
- * May fail if the window has been destroyed, if so returns %NULL.
+ * Wraps a native window in a #GdkWindow.
+ * This may fail if the window has been destroyed.
+ *
+ * For example in the X backend, a native window handle is an Xlib
+ * <type>XID</type>.
  * 
- * Return value: the #GdkWindow wrapper for the X window
+ * Return value: the newly-created #GdkWindow wrapper for the 
+ *    native window or %NULL if the window has been destroyed.
  **/
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)
@@ -700,6 +704,24 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   gdk_xid_table_insert (&GDK_WINDOW_XID (window), window);
   
   return window;
+}
+
+/**
+ * gdk_window_lookup:
+ * @anid: a native window handle.
+ *
+ * Looks up the #GdkWindow that wraps the given native window handle. 
+ *
+ * For example in the X backend, a native window handle is an Xlib
+ * <type>XID</type>.
+ *
+ * Return value: the #GdkWindow wrapper for the native window, 
+ *    or %NULL if there is none.
+ **/
+GdkWindow *
+gdk_window_lookup (GdkNativeWindow anid)
+{
+  return (GdkWindow*) gdk_xid_table_lookup (anid);
 }
 
 void

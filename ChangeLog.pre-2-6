@@ -1,5 +1,15 @@
 2001-10-18  Matthias Clasen  <matthiasc@poet.de>
 
+        * gdk/gdkwindow.h, gdk/gdkpixmap.h, gdk/x11/gdkx.h,
+        gdk/x11/gdkwindow-x11.c, gdk/x11/gdkpixmap-x11.c,
+        gdk/win32/gdkwin32.h, gdk/win32/gdkwindow-win32.c,
+        gdk/win32/gdkpixmap-win32.c, gdk/linux-fb/gdkfb.h,
+        gdk/linux-fb/gdkwindow-fb.c, gdk/linux-fb/gdkpixmap-fb.c:
+        Add gdk_window_lookup, gdk_window_foreign_new, gdk_pixmap_lookup
+        and gkd_pixmap_foreign_new to the gdk frontend api. (#62063)
+
+        * gtk/gtkselection.c: Remove gdk backend dependencies. (#62063)
+
 	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): 
 	Don't restrict the width of the spinbutton entry field 
 	to 10 digits. (#58681)

@@ -371,6 +371,11 @@ GdkWindowState gdk_window_get_state (GdkWindow *window);
 gboolean gdk_window_set_static_gravities (GdkWindow *window,
 					  gboolean   use_static);   
 
+/* Functions to create/lookup windows from their native equivalents */ 
+GdkWindow*    gdk_window_foreign_new (GdkNativeWindow anid);
+GdkWindow*    gdk_window_lookup      (GdkNativeWindow anid);
+
+
 /* GdkWindow */
 
 #ifndef GDK_DISABLE_DEPRECATED
