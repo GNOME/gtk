@@ -207,6 +207,8 @@ static GSList *widget_class_sets = NULL;
 #define GTK_RC_MAX_PIXMAP_PATHS 128
 static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 
+/* The files we have parsed, to reread later if necessary */
+GSList *rc_files;
 
 void
 gtk_rc_init ()
@@ -230,6 +232,8 @@ gtk_rc_parse (const gchar *filename)
 
   g_return_if_fail (filename != NULL);
 
+  rc_files = g_slist_append (rc_files, g_strdup (filename));
+
   fd = open (filename, O_RDONLY);
   if (fd < 0)
     return;
@@ -237,6 +241,93 @@ gtk_rc_parse (const gchar *filename)
   gtk_rc_parse_any (filename, fd, NULL);
 
   close (fd);
+}
+
+void
+gtk_rc_clear_hash_node (gpointer key, 
+			gpointer data, 
+			gpointer user_data)
+{
+  int i;
+  GtkRcStyle *rc_style = data;
+  GList *tmp_list;
+
+  g_free (rc_style->name);
+  g_free (rc_style->font_name);
+  g_free (rc_style->fontset_name);
+
+  for (i=0 ; i<5 ; i++)
+    g_free (rc_style->bg_pixmap_name[i]);
+
+  gtk_style_unref (rc_style->proto_style);
+
+  tmp_list = rc_style->styles;
+  while (tmp_list)
+    {
+      GtkRcNode *node = tmp_list->data;
+
+      gdk_colormap_unref (node->cmap);
+      gtk_style_unref (node->style);
+
+      g_free (node);
+      tmp_list = tmp_list->next;
+    }
+
+  g_free (rc_style);
+}
+
+void
+gtk_rc_reparse_all (void)
+{
+  GSList *tmp_list, *tmp_files;
+  GtkRcSet *rc_set;
+
+  /* Clear out all old rc_styles */
+
+  g_hash_table_foreach (rc_style_ht, gtk_rc_clear_hash_node, NULL);
+  g_hash_table_destroy (rc_style_ht);
+  rc_style_ht = NULL;
+
+  tmp_list = widget_sets;
+  while (tmp_list)
+    {
+      rc_set = (GtkRcSet *)tmp_list->data;
+      g_free (rc_set->set);
+      g_free (rc_set);
+      
+      tmp_list = tmp_list->next;
+    }
+  g_slist_free (widget_sets);
+  widget_sets = NULL;
+
+  tmp_list = widget_class_sets;
+  while (tmp_list)
+    {
+      rc_set = (GtkRcSet *)tmp_list->data;
+      g_free (rc_set->set);
+      g_free (rc_set);
+      
+      tmp_list = tmp_list->next;
+    }
+  g_slist_free (widget_class_sets);
+  widget_class_sets = NULL;
+
+  /* Now read the RC's again */
+  
+  gtk_rc_init ();
+
+  tmp_files = rc_files;
+  rc_files = NULL;
+
+  tmp_list = tmp_files;
+  while (tmp_list)
+    {
+      gtk_rc_parse ((gchar *)tmp_list->data);
+      g_free (tmp_list->data);
+      
+      tmp_list = tmp_list->next;
+    }
+  g_slist_free (tmp_files);
 }
 
 GtkStyle*

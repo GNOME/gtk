@@ -2581,7 +2581,11 @@ gtk_widget_style_set (GtkWidget *widget,
 {
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
-    gtk_style_set_background (widget->style, widget->window, widget->state);
+    {
+      gtk_style_set_background (widget->style, widget->window, widget->state);
+      if (GTK_WIDGET_DRAWABLE (widget))
+	gdk_window_clear (widget->window);
+    }
 }
 
 static void
@@ -2644,6 +2648,12 @@ gtk_widget_set_style_recurse (GtkWidget *widget,
     gtk_container_foreach (GTK_CONTAINER (widget),
 			   gtk_widget_set_style_recurse,
 			   NULL);
+}
+
+void
+gtk_widget_reset_rc_styles (GtkWidget *widget)
+{
+  gtk_widget_set_style_recurse (widget, NULL);
 }
 
 void

@@ -474,6 +474,9 @@ void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
 void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 
+/* Descend recursively and set rc-style on all widgets without user styles */
+void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
+
 /* Tell other Gtk applications to use the same default colors.
  */
 void	   gtk_widget_propagate_default_style	(void);

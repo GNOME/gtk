@@ -6446,6 +6446,71 @@ create_idle_test ()
     gtk_widget_destroy (window);
 }
 
+void
+reload_rc_file (void)
+{
+  GList *toplevels;
+
+  gtk_rc_reparse_all ();
+
+  toplevels = gdk_window_get_toplevels();
+  while (toplevels)
+    {
+      GtkWidget *widget;
+      gdk_window_get_user_data (toplevels->data, (gpointer *)&widget);
+      
+      if (widget)
+	gtk_widget_reset_rc_styles (widget);
+
+      toplevels = toplevels->next;
+    }
+
+  g_list_free (toplevels);
+}
+
+void
+create_rc_file ()
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *button;
+
+  if (!window)
+    {
+      window = gtk_dialog_new ();
+
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(destroy_idle_test),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Reload Rc file");
+      gtk_container_border_width (GTK_CONTAINER (window), 0);
+
+      button = gtk_button_new_with_label ("Reload");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(reload_rc_file), NULL);
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
+      gtk_widget_grab_default (button);
+      gtk_widget_show (button);
+
+      button = gtk_button_new_with_label ("Close");
+      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
+				 GTK_OBJECT (window));
+      GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+      gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->action_area), 
+			  button, TRUE, TRUE, 0);
+      gtk_widget_show (button);
+
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
 /*
  * Test of recursive mainloop
  */
@@ -6550,6 +6615,7 @@ create_main_window ()
       { "progress bar", create_progress_bar },
       { "radio buttons", create_radio_buttons },
       { "range controls", create_range_controls },
+      { "rc file", create_rc_file },
       { "reparent", create_reparent },
       { "rulers", create_rulers },
       { "scrolled windows", create_scrolled_windows },

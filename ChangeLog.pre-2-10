@@ -1,3 +1,19 @@
+Fri May  1 12:06:43 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwindow.[ch] (gtk_widget_reset_rc_styles): New
+	function to reset the RC styles for a heirarchy
+
+        Clear the window background if necessary in
+	gtk_window_style_set.
+
+	* gtk/gtkrc.[ch]: New function gtk_rc_reparse_all() which
+	rereads all previously read RC files.
+
+	* gdk/gdkwindow.c gdk/gdk.h: New function gdk_window_get_toplevels().
+	(Should it just be called gdk_get_toplevels?)
+
+	* gtk/testgtk.c: New test to reload RC files.
+
 Fri May  1 13:57:36 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkclist.h:

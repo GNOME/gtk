@@ -233,7 +233,7 @@ gdk_window_new (GdkWindow     *parent,
 
   private->parent = parent;
 
-  if (parent_private != &gdk_root_parent)
+  if (parent_private)
     parent_private->children = g_list_prepend (parent_private->children, window);
 
   private->xdisplay = parent_display;
@@ -1956,3 +1956,20 @@ gdk_window_set_functions (GdkWindow    *window,
 
   gdk_window_set_mwm_hints (window, &hints);
 }
+
+GList *
+gdk_window_get_toplevels (void)
+{
+  GList *new_list = NULL;
+  GList *tmp_list;
+
+  tmp_list = gdk_root_parent.children;
+  while (tmp_list)
+    {
+      new_list = g_list_prepend (new_list, tmp_list->data);
+      tmp_list = tmp_list->next;
+    }
+
+  return new_list;
+}
+
