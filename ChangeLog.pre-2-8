@@ -1,3 +1,17 @@
+2004-04-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testentrycompletion.c (main): Add a missing 
+	cat.  (#141070, Chris Sherlock)  
+
+	* gtk/gtkrc.c (gtk_rc_check_pixmap_dir): Remove unused
+	variable.  (#141022, Chris Sherlock)
+	
+	* gtk/gtkcombo.c (gtk_combo_popup_list): Add a missing
+	cast.  (#141013, Chris Sherlock)
+
+	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear): Remove
+	unused variable.  (#141011, Chris Sherlock)
+
 2004-04-29  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Plug memory

@@ -2967,10 +2967,10 @@ gtk_rc_parse_bg_pixmap (GtkRcContext *context,
 }
 
 static gchar*
-gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
+gtk_rc_check_pixmap_dir (const gchar *dir, 
+			 const gchar *pixmap_file)
 {
   gchar *buf;
-  gint fd;
 
   buf = g_build_filename (dir, pixmap_file, NULL);
 

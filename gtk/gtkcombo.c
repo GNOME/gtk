@@ -514,7 +514,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 }
 
 static void
-gtk_combo_popup_list (GtkCombo * combo)
+gtk_combo_popup_list (GtkCombo *combo)
 {
   GtkWidget *toplevel;
   GtkList *list;
@@ -556,7 +556,7 @@ gtk_combo_popup_list (GtkCombo * combo)
   
   gtk_window_move (GTK_WINDOW (combo->popwin), x, y);
 
-  toplevel = gtk_widget_get_toplevel (combo);
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (combo));
 
   if (GTK_IS_WINDOW (toplevel))
     {

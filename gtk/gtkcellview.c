@@ -640,7 +640,6 @@ gtk_cell_view_cell_layout_add_attribute (GtkCellLayout   *layout,
 static void
 gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
 {
-  GList *i;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
   g_return_if_fail (GTK_IS_CELL_VIEW (cellview));

@@ -243,6 +243,7 @@ main (int argc, char *argv[])
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   
   label = gtk_label_new (NULL);
+
   gtk_label_set_markup (GTK_LABEL (label), "Completion demo, try writing <b>total</b> or <b>gnome</b> for example.");
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
@@ -311,7 +312,7 @@ main (int argc, char *argv[])
   g_object_unref (completion);
   
   /* Create a tree model and use it as the completion model */
-  completion_model = gtk_list_store_new (1, G_TYPE_STRING);
+  completion_model = GTK_TREE_MODEL (gtk_list_store_new (1, G_TYPE_STRING));
 
   gtk_entry_completion_set_model (completion, completion_model);
   g_object_unref (completion_model);
