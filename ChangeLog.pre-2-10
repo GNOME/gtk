@@ -1,3 +1,15 @@
+Tue Apr 30 15:59:53 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testmultiscreen.c: Multi-screen test case
+	form multihead branch with a few cleanups. (Get rid
+	of use of g_object_connect())
+
+	* tests/testmultidisplay.c: Multi-display test case
+	from multihead branch with a few improvements.
+	(Allow the other display name to be passed on
+	the command line, use a GtkDialog to get more attractive
+	spacing.)
+
 Tue Apr 30 14:23:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdisplay-x11.c (gdk_open_display): fix

@@ -30,6 +30,8 @@ noinst_PROGRAMS = 		\
 	testdnd			\
 	testgtk 		\
 	testinput		\
+	testmultidisplay	\
+	testmultiscreen		\
 	testrgb			\
 	testselection 		\
 	$(testsocket_programs)	\
@@ -49,6 +51,8 @@ testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
+testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
+testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testrgb_DEPENDENCIES = $(TEST_DEPS)
 testselection_DEPENDENCIES = $(TEST_DEPS)
 testsocket_DEPENDENCIES = $(DEPS)
@@ -69,6 +73,8 @@ testcalendar_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
+testmultidisplay_LDADD = $(LDADDS)
+testmultiscreen_LDADD = $(LDADDS)
 testrgb_LDADD = $(LDADDS)
 testselection_LDADD = $(LDADDS)
 testsocket_LDADD = $(LDADDS)
