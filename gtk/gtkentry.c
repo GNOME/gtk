@@ -2124,10 +2124,7 @@ get_better_cursor_x (GtkEntry *entry,
 		     gint      offset)
 {
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)));
-  GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
-    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-  GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (entry));
+  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
   gboolean split_cursor;
   
   PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
@@ -2145,7 +2142,7 @@ get_better_cursor_x (GtkEntry *entry,
   if (split_cursor)
     return strong_pos.x / PANGO_SCALE;
   else
-    return (keymap_direction == widget_direction) ? strong_pos.x / PANGO_SCALE : weak_pos.x / PANGO_SCALE;
+    return (keymap_direction == entry->resolved_dir) ? strong_pos.x / PANGO_SCALE : weak_pos.x / PANGO_SCALE;
 }
 
 static void
@@ -2901,8 +2898,8 @@ gtk_entry_draw_text (GtkEntry *entry)
 static void
 draw_insertion_cursor (GtkEntry      *entry,
 		       GdkRectangle  *cursor_location,
-		       PangoDirection direction,
 		       gboolean       is_primary,
+		       PangoDirection direction,
 		       gboolean       draw_arrow)
 {
   GtkWidget *widget = GTK_WIDGET (entry);

@@ -1705,6 +1705,53 @@ get_layout_location (GtkLabel  *label,
 }
 
 static void
+draw_insertion_cursor (GtkLabel      *label,
+		       GdkRectangle  *cursor_location,
+		       gboolean       is_primary,
+		       PangoDirection direction,
+		       gboolean       draw_arrow)
+{
+  GtkWidget *widget = GTK_WIDGET (label);
+  GtkTextDirection text_dir;
+
+  if (direction == PANGO_DIRECTION_LTR)
+    text_dir = GTK_TEXT_DIR_LTR;
+  else
+    text_dir = GTK_TEXT_DIR_RTL;
+
+  gtk_draw_insertion_cursor (widget, widget->window, NULL,
+			     cursor_location,
+			     is_primary, text_dir, draw_arrow);
+}
+
+static PangoDirection
+get_cursor_direction (GtkLabel *label)
+{
+  GSList *l;
+
+  g_assert (label->select_info);
+
+  gtk_label_ensure_layout (label);
+
+  for (l = pango_layout_get_lines (label->layout); l; l = l->next)
+    {
+      PangoLayoutLine *line = l->data;
+
+      /* If label->select_info->selection_end is at the very end of
+       * the line, we don't know if the cursor is on this line or
+       * the next without looking ahead at the next line. (End
+       * of paragraph is different from line break.) But it's
+       * definitely in this paragraph, which is good enough
+       * to figure out the resolved direction.
+       */
+       if (line->start_index + line->length >= label->select_info->selection_end)
+	return line->resolved_dir;
+    }
+
+  return PANGO_DIRECTION_LTR;
+}
+
+static void
 gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 {
   if (label->select_info == NULL)
@@ -1714,21 +1761,18 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
     {
       GtkWidget *widget = GTK_WIDGET (label);
 
-      GtkTextDirection keymap_direction;
-      GtkTextDirection widget_direction;
+      PangoDirection keymap_direction;
+      PangoDirection cursor_direction;
       PangoRectangle strong_pos, weak_pos;
       gboolean split_cursor;
       PangoRectangle *cursor1 = NULL;
       PangoRectangle *cursor2 = NULL;
       GdkRectangle cursor_location;
-      GtkTextDirection dir1 = GTK_TEXT_DIR_NONE;
-      GtkTextDirection dir2 = GTK_TEXT_DIR_NONE;
+      PangoDirection dir1 = PANGO_DIRECTION_NEUTRAL;
+      PangoDirection dir2 = PANGO_DIRECTION_NEUTRAL;
 
-      keymap_direction =
-	(gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (widget))) == PANGO_DIRECTION_LTR) ?
-	GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-
-      widget_direction = gtk_widget_get_direction (widget);
+      keymap_direction = gdk_keymap_get_direction (gdk_keymap_get_for_display (gtk_widget_get_display (widget)));
+      cursor_direction = get_cursor_direction (label);
 
       gtk_label_ensure_layout (label);
       
@@ -1739,7 +1783,7 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 		    "gtk-split-cursor", &split_cursor,
 		    NULL);
 
-      dir1 = widget_direction;
+      dir1 = cursor_direction;
       
       if (split_cursor)
 	{
@@ -1748,13 +1792,13 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
 	  if (strong_pos.x != weak_pos.x ||
 	      strong_pos.y != weak_pos.y)
 	    {
-	      dir2 = (widget_direction == GTK_TEXT_DIR_LTR) ? GTK_TEXT_DIR_RTL : GTK_TEXT_DIR_LTR;
+	      dir2 = (cursor_direction == PANGO_DIRECTION_LTR) ? PANGO_DIRECTION_RTL : PANGO_DIRECTION_LTR;
 	      cursor2 = &weak_pos;
 	    }
 	}
       else
 	{
-	  if (keymap_direction == widget_direction)
+	  if (keymap_direction == cursor_direction)
 	    cursor1 = &strong_pos;
 	  else
 	    cursor1 = &weak_pos;
@@ -1765,20 +1809,20 @@ gtk_label_draw_cursor (GtkLabel  *label, gint xoffset, gint yoffset)
       cursor_location.width = 0;
       cursor_location.height = PANGO_PIXELS (cursor1->height);
 
-      gtk_draw_insertion_cursor (widget, widget->window, NULL,
-				 &cursor_location, TRUE, dir1,
-				 dir2 != GTK_TEXT_DIR_NONE);
+      draw_insertion_cursor (label,
+			     &cursor_location, TRUE, dir1,
+			     dir2 != PANGO_DIRECTION_NEUTRAL);
       
-      if (dir2 != GTK_TEXT_DIR_NONE)
+      if (dir2 != PANGO_DIRECTION_NEUTRAL)
 	{
 	  cursor_location.x = xoffset + PANGO_PIXELS (cursor2->x);
 	  cursor_location.y = yoffset + PANGO_PIXELS (cursor2->y);
 	  cursor_location.width = 0;
 	  cursor_location.height = PANGO_PIXELS (cursor2->height);
 
-	  gtk_draw_insertion_cursor (widget, widget->window, NULL,
-				     &cursor_location, FALSE, dir2,
-				     TRUE);
+	  draw_insertion_cursor (label,
+				 &cursor_location, FALSE, dir2,
+				 TRUE);
 	}
     }
 }
@@ -2779,10 +2823,8 @@ get_better_cursor (GtkLabel *label,
 		   gint      *y)
 {
   GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
-  GtkTextDirection keymap_direction =
-    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
-    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
-  GtkTextDirection widget_direction = gtk_widget_get_direction (GTK_WIDGET (label));
+  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
+  PangoDirection cursor_direction = get_cursor_direction (label);
   gboolean split_cursor;
   PangoRectangle strong_pos, weak_pos;
   
@@ -2802,7 +2844,7 @@ get_better_cursor (GtkLabel *label,
     }
   else
     {
-      if (keymap_direction == widget_direction)
+      if (keymap_direction == cursor_direction)
 	{
 	  *x = strong_pos.x / PANGO_SCALE;
 	  *y = strong_pos.y / PANGO_SCALE;
@@ -2885,11 +2927,9 @@ gtk_label_move_visually (GtkLabel *label,
       else
 	{
 	  GdkKeymap *keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (label)));
-	  GtkTextDirection keymap_direction =
-	    (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_LTR) ?
-	    GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
+	  PangoDirection keymap_direction = gdk_keymap_get_direction (keymap);
 
-	  strong = keymap_direction == gtk_widget_get_direction (GTK_WIDGET (label));
+	  strong = keymap_direction == get_cursor_direction (label);
 	}
       
       if (count > 0)

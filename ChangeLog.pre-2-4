@@ -1,3 +1,13 @@
+Mon Mar  1 12:23:06 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c: Handle dynamically resolved bidi direction
+	when drawing the cursor. (#118541)
+
+	* gtk/gtkentry.c (get_better_cursor_x): Use entry->resolved_dir;
+
+	* gtk/gtkentry.c (draw_insertion_cursor): Fix up
+	some confusion in parameter ordering.
+
 Mon Mar  1 12:05:54 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserdialog.c
