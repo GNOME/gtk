@@ -1,5 +1,8 @@
 2003-07-27  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtktreeselection.c (gtk_tree_selection_selected_foreach): Fix function name in 
+	warning message.  (#118156, Tim-Philipp Müller)
+
 	* gtk/gtkcellrenderer.c (gtk_cell_renderer_get_property): is-expander and is-expanded are 
 	boolean properties, not ints.  (#118359, Josh Parsons)
 

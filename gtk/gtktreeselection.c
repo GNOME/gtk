@@ -752,7 +752,7 @@ out:
     TREE_VIEW_INTERNAL_ASSERT_VOID (has_parent);
   if (stop)
     g_warning
-      ("The model has been modified from within gtk_tree_selection_foreach.\n"
+      ("The model has been modified from within gtk_tree_selection_selected_foreach.\n"
        "This function is for observing the selections of the tree only.  If\n"
        "you are trying to get all selected items from the tree, try using\n"
        "gtk_tree_selection_get_selected_rows instead.\n");
