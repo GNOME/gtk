@@ -102,11 +102,19 @@ guint          gtk_ui_manager_add_ui_from_string  (GtkUIManager   *self,
 guint          gtk_ui_manager_add_ui_from_file    (GtkUIManager   *self,
 						   const gchar    *filename,
 						   GError        **error);
+guint          gtk_ui_manager_new_merge_id        (GtkUIManager   *self);
+void           gtk_ui_manager_add_ui              (GtkUIManager   *self,
+						   guint           merge_id,
+						   const gchar    *path,
+						   const gchar    *name,
+						   const gchar    *action);
 void           gtk_ui_manager_remove_ui           (GtkUIManager   *self,
 						   guint           merge_id);
 
 gchar         *gtk_ui_manager_get_ui              (GtkUIManager   *self);
 
 void           gtk_ui_manager_ensure_update       (GtkUIManager   *self);
+
+guint          gtk_ui_manager_new_merge_id        (GtkUIManager   *self);
 
 #endif /* __GTK_UI_MANAGER_H__ */

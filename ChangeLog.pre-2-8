@@ -1,3 +1,19 @@
+2003-09-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c: Shorten the names of some static 
+	functions.
+
+	Support adding and removing merge nodes dynamically (#120647, 
+	Anders Carlsson):
+	
+	* gtk/gtkuimanager.[ch] (gtk_ui_manager_new_merge_id): Renamed 
+	gtk_ui_manager_next_merge_id to gtk_ui_manager_new_merge_id 
+	and made it public.
+	(gtk_ui_manager_add_ui): New function to add UI elements
+	without juggling XML fragments, currently restricted to menuitems,
+	toolitems and separators. Actions still come from registered 
+	action groups.
+
 Mon Sep  1 19:39:14 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/gdkwindow.c (gdk_window_get_bg_gc): Fix bug where the

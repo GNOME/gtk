@@ -1733,6 +1733,8 @@ gtk_ui_manager_get_widget
 gtk_ui_manager_get_action
 gtk_ui_manager_add_ui_from_string
 gtk_ui_manager_add_ui_from_file
+gtk_ui_manager_new_merge_id
+gtk_ui_manager_add_ui
 gtk_ui_manager_remove_ui
 gtk_ui_manager_get_ui
 gtk_ui_manager_ensure_update

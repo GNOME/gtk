@@ -1,3 +1,8 @@
+2003-09-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_ui_manager_new_merge_id and
+	gtk_ui_manager_add_ui.
+
 2003-09-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkuimanager.sgml: Add an example UI description.
