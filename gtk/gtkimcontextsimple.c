@@ -181,6 +181,12 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_abovering,	GDK_a,	0,	0,	0,	0x00E5,	/* LATIN_SMALL_LETTER_A_WITH_RING_ABOVE */
   GDK_dead_abovering,	GDK_u,	0,	0,	0,	0x016F,	/* LATIN_SMALL_LETTER_U_WITH_RING_ABOVE */
   GDK_dead_abovering,	GDK_dead_abovering,	0,	0,	0,	0x02DA,	/* RING_ABOVE */
+  GDK_dead_doubleacute,	GDK_space,	0,	0,	0,	0x02DD,	/* DOUBLE_ACUTE_ACCENT */
+  GDK_dead_doubleacute,	GDK_O,	0,	0,	0,	0x0150,	/* LATIN_CAPITAL_LETTER_O_WITH_DOUBLE_ACUTE */
+  GDK_dead_doubleacute,	GDK_U,	0,	0,	0,	0x0170,	/* LATIN_CAPITAL_LETTER_U_WITH_DOUBLE_ACUTE */
+  GDK_dead_doubleacute,	GDK_o,	0,	0,	0,	0x0151,	/* LATIN_SMALL_LETTER_O_WITH_DOUBLE_ACUTE */
+  GDK_dead_doubleacute,	GDK_u,	0,	0,	0,	0x0171,	/* LATIN_SMALL_LETTER_U_WITH_DOUBLE_ACUTE */
+  GDK_dead_doubleacute,	GDK_dead_doubleacute,	0,	0,	0,	0x02DD,	/* DOUBLE_ACUTE_ACCENT */
   GDK_dead_caron,	GDK_space,	0,	0,	0,	0x02C7,	/* CARON */
   GDK_dead_caron,	GDK_C,	0,	0,	0,	0x010C,	/* LATIN_CAPITAL_LETTER_C_WITH_CARON */
   GDK_dead_caron,	GDK_D,	0,	0,	0,	0x010E,	/* LATIN_CAPITAL_LETTER_D_WITH_CARON */
