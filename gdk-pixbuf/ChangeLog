@@ -1,3 +1,8 @@
+2004-11-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_iter_get_pixbuf): 
+	Fix a typo in the docs.  (#159955, Masao Mutoh)
+
 2004-11-29  Matthias Clasen  <mclasen@redhat.com>
 
 	* Makefile.am (gdk-pixbuf-alias.h): Use the perl found by 

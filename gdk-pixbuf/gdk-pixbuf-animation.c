@@ -479,9 +479,9 @@ gdk_pixbuf_animation_iter_get_delay_time (GdkPixbufAnimationIter *iter)
  * 
  * Gets the current pixbuf which should be displayed; the pixbuf will
  * be the same size as the animation itself
- * (gdk_pixbuf_animation_get_width(),
- * gdk_pixbuf_animation_get_height()). This pixbuf should be displayed
- * for gdk_pixbuf_animation_get_delay_time() milliseconds.  The caller
+ * (gdk_pixbuf_animation_get_width(), gdk_pixbuf_animation_get_height()). 
+ * This pixbuf should be displayed for 
+ * gdk_pixbuf_animation_iter_get_delay_time() milliseconds.  The caller
  * of this function does not own a reference to the returned pixbuf;
  * the returned pixbuf will become invalid when the iterator advances
  * to the next frame, which may happen anytime you call
