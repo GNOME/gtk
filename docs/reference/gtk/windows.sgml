@@ -1,0 +1,24 @@
+<refentry id="gtk-windows" revision="4 Feb 2001">
+<refmeta>
+<refentrytitle>Using GTK+ on Windows</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Using GTK+ on Windows</refname>
+<refpurpose>
+Windows-specific aspects of using GTK+
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Using GTK+ on Windows</title>
+
+<para>
+
+</para>
+
+</refsect1>
+
+</refentry>

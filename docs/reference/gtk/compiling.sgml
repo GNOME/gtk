@@ -1,0 +1,24 @@
+<refentry id="gtk-compiling" revision="4 Feb 2001">
+<refmeta>
+<refentrytitle>Compiling GTK+ Applications</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>GTK Library</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+<refname>Compiling GTK+ Applications</refname>
+<refpurpose>
+How to compile your GTK+ application
+</refpurpose>
+</refnamediv>
+
+<refsect1>
+<title>Compiling GTK+ Applications</title>
+
+<para>
+
+</para>
+
+</refsect1>
+
+</refentry>

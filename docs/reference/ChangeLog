@@ -1,3 +1,12 @@
+2001-02-08  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/windows.sgml: windows (file is blank)
+
+	* gtk/framebuffer.sgml: framebuffer (file is blank)
+
+	* gtk/compiling.sgml: how to use pkg-config, etc. (file is 
+	blank for now)
+
 2001-02-03  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/tmpl/gtkfixed.sgml: Add the intro docs section

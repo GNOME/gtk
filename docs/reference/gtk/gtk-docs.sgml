@@ -140,6 +140,9 @@
 <!entity index-Objects-Grouped SYSTEM "objects_grouped.sgml">
 <!entity gtk-TextWidget SYSTEM "text_widget.sgml">
 <!entity gtk-TreeWidget SYSTEM "tree_widget.sgml">
+<!entity gtk-Compiling SYSTEM "compiling.sgml">
+<!entity gtk-Windows SYSTEM "windows.sgml">
+<!entity gtk-Framebuffer SYSTEM "framebuffer.sgml">
 ]>
 <book id="index">
   <bookinfo>
@@ -158,9 +161,9 @@ licenses or royalties.
     </para>
     <para>
 GTK+ is a set of libraries to create graphical user interfaces. It
-works on many Unix-like platforms, and a Windows version is in
-development. GTK+ is released under the GNU Library General Public
-License (GNU LGPL), which allows for flexible licensing of client
+works on many Unix-like platforms, Windows, and on framebuffer
+devices. GTK+ is released under the GNU Library General Public License
+(GNU LGPL), which allows for flexible licensing of client
 applications. GTK+ has a C-based object-oriented architecture that
 allows for maximum flexibility.  Bindings for other languages have
 been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
@@ -194,6 +197,9 @@ An advanced widget set.
 </variablelist>
     </para>
 
+    &gtk-Compiling;
+    &gtk-Windows;
+    &gtk-Framebuffer;
     &gtk-General;
     &gtk-Feature-Test-Macros;
     &gtk-Graphics-Contexts;
