@@ -1,3 +1,10 @@
+1999-03-28  Raja R Harinath  <harinath@cs.umn.edu>
+
+	* gdk/Makefile.am (gdkconfig.h): Make sure `gdkconfig.h' exists
+	after the rule is fired.
+	(install-exec-local): Install gdkconfig.h only if the contents are
+	different from the currently installed gdkconfig.h.
+
 1999-03-26  Raja R Harinath  <harinath@cs.umn.edu>
 
 	* gdk/Makefile.am (configexecincludedir): Rename from 

@@ -2,7 +2,7 @@
 
 gdkincludedir = $(includedir)/gdk
 
-configexecincludedir = $(pkglibdir)/include
+
 
 lib_LTLIBRARIES = libgdk.la
 
@@ -74,12 +74,18 @@ libgdk_la_LDFLAGS = \
          @x_libs@	\
          -lm
 
-configexecinclude_DATA = \
-	gdkconfig.h
+configexecincludedir = $(pkglibdir)/include
+#configexecinclude_DATA = gdkconfig.h
+install-exec-local: gdkconfig.h
+	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)
+	file=$(DESTDIR)$(configexecincludedir)/gdkconfig.h; \
+	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \
+	else $(INSTALL_DATA) gdkconfig.h $$file; fi
 
 BUILT_SOURCES = stamp-gc-h #note: not gdkconfig.h
 gdkconfig.h: stamp-gc-h
-	@:
+	@if test -f gdkconfig.h; then :; \
+	else rm -f stamp-gc-h; $(MAKE) stamp-gc-h; fi
 stamp-gc-h: ../config.status
 	cd .. && CONFIG_FILES= CONFIG_HEADERS= CONFIG_OTHER=gdk/gdkconfig.h ./config.status
 	echo timestamp > stamp-gc-h
