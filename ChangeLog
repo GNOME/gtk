@@ -3,6 +3,7 @@
 	* gtk/gtkuimanager.c (update_node): Remove two more places
 	where we were unconditionally setting "visible", causing
 	unnecessary notifications.
+	(update_node): Fix some C99isms.
 
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 

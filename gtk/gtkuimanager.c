@@ -2036,6 +2036,9 @@ update_node (GtkUIManager *self,
   GNode *child;
   GtkAction *action;
   gchar *tooltip;
+  const gchar *action_name;
+  NodeUIReference *ref;
+  
 #ifdef DEBUG_UI_MANAGER
   GList *tmp;
 #endif
@@ -2063,9 +2066,6 @@ update_node (GtkUIManager *self,
   g_print (")\n");
 #endif
 
-  const gchar *action_name;
-  NodeUIReference *ref;
-  
   if (info->uifiles == NULL) {
     /* We may need to remove this node.
      * This must be done in post order
