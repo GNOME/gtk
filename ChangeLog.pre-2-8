@@ -1,5 +1,10 @@
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Check for uxtheme.h  (#157967, J. Ali Harlow)
+
+	* modules/engines/ms-windows/xp_theme.c: Use HAVE_UXTHEME_H
+	to protect the #include <uxtheme.h> 
+
 	* docs/tools/Makefile.am: Don't try to build doc-shooter on 
 	Windows.  (#157979, J. Ali Harlow) 
 

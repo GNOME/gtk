@@ -22,6 +22,7 @@
 
 #include "xp_theme.h"
 
+#include <config.h>
 #include <windows.h>
 #include <math.h>
 #include <string.h>
@@ -29,12 +30,11 @@
 
 #include "gdk/win32/gdkwin32.h"
 
-
-#ifdef DONT_HAVE_UXTHEME_H
-#include "xp_theme_defs.h"
-#else
+#ifdef HAVE_UXTHEME_H
 #include <uxtheme.h>
 #include <tmschema.h>
+#else
+#include "xp_theme_defs.h"
 #endif
 
 #ifndef TMT_CAPTIONFONT

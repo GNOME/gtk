@@ -639,6 +639,14 @@ fi
 AC_MSG_RESULT($gdk_working_wctype)
 AC_SUBST(GDK_WLIBS)
 
+# Check for uxtheme.h (for MS-Windows Engine)
+AC_MSG_CHECKING(for uxtheme.h)
+AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
+if test $gtk_uxtheme_h = yes; then
+   AC_DEFINE(HAVE_UXTHEME_H,1,[Have uxtheme.h include file])
+fi
+AC_MSG_RESULT($gtk_uxtheme_h)
+
 
 ##################################################
 # Checks for gdk-pixbuf
