@@ -1,3 +1,8 @@
+Wed Jan 23 14:44:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (EPSILON): Decreate value since
+	we now use doubles.
+
 Tue Jan 22 16:58:37 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): Fix sizing bug

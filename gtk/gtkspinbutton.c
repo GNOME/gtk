@@ -44,7 +44,7 @@
 #define SPIN_BUTTON_INITIAL_TIMER_DELAY    200
 #define SPIN_BUTTON_TIMER_DELAY            20
 #define MAX_TIMER_CALLS                    5
-#define EPSILON                            1e-5
+#define EPSILON                            1e-10
 #define	MAX_DIGITS			   20
 
 enum {
