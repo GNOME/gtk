@@ -732,9 +732,11 @@ gtk_text_iter_get_visible_line_offset (const GtkTextIter *iter)
   ensure_char_offsets (real);
 
   check_invariants (iter);
-
+  
   vis_offset = real->line_char_offset;
 
+  g_assert (vis_offset >= 0);
+  
   _gtk_text_btree_get_iter_at_line (real->tree,
                                     &pos,
                                     real->line,
@@ -792,12 +794,14 @@ gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
   if (real == NULL)
     return 0;
 
-  ensure_char_offsets (real);
+  ensure_byte_offsets (real);
 
   check_invariants (iter);
 
   vis_offset = real->line_byte_offset;
 
+  g_assert (vis_offset >= 0);
+  
   _gtk_text_btree_get_iter_at_line (real->tree,
                                     &pos,
                                     real->line,

@@ -1,3 +1,9 @@
+2001-12-31  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextiter.c (gtk_text_iter_get_visible_line_index): fix 
+	to use ensure_byte_offsets not ensure_char_offsets, patch 
+	from Padraig O'Briain bug #67356
+	
 2001-12-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkdialog.h (GtkDialogFlags): fix GtkDialogFlags to have 
