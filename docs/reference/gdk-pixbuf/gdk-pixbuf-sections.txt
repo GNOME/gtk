@@ -166,6 +166,7 @@ GDK_IS_PIXBUF_LOADER
 GDK_PIXBUF_LOADER_CLASS
 GDK_IS_PIXBUF_LOADER_CLASS
 <SUBSECTION Private>
+GdkPixbufLoaderClass
 gdk_pixbuf_loader_get_type
 </SECTION>
 
