@@ -742,12 +742,12 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_EXPOSE:
-      if (event->any.window)
+      if (event->any.window && GTK_WIDGET_DOUBLE_BUFFERED (event_widget))
 	gdk_window_begin_paint_rect (event->any.window, &event->expose.area);
 
       gtk_widget_event (event_widget, event);
 
-      if (event->any.window)
+      if (event->any.window && GTK_WIDGET_DOUBLE_BUFFERED (event_widget))
 	gdk_window_end_paint (event->any.window);
       break;
 

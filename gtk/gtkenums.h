@@ -81,8 +81,8 @@ typedef enum
 typedef enum
 {
   GTK_TEXT_DIR_NONE,
-  GTK_TEXT_DIR_RTL,
-  GTK_TEXT_DIR_LTR
+  GTK_TEXT_DIR_LTR,
+  GTK_TEXT_DIR_RTL
 } GtkTextDirection;
 
 /* justification for label and maybe other widgets (text?) */

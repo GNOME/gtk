@@ -1,3 +1,21 @@
+Fri Jun  2 12:56:01 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_init): Initialize DOUBLE_BUFFERED
+	flag to on.
+
+	* gtk/gtkwidget.c (gtk_widget_draw) gtk/gtkmain.c (gtk_main_do_event): 
+	Honor DOUBLE_BUFFRED_FLAG
+
+	* gtk/gtkwidget.c (gtk_widget_set_double_buffered): Add a
+	function to set the DOUBLE_BUFFERED flag.
+
+	* gtk/gtkwidget.h: Add GTK_DOUBLE_BUFFERED flag to indicate whether
+	or not exposes done on the widget should be double-buffered.
+
+	* gtk/gtkenums.h (GtkTextDirection): Reverse order of enumerations
+	to be what would be expected. (Fixes problem with a
+	g_return_if_fail() validating a TextDirection enumeration)
+
 Thu Jun  1 23:05:13 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c: Remove all references to 

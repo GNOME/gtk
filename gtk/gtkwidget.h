@@ -60,7 +60,8 @@ typedef enum
   GTK_COMPOSITE_CHILD  = 1 << 17,
   GTK_NO_REPARENT      = 1 << 18,
   GTK_APP_PAINTABLE    = 1 << 19,
-  GTK_RECEIVES_DEFAULT = 1 << 20
+  GTK_RECEIVES_DEFAULT = 1 << 20,
+  GTK_DOUBLE_BUFFERED  = 1 << 21
 } GtkWidgetFlags;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
@@ -101,6 +102,7 @@ typedef enum
 #define GTK_WIDGET_COMPOSITE_CHILD(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_COMPOSITE_CHILD) != 0)
 #define GTK_WIDGET_APP_PAINTABLE(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_APP_PAINTABLE) != 0)
 #define GTK_WIDGET_RECEIVES_DEFAULT(wid)  ((GTK_WIDGET_FLAGS (wid) & GTK_RECEIVES_DEFAULT) != 0)
+#define GTK_WIDGET_DOUBLE_BUFFERED(wid)	  ((GTK_WIDGET_FLAGS (wid) & GTK_DOUBLE_BUFFERED) != 0)
   
 /* Macros for setting and clearing widget flags.
  */
@@ -511,6 +513,8 @@ void	   gtk_widget_set_sensitive	  (GtkWidget	       *widget,
 					   gboolean		sensitive);
 void	   gtk_widget_set_app_paintable	  (GtkWidget	       *widget,
 					   gboolean		app_paintable);
+void	   gtk_widget_set_double_buffered (GtkWidget	       *widget,
+					   gboolean	        double_buffered);
 void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 					   GtkWidget	       *parent);
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,

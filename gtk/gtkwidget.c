@@ -1023,7 +1023,8 @@ gtk_widget_init (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget,
 			GTK_SENSITIVE |
 			GTK_PARENT_SENSITIVE |
-			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0));
+			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
+			GTK_DOUBLE_BUFFERED);
 
   widget->style = gtk_widget_peek_style ();
   gtk_style_ref (widget->style);
@@ -1859,7 +1860,7 @@ gtk_widget_draw (GtkWidget    *widget,
 	  area = &temp_area;
 	}
 
-      if (!GTK_WIDGET_NO_WINDOW (widget))
+      if (!GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_DOUBLE_BUFFERED (widget))
 	{
 	  GdkRectangle tmp_area = *area;
 	  gint x, y;
@@ -1876,7 +1877,7 @@ gtk_widget_draw (GtkWidget    *widget,
       
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DRAW], area);
 
-      if (!GTK_WIDGET_NO_WINDOW (widget))
+      if (!GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_DOUBLE_BUFFERED (widget))
 	gdk_window_end_paint (widget->window);
     }
 }
@@ -2802,6 +2803,19 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
     }
 }
 
+void
+gtk_widget_set_double_buffered (GtkWidget *widget,
+				gboolean   double_buffered)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (double_buffered)
+    GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+  else
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+}
+
 /*****************************************
  * gtk_widget_set_sensitive:
  *
@@ -3192,7 +3206,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
   PangoContext *context;
   char *lang, *p;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   context = gdk_pango_context_get ();
 
@@ -3232,7 +3246,7 @@ gtk_widget_create_pango_layout (GtkWidget *widget)
   PangoLayout *layout;
   PangoContext *context;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   context = gtk_widget_create_pango_context (widget);
   layout = pango_layout_new (context);
@@ -3998,7 +4012,7 @@ GtkTextDirection
 gtk_widget_get_direction (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, GTK_TEXT_DIR_LTR);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_TEXT_DIR_LTR);
   
   if (GTK_WIDGET_DIRECTION_SET (widget))
     return GTK_WIDGET_DIRECTION_LTR (widget) ? GTK_TEXT_DIR_LTR : GTK_TEXT_DIR_RTL;
