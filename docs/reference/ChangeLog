@@ -1,6 +1,12 @@
+2001-10-20  jacob berkman  <jacob@ximian.com>
+
+	* gtk/Makefile.am (HTML_IMAGES): get them from
+	$(top_srcdir)/gtk/stock-icons/ rather than
+	../../../gtk/stock-items/
+
 Fri Oct 19 15:44:52 2001  Owen Taylor  <otaylor@redhat.com>
 
-	*  gtk/Makefile.am gtk/gtk-sections.txt gtk/gtk-docs.sgml:
+	* gtk/Makefile.am gtk/gtk-sections.txt gtk/gtk-docs.sgml:
 	Add gtkimcontextsimple.
 
 2001-10-19  Matthias Clasen   <matthiasc@poet.de>
