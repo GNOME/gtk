@@ -1,3 +1,10 @@
+2004-02-28  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (set_cell_text_bold_if_folder):
+	Removed.
+	(list_name_data_func): Don't call the function above.
+	(list_mtime_data_func): Likewise.
+
 Sun Feb 29 02:34:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_list_position): New 

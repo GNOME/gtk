@@ -3537,16 +3537,6 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
     g_object_unref (pixbuf);
 }
 
-/* Sets a cellrenderer's text, making it bold if the GtkFileInfo is a folder */
-static void
-set_cell_text_bold_if_folder (const GtkFileInfo *info, GtkCellRenderer *cell, const char *text)
-{
-  g_object_set (cell,
-		"text", text,
-		"weight", gtk_file_info_get_is_folder (info) ? PANGO_WEIGHT_BOLD : PANGO_WEIGHT_NORMAL,
-		NULL);
-}
-
 static void
 list_name_data_func (GtkTreeViewColumn *tree_column,
 		     GtkCellRenderer   *cell,
@@ -3565,7 +3555,9 @@ list_name_data_func (GtkTreeViewColumn *tree_column,
       return;
     }
 
-  set_cell_text_bold_if_folder (info, cell, gtk_file_info_get_display_name (info));
+  g_object_set (cell,
+		"text", gtk_file_info_get_display_name (info),
+		NULL);
 }
 
 #if 0
@@ -3655,7 +3647,9 @@ list_mtime_data_func (GtkTreeViewColumn *tree_column,
 	strcpy (buf, _("Unknown"));
     }
 
-  set_cell_text_bold_if_folder (info, cell, buf);
+  g_object_set (cell,
+		"text", buf,
+		NULL);
 }
 
 GtkWidget *
