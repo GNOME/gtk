@@ -70,6 +70,7 @@ GtkAccelKey
 gtk_accelerator_valid
 gtk_accelerator_parse
 gtk_accelerator_name
+gtk_accelerator_get_label
 gtk_accelerator_set_default_mod_mask
 gtk_accelerator_get_default_mod_mask
 
