@@ -564,8 +564,6 @@ AM_CONDITIONAL(HAVE_PNG, test "x$LIBPNG" != x)
 AM_CONDITIONAL(HAVE_JPEG, test "x$LIBJPEG" != x)
 
 if $dynworks ; then
-  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG"
-else
   STATIC_LIB_DEPS=
   if echo "$included_loaders" | grep "\(^\|\,\)tiff\(\$\|\,\)" > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBTIFF"
@@ -576,6 +574,8 @@ else
   if echo "$included_loaders" | grep "\(^\|\,\)png\(\$\|\,\)" > /dev/null; then
     STATIC_LIB_DEPS="$STATIC_LIB_DEPS $LIBPNG"
   fi
+else
+  STATIC_LIB_DEPS="$LIBTIFF $LIBJPEG $LIBPNG"
 fi
 
 # Checks to see if we should compile in MMX support (there will be

@@ -267,7 +267,9 @@ gtk_paned_realize (GtkWidget *widget)
 
   gdk_window_set_back_pixmap (widget->window, NULL, TRUE);
 
-  gdk_window_show (paned->handle);
+  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
+      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+    gdk_window_show (paned->handle);
 }
 
 static void

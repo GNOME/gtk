@@ -1,3 +1,10 @@
+Mon May 21 11:29:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtk{h,v,}paned.c: Only show the separator if 
+
+	* configure.in: Fixed reversed conditional causing all image
+	libraries to be linked in.
+
 2001-05-21  Joe Shaw  <joe@ximian.com>
 
 	* gtk/gtklayout.c (gtk_text_layout_get_lines): Remove the assertion

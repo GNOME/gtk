@@ -115,9 +115,6 @@ gtk_hpaned_size_request (GtkWidget      *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkRequisition child_requisition;
-  gint handle_size;
-
-  gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
 
   requisition->width = 0;
   requisition->height = 0;
@@ -138,8 +135,17 @@ gtk_hpaned_size_request (GtkWidget      *widget,
       requisition->width += child_requisition.width;
     }
 
-  requisition->width += GTK_CONTAINER (paned)->border_width * 2 + handle_size;
+  requisition->width += GTK_CONTAINER (paned)->border_width * 2;
   requisition->height += GTK_CONTAINER (paned)->border_width * 2;
+
+  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
+      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+    {
+      gint handle_size;
+      
+      gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
+      requisition->width += handle_size;
+    }
 }
 
 static void
@@ -148,78 +154,90 @@ gtk_hpaned_size_allocate (GtkWidget     *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
   gint border_width = GTK_CONTAINER (paned)->border_width;
-  gint handle_size;
-  GtkRequisition child1_requisition;
-  GtkRequisition child2_requisition;
-  GtkAllocation child1_allocation;
-  GtkAllocation child2_allocation;
-
-  gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
 
   widget->allocation = *allocation;
-  
-  if (paned->child1)
-    gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
-  else
-    child1_requisition.width = 0;
-
-  if (paned->child2)
-    gtk_widget_get_child_requisition (paned->child2, &child2_requisition);
-  else
-    child2_requisition.width = 0;
-
-  gtk_paned_compute_position (paned,
-			      MAX (1, widget->allocation.width
-				      - handle_size
-				   - 2 * border_width),
-			      child1_requisition.width,
-			      child2_requisition.width);
-
-  /* Move the handle before the children so we don't get extra expose events */
-
-  paned->handle_xpos = paned->child1_size + border_width;
-  paned->handle_ypos = border_width;
-  paned->handle_width = handle_size;
-  paned->handle_height = MAX (1, widget->allocation.height - 2 * border_width);
-
   if (GTK_WIDGET_REALIZED (widget))
+    gdk_window_move_resize (widget->window,
+			    allocation->x, allocation->y,
+			    allocation->width,
+			    allocation->height);
+
+  if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
+      paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
     {
-      gdk_window_move_resize (widget->window,
-			      allocation->x, allocation->y,
-			      allocation->width,
-			      allocation->height);
+      GtkAllocation child1_allocation;
+      GtkAllocation child2_allocation;
+      GtkRequisition child1_requisition;
+      GtkRequisition child2_requisition;
+      gint handle_size;
+      
+      gtk_widget_style_get (widget, "handle_size", &handle_size, NULL);
 
-      gdk_window_move_resize (paned->handle,
-			      paned->handle_xpos,
-			      paned->handle_ypos,
-			      handle_size,
-			      paned->handle_height);
-    }
-
-  child1_allocation.height = child2_allocation.height = MAX (1, (gint) allocation->height - border_width * 2);
-  child1_allocation.width = paned->child1_size;
-  child1_allocation.x = border_width;
-  child1_allocation.y = child2_allocation.y = border_width;
-  
-  child2_allocation.x = child1_allocation.x + child1_allocation.width +  paned->handle_width;
-  child2_allocation.width = MAX (1, (gint) allocation->width - child2_allocation.x - border_width);
-
-  /* Now allocate the childen, making sure, when resizing not to
-   * overlap the windows */
-  if (GTK_WIDGET_MAPPED (widget) &&
-      paned->child1 && GTK_WIDGET_VISIBLE (paned->child1) &&
-      paned->child1->allocation.width < child1_allocation.width)
-    {
-      if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
-	gtk_widget_size_allocate (paned->child2, &child2_allocation);
-      gtk_widget_size_allocate (paned->child1, &child1_allocation);
+      gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
+      gtk_widget_get_child_requisition (paned->child2, &child2_requisition);
+      
+      gtk_paned_compute_position (paned,
+				  MAX (1, widget->allocation.width
+				       - handle_size
+				       - 2 * border_width),
+				  child1_requisition.width,
+				  child2_requisition.width);
+      
+      /* Move the handle before the children so we don't get extra expose events */
+      
+      paned->handle_xpos = paned->child1_size + border_width;
+      paned->handle_ypos = border_width;
+      paned->handle_width = handle_size;
+      paned->handle_height = MAX (1, widget->allocation.height - 2 * border_width);
+      
+      if (GTK_WIDGET_REALIZED (widget))
+	{
+	  gdk_window_show (paned->handle);
+	  gdk_window_move_resize (paned->handle,
+				  paned->handle_xpos,
+				  paned->handle_ypos,
+				  handle_size,
+				  paned->handle_height);
+	}
+      
+      child1_allocation.height = child2_allocation.height = MAX (1, (gint) allocation->height - border_width * 2);
+      child1_allocation.width = paned->child1_size;
+      child1_allocation.x = border_width;
+      child1_allocation.y = child2_allocation.y = border_width;
+      
+      child2_allocation.x = child1_allocation.x + child1_allocation.width +  paned->handle_width;
+      child2_allocation.width = MAX (1, (gint) allocation->width - child2_allocation.x - border_width);
+      
+      /* Now allocate the childen, making sure, when resizing not to
+       * overlap the windows */
+      if (GTK_WIDGET_MAPPED (widget) &&
+	  paned->child1->allocation.width < child1_allocation.width)
+	{
+	  gtk_widget_size_allocate (paned->child2, &child2_allocation);
+	  gtk_widget_size_allocate (paned->child1, &child1_allocation);
+	}
+      else
+	{
+	  gtk_widget_size_allocate (paned->child1, &child1_allocation);
+	  gtk_widget_size_allocate (paned->child2, &child2_allocation);
+	}
     }
   else
     {
+      GtkAllocation child_allocation;
+
+      if (GTK_WIDGET_REALIZED (widget))      
+	gdk_window_hide (paned->handle);
+	  
+      child_allocation.x = border_width;
+      child_allocation.y = border_width;
+      child_allocation.width = MAX (1, allocation->width - 2 * border_width);
+      child_allocation.height = MAX (1, allocation->height - 2 * border_width);
+      
       if (paned->child1 && GTK_WIDGET_VISIBLE (paned->child1))
-	gtk_widget_size_allocate (paned->child1, &child1_allocation);
-      if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
-	gtk_widget_size_allocate (paned->child2, &child2_allocation);
+	gtk_widget_size_allocate (paned->child1, &child_allocation);
+      else if (paned->child2 && GTK_WIDGET_VISIBLE (paned->child2))
+	gtk_widget_size_allocate (paned->child2, &child_allocation);
     }
 }
 
