@@ -4375,7 +4375,7 @@ gtk_default_draw_expander (GtkStyle        *style,
   gint line_width;
   gdouble affine[6];
   gint degrees = 0;
-  
+
   gtk_widget_style_get (widget,
 			"expander_size", &expander_size,
 			NULL);
@@ -4398,13 +4398,13 @@ gtk_default_draw_expander (GtkStyle        *style,
   switch (expander_style)
     {
     case GTK_EXPANDER_COLLAPSED:
-      degrees = 0;
+      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 180 : 0;
       break;
     case GTK_EXPANDER_SEMI_COLLAPSED:
-      degrees = 30;
+      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 150 : 30;
       break;
     case GTK_EXPANDER_SEMI_EXPANDED:
-      degrees = 60;
+      degrees = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) ? 120 : 60;
       break;
     case GTK_EXPANDER_EXPANDED:
       degrees = 90;
@@ -4412,7 +4412,7 @@ gtk_default_draw_expander (GtkStyle        *style,
     default:
       g_assert_not_reached ();
     }
-  
+
   create_expander_affine (affine, degrees, expander_size, x, y);
 
   for (i = 0; i < 3; i++)

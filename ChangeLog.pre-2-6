@@ -1,3 +1,8 @@
+2002-02-03  Anders Carlsson  <expander-master@gtk.org>
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Add 
+	flipping support to the expanders.
+
 Sat Feb  2 21:54:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	RC file lookup improvements (#68234, suggestions
