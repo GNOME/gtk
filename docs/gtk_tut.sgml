@@ -11,7 +11,7 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>,
-<date>January 28th, 1999
+<date>January 31th, 1999
 
 <!-- ***************************************************************** -->
 <sect>Introduction
@@ -3013,7 +3013,8 @@ Where the first argument is the label you created previously (cast
 using the GTK_LABEL() macro), and the second is the new string.
 
 The space needed for the new string will be automatically adjusted if
-needed.
+needed. You can produce multi-line labels by putting line breaks in
+the label string.
 
 To retrieve the current string, use:
 
@@ -3023,7 +3024,276 @@ void gtk_label_get( GtkLabel  *label,
 </verb></tscreen>
 
 Where the first argument is the label you've created, and the second,
-the return for the string.
+the return for the string. Do not free the return string, as it is
+used internally by GTK.
+
+The label text can be justified using:
+
+<tscreen><verb>
+void gtk_label_set_justify( GtkLabel         *label,
+                            GtkJustification  jtype );
+</verb></tscreen>
+
+Values for <tt/jtype/ are:
+<itemize>
+<item> GTK_JUSTIFY_LEFT
+<item> GTK_JUSTIFY_RIGHT
+<item> GTK_JUSTIFY_CENTER (the default)
+<item> GTK_JUSTIFY_FILL
+</itemize>
+
+The label widget is also capable of line wrapping the text
+automatically. This can be activated using:
+
+<tscreen><verb>
+void gtk_label_set_line_wrap (GtkLabel *label,
+                              gboolean  wrap);
+</verb></tscreen>
+
+The <//wrap/ argument takes a TRUE or FALSE value.
+
+If you want your label underlined, then you can set a pattern on the
+label:
+
+<tscreen><verb>
+void       gtk_label_set_pattern   (GtkLabel          *label,
+                                    const gchar       *pattern);
+</verb></tscreen>
+
+The pattern argument indicates how the underlining should look. It
+consists of a string of underscore and space characters. An underscore
+indicates that the corresponding character in the label should be
+underlined. For example, the string <verb/"__     __"/ would underline the
+first two characters and eigth and ninth characters.
+
+Below is a short example to illustrate these functions. This example
+makes use of the Frame widget to better demonstrate the label
+styles. You can ignore this for now as the <ref id="sec_Frames"
+name="Frame"> widget is explained later on.
+
+<tscreen><verb>
+/* example-start label label.c */
+
+#include <gtk/gtk.h>
+
+int main( int   argc,
+          char *argv[] )
+{
+  static GtkWidget *window = NULL;
+  GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkWidget *frame;
+  GtkWidget *label;
+
+  /* Initialise GTK */
+  gtk_init(&amp;argc, &amp;argv);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC(gtk_main_quit),
+		      NULL);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Label");
+  vbox = gtk_vbox_new (FALSE, 5);
+  hbox = gtk_hbox_new (FALSE, 5);
+  gtk_container_add (GTK_CONTAINER (window), hbox);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (window), 5);
+  
+  frame = gtk_frame_new ("Normal Label");
+  label = gtk_label_new ("This is a Normal label");
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  
+  frame = gtk_frame_new ("Multi-line Label");
+  label = gtk_label_new ("This is a Multi-line label.\nSecond line\n" \
+			 "Third line");
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  
+  frame = gtk_frame_new ("Left Justified Label");
+  label = gtk_label_new ("This is a Left-Justified\n" \
+			 "Multi-line label.\nThird      line");
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  
+  frame = gtk_frame_new ("Right Justified Label");
+  label = gtk_label_new ("This is a Right-Justified\nMulti-line label.\n" \
+			 "Fourth line, (j/k)");
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_RIGHT);
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+  vbox = gtk_vbox_new (FALSE, 5);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+  frame = gtk_frame_new ("Line wrapped label");
+  label = gtk_label_new ("This is an example of a line-wrapped label.  It " \
+			 "should not be taking up the entire             " /* big space to test spacing */\
+			 "width allocated to it, but automatically " \
+			 "wraps the words to fit.  " \
+			 "The time has come, for all good men, to come to " \
+			 "the aid of their party.  " \
+			 "The sixth sheik's six sheep's sick.\n" \
+			 "     It supports multiple paragraphs correctly, " \
+			 "and  correctly   adds "\
+			 "many          extra  spaces. ");
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  
+  frame = gtk_frame_new ("Filled, wrapped label");
+  label = gtk_label_new ("This is an example of a line-wrapped, filled label.  " \
+			 "It should be taking "\
+			 "up the entire              width allocated to it.  " \
+			 "Here is a seneance to prove "\
+			 "my point.  Here is another sentence. "\
+			 "Here comes the sun, do de do de do.\n"\
+			 "    This is a new paragraph.\n"\
+			 "    This is another newer, longer, better " \
+			 "paragraph.  It is coming to an end, "\
+			 "unfortunately.");
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_FILL);
+  gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  
+  frame = gtk_frame_new ("Underlined label");
+  label = gtk_label_new ("This label is underlined!\n"
+			 "This one is underlined in quite a funky fashion");
+  gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
+  gtk_label_set_pattern (GTK_LABEL (label),
+			 "_________________________ _ _________ _ ______     __ _______ ___");
+  gtk_container_add (GTK_CONTAINER (frame), label);
+  gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+  
+  gtk_widget_show_all (window);
+
+  gtk_main ();
+  
+  return(0);
+}
+/* example-end */
+</verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1> Arrows
+<p>
+The Arrow widget draws an arrowhead, facing in a number of possible
+directions and having a number of possible styles. It can be very
+useful when placed on a button in many applications.
+
+There are only two functions for manipulating an Arrow widget:
+
+<tscreen><verb>
+GtkWidget *gtk_arrow_new( GtkArrowType   arrow_type,
+                          GtkShadowType  shadow_type );
+
+void gtk_arrow_set( GtkArrow      *arrow,
+                    GtkArrowType   arrow_type,
+                    GtkShadowType  shadow_type );
+</verb></tscreen>
+
+The first creates a new arrow widget with the indicated type and
+appearance. The second allows these values to be altered
+retrospectively. The <tt/arrow_type/ argument may take one of the
+following values:
+
+<itemize>
+<item> GTK_ARROW_UP
+<item> GTK_ARROW_DOWN
+<item> GTK_ARROW_LEFT
+<item> GTK_ARROW_RIGHT
+</itemize>
+
+These values obviously indicate the direction in which the arrow will
+point. The <tt/shadow_type/ argument may take one of these values:
+
+<itemize>
+<item> GTK_SHADOW_IN
+<item> GTK_SHADOW_OUT (the default)
+<item> GTK_SHADOW_ETCHED_IN
+<item> GTK_SHADOW_ETCHED_OUT
+</itemize>
+
+Here's a brief example to illustrate their use.
+
+<tscreen><verb>
+/* example-start arrow arrow.c */
+
+#include <gtk/gtk.h>
+
+/* Create an Arrow widget with the specified parameters
+ * and pack it into a button */
+GtkWidget *create_arrow_button( GtkArrowType  arrow_type,
+				GtkShadowType shadow_type )
+{
+  GtkWidget *button;
+  GtkWidget *arrow;
+
+  button = gtk_button_new();
+  arrow = gtk_arrow_new (arrow_type, shadow_type);
+
+  gtk_container_add (GTK_CONTAINER (button), arrow);
+  
+  gtk_widget_show(button);
+  gtk_widget_show(arrow);
+
+  return(button);
+}
+
+int main( int   argc,
+          char *argv[] )
+{
+  /* GtkWidget is the storage type for widgets */
+  GtkWidget *window;
+  GtkWidget *button;
+  GtkWidget *box;
+
+  /* Initialize the toolkit */
+  gtk_init (&amp;argc, &amp;argv);
+
+  /* Create a new window */
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Arrow Buttons");
+
+  /* It's a good idea to do this for all windows. */
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+
+  /* Sets the border width of the window. */
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+  /* Create a box to hold the arrows/buttons */
+  box = gtk_hbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (box), 2);
+  gtk_container_add (GTK_CONTAINER (window), box);
+
+  /* Pack and show all our widgets */
+  gtk_widget_show(box);
+
+  button = create_arrow_button(GTK_ARROW_UP, GTK_SHADOW_IN);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
+
+  button = create_arrow_button(GTK_ARROW_DOWN, GTK_SHADOW_OUT);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
+  
+  button = create_arrow_button(GTK_ARROW_LEFT, GTK_SHADOW_ETCHED_IN);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
+  
+  button = create_arrow_button(GTK_ARROW_RIGHT, GTK_SHADOW_ETCHED_OUT);
+  gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
+  
+  gtk_widget_show (window);
+  
+  /* Rest in gtk_main and wait for the fun to begin! */
+  gtk_main ();
+  
+  return(0);
+}
+/* example-end */
+</verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>The Tooltips Widget
@@ -3116,7 +3386,7 @@ And that's all the functions associated with tooltips. More than
 you'll ever want to know :-)
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Progress Bars
+<sect1> Progress Bars <label id="sec_ProgressBar">
 <p>
 Progress bars are used to show the status of an operation. They are
 pretty easy to use, as you will see with the code below. But first
@@ -4811,7 +5081,7 @@ GtkWidget *gtk_event_box_new( void );
 A child widget can then be added to this EventBox:
 
 <tscreen><verb>
-gtk_container_add( GTK_CONTAINER(event_box), widget );
+    gtk_container_add( GTK_CONTAINER(event_box), child_widget );
 </verb></tscreen>
 
 The following example demonstrates both uses of an EventBox - a label
@@ -4875,6 +5145,48 @@ main (int argc, char *argv[])
 }
 /* example-end */
 </verb></tscreen>
+
+<!-- ----------------------------------------------------------------- -->   
+<sect1>The Alignment widget <label id="sec_Alignment">
+<p>
+The alignment widget allows you to place a widget within its window at
+a position and size relative to the size of the Alignment widget
+itself. For example, it can be very useful for centering a widget
+within the window.
+
+There are only two functions associated with the Alignment widget:
+
+<tscreen><verb>
+GtkWidget* gtk_alignment_new( gfloat xalign,
+                              gfloat yalign,
+                              gfloat xscale,
+                              gfloat yscale );
+
+void gtk_alignment_set( GtkAlignment *alignment,
+                        gfloat        xalign,
+                        gfloat        yalign,
+                        gfloat        xscale,
+                        gfloat        yscale );
+</verb></tscreen>
+
+The first function creates a new Alignment widget with the specified
+parameters. The second function allows the alignment paramters of an
+exisiting Alignment widget to be altered.
+
+All four alignment parameters are floating point numbers which can
+range from 0.0 to 1.0. The <tt/xalign/ and <tt/yalign/ arguments
+affect the position of the widget placed within the Alignment
+widget. The <tt/xscale/ and <tt/yscale/ arguments effect the amount of
+space allocated to the widget.
+
+A child widget can be added to this Alignment widget using:
+
+<tscreen><verb>
+    gtk_container_add( GTK_CONTAINER(alignment), child_widget );
+</verb></tscreen>
+
+For an example of using an Alignment widget, refer to the example for
+the <ref id="sec_ProgressBar" name="Progress Bar"> widget.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1> Fixed Container
@@ -4988,7 +5300,7 @@ int main( int   argc,
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Frames
+<sect1> Frames <label id="sec_Frames">
 <p>
 Frames can be used to enclose one or a group of widgets with a box
 which can optionally be labelled. The position of the label and the
@@ -5390,7 +5702,62 @@ main (int argc, char *argv[])
 </verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Scrolled Windows
+<sect1>Viewports <label id="sec_Viewports">
+<p>
+It is unlikely that you will ever need to use the Viewport widget
+directly. You are much more likely to use the
+<ref id="sec_ScrolledWindows" name="Scrolled Windows"> widget which
+itself uses the Viewport.
+
+A viewport widget allows you to place a larger widget within it such
+that you can view a part of it at a time. It uses
+<ref id="sec_Adjustment" name="Adjustments"> to define the area that
+is currently in view.
+
+A Viewport is created with the function
+
+<tscreen><verb>
+GtkWidget *gtk_viewport_new( GtkAdjustment *hadjustment,
+                             GtkAdjustment *vadjustment );
+</verb></tscreen>
+
+As you can see you can specify the horizontal and vertical Adjustments
+that the widget is to use when you create the widget. It will create
+it's own if you pass NULL as the value of the arguments.
+
+You can get and set the adjustments after the widget has been created
+using the following four functions:
+
+<tscreen><verb>
+GtkAdjustment *gtk_viewport_get_hadjustment (GtkViewport *viewport );
+
+GtkAdjustment *gtk_viewport_get_vadjustment (GtkViewport *viewport );
+
+void gtk_viewport_set_hadjustment( GtkViewport   *viewport,
+                                   GtkAdjustment *adjustment );
+
+void gtk_viewport_set_vadjustment( GtkViewport   *viewport,
+                                   GtkAdjustment *adjustment );
+</verb></tscreen>
+
+The only other viewport function is used to alter its appearance:
+
+<tscreen><verb>
+void gtk_viewport_set_shadow_type( GtkViewport   *viewport,
+                                   GtkShadowType  type );
+</verb></tscreen>
+
+Possible values for the <tt/type/ parameter are:
+<itemize>
+<item> GTK_SHADOW_NONE,
+<item> GTK_SHADOW_IN,
+<item> GTK_SHADOW_OUT,
+<item> GTK_SHADOW_ETCHED_IN,
+<item> GTK_SHADOW_ETCHED_OUT
+</itemize>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>Scrolled Windows <label id="sec_ScrolledWindows">
 <p>
 Scrolled windows are used to create a scrollable area inside a real
 window.  You may insert any type of widget into a scrolled window, and
@@ -5534,6 +5901,198 @@ int main (int argc, char *argv[])
 Try playing with resizing the window. You'll notice how the scrollbars
 react. You may also wish to use the gtk_widget_set_usize() call to set
 the default size of the window or other widgets.
+
+<!-- ----------------------------------------------------------------- -->   
+<sect1>Button Boxes
+<p>
+Button Boxes are a convenient way to quickly layout a group of
+buttons. They come in both horizontal and vertical flavours. You
+create a new Button Box with one of the following calls, which create
+a horizontal or vertical box, respectively:
+
+<tscreen><verb>
+GtkWidget *gtk_hbutton_box_new( void );
+
+GtkWidget *gtk_vbutton_box_new( void );
+</verb></tscreen>
+
+The only attributes pertaining to button boxes effect how the buttons
+are layed out. You can change the spacing between the buttons with:
+
+<tscreen><verb>
+void gtk_hbutton_box_set_spacing_default( gint spacing );
+
+void gtk_vbutton_box_set_spacing_default( gint spacing );
+</verb></tscreen>
+
+Similarly, the current spacing values can be queried using:
+
+<tscreen><verb>
+gint gtk_hbutton_box_get_spacing_default( void );
+
+gint gtk_vbutton_box_get_spacing_default( void );
+</verb></tscreen>
+
+The second attribute that we can access effects the layour of the
+buttons within the box. It is set using one of:
+
+<tscreen><verb>
+void gtk_hbutton_box_set_layout_default( GtkButtonBoxStyle layout );
+
+void gtk_vbutton_box_set_layout_default( GtkButtonBoxStyle layout );
+</verb></tscreen>
+
+The <tt/layout/ argument can take one of the following values:
+
+<itemize>
+<item> GTK_BUTTONBOX_DEFAULT_STYLE
+<item> GTK_BUTTONBOX_SPREAD
+<item> GTK_BUTTONBOX_EDGE
+<item> GTK_BUTTONBOX_START
+<item> GTK_BUTTONBOX_END
+</itemize>
+
+The current layout setting can be retrieved using:
+
+<tscreen><verb>
+GtkButtonBoxStyle gtk_hbutton_box_get_layout_default( void );
+
+GtkButtonBoxStyle gtk_vbutton_box_get_layout_default( void );
+</verb></tscreen>
+
+Buttons are added to a Button Box using the usual function:
+
+<tscreen><verb>
+    gtk_container_add( GTK_CONTAINER(button_box), child_widget );
+</verb></tscreen>
+
+Here's an example that illustrates all the different layout settings
+for Button Boxes.
+
+<tscreen><verb>
+/* example-start buttonbox buttonbox.c */
+
+#include <gtk/gtk.h>
+
+/* Create a Button Box with the specified parameters */
+GtkWidget *create_bbox (gint  horizontal,
+			char* title,
+			gint  spacing,
+			gint  child_w,
+			gint  child_h,
+			gint  layout)
+{
+  GtkWidget *frame;
+  GtkWidget *bbox;
+  GtkWidget *button;
+
+  frame = gtk_frame_new (title);
+
+  if (horizontal)
+    bbox = gtk_hbutton_box_new ();
+  else
+    bbox = gtk_vbutton_box_new ();
+
+  gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
+  gtk_container_add (GTK_CONTAINER (frame), bbox);
+
+  /* Set the appearance of the Button Box */
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
+  gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), spacing);
+  gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);
+
+  button = gtk_button_new_with_label ("OK");
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+
+  button = gtk_button_new_with_label ("Cancel");
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+
+  button = gtk_button_new_with_label ("Help");
+  gtk_container_add (GTK_CONTAINER (bbox), button);
+
+  return(frame);
+}
+
+int main( int   argc,
+          char *argv[] )
+{
+  static GtkWidget* window = NULL;
+  GtkWidget *main_vbox;
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *frame_horz;
+  GtkWidget *frame_vert;
+
+  /* Initialize GTK */
+  gtk_init( &amp;argc, &amp;argv );
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
+
+  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC(gtk_main_quit),
+		      NULL);
+
+  gtk_container_set_border_width (GTK_CONTAINER (window), 10);
+
+  main_vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (window), main_vbox);
+
+  frame_horz = gtk_frame_new ("Horizontal Button Boxes");
+  gtk_box_pack_start (GTK_BOX (main_vbox), frame_horz, TRUE, TRUE, 10);
+
+  vbox = gtk_vbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
+  gtk_container_add (GTK_CONTAINER (frame_horz), vbox);
+
+  gtk_box_pack_start (GTK_BOX (vbox),
+	   create_bbox (TRUE, "Spread (spacing 40)", 40, 85, 20, GTK_BUTTONBOX_SPREAD),
+		      TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox),
+	   create_bbox (TRUE, "Edge (spacing 30)", 30, 85, 20, GTK_BUTTONBOX_EDGE),
+		      TRUE, TRUE, 5);
+
+  gtk_box_pack_start (GTK_BOX (vbox),
+           create_bbox (TRUE, "Start (spacing 20)", 20, 85, 20, GTK_BUTTONBOX_START),
+		      TRUE, TRUE, 5);
+
+  gtk_box_pack_start (GTK_BOX (vbox),
+	   create_bbox (TRUE, "End (spacing 10)", 10, 85, 20, GTK_BUTTONBOX_END),
+		      TRUE, TRUE, 5);
+
+  frame_vert = gtk_frame_new ("Vertical Button Boxes");
+  gtk_box_pack_start (GTK_BOX (main_vbox), frame_vert, TRUE, TRUE, 10);
+
+  hbox = gtk_hbox_new (FALSE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
+  gtk_container_add (GTK_CONTAINER (frame_vert), hbox);
+
+  gtk_box_pack_start (GTK_BOX (hbox),
+           create_bbox (FALSE, "Spread (spacing 5)", 5, 85, 20, GTK_BUTTONBOX_SPREAD),
+		      TRUE, TRUE, 0);
+
+  gtk_box_pack_start (GTK_BOX (hbox),
+           create_bbox (FALSE, "Edge (spacing 30)", 30, 85, 20, GTK_BUTTONBOX_EDGE),
+		      TRUE, TRUE, 5);
+
+  gtk_box_pack_start (GTK_BOX (hbox),
+           create_bbox (FALSE, "Start (spacing 20)", 20, 85, 20, GTK_BUTTONBOX_START),
+		      TRUE, TRUE, 5);
+
+  gtk_box_pack_start (GTK_BOX (hbox),
+           create_bbox (FALSE, "End (spacing 20)", 20, 85, 20, GTK_BUTTONBOX_END),
+		      TRUE, TRUE, 5);
+
+  gtk_widget_show_all (window);
+
+  /* Enter the event loop */
+  gtk_main ();
+    
+  return(0);
+}
+/* example-end */
+</verb></tscreen>
 
 <!-- ----------------------------------------------------------------- -->   
 <sect1>Toolbar
@@ -7003,7 +7562,7 @@ void selection_made( GtkWidget *clist, gint row, gint column,
 </verb></tscreen>
                     
 <!-- ***************************************************************** -->
-<sect> Tree Widget<label id="sec_Tree_Widgets">
+<sect> Tree Widget <label id="sec_Tree_Widgets">
 <!-- ***************************************************************** -->
 <p>
 The purpose of tree widgets is to display hierarchically-organized
@@ -8721,15 +9280,6 @@ widget, please consider writing a tutorial on it so others may benefit
 from your time.
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Alignment
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Arrows
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Button Box(es)
-<p>
-<!-- ----------------------------------------------------------------- -->
 <sect1> Calendar
 <p>
 <!-- ----------------------------------------------------------------- -->
@@ -8740,9 +9290,6 @@ from your time.
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Curves
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Dialog boxes
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Drawing Area
@@ -8770,9 +9317,6 @@ from your time.
 <p>
 <!-- ----------------------------------------------------------------- -->
 <sect1> Spin Button
-<p>
-<!-- ----------------------------------------------------------------- -->
-<sect1> Viewport
 <p>
 
 <!--

@@ -1,3 +1,16 @@
+Mon Feb  1 09:16:03 GMT 1999 Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml:
+	  - Complete documentation of Label widget API
+	  - New sections for the following:
+		* Arrows
+		* Alignment
+		* Button Boxes
+		* Viewports
+
+	* examples/arrow/*, examples/buttonbox/*, examples/label/*
+	  - New code examples
+
 Fri Jan 29 09:44:37 GMT 1999 Tony Gake  <gale@gtk.org>
 
 	* examples/fixed/*, examples/frame/*
