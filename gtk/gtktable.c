@@ -964,12 +964,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
           for (col = 0; col < table->ncols; col++)
             {
               extra = width / (table->ncols - col);
-
-              if ((col + 1) == table->ncols)
-                table->cols[col].allocation = width;
-              else
-                table->cols[col].allocation = extra;
-
+	      table->cols[col].allocation = extra;
               width -= extra;
             }
         }
@@ -1001,10 +996,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
             if (table->cols[col].expand)
               {
                 extra = width / nexpand;
-                if (nexpand == 1)
-                  table->cols[col].allocation += width;
-                else
-                  table->cols[col].allocation += extra;
+		table->cols[col].allocation += extra;
 
                 width -= extra;
                 nexpand -= 1;
@@ -1021,10 +1013,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
             if (table->cols[col].shrink)
               {
                 extra = width / nshrink;
-                if (nshrink == 1)
-                  table->cols[col].allocation -= width;
-                else
-                  table->cols[col].allocation -= extra;
+		table->cols[col].allocation -= extra;
 
                 width -= extra;
                 nshrink -= 1;
@@ -1053,11 +1042,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
           for (row = 0; row < table->nrows; row++)
             {
               extra = height / (table->nrows - row);
-              if ((row + 1) == table->nrows)
-                table->rows[row].allocation = height;
-              else
-                table->rows[row].allocation = extra;
-
+	      table->rows[row].allocation = extra;
               height -= extra;
             }
         }
@@ -1089,10 +1074,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
             if (table->rows[row].expand)
               {
                 extra = height / nexpand;
-                if (nexpand == 1)
-                  table->rows[row].allocation += height;
-                else
-                  table->rows[row].allocation += extra;
+		table->rows[row].allocation += extra;
 
                 height -= extra;
                 nexpand -= 1;
@@ -1109,10 +1091,7 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
             if (table->rows[row].shrink)
               {
                 extra = height / nshrink;
-                if (nshrink == 1)
-                  table->rows[row].allocation -= height;
-                else
-                  table->rows[row].allocation -= extra;
+		table->rows[row].allocation -= extra;
 
                 height -= extra;
                 nshrink -= 1;

@@ -1,3 +1,9 @@
+Tue Feb  3 00:12:00 1998  Owen Taylor  <owt1@cornell.edu>
+	* gtk/gtktable.c 
+	  Fixed problem with division by zero in row/column-spanned
+	  tables. Also removed a bunch of conditionals by making
+	  the observation that x/1 == x.
+
 Mon Feb  2 04:15:08 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtkwindow.c:
@@ -213,6 +219,7 @@ Sat Jan 31 23:55:03 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/testgtk.c: some changes because of all the above ;)
 
+>>>>>>> 1.103
 Sat Jan 31 21:26:27 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwidget.c: Added a new GTK_IN_REPARENT flag and revised
