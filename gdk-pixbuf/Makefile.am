@@ -353,6 +353,7 @@ EXTRA_DIST =			\
         gdk-pixbuf-csource.1    \
 	makefile.mingw		\
 	makefile.mingw.in	\
+	makefile.msc		\
 	gdk_pixbuf.def		\
 	gdk-pixbuf-marshal.c	\
 	gdk-pixbuf-marshal.list		\

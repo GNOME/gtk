@@ -1,3 +1,7 @@
+2001-12-29  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am (EXTRA_DIST): Add makefile.msc.
+
 Sat Dec 22 15:31:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixdata.h: Fix trailing "," in enumeration.
