@@ -1,18 +1,17 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* This is a callback function. The data arguments are ignored
  * in this example. More on callbacks below. */
-void hello( GtkWidget *widget,
-            gpointer   data )
+static void hello( GtkWidget *widget,
+                   gpointer   data )
 {
     g_print ("Hello World\n");
 }
 
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-		   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     /* If you return FALSE in the "delete_event" signal handler,
      * GTK will emit the "destroy" signal. Returning TRUE means
@@ -29,8 +28,8 @@ gint delete_event( GtkWidget *widget,
 }
 
 /* Another callback */
-void destroy( GtkWidget *widget,
-              gpointer   data )
+static void destroy( GtkWidget *widget,
+                     gpointer   data )
 {
     gtk_main_quit ();
 }

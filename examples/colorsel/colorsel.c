@@ -1,5 +1,4 @@
 
-#include <config.h>
 #include <glib.h>
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -10,8 +9,8 @@ GdkColor color;
 
 /* Color changed handler */
 
-void color_changed_cb( GtkWidget         *widget,
-                       GtkColorSelection *colorsel )
+static void color_changed_cb( GtkWidget         *widget,
+                              GtkColorSelection *colorsel )
 {
   GdkColor ncolor;
 
@@ -21,9 +20,9 @@ void color_changed_cb( GtkWidget         *widget,
 
 /* Drawingarea event handler */
 
-gint area_event( GtkWidget *widget,
-                 GdkEvent  *event,
-                 gpointer   client_data )
+static gboolean area_event( GtkWidget *widget,
+                            GdkEvent  *event,
+                            gpointer   client_data )
 {
   gint handled = FALSE;
   gint response;
@@ -49,7 +48,7 @@ gint area_event( GtkWidget *widget,
       /* Connect to the "color_changed" signal, set the client-data
        * to the colorsel widget */
       g_signal_connect (G_OBJECT (colorsel), "color_changed",
-                        G_CALLBACK (color_changed_cb), (gpointer)colorsel);
+                        G_CALLBACK (color_changed_cb), (gpointer) colorsel);
 
       /* Show the dialog */
       response = gtk_dialog_run (GTK_DIALOG (colorseldlg));
@@ -67,9 +66,9 @@ gint area_event( GtkWidget *widget,
 
 /* Close down and exit handler */
 
-gint destroy_window( GtkWidget *widget,
-                     GdkEvent  *event,
-                     gpointer   client_data )
+static gboolean destroy_window( GtkWidget *widget,
+                                GdkEvent  *event,
+                                gpointer   client_data )
 {
   gtk_main_quit ();
   return TRUE;
@@ -95,7 +94,7 @@ gint main( gint   argc,
   /* Attach to the "delete" and "destroy" events so we can exit */
 
   g_signal_connect (GTK_OBJECT (window), "delete_event",
-                    GTK_SIGNAL_FUNC (destroy_window), (gpointer)window);
+                    GTK_SIGNAL_FUNC (destroy_window), (gpointer) window);
   
   /* Create drawingarea, set size and catch button events */
 
@@ -111,7 +110,7 @@ gint main( gint   argc,
   gtk_widget_set_events (drawingarea, GDK_BUTTON_PRESS_MASK);
 
   g_signal_connect (GTK_OBJECT (drawingarea), "event", 
-	            GTK_SIGNAL_FUNC (area_event), (gpointer)drawingarea);
+	            GTK_SIGNAL_FUNC (area_event), (gpointer) drawingarea);
   
   /* Add drawingarea to window, then show them both */
 

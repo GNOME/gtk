@@ -1,44 +1,44 @@
 
-#include <config.h>
 #include <stdio.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *spinner1;
 
-void toggle_snap( GtkWidget     *widget,
-		  GtkSpinButton *spin )
+static void toggle_snap( GtkWidget     *widget,
+                         GtkSpinButton *spin )
 {
   gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)->active);
 }
 
-void toggle_numeric( GtkWidget *widget,
-		     GtkSpinButton *spin )
+static void toggle_numeric( GtkWidget *widget,
+                            GtkSpinButton *spin )
 {
   gtk_spin_button_set_numeric (spin, GTK_TOGGLE_BUTTON (widget)->active);
 }
 
-void change_digits( GtkWidget *widget,
-	            GtkSpinButton *spin )
+static void change_digits( GtkWidget *widget,
+                           GtkSpinButton *spin )
 {
   gtk_spin_button_set_digits (GTK_SPIN_BUTTON (spinner1),
                               gtk_spin_button_get_value_as_int (spin));
 }
 
-void get_value( GtkWidget *widget,
-		gpointer data )
+static void get_value( GtkWidget *widget,
+                       gpointer data )
 {
-  gchar buf[32];
+  gchar *buf;
   GtkLabel *label;
   GtkSpinButton *spin;
 
   spin = GTK_SPIN_BUTTON (spinner1);
   label = GTK_LABEL (g_object_get_data (G_OBJECT (widget), "user_data"));
   if (GPOINTER_TO_INT (data) == 1)
-    sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
+    buf = g_strdup_printf ("%d", gtk_spin_button_get_value_as_int (spin));
   else
-    sprintf (buf, "%0.*f", spin->digits,
-             gtk_spin_button_get_value (spin));
+    buf = g_strdup_printf ("%0.*f", spin->digits,
+                           gtk_spin_button_get_value (spin));
   gtk_label_set_text (label, buf);
+  g_free (buf);
 }
 
 

@@ -1,10 +1,9 @@
 
-#include <config.h>
 #include <stdio.h>
 #include <gtk/gtk.h>
 
-void destroy( GtkWidget *widget,
-              gpointer   data )
+static void destroy( GtkWidget *widget,
+                     gpointer   data )
 {
     gtk_main_quit ();
 }

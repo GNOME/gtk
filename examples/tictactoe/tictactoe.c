@@ -17,7 +17,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include <config.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktogglebutton.h>
@@ -32,7 +31,7 @@ static void tictactoe_class_init          (TictactoeClass *klass);
 static void tictactoe_init                (Tictactoe      *ttt);
 static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
 
-static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
+static guint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
 GType
 tictactoe_get_type (void)

@@ -1,5 +1,4 @@
 
-#include <config.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <time.h>
@@ -9,8 +8,8 @@ GtkWidget *selection_button;
 GtkWidget *selection_widget;
 
 /* Callback when the user toggles the selection */
-void selection_toggled( GtkWidget *widget,
-                        gint      *have_selection )
+static void selection_toggled( GtkWidget *widget,
+                               gint      *have_selection )
 {
   if (GTK_TOGGLE_BUTTON (widget)->active)
     {
@@ -37,9 +36,9 @@ void selection_toggled( GtkWidget *widget,
 }
 
 /* Called when another application claims the selection */
-gint selection_clear( GtkWidget         *widget,
-                      GdkEventSelection *event,
-                      gint              *have_selection )
+static gboolean selection_clear( GtkWidget         *widget,
+                                 GdkEventSelection *event,
+                                 gint              *have_selection )
 {
   *have_selection = FALSE;
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (selection_button), FALSE);
@@ -48,11 +47,11 @@ gint selection_clear( GtkWidget         *widget,
 }
 
 /* Supplies the current time as the selection. */
-void selection_handle( GtkWidget        *widget, 
-                       GtkSelectionData *selection_data,
-                       guint             info,
-                       guint             time_stamp,
-                       gpointer          data )
+static void selection_handle( GtkWidget        *widget, 
+                              GtkSelectionData *selection_data,
+                              guint             info,
+                              guint             time_stamp,
+                              gpointer          data )
 {
   gchar *timestr;
   time_t current_time;

@@ -17,7 +17,6 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include <config.h>
 #include <math.h>
 #include <stdio.h>
 #include <gtk/gtkmain.h>
@@ -30,23 +29,23 @@
 
 /* Forward declarations */
 
-static void gtk_dial_class_init               (GtkDialClass    *klass);
-static void gtk_dial_init                     (GtkDial         *dial);
+static void gtk_dial_class_init               (GtkDialClass     *klass);
+static void gtk_dial_init                     (GtkDial          *dial);
 static void gtk_dial_destroy                  (GtkObject        *object);
 static void gtk_dial_realize                  (GtkWidget        *widget);
-static void gtk_dial_size_request             (GtkWidget      *widget,
-					       GtkRequisition *requisition);
-static void gtk_dial_size_allocate            (GtkWidget     *widget,
-					       GtkAllocation *allocation);
-static gint gtk_dial_expose                   (GtkWidget        *widget,
-						GdkEventExpose   *event);
-static gint gtk_dial_button_press             (GtkWidget        *widget,
-						GdkEventButton   *event);
-static gint gtk_dial_button_release           (GtkWidget        *widget,
-						GdkEventButton   *event);
-static gint gtk_dial_motion_notify            (GtkWidget        *widget,
-						GdkEventMotion   *event);
-static gboolean gtk_dial_timer                (GtkDial         *dial);
+static void gtk_dial_size_request             (GtkWidget        *widget,
+                                               GtkRequisition   *requisition);
+static void gtk_dial_size_allocate            (GtkWidget        *widget,
+                                               GtkAllocation    *allocation);
+static gboolean gtk_dial_expose               (GtkWidget        *widget,
+                                               GdkEventExpose   *event);
+static gboolean gtk_dial_button_press         (GtkWidget        *widget,
+                                               GdkEventButton   *event);
+static gboolean gtk_dial_button_release       (GtkWidget        *widget,
+                                               GdkEventButton   *event);
+static gboolean gtk_dial_motion_notify        (GtkWidget        *widget,
+                                               GdkEventMotion   *event);
+static gboolean gtk_dial_timer                (GtkDial          *dial);
 
 static void gtk_dial_update_mouse             (GtkDial *dial, gint x, gint y);
 static void gtk_dial_update                   (GtkDial *dial);
@@ -275,9 +274,9 @@ gtk_dial_size_allocate (GtkWidget     *widget,
   dial->pointer_width = dial->radius / 5;
 }
 
-static gint
-gtk_dial_expose (GtkWidget      *widget,
-		 GdkEventExpose *event)
+static gboolean
+gtk_dial_expose( GtkWidget      *widget,
+		 GdkEventExpose *event )
 {
   GtkDial *dial;
   GdkPoint points[6];
@@ -414,9 +413,9 @@ gtk_dial_expose (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_button_press (GtkWidget      *widget,
-		       GdkEventButton *event)
+static gboolean
+gtk_dial_button_press( GtkWidget      *widget,
+		       GdkEventButton *event )
 {
   GtkDial *dial;
   gint dx, dy;
@@ -458,9 +457,9 @@ gtk_dial_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_button_release (GtkWidget      *widget,
-			  GdkEventButton *event)
+static gboolean
+gtk_dial_button_release( GtkWidget      *widget,
+                         GdkEventButton *event )
 {
   GtkDial *dial;
 
@@ -487,9 +486,9 @@ gtk_dial_button_release (GtkWidget      *widget,
   return FALSE;
 }
 
-static gint
-gtk_dial_motion_notify (GtkWidget      *widget,
-			 GdkEventMotion *event)
+static gboolean
+gtk_dial_motion_notify( GtkWidget      *widget,
+                        GdkEventMotion *event )
 {
   GtkDial *dial;
   GdkModifierType mods;
@@ -533,7 +532,7 @@ gtk_dial_motion_notify (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_dial_timer (GtkDial *dial)
+gtk_dial_timer( GtkDial *dial )
 {
   g_return_val_if_fail (dial != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_DIAL (dial), FALSE);
@@ -545,7 +544,7 @@ gtk_dial_timer (GtkDial *dial)
 }
 
 static void
-gtk_dial_update_mouse (GtkDial *dial, gint x, gint y)
+gtk_dial_update_mouse( GtkDial *dial, gint x, gint y )
 {
   gint xc, yc;
   gfloat old_value;

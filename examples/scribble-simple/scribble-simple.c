@@ -18,7 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
@@ -26,8 +25,8 @@
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint configure_event( GtkWidget         *widget,
-                             GdkEventConfigure *event )
+static gboolean configure_event( GtkWidget         *widget,
+                                 GdkEventConfigure *event )
 {
   if (pixmap)
     g_object_unref (pixmap);
@@ -47,8 +46,8 @@ static gint configure_event( GtkWidget         *widget,
 }
 
 /* Redraw the screen from the backing pixmap */
-static gint expose_event( GtkWidget      *widget,
-                          GdkEventExpose *event )
+static gboolean expose_event( GtkWidget      *widget,
+                              GdkEventExpose *event )
 {
   gdk_draw_drawable (widget->window,
 		     widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
@@ -77,12 +76,12 @@ static void draw_brush( GtkWidget *widget,
 		      update_rect.x, update_rect.y,
 		      update_rect.width, update_rect.height);
   gtk_widget_queue_draw_area (widget, 
-		      update_rect.x, update_rect.y,
-		      update_rect.width, update_rect.height);
+		              update_rect.x, update_rect.y,
+		              update_rect.width, update_rect.height);
 }
 
-static gint button_press_event( GtkWidget      *widget,
-                                GdkEventButton *event )
+static gboolean button_press_event( GtkWidget      *widget,
+                                    GdkEventButton *event )
 {
   if (event->button == 1 && pixmap != NULL)
     draw_brush (widget, event->x, event->y);
@@ -90,8 +89,8 @@ static gint button_press_event( GtkWidget      *widget,
   return TRUE;
 }
 
-static gint motion_notify_event( GtkWidget *widget,
-                                 GdkEventMotion *event )
+static gboolean motion_notify_event( GtkWidget *widget,
+                                     GdkEventMotion *event )
 {
   int x, y;
   GdkModifierType state;

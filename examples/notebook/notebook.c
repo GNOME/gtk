@@ -1,18 +1,17 @@
 
-#include <config.h>
 #include <stdio.h>
 #include <gtk/gtk.h>
 
 /* This function rotates the position of the tabs */
-void rotate_book( GtkButton   *button,
-                  GtkNotebook *notebook )
+static void rotate_book( GtkButton   *button,
+                         GtkNotebook *notebook )
 {
     gtk_notebook_set_tab_pos (notebook, (notebook->tab_pos + 1) % 4);
 }
 
 /* Add/Remove the page tabs and the borders */
-void tabsborder_book( GtkButton   *button,
-                      GtkNotebook *notebook )
+static void tabsborder_book( GtkButton   *button,
+                             GtkNotebook *notebook )
 {
     gint tval = FALSE;
     gint bval = FALSE;
@@ -26,8 +25,8 @@ void tabsborder_book( GtkButton   *button,
 }
 
 /* Remove a page from the notebook */
-void remove_book( GtkButton   *button,
-                  GtkNotebook *notebook )
+static void remove_book( GtkButton   *button,
+                         GtkNotebook *notebook )
 {
     gint page;
     
@@ -38,9 +37,9 @@ void remove_book( GtkButton   *button,
     gtk_widget_queue_draw (GTK_WIDGET (notebook));
 }
 
-gint delete( GtkWidget *widget,
-             GtkWidget *event,
-             gpointer   data )
+static gboolean delete( GtkWidget *widget,
+                        GtkWidget *event,
+                        gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;

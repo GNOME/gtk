@@ -1,5 +1,4 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 typedef struct _ProgressData {
@@ -11,7 +10,7 @@ typedef struct _ProgressData {
 
 /* Update the value of the progress bar so that we get
  * some movement */
-gboolean progress_timeout( gpointer data )
+static gboolean progress_timeout( gpointer data )
 {
   ProgressData *pdata = (ProgressData *)data;
   gdouble new_val;
@@ -38,8 +37,8 @@ gboolean progress_timeout( gpointer data )
 } 
 
 /* Callback that toggles the text display within the progress bar trough */
-void toggle_show_text( GtkWidget    *widget,
-		       ProgressData *pdata )
+static void toggle_show_text( GtkWidget    *widget,
+                              ProgressData *pdata )
 {
   const gchar *text;
   
@@ -51,8 +50,8 @@ void toggle_show_text( GtkWidget    *widget,
 }
 
 /* Callback that toggles the activity mode of the progress bar */
-void toggle_activity_mode( GtkWidget    *widget,
-			   ProgressData *pdata )
+static void toggle_activity_mode( GtkWidget    *widget,
+                                  ProgressData *pdata )
 {
   pdata->activity_mode = !pdata->activity_mode;
   if (pdata->activity_mode) 
@@ -63,8 +62,8 @@ void toggle_activity_mode( GtkWidget    *widget,
 
  
 /* Callback that toggles the orientation of the progress bar */
-void toggle_orientation( GtkWidget    *widget,
-			 ProgressData *pdata )
+static void toggle_orientation( GtkWidget    *widget,
+                                ProgressData *pdata )
 {
   switch (gtk_progress_bar_get_orientation (GTK_PROGRESS_BAR (pdata->pbar))) {
   case GTK_PROGRESS_LEFT_TO_RIGHT:
@@ -75,15 +74,15 @@ void toggle_orientation( GtkWidget    *widget,
     gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (pdata->pbar), 
 				      GTK_PROGRESS_LEFT_TO_RIGHT);
     break;
-  default: ;
+  default:;
     /* do nothing */
   }
 }
 
  
 /* Clean up allocated memory and remove the timer */
-void destroy_progress( GtkWidget     *widget,
-		       ProgressData *pdata)
+static void destroy_progress( GtkWidget    *widget,
+                              ProgressData *pdata)
 {
     g_source_remove (pdata->timer);
     pdata->timer = 0;
@@ -129,6 +128,7 @@ int main( int   argc,
 
     /* Create the GtkProgressBar */
     pdata->pbar = gtk_progress_bar_new ();
+    pdata->activity_mode = FALSE;
 
     gtk_container_add (GTK_CONTAINER (align), pdata->pbar);
     gtk_widget_show (pdata->pbar);

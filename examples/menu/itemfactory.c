@@ -1,5 +1,4 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* Obligatory basic callback */
@@ -10,21 +9,21 @@ static void print_hello( GtkWidget *w,
 }
 
 /* For the check button */
-static void print_toggle(gpointer   callback_data,
-                         guint      callback_action,
-                         GtkWidget *menu_item)
+static void print_toggle( gpointer   callback_data,
+                          guint      callback_action,
+                          GtkWidget *menu_item )
 {
    g_message ("Check button state - %d\n",
-              GTK_CHECK_MENU_ITEM(menu_item)->active);
+              GTK_CHECK_MENU_ITEM (menu_item)->active);
 }
 
 /* For the radio buttons */
-static void print_selected(gpointer   callback_data,
-                           guint      callback_action,
-                           GtkWidget *menu_item)
+static void print_selected( gpointer   callback_data,
+                            guint      callback_action,
+                            GtkWidget *menu_item )
 {
    if(GTK_CHECK_MENU_ITEM(menu_item)->active)
-     g_message("Radio button %d selected\n", callback_action);
+     g_message ("Radio button %d selected\n", callback_action);
 }
 
 /* Our menu, an array of GtkItemFactoryEntry structures that defines each menu item */
@@ -50,7 +49,7 @@ static GtkItemFactoryEntry menu_items[] = {
 static gint nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
 /* Returns a menubar widget made from the above menu */
-GtkWidget *get_menubar_menu( GtkWidget  *window)
+static GtkWidget *get_menubar_menu( GtkWidget  *window )
 {
   GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group;
@@ -75,24 +74,26 @@ GtkWidget *get_menubar_menu( GtkWidget  *window)
 }
 
 /* Popup the menu when the popup button is pressed */
-static gint popup_cb(GtkWidget *widget, GdkEvent *event, GtkWidget *menu)
+static gboolean popup_cb( GtkWidget *widget,
+                          GdkEvent *event,
+                          GtkWidget *menu )
 {
    GdkEventButton *bevent = (GdkEventButton *)event;
   
    /* Only take button presses */
-   if(event->type != GDK_BUTTON_PRESS)
+   if (event->type != GDK_BUTTON_PRESS)
      return FALSE;
   
    /* Show the menu */
-   gtk_menu_popup(GTK_MENU(menu), NULL, NULL,
-                  NULL, NULL, bevent->button, bevent->time);
+   gtk_menu_popup (GTK_MENU(menu), NULL, NULL,
+                   NULL, NULL, bevent->button, bevent->time);
   
    return TRUE;
 }
 
 /* Same as with get_menubar_menu() but just return a button with a signal to
    call a popup menu */
-GtkWidget *get_popup_menu(void)
+GtkWidget *get_popup_menu( void )
 {
    GtkItemFactory *item_factory;
    GtkWidget *button, *menu;
@@ -101,21 +102,21 @@ GtkWidget *get_popup_menu(void)
    item_factory = gtk_item_factory_new (GTK_TYPE_MENU, "<main>",
                                         NULL);
    gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
-   menu = gtk_item_factory_get_widget(item_factory, "<main>");
+   menu = gtk_item_factory_get_widget (item_factory, "<main>");
   
    /* Make a button to activate the popup menu */
-   button = gtk_button_new_with_label("Popup");
+   button = gtk_button_new_with_label ("Popup");
    /* Make the menu popup when clicked */
-   g_signal_connect(G_OBJECT(button),
-                    "event",
-                    G_CALLBACK(popup_cb),
-                    (gpointer) menu);
+   g_signal_connect (G_OBJECT(button),
+                     "event",
+                     G_CALLBACK(popup_cb),
+                     (gpointer) menu);
 
    return button;
 }
 
 /* Same again but return an option menu */
-GtkWidget *get_option_menu(void)
+GtkWidget *get_option_menu( void )
 {
    GtkItemFactory *item_factory;
    GtkWidget *option_menu;
@@ -124,7 +125,7 @@ GtkWidget *get_option_menu(void)
    item_factory = gtk_item_factory_new (GTK_TYPE_OPTION_MENU, "<main>",
                                         NULL);
    gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
-   option_menu = gtk_item_factory_get_widget(item_factory, "<main>");
+   option_menu = gtk_item_factory_get_widget (item_factory, "<main>");
 
    return option_menu;
 }
@@ -157,8 +158,8 @@ int main( int argc,
   /* Note: all three menus are separately created, so they are not the
      same menu */
   menubar = get_menubar_menu (window);
-  popup_button = get_popup_menu();
-  option_menu = get_option_menu();
+  popup_button = get_popup_menu ();
+  option_menu = get_option_menu ();
   
   /* Pack it all together */
   gtk_box_pack_start (GTK_BOX (main_vbox), menubar, FALSE, TRUE, 0);
@@ -171,5 +172,5 @@ int main( int argc,
   /* Finished! */
   gtk_main ();
  
-  return(0);
+  return 0;
 }

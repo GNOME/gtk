@@ -1,34 +1,33 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 GtkWidget *hscale, *vscale;
 
-void cb_pos_menu_select( GtkWidget       *item,
-                         GtkPositionType  pos )
+static void cb_pos_menu_select( GtkWidget       *item,
+                                GtkPositionType  pos )
 {
     /* Set the value position on both scale widgets */
     gtk_scale_set_value_pos (GTK_SCALE (hscale), pos);
     gtk_scale_set_value_pos (GTK_SCALE (vscale), pos);
 }
 
-void cb_update_menu_select( GtkWidget     *item,
-                            GtkUpdateType  policy )
+static void cb_update_menu_select( GtkWidget     *item,
+                                   GtkUpdateType  policy )
 {
     /* Set the update policy for both scale widgets */
     gtk_range_set_update_policy (GTK_RANGE (hscale), policy);
     gtk_range_set_update_policy (GTK_RANGE (vscale), policy);
 }
 
-void cb_digits_scale( GtkAdjustment *adj )
+static void cb_digits_scale( GtkAdjustment *adj )
 {
     /* Set the number of decimal places to which adj->value is rounded */
     gtk_scale_set_digits (GTK_SCALE (hscale), (gint) adj->value);
     gtk_scale_set_digits (GTK_SCALE (vscale), (gint) adj->value);
 }
 
-void cb_page_size( GtkAdjustment *get,
-                   GtkAdjustment *set )
+static void cb_page_size( GtkAdjustment *get,
+                          GtkAdjustment *set )
 {
     /* Set the page size and page increment size of the sample
      * adjustment to the value specified by the "Page Size" scale */
@@ -43,7 +42,7 @@ void cb_page_size( GtkAdjustment *get,
     g_signal_emit_by_name(G_OBJECT(set), "changed");
 }
 
-void cb_draw_value( GtkToggleButton *button )
+static void cb_draw_value( GtkToggleButton *button )
 {
     /* Turn the value display on the scale widgets off or on depending
      *  on the state of the checkbutton */
@@ -53,9 +52,9 @@ void cb_draw_value( GtkToggleButton *button )
 
 /* Convenience functions */
 
-GtkWidget *make_menu_item (gchar     *name,
-                           GCallback  callback,
-			   gpointer   data)
+static GtkWidget *make_menu_item ( gchar     *name,
+                                   GCallback  callback,
+                                   gpointer   data )
 {
     GtkWidget *item;
   
@@ -67,7 +66,7 @@ GtkWidget *make_menu_item (gchar     *name,
     return item;
 }
 
-void scale_set_default_values( GtkScale *scale )
+static void scale_set_default_values( GtkScale *scale )
 {
     gtk_range_set_update_policy (GTK_RANGE (scale),
                                  GTK_UPDATE_CONTINUOUS);
@@ -78,7 +77,7 @@ void scale_set_default_values( GtkScale *scale )
 
 /* makes the sample window */
 
-void create_range_controls( void )
+static void create_range_controls( void )
 {
     GtkWidget *window;
     GtkWidget *box1, *box2, *box3;

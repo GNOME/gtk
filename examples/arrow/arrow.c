@@ -1,11 +1,10 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* Create an Arrow widget with the specified parameters
  * and pack it into a button */
-GtkWidget *create_arrow_button( GtkArrowType  arrow_type,
-				GtkShadowType shadow_type )
+static GtkWidget *create_arrow_button( GtkArrowType  arrow_type,
+                                       GtkShadowType shadow_type )
 {
   GtkWidget *button;
   GtkWidget *arrow;

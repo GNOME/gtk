@@ -1,19 +1,18 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* Our callback.
  * The data passed to this function is printed to stdout */
-void callback( GtkWidget *widget,
-               gpointer   data )
+static void callback( GtkWidget *widget,
+                      gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* This callback quits the program */
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-                   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;

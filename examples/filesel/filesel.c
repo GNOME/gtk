@@ -1,10 +1,9 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* Get the selected filename and print it to the console */
-void file_ok_sel( GtkWidget        *w,
-                  GtkFileSelection *fs )
+static void file_ok_sel( GtkWidget        *w,
+                         GtkFileSelection *fs )
 {
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }

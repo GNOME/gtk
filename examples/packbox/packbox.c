@@ -1,12 +1,11 @@
 
-#include <config.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "gtk/gtk.h"
 
-gint delete_event( GtkWidget *widget,
-                   GdkEvent  *event,
-                   gpointer   data )
+static gboolean delete_event( GtkWidget *widget,
+                              GdkEvent  *event,
+                              gpointer   data )
 {
     gtk_main_quit ();
     return FALSE;
@@ -15,11 +14,11 @@ gint delete_event( GtkWidget *widget,
 /* Make a new hbox filled with button-labels. Arguments for the 
  * variables we're interested are passed in to this function. 
  * We do not show the box, but do show everything inside. */
-GtkWidget *make_box( gboolean homogeneous,
-                     gint     spacing,
-		     gboolean expand,
-		     gboolean fill,
-		     guint    padding ) 
+static GtkWidget *make_box( gboolean homogeneous,
+                            gint     spacing,
+                            gboolean expand,
+                            gboolean fill,
+                            guint    padding ) 
 {
     GtkWidget *box;
     GtkWidget *button;

@@ -1,10 +1,9 @@
 
-#include <config.h>
 #include <stdio.h>
 #include <gtk/gtk.h>
    
 /* Create the list of "messages" */
-GtkWidget *create_list( void )
+static GtkWidget *create_list( void )
 {
 
     GtkWidget *scrolled_window;
@@ -58,7 +57,7 @@ when our window is realized. We could also force our window to be
 realized with gtk_widget_realize, but it would have to be part of
 a hierarchy first */
 
-void insert_text (GtkTextBuffer *buffer)
+static void insert_text( GtkTextBuffer *buffer )
 {
    GtkTextIter iter;
  
@@ -76,7 +75,7 @@ void insert_text (GtkTextBuffer *buffer)
 }
    
 /* Create a scrolled text area that displays a "message" */
-GtkWidget *create_text( void )
+static GtkWidget *create_text( void )
 {
    GtkWidget *scrolled_window;
    GtkWidget *view;

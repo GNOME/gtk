@@ -1,5 +1,9 @@
 2005-01-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* examples/*: Re-extract.
+
+	* docs/tutorial/gtk-tut.sgml: Small corrections.
+	
 	* docs/tutorial/gtk-tut.sgml: Some updates for the drawing
 	section.  (#161414, Robert Ancell)
 

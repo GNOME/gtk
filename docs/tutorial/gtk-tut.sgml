@@ -4048,6 +4048,7 @@ int main( int   argc,
 
     /* Create the GtkProgressBar */
     pdata-&gt;pbar = gtk_progress_bar_new ();
+    pdata-&gt;activity_mode = FALSE;
 
     gtk_container_add (GTK_CONTAINER (align), pdata-&gt;pbar);
     gtk_widget_show (pdata-&gt;pbar);
@@ -4214,7 +4215,7 @@ parent.</para></listitem>
 
 <para>Ruler widgets are used to indicate the location of the mouse pointer
 in a given window. A window can have a vertical ruler spanning across
-the width and a horizontal ruler spanning down the height. A small
+the height and a horizontal ruler spanning down the width. A small
 triangular indicator on the ruler shows the exact location of the
 pointer relative to the ruler.</para>
 

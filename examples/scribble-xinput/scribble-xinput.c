@@ -18,14 +18,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* Backing pixmap for drawing area */
 static GdkPixmap *pixmap = NULL;
 
 /* Create a new backing pixmap of the appropriate size */
-static gint
+static gboolean
 configure_event (GtkWidget *widget, GdkEventConfigure *event)
 {
   if (pixmap)
@@ -46,7 +45,7 @@ configure_event (GtkWidget *widget, GdkEventConfigure *event)
 }
 
 /* Redraw the screen from the backing pixmap */
-static gint
+static gboolean
 expose_event (GtkWidget *widget, GdkEventExpose *event)
 {
   gdk_draw_drawable (widget->window,
@@ -101,7 +100,7 @@ print_button_press (GdkDevice *device)
   g_print ("Button press on device '%s'\n", device->name);
 }
 
-static gint
+static gboolean
 button_press_event (GtkWidget *widget, GdkEventButton *event)
 {
   print_button_press (event->device);
@@ -115,7 +114,7 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
   return TRUE;
 }
 
-static gint
+static gboolean
 motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 {
   gdouble x, y;
@@ -177,6 +176,7 @@ create_input_dialog ()
     }
 }
 
+void
 int
 main (int argc, char *argv[])
 {

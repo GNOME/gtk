@@ -1,28 +1,25 @@
 
-#include <config.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 
 GtkWidget *status_bar;
 
-void push_item( GtkWidget *widget,
-                gpointer   data )
+static void push_item( GtkWidget *widget,
+                       gpointer   data )
 {
   static int count = 1;
-  char buff[20];
+  gchar *buff;
 
-  g_snprintf (buff, 20, "Item %d", count++);
+  buff = g_strdup_printf ("Item %d", count++);
   gtk_statusbar_push (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (data), buff);
-
-  return;
+  g_free (buff);
 }
 
-void pop_item( GtkWidget *widget,
-               gpointer   data )
+static void pop_item( GtkWidget *widget,
+                      gpointer   data )
 {
   gtk_statusbar_pop (GTK_STATUSBAR (status_bar), GPOINTER_TO_INT (data));
-  return;
 }
 
 int main( int   argc,

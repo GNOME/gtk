@@ -1,9 +1,8 @@
 
-#include <config.h>
 #include <stdio.h>
 #include <gtk/gtk.h>
 
-static gint button_press (GtkWidget *, GdkEvent *);
+static gboolean button_press (GtkWidget *, GdkEvent *);
 static void menuitem_response (gchar *);
 
 int main( int   argc,
@@ -109,8 +108,8 @@ int main( int   argc,
  * the button that was pressed.
  */
 
-static gint button_press( GtkWidget *widget,
-                          GdkEvent *event )
+static gboolean button_press( GtkWidget *widget,
+                              GdkEvent *event )
 {
 
     if (event->type == GDK_BUTTON_PRESS) {

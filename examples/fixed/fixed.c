@@ -1,5 +1,4 @@
 
-#include <config.h>
 #include <gtk/gtk.h>
 
 /* I'm going to be lazy and use some global variables to
@@ -10,8 +9,8 @@ gint y = 50;
 
 /* This callback function moves the button to a new position
  * in the Fixed container. */
-void move_button( GtkWidget *widget,
-                  GtkWidget *fixed )
+static void move_button( GtkWidget *widget,
+                         GtkWidget *fixed )
 {
   x = (x + 30) % 300;
   y = (y + 50) % 300;

@@ -17,7 +17,6 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <config.h>
 #include <stdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
@@ -50,23 +49,22 @@ enum {
  * GtkCalendar
  */
 
-void calendar_date_to_string (CalendarData *data,
-			      char         *buffer,
-			      gint          buff_len)
+static void calendar_date_to_string( CalendarData *data,
+                                     char         *buffer,
+                                     gint          buff_len )
 {
-  GDate *date;
+  GDate date;
   guint year, month, day;
 
   gtk_calendar_get_date (GTK_CALENDAR (data->window),
 			 &year, &month, &day);
-  date = g_date_new_dmy (day, month + 1, year);
-  g_date_strftime (buffer, buff_len - 1, "%x", date);
+  g_date_set_dmy (&date, day, month + 1, year);
+  g_date_strftime (buffer, buff_len - 1, "%x", &date);
 
-  g_date_free (date);
 }
 
-void calendar_set_signal_strings (char         *sig_str,
-				  CalendarData *data)
+static void calendar_set_signal_strings( char         *sig_str,
+                                         CalendarData *data )
 {
   const gchar *prev_sig;
 
@@ -78,8 +76,8 @@ void calendar_set_signal_strings (char         *sig_str,
   gtk_label_set_text (GTK_LABEL (data->last_sig), sig_str);
 }
 
-void calendar_month_changed (GtkWidget    *widget,
-                             CalendarData *data)
+static void calendar_month_changed( GtkWidget    *widget,
+                                    CalendarData *data )
 {
   char buffer[256] = "month_changed: ";
 
@@ -87,8 +85,8 @@ void calendar_month_changed (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_day_selected (GtkWidget    *widget,
-                            CalendarData *data)
+static void calendar_day_selected( GtkWidget    *widget,
+                                   CalendarData *data )
 {
   char buffer[256] = "day_selected: ";
 
@@ -96,8 +94,8 @@ void calendar_day_selected (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_day_selected_double_click (GtkWidget    *widget,
-                                         CalendarData *data)
+static void calendar_day_selected_double_click ( GtkWidget    *widget,
+                                                 CalendarData *data )
 {
   char buffer[256] = "day_selected_double_click: ";
   guint day;
@@ -115,8 +113,8 @@ void calendar_day_selected_double_click (GtkWidget    *widget,
   }
 }
 
-void calendar_prev_month (GtkWidget    *widget,
-                          CalendarData *data)
+static void calendar_prev_month( GtkWidget    *widget,
+                                 CalendarData *data )
 {
   char buffer[256] = "prev_month: ";
 
@@ -124,8 +122,8 @@ void calendar_prev_month (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_next_month (GtkWidget    *widget,
-                          CalendarData *data)
+static void calendar_next_month( GtkWidget    *widget,
+                                 CalendarData *data )
 {
   char buffer[256] = "next_month: ";
 
@@ -133,8 +131,8 @@ void calendar_next_month (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_prev_year (GtkWidget    *widget,
-                         CalendarData *data)
+static void calendar_prev_year( GtkWidget    *widget,
+                                CalendarData *data )
 {
   char buffer[256] = "prev_year: ";
 
@@ -142,8 +140,8 @@ void calendar_prev_year (GtkWidget    *widget,
   calendar_set_signal_strings (buffer, data);
 }
 
-void calendar_next_year (GtkWidget    *widget,
-                         CalendarData *data)
+static void calendar_next_year( GtkWidget    *widget,
+                                CalendarData *data )
 {
   char buffer[256] = "next_year: ";
 
@@ -152,7 +150,7 @@ void calendar_next_year (GtkWidget    *widget,
 }
 
 
-void calendar_set_flags (CalendarData *calendar)
+static void calendar_set_flags( CalendarData *calendar )
 {
   gint i;
   gint options = 0;
@@ -165,8 +163,8 @@ void calendar_set_flags (CalendarData *calendar)
     gtk_calendar_display_options (GTK_CALENDAR (calendar->window), options);
 }
 
-void calendar_toggle_flag (GtkWidget    *toggle,
-                           CalendarData *calendar)
+static void calendar_toggle_flag( GtkWidget    *toggle,
+                                  CalendarData *calendar)
 {
   gint i;
   gint j;
@@ -180,8 +178,8 @@ void calendar_toggle_flag (GtkWidget    *toggle,
   
 }
 
-void calendar_font_selection_ok (GtkWidget    *button,
-                                 CalendarData *calendar)
+static void calendar_font_selection_ok( GtkWidget    *button,
+                                        CalendarData *calendar )
 {
   GtkRcStyle *style;
   char *font_name;
@@ -202,8 +200,8 @@ void calendar_font_selection_ok (GtkWidget    *button,
   gtk_widget_destroy (calendar->font_dialog);
 }
 
-void calendar_select_font (GtkWidget    *button,
-                           CalendarData *calendar)
+static void calendar_select_font( GtkWidget    *button,
+                                  CalendarData *calendar )
 {
   GtkWidget *window;
 
@@ -233,7 +231,7 @@ void calendar_select_font (GtkWidget    *button,
 
 }
 
-void create_calendar ()
+static void create_calendar( void )
 {
   GtkWidget *window;
   GtkWidget *vbox, *vbox2, *vbox3;

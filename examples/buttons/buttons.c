@@ -1,13 +1,12 @@
 
-#include <config.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
 /* Create a new hbox with an image and a label packed into it
  * and return the box. */
 
-GtkWidget *xpm_label_box( gchar     *xpm_filename,
-                          gchar     *label_text )
+static GtkWidget *xpm_label_box( gchar     *xpm_filename,
+                                 gchar     *label_text )
 {
     GtkWidget *box;
     GtkWidget *label;
@@ -34,8 +33,8 @@ GtkWidget *xpm_label_box( gchar     *xpm_filename,
 }
 
 /* Our usual callback function */
-void callback( GtkWidget *widget,
-               gpointer   data )
+static void callback( GtkWidget *widget,
+                      gpointer   data )
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
