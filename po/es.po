@@ -326,9 +326,6 @@ msgstr ""
 msgid "thin"
 msgstr ""
 
-msgid "regular"
-msgstr "regular"
-
 #: gtk/gtkfontsel.c:1237
 msgid "[M]"
 msgstr "[M]"
