@@ -32,11 +32,16 @@ noinst_PROGRAMS = 		\
 	testpixbuf-scale 	\
 	pixbuf-demo
 
-test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource$(EXEEXT) apple-red.png gnome-foot.png
+if CROSS_COMPILING
+pixbuf_csource=$(GDK_PIXBUF_CSOURCE)
+else
+pixbuf_csource=GDK_PIXBUF_MODULEDIR=$$topdir/gdk-pixbuf/.libs $$topdir/gdk-pixbuf/gdk-pixbuf-csource
+endif
+
+test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource apple-red.png gnome-foot.png
 	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
 	  cd $(srcdir) &&				     \
-	    GDK_PIXBUF_MODULEDIR=$$topdir/gdk-pixbuf/.libs \
-	      $$topdir/gdk-pixbuf/gdk-pixbuf-csource --build-list \
+	      $(pixbuf_csource) --build-list \
 	        apple_red apple-red.png gnome_foot gnome-foot.png >$$curdir/test-inline-pixbufs.h)
 
 testpixbuf_DEPENDENCIES = $(DEPS)
