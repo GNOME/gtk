@@ -4019,7 +4019,7 @@ gtk_text_view_paint (GtkWidget      *widget,
   if (!text_view->onscreen_validated)
     {
       g_warning (G_STRLOC ": somehow some text lines were modified or scrolling occurred since the last validation of lines on the screen - may be a text widget bug.");
-      G_BREAKPOINT ();
+      g_assert_not_reached ();
     }
   
 #if 0

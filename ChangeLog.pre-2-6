@@ -1,3 +1,9 @@
+Fri Mar 22 10:12:10 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_paint): Change
+	G_BREAKPOINT() to g_assert_not_reached ().
+	(#75865, Ashok Venkiteswaran)
+	
 2002-03-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc-win32.c (gdk_win32_gc_set_dashes): Don't clear
