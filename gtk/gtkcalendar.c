@@ -2289,6 +2289,12 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   x = (gint) (event->x);
   y = (gint) (event->y);
   
+  if (event->window == private_data->main_win)
+    gtk_calendar_main_button (widget, event);
+  
+  if (event->type != GDK_BUTTON_PRESS)
+    return FALSE; /* Double-clicks? Triple-clicks? No thanks! */
+
   if (event->window == private_data->arrow_win[ARROW_MONTH_LEFT])
     gtk_calendar_set_month_prev (calendar);
   
@@ -2300,9 +2306,6 @@ gtk_calendar_button_press (GtkWidget	  *widget,
   
   if (event->window == private_data->arrow_win[ARROW_YEAR_RIGHT])
     gtk_calendar_set_year_next (calendar);
-  
-  if (event->window == private_data->main_win)
-    gtk_calendar_main_button (widget, event);
   
   return FALSE;
 }

@@ -1,3 +1,9 @@
+Sat Feb 20 20:04:48 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcalendar.c (gtk_calendar_button_press): increment years and
+	months by two not three on double clicks, patch provided by Nick Lamb
+	<njl98r@ecs.soton.ac.uk>.
+
 Sat Feb 20 19:44:36 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c: added ::modal argument.
