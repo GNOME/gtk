@@ -87,7 +87,7 @@ EXTRA_DIST=x-cursors.xbm
 # Hack to get gdkenumtypes.h built first
 ###########################################
                                        
-$(libgdk_x11_la_OBJECTS): $(top_srcdir)/gdk/gdkenumtypes.h
+$(libgdk_linux_fb_la_OBJECTS): $(top_srcdir)/gdk/gdkenumtypes.h
 
 $(top_srcdir)/gdk/gdkenumtypes.h:
 	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h

@@ -87,7 +87,7 @@ libgdk_win32_la_LIBADD = rc/gdk-win32res.lo
 # Hack to get gdkenumtypes.h built first
 ###########################################
                                        
-$(libgdk_x11_la_OBJECTS): $(top_srcdir)/gdk/gdkenumtypes.h
+$(libgdk_win32_la_OBJECTS): $(top_srcdir)/gdk/gdkenumtypes.h
 
 $(top_srcdir)/gdk/gdkenumtypes.h:
 	@cd $(top_builddir)/gdk && make $(AM_MAKEFLAGS) gdkenumtypes.h

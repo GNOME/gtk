@@ -1,3 +1,7 @@
+Thu Dec  5 16:01:14 2002  Eric Warmenhoven <eric@warmenhoven.org>
+
+	* gdk/{linux-fb,win32}/Makefile.am: Fix gdkenumtypes.h hack
+
 2002-12-06  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkcolor.c: 
