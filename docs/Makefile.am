@@ -99,9 +99,10 @@ FAQ_FILES=html/gtkfaq.html		\
 	html/gtkfaq-5.html       	\
 	html/gtkfaq-6.html       	\
 	html/gtkfaq-7.html		\
-	text/gtkfaq.txt			\
+	text/gtkfaq.txt
 
 EXTRA_DIST =	\
+	gtk-config.1		\
 	texinfo.tex 		\
 	macros.texi		\
 	gtkdocs_fix		\
@@ -122,7 +123,6 @@ EXTRA_DIST =	\
 	html/gtk_tut_packbox1.gif 	\
 	html/gtk_tut_packbox2.gif 	\
 	gtk_tut_table.gif	\
-	gtk-config.1		\
 	html/gdk.html            	\
 	html/gdk_toc.html        	\
 	html/gtk.html            	\

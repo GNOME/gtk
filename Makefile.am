@@ -14,6 +14,7 @@ EXTRA_DIST =	\
 	NEWS.pre-1-0	\
 	ChangeLog.pre-1-0	\
 	README.cvs-commits	\
+	intl/libgettext.h	\
 	examples/Makefile	\
 	examples/README.1ST	\
 	examples/extract.awk	\
@@ -102,7 +103,6 @@ files:
 
 release:
 	rm -rf .deps */.deps
-	cd docs && make distdocs
 	$(MAKE) distcheck
 
 sanity:

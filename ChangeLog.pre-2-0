@@ -1,3 +1,15 @@
+Thu Dec 24 03:16:52 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.10
+
+	* INSTALL:
+	  NEWS:
+	  README:
+	  configure.in:
+	  gtk+.spec:
+	  docs/gtk-config.1:
+	  gtk/gtkfeatures.h.in: version=1.1.10
+
 Wed Dec 23 20:31:40 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c: Fix problem where empty labels were 
