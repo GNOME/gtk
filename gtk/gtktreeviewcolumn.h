@@ -64,6 +64,7 @@ struct _GtkTreeViewColumn
   GtkWidget *arrow;
   GtkWidget *alignment;
   GdkWindow *window;
+  GtkCellEditable *editable_widget;
   gfloat xalign;
   guint property_changed_signal;
 

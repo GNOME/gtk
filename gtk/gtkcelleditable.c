@@ -78,21 +78,24 @@ void
 gtk_cell_editable_start_editing (GtkCellEditable *cell_editable,
 				 GdkEvent        *event)
 {
-}
+  g_return_if_fail (GTK_IS_CELL_EDITABLE (cell_editable));
+  g_return_if_fail (GTK_CELL_EDITABLE_GET_IFACE (cell_editable)->start_editing != NULL);
 
-void
-gtk_cell_editable_stop_editing (GtkCellEditable *cell_editable)
-{
+  (* GTK_CELL_EDITABLE_GET_IFACE (cell_editable)->start_editing) (cell_editable, event);
 }
-
 
 void
 gtk_cell_editable_editing_done (GtkCellEditable *cell_editable)
 {
+  g_return_if_fail (GTK_IS_CELL_EDITABLE (cell_editable));
+
+  g_signal_emit_by_name (cell_editable, "editing_done");
 }
 
 void
 gtk_cell_editable_remove_widget (GtkCellEditable *cell_editable)
 {
+  g_return_if_fail (GTK_IS_CELL_EDITABLE (cell_editable));
 
+  g_signal_emit_by_name (cell_editable, "remove_widget");
 }

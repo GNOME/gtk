@@ -2339,3 +2339,19 @@ gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column)
     gtk_widget_queue_resize (tree_column->tree_view);
 }
 
+void
+_gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
+				     GtkCellEditable   *cell_editable)
+{
+  g_return_if_fail (tree_column->editable_widget == NULL);
+
+  tree_column->editable_widget = cell_editable;
+}
+
+void
+_gtk_tree_view_column_stop_editing (GtkTreeViewColumn *tree_column)
+{
+  g_return_if_fail (tree_column->editable_widget != NULL);
+
+  tree_column->editable_widget = NULL;
+}

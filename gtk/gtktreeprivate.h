@@ -105,6 +105,7 @@ struct _GtkTreeViewPrivate
   gint drag_column_x;
 
   GtkTreeViewColumn *expander_column;
+  GtkTreeViewColumn *edited_column;
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;
@@ -268,6 +269,12 @@ GtkTreePath *_gtk_tree_view_find_path                 (GtkTreeView       *tree_v
 						       GtkRBTree         *tree,
 						       GtkRBNode         *node);
 void         _gtk_tree_view_update_size               (GtkTreeView       *tree_view);
+void         _gtk_tree_view_child_move_resize         (GtkTreeView       *tree_view,
+						       GtkWidget         *widget,
+						       gint               x,
+						       gint               y,
+						       gint               width,
+						       gint               height);
 
 
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
@@ -286,6 +293,10 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 					     GdkRectangle       *background_area,
 					     GdkRectangle       *cell_area,
 					     guint               flags);
+void _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
+					  GtkCellEditable   *editable_widget);
+void _gtk_tree_view_column_stop_editing  (GtkTreeViewColumn *tree_column);
+					 
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

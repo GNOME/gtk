@@ -215,12 +215,12 @@ gtk_tree_sortable_has_default_sort_func (GtkTreeSortable *sortable)
 {
   GtkTreeSortableIface *iface;
 
-  g_return_if_fail (GTK_IS_TREE_SORTABLE (sortable));
+  g_return_val_if_fail (GTK_IS_TREE_SORTABLE (sortable), FALSE);
 
   iface = GTK_TREE_SORTABLE_GET_IFACE (sortable);
 
-  g_return_if_fail (iface != NULL);
-  g_return_if_fail (iface->has_default_sort_func != NULL);
+  g_return_val_if_fail (iface != NULL, FALSE);
+  g_return_val_if_fail (iface->has_default_sort_func != NULL, FALSE);
   
-  (* iface->has_default_sort_func) (sortable);
+  return (* iface->has_default_sort_func) (sortable);
 }

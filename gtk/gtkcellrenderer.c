@@ -443,7 +443,6 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 						       flags);
 }
 
-
 /**
  * gtk_cell_renderer_start_editing:
  * @cell: a #GtkCellRenderer

@@ -76,6 +76,7 @@ enum {
   PROP_EDITABLE,
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
+  PROP_HAS_FRAME,
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
   PROP_WIDTH_CHARS,
@@ -414,7 +415,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 _("FALSE displays the \"invisible char\" instead of the actual text (password mode)"),
                                                          TRUE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+
   g_object_class_install_property (gobject_class,
+                                   PROP_HAS_FRAME,
+                                   g_param_spec_boolean ("has_frame",
+							 _("Has Frame"),
+							 _("FALSE removes outside bevel from entry."),
+                                                         TRUE,
+							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+
+    g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
                                    g_param_spec_unichar ("invisible_char",
 							 _("Invisible character"),
@@ -787,6 +797,10 @@ gtk_entry_set_property (GObject         *object,
       gtk_entry_set_visibility (entry, g_value_get_boolean (value));
       break;
 
+    case PROP_HAS_FRAME:
+      gtk_entry_set_has_frame (entry, g_value_get_boolean (value));
+      break;
+
     case PROP_INVISIBLE_CHAR:
       gtk_entry_set_invisible_char (entry, g_value_get_uint (value));
       break;
@@ -829,6 +843,9 @@ gtk_entry_get_property (GObject         *object,
       break;
     case PROP_VISIBILITY:
       g_value_set_boolean (value, entry->visible);
+      break;
+    case PROP_HAS_FRAME:
+      g_value_set_boolean (value, entry->has_frame);
       break;
     case PROP_INVISIBLE_CHAR:
       g_value_set_uint (value, entry->invisible_char);
@@ -3382,11 +3399,13 @@ gtk_entry_set_has_frame (GtkEntry *entry,
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   setting = (setting != FALSE);
-  
-  if (entry->has_frame != setting)
-    gtk_widget_queue_resize (GTK_WIDGET (entry));
-  
+
+  if (entry->has_frame == setting)
+    return;
+
+  gtk_widget_queue_resize (GTK_WIDGET (entry));
   entry->has_frame = setting;
+  g_object_notify (G_OBJECT (entry), "has_frame");
 }
 
 /**

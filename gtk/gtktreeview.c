@@ -382,7 +382,14 @@ static void     gtk_tree_view_put                       (GtkTreeView      *tree_
 							 gint              y,
 							 gint              width,
 							 gint              height);
-							 
+static void gtk_tree_view_start_editing (GtkTreeView       *tree_view,
+					 GtkTreeViewColumn *column,
+					 GtkCellEditable   *cell_editable,
+					 GdkRectangle      *cell_area,
+					 GdkEvent          *event,
+					 guint              flags);
+static void gtk_tree_view_stop_editing (GtkTreeView       *tree_view);
+
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals[LAST_SIGNAL] = { 0 };
@@ -1547,6 +1554,8 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  GtkTreeIter iter;
 	  GtkCellEditable *cell_editable = NULL;
+	  /* FIXME: get the right flags */
+	  guint flags = 0; 
 
 	  column = list->data;
 
@@ -1589,15 +1598,17 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 						(GdkEvent *)event,
 						path_string,
 						&background_area,
-						&cell_area, 0))
+						&cell_area, flags))
 	    {
 	      if (cell_editable != NULL)
 		{
-		  gtk_tree_view_put (tree_view,
-				     GTK_WIDGET (cell_editable),
-				     cell_area.x, cell_area.y, cell_area.width, cell_area.height);
-		  gtk_cell_editable_start_editing (cell_editable,
-						   (GdkEvent *)event);
+		  gtk_tree_view_stop_editing (tree_view);
+		  gtk_tree_view_start_editing (tree_view,
+					       column,
+					       cell_editable,
+					       &cell_area,
+					       (GdkEvent *)event,
+					       flags);
 		}
 	      g_free (path_string);
 	      gtk_tree_path_free (path);
@@ -4241,6 +4252,41 @@ gtk_tree_view_put (GtkTreeView *tree_view,
     gtk_widget_set_parent_window (child->widget, tree_view->priv->bin_window);
 
   gtk_widget_set_parent (child_widget, GTK_WIDGET (tree_view));
+}
+
+void
+_gtk_tree_view_child_move_resize (GtkTreeView *tree_view,
+				  GtkWidget   *widget,
+				  gint         x,
+				  gint         y,
+				  gint         width,
+				  gint         height)
+{
+  GtkTreeViewChild *child = NULL;
+  GList *list;
+  GdkRectangle allocation;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  for (list = tree_view->priv->children; list; list = list->next)
+    {
+      if (((GtkTreeViewChild *)list->data)->widget == widget)
+	{
+	  child = list->data;
+	  break;
+	}
+    }
+  if (child == NULL)
+    return;
+
+  allocation.x = child->x = x;
+  allocation.y = child->y = y;
+  allocation.width = child->width = width;
+  allocation.height = child->height = height;
+
+  if (GTK_WIDGET_REALIZED (widget))
+    gtk_widget_size_allocate (widget, &allocation);
 }
 
 
@@ -9100,5 +9146,44 @@ gtk_tree_view_search_init (GtkWidget   *entry,
       gtk_object_set_data (GTK_OBJECT (window), "selected-iter",
                            selected_iter);
     }
+}
+
+static void
+gtk_tree_view_remove_widget (GtkCellEditable *cell_editable,
+			     GtkTreeView     *tree_view)
+{
+  g_return_if_fail (tree_view->priv->edited_column != NULL);
+  _gtk_tree_view_column_stop_editing (tree_view->priv->edited_column);
+  gtk_container_remove (GTK_CONTAINER (tree_view),
+			GTK_WIDGET (cell_editable));
+}
+
+static void
+gtk_tree_view_start_editing (GtkTreeView       *tree_view,
+			     GtkTreeViewColumn *column,
+			     GtkCellEditable   *cell_editable,
+			     GdkRectangle      *cell_area,
+			     GdkEvent          *event,
+			     guint              flags)
+{
+  tree_view->priv->edited_column = column;
+  _gtk_tree_view_column_start_editing (column, GTK_CELL_EDITABLE (cell_editable));
+  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+  gtk_tree_view_put (tree_view,
+		     GTK_WIDGET (cell_editable),
+		     cell_area->x, cell_area->y, cell_area->width, cell_area->height);
+  gtk_cell_editable_start_editing (GTK_CELL_EDITABLE (cell_editable),
+				   (GdkEvent *)event);
+  gtk_widget_grab_focus (GTK_WIDGET (cell_editable));
+  g_signal_connect (cell_editable, "remove_widget", G_CALLBACK (gtk_tree_view_remove_widget), tree_view);
+}
+
+static void
+gtk_tree_view_stop_editing (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->edited_column == NULL)
+    return;
+  gtk_cell_editable_editing_done (tree_view->priv->edited_column->editable_widget);
+  gtk_cell_editable_remove_widget (tree_view->priv->edited_column->editable_widget);
 }
 
