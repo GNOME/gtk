@@ -1,15 +1,16 @@
 # Brazilian Portuguese translation of the Gimp Toolkit
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>, 1999.
+# Alexandre Folle de Menezes <afmenez@terra.com.br>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.12\n"
-"POT-Creation-Date: 2002-11-20 20:37+0100\n"
-"PO-Revision-Date: 2002-08-13 16:45-0300\n"
-"Last-Translator: Gustavo Noronha Silva <kov@debian.org>\n"
-"Language-Team: Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>, Debian-"
-"BR <debian-l10n-portuguese@lists.debian.org>\n"
+"POT-Creation-Date: 2002-12-01 16:14-0200\n"
+"PO-Revision-Date: 2002-11-30 15:20-0200\n"
+"Last-Translator: Alexandre Folle de Menezes <afmenez@terra.com.br>\n"
+"Language-Team: Debian-BR <debian-l10n-portuguese@lists.debian.org>, "
+"Brazilian Portuguese <ldp-br@bazar.conectiva.com.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -165,7 +166,7 @@ msgstr "Erro interno no carregador do GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:543
 msgid "Stack overflow"
-msgstr ""
+msgstr "Estouro da pilha"
 
 #: gdk-pixbuf/io-gif.c:603
 msgid "GIF image loader can't understand this image."
@@ -277,9 +278,9 @@ msgstr ""
 "para liberar memória"
 
 #: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
-#, fuzzy, c-format
+#, c-format
 msgid "Unsupported JPEG color space (%s)"
-msgstr "Tipo de ícone não suportado"
+msgstr "Espaço de cor JPEG (%s) não suportado"
 
 #: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
@@ -3258,9 +3259,8 @@ msgid "_Copy"
 msgstr "_Copiar"
 
 #: gtk/gtkstock.c:284
-#, fuzzy
 msgid "Cu_t"
-msgstr "C_ortar"
+msgstr "Cor_tar"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -4521,144 +4521,3 @@ msgstr "Vietnamita (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Método de Entrada X"
-
-#~ msgid "Insufficient memory to load TGA image"
-#~ msgstr "Memória insuficiente para carregar imagem TGA"
-
-#~ msgid "Directories"
-#~ msgstr "Directórios"
-
-#~ msgid "_Directories"
-#~ msgstr "_Directórios"
-
-#~ msgid "Crea_te Dir"
-#~ msgstr "Criar Direc_tório"
-
-#~ msgid ""
-#~ "The directory name \"%s\" contains symbols that are not allowed in "
-#~ "filenames"
-#~ msgstr ""
-#~ "O nome de directório \"%s\" contém símbolos que não são permitidos em "
-#~ "nomes de arquivos"
-
-#~ msgid ""
-#~ "Error creating directory \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Erro ao criar directório \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "Create Directory"
-#~ msgstr "Criar Directório"
-
-#~ msgid "_Directory name:"
-#~ msgstr "Nome _directório:"
-
-#~ msgid "Cancel"
-#~ msgstr "Cancelar"
-
-#~ msgid "Delete"
-#~ msgstr "Apagar"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Save"
-#~ msgstr "Gravar"
-
-#~ msgid "Close"
-#~ msgstr "Fechar"
-
-#~ msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-#~ msgstr ""
-#~ "Incapaz de encontrar arquivo de imagem na pixmap_path: \"%s\" linha %d"
-
-#~ msgid "He_x Value:"
-#~ msgstr "Valor He_x:"
-
-#~ msgid "Slant:"
-#~ msgstr "Inclinação:"
-
-#~ msgid "Resolution X:"
-#~ msgstr "Resolução X:"
-
-#~ msgid "Resolution Y:"
-#~ msgstr "Resolução Y:"
-
-#~ msgid "Charset:"
-#~ msgstr "Conjunto Caracteres:"
-
-#~ msgid "Requested Value"
-#~ msgstr "Valor Pedido"
-
-#~ msgid "Font:"
-#~ msgstr "Fonte:"
-
-#~ msgid "Reset Filter"
-#~ msgstr "Limpar Filtro"
-
-#~ msgid "Metric:"
-#~ msgstr "Métrica:"
-
-#~ msgid "Pixels"
-#~ msgstr "Pixels"
-
-#~ msgid "Requested Font Name:"
-#~ msgstr "Nome de Fonte Pedido:"
-
-#~ msgid "Actual Font Name:"
-#~ msgstr "Fonte de Nome Real:"
-
-#~ msgid "%i fonts available with a total of %i styles."
-#~ msgstr "%i fontes disponíveis com um total de %i estilos."
-
-#~ msgid "Filter"
-#~ msgstr "Filtro"
-
-#~ msgid "Scaled Bitmap"
-#~ msgstr "Bitmap Escalado"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "regular"
-#~ msgstr "regular"
-
-#~ msgid "oblique"
-#~ msgstr "oblíquo"
-
-#~ msgid "reverse italic"
-#~ msgstr "itálico invertido"
-
-#~ msgid "reverse oblique"
-#~ msgstr "oblíquo invertido"
-
-#~ msgid "[M]"
-#~ msgstr "[M]"
-
-#~ msgid "[C]"
-#~ msgstr "[C]"
-
-#~ msgid "The selected font is not available."
-#~ msgstr "A fonte seleccionada não está disponível."
-
-#~ msgid "The selected font is not a valid font."
-#~ msgstr "A fonte seleccionada não é uma fonte válida."
-
-#~ msgid "This is a 2-byte font and may not be displayed correctly."
-#~ msgstr "Esta é uma fonte de 2 bytes e pode não ser mostrada correctamente."
-
-#~ msgid "roman"
-#~ msgstr "romano"
-
-#~ msgid "proportional"
-#~ msgstr "proporcional"
-
-#~ msgid "monospaced"
-#~ msgstr "monoespaçada"
-
-#~ msgid "Font: (Filter Applied)"
-#~ msgstr "Fonte: (Filtro Aplicado)"
-
-#~ msgid "MAX_FONTS exceeded. Some fonts may be missing."
-#~ msgstr "MAX_FONTS foi excedido. Podem faltar algumas fontes."
