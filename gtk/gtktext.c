@@ -3562,24 +3562,24 @@ find_line_containing_point (GtkText* text, guint point,
   gint height;
   
   text->current_line = NULL;
-  
-  if (!text->line_start_cache->next)
-    {
-      /* @@@ Its visible, right? */
-      text->current_line = text->line_start_cache;
-      return;
-    }
-  
-  while ( ( scroll && (text->first_cut_pixels != 0) &&
-	    (CACHE_DATA(text->line_start_cache->next).start.index > point) ) ||
-	  ( (text->first_cut_pixels == 0) &&
-	    (CACHE_DATA(text->line_start_cache).start.index > point) ) )
-    {
-      g_assert (text->line_start_cache->next);
-      scroll_int (text, - LINE_HEIGHT(CACHE_DATA(text->line_start_cache->next)));
-    }
-  
+
   TEXT_SHOW (text);
+
+  /* Scroll backwards until the point is on screen
+   */
+  while (CACHE_DATA(text->line_start_cache).start.index > point)
+    scroll_int (text, - LINE_HEIGHT(CACHE_DATA(text->line_start_cache)));
+
+  /* Now additionally try to make sure that the point is fully on screen
+   */
+  if (scroll)
+    {
+      while (text->first_cut_pixels != 0 && 
+	     text->line_start_cache->next &&
+	     CACHE_DATA(text->line_start_cache->next).start.index > point)
+	scroll_int (text, - LINE_HEIGHT(CACHE_DATA(text->line_start_cache->next)));
+    }
+
   gdk_window_get_size (text->text_area, NULL, &height);
   
   for (cache = text->line_start_cache; cache; cache = cache->next)

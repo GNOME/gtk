@@ -1,3 +1,12 @@
+Sun Feb 21 11:39:06 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (find_line_containing_point): Revise
+	algorithm for scrolling backwards. This one might actually 
+	work with one-line-high	Text widgets.
+
+	* gtk/gtkmain.c: Removed a misplaced comment, a few 
+	formatting cleanups.
+
 Sat Feb 20 20:59:25 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c: hm, set_modal doesn't really work with random

@@ -177,12 +177,6 @@ gtk_init (int	 *argc,
   if (gtk_initialized)
     return;
 
-  /* There is some argument for putting this in a separate
-   * function ... but I don't think that it is much
-   * of a restriction to require that GTK+ be used
-   * single threaded until gtk_init().
-   */
-
 #if	0
   g_set_error_handler (gtk_error);
   g_set_warning_handler (gtk_warning);
@@ -371,7 +365,7 @@ gtk_init (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-  bindtextdomain("gtk+",GTK_LOCALEDIR);
+  bindtextdomain("gtk+", GTK_LOCALEDIR);
 #endif  
 
   /* Initialize the default visual and colormap to be
