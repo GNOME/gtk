@@ -60,7 +60,16 @@ void	   gtk_grab_remove	   (GtkWidget	*widget);
 
 void	   gtk_init_add		   (GtkFunction	 function,
 				    gpointer	 data);
-
+gint       gtk_quit_add            (guint              main_level,
+				    GtkFunction        function,
+				    gpointer           data);
+gint       gtk_quit_add_full       (guint              main_level,
+				    GtkFunction        function,
+				    GtkCallbackMarshal marshal,
+				    gpointer           data,
+				    GtkDestroyNotify   destroy);
+void	   gtk_quit_remove	   (gint	       tag);
+void	   gtk_quit_remove_by_data (gpointer           data);
 gint       gtk_timeout_add_full    (guint32            interval,
 				    GtkFunction        function,
 				    GtkCallbackMarshal marshal,

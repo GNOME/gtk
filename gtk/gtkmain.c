@@ -37,6 +37,7 @@
 /* Private type definitions
  */
 typedef struct _GtkInitFunction	         GtkInitFunction;
+typedef struct _GtkQuitFunction	         GtkQuitFunction;
 typedef struct _GtkTimeoutFunction       GtkTimeoutFunction;
 typedef struct _GtkIdleFunction	         GtkIdleFunction;
 typedef struct _GtkInputFunction         GtkInputFunction;
@@ -46,6 +47,16 @@ struct _GtkInitFunction
 {
   GtkFunction function;
   gpointer data;
+};
+
+struct _GtkQuitFunction
+{
+  gint tag;
+  guint main_level;
+  GtkCallbackMarshal marshal;
+  GtkFunction function;
+  gpointer data;
+  GtkDestroyNotify destroy;
 };
 
 struct _GtkTimeoutFunction
@@ -85,6 +96,8 @@ struct _GtkKeySnooperData
 };
 
 static void  gtk_exit_func		 (void);
+static gint  gtk_quit_invoke_function    (GtkQuitFunction    *quitf);
+static void  gtk_quit_destroy            (GtkQuitFunction    *quitf);
 static void  gtk_timeout_insert		 (GtkTimeoutFunction *timeoutf);
 static void  gtk_handle_current_timeouts (guint32	      the_time);
 static void  gtk_handle_current_idles	 (void);
@@ -117,6 +130,8 @@ static GSList *grabs = NULL;		   /* A stack of unique grabs. The grabbing
 					    */
 static GList *init_functions = NULL;	   /* A list of init functions.
 					    */
+static GList *quit_functions = NULL;	   /* A list of quit functions.
+					    */
 static GList *timeout_functions = NULL;	   /* A list of timeout functions sorted by
 					    *  when the length of the time interval
 					    *  remaining. Therefore, the first timeout
@@ -131,6 +146,7 @@ static GList *current_idles = NULL;
 static GList *current_timeouts = NULL;
 static GMemChunk *timeout_mem_chunk = NULL;
 static GMemChunk *idle_mem_chunk = NULL;
+static GMemChunk *quit_mem_chunk = NULL;
 
 static GSList *key_snoopers = NULL;
 
@@ -283,14 +299,48 @@ gtk_main ()
       (* init->function) (init->data);
       g_free (init);
     }
-  
   g_list_free (functions);
   
   old_done = iteration_done;
   while (!gtk_main_iteration ())
     ;
   iteration_done = old_done;
-  
+
+  if (quit_functions)
+    {
+      GList *reinvoke_list = NULL;
+      GtkQuitFunction *quitf;
+
+      while (quit_functions)
+	{
+	  quitf = quit_functions->data;
+
+	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
+
+	  if ((quitf->main_level &&
+	       quitf->main_level != main_level) ||
+	      gtk_quit_invoke_function (quitf) == FALSE)
+	    {
+	      g_list_free (tmp_list);
+	      gtk_quit_destroy (quitf);
+	    }
+	  else
+	    {
+	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
+	    }
+	}
+      if (reinvoke_list)
+	{
+	  GList *tmp_list;
+	  
+	  tmp_list = g_list_last (reinvoke_list);
+	  if (quit_functions)
+	    quit_functions->prev = tmp_list;
+	  tmp_list->next = quit_functions;
+	  quit_functions = tmp_list;
+	}
+    }
+	      
   main_level--;
 }
 
@@ -796,6 +846,36 @@ gtk_idle_compare (gpointer a, gpointer b)
 }
 
 gint
+gtk_quit_add_full (guint		main_level,
+		   GtkFunction	        function,
+		   GtkCallbackMarshal	marshal,
+		   gpointer		data,
+		   GtkDestroyNotify     destroy)
+{
+  static gint quit_tag = 1;
+  GtkQuitFunction *quitf;
+  
+  g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
+
+  if (!quit_mem_chunk)
+    quit_mem_chunk = g_mem_chunk_new ("quit mem chunk", sizeof (GtkQuitFunction),
+				      512, G_ALLOC_AND_FREE);
+  
+  quitf = g_chunk_new (GtkQuitFunction, quit_mem_chunk);
+  
+  quitf->tag = quit_tag++;
+  quitf->main_level = main_level;
+  quitf->function = function;
+  quitf->marshal = marshal;
+  quitf->data = data;
+  quitf->destroy = destroy;
+
+  quit_functions = g_list_prepend (quit_functions, quitf);
+  
+  return quitf->tag;
+}
+
+gint
 gtk_idle_add_full (gint		        priority,
 		   GtkFunction	        function,
 		   GtkCallbackMarshal	marshal,
@@ -841,6 +921,22 @@ gtk_idle_destroy (GtkIdleFunction *idlef)
   g_mem_chunk_free (idle_mem_chunk, idlef);
 }
 
+static void
+gtk_quit_destroy (GtkQuitFunction *quitf)
+{
+  if (quitf->destroy)
+    quitf->destroy (quitf->data);
+  g_mem_chunk_free (quit_mem_chunk, quitf);
+}
+
+gint
+gtk_quit_add (guint	  main_level,
+	      GtkFunction function,
+	      gpointer	  data)
+{
+  return gtk_quit_add_full (main_level, function, NULL, data, NULL);
+}
+
 gint
 gtk_idle_add (GtkFunction function,
 	      gpointer	  data)
@@ -854,6 +950,54 @@ gtk_idle_add_priority   (gint               priority,
 			 gpointer           data)
 {
   return gtk_idle_add_full (priority, function, NULL, data, NULL);
+}
+
+void
+gtk_quit_remove (gint tag)
+{
+  GtkQuitFunction *quitf;
+  GList *tmp_list;
+  
+  tmp_list = quit_functions;
+  while (tmp_list)
+    {
+      quitf = tmp_list->data;
+      
+      if (quitf->tag == tag)
+	{
+	  quit_functions = g_list_remove_link (quit_functions, tmp_list);
+	  g_list_free (tmp_list);
+	  gtk_quit_destroy (quitf);
+	  
+	  return;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
+}
+
+void
+gtk_quit_remove_by_data (gpointer data)
+{
+  GtkQuitFunction *quitf;
+  GList *tmp_list;
+  
+  tmp_list = quit_functions;
+  while (tmp_list)
+    {
+      quitf = tmp_list->data;
+      
+      if (quitf->data == data)
+	{
+	  quit_functions = g_list_remove_link (quit_functions, tmp_list);
+	  g_list_free (tmp_list);
+	  gtk_quit_destroy (quitf);
+
+	  return;
+	}
+      
+      tmp_list = tmp_list->next;
+    }
 }
 
 void
@@ -912,7 +1056,7 @@ gtk_idle_remove_by_data (gpointer data)
 	{
 	  idle_functions = g_list_remove_link (idle_functions, tmp_list);
 	  g_list_free (tmp_list);
-	  g_mem_chunk_free (idle_mem_chunk, idlef);
+	  gtk_idle_destroy (idlef);
 	  
 	  return;
 	}
@@ -929,7 +1073,7 @@ gtk_idle_remove_by_data (gpointer data)
 	{
 	  current_idles = g_list_remove_link (current_idles, tmp_list);
 	  g_list_free (tmp_list);
-	  g_mem_chunk_free (idle_mem_chunk, idlef);
+	  gtk_idle_destroy (idlef);
 	  
 	  return;
 	}
@@ -1150,6 +1294,26 @@ gtk_handle_timeouts ()
 }
 
 static gint
+gtk_quit_invoke_function (GtkQuitFunction *quitf)
+{
+  if (!quitf->marshal)
+    return quitf->function (quitf->data);
+  else
+    {
+      GtkArg args[1];
+      gint ret_val = FALSE;
+
+      args[0].name = NULL;
+      args[0].type = GTK_TYPE_BOOL;
+      args[0].d.pointer_data = &ret_val;
+      ((GtkCallbackMarshal) quitf->marshal) (NULL,
+					     quitf->data,
+					     0, args);
+      return ret_val;
+    }
+}
+
+static gint
 gtk_idle_invoke_function (GtkIdleFunction *idlef)
 {
   if (!idlef->marshal)
@@ -1158,12 +1322,13 @@ gtk_idle_invoke_function (GtkIdleFunction *idlef)
     {
       GtkArg args[1];
       gint ret_val = FALSE;
+
       args[0].name = NULL;
       args[0].type = GTK_TYPE_BOOL;
       args[0].d.pointer_data = &ret_val;
-      ((GtkCallbackMarshal)idlef->marshal) (NULL,
-					    idlef->data,
-					    0, args);
+      ((GtkCallbackMarshal) idlef->marshal) (NULL,
+					     idlef->data,
+					     0, args);
       return ret_val;
     }
 }
