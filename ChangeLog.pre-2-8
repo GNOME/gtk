@@ -1,3 +1,7 @@
+2004-10-19  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/testicontheme.c: Set the locale, tidy up output.
+
 2004-10-18  Matthias Clasen  <mclasen@redhat.com>
 
 	Fix #155658, Sebastien Bacher:

@@ -2,6 +2,7 @@
 #include <gtk/gtkicontheme.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 static void
 usage (void)
@@ -28,6 +29,7 @@ main (int argc, char *argv[])
   int i;
   
   g_type_init ();
+  setlocale (LC_ALL, "");
 
   if (argc < 3)
     {
@@ -73,29 +75,33 @@ main (int argc, char *argv[])
       g_print ("icon for %s at %dx%d is %s\n", argv[3], size, size,
 	       icon_info ? gtk_icon_info_get_filename (icon_info) : "<none>");
 
-      if (gtk_icon_info_get_embedded_rect (icon_info, &embedded_rect))
+      if (icon_info) 
 	{
-	  g_print ("Embedded rect: %d,%d %dx%d\n",
-		   embedded_rect.x, embedded_rect.y,
-		   embedded_rect.width, embedded_rect.height);
+	  if (gtk_icon_info_get_embedded_rect (icon_info, &embedded_rect))
+	    {
+	      g_print ("Embedded rect: %d,%d %dx%d\n",
+		       embedded_rect.x, embedded_rect.y,
+		       embedded_rect.width, embedded_rect.height);
+	    }
+	  
+	  if (gtk_icon_info_get_attach_points (icon_info, &attach_points, &n_attach_points))
+	    {
+	      g_print ("Attach Points: ");
+	      for (i = 0; i < n_attach_points; i++)
+		g_print ("%d, %d; ",
+			 attach_points[i].x,
+			 attach_points[i].y);
+	      g_free (attach_points);
+	      g_print ("\n");
+	    }
+	  
+	  display_name = gtk_icon_info_get_display_name (icon_info);
+	  
+	  if (display_name)
+	    g_print ("Display name: %s\n", display_name);
+	  
+	  gtk_icon_info_free (icon_info);
 	}
-
-      if (gtk_icon_info_get_attach_points (icon_info, &attach_points, &n_attach_points))
-	{
-	  g_print ("Attach Points: ");
-	  for (i = 0; i < n_attach_points; i++)
-	    g_print ("%d, %d; ",
-		     attach_points[i].x,
-		     attach_points[i].y);
-	  g_free (attach_points);
-	}
-
-      display_name = gtk_icon_info_get_display_name (icon_info);
-
-      if (display_name)
-	g_print ("Display name: %s\n", display_name);
-      
-      gtk_icon_info_free (icon_info);
     }
   else
     {
