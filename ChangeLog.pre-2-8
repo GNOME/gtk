@@ -1,3 +1,10 @@
+Wed Nov 28 20:05:44 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Remove 
+	improper use of g_locale_to_utf8() to convert from
+	latin-1, and do it the easy way by building the string
+	correctly in the first place.
+
 Wed Nov 28 19:34:15 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkproperty-x11.c (gdk_property_change, gdk_property_get): 

@@ -533,7 +533,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 		  g_string_append (gstring, "Backslash");
 		  break;
 		default:
-		  g_string_append_c (gstring, toupper (key->accel_key));
+		  g_string_append_unichar (gstring, toupper (key->accel_key));
 		  break;
 		}
 	    }
@@ -557,13 +557,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
   
   if (!accel_label->accel_string)
     accel_label->accel_string = g_strdup ("");
-
-  utf8 = g_locale_to_utf8 (accel_label->accel_string, -1, NULL, NULL, NULL);
-  if (utf8)
-    {
-      g_free (accel_label->accel_string);
-      accel_label->accel_string = utf8;
-    }
 
   if (accel_label->queue_id)
     {
