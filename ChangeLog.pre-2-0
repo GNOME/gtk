@@ -1,3 +1,14 @@
+2001-07-23  Ron Steinke  <rsteinke@w-link.net>
+
+	* gdk/gdkdraw.c: Added a check on the colormap depth to
+	gdk_drawable_set_colormap()
+	* gdk/x11/gdkimage-x11.c: combination of Mathias Hasselmann's
+	patch to fix colorsel and my patch to fix gdk_drawable_get_image()
+	for pixmaps without visuals (more specifically, bitmaps)
+	* gdk/x11/gdkpixmap-x11.c: Fixed gdk_pixmap_new() so it
+	doesn't set a colormap with the wrong depth
+
+
 2001-07-22  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Replace the

@@ -198,6 +198,8 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
                            GdkColormap *cmap)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (cmap == NULL || gdk_drawable_get_depth (drawable)
+                    == cmap->visual->depth);
 
   GDK_DRAWABLE_GET_CLASS (drawable)->set_colormap (drawable, cmap);
 }
