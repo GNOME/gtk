@@ -3571,7 +3571,7 @@ gdk_event_translate (GdkEvent *event,
 	}
 
       /* If posted without us having keyboard focus, ignore */
-      if (!(xevent->lParam & 0x20000000))
+      if (xevent->wParam != VK_F10 && !(HIWORD (xevent->lParam) & KF_ALTDOWN))
 	break;
 #if 0
       /* don't generate events for just the Alt key */

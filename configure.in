@@ -357,6 +357,8 @@ AM_CONDITIONAL(HAVE_WINTAB, test x$have_wintab = xyes)
 # in case somebody wants to compare
 
 if test "$platform_win32" = "yes"; then
+  AM_CONDITIONAL(XINPUT_GXI, false)
+  AM_CONDITIONAL(XINPUT_XFREE, false)
   gdktarget=win32
   x_libs="-lgdi32 -luser32 -limm32 -lshell32 -lole32 -luuid"
   if test x$have_wintab = xyes; then
@@ -367,7 +369,7 @@ if test "$platform_win32" = "yes"; then
   if test x$enable_ole2_dnd = xyes; then
     AC_DEFINE(USE_OLE2_DND)
   fi
-else
+else # ends at comment "!platform_win32"
 gdktarget=x11
 # Find the X11 include and library directories
 AC_PATH_X

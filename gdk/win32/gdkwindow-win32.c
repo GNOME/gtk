@@ -141,7 +141,7 @@ gdk_window_init (void)
   guint width;
   guint height;
 
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+  SystemParametersInfo (SPI_GETWORKAREA, 0, &r, 0);
   width  = r.right - r.left;
   height = r.bottom - r.top;
 
@@ -1576,6 +1576,12 @@ gdk_window_get_geometry (GdkWindow *window,
 
       if (!GetClientRect (GDK_DRAWABLE_XID (window), &rect))
 	WIN32_API_FAILED ("GetClientRect");
+
+      if (window != _gdk_parent_root)
+	{
+	  ClientToScreen (GDK_WINDOW_HWND (window), &rect);
+	  ScreenToClient (GDK_WINDOW_HWND (gdk_window_get_parent (window)), &rect);
+	}
 
       if (x)
 	*x = rect.left;

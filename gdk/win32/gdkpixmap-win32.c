@@ -25,6 +25,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/* #define VERY_VERBOSE */
+
 #include "config.h"
 
 #include <stdlib.h>
@@ -683,7 +685,7 @@ gdk_xpm_destroy_notify (gpointer data)
   g_free (info);
 }
 
-#if 0
+#ifdef VERY_VERBOSE
 
 /* Very verbose pixmap dumping, both to screen and with g_print() */
 
@@ -951,8 +953,10 @@ _gdk_pixmap_create_from_xpm (GdkWindow   *window,
 	gdk_draw_line (*mask, gc, cnt, ycnt, xcnt - 1, ycnt);
     }
 
-#if 0
-  GDK_NOTE (PIXMAP, showpixmap (*mask));
+#ifdef VERY_VERBOSE
+  GDK_NOTE (PIXMAP, (mask ? (g_print ("mask:\n"),
+			     showpixmap (*mask)) :
+		     (void) 0));
 #endif
  error:
 
@@ -963,8 +967,9 @@ _gdk_pixmap_create_from_xpm (GdkWindow   *window,
     {
       pixmap = ((GdkImagePrivateWin32 *) image)->pixmap;
 
-#if 0
-      GDK_NOTE (PIXMAP, showpixmap (pixmap));
+#ifdef VERY_VERBOSE
+      GDK_NOTE (PIXMAP, (g_print ("pixmap:\n"),
+			 showpixmap (pixmap)));
 #endif
       if (color_info)
 	gdk_drawable_set_data (pixmap, "gdk-xpm", color_info,

@@ -1,3 +1,28 @@
+2002-11-03  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am (SUBDIRS): Do include docs.
+	(EXTRA_DIST): Include config.h.win32.
+
+	* configure.in: Must call AM_CONDITIONAL for XINPUT_GXI and
+	XINPUT_XFREE (setting them to falce) also in the win32 branch.
+	
+	* gdk/gdkdnd.h: Fix lint, put the "extra tokens" inside comment
+	after the #endif.
+
+	* gdk/win32/gdkdrawable-win32.c: A couple of logging fixes.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
+	WM_SYSKEYDOWN, WM_SYSKEYUP: Need to handle F10 specially here in
+	order to be able to handle it normally in the application.
+
+	* gdk/win32/gdkpixmap-win32.c: Minor logging changes.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_get_geometry): Return
+	the window's coordintes relative to the *parent*.
+
+	* gtk/gtkmain.c (gtk_init_check): Don't need to call
+	bind_textdomain_codeset() for glib20, GLib handles that itself.
+
 2002-10-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkfont-win32.c (gdk_font_load_internal): If the font

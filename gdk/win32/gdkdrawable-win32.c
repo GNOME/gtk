@@ -599,7 +599,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
 
   arg.hdc = gdk_gc_predraw (drawable, gc_private, GDK_GC_FOREGROUND|GDK_GC_FONT);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text: %p (%d,%d) \"%.*s\" (len %d)\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_text: %p (%d,%d) \"%.*s\" (len %d)\n",
 			   GDK_DRAWABLE_XID (drawable),
 			   x, y,
 			   (text_length > 10 ? 10 : text_length),
@@ -607,7 +607,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
   
   wcstr = g_new (wchar_t, text_length);
   if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-    g_warning ("gdk_draw_text: gdk_nmbstowchar_ts failed");
+    g_warning ("gdk_win32_draw_text: gdk_nmbstowchar_ts failed");
   else
     {
       arg.total_len = wlen;

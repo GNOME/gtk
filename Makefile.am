@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 
 SRC_SUBDIRS = gdk gtk
-SUBDIRS = po $(SRC_SUBDIRS) build # docs
+SUBDIRS = po $(SRC_SUBDIRS) build docs
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk-1.3-win32-production.pc gtk+-1.3-win32-production.pc
@@ -18,6 +18,7 @@ EXTRA_DIST =	\
 	ChangeLog.pre-1-0	\
 	README.cvs-commits	\
 	README.win32	\
+	config.h.win32	\
 	gtk+-1.3-win32-production.pc.in \
 	gdk-1.3-win32-production.pc.in \
 	gtk+-zip.sh \
