@@ -10,8 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.x\n"
-"POT-Creation-Date: 2003-02-02 10:11-0500\n"
-"PO-Revision-Date: 2003-02-01 18:45+0100\n"
+"POT-Creation-Date: 2003-02-08 12:33+0100\n"
+"PO-Revision-Date: 2003-02-08 12:33+0100\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -2085,7 +2085,7 @@ msgstr "Ordner anlegen"
 
 #: gtk/gtkfilesel.c:1485
 msgid "_Folder name:"
-msgstr "Name des _Ordners:"
+msgstr "_Ordnername:"
 
 #: gtk/gtkfilesel.c:1511
 msgid "C_reate"
