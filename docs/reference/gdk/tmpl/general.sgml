@@ -246,7 +246,7 @@ This overrides any previous keyboard grab by this client.
 @owner_events: if FALSE then all keyboard events are reported with respect to
 @window. If TRUE then keyboard events for this application are reported as
 normal, but keyboard events outside this application are reported with respect
-to @window. Both key press and key release events are alwasy reported,
+to @window. Both key press and key release events are always reported,
 independant of the event mask set by the application.
 @time: a timestamp from a #GdkEvent, or #GDK_CURRENT_TIME if no timestamp is
 available.

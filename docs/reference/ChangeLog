@@ -1,3 +1,11 @@
+2000-04-09  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk/tmpl/gtkmain.sgml: update from Torsten Landschoff
+	<t.landschoff@gmx.net>
+
+	* gdk/tmpl/input_methods.sgml: 
+	* gdk/tmpl/general.sgml: fixed typos.
+
 Tue Mar 14 14:17:46 2000  Raph Levien  <raph@acm.org>
 
 	* gdk/tmpl/rgb.sgml: Better explanation of gdk_rgb_set_min_colors.

@@ -94,7 +94,7 @@ pre-edit flags and the status flags.
 </para>
 <para>
 The pre-edit flags specify how pre-editing data is displayed.
-For example, this could display the text being typed in in the phonetic
+For example, this could display the text being typed in the phonetic
 alphabet before it is composed and inserted as an ideograph.
 </para>
 <para>
@@ -198,7 +198,7 @@ This should be called when the widget receives the input focus, typically in
 the widget's focus_in_event method.
 </para>
 
-@ic: a #GdkInputContext.
+@ic: a #GdkIC.
 @window: the #GdkWindow which will be receiving the key press events.
 
 
