@@ -1,3 +1,7 @@
+Mon Apr 13 18:03:54 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* README: update address info to gtk.org for ftp and web sites.
+
 1998-04-13  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gdk/gdkregion.c (gdk_region_polygon): New function; wrapper for

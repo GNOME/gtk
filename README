@@ -7,10 +7,10 @@ System. It is designed to be small, efficient, and flexible. GTK+ is
 written in C with a very object-oriented approach.
 
 The official ftp site is:
-  ftp://ftp.gimp.org/pub/gtk
+  ftp://ftp.gtk.org/pub/gtk
 
 The official web site is:
-  http://www.gimp.org/gtk
+  http://www.gtk.org/
 
 A mailing list is located at:
   gtk-list@redhat.com
