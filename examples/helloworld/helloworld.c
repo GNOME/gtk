@@ -56,7 +56,7 @@ int main (int argc, char *argv[])
 
     /* here we connect the "destroy" event to a signal handler.
      * This event occurs when we call gtk_widget_destroy() on the window,
-     * or if we return 'TRUE' in the "delete_event" callback. */
+     * or if we return 'FALSE' in the "delete_event" callback. */
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
                         GTK_SIGNAL_FUNC (destroy), NULL);
 

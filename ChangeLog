@@ -1,3 +1,9 @@
+Mon Apr  6 08:08:49 BST 1998  Tony Gale <gale@gtk.org>
+
+	* docs/gtk_tut.sgml examples/helloworld/helloworld.c:
+	  Change a missed "delete_event" return value description
+	  from TRUE to FALSE.
+
 Mon Apr  6 00:28:28 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkcontainer.c (gtk_container_focus_tab): Make
