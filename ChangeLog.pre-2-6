@@ -1,3 +1,13 @@
+1999-07-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcursor.c (gdk_cursor_new_from_pixmap): Implement
+ 	it. Obscure bit manipulation needed.
+
+	* gdk/win32/gdkevents.c: Logging.
+	
+	* gtk/gtkthemes.c (gtk_theme_engine_get): (Win32) Use new DLL naming
+	style (file name include compiler name) for theme engines.
+
 1999-07-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdraw.c (gdk_draw_pixmap): Less logging verbiage.

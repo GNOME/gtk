@@ -2475,11 +2475,18 @@ gdk_event_translate (GdkEvent *event,
       if (LOWORD (xevent->lParam) != HTCLIENT)
 	break;
       if (p_grab_window != NULL && p_grab_cursor != NULL)
-	SetCursor (p_grab_cursor);
+	{
+	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n", p_grab_cursor));
+	  SetCursor (p_grab_cursor);
+	}
       else if (window_private
 	       && !window_private->destroyed
 	       && window_private->xcursor)
-	SetCursor (window_private->xcursor);
+	{
+	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n",
+				     window_private->xcursor));
+	  SetCursor (window_private->xcursor);
+	}
       *ret_val_flagp = TRUE;
       *ret_valp = FALSE;
       break;

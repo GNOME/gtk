@@ -83,7 +83,19 @@ gtk_theme_engine_get (gchar *name)
        GModule *library;
       
 #ifndef __EMX__
+#if defined (NATIVE_WIN32) && defined (__GNUC__)
+       {
+	  /* When built with gcc on Win32, use DLLs named *.gcc.dll,
+	   * because MSVC-compiled GTK code is not fully binary compatible
+	   * with gcc-compiled.
+	   */
+	  gchar *gccname = g_strconcat (name, ".gcc", NULL);
+	  fullname = g_module_build_path (NULL, gccname);
+	  g_free (gccname);
+       }
+#else
        fullname = g_module_build_path (NULL, name);
+#endif
 #else
        fullname = g_malloc (13);
        gen_8_3_dll_name(name, fullname);
