@@ -84,10 +84,6 @@ void		 gtk_tooltips_set_colors (GtkTooltips     *tooltips,
 					  GdkColor	  *foreground);
 GtkTooltipsData* gtk_tooltips_data_get	 (GtkWidget	  *widget);
 
-/* discouraged old function name
- */
-#define	gtk_tooltips_set_tips(t,w,x)	gtk_tooltips_set_tip(t,w,x,NULL)
-
 
 
 #ifdef __cplusplus
