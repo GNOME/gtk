@@ -97,7 +97,7 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-scale.c	\
 	gdk-pixbuf-util.c
 
-libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0 $(EXTRA_GNOME_LIBS)
+libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0 $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 libgdk_pixbuf_la_LIBADD = pixops/libpixops.la
 
 libgdk_pixbufinclude_HEADERS =	\
