@@ -1358,12 +1358,8 @@ gtk_text_tag_set_property (GObject      *object,
 static void
 get_color_arg (GValue *value, GdkColor *orig)
 {
-  GdkColor *color;
-
-  color = g_new (GdkColor, 1);
-  *color = *orig;
   g_value_init (value, GDK_TYPE_COLOR);
-  g_value_set_boxed (value, color);
+  g_value_set_boxed (value, orig);
 }
 
 static void
