@@ -3513,8 +3513,8 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
             event->type == GDK_3BUTTON_PRESS) &&
            event->button == 1)
     {
-      GtkTextIter start, end;
-
+      GtkTextIter start, end;      
+      
       /* End the selection drag, otherwise we'd clear the new
        * word/line selection on button release
        */
@@ -3560,12 +3560,28 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
             }
         }
 
-      gtk_text_buffer_move_mark (get_buffer (text_view),
-                                 gtk_text_buffer_get_selection_bound (get_buffer (text_view)),
-                                 &start);
-      gtk_text_buffer_move_mark (get_buffer (text_view),
-                                 gtk_text_buffer_get_insert (get_buffer (text_view)),
-                                 &end);
+      if (event->state & GDK_SHIFT_MASK)
+        {
+          /* Take union of old and new selection */
+          GtkTextIter old_start, old_end;
+          
+          gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                                &old_start, &old_end);
+
+          gtk_text_iter_order (&start, &old_start);
+          gtk_text_iter_order (&old_end, &end);
+
+          /* Now start is the first of the starts, and end is the
+           * last of the ends
+           */
+        }
+      
+      gtk_text_buffer_move_mark_by_name (get_buffer (text_view),
+                                         "selection_bound",
+                                         &start);
+      gtk_text_buffer_move_mark_by_name (get_buffer (text_view),
+                                         "insert",
+                                         &end);
 
       text_view->just_selected_element = TRUE;
       
@@ -4590,14 +4606,45 @@ gtk_text_view_start_selection_drag (GtkTextView       *text_view,
                                     GdkEventButton    *button)
 {
   GtkTextIter newplace;
-
+  GtkTextBuffer *buffer;
+  
   g_return_if_fail (text_view->selection_drag_handler == 0);
 
   gtk_grab_add (GTK_WIDGET (text_view));
 
+  buffer = get_buffer (text_view);
+  
   newplace = *iter;
 
-  gtk_text_buffer_place_cursor (get_buffer (text_view), &newplace);
+  if (button->state & GDK_SHIFT_MASK)
+    {
+      /* Extend selection */
+      GtkTextIter start, end;
+
+      gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+
+      if (gtk_text_iter_compare (&newplace, &start) <= 0)
+        {
+          gtk_text_buffer_move_mark_by_name (buffer, "insert",
+                                             &newplace);
+
+          gtk_text_buffer_move_mark_by_name (buffer, "selection_bound",
+                                             &end);
+        }
+      else if (gtk_text_iter_compare (&newplace, &end) >= 0)
+        {
+          gtk_text_buffer_move_mark_by_name (buffer, "insert",
+                                             &newplace);
+
+          gtk_text_buffer_move_mark_by_name (buffer, "selection_bound",
+                                             &start);
+        }
+    }
+  else
+    {
+      /* Replace selection */
+      gtk_text_buffer_place_cursor (buffer, &newplace);
+    }
 
   text_view->selection_drag_handler = gtk_signal_connect (GTK_OBJECT (text_view),
                                                           "motion_notify_event",
