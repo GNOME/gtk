@@ -535,7 +535,7 @@ gtk_init (int *argc, char ***argv)
 {
   if (!gtk_init_check (argc, argv))
     {
-      g_warning ("cannot open display: %s", gdk_get_display ());
+      g_error ("cannot open display: %s", gdk_get_display_arg_name ());
       exit(1);
     }
 }

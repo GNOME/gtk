@@ -849,6 +849,12 @@ gdk_get_display (void)
   return gdk_x11_display_impl_get_display_name(DEFAULT_GDK_DISPLAY);
 }
 
+gchar *
+gdk_get_display_arg_name(void)
+{
+return gdk_display_name;
+}
+
 gint 
 gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 		 XEvent *event_send)

@@ -43,6 +43,7 @@ typedef enum {
 struct _GdkWindowQueueItem
 {
   GdkWindow *window;
+  GdkDisplay *display;
   gulong serial;
   GdkWindowQueueType type;
   union {
@@ -677,6 +678,7 @@ gdk_window_queue_translation (GdkWindow *window,
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->window = window;
+  item->display = GDK_WINDOW_DISPLAY(window);
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   item->type = GDK_WINDOW_QUEUE_TRANSLATE;
   item->u.translate.dx = dx;
@@ -692,6 +694,7 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow *window,
 {
   GdkWindowQueueItem *item = g_new (GdkWindowQueueItem, 1);
   item->window = window;
+  item->display = GDK_WINDOW_DISPLAY(window);
   item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   item->type = GDK_WINDOW_QUEUE_ANTIEXPOSE;
   item->u.antiexpose.area = area;
@@ -711,6 +714,7 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
   GSList *tmp_list = translate_queue;
+  GdkDisplay *display = gdk_window_get_display(window);
 
   impl = GDK_WINDOW_IMPL_X11 (GDK_WINDOW_OBJECT (window)->impl);
   
@@ -719,7 +723,8 @@ _gdk_window_process_expose (GdkWindow    *window,
       GdkWindowQueueItem *item = tmp_list->data;
       tmp_list = tmp_list->next;
 
-      if (serial < item->serial)
+      if(display == item->display){
+        if (serial < item->serial)
 	{
 	  if (item->window == window)
 	    {
@@ -729,19 +734,23 @@ _gdk_window_process_expose (GdkWindow    *window,
 		gdk_region_subtract (invalidate_region, item->u.antiexpose.area);
 	    }
 	}
-      else
+        else
 	{
 	  GSList *tmp_link = translate_queue;
 	  
 	  translate_queue = g_slist_remove_link (translate_queue, translate_queue);
-	  gdk_drawable_unref (item->window);
+	  
+	  /* FIXME window and area get unref somewhere else (Where !?)
+	   * gdk_drawable_unref (item->window);
 
 	  if (item->type == GDK_WINDOW_QUEUE_ANTIEXPOSE)
 	    gdk_region_destroy (item->u.antiexpose.area);
+	  */
 	  
-	  g_free (item);
-	  g_slist_free_1 (tmp_link);
+	    g_free (item);
+	    g_slist_free_1 (tmp_link);
 	}
+      }
     }
 
   clip_region = gdk_region_rectangle (&impl->position_info.clip_rect);

@@ -27,6 +27,7 @@ endif
 noinst_PROGRAMS = 		\
 	simple			\
 	testmultidisplay	\
+	testmultidisplaysimple	\
 	testmultiscreen		\
 	testcalendar		\
 	testdnd			\
@@ -45,6 +46,7 @@ noinst_PROGRAMS = 		\
 
 simple_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
+testmultidisplaysimple_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testdnd_DEPENDENCIES = $(TEST_DEPS)
@@ -64,6 +66,7 @@ treestoretest_DEPENDENCIES = $(TEST_DEPS)
 
 simple_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
+testmultidisplaysimple_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testcalendar_LDADD = $(LDADDS)
 testdnd_LDADD = $(LDADDS)

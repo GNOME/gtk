@@ -947,7 +947,7 @@ gtk_entry_realize (GtkWidget *widget)
   
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
-  attributes.cursor = gdk_cursor_new (GDK_XTERM);
+  attributes.cursor = gdk_cursor_new_for_screen (GDK_XTERM, widget->screen);
   attributes_mask |= GDK_WA_CURSOR;
 
   entry->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
@@ -3257,6 +3257,9 @@ gtk_entry_do_popup (GtkEntry       *entry,
     gtk_widget_destroy (entry->popup_menu);
   
   entry->popup_menu = gtk_menu_new ();
+  gtk_widget_set_screen(entry->popup_menu, gtk_widget_get_screen(entry));
+  gtk_widget_set_screen(((GtkMenu*)entry->popup_menu)->toplevel, gtk_widget_get_screen(entry));
+
 
   gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
                              GTK_WIDGET (entry),
@@ -3278,6 +3281,8 @@ gtk_entry_do_popup (GtkEntry       *entry,
   menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
   gtk_widget_show (menuitem);
   submenu = gtk_menu_new ();
+  gtk_widget_set_screen(submenu, gtk_widget_get_screen(entry));
+  gtk_widget_set_screen(((GtkMenu*)submenu)->toplevel, gtk_widget_get_screen(entry));
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
 
   gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);

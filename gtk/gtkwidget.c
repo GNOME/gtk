@@ -3381,7 +3381,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   }
   /* propagate the screen information */
   gtk_widget_set_screen(widget,gtk_widget_get_screen(parent));
-  g_object_notify (G_OBJECT (widget), "screen");
+
 }
 
 /*****************************************
@@ -4193,6 +4193,12 @@ void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
   /* need to check if the style is Ok for the widget's display */
   if(GTK_WIDGET_GET_DISPLAY(widget) != widget->style->display)
     widget->style = gtk_widget_peek_style(widget);
+  g_object_notify (G_OBJECT (widget), "screen");
+  if (GTK_IS_CONTAINER (widget))
+     gtk_container_forall (GTK_CONTAINER (widget),
+			  (GtkCallback) gtk_widget_set_screen,
+			   screen);
+
 }
 /*************************************************************
  * gtk_widget_get_screen :

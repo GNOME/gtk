@@ -44,6 +44,8 @@ GdkDisplay * gdk_x11_display_manager_open_display (GdkDisplayManager * dpy_mgr,
 						gchar *display_name){
     GdkDisplay * dpy;
     dpy = gdk_x11_display_impl_display_new(display_name);
+    if(!dpy)
+        return NULL;
 
     if(dpy_mgr->open_displays == NULL)
 	gdk_x11_display_manager_set_default(dpy_mgr,dpy);

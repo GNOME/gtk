@@ -62,8 +62,7 @@ GdkDisplay *	gdk_x11_display_impl_display_new(gchar * display_name)
   dpy_impl = GDK_DISPLAY_IMPL_X11(dpy);
 
   if ((dpy_impl->xdisplay = XOpenDisplay(display_name)) == NULL){
-	g_message("Error: Can't open display: %s",display_name);
-	exit(1);
+	return NULL;
   }
 
   scr_num = ScreenCount(dpy_impl->xdisplay);
