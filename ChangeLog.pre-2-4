@@ -1,3 +1,8 @@
+2002-01-16  Padraig O'Briain <padraig.obriain@sun.com>
+
+	* gtk/gtkmenushell.c (gtk_real_menu_shell_move_current):
+	Avoid unexpected warning message when navigating menu (#68517)
+
 2002-01-15  Jody Goldberg <jody@gnome.org>
 
 	* gtk/gtklayout.c (gtk_layout_realize) : It is possible that a

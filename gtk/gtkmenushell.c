@@ -981,8 +981,15 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
 	  while (parent_menu_shell && 
 		 (GTK_MENU_SHELL_GET_CLASS (parent_menu_shell)->submenu_placement ==
 		  GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement))
-	    parent_menu_shell = GTK_MENU_SHELL (parent_menu_shell->parent_menu_shell);
-	  
+            {
+              GtkWidget *tmp_widget = parent_menu_shell->parent_menu_shell;
+
+              if (tmp_widget)
+                parent_menu_shell = GTK_MENU_SHELL (tmp_widget);
+              else
+                parent_menu_shell = NULL;
+            }
+
 	  if (parent_menu_shell)
 	    {
 	      gtk_menu_shell_move_selected (parent_menu_shell, 1);
