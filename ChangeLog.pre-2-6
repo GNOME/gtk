@@ -1,3 +1,9 @@
+Tue May  7 15:50:51 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontextsimple.c (gtk_im_context_simple_filter_keypress):
+	Don't filter control-shift+[non-hex]. 
+	(#80252, reported by Nalin Dahyabhai)
+
 Thu May 16 14:51:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes for #78258
