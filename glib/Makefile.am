@@ -18,23 +18,12 @@ libglib_la_SOURCES = \
 		gutils.c
 
 include_HEADERS = \
-		glib.h
+		glib.h \
+		glibconfig.h
 
 libglib_la_LDFLAGS = -version-info 1:0:0
 
 INCLUDES = -I$(top_srcdir)
-
-BUILT_SOURCES = glib.h
-
-glib.h: glibconfig.h glib_pre1.h glib_pre2.h
-	$(srcdir)/makeglib_h $(srcdir)/glib_pre1.h \
-	$(top_builddir)/glibconfig.h \
-	$(srcdir)/glib_pre2.h > $@
-
-EXTRA_DIST = \
-		glib_pre1.h \
-		glib_pre2.h \
-		makeglib_h
 
 noinst_PROGRAMS = testglib
 testglib_LDADD = $(top_builddir)/libglib.la
@@ -48,5 +37,3 @@ files:
 
 release:
 	$(MAKE) dist distdir=$(PACKAGE)`date +"%y%m%d"`
-
-$(DEP_FILES) : $(BUILT_SOURCES)
