@@ -1,3 +1,12 @@
+Thu May  4 02:04:46 2000  Tim Janik  <timj@gtk.org>
+
+        * configure.in (STRIP_DUMMY): some Make 3.79 $(strip ) versions are
+        broken and require an empty arg, give it to them.
+
+Fri Apr 28 19:34:32 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklabel.h: indentation fixes.
+
 2000-05-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_arc): Don't try to

@@ -171,12 +171,14 @@ AC_MSG_CHECKING(whether make is GNU Make)
 STRIP_BEGIN=
 STRIP_END=
 if $ac_make --version 2>/dev/null | grep '^GNU Make ' >/dev/null ; then
-	STRIP_BEGIN='$(strip'
+	STRIP_BEGIN='$(strip $(STRIP_DUMMY)'
 	STRIP_END=')'
 	AC_MSG_RESULT(yes)
 else
 	AC_MSG_RESULT(no)
 fi
+STRIP_DUMMY=
+AC_SUBST(STRIP_DUMMY)
 AC_SUBST(STRIP_BEGIN)
 AC_SUBST(STRIP_END)
 
@@ -254,12 +256,12 @@ if test x$with_glib = x ; then
     AC_MSG_ERROR([
 *** GLIB 1.3.0 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
-    gmodule gthread)
+    gobject gmodule gthread)
 
   # we do not want to make all gtk progs to link to thread libraries.
-  glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
+  glib_cflags=`$GLIB_CONFIG glib gobject gmodule --cflags`
   glib_thread_cflags="$GLIB_CFLAGS"
-  glib_libs=`$GLIB_CONFIG glib gmodule --libs`
+  glib_libs=`$GLIB_CONFIG glib gobject gmodule --libs`
   glib_thread_libs="$GLIB_LIBS"
   GLIB_LIBS="$glib_libs"
   GLIB_DEPLIBS="$glib_libs"
@@ -274,10 +276,10 @@ else
   fi
 
   # For use in gtk-config
-  glib_cflags=`$GLIB_CONFIG --cflags gmodule`
-  glib_thread_cflags=`$GLIB_CONFIG --cflags gmodule gthread`
-  glib_libs=`$GLIB_CONFIG --libs gmodule`
-  glib_thread_libs=`$GLIB_CONFIG --libs gmodule gthread`
+  glib_cflags=`$GLIB_CONFIG --cflags gobject gmodule`
+  glib_thread_cflags=`$GLIB_CONFIG --cflags gobject gmodule gthread`
+  glib_libs=`$GLIB_CONFIG --libs gobject gmodule`
+  glib_thread_libs=`$GLIB_CONFIG --libs gobject gmodule gthread`
 
   glib_release=`$GLIB_CONFIG --version | sed 's%\\.[[0-9]]*$%%'`
 
@@ -292,7 +294,7 @@ else
   esac
 
   GLIB_CFLAGS="-I$glib_dir -I$glib_dir/gmodule"
-  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgmodule.la"
+  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgobject.la $glib_dir/gmodule/libgmodule.la"
   GLIB_DEPLIBS=
 
   AC_SUBST(GLIB_CFLAGS)

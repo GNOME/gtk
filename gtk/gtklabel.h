@@ -69,24 +69,23 @@ struct _GtkLabelClass
   GtkMiscClass parent_class;
 };
 
-GtkType    gtk_label_get_type      (void);
-GtkWidget *gtk_label_new           (const char       *str);
-void       gtk_label_set_text      (GtkLabel         *label,
-                                    const char       *str);
-void       gtk_label_set_justify   (GtkLabel         *label,
-                                    GtkJustification  jtype);
-void       gtk_label_set_pattern   (GtkLabel         *label,
-                                    const gchar      *pattern);
-void       gtk_label_set_line_wrap (GtkLabel         *label,
-                                    gboolean          wrap);
-gchar *    gtk_label_get_text      (GtkLabel         *label);
+GtkType     gtk_label_get_type      (void);
+GtkWidget * gtk_label_new           (const char       *str);
+void        gtk_label_set_text      (GtkLabel         *label,
+				     const char       *str);
+void        gtk_label_set_justify   (GtkLabel         *label,
+				     GtkJustification  jtype);
+void        gtk_label_set_pattern   (GtkLabel         *label,
+				     const gchar      *pattern);
+void        gtk_label_set_line_wrap (GtkLabel         *label,
+				     gboolean          wrap);
+gchar *     gtk_label_get_text      (GtkLabel         *label);
 
 /* Convenience function to set the name and pattern by parsing
  * a string with embedded underscores, and return the appropriate
  * key symbol for the accelerator.
  */
-
-guint      gtk_label_parse_uline    (GtkLabel         *label,
+guint       gtk_label_parse_uline   (GtkLabel         *label,
 				     const gchar      *string);
 
 #ifndef	GTK_DISABLE_COMPAT_H
