@@ -1161,8 +1161,8 @@ gtk_range_button_press (GtkWidget      *widget,
 
       stepper_area = get_area (range, range->layout->mouse_location);
       gtk_widget_queue_draw_area (widget,
-                                  stepper_area->x,
-                                  stepper_area->y,
+                                  widget->allocation.x + stepper_area->x,
+                                  widget->allocation.y + stepper_area->y,
                                   stepper_area->width,
                                   stepper_area->height);
 

@@ -3789,9 +3789,6 @@ real_unselect_row (GtkCList *clist,
 static void
 real_select_all (GtkCList *clist)
 {
-  GList *list;
-  gint i;
- 
   g_return_if_fail (GTK_IS_CLIST (clist));
 
   if (gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist))
@@ -6138,6 +6135,64 @@ vadjustment_value_changed (GtkAdjustment *adjustment,
   return;
 }
 
+typedef struct
+{
+  GdkWindow *window;
+  gint dx;
+} ScrollData;
+
+/* The window to which widget->window is relative */
+#define ALLOCATION_WINDOW(widget)		\
+   (GTK_WIDGET_NO_WINDOW (widget) ?		\
+    (widget)->window :                          \
+     gdk_window_get_parent ((widget)->window))
+
+static void
+adjust_allocation_recurse (GtkWidget *widget,
+			   gpointer   data)
+{
+  ScrollData *scroll_data = data;
+  
+  if (!GTK_WIDGET_REALIZED (widget))
+    {
+      if (GTK_WIDGET_VISIBLE (widget))
+	{
+	  GdkRectangle tmp_rectangle = widget->allocation;
+	  tmp_rectangle.x += scroll_data->dx;
+      
+	  gtk_widget_size_allocate (widget, &tmp_rectangle);
+	}
+    }
+  else
+    {
+      if (ALLOCATION_WINDOW (widget) == scroll_data->window)
+	{
+	  widget->allocation.x += scroll_data->dx;
+
+	  if (GTK_IS_CONTAINER (widget))
+	    gtk_container_forall (GTK_CONTAINER (widget),
+				  adjust_allocation_recurse,
+				  data);
+	}
+    }
+}
+
+static void
+adjust_allocation (GtkWidget *widget,
+		   gint       dx)
+{
+  ScrollData scroll_data;
+
+  if (GTK_WIDGET_REALIZED (widget))
+    scroll_data.window = ALLOCATION_WINDOW (widget);
+  else
+    scroll_data.window = NULL;
+    
+  scroll_data.dx = dx;
+  
+  adjust_allocation_recurse (widget, &scroll_data);
+}
+
 static void
 hadjustment_value_changed (GtkAdjustment *adjustment,
 			   gpointer       data)
@@ -6164,32 +6219,14 @@ hadjustment_value_changed (GtkAdjustment *adjustment,
   dx = -value - clist->hoffset;
 
   if (GTK_WIDGET_REALIZED (clist))
-    {
-      /* move the column buttons and resize windows */
-      for (i = (dx<0)? 0 : clist->columns-1; i >= 0 && i < clist->columns; i += (dx<0)? 1 : -1)
-        {
-          if (clist->column[i].button)
-            {
-              clist->column[i].button->allocation.x -= value + clist->hoffset;
-              
-              if (clist->column[i].button->window)
-                {
-                  gdk_window_move (clist->column[i].button->window,
-                                   clist->column[i].button->allocation.x,
-                                   clist->column[i].button->allocation.y);
-                  
-                  if (clist->column[i].window)
-                    gdk_window_move (clist->column[i].window,
-                                     clist->column[i].button->allocation.x +
-                                     clist->column[i].button->allocation.width - 
-                                     (DRAG_WIDTH / 2), 0); 
-                }
-            }
-        }
-    }
+    gdk_window_scroll (clist->title_window, dx, 0);
+
+  /* adjust the column button's allocations */
+  for (i = 0; i < clist->columns; i++)
+    if (clist->column[i].button)
+      adjust_allocation (clist->column[i].button, dx);
 
   clist->hoffset = -value;
-
 
   if (GTK_WIDGET_DRAWABLE (clist))
     {
