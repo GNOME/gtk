@@ -1060,52 +1060,6 @@ gdk_event_send_client_message (GdkEvent *event, guint32 xid)
   return gdk_send_xevent (xid, False, NoEventMask, &sev);
 }
 
-static RETSIGTYPE
-gdk_signal (int sig_num)
-{
-  static int caught_fatal_sig = 0;
-  char *sig;
-  
-  if (caught_fatal_sig)
-    kill (getpid (), sig_num);
-  caught_fatal_sig = 1;
-  
-  switch (sig_num)
-    {
-    case SIGHUP:
-      sig = "sighup";
-      break;
-    case SIGINT:
-      sig = "sigint";
-      break;
-    case SIGQUIT:
-      sig = "sigquit";
-      break;
-    case SIGBUS:
-      sig = "sigbus";
-      break;
-    case SIGSEGV:
-      sig = "sigsegv";
-      break;
-    case SIGPIPE:
-      sig = "sigpipe";
-      break;
-    case SIGTERM:
-      sig = "sigterm";
-      break;
-    default:
-      sig = "unknown signal";
-      break;
-    }
-  
-  g_message ("\n** ERROR **: %s caught", sig);
-#ifdef G_ENABLE_DEBUG
-  abort ();
-#else /* !G_ENABLE_DEBUG */
-  gdk_exit (1);
-#endif /* !G_ENABLE_DEBUG */
-}
-
 gchar *
 gdk_get_display(void)
 {

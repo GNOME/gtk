@@ -1,3 +1,8 @@
+Tue Dec 15 08:53:38 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c (gdk_get_display): Remove gdk_signal,
+	which crept back in in last commit.
+
 Tue Dec 15 01:38:53 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am: Commented out testthreads from
