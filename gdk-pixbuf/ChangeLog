@@ -1,3 +1,8 @@
+2002-10-23  Matthias Clasen  <maclas@gmx.de>
+
+	* io-gif.c (lzw_read_byte): Check for stack overflow throughout.
+	(#91808, Elliot Lee)
+
 Thu Oct  3 18:25:57 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* io-jpeg.c (gdk_pixbuf__jpeg_image_save): 
