@@ -1,3 +1,25 @@
+2003-10-23  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtk.types: Added gtk_file_chooser_get_type,
+	gtk_file_chooser_dialog_get_type,
+	gtk_file_chooser_widget_get_type, gtk_file_filter_get_type.
+
+	* gtk/gtk-sections.txt: Added GtkFileChooser,
+	GtkFileChooserWidget, GtkFileChooserDialog, GtkFileFilter.
+
+	* gtk/Makefile.am (IGNORE_HFILES): Added gtkcellrendererseptext.h,
+	gtkfilechooserdefault.h, gtkfilechooserentry.h,
+	gtkfilechooserutils.h, gtkfilesystem.h, gtkfilesystemmodel.h,
+	gtkfilesystemunix.h.
+
+	* gtk/tmpl/gtkfilechooser.sgml: New template file.
+
+	* gtk/tmpl/gtkfilechooserdialog.sgml: Likewise.
+
+	* gtk/tmpl/gtkfilechooserwidget.sgml: Likewise.
+
+	* gtk/tmpl/gtkfilefilter.sgml: Likewise.
+
 Sun Oct 12 00:33:48 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk.types: Add the get_type() functions for

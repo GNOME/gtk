@@ -37,6 +37,10 @@ gtk_entry_completion_get_type
 gtk_entry_get_type
 gtk_event_box_get_type
 gtk_expander_get_type
+gtk_file_chooser_get_type
+gtk_file_chooser_dialog_get_type
+gtk_file_chooser_widget_get_type
+gtk_file_filter_get_type
 gtk_file_selection_get_type
 gtk_fixed_get_type
 gtk_font_button_get_type

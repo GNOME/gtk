@@ -22,32 +22,39 @@ HFILE_GLOB=$(top_srcdir)/gtk/*.h
 CFILE_GLOB=$(top_srcdir)/gtk/*.c
 
 # Header files to ignore when scanning
-IGNORE_HFILES=			\
-	fnmatch.h		\
-	gdk-pixbuf-loader.h	\
-	gtkdebug.h		\
-	gtkhsv.h		\
-	gtkiconthemeparser.h	\
-	gtkimmodule.h		\
-	gtkintl.h		\
-	gtkkeyhash.h		\
-	gtkmarshal.h		\
-	gtkprivate.h		\
-	gtktreeprivate.h	\
-	gtkrbtree.h		\
-	gtktreedatalist.h	\
-	gtktextbtree.h		\
-	gtktextdisplay.h	\
-	gtktextiterprivate.h	\
-	gtktextlayout.h		\
-	gtktextmarkprivate.h	\
-	gtktextsegment.h	\
-	gtktexttagprivate.h	\
-	gtktexttypes.h		\
-	gtktextutil.h		\
-	gtktypebuiltins.h	\
-	gtkxembed.h		\
-	xembed.h		\
+IGNORE_HFILES=				\
+	fnmatch.h			\
+	gdk-pixbuf-loader.h		\
+	gtkcellrendererseptext.h	\
+	gtkdebug.h			\
+	gtkfilechooserdefault.h		\
+	gtkfilechooserentry.h		\
+	gtkfilechooserutils.h		\
+	gtkfilesystem.h			\
+	gtkfilesystemmodel.h		\
+	gtkfilesystemunix.h		\
+	gtkhsv.h			\
+	gtkiconthemeparser.h		\
+	gtkimmodule.h			\
+	gtkintl.h			\
+	gtkkeyhash.h			\
+	gtkmarshal.h			\
+	gtkprivate.h			\
+	gtktreeprivate.h		\
+	gtkrbtree.h			\
+	gtktreedatalist.h		\
+	gtktextbtree.h			\
+	gtktextdisplay.h		\
+	gtktextiterprivate.h		\
+	gtktextlayout.h			\
+	gtktextmarkprivate.h		\
+	gtktextsegment.h		\
+	gtktexttagprivate.h		\
+	gtktexttypes.h			\
+	gtktextutil.h			\
+	gtktypebuiltins.h		\
+	gtkxembed.h			\
+	xembed.h			\
 	gtktoggleactionprivate.h
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed

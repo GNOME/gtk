@@ -1,0 +1,485 @@
+<!-- ##### SECTION Title ##### -->
+GtkFileChooser
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkFileChooser ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### ENUM GtkFileChooserAction ##### -->
+<para>
+
+</para>
+
+@GTK_FILE_CHOOSER_ACTION_OPEN: 
+@GTK_FILE_CHOOSER_ACTION_SAVE: 
+
+<!-- ##### MACRO GTK_FILE_CHOOSER_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### ENUM GtkFileChooserError ##### -->
+<para>
+
+</para>
+
+@GTK_FILE_CHOOSER_ERROR_NONEXISTENT: 
+@GTK_FILE_CHOOSER_ERROR_BAD_FILENAME: 
+
+<!-- ##### FUNCTION gtk_file_chooser_error_quark ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_action ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@action: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_action ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_folder_mode ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@folder_mode: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_folder_mode ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_local_only ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@files_only: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_local_only ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_select_multiple ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@select_multiple: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_select_multiple ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_current_name ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_filename ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_filename ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_select_filename ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_unselect_filename ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_select_all ##### -->
+<para>
+
+</para>
+
+@chooser: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_unselect_all ##### -->
+<para>
+
+</para>
+
+@chooser: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_filenames ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_current_folder ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filename: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_current_folder ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_select_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_unselect_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_uris ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_current_folder_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@uri: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_current_folder_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_preview_widget ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@preview_widget: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_preview_widget ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_preview_widget_active ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@active: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_preview_widget_active ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_preview_filename ##### -->
+<para>
+
+</para>
+
+@file_chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_preview_uri ##### -->
+<para>
+
+</para>
+
+@file_chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_extra_widget ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@extra_widget: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_extra_widget ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_add_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_remove_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_list_filters ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_set_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_get_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_add_shortcut_folder ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@folder: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_remove_shortcut_folder ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@folder: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_list_shortcut_folders ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_add_shortcut_folder_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@folder: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_remove_shortcut_folder_uri ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@folder: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_chooser_list_shortcut_folder_uris ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@Returns: 
+
+

@@ -1,0 +1,130 @@
+<!-- ##### SECTION Title ##### -->
+gtkfilefilter
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkFileFilter ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkFileFilterInfo ##### -->
+<para>
+
+</para>
+
+@contains: 
+@filename: 
+@uri: 
+@display_name: 
+@mime_type: 
+
+<!-- ##### ENUM GtkFileFilterFlags ##### -->
+<para>
+
+</para>
+
+@GTK_FILE_FILTER_FILENAME: 
+@GTK_FILE_FILTER_URI: 
+@GTK_FILE_FILTER_DISPLAY_NAME: 
+@GTK_FILE_FILTER_MIME_TYPE: 
+
+<!-- ##### USER_FUNCTION GtkFileFilterFunc ##### -->
+<para>
+
+</para>
+
+@filter_info: 
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_set_name ##### -->
+<para>
+
+</para>
+
+@filter: 
+@name: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_get_name ##### -->
+<para>
+
+</para>
+
+@filter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_add_mime_type ##### -->
+<para>
+
+</para>
+
+@filter: 
+@mime_type: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_add_pattern ##### -->
+<para>
+
+</para>
+
+@filter: 
+@pattern: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_add_custom ##### -->
+<para>
+
+</para>
+
+@filter: 
+@needed: 
+@func: 
+@data: 
+@notify: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_get_needed ##### -->
+<para>
+
+</para>
+
+@filter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_file_filter_filter ##### -->
+<para>
+
+</para>
+
+@filter: 
+@filter_info: 
+@Returns: 
+
+
