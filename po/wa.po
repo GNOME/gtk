@@ -273,7 +273,7 @@ msgstr "Bitmap al schåle"
 
 #: gtk/gtkfontsel.c:903
 msgid "*"
-msgstr ""
+msgstr "*"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1228
