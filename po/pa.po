@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pa\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-03-01 11:34-0500\n"
-"PO-Revision-Date: 2005-03-03 22:26+0530\n"
+"POT-Creation-Date: 2005-03-03 22:29+0100\n"
+"PO-Revision-Date: 2005-03-04 06:46+0530\n"
 "Last-Translator: Amanpreet Singh Alam <amanpreetalam@yahoo.com>\n"
 "Language-Team: Punjabi <fedora-trans-pa@redhat.com>\n"
 "MIME-Version: 1.0\n"
@@ -127,8 +127,8 @@ msgid ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
 "but didn't give a reason for the failure"
 msgstr ""
-"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, ਪਰ ਗਲਤੀ ਦਾ "
-"ਕਾਰਨ ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ"
+"ਅੰਦਰੂਨੀ ਗਲਤੀ: ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਚਿੱਤਰ ਲੋਡਰ ਮੈਡੀਊਲ '%s' ਅਸਫਲ, ਪਰ ਗਲਤੀ ਦਾ ਕਾਰਨ "
+"ਇਹ ਦੱਸ ਨਹੀ ਸਕਿਆ"
 
 #: gdk-pixbuf/gdk-pixdata.c:147
 msgid "Image header corrupt"
@@ -200,7 +200,7 @@ msgstr "BMP ਚਿੱਤਰ ਫਾਰਮਿਟ"
 msgid "Failure reading GIF: %s"
 msgstr "GIF ਪੜ੍ਹਨਾ ਅਸਫਲ਼: %s"
 
-#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1435 gdk-pixbuf/io-gif.c:1596
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1463 gdk-pixbuf/io-gif.c:1624
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF ਫਾਇਲ ਵਿੱਚ ਕੁਝ ਡਾਟਾ ਗੁੰਮ ਹੈ (ਸਾਇਦ ਇਸ ਵਿੱਚ ਕੁਝ ਕੱਟ-ਵੱਢ ਹੋਈ ਹੈ?)"
 
@@ -225,35 +225,39 @@ msgstr "ਬਾਰ-ਕੋਡ ਮਿਲ ਗਿਆ ਹੈ"
 msgid "Circular table entry in GIF file"
 msgstr "GIF ਫਾਇਲ ਵਿੱਚ ਚੱਕਰ ਸਾਰਣੀ ਇੰਦਰਾਜ਼"
 
-#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1423 gdk-pixbuf/io-gif.c:1469
-#: gdk-pixbuf/io-gif.c:1584
+#: gdk-pixbuf/io-gif.c:862 gdk-pixbuf/io-gif.c:1451 gdk-pixbuf/io-gif.c:1497
+#: gdk-pixbuf/io-gif.c:1612
 msgid "Not enough memory to load GIF file"
 msgstr "GIF ਫਾਇਲ ਲੋਡ ਕਰਨ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
-#: gdk-pixbuf/io-gif.c:1088
+#: gdk-pixbuf/io-gif.c:947
+msgid "Not enough memory to composite a frame in GIF file"
+msgstr "GIF ਫਾਇਲ ਦੇ ਫਰੇਮ ਲੋਡ ਕਰਨ ਲਈ ਲੋਡ਼ੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
+
+#: gdk-pixbuf/io-gif.c:1116
 msgid "GIF image is corrupt (incorrect LZW compression)"
 msgstr "GIF ਚਿੱਤਰ ਨਕਾਰਾ ਹੈ (ਗਲਤ LZW ਸੁੰਕਚਿਤ)"
 
-#: gdk-pixbuf/io-gif.c:1138
+#: gdk-pixbuf/io-gif.c:1166
 msgid "File does not appear to be a GIF file"
 msgstr "ਫਾਇਲ ਇੱਕ GIF ਫਾਇਲ ਲੱਗ ਨਹੀ ਰਹੀ ਹੈ"
 
-#: gdk-pixbuf/io-gif.c:1150
+#: gdk-pixbuf/io-gif.c:1178
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF ਫਾਇਲ ਫਾਰਮਿਟ ਦਾ ਵਰਜਨ %s ਸਹਾਇਤਾ ਪ੍ਰਾਪਤ ਨਹੀ ਹੈ"
 
-#: gdk-pixbuf/io-gif.c:1259
+#: gdk-pixbuf/io-gif.c:1287
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr "GIF ਚਿੱਤਰ ਕੋਲ ਗਲੋਬਲ ਰੰਗ-ਨਕਸਾ ਨਹੀ ਅਤੇ ਇਸ ਦੇ ਫਰੇਮ ਅੰਦਰ ਆਪਣਾ ਕੋਈ ਸਥਾਨਕ ਰੰਗ-ਨਕਸ਼ਾ ਨਹੀ ਹੈ।"
 
-#: gdk-pixbuf/io-gif.c:1491
+#: gdk-pixbuf/io-gif.c:1519
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF ਚਿੱਤਰ ਦੀ ਕੱਟ-ਵੱਢ ਕੀਤੀ ਗਈ ਹੈ ਜਾਂ ਪੂਰਾ ਨਹੀ ਹੈ।"
 
-#: gdk-pixbuf/io-gif.c:1643
+#: gdk-pixbuf/io-gif.c:1671
 msgid "The GIF image format"
 msgstr "GIF ਚਿੱਤਰ ਫਾਰਮਿਟ"
 
@@ -679,35 +683,39 @@ msgstr "XBM ਚਿੱਤਰ ਫਾਰਮਿਟ"
 msgid "No XPM header found"
 msgstr "ਕੋਈ XPM ਸਿਰਲੇਖ ਨਹੀ ਲੱਭਾ"
 
-#: gdk-pixbuf/io-xpm.c:1237
+#: gdk-pixbuf/io-xpm.c:1238
+msgid "Invalid XPM header"
+msgstr "ਗਲਤ XPM ਸਿਰਲੇਖ"
+
+#: gdk-pixbuf/io-xpm.c:1246
 msgid "XPM file has image width <= 0"
 msgstr "XPM ਫਾਇਲ ਵਿੱਚ ਚਿੱਤਰ ਦੀ ਚੌੜਾਈ <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1245
+#: gdk-pixbuf/io-xpm.c:1254
 msgid "XPM file has image height <= 0"
 msgstr "XPM ਫਾਇਲ ਵਿੱਚ ਚਿੱਤਰ ਦੀ ਉਚਾਈ <= 0"
 
-#: gdk-pixbuf/io-xpm.c:1253
+#: gdk-pixbuf/io-xpm.c:1262
 msgid "XPM has invalid number of chars per pixel"
 msgstr "XPM ਵਿੱਚ ਅੱਖਰ ਪ੍ਰਤੀ ਪਿਕਸਲ ਦੀ ਗਿਣਤੀ ਗਲਤ ਹੈ"
 
-#: gdk-pixbuf/io-xpm.c:1260
+#: gdk-pixbuf/io-xpm.c:1269
 msgid "XPM file has invalid number of colors"
 msgstr "XPM ਫਾਇਲ ਵਿੱਚ ਰੰਗ ਦੀ ਗਿਣਤੀ ਗਲਤ ਹੈ"
 
-#: gdk-pixbuf/io-xpm.c:1272 gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1333
+#: gdk-pixbuf/io-xpm.c:1281 gdk-pixbuf/io-xpm.c:1290 gdk-pixbuf/io-xpm.c:1342
 msgid "Cannot allocate memory for loading XPM image"
 msgstr "XPM ਲੋਡ ਕਰਨ ਲਈ ਲੋੜੀਦੀ ਮੈਮੋਰੀ ਨਹੀ ਹੈ"
 
-#: gdk-pixbuf/io-xpm.c:1295
+#: gdk-pixbuf/io-xpm.c:1304
 msgid "Cannot read XPM colormap"
 msgstr "XPM ਰੰਗ-ਨਕਸ਼ਾ ਪੜ੍ਹਿਆ ਨਹੀ ਜਾ ਸਕਿਆ"
 
-#: gdk-pixbuf/io-xpm.c:1524
+#: gdk-pixbuf/io-xpm.c:1533
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM ਚਿੱਤਰ ਦੀ ਲੋਡਿੰਗ ਦੌਰਾਨ ਆਰਜ਼ੀ ਫਾਇਲ ਲਿਖਣ ਵਿੱਚ ਗਲਤੀ"
 
-#: gdk-pixbuf/io-xpm.c:1559
+#: gdk-pixbuf/io-xpm.c:1568
 msgid "The XPM image format"
 msgstr "XPM ਚਿੱਤਰ ਫਾਰਮਿਟ"
 
@@ -934,16 +942,16 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"ਇਸ ਰੰਗ-ਪੱਟੀ ਦੇ ਇੰਦਰਾਜ਼ ਨੂੰ ਦਬਾਉ ਤਾਂ ਇਹ ਮੌਜੂਦਾ ਰੰਗ ਬਣ ਜਾਵੇ। ਇਸ ਇੰਦਰਾਜ਼ ਨੂੰ ਤਬਦੀਲ਼ ਕਰਨ "
-"ਲਈ ਇੱਕ ਰੰਗ ਨੂੰ ਇਥੇ ਤਬਦੀਲ ਕਰ ਦਿਉ ਜਾਂ ਸੱਜਾ-ਬਟਨ ਦਬਾਉ ਤੇ \"ਰੰਗ ਇਥੇ ਸੰਭਾਲੋ\" ਨੂੰ ਚੁਣੋ।"
+"ਇਸ ਰੰਗ-ਪੱਟੀ ਦੇ ਇੰਦਰਾਜ਼ ਨੂੰ ਦਬਾਉ ਤਾਂ ਇਹ ਮੌਜੂਦਾ ਰੰਗ ਬਣ ਜਾਵੇ। ਇਸ ਇੰਦਰਾਜ਼ ਨੂੰ ਤਬਦੀਲ਼ ਕਰਨ ਲਈ ਇੱਕ ਰੰਗ "
+"ਨੂੰ ਇਥੇ ਤਬਦੀਲ ਕਰ ਦਿਉ ਜਾਂ ਸੱਜਾ-ਬਟਨ ਦਬਾਉ ਤੇ \"ਰੰਗ ਇਥੇ ਸੰਭਾਲੋ\" ਨੂੰ ਚੁਣੋ।"
 
 #: gtk/gtkcolorsel.c:1913
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
-"ਬਾਹਰੀ ਚੱਕਰ ਵਿੱਚ ਰੰਗ, ਜੋ ਤੁਸੀ ਚਾਹੁੰਦੇ ਹੋ ਨੂੰ ਚੁਣੋ। ਅੰਦਰੂਨੀ ਤਿਕੋਣ ਨਾਲ ਰੰਗ ਦਾ ਗੂੜਾਪਨ ਜਾਂ "
-"ਫਿੱਕਾਪਨ ਨਿਰਧਾਰਿਤ ਕਰੋ।"
+"ਬਾਹਰੀ ਚੱਕਰ ਵਿੱਚ ਰੰਗ, ਜੋ ਤੁਸੀ ਚਾਹੁੰਦੇ ਹੋ ਨੂੰ ਚੁਣੋ। ਅੰਦਰੂਨੀ ਤਿਕੋਣ ਨਾਲ ਰੰਗ ਦਾ ਗੂੜਾਪਨ ਜਾਂ ਫਿੱਕਾਪਨ "
+"ਨਿਰਧਾਰਿਤ ਕਰੋ।"
 
 #: gtk/gtkcolorsel.c:1938
 msgid ""
@@ -1016,8 +1024,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"ਤੁਸੀ ਇਸ ਇੰਦਰਾਜ਼ ਵਿੱਚ HTML-ਸ਼ੈਲੀ ਵਾਂਗ ਹੈਕਸਾਡੈਸੀਮਲ ਮੁੱਲ ਵੀ ਦੇ ਸਕਦੇ ਹੋ ਜਾਂ ਰੰਗ ਦਾ ਨਾਂ ਵੀ "
-"ਭਰ ਸਕਦੇ ਹੋ, ਜਿਵੇਂ ਕਿ 'ਲਾਲ'।"
+"ਤੁਸੀ ਇਸ ਇੰਦਰਾਜ਼ ਵਿੱਚ HTML-ਸ਼ੈਲੀ ਵਾਂਗ ਹੈਕਸਾਡੈਸੀਮਲ ਮੁੱਲ ਵੀ ਦੇ ਸਕਦੇ ਹੋ ਜਾਂ ਰੰਗ ਦਾ ਨਾਂ ਵੀ ਭਰ ਸਕਦੇ "
+"ਹੋ, ਜਿਵੇਂ ਕਿ 'ਲਾਲ'।"
 
 #: gtk/gtkcolorsel.c:2022
 msgid "_Palette"
