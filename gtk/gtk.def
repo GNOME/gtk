@@ -331,6 +331,7 @@ EXPORTS
 	gtk_container_arg_get
 	gtk_container_arg_set
 	gtk_container_check_resize
+	gtk_container_child_arg_get_info
 	gtk_container_child_composite_name
 	gtk_container_child_getv
 	gtk_container_child_set
@@ -447,6 +448,7 @@ EXPORTS
 	gtk_drag_source_handle_event
 	gtk_drag_source_set
 	gtk_drag_source_set_icon
+	gtk_drag_source_unset
 	gtk_drag_unhighlight
 	gtk_draw_arrow
 	gtk_draw_box
@@ -958,8 +960,11 @@ EXPORTS
 	gtk_rc_add_default_file
 	gtk_rc_add_widget_class_style
 	gtk_rc_add_widget_name_style
+	gtk_rc_find_module_in_path
 	gtk_rc_find_pixmap_in_path
 	gtk_rc_get_default_files
+	gtk_rc_get_module_dir
+	gtk_rc_get_theme_dir
 	gtk_rc_get_style
 	gtk_rc_init
 	gtk_rc_load_image
@@ -1042,6 +1047,7 @@ EXPORTS
 	gtk_signal_name
 	gtk_signal_new
 	gtk_signal_newv
+	gtk_signal_set_funcs
 	gtk_signal_query
 	gtk_signal_remove_emission_hook
 	gtk_socket_get_type
@@ -1087,6 +1093,8 @@ EXPORTS
 	gtk_table_set_homogeneous
 	gtk_table_set_row_spacing
 	gtk_table_set_row_spacings
+	gtk_target_list_new
+	gtk_target_list_unref
 	gtk_tearoff_menu_item_get_type
 	gtk_tearoff_menu_item_new
 	gtk_text_backward_delete
