@@ -1209,6 +1209,165 @@ do_search (gpointer callback_data,
   gtk_widget_show_all (dialog);
 }
 
+typedef struct
+{
+  /* position is in coordinate system of text_view_move_child */
+  int click_x;
+  int click_y;
+  int start_x;
+  int start_y;
+  int button;
+} ChildMoveInfo;
+
+static gboolean
+movable_child_callback (GtkWidget *child,
+                        GdkEvent  *event,
+                        gpointer   data)
+{
+  ChildMoveInfo *info;
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (data);
+  
+  g_return_val_if_fail (GTK_IS_EVENT_BOX (child), FALSE);
+  g_return_val_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (text_view), FALSE);  
+  
+  info = g_object_get_data (G_OBJECT (child),
+                            "testtext-move-info");
+
+  if (info == NULL)
+    {
+      info = g_new (ChildMoveInfo, 1);      
+      info->start_x = -1;
+      info->start_y = -1;
+      info->button = -1;
+      g_object_set_data_full (G_OBJECT (child),
+                              "testtext-move-info",
+                              info,
+                              g_free);
+    }
+  
+  switch (event->type)
+    {
+    case GDK_BUTTON_PRESS:
+      if (info->button < 0)
+        {
+          if (gdk_pointer_grab (event->button.window,
+                                FALSE,
+                                GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+                                GDK_BUTTON_RELEASE_MASK,
+                                NULL,
+                                NULL,
+                                event->button.time) != GDK_GRAB_SUCCESS)
+            return FALSE;
+          
+          info->button = event->button.button;
+          
+          info->start_x = child->allocation.x;
+          info->start_y = child->allocation.y;
+          info->click_x = child->allocation.x + event->button.x;
+          info->click_y = child->allocation.y + event->button.y;
+        }
+      break;
+
+    case GDK_BUTTON_RELEASE:
+      if (info->button < 0)
+        return FALSE;
+
+      if (info->button == event->button.button)
+        {
+          int x, y;
+          
+          gdk_pointer_ungrab (event->button.time);
+          info->button = -1;
+
+          /* convert to window coords from event box coords */
+          x = info->start_x + (event->button.x + child->allocation.x - info->click_x);
+          y = info->start_y + (event->button.y + child->allocation.y - info->click_y);
+
+          gtk_text_view_move_child (text_view,
+                                    child,
+                                    x, y);
+        }
+      break;
+
+    case GDK_MOTION_NOTIFY:
+      {
+        int x, y;
+        
+        if (info->button < 0)
+          return FALSE;
+        
+        gdk_window_get_pointer (child->window, &x, &y, NULL); /* ensure more events */
+
+        /* to window coords from event box coords */
+        x += child->allocation.x;
+        y += child->allocation.y;
+        
+        x = info->start_x + (x - info->click_x);
+        y = info->start_y + (y - info->click_y);
+        
+        gtk_text_view_move_child (text_view,
+                                  child,
+                                  x, y);
+      }
+      break;
+
+    default:
+      break;
+    }
+
+  return FALSE;
+}
+
+static void
+add_movable_child (GtkTextView      *text_view,
+                   GtkTextWindowType window)
+{
+  GtkWidget *event_box;
+  GtkWidget *label;
+  GdkColor color;
+  
+  label = gtk_label_new ("Drag me around");  
+  
+  event_box = gtk_event_box_new ();
+  gtk_widget_add_events (event_box,
+                         GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
+                         GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK);
+
+  color.red = 0xffff;
+  color.green = color.blue = 0;
+  gtk_widget_modify_bg (event_box, GTK_STATE_NORMAL, &color);
+  
+  gtk_container_add (GTK_CONTAINER (event_box), label);
+
+  gtk_widget_show_all (event_box);
+
+  g_signal_connect (G_OBJECT (event_box), "event",
+                    G_CALLBACK (movable_child_callback),
+                    text_view);
+
+  gtk_text_view_add_child_in_window (text_view,
+                                     event_box,
+                                     window,
+                                     0, 0);
+}
+
+static void
+do_add_children (gpointer callback_data,
+                 guint callback_action,
+                 GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+
+  add_movable_child (GTK_TEXT_VIEW (view->text_view),
+                     GTK_TEXT_WINDOW_WIDGET);
+  add_movable_child (GTK_TEXT_VIEW (view->text_view),
+                     GTK_TEXT_WINDOW_LEFT);
+  add_movable_child (GTK_TEXT_VIEW (view->text_view),
+                     GTK_TEXT_WINDOW_RIGHT);
+}
+
 static void
 view_init_menus (View *view)
 {
@@ -1301,6 +1460,7 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
   { "/Test/_Insert and scroll", NULL,         do_insert_and_scroll,  0, NULL },
+  { "/Test/_Add fixed children", NULL,         do_add_children,  0, NULL },
 };
 
 static gboolean

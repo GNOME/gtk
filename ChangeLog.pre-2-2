@@ -1,3 +1,21 @@
+2001-11-13  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (gtk_text_view_size_request): add border width
+	to requisition, request non-anchored children
+	(gtk_text_view_size_allocate): handle border width, allocate
+	non-anchored children
+	(text_view_child_new_window): set the child as object data
+	(gtk_text_view_move_child): allow children at negative
+	coordinates, no reason why not
+	(gtk_text_view_forall): make it copy the list of children before
+	walking it, to avoid reentrancy issues	
+	(gtk_text_view_move_child): short-circuit if position is unchanged
+	(changed_handler): only queue_resize if requisition has changed
+	(gtk_text_view_init): don't redraw_on_allocate, since we can do 
+	a better job of invalidation ourselves
+
+	* tests/testtext.c: add tests for the fixed-position children
+
 Tue Nov 13 19:51:43 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (handle_accels_changed): protect idle handle

@@ -978,6 +978,9 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->drag_start_y = -1;
 
   text_view->pending_place_cursor_button = 0;
+
+  /* We handle all our own redrawing */
+  gtk_widget_set_redraw_on_allocate (widget, FALSE);
 }
 
 /**
@@ -2408,6 +2411,9 @@ gtk_text_view_size_request (GtkWidget      *widget,
   if (text_view->bottom_window)
     requisition->height += text_view->bottom_window->requisition.height;
 
+  requisition->width += GTK_CONTAINER (text_view)->border_width * 2;
+  requisition->height += GTK_CONTAINER (text_view)->border_width * 2;
+  
   tmp_list = text_view->children;
   while (tmp_list != NULL)
     {
@@ -2433,7 +2439,9 @@ gtk_text_view_size_request (GtkWidget      *widget,
         }
       else
         {
-
+          GtkRequisition child_req;
+          
+          gtk_widget_size_request (child->widget, &child_req);
         }
 
       tmp_list = g_slist_next (tmp_list);
@@ -2514,7 +2522,7 @@ gtk_text_view_child_allocated (GtkTextLayout *layout,
 }
 
 static void
-gtk_text_view_validate_children (GtkTextView *text_view)
+gtk_text_view_allocate_children (GtkTextView *text_view)
 {
   GSList *tmp_list;
 
@@ -2541,7 +2549,20 @@ gtk_text_view_validate_children (GtkTextView *text_view)
         }
       else
         {
+          GtkAllocation allocation;          
+          GtkRequisition child_req;
+             
+          g_assert (child != NULL);
+          
+          allocation.x = child->x;
+          allocation.y = child->y;
 
+          gtk_widget_get_child_requisition (child->widget, &child_req);
+          
+          allocation.width = child_req.width;
+          allocation.height = child_req.height;
+          
+          gtk_widget_size_allocate (child->widget, &allocation);          
         }
 
       tmp_list = g_slist_next (tmp_list);
@@ -2565,10 +2586,15 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle bottom_rect;
   gint focus_edge_width;
   gboolean interior_focus;
+  gboolean size_changed;
   
   text_view = GTK_TEXT_VIEW (widget);
 
   DV(g_print(G_STRLOC"\n"));
+
+  size_changed =
+    widget->allocation.width != allocation->width ||
+    widget->allocation.height != allocation->height;
   
   widget->allocation = *allocation;
 
@@ -2590,7 +2616,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   else
     focus_edge_width = 1;
   
-  width = allocation->width - focus_edge_width * 2;
+  width = allocation->width - focus_edge_width * 2 - GTK_CONTAINER (text_view)->border_width * 2;
 
   if (text_view->left_window)
     left_rect.width = text_view->left_window->requisition.width;
@@ -2612,7 +2638,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   bottom_rect.width = text_rect.width;
 
 
-  height = allocation->height - focus_edge_width * 2;
+  height = allocation->height - focus_edge_width * 2 - GTK_CONTAINER (text_view)->border_width * 2;
 
   if (text_view->top_window)
     top_rect.height = text_view->top_window->requisition.height;
@@ -2634,8 +2660,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   right_rect.height = text_rect.height;
 
   /* Origins */
-  left_rect.x = focus_edge_width;
-  top_rect.y = focus_edge_width;
+  left_rect.x = focus_edge_width + GTK_CONTAINER (text_view)->border_width;
+  top_rect.y = focus_edge_width + GTK_CONTAINER (text_view)->border_width;
 
   text_rect.x = left_rect.x + left_rect.width;
   text_rect.y = top_rect.y + top_rect.height;
@@ -2670,8 +2696,8 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   gtk_text_view_update_layout_width (text_view);
   
-  /* This is because validating children ends up size allocating them. */
-  gtk_text_view_validate_children (text_view);
+  /* Note that this will do some layout validation */
+  gtk_text_view_allocate_children (text_view);
 
   /* Now adjust the value of the adjustment to keep the cursor at the
    * same place in the buffer
@@ -2725,6 +2751,12 @@ gtk_text_view_size_allocate (GtkWidget *widget,
       if (!gtk_text_view_flush_scroll (text_view))
         gtk_text_view_validate_onscreen (text_view);
     }
+
+  /* widget->window doesn't get auto-redrawn as the layout is computed, so has to
+   * be invalidated
+   */
+  if (size_changed && GTK_WIDGET_REALIZED (widget))
+    gdk_window_invalidate_rect (widget->window, NULL, FALSE);
 }
 
 static void
@@ -2989,7 +3021,17 @@ changed_handler (GtkTextLayout     *layout,
         }
     }
 
-  gtk_widget_queue_resize (widget);
+  {
+    GtkRequisition old_req;
+    GtkRequisition new_req;
+
+    old_req = widget->requisition;
+    gtk_widget_size_request (widget, &new_req);
+
+    if (old_req.width != new_req.width ||
+        old_req.height != new_req.height)
+      gtk_widget_queue_resize (widget);
+  }
 }
 
 static void
@@ -3841,13 +3883,15 @@ gtk_text_view_forall (GtkContainer *container,
 {
   GSList *iter;
   GtkTextView *text_view;
+  GSList *copy;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (container));
   g_return_if_fail (callback != NULL);
 
   text_view = GTK_TEXT_VIEW (container);
 
-  iter = text_view->children;
+  copy = g_slist_copy (text_view->children);
+  iter = copy;
 
   while (iter != NULL)
     {
@@ -3857,6 +3901,8 @@ gtk_text_view_forall (GtkContainer *container,
 
       iter = g_slist_next (iter);
     }
+
+  g_slist_free (copy);
 }
 
 #define CURSOR_ON_MULTIPLIER 0.66
@@ -6597,6 +6643,10 @@ text_view_child_new_window (GtkWidget          *child,
   vc->x = x;
   vc->y = y;
 
+  g_object_set_data (G_OBJECT (child),
+                     "gtk-text-view-child",
+                     vc);
+  
   return vc;
 }
 
@@ -6665,6 +6715,9 @@ gtk_text_view_add_child_at_anchor (GtkTextView          *text_view,
                                      text_view->layout);
 
   add_child (text_view, vc);
+
+  g_assert (vc->widget == child);
+  g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
 }
 
 void
@@ -6678,14 +6731,15 @@ gtk_text_view_add_child_in_window (GtkTextView          *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (xpos >= 0);
-  g_return_if_fail (ypos >= 0);
   g_return_if_fail (child->parent == NULL);
 
   vc = text_view_child_new_window (child, which_window,
                                    xpos, ypos);
 
   add_child (text_view, vc);
+
+  g_assert (vc->widget == child);
+  g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (text_view));
 }
 
 void
@@ -6698,8 +6752,6 @@ gtk_text_view_move_child          (GtkTextView          *text_view,
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (xpos >= 0);
-  g_return_if_fail (ypos >= 0);
   g_return_if_fail (child->parent == (GtkWidget*) text_view);
 
   vc = g_object_get_data (G_OBJECT (child),
@@ -6707,13 +6759,16 @@ gtk_text_view_move_child          (GtkTextView          *text_view,
 
   g_assert (vc != NULL);
 
+  if (vc->x == xpos &&
+      vc->y == ypos)
+    return;
+  
   vc->x = xpos;
   vc->y = ypos;
 
   if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (text_view))
     gtk_widget_queue_resize (child);
 }
-
 
 
 /* Iterator operations */
