@@ -1985,7 +1985,7 @@ gtk_tree_model_sort_convert_path_to_child_path (GtkTreeModelSort *tree_model_sor
  * @child_iter: An uninitialized #GtkTreeIter
  * @sorted_iter: A valid #GtkTreeIter pointing to a row on @tree_model_sort.
  * 
- * Sets @child_iter to point to the row pointed to by *sorted_iter.
+ * Sets @child_iter to point to the row pointed to by @sorted_iter.
  **/
 void
 gtk_tree_model_sort_convert_iter_to_child_iter (GtkTreeModelSort *tree_model_sort,
