@@ -1,3 +1,21 @@
+2000-05-04  Darin Adler  <darin@eazel.com>
+
+	* gdk-pixbuf/.cvsignore:
+	* gdk-pixbuf/Makefile.am:
+	* gdk-pixbuf/test-gdk-pixbuf.c (store_pixel), (fill_with_pixel),
+	(load_pixel), (simple_composite_test_one),
+	(simple_composite_test_one_type), (simple_composite_test), (main):
+	Added some tests of composite to highlight problems in the old
+	implementation. These tests run without any user interaction.
+	Just do "make check".
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_composite_nearest),
+	(composite_pixel), (composite_line): Fix composite to do a textbook
+	"A over B" composite. This was clearly the intent, and it was easy
+	to fix the code to do it. (Note to those that read my earlier tries
+	at a patch; this version fixes typos that were present in all
+	my patch attempts. I checked the final version by adding more tests.)
+
 2000-04-22 05:27:43 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/pixops.c (pixops_scale_nearest): Properly

@@ -138,7 +138,8 @@ extra_sources = $(libpixbufloader_png_la_SOURCES) 	\
 builtin_libraries = 
 endif
 
-noinst_PROGRAMS = testpixbuf testpixbuf-drawable testanimation testpixbuf-scale
+noinst_PROGRAMS = test-gdk-pixbuf testpixbuf testpixbuf-drawable testanimation testpixbuf-scale
+TESTS = test-gdk-pixbuf
 
 DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
@@ -150,11 +151,13 @@ AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(libexecdir)\""
 LDADDS = libgdk_pixbuf.la $(GLIB_LIBS) $(GTK_LIBS) $(STATIC_LIB_DEPS)
 
 if INSIDE_GNOME_LIBS
+test_gdk_pixbuf_LDADD = $(LDADDS) -lgmodule
 testpixbuf_LDADD = $(LDADDS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS)
 testpixbuf_scale_LDADD = $(LDADDS)
 testanimation_LDADD = $(LDADDS) -lgmodule
 else
+test_gdk_pixbuf_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
 testpixbuf_LDADD = $(LDADDS) $(GNOME_LIBS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 testpixbuf_scale_LDADD = $(LDADDS) $(GNOME_LIBS)

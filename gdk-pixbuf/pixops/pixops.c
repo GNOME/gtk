@@ -171,36 +171,23 @@ pixops_composite_nearest (guchar        *dest_buf,
           unsigned int  a0;
 
 	  if (src_has_alpha)
-	    a0 = (p[3] * overall_alpha + 0xff) >> 8;
+	    a0 = (p[3] * overall_alpha) / 0xff;
 	  else
 	    a0 = overall_alpha;
 
 	  if (dest_has_alpha)
 	    {
-	      unsigned int a1 = dest[3];
-	      unsigned int total = a0 + a1;
-
-	      if (total)
-		{
-		  dest[0] = (a0 * src[0] + a1 * dest[0]) / (total);
-		  dest[1] = (a0 * src[1] + a1 * dest[1]) / (total);
-		  dest[2] = (a0 * src[2] + a1 * dest[2]) / (total);
-		  dest[3] = total - ((a0 * a1 + 0xff) >> 8);
-		}
-	      else
-		{
-		  dest[0] = 0;
-		  dest[1] = 0;
-		  dest[2] = 0;
-		  dest[3] = 0;
-		}
+	      dest[0] = (a0 * src[0] + (0xff - a0) * dest[0]) / 0xff;
+	      dest[1] = (a0 * src[1] + (0xff - a0) * dest[1]) / 0xff;
+	      dest[2] = (a0 * src[2] + (0xff - a0) * dest[2]) / 0xff;
+	      dest[3] = (0xff * a0 + (0xff - a0) * dest[3]) / 0xff;
 	    }
 	  else
 	    {
-	      dest[0] = dest[0] + ((a0 * (p[0] - dest[0]) + 0xff) >> 8);
-	      dest[1] = dest[1] + ((a0 * (p[1] - dest[1]) + 0xff) >> 8);
-	      dest[2] = dest[2] + ((a0 * (p[2] - dest[2]) + 0xff) >> 8);
-
+	      dest[0] = (a0 * p[0] + (0xff - a0) * dest[0]) / 0xff;
+	      dest[1] = (a0 * p[1] + (0xff - a0) * dest[1]) / 0xff;
+	      dest[2] = (a0 * p[2] + (0xff - a0) * dest[2]) / 0xff;
+	      
 	      if (dest_channels == 4)
 		dest[3] = 0xff;
 	    }
@@ -309,29 +296,18 @@ composite_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha
 {
   if (dest_has_alpha)
     {
-      unsigned int w = (((1 << 16) - a) * dest[3]) >> 8;
-      unsigned int total = a + w;
-
-      if (total)
-	{
-	  dest[0] = (r + w * dest[0]) / total;
-	  dest[1] = (g + w * dest[1]) / total;
-	  dest[2] = (b + w * dest[2]) / total;
-	  dest[3] = (r * w) >> 16;
-	}
-      else
-	{
-	  dest[0] = 0;
-	  dest[1] = 0;
-	  dest[2] = 0;
-	  dest[3] = 0;
-	}
+      unsigned int w = (0xff0000 - a) * dest[3];
+      
+      dest[0] = (r + (0xff0000 - a) * dest[0]) / 0xff0000;
+      dest[1] = (g + (0xff0000 - a) * dest[1]) / 0xff0000;
+      dest[2] = (b + (0xff0000 - a) * dest[2]) / 0xff0000;
+      dest[3] = (0xff * a + (0xff0000 - a) * dest[3]) / 0xff0000;
     }
   else
     {
-      dest[0] = ((0xff0000 - a) * dest[0] + r) >> 24;
-      dest[1] = ((0xff0000 - a) * dest[1] + g) >> 24;
-      dest[2] = ((0xff0000 - a) * dest[2] + b) >> 24;
+      dest[0] = (r + (0xff0000 - a) * dest[0]) / 0xff0000;
+      dest[1] = (g + (0xff0000 - a) * dest[1]) / 0xff0000;
+      dest[2] = (b + (0xff0000 - a) * dest[2]) / 0xff0000;
     }
 }
 
@@ -366,7 +342,7 @@ composite_line (int *weights, int n_x, int n_y,
 		ta = q[3] * line_weights[j];
 	      else
 		ta = 0xff * line_weights[j];
-		  
+	      
 	      r += ta * q[0];
 	      g += ta * q[1];
 	      b += ta * q[2];
@@ -378,29 +354,18 @@ composite_line (int *weights, int n_x, int n_y,
 
       if (dest_has_alpha)
 	{
-	  unsigned int w = (((1 << 16) - a) * dest[3]) >> 8;
-	  unsigned int total = a + w;
+	  unsigned int w = (0xff0000 - a) * dest[3];
 
-	  if (total)
-	    {
-	      dest[0] = (r + w * dest[0]) / total;
-	      dest[1] = (r + w * dest[1]) / total;
-	      dest[2] = (r + w * dest[2]) / total;
-	      dest[3] = (r * w) >> 16;
-	    }
-	  else
-	    {
-	      dest[0] = 0;
-	      dest[1] = 0;
-	      dest[2] = 0;
-	      dest[3] = 0;
-	    }
+	  dest[0] = (r + (0xff0000 - a) * dest[0]) / 0xff0000;
+	  dest[1] = (g + (0xff0000 - a) * dest[1]) / 0xff0000;
+	  dest[2] = (b + (0xff0000 - a) * dest[2]) / 0xff0000;
+	  dest[3] = (0xff * a + (0xff0000 - a) * dest[3]) / 0xff0000;
 	}
       else
 	{
-	  dest[0] = ((0xff0000 - a) * dest[0] + r) >> 24;
-	  dest[1] = ((0xff0000 - a) * dest[1] + g) >> 24;
-	  dest[2] = ((0xff0000 - a) * dest[2] + b) >> 24;
+	  dest[0] = (r + (0xff0000 - a) * dest[0]) / 0xff0000;
+	  dest[1] = (g + (0xff0000 - a) * dest[1]) / 0xff0000;
+	  dest[2] = (b + (0xff0000 - a) * dest[2]) / 0xff0000;
 	}
       
       dest += dest_channels;

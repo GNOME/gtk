@@ -5,6 +5,7 @@ Makefile
 .libs
 *.la
 *.lo
+test-gdk-pixbuf
 testpixbuf
 testpixbuf-drawable
 testpixbuf-scale
