@@ -1544,7 +1544,7 @@ placed on a queue, which is processed within <tt/gtk_main()/. You can
 force the drawing queue to be processed using something like:
 
 <tscreen><verb>
-while (gtk_main_iteration(FALSE));
+while (g_main_iteration(FALSE));
 </verb></tscreen>
 
 inside you're function that changes the widget.
