@@ -51,7 +51,7 @@ information on error domains and error codes.
   <para>
     These values can be passed to
     gdk_pixbuf_render_to_drawable_alpha() to control how the alpha
-    chanel of an image should be handled.  This function can create a
+    channel of an image should be handled.  This function can create a
     bilevel clipping mask (black and white) and use it while painting
     the image.  In the future, when the X Window System gets an alpha
     channel extension, it will be possible to do full alpha
