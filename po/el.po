@@ -1,14 +1,14 @@
 # gtk+ Greek PO file
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Spiros Papadimitriou <spapadim+@cs.cmu.edu>, 1999.
-# Simos Xenitellis <simos@hellug.gr>, 1999.
+# Simos Xenitellis <simos@hellug.gr>, 1999, 2001.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-05-19 07:11+0200\n"
-"PO-Revision-Date: 1999-10-22 22:43-0000\n"
-"Last-Translator: Spiros Papadimitriou <spapadim+@cs.cmu.edu>\n"
+"Project-Id-Version: gtk+ 1.2.9\n"
+"POT-Creation-Date: 2001-02-13 23:12+0000\n"
+"PO-Revision-Date: 2001-02-13 23:12:24+0900\n"
+"Last-Translator: Simos Xenitellis <simos@hellug.gr>\n"
 "Language-Team: Greek <nls@tux.hellug.gr>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-7\n"
@@ -51,15 +51,15 @@ msgstr "Διαφάνεια:"
 
 #
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3492
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:481 gtk/gtkfontsel.c:3501
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Εντάξει"
 
 #
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
-#: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
+#: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:488 gtk/gtkfilesel.c:868
+#: gtk/gtkfilesel.c:968 gtk/gtkfilesel.c:1083 gtk/gtkfontsel.c:3514
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "¶κυρο"
@@ -71,36 +71,36 @@ msgstr "Βοήθεια"
 
 #
 #. The directories clist
-#: gtk/gtkfilesel.c:418
+#: gtk/gtkfilesel.c:430
 msgid "Directories"
 msgstr "Κατάλογοι"
 
 #
 #. The files clist
-#: gtk/gtkfilesel.c:437
+#: gtk/gtkfilesel.c:449
 msgid "Files"
 msgstr "Αρχεία"
 
 #
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1466
+#: gtk/gtkfilesel.c:519 gtk/gtkfilesel.c:1478
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Μη αναγνώσιμος κατάλογος: %s"
 
 #
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:551
 msgid "Create Dir"
-msgstr "Δημιουργία καταλόγου"
+msgstr "Δημιουργία Kαταλόγου"
 
 #
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
+#: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
-msgstr "Διαγραφή αρχείου"
+msgstr "Διαγραφή Aρχείου"
 
 #
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
+#: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
-msgstr "Μετονομασία αρχείου"
+msgstr "Μετονομασία Aρχείου"
 
 #
 #.
@@ -108,46 +108,46 @@ msgstr "Μετονομασία αρχείου"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:734
 msgid "Error"
 msgstr "Σφάλμα"
 
 #
 #. close button
-#: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:757 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Κλείσιμο"
 
 #
-#: gtk/gtkfilesel.c:820
+#: gtk/gtkfilesel.c:832
 msgid "Create Directory"
-msgstr "Δημιουργία καταλόγου"
+msgstr "Δημιουργία Kαταλόγου"
 
 #
-#: gtk/gtkfilesel.c:834
+#: gtk/gtkfilesel.c:846
 msgid "Directory name:"
 msgstr "Όνομα καταλόγου:"
 
 #
 #. buttons
-#: gtk/gtkfilesel.c:847
+#: gtk/gtkfilesel.c:859
 msgid "Create"
 msgstr "Δημιουργία"
 
 #
 #. buttons
-#: gtk/gtkfilesel.c:947
+#: gtk/gtkfilesel.c:959
 msgid "Delete"
 msgstr "Διαγραφή"
 
 #
 #. buttons
-#: gtk/gtkfilesel.c:1062
+#: gtk/gtkfilesel.c:1074
 msgid "Rename"
 msgstr "Μετονομασία"
 
 #
-#: gtk/gtkfilesel.c:1445
+#: gtk/gtkfilesel.c:1457
 msgid "Selection: "
 msgstr "Επιλογή: "
 
@@ -174,32 +174,32 @@ msgstr "Κλίση:"
 #
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Ορισμός πλάτους:"
+msgstr "Καθορισμός Πλάτους:"
 
 #
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr "Προσθήκη στυλ:"
+msgstr "Προσθήκη Στυλ:"
 
 #
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Μέγεθος σε pixel:"
+msgstr "Μέγεθος σε Εικ/χεία:"
 
 #
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr "Μέγεθος σε στιγμές"
+msgstr "Μέγεθος σε Στιγμές:"
 
 #
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr "Χ ανάλυση:"
+msgstr "Aνάλυση Χ:"
 
 #
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr "Υ ανάλυση:"
+msgstr "Ανάλυση Ψ:"
 
 #
 #: gtk/gtkfontsel.c:220
@@ -221,17 +221,17 @@ msgstr "Σύνολο χαρακτήρων:"
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Ιδιότητες γραμματοσειράς:"
+msgstr "Ιδιότητες γραμ/σειράς:"
 
 #
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Επιθυμητή τιμή"
+msgstr "Επιθυμητή Tιμή"
 
 #
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr "Πραγματικκή τιμή"
+msgstr "Πραγματική Tιμή"
 
 #
 #: gtk/gtkfontsel.c:494
@@ -239,14 +239,14 @@ msgid "Font"
 msgstr "Γραμματοσειρά"
 
 #
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2181 gtk/gtkfontsel.c:2411
+#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2185 gtk/gtkfontsel.c:2415
 msgid "Font:"
 msgstr "Γραμματοσειρά:"
 
 #
 #: gtk/gtkfontsel.c:509
 msgid "Font Style:"
-msgstr "Στυλ γραμματοσειράς:"
+msgstr "Στυλ Γραμματοσειράς:"
 
 #
 #: gtk/gtkfontsel.c:514
@@ -271,7 +271,7 @@ msgstr "Στιγμές"
 #
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixel"
+msgstr "Εικονοστοιχεία"
 
 #
 #. create the text entry widget
@@ -282,7 +282,7 @@ msgstr "Προεπισκόπιση:"
 #
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
-msgstr "Πληροφορίες γραμματοσειράς"
+msgstr "Πληροφορίες Γραμματοσειράς"
 
 #
 #: gtk/gtkfontsel.c:749
@@ -303,12 +303,12 @@ msgstr "%i γραμματοσειρές είναι διαθέσιμες με %i συνολικά στυλ."
 #
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
-msgstr "Φίλτρο"
+msgstr "Φιλτράρισμα"
 
 #
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Τύποι Γραμματοσειρών:"
+msgstr "Είδη Γραμματοσειρών:"
 
 #
 #: gtk/gtkfontsel.c:807
@@ -342,27 +342,27 @@ msgid "regular"
 msgstr "κανονικό"
 
 #
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1973
+#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1977
 msgid "italic"
 msgstr "πλάγια"
 
 #
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1974
+#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1978
 msgid "oblique"
 msgstr "λοξά"
 
 #
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1975
+#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1979
 msgid "reverse italic"
 msgstr "ανάποδα πλάγια"
 
 #
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1976
+#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1980
 msgid "reverse oblique"
 msgstr "ανάποδα λοξά"
 
 #
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1977
+#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1981
 msgid "other"
 msgstr "άλλο"
 
@@ -377,63 +377,63 @@ msgid "[C]"
 msgstr "[C]"
 
 #
-#: gtk/gtkfontsel.c:1793
+#: gtk/gtkfontsel.c:1797
 msgid "The selected font is not available."
 msgstr "Η επιλεγμένη γραμματοσειρά δεν είναι διαθέσιμη."
 
 #
-#: gtk/gtkfontsel.c:1799
+#: gtk/gtkfontsel.c:1803
 msgid "The selected font is not a valid font."
 msgstr "Η επιλεγμένη γραμματοσειρά δεν είναι έγκυρη."
 
 #
-#: gtk/gtkfontsel.c:1857
+#: gtk/gtkfontsel.c:1861
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
 "Η παρούσα είναι γραμματοσειρά 2 byte και πιθανόν να μην απεικονισθεί σωστά."
 
 #
-#: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1965 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(άγνωστο)"
 
 #
-#: gtk/gtkfontsel.c:1972
+#: gtk/gtkfontsel.c:1976
 msgid "roman"
 msgstr "roman"
 
 #
-#: gtk/gtkfontsel.c:1984
+#: gtk/gtkfontsel.c:1988
 msgid "proportional"
 msgstr "αναλογικά"
 
 #
-#: gtk/gtkfontsel.c:1985
+#: gtk/gtkfontsel.c:1989
 msgid "monospaced"
 msgstr "monospaced"
 
 #
-#: gtk/gtkfontsel.c:1986
+#: gtk/gtkfontsel.c:1990
 msgid "char cell"
 msgstr "κελί χαρακτήρα"
 
 #
-#: gtk/gtkfontsel.c:2186
+#: gtk/gtkfontsel.c:2190
 msgid "Font: (Filter Applied)"
 msgstr "Γραμματοσειρά: (Φιλτραρισμένη)"
 
 #
-#: gtk/gtkfontsel.c:2662
+#: gtk/gtkfontsel.c:2666
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "Υπέρβαση ορίου MAX_FONTS. Πιθανό να λείπουν μερικές γραμματοσειρές."
 
 #
-#: gtk/gtkfontsel.c:3499
+#: gtk/gtkfontsel.c:3508
 msgid "Apply"
 msgstr "Εφαρμογή"
 
 #
-#: gtk/gtkfontsel.c:3521
+#: gtk/gtkfontsel.c:3530
 msgid "Font Selection"
 msgstr "Επιλογή Γραμματοσειράς"
 
@@ -570,7 +570,7 @@ msgstr "Το module δε βρέθηκε στο module_path: \"%s\","
 #
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "--- Καμία συμβουλή ---"
+msgstr "--- Καμία Συμβουλή ---"
 
 #
 #~ msgid "heavy"
