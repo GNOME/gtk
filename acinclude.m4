@@ -676,7 +676,9 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 
       if test "$nls_cv_use_gnu_gettext" != "yes"; then
         AC_DEFINE(ENABLE_NLS)
-#      else
+      else
+         # Unset this variable since we use the non-zero value as a flag.
+         CATOBJEXT=
 #        dnl Mark actions used to generate GNU NLS library.
 #        INTLOBJS="\$(GETTOBJS)"
 #        AM_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,

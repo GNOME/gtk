@@ -1,3 +1,9 @@
+Wed Jan 13 21:18:41 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* acinclude.m4 (ac_result): Unset CATOBJEXT so
+	that the macros and Makefiles correctly handle
+	disabling NLS when no gettext is found.
+
 Wed Jan 13 20:14:32 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkarg.c (gtk_arg_copy): in comparisions with GTK_TYPE_STRING, use
