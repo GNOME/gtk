@@ -46,6 +46,7 @@
 #include "linux-fb/gdkfb.h"
 #endif
 
+#define GTK_TREE_VIEW_SEARCH_DIALOG_KEY "gtk-tree-view-search-dialog"
 
 #define SCROLL_EDGE_SIZE 15
 #define EXPANDER_EXTRA_PADDING 4
@@ -1078,10 +1079,11 @@ gtk_tree_view_destroy (GtkObject *object)
   tree_view->priv->anchor = NULL;
 
   /* destroy interactive search dialog */
-  search_dialog = gtk_object_get_data (GTK_OBJECT (tree_view), "search-dialog");
+  search_dialog = gtk_object_get_data (GTK_OBJECT (tree_view),
+				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
   if (search_dialog)
     gtk_tree_view_search_dialog_destroy (search_dialog,
-						     tree_view);
+					 tree_view);
 
   if (tree_view->priv->search_user_data)
     {
@@ -2907,6 +2909,7 @@ static gboolean
 gtk_tree_view_leave_notify (GtkWidget        *widget,
 			    GdkEventCrossing *event)
 {
+  GtkWidget *search_dialog;
   GtkTreeView *tree_view;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
@@ -2920,6 +2923,12 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
                                    NULL);
 
   ensure_unprelighted (tree_view);
+
+  /* destroy interactive search dialog */
+  search_dialog = gtk_object_get_data (GTK_OBJECT (widget),
+				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
+  if (search_dialog)
+    gtk_tree_view_search_dialog_destroy (search_dialog, GTK_TREE_VIEW (widget));
 
 return TRUE;
 }
@@ -2958,7 +2967,8 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
   gtk_widget_queue_draw (widget);
 
   /* destroy interactive search dialog */
-  search_dialog = gtk_object_get_data (GTK_OBJECT (widget), "search-dialog");
+  search_dialog = gtk_object_get_data (GTK_OBJECT (widget),
+				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
   if (search_dialog)
     gtk_tree_view_search_dialog_destroy (search_dialog, GTK_TREE_VIEW (widget));
   return FALSE;
@@ -6127,9 +6137,15 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 {
   GtkWidget *window;
   GtkWidget *entry;
+  GtkWidget *search_dialog;
 
   if (tree_view->priv->enable_search == FALSE ||
       tree_view->priv->search_column < 0)
+    return;
+
+  search_dialog = gtk_object_get_data (GTK_OBJECT (tree_view),
+				       GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
+  if (search_dialog)
     return;
 
   /* set up window */
@@ -6168,7 +6184,8 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
 
   gtk_object_set_data (GTK_OBJECT (window), "text",
                        gtk_entry_get_text (GTK_ENTRY (entry)));
-  gtk_object_set_data (GTK_OBJECT (tree_view), "search-dialog", window);
+  gtk_object_set_data (GTK_OBJECT (tree_view),
+		       GTK_TREE_VIEW_SEARCH_DIALOG_KEY, window);
 
   /* search first matching iter */
   gtk_tree_view_search_init (entry, tree_view);
@@ -8856,7 +8873,8 @@ gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
 				     GtkTreeView *tree_view)
 {
   /* remove data from tree_view */
-  gtk_object_remove_data (GTK_OBJECT (tree_view), "search-dialog");
+  gtk_object_remove_data (GTK_OBJECT (tree_view),
+			  GTK_TREE_VIEW_SEARCH_DIALOG_KEY);
 
   gtk_widget_destroy (search_dialog);
 }

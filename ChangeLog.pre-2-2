@@ -1,3 +1,16 @@
+Fri Oct  5 19:06:07 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtktreeview.c (gtk_tree_view_leave_notify): should
+	destroy the search dialog
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search):
+	added check to prevent creation of a search dialog if there's
+	already one around
+
+	* gtk/gtktreeview.c: Define GTK_TREE_VIEW_SEARCH_DIALOG_KEY, and use
+	it instead of "search-dialog" (when getting/setting the search dialog
+	widget).
+
 2001-10-05  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/stock_broken_image.png: broken images icon
