@@ -1,3 +1,16 @@
+Sun Jul 26 14:50:07 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/testgtk.c : 
+	Began cleanup, e.g. use gtk_widget_show_all instead of many 
+	gtk_widget_show's. Completely rewrote the button box sample
+ 	(only one window now). Removed "miscellaneous" button.
+
+Sun Jul 26 14:48:14 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkvbbox.c (gtk_vbutton_box_size_allocate): 
+	Fixed wrong allocation for GTK_BUTTONBOX_END.
+ 	(allocation->x  =>  allocation->y)
+
 Sun Jul 26 14:06:37 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_button_press) (gtk_clist_button_release)
