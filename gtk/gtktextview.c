@@ -159,6 +159,9 @@ static void gtk_text_view_style_set            (GtkWidget        *widget,
                                                 GtkStyle         *previous_style);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
+static void gtk_text_view_state_changed        (GtkWidget        *widget,
+					        GtkStateType      previous_state);
+
 static gint gtk_text_view_event                (GtkWidget        *widget,
                                                 GdkEvent         *event);
 static gint gtk_text_view_key_press_event      (GtkWidget        *widget,
@@ -484,6 +487,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->unrealize = gtk_text_view_unrealize;
   widget_class->style_set = gtk_text_view_style_set;
   widget_class->direction_changed = gtk_text_view_direction_changed;
+  widget_class->state_changed = gtk_text_view_state_changed;
   widget_class->size_request = gtk_text_view_size_request;
   widget_class->size_allocate = gtk_text_view_size_allocate;
   widget_class->event = gtk_text_view_event;
@@ -3426,6 +3430,33 @@ gtk_text_view_unrealize (GtkWidget *widget)
   (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
+static void 
+gtk_text_view_set_background (GtkTextView *text_view)
+{
+  GtkWidget *widget = GTK_WIDGET (text_view);
+
+  gdk_window_set_background (widget->window,
+			     &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+  
+  gdk_window_set_background (text_view->text_window->bin_window,
+			     &widget->style->base[GTK_WIDGET_STATE (widget)]);
+  
+  if (text_view->left_window)
+    gdk_window_set_background (text_view->left_window->bin_window,
+			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+  if (text_view->right_window)
+    gdk_window_set_background (text_view->right_window->bin_window,
+			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+  
+  if (text_view->top_window)
+    gdk_window_set_background (text_view->top_window->bin_window,
+			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+  
+  if (text_view->bottom_window)
+    gdk_window_set_background (text_view->bottom_window->bin_window,
+			       &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+}
+
 static void
 gtk_text_view_style_set (GtkWidget *widget,
                          GtkStyle  *previous_style)
@@ -3434,26 +3465,7 @@ gtk_text_view_style_set (GtkWidget *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      gdk_window_set_background (widget->window,
-                                 &widget->style->bg[GTK_WIDGET_STATE (widget)]);
-
-      gdk_window_set_background (text_view->text_window->bin_window,
-                                 &widget->style->base[GTK_WIDGET_STATE (widget)]);
-
-      if (text_view->left_window)
-        gdk_window_set_background (text_view->left_window->bin_window,
-                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
-      if (text_view->right_window)
-        gdk_window_set_background (text_view->right_window->bin_window,
-                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
-
-      if (text_view->top_window)
-        gdk_window_set_background (text_view->top_window->bin_window,
-                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
-
-      if (text_view->bottom_window)
-        gdk_window_set_background (text_view->bottom_window->bin_window,
-                                   &widget->style->bg[GTK_WIDGET_STATE (widget)]);
+      gtk_text_view_set_background (text_view);
     }
 
   if (text_view->layout && previous_style)
@@ -3478,6 +3490,25 @@ gtk_text_view_direction_changed (GtkWidget        *widget,
     }
 }
 
+static void
+gtk_text_view_state_changed (GtkWidget      *widget,
+		 	     GtkStateType    previous_state)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gtk_text_view_set_background (text_view);
+    }
+
+  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+    {
+      /* Clear any selection */
+      gtk_text_view_unselect (text_view);
+    }
+  
+  gtk_widget_queue_draw (widget);
+}
 
 static void
 set_invisible_cursor (GdkWindow *window)

@@ -1,3 +1,11 @@
+2002-12-21  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_set_background): New static
+	function to set the background of all windows.
+	(gtk_text_view_style_set): Use gtk_text_view_set_background().
+	(gtk_text_view_state_changed): New function; change background
+	according to state.  (#88126)
+
 2002-12-21  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_move_visually): fix the documentation
