@@ -1059,21 +1059,18 @@ check_is_folder (GtkFileSystem *file_system, const GtkFilePath *path, GError **e
     return FALSE;
   
   is_folder = gtk_file_info_get_is_folder (info);
-  gtk_file_info_free (info);
 
   if (!is_folder)
-    {
-      g_set_error (error,
-		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
-		   "%s: %s", 
-		   gtk_file_info_get_display_name (info),
-		   g_strerror (ENOTDIR));
+    g_set_error (error,
+		 GTK_FILE_SYSTEM_ERROR,
+		 GTK_FILE_SYSTEM_ERROR_NOT_FOLDER,
+		 "%s: %s", 
+		 gtk_file_info_get_display_name (info),
+		 g_strerror (ENOTDIR));
 
-      return FALSE;
-    }
+  gtk_file_info_free (info);
 
-  return TRUE;
+  return is_folder;
 }
 
 /* Inserts a path in the shortcuts tree, making a copy of it; alternatively,
