@@ -1,3 +1,9 @@
+2004-08-24  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixdata.c (gdk_pixdata_from_pixbuf): Work around bugs in
+	the runlength encoder by forcing rowstride * height to be 
+	divisible by bpp.  (#150882)
+
 Mon Aug 23 00:51:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* pixops/pixops.c (pixops_scale_nearest): Make it 
