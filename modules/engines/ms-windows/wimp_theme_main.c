@@ -49,7 +49,7 @@ global_filter_func (void     *xevent,
       /* catch theme changes */
     case WM_THEMECHANGED:
     case WM_SYSCOLORCHANGE:
-      xp_theme_exit();
+      xp_theme_reset ();
       wimp_style_init ();
 
       /* force all gtkwidgets to redraw */

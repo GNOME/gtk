@@ -85,12 +85,14 @@ typedef enum
   XP_THEME_ELEMENT__SIZEOF
 } XpThemeElement;
 
-void xp_theme_init(void);
-void xp_theme_exit(void);
-gboolean xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
-                       int x, int y, int width, int height, GtkStateType state_type,
-		       GdkRectangle *area);
-gboolean xp_theme_is_drawable(XpThemeElement element);
-gboolean xp_theme_get_system_font(int fontId, LOGFONT *lf);
+void xp_theme_init (void);
+void xp_theme_reset (void);
+void xp_theme_exit (void);
+gboolean xp_theme_draw (GdkWindow *win, XpThemeElement element,
+                        GtkStyle *style, int x, int y, int width,
+                        int height, GtkStateType state_type,
+                        GdkRectangle *area);
+gboolean xp_theme_is_drawable (XpThemeElement element);
+gboolean xp_theme_get_system_font (int fontId, LOGFONT *lf);
 
 #endif /* XP_THEME_H */

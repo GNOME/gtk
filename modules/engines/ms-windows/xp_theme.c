@@ -118,8 +118,25 @@ static DrawThemeBackgroundFunc draw_theme_background_func = NULL;
 static EnableThemeDialogTextureFunc enable_theme_dialog_texture_func = NULL;
 static IsThemeActiveFunc is_theme_active_func = NULL;
 
+static  gboolean was_theming_active = FALSE;
+
+static void
+xp_theme_close_open_handles (void)
+{
+  int i;
+  
+  for (i=0; i < XP_THEME_CLASS__SIZEOF; i++)
+    {
+      if (open_themes[i])
+        {
+          close_theme_data_func (open_themes[i]);
+          open_themes[i] = NULL;
+	}
+    }
+}
+
 void
-xp_theme_init(void)
+xp_theme_init (void)
 {
   if (uxtheme_dll)
     return;
@@ -133,25 +150,30 @@ xp_theme_init(void)
   draw_theme_background_func = (DrawThemeBackgroundFunc) GetProcAddress(uxtheme_dll, "DrawThemeBackground");
   enable_theme_dialog_texture_func = (EnableThemeDialogTextureFunc) GetProcAddress(uxtheme_dll, "EnableThemeDialogTexture");
   get_theme_sys_font_func = (GetThemeSysFontFunc) GetProcAddress(uxtheme_dll, "GetThemeSysFont");
+
+  if (is_theme_active_func)
+    {
+      was_theming_active = (*is_theme_active_func) ();
+    }
+}
+
+
+void
+xp_theme_reset (void)
+{
+  xp_theme_close_open_handles ();
+  was_theming_active = (*is_theme_active_func) ();
 }
 
 void
-xp_theme_exit(void)
+xp_theme_exit (void)
 {
-  int i;
   if (! uxtheme_dll)
     return;
 
-  for (i=0; i < XP_THEME_CLASS__SIZEOF; i++)
-    {
-      if (open_themes[i])
-        {
-          close_theme_data_func(open_themes[i]);
-          open_themes[i] = NULL;
-	}
-    }
+  xp_theme_close_open_handles ();
 
-  FreeLibrary(uxtheme_dll);
+  FreeLibrary (uxtheme_dll);
   uxtheme_dll = NULL;
 
   is_theme_active_func = NULL;
@@ -163,7 +185,7 @@ xp_theme_exit(void)
 }
 
 static HTHEME
-xp_theme_get_handle_by_class(XpThemeClass klazz)
+xp_theme_get_handle_by_class (XpThemeClass klazz)
 {
   if (!open_themes[klazz] && open_theme_data_func)
     {
@@ -173,7 +195,7 @@ xp_theme_get_handle_by_class(XpThemeClass klazz)
 }
 
 static HTHEME
-xp_theme_get_handle_by_element(XpThemeElement element)
+xp_theme_get_handle_by_element (XpThemeElement element)
 {
   HTHEME ret = NULL;
   XpThemeClass klazz = XP_THEME_CLASS__SIZEOF;
@@ -266,7 +288,7 @@ xp_theme_get_handle_by_element(XpThemeElement element)
 }
 
 static int
-xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
+xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 {
   int ret;
 
@@ -580,9 +602,9 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
 }
 
 gboolean
-xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
-              int x, int y, int width, int height, GtkStateType state_type,
-	      GdkRectangle *area)
+xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
+               int x, int y, int width, int height,
+               GtkStateType state_type, GdkRectangle *area)
 {
   HTHEME theme;
   RECT rect, clip, *pClip;
@@ -643,17 +665,32 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
 }
 
 gboolean
-xp_theme_is_drawable(XpThemeElement element)
+xp_theme_is_drawable (XpThemeElement element)
 {
-  if (is_theme_active_func && (*is_theme_active_func)())
+  gboolean ret = FALSE;
+  
+  if (is_theme_active_func)
     {
-      return (xp_theme_get_handle_by_element(element) != NULL);
+      gboolean active = (*is_theme_active_func) ();
+      // A bit of a hack, but it at least detects theme
+      // switches between XP and classic looks on systems
+      // using older GTK+ version (2.2.0-?) that do not
+      // support theme switch detection (gdk_window_add_filter).
+      if (active != was_theming_active)
+        {
+          xp_theme_reset ();
+        }
+      
+      if (active)
+        {
+          ret = (xp_theme_get_handle_by_element (element) != NULL);
+        }
     }
-  return FALSE;
+  return ret;
 }
 
 gboolean
-xp_theme_get_system_font(int fontId, LOGFONT *lf)
+xp_theme_get_system_font (int fontId, LOGFONT *lf)
 {
   if (get_theme_sys_font_func != NULL)
     {
