@@ -129,7 +129,7 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog->action_area),
                              GTK_BUTTONBOX_END);
 
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (dialog->action_area), 5);
+  gtk_box_set_spacing (GTK_BOX (dialog->action_area), 5);
   
   gtk_container_set_border_width (GTK_CONTAINER (dialog->action_area), 5);
   gtk_box_pack_end (GTK_BOX (dialog->vbox), dialog->action_area,

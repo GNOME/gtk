@@ -51,7 +51,6 @@ typedef struct _GtkButtonBoxClass  GtkButtonBoxClass;
 struct _GtkButtonBox
 {
   GtkBox box;
-  gint spacing;
   gint child_min_width;
   gint child_min_height;
   gint child_ipad_x;
@@ -67,31 +66,27 @@ struct _GtkButtonBoxClass
 
 GtkType gtk_button_box_get_type (void) G_GNUC_CONST;
 
-void gtk_button_box_get_child_size_default (gint *min_width, gint *min_height);
-void gtk_button_box_get_child_ipadding_default (gint *ipad_x, gint *ipad_y);
+GtkButtonBoxStyle gtk_button_box_get_layout  (GtkButtonBox      *widget);
+void              gtk_button_box_set_layout  (GtkButtonBox      *widget,
+                                              GtkButtonBoxStyle  layout_style);
 
-void gtk_button_box_set_child_size_default (gint min_width, gint min_height);
-void gtk_button_box_set_child_ipadding_default (gint ipad_x, gint ipad_y);
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_button_box_set_spacing gtk_box_set_spacing
+#define gtk_button_box_get_spacing gtk_box_get_spacing
 
-gint gtk_button_box_get_spacing (GtkButtonBox *widget);
-GtkButtonBoxStyle gtk_button_box_get_layout (GtkButtonBox *widget);
-void gtk_button_box_get_child_size (GtkButtonBox *widget,
-				    gint *min_width, gint *min_height);
-void gtk_button_box_get_child_ipadding (GtkButtonBox *widget, gint *ipad_x, gint *ipad_y);
-
-void gtk_button_box_set_spacing (GtkButtonBox *widget, gint spacing);
-void gtk_button_box_set_layout (GtkButtonBox *widget, 
-				GtkButtonBoxStyle layout_style);
 void gtk_button_box_set_child_size (GtkButtonBox *widget,
 				    gint min_width, gint min_height);
 void gtk_button_box_set_child_ipadding (GtkButtonBox *widget, gint ipad_x, gint ipad_y);
-
+void gtk_button_box_get_child_size (GtkButtonBox *widget,
+				    gint *min_width, gint *min_height);
+void gtk_button_box_get_child_ipadding (GtkButtonBox *widget, gint *ipad_x, gint *ipad_y);
+#endif
 
 /* Internal method - do not use. */
-void gtk_button_box_child_requisition (GtkWidget *widget,
-				       int *nvis_children,
-				       int *width,
-				       int *height);
+void _gtk_button_box_child_requisition (GtkWidget *widget,
+                                        int *nvis_children,
+                                        int *width,
+                                        int *height);
 
 #ifdef __cplusplus
 }

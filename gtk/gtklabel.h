@@ -112,6 +112,10 @@ void     gtk_label_select_region  (GtkLabel *label,
                                    gint      start_offset,
                                    gint      end_offset);
 
+void     gtk_label_get_layout_offsets (GtkLabel *label,
+                                       gint     *x,
+                                       gint     *y);
+
 #ifndef	GTK_DISABLE_COMPAT_H
 #  define gtk_label_set				gtk_label_set_text
 #endif	/* GTK_DISABLE_COMPAT_H */

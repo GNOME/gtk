@@ -438,6 +438,22 @@ gtk_box_set_spacing (GtkBox *box,
     }
 }
 
+/**
+ * gtk_box_get_spacing:
+ * @box: a #GtkBox
+ * 
+ * Gets the value set by gtk_box_set_spacing().
+ * 
+ * Return value: spacing between children
+ **/
+gint
+gtk_box_get_spacing (GtkBox *box)
+{
+  g_return_if_fail (GTK_IS_BOX (box));
+
+  return box->spacing;
+}
+
 void
 gtk_box_reorder_child (GtkBox                   *box,
 		       GtkWidget                *child,

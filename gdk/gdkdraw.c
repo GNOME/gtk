@@ -616,6 +616,10 @@ gdk_drawable_get_image (GdkDrawable *drawable,
   g_return_val_if_fail (x >= 0, NULL);
   g_return_val_if_fail (y >= 0, NULL);
 
+  /* FIXME? Note race condition since we get the size then
+   * get the image, and the size may have changed.
+   */
+  
   if (width < 0 || height < 0)
     gdk_drawable_get_size (drawable,
                            width < 0 ? &width : NULL,

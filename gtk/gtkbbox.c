@@ -68,12 +68,16 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   GtkWidgetClass *widget_class;
 
   widget_class = (GtkWidgetClass*) class;
+
+  /* FIXME we need to override the "spacing" property on GtkBox once
+   * libgobject allows that.
+   */
 }
 
 static void
 gtk_button_box_init (GtkButtonBox *button_box)
 {
-  button_box->spacing = GTK_BUTTONBOX_DEFAULT;
+  GTK_BOX (button_box)->spacing = 0;
   button_box->child_min_width = GTK_BUTTONBOX_DEFAULT;
   button_box->child_min_height = GTK_BUTTONBOX_DEFAULT;
   button_box->child_ipad_x = GTK_BUTTONBOX_DEFAULT;
@@ -81,42 +85,7 @@ gtk_button_box_init (GtkButtonBox *button_box)
   button_box->layout_style = GTK_BUTTONBOX_DEFAULT_STYLE;
 }
 
-
-/* set default values for child size and child internal padding */
-/* default spacing is in defined in subclasses */
-
-void gtk_button_box_set_child_size_default (gint width, gint height)
-{
-  default_child_min_width = width;
-  default_child_min_height = height;
-}
-
-void gtk_button_box_set_child_ipadding_default (gint ipad_x, gint ipad_y)
-{
-  default_child_ipad_x = ipad_x;
-  default_child_ipad_y = ipad_y;
-}
-
-/* get default values for child size and child internal padding */
-
-void gtk_button_box_get_child_size_default (gint *width, gint *height)
-{
-  *width = default_child_min_width;
-  *height = default_child_min_height;
-}
-
-void gtk_button_box_get_child_ipadding_default (gint *ipad_x, gint *ipad_y)
-{
-  *ipad_x = default_child_ipad_x;
-  *ipad_y = default_child_ipad_y;
-}
-
 /* set per widget values for spacing, child size and child internal padding */
-
-void gtk_button_box_set_spacing (GtkButtonBox *widget, gint spacing)
-{
-  widget->spacing = spacing;
-}
 
 void gtk_button_box_set_child_size (GtkButtonBox *widget, gint width, gint height)
 {
@@ -143,11 +112,6 @@ void gtk_button_box_set_layout (GtkButtonBox *widget,
 
 /* get per widget values for spacing, child size and child internal padding */
 
-gint gtk_button_box_get_spacing (GtkButtonBox *widget)
-{
-  return widget->spacing;
-}
-
 void gtk_button_box_get_child_size (GtkButtonBox *widget,
 				     gint *width, gint *height)
 {
@@ -173,10 +137,10 @@ GtkButtonBoxStyle gtk_button_box_get_layout (GtkButtonBox *widget)
    to match minimum size and internal padding.
    Returns the size each single child should have. */
 void
-gtk_button_box_child_requisition (GtkWidget *widget,
-				  int *nvis_children,
-				  int *width,
-				  int *height)
+_gtk_button_box_child_requisition (GtkWidget *widget,
+                                   int *nvis_children,
+                                   int *width,
+                                   int *height)
 {
   GtkButtonBox *bbox;
   GtkBoxChild *child;
@@ -202,8 +166,10 @@ gtk_button_box_child_requisition (GtkWidget *widget,
 
   bbox = GTK_BUTTON_BOX (widget);
 
-  gtk_button_box_get_child_size_default (&width_default, &height_default);
-  gtk_button_box_get_child_ipadding_default (&ipad_x_default, &ipad_y_default);
+  width_default = default_child_min_width;
+  height_default = default_child_min_height;
+  ipad_x_default = default_child_ipad_x;
+  ipad_y_default = default_child_ipad_y;
   
   child_min_width = bbox->child_min_width   != GTK_BUTTONBOX_DEFAULT
 	  ? bbox->child_min_width : width_default;

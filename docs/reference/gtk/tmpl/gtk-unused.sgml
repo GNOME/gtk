@@ -571,6 +571,14 @@ produce superscript and subscript.
 </para>
 
 
+<!-- ##### SIGNAL GtkWidget::debug-msg ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@message: 
+
 <!-- ##### SIGNAL GtkWidget::draw ##### -->
 <para>
 
@@ -592,6 +600,53 @@ produce superscript and subscript.
 </para>
 
 @widget: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
+<para>
+This is an internally used function and should never be called from an
+application.
+</para>
+
+@widget: 
+@nvis_children: 
+@width: 
+@height: 
+
+<!-- ##### FUNCTION gtk_button_box_get_child_ipadding_default ##### -->
+<para>
+The internal padding of a button is the amount of space between the outside
+of the button and the widget it contains. This function gets the default
+amount of horizontal and vertical padding, placing the results in @ipad_x
+and @ipad_y, respectively.
+</para>
+
+@ipad_x: the default horizontal internal button padding.
+@ipad_y: the default vertical internal button padding.
+
+<!-- ##### FUNCTION gtk_button_box_get_child_size_default ##### -->
+<para>
+Retrieves the default minimum width and height for all button boxes, and
+places the values in @min_width and @min_height, respectively.
+</para>
+
+@min_width: the default minimum width of a child widget.
+@min_height: the default minimum height of a child widget.
+
+<!-- ##### FUNCTION gtk_button_box_set_child_ipadding_default ##### -->
+<para>
+Sets the default number of pixels that pad each button in every button box.
+</para>
+
+@ipad_x: new default horizontal padding.
+@ipad_y: new default vertical padding.
+
+<!-- ##### FUNCTION gtk_button_box_set_child_size_default ##### -->
+<para>
+Sets the default size of child buttons.
+</para>
+
+@min_width: minimum default width for child buttons.
+@min_height: minimum default height for child buttons.
 
 <!-- ##### FUNCTION gtk_clist_construct ##### -->
 <para>
@@ -953,6 +1008,12 @@ This function is labeled private.
 </para>
 
 @object: the object whose signal handlers should be destroyed.
+
+<!-- ##### FUNCTION gtk_signal_init ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
 <para>

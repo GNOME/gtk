@@ -332,6 +332,7 @@ gtk_label_get_property (GObject     *object,
     case PROP_ACCEL_KEYVAL:
       g_value_set_uint (value, label->accel_keyval);
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1671,5 +1672,29 @@ gtk_label_select_region  (GtkLabel *label,
                                      g_utf8_offset_to_pointer (label->text, start_offset) - label->text,
                                      g_utf8_offset_to_pointer (label->text, end_offset) - label->text);
     }
+}
+
+/**
+ * gtk_label_get_layout_offsets:
+ * @label: a #GtkLabel
+ * @x: location to store X offset of layout, or %NULL
+ * @y: location to store Y offset of layout, or %NULL
+ *
+ * Returns the coordinates where the label will draw the #PangoLayout
+ * representing the text in the label; useful to convert mouse events
+ * into coordinates inside the #PangoLayout, e.g. to take some action
+ * if some part of the label is clicked. Of course you will need to
+ * create a #GtkEventBox to receive the events, and pack the label
+ * inside it, since labels are a #GTK_NO_WINDOW widget.
+ * 
+ **/
+void
+gtk_label_get_layout_offsets (GtkLabel *label,
+                              gint     *x,
+                              gint     *y)
+{
+  g_return_if_fail (GTK_IS_LABEL (label));
+  
+  get_layout_location (label, x, y);
 }
 

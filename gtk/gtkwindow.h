@@ -57,6 +57,7 @@ struct _GtkWindow
   gchar *title;
   gchar *wmclass_name;
   gchar *wmclass_class;
+  gchar *wm_role;
   GtkWindowType type;
 
   GdkWindow *frame;
@@ -90,8 +91,10 @@ struct _GtkWindow
   guint stick_initially : 1;
   guint maximize_initially : 1;
 
+  guint decorated : 1;
+  
   GdkWindowTypeHint type_hint : 2;
-
+  
   guint frame_left;
   guint frame_top;
   guint frame_right;
@@ -116,6 +119,8 @@ void       gtk_window_set_title                (GtkWindow           *window,
 void       gtk_window_set_wmclass              (GtkWindow           *window,
 						const gchar         *wmclass_name,
 						const gchar         *wmclass_class);
+void       gtk_window_set_role                 (GtkWindow           *window,
+                                                const gchar         *role);
 void       gtk_window_set_policy               (GtkWindow           *window,
 						gint                 allow_shrink,
 						gint                 allow_grow,
@@ -139,6 +144,11 @@ void       gtk_window_set_geometry_hints       (GtkWindow           *window,
 						GtkWidget           *geometry_widget,
 						GdkGeometry         *geometry,
 						GdkWindowHints       geom_mask);
+void       gtk_window_set_decorations_hint     (GtkWindow	    *window,
+                                                GdkWMDecoration      decorations);
+void       gtk_window_set_functions_hint       (GtkWindow	    *window,
+                                                GdkWMFunction	     functions);
+
 /* The following differs from gtk_widget_set_usize, in that
  * gtk_widget_set_usize() overrides the requisition, so sets a minimum
  * size, while this only sets the size requested from the WM.

@@ -315,7 +315,8 @@ gtk_window_init (GtkWindow *window)
   window->frame_top = 0;
   window->frame_bottom = 0;
   window->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
-    
+  window->decorated = TRUE;
+  
   gtk_widget_ref (GTK_WIDGET (window));
   gtk_object_sink (GTK_OBJECT (window));
   window->has_user_ref_count = TRUE;
@@ -442,9 +443,13 @@ gtk_window_get_arg (GtkObject  *object,
  * contain other widgets. Nearly always, the type of the window should
  * be #GTK_WINDOW_TOPLEVEL. If you're implementing something like a
  * popup menu from scratch (which is a bad idea, just use #GtkMenu),
- * you might use #GTK_WINDOW_TOPLEVEL. #GTK_WINDOW_DIALOG is not
- * useful; dialogs should be of type #GTK_WINDOW_TOPLEVEL.  (Probably
- * you want to use the #GtkDialog widget for dialogs anyway).
+ * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
+ * dialogs, though in some other toolkits dialogs are called "popups."
+ * In GTK+, #GTK_WINDOW_POPUP means a pop-up menu or pop-up tooltip.
+ * Popup windows are not controlled by the window manager.
+ *
+ * If you simply want an undecorated window (no window borders), use
+ * gtk_window_set_decorated(), don't use #GTK_WINDOW_POPUP.
  * 
  * Return value: a new #GtkWindow.
  **/
@@ -500,13 +505,14 @@ gtk_window_set_title (GtkWindow   *window,
  * @wmclass_name: window name hint
  * @wmclass_class: window class hint
  *
- * This function sets the X Window System "class" and "name" hints for a window.
- * According to the ICCCM, you should always set these to the same value for
- * all windows in an application, and GTK sets them to that value by default,
- * so calling this function is sort of pointless. However, you may want to
- * call gtk_window_set_role() on each window in your application, for the
- * benefit of the session manager. Setting the role allows the window manager
- * to restore window positions when loading a saved session.
+ * Don't use this function. It sets the X Window System "class" and
+ * "name" hints for a window.  According to the ICCCM, you should
+ * always set these to the same value for all windows in an
+ * application, and GTK sets them to that value by default, so calling
+ * this function is sort of pointless. However, you may want to call
+ * gtk_window_set_role() on each window in your application, for the
+ * benefit of the session manager. Setting the role allows the window
+ * manager to restore window positions when loading a saved session.
  * 
  **/
 void
@@ -524,7 +530,39 @@ gtk_window_set_wmclass (GtkWindow *window,
   window->wmclass_class = g_strdup (wmclass_class);
 
   if (GTK_WIDGET_REALIZED (window))
-    g_warning ("shouldn't set wmclass after window is realized!\n");
+    g_warning ("gtk_window_set_wmclass: shouldn't set wmclass after window is realized!\n");
+}
+
+/**
+ * gtk_window_set_role:
+ * @window: a #GtkWindow
+ * @role: unique identifier for the window to be used when restoring a session
+ *
+ * In combination with the window title, the window role allows a
+ * window manager to identify "the same" window when an application is
+ * restarted. So for example you might set the "toolbox" role on your
+ * app's toolbox window, so that when the user restarts their session,
+ * the window manager can put the toolbox back in the same place.
+ *
+ * If a window already has a unique title, you don't need to set the
+ * role, since the WM can use the title to identify the window when
+ * restoring the session.
+ * 
+ **/
+void
+gtk_window_set_role (GtkWindow   *window,
+                     const gchar *role)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (role == window->wm_role)
+    return;
+  
+  g_free (window->wm_role);
+  window->wm_role = g_strdup (role);
+  
+  if (GTK_WIDGET_REALIZED (window))
+    g_warning ("gtk_window_set_role(): shouldn't set role after window is realized!\n");
 }
 
 /**
@@ -927,7 +965,7 @@ gtk_window_unset_transient_for  (GtkWindow *window)
  * e.g. keep the dialog on top of the main window, or center the
  * dialog over the main window. gtk_dialog_new_with_buttons() and
  * other convenience functions in GTK+ will sometimes call
- * gtk_window_set_transient_for() on yoru behalf.
+ * gtk_window_set_transient_for() on your behalf.
  * 
  **/
 void       
@@ -1112,6 +1150,40 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
 }
 
 /**
+ * gtk_window_set_decorated:
+ * @window: a #GtkWindow
+ * @setting: %TRUE to decorate the window
+ *
+ * By default, windows are decorated with a title bar, resize
+ * controls, etc.  Some window managers allow GTK+ to disable these
+ * decorations, creating a borderless window. If you set the decorated
+ * property to %FALSE using this function, GTK+ will do its best to
+ * convince the window manager not to decorate the window.
+ * 
+ **/
+void
+gtk_window_set_decorated (GtkWindow *window,
+                          gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  setting = setting != FALSE;
+
+  if (setting == window->decorated)
+    return;
+
+  if (GTK_WIDGET (window)->window)
+    {
+      if (window->decorated)
+        gdk_window_set_decorations (GTK_WIDGET (window)->window,
+                                    GDK_DECOR_ALL);
+      else
+        gdk_window_set_decorations (GTK_WIDGET (window)->window,
+                                    0);
+    }
+}
+
+/**
  * gtk_window_set_default_size:
  * @window: a #GtkWindow
  * @width: width in pixels, or -1 to leave the default width unchanged
@@ -1128,6 +1200,11 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
  *
  * For more control over a window's initial size and how resizing works,
  * investigate gtk_window_set_geometry_hints().
+ *
+ * A useful feature: if you set the "geometry widget" via
+ * gtk_window_set_geometry_hints(), the default size specified by
+ * gtk_window_set_default_size() will be the default size of that
+ * widget, not of the entire window.
  * 
  **/
 void       
@@ -1376,11 +1453,11 @@ gtk_window_realize (GtkWidget *widget)
     case GTK_WINDOW_TOPLEVEL:
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
       break;
-    case GTK_WINDOW_DIALOG:
-      attributes.window_type = GDK_WINDOW_DIALOG;
-      break;
     case GTK_WINDOW_POPUP:
       attributes.window_type = GDK_WINDOW_TEMP;
+      break;
+    default:
+      g_warning (G_STRLOC": Unknown window type %d!", window->type);
       break;
     }
    
@@ -1453,6 +1530,12 @@ gtk_window_realize (GtkWidget *widget)
       GTK_WIDGET_REALIZED (window->transient_parent))
     gdk_window_set_transient_for (widget->window,
 				  GTK_WIDGET (window->transient_parent)->window);
+
+  if (window->wm_role)
+    gdk_window_set_role (widget->window, window->wm_role);
+  
+  if (!window->decorated)
+    gdk_window_set_decorations (widget->window, 0);
 
   gdk_window_set_type_hint (widget->window, window->type_hint);
 

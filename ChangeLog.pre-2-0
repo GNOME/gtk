@@ -1,3 +1,56 @@
+2001-03-07  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_set_decorated): new function, turns
+	off decorations for a window.
+
+	* demos/gtk-demo/button_box.c (create_bbox): adapt to button box
+	changes
+
+	* gtk/gtklabel.c (gtk_label_get_layout_offsets): new function 
+	to get location of PangoLayout inside the label, closes #51198
+
+	* gtk/testgtk.c (create_bbox): fix up button box usage
+
+	* gtk/testcalendar.c (create_calendar): fix up button box usage
+
+	* gtk/gtkfilesel.c (gtk_file_selection_init): fixup buttonbox usage
+
+	* gtk/gtkdialog.c (gtk_dialog_init): fixup buttonbox usage
+
+	* gtk/gtkhbbox.h: deprecations
+
+	* gtk/gtkvbbox.h: deprecations
+
+	* gtk/gtkbox.c (gtk_box_get_spacing): new function, used to
+	emulate deprecated gtk_button_box_get_spacing
+
+	* gtk/gtkbbox.h: deprecate some useless functions, remove entirely 
+	the "set global default" functions
+	(struct _GtkButtonBox): remove "spacing" field, use the one from 
+	GtkBox base class
+
+	* gtk/gtkbbox.c (_gtk_button_box_child_requisition): rename with uscore
+
+	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): If we fail to
+	render the icon, return the missing image icon.
+
+	* gtk/gtkimage.c (gtk_image_set_from_file): fall back to missing
+	image icon if the load fails.	
+
+	* gtk/gtkstock.h (GTK_STOCK_MISSING_IMAGE): Add stock icon for use
+	when no image is found; should be the Netscape "missing image"
+	icon eventually but for now is a random image
+
+	* gtk/gtkwindow.c (gtk_window_set_role): new function, sets the 
+	role for the session manager
+
+	* gtk/testgtk.c (dnd_drop): remove use of GTK_WINDOW_DIALOG
+
+	* gtk/gtkcompat.h (GTK_WINDOW_DIALOG): compat #define
+	GTK_WINDOW_DIALOG GTK_WINDOW_TOPLEVEL
+
+	* gtk/gtkenums.h (enum GtkWindowType): remove GTK_WINDOW_DIALOG
+
 Wed Mar  7 13:24:57 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/*.c: marshaller fixes.

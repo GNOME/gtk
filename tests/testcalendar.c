@@ -296,7 +296,7 @@ void create_calendar()
   hbbox = gtk_hbutton_box_new();
   gtk_box_pack_start(GTK_BOX(hbox), hbbox, FALSE, FALSE, DEF_PAD);
   gtk_button_box_set_layout(GTK_BUTTON_BOX(hbbox), GTK_BUTTONBOX_SPREAD);
-  gtk_button_box_set_spacing(GTK_BUTTON_BOX(hbbox), 5);
+  gtk_box_set_spacing(GTK_BOX(hbbox), 5);
 
   /* Calendar widget */
   frame = gtk_frame_new("Calendar");

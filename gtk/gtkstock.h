@@ -62,6 +62,8 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 
 
 /* Stock IDs */
+#define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
+
 #define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
 #define GTK_STOCK_DIALOG_WARNING   "gtk-dialog-warning"
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"

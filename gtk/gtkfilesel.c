@@ -499,7 +499,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   /* The horizontal box containing create, rename etc. buttons */
   filesel->button_area = gtk_hbutton_box_new ();
   gtk_button_box_set_layout (GTK_BUTTON_BOX (filesel->button_area), GTK_BUTTONBOX_START);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (filesel->button_area), 0);
+  gtk_box_set_spacing (GTK_BOX (filesel->button_area), 0);
   gtk_box_pack_start (GTK_BOX (filesel->main_vbox), filesel->button_area, 
 		      FALSE, FALSE, 0);
   gtk_widget_show (filesel->button_area);

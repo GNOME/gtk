@@ -27,6 +27,7 @@
 #include "gtkcontainer.h"
 #include "gtkimage.h"
 #include "gtkiconfactory.h"
+#include "gtkstock.h"
 
 static void gtk_image_class_init   (GtkImageClass  *klass);
 static void gtk_image_init         (GtkImage       *image);
@@ -388,7 +389,12 @@ gtk_image_set_from_file   (GtkImage    *image,
   pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 
   if (pixbuf == NULL)
-    return;
+    {
+      gtk_image_set_from_stock (image,
+                                GTK_STOCK_MISSING_IMAGE,
+                                GTK_ICON_SIZE_BUTTON);
+      return;
+    }
 
   gtk_image_set_from_pixbuf (image, pixbuf);
 

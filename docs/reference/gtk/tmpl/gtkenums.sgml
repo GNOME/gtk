@@ -373,7 +373,6 @@ window managers.
 </para>
 
 @GTK_WINDOW_TOPLEVEL: A window for a typical application.
-@GTK_WINDOW_DIALOG: A window for transient messages and dialogs.
 @GTK_WINDOW_POPUP: A window for popups.
 
 <!-- ##### ENUM GtkSortType ##### -->

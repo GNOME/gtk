@@ -146,15 +146,14 @@ gtk_vbutton_box_size_request (GtkWidget      *widget,
   box = GTK_BOX (widget);
   bbox = GTK_BUTTON_BOX (widget);
 
-  spacing = bbox->spacing != GTK_BUTTONBOX_DEFAULT
-	  ? bbox->spacing : default_spacing;
+  spacing = box->spacing;
   layout = bbox->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
 	  ? bbox->layout_style : default_layout_style;
   
-  gtk_button_box_child_requisition (widget,
-				    &nvis_children,
-				    &child_width,
-				    &child_height);
+  _gtk_button_box_child_requisition (widget,
+                                     &nvis_children,
+                                     &child_width,
+                                     &child_height);
 
   if (nvis_children == 0)
     {
@@ -193,6 +192,7 @@ static void
 gtk_vbutton_box_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)
 {
+  GtkBox *base_box;
   GtkButtonBox *box;
   GtkVButtonBox *hbox;
   GtkBoxChild *child;
@@ -213,16 +213,16 @@ gtk_vbutton_box_size_allocate (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_VBUTTON_BOX (widget));
   g_return_if_fail (allocation != NULL);
 
+  base_box = GTK_BOX (widget);
   box = GTK_BUTTON_BOX (widget);
   hbox = GTK_VBUTTON_BOX (widget);
-  spacing = box->spacing != GTK_BUTTONBOX_DEFAULT
-	  ? box->spacing : default_spacing;
+  spacing = base_box->spacing;
   layout = box->layout_style != GTK_BUTTONBOX_DEFAULT_STYLE
 	  ? box->layout_style : default_layout_style;
-  gtk_button_box_child_requisition (widget,
-				    &nvis_children,
-				    &child_width,
-				    &child_height);
+  _gtk_button_box_child_requisition (widget,
+                                     &nvis_children,
+                                     &child_width,
+                                     &child_height);
   widget->allocation = *allocation;
   height = allocation->height - GTK_CONTAINER (box)->border_width*2;
   switch (layout)

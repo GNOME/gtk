@@ -1,4 +1,16 @@
 <SIGNAL>
+<NAME>GdkPixbufLoader::animation-done</NAME>
+<RETURNS>void</RETURNS>
+GdkPixbufLoader *gdkpixbufloader
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GdkPixbufLoader::area-prepared</NAME>
+<RETURNS>void</RETURNS>
+GdkPixbufLoader *gdkpixbufloader
+</SIGNAL>
+
+<SIGNAL>
 <NAME>GdkPixbufLoader::area-updated</NAME>
 <RETURNS>void</RETURNS>
 GdkPixbufLoader *gdkpixbufloader
@@ -9,7 +21,7 @@ gint  arg4
 </SIGNAL>
 
 <SIGNAL>
-<NAME>GdkPixbufLoader::area-prepared</NAME>
+<NAME>GdkPixbufLoader::closed</NAME>
 <RETURNS>void</RETURNS>
 GdkPixbufLoader *gdkpixbufloader
 </SIGNAL>
@@ -18,18 +30,6 @@ GdkPixbufLoader *gdkpixbufloader
 <NAME>GdkPixbufLoader::frame-done</NAME>
 <RETURNS>void</RETURNS>
 GdkPixbufLoader *gdkpixbufloader
-gpointer  arg1
-</SIGNAL>
-
-<SIGNAL>
-<NAME>GdkPixbufLoader::animation-done</NAME>
-<RETURNS>void</RETURNS>
-GdkPixbufLoader *gdkpixbufloader
-</SIGNAL>
-
-<SIGNAL>
-<NAME>GdkPixbufLoader::closed</NAME>
-<RETURNS>void</RETURNS>
-GdkPixbufLoader *gdkpixbufloader
+GdkPixbufFrame  arg1
 </SIGNAL>
 

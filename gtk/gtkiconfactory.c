@@ -33,6 +33,9 @@
 #include <ctype.h>
 #include <string.h>
 
+/* FIXME use a better icon for this */
+#define MISSING_IMAGE_INLINE dialog_error
+
 static gpointer parent_class = NULL;
 
 static void gtk_icon_factory_init       (GtkIconFactory      *icon_factory);
@@ -384,6 +387,8 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_new, GTK_STOCK_NEW);
   add_unsized (factory, stock_open, GTK_STOCK_OPEN);
   add_unsized (factory, stock_save, GTK_STOCK_SAVE);
+
+  add_unsized (factory, MISSING_IMAGE_INLINE, GTK_STOCK_MISSING_IMAGE);
 }
 
 /* Sizes */
@@ -878,6 +883,20 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
   return source;
 }
 
+static GdkPixbuf*
+get_fallback_image (void)
+{
+  /* This icon can be used for any direction/state/size */
+  static GdkPixbuf *pixbuf = NULL;
+
+  if (pixbuf == NULL)
+    pixbuf = gdk_pixbuf_new_from_inline (MISSING_IMAGE_INLINE, FALSE, -1, NULL);
+  else
+    g_object_ref (G_OBJECT (pixbuf));
+
+  return pixbuf;
+}
+
 /**
  * gtk_icon_set_render_icon:
  * @icon_set: a #GtkIconSet
@@ -908,17 +927,11 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
   GdkPixbuf *icon;
   GtkIconSource *source;
   
-  /* FIXME conceivably, everywhere this function
-   * returns NULL, we should return some default
-   * dummy icon like a question mark or the image icon
-   * from netscape
-   */
-  
   g_return_val_if_fail (icon_set != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
 
   if (icon_set->sources == NULL)
-    return NULL;
+    return get_fallback_image ();
   
   icon = find_in_cache (icon_set, style, direction,
                         state, size);
@@ -933,7 +946,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
   source = find_and_prep_icon_source (icon_set, direction, state, size);
 
   if (source == NULL)
-    return NULL;
+    return get_fallback_image ();
 
   g_assert (source->pixbuf != NULL);
   
@@ -948,7 +961,7 @@ gtk_icon_set_render_icon (GtkIconSet        *icon_set,
   if (icon == NULL)
     {
       g_warning ("Theme engine failed to render icon");
-      return NULL;
+      return get_fallback_image ();
     }
   
   add_to_cache (icon_set, style, direction, state, size, icon);

@@ -92,6 +92,7 @@ void	   gtk_box_set_homogeneous     (GtkBox	     *box,
 					gboolean      homogeneous);
 void	   gtk_box_set_spacing	       (GtkBox	     *box,
 					gint	      spacing);
+gint       gtk_box_get_spacing         (GtkBox       *box);
 void	   gtk_box_reorder_child       (GtkBox	     *box,
 					GtkWidget    *child,
 					gint	      position);

@@ -1295,14 +1295,6 @@ GtkWidget
 @event: 
 @Returns: 
 
-<!-- ##### SIGNAL GtkWidget::debug-msg ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@message: 
-
 <!-- ##### SIGNAL GtkWidget::delete-event ##### -->
 <para>
 

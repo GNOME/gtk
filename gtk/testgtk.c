@@ -508,7 +508,7 @@ create_bbox (gint  horizontal,
   gtk_container_add (GTK_CONTAINER (frame), bbox);
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), spacing);
+  gtk_box_set_spacing (GTK_BOX (bbox), spacing);
   gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);
   
   button = gtk_button_new_with_label ("OK");
@@ -7228,7 +7228,7 @@ dnd_drop (GtkWidget *button, GdkEvent *event)
   if (window)
     return;
 
-  window = gtk_window_new(GTK_WINDOW_DIALOG);
+  window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_container_set_border_width (GTK_CONTAINER(window), 10);
 
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -7606,6 +7606,8 @@ create_shapes (void)
       with_region = shape_create_icon ("3DRings.xpm",
                                        460, 270, 25,25, GTK_WINDOW_TOPLEVEL);
 
+      gtk_window_set_decorated (GTK_WINDOW (with_region), FALSE);
+      
       gtk_signal_connect (GTK_OBJECT (with_region), "destroy",
 			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
 			  &with_region);

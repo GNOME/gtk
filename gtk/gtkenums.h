@@ -356,7 +356,6 @@ typedef enum
 typedef enum
 {
   GTK_WINDOW_TOPLEVEL,
-  GTK_WINDOW_DIALOG,
   GTK_WINDOW_POPUP
 } GtkWindowType;
 
