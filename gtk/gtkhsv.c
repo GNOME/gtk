@@ -380,14 +380,18 @@ static void
 gtk_hsv_size_request (GtkWidget      *widget,
 		      GtkRequisition *requisition)
 {
-  GtkHSV *hsv;
-  HSVPrivate *priv;
+  GtkHSV *hsv = GTK_HSV (widget);
+  HSVPrivate *priv = hsv->priv;
+  gint focus_width;
+  gint focus_pad;
+
+  gtk_widget_style_get (widget,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
   
-  hsv = GTK_HSV (widget);
-  priv = hsv->priv;
-  
-  requisition->width = priv->size;
-  requisition->height = priv->size;
+  requisition->width = priv->size + 2 * (focus_width + focus_pad);
+  requisition->height = priv->size + 2 * (focus_width + focus_pad);
 }
 
 /* Size_allocate handler for the HSV color selector */
@@ -581,7 +585,7 @@ compute_triangle (GtkHSV *hsv,
   
   priv = hsv->priv;
   
-  center = priv->size / 2.0;
+  center = GTK_WIDGET (hsv)->requisition.width / 2.0;
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
   angle = priv->h * 2.0 * G_PI;
@@ -633,7 +637,7 @@ compute_sv (GtkHSV  *hsv,
   priv = hsv->priv;
   
   compute_triangle (hsv, &ihx, &ihy, &isx, &isy, &ivx, &ivy);
-  center = priv->size / 2.0;
+  center = GTK_WIDGET (hsv)->requisition.width / 2.0;
   hx = ihx - center;
   hy = center - ihy;
   sx = isx - center;
@@ -736,7 +740,7 @@ compute_v (GtkHSV *hsv,
   
   priv = hsv->priv;
   
-  center = priv->size / 2.0;
+  center = GTK_WIDGET (hsv)->requisition.width / 2.0;
   dx = x - center;
   dy = center - y;
   
@@ -923,6 +927,7 @@ paint_ring (GtkHSV      *hsv,
 	    gint         width,
 	    gint         height)
 {
+  GtkWidget *widget = GTK_WIDGET (hsv);
   HSVPrivate *priv;
   int xx, yy;
   gdouble dx, dy, dist;
@@ -935,10 +940,17 @@ paint_ring (GtkHSV      *hsv,
   GdkBitmap *mask;
   GdkGC *gc;
   GdkColor color;
+  gint focus_width;
+  gint focus_pad;
+
+  gtk_widget_style_get (widget,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
   
   priv = hsv->priv;
   
-  center = priv->size / 2.0;
+  center = widget->requisition.width / 2.0;
   
   outer = priv->size / 2.0;
   inner = outer - priv->ring_width;
@@ -998,14 +1010,16 @@ paint_ring (GtkHSV      *hsv,
   color.pixel = 1;
   gdk_gc_set_foreground (gc, &color);
   gdk_draw_arc (mask, gc, TRUE,
-		-x, -y,
+		focus_width + focus_pad - x, 
+		focus_width + focus_pad - y,
 		priv->size - 1, priv->size - 1,
 		0, 360 * 64);
   
   color.pixel = 0;
   gdk_gc_set_foreground (gc, &color);
   gdk_draw_arc (mask, gc, TRUE,
-		-x + priv->ring_width - 1, -y + priv->ring_width - 1,
+		focus_width + focus_pad - x + priv->ring_width - 1, 
+		focus_width + focus_pad - y + priv->ring_width - 1,
 		priv->size - 2 * priv->ring_width + 1, priv->size - 2 * priv->ring_width + 1,
 		0, 360 * 64);
   
@@ -1056,25 +1070,12 @@ paint_ring (GtkHSV      *hsv,
   
   /* Draw ring outline */
 
-  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
-      priv->focus_on_ring)
+  if (GTK_WIDGET_HAS_FOCUS (hsv) && priv->focus_on_ring)
     {
-      gint focus_width;
-      gint focus_halfwidth;
-      GdkGC *gc = gtk_hsv_get_focus_gc (hsv, &focus_width);
-      focus_halfwidth = (focus_width + 1) / 2;
-      
-      gdk_draw_arc (drawable, gc, FALSE,
-                    -x + focus_width/2, -y + focus_width/2,
-                    priv->size - focus_width, priv->size - focus_width,
-                    0, 360 * 64);
-      gdk_draw_arc (drawable, gc, FALSE,
-                    -x + priv->ring_width - focus_halfwidth, -y + priv->ring_width - focus_halfwidth,
-                    priv->size - 2 * priv->ring_width + focus_width,
-		    priv->size - 2 * priv->ring_width + focus_width,
-                    0, 360 * 64);
-      
-      g_object_unref (gc);
+      gtk_paint_focus (widget->style, drawable,
+		       GTK_WIDGET_STATE (widget),
+		       NULL, widget, NULL,
+		       x, y, width, height);
     }
 }
 
@@ -1109,6 +1110,7 @@ paint_triangle (GtkHSV      *hsv,
 		gint         width,
 		gint         height)
 {
+  GtkWidget *widget = GTK_WIDGET (hsv);
   HSVPrivate *priv;
   gint hx, hy, sx, sy, vx, vy; /* HSV vertices */
   gint x1, y1, r1, g1, b1; /* First vertex in scanline order */
@@ -1123,6 +1125,7 @@ paint_triangle (GtkHSV      *hsv,
   GdkColor color;
   GdkPoint points[3];
   gdouble r, g, b;
+  gchar *detail;
   
   priv = hsv->priv;
   
@@ -1236,7 +1239,7 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (GTK_WIDGET (hsv)->window, width, height, 1);
+  mask = gdk_pixmap_new (widget->window, width, height, 1);
 
   gc = gdk_gc_new (mask);
   
@@ -1274,18 +1277,6 @@ paint_triangle (GtkHSV      *hsv,
   
   g_free (buf);
   
-  /* Draw triangle focus outline */
-
-  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
-      !priv->focus_on_ring)
-    {
-      gint focus_width = 1;	    
-      GdkGC *gc = gtk_hsv_get_focus_gc (hsv, &focus_width);
-  
-      gdk_draw_polygon (drawable, gc, FALSE, points, 3);
-      g_object_unref (gc);
-    }
-  
   /* Draw value marker */
   
   xx = floor (sx + (vx - sx) * priv->v + (hx - vx) * priv->s * priv->v + 0.5) - x;
@@ -1298,12 +1289,14 @@ paint_triangle (GtkHSV      *hsv,
 
   if (INTENSITY (r, g, b) > 0.5)
     {
+      detail = "colorwheel_light";
       color.red = 0x0000;
       color.green = 0x0000;
       color.blue = 0x0000;
     }
   else
     {
+      detail = "colorwheel_dark";
       color.red = 0xffff;
       color.green = 0xffff;
       color.blue = 0xffff;
@@ -1313,6 +1306,7 @@ paint_triangle (GtkHSV      *hsv,
 
 #define OUTER_RADIUS 4
 #define INNER_RADIUS 3 
+#define FOCUS_RADIUS 6
   
   gdk_draw_arc (drawable, priv->gc, FALSE,
 		xx - OUTER_RADIUS, yy - OUTER_RADIUS,
@@ -1322,6 +1316,29 @@ paint_triangle (GtkHSV      *hsv,
 		xx - INNER_RADIUS, yy - INNER_RADIUS,
 		INNER_RADIUS * 2, INNER_RADIUS * 2,
 		0, 360 * 64);
+
+  /* Draw focus outline */
+
+  if (GTK_WIDGET_HAS_FOCUS (hsv) &&
+      !priv->focus_on_ring)
+    {
+      gint focus_width;
+      gint focus_pad;
+
+      gtk_widget_style_get (widget,
+			    "focus-line-width", &focus_width,
+			    "focus-padding", &focus_pad,
+			    NULL);
+  
+      gtk_paint_focus (widget->style, drawable,
+		       GTK_WIDGET_STATE (widget),
+		       NULL, widget, detail,
+		       xx - FOCUS_RADIUS - focus_width - focus_pad, 
+		       yy - FOCUS_RADIUS - focus_width - focus_pad, 
+		       2 * (FOCUS_RADIUS + focus_width + focus_pad), 
+		       2 * (FOCUS_RADIUS + focus_width + focus_pad));
+    }
+  
 }
 
 /* Paints the contents of the HSV color selector */

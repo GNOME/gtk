@@ -1,3 +1,19 @@
+2004-05-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkhsv.c: Draw focus indication in the color wheel using
+	standard focus style.  (#63071, Bill Haneman, idea for new
+	style by Owen Taylor)
+
+	* gtk/gtkstyle.c (gtk_default_draw_focus): Support drawing on
+	focus on the colorwheel via details.
+
+2004-05-06  Matthias Clasen  <mclasen@redhat.com>
+
+        Merge from 2.4:
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_state_changed): Remove
+	this no longer needed signal handler.  (#141817, Paul Pogonyshev)
+
 Fri May  7 00:41:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktearoffmenuitem.h: 

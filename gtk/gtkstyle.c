@@ -1880,14 +1880,18 @@ gtk_style_real_realize (GtkStyle *style)
   style->white.blue = 0xffff;
   gdk_colormap_alloc_color (style->colormap, &style->white, FALSE, TRUE);
 
-  gc_values_mask = GDK_GC_FOREGROUND;
+  gc_values_mask = GDK_GC_FOREGROUND | GDK_GC_BACKGROUND;
   
   gc_values.foreground = style->black;
+  gc_values.background = style->white;
   style->black_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
   
   gc_values.foreground = style->white;
+  gc_values.background = style->black;
   style->white_gc = gtk_gc_get (style->depth, style->colormap, &gc_values, gc_values_mask);
   
+  gc_values_mask = GDK_GC_FOREGROUND;
+
   for (i = 0; i < 5; i++)
     {
       if (style->rc_style && style->rc_style->bg_pixmap_name[i])
@@ -4615,8 +4619,6 @@ gtk_default_draw_focus (GtkStyle      *style,
   gint8 *dash_list = "\1\1";
   gint dash_len;
 
-  gc = style->fg_gc[state_type];
-
   if (widget)
     {
       gtk_widget_style_get (widget,
@@ -4629,13 +4631,19 @@ gtk_default_draw_focus (GtkStyle      *style,
 
   sanitize_size (window, &width, &height);
   
-  if (area)
-    gdk_gc_set_clip_rectangle (gc, area);
+  if (detail && !strcmp (detail, "colorwheel_light"))
+    gc = style->black_gc;
+  else if (detail && !strcmp (detail, "colorwheel_dark"))
+    gc = style->white_gc;
+  else 
+    gc = style->fg_gc[state_type];
 
   gdk_gc_set_line_attributes (gc, line_width,
 			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
 			      GDK_CAP_BUTT, GDK_JOIN_MITER);
-
+  
+  if (area)
+    gdk_gc_set_clip_rectangle (gc, area);
 
   if (detail && !strcmp (detail, "add-mode"))
     {
