@@ -782,11 +782,12 @@ GArray* g_rarray_truncate (GArray   *array,
 gint  g_str_equal (const gpointer v,
 		   const gpointer v2);
 guint g_str_hash  (const gpointer v);
-/* These two "hash" functions actually just return the value and/or
-   comparison of the pointers themselves - useful for hashing
-   on an int value or something like that */
-gint  g_direct_compare(gpointer a, gpointer b);
-guint g_direct_hash(gpointer key);
+
+/* This "hash" function will just return the key's adress as an
+ * unsigned integer. Useful for hashing on plain adresses or
+ * simple integer values.
+ */
+guint g_direct_hash (gpointer key);
 
 
 /* GScanner: Flexible lexical scanner for general purpose.
