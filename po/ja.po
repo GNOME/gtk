@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-25 22:37+0900\n"
-"PO-Revision-Date: 2004-01-25 22:03+0900\n"
+"POT-Creation-Date: 2004-01-25 23:45+0900\n"
+"PO-Revision-Date: 2004-01-25 23:44+0900\n"
 "Last-Translator: Takeshi AIHANA <aihana@gnome.gr.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -991,7 +991,7 @@ msgstr "削除"
 
 #: gtk/gtkfilechooserdefault.c:1021
 msgid "Up"
-msgstr "上げる"
+msgstr "上へ"
 
 #: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
 msgid "File name"
@@ -1604,7 +1604,7 @@ msgstr "戻る(_B)"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "下がる(_D)"
+msgstr "下へ(_D)"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
@@ -1612,7 +1612,7 @@ msgstr "進む(_F)"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "上る(_U)"
+msgstr "上へ(_U)"
 
 #: gtk/gtkstock.c:298
 msgid "_Harddisk"
