@@ -1,3 +1,11 @@
+Wed May 15 16:52:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c: Update from contents of size entry
+	on focus out. (#76493, Lauris Kaplinski)
+
+	* gtk/gtkclipboard.c (selection_get_cb): Fix backwads
+	info/time arguments. (#80226)
+
 Wed May 15 11:13:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in gtk/stock-icons/Makefile.am: If not
