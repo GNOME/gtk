@@ -103,7 +103,7 @@ static gpointer parent_class = NULL;
 
 #define WINDOW_IS_TOPLEVEL(window)		   \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
-   GDK_WINDOW_TYPE (window) != GDK_WINDOW_TOPLEVEL)
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 
 GType
 gdk_window_impl_x11_get_type (void)

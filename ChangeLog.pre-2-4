@@ -1,3 +1,8 @@
+2004-01-22  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (WINDOW_IS_TOPLEVEL):
+	Fix typo
+
 2004-01-21  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_finalize):
