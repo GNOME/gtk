@@ -530,4 +530,6 @@ docs/Makefile
 gdk/Makefile
 gtk/Makefile
 gtk/gtkfeatures.h
+gdk.pc
+gtk+.pc
 ], [chmod +x gtk-config])

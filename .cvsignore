@@ -15,3 +15,5 @@ ABOUT-NLS
 intl
 stamp-h.in
 gtk+.spec
+gdk.pc
+gtk+.pc

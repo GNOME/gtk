@@ -1,3 +1,12 @@
+2000-09-30  Martin Baulig  <baulig@suse.de>
+
+	* gtk+.pc.in, gdk.pc.in: Provide pkg-config scripts.
+
+	* configure.in: Create *.pc scripts from the *.pc.in
+	templates.
+	* Makefile.am (pkgconfig_DATA): Install the *.pc
+	scripts in `$(libexecdir)/pkgconfig'.
+
 Thu Sep 07 20:50:49 2000  George Lebl <jirka@5z.com>
 
 	* gtk/gtkmenu.c:  Backported Nils Barth's patch for submenu

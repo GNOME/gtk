@@ -98,7 +98,11 @@ EXTRA_DIST =	\
 	examples/frame/Makefile  \
 	examples/spinbutton/spinbutton.c  \
 	examples/spinbutton/Makefile  \
-	examples/find-examples.sh
+	examples/find-examples.sh \
+	gdk.pc.in gtk+.pc.in
+
+pkgconfigdir = $(libexecdir)/pkgconfig
+pkgconfig_DATA= gdk.pc gtk+.pc
 
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \
