@@ -428,16 +428,23 @@ gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (width >= -1 && height >= -1);
 
-  if (width != cell->width)
+  if ((width != cell->width) || (height != cell->height))
     {
-      cell->width = width;
-      g_object_notify (G_OBJECT (cell), "width");
-    }
+      g_object_freeze_notify (G_OBJECT (cell));
 
-  if (height != cell->height)
-    {
-      cell->height = height;
-      g_object_notify (G_OBJECT (cell), "height");
+      if (width != cell->width)
+        {
+          cell->width = width;
+          g_object_notify (G_OBJECT (cell), "width");
+        }
+
+      if (height != cell->height)
+        {
+          cell->height = height;
+          g_object_notify (G_OBJECT (cell), "height");
+        }
+
+      g_object_thaw_notify (G_OBJECT (cell));
     }
 }
 

@@ -1,3 +1,19 @@
+2001-08-11  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkalignment.c, gtk/gtkarrow.c, gtk/gtkaspectframe.c,
+	  gtk/gtkcellrenderer.c, gtk/gtkcellrenderertext.c, 
+	  gtk/gtkcombo.c, gtk/gtkcurve.c, gtk/gtkfontsel.c, 
+	  gtk/gtklayout.c, gtk/gtkmisc.c, gtk/gtkpacker.c, 
+	  gtk/gtkprogress.c, gtk/gtkruler.c,, gtk/gtksettings.c,
+	  gtk/gtkspinbutton.c, gtk/gtktexttag.c : coalescing property notifies
+
+	* gtk/gtkclist.c, gtk/gtktipsquery.c, gtk/gtktexttag.c,
+	  gtk/gtkwidget.c : added G_SIGNAL_TYPE_STATIC_SCOPE to all
+	GDK_TYPE_EVENT signals
+
+	* gtk/gtkalignment.c : removed 'direct allocation bug',
+	which Tim discovered while reading the patch
+
 Sat Aug 11 14:32:14 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.h (gtk_widget_set_default_visual): Add some

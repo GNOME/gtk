@@ -356,6 +356,7 @@ gtk_layout_set_size (GtkLayout     *layout,
 
   widget = GTK_WIDGET (layout);
   
+  g_object_freeze_notify (G_OBJECT (layout));
   if (width != layout->width)
      {
 	layout->width = width;
@@ -366,6 +367,7 @@ gtk_layout_set_size (GtkLayout     *layout,
 	layout->height = height;
 	g_object_notify (G_OBJECT (layout), "height");
      }
+  g_object_thaw_notify (G_OBJECT (layout));
 
   gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
   gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);

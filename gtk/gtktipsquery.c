@@ -169,7 +169,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
                   GTK_TYPE_WIDGET,
                   G_TYPE_STRING,
                   G_TYPE_STRING,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void

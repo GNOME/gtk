@@ -530,8 +530,9 @@ gdk_window_new (GdkWindow     *parent,
       dwExStyle = WS_EX_TRANSPARENT;
       private->depth = 0;
       private->input_only = TRUE;
-      draw_impl->colormap = NULL;
-      GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, NULL colormap\n"));
+      draw_impl->colormap = gdk_colormap_get_system ();
+      gdk_colormap_ref (draw_impl->colormap);
+      GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, system colormap\n"));
     }
 
   if (parent_private)
@@ -1505,8 +1506,10 @@ gdk_window_set_transient_for (GdkWindow *window,
 
   if (!SetWindowLong (window_id, GWL_STYLE, style))
     WIN32_API_FAILED ("SetWindowLong");
+#if 0 /* not sure if we want to do this, clipping to parent size! */
   if (!SetParent (window_id, parent_id))
 	WIN32_API_FAILED ("SetParent");
+#endif
 
   if (!RedrawWindow (window_id, NULL, NULL, 
                      RDW_FRAME | RDW_INVALIDATE | RDW_UPDATENOW))
@@ -1751,6 +1754,11 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   HWND hwnd;
   RECT r;
 
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (rect != NULL);
+
+  private = GDK_WINDOW_OBJECT (window);
+
   rect->x = 0;
   rect->y = 0;
   rect->width = 1;
@@ -1758,6 +1766,9 @@ gdk_window_get_frame_extents (GdkWindow    *window,
   
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  while (private->parent && ((GdkWindowObject*) private->parent)->parent)
+    private = (GdkWindowObject*) private->parent;
 
   hwnd = GDK_WINDOW_HWND (window);
   /* find the frame window */
@@ -1767,7 +1778,7 @@ gdk_window_get_frame_extents (GdkWindow    *window,
       g_return_if_fail (NULL != hwnd);
     }
 
-  if (GetWindowRect (hwnd, &r))
+  if (!GetWindowRect (hwnd, &r))
     WIN32_API_FAILED ("GetWindowRect");
 
   rect->x = r.left;

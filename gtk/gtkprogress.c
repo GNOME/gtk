@@ -633,6 +633,7 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
 
   if (progress->x_align != x_align || progress->y_align != y_align)
     {
+      g_object_freeze_notify (G_OBJECT (progress));
       if (progress->x_align != x_align)
 	{
 	  progress->x_align = x_align;
@@ -644,6 +645,7 @@ gtk_progress_set_text_alignment (GtkProgress *progress,
 	  progress->y_align = y_align;
 	  g_object_notify (G_OBJECT (progress), "text_yalign");
 	}
+      g_object_thaw_notify (G_OBJECT (progress));
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));

@@ -824,6 +824,7 @@ gtk_curve_set_range (GtkCurve *curve,
                      gfloat    min_y,
                      gfloat    max_y)
 {
+  g_object_freeze_notify (G_OBJECT (curve));
   if (curve->min_x != min_x) {
      curve->min_x = min_x;
      g_object_notify (G_OBJECT (curve), "min_x");
@@ -840,6 +841,7 @@ gtk_curve_set_range (GtkCurve *curve,
      curve->max_y = max_y;
      g_object_notify (G_OBJECT (curve), "max_y");
   }
+  g_object_thaw_notify (G_OBJECT (curve));
 
   gtk_curve_size_graph (curve);
   gtk_curve_reset_vector (curve);

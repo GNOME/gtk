@@ -108,6 +108,7 @@ gtk_settings_init (GtkSettings *settings)
       i++;
   settings->property_values = g_new0 (GValue, i);
   i = 0;
+  g_object_freeze_notify (G_OBJECT (settings));
   for (p = pspecs; *p; p++)
     {
       GParamSpec *pspec = *p;
@@ -119,6 +120,7 @@ gtk_settings_init (GtkSettings *settings)
       g_object_notify (G_OBJECT (settings), pspec->name);
       i++;
     }
+  g_object_thaw_notify (G_OBJECT (settings));
   g_free (pspecs);
 }
 

@@ -991,9 +991,9 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
   if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
     impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
   else if (GDK_IS_WINDOW (drawable))
-    impl = ((GdkWindowObject *) drawable)->impl;
+    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
   else if (GDK_IS_PIXMAP (drawable))
-    impl = ((GdkPixmapObject *) drawable)->impl;
+    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
 
   win32_gc->hwnd = impl->handle;
 
@@ -1209,9 +1209,9 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
   if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
     impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
   else if (GDK_IS_WINDOW (drawable))
-    impl = ((GdkWindowObject *) drawable)->impl;
+    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
   else if (GDK_IS_PIXMAP (drawable))
-    impl = ((GdkPixmapObject *) drawable)->impl;
+    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
 
   if (usage & GDK_GC_FOREGROUND)
     {
@@ -1241,7 +1241,8 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
     }
   else
     {
-      ReleaseDC (win32_gc->hwnd, win32_gc->hdc);
+      if (!ReleaseDC (win32_gc->hwnd, win32_gc->hdc))
+	WIN32_GDI_FAILED ("ReleaseDC");
     }
 
   if (hpen != NULL)

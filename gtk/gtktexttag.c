@@ -625,7 +625,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   G_TYPE_BOOLEAN,
                   3,
                   G_TYPE_OBJECT,
-                  GDK_TYPE_EVENT,
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE,
                   GTK_TYPE_TEXT_ITER);
 }
 
@@ -756,6 +756,7 @@ set_font_description (GtkTextTag           *text_tag,
     }
   else
     {
+      g_object_freeze_notify (G_OBJECT (text_tag));
       if (text_tag->family_set)
         {
           text_tag->family_set = FALSE;
@@ -786,6 +787,7 @@ set_font_description (GtkTextTag           *text_tag,
           text_tag->size_set = FALSE;
           g_object_notify (G_OBJECT (text_tag), "size_set");
         }
+      g_object_thaw_notify (G_OBJECT (text_tag));
     }
 }
 

@@ -657,7 +657,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EVENT_AFTER] =
     g_signal_new ("event-after",
                   G_TYPE_FROM_CLASS (object_class),
@@ -665,7 +665,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   0,
                   NULL, NULL,
                   gtk_marshal_VOID__BOXED,
-                  G_TYPE_NONE, 1, GDK_TYPE_EVENT);
+                  G_TYPE_NONE, 1, GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[BUTTON_PRESS_EVENT] =
     g_signal_new ("button_press_event",
                   G_TYPE_FROM_CLASS (object_class),
@@ -674,7 +674,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[BUTTON_RELEASE_EVENT] =
     g_signal_new ("button_release_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -683,7 +683,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SCROLL_EVENT] =
     g_signal_new ("scroll_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -692,7 +692,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[MOTION_NOTIFY_EVENT] =
     g_signal_new ("motion_notify_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -701,7 +701,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DELETE_EVENT] =
     g_signal_new ("delete_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -710,7 +710,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DESTROY_EVENT] =
     g_signal_new ("destroy_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -719,7 +719,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EXPOSE_EVENT] =
     g_signal_new ("expose_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -728,7 +728,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[KEY_PRESS_EVENT] =
     g_signal_new ("key_press_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -737,7 +737,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[KEY_RELEASE_EVENT] =
     g_signal_new ("key_release_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -746,7 +746,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[ENTER_NOTIFY_EVENT] =
     g_signal_new ("enter_notify_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -755,7 +755,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[LEAVE_NOTIFY_EVENT] =
     g_signal_new ("leave_notify_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -764,7 +764,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[CONFIGURE_EVENT] =
     g_signal_new ("configure_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -773,7 +773,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[FOCUS_IN_EVENT] =
     g_signal_new ("focus_in_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -782,7 +782,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[FOCUS_OUT_EVENT] =
     g_signal_new ("focus_out_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -791,7 +791,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[MAP_EVENT] =
     g_signal_new ("map_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -800,7 +800,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[UNMAP_EVENT] =
     g_signal_new ("unmap_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -809,7 +809,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[PROPERTY_NOTIFY_EVENT] =
     g_signal_new ("property_notify_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -818,7 +818,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_CLEAR_EVENT] =
     g_signal_new ("selection_clear_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -827,7 +827,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_REQUEST_EVENT] =
     g_signal_new ("selection_request_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -836,7 +836,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_NOTIFY_EVENT] =
     g_signal_new ("selection_notify_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -845,7 +845,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_RECEIVED] =
     g_signal_new ("selection_received",
 		  G_TYPE_FROM_CLASS (object_class),
@@ -875,7 +875,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[PROXIMITY_OUT_EVENT] =
     g_signal_new ("proximity_out_event",
                   G_TYPE_FROM_CLASS(object_class),
@@ -884,7 +884,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
                   gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DRAG_LEAVE] =
     gtk_signal_new ("drag_leave",
 		    GTK_RUN_LAST,
@@ -976,7 +976,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   _gtk_boolean_handled_accumulator, NULL,
 		  gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
+                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[CLIENT_EVENT] =
     g_signal_new ("client_event",
 		  G_TYPE_FROM_CLASS(object_class),
@@ -985,7 +985,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[NO_EXPOSE_EVENT] =
     g_signal_new ("no_expose_event",
 		  G_TYPE_FROM_CLASS(object_class),
@@ -994,7 +994,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[WINDOW_STATE_EVENT] =
     g_signal_new ("window_state_event",
 		  G_TYPE_FROM_CLASS(object_class),
@@ -1003,7 +1003,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_boolean_handled_accumulator, NULL,
 		  gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT);
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[POPUP_MENU] =
     gtk_signal_new ("popup_menu",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,

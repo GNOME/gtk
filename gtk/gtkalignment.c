@@ -247,8 +247,6 @@ gtk_alignment_set (GtkAlignment *alignment,
 		   gfloat        xscale,
 		   gfloat        yscale)
 {
-  gboolean values_changed = FALSE; 
-  
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
   xalign = CLAMP (xalign, 0.0, 1.0);
@@ -256,34 +254,36 @@ gtk_alignment_set (GtkAlignment *alignment,
   xscale = CLAMP (xscale, 0.0, 1.0);
   yscale = CLAMP (yscale, 0.0, 1.0);
 
-  if (alignment->xalign != xalign)
+  if (   (alignment->xalign != xalign)
+      || (alignment->yalign != yalign)
+      || (alignment->xscale != xscale)
+      || (alignment->yscale != yscale))
     {
-       values_changed = TRUE;
-       alignment->xalign = xalign;
-       g_object_notify (G_OBJECT(alignment), "xalign");
-    }
-  if (alignment->yalign != yalign)
-    {
-       values_changed = TRUE;
-       alignment->yalign = yalign;
-       g_object_notify (G_OBJECT(alignment), "yalign");
-    }
-  if (alignment->xscale != xscale)
-    {
-       values_changed = TRUE;
-       alignment->xscale = xscale;
-       g_object_notify (G_OBJECT(alignment), "xscale");
-    }
-  if (alignment->yscale != yscale)
-    {
-       values_changed = TRUE;
-       alignment->yscale = yscale;
-       g_object_notify (G_OBJECT(alignment), "yscale");
-    }
+      g_object_freeze_notify (G_OBJECT (alignment));
+      if (alignment->xalign != xalign)
+        {
+           alignment->xalign = xalign;
+           g_object_notify (G_OBJECT(alignment), "xalign");
+        }
+      if (alignment->yalign != yalign)
+        {
+           alignment->yalign = yalign;
+           g_object_notify (G_OBJECT(alignment), "yalign");
+        }
+      if (alignment->xscale != xscale)
+        {
+           alignment->xscale = xscale;
+           g_object_notify (G_OBJECT(alignment), "xscale");
+        }
+      if (alignment->yscale != yscale)
+        {
+           alignment->yscale = yscale;
+           g_object_notify (G_OBJECT(alignment), "yscale");
+        }
+      g_object_thaw_notify (G_OBJECT (alignment));
 
-   if (values_changed == TRUE)
-    {
-      gtk_widget_size_allocate (GTK_WIDGET (alignment), &(GTK_WIDGET (alignment)->allocation));
+      if (GTK_BIN (alignment)->child)
+        gtk_widget_queue_resize (GTK_BIN (alignment)->child);
       gtk_widget_queue_draw (GTK_WIDGET (alignment));
     }
 }

@@ -657,6 +657,7 @@ set_font_description (GtkCellRendererText  *celltext,
     }
   else
     {
+      g_object_freeze_notify (G_OBJECT (celltext));
       if (celltext->family_set)
         {
           celltext->family_set = FALSE;
@@ -687,6 +688,7 @@ set_font_description (GtkCellRendererText  *celltext,
           celltext->size_set = FALSE;
           g_object_notify (G_OBJECT (celltext), "size_set");
         }
+      g_object_thaw_notify (G_OBJECT (celltext));
     }
 }
 

@@ -423,11 +423,13 @@ _gdk_win32_get_image (GdkDrawable *drawable,
       if (GDK_IS_PIXMAP (drawable))
 	{
 	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
+	  if (!DeleteDC (hdc))
+	    WIN32_GDI_FAILED ("DeleteDC");
 	}
       else
 	{
-	  ReleaseDC (impl->handle, hdc);
+	  if (!ReleaseDC (impl->handle, hdc))
+	    WIN32_GDI_FAILED ("ReleaseDC");
 	}
       g_free (image);
       return NULL;
