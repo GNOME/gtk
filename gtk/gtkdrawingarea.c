@@ -35,10 +35,10 @@ static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
 static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
 
-guint
+GtkType
 gtk_drawing_area_get_type (void)
 {
-  static guint drawing_area_type = 0;
+  static GtkType drawing_area_type = 0;
 
   if (!drawing_area_type)
     {
@@ -54,7 +54,7 @@ gtk_drawing_area_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      drawing_area_type = gtk_type_unique (gtk_widget_get_type (), &drawing_area_info);
+      drawing_area_type = gtk_type_unique (GTK_TYPE_WIDGET, &drawing_area_info);
     }
 
   return drawing_area_type;
@@ -65,7 +65,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 {
   GtkWidgetClass *widget_class;
 
-  widget_class = (GtkWidgetClass*) class;
+  widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->realize = gtk_drawing_area_realize;
   widget_class->size_allocate = gtk_drawing_area_size_allocate;

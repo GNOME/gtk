@@ -2533,7 +2533,7 @@ gtk_widget_unlock_accelerators (GtkWidget *widget)
 gboolean
 gtk_widget_accelerators_locked (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   
   return gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
 					     widget_signals[ADD_ACCELERATOR],

@@ -1,3 +1,7 @@
+Wed Mar 24 09:24:03 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkdrawingarea.[hc]: type/macro fixups.
+
 Mon Mar 22 05:51:34 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbin.c (gtk_bin_draw): only redraw children that are visible
