@@ -2595,6 +2595,7 @@ gtk_menu_position (GtkMenu *menu)
   gint menu_height;
   gboolean push_in;
   GdkScreen *screen;
+  GdkScreen *pointer_screen;
   GdkRectangle monitor;
   gint monitor_num;
 
@@ -2602,12 +2603,9 @@ gtk_menu_position (GtkMenu *menu)
 
   widget = GTK_WIDGET (menu);
 
-  gdk_window_get_pointer (gtk_widget_get_root_window (widget),
-  			  &x, &y, NULL);
-
   screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
-  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+  gdk_display_get_pointer (gdk_screen_get_display (screen),
+			   &pointer_screen, &x, &y, NULL);
 
   /* We need the requisition to figure out the right place to
    * popup the menu. In fact, we always need to ask here, since
@@ -2615,6 +2613,20 @@ gtk_menu_position (GtkMenu *menu)
    * the requisition won't have been recomputed yet.
    */
   gtk_widget_size_request (widget, &requisition);
+
+  if (pointer_screen != screen)
+    {
+      /* Pointer is on a different screen; roughly center the
+       * menu on the screen. If someone was using multiscreen
+       * + Xinerama together they'd probably want something
+       * fancier; but that is likely to be vanishingly rare.
+       */
+      x = MAX (0, (gdk_screen_get_width (screen) - requisition.width) / 2);
+      y = MAX (0, (gdk_screen_get_height (screen) - requisition.height) / 2);
+    }
+
+  monitor_num = gdk_screen_get_monitor_at_point (screen, x, y);
+  gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
 
   push_in = FALSE;
   

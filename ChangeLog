@@ -1,3 +1,20 @@
+Sat Dec 14 01:00:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_position): Handle the case
+	where the pointer isn't on the same screen as the widget
+	by centering the menu on the widget's screen. (#94563)
+
+Fri Dec 13 23:58:06 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkscreen.c (gdk_screen_get_monitor_at_point)
+	* gdk/gdkscreen.c (gdk_screen_get_monitor_at_window): 
+	Provide a useful fallback on failure - return a monitor
+	close to the point or window. (#79991)
+
+	* gtk/gtkmenu.c (gtk_menu_position): Remove a now
+	unneeded check for failure of 
+	gdk_screen_get_monitor_at_point()
+
 Fri Dec 13 23:10:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkclist.c: Fix a problem with the focus row
