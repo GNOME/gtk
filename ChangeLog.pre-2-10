@@ -1,3 +1,8 @@
+2004-05-22  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkinput-win32.c (print_lc): Remove duplicated
+	line. (Spotted by Benoît Carpentier.)
+
 2004-05-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Check for XFIXES extension.

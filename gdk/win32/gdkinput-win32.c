@@ -109,7 +109,6 @@ print_lc(LOGCONTEXT *lc)
   if (lc->lcOptions & CXO_MARGIN) g_print (" CXO_MARGIN");
   if (lc->lcOptions & CXO_MGNINSIDE) g_print (" CXO_MGNINSIDE");
   if (lc->lcOptions & CXO_CSRMESSAGES) g_print (" CXO_CSRMESSAGES");
-  if (lc->lcOptions & CXO_CSRMESSAGES) g_print (" CXO_CSRMESSAGES");
   g_print ("\n");
   g_print ("lcStatus =");
   if (lc->lcStatus & CXS_DISABLED) g_print (" CXS_DISABLED");
