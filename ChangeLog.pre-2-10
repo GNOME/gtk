@@ -1,5 +1,9 @@
 2004-12-14  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Bump version to 2.6.0
+
+	* NEWS: Updates
+
 	* tests/testiconview.c: Test oversized items.
 
 	* gtk/gtk.symbols: Add new symbols.
@@ -31,8 +35,6 @@
 
 	* gtk/gtkimage.c (gtk_image_set_property): Add a missing break
 	statement.  (#161172, Damon Chaplin)
-
-	* NEWS: Updates
 
 	* gtk/gtkcellrenderertext.c: Add a width-chars property like
 	GtkLabel has.  (#160496, James M. Cape)

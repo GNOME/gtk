@@ -13,81 +13,83 @@ Overview of Changes from GTK+ 2.4.x to GTK+ 2.6.0
   - GtkCellRendererProgress
 
 * Changes in GtkFileChooser
-  - many tweaks to keynav and other behaviour
+  - Many tweaks to keynav and other behaviour
 
 * Changes in GtkTreeView 
-  - hover selection
-  - hover expand
-  - separators 
-  - insensitive rows
-  - typeahead
+  - Hover selection
+  - Hover expand
+  - Separators 
+  - Insensitive rows
+  - Typeahead
 
 * Changes in GtkComboBox
-  - allow trees in combo boxes
-  - hover selection
-  - hover expand
-  - separators 
-  - insensitive rows
-  - scrolling
+  - Allow trees in combo boxes
+  - Hover selection
+  - Hover expand
+  - Separators 
+  - Insensitive rows
+  - Scrolling
 
 * Changes in GtkLabel
-  - rotated text
-  - ellipsisation
-  - dnd from selectable labels
-  - selectable labels in the focus chain
-  - obey the Pango backspace-deletes-character attribute
+  - Rotated text
+  - Ellipsisation
+  - Dnd from selectable labels
+  - Selectable labels in the focus chain
+  - Obey the Pango backspace-deletes-character attribute
 
 * Changes in GtkTextView
-  - rotated text
-  - obey the Pango backspace-deletes-character attribute
+  - Rotated text
+  - Obey the Pango backspace-deletes-character attribute
 
 * Changes in Clipboard/Selection/DND handling
-  - selection ownerchip change notification
+  - Selection ownerchip change notification
   - API to handle text, image and file targets
-  - support text/plain target
-  - support clipboard persistency
-  - support xdnd v5
-  - reduce clipboard timeout to 30 seconds
+  - Support text/plain target
+  - Support clipboard persistency. 
+    A sample clipboard manager implementation can be found at 
+    http://people.imendio.com/andersca/archives/clipboard-manager-0.3.tar.gz
+  - Support xdnd v5
+  - Reduce clipboard timeout to 30 seconds
 
 * Theming
-  - follow icon theme specification for directory locations
-  - themed window icons
-  - themed images in GtkImage
-  - allow themes to displace focus rectangles on click
-  - various new stock icons
+  - Follow icon theme specification for directory locations
+  - Themed window icons
+  - Themed images in GtkImage
+  - Allow themes to displace focus rectangles on click
+  - Various new stock icons
 
 * Window Manager interaction
-  - support do-not-focus-on-map hint
-  - support _NET_WM_USER_TIME
+  - Support do-not-focus-on-map hint
+  - Support _NET_WM_USER_TIME
 
 * gdk-pixbuf:
-  - license information for image loaders
-  - disable loaders
-  - simple rotation
-  - make threadsafe
+  - License information for image loaders
+  - Disable loaders
+  - Simple rotation
+  - Make threadsafe
 
 * Performance improvements
-  - increase chunk size for incremental selection transfers
-  - get rid of many PLT entries
-  - icon theme caching
-  - sync counter mechanism to speed up resizes
-  - reimplement GtkListStore on top of a splay tree
-  - fix algorithmic problems in GtkUIManager
+  - Increase chunk size for incremental selection transfers
+  - Get rid of many PLT entries
+  - Icon theme caching
+  - Sync counter mechanism to speed up resizes
+  - Reimplement GtkListStore on top of a splay tree
+  - Fix algorithmic problems in GtkUIManager
 
 * Win32-specific changes
-  - integrate IME input method module
-  - integrate ms-windows (Wimp) theme engine
+  - Integrate IME input method module
+  - Integrate ms-windows (Wimp) theme engine
 
 * Other changes
   - API for HIG-conform dialogs
   - API for stock-like buttons
-  - new init API based on GOption
-  - setting for alternative button order
-  - setting for modules to load
-  - integrate pixbuf theme engine
-  - change notebook tabs with the scroll wheel
-  - ellipsisation in GtkCellRendererText, GtkProgressBar, GtkStatusbar
-  - clean up abi and enforce list of exported symbols
+  - New init API based on GOption
+  - Setting for alternative button order
+  - Setting for modules to load
+  - Integrate pixbuf theme engine
+  - Change notebook tabs with the scroll wheel
+  - Ellipsisation in GtkCellRendererText, GtkProgressBar, GtkStatusbar
+  - Clean up abi and enforce list of exported symbols
 
 Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
 =================================================
@@ -102,18 +104,26 @@ Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
   - Reset filters when necessary [Carlos Garnacho Parro]
 * GtkMenu
   - Make mnemonics without Alt work in menubars [Owen Taylor]
+  - Scroll wheel scrolling [Matthias]
 * GtkLabel
   - Add a max-width-chars property to specify the maximal 
     width of a label in characters [Christian Persch]
+* GtkIconView 
+  - Arrange items in a grid [Matthias]
+  - Convert hardcoded spacing constants into properties [Matthias]
+* GtkCellRendererText
+  - Add ::width-chars property [James M. Cape]
 * Win32
   - Implement keynav for the color picker [Hans Breuer]
   - Use GLib stdio wrappers [Tor Lillqvist]
 * Bug fixes [Kazuki IWAMOTO, Damon Chaplin, Matthias, Christian, 
   Michael Natterer, Jonathan Blandford, Manish Singh, John Finlay, 
-  Robert Ögren, Mariano Suárez-Alvarez, Marco Pesenti Gritti]
-* Documentation improvements [Matthias, Jay Camp, Paolo Borelli]
+  Robert Ögren, Mariano Suárez-Alvarez, Marco Pesenti Gritti,
+  Tommi Komulainen]
+* Documentation improvements [Matthias, Jay Camp, Paolo Borelli,
+  David Lodge]
 * New and improved translations (bg,nb,no,nso,pt_BR,zh_CN)
-Bugs fixed: 160437,160376,159640, 160679,159498,111031,160826,160063,145463,159896,160911,101309,160936,161109,161050,160500,155944,161142,160838
+Bugs fixed: 160437,160376,159640, 160679,159498,111031,160826,160063,145463,159896,160911,101309,160936,161109,161050,160500,155944,161142,160838,160496,161172,160711,88532,161195,152483
 
 Overview of Changes from GTK+ 2.5.5 to GTK+ 2.5.6
 =================================================
