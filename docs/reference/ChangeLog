@@ -1,3 +1,17 @@
+Thu Feb 12 02:00:53 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtktreemodelfilter.sgml: 
+	* gtk/tmpl/gtkentrycompletion.sgml: 
+	* gtk/tmpl/gtkcelllayout.sgml: Additions.
+
+Thu Feb 12 01:27:02 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Updates.
+
+Thu Feb 12 01:26:42 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add some private headers.
+
 Sat Feb  7 00:38:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add GtkAccelMap, gtk_accel_map_get,

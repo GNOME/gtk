@@ -26,9 +26,13 @@ IGNORE_HFILES=				\
 	fnmatch.h			\
 	gdk-pixbuf-loader.h		\
 	gtkcellrendererseptext.h	\
+	gtkcellview.h			\
+	gtkcellviewmenuitem.h		\
 	gtkdebug.h			\
+	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
 	gtkfilechooserentry.h		\
+	gtkfilechooserprivate.h		\
 	gtkfilechooserutils.h		\
 	gtkfilesystem.h			\
 	gtkfilesystemmodel.h		\

@@ -2,11 +2,17 @@
 GtkEntryCompletion
 
 <!-- ##### SECTION Short_Description ##### -->
-
+completion functionality for GtkEntry
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkEntryCompletion is an auxiliary object to be used in conjunction with
+#GtkEntry to provide the completion functionality. It implements the
+#GtkCellLayout interface, to allow the user to add extra cells to the 
+TreeView with completion matches. 
+</para>
+<para>
+To add completion functionality to an entry, use gtk_entry_set_completion().
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,7 +22,7 @@ GtkEntryCompletion
 
 <!-- ##### STRUCT GtkEntryCompletion ##### -->
 <para>
-
+The GtkEntryCompletion struct contains only private data.
 </para>
 
 
@@ -50,14 +56,15 @@ GtkEntryCompletion
 
 <!-- ##### USER_FUNCTION GtkEntryCompletionMatchFunc ##### -->
 <para>
-
+A function which decides whether the row indicated by @iter matches a given 
+@key, and should be displayed as a possible completion for @key.
 </para>
 
-@completion: 
-@key: 
-@iter: 
-@user_data: 
-@Returns: 
+@completion: the #GtkEntryCompletion
+@key: the string to match
+@iter: a #GtkTreeIter indicating the row to match
+@user_data: user data given to gtk_entry_completion_set_match_func()
+@Returns: %TRUE if @iter should be displayed as a possible completion for @key
 
 
 <!-- ##### FUNCTION gtk_entry_completion_new ##### -->

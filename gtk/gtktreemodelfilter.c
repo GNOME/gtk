@@ -2484,12 +2484,12 @@ gtk_tree_model_filter_set_visible_func (GtkTreeModelFilter            *filter,
  * @filter: A #GtkTreeModelFilter.
  * @n_columns: The number of columns in the filter model.
  * @types: The #GType<!-- -->s of the columns.
- * @func: A #GtkTreeModelFilterModifyFunc, or %NULL.
+ * @func: A #GtkTreeModelFilterModifyFunc
  * @data: User data to pass to the modify function, or %NULL.
  * @destroy: Destroy notifier of @data, or %NULL.
  *
- * Sets the @filter to have @n_columns columns with @types. If @func
- * is not %NULL, it will set @func to be the modify function of @filter.
+ * Sets the @filter to have @n_columns columns with @types and sets 
+ * @func to be the modify function of @filter.
  *
  * Since: 2.4
  */

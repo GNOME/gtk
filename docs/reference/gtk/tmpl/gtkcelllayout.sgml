@@ -2,11 +2,13 @@
 GtkCellLayout
 
 <!-- ##### SECTION Short_Description ##### -->
-
+An interface for packing cells
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkCellLayout is an interface to be implemented by all objects which
+want to provide a #GtkTreeViewColumn-like API for packing cells, setting
+attributes and data funcs. 
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -36,14 +38,15 @@ GtkCellLayout
 
 <!-- ##### USER_FUNCTION GtkCellLayoutDataFunc ##### -->
 <para>
-
+A function which should set the value of @cell_layout's cell renderer(s)
+as appropriate. 
 </para>
 
-@cell_layout: 
-@cell: 
-@tree_model: 
-@iter: 
-@data: 
+@cell_layout: a #GtkCellLayout
+@cell: the cell renderer whose value is to be set
+@tree_model: the model
+@iter: a #GtkTreeIter indicating the row to set the value for
+@data: user data passed to gtk_cell_layout_set_cell_data_func()
 
 
 <!-- ##### FUNCTION gtk_cell_layout_pack_start ##### -->
@@ -64,6 +67,16 @@ GtkCellLayout
 @cell_layout: 
 @cell: 
 @expand: 
+
+
+<!-- ##### FUNCTION gtk_cell_layout_reorder ##### -->
+<para>
+
+</para>
+
+@cell_layout: 
+@cell: 
+@position: 
 
 
 <!-- ##### FUNCTION gtk_cell_layout_clear ##### -->

@@ -2,21 +2,41 @@
 GtkTreeModelFilter
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A GtkTreeModel which hides parts of an underlying tree model
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A #GtkTreeModelFilter is a tree model which wraps another tree model,
+and can do the following things:
+<itemizedlist>
+<listitem><para>
+Filter specific rows, based on data from a "visible column", a column
+storing booleans indicating whether the row should be filtered or not,
+or based on the return value of a "visible function", which gets a
+model, iter and user_data and returns a boolean indicating whether the
+row should be filtered or not.
+</para></listitem>
+<listitem><para>
+Modify the "appearance" of the model, using a modify function. 
+This is extremely powerful and allows for just changing
+some values and also for creating a completely different model based on
+the given child model. 
+</para></listitem>
+<listitem><para>
+Set a different root node, also known as a "virtual root". You can pass in 
+a #GtkTreePath indicating the root node for the filter at construction time.
+</para></listitem>
+</itemizedlist>
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkTreeModelSort
 </para>
 
 <!-- ##### STRUCT GtkTreeModelFilter ##### -->
 <para>
-
+The GtkTreeModelFilter struct contains only private fields.
 </para>
 
 
@@ -32,25 +52,28 @@ GtkTreeModelFilter
 
 <!-- ##### USER_FUNCTION GtkTreeModelFilterVisibleFunc ##### -->
 <para>
-
+A function which decides whether the row indicated by @iter is visible.
 </para>
 
-@model: 
-@iter: 
-@data: 
-@Returns: 
+@model: the #GtkTreeModelFilter
+@iter: a #GtkTreeIter pointing to the row whose visibility is determined
+@data: user data given to gtk_tree_model_filter_set_visible_func()
+@Returns: Whether the row indicated by @iter is visible.
 
 
 <!-- ##### USER_FUNCTION GtkTreeModelFilterModifyFunc ##### -->
 <para>
-
+A function which calculates display values from raw values in the model.
+It must fill @value with the display value for the column @column in the 
+row indicated by @iter. 
 </para>
 
-@model: 
-@iter: 
-@value: 
-@column: 
-@data: 
+@model: the #GtkTreeModelFilter
+@iter: a #GtkTreeIter pointing to the row whose display values are determined
+@value: A #GValue which is already initialized for with the correct type for 
+  the column @column.
+@column: the column whose display value is determined 
+@data: user data given to gtk_tree_model_filter_set_modify_func()
 
 
 <!-- ##### FUNCTION gtk_tree_model_filter_new ##### -->
