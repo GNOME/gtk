@@ -2896,6 +2896,7 @@ GTK_TYPE_TREE_ROW_REFERENCE
 gtk_tree_model_get_type
 gtk_tree_iter_get_type
 gtk_tree_path_get_type
+gtk_tree_row_reference_get_type
 </SECTION>
 
 <SECTION>
