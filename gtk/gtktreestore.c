@@ -2317,7 +2317,8 @@ gtk_tree_store_move (GtkTreeStore *tree_store,
       parent->children = node;
 
       node->next = tmp;
-      tmp->prev = node;
+      if (tmp) 
+	tmp->prev = node;
 
       handle_b = FALSE;
     }
