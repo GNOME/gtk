@@ -27,6 +27,7 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
@@ -51,18 +52,43 @@ extern "C" {
 #endif /* GTK_NO_CHECK_CASTS */
 
 
-/* Determines whether 'obj' is a type of 'otype'.
+/* Determines whether `obj' and `klass' are a type of `otype'.
  */
-#define GTK_CHECK_TYPE(obj,otype)  (gtk_type_is_a (((GtkObject*) (obj))->klass->type, (otype)))
+#define GTK_CHECK_TYPE(obj,otype)          ( \
+  GTK_TYPE_IS_A (((GtkObject*) (obj))->klass->type, (otype)) \
+)
+#define GTK_CHECK_CLASS_TYPE(klass,otype)  ( \
+  GTK_TYPE_IS_A (((GtkObjectClass*) (klass))->type, (otype)) \
+)
 
-
-/* Macro for casting a pointer to a GtkObject pointer.
+/* Macro for casting a pointer to a GtkObject or GtkObjectClass pointer.
+ * The second portion of the ?: statments are just in place to offer
+ * descriptive warning message.
  */
-#define GTK_OBJECT(obj)                   GTK_CHECK_CAST ((obj), gtk_object_get_type (), GtkObject)
+#define GTK_OBJECT(object)		( \
+  GTK_IS_OBJECT (object) ? \
+    (GtkObject*) (object) : \
+    (GtkObject*) gtk_object_check_cast ((GtkObject*) (object), GTK_TYPE_OBJECT) \
+)
+#define GTK_OBJECT_CLASS(klass)		( \
+  GTK_IS_OBJECT_CLASS (klass) ? \
+    (GtkObjectClass*) (klass) : \
+    (GtkObjectClass*) gtk_object_check_class_cast ((GtkObjectClass*) (klass), GTK_TYPE_OBJECT) \
+)
+
+/* Macro for testing whether `object' and `klass' are of type GTK_TYPE_OBJECT.
+ */
+#define GTK_IS_OBJECT(object)		( \
+  (object) != NULL && \
+  GTK_IS_OBJECT_CLASS (((GtkObject*) (object))->klass) \
+)
+#define GTK_IS_OBJECT_CLASS(klass)	( \
+  (klass) != NULL && \
+  GTK_FUNDAMENTAL_TYPE (((GtkObjectClass*) (klass))->type) == GTK_TYPE_OBJECT \
+)
 
 /* Macros for extracting various fields from GtkObject and GtkObjectClass.
  */
-#define GTK_OBJECT_CLASS(klass)           (GTK_CHECK_CLASS_CAST ((klass), gtk_object_get_type (), GtkObjectClass))
 #define GTK_OBJECT_TYPE(obj)              (GTK_OBJECT (obj)->klass->type)
 #define GTK_OBJECT_SIGNALS(obj)           (GTK_OBJECT (obj)->klass->signals)
 #define GTK_OBJECT_NSIGNALS(obj)          (GTK_OBJECT (obj)->klass->nsignals)
@@ -81,17 +107,6 @@ enum
   GTK_OBJECT_FLAG_LAST  = GTK_RESERVED_2
 };
   
-/* GtkArg flag bits for gtk_object_add_arg_type
- */
-enum
-{
-  GTK_ARG_READABLE	= 1 << 0,
-  GTK_ARG_WRITABLE	= 1 << 1,
-  GTK_ARG_CONSTRUCT	= 1 << 2
-};
-#define GTK_ARG_READWRITE	(GTK_ARG_READABLE | GTK_ARG_WRITABLE)
-
-
 /* Macros for extracting the object_flags from GtkObject.
  */
 #define GTK_OBJECT_FLAGS(obj)             (GTK_OBJECT (obj)->flags)
@@ -103,9 +118,17 @@ enum
 #define GTK_OBJECT_SET_FLAGS(obj,flag)    G_STMT_START{ (GTK_OBJECT_FLAGS (obj) |= (flag)); }G_STMT_END
 #define GTK_OBJECT_UNSET_FLAGS(obj,flag)  G_STMT_START{ (GTK_OBJECT_FLAGS (obj) &= ~(flag)); }G_STMT_END
 
-/* Macro for testing whether "obj" is of type GtkObject.
+/* GtkArg flag bits for gtk_object_add_arg_type
  */
-#define GTK_IS_OBJECT(obj)                (GTK_CHECK_TYPE ((obj), gtk_object_get_type ()))
+enum
+{
+  GTK_ARG_READABLE	= 1 << 0,
+  GTK_ARG_WRITABLE	= 1 << 1,
+  GTK_ARG_CONSTRUCT	= 1 << 2,
+  /* aliases
+   */
+  GTK_ARG_READWRITE	= GTK_ARG_READABLE | GTK_ARG_WRITABLE
+};
 
 
 typedef struct _GtkObjectClass  GtkObjectClass;
@@ -193,7 +216,7 @@ typedef void (*GtkSignalMarshaller) (GtkObject      *object,
 
 /* Get the type identifier for GtkObject's.
  */
-guint	gtk_object_get_type		(void);
+GtkType	gtk_object_get_type		(void);
 
 /* Append "signals" to those already defined in "class".
  */

@@ -47,10 +47,10 @@ static GtkMenuItemClass *parent_class = NULL;
 static guint check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_check_menu_item_get_type (void)
 {
-  static guint check_menu_item_type = 0;
+  static GtkType check_menu_item_type = 0;
 
   if (!check_menu_item_type)
     {

@@ -26,12 +26,14 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
-
-#define GTK_BUTTON(obj)          (GTK_CHECK_CAST ((obj), gtk_button_get_type (), GtkButton))
-#define GTK_BUTTON_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_button_get_type (), GtkButtonClass))
-#define GTK_IS_BUTTON(obj)       (GTK_CHECK_TYPE ((obj), gtk_button_get_type ()))
+#define GTK_TYPE_BUTTON			(gtk_button_get_type ())
+#define GTK_BUTTON(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_BUTTON, GtkButton))
+#define GTK_BUTTON_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_BUTTON, GtkButtonClass))
+#define GTK_IS_BUTTON(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_BUTTON))
+#define GTK_IS_BUTTON_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BUTTON))
 
 
 typedef struct _GtkButton       GtkButton;
@@ -59,7 +61,7 @@ struct _GtkButtonClass
 };
 
 
-guint      gtk_button_get_type       (void);
+GtkType    gtk_button_get_type       (void);
 GtkWidget* gtk_button_new            (void);
 GtkWidget* gtk_button_new_with_label (const gchar *label);
 void       gtk_button_pressed        (GtkButton *button);

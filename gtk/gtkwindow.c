@@ -115,10 +115,10 @@ static GtkBinClass *parent_class = NULL;
 static guint window_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_window_get_type (void)
 {
-  static guint window_type = 0;
+  static GtkType window_type = 0;
 
   if (!window_type)
     {

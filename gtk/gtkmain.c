@@ -327,7 +327,7 @@ gtk_init (int	 *argc,
    * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
    */
 
-  current_locale = g_strdup(setlocale (LC_CTYPE, NULL));
+  current_locale = g_strdup (setlocale (LC_CTYPE, NULL));
 
 #ifdef X_LOCALE
   if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
@@ -342,7 +342,7 @@ gtk_init (int	 *argc,
 
   g_free (current_locale);
 
-  GTK_NOTE(MISC, g_print("%s multi-byte string functions.\n", 
+  GTK_NOTE (MISC, g_print("%s multi-byte string functions.\n", 
 			  gtk_use_mb ? "Using" : "Not using"));
 
   /* Initialize the default visual and colormap to be
@@ -351,9 +351,11 @@ gtk_init (int	 *argc,
    */
   gtk_visual = gdk_visual_get_system ();
   gtk_colormap = gdk_colormap_get_system ();
+
+  gtk_type_init ();
+  gtk_signal_init ();
   gtk_rc_init ();
   
-  gtk_type_init ();
   
   /* Register an exit function to make sure we are able to cleanup.
    */

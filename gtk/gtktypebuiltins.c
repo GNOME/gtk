@@ -56,4 +56,3 @@
   { "GdkWindow", GTK_TYPE_BOXED },
   { "GdkEvent", GTK_TYPE_BOXED },
   { "GdkColor", GTK_TYPE_BOXED },
-  { "GtkTooltips", GTK_TYPE_BOXED },

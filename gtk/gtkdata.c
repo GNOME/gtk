@@ -32,10 +32,10 @@ static void gtk_data_class_init (GtkDataClass *klass);
 static guint data_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_data_get_type (void)
 {
-  static guint data_type = 0;
+  static GtkType data_type = 0;
 
   if (!data_type)
     {

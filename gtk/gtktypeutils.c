@@ -21,51 +21,102 @@
 #include "gtktypeutils.h"
 
 
+#define	TYPE_NODES_BLOCK_SIZE	(200)
+
 typedef struct _GtkTypeNode GtkTypeNode;
 
 struct _GtkTypeNode
 {
   GtkType type;
-  gint init_class;
-  gpointer klass;
   GtkTypeInfo type_info;
-  GtkTypeNode *parent;
-  GList *children;
+  guint n_supers;
+  GtkType *supers;
+  GtkType parent_type;
+  gpointer klass;
+  GList *children_types;
 };
 
 
-static void  gtk_type_insert       (guint        parent_type,
-				    GtkType      type,
-				    GtkTypeInfo *type_info);
-static void  gtk_type_class_init   (GtkTypeNode *node);
-static void  gtk_type_object_init  (GtkTypeNode *node,
-				    gpointer     object);
-static guint gtk_type_hash         (GtkType     *key);
-static gint  gtk_type_compare      (GtkType     *a,
-			            GtkType     *b);
-static guint gtk_type_name_hash    (const char  *key);
-static gint  gtk_type_name_compare (const char  *a,
-				    const char  *b);
-static void  gtk_type_init_builtin_types (void);
+#define	LOOKUP_TYPE_NODE(node_var, type)	{ \
+  if (type > 0) \
+  { \
+    register GtkType sqn = GTK_TYPE_SEQNO (type); \
+    if (sqn < n_type_nodes) \
+      node_var = type_nodes + sqn; \
+    else \
+      node_var = NULL; \
+  } \
+  else \
+    node_var = NULL; \
+}
+
+static void  gtk_type_class_init		(GtkTypeNode *node);
+static guint gtk_type_name_hash			(const char  *key);
+static gint  gtk_type_name_compare		(const char  *a,
+						 const char  *b);
+static void  gtk_type_init_builtin_types	(void);
+
+static GtkTypeNode *type_nodes = NULL;
+static guint        n_type_nodes = 0;
+static GHashTable *type_name_2_type_ht = NULL;
 
 
-static int initialize = TRUE;
-static GHashTable *type_hash_table = NULL;
-static GHashTable *name_hash_table = NULL;
+static GtkTypeNode*
+gtk_type_node_next_and_invalidate (void)
+{
+  static guint  n_free_type_nodes = 0;
+  register GtkTypeNode  *node;
+  register GtkType new_type;
 
+  /* don't keep *any* GtkTypeNode pointers across invokation of this function!!!
+   */
+
+  if (n_free_type_nodes == 0)
+    {
+      register guint i;
+      register guint size;
+      
+      /* nearest pow
+       */
+      size = n_type_nodes + TYPE_NODES_BLOCK_SIZE;
+      size *= sizeof (GtkTypeNode);
+      i = 1;
+      while (i < size)
+	i <<= 1;
+      size = i;
+      
+      type_nodes = g_realloc (type_nodes, size);
+
+      n_free_type_nodes = size / sizeof (GtkTypeNode) - n_type_nodes;
+      
+      memset (type_nodes + n_type_nodes, 0, n_free_type_nodes * sizeof (GtkTypeNode));
+    }
+
+  new_type = n_type_nodes++;
+  n_free_type_nodes--;
+
+  LOOKUP_TYPE_NODE (node, new_type);
+  if (node)
+    node->type = new_type;
+
+  return node;
+}
 
 void
 gtk_type_init (void)
 {
-  if (initialize)
+  if (n_type_nodes == 0)
     {
+      GtkTypeNode *zero;
+
       g_assert (sizeof (GtkType) >= 4);
 
-      initialize = FALSE;
-      type_hash_table = g_hash_table_new ((GHashFunc) gtk_type_hash,
-					  (GCompareFunc) gtk_type_compare);
-      name_hash_table = g_hash_table_new ((GHashFunc) gtk_type_name_hash,
-					  (GCompareFunc) gtk_type_name_compare);
+      zero = gtk_type_node_next_and_invalidate ();
+      g_assert (zero == NULL);
+
+      type_name_2_type_ht = g_hash_table_new ((GHashFunc) gtk_type_name_hash,
+					      (GCompareFunc) gtk_type_name_compare);
+
       gtk_type_init_builtin_types ();
     }
 }
@@ -74,22 +125,64 @@ GtkType
 gtk_type_unique (GtkType      parent_type,
 		 GtkTypeInfo *type_info)
 {
-  static guint next_seqno = 0;
-  GtkType new_type;
+  GtkTypeNode *new_node;
+  GtkTypeNode *parent;
+  guint i;
 
   g_return_val_if_fail (type_info != NULL, 0);
+  if (g_hash_table_lookup (type_name_2_type_ht, type_info->type_name))
+    {
+      g_warning ("gtk_type_unique(): type `%s' already exists.", type_info->type_name);
+      return 0;
+    }
+  if (parent_type)
+    {
+      GtkTypeNode *tmp_node;
 
-  if (initialize)
-    gtk_type_init ();
+      LOOKUP_TYPE_NODE (tmp_node, parent_type);
+      if (!tmp_node)
+	{
+	  g_warning ("gtk_type_unique(): unknown parent type `%u'.", parent_type);
+	  return 0;
+	}
+    }
 
-  next_seqno++;
-  if (parent_type == GTK_TYPE_INVALID)
-    new_type = next_seqno;
+  /* relookup pointer afterwards.
+   */
+  new_node = gtk_type_node_next_and_invalidate ();
+
+  if (parent_type)
+    {
+      new_node->type = GTK_TYPE_MAKE (parent_type, new_node->type);
+      LOOKUP_TYPE_NODE (parent, parent_type);
+    }
   else
-    new_type = GTK_TYPE_MAKE (GTK_FUNDAMENTAL_TYPE (parent_type), next_seqno);
-  gtk_type_insert (parent_type, new_type, type_info);
+    {
+      g_assert (new_node->type <= 0xff);
+      parent = NULL;
+    }
 
-  return new_type;
+  new_node->type_info = *type_info;
+  new_node->type_info.type_name = g_strdup (type_info->type_name);
+  new_node->n_supers = parent ? parent->n_supers + 1 : 0;
+  new_node->supers = g_new0 (GtkType, new_node->n_supers + 1);
+  new_node->parent_type = parent_type;
+  new_node->klass = NULL;
+  new_node->children_types = NULL;
+
+  if (parent)
+    parent->children_types = g_list_append (parent->children_types, (gpointer) new_node->type);
+
+  parent = new_node;
+  for (i = 0; i < new_node->n_supers + 1; i++)
+    {
+      new_node->supers[i] = parent->type;
+      LOOKUP_TYPE_NODE (parent, parent->parent_type);
+    }
+    
+  g_hash_table_insert (type_name_2_type_ht, new_node->type_info.type_name, (gpointer) new_node->type);
+
+  return new_node->type;
 }
 
 gchar*
@@ -97,10 +190,7 @@ gtk_type_name (GtkType type)
 {
   GtkTypeNode *node;
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
+  LOOKUP_TYPE_NODE (node, type);
 
   if (node)
     return node->type_info.type_name;
@@ -111,15 +201,14 @@ gtk_type_name (GtkType type)
 GtkType
 gtk_type_from_name (const gchar *name)
 {
-  GtkTypeNode *node;
+  if (type_name_2_type_ht)
+    {
+      GtkType type;
+      
+      type = (GtkType) g_hash_table_lookup (type_name_2_type_ht, (gpointer) name);
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (name_hash_table, (gpointer) name);
-
-  if (node)
-    return node->type;
+      return type;
+    }
 
   return 0;
 }
@@ -129,15 +218,35 @@ gtk_type_parent (GtkType type)
 {
   GtkTypeNode *node;
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
-
-  if (node && node->parent)
-    return node->parent->type;
+  LOOKUP_TYPE_NODE (node, type);
+  if (node)
+    return node->parent_type;
 
   return 0;
+}
+
+gpointer
+gtk_type_parent_class (GtkType type)
+{
+  GtkTypeNode *node;
+
+  LOOKUP_TYPE_NODE (node, type);
+  g_return_val_if_fail (node != NULL, NULL);
+
+  if (node)
+    {
+      LOOKUP_TYPE_NODE (node, node->parent_type);
+
+      if (node)
+	{
+	  if (!node->klass)
+	    gtk_type_class_init (node);
+
+	  return node->klass;
+	}
+    }
+
+  return NULL;
 }
 
 gpointer
@@ -145,13 +254,10 @@ gtk_type_class (GtkType type)
 {
   GtkTypeNode *node;
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
+  LOOKUP_TYPE_NODE (node, type);
   g_return_val_if_fail (node != NULL, NULL);
 
-  if (node->init_class)
+  if (!node->klass)
     gtk_type_class_init (node);
 
   return node->klass;
@@ -161,17 +267,27 @@ gpointer
 gtk_type_new (GtkType type)
 {
   GtkTypeNode *node;
-  gpointer object;
+  GtkObject *object;
+  gpointer klass;
+  guint i;
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
+  LOOKUP_TYPE_NODE (node, type);
   g_return_val_if_fail (node != NULL, NULL);
 
-  object = g_new0 (guchar, node->type_info.object_size);
-  ((GtkObject*) object)->klass = gtk_type_class (type);
-  gtk_type_object_init (node, object);
+  klass = gtk_type_class (type);
+  object = g_malloc0 (node->type_info.object_size);
+  object->klass = klass;
+
+  for (i = node->n_supers; i > 0; i--)
+    {
+      GtkTypeNode *pnode;
+
+      LOOKUP_TYPE_NODE (pnode, node->supers[i]);
+      if (pnode->type_info.object_init_func)
+	(* pnode->type_info.object_init_func) (object);
+    }
+  if (node->type_info.object_init_func)
+    (* node->type_info.object_init_func) (object);
 
   return object;
 }
@@ -182,10 +298,7 @@ gtk_type_describe_heritage (GtkType type)
   GtkTypeNode *node;
   gint first;
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
+  LOOKUP_TYPE_NODE (node, type);
   first = TRUE;
 
   while (node)
@@ -201,7 +314,7 @@ gtk_type_describe_heritage (GtkType type)
       else
 	g_print ("<unnamed type>\n");
 
-      node = node->parent;
+      LOOKUP_TYPE_NODE (node, node->parent_type);
     }
 }
 
@@ -209,62 +322,61 @@ void
 gtk_type_describe_tree (GtkType type,
 			gint  show_size)
 {
-  static gint indent = 0;
   GtkTypeNode *node;
-  GtkTypeNode *child;
-  GList *children;
-  gint old_indent;
-  gint i;
-
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
-
-  for (i = 0; i < indent; i++)
-    g_print (" ");
-
-  if (node->type_info.type_name)
-    g_print ("%s", node->type_info.type_name);
-  else
-    g_print ("<unnamed type>");
-
-  if (show_size)
-    g_print (" ( %d bytes )\n", node->type_info.object_size);
-  else
-    g_print ("\n");
-
-  old_indent = indent;
-  indent += 4;
-
-  children = node->children;
-  while (children)
+  
+  LOOKUP_TYPE_NODE (node, type);
+  
+  if (node)
     {
-      child = children->data;
-      children = children->next;
-
-      gtk_type_describe_tree (child->type, show_size);
+      static gint indent = 0;
+      GList *list;
+      guint old_indent;
+      guint i;
+      
+      for (i = 0; i < indent; i++)
+	g_print (" ");
+      
+      if (node->type_info.type_name)
+	g_print ("%s", node->type_info.type_name);
+      else
+	g_print ("(no-name)");
+      
+      if (show_size)
+	g_print (" ( %d bytes )\n", node->type_info.object_size);
+      else
+	g_print ("\n");
+      
+      old_indent = indent;
+      indent += 4;
+      
+      for (list = node->children_types; list; list = list->next)
+	gtk_type_describe_tree ((GtkType) list->data, show_size);
+      
+      indent = old_indent;
     }
-
-  indent = old_indent;
 }
 
 gint
 gtk_type_is_a (GtkType type,
 	       GtkType is_a_type)
 {
-  GtkTypeNode *node;
+  register GtkTypeNode *node;
 
-  if (initialize)
-    gtk_type_init ();
+  /* we already check for type==is_a_type in the
+   * wrapper macro GTK_TYPE_IS_A()
+   */
 
-  node = g_hash_table_lookup (type_hash_table, &type);
-
-  while (node)
+  LOOKUP_TYPE_NODE (node, type);
+  if (node)
     {
-      if (node->type == is_a_type)
-	return TRUE;
-      node = node->parent;
+      register GtkTypeNode *a_node;
+
+      LOOKUP_TYPE_NODE (a_node, is_a_type);
+      if (a_node)
+	{
+	  if (a_node->n_supers <= node->n_supers)
+	    return node->supers[node->n_supers - a_node->n_supers] == is_a_type;
+	}
     }
 
   return FALSE;
@@ -281,10 +393,7 @@ gtk_type_get_arg (GtkObject   *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (arg != NULL);
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
+  LOOKUP_TYPE_NODE (node, type);
 
   if (node && node->type_info.arg_get_func)
     (* node->type_info.arg_get_func) (object, arg, arg_id);
@@ -303,10 +412,7 @@ gtk_type_set_arg (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (arg != NULL);
 
-  if (initialize)
-    gtk_type_init ();
-
-  node = g_hash_table_lookup (type_hash_table, &type);
+  LOOKUP_TYPE_NODE (node, type);
 
   if (node && node->type_info.arg_set_func)
     (* node->type_info.arg_set_func) (object, arg, arg_id);
@@ -334,82 +440,43 @@ gtk_arg_copy (GtkArg         *src_arg,
 }
 
 static void
-gtk_type_insert (GtkType        parent_type,
-		 GtkType        type,
-		 GtkTypeInfo   *type_info)
-{
-  GtkTypeNode *node;
-  GtkTypeNode *parent;
-
-  parent = g_hash_table_lookup (type_hash_table, &parent_type);
-
-  node = g_new (GtkTypeNode, 1);
-  node->type = type;
-  node->init_class = TRUE;
-  node->klass = NULL;
-  node->type_info = *type_info;
-  node->parent = parent;
-  node->children = NULL;
-
-  if (node->parent)
-    node->parent->children = g_list_append (node->parent->children, node);
-
-  g_hash_table_insert (type_hash_table, &node->type, node);
-  g_hash_table_insert (name_hash_table, node->type_info.type_name, node);
-}
-
-static void
 gtk_type_class_init (GtkTypeNode *node)
 {
-  GtkObjectClass *object_class;
-
-  if (node->init_class)
+  if (!node->klass && node->type_info.class_size)
     {
-      node->init_class = FALSE;
       node->klass = g_new0 (guchar, node->type_info.class_size);
 
-      if (node->parent)
+      if (node->parent_type)
 	{
-	  if (node->parent->init_class)
-	    gtk_type_class_init (node->parent);
+	  GtkTypeNode *parent;
 
-	  memcpy (node->klass, node->parent->klass, node->parent->type_info.class_size);
+	  LOOKUP_TYPE_NODE (parent, node->parent_type);
+	  if (!parent->klass)
+	    gtk_type_class_init (parent);
+
+	  if (parent->klass)
+	    memcpy (node->klass, parent->klass, parent->type_info.class_size);
 	}
 
-      object_class = node->klass;
-      object_class->type = node->type;
-      object_class->signals = NULL;
-      object_class->nsignals = 0;
-      object_class->n_args = 0;
+      if (GTK_TYPE_IS_A (node->type, GTK_TYPE_OBJECT))
+	{
+	  GtkObjectClass *object_class;
 
+	  /* FIXME: this initialization needs to be done through
+	   * a function pointer someday.
+	   */
+	  g_assert (node->type_info.class_size >= sizeof (GtkObjectClass));
+	  
+	  object_class = node->klass;
+	  object_class->type = node->type;
+	  object_class->signals = NULL;
+	  object_class->nsignals = 0;
+	  object_class->n_args = 0;
+	}
+      
       if (node->type_info.class_init_func)
 	(* node->type_info.class_init_func) (node->klass);
     }
-}
-
-static void
-gtk_type_object_init (GtkTypeNode *node,
-		      gpointer     object)
-{
-  if (node->parent)
-    gtk_type_object_init (node->parent, object);
-
-  if (node->type_info.object_init_func)
-    (* node->type_info.object_init_func) (object);
-}
-
-static guint
-gtk_type_hash (GtkType *key)
-{
-  return GTK_TYPE_SEQNO (*key);
-}
-
-static gint
-gtk_type_compare (GtkType *a,
-		  GtkType *b)
-{
-  g_return_val_if_fail(a != NULL && b != NULL, 0);
-  return (*a == *b);
 }
 
 static guint
@@ -477,12 +544,12 @@ gtk_type_init_builtin_types (void)
     { GTK_TYPE_FOREIGN, "foreign" },
     { GTK_TYPE_CALLBACK, "callback" },
     { GTK_TYPE_ARGS, "args" },
-
+    
     { GTK_TYPE_POINTER, "pointer" },
     { GTK_TYPE_SIGNAL, "signal" },
     { GTK_TYPE_C_CALLBACK, "c_callback" }
   };
-
+  
   static struct {
     char *name;
     GtkType parent;
@@ -490,19 +557,19 @@ gtk_type_init_builtin_types (void)
 #include "gtktypebuiltins.c"
     { NULL }
   };
-
+  
   int i;
-
-  for (i = 0; i < sizeof (fundamental_info)/sizeof(fundamental_info[0]); i++)
+  
+  for (i = 0; i < sizeof (fundamental_info) / sizeof (fundamental_info[0]); i++)
     {
       GtkType id;
       id = gtk_type_register_builtin (fundamental_info[i].name,
 				      GTK_TYPE_INVALID);
       g_assert (id == fundamental_info[i].enum_id);
     }
-
+  
   gtk_object_init_type ();
-
+  
   for (i = 0; builtin_info[i].name; i++)
     {
       gtk_type_builtins[i] =

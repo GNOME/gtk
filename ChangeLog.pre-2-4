@@ -1,3 +1,22 @@
+Wed May  6 02:16:34 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c: reimplemented the signal storage system to use a
+	linear array rather than a hash table.
+ 	be carefull *not* to keep any GtkSignal pointers across invokations
+ 	of gtk_signal_next_and_invalidate() and therefore gtk_signal_new[v]().
+	general code cleanups, made all allocations through memchunks.
+	(gtk_signal_lookup): we now do the lookup of signals through a key_id
+	for the signal names to avoid multiple hashing of the signal name on
+	lookups for the several hirarchy levels of an object.
+
+Tue May  5 15:33:27 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_init): added gtk_signal_init() to avoid repeatedly
+	checking for signal initialization in gtksignal.c.
+
+	* gtk/gtktypeutils.c (TYPE_NODES_BLOCK_SIZE): reseted this to 200 after
+	a long debugging period ;)
+
 1998-05-05  Stefan Jeske  <stefan@gtk.org>
 
 	* gdk/gdkgc.c gdk/gdk.h gtk/gtkctree.c (gdk_gc_set_dashes):
@@ -7,6 +26,33 @@
 
 	* configure.in: Added $x_libs in the other_libraries field in the
 	check for XShapeCombineMask.
+
+Mon May  4 00:30:11 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.h (GTK_TYPE_IS_A): new macro to speedup
+ 	gtk_type_is_a().
+ 	* gtk/gtktypeutils.c: reimplemented the type storage system to use a
+	linear array rather than a hash table. it actually speeded up testgtk
+	for a *considerable* amount. be carefull *not* to keep any GtkTypeNode
+ 	pointers across invokations of gtk_type_node_next_and_invalidate() and
+ 	therefore gtk_type_unique()!
+
+	* gtk/gtkobject.h (GTK_IS_OBJECT_CLASS): new macro to test for the
+	inheritance of a class pointer.
+	(GTK_OBJECT): modifications for speedups.
+	(GTK_IS_OBJECT): likewise.
+	(GTK_OBJECT_CLASS): likewise.
+	(suggested by owen).
+
+	* gtk/gtkcontainer.h (GTK_IS_CONTAINER_CLASS): new macro.
+
+	* gtk/gtkwidget.h (GTK_IS_WIDGET_CLASS): new macro.
+
+	* gtk/gtk.defs (GtkTooltips): define GtkTooltips as object not as boxed,
+	since its derivation changed 4 month ago ;(. showed up with the unique
+	type name checking code in gtk_type_unique().
+
+	* random guint->GtkType and macro fixups.
 
 Sat May  2 23:14:34 1998  Owen Taylor  <otaylor@gtk.org>
 
@@ -138,7 +184,6 @@ Sat May  2 20:19:03 1998  Tim Janik  <timj@gtk.org>
 	(gtk_adjustment_set_value): new function to emit the "value_changed"
 	signal.
 
->>>>>>> 1.372
 Fri May  1 12:28:35 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkcombo.c: Further changes to the way the window

@@ -28,9 +28,10 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
-  
-  
+
+
 /* The flags that are used by GtkWidget on top of the
  * flags field of GtkObject.
  */
@@ -54,13 +55,14 @@ enum
 };
 
 
-/* Macro for casting a pointer to a GtkWidget pointer.
+/* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
+ * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.
  */
-#define GTK_WIDGET(wid)			  GTK_CHECK_CAST ((wid), gtk_widget_get_type (), GtkWidget)
-
-/* Macro for casting the klass field of a widget to a GtkWidgetClass pointer.
- */
-#define GTK_WIDGET_CLASS(klass)		  GTK_CHECK_CLASS_CAST ((klass), gtk_widget_get_type (), GtkWidgetClass)
+#define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
+#define GTK_WIDGET(widget)		  (GTK_CHECK_CAST ((widget), GTK_TYPE_WIDGET, GtkWidget))
+#define GTK_WIDGET_CLASS(klass)		  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET, GtkWidgetClass))
+#define GTK_IS_WIDGET(widget)		  (GTK_CHECK_TYPE ((widget), GTK_TYPE_WIDGET))
+#define GTK_IS_WIDGET_CLASS(klass)	  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET))
 
 /* Macros for extracting various fields from GtkWidget and GtkWidgetClass.
  */
@@ -93,11 +95,6 @@ enum
  */
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
-  
-/* Macros for testing whether "wid" is of type GtkWidget.
- */
-#define GTK_IS_WIDGET(wid)		  GTK_CHECK_TYPE ((wid), GTK_TYPE_WIDGET)
-#define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
   
   
   

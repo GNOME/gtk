@@ -37,10 +37,10 @@ static void gtk_aspect_frame_size_allocate (GtkWidget         *widget,
 #define MAX_RATIO 10000.0
 #define MIN_RATIO 0.0001
 
-guint
+GtkType
 gtk_aspect_frame_get_type (void)
 {
-  static guint aspect_frame_type = 0;
+  static GtkType aspect_frame_type = 0;
 
   if (!aspect_frame_type)
     {

@@ -32,9 +32,9 @@ extern "C" {
 
   
 #ifdef offsetof
-#define GTK_SIGNAL_OFFSET(t, f) ((int) offsetof (t, f))
+#define GTK_SIGNAL_OFFSET(t, f) ((gint) offsetof (t, f))
 #else /* offsetof */
-#define GTK_SIGNAL_OFFSET(t, f) ((int) ((char*) &((t*) 0)->f))
+#define GTK_SIGNAL_OFFSET(t, f) ((gint) ((gchar*) &((t*) 0)->f))
 #endif /* offsetof */
   
   
@@ -53,13 +53,14 @@ struct	_GtkSignalQuery
   GtkType	   object_type;
   guint		   signal_id;
   const gchar	  *signal_name;
-  gboolean	   is_user_signal;
+  guint		   is_user_signal : 1;
   GtkSignalRunType run_type;
   GtkType	   return_val;
   guint		   nparams;
   const GtkType	  *params;
 };
 
+void   gtk_signal_init			  (void);
 guint  gtk_signal_new			  (const gchar	       *name,
 					   GtkSignalRunType	run_type,
 					   GtkType		object_type,

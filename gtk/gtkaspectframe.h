@@ -26,12 +26,16 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-#define GTK_ASPECT_FRAME(obj)        ((GtkAspectFrame*) obj)
-#define GTK_ASPECT_FRAME_CLASS(obj)  ((GtkAspectFrameClass*) GTK_OBJECT_CLASS (obj))
-#define GTK_IS_ASPECT_FRAME(obj)     (gtk_type_is_a (GTK_WIDGET_TYPE (obj), gtk_aspect_frame_get_type ()))
+#define GTK_TYPE_ASPECT_FRAME            (gtk_aspect_frame_get_type ())
+#define GTK_ASPECT_FRAME(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_ASPECT_FRAME, GtkAspectFrame))
+#define GTK_ASPECT_FRAME_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_ASPECT_FRAME, GtkAspectFrameClass))
+#define GTK_IS_ASPECT_FRAME(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_ASPECT_FRAME))
+#define GTK_IS_ASPECT_FRAME_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ASPECT_FRAME))
+
 
 
 typedef struct _GtkAspectFrame       GtkAspectFrame;
@@ -55,7 +59,7 @@ struct _GtkAspectFrameClass
 };
 
 
-guint      gtk_aspect_frame_get_type   (void);
+GtkType    gtk_aspect_frame_get_type   (void);
 GtkWidget* gtk_aspect_frame_new        (const gchar       *label,
 					gfloat             xalign,
 					gfloat             yalign,

@@ -25,11 +25,12 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 
-/* Fundamental Types */
-
+/* Fundamental Types
+ */
 typedef enum
 {
   GTK_TYPE_INVALID,
@@ -49,29 +50,34 @@ typedef enum
   GTK_TYPE_FOREIGN,
   GTK_TYPE_CALLBACK,
   GTK_TYPE_ARGS,
-
+  
   GTK_TYPE_POINTER,
-
-  /* it'd be great if the next two could be removed eventually */
+  
+  /* It'd be great if the next two could be removed eventually
+   */
   GTK_TYPE_SIGNAL,
   GTK_TYPE_C_CALLBACK,
-
+  
   GTK_TYPE_OBJECT
-
+  
 } GtkFundamentalType;
 
 typedef guint GtkType;
 
-/* Builtin Types */
-
+/* Builtin Types
+ */
 extern GtkType gtk_type_builtins[];
 #include <gtk/gtktypebuiltins.h>
 
-/* General Types */
-
-#define GTK_TYPE_MAKE(ft, seqno) (((seqno)<<8)|ft)
-#define GTK_FUNDAMENTAL_TYPE(t)	 ((GtkFundamentalType)((t)&0xFF))
-#define GTK_TYPE_SEQNO(t)	 ((t)>0xFF? (t)>>8:(t))
+/* Macros
+ */
+#define GTK_TYPE_MAKE(parent_t, seqno) 	(((seqno) << 8) | GTK_FUNDAMENTAL_TYPE (parent_t))
+#define GTK_FUNDAMENTAL_TYPE(type)	 	((GtkFundamentalType) ((type) & 0xFF))
+#define GTK_TYPE_SEQNO(type)	 	((type) > 0xFF ? (type) >> 8 : (type))
+#define GTK_TYPE_IS_A(type, is_a_type)	( \
+  ((GtkType) (type)) == ((GtkType) (is_a_type)) || \
+  gtk_type_is_a (((GtkType) (type)), ((GtkType) (is_a_type))) \
+)
 
 typedef struct _GtkArg	       GtkArg;
 typedef struct _GtkObject      GtkObject;   /* forward declaration of object type */
@@ -183,6 +189,7 @@ gchar*	 gtk_type_name		    (guint	  type);
 GtkType	 gtk_type_from_name	    (const gchar *name);
 GtkType	 gtk_type_parent	    (GtkType	  type);
 gpointer gtk_type_class		    (GtkType	  type);
+gpointer gtk_type_parent_class	    (GtkType	  type);
 gpointer gtk_type_new		    (GtkType	  type);
 void	 gtk_type_describe_heritage (GtkType	  type);
 void	 gtk_type_describe_tree	    (GtkType	  type,
