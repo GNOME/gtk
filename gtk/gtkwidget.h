@@ -317,6 +317,8 @@ struct _GtkWidgetClass
 				    GdkEventDragBegin  *event);
   gint (* drag_request_event)	   (GtkWidget	       *widget,
 				    GdkEventDragRequest *event);
+  gint (* drag_end_event)	   (GtkWidget	       *widget,
+				    GdkEvent	       *event);
   gint (* drop_enter_event)	   (GtkWidget	       *widget,
 				    GdkEventDropEnter  *event);
   gint (* drop_leave_event)	   (GtkWidget	       *widget,
@@ -440,6 +442,23 @@ void	   gtk_widget_set_events	  (GtkWidget	       *widget,
 					   gint			events);
 void	   gtk_widget_set_extension_events (GtkWidget		*widget,
 					    GdkExtensionMode	mode);
+
+GtkWidget*   gtk_widget_get_toplevel  (GtkWidget *widget);
+GtkWidget*   gtk_widget_get_ancestor  (GtkWidget *widget,
+				       gint	  type);
+GdkColormap* gtk_widget_get_colormap  (GtkWidget *widget);
+GdkVisual*   gtk_widget_get_visual    (GtkWidget *widget);
+GtkStyle*    gtk_widget_get_style     (GtkWidget *widget);
+gint	     gtk_widget_get_events    (GtkWidget *widget);
+GdkExtensionMode gtk_widget_get_extension_events    (GtkWidget *widget);
+void	     gtk_widget_get_pointer   (GtkWidget *widget,
+				       gint	 *x,
+				       gint	 *y);
+
+gint	     gtk_widget_is_ancestor (GtkWidget *widget,
+				     GtkWidget *ancestor);
+gint	     gtk_widget_is_child    (GtkWidget *widget,
+				     GtkWidget *child);
 
 GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);

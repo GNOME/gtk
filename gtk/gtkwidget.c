@@ -74,6 +74,7 @@ enum {
   PROXIMITY_OUT_EVENT,
   DRAG_BEGIN_EVENT,
   DRAG_REQUEST_EVENT,
+  DRAG_END_EVENT,
   DROP_ENTER_EVENT,
   DROP_LEAVE_EVENT,
   DROP_DATA_AVAILABLE_EVENT,
@@ -623,6 +624,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_request_event),
+		    gtk_widget_marshal_signal_4,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[DRAG_END_EVENT] =
+    gtk_signal_new ("drag_end_event",
+		    GTK_RUN_LAST,
+		    object_class->type,
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end_event),
 		    gtk_widget_marshal_signal_4,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
@@ -2648,6 +2657,24 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
 				       parent_window_key);
 
   return (parent_window != NULL) ? parent_window : widget->parent->window;
+}
+
+/*****************************************
+ * gtk_widget_set_style:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+void
+gtk_widget_set_style (GtkWidget *widget,
+		      GtkStyle	*style)
+{
+  g_return_if_fail (widget != NULL);
+  
+  GTK_PRIVATE_SET_FLAG (widget, GTK_USER_STYLE);
+  gtk_widget_set_style_internal (widget, style);
 }
 
 /*****************************************

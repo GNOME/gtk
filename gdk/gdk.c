@@ -1701,24 +1701,27 @@ gdk_event_translate (GdkEvent *event,
   window = gdk_window_lookup (xevent->xany.window);
   window_private = (GdkWindowPrivate *) window;
 
-  if (window == NULL)
-    g_warning ("%#lx -> NULL\n", xevent->xany.window);
-  else
+  if (window != NULL)
     gdk_window_ref (window);
-
+  else if(gdk_null_window_warnings) /* Special purpose programs that
+				       get events for other windows may
+				       want to disable this */
+    g_warning ("%#lx -> NULL\n", xevent->xany.window);
 
   /* Check for filters for this window */
 
-  if (window_private)
-    {
-      GdkFilterReturn result;
-      result = gdk_event_apply_filters (xevent, event, window_private->filters);
-
-      if (result != GDK_FILTER_CONTINUE)
-	{
-	  return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
-	}
-    }
+  {
+    GdkFilterReturn result;
+    result = gdk_event_apply_filters (xevent, event,
+				      window_private
+				      ?window_private->filters
+				      :default_filters);
+    
+    if (result != GDK_FILTER_CONTINUE)
+      {
+	return (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
+      }
+  }
 
   /* We do a "manual" conversion of the XEvent to a
    *  GdkEvent. The structures are mostly the same so

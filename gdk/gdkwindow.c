@@ -1475,13 +1475,15 @@ gdk_window_add_filter     (GdkWindow     *window,
   GList *tmp_list;
   GdkEventFilter *filter;
 
-  g_return_if_fail (window != NULL);
-
   private = (GdkWindowPrivate*) window;
-  if (private->destroyed)
+  if (private && private->destroyed)
     return;
 
-  tmp_list = private->filters;
+  if(private)
+    tmp_list = private->filters;
+  else
+    tmp_list = default_filters;
+
   while (tmp_list)
     {
       filter = (GdkEventFilter *)tmp_list->data;
@@ -1493,8 +1495,11 @@ gdk_window_add_filter     (GdkWindow     *window,
   filter = g_new (GdkEventFilter, 1);
   filter->function = function;
   filter->data = data;
-  
-  private->filters = g_list_append (private->filters, filter);
+
+  if(private)
+    private->filters = g_list_append (private->filters, filter);
+  else
+    default_filters = g_list_append (default_filters, filter);
 }
 
 void
@@ -1506,10 +1511,13 @@ gdk_window_remove_filter  (GdkWindow     *window,
   GList *tmp_list;
   GdkEventFilter *filter;
 
-  g_return_if_fail (window != NULL);
   private = (GdkWindowPrivate*) window;
 
-  tmp_list = private->filters;
+  if(private)
+    tmp_list = private->filters;
+  else
+    tmp_list = default_filters;
+
   while (tmp_list)
     {
       filter = (GdkEventFilter *)tmp_list->data;
@@ -1517,7 +1525,10 @@ gdk_window_remove_filter  (GdkWindow     *window,
 
       if ((filter->function == function) && (filter->data == data))
 	{
-	  private->filters = g_list_remove_link (private->filters, tmp_list);
+	  if(private)
+	    private->filters = g_list_remove_link (private->filters, tmp_list);
+	  else
+	    default_filters = g_list_remove_link (default_filters, tmp_list);
 	  g_list_free_1 (tmp_list);
 	  g_free (filter);
 	  

@@ -47,4 +47,6 @@ GdkDndGlobals     gdk_dnd = {None,None,None,
 gchar            *gdk_progname = NULL;
 gchar            *gdk_progclass = NULL;
 gint              gdk_error_code;
-gint              gdk_error_warnings = TRUE;
+gboolean          gdk_error_warnings = TRUE;
+gboolean          gdk_null_window_warnings = TRUE;
+GList            *default_filters = NULL;

@@ -250,6 +250,8 @@ extern gchar		*gdk_progname;
 extern gchar		*gdk_progclass;
 extern gint		 gdk_error_code;
 extern gint		 gdk_error_warnings;
+extern gboolean          gdk_null_window_warnings;
+extern GList            *default_filters;
 
 /* Debugging support */
 
