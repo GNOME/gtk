@@ -1,5 +1,7 @@
 2002-03-03  Tor Lillqvist  <tml@iki.fi>
 
+	* README.win32: Minor edits.
+
 	* config.h.win32.in: Update to match a recent configure-generated
 	config.h
 
