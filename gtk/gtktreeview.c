@@ -11421,8 +11421,13 @@ static void
 gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
 				     GtkTreeView *tree_view)
 {
-  GtkEntry *entry = (GtkEntry *)(gtk_container_get_children (GTK_CONTAINER (search_dialog)))->data;
+  GList *list;
+  GtkEntry *entry;
   gint *selected_iter;
+
+  list = gtk_container_get_children (GTK_CONTAINER (search_dialog));
+  entry = (GtkEntry *)list->data;
+  g_list_free (list);
 
   if (tree_view->priv->disable_popdown)
     return;

@@ -1,3 +1,14 @@
+Sun Dec 21 23:17:01 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (update_node): 
+	(update_smart_separators): 
+	(_gtk_menu_is_empty): 
+	(find_menu_position): 
+	* gtk/gtktreeview.c (gtk_tree_view_search_dialog_destroy): 
+	* gtk/gtkcombobox.c (gtk_combo_box_relayout_item): 
+	(gtk_combo_box_relayout): Fix memory leaks caused by the
+	failure to free the result of gtk_container_get_children().
+
 Sun Dec 21 17:34:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent): Set the right

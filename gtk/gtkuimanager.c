@@ -1537,6 +1537,7 @@ find_menu_position (GNode      *node,
 	    pos = 1;
 	  else
 	    pos = 0;
+	  g_list_free (siblings);
 	  break;
 	case NODE_TYPE_MENU_PLACEHOLDER:
 	  menushell = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
@@ -1677,6 +1678,7 @@ _gtk_menu_is_empty (GtkWidget *menu)
 	}
       cur = cur->next;
     }
+  g_list_free (children);
 
   return TRUE;
 }
@@ -1777,6 +1779,8 @@ update_smart_separators (GtkWidget *proxy)
 	  if (GTK_IS_WIDGET (filler))
 	    g_object_set (G_OBJECT (filler), "visible", empty, NULL);
 	}
+
+      g_list_free (children);
     }
 }
 
@@ -1865,6 +1869,7 @@ update_node (GtkUIManager *self,
 		g_object_set (G_OBJECT (siblings->data), 
 			      "visible", self->private_data->add_tearoffs && !in_popup, 
 			      NULL);
+	      g_list_free (siblings);
 	    }
 
 	  goto recurse_children;
@@ -1946,10 +1951,11 @@ update_node (GtkUIManager *self,
 	      g_object_set (G_OBJECT (siblings->data), 
 			    "visible", self->private_data->add_tearoffs && !in_popup, 
 			    NULL);
+	    g_list_free (siblings);
 	  }
 	  break;
 	case NODE_TYPE_UNDECIDED:
-	  g_warning ("found 'undecided node!");
+	  g_warning ("found undecided node!");
 	  break;
 	case NODE_TYPE_ROOT:
 	  break;

@@ -1484,6 +1484,7 @@ gtk_combo_box_relayout_item (GtkComboBox *combo_box,
 
   list = gtk_container_get_children (GTK_CONTAINER (menu));
   item = g_list_nth_data (list, index);
+  g_list_free (list);
 
   gtk_combo_box_item_get_size (combo_box, index, &cols, &rows);
 
@@ -1537,7 +1538,7 @@ gtk_combo_box_relayout (GtkComboBox *combo_box)
   for (j = g_list_last (list); j; j = j->prev)
     gtk_container_remove (GTK_CONTAINER (menu), j->data);
 
-  g_list_free (j);
+  g_list_free (list);
 
   /* and relayout */
   items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
@@ -2131,6 +2132,7 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
 
           gtk_cell_layout_clear (GTK_CELL_LAYOUT (view));
         }
+      g_list_free (list);
     }
 }
 
