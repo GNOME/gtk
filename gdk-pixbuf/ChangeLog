@@ -1,3 +1,8 @@
+Sat Dec  7 10:14:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (gdk-pixbuf.loaders): Make gdk-pixbuf.loaders
+	also depend gdk-pixbuf-query-loaders. (#97096, Daniel Elstner)
+
 2002-12-05  Matthias Clasen  <maclas@gmx.de>
 
 	* io-ico.c: Remove leftover debug output.  (#100357, Owen Taylor)
