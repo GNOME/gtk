@@ -38,14 +38,14 @@ TOUCH = copy makefile.msc+nul
 GLIB_VER=1.2
 GTK_VER=1.3
 
-GDK = ..\gdk
+GDKSYSDEP = ..\gdk\win32
 GLIB = ..\..\glib-$(GLIB_VER)
 
-CFLAGS = -I. -I.. -I..\gdk\win32 -I$(GLIB) -I$(GLIB)\gmodule -DGTK_DISABLE_COMPAT_H
+CFLAGS = -I. -I.. -I$(GDKSYSDEP) -I$(GLIB) -I$(GLIB)\gmodule -DGTK_DISABLE_COMPAT_H
 
 all : \
 	..\config.h	\
-	gtkfeatures.h	\
+	gtkcompat.h	\
 	generated	\
 	gtk-$(GTK_VER).dll\
 	testdnd.exe	\
@@ -53,7 +53,6 @@ all : \
 	testinput.exe	\
 	testrgb.exe	\
 	testselection.exe \
-	testthreads.exe	\
 	simple.exe
 
 install : all
@@ -289,8 +288,8 @@ gdk_headers = \
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
 
-gtkfeatures.h : gtkfeatures.h.win32
-	copy gtkfeatures.h.win32 gtkfeatures.h
+gtkcompat.h : gtkcompat.h.win32
+	copy gtkcompat.h.win32 gtkcompat.h
 
 #
 # Generated source files:
@@ -330,7 +329,7 @@ gtkmarshal.h gtkmarshal.c : gtkmarshal.list genmarshal.pl
 # Linking:
 #
 gtk-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) $(MEMCHECKLIB) $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib $(LDFLAGS) /def:gtk.def
+	$(CC) $(CFLAGS) -LD -Fegtk-$(GTK_VER).dll $(gtk_OBJECTS) $(MEMCHECKLIB) $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gmodule-$(GLIB_VER).lib gdi32.lib user32.lib $(LDFLAGS) /def:gtk.def
 
 # General rule for compiling the objects into the DLL
 .c.obj :
@@ -340,44 +339,44 @@ gtk-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
 # Test programs:
 #
 testdnd.exe : testdnd.obj
-	$(CC) $(CFLAGS) testdnd.obj gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testdnd.obj gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 
 # Must have separate rules for these objects that don't go in the DLL
 testdnd.obj : testdnd.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testdnd\" testdnd.c
 
 testgtk.exe : testgtk.obj
-	$(CC) $(CFLAGS) testgtk.obj $(MEMCHECKLIB) gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testgtk.obj $(MEMCHECKLIB) gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 
 testgtk.obj : testgtk.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testgtk\" testgtk.c
 
 testinput.exe : testinput.obj
-	$(CC) $(CFLAGS) testinput.obj gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testinput.obj gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 
 testinput.obj : testinput.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testinput\" testinput.c
 
 testrgb.exe : testrgb.obj
-	$(CC) $(CFLAGS) testrgb.obj gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testrgb.obj gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 
 testrgb.obj : testrgb.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testrgb\" testrgb.c
 
 testselection.exe : testselection.obj
-	$(CC) $(CFLAGS) testselection.obj gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) testselection.obj gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 
 testselection.obj : testselection.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"testselection\" testselection.c
 
 testthreads.exe : testthreads.obj
-	$(CC) $(CFLAGS) testthreads.obj gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gthread-$(GLIB_VER).lib $(PTHREAD_LIB) $(LDFLAGS)
+	$(CC) $(CFLAGS) testthreads.obj gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(GLIB)\gthread-$(GLIB_VER).lib $(PTHREAD_LIB) $(LDFLAGS)
 
 testthreads.obj : testthreads.c
 	$(CC) $(CFLAGS) -I$(PTHREAD_INC) -c -DG_LOG_DOMAIN=\"testthreads\" -DUSE_PTHREADS=1 testthreads.c
 
 simple.exe : simple.obj
-	$(CC) $(CFLAGS) simple.obj gtk-$(GTK_VER).lib $(GDK)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
+	$(CC) $(CFLAGS) simple.obj gtk-$(GTK_VER).lib $(GDKSYSDEP)\gdk-$(GTK_VER).lib $(GLIB)\glib-$(GLIB_VER).lib $(LDFLAGS)
 
 simple.obj : simple.c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"simple\" simple.c

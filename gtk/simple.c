@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include <gdk/gdkprivate.h>
+#include <gdkprivate.h>
 
 
 void
