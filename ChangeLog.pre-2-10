@@ -1,5 +1,10 @@
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/gdkdisplay.c (singlehead_...): 
+	* gdk/x11/gdkkeys-x11.c (get_effective_keymap): 
+	* gdk/x11/gdkgeometry-x11.c (expose_serial_predicate): 
+	* gdk/x11/gdkdisplay-x11.c (escape_for_xmessage): Make static.
+
 	* gtk/gtktreeview.c (gtk_tree_view_set_fixed_height_mode): Add a 
 	note about COLUMN_FIXED restriction.
 

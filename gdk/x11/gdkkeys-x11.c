@@ -380,9 +380,9 @@ get_keymap (GdkKeymapX11 *keymap_x11)
 
 #define GET_EFFECTIVE_KEYMAP(keymap) get_effective_keymap ((keymap), G_STRFUNC)
 
-GdkKeymap *
+static GdkKeymap *
 get_effective_keymap (GdkKeymap  *keymap,
-                      const char *function)
+		       const char *function)
 {
   if (!keymap)
     {

@@ -813,7 +813,7 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
     }
 }
 
-char*
+static char*
 escape_for_xmessage (const char *str)
 {
   GString *retval;

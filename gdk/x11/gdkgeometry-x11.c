@@ -866,7 +866,7 @@ gdk_window_postmove (GdkWindow          *window,
     }
 }
 
-Bool
+static Bool
 expose_serial_predicate (Display *xdisplay,
 			 XEvent  *xev,
 			 XPointer arg)

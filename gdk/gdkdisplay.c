@@ -40,27 +40,27 @@ static void gdk_display_dispose    (GObject         *object);
 static void gdk_display_finalize   (GObject         *object);
 
 
-void       singlehead_get_pointer        (GdkDisplay       *display,
+static void       singlehead_get_pointer (GdkDisplay       *display,
 					  GdkScreen       **screen,
 					  gint             *x,
 					  gint             *y,
 					  GdkModifierType  *mask);
-GdkWindow* singlehead_window_get_pointer (GdkDisplay       *display,
-					  GdkWindow        *window,
-					  gint             *x,
-					  gint             *y,
-					  GdkModifierType  *mask);
-GdkWindow* singlehead_window_at_pointer  (GdkDisplay       *display,
-					  gint             *win_x,
-					  gint             *win_y);
+static GdkWindow* singlehead_window_get_pointer (GdkDisplay       *display,
+						 GdkWindow        *window,
+						 gint             *x,
+						 gint             *y,
+						 GdkModifierType  *mask);
+static GdkWindow* singlehead_window_at_pointer  (GdkDisplay       *display,
+						 gint             *win_x,
+						 gint             *win_y);
 
-GdkWindow* singlehead_default_window_get_pointer (GdkWindow       *window,
-						  gint            *x,
-						  gint            *y,
-						  GdkModifierType *mask);
-GdkWindow* singlehead_default_window_at_pointer  (GdkScreen       *screen,
-						  gint            *win_x,
-						  gint            *win_y);
+static GdkWindow* singlehead_default_window_get_pointer (GdkWindow       *window,
+							 gint            *x,
+							 gint            *y,
+							 GdkModifierType *mask);
+static GdkWindow* singlehead_default_window_at_pointer  (GdkScreen       *screen,
+							 gint            *win_x,
+							 gint            *win_y);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -558,7 +558,7 @@ gdk_display_set_pointer_hooks (GdkDisplay                   *display,
   return (GdkDisplayPointerHooks *)result;
 }
 
-void
+static void
 singlehead_get_pointer (GdkDisplay       *display,
 			GdkScreen       **screen,
 			gint             *x,
@@ -573,7 +573,7 @@ singlehead_get_pointer (GdkDisplay       *display,
   singlehead_current_pointer_hooks->get_pointer (root_window, x, y, mask);
 }
 
-GdkWindow*
+static GdkWindow*
 singlehead_window_get_pointer (GdkDisplay       *display,
 			       GdkWindow        *window,
 			       gint             *x,
@@ -583,7 +583,7 @@ singlehead_window_get_pointer (GdkDisplay       *display,
   return singlehead_current_pointer_hooks->get_pointer (window, x, y, mask);
 }
 
-GdkWindow*
+static GdkWindow*
 singlehead_window_at_pointer   (GdkDisplay *display,
 				gint       *win_x,
 				gint       *win_y)
@@ -594,7 +594,7 @@ singlehead_window_at_pointer   (GdkDisplay *display,
 							      win_x, win_y);
 }
 
-GdkWindow*
+static GdkWindow*
 singlehead_default_window_get_pointer (GdkWindow       *window,
 				       gint            *x,
 				       gint            *y,
@@ -604,7 +604,7 @@ singlehead_default_window_get_pointer (GdkWindow       *window,
 					    window, x, y, mask);
 }
 
-GdkWindow*
+static GdkWindow*
 singlehead_default_window_at_pointer  (GdkScreen       *screen,
 				       gint            *win_x,
 				       gint            *win_y)
