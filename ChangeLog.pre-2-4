@@ -1,3 +1,12 @@
+Thu Feb 14 00:10:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): Only
+	pop the tooltip down on a select set of events, not
+	on any unknown event. (#71157, Jody Goldberg)
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler):
+	Fix some warnings.
+
 Thu Feb 14 00:02:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c (gtk_calendar_size_request): A bunch of

@@ -523,7 +523,7 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 
   if ((event->type == GDK_LEAVE_NOTIFY || event->type == GDK_ENTER_NOTIFY) &&
       event->crossing.detail == GDK_NOTIFY_INFERIOR)
-    return FALSE;
+    return;
 
   old_tips_data = gtk_tooltips_data_get (widget);
   tooltips = old_tips_data->tooltips;
@@ -544,9 +544,12 @@ gtk_tooltips_event_handler (GtkWidget *widget,
     }
   else
     {
-      event_widget = gtk_get_event_widget (event);
-      if (event_widget != widget)
-	return FALSE;
+      if (event->type != GDK_KEY_PRESS && event->type != GDK_KEY_RELEASE)
+	{
+	  event_widget = gtk_get_event_widget (event);
+	  if (event_widget != widget)
+	    return;
+	}
   
       switch (event->type)
 	{
@@ -585,14 +588,19 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 	    tooltips->use_sticky_delay = use_sticky_delay;
 	  }
 	  break;
-	  
-	default:
+
+	case GDK_BUTTON_PRESS:
+	case GDK_BUTTON_RELEASE:
+	case GDK_KEY_PRESS:
+	case GDK_KEY_RELEASE:
+	case GDK_PROXIMITY_IN:
+	case GDK_SCROLL:
 	  gtk_tooltips_set_active_widget (tooltips, NULL);
+	  break;
+	default:
 	  break;
 	}
     }
-
-  return FALSE;
 }
 
 static void
