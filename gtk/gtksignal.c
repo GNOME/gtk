@@ -165,8 +165,8 @@ static gboolean	gtk_signal_collect_params      (GtkArg	       *params,
 						va_list		var_args);
 
 #define LOOKUP_SIGNAL_ID(signal_id)	( \
-  signal_id > 0 && signal_id < gtk_n_signals ? \
-    (GtkSignal*) gtk_signals + signal_id : \
+  signal_id > 0 && signal_id < _gtk_private_n_signals ? \
+    (GtkSignal*) _gtk_private_signals + signal_id : \
     (GtkSignal*) 0 \
 )
 
@@ -177,8 +177,8 @@ static GtkSignalDestroy global_destroy_notify = NULL;
 static guint	   		 gtk_handler_id = 1;
 static guint	   		 gtk_handler_quark = 0;
 static GHashTable  		*gtk_signal_hash_table = NULL;
-static GtkSignal   		*gtk_signals = NULL;
-static guint	   		 gtk_n_signals = 0;
+       GtkSignal   		*_gtk_private_signals = NULL;
+       guint	   		 _gtk_private_n_signals = 0;
 static GMemChunk   		*gtk_signal_hash_mem_chunk = NULL;
 static GMemChunk   		*gtk_disconnect_info_mem_chunk = NULL;
 static GtkHandler  		*gtk_handler_free_list = NULL;
@@ -207,24 +207,24 @@ gtk_signal_next_and_invalidate (void)
       
       /* nearest pow
        */
-      size = gtk_n_signals + SIGNAL_BLOCK_SIZE;
+      size = _gtk_private_n_signals + SIGNAL_BLOCK_SIZE;
       size *= sizeof (GtkSignal);
       i = 1;
       while (i < size)
 	i <<= 1;
       size = i;
       
-      gtk_signals = g_realloc (gtk_signals, size);
+      _gtk_private_signals = g_realloc (_gtk_private_signals, size);
       
-      gtk_n_free_signals = size / sizeof (GtkSignal) - gtk_n_signals;
+      gtk_n_free_signals = size / sizeof (GtkSignal) - _gtk_private_n_signals;
       
-      memset (gtk_signals + gtk_n_signals, 0, gtk_n_free_signals * sizeof (GtkSignal));
+      memset (_gtk_private_signals + _gtk_private_n_signals, 0, gtk_n_free_signals * sizeof (GtkSignal));
     }
   
-  new_signal_id = gtk_n_signals++;
+  new_signal_id = _gtk_private_n_signals++;
   gtk_n_free_signals--;
 
-  g_assert (gtk_n_signals < 65535);
+  g_assert (_gtk_private_n_signals < 65535);
   
   signal = LOOKUP_SIGNAL_ID (new_signal_id);
   if (signal)
