@@ -1,3 +1,15 @@
+Sun Nov 30 17:31:32 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (slide_idle_handler): return TRUE if there are
+	disappearing placeholders that are still visible.
+
+	* gtk/gtktoolbar.c: formatting fixes
+
+	* gtk/gtktoolbar.c (struct _ToolbarContent): new bit:
+	disappearing, for placeholders that are going to disappear.
+
+	* gtk/gtktoolbar.c (get_item_size): return 0 for disappearing placeholders
+
 Sat Nov 29 00:55:28 2003  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_new_column_width): 
