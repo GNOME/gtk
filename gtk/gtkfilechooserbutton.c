@@ -20,9 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifdef HAVE_CONFIG_H
-# include <config.h>
-#endif /* HAVE_CONFIG_H */
+#include <config.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -55,7 +53,6 @@
 
 #define GTK_FILE_CHOOSER_BUTTON_GET_PRIVATE(object) (GTK_FILE_CHOOSER_BUTTON ((object))->priv)
 
-#define DEFAULT_TITLE		N_("Select a File")
 #define DEFAULT_FILENAME	N_("(None)")
 #define DEFAULT_SPACING		0
 
@@ -102,13 +99,12 @@ struct _GtkFileChooserButtonPrivate
 
 enum
 {
-  TEXT_URI_LIST,
-  TEXT_PLAIN
+  TEXT_PLAIN,
+  TEXT_URI_LIST
 };
 
 static const GtkTargetEntry drop_targets[] = {
-  { "text/uri-list", 0, TEXT_URI_LIST },
-  { "text/plain", 0, TEXT_PLAIN }
+  { "text/uri-list", 0, TEXT_URI_LIST }
 };
 
 
@@ -223,7 +219,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 				   g_param_spec_string ("title",
 							P_("Title"),
 							P_("The title of the file chooser dialog."),
-							_(DEFAULT_TITLE),
+							_("Select a File"),
 							G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class, PROP_ACTIVE,
 				   g_param_spec_boolean ("active",
@@ -288,11 +284,10 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   /* DnD */
   gtk_drag_dest_unset (priv->entry);
   gtk_drag_dest_set (GTK_WIDGET (button),
-                     (GTK_DEST_DEFAULT_MOTION |
-                      GTK_DEST_DEFAULT_HIGHLIGHT |
-                      GTK_DEST_DEFAULT_DROP),
+                     (GTK_DEST_DEFAULT_ALL),
 		     drop_targets, G_N_ELEMENTS (drop_targets),
 		     GDK_ACTION_COPY);
+  gtk_drag_dest_add_text_targets (GTK_WIDGET (button));
 }
 
 
@@ -467,6 +462,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 					    guint	      drag_time)
 {
   GtkFileChooserButtonPrivate *priv;
+  gchar *text;
 
   if (GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received != NULL)
     (*GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->drag_data_received) (widget,
@@ -514,7 +510,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 						     GTK_FILE_INFO_IS_FOLDER,
 						     NULL);
 
-		info = gtk_file_folder_get_info (folder, base_path, NULL);
+		info = gtk_file_folder_get_info (folder, path, NULL);
 
 		if (info != NULL)
 		  {
@@ -549,11 +545,13 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
       break;
 
     case TEXT_PLAIN:
-      gtk_entry_set_text (GTK_ENTRY (priv->entry), data->data);
+      text = gtk_selection_data_get_text (data);
+      gtk_entry_set_text (GTK_ENTRY (priv->entry), text);
+      g_free (text);
       break;
     }
 
-  gtk_drag_finish (context, FALSE, FALSE, drag_time);
+  gtk_drag_finish (context, TRUE, FALSE, drag_time);
 }
 
 
@@ -752,7 +750,7 @@ gtk_file_chooser_button_set_dialog (GObject   *object,
   /* Kinda ugly to set this here... */
   _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (priv->entry),
 					   _gtk_file_chooser_get_file_system (GTK_FILE_CHOOSER (priv->dialog)));
-  path = gtk_file_path_new_steal ("file:///");
+  path = gtk_file_path_new_steal ("/");
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (priv->entry),
 					   path);
   priv->entry_changed_id = g_signal_connect_after (priv->entry, "changed",
@@ -863,9 +861,12 @@ update_dialog (gpointer user_data)
       gchar *display_name;
 
       display_name = g_filename_from_uri (full_uri, NULL, NULL);
-      display_name = get_display_name (display_name);
-      gtk_label_set_text (GTK_LABEL (priv->label), display_name);
-      g_free (display_name);
+      if (display_name)
+	{
+	  display_name = get_display_name (display_name);
+	  gtk_label_set_text (GTK_LABEL (priv->label), display_name);
+	  g_free (display_name);
+	}
     }
   else
     {
@@ -901,8 +902,9 @@ update_dialog (gpointer user_data)
 	  else
 	    _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (priv->dialog),
 					   full_path, NULL);
-
-	  gtk_file_info_free (info);
+	  
+	  if (info)
+	    gtk_file_info_free (info);
 	  gtk_file_path_free (full_path);
 	}
       else
@@ -1054,12 +1056,9 @@ button_toggled_cb (GtkToggleButton *real_button,
 
 	  if (GTK_WIDGET_TOPLEVEL (toplevel) && GTK_IS_WINDOW (toplevel))
 	    {
-	      if (GTK_WINDOW (toplevel) !=
-		  gtk_window_get_transient_for (GTK_WINDOW (priv->dialog)))
-		{
-		  gtk_window_set_transient_for (GTK_WINDOW (priv->dialog),
-						GTK_WINDOW (toplevel));
-		}
+	      if (GTK_WINDOW (toplevel) != gtk_window_get_transient_for (GTK_WINDOW (priv->dialog)))
+		gtk_window_set_transient_for (GTK_WINDOW (priv->dialog), GTK_WINDOW (toplevel));
+	      
 	      gtk_window_set_modal (GTK_WINDOW (priv->dialog),
 				    gtk_window_get_modal (GTK_WINDOW (toplevel)));
 	    }

@@ -19,10 +19,10 @@
  */
 
 #ifndef __GTK_FILE_CHOOSER_BUTTON_H__
-#define __GTK_FILE_CHOOSER_BUTTON_H__ 1
+#define __GTK_FILE_CHOOSER_BUTTON_H__
 
-#include "gtkhbox.h"
-#include "gtkfilechooser.h"
+#include <gtk/gtkhbox.h>
+#include <gtk/gtkfilechooser.h>
 
 G_BEGIN_DECLS
 
@@ -69,19 +69,17 @@ struct _GtkFileChooserButtonClass
 };
 
 
-GType gtk_file_chooser_button_get_type (void) G_GNUC_CONST;
-
-GtkWidget *gtk_file_chooser_button_new                   (const gchar          *title);
-GtkWidget *gtk_file_chooser_button_new_with_backend      (const gchar          *title,
-							  const gchar          *backend);
-GtkWidget *gtk_file_chooser_button_new_with_dialog       (GtkWidget            *dialog);
-
-G_CONST_RETURN gchar *gtk_file_chooser_button_get_title  (GtkFileChooserButton *button);
-void		      gtk_file_chooser_button_set_title  (GtkFileChooserButton *button,
-							  const gchar          *title);
-gboolean	      gtk_file_chooser_button_get_active (GtkFileChooserButton *button);
-void		      gtk_file_chooser_button_set_active (GtkFileChooserButton *button,
-							  gboolean              is_active);
+GType                 gtk_file_chooser_button_get_type         (void) G_GNUC_CONST;
+GtkWidget *           gtk_file_chooser_button_new              (const gchar          *title);
+GtkWidget *           gtk_file_chooser_button_new_with_backend (const gchar          *title,
+								const gchar          *backend);
+GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget            *dialog);
+G_CONST_RETURN gchar *gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);
+void                  gtk_file_chooser_button_set_title        (GtkFileChooserButton *button,
+								const gchar          *title);
+gboolean              gtk_file_chooser_button_get_active       (GtkFileChooserButton *button);
+void                  gtk_file_chooser_button_set_active       (GtkFileChooserButton *button,
+								gboolean              is_active);
 
 
 G_END_DECLS

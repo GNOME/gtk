@@ -1,5 +1,20 @@
 2004-08-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testfilechooserbutton.c: Use g_message() throughout, add RTL envar for
+	rtl testing.
+
+	* gtk/gtkfilechooserbutton.c: Get rid of HAVE_CONFIG_H.
+	(gtk_file_chooser_button_init): Use gtk_drag_dest_add_text_targets().
+	(gtk_file_chooser_button_drag_data_received): Use gtk_selection_data_get_text().
+	(gtk_file_chooser_button_set_dialog): _gtk_file_chooser_entry_set_base_folder()
+	seems to expect a path, not an uri.
+	(update_dialog): Handle g_filename_from_uri() returning NULL, don't free
+	info if it is NULL. 
+
+	* gtk/gtkfilechooserbutton.h: Minor stylistic changes.
+
+2004-08-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkfilechooserbutton.[hc]: New widget to go along with 
 	GtkFontButton and GtkColorButton for use in preference dialogs.
 	Replaces GnomeFileEntry.  (#148108, James M. Cape)

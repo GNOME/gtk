@@ -68,7 +68,7 @@ chooser_selection_changed_cb (GtkFileChooser *chooser, gpointer user_data)
 {
   GSList *selection;
 
-  g_warning ("%s:%s:\n`%s` Selection:", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser));
+  g_message ("%s:%s:\n`%s` Selection:", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser));
   for (selection = gtk_file_chooser_get_filenames (chooser); selection != NULL;
        selection = g_slist_remove_link (selection, selection))
     {
@@ -86,7 +86,7 @@ chooser_file_activated_cb (GtkFileChooser *chooser, gpointer user_data)
 
   folder = gtk_file_chooser_get_current_folder (chooser);
   filename = gtk_file_chooser_get_filename (chooser);
-  g_warning ("%s:%s:\n`%s`\nFolder: `%s'\nFilename: `%s'", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser), folder, filename);
+  g_message ("%s:%s:\n`%s`\nFolder: `%s'\nFilename: `%s'", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser), folder, filename);
   g_free (folder);
   g_free (filename);
 }
@@ -98,7 +98,7 @@ chooser_update_preview_cb (GtkFileChooser *chooser, gpointer user_data)
   gchar *filename;
 
   filename = gtk_file_chooser_get_preview_filename (chooser);
-  g_warning ("%s:%s:\n`%s`\nPreview Filename: `%s'", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser), filename);
+  g_message ("%s:%s:\n`%s`\nPreview Filename: `%s'", G_STRFUNC, G_STRLOC, G_OBJECT_TYPE_NAME (chooser), filename);
   g_free (filename);
 }
 
@@ -110,6 +110,10 @@ main (int argc, char *argv[])
   GtkSizeGroup *label_group;
 
   gtk_init (&argc, &argv);
+
+  /* to test rtl layout, set RTL=1 in the environment */
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   win = gtk_dialog_new_with_buttons ("TestFileChooserButton", NULL, GTK_DIALOG_NO_SEPARATOR,
 				     GTK_STOCK_QUIT, GTK_RESPONSE_CLOSE, NULL);
