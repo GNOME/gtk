@@ -3561,7 +3561,7 @@ create_list (void)
 	 gtk_scrolled_window_get_hadjustment
 	 (GTK_SCROLLED_WINDOW (scrolled_win)));
 
-      if ((infile = fopen("gtkenums.h", "r")))
+      if ((infile = fopen("gtklist.c", "r")))
 	{
 	  char buffer[256];
 	  char *pos;

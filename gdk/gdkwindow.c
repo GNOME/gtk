@@ -375,18 +375,13 @@ void
 gdk_window_begin_paint_rect (GdkWindow    *window,
 			     GdkRectangle *rectangle)
 {
-  GdkRegion *tmp;
   GdkRegion *region;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  tmp = gdk_region_new();
-  region = gdk_region_union_with_rect (tmp, rectangle);
-
+  region = gdk_region_rectangle (rectangle);
   gdk_window_begin_paint_region (window, region);
-
-  gdk_region_destroy (tmp);
   gdk_region_destroy (region);
 }
 
@@ -406,7 +401,7 @@ gdk_window_get_bg_gc (GdkWindow *window, GdkWindowPaint *paint)
       
       return gdk_window_get_bg_gc (private->parent, &tmp_paint);
     }
-  else if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG)
+  else if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG && private->bg_pixmap != GDK_NO_BG)
     {
       gc_values.fill = GDK_TILED;
       gc_values.tile = private->bg_pixmap;
@@ -443,7 +438,6 @@ gdk_window_begin_paint_region (GdkWindow *window,
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   GdkRectangle clip_box;
   GdkWindowPaint *paint;
-  GdkRegion *tmp_region;
   GdkRegion *init_region;
   GdkGC *tmp_gc;
   
@@ -452,14 +446,9 @@ gdk_window_begin_paint_region (GdkWindow *window,
 
   paint = g_new (GdkWindowPaint, 1);
 
-  tmp_region = gdk_region_new ();
-  paint->region = gdk_regions_union (tmp_region, region);
-  gdk_region_destroy (tmp_region);
+  paint->region = gdk_region_copy (region);
 
-  tmp_region = gdk_region_new ();
-  init_region = gdk_regions_union (tmp_region, region);
-  gdk_region_destroy (tmp_region);
-  
+  init_region = gdk_region_copy (region);
   gdk_region_get_clipbox (paint->region, &clip_box);
 
   if (private->paint_stack)
@@ -494,10 +483,7 @@ gdk_window_begin_paint_region (GdkWindow *window,
 	  while (tmp_list)
 	    {
 	      tmp_paint = private->paint_stack->data;
-	      
-	      tmp_region = init_region;
-	      init_region = gdk_regions_subtract (tmp_region, tmp_paint->region);
-	      gdk_region_destroy (tmp_region);
+	      gdk_region_subtract (init_region, tmp_paint->region);
 
 	      tmp_paint->pixmap = paint->pixmap;
 	      tmp_paint->x_offset = paint->x_offset;
@@ -516,11 +502,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
 	  while (tmp_list)
 	    {
 	      tmp_paint = private->paint_stack->data;
+	      gdk_region_subtract (init_region, tmp_paint->region);
 	      
-	      tmp_region = init_region;
-	      init_region = gdk_regions_subtract (tmp_region, tmp_paint->region);
-	      gdk_region_destroy (tmp_region);
-
 	      tmp_list = tmp_list->next;
 	    }
 	}
@@ -546,6 +529,7 @@ gdk_window_end_paint (GdkWindow *window)
   GdkWindowPaint *paint;
   GdkGC *tmp_gc;
   GdkRectangle clip_box;
+  gint x_offset, y_offset;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -557,11 +541,16 @@ gdk_window_end_paint (GdkWindow *window)
   gdk_region_get_clipbox (paint->region, &clip_box);
 
   tmp_gc = gdk_gc_new (window);
+
+  _gdk_windowing_window_get_offsets (window, &x_offset, &y_offset);
+
   gdk_gc_set_clip_region (tmp_gc, paint->region);
+  gdk_gc_set_clip_origin (tmp_gc, -x_offset, -y_offset);
+
   _gdk_windowing_window_class.draw_drawable (window, tmp_gc, paint->pixmap,
 					     clip_box.x - paint->x_offset,
 					     clip_box.y - paint->y_offset,
-					     clip_box.x, clip_box.y,
+					     clip_box.x - x_offset, clip_box.y - y_offset,
 					     clip_box.width, clip_box.height);
   gdk_gc_unref (tmp_gc);
 
@@ -571,10 +560,7 @@ gdk_window_end_paint (GdkWindow *window)
       while (tmp_list)
 	{
 	  GdkWindowPaint *tmp_paint = tmp_list->data;
-
-	  GdkRegion *tmp_region = tmp_paint->region;
-	  tmp_paint->region = gdk_regions_subtract (tmp_region, paint->region);
-	  gdk_region_destroy (tmp_region);
+	  gdk_region_subtract (tmp_paint->region, paint->region);
 	  
 	  tmp_list = tmp_list->next;
 	}
@@ -586,21 +572,40 @@ gdk_window_end_paint (GdkWindow *window)
   g_free (paint);
 }
 
-#define OFFSET_GC(gc)                                             \
-    gint old_clip_x = ((GdkGCPrivate *)gc)->clip_x_origin;        \
-    gint old_clip_y = ((GdkGCPrivate *)gc)->clip_y_origin;        \
-    gint old_ts_x = ((GdkGCPrivate *)gc)->ts_x_origin;            \
-    gint old_ts_y = ((GdkGCPrivate *)gc)->ts_y_origin;            \
-    if (paint->x_offset != 0 || paint->y_offset != 0)             \
-      {                                                           \
-        gdk_gc_set_clip_origin (gc, old_clip_x - paint->x_offset, \
-	  	                old_clip_y - paint->y_offset);    \
-        gdk_gc_set_ts_origin (gc, old_ts_x - paint->x_offset,     \
-	  	              old_ts_y - paint->y_offset);        \
+static void
+gdk_window_get_offsets (GdkWindow *window,
+			gint      *x_offset,
+			gint      *y_offset)
+{
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      *x_offset = paint->x_offset;
+      *y_offset = paint->y_offset;
+    }
+  else
+    _gdk_windowing_window_get_offsets (window, x_offset, y_offset);
+}
+
+#define OFFSET_GC(gc)                                         \
+    gint x_offset, y_offset; 				      \
+    gint old_clip_x = ((GdkGCPrivate *)gc)->clip_x_origin;    \
+    gint old_clip_y = ((GdkGCPrivate *)gc)->clip_y_origin;    \
+    gint old_ts_x = ((GdkGCPrivate *)gc)->ts_x_origin;        \
+    gint old_ts_y = ((GdkGCPrivate *)gc)->ts_y_origin;        \
+    gdk_window_get_offsets (drawable, &x_offset, &y_offset);  \
+    if (x_offset != 0 || y_offset != 0)             	      \
+      {                                                       \
+        gdk_gc_set_clip_origin (gc, old_clip_x - x_offset,    \
+	  	                old_clip_y - y_offset);       \
+        gdk_gc_set_ts_origin (gc, old_ts_x - x_offset,        \
+	  	              old_ts_y - y_offset);           \
       }
 
 #define RESTORE_GC(gc)                                      \
-    if (paint->x_offset != 0 || paint->y_offset != 0)       \
+    if (x_offset != 0 || y_offset != 0)       		    \
      {                                                      \
        gdk_gc_set_clip_origin (gc, old_clip_x, old_clip_y); \
        gdk_gc_set_ts_origin (gc, old_ts_x, old_ts_y);       \
@@ -630,19 +635,19 @@ gdk_window_draw_rectangle (GdkDrawable *drawable,
 			   gint         height)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
-
+  OFFSET_GC (gc);
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      OFFSET_GC (gc);
-
       gdk_draw_rectangle (paint->pixmap, gc, filled,
-			  x - paint->x_offset, y - paint->y_offset, width, height);
-
-      RESTORE_GC (gc);
+			  x - x_offset, y - y_offset, width, height);
     }
   else
-    _gdk_windowing_window_class.draw_rectangle (drawable, gc, filled, x, y, width, height);
+    _gdk_windowing_window_class.draw_rectangle (drawable, gc, filled,
+						x - x_offset, y - y_offset, width, height);
+
+  RESTORE_GC (gc);
 }
 
 static void
@@ -657,21 +662,20 @@ gdk_window_draw_arc (GdkDrawable *drawable,
 		     gint         angle2)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  OFFSET_GC (gc);
 
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      OFFSET_GC (gc);
-
       gdk_draw_arc (paint->pixmap, gc, filled,
-		    x - paint->x_offset, y - paint->y_offset,
+		    x - x_offset, y_offset,
 		    width, height, angle1, angle2);
-
-      RESTORE_GC (gc);
     }
   else
-    _gdk_windowing_window_class.draw_arc (drawable, gc, filled, x, y, width, height,
-					  angle1, angle2);
+    _gdk_windowing_window_class.draw_arc (drawable, gc, filled,
+					  x - x_offset, y - y_offset,
+					  width, height, angle1, angle2);
+  RESTORE_GC (gc);
 }
 
 static void
@@ -682,30 +686,37 @@ gdk_window_draw_polygon (GdkDrawable *drawable,
 			 gint         npoints)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkPoint *new_points;
+  
+  OFFSET_GC (gc);
+
+  if (x_offset != 0 || y_offset != 0)
+    {
+      int i;
+      
+      new_points = g_new (GdkPoint, npoints);
+      for (i=0; i<npoints; i++)
+	{
+	  new_points[i].x = points[i].x - x_offset;
+	  new_points[i].y = points[i].y - y_offset;
+	}
+    }
+  else
+    new_points = points;
 
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      GdkPoint *new_points;
-      gint i;
-
-      OFFSET_GC (gc);
-
-      new_points = g_new (GdkPoint, npoints);
-      for (i=0; i<npoints; i++)
-	{
-	  new_points[i].x = points[i].x - paint->x_offset;
-	  new_points[i].y = points[i].y - paint->y_offset;
-	}
-
       gdk_draw_polygon (paint->pixmap, gc, filled, new_points, npoints);
 
-      g_free (new_points);
-
-      RESTORE_GC (gc);
     }
   else
-    _gdk_windowing_window_class.draw_polygon (drawable, gc, filled, points, npoints);
+    _gdk_windowing_window_class.draw_polygon (drawable, gc, filled, new_points, npoints);
+
+  if (new_points != points)
+    g_free (new_points);
+
+  RESTORE_GC (gc);
 }
 
 static void
@@ -718,19 +729,20 @@ gdk_window_draw_text (GdkDrawable *drawable,
 		      gint         text_length)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  OFFSET_GC (gc);
 
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      OFFSET_GC (gc);
-
       gdk_draw_text (paint->pixmap, font, gc, 
-			x - paint->x_offset, y - paint->y_offset, text, text_length);
+		     x - x_offset, y - y_offset, text, text_length);
 
-      RESTORE_GC (gc);
     }
   else
-    _gdk_windowing_window_class.draw_text (drawable, font, gc, x, y, text, text_length);
+    _gdk_windowing_window_class.draw_text (drawable, font, gc,
+					   x - x_offset, y - y_offset, text, text_length);
+
+  RESTORE_GC (gc);
 }
 
 static void
@@ -743,19 +755,19 @@ gdk_window_draw_text_wc (GdkDrawable    *drawable,
 			 gint            text_length)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  OFFSET_GC (gc);
 
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      OFFSET_GC (gc);
-
       gdk_draw_text_wc (paint->pixmap, font, gc, 
-			x - paint->x_offset, y - paint->y_offset, text, text_length);
-
-      RESTORE_GC (gc);
+			x - x_offset, y - y_offset, text, text_length);
     }
   else
-    _gdk_windowing_window_class.draw_text_wc (drawable, font, gc, x, y, text, text_length);
+    _gdk_windowing_window_class.draw_text_wc (drawable, font, gc,
+					      x - x_offset, y - y_offset, text, text_length);
+
+  RESTORE_GC (gc);
 }
 
 static void
@@ -770,21 +782,20 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 			  gint         height)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  OFFSET_GC (gc);
 
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      OFFSET_GC (gc);
-
       gdk_draw_drawable (paint->pixmap, gc, src, xsrc, ysrc,
-			 xdest - paint->x_offset, ydest - paint->y_offset, width, height);
+			 xdest - x_offset, ydest - y_offset, width, height);
 
-      RESTORE_GC (gc);
     }
   else
     _gdk_windowing_window_class.draw_drawable (drawable, gc, src, xsrc, ysrc,
-					       xdest, ydest,
+					       xdest - x_offset, ydest - y_offset,
 					       width, height);
+  RESTORE_GC (gc);
 }
 
 static void
@@ -794,30 +805,36 @@ gdk_window_draw_points (GdkDrawable *drawable,
 			gint         npoints)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkPoint *new_points;
+  
+  OFFSET_GC (gc);
 
-  if (private->paint_stack)
+  if (x_offset != 0 || y_offset != 0)
     {
-      GdkWindowPaint *paint = private->paint_stack->data;
-      GdkPoint *new_points;
       gint i;
-
-      OFFSET_GC (gc);
 
       new_points = g_new (GdkPoint, npoints);
       for (i=0; i<npoints; i++)
 	{
-	  new_points[i].x = points[i].x - paint->x_offset;
-	  new_points[i].y = points[i].y - paint->y_offset;
+	  new_points[i].x = points[i].x - x_offset;
+	  new_points[i].y = points[i].y - y_offset;
 	}
+    }
+  else
+    new_points = points;
 
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
       gdk_draw_points (paint->pixmap, gc, new_points, npoints);
-
-      g_free (new_points);
-
-      RESTORE_GC (gc);
     }
   else
     _gdk_windowing_window_class.draw_points (drawable, gc, points, npoints);
+
+  if (new_points != points)
+    g_free (new_points);
+
+  RESTORE_GC (gc);
 }
 
 static void
@@ -827,32 +844,38 @@ gdk_window_draw_segments (GdkDrawable *drawable,
 			  gint         nsegs)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkSegment *new_segs;
 
-  if (private->paint_stack)
+  OFFSET_GC (gc);
+
+  if (x_offset != 0 || y_offset != 0)
     {
-      GdkWindowPaint *paint = private->paint_stack->data;
-      GdkSegment *new_segs;
       gint i;
-
-      OFFSET_GC (gc);
 
       new_segs = g_new (GdkSegment, nsegs);
       for (i=0; i<nsegs; i++)
 	{
-	  new_segs[i].x1 = segs[i].x1 - paint->x_offset;
-	  new_segs[i].y1 = segs[i].y1 - paint->y_offset;
-	  new_segs[i].x2 = segs[i].x2 - paint->x_offset;
-	  new_segs[i].y2 = segs[i].y2 - paint->y_offset;
+	  new_segs[i].x1 = segs[i].x1 - x_offset;
+	  new_segs[i].y1 = segs[i].y1 - y_offset;
+	  new_segs[i].x2 = segs[i].x2 - x_offset;
+	  new_segs[i].y2 = segs[i].y2 - y_offset;
 	}
-
-      gdk_draw_segments (paint->pixmap, gc, new_segs, nsegs);
-
-      g_free (new_segs);
-
-      RESTORE_GC (gc);
     }
   else
-    _gdk_windowing_window_class.draw_segments (drawable, gc, segs, nsegs);
+    new_segs = segs;
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_draw_segments (paint->pixmap, gc, new_segs, nsegs);
+    }
+  else
+    _gdk_windowing_window_class.draw_segments (drawable, gc, new_segs, nsegs);
+
+  if (new_segs != segs)
+    g_free (new_segs);
+
+  RESTORE_GC (gc);
 }
 
 static void
@@ -862,30 +885,36 @@ gdk_window_draw_lines (GdkDrawable *drawable,
 		       gint         npoints)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkPoint *new_points;
 
-  if (private->paint_stack)
+  OFFSET_GC (gc);
+
+  if (x_offset != 0 || y_offset != 0)
     {
-      GdkWindowPaint *paint = private->paint_stack->data;
-      GdkPoint *new_points;
       gint i;
-
-      OFFSET_GC (gc);
 
       new_points = g_new (GdkPoint, npoints);
       for (i=0; i<npoints; i++)
 	{
-	  new_points[i].x = points[i].x - paint->x_offset;
-	  new_points[i].y = points[i].y - paint->y_offset;
+	  new_points[i].x = points[i].x - x_offset;
+	  new_points[i].y = points[i].y - y_offset;
 	}
-
-      gdk_draw_lines (paint->pixmap, gc, new_points, npoints);
-
-      g_free (new_points);
-
-      RESTORE_GC (gc);
     }
   else
-    _gdk_windowing_window_class.draw_lines (drawable, gc, points, npoints);
+    new_points = points;
+
+  if (private->paint_stack)
+    {
+      GdkWindowPaint *paint = private->paint_stack->data;
+      gdk_draw_lines (paint->pixmap, gc, new_points, npoints);
+    }
+  else
+    _gdk_windowing_window_class.draw_lines (drawable, gc, new_points, npoints);
+
+  if (new_points != points)
+    g_free (new_points);
+
+  RESTORE_GC (gc);
 }
 
 /* Fixme - this is just like gdk_window_paint_init_bg */
@@ -956,20 +985,22 @@ _gdk_window_draw_image (GdkDrawable *drawable,
   GdkImagePrivate *image_private = (GdkImagePrivate*) image;
   GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
 
+  OFFSET_GC (gc);
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      OFFSET_GC (gc);
-
       image_private->klass->image_put (image, paint->pixmap, gc, xsrc, ysrc,
-				       xdest - paint->x_offset,
-				       ydest - paint->y_offset, width, height);
+				       xdest - x_offset, ydest - y_offset,
+				       width, height);
 
-      RESTORE_GC (gc);
     }
   else
     image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
-				     xdest, ydest, width, height);
+				     xdest - x_offset, ydest - y_offset,
+				     width, height);
+
+  RESTORE_GC (gc);
 }
 
 /* Code for dirty-region queueing
@@ -984,6 +1015,7 @@ static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  gboolean save_region = FALSE;
   
   if (gdk_event_func)
     {
@@ -994,17 +1026,22 @@ gdk_window_process_updates_internal (GdkWindow *window)
       window_rect.y = 0;
       window_rect.width = private->drawable.width;
       window_rect.height = private->drawable.height;
+
+      save_region = _gdk_windowing_window_queue_antiexpose (window, private->update_area);
       
       event.expose.type = GDK_EXPOSE;
       event.expose.window = gdk_window_ref ((GdkWindow *)private);
-      gdk_region_get_clipbox (private->update_area, &event.expose.area);
-      gdk_rectangle_intersect (&event.expose.area, &window_rect, &event.expose.area);
       event.expose.count = 0;
       
-      (*gdk_event_func) (&event, gdk_event_data);
+      gdk_region_get_clipbox (private->update_area, &event.expose.area);
+      if (gdk_rectangle_intersect (&event.expose.area, &window_rect, &event.expose.area))
+	{
+	  (*gdk_event_func) (&event, gdk_event_data);
+	}
     }
   
-  gdk_region_destroy (private->update_area);
+  if (!save_region)
+    gdk_region_destroy (private->update_area);
   private->update_area = NULL;
 }
 
@@ -1071,25 +1108,24 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 			      gboolean      invalidate_children)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkRegion *tmp_region;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (private->update_area)
-    tmp_region = private->update_area;
+    {
+      gdk_region_union_with_rect (private->update_area, rect);
+    }
   else
     {
       update_windows = g_slist_prepend (update_windows, window);
-      tmp_region = gdk_region_new ();
+      private->update_area = gdk_region_rectangle (rect);
 
       if (!private->update_freeze_count && !update_idle)
 	update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
 				       gdk_window_update_idle, NULL, NULL);
     }
 
-  private->update_area = gdk_region_union_with_rect (tmp_region, rect);
-  gdk_region_destroy (tmp_region);
 
   if (invalidate_children)
     {
@@ -1130,31 +1166,29 @@ gdk_window_invalidate_region (GdkWindow *window,
 			      gboolean   invalidate_children)
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-  GdkRegion *tmp_region;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (private->update_area)
-    tmp_region = private->update_area;
+    {
+      gdk_region_union (private->update_area, region);
+    }
   else
     {
       update_windows = g_slist_prepend (update_windows, window);
-      tmp_region = gdk_region_new ();
+      private->update_area = gdk_region_copy (region);
 
       if (!private->update_freeze_count && !update_idle)
 	update_idle = g_idle_add_full (GDK_PRIORITY_REDRAW,
 				       gdk_window_update_idle, NULL, NULL);
     }
 
-  private->update_area = gdk_regions_union (tmp_region, region);
-  gdk_region_destroy (tmp_region);
-
   if (invalidate_children)
     {
       GList *tmp_list;
       GdkRectangle child_rect;
-      GdkRegion *new_region, *child_region;
+      GdkRegion *child_region;
 
       tmp_list = private->children;
       while (tmp_list)
@@ -1172,20 +1206,16 @@ gdk_window_invalidate_region (GdkWindow *window,
 	      child_rect.width = child->drawable.width;
 	      child_rect.height = child->drawable.height;
 	      
-	      tmp_region = gdk_region_new ();
-	      child_region = gdk_region_union_with_rect (tmp_region, &child_rect);
-	      gdk_region_destroy (tmp_region);
+	      child_region = gdk_region_rectangle (&child_rect);
+	      gdk_region_intersect (child_region, region);
 	      
-	      new_region = gdk_regions_intersect (child_region, region);
-	      gdk_region_destroy (child_region);
-	      
-	      if (!gdk_region_empty (new_region))
+	      if (!gdk_region_empty (child_region))
 		{
-		  gdk_region_offset (new_region, - child_rect.x, - child_rect.y);
-		  gdk_window_invalidate_region ((GdkWindow *)child, new_region, TRUE);
+		  gdk_region_offset (child_region, - child_rect.x, - child_rect.y);
+		  gdk_window_invalidate_region ((GdkWindow *)child, child_region, TRUE);
 		}
 	      
-	      gdk_region_destroy (new_region);
+	      gdk_region_destroy (child_region);
 	    }
 	}
     }

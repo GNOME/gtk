@@ -143,24 +143,24 @@ typedef void (*GdkDestroyNotify) (gpointer data);
 
 struct _GdkPoint
 {
-  gint16 x;
-  gint16 y;
+  gint x;
+  gint y;
 };
 
 struct _GdkRectangle
 {
-  gint16 x;
-  gint16 y;
-  guint16 width;
-  guint16 height;
+  gint x;
+  gint y;
+  gint width;
+  gint height;
 };
 
 struct _GdkSegment
 {
-  gint16 x1;
-  gint16 y1;
-  gint16 x2;
-  gint16 y2;
+  gint x1;
+  gint y1;
+  gint x2;
+  gint y2;
 };
 
 

@@ -35,34 +35,36 @@ xinput_sources =	   \
 endif
 endif
 
-libgdk_x11_la_SOURCES =    \
-	MwmUtil.h	   \
-	gdkcc-x11.c	   \
-	gdkcolor-x11.c	   \
-	gdkcursor-x11.c	   \
-	gdkdnd-x11.c	   \
-	gdkdrawable-x11.c  \
-	gdkevents-x11.c	   \
-	gdkfont-x11.c	   \
-	gdkgc-x11.c 	   \
-	gdkglobals-x11.c   \
-	gdkim-x11.c	   \
-	gdkimage-x11.c	   \
-	gdkinput.c	   \
-	gdkmain-x11.c	   \
-	gdkpixmap-x11.c	   \
-	gdkproperty-x11.c  \
-	gdkregion-x11.c	   \
-	gdkselection-x11.c \
-	gdkvisual-x11.c	   \
-	gdkwindow-x11.c    \
-	gdkxid.c	   \
-	gxid_lib.c	   \
-	gxid_lib.h	   \
-	gxid_proto.h	   \
-	gdkx.h		   \
-	gdkprivate-x11.h   \
-	gdkinputprivate.h  \
+libgdk_x11_la_SOURCES =    	\
+	MwmUtil.h	   	\
+	gdkcc-x11.c	   	\
+	gdkcolor-x11.c	   	\
+	gdkcursor-x11.c	   	\
+	gdkdnd-x11.c	   	\
+	gdkdrawable-x11.c  	\
+	gdkevents-x11.c	   	\
+	gdkfont-x11.c	   	\
+	gdkgc-x11.c 	   	\
+	gdkgeometry-x11.c  	\
+	gdkglobals-x11.c   	\
+	gdkim-x11.c	   	\
+	gdkimage-x11.c	   	\
+	gdkinput.c	   	\
+	gdkmain-x11.c	   	\
+	gdkpixmap-x11.c	   	\
+	gdkproperty-x11.c  	\
+	gdkpolyreg-generic.c 	\
+	gdkregion-generic.c 	\
+	gdkselection-x11.c 	\
+	gdkvisual-x11.c	   	\
+	gdkwindow-x11.c    	\
+	gdkxid.c	   	\
+	gxid_lib.c	   	\
+	gxid_lib.h	   	\
+	gxid_proto.h	   	\
+	gdkx.h		   	\
+	gdkprivate-x11.h   	\
+	gdkinputprivate.h  	\
 	$(xinput_sources)
 
 EXTRA_PROGRAMS = gxid

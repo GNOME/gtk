@@ -110,7 +110,7 @@ gint
 gdk_drawable_get_depth (GdkDrawable *drawable)
 {
   GdkDrawablePrivate *private = (GdkDrawablePrivate *)drawable;
-  g_return_val_if_fail (drawable != NULL, NULL);
+  g_return_val_if_fail (drawable != NULL, 0);
 
   return private->depth;
 }

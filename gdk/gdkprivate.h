@@ -42,6 +42,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GDK_PARENT_RELATIVE_BG ((GdkPixmap *)1L)
+#define GDK_NO_BG ((GdkPixmap *)2L)
 
 #define GDK_DRAWABLE_TYPE(d) (((GdkDrawablePrivate *)d)->window_type)
 #define GDK_IS_WINDOW(d) (GDK_DRAWABLE_TYPE(d) <= GDK_WINDOW_TEMP || \
@@ -73,8 +74,8 @@ struct _GdkDrawablePrivate
 
   guint ref_count;
 
-  guint16 width;
-  guint16 height;
+  gint width;
+  gint height;
 
   GdkColormap *colormap;
 
@@ -89,8 +90,8 @@ struct _GdkWindowPrivate
   GdkDrawablePrivate drawable;
   
   GdkWindow *parent;
-  gint16 x;
-  gint16 y;
+  gint x;
+  gint y;
   guint8 resize_count;
   guint mapped : 1;
   guint guffaw_gravity : 1;
@@ -284,18 +285,30 @@ void _gdk_cursor_destroy (GdkCursor *cursor);
 /* Initialization */
 
 extern GdkArgDesc _gdk_windowing_args[];
-gboolean _gdk_windowing_init_check (int argc, char **argv);
+gboolean _gdk_windowing_init_check              (int         argc,
+						 char      **argv);
+void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
+						 gint       *x_offset,
+						 gint       *y_offset);
+void     _gdk_windowing_window_clear_area       (GdkWindow  *window,
+						 gint        x,
+						 gint        y,
+						 gint        width,
+						 gint        height);
+void     _gdk_windowing_window_clear_area_e     (GdkWindow  *window,
+						 gint        x,
+						 gint        y,
+						 gint        width,
+						 gint        height);
 
-void _gdk_windowing_window_clear_area   (GdkWindow *window,
-					 gint       x,
-					 gint       y,
-					 gint       width,
-					 gint       height);
-void _gdk_windowing_window_clear_area_e (GdkWindow *window,
-					 gint       x,
-					 gint       y,
-					 gint       width,
-					 gint       height);
+/* Called before processing updates for a window. This gives the windowing
+ * layer a chance to save the region for later use in avoiding duplicate
+ * exposes. The return value indicates whether the function has a saved
+ * the region; if the result is TRUE, then the windowing layer is responsible
+ * for destroying the region later.
+ */
+gboolean _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
+						 GdkRegion  *area);
 
 #ifdef USE_XIM
 /* XIM support */

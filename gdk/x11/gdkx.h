@@ -37,7 +37,6 @@
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
 #define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)
-#define GDK_GC_XGC(gc)                (GDK_GC_XDATA(gc)->xgc)
 #define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX *)cmap)->xdisplay)
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX *)cmap)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)

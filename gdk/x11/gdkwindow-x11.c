@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#define USE_GRAVITY
-  
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -115,7 +113,7 @@ gdk_x11_window_alloc (void)
   private = (GdkWindowPrivate *)window;
 
   private->drawable.klass = &_gdk_window_class;
-  private->drawable.klass_data = g_new (GdkDrawableXData, 1);
+  private->drawable.klass_data = g_new (GdkWindowXData, 1);
 
   return window;
 }
@@ -209,6 +207,10 @@ gdk_window_new (GdkWindow     *parent,
   private->drawable.width = (attributes->width > 1) ? (attributes->width) : (1);
   private->drawable.height = (attributes->height > 1) ? (attributes->height) : (1);
   private->drawable.window_type = attributes->window_type;
+
+  _gdk_window_init_position (window);
+  if (GDK_WINDOW_XDATA (window)->position_info.big)
+    private->guffaw_gravity = TRUE;
   
   if (attributes_mask & GDK_WA_VISUAL)
     visual = attributes->visual;
@@ -260,11 +262,17 @@ gdk_window_new (GdkWindow     *parent,
       
       private->bg_color.pixel = BlackPixel (gdk_display, gdk_screen);
       xattributes.background_pixel = private->bg_color.pixel;
+
+      private->bg_pixmap = NULL;
       
       xattributes.border_pixel = BlackPixel (gdk_display, gdk_screen);
       xattributes_mask |= CWBorderPixel | CWBackPixel;
+
+      if (private->guffaw_gravity)
+	xattributes.bit_gravity = StaticGravity;
+      else
+	xattributes.bit_gravity = NorthWestGravity;
       
-      xattributes.bit_gravity = NorthWestGravity;
       xattributes_mask |= CWBitGravity;
   
       switch (private->drawable.window_type)
@@ -639,8 +647,10 @@ gdk_window_show (GdkWindow *window)
       private->mapped = TRUE;
       XRaiseWindow (GDK_DRAWABLE_XDISPLAY (window),
 		    GDK_DRAWABLE_XID (window));
-      XMapWindow (GDK_DRAWABLE_XDISPLAY (window),
-		  GDK_DRAWABLE_XID (window));
+      
+      if (GDK_WINDOW_XDATA (window)->position_info.mapped)
+	XMapWindow (GDK_DRAWABLE_XDISPLAY (window),
+		    GDK_DRAWABLE_XID (window));
     }
 }
 
@@ -678,23 +688,13 @@ gdk_window_move (GdkWindow *window,
 		 gint       x,
 		 gint       y)
 {
-  GdkWindowPrivate *private;
+  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
   
   g_return_if_fail (window != NULL);
-  
-  private = (GdkWindowPrivate*) window;
-  if (!private->drawable.destroyed)
-    {
-      XMoveWindow (GDK_DRAWABLE_XDISPLAY (window),
-		   GDK_DRAWABLE_XID (window),
-		   x, y);
-      
-      if (private->drawable.window_type == GDK_WINDOW_CHILD)
-	{
-	  private->x = x;
-	  private->y = y;
-	}
-    }
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_move_resize (window, x, y,
+			  private->drawable.width, private->drawable.height);
 }
 
 void
@@ -714,20 +714,17 @@ gdk_window_resize (GdkWindow *window,
 
   private = (GdkWindowPrivate*) window;
   
-  if (!private->drawable.destroyed &&
-      ((private->resize_count > 0) ||
-       (private->drawable.width != (guint16) width) ||
-       (private->drawable.height != (guint16) height)))
+  if (!GDK_DRAWABLE_DESTROYED (window))
     {
-      XResizeWindow (GDK_DRAWABLE_XDISPLAY (private),
-		     GDK_DRAWABLE_XID (private),
-		     width, height);
-      private->resize_count += 1;
-      
       if (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
+	_gdk_window_move_resize_child (window, private->x, private->y,
+				       width, height);
+      else
 	{
-	  private->drawable.width = width;
-	  private->drawable.height = height;
+	  XResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
+			 GDK_DRAWABLE_XID (window),
+			 width, height);
+	  private->resize_count += 1;
 	}
     }
 }
@@ -753,30 +750,13 @@ gdk_window_move_resize (GdkWindow *window,
 
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
-      XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
-			 GDK_DRAWABLE_XID (window),
-			 x, y, width, height);
-      
-      if (private->guffaw_gravity)
-	{
-	  GList *tmp_list = private->children;
-	  while (tmp_list)
-	    {
-	      GdkWindowPrivate *child_private = tmp_list->data;
-	      
-	      child_private->x -= x - private->x;
-	      child_private->y -= y - private->y;
-	      
-	      tmp_list = tmp_list->next;
-	    }
-	}
-      
       if (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
+	_gdk_window_move_resize_child (window, x, y, width, height);
+      else
 	{
-	  private->x = x;
-	  private->y = y;
-	  private->drawable.width = width;
-	  private->drawable.height = height;
+	  XMoveResizeWindow (GDK_DRAWABLE_XDISPLAY (window),
+			     GDK_DRAWABLE_XID (window),
+			     x, y, width, height);
 	}
     }
 }
@@ -1083,6 +1063,14 @@ gdk_window_set_background (GdkWindow *window,
 			  GDK_DRAWABLE_XID (window), color->pixel);
 
   private->bg_color = *color;
+
+  if (private->bg_pixmap &&
+      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
+      private->bg_pixmap != GDK_NO_BG)
+    {
+      gdk_pixmap_unref (private->bg_pixmap);
+      private->bg_pixmap = NULL;
+    }
 }
 
 void
@@ -1097,25 +1085,30 @@ gdk_window_set_back_pixmap (GdkWindow *window,
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (pixmap == NULL || !parent_relative);
 
-  if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG)
+  if (private->bg_pixmap &&
+      private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
+      private->bg_pixmap != GDK_NO_BG)
     gdk_pixmap_unref (private->bg_pixmap);
 
-  if (pixmap && !parent_relative)
-    {
-      gdk_pixmap_ref (pixmap);
-      xpixmap = GDK_DRAWABLE_XID (pixmap);
-    }
-  else
-    xpixmap = None;
-  
-  
   if (parent_relative)
     {
       xpixmap = ParentRelative;
       private->bg_pixmap = GDK_PARENT_RELATIVE_BG;
     }
   else
-    private->bg_pixmap = pixmap;
+    {
+      if (pixmap)
+	{
+	  gdk_pixmap_ref (pixmap);
+	  private->bg_pixmap = pixmap;
+	  xpixmap = GDK_DRAWABLE_XID (pixmap);
+	}
+      else
+	{
+	  xpixmap = None;
+	  private->bg_pixmap = GDK_NO_BG;
+	}
+    }
   
   if (!GDK_DRAWABLE_DESTROYED (window))
     XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),

@@ -269,6 +269,7 @@ gdk_event_translate (GdkEvent *event,
   char buf[16];
 #endif
   gint return_val;
+  gint xoffset, yoffset;
   
   return_val = FALSE;
   
@@ -362,6 +363,16 @@ gdk_event_translate (GdkEvent *event,
    */
 
   return_val = TRUE;
+
+  if (window)
+    {
+      _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
+    }
+  else
+    {
+      xoffset = 0;
+      yoffset = 0;
+    }
 
   switch (xevent->type)
     {
@@ -495,8 +506,8 @@ gdk_event_translate (GdkEvent *event,
       event->button.type = GDK_BUTTON_PRESS;
       event->button.window = window;
       event->button.time = xevent->xbutton.time;
-      event->button.x = xevent->xbutton.x;
-      event->button.y = xevent->xbutton.y;
+      event->button.x = xevent->xbutton.x + xoffset;
+      event->button.y = xevent->xbutton.y + yoffset;
       event->button.x_root = (gfloat)xevent->xbutton.x_root;
       event->button.y_root = (gfloat)xevent->xbutton.y_root;
       event->button.pressure = 0.5;
@@ -531,8 +542,8 @@ gdk_event_translate (GdkEvent *event,
       event->button.type = GDK_BUTTON_RELEASE;
       event->button.window = window;
       event->button.time = xevent->xbutton.time;
-      event->button.x = xevent->xbutton.x;
-      event->button.y = xevent->xbutton.y;
+      event->button.x = xevent->xbutton.x + xoffset;
+      event->button.y = xevent->xbutton.y + yoffset;
       event->button.x_root = (gfloat)xevent->xbutton.x_root;
       event->button.y_root = (gfloat)xevent->xbutton.y_root;
       event->button.pressure = 0.5;
@@ -565,8 +576,8 @@ gdk_event_translate (GdkEvent *event,
       event->motion.type = GDK_MOTION_NOTIFY;
       event->motion.window = window;
       event->motion.time = xevent->xmotion.time;
-      event->motion.x = xevent->xmotion.x;
-      event->motion.y = xevent->xmotion.y;
+      event->motion.x = xevent->xmotion.x + xoffset;
+      event->motion.y = xevent->xmotion.y + yoffset;
       event->motion.x_root = (gfloat)xevent->xmotion.x_root;
       event->motion.y_root = (gfloat)xevent->xmotion.y_root;
       event->motion.pressure = 0.5;
@@ -607,8 +618,8 @@ gdk_event_translate (GdkEvent *event,
 	event->crossing.subwindow = NULL;
       
       event->crossing.time = xevent->xcrossing.time;
-      event->crossing.x = xevent->xcrossing.x;
-      event->crossing.y = xevent->xcrossing.y;
+      event->crossing.x = xevent->xcrossing.x + xoffset;
+      event->crossing.y = xevent->xcrossing.y + yoffset;
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
       
@@ -676,8 +687,8 @@ gdk_event_translate (GdkEvent *event,
 	event->crossing.subwindow = NULL;
       
       event->crossing.time = xevent->xcrossing.time;
-      event->crossing.x = xevent->xcrossing.x;
-      event->crossing.y = xevent->xcrossing.y;
+      event->crossing.x = xevent->xcrossing.x + xoffset;
+      event->crossing.y = xevent->xcrossing.y + yoffset;
       event->crossing.x_root = xevent->xcrossing.x_root;
       event->crossing.y_root = xevent->xcrossing.y_root;
       
@@ -781,12 +792,12 @@ gdk_event_translate (GdkEvent *event,
       {
 	GdkRectangle expose_rect;
 
-	expose_rect.x = xevent->xexpose.x;
-	expose_rect.y = xevent->xexpose.y;
+	expose_rect.x = xevent->xexpose.x + xoffset;
+	expose_rect.y = xevent->xexpose.y + yoffset;
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
-	gdk_window_invalidate_rect (window, &expose_rect, FALSE);
+	_gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
 
 	return_val = FALSE;
       }
@@ -800,23 +811,15 @@ gdk_event_translate (GdkEvent *event,
 		g_message ("graphics expose:\tdrawable: %ld",
 			   xevent->xgraphicsexpose.drawable));
       
-      event->expose.type = GDK_EXPOSE;
-      event->expose.window = window;
-      event->expose.area.x = xevent->xgraphicsexpose.x;
-      event->expose.area.y = xevent->xgraphicsexpose.y;
-      event->expose.area.width = xevent->xgraphicsexpose.width;
-      event->expose.area.height = xevent->xgraphicsexpose.height;
-      event->expose.count = xevent->xexpose.count;
-      
       {
 	GdkRectangle expose_rect;
 
-	expose_rect.x = xevent->xgraphicsexpose.x;
-	expose_rect.y = xevent->xgraphicsexpose.y;
+	expose_rect.x = xevent->xgraphicsexpose.x + xoffset;
+	expose_rect.y = xevent->xgraphicsexpose.y + yoffset;
 	expose_rect.width = xevent->xgraphicsexpose.width;
 	expose_rect.height = xevent->xgraphicsexpose.height;
 
-	gdk_window_invalidate_rect (window, &expose_rect, FALSE);
+	_gdk_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
 
 	return_val = FALSE;
       }

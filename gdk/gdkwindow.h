@@ -91,9 +91,9 @@ struct _GdkWindowAttr
 {
   gchar *title;
   gint event_mask;
-  gint16 x, y;
-  gint16 width;
-  gint16 height;
+  gint x, y;
+  gint width;
+  gint height;
   GdkWindowClass wclass;
   GdkVisual *visual;
   GdkColormap *colormap;

@@ -1998,14 +1998,13 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation.width = MAX (real_allocation.width, 1);
   real_allocation.height = MAX (real_allocation.height, 1);
 
-  if (real_allocation.width > 32767 ||
-      real_allocation.height > 32767)
+  if (real_allocation.width < 0 || real_allocation.height < 0)
     {
       g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
 		 real_allocation.width,
 		 real_allocation.height);
-      real_allocation.width = MIN (real_allocation.width, 32767);
-      real_allocation.height = MIN (real_allocation.height, 32767);
+      real_allocation.width = 1;
+      real_allocation.height = 1;
     }
   
   if (GTK_WIDGET_NO_WINDOW (widget))
@@ -2569,7 +2568,7 @@ gtk_widget_intersect (GtkWidget	   *widget,
   else
     dest = &tmp;
   
-  return_val = gdk_rectangle_intersect ((GdkRectangle*) &widget->allocation, area, dest);
+  return_val = gdk_rectangle_intersect (&widget->allocation, area, dest);
   
   if (return_val && intersection && !GTK_WIDGET_NO_WINDOW (widget))
     {

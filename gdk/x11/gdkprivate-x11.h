@@ -10,30 +10,55 @@
 
 typedef struct _GdkGCXData          GdkGCXData;
 typedef struct _GdkDrawableXData    GdkDrawableXData;
+typedef struct _GdkWindowXData      GdkWindowXData;
+typedef struct _GdkXPositionInfo    GdkXPositionInfo;
 typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
 typedef struct _GdkCursorPrivate    GdkCursorPrivate;
 typedef struct _GdkFontPrivateX     GdkFontPrivateX;
 typedef struct _GdkImagePrivateX    GdkImagePrivateX;
 typedef struct _GdkVisualPrivate    GdkVisualPrivate;
-typedef struct _GdkRegionPrivate    GdkRegionPrivate;
 
 #ifdef USE_XIM
 typedef struct _GdkICPrivate        GdkICPrivate;
 #endif /* USE_XIM */
 
 #define GDK_DRAWABLE_XDATA(win) ((GdkDrawableXData *)(((GdkDrawablePrivate*)(win))->klass_data))
+#define GDK_WINDOW_XDATA(win) ((GdkWindowXData *)(((GdkDrawablePrivate*)(win))->klass_data))
 #define GDK_GC_XDATA(gc) ((GdkGCXData *)(((GdkGCPrivate*)(gc))->klass_data))
 
 struct _GdkGCXData
 {
   GC xgc;
   Display *xdisplay;
+  GdkRegion *clip_region;
+  guint dirty_mask;
 };
 
 struct _GdkDrawableXData
 {
   Window xid;
   Display *xdisplay;
+};
+
+struct _GdkXPositionInfo
+{
+  gint x;
+  gint y;
+  gint width;
+  gint height;
+  gint x_offset;		/* Offsets to add to X coordinates within window */
+  gint y_offset;		/*   to get GDK coodinates within window */
+  gboolean big : 1;
+  gboolean mapped : 1;
+  gboolean no_bg : 1;	        /* Set when the window background is temporarily
+				 * unset during resizing and scaling */
+  GdkRectangle clip_rect;	/* visible rectangle of window */
+};
+
+struct _GdkWindowXData
+{
+  GdkDrawableXData drawable_data;
+  GdkXPositionInfo position_info;
 };
 
 struct _GdkCursorPrivate
@@ -82,12 +107,6 @@ struct _GdkImagePrivateX
   gpointer x_shm_info;
 };
 
-struct _GdkRegionPrivate
-{
-  GdkRegion region;
-  Region xregion;
-};
-
 
 #ifdef USE_XIM
 
@@ -127,6 +146,22 @@ Window gdk_window_xid_at_coords (gint      x,
 				 GList    *excludes,
 				 gboolean  excl_child);
 
+/* Routines from gdkgeometry-x11.c */
+void _gdk_window_init_position     (GdkWindow    *window);
+void _gdk_window_move_resize_child (GdkWindow    *window,
+				    gint          x,
+				    gint          y,
+				    gint          width,
+				    gint          height);
+void _gdk_window_process_expose    (GdkWindow    *window,
+				    gulong        serial,
+				    GdkRectangle *area);
+
+#define GDK_GC_XGC(gc)       (GDK_GC_XDATA(gc)->xgc)
+#define GDK_GC_GET_XGC(gc)   (GDK_GC_XDATA(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
+
+GC _gdk_x11_gc_flush (GdkGC *gc);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
 extern gchar		*gdk_display_name;
@@ -155,4 +190,5 @@ extern GdkWindow *gdk_xim_window;	        /* currently using Window */
 
 
 #endif /* __GDK_PRIVATE_X11_H__ */
+
 

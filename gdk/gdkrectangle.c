@@ -106,5 +106,11 @@ gdk_rectangle_intersect (GdkRectangle *src1,
 	}
     }
 
+  if (!return_val)
+    {
+      dest->width = 0;
+      dest->height = 0;
+    }
+
   return return_val;
 }

@@ -141,8 +141,8 @@ struct _GdkInputWindow
   GdkExtensionMode mode;
 
   /* position relative to root window */
-  gint16 root_x;
-  gint16 root_y;
+  gint root_x;
+  gint root_y;
 
   /* rectangles relative to window of windows obscuring this one */
   GdkRectangle *obscuring;

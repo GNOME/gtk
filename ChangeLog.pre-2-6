@@ -1,3 +1,21 @@
+Thu Feb 24 15:37:41 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrectangle.c (gdk_rectangle_intersect): Set width
+	and height of dest rectangle for non-intersecting rectangles.
+
+Sun Feb 20 16:47:31 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h: Make GtkAllocation just a typedef
+	for GdkRectangle.
+
+Sun Feb 20 11:27:00 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk{events,image,private,types,window}.h
+	 gdk/x11/gdkinputprivate.h: Change all coordinates
+	 from int16 to int. Also, Change width and height from
+	 unsigned to signed to avoid all the stupid C 
+	 signedness bugs.
+
 Sat Feb 19 12:01:53 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdrawable-x11.c (gdk_x11_draw_drawable):
