@@ -171,6 +171,8 @@ gtk_tree_item_subtree_button_click (GtkWidget *widget)
   GtkTreeItem* item;
 
   item = (GtkTreeItem*) gtk_object_get_user_data(GTK_OBJECT(widget));
+  if(!GTK_WIDGET_IS_SENSITIVE(item))
+    return;
 
   if(item->expanded)
     gtk_tree_item_collapse(item);
@@ -678,8 +680,9 @@ gtk_tree_item_button_press (GtkWidget      *widget,
   g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  if (event->type == GDK_BUTTON_PRESS)
-    if (!GTK_WIDGET_HAS_FOCUS (widget))
+  if (event->type == GDK_BUTTON_PRESS
+	&& GTK_WIDGET_IS_SENSITIVE(widget)
+     	&& !GTK_WIDGET_HAS_FOCUS (widget))
       gtk_widget_grab_focus (widget);
 
   return FALSE;
@@ -738,7 +741,8 @@ gtk_real_tree_item_select (GtkItem *item)
   g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (item));
 
-  if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED)
+  if (GTK_WIDGET (item)->state == GTK_STATE_SELECTED
+	|| !GTK_WIDGET_IS_SENSITIVE(item))
     return;
 
   if(GTK_TREE(GTK_WIDGET(item)->parent)->view_mode == GTK_TREE_VIEW_LINE)
@@ -776,6 +780,9 @@ gtk_real_tree_item_toggle (GtkItem *item)
 
   g_return_if_fail (item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (item));
+
+  if(!GTK_WIDGET_IS_SENSITIVE(item))
+    return;
 
   if (GTK_WIDGET (item)->parent && GTK_IS_TREE (GTK_WIDGET (item)->parent))
     gtk_tree_select_child (GTK_TREE (GTK_WIDGET (item)->parent),
