@@ -867,13 +867,23 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
-  g_return_if_fail (scrolled_window->child == NULL);
   g_return_if_fail (child->parent == NULL);
 
-  viewport =
-    gtk_viewport_new (gtk_scrolled_window_get_hadjustment (scrolled_window),
-		      gtk_scrolled_window_get_vadjustment (scrolled_window));
+  if (scrolled_window->child != NULL)
+    {
+      g_return_if_fail (GTK_IS_VIEWPORT (scrolled_window->child));
+      g_return_if_fail (GTK_BIN (scrolled_window->child)->child == NULL);
+
+      viewport = scrolled_window->child;
+    }
+  else
+    {
+      viewport =
+        gtk_viewport_new (gtk_scrolled_window_get_hadjustment (scrolled_window),
+			  gtk_scrolled_window_get_vadjustment (scrolled_window));
+      gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
+    }
+
   gtk_widget_show (viewport);
   gtk_container_add (GTK_CONTAINER (viewport), child);
-  gtk_container_add (GTK_CONTAINER (scrolled_window), viewport);
 }

@@ -1,3 +1,9 @@
+Fri Nov 27 18:57:20 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_add_with_viewport):
+	check for existing viewport first, and don't add one if there
+	already is one
+
 Sat Nov 28 00:06:49 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.h: 
