@@ -1,3 +1,45 @@
+2002-11-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/stock-icons/stock_jump_to_rtl_16.png,
+	* gtk/stock-icons/stock_jump_to_rtl_24.png: Mirrored variants
+	of stock_jump_to.
+	
+	* gtk/stock-icons/Makefile.am: 
+	* gtk/gtkiconfactory.c (get_default_icons): Flip GTK_STOCK_FIRST,
+	GTK_STOCK_LAST and GTK_STOCK_JUMP_TO for RTL locales.  (#96633)
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): 
+	Flip accel labels for RTL locales.  (#96637)
+	
+	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_paint): 
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_draw_indicator): 
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_size_allocate): 
+	* gtk/gtkmenuitem.c (gtk_menu_item_init): 
+	(gtk_menu_item_size_request): 
+	(gtk_menu_item_size_allocate): 
+	(gtk_menu_item_paint): 
+	(gtk_menu_item_select_timeout): 
+	(gtk_menu_item_position_menu): Flip all kinds of menu items for 
+	RTL locales.  (#96637)
+
+	* gtk/gtkstyle.c (gtk_default_draw_resize_grip): Support resize
+	grips for all edges.  (#52833)
+
+	* gtk/gtkstyle.c (gtk_default_draw_box): 
+	* gtk/gtkoptionmenu.c (gtk_option_menu_size_allocate): 
+	(gtk_option_menu_paint): Flip option menus for RTL 
+	locales.  (#96631)
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_allocate): Flip menubars
+	for RTL locales.  (#96627)
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_act_mode_enter): 
+	(gtk_progress_bar_paint): Flip progress bars for RTL 
+	locales.  (#96634)
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Flip toolbars
+	for RTL locales.  (#96626) 
+
 2002-11-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkim-x11.c: 

@@ -132,11 +132,15 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
   gint width, height;
   gint x, y;
   gint right_max;
-
+  GtkArrowType arrow_type;
+  GtkTextDirection direction;
+  
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
       tearoff_item = GTK_TEAROFF_MENU_ITEM (widget);
+
+      direction = gtk_widget_get_direction (widget);
 
       x = widget->allocation.x + GTK_CONTAINER (menu_item)->border_width;
       y = widget->allocation.y + GTK_CONTAINER (menu_item)->border_width;
@@ -172,29 +176,54 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 
 	  if (menu_item->toggle_size > ARROW_SIZE)
 	    {
-	      arrow_x = x + (menu_item->toggle_size - ARROW_SIZE)/2;
+	      if (direction == GTK_TEXT_DIR_LTR) {
+		arrow_x = x + (menu_item->toggle_size - ARROW_SIZE)/2;
+		arrow_type = GTK_ARROW_LEFT;
+	      }
+	      else {
+		arrow_x = x + width - menu_item->toggle_size + (menu_item->toggle_size - ARROW_SIZE)/2; 
+		arrow_type = GTK_ARROW_RIGHT;	    
+	      }
 	      x += menu_item->toggle_size + BORDER_SPACING;
 	    }
 	  else
 	    {
-	      arrow_x = ARROW_SIZE / 2;
+	      if (direction == GTK_TEXT_DIR_LTR) {
+		arrow_x = ARROW_SIZE / 2;
+		arrow_type = GTK_ARROW_LEFT;
+	      }
+	      else {
+		arrow_x = x + width - 2 * ARROW_SIZE + ARROW_SIZE / 2; 
+		arrow_type = GTK_ARROW_RIGHT;	    
+	      }
 	      x += 2 * ARROW_SIZE;
 	    }
-	  
+
+
 	  gtk_paint_arrow (widget->style, widget->window,
 			   widget->state, shadow_type,
 			   NULL, widget, "tearoffmenuitem",
-			   GTK_ARROW_LEFT, FALSE,
+			   arrow_type, FALSE,
 			   arrow_x, y + height / 2 - 5, 
 			   ARROW_SIZE, ARROW_SIZE);
 	}
 
       while (x < right_max)
 	{
+	  gint x1, x2;
+
+	  if (direction == GTK_TEXT_DIR_LTR) {
+	    x1 = x;
+	    x2 = MIN (x + TEAR_LENGTH, right_max);
+	  }
+	  else {
+	    x1 = right_max - x;
+	    x2 = MAX (right_max - x - TEAR_LENGTH, 0);
+	  }
+	  
 	  gtk_paint_hline (widget->style, widget->window, GTK_STATE_NORMAL,
 			   NULL, widget, "tearoffmenuitem",
-			   x, MIN (x + TEAR_LENGTH, right_max),
-			   y + (height - widget->style->ythickness) / 2);
+			   x1, x2, y + (height - widget->style->ythickness) / 2);
 	  x += 2 * TEAR_LENGTH;
 	}
     }

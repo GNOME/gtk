@@ -518,18 +518,28 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
   GtkProgressBar *pbar;
   GtkWidget *widget;
   gint size;
+  GtkProgressBarOrientation orientation;
 
   pbar = GTK_PROGRESS_BAR (progress);
   widget = GTK_WIDGET (progress);
 
+  orientation = pbar->orientation;
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+    {
+      if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
+	orientation = GTK_PROGRESS_RIGHT_TO_LEFT;
+      else if (pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
+    }
+  
   /* calculate start pos */
 
-  if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
-      pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+  if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
+      orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     {
       size = MAX (2, widget->allocation.width / pbar->activity_blocks);
 
-      if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
+      if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
 	{
 	  pbar->activity_pos = widget->style->xthickness;
 	  pbar->activity_dir = 0;
@@ -546,7 +556,7 @@ gtk_progress_bar_act_mode_enter (GtkProgress *progress)
     {
       size = MAX (2, widget->allocation.height / pbar->activity_blocks);
 
-      if (pbar->orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
+      if (orientation == GTK_PROGRESS_TOP_TO_BOTTOM)
 	{
 	  pbar->activity_pos = widget->style->ythickness;
 	  pbar->activity_dir = 0;
@@ -574,14 +584,24 @@ gtk_progress_bar_paint (GtkProgress *progress)
   gint y;
   gdouble percentage;
   gint size;
+  GtkProgressBarOrientation orientation;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (progress));
 
   pbar = GTK_PROGRESS_BAR (progress);
   widget = GTK_WIDGET (progress);
 
-  if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
-      pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+  orientation = pbar->orientation;
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL) 
+    {
+      if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT)
+	orientation = GTK_PROGRESS_RIGHT_TO_LEFT;
+      else if (pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	orientation = GTK_PROGRESS_LEFT_TO_RIGHT;
+    }
+ 
+  if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
+      orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
     space = widget->allocation.width -
       2 * widget->style->xthickness;
   else
@@ -602,8 +622,8 @@ gtk_progress_bar_paint (GtkProgress *progress)
       
       if (progress->activity_mode)
 	{
-	  if (pbar->orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
-	      pbar->orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
+	  if (orientation == GTK_PROGRESS_LEFT_TO_RIGHT ||
+	      orientation == GTK_PROGRESS_RIGHT_TO_LEFT)
 	    {
 	      size = MAX (2, widget->allocation.width / pbar->activity_blocks);
 	      
@@ -637,7 +657,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
       
       if (amount > 0)
 	{
-	  switch (pbar->orientation)
+	  switch (orientation)
 	    {
 	      
 	    case GTK_PROGRESS_LEFT_TO_RIGHT:

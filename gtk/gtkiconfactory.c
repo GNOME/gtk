@@ -591,11 +591,13 @@ get_default_icons (GtkIconFactory *factory)
 			   GTK_ICON_SIZE_MENU,
 			   GTK_STOCK_QUIT);
 
-  add_sized_with_fallback (factory,
-			   stock_first_24,
-			   stock_first_16,
-			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_GOTO_FIRST);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_first_24,
+				   stock_last_24,
+				   stock_first_16,
+				   stock_last_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_GOTO_FIRST);
 
   add_sized_with_fallback (factory,
 			   stock_font_24,
@@ -615,17 +617,21 @@ get_default_icons (GtkIconFactory *factory)
                            GTK_ICON_SIZE_MENU,
                            GTK_STOCK_HOME);
 
-  add_sized_with_fallback (factory,
-			   stock_jump_to_24,
-			   stock_jump_to_16,
-			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_JUMP_TO);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_jump_to_24,
+				   stock_jump_to_rtl_24,
+				   stock_jump_to_16,
+				   stock_jump_to_rtl_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_JUMP_TO);
 
-  add_sized_with_fallback (factory,
-                           stock_last_24,
-                           stock_last_16,
-                           GTK_ICON_SIZE_MENU,
-                           GTK_STOCK_GOTO_LAST);
+  add_sized_with_fallback_and_rtl (factory,
+				   stock_last_24,
+				   stock_first_24,
+				   stock_last_16,
+				   stock_first_16,
+				   GTK_ICON_SIZE_MENU,
+				   GTK_STOCK_GOTO_LAST);
 
   add_sized_with_fallback_and_rtl (factory,
 				   stock_left_arrow_24,
@@ -684,10 +690,10 @@ get_default_icons (GtkIconFactory *factory)
 			   GTK_STOCK_PROPERTIES);
   
   add_sized_with_fallback (factory,
-                           stock_redo_24,
-                           stock_redo_16,
-                           GTK_ICON_SIZE_MENU,
-                           GTK_STOCK_REDO);
+			   stock_redo_24,
+			   stock_redo_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_REDO);
 
   add_sized_with_fallback (factory,
 			   stock_remove_24,
@@ -812,10 +818,10 @@ get_default_icons (GtkIconFactory *factory)
                            GTK_STOCK_UNDELETE);
 
   add_sized_with_fallback (factory,
-                           stock_undo_24,
-                           stock_undo_16,
-                           GTK_ICON_SIZE_MENU,
-                           GTK_STOCK_UNDO);
+			   stock_undo_24,
+			   stock_undo_16,
+			   GTK_ICON_SIZE_MENU,
+			   GTK_STOCK_UNDO);
 
   add_sized_with_fallback (factory,
                            stock_up_arrow_24,

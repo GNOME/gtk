@@ -3321,16 +3321,22 @@ gtk_default_draw_box (GtkStyle      *style,
     {
       GtkRequisition indicator_size;
       GtkBorder indicator_spacing;
+      gint vline_x;
 
       option_menu_get_props (widget, &indicator_size, &indicator_spacing);
 
       sanitize_size (window, &width, &height);
-  
+
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	vline_x = x + indicator_size.width + indicator_spacing.left + indicator_spacing.right;
+      else 
+	vline_x = x + width - (indicator_size.width + indicator_spacing.left + indicator_spacing.right) - style->xthickness;
+
       gtk_paint_vline (style, window, state_type, area, widget,
 		       detail,
 		       y + style->ythickness + 1,
 		       y + height - style->ythickness - 3,
-		       x + width - (indicator_size.width + indicator_spacing.left + indicator_spacing.right) - style->xthickness);
+		       vline_x);
     }
 }
 
@@ -5010,19 +5016,88 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
       gdk_gc_set_clip_rectangle (style->dark_gc[state_type], area);
       gdk_gc_set_clip_rectangle (style->bg_gc[state_type], area);
     }
-
-  /* make it square, aligning to bottom right */
-  if (width < height)
+  
+  switch (edge)
     {
-      y += (height - width);
-      height = width;
+    case GDK_WINDOW_EDGE_NORTH_WEST:
+      /* make it square */
+      if (width < height)
+	{
+	  height = width;
+	}
+      else if (height < width)
+	{
+	  width = height;
+	}
+      break;
+    case GDK_WINDOW_EDGE_NORTH:
+      if (width < height)
+	{
+	  height = width;
+	}
+      break;
+    case GDK_WINDOW_EDGE_NORTH_EAST:
+      /* make it square, aligning to top right */
+      if (width < height)
+	{
+	  height = width;
+	}
+      else if (height < width)
+	{
+	  x += (width - height);
+	  width = height;
+	}
+      break;
+    case GDK_WINDOW_EDGE_WEST:
+      if (height < width)
+	{
+	   width = height;
+	}
+      break;
+    case GDK_WINDOW_EDGE_EAST:
+      /* aligning to right */
+      if (height < width)
+	{
+	  x += (width - height);
+	  width = height;
+	}
+      break;
+    case GDK_WINDOW_EDGE_SOUTH_WEST:
+      /* make it square, aligning to bottom left */
+      if (width < height)
+	{
+	  y += (height - width);
+	  height = width;
+	}
+      else if (height < width)
+	{
+	  width = height;
+	}
+      break;
+    case GDK_WINDOW_EDGE_SOUTH:
+      /* align to bottom */
+      if (width < height)
+	{
+	  y += (height - width);
+	  height = width;
+	}
+      break;
+    case GDK_WINDOW_EDGE_SOUTH_EAST:
+      /* make it square, aligning to bottom right */
+      if (width < height)
+	{
+	  y += (height - width);
+	  height = width;
+	}
+      else if (height < width)
+	{
+	  x += (width - height);
+	  width = height;
+	}
+      break;
+    default:
+      g_assert_not_reached ();
     }
-  else if (height < width)
-    {
-      x += (width - height);
-      width = height;
-    }
-
   /* Clear background */
   gtk_style_apply_default_background (style, window, FALSE,
 				      state_type, area,
@@ -5030,6 +5105,161 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
 
   switch (edge)
     {
+    case GDK_WINDOW_EDGE_WEST:
+    case GDK_WINDOW_EDGE_EAST:
+      {
+	gint xi;
+
+	xi = x;
+
+	while (xi < x + width)
+	  {
+	    gdk_draw_line (window,
+			   style->light_gc[state_type],
+			   xi, y,
+			   xi, y + height);
+
+	    xi++;
+	    gdk_draw_line (window,
+			   style->dark_gc[state_type],
+			   xi, y,
+			   xi, y + height);
+
+	    xi += 2;
+	  }
+      }
+      break;
+    case GDK_WINDOW_EDGE_NORTH:
+    case GDK_WINDOW_EDGE_SOUTH:
+      {
+	gint yi;
+
+	yi = y;
+
+	while (yi < y + height)
+	  {
+	    gdk_draw_line (window,
+			   style->light_gc[state_type],
+			   x, yi,
+			   x + width, yi);
+
+	    yi++;
+	    gdk_draw_line (window,
+			   style->dark_gc[state_type],
+			   x, yi,
+			   x + width, yi);
+
+	    yi+= 2;
+	  }
+      }
+      break;
+    case GDK_WINDOW_EDGE_NORTH_WEST:
+      {
+	gint xi, yi;
+
+	xi = x + width;
+	yi = y + height;
+
+	while (xi > x + 3)
+	  {
+	    gdk_draw_line (window,
+			   style->dark_gc[state_type],
+			   xi, y,
+			   x, yi);
+
+	    --xi;
+	    --yi;
+
+	    gdk_draw_line (window,
+			   style->dark_gc[state_type],
+			   xi, y,
+			   x, yi);
+
+	    --xi;
+	    --yi;
+
+	    gdk_draw_line (window,
+			   style->light_gc[state_type],
+			   xi, y,
+			   x, yi);
+
+	    xi -= 3;
+	    yi -= 3;
+	    
+	  }
+      }
+      break;
+    case GDK_WINDOW_EDGE_NORTH_EAST:
+      {
+        gint xi, yi;
+
+        xi = x;
+        yi = y + height;
+
+        while (xi < (x + width - 3))
+          {
+            gdk_draw_line (window,
+                           style->light_gc[state_type],
+                           xi, y,
+                           x + width, yi);                           
+
+            ++xi;
+            --yi;
+            
+            gdk_draw_line (window,
+                           style->dark_gc[state_type],
+                           xi, y,
+                           x + width, yi);                           
+
+            ++xi;
+            --yi;
+            
+            gdk_draw_line (window,
+                           style->dark_gc[state_type],
+                           xi, y,
+                           x + width, yi);
+
+            xi += 3;
+            yi -= 3;
+          }
+      }
+      break;
+    case GDK_WINDOW_EDGE_SOUTH_WEST:
+      {
+	gint xi, yi;
+
+	xi = x + width;
+	yi = y;
+
+	while (xi > x + 3)
+	  {
+	    gdk_draw_line (window,
+			   style->dark_gc[state_type],
+			   x, yi,
+			   xi, y + height);
+
+	    --xi;
+	    ++yi;
+
+	    gdk_draw_line (window,
+			   style->dark_gc[state_type],
+			   x, yi,
+			   xi, y + height);
+
+	    --xi;
+	    ++yi;
+
+	    gdk_draw_line (window,
+			   style->light_gc[state_type],
+			   x, yi,
+			   xi, y + height);
+
+	    xi -= 3;
+	    yi += 3;
+	    
+	  }
+      }
+      break;
     case GDK_WINDOW_EDGE_SOUTH_EAST:
       {
         gint xi, yi;

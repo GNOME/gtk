@@ -204,8 +204,6 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
   accel_label->accel_closure = NULL;
   accel_label->accel_group = NULL;
   accel_label->accel_string = NULL;
-  
-  gtk_accel_label_refetch (accel_label);
 }
 
 GtkWidget*
@@ -312,7 +310,10 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   GtkMisc *misc = GTK_MISC (accel_label);
-	  
+  GtkTextDirection direction;
+
+  direction = gtk_widget_get_direction (widget);
+
   if (GTK_WIDGET_DRAWABLE (accel_label))
     {
       guint ac_width;
@@ -327,12 +328,19 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  gint x;
 	  gint y;
 	  
+	  if (direction == GTK_TEXT_DIR_RTL)
+	    widget->allocation.x += ac_width;
 	  widget->allocation.width -= ac_width;
 	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
 	    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
+	  if (direction == GTK_TEXT_DIR_RTL)
+	    widget->allocation.x -= ac_width;
 	  widget->allocation.width += ac_width;
 	  
-	  x = widget->allocation.x + widget->allocation.width - misc->xpad - ac_width;
+	  if (direction == GTK_TEXT_DIR_RTL)
+	    x = widget->allocation.x + misc->xpad;
+	  else
+	    x = widget->allocation.x + widget->allocation.width - misc->xpad - ac_width;
 
 	  label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
 	  gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);

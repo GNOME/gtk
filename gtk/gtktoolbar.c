@@ -712,6 +712,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   gint x_border_width, y_border_width;
   gint space_size;
   gint ipadding;
+  GtkTextDirection direction;
+  gint ltr_x;
   
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
   g_return_if_fail (allocation != NULL);
@@ -719,6 +721,8 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   toolbar = GTK_TOOLBAR (widget);
   widget->allocation = *allocation;
   
+  direction = gtk_widget_get_direction (widget);
+
   x_border_width = GTK_CONTAINER (toolbar)->border_width;
   y_border_width = GTK_CONTAINER (toolbar)->border_width;
 
@@ -728,7 +732,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   y_border_width += ipadding;
   
   if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-    alloc.x = allocation->x + x_border_width;
+    ltr_x = allocation->x + x_border_width;
   else
     alloc.y = allocation->y + y_border_width;
 
@@ -746,9 +750,12 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
-	      child_space->alloc_x = alloc.x;
+	      if (direction == GTK_TEXT_DIR_LTR)
+		child_space->alloc_x = ltr_x;
+	      else
+		child_space->alloc_x = allocation->width - ltr_x - space_size;
 	      child_space->alloc_y = allocation->y + (allocation->height - toolbar->button_maxh) / 2;
-	      alloc.x += space_size;
+	      ltr_x += space_size;
 	    }
 	  else
 	    {
@@ -768,15 +775,21 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  alloc.width = toolbar->button_maxw;
 	  alloc.height = toolbar->button_maxh;
 
-	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.y = allocation->y + (allocation->height - toolbar->button_maxh) / 2;
+	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL) 
+	    {
+	      if (direction == GTK_TEXT_DIR_LTR)
+		alloc.x = ltr_x;
+	      else
+		alloc.x = allocation->width - ltr_x - alloc.width;
+	      alloc.y = allocation->y + (allocation->height - toolbar->button_maxh) / 2;
+	    }
 	  else
 	    alloc.x = allocation->x + (allocation->width - toolbar->button_maxw) / 2;
-
+	  
 	  gtk_widget_size_allocate (child->widget, &alloc);
 
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.x += toolbar->button_maxw;
+	    ltr_x += toolbar->button_maxw;
 	  else
 	    alloc.y += toolbar->button_maxh;
 
@@ -791,15 +804,21 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  alloc.width = child_requisition.width;
 	  alloc.height = child_requisition.height;
 
-	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.y = allocation->y + (allocation->height - child_requisition.height) / 2;
+	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL) 
+	    {
+	      if (direction == GTK_TEXT_DIR_LTR)
+		alloc.x = ltr_x;
+	      else
+		alloc.x = allocation->width - ltr_x - alloc.width;
+	      alloc.y = allocation->y + (allocation->height - child_requisition.height) / 2;
+	    }
 	  else
 	    alloc.x = allocation->x + (allocation->width - child_requisition.width) / 2;
 
 	  gtk_widget_size_allocate (child->widget, &alloc);
 
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    alloc.x += child_requisition.width;
+	    ltr_x += child_requisition.width;
 	  else
 	    alloc.y += child_requisition.height;
 

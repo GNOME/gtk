@@ -235,7 +235,7 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
   if (image_menu_item->image)
     {
-      gint width, height, x, y;
+      gint width, height, x, y, offset;
       GtkAllocation child_allocation;
       
       /* Man this is lame hardcoding action, but I can't
@@ -244,10 +244,15 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
       
       width = image_menu_item->image->requisition.width;
       height = image_menu_item->image->requisition.height;
+      offset = GTK_CONTAINER (image_menu_item)->border_width +
+	widget->style->xthickness; 
 
-      x = (GTK_CONTAINER (image_menu_item)->border_width +
-	   widget->style->xthickness) +
-        (GTK_MENU_ITEM (image_menu_item)->toggle_size - width) / 2;
+      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) 
+	  x = offset + (GTK_MENU_ITEM (image_menu_item)->toggle_size - width) / 2;
+	else
+	x = widget->allocation.width - 
+	  GTK_MENU_ITEM (image_menu_item)->toggle_size - offset +
+	  (GTK_MENU_ITEM (image_menu_item)->toggle_size - width) / 2;
       y = (widget->allocation.height - height) / 2;
 
       child_allocation.width = width;

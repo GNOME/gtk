@@ -501,7 +501,7 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
     {
       gint xthickness = GTK_WIDGET (widget)->style->xthickness;
       gint ythickness = GTK_WIDGET (widget)->style->ythickness;
-    
+      
       child_allocation.x = widget->allocation.x + border_width + xthickness + props.focus_width + props.focus_pad + CHILD_LEFT_SPACING;
       child_allocation.y = widget->allocation.y + border_width + ythickness + props.focus_width + props.focus_pad + CHILD_TOP_SPACING;
       child_allocation.width = MAX (1, allocation->width - (border_width + xthickness + props.focus_width + props.focus_pad) * 2 -
@@ -509,6 +509,9 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
 				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING);
       child_allocation.height = MAX (1, allocation->height - (border_width + ythickness + props.focus_width + props.focus_pad) * 2 -
 				     CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING);
+
+      if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL) 
+	child_allocation.x += props.indicator_size.width + props.indicator_spacing.left + props.indicator_spacing.right;
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
@@ -521,6 +524,7 @@ gtk_option_menu_paint (GtkWidget    *widget,
   GdkRectangle button_area;
   GtkOptionMenuProps props;
   gint border_width;
+  gint tab_x;
 
   g_return_if_fail (GTK_IS_OPTION_MENU (widget));
   g_return_if_fail (area != NULL);
@@ -549,12 +553,18 @@ gtk_option_menu_paint (GtkWidget    *widget,
 		     button_area.x, button_area.y,
 		     button_area.width, button_area.height);
       
+      if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL) 
+	tab_x = button_area.x + props.indicator_spacing.left + 
+	  widget->style->xthickness;
+      else
+	tab_x = button_area.x + button_area.width - 
+	  props.indicator_size.width - props.indicator_spacing.right -
+	  widget->style->xthickness;
+
       gtk_paint_tab (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
 		     area, widget, "optionmenutab",
-		     button_area.x + button_area.width - 
-		     props.indicator_size.width - props.indicator_spacing.right -
-		     widget->style->xthickness,
+		     tab_x,
 		     button_area.y + (button_area.height - props.indicator_size.height) / 2,
 		     props.indicator_size.width, props.indicator_size.height);
       
@@ -569,6 +579,10 @@ gtk_option_menu_paint (GtkWidget    *widget,
 		      props.indicator_spacing.right +
 		      props.indicator_size.width;
 	      button_area.height -= 2 * (widget->style->ythickness + props.focus_pad);
+	      if (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL) 
+		button_area.x += props.indicator_spacing.left +
+		  props.indicator_spacing.right +
+		  props.indicator_size.width;
 	    }
 	  else
 	    {

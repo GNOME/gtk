@@ -51,6 +51,8 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_index_24.png 		\
 	stock_jump_to_16.png		\
 	stock_jump_to_24.png 		\
+	stock_jump_to_rtl_16.png	\
+	stock_jump_to_rtl_24.png 	\
 	stock_last_16.png		\
 	stock_last_24.png 		\
 	stock_left_arrow_16.png		\
@@ -177,6 +179,8 @@ VARIABLES3 = @STRIP_BEGIN@ 									\
                 stock_index_24			$(srcdir)/stock_index_24.png             	\
 		stock_jump_to_16		$(srcdir)/stock_jump_to_16.png			\
                 stock_jump_to_24		$(srcdir)/stock_jump_to_24.png             	\
+		stock_jump_to_rtl_16		$(srcdir)/stock_jump_to_rtl_16.png			\
+                stock_jump_to_rtl_24		$(srcdir)/stock_jump_to_rtl_24.png             	\
 		stock_last_16			$(srcdir)/stock_last_16.png			\
                 stock_last_24			$(srcdir)/stock_last_24.png             	\
 		stock_left_arrow_16		$(srcdir)/stock_left_arrow_16.png		\
