@@ -5,7 +5,7 @@
 	* configure.in: Create *.pc scripts from the *.pc.in
 	templates.
 	* Makefile.am (pkgconfig_DATA): Install the *.pc
-	scripts in `$(libexecdir)/pkgconfig'.
+	scripts in `$(libdir)/pkgconfig'.
 
 Thu Sep 07 20:50:49 2000  George Lebl <jirka@5z.com>
 

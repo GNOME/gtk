@@ -101,7 +101,7 @@ EXTRA_DIST =	\
 	examples/find-examples.sh \
 	gdk.pc.in gtk+.pc.in
 
-pkgconfigdir = $(libexecdir)/pkgconfig
+pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA= gdk.pc gtk+.pc
 
 dist-hook: gtk+.spec

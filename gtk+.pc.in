@@ -3,12 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-VERSION="@VERSION@"
-REQUIRES="gdk"
-CFLAGS="-I${includedir} $CFLAGS"
-LIBS_PATH="-L${libdir} $LIBS_PATH"
-LIBS_LINK_SELF="-lgtk-1.2 $LIBS_LINK_SELF"
-LIBS_LINK_SYSTEM="$LIBS_LINK_SYSTEM"
-
-#Name: GTK+
-#Description: GIMP Tool Kit
+Name: GTK+
+Description: GIMP Tool Kit
+Version: @VERSION@
+Requires: gdk
+Libs: -L${libdir} -lgtk-${target}-1.2
+Cflags: -I${includedir}

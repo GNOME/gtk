@@ -3,12 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-VERSION="@VERSION@"
-REQUIRES="glib"
-CFLAGS="-I${includedir}/gtk-1.2 @x_cflags@ $CFLAGS"
-LIBS_PATH="-L${libdir} @x_ldflags@ $LIBS_PATH"
-LIBS_LINK_SELF="-lgdk-1.2 @GDK_WLIBS@ $LIBS_LINK_SELF"
-LIBS_LINK_SYSTEM="@INTLLIBS@ @x_libs@ @GDK_WLIBS@ -lm $LIBS_LINK_SYSTEM"
-
-#Name: GDK
-#Description: GIMP Drawing Kit
+Name: GDK
+Description: GIMP Drawing Kit
+Version: @VERSION@
+Requires: glib
+Libs: -L${libdir} @x_ldflags@ -lgdk-1.2 @INTLLIBS@ @GDK_WLIBS@ @x_libs@ -lm
+Cflags: -I${includedir}/gtk-1.2 @x_cflags@
