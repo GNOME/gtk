@@ -901,6 +901,7 @@ gtk_font_selection_select_size (GtkTreeSelection *selection,
   GtkTreeModel *model;
   GtkTreeIter iter;
   gint new_size;
+  gchar buffer[128];
   
   fontsel = GTK_FONT_SELECTION (data);
   
@@ -913,6 +914,10 @@ gtk_font_selection_select_size (GtkTreeSelection *selection,
 	{
 	  /* If the size was selected by the user we set the selected_size. */
 	  fontsel->size = new_size;
+
+	  sprintf (buffer, "%i", fontsel->size / PANGO_SCALE);
+	  gtk_entry_set_text (GTK_ENTRY (fontsel->size_entry), buffer);
+
 	  gtk_font_selection_load_font (fontsel);
 	}
     }

@@ -1,3 +1,8 @@
+2002-01-29  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_select_size): Show correct
+	size in the size entry.
+
 Tue Jan 29 16:11:55 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfontsel.c (gtk_font_selection_show_available_sizes): Use
