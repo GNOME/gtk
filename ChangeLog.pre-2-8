@@ -1,3 +1,7 @@
+2003-06-14  Arafat Medini <lumina@silverpen.de>
+
+	* configure.in: Added locale "ar" Arabic to ALL_LINGUAS.
+
 2003-06-12  Anders Carlsson  <andersca@codefactory.se>
 
 	* gtk/gtkwidget.c: (event_window_is_still_viewable):
