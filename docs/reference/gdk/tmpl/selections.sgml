@@ -25,8 +25,9 @@ can be retrieved by requesting the special target
 <literal>TARGETS</literal>. When a selection is 
 retrieved, the data is accompanied by a type
 (an atom), and a format (an integer, representing
-the number of bits per item). See <xref
-linkend="gdk-Properties-and-Atoms"> for more information.
+the number of bits per item).
+See <link linkend="gdk-Properties-and-Atoms">Properties and Atoms</link>
+for more information.
 </para>
 <para>
 The functions in this section only contain the lowlevel
@@ -96,7 +97,7 @@ compatibility with older programs.
 @GDK_TARGET_PIXMAP: A pixmap ID.
 @GDK_TARGET_STRING: A string encoded in ISO Latin-1. 
      (With the additional of <symbol>TAB</symbol>
-       and <symbol>NEWLINE</symbol>.) 
+       and <symbol>NEWLINE</symbol>.)
 
 <!-- ##### FUNCTION gdk_selection_owner_set ##### -->
 <para>
@@ -147,6 +148,7 @@ form.
        selection. The selection owner may refuse the
        request if it did not own the selection at 
        the time indicated by the timestamp.
+
 
 <!-- ##### FUNCTION gdk_selection_property_get ##### -->
 <para>

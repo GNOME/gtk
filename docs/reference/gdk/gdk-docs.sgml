@@ -32,28 +32,41 @@
   <chapter id="gdk">
     <title>GDK</title>
     &gdk-General;
-    &gdk-Bitmaps-and-Pixmaps;
-    &gdk-Images;
-    &gdk-GdkRGB;
-    &gdk-Colormaps-and-Colors;
-    &gdk-Fonts;
-    &gdk-Drawing-Primitives;
-    &gdk-Graphics-Contexts;
-    &gdk-Visuals;
-    &gdk-Windows;
-    &gdk-Selections;
-    &gdk-Properties-and-Atoms;
-    &gdk-Input-Methods;
-    &gdk-Input-Contexts;
-    &gdk-Color-Contexts;
+
     &gdk-Points-Rectangles-and-Regions;
-    &gdk-Threads;
-    &gdk-Key-Values;
-    &gdk-Input-Devices;
+    &gdk-Graphics-Contexts;
+    &gdk-Drawing-Primitives;
+
+    &gdk-Bitmaps-and-Pixmaps;
+    &gdk-GdkRGB;
+    &gdk-Images;
+
+    &gdk-Colormaps-and-Colors;
+    &gdk-Color-Contexts;
+    &gdk-Visuals;
+
+    &gdk-Fonts;
+    &gdk-Cursors;
+
+    &gdk-Windows;
+
     &gdk-Events;
     &gdk-Event-Structures;
-    &gdk-Cursors;
-    &gdk-Input;
+
+    &gdk-Selections;
     &gdk-Drag-and-Drop;
+
+    &gdk-Properties-and-Atoms;
+
+    &gdk-Threads;
+
+    &gdk-Input;
+
+    &gdk-Input-Devices;
+
+    &gdk-Key-Values;
+
+    &gdk-Input-Methods;
+    &gdk-Input-Contexts;
   </chapter>
 </book>

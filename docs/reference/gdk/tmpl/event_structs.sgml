@@ -232,6 +232,14 @@ as graphics tablets. It defaults to 0.5.
 @time: 
 @state: 
 
+<!-- ##### ENUM GdkPropertyState ##### -->
+<para>
+
+</para>
+
+@GDK_PROPERTY_NEW_VALUE: 
+@GDK_PROPERTY_DELETE: 
+
 <!-- ##### STRUCT GdkEventSelection ##### -->
 <para>
 

@@ -2,11 +2,14 @@
 Input Contexts
 
 <!-- ##### SECTION Short_Description ##### -->
-
+internationalized text input properties.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+A #GdkIC input context is used for each user interface element which supports
+internationalized text input. See the
+<link linkend="gdk-Input-Methods">Input Methods</link> section for an overview
+of how internationalized text input works in GTK+.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,40 +19,182 @@ Input Contexts
 
 <!-- ##### STRUCT GdkIC ##### -->
 <para>
-
+The #GdkIC struct is an opaque structure representing an input context
+for use with the global <link linkend="gdk-Input-Methods">Input Method</link>.
 </para>
+
+
+<!-- ##### FUNCTION gdk_ic_new ##### -->
+<para>
+Creates a new #GdkIC using the given attributes.
+</para>
+
+@attr: a #GdkICAttr struct containing attributes to use for the input context.
+@mask: a #GdkICAttributesType mask specifying which of the attributes in @attr
+are set.
+@Returns: a new #GdkIC.
+
+
+<!-- ##### FUNCTION gdk_ic_destroy ##### -->
+<para>
+Destroys the input context.
+</para>
+
+@ic: a #GdkIC.
+
+
+<!-- ##### FUNCTION gdk_ic_get_events ##### -->
+<para>
+Returns the mask of events that the input method needs to function properly.
+This is typically called in a widget's realize method after creating the
+#GdkIC. The returned event mask is then combined with the widget's
+own event mask and applied using gdk_window_set_events().
+</para>
+
+@ic: a #GdkIC.
+@Returns: the mask of events that the input method needs to function
+properly.
+
+
+<!-- ##### FUNCTION gdk_ic_get_style ##### -->
+<para>
+Returns the pre-edit and status style of the #GdkIC.
+</para>
+
+@ic: a #GdkIC.
+@Returns: the pre-edit and status style of the #GdkIC.
+
+
+<!-- ##### FUNCTION gdk_ic_get_attr ##### -->
+<para>
+Gets attributes of a #GdkIC.
+</para>
+
+@ic: a #GdkIC.
+@attr: a #GdkICAttr struct to contain the returned attributes.
+@mask: a #GdkICAttributesType mask specifying which attributes to get.
+@Returns: a #GdkICAttributesType mask specifying which of the attributes
+were not retrieved succesfully.
+
+
+<!-- ##### FUNCTION gdk_ic_set_attr ##### -->
+<para>
+Sets attributes of the #GdkIC.
+</para>
+<para>
+Note that the GDK_IC_STYLE and GDK_IC_CLIENT_WINDOW attributes can only be set
+when creating the #GdkIC, and the GDK_IC_FILTER_EVENTS attribute is read-only.
+</para>
+
+@ic: a #GdkIC.
+@attr: a #GdkICAttr struct containing attributes to use for the input context.
+@mask: a #GdkICAttributesType mask specifying which of the attributes in @attr
+are set.
+@Returns: a #GdkICAttributesType mask indicating which of the attributes
+were not set successfully.
 
 
 <!-- ##### STRUCT GdkICAttr ##### -->
 <para>
-
+The #GdkICAttr struct is used when getting and setting attributes of the
+input context. It is used together with a #GdkICAttributesType mask which
+specifies which of the fields are being set or returned.
 </para>
 
-@style: 
-@client_window: 
-@focus_window: 
-@filter_events: 
-@spot_location: 
-@line_spacing: 
-@cursor: 
-@preedit_fontset: 
-@preedit_area: 
-@preedit_area_needed: 
-@preedit_foreground: 
-@preedit_background: 
-@preedit_pixmap: 
-@preedit_colormap: 
-@status_fontset: 
-@status_area: 
-@status_area_needed: 
-@status_foreground: 
-@status_background: 
-@status_pixmap: 
-@status_colormap: 
+@style: the pre-edit and status style. This attribute is required when
+creating the #GdkIC, and cannot be changed.
+@client_window: the #GdkWindow in which the input method will display its
+pre-edit and status areas or create subwindows.
+The preedit_area and status_area attributes are specified relative to this
+window. This attribute is required when creating the #GdkIC, and cannot be
+changed.
+@focus_window: the #GdkWindow which is to be used when editing text.
+gdk_im_begin() sets this attribute before starting the text input process,
+so it is normally not necessary to set it elsewhere.
+@filter_events: the mask of events that the input method requires.
+See the gdk_ic_get_events() function. This attribute is read-only and is
+never changed.
+@spot_location: the position of the insertion cursor, for use with the
+%GDK_IM_PREEDIT_POSITION style. The y coordinate specifies the baseline of
+the text.
+@line_spacing: the line spacing to be used in the pre-edit and status areas
+when displaying multi-line text.
+@cursor: the cursor to use in the input method's windows.
+If this attribute isn't set it is determined by the input method.
+@preedit_fontset: the font to use for the pre-edit area.
+If this attribute isn't set it is determined by the input method.
+@preedit_area: the area in which the input method will display pre-editing
+data, used for the %GDK_IM_PREEDIT_POSITION and %GDK_IM_PREEDIT_AREA styles.
+@preedit_area_needed: the area that the input method requests for displaying
+pre-editing data, used for the %GDK_IM_PREEDIT_POSITION and
+%GDK_IM_PREEDIT_AREA styles.
+@preedit_foreground: the foreground color to use for the pre-edit area.
+This color must already be allocated in the preedit_colormap.
+If this attribute isn't set it is determined by the input method.
+@preedit_background: the background color to use for the pre-edit area.
+This color must already be allocated in the preedit_colormap.
+If this attribute isn't set it is determined by the input method.
+@preedit_pixmap: the background pixmap to use for the pre-edit area.
+If this attribute isn't set it is determined by the input method.
+@preedit_colormap: the colormap the input method should use to allocate colors.
+The default value is the colormap of client_window.
+@status_fontset: the font to use for the status area.
+If this attribute isn't set it is determined by the input method.
+@status_area: the are that the input method will display status information in.
+This is used for the %GDK_IM_STATUS_AREA style.
+@status_area_needed: the size that the input method requests for displaying
+status information, for the %GDK_IM_STATUS_AREA style.
+@status_foreground: the foreground color to use for the status area.
+This color must already be allocated in the status_colormap.
+If this attribute isn't set it is determined by the input method.
+@status_background: the background color to use for the status area.
+This color must already be allocated in the status_colormap.
+If this attribute isn't set it is determined by the input method.
+@status_pixmap: the background pixmap to use for the status area.
+If this attribute isn't set it is determined by the input method.
+@status_colormap: the colormap the input method should use to allocate colors.
+The default value is the colormap of client_window.
 
 <!-- ##### ENUM GdkICAttributesType ##### -->
 <para>
+The #GdkICAttributesType contains a set of bit-flags which are used to
+specify which of the attributes in a #GdkICAttr are being set or returned.
+</para>
+<para>
+It also contains several combinations of the flags which specify required
+attributes for the various styles:
+<variablelist>
+<varlistentry>
+<term>%GDK_IC_ALL_REQ:</term>
+<listitem><para>
+the set of attributes required for all styles.
+</para></listitem>
+</varlistentry>
 
+<varlistentry>
+<term>%GDK_IC_PREEDIT_AREA_REQ:</term>
+<listitem><para>
+the set of additional attributes required for the
+%GDK_IM_PREEDIT_AREA pre-edit style.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>%GDK_IC_PREEDIT_POSITION_REQ:</term>
+<listitem><para>
+the set of additional attributes required for the
+%GDK_IM_PREEDIT_POSITION pre-edit style.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>%GDK_IC_STATUS_AREA_REQ:</term>
+<listitem><para>
+the set of additional attributes required for the
+%GDK_IM_STATUS_AREA status style.
+</para></listitem>
+</varlistentry>
+</variablelist>
 </para>
 
 @GDK_IC_STYLE: 
@@ -78,77 +223,21 @@ Input Contexts
 @GDK_IC_PREEDIT_POSITION_REQ: 
 @GDK_IC_STATUS_AREA_REQ: 
 
-<!-- ##### FUNCTION gdk_ic_new ##### -->
-<para>
-
-</para>
-
-@attr: 
-@mask: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_ic_destroy ##### -->
-<para>
-
-</para>
-
-@ic: 
-
-
-<!-- ##### FUNCTION gdk_ic_get_style ##### -->
-<para>
-
-</para>
-
-@ic: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_ic_set_attr ##### -->
-<para>
-
-</para>
-
-@ic: 
-@attr: 
-@mask: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_ic_get_attr ##### -->
-<para>
-
-</para>
-
-@ic: 
-@attr: 
-@mask: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_ic_get_events ##### -->
-<para>
-
-</para>
-
-@ic: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_ic_attr_new ##### -->
 <para>
-
+Creates a new #GdkICAttr struct, with all fields set to 0.
+The #GdkICAttr struct should be freed with gdk_ic_attr_destroy() when no
+longer needed.
 </para>
 
-@Returns: 
+@Returns: a new #GdkICAttr struct.
 
 
 <!-- ##### FUNCTION gdk_ic_attr_destroy ##### -->
 <para>
-
+Destroys the given #GdkICAttr struct, freeing the allocated memory.
 </para>
 
-@attr: 
+@attr: a #GdkICAttr struct.
 
 

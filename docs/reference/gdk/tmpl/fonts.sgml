@@ -579,3 +579,65 @@ relation to the baseline. See gdk_text_extents().
 @Returns: the height of the character in pixels.
 
 
+<!-- ##### TYPEDEF GdkWChar ##### -->
+<para>
+Specifies a wide character type, used to represent character codes.
+This is needed since some native languages have character sets which have
+more than 256 characters (Japanese and Chinese, for example).
+</para>
+<para>
+Wide character values between 0 and 127 are always identical in meaning to
+the ASCII character codes. The wide character value 0 is often used to
+terminate strings of wide characters in a similar way to normal strings
+using the char type.
+</para>
+<para>
+An alternative to wide characters is multi-byte characters, which extend
+normal char strings to cope with larger character sets. As the name suggests,
+multi-byte characters use a different number of bytes to store different
+character codes. For example codes 0-127 (i.e. the ASCII codes) often
+use just one byte of memory, while other codes may use 2, 3 or even 4 bytes.
+Multi-byte characters have the advantage that they can often be used in an
+application with little change, since strings are still represented as arrays
+of char values. However multi-byte strings are much easier to manipulate since
+the character are all of the same size.
+</para>
+<para>
+Applications typically use wide characters to represent character codes
+internally, and multi-byte strings when saving the characters to a file.
+The gdk_wcstombs() and gdk_mbstowcs() functions can be used to convert from
+one representation to the other.
+</para>
+<para>
+See the 'Extended Characters' section of the GNU C Library Reference Manual
+for more detailed information on wide and multi-byte characters.
+</para>
+
+
+<!-- ##### FUNCTION gdk_wcstombs ##### -->
+<para>
+Converts a wide character string to a multi-byte string.
+(The function name comes from an acronym of 'Wide Character String TO
+Multi-Byte String').
+</para>
+
+@src: a wide character string.
+@Returns: the multi-byte string corresponding to @src, or NULL if the
+conversion failed. The returned string should be freed with g_free() when no
+longer needed.
+
+
+<!-- ##### FUNCTION gdk_mbstowcs ##### -->
+<para>
+Converts a multi-byte string to a wide character string.
+(The function name comes from an acronym of 'Multi-Byte String TO Wide
+Character String').
+</para>
+
+@dest: the space to place the converted wide character string into.
+@src: the multi-byte string to convert, which must be null-terminated.
+@dest_max: the maximum number of wide characters to place in @dest.
+@Returns: the number of wide characters written into @dest, or -1 if the
+conversion failed.
+
+

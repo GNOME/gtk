@@ -1,3 +1,32 @@
+2000-02-02  Damon Chaplin  <damon@karuna.freeserve.co.uk>
+
+	* gdk/tmpl/*.sgml: ran make templates.
+
+	* gdk/gdk-docs.sgml: rearranged sections.
+
+	* gdk/tmpl/events.sgml: documented.
+
+	* gdk/tmpl/general.sgml: documented.
+
+	* gdk/tmpl/rgb.sgml: fixed a few '@' -> '#'.
+
+	* gdk/gdk-sections.txt: rearranged a few bits, including moving
+	GdkWChar and related functions from the input method section to the
+	font section, and GdkCapStyle etc. from Drawing Primitives to GCs.
+
+	* gdk/tmpl/images.sgml: documented.
+
+	* gdk/tmpl/drawing.sgml: updated.
+
+	* gdk/tmpl/regions.sgml: updated.
+
+	* gdk/tmpl/input_contexts.sgml: documented.
+
+	* gdk/tmpl/input_methods.sgml: documented.
+
+	* gdk/tmpl/selections.sgml: changed xref to a link since Jade says
+	a xref to a RefEntry is not supported.
+
 2000-01-19  Damon Chaplin  <damon@karuna.freeserve.co.uk>
 
 	* gtk/tmpl/gtkscrollbar.sgml: Started.

@@ -870,17 +870,17 @@ GdkImage     *image
 <FUNCTION>
 <NAME>gdk_colormap_new</NAME>
 <RETURNS>GdkColormap *</RETURNS>
-GdkVisual   *visual,gint		allocate
+GdkVisual      *visual,gint		   allocate
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_ref</NAME>
 <RETURNS>GdkColormap *</RETURNS>
-GdkColormap *cmap
+GdkColormap    *cmap
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_unref</NAME>
 <RETURNS>void 	</RETURNS>
-GdkColormap *cmap
+GdkColormap    *cmap
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_get_system</NAME>
@@ -895,42 +895,42 @@ void
 <FUNCTION>
 <NAME>gdk_colormap_change</NAME>
 <RETURNS>void  </RETURNS>
-GdkColormap	*colormap,gint		 ncolors
+GdkColormap    *colormap,gint		   ncolors
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_alloc_colors</NAME>
 <RETURNS>gint  </RETURNS>
-GdkColormap *colormap,GdkColor    *colors,gint         ncolors,gboolean     writeable,gboolean     best_match,gboolean    *success
+GdkColormap    *colormap,GdkColor       *colors,gint            ncolors,gboolean        writeable,gboolean        best_match,gboolean       *success
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_alloc_color</NAME>
 <RETURNS>gboolean  </RETURNS>
-GdkColormap *colormap,GdkColor    *color,gboolean     writeable,gboolean     best_match
+GdkColormap    *colormap,GdkColor       *color,gboolean        writeable,gboolean        best_match
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_free_colors</NAME>
 <RETURNS>void  </RETURNS>
-GdkColormap *colormap,GdkColor    *colors,gint         ncolors
+GdkColormap    *colormap,GdkColor       *colors,gint            ncolors
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colormap_get_visual</NAME>
-<RETURNS>GdkVisual  *</RETURNS>
-GdkColormap *colormap
+<RETURNS>GdkVisual *</RETURNS>
+GdkColormap    *colormap
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_copy</NAME>
-<RETURNS>GdkColor  *</RETURNS>
-GdkColor *color
+<RETURNS>GdkColor *</RETURNS>
+GdkColor       *color
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_free</NAME>
 <RETURNS>void  </RETURNS>
-GdkColor *color
+GdkColor       *color
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_parse</NAME>
-<RETURNS>gint  </RETURNS>
-const gchar	*spec,GdkColor	*color
+<RETURNS>gboolean  </RETURNS>
+const gchar    *spec,GdkColor       *color
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_hash</NAME>
@@ -949,7 +949,7 @@ GdkColormap	*colormap,GdkColor	*colors,gint		 ncolors
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_colors_alloc</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 GdkColormap	*colormap,gint		 contiguous,gulong	*planes,gint		 nplanes,gulong	*pixels,gint		 npixels
 </FUNCTION>
 <FUNCTION>
@@ -959,22 +959,22 @@ GdkColormap	*colormap,gulong	*pixels,gint		 npixels,gulong	 planes
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_white</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 GdkColormap	*colormap,GdkColor	*color
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_black</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 GdkColormap	*colormap,GdkColor	*color
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_alloc</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 GdkColormap	*colormap,GdkColor	*color
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_color_change</NAME>
-<RETURNS>gint  </RETURNS>
+<RETURNS>gboolean  </RETURNS>
 GdkColormap	*colormap,GdkColor	*color
 </FUNCTION>
 <FUNCTION>

@@ -2,59 +2,102 @@
 Events
 
 <!-- ##### SECTION Short_Description ##### -->
-
+functions for handling events from the window system.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+This section describes functions dealing with events from the window system.
+</para>
+<para>
+In GTK+ applications the events are handled automatically in
+gtk_main_do_event() and passed on to the appropriate widgets, so these
+functions are rarely needed. Though some of the fields in the
+<link linkend="gdk-Event-Structures">Event Structures</link> are useful.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+<variablelist>
+<varlistentry>
+<term><link linkend="gdk-Event-Structures">Event Structures</link></term>
+<listitem><para>
+The structs used for each type of event.
+</para></listitem>
+</varlistentry>
+</variablelist>
 </para>
 
 <!-- ##### ENUM GdkEventType ##### -->
 <para>
-
+Specifies the type of the event.
+</para>
+<para>
+Do not confuse these events with the signals that GTK+ widgets emit.
+Although many of these events result in corresponding signals being emitted,
+the events are often transformed or filtered along the way.
 </para>
 
-@GDK_NOTHING: 
-@GDK_DELETE: 
-@GDK_DESTROY: 
-@GDK_EXPOSE: 
-@GDK_MOTION_NOTIFY: 
-@GDK_BUTTON_PRESS: 
-@GDK_2BUTTON_PRESS: 
-@GDK_3BUTTON_PRESS: 
-@GDK_BUTTON_RELEASE: 
-@GDK_KEY_PRESS: 
-@GDK_KEY_RELEASE: 
-@GDK_ENTER_NOTIFY: 
-@GDK_LEAVE_NOTIFY: 
-@GDK_FOCUS_CHANGE: 
-@GDK_CONFIGURE: 
-@GDK_MAP: 
-@GDK_UNMAP: 
-@GDK_PROPERTY_NOTIFY: 
-@GDK_SELECTION_CLEAR: 
-@GDK_SELECTION_REQUEST: 
-@GDK_SELECTION_NOTIFY: 
-@GDK_PROXIMITY_IN: 
-@GDK_PROXIMITY_OUT: 
-@GDK_DRAG_ENTER: 
-@GDK_DRAG_LEAVE: 
-@GDK_DRAG_MOTION: 
-@GDK_DRAG_STATUS: 
-@GDK_DROP_START: 
-@GDK_DROP_FINISHED: 
-@GDK_CLIENT_EVENT: 
-@GDK_VISIBILITY_NOTIFY: 
-@GDK_NO_EXPOSE: 
+@GDK_NOTHING: a special code to indicate a null event.
+@GDK_DELETE: the window manager has requested that the toplevel window be
+hidden or destroyed, usually when the user clicks on a special icon in the
+title bar.
+@GDK_DESTROY: the window has been destroyed.
+@GDK_EXPOSE: all or part of the window has become visible and needs to be
+redrawn.
+@GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
+@GDK_BUTTON_PRESS: a mouse button has been pressed.
+@GDK_2BUTTON_PRESS: a mouse button has been double-clicked (clicked twice
+within a short period of time). Note that each click also generates a
+%GDK_BUTTON_PRESS event.
+@GDK_3BUTTON_PRESS: a mouse button has been clicked 3 times in a short period
+of time. Note that each click also generates a %GDK_BUTTON_PRESS event.
+@GDK_BUTTON_RELEASE: a mouse button has been released.
+@GDK_KEY_PRESS: a key has been pressed.
+@GDK_KEY_RELEASE: a key has been released.
+@GDK_ENTER_NOTIFY: the pointer has entered the window.
+@GDK_LEAVE_NOTIFY: the pointer has left the window.
+@GDK_FOCUS_CHANGE: the keyboard focus has entered or left the window. Note that
+in GTK+ keyboard focus is handled mostly within GTK+ itself, so it is usually
+only toplevel windows which receive these events.
+@GDK_CONFIGURE: the size, position or stacking order of the window has changed.
+Note that GTK+ discards these events for %GDK_WINDOW_CHILD windows.
+@GDK_MAP: the window has been mapped.
+@GDK_UNMAP: the window has been unmapped.
+@GDK_PROPERTY_NOTIFY: a property on the window has been changed or deleted.
+@GDK_SELECTION_CLEAR: the application has lost ownership of a selection.
+@GDK_SELECTION_REQUEST: another application has requested a selection.
+@GDK_SELECTION_NOTIFY: a selection has been received.
+@GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
+surface (e.g. a touchscreen or graphics tablet).
+@GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
+surface.
+@GDK_DRAG_ENTER: the mouse has entered the window while a drag is in progress.
+@GDK_DRAG_LEAVE: the mouse has left the window while a drag is in progress.
+@GDK_DRAG_MOTION: the mouse has moved in the window while a drag is in
+progress.
+@GDK_DRAG_STATUS: the status of the drag operation initiated by the window
+has changed.
+@GDK_DROP_START: a drop operation onto the window has started.
+@GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
+@GDK_CLIENT_EVENT: a message has been received from another application.
+@GDK_VISIBILITY_NOTIFY: the window visibility status has changed.
+@GDK_NO_EXPOSE: indicates that the source region was completely available
+when parts of a drawable were copied. This is not very useful.
 
 <!-- ##### ENUM GdkEventMask ##### -->
 <para>
-
+A set of bit-flags to indicate which events a window is to receive.
+Most of these masks map onto one or more of the #GdkEventType event types
+above.
+</para>
+<para>
+%GDK_POINTER_MOTION_HINT_MASK is a special mask which is used to reduce the
+number of %GDK_MOTION_NOTIFY events received. Normally a %GDK_MOTION_NOTIFY
+event is received each time the mouse moves. However, if the application
+spends a lot of time processing the event (updating the display, for example),
+it can easily lag behind the position of the mouse. When using the
+%GDK_POINTER_MOTION_HINT_MASK the server will only send %GDK_MOTION_NOTIFY
+events when the application asks for them, by calling gdk_window_get_pointer().
 </para>
 
 @GDK_EXPOSURE_MASK: 
@@ -77,109 +120,186 @@ Events
 @GDK_PROXIMITY_IN_MASK: 
 @GDK_PROXIMITY_OUT_MASK: 
 @GDK_SUBSTRUCTURE_MASK: 
-@GDK_ALL_EVENTS_MASK: 
+@GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
+
+<!-- ##### MACRO GDK_CURRENT_TIME ##### -->
+<para>
+Represents the current time, and can be used anywhere a time is expected.
+</para>
+
+
+
+<!-- ##### MACRO GDK_PRIORITY_EVENTS ##### -->
+<para>
+This is the priority that events from the X server are given in the
+<link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
+</para>
+
+
 
 <!-- ##### FUNCTION gdk_events_pending ##### -->
 <para>
-
+Checks if any events are waiting to be processed.
 </para>
 
-@Returns: 
+@Returns: TRUE if any events are pending.
 
 
 <!-- ##### FUNCTION gdk_event_peek ##### -->
 <para>
-
+Gets a copy of the first #GdkEvent in the event queue.
+(Note that this function will not get more events from the X server.
+It only checks the events that have already been moved to the GDK event queue.)
 </para>
 
-@Returns: 
+@Returns: a copy of the first #GdkEvent on the event queue, or NULL if no
+events are in the queue. The returned #GdkEvent should be freed with
+gdk_event_free().
 
 
 <!-- ##### FUNCTION gdk_event_get ##### -->
 <para>
-
+Gets the next #GdkEvent to be processed, fetching events from the X server if
+necessary.
 </para>
 
-@Returns: 
+@Returns: the next #GdkEvent to be processed, or NULL if no events are pending.
+The returned #GdkEvent should be freed with gdk_event_free().
 
 
 <!-- ##### FUNCTION gdk_event_get_graphics_expose ##### -->
 <para>
-
+Waits for a GraphicsExpose or NoExpose event from the X server.
+This is used in the #GtkText and #GtkCList widgets in GTK+ to make sure any
+GraphicsExpose events are handled before the widget is scrolled.
 </para>
 
-@window: 
-@Returns: 
+@window: the #GdkWindow to wait for the events for.
+@Returns: a #GdkEventExpose if a GraphicsExpose was received, or NULL if a
+NoExpose event was received.
 
 
 <!-- ##### FUNCTION gdk_event_put ##### -->
 <para>
-
+Appends a copy of the given event onto the front of the event queue.
 </para>
 
-@event: 
+@event: a #GdkEvent.
 
 
 <!-- ##### FUNCTION gdk_event_copy ##### -->
 <para>
-
+Copies a #GdkEvent, copying or incrementing the reference count of the
+resources associated with it (e.g. #GdkWindow's and strings).
 </para>
 
-@event: 
-@Returns: 
+@event: a #GdkEvent.
+@Returns: a copy of @event. The returned #GdkEvent should be freed with
+gdk_event_free().
 
 
 <!-- ##### FUNCTION gdk_event_free ##### -->
 <para>
-
+Frees a #GdkEvent, freeing or decrementing any resources associated with it.
+Note that this function should only be called with events returned from
+gdk_event_peek(), gdk_event_get(), gdk_event_get_graphics_expose() and
+gdk_event_copy().
 </para>
 
-@event: 
+@event: a #GdkEvent.
 
 
 <!-- ##### FUNCTION gdk_event_get_time ##### -->
 <para>
-
+Gets the timestamp from a #GdkEvent.
 </para>
 
-@event: 
-@Returns: 
+@event: a #GdkEvent.
+@Returns: the timestamp from @event, or #GDK_CURRENT_TIME if the event has
+no timestamp.
 
 
 <!-- ##### FUNCTION gdk_event_handler_set ##### -->
 <para>
-
+Sets the function to call to handle all events from GDK.
 </para>
-
-@func: 
-@data: 
-@notify: 
-
-
-<!-- ##### FUNCTION gdk_event_send_client_message ##### -->
 <para>
-
+Note that GTK+ uses this to install its own event handler, so it is probably
+not useful for GTK+ applications.
 </para>
 
-@event: 
-@xid: 
-@Returns: 
+@func: the function to call to handle events from GDK.
+@data: user data to pass to the function.
+@notify: the function to call when the handler function is removed, i.e. when
+gdk_event_handler_set() is called with another event handler.
 
 
 <!-- ##### USER_FUNCTION GdkEventFunc ##### -->
 <para>
-
+Specifies the type of function passed to gdk_event_handler_set() to handle
+all GDK events.
 </para>
 
-@event: 
-@data: 
+@event: the #GdkEvent to process.
+@data: user data set when the event handler was installed with
+gdk_event_handler_set().
+
+
+<!-- ##### FUNCTION gdk_event_send_client_message ##### -->
+<para>
+Sends an X ClientMessage event to a given window.
+</para>
+<para>
+This could be used for communicating between different applications,
+though the amount of data is limited to 20 bytes.
+</para>
+
+@event: the #GdkEvent to send, which should be a #GdkEventClient.
+@xid: the window to send the X ClientMessage event to.
+@Returns: non-zero on success.
 
 
 <!-- ##### FUNCTION gdk_event_send_clientmessage_toall ##### -->
 <para>
-
+Sends an X ClientMessage event to all toplevel windows.
+</para>
+<para>
+Toplevel windows are determined by checking for the WM_STATE property, as
+described in the Inter-Client Communication Conventions Manual (ICCCM).
+If no windows are found with the WM_STATE property set, the message is sent
+to all children of the root window.
 </para>
 
-@event: 
+@event: the #GdkEvent to send, which should be a #GdkEventClient.
+
+
+<!-- ##### FUNCTION gdk_add_client_message_filter ##### -->
+<para>
+Adds a filter to be called when X ClientMessage events are received.
+</para>
+
+@message_type: the type of ClientMessage events to receive. This will be
+checked against the <structfield>message_type</structfield> field of the
+XClientMessage event struct.
+@func: the function to call to process the event.
+@data: user data to pass to @func.
+
+
+<!-- ##### FUNCTION gdk_get_show_events ##### -->
+<para>
+Returns non-zero if event debugging output is enabled.
+</para>
+
+@Returns: non-zero if event debugging output is enabled.
+
+
+<!-- ##### FUNCTION gdk_set_show_events ##### -->
+<para>
+Sets whether event debugging information is output.
+Note that GTK+ must be compiled with debugging enabled, i.e. using the
+'--enable-debug' configure option.
+</para>
+
+@show_events: TRUE to output event debugging information.
 
 

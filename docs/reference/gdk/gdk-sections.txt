@@ -7,35 +7,47 @@
 gdk_init
 gdk_init_check
 gdk_exit
-GdkStatus
-GDK_NONE
-GDK_CURRENT_TIME
-GDK_PRIORITY_EVENTS
 gdk_set_locale
-gdk_get_show_events
-gdk_set_show_events
-gdk_add_client_message_filter
 gdk_set_sm_client_id
-gdk_get_use_xshm
-gdk_set_use_xshm
+
+<SUBSECTION>
 gdk_get_display
+
+<SUBSECTION>
+gdk_flush
+
+<SUBSECTION>
 gdk_screen_width
 gdk_screen_height
 gdk_screen_width_mm
 gdk_screen_height_mm
+
+<SUBSECTION>
 gdk_pointer_grab
 gdk_pointer_ungrab
+gdk_pointer_is_grabbed
+
+<SUBSECTION>
 gdk_keyboard_grab
 gdk_keyboard_ungrab
-gdk_pointer_is_grabbed
-gdk_flush
-gdk_beep
+
+<SUBSECTION>
 gdk_key_repeat_disable
 gdk_key_repeat_restore
+
+<SUBSECTION>
+gdk_beep
+
+<SUBSECTION>
+gdk_get_use_xshm
+gdk_set_use_xshm
+
+<SUBSECTION>
 gdk_error_trap_push
 gdk_error_trap_pop
 
 <SUBSECTION Private>
+GdkStatus
 gdk_time_get
 gdk_timer_get
 gdk_timer_set
@@ -65,13 +77,14 @@ gdk_bitmap_unref
 <TITLE>Images</TITLE>
 <FILE>images</FILE>
 GdkImage
+gdk_image_new
 GdkImageType
 gdk_image_new_bitmap
-gdk_image_new
 gdk_image_get
+gdk_image_destroy
+<SUBSECTION>
 gdk_image_put_pixel
 gdk_image_get_pixel
-gdk_image_destroy
 </SECTION>
 
 <SECTION>
@@ -162,16 +175,16 @@ gdk_char_measure
 gdk_string_height
 gdk_text_height
 gdk_char_height
+
+<SUBSECTION>
+GdkWChar
+gdk_wcstombs
+gdk_mbstowcs
 </SECTION>
 
 <SECTION>
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
-GdkFill
-GdkLineStyle
-GdkCapStyle
-GdkJoinStyle
-
 gdk_draw_point
 gdk_draw_points
 gdk_draw_line
@@ -189,8 +202,10 @@ gdk_draw_text_wc
 
 <SUBSECTION>
 gdk_draw_pixmap
-gdk_draw_bitmap
 gdk_draw_image
+
+<SUBSECTION Private>
+gdk_draw_bitmap
 </SECTION>
 
 <SECTION>
@@ -213,6 +228,7 @@ gdk_gc_set_background
 gdk_gc_set_font
 gdk_gc_set_function
 gdk_gc_set_fill
+GdkFill
 gdk_gc_set_tile
 gdk_gc_set_stipple
 gdk_gc_set_ts_origin
@@ -224,6 +240,9 @@ gdk_gc_set_subwindow
 GdkSubwindowMode
 gdk_gc_set_exposures
 gdk_gc_set_line_attributes
+GdkLineStyle
+GdkCapStyle
+GdkJoinStyle
 gdk_gc_set_dashes
 gdk_gc_copy
 </SECTION>
@@ -347,6 +366,7 @@ gdk_selection_send_notify
 <TITLE>Properties and Atoms</TITLE>
 <FILE>properties</FILE>
 GdkAtom
+GDK_NONE
 gdk_text_property_to_text_list
 gdk_free_text_list
 gdk_string_to_compound_text
@@ -363,29 +383,29 @@ gdk_property_delete
 <TITLE>Input Methods</TITLE>
 <FILE>input_methods</FILE>
 GdkIMStyle
-GdkWChar
 gdk_im_ready
-gdk_im_begin
-gdk_im_end
 gdk_im_decide_style
 gdk_im_set_best_style
 
-gdk_wcstombs
-gdk_mbstowcs
+<SUBSECTION>
+gdk_im_begin
+gdk_im_end
 </SECTION>
 
 <SECTION>
 <TITLE>Input Contexts</TITLE>
 <FILE>input_contexts</FILE>
 GdkIC
-GdkICAttr
-GdkICAttributesType
 gdk_ic_new
 gdk_ic_destroy
-gdk_ic_get_style
-gdk_ic_set_attr
-gdk_ic_get_attr
 gdk_ic_get_events
+gdk_ic_get_style
+gdk_ic_get_attr
+gdk_ic_set_attr
+
+<SUBSECTION>
+GdkICAttr
+GdkICAttributesType
 gdk_ic_attr_new
 gdk_ic_attr_destroy
 </SECTION>
@@ -502,7 +522,10 @@ gdk_input_exit
 <FILE>events</FILE>
 GdkEventType
 GdkEventMask
+GDK_CURRENT_TIME
+GDK_PRIORITY_EVENTS
 
+<SUBSECTION>
 gdk_events_pending
 gdk_event_peek
 gdk_event_get
@@ -511,12 +534,19 @@ gdk_event_put
 gdk_event_copy
 gdk_event_free
 gdk_event_get_time
-gdk_event_handler_set
-gdk_event_send_client_message
 
+<SUBSECTION>
+gdk_event_handler_set
 GdkEventFunc
 
+<SUBSECTION>
+gdk_event_send_client_message
 gdk_event_send_clientmessage_toall
+gdk_add_client_message_filter
+
+<SUBSECTION>
+gdk_get_show_events
+gdk_set_show_events
 </SECTION>
 
 <SECTION>

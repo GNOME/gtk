@@ -2,11 +2,12 @@
 General
 
 <!-- ##### SECTION Short_Description ##### -->
-
+library initialization and miscellaneous functions.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+This section describes the GDK initialization functions and miscellaneous
+utility functions.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,250 +17,330 @@ General
 
 <!-- ##### FUNCTION gdk_init ##### -->
 <para>
-
+Initializes the GDK library and connects to the X server.
+If initialization fails, a warning message is output and the application
+terminates with a call to exit(1).
+</para>
+<para>
+Any arguments used by GDK are removed from the array and @argc and @argv are
+updated accordingly.
+</para>
+<para>
+GTK+ initializes GDK in gtk_init() and so this function is not usually needed
+by GTK+ applications.
 </para>
 
-@argc: 
-@argv: 
+@argc: the number of command line arguments.
+@argv: the array of command line arguments.
 
 
 <!-- ##### FUNCTION gdk_init_check ##### -->
 <para>
-
+Initializes the GDK library and connects to the X server, returning TRUE on
+success.
+</para>
+<para>
+Any arguments used by GDK are removed from the array and @argc and @argv are
+updated accordingly.
+</para>
+<para>
+GTK+ initializes GDK in gtk_init() and so this function is not usually needed
+by GTK+ applications.
 </para>
 
-@argc: 
-@argv: 
-@Returns: 
+@argc: the number of command line arguments.
+@argv: the array of command line arguments.
+@Returns: TRUE if initialization succeeded.
 
 
 <!-- ##### FUNCTION gdk_exit ##### -->
 <para>
-
+Exits the application using the exit() system call.
 </para>
-
-@error_code: 
-
-
-<!-- ##### ENUM GdkStatus ##### -->
 <para>
-
+This routine is provided mainly for backwards compatability, since it used to
+perform tasks necessary to exit the application cleanly. Those tasks are now
+performed in a function which is automatically called on exit (via the use
+of g_atexit()).
 </para>
 
-@GDK_OK: 
-@GDK_ERROR: 
-@GDK_ERROR_PARAM: 
-@GDK_ERROR_FILE: 
-@GDK_ERROR_MEM: 
-
-<!-- ##### MACRO GDK_NONE ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_CURRENT_TIME ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_PRIORITY_EVENTS ##### -->
-<para>
-
-</para>
-
+@error_code: the error code to pass to the exit() call.
 
 
 <!-- ##### FUNCTION gdk_set_locale ##### -->
 <para>
-
+Initializes the support for internationalization by calling the setlocale()
+system call. This function is called by gtk_set_locale() and so GTK+
+applications should use that instead.
 </para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_get_show_events ##### -->
 <para>
-
+The locale to use is determined by the LANG environment variable,
+so to run an application in a certain locale you can do something like this:
+<informalexample>
+<programlisting>
+  export LANG="fr"
+  ... run application ...
+</programlisting>
+</informalexample>
 </para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_set_show_events ##### -->
 <para>
-
+If the locale is not supported by X then it is reset to the standard "C"
+locale.
 </para>
 
-@show_events: 
-
-
-<!-- ##### FUNCTION gdk_add_client_message_filter ##### -->
-<para>
-
-</para>
-
-@message_type: 
-@func: 
-@data: 
+@Returns: the resulting locale.
 
 
 <!-- ##### FUNCTION gdk_set_sm_client_id ##### -->
 <para>
-
+Sets the SM_CLIENT_ID property on the application's leader window so that
+the window manager can save the application's state using the X11R6 ICCCM
+session management protocol.
 </para>
-
-@sm_client_id: 
-
-
-<!-- ##### FUNCTION gdk_get_use_xshm ##### -->
 <para>
-
+The leader window is automatically created by GDK and never shown. It's only
+use is for session management. The WM_CLIENT_LEADER property is automatically
+set on all X windows created by the application to point to the leader window.
 </para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_set_use_xshm ##### -->
 <para>
-
+See the X Session Management Library documentation for more information on
+session management and the Inter-Client Communication Conventions Manual
+(ICCCM) for information on the WM_CLIENT_LEADER property. (Both documents are
+part of the X Windows distribution.)
 </para>
 
-@use_xshm: 
+@sm_client_id: the client id assigned by the session manager when the
+connection was opened, or NULL to remove the property.
 
 
 <!-- ##### FUNCTION gdk_get_display ##### -->
 <para>
-
+Gets the name of the display, which usually comes from the DISPLAY
+environment variable or the --display command line option.
 </para>
 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_width ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_height ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_width_mm ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_height_mm ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pointer_grab ##### -->
-<para>
-
-</para>
-
-@window: 
-@owner_events: 
-@event_mask: 
-@confine_to: 
-@cursor: 
-@time: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pointer_ungrab ##### -->
-<para>
-
-</para>
-
-@time: 
-
-
-<!-- ##### FUNCTION gdk_keyboard_grab ##### -->
-<para>
-
-</para>
-
-@window: 
-@owner_events: 
-@time: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_keyboard_ungrab ##### -->
-<para>
-
-</para>
-
-@time: 
-
-
-<!-- ##### FUNCTION gdk_pointer_is_grabbed ##### -->
-<para>
-
-</para>
-
-@Returns: 
+@Returns: the name of the display.
 
 
 <!-- ##### FUNCTION gdk_flush ##### -->
 <para>
-
+Flushes the X output buffer and waits until all requests have been processed
+by the server. This is rarely needed by applications. It's main use is for
+trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
 </para>
 
 
 
-<!-- ##### FUNCTION gdk_beep ##### -->
+<!-- ##### FUNCTION gdk_screen_width ##### -->
 <para>
-
+Returns the width of the screen in pixels.
 </para>
 
+@Returns: the width of the screen in pixels.
+
+
+<!-- ##### FUNCTION gdk_screen_height ##### -->
+<para>
+Returns the height of the screen in pixels.
+</para>
+
+@Returns: the height of the screen in pixels.
+
+
+<!-- ##### FUNCTION gdk_screen_width_mm ##### -->
+<para>
+Returns the width of the screen in millimeters.
+Note that on many X servers this value will not be correct.
+</para>
+
+@Returns: the width of the screen in millimeters, though it is not always
+correct.
+
+
+<!-- ##### FUNCTION gdk_screen_height_mm ##### -->
+<para>
+Returns the height of the screen in millimeters.
+Note that on many X servers this value will not be correct.
+</para>
+
+@Returns: the height of the screen in millimeters, though it is not always
+correct.
+
+
+<!-- ##### FUNCTION gdk_pointer_grab ##### -->
+<para>
+Grabs the pointer (usually a mouse) so that all events are passed to this
+application until the pointer is ungrabbed with gdk_pointer_ungrab(), or
+the grab window becomes unviewable.
+This overrides any previous pointer grab by this client.
+</para>
+<para>
+Pointer grabs are used for operations which need complete control over mouse
+events, even if the mouse leaves the application.
+For example in GTK+ it is used for Drag and Drop, for dragging the handle in
+the #GtkHPaned and #GtkVPaned widgets, and for resizing columns in #GtkCList
+widgets.
+</para>
+<para>
+Note that if the event mask of an X window has selected both button press and
+button release events, then a button press event will cause an automatic
+pointer grab until the button is released.
+X does this automatically since most applications expect to receive button
+press and release events in pairs.
+It is equivalent to a pointer grab on the window with @owner_events set to
+TRUE.
+</para>
+
+@window: the #GdkWindow which will own the grab (the grab window).
+@owner_events: if FALSE then all pointer events are reported with respect to
+@window and are only reported if selected by @event_mask. If TRUE then pointer
+events for this application are reported as normal, but pointer events outside
+this application are reported with respect to @window and only if selected by
+@event_mask. In either mode, unreported events are discarded.
+@event_mask: specifies the event mask, which is used in accordance with
+@owner_events.
+@confine_to: TRUE to confine the pointer to @window. If the pointer is outside
+@window, it will automatically be moved to the closest edge of @window and
+enter and leave events will be generated as necessary.
+@cursor: the cursor to display while the grab is active. If this is NULL then
+the normal cursors are used for @window and its descendants, and the cursor
+for @window is used for all other windows.
+@time: the timestamp of the event which led to this pointer grab. This usually
+comes from a #GdkEventButton struct, though #GDK_CURRENT_TIME can be used if
+the time isn't known.
+@Returns: 0 if the grab was successful.
+
+
+<!-- ##### FUNCTION gdk_pointer_ungrab ##### -->
+<para>
+Ungrabs the pointer, if it is grabbed by this application.
+</para>
+
+@time: a timestamp from a #GdkEvent, or #GDK_CURRENT_TIME if no timestamp is
+available.
+
+
+<!-- ##### FUNCTION gdk_pointer_is_grabbed ##### -->
+<para>
+Returns TRUE if the pointer is currently grabbed by this application.
+</para>
+<para>
+Note that the return value is not completely reliable since the X server may
+automatically ungrab the pointer, without informing the application, if the
+grab window becomes unviewable. It also does not take passive pointer grabs
+into account.
+</para>
+
+@Returns: TRUE if the pointer is currently grabbed by this application.
+Though this value is not always correct.
+
+
+<!-- ##### FUNCTION gdk_keyboard_grab ##### -->
+<para>
+Grabs the keyboard so that all events are passed to this
+application until the keyboard is ungrabbed with gdk_keyboard_ungrab().
+This overrides any previous keyboard grab by this client.
+</para>
+
+@window: the #GdkWindow which will own the grab (the grab window).
+@owner_events: if FALSE then all keyboard events are reported with respect to
+@window. If TRUE then keyboard events for this application are reported as
+normal, but keyboard events outside this application are reported with respect
+to @window. Both key press and key release events are alwasy reported,
+independant of the event mask set by the application.
+@time: a timestamp from a #GdkEvent, or #GDK_CURRENT_TIME if no timestamp is
+available.
+@Returns: 0 if the grab was successful.
+
+
+<!-- ##### FUNCTION gdk_keyboard_ungrab ##### -->
+<para>
+Ungrabs the keyboard, if it is grabbed by this application.
+</para>
+
+@time: a timestamp from a #GdkEvent, or #GDK_CURRENT_TIME if no timestamp is
+available.
 
 
 <!-- ##### FUNCTION gdk_key_repeat_disable ##### -->
 <para>
-
+Disables the keyboard auto-repeat mode.
+This should be used with care as it may affect other applications.
 </para>
 
 
 
 <!-- ##### FUNCTION gdk_key_repeat_restore ##### -->
 <para>
-
+Restores the keyboard auto-repeat mode to its state when the application was
+started.
 </para>
 
+
+
+<!-- ##### FUNCTION gdk_beep ##### -->
+<para>
+Emits a short beep.
+</para>
+
+
+
+<!-- ##### FUNCTION gdk_get_use_xshm ##### -->
+<para>
+Returns TRUE if GDK will attempt to use the MIT-SHM shared memory extension.
+</para>
+<para>
+The shared memory extension is used for #GdkImage, and consequently for
+<link linkend="gdk-GdkRGB">GdkRGB</link>.
+It enables much faster drawing by communicating with the X server through
+SYSV shared memory calls. However, it can only be used if the X client and
+server are on the same machine and the server supports it.
+</para>
+
+@Returns: TRUE if use of the MIT shared memory extension will be attempted.
+
+
+<!-- ##### FUNCTION gdk_set_use_xshm ##### -->
+<para>
+Sets whether the use of the MIT shared memory extension should be attempted.
+This function is mainly for internal use. It is only safe for an application
+to set this to FALSE, since if it is set to TRUE and the server does not
+support the extension it may cause warning messages to be output.
+</para>
+
+@use_xshm: TRUE if use of the MIT shared memory extension should be attempted.
 
 
 <!-- ##### FUNCTION gdk_error_trap_push ##### -->
 <para>
-
+This function allows X errors to be trapped instead of the normal behavior
+of exiting the application. It should only be used if it is not possible to
+avoid the X error in any other way.
 </para>
+<example>
+<title>Trapping an X error.</title>
+<programlisting>
+  gdk_error_trap_push ();
+
+  /* ... Call the X function which may cause an error here ... */
+
+  /* Flush the X queue to catch errors now. */
+  gdk_flush ();
+
+  if (gdk_error_trap_pop ())
+    {
+      /* ... Handle the error here ... */
+    }
+</programlisting>
+</example>
 
 
 
 <!-- ##### FUNCTION gdk_error_trap_pop ##### -->
 <para>
-
+Removes the X error trap installed with gdk_error_trap_push().
 </para>
 
-@Returns: 
+@Returns: the X error code, or 0 if no error occurred.
 
 

@@ -25,76 +25,6 @@ more information.
 
 </para>
 
-<!-- ##### ENUM GdkFill ##### -->
-<para>
-Used to specify the way in which drawing operations are performed.
-See gdk_gc_set_fill().
-</para>
-
-@GDK_SOLID: graphics are drawn in a solid color, usually the foreground color
-of the #GdkGC.
-@GDK_TILED: graphics are drawn using a tile pixmap. See gdk_gc_set_tile().
-@GDK_STIPPLED: graphics are drawn with a stipple (a pixmap with a depth of 1).
-Bits set in the stipple are drawn in the foreground color. Bits not set in the
-stipple are left as they are. See gdk_gc_set_stipple().
-@GDK_OPAQUE_STIPPLED: graphics are drawn with a stipple, as in @GDK_STIPPLED,
-except that the bits not set in the stipple are drawn in the background color
-instead of being left as they are. See gdk_gc_set_stipple().
-
-<!-- ##### ENUM GdkFillRule ##### -->
-<para>
-The method for determining which pixels are included in a region, when
-creating a #GdkRegion from a polygon.
-The fill rule is only relevant for polygons which overlap themselves.
-</para>
-
-@GDK_EVEN_ODD_RULE: areas which are overlapped an odd number of times are
-included in the region, while areas overlapped an even number of times are not.
-@GDK_WINDING_RULE: overlapping areas are always included.
-
-
-<!-- ##### ENUM GdkLineStyle ##### -->
-<para>
-Used to specify how lines are drawn. See gdk_gc_set_line_attributes().
-</para>
-
-@GDK_LINE_SOLID: lines are drawn in a solid color, the foreground color.
-@GDK_LINE_ON_OFF_DASH: dashed lines are drawn, with the pixels between the
-dashes left as they are. The #GdkCapStyle is applied to each end of the dashes.
-@GDK_LINE_DOUBLE_DASH: dashed lines are drawn, alternating between the
-foreground and background colors. The %GDK_CAP_BUTT style is used where
-dashes and gaps meet.
-
-<!-- ##### ENUM GdkCapStyle ##### -->
-<para>
-Used to specify how the ends of lines and dashes are drawn.
-See gdk_gc_set_line_attributes().
-</para>
-
-@GDK_CAP_NOT_LAST: this is equivalent to %GDK_CAP_BUTT, except that for a line
-width of 0 the final endpoint is not drawn.
-@GDK_CAP_BUTT: the ends of the line are square with no projection beyond the
-endpoint.
-@GDK_CAP_ROUND: the ends of the line are rounded using a circular arc centered
-on the endpoint. This is equivalent to %GDK_CAP_BUTT when the line width is 0.
-@GDK_CAP_PROJECTING: the ends of the line are square, but project beyond the
-endpoint to a distance of half the line width.
-This is equivalent to %GDK_CAP_BUTT when the line width is 0.
-
-<!-- ##### ENUM GdkJoinStyle ##### -->
-<para>
-Used to specify how the the joins between lines are drawn.
-See gdk_gc_set_line_attributes().
-</para>
-
-@GDK_JOIN_MITER: the ends of the lines are extended to meet at a point.
-If the angle between the lines is less than 11 degrees, %GDK_JOIN_BEVEL is
-used instead.
-@GDK_JOIN_ROUND: the ends of the lines are rounded with a circular arc
-centered on the joinpoint, with a diameter equal to the line width.
-@GDK_JOIN_BEVEL: the lines have %GDK_CAP_BUTT cap styles, with the triangular
-notch filled.
-
 <!-- ##### FUNCTION gdk_draw_point ##### -->
 <para>
 Draws a point, using the foreground color and other attributes of the #GdkGC.
@@ -104,6 +34,18 @@ Draws a point, using the foreground color and other attributes of the #GdkGC.
 @gc: a #GdkGC.
 @x: the x coordinate of the point.
 @y: the y coordinate of the point.
+
+
+<!-- ##### FUNCTION gdk_draw_points ##### -->
+<para>
+Draws a number of points, using the foreground color and other attributes of
+the #GdkGC.
+</para>
+
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@points: an array of #GdkPoint structures.
+@npoints: the number of points to be drawn.
 
 
 <!-- ##### FUNCTION gdk_draw_line ##### -->
@@ -118,6 +60,44 @@ Draws a line, using the foreground color and other attributes of the #GdkGC.
 @x2: the x coordinate of the end point.
 @y2: the y coordinate of the end point.
 
+
+<!-- ##### FUNCTION gdk_draw_lines ##### -->
+<para>
+Draws a series of lines connecting the given points.
+The way in which joins between lines are draw is determined by the
+#GdkCapStyle value in the #GdkGC. This can be set with
+gdk_gc_set_line_attributes().
+</para>
+
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@points: an array of #GdkPoint structures specifying the endpoints of the
+lines.
+@npoints: the size of the @points array.
+
+
+<!-- ##### FUNCTION gdk_draw_segments ##### -->
+<para>
+Draws a number of unconnected lines.
+</para>
+
+@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
+@gc: a #GdkGC.
+@segs: an array of #GdkSegment structures specifying the start and end points
+of the lines to be drawn,
+@nsegs: the number of line segments to draw, i.e. the size of the @segs array.
+
+
+<!-- ##### STRUCT GdkSegment ##### -->
+<para>
+Specifies the start and end point of a line for use by the gdk_draw_segments()
+function.
+</para>
+
+@x1: the x coordinate of the start point.
+@y1: the y coordinate of the start point.
+@x2: the x coordinate of the end point.
+@y2: the y coordinate of the end point.
 
 <!-- ##### FUNCTION gdk_draw_rectangle ##### -->
 <para>
@@ -238,83 +218,22 @@ the right edge of the source pixmap.
 to the bottom edge of the source pixmap.
 
 
-<!-- ##### FUNCTION gdk_draw_bitmap ##### -->
-<para>
-
-</para>
-
-@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
-@gc: 
-@src: 
-@xsrc: 
-@ysrc: 
-@xdest: 
-@ydest: 
-@width: 
-@height: 
-
-
 <!-- ##### FUNCTION gdk_draw_image ##### -->
 <para>
-
-</para>
-
-@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
-@gc: 
-@image: 
-@xsrc: 
-@ysrc: 
-@xdest: 
-@ydest: 
-@width: 
-@height: 
-
-
-<!-- ##### FUNCTION gdk_draw_points ##### -->
-<para>
-Draws a number of points, using the foreground color and other attributes of
-the #GdkGC.
+Draws a #GdkImage onto a drawable.
+The depth of the #GdkImage must match the depth of the #GdkDrawable.
 </para>
 
 @drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
 @gc: a #GdkGC.
-@points: an array of #GdkPoint structures.
-@npoints: the number of points to be drawn.
-
-
-<!-- ##### FUNCTION gdk_draw_segments ##### -->
-<para>
-
-</para>
-
-@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
-@gc: 
-@segs: 
-@nsegs: 
-
-
-<!-- ##### STRUCT GdkSegment ##### -->
-<para>
-
-</para>
-
-@x1: 
-@y1: 
-@x2: 
-@y2: 
-
-<!-- ##### FUNCTION gdk_draw_lines ##### -->
-<para>
-Draws a series of lines connecting the given points.
-The way in which joins between lines are draw is determined by the
-#GdkCapStyle value in the #GdkGC. This can be set with
-gdk_gc_set_line_attributes().
-</para>
-
-@drawable: a #GdkDrawable (a #GdkWindow or a #GdkPixmap).
-@gc: a #GdkGC.
-@points: an array of #GdkPoint structures specifying the endpoints of the
-lines.
-@npoints: the number of endpoints.
+@image: the #GdkImage to draw.
+@xsrc: the left edge of the source rectangle within @image.
+@ysrc: the top of the source rectangle within @image.
+@xdest: the x coordinate of the destination within @drawable.
+@ydest: the y coordinate of the destination within @drawable.
+@width: the width of the area to be copied, or -1 to make the area extend to
+the right edge of @image.
+@height: the height of the area to be copied, or -1 to make the area extend
+to the bottom edge of @image.
 
 

@@ -88,6 +88,30 @@ Creates a new empty #GdkRegion.
 @Returns: a new empty #GdkRegion.
 
 
+<!-- ##### FUNCTION gdk_region_polygon ##### -->
+<para>
+Creates a new #GdkRegion using the polygon defined by a number of points.
+
+</para>
+
+@points: an array of #GdkPoint structs.
+@npoints: the number of elements in the @points array.
+@fill_rule: specifies which pixels are included in the region when the polygon
+overlaps itself.
+@Returns: a new #GdkRegion based on the given polygon.
+
+
+<!-- ##### ENUM GdkFillRule ##### -->
+<para>
+The method for determining which pixels are included in a region, when
+creating a #GdkRegion from a polygon.
+The fill rule is only relevant for polygons which overlap themselves.
+</para>
+
+@GDK_EVEN_ODD_RULE: areas which are overlapped an odd number of times are
+included in the region, while areas overlapped an even number of times are not.
+@GDK_WINDING_RULE: overlapping areas are always included.
+
 <!-- ##### FUNCTION gdk_region_destroy ##### -->
 <para>
 Destroys a #GdkRegion.
@@ -96,13 +120,81 @@ Destroys a #GdkRegion.
 @region: a #GdkRegion.
 
 
-<!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
+<!-- ##### FUNCTION gdk_regions_intersect ##### -->
 <para>
-Returns the smallest rectangle which includes the entire #GdkRegion.
+Returns the intersection of two regions.
+</para>
+
+@source1: a #GdkRegion.
+@source2: a #GdkRegion.
+@Returns: the intersection of @source1 and @source2.
+
+
+<!-- ##### FUNCTION gdk_regions_union ##### -->
+<para>
+Returns the union of two regions.
+This is all pixels in either of @source1 or @source2.
+</para>
+
+@source1: a #GdkRegion.
+@source2: a #GdkRegion.
+@Returns: the union of @source1 and @source2.
+
+
+<!-- ##### FUNCTION gdk_regions_subtract ##### -->
+<para>
+Subtracts one region from another.
+The result is a region containing all the pixels which are in @source1, but
+which are not in @source2.
+</para>
+
+@source1: a #GdkRegion.
+@source2: a #GdkRegion to subtract from @source1.
+@Returns: @source1 - @source2.
+
+
+<!-- ##### FUNCTION gdk_regions_xor ##### -->
+<para>
+Returns the difference between the union and the intersection of two regions.
+This is a region containing the pixels that are in one of the source regions,
+but which are not in both.
+</para>
+
+@source1: a #GdkRegion.
+@source2: a #GdkRegion.
+@Returns: the difference between the union and the intersection of @source1
+and @source2.
+
+
+<!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
+<para>
+Returns the union of a region and a rectangle.
 </para>
 
 @region: a #GdkRegion.
-@rectangle: returns the smallest rectangle which includes all of @region.
+@rect: a #GdkRectangle.
+@Returns: the union of @region and @rect.
+
+
+<!-- ##### FUNCTION gdk_region_offset ##### -->
+<para>
+Moves a region the specified distance.
+</para>
+
+@region: a #GdkRegion.
+@dx: the distance to move the region horizontally.
+@dy: the distance to move the region vertically.
+
+
+<!-- ##### FUNCTION gdk_region_shrink ##### -->
+<para>
+Resizes a region by the specified amount.
+Positive values shrink the region. Negative values expand it.
+</para>
+
+@region: a #GdkRegion.
+@dx: the number of pixels to shrink the region horizontally.
+@dy: the number of pixels to shrink the region vertically.
 
 
 <!-- ##### FUNCTION gdk_region_empty ##### -->
@@ -156,92 +248,12 @@ Specifies the possible values returned by gdk_region_rect_in().
 @GDK_OVERLAP_RECTANGLE_OUT: if the rectangle is outside the #GdkRegion.
 @GDK_OVERLAP_RECTANGLE_PART: if the rectangle is partly inside the #GdkRegion.
 
-<!-- ##### FUNCTION gdk_region_polygon ##### -->
+<!-- ##### FUNCTION gdk_region_get_clipbox ##### -->
 <para>
-Creates a new #GdkRegion using the polygon defined by a number of points.
-
-</para>
-
-@points: an array of #GdkPoint structs.
-@npoints: the number of elements in the @points array.
-@fill_rule: specifies which pixels are included in the region when the polygon
-overlaps itself.
-@Returns: a new #GdkRegion based on the given polygon.
-
-
-<!-- ##### FUNCTION gdk_region_offset ##### -->
-<para>
-Moves a region.
+Returns the smallest rectangle which includes the entire #GdkRegion.
 </para>
 
 @region: a #GdkRegion.
-@dx: the distance to move the region horizontally.
-@dy: the distance to move the region vertically.
-
-
-<!-- ##### FUNCTION gdk_region_shrink ##### -->
-<para>
-Resizes a region.
-</para>
-
-@region: a #GdkRegion.
-@dx: 
-@dy: 
-
-
-<!-- ##### FUNCTION gdk_region_union_with_rect ##### -->
-<para>
-Returns the union of a region and a rectangle.
-</para>
-
-@region: a #GdkRegion.
-@rect: a #GdkRectangle.
-@Returns: the union of @region and @rect.
-
-
-<!-- ##### FUNCTION gdk_regions_intersect ##### -->
-<para>
-Returns the intersection of two regions.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the intersection of @source1 and @source2.
-
-
-<!-- ##### FUNCTION gdk_regions_union ##### -->
-<para>
-Returns the union of two regions.
-This is all pixels in either of @source1 or @source2.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the union of @source1 and @source2.
-
-
-<!-- ##### FUNCTION gdk_regions_subtract ##### -->
-<para>
-Subtracts one region from another.
-The result is a region containing all the pixels which are in @source1, but
-which are not in @source2.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion to subtract from @source1.
-@Returns: @source1 - @source2.
-
-
-<!-- ##### FUNCTION gdk_regions_xor ##### -->
-<para>
-Returns the difference between the union and the intersection of two regions.
-This is a region containing the pixels that are in one of the source regions,
-but which are not in both.
-</para>
-
-@source1: a #GdkRegion.
-@source2: a #GdkRegion.
-@Returns: the difference between the union and the intersection of @source1
-and @source2.
+@rectangle: returns the smallest rectangle which includes all of @region.
 
 

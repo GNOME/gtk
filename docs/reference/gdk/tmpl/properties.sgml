@@ -49,6 +49,13 @@ of strings on the X server.
 </para>
 
 
+<!-- ##### MACRO GDK_NONE ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gdk_text_property_to_text_list ##### -->
 <para>
 Convert a text string from the encoding as it is stored in

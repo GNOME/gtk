@@ -185,48 +185,6 @@ A set of bit flags used to indicate which fields
 @GDK_GC_CAP_STYLE: 
 @GDK_GC_JOIN_STYLE: 
 
-<!-- ##### ENUM GdkFill ##### -->
-<para>
-Determines how primitives are drawn.
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GDK_SOLID</entry>
-<entry>draw with the foreground color.</entry>
-</row>
-
-<row>
-<entry>GDK_TILED</entry>
-<entry>draw with a tiled pixmap.</entry>
-</row>
-
-<row>
-<entry>GDK_STIPPLED</entry>
-<entry>draw using the stipple bitmap. Pixels corresponding
-to bits in the stipple bitmap that are set will be drawn in the 
-foreground color; pixels corresponding to bits that are
-not set will be left untouched.</entry>
-</row>
-
-<row>
-<entry>GDK_OPAQUE_STIPPLED</entry>
-<entry>draw using the stipple bitmap. Pixels corresponding
-to bits in the stipple bitmap that are set will be drawn in the 
-foreground color; pixels corresponding to bits that are
-not set will be drawn with the background color.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-</para>
-
-@GDK_SOLID: 
-@GDK_TILED: 
-@GDK_STIPPLED: 
-@GDK_OPAQUE_STIPPLED: 
-
 <!-- ##### ENUM GdkFunction ##### -->
 <para>
 Determines how the bit values for the source pixels are combined with
@@ -252,111 +210,6 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 @GDK_OR_INVERT: 
 @GDK_NAND: 
 @GDK_SET: 
-
-<!-- ##### ENUM GdkLineStyle ##### -->
-<para>
-Determines how lines are drawn.
-
-<informaltable pgwide=1 frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GDK_LINE_SOLID</entry>
-<entry>lines are drawn solid.</entry>
-</row>
-
-<row>
-<entry>GDK_LINE_ON_OFF_DASH</entry>
-<entry>even segments are drawn; odd segments are not drawn.</entry>
-</row>
-
-<row>
-<entry>GDK_LINE_DOUBLE_DASH</entry>
-<entry>even segments are normally. Odd segments are drawn 
-in the background color if the fill style is %GDK_SOLID,
-or in the background color masked by the stipple if the
-fill style is %GDK_STIPPLED.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-</para>
-
-@GDK_LINE_SOLID: 
-@GDK_LINE_ON_OFF_DASH: 
-@GDK_LINE_DOUBLE_DASH: 
-
-<!-- ##### ENUM GdkCapStyle ##### -->
-<para>
-Determines how the end of lines are drawn.
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GDK_CAP_NOT_LAST</entry>
-<entry>the same as %GDK_CAP_BUTT for lines of non-zero width.
-       for zero width lines, the final point on the line
-       will not be drawn.</entry>
-</row>
-
-<row>
-<entry>GDK_CAP_BUTT</entry>
-<entry>the ends of the lines are drawn squared off and extending
-       to the coordinates of the end point.</entry>
-</row>
-
-<row>
-<entry>GDK_CAP_ROUND</entry>
-<entry>the ends of the lines are drawn as semicircles with the
-       diameter equal to the line width and centered at the
-       end point.</entry>
-</row>
-
-<row>
-<entry>GDK_CAP_PROJECTING</entry>
-<entry>the ends of the lines are drawn squared off and extending
-       half the width of the line beyond the end point.</entry>
-</row>
-</tbody></tgroup></informaltable>
-</para>
-
-@GDK_CAP_NOT_LAST: 
-@GDK_CAP_BUTT: 
-@GDK_CAP_ROUND: 
-@GDK_CAP_PROJECTING: 
-
-<!-- ##### ENUM GdkJoinStyle ##### -->
-<para>
-Determines how the joins between segments of a polygon are drawn.
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GDK_JOIN_MITER</entry>
-<entry>the sides of each line are extended to meet at an angle.</entry>
-</row>
-
-<row>
-<entry>GDK_JOIN_ROUND</entry>
-<entry>the sides of the two lines are joined by a circular arc.</entry>
-</row>
-
-<row>
-<entry>GDK_JOIN_BEVEL</entry>
-<entry>the sides of the two lines are joined by a straight line which
-       makes an equal angle with each line.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-</para>
-
-@GDK_JOIN_MITER: 
-@GDK_JOIN_ROUND: 
-@GDK_JOIN_BEVEL: 
 
 <!-- ##### FUNCTION gdk_gc_new ##### -->
 <para>
@@ -467,6 +320,48 @@ Set the fill mode for a graphics context.
 @gc: a #GdkGC.
 @fill: the new fill mode.
 
+
+<!-- ##### ENUM GdkFill ##### -->
+<para>
+Determines how primitives are drawn.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_SOLID</entry>
+<entry>draw with the foreground color.</entry>
+</row>
+
+<row>
+<entry>GDK_TILED</entry>
+<entry>draw with a tiled pixmap.</entry>
+</row>
+
+<row>
+<entry>GDK_STIPPLED</entry>
+<entry>draw using the stipple bitmap. Pixels corresponding
+to bits in the stipple bitmap that are set will be drawn in the 
+foreground color; pixels corresponding to bits that are
+not set will be left untouched.</entry>
+</row>
+
+<row>
+<entry>GDK_OPAQUE_STIPPLED</entry>
+<entry>draw using the stipple bitmap. Pixels corresponding
+to bits in the stipple bitmap that are set will be drawn in the 
+foreground color; pixels corresponding to bits that are
+not set will be drawn with the background color.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GDK_SOLID: 
+@GDK_TILED: 
+@GDK_STIPPLED: 
+@GDK_OPAQUE_STIPPLED: 
 
 <!-- ##### FUNCTION gdk_gc_set_tile ##### -->
 <para>
@@ -611,6 +506,111 @@ explanations of the arguments.
 @join_style: the in which lines are joined together.
 
 
+<!-- ##### ENUM GdkLineStyle ##### -->
+<para>
+Determines how lines are drawn.
+
+<informaltable pgwide=1 frame="none" role="enum">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_LINE_SOLID</entry>
+<entry>lines are drawn solid.</entry>
+</row>
+
+<row>
+<entry>GDK_LINE_ON_OFF_DASH</entry>
+<entry>even segments are drawn; odd segments are not drawn.</entry>
+</row>
+
+<row>
+<entry>GDK_LINE_DOUBLE_DASH</entry>
+<entry>even segments are normally. Odd segments are drawn 
+in the background color if the fill style is %GDK_SOLID,
+or in the background color masked by the stipple if the
+fill style is %GDK_STIPPLED.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GDK_LINE_SOLID: 
+@GDK_LINE_ON_OFF_DASH: 
+@GDK_LINE_DOUBLE_DASH: 
+
+<!-- ##### ENUM GdkCapStyle ##### -->
+<para>
+Determines how the end of lines are drawn.
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_CAP_NOT_LAST</entry>
+<entry>the same as %GDK_CAP_BUTT for lines of non-zero width.
+       for zero width lines, the final point on the line
+       will not be drawn.</entry>
+</row>
+
+<row>
+<entry>GDK_CAP_BUTT</entry>
+<entry>the ends of the lines are drawn squared off and extending
+       to the coordinates of the end point.</entry>
+</row>
+
+<row>
+<entry>GDK_CAP_ROUND</entry>
+<entry>the ends of the lines are drawn as semicircles with the
+       diameter equal to the line width and centered at the
+       end point.</entry>
+</row>
+
+<row>
+<entry>GDK_CAP_PROJECTING</entry>
+<entry>the ends of the lines are drawn squared off and extending
+       half the width of the line beyond the end point.</entry>
+</row>
+</tbody></tgroup></informaltable>
+</para>
+
+@GDK_CAP_NOT_LAST: 
+@GDK_CAP_BUTT: 
+@GDK_CAP_ROUND: 
+@GDK_CAP_PROJECTING: 
+
+<!-- ##### ENUM GdkJoinStyle ##### -->
+<para>
+Determines how the joins between segments of a polygon are drawn.
+
+<informaltable pgwide=1 frame="none" role="struct">
+<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
+<tbody>
+
+<row>
+<entry>GDK_JOIN_MITER</entry>
+<entry>the sides of each line are extended to meet at an angle.</entry>
+</row>
+
+<row>
+<entry>GDK_JOIN_ROUND</entry>
+<entry>the sides of the two lines are joined by a circular arc.</entry>
+</row>
+
+<row>
+<entry>GDK_JOIN_BEVEL</entry>
+<entry>the sides of the two lines are joined by a straight line which
+       makes an equal angle with each line.</entry>
+</row>
+
+</tbody></tgroup></informaltable>
+</para>
+
+@GDK_JOIN_MITER: 
+@GDK_JOIN_ROUND: 
+@GDK_JOIN_BEVEL: 
+
 <!-- ##### FUNCTION gdk_gc_set_dashes ##### -->
 <para>
 Sets the way dashed-lines are drawn. Lines will be
@@ -635,3 +635,5 @@ onto another graphics context.
 
 @dst_gc: the destination graphics context.
 @src_gc: the source graphics context.
+
+
