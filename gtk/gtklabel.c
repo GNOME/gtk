@@ -359,6 +359,8 @@ gtk_label_finalize (GtkObject *object)
   label = GTK_LABEL (object);
   
   g_free (label->label);
+  g_free (label->label_wc);
+  
   if (label->pattern) 
     g_free (label->pattern);
   gtk_label_free_words (label);
