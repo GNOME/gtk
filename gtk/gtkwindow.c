@@ -761,7 +761,7 @@ gtk_window_get_property (GObject      *object,
  * be #GTK_WINDOW_TOPLEVEL. If you're implementing something like a
  * popup menu from scratch (which is a bad idea, just use #GtkMenu),
  * you might use #GTK_WINDOW_POPUP. #GTK_WINDOW_POPUP is not for
- * dialogs, though in some other toolkits dialogs are called "popups."
+ * dialogs, though in some other toolkits dialogs are called "popups".
  * In GTK+, #GTK_WINDOW_POPUP means a pop-up menu or pop-up tooltip.
  * Popup windows are not controlled by the window manager.
  *
