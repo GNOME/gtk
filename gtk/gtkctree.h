@@ -87,7 +87,6 @@ struct _GtkCTree
   GtkCTreeCompareFunc node_compare;
 
   guint auto_sort   : 1;
-  guint draw_lines  : 1;
   guint reorderable : 1;
   guint use_icons   : 1;
   guint in_drag     : 1;
@@ -198,7 +197,7 @@ gboolean   gtk_ctree_is_hot_spot            (GtkCTree     *ctree,
  ***********************************************************/
 
 void       gtk_ctree_move                   (GtkCTree     *ctree,
-					     GList        *child,
+					     GList        *node,
 					     GList        *new_parent, 
 					     GList        *new_sibling);
 void       gtk_ctree_expand                 (GtkCTree     *ctree,
@@ -230,19 +229,19 @@ void       gtk_ctree_set_text               (GtkCTree     *ctree,
 					     gint          column,
 					     gchar        *text);
 void       gtk_ctree_set_pixmap             (GtkCTree     *ctree,
-					     GList        *child,
+					     GList        *node,
 					     gint          column,
 					     GdkPixmap    *pixmap,
 					     GdkBitmap    *mask);
 void       gtk_ctree_set_pixtext            (GtkCTree     *ctree,
-					     GList        *child,
+					     GList        *node,
 					     gint          column,
 					     gchar        *text,
 					     guint8        spacing,
 					     GdkPixmap    *pixmap,
 					     GdkBitmap    *mask);
 void       gtk_ctree_set_node_info          (GtkCTree     *ctree,
-					     GList        *child,
+					     GList        *node,
 					     gchar        *text,
 					     guint8        spacing,
 					     GdkPixmap    *pixmap_closed,
@@ -252,46 +251,56 @@ void       gtk_ctree_set_node_info          (GtkCTree     *ctree,
 					     gboolean      is_leaf,
 					     gboolean      expanded);
 void       gtk_ctree_set_shift              (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     gint          column,
 					     gint          vertical,
 					     gint          horizontal);
 GtkCellType gtk_ctree_get_cell_type         (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     gint          column);
 gint       gtk_ctree_get_text               (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     gint          column,
 					     gchar       **text);
 gint       gtk_ctree_get_pixmap             (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     gint          column,
 					     GdkPixmap   **pixmap,
 					     GdkBitmap   **mask);
 gint       gtk_ctree_get_pixtext            (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     gint          column,
 					     gchar       **text,
 					     guint8       *spacing,
 					     GdkPixmap   **pixmap,
 					     GdkBitmap   **mask);
+gint       gtk_ctree_get_node_info          (GtkCTree     *ctree,
+					     GList        *node,
+					     gchar       **text,
+					     guint8       *spacing,
+					     GdkPixmap   **pixmap_closed,
+					     GdkBitmap   **mask_closed,
+					     GdkPixmap   **pixmap_opened,
+					     GdkBitmap   **mask_opened,
+					     gboolean     *is_leaf,
+					     gboolean     *expanded);
 void       gtk_ctree_set_foreground         (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     GdkColor     *color);
 void       gtk_ctree_set_background         (GtkCTree     *ctree,
-					     GList        *row,
+					     GList        *node,
 					     GdkColor     *color);
 void       gtk_ctree_set_selection_mode     (GtkCTree     *ctree,
 					     GtkSelectionMode  mode);
 void       gtk_ctree_set_row_data           (GtkCTree     *ctree,
-					     GList        *list,
+					     GList        *node,
 					     gpointer      data);
 void       gtk_ctree_set_row_data_full      (GtkCTree     *ctree,
-					     GList        *list,
+					     GList        *node,
 					     gpointer      data,
 					     GtkDestroyNotify destroy);
 gpointer   gtk_ctree_get_row_data           (GtkCTree     *ctree,
-					     GList        *list);
+					     GList        *node);
 
 /***********************************************************
  *             GtkCTree specific functions                 *

@@ -3533,11 +3533,14 @@ void after_move (GtkCTree *ctree, GList *child, GList *parent,
   char *target1;
   char *target2;
 
-  gtk_ctree_get_pixtext (ctree, child, 0, &source, NULL, NULL, NULL);
+  gtk_ctree_get_node_info (ctree, child, &source, 
+			   NULL, NULL, NULL, NULL, NULL, NULL, NULL);
   if (parent)
-    gtk_ctree_get_pixtext (ctree, parent, 0, &target1, NULL, NULL, NULL);
+    gtk_ctree_get_node_info (ctree, parent, &target1, 
+			     NULL, NULL, NULL, NULL, NULL, NULL, NULL);
   if (sibling)
-    gtk_ctree_get_pixtext (ctree, sibling, 0, &target2, NULL, NULL, NULL);
+    gtk_ctree_get_node_info (ctree, sibling, &target2, 
+			     NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
   g_print ("Moving \"%s\" to \"%s\" with sibling \"%s\".\n", source,
 	   (parent) ? target1 : "nil", (sibling) ? target2 : "nil");
@@ -3568,12 +3571,10 @@ gint button_press (GtkCTree *ctree, GdkEventButton *event, gpointer data)
       if (GTK_CTREE_ROW (work)->children && 
 	  gtk_ctree_is_hot_spot (ctree, event->x, event->y))
 	{
-	  gtk_clist_freeze (GTK_CLIST (ctree));
 	  if (GTK_CTREE_ROW (work)->expanded)
 	    gtk_ctree_collapse_recursive (ctree, work);
 	  else
 	    gtk_ctree_expand_recursive (ctree, work);
-	  gtk_clist_thaw (GTK_CLIST (ctree));
 	  after_press (ctree, NULL);
 	  gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree), 
 					"button_press_event");
@@ -3602,12 +3603,10 @@ gint button_release (GtkCTree *ctree, GdkEventButton *event, gpointer data)
   if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_MULTIPLE &&
       event->state & GDK_SHIFT_MASK)
     {
-      gtk_clist_freeze (GTK_CLIST (ctree));
       if (GTK_CTREE_ROW (work)->row.state == GTK_STATE_SELECTED) 
 	    gtk_ctree_unselect_recursive (ctree, work);
       else
 	gtk_ctree_select_recursive (ctree, work);
-      gtk_clist_thaw (GTK_CLIST (ctree));
       after_press (ctree, NULL);
       gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree), 
 				    "button_release_event");
@@ -3625,17 +3624,13 @@ void count_items (GtkCTree *ctree, GList *list)
 
 void expand_all (GtkWidget *widget, GtkCTree *ctree)
 {
-  gtk_clist_freeze (GTK_CLIST (ctree));
   gtk_ctree_expand_recursive (ctree, NULL);
-  gtk_clist_thaw (GTK_CLIST (ctree));
   after_press (ctree, NULL);
 }
 
 void collapse_all (GtkWidget *widget, GtkCTree *ctree)
 {
-  gtk_clist_freeze (GTK_CLIST (ctree));
   gtk_ctree_collapse_recursive (ctree, NULL);
-  gtk_clist_thaw (GTK_CLIST (ctree));
   after_press (ctree, NULL);
 }
 
@@ -3643,19 +3638,26 @@ void select_all (GtkWidget *widget, GtkCTree *ctree)
 {
   if (GTK_CLIST (ctree)->selection_mode != GTK_SELECTION_MULTIPLE)
     return;
-  gtk_clist_freeze (GTK_CLIST (ctree));
   gtk_ctree_select_recursive (ctree, NULL);
-  gtk_clist_thaw (GTK_CLIST (ctree));
   after_press (ctree, NULL);
 }
 
 void unselect_all (GtkWidget *widget, GtkCTree *ctree)
 {
-  if (GTK_CLIST (ctree)->selection_mode != GTK_SELECTION_MULTIPLE)
+  GList *work;
+  GList *ptr;
+
+  if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_BROWSE)
     return;
-  gtk_clist_freeze (GTK_CLIST (ctree));
-  gtk_ctree_unselect_recursive (ctree, NULL);
-  gtk_clist_thaw (GTK_CLIST (ctree));
+
+  work = GTK_CLIST (ctree)->selection;
+
+  while (work)
+    {
+      ptr = work->data;
+      work = work->next;
+      gtk_ctree_unselect (ctree, ptr);
+    }
   after_press (ctree, NULL);
 }
 
@@ -3709,9 +3711,7 @@ void remove_selection (GtkWidget *widget, GtkCTree *ctree)
 
 void sort_all (GtkWidget *widget, GtkCTree *ctree)
 {
-  gtk_clist_freeze (GTK_CLIST (ctree));
   gtk_ctree_sort_recursive (ctree, NULL);
-  gtk_clist_thaw (GTK_CLIST (ctree));
 }
 
 void change_indent (GtkWidget *widget, GtkCTree *ctree)
@@ -3783,7 +3783,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   for (i = num_pages + num_books; i > num_books; i--)
     {
       pages++;
-      sprintf (buf1, "Page %02ld", random() % 100);
+      sprintf (buf1, "Page %02d", random() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap3,
 				  mask3, NULL, NULL, TRUE, FALSE);
@@ -3795,7 +3795,7 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
   for (i = num_books; i > 0; i--)
     {
       books++;
-      sprintf (buf1, "Book %02ld", random() % 100);
+      sprintf (buf1, "Book %02d", random() % 100);
       sprintf (buf2, "Item %d-%d", cur_depth, i);
       sibling = gtk_ctree_insert (ctree, parent, sibling, text, 5, pixmap1,
 				  mask1, pixmap2, mask2, FALSE, FALSE);
