@@ -35,7 +35,7 @@ static GdkVisualPrivate *system_visual;
 static GdkVisualPrivate *visuals;
 static gint nvisuals;
 
-static gint available_depths[4];
+static gint available_depths[7];
 static gint navailable_depths;
 
 static GdkVisualType available_types[6];
@@ -60,7 +60,7 @@ static GHashTable *visual_hash = NULL;
 void
 gdk_visual_init (void)
 {
-  static gint possible_depths[6] = { 32, 24, 16, 15, 8, 1 };
+  static gint possible_depths[7] = { 32, 24, 16, 15, 8, 4, 1 };
   static GdkVisualType possible_types[6] =
     {
       GDK_VISUAL_DIRECT_COLOR,
@@ -71,7 +71,7 @@ gdk_visual_init (void)
       GDK_VISUAL_STATIC_GRAY
     };
 
-  static gint npossible_depths = 6;
+  static gint npossible_depths = 7;
   static gint npossible_types = 6;
 
   XVisualInfo *visual_list;

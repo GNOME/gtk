@@ -1,3 +1,8 @@
+Thu Jul  9 20:20:04 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* gdk/gdkvisuals.c: 4 bit support, increased available_depths
+	  array, which was too low (?)
+
 Fri Jul 10 00:02:04 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcontainer.h: 
