@@ -1,3 +1,8 @@
+1998-02-19  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Added M-p and M-n
+	key equivalents for up and down keys.  Just for us Emacs weenies :-)
+
 Thu Feb 19 12:18:24 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/testgtk.c : Use POINTER_MOTION_HINT when dragging

@@ -104,7 +104,9 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
     return FALSE;
   li = g_list_find (GTK_LIST (combo->list)->children, gtk_combo_find (combo));
 
-  if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
+  if ((event->keyval == GDK_Up)
+      || (event->keyval == GDK_KP_Up)
+      || ((event->state & GDK_MOD1_MASK) && ((event->keyval == 'p') || (event->keyval == 'P'))))
     {
       if (li)
 	li = li->prev;
@@ -119,7 +121,9 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
 	  return TRUE;
 	}
     }
-  else if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
+  else if ((event->keyval == GDK_Down)
+	   || (event->keyval == GDK_KP_Down)
+	   || ((event->state & GDK_MOD1_MASK) && ((event->keyval == 'n') || (event->keyval == 'N'))))
     {
       if (li)
 	li = li->next;
