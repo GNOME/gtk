@@ -204,8 +204,7 @@ libgdk_pixbuf_1_3_la_SOURCES = 	\
 
 libgdk_pixbuf_1_3_la_LDFLAGS = 				        \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
-	@LIBTOOL_EXPORT_OPTIONS@				\
-	$(GLIB_LIBS) 
+	@LIBTOOL_EXPORT_OPTIONS@
 libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
 libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
 

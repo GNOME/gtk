@@ -1,3 +1,8 @@
+Sun May 20 12:53:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (libgdk_pixbuf_1_3_la_LDFLAGS): Remove an
+	excess $(GLIB_LIBS).
+
 Sun May 13 11:59:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am: Make modules depend on libgdk_pixbuf.la.
