@@ -10,6 +10,8 @@
 #include <gtk/gtk.h>
 #include <stdlib.h> /* for exit() */
 
+static void easter_egg_callback (GtkWidget *button, gpointer data);
+
 #define gray50_width 2
 #define gray50_height 2
 static char gray50_bits[] = {
@@ -379,6 +381,10 @@ attach_widgets (GtkTextView *text_view)
       if (i == 0)
         {
           widget = gtk_button_new_with_label ("Click Me");
+
+          g_signal_connect (G_OBJECT (widget), "clicked",
+                            G_CALLBACK (easter_egg_callback),
+                            NULL);
         }
       else if (i == 1)
         {
@@ -503,5 +509,86 @@ do_textview (void)
     }
 
   return window;
+}
+
+static void
+recursive_attach_view (int                 depth,
+                       GtkTextView        *view,
+                       GtkTextChildAnchor *anchor)
+{
+  GtkWidget *child_view;
+  GtkWidget *event_box;
+  GdkColor color;
+  GtkWidget *align;
+  
+  if (depth > 4)
+    return;
+  
+  child_view = gtk_text_view_new_with_buffer (gtk_text_view_get_buffer (view));
+
+  /* Event box is to add a black border around each child view */
+  event_box = gtk_event_box_new ();
+  gdk_color_parse ("black", &color);
+  gtk_widget_modify_bg (event_box, GTK_STATE_NORMAL, &color);
+
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+  gtk_container_set_border_width (GTK_CONTAINER (align), 1);
+  
+  gtk_container_add (GTK_CONTAINER (event_box), align);
+  gtk_container_add (GTK_CONTAINER (align), child_view);
+  
+  gtk_text_view_add_child_at_anchor (view, event_box, anchor);
+
+  recursive_attach_view (depth + 1, GTK_TEXT_VIEW (child_view), anchor);
+}
+
+static void
+easter_egg_callback (GtkWidget *button,
+                     gpointer   data)
+{
+  static GtkWidget *window = NULL;
+  GtkTextBuffer *buffer;
+  GtkWidget     *view;
+  GtkTextIter    iter;
+  GtkTextChildAnchor *anchor;
+  GtkWidget *sw;
+
+  if (window)
+    {
+      gtk_window_present (GTK_WINDOW (window));
+      return;
+    }
+  
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+
+  gtk_text_buffer_insert (buffer, &iter,
+                          "This buffer is shared by a set of nested text views.\n Nested view:\n", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter,
+                          "\nDon't do this in real applications, please.\n", -1);
+
+  view = gtk_text_view_new_with_buffer (buffer);
+  
+  recursive_attach_view (0, GTK_TEXT_VIEW (view), anchor);
+  
+  g_object_unref (G_OBJECT (buffer));
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+
+  gtk_container_add (GTK_CONTAINER (window), sw);
+  gtk_container_add (GTK_CONTAINER (sw), view);
+
+  g_object_add_weak_pointer (G_OBJECT (window),
+                             (gpointer *) &window);
+
+  gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
+  
+  gtk_widget_show_all (window);
 }
 
