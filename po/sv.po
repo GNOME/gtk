@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2003-10-06 02:50+0200\n"
-"PO-Revision-Date: 2003-10-06 02:52+0200\n"
+"POT-Creation-Date: 2003-10-07 01:24+0200\n"
+"PO-Revision-Date: 2003-10-07 01:25+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -267,16 +267,16 @@ msgstr "Inte tillräckligt med minne för att läsa in ICO-fil"
 
 #: gdk-pixbuf/io-ico.c:921
 msgid "Image too large to be saved as ICO"
-msgstr ""
+msgstr "Bilden för stor för att sparas som ICO"
 
 #: gdk-pixbuf/io-ico.c:932
 msgid "Cursor hotspot outside image"
-msgstr ""
+msgstr "Markörpunkt utanför bilden"
 
 #: gdk-pixbuf/io-ico.c:955
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
-msgstr ""
+msgstr "Djupet stöds inte för ICO-fil: %d"
 
 #: gdk-pixbuf/io-ico.c:1184
 msgid "The ICO image format"
@@ -809,6 +809,8 @@ msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
+"Huruvida åtgärden är viktig. Då detta är SANT visar ställföreträdare för "
+"verktygsobjekt för denna åtgärd text i GTK_TOOLBAR_BOTH_HORIZ-läge."
 
 #: gtk/gtkaction.c:228
 msgid "Hide if empty"
@@ -816,7 +818,7 @@ msgstr "Dölj om tom"
 
 #: gtk/gtkaction.c:229
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr ""
+msgstr "Då detta är SANT döljs tomma menyställföreträdare för denna åtgärd."
 
 #: gtk/gtkaction.c:235 gtk/gtkwidget.c:442
 msgid "Sensitive"
@@ -1554,7 +1556,7 @@ msgstr "Höjning"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
-"Offset för texten ovanför baslinjen (nedanför baslinjen om höjning är "
+"Avstånd för texten ovanför baslinjen (nedanför baslinjen om höjning är "
 "negativt)"
 
 #: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:463
@@ -2219,7 +2221,7 @@ msgstr "Antal tecken som ska lämnas plats till i fältet"
 
 #: gtk/gtkentry.c:524
 msgid "Scroll offset"
-msgstr "Rullningsoffset"
+msgstr "Rullningsavstånd"
 
 #: gtk/gtkentry.c:525
 msgid "Number of pixels of the entry scrolled off the screen to the left"
@@ -3047,35 +3049,34 @@ msgid "Vertical Padding"
 msgstr "Vertikal utfyllnad"
 
 #: gtk/gtkmenu.c:352
-#, fuzzy
 msgid "Extra space at the top and bottom of the menu"
-msgstr ""
-"Mängden utrymme att lägga till på vänster och höger sida, i bildpunkter"
+msgstr "Extra utrymme överst och nederst i menyn"
 
 #: gtk/gtkmenu.c:360
-#, fuzzy
 msgid "Vertical Offset"
-msgstr "Vertikal skala"
+msgstr "Vertikalt avstånd"
 
 #: gtk/gtkmenu.c:361
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
+"Positionera menyn med vertikalt avstånd i detta antal bildpunkter när den är "
+"en undermeny"
 
 #: gtk/gtkmenu.c:369
-#, fuzzy
 msgid "Horizontal Offset"
-msgstr "Horisontell skala"
+msgstr "Horisontellt avstånd"
 
 #: gtk/gtkmenu.c:370
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
+"Positionera menyn med horisontellt avstånd i detta antal bildpunkter när den "
+"är en undermeny"
 
 #: gtk/gtkmenu.c:380
-#, fuzzy
 msgid "Left Attach"
 msgstr "Vänsterfäste"
 
@@ -3084,27 +3085,22 @@ msgid "The column number to attach the left side of the child to"
 msgstr "Det kolumnnummer som vänster sida av barnet ska fästas vid"
 
 #: gtk/gtkmenu.c:388
-#, fuzzy
 msgid "Right Attach"
 msgstr "Högerfäste"
 
 #: gtk/gtkmenu.c:389
-#, fuzzy
 msgid "The column number to attach the right side of the child to"
-msgstr "Det kolumnnummer som vänster sida av barnet ska fästas vid"
+msgstr "Det kolumnnummer som höger sida av barnet ska fästas vid"
 
 #: gtk/gtkmenu.c:396
-#, fuzzy
 msgid "Top Attach"
 msgstr "Övre fäste"
 
 #: gtk/gtkmenu.c:397
-#, fuzzy
 msgid "The row number to attach the top of the child to"
-msgstr "Det radnummer som nederkanten på barnet ska fästas vid"
+msgstr "Det radnummer som överkanten på barnet ska fästas vid"
 
 #: gtk/gtkmenu.c:404
-#, fuzzy
 msgid "Bottom Attach"
 msgstr "Nedre fäste"
 
@@ -3573,6 +3569,8 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
+"Värdet som returneras av gtk_radio_action_get_current_value() då denna "
+"åtgärd är den aktuella åtgärden i sin grupp."
 
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
@@ -3996,9 +3994,8 @@ msgid "Has Resize Grip"
 msgstr "Har handtag för storleksändring"
 
 #: gtk/gtkstatusbar.c:168
-#, fuzzy
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr "Huruvida widgeten är fokuswidgeten på toppnivån"
+msgstr "Huruvida statusraden har ett handtag för storleksändring av toppnivån"
 
 #: gtk/gtkstatusbar.c:195
 msgid "Style of bevel around the statusbar text"
@@ -4325,8 +4322,8 @@ msgid "Right attachment"
 msgstr "Högerfäste"
 
 #: gtk/gtktable.c:210
-msgid "the column number to attach the right side of a child widget to"
-msgstr "det kolumnnummer som höger sida av en barnwidget ska fästas vid"
+msgid "The column number to attach the right side of a child widget to"
+msgstr "Det kolumnnummer som höger sida av en barnwidget ska fästas vid"
 
 #: gtk/gtktable.c:216
 msgid "Top attachment"
@@ -4549,7 +4546,7 @@ msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative) "
 "in pixels"
 msgstr ""
-"Offset för texten ovanför baslinjen (nedanför baslinjen om höjning är "
+"Avstånd för texten ovanför baslinjen (nedanför baslinjen om höjning är "
 "negativt) i bildpunkter"
 
 #: gtk/gtktexttag.c:433
@@ -4801,11 +4798,13 @@ msgstr "Huruvida inmatad text skriver över befintligt innehåll"
 
 #: gtk/gtktextview.c:673
 msgid "Accepts tab"
-msgstr ""
+msgstr "Accepterar tabulator"
 
 #: gtk/gtktextview.c:674
 msgid "Whether Tab will result in a tab character being entered"
 msgstr ""
+"Huruvida ett tabulatorsteg kommer att resultera i att ett tabulatortecken "
+"anges"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -4817,13 +4816,14 @@ msgid "--- No Tip ---"
 msgstr "--- Inget tips ---"
 
 #: gtk/gtktoggleaction.c:129
-#, fuzzy
 msgid "Create the same proxies as a radio action"
-msgstr "Rita växlingsknappen som en radioknapp"
+msgstr "Skapa samma ställföreträdare som en radioåtgärd"
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
+"Huruvida ställföreträdarna för denna åtgärd ser ut som ställföreträdare för "
+"radioåtgärder"
 
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
@@ -4862,23 +4862,20 @@ msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Om en pil ska visas om verktygsraden inte passar"
 
 #: gtk/gtktoolbar.c:450
-#, fuzzy
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr "Huruvida barnet ska få extra utrymme när föräldern växer"
+msgstr "Huruvida objektet ska få extra utrymme när verktygsraden växer"
 
 #: gtk/gtktoolbar.c:458
-#, fuzzy
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "Huruvida barnen allihop ska vara av samma storlek"
+msgstr "Huruvida objektet ska vara av samma storlek som andra liknande objekt"
 
 #: gtk/gtktoolbar.c:465
 msgid "Pack End"
-msgstr ""
+msgstr "Packningsslut"
 
 #: gtk/gtktoolbar.c:466
-#, fuzzy
 msgid "Whether the item is positioned at the end of the toolbar"
-msgstr "Huruvida widgeten är fokuswidgeten på toppnivån"
+msgstr "Huruvida objektet är placerat i slutet på verktygsraden"
 
 #: gtk/gtktoolbar.c:473
 msgid "Spacer size"
@@ -4936,46 +4933,44 @@ msgid "Text to show in the item."
 msgstr "Text att visa i objektet."
 
 #: gtk/gtktoolbutton.c:187
-#, fuzzy
 msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
-"Om detta är angivet kommer en understrykning i texten att indikera att nästa "
-"tecken ska användas som en genvägstangent"
+"Om detta är angivet kommer en understrykning i etikettegenskapen att "
+"indikera att nästa tecken ska användas som en genvägstangent i spillmenyn"
 
 #: gtk/gtktoolbutton.c:194
-#, fuzzy
 msgid "Widget to use as the item label"
-msgstr "Bredd på ramen runt fliketiketterna"
+msgstr "Widget att använda som objektetikett"
 
 #: gtk/gtktoolbutton.c:200
 msgid "Stock Id"
 msgstr "Standard-id"
 
 #: gtk/gtktoolbutton.c:201
-#, fuzzy
 msgid "The stock icon displayed on the item"
-msgstr "Strängen som visas på barnets fliketikett"
+msgstr "Standardikonen som visas på objektet"
 
 #: gtk/gtktoolbutton.c:207
 msgid "Icon widget"
 msgstr "Ikonwidget"
 
 #: gtk/gtktoolbutton.c:208
-#, fuzzy
 msgid "Icon widget to display in the item"
-msgstr "Ikonsamling att visa"
+msgstr "Ikonsamling att visa i objektet"
 
 #: gtk/gtktoolitem.c:155
 msgid "Visible when horizontal"
-msgstr ""
+msgstr "Synlig då horisontell"
 
 #: gtk/gtktoolitem.c:156
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr ""
+"Huruvida verktygsradsobjektet är synligt då verktygsraden är orienterad "
+"horisontellt."
 
 #: gtk/gtktoolitem.c:162
 msgid "Visible when vertical"
@@ -4986,12 +4981,16 @@ msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr ""
+"Huruvida verktygsradsobjektet är synligt då verktygsraden är orienterad "
+"vertikalt."
 
 #: gtk/gtktoolitem.c:170
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
+"Huruvida verktygsradsobjektet är viktigt. Då detta är SANT visar "
+"verktygsradsknappar text i GTK_TOOLBAR_BOTH_HORIZ-läge"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
@@ -5219,39 +5218,38 @@ msgstr "Sorteringsriktning som sorteringsindikatorn ska indikera"
 
 #: gtk/gtkuimanager.c:213
 msgid "Add tearoffs to menus"
-msgstr ""
+msgstr "Lägg till löstagbara i menyer"
 
 #: gtk/gtkuimanager.c:214
-#, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "Huruvida menyposten är ikryssad"
+msgstr "Huruvida löstagbara menyposter ska läggas till i menyer"
 
 #: gtk/gtkuimanager.c:221
 msgid "Merged UI definition"
-msgstr ""
+msgstr "Sammanslagen användargränssnittsdefinition"
 
 #: gtk/gtkuimanager.c:222
 msgid "An XML string describing the merged UI"
-msgstr ""
+msgstr "En XML-sträng som beskriver det sammanslagna användargränssnittet"
 
 #: gtk/gtkuimanager.c:865
 #, c-format
 msgid "Unknown attribute '%s' on line %d char %d"
-msgstr ""
+msgstr "Okänt attribut \"%s\" på rad %d tecken %d"
 
 #: gtk/gtkuimanager.c:1074
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr ""
+msgstr "Oväntad starttagg \"%s\" på rad %d tecken %d"
 
 #: gtk/gtkuimanager.c:1158
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr ""
+msgstr "Oväntade teckendata på rad %d tecken %d"
 
 #: gtk/gtkuimanager.c:1916
 msgid "Empty"
-msgstr ""
+msgstr "Tom"
 
 #: gtk/gtkviewport.c:135
 msgid ""
@@ -5415,11 +5413,11 @@ msgstr "Masken som avgör vilken typ av utökningshändelser som denna widget f�
 
 #: gtk/gtkwidget.c:528
 msgid "No show all"
-msgstr ""
+msgstr "Visa inte alla"
 
 #: gtk/gtkwidget.c:529
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
+msgstr "Huruvida gtk_widget_show_all() inte ska påverka denna widget"
 
 #: gtk/gtkwidget.c:1338
 msgid "Interior Focus"
@@ -5630,23 +5628,20 @@ msgid "TRUE if the window should not be in the pager."
 msgstr "SANT om fönstret inte ska vara i skrivbordsväljaren."
 
 #: gtk/gtkwindow.c:618
-#, fuzzy
 msgid "Decorated"
-msgstr "Kataloger"
+msgstr "Dekorerat"
 
 #: gtk/gtkwindow.c:619
-#, fuzzy
 msgid "Whether the window should be decorated by the window manager"
-msgstr "SANT om fönstret inte ska vara i skrivbordsväljaren"
+msgstr "Huruvida fönstret ska vara dekorerat i fönsterhanteraren"
 
 #: gtk/gtkwindow.c:634
 msgid "Gravity"
-msgstr ""
+msgstr "Gravitet"
 
 #: gtk/gtkwindow.c:635
-#, fuzzy
 msgid "The window gravity of the window"
-msgstr "Typen av fönster"
+msgstr "Fönstrets fönstergravitet"
 
 #: modules/input/gtkimcontextxim.c:325
 msgid "IM Preedit style"
@@ -5672,7 +5667,7 @@ msgstr "Amharisk (EZ+)"
 #. ID
 #: modules/input/imcedilla.c:90
 msgid "Cedilla"
-msgstr ""
+msgstr "Cedilj"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
@@ -5713,6 +5708,16 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inmatningsmetod"
+
+#~ msgid "the column number to attach the right side of a child widget to"
+#~ msgstr "det kolumnnummer som höger sida av en barnwidget ska fästas vid"
+
+#~ msgid ""
+#~ "Whether the toolbar item is considered important. When TRUE, toolbar "
+#~ "buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode."
+#~ msgstr ""
+#~ "Huruvida verktygsradsobjektet är viktigt. Då detta är SANT visar "
+#~ "verktygsradsknappar text i GTK_TOOLBAR_BOTH_HORIZ-läge."
 
 #~ msgid ""
 #~ " Whether the event box is visible, as opposed to invisible and only used "
