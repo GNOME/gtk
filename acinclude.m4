@@ -569,7 +569,7 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 
     dnl If we use NLS figure out what method
     if test "$USE_NLS" = "yes"; then
-      AC_DEFINE(ENABLE_NLS)
+#      AC_DEFINE(ENABLE_NLS)
 #      AC_MSG_CHECKING([whether included gettext is requested])
 #      AC_ARG_WITH(included-gettext,
 #        [  --with-included-gettext use the GNU gettext library included here],

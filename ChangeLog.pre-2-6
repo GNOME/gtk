@@ -1,3 +1,10 @@
+Mon Jan 25 15:47:46 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* acinclude.m4 (ac_result): Don't define ENABLE_NLS
+	 unless we have a working NLS. (This should keep
+	 libintl.h from being included when it doesn't
+	 exist).
+
 Mon Jan 25 11:05:10 1999  George Lebl  <jirka@5z.com>
 
 	* gtk/gtkbutton.c: set RECEIVES_DEFAULT on init, and a
