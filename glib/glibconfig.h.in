@@ -35,9 +35,6 @@
 #undef NO_SYS_ERRLIST
 #undef NO_SYS_SIGLIST
 
-/* #undef PACKAGE */
-/* #undef VERSION */
-
 /* The number of bytes in a char.  */
 #undef SIZEOF_CHAR
 

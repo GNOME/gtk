@@ -4,16 +4,6 @@ Sat May  9 20:11:20 1998  Owen Taylor  <otaylor@gtk.org>
 	is Digital Unix and we need -std1 to get the
 	right prototypes.
 
-Sat May  9 20:08:12 1998  Owen Taylor  <otaylor@gtk.org>
-
-	* glib/gmem.c: Experimentally restore GMemChunk
-	to its primeval state - where mem areas are
-	freed incrementally instead of searching the tree
-	every time a mem area is completely empty. Also,
-	always keep one mem chunk around. (Reduced calls
-	to malloc() a lot, but doesn't really improve 
-	performance significiantly)
-
 Fri May  8 21:31:50 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_draw): Free the
@@ -593,8 +583,6 @@ Wed Apr 15 20:42:46 1998  Owen Taylor  <otaylor@gtk.org>
 	was causing problems for SGI's make, when used with
 	the 'make dist' form of GTK+. (Dependency caused dependencies
         to be redone when BUILT_SOURCES changed)
-
-==========
 
 Thu Apr 30 11:18:00 1998  Owen Taylor  <otaylor@gtk.org>
 

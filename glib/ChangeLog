@@ -1,3 +1,13 @@
+Sat May  9 20:08:12 1998  Owen Taylor  <otaylor@gtk.org>
+
+        * glib/gmem.c: Experimentally restore GMemChunk
+        to its primeval state - where mem areas are
+        freed incrementally instead of searching the tree
+        every time a mem area is completely empty. Also,
+        always keep one mem chunk around. (Reduced calls
+        to malloc() a lot, but doesn't really improve
+        performance significiantly)
+
 Thu May  7 08:17:28 1998  Tim Janik  <timj@gtk.org>
 
 	* glib.h (G_GNUC_PRINTF):
