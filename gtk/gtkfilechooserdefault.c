@@ -376,6 +376,17 @@ gtk_file_chooser_default_finalize (GObject *object)
   impl->bookmarks_changed_id = 0;
   g_object_unref (impl->file_system);
 
+  /* FIXME: Free impl->filters -- what's the memory management there? */
+
+  if (impl->current_volume_path)
+    gtk_file_path_free (impl->current_volume_path);
+
+  if (impl->current_folder)
+    gtk_file_path_free (impl->current_folder);
+
+  if (impl->preview_path)
+    gtk_file_path_free (impl->preview_path);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 

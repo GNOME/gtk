@@ -256,6 +256,12 @@ gtk_file_system_model_finalize (GObject *object)
   if (model->root_folder)
     g_object_unref (model->root_folder);
 
+  if (model->root_path)
+    gtk_file_path_free (model->root_path);
+
+  if (model->file_system)
+    g_object_unref (model->file_system);
+
   children = model->roots;
   while (children)
     {

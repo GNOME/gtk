@@ -1,3 +1,18 @@
+2004-01-21  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_finalize):
+	Free the path fields.
+
+	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_finalize): Free
+	the root_path, reported by <scott@asofyet.org>
+	(gtk_file_system_model_finalize): Unref the file system.
+
+	* gtk/gtkfilefilter.c (filter_rule_free): default:
+	g_assert_not_reached().
+	(gtk_file_filter_finalize): Free the filter->name, reported by
+	<scott@asofyet.org>
+	(gtk_file_filter_finalize): Free the rules list.
+
 Wed Jan 21 18:10:40 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkcolorbutton.c (gtk_color_button_set_color):redraw the

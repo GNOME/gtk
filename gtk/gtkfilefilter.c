@@ -34,7 +34,7 @@ typedef struct _FilterRule FilterRule;
 typedef enum {
   FILTER_RULE_PATTERN,
   FILTER_RULE_MIME_TYPE,
-  FILTER_RULE_CUSTOM,
+  FILTER_RULE_CUSTOM
 } FilterRuleType;
 
 struct _GtkFileFilterClass
@@ -125,6 +125,8 @@ filter_rule_free (FilterRule *rule)
       if (rule->u.custom.notify)
 	rule->u.custom.notify (rule->u.custom.data);
       break;
+    default:
+      g_assert_not_reached ();
     }
 
   g_free (rule);
@@ -136,6 +138,10 @@ gtk_file_filter_finalize (GObject  *object)
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
 
   g_slist_foreach (filter->rules, (GFunc)filter_rule_free, NULL);
+  g_slist_free (filter->rules);
+
+  if (filter->name)
+    g_free (filter->name);
 
   parent_class->finalize (object);
 }
