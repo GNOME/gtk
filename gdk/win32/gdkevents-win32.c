@@ -2001,7 +2001,7 @@ gdk_event_translate (GdkDisplay *display,
       event->scroll.x_root = (gint16) LOWORD (msg->lParam);
       event->scroll.y_root = (gint16) HIWORD (msg->lParam);
       event->scroll.state = 0;	/* No state information with MSH_MOUSEWHEEL */
-      event->scroll.device = _gdk_core_pointer;
+      event->scroll.device = display->core_pointer;
       return_val = !GDK_WINDOW_DESTROYED (window);
 
       goto done;
@@ -2520,7 +2520,7 @@ gdk_event_translate (GdkDisplay *display,
       event->button.axes = NULL;
       event->button.state = build_pointer_event_state (msg);
       event->button.button = button;
-      event->button.device = _gdk_core_pointer;
+      event->button.device = display->core_pointer;
 
       _gdk_event_button_generate (display, event);
       
@@ -2577,7 +2577,7 @@ gdk_event_translate (GdkDisplay *display,
 	  event->button.axes = NULL;
 	  event->button.state = build_pointer_event_state (msg);
 	  event->button.button = button;
-	  event->button.device = _gdk_core_pointer;
+	  event->button.device = display->core_pointer;
 	  
 	  return_val = !GDK_WINDOW_DESTROYED (window);
 	}
@@ -2642,7 +2642,7 @@ gdk_event_translate (GdkDisplay *display,
       event->motion.axes = NULL;
       event->motion.state = build_pointer_event_state (msg);
       event->motion.is_hint = FALSE;
-      event->motion.device = _gdk_core_pointer;
+      event->motion.device = display->core_pointer;
 
       return_val = !GDK_WINDOW_DESTROYED (window);
       break;
@@ -2736,7 +2736,7 @@ gdk_event_translate (GdkDisplay *display,
       event->scroll.x_root = (gint16) LOWORD (msg->lParam);
       event->scroll.y_root = (gint16) HIWORD (msg->lParam);
       event->scroll.state = build_pointer_event_state (msg);
-      event->scroll.device = _gdk_core_pointer;
+      event->scroll.device = display->core_pointer;
       return_val = !GDK_WINDOW_DESTROYED (window);
       
       break;

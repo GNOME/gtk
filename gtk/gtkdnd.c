@@ -3059,7 +3059,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
   send_event.button.axes = NULL;
   send_event.button.state = 0;
   send_event.button.button = info->button;
-  send_event.button.device = gdk_device_get_core_pointer ();
+  send_event.button.device = gdk_display_get_core_pointer (display);
   send_event.button.x_root = 0;
   send_event.button.y_root = 0;
 

@@ -1019,12 +1019,6 @@ gdk_event_get_type (void)
   return our_type;
 }
 
-GdkDevice *
-gdk_device_get_core_pointer (void)
-{
-  return _gdk_core_pointer;
-}
-
 /**
  * gdk_setting_get:
  * @name: the name of the setting.

@@ -224,11 +224,9 @@ Specifies how an axis of a device is used.
 
 <!-- ##### FUNCTION gdk_device_get_core_pointer ##### -->
 <para>
-Returns the device for the core pointer. The device is statically
-allocated and should not be freed.
 </para>
 
-@Returns: a #GdkDevice.
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_device_get_state ##### -->

@@ -794,7 +794,7 @@ gdk_event_translate (GdkDisplay *display,
 	  event->scroll.x_root = (gfloat)xevent->xbutton.x_root;
 	  event->scroll.y_root = (gfloat)xevent->xbutton.y_root;
 	  event->scroll.state = (GdkModifierType) xevent->xbutton.state;
-	  event->scroll.device = _gdk_core_pointer;
+	  event->scroll.device = display->core_pointer;
           break;
           
         default:
@@ -808,7 +808,7 @@ gdk_event_translate (GdkDisplay *display,
 	  event->button.axes = NULL;
 	  event->button.state = (GdkModifierType) xevent->xbutton.state;
 	  event->button.button = xevent->xbutton.button;
-	  event->button.device = _gdk_core_pointer;
+	  event->button.device = display->core_pointer;
 	  
 	  _gdk_event_button_generate (display, event);
           break;
@@ -849,7 +849,7 @@ gdk_event_translate (GdkDisplay *display,
       event->button.axes = NULL;
       event->button.state = (GdkModifierType) xevent->xbutton.state;
       event->button.button = xevent->xbutton.button;
-      event->button.device = _gdk_core_pointer;
+      event->button.device = display->core_pointer;
       
       break;
       
@@ -878,7 +878,7 @@ gdk_event_translate (GdkDisplay *display,
       event->motion.axes = NULL;
       event->motion.state = (GdkModifierType) xevent->xmotion.state;
       event->motion.is_hint = xevent->xmotion.is_hint;
-      event->motion.device = _gdk_core_pointer;
+      event->motion.device = display->core_pointer;
       
       break;
       

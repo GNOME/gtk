@@ -6795,6 +6795,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GtkAllocation allocation;
   gint x, y, width, height;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
+  GdkDisplay *display = gtk_screen_get_display (screen);
 
   g_return_if_fail (tree_view->priv->column_drag_info == NULL);
 
@@ -6821,8 +6822,8 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
     }
 
-  gdk_display_pointer_ungrab (gdk_screen_get_display (screen), GDK_CURRENT_TIME);
-  gdk_display_keyboard_ungrab (gdk_screen_get_display (screen), GDK_CURRENT_TIME);
+  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
+  gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
 
   gtk_grab_remove (column->button);
 
@@ -6844,7 +6845,7 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   send_event.button.axes = NULL;
   send_event.button.state = 0;
   send_event.button.button = 1;
-  send_event.button.device = gdk_device_get_core_pointer ();
+  send_event.button.device = gdk_display_get_core_pointer (display);
   send_event.button.x_root = 0;
   send_event.button.y_root = 0;
 

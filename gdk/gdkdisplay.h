@@ -55,6 +55,8 @@ struct _GdkDisplay
   GdkWindow *button_window[2];  /* The last 2 windows to receive button presses. */
   guint button_number[2];       /* The last 2 buttons to be pressed. */
 
+  GdkDevice *core_pointer;	/* Core pointer device */
+
   guint double_click_time;	               /* Maximum time between clicks in msecs */
 };
 
@@ -106,6 +108,8 @@ void gdk_display_set_sm_client_id      (GdkDisplay  *display,
 
 void        gdk_set_default_display (GdkDisplay *display);
 GdkDisplay *gdk_get_default_display (void);
+
+GdkDevice  *gdk_display_get_core_pointer (GdkDisplay *display);
 
 G_END_DECLS
 

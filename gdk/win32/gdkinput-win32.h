@@ -121,7 +121,7 @@ struct _GdkInputWindow
 
 /* Global data */
 
-#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == _gdk_core_pointer)
+#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == gdk_get_default_display ()->core_pointer)
 
 extern GList *_gdk_input_devices;
 extern GList *_gdk_input_windows;

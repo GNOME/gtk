@@ -323,3 +323,31 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   gdk_screen_broadcast_client_message (gdk_get_default_screen (), event);
 }
 
+/**
+ * gdk_device_get_core_pointer:
+ * 
+ * Returns the core pointer device for the default display.
+ * 
+ * Return value: the core pointer device; this is owned by the
+ *   display and should not be freed.
+ **/
+GdkDevice *
+gdk_device_get_core_pointer (void)
+{
+  return gdk_display_get_core_pointer (gdk_get_default_display ());
+}
+
+/**
+ * gdk_display_get_core_pointer:
+ * @display: a #GdkDisplay
+ * 
+ * Returns the core pointer device for the given display
+ * 
+ * Return value: the core pointer device; this is owned by the
+ *   display and should not be freed.
+ **/
+GdkDevice *
+gdk_display_get_core_pointer (GdkDisplay *display)
+{
+  return display->core_pointer;
+}

@@ -126,7 +126,7 @@ struct _GdkInputWindow
 
 /* Global data */
 
-#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == _gdk_core_pointer)
+#define GDK_IS_CORE(d) (((GdkDevice *)(d)) == ((GdkDevicePrivate *)(d))->display->core_pointer)
 
 /* Function declarations */
 
@@ -134,7 +134,7 @@ GdkInputWindow *gdk_input_window_find        (GdkWindow *window);
 void            gdk_input_window_destroy     (GdkWindow *window);
 GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,
 					      gint       n_events);
-void            _gdk_init_input_core         (void);
+void            _gdk_init_input_core         (GdkDisplay *display);
 
 /* The following functions are provided by each implementation
  * (xfree, gxi, and none)

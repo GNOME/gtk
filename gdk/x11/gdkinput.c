@@ -41,21 +41,19 @@ static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_Y, 0, 0 }
 };
 
-GdkDevice *_gdk_core_pointer = NULL;
- 
 void
-_gdk_init_input_core (void)
+_gdk_init_input_core (GdkDisplay *display)
 {
-  _gdk_core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
+  display->core_pointer = g_object_new (GDK_TYPE_DEVICE, NULL);
   
-  _gdk_core_pointer->name = "Core Pointer";
-  _gdk_core_pointer->source = GDK_SOURCE_MOUSE;
-  _gdk_core_pointer->mode = GDK_MODE_SCREEN;
-  _gdk_core_pointer->has_cursor = TRUE;
-  _gdk_core_pointer->num_axes = 2;
-  _gdk_core_pointer->axes = gdk_input_core_axes;
-  _gdk_core_pointer->num_keys = 0;
-  _gdk_core_pointer->keys = NULL;
+  display->core_pointer->name = "Core Pointer";
+  display->core_pointer->source = GDK_SOURCE_MOUSE;
+  display->core_pointer->mode = GDK_MODE_SCREEN;
+  display->core_pointer->has_cursor = TRUE;
+  display->core_pointer->num_axes = 2;
+  display->core_pointer->axes = gdk_input_core_axes;
+  display->core_pointer->num_keys = 0;
+  display->core_pointer->keys = NULL;
 }
 
 GType

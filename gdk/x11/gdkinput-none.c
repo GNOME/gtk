@@ -32,9 +32,9 @@ _gdk_input_init (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   
-  _gdk_init_input_core ();
+  _gdk_init_input_core (display);
   
-  display_x11->input_devices = g_list_append (NULL, _gdk_core_pointer);
+  display_x11->input_devices = g_list_append (NULL, display->core_pointer);
   display_x11->input_ignore_core = FALSE;
 }
 

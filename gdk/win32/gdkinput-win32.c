@@ -1208,6 +1208,6 @@ _gdk_input_init (void)
   gdk_input_wintab_init ();
 #endif /* HAVE_WINTAB */
 
-  _gdk_input_devices = g_list_append (_gdk_input_devices, _gdk_core_pointer);
+  _gdk_input_devices = g_list_append (_gdk_input_devices, display->core_pointer);
 }
 

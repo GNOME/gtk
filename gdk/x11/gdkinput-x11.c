@@ -412,7 +412,7 @@ gdk_input_common_init (GdkDisplay *display,
       XFreeDeviceList(devices);
     }
 
-  display_x11->input_devices = g_list_append (display_x11->input_devices, _gdk_core_pointer);
+  display_x11->input_devices = g_list_append (display_x11->input_devices, display->core_pointer);
 
   return TRUE;
 }

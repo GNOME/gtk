@@ -147,8 +147,6 @@ extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
 extern GDestroyNotify _gdk_event_notify;
 
-extern GdkDevice *_gdk_core_pointer;
-
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 

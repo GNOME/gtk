@@ -138,7 +138,9 @@ void gdk_input_set_extension_events (GdkWindow        *window,
 				     gint              mask,
 				     GdkExtensionMode  mode);
 
+#ifndef GDK_MULTIHEAD_SAFE
 GdkDevice *gdk_device_get_core_pointer (void);
+#endif
  
 #ifdef __cplusplus
 }
