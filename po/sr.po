@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2003-11-20 23:22+0100\n"
-"PO-Revision-Date: 2003-11-20 23:26+0100\n"
+"PO-Revision-Date: 2003-11-20 23:30+0100\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -2781,7 +2781,7 @@ msgstr "грешка при образовању директоријума „%
 
 #: gtk/gtkfilesystemunix.c:566
 msgid "This file system does not support icons"
-msgstr "Овај систем датотека не подржава ikone"
+msgstr "Овај систем датотека не подржава иконе"
 
 #: gtk/gtkfilesystemunix.c:579 gtk/gtkfilesystemunix.c:592
 msgid "This file system does not support bookmarks"
