@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-03-08 14:45-0500\n"
-"PO-Revision-Date: 2002-03-06 07:45+0100\n"
+"POT-Creation-Date: 2002-03-14 22:32+0100\n"
+"PO-Revision-Date: 2002-03-14 22:33+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -125,7 +125,7 @@ msgstr "Ikke nok minne til å laste bitkart-bilde"
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bilde har ustøttet headerstørrelse"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323
+#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-bilde har ugyldige data i header"
 
@@ -172,7 +172,7 @@ msgstr "Ikke nok minne til å laste ICO-fil"
 msgid "Failure reading GIF: %s"
 msgstr "Feil under lesing av GIF: %s"
 
-#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1371 gdk-pixbuf/io-gif.c:1530
+#: gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1382 gdk-pixbuf/io-gif.c:1541
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr "GIF-fil mangler data (kanskje den har blitt avkuttet på en måte?)"
 
@@ -193,8 +193,8 @@ msgstr "Ugyldig kode funnet"
 msgid "Circular table entry in GIF file"
 msgstr "Sirkulær tabelloppføring i GIF-fil"
 
-#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1359 gdk-pixbuf/io-gif.c:1404
-#: gdk-pixbuf/io-gif.c:1518
+#: gdk-pixbuf/io-gif.c:762 gdk-pixbuf/io-gif.c:1370 gdk-pixbuf/io-gif.c:1415
+#: gdk-pixbuf/io-gif.c:1529
 msgid "Not enough memory to load GIF file"
 msgstr "Ikke nok minne til å laste GIF-bilde"
 
@@ -211,17 +211,21 @@ msgstr "Filen ser ikke ut til å være en GIF-fil"
 msgid "Version %s of the GIF file format is not supported"
 msgstr "Versjon %s av GIF filformatet er ikke støttet"
 
-#: gdk-pixbuf/io-gif.c:1146
-msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr "GIF-bildet inneholdt et delbilde some var utenfor bildegrensene."
+#: gdk-pixbuf/io-gif.c:1144
+msgid "GIF image contained a frame with height or width 0."
+msgstr "GIF-bildet inneholdt et delbilde med høyde eller bredde 0."
 
-#: gdk-pixbuf/io-gif.c:1162
+#: gdk-pixbuf/io-gif.c:1157
+msgid "GIF image contained a frame appearing outside the image bounds."
+msgstr "GIF-bildet inneholdt et delbilde som var utenfor bildegrensene."
+
+#: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
 "Første delbilde av GIF-bildet hadde «gå til forrige» som sin "
 "forkastingsmodus."
 
-#: gdk-pixbuf/io-gif.c:1197
+#: gdk-pixbuf/io-gif.c:1208
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
@@ -229,7 +233,7 @@ msgstr ""
 "GIF-bildet har ikke globalt fargekart, og et delbilde i det har ikke lokalt "
 "fargekart."
 
-#: gdk-pixbuf/io-gif.c:1426
+#: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bildet er avkuttet eller ukomplett."
 
@@ -2883,11 +2887,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Vis en sekundær knapp med framoverpil på motsatt side av rullefeltet"
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:519
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:522
 msgid "Horizontal Adjustment"
 msgstr "Horisontal justering"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:527
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:530
 msgid "Vertical Adjustment"
 msgstr "Vertikal justering"
 
@@ -3812,115 +3816,115 @@ msgstr "TreeModelSort modell"
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modell som TreeModelSort skal sortere"
 
-#: gtk/gtktreeview.c:511
+#: gtk/gtktreeview.c:514
 msgid "TreeView Model"
 msgstr "TreeView modell"
 
-#: gtk/gtktreeview.c:512
+#: gtk/gtktreeview.c:515
 msgid "The model for the tree view"
 msgstr "Modell for treevisning"
 
-#: gtk/gtktreeview.c:520
+#: gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment for the widget"
 msgstr "Horisontal justering for widget"
 
-#: gtk/gtktreeview.c:528
+#: gtk/gtktreeview.c:531
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikal justering for widget"
 
-#: gtk/gtktreeview.c:535 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:538 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Synlig"
 
-#: gtk/gtktreeview.c:536
+#: gtk/gtktreeview.c:539
 msgid "Show the column header buttons"
 msgstr "Vis knapper for kolonnetopptekst"
 
-#: gtk/gtktreeview.c:543
+#: gtk/gtktreeview.c:546
 msgid "Headers Clickable"
 msgstr "Topptekster kan klikkes"
 
-#: gtk/gtktreeview.c:544
+#: gtk/gtktreeview.c:547
 msgid "Column headers respond to click events"
 msgstr "Kolonnetitler svarer på klikk"
 
-#: gtk/gtktreeview.c:551
+#: gtk/gtktreeview.c:554
 msgid "Expander Column"
 msgstr "Utviderkolonne"
 
-#: gtk/gtktreeview.c:552
+#: gtk/gtktreeview.c:555
 msgid "Set the column for the expander column"
 msgstr "Sett kolonne for utviderkolonne"
 
-#: gtk/gtktreeview.c:559 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:562 gtk/gtktreeviewcolumn.c:273
 msgid "Reorderable"
 msgstr "Kan omorganiseres"
 
-#: gtk/gtktreeview.c:560
+#: gtk/gtktreeview.c:563
 msgid "View is reorderable"
 msgstr "Visningen kan omorganiseres"
 
-#: gtk/gtktreeview.c:567
+#: gtk/gtktreeview.c:570
 msgid "Rules Hint"
 msgstr "Regelhint"
 
-#: gtk/gtktreeview.c:568
+#: gtk/gtktreeview.c:571
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr "Sett et hint til temamotoren for å tegne rader i alternerende farger"
 
-#: gtk/gtktreeview.c:575
+#: gtk/gtktreeview.c:578
 msgid "Enable Search"
 msgstr "Aktiver søk"
 
-#: gtk/gtktreeview.c:576
+#: gtk/gtktreeview.c:579
 msgid "View allows user to search through columns interactively"
 msgstr "Visning lar bruker søke gjennom kolonner interaktivt"
 
-#: gtk/gtktreeview.c:583
+#: gtk/gtktreeview.c:586
 msgid "Search Column"
 msgstr "Søkekolonne"
 
-#: gtk/gtktreeview.c:584
+#: gtk/gtktreeview.c:587
 msgid "Model column to search through when searching through code"
 msgstr "Modellkolonne som skal søkes gjennom ved søk i koden"
 
-#: gtk/gtktreeview.c:597
+#: gtk/gtktreeview.c:600
 msgid "Expander Size"
 msgstr "Størrelse på utvider"
 
-#: gtk/gtktreeview.c:598
+#: gtk/gtktreeview.c:601
 msgid "Size of the expander arrow."
 msgstr "Størrelse på utviderpil."
 
-#: gtk/gtktreeview.c:606
+#: gtk/gtktreeview.c:609
 msgid "Vertical Separator Width"
 msgstr "Bredde på vertikal separator"
 
-#: gtk/gtktreeview.c:607
+#: gtk/gtktreeview.c:610
 msgid "Vertical space between cells.  Must be an even number."
 msgstr "Vertikalt mellomrom mellom celler. Må være et helt tall."
 
-#: gtk/gtktreeview.c:615
+#: gtk/gtktreeview.c:618
 msgid "Horizontal Separator Width"
 msgstr "Bredde på horisontal separator"
 
-#: gtk/gtktreeview.c:616
+#: gtk/gtktreeview.c:619
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Horisontalt mellomrom mellom celler. Må være et heltall."
 
-#: gtk/gtktreeview.c:624
+#: gtk/gtktreeview.c:627
 msgid "Allow Rules"
 msgstr "Tillat linjaler"
 
-#: gtk/gtktreeview.c:625
+#: gtk/gtktreeview.c:628
 msgid "Allow drawing of alternating color rows."
 msgstr "Tillat tegning av alternerende fargerader."
 
-#: gtk/gtktreeview.c:631
+#: gtk/gtktreeview.c:634
 msgid "Indent Expanders"
 msgstr "Indenter utvidere"
 
-#: gtk/gtktreeview.c:632
+#: gtk/gtktreeview.c:635
 msgid "Make the expanders indented."
 msgstr "Gjør utvidere indentert."
 
