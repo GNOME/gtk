@@ -53,6 +53,96 @@ int event_mask_table[19] =
 };
 
 
+/* internal function created for and used by gdk_window_xid_at_coords */
+Window
+gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y)
+{
+   GdkWindow *window;
+   GdkWindowPrivate *private;
+   Display *disp;
+   Window *list=NULL;
+   Window child=0,parent_win=0,root_win=0;
+   unsigned int num,i,ww,wh,wb,wd;
+   int wx,wy;
+   
+   window=(GdkWindow*)&gdk_root_parent;
+   private=(GdkWindowPrivate*)window;
+   disp=private->xdisplay;
+   if (!XGetGeometry(disp,base,&root_win,&wx,&wy,&ww,&wh,&wb,&wd))
+     return 0;
+   wx+=bx;wy+=by;
+   if (!((x>=wx)&&(y>=wy)&&(x<(wx+ww))&&(y<(wy+wh))))
+     return 0;
+   if (!XQueryTree(disp,base,&root_win,&parent_win,&list,&num))
+     return base;
+   if (list)
+     {
+	for (i=num-1;i>=0;i--)
+	  {
+	     if ((child=gdk_window_xid_at(list[i],wx,wy,x,y))!=0)
+	       {
+		  XFree(list);
+		  return child;
+	       }
+	  }
+     }
+   return 0;
+}
+
+/* 
+ * The following fucntion by The Rasterman <raster@redhat.com>
+ * This function returns the X Window ID in which the x y location is in 
+ * (x and y being relative to the root window), excluding any windows listed
+ * in the GList excludes (this is a list of X Window ID's - gpointer being
+ * the Window ID).
+ * 
+ * This is primarily designed for internal gdk use - for DND for example
+ * when using a shaped icon window as the drag object - you exclude the
+ * X Window ID of the "icon" (perhaps more if excludes may be needed) and
+ * You can get back an X Window ID as to what X Window ID is infact under
+ * those X,Y co-ordinates.
+ */
+Window
+gdk_window_xid_at_coords(gint x, gint y, GList *excludes)
+{
+   GdkWindow *window;
+   GdkWindowPrivate *private;
+   Display *disp;
+   Window *list=NULL;
+   Window root,child=0,parent_win=0,root_win=0;
+   unsigned int num,i;
+   
+   window=(GdkWindow*)&gdk_root_parent;
+   private=(GdkWindowPrivate*)window;
+   disp=private->xdisplay;
+   root=private->xwindow;
+   if (!XQueryTree(disp,root,&root_win,&parent_win,&list,&num))
+     return root;
+   if (list)
+     {
+	for (i=num-1;i>=0;i--)
+	  {
+	     if ((child=gdk_window_xid_at(list[i],0,0,x,y))!=0)
+	       {
+		  if (excludes)
+		    {
+		       if (!g_list_find(excludes,(gpointer)child))
+			 {
+			    XFree(list);
+			    return child;
+			 }
+		    }
+		  else
+		    {
+		       XFree(list);
+		       return child;
+		    }
+	       }
+	  }
+     }
+   return root;
+}
+
 void
 gdk_window_init ()
 {
@@ -675,16 +765,21 @@ gdk_window_copy_area (GdkWindow    *window,
   GdkWindowPrivate *dest_private;
   GdkGCPrivate *gc_private;
 
-  g_return_if_fail (window != NULL);
+   printf("1\n");
+   g_return_if_fail (window != NULL);
+   printf("2\n");
   g_return_if_fail (gc != NULL);
+   printf("3\n");
   
   if (source_window == NULL)
     source_window = window;
+   printf("4\n");
 
   src_private = (GdkWindowPrivate*) source_window;
   dest_private = (GdkWindowPrivate*) window;
   gc_private = (GdkGCPrivate*) gc;
   
+   printf("5\n");
   if (!src_private->destroyed && !dest_private->destroyed)
   {
     XCopyArea (dest_private->xdisplay, src_private->xwindow, dest_private->xwindow,
@@ -692,7 +787,9 @@ gdk_window_copy_area (GdkWindow    *window,
 	       source_x, source_y,
 	       width, height,
 	       x, y);
+   printf("6\n");
   }
+   printf("7\n");
 }
 
 void
