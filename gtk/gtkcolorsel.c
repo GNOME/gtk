@@ -854,7 +854,6 @@ do_popup (GtkColorSelection *colorsel,
 {
   GtkWidget *menu;
   GtkWidget *mi;
-  GtkWidget *label;
   
   g_object_set_data (G_OBJECT (drawing_area),
                      "gtk-color-sel",
@@ -862,9 +861,7 @@ do_popup (GtkColorSelection *colorsel,
   
   menu = gtk_menu_new ();
 
-  label = gtk_label_new_with_mnemonic (_("_Save color here"));
-  mi = gtk_menu_item_new ();
-  gtk_container_add (GTK_CONTAINER (mi), label);
+  mi = gtk_menu_item_new_with_mnemonic (_("_Save color here"));
 
   gtk_signal_connect (GTK_OBJECT (mi), "activate",
                       GTK_SIGNAL_FUNC (save_color_selected),

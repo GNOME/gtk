@@ -423,10 +423,18 @@ gtk_label_new (const gchar *str)
  *
  * Creates a new #GtkLabel, containing the text in @str.
  *
- * If characters in @str are preceded by an underscore, they are underlined
- * indicating that they represent a keyboard accelerator called a mnemonic.
- * The mnemonic key can be used to activate another widget, chosen automatically,
- * or explicitly using gtk_label_set_mnemonic_widget().
+ * If characters in @str are preceded by an underscore, they are
+ * underlined indicating that they represent a keyboard accelerator
+ * called a mnemonic.  The mnemonic key can be used to activate
+ * another widget, chosen automatically, or explicitly using
+ * gtk_label_set_mnemonic_widget().
+ * 
+ * If gtk_label_set_mnemonic_widget()
+ * is not called, then the first activatable ancestor of the #GtkLabel
+ * will be chosen as the mnemonic widget. For instance, if the
+ * label is inside a button or menu item, the button or menu item will
+ * automatically become the mnemonic widget and be activated by
+ * the mnemonic.
  **/
 GtkWidget*
 gtk_label_new_with_mnemonic (const gchar *str)

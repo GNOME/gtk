@@ -165,6 +165,35 @@ gtk_check_menu_item_new_with_label (const gchar *label)
   return check_menu_item;
 }
 
+
+/**
+ * gtk_check_menu_item_new_with_mnemonic:
+ * @label: The text of the button, with an underscore in front of the
+ *         mnemonic character
+ * @returns: a new #GtkCheckMenuItem
+ *
+ * Creates a new #GtkCheckMenuItem containing a label. The label
+ * will be created using gtk_label_new_with_mnemonic(), so underscores
+ * in @label indicate the mnemonic for the menu item.
+ **/
+GtkWidget*
+gtk_check_menu_item_new_with_mnemonic (const gchar *label)
+{
+  GtkWidget *check_menu_item;
+  GtkWidget *accel_label;
+
+  check_menu_item = gtk_check_menu_item_new ();
+  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (check_menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), check_menu_item);
+  gtk_widget_show (accel_label);
+
+  return check_menu_item;
+}
+
 void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
 				gboolean          is_active)

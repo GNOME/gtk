@@ -138,6 +138,37 @@ gtk_radio_menu_item_new_with_label (GSList *group,
   return radio_menu_item;
 }
 
+
+/**
+ * gtk_radio_menu_item_new_with_mnemonic:
+ * @group: group the radio menu item is inside
+ * @label: the text of the button, with an underscore in front of the
+ *         mnemonic character
+ * @returns: a new #GtkRadioMenuItem
+ *
+ * Creates a new #GtkRadioMenuItem containing a label. The label
+ * will be created using gtk_label_new_with_mnemonic(), so underscores
+ * in @label indicate the mnemonic for the menu item.
+ **/
+GtkWidget*
+gtk_radio_menu_item_new_with_mnemonic (GSList *group,
+				       const gchar *label)
+{
+  GtkWidget *radio_menu_item;
+  GtkWidget *accel_label;
+
+  radio_menu_item = gtk_radio_menu_item_new (group);
+  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (radio_menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), radio_menu_item);
+  gtk_widget_show (accel_label);
+
+  return radio_menu_item;
+}
+
 GSList*
 gtk_radio_menu_item_group (GtkRadioMenuItem *radio_menu_item)
 {

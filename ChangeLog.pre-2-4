@@ -1,3 +1,33 @@
+2001-06-05  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkcolorsel.c: Use new mnemonic convenience functions
+
+	Applying patch from Jeff Franks, with function docs added.
+	
+	* gtk/gtkcheckbutton.c (gtk_check_button_new_with_mnemonic):
+	remove call to set_mnemonic_widget, change docs a bit.	
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_with_mnemonic):
+	new function
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_new_with_mnemonic):
+	new function
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_new_with_mnemonic): new function
+
+	* gtk/gtkradiobutton.c (gtk_radio_button_new_with_mnemonic): new
+	function
+	(gtk_radio_button_new_with_mnemonic_from_widget): new function
+
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_new_with_mnemonic):
+	new function
+
+	* gtk/gtktogglebutton.c (gtk_toggle_button_new_with_mnemonic): new
+	function	
+
+	* gtk/gtklabel.c (gtk_label_new_with_mnemonic): Improve docs on 
+	auto-selection of mnemonic widget.
+
 Mon Jun  4 15:05:24 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_max_width):
