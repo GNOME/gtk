@@ -2373,7 +2373,7 @@ typedef struct {
   GdkPixmap *mask;
 } ScreenIconInfo;
 
-ScreenIconInfo *
+static ScreenIconInfo *
 get_screen_icon_info (GdkScreen *screen)
 {
   ScreenIconInfo *info = g_object_get_data (G_OBJECT (screen), 
