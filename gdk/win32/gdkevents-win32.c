@@ -2972,6 +2972,7 @@ gdk_event_translate (GdkEvent *event,
     {
       /* Check for filters for this window */
       GdkFilterReturn result;
+      event->any.window = window;
       result = gdk_event_apply_filters
 	(xevent, event, ((GdkWindowPrivate *) window)->filters);
       
@@ -3040,6 +3041,7 @@ gdk_event_translate (GdkEvent *event,
 	  if (filter->type == xevent->message)
 	    {
 	      GDK_NOTE (EVENTS, g_print ("client filter matched\n"));
+	      event->any.window = window;
 	      result = (*filter->function) (xevent, event, filter->data);
 	      switch (result)
 		{

@@ -1,3 +1,8 @@
+1999-11-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): set
+	event->any.window before calling filter functions.
+
 Fri Nov 19 10:34:41 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkgamma.h: Adapt cast macros to standard.
