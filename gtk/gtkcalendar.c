@@ -2747,10 +2747,10 @@ gtk_calendar_button_press (GtkWidget	  *widget,
 	  /* only call the action on single click, not double */
 	  if (event->type == GDK_BUTTON_PRESS)
 	    {
-	      arrow_action (calendar, arrow);
-	      
 	      if (event->button == 1)
 		start_spinning (widget, arrow);
+
+	      arrow_action (calendar, arrow);	      
 	    }
 
 	  return TRUE;
