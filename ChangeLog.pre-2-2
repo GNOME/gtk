@@ -1,3 +1,29 @@
+Fri Aug 17 17:30:34 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktreemodel.c (gtk_tree_path_new_from_string): const correct
+	string parameter.
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_set_menu): connect to
+	GtkMenuShell::selection_done, now that we have it, instead of 
+	::deactivate so we're not tearing the menu apart and notify
+	the user prematurely.
+
+Thu Aug 16 05:22:01 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): if we actually move our
+	window, clear window->need_default_position to avoid infinite loops.
+	some comment fixups and GTK_RESIZE_IMMEDIATE fixups.
+
+Wed Aug 15 12:36:55 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): move all model setup
+	code into this place. get rid of GTK_TREE_VIEW_MODEL_SETUP usage.
+	(gtk_tree_view_set_property): don't cast possible NULL objects.
+	(gtk_tree_view_destroy): reset the model to NULL.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_finalize): chain
+	parent_class handler.
+
 2001-08-17  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* gtk/demos/gtk-demo/*: Remove all uses of deprecated functions.
@@ -19,25 +45,25 @@
 	* gtk/stock-icons/dialog_error.png: maybe a little drastic ;)
 	* gtk/stock-icons/dialog_warning.png: need a hand?
 	* gtk/stock-icons/stock_add.png, stock_remove.png: I hope 
-     the aa border gets chopped off ok
+	  the aa border gets chopped off ok
 	* gtk/stock-icons/stock_colorselector.png: using the new hand
 	* gtk/stock-icons/stock_dnd_multiple.png: I'm not totally sure what 
-     this one is for, but the old icon was butt ugly.
+	  this one is for, but the old icon was butt ugly.
 	* gtk/stock-icons/stock*_insert_image.png: not sure if it belongs here
 	* gtk/stock-icons/stock*_insert_object.png: "
 	* gtk/stock-icons/stock_index.png: using new hand icon
 	* gtk/stock-icons/stock*_new.png: the document template being used 
-     elsewhere too
+	  elsewhere too
 	* gtk/stock-icons/stock*_print*.png: new print and print preview 
-     icons (panel/menu)  
+	  icons (panel/menu)  
 	* gtk/stock-icons/stock*_save*.png, stock*_revert.png: new save/revert 
-     icons based on Tuomas' floppy image.
+	  icons based on Tuomas' floppy image.
 	* gtk/stock-icons/stock*_search*.png: search and s'n'r icons for panel/menu
 	* gtk/stock-icons/stock*_stop.png: replacing the old 'x' button
 	* gtk/stock-icons/stock*_trash.png: based on Tuomas' trash icon
 	* gtk/stock-icons/stock*_undelete.png: "
 	* gtk/stock-icons/stock_preferences.png: I have a version with a 
-     document base if the sliders are no good.
+	  document base if the sliders are no good.
 	* gtk/stock-icons/stock_properties.png: properties 
 	
 

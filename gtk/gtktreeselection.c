@@ -99,6 +99,9 @@ gtk_tree_selection_finalize (GObject *object)
 {
   if (GTK_TREE_SELECTION (object)->destroy)
     (* GTK_TREE_SELECTION (object)->destroy) (GTK_TREE_SELECTION (object)->user_data);
+
+  /* chain parent_class' handler */
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /**

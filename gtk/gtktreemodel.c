@@ -154,10 +154,10 @@ gtk_tree_path_new (void)
  * Return value: A newly created #GtkTreePath, or NULL
  **/
 GtkTreePath *
-gtk_tree_path_new_from_string (gchar *path)
+gtk_tree_path_new_from_string (const gchar *path)
 {
   GtkTreePath *retval;
-  gchar *orig_path = path;
+  const gchar *orig_path = path;
   gchar *ptr;
   gint i;
 
@@ -173,7 +173,7 @@ gtk_tree_path_new_from_string (gchar *path)
 
       if (i < 0)
 	{
-	  g_warning (G_STRLOC"Negative numbers in path %s passed to gtk_tree_path_new_from_string", orig_path);
+	  g_warning (G_STRLOC ": Negative numbers in path %s passed to gtk_tree_path_new_from_string", orig_path);
 	  gtk_tree_path_free (retval);
 	  return NULL;
 	}
@@ -181,7 +181,7 @@ gtk_tree_path_new_from_string (gchar *path)
 	break;
       if (ptr == path || *ptr != ':')
 	{
-	  g_warning (G_STRLOC"Invalid path %s passed to gtk_tree_path_new_from_string", orig_path);
+	  g_warning (G_STRLOC ": Invalid path %s passed to gtk_tree_path_new_from_string", orig_path);
 	  gtk_tree_path_free (retval);
 	  return NULL;
 	}

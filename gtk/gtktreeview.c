@@ -853,13 +853,13 @@ gtk_tree_view_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (g_value_get_object (value)));
+      gtk_tree_view_set_model (tree_view, g_value_get_object (value));
       break;
     case PROP_HADJUSTMENT:
-      gtk_tree_view_set_hadjustment (tree_view, GTK_ADJUSTMENT (g_value_get_object (value)));
+      gtk_tree_view_set_hadjustment (tree_view, g_value_get_object (value));
       break;
     case PROP_VADJUSTMENT:
-      gtk_tree_view_set_vadjustment (tree_view, GTK_ADJUSTMENT (g_value_get_object (value)));
+      gtk_tree_view_set_vadjustment (tree_view, g_value_get_object (value));
       break;
     case PROP_HEADERS_VISIBLE:
       gtk_tree_view_set_headers_visible (tree_view, g_value_get_boolean (value));
@@ -868,7 +868,7 @@ gtk_tree_view_set_property (GObject         *object,
       gtk_tree_view_set_headers_clickable (tree_view, g_value_get_boolean (value));
       break;
     case PROP_EXPANDER_COLUMN:
-      gtk_tree_view_set_expander_column (tree_view, GTK_TREE_VIEW_COLUMN (g_value_get_object (value)));
+      gtk_tree_view_set_expander_column (tree_view, g_value_get_object (value));
       break;
     case PROP_REORDERABLE:
       gtk_tree_view_set_reorderable (tree_view, g_value_get_boolean (value));
@@ -939,9 +939,10 @@ gtk_tree_view_finalize (GObject *object)
 static void
 gtk_tree_view_destroy (GtkObject *object)
 {
-  GtkTreeView *tree_view = (GtkTreeView *) object;
+  GtkTreeView *tree_view = GTK_TREE_VIEW (object);
   GList *list;
 
+  gtk_tree_view_set_model (tree_view, NULL);
 
   if (tree_view->priv->tree != NULL)
     {
@@ -1273,7 +1274,7 @@ gtk_tree_view_size_request_buttons (GtkTreeView *tree_view)
 
   tree_view->priv->header_height = 1;
 
-  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
+  if (tree_view->priv->model)
     {
       for (list = tree_view->priv->columns; list; list = list->next)
         {
@@ -4701,53 +4702,6 @@ gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
     }
 }
 
-static void
-gtk_tree_view_setup_model (GtkTreeView *tree_view)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-
-  tree_view->priv->tree = NULL;
-
-  g_signal_connect (tree_view->priv->model,
-                    "range_changed",
-                    (GCallback) gtk_tree_view_range_changed,
-                    tree_view);
-  g_signal_connect (tree_view->priv->model,
-                    "inserted",
-                    (GCallback) gtk_tree_view_inserted,
-                    tree_view);
-  g_signal_connect (tree_view->priv->model,
-                    "has_child_toggled",
-                    (GCallback) gtk_tree_view_has_child_toggled,
-                    tree_view);
-  g_signal_connect (tree_view->priv->model,
-                    "deleted",
-                    (GCallback) gtk_tree_view_deleted,
-                    tree_view);
-  g_signal_connect (tree_view->priv->model,
-                    "reordered",
-                    (GCallback) gtk_tree_view_reordered,
-                    tree_view);
-
-  if (tree_view->priv->columns == NULL)
-    return;
-
-  path = gtk_tree_path_new_root ();
-
-  if (gtk_tree_model_get_iter (tree_view->priv->model, &iter, path))
-    {
-      tree_view->priv->tree = _gtk_rbtree_new ();
-      gtk_tree_view_build_tree (tree_view, tree_view->priv->tree, &iter, 1, FALSE, GTK_WIDGET_REALIZED (tree_view));
-    }
-
-  gtk_tree_path_free (path);
-
-  /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
-
-  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_MODEL_SETUP);
-}
-
 static gint
 gtk_tree_view_insert_iter_height (GtkTreeView *tree_view,
 				  GtkRBTree   *tree,
@@ -5011,10 +4965,6 @@ gtk_tree_view_check_dirty (GtkTreeView *tree_view)
   GList *list;
   GtkTreeViewColumn *column;
   GtkTreeIter iter;
-
-  if (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP) &&
-      tree_view->priv->model)
-    gtk_tree_view_setup_model (tree_view);
 
   for (list = tree_view->priv->columns; list; list = list->next)
     {
@@ -6160,58 +6110,73 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
   if (model == tree_view->priv->model)
     return;
 
-  if (model != NULL)
-    g_object_ref (model);
-
-  if (tree_view->priv->model != NULL)
+  if (tree_view->priv->model)
     {
-      if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
+      g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
+					    gtk_tree_view_range_changed, tree_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
+					    gtk_tree_view_inserted, tree_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
+					    gtk_tree_view_has_child_toggled, tree_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
+					    gtk_tree_view_deleted, tree_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (tree_view->priv->model),
+					    gtk_tree_view_reordered, tree_view);
+      if (tree_view->priv->tree)
 	{
-	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-						0, 0, NULL,
-						gtk_tree_view_range_changed, tree_view);
-	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-						0, 0, NULL,
-						gtk_tree_view_inserted, tree_view);
-	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-						0, 0, NULL,
-						gtk_tree_view_has_child_toggled, tree_view);
-	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-						0, 0, NULL,
-						gtk_tree_view_deleted, tree_view);
-	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA,
-						0, 0, NULL,
-						gtk_tree_view_reordered, tree_view);
-	  if (tree_view->priv->tree)
-	    _gtk_rbtree_free (tree_view->priv->tree);
+	  _gtk_rbtree_free (tree_view->priv->tree);
+	  tree_view->priv->tree = NULL;
 	}
-
       if (tree_view->priv->drag_dest_row)
-        gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
-
-      GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_MODEL_SETUP);
+	{
+	  gtk_tree_row_reference_free (tree_view->priv->drag_dest_row);
+	  tree_view->priv->drag_dest_row = NULL;
+	}
       g_object_unref (tree_view->priv->model);
     }
 
   tree_view->priv->model = model;
 
-  if (model == NULL)
+  if (tree_view->priv->model)
     {
-      tree_view->priv->tree = NULL;
-      if (GTK_WIDGET_REALIZED (tree_view))
-	_gtk_tree_view_update_size (tree_view);
-    }
-  else if (GTK_WIDGET_REALIZED (tree_view))
-    {
-      gtk_tree_view_setup_model (tree_view);
-      _gtk_tree_view_update_size (tree_view);
+      GtkTreePath *path;
+      GtkTreeIter iter;
+
+      g_object_ref (tree_view->priv->model);
+      g_signal_connect (tree_view->priv->model,
+			"range_changed",
+			G_CALLBACK (gtk_tree_view_range_changed),
+			tree_view);
+      g_signal_connect (tree_view->priv->model,
+			"inserted",
+			G_CALLBACK (gtk_tree_view_inserted),
+			tree_view);
+      g_signal_connect (tree_view->priv->model,
+			"has_child_toggled",
+			G_CALLBACK (gtk_tree_view_has_child_toggled),
+			tree_view);
+      g_signal_connect (tree_view->priv->model,
+			"deleted",
+			G_CALLBACK (gtk_tree_view_deleted),
+			tree_view);
+      g_signal_connect (tree_view->priv->model,
+			"reordered",
+			G_CALLBACK (gtk_tree_view_reordered),
+			tree_view);
+
+      path = gtk_tree_path_new_root ();
+      if (gtk_tree_model_get_iter (tree_view->priv->model, &iter, path))
+	{
+	  tree_view->priv->tree = _gtk_rbtree_new ();
+	  gtk_tree_view_build_tree (tree_view, tree_view->priv->tree, &iter, 1, FALSE, GTK_WIDGET_REALIZED (tree_view));
+	}
+      gtk_tree_path_free (path);
+
+      /*  FIXME: do I need to do this? gtk_tree_view_create_buttons (tree_view); */
     }
 
+  if (GTK_WIDGET_REALIZED (tree_view))
+    _gtk_tree_view_update_size (tree_view);
   g_object_notify (G_OBJECT (tree_view), "model");
 }
 

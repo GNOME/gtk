@@ -67,7 +67,7 @@ static gint gtk_option_menu_button_press    (GtkWidget          *widget,
 					     GdkEventButton     *event);
 static gint gtk_option_menu_key_press	    (GtkWidget          *widget,
 					     GdkEventKey        *event);
-static void gtk_option_menu_deactivate      (GtkMenuShell       *menu_shell,
+static void gtk_option_menu_selection_done  (GtkMenuShell       *menu_shell,
 					     GtkOptionMenu      *option_menu);
 static void gtk_option_menu_update_contents (GtkOptionMenu      *option_menu);
 static void gtk_option_menu_remove_contents (GtkOptionMenu      *option_menu);
@@ -234,9 +234,9 @@ gtk_option_menu_set_menu (GtkOptionMenu *option_menu,
 
       gtk_option_menu_calc_size (option_menu);
 
-      gtk_signal_connect (GTK_OBJECT (option_menu->menu), "deactivate",
-			  (GtkSignalFunc) gtk_option_menu_deactivate,
-			  option_menu);
+      gtk_signal_connect_after (GTK_OBJECT (option_menu->menu), "selection_done",
+				G_CALLBACK (gtk_option_menu_selection_done),
+				option_menu);
       gtk_signal_connect_object (GTK_OBJECT (option_menu->menu), "size_request",
 				 (GtkSignalFunc) gtk_option_menu_calc_size,
 				 GTK_OBJECT (option_menu));
@@ -611,8 +611,8 @@ gtk_option_menu_key_press (GtkWidget   *widget,
 }
 
 static void
-gtk_option_menu_deactivate (GtkMenuShell  *menu_shell,
-			    GtkOptionMenu *option_menu)
+gtk_option_menu_selection_done (GtkMenuShell  *menu_shell,
+				GtkOptionMenu *option_menu)
 {
   g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));

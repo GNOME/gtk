@@ -1318,8 +1318,6 @@ _gtk_window_reposition (GtkWindow *window,
 			gint       x,
 			gint       y)
 {
-  GtkWindowGeometryInfo *info;
-  
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   gtk_window_move (window, x, y);
@@ -3484,8 +3482,7 @@ gtk_window_move_resize (GtkWindow *window)
        widget->allocation.height != new_request.height))
     configure_request_size_changed = TRUE;
 
-  /*
-   * Position Constraints
+  /* Position Constraints
    * ====================
    * 
    * POS_CENTER_ALWAYS is conceptually a constraint rather than
@@ -3619,7 +3616,9 @@ gtk_window_move_resize (GtkWindow *window)
     gdk_window_set_geometry_hints (widget->window,
 				   &new_geometry,
 				   new_flags);
-  
+
+  /* handle resizing/moving and widget tree allocation
+   */
   if (window->configure_notify_received)
     { 
       GtkAllocation allocation;
@@ -3635,12 +3634,10 @@ gtk_window_move_resize (GtkWindow *window)
        * (one per configure request), as an optimization.
        *
        */
-      
       window->configure_notify_received = FALSE;
 
       /* gtk_window_configure_event() filled in widget->allocation */
       allocation = widget->allocation;
-      
       gtk_widget_size_allocate (widget, &allocation);
       gtk_widget_queue_draw (widget);
 
@@ -3648,8 +3645,7 @@ gtk_window_move_resize (GtkWindow *window)
        * we either:
        *   1) coincidentally changed hints or widget properties
        *      impacting the configure request before getting
-       *      a configure notify
-       *  or
+       *      a configure notify, or
        *   2) some broken widget is changing its size request
        *      during size allocation, resulting in
        *      a false appearance of changed configure request.
@@ -3670,7 +3666,6 @@ gtk_window_move_resize (GtkWindow *window)
        * hurt us too badly, since it is what would have
        * happened if we had gotten the configure event before
        * the new size had been set.
-       * 
        */
 
       if (configure_request_size_changed ||
@@ -3680,42 +3675,32 @@ gtk_window_move_resize (GtkWindow *window)
            * haven't actually updated to the new info yet - we decided
            * to postpone our configure request until later.
            */
-          
 	  info->last = saved_last_info;
           
-	  gtk_widget_queue_resize (widget);
+	  gtk_widget_queue_resize (widget); /* migth recurse for GTK_RESIZE_IMMEDIATE */
 	}
     }
   else if (configure_request_pos_changed ||
            configure_request_size_changed ||
            hints_changed)
     {
-      /* We are in one of the following situations with
-       * respect to the window size:
-       * 
+      /* We are in one of the following situations:
        * A. configure_request_size_changed
-       *   our requisition has changed and we need a different window size,
-       *   so we request it from the window manager.
-       *
+       *    our requisition has changed and we need a different window size,
+       *    so we request it from the window manager.
        * B. !configure_request_size_changed
-       *   the window manager wouldn't assign us the size we requested, in this
-       *   case we don't try to request a new size with every resize.
-       *
+       *    the window manager wouldn't assign us the size we requested, in this
+       *    case we don't try to request a new size with every resize.
        * C. !configure_request_size_changed && hints_changed
-       *   the window manager rejects our size, but we have just changed the
-       *   window manager hints, so there's a certain chance our request will
-       *   be honoured this time, so we try again.
+       *    the window manager rejects our size, but we have just changed the
+       *    window manager hints, so there's a certain chance our request will
+       *    be honoured this time, so we try again.
+       * D. configure_request_pos_changed
+       *    we need to move to a new position, in which case we can also request
+       *    a new size since any of A-C might also apply.
        */
 
-      /* Compress case C into case A */
-      if (hints_changed)
-        configure_request_size_changed = TRUE;
-
-      g_assert (configure_request_size_changed ||
-                configure_request_pos_changed);
-      
       /* Now send the configure request */
-
       if (configure_request_pos_changed)
 	{
 	  if (window->frame)
@@ -3733,15 +3718,12 @@ gtk_window_move_resize (GtkWindow *window)
                                     new_request.x, new_request.y,
                                     new_request.width, new_request.height);
 	}
-      else
+      else  /* only size changed */
 	{
-          /* only size changed */
-          
 	  if (window->frame)
 	    gdk_window_resize (window->frame,
 			       new_request.width + window->frame_left + window->frame_right,
 			       new_request.height + window->frame_top + window->frame_bottom);
-
 	  gdk_window_resize (widget->window,
                              new_request.width, new_request.height);
 	}
@@ -3750,13 +3732,17 @@ gtk_window_move_resize (GtkWindow *window)
       window->configure_request_count += 1;
 
       /* We have now sent a request since the last position constraint
-       * change
+       * change and definitely don't need a an initial size again (not
+       * resetting this here can lead to infinite loops for
+       * GTK_RESIZE_IMMEDIATE containers)
        */
       info->position_constraints_changed = FALSE;
-      
-      /* we are now awaiting the new configure notify event in response to our
-       * resizing request. the configure event will cause a new resize
-       * with ->configure_notify_received=TRUE.
+      window->need_default_position = FALSE;
+
+      /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
+       * configure event in response to our resizing request.
+       * the configure event will cause a new resize with
+       * ->configure_notify_received=TRUE.
        * until then, we want to
        * - discard expose events
        * - coalesce resizes for our children
@@ -3766,17 +3752,13 @@ gtk_window_move_resize (GtkWindow *window)
        * idle handler but when the configure event arrives.
        *
        * FIXME: we should also dequeue the pending redraws here, since
-       * we handle those ourselves in ->configure_notify_received==TRUE.
-       *
-       * FIXME: not sure the above FIXME is correct, because we only
-       * queue draw in size allocate if the size actually changes,
-       * so if the update area for the window contains stuff
-       * unrelated to sizing (should be rare actually) then we
-       * might lose that info.
+       * we handle those ourselves upon ->configure_notify_received==TRUE.
        */
-      gtk_widget_queue_resize (widget);
       if (container->resize_mode == GTK_RESIZE_QUEUE)
-	_gtk_container_dequeue_resize_handler (container);
+	{
+	  gtk_widget_queue_resize (widget);
+	  _gtk_container_dequeue_resize_handler (container);
+	}
     }
   else
     {
