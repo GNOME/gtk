@@ -1,3 +1,8 @@
+Tue Aug 28 21:05:26 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-bmp.c (OneLine): Emit area_updated signal with proper
+	area information. (#52002)
+
 Tue Aug 28 20:03:43 2001  Matthias Clasen  <matthiasc@poet.de>
 
 	* test-loaders.c (test_loader): Catch errors at close time. 
