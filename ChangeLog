@@ -1,3 +1,9 @@
+Wed Jun 12 15:43:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_snap): Handle
+	0 increment, to fix division-by-zero problem.
+	(#82816, George Lebl.)
+
 Wed Jun 12 15:38:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkimmulticontext.c (gtk_im_multicontext_append_menuitems):

@@ -1318,6 +1318,9 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
   gdouble tmp;
 
   inc = spin_button->adjustment->step_increment;
+  if (inc == 0)
+    return;
+  
   tmp = (val - spin_button->adjustment->lower) / inc;
   if (tmp - floor (tmp) < ceil (tmp) - tmp)
     val = spin_button->adjustment->lower + floor (tmp) * inc;
