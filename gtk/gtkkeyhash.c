@@ -21,20 +21,18 @@
 #include "gtkdebug.h"
 #include "gtkkeyhash.h"
 
-/* We need to add a ::changed signal to GdkKeyMap to properly deal
- * with changes to the key map while we are running.
- */
-#undef HAVE_CHANGED_SIGNAL
-
 typedef struct _GtkKeyHashEntry GtkKeyHashEntry;
 
 struct _GtkKeyHashEntry
 {
   guint keyval;
   GdkModifierType modifiers;
-  GdkKeymapKey *keys;
-  gint n_keys;
   gpointer value;
+
+  /* Set as a side effect of generating key_hash->keycode_hash
+   */
+  GdkKeymapKey *keys;		
+  gint n_keys;
 };
 
 struct _GtkKeyHash
@@ -42,6 +40,7 @@ struct _GtkKeyHash
   GdkKeymap *keymap;
   GHashTable *keycode_hash;
   GHashTable *reverse_hash;
+  GList *entries_list;
   GDestroyNotify destroy_notify;
 };
 
@@ -60,6 +59,7 @@ key_hash_insert_entry (GtkKeyHash      *key_hash,
 {
   gint i;
 
+  g_free (entry->keys);
   gdk_keymap_get_entries_for_keyval (key_hash->keymap,
 				     entry->keyval,
 				     &entry->keys, &entry->n_keys);
@@ -75,33 +75,39 @@ key_hash_insert_entry (GtkKeyHash      *key_hash,
     }
 }
 
-#ifdef HAVE_CHANGED_SIGNAL
-static void
-key_hash_reinsert_entry (gpointer key,
-			 gpointer value,
-			 gpointer data)
+static GHashTable *
+key_hash_get_keycode_hash (GtkKeyHash *key_hash)
 {
-  GtkKeyHashEntry *entry = value;
-  GtkKeyHash *key_hash = data;
+  if (!key_hash->keycode_hash)
+    {
+      GList *tmp_list;
+  
+      key_hash->keycode_hash = g_hash_table_new (g_direct_hash, NULL);
+      
+      /* Preserve the original insertion order
+       */
+      for (tmp_list = g_list_last (key_hash->entries_list);
+	   tmp_list;
+	   tmp_list = tmp_list->prev)
+	key_hash_insert_entry (key_hash, tmp_list->data);
+    }
 
-  g_free (entry->keys);
-  key_hash_insert_entry (key_hash, entry);
+  return key_hash->keycode_hash;
 }
 
 static void
-key_hash_keymap_changed (GdkKeymap  *keymap,
-			 GtkKeyHash *key_hash)
+key_hash_keys_changed (GdkKeymap  *keymap,
+		       GtkKeyHash *key_hash)
 {
-  /* The keymap changed, so we have to clear and reinsert all our entries
+  /* The keymap changed, so we have to regenerate the keycode hash
    */
-  g_hash_table_foreach (key_hash->keycode_hash, key_hash_clear_keycode, NULL);
-
-  /* FIXME: Here we reinsert in random order, but I think we actually have to
-   * insert in the same order as the original order to keep GtkBindingSet happy.
-   */
-  g_hash_table_foreach (key_hash->reverse_hash, key_hash_reinsert_entry, key_hash);
+  if (key_hash->keycode_hash)
+    {
+      g_hash_table_foreach (key_hash->keycode_hash, key_hash_clear_keycode, NULL);
+      g_hash_table_destroy (key_hash->keycode_hash);
+      key_hash->keycode_hash = NULL;
+    }
 }
-#endif /* HAVE_CHANGED_SIGNAL */
 
 /**
  * _gtk_key_hash_new:
@@ -120,12 +126,11 @@ _gtk_key_hash_new (GdkKeymap      *keymap,
   GtkKeyHash *key_hash = g_new (GtkKeyHash, 1);
 
   key_hash->keymap = keymap;
-#ifdef HAVE_CHANGED_SIGNAL
-  g_signal_connect (keymap, "changed",
-		    G_CALLBACK (key_hash_keymap_changed), key_hash);
-#endif  
+  g_signal_connect (keymap, "keys_changed",
+		    G_CALLBACK (key_hash_keys_changed), key_hash);
 
-  key_hash->keycode_hash = g_hash_table_new (g_direct_hash, NULL);
+  key_hash->entries_list = NULL;
+  key_hash->keycode_hash = NULL;
   key_hash->reverse_hash = g_hash_table_new (g_direct_hash, NULL);
   key_hash->destroy_notify = item_destroy_notify;
 
@@ -144,8 +149,7 @@ key_hash_free_entry (GtkKeyHash      *key_hash,
 }
 
 static void
-key_hash_free_entry_foreach (gpointer key,
-			     gpointer value,
+key_hash_free_entry_foreach (gpointer value,
 			     gpointer data)
 {
   GtkKeyHashEntry *entry = value;
@@ -163,16 +167,20 @@ key_hash_free_entry_foreach (gpointer key,
 void
 _gtk_key_hash_free (GtkKeyHash *key_hash)
 {
-#if HAVE_CHANGED_SIGNAL  
   g_signal_handlers_disconnect_by_func (key_hash->keymap,
-					G_CALLBACK (key_hash_keymap_changed), key_hash);
-#endif
+					G_CALLBACK (key_hash_keys_changed), key_hash);
 
-  g_hash_table_foreach (key_hash->keycode_hash, key_hash_clear_keycode, NULL);
-  g_hash_table_foreach (key_hash->reverse_hash, key_hash_free_entry_foreach, key_hash);
-  g_hash_table_destroy (key_hash->keycode_hash);
+  if (key_hash->keycode_hash)
+    {
+      g_hash_table_foreach (key_hash->keycode_hash, key_hash_clear_keycode, NULL);
+      g_hash_table_destroy (key_hash->keycode_hash);
+    }
+  
   g_hash_table_destroy (key_hash->reverse_hash);
 
+  g_list_foreach (key_hash->entries_list, key_hash_free_entry_foreach, key_hash);
+  g_list_free (key_hash->entries_list);
+  
   g_free (key_hash);
 }
 
@@ -196,9 +204,13 @@ _gtk_key_hash_add_entry (GtkKeyHash      *key_hash,
   entry->value = value;
   entry->keyval = keyval;
   entry->modifiers = modifiers;
+  entry->keys = NULL;
 
-  g_hash_table_insert (key_hash->reverse_hash, value, entry);
-  key_hash_insert_entry (key_hash, entry);
+  key_hash->entries_list = g_list_prepend (key_hash->entries_list, entry);
+  g_hash_table_insert (key_hash->reverse_hash, value, key_hash->entries_list);
+
+  if (key_hash->keycode_hash)
+    key_hash_insert_entry (key_hash, entry);
 }
 
 /**
@@ -213,30 +225,37 @@ void
 _gtk_key_hash_remove_entry (GtkKeyHash *key_hash,
 			    gpointer    value)
 {
-  GtkKeyHashEntry *entry = g_hash_table_lookup (key_hash->reverse_hash, value);
-  if (entry)
+  GList *entry_node = g_hash_table_lookup (key_hash->reverse_hash, value);
+  
+  if (entry_node)
     {
-      gint i;
+      GtkKeyHashEntry *entry = entry_node->data;
 
-      for (i = 0; i < entry->n_keys; i++)
+      if (key_hash->keycode_hash)
 	{
-	  GSList *old_keys = g_hash_table_lookup (key_hash->keycode_hash,
-						  GUINT_TO_POINTER (entry->keys[i].keycode));
-
-	  GSList *new_keys = g_slist_remove (old_keys, entry);
-	  if (new_keys != old_keys)
+	  gint i;
+	  
+	  for (i = 0; i < entry->n_keys; i++)
 	    {
-	      if (new_keys)
-		g_hash_table_insert (key_hash->keycode_hash,
-				     GUINT_TO_POINTER (entry->keys[i].keycode),
-				     new_keys);
-	      else
-		g_hash_table_remove (key_hash->keycode_hash,
-				     GUINT_TO_POINTER (entry->keys[i].keycode));
+	      GSList *old_keys = g_hash_table_lookup (key_hash->keycode_hash,
+						      GUINT_TO_POINTER (entry->keys[i].keycode));
+	      
+	      GSList *new_keys = g_slist_remove (old_keys, entry);
+	      if (new_keys != old_keys)
+		{
+		  if (new_keys)
+		    g_hash_table_insert (key_hash->keycode_hash,
+					 GUINT_TO_POINTER (entry->keys[i].keycode),
+					 new_keys);
+		  else
+		    g_hash_table_remove (key_hash->keycode_hash,
+					 GUINT_TO_POINTER (entry->keys[i].keycode));
+		}
 	    }
 	}
-      
-      g_hash_table_remove (key_hash->reverse_hash, value);
+	  
+      g_hash_table_remove (key_hash->reverse_hash, entry_node);
+      key_hash->entries_list = g_list_delete_link (key_hash->entries_list, entry_node);
 
       key_hash_free_entry (key_hash, entry);
     }
@@ -304,7 +323,8 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 		      GdkModifierType  state,
 		      gint             group)
 {
-  GSList *keys = g_hash_table_lookup (key_hash->keycode_hash, GUINT_TO_POINTER ((guint)hardware_keycode));
+  GHashTable *keycode_hash = key_hash_get_keycode_hash (key_hash);
+  GSList *keys = g_hash_table_lookup (keycode_hash, GUINT_TO_POINTER ((guint)hardware_keycode));
   GSList *results = NULL;
   gboolean have_exact = FALSE;
   guint keyval;
@@ -404,7 +424,8 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
 
   if (n_keys)
     {
-      GSList *entries = g_hash_table_lookup (key_hash->keycode_hash, GUINT_TO_POINTER (keys[0].keycode));
+      GHashTable *keycode_hash = key_hash_get_keycode_hash (key_hash);
+      GSList *entries = g_hash_table_lookup (keycode_hash, GUINT_TO_POINTER (keys[0].keycode));
 
       while (entries)
 	{

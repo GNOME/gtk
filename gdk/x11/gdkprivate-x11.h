@@ -156,6 +156,7 @@ gboolean _gdk_moveresize_configure_done (GdkDisplay *display,
 					 GdkWindow  *window);
 
 void _gdk_keymap_state_changed    (GdkDisplay      *display);
+void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
 				   GdkModifierType  state);
 

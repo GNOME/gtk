@@ -373,6 +373,18 @@ _gdk_keymap_state_changed (GdkDisplay *display)
 	}
     }
 }
+
+void
+_gdk_keymap_keys_changed (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  
+  ++display_x11->keymap_serial;
+  
+  if (display_x11->keymap)
+    g_signal_emit_by_name (display_x11->keymap, "keys_changed", 0);
+}
+
 #endif /* HAVE_XKB */
   
 PangoDirection

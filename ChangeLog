@@ -1,3 +1,24 @@
+Mon Sep 23 16:48:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkkeys.[ch] gdk/x11/gdkkeys-x11.c gdk/x11/gdkevents-x11.c:
+	Add a keys_changed signal emitted when the keymap changes.
+	(#72148)
+	
+	* gtk/gtkkeyhash.c (_gtk_key_hash_remove_entry): 
+	Hook up code to handle keymap changes, change to keep
+	a linked list of keymap entries so that we can reinsert
+	them in the same order on a keymap change.
+
+Mon Sep 23 14:58:04 2002  Owen Taylor  <otaylor@redhat.com>
+ 
+ 	* gtk/gtkhandlebox.h gtk/gtktextbtree.[ch]:
+ 	Use 'signed int' not 'gint' for signed bitfields.
+ 	(#93020, Vitaly Tishkov)
+ 
+ 	* gtk/gtktextlayout.h gtk/gtktextbtree.[ch]: 
+ 	Fix some 'gint' bitfields that should have been
+ 	unsigned.
+	
 Mon Sep 23 12:24:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c (status_window_get): 

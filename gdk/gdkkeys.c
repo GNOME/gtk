@@ -31,6 +31,7 @@
 
 enum {
   DIRECTION_CHANGED,
+  KEYS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -73,6 +74,15 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 
   signals[DIRECTION_CHANGED] =
     g_signal_new ("direction_changed",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE,
+		  0);
+  signals[KEYS_CHANGED] =
+    g_signal_new ("keys_changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),

@@ -1606,7 +1606,7 @@ gdk_event_translate (GdkDisplay *display,
       /* Let XLib know that there is a new keyboard mapping.
        */
       XRefreshKeyboardMapping (&xevent->xmapping);
-      ++display_x11->keymap_serial;
+      _gdk_keymap_keys_changed (display);
       return_val = FALSE;
       break;
 
@@ -1619,7 +1619,7 @@ gdk_event_translate (GdkDisplay *display,
 	  switch (xkb_event->any.xkb_type)
 	    {
 	    case XkbMapNotify:
-	      ++display_x11->keymap_serial;
+	      _gdk_keymap_keys_changed (display);
 
 	      return_val = FALSE;
 	      break;
