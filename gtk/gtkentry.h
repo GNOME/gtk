@@ -191,8 +191,6 @@ void                gtk_entry_set_completion (GtkEntry           *entry,
                                               GtkEntryCompletion *completion);
 GtkEntryCompletion *gtk_entry_get_completion (GtkEntry           *entry);
 
-PangoLayout* gtk_entry_get_layout (GtkEntry *entry);
-
 gint       gtk_entry_layout_index_to_text_index (GtkEntry      *entry,
                                                  gint           layout_index);
 gint       gtk_entry_text_index_to_layout_index (GtkEntry      *entry,
