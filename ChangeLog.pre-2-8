@@ -1,5 +1,9 @@
 2005-01-24  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c: Removed leftover comments.
+
+2005-01-24  Federico Mena Quintero  <federico@ximian.com>
+
 	Fix #147785 and clean up the loading code:
 
 	* gtk/gtkfilechooserdefault.c (LoadState): Make the set of states
