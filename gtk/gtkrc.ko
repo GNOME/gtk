@@ -1,8 +1,0 @@
-style "gtk-default-ko" {
-       fontset = "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*,\
-                  -*-gulim-medium-r-normal--*-120-*-*-*-*-ksc5601.1987-0,\
-                  -*-kodig-medium-r-normal--*-120-*-*-*-*-ksc5601.1987-0,\
-                  -*-*-medium-r-normal--*-120-*-*-*-*-ksc5601.1987-0,*"
-}
-class "GtkWidget" style "gtk-default-ko"
-
