@@ -3305,6 +3305,9 @@ gtk_combo_box_key_press (GtkWidget   *widget,
   GtkTreeIter iter;
   GtkTreeIter new_iter;
 
+  if (combo_box->priv->model == NULL)
+    return FALSE;
+
   if ((event->keyval == GDK_Down || event->keyval == GDK_KP_Down) && 
       state == GDK_MOD1_MASK)
     {

@@ -1,3 +1,8 @@
+Thu Aug 26 23:58:11 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_key_press): Don't crash
+	if model is not set. Noted by Mariano Suarez-Alvarez.
+
 Thu Aug 26 22:44:12 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Provide information about how an adjustment change in a range 
