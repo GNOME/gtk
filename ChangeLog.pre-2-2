@@ -1,3 +1,7 @@
+2002-03-04  Hans Breuer  <hans@breuer.org>
+
+	* gtk/makefile.msc.in : don't build gtk.defs anymore
+
 2002-03-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkrc.h: Remove obsolete Win32-only declaration of

@@ -356,7 +356,8 @@ gtk_extra_sources = \
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
 
-GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins.c gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c
+# Removed: gtk.defs 
+GENERATED = gtktypebuiltins.h gtktypebuiltins.c gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c
 
 #
 # Generated source files:
@@ -364,7 +365,7 @@ GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins.c gtkmarshal.h gtkmarshal
 generated : $(GENERATED)
 	$(TOUCH) generated
 
-gtk.defs : gtk-boxed.defs $(gtk_public_h_sources) makefile.msc
+gtk.defs : $(gtk_public_h_sources) makefile.msc
 	$(PERL) $(GLIB)\gobject\glib-mkenums \
 		--comments ";; @comment@" \
 		--fprod "; enumerations from \"@filename@\"\n " \
@@ -372,7 +373,7 @@ gtk.defs : gtk-boxed.defs $(gtk_public_h_sources) makefile.msc
 		--vprod "   (@valuenick@ @VALUENAME@)" \
 		--vtail ")" \
 		$(gtk_public_h_sources) > xgen-gdef
-	copy xgen-gdef+gtk-boxed.defs gtk.defs
+	copy xgen-gdef gtk.defs
 
 # generate type identifier header (GTK_TYPE_WIDGET_FLAGS)
 # use 'echo' to work around 'command line too long'
