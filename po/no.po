@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.14\n"
-"POT-Creation-Date: 2002-04-22 12:37+0200\n"
-"PO-Revision-Date: 2002-04-22 12:38+0200\n"
+"POT-Creation-Date: 2002-04-23 21:46+0200\n"
+"PO-Revision-Date: 2002-04-23 21:48+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -920,109 +920,157 @@ msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Hvor langt barnet flyttes i y-retning når knappen er nedtrykt"
 
-#: gtk/gtkcellrenderer.c:103
+#: gtk/gtkcellrenderer.c:108
 msgid "mode"
 msgstr "modus"
 
-#: gtk/gtkcellrenderer.c:104
+#: gtk/gtkcellrenderer.c:109
 msgid "Editable mode of the CellRenderer"
 msgstr "Redigerbart modus for CellRenderer"
 
-#: gtk/gtkcellrenderer.c:113
+#: gtk/gtkcellrenderer.c:118
 msgid "visible"
 msgstr "synlig"
 
-#: gtk/gtkcellrenderer.c:114
+#: gtk/gtkcellrenderer.c:119
 msgid "Display the cell"
 msgstr "Vis cellen"
 
-#: gtk/gtkcellrenderer.c:122
+#: gtk/gtkcellrenderer.c:127
 msgid "xalign"
 msgstr "xalign"
 
-#: gtk/gtkcellrenderer.c:123
+#: gtk/gtkcellrenderer.c:128
 msgid "The x-align."
 msgstr "X-justering."
 
-#: gtk/gtkcellrenderer.c:133
+#: gtk/gtkcellrenderer.c:138
 msgid "yalign"
 msgstr "yalign"
 
-#: gtk/gtkcellrenderer.c:134
+#: gtk/gtkcellrenderer.c:139
 msgid "The y-align."
 msgstr "Y-justering."
 
-#: gtk/gtkcellrenderer.c:144
+#: gtk/gtkcellrenderer.c:149
 msgid "xpad"
 msgstr "xpad"
 
-#: gtk/gtkcellrenderer.c:145
+#: gtk/gtkcellrenderer.c:150
 msgid "The xpad."
 msgstr "Xpad."
 
-#: gtk/gtkcellrenderer.c:155
+#: gtk/gtkcellrenderer.c:160
 msgid "ypad"
 msgstr "ypad"
 
-#: gtk/gtkcellrenderer.c:156
+#: gtk/gtkcellrenderer.c:161
 msgid "The ypad."
 msgstr "Ypad."
 
-#: gtk/gtkcellrenderer.c:166
+#: gtk/gtkcellrenderer.c:171
 msgid "width"
 msgstr "bredde"
 
-#: gtk/gtkcellrenderer.c:167
+#: gtk/gtkcellrenderer.c:172
 msgid "The fixed width."
 msgstr "Den faste bredden."
 
-#: gtk/gtkcellrenderer.c:177
+#: gtk/gtkcellrenderer.c:182
 msgid "height"
 msgstr "høyde"
 
-#: gtk/gtkcellrenderer.c:178
+#: gtk/gtkcellrenderer.c:183
 msgid "The fixed height."
 msgstr "Den faste høyden."
 
-#: gtk/gtkcellrenderer.c:188
+#: gtk/gtkcellrenderer.c:193
 msgid "Is Expander"
 msgstr "Er utvider"
 
-#: gtk/gtkcellrenderer.c:189
+#: gtk/gtkcellrenderer.c:194
 msgid "Row has children."
 msgstr "Raden har barn."
 
-#: gtk/gtkcellrenderer.c:198
+#: gtk/gtkcellrenderer.c:203
 msgid "Is Expanded"
 msgstr "Er utvidet"
 
-#: gtk/gtkcellrenderer.c:199
+#: gtk/gtkcellrenderer.c:204
 msgid "Row is an expander row, and is expanded"
 msgstr "Raden er en utvider-rad, og er utvidet"
 
-#: gtk/gtkcellrendererpixbuf.c:104
+#: gtk/gtkcellrenderer.c:212
+msgid "Cell background color name"
+msgstr "Navn på bakgrunnsfarge for celle"
+
+#: gtk/gtkcellrenderer.c:213
+msgid "Cell background color as a string"
+msgstr "Bakgrunnsfarge for celle som en streng"
+
+#: gtk/gtkcellrenderer.c:220
+msgid "Cell background color"
+msgstr "Bakgrunnsfarge for celle"
+
+#: gtk/gtkcellrenderer.c:221
+msgid "Cell background color as a GdkColor"
+msgstr "Bakgrunnsfarge for celle som en GdkColor"
+
+#: gtk/gtkcellrenderer.c:229
+msgid "Cell background set"
+msgstr "Bakgrunn for celle satt"
+
+#: gtk/gtkcellrenderer.c:230
+msgid "Whether this tag affects the cell background color"
+msgstr "Om denne merkingen påvirker bakgrunnsfargen for cellen"
+
+#: gtk/gtkcellrendererpixbuf.c:117
 msgid "Pixbuf Object"
 msgstr "Pixbuf-objekt"
 
-#: gtk/gtkcellrendererpixbuf.c:105
+#: gtk/gtkcellrendererpixbuf.c:118
 msgid "The pixbuf to render."
 msgstr "Pixbuf som skal rendres."
 
-#: gtk/gtkcellrendererpixbuf.c:113
+#: gtk/gtkcellrendererpixbuf.c:126
 msgid "Pixbuf Expander Open"
 msgstr "Pixbuf for åpen utvider"
 
-#: gtk/gtkcellrendererpixbuf.c:114
+#: gtk/gtkcellrendererpixbuf.c:127
 msgid "Pixbuf for open expander."
 msgstr "Pixbuf for åpen utvider."
 
-#: gtk/gtkcellrendererpixbuf.c:122
+#: gtk/gtkcellrendererpixbuf.c:135
 msgid "Pixbuf Expander Closed"
 msgstr "Pixbuf for lukket utvider"
 
-#: gtk/gtkcellrendererpixbuf.c:123
+#: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf for closed expander."
 msgstr "Pixbuf for lukket utvider."
+
+#: gtk/gtkcellrendererpixbuf.c:144 gtk/gtkimage.c:170
+msgid "Stock ID"
+msgstr "Standard ID"
+
+#: gtk/gtkcellrendererpixbuf.c:145
+msgid "The stock ID of the stock icon to render"
+msgstr "Standard-ID for standardikon som skal rendres"
+
+#: gtk/gtkcellrendererpixbuf.c:152
+msgid "Size"
+msgstr "Størrelse"
+
+#: gtk/gtkcellrendererpixbuf.c:153
+msgid "The size of the rendered icon"
+msgstr "Størrelsen på rendret ikon"
+
+#: gtk/gtkcellrendererpixbuf.c:161
+msgid "Detail"
+msgstr "Detalj"
+
+#: gtk/gtkcellrendererpixbuf.c:162
+msgid "Render detail to pass to the theme engine"
+msgstr "Rendringsdetalj som skal sendes til temamotor"
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
@@ -2129,10 +2177,6 @@ msgstr "Maskebitkart for bruk med GdkImage eller GdkPixmap"
 #: gtk/gtkimage.c:162
 msgid "Filename to load and display."
 msgstr "Filnavn som skal lastes og vises."
-
-#: gtk/gtkimage.c:170
-msgid "Stock ID"
-msgstr "Standard ID"
 
 #: gtk/gtkimage.c:171
 msgid "Stock ID for a stock image to display."
