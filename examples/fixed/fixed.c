@@ -34,8 +34,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Fixed Container");
 
   /* Here we connect the "destroy" event to a signal handler */ 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit), NULL);
  
   /* Sets the border width of the window. */
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -52,8 +52,8 @@ int main( int   argc,
     /* When the button receives the "clicked" signal, it will call the
      * function move_button() passing it the Fixed Container as its
      * argument. */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (move_button), fixed);
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (move_button), fixed);
   
     /* This packs the button into the fixed containers window. */
     gtk_fixed_put (GTK_FIXED (fixed), button, i*50, i*50);

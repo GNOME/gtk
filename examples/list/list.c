@@ -51,9 +51,8 @@ gint main( int    argc,
      */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkList Example");
-    g_signal_connect (GTK_OBJECT (window),
-		      "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit),
+    g_signal_connect (G_OBJECT (window), "destroy",
+		      G_CALLBACK (gtk_main_quit),
 		      NULL);
     
     
@@ -79,10 +78,9 @@ gint main( int    argc,
     gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (scrolled_window),
                                            gtklist);
     gtk_widget_show (gtklist);
-    gtk_signal_connect (GTK_OBJECT (gtklist),
-		        "selection_changed",
-		        GTK_SIGNAL_FUNC (sigh_print_selection),
-		        NULL);
+    g_signal_connect (G_OBJECT (gtklist), "selection_changed",
+                      G_CALLBACK (sigh_print_selection),
+                      NULL);
     
     /* We create a "Prison" to put a list item in ;) */
     frame=gtk_frame_new ("Prison");
@@ -95,10 +93,9 @@ gint main( int    argc,
     /* Connect the sigh_button_event() signal handler to the List
      * which will handle the "arresting" of list items
      */
-    gtk_signal_connect (GTK_OBJECT (gtklist),
-		        "button_release_event",
-		        GTK_SIGNAL_FUNC (sigh_button_event),
-		        frame);
+    g_signal_connect (G_OBJECT (gtklist), "button_release_event",
+                      G_CALLBACK (sigh_button_event),
+                      frame);
     
     /* Create a separator */
     separator=gtk_hseparator_new ();
@@ -110,10 +107,9 @@ gint main( int    argc,
     button=gtk_button_new_with_label ("Close");
     gtk_container_add (GTK_CONTAINER (vbox), button);
     gtk_widget_show (button);
-    gtk_signal_connect_object (GTK_OBJECT (button),
-			       "clicked",
-			       GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			       GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (gtk_widget_destroy),
+                              window);
     
     
     /* Now we create 5 list items, each having its own
@@ -133,9 +129,7 @@ gint main( int    argc,
 	gtk_container_add (GTK_CONTAINER (gtklist), list_item);
 	gtk_widget_show (list_item);
 	gtk_label_get (GTK_LABEL (label), &string);
-	gtk_object_set_data (GTK_OBJECT (list_item),
-			     list_item_data_key,
-			     string);
+	g_object_set_data (G_OBJECT (list_item), list_item_data_key, string);
     }
     /* Here, we are creating another 5 labels, this time
      * we use gtk_list_item_new_with_label() for the creation
@@ -156,9 +150,9 @@ gint main( int    argc,
 	list_item = gtk_list_item_new_with_label (buffer);
 	dlist = g_list_prepend (dlist, list_item);
 	gtk_widget_show (list_item);
-	gtk_object_set_data (GTK_OBJECT (list_item),
-			     list_item_data_key,
-			     "ListItem with integrated Label");
+	g_object_set_data (G_OBJECT (list_item),
+                           list_item_data_key,
+                           "ListItem with integrated Label");
     }
     gtk_list_append_items (GTK_LIST (gtklist), dlist);
     
@@ -262,11 +256,9 @@ void sigh_print_selection( GtkWidget *gtklist,
      * and then query the data associated with list_item_data_key.
      * We then just print it */
     while (dlist) {
-	GtkObject       *list_item;
-	gchar           *item_data_string;
+	const gchar *item_data_string;
 	
-	list_item = GTK_OBJECT (dlist->data);
-	item_data_string = g_object_get_data (G_OBJECT (list_item),
+	item_data_string = g_object_get_data (G_OBJECT (dlist->data),
 	 				      list_item_data_key);
 	g_print("%s ", item_data_string);
  	

@@ -28,8 +28,8 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Dial");
   
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -55,8 +55,8 @@ int main( int   argc,
   gtk_box_pack_end (GTK_BOX (vbox), label, 0, 0, 0);
   gtk_widget_show (label);
 
-  g_signal_connect (GTK_OBJECT (adjustment), "value_changed",
-		    GTK_SIGNAL_FUNC (value_changed), label);
+  g_signal_connect (G_OBJECT (adjustment), "value_changed",
+		    G_CALLBACK (value_changed), label);
   
   gtk_widget_show (window);
   

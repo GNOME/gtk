@@ -23,8 +23,8 @@ int main( int   argc,
     /* Create a new dialog window for the scrolled window to be
      * packed into.  */
     window = gtk_dialog_new ();
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (destroy), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+		      G_CALLBACK (destroy), NULL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
     gtk_widget_set_size_request (window, 300, 300);
@@ -71,9 +71,9 @@ int main( int   argc,
     
     /* Add a "close" button to the bottom of the dialog */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_widget_destroy),
+			      window);
     
     /* this makes it so the button is the default. */
     

@@ -53,14 +53,14 @@ int main( int   argc,
      * titlebar), we ask it to call the delete_event () function
      * as defined above. The data passed to the callback
      * function is NULL and is ignored in the callback function. */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (delete_event), NULL);
     
     /* Here we connect the "destroy" event to a signal handler.  
      * This event occurs when we call gtk_widget_destroy() on the window,
      * or if we return FALSE in the "delete_event" callback. */
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (destroy), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+		      G_CALLBACK (destroy), NULL);
     
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -71,15 +71,15 @@ int main( int   argc,
     /* When the button receives the "clicked" signal, it will call the
      * function hello() passing it NULL as its argument.  The hello()
      * function is defined above. */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (hello), NULL);
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (hello), NULL);
     
     /* This will cause the window to be destroyed by calling
      * gtk_widget_destroy(window) when "clicked".  Again, the destroy
      * signal could come from here, or the window manager. */
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_widget_destroy),
+                              window);
     
     /* This packs the button into the window (a gtk container). */
     gtk_container_add (GTK_CONTAINER (window), button);

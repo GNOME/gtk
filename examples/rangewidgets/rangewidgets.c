@@ -34,13 +34,11 @@ void cb_page_size( GtkAdjustment *get,
     set->page_size = get->value;
     set->page_increment = get->value;
 
+    /* This sets the adjustment and makes it emit the "changed" signal to 
+       reconfigure all the widgets that are attached to this signal.  */
     gtk_adjustment_set_value (set, CLAMP (set->value,
 					  set->lower,
 					  (set->upper - set->page_size)));
-
-    /* Now emit the "changed" signal to reconfigure all the widgets that
-     * are attached to this adjustment */
-    g_signal_emit_by_name (GTK_OBJECT (set), "changed");
 }
 
 void cb_draw_value( GtkToggleButton *button )
@@ -53,14 +51,14 @@ void cb_draw_value( GtkToggleButton *button )
 
 /* Convenience functions */
 
-GtkWidget *make_menu_item( gchar         *name,
-                           GtkSignalFunc  callback,
-			   gpointer       data )
+GtkWidget *make_menu_item (gchar     *name,
+                           GCallback  callback,
+			   gpointer   data)
 {
     GtkWidget *item;
   
     item = gtk_menu_item_new_with_label (name);
-    g_signal_connect (GTK_OBJECT (item), "activate",
+    g_signal_connect (G_OBJECT (item), "activate",
 	              callback, data);
     gtk_widget_show (item);
 
@@ -92,8 +90,8 @@ void create_range_controls( void )
 
     /* Standard window-creating stuff */
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-                      GTK_SIGNAL_FUNC (gtk_main_quit),
+    g_signal_connect (G_OBJECT (window), "destroy",
+                      G_CALLBACK (gtk_main_quit),
                       NULL);
     gtk_window_set_title (GTK_WINDOW (window), "range controls");
 
@@ -145,8 +143,8 @@ void create_range_controls( void )
     /* A checkbutton to control whether the value is displayed or not */
     button = gtk_check_button_new_with_label("Display value on scale widgets");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    g_signal_connect (GTK_OBJECT (button), "toggled",
-                      GTK_SIGNAL_FUNC (cb_draw_value), NULL);
+    g_signal_connect (G_OBJECT (button), "toggled",
+                      G_CALLBACK (cb_draw_value), NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
   
@@ -162,19 +160,19 @@ void create_range_controls( void )
     menu = gtk_menu_new ();
 
     item = make_menu_item ("Top",
-                           GTK_SIGNAL_FUNC (cb_pos_menu_select),
+                           G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_TOP));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
-    item = make_menu_item ("Bottom", GTK_SIGNAL_FUNC (cb_pos_menu_select), 
+    item = make_menu_item ("Bottom", G_CALLBACK (cb_pos_menu_select), 
                            GINT_TO_POINTER (GTK_POS_BOTTOM));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
-    item = make_menu_item ("Left", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+    item = make_menu_item ("Left", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_LEFT));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
-    item = make_menu_item ("Right", GTK_SIGNAL_FUNC (cb_pos_menu_select),
+    item = make_menu_item ("Right", G_CALLBACK (cb_pos_menu_select),
                            GINT_TO_POINTER (GTK_POS_RIGHT));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
@@ -198,17 +196,17 @@ void create_range_controls( void )
     menu = gtk_menu_new ();
   
     item = make_menu_item ("Continuous",
-                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_CONTINUOUS));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
     item = make_menu_item ("Discontinuous",
-                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_DISCONTINUOUS));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
     item = make_menu_item ("Delayed",
-                           GTK_SIGNAL_FUNC (cb_update_menu_select),
+                           G_CALLBACK (cb_update_menu_select),
                            GINT_TO_POINTER (GTK_UPDATE_DELAYED));
     gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   
@@ -229,8 +227,8 @@ void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
-    g_signal_connect (GTK_OBJECT (adj2), "value_changed",
-                      GTK_SIGNAL_FUNC (cb_digits_scale), NULL);
+    g_signal_connect (G_OBJECT (adj2), "value_changed",
+                      G_CALLBACK (cb_digits_scale), NULL);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
@@ -249,8 +247,8 @@ void create_range_controls( void )
     gtk_widget_show (label);
 
     adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
-    g_signal_connect (GTK_OBJECT (adj2), "value_changed",
-                      GTK_SIGNAL_FUNC (cb_page_size), adj1);
+    g_signal_connect (G_OBJECT (adj2), "value_changed",
+                      G_CALLBACK (cb_page_size), adj1);
     scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
@@ -269,8 +267,8 @@ void create_range_controls( void )
     gtk_widget_show (box2);
 
     button = gtk_button_new_with_label ("Quit");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                              GTK_SIGNAL_FUNC (gtk_main_quit),
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (gtk_main_quit),
                               NULL);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);

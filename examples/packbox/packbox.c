@@ -95,8 +95,8 @@ int main( int   argc,
     /* You should always remember to connect the delete_event signal
      * to the main window. This is very important for proper intuitive
      * behavior */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (delete_event), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
     /* We create a vertical box (vbox) to pack the horizontal boxes into.
@@ -259,9 +259,9 @@ int main( int   argc,
     button = gtk_button_new_with_label ("Quit");
     
     /* Setup the signal to terminate the program when the button is clicked */
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			      GTK_SIGNAL_FUNC (gtk_main_quit),
-			      GTK_OBJECT (window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+			      G_CALLBACK (gtk_main_quit),
+			      window);
     /* Pack the button into the quitbox.
      * The last 3 arguments to gtk_box_pack_start are:
      * expand, fill, padding. */

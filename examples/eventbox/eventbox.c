@@ -15,8 +15,8 @@ int main( int argc,
     
     gtk_window_set_title (GTK_WINDOW (window), "Event Box");
     
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (exit), NULL);
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     
@@ -37,8 +37,8 @@ int main( int argc,
     
     /* And bind an action to it */
     gtk_widget_set_events (event_box, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect (GTK_OBJECT (event_box), "button_press_event",
-	              GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (event_box), "button_press_event",
+	              G_CALLBACK (exit), NULL);
     
     /* Yet one more thing you need an X window for ... */
     

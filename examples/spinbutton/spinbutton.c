@@ -62,8 +62,8 @@ int main( int   argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit),
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), "Spin Button");
@@ -158,24 +158,24 @@ int main( int   argc,
   adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
   spinner2 = gtk_spin_button_new (adj, 0.0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
-  g_signal_connect (GTK_OBJECT (adj), "value_changed",
-		    GTK_SIGNAL_FUNC (change_digits),
-		    (gpointer) spinner2);
+  g_signal_connect (G_OBJECT (adj), "value_changed",
+		    G_CALLBACK (change_digits),
+		    spinner2);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
   
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
   button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (toggle_snap),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (toggle_snap),
 		    spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
   button = gtk_check_button_new_with_label ("Numeric only input mode");
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (toggle_numeric),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (toggle_numeric),
 		    spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
@@ -186,15 +186,15 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   button = gtk_button_new_with_label ("Value as Int");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (get_value),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (get_value),
 		    GINT_TO_POINTER (1));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
   
   button = gtk_button_new_with_label ("Value as Float");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-		    GTK_SIGNAL_FUNC (get_value),
+  g_signal_connect (G_OBJECT (button), "clicked",
+		    G_CALLBACK (get_value),
 		    GINT_TO_POINTER (2));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
   
@@ -205,9 +205,9 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
   
   button = gtk_button_new_with_label ("Close");
-  g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			     GTK_OBJECT (window));
+  g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                            G_CALLBACK (gtk_widget_destroy),
+			    window);
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
 
   gtk_widget_show_all (window);

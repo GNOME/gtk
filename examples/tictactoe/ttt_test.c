@@ -22,8 +22,8 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -32,8 +32,8 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), ttt);
   gtk_widget_show (ttt);
 
-  g_signal_connect (GTK_OBJECT (ttt), "tictactoe",
-		    GTK_SIGNAL_FUNC (win), NULL);
+  g_signal_connect (G_OBJECT (ttt), "tictactoe",
+		    G_CALLBACK (win), NULL);
 
   gtk_widget_show (window);
   

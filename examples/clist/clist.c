@@ -92,10 +92,9 @@ int main( int    argc,
     gtk_widget_set_size_request (GTK_WIDGET (window), 300, 150);
 
     gtk_window_set_title (GTK_WINDOW (window), "GtkCList Example");
-    gtk_signal_connect (GTK_OBJECT (window),
-		        "destroy",
-		        GTK_SIGNAL_FUNC (gtk_main_quit),
-		        NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+                      G_CALLBACK (gtk_main_quit),
+                      NULL);
     
     vbox=gtk_vbox_new (FALSE, 5);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -115,9 +114,9 @@ int main( int    argc,
 
     /* When a selection is made, we want to know about it. The callback
      * used is selection_made, and its code can be found further down */
-    gtk_signal_connect(GTK_OBJECT (clist), "select_row",
-		       GTK_SIGNAL_FUNC (selection_made),
-		       NULL);
+    g_signal_connect (G_OBJECT (clist), "select_row",
+                      G_CALLBACK (selection_made),
+                      NULL);
 
     /* It isn't necessary to shadow the border, but it looks nice :) */
     gtk_clist_set_shadow_type (GTK_CLIST (clist), GTK_SHADOW_OUT);
@@ -148,15 +147,15 @@ int main( int    argc,
     gtk_box_pack_start (GTK_BOX (hbox), button_hide_show, TRUE, TRUE, 0);
 
     /* Connect our callbacks to the three buttons */
-    gtk_signal_connect_object (GTK_OBJECT (button_add), "clicked",
-			       GTK_SIGNAL_FUNC (button_add_clicked),
-			       (gpointer) clist);
-    gtk_signal_connect_object (GTK_OBJECT (button_clear), "clicked",
-			       GTK_SIGNAL_FUNC (button_clear_clicked),
-			       (gpointer) clist);
-    gtk_signal_connect_object (GTK_OBJECT (button_hide_show), "clicked",
-			       GTK_SIGNAL_FUNC (button_hide_show_clicked),
-			       (gpointer) clist);
+    g_signal_connect_swapped (G_OBJECT (button_add), "clicked",
+                              G_CALLBACK (button_add_clicked),
+			      clist);
+    g_signal_connect_swapped (G_OBJECT (button_clear), "clicked",
+                              G_CALLBACK (button_clear_clicked),
+                              clist);
+    g_signal_connect_swapped (G_OBJECT (button_hide_show), "clicked",
+                              G_CALLBACK (button_hide_show_clicked),
+                              clist);
 
     gtk_widget_show (button_add);
     gtk_widget_show (button_clear);

@@ -37,8 +37,8 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Arrow Buttons");
 
   /* It's a good idea to do this for all windows. */
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   /* Sets the border width of the window. */
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);

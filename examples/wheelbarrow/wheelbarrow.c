@@ -142,8 +142,8 @@ int main (int argc,
      * since we're making it a popup. */
     gtk_init (&argc, &argv);
     window = gtk_window_new (GTK_WINDOW_POPUP);
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (close_application), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (close_application), NULL);
     gtk_widget_show (window);
 
     /* Now for the pixmap and the pixmap widget */

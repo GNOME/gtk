@@ -6,7 +6,7 @@
 void callback( GtkWidget *widget,
                gpointer   data )
 {
-    g_print ("Hello again - %s was pressed\n", (char *) data);
+    g_print ("Hello again - %s was pressed\n", (gchar *) data);
 }
 
 /* another callback */
@@ -39,8 +39,8 @@ int main( int   argc,
 
     /* Here we just set a handler for delete_event that immediately
      * exits GTK. */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-		      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+		      G_CALLBACK (delete_event), NULL);
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -58,8 +58,8 @@ int main( int   argc,
     
     /* Now when the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (callback), "button 1");
 
     /* Instead of gtk_container_add, we pack this button into the invisible
      * box, which has been packed into the window. */
@@ -74,8 +74,8 @@ int main( int   argc,
 
     /* Call the same callback function with a different argument,
      * passing a pointer to "button 2" instead. */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (callback), "button 2");
 
     gtk_box_pack_start(GTK_BOX (box1), button, TRUE, TRUE, 0);
 

@@ -74,18 +74,18 @@ int main( int   argc,
   gtk_window_set_title (GTK_WINDOW (window), "Event Box");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-	            GTK_SIGNAL_FUNC (exit), NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+	            G_CALLBACK (exit), NULL);
 
   /* Create a button the user can click to get targets */
 
   button = gtk_button_new_with_label ("Get Targets");
   gtk_container_add (GTK_CONTAINER (window), button);
 
-  g_signal_connect (GTK_OBJECT(button), "clicked",
-		    GTK_SIGNAL_FUNC (get_targets), NULL);
-  g_signal_connect (GTK_OBJECT(button), "selection_received",
-		    GTK_SIGNAL_FUNC (selection_received), NULL);
+  g_signal_connect (G_OBJECT(button), "clicked",
+		    G_CALLBACK (get_targets), NULL);
+  g_signal_connect (G_OBJECT(button), "selection_received",
+		    G_CALLBACK (selection_received), NULL);
 
   gtk_widget_show (button);
   gtk_widget_show (window);

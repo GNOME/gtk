@@ -28,13 +28,13 @@ GtkWidget *create_bbox( gint  horizontal,
   gtk_box_set_spacing (GTK_BOX (bbox), spacing);
   /*gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);*/
 
-  button = gtk_button_new_with_label ("OK");
+  button = gtk_button_new_from_stock (GTK_STOCK_OK);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gtk_button_new_with_label ("Cancel");
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
-  button = gtk_button_new_with_label ("Help");
+  button = gtk_button_new_from_stock (GTK_STOCK_HELP);
   gtk_container_add (GTK_CONTAINER (bbox), button);
 
   return frame;
@@ -56,8 +56,8 @@ int main( int   argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
 
-  g_signal_connect (GTK_OBJECT (window), "destroy",
-		    GTK_SIGNAL_FUNC (gtk_main_quit),
+  g_signal_connect (G_OBJECT (window), "destroy",
+		    G_CALLBACK (gtk_main_quit),
 		    NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);

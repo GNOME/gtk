@@ -67,14 +67,12 @@ int main( int   argc,
 
     gtk_window_set_title (GTK_WINDOW (window), "Pixmap'd Buttons!");
 
-#if 1
     /* It's a good idea to do this for all windows. */
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (exit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (gtk_main_quit), NULL);
 
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-	 	      GTK_SIGNAL_FUNC (exit), NULL);
-#endif
+    g_signal_connect (G_OBJECT (window), "delete_event",
+	 	      G_CALLBACK (gtk_main_quit), NULL);
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -84,8 +82,8 @@ int main( int   argc,
     button = gtk_button_new ();
 
     /* Connect the "clicked" signal of the button to our callback */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-		      GTK_SIGNAL_FUNC (callback), (gpointer) "cool button");
+    g_signal_connect (G_OBJECT (button), "clicked",
+		      G_CALLBACK (callback), (gpointer) "cool button");
 
     /* This calls our box creating function */
     box1 = xpm_label_box(window, "info.xpm", "cool button");

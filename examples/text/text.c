@@ -49,9 +49,9 @@ int main( int argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_widget_set_size_request (window, 600, 500);
   gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, FALSE);  
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (close_application),
-		      NULL);
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (close_application),
+                    NULL);
   gtk_window_set_title (GTK_WINDOW (window), "Text Widget Example");
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
   
@@ -146,14 +146,14 @@ int main( int argc,
 
   check = gtk_check_button_new_with_label ("Editable");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, FALSE, 0);
-  gtk_signal_connect (GTK_OBJECT (check), "toggled",
-		      GTK_SIGNAL_FUNC (text_toggle_editable), text);
+  g_signal_connect (G_OBJECT (check), "toggled",
+                    G_CALLBACK (text_toggle_editable), text);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), TRUE);
   gtk_widget_show (check);
   check = gtk_check_button_new_with_label ("Wrap Words");
   gtk_box_pack_start (GTK_BOX (hbox), check, FALSE, TRUE, 0);
-  gtk_signal_connect (GTK_OBJECT (check), "toggled",
-		      GTK_SIGNAL_FUNC (text_toggle_word_wrap), text);
+  g_signal_connect (G_OBJECT (check), "toggled",
+                    G_CALLBACK (text_toggle_word_wrap), text);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check), FALSE);
   gtk_widget_show (check);
 
@@ -167,8 +167,8 @@ int main( int argc,
   gtk_widget_show (box2);
   
   button = gtk_button_new_with_label ("close");
-  g_signal_connect (GTK_OBJECT (button), "clicked",
-	            GTK_SIGNAL_FUNC (close_application),
+  g_signal_connect (G_OBJECT (button), "clicked",
+	            G_CALLBACK (close_application),
 	            NULL);
   gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);

@@ -1,3 +1,8 @@
+2002-02-19  Sven Neumann  <sven@gimp.org>
+
+	* examples/*/*.c: finish conversion to g_signal_* functions by
+	using G_OBJECT and G_CALLBACK and other assorted changes.
+
 Tue Feb 19 17:36:31 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtktreeprivate.h, gtktreeviewcolumn.[ch], gtktreeview.c: change

@@ -109,8 +109,8 @@ int main( int   argc,
    
     window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title (GTK_WINDOW (window), "Paned Windows");
-    g_signal_connect (GTK_OBJECT (window), "destroy",
-	              GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
+    g_signal_connect (G_OBJECT (window), "destroy",
+	              G_CALLBACK (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
     gtk_widget_set_size_request (GTK_WIDGET (window), 450, 400);
 

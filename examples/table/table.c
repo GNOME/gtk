@@ -35,8 +35,8 @@ int main( int   argc,
 
     /* Set a handler for delete_event that immediately
      * exits GTK. */
-    g_signal_connect (GTK_OBJECT (window), "delete_event",
-                      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (window), "delete_event",
+                      G_CALLBACK (delete_event), NULL);
 
     /* Sets the border width of the window. */
     gtk_container_set_border_width (GTK_CONTAINER (window), 20);
@@ -52,8 +52,8 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 1" as its argument */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-	              GTK_SIGNAL_FUNC (callback), (gpointer) "button 1");
+    g_signal_connect (G_OBJECT (button), "clicked",
+	              G_CALLBACK (callback), (gpointer) "button 1");
 
 
     /* Insert button 1 into the upper left quadrant of the table */
@@ -67,8 +67,8 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "callback" function
      * with a pointer to "button 2" as its argument */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (callback), (gpointer) "button 2");
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (callback), (gpointer) "button 2");
     /* Insert button 2 into the upper right quadrant of the table */
     gtk_table_attach_defaults (GTK_TABLE (table), button, 1, 2, 0, 1);
 
@@ -79,8 +79,8 @@ int main( int   argc,
 
     /* When the button is clicked, we call the "delete_event" function
      * and the program exits */
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (delete_event), NULL);
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (delete_event), NULL);
 
     /* Insert the quit button into the both 
      * lower quadrants of the table */

@@ -98,8 +98,8 @@ int main( int   argc,
     pdata->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
     gtk_window_set_resizable (GTK_WINDOW (pdata->window), TRUE);
 
-    g_signal_connect (GTK_OBJECT (pdata->window), "destroy",
-	              GTK_SIGNAL_FUNC (destroy_progress),
+    g_signal_connect (G_OBJECT (pdata->window), "destroy",
+	              G_CALLBACK (destroy_progress),
                       pdata);
     gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
     gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
@@ -149,8 +149,8 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (GTK_OBJECT (check), "clicked",
-                      GTK_SIGNAL_FUNC (toggle_show_text),
+    g_signal_connect (G_OBJECT (check), "clicked",
+                      G_CALLBACK (toggle_show_text),
                       pdata);
     gtk_widget_show (check);
 
@@ -159,8 +159,8 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), check, 0, 1, 1, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (GTK_OBJECT (check), "clicked",
-                      GTK_SIGNAL_FUNC (toggle_activity_mode),
+    g_signal_connect (G_OBJECT (check), "clicked",
+                      G_CALLBACK (toggle_activity_mode),
                       pdata);
     gtk_widget_show (check);
 
@@ -175,8 +175,8 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), button, 2, 3, 0, 1,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (set_continuous_mode),
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (set_continuous_mode),
                       pdata);
     gtk_widget_show (button);
 
@@ -187,8 +187,8 @@ int main( int   argc,
     gtk_table_attach (GTK_TABLE (table), button, 2, 3, 1, 2,
                       GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
                       5, 5);
-    g_signal_connect (GTK_OBJECT (button), "clicked",
-                      GTK_SIGNAL_FUNC (set_discrete_mode),
+    g_signal_connect (G_OBJECT (button), "clicked",
+                      G_CALLBACK (set_discrete_mode),
                       pdata);
     gtk_widget_show (button);
 
@@ -198,9 +198,9 @@ int main( int   argc,
 
     /* Add a button to exit the program */
     button = gtk_button_new_with_label ("close");
-    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
-                              GTK_SIGNAL_FUNC (gtk_widget_destroy),
-                              GTK_OBJECT (pdata->window));
+    g_signal_connect_swapped (G_OBJECT (button), "clicked",
+                              G_CALLBACK (gtk_widget_destroy),
+                              pdata->window);
     gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
     /* This makes it so the button is the default. */
