@@ -1,3 +1,12 @@
+Thu Mar 11 16:18:51 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_insert_path): revert
+	earlier change to insert_path so that we test that the directory
+	exists.
+
+	* gtk/gtkfilechooserdialog.c
+	(gtk_file_chooser_dialog_constructor): move focus.
+
 Thu Mar 11 22:12:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_size_request): Use the same

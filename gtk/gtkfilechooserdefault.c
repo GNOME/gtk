@@ -878,6 +878,8 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean nam
   GtkFileFolder *parent_folder;
   GtkFileInfo *info;
 
+  info = NULL;
+
   if (!gtk_file_system_get_parent (file_system, path, &parent_path, error))
     return NULL;
 
@@ -890,17 +892,11 @@ get_file_info (GtkFileSystem *file_system, const GtkFilePath *path, gboolean nam
 					      error);
   gtk_file_path_free (parent_path);
 
-  if (parent_folder)
-    {
-      info = gtk_file_folder_get_info (parent_folder, path, error);
-      g_object_unref (parent_folder);
-    }
-  else
-    {
-      info = NULL;
-      /* Name-only should not fail.  */
-      g_return_val_if_fail (!name_only, NULL);
-    }
+  if (!parent_folder)
+    return NULL;
+
+  info = gtk_file_folder_get_info (parent_folder, path, error);
+  g_object_unref (parent_folder);
 
   return info;
 }
@@ -923,10 +919,6 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
   gpointer data;
   GtkTreeIter iter;
 
-  /* Note: currently this function cannot fail.  If you ever change
-   * it so it can, go check callers and their callers.
-   */
-
   if (is_volume)
     {
       data = volume;
@@ -936,14 +928,18 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
     }
   else
     {
+      /* Always check to make sure that the directory exists. */
+      GtkFileInfo *info = get_file_info (impl->file_system, path, FALSE, error);
+
+      if (info == NULL)
+	return FALSE;
+
       if (label)
 	label_copy = g_strdup (label);
       else
-	{
-	  GtkFileInfo *info = get_file_info (impl->file_system, path, TRUE, error);
-	  label_copy = g_strdup (gtk_file_info_get_display_name (info));
-	  gtk_file_info_free (info);
-	}
+	label_copy = g_strdup (gtk_file_info_get_display_name (info));
+
+      gtk_file_info_free (info);
 
       data = gtk_file_path_copy (path);
       pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
@@ -3940,14 +3936,7 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
   gboolean result;
-  GtkFileInfo *info;
   int pos;
-
-  /* Test validity of path here.  */
-  info = get_file_info (impl->file_system, path, FALSE, error);
-  if (!info)
-    return FALSE;
-  gtk_file_info_free (info);
 
   pos = shortcuts_get_pos_for_shortcut_folder (impl, impl->num_shortcuts);
 

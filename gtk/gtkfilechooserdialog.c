@@ -331,18 +331,19 @@ gtk_file_chooser_dialog_constructor (GType                  type,
   else
     priv->widget = g_object_new (GTK_TYPE_FILE_CHOOSER_WIDGET, NULL);
 
-  _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
-
   g_signal_connect (priv->widget, "file-activated",
 		    G_CALLBACK (file_chooser_widget_file_activated), object);
   g_signal_connect (priv->widget, "default-size-changed",
 		    G_CALLBACK (file_chooser_widget_default_size_changed), object);
 
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (object)->vbox), priv->widget, TRUE, TRUE, 0);
+
   gtk_widget_show (priv->widget);
 
   _gtk_file_chooser_set_delegate (GTK_FILE_CHOOSER (object),
 				  GTK_FILE_CHOOSER (priv->widget));
+
+  _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
 
   gtk_widget_pop_composite_child ();
 
