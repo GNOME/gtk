@@ -1,6 +1,5 @@
 <chapter id="gtk-migrating-GtkFileChooser">
   <chapterinfo>
-    <title>Migrating from GtkFileSelection to GtkFileChooser</title>
     <author>
       <firstname>Federico</firstname>
       <surname>Mena-Quintero</surname>
@@ -11,6 +10,8 @@
       </affiliation>
     </author>
   </chapterinfo>
+
+  <title>Migrating from GtkFileSelection to GtkFileChooser</title>
 
   <para>
     #GtkFileChooser, starting with GTK+ 2.4, is the new set of APIs

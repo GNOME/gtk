@@ -209,10 +209,10 @@ static void filter_combo_changed       (GtkComboBox           *combo_box,
 static void tree_selection_changed     (GtkTreeSelection      *tree_selection,
 					GtkFileChooserDefault *impl);
 
-static void     shortcuts_row_activated (GtkTreeView           *tree_view,
-					 GtkTreePath           *path,
-					 GtkTreeViewColumn     *column,
-					 GtkFileChooserDefault *impl);
+static void     shortcuts_row_activated_cb (GtkTreeView           *tree_view,
+					    GtkTreePath           *path,
+					    GtkTreeViewColumn     *column,
+					    GtkFileChooserDefault *impl);
 static gboolean shortcuts_select_func   (GtkTreeSelection      *selection,
 					 GtkTreeModel          *model,
 					 GtkTreePath           *path,
@@ -556,24 +556,18 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 static void
 shortcuts_append_home (GtkFileChooserDefault *impl)
 {
-  const char *name;
   const char *home;
   GtkFilePath *home_path;
-  char *label;
   GError *error;
-
-  name = g_get_user_name ();
-  label = g_strdup_printf (_("%s's Home"), name);
 
   home = g_get_home_dir ();
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
   error = NULL;
-  impl->has_home = shortcuts_insert_path (impl, -1, home_path, FALSE, label, &error);
+  impl->has_home = shortcuts_insert_path (impl, -1, home_path, FALSE, _("Home"), &error);
   if (!impl->has_home)
     error_getting_info_dialog (impl, home_path, error);
 
-  g_free (label);
   gtk_file_path_free (home_path);
 }
 
@@ -1060,6 +1054,14 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_slist_free (uris);
 }
 
+/* Callback used when the selection in the shortcuts tree changes */
+static void
+shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
+				GtkFileChooserDefault *impl)
+{
+  bookmarks_check_remove_sensitivity (impl);
+}
+
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
 create_shortcuts_tree (GtkFileChooserDefault *impl)
@@ -1093,9 +1095,12 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_tree_selection_set_select_function (selection,
 					  shortcuts_select_func,
 					  impl, NULL);
+
+  g_signal_connect (selection, "changed",
+		    G_CALLBACK (shortcuts_selection_changed_cb), impl);
   
   g_signal_connect (impl->shortcuts_tree, "row-activated",
-		    G_CALLBACK (shortcuts_row_activated), impl);
+		    G_CALLBACK (shortcuts_row_activated_cb), impl);
 
   g_signal_connect (impl->shortcuts_tree, "drag-data-received",
 		    G_CALLBACK (shortcuts_drag_data_received_cb), impl);
@@ -2407,18 +2412,16 @@ tree_selection_changed (GtkTreeSelection      *selection,
 
 /* Callback used when a row in the shortcuts list is activated */
 static void
-shortcuts_row_activated (GtkTreeView           *tree_view,
-			 GtkTreePath           *path,
-			 GtkTreeViewColumn     *column,
-			 GtkFileChooserDefault *impl)
+shortcuts_row_activated_cb (GtkTreeView           *tree_view,
+			    GtkTreePath           *path,
+			    GtkTreeViewColumn     *column,
+			    GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
   GtkFilePath *model_path;
   
   if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
     return;
-
-  bookmarks_check_remove_sensitivity (impl);
 
   /* Set the current folder */
 

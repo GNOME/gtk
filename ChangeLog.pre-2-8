@@ -1,3 +1,12 @@
+2003-12-09  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_home): Use "Home"
+	rather than "Username's Home" (#125964).
+	(shortcuts_selection_changed_cb): New callback, check the
+	sensitivity of the Remove Bookmark button at the right time.
+	(shortcuts_row_activated_cb): It is not necessary to check the
+	sensitivity here.
+
 Wed Dec 10 00:06:24 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Improve the GDK API for dealing with group leaders (#119375):
