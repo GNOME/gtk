@@ -1,3 +1,10 @@
+1998-04-08  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_event_translate): During drag and drop, set the
+	event mask at ButtonPress time to include ButtonPressMask and
+	ButtonReleaseMask, otherwise, if the button is released, and we
+	get a LeaveNotify event, it still thinks we are doing a drag.
+
 Tue Apr  7 22:45:37 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 0.99.10

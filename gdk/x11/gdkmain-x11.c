@@ -1965,7 +1965,7 @@ gdk_event_translate (GdkEvent *event,
 	    
 	    window_private->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
 	    dnd_setwinattr.event_mask = 
-	      window_private->dnd_drag_eventmask = ButtonMotionMask |
+	      window_private->dnd_drag_eventmask = ButtonMotionMask | ButtonPressMask | ButtonReleaseMask |
 			EnterWindowMask | LeaveWindowMask;
 	    XChangeWindowAttributes(gdk_display, window_private->xwindow,
 				    CWEventMask, &dnd_setwinattr);
