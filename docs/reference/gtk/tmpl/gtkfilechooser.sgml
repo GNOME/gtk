@@ -123,7 +123,7 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 	Internally, GTK+ implements a file chooser's graphical user
 	interface with the private
 	<classname>GtkFileChooserDefaultClass</classname>.  This
-	widget has several <link linkend="gtk-Bindings"">key
+	widget has several <link linkend="gtk-Bindings">key
 	bindings</link> and their associated signals.  This section
 	describes the available key binding signals.
       </para>
