@@ -238,6 +238,8 @@ void _gdk_colormap_real_destroy (GdkColormap *colormap);
 
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
+void     _gdk_windowing_init                    (void);
+
 extern GOptionEntry _gdk_windowing_args[];
 void     _gdk_windowing_set_default_display     (GdkDisplay *display);
 

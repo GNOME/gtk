@@ -53,8 +53,6 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     */
 
 static gchar  *gdk_progclass = NULL;
-static gint    gdk_argc = 0;
-static gchar **gdk_argv = NULL;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {

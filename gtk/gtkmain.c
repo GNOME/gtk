@@ -437,7 +437,7 @@ do_pre_parse_initialization (int    *argc,
 	g_warning ("Locale not supported by C library.\n\tUsing the fallback 'C' locale.");
     }
 
-  gdk_pre_parse_libgtk_only ();
+  gdk_parse_args (argc, argv);
   gdk_event_handler_set ((GdkEventFunc)gtk_main_do_event, NULL, NULL);
   
 #ifdef G_ENABLE_DEBUG

@@ -1,3 +1,12 @@
+Tue Sep 21 16:27:19 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk/gdk.c: remove now unused arg variables.
+
+	* gdk/gdkinternals.h: declare _gdk_windowing_init ().
+
+	* gtk/gtkmain.c (do_pre_parse_initialization): call gdk_parse_args ()
+	here instead of gdk_pre_parse_libgtk_only (). Should fix #153082.
+
 2004-09-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_should_respond): 
