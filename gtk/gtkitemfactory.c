@@ -1609,7 +1609,11 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
   if (!S_ISREG (g_scanner_stat_mode (file_name)))
     return;
 
+#ifndef __EMX__
   fd = open (file_name, O_RDONLY);
+#else
+  fd = open (file_name, O_RDONLY | O_TEXT);
+#endif
   if (fd < 0)
     return;
 

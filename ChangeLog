@@ -1,3 +1,8 @@
+Fri Mar  5 09:12:24 1999  ape@lrdpf.spacetec.no  (Asbjorn Pettersen)
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc): Open file in
+	 textmode (O_TEXT) for OS/2 version.
+
 Sun Feb 28 16:46:02 1999  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkspinbutton.[c,h] gtk/testgtk.c: Added two new signals to 
