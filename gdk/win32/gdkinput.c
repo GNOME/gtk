@@ -280,18 +280,6 @@ gdk_input_exit (void)
   g_list_free(gdk_input_windows);
 }
 
-/**
- * gdk_device_get_axis:
- * @axis: a #GdkDevice
- * @axes: pointer to an array of axes
- * @use: the use to look for
- * @value: location to store the found value.
- * 
- * Interprets an array of double as axis values for a given device,
- * and locates the value in the array for a given axis use.
- * 
- * Return value: %TRUE if the given axis use was found, otherwies %FALSE
- **/
 gboolean
 gdk_device_get_axis (GdkDevice *device, gdouble *axes, GdkAxisUse use, gdouble *value)
 {

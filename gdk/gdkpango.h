@@ -75,7 +75,7 @@ struct _GdkPangoAttrEmbossed
   gboolean embossed;
 };
 
-PangoAttribute *gdk_pango_attr_stipple_new  (GdkBitmap *bitmap);
+PangoAttribute *gdk_pango_attr_stipple_new  (GdkBitmap *stipple);
 PangoAttribute *gdk_pango_attr_embossed_new (gboolean embossed);
 
 #ifdef __cplusplus

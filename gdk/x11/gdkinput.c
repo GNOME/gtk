@@ -338,7 +338,10 @@ gdk_input_exit (void)
  * Return value: %TRUE if the given axis use was found, otherwies %FALSE
  **/
 gboolean
-gdk_device_get_axis (GdkDevice *device, gdouble *axes, GdkAxisUse use, gdouble *value)
+gdk_device_get_axis (GdkDevice  *device,
+		     gdouble    *axes,
+		     GdkAxisUse  use,
+		     gdouble    *value)
 {
   gint i;
   
