@@ -1,3 +1,10 @@
+Wed May 17 01:03:50 2000  Raph Levien  <raph@acm.org>
+
+	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Changed the behavior
+	when the number of colors requested (gdk_rgb_min_colors)
+	exceeds the maximum cube tried. Old behavior segfaulted. New
+	behavior just uses the maximum cube.
+
 Mon May  8 16:16:53 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
 
         * gtk/gtkrc.*: added "*-r-*" to all fontsets; that works quite well,

@@ -216,7 +216,7 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
   gint idx;
   gint best[256];
 
-  if (nr * ng * nb < gdk_rgb_min_colors)
+  if (!image_info->cmap_alloced && nr * ng * nb < gdk_rgb_min_colors)
     return FALSE;
 
   if (image_info->cmap_alloced)
