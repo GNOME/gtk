@@ -34,10 +34,8 @@ gdk_font_get_type (void)
   
   if (our_type == 0)
     our_type = g_boxed_type_register_static ("GdkFont",
-					     NULL,
 					     (GBoxedCopyFunc)gdk_font_ref,
-					     (GBoxedFreeFunc)gdk_font_unref,
-					     TRUE);
+					     (GBoxedFreeFunc)gdk_font_unref);
   return our_type;
 }
 
