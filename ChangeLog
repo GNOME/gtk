@@ -1,5 +1,8 @@
 2002-02-17  Tor Lillqvist  <tml@iki.fi>
 
+	* README.win32: Remove comment about the gtk-1-3-win32-production
+	branch having more functionality.
+
 	* gdk/win32/*.c: Massive changes. Too many to list here, but I'll
 	try a summary:
 
@@ -9,7 +12,7 @@
 	GdkImage::windowing_data is a pointer to the GdkPixmap.
 
 	This simplifies many pixmap and image related functions a lot, and
-	reduces duplicated code snippets. For instance, there is only one
+	reduces duplicated code. For instance, there is only one
 	place in gdk/win32 where CreateDIBSection() is called, in the
 	function _gdk_win32_new_pixmap(). Converting a bitmap (GdkPixmap)
 	to a Windows region is almost trivial, with the bitmap bits being
