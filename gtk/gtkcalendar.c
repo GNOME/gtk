@@ -262,6 +262,7 @@ typedef void (*GtkCalendarSignalDate) (GtkObject *object, guint arg1, guint arg2
 
 static void gtk_calendar_class_init	(GtkCalendarClass *class);
 static void gtk_calendar_init		(GtkCalendar *calendar);
+static void gtk_calendar_destroy	(GtkObject *calendar);
 static void gtk_calendar_realize	(GtkWidget *widget);
 static void gtk_calendar_unrealize	(GtkWidget *widget);
 static void gtk_calendar_draw_focus	(GtkWidget *widget);
@@ -370,6 +371,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->focus_out_event = gtk_calendar_focus_out;
   widget_class->style_set = gtk_calendar_style_set;
   widget_class->state_changed = gtk_calendar_state_changed;
+  object_class->destroy = gtk_calendar_destroy;
   
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     gtk_signal_new ("month_changed",
@@ -1147,6 +1149,16 @@ gtk_calendar_unrealize (GtkWidget *widget)
       gdk_window_destroy (private_data->main_win);
       private_data->main_win = NULL;      
     }
+  if (private_data->day_name_win)
+    {
+      gdk_window_set_user_data (private_data->day_name_win, NULL);
+      gdk_window_destroy (private_data->day_name_win);
+      private_data->day_name_win = NULL;      
+    }
+  if (calendar->xor_gc)
+    gdk_gc_unref (calendar->xor_gc);
+  if (calendar->gc)
+    gdk_gc_unref (calendar->gc);
   
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
@@ -2644,6 +2656,16 @@ gtk_calendar_focus_in (GtkWidget	 *widget,
   gtk_calendar_paint_day (widget, calendar->focus_row, calendar->focus_col);
   
   return FALSE;
+}
+
+static void
+gtk_calendar_destroy (GtkObject *object)
+{
+  GtkCalendarPrivateData *private_data;
+  private_data = GTK_CALENDAR_PRIVATE_DATA (object);
+  g_free (private_data);
+  if (GTK_OBJECT_CLASS (parent_class)->destroy)
+    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static gint
