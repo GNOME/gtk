@@ -1,3 +1,12 @@
+Fri Feb 27 21:42:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_relayout): 
+	* gtk/gtkcombobox.c (gtk_combo_box_style_set): Simplify, only 
+	create a new setup if appearance actually changed.
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_clear): 
+	* gtk/gtkcombobox.c (gtk_combo_box_get_cell_info): Make 
+	these more robust.  (#127623, Damon Chaplin)
+
 Fri Feb 27 15:06:00 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooser.c (gtk_file_chooser_class_init): remove

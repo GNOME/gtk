@@ -580,21 +580,23 @@ gtk_combo_box_style_set (GtkWidget *widget,
   /* TRUE is windows style */
   if (appearance)
     {
+      /* Destroy all the menu mode widgets, if they exist. */
       if (GTK_IS_MENU (combo_box->priv->popup_widget))
-        gtk_combo_box_menu_destroy (combo_box);
-      else
-	gtk_combo_box_unset_model (combo_box);
-  
-      gtk_combo_box_list_setup (combo_box);
+	gtk_combo_box_menu_destroy (combo_box);
+
+      /* Create the list mode widgets, if they don't already exist. */
+      if (!GTK_IS_TREE_VIEW (combo_box->priv->tree_view))
+	gtk_combo_box_list_setup (combo_box);
     }
   else
     {
+      /* Destroy all the list mode widgets, if they exist. */
       if (GTK_IS_TREE_VIEW (combo_box->priv->tree_view))
-        gtk_combo_box_list_destroy (combo_box);
-      else
-	gtk_combo_box_unset_model (combo_box);
-  
-      gtk_combo_box_menu_setup (combo_box, TRUE);
+	gtk_combo_box_list_destroy (combo_box);
+
+      /* Create the menu mode widgets, if they don't already exist. */
+      if (!GTK_IS_MENU (combo_box->priv->popup_widget))
+	gtk_combo_box_menu_setup (combo_box, TRUE);
     }
 }
 
@@ -661,7 +663,7 @@ gtk_combo_box_get_cell_info (GtkComboBox     *combo_box,
     {
       ComboCellInfo *info = (ComboCellInfo *)i->data;
 
-      if (info->cell == cell)
+      if (info && info->cell == cell)
         return info;
     }
 
@@ -1395,6 +1397,9 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 {
   GtkWidget *box;
 
+  /* Unset any existing model. */
+  gtk_combo_box_unset_model (combo_box);
+
   if (combo_box->priv->cell_view)
     {
       combo_box->priv->button = gtk_toggle_button_new ();
@@ -1649,8 +1654,6 @@ gtk_combo_box_relayout (GtkComboBox *combo_box)
   /* ensure we are in menu style */
   if (combo_box->priv->tree_view)
     gtk_combo_box_list_destroy (combo_box);
-  else
-    gtk_combo_box_unset_model (combo_box);
 
   menu = combo_box->priv->popup_widget;
 
@@ -1834,6 +1837,9 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 {
   GSList *i;
   GtkTreeSelection *sel;
+
+  /* Unset any existing model. */
+  gtk_combo_box_unset_model (combo_box);
 
   combo_box->priv->button = gtk_toggle_button_new ();
   gtk_widget_set_parent (combo_box->priv->button,
@@ -2260,6 +2266,7 @@ gtk_combo_box_cell_layout_clear (GtkCellLayout *layout)
       gtk_combo_box_cell_layout_clear_attributes (layout, info->cell);
       g_object_unref (G_OBJECT (info->cell));
       g_free (info);
+      i->data = NULL;
     }
   g_slist_free (combo_box->priv->cells);
   combo_box->priv->cells = NULL;
