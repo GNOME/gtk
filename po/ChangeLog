@@ -1,3 +1,7 @@
+2005-01-26  Frank Arnold  <farnold@cvs.gnome.org>
+
+	* de.po: Removed context string in translation. Added comment.
+
 2005-01-26  Changwoo Ryu  <cwryu@debian.org>
 
 	* ChangeLog: Removed CVS conflict indicator.
