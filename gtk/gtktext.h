@@ -66,6 +66,8 @@ struct _GtkText
   GdkPixmap* line_wrap_bitmap;
   GdkPixmap* line_arrow_bitmap;
 
+  GdkIC  ic;
+
 		      /* GAPPED TEXT SEGMENT */
 
   /* The text, a single segment of text a'la emacs, with a gap
