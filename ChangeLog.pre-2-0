@@ -1,3 +1,8 @@
+Tue May 30 16:05:39 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): Track
+	g_locale_get_codeset() to g_get_codeset() change.
+
 Tue May 30 15:03:19 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/testcalendar.c (calendar_font_selection_ok): Use font

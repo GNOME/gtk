@@ -152,7 +152,7 @@ gdk_font_charset_for_locale ()
     { "ISO-8859-9", "iso8859-9" },
   };
 
-  char *codeset = g_locale_get_codeset ();
+  char *codeset = g_get_codeset ();
   char *result = NULL;
   int i;
   
