@@ -33,7 +33,7 @@
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
-#define DUMPBIH 1
+#define DUMPBIH 0
 
 
 
@@ -863,8 +863,6 @@ static void OneLine(struct bmp_progressive_state *context)
 	context->Lines++;
 
 	if (context->updated_func != NULL) {
-		g_print ("OneLine negative %d lines %d\n", 
-			 context->Header.Negative, context->Lines);
 		(*context->updated_func) (context->pixbuf,
 					  0,
 					  (context->Header.Negative ?
