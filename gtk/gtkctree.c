@@ -4077,6 +4077,27 @@ gtk_ctree_find_by_row_data (GtkCTree     *ctree,
   return NULL;
 }
 
+GtkCTreeNode *
+gtk_ctree_find_by_row_data_custom (GtkCTree     *ctree,
+				   GtkCTreeNode *node,
+				   gpointer      data,
+				   GCompareFunc  func)
+{
+  GtkCTreeNode *work;
+
+  while (node)
+    {
+      if (!func (GTK_CTREE_ROW (node)->row.data, data))
+	return node;
+      if (GTK_CTREE_ROW (node)->children &&
+	  (work = gtk_ctree_find_by_row_data_custom
+	   (ctree, GTK_CTREE_ROW (node)->children, data, func)))
+	return work;
+      node = GTK_CTREE_ROW (node)->sibling;
+    }
+  return NULL;
+}
+
 gboolean
 gtk_ctree_is_hot_spot (GtkCTree *ctree, 
 		       gint      x, 
