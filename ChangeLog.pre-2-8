@@ -1,3 +1,8 @@
+Thu Dec  2 13:18:34 2004  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkgc-x11.c (make_fg_tile_picture): Make sure we always
+	return a value. Return None in the fallthrough case.
+
 2004-12-02  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmessagedialog.c: (setup_primary_label_font):

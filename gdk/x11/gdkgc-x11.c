@@ -998,6 +998,8 @@ make_fg_tile_picture (GdkGC *gc)
 				   format,
 				   CPRepeat, &pa);
     }
+
+  return None;
 }
 
 static Picture
