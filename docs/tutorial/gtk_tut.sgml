@@ -172,16 +172,16 @@ void hello (GtkWidget *widget, gpointer data)
 gint delete_event(GtkWidget *widget, gpointer data)
 {
     g_print ("delete event occured\n");
-    /* if you return TRUE in the "delete_event" signal handler, 
-     * GTK will emit the "destroy" signal.  Returning FALSE means
+    /* if you return FALSE in the "delete_event" signal handler,
+     * GTK will emit the "destroy" signal.  Returning TRUE means
      * you don't want the window to be destroyed.
      * This is useful for popping up 'are you sure you want to quit ?'
      * type dialogs. */
-    
-    /* Change FALSE to TRUE and the main window will be destroyed with
+
+    /* Change TRUE to FALSE and the main window will be destroyed with
      * a "delete_event". */
-    
-    return (FALSE); 
+
+    return (TRUE);
 }
 
 /* another callback */
@@ -381,8 +381,8 @@ as to what to do about these events.  We can ignore them, make some sort of
 response, or simply quit the application.
 
 The value you return in this callback lets GTK know what action to take.
-By returning FALSE, we let it know that we don't want to have the "destroy"
-signal emitted, keeping our application running.  By returning TRUE, we 
+By returning TRUE, we let it know that we don't want to have the "destroy"
+signal emitted, keeping our application running.  By returning FALSE, we 
 ask that "destroy" is emitted, which in turn will call our "destroy" 
 signal handler.
 
@@ -391,20 +391,22 @@ gint delete_event(GtkWidget *widget, gpointer data)
 {
     g_print ("delete event occured\n");
 
-    return (FALSE); 
+    return (TRUE); 
 }
 </verb></tscreen>
 
 <p>
-Here is another callback function which just quits by calling
-gtk_main_quit().  Not really much to say about this, it is pretty self
-explanatory.
+Here is another callback function which causes the program to quit by calling
+gtk_main_quit().  This function tells GTK that it is to exit from gtk_main
+when control is returned to it.
+
 <tscreen><verb>
 void destroy (GtkWidget *widget, gpointer *data)
 {
     gtk_main_quit ();
 }
 </verb></tscreen>
+
 <p>
 I assume you know about the main() function... yes, as with other
 applications, all GTK applications will also have one of these.
@@ -541,8 +543,8 @@ caught, and calls our destroy() callback function, which simply exits GTK.
 <p>
 Another course of events, is to use the window manager to kill the window.
 This will cause the "delete_event" to be emitted.  This will call our
-"delete_event" handler.  If we return FALSE here, the window will be left as
-is and nothing will happen.  Returning TRUE will cause GTK to emit the
+"delete_event" handler.  If we return TRUE here, the window will be left as
+is and nothing will happen.  Returning FALSE will cause GTK to emit the
 "destroy" signal which of course, calls the "destroy" callback, exiting GTK.
 <p>
 Note that these signals are not the same as the Unix system
@@ -581,7 +583,9 @@ gint gtk_signal_connect (GtkObject *object, gchar *name,
 
 Notice the gint return value ?  This is a tag that identifies your callback
 function.  As said above, you may have as many callbacks per signal and per
-object as you need, and each will be executed in turn, in the order they were attached.  
+object as you need, and each will be executed in turn, in the order they 
+were attached.  
+
 This tag allows you to remove this callback from the list by using:
 <tscreen><verb>
 void gtk_signal_disconnect (GtkObject *object,
@@ -590,12 +594,13 @@ void gtk_signal_disconnect (GtkObject *object,
 So, by passing in the widget you wish to remove the handler from, and the
 tag or id returned by one of the signal_connect functions, you can
 disconnect a signal handler.
-<p>
+
 Another function to remove all the signal handers from an object is:
+
 <tscreen><verb>
 gtk_signal_handlers_destroy (GtkObject *object);
 </verb></tscreen>
-<p>
+
 This call is fairly self explanatory.  It simply removes all the current
 signal handlers from the object passed in as the first argument.
 
@@ -699,15 +704,15 @@ int main (int argc, char *argv[])
     return 0;
 }
 </verb></tscreen>
-<p>
+
 Compile this program using the same linking arguments as our first example.
-You'll notice this time there is no easy way to exit the program, you have to use
-your window manager or command line to kill it.  A good exercise for the
-reader would be to insert a third "Quit" button that will exit the
+You'll notice this time there is no easy way to exit the program, you have 
+to use your window manager or command line to kill it.  A good exercise 
+for the reader would be to insert a third "Quit" button that will exit the
 program.  You may also wish to play with the options to
 gtk_box_pack_start() while reading the next section.  
 Try resizing the window, and observe the behavior.
-<p>
+
 Just as a side note, there is another useful define for gtk_window_new() -
 GTK_WINDOW_DIALOG.  This interacts with the window manager a little
 differently and should be used for transient windows.
@@ -1224,8 +1229,8 @@ The X and Y options default to GTK_FILL | GTK_EXPAND, and X and Y padding
 are set to 0.  The rest of the arguments are identical to the previous
 function.
 
-We also have gtk_table_set_row_spacing() and gtk_table_set_col_spacing().  This places 
-spacing between the rows at the specified row or column.
+We also have gtk_table_set_row_spacing() and gtk_table_set_col_spacing(). 
+This places spacing between the rows at the specified row or column.
 
 <tscreen><verb>
 void gtk_table_set_row_spacing (GtkTable      *table,
@@ -1239,8 +1244,8 @@ void       gtk_table_set_col_spacing  (GtkTable      *table,
 				       gint           spacing);
 </verb></tscreen>
 
-Note that for columns, the space goes to the right of the column, and for rows, 
-the space goes below the row.
+Note that for columns, the space goes to the right of the column, and for 
+rows, the space goes below the row.
 
 You can also set a consistent spacing of all rows and/or columns with:
 
@@ -1255,7 +1260,8 @@ void gtk_table_set_col_spacings (GtkTable  *table,
                                  gint       spacing);
 </verb></tscreen>
 <p>
-Note that with these calls, the last row and last column do not get any spacing 
+Note that with these calls, the last row and last column do not get any 
+spacing.
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>Table Packing Example
@@ -1368,14 +1374,6 @@ int main (int argc, char *argv[])
     return 0;
 }
 </verb></tscreen>
-
-You can compile this program with something like:
-
-<tscreen><verb>
-gcc -g -Wall -ansi -o table table.c -L/usr/X11R6/lib \
-    -lgdk -lgtk -lglib -lX11 -lXext -lm
-</verb></tscreen>
-
 <!-- ***************************************************************** -->
 <sect>Widget Overview
 <!-- ***************************************************************** -->
