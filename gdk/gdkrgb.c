@@ -745,6 +745,8 @@ gdk_rgb_xpixel_from_rgb_internal (GdkColormap *colormap,
   else if (image_info->visual->type == GDK_VISUAL_TRUE_COLOR ||
 	   image_info->visual->type == GDK_VISUAL_DIRECT_COLOR)
     {
+      guint32 unused;
+
 #ifdef VERBOSE
       g_print ("shift, prec: r %d %d g %d %d b %d %d\n",
 	       image_info->visual->red_shift,
@@ -754,8 +756,15 @@ gdk_rgb_xpixel_from_rgb_internal (GdkColormap *colormap,
 	       image_info->visual->blue_shift,
 	       image_info->visual->blue_prec);
 #endif
+      /* If bits not used for color are used for something other than padding,
+       * it's likely alpha, so we set them to 1s.
+       */
+      unused = ~ (image_info->visual->red_mask | 
+		  image_info->visual->green_mask | 
+		  image_info->visual->blue_mask |
+		  (((~(guint32)0)) << image_info->visual->depth));
 
-      pixel = (((r >> (16 - image_info->visual->red_prec)) << image_info->visual->red_shift) +
+      pixel = (unused + ((r >> (16 - image_info->visual->red_prec)) << image_info->visual->red_shift) +
 	       ((g >> (16 - image_info->visual->green_prec)) << image_info->visual->green_shift) +
 	       ((b >> (16 - image_info->visual->blue_prec)) << image_info->visual->blue_shift));
     }

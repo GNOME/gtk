@@ -1,3 +1,9 @@
+Mon Aug 23 01:17:59 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdkrgb.c (gdk_rgb_xpixel_from_rgb_internal): Set unused
+	bits in pixel to 1s in case they are used as alpha; copying
+	code from gdk_colormap_alloc_colors().  (#150466, Rich Wareham)
+
 2004-08-22  Philip Langdale  <plangdale@vmware.com>
 
 	* gtk/gtkaction.c (gtk_action_disconnect_proxy): Two signals
