@@ -67,6 +67,7 @@ typedef struct {
 	guint                    width;
 	guint                    height;
 	guint                    maxval;
+	guint                    rowstride;
 	PnmFormat                type;
 
 	guint                    output_row;  /* last row to be completed */
@@ -116,13 +117,16 @@ explode_bitmap_into_buf (PnmLoaderContext *context)
 
 	from = dptr + (wid - 1)/8;
 	to   = dptr + (wid - 1) * 3;
-	bit  = 7 - (((y+1)*wid - 1) % 8);
+/*	bit  = 7 - (((y+1)*wid-1) % 8); */
+	bit  = 7 - ((wid-1) % 8); 
 
 	/* get first byte and align properly */
 	data = from[0];
 	for (j = 0; j < bit; j++, data >>= 1);
 
 	for (x = wid-1; x >= 0; x--) {
+
+/*		g_print ("%c",  (data & 1) ? '*' : ' '); */
 
 		to[0] = to[1] = to[2] = (data & 1) ? 0x00 : 0xff;
 
@@ -137,6 +141,8 @@ explode_bitmap_into_buf (PnmLoaderContext *context)
 			data >>= 1;
 		}
 	}
+
+/*	g_print ("\n"); */
 }
 
 /* explode gray image row into rgb components in pixbuf */
@@ -367,6 +373,8 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 
 	g_return_val_if_fail (context != NULL, PNM_FATAL_ERR);
 
+/*G_BREAKPOINT(); */
+
 	inbuf = &context->inbuf;
 
 	switch (context->type) {
@@ -386,16 +394,16 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 	}
 	
 	numpix = MIN (numpix, context->width - context->output_col);
-	
+
 	if (numpix == 0)
 		return PNM_SUSPEND;
 	
 	context->dptr = context->pixels + 
-		context->output_row * context->width * 3;
+		context->output_row * context->rowstride;
 	
 	switch (context->type) {
 	case PNM_FORMAT_PBM_RAW:
-		numbytes = numpix/8;
+		numbytes = numpix/8 + ((numpix % 8) ? 1 : 0);
 		offset = context->output_col/8;
 		break;
 	case PNM_FORMAT_PGM_RAW:
@@ -412,10 +420,10 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 	}
 	
 	memcpy (context->dptr + offset,	inbuf->next_byte, numbytes);
-	
+
 	inbuf->next_byte  += numbytes;
 	inbuf->bytes_left -= numbytes;
-	
+
 	context->output_col += numpix;
 	if (context->output_col == context->width) {
 		if ( context->type == PNM_FORMAT_PBM_RAW )
@@ -451,11 +459,11 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 	inbuf = &context->inbuf;
 
 	context->dptr = context->pixels + 
-		context->output_row * context->width * 3;
+		context->output_row * context->rowstride;
 
 	switch (context->type) {
 	case PNM_FORMAT_PBM:
-		numval = 8;
+		numval = MIN (8, context->width - context->output_col);
 		offset = context->output_col/8;
 		break;
 	case PNM_FORMAT_PGM:
@@ -478,6 +486,7 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 		if (context->type == PNM_FORMAT_PBM) {
 			mask = 0x80;
 			data = 0;
+			numval = MIN (8, context->width - context->output_col);
 		}
 
 		old_next_byte  = inbuf->next_byte;
@@ -508,10 +517,12 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 			}
 		}
 		
-		if (context->type == PNM_FORMAT_PBM)
-			*dptr++ = value;
-		
-		context->output_col++;
+		if (context->type == PNM_FORMAT_PBM) {
+			*dptr++ = data;
+			context->output_col += 8;
+		} else {
+			context->output_col++;
+		}
 
 		if (context->output_col == context->width) {
 			if ( context->type == PNM_FORMAT_PBM )
@@ -584,6 +595,7 @@ image_load (FILE *f)
 
 	inbuf = &context.inbuf;
 
+	file_off = 0;
 	while (TRUE) {
 		guint  num_to_read;
 
@@ -598,7 +610,7 @@ image_load (FILE *f)
 				1, num_to_read, f);
 		inbuf->bytes_left += nbytes;
 		inbuf->next_byte   = inbuf->buffer;
-		
+
 		/* ran out of data and we haven't exited main loop */
 		if (inbuf->bytes_left == 0) {
 			if (context.pixbuf)
@@ -621,6 +633,7 @@ image_load (FILE *f)
 
 		/* scan until we hit image data */
 		if (!context.did_prescan) {
+
 			if (skip_ahead_whitespace (inbuf) == NULL)
 				continue;
 
@@ -628,23 +641,18 @@ image_load (FILE *f)
 			context.output_row = 0;
 			context.output_col = 0;
 
-			context.pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
-							 /*have_alpha*/ FALSE,
-							 8, 
-							 context.width,
-							 context.height);
-
-
-			if (context.pixbuf == NULL) {
+			context.rowstride = context.width * 3;
+			context.pixels = g_malloc (context.height * 
+						   context.width  * 3);
+			if (!context.pixels) {
 				/* Failed to allocate memory */
-				g_error ("Couldn't allocate gdkpixbuf");
+				g_error ("Couldn't allocate pixel buf");
 			}
-
-			context.pixels = context.pixbuf->art_pixbuf->pixels;
 		}
 
 		/* if we got here we're reading image data */
 		while (context.output_row < context.height) {
+
 			rc = pnm_read_scanline (&context);
 
 			if (rc == PNM_SUSPEND) {
@@ -668,54 +676,6 @@ image_load (FILE *f)
 					 context.width * 3, free_buffer, NULL);
 
 }
-
-#if 0
-/**** Progressive image loading handling *****/
-
-/* these routines required because we are acting as a source manager for */
-/* libjpeg. */
-static void
-init_source (j_decompress_ptr cinfo)
-{
-	my_src_ptr src = (my_src_ptr) cinfo->src;
-
-	src->skip_next = 0;
-}
-
-
-static void
-term_source (j_decompress_ptr cinfo)
-{
-	/* XXXX - probably should scream something has happened */
-}
-
-
-/* for progressive loading (called "I/O Suspension" by libjpeg docs) */
-/* we do nothing except return "FALSE"                               */
-static boolean
-fill_input_buffer (j_decompress_ptr cinfo)
-{
-	return FALSE;
-}
-
-
-static void
-skip_input_data (j_decompress_ptr cinfo, long num_bytes)
-{
-	my_src_ptr src = (my_src_ptr) cinfo->src;
-	long   num_can_do;
-
-	/* move as far as we can into current buffer */
-	/* then set skip_next to catch the rest      */
-	if (num_bytes > 0) {
-		num_can_do = MIN (src->pub.bytes_in_buffer, num_bytes);
-		src->pub.next_input_byte += (size_t) num_can_do;
-		src->pub.bytes_in_buffer -= (size_t) num_can_do;
-
-		src->skip_next = num_bytes - num_can_do;
-	}
-}
-#endif
 
 /* 
  * func - called when we have pixmap created (but no image data)
@@ -852,6 +812,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 			}
 
 			context->pixels = context->pixbuf->art_pixbuf->pixels;
+			context->rowstride = context->pixbuf->art_pixbuf->rowstride;
 
 			/* Notify the client that we are ready to go */
 			(* context->prepared_func) (context->pixbuf,
@@ -861,7 +822,6 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 
 		/* if we got here we're reading image data */
 		while (context->output_row < context->height) {
-
 			rc = pnm_read_scanline (context);
 
 			if (rc == PNM_SUSPEND) {
@@ -872,6 +832,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				g_warning ("io-pnm.c: error reading rows..\n");
 				return FALSE;
 			} else if (rc == PNM_OK) {
+
 				/* send updated signal */
 				(* context->updated_func) (context->pixbuf,
 						 context->user_data,

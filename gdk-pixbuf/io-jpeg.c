@@ -492,7 +492,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 				rowptr = context->dptr;
 				for (i=0; i < cinfo->rec_outbuf_height; i++) {
 					*lptr++ = rowptr;
-					rowptr += context->pixbuf->art_pixbuf->rowstride;;
+					rowptr += context->pixbuf->art_pixbuf->rowstride;
 				}
 
 				nlines = jpeg_read_scanlines (cinfo, lines,
