@@ -8705,7 +8705,7 @@ gtk_tree_view_collapse_all (GtkTreeView *tree_view)
   GtkRBTree *tree;
   GtkRBNode *node;
   GtkTreePath *path;
-  guint *indices;
+  gint *indices;
 
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
@@ -10587,9 +10587,6 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
 	}
     }
   while (1);
-
-  if (path)
-    gtk_tree_path_free (path);
 
   return FALSE;
 }
