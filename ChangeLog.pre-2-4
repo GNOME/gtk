@@ -1,3 +1,8 @@
+Fri Apr 19 21:31:04 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): cancel editing
+	if tree_view->priv->edited_column != NULL (fixes #76066)
+
 Fri Apr 19 21:06:39 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_size_allocate): subtract

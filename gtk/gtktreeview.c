@@ -5655,6 +5655,9 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
      */
     return;
 
+  if (tree_view->priv->edited_column)
+    gtk_tree_view_stop_editing (tree_view, TRUE);
+
   gtk_widget_style_get (GTK_WIDGET (data), "vertical_separator", &vertical_separator, NULL);
 
   if (path == NULL)
