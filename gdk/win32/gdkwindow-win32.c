@@ -1267,7 +1267,7 @@ gdk_window_set_hints (GdkWindow *window,
 	  rect.bottom = min_height;
 	  dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
 	  dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-	  AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
+	  SafeAdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
 	  impl->hint_min_width = rect.right - rect.left;
 	  impl->hint_min_height = rect.bottom - rect.top;
 

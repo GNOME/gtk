@@ -1,3 +1,26 @@
+2001-05-25  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkgc-win32.c : made fil mode GDK_STIPPLED actually
+	work -> check boxes and radio buttons are drawn now, even on win9x.
+	Improved line settings a bit, still no clue how to get really dotted
+	lines on win9x, on NT it's PS_ALTERNATE.
+
+	* gdk/win32/gdkwindow-win32.c : use SafeAdjustWindowRect for 
+	GDK_HINT_MIN_SIZE as well
+
+	* gdk/win32/makefile.am : added gdkkeys-win32.c to EXTRA_DIST
+
+	* gtk/gtk.def : updated
+
+	* gtk/gtktreeprivate.h : change column_drop_func to be a function
+	pointer not a function pointer pointer
+
+	* tests/testdnd.c : include <stdlib.h> for putenv prototype
+
+	* tests/testsocket.c : made it compile on win32 again
+
+	* tests/makefile.msc : one more test-app uses prop-editor.obj
+
 2001-05-22  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkbin.c (gtk_bin_get_child): New function

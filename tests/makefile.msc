@@ -61,6 +61,10 @@ EXTRA_OBJETCS = prop-editor.obj
 EXTRA_OBJETCS = prop-editor.obj
 !ENDIF
 
+!IFDEF EXTRA_testtext
+EXTRA_OBJETCS = prop-editor.obj
+!ENDIF
+
 $(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).dll $(TESTAPP).obj
 	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(GLIB_LIBS) $(LDFLAGS)
 
