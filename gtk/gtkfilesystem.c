@@ -838,13 +838,6 @@ gtk_file_folder_base_init (gpointer g_class)
 		    g_cclosure_marshal_VOID__POINTER,
 		    G_TYPE_NONE, 1,
 		    G_TYPE_POINTER);
-      g_signal_new ("finished-loading",
-		    iface_type,
-		    G_SIGNAL_RUN_LAST,
-		    G_STRUCT_OFFSET (GtkFileFolderIface, finished_loading),
-		    NULL, NULL,
-		    g_cclosure_marshal_VOID__VOID,
-		    G_TYPE_NONE, 0);
 
       initialized = TRUE;
     }
@@ -881,17 +874,6 @@ gtk_file_folder_get_info (GtkFileFolder     *folder,
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   return GTK_FILE_FOLDER_GET_IFACE (folder)->get_info (folder, path, error);
-}
-
-gboolean
-gtk_file_folder_is_finished_loading (GtkFileFolder *folder)
-{
-  g_return_val_if_fail (GTK_IS_FILE_FOLDER (folder), TRUE);
-
-  if (!GTK_FILE_FOLDER_GET_IFACE (folder)->is_finished_loading)
-    return TRUE;
-  else
-    return GTK_FILE_FOLDER_GET_IFACE (folder)->is_finished_loading (folder);
 }
 
 

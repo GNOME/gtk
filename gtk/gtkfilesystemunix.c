@@ -203,8 +203,6 @@ static gboolean     gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 							GSList        **children,
 							GError        **error);
 
-static gboolean     gtk_file_folder_unix_is_finished_loading (GtkFileFolder *folder);
-
 static GtkFilePath *filename_to_path   (const gchar       *filename);
 
 static gboolean     filename_is_root  (const char       *filename);
@@ -1466,7 +1464,6 @@ gtk_file_folder_unix_iface_init (GtkFileFolderIface *iface)
 {
   iface->get_info = gtk_file_folder_unix_get_info;
   iface->list_children = gtk_file_folder_unix_list_children;
-  iface->is_finished_loading = gtk_file_folder_unix_is_finished_loading;
 }
 
 static void
@@ -1626,12 +1623,6 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
   return TRUE;
 }
 
-static gboolean
-gtk_file_folder_unix_is_finished_loading (GtkFileFolder *folder)
-{
-  /* Since we don't do asynchronous loads, we are always finished loading */
-  return TRUE;
-}
 
 static void
 free_stat_info_entry (struct stat_info_entry *entry)

@@ -1,3 +1,9 @@
+2004-03-19  Federico Mena Quintero  <federico@ximian.com>
+
+	* Revert the patch to #137520, as 2.4.1 is for conservative bug
+	fixes only.  The patch is attached to the bug report, for
+	reference.
+
 2004-03-19  Morten Welinder  <terra@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c
