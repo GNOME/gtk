@@ -1,3 +1,11 @@
+Sun Jul 12 05:59:26 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktypeutils.c (gtk_type_new): call the base classes'
+ 	object_init_func for derived objects with the object's ->klass field
+ 	still pointing to the corresponding base class, otherwise overridden
+ 	class functions could get called with partly-initialized objects.
+	(change from Tero Pulkkinen <terop@modeemi.cs.tut.fi>).
+
 Sun Jul 12 02:47:35 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkobject.h:
