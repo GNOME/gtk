@@ -9,15 +9,15 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GTK+ 2.2.2\n"
-"POT-Creation-Date: 2003-08-25 22:08-0400\n"
-"PO-Revision-Date: 2003-07-29 17:11+0200\n"
+"Project-Id-Version: GTK+ 2.2.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2003-08-27 12:27+0200\n"
+"PO-Revision-Date: 2003-08-27 12:27+0200\n"
 "Last-Translator: Christian Neumair <chris@gnome-de.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:737
 #, c-format
@@ -5020,7 +5020,7 @@ msgstr "Amharisch (EZ+)"
 #. ID
 #: modules/input/imcedilla.c:90
 msgid "Cedilla"
-msgstr ""
+msgstr "Cédille"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
