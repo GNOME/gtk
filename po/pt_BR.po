@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 09:36-0400\n"
-"PO-Revision-Date: 2004-07-22 00:03-0300\n"
+"POT-Creation-Date: 2004-08-25 14:03-0400\n"
+"PO-Revision-Date: 2004-08-25 13:56-0400\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -987,7 +987,7 @@ msgstr ""
 "Impossível adicionar um marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:822 gtk/gtkfilechooserdefault.c:5556
+#: gtk/gtkfilechooserdefault.c:822 gtk/gtkfilechooserdefault.c:5575
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1005,15 +1005,15 @@ msgstr ""
 "Impossível mudar a pasta atual para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1129 gtk/gtkpathbar.c:843
+#: gtk/gtkfilechooserdefault.c:1148 gtk/gtkpathbar.c:843
 msgid "Home"
 msgstr "Pasta Pessoal"
 
-#: gtk/gtkfilechooserdefault.c:1152 gtk/gtkpathbar.c:845
+#: gtk/gtkfilechooserdefault.c:1171 gtk/gtkpathbar.c:845
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserdefault.c:1550
+#: gtk/gtkfilechooserdefault.c:1569
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -1022,13 +1022,13 @@ msgstr ""
 "Impossível criar a pasta %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1730
+#: gtk/gtkfilechooserdefault.c:1749
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr ""
 "Não foi possível adicionar um marcador para %s porque ele não é uma pasta."
 
-#: gtk/gtkfilechooserdefault.c:1842
+#: gtk/gtkfilechooserdefault.c:1861
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1037,135 +1037,135 @@ msgstr ""
 "Não foi possível remover os marcadores para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2449
+#: gtk/gtkfilechooserdefault.c:2468
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Não foi possível adicionar um marcador para %s porque ele é um caminho "
 "inválido."
 
-#: gtk/gtkfilechooserdefault.c:2608
+#: gtk/gtkfilechooserdefault.c:2627
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: gtk/gtkfilechooserdefault.c:2662
+#: gtk/gtkfilechooserdefault.c:2681
 msgid "Folder"
 msgstr "Pasta"
 
-#: gtk/gtkfilechooserdefault.c:2714 gtk/gtkstock.c:295
+#: gtk/gtkfilechooserdefault.c:2733 gtk/gtkstock.c:295
 msgid "_Add"
 msgstr "A_dicionar"
 
-#: gtk/gtkfilechooserdefault.c:2724 gtk/gtkstock.c:352
+#: gtk/gtkfilechooserdefault.c:2743 gtk/gtkstock.c:352
 msgid "_Remove"
 msgstr "_Remover"
 
-#: gtk/gtkfilechooserdefault.c:2814
+#: gtk/gtkfilechooserdefault.c:2833
 #, fuzzy
 msgid "_Add to Shortcuts"
 msgstr "Atalhos"
 
-#: gtk/gtkfilechooserdefault.c:2828
+#: gtk/gtkfilechooserdefault.c:2847
 msgid "Show _Hidden Files"
 msgstr "Mostrar _Arquivos Escondidos"
 
-#: gtk/gtkfilechooserdefault.c:2952 gtk/gtkfilesel.c:767
+#: gtk/gtkfilechooserdefault.c:2971 gtk/gtkfilesel.c:767
 msgid "Files"
 msgstr "Arquivos"
 
-#: gtk/gtkfilechooserdefault.c:2980
+#: gtk/gtkfilechooserdefault.c:2999
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkfilechooserdefault.c:3005
+#: gtk/gtkfilechooserdefault.c:3024
 msgid "Size"
 msgstr "Tamanho"
 
-#: gtk/gtkfilechooserdefault.c:3018
+#: gtk/gtkfilechooserdefault.c:3037
 msgid "Modified"
 msgstr "Modificado"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3082
 msgid "Create Fo_lder"
 msgstr "Criar _Pasta"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3177
+#: gtk/gtkfilechooserdefault.c:3196
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserdefault.c:3221
+#: gtk/gtkfilechooserdefault.c:3240
 msgid "_Browse for other folders"
 msgstr "_Navegar para outras pastas"
 
-#: gtk/gtkfilechooserdefault.c:3463
+#: gtk/gtkfilechooserdefault.c:3482
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:3465
+#: gtk/gtkfilechooserdefault.c:3484
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:4152
+#: gtk/gtkfilechooserdefault.c:4171
 #, fuzzy
 msgid "Cannot change to folder because it is not local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: gtk/gtkfilechooserdefault.c:4295
+#: gtk/gtkfilechooserdefault.c:4314
 msgid "Could not find the path"
 msgstr "Não foi possível achar o caminho"
 
-#: gtk/gtkfilechooserdefault.c:4656
+#: gtk/gtkfilechooserdefault.c:4675
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "o atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:5329
+#: gtk/gtkfilechooserdefault.c:5348
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:5358
+#: gtk/gtkfilechooserdefault.c:5377
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5360
+#: gtk/gtkfilechooserdefault.c:5379
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5362
+#: gtk/gtkfilechooserdefault.c:5381
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5364
+#: gtk/gtkfilechooserdefault.c:5383
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Today"
 msgstr "Hoje"
 
-#: gtk/gtkfilechooserdefault.c:5411
+#: gtk/gtkfilechooserdefault.c:5430
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserdefault.c:5422
+#: gtk/gtkfilechooserdefault.c:5441
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:5517
+#: gtk/gtkfilechooserdefault.c:5536
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Impossível ir para a pasta que você especificou porque ela tem um caminho "
 "inválido."
 
-#: gtk/gtkfilechooserdefault.c:5594
+#: gtk/gtkfilechooserdefault.c:5613
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1174,15 +1174,15 @@ msgstr ""
 "Não foi possível selecionar %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5633
+#: gtk/gtkfilechooserdefault.c:5652
 msgid "Open Location"
 msgstr "Abrir Localização"
 
-#: gtk/gtkfilechooserdefault.c:5640
+#: gtk/gtkfilechooserdefault.c:5659
 msgid "Save in Location"
 msgstr "Salvar na Localização"
 
-#: gtk/gtkfilechooserdefault.c:5659
+#: gtk/gtkfilechooserdefault.c:5678
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -1684,7 +1684,7 @@ msgstr "_Copiar"
 
 #: gtk/gtkstock.c:304
 msgid "Cu_t"
-msgstr "Cor_tar"
+msgstr "Recor_tar"
 
 #: gtk/gtkstock.c:305
 msgid "_Delete"
@@ -1701,11 +1701,11 @@ msgstr "_Sair"
 
 #: gtk/gtkstock.c:308
 msgid "_Find"
-msgstr "_Procurar"
+msgstr "_Localizar"
 
 #: gtk/gtkstock.c:309
 msgid "Find and _Replace"
-msgstr "Procurar e _Substituir"
+msgstr "Localizar e _Substituir"
 
 #: gtk/gtkstock.c:310
 msgid "_Floppy"
@@ -1729,11 +1729,11 @@ msgstr "_Topo"
 
 #: gtk/gtkstock.c:315
 msgid "_Back"
-msgstr "_Regressar"
+msgstr "_Voltar"
 
 #: gtk/gtkstock.c:316
 msgid "_Down"
-msgstr "_Fundo"
+msgstr "A_baixo"
 
 #: gtk/gtkstock.c:317 gtk/gtkstock.c:331
 msgid "_Forward"
@@ -1799,16 +1799,15 @@ msgstr "_Novo"
 #: gtk/gtkstock.c:333
 #, fuzzy
 msgid "P_ause"
-msgstr "Co_lar"
+msgstr "C_olar"
 
 #: gtk/gtkstock.c:334
 msgid "_Play"
 msgstr ""
 
 #: gtk/gtkstock.c:335
-#, fuzzy
 msgid "Pre_vious"
-msgstr "Pré-visualização"
+msgstr ""
 
 #: gtk/gtkstock.c:336
 #, fuzzy
@@ -1818,7 +1817,7 @@ msgstr "_Refazer"
 #: gtk/gtkstock.c:337
 #, fuzzy
 msgid "R_ewind"
-msgstr "_Procurar"
+msgstr "_Localizar"
 
 #: gtk/gtkstock.c:338 gtk/gtkstock.c:361
 msgid "_Stop"
@@ -1846,7 +1845,7 @@ msgstr "_Abrir"
 
 #: gtk/gtkstock.c:344
 msgid "_Paste"
-msgstr "Co_lar"
+msgstr "C_olar"
 
 #: gtk/gtkstock.c:345
 msgid "_Preferences"
@@ -1938,11 +1937,11 @@ msgstr "A_justar para Caber"
 
 #: gtk/gtkstock.c:369
 msgid "Zoom _In"
-msgstr "_Aumentar o Zoom"
+msgstr "_Ampliar"
 
 #: gtk/gtkstock.c:370
 msgid "Zoom _Out"
-msgstr "_Diminuir o Zoom"
+msgstr "_Reduzir"
 
 #: gtk/gtktextutil.c:48
 msgid "LRM _Left-to-right mark"
@@ -2075,50 +2074,3 @@ msgstr "Impossível obter informações sobre o arquivo '%s': %s"
 
 #~ msgid "Alt"
 #~ msgstr "Alt"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Tipo de imagem TIFF não suportado"
-
-#~ msgid "%d/%b/%Y"
-#~ msgstr "%d/%b/%Y"
-
-#~ msgid ""
-#~ "Could not go to the parent folder of %s:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Não foi possível ir para a pasta pai de %s:\n"
-#~ "%s"
-
-#~ msgid "File name"
-#~ msgstr "Nome do arquivo"
-
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "A_dicionar"
-
-#, fuzzy
-#~ msgid "Remove"
-#~ msgstr "_Remover"
-
-#, fuzzy
-#~ msgid "Up"
-#~ msgstr "_Acima"
-
-#, fuzzy
-#~ msgid "_Filename:"
-#~ msgstr "Nome do arquivo"
-
-#~ msgid "Current folder: %s"
-#~ msgstr "Pasta atual: %s"
-
-#~ msgid "This file system does not support icons"
-#~ msgstr "Esse sistema de arquivos não suporta ícones"
-
-#~ msgid "This file system does not support bookmarks"
-#~ msgstr "Esse sistema de arquivos não suporta marcadores"
-
-#~ msgid "Zoom _100%"
-#~ msgstr "Zoom _100%"
-
-#~ msgid "Zoom to _Fit"
-#~ msgstr "Zoom para _Caber"
