@@ -1,3 +1,9 @@
+Fri Nov 30 16:37:01 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c (gtk_combo_popup_list): Sanitize
+	move/resize code, removing various bad, non-functional
+	hacks. (Fixes #65048, reported by Damon Chaplin.)
+
 Fri Nov 30 16:12:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.c: Patch from Hidetoshi Tajima to fix 
@@ -38,7 +44,6 @@ Thu Nov 29 21:35:56 2001  Kristian Rietveld  <kristian@planet.nl>
 	assertion here that we were at the end iterator was not correct;
 	change code to move us to the end iterator. bug #65731
 
->>>>>>> 1.2646
 Wed Nov 28 20:05:44 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): Remove 

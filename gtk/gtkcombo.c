@@ -486,10 +486,8 @@ gtk_combo_popup_list (GtkCombo * combo)
       gtk_widget_hide (GTK_SCROLLED_WINDOW (combo->popup)->vscrollbar);
     }
 
-  gtk_widget_set_uposition (combo->popwin, x, y);
+  gtk_window_move (GTK_WINDOW (combo->popwin), x, y);
   gtk_widget_set_usize (combo->popwin, width, height);
-  gtk_widget_realize (combo->popwin);
-  gdk_window_resize (combo->popwin->window, width, height);
   gtk_widget_show (combo->popwin);
 
   gtk_widget_grab_focus (combo->popwin);
@@ -784,7 +782,7 @@ gtk_combo_init (GtkCombo * combo)
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_ref (combo->popwin);
-  gtk_window_set_policy (GTK_WINDOW (combo->popwin), 1, 1, 0);
+  gtk_window_set_resizable (GTK_WINDOW (combo->popwin), FALSE);
 
   gtk_signal_connect (GTK_OBJECT (combo->popwin), "key_press_event",
 		      GTK_SIGNAL_FUNC (gtk_combo_window_key_press), combo);
