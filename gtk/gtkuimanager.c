@@ -989,7 +989,7 @@ node_remove_ui_reference (Node  *node,
       
       if (reference->merge_id == merge_id)
 	{
-	  node->uifiles = g_list_remove_link (node->uifiles, p);
+	  node->uifiles = g_list_delete_link (node->uifiles, p);
 	  node->dirty = TRUE;
 	  g_free (reference);
 
@@ -1400,17 +1400,17 @@ add_ui_from_string (GtkUIManager *self,
 
   if (needs_root)
     if (!g_markup_parse_context_parse (context, "<ui>", -1, error))
-      goto error;
+      goto out;
 
   if (!g_markup_parse_context_parse (context, buffer, length, error))
-    goto error;
+    goto out;
 
   if (needs_root)
     if (!g_markup_parse_context_parse (context, "</ui>", -1, error))
-      goto error;
+      goto out;
 
   if (!g_markup_parse_context_end_parse (context, error))
-    goto error;
+    goto out;
 
   g_markup_parse_context_free (context);
 
@@ -1420,7 +1420,7 @@ add_ui_from_string (GtkUIManager *self,
 
   return ctx.merge_id;
 
- error:
+ out:
 
   g_markup_parse_context_free (context);
 
