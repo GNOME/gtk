@@ -770,6 +770,7 @@ main (int argc, char *argv[])
 
   /* Set up the test windows. */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL); 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Top Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
@@ -778,6 +779,7 @@ main (int argc, char *argv[])
   gtk_widget_show_all (window);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL); 
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 300);
   gtk_window_set_title (GTK_WINDOW (window), "Bottom Window");
   swindow = gtk_scrolled_window_new (NULL, NULL);
@@ -787,6 +789,7 @@ main (int argc, char *argv[])
 
   /* Set up the main window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL); 
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
   vbox = gtk_vbox_new (FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);

@@ -647,7 +647,7 @@ main (int    argc,
   run_automated_tests ();
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
+  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
 
   table = gtk_table_new (3, 1, FALSE);
@@ -960,7 +960,7 @@ gtk_real_model_types_get_value (GtkTreeModel *tree_model,
         
         g_value_init (value, G_TYPE_STRING);
 
-        str = g_strdup_printf ("%d", type);
+        str = g_strdup_printf ("%ld", type);
         g_value_set_string (value, str);
         g_free (str);
       }
@@ -1159,7 +1159,7 @@ gtk_real_model_types_iter_parent (GtkTreeModel *tree_model,
   if (parent == G_TYPE_INVALID)
     {
       if (type > G_TYPE_FUNDAMENTAL_MAX)
-        g_warning ("no parent for %d %s\n", type, g_type_name (type));
+        g_warning ("no parent for %ld %s\n", type, g_type_name (type));
       return FALSE;
     }
   else
