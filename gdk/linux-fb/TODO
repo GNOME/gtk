@@ -1,5 +1,13 @@
-. Fix CTree
 . DnD?
-. Fix xbm cursors (almost done, need to figure out edges thingie).
-. When cursor is changed on active window, really change the cursor
 . Faster
+. Input methods
+. Fix xbm cursors (almost done, need to figure out edges thingie)
+. Allow dynamic screen rotate & resize
+. Hardware cursor
+. Hardware acceleration
+. Keyboard abstraction
+. Slightly mouse device abstraction
+. Conditional compilation of all the major features of gdk/gtk
+
+. When cursor is changed on active window, really change the cursor (Unsure if still
+applicable)
