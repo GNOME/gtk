@@ -1,3 +1,18 @@
+Thu Mar 26 15:33:50 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwidget.c: When gtk_widget_draw() is called on a 
+	REDRAW_PENDING widget, draw it and remove it from the
+	queue instead of doing nothing.
+
+	* gtk/Makefile.am gdk/Makefile.am: Switch order of includes
+	directories, to make doubly sure that wrong glibconfig.h
+	isn't used. (See also glib/ChangeLog)
+
+	* gtk/gtkentry.c (gtk_entry_draw_focus): Don't draw the
+	cursor unless the entry is editable.
+
+	(From: Stefan Jeske <jeske@braunschweig.netsurf.de>)
+
 Thu Mar 26 08:31:58 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmain.c (gtk_propagate_event): do not propagate unhandled key

@@ -22,7 +22,7 @@ libglib_la_SOURCES = \
 include_HEADERS = \
 		glib.h
 
-configinclude_HEADERS = \
+configinclude_DATA = \
 		glibconfig.h
 
 libglib_la_LDFLAGS = -version-info 1:0:0

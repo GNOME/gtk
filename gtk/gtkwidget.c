@@ -1578,8 +1578,13 @@ gtk_widget_draw (GtkWidget    *widget,
 
   g_return_if_fail (widget != NULL);
 
-  if (GTK_WIDGET_DRAWABLE (widget) &&
-      !GTK_WIDGET_REDRAW_PENDING (widget))
+  if (GTK_WIDGET_REDRAW_PENDING (widget))
+    {
+      gtk_widget_redraw_queue = g_slist_remove (gtk_widget_redraw_queue, widget);
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
+    }
+
+  if (GTK_WIDGET_DRAWABLE (widget))
     {
       if (!area)
 	{

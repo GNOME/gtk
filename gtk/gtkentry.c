@@ -609,7 +609,8 @@ gtk_entry_draw_focus (GtkWidget *widget)
 			      FALSE, 0, 0, width - 1, height - 1);
 	}
 
-      gtk_entry_draw_cursor (GTK_ENTRY (widget));
+      if (GTK_EDITABLE (widget)->editable)
+	gtk_entry_draw_cursor (GTK_ENTRY (widget));
     }
 }
 
