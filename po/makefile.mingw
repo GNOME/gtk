@@ -8,7 +8,8 @@
 ##		  - msgfmt, from GNU gettext
 
 # This file is included from other po directories, too.
-# They should define their own PACKAGE and possibly LOCALEDIR macros
+# They should define their own PACKAGE and possibly INSTALLSUBDIR
+# and LOCALEDIR macros
 
 ifndef PACKAGE
 PACKAGE = gtk+
