@@ -454,8 +454,10 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   win32_gc->fill_style = GDK_SOLID;
   win32_gc->tile = NULL;
   win32_gc->stipple = NULL;
-  win32_gc->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
+  win32_gc->subwindow_mode = GDK_CLIP_BY_CHILDREN;
+  win32_gc->graphics_exposures = TRUE;
   win32_gc->pen_width = 0;
+  win32_gc->pen_style = PS_GEOMETRIC|PS_ENDCAP_FLAT|PS_JOIN_MITER;
   win32_gc->pen_dashes = NULL;
   win32_gc->pen_num_dashes = 0;
 
