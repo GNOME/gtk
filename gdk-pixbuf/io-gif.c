@@ -1485,7 +1485,8 @@ gdk_pixbuf__gif_image_load_increment (gpointer data,
 	retval = gif_main_loop (context);
 
 	if (retval == -2) {
-                context->buf = NULL;
+		if (context->buf == buf)
+                        context->buf = NULL;
 		return FALSE;
         }
 	if (retval == -1) {

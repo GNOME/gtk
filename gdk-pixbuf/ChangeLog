@@ -1,3 +1,13 @@
+2002-03-26  Matthias Clasen  <maclas@gmx.de>
+
+	* io-tiff.c (tiff_image_parse): Don't leak pixbuf on error.
+
+	* io-gif.c (gdk_pixbuf__gif_image_load_increment): Don't leak
+	context->buf on error.
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): Make sure to call
+	stop_load even for short images to prevent memleaks.
+
 2002-03-25  Matthias Clasen  <maclas@gmx.de>
 
 	* io-png.c (setup_png_transformations): Changed signature to
