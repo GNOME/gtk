@@ -1,5 +1,10 @@
 2004-04-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (get_child_node): Don't crash if a node 
+	has no name.
+	(start_element_handler): Accept separators without unique 
+	names.  (#133302, Anders Carlsson)
+
 	* gtk/gtkactiongroup.c (gtk_action_group_add_action): Document
 	possible accelerator gotcha when using this function.  (#139641, 
 	Christian Persch)

@@ -29,6 +29,7 @@ roughly described by the following DTD.
 &lt;!ATTLIST toolbar      name               &num;IMPLIED &gt;
 &lt;!ATTLIST popup        name               &num;IMPLIED &gt;
 &lt;!ATTLIST placeholder  name               &num;IMPLIED &gt;
+&lt;!ATTLIST separator    name               &num;IMPLIED &gt;
 &lt;!ATTLIST menu         name               &num;IMPLIED
                        action             &num;REQUIRED
                        position (top|bot) &num;IMPLIED &gt;
@@ -126,7 +127,7 @@ The most remarkable feature of #GtkUIManager is that it can overlay a set
 of menuitems and toolitems over another one, and demerge them later.
 </para>
 <para>
-Merging is done based on the name of the XML elements. Each element is 
+Merging is done based on the names of the XML elements. Each element is 
 identified by a path which consists of the names of its anchestors, separated
 by slashes. For example, the menuitem named "Left" in the example above
 has the path <literal>/ui/menubar/JustifyMenu/Left</literal> and the

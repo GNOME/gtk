@@ -824,7 +824,8 @@ get_child_node (GtkUIManager *self,
 	{
 	  for (child = parent->children; child != NULL; child = child->next)
 	    {
-	      if (strlen (NODE_INFO (child)->name) == childname_length &&
+	      if (NODE_INFO (child)->name &&
+		  strlen (NODE_INFO (child)->name) == childname_length &&
 		  !strncmp (NODE_INFO (child)->name, childname, childname_length))
 		{
 		  /* if undecided about node type, set it */
@@ -1215,15 +1216,24 @@ start_element_handler (GMarkupParseContext *context,
 	  !strcmp (element_name, "separator"))
 	{
 	  GNode *node;
+	  gint length;
 
 	  if (ctx->state == STATE_TOOLBAR)
 	    ctx->state = STATE_TOOLITEM;
 	  else
 	    ctx->state = STATE_MENUITEM;
+	  if (!strcmp (node_name, "separator"))
+	    {
+	      node_name = NULL;
+	      length = -1;
+	    }
+	  else
+	    length = strlen (node_name);
 	  node = get_child_node (self, ctx->current,
-				 node_name, strlen (node_name),
+				 node_name, length,
 				 NODE_TYPE_SEPARATOR,
 				 TRUE, top);
+
 	  if (NODE_INFO (node)->action_name == 0)
 	    NODE_INFO (node)->action_name = action_quark;
 
