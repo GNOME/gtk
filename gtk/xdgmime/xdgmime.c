@@ -25,7 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include "xdgmime.h"
 #include "xdgmimeint.h"
 #include "xdgmimeglob.h"
@@ -529,10 +532,12 @@ xdg_mime_get_max_buffer_extents (void)
   return _xdg_mime_magic_get_buffer_extents (global_magic);
 }
 
-static const char *
-unalias_mime_type (const char *mime_type)
+const char *
+xdg_mime_unalias_mime_type (const char *mime_type)
 {
   const char *lookup;
+
+  xdg_mime_init ();
 
   if ((lookup = _xdg_mime_alias_list_lookup (alias_list, mime_type)) != NULL)
     return lookup;
@@ -548,8 +553,8 @@ xdg_mime_mime_type_equal (const char *mime_a,
 
   xdg_mime_init ();
 
-  unalias_a = unalias_mime_type (mime_a);
-  unalias_b = unalias_mime_type (mime_b);
+  unalias_a = xdg_mime_unalias_mime_type (mime_a);
+  unalias_b = xdg_mime_unalias_mime_type (mime_b);
 
   if (strcmp (unalias_a, unalias_b) == 0)
     return 1;
@@ -599,8 +604,8 @@ xdg_mime_mime_type_subclass (const char *mime,
 
   xdg_mime_init ();
 
-  umime = unalias_mime_type (mime);
-  ubase = unalias_mime_type (base);
+  umime = xdg_mime_unalias_mime_type (mime);
+  ubase = xdg_mime_unalias_mime_type (base);
 
   if (strcmp (umime, ubase) == 0)
     return 1;
@@ -631,6 +636,18 @@ xdg_mime_mime_type_subclass (const char *mime,
     }
 
   return 0;
+}
+
+const char **
+xdg_mime_get_mime_parents (const char *mime)
+{
+  const char *umime;
+
+  xdg_mime_init ();
+
+  umime = xdg_mime_unalias_mime_type (mime);
+
+  return _xdg_mime_parent_list_lookup (parent_list, umime);
 }
 
 void 

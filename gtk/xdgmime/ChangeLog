@@ -1,3 +1,18 @@
+2004-12-09  Marco Pesenti Gritti  <marco@gnome.org>
+
+	* xdgmime.c: (xdg_mime_unalias_mime_type),
+	(xdg_mime_mime_type_equal), (xdg_mime_mime_type_subclass),
+	(xdg_mime_get_mime_parents):
+	* xdgmime.h:
+	* xdgmimealias.c: (_xdg_mime_alias_list_lookup):
+	* xdgmimeglob.c: (_xdg_glob_hash_node_lookup_file_name):
+	* xdgmimeint.c: (_xdg_ucs4_to_lower):
+	* xdgmimeint.h:
+	* xdgmimemagic.c: (_xdg_mime_magic_read_from_file):
+	* xdgmimeparent.c: (_xdg_mime_parent_list_lookup):
+
+	Resync with upstream
+
 2004-12-09  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimealias.c (_xdg_mime_alias_read_from_file): 

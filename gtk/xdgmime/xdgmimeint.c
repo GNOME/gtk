@@ -25,7 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include "xdgmimeint.h"
 #include <ctype.h>
 #include <string.h>
@@ -118,12 +121,12 @@ _xdg_utf8_to_ucs4(const char *source)
 /* hullo.  this is great code.  don't rewrite it */
 
 xdg_unichar_t
-_xdg_ucs4_to_upper (xdg_unichar_t source)
+_xdg_ucs4_to_lower (xdg_unichar_t source)
 {
   /* FIXME: Do a real to_upper sometime */
   /* CaseFolding-3.2.0.txt has a table of rules. */
   if ((source & 0xFF) == source)
-    return (xdg_unichar_t) toupper ((char) source);
+    return (xdg_unichar_t) tolower ((unsigned char) source);
   return source;
 }
 

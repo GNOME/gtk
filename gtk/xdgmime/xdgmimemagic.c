@@ -25,7 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include <assert.h>
 #include "xdgmimemagic.h"
 #include "xdgmimeint.h"
@@ -768,9 +771,11 @@ _xdg_mime_magic_read_from_file (XdgMimeMagic *mime_magic,
   if (magic_file == NULL)
     return;
 
-  fread (header, 1, 12, magic_file);
+  if (fread (header, 1, 12, magic_file) == 12)
+    {
+      if (memcmp ("MIME-Magic\0\n", header, 12) == 0)
+        _xdg_mime_magic_read_magic_file (mime_magic, magic_file);
+    }
 
-  if (memcmp ("MIME-Magic\0\n", header, 12) == 0)
-    _xdg_mime_magic_read_magic_file (mime_magic, magic_file);
   fclose (magic_file);
 }

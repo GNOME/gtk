@@ -25,7 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include "xdgmimeglob.h"
 #include "xdgmimeint.h"
 #include <stdlib.h>
@@ -260,13 +263,11 @@ _xdg_glob_hash_node_lookup_file_name (XdgGlobHashNode *glob_hash_node,
 
   character = _xdg_utf8_to_ucs4 (file_name);
   if (ignore_case)
-    character = _xdg_ucs4_to_upper(character);
+    character = _xdg_ucs4_to_lower(character);
 
-  for (node = glob_hash_node;
-       node && character >= (ignore_case?_xdg_ucs4_to_upper (node->character):node->character);
-       node = node->next)
+  for (node = glob_hash_node; node && character >= node->character; node = node->next)
     {
-      if (character == (ignore_case?_xdg_ucs4_to_upper (node->character):node->character))
+      if (character == node->character)
 	{
 	  file_name = _xdg_utf8_next_char (file_name);
 	  if (*file_name == '\000')

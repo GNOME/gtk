@@ -25,7 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include "xdgmimeparent.h"
 #include "xdgmimeint.h"
 #include <stdlib.h>
@@ -108,11 +111,11 @@ _xdg_mime_parent_list_lookup (XdgParentList *list,
     {
       key.mime = (char *)mime;
       key.parents = NULL;
-      
+
       entry = bsearch (&key, list->parents, list->n_mimes,
 		       sizeof (XdgMimeParents), &parent_entry_cmp);
       if (entry)
-	return (const char **)entry->parents;
+        return (const char **)entry->parents;
     }
 
   return NULL;

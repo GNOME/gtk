@@ -25,7 +25,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#ifdef HAVE_CONFIG_H
 #include <config.h>
+#endif
+
 #include "xdgmimealias.h"
 #include "xdgmimeint.h"
 #include <stdlib.h>
@@ -103,11 +106,11 @@ _xdg_mime_alias_list_lookup (XdgAliasList *list,
     {
       key.alias = (char *)alias;
       key.mime_type = 0;
-      
+
       entry = bsearch (&key, list->aliases, list->n_aliases,
 		       sizeof (XdgAlias), alias_entry_cmp);
       if (entry)
-	return entry->mime_type;
+        return entry->mime_type;
     }
 
   return NULL;
