@@ -1,3 +1,9 @@
+Thu Jun  5 20:12:51 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_get_default_size): Handle
+	gtk_window_get_geometry_info() returning NULL.
+	(#107311, John Finlay)
+
 Thu Jun  5 19:24:33 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_expose): Subtract off
