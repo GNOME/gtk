@@ -659,9 +659,9 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
+  gint old_column = column;
   GValue real_value = {0, };
   gboolean converted = FALSE;
-  gint orig_column = column;
   gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
@@ -736,12 +736,13 @@ gtk_list_store_real_set_value (GtkListStore *list_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
+
   retval = TRUE;
   if (converted)
     g_value_unset (&real_value);
 
   if (sort && GTK_LIST_STORE_IS_SORTED (list_store))
-    gtk_list_store_sort_iter_changed (list_store, iter, orig_column);
+    gtk_list_store_sort_iter_changed (list_store, iter, old_column);
 
   return retval;
 }
@@ -1770,7 +1771,6 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
       tmp_iter.user_data = next;
       cmp_b = (* func) (GTK_TREE_MODEL (list_store), iter, &tmp_iter, data);
     }
-
 
   if (list_store->order == GTK_SORT_DESCENDING)
     {

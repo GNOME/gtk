@@ -778,10 +778,15 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
-  GtkTreePath *path = NULL;
+  gint old_column = column;
   GValue real_value = {0, };
   gboolean converted = FALSE;
   gboolean retval = FALSE;
+
+  g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), FALSE);
+  g_return_val_if_fail (VALID_ITER (iter, tree_store), FALSE);
+  g_return_val_if_fail (column >= 0 && column < tree_store->n_columns, FALSE);
+  g_return_val_if_fail (G_IS_VALUE (value), FALSE);
 
   if (! g_type_is_a (G_VALUE_TYPE (value), tree_store->column_headers[column]))
     {
@@ -808,8 +813,6 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 
   prev = list = G_NODE (iter->user_data)->data;
 
-  path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), iter);
-
   while (list != NULL)
     {
       if (column == 0)
@@ -819,7 +822,6 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 	  else
 	    _gtk_tree_data_list_value_to_node (list, value);
 	  retval = TRUE;
-	  gtk_tree_path_free (path);
 	  if (converted)
 	    g_value_unset (&real_value);
 	  return retval;
@@ -848,15 +850,18 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
       list->next = NULL;
       column --;
     }
+
   if (converted)
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
   
   retval = TRUE;
-  gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);
+
+  if (sort && GTK_TREE_STORE_IS_SORTED (tree_store))
+    gtk_tree_store_sort_iter_changed (tree_store, iter, old_column);
 
   return retval;
 }
@@ -2066,7 +2071,6 @@ gtk_tree_store_sort_iter_changed (GtkTreeStore *tree_store,
       tmp_iter.user_data = next;
       cmp_b = (* func) (GTK_TREE_MODEL (tree_store), iter, &tmp_iter, data);
     }
-
 
   if (tree_store->order == GTK_SORT_DESCENDING)
     {
