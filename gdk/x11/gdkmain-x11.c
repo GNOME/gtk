@@ -84,9 +84,6 @@ static int	    gdk_x_io_error		 (Display     *display);
 
 /* Private variable declarations
  */
-static int gdk_initialized = 0;			    /* 1 if the library is initialized,
-						     * 0 otherwise.
-						     */
 static GSList *gdk_error_traps = NULL;               /* List of error traps */
 static GSList *gdk_error_trap_free_list = NULL;      /* Free list */
 
@@ -615,9 +612,6 @@ gdk_x_io_error (Display *display)
 	       display ? DisplayString (display) : gdk_get_display_arg_name ());
     }
 
-  /* Disable the atexit shutdown for GDK */
-  gdk_initialized = 0;
-  
   exit(1);
 }
 

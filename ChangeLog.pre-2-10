@@ -1,3 +1,10 @@
+Fri Aug  2 16:24:32 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkmain-x11.c: Remove references to 
+	gdk_initialized (#81060, Jacob Berkman)
+	
+	* gdk/gdk.c (gdk_exit): Remove gdk_exit_func().
+
 Fri Aug  2 15:56:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkscreen-x11.c (gdk_screen_x11_dispose): Fix

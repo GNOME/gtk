@@ -444,55 +444,6 @@ gdk_exit (gint errorcode)
   exit (errorcode);
 }
 
-#if 0
-
-/* This is disabled, but the code isn't removed, because we might
- * want to have some sort of explicit way to shut down GDK cleanly
- * at some point in the future.
- */
-
-/*
- *--------------------------------------------------------------
- * gdk_exit_func
- *
- *   This is the "atexit" function that makes sure the
- *   library gets a chance to cleanup.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *   The library is un-initialized and the program exits.
- *
- *--------------------------------------------------------------
- */
-
-static void
-gdk_exit_func (void)
-{
-  static gboolean in_gdk_exit_func = FALSE;
-  
-  /* This is to avoid an infinite loop if a program segfaults in
-     an atexit() handler (and yes, it does happen, especially if a program
-     has trounced over memory too badly for even g_message to work) */
-  if (in_gdk_exit_func == TRUE)
-    return;
-  in_gdk_exit_func = TRUE;
-  
-  if (gdk_initialized)
-    {
-      _gdk_image_exit ();
-      _gdk_input_exit ();
-
-      _gdk_windowing_exit ();
-      
-      gdk_initialized = 0;
-    }
-}
-
-#endif
-
 void
 gdk_threads_enter ()
 {
