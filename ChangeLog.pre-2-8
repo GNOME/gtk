@@ -1,3 +1,8 @@
+Tue Jan 27 18:45:47 2004  Manish Singh  <yosh@gimp.org>
+
+        * m4macros/gtk-2.0.m4: quote AC_DEFUN macro names so automake
+        1.8 won't whine at us.
+
 2004-01-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (synthesize_leave_event,
