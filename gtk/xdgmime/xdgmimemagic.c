@@ -111,7 +111,7 @@ _xdg_mime_magic_matchlet_new (void)
 }
 
 
-void
+static void
 _xdg_mime_magic_matchlet_free (XdgMimeMagicMatchlet *mime_magic_matchlet)
 {
   if (mime_magic_matchlet)
@@ -129,7 +129,7 @@ _xdg_mime_magic_matchlet_free (XdgMimeMagicMatchlet *mime_magic_matchlet)
 
 /* Frees mime_magic_match and the remainder of its list
  */
-void
+static void
 _xdg_mime_magic_match_free (XdgMimeMagicMatch *mime_magic_match)
 {
   XdgMimeMagicMatch *ptr, *next;
@@ -614,7 +614,7 @@ _xdg_mime_magic_insert_match (XdgMimeMagic      *mime_magic,
   list = mime_magic->match_list;
   while (list->next != NULL)
     {
-      if (list->next->priority > match->priority)
+      if (list->next->priority < match->priority)
 	{
 	  match->next = list->next;
 	  list->next = match;
