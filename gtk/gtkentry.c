@@ -1833,3 +1833,9 @@ gtk_entry_select_region  (GtkEntry       *entry,
   gtk_editable_select_region (GTK_EDITABLE(entry), start, end);
 }
 
+void
+gtk_entry_set_max_length (GtkEntry *entry,
+			  guint16 max)
+{
+  entry->text_max_length = max;
+}
