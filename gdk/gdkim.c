@@ -54,7 +54,7 @@ typedef struct {
   gpointer value;
 } GdkImArg;
 
-#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
+#ifndef XIM_INST_IS_MISSING_OR_STRANGE
 static void   gdk_im_instantiate_cb      (Display *display,
  					  XPointer client_data,
  					  XPointer call_data);
@@ -340,13 +340,13 @@ gdk_im_destroy_cb (XIM im, XPointer client_data, XPointer call_data)
       private->xic = NULL;
     }
 
-#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
+#ifndef XIM_INST_IS_MISSING_OR_STRANGE
   XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
       				  gdk_im_instantiate_cb, NULL);
 #endif
 }
 
-#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
+#ifndef XIM_INST_IS_MISSING_OR_STRANGE
 static void
 gdk_im_instantiate_cb (Display *display,
     		       XPointer client_data, XPointer call_data)
@@ -411,7 +411,7 @@ gdk_im_open (void)
   if (gdk_im_real_open ())
     return TRUE;
 
-#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
+#ifndef XIM_INST_IS_MISSING_OR_STRANGE
   XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
 				  gdk_im_instantiate_cb, NULL);
 #endif

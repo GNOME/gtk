@@ -1,3 +1,8 @@
+1999-01-28  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk/gdkim.c:
+	s/XIM_INSTANTIATE_IS_MISSING_OR_STRANGE/XIM_INST_IS_MISSING_OR_STRANGE/
+
 Thu Jan 28 01:57:06 CST 1999 Shawn T. Amundson <amundson@gtk.org>
 
 	* INSTALL
