@@ -1,7 +1,7 @@
 2002-12-25  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Fix highlighting of
-	selection wrt. to empty lines.  (#90435, #90582)
+	selection wrt. to empty lines.  (#90435, #90582, #91619)
 
 	* gtk/gtktextview.c (gtk_text_view_preedit_changed_handler):
 	Keep the cursor on screen.  (#96929)
