@@ -1,3 +1,8 @@
+2002-07-31  Sven Neumann  <sven@gimp.org>
+
+	* gdk-pixdata.c (gdk_pixdata_to_csource): free the result of
+	gdk_pixdata_serialize() (bug #89411).
+
 Mon Jul 29 23:06:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf-scale.c: Fix some warnings by adding
