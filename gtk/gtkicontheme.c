@@ -1295,6 +1295,77 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
   return FALSE;
 }
 
+static void
+add_size (gpointer  key,
+	  gpointer  value,
+	  gpointer  user_data)
+{
+  gint **res_p = user_data;
+
+  **res_p = GPOINTER_TO_INT (key);
+
+  *res_p++;
+}
+
+/**
+ * gtk_icon_theme_get_icon_sizes:
+ * @icon_theme: a #GtkIconTheme
+ * @icon_name: the name of an icon
+ * 
+ * Returns an array of integers describing the sizes at which
+ * the icon is available without scaling. A size of -1 means 
+ * that the icon is available in a scalable format. The array 
+ * is zero-terminated.
+ * 
+ * Return value: An newly allocated array describing the sizes at
+ * which the icon is available.
+ *
+ * Since: 2.6
+ **/
+gint *
+gtk_icon_theme_get_icon_sizes (GtkIconTheme *icon_theme,
+			       const char   *icon_name)
+{
+  GList *l, *d;
+  GHashTable *sizes;
+  gint *result;
+  guint suffix;
+  
+  GtkIconThemePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_ICON_THEME (icon_theme), FALSE);
+  
+  priv = icon_theme->priv;
+
+  ensure_valid_themes (icon_theme);
+
+  sizes = g_hash_table_new (g_direct_hash, g_direct_equal);
+
+  for (l = priv->themes; l; l = l->next)
+    {
+      IconTheme *theme = l->data;
+      for (d = theme->dirs; d; d = d->next)
+	{
+	  IconThemeDir *dir = d->data;
+	  
+	  suffix = GPOINTER_TO_UINT (g_hash_table_lookup (dir->icons, icon_name));
+	  if (suffix != ICON_SUFFIX_NONE)
+	    {
+	      if (suffix == ICON_SUFFIX_SVG)
+		g_hash_table_insert (sizes, GINT_TO_POINTER (-1), NULL);
+	      else
+		g_hash_table_insert (sizes, GINT_TO_POINTER (dir->size), NULL);
+	    }
+	}
+    }
+
+  result = g_new0 (gint, g_hash_table_size (sizes) + 1);
+
+  g_hash_table_foreach (sizes, add_size, &result);
+  g_hash_table_destroy (sizes);
+  
+  return result;
+}
 
 static void
 add_key_to_hash (gpointer  key,
@@ -2275,7 +2346,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info,
  * 
  * Renders an icon previously looked up in an icon theme using
  * gtk_icon_theme_lookup_icon(); the size will be based on the size
- * pssed to gtk_icon_theme_lookup_icon(). Note that the resulting
+ * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
  * pixbuf may not be exactly this size; an icon theme may have icons
  * that differ slightly from their nominal sizes, and in addition GTK+
  * will avoid scaling icons that it considers sufficiently close to the

@@ -116,6 +116,8 @@ void          gtk_icon_theme_set_custom_theme      (GtkIconTheme                
 
 gboolean      gtk_icon_theme_has_icon              (GtkIconTheme                *icon_theme,
 						    const gchar                 *icon_name);
+gint         *gtk_icon_theme_get_icon_sizes        (GtkIconTheme                *icon_theme,
+						    const gchar                 *icon_name);
 GtkIconInfo * gtk_icon_theme_lookup_icon           (GtkIconTheme                *icon_theme,
 						    const gchar                 *icon_name,
 						    gint                         size,

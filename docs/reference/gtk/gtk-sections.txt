@@ -4559,6 +4559,7 @@ gtk_window_get_frame_dimensions
 gtk_window_get_has_frame
 gtk_window_get_icon
 gtk_window_get_icon_list
+gtk_window_get_icon_name
 gtk_window_get_mnemonic_modifier
 gtk_window_get_modal
 gtk_window_get_position
@@ -4578,9 +4579,11 @@ gtk_window_resize
 gtk_window_set_default_icon_list
 gtk_window_set_default_icon
 gtk_window_set_default_icon_from_file
+gtk_window_set_default_icon_name
 gtk_window_set_icon
 gtk_window_set_icon_list
 gtk_window_set_icon_from_file
+gtk_window_set_icon_name
 gtk_window_set_auto_startup_notification
 <SUBSECTION Standard>
 GTK_WINDOW
@@ -5308,6 +5311,7 @@ gtk_icon_theme_has_icon
 gtk_icon_theme_lookup_icon
 gtk_icon_theme_load_icon
 gtk_icon_theme_list_icons
+gtk_icon_theme_get_icon_sizes
 gtk_icon_theme_get_example_icon_name
 gtk_icon_theme_rescan_if_needed
 gtk_icon_theme_add_builtin_icon

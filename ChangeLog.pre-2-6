@@ -1,3 +1,21 @@
+Fri Jul 16 23:20:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Support themed window icons.  (#92346, Calum Benson)
+	
+	* gtk/gtkicontheme.c (gtk_icon_theme_get_icon_sizes): New 
+	function to obtain information about the sizes in which an
+	icon is available.  
+
+	* gtk/gtkwindow.h: 
+	* gtk/gtkwindow.c (gtk_window_class_init): 
+	(gtk_window_set_icon_name): 
+	(gtk_window_get_icon_name): Add an "icon_name" property
+	(gtk_window_set_default_icon_name): ...and a default icon name. 
+	(icon_list_from_theme): 
+	(update_themed_icon): New auxiliary functions to create a 
+	list of all available sizes of a themed icon and update the
+	window icon list from it.
+
 2004-07-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_scroll_event): Make 

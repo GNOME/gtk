@@ -257,13 +257,18 @@ void       gtk_window_set_icon_list                (GtkWindow  *window,
 GList*     gtk_window_get_icon_list                (GtkWindow  *window);
 void       gtk_window_set_icon                     (GtkWindow  *window,
                                                     GdkPixbuf  *icon);
+void       gtk_window_set_icon_name                (GtkWindow   *window,
+						    const gchar *name);
 gboolean   gtk_window_set_icon_from_file           (GtkWindow   *window,
 						    const gchar *filename,
 						    GError     **err);
 GdkPixbuf* gtk_window_get_icon                     (GtkWindow  *window);
+G_CONST_RETURN 
+gchar     *gtk_window_get_icon_name                (GtkWindow  *window);
 void       gtk_window_set_default_icon_list        (GList      *list);
 GList*     gtk_window_get_default_icon_list        (void);
 void       gtk_window_set_default_icon             (GdkPixbuf  *icon);
+void       gtk_window_set_default_icon_name        (const gchar *name);
 gboolean   gtk_window_set_default_icon_from_file   (const gchar *filename,
 						    GError     **err);
 
