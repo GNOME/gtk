@@ -1,3 +1,7 @@
+2002-08-07  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Remove gtk_style_get_font_for_display.
+
 Mon Jul 29 22:36:06 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtkfilesel.sgml: Fix up the example program

@@ -3869,7 +3869,6 @@ gtk_style_apply_default_pixmap
 gtk_style_lookup_icon_set
 gtk_style_render_icon
 gtk_style_get_font
-gtk_style_get_font_for_display
 gtk_style_set_font
 gtk_draw_hline
 gtk_draw_vline
