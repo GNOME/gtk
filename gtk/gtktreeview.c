@@ -822,8 +822,12 @@ G_PARAM_READABLE));
   /* Key bindings */
   gtk_tree_view_add_move_binding (binding_set, GDK_Up, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, -1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Up, 0,
+				  GTK_MOVEMENT_DISPLAY_LINES, -1);
 
   gtk_tree_view_add_move_binding (binding_set, GDK_Down, 0,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Down, 0,
 				  GTK_MOVEMENT_DISPLAY_LINES, 1);
 
   gtk_tree_view_add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
@@ -834,15 +838,24 @@ G_PARAM_READABLE));
 
   gtk_tree_view_add_move_binding (binding_set, GDK_Home, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, -1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Home, 0,
+				  GTK_MOVEMENT_BUFFER_ENDS, -1);
 
   gtk_tree_view_add_move_binding (binding_set, GDK_End, 0,
+				  GTK_MOVEMENT_BUFFER_ENDS, 1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_End, 0,
 				  GTK_MOVEMENT_BUFFER_ENDS, 1);
 
   gtk_tree_view_add_move_binding (binding_set, GDK_Page_Up, 0,
 				  GTK_MOVEMENT_PAGES, -1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Up, 0,
+				  GTK_MOVEMENT_PAGES, -1);
 
   gtk_tree_view_add_move_binding (binding_set, GDK_Page_Down, 0,
 				  GTK_MOVEMENT_PAGES, 1);
+  gtk_tree_view_add_move_binding (binding_set, GDK_KP_Page_Down, 0,
+				  GTK_MOVEMENT_PAGES, 1);
+
 
   gtk_binding_entry_add_signal (binding_set, GDK_Right, 0, "move_cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
@@ -852,11 +865,31 @@ G_PARAM_READABLE));
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK, "move_cursor", 2,
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0, "move_cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, 1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_CONTROL_MASK, "move_cursor", 2,
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0, "move_cursor", 2,
+				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				G_TYPE_INT, -1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK,
+                                "move_cursor", 2,
+				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				G_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_CONTROL_MASK,
+                                "move_cursor", 2,
+				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				G_TYPE_INT, -1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, GDK_CONTROL_MASK,
+                                "move_cursor", 2,
+				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
+				G_TYPE_INT, 1);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, GDK_CONTROL_MASK,
+                                "move_cursor", 2,
 				G_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				G_TYPE_INT, -1);
 
@@ -902,11 +935,25 @@ G_PARAM_READABLE));
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_SHIFT_MASK, "expand_collapse_cursor_row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "expand_collapse_cursor_row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
+				G_TYPE_BOOLEAN, TRUE,
+				G_TYPE_BOOLEAN, TRUE,
+				G_TYPE_BOOLEAN, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_Right,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
+				G_TYPE_BOOLEAN, TRUE,
+				G_TYPE_BOOLEAN, TRUE,
+				G_TYPE_BOOLEAN, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE,
 				G_TYPE_BOOLEAN, TRUE);
@@ -927,11 +974,25 @@ G_PARAM_READABLE));
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_SHIFT_MASK, "expand_collapse_cursor_row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "expand_collapse_cursor_row", 3,
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
+				G_TYPE_BOOLEAN, FALSE,
+				G_TYPE_BOOLEAN, FALSE,
+				G_TYPE_BOOLEAN, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_Left,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
+				G_TYPE_BOOLEAN, FALSE,
+				G_TYPE_BOOLEAN, FALSE,
+				G_TYPE_BOOLEAN, TRUE);
+  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left,
+                                GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                "expand_collapse_cursor_row", 3,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, FALSE,
 				G_TYPE_BOOLEAN, TRUE);
@@ -3672,7 +3733,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
     }
 
   if (tree_view->priv->columns && (event->state & GDK_SHIFT_MASK)
-      && (event->keyval == GDK_Left || event->keyval == GDK_Right))
+      && (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+          || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
     {
       list = tree_view->priv->columns;
       while (list)
@@ -3683,7 +3745,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	      if (!column->resizable)
 		return TRUE;
 
-	      if (event->keyval == GDK_Left)
+	      if (event->keyval == GDK_Left || event->keyval == GDK_KP_Left)
 	        {
 		  column->resized_width = MAX (column->resized_width,
 					       column->width);
@@ -3703,7 +3765,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  gtk_widget_queue_resize (widget);
 		  return TRUE;
 		}
-	      else if (event->keyval == GDK_Right)
+	      else if (event->keyval == GDK_Right
+                       || event->keyval == GDK_KP_Right)
 	        {
 		  column->resized_width = MAX (column->resized_width,
 					       column->width);
@@ -3722,8 +3785,10 @@ gtk_tree_view_key_press (GtkWidget   *widget,
     }
 
   if (tree_view->priv->columns && (event->state & GDK_CONTROL_MASK) &&
-      (event->keyval == GDK_Left || event->keyval == GDK_Right
-       || event->keyval == GDK_Home || event->keyval == GDK_End))
+      (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+       || event->keyval == GDK_Right || event->keyval == GDK_KP_Right
+       || event->keyval == GDK_Home || event->keyval == GDK_KP_Home
+       || event->keyval == GDK_End || event->keyval == GDK_KP_End))
     {
       list = tree_view->priv->columns;
       while (list)
@@ -3731,7 +3796,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	  GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
 	  if (GTK_WIDGET_HAS_FOCUS (column->button))
 	    {
-	      if (event->keyval == (rtl ? GDK_Right : GDK_Left))
+	      if (event->keyval == (rtl ? GDK_Right : GDK_Left)
+                  || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
 	        {
 		  GtkTreeViewColumn *col;
 		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_LEFT);
@@ -3739,7 +3805,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		    gtk_tree_view_move_column_after (tree_view, column, col);
 		  return TRUE;
 		}
-	      else if (event->keyval == (rtl ? GDK_Left : GDK_Right))
+	      else if (event->keyval == (rtl ? GDK_Left : GDK_Right)
+                       || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
 	        {
 		  GtkTreeViewColumn *col;
 		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_RIGHT);
@@ -3747,7 +3814,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		    gtk_tree_view_move_column_after (tree_view, column, col);
 		  return TRUE;
 		}
-	      else if (event->keyval == GDK_Home)
+	      else if (event->keyval == GDK_Home
+                       || event->keyval == GDK_KP_Home)
 	        {
 		  GtkTreeViewColumn *col;
 		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_HOME);
@@ -3755,7 +3823,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		    gtk_tree_view_move_column_after (tree_view, column, col);
 		  return TRUE;
 	        }
-	      else if (event->keyval == GDK_End)
+	      else if (event->keyval == GDK_End || event->keyval == GDK_KP_End)
 	        {
 		  GtkTreeViewColumn *col;
 		  col = gtk_tree_view_get_drop_column (tree_view, column, DROP_END);
@@ -3770,7 +3838,8 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 
   if (tree_view->priv->columns &&
       GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE) &&
-      (event->keyval == GDK_Left || event->keyval == GDK_Right))
+      (event->keyval == GDK_Left || event->keyval == GDK_KP_Left
+       || event->keyval == GDK_Right || event->keyval == GDK_KP_Right))
     {
       gint width = 0;
       list = tree_view->priv->columns;
@@ -3779,7 +3848,9 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	  GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
 	  if (GTK_WIDGET_HAS_FOCUS (column->button))
 	    {
-	      if (event->keyval == (rtl ? GDK_Right : GDK_Left) && list->prev)
+	      if ((event->keyval == (rtl ? GDK_Right : GDK_Left)
+                   || event->keyval == (rtl ? GDK_KP_Right : GDK_KP_Left))
+                  && list->prev)
 	        {
 		  GList *tmp;
 
@@ -3796,7 +3867,9 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 		  gtk_adjustment_set_value (tree_view->priv->hadjustment, CLAMP (width, tree_view->priv->hadjustment->lower, tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size));
 		  return TRUE;
 		}
-	      else if (event->keyval == (rtl ? GDK_Left : GDK_Right) && list->next)
+	      else if ((event->keyval == (rtl ? GDK_Left : GDK_Right)
+                        || event->keyval == (rtl ? GDK_KP_Left : GDK_KP_Right))
+                       && list->next)
 	        {
 		  GList *tmp;
 
@@ -11093,14 +11166,14 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
     }
 
   /* select previous matching iter */
-  if (event->keyval == GDK_Up)
+  if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
     {
       gtk_tree_view_search_move (widget, tree_view, TRUE);
       return TRUE;
     }
 
   /* select next matching iter */
-  if (event->keyval == GDK_Down)
+  if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
     {
       gtk_tree_view_search_move (widget, tree_view, FALSE);
       return TRUE;

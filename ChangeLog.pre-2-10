@@ -1,3 +1,13 @@
+Fri Aug 15 19:43:14 2003  Kristian Rietveld  <kris@gtk.org>
+
+	(Note: This is not exactly the same as the patch which went in
+	 gtk-2-2).
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init),
+	(gtk_tree_view_key_press), (gtk_tree_view_search_key_press_event):
+	Also support the up, down, left, right, home, end, page up and
+	page down keys on the numpad. (#119419, reported by Alex Larsson).
+
 Fri Aug 15 12:34:04 2003  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes for X/Cygwin builds of GTK+ (#107623, Masahiro Sakai):
