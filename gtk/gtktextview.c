@@ -262,6 +262,8 @@ static void     gtk_text_view_value_changed                (GtkAdjustment *adj,
 static void     gtk_text_view_commit_handler               (GtkIMContext  *context,
 							    const gchar   *str,
 							    GtkTextView   *text_view);
+static void     gtk_text_view_commit_text                  (GtkTextView   *text_view,
+                                                            const gchar   *text);
 static void     gtk_text_view_preedit_changed_handler      (GtkIMContext  *context,
 							    GtkTextView   *text_view);
 static gboolean gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
@@ -3377,13 +3379,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   else if (event->keyval == GDK_Return ||
            event->keyval == GDK_KP_Enter)
     {
-      gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\n", 1,
-                                                    text_view->editable);
-      DV(g_print (G_STRLOC": scrolling to mark\n"));
-      gtk_text_view_scroll_to_mark (text_view,
-                                    gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                              "insert"),
-                                    0.0, FALSE, 0.0, 0.0);
+      gtk_text_view_commit_text (text_view, "\n");
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
@@ -3392,12 +3388,7 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
             event->keyval == GDK_ISO_Left_Tab) &&
            !(event->state & GDK_CONTROL_MASK))
     {
-      gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), "\t", 1,
-                                                    text_view->editable);
-      DV(g_print (G_STRLOC": scrolling onscreen\n"));
-      gtk_text_view_scroll_mark_onscreen (text_view,
-                                          gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                    "insert"));
+      gtk_text_view_commit_text (text_view, "\t");
       retval = TRUE;
     }
   else
@@ -5385,6 +5376,13 @@ static void
 gtk_text_view_commit_handler (GtkIMContext  *context,
                               const gchar   *str,
                               GtkTextView   *text_view)
+{
+  gtk_text_view_commit_text (text_view, str);
+}
+
+static void
+gtk_text_view_commit_text (GtkTextView   *text_view,
+                           const gchar   *str)
 {
   gboolean had_selection;
   

@@ -785,12 +785,9 @@ gtk_text_layout_draw (GtkTextLayout *layout,
               gtk_text_layout_get_iter_at_line (layout,
                                                 &line_start,
                                                 line, 0);
-              byte_count = gtk_text_iter_get_bytes_in_line (&line_start);
-          
-              /* FIXME the -1 assumes a newline I think */
-              gtk_text_layout_get_iter_at_line (layout,
-                                                &line_end,
-                                                line, byte_count - 1);
+              line_end = line_start;
+              gtk_text_iter_forward_to_line_end (&line_end);
+              byte_count = gtk_text_iter_get_line_index (&line_end);     
 
               if (gtk_text_iter_compare (&selection_start, &line_end) <= 0 &&
                   gtk_text_iter_compare (&selection_end, &line_start) >= 0)
