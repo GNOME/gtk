@@ -911,8 +911,8 @@ gtk_combo_init (GtkCombo * combo)
   combo->entry_change_id = g_signal_connect (combo->entry, "changed",
 					     G_CALLBACK (gtk_combo_update_list),
 					     combo);
-  g_signal_connect (combo->entry, "key_press_event",
-		    G_CALLBACK (gtk_combo_entry_key_press), combo);
+  g_signal_connect_after (combo->entry, "key_press_event",
+			  G_CALLBACK (gtk_combo_entry_key_press), combo);
   g_signal_connect_after (combo->entry, "focus_out_event",
 			  G_CALLBACK (gtk_combo_entry_focus_out), combo);
   combo->activate_id = g_signal_connect (combo->entry, "activate",
