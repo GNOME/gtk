@@ -1,3 +1,7 @@
+Tue Sep  8 02:09:33 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: added -posix check for NeXTStep
+
 Mon Sep  7 22:20:40 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* configure.in: added -std1 check for ANSI compliance
