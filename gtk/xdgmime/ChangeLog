@@ -1,3 +1,9 @@
+2005-03-20  Matthias Clasen  <mclasen@redhat.com>
+
+	* xdgmimeglob.c (_xdg_glob_hash_insert_text): Don't 
+	leak node->mime_type if we are reusing an existing
+	node.  (#170774, Kjartan Maraas)
+
 2005-01-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.6.1 ===
