@@ -1,3 +1,15 @@
+2004-05-26  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Send key
+	modifiers (shift, ctrl etc) in button and motion events from the
+	tablet. (#143240)
+
+2004-05-26  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkinput-win32.c (gdk_device_get_state): Simple
+	implementation for extended input devices using last known 
+	device state (#143237)
+
 2004-05-11  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkevents-win32.c (propagate): Don't propagate mouse

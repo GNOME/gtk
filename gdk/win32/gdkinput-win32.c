@@ -694,6 +694,31 @@ _gdk_input_enter_event (GdkWindow        *window)
   input_window->root_y = root_y;
 }
 
+/**
+ * Get the currently active keyboard modifiers (ignoring the mouse buttons)
+ * We could use gdk_window_get_pointer but that function does a lot of other
+ * expensive things besides getting the modifiers. This code is somewhat based
+ * on build_pointer_event_state from gdkevents-win32.c
+ */
+static guint
+get_modifier_key_state (void)
+{
+  guint state;
+  
+  state = 0;
+  /* High-order bit is up/down, low order bit is toggled/untoggled */
+  if (GetKeyState (VK_CONTROL) < 0)
+    state |= GDK_CONTROL_MASK;
+  if (GetKeyState (VK_SHIFT) < 0)
+    state |= GDK_SHIFT_MASK;
+  if (GetKeyState (VK_MENU) < 0)
+    state |= GDK_MOD1_MASK;
+  if (GetKeyState (VK_CAPITAL) & 0x1)
+    state |= GDK_LOCK_MASK;
+
+  return state;
+}
+
 gboolean 
 _gdk_input_other_event (GdkEvent  *event,
 			MSG       *msg,
@@ -708,6 +733,7 @@ _gdk_input_other_event (GdkEvent  *event,
   GdkInputWindow *input_window;
   GdkDevicePrivate *gdkdev = NULL;
   GdkEventMask masktest;
+  guint key_state;
   POINT pt;
 
   PACKET packet;
@@ -878,7 +904,7 @@ _gdk_input_other_event (GdkEvent  *event,
 	return FALSE;
 
       event->any.window = window;
-
+      key_state = get_modifier_key_state ();
       if (event->any.type == GDK_BUTTON_PRESS
 	  || event->any.type == GDK_BUTTON_RELEASE)
 	{
@@ -903,7 +929,8 @@ _gdk_input_other_event (GdkEvent  *event,
 	  event->button.state = ((gdkdev->button_state << 8)
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
-				    | GDK_BUTTON5_MASK));
+				    | GDK_BUTTON5_MASK))
+				| key_state;
 	  GDK_NOTE (EVENTS_OR_INPUT,
 		    g_print ("WINTAB button %s:%d %g,%g\n",
 			     (event->button.type == GDK_BUTTON_PRESS ?
@@ -928,7 +955,8 @@ _gdk_input_other_event (GdkEvent  *event,
 	  event->motion.state = ((gdkdev->button_state << 8)
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 				    | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
-				    | GDK_BUTTON5_MASK));
+				    | GDK_BUTTON5_MASK))
+				| key_state;
 
 	  GDK_NOTE (EVENTS_OR_INPUT,
 		    g_print ("WINTAB motion: %g,%g\n",
@@ -959,7 +987,8 @@ _gdk_input_other_event (GdkEvent  *event,
 	      event2->button.state = ((gdkdev->button_state << 8)
 				      & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
 					 | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
-					 | GDK_BUTTON5_MASK));
+					 | GDK_BUTTON5_MASK))
+				     | key_state;
 	      event2->button.button = 1;
 	      GDK_NOTE (EVENTS_OR_INPUT,
 			g_print ("WINTAB synthesized button %s: %d %g,%gg\n",
@@ -1196,42 +1225,27 @@ gdk_device_get_state (GdkDevice       *device,
       GdkDevicePrivate *gdkdev;
       GdkInputWindow *input_window;
       
-      if (mask)
-	gdk_window_get_pointer (window, NULL, NULL, mask);
-      
       gdkdev = (GdkDevicePrivate *)device;
+      /* For now just use the last known button and axis state of the device.
+       * Since graphical tablets send an insane amount of motion events each
+       * second, the info should be fairly up to date */
+      if (mask)
+	{
+	  gdk_window_get_pointer (window, NULL, NULL, mask);
+	  *mask &= 0xFF; /* Mask away core pointer buttons */
+	  *mask |= ((gdkdev->button_state << 8)
+		    & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
+		       | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
+		       | GDK_BUTTON5_MASK));
+	}
       input_window = _gdk_input_window_find (window);
       g_return_if_fail (input_window != NULL);
-
-#if 0 /* FIXME */
-      state = XQueryDeviceState (gdk_display, gdkdev->xdevice);
-      input_class = state->data;
-      for (i = 0; i < state->num_classes; i++)
-	{
-	  switch (input_class->class)
-	    {
-	    case ValuatorClass:
-	      if (axes)
-		gdk_input_translate_coordinates (gdkdev, input_window,
-						 ((XValuatorState *)input_class)->valuators,
-						 axes, NULL, NULL);
-	      break;
-	      
-	    case ButtonClass:
-	      if (mask)
-		{
-		  *mask &= 0xFF;
-		  if (((XButtonState *)input_class)->num_buttons > 0)
-		    *mask |= ((XButtonState *)input_class)->buttons[0] << 7;
-		  /* GDK_BUTTON1_MASK = 1 << 8, and button n is stored
-		   * in bit 1<<(n%8) in byte n/8. n = 1,2,... */
-		}
-	      break;
-	    }
-	  input_class = (XInputClass *)(((char *)input_class)+input_class->length);
-	}
-      XFreeDeviceState (state);
-#endif
+      /* For some reason, input_window is sometimes NULL when I use The GIMP 2
+       * (bug #141543?). Avoid crashing if debugging is disabled. */
+      if (axes && gdkdev->last_axis_data && input_window)
+	gdk_input_translate_coordinates (gdkdev, input_window,
+					 gdkdev->last_axis_data,
+					 axes, NULL, NULL);
     }
 }
 
