@@ -497,6 +497,16 @@ gtk_path_bar_add (GtkContainer *container,
 }
 
 static void
+gtk_path_bar_remove_1 (GtkContainer *container,
+		       GtkWidget    *widget)
+{
+  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+  gtk_widget_unparent (widget);
+  if (was_visible)
+    gtk_widget_queue_resize (GTK_WIDGET (container));
+}
+
+static void
 gtk_path_bar_remove (GtkContainer *container,
 		     GtkWidget    *widget)
 {
@@ -505,23 +515,29 @@ gtk_path_bar_remove (GtkContainer *container,
 
   path_bar = GTK_PATH_BAR (container);
 
-  children = path_bar->button_list;
+  if (widget == path_bar->up_slider_button)
+    {
+      gtk_path_bar_remove_1 (container, widget);
+      path_bar->up_slider_button = NULL;
+      return;
+    }
 
+  if (widget == path_bar->down_slider_button)
+    {
+      gtk_path_bar_remove_1 (container, widget);
+      path_bar->down_slider_button = NULL;
+      return;
+    }
+
+  children = path_bar->button_list;
   while (children)
     {
       if (widget == BUTTON_DATA (children->data)->button)
 	{
-	  gboolean was_visible;
-
-	  was_visible = GTK_WIDGET_VISIBLE (widget);
-	  gtk_widget_unparent (widget);
-
+	  gtk_path_bar_remove_1 (container, widget);
 	  path_bar->button_list = g_list_remove_link (path_bar->button_list, children);
 	  g_list_free (children);
-
-	  if (was_visible)
-	    gtk_widget_queue_resize (GTK_WIDGET (container));
-	  break;
+	  return;
 	}
       
       children = children->next;
@@ -550,8 +566,11 @@ gtk_path_bar_forall (GtkContainer *container,
       (* callback) (child, callback_data);
     }
 
-  (* callback) (path_bar->up_slider_button, callback_data);
-  (* callback) (path_bar->down_slider_button, callback_data);
+  if (path_bar->up_slider_button)
+    (* callback) (path_bar->up_slider_button, callback_data);
+
+  if (path_bar->down_slider_button)
+    (* callback) (path_bar->down_slider_button, callback_data);
 }
 
 static void
