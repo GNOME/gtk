@@ -1,3 +1,9 @@
+2003-12-15  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkdialog.c (dialog_has_cancel): Removed.
+	(gtk_dialog_close): Don't call dialog_has_cancel().  At least
+	allows sane behavior for #101293.
+
 Mon Dec 15 00:56:54 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkbutton.[hc]: Add new properties, xalign and yalign, with
