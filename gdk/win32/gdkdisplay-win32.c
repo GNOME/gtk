@@ -20,6 +20,7 @@
 
 #include <config.h>
 #include "gdk.h"
+#define _WIN32_WINNT 0x0500	/* To get ProcessIdToSessionId */
 #include "gdkprivate-win32.h"
 
 #define HAVE_MONITOR_INFO
@@ -178,8 +179,23 @@ _gdk_monitor_init (void)
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
-  if (_gdk_display != NULL)
-    return NULL; /* single display only */
+  GDK_NOTE (MISC, g_print ("gdk_display_open: %s\n", (display_name ? display_name : "NULL")));
+
+  if (display_name == NULL ||
+      g_ascii_strcasecmp (display_name,
+			  gdk_display_get_name (_gdk_display)) == 0)
+    {
+      if (_gdk_display != NULL)
+	{
+	  GDK_NOTE (MISC, g_print ("... return _gdk_display\n"));
+	  return _gdk_display;
+	}
+    }
+  else
+    {
+      GDK_NOTE (MISC, g_print ("... return NULL\n"));
+      return NULL;
+    }
 
   _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
   _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
@@ -197,13 +213,65 @@ gdk_display_open (const gchar *display_name)
   g_signal_emit_by_name (gdk_display_manager_get (),
 			 "display_opened", _gdk_display);
 
+  GDK_NOTE (MISC, g_print ("... _gdk_display now set up\n"));
+
   return _gdk_display;
 }
 
 G_CONST_RETURN gchar *
 gdk_display_get_name (GdkDisplay *display)
 {
-  return gdk_get_display_arg_name ();
+  HDESK hdesk = GetThreadDesktop (GetCurrentThreadId ());
+  char dummy;
+  char *desktop_name;
+  HWINSTA hwinsta = GetProcessWindowStation ();
+  char *window_station_name;
+  DWORD n;
+  DWORD session_id;
+  char *display_name;
+  const char *retval;
+
+  n = 0;
+  GetUserObjectInformation (hdesk, UOI_NAME, &dummy, 0, &n);
+  if (n == 0)
+    desktop_name = "Default";
+  else
+    {
+      n++;
+      desktop_name = g_alloca (n + 1);
+      memset (desktop_name, 0, n + 1);
+
+      if (!GetUserObjectInformation (hdesk, UOI_NAME, desktop_name, n, &n))
+	desktop_name = "Default";
+    }
+
+  n = 0;
+  GetUserObjectInformation (hwinsta, UOI_NAME, &dummy, 0, &n);
+  if (n == 0)
+    window_station_name = "WinSta0";
+  else
+    {
+      n++;
+      window_station_name = g_alloca (n + 1);
+      memset (window_station_name, 0, n + 1);
+
+      if (!GetUserObjectInformation (hwinsta, UOI_NAME, window_station_name, n, &n))
+	window_station_name = "WinSta0";
+    }
+
+  ProcessIdToSessionId (GetCurrentProcessId (), &session_id);
+  
+  display_name = g_strdup_printf ("%ld\\%s\\%s",
+				  session_id, window_station_name,
+				  desktop_name);
+
+  retval = g_quark_to_string (g_quark_from_string (display_name));
+
+  g_free (display_name);
+
+  GDK_NOTE (MISC, g_print ("gdk_display_get_name: %s\n", retval));
+
+  return retval;
 }
 
 gint

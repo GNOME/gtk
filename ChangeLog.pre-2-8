@@ -1,3 +1,12 @@
+2005-03-20  Tor Lillqvist  <tml@novell.com>
+
+	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_name): Return the
+	Terminal Services session number, window station name (always
+	"WinSta0" in interactive processes), and desktop name (typically
+	"Default"), concatenated with backslash separators.
+	(gdk_display_open): Accept only NULL or the string
+	gdk_display_get_name() returns as display name.
+
 2005-03-20  Matthias Clasen  <mclasen@redhat.com>
 
 	Make PLT-reduction work with gcc4, and don't include
