@@ -117,6 +117,9 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);
 
+void           gtk_icon_set_get_sizes    (GtkIconSet          *icon_set,
+                                          GtkIconSize        **sizes,
+                                          gint                *n_sizes);
 
 GtkIconSource* gtk_icon_source_new                      (void);
 GtkIconSource* gtk_icon_source_copy                     (const GtkIconSource *source);
@@ -152,6 +155,7 @@ GtkIconSize      gtk_icon_source_get_size                 (const GtkIconSource *
 
 /* ignore this */
 void _gtk_icon_set_invalidate_caches (void);
+GSList* _gtk_icon_factory_list_ids (void);
 
 #ifdef __cplusplus
 }

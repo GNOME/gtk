@@ -4022,7 +4022,7 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * A convenience function that uses the theme engine and RC file
  * settings for @widget to look up @stock_id and render it to
  * a pixbuf. @stock_id should be a stock icon ID such as
- * #GTK_STOCK_OPEN or #GTK_STOCK_BUTTON_OK. @size should be a size
+ * #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size should be a size
  * such as #GTK_ICON_SIZE_MENU. @detail should be a string that
  * identifies the widget or code doing the rendering, so that
  * theme engines can special-case rendering for that widget or code.

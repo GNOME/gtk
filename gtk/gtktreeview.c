@@ -1015,8 +1015,8 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  requisition->width = 200;
-  requisition->height = 200;
+  requisition->width = tree_view->priv->width;
+  requisition->height = tree_view->priv->height + tree_view->priv->header_height;
 
   tmp_list = tree_view->priv->children;
 
@@ -6168,6 +6168,49 @@ gtk_tree_view_insert_column_with_attributes (GtkTreeView     *tree_view,
   va_end (args);
 
   gtk_tree_view_insert_column (tree_view, column, position);
+  g_object_unref (column);
+
+  return tree_view->priv->n_columns;
+}
+
+/**
+ * gtk_tree_view_insert_column_with_data_func:
+ * @tree_view: a #GtkTreeView
+ * @position: Position to insert, -1 for append
+ * @title: column title
+ * @cell: cell renderer for column
+ * @func: function to set attributes of cell renderer
+ * @data: data for @func
+ * @dnotify: destroy notifier for @data
+ * 
+ * Convenience function that inserts a new column into the #GtkTreeView
+ * with the given cell renderer and a #GtkCellDataFunc to set cell renderer
+ * attributes (normally using data from the model). See also
+ * gtk_tree_view_column_set_cell_data_func(), gtk_tree_view_column_set_cell_renderer().
+ * 
+ * Return value: number of columns in the tree view post-insert
+ **/
+gint
+gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
+                                             gint                       position,
+                                             gchar                     *title,
+                                             GtkCellRenderer           *cell,
+                                             GtkCellDataFunc            func,
+                                             gpointer                   data,
+                                             GDestroyNotify             dnotify)
+{
+  GtkTreeViewColumn *column;
+
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), -1);
+
+  column = gtk_tree_view_column_new ();
+
+  gtk_tree_view_column_set_title (column, title);
+  gtk_tree_view_column_set_cell_renderer (column, cell);
+  gtk_tree_view_column_set_cell_data_func (column, func, data, dnotify);
+
+  gtk_tree_view_insert_column (tree_view, column, position);
+
   g_object_unref (column);
 
   return tree_view->priv->n_columns;

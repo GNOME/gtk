@@ -97,13 +97,13 @@ gtk_color_selection_dialog_init (GtkColorSelectionDialog *colorseldiag)
   action_area_button_box = GTK_DIALOG (colorseldiag)->action_area;
 
   colorseldiag->ok_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
-                                                   GTK_STOCK_BUTTON_OK,
+                                                   GTK_STOCK_OK,
                                                    GTK_RESPONSE_OK);
                                                    
   gtk_widget_grab_default (colorseldiag->ok_button);
   
   colorseldiag->cancel_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),
-                                                       GTK_STOCK_BUTTON_CANCEL,
+                                                       GTK_STOCK_CANCEL,
                                                        GTK_RESPONSE_CANCEL);
   
   colorseldiag->help_button = gtk_dialog_add_button (GTK_DIALOG (colorseldiag),

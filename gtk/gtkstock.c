@@ -24,7 +24,10 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <string.h>
+
 #include "gtkstock.h"
+#include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include <gdk/gdkkeysyms.h>
 
@@ -144,11 +147,11 @@ listify_foreach (gpointer key, gpointer value, gpointer data)
 {
   GSList **list = data;
 
-  *list = g_slist_prepend (*list, value);
+  *list = g_slist_prepend (*list, key);
 }
 
 static GSList *
-g_hash_table_get_values (GHashTable *table)
+g_hash_table_get_keys (GHashTable *table)
 {
   GSList *list = NULL;
 
@@ -158,20 +161,56 @@ g_hash_table_get_values (GHashTable *table)
 }
 
 /**
- * gtk_stock_list_items:
+ * gtk_stock_list_ids:
  * 
- * Retrieves a list of all known #GtkStockItem. The items are not copied;
- * they should not be freed. However, the list itself must be freed
- * with g_slist_free().
+ * Retrieves a list of all known stock IDs added to a #GtkIconFactory
+ * or registered with gtk_stock_add(). The list must be freed with g_slist_free(),
+ * and each string in the list must be freed with g_free().
  * 
- * Return value: a list of registered stock items
+ * Return value: a list of known stock IDs
  **/
-GSList *
-gtk_stock_list_items (void)
+GSList*
+gtk_stock_list_ids (void)
 {
+  GSList *ids;
+  GSList *icon_ids;
+  GSList *retval;
+  GSList *tmp_list;
+  const gchar *last_id;
+  
   init_stock_hash ();
 
-  return g_hash_table_get_values (stock_hash);
+  ids = g_hash_table_get_keys (stock_hash);
+  icon_ids = _gtk_icon_factory_list_ids ();
+  ids = g_slist_concat (ids, icon_ids);
+
+  ids = g_slist_sort (ids, (GCompareFunc)strcmp);
+
+  last_id = NULL;
+  retval = NULL;
+  tmp_list = ids;
+  while (tmp_list != NULL)
+    {
+      GSList *next;
+
+      next = g_slist_next (tmp_list);
+
+      if (last_id && strcmp (tmp_list->data, last_id) == 0)
+        {
+          /* duplicate, ignore */
+        }
+      else
+        {
+          retval = g_slist_prepend (retval, g_strdup (tmp_list->data));
+          last_id = tmp_list->data;
+        }
+
+      g_slist_free_1 (tmp_list);
+      
+      tmp_list = next;
+    }
+
+  return retval;
 }
 
 /**
@@ -223,26 +262,58 @@ gtk_stock_item_free (GtkStockItem *item)
 
 static GtkStockItem builtin_items [] =
 {
-  /* KEEP IN SYNC with gtkiconfactory.c stock icons */ 
+  /* KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate */ 
  
   { GTK_STOCK_DIALOG_INFO, N_("Information"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_DIALOG_WARNING, N_("Warning"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_DIALOG_ERROR, N_("Error"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_DIALOG_QUESTION, N_("Question"), 0, 0, GETTEXT_PACKAGE },
 
-  { GTK_STOCK_BUTTON_APPLY, N_("_Apply"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_BUTTON_OK, N_("_OK"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_BUTTON_CANCEL, N_("_Cancel"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_BUTTON_CLOSE, N_("_Close"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_BUTTON_YES, N_("_Yes"), 0, 0, GETTEXT_PACKAGE },
-  { GTK_STOCK_BUTTON_NO, N_("_No"), 0, 0, GETTEXT_PACKAGE },
-
+  /*  FIXME these need accelerators when appropriate, and
+   * need the mnemonics to be rationalized
+   */
+  { GTK_STOCK_APPLY, N_("_Apply"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_BOLD, N_("_Bold"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_CANCEL, N_("_Cancel"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_CLEAR, N_("_Clear"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_CLOSE, N_("_Close"), GDK_CONTROL_MASK, 'w', GETTEXT_PACKAGE },
-  { GTK_STOCK_QUIT, N_("_Quit"), GDK_CONTROL_MASK, 'q', GETTEXT_PACKAGE },
+  { GTK_STOCK_COPY, N_("_Copy"), GDK_CONTROL_MASK, 'c', GETTEXT_PACKAGE },
+  { GTK_STOCK_CUT, N_("C_ut"), GDK_CONTROL_MASK, 'x', GETTEXT_PACKAGE },
+  { GTK_STOCK_FIND, N_("_Find"), GDK_CONTROL_MASK, 'f', GETTEXT_PACKAGE },
+  { GTK_STOCK_FIND_AND_REPLACE, N_("Find and _Replace"), GDK_CONTROL_MASK, 'r', GETTEXT_PACKAGE },
+  { GTK_STOCK_GO_BACK, N_("_Back"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_GO_FORWARD, N_("_Forward"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_HELP, N_("_Help"), GDK_CONTROL_MASK, 'h', GETTEXT_PACKAGE },
+  { GTK_STOCK_HOME, N_("_Home"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ITALIC, N_("_Italic"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_JUSTIFY_CENTER, N_("_Center"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_JUSTIFY_FILL, N_("_Fill"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_JUSTIFY_LEFT, N_("_Left"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_JUSTIFY_RIGHT, N_("_Right"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_NEW, N_("_New"), GDK_CONTROL_MASK, 'n', GETTEXT_PACKAGE },
+  { GTK_STOCK_NO, N_("_No"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_OK, N_("_OK"), 0, 0, GETTEXT_PACKAGE },
   { GTK_STOCK_OPEN, N_("_Open"), GDK_CONTROL_MASK, 'o', GETTEXT_PACKAGE },
-  { GTK_STOCK_SAVE, N_("_Save"), GDK_CONTROL_MASK, 's', GETTEXT_PACKAGE }
+  { GTK_STOCK_PASTE, N_("_Paste"), GDK_CONTROL_MASK, 'v', GETTEXT_PACKAGE },
+  { GTK_STOCK_PREFERENCES, N_("_Preferences"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_PRINT, N_("_Print"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_PRINT_PREVIEW, N_("Print Pre_view"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_PROPERTIES, N_("_Properties"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_QUIT, N_("_Quit"), GDK_CONTROL_MASK, 'q', GETTEXT_PACKAGE },
+  { GTK_STOCK_REDO, N_("_Redo"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_REVERT_TO_SAVED, N_("_Revert"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_SAVE, N_("_Save"), GDK_CONTROL_MASK, 's', GETTEXT_PACKAGE },
+  { GTK_STOCK_SAVE_AS, N_("Save _As"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_SPELL_CHECK, N_("_Spell Check"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_STOP, N_("_Stop"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_STRIKETHROUGH, N_("_Strikethrough"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_UNDERLINE, N_("_Underline"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_UNDO, N_("_Undo"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_YES, N_("_Yes"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ZOOM_100, N_("Zoom _100%"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ZOOM_FIT, N_("Zoom to _Fit"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ZOOM_IN, N_("Zoom _In"), 0, 0, GETTEXT_PACKAGE },
+  { GTK_STOCK_ZOOM_OUT, N_("Zoom _Out"), 0, 0, GETTEXT_PACKAGE }
 };
 
 static void

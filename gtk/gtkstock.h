@@ -52,16 +52,16 @@ void     gtk_stock_add_static (const GtkStockItem  *items,
 gboolean gtk_stock_lookup     (const gchar         *stock_id,
                                GtkStockItem        *item);
 
-/* Should free the list, but DO NOT modify the items in the list.
+/* Should free the list (and free each string in it also).
  * This function is only useful for GUI builders and such.
  */
-GSList*  gtk_stock_list_items  (void);
+GSList*  gtk_stock_list_ids  (void);
 
 GtkStockItem *gtk_stock_item_copy (const GtkStockItem *item);
 void          gtk_stock_item_free (GtkStockItem       *item);
 
 
-/* Stock IDs */
+/* Stock IDs (not all are stock items; some are images only) */
 #define GTK_STOCK_MISSING_IMAGE    "gtk-missing-image"
 
 #define GTK_STOCK_DIALOG_INFO      "gtk-dialog-info"
@@ -69,19 +69,69 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_DIALOG_ERROR     "gtk-dialog-error"
 #define GTK_STOCK_DIALOG_QUESTION  "gtk-dialog-question"
 
-#define GTK_STOCK_BUTTON_APPLY     "gtk-button-apply"
-#define GTK_STOCK_BUTTON_OK        "gtk-button-ok"
-#define GTK_STOCK_BUTTON_CANCEL    "gtk-button-cancel"
-#define GTK_STOCK_BUTTON_CLOSE     "gtk-button-close"
-#define GTK_STOCK_BUTTON_YES       "gtk-button-yes"
-#define GTK_STOCK_BUTTON_NO        "gtk-button-no"
-
+#define GTK_STOCK_ADD              "gtk-add"
+#define GTK_STOCK_APPLY            "gtk-apply"
+#define GTK_STOCK_BOLD             "gtk-bold"
+#define GTK_STOCK_CANCEL           "gtk-cancel"
+#define GTK_STOCK_CDROM            "gtk-cdrom"
+#define GTK_STOCK_CLEAR            "gtk-clear"
 #define GTK_STOCK_CLOSE            "gtk-close"
-#define GTK_STOCK_QUIT             "gtk-quit"
+#define GTK_STOCK_CONVERT          "gtk-convert"
+#define GTK_STOCK_COPY             "gtk-copy"
+#define GTK_STOCK_CUT              "gtk-cut"
+#define GTK_STOCK_DELETE           "gtk-delete"
+#define GTK_STOCK_EXECUTE          "gtk-execute"
+#define GTK_STOCK_FIND             "gtk-find"
+#define GTK_STOCK_FIND_AND_REPLACE "gtk-find-and-replace"
+#define GTK_STOCK_FLOPPY           "gtk-floppy"
+#define GTK_STOCK_GOTO_BOTTOM      "gtk-goto-bottom"
+#define GTK_STOCK_GOTO_FIRST       "gtk-goto-first"
+#define GTK_STOCK_GOTO_LAST        "gtk-goto-last"
+#define GTK_STOCK_GOTO_TOP         "gtk-goto-top"
+#define GTK_STOCK_GO_BACK          "gtk-go-back"
+#define GTK_STOCK_GO_DOWN          "gtk-go-down"
+#define GTK_STOCK_GO_FORWARD       "gtk-go-forward"
+#define GTK_STOCK_GO_UP            "gtk-up"
 #define GTK_STOCK_HELP             "gtk-help"
+#define GTK_STOCK_HOME             "gtk-home"
+#define GTK_STOCK_INDEX            "gtk-index"
+#define GTK_STOCK_ITALIC           "gtk-italic"
+#define GTK_STOCK_JUMP_TO          "gtk-jump-to"
+#define GTK_STOCK_JUSTIFY_CENTER   "gtk-justify-center"
+#define GTK_STOCK_JUSTIFY_FILL     "gtk-justify-fill"
+#define GTK_STOCK_JUSTIFY_LEFT     "gtk-justify-left"
+#define GTK_STOCK_JUSTIFY_RIGHT    "gtk-justify-right"
 #define GTK_STOCK_NEW              "gtk-new"
+#define GTK_STOCK_NO               "gtk-no"
+#define GTK_STOCK_OK               "gtk-ok"
 #define GTK_STOCK_OPEN             "gtk-open"
+#define GTK_STOCK_PASTE            "gtk-paste"
+#define GTK_STOCK_PREFERENCES      "gtk-preferences"
+#define GTK_STOCK_PRINT            "gtk-print"
+#define GTK_STOCK_PRINT_PREVIEW    "gtk-print-preview"
+#define GTK_STOCK_PROPERTIES       "gtk-properties"
+#define GTK_STOCK_QUIT             "gtk-quit"
+#define GTK_STOCK_REDO             "gtk-redo"
+#define GTK_STOCK_REFRESH          "gtk-refresh"
+#define GTK_STOCK_REMOVE           "gtk-remove"
+#define GTK_STOCK_REVERT_TO_SAVED  "gtk-revert-to-saved"
 #define GTK_STOCK_SAVE             "gtk-save"
+#define GTK_STOCK_SAVE_AS          "gtk-save-as"
+#define GTK_STOCK_SELECT_COLOR     "gtk-select-color"
+#define GTK_STOCK_SELECT_FONT      "gtk-select-font"
+#define GTK_STOCK_SORT_ASCENDING   "gtk-sort-ascending"
+#define GTK_STOCK_SORT_DESCENDING  "gtk-sort-descending"
+#define GTK_STOCK_SPELL_CHECK      "gtk-spell-check"
+#define GTK_STOCK_STOP             "gtk-stop"
+#define GTK_STOCK_STRIKETHROUGH    "gtk-strikethrough"
+#define GTK_STOCK_UNDELETE         "gtk-undelete"
+#define GTK_STOCK_UNDERLINE        "gtk-underline"
+#define GTK_STOCK_UNDO             "gtk-undo"
+#define GTK_STOCK_YES              "gtk-yes"
+#define GTK_STOCK_ZOOM_100         "gtk-zoom-100"
+#define GTK_STOCK_ZOOM_FIT         "gtk-zoom-fit"
+#define GTK_STOCK_ZOOM_IN          "gtk-zoom-in"
+#define GTK_STOCK_ZOOM_OUT         "gtk-zoom-out"
 
 #ifdef __cplusplus
 }

@@ -2283,6 +2283,9 @@ gtk_text_view_size_request (GtkWidget      *widget,
 
   text_view = GTK_TEXT_VIEW (widget);
 
+  text_view->text_window->requisition.width = text_view->layout->width;
+  text_view->text_window->requisition.height = text_view->layout->height;
+  
   requisition->width = text_view->text_window->requisition.width + FOCUS_EDGE_WIDTH * 2;
   requisition->height = text_view->text_window->requisition.height + FOCUS_EDGE_WIDTH * 2;
 

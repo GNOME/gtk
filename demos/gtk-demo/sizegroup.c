@@ -110,7 +110,7 @@ do_sizegroup (void)
     {
       window = gtk_dialog_new_with_buttons ("GtkSizeGroup",
 					    NULL, 0,
-					    GTK_STOCK_BUTTON_CLOSE,
+					    GTK_STOCK_CLOSE,
 					    GTK_RESPONSE_NONE,
 					    NULL);
       gtk_window_set_resizeable (GTK_WINDOW (window), FALSE);

@@ -678,14 +678,14 @@ gtk_file_selection_init (GtkFileSelection *filesel)
 
   /*  The OK button  */
   filesel->ok_button = gtk_dialog_add_button (dialog,
-                                              GTK_STOCK_BUTTON_OK,
+                                              GTK_STOCK_OK,
                                               GTK_RESPONSE_OK);
   
   gtk_widget_grab_default (filesel->ok_button);
 
   /*  The Cancel button  */
   filesel->cancel_button = gtk_dialog_add_button (dialog,
-                                                  GTK_STOCK_BUTTON_CANCEL,
+                                                  GTK_STOCK_CANCEL,
                                                   GTK_RESPONSE_CANCEL);
 
   /*  The selection entry widget  */

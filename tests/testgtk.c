@@ -194,11 +194,11 @@ create_buttons (void)
       button[0] = gtk_button_new_with_label ("button1");
       button[1] = gtk_button_new_with_mnemonic ("_button2");
       button[2] = gtk_button_new_with_mnemonic ("_button3");
-      button[3] = gtk_button_new_from_stock (GTK_STOCK_BUTTON_OK);
+      button[3] = gtk_button_new_from_stock (GTK_STOCK_OK);
       button[4] = gtk_button_new_with_label ("button5");
       button[5] = gtk_button_new_with_label ("button6");
       button[6] = gtk_button_new_with_label ("button7");
-      button[7] = gtk_button_new_from_stock (GTK_STOCK_BUTTON_CLOSE);
+      button[7] = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
       button[8] = gtk_button_new_with_label ("button9");
       
       gtk_signal_connect (GTK_OBJECT (button[0]), "clicked",
@@ -3677,7 +3677,7 @@ create_size_group_window (GtkSizeGroup *master_size_group)
 
   window = gtk_dialog_new_with_buttons ("GtkSizeGroup",
 					NULL, 0,
-					GTK_STOCK_BUTTON_CLOSE,
+					GTK_STOCK_CLOSE,
 					GTK_RESPONSE_NONE,
 					NULL);
 
@@ -6381,7 +6381,7 @@ create_focus (void)
       
       window = gtk_dialog_new_with_buttons ("Keyboard focus navigation",
                                             NULL, 0,
-                                            GTK_STOCK_BUTTON_CLOSE,
+                                            GTK_STOCK_CLOSE,
                                             GTK_RESPONSE_NONE,
                                             NULL);
 

@@ -1,3 +1,37 @@
+2001-05-25  Havoc Pennington  <hp@redhat.com>
+	
+	* gtk/gtkiconfactory.c (gtk_icon_set_get_sizes): get sizes an icon
+	set can render without falling back to missing image icon
+
+	* gtk/gtktextview.c (gtk_text_view_size_request): request full
+	size of text, instead of random values
+
+	* gtk/gtktreeview.c (gtk_tree_view_size_request): request full
+	size of tree view, instead of random values
+
+	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): render fallback
+	image in an appropriate size
+
+        * gtk/gtkstock.h: Rename the stock items including _BUTTON_,
+	etc. not to include that. i.e. s/GTK_STOCK_BUTTON_OK/GTK_STOCK_OK/
+
+        Throughout: fix GTK_STOCK_BUTTON_ instances
+	
+	* gtk/gtkstock.h, gtk/gtkstock.c, gtk/gtkiconfactory.h,
+	gtk/gtkiconfactory.c, gtk/stock-icons/Makefile.am:
+	Add a bunch of new stock items/icons
+
+	* gtk/gtktreeview.c (gtk_tree_view_insert_column_with_data_func):
+	new function, convenience for inserting columns with a data func
+
+	* gtk/gtkiconfactory.c: keep a list of all existing icon factories
+	(_gtk_icon_factory_list_ids): use list of all factories to
+	generate a list of all known IDs
+
+	* gtk/gtkstock.c (gtk_stock_list_ids): replace
+	gtk_stock_list_items() with a function that returns all IDs known
+	including those for GtkIconFactory.
+
 2001-05-25  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkgc-win32.c : made fil mode GDK_STIPPLED actually

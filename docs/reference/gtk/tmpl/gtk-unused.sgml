@@ -209,6 +209,42 @@ Get the array of signals defined for this object.
 
 @obj: the object to fetch the signals from.
 
+<!-- ##### MACRO GTK_STOCK_BUTTON_APPLY ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_CANCEL ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_CLOSE ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_NO ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_OK ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### MACRO GTK_STOCK_BUTTON_YES ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### MACRO GTK_TREE_SELECTION ##### -->
 <para>
 A macro that returns a GList that contains the selection of the root tree of @obj.
@@ -1466,6 +1502,13 @@ Creates a border around the arrows of a #GtkSpinButton. The type of border is de
 
 @spin_button: a #GtkSpinButton
 @shadow_type: the new border type.
+
+<!-- ##### FUNCTION gtk_stock_list_items ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### FUNCTION gtk_trace_referencing ##### -->
 <para>

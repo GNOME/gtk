@@ -44,7 +44,7 @@ interactive_dialog_clicked (GtkButton *button,
   dialog = gtk_dialog_new_with_buttons ("Interactive Dialog",
 					GTK_WINDOW (window),
 					GTK_DIALOG_MODAL| GTK_DIALOG_DESTROY_WITH_PARENT,
-					GTK_STOCK_BUTTON_OK,
+					GTK_STOCK_OK,
 					GTK_RESPONSE_OK,
 					NULL);
 

@@ -1149,7 +1149,7 @@ do_search (gpointer callback_data,
                                         GTK_DIALOG_DESTROY_WITH_PARENT,
                                         "Forward", RESPONSE_FORWARD,
                                         "Backward", RESPONSE_BACKWARD,
-                                        GTK_STOCK_BUTTON_CANCEL,
+                                        GTK_STOCK_CANCEL,
                                         GTK_RESPONSE_NONE, NULL);
 
 

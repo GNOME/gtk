@@ -28,10 +28,10 @@ create_bbox (gint  horizontal,
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
   gtk_box_set_spacing (GTK_BOX (bbox), spacing);
   
-  button = gtk_button_new_from_stock (GTK_STOCK_BUTTON_OK);
+  button = gtk_button_new_from_stock (GTK_STOCK_OK);
   gtk_container_add (GTK_CONTAINER (bbox), button);
   
-  button = gtk_button_new_from_stock (GTK_STOCK_BUTTON_CANCEL);
+  button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   gtk_container_add (GTK_CONTAINER (bbox), button);
   
   button = gtk_button_new_from_stock (GTK_STOCK_HELP);

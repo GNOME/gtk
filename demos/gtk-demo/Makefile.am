@@ -15,6 +15,7 @@ demos = @STRIP_BEGIN@	\
 	panes.c		\
 	pixbufs.c	\
 	sizegroup.c	\
+	stock_browser.c	\
 	textview.c	\
 @STRIP_END@
 

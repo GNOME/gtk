@@ -138,6 +138,13 @@ gint                   gtk_tree_view_insert_column_with_attributes (GtkTreeView 
 								    gchar                     *title,
 								    GtkCellRenderer           *cell,
 								    ...);
+gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_view,
+								    gint                       position,
+								    gchar                     *title,
+								    GtkCellRenderer           *cell,
+                                                                    GtkCellDataFunc            func,
+                                                                    gpointer                   data,
+                                                                    GDestroyNotify             dnotify);
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,
 								    gint                       n);
 GList                 *gtk_tree_view_get_columns                   (GtkTreeView               *tree_view);
