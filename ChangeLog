@@ -1,3 +1,15 @@
+Fri Feb 23 15:06:48 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktree.c (gtk_tree_class_init): Do the setting
+	of tree->root_tree in parent_set rather than _map(), 
+	fixing #50892 in a bit better manner.
+
+Fri Feb 23 11:54:25 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklistitem.c (gtk_list_item_focus_out): Emit
+	"end_selection", since we won't get subsequent key
+	releases. (#13447)
+
 Thu Feb 22 20:50:08 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkplug.c (gtk_plug_set_focus): Change to parent
