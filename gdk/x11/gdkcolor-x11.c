@@ -658,7 +658,7 @@ gdk_colors_free (GdkColormap *colormap,
 	}
     }
 
-  if (npixels_to_free && !private->screen->closed)
+  if (npixels_to_free && !private->private_val && !private->screen->closed)
     XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
 		 pixels_to_free, npixels_to_free, planes);
   g_free (pixels_to_free);
@@ -715,7 +715,7 @@ gdk_colormap_free_colors (GdkColormap *colormap,
 	}
     }
 
-  if (npixels && !private->screen->closed)
+  if (npixels_to_free && !private->private_val && !private->screen->closed)
     XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
 		 pixels, npixels, 0);
 
@@ -811,7 +811,7 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
 	  else
 	    break;
 	}
-      return i;
+      return ncolors - i;
     }
   else
     {
@@ -832,7 +832,7 @@ gdk_colormap_alloc_colors_writeable (GdkColormap *colormap,
       
       g_free (pixels);
 
-      return status ? ncolors : 0; 
+      return status ? 0 : ncolors; 
     }
 }
 
@@ -851,7 +851,6 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
   gint nremaining = 0;
   
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-  index = -1;
 
   /* First, store the colors we have room for */
 
@@ -913,7 +912,7 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
       g_free (available);
     }
 
-  return (ncolors - nremaining);
+  return nremaining;
 }
 
 static gint
@@ -930,7 +929,6 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
   gint nfailed = 0;
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-  index = -1;
 
   for (i=0; i<ncolors; i++)
     {
@@ -1005,7 +1003,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
       nremaining = nfailed;
     }
   
-  return (ncolors - nremaining);
+  return nremaining;
 }
 
 static gint

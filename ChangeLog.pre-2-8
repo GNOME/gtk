@@ -1,3 +1,20 @@
+Sun Dec  8 20:32:23 2002  Owen Taylor  <otaylor@redhat.com>
+
+	More fixes for GdkColormapX11 (#100023, Naofumi Yasufuku)
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colors_free) 
+	(gdk_colormap_free_colors): Don't call XFreeColors() for  
+	private colorsmaps.
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors_writeable,
+	gdk_colormap_colors_private, gdk_colormap_alloc_colors_shared):
+	Fix return values to return number remaining not number
+	allocated.
+	
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors_shared,
+	gdk_colormap_alloc_colors_private): Clean up some a stray 
+	initializations.
+
 Sun Dec  8 20:19:22 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes for GdkColormapX11 (#100023, Naofumi Yasufuku)
