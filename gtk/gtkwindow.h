@@ -285,6 +285,9 @@ void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
 					   GdkModifierType  modifier);
 GdkModifierType gtk_window_get_mnemonic_modifier (GtkWindow *window);
 
+gboolean gtk_window_activate_key          (GtkWindow        *window,
+					   GdkEventKey      *event);
+
 void     gtk_window_present       (GtkWindow *window);
 void     gtk_window_iconify       (GtkWindow *window);
 void     gtk_window_deiconify     (GtkWindow *window);
@@ -370,8 +373,6 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
-gboolean        _gtk_window_activate_key       (GtkWindow   *window,
-						GdkEventKey *event);
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
 						    gboolean   has_toplevel_focus);

@@ -1,3 +1,8 @@
+Sun Feb 29 20:34:06 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.[ch] gtk/gtkmenushellx.c: export
+	gtk_window_activate_key() (Request from Tim Janik)
+
 Mon Mar  1 01:00:11 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextview.c (gtk_text_view_drag_data_received): 

@@ -4198,7 +4198,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
   /* Check for mnemonics and accelerators
    */
   if (!handled)
-    handled = _gtk_window_activate_key (window, event);
+    handled = gtk_window_activate_key (window, event);
 
   if (!handled)
     {
@@ -7067,17 +7067,20 @@ gtk_window_free_key_hash (GtkWindow *window)
 }
 
 /**
- * _gtk_window_activate_key:
+ * gtk_window_activate_key:
  * @window: a #GtkWindow
  * @event: a #GdkEventKey
  * 
- * Activates mnemonics and accelerators for this #GtKWindow
+ * Activates mnemonics and accelerators for this #GtkWindow. This is normally
+ * called by the default ::key_press_event handler for toplevel windows,
+ * however in some cases it may be useful to call this directly when
+ * overriding the standard key handling for a toplevel window.
  * 
  * Return value: %TRUE if a mnemonic or accelerator was found and activated.
  **/
 gboolean
-_gtk_window_activate_key (GtkWindow   *window,
-			  GdkEventKey *event)
+gtk_window_activate_key (GtkWindow   *window,
+			 GdkEventKey *event)
 {
   GtkKeyHash *key_hash = g_object_get_data (G_OBJECT (window), "gtk-window-key-hash");
   GtkWindowKeyEntry *found_entry = NULL;
