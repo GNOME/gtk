@@ -1,3 +1,9 @@
+Thu Jun  3 20:51:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Fix the al lowed
+	values and default value for the ::active property.  (#143669,
+	Olivier Andrieu)
+
 2004-06-03  Michael Natterer  <mitch@gimp.org>
 
 	Merged from HEAD:

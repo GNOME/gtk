@@ -501,9 +501,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                    g_param_spec_int ("active",
                                                      P_("Active item"),
                                                      P_("The item which is currently active"),
-                                                     0,
+                                                     -1,
                                                      G_MAXINT,
-                                                     0,
+                                                     -1,
                                                      G_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
