@@ -8,3 +8,5 @@ libgdk-1.1.la
 gdkcursors.h
 gdkkeysyms.h
 libgdk.la
+gdkconfig.h
+stamp-gc-h

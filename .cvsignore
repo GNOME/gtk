@@ -13,3 +13,5 @@ gtk-config
 config.cache
 ABOUT-NLS
 intl
+stamp-h.in
+gtk+.spec
