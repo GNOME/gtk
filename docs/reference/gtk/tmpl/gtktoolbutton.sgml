@@ -1,0 +1,132 @@
+<!-- ##### SECTION Title ##### -->
+GtkToolButton
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkToolButton ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### FUNCTION gtk_tool_button_new ##### -->
+<para>
+
+</para>
+
+@label: 
+@icon_widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_new_from_stock ##### -->
+<para>
+
+</para>
+
+@stock_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_set_label ##### -->
+<para>
+
+</para>
+
+@button: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_get_label ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_set_use_underline ##### -->
+<para>
+
+</para>
+
+@button: 
+@use_underline: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_get_use_underline ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_set_stock_id ##### -->
+<para>
+
+</para>
+
+@button: 
+@stock_id: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_get_stock_id ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_set_icon_widget ##### -->
+<para>
+
+</para>
+
+@button: 
+@icon: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_get_icon_widget ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_set_label_widget ##### -->
+<para>
+
+</para>
+
+@button: 
+@label_widget: 
+
+
+<!-- ##### FUNCTION gtk_tool_button_get_label_widget ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+

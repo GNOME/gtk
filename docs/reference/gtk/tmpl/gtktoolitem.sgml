@@ -1,0 +1,214 @@
+<!-- ##### SECTION Title ##### -->
+GtkToolItem
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkToolItem ##### -->
+<para>
+
+</para>
+
+@parent: 
+
+<!-- ##### FUNCTION gtk_tool_item_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_toolbar_reconfigured ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_homogeneous ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@homogeneous: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_homogeneous ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_expand ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@expand: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_expand ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_pack_end ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@pack_end: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_pack_end ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_tooltip ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@tooltips: 
+@tip_text: 
+@tip_private: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_use_drag_window ##### -->
+<para>
+
+</para>
+
+@toolitem: 
+@use_drag_window: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_use_drag_window ##### -->
+<para>
+
+</para>
+
+@toolitem: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_visible_horizontal ##### -->
+<para>
+
+</para>
+
+@toolitem: 
+@visible_horizontal: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_visible_horizontal ##### -->
+<para>
+
+</para>
+
+@toolitem: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_visible_vertical ##### -->
+<para>
+
+</para>
+
+@toolitem: 
+@visible_horizontal: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_visible_vertical ##### -->
+<para>
+
+</para>
+
+@toolitem: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_icon_size ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_orientation ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_toolbar_style ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_retrieve_proxy_menu_item ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_get_proxy_menu_item ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@menu_item_id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tool_item_set_proxy_menu_item ##### -->
+<para>
+
+</para>
+
+@tool_item: 
+@menu_item_id: 
+@menu_item: 
+
+

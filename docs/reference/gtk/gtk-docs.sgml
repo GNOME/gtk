@@ -96,6 +96,8 @@
 <!ENTITY GtkTipsQuery SYSTEM "xml/gtktipsquery.xml">
 <!ENTITY GtkToggleButton SYSTEM "xml/gtktogglebutton.xml">
 <!ENTITY GtkToolbar SYSTEM "xml/gtktoolbar.xml">
+<!ENTITY GtkToolButton SYSTEM "xml/gtktoolbutton.xml">
+<!ENTITY GtkToolItem SYSTEM "xml/gtktoolitem.xml">
 <!ENTITY GtkTooltips SYSTEM "xml/gtktooltips.xml">
 <!ENTITY GtkTree SYSTEM "xml/gtktree.xml">
 <!ENTITY GtkTreeItem SYSTEM "xml/gtktreeitem.xml">
@@ -380,6 +382,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkSeparatorMenuItem;
         &GtkTearoffMenuItem;
         &GtkToolbar;
+        &GtkToolItem;
+        &GtkToolButton;
     </chapter>
 
     <chapter id="SelectorWidgets">

@@ -107,6 +107,8 @@ gtk_tips_query_get_type
 gtk_toggle_button_get_type
 gtk_toolbar_get_type
 gtk_tooltips_get_type
+gtk_tool_button_get_type
+gtk_tool_item_get_type
 gtk_tree_get_type
 gtk_tree_item_get_type
 gtk_tree_model_sort_get_type

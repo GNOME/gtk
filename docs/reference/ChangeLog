@@ -1,5 +1,14 @@
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtk.types: Add gtk_tool_button_get_type and gtk_tool_item_get_type.
+	
+	* gtk/tmpl/gtktoolbutton.sgml:
+	* gtk/tmpl/gtktoolitem.sgml:
+	* gtk/gtk-docs.sgml: 
+	* gtk/gtk-sections.txt: Add new toolbar api.
+
+	* gtk/tmpl/gtkdnd.sgml: Remove docs for gtk_drag_begin(), which are now inline.
+
 	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add gdk_pixbuf_new_from_file_at_size.
 
 2003-07-08  Matthias Clasen  <maclas@gmx.de>
