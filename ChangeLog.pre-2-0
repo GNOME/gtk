@@ -1,3 +1,23 @@
+1999-05-30  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow.c: AdjustWindowRectEx2 renamed to
+ 	SafeAdjustWindowRectEx. Don't override all calls to
+ 	AdjustWindowRectEx by it, but use it only in two places: When
+ 	creating a new top-level window and when moving a top-level
+ 	window.
+
+	Use screen coordinate rectangle, not client rectangle, in
+ 	gdk_window_move. Thus SafeAdjustWindowRectEx will do its job only
+ 	when we try to place a window so that the decoration (mainly,
+ 	title bar) isn't visible.
+
+	These changes fix the bug that showed up for instance as the
+ 	GIMP's saved top-level windows moving right and down (by an amount
+ 	equal to the window decoration) for each session. This bug showed
+ 	up also in testgtk's "Saved Position".
+
+	gdk_window_resize also redone a bit.
+
 1999-05-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/testgtkrc: Add (commented out) Windows-style theme

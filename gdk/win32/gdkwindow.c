@@ -36,10 +36,11 @@
 /* The Win API function AdjustWindowRect may return negative values
  * resulting in obscured title bars. This helper function is coreccting it.
  */
-BOOL AdjustWindowRectEx2(RECT* lpRect, 
-                         DWORD dwStyle, 
-                         BOOL bMenu, 
-                         DWORD dwExStyle)
+BOOL
+SafeAdjustWindowRectEx (RECT* lpRect, 
+			DWORD dwStyle, 
+			BOOL bMenu, 
+			DWORD dwExStyle)
 {
   if (!AdjustWindowRectEx(lpRect, dwStyle, bMenu, dwExStyle))
     return FALSE;
@@ -55,8 +56,6 @@ BOOL AdjustWindowRectEx2(RECT* lpRect,
     }
   return TRUE;
 }
-/* HB: now use it */
-#define AdjustWindowRectEx AdjustWindowRectEx2
 
 /* Forward declarations */
 static gboolean gdk_window_gravity_works (void);
@@ -176,18 +175,9 @@ gdk_window_new (GdkWindow     *parent,
   private->resize_count = 0;
   private->ref_count = 1;
 
-  if (attributes_mask & GDK_WA_X)
-    x = attributes->x;
-  else
-    x = 0;
+  private->x = (attributes_mask & GDK_WA_X) ? attributes->x : 0;
+  private->y = (attributes_mask & GDK_WA_Y) ? attributes->y : 0;
 
-  if (attributes_mask & GDK_WA_Y)
-    y = attributes->y;
-  else
-    y = 0;
-
-  private->x = x;
-  private->y = y;
   private->width = (attributes->width > 1) ? (attributes->width) : (1);
   private->height = (attributes->height > 1) ? (attributes->height) : (1);
   private->window_type = attributes->window_type;
@@ -362,7 +352,7 @@ gdk_window_new (GdkWindow     *parent,
       rect.right = rect.left + private->width;
       rect.bottom = rect.top + private->height;
 
-      if (!AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
+      if (!SafeAdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
 	g_warning ("gdk_window_new: AdjustWindowRectEx failed");
 
       if (x != CW_USEDEFAULT)
@@ -753,18 +743,39 @@ gdk_window_move (GdkWindow *window,
   if (!private->destroyed)
     {
       RECT rect;
-      DWORD dwStyle;
-      DWORD dwExStyle;
 
       GDK_NOTE (MISC, g_print ("gdk_window_move: %#x +%d+%d\n",
 			       private->xwindow, x, y));
+
       GetClientRect (private->xwindow, &rect);
 
-      dwStyle = GetWindowLong (private->xwindow, GWL_STYLE);
-      dwExStyle = GetWindowLong (private->xwindow, GWL_EXSTYLE);
-      if (!AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
-	g_warning ("gdk_window_move: AdjustWindowRectEx failed");
-      if (private->window_type == GDK_WINDOW_CHILD)
+      if (private->window_type != GDK_WINDOW_CHILD)
+	{
+	  POINT ptTL, ptBR;
+	  DWORD dwStyle;
+	  DWORD dwExStyle;
+
+	  ptTL.x = 0;
+	  ptTL.y = 0; 
+	  ClientToScreen (private->xwindow, &ptTL);
+	  rect.left = x;
+	  rect.top = y;
+
+	  ptBR.x = rect.right;
+	  ptBR.y = rect.bottom;
+	  ClientToScreen (private->xwindow, &ptBR);
+	  rect.right = x + ptBR.x - ptTL.x;
+	  rect.bottom = y + ptBR.y - ptTL.y;
+
+	  dwStyle = GetWindowLong (private->xwindow, GWL_STYLE);
+	  dwExStyle = GetWindowLong (private->xwindow, GWL_EXSTYLE);
+	  if (!SafeAdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
+	    g_warning ("gdk_window_move: AdjustWindowRectEx failed");
+
+	  x = rect.left;
+	  y = rect.top;
+	}
+      else
 	{
 	  private->x = x;
 	  private->y = y;
@@ -772,10 +783,9 @@ gdk_window_move (GdkWindow *window,
       GDK_NOTE (MISC, g_print ("...MoveWindow(%#x,%dx%d@+%d+%d)\n",
 			       private->xwindow,
 			       rect.right - rect.left, rect.bottom - rect.top,
-			       x + rect.left, y + rect.top));
+			       x, y));
       if (!MoveWindow (private->xwindow,
-		       x + rect.left, y + rect.top,
-		       rect.right - rect.left, rect.bottom - rect.top,
+		       x, y, rect.right - rect.left, rect.bottom - rect.top,
 		       TRUE))
 	g_warning ("gdk_window_move: MoveWindow failed");
     }
@@ -802,52 +812,50 @@ gdk_window_resize (GdkWindow *window,
        (private->width != (guint16) width) ||
        (private->height != (guint16) height)))
     {
-      RECT rect;
-      POINT pt;
-      DWORD dwStyle;
-      DWORD dwExStyle;
       int x, y;
 
       GDK_NOTE (MISC, g_print ("gdk_window_resize: %#x %dx%d\n",
 			       private->xwindow, width, height));
       
-      pt.x = 0;
-      pt.y = 0; 
-      ClientToScreen (private->xwindow, &pt);
-      rect.left = pt.x;
-      rect.top = pt.y;
-      rect.right = pt.x + width;
-      rect.bottom = pt.y + height;
-
-      dwStyle = GetWindowLong (private->xwindow, GWL_STYLE);
-      dwExStyle = GetWindowLong (private->xwindow, GWL_EXSTYLE);
-      if (!AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
-	g_warning ("gdk_window_resize: AdjustWindowRectEx failed");
       if (private->window_type != GDK_WINDOW_CHILD)
 	{
+	  POINT pt;
+	  RECT rect;
+	  DWORD dwStyle;
+	  DWORD dwExStyle;
+
+	  pt.x = 0;
+	  pt.y = 0; 
+	  ClientToScreen (private->xwindow, &pt);
+	  rect.left = pt.x;
+	  rect.top = pt.y;
+	  rect.right = pt.x + width;
+	  rect.bottom = pt.y + height;
+
+	  dwStyle = GetWindowLong (private->xwindow, GWL_STYLE);
+	  dwExStyle = GetWindowLong (private->xwindow, GWL_EXSTYLE);
+	  if (!AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle))
+	    g_warning ("gdk_window_resize: AdjustWindowRectEx failed");
+
 	  x = rect.left;
 	  y = rect.top;
+	  width = rect.right - rect.left;
+	  height = rect.bottom - rect.top;
 	}
       else
 	{
 	  x = private->x;
 	  y = private->y;
+	  private->width = width;
+	  private->height = height;
 	}
 
       private->resize_count += 1;
 
-      if (private->window_type == GDK_WINDOW_CHILD)
-	{
-	  private->width = width;
-	  private->height = height;
-	}
       GDK_NOTE (MISC, g_print ("...MoveWindow(%#x,%dx%d@+%d+%d)\n",
-			       private->xwindow,
-			       rect.right - rect.left, rect.bottom - rect.top,
-			       x, y));
+			       private->xwindow, width, height, x, y));
       if (!MoveWindow (private->xwindow,
-		       x, y,
-		       rect.right - rect.left, rect.bottom - rect.top,
+		       x, y, width, height,
 		       TRUE))
 	g_warning ("gdk_window_resize: MoveWindow failed");
     }
@@ -1784,7 +1792,9 @@ gdk_window_get_origin (GdkWindow *window,
     *x = tx;
   if (y)
     *y = ty;
-  
+
+  GDK_NOTE (MISC, g_print ("gdk_window_get_origin: %#x: +%d+%d\n",
+			   private->xwindow, tx, ty));
   return return_val;
 }
 
@@ -1826,6 +1836,10 @@ gdk_window_get_root_origin (GdkWindow *window,
     *x = pt.x;
   if (y)
     *y = pt.y;
+
+  GDK_NOTE (MISC, g_print ("gdk_window_get_root_origin: %#x: (%#x) +%d+%d\n",
+			   ((GdkWindowPrivate *) window)->xwindow,
+			   private->xwindow, pt.x, pt.y));
 }
 
 GdkWindow*
