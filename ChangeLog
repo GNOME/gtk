@@ -1,5 +1,8 @@
 2004-11-11  Matthias Clasen  <mclasen@redhat.com>
 
+	* docs/tools/Makefile.am: Don't try to build doc-shooter on 
+	Windows.  (#157979, J. Ali Harlow) 
+
 	* gtk/gtkfilefilter.c: Don't try to use xdgmime on 
 	Windows where we don't build it.   (#157944, J. Ali Harlow)
 

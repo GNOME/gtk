@@ -16,8 +16,10 @@ LDADDS = 								\
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
 	$(top_builddir)/gtk/$(gtktargetlib)
 
+if OS_UNIX
 noinst_PROGRAMS = 		\
 	doc-shooter
+endif
 
 doc_shooter_DEPENDENCIES = $(DEPS)
 doc_shooter_LDADD = $(LDADDS)
