@@ -1743,7 +1743,8 @@ gtk_toolbar_focus (GtkWidget        *widget,
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (widget);
   GList *children, *list;
-  
+  gboolean result = FALSE;
+
   /* if focus is already somewhere inside the toolbar then return FALSE.
    * The only way focus can stay inside the toolbar is when the user presses
    * arrow keys or Ctrl TAB (both of which are handled by the
@@ -1751,20 +1752,23 @@ gtk_toolbar_focus (GtkWidget        *widget,
    */
   if (GTK_CONTAINER (widget)->focus_child)
     return FALSE;
-  
+
   children = gtk_toolbar_list_children_in_focus_order (toolbar, dir);
-  
+
   for (list = children; list != NULL; list = list->next)
     {
       GtkWidget *child = list->data;
       
       if (GTK_WIDGET_MAPPED (child) && gtk_widget_child_focus (child, dir))
-	return TRUE;
+	{
+	  result = TRUE;
+	  break;
+	}
     }
-  
+
   g_list_free (children);
-  
-  return FALSE;
+
+  return result;
 }
 
 static void

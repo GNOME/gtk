@@ -1,3 +1,8 @@
+2004-04-19  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_focus): Don't leak list of
+	children.  (#140523)
+
 2004-04-19  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbtree.c (_gtk_text_line_previous_could_contain_tag): 
