@@ -23,21 +23,6 @@
 
 #include "prop-editor.h"
 
-static void
-get_param_specs (GType         type,
-                 GParamSpec ***specs,
-                 gint         *n_specs)
-{
-  GObjectClass *class = g_type_class_peek (type);
-
-  /* We count on the fact we have an instance, or else we'd have
-   * to use g_type_class_ref ();
-   */
-
-  /* Use private interface for now, fix later */
-  *specs = NULL; /* class->property_specs; */
-  *n_specs = 0; /* class->n_property_specs; */
-}
 
 typedef struct
 {
@@ -446,7 +431,7 @@ object_changed (GObject *object, GParamSpec *pspec, gpointer data)
     name = g_type_name (G_TYPE_FROM_INSTANCE (obj));
   else
     name = "unknown";
-  str = g_strdup_printf ("Objetct: %p (%s)", obj, name);
+  str = g_strdup_printf ("Object: %p (%s)", obj, name);
   
   gtk_label_set_text (label, str);
   g_free (str);
@@ -670,12 +655,14 @@ properties_from_type (GObject     *object,
   GtkWidget *sw;
   GtkWidget *vbox;
   GtkWidget *table;
+  GObjectClass *class;
+  GParamSpec **specs;
+  gint n_specs;
   int i;
-  gint n_specs = 0;
-  GParamSpec **specs = NULL;
 
-  get_param_specs (type, &specs, &n_specs);
-
+  class = G_OBJECT_CLASS (g_type_class_peek (type));
+  specs = g_object_class_list_properties (class, &n_specs);
+        
   if (n_specs == 0)
     return NULL;
   
@@ -701,6 +688,13 @@ properties_from_type (GObject     *object,
           continue;
         }
       
+      if (spec->owner_type != type)
+	{
+	  /* we're only interested in params of type */
+	  ++i;
+	  continue;
+	}
+
       label = gtk_label_new (spec->nick);
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
@@ -732,6 +726,9 @@ properties_from_type (GObject     *object,
                                   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
   
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), vbox);
+
+  g_free (specs);
+
   return sw;
 }
 
@@ -771,7 +768,7 @@ create_prop_editor (GObject *object, GType type)
       gtk_container_add (GTK_CONTAINER (win), notebook);
       
       type = G_TYPE_FROM_INSTANCE (object);
-      
+
       title = g_strdup_printf ("Properties of %s widget", g_type_name (type));
       gtk_window_set_title (GTK_WINDOW (win), title);
       g_free (title);

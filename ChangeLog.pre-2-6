@@ -1,5 +1,11 @@
 2001-08-09  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
+	* tests/prop-editor.c (properties_from_type): Use 
+	g_object_class_list_properties to get the param specs 
+	for a given type. (#58609)
+
+2001-08-09  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
 	* gtk/gtkstyle.c (gtk_style_real_unrealize): Don't forget to
 	free the text_aa parts. (#57549)
 
