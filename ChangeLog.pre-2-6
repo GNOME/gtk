@@ -1,3 +1,7 @@
+2004-09-29  Abel Cheung  <maddog@linuxhall.org>
+
+	* configure.in: Added "ang" to ALL_LINGUAS.
+
 2004-09-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserentry.c (update_current_folder_files): Turn
