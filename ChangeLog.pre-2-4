@@ -1,3 +1,8 @@
+Fri Nov 28 00:26:24 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilesystemmodel.c (gtk_file_system_model_finalize): 
+	Don't use freed memory.  (#127698, Taavi Talvik) 
+
 Fri Nov 28 00:09:10 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserentry.c: Remove debug g_print()s. 

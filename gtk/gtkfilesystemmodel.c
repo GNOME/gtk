@@ -247,7 +247,7 @@ static void
 gtk_file_system_model_finalize (GObject *object)
 {
   GtkFileSystemModel *model = GTK_FILE_SYSTEM_MODEL (object);
-  FileModelNode *children;
+  FileModelNode *children, *next;
 
   if (model->root_folder)
     g_object_unref (model->root_folder);
@@ -255,8 +255,9 @@ gtk_file_system_model_finalize (GObject *object)
   children = model->roots;
   while (children)
     {
+      next = children->next;
       file_model_node_free (children);
-      children = children->next;
+      children = next;
     }
 }
 
