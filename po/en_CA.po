@@ -1,16 +1,16 @@
 # Canadian English translation of gtk+
 # Copyright (C) 2004 Adam Weinberger and the GNOME Foundation
-# This file is distributed under the same license as the gtk+ package.
-# Adam Weinberger <adamw@FreeBSD.org>, 2004.
+# This file is distributed under the same licence as the gtk+ package.
+# Adam Weinberger <adamw@gnome.org>, 2004.
 # 
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-25 13:27-0400\n"
-"PO-Revision-Date: 2004-07-16 13:05-0400\n"
-"Last-Translator: Alexander Winston <alexander.winston@comcast.net>\n"
+"POT-Creation-Date: 2004-09-01 23:39-0400\n"
+"PO-Revision-Date: 2004-09-01 13:05-0400\n"
+"Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
 "Language-Team: English/Canada <adamw@FreeBSD.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,7 +67,7 @@ msgstr "Image type '%s' is not supported"
 #: gdk-pixbuf/gdk-pixbuf-io.c:663
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Couldn't recognize the image file format for file '%s'"
+msgstr "Could not recognize the image file format for file '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:671
 msgid "Unrecognized image file format"
@@ -130,7 +130,7 @@ msgid ""
 "but didn't give a reason for the failure"
 msgstr ""
 "Internal error: Image loader module '%s' failed to begin loading an image, "
-"but didn't give a reason for the failure"
+"but did not give a reason for the failure"
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
@@ -213,7 +213,7 @@ msgstr "Stack overflow"
 
 #: gdk-pixbuf/io-gif.c:635
 msgid "GIF image loader can't understand this image."
-msgstr "GIF image loader can't understand this image."
+msgstr "GIF image loader cannot understand this image."
 
 #: gdk-pixbuf/io-gif.c:664
 msgid "Bad code encountered"
@@ -324,7 +324,7 @@ msgstr "Unsupported JPEG colour space (%s)"
 #: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr "Couldn't allocate memory for loading JPEG file"
+msgstr "Could not allocate memory for loading JPEG file"
 
 #: gdk-pixbuf/io-jpeg.c:893
 #, c-format
@@ -348,11 +348,11 @@ msgstr "The JPEG image format"
 
 #: gdk-pixbuf/io-pcx.c:191
 msgid "Couldn't allocate memory for header"
-msgstr "Couldn't allocate memory for header"
+msgstr "Could not allocate memory for header"
 
 #: gdk-pixbuf/io-pcx.c:206 gdk-pixbuf/io-pcx.c:566
 msgid "Couldn't allocate memory for context buffer"
-msgstr "Couldn't allocate memory for context buffer"
+msgstr "Could not allocate memory for context buffer"
 
 #: gdk-pixbuf/io-pcx.c:607
 msgid "Image has invalid width and/or height"
@@ -369,19 +369,19 @@ msgstr "Image has unsupported number of %d-bit planes"
 
 #: gdk-pixbuf/io-pcx.c:648
 msgid "Couldn't create new pixbuf"
-msgstr "Couldn't create new pixbuf"
+msgstr "Could not create new pixbuf"
 
 #: gdk-pixbuf/io-pcx.c:656
 msgid "Couldn't allocate memory for line data"
-msgstr "Couldn't allocate memory for line data"
+msgstr "Could not allocate memory for line data"
 
 #: gdk-pixbuf/io-pcx.c:663
 msgid "Couldn't allocate memory for paletted data"
-msgstr "Couldn't allocate memory for paletted data"
+msgstr "Could not allocate memory for paletted data"
 
 #: gdk-pixbuf/io-pcx.c:710
 msgid "Didn't get all lines of PCX image"
-msgstr "Didn't get all lines of PCX image"
+msgstr "Did not get all lines of PCX image"
 
 #: gdk-pixbuf/io-pcx.c:717
 msgid "No palette found at end of PCX data"
@@ -461,7 +461,7 @@ msgstr "The PNG image format"
 
 #: gdk-pixbuf/io-pnm.c:249
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr "PNM loader expected to find an integer, but didn't"
+msgstr "PNM loader expected to find an integer, but did not"
 
 #: gdk-pixbuf/io-pnm.c:281
 msgid "PNM file has an incorrect initial byte"
@@ -489,7 +489,7 @@ msgstr "Maximum colour value in PNM file is too large"
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Can't handle PNM files with maximum color values greater than 255"
-msgstr "Can't handle PNM files with maximum colour values greater than 255"
+msgstr "Cannot handle PNM files with maximum colour values greater than 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -513,7 +513,7 @@ msgstr "Raw PNM formats require exactly one whitespace before sample data"
 
 #: gdk-pixbuf/io-pnm.c:770
 msgid "Can't allocate memory for loading PNM image"
-msgstr "Can't allocate memory for loading PNM image"
+msgstr "Cannot allocate memory for loading PNM image"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
@@ -553,31 +553,31 @@ msgstr "The Sun raster image format"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Can't allocate memory for IOBuffer struct"
+msgstr "Cannot allocate memory for IOBuffer struct"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Can't allocate memory for IOBuffer data"
+msgstr "Cannot allocate memory for IOBuffer data"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
-msgstr "Can't realloc IOBuffer data"
+msgstr "Cannot realloc IOBuffer data"
 
 #: gdk-pixbuf/io-tga.c:219
 msgid "Can't allocate temporary IOBuffer data"
-msgstr "Can't allocate temporary IOBuffer data"
+msgstr "Cannot allocate temporary IOBuffer data"
 
 #: gdk-pixbuf/io-tga.c:353
 msgid "Can't allocate new pixbuf"
-msgstr "Can't allocate new pixbuf"
+msgstr "Cannot allocate new pixbuf"
 
 #: gdk-pixbuf/io-tga.c:692
 msgid "Can't allocate colormap structure"
-msgstr "Can't allocate colourmap structure"
+msgstr "Cannot allocate colourmap structure"
 
 #: gdk-pixbuf/io-tga.c:699
 msgid "Can't allocate colormap entries"
-msgstr "Can't allocate colourmap entries"
+msgstr "Cannot allocate colourmap entries"
 
 #: gdk-pixbuf/io-tga.c:721
 msgid "Unexpected bitdepth for colormap entries"
@@ -585,7 +585,7 @@ msgstr "Unexpected bitdepth for colourmap entries"
 
 #: gdk-pixbuf/io-tga.c:739
 msgid "Can't allocate TGA header memory"
-msgstr "Can't allocate TGA header memory"
+msgstr "Cannot allocate TGA header memory"
 
 #: gdk-pixbuf/io-tga.c:772
 msgid "TGA image has invalid dimensions"
@@ -598,7 +598,7 @@ msgstr "TGA image type not supported"
 
 #: gdk-pixbuf/io-tga.c:861
 msgid "Can't allocate memory for TGA context struct"
-msgstr "Can't allocate memory for TGA context struct"
+msgstr "Cannot allocate memory for TGA context struct"
 
 #: gdk-pixbuf/io-tga.c:926
 msgid "Excess data in file"
@@ -663,7 +663,7 @@ msgstr "Not enough memory to load image"
 
 #: gdk-pixbuf/io-wbmp.c:334
 msgid "Couldn't save the rest"
-msgstr "Couldn't save the rest"
+msgstr "Could not save the rest"
 
 #: gdk-pixbuf/io-wbmp.c:368
 msgid "The WBMP image format"
@@ -707,11 +707,11 @@ msgstr "XPM has invalid number of chars per pixel"
 
 #: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
-msgstr "Can't read XPM colourmap"
+msgstr "Ca not read XPM colourmap"
 
 #: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
-msgstr "Can't allocate memory for loading XPM image"
+msgstr "Cannot allocate memory for loading XPM image"
 
 #: gdk-pixbuf/io-xpm.c:1508
 msgid "Failed to write to temporary file when loading XPM image"
@@ -1057,7 +1057,7 @@ msgstr "Create in _folder:"
 
 #: gtk/gtkfilechooserdefault.c:4065
 msgid "Can't change to folder because it isn't local"
-msgstr "Can't change to folder because it isn't local"
+msgstr "Cannot change to folder because it is not local"
 
 #: gtk/gtkfilechooserdefault.c:4208
 msgid "Could not find the path"
@@ -1292,7 +1292,7 @@ msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 msgstr ""
-"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+"The filename \"%s\" could not be converted to UTF-8. (try setting the "
 "environment variable G_FILENAME_ENCODING): %s"
 
 #: gtk/gtkfilesel.c:3142
@@ -1305,7 +1305,7 @@ msgstr "Name too long"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
-msgstr "Couldn't convert filename"
+msgstr "Could not convert filename"
 
 #: gtk/gtkfilesystemmodel.c:1266
 msgid "(Empty)"
@@ -1964,6 +1964,3 @@ msgstr "X Input Method"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Could not get information for file '%s': %s"
-
-#~ msgid "Unsupported TIFF variant"
-#~ msgstr "Unsupported TIFF variant"
