@@ -766,6 +766,7 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
   
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+  g_return_if_fail (step >= 0);
   
   adj = spin_button->adjustment;
 
