@@ -65,39 +65,41 @@ void                 gtk_file_chooser_set_select_multiple (GtkFileChooser       
 							   gboolean              select_multiple);
 gboolean             gtk_file_chooser_get_select_multiple (GtkFileChooser       *chooser);
 
+/* Suggested name for the Save-type actions
+ */
+void     gtk_file_chooser_set_current_name   (GtkFileChooser *chooser,
+					      const gchar    *name);
+
 /* Filename manipulation
  */
-void    gtk_file_chooser_set_current_name  (GtkFileChooser *chooser,
-					    const gchar    *name);
-gchar * gtk_file_chooser_get_filename      (GtkFileChooser *chooser);
-void    gtk_file_chooser_set_filename      (GtkFileChooser *chooser,
-					    const char     *filename);
-void    gtk_file_chooser_select_filename   (GtkFileChooser *chooser,
-					    const char     *filename);
-void    gtk_file_chooser_unselect_filename (GtkFileChooser *chooser,
-					    const char     *filename);
-void    gtk_file_chooser_select_all        (GtkFileChooser *chooser);
-void    gtk_file_chooser_unselect_all      (GtkFileChooser *chooser);
-GSList *gtk_file_chooser_get_filenames     (GtkFileChooser *chooser);
-void   gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
-					    const gchar    *filename);
-gchar *gtk_file_chooser_get_current_folder (GtkFileChooser *chooser);
+gchar *  gtk_file_chooser_get_filename       (GtkFileChooser *chooser);
+gboolean gtk_file_chooser_set_filename       (GtkFileChooser *chooser,
+					      const char     *filename);
+gboolean gtk_file_chooser_select_filename    (GtkFileChooser *chooser,
+					      const char     *filename);
+void     gtk_file_chooser_unselect_filename  (GtkFileChooser *chooser,
+					      const char     *filename);
+void     gtk_file_chooser_select_all         (GtkFileChooser *chooser);
+void     gtk_file_chooser_unselect_all       (GtkFileChooser *chooser);
+GSList * gtk_file_chooser_get_filenames      (GtkFileChooser *chooser);
+gboolean gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
+					      const gchar    *filename);
+gchar *  gtk_file_chooser_get_current_folder (GtkFileChooser *chooser);
 
 
 /* URI manipulation
  */
-gchar * gtk_file_chooser_get_uri      (GtkFileChooser *chooser);
-void    gtk_file_chooser_set_uri      (GtkFileChooser *chooser,
-				       const char     *uri);
-void    gtk_file_chooser_select_uri   (GtkFileChooser *chooser,
-				       const char     *uri);
-void    gtk_file_chooser_unselect_uri (GtkFileChooser *chooser,
-				       const char     *uri);
-GSList *gtk_file_chooser_get_uris     (GtkFileChooser *chooser);
-
-void   gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
-						const gchar    *uri);
-gchar *gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser);
+gchar *  gtk_file_chooser_get_uri                (GtkFileChooser *chooser);
+gboolean gtk_file_chooser_set_uri                (GtkFileChooser *chooser,
+						  const char     *uri);
+gboolean gtk_file_chooser_select_uri             (GtkFileChooser *chooser,
+						  const char     *uri);
+void     gtk_file_chooser_unselect_uri           (GtkFileChooser *chooser,
+						  const char     *uri);
+GSList * gtk_file_chooser_get_uris               (GtkFileChooser *chooser);
+gboolean gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
+						  const gchar    *uri);
+gchar *  gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser);
 
 /* Preview widget
  */

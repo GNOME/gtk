@@ -359,16 +359,19 @@ gtk_file_chooser_get_filename (GtkFileChooser *chooser)
  * for the directory change. To pre-enter a filename for the user, as in
  * a save-as dialog, use gtk_file_chooser_set_current_name()
  *
+ * Return value: %TRUE if both the folder could be changed and the file was
+ * selected successfully, %FALSE otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 gtk_file_chooser_set_filename (GtkFileChooser *chooser,
 			       const gchar    *filename)
 {
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
 
   gtk_file_chooser_unselect_all (chooser);
-  gtk_file_chooser_select_filename (chooser, filename);
+  return gtk_file_chooser_select_filename (chooser, filename);
 }
 
 /**
@@ -380,26 +383,34 @@ gtk_file_chooser_set_filename (GtkFileChooser *chooser,
  * folder of @chooser, then the current folder of @chooser will
  * be changed to the folder containing @filename.
  *
+ * Return value: %TRUE if both the folder could be changed and the file was
+ * selected successfully, %FALSE otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 gtk_file_chooser_select_filename (GtkFileChooser *chooser,
 				  const gchar    *filename)
 {
   GtkFileSystem *file_system;
   GtkFilePath *path;
+  gboolean result;
   
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  g_return_if_fail (filename != NULL);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
 
   path = gtk_file_system_filename_to_path (file_system, filename);
   if (path)
     {
-      _gtk_file_chooser_select_path (chooser, path);
+      result = _gtk_file_chooser_select_path (chooser, path, NULL);
       gtk_file_path_free (path);
     }
+  else
+    result = FALSE;
+
+  return result;
 }
 
 /**
@@ -499,26 +510,34 @@ gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
  * The user will be shown the full contents of the current folder,
  * plus user interface elements for navigating to other folders.
  *
+ * Return value: %TRUE if the folder could be changed successfully, %FALSE
+ * otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
 				     const gchar    *filename)
 {
   GtkFileSystem *file_system;
   GtkFilePath *path;
+  gboolean result;
   
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  g_return_if_fail (filename != NULL);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (filename != NULL, FALSE);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
 
   path = gtk_file_system_filename_to_path (file_system, filename);
   if (path)
     {
-      _gtk_file_chooser_set_current_folder_path (chooser, path);
+      result = _gtk_file_chooser_set_current_folder_path (chooser, path, NULL);
       gtk_file_path_free (path);
     }
+  else
+    result = FALSE;
+
+  return result;
 }
 
 /**
@@ -628,16 +647,19 @@ gtk_file_chooser_get_uri (GtkFileChooser *chooser)
  * for the directory change. To pre-enter a filename for the user, as in
  * a save-as dialog, use gtk_file_chooser_set_current_name()
  *
+ * Return value: %TRUE if both the folder could be changed and the URI was
+ * selected successfully, %FALSE otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 gtk_file_chooser_set_uri (GtkFileChooser *chooser,
 			  const char     *uri)
 {
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
 
   gtk_file_chooser_unselect_all (chooser);
-  gtk_file_chooser_select_uri (chooser, uri);
+  return gtk_file_chooser_select_uri (chooser, uri);
 }
 
 /**
@@ -649,26 +671,34 @@ gtk_file_chooser_set_uri (GtkFileChooser *chooser,
  * file in the current folder of @chooser, then the current folder of
  * @chooser will be changed to the folder containing @filename.
  *
+ * Return value: %TRUE if both the folder could be changed and the URI was
+ * selected successfully, %FALSE otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 gtk_file_chooser_select_uri (GtkFileChooser *chooser,
 			     const char     *uri)
 {
   GtkFileSystem *file_system;
   GtkFilePath *path;
+  gboolean result;
   
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  g_return_if_fail (uri != NULL);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
 
   path = gtk_file_system_uri_to_path (file_system, uri);
   if (path)
     {
-      _gtk_file_chooser_select_path (chooser, path);
+      result = _gtk_file_chooser_select_path (chooser, path, NULL);
       gtk_file_path_free (path);
     }
+  else
+    result = FALSE;
+
+  return result;
 }
 
 /**
@@ -774,26 +804,34 @@ gtk_file_chooser_get_uris (GtkFileChooser *chooser)
  * The user will be shown the full contents of the current folder,
  * plus user interface elements for navigating to other folders.
  *
+ * Return value: %TRUE if the folder could be changed successfully, %FALSE
+ * otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
 					 const gchar    *uri)
 {
   GtkFileSystem *file_system;
   GtkFilePath *path;
+  gboolean result;
   
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  g_return_if_fail (uri != NULL);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (uri != NULL, FALSE);
 
   file_system = _gtk_file_chooser_get_file_system (chooser);
 
   path = gtk_file_system_uri_to_path (file_system, uri);
   if (path)
     {
-      _gtk_file_chooser_set_current_folder_path (chooser, path);
+      result = _gtk_file_chooser_set_current_folder_path (chooser, path, NULL);
       gtk_file_path_free (path);
     }
+  else
+    result = FALSE;
+
+  return result;
 }
 
 /**
@@ -830,20 +868,26 @@ gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser)
  * _gtk_file_chooser_set_current_folder_path:
  * @chooser: a #GtkFileChooser
  * @path: the #GtkFilePath for the new folder
+ * @error: location to store error, or %NULL.
  * 
  * Sets the current folder for @chooser from a #GtkFilePath.
  * Internal function, see gtk_file_chooser_set_current_folder_uri().
  *
+ * Return value: %TRUE if the folder could be changed successfully, %FALSE
+ * otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 _gtk_file_chooser_set_current_folder_path (GtkFileChooser    *chooser,
-					   const GtkFilePath *path)
+					   const GtkFilePath *path,
+					   GError           **error)
 {
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
-  g_return_if_fail (path != NULL);
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_current_folder (chooser, path);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_current_folder (chooser, path, error);
 }
 
 /**
@@ -870,19 +914,26 @@ _gtk_file_chooser_get_current_folder_path (GtkFileChooser *chooser)
  * _gtk_file_chooser_select_path:
  * @chooser: a #GtkFileChooser
  * @path: the path to select
+ * @error: location to store error, or %NULL
  * 
  * Selects the file referred to by @path. An internal function. See
  * _gtk_file_chooser_select_uri().
  *
+ * Return value: %TRUE if both the folder could be changed and the path was
+ * selected successfully, %FALSE otherwise.
+ *
  * Since: 2.4
  **/
-void
+gboolean
 _gtk_file_chooser_select_path (GtkFileChooser    *chooser,
-			       const GtkFilePath *path)
+			       const GtkFilePath *path,
+			       GError           **error)
 {
-  g_return_if_fail (GTK_IS_FILE_CHOOSER (chooser));
+  g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_path (chooser, path);
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->select_path (chooser, path, error);
 }
 
 /**

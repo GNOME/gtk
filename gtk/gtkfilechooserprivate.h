@@ -36,13 +36,15 @@ struct _GtkFileChooserIface
 
   /* Methods
    */
-  void           (*set_current_folder) 	   (GtkFileChooser    *chooser,
-		 		       	    const GtkFilePath *path);
+  gboolean       (*set_current_folder) 	   (GtkFileChooser    *chooser,
+		 		       	    const GtkFilePath *path,
+					    GError           **error);
   GtkFilePath *  (*get_current_folder) 	   (GtkFileChooser    *chooser);
   void           (*set_current_name)   	   (GtkFileChooser    *chooser,
 					    const gchar       *name);
-  void           (*select_path)        	   (GtkFileChooser    *chooser,
-		 		       	    const GtkFilePath *path);
+  gboolean       (*select_path)        	   (GtkFileChooser    *chooser,
+		 		       	    const GtkFilePath *path,
+					    GError           **error);
   void           (*unselect_path)      	   (GtkFileChooser    *chooser,
 		 		       	    const GtkFilePath *path);
   void           (*select_all)         	   (GtkFileChooser    *chooser);
@@ -72,11 +74,13 @@ struct _GtkFileChooserIface
 };
 
 GtkFileSystem *_gtk_file_chooser_get_file_system         (GtkFileChooser    *chooser);
-void           _gtk_file_chooser_set_current_folder_path (GtkFileChooser    *chooser,
-							  const GtkFilePath *path);
+gboolean       _gtk_file_chooser_set_current_folder_path (GtkFileChooser    *chooser,
+							  const GtkFilePath *path,
+							  GError           **error);
 GtkFilePath *  _gtk_file_chooser_get_current_folder_path (GtkFileChooser    *chooser);
-void           _gtk_file_chooser_select_path             (GtkFileChooser    *chooser,
-							  const GtkFilePath *path);
+gboolean       _gtk_file_chooser_select_path             (GtkFileChooser    *chooser,
+							  const GtkFilePath *path,
+							  GError           **error);
 void           _gtk_file_chooser_unselect_path           (GtkFileChooser    *chooser,
 							  const GtkFilePath *path);
 GSList *       _gtk_file_chooser_get_paths               (GtkFileChooser    *chooser);

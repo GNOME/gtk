@@ -1,3 +1,48 @@
+2004-03-05  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserprivate.h (struct _GtkFileChooserIface): Add
+	gboolean return values and GError arguments to
+	::set_current_folder() and ::select_path().
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_current_folder):
+	Return a boolean value for success/failure.
+	(gtk_file_chooser_set_current_folder_uri): Likewise.
+	(gtk_file_chooser_select_filename): Likewise.
+	(gtk_file_chooser_select_uri): Likewise.
+	(gtk_file_chooser_set_filename): Likewise.
+	(gtk_file_chooser_set_uri): Likewise.
+	(_gtk_file_chooser_set_current_folder_path): Likewise, plus take
+	in a GError.
+	(_gtk_file_chooser_select_path): Likewise.
+
+	* gtk/gtkfilechooserutils.c (delegate_set_current_folder):
+	Likewise.
+	(delegate_select_path): Likewise.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_select_path): Likewise.
+	(gtk_file_chooser_default_set_current_folder): Likewise.
+	(error_changing_folder_dialog): New helper function.
+	(change_folder_and_display_error): New helper function.
+	(switch_to_selected_folder): Use change_folder_and_display_error().
+	(tree_selection_changed): Likewise.
+	(shortcuts_activate_volume): Likewise.
+	(shortcuts_activate_item): Likewise.
+	(list_row_activated): Likewise.
+	(path_bar_clicked): Likewise.
+	(update_from_entry): Likewise.
+	(up_folder_handler): Likewise.
+	(home_folder_handler): Get the home path from the shortcuts model,
+	and use change_folder_and_display_error().
+
+	* tests/testfilechooser.c (set_current_folder): New helper
+	function; pops up a simple error dialog if necessary.
+	(set_filename): Likewise.
+	(set_folder_nonexistent_cb): Use set_current_folder().
+	(set_folder_existing_nonexistent_cb): Likewise.
+	(set_filename_nonexistent_cb): Use set_filename().
+	(set_filename_existing_nonexistent_cb): Likewise.
+
 Fri Mar  5 11:17:35 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_new_proxy): 

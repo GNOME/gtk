@@ -24,13 +24,15 @@
 #include "gtkfilesystem.h"
 #include "gtktypebuiltins.h"
 
-static void           delegate_set_current_folder     (GtkFileChooser    *chooser,
-						       const GtkFilePath *path);
+static gboolean       delegate_set_current_folder     (GtkFileChooser    *chooser,
+						       const GtkFilePath *path,
+						       GError           **error);
 static GtkFilePath *  delegate_get_current_folder     (GtkFileChooser    *chooser);
 static void           delegate_set_current_name       (GtkFileChooser    *chooser,
 						       const gchar       *name);
-static void           delegate_select_path            (GtkFileChooser    *chooser,
-						       const GtkFilePath *path);
+static gboolean       delegate_select_path            (GtkFileChooser    *chooser,
+						       const GtkFilePath *path,
+						       GError           **error);
 static void           delegate_unselect_path          (GtkFileChooser    *chooser,
 						       const GtkFilePath *path);
 static void           delegate_select_all             (GtkFileChooser    *chooser);
@@ -65,7 +67,7 @@ static void           delegate_file_activated         (GtkFileChooser    *choose
 /**
  * _gtk_file_chooser_install_properties:
  * @klass: the class structure for a type deriving from #GObject
- * 
+ *
  * Installs the necessary properties for a class implementing
  * #GtkFileChooser. A #GtkParamSpecOverride property is installed
  * for each property, using the values from the #GtkFileChooserProp
@@ -111,7 +113,7 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 /**
  * _gtk_file_chooser_delegate_iface_init:
  * @iface: a #GtkFileChoserIface structure
- * 
+ *
  * An interface-initialization function for use in cases where
  * an object is simply delegating the methods, signals of
  * the #GtkFileChooser interface to another object.
@@ -157,7 +159,7 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER (receiver));
   g_return_if_fail (GTK_IS_FILE_CHOOSER (delegate));
-  
+
   g_object_set_data (G_OBJECT (receiver), "gtk-file-chooser-delegate", delegate);
 
   g_signal_connect (delegate, "notify",
@@ -178,11 +180,12 @@ get_delegate (GtkFileChooser *receiver)
   return g_object_get_data (G_OBJECT (receiver), "gtk-file-chooser-delegate");
 }
 
-static void
+static gboolean
 delegate_select_path (GtkFileChooser    *chooser,
-		      const GtkFilePath *path)
+		      const GtkFilePath *path,
+		      GError           **error)
 {
-  _gtk_file_chooser_select_path (get_delegate (chooser), path);
+  return _gtk_file_chooser_select_path (get_delegate (chooser), path, error);
 }
 
 static void
@@ -264,11 +267,12 @@ delegate_list_shortcut_folders (GtkFileChooser *chooser)
   return gtk_file_chooser_list_shortcut_folders (get_delegate (chooser));
 }
 
-static void
+static gboolean
 delegate_set_current_folder (GtkFileChooser    *chooser,
-			     const GtkFilePath *path)
+			     const GtkFilePath *path,
+			     GError           **error)
 {
-  _gtk_file_chooser_set_current_folder_path (get_delegate (chooser), path);
+  return _gtk_file_chooser_set_current_folder_path (get_delegate (chooser), path, error);
 }
 
 static GtkFilePath *
