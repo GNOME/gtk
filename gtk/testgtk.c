@@ -5840,7 +5840,6 @@ create_text (void)
   GtkWidget *separator;
   GtkWidget *scrolled_window;
   GtkWidget *text;
-  GdkFont *font;
 
   FILE *infile;
 
@@ -5886,27 +5885,20 @@ create_text (void)
 
       gtk_text_freeze (GTK_TEXT (text));
 
-      font = NULL;
-
       for (i=0; i<ntext_colors; i++)
 	{
-	  gtk_text_insert (GTK_TEXT (text), font, NULL, NULL, 
+	  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, 
 			   text_colors[i].name, -1);
-	  gtk_text_insert (GTK_TEXT (text), font, NULL, NULL, "\t", -1);
+	  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, "\t", -1);
 
 	  for (j=0; j<ntext_colors; j++)
 	    {
-	      gtk_text_insert (GTK_TEXT (text), font,
+	      gtk_text_insert (GTK_TEXT (text), NULL,
 			       &text_colors[j].color, &text_colors[i].color,
 			       "XYZ", -1);
 	    }
 	  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, "\n", -1);
 	}
-
-      /* The Text widget will reference count the font, so we
-       * unreference it here
-       */
-      gdk_font_unref (font);
 
       infile = fopen("testgtk.c", "r");
       
