@@ -182,14 +182,15 @@ static IOBuffer *io_buffer_append(IOBuffer *buffer,
 		g_memmove(buffer->data, data, len);
 		buffer->size = len;
 	} else {
-		buffer->data = g_try_realloc(buffer->data, buffer->size + len);
-		if (!buffer->data) {
+		guchar *tmp = g_try_realloc (buffer->data, buffer->size + len);
+		if (!tmp) {
 			g_set_error(err, GDK_PIXBUF_ERROR,
 				    GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 				    _("Can't realloc IOBuffer data"));
 			g_free(buffer);
 			return NULL;
 		}
+		buffer->data = tmp;
 		g_memmove(&buffer->data[buffer->size], data, len);
 		buffer->size += len;
 	}

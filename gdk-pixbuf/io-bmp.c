@@ -214,8 +214,8 @@ lsb_16 (guchar *src)
 static gboolean grow_buffer (struct bmp_progressive_state *State,
                              GError **error)
 {
-  State->buff = g_try_realloc (State->buff, State->BufferSize);
-  if (State->buff == NULL) {
+  guchar *tmp = g_try_realloc (State->buff, State->BufferSize);
+  if (!tmp) {
     g_set_error (error,
 		 GDK_PIXBUF_ERROR,
 		 GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
@@ -223,6 +223,7 @@ static gboolean grow_buffer (struct bmp_progressive_state *State,
     State->read_state = READ_STATE_ERROR;
     return FALSE;
   }
+  State->buff = tmp;
   return TRUE;
 }
 

@@ -156,12 +156,12 @@ pixbuf_check_ico (guchar *buffer, int size)
 	    buffer [1] != 0x0 ||
 	    ((buffer [2] != 0x1)&&(buffer[2]!=0x2)) ||
 	    buffer [3] != 0x0 ||
+	    buffer [4] == 0x0 || 
 	    buffer [5] != 0x0 )
 		return FALSE;
 
 	return TRUE;
 }
-
 
 static gboolean
 pixbuf_check_bmp (guchar *buffer, int size)
@@ -241,10 +241,7 @@ static GdkPixbufModule file_formats [] = {
 	{ "ras",  pixbuf_check_sunras, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "bmp",  pixbuf_check_bmp, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "xbm",  pixbuf_check_xbm, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },
-	{ "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
-	/* Moved at the bottom, because it causes false positives against many
-	   of my TGA files. */
-	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },	
+	{ "ico",  pixbuf_check_ico, NULL,  NULL, NULL, NULL, NULL, NULL, NULL },            { "tga", pixbuf_check_tga, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ "wbmp", pixbuf_check_wbmp, NULL, NULL, NULL, NULL, NULL, NULL, NULL },
 	{ NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL }
 };

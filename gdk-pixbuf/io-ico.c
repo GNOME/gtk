@@ -147,7 +147,6 @@ struct ico_progressive_state {
 				   1  = 1 bit bitonal 
 				 */
 
-
 	struct headerpair Header;	/* Decoded (BE->CPU) header */
 	
 	gint			DIBoffset;
@@ -199,20 +198,21 @@ static void DecodeHeader(guchar *Data, gint Bytes,
  	gint I;
  
  	/* Step 1: The ICO header */
- 
+
  	IconCount = (Data[5] << 8) + (Data[4]);
 	
  	State->HeaderSize = 6 + IconCount*16;
 
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
- 		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
-		if (!State->HeaderBuf) {
+ 		guchar *tmp=g_try_realloc(State->HeaderBuf,State->HeaderSize);
+		if (!tmp) {
 			g_set_error (error,
 				     GDK_PIXBUF_ERROR,
 				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 				     _("Not enough memory to load icon"));
 			return;
 		}
+		State->HeaderBuf = tmp;
  		State->BytesInHeaderBuf = State->HeaderSize;
  	}
  	if (Bytes < State->HeaderSize)
@@ -261,14 +261,15 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	State->HeaderSize = State->DIBoffset + 40; /* 40 = sizeof(InfoHeader) */
 	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
- 		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
-		if (!State->HeaderBuf) {
+ 		guchar *tmp=g_try_realloc(State->HeaderBuf,State->HeaderSize);
+		if (!tmp) {
 			g_set_error (error,
 				     GDK_PIXBUF_ERROR,
 				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 				     _("Not enough memory to load icon"));
 			return;
 		}
+		State->HeaderBuf = tmp;
  		State->BytesInHeaderBuf = State->HeaderSize;
  	}
 	if (Bytes<State->HeaderSize) 
@@ -279,7 +280,6 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 #ifdef DUMPBIH
 	DumpBIH(BIH);
 #endif	
-	
 	/* Add the palette to the headersize */
 		
 	State->Header.width =
@@ -301,13 +301,11 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 			     _("Icon has zero height"));
 		return;
 	}
-	State->Header.depth = (BIH[15] << 8) + (BIH[14]);;
+	State->Header.depth = (BIH[15] << 8) + (BIH[14]);
 
 	State->Type = State->Header.depth;	
 	if (State->Lines>=State->Header.height)
 		State->Type = 1; /* The transparency mask is 1 bpp */
-	
-	
 	
 	/* Determine the  palette size. If the header indicates 0, it
 	   is actually the maximum for the bpp. You have to love the
@@ -324,14 +322,15 @@ static void DecodeHeader(guchar *Data, gint Bytes,
 	State->HeaderSize+=I;
 	
  	if (State->HeaderSize>State->BytesInHeaderBuf) {
- 		State->HeaderBuf=g_try_realloc(State->HeaderBuf,State->HeaderSize);
-		if (!State->HeaderBuf) {
+	        guchar *tmp=g_try_realloc(State->HeaderBuf,State->HeaderSize);
+		if (!tmp) {
 			g_set_error (error,
 				     GDK_PIXBUF_ERROR,
 				     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
 				     _("Not enough memory to load icon"));
 			return;
 		}
+		State->HeaderBuf = tmp;
  		State->BytesInHeaderBuf = State->HeaderSize;
  	}
  	if (Bytes < State->HeaderSize)
@@ -487,7 +486,7 @@ gboolean gdk_pixbuf__ico_image_stop_load(gpointer data,
          */
 
 	g_return_val_if_fail(context != NULL, TRUE);
-	
+
 	context_free (context);
         return TRUE;
 }
@@ -691,7 +690,7 @@ static void OneLineTransp(struct ico_progressive_state *context)
 		Bit = Bit & 1;
 		/* The joys of having a BGR byteorder */
 		Pixels[X * 4 + 3] = 255-Bit*255;
-#if 0		
+#if 0
 		if (Bit){
 		  Pixels[X*4+0] = 255;
 		  Pixels[X*4+1] = 255;
