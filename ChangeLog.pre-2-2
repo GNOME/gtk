@@ -1,5 +1,7 @@
 1998-12-15  Martin Baulig  <martin@home-of-linux.org>
 
+	* acinclude.m4: Make the gettext check for for libc5 systems.
+
 	* autogen.sh: Not running gettextize fails on a fresh CVS checkout
 	and we'll get a lot of bug reports tomorrow, so I add it back.
 

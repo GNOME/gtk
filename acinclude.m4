@@ -338,6 +338,13 @@ AC_DEFUN(AM_GTK_WITH_NLS,
 		INSTOBJEXT=.mo
 	      fi
 	    fi
+
+	    # Added by Martin Baulig 12/15/98 for libc5 systems
+	    if test "$gt_cv_func_gettext_libc" != "yes" \
+	       && test "$gt_cv_func_gettext_libintl" = "yes"; then
+	       INTLLIBS=-lintl
+	       LIBS=`echo $LIBS | sed -e 's/-lintl//'`
+	    fi
 	])
 
         if test "$CATOBJEXT" = "NONE"; then
