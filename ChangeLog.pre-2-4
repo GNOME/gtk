@@ -1,3 +1,23 @@
+Sun Mar  3 14:26:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] (_gtk_get_insertion_cursor_gc):
+	Centralize lookup and caching of cursor GC's here.
+
+	* gtk/gtkentry.[ch] gtk/gtktextview.[ch] gtk/gtktextdisplay.c
+	gtk/gtklabel.c: Move to using _gtk_get_insertion_cursor_gc().
+
+	* gtk/gtkentry.c (gtk_entry_expose): Draw cursors
+	under the text, not over the text.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): add
+	a secondary-cursor-color property.
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): Decrease
+	the default aspect ratio to 1/25 (0.04).
+	
+	* tests/testgtkrc (bell_duration): Comment out
+	cursor color setting.
+	
 Sun Mar  3 20:48:12 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (gtk_menu_set_submenu_navigation_region): change
@@ -25,16 +45,6 @@ Sun Mar  3 12:13:56 2002  Owen Taylor  <otaylor@redhat.com>
 	* configure.in: Fix typo where pangoxft was being
 	required instead of pangox. (Reported by Miles
 	Lane)
-
-Sun Mar  3 12:06:02 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkentry.c (gtk_entry_expose): Draw cursors
-	_under_ the text, not over.
-
-Sun Mar  3 11:26:20 2002  Owen Taylor  <otaylor@redhat.com>
-
-	* gtk/gtkwidget.c (gtk_widget_class_init): add
-	a secondary-cursor-color property.
 
 Sun Mar  3 11:12:16 2002  Owen Taylor  <otaylor@redhat.com>
 

@@ -3252,24 +3252,6 @@ changed_handler (GtkTextLayout     *layout,
 }
 
 static void
-gtk_text_view_realize_cursor_gc (GtkTextView *text_view)
-{
-  GdkColor *cursor_color;
-  GdkColor red = { 0, 0xffff, 0x0000, 0x0000 };
-  
-  if (text_view->cursor_gc)
-    gdk_gc_unref (text_view->cursor_gc);
-
-  gtk_widget_style_get (GTK_WIDGET (text_view), "cursor-color", &cursor_color, NULL);
-
-  if (!cursor_color)
-    cursor_color = &red;
-
-  text_view->cursor_gc = gdk_gc_new (text_view->text_window->bin_window);
-  gdk_gc_set_rgb_fg_color (text_view->cursor_gc, cursor_color);
-}
-
-static void
 gtk_text_view_realize (GtkWidget *widget)
 {
   GtkTextView *text_view;
@@ -3320,8 +3302,6 @@ gtk_text_view_realize (GtkWidget *widget)
     text_window_realize (text_view->bottom_window,
                          widget->window);
 
-  gtk_text_view_realize_cursor_gc (text_view);
-
   gtk_text_view_ensure_layout (text_view);
 
   if (text_view->buffer)
@@ -3349,12 +3329,6 @@ gtk_text_view_unrealize (GtkWidget *widget)
   if (text_view->buffer)
     gtk_text_buffer_remove_selection_clipboard (text_view->buffer,
 						gtk_clipboard_get (GDK_SELECTION_PRIMARY));
-
-  if (text_view->cursor_gc)
-    {
-      gdk_gc_unref (text_view->cursor_gc);
-      text_view->cursor_gc = NULL;
-    }
 
   gtk_text_view_remove_validate_idles (text_view);
 
@@ -3411,8 +3385,6 @@ gtk_text_view_style_set (GtkWidget *widget,
       if (text_view->bottom_window)
         gdk_window_set_background (text_view->bottom_window->bin_window,
                                    &widget->style->bg[GTK_WIDGET_STATE (widget)]);
-      
-      gtk_text_view_realize_cursor_gc (text_view);
     }
 
   if (text_view->layout && previous_style)
@@ -4060,7 +4032,7 @@ gtk_text_view_paint (GtkWidget      *widget,
   gtk_text_layout_draw (text_view->layout,
                         widget,
                         text_view->text_window->bin_window,
-			text_view->cursor_gc,
+			NULL,
                         text_view->xoffset,
                         text_view->yoffset,
                         area->x, area->y,

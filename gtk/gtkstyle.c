@@ -312,6 +312,7 @@ static void hls_to_rgb			(gdouble	 *h,
 					 gdouble	 *l,
 					 gdouble	 *s);
 
+static void style_unrealize_cursor_gcs (GtkStyle *style);
 
 /*
  * Data for default check and radio buttons
@@ -1774,6 +1775,8 @@ gtk_style_real_unrealize (GtkStyle *style)
   gdk_colormap_free_colors (style->colormap, style->text, 5);
   gdk_colormap_free_colors (style->colormap, style->base, 5);
   gdk_colormap_free_colors (style->colormap, style->text_aa, 5);
+
+  style_unrealize_cursor_gcs (style);
 }
 
 static void
@@ -5642,6 +5645,136 @@ gtk_style_set_font (GtkStyle *style,
     {
       pango_font_description_free (style->private_font_desc);
       style->private_font_desc = NULL;
+    }
+}
+
+typedef struct _CursorInfo CursorInfo;
+
+struct _CursorInfo
+{
+  GType for_type;
+  GdkGC *primary_gc;
+  GdkGC *secondary_gc;
+};
+
+static void
+style_unrealize_cursor_gcs (GtkStyle *style)
+{
+  CursorInfo *
+  
+  cursor_info = g_object_get_data (G_OBJECT (style), "gtk-style-cursor-info");
+  if (cursor_info)
+    {
+      if (cursor_info->primary_gc)
+	gtk_gc_release (cursor_info->primary_gc);
+
+      if (cursor_info->secondary_gc)
+	gtk_gc_release (cursor_info->secondary_gc);
+      
+      g_free (cursor_info);
+      g_object_set_data (G_OBJECT (style), "gtk-style-cursor-info", NULL);
+    }
+}
+
+static GdkGC *
+make_cursor_gc (GtkWidget   *widget,
+		const gchar *property_name,
+		GdkColor    *fallback)
+{
+  GdkGCValues gc_values;
+  GdkGCValuesMask gc_values_mask;
+  GdkColor *cursor_color;
+
+  gtk_widget_style_get (widget, property_name, &cursor_color, NULL);
+  
+  gc_values_mask = GDK_GC_FOREGROUND;
+  if (cursor_color)
+    {
+      gc_values.foreground = *cursor_color;
+      gdk_color_free (cursor_color);
+    }
+  else
+    gc_values.foreground = *fallback;
+  
+  gdk_rgb_find_color (widget->style->colormap, &gc_values.foreground);
+  return gtk_gc_get (widget->style->depth, widget->style->colormap, &gc_values, gc_values_mask);
+}
+
+/**
+ * _gtk_get_insertion_cursor_gc:
+ * @widget: a #GtkWidget
+ * @is_primary: if the cursor should be the primary cursor color.
+ * 
+ * Get a GC suitable for drawing the primary or secondary text
+ * cursor.
+ *
+ * Note: the return value is ref'ed because calls to this function
+ *  on other widgets could result in this the GC being released
+ *  which would be an unexpected side effect. If made public,
+ *  this function should possibly be called create_insertion_cursor_gc().
+ *
+ * Return value: an appropriate #GdkGC. Call g_object_unref() on
+ *   the gc when you are done with it; this GC may be shared with
+ *   other users, so you must not modify the GC except for temporarily
+ *   setting the clip before drawing with the GC, and then unsetting the clip
+ *   again afterwards.
+ **/
+GdkGC *
+_gtk_get_insertion_cursor_gc (GtkWidget *widget,
+			      gboolean   is_primary)
+{
+  CursorInfo *cursor_info;
+
+  cursor_info = g_object_get_data (G_OBJECT (widget->style), "gtk-style-cursor-info");
+  if (!cursor_info)
+    {
+      cursor_info = g_new (CursorInfo, 1);
+      g_object_set_data (G_OBJECT (widget->style), "gtk-style-cursor-info", cursor_info);
+      cursor_info->primary_gc = NULL;
+      cursor_info->secondary_gc = NULL;
+      cursor_info->for_type = G_TYPE_INVALID;
+    }
+
+  /* We have to keep track of the type because gtk_widget_style_get()
+   * can return different results when called on the same property and
+   * same style but for different widgets. :-(. That is,
+   * GtkEntry::cursor-color = "red" in a style will modify the cursor
+   * color for entries but not for text view.
+   */
+  if (cursor_info->for_type != G_OBJECT_TYPE (widget))
+    {
+      cursor_info->for_type = G_OBJECT_TYPE (widget);
+      if (cursor_info->primary_gc)
+	{
+	  gtk_gc_release (cursor_info->primary_gc);
+	  cursor_info->primary_gc = NULL;
+	}
+      if (cursor_info->secondary_gc)
+	{
+	  gtk_gc_release (cursor_info->secondary_gc);
+	  cursor_info->secondary_gc = NULL;
+	}
+    }
+
+  if (is_primary)
+    {
+      if (!cursor_info->primary_gc)
+	cursor_info->primary_gc = make_cursor_gc (widget,
+						  "cursor-color",
+						  &widget->style->black);
+	
+      return g_object_ref (cursor_info->primary_gc);
+    }
+  else
+    {
+      static GdkColor gray = { 0, 0x8888, 0x8888, 0x8888 };
+      
+      if (!cursor_info->secondary_gc)
+	cursor_info->secondary_gc = make_cursor_gc (widget,
+						    "secondary-cursor-color",
+						    &gray);
+	
+      return g_object_ref (cursor_info->secondary_gc);
     }
 }
 

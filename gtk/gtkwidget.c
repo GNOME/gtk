@@ -1079,10 +1079,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
+					   g_param_spec_boxed ("secondary-cursor-color",
+							       _("Secondary cursor color"),
+							       _("Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text."),
+							       GDK_TYPE_COLOR,
+							       G_PARAM_READABLE));
+  gtk_widget_class_install_style_property (klass,
                                            g_param_spec_float ("cursor-aspect-ratio",
                                                                _("Cursor line aspect ratio"),
                                                                _("Aspect ratio with which to draw insertion cursor"),
-                                                               0.0, 1.0, 0.033,
+                                                               0.0, 1.0, 0.04,
                                                                G_PARAM_READABLE));
 }
 

@@ -34,7 +34,7 @@ style "global-style-properties"
 #  xthickness = 20
   GtkButton::child_displacement_x = 1
   GtkButton::child_displacement_y = 1
-  GtkWidget::cursor_color = "#ff0000"
+#  GtkWidget::cursor_color = "#ff0000"
   GtkToolbar::space_size = 10
   GtkToolbar::space_style = line
   GtkToolbar::button_relief = none
