@@ -1,3 +1,7 @@
+Wed Jun 21 19:45:02 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* TODO.xml: Change 1.4 version numbers to 2.0.
+
 Wed Jun 21 19:29:08 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixbuf-render.c gdk/gdkpixbuf-drawable.c: Indentation

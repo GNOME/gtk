@@ -12,7 +12,7 @@
   <section>
     <title>GDK</title>
     
-    <entry size="medium" status="70%" target="1.4">
+    <entry size="medium" status="90%" target="2.0">
       <title>Add backing store support</title>
       <description>
 	<p>
@@ -39,7 +39,7 @@
       <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
     </entry>
 
-    <entry size="medium" status="70%" target="1.4">
+    <entry size="medium" status="90%" target="2.0">
       <title>32 Bit Coordinates</title>
       <description>
 	<p>
@@ -60,7 +60,7 @@
       <contact>Owen Taylor &lt;otaylor@redhat.com&gt;</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Customizable double-click timeout</title>
       <description>
 	<p>
@@ -73,7 +73,7 @@
       <bugs>#3958</bugs>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Make color handling more convenient</title>
       <description>
 	<p>
@@ -88,7 +88,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Cursors</title>
       <description>
 	<p>
@@ -105,7 +105,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="1.4">
+    <entry size="medium" status="0%" target="2.0">
       <title>Make GdkRGB work on any visual</title>
       <description>
 	<p>
@@ -123,7 +123,7 @@
   <section>
     <title>Internationalization</title>
     
-    <entry size="big" status="70%" target="1.4">
+    <entry size="big" status="85%" target="2.0">
       <title>Integrate Pango</title>
       <description>
 	<p>
@@ -136,7 +136,7 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="medium" status="80%" target="1.4">
+    <entry size="medium" status="90%" target="2.0">
       <title>Switch to using UTF-8</title>
       <description>
 	<p>
@@ -158,7 +158,7 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="40%" target="1.4">
+    <entry size="big" status="40%" target="2.0">
       <title>Rewrite Input Method Support</title>
       <description>
 	<p>
@@ -172,7 +172,7 @@
 	  set of callbacks that are invoked by the input methods.
 	</p>
 	<p>
-	  GTK+-1.4 will have a new system with loadable input method
+	  GTK+-2.0 will have a new system with loadable input method
 	  modules. These modules can either be implemented using XIM,
 	  or written from scratch.
 	</p>
@@ -184,7 +184,7 @@
   <section>
     <title>GTK+ Core</title>
 
-    <entry size="big" status="5%" target="1.4">
+    <entry size="big" status="60%" target="2.0">
       <title>GLib based object and type system</title>
       <description>
 	<p>
@@ -197,7 +197,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="1%" target="1.4">
+    <entry size="big" status="1%" target="2.0">
       <title>Overall callback improvements</title>
       <description>
 	<p>
@@ -213,7 +213,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="0%" target="1.4">
+    <entry size="big" status="0%" target="2.0">
       <title>State change notification</title>
       <description>
 	<p>
@@ -233,7 +233,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="5%" target="1.4">
+    <entry size="big" status="5%" target="2.0">
       <title>Widget as sensitivity/grab state machine</title>
       <description>
 	<p>
@@ -253,7 +253,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="0%" target="1.4">
+    <entry size="big" status="0%" target="2.0">
       <title>Allow argument customization</title>
       <description>
 	<p>
@@ -269,7 +269,7 @@
       </description>
     </entry>
 
-    <entry size="medium" status="0%" target="1.4">
+    <entry size="medium" status="0%" target="2.0">
       <title>Allow global customization</title>
       <description>
 	<p>
@@ -286,7 +286,7 @@
       </description>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Gtk+ Modules installation directory</title>
       <description>
 	<p>
@@ -301,7 +301,7 @@
     </entry>
 
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Convenient widget setup</title>
       <description>
 	<p>
@@ -322,7 +322,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="> 1.4">
+    <entry size="medium" status="0%" target="> 2.0">
       <title>Make selections/clipboard more convenient</title>
       <description>
 	<p>
@@ -334,7 +334,7 @@
     </entry>
 
 
-    <entry size="small" status="50%" target="1.4">
+    <entry size="small" status="50%" target="2.0">
       <title>Stock label/icon system</title>
       <description>
 	<p>
@@ -347,7 +347,7 @@
     </entry>
 
 
-    <entry size="big" status="0%" target="> 1.4">
+    <entry size="big" status="0%" target="> 2.0">
       <title>Session Management</title>
       <description>
 	<p>
@@ -359,14 +359,14 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="0%" target="> 1.4">
+    <entry size="big" status="0%" target="> 2.0">
       <title>Online help enhancements</title>
       <description>
 	<p>
           Look at a small "What's This" popup widget, 
           and a What's This system in general (this part 
-          could maybe be done for 1.4). A more difficult, probably 
-          a post-1.4 task, is to integrate a very simple little
+          could maybe be done for 2.0). A more difficult, probably 
+          a post-2.0 task, is to integrate a very simple little
           help browser gizmo into GTK.
 	</p>
       </description>
@@ -374,7 +374,7 @@
     </entry>
 
 
-    <entry size="medium" status="0%" target="1.4">
+    <entry size="medium" status="0%" target="2.0">
       <title>GUI-editable means of user configuration</title>
       <description>
 	<p>
@@ -390,7 +390,7 @@
   <section>
     <title>GTK+ Widgets</title>
 
-    <entry size="small" status="50%" target="1.4">
+    <entry size="small" status="100%" target="2.0">
       <title>Make GtkFrame use a label</title>
       <description>
 	<p>
@@ -405,7 +405,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="75%" target="1.4">
+    <entry size="big" status="90%" target="2.0">
       <title>Replace GtkText Widget</title>
       <description>
 	<p>
@@ -426,7 +426,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="20%" target="2.0">
       <title>Improve Radio/Checkbutton Look</title>
       <description>
 	<p>
@@ -441,7 +441,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="40%" target="2.0">
       <title>Improve Submenu Navigation</title>
       <description>
 	<p>
@@ -457,7 +457,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4 ?">
+    <entry size="small" status="0%" target="2.0 ?">
       <title>Improve Spinbutton Look</title>
       <description>
 	<p>
@@ -478,20 +478,20 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="90%" target="1.4">
+    <entry size="big" status="90%" target="2.0">
       <title>Supply horizontable/vertical wrapping boxes</title>
       <description>
 	<p>
 	  An often requested feature are wrapping containers, at this
 	  point, gimp's development version already uses such widgets:
-	  horizontable/vertical wrap boxes, that need to go into 1.4
+	  horizontable/vertical wrap boxes, that need to go into 2.0
 	  proper at some point.
 	</p>
       </description>
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="medium" status="90%" target="1.4">
+    <entry size="medium" status="90%" target="2.0">
       <title>Improved generic combo support</title>
       <description>
 	<p>
@@ -504,7 +504,7 @@
       <contact>Tim Janik &lt;timj@gtk.org&gt;</contact>
     </entry>
 
-    <entry size="big" status="0%" target="> 1.4">
+    <entry size="big" status="40%" target="2.0?">
       <title>Add unified set of List/Tree/Grid widgets</title>
       <description>
 	<p>
@@ -529,8 +529,8 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
-      <title>GtkPixbuf</title>
+    <entry size="small" status="0%" target="2.0">
+      <title>GtkImage</title>
       <description>
 	<p>
           gdk-pixbuf is moving to become a GTK+ dependency, a new image-display
@@ -540,7 +540,7 @@
       <contact>hp@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Attempt to fix GtkStatusbar</title>
       <description>
 	<p>
@@ -553,7 +553,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
     
-    <entry size="small" status="95%" target="1.4">
+    <entry size="small" status="95%" target="2.0">
       <title>Decruft GtkProgress, GtkProgressbar</title>
       <description>
         <p>UPDATE: this is done, just need to apply the patch.
@@ -571,7 +571,7 @@
       <contact>hp@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Entry validation hooks</title>
       <description>
 	<p>
@@ -586,7 +586,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="0%" target="> 1.4">
+    <entry size="big" status="0%" target="> 2.0">
       <title>pseudo-MDI Widget</title>
       <description>
 	<p>
@@ -607,7 +607,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="> 1.4">
+    <entry size="medium" status="0%" target="> 2.0">
       <title>Icon List Widget</title>
       <description>
 	<p>
@@ -618,7 +618,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="> 1.4">
+    <entry size="medium" status="0%" target="> 2.0">
       <title>Dock widget</title>
       <description>
 	<p>
@@ -631,7 +631,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="big" status="0%" target="> 1.4">
+    <entry size="big" status="0%" target="> 2.0">
       <title>Canvas widget</title>
       <description>
 	<p>
@@ -641,7 +641,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="1.4">
+    <entry size="medium" status="0%" target="2.0">
       <title>Menu scroll</title>
       <description>
 	<p>
@@ -652,7 +652,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="1.4">
+    <entry size="medium" status="20%" target="2.0">
       <title>Toolbar/menubar wrap</title>
       <description>
 	<p>
@@ -663,7 +663,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Blink cursor in GtkEntry</title>
       <description>
 	<p>
@@ -674,7 +674,7 @@
       <contact>otaylor@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="100%" target="1.4">
+    <entry size="small" status="100%" target="2.0">
       <title>Don't highlight first menu item when menus come up</title>
       <description>
 	<p>
@@ -684,7 +684,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="95%" target="1.4">
+    <entry size="small" status="100%" target="2.0">
       <title>Integrate new color selector</title>
       <description>
 	<p>
@@ -697,7 +697,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="1.4">
+    <entry size="medium" status="70%" target="2.0">
       <title>Write new font selector</title>
       <description>
 	<p>
@@ -710,7 +710,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Stack Widget</title>
       <description>
 	<p>
@@ -723,7 +723,7 @@
       <contact>gtk-devel-list@gnome.org, jrb@redhat.com</contact>
     </entry>
 
-    <entry size="small" status="0%" target="1.4">
+    <entry size="small" status="0%" target="2.0">
       <title>Clean up GtkNotebook</title>
       <description>
 	<p>
