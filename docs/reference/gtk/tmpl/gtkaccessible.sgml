@@ -1,0 +1,30 @@
+<!-- ##### SECTION Title ##### -->
+GtkAccessible
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkAccessible ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_accessible_connect_widget_destroyed ##### -->
+<para>
+
+</para>
+
+@accessible: 
+
+
