@@ -1370,7 +1370,7 @@ gdk_window_reparent (GdkWindow *window,
    * the root window
    */
   if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
-    new_parent = _gdk_parent_root;
+    new_parent = gdk_screen_get_root_window (GDK_WINDOW_SCREEN (window));
   
   window_private->parent = (GdkWindowObject *)new_parent;
 
@@ -1697,19 +1697,12 @@ gdk_wmspec_change_state (gboolean   add,
 			 GdkAtom    state2)
 {
   XEvent xev;
-  Atom op;
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   
 #define _NET_WM_STATE_REMOVE        0    /* remove/unset property */
 #define _NET_WM_STATE_ADD           1    /* add/set property */
 #define _NET_WM_STATE_TOGGLE        2    /* toggle property  */  
   
-  if (add)
-    op = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE_ADD");
-  else
-    op = gdk_x11_get_xatom_by_name_for_display (display, 
-						"_NET_WM_STATE_REMOVE");
-
   xev.xclient.type = ClientMessage;
   xev.xclient.serial = 0;
   xev.xclient.send_event = True;
@@ -2736,19 +2729,23 @@ static gboolean
 gdk_window_have_shape_ext (GdkDisplay *display)
 {
   enum { UNKNOWN, NO, YES };
-  static gint have_shape = UNKNOWN;
+  GdkDisplayImplX11 *display_impl;
   
-  if (have_shape == UNKNOWN)
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  display_impl = GDK_DISPLAY_IMPL_X11 (display);
+  
+  if (display_impl->have_shape == UNKNOWN)
     {
       int ignore;
-      if (XQueryExtension (GDK_DISPLAY_IMPL_X11 (display)->xdisplay,
-			   "SHAPE", &ignore, &ignore, &ignore))
-	have_shape = YES;
+      if (XQueryExtension (display_impl->xdisplay, "SHAPE", 
+			   &ignore, &ignore, &ignore))
+	display_impl->have_shape = YES;
       else
-	have_shape = NO;
+	display_impl->have_shape = NO;
     }
   
-  return (have_shape == YES);
+  return (display_impl->have_shape == YES);
 }
 
 #define WARN_SHAPE_TOO_BIG() g_warning ("GdkWindow is too large to allow the use of shape masks or shape regions.")

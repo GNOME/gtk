@@ -1972,8 +1972,9 @@ gdk_event_send_client_message_to_all_recurse (XEvent  *xev,
   GdkDisplay *display= 
     gdk_x11_display_manager_get_display (_gdk_display_manager,
 					 xev->xany.display);
-  _gdk_error_warnings = FALSE;
-  _gdk_error_code = 0;
+  
+  gdk_error_trap_push ();
+  
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid, 
 		      gdk_x11_get_xatom_by_name_for_display (display,
 							     "_NET_WM_STATE"),

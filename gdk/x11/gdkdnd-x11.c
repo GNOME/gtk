@@ -431,8 +431,7 @@ gdk_window_cache_new (GdkScreen *screen)
   result->old_event_mask = xwa.your_event_mask;
   XSelectInput (xdisplay, GDK_WINDOW_XWINDOW (root_window),
 		result->old_event_mask | SubstructureNotifyMask);
-  gdk_window_add_filter (gdk_screen_get_root_window (screen),
-			 gdk_window_cache_filter, result);
+  gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
 
   gdk_error_trap_push ();
 
@@ -650,7 +649,7 @@ print_target_list (GdkDisplay *display,
       g_message ("\t%s", name);
       g_free (name);
       targets = targets->next;
-  }
+    }
 }
 #endif /* G_ENABLE_DEBUG */
 

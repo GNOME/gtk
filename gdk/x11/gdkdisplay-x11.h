@@ -67,6 +67,7 @@ struct _GdkDisplayImplX11
 
   gboolean gdk_use_xshm;
   gboolean have_shm_pixmaps;
+  gint     have_shape;
   
   /* Information about current pointer and keyboard grabs held by this
    * client. If gdk_pointer_xgrab_window or gdk_keyboard_xgrab_window

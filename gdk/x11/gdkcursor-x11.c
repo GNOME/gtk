@@ -212,7 +212,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
 }
 
 Display *
-gdk_x11_cursor_get_xscreen (GdkCursor *cursor)
+gdk_x11_cursor_get_xdisplay (GdkCursor *cursor)
 {
   g_return_val_if_fail (cursor != NULL, NULL);
 

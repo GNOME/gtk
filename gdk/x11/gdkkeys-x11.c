@@ -940,13 +940,6 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
   g_return_val_if_fail (group < 4, FALSE);
   
-  if (!keymap)
-    {
-      keymap = gdk_keymap_get_for_display (gdk_get_default_display ());
-      g_warning ("multihead : reverting to default display keymap"
-		 "in gdk_keymap_translate_keyboard_state\n");
-    }
-
   keymap_x11 = GDK_KEYMAP_X11 (keymap);
 
   if (keyval)

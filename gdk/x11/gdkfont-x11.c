@@ -138,7 +138,7 @@ gdk_font_hash_remove (GdkFontType type,
   private->names = NULL;
 }
 
-GdkFont *
+static GdkFont *
 gdk_font_hash_lookup (GdkDisplay  *display, 
 		      GdkFontType  type, 
 		      const gchar *font_name)

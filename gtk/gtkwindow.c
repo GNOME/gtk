@@ -583,21 +583,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   add_arrow_bindings (binding_set, GDK_Down, GTK_DIR_DOWN);
   add_arrow_bindings (binding_set, GDK_Left, GTK_DIR_LEFT);
   add_arrow_bindings (binding_set, GDK_Right, GTK_DIR_RIGHT);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_LEFT);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Left, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_LEFT);  
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_RIGHT);
-  gtk_binding_entry_add_signal (binding_set, GDK_KP_Right, 0,
-                                "move_focus", 1,
-                                GTK_TYPE_DIRECTION_TYPE, GTK_DIR_RIGHT);  
-
+  
   add_tab_bindings (binding_set, 0, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);

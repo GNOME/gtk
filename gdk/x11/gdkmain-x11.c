@@ -1035,7 +1035,8 @@ gdk_send_xevent (Window window, gboolean propagate, glong event_mask,
 
   gdk_error_trap_push ();
     
-  result = XSendEvent (gdk_display, window, propagate, 
+  result = XSendEvent (GDK_DISPLAY_XDISPLAY (gdk_get_default_display ()),
+		       window, propagate, 
 		       event_mask, event_send);
   XSync (gdk_display, False);
   return result && gdk_error_trap_pop() == Success;
