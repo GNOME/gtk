@@ -1,3 +1,65 @@
+Sat Nov 20 15:13:51 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpango.[ch]: Add GdkPangoRenderer, a subclass of 
+	PangoRenderer targeting GDK drawables. Use to implement the old
+	gdk_draw_layout() and friends.
+
+	* gdk/gdkdraw.c gdk/gdkdrawable.h gdk/gdkwindow.c gdk/gdkpixmap.c:
+	Add gdk_draw_glyphs_transformed() gdk_draw_trapezoids() and
+	the corresponding members of GdkDrawableClass. Add a fallback
+	implementation of gdk_draw_trapezoids() in terms of pixbufs.
+
+	* gdk/gdkwindowing.h gdk/x11/gdkg-x11.h: Add 
+	_gdk_windowing_gc_get_foreground() to enable the fallback 
+	trapezoid implementation.
+
+	* gdk/x11/gdkdrawable-x11.c gdk/x11/gdkdisplay-x11.h: Implement 
+	draw_glyph_transformed,	draw_trapezoids.
+
+	* gdk/x11/gdkdrawable-x11.[ch]: Add 
+	_gdk_x11_drawable_draw_xtrapezoids, _gdk_x11_drawable_draw_xft_glyphs
+	for use of GdkX11Renderer.
+
+	* gdk/x11/gdkgc-x11.c gdk/x11/gdkprivate-x11.h: Implement
+	GDK_TILED, GDK_STIPPLED, GDK_OPAQUE_STIPPLED in the RENDER codepath.
+
+	* gdk/gdkpango-x11.c: Add GdkX11Renderer... a subclass of 
+	PangoXftRenderer that does tiles/stipples and fallback rendering
+	of trapezoids without the RENDER extension.
+
+	* gdk/gdkpango-x11.c gdk/x11/gdkscreen-x11.[ch] _gdk_x11_renderer_get:
+	Add _gdk_x11_renderer_get() to get a singleton GdkX11Renderer
+	for the screen.
+
+	* gdk/x11/gdkdrawable-x11.c (get_impl_drawable): Fix a None/NULL
+	confusion.
+
+	* gtk/gtklabel.[ch] gtk/gtk.symbols: Add gtk_label_set/get_angle(),
+	and an ::angle property.
+
+	* gtk/gtklabel.c: Remove #if 0'd dead code gtk_label_paint_word().
+
+	* gtk/gtktextdisplay.c: Switch to using a GtkTextRenderer subclass
+	of GdkPangoRenderer for drawing.
+
+	* gtk/gtktextlayout.[ch] gtk/gtktextdisplay.c: Switch to using
+	gtk_attr_shape_new_with_data() to store backreferences to 
+	embedded pixmaps and widgets. Leave line_display->shaped_objects
+	around for backwords compatibility.
+
+	* gdk/gdkpango.[ch] (gdk_pango_context_set_colormap): Describe
+	as deprecated, remove implementation.
+
+	* gtk/gtkwidget.c (gtk_widget_create_pango_context): Remove
+	call to gdk_pango_context_set_colormap.
+
+	* demos/gtk-demo/Makefile.am demos/gtk-demo/rotated_text.c: Add
+	a demo showing drawing rotated text.
+
+	* tests/testgtk.c: Add a rotated-label test, and also a rotated
+	drawing test (differs from demos/gtk-demo/rotated_text by also
+	using a tile)
+	
 2004-11-21  Sven Neumann  <sven@gimp.org>
 
 	* configure.in: talk about TIFF loader, not TIFF plug-in.
