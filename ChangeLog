@@ -1,3 +1,7 @@
+Wed Mar 15 02:59:38 PST 2000 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkvpaned.c: removed stray gutter_size reference, a 1.2 relic
+
 Mon Mar 13 18:37:55 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdnd.c: Fix a bunch of cases where XGetWindowProperty()

@@ -158,7 +158,6 @@ gtk_vpaned_size_allocate (GtkWidget     *widget,
   widget->allocation = *allocation;
   paned = GTK_PANED (widget);
   border_width = GTK_CONTAINER (widget)->border_width;
-  gutter_size = paned->gutter_size;
 
   if (paned->child1)
     gtk_widget_get_child_requisition (paned->child1, &child1_requisition);
