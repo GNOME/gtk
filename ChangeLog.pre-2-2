@@ -1,4 +1,10 @@
-2002-02-26            Vitaly Tishkov       <tvv@sparc.spb.su>
+Tue Feb 26 15:04:33 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_enter_text): use
+	the cursor position _after_ deleting the text
+	as the position to insert at. (#72717, Jan Mynarik)
+
+2002-02-26 Vitaly Tishkov <tvv@sparc.spb.su>
 
         * gtk/gtktreemodel.c
 	misprints in documentation for gtk_tree_row_reference_inserted() 

@@ -2280,7 +2280,7 @@ gtk_entry_enter_text (GtkEntry       *entry,
                       const gchar    *str)
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
-  gint tmp_pos = entry->current_pos;
+  gint tmp_pos;
 
   if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
     gtk_editable_delete_selection (editable);
@@ -2290,6 +2290,7 @@ gtk_entry_enter_text (GtkEntry       *entry,
         gtk_entry_delete_from_cursor (entry, GTK_DELETE_CHARS, 1);
     }
 
+  tmp_pos = entry->current_pos;
   gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
   gtk_editable_set_position (editable, tmp_pos);
 }
