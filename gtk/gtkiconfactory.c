@@ -486,7 +486,7 @@ get_default_icons (GtkIconFactory *factory)
 			   stock_add_24,
 			   stock_add_16,
 			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_JUSTIFY_CENTER);
+			   GTK_STOCK_ADD);
 
   add_sized_with_fallback (factory,
 			   stock_align_center_24,
@@ -660,7 +660,7 @@ get_default_icons (GtkIconFactory *factory)
 			   stock_remove_24,
 			   stock_remove_16,
 			   GTK_ICON_SIZE_MENU,
-			   GTK_STOCK_JUSTIFY_CENTER);
+			   GTK_STOCK_REMOVE);
 
   add_sized_with_fallback (factory,
 			   stock_refresh_24,
