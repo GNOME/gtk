@@ -1,3 +1,16 @@
+Fri Jul 23 00:00:47 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): backed out my recent
+	change that assured that a widget's allocated with and height are
+	always >1, since this breaks *buggy* panel code. unfortunately this
+	back-breaks the gimp's color selector.
+
+	* gtk/gtkdrawingarea.c (gtk_drawing_area_size_allocate): asure that our
+	allocation is always >0 in width and height, before sending the
+	configure event; this is a *gross* hack to get the gimp back to work.
+	
+	* maked both cases with TODO-1.3
+
 Wed Jul 21 15:47:39 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktext.c: Don't display wrap indicators when

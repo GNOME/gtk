@@ -140,6 +140,9 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
+  /* FIXME, TODO-1.3: back out the MAX() statements */
+  widget->allocation.width = MAX (1, widget->allocation.width);
+  widget->allocation.height = MAX (1, widget->allocation.height);
 
   if (GTK_WIDGET_REALIZED (widget))
     {
