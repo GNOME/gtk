@@ -1,3 +1,10 @@
+Mon Feb 12 20:37:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_try_colormap): Call gdk_colormap_sync() - 
+	fixes #50678.
+
+	* gdk/gdk.h: Add missing prototype for gdk_colormap_sync().
+
 Mon Feb 12 20:02:32 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c: Fix some cases of implicit casting between

@@ -239,6 +239,8 @@ gdk_rgb_try_colormap (gint nr, gint ng, gint nb)
   else
     cmap = gdk_colormap_get_system ();
 
+  gdk_colormap_sync (cmap, FALSE);
+  
   colors_needed = nr * ng * nb;
   for (i = 0; i < 256; i++)
     {

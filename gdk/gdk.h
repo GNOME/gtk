@@ -537,6 +537,8 @@ gint	     gdk_colormap_get_system_size (void);
 void         gdk_colormap_change          (GdkColormap    *colormap,
 					   gint		   ncolors);
 
+void         gdk_colormap_sync            (GdkColormap    *colormap,
+					   gboolean        force);
 gint         gdk_colormap_alloc_colors    (GdkColormap    *colormap,
 					   GdkColor       *colors,
 					   gint            ncolors,
