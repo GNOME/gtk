@@ -1971,7 +1971,7 @@ msgstr "하위 위젯의 세로 위치"
 #. can set it. Remember that some fonts only have capital letters.
 #: gtk/gtkfontsel.c:69
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcdefghijk ABCDEFGHIJK 가나다라마바사"
+msgstr "가나다라마바사 abcdef ABCDEF"
 
 #: gtk/gtkfontsel.c:205
 msgid "Font name"
