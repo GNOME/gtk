@@ -188,10 +188,6 @@ AC_ARG_ENABLE(shm,
               [AC_HELP_STRING([--enable-shm],
                               [support shared memory if available [default=yes]])],,
               [enable_shm="yes"])
-AC_ARG_ENABLE(ansi,
-              [AC_HELP_STRING([--enable-ansi],
-                              [turn on strict ansi [default=no]])],,
-              [enable_ansi=no])
 AC_ARG_ENABLE(xkb,
               [AC_HELP_STRING([--enable-xkb],
                               [support XKB [default=maybe]])],,

@@ -1,3 +1,7 @@
+2005-02-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* configure.in: Kill --enable-ansi  (#164394)
+
 2005-02-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkpathbar.c (gtk_path_bar_finalize): Stop scrolling 
