@@ -1978,7 +1978,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 /**
  * gtk_drag_begin:
  * @widget: the source widget.
- * @target_list: The targets (data formats) in which the
+ * @targets: The targets (data formats) in which the
  *    source can provide the data.
  * @actions: A bitmask of the allowed drag actions for this drag.
  * @button: The button the user clicked to start the drag.
@@ -1993,16 +1993,16 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  **/
 GdkDragContext *
 gtk_drag_begin (GtkWidget         *widget,
-		GtkTargetList     *target_list,
+		GtkTargetList     *targets,
 		GdkDragAction      actions,
 		gint               button,
 		GdkEvent          *event)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GTK_WIDGET_REALIZED (widget), NULL);
-  g_return_val_if_fail (target_list != NULL, NULL);
+  g_return_val_if_fail (targets != NULL, NULL);
 
-  return gtk_drag_begin_internal (widget, NULL, target_list,
+  return gtk_drag_begin_internal (widget, NULL, targets,
 				  actions, button, event);
 }
 
