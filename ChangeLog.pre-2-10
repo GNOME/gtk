@@ -1,3 +1,9 @@
+Mon Jun  2 18:58:54 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_size_allocate): Don't
+	map the event window if the notebook isn't mapped. (#113980,
+	Richard Reich)
+
 2003-06-02  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkprogress.c (gtk_progress_changed): added a missing cast.
