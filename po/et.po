@@ -6,6 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-02-27 04:18+0100\n"
 "PO-Revision-Date: 2004-02-27 11:10+0300\n"
 "Last-Translator: Priit Laes <amd@tt.ee>\n"
@@ -14,32 +15,34 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:147
-#: gdk-pixbuf/gdk-pixbuf-io.c:736
-#: gdk-pixbuf/gdk-pixbuf-io.c:869
-#: tests/testfilechooser.c:198
+#: gdk-pixbuf/gdk-pixbuf-animation.c:147 gdk-pixbuf/gdk-pixbuf-io.c:736
+#: gdk-pixbuf/gdk-pixbuf-io.c:869 tests/testfilechooser.c:198
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Faili '%s' avamine ebaõnnestus: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:158
-#: gdk-pixbuf/gdk-pixbuf-io.c:746
+#: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:746
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Pildifaili '%s' on tühi"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:198
-#: gdk-pixbuf/gdk-pixbuf-io.c:780
-#: gdk-pixbuf/gdk-pixbuf-io.c:906
-#: tests/testfilechooser.c:237
+#: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:780
+#: gdk-pixbuf/gdk-pixbuf-io.c:906 tests/testfilechooser.c:237
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Pildifaili '%s' laadimine ebaõnnestus tundmatul põhjusel, arvatavasti on fail rikutud"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr ""
+"Pildifaili '%s' laadimine ebaõnnestus tundmatul põhjusel, arvatavasti on "
+"fail rikutud"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
-msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
-msgstr "Animatsiooni '%s' laadimine ebaõnnestus tundmatul põhjusel, arvatavasti on fail rikutud"
+msgid ""
+"Failed to load animation '%s': reason not known, probably a corrupt "
+"animation file"
+msgstr ""
+"Animatsiooni '%s' laadimine ebaõnnestus tundmatul põhjusel, arvatavasti on "
+"fail rikutud"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:382
 #, c-format
@@ -48,11 +51,14 @@ msgstr "Ei saa piltide laadimise moodulit laadida: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:397
 #, c-format
-msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
-msgstr "Pildilaadimis moodul '%s' ei väljasta korralikku liidest; võibolla on tegemist erinevate GTK versioonidega?"
+msgid ""
+"Image-loading module %s does not export the proper interface; perhaps it's "
+"from a different GTK version?"
+msgstr ""
+"Pildilaadimis moodul '%s' ei väljasta korralikku liidest; võibolla on "
+"tegemist erinevate GTK versioonidega?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
-#: gdk-pixbuf/gdk-pixbuf-io.c:592
+#: gdk-pixbuf/gdk-pixbuf-io.c:544 gdk-pixbuf/gdk-pixbuf-io.c:592
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "'%s' pilditüüp ei ole toetatud"
@@ -76,8 +82,7 @@ msgstr "Pildi '%s' laadimine ebaõnnestus> %s"
 msgid "Error writing to image file: %s"
 msgstr "Viga pildifaili kirjutamisel: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1138
-#: gdk-pixbuf/gdk-pixbuf-io.c:1254
+#: gdk-pixbuf/gdk-pixbuf-io.c:1138 gdk-pixbuf/gdk-pixbuf-io.c:1254
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
@@ -101,11 +106,12 @@ msgstr "'%s' avamine kirjutamiseks ebaõnnestus: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1399
 #, c-format
-msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+msgid ""
+"Failed to close '%s' while writing image, all data may not have been saved: %"
+"s"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:1585
-#: gdk-pixbuf/gdk-pixbuf-io.c:1635
+#: gdk-pixbuf/gdk-pixbuf-io.c:1585 gdk-pixbuf/gdk-pixbuf-io.c:1635
 msgid "Insufficient memory to save image into a buffer"
 msgstr ""
 
@@ -114,10 +120,11 @@ msgstr ""
 msgid "Incremental loading of image type '%s' is not supported"
 msgstr ""
 
-#: gdk-pixbuf/gdk-pixbuf-loader.c:401
-#: gdk-pixbuf/gdk-pixbuf-loader.c:503
+#: gdk-pixbuf/gdk-pixbuf-loader.c:401 gdk-pixbuf/gdk-pixbuf-loader.c:503
 #, c-format
-msgid "Internal error: Image loader module '%s' failed to begin loading an image, but didn't give a reason for the failure"
+msgid ""
+"Internal error: Image loader module '%s' failed to begin loading an image, "
+"but didn't give a reason for the failure"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixdata.c:145
@@ -128,14 +135,18 @@ msgstr "Pildi päis on rikutud"
 msgid "Image format unknown"
 msgstr "Pildi formaat on tundmatu"
 
-#: gdk-pixbuf/gdk-pixdata.c:155
-#: gdk-pixbuf/gdk-pixdata.c:458
+#: gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:458
 msgid "Image pixel data corrupt"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixdata.c:402
-#: gdk-pixbuf/io-ani.c:244
 #, c-format
+msgid "failed to allocate image buffer of %u byte"
+msgid_plural "failed to allocate image buffer of %u bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: gdk-pixbuf/io-ani.c:244
 msgid "Unexpected icon chunk in animation"
 msgstr ""
 
@@ -143,23 +154,16 @@ msgstr ""
 msgid "Unsupported animation type"
 msgstr "Animatsioonitüüp ei ole toetatud"
 
-#: gdk-pixbuf/io-ani.c:348
-#: gdk-pixbuf/io-ani.c:538
+#: gdk-pixbuf/io-ani.c:348 gdk-pixbuf/io-ani.c:538
 msgid "Invalid header in animation"
 msgstr "Vigane päis animatsioonis"
 
-#: gdk-pixbuf/io-ani.c:358
-#: gdk-pixbuf/io-ani.c:382
-#: gdk-pixbuf/io-ani.c:441
-#: gdk-pixbuf/io-ani.c:460
-#: gdk-pixbuf/io-ani.c:511
-#: gdk-pixbuf/io-ani.c:583
+#: gdk-pixbuf/io-ani.c:358 gdk-pixbuf/io-ani.c:382 gdk-pixbuf/io-ani.c:441
+#: gdk-pixbuf/io-ani.c:460 gdk-pixbuf/io-ani.c:511 gdk-pixbuf/io-ani.c:583
 msgid "Not enough memory to load animation"
 msgstr "Animatsiooni laadimiseks ei ole piisavalt mälu"
 
-#: gdk-pixbuf/io-ani.c:400
-#: gdk-pixbuf/io-ani.c:417
-#: gdk-pixbuf/io-ani.c:428
+#: gdk-pixbuf/io-ani.c:400 gdk-pixbuf/io-ani.c:417 gdk-pixbuf/io-ani.c:428
 msgid "Malformed chunk in animation"
 msgstr ""
 
@@ -167,8 +171,7 @@ msgstr ""
 msgid "The ANI image format"
 msgstr "ANI pildiformaat"
 
-#: gdk-pixbuf/io-bmp.c:225
-#: gdk-pixbuf/io-bmp.c:370
+#: gdk-pixbuf/io-bmp.c:225 gdk-pixbuf/io-bmp.c:370
 msgid "Not enough memory to load bitmap image"
 msgstr ""
 
@@ -176,9 +179,7 @@ msgstr ""
 msgid "BMP image has unsupported header size"
 msgstr ""
 
-#: gdk-pixbuf/io-bmp.c:282
-#: gdk-pixbuf/io-bmp.c:307
-#: gdk-pixbuf/io-bmp.c:330
+#: gdk-pixbuf/io-bmp.c:282 gdk-pixbuf/io-bmp.c:307 gdk-pixbuf/io-bmp.c:330
 #: gdk-pixbuf/io-bmp.c:401
 msgid "BMP image has bogus header data"
 msgstr ""
@@ -192,9 +193,7 @@ msgstr "BMP pildiformaat"
 msgid "Failure reading GIF: %s"
 msgstr "Viga GIF faili lugemisel: %s"
 
-#: gdk-pixbuf/io-gif.c:492
-#: gdk-pixbuf/io-gif.c:1442
-#: gdk-pixbuf/io-gif.c:1603
+#: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 msgstr ""
 
@@ -219,9 +218,7 @@ msgstr ""
 msgid "Circular table entry in GIF file"
 msgstr ""
 
-#: gdk-pixbuf/io-gif.c:869
-#: gdk-pixbuf/io-gif.c:1430
-#: gdk-pixbuf/io-gif.c:1476
+#: gdk-pixbuf/io-gif.c:869 gdk-pixbuf/io-gif.c:1430 gdk-pixbuf/io-gif.c:1476
 #: gdk-pixbuf/io-gif.c:1591
 msgid "Not enough memory to load GIF file"
 msgstr "GIF faili laadimiseks ei ole piisavalt mälu"
@@ -240,7 +237,9 @@ msgid "Version %s of the GIF file format is not supported"
 msgstr "GIF failiformaadi %s versioon ei ole toetatud"
 
 #: gdk-pixbuf/io-gif.c:1266
-msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
+msgid ""
+"GIF image has no global colormap, and a frame inside it has no local "
+"colormap."
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1498
@@ -251,11 +250,8 @@ msgstr ""
 msgid "The GIF image format"
 msgstr "GIF failiformaat"
 
-#: gdk-pixbuf/io-ico.c:219
-#: gdk-pixbuf/io-ico.c:271
-#: gdk-pixbuf/io-ico.c:332
-#: gdk-pixbuf/io-ico.c:395
-#: gdk-pixbuf/io-ico.c:425
+#: gdk-pixbuf/io-ico.c:219 gdk-pixbuf/io-ico.c:271 gdk-pixbuf/io-ico.c:332
+#: gdk-pixbuf/io-ico.c:395 gdk-pixbuf/io-ico.c:425
 msgid "Not enough memory to load icon"
 msgstr "Ikooni laadimiseks ei ole piisavalt mälu"
 
@@ -306,31 +302,39 @@ msgid "Error interpreting JPEG image file (%s)"
 msgstr "Viga JPEG pildifaili (%s) tõlgendamisel"
 
 #: gdk-pixbuf/io-jpeg.c:349
-msgid "Insufficient memory to load image, try exiting some applications to free memory"
-msgstr "Ebapiisav mälu pildifaili laadimiseks, proovi sulgeda mõningaid rakendusi, et mälu vabastada"
+msgid ""
+"Insufficient memory to load image, try exiting some applications to free "
+"memory"
+msgstr ""
+"Ebapiisav mälu pildifaili laadimiseks, proovi sulgeda mõningaid rakendusi, "
+"et mälu vabastada"
 
-#: gdk-pixbuf/io-jpeg.c:383
-#: gdk-pixbuf/io-jpeg.c:749
+#: gdk-pixbuf/io-jpeg.c:383 gdk-pixbuf/io-jpeg.c:749
 #, c-format
 msgid "Unsupported JPEG color space (%s)"
 msgstr ""
 
-#: gdk-pixbuf/io-jpeg.c:481
-#: gdk-pixbuf/io-jpeg.c:678
-#: gdk-pixbuf/io-jpeg.c:941
+#: gdk-pixbuf/io-jpeg.c:481 gdk-pixbuf/io-jpeg.c:678 gdk-pixbuf/io-jpeg.c:941
 #: gdk-pixbuf/io-jpeg.c:950
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:893
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
-msgstr "JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s'ei ole võimalik analüüsida."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%s' could not be "
+"parsed."
+msgstr ""
+"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtust '%s'ei ole "
+"võimalik analüüsida."
 
 #: gdk-pixbuf/io-jpeg.c:908
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr "JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' ei ole lubatud."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr ""
+"JPEG kvaliteedi väärtus peab olema 0 ja 100 vahel; väärtus '%d' ei ole "
+"lubatud."
 
 #: gdk-pixbuf/io-jpeg.c:1069
 msgid "The JPEG image format"
@@ -340,8 +344,7 @@ msgstr "JPEG pildiformaat"
 msgid "Couldn't allocate memory for header"
 msgstr ""
 
-#: gdk-pixbuf/io-pcx.c:205
-#: gdk-pixbuf/io-pcx.c:565
+#: gdk-pixbuf/io-pcx.c:205 gdk-pixbuf/io-pcx.c:565
 msgid "Couldn't allocate memory for context buffer"
 msgstr ""
 
@@ -349,13 +352,11 @@ msgstr ""
 msgid "Image has invalid width and/or height"
 msgstr "Pildil on vigane laius ja/või kõrgus"
 
-#: gdk-pixbuf/io-pcx.c:618
-#: gdk-pixbuf/io-pcx.c:679
+#: gdk-pixbuf/io-pcx.c:618 gdk-pixbuf/io-pcx.c:679
 msgid "Image has unsupported bpp"
 msgstr ""
 
-#: gdk-pixbuf/io-pcx.c:623
-#: gdk-pixbuf/io-pcx.c:631
+#: gdk-pixbuf/io-pcx.c:623 gdk-pixbuf/io-pcx.c:631
 #, c-format
 msgid "Image has unsupported number of %d-bit planes"
 msgstr ""
@@ -415,7 +416,9 @@ msgstr "Ebapiisav mälu PNG faili laadimiseks"
 
 #: gdk-pixbuf/io-png.c:618
 #, c-format
-msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
+msgid ""
+"Insufficient memory to store a %ld by %ld image; try exiting some "
+"applications to reduce memory usage"
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:669
@@ -428,7 +431,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Saatuslik viga PNG pildifaili lugemisel: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:821
@@ -437,7 +441,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-png.c:854
 #, c-format
-msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+msgid ""
+"Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:994
@@ -476,14 +481,11 @@ msgstr ""
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:435
-#: gdk-pixbuf/io-pnm.c:463
-#: gdk-pixbuf/io-pnm.c:495
+#: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:555
-#: gdk-pixbuf/io-pnm.c:597
+#: gdk-pixbuf/io-pnm.c:555 gdk-pixbuf/io-pnm.c:597
 msgid "PNM image format is invalid"
 msgstr "PNM pildiformaat on vigane"
 
@@ -495,8 +497,7 @@ msgstr ""
 msgid "Premature end-of-file encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:743
-#: gdk-pixbuf/io-pnm.c:974
+#: gdk-pixbuf/io-pnm.c:743 gdk-pixbuf/io-pnm.c:974
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
@@ -532,8 +533,7 @@ msgstr ""
 msgid "unsupported RAS image variation"
 msgstr ""
 
-#: gdk-pixbuf/io-ras.c:171
-#: gdk-pixbuf/io-ras.c:200
+#: gdk-pixbuf/io-ras.c:171 gdk-pixbuf/io-ras.c:200
 msgid "Not enough memory to load RAS image"
 msgstr "Ebapiisav mälu RAS pildi laadimiseks"
 
@@ -581,11 +581,8 @@ msgstr ""
 msgid "TGA image has invalid dimensions"
 msgstr "TGA pildil on vigane suurus"
 
-#: gdk-pixbuf/io-tga.c:777
-#: gdk-pixbuf/io-tga.c:786
-#: gdk-pixbuf/io-tga.c:796
-#: gdk-pixbuf/io-tga.c:806
-#: gdk-pixbuf/io-tga.c:813
+#: gdk-pixbuf/io-tga.c:777 gdk-pixbuf/io-tga.c:786 gdk-pixbuf/io-tga.c:796
+#: gdk-pixbuf/io-tga.c:806 gdk-pixbuf/io-tga.c:813
 msgid "TGA image type not supported"
 msgstr "TGA pilditüüp ei ole toetatud"
 
@@ -614,14 +611,11 @@ msgstr "Ei suuda saada pildi kõrgust (vigane TIFF fail)"
 msgid "Width or height of TIFF image is zero"
 msgstr "TIFF pildi laius või kõrgus on null"
 
-#: gdk-pixbuf/io-tiff.c:216
-#: gdk-pixbuf/io-tiff.c:225
+#: gdk-pixbuf/io-tiff.c:216 gdk-pixbuf/io-tiff.c:225
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF pildi mõõtmed on liiga suured"
 
-#: gdk-pixbuf/io-tiff.c:244
-#: gdk-pixbuf/io-tiff.c:256
-#: gdk-pixbuf/io-tiff.c:564
+#: gdk-pixbuf/io-tiff.c:244 gdk-pixbuf/io-tiff.c:256 gdk-pixbuf/io-tiff.c:564
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ebapiisav mälu TIFF faili avamiseks"
 
@@ -641,8 +635,7 @@ msgstr "TIFF faili avamine ebaõnnestus"
 msgid "TIFFClose operation failed"
 msgstr "TIFFSulgemisoperatsioon nurjus"
 
-#: gdk-pixbuf/io-tiff.c:494
-#: gdk-pixbuf/io-tiff.c:507
+#: gdk-pixbuf/io-tiff.c:494 gdk-pixbuf/io-tiff.c:507
 msgid "Failed to load TIFF image"
 msgstr "TIFF faili laadimine ebaõnnestus"
 
@@ -770,8 +763,7 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
-#: gtk/gtkcolorbutton.c:219
-#: gtk/gtkcolorbutton.c:573
+#: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
 msgstr "Vali värv"
 
@@ -780,11 +772,16 @@ msgid "Received invalid color data\n"
 msgstr ""
 
 #: gtk/gtkcolorsel.c:561
-msgid "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as current by dragging it to the other color swatch alongside."
+msgid ""
+"The previously-selected color, for comparison to the color you're selecting "
+"now. You can drag this color to a palette entry, or select this color as "
+"current by dragging it to the other color swatch alongside."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:566
-msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
+msgid ""
+"The color you've chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:927
@@ -792,15 +789,23 @@ msgid "_Save color here"
 msgstr "_Salvesta värv siia"
 
 #: gtk/gtkcolorsel.c:1132
-msgid "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here.\""
+msgid ""
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1839
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, vali värvi heledus või tumedus."
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, "
+"vali värvi heledus või tumedus."
 
 #: gtk/gtkcolorsel.c:1864
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1873
@@ -855,8 +860,7 @@ msgstr "Sinise valguse kogus värvis."
 msgid "_Opacity:"
 msgstr "Kat_vus:"
 
-#: gtk/gtkcolorsel.c:1896
-#: gtk/gtkcolorsel.c:1907
+#: gtk/gtkcolorsel.c:1896 gtk/gtkcolorsel.c:1907
 msgid "Transparency of the color."
 msgstr "Värvi läbipaistvus."
 
@@ -865,8 +869,12 @@ msgid "Color _Name:"
 msgstr "Värvi _nimi:"
 
 #: gtk/gtkcolorsel.c:1929
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgstr "Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või värvi inglisekeelse nimetuse (näiteks 'orange')."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as 'orange' in this entry."
+msgstr ""
+"Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
+"värvi inglisekeelse nimetuse (näiteks 'orange')."
 
 #: gtk/gtkcolorsel.c:1948
 msgid "_Palette"
@@ -876,25 +884,20 @@ msgstr "Pa_lett"
 msgid "Color Selection"
 msgstr "Värvi valik"
 
-#: gtk/gtkentry.c:4074
-#: gtk/gtktextview.c:6875
+#: gtk/gtkentry.c:4074 gtk/gtktextview.c:6875
 msgid "Select _All"
 msgstr "Vali k_õik"
 
-#: gtk/gtkentry.c:4084
-#: gtk/gtktextview.c:6885
+#: gtk/gtkentry.c:4084 gtk/gtktextview.c:6885
 msgid "Input _Methods"
 msgstr "Sisestus_meetodid"
 
-#: gtk/gtkentry.c:4094
-#: gtk/gtktextview.c:6896
+#: gtk/gtkentry.c:4094 gtk/gtktextview.c:6896
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
 
-#: gtk/gtkfilechooser.c:1405
-#: gtk/gtkfilechooser.c:1449
-#: gtk/gtkfilechooser.c:1524
-#: gtk/gtkfilechooser.c:1568
+#: gtk/gtkfilechooser.c:1405 gtk/gtkfilechooser.c:1449
+#: gtk/gtkfilechooser.c:1524 gtk/gtkfilechooser.c:1568
 #, c-format
 msgid "Invalid filename: %s"
 msgstr "Vigane failinimi: %s"
@@ -913,8 +916,7 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:580
-#: gtk/gtkfilechooserdefault.c:3600
+#: gtk/gtkfilechooserdefault.c:580 gtk/gtkfilechooserdefault.c:3600
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -938,8 +940,7 @@ msgstr ""
 "Ei suuda luua kataloogi %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1134
-#: gtk/gtkfilechooserdefault.c:1662
+#: gtk/gtkfilechooserdefault.c:1134 gtk/gtkfilechooserdefault.c:1662
 msgid "File name"
 msgstr "Faili nimi"
 
@@ -967,13 +968,11 @@ msgstr "Kataloog"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:1603
-#: gtk/gtkstock.c:275
+#: gtk/gtkfilechooserdefault.c:1603 gtk/gtkstock.c:275
 msgid "_Add"
 msgstr "_Lisa"
 
-#: gtk/gtkfilechooserdefault.c:1613
-#: gtk/gtkstock.c:323
+#: gtk/gtkfilechooserdefault.c:1613 gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_Eemalda"
 
@@ -986,6 +985,7 @@ msgid "Modified"
 msgstr "Muudetud"
 
 #  Create Folder
+#. Create Folder
 #: gtk/gtkfilechooserdefault.c:1746
 msgid "Create _Folder"
 msgstr "Uus _kataloog"
@@ -996,11 +996,13 @@ msgid "Preview"
 msgstr "Eelvaade"
 
 #  Name entry
+#. Name entry
 #: gtk/gtkfilechooserdefault.c:1815
 msgid "_Name:"
 msgstr "_Nimi:"
 
 #  Folder combo
+#. Folder combo
 #: gtk/gtkfilechooserdefault.c:1834
 msgid "Save in _Folder:"
 msgstr "Salvesta _kataloogi:"
@@ -1019,6 +1021,12 @@ msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
 
 #: gtk/gtkfilechooserdefault.c:3455
+#, c-format
+msgid "%d byte"
+msgid_plural "%d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
 #: gtk/gtkfilechooserdefault.c:3457
 #, c-format
 msgid "%.1f K"
@@ -1086,8 +1094,7 @@ msgstr "Failid"
 msgid "_Files"
 msgstr "_Failid"
 
-#: gtk/gtkfilesel.c:853
-#: gtk/gtkfilesel.c:2243
+#: gtk/gtkfilesel.c:853 gtk/gtkfilesel.c:2243
 #, c-format
 msgid "Folder unreadable: %s"
 msgstr "Kataloog on loetamatu: %s"
@@ -1095,10 +1102,12 @@ msgstr "Kataloog on loetamatu: %s"
 #: gtk/gtkfilesel.c:984
 #, c-format
 msgid ""
-"The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
+"The file \"%s\" resides on another machine (called %s) and may not be "
+"available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
-"Fail \"%s\" asub teises arvutis (mille nimi on %s) ning ei pruugi seetõttu sellele programmile kättesaadav olla.\n"
+"Fail \"%s\" asub teises arvutis (mille nimi on %s) ning ei pruugi seetõttu "
+"sellele programmile kättesaadav olla.\n"
 "Kas sa tahad kindlasti seda faili valida?"
 
 #: gtk/gtkfilesel.c:1115
@@ -1115,7 +1124,8 @@ msgstr "_Nimeta ümber"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Kataloogi \"%s\" nimi sisaldab failinimedes keelatud märke"
 
 #: gtk/gtkfilesel.c:1441
@@ -1127,8 +1137,7 @@ msgstr ""
 "Viga kataloogi \"%s\" loomisel: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1442
-#: gtk/gtkfilesel.c:1678
+#: gtk/gtkfilesel.c:1442 gtk/gtkfilesel.c:1678
 msgid "You probably used symbols not allowed in filenames."
 msgstr "Tõenäoliselt kasutasid sa failinimedes keelatud märke."
 
@@ -1163,8 +1172,7 @@ msgstr ""
 "Viga faili \"%s\" kustutamisel: %s\n"
 "%s"
 
-#: gtk/gtkfilesel.c:1571
-#: gtk/gtkfilesel.c:1692
+#: gtk/gtkfilesel.c:1571 gtk/gtkfilesel.c:1692
 msgid "It probably contains symbols not allowed in filenames."
 msgstr "Tõenäoliselt sisaldab see failinimedes keelatud märke."
 
@@ -1182,8 +1190,7 @@ msgstr "Kas kindlasti kustutadata fail \"%s\"?"
 msgid "Delete File"
 msgstr "Kustuta fail"
 
-#: gtk/gtkfilesel.c:1674
-#: gtk/gtkfilesel.c:1688
+#: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Failinimi \"%s\" sisaldab failinimedes keelatud märke"
@@ -1230,8 +1237,12 @@ msgstr "_Valik: "
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
-msgid "The filename \"%s\" couldn't be converted to UTF-8 (try setting the environment variable G_BROKEN_FILENAMES): %s"
-msgstr "Failinime \"%s\" ei saa UTF-8sse ümber kodeerida (proovi keskkonnamuutuja G_BROKEN_FILENAMES seadmist): %s"
+msgid ""
+"The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
+"environment variable G_BROKEN_FILENAMES): %s"
+msgstr ""
+"Failinime \"%s\" ei saa UTF-8sse ümber kodeerida (proovi keskkonnamuutuja "
+"G_BROKEN_FILENAMES seadmist): %s"
 
 #: gtk/gtkfilesel.c:3142
 msgid "Invalid UTF-8"
@@ -1249,14 +1260,12 @@ msgstr "Ei saa failinime ümber kodeerida"
 msgid "(Empty)"
 msgstr "(tühi)"
 
-#: gtk/gtkfilesystemunix.c:382
-#: gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:382 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "viga kataloogi '%s' loomisel: %s"
 
-#: gtk/gtkfilesystemunix.c:443
-#: gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:443 gtk/gtkfilesystemwin32.c:414
 #, fuzzy
 msgid "This file system does not support mounting"
 msgstr "See failisüsteem ei toeta "
@@ -1265,15 +1274,13 @@ msgstr "See failisüsteem ei toeta "
 msgid "Filesystem"
 msgstr "Failisüsteem"
 
-#: gtk/gtkfilesystemunix.c:470
-#: gtk/gtkfilesystemunix.c:1354
+#: gtk/gtkfilesystemunix.c:470 gtk/gtkfilesystemunix.c:1354
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "viga informatsiooni saamisel '%s' jaoks: %s"
 
-#: gtk/gtkfilesystemunix.c:1056
-#: gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1056 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Järjehoidja salvestamine ebaõnnestus (%s)"
@@ -1282,8 +1289,7 @@ msgstr "Järjehoidja salvestamine ebaõnnestus (%s)"
 msgid "This file system does not support icons for everything"
 msgstr ""
 
-#: gtk/gtkfontbutton.c:177
-#: gtk/gtkfontbutton.c:294
+#: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
 msgstr "Vali kirjatüüp"
 
@@ -1427,8 +1433,7 @@ msgstr "Ratas"
 msgid "none"
 msgstr "ei ole"
 
-#: gtk/gtkinputdialog.c:641
-#: gtk/gtkinputdialog.c:677
+#: gtk/gtkinputdialog.c:641 gtk/gtkinputdialog.c:677
 msgid "(disabled)"
 msgstr "(välja lülitatud)"
 
@@ -1458,8 +1463,7 @@ msgstr "Sisestusmeetodid"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtknotebook.c:2679
-#: gtk/gtknotebook.c:5072
+#: gtk/gtknotebook.c:2679 gtk/gtknotebook.c:5072
 #, c-format
 msgid "Page %u"
 msgstr "Lehekülg %u"
@@ -1477,8 +1481,7 @@ msgstr ""
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:3033
-#: gtk/gtkrc.c:3036
+#: gtk/gtkrc.c:3033 gtk/gtkrc.c:3036
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
@@ -1889,4 +1892,3 @@ msgstr "X Sisestusmeetod"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr ""
-
