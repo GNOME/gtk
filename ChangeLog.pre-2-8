@@ -1,3 +1,8 @@
+Fri Jul 30 02:21:41 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Fix the positioning of the popup. 
+
 Fri Jul 30 00:56:31 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_active_changed): 

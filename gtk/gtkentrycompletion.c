@@ -1267,6 +1267,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gint monitor_num;
   GdkRectangle monitor;
   GtkRequisition popup_req;
+  GtkRequisition entry_req;
   GtkTreePath *path;
   gboolean above;
   gint width;
@@ -1318,15 +1319,16 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     gtk_widget_hide (completion->priv->action_view);
 
   gtk_widget_size_request (completion->priv->popup_window, &popup_req);
+  gtk_widget_size_request (completion->priv->entry, &entry_req);
   
   if (x < monitor.x)
     x = monitor.x;
   else if (x + popup_req.width > monitor.x + monitor.width)
     x = monitor.x + monitor.width - popup_req.width;
   
-  if (y + height + popup_req.height <= monitor.y + monitor.height)
+  if (y + entry_req.height + popup_req.height <= monitor.y + monitor.height)
     {
-      y += height;
+      y += entry_req.height;
       above = FALSE;
     }
   else
