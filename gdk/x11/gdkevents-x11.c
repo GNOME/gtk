@@ -1390,6 +1390,11 @@ gdk_event_translate (GdkEvent *event,
 	      gdk_x11_get_virtual_atom (dpy, xevent->xselectionrequest.target);
       event->selection.property =
 	      gdk_x11_get_virtual_atom (dpy, xevent->xselectionrequest.property);
+      g_print ("x selection %ld %s, virtual_selection %ld %s\n",
+	       xevent->xselectionrequest.property, 
+	       XGetAtomName (dpy_impl->xdisplay, xevent->xselectionrequest.property),
+	       event->selection.property,
+	       g_quark_to_string (event->selection.property));
       event->selection.requestor = xevent->xselectionrequest.requestor;
       event->selection.time = xevent->xselectionrequest.time;
       

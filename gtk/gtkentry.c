@@ -1966,9 +1966,9 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get_for_display (gtk_widget_get_display(entry), GDK_NONE),
-
-		      str, -1);
+      gtk_clipboard_set_text (gtk_clipboard_get_for_display (gtk_widget_get_display(entry),
+							     GDK_NONE),
+			      str, -1);
       g_free (str);
     }
 }

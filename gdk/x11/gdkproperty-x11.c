@@ -34,6 +34,7 @@
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
+#include "gdkselection.h" /* only from predefined atom */
 
 typedef struct
 {
@@ -51,6 +52,38 @@ GdkAtomMap;
 
 static GSList *display_atom_lists = NULL;
 
+static gboolean
+check_if_predefined_atom (atom)
+{
+  switch (atom)
+  {
+    case 0:
+	return TRUE;
+    case GDK_SELECTION_PRIMARY:
+	return TRUE;
+    case GDK_SELECTION_SECONDARY:
+	return TRUE;
+    case GDK_SELECTION_TYPE_ATOM:	
+	return TRUE;
+    case GDK_SELECTION_TYPE_BITMAP:
+	return TRUE;
+    case GDK_SELECTION_TYPE_COLORMAP:
+	return TRUE;
+    case GDK_SELECTION_TYPE_DRAWABLE:
+	return TRUE;
+    case GDK_SELECTION_TYPE_INTEGER:
+	return TRUE;
+    case GDK_SELECTION_TYPE_PIXMAP:
+	return TRUE;
+    case GDK_SELECTION_TYPE_WINDOW:
+	return TRUE;
+    case GDK_SELECTION_TYPE_STRING:
+	return TRUE;
+    default:
+	return FALSE;
+  }
+}
+
 
 GdkAtom 
 gdk_x11_get_real_atom (GdkDisplay *display, GdkAtom virtual_atom, gboolean only_if_exists)
@@ -61,10 +94,10 @@ gdk_x11_get_real_atom (GdkDisplay *display, GdkAtom virtual_atom, gboolean only_
   GSList *tmp_atom_map_list;
   gboolean found = FALSE;
   
-  if (virtual_atom == 0)
+  if (check_if_predefined_atom (virtual_atom))
   {
-/*    g_print ("return real  = 0\n");*/
-    return 0;
+    g_print ("We got a predefined atom %ld\n", virtual_atom);
+    return virtual_atom;
   }
   
   if (display_atom_lists == NULL)
@@ -157,9 +190,10 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
   gchar *xatom_string = NULL;
   gboolean found = FALSE;
 
-  if (xatom == 0){
-    /*g_print ("Get VIRTUAL (%d) return virtual = ZERO\n", xatom);*/
-    return 0;
+  if (check_if_predefined_atom (xatom))
+  {
+    g_print ("We got a predefined atom %ld\n", xatom);
+    return xatom;
   }
 
   if (display_atom_lists == NULL)
@@ -168,6 +202,9 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
     atom_map->x_atom = xatom;
     xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
     atom_map->virtual_atom = g_quark_from_string (xatom_string);
+    if (check_if_predefined_atom (atom_map->virtual_atom))
+	g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
+		    is already used as a real Atom\n");
     XFree (xatom_string);
     atom_display_list = g_new0 (GdkAtomDisplayList, 1);
     atom_display_list->display = display;
@@ -203,6 +240,9 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
     atom_map->x_atom = xatom;
     xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
     atom_map->virtual_atom = g_quark_from_string (xatom_string);
+    if (check_if_predefined_atom (atom_map->virtual_atom))
+       g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
+	           is already used as a real Atom\n");
 /*    g_print ("\nGet VIRTUAL (%d) string (%s) return virtual = %d\n", xatom, xatom_string, atom_map->virtual_atom);*/
     XFree (xatom_string);
     atom_display_list->atom_list = g_slist_append (atom_display_list->atom_list,
@@ -214,6 +254,9 @@ gdk_x11_get_virtual_atom (GdkDisplay *display, GdkAtom xatom)
   atom_map->x_atom = xatom;
   xatom_string = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
   atom_map->virtual_atom = g_quark_from_string (xatom_string);
+  if (check_if_predefined_atom (atom_map->virtual_atom))
+    g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
+	        is already used as a real Atom\n");
 /*g_print ("\n!New Display! Get VIRTUAL (%d) string (%s) return virtual = %d\n", xatom, xatom_string, atom_map->virtual_atom);*/
   XFree (xatom_string);  
   atom_display_list = g_new0 (GdkAtomDisplayList, 1);
@@ -245,13 +288,22 @@ gdk_x11_get_real_atom_name (GdkDisplay *display, GdkAtom xatom)
 GdkAtom
 gdk_atom_intern (const gchar *atom_name, gboolean only_if_exists)
 {
+  GdkAtom virtual_atom;
   g_return_val_if_fail (atom_name != NULL, GDK_NONE);
-  return g_quark_from_string (atom_name);
+  virtual_atom = g_quark_from_string (atom_name);
+  if (check_if_predefined_atom (virtual_atom))
+    g_warning ("gdk_x11_get_virtual_atom created a virtual atom which\
+	        is already used as a real Atom\n");
+  return virtual_atom;
 }
 
 gchar*
 gdk_atom_name (GdkAtom atom)
 {
+  if (check_if_predefined_atom (atom))
+  { 
+    return gdk_x11_get_real_atom_name (gdk_get_default_display (), atom);
+  }
   return g_strdup (g_quark_to_string (atom));
 }
 
@@ -267,6 +319,7 @@ gdk_property_get (GdkWindow   *window,
 		  gint        *actual_length,
 		  guchar     **data)
 {
+  GdkDisplay *display;
   Display *xdisplay;
   Window xwindow;
   Atom ret_prop_type;
@@ -275,6 +328,9 @@ gdk_property_get (GdkWindow   *window,
   gulong ret_bytes_after;
   gulong ret_length;
   guchar *ret_data;
+  Atom xproperty;
+  Atom xtype;
+  
 
   g_return_val_if_fail (!window || GDK_IS_WINDOW (window), FALSE);
 
@@ -293,9 +349,12 @@ gdk_property_get (GdkWindow   *window,
     }
 
   ret_data = NULL;
-  XGetWindowProperty (xdisplay, xwindow, property,
+  display = GDK_WINDOW_DISPLAY (window);
+  xproperty = gdk_x11_get_real_atom (display, property, FALSE);
+  xtype = gdk_x11_get_real_atom (display, type, FALSE);
+  XGetWindowProperty (xdisplay, xwindow, xproperty,
 		      offset, (length + 3) / 4, pdelete,
-		      type, &ret_prop_type, &ret_format,
+		      xtype, &ret_prop_type, &ret_format,
 		      &ret_nitems, &ret_bytes_after,
 		      &ret_data);
 
@@ -304,11 +363,11 @@ gdk_property_get (GdkWindow   *window,
   }
 
   if (actual_property_type)
-    *actual_property_type = ret_prop_type;
+    *actual_property_type = gdk_x11_get_virtual_atom (display, ret_prop_type);
   if (actual_format_type)
     *actual_format_type = ret_format;
 
-  if ((type != AnyPropertyType) && (ret_prop_type != type))
+  if ((xtype != AnyPropertyType) && (ret_prop_type != xtype))
     {
       gchar *rn, *pn;
 
@@ -363,8 +422,11 @@ gdk_property_change (GdkWindow    *window,
 		     const guchar *data,
 		     gint          nelements)
 {
+  GdkDisplay *display;
   Display *xdisplay;
   Window xwindow;
+  Atom xproperty;
+  Atom xtype;
 
   g_return_if_fail (!window || GDK_IS_WINDOW (window));
 
@@ -381,8 +443,10 @@ gdk_property_change (GdkWindow    *window,
       g_warning("gdk_property_change no GdkWindow defined\n");
       return;
     }
-
-  XChangeProperty (xdisplay, xwindow, property, type,
+  display = GDK_WINDOW_DISPLAY (window);
+  xproperty = gdk_x11_get_real_atom (display, property, FALSE);
+  xtype = gdk_x11_get_real_atom (display, type, FALSE);
+  XChangeProperty (xdisplay, xwindow, xproperty, xtype,
 		   format, mode, (guchar *)data, nelements);
 }
 
@@ -402,16 +466,11 @@ gdk_property_delete (GdkWindow *window,
 
       xdisplay = GDK_WINDOW_XDISPLAY (window);
       xwindow = GDK_WINDOW_XID (window);
-      XDeleteProperty (xdisplay, xwindow, property);
+      XDeleteProperty (xdisplay, 
+		       xwindow,
+		       gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (window), 
+					      property,
+					      FALSE));
 
     }
-/*  removed for multihead support,
- *  use root_window from a GdkScreen to delete a prop
- *  from the specific root window.
-    else
-    {
-      xdisplay = gdk_display;
-      xwindow = gdk_root_window;
-    }
-*/
- }
+}

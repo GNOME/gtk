@@ -1309,7 +1309,7 @@ gdk_window_set_type_hint (GdkWindow        *window,
 static void
 gdk_wmspec_change_state (gboolean add,
 			 GdkWindow *window,
-			 GdkAtom state1,
+			 GdkAtom state1,  /* state1 and state2 are X Atoms*/
 			 GdkAtom state2)
 {
   XEvent xev;
@@ -1549,7 +1549,7 @@ utf8_is_latin1 (const gchar *str)
  */
 static void
 set_text_property (GdkWindow   *window,
-		   GdkAtom      property,
+		   GdkAtom      property, /* property is an X atom*/
 		   const gchar *utf8_str)
 {
   guchar *prop_text = NULL;
@@ -1574,7 +1574,9 @@ set_text_property (GdkWindow   *window,
     {
       XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		       GDK_WINDOW_XID (window),
-		       property,
+		       gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (window),
+					      property,
+					      FALSE),
 		       prop_type, prop_format,
 		       PropModeReplace, prop_text,
 		       prop_length);

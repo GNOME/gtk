@@ -55,6 +55,8 @@
 #include <string.h>
 #include "gdk.h"
 
+
+
 #if defined (GDK_WINDOWING_X11)
 #include "x11/gdkx.h"		/* For gdk_window_lookup () */
 #include "x11/gdkdisplay-x11.h"
@@ -73,7 +75,7 @@
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
 
-/* #define DEBUG_SELECTION */
+#define DEBUG_SELECTION 
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
    our buffers */
@@ -664,6 +666,9 @@ gtk_selection_convert (GtkWidget *widget,
   GdkWindow *owner_window;
   
   g_return_val_if_fail (widget != NULL, FALSE);
+
+  if (initialize)
+    gtk_selection_init ();
   
   if (!GTK_WIDGET_REALIZED (widget))
     gtk_widget_realize (widget);
@@ -814,6 +819,8 @@ init_atoms (void)
 gboolean gtk_selection_data_set_text (GtkSelectionData *selection_data,
 				      const guchar     *str)
 {
+  init_atoms ();
+
   if (selection_data->target == utf8_atom)
     {
       gtk_selection_data_set (selection_data,
@@ -872,6 +879,8 @@ guchar *
 gtk_selection_data_get_text (GtkSelectionData *selection_data)
 {
   guchar *result = NULL;
+
+  init_atoms ();
 
   if (selection_data->length >= 0 &&
       (selection_data->type == GDK_TARGET_STRING ||
@@ -973,7 +982,10 @@ gtk_selection_request (GtkWidget *widget,
   GList *tmp_list;
   guchar *mult_atoms;
   int i;
-  
+
+  if (initialize)
+    gtk_selection_init ();
+ 
   /* Check if we own selection */
   
   tmp_list = current_selections;
@@ -1069,7 +1081,7 @@ gtk_selection_request (GtkWidget *widget,
 #ifdef DEBUG_SELECTION
       g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
 		 event->selection, info->conversions[i].target,
-		 gdk_atom_intern_name (info->conversions[i].target),
+		 gdk_atom_name (info->conversions[i].target),
 		 event->requestor, event->property);
 #endif
       
@@ -1471,9 +1483,9 @@ gtk_selection_property_notify (GtkWidget	*widget,
       (event->atom != gdk_selection_property)) /* not the right property */
 #endif
 #if defined(GDK_WINDOWING_X11)	  
-  if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
-      (event->atom !=     /* not the right property */
-       GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (widget->window))->gdk_selection_property)) 
+if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
+    (event->atom !=     /* not the right property */
+     gdk_x11_get_virtual_atom(gtk_widget_get_display (widget), GDK_DISPLAY_IMPL_X11 (gtk_widget_get_display (widget))->gdk_selection_property))) 
 #endif
 	  return FALSE;
   

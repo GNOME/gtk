@@ -83,7 +83,8 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
   while (tmp_list)
     {
       OwnerInfo *info = tmp_list->data;
-      if (info->selection == event->selection)
+      GdkDisplay *dpy = gdk_drawable_get_display (info->owner);
+      if (info->selection == gdk_x11_get_real_atom (dpy, event->selection, FALSE))
 	{
 	  if ((GDK_DRAWABLE_XID (info->owner) == event->window &&
 	       event->serial >= info->serial))
@@ -111,6 +112,7 @@ gdk_selection_owner_set_for_display (GdkDisplay * display,
   Window xwindow;
   GSList *tmp_list;
   OwnerInfo *info;
+  Atom xselection;
 
   if (owner) {
     if (GDK_WINDOW_DESTROYED (owner))
@@ -123,6 +125,7 @@ gdk_selection_owner_set_for_display (GdkDisplay * display,
     xdisplay = GDK_DISPLAY_XDISPLAY (display);
     xwindow = None;
   }
+  xselection = gdk_x11_get_real_atom (display, selection, FALSE);
 
   tmp_list = owner_list;
   while (tmp_list) {
@@ -144,9 +147,9 @@ gdk_selection_owner_set_for_display (GdkDisplay * display,
     owner_list = g_slist_prepend (owner_list, info);
   }
 
-  XSetSelectionOwner (xdisplay, selection, xwindow, time);
+  XSetSelectionOwner (xdisplay, xselection, xwindow, time);
 
-  return (XGetSelectionOwner (xdisplay, selection) == xwindow);
+  return (XGetSelectionOwner (xdisplay, xselection) == xwindow);
 }
 
 gboolean
@@ -164,7 +167,10 @@ gdk_selection_owner_get_for_display (GdkDisplay * display, GdkAtom selection)
 {
   Window xwindow;
 
-  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display), selection);
+  xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
+				gdk_x11_get_real_atom (display,
+						       selection,
+						       FALSE));
   if (xwindow == None)
     return NULL;
 
@@ -184,12 +190,19 @@ gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    target,
 		       guint32    time)
 {
-  GdkDisplayImplX11 * dpy = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (requestor));
+  GdkDisplayImplX11 * dpy_impl;
+  GdkDisplay *dpy;
   if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
-  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),selection,target,
-		    dpy->gdk_selection_property, GDK_WINDOW_XID (requestor), time);
+  dpy_impl = GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (requestor));
+  dpy = GDK_WINDOW_DISPLAY (requestor);
+
+  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
+		     gdk_x11_get_real_atom (dpy, selection, FALSE),
+		     gdk_x11_get_real_atom (dpy, target, FALSE),
+		     dpy_impl->gdk_selection_property, 
+		     GDK_WINDOW_XID (requestor), time);
 }
 
 gint
@@ -225,7 +238,7 @@ gdk_selection_property_get (GdkWindow  *requestor,
 		      &nitems, &nbytes, &t);
 
   if (ret_type)
-    *ret_type = prop_type;
+    *ret_type = gdk_x11_get_virtual_atom (GDK_WINDOW_DISPLAY (requestor), prop_type);
   if (ret_format)
     *ret_format = prop_format;
 
@@ -284,9 +297,9 @@ gdk_selection_send_notify_for_display (GdkDisplay * display,
   xevent.send_event = True;
   xevent.display = GDK_DISPLAY_XDISPLAY (display);
   xevent.requestor = requestor;
-  xevent.selection = selection;
-  xevent.target = target;
-  xevent.property = property;
+  xevent.selection = gdk_x11_get_real_atom (display, selection, FALSE);
+  xevent.target = gdk_x11_get_real_atom (display, target, FALSE);
+  xevent.property = gdk_x11_get_real_atom (display, property, FALSE);
   xevent.time = time;
 
   gdk_send_xevent (requestor, False, NoEventMask, (XEvent *) & xevent);
@@ -542,7 +555,7 @@ gdk_string_to_compound_text_for_display (GdkDisplay * display,
   }
 
   if (encoding)
-    *encoding = property.encoding;
+    *encoding = gdk_x11_get_virtual_atom (display, property.encoding);
   if (format)
     *format = property.format;
   if (ctext)

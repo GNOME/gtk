@@ -436,7 +436,7 @@ _get_default_font (GtkStyle *style, GdkDisplay *display)
   }
   default_font = g_new0 (_GtkStyleDefaultFont, 1);
   default_font->display = display;
-  default_font->font = gdk_font_from_description (style->font_desc);
+  default_font->font = gdk_font_from_description_for_display (display, style->font_desc);
   if (!default_font->font) 
     default_font->font = gdk_font_load_for_display (display, "fixed");
   if (!default_font->font) 
