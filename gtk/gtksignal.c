@@ -744,7 +744,7 @@ gtk_signal_compare (gint *a,
 static guint
 gtk_signal_info_hash (GtkSignalInfo *a)
 {
-  return (g_string_hash (a->name) + a->object_type);
+  return (g_str_hash (a->name) + a->object_type);
 }
 
 static gint
@@ -752,7 +752,7 @@ gtk_signal_info_compare (GtkSignalInfo *a,
 			 GtkSignalInfo *b)
 {
   return ((a->object_type == b->object_type) &&
-	  g_string_equal (a->name, b->name));
+	  g_str_equal (a->name, b->name));
 }
 
 static GtkHandler*
