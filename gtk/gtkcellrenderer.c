@@ -147,8 +147,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_MODE,
 				   g_param_spec_enum ("mode",
-						      _("mode"),
-						      _("Editable mode of the CellRenderer"),
+						      P_("mode"),
+						      P_("Editable mode of the CellRenderer"),
 						      GTK_TYPE_CELL_RENDERER_MODE,
 						      GTK_CELL_RENDERER_MODE_INERT,
 						      G_PARAM_READABLE |
@@ -157,8 +157,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
-							 _("visible"),
-							 _("Display the cell"),
+							 P_("visible"),
+							 P_("Display the cell"),
 							 TRUE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
@@ -166,8 +166,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
 				   g_param_spec_float ("xalign",
-						       _("xalign"),
-						       _("The x-align"),
+						       P_("xalign"),
+						       P_("The x-align"),
 						       0.0,
 						       1.0,
 						       0.0,
@@ -177,8 +177,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_YALIGN,
 				   g_param_spec_float ("yalign",
-						       _("yalign"),
-						       _("The y-align"),
+						       P_("yalign"),
+						       P_("The y-align"),
 						       0.0,
 						       1.0,
 						       0.5,
@@ -188,8 +188,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_XPAD,
 				   g_param_spec_uint ("xpad",
-						      _("xpad"),
-						      _("The xpad"),
+						      P_("xpad"),
+						      P_("The xpad"),
 						      0,
 						      100,
 						      2,
@@ -199,8 +199,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_YPAD,
 				   g_param_spec_uint ("ypad",
-						      _("ypad"),
-						      _("The ypad"),
+						      P_("ypad"),
+						      P_("The ypad"),
 						      0,
 						      100,
 						      2,
@@ -210,8 +210,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_WIDTH,
 				   g_param_spec_int ("width",
-						     _("width"),
-						     _("The fixed width"),
+						     P_("width"),
+						     P_("The fixed width"),
 						     -1,
 						     100,
 						     -1,
@@ -221,8 +221,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_HEIGHT,
 				   g_param_spec_int ("height",
-						     _("height"),
-						     _("The fixed height"),
+						     P_("height"),
+						     P_("The fixed height"),
 						     -1,
 						     100,
 						     -1,
@@ -232,8 +232,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
 				   g_param_spec_boolean ("is_expander",
-							 _("Is Expander"),
-							 _("Row has children"),
+							 P_("Is Expander"),
+							 P_("Row has children"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
@@ -242,8 +242,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDED,
 				   g_param_spec_boolean ("is_expanded",
-							 _("Is Expanded"),
-							 _("Row is an expander row, and is expanded"),
+							 P_("Is Expanded"),
+							 P_("Row is an expander row, and is expanded"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
@@ -251,16 +251,16 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND,
 				   g_param_spec_string ("cell_background",
-							_("Cell background color name"),
-							_("Cell background color as a string"),
+							P_("Cell background color name"),
+							P_("Cell background color as a string"),
 							NULL,
 							G_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND_GDK,
 				   g_param_spec_boxed ("cell_background_gdk",
-						       _("Cell background color"),
-						       _("Cell background color as a GdkColor"),
+						       P_("Cell background color"),
+						       P_("Cell background color as a GdkColor"),
 						       GDK_TYPE_COLOR,
 						       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -268,8 +268,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
 
   ADD_SET_PROP ("cell_background_set", PROP_CELL_BACKGROUND_SET,
-                _("Cell background set"),
-                _("Whether this tag affects the cell background color"));
+                P_("Cell background set"),
+                P_("Whether this tag affects the cell background color"));
 
   g_type_class_add_private (object_class, sizeof (GtkCellRendererPrivate));
 }

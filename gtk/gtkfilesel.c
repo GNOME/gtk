@@ -556,23 +556,23 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_FILENAME,
                                    g_param_spec_string ("filename",
-                                                        _("Filename"),
-                                                        _("The currently selected filename"),
+                                                        P_("Filename"),
+                                                        P_("The currently selected filename"),
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_FILEOPS,
 				   g_param_spec_boolean ("show_fileops",
-							 _("Show file operations"),
-							 _("Whether buttons for creating/manipulating files should be displayed"),
+							 P_("Show file operations"),
+							 P_("Whether buttons for creating/manipulating files should be displayed"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_SELECT_MULTIPLE,
 				   g_param_spec_boolean ("select_multiple",
-							 _("Select multiple"),
-							 _("Whether to allow multiple files to be selected"),
+							 P_("Select multiple"),
+							 P_("Whether to allow multiple files to be selected"),
 							 FALSE,
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));

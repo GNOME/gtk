@@ -1758,29 +1758,29 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_OPACITY_CONTROL,
                                    g_param_spec_boolean ("has_opacity_control",
-							 _("Has Opacity Control"),
-							 _("Whether the color selector should allow setting opacity"),
+							 P_("Has Opacity Control"),
+							 P_("Whether the color selector should allow setting opacity"),
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_PALETTE,
                                    g_param_spec_boolean ("has_palette",
-							 _("Has palette"),
-							 _("Whether a palette should be used"),
+							 P_("Has palette"),
+							 P_("Whether a palette should be used"),
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_CURRENT_COLOR,
                                    g_param_spec_boxed ("current_color",
-                                                       _("Current Color"),
-                                                       _("The current color"),
+                                                       P_("Current Color"),
+                                                       P_("The current color"),
                                                        GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_CURRENT_ALPHA,
                                    g_param_spec_uint ("current_alpha",
-						      _("Current Alpha"),
-						      _("The current opacity value (0 fully transparent, 65535 fully opaque)"),
+						      P_("Current Alpha"),
+						      P_("The current opacity value (0 fully transparent, 65535 fully opaque)"),
 						      0, 65535, 65535,
 						      G_PARAM_READABLE | G_PARAM_WRITABLE));
   
@@ -1794,8 +1794,8 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 		  G_TYPE_NONE, 0);
 
   gtk_settings_install_property (g_param_spec_string ("gtk-color-palette",
-                                                      _("Custom palette"),
-                                                      _("Palette to use in the color selector"),
+                                                      P_("Custom palette"),
+                                                      P_("Palette to use in the color selector"),
                                                       default_colors,
                                                       G_PARAM_READWRITE));
 }

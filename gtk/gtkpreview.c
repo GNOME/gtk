@@ -129,8 +129,8 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_EXPAND,
                                    g_param_spec_boolean ("expand",
-							 _("Expand"),
-							 _("Whether the preview widget should take up the entire space it is allocated"),
+							 P_("Expand"),
+							 P_("Whether the preview widget should take up the entire space it is allocated"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 }

@@ -189,21 +189,21 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_MENU,
                                    g_param_spec_object ("menu",
-                                                        _("Menu"),
-                                                        _("The menu of options"),
+                                                        P_("Menu"),
+                                                        P_("The menu of options"),
                                                         GTK_TYPE_MENU,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("indicator_size",
-							       _("Indicator Size"),
-							       _("Size of dropdown indicator"),
+							       P_("Indicator Size"),
+							       P_("Size of dropdown indicator"),
 							       GTK_TYPE_REQUISITION,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("indicator_spacing",
-							       _("Indicator Spacing"),
-							       _("Spacing around indicator"),
+							       P_("Indicator Spacing"),
+							       P_("Spacing around indicator"),
 							       GTK_TYPE_BORDER,
 							       G_PARAM_READABLE));
 }

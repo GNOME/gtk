@@ -167,64 +167,64 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-time",
-                                                               _("Double Click Time"),
-                                                               _("Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"),
+                                                               P_("Double Click Time"),
+                                                               P_("Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"),
                                                                0, G_MAXINT, 250,
                                                                G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_TIME);
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-distance",
-                                                               _("Double Click Distance"),
-                                                               _("Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"),
+                                                               P_("Double Click Distance"),
+                                                               P_("Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"),
                                                                0, G_MAXINT, 5,
                                                                G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_DISTANCE);
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-cursor-blink",
-								   _("Cursor Blink"),
-								   _("Whether the cursor should blink"),
+								   P_("Cursor Blink"),
+								   P_("Whether the cursor should blink"),
 								   TRUE,
 								   G_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_CURSOR_BLINK);
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-cursor-blink-time",
-                                                               _("Cursor Blink Time"),
-                                                               _("Length of the cursor blink cycle, in milleseconds"),
+                                                               P_("Cursor Blink Time"),
+                                                               P_("Length of the cursor blink cycle, in milleseconds"),
                                                                100, G_MAXINT, 1200,
                                                                G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIME);
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-split-cursor",
-								   _("Split Cursor"),
-								   _("Whether two cursors should be displayed for mixed left-to-right and right-to-left text"),
+								   P_("Split Cursor"),
+								   P_("Whether two cursors should be displayed for mixed left-to-right and right-to-left text"),
 								   TRUE,
 								   G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SPLIT_CURSOR);
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-theme-name",
-								   _("Theme Name"),
-								   _("Name of theme RC file to load"),
+								   P_("Theme Name"),
+								   P_("Name of theme RC file to load"),
 								  "Default",
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-theme-name",
-								  _("Icon Theme Name"),
-								  _("Name of icon theme to use"),
+								  P_("Icon Theme Name"),
+								  P_("Name of icon theme to use"),
 								  "hicolor",
 								  G_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_THEME_NAME);    
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-key-theme-name",
-								  _("Key Theme Name"),
-								  _("Name of key theme RC file to load"),
+								  P_("Key Theme Name"),
+								  P_("Name of key theme RC file to load"),
 								  NULL,
 								  G_PARAM_READWRITE),
                                              NULL);
@@ -232,8 +232,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-menu-bar-accel",
-                                                                  _("Menu bar accelerator"),
-                                                                  _("Keybinding to activate the menu bar"),
+                                                                  P_("Menu bar accelerator"),
+                                                                  P_("Keybinding to activate the menu bar"),
                                                                   "F10",
                                                                   G_PARAM_READWRITE),
                                              NULL);
@@ -241,8 +241,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   result = settings_install_property_parser (class,
 					     g_param_spec_int ("gtk-dnd-drag-threshold",
-							       _("Drag threshold"),
-							       _("Number of pixels the cursor can move before dragging"),
+							       P_("Drag threshold"),
+							       P_("Number of pixels the cursor can move before dragging"),
 							       1, G_MAXINT, 8,
                                                                G_PARAM_READWRITE),
 					     NULL);
@@ -250,8 +250,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-font-name",
-								   _("Font Name"),
-								   _("Name of default font to use"),
+								   P_("Font Name"),
+								   P_("Name of default font to use"),
 								  "Sans 10",
 								  G_PARAM_READWRITE),
                                              NULL);
@@ -259,8 +259,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
 
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-icon-sizes",
-								   _("Icon Sizes"),
-								   _("List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."),
+								   P_("Icon Sizes"),
+								   P_("List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."),
 								  NULL,
 								  G_PARAM_READWRITE),
                                              NULL);

@@ -116,8 +116,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child_min_width",
-							     _("Minimum child width"),
-							     _("Minimum width of buttons inside the box"),
+							     P_("Minimum child width"),
+							     P_("Minimum width of buttons inside the box"),
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_MIN_WIDTH,
@@ -125,8 +125,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child_min_height",
-							     _("Minimum child height"),
-							     _("Minimum height of buttons inside the box"),
+							     P_("Minimum child height"),
+							     P_("Minimum height of buttons inside the box"),
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_MIN_HEIGHT,
@@ -134,8 +134,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child_internal_pad_x",
-							     _("Child internal width padding"),
-							     _("Amount to increase child's size on either side"),
+							     P_("Child internal width padding"),
+							     P_("Amount to increase child's size on either side"),
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_X,
@@ -143,8 +143,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child_internal_pad_y",
-							     _("Child internal height padding"),
-							     _("Amount to increase child's size on the top and bottom"),
+							     P_("Child internal height padding"),
+							     P_("Amount to increase child's size on the top and bottom"),
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_Y,
@@ -152,8 +152,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_LAYOUT_STYLE,
                                    g_param_spec_enum ("layout_style",
-                                                      _("Layout style"),
-                                                      _("How to layout the buttons in the box. Possible values are default, spread, edge, start and end"),
+                                                      P_("Layout style"),
+                                                      P_("How to layout the buttons in the box. Possible values are default, spread, edge, start and end"),
 						      GTK_TYPE_BUTTON_BOX_STYLE,
 						      GTK_BUTTONBOX_DEFAULT_STYLE,
                                                       G_PARAM_READWRITE));
@@ -161,8 +161,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_SECONDARY,
 					      g_param_spec_boolean ("secondary", 
-								    _("Secondary"),
-								    _("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"),
+								    P_("Secondary"),
+								    P_("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"),
 								    FALSE,
 								    G_PARAM_READWRITE));
 }

@@ -322,8 +322,8 @@ setup_im (GtkXIMInfo *info)
   if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
 				     "gtk-im-preedit-style"))
     gtk_settings_install_property (g_param_spec_enum ("gtk-im-preedit-style",
-						      _("IM Preedit style"),
-						      _("How to draw the input method preedit string"),
+						      P_("IM Preedit style"),
+						      P_("How to draw the input method preedit string"),
 						      GTK_TYPE_IM_PREEDIT_STYLE,
 						      GTK_IM_PREEDIT_CALLBACK,
 						      G_PARAM_READWRITE));
@@ -331,8 +331,8 @@ setup_im (GtkXIMInfo *info)
   if (!g_object_class_find_property (G_OBJECT_GET_CLASS (info->settings),
 				     "gtk-im-status-style"))
     gtk_settings_install_property (g_param_spec_enum ("gtk-im-status-style",
-						      _("IM Status style"),
-						      _("How to draw the input method statusbar"),
+						      P_("IM Status style"),
+						      P_("How to draw the input method statusbar"),
 						      GTK_TYPE_IM_STATUS_STYLE,
 						      GTK_IM_STATUS_CALLBACK,
 						      G_PARAM_READWRITE));

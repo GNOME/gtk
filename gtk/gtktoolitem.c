@@ -151,22 +151,22 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_HORIZONTAL,
 				   g_param_spec_boolean ("visible_horizontal",
-							 _("Visible when horizontal"),
-							 _("Whether the toolbar item is visible when the toolbar is in a horizontal orientation."),
+							 P_("Visible when horizontal"),
+							 P_("Whether the toolbar item is visible when the toolbar is in a horizontal orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_VERTICAL,
 				   g_param_spec_boolean ("visible_vertical",
-							 _("Visible when vertical"),
-							 _("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
+							 P_("Visible when vertical"),
+							 P_("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
  				   PROP_IS_IMPORTANT,
  				   g_param_spec_boolean ("is_important",
- 							 _("Is important"),
- 							 _("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
+ 							 P_("Is important"),
+ 							 P_("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
  							 FALSE,
  							 G_PARAM_READWRITE));
 

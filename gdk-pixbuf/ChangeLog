@@ -1,3 +1,12 @@
+Sat Jan 17 00:01:51 2004  Matthias Clasen  <maclas@gmx.de>
+
+	The first part of the fix for #114351 (see also
+	../ChangeLog): 
+
+	* gdk-pixbuf-i18n.h: Define P_() for property blurbs and nicks.
+
+	* gdk-pixbuf.c:  Mark property blurbs and nicks with P_().
+
 Thu Jan  8 22:01:14 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* queryloaders.c (loader_sanity_check): Don't use bitwise operators

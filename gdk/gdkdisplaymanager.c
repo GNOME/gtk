@@ -123,8 +123,8 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
   g_object_class_install_property (object_class,
 				   PROP_DEFAULT_DISPLAY,
 				   g_param_spec_object ("default-display",
- 							_("Default Display"),
- 							_("The default display for GDK"),
+ 							P_("Default Display"),
+ 							P_("The default display for GDK"),
 							GDK_TYPE_DISPLAY,
  							G_PARAM_READWRITE));
 }

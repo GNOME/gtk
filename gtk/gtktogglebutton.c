@@ -129,24 +129,24 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
-							 _("Active"),
-							 _("If the toggle button should be pressed in or not"),
+							 P_("Active"),
+							 P_("If the toggle button should be pressed in or not"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INCONSISTENT,
                                    g_param_spec_boolean ("inconsistent",
-							 _("Inconsistent"),
-							 _("If the toggle button is in an \"in between\" state"),
+							 P_("Inconsistent"),
+							 P_("If the toggle button is in an \"in between\" state"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_INDICATOR,
                                    g_param_spec_boolean ("draw_indicator",
-							 _("Draw Indicator"),
-							 _("If the toggle part of the button is displayed"),
+							 P_("Draw Indicator"),
+							 P_("If the toggle part of the button is displayed"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 

@@ -177,8 +177,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_TAG_TABLE,
                                    g_param_spec_object ("tag_table",
-                                                        _("Tag Table"),
-                                                        _("Text Tag Table"),
+                                                        P_("Tag Table"),
+                                                        P_("Text Tag Table"),
                                                         GTK_TYPE_TEXT_TAG_TABLE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 

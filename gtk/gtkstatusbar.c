@@ -164,8 +164,8 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_RESIZE_GRIP,
 				   g_param_spec_boolean ("has_resize_grip",
- 							 _("Has Resize Grip"),
- 							 _("Whether the statusbar has a grip for resizing the toplevel"),
+ 							 P_("Has Resize Grip"),
+ 							 P_("Whether the statusbar has a grip for resizing the toplevel"),
  							 TRUE,
  							 G_PARAM_READWRITE));
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
@@ -191,8 +191,8 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow_type",
-                                                              _("Shadow type"),
-                                                              _("Style of bevel around the statusbar text"),
+                                                              P_("Shadow type"),
+                                                              P_("Style of bevel around the statusbar text"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_IN,
                                                               G_PARAM_READABLE));

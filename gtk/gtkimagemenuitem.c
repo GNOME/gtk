@@ -121,8 +121,8 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE,
                                    g_param_spec_object ("image",
-                                                        _("Image widget"),
-                                                        _("Child widget to appear next to the menu text"),
+                                                        P_("Image widget"),
+                                                        P_("Child widget to appear next to the menu text"),
                                                         GTK_TYPE_WIDGET,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 }

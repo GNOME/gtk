@@ -115,24 +115,24 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
-                                                         _("Active"),
-                                                         _("Whether the menu item is checked"),
+                                                         P_("Active"),
+                                                         P_("Whether the menu item is checked"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_INCONSISTENT,
                                    g_param_spec_boolean ("inconsistent",
-                                                         _("Inconsistent"),
-                                                         _("Whether to display an \"inconsistent\" state"),
+                                                         P_("Inconsistent"),
+                                                         P_("Whether to display an \"inconsistent\" state"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_AS_RADIO,
                                    g_param_spec_boolean ("draw_as_radio",
-                                                         _("Draw as radio menu item"),
-                                                         _("Whether the menu item looks like a radio menu item"),
+                                                         P_("Draw as radio menu item"),
+                                                         P_("Whether the menu item looks like a radio menu item"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   

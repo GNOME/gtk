@@ -199,8 +199,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_ALPHA,
-                                   g_param_spec_boolean ("use_alpha", _("Use alpha"), 
-                                                         _("Whether or not to give the color an alpha value"),
+                                   g_param_spec_boolean ("use_alpha", P_("Use alpha"), 
+                                                         P_("Whether or not to give the color an alpha value"),
                                                          FALSE,
                                                          (G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
@@ -214,8 +214,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
                                    g_param_spec_string ("title", 
-							_("Title"), 
-                                                        _("The title of the color selection dialog"),
+							P_("Title"), 
+                                                        P_("The title of the color selection dialog"),
                                                         _("Pick a Color"),
                                                         (G_PARAM_READABLE | G_PARAM_WRITABLE)));
 
@@ -229,8 +229,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_COLOR,
                                    g_param_spec_boxed ("color",
-                                                       _("Current Color"),
-                                                       _("The selected color"),
+                                                       P_("Current Color"),
+                                                       P_("The selected color"),
                                                        GDK_TYPE_COLOR,
                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -244,8 +244,8 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_ALPHA,
                                    g_param_spec_uint ("alpha",
-                                                      _("Current Alpha"),
-                                                      _("The selected opacity value (0 fully transparent, 65535 fully opaque)"),
+                                                      P_("Current Alpha"),
+                                                      P_("The selected opacity value (0 fully transparent, 65535 fully opaque)"),
                                                       0, 65535, 65535,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
         

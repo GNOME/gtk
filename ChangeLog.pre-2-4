@@ -1,3 +1,15 @@
+Fri Jan 16 23:59:01 2004  Matthias Clasen  <maclas@gmx.de>
+
+	The first part of the fix for #114351 (see also 
+	gdk-pixbuf/ChangeLog and po/ChangeLog):
+	
+	* gtk/gtkintl.h: 
+	* gdk/gdkintl.h: Define P_() for property blurbs and nicks.
+
+	* gdk/gdkdisplaymanager.c:
+	* modules/input/gtkimcontextxim.c:
+	* gtk/*.c:  Mark property blurbs and nicks with P_().
+	
 2004-01-16  Federico Mena Quintero  <federico@ximian.com>
 
 	Fix #130969.

@@ -135,8 +135,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
 				   g_param_spec_int ("value",
-						     _("The value"),
-						     _("The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group."),
+						     P_("The value"),
+						     P_("The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group."),
 						     G_MININT,
 						     G_MAXINT,
 						     0,
@@ -152,8 +152,8 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
-							_("Group"),
-							_("The radio action whose group this action belongs."),
+							P_("Group"),
+							P_("The radio action whose group this action belongs."),
 							GTK_TYPE_RADIO_ACTION,
 							G_PARAM_WRITABLE));
 

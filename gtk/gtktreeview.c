@@ -524,80 +524,80 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   g_object_class_install_property (o_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model",
-							_("TreeView Model"),
-							_("The model for the tree view"),
+							P_("TreeView Model"),
+							P_("The model for the tree view"),
 							GTK_TYPE_TREE_MODEL,
 							G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HADJUSTMENT,
                                    g_param_spec_object ("hadjustment",
-							_("Horizontal Adjustment"),
-                                                        _("Horizontal Adjustment for the widget"),
+							P_("Horizontal Adjustment"),
+                                                        P_("Horizontal Adjustment for the widget"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_VADJUSTMENT,
                                    g_param_spec_object ("vadjustment",
-							_("Vertical Adjustment"),
-                                                        _("Vertical Adjustment for the widget"),
+							P_("Vertical Adjustment"),
+                                                        P_("Vertical Adjustment for the widget"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_VISIBLE,
                                    g_param_spec_boolean ("headers_visible",
-							 _("Visible"),
-							 _("Show the column header buttons"),
+							 P_("Visible"),
+							 P_("Show the column header buttons"),
 							 TRUE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_CLICKABLE,
                                    g_param_spec_boolean ("headers_clickable",
-							 _("Headers Clickable"),
-							 _("Column headers respond to click events"),
+							 P_("Headers Clickable"),
+							 P_("Column headers respond to click events"),
 							 FALSE,
 							 G_PARAM_WRITABLE));
 
   g_object_class_install_property (o_class,
                                    PROP_EXPANDER_COLUMN,
                                    g_param_spec_object ("expander_column",
-							_("Expander Column"),
-							_("Set the column for the expander column"),
+							P_("Expander Column"),
+							P_("Set the column for the expander column"),
 							GTK_TYPE_TREE_VIEW_COLUMN,
 							G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_REORDERABLE,
                                    g_param_spec_boolean ("reorderable",
-							 _("Reorderable"),
-							 _("View is reorderable"),
+							 P_("Reorderable"),
+							 P_("View is reorderable"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_RULES_HINT,
                                    g_param_spec_boolean ("rules_hint",
-							 _("Rules Hint"),
-							 _("Set a hint to the theme engine to draw rows in alternating colors"),
+							 P_("Rules Hint"),
+							 P_("Set a hint to the theme engine to draw rows in alternating colors"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
     g_object_class_install_property (o_class,
 				     PROP_ENABLE_SEARCH,
 				     g_param_spec_boolean ("enable_search",
-							   _("Enable Search"),
-							   _("View allows user to search through columns interactively"),
+							   P_("Enable Search"),
+							   P_("View allows user to search through columns interactively"),
 							   TRUE,
 							   G_PARAM_READWRITE));
 
     g_object_class_install_property (o_class,
 				     PROP_SEARCH_COLUMN,
 				     g_param_spec_int ("search_column",
-						       _("Search Column"),
-						       _("Model column to search through when searching through code"),
+						       P_("Search Column"),
+						       P_("Model column to search through when searching through code"),
 						       -1,
 						       G_MAXINT,
 						       0,
@@ -606,8 +606,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
     g_object_class_install_property (o_class,
                                      PROP_FIXED_HEIGHT_MODE,
                                      g_param_spec_boolean ("fixed_height_mode",
-                                                           _("Fixed Height Mode"),
-                                                           _("Speeds up GtkTreeView by assuming that all rows have the same height"),
+                                                           P_("Fixed Height Mode"),
+                                                           P_("Speeds up GtkTreeView by assuming that all rows have the same height"),
                                                            FALSE,
                                                            G_PARAM_READWRITE));
 
@@ -618,8 +618,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
     
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("expander_size",
-							     _("Expander Size"),
-							     _("Size of the expander arrow"),
+							     P_("Expander Size"),
+							     P_("Size of the expander arrow"),
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_EXPANDER_SIZE,
@@ -627,8 +627,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical_separator",
-							     _("Vertical Separator Width"),
-							     _("Vertical space between cells.  Must be an even number"),
+							     P_("Vertical Separator Width"),
+							     P_("Vertical space between cells.  Must be an even number"),
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_VERTICAL_SEPARATOR,
@@ -636,8 +636,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("horizontal_separator",
-							     _("Horizontal Separator Width"),
-							     _("Horizontal space between cells.  Must be an even number"),
+							     P_("Horizontal Separator Width"),
+							     P_("Horizontal space between cells.  Must be an even number"),
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
@@ -645,29 +645,29 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("allow_rules",
-								 _("Allow Rules"),
-								 _("Allow drawing of alternating color rows"),
+								 P_("Allow Rules"),
+								 P_("Allow drawing of alternating color rows"),
 								 TRUE,
 								 G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("indent_expanders",
-								 _("Indent Expanders"),
-								 _("Make the expanders indented"),
+								 P_("Indent Expanders"),
+								 P_("Make the expanders indented"),
 								 TRUE,
 								 G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boxed ("even_row_color",
-                                                               _("Even Row Color"),
-                                                               _("Color to use for even rows"),
+                                                               P_("Even Row Color"),
+                                                               P_("Color to use for even rows"),
 							       GDK_TYPE_COLOR,
 G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boxed ("odd_row_color",
-                                                               _("Odd Row Color"),
-                                                               _("Color to use for odd rows"),
+                                                               P_("Odd Row Color"),
+                                                               P_("Color to use for odd rows"),
 							       GDK_TYPE_COLOR,
 G_PARAM_READABLE));
 

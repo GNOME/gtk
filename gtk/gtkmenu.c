@@ -349,15 +349,15 @@ gtk_menu_class_init (GtkMenuClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_TEAROFF_TITLE,
                                    g_param_spec_string ("tearoff-title",
-                                                        _("Tearoff Title"),
-                                                        _("A title that may be displayed by the window manager when this menu is torn-off"),
+                                                        P_("Tearoff Title"),
+                                                        P_("A title that may be displayed by the window manager when this menu is torn-off"),
                                                         "",
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-padding",
-							     _("Vertical Padding"),
-							     _("Extra space at the top and bottom of the menu"),
+							     P_("Vertical Padding"),
+							     P_("Extra space at the top and bottom of the menu"),
 							     0,
 							     G_MAXINT,
 							     1,
@@ -365,8 +365,8 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-offset",
-							     _("Vertical Offset"),
-							     _("When the menu is a submenu, position it this number of pixels offset vertically"),
+							     P_("Vertical Offset"),
+							     P_("When the menu is a submenu, position it this number of pixels offset vertically"),
 							     G_MININT,
 							     G_MAXINT,
 							     0,
@@ -374,8 +374,8 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("horizontal-offset",
-							     _("Horizontal Offset"),
-							     _("When the menu is a submenu, position it this number of pixels offset horizontally"),
+							     P_("Horizontal Offset"),
+							     P_("When the menu is a submenu, position it this number of pixels offset horizontally"),
 							     G_MININT,
 							     G_MAXINT,
 							     -2,
@@ -385,32 +385,32 @@ gtk_menu_class_init (GtkMenuClass *class)
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_LEFT_ATTACH,
                                              g_param_spec_uint ("left_attach",
-                                                               _("Left Attach"),
-                                                               _("The column number to attach the left side of the child to"),
+                                                               P_("Left Attach"),
+                                                               P_("The column number to attach the left side of the child to"),
                                                                0, UINT_MAX, 0,
                                                                G_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_RIGHT_ATTACH,
                                              g_param_spec_uint ("right_attach",
-                                                               _("Right Attach"),
-                                                               _("The column number to attach the right side of the child to"),
+                                                               P_("Right Attach"),
+                                                               P_("The column number to attach the right side of the child to"),
                                                                0, UINT_MAX, 0,
                                                                G_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_TOP_ATTACH,
                                              g_param_spec_uint ("top_attach",
-                                                               _("Top Attach"),
-                                                               _("The row number to attach the top of the child to"),
+                                                               P_("Top Attach"),
+                                                               P_("The row number to attach the top of the child to"),
                                                                0, UINT_MAX, 0,
                                                                G_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_BOTTOM_ATTACH,
                                              g_param_spec_uint ("bottom_attach",
-                                                               _("Bottom Attach"),
-                                                               _("The row number to attach the bottom of the child to"),
+                                                               P_("Bottom Attach"),
+                                                               P_("The row number to attach the bottom of the child to"),
                                                                0, UINT_MAX, 0,
                                                                G_PARAM_READWRITE));
 
@@ -497,22 +497,22 @@ gtk_menu_class_init (GtkMenuClass *class)
 				GTK_SCROLL_PAGE_DOWN);
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
-						       _("Can change accelerators"),
-						       _("Whether menu accelerators can be changed by pressing a key over the menu item"),
+						       P_("Can change accelerators"),
+						       P_("Whether menu accelerators can be changed by pressing a key over the menu item"),
 						       FALSE,
 						       G_PARAM_READWRITE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-popup-delay",
-						   _("Delay before submenus appear"),
-						   _("Minimum time the pointer must stay over a menu item before the submenu appear"),
+						   P_("Delay before submenus appear"),
+						   P_("Minimum time the pointer must stay over a menu item before the submenu appear"),
 						   0,
 						   G_MAXINT,
 						   DEFAULT_POPUP_DELAY,
 						   G_PARAM_READWRITE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-popdown-delay",
-						   _("Delay before hiding a submenu"),
-						   _("The time before hiding a submenu when the pointer is moving towards the submenu"),
+						   P_("Delay before hiding a submenu"),
+						   P_("The time before hiding a submenu when the pointer is moving towards the submenu"),
 						   0,
 						   G_MAXINT,
 						   DEFAULT_POPDOWN_DELAY,

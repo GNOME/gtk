@@ -176,23 +176,23 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND,
                                    g_param_spec_string ("background",
-                                                        _("Background color name"),
-                                                        _("Background color as a string"),
+                                                        P_("Background color name"),
+                                                        P_("Background color as a string"),
                                                         NULL,
                                                         G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background_gdk",
-                                                      _("Background color"),
-                                                      _("Background color as a GdkColor"),
+                                                      P_("Background color"),
+                                                      P_("Background color as a GdkColor"),
                                                       GDK_TYPE_COLOR,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
 
   ADD_SET_PROP ("background_set", PROP_BACKGROUND_SET,
-                _("Background set"),
-                _("Whether this tag affects the background color"));
+                P_("Background set"),
+                P_("Whether this tag affects the background color"));
 
   g_type_class_add_private (gobject_class, sizeof (GtkCellViewPrivate));
 }

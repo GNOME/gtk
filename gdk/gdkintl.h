@@ -6,6 +6,7 @@
 #ifdef ENABLE_NLS
 #include<libintl.h>
 #define _(String) dgettext(GETTEXT_PACKAGE,String)
+#define P_(String) dgettext(GETTEXT_PACKAGE,String)
 #ifdef gettext_noop
 #define N_(String) gettext_noop(String)
 #else
@@ -13,6 +14,7 @@
 #endif
 #else /* NLS is disabled */
 #define _(String) (String)
+#define P_(String) (String)
 #define N_(String) (String)
 #define textdomain(String) (String)
 #define gettext(String) (String)

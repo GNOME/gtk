@@ -77,8 +77,8 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("min_slider_length",
-							     _("Minimum Slider Length"),
-							     _("Minimum length of scrollbar slider"),
+							     P_("Minimum Slider Length"),
+							     P_("Minimum length of scrollbar slider"),
 							     0,
 							     G_MAXINT,
 							     21,
@@ -86,40 +86,40 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("fixed_slider_length",
-                                                                 _("Fixed slider size"),
-                                                                 _("Don't change slider size, just lock it to the minimum length"),
+                                                                 P_("Fixed slider size"),
+                                                                 P_("Don't change slider size, just lock it to the minimum length"),
                                                                  FALSE,
                                                                  
                                                                  G_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has_backward_stepper",
-                                                                 _("Backward stepper"),
-                                                                 _("Display the standard backward arrow button"),
+                                                                 P_("Backward stepper"),
+                                                                 P_("Display the standard backward arrow button"),
                                                                  TRUE,
                                                                  
                                                                  G_PARAM_READABLE));
 
     gtk_widget_class_install_style_property (widget_class,
                                              g_param_spec_boolean ("has_forward_stepper",
-                                                                   _("Forward stepper"),
-                                                                   _("Display the standard forward arrow button"),
+                                                                   P_("Forward stepper"),
+                                                                   P_("Display the standard forward arrow button"),
                                                                    TRUE,
                                                                    
                                                                    G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("has_secondary_backward_stepper",
-                                                                 _("Secondary backward stepper"),
-                                                                 _("Display a second backward arrow button on the opposite end of the scrollbar"),
+                                                                 P_("Secondary backward stepper"),
+                                                                 P_("Display a second backward arrow button on the opposite end of the scrollbar"),
                                                                  FALSE,
                                                                  
                                                                  G_PARAM_READABLE));
 
     gtk_widget_class_install_style_property (widget_class,
                                              g_param_spec_boolean ("has_secondary_forward_stepper",
-                                                                   _("Secondary forward stepper"),
-                                                                   _("Display a secondary forward arrow button on the opposite end of the scrollbar"),
+                                                                   P_("Secondary forward stepper"),
+                                                                   P_("Display a secondary forward arrow button on the opposite end of the scrollbar"),
                                                                    FALSE,
                                                                    
                                                                    G_PARAM_READABLE));

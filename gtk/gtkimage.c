@@ -132,40 +132,40 @@ gtk_image_class_init (GtkImageClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF,
                                    g_param_spec_object ("pixbuf",
-                                                        _("Pixbuf"),
-                                                        _("A GdkPixbuf to display"),
+                                                        P_("Pixbuf"),
+                                                        P_("A GdkPixbuf to display"),
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_PIXMAP,
                                    g_param_spec_object ("pixmap",
-                                                        _("Pixmap"),
-                                                        _("A GdkPixmap to display"),
+                                                        P_("Pixmap"),
+                                                        P_("A GdkPixmap to display"),
                                                         GDK_TYPE_PIXMAP,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE,
                                    g_param_spec_object ("image",
-                                                        _("Image"),
-                                                        _("A GdkImage to display"),
+                                                        P_("Image"),
+                                                        P_("A GdkImage to display"),
                                                         GDK_TYPE_IMAGE,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_MASK,
                                    g_param_spec_object ("mask",
-                                                        _("Mask"),
-                                                        _("Mask bitmap to use with GdkImage or GdkPixmap"),
+                                                        P_("Mask"),
+                                                        P_("Mask bitmap to use with GdkImage or GdkPixmap"),
                                                         GDK_TYPE_PIXMAP,
                                                         G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_FILE,
                                    g_param_spec_string ("file",
-                                                        _("Filename"),
-                                                        _("Filename to load and display"),
+                                                        P_("Filename"),
+                                                        P_("Filename to load and display"),
                                                         NULL,
                                                         G_PARAM_WRITABLE));
   
@@ -173,24 +173,24 @@ gtk_image_class_init (GtkImageClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_STOCK,
                                    g_param_spec_string ("stock",
-                                                        _("Stock ID"),
-                                                        _("Stock ID for a stock image to display"),
+                                                        P_("Stock ID"),
+                                                        P_("Stock ID for a stock image to display"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_SET,
                                    g_param_spec_boxed ("icon_set",
-                                                       _("Icon set"),
-                                                       _("Icon set to display"),
+                                                       P_("Icon set"),
+                                                       P_("Icon set to display"),
                                                        GTK_TYPE_ICON_SET,
                                                        G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_ICON_SIZE,
                                    g_param_spec_int ("icon_size",
-                                                     _("Icon size"),
-                                                     _("Size to use for stock icon or icon set"),
+                                                     P_("Icon size"),
+                                                     P_("Size to use for stock icon or icon set"),
                                                      0, G_MAXINT,
                                                      DEFAULT_ICON_SIZE,
                                                      G_PARAM_READWRITE));
@@ -198,16 +198,16 @@ gtk_image_class_init (GtkImageClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_PIXBUF_ANIMATION,
                                    g_param_spec_object ("pixbuf_animation",
-                                                        _("Animation"),
-                                                        _("GdkPixbufAnimation to display"),
+                                                        P_("Animation"),
+                                                        P_("GdkPixbufAnimation to display"),
                                                         GDK_TYPE_PIXBUF_ANIMATION,
                                                         G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_STORAGE_TYPE,
                                    g_param_spec_enum ("storage_type",
-                                                      _("Storage type"),
-                                                      _("The representation being used for image data"),
+                                                      P_("Storage type"),
+                                                      P_("The representation being used for image data"),
                                                       GTK_TYPE_IMAGE_TYPE,
                                                       GTK_IMAGE_EMPTY,
                                                       G_PARAM_READABLE));

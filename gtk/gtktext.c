@@ -598,32 +598,32 @@ gtk_text_class_init (GtkTextClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_HADJUSTMENT,
                                    g_param_spec_object ("hadjustment",
-                                                        _("Horizontal Adjustment"),
-                                                        _("Horizontal adjustment for the text widget"),
+                                                        P_("Horizontal Adjustment"),
+                                                        P_("Horizontal adjustment for the text widget"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_VADJUSTMENT,
                                    g_param_spec_object ("vadjustment",
-                                                        _("Vertical Adjustment"),
-                                                        _("Vertical adjustment for the text widget"),
+                                                        P_("Vertical Adjustment"),
+                                                        P_("Vertical adjustment for the text widget"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_LINE_WRAP,
                                    g_param_spec_boolean ("line_wrap",
-							 _("Line Wrap"),
-							 _("Whether lines are wrapped at widget edges"),
+							 P_("Line Wrap"),
+							 P_("Whether lines are wrapped at widget edges"),
 							 TRUE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_WORD_WRAP,
                                    g_param_spec_boolean ("word_wrap",
-							 _("Word Wrap"),
-							 _("Whether words are wrapped at widget edges"),
+							 P_("Word Wrap"),
+							 P_("Whether words are wrapped at widget edges"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 

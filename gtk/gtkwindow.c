@@ -436,8 +436,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TYPE,
                                    g_param_spec_enum ("type",
-						      _("Window Type"),
-						      _("The type of the window"),
+						      P_("Window Type"),
+						      P_("The type of the window"),
 						      GTK_TYPE_WINDOW_TYPE,
 						      GTK_WINDOW_TOPLEVEL,
 						      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -445,57 +445,57 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
                                    g_param_spec_string ("title",
-                                                        _("Window Title"),
-                                                        _("The title of the window"),
+                                                        P_("Window Title"),
+                                                        P_("The title of the window"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ROLE,
                                    g_param_spec_string ("role",
-							_("Window Role"),
-							_("Unique identifier for the window to be used when restoring a session"),
+							P_("Window Role"),
+							P_("Unique identifier for the window to be used when restoring a session"),
 							NULL,
 							G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_SHRINK,
                                    g_param_spec_boolean ("allow_shrink",
-							 _("Allow Shrink"),
+							 P_("Allow Shrink"),
 							 /* xgettext:no-c-format */
-							 _("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"),
+							 P_("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_GROW,
                                    g_param_spec_boolean ("allow_grow",
-							 _("Allow Grow"),
-							 _("If TRUE, users can expand the window beyond its minimum size"),
+							 P_("Allow Grow"),
+							 P_("If TRUE, users can expand the window beyond its minimum size"),
 							 TRUE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZABLE,
                                    g_param_spec_boolean ("resizable",
-							 _("Resizable"),
-							 _("If TRUE, users can resize the window"),
+							 P_("Resizable"),
+							 P_("If TRUE, users can resize the window"),
 							 TRUE,
 							 G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_MODAL,
                                    g_param_spec_boolean ("modal",
-							 _("Modal"),
-							 _("If TRUE, the window is modal (other windows are not usable while this one is up)"),
+							 P_("Modal"),
+							 P_("If TRUE, the window is modal (other windows are not usable while this one is up)"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_WIN_POS,
                                    g_param_spec_enum ("window_position",
-						      _("Window Position"),
-						      _("The initial position of the window"),
+						      P_("Window Position"),
+						      P_("The initial position of the window"),
 						      GTK_TYPE_WINDOW_POSITION,
 						      GTK_WIN_POS_NONE,
 						      G_PARAM_READWRITE));
@@ -503,8 +503,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_DEFAULT_WIDTH,
                                    g_param_spec_int ("default_width",
-						     _("Default Width"),
-						     _("The default width of the window, used when initially showing the window"),
+						     P_("Default Width"),
+						     P_("The default width of the window, used when initially showing the window"),
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -513,8 +513,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_DEFAULT_HEIGHT,
                                    g_param_spec_int ("default_height",
-						     _("Default Height"),
-						     _("The default height of the window, used when initially showing the window"),
+						     P_("Default Height"),
+						     P_("The default height of the window, used when initially showing the window"),
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -523,48 +523,48 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_DESTROY_WITH_PARENT,
                                    g_param_spec_boolean ("destroy_with_parent",
-							 _("Destroy with Parent"),
-							 _("If this window should be destroyed when the parent is destroyed"),
+							 P_("Destroy with Parent"),
+							 P_("If this window should be destroyed when the parent is destroyed"),
                                                          FALSE,
 							 G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ICON,
                                    g_param_spec_object ("icon",
-                                                        _("Icon"),
-                                                        _("Icon for this window"),
+                                                        P_("Icon"),
+                                                        P_("Icon for this window"),
                                                         GDK_TYPE_PIXBUF,
                                                         G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
 				   PROP_SCREEN,
 				   g_param_spec_object ("screen",
- 							_("Screen"),
- 							_("The screen where this window will be displayed"),
+ 							P_("Screen"),
+ 							P_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
  							G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_IS_ACTIVE,
                                    g_param_spec_boolean ("is_active",
-							 _("Is Active"),
-							 _("Whether the toplevel is the current active window"),
+							 P_("Is Active"),
+							 P_("Whether the toplevel is the current active window"),
 							 FALSE,
 							 G_PARAM_READABLE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_TOPLEVEL_FOCUS,
                                    g_param_spec_boolean ("has_toplevel_focus",
-							 _("Focus in Toplevel"),
-							 _("Whether the input focus is within this GtkWindow"),
+							 P_("Focus in Toplevel"),
+							 P_("Whether the input focus is within this GtkWindow"),
 							 FALSE,
 							 G_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_TYPE_HINT,
 				   g_param_spec_enum ("type_hint",
-                                                      _("Type hint"),
-                                                      _("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
+                                                      P_("Type hint"),
+                                                      P_("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
                                                       GDK_TYPE_WINDOW_TYPE_HINT,
                                                       GDK_WINDOW_TYPE_HINT_NORMAL,
                                                       G_PARAM_READWRITE));
@@ -572,16 +572,16 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_SKIP_TASKBAR_HINT,
 				   g_param_spec_boolean ("skip_taskbar_hint",
-                                                         _("Skip taskbar"),
-                                                         _("TRUE if the window should not be in the task bar."),
+                                                         P_("Skip taskbar"),
+                                                         P_("TRUE if the window should not be in the task bar."),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_SKIP_PAGER_HINT,
 				   g_param_spec_boolean ("skip_pager_hint",
-                                                         _("Skip pager"),
-                                                         _("TRUE if the window should not be in the pager."),
+                                                         P_("Skip pager"),
+                                                         P_("TRUE if the window should not be in the pager."),
                                                          FALSE,
                                                          G_PARAM_READWRITE));  
 
@@ -595,8 +595,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
 				   PROP_ACCEPT_FOCUS,
 				   g_param_spec_boolean ("accept_focus",
-                                                         _("Accept focus"),
-                                                         _("TRUE if the window should receive the input focus."),
+                                                         P_("Accept focus"),
+                                                         P_("TRUE if the window should receive the input focus."),
                                                          TRUE,
                                                          G_PARAM_READWRITE));  
 
@@ -610,8 +610,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_DECORATED,
                                    g_param_spec_boolean ("decorated",
-							 _("Decorated"),
-							 _("Whether the window should be decorated by the window manager"),
+							 P_("Decorated"),
+							 P_("Whether the window should be decorated by the window manager"),
 							 TRUE,
 							 G_PARAM_READWRITE));
 
@@ -626,8 +626,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   g_object_class_install_property (gobject_class,
                                    PROP_GRAVITY,
                                    g_param_spec_enum ("gravity",
-						      _("Gravity"),
-						      _("The window gravity of the window"),
+						      P_("Gravity"),
+						      P_("The window gravity of the window"),
 						      GDK_TYPE_GRAVITY,
 						      GDK_GRAVITY_NORTH_WEST,
 						      G_PARAM_READWRITE));

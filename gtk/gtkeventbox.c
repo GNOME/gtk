@@ -116,15 +116,15 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBLE_WINDOW,
                                    g_param_spec_boolean ("visible-window",
-                                                        _("Visible Window"),
-                                                        _("Whether the event box is visible, as opposed to invisible and only used to trap events."),
+                                                        P_("Visible Window"),
+                                                        P_("Whether the event box is visible, as opposed to invisible and only used to trap events."),
                                                         TRUE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_ABOVE_CHILD,
                                    g_param_spec_boolean ("above-child",
-                                                        _("Above child"),
-                                                        _("Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."),
+                                                        P_("Above child"),
+                                                        P_("Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
   

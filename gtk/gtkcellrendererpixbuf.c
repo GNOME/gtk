@@ -130,8 +130,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF,
 				   g_param_spec_object ("pixbuf",
-							_("Pixbuf Object"),
-							_("The pixbuf to render"),
+							P_("Pixbuf Object"),
+							P_("The pixbuf to render"),
 							GDK_TYPE_PIXBUF,
 							G_PARAM_READABLE |
 							G_PARAM_WRITABLE));
@@ -139,8 +139,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_OPEN,
 				   g_param_spec_object ("pixbuf_expander_open",
-							_("Pixbuf Expander Open"),
-							_("Pixbuf for open expander"),
+							P_("Pixbuf Expander Open"),
+							P_("Pixbuf for open expander"),
 							GDK_TYPE_PIXBUF,
 							G_PARAM_READABLE |
 							G_PARAM_WRITABLE));
@@ -148,8 +148,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   g_object_class_install_property (object_class,
 				   PROP_PIXBUF_EXPANDER_CLOSED,
 				   g_param_spec_object ("pixbuf_expander_closed",
-							_("Pixbuf Expander Closed"),
-							_("Pixbuf for closed expander"),
+							P_("Pixbuf Expander Closed"),
+							P_("Pixbuf for closed expander"),
 							GDK_TYPE_PIXBUF,
 							G_PARAM_READABLE |
 							G_PARAM_WRITABLE));
@@ -157,16 +157,16 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   g_object_class_install_property (object_class,
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock_id",
-							_("Stock ID"),
-							_("The stock ID of the stock icon to render"),
+							P_("Stock ID"),
+							P_("The stock ID of the stock icon to render"),
 							NULL,
 							G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_STOCK_SIZE,
 				   g_param_spec_enum ("stock_size",
-						      _("Size"),
-						      _("The size of the rendered icon"),
+						      P_("Size"),
+						      P_("The size of the rendered icon"),
 						      GTK_TYPE_ICON_SIZE,
 						      GTK_ICON_SIZE_MENU,
 						      G_PARAM_READWRITE));
@@ -174,8 +174,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
   g_object_class_install_property (object_class,
 				   PROP_STOCK_DETAIL,
 				   g_param_spec_string ("stock_detail",
-							_("Detail"),
-							_("Render detail to pass to the theme engine"),
+							P_("Detail"),
+							P_("Render detail to pass to the theme engine"),
 							NULL,
 							G_PARAM_READWRITE));
 

@@ -153,24 +153,24 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("shadow_type",
-                                                              _("Shadow type"),
-                                                              _("Style of bevel around the menubar"),
+                                                              P_("Shadow type"),
+                                                              P_("Style of bevel around the menubar"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
                                                               G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("internal_padding",
-							     _("Internal padding"),
-							     _("Amount of border space between the menubar shadow and the menu items"),
+							     P_("Internal padding"),
+							     P_("Amount of border space between the menubar shadow and the menu items"),
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_IPADDING,
                                                              G_PARAM_READABLE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-bar-popup-delay",
-						   _("Delay before drop down menus appear"),
-						   _("Delay before the submenus of a menu bar appear"),
+						   P_("Delay before drop down menus appear"),
+						   P_("Delay before the submenus of a menu bar appear"),
 						   0,
 						   G_MAXINT,
 						   0,

@@ -156,8 +156,8 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
   g_object_class_install_property (object_class,
 				   PROP_DRAW,
 				   g_param_spec_boolean ("draw",
-							 _("Draw"),
-							 _("Whether the separator is drawn, or just blank"),
+							 P_("Draw"),
+							 P_("Whether the separator is drawn, or just blank"),
 							 TRUE,
 							 G_PARAM_READWRITE));
   

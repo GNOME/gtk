@@ -1,3 +1,9 @@
+Fri Jan 16 23:56:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* Makefile.in.in: Add --keyword=P_ to the xgettext 
+	invocation, since property blurbs and nicks are
+	now marked with P_().
+
 2004-01-16  Laurent Dhima  <laurenti@alblinux.net>
 
 	* sq.po: Updated Albanian translation.

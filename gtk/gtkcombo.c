@@ -140,38 +140,38 @@ gtk_combo_class_init (GtkComboClass * klass)
   g_object_class_install_property (gobject_class,
                                    PROP_ENABLE_ARROW_KEYS,
                                    g_param_spec_boolean ("enable_arrow_keys",
-                                                         _("Enable arrow keys"),
-                                                         _("Whether the arrow keys move through the list of items"),
+                                                         P_("Enable arrow keys"),
+                                                         P_("Whether the arrow keys move through the list of items"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_ENABLE_ARROWS_ALWAYS,
                                    g_param_spec_boolean ("enable_arrows_always",
-                                                         _("Always enable arrows"),
-                                                         _("Obsolete property, ignored"),
+                                                         P_("Always enable arrows"),
+                                                         P_("Obsolete property, ignored"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_CASE_SENSITIVE,
                                    g_param_spec_boolean ("case_sensitive",
-                                                         _("Case sensitive"),
-                                                         _("Whether list item matching is case sensitive"),
+                                                         P_("Case sensitive"),
+                                                         P_("Whether list item matching is case sensitive"),
                                                          FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_EMPTY,
                                    g_param_spec_boolean ("allow_empty",
-                                                         _("Allow empty"),
-							 _("Whether an empty value may be entered in this field"),
+                                                         P_("Allow empty"),
+							 P_("Whether an empty value may be entered in this field"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_IN_LIST,
                                    g_param_spec_boolean ("value_in_list",
-                                                         _("Value in list"),
-                                                         _("Whether entered values must already be present in the list"),
+                                                         P_("Value in list"),
+                                                         P_("Whether entered values must already be present in the list"),
                                                          FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   
