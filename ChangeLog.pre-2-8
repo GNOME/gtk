@@ -1,3 +1,13 @@
+Mon May 31 00:27:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooserutils.c (_gtk_file_chooser_set_delegate): Fix
+	a typo.
+
+Mon May 31 00:23:55 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooser.c (gtk_file_chooser_set_preview_widget): 
+	Refer to ::update-preview, not ::selection-changed.
+
 2004-05-29  Christian Rose  <menthos@menthos.com>
  
         * configure.in: Added "tk" to ALL_LINGUAS.

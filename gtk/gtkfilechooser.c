@@ -1107,7 +1107,7 @@ _gtk_file_chooser_get_file_system (GtkFileChooser *chooser)
  *
  * Sets an application-supplied widget to use to display a custom preview
  * of the currently selected file. To implement a preview, after setting the
- * preview widget, you connect to the ::selection-changed
+ * preview widget, you connect to the ::update-preview
  * signal, and call gtk_file_chooser_get_preview_filename() or
  * gtk_file_chooser_get_preview_uri() on each change. If you can
  * display a preview of the new file, update your widget and

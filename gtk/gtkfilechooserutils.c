@@ -151,7 +151,7 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
  * Establishes that calls on @receiver for #GtkFileChooser
  * methods should be delegated to @delegate, and that
  * #GtkFileChooser signals emitted on @delegate should be
- * forwarded to @receiver. Must be used in confunction with
+ * forwarded to @receiver. Must be used in conjunction with
  * _gtk_file_chooser_delegate_iface_init().
  **/
 void
