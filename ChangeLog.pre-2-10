@@ -1,3 +1,8 @@
+2005-02-11  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_size_allocate): Don't queue
+	a redraw if the size didn't change. queue a shallow redraw.
+
 2005-02-10  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c: Add a resizable-background style property

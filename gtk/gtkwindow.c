@@ -4217,8 +4217,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
 {
   GtkWindow *window;
   GtkAllocation child_allocation;
+  gboolean allocation_changed = FALSE;
 
   window = GTK_WINDOW (widget);
+
+  if (allocation->width != widget->allocation.width ||
+      allocation->height != widget->allocation.height)
+    allocation_changed = TRUE;
+  
   widget->allocation = *allocation;
 
   if (window->bin.child && GTK_WIDGET_VISIBLE (window->bin.child))
@@ -4240,7 +4246,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
 			 allocation->height + window->frame_top + window->frame_bottom);
     }
 
-  if (GTK_WIDGET_REALIZED (widget))
+  if (allocation_changed && GTK_WIDGET_REALIZED (widget))
     {
       gboolean resizable_background;
 
@@ -4249,7 +4255,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
 			    NULL);
 
       if (resizable_background)
-	gtk_widget_queue_draw (widget);
+	gdk_window_invalidate_rect (widget->window, NULL, FALSE);
     }
 }
 
