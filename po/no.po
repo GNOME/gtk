@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.3\n"
-"POT-Creation-Date: 2001-06-11 17:29-0400\n"
-"PO-Revision-Date: 2001-05-22 16:56+02:00\n"
+"POT-Creation-Date: 2001-06-28 00:38+0200\n"
+"PO-Revision-Date: 2001-06-28 00:42+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <no@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -45,70 +45,10 @@ msgstr ""
 "Feil under lasting av animasjon '%s': årsak ikke kjent, sannsynligvis "
 "korrupt animasjonsfil"
 
-#: gdk-pixbuf/gdk-pixbuf-data.c:126
-msgid "Image data is partially missing"
-msgstr "Bildedata mangler delvis"
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:139
-msgid ""
-"Image has an incorrect pixel rowstride, perhaps the data was corrupted "
-"somehow."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:154
-msgid "Image size is impossibly large, perhaps the data was corrupted somehow"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:167
-msgid "Image data is partially missing, probably it was corrupted somehow."
-msgstr ""
-"Bildedata mangler delvis, sannsynligvis korrupt på en eller annen måte."
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:183
-#, c-format
-msgid ""
-"Image has an unknown colorspace code (%d), perhaps the image data was "
-"corrupted"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:192
-#, c-format
-msgid ""
-"Image has an improper number of bits per sample (%d), perhaps the image data "
-"was corrupted"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:201 gdk-pixbuf/gdk-pixbuf-data.c:210
-#, c-format
-msgid ""
-"Image has an improper number of channels (%d), perhaps the image data was "
-"corrupted"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:228
-#, c-format
-msgid ""
-"Not enough memory to store a %d by %d image; try exiting some applications "
-"to free memory."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:298
-msgid "Image contained no data."
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:308
-msgid "Image isn't in the correct format (inline GdkPixbuf format)"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixbuf-data.c:324
-#, c-format
-msgid "This version of the software is unable to read images with type code %d"
-msgstr ""
-
 #: gdk-pixbuf/gdk-pixbuf-io.c:295
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr ""
+msgstr "Kan ikke laste modul for innlesing av bilder: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:314
 #, c-format
@@ -120,26 +60,26 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Bildetype '%s' er ikke støttet"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:473
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Kunne ikke gjenkjenne bildeformatet for fil '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:479
 msgid "Unrecognized image file format"
-msgstr ""
+msgstr "Ikke-gjenkjent bildeformat"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:549
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
-msgstr ""
+msgstr "Vet ikke hvordan bildet i fil '%s' skal lastes"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:582
 #, c-format
 msgid "Failed to load image '%s': %s"
-msgstr ""
+msgstr "Feil under lasting av bilde '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:687
 #, c-format
@@ -206,55 +146,60 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
 #: gdk-pixbuf/io-gif.c:1499
-#, fuzzy
 msgid "Not enough memory to load GIF file"
-msgstr "Ikke nok minne til å åpne TIFF-bilde"
+msgstr "Ikke nok minne til å laste GIF-bilde"
 
 #: gdk-pixbuf/io-gif.c:990
 msgid "GIF image is corrupt (incorrect LZW compression)"
-msgstr ""
+msgstr "GIF-bilde er korrupt (ukorrekt LZW-kompresjon)"
 
 #: gdk-pixbuf/io-gif.c:1040
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Filen ser ikke ut til å være en GIF-fil"
 
 #: gdk-pixbuf/io-gif.c:1052
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Versjon %s av GIF filformatet er ikke støttet"
 
 #: gdk-pixbuf/io-gif.c:1127
 msgid "GIF image contained a frame appearing outside the image bounds."
-msgstr ""
+msgstr "GIF-bildet inneholdt en ramme some var utenfor bildegrensene."
 
 #: gdk-pixbuf/io-gif.c:1143
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
 msgstr ""
+"Første rammen av GIF-bildet hadde 'gå til forrige' som sin \"disposal\" "
+"modus."
 
 #: gdk-pixbuf/io-gif.c:1178
 msgid ""
 "GIF image has no global colormap, and a frame inside it has no local "
 "colormap."
 msgstr ""
+"GIF-bildet har ikke globalt fargekart, og en ramme i det har ikke lokalt "
+"fargekart."
 
 #: gdk-pixbuf/io-gif.c:1407
 msgid "GIF image was truncated or incomplete."
-msgstr ""
+msgstr "GIF-bildet er avkuttet eller ukomplett."
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "Feil under tolking av JPEG-bildefil (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:234
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
 msgstr ""
+"Ikke nok minne til å laste bildet. Prøv å avslutte noen applikasjoner for å "
+"frigjøre minne"
 
 #: gdk-pixbuf/io-jpeg.c:529
 msgid "Couldn't allocate memory for loading JPEG file"
-msgstr ""
+msgstr "Kunne ikke allokere minne for lasting av JPEG-fil"
 
 #: gdk-pixbuf/io-jpeg.c:655
 #, c-format
@@ -262,21 +207,24 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
+"JPEG-kvalitet må være en verdi mellom 0 og 100; verdien '%s' kunne ikke "
+"tolkes."
 
 #: gdk-pixbuf/io-jpeg.c:670
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
+"JPEG-kvalitet må være en verdi mellom 0 og 100; verdien '%d' er ikke tillatt."
 
 #: gdk-pixbuf/io-png.c:159
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "Fatal feil i PNG-bildefil: %s"
 
 #: gdk-pixbuf/io-png.c:243
 msgid "Insufficient memory to load PNG file"
-msgstr ""
+msgstr "Ikke nok minne til å laste PNG-fil"
 
 #: gdk-pixbuf/io-png.c:534
 #, c-format
@@ -284,81 +232,81 @@ msgid ""
 "Insufficient memory to store a %ld by %ld image; try exiting some "
 "applications to reduce memory usage"
 msgstr ""
+"Ikke nok minne til å lagre et %ld ganger %ld bilde; prøv å avslutte noen "
+"applikasjoner for å redusere minnebruken"
 
 #: gdk-pixbuf/io-png.c:608
 #, c-format
 msgid "Fatal error reading PNG image file: %s"
-msgstr ""
+msgstr "Fatal feil under lesing av PNG-bildefil: %s"
 
 #: gdk-pixbuf/io-png.c:718
 msgid "Insufficient memory to save PNG file"
-msgstr ""
+msgstr "Ikke nok minne til å lagre PNG-fil"
 
 #: gdk-pixbuf/io-pnm.c:254
 msgid "PNM loader expected to find an integer, but didn't"
-msgstr ""
+msgstr "PNM-laster ventet å finne et heltall, men gjorde ikke det"
 
 #: gdk-pixbuf/io-pnm.c:285
 msgid "PNM file has an incorrect initial byte"
-msgstr ""
+msgstr "PNM-filen har ukorrekt initiell byte"
 
 #: gdk-pixbuf/io-pnm.c:315
 msgid "PNM file is not in a recognized PNM subformat"
-msgstr ""
+msgstr "PNM-filen er ikke i et gjenkjent PNM-underformat"
 
 #: gdk-pixbuf/io-pnm.c:340
 msgid "PNM file has an image width of 0"
-msgstr ""
+msgstr "PNM-filen har en bildebredde på 0"
 
 #: gdk-pixbuf/io-pnm.c:361
 msgid "PNM file has an image height of 0"
-msgstr ""
+msgstr "PNM-filen har en bildehøyde på 0"
 
 #: gdk-pixbuf/io-pnm.c:384
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Maksimal fargeverdi i PNM-filen er 0"
 
 #: gdk-pixbuf/io-pnm.c:423 gdk-pixbuf/io-pnm.c:451 gdk-pixbuf/io-pnm.c:483
 msgid "Raw PNM image type is invalid"
-msgstr ""
+msgstr "Rå PNM-bildetype er ugyldig"
 
 #: gdk-pixbuf/io-pnm.c:543 gdk-pixbuf/io-pnm.c:585
 msgid "PNM image format is invalid"
-msgstr ""
+msgstr "PNM-bildeformat er ugyldig"
 
 #: gdk-pixbuf/io-pnm.c:644
 msgid "PNM image loader does not support this PNM subformat"
-msgstr ""
+msgstr "PNM-bildelaster støtter ikke dette PNM-underformatet"
 
 #: gdk-pixbuf/io-pnm.c:818
 msgid "Unexpected end of PNM image data"
-msgstr ""
+msgstr "Uventet slutt på PNM-bildedata"
 
 #: gdk-pixbuf/io-pnm.c:920
 msgid "Insufficient memory to load PNM file"
-msgstr ""
+msgstr "Ikke nok minne til å laste PNM-fil"
 
 #: gdk-pixbuf/io-tiff.c:152
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "Kunne ikke finne bildebredde (ugyldig TIFF-fil)"
 
 #: gdk-pixbuf/io-tiff.c:159
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "Kunne ikke finne bildehøyde (ugyldig TIFF-fil)"
 
 #: gdk-pixbuf/io-tiff.c:169
-#, fuzzy
 msgid "Width or height of TIFF image is zero"
-msgstr "Bredde på høyre marg i piksler"
+msgstr "Bredde eller høyde på TIFF-bilde er null"
 
 #: gdk-pixbuf/io-tiff.c:178 gdk-pixbuf/io-tiff.c:194 gdk-pixbuf/io-tiff.c:471
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ikke nok minne til å åpne TIFF-bilde"
 
 #: gdk-pixbuf/io-tiff.c:201
-#, fuzzy
 msgid "Failed to load RGB data from TIFF file"
-msgstr "Feil under åpning av TIFF-bilde"
+msgstr "Feil under lasting av RGB-data fra TIFF-fil"
 
 #: gdk-pixbuf/io-tiff.c:264
 msgid "Failed to open TIFF image"
@@ -366,10 +314,9 @@ msgstr "Feil under åpning av TIFF-bilde"
 
 #: gdk-pixbuf/io-tiff.c:277
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "TIFFClose operasjonen feilet"
 
 #: gdk-pixbuf/io-tiff.c:411
-#, fuzzy
 msgid "Failed to load TIFF image"
 msgstr "Feil under åpning av TIFF-bilde"
 
@@ -936,35 +883,34 @@ msgid "Number of characters to leave space for in the entry."
 msgstr ""
 
 #: gtk/gtkentry.c:444
-#, fuzzy
 msgid "Scroll offset"
-msgstr "Rullbar"
+msgstr "Rulleavstand"
 
 #: gtk/gtkentry.c:445
 msgid "Number of pixels of the entry scrolled off the screen to the left"
-msgstr ""
+msgstr "Antall piksler av oppføringen som rullet ut av skjermen til venstre"
 
 #: gtk/gtkentry.c:454
 msgid "Cursor color"
-msgstr ""
+msgstr "Markørfarge"
 
 #: gtk/gtkentry.c:455
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Farge som markøren skal tegnes med"
 
-#: gtk/gtkentry.c:3500 gtk/gtktextview.c:5253
+#: gtk/gtkentry.c:3548 gtk/gtktextview.c:5253
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: gtk/gtkentry.c:3502 gtk/gtktextview.c:5255
+#: gtk/gtkentry.c:3550 gtk/gtktextview.c:5255
 msgid "Copy"
 msgstr "Kopier"
 
-#: gtk/gtkentry.c:3504 gtk/gtktextview.c:5258
+#: gtk/gtkentry.c:3552 gtk/gtktextview.c:5258
 msgid "Paste"
 msgstr "Lim inn"
 
-#: gtk/gtkentry.c:3511 gtk/gtktextview.c:5265
+#: gtk/gtkentry.c:3559 gtk/gtktextview.c:5265
 msgid "Input Methods"
 msgstr "Inndatametode"
 
@@ -974,15 +920,15 @@ msgstr "Filnavn"
 
 #: gtk/gtkfilesel.c:503
 msgid "The currently selected filename."
-msgstr ""
+msgstr "Filnavn som er valgt nå."
 
 #: gtk/gtkfilesel.c:509
 msgid "Show file operations"
-msgstr ""
+msgstr "Vis filoperasjoner"
 
 #: gtk/gtkfilesel.c:510
 msgid "Whether buttons for creating/manipulating files should be displayed."
-msgstr ""
+msgstr "Vis knapper for oppretting/manipulering av filer."
 
 #. The directories clist
 #: gtk/gtkfilesel.c:631
@@ -1134,27 +1080,24 @@ msgid "Couldn't convert filename"
 msgstr ""
 
 #: gtk/gtkfontsel.c:185
-#, fuzzy
 msgid "Font name"
-msgstr "Skrifttypeskalering"
+msgstr "Skrifttypenavn"
 
 #: gtk/gtkfontsel.c:186
-#, fuzzy
 msgid "The X string that represents this font."
-msgstr "Strengen til skrifttypen."
+msgstr "X-strengen som representerer denne skrifttypen."
 
 #: gtk/gtkfontsel.c:193
 msgid "The GdkFont that is currently selected."
-msgstr ""
+msgstr "GdkFont som er valgt nå."
 
 #: gtk/gtkfontsel.c:199
-#, fuzzy
 msgid "Preview text"
-msgstr "Forhåndsvisning:"
+msgstr "Forhåndsvisningstekst"
 
 #: gtk/gtkfontsel.c:200
 msgid "The text to display in order to demonstrate the selected font."
-msgstr ""
+msgstr "Tekst som skal vises for å demonstrere valgt skrifttype."
 
 #: gtk/gtkfontsel.c:296
 msgid "_Family:"
@@ -1192,7 +1135,7 @@ msgstr "OK"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1051
+#: gtk/gtkiconfactory.c:1060
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -1292,104 +1235,103 @@ msgstr "tøm"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:475
+#: gtk/gtkmain.c:474
 msgid "default:LTR"
 msgstr "standard:LTR"
 
-#: gtk/gtknotebook.c:331
+#: gtk/gtknotebook.c:328
 msgid "Page"
 msgstr "Side"
 
-#: gtk/gtknotebook.c:332
+#: gtk/gtknotebook.c:329
 msgid "The index of the current page"
 msgstr "Indeks for aktiv side"
 
-#: gtk/gtknotebook.c:341
+#: gtk/gtknotebook.c:337
 msgid "Tab Position"
 msgstr "Faneplassering"
 
-#: gtk/gtknotebook.c:342
+#: gtk/gtknotebook.c:338
 msgid "Which side of the notebook holds the tabs"
 msgstr ""
 
-#: gtk/gtknotebook.c:350
+#: gtk/gtknotebook.c:345
 msgid "Tab Border"
 msgstr ""
 
-#: gtk/gtknotebook.c:351
-#, fuzzy
+#: gtk/gtknotebook.c:346
 msgid "Width of the border around the tab labels"
-msgstr "Bredde på venstre marg i piksler"
+msgstr "Bredde på kanten rundt faneetikettene"
 
-#: gtk/gtknotebook.c:360
+#: gtk/gtknotebook.c:354
 msgid "Horizontal Tab Border"
-msgstr ""
+msgstr "Horisontal fanekant"
 
-#: gtk/gtknotebook.c:361
+#: gtk/gtknotebook.c:355
 msgid "Width of the horizontal border of tab labels"
-msgstr ""
+msgstr "Bredde på horisontal kant på faneetikettene"
 
-#: gtk/gtknotebook.c:370
+#: gtk/gtknotebook.c:363
 msgid "Vertical Tab Border"
-msgstr ""
+msgstr "Vertikal fanekant"
 
-#: gtk/gtknotebook.c:371
+#: gtk/gtknotebook.c:364
 msgid "Width of the vertical border of tab labels"
-msgstr ""
+msgstr "Bredde på vertikal kant på faneetikettene"
 
-#: gtk/gtknotebook.c:380
+#: gtk/gtknotebook.c:372
 msgid "Show Tabs"
 msgstr "Vis faner"
 
-#: gtk/gtknotebook.c:381
+#: gtk/gtknotebook.c:373
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "Vis/Ikke vis faner"
 
-#: gtk/gtknotebook.c:388
+#: gtk/gtknotebook.c:379
 msgid "Show Border"
 msgstr "Vis kant"
 
-#: gtk/gtknotebook.c:389
+#: gtk/gtknotebook.c:380
 msgid "Whether the border should be shown or not"
-msgstr ""
+msgstr "Vis/ikke vis kant"
 
-#: gtk/gtknotebook.c:396
+#: gtk/gtknotebook.c:386
 msgid "Scrollable"
 msgstr "Rullbar"
 
-#: gtk/gtknotebook.c:397
+#: gtk/gtknotebook.c:387
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
 msgstr ""
 
-#: gtk/gtknotebook.c:404
+#: gtk/gtknotebook.c:393
 msgid "Enable Popup"
 msgstr "Slå på oppsprett"
 
-#: gtk/gtknotebook.c:405
+#: gtk/gtknotebook.c:394
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
 
-#: gtk/gtknotebook.c:412
+#: gtk/gtknotebook.c:400
 msgid "Homogeneous"
 msgstr "Homogen"
 
-#: gtk/gtknotebook.c:413
+#: gtk/gtknotebook.c:401
 msgid "Whether tabs should have homogeneous sizes"
 msgstr ""
 
-#: gtk/gtknotebook.c:2145 gtk/gtknotebook.c:4506
+#: gtk/gtknotebook.c:2153 gtk/gtknotebook.c:4592
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:2363
+#: gtk/gtkrc.c:2359
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:2366
+#: gtk/gtkrc.c:2362
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
@@ -1419,80 +1361,72 @@ msgid "_Apply"
 msgstr "_Bruk"
 
 #: gtk/gtkstock.c:276
-#, fuzzy
 msgid "_Bold"
-msgstr "Uthevet"
+msgstr "_Uthevet"
 
 #: gtk/gtkstock.c:277
 msgid "_Cancel"
 msgstr "_Avbryt"
 
 #: gtk/gtkstock.c:278
-#, fuzzy
 msgid "_Clear"
-msgstr "tøm"
+msgstr "_Tøm"
 
 #: gtk/gtkstock.c:279
 msgid "_Close"
 msgstr "_Lukk"
 
 #: gtk/gtkstock.c:280
-#, fuzzy
 msgid "_Copy"
-msgstr "Kopier"
+msgstr "_Kopier"
 
 #: gtk/gtkstock.c:281
-#, fuzzy
 msgid "C_ut"
-msgstr "Klipp ut"
+msgstr "Klipp _ut"
 
 #: gtk/gtkstock.c:282
 msgid "_Find"
-msgstr ""
+msgstr "_Finn"
 
 #: gtk/gtkstock.c:283
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Finn og e_rstatt"
 
 #: gtk/gtkstock.c:284
 msgid "_Back"
-msgstr ""
+msgstr "Til_bake"
 
 #: gtk/gtkstock.c:285
 msgid "_Forward"
-msgstr ""
+msgstr "_Fremover"
 
 #: gtk/gtkstock.c:286
 msgid "_Help"
 msgstr "_Hjelp"
 
 #: gtk/gtkstock.c:287
-#, fuzzy
 msgid "_Home"
-msgstr "_Hjelp"
+msgstr "_Hjem"
 
 #: gtk/gtkstock.c:288
-#, fuzzy
 msgid "_Italic"
-msgstr "Kursiv"
+msgstr "Kurs_iv"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Center"
-msgstr "Lag"
+msgstr "_Sentrer"
 
 #: gtk/gtkstock.c:290
-#, fuzzy
 msgid "_Fill"
-msgstr "_Familie:"
+msgstr "_Fyll"
 
 #: gtk/gtkstock.c:291
 msgid "_Left"
-msgstr ""
+msgstr "_Venstre"
 
 #: gtk/gtkstock.c:292
 msgid "_Right"
-msgstr ""
+msgstr "Høy_re"
 
 #: gtk/gtkstock.c:293
 msgid "_New"
@@ -1511,70 +1445,64 @@ msgid "_Open"
 msgstr "_Åpne"
 
 #: gtk/gtkstock.c:297
-#, fuzzy
 msgid "_Paste"
-msgstr "Lim inn"
+msgstr "_Lim inn"
 
 #: gtk/gtkstock.c:298
 msgid "_Preferences"
-msgstr ""
+msgstr "_Brukervalg"
 
 #: gtk/gtkstock.c:299
 msgid "_Print"
-msgstr ""
+msgstr "S_kriv ut"
 
 #: gtk/gtkstock.c:300
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "Forhåndsvisning:"
+msgstr "Utskriftsforhåndsvisning"
 
 #: gtk/gtkstock.c:301
 msgid "_Properties"
-msgstr ""
+msgstr "E_genskaper"
 
 #: gtk/gtkstock.c:302
 msgid "_Quit"
 msgstr "_Avslutt"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Redo"
-msgstr "_Rød:"
+msgstr "_Gjenopprett"
 
 #: gtk/gtkstock.c:304
 msgid "_Revert"
-msgstr ""
+msgstr "Fo_rkast"
 
 #: gtk/gtkstock.c:305
 msgid "_Save"
 msgstr "_Lagre"
 
 #: gtk/gtkstock.c:306
-#, fuzzy
 msgid "Save _As"
-msgstr "Lagre"
+msgstr "Lagre s_om"
 
 #: gtk/gtkstock.c:307
 msgid "_Spell Check"
-msgstr ""
+msgstr "_Stavekontroll"
 
 #: gtk/gtkstock.c:308
 msgid "_Stop"
-msgstr ""
+msgstr "_Stopp"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_Strikethrough"
-msgstr "Gjennomstreking"
+msgstr "_Gjennomstreking"
 
 #: gtk/gtkstock.c:310
-#, fuzzy
 msgid "_Underline"
-msgstr "Understrek"
+msgstr "_Understrek"
 
 #: gtk/gtkstock.c:311
 msgid "_Undo"
-msgstr ""
+msgstr "_Angre"
 
 #: gtk/gtkstock.c:312
 msgid "_Yes"
@@ -1583,11 +1511,11 @@ msgstr "_Ja"
 #: gtk/gtkstock.c:313
 #, c-format
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Zoom _100%"
 
 #: gtk/gtkstock.c:314
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "Zoom _tilpasset"
 
 #: gtk/gtkstock.c:315
 msgid "Zoom _In"
@@ -1837,60 +1765,52 @@ msgid "Whether this tag affects text visibility"
 msgstr ""
 
 #: gtk/gtktextview.c:503
-#, fuzzy
 msgid "Line Height"
-msgstr "Skrifttypens vekt"
+msgstr "Linjehøyde"
 
 #: gtk/gtktextview.c:504
 msgid "The height of a line"
-msgstr ""
+msgstr "Høyden på en linje"
 
 #: gtk/gtktextview.c:513
-#, fuzzy
 msgid "Column Width"
-msgstr "Minimal bredde"
+msgstr "Kolonnebredde"
 
 #: gtk/gtktextview.c:514
 msgid "The width of a column"
-msgstr ""
+msgstr "Bredde på en kolonne"
 
 #: gtk/gtktextview.c:523
-#, fuzzy
 msgid "Pixels Above Lines"
 msgstr "Piksler over linjer"
 
 #: gtk/gtktextview.c:533
-#, fuzzy
 msgid "Pixels Below Lines"
-msgstr "Piksler over linjer"
+msgstr "Piksler under linjer"
 
 #: gtk/gtktextview.c:543
 msgid "Pixels Inside Wrap"
 msgstr ""
 
 #: gtk/gtktextview.c:561
-#, fuzzy
 msgid "Wrap Mode"
 msgstr "Brytningsmodus"
 
 #: gtk/gtktextview.c:579
-#, fuzzy
 msgid "Left Margin"
 msgstr "Venstre marg"
 
 #: gtk/gtktextview.c:589
-#, fuzzy
 msgid "Right Margin"
 msgstr "Høyre marg"
 
 #: gtk/gtktextview.c:617
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Synlig"
+msgstr "Synlig markør"
 
 #: gtk/gtktextview.c:618
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Vis innsettingsmarkør"
 
 #: gtk/gtkthemes.c:71
 #, c-format
@@ -1903,19 +1823,19 @@ msgstr "--- Ingen tips ---"
 
 #: gtk/gtktreeviewcolumn.c:157
 msgid "Cell renderer"
-msgstr ""
+msgstr "Cellerendrer"
 
 #: gtk/gtktreeviewcolumn.c:158
 msgid "Cell renderer object to use for rendering the cell"
-msgstr ""
+msgstr "Cellerendrer-objekt som skal brukes for rendring av cellen"
 
 #: gtk/gtktreeviewcolumn.c:165
 msgid "Visible"
 msgstr "Synlig"
 
 #: gtk/gtktreeviewcolumn.c:166
-msgid "Whether to display the colomn"
-msgstr ""
+msgid "Whether to display the column"
+msgstr "Vis kolonnen"
 
 #: gtk/gtktreeviewcolumn.c:173
 msgid "Sizing"
@@ -1923,7 +1843,7 @@ msgstr "Størrelse"
 
 #: gtk/gtktreeviewcolumn.c:174
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "Modus for endring av størrelse for kolonnen"
 
 #: gtk/gtktreeviewcolumn.c:182
 msgid "Width"
@@ -1931,7 +1851,7 @@ msgstr "Bredde"
 
 #: gtk/gtktreeviewcolumn.c:183
 msgid "Current width of the column"
-msgstr ""
+msgstr "Nåværende bredde på kolonnen"
 
 #: gtk/gtktreeviewcolumn.c:192
 msgid "Minimum Width"
@@ -1939,7 +1859,7 @@ msgstr "Minimal bredde"
 
 #: gtk/gtktreeviewcolumn.c:193
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "Minimum tillatt bredde på kolonne"
 
 #: gtk/gtktreeviewcolumn.c:202
 msgid "Maximum Width"
@@ -1947,7 +1867,7 @@ msgstr "Maksimal bredde"
 
 #: gtk/gtktreeviewcolumn.c:203
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Maksimum tillatt bredde på kolonnen"
 
 #: gtk/gtktreeviewcolumn.c:212
 msgid "Title"
@@ -1971,15 +1891,15 @@ msgstr "Widget"
 
 #: gtk/gtktreeviewcolumn.c:230
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Widget som skal legges i kappen for kolonneheader i stedet for kolonnens tittel"
 
 #: gtk/gtktreeviewcolumn.c:237
 msgid "Alignment"
-msgstr ""
+msgstr "Justering"
 
 #: gtk/gtktreeviewcolumn.c:238
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "X-justering for kolonneheaders tekst eller widget"
 
 #: gtk/gtktreeviewcolumn.c:247
 msgid "Reorderable"
@@ -1991,15 +1911,15 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:255
 msgid "Sort indicator"
-msgstr ""
+msgstr "Sorter indikator"
 
 #: gtk/gtktreeviewcolumn.c:256
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "Sorter indikator eller ikke"
 
 #: gtk/gtktreeviewcolumn.c:263
 msgid "Sort order"
-msgstr ""
+msgstr "Sorteringsrekkefølge"
 
 #: gtk/gtktreeviewcolumn.c:264
 msgid "Sort direction the sort indicator should indicate"
@@ -2029,6 +1949,13 @@ msgstr "Vietnamesisk (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "X-inndatametode"
+
+#~ msgid "Image data is partially missing"
+#~ msgstr "Bildedata mangler delvis"
+
+#~ msgid "Image data is partially missing, probably it was corrupted somehow."
+#~ msgstr ""
+#~ "Bildedata mangler delvis, sannsynligvis korrupt på en eller annen måte."
 
 #~ msgid "Failed to write to temporary file when loading TIFF image"
 #~ msgstr "Feil under skriving til midlertidig fil under lasting av TIFF-bilde"
