@@ -1435,17 +1435,26 @@ update_dialog (GtkFileChooserButton *button)
       gtk_file_chooser_unselect_all (GTK_FILE_CHOOSER (priv->dialog));
       if (folder_part)
 	{
-	  full_path = gtk_file_system_make_path (fs, folder_part, file_part, NULL);
-
 	  /* Entry contents don't exist. */
-	  if (full_path)
-	    _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (priv->dialog),
-					   full_path, NULL);
+	  if (file_part && file_part[0] != '\0')
+	    {
+	      full_path = gtk_file_system_make_path (fs, folder_part, file_part,
+						     NULL);
+	      if (full_path)
+		{
+		  _gtk_file_chooser_select_path (GTK_FILE_CHOOSER (priv->dialog),
+						 full_path, NULL);
+		  gtk_file_path_free (full_path);
+		}
+	      else
+		_gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (priv->dialog),
+							   folder_part, NULL);
+	    }
 	  else
-	    _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (priv->dialog),
-						       folder_part, NULL);
-
-	  gtk_file_path_free (full_path);
+	    {
+	      _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (priv->dialog),
+							 folder_part, NULL);
+	    }
 	}
       break;
 
@@ -1571,7 +1580,9 @@ dialog_response_cb (GtkFileChooser *dialog,
     }
   else
     {
+      g_signal_handler_block (priv->dialog, priv->dialog_selection_changed_id);
       update_dialog (user_data);
+      g_signal_handler_unblock (priv->dialog, priv->dialog_selection_changed_id);
     }
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button), FALSE);

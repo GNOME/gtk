@@ -1,3 +1,9 @@
+2004-11-03  James M. Cape  <jcape@ignore-your.tv>
+
+	* gtk/gtkfilechooserbutton.c (update_dialog), (dialog_response_cb):
+	Don't mysteriously go to the parent dir when hitting "Cancel" in
+	folder mode (fixes #156971).
+
 2004-11-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): Don't
