@@ -2109,6 +2109,8 @@ gtk_drag_source_unset (GtkWidget        *widget)
  * drag-and-drop.
  *
  * Return value: the #GtkTargetList, or %NULL if none
+ *
+ * Since: 2.4
  **/
 GtkTargetList *
 gtk_drag_source_get_target_list (GtkWidget *widget)
@@ -2130,6 +2132,8 @@ gtk_drag_source_get_target_list (GtkWidget *widget)
  * Changes the target types that this widget offers for drag-and-drop.
  * The widget must first be made into a drag source with
  * gtk_drag_source_set().
+ *
+ * Since: 2.4
  **/
 void
 gtk_drag_source_set_target_list (GtkWidget     *widget,

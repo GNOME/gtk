@@ -26,6 +26,8 @@ EXPORTS
 	gtk_accel_map_change_entry
 	gtk_accel_map_foreach
 	gtk_accel_map_foreach_unfiltered
+	gtk_accel_map_get
+	gtk_accel_map_get_type
 	gtk_accel_map_load
 	gtk_accel_map_load_fd
 	gtk_accel_map_load_scanner
@@ -117,6 +119,7 @@ EXPORTS
 	gtk_binding_set_find
 	gtk_binding_set_new
 	gtk_bindings_activate
+	gtk_bindings_activate_event
 	gtk_border_copy
 	gtk_border_free
 	gtk_border_get_type
@@ -391,6 +394,8 @@ EXPORTS
 	gtk_combo_box_new
 	gtk_combo_box_new_text
 	gtk_combo_box_new_with_model
+	gtk_combo_box_popdown
+	gtk_combo_box_popup
 	gtk_combo_box_prepend_text
 	gtk_combo_box_remove_text
 	gtk_combo_box_set_active
@@ -566,10 +571,12 @@ EXPORTS
 	gtk_drag_set_icon_pixmap
 	gtk_drag_set_icon_stock
 	gtk_drag_set_icon_widget
+	gtk_drag_source_get_target_list
 	gtk_drag_source_set
 	gtk_drag_source_set_icon
 	gtk_drag_source_set_icon_pixbuf
 	gtk_drag_source_set_icon_stock
+	gtk_drag_source_set_target_list
 	gtk_drag_source_unset
 	gtk_drag_unhighlight
 	gtk_draw_arrow
@@ -583,6 +590,7 @@ EXPORTS
 	gtk_draw_focus
 	gtk_draw_handle
 	gtk_draw_hline
+	gtk_draw_insertion_cursor
 	gtk_draw_layout
 	gtk_draw_option
 	gtk_draw_polygon
@@ -625,6 +633,7 @@ EXPORTS
 	gtk_entry_completion_set_model
 	gtk_entry_completion_set_text_column
 	gtk_entry_get_activates_default
+	gtk_entry_get_alignment
 	gtk_entry_get_completion
 	gtk_entry_get_has_frame
 	gtk_entry_get_invisible_char
@@ -641,6 +650,7 @@ EXPORTS
 	gtk_entry_prepend_text
 	gtk_entry_select_region
 	gtk_entry_set_activates_default
+	gtk_entry_set_alignment
 	gtk_entry_set_completion
 	gtk_entry_set_editable
 	gtk_entry_set_has_frame
@@ -682,6 +692,7 @@ EXPORTS
 	gtk_file_chooser_add_shortcut_folder_uri
 	gtk_file_chooser_dialog_get_type
 	gtk_file_chooser_dialog_new
+	gtk_file_chooser_dialog_new_with_backend
 	gtk_file_chooser_error_get_type
 	gtk_file_chooser_error_quark
 	gtk_file_chooser_get_action
@@ -700,6 +711,7 @@ EXPORTS
 	gtk_file_chooser_get_type
 	gtk_file_chooser_get_uri
 	gtk_file_chooser_get_uris
+	gtk_file_chooser_get_use_preview_label
 	gtk_file_chooser_list_filters
 	gtk_file_chooser_list_shortcut_folder_uris
 	gtk_file_chooser_list_shortcut_folders
@@ -721,11 +733,13 @@ EXPORTS
 	gtk_file_chooser_set_preview_widget_active
 	gtk_file_chooser_set_select_multiple
 	gtk_file_chooser_set_uri
+	gtk_file_chooser_set_use_preview_label
 	gtk_file_chooser_unselect_all
 	gtk_file_chooser_unselect_filename
 	gtk_file_chooser_unselect_uri
 	gtk_file_chooser_widget_get_type
 	gtk_file_chooser_widget_new
+	gtk_file_chooser_widget_new_with_backend
 	gtk_file_filter_add_custom
 	gtk_file_filter_add_mime_type
 	gtk_file_filter_add_pattern
@@ -772,6 +786,7 @@ EXPORTS
 	gtk_file_selection_set_filename
 	gtk_file_selection_set_select_multiple
 	gtk_file_selection_show_fileop_buttons
+	gtk_file_system_create_folder
 	gtk_file_system_error_quark
 	gtk_file_system_filename_to_path
 	gtk_file_system_get_folder
@@ -854,7 +869,6 @@ EXPORTS
 	gtk_grab_get_current
 	gtk_grab_remove
 	gtk_handle_box_get_handle_position
-	gtk_handle_box_get_private
 	gtk_handle_box_get_shadow_type
 	gtk_handle_box_get_snap_edge
 	gtk_handle_box_get_type
@@ -1031,7 +1045,6 @@ EXPORTS
 	gtk_init_check
 	gtk_init_check_abi_check
 	gtk_input_add_full
-	gtk_input_dialog_get_private
 	gtk_input_dialog_get_type
 	gtk_input_dialog_new
 	gtk_input_remove
@@ -1236,6 +1249,7 @@ EXPORTS
 	gtk_menu_set_accel_group
 	gtk_menu_set_accel_path
 	gtk_menu_set_active
+	gtk_menu_set_monitor
 	gtk_menu_set_screen
 	gtk_menu_set_tearoff_state
 	gtk_menu_set_title
@@ -1372,6 +1386,7 @@ EXPORTS
 	gtk_paned_pack1
 	gtk_paned_pack2
 	gtk_paned_set_position
+	gtk_path_bar_get_type
 	gtk_parse_args
 	gtk_path_priority_type_get_type
 	gtk_path_type_get_type
@@ -1456,8 +1471,11 @@ EXPORTS
 	gtk_radio_menu_item_get_group
 	gtk_radio_menu_item_get_type
 	gtk_radio_menu_item_new
+	gtk_radio_menu_item_new_from_widget
 	gtk_radio_menu_item_new_with_label
+	gtk_radio_menu_item_new_with_label_from_widget
 	gtk_radio_menu_item_new_with_mnemonic
+	gtk_radio_menu_item_new_with_mnemonic_from_widget
 	gtk_radio_menu_item_set_group
 	gtk_radio_tool_button_get_group
 	gtk_radio_tool_button_get_type
@@ -1528,6 +1546,8 @@ EXPORTS
 	gtk_ruler_set_range
 	gtk_scale_get_digits
 	gtk_scale_get_draw_value
+	gtk_scale_get_layout
+	gtk_scale_get_layout_offsets
 	gtk_scale_get_type
 	gtk_scale_get_value_pos
 	gtk_scale_set_digits
@@ -1889,6 +1909,7 @@ EXPORTS
 	gtk_text_layout_set_cursor_direction
 	gtk_text_layout_set_cursor_visible
 	gtk_text_layout_set_default_style
+	gtk_text_layout_set_keyboard_direction
 	gtk_text_layout_set_preedit_string
 	gtk_text_layout_set_screen_width
 	gtk_text_layout_spew
@@ -2004,6 +2025,7 @@ EXPORTS
 	gtk_toggle_action_get_active
 	gtk_toggle_action_get_draw_as_radio
 	gtk_toggle_action_get_type
+	gtk_toggle_action_new
 	gtk_toggle_action_set_active
 	gtk_toggle_action_set_draw_as_radio
 	gtk_toggle_action_toggled
@@ -2100,6 +2122,7 @@ EXPORTS
 	gtk_tooltips_disable
 	gtk_tooltips_enable
 	gtk_tooltips_force_window
+	gtk_tooltips_get_info_from_tip_window
 	gtk_tooltips_get_type
 	gtk_tooltips_new
 	gtk_tooltips_set_delay
@@ -2444,6 +2467,7 @@ EXPORTS
 	gtk_widget_activate
 	gtk_widget_add_accelerator
 	gtk_widget_add_events
+	gtk_widget_add_mnemonic_label
 	gtk_widget_can_activate_accel
 	gtk_widget_child_focus
 	gtk_widget_child_notify
@@ -2502,6 +2526,7 @@ EXPORTS
 	gtk_widget_is_ancestor
 	gtk_widget_is_focus
 	gtk_widget_list_accel_closures
+	gtk_widget_list_mnemonic_labels
 	gtk_widget_map
 	gtk_widget_mnemonic_activate
 	gtk_widget_modify_base
@@ -2526,6 +2551,7 @@ EXPORTS
 	gtk_widget_ref
 	gtk_widget_region_intersect
 	gtk_widget_remove_accelerator
+	gtk_widget_remove_mnemonic_label
 	gtk_widget_render_icon
 	gtk_widget_reparent
 	gtk_widget_reset_rc_styles
@@ -2572,6 +2598,7 @@ EXPORTS
 	gtk_widget_unref
 	gtk_window_activate_default
 	gtk_window_activate_focus
+	gtk_window_activate_key
 	gtk_window_add_accel_group
 	gtk_window_add_embedded_xid
 	gtk_window_add_mnemonic
@@ -2618,6 +2645,7 @@ EXPORTS
 	gtk_window_parse_geometry
 	gtk_window_position_get_type
 	gtk_window_present
+	gtk_window_propagate_key_event
 	gtk_window_remove_accel_group
 	gtk_window_remove_embedded_xid
 	gtk_window_remove_mnemonic

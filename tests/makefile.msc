@@ -40,8 +40,9 @@ all :	\
 #
 TESTAPPS = \
 	testabi testactions \
-	testcalendar testcombo \
+	testcalendar testcombo testcombochange \
 	testdnd \
+	testentrycompletion \
 	testfilechooser \
 	testgtk \
 	testicontheme testinput \
@@ -52,8 +53,11 @@ TESTAPPS = \
 	testtreecolumns testtreeedit testtreeflow testtreefocus \
 	testtreesort testtreeview treestoretest \
 	testsocket testsocket_child \
-	testthreads \
+	testthreads testxinerama \
 	simple 
+
+# syntax error : illegal character '-' in macro
+#stresstest-toolbar
 
 
 all-test-apps: 

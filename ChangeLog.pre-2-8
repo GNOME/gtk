@@ -1,3 +1,17 @@
+2004-03-07  Hans Breuer  <hans@breuer.org>
+
+	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting) :
+	some more settings from system, also reflect some name changes
+	done a while ago in the x11 backend
+
+	* gdk/win32/makefile.msc : build gdkspawn-win32.c
+
+	* gtk/gtkdnd.c : gtk_drag_source_[gs]et_target_list, added "Since: 2.4"
+
+	* gtk/makefile.msc.in : build gtkpathbar, link shell32.lib
+
+	* tests/makefile.msc : some more tests get build
+
 Sun Mar  7 03:03:57 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c

@@ -47,6 +47,7 @@ gdk_win32_OBJECTS = \
 #	gdkregion-win32.obj \
 	gdkscreen-win32.obj \
 	gdkselection-win32.obj \
+	gdkspawn-win32.obj \
 	gdkvisual-win32.obj \
 	gdkwin32id.obj \
 	gdkwindow-win32.obj

@@ -161,6 +161,7 @@ gtk_OBJECTS = 					\
 	gtkoldeditable.obj			\
 	gtkoptionmenu.obj			\
 	gtkpaned.obj				\
+	gtkpathbar.obj				\
 	gtkpixmap.obj				\
 #	gtkplug.obj				\
 	gtkpreview.obj				\
@@ -485,7 +486,7 @@ gtk.res : gtk.rc
 libgtk-win32-$(GTK_VER)-0.dll : $(gtk_OBJECTS) gtk.def gtk.res
 	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_OBJECTS) gtk.res \
 	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) \
-	gdi32.lib user32.lib advapi32.lib wsock32.lib \
+	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib \
 	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
