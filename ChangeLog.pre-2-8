@@ -1,3 +1,7 @@
+Wed Jun 10 18:44:22 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkfeatures.in: #define GTK_HAVE_ACCEL_GROUP
+
 Wed Jun 10 20:54:37 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk-config.in: Added missing quotes.

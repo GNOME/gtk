@@ -45,6 +45,8 @@ extern "C" {
   
 #define GTK_HAVE_RC_SET_IMAGE_LOADER			1-1-0
 
+#define GTK_HAVE_ACCEL_GROUP				1-1-0
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
