@@ -1464,6 +1464,7 @@ BitmapToRegion (HBITMAP hBmp)
     hRgn = h;
 
   /* Clean up*/
+  g_free (pData);
   SelectObject(hMemDC, holdBmp);
   DeleteObject (hbm8);
   DeleteDC (hMemDC);

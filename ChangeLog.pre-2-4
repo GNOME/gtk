@@ -1,3 +1,29 @@
+2000-12-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/makefile.{mingw.in,msc} (gdk_OBJECTS): Add gdkkeys.
+
+	* gtk/gtk.def
+	* gdk/gdk.def: Update.
+
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkkeys-win32.c: New file. Move some functions from
+	gdkmain-win32.c here.
+
+	* gdk/win32/makefile.mingw.in (all): No need to make
+	gdk-win32res.o here, the makefile one step up will call us to make
+	it.
+
+	* gdk/win32/makefile.{mingw.in,msc} (gdk_win32_OBJECTS): Add
+	gdkkeys-win32.
+
+	* gdk/win32/gdkcolor-win32.c: Silence gcc -Wall.
+
+	* gdk/win32/gdkevents-win32.c (gdk_events_init): Remove leftover
+	call to g_source_add().
+
+	* gdk/win32/gdkgc-win32.c (BitmapToRegion): Plug memory
+	leak. Thanks to Andreas Kemnade.
+
 2000-12-13  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextbtree.h: Remove double _ in front of some functions

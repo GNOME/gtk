@@ -254,7 +254,7 @@ terms specified in this license.
 static int
 alloc_color(Colormap  colormap,
 	    XColor   *color,
-	    gulong   *pixelp)
+	    guint    *pixelp)
 {
   PALETTEENTRY entry, closeEntry;
   unsigned int i;
@@ -2272,7 +2272,7 @@ gdk_win32_color_to_string (const GdkColor *color)
 {
   static char buf[100];
 
-  sprintf (buf, "(%.04x,%.04x,%.04x):%.06lx",
+  sprintf (buf, "(%.04x,%.04x,%.04x):%.06x",
 	   color->red, color->green, color->blue, color->pixel);
 
   return buf;

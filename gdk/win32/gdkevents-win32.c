@@ -315,8 +315,6 @@ gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
-  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
-
   hres = CoCreateInstance (&CLSID_CActiveIMM,
 			   NULL,
 			   CLSCTX_ALL,

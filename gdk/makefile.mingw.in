@@ -37,6 +37,7 @@ gdk_OBJECTS =					\
 	gdkgc.o					\
 	gdkglobals.o				\
 	gdkimage.o				\
+	gdkkeys.o				\
 	gdkkeyuni.o				\
 	gdkpango.o				\
 	gdkpixbuf-drawable.o			\

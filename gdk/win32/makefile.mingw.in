@@ -23,7 +23,6 @@ all:						\
 	../../config.h				\
 	../gdkconfig.h				\
 	libgdk-win32.a				\
-	gdk-win32res.o				\
 	libwntab32x.a
 
 gdk_win32_OBJECTS =				\
@@ -41,6 +40,7 @@ gdk_win32_OBJECTS =				\
 	gdkimage-win32.o			\
 	gdkinput.o				\
 	gdkinput-win32.o			\
+	gdkkeys-win32.o				\
 	gdkmain-win32.o				\
 	gdkpango-win32.o			\
 	gdkpixmap-win32.o			\

@@ -202,6 +202,12 @@ EXPORTS
 	gdk_key_repeat_restore
 	gdk_keyboard_grab
 	gdk_keyboard_ungrab
+	gdk_keymap_get_default
+	gdk_keymap_get_entries_for_keycode
+	gdk_keymap_get_entries_for_keyval
+	gdk_keymap_get_type
+	gdk_keymap_lookup_key
+	gdk_keymap_translate_keyboard_state
 	gdk_keyval_convert_case
 	gdk_keyval_from_name
 	gdk_keyval_is_lower

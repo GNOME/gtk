@@ -56,6 +56,7 @@ gdk_OBJECTS = \
 	gdkgc.obj \
 	gdkglobals.obj \
 	gdkimage.obj \
+	gdkkeys.obj \
 	gdkkeyuni.obj \
 	gdkpango.obj \
 	gdkpixmap.obj \

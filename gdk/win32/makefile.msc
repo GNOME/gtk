@@ -49,6 +49,7 @@ gdk_win32_OBJECTS = \
 	gdkimage-win32.obj \
 	gdkinput.obj \
 	gdkinput-win32.obj \
+	gdkkeys-win32.obj \
 	gdkmain-win32.obj \
 	gdkpango-win32.obj \
 	gdkpixmap-win32.obj \

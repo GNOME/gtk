@@ -254,7 +254,6 @@ EXPORTS
 	gtk_clist_column_titles_passive
 	gtk_clist_column_titles_show
 	gtk_clist_columns_autosize
-	gtk_clist_construct
 	gtk_clist_find_row_from_data
 	gtk_clist_freeze
 	gtk_clist_get_cell_style
@@ -371,7 +370,6 @@ EXPORTS
 	gtk_ctree_collapse
 	gtk_ctree_collapse_recursive
 	gtk_ctree_collapse_to_depth
-	gtk_ctree_construct
 	gtk_ctree_expand
 	gtk_ctree_expand_recursive
 	gtk_ctree_expand_to_depth
@@ -847,25 +845,13 @@ EXPORTS
 	gtk_notebook_set_tab_pos
 	gtk_notebook_set_tab_vborder
 	gtk_object_add_arg_type
-	gtk_object_arg_get
-	gtk_object_arg_get_info
-	gtk_object_arg_set
-	gtk_object_args_collect
-	gtk_object_class_add_signals
-	gtk_object_class_user_signal_new
-	gtk_object_class_user_signal_newv
-	gtk_object_constructed
-	gtk_object_default_construct
 	gtk_object_destroy
 	gtk_object_get
 	gtk_object_get_data
 	gtk_object_get_data_by_id
 	gtk_object_get_type
 	gtk_object_get_user_data
-	gtk_object_getv
 	gtk_object_new
-	gtk_object_newv
-	gtk_object_query_args
 	gtk_object_ref
 	gtk_object_remove_data
 	gtk_object_remove_data_by_id
@@ -877,7 +863,6 @@ EXPORTS
 	gtk_object_set_data_by_id_full
 	gtk_object_set_data_full
 	gtk_object_set_user_data
-	gtk_object_setv
 	gtk_object_sink
 	gtk_object_unref
 	gtk_object_weakref
@@ -1189,6 +1174,7 @@ EXPORTS
 	gtk_text_get_point
 	gtk_text_get_type
 	gtk_text_insert
+	gtk_text_iter_backward_char
 	gtk_text_iter_backward_chars
 	gtk_text_iter_backward_find_char
 	gtk_text_iter_backward_search
@@ -1197,6 +1183,7 @@ EXPORTS
 	gtk_text_iter_compare
 	gtk_text_iter_ends_tag
 	gtk_text_iter_equal
+	gtk_text_iter_forward_char
 	gtk_text_iter_forward_chars
 	gtk_text_iter_forward_find_char
 	gtk_text_iter_forward_line
@@ -1209,8 +1196,6 @@ EXPORTS
 	gtk_text_iter_get_toggled_tags
 	gtk_text_iter_in_range
 	gtk_text_iter_is_last
-	gtk_text_iter_next_char
-	gtk_text_iter_prev_char
 	gtk_text_iter_reorder
 	gtk_text_iter_spew
 	gtk_text_iter_toggles_tag
@@ -1378,7 +1363,6 @@ EXPORTS
 	gtk_widget_draw_focus
 	gtk_widget_ensure_style
 	gtk_widget_event
-	gtk_widget_get
 	gtk_widget_get_ancestor
 	gtk_widget_get_child_requisition
 	gtk_widget_get_colormap
@@ -1399,7 +1383,6 @@ EXPORTS
 	gtk_widget_get_toplevel
 	gtk_widget_get_type
 	gtk_widget_get_visual
-	gtk_widget_getv
 	gtk_widget_grab_default
 	gtk_widget_grab_focus
 	gtk_widget_hide
@@ -1416,7 +1399,6 @@ EXPORTS
 	gtk_widget_modify_style
 	gtk_widget_modify_text
 	gtk_widget_new
-	gtk_widget_newv
 	gtk_widget_path
 	gtk_widget_pop_colormap
 	gtk_widget_pop_composite_child
@@ -1459,7 +1441,6 @@ EXPORTS
 	gtk_widget_set_style
 	gtk_widget_set_uposition
 	gtk_widget_set_usize
-	gtk_widget_setv
 	gtk_widget_shape_combine_mask
 	gtk_widget_show
 	gtk_widget_show_all
