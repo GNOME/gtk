@@ -3047,7 +3047,16 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	  widget = GTK_WINDOW (toplevel)->focus_widget;
 	  
 	  if (widget == focus_widget)
-	    return;
+	    {
+	      /* We call gtk_window_set_focus() here so that the
+	       * toplevel window can request the focus if necessary.
+	       * This is needed when the toplevel is a GtkPlug
+	       */
+	      if (!GTK_WIDGET_HAS_FOCUS (widget))
+		gtk_window_set_focus (GTK_WINDOW (toplevel), focus_widget);
+
+	      return;
+	    }
 	  
 	  if (widget)
 	    {

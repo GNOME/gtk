@@ -361,7 +361,8 @@ gtk_window_set_focus (GtkWindow *window,
       g_return_if_fail (GTK_WIDGET_CAN_FOCUS (focus));
     }
 
-  if (window->focus_widget != focus)
+  if ((window->focus_widget != focus) ||
+      (focus && !GTK_WIDGET_HAS_FOCUS (focus)))
     gtk_signal_emit (GTK_OBJECT (window), window_signals[SET_FOCUS], focus);
 }
 
