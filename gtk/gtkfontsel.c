@@ -773,9 +773,9 @@ gtk_font_selection_show_available_styles (GtkFontSelection *fontsel)
   fontsel->face = match_face;
   if (match_face)
     {
+#ifdef INCLUDE_FONT_ENTRIES        
       const gchar *str = pango_font_face_get_face_name (fontsel->face);
 
-#ifdef INCLUDE_FONT_ENTRIES        
       gtk_entry_set_text (GTK_ENTRY (fontsel->font_style_entry), str);
 #endif      
       set_cursor_to_iter (GTK_TREE_VIEW (fontsel->face_list), &match_row);

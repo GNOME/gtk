@@ -126,7 +126,7 @@ void         gtk_tree_path_prepend_index    (GtkTreePath       *path,
 gint         gtk_tree_path_get_depth        (GtkTreePath       *path);
 gint        *gtk_tree_path_get_indices      (GtkTreePath       *path);
 void         gtk_tree_path_free             (GtkTreePath       *path);
-GtkTreePath *gtk_tree_path_copy             (GtkTreePath       *path);
+GtkTreePath *gtk_tree_path_copy             (const GtkTreePath *path);
 GType        gtk_tree_path_get_type         (void);
 gint         gtk_tree_path_compare          (const GtkTreePath *a,
 					     const GtkTreePath *b);

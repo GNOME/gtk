@@ -345,7 +345,7 @@ gtk_tree_path_free (GtkTreePath *path)
  * Return value: A new #GtkTreePath.
  **/
 GtkTreePath *
-gtk_tree_path_copy (GtkTreePath *path)
+gtk_tree_path_copy (const GtkTreePath *path)
 {
   GtkTreePath *retval;
 

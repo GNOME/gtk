@@ -1,3 +1,14 @@
+Sun Mar 24 10:32:38 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_path_copy): Make path arg const, #75653
+
+	* gtk/gtkfontsel.c (gtk_font_selection_show_available_styles): fix
+	a warning
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): remove the grab
+	when we emit row_activated so that listeners of this signal can
+	grab the mouse, #75629
+
 2002-03-23  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_real_invalidate):

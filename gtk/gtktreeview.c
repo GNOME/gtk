@@ -1709,6 +1709,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       gint pre_val, aft_val;
       GtkTreeViewColumn *column = NULL;
       gint column_handled_click = FALSE;
+      gboolean emit_row_activated = FALSE;
 
       if (!GTK_WIDGET_HAS_FOCUS (widget))
 	gtk_widget_grab_focus (widget);
@@ -1877,14 +1878,9 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       if (event->button == 1 && event->type == GDK_2BUTTON_PRESS &&
 	  tree_view->priv->last_single_clicked)
 	{
-	  GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_single_clicked);
+	  GtkTreePath *lsc;
 
-	  if (lsc)
-	    {
-	      if (!gtk_tree_path_compare (lsc, path))
-		gtk_tree_view_row_activated (tree_view, path, column);
-	      gtk_tree_path_free (lsc);
-	    }
+	  lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_single_clicked);
 
 	  if (tree_view->priv->last_single_clicked)
 	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
@@ -1892,6 +1888,13 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked_2);
 	  tree_view->priv->last_single_clicked = NULL;
 	  tree_view->priv->last_single_clicked_2 = NULL;
+
+	  if (lsc)
+	    {
+	      if (!gtk_tree_path_compare (lsc, path))
+		emit_row_activated = TRUE;
+	      gtk_tree_path_free (lsc);
+	    }
 	}
       else if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
         {
@@ -1903,6 +1906,12 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
       gtk_tree_path_free (path);
+
+      if (emit_row_activated)
+	{
+	  gtk_grab_remove (widget);
+	  gtk_tree_view_row_activated (tree_view, path, column);
+	}
       return TRUE;
     }
 
