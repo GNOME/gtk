@@ -1,3 +1,20 @@
+Mon Feb 22 19:06:30 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.c (xdnd_send_*): When sending events to
+	 windows with a proxy, set the window field in the
+	 sent event to the original window, not to the proxy.
+	 (This gives consistency with Motif, and also provides
+	  information to the destination that it wouldn't have 
+	  otherwise).
+	
+	* gtk/gtkdnd.c: Fixed some refcount leaks for windows.
+
+	* gdk/gdkdnd.c (xdnd_send_xevent): When sending
+	 Xdnd event to the root window, set the event mask
+	 to ButtonPressMask. Hopefully, this should give us 
+	 compatibility with kfm, if it uses the Qt style
+	 of root window drops.
+
 Mon Feb 22 08:45:10 GMT 1999 Tony Gale  <gale@gtk.org>
 
 	* docs/gtk_tut.sgml:

@@ -1385,6 +1385,9 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 		       context->suggested_action, 
 		       context->actions, time);
 
+      if (!site->proxy_window && dest_window)
+	gdk_window_unref (dest_window);
+
       selection = gdk_drag_get_selection (info->proxy_source->context);
       if (selection && 
 	  selection != gdk_drag_get_selection (info->context))
@@ -1494,13 +1497,16 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 				    current_event->dnd.y_root,
 				    &dest_window, &proto);
 	    }
-	    
+
 	  gdk_drag_motion (info->proxy_source->context, 
 			   dest_window, proto,
 			   current_event->dnd.x_root, 
 			   current_event->dnd.y_root, 
 			   context->suggested_action, 
 			   context->actions, time);
+
+	  if (!site->proxy_window && dest_window)
+	    gdk_window_unref (dest_window);
 
 	  selection = gdk_drag_get_selection (info->proxy_source->context);
 	  if (selection && 

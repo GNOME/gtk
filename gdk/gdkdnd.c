@@ -23,6 +23,8 @@
 #include "gdk/gdkprivate.h"
 #include "gdk.h"
 
+#define NEW_DRAGS
+
 typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 typedef enum {
@@ -177,16 +179,24 @@ gdk_drag_context_find (gboolean is_source,
 {
   GList *tmp_list = contexts;
   GdkDragContext *context;
+  GdkDragContextPrivate *private;
+  Window context_dest_xid;
 
   while (tmp_list)
     {
       context = (GdkDragContext *)tmp_list->data;
+      private = (GdkDragContextPrivate *)context;
+
+      context_dest_xid = context->dest_window ? 
+	                   (private->dest_xid ?
+			      private->dest_xid :
+			      GDK_WINDOW_XWINDOW (context->dest_window)) :
+	                   None;
 
       if ((!context->is_source == !is_source) &&
 	  ((source_xid == None) || (context->source_window &&
 	    (GDK_WINDOW_XWINDOW (context->source_window) == source_xid))) &&
-	  ((dest_xid == None) || (context->dest_window &&
-	    (GDK_WINDOW_XWINDOW (context->dest_window) == dest_xid))))
+	  ((dest_xid == None) || (context_dest_xid == dest_xid)))
 	return context;
       
       tmp_list = tmp_list->next;
@@ -2059,6 +2069,26 @@ xdnd_set_actions (GdkDragContext *context)
   private->xdnd_actions = context->actions;
 }
 
+/*************************************************************
+ * xdnd_send_xevent:
+ *     Like gdk_send_event, but if the target is the root
+ *     window, sets an event mask of ButtonPressMask, otherwise
+ *     an event mask of 0.
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+gint
+xdnd_send_xevent (Window window, gboolean propagate, 
+		  XEvent *event_send)
+{
+  if (window == gdk_root_window)
+    return gdk_send_xevent (window, propagate, ButtonPressMask, event_send);
+  else
+    return gdk_send_xevent (window, propagate, 0, event_send);
+}
+
 static void
 xdnd_send_enter (GdkDragContext *context)
 {
@@ -2068,7 +2098,13 @@ xdnd_send_enter (GdkDragContext *context)
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndEnter", FALSE);
   xev.xclient.format = 32;
+#ifdef NEW_DRAGS
+  xev.xclient.window = private->dest_xid ? 
+                           private->dest_xid : 
+                           GDK_WINDOW_XWINDOW (context->dest_window);
+#else
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
+#endif
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = (3 << 24); /* version */
   xev.xclient.data.l[2] = 0;
@@ -2097,8 +2133,8 @@ xdnd_send_enter (GdkDragContext *context)
 	}
     }
 
-  if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
-			FALSE, 0, &xev))
+  if (!xdnd_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2113,18 +2149,26 @@ xdnd_send_leave (GdkDragContext *context)
 {
   XEvent xev;
 
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndLeave", FALSE);
   xev.xclient.format = 32;
+#ifdef NEW_DRAGS
+  xev.xclient.window = private->dest_xid ? 
+                           private->dest_xid : 
+                           GDK_WINDOW_XWINDOW (context->dest_window);
+#else
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
+#endif
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
-			FALSE, 0, &xev))
+  if (!xdnd_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2137,20 +2181,27 @@ xdnd_send_leave (GdkDragContext *context)
 static void
 xdnd_send_drop (GdkDragContext *context, guint32 time)
 {
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndDrop", FALSE);
   xev.xclient.format = 32;
+#ifdef NEW_DRAGS  
+  xev.xclient.window = private->dest_xid ? 
+                           private->dest_xid : 
+                           GDK_WINDOW_XWINDOW (context->dest_window);
+#else
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
+#endif
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = time;
   xev.xclient.data.l[3] = 0;
   xev.xclient.data.l[4] = 0;
 
-  if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
-			FALSE, 0, &xev))
+  if (!xdnd_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -2173,15 +2224,21 @@ xdnd_send_motion (GdkDragContext *context,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndPosition", FALSE);
   xev.xclient.format = 32;
+#ifdef NEW_DRAGS
+  xev.xclient.window = private->dest_xid ? 
+                           private->dest_xid : 
+                           GDK_WINDOW_XWINDOW (context->dest_window);
+#else
   xev.xclient.window = GDK_WINDOW_XWINDOW (context->dest_window);
+#endif  
   xev.xclient.data.l[0] = GDK_WINDOW_XWINDOW (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
   xev.xclient.data.l[3] = time;
   xev.xclient.data.l[4] = xdnd_action_to_atom (action);
 
-  if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
-			FALSE, 0, &xev))
+  if (!xdnd_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
+			 FALSE, &xev))
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
@@ -3075,8 +3132,8 @@ gdk_drag_status (GdkDragContext   *context,
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = xdnd_action_to_atom (action);
 
-      if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->source_window),
-		       FALSE, 0, &xev))
+      if (!xdnd_send_xevent (GDK_WINDOW_XWINDOW (context->source_window),
+			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
 			     GDK_WINDOW_XWINDOW (context->source_window)));
@@ -3146,8 +3203,8 @@ gdk_drop_finish (GdkDragContext   *context,
       xev.xclient.data.l[3] = 0;
       xev.xclient.data.l[4] = 0;
 
-      if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->source_window),
-		       FALSE, 0, &xev))
+      if (!xdnd_send_xevent (GDK_WINDOW_XWINDOW (context->source_window),
+			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
 			     GDK_WINDOW_XWINDOW (context->source_window)));
