@@ -1,6 +1,6 @@
-# Makefile.in generated automatically by automake 1.2c from Makefile.am
+# Makefile.in generated automatically by automake 1.3 from Makefile.am
 
-# Copyright (C) 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
+# Copyright (C) 1994, 1995, 1996, 1997, 1998 Free Software Foundation, Inc.
 # This Makefile.in is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
@@ -32,6 +32,8 @@ mandir = @mandir@
 includedir = @includedir@
 oldincludedir = /usr/include
 
+DISTDIR =
+
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
@@ -49,19 +51,26 @@ INSTALL_DATA = @INSTALL_DATA@
 INSTALL_SCRIPT = @INSTALL_SCRIPT@
 transform = @program_transform_name@
 
-NORMAL_INSTALL = true
-PRE_INSTALL = true
-POST_INSTALL = true
-NORMAL_UNINSTALL = true
-PRE_UNINSTALL = true
-POST_UNINSTALL = true
+NORMAL_INSTALL = :
+PRE_INSTALL = :
+POST_INSTALL = :
+NORMAL_UNINSTALL = :
+PRE_UNINSTALL = :
+POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
 CC = @CC@
-CPP = @CPP@
+GTK_MAJOR_VERSION = @GTK_MAJOR_VERSION@
+GTK_MICRO_VERSION = @GTK_MICRO_VERSION@
+GTK_MINOR_VERSION = @GTK_MINOR_VERSION@
+GTK_VERSION = @GTK_VERSION@
 LD = @LD@
 LIBTOOL = @LIBTOOL@
 LN_S = @LN_S@
+LT_AGE = @LT_AGE@
+LT_CURRENT = @LT_CURRENT@
+LT_RELEASE = @LT_RELEASE@
+LT_REVISION = @LT_REVISION@
 MAINT = @MAINT@
 MAKEINFO = @MAKEINFO@
 NM = @NM@
@@ -77,14 +86,88 @@ xinput_progs = @xinput_progs@
 SRC_SUBDIRS = glib gdk gtk
 SUBDIRS = $(SRC_SUBDIRS) docs
 
-EXTRA_DIST = gtk+.prj makecopyright TODO REFCOUNTING BUGS
+bin_SCRIPTS = gtk-config
+
+EXTRA_DIST =	\
+	gtk+.spec	\
+        gtk.m4          \
+	makecopyright	\
+	TODO		\
+	NEWS.pre-1-0	\
+	ChangeLog.pre-1-0	\
+	examples/aspectframe/Makefile  \
+	examples/aspectframe/aspectframe.c  \
+	examples/buttons/Makefile  \
+	examples/buttons/buttons.c  \
+	examples/buttons/info.xpm  \
+	examples/entry/Makefile  \
+	examples/entry/entry.c  \
+	examples/eventbox/Makefile  \
+	examples/eventbox/eventbox.c  \
+	examples/filesel/Makefile  \
+	examples/filesel/filesel.c  \
+	examples/gtkdial/Makefile  \
+	examples/gtkdial/dial_test.c  \
+	examples/gtkdial/gtkdial.c  \
+	examples/gtkdial/gtkdial.h  \
+	examples/helloworld/Makefile  \
+	examples/helloworld/helloworld.c  \
+	examples/helloworld2/Makefile  \
+	examples/helloworld2/helloworld2.c  \
+	examples/list/Makefile  \
+	examples/list/list.c  \
+	examples/menu/Makefile  \
+	examples/menu/menu.c  \
+	examples/menu/menufactory.c  \
+	examples/menu/menufactory.h  \
+	examples/menu/mfmain.c  \
+	examples/menu/mfmain.h  \
+	examples/notebook/Makefile  \
+	examples/notebook/notebook.c  \
+	examples/packbox/Makefile  \
+	examples/packbox/packbox.c  \
+	examples/paned/Makefile  \
+	examples/paned/paned.c  \
+	examples/pixmap/Makefile  \
+	examples/pixmap/pixmap.c  \
+	examples/progressbar/Makefile  \
+	examples/progressbar/progressbar.c  \
+	examples/radiobuttons/Makefile  \
+	examples/radiobuttons/radiobuttons.c  \
+	examples/rulers/Makefile  \
+	examples/rulers/rulers.c  \
+	examples/scribble-simple/Makefile  \
+	examples/scribble-simple/scribble-simple.c  \
+	examples/scrolledwin/Makefile  \
+	examples/scrolledwin/scrolledwin.c  \
+	examples/selection/Makefile  \
+	examples/selection/gettargets.c  \
+	examples/selection/setselection.c  \
+	examples/statusbar/Makefile  \
+	examples/statusbar/statusbar.c  \
+	examples/table/Makefile  \
+	examples/table/table.c  \
+	examples/tictactoe/Makefile  \
+	examples/tictactoe/tictactoe.c  \
+	examples/tictactoe/tictactoe.h  \
+	examples/tictactoe/ttt_test.c  \
+	examples/wheelbarrow/Makefile  \
+	examples/wheelbarrow/wheelbarrow.c  \
+	examples/find-examples.sh
+
+m4datadir = $(datadir)/aclocal
+m4data_DATA = gtk.m4
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES =  gtk+.xconfig
+CONFIG_CLEAN_FILES =  gtk-config
+SCRIPTS =  $(bin_SCRIPTS)
+
+DATA =  $(m4data_DATA)
+
 DIST_COMMON =  README AUTHORS COPYING ChangeLog INSTALL Makefile.am \
 Makefile.in NEWS TODO acconfig.h aclocal.m4 config.guess config.h.in \
-config.sub configure configure.in gtk+.xconfig.in install-sh ltconfig \
+config.sub configure configure.in gtk-config.in install-sh ltconfig \
 ltmain.sh missing mkinstalldirs stamp-h.in
 
 
@@ -92,13 +175,13 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP = --best
-default: all
+all: all-recursive-am all-am
 
 .SUFFIXES:
-$(srcdir)/Makefile.in: @MAINT@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
+$(srcdir)/Makefile.in: @MAINT@ Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4)
 	cd $(top_srcdir) && $(AUTOMAKE) --gnu Makefile
 
-Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status $(BUILT_SOURCES)
+Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status $(BUILT_SOURCES)
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
@@ -130,8 +213,46 @@ distclean-hdr:
 	-rm -f config.h
 
 maintainer-clean-hdr:
-gtk+.xconfig: $(top_builddir)/config.status gtk+.xconfig.in
+gtk-config: $(top_builddir)/config.status gtk-config.in
 	cd $(top_builddir) && CONFIG_FILES=$@ CONFIG_HEADERS= ./config.status
+
+install-binSCRIPTS: $(bin_SCRIPTS)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(bindir)
+	@list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  if test -f $$p; then \
+	    echo " $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`"; \
+	    $(INSTALL_SCRIPT) $(srcdir)/$$p $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	  else :; fi; fi; \
+	done
+
+uninstall-binSCRIPTS:
+	@$(NORMAL_UNINSTALL)
+	list='$(bin_SCRIPTS)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(bindir)/`echo $$p|sed '$(transform)'`; \
+	done
+
+install-m4dataDATA: $(m4data_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(m4datadir)
+	@list='$(m4data_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(m4datadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(m4datadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(m4datadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(m4datadir)/$$p; \
+	  fi; fi; \
+	done
+
+uninstall-m4dataDATA:
+	@$(NORMAL_UNINSTALL)
+	list='$(m4data_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(m4datadir)/$$p; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -146,7 +267,7 @@ all-recursive install-data-recursive install-exec-recursive \
 installdirs-recursive install-recursive uninstall-recursive  \
 check-recursive installcheck-recursive info-recursive dvi-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
-	for subdir in $(SUBDIRS); do \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
 	  target=`echo $@ | sed s/-recursive//`; \
 	  echo "Making $$target in $$subdir"; \
 	  (cd $$subdir && $(MAKE) $$target) \
@@ -156,7 +277,9 @@ check-recursive installcheck-recursive info-recursive dvi-recursive:
 mostlyclean-recursive clean-recursive distclean-recursive \
 maintainer-clean-recursive:
 	@set fnord $(MAKEFLAGS); amf=$$2; \
-	rev=''; for subdir in $(SUBDIRS); do rev="$$subdir $$rev"; done; \
+	rev=''; list='$(SUBDIRS)'; for subdir in $$list; do \
+	  rev="$$subdir $$rev"; \
+	done; \
 	for subdir in $$rev; do \
 	  target=`echo $@ | sed s/-recursive//`; \
 	  echo "Making $$target in $$subdir"; \
@@ -170,17 +293,22 @@ tags-recursive:
 
 tags: TAGS
 
-ID: $(HEADERS) $(SOURCES)
-	here=`pwd` && cd $(srcdir) && mkid -f$$here/ID $(SOURCES) $(HEADERS)
+ID: $(HEADERS) $(SOURCES) $(LISP)
+	here=`pwd` && cd $(srcdir) \
+	  && mkid -f$$here/ID $(SOURCES) $(HEADERS) $(LISP)
 
-TAGS: tags-recursive $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES)
+TAGS: tags-recursive $(HEADERS) $(SOURCES) config.h.in $(TAGS_DEPENDENCIES) $(LISP)
 	tags=; \
 	here=`pwd`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
 	  test -f $$subdir/TAGS && tags="$$tags -i $$here/$$subdir/TAGS"; \
 	done; \
-	test -z "$(ETAGS_ARGS)config.h.in$(SOURCES)$(HEADERS)$$tags" \
-	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags config.h.in $(SOURCES) $(HEADERS) -o $$here/TAGS)
+	list='$(SOURCES) $(HEADERS)'; \
+	unique=`for i in $$list; do echo $$i; done | \
+	  awk '    { files[$$0] = 1; } \
+	       END { for (i in files) print i; }'`; \
+	test -z "$(ETAGS_ARGS)config.h.in$$unique$(LISP)$$tags" \
+	  || (cd $(srcdir) && etags $(ETAGS_ARGS) $$tags config.h.in $$unique $(LISP) -o $$here/TAGS)
 
 mostlyclean-tags:
 
@@ -232,6 +360,20 @@ distdir: $(DISTFILES)
 	distdir=`cd $(distdir) && pwd`; \
 	cd $(top_srcdir) \
 	  && $(AUTOMAKE) --include-deps --build-dir=$$here --srcdir-name=$(top_srcdir) --output-dir=$$top_distdir --gnu Makefile
+	$(mkinstalldirs) $(distdir)/examples $(distdir)/examples/aspectframe \
+	   $(distdir)/examples/buttons $(distdir)/examples/entry \
+	   $(distdir)/examples/eventbox $(distdir)/examples/filesel \
+	   $(distdir)/examples/gtkdial $(distdir)/examples/helloworld \
+	   $(distdir)/examples/helloworld2 $(distdir)/examples/list \
+	   $(distdir)/examples/menu $(distdir)/examples/notebook \
+	   $(distdir)/examples/packbox $(distdir)/examples/paned \
+	   $(distdir)/examples/pixmap $(distdir)/examples/progressbar \
+	   $(distdir)/examples/radiobuttons $(distdir)/examples/rulers \
+	   $(distdir)/examples/scribble-simple \
+	   $(distdir)/examples/scrolledwin \
+	   $(distdir)/examples/selection $(distdir)/examples/statusbar \
+	   $(distdir)/examples/table $(distdir)/examples/tictactoe \
+	   $(distdir)/examples/wheelbarrow
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  test -f $(distdir)/$$file \
@@ -254,24 +396,29 @@ installcheck: installcheck-recursive
 all-recursive-am: config.h
 	$(MAKE) all-recursive
 
-all-am: Makefile config.h
+all-am: Makefile $(SCRIPTS) $(DATA) config.h
 
-install-exec: install-exec-recursive
+install-exec-am: install-binSCRIPTS
+
+install-data-am: install-m4dataDATA
+
+uninstall-am: uninstall-binSCRIPTS uninstall-m4dataDATA
+
+install-exec: install-exec-recursive install-exec-am
 	@$(NORMAL_INSTALL)
 
-install-data: install-data-recursive
+install-data: install-data-recursive install-data-am
 	@$(NORMAL_INSTALL)
 
-install: install-recursive
+install: install-recursive install-exec-am install-data-am
 	@:
 
-uninstall: uninstall-recursive
-
-all: all-recursive-am all-am
+uninstall: uninstall-recursive uninstall-am
 
 install-strip:
 	$(MAKE) INSTALL_PROGRAM='$(INSTALL_PROGRAM) -s' INSTALL_SCRIPT='$(INSTALL_PROGRAM)' install
 installdirs: installdirs-recursive
+	$(mkinstalldirs)  $(DATADIR)$(bindir) $(DATADIR)$(m4datadir)
 
 
 mostlyclean-generic:
@@ -310,18 +457,19 @@ maintainer-clean:  maintainer-clean-recursive maintainer-clean-am
 	@echo "it deletes files that may require special tools to rebuild."
 	-rm -f config.status
 
-.PHONY: default mostlyclean-hdr distclean-hdr clean-hdr \
-maintainer-clean-hdr install-data-recursive uninstall-data-recursive \
+.PHONY: mostlyclean-hdr distclean-hdr clean-hdr maintainer-clean-hdr \
+uninstall-binSCRIPTS install-binSCRIPTS uninstall-m4dataDATA \
+install-m4dataDATA install-data-recursive uninstall-data-recursive \
 install-exec-recursive uninstall-exec-recursive installdirs-recursive \
 uninstalldirs-recursive all-recursive check-recursive \
 installcheck-recursive info-recursive dvi-recursive \
 mostlyclean-recursive distclean-recursive clean-recursive \
 maintainer-clean-recursive tags tags-recursive mostlyclean-tags \
 distclean-tags clean-tags maintainer-clean-tags distdir info dvi \
-installcheck all-recursive-am all-am install-exec install-data install \
-uninstall all installdirs mostlyclean-generic distclean-generic \
-clean-generic maintainer-clean-generic clean mostlyclean distclean \
-maintainer-clean
+installcheck all-recursive-am all-am install-exec-am install-data-am \
+uninstall-am install-exec install-data install uninstall all \
+installdirs mostlyclean-generic distclean-generic clean-generic \
+maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 
 .PHONY: files populate checkin release

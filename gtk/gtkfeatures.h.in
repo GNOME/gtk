@@ -43,7 +43,7 @@ extern "C" {
  */
 #define GTK_HAVE_SIGNAL_INIT				1-0-2
   
-
+#define GTK_HAVE_RC_SET_IMAGE_LOADER			1-1-0
 
 #ifdef __cplusplus
 }

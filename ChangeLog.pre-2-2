@@ -1,3 +1,8 @@
+1998-05-22  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gtk/gtkfeatures.h.in: Define GTK_HAVE_RC_SET_IMAGE_LOADER, to be
+	used in gnome-libs
+
 1998-05-22    <sopwith@redhat.com>
 
 	* gtk/gtkeventbox.c: Pass size_allocate on to the child
