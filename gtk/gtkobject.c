@@ -278,16 +278,16 @@ gtk_object_add_arg_type (const gchar *arg_name,
       pspec = g_param_spec_boolean (pname, NULL, NULL, FALSE, arg_flags);
       break;
     case G_TYPE_INT:
-      pspec = g_param_spec_int (pname, NULL, NULL, -2147483647, 2147483647, 0, arg_flags);
+      pspec = g_param_spec_int (pname, NULL, NULL, G_MININT, G_MAXINT, 0, arg_flags);
       break;
     case G_TYPE_UINT:
-      pspec = g_param_spec_uint (pname, NULL, NULL, 0, 4294967295U, 0, arg_flags);
+      pspec = g_param_spec_uint (pname, NULL, NULL, 0, G_MAXUINT, 0, arg_flags);
       break;
     case G_TYPE_FLOAT:
-      pspec = g_param_spec_float (pname, NULL, NULL, -1E+37, 1E+37, 0, arg_flags);
+      pspec = g_param_spec_float (pname, NULL, NULL, -G_MAXFLOAT, G_MAXFLOAT, 0, arg_flags);
       break;
     case G_TYPE_DOUBLE:
-      pspec = g_param_spec_double (pname, NULL, NULL, -1E+307, 1E+307, 0, arg_flags);
+      pspec = g_param_spec_double (pname, NULL, NULL, -G_MAXDOUBLE, G_MAXDOUBLE, 0, arg_flags);
       break;
     case G_TYPE_STRING:
       pspec = g_param_spec_string (pname, NULL, NULL, NULL, arg_flags);
