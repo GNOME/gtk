@@ -79,13 +79,9 @@ gdk_image_new_bitmap (GdkVisual *visual,
 		      gpointer   data,
 		      gint       width,
 		      gint       height)
-/*
- * Desc: create a new bitmap image
- */
 {
   GdkPixmap *pixmap;
   GdkImage *image;
-  GdkImagePrivateWin32 *private;
   gint data_bpl = (width - 1)/8 + 1;
   gint i;
 
@@ -95,7 +91,6 @@ gdk_image_new_bitmap (GdkVisual *visual,
     return NULL;
 
   image = GDK_DRAWABLE_WIN32DATA (pixmap)->image;
-  private = (GdkImagePrivateWin32 *) image;
 
   GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d\n", width, height));
   
@@ -196,7 +191,7 @@ gdk_image_get_pixel (GdkImage *image,
 
   GdiFlush ();
   if (image->depth == 1)
-    return (((char *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
+    return (((guchar *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
 
   if (image->depth == 4)
     {
