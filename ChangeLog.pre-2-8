@@ -1,3 +1,8 @@
+2002-06-07  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtkwindow.c: (gtk_window_compute_configure_request): use
+	the RootWindow of this screen for gdk_window_get_pointer.
+
 2002-06-06  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Set

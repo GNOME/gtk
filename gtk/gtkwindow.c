@@ -4183,7 +4183,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             gint screen_height = gdk_screen_get_height (window->screen);
             int px, py;
             
-            gdk_window_get_pointer (NULL, &px, &py, NULL);
+            gdk_window_get_pointer (gdk_screen_get_root_window (window->screen),
+				    &px, &py, NULL);
             x = px - w / 2;
             y = py - h / 2;
             x = CLAMP (x, 0, screen_width - w);
