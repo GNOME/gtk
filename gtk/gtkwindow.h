@@ -77,6 +77,10 @@ struct _GtkWindow
    */
   guint use_uposition : 1;
   guint modal : 1;
+
+  /* Set if the window, or any descendent of it, has the focus
+   */
+  guint window_has_focus : 1;
 };
 
 struct _GtkWindowClass

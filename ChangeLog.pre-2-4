@@ -1,3 +1,15 @@
+Tue Feb 27 18:38:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_map): Redo the focus stuff
+	once more. Keep track of the focus status via an event
+	filter, so we can keep track of whether the window
+	or any child has the focus; something that requires
+	fields from the XEvent not in the GdkEvent.
+
+	Install this event filter in gtk_window_map() before mapping
+	the window, on the guess that this is unlikely to be overriden
+	without the overrider chaining up. (fingers crossed)
+
 Tue Feb 27 04:14:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.c (gtk_propagate_event): Remove

@@ -926,6 +926,52 @@ gtk_window_hide (GtkWidget *widget)
     gtk_grab_remove (widget);
 }
 
+static GdkFilterReturn
+gtk_window_focus_filter (GdkXEvent *xevent,
+			 GdkEvent  *event,
+			 gpointer   data)
+{
+  GtkWindow *window = GTK_WINDOW (data);
+  XEvent *xev = (XEvent *)xevent;
+  
+  if (xev->xany.type == FocusIn)
+    {
+      switch (xev->xfocus.detail)
+	{
+	case NotifyAncestor:
+	case NotifyNonlinear:
+	case NotifyVirtual:
+	case NotifyNonlinearVirtual:
+	  window->window_has_focus = TRUE;
+	  break;
+	case NotifyInferior:
+	case NotifyPointer:
+	case NotifyPointerRoot:
+	case NotifyDetailNone:
+	  break;
+	}
+    }
+  else if (xev->xany.type == FocusOut)
+    {
+      switch (xev->xfocus.detail)
+	{
+	case NotifyAncestor:
+	case NotifyNonlinear:
+	case NotifyVirtual:
+	case NotifyNonlinearVirtual:
+	  window->window_has_focus = FALSE;
+	  break;
+	case NotifyInferior:
+	case NotifyPointer:
+	case NotifyPointerRoot:
+	case NotifyDetailNone:
+	  break;
+	}
+    }
+
+  return GDK_FILTER_CONTINUE;
+}
+
 static void
 gtk_window_map (GtkWidget *widget)
 {
@@ -942,6 +988,8 @@ gtk_window_map (GtkWidget *widget)
       GTK_WIDGET_VISIBLE (window->bin.child) &&
       !GTK_WIDGET_MAPPED (window->bin.child))
     gtk_widget_map (window->bin.child);
+
+  gdk_window_add_filter (widget->window, gtk_window_focus_filter, widget);
 
   gdk_window_show (widget->window);
 }
@@ -1325,7 +1373,6 @@ gtk_window_focus_in_event (GtkWidget     *widget,
    */
   if (GTK_WIDGET_VISIBLE (widget))
     {
-      GTK_OBJECT_SET_FLAGS (widget, GTK_HAS_FOCUS);
       window = GTK_WINDOW (widget);
       if (window->focus_widget &&
 	  window->focus_widget != widget &&
@@ -1354,8 +1401,6 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   g_return_val_if_fail (event != NULL, FALSE);
 
   window = GTK_WINDOW (widget);
-
-  GTK_OBJECT_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
 
   if (window->focus_widget &&
       window->focus_widget != widget &&
@@ -1472,7 +1517,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 	    GTK_WIDGET_SET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
         }
 
-      if (GTK_WIDGET_HAS_FOCUS (window))
+      if (window->window_has_focus)
 	{
 	  event.type = GDK_FOCUS_CHANGE;
 	  event.window = window->focus_widget->window;
@@ -1496,7 +1541,7 @@ gtk_window_real_set_focus (GtkWindow *window,
 	    GTK_WIDGET_UNSET_FLAGS (window->default_widget, GTK_HAS_DEFAULT);
 	}
       
-      if (GTK_WIDGET_HAS_FOCUS (window))
+      if (window->window_has_focus)
 	{
 	  event.type = GDK_FOCUS_CHANGE;
 	  event.window = window->focus_widget->window;
