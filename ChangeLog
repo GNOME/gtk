@@ -1,3 +1,23 @@
+Tue Apr 25 19:40:18 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_set_buffer): Fix
+	a problem with referring to the wrong buffer.
+
+	* gtk/gtkentry.c: Fix focus-in/focus-out confusion.
+
+	* gtk/gtkrc.c gtk/gtkstyle.c: Moving setting default
+	font description to gtk_style_new() - otherwise things
+	don't work without a .gtkrc file.
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_new): Sink the
+	tags table if we create it ourself, too.
+
+	* gdk/gdktypes.h (enum): Move GDK_RELEASE_MASK, since
+	it was conflicting with XKB modifiers.
+
+	* gtk/gtktextview.[ch]: Add simple support for 
+	GtkIMContext.
+
 Mon Apr 24 19:34:18 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_move_cursor_visually): Fix problem

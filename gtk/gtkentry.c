@@ -1151,7 +1151,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
   gtk_widget_draw_focus (widget);
   gtk_entry_queue_draw (GTK_ENTRY (widget));
   
-  gtk_im_context_focus_out (GTK_ENTRY (widget)->im_context);
+  gtk_im_context_focus_in (GTK_ENTRY (widget)->im_context);
 
   return FALSE;
 }

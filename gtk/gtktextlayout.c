@@ -225,7 +225,7 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
   
   if (layout->buffer)
     {
-      gtk_text_btree_remove_view (buffer->tree, layout);
+      gtk_text_btree_remove_view (layout->buffer->tree, layout);
       
       gtk_object_unref (GTK_OBJECT (layout->buffer));
       layout->buffer = NULL;
@@ -1826,6 +1826,5 @@ gtk_text_layout_spew (GtkTextLayout *layout)
          layout->height, layout->screen_width);
 #endif
 }
-
 
 
