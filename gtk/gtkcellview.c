@@ -932,8 +932,8 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
 }
 
 void
-gtk_cell_view_set_background_color (GtkCellView *view,
-                                    GdkColor    *color)
+gtk_cell_view_set_background_color (GtkCellView    *view,
+                                    const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_CELL_VIEW (view));
 

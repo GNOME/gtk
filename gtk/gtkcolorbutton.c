@@ -660,7 +660,7 @@ gtk_color_button_new (void)
  * Since: 2.4
  */
 GtkWidget *
-gtk_color_button_new_with_color (GdkColor *color)
+gtk_color_button_new_with_color (const GdkColor *color)
 {
   return g_object_new (GTK_TYPE_COLOR_BUTTON, "color", color, NULL);
 }
@@ -776,7 +776,7 @@ gtk_color_button_clicked (GtkButton *button)
  **/
 void
 gtk_color_button_set_color (GtkColorButton *color_button,
-			    GdkColor       *color)
+			    const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_COLOR_BUTTON (color_button));
 

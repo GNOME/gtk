@@ -4481,10 +4481,10 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
 }
 
 static void
-gtk_widget_modify_color_component (GtkWidget     *widget,
-				   GtkRcFlags     component,
-				   GtkStateType   state,
-				   GdkColor      *color)
+gtk_widget_modify_color_component (GtkWidget      *widget,
+				   GtkRcFlags      component,
+				   GtkStateType    state,
+				   const GdkColor *color)
 {
   GtkRcStyle *rc_style = gtk_widget_get_modifier_style (widget);  
 
@@ -4529,9 +4529,9 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
  * gtk_widget_modify_style().
  **/
 void
-gtk_widget_modify_fg (GtkWidget   *widget,
-		      GtkStateType state,
-		      GdkColor    *color)
+gtk_widget_modify_fg (GtkWidget      *widget,
+		      GtkStateType    state,
+		      const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -4552,9 +4552,9 @@ gtk_widget_modify_fg (GtkWidget   *widget,
  * gtk_widget_modify_style().
  **/
 void
-gtk_widget_modify_bg (GtkWidget   *widget,
-		      GtkStateType state,
-		      GdkColor    *color)
+gtk_widget_modify_bg (GtkWidget      *widget,
+		      GtkStateType    state,
+		      const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -4577,9 +4577,9 @@ gtk_widget_modify_bg (GtkWidget   *widget,
  * gtk_widget_modify_style().
  **/
 void
-gtk_widget_modify_text (GtkWidget   *widget,
-			GtkStateType state,
-			GdkColor    *color)
+gtk_widget_modify_text (GtkWidget      *widget,
+			GtkStateType    state,
+			const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -4602,9 +4602,9 @@ gtk_widget_modify_text (GtkWidget   *widget,
  * and #GtkTextView. See also gtk_widget_modify_style().
  **/
 void
-gtk_widget_modify_base (GtkWidget  *widget,
-			GtkStateType state,
-			GdkColor    *color)
+gtk_widget_modify_base (GtkWidget      *widget,
+			GtkStateType    state,
+			const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);

@@ -267,9 +267,9 @@ static GtkTextFont* get_text_font (GdkFont* gfont);
 static void         text_font_unref (GtkTextFont *text_font);
 
 static void insert_text_property (GtkText* text, GdkFont* font,
-				  GdkColor *fore, GdkColor* back, guint len);
+				  const GdkColor *fore, const GdkColor* back, guint len);
 static TextProperty* new_text_property (GtkText *text, GdkFont* font, 
-					GdkColor* fore, GdkColor* back, guint length);
+					const GdkColor* fore, const GdkColor* back, guint length);
 static void destroy_text_property (TextProperty *prop);
 static void init_properties      (GtkText *text);
 static void realize_property     (GtkText *text, TextProperty *prop);
@@ -958,12 +958,12 @@ gtk_text_thaw (GtkText *text)
 }
 
 void
-gtk_text_insert (GtkText    *text,
-		 GdkFont    *font,
-		 GdkColor   *fore,
-		 GdkColor   *back,
-		 const char *chars,
-		 gint        nchars)
+gtk_text_insert (GtkText        *text,
+		 GdkFont        *font,
+		 const GdkColor *fore,
+		 const GdkColor *back,
+		 const char     *chars,
+		 gint            nchars)
 {
   GtkOldEditable *old_editable = GTK_OLD_EDITABLE (text);
   gboolean frozen = FALSE;
@@ -2876,7 +2876,7 @@ text_font_unref (GtkTextFont *text_font)
 }
 
 static gint
-text_properties_equal (TextProperty* prop, GdkFont* font, GdkColor *fore, GdkColor *back)
+text_properties_equal (TextProperty* prop, GdkFont* font, const GdkColor *fore, const GdkColor *back)
 {
   if (prop->flags & PROPERTY_FONT)
     {
@@ -2970,8 +2970,8 @@ unrealize_properties (GtkText *text)
 }
 
 static TextProperty*
-new_text_property (GtkText *text, GdkFont *font, GdkColor* fore, 
-		   GdkColor* back, guint length)
+new_text_property (GtkText *text, GdkFont *font, const GdkColor* fore,
+		   const GdkColor* back, guint length)
 {
   TextProperty *prop;
   
@@ -3104,7 +3104,7 @@ make_forward_space (GtkText* text, guint len)
  * point. */
 static void
 insert_text_property (GtkText* text, GdkFont* font,
-		      GdkColor *fore, GdkColor* back, guint len)
+		      const GdkColor *fore, const GdkColor* back, guint len)
 {
   GtkPropertyMark *mark = &text->point;
   TextProperty* forward_prop = MARK_CURRENT_PROPERTY(mark);

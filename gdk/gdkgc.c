@@ -199,8 +199,8 @@ gdk_gc_set_values (GdkGC           *gc,
 }
 
 void
-gdk_gc_set_foreground (GdkGC	*gc,
-		       GdkColor *color)
+gdk_gc_set_foreground (GdkGC	      *gc,
+		       const GdkColor *color)
 {
   GdkGCValues values;
 
@@ -212,8 +212,8 @@ gdk_gc_set_foreground (GdkGC	*gc,
 }
 
 void
-gdk_gc_set_background (GdkGC	*gc,
-		       GdkColor *color)
+gdk_gc_set_background (GdkGC	      *gc,
+		       const GdkColor *color)
 {
   GdkGCValues values;
 
@@ -496,7 +496,8 @@ gdk_gc_get_colormap_warn (GdkGC *gc)
  * Calling this function for a GC without a colormap is an error.
  **/
 void
-gdk_gc_set_rgb_fg_color (GdkGC *gc, GdkColor *color)
+gdk_gc_set_rgb_fg_color (GdkGC          *gc,
+			 const GdkColor *color)
 {
   GdkColormap *cmap;
   GdkColor tmp_color;
@@ -527,7 +528,8 @@ gdk_gc_set_rgb_fg_color (GdkGC *gc, GdkColor *color)
  * Calling this function for a GC without a colormap is an error.
  **/
 void
-gdk_gc_set_rgb_bg_color (GdkGC *gc, GdkColor *color)
+gdk_gc_set_rgb_bg_color (GdkGC          *gc,
+			 const GdkColor *color)
 {
   GdkColormap *cmap;
   GdkColor tmp_color;

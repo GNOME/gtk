@@ -3215,9 +3215,9 @@ gtk_clist_row_is_visible (GtkCList *clist,
 }
 
 void
-gtk_clist_set_foreground (GtkCList *clist,
-			  gint      row,
-			  GdkColor *color)
+gtk_clist_set_foreground (GtkCList       *clist,
+			  gint            row,
+			  const GdkColor *color)
 {
   GtkCListRow *clist_row;
 
@@ -3244,9 +3244,9 @@ gtk_clist_set_foreground (GtkCList *clist,
 }
 
 void
-gtk_clist_set_background (GtkCList *clist,
-			  gint      row,
-			  GdkColor *color)
+gtk_clist_set_background (GtkCList       *clist,
+			  gint            row,
+			  const GdkColor *color)
 {
   GtkCListRow *clist_row;
 

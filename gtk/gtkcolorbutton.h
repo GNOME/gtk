@@ -77,9 +77,9 @@ struct _GtkColorButtonClass {
 
 GType      gtk_color_button_get_type       (void) G_GNUC_CONST;
 GtkWidget *gtk_color_button_new            (void);
-GtkWidget *gtk_color_button_new_with_color (GdkColor       *color);
+GtkWidget *gtk_color_button_new_with_color (const GdkColor *color);
 void       gtk_color_button_set_color      (GtkColorButton *color_button, 
-					    GdkColor       *color);
+					    const GdkColor *color);
 void       gtk_color_button_set_alpha      (GtkColorButton *color_button,
 					    guint16         alpha);
 void       gtk_color_button_get_color      (GtkColorButton *color_button, 

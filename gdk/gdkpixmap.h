@@ -46,32 +46,32 @@ GdkBitmap* gdk_bitmap_create_from_data	(GdkDrawable *drawable,
 					 const gchar *data,
 					 gint	      width,
 					 gint	      height);
-GdkPixmap* gdk_pixmap_create_from_data	(GdkDrawable *drawable,
-					 const gchar *data,
-					 gint	      width,
-					 gint	      height,
-					 gint	      depth,
-					 GdkColor    *fg,
-					 GdkColor    *bg);
+GdkPixmap* gdk_pixmap_create_from_data	(GdkDrawable    *drawable,
+					 const gchar 	*data,
+					 gint	     	 width,
+					 gint	     	 height,
+					 gint	         depth,
+					 const GdkColor *fg,
+					 const GdkColor *bg);
 
-GdkPixmap* gdk_pixmap_create_from_xpm            (GdkDrawable  *drawable,
-						  GdkBitmap   **mask,
-						  GdkColor     *transparent_color,
-						  const gchar  *filename);
-GdkPixmap* gdk_pixmap_colormap_create_from_xpm   (GdkDrawable  *drawable,
-						  GdkColormap  *colormap,
-						  GdkBitmap   **mask,
-						  GdkColor     *transparent_color,
-						  const gchar  *filename);
-GdkPixmap* gdk_pixmap_create_from_xpm_d          (GdkDrawable  *drawable,
-						  GdkBitmap   **mask,
-						  GdkColor     *transparent_color,
-						  gchar       **data);
-GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable  *drawable,
-						  GdkColormap  *colormap,
-						  GdkBitmap   **mask,
-						  GdkColor     *transparent_color,
-						  gchar       **data);
+GdkPixmap* gdk_pixmap_create_from_xpm            (GdkDrawable    *drawable,
+						  GdkBitmap     **mask,
+						  const GdkColor *transparent_color,
+						  const gchar    *filename);
+GdkPixmap* gdk_pixmap_colormap_create_from_xpm   (GdkDrawable    *drawable,
+						  GdkColormap    *colormap,
+						  GdkBitmap     **mask,
+						  const GdkColor *transparent_color,
+						  const gchar    *filename);
+GdkPixmap* gdk_pixmap_create_from_xpm_d          (GdkDrawable    *drawable,
+						  GdkBitmap     **mask,
+						  const GdkColor *transparent_color,
+						  gchar         **data);
+GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable    *drawable,
+						  GdkColormap    *colormap,
+						  GdkBitmap     **mask,
+						  const GdkColor *transparent_color,
+						  gchar         **data);
 
 /* Functions to create/lookup pixmaps from their native equivalents
  */

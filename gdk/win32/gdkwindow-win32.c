@@ -1649,8 +1649,8 @@ gdk_window_set_transient_for (GdkWindow *window,
 }
 
 void
-gdk_window_set_background (GdkWindow *window,
-			   GdkColor  *color)
+gdk_window_set_background (GdkWindow      *window,
+			   const GdkColor *color)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   

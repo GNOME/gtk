@@ -256,13 +256,13 @@ gdk_bitmap_create_from_data (GdkDrawable *drawable,
 }
 
 GdkPixmap*
-gdk_pixmap_create_from_data (GdkDrawable *drawable,
-			     const gchar *data,
-			     gint         width,
-			     gint         height,
-			     gint         depth,
-			     GdkColor    *fg,
-			     GdkColor    *bg)
+gdk_pixmap_create_from_data (GdkDrawable    *drawable,
+			     const gchar    *data,
+			     gint            width,
+			     gint            height,
+			     gint            depth,
+			     const GdkColor *fg,
+			     const GdkColor *bg)
 {
   GdkPixmap *pixmap;
   GdkDrawableImplX11 *draw_impl;

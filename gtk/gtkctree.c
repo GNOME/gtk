@@ -5099,9 +5099,9 @@ gtk_ctree_node_get_row_style (GtkCTree     *ctree,
 }
 
 void
-gtk_ctree_node_set_foreground (GtkCTree     *ctree,
-			       GtkCTreeNode *node,
-			       GdkColor     *color)
+gtk_ctree_node_set_foreground (GtkCTree       *ctree,
+			       GtkCTreeNode   *node,
+			       const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);
@@ -5121,9 +5121,9 @@ gtk_ctree_node_set_foreground (GtkCTree     *ctree,
 }
 
 void
-gtk_ctree_node_set_background (GtkCTree     *ctree,
-			       GtkCTreeNode *node,
-			       GdkColor     *color)
+gtk_ctree_node_set_background (GtkCTree       *ctree,
+			       GtkCTreeNode   *node,
+			       const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_CTREE (ctree));
   g_return_if_fail (node != NULL);

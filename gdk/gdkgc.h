@@ -209,9 +209,9 @@ void   gdk_gc_set_values          (GdkGC           *gc,
                                    GdkGCValues	   *values,
                                    GdkGCValuesMask  values_mask);
 void   gdk_gc_set_foreground	  (GdkGC	    *gc,
-				   GdkColor	    *color);
+				   const GdkColor   *color);
 void   gdk_gc_set_background	  (GdkGC	    *gc,
-				   GdkColor	    *color);
+				   const GdkColor   *color);
 #ifndef GDK_DISABLE_DEPRECATED
 void   gdk_gc_set_font		  (GdkGC	    *gc,
 				   GdkFont	    *font);
@@ -256,14 +256,14 @@ void   gdk_gc_copy		  (GdkGC	    *dst_gc,
 				   GdkGC	    *src_gc);
 
 
-void         gdk_gc_set_colormap     (GdkGC       *gc,
-				      GdkColormap *colormap);
-GdkColormap *gdk_gc_get_colormap     (GdkGC       *gc);
-void         gdk_gc_set_rgb_fg_color (GdkGC       *gc,
-				      GdkColor    *color);
-void         gdk_gc_set_rgb_bg_color (GdkGC       *gc,
-				      GdkColor    *color);
-GdkScreen *  gdk_gc_get_screen	     (GdkGC       *gc);
+void         gdk_gc_set_colormap     (GdkGC          *gc,
+				      GdkColormap    *colormap);
+GdkColormap *gdk_gc_get_colormap     (GdkGC          *gc);
+void         gdk_gc_set_rgb_fg_color (GdkGC          *gc,
+				      const GdkColor *color);
+void         gdk_gc_set_rgb_bg_color (GdkGC          *gc,
+				      const GdkColor *color);
+GdkScreen *  gdk_gc_get_screen	     (GdkGC          *gc);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_gc_destroy                 gdk_gc_unref

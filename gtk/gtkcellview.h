@@ -75,7 +75,7 @@ gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_v
                                                          GtkRequisition  *requisition);
 
 void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
-                                                         GdkColor        *color);
+                                                         const GdkColor  *color);
 
 G_END_DECLS
 

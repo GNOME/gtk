@@ -119,12 +119,12 @@ color_is_white (GdkColor *color)
 }
 
 GdkCursor*
-gdk_cursor_new_from_pixmap (GdkPixmap *source,
-			    GdkPixmap *mask,
-			    GdkColor  *fg,
-			    GdkColor  *bg,
-			    gint       x,
-			    gint       y)
+gdk_cursor_new_from_pixmap (GdkPixmap      *source,
+			    GdkPixmap      *mask,
+			    const GdkColor *fg,
+			    const GdkColor *bg,
+			    gint            x,
+			    gint            y)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;

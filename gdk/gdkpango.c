@@ -214,8 +214,8 @@ gdk_draw_layout_line_with_colors (GdkDrawable      *drawable,
                                   gint              x, 
                                   gint              y,
                                   PangoLayoutLine  *line,
-                                  GdkColor         *foreground,
-                                  GdkColor         *background)
+                                  const GdkColor   *foreground,
+                                  const GdkColor   *background)
 {
   GSList *tmp_list = line->runs;
   PangoRectangle overall_rect;
@@ -451,8 +451,8 @@ gdk_draw_layout_with_colors (GdkDrawable     *drawable,
                              int              x, 
                              int              y,
                              PangoLayout     *layout,
-                             GdkColor        *foreground,
-                             GdkColor        *background)
+                             const GdkColor  *foreground,
+                             const GdkColor  *background)
 {
   PangoLayoutIter *iter;
   

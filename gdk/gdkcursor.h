@@ -113,8 +113,8 @@ GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 #endif
 GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkPixmap	  *mask,
-					  GdkColor	  *fg,
-					  GdkColor	  *bg,
+					  const GdkColor  *fg,
+					  const GdkColor  *bg,
 					  gint		   x,
 					  gint		   y);
 GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,

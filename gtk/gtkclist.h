@@ -631,16 +631,16 @@ gint gtk_clist_get_pixtext (GtkCList   *clist,
 /* sets the foreground color of a row, the color must already
  * be allocated
  */
-void gtk_clist_set_foreground (GtkCList *clist,
-			       gint      row,
-			       GdkColor *color);
+void gtk_clist_set_foreground (GtkCList       *clist,
+			       gint            row,
+			       const GdkColor *color);
 
 /* sets the background color of a row, the color must already
  * be allocated
  */
-void gtk_clist_set_background (GtkCList *clist,
-			       gint      row,
-			       GdkColor *color);
+void gtk_clist_set_background (GtkCList       *clist,
+			       gint            row,
+			       const GdkColor *color);
 
 /* set / get cell styles */
 void gtk_clist_set_cell_style (GtkCList *clist,

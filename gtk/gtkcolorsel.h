@@ -88,14 +88,14 @@ void       gtk_color_selection_set_has_palette         (GtkColorSelection *color
 
 
 void     gtk_color_selection_set_current_color   (GtkColorSelection *colorsel,
-						  GdkColor          *color);
+						  const GdkColor    *color);
 void     gtk_color_selection_set_current_alpha   (GtkColorSelection *colorsel,
 						  guint16            alpha);
 void     gtk_color_selection_get_current_color   (GtkColorSelection *colorsel,
 						  GdkColor          *color);
 guint16  gtk_color_selection_get_current_alpha   (GtkColorSelection *colorsel);
 void     gtk_color_selection_set_previous_color  (GtkColorSelection *colorsel,
-						  GdkColor          *color);
+						  const GdkColor    *color);
 void     gtk_color_selection_set_previous_alpha  (GtkColorSelection *colorsel,
 						  guint16            alpha);
 void     gtk_color_selection_get_previous_color  (GtkColorSelection *colorsel,

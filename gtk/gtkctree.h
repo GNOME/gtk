@@ -382,12 +382,12 @@ void gtk_ctree_node_set_cell_style               (GtkCTree     *ctree,
 GtkStyle * gtk_ctree_node_get_cell_style         (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gint          column);
-void gtk_ctree_node_set_foreground               (GtkCTree     *ctree,
-						  GtkCTreeNode *node,
-						  GdkColor     *color);
-void gtk_ctree_node_set_background               (GtkCTree     *ctree,
-						  GtkCTreeNode *node,
-						  GdkColor     *color);
+void gtk_ctree_node_set_foreground               (GtkCTree       *ctree,
+						  GtkCTreeNode   *node,
+						  const GdkColor *color);
+void gtk_ctree_node_set_background               (GtkCTree       *ctree,
+						  GtkCTreeNode   *node,
+						  const GdkColor *color);
 void gtk_ctree_node_set_row_data                 (GtkCTree     *ctree,
 						  GtkCTreeNode *node,
 						  gpointer      data);

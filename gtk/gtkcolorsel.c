@@ -2209,13 +2209,14 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
  **/
 void
 gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
-				       GdkColor          *color)
+				       const GdkColor    *color)
 {
   ColorSelectionPrivate *priv;
   gint i;
   gboolean previous_changed;
   
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (color != NULL);
 
   priv = colorsel->private_data;
   priv->changing = TRUE;
@@ -2301,6 +2302,7 @@ gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
   ColorSelectionPrivate *priv;
   
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (color != NULL);
   
   priv = colorsel->private_data;
   color->red = UNSCALE (priv->color[COLORSEL_RED]);
@@ -2363,11 +2365,12 @@ gtk_color_selection_get_color (GtkColorSelection *colorsel,
  **/
 void
 gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
-					GdkColor          *color)
+					const GdkColor    *color)
 {
   ColorSelectionPrivate *priv;
   
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (color != NULL);
   
   priv = colorsel->private_data;
   priv->changing = TRUE;
@@ -2424,6 +2427,7 @@ gtk_color_selection_get_previous_color (GtkColorSelection *colorsel,
   ColorSelectionPrivate *priv;
   
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (color != NULL);
   
   priv = colorsel->private_data;
   color->red = UNSCALE (priv->old_color[COLORSEL_RED]);

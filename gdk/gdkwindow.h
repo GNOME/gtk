@@ -432,7 +432,7 @@ void          gdk_window_set_role          (GdkWindow       *window,
 void          gdk_window_set_transient_for (GdkWindow       *window, 
 					    GdkWindow       *parent);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
-					  GdkColor	  *color);
+					  const GdkColor  *color);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
 					  GdkPixmap	  *pixmap,
 					  gboolean	   parent_relative);

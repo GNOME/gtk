@@ -246,12 +246,12 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
 }
 
 GdkCursor*
-gdk_cursor_new_from_pixmap (GdkPixmap *source,
-			    GdkPixmap *mask,
-			    GdkColor  *fg,
-			    GdkColor  *bg,
-			    gint       x,
-			    gint       y)
+gdk_cursor_new_from_pixmap (GdkPixmap      *source,
+			    GdkPixmap      *mask,
+			    const GdkColor *fg,
+			    const GdkColor *bg,
+			    gint            x,
+			    gint            y)
 {
   GdkCursorPrivateFB *private;
   GdkCursor *cursor;

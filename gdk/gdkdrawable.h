@@ -328,15 +328,15 @@ void gdk_draw_layout_line_with_colors (GdkDrawable     *drawable,
                                        gint             x,
                                        gint             y,
                                        PangoLayoutLine *line,
-                                       GdkColor        *foreground,
-                                       GdkColor        *background);
+                                       const GdkColor  *foreground,
+                                       const GdkColor  *background);
 void gdk_draw_layout_with_colors      (GdkDrawable     *drawable,
                                        GdkGC           *gc,
                                        gint             x,
                                        gint             y,
                                        PangoLayout     *layout,
-                                       GdkColor        *foreground,
-                                       GdkColor        *background);
+                                       const GdkColor  *foreground,
+                                       const GdkColor  *background);
 
 #ifndef GDK_DISABLE_DEPRECATED
 #define gdk_draw_pixmap                gdk_draw_drawable

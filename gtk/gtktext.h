@@ -197,12 +197,12 @@ guint      gtk_text_get_point       (GtkText       *text);
 guint      gtk_text_get_length      (GtkText       *text);
 void       gtk_text_freeze          (GtkText       *text);
 void       gtk_text_thaw            (GtkText       *text);
-void       gtk_text_insert          (GtkText       *text,
-				     GdkFont       *font,
-				     GdkColor      *fore,
-				     GdkColor      *back,
-				     const char    *chars,
-				     gint           length);
+void       gtk_text_insert          (GtkText        *text,
+				     GdkFont        *font,
+				     const GdkColor *fore,
+				     const GdkColor *back,
+				     const char     *chars,
+				     gint            length);
 gboolean   gtk_text_backward_delete (GtkText       *text,
 				     guint          nchars);
 gboolean   gtk_text_forward_delete  (GtkText       *text,

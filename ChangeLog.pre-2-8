@@ -1,3 +1,61 @@
+2004-01-26  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #105497; constify uses of GdkColor.
+
+	* gdk/gdkgc.c (gdk_gc_set_rgb_fg_color): Constify.
+	(gdk_gc_set_rgb_bg_color): Constify.
+	(gdk_gc_set_foreground): Constify.
+
+	* gdk/x11/gdkcursor-x11.c (gdk_cursor_new_from_pixmap): Constify.
+	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap): Constify.
+	* gdk/linux-fb/gdkcursor-fb.c (gdk_cursor_new_from_pixmap): Constify.
+
+	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_create_from_data): Constify.
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_create_from_data): Constify.
+	* gdk/linux-fb/gdkpixmap-fb.c (gdk_pixmap_create_from_data): Constify.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_background): Constify.
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_background): Constify.
+	* gdk/linux-fb/gdkwindow-fb.c (gdk_window_set_background): Constify.
+
+	* gdk/gdkpango.c (gdk_draw_layout_line_with_colors): Constify.
+	(gdk_draw_layout_with_colors): Constify.
+
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_new_from_pixbuf): Constify.
+	(gdk_pixmap_colormap_create_from_xpm): Constify.
+	(gdk_pixmap_create_from_xpm): Constify.
+	(gdk_pixmap_colormap_create_from_xpm_d): Constify.
+	(gdk_pixmap_create_from_xpm_d): Constify.
+
+	* gtk/gtkcellview.c (gtk_cell_view_set_background_color): Constify.
+
+	* gtk/gtkclist.c (gtk_clist_set_foreground): Constify.
+	(gtk_clist_set_background): Constify.
+
+	* gtk/gtkcolorbutton.c (gtk_color_button_new_with_color): Constify.
+	(gtk_color_button_set_color): Constify.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_set_current_color):
+	Constify and add a check for color != NULL.
+	(gtk_color_selection_get_current_color): Add a check for color != NULL.
+	(gtk_color_selection_set_previous_color): Constify and add a check
+	for color != NULL.
+	(gtk_color_selection_get_previous_color): Add a check for color != NULL.
+
+	* gtk/gtkctree.c (gtk_ctree_node_set_foreground): Constify.
+	(gtk_ctree_node_set_background): Constify.
+
+	* gtk/gtktext.c (gtk_text_insert): Constify.
+	(insert_text_property): Constify.
+	(text_properties_equal): Constify.
+	(new_text_property): Constify.
+
+	* gtk/gtkwidget.c (gtk_widget_modify_color_component): Constify.
+	(gtk_widget_modify_fg): Constify.
+	(gtk_widget_modify_bg): Constify.
+	(gtk_widget_modify_text): Constify.
+	(gtk_widget_modify_base): Constify.
+
 2004-01-26  Christian Rose  <menthos@menthos.com>
 
 	* configure.in: Added "mi" to ALL_LINGUAS.
