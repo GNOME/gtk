@@ -324,13 +324,13 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
 /**
  * gtk_tree_model_sort_convert_path:
  * @tree_model_sort: The #GtkTreeModelSort.
- * @path: A #GtkTreePath, relative to the child model.
+ * @child_path: A #GtkTreePath, relative to the child model.
  * 
- * Converts the @path to a new path, relative to the sorted position.  In other
- * words, the value found in the @tree_model_sort ->child_model at the @path, is
+ * Converts the @child_path to a new path, relative to the sorted position.  In other
+ * words, the value found in the @tree_model_sort ->child_model at the @child_path, is
  * identical to that found in the @tree_model_sort and the return value.
  * 
- * Return value: A new path, or NULL if @path does not exist in @tree_model_sort
+ * Return value: A new path, or NULL if @child_path does not exist in @tree_model_sort
  * ->child_model.
  **/
 GtkTreePath *

@@ -279,7 +279,7 @@ int                  gdk_pixbuf_frame_get_x_offset   (GdkPixbufFrame *frame);
 int                  gdk_pixbuf_frame_get_y_offset   (GdkPixbufFrame *frame);
 int                  gdk_pixbuf_frame_get_delay_time (GdkPixbufFrame *frame);
 GdkPixbufFrameAction gdk_pixbuf_frame_get_action     (GdkPixbufFrame *frame);
-GdkPixbufFrame      *gdk_pixbuf_frame_copy           (GdkPixbufFrame *frame);
+GdkPixbufFrame      *gdk_pixbuf_frame_copy           (GdkPixbufFrame *src);
 void                 gdk_pixbuf_frame_free           (GdkPixbufFrame *frame);
 GType                gdk_pixbuf_frame_get_type       (void) G_GNUC_CONST;
 #define              GDK_TYPE_PIXBUF_FRAME gdk_pixbuf_frame_get_type ()

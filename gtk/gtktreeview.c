@@ -3288,7 +3288,7 @@ gtk_tree_view_columns_autosize (GtkTreeView *tree_view)
  **/
 void
 gtk_tree_view_set_headers_clickable (GtkTreeView *tree_view,
-				  gboolean   setting)
+				     gboolean   setting)
 {
   GList *list;
 

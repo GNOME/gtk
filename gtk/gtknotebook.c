@@ -372,7 +372,6 @@ gtk_notebook_init (GtkNotebook *notebook)
 
 /**
  * gtk_notebook_new:
- * @void: 
  * 
  * Creates a new #GtkNotebook widget with no pages.
 
@@ -4099,22 +4098,21 @@ gtk_notebook_set_homogeneous_tabs (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_tab_border:
  * @notebook: a #GtkNotebook
- * @tab_border: %TRUE if there should be a border around the
- *              tab labels.
+ * @border_width: width of the border around the tab labels.
  * 
- * Sets whether there should be a border around the tab labels
+ * Sets the width the border around the tab labels
  * in a notebook. This is equivalent to calling
- * gtk_notebook_set_tab_hborder (@notebook, @tab_border) followed
- * by gtk_noteobok_set_tab_vborder (@notebook, @tab_border).
+ * gtk_notebook_set_tab_hborder (@notebook, @border_width) followed
+ * by gtk_noteobok_set_tab_vborder (@notebook, @border_width).
  **/
 void
 gtk_notebook_set_tab_border (GtkNotebook *notebook,
-			     guint        tab_border)
+			     guint        border_width)
 {
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
 
-  notebook->tab_hborder = tab_border;
-  notebook->tab_vborder = tab_border;
+  notebook->tab_hborder = border_width;
+  notebook->tab_vborder = border_width;
 
   if (GTK_WIDGET_VISIBLE (notebook) && notebook->show_tabs)
     gtk_widget_queue_resize (GTK_WIDGET (notebook));
@@ -4123,10 +4121,9 @@ gtk_notebook_set_tab_border (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_tab_hborder:
  * @notebook: a #GtkNotebook
- * @tab_vborder: %TRUE if the notebook tabs should have
- *               a vertical border.
+ * @tab_hborder: width of the horizontal border of tab labels.
  * 
- * Sets whether the tabs should have a vertical border.
+ * Sets the width of the horizontal border of tab labels.
  **/
 void
 gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
@@ -4146,10 +4143,9 @@ gtk_notebook_set_tab_hborder (GtkNotebook *notebook,
 /**
  * gtk_notebook_set_tab_vborder:
  * @notebook: a #GtkNotebook
- * @tab_vborder: %TRUE if the notebook tabs should have
- *               a vertical border.
+ * @tab_vborder: width of the vertical border of tab labels.
  * 
- * Sets whether the tabs should have a vertical border.
+ * Sets the width of the vertical border of tab labels.
  **/
 void
 gtk_notebook_set_tab_vborder (GtkNotebook *notebook,
@@ -4368,7 +4364,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
  * gtk_notebook_set_tab_label_text:
  * @notebook: a #GtkNotebook
  * @child: the page
- * @tab_label: the label text
+ * @tab_text: the label text
  * 
  * Creates a new label and sets it as the tab label for the page
  * containing @child.
