@@ -1,3 +1,8 @@
+Wed May 14 18:12:45 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* autogen.sh (have_libtool): Fix some typos. (#108381,
+	Morten Welinder.)
+
 Wed May 14 16:40:09 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkframe.c (gtk_frame_set_label_widget): Patch
