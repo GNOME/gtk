@@ -1,3 +1,11 @@
+Thu Jan 21 02:11:44 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* Set and read the XdndActionList property defined
+	in the Xdnd spec. We do this always, not just for
+	XdndActionAsk like the spec says, but if we don't
+	find it, we fall back to actions = suggested_action,
+	which is compatible with the language of the spec.
+
 Thu Jan 21 01:15:28 1999  Jeff Garzik  <jgarzik@pobox.com>
 
 	* gdk/gdkdnd.c (gdk_drag_context_unref):

@@ -60,6 +60,8 @@ struct _GdkDragContextPrivate {
 
   Window  dest_xid;
   guint xdnd_targets_set : 1;   /* Whether we've already set XdndTypeList */
+  guint xdnd_actions_set : 1;   /* Whether we've already set XdndActionsList */
+  guint xdnd_have_actions : 1; /* Whether an XdndActionList was provided */
   guint motif_targets_set : 1;  /* Whether we've already set motif initiator info */
   guint drag_status : 4;	/* current status of drag */
 
@@ -1953,16 +1955,16 @@ static void
 xdnd_set_targets (GdkDragContext *context)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-  GdkAtom *typelist;
+  GdkAtom *atomlist;
   GList *tmp_list = context->targets;
   gint i;
-  gint n_targets = g_list_length (context->targets);
+  gint n_atoms = g_list_length (context->targets);
 
-  typelist = g_new (GdkAtom, n_targets);
+  atomlist = g_new (GdkAtom, n_atoms);
   i = 0;
   while (tmp_list)
     {
-      typelist[i] = GPOINTER_TO_INT (tmp_list->data);
+      atomlist[i] = GPOINTER_TO_INT (tmp_list->data);
       tmp_list = tmp_list->next;
       i++;
     }
@@ -1971,9 +1973,55 @@ xdnd_set_targets (GdkDragContext *context)
 		   GDK_WINDOW_XWINDOW (context->source_window),
 		   gdk_atom_intern ("XdndTypeList", FALSE),
 		   XA_ATOM, 32, PropModeReplace,
-		   (guchar *)typelist, n_targets);
+		   (guchar *)atomlist, n_atoms);
 
   private->xdnd_targets_set = 1;
+}
+
+static void
+xdnd_set_actions (GdkDragContext *context)
+{
+  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkAtom *atomlist;
+  gint i;
+  gint n_atoms;
+  guint actions;
+
+  if (!xdnd_actions_initialized)
+    xdnd_initialize_actions();
+
+  actions = context->actions;
+  n_atoms = 0;
+  for (i=0; i<xdnd_n_actions; i++)
+    {
+      if (actions & xdnd_actions_table[i].action)
+	{
+	  actions &= ~xdnd_actions_table[i].action;
+	  n_atoms++;
+	}
+    }
+
+  atomlist = g_new (GdkAtom, n_atoms);
+
+  actions = context->actions;
+  n_atoms = 0;
+  for (i=0; i<xdnd_n_actions; i++)
+    {
+      if (actions & xdnd_actions_table[i].action)
+	{
+	  actions &= ~xdnd_actions_table[i].action;
+	  atomlist[n_atoms] = xdnd_actions_table[i].atom;
+	  n_atoms++;
+	}
+    }
+
+  XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+		   GDK_WINDOW_XWINDOW (context->source_window),
+		   gdk_atom_intern ("XdndActionList", FALSE),
+		   XA_ATOM, 32, PropModeReplace,
+		   (guchar *)atomlist, n_atoms);
+
+  private->xdnd_actions_set = 1;
 }
 
 static void
@@ -2013,6 +2061,9 @@ xdnd_send_enter (GdkDragContext *context)
 	  i++;
 	}
     }
+
+  if (!private->xdnd_actions_set)
+    xdnd_set_actions (context);
 
   if (!gdk_send_xevent (GDK_WINDOW_XWINDOW (context->dest_window),
 			FALSE, 0, &xev))
@@ -2188,12 +2239,17 @@ xdnd_check_dest (Window win)
 static GdkFilterReturn 
 xdnd_enter_filter (GdkXEvent *xev,
 		   GdkEvent  *event,
-		   gpointer   data)
+		   gpointer   cb_data)
 {
   XEvent *xevent = (XEvent *)xev;
   GdkDragContext *new_context;
   gint i;
   
+  Atom type;
+  int format;
+  gulong nitems, after;
+  Atom *data;
+
   guint32 source_window = xevent->xclient.data.l[0];
   gboolean get_types = ((xevent->xclient.data.l[1] & 1) != 0);
   gint version = (xevent->xclient.data.l[1] & 0xff000000) >> 24;
@@ -2237,11 +2293,6 @@ xdnd_enter_filter (GdkXEvent *xev,
   new_context->targets = NULL;
   if (get_types)
     {
-      Atom type;
-      int format;
-      gulong nitems, after;
-      Atom *data;
-
       XGetWindowProperty (GDK_WINDOW_XDISPLAY (event->any.window), 
 			  source_window, 
 			  gdk_atom_intern ("XdndTypeList", FALSE), 0, 65536,
@@ -2268,6 +2319,44 @@ xdnd_enter_filter (GdkXEvent *xev,
 						GUINT_TO_POINTER (xevent->xclient.data.l[2+i]));
     }
 
+  /* Get the XdndActionList, if set */
+
+  XGetWindowProperty (GDK_WINDOW_XDISPLAY (event->any.window), 
+		      source_window, 
+		      gdk_atom_intern ("XdndActionList", FALSE), 0, 65536,
+		      False, XA_ATOM, &type, &format, &nitems,
+		      &after, (guchar **)&data);
+  
+  if ((format == 32) && (type == XA_ATOM))
+    {
+      new_context->actions = 0;
+
+      for (i=0; i<nitems; i++)
+	new_context->actions |= xdnd_action_from_atom (data[i]);
+
+      ((GdkDragContextPrivate *)new_context)->xdnd_have_actions = TRUE;
+
+#ifdef G_ENABLE_DEBUG
+      if (gdk_debug_flags & GDK_DEBUG_DND)
+	{
+	  GString *action_str = g_string_new (NULL);
+	  if (new_context->actions & GDK_ACTION_MOVE)
+	    g_string_append(action_str, "MOVE ");
+	  if (new_context->actions & GDK_ACTION_COPY)
+	    g_string_append(action_str, "COPY ");
+	  if (new_context->actions & GDK_ACTION_LINK)
+	    g_string_append(action_str, "LINK ");
+	  if (new_context->actions & GDK_ACTION_ASK)
+	    g_string_append(action_str, "ASK ");
+	  
+	  g_message("\tactions = %s", action_str->str);
+	  g_string_free (action_str, TRUE);
+	}
+#endif /* G_ENABLE_DEBUG */
+
+      XFree(data);
+    }
+  
 #ifdef G_ENABLE_DEBUG
   if (gdk_debug_flags & GDK_DEBUG_DND)
     print_target_list (new_context->targets);
@@ -2340,6 +2429,8 @@ xdnd_position_filter (GdkXEvent *xev,
       event->dnd.time = time;
 
       current_dest_drag->suggested_action = xdnd_action_from_atom (action);
+      if (!((GdkDragContextPrivate *)current_dest_drag)->xdnd_have_actions)
+	current_dest_drag->actions = current_dest_drag->suggested_action;
 
       event->dnd.x_root = x_root;
       event->dnd.y_root = y_root;
@@ -2436,6 +2527,7 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
 	  xdnd_send_leave (context);
 	  break;
 	case GDK_DRAG_PROTO_ROOTWIN:
+	case GDK_DRAG_PROTO_NONE:
 	  break;
 	}
 
@@ -2639,6 +2731,7 @@ gdk_drag_motion (GdkDragContext *context,
 	      break;
 
 	    case GDK_DRAG_PROTO_ROOTWIN:
+	    case GDK_DRAG_PROTO_NONE:
 	      break;
 	    }
 	  private->old_action = action;
@@ -2710,6 +2803,9 @@ gdk_drag_motion (GdkDragContext *context,
 		gdk_event_put (&temp_event);
 	      }
 	      break;
+	    case GDK_DRAG_PROTO_NONE:
+	      g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_motion()");
+	      break;
 	    }
 	}
       else
@@ -2740,6 +2836,9 @@ gdk_drag_drop (GdkDragContext *context,
 
 	case GDK_DRAG_PROTO_ROOTWIN:
 	  g_warning ("Drops for GDK_DRAG_PROTO_ROOTWIN must be handled internally");
+	  break;
+	case GDK_DRAG_PROTO_NONE:
+	  g_warning ("GDK_DRAG_PROTO_NONE is not valid in gdk_drag_drop()");
 	  break;
 	}
     }
