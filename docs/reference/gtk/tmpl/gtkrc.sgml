@@ -134,7 +134,7 @@ The possible toplevel declarations are:
     </listitem>
   </varlistentry>
   <varlistentry>
-    <term><literal>module_path <replaceable>path></replaceable></literal></term>
+    <term><literal>module_path <replaceable>path</replaceable></literal></term>
     <listitem>
       <para>Sets a path (a list of directories separated
       by colons) that will be searched for theme engines referenced in
@@ -142,7 +142,7 @@ The possible toplevel declarations are:
     </listitem>
   </varlistentry>
   <varlistentry>
-    <term><literal>pixmap_path <replaceable>path></replaceable></literal></term>
+    <term><literal>pixmap_path <replaceable>path</replaceable></literal></term>
     <listitem>
       <para>Sets a path (a list of directories separated
       by colons) that will be searched for pixmaps referenced in
@@ -244,9 +244,9 @@ elements are:
          Sets a background pixmap to be used in place of
          the <literal>bg</literal> color (or for #GtkText,
          in place of the <literal>base</literal> color. The special
-         value "&lt;parent&gt;" may be used to indicate that the widget should
+         value <literal>"&lt;parent&gt;"</literal> may be used to indicate that the widget should
          use the same background pixmap as its parent. The special value
-         "&lt;none&gt;" may be used to indicate no background pixmap.
+         <literal>"&lt;none&gt;"</literal> may be used to indicate no background pixmap.
        </para>
      </listitem>
   </varlistentry>
@@ -336,14 +336,19 @@ state of the widget. The states are:
 </variablelist>
 </para>
 
-<para>
-Colors can be specified as a string <literal>"&hash;rrrrggggbbbb"</literal>,
-<literal>"&hash;rrrgggbbb"</literal>, <literal>"&hash;rrggbb"</literal>,
-or <literal>"&hash;rgb"</literal>, where <literal>r</literal>
-<literal>g</literal>, and <literal>b</literal> are
-hex digits, or they can be specified as a triplet of floats
+<para id="color-format">
+Colors can be specified as a string containing a color name (GTK+ knows
+all names from the X color database 
+<filename>/usr/lib/X11/rgb.txt</filename>),  
+in one of the hexadecimal forms <literal>&hash;rrrrggggbbbb</literal>,
+<literal>&hash;rrrgggbbb</literal>, <literal>&hash;rrggbb</literal>,
+or <literal>&hash;rgb</literal>, where <literal>r</literal>,
+<literal>g</literal> and <literal>b</literal> are
+hex digits, or they can be specified as a triplet 
 <literal>{ <replaceable>r</replaceable>, <replaceable>g</replaceable>,
-<replaceable>b</replaceable>}</literal>.
+<replaceable>b</replaceable>}</literal>, where <literal>r</literal>,
+<literal>g</literal> and <literal>b</literal> are either integers in 
+the range 0-65635 or floats in the range 0.0-1.0.
 </para>
 
 <para>
@@ -470,16 +475,19 @@ and only then by order of specification. (Later
 overrides earlier). The priorities that can
 be specified are (highest to lowest):
 <simplelist>
-<member><literal>HIGHEST</literal></member>
-<member><literal>RC</literal></member>
-<member><literal>APPLICATION</literal></member>
-<member><literal>GTK</literal></member>
-<member><literal>LOWEST</literal></member>
+<member><literal>highest</literal></member>
+<member><literal>rc</literal></member>
+<member><literal>theme</literal></member>
+<member><literal>application</literal></member>
+<member><literal>gtk</literal></member>
+<member><literal>lowest</literal></member>
 </simplelist>
-<literal>RC</literal> is the default for bindings
-read from an RC file, <literal>APPLICATION</literal>
+<literal>rc</literal> is the default for bindings
+read from an RC file, <literal>theme</literal>
+is the default for bindings read from theme RC files,
+<literal>application</literal> 
 should be used for bindings an application sets
-up, and <literal>GTK</literal> is used for bindings
+up, and <literal>gtk</literal> is used for bindings
 that GTK+ creates internally.
 </para>
 </refsect2>
@@ -699,7 +707,7 @@ Parses resource information directly from a string.
 
 <!-- ##### FUNCTION gtk_rc_parse_color ##### -->
 <para>
-Parses a color in the format expected in a RC file.
+Parses a color in the <link linkend="color-format">format</link> expected in a RC file.
 </para>
 
 @scanner: a #GtkScanner

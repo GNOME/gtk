@@ -196,6 +196,17 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
   ifactory->translate_notify = NULL;
 }
 
+/**
+ * gtk_item_factory_new:
+ * @container_type: the kind of menu to create; can be
+ *    #GTK_TYPE_MENU_BAR, #GTK_TYPE_MENU or #GTK_TYPE_OPTION_MENU
+ * @path: the path of the menu, a string of the form "<name>"
+ * @accel_group: a #GtkAccelGroup to which the accelerators for the
+ *    menu items will be added, or %NULL to create a new one
+ * @returns: a new #GtkItemFactory
+ * 
+ * Creates a new #GtkItemFactory.
+ */
 GtkItemFactory*
 gtk_item_factory_new (GtkType	     container_type,
 		      const gchar   *path,
@@ -377,6 +388,17 @@ gtk_item_factory_add_item (GtkItemFactory		*ifactory,
     ifactory->items = g_slist_prepend (ifactory->items, item);
 }
 
+/**
+ * gtk_item_factory_construct:
+ * @ifactory: a #GtkItemFactory
+ * @container_type: the kind of menu to create; can be
+ *    #GTK_TYPE_MENU_BAR, #GTK_TYPE_MENU or #GTK_TYPE_OPTION_MENU
+ * @path: the path of the menu, a string of the form "<name>"
+ * @accel_group: a #GtkAccelGroup to which the accelerators for the
+ *    menu items will be added, or %NULL to create a new one
+ * 
+ * Initializes an item factory.
+ */  
 void
 gtk_item_factory_construct (GtkItemFactory	*ifactory,
 			    GtkType		 container_type,
@@ -421,6 +443,13 @@ gtk_item_factory_construct (GtkItemFactory	*ifactory,
 			     ifactory->widget);
 }
 
+/**
+ * gtk_item_factory_from_path:
+ * @path: a string starting with a factory path of the form <literal>"&lt;name&gt;"</literal>
+ * @returns: the #GtkItemFactory created for the given factory path, or %NULL 
+ *
+ * Finds an item factory which has been constructed using the <literal>"&lt;name&gt;"</literal> prefix of @path as the @path argument for gtk_item_factory_new().
+ */
 GtkItemFactory*
 gtk_item_factory_from_path (const gchar      *path)
 {
@@ -515,6 +544,13 @@ gtk_item_factory_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+/**
+ * gtk_item_factory_from_widget:
+ * @widget: a widget
+ * @returns: the item factory from which @widget was created, or %NULL
+ *
+ * Obtains the item factory from which a widget was created.
+ */
 GtkItemFactory*
 gtk_item_factory_from_widget (GtkWidget	       *widget)
 {
@@ -523,6 +559,17 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
   return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_factory);
 }
 
+/**
+ * gtk_item_factory_path_from_widget:
+ * @widget: a widget
+ * @returns: the full path to @widget if it been created by an item factory, 
+ *   %NULL otherwise 
+ * 
+ * If @widget has been created by an item factory, returns the full path
+ * to it. (The full path of a widget is the concatenation of the factory 
+ * path specified in gtk_item_factory_new() with the path specified in the 
+ * #GtkItemFactoryEntry from which the widget was created.)
+ */
 gchar*
 gtk_item_factory_path_from_widget (GtkWidget	    *widget)
 {
@@ -531,6 +578,16 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
   return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_path);
 }
 
+/**
+ * gtk_item_factory_create_items:
+ * @ifactory: a #GtkItemFactory
+ * @n_entries: the length of @entries
+ * @entries: an array of #GtkItemFactoryEntry<!>s whose @callback members
+ *    must by of type #GtkItemFactoryCallback1
+ * @callback_data: data passed to the callback functions of all entries
+ *
+ * Creates the menu items from the @entries.
+ */
 void
 gtk_item_factory_create_items (GtkItemFactory	   *ifactory,
 			       guint		    n_entries,
@@ -540,6 +597,17 @@ gtk_item_factory_create_items (GtkItemFactory	   *ifactory,
   gtk_item_factory_create_items_ac (ifactory, n_entries, entries, callback_data, 1);
 }
 
+/**
+ * gtk_item_factory_create_items_ac:
+ * @ifactory: a #GtkItemFactory
+ * @n_entries: the length of @entries
+ * @entries: an array of #GtkItemFactoryEntry<!>s 
+ * @callback_data: data passed to the callback functions of all entries
+ * @callback_data: 1 if the callback functions in @entries are of type
+ *    #GtkItemFactoryCallback1, 2 if they are of type #GtkItemFactoryCallback2 
+ *
+ * Creates the menu items from the @entries.
+ */
 void
 gtk_item_factory_create_items_ac (GtkItemFactory      *ifactory,
 				  guint		       n_entries,
@@ -561,6 +629,19 @@ gtk_item_factory_create_items_ac (GtkItemFactory      *ifactory,
     gtk_item_factory_create_item (ifactory, entries + i, callback_data, callback_type);
 }
 
+/**
+ * gtk_item_factory_get_widget:
+ * @ifactory: a #GtkItemFactory
+ * @path: the path to the widget
+ * @returns: the widget for the given path, or %NULL if @path doesn't lead
+ *   to a widget
+ *
+ * Obtains the widget which corresponds to @path. 
+ *
+ * If the widget corresponding to @path is a menu item which opens a 
+ * submenu, then the submenu is returned. If you are interested in the menu 
+ * item, use gtk_item_factory_get_item() instead.
+ */
 GtkWidget*
 gtk_item_factory_get_widget (GtkItemFactory *ifactory,
 			     const gchar    *path)
@@ -598,6 +679,17 @@ gtk_item_factory_get_widget (GtkItemFactory *ifactory,
   return NULL;
 }
 
+/**
+ * gtk_item_factory_get_widget_by_action:
+ * @ifactory: a #GtkItemFactory
+ * @action: an action as specified in the @callback_action field
+ *   of #GtkItemFactoryEntry
+ * @returns: the widget which corresponds to the given action, or %NULL
+ *   if no widget was found
+ *
+ * Obtains the widget which was constructed from the first #GtkItemFactoryEntry
+ * with the given @action.
+ */
 GtkWidget*
 gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
 				       guint	       action)
@@ -620,6 +712,19 @@ gtk_item_factory_get_widget_by_action (GtkItemFactory *ifactory,
   return NULL;
 }
 
+/** 
+ * gtk_item_factory_get_item:
+ * @ifactory: a #GtkItemFactory
+ * @path: the path to the menu item
+ * @returns: the menu item for the given path, or %NULL if @path doesn't
+ *   lead to a menu item
+ *
+ * Obtains the menu item which corresponds to @path. 
+ *
+ * If the widget corresponding to @path is a menu item which opens a 
+ * submenu, then the item is returned. If you are interested in the submenu, 
+ * use gtk_item_factory_get_widget() instead.
+ */
 GtkWidget*
 gtk_item_factory_get_item (GtkItemFactory *ifactory,
 			   const gchar    *path)
@@ -637,6 +742,18 @@ gtk_item_factory_get_item (GtkItemFactory *ifactory,
   return GTK_IS_ITEM (widget) ? widget : NULL;
 }
 
+
+/**
+ * gtk_item_factory_get_item_by_action:
+ * @ifactory: a #GtkItemFactory
+ * @action: an action as specified in the @callback_action field
+ *   of #GtkItemFactoryEntry
+ * @returns: the menu item which corresponds to the given action, or %NULL
+ *   if no menu item was found
+ *
+ * Obtains the menu item which was constructed from the first 
+ * #GtkItemFactoryEntry with the given @action.
+ */
 GtkWidget*
 gtk_item_factory_get_item_by_action (GtkItemFactory *ifactory,
 				     guint	     action)
@@ -763,6 +880,16 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
   return TRUE;
 }
 
+/**
+ * gtk_item_factory_create_item:
+ * @ifactory: a #GtkItemFactory
+ * @entry: the #GtkItemFactoryEntry to create an item for
+ * @callback_data: data passed to the callback function of @entry
+ * @callback_data: 1 if the callback function of @entry is of type
+ *    #GtkItemFactoryCallback1, 2 if it is of type #GtkItemFactoryCallback2 
+ *
+ * Creates an item for @entry.
+ */
 void
 gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      GtkItemFactoryEntry    *entry,
@@ -988,6 +1115,13 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
   g_free (path);
 }
 
+/**
+ * gtk_item_factory_create_menu_entries:
+ * @n_entries: the length of @entries
+ * @entries: an array of #GtkMenuEntry<!>s 
+ *
+ * Creates the menu items from the @entries.
+ */
 void
 gtk_item_factory_create_menu_entries (guint              n_entries,
 				      GtkMenuEntry      *entries)
@@ -1064,6 +1198,14 @@ gtk_item_factory_create_menu_entries (guint              n_entries,
     }
 }
 
+/**
+ * gtk_item_factories_path_delete:
+ * @ifactory_path: a factory path to prepend to @path. May be %NULL if @path
+ *   starts with a factory path
+ * @path: a path 
+ * 
+ * Deletes all widgets constructed from the specified path.
+ */
 void
 gtk_item_factories_path_delete (const gchar *ifactory_path,
 				const gchar *path)
@@ -1115,6 +1257,14 @@ gtk_item_factories_path_delete (const gchar *ifactory_path,
     }
 }
 
+/**
+ * gtk_item_factory_delete_item:
+ * @ifactory: a #GtkItemFactory
+ * @path: a path
+ *
+ * Deletes the menu item which was created for @path by the given
+ * item factory.
+ */
 void
 gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
 			      const gchar            *path)
@@ -1138,6 +1288,14 @@ gtk_item_factory_delete_item (GtkItemFactory         *ifactory,
     }
 }
 
+/**
+ * gtk_item_factory_delete_entry:
+ * @ifactory: a #GtkItemFactory
+ * @entry: a #GtkItemFactoryEntry
+ *
+ * Deletes the menu item which was created from @entry by the given
+ * item factory.
+ */
 void
 gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
 			       GtkItemFactoryEntry    *entry)
@@ -1148,6 +1306,14 @@ gtk_item_factory_delete_entry (GtkItemFactory         *ifactory,
   gtk_item_factory_delete_item (ifactory, entry->path);
 }
 
+/**
+ * gtk_item_factory_delete_entries:
+ * @n_entries: the length of @entries
+ * @entries: an array of #GtkItemFactoryEntry<!>s 
+ *
+ * Deletes the menu items which were created from the @entries by the given
+ * item factory.
+ */
 void
 gtk_item_factory_delete_entries (GtkItemFactory         *ifactory,
 				 guint                   n_entries,
@@ -1182,6 +1348,17 @@ gtk_item_factory_menu_pos (GtkMenu  *menu,
   *y = mpos->y;
 }
 
+/**
+ * gtk_item_factory_popup_data_from_widget:
+ * @widget a widget
+ * @returns: @popup_data associated with the item factory from
+ *   which @widget was created, or %NULL if @widget wasn't created
+ *   by an item factory
+ *
+ * Obtains the @popup_data which was passed to 
+ * gtk_item_factory_popup_with_data(). This data is available until the menu
+ * is popped down again.
+ */
 gpointer
 gtk_item_factory_popup_data_from_widget (GtkWidget     *widget)
 {
@@ -1196,6 +1373,15 @@ gtk_item_factory_popup_data_from_widget (GtkWidget     *widget)
   return NULL;
 }
 
+/**
+ * gtk_item_factory_popup_data:
+ * @ifactory: a #GtkItemFactory
+ * @returns: @popup_data associated with @ifactory
+ *
+ * Obtains the @popup_data which was passed to 
+ * gtk_item_factory_popup_with_data(). This data is available until the menu
+ * is popped down again.
+ */
 gpointer
 gtk_item_factory_popup_data (GtkItemFactory *ifactory)
 {
@@ -1214,6 +1400,16 @@ ifactory_delete_popup_data (GtkObject	   *object,
   gtk_object_remove_data_by_id (GTK_OBJECT (ifactory), quark_popup_data);
 }
 
+/**
+ * gtk_item_factory_popup:
+ * @ifactory: a #GtkItemFactory
+ * @x: the x position 
+ * @y: the y position
+ * @mouse_button: the mouse button which was pressed to initiate this action
+ * @time: a timestamp for this action
+ *
+ * Pops up the menu constructed from the item factory at (@x, @y).
+ */
 void
 gtk_item_factory_popup (GtkItemFactory		*ifactory,
 			guint			 x,
@@ -1224,6 +1420,21 @@ gtk_item_factory_popup (GtkItemFactory		*ifactory,
   gtk_item_factory_popup_with_data (ifactory, NULL, NULL, x, y, mouse_button, time);
 }
 
+/**
+ * gtk_item_factory_popup_with_data:
+ * @ifactory: a #GtkItemFactory
+ * @popup_data: data available for callbacks while the menu is posted
+ * @destroy: a #GtkDestroyNotify function to be called on @popup_data when
+ *  the menu is unposted
+ * @x: the x position 
+ * @y: the y position
+ * @mouse_button: the mouse button which was pressed to initiate this action
+ * @time: a timestamp for this action
+ *
+ * Pops up the menu constructed from the item factory at (@x, @y). Callbacks
+ * can access the @popup_data while the menu is posted via 
+ * gtk_item_factory_popup_data() and gtk_item_factory_popup_data_from_widget().
+ */
 void
 gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
 				  gpointer		 popup_data,
@@ -1270,6 +1481,17 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
 		  mouse_button, time);
 }
 
+/**
+ * gtk_item_factory_set_translate_func:
+ * @ifactory: a #GtkItemFactory
+ * @func: the #GtkTranslateFunc function to be used to translate path elements 
+ * @data: data to pass to @func and @notify
+ * @notify: a #GtkDestroyNotify function to be called @ifactory is destroyed 
+ *   and when the translation function is changed again
+ * 
+ * Sets a function to be use for translating the path elements before they
+ * are displayed. 
+ */ 
 void
 gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 				     GtkTranslateFunc     func,
