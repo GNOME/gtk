@@ -1,3 +1,8 @@
+Tue Jan 29 14:47:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_init_check): Remove the scary startup
+	warning.
+
 Tue Jan 29 14:24:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_class_init): Add <Control>Tab
