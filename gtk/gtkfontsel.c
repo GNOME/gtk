@@ -1340,7 +1340,8 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
       nbitmapped_sizes = style->npixel_sizes;
     }
 
-  if (!fontsel->scale_bitmapped_fonts && !(style->flags & SCALABLE_FONT))
+  if (!(fontsel->scale_bitmapped_fonts && style->flags & SCALABLE_BITMAP_FONT)
+      && !(style->flags & SCALABLE_FONT))
     nstandard_sizes = 0;
 
   gtk_clist_freeze (GTK_CLIST(fontsel->size_clist));
@@ -1508,7 +1509,8 @@ gtk_font_selection_select_best_size(GtkFontSelection *fontsel)
 
   /* If we aren't scaling bitmapped fonts and this is a bitmapped font, we
      need to use the closest size found. */
-  if (!fontsel->scale_bitmapped_fonts && !(style->flags & SCALABLE_FONT))
+  if (!(fontsel->scale_bitmapped_fonts && style->flags & SCALABLE_BITMAP_FONT)
+      && !(style->flags & SCALABLE_FONT))
     found = TRUE;
 
   if (found)
@@ -2341,7 +2343,9 @@ gtk_font_selection_get_fonts (void)
 		= gtk_font_selection_insert_field (fontname, prop);
 	    }
 	  current_style->pixel_sizes_index = npixel_sizes;
+	  current_style->npixel_sizes = 0;
 	  current_style->point_sizes_index = npoint_sizes;
+	  current_style->npoint_sizes = 0;
 	  current_style->flags = 0;
 
 
