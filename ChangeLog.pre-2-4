@@ -1,3 +1,8 @@
+2000-10-27  Robert Brady  <robert@suse.co.uk>
+
+	* configure.in (ALL_LINGUAS): Add en@IPA (English, phonetic), 
+	en_GB (British), ia (Interlingua).
+
 2000-10-26  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (my_strrstr): fix constness warning

@@ -1,0 +1,306 @@
+# English (IPA)
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Robert Brady <rwb197@zepler.org>, 2000.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.3.1\n"
+"POT-Creation-Date: 2000-10-27 01:03+0100\n"
+"PO-Revision-Date: 2000-07-31 23:18+0100\n"
+"Last-Translator: Robert Brady <rwb197@zepler.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF faɪl wɒz mɪsɪŋ sʌm deɪtə (pəhæps ɪt wɒz trʌŋkeɪtɪd sʌmhau?)"
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "ɪntɜnəl ɛrə ɪn ðə GIF ləudə (%s)"
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr "sɜkjulə teɪbl ɛntri ɪn GIF faɪl"
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr "fɑil dʌs nɒt əpiə tə bi ə GIF faɪl"
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "vɜːʃən %s ɒv ðə GIF faɪl fɔmæt ɪz nɒt sʌpɒtɪd"
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr "GIF ænɪmeɪʃən kənteɪnd ə freɪm wɪð ən ɪnkərɛkt saɪz"
+
+#: gtk/gtkcolorsel.c:1423
+msgid "Hue:"
+msgstr "hjuː:"
+
+#: gtk/gtkcolorsel.c:1424
+msgid "Saturation:"
+msgstr "sætʃureɪʃən:"
+
+#: gtk/gtkcolorsel.c:1425
+msgid "Value:"
+msgstr "væljuː:"
+
+#: gtk/gtkcolorsel.c:1426
+msgid "Red:"
+msgstr "rɛd"
+
+#: gtk/gtkcolorsel.c:1427
+msgid "Green:"
+msgstr "griːn:"
+
+#: gtk/gtkcolorsel.c:1428
+msgid "Blue:"
+msgstr "bluː:"
+
+#: gtk/gtkcolorsel.c:1431
+msgid "Opacity:"
+msgstr "əʊpæsɪti:"
+
+#: gtk/gtkcolorsel.c:1446
+msgid "Hex Value:"
+msgstr "hɛks væljuː:"
+
+#: gtk/gtkcolorsel.c:1469
+msgid "Custom Palette"
+msgstr "kʌstəm pælɪt"
+
+#: gtk/gtkcolorsel.c:1474
+msgid "Set Color"
+msgstr "sɛt kʌlə"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:513
+msgid "Directories"
+msgstr "daɪrɛktəriz"
+
+#. The files clist
+#: gtk/gtkfilesel.c:533
+msgid "Files"
+msgstr "faɪlz"
+
+#: gtk/gtkfilesel.c:604 gtk/gtkfilesel.c:1640
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "daɪrɛktəri ʌnridəbl: %s"
+
+#: gtk/gtkfilesel.c:636
+msgid "Create Dir"
+msgstr "krieɪt dɜː"
+
+#: gtk/gtkfilesel.c:647 gtk/gtkfilesel.c:1047
+msgid "Delete File"
+msgstr "dəlit faɪl"
+
+#: gtk/gtkfilesel.c:658 gtk/gtkfilesel.c:1160
+msgid "Rename File"
+msgstr "rineɪm faɪl"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:828
+msgid "Error"
+msgstr "ɛrə"
+
+#: gtk/gtkfilesel.c:933
+msgid "Create Directory"
+msgstr "krieɪt daɪrɛktəri"
+
+#: gtk/gtkfilesel.c:947
+msgid "Directory name:"
+msgstr "daɪrɛktəri neɪm:"
+
+#. buttons
+#: gtk/gtkfilesel.c:960
+msgid "Create"
+msgstr "krieɪt"
+
+#. buttons
+#: gtk/gtkfilesel.c:1069
+msgid "Delete"
+msgstr "dəlit"
+
+#. buttons
+#: gtk/gtkfilesel.c:1193
+msgid "Rename"
+msgstr "rineɪm"
+
+#: gtk/gtkfilesel.c:1619
+msgid "Selection: "
+msgstr "səlɛkʃən: "
+
+#: gtk/gtkfontsel.c:191
+msgid "Family:"
+msgstr "fæməli:"
+
+#: gtk/gtkfontsel.c:196
+msgid "Style:"
+msgstr "staɪl:"
+
+#: gtk/gtkfontsel.c:201
+msgid "Size:"
+msgstr "saɪz:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:311
+msgid "Preview:"
+msgstr "privjuː:"
+
+#: gtk/gtkfontsel.c:986
+msgid "Font Selection"
+msgstr "fɒnt səlɛkʃən"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "gæmə"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "gæmə væljuː"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:186
+msgid "Input"
+msgstr "ɪmpʌt"
+
+#: gtk/gtkinputdialog.c:194
+msgid "No input devices"
+msgstr "nəʊ ɪmpʌt dɪvaɪsɪz"
+
+#: gtk/gtkinputdialog.c:223
+msgid "Device:"
+msgstr "dɪvaɪs"
+
+#: gtk/gtkinputdialog.c:239
+msgid "Disabled"
+msgstr "dɪseɪbəld"
+
+#: gtk/gtkinputdialog.c:247
+msgid "Screen"
+msgstr "skriːn"
+
+#: gtk/gtkinputdialog.c:255
+msgid "Window"
+msgstr "wɪndəʊ"
+
+#: gtk/gtkinputdialog.c:263
+msgid "Mode: "
+msgstr "məʊd: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:293
+msgid "Axes"
+msgstr "æksiz"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:309
+msgid "Keys"
+msgstr "kiːz"
+
+#: gtk/gtkinputdialog.c:472
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:473
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:474
+msgid "Pressure"
+msgstr "prɛʃə"
+
+#: gtk/gtkinputdialog.c:475
+msgid "X Tilt"
+msgstr "X tɪlt"
+
+#: gtk/gtkinputdialog.c:476
+msgid "Y Tilt"
+msgstr "Y tɪlt"
+
+#: gtk/gtkinputdialog.c:477
+msgid "Wheel"
+msgstr "wiːl"
+
+#: gtk/gtkinputdialog.c:517
+msgid "none"
+msgstr "nən"
+
+#: gtk/gtkinputdialog.c:551 gtk/gtkinputdialog.c:587
+msgid "(disabled)"
+msgstr "(dɪseɪbəld)"
+
+#: gtk/gtkinputdialog.c:580
+msgid "(unknown)"
+msgstr "(ʌnəʊn)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:665
+msgid "clear"
+msgstr "kliə"
+
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR
+#.
+#: gtk/gtkmain.c:417
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#: gtk/gtkmain.c:1419
+msgid "0123456789."
+msgstr "0123456789."
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "peɪdʒ %u"
+
+#: gtk/gtkrc.c:1978
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr ""
+"ʌneɪbəl tə ləʊkeɪt ɪmɪdʒ faɪl ɪn pixmap_path: \"%s\" laɪn %d"
+
+#: gtk/gtkrc.c:1981
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "ʌneɪbəl tu ləʊkeɪt ɪmɪdʒ faɪl ɪn pixmap_path: \"%s\""
+
+#: gtk/gtkthemes.c:117
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "ʌneɪbəl tu ləʊkeɪt ɪmɪdʒ faɪl ɪn module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- nəʊ tɪp ---"
+
+#~ msgid "OK"
+#~ msgstr "əʊkeɪ"
+
+#~ msgid "Cancel"
+#~ msgstr "kænsl"
+
+#~ msgid "Help"
+#~ msgstr "hɛlp"
+
+#~ msgid "Close"
+#~ msgstr "kləʊz"
+
+#~ msgid "Apply"
+#~ msgstr "əplaɪ"
+
+#~ msgid "Save"
+#~ msgstr "seɪv"

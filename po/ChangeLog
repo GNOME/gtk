@@ -1,3 +1,13 @@
+2000-10-27  Robert Brady  <robert@suse.co.uk>
+
+	* POTFILES.in: Added gtkstock.c
+	
+	* en_GB.po: Added British translation.
+
+	* en@IPA.po: Added English (IPA) translation.
+
+	* ia.po: Added Interlingua translation.
+
 2000-10-24  Christopher R. Gabriel  <cgabriel@softwarelibero.org>
 
 	* it.po: Updated Italian translation

@@ -1,0 +1,353 @@
+# Interlingua translation
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Robert Brady <rwb197@zepler.org>
+# 
+# I am a novice at Interlingua, please do not laugh.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ 1.3\n"
+"POT-Creation-Date: 2000-10-27 02:18+0100\n"
+"PO-Revision-Date: 2000-10-27 02:02+0100\n"
+"Last-Translator: Robert Brady <rwb197@zepler.org>\n"
+"Language-Team: Interlingua\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=US-ASCII\n"
+"Content-Transfer-Encoding: 7bit\n"
+
+#: gdk-pixbuf/io-gif.c:426
+msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF archivo manca datos (forsan truncateva?)"
+
+#: gdk-pixbuf/io-gif.c:435
+#, c-format
+msgid "Internal error in the GIF loader (%s)"
+msgstr "Interne error in le cargator de GIF (%s)"
+
+#: gdk-pixbuf/io-gif.c:584
+msgid "Circular table entry in GIF file"
+msgstr "Circular elemento de tabella in GIF archivo"
+
+#: gdk-pixbuf/io-gif.c:921
+msgid "File does not appear to be a GIF file"
+msgstr "Archivo disapparer un GIF archivo"
+
+#: gdk-pixbuf/io-gif.c:933
+#, c-format
+msgid "Version %s of the GIF file format is not supported"
+msgstr "Version %s de la formato de GIF archivo insupportava"
+
+#: gdk-pixbuf/io-gif.c:985
+msgid "GIF animation contained a frame with an incorrect size"
+msgstr "GIF animation contineva un frame apud un incorrect dimension"
+
+#: gtk/gtkcolorsel.c:1423
+msgid "Hue:"
+msgstr "Tinta:"
+
+#: gtk/gtkcolorsel.c:1424
+msgid "Saturation:"
+msgstr "Saturation:"
+
+#: gtk/gtkcolorsel.c:1425
+msgid "Value:"
+msgstr "Valor:"
+
+#: gtk/gtkcolorsel.c:1426
+msgid "Red:"
+msgstr "Rubor:"
+
+#: gtk/gtkcolorsel.c:1427
+msgid "Green:"
+msgstr "Verde:"
+
+#: gtk/gtkcolorsel.c:1428
+msgid "Blue:"
+msgstr "Blau:"
+
+#: gtk/gtkcolorsel.c:1431
+msgid "Opacity:"
+msgstr "Opacitate:"
+
+#: gtk/gtkcolorsel.c:1446
+msgid "Hex Value:"
+msgstr "Hex Valor:"
+
+#: gtk/gtkcolorsel.c:1469
+msgid "Custom Palette"
+msgstr "Personal Palleta"
+
+#: gtk/gtkcolorsel.c:1474
+msgid "Set Color"
+msgstr "Definir Color"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:513
+msgid "Directories"
+msgstr "Directoris"
+
+#. The files clist
+#: gtk/gtkfilesel.c:533
+msgid "Files"
+msgstr "Archivos"
+
+#: gtk/gtkfilesel.c:604 gtk/gtkfilesel.c:1640
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Illegible directori: %s"
+
+#: gtk/gtkfilesel.c:636
+msgid "Create Dir"
+msgstr "Crear Dir"
+
+#: gtk/gtkfilesel.c:647 gtk/gtkfilesel.c:1047
+msgid "Delete File"
+msgstr "Deler Archivo"
+
+#: gtk/gtkfilesel.c:658 gtk/gtkfilesel.c:1160
+msgid "Rename File"
+msgstr "Renominar Archivo"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:828 gtk/gtkstock.c:171
+msgid "Error"
+msgstr "Error"
+
+#: gtk/gtkfilesel.c:933
+msgid "Create Directory"
+msgstr "Crear Directori"
+
+#: gtk/gtkfilesel.c:947
+msgid "Directory name:"
+msgstr "Nomine de Directori"
+
+#. buttons
+#: gtk/gtkfilesel.c:960
+msgid "Create"
+msgstr "Crear"
+
+#. buttons
+#: gtk/gtkfilesel.c:1069
+msgid "Delete"
+msgstr "Deler"
+
+#. buttons
+#: gtk/gtkfilesel.c:1193
+msgid "Rename"
+msgstr "Renominar"
+
+#: gtk/gtkfilesel.c:1619
+msgid "Selection: "
+msgstr "Selection: "
+
+#: gtk/gtkfontsel.c:191
+msgid "Family:"
+msgstr "Familia:"
+
+#: gtk/gtkfontsel.c:196
+msgid "Style:"
+msgstr "Stilo:"
+
+#: gtk/gtkfontsel.c:201
+msgid "Size:"
+msgstr "Dimension:"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:311
+msgid "Preview:"
+msgstr "Antevista"
+
+# want term for "Font!"
+#: gtk/gtkfontsel.c:986
+msgid "Font Selection"
+msgstr "Selection de Fonte"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gamma valor"
+
+# This means "Input"?
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:186
+msgid "Input"
+msgstr "Entrada"
+
+#: gtk/gtkinputdialog.c:194
+msgid "No input devices"
+msgstr "No devisa de entrada"
+
+#: gtk/gtkinputdialog.c:223
+msgid "Device:"
+msgstr "Devisa:"
+
+#: gtk/gtkinputdialog.c:239
+msgid "Disabled"
+msgstr "Deactiveate"
+
+#: gtk/gtkinputdialog.c:247
+msgid "Screen"
+msgstr "Screen"
+
+#: gtk/gtkinputdialog.c:255
+msgid "Window"
+msgstr "Fenestra"
+
+#: gtk/gtkinputdialog.c:263
+msgid "Mode: "
+msgstr "Modo: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:293
+msgid "Axes"
+msgstr "Axes"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:309
+msgid "Keys"
+msgstr "Claves"
+
+#: gtk/gtkinputdialog.c:472
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:473
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:474
+msgid "Pressure"
+msgstr "Pression"
+
+#: gtk/gtkinputdialog.c:475
+msgid "X Tilt"
+msgstr "X Inclanation"
+
+#: gtk/gtkinputdialog.c:476
+msgid "Y Tilt"
+msgstr "Y Inclanation"
+
+#: gtk/gtkinputdialog.c:477
+msgid "Wheel"
+msgstr "Rota"
+
+#: gtk/gtkinputdialog.c:517
+msgid "none"
+msgstr "necun"
+
+#: gtk/gtkinputdialog.c:551 gtk/gtkinputdialog.c:587
+msgid "(disabled)"
+msgstr "(deactive)"
+
+#: gtk/gtkinputdialog.c:580
+msgid "(unknown)"
+msgstr "(incognite)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:665
+msgid "clear"
+msgstr "depurar"
+
+#. Translate to default:RTL if you want your widgets
+#. * to be RTL, otherwise translate to default:LTR
+#.
+#: gtk/gtkmain.c:417
+msgid "default:LTR"
+msgstr "default:LTR"
+
+#: gtk/gtkmain.c:1419
+msgid "0123456789."
+msgstr "0123456789."
+
+#. KEEP IN SYNC with gtkiconfactory.c stock icons
+#: gtk/gtkstock.c:169
+msgid "Information"
+msgstr "Information"
+
+#: gtk/gtkstock.c:170
+msgid "Warning"
+msgstr "Advertimento"
+
+#: gtk/gtkstock.c:172
+msgid "Question"
+msgstr "Question"
+
+#: gtk/gtkstock.c:174
+msgid "_Apply"
+msgstr "_Applicar"
+
+#: gtk/gtkstock.c:175
+msgid "OK"
+msgstr "Validar"
+
+#: gtk/gtkstock.c:176
+msgid "Cancel"
+msgstr "Annullar"
+
+#: gtk/gtkstock.c:177
+msgid "_Close"
+msgstr "_Clauder"
+
+#: gtk/gtkstock.c:178
+msgid "_Yes"
+msgstr "_Si"
+
+#: gtk/gtkstock.c:179
+msgid "_No"
+msgstr "_No"
+
+#: gtk/gtkstock.c:181
+msgid "Close"
+msgstr "Clauder"
+
+#: gtk/gtkstock.c:182
+msgid "Quit"
+msgstr "Quitar"
+
+#: gtk/gtkstock.c:183
+msgid "Help"
+msgstr "Adjuta"
+
+#: gtk/gtkstock.c:184
+msgid "New"
+msgstr "Nove"
+
+#: gtk/gtkstock.c:185
+msgid "Open"
+msgstr "Aperir"
+
+#: gtk/gtkstock.c:186
+msgid "Save"
+msgstr "Salvar"
+
+#: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
+#, c-format
+msgid "Page %u"
+msgstr "Pagina %u"
+
+#: gtk/gtkrc.c:1978
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr ""
+"Incapabile de localisar le image archivo in pixmap_path: \"%s\" linea %d"
+
+#: gtk/gtkrc.c:1981
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Incapabile de localisar le image archivo in pixmap_path: \"%s\""
+
+#: gtk/gtkthemes.c:117
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Incapabile de localisar le cargarable modulo in module_path: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- No Ariso ---"

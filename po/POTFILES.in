@@ -8,6 +8,7 @@ gtk/gtkfontsel.c
 gtk/gtkgamma.c
 gtk/gtkinputdialog.c
 gtk/gtkmain.c
+gtk/gtkstock.c
 gtk/gtknotebook.c
 gtk/gtkrc.c
 gtk/gtkthemes.c
