@@ -29,11 +29,18 @@ extern "C" {
 
 typedef struct _GtkStyle         GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
+
+/* Some forward declarations needed to rationalize the header
+ * files.
+ */
+
+typedef struct _GtkThemeEngine GtkThemeEngine;
+typedef struct _GtkRcStyle GtkRcStyle;
+
 #ifndef __TYPEDEFED_GTK_WIDGET__
 typedef struct _GtkWidget         GtkWidget;
 #define __TYPEDEFED_GTK_WIDGET__
 #endif
-
 
 /* This is used for having dynamic style changing stuff */
 /* fg, bg, light, dark, mid, text, base */
@@ -67,13 +74,21 @@ struct _GtkStyle
 
   GdkPixmap *bg_pixmap[5];
 
+  GtkThemeEngine *engine;
+  GtkStyleClass  *klass;
+
+  gpointer        engine_data;
+
+  /* Private */
   gint ref_count;
   gint attach_count;
 
   gint depth;
   GdkColormap *colormap;
 
-  GtkStyleClass *klass;
+  GtkRcStyle     *rc_style;	/* the Rc style from which this style
+				 * was created */
+  GSList         *styles;
 };
 
 struct _GtkStyleClass

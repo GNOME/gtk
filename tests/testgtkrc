@@ -29,14 +29,18 @@ style "window"
 style "scale"
 {
   fg[NORMAL] = { 1.0, 0, 0 }
+  bg[PRELIGHT] = { 1.0, 1.0, 0 }
   bg_pixmap[NORMAL] = "<parent>"
 }
 
-style "button" = "default"
+style "button"
 {
 #  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
 #  bg[PRELIGHT] = { 0.75, 0, 0x00 }
+   engine "sample" { 
+     name = "Sssaample"
+   }
 }
 
 style "toggle_button" = "button"
@@ -136,4 +140,3 @@ binding "clist-test"
 }
 
 class "GtkCList" binding "clist-test"
-  

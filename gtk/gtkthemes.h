@@ -26,7 +26,53 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 #include <gdk/gdk.h>
+#include <gtk/gtkstyle.h>
 #include <gtk/gtkwidget.h>
+
+struct _GtkThemeEngine {
+  /* Fill in engine_data pointer in a GtkRcStyle by parsing contents
+   * of brackets. Returns G_TOKEN_NONE if succesfull, otherwise returns
+   * the token it expected but didn't get.
+   */
+  guint (*parse_rc_style)    (GScanner *scanner, GtkRcStyle *rc_style);
+  
+  /* Combine RC style data from src into dest. If 
+   * dest->engine_data is NULL, it should be initialized to default
+   * values.
+   */
+  void (*merge_rc_style)    (GtkRcStyle *dest,     GtkRcStyle *src);
+
+  /* Fill in style->engine_data from rc_style->engine_data */
+  void (*rc_style_to_style) (GtkStyle   *style, GtkRcStyle *rc_style);
+
+  /* Duplicate engine_data from src to dest. The engine_data will
+   * not subsequently be modified except by a call to realize_style()
+   * so if realize_style() does nothing, refcounting is appropriate.
+   */
+  void (*duplicate_style)   (GtkStyle *dest,       GtkStyle *src);
+
+  /* If style needs to initialize for a particular colormap/depth
+   * combination, do it here. style->colormap/style->depth will have
+   * been set at this point, and style itself initialized for 
+   * the colormap
+   */
+  void (*realize_style) (GtkStyle   *new_style);
+
+  /* If style needs to clean up for a particular colormap/depth
+   * combination, do it here. 
+   */
+  void (*unrealize_style) (GtkStyle   *new_style);
+
+  /* Clean up rc_style->engine_data before rc_style is destroyed */
+  void (*destroy_rc_style)  (GtkRcStyle *rc_style);
+
+  /* Clean up style->engine_data before style is destroyed */
+  void (*destroy_style)     (GtkStyle   *style);
+};
+
+GtkThemeEngine *gtk_theme_engine_get   (gchar          *name);
+void            gtk_theme_engine_ref   (GtkThemeEngine *engine);
+void            gtk_theme_engine_unref (GtkThemeEngine *engine);
 
 struct _GtkThemesData
 {
