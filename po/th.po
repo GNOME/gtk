@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-03-07 00:18-0600\n"
+"PO-Revision-Date: 2004-03-07 18:59-0600\n"
 "Last-Translator: Paisa Seeluangsawat <paisa@users.sf.net>\n"
 "Language-Team: Thai <L10n@opentle.net>\n"
 "MIME-Version: 1.0\n"
@@ -1224,7 +1224,7 @@ msgstr "เปลี่ยนชื่อแฟ้ม \"%s\" ไปเป็น:
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr "เปลี่_ยนชื่อ"
+msgstr "เ_ปลี่ยนชื่อ"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
