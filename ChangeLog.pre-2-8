@@ -1,3 +1,12 @@
+Wed Aug 18 16:18:00 2004  Manish Singh  <yosh@gimp.org>
+
+        * gtk/gtktreeview.c (gtk_tree_view_row_inserted): Initialize height
+        from fixed_height before we do anything, so it always has a valid
+        value.
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons): Fix call
+	to gtk_tree_model_get (missing "," in param list).
+
 2004-08-18  Federico Mena Quintero  <federico@ximian.com>
 
 	Merged from 2.4:

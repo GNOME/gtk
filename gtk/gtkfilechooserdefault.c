@@ -942,7 +942,7 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
 
     gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
 			SHORTCUTS_COL_DATA, &data,
-			SHORTCUTS_COL_IS_VOLUME &is_volume,
+			SHORTCUTS_COL_IS_VOLUME, &is_volume,
 			SHORTCUTS_COL_PIXBUF_VISIBLE, &pixbuf_visible,
 			-1);
 
