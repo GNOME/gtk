@@ -78,7 +78,7 @@ enum
   GTK_RESERVED_2        = 1 << 3
 };
   
-/* GtkArg access bits for gtk_object_add_arg_type
+/* GtkArg flag bits for gtk_object_add_arg_type
  */
 enum
 {
@@ -246,19 +246,20 @@ void	gtk_object_setv		(GtkObject	*object,
 
 /* Allocate a GtkArg array of size nargs that hold the
  * names and types of the args that can be used with
- * gtk_object_set/gtk_object_get. if (acess_masks!=NULL),
- * (*access_mask) will be set to point to a newly allocated
- * guint array that holds the access masks of the args.
+ * gtk_object_set/gtk_object_get. if (arg_flags!=NULL),
+ * (*arg_flags) will be set to point to a newly allocated
+ * guint array that holds the flags of the args.
  * It is the callers response to do a
  * g_free (returned_args); g_free (*acess_masks).
  */
 GtkArg* gtk_object_query_args   (GtkType	class_type,
-				 guint		**acess_masks,
+				 guint32	**arg_flags,
+				 guint		**seq_ids,
 				 guint          *nargs);
 
 void	gtk_object_add_arg_type	(const gchar	*arg_name,
 				 GtkType	arg_type,
-				 guint		access_mask,
+				 guint		arg_flags,
 				 guint		arg_id);
 
 GtkType	gtk_object_get_arg_type	(const gchar	*arg_name);
