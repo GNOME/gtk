@@ -312,7 +312,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  "hicolor",
 								  G_PARAM_READWRITE),
                                              NULL);
-  g_assert (result == PROP_ICON_THEME_NAME);    
+  g_assert (result == PROP_ICON_THEME_NAME);
+  
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-key-theme-name",
 								  P_("Key Theme Name"),

@@ -1,3 +1,13 @@
+Mon Mar  1 14:16:52 2004  Owen Taylor  <otaylor@redhat.com>
+
+	Based on patch by Alex Larsson
+
+	* gtk/gtkfilechooserdefault.c: Use gtk-file-chooser-backend
+	GtkSetting to set the backend if the app doesn't specify one.
+
+	* gdk/x11/gdkevents-x11.c gtk/gtksettings.c:
+	Add Gtk/FileChooserBackend.
+
 Mon Mar  1 20:32:06 2004  Tim Janik  <timj@gtk.org>
 
         * autogen.sh:

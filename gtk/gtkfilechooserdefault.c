@@ -455,6 +455,12 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				0);
 
   _gtk_file_chooser_install_properties (gobject_class);
+  
+  gtk_settings_install_property (g_param_spec_string ("gtk-file-chooser-backend",
+						      P_("Default file chooser backend"),
+						      P_("Name of the GtkFileChooser backend to use by default"),
+						      NULL,
+						      G_PARAM_READWRITE));
 }
 
 static void
@@ -2059,6 +2065,18 @@ set_file_system_backend (GtkFileChooserDefault *impl,
   impl->file_system = NULL;
   if (backend)
     impl->file_system = _gtk_file_system_create (backend);
+  else
+    {
+      GtkSettings *settings = gtk_settings_get_default ();
+      gchar *default_backend = NULL;
+      
+      g_object_get (settings, "gtk-file-chooser-backend", &default_backend, NULL);
+      if (default_backend)
+	{
+	  impl->file_system = _gtk_file_system_create (default_backend);
+	  g_free (default_backend);
+	}
+    }
 
   if (!impl->file_system)
     {

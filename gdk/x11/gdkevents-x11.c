@@ -2632,6 +2632,7 @@ static struct
   { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
   { "Net/ThemeName", "gtk-theme-name" },
   { "Net/IconThemeName", "gtk-icon-theme-name" },
+  { "Gtk/FileChooserBackend", "gtk-file-chooser-backend" },
   { "Gtk/ButtonImages", "gtk-button-images" },
   { "Gtk/MenuImages", "gtk-menu-images" },
   { "Xft/Antialias", "gtk-xft-antialias" },
