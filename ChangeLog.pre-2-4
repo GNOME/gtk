@@ -1,3 +1,10 @@
+Sun Oct  4 17:45:43 BST 1998  Tony Gale  <gale@gtk.org>
+
+	* docs/gtk_tut.sgml: update I've had sat around:
+	  - Grammar patch from James R. Van Zandt <jrv@vanzandt.mv.com>
+	  - Range Widget update from David Huggins-Daines <bn711@freenet.carleton.ca>
+	  - New Toolbar section from Jacek Wojdel <J.C.Wojdel@cs.tudelft.nl>
+
 1998-10-01  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/gtkclist.h (GtkCListColumn): Added `visible'.
