@@ -2389,6 +2389,11 @@ gtk_clist_realize (GtkWidget * widget)
 					  GDK_GC_FUNCTION |
 					  GDK_GC_SUBWINDOW);
   
+  attributes.x = 0;
+  attributes.y = 0;
+  attributes.width = clist->clist_window_width + (2 * widget->style->klass->xthickness),
+  attributes.height = clist->clist_window_height + (2 * widget->style->klass->ythickness) +
+    clist->column_title_area.height;
   attributes.wclass = GDK_INPUT_ONLY;
   clist->dummy_window = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_lower(clist->dummy_window);
@@ -2549,10 +2554,7 @@ gtk_clist_draw (GtkWidget * widget,
       gtk_paint_shadow (widget->style, widget->window,
 			GTK_STATE_NORMAL, clist->shadow_type,
 			area, widget, "clist",
-			clist->internal_allocation.x + 
-			GTK_CONTAINER (widget)->border_width, 
-			clist->internal_allocation.y +
-			GTK_CONTAINER (widget)->border_width, 
+			0, 0,
 			clist->clist_window_width + (2 * widget->style->klass->xthickness),
 			clist->clist_window_height + (2 * widget->style->klass->ythickness) +
 			clist->column_title_area.height);
@@ -2583,10 +2585,7 @@ gtk_clist_expose (GtkWidget * widget,
 	gtk_paint_shadow (widget->style, widget->window,
 			  GTK_STATE_NORMAL, clist->shadow_type,
 			  &event->area, widget, "clist",
-			  clist->internal_allocation.x +
-			  GTK_CONTAINER (widget)->border_width, 
-			  clist->internal_allocation.y +
-			  GTK_CONTAINER (widget)->border_width, 
+			  0, 0,
 			  clist->clist_window_width + (2 * widget->style->klass->xthickness),
 			  clist->clist_window_height + (2 * widget->style->klass->ythickness) +
 			  clist->column_title_area.height);
@@ -3172,14 +3171,6 @@ gtk_clist_size_allocate (GtkWidget * widget,
 			      allocation->y + GTK_CONTAINER (widget)->border_width,
 			      allocation->width - GTK_CONTAINER (widget)->border_width * 2,
 			      allocation->height - GTK_CONTAINER (widget)->border_width * 2);
-      gdk_window_move_resize (clist->dummy_window,
-			      clist->internal_allocation.x + widget->allocation.x +
-			      GTK_CONTAINER (widget)->border_width,
-			      clist->internal_allocation.y + widget->allocation.y +
-			      GTK_CONTAINER (widget)->border_width,
-			      clist->clist_window_width + (2 * widget->style->klass->xthickness),
-			      clist->clist_window_height + (2 * widget->style->klass->ythickness) +
-			      clist->column_title_area.height);
     }
 
   /* use internal allocation structure for all the math
@@ -3320,12 +3311,22 @@ gtk_clist_size_allocate (GtkWidget * widget,
 	gtk_widget_hide (clist->hscrollbar);
     }
 
-   /* get rid of the ugly box border */
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      gdk_window_move_resize (clist->dummy_window,
+			      0, 0,
+			      clist->clist_window_width + (2 * widget->style->klass->xthickness),
+			      clist->clist_window_height + (2 * widget->style->klass->ythickness) +
+			      clist->column_title_area.height);
+    }
+
+  /* get rid of the ugly box border */
   if (GTK_WIDGET_REALIZED (widget))
      gdk_window_set_child_shapes(widget->window);
    
   /* set the vscrollbar adjustments */
   adjust_scrollbars (clist);
+
 }
 
 /* 
