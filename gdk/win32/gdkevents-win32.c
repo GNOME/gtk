@@ -808,6 +808,8 @@ build_key_event_state (GdkEvent *event)
       if (GetKeyState (VK_MENU) < 0)
 	event->key.state |= GDK_MOD1_MASK;
     }
+  else
+    event->key.group = 1;
 }
 
 static gint
@@ -856,9 +858,11 @@ build_keypress_event (GdkWindowImplWin32 *impl,
       bytecount = ImmGetCompositionStringW (himc, GCS_RESULTSTR,
 					    wbuf, sizeof (wbuf));
       ucount = bytecount / 2;
+      event->key.hardware_keycode = wbuf[0]; /* ??? */
     }
   else
     {
+      event->key.hardware_keycode = msg->wParam;
       if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
 	{
 	  bytecount = MIN ((msg->lParam & 0xFFFF), sizeof (buf));
@@ -884,12 +888,11 @@ build_keypress_event (GdkWindowImplWin32 *impl,
 	    }
 	}
 
-      /* Convert from the window's current code page
+      /* Convert from the thread's current code page
        * to Unicode. Then convert to UTF-8.
        * We don't handle the surrogate stuff. Should we?
        */
-      GDK_NOTE (EVENTS, g_print ("ciACP=%d\n", impl->charset_info.ciACP));
-      ucount = MultiByteToWideChar (impl->charset_info.ciACP,
+      ucount = MultiByteToWideChar (_gdk_input_codepage,
 				    0, buf, bytecount,
 				    wbuf, G_N_ELEMENTS (wbuf));
     }
@@ -940,18 +943,24 @@ build_keyrelease_event (GdkWindowImplWin32 *impl,
   event->key.group = 0;		/* ??? */
 
   if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
-    if (msg->wParam < ' ')
-      event->key.keyval = msg->wParam + '@';
-    else
-      {
-	buf = msg->wParam;
-	MultiByteToWideChar (impl->charset_info.ciACP,
-			     0, &buf, 1, &wbuf, 1);
-
-	event->key.keyval = gdk_unicode_to_keyval (wbuf);
-      }
+    {
+      event->key.hardware_keycode = msg->wParam;
+      if (msg->wParam < ' ')
+	event->key.keyval = msg->wParam + '@';
+      else
+	{
+	  buf = msg->wParam;
+	  MultiByteToWideChar (_gdk_input_codepage,
+			       0, &buf, 1, &wbuf, 1);
+	  
+	  event->key.keyval = gdk_unicode_to_keyval (wbuf);
+	}
+    }
   else
-    event->key.keyval = GDK_VoidSymbol;
+    {
+      event->key.keyval = GDK_VoidSymbol;
+      event->key.hardware_keycode = 0; /* ??? */
+    }
   build_key_event_state (event);
   event->key.string = NULL;
   event->key.length = 0;
@@ -1061,7 +1070,8 @@ print_event (GdkEvent *event)
       else
 	escaped = g_strescape (event->key.string, NULL);
       kvname = gdk_keyval_name (event->key.keyval);
-      g_print ("%s %d:\"%s\" ",
+      g_print ("%#.02x %d %s %d:\"%s\" ",
+	       event->key.hardware_keycode, event->key.group,
 	       (kvname ? kvname : "??"),
 	       event->key.length,
 	       escaped);
@@ -1796,6 +1806,7 @@ gdk_event_translate (GdkEvent *event,
   HWND hwnd;
   HCURSOR hcursor;
   HRGN hrgn;
+  CHARSETINFO charset_info;
 
   /* Invariant:
    * window_impl == GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)
@@ -2014,13 +2025,16 @@ gdk_event_translate (GdkEvent *event,
   switch (msg->message)
     {
     case WM_INPUTLANGCHANGE:
-      GDK_NOTE (EVENTS,
-		g_print ("WM_INPUTLANGCHANGE: %p  charset %lu locale %lx\n",
-			 msg->hwnd, (gulong) msg->wParam, msg->lParam));
-      window_impl->input_locale = (HKL) msg->lParam;
+      _gdk_input_locale = (HKL) msg->lParam;
       TranslateCharsetInfo ((DWORD FAR *) msg->wParam,
-			    &window_impl->charset_info,
+			    &charset_info,
 			    TCI_SRCCHARSET);
+      _gdk_input_codepage = charset_info.ciACP;
+      _gdk_keymap_serial++;
+      GDK_NOTE (EVENTS,
+		g_print ("WM_INPUTLANGCHANGE: %p  charset %lu locale %lx cp%d\n",
+			 msg->hwnd, (gulong) msg->wParam, msg->lParam,
+			 _gdk_input_codepage));
       break;
 
     case WM_SYSKEYUP:
@@ -2068,7 +2082,6 @@ gdk_event_translate (GdkEvent *event,
     keyup_or_down:
 
       event->key.window = window;
-      event->key.hardware_keycode = msg->wParam;
 
       switch (msg->wParam)
 	{
@@ -2330,7 +2343,8 @@ gdk_event_translate (GdkEvent *event,
 	event->key.state |= GDK_CONTROL_MASK;
       if (msg->wParam != VK_MENU && GetKeyState (VK_MENU) < 0)
 	event->key.state |= GDK_MOD1_MASK;
-      event->key.group = 0;	/* ??? */
+      event->key.hardware_keycode = msg->wParam;
+      event->key.group = (event->key.state & GDK_MOD1_MASK) != 0;
       event->key.string = NULL;
       event->key.length = 0;
       return_val = !GDK_WINDOW_DESTROYED (window);

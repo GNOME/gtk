@@ -444,6 +444,14 @@ extern HDC		 gdk_display_hdc;
 extern HINSTANCE	 gdk_dll_hinstance;
 extern HINSTANCE	 gdk_app_hmodule;
 
+/* These are thread specific, but GDK/win32 works OK only when invoked
+ * from a single thread anyway.
+ */
+extern HKL		 _gdk_input_locale;
+extern UINT		 _gdk_input_codepage;
+
+extern guint		 _gdk_keymap_serial;
+
 /* Registered clipboard formats */
 extern WORD		 cf_rtf;
 extern WORD		 cf_utf8_string;

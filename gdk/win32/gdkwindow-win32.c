@@ -95,9 +95,6 @@ gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
   impl->hcursor = NULL;
   impl->hint_flags = 0;
   impl->extension_events_selected = FALSE;
-  impl->input_locale = GetKeyboardLayout (0);
-  TranslateCharsetInfo ((DWORD FAR *) GetACP (), &impl->charset_info,
-			TCI_SRCCODEPAGE);
 }
 
 static void
@@ -644,14 +641,11 @@ gdk_window_new (GdkWindow     *parent,
 #endif
 
   GDK_NOTE (MISC,
-	    g_print ("... \"%s\" %dx%d@+%d+%d %p = %p\n"
-		     "... locale %#x codepage %d\n",
+	    g_print ("... \"%s\" %dx%d@+%d+%d %p = %p\n",
 		     mbtitle,
 		     width, height, (x == CW_USEDEFAULT ? -9999 : x), y, 
 		     hparent,
-		     GDK_WINDOW_HWND (window),
-		     (guint) impl->input_locale,
-		     (guint) impl->charset_info.ciACP));
+		     GDK_WINDOW_HWND (window)));
 
   g_free (mbtitle);
 
