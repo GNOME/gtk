@@ -324,18 +324,21 @@ g_list_find (GList    *list,
   return list;
 }
 
-GList *
-g_list_find_custom(GList *list, gpointer data, GCompareFunc func)
+GList*
+g_list_find_custom (GList       *list,
+		    gpointer     data,
+		    GCompareFunc func)
 {
-  if(!func) return g_list_find(list, data);
+  g_return_val_if_fail (func != NULL, list);
 
   while (list)
     {
-      if ( !((*func)(list->data, data)) ) break;
+      if (! func (list->data, data))
+	return list;
       list = list->next;
     }
 
-  return list;
+  return NULL;
 }
 
 
@@ -428,13 +431,15 @@ g_list_foreach (GList	 *list,
 
 
 GList*
-g_list_insert_sorted (GList    *list,
-                      gpointer  data,
+g_list_insert_sorted (GList        *list,
+                      gpointer      data,
                       GCompareFunc  func)
 {
   GList *tmp_list = list;
   GList *new_list;
   gint cmp;
+
+  g_return_val_if_fail (func != NULL, list);
   
   if (!list) 
     {
