@@ -160,7 +160,7 @@ msgstr "Familie"
 
 #: gtk/gtkfontsel.c:195
 msgid "Style:"
-msgstr "Stíl:"
+msgstr "Style:"
 
 #: gtk/gtkfontsel.c:200
 msgid "Size:"

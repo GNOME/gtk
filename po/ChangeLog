@@ -1,3 +1,8 @@
+2001-04-27  Michael Natterer  <mitch@convergence.de>
+
+	* da.po: removed invalid multibyte sequence.
+	* jp.po: fixed invalid end-of-line.
+
 2001-04-12  Christian Rose  <menthos@menthos.com>
 
 	* sv.po: Fixed Swedish translation. Thanks to Göran Uddeborg
