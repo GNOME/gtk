@@ -47,6 +47,7 @@
  *
  */
 
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtktextchild.h"
 #include "gtktextbtree.h"
 #include "gtktextlayout.h"

@@ -42,7 +42,7 @@ typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *
 typedef enum
 {
   GTK_TREE_MODEL_ITERS_PERSIST = 1 << 0,
-  GTK_TREE_MODEL_LIST_ONLY = 1 << 1,
+  GTK_TREE_MODEL_LIST_ONLY = 1 << 1
 } GtkTreeModelFlags;
 
 struct _GtkTreeIter

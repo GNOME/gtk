@@ -39,7 +39,6 @@ extern "C" {
 typedef enum
 {
   GTK_TREE_VIEW_COLUMN_GROW_ONLY,
-  GTK_TREE_VIEW_COLUMN_RESIZABLE,
   GTK_TREE_VIEW_COLUMN_AUTOSIZE,
   GTK_TREE_VIEW_COLUMN_FIXED
 } GtkTreeViewColumnSizing;
@@ -91,6 +90,7 @@ struct _GtkTreeViewColumn
 
   /* Flags */
   guint visible             : 1;
+  guint resizable           : 1;
   guint clickable           : 1;
   guint dirty               : 1;
   guint show_sort_indicator : 1;
@@ -138,6 +138,9 @@ gint                    gtk_tree_view_column_get_spacing         (GtkTreeViewCol
 void                    gtk_tree_view_column_set_visible         (GtkTreeViewColumn       *tree_column,
 								  gboolean                 visible);
 gboolean                gtk_tree_view_column_get_visible         (GtkTreeViewColumn       *tree_column);
+void                    gtk_tree_view_column_set_resizable       (GtkTreeViewColumn       *tree_column,
+								  gboolean                 resizable);
+gboolean                gtk_tree_view_column_get_resizable       (GtkTreeViewColumn       *tree_column);
 void                    gtk_tree_view_column_set_sizing          (GtkTreeViewColumn       *tree_column,
 								  GtkTreeViewColumnSizing  type);
 GtkTreeViewColumnSizing gtk_tree_view_column_get_sizing          (GtkTreeViewColumn       *tree_column);

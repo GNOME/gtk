@@ -89,7 +89,7 @@ static void         gtk_combo_update_list        (GtkEntry         *entry,
 static gint         gtk_combo_button_press       (GtkWidget        *widget,
 						  GdkEvent         *event,
 						  GtkCombo         *combo);
-static gint         gtk_combo_button_release     (GtkWidget        *widget,
+static void         gtk_combo_button_event_after (GtkWidget        *widget,
 						  GdkEvent         *event,
 						  GtkCombo         *combo);
 static gint         gtk_combo_list_enter         (GtkWidget        *widget,
@@ -310,7 +310,7 @@ gtk_combo_window_key_press (GtkWidget   *window,
 static GtkListItem *
 gtk_combo_find (GtkCombo * combo)
 {
-  gchar *text;
+  const gchar *text;
   gchar *ltext;
   GList *clist;
   int (*string_compare) (const char *, const char *);
@@ -623,23 +623,15 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
   return TRUE;
 }
 
-static gint
-gtk_combo_button_release (GtkWidget *widget,
-			  GdkEvent  *event,
-			  GtkCombo  *combo)
+static void
+gtk_combo_button_event_after (GtkWidget *widget,
+			      GdkEvent  *event,
+			      GtkCombo  *combo)
 {
   GtkWidget *child;
 
-  /* Horrible hack to get connect-after effect without regard to the return value of the default
-   * handler.
-   */
-  gtk_signal_handler_block_by_func (GTK_OBJECT (widget),
-				    GTK_SIGNAL_FUNC (gtk_combo_button_release),
-				    combo);
-  gtk_widget_event (widget, event);
-  gtk_signal_handler_unblock_by_func (GTK_OBJECT (widget),
-				      GTK_SIGNAL_FUNC (gtk_combo_button_release),
-				      combo);
+  if (event->type != GDK_BUTTON_RELEASE)
+    return;
   
   if ((combo->current_button != 0) && (event->button.button == 1))
     {
@@ -676,7 +668,7 @@ gtk_combo_button_release (GtkWidget *widget,
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_POINTER_MOTION_MASK, 
 			    NULL, NULL, GDK_CURRENT_TIME);
-	  return TRUE;
+	  return;
 	}
     }
   else
@@ -692,8 +684,6 @@ gtk_combo_button_release (GtkWidget *widget,
     }
   
   gtk_widget_hide (combo->popwin);
-
-  return TRUE;
 }
 
 static gint         
@@ -797,12 +787,8 @@ gtk_combo_init (GtkCombo * combo)
 		      (GtkSignalFunc) gtk_combo_activate, combo);
   gtk_signal_connect (GTK_OBJECT (combo->button), "button_press_event",
 		      (GtkSignalFunc) gtk_combo_popup_button_press, combo);
-  /*gtk_signal_connect_after (GTK_OBJECT (combo->button), "button_release_event",
-    (GtkSignalFunc) gtk_combo_button_release, combo);*/
   gtk_signal_connect (GTK_OBJECT (combo->button), "leave_notify_event",
 		      (GtkSignalFunc) gtk_combo_popup_button_leave, combo);
-  /*gtk_signal_connect (GTK_OBJECT (combo->button), "clicked",
-     (GtkSignalFunc)prelight_bug, combo); */
 
   combo->popwin = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_widget_ref (combo->popwin);
@@ -852,8 +838,8 @@ gtk_combo_init (GtkCombo * combo)
   gtk_signal_connect (GTK_OBJECT (combo->popwin), "button_press_event",
 		      GTK_SIGNAL_FUNC (gtk_combo_button_press), combo);
 
-  gtk_signal_connect (GTK_OBJECT (combo->list), "button_release_event",
-		      GTK_SIGNAL_FUNC (gtk_combo_button_release), combo);
+  gtk_signal_connect (GTK_OBJECT (combo->list), "event_after",
+		      (GtkSignalFunc) gtk_combo_button_event_after, combo);
   /* We connect here on the button, because we'll have a grab on it
    * when the event occurs. But we are actually interested in enters
    * for the combo->list.

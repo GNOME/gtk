@@ -34,6 +34,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
+typedef enum {
+  GTK_TEXT_SEARCH_VISIBLE_ONLY,
+  GTK_TEXT_SEARCH_TEXT_ONLY
+  /* Possible future plans: SEARCH_CASE_INSENSITIVE, SEARCH_REGEXP */
+} GtkTextSearchFlags;
+
 /*
  * Iter: represents a location in the text. Becomes invalid if the
  * characters/pixmaps/widgets (indexable objects) in the text buffer
@@ -60,6 +66,9 @@ struct _GtkTextIter {
   gpointer dummy10;
   gint dummy11;
   gint dummy12;
+  /* padding */
+  gint dummy13;
+  gpointer dummy14;
 };
 
 
@@ -236,16 +245,14 @@ gboolean gtk_text_iter_backward_find_char (GtkTextIter          *iter,
 
 gboolean gtk_text_iter_forward_search  (const GtkTextIter *iter,
                                         const gchar       *str,
-                                        gboolean           visible_only,
-                                        gboolean           slice,
+                                        GtkTextSearchFlags flags,
                                         GtkTextIter       *match_start,
                                         GtkTextIter       *match_end,
                                         const GtkTextIter *limit);
 
 gboolean gtk_text_iter_backward_search (const GtkTextIter *iter,
                                         const gchar       *str,
-                                        gboolean           visible_only,
-                                        gboolean           slice,
+                                        GtkTextSearchFlags flags,
                                         GtkTextIter       *match_start,
                                         GtkTextIter       *match_end,
                                         const GtkTextIter *limit);

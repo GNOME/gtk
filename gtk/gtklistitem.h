@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #ifndef __GTK_LIST_ITEM_H__
 #define __GTK_LIST_ITEM_H__
 
@@ -92,3 +94,5 @@ void       gtk_list_item_deselect       (GtkListItem      *list_item);
 
 
 #endif /* __GTK_LIST_ITEM_H__ */
+
+#endif /* GTK_DISABLE_DEPRECATED */

@@ -135,13 +135,11 @@ gchar*	   gtk_font_selection_get_font_name	(GtkFontSelection *fontsel);
 GdkFont*   gtk_font_selection_get_font		(GtkFontSelection *fontsel);
 #endif /* GTK_DISABLE_DEPRECATED */
 
-gboolean   gtk_font_selection_set_font_name	(GtkFontSelection *fontsel,
-						 const gchar	  *fontname);
-gchar*	   gtk_font_selection_get_preview_text	(GtkFontSelection *fontsel);
-void	   gtk_font_selection_set_preview_text	(GtkFontSelection *fontsel,
-						 const gchar	  *text);
-
-
+gboolean              gtk_font_selection_set_font_name    (GtkFontSelection *fontsel,
+							   const gchar      *fontname);
+G_CONST_RETURN gchar* gtk_font_selection_get_preview_text (GtkFontSelection *fontsel);
+void                  gtk_font_selection_set_preview_text (GtkFontSelection *fontsel,
+							   const gchar      *text);
 
 /*****************************************************************************
  * GtkFontSelectionDialog functions.
@@ -175,7 +173,7 @@ gboolean gtk_font_selection_dialog_set_font_name    (GtkFontSelectionDialog *fsd
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
-gchar*	 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd);
+G_CONST_RETURN gchar* gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd);
 
 /* This sets the text in the preview entry. It will be copied by the entry,
    so there's no need to g_strdup() it first. */

@@ -28,6 +28,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkcontainer.h"
+#include "gtkmarshalers.h"
 
 /*
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
@@ -181,7 +182,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkHSVClass, changed),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 
   hsv_signals[MOVE] =
@@ -189,7 +190,7 @@ gtk_hsv_class_init (GtkHSVClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkHSVClass, move),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_DIRECTION_TYPE);
 
   binding_set = gtk_binding_set_by_class (class);

@@ -312,9 +312,9 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       width = 8;
       height = 8;
-      x = (GTK_CONTAINER (check_menu_item)->border_width +
-	   widget->style->xthickness + 2);
-      y = (widget->allocation.height - height) / 2;
+      x = widget->allocation.x + (GTK_CONTAINER (check_menu_item)->border_width +
+				  widget->style->xthickness + 2);
+      y = widget->allocation.y + (widget->allocation.height - height) / 2;
 
       if (check_menu_item->active ||
 	  check_menu_item->always_show_toggle ||

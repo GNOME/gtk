@@ -411,7 +411,7 @@ gboolean
 gtk_cell_renderer_activate (GtkCellRenderer      *cell,
 			    GdkEvent             *event,
 			    GtkWidget            *widget,
-			    gchar                *path,
+			    const gchar          *path,
 			    GdkRectangle         *background_area,
 			    GdkRectangle         *cell_area,
 			    GtkCellRendererState  flags)
@@ -451,7 +451,7 @@ GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,
 				 GdkEvent             *event,
 				 GtkWidget            *widget,
-				 gchar                *path,
+				 const gchar          *path,
 				 GdkRectangle         *background_area,
 				 GdkRectangle         *cell_area,
 				 GtkCellRendererState  flags)

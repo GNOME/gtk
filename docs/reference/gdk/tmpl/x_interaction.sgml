@@ -138,6 +138,7 @@ Returns the X visual belonging to a #GdkVisual.
 @Returns: an Xlib <type>Visual*</Visual>.
 <!-- # Unused Parameters # -->
 @vis: a #GdkVisual.
+@Returns: an Xlib <type>Visual*</type>.
 
 
 <!-- ##### MACRO GDK_FONT_XDISPLAY ##### -->
@@ -164,7 +165,7 @@ Returns the X cursor belonging to a #GdkCursor.
 </para>
 
 @cursor: a #GdkCursor.
-@Returns: an Xlib <type>Cursor</type.
+@Returns: an Xlib <type>Cursor</type>.
 
 
 <!-- ##### MACRO GDK_CURSOR_XDISPLAY ##### -->
@@ -234,18 +235,6 @@ Returns a #GdkColormap corresponding to a X colormap.
 
 @xcolormap: a X colormap.
 @Returns: the #GdkColormap.
-
-
-<!-- ##### FUNCTION gdk_get_client_window ##### -->
-<para>
-
-</para>
-
-@display: 
-@win: 
-@Returns: 
-<!-- # Unused Parameters # -->
-@dpy: 
 
 
 <!-- ##### FUNCTION gdk_pixmap_foreign_new_for_screen ##### -->
@@ -601,6 +590,6 @@ Returns the X visual belonging to a #GdkVisual.
 </para>
 
 @visual: a #GdkVisual.
-@Returns: an Xlib <type>Visual*</Visual>.
+@Returns: an Xlib <type>Visual*</type>.
 
 

@@ -35,14 +35,17 @@
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkentry.h"
+#include "gtkimagemenuitem.h"
 #include "gtkimmulticontext.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
+#include "gtkstock.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 
@@ -71,7 +74,8 @@ enum {
 
 enum {
   PROP_0,
-  PROP_TEXT_POSITION,
+  PROP_CURSOR_POSITION,
+  PROP_SELECTION_BOUND,
   PROP_EDITABLE,
   PROP_MAX_LENGTH,
   PROP_VISIBILITY,
@@ -230,11 +234,18 @@ static void gtk_entry_keymap_direction_changed (GdkKeymap *keymap,
 						GtkEntry  *entry);
 /* IM Context Callbacks
  */
-static void gtk_entry_commit_cb           (GtkIMContext      *context,
-					   const gchar       *str,
-					   GtkEntry          *entry);
-static void gtk_entry_preedit_changed_cb  (GtkIMContext      *context,
-					   GtkEntry          *entry);
+static void     gtk_entry_commit_cb               (GtkIMContext *context,
+						   const gchar  *str,
+						   GtkEntry     *entry);
+static void     gtk_entry_preedit_changed_cb      (GtkIMContext *context,
+						   GtkEntry     *entry);
+static gboolean gtk_entry_retrieve_surrounding_cb (GtkIMContext *context,
+						   GtkEntry     *entry);
+static gboolean gtk_entry_delete_surrounding_cb   (GtkIMContext *context,
+						   gint          offset,
+						   gint          n_chars,
+						   GtkEntry     *entry);
+
 /* Internal routines
  */
 static void         gtk_entry_set_positions            (GtkEntry       *entry,
@@ -403,14 +414,24 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   
   g_object_class_install_property (gobject_class,
-                                   PROP_TEXT_POSITION,
-                                   g_param_spec_int ("text_position",
-                                                     _("Text Position"),
-                                                     _("The current position of the insertion point"),
+                                   PROP_CURSOR_POSITION,
+                                   g_param_spec_int ("cursor_position",
+                                                     _("Cursor Position"),
+                                                     _("The current position of the insertion cursor in chars."),
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                     G_PARAM_READABLE));
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_SELECTION_BOUND,
+                                   g_param_spec_int ("selection_bound",
+                                                     _("Selection Bound"),
+                                                     _("The position of the opposite end of the selection from the cursor in chars."),
+                                                     0,
+                                                     G_MAXINT,
+                                                     0,
+                                                     G_PARAM_READABLE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_EDITABLE,
@@ -500,7 +521,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkEntryClass, populate_popup),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_MENU);
   
  /* Action signals */
@@ -510,7 +531,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkEntryClass, activate),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_class->activate_signal = signals[ACTIVATE];
 
@@ -519,7 +540,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkEntryClass, move_cursor),
-                      gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+                      _gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                       GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
   signals[INSERT_AT_CURSOR] = 
@@ -527,7 +548,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkEntryClass, insert_at_cursor),
-                      gtk_marshal_VOID__STRING,
+                      _gtk_marshal_VOID__STRING,
                       GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
   signals[DELETE_FROM_CURSOR] = 
@@ -535,7 +556,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
                       GTK_SIGNAL_OFFSET (GtkEntryClass, delete_from_cursor),
-                      gtk_marshal_VOID__ENUM_INT,
+                      _gtk_marshal_VOID__ENUM_INT,
                       GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
   signals[CUT_CLIPBOARD] =
@@ -543,7 +564,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, cut_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[COPY_CLIPBOARD] =
@@ -551,7 +572,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, copy_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[PASTE_CLIPBOARD] =
@@ -559,7 +580,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, paste_clipboard),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   signals[TOGGLE_OVERWRITE] =
@@ -567,7 +588,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                     GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkEntryClass, toggle_overwrite),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   /*
@@ -776,11 +797,6 @@ gtk_entry_set_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_TEXT_POSITION:
-      gtk_editable_set_position (GTK_EDITABLE (object), 
-				 g_value_get_int (value));
-      break;
-
     case PROP_EDITABLE:
       {
         gboolean new_value = g_value_get_boolean (value);
@@ -822,6 +838,7 @@ gtk_entry_set_property (GObject         *object,
       break;
 
     case PROP_SCROLL_OFFSET:
+    case PROP_CURSOR_POSITION:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -840,8 +857,11 @@ gtk_entry_get_property (GObject         *object,
 
   switch (prop_id)
     {
-    case PROP_TEXT_POSITION:
+    case PROP_CURSOR_POSITION:
       g_value_set_int (value, entry->current_pos);
+      break;
+    case PROP_SELECTION_BOUND:
+      g_value_set_int (value, entry->selection_bound);
       break;
     case PROP_EDITABLE:
       g_value_set_boolean (value, entry->editable);
@@ -892,8 +912,9 @@ gtk_entry_init (GtkEntry *entry)
   entry->dnd_position = -1;
   entry->width_chars = -1;
   entry->is_cell_renderer = FALSE;
+  entry->editing_canceled = FALSE;
   entry->has_frame = TRUE;
-  
+
   gtk_drag_dest_set (GTK_WIDGET (entry),
                      GTK_DEST_DEFAULT_HIGHLIGHT,
                      target_table, G_N_ELEMENTS (target_table),
@@ -908,6 +929,10 @@ gtk_entry_init (GtkEntry *entry)
 		    G_CALLBACK (gtk_entry_commit_cb), entry);
   g_signal_connect (G_OBJECT (entry->im_context), "preedit_changed",
 		    G_CALLBACK (gtk_entry_preedit_changed_cb), entry);
+  g_signal_connect (G_OBJECT (entry->im_context), "retrieve_surrounding",
+		    G_CALLBACK (gtk_entry_retrieve_surrounding_cb), entry);
+  g_signal_connect (G_OBJECT (entry->im_context), "delete_surrounding",
+		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 }
 
 static void
@@ -1818,6 +1843,7 @@ gtk_cell_editable_key_press_event (GtkEntry    *entry,
 {
     if (key_event->keyval == GDK_Escape)
       {
+	entry->editing_canceled = TRUE;
 	gtk_cell_editable_editing_done (GTK_CELL_EDITABLE (entry));
 	gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE (entry));
 
@@ -2161,10 +2187,9 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text ( gtk_clipboard_get_for_display (
-				  gtk_widget_get_display (GTK_WIDGET (entry)),
-				  GDK_SELECTION_CLIPBOARD),
-			       str, -1);
+      gtk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+						  GDK_SELECTION_CLIPBOARD),
+			      str, -1);
       g_free (str);
     }
 }
@@ -2268,6 +2293,31 @@ gtk_entry_preedit_changed_cb (GtkIMContext *context,
   gtk_entry_recompute (entry);
 }
 
+static gboolean
+gtk_entry_retrieve_surrounding_cb (GtkIMContext *context,
+			       GtkEntry     *entry)
+{
+  gtk_im_context_set_surrounding (context,
+				  entry->text,
+				  entry->n_bytes,
+				  g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text);
+
+  return TRUE;
+}
+
+static gboolean
+gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
+				 gint          offset,
+				 gint          n_chars,
+				 GtkEntry     *entry)
+{
+  gtk_editable_delete_text (GTK_EDITABLE (entry),
+			    entry->current_pos + offset,
+			    entry->current_pos + offset + n_chars);
+
+  return TRUE;
+}
+
 /* Internal functions
  */
 
@@ -2280,6 +2330,8 @@ gtk_entry_set_positions (GtkEntry *entry,
 			 gint      selection_bound)
 {
   gboolean changed = FALSE;
+
+  g_object_freeze_notify (G_OBJECT (entry));
   
   if (current_pos != -1 &&
       entry->current_pos != current_pos)
@@ -2287,7 +2339,7 @@ gtk_entry_set_positions (GtkEntry *entry,
       entry->current_pos = current_pos;
       changed = TRUE;
 
-      g_object_notify (G_OBJECT (entry), "text_position");
+      g_object_notify (G_OBJECT (entry), "cursor_position");
     }
 
   if (selection_bound != -1 &&
@@ -2295,7 +2347,11 @@ gtk_entry_set_positions (GtkEntry *entry,
     {
       entry->selection_bound = selection_bound;
       changed = TRUE;
+      
+      g_object_notify (G_OBJECT (entry), "selection_bound");
     }
+
+  g_object_thaw_notify (G_OBJECT (entry));
 
   if (changed)
     gtk_entry_recompute (entry);
@@ -3149,9 +3205,8 @@ gtk_entry_paste (GtkEntry *entry,
 		 GdkAtom   selection)
 {
   g_object_ref (G_OBJECT (entry));
-  gtk_clipboard_request_text (gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)),
-							     selection),
-
+  gtk_clipboard_request_text (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+							selection),
 			      paste_received, entry);
 }
 
@@ -3167,7 +3222,7 @@ primary_get_cb (GtkClipboard     *clipboard,
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
     }
 }
@@ -3191,8 +3246,8 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     { "COMPOUND_TEXT", 0, 0 }
   };
   
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (entry)), 
-							   GDK_SELECTION_PRIMARY);
+  GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET (entry),
+						      GDK_SELECTION_PRIMARY);
 
   gint start, end;
   
@@ -3465,7 +3520,7 @@ gtk_entry_get_activates_default (GtkEntry *entry)
  *
  * Changes the size request of the entry to be about the right size
  * for @n_chars characters. Note that it changes the size
- * <emphasize>request</emphasize>, the size can still be affected by
+ * <emphasis>request</emphasis>, the size can still be affected by
  * how you pack the widget into containers. If @n_chars is -1, the
  * size reverts to the default entry size.
  * 
@@ -3700,11 +3755,11 @@ gtk_entry_mnemonic_activate (GtkWidget *widget,
 static void
 append_action_signal (GtkEntry     *entry,
 		      GtkWidget    *menu,
-		      const gchar  *label,
+		      const gchar  *stock_id,
 		      const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
+  GtkWidget *menuitem = gtk_image_menu_item_new_from_stock (stock_id, NULL);
 
   gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
@@ -3736,7 +3791,7 @@ popup_position_func (GtkMenu   *menu,
   
   entry = GTK_ENTRY (user_data);  
   widget = GTK_WIDGET (entry);
-  
+
   g_return_if_fail (GTK_WIDGET_REALIZED (entry));
 
   gdk_window_get_origin (widget->window, x, y);      
@@ -3750,65 +3805,110 @@ popup_position_func (GtkMenu   *menu,
   *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (gtk_widget_get_screen (widget)) - req.height));
 }
 
+typedef struct
+{
+  GtkEntry *entry;
+  gint button;
+  guint time;
+} PopupInfo;
+
+static void
+popup_targets_received (GtkClipboard     *clipboard,
+			GtkSelectionData *data,
+			gpointer          user_data)
+{
+  PopupInfo *info = user_data;
+  GtkEntry *entry = info->entry;
+  
+  if (GTK_WIDGET_REALIZED (entry))
+    {
+      gboolean clipboard_contains_text = gtk_selection_data_targets_include_text (data);
+      GtkWidget *menuitem;
+      GtkWidget *submenu;
+      
+      if (entry->popup_menu)
+	gtk_widget_destroy (entry->popup_menu);
+      
+      entry->popup_menu = gtk_menu_new ();
+      
+      gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
+				 GTK_WIDGET (entry),
+				 popup_menu_detach);
+      
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_CUT, "cut_clipboard",
+			    entry->editable && entry->current_pos != entry->selection_bound);
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_COPY, "copy_clipboard",
+			    entry->current_pos != entry->selection_bound);
+      append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
+			    entry->editable && clipboard_contains_text);
+      
+      menuitem = gtk_menu_item_new_with_label (_("Select All"));
+      gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
+				 GTK_SIGNAL_FUNC (gtk_entry_select_all), entry);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      
+      menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+      gtk_widget_show (menuitem);
+      submenu = gtk_menu_new ();
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
+      
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      
+      gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
+					    GTK_MENU_SHELL (submenu));
+      
+      gtk_signal_emit (GTK_OBJECT (entry),
+		       signals[POPULATE_POPUP],
+		       entry->popup_menu);
+  
+
+      if (info->button)
+	gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
+			NULL, NULL,
+			info->button, info->time);
+      else
+	gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
+			popup_position_func, entry,
+			info->button, info->time);
+    }
+
+  g_object_unref (entry);
+  g_free (info);
+}
+			
 static void
 gtk_entry_do_popup (GtkEntry       *entry,
                     GdkEventButton *event)
 {
+  PopupInfo *info = g_new (PopupInfo, 1);
 
-  GtkWidget *menuitem;
-  GtkWidget *submenu;
-  gboolean have_selection;
-
-  if (entry->popup_menu)
-    gtk_widget_destroy (entry->popup_menu);
-  
-  entry->popup_menu = gtk_menu_new ();
-
-  gtk_menu_attach_to_widget (GTK_MENU (entry->popup_menu),
-                             GTK_WIDGET (entry),
-                             popup_menu_detach);
-
-  have_selection = entry->current_pos != entry->selection_bound;
-  
-  append_action_signal (entry, entry->popup_menu, _("Cut"), "cut_clipboard",
-                        have_selection);
-  append_action_signal (entry, entry->popup_menu, _("Copy"), "copy_clipboard",
-                        have_selection);
-  append_action_signal (entry, entry->popup_menu, _("Paste"), "paste_clipboard",
-                        TRUE);
-
-  menuitem = gtk_menu_item_new_with_label (_("Select All"));
-  gtk_signal_connect_object (GTK_OBJECT (menuitem), "activate",
-			     GTK_SIGNAL_FUNC (gtk_entry_select_all), entry);
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
-
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
-      
-  menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
-  gtk_widget_show (menuitem);
-  submenu = gtk_menu_new ();
-  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
-      
-  gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
-                                        GTK_MENU_SHELL (submenu));
-
-  gtk_signal_emit (GTK_OBJECT (entry),
-                   signals[POPULATE_POPUP],
-                   entry->popup_menu);
+  /* In order to know what entries we should make sensitive, we
+   * ask for the current targets of the clipboard, and when
+   * we get them, then we actually pop up the menu.
+   */
+  info->entry = g_object_ref (entry);
   
   if (event)
-    gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
-                    NULL, NULL,
-                    event->button, event->time);
+    {
+      info->button = event->button;
+      info->time = event->time;
+    }
   else
-    gtk_menu_popup (GTK_MENU (entry->popup_menu), NULL, NULL,
-                    popup_position_func, entry,
-                    0, gtk_get_current_event_time ());
+    {
+      info->button = 0;
+      info->time = gtk_get_current_event_time ();
+    }
+
+  gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (entry),
+						      GDK_SELECTION_CLIPBOARD),
+				  gdk_atom_intern ("TARGETS", FALSE),
+				  popup_targets_received,
+				  info);
 }
 
 static void
@@ -3978,7 +4078,7 @@ gtk_entry_drag_data_get (GtkWidget        *widget,
     {
       gchar *str = gtk_editable_get_chars (editable, sel_start, sel_end);
 
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       
       g_free (str);
     }

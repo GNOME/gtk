@@ -13,13 +13,13 @@ VS_VERSION_INFO VERSIONINFO
     BEGIN
       BLOCK "040904B0"
       BEGIN
-	VALUE "CompanyName", "The GTK+ developer community"
+	VALUE "CompanyName", "The GTK developer community"
 	VALUE "FileDescription", "GIMP Toolkit"
 	VALUE "FileVersion", "@GTK_VERSION@.BUILDNUMBER"
-	VALUE "InternalName", "gtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@"
+	VALUE "InternalName", "libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@"
 	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
-	VALUE "OriginalFilename", "gtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@.dll"
-	VALUE "ProductName", "GTK+"
+	VALUE "OriginalFilename", "libgtk-win32-@GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@-@LT_CURRENT_MINUS_AGE@.dll"
+	VALUE "ProductName", "GTK"
 	VALUE "ProductVersion", "@GTK_VERSION@"
       END
     END

@@ -79,7 +79,7 @@ const int _gdk_event_mask_table[21] =
 const int _gdk_nenvent_masks = sizeof (_gdk_event_mask_table) / sizeof (int);
 
 /* Forward declarations */
-static gboolean gdk_window_gravity_works          (GdkDisplay * display);
+static gboolean gdk_window_gravity_works          (GdkWindow *window);
 static void     gdk_window_set_static_win_gravity (GdkWindow *window,
 						   gboolean   on);
 static gboolean gdk_window_have_shape_ext         (GdkDisplay * display);
@@ -333,7 +333,6 @@ gdk_window_new (GdkWindow     *parent,
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkScreenImplX11 *screen_impl;
@@ -355,7 +354,7 @@ gdk_window_new (GdkWindow     *parent,
   unsigned int class;
   char *title;
   int i;
-  int pid;
+  long pid;
   
   g_return_val_if_fail (attributes != NULL, NULL);
 
@@ -375,7 +374,6 @@ gdk_window_new (GdkWindow     *parent,
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
   
-  parent_private = (GdkWindowObject*) parent;
   if (GDK_WINDOW_DESTROYED (parent))
     return NULL;
   
@@ -389,6 +387,12 @@ gdk_window_new (GdkWindow     *parent,
   
   draw_impl->screen = screen;
   xdisplay = screen_impl->xdisplay;
+
+  /* Windows with a foreign parent are treated as if they are children
+   * of the root window, except for actual creation.
+   */
+  if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+    parent = gdk_screen_get_root_window (screen);
   
   private->parent = (GdkWindowObject *)parent;
 
@@ -415,8 +419,7 @@ gdk_window_new (GdkWindow     *parent,
        * attributes->window_type for input-only windows
        * before
        */
-      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT &&
-	  GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT)
 	private->window_type = GDK_WINDOW_TEMP;
       else
 	private->window_type = GDK_WINDOW_CHILD;
@@ -453,7 +456,7 @@ gdk_window_new (GdkWindow     *parent,
   else
     xattributes.override_redirect = False;
 
-  if (parent_private && parent_private->guffaw_gravity)
+  if (private->parent && private->parent->guffaw_gravity)
     {
       xattributes.win_gravity = StaticGravity;
       xattributes_mask |= CWWinGravity;
@@ -465,8 +468,7 @@ gdk_window_new (GdkWindow     *parent,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT &&
-	  GDK_WINDOW_TYPE (parent) != GDK_WINDOW_FOREIGN)
+      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT)
 	{
 	  g_warning (G_STRLOC "Toplevel windows must be created as children of"
 		     "\nof a window of type "
@@ -562,9 +564,9 @@ gdk_window_new (GdkWindow     *parent,
 				  (attributes->cursor) :
 				  NULL));
   
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, 
-					       window);
+  if (private->parent)
+    private->parent->children = g_list_prepend (private->parent->children,
+						window);
   
   switch (GDK_WINDOW_TYPE (private))
     {
@@ -700,7 +702,6 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
   GdkDisplayImplX11 *display_impl;
@@ -733,18 +734,21 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
+  draw_impl->screen =
+    gdk_x11_display_manager_get_screen_for_root (_gdk_display_manager, root);
+  
   private->parent = gdk_xid_table_lookup_for_display (display,
 						      parent);
   
-  parent_private = (GdkWindowObject *)private->parent;
+  if (!private->parent || 
+      GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_FOREIGN)
+    private->parent = 
+      (GdkWindowObject *) gdk_screen_get_root_window (draw_impl->screen);
   
-  if (parent_private)
-    parent_private->children = 
-      g_list_prepend (parent_private->children, window);
+  private->parent->children = g_list_prepend (private->parent->children, 
+					      window);
 
   draw_impl->xid = anid;
-  draw_impl->screen =
-    gdk_x11_display_manager_get_screen_for_root (_gdk_display_manager, root);
 
   private->x = attrs.x;
   private->y = attrs.y;
@@ -826,6 +830,15 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   
   if (private->extension_events != 0)
     gdk_input_window_destroy (window);
+
+#ifdef HAVE_XFT  
+  {
+    GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
+
+    if (draw_impl->picture)
+      XRenderFreePicture (draw_impl->xdisplay, draw_impl->picture);
+  }
+#endif /* HAVE_XFT */  
 
   if (private->window_type == GDK_WINDOW_FOREIGN)
     {
@@ -1319,6 +1332,12 @@ gdk_window_reparent (GdkWindow *window,
 		     GDK_WINDOW_XID (window),
 		     GDK_WINDOW_XID (new_parent),
 		     x, y);
+
+  /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
+   * the root window
+   */
+  if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
+    new_parent = _gdk_parent_root;
   
   window_private->parent = (GdkWindowObject *)new_parent;
 
@@ -1503,7 +1522,7 @@ gdk_window_focus (GdkWindow *window,
       gdk_error_trap_push ();
       XSetInputFocus (GDK_WINDOW_XDISPLAY (window),
                       GDK_WINDOW_XWINDOW (window),
-                      RevertToNone,
+                      RevertToParent,
                       timestamp);
       XSync (GDK_WINDOW_XDISPLAY (window), False);
       gdk_error_trap_pop ();
@@ -1939,9 +1958,7 @@ set_text_property (GdkWindow   *window,
     {
       XChangeProperty (GDK_WINDOW_XDISPLAY (window),
 		       GDK_WINDOW_XID (window),
-		       property,
-		       gdk_x11_atom_to_xatom_for_display 
-		       (GDK_WINDOW_DISPLAY (window), prop_type),
+		       property, prop_type,
 		       prop_format, PropModeReplace, 
 		       prop_text, prop_length);
 
@@ -2559,8 +2576,9 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (gint *win_x,
-				  gint *win_y)
+_gdk_windowing_window_at_pointer (GdkScreen *screen,
+                                  gint      *win_x,
+				  gint      *win_y)
 {
   GDK_NOTE (MULTIHEAD,
 	    g_message ("Use gdk_screen_get_window_at_pointer instead\n"));
@@ -2907,9 +2925,9 @@ void
 gdk_window_set_icon_list (GdkWindow *window,
 			  GList     *pixbufs)
 {
-  guint *data;
+  gulong *data;
   guchar *pixels;
-  guint *p;
+  gulong *p;
   gint size;
   GList *l;
   GdkPixbuf *pixbuf;
@@ -2938,7 +2956,7 @@ gdk_window_set_icon_list (GdkWindow *window,
       l = g_list_next (l);
     }
 
-  data = g_malloc (size*4);
+  data = g_malloc (size * sizeof (gulong));
 
   l = pixbufs;
   p = data;
@@ -2994,6 +3012,8 @@ gdk_window_set_icon_list (GdkWindow *window,
 		       gdk_x11_get_xatom_by_name_for_display 
 		       (GDK_WINDOW_DISPLAY (window), "_NET_WM_ICON"));
     }
+  
+  g_free (data);
 }
 
 /**
@@ -3965,10 +3985,11 @@ gdk_window_merge_child_shapes (GdkWindow *window)
  */
 
 static gboolean
-gdk_window_gravity_works (GdkDisplay * display)
+gdk_window_gravity_works (GdkWindow *window)
 {
   enum { UNKNOWN, NO, YES };
   static gint gravity_works = UNKNOWN;
+  GdkDisplay *display = GDK_DRAWABLE_DISPLAY (window);
   
   if (gravity_works == UNKNOWN)
     {
@@ -3996,7 +4017,9 @@ gdk_window_gravity_works (GdkDisplay * display)
       attr.height = 100;
       attr.event_mask = 0;
       
-      parent = gdk_window_new (NULL, &attr, GDK_WA_X | GDK_WA_Y);
+      parent = gdk_window_new (gdk_screen_get_root_window
+			       (GDK_DRAWABLE_SCREEN (window)),
+			       &attr, GDK_WA_X | GDK_WA_Y);
       
       attr.window_type = GDK_WINDOW_CHILD;
       child = gdk_window_new (parent, &attr, GDK_WA_X | GDK_WA_Y);
@@ -4077,7 +4100,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
   if (!use_static == !private->guffaw_gravity)
     return TRUE;
   
-  if (use_static && !gdk_window_gravity_works (GDK_WINDOW_DISPLAY (window)))
+  if (use_static && !gdk_window_gravity_works (window))
     return FALSE;
   
   private->guffaw_gravity = use_static;
@@ -4089,7 +4112,7 @@ gdk_window_set_static_gravities (GdkWindow *window,
       tmp_list = private->children;
       while (tmp_list)
 	{
-	  gdk_window_set_static_win_gravity (window, use_static);
+	  gdk_window_set_static_win_gravity (tmp_list->data, use_static);
 	  
 	  tmp_list = tmp_list->next;
 	}
@@ -4694,6 +4717,7 @@ emulate_move_drag (GdkWindow     *window,
 /**
  * gdk_window_begin_resize_drag:
  * @window: a #GdkWindow
+ * @edge: the edge or corner from which the drag is started
  * @button: the button being used to drag
  * @root_x: root window X coordinate of mouse click that began the drag
  * @root_y: root window Y coordinate of mouse click that began the drag

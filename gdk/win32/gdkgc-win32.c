@@ -24,15 +24,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <string.h>
 
 #include "gdkgc.h"
 #include "gdkfont.h"
 #include "gdkpixmap.h"
 #include "gdkregion-generic.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_gc_get_values (GdkGC           *gc,
@@ -51,7 +48,7 @@ static void gdk_gc_win32_finalize   (GObject         *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_gc_win32_get_type (void)
+_gdk_gc_win32_get_type (void)
 {
   static GType object_type = 0;
 
@@ -495,7 +492,7 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
    */
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
 
-  gc = g_object_new (gdk_gc_win32_get_type (), NULL);
+  gc = g_object_new (_gdk_gc_win32_get_type (), NULL);
   win32_gc = GDK_GC_WIN32 (gc);
 
   win32_gc->hdc = NULL;
@@ -820,8 +817,8 @@ gdk_gc_copy (GdkGC *dst_gc,
 static guint bitmask[9] = { 0, 1, 3, 7, 15, 31, 63, 127, 255 };
 
 COLORREF
-gdk_colormap_color (GdkColormap *colormap,
-		    gulong       pixel)
+_gdk_win32_colormap_color (GdkColormap *colormap,
+                           gulong       pixel)
 {
   const GdkVisual *visual;
   GdkColormapPrivateWin32 *colormap_private;
@@ -916,7 +913,7 @@ predraw_set_foreground (GdkGC       *gc,
 	}
     }
 
-  fg = gdk_colormap_color (colormap, win32_gc->foreground);
+  fg = _gdk_win32_colormap_color (colormap, win32_gc->foreground);
 
   if (SetTextColor (win32_gc->hdc, fg) == CLR_INVALID)
     WIN32_GDI_FAILED ("SetTextColor"), *ok = FALSE;
@@ -955,7 +952,7 @@ predraw_set_foreground (GdkGC       *gc,
     WIN32_GDI_FAILED ("SelectObject"), *ok = FALSE;
 }  
 
-void
+static void
 predraw_set_background (GdkGC       *gc,
 			GdkColormap *colormap,
 			gboolean    *ok)
@@ -964,7 +961,7 @@ predraw_set_background (GdkGC       *gc,
 
   if (win32_gc->values_mask & GDK_GC_BACKGROUND)
     {
-      COLORREF bg = gdk_colormap_color (colormap, win32_gc->background);
+      COLORREF bg = _gdk_win32_colormap_color (colormap, win32_gc->background);
 
       if (SetBkColor (win32_gc->hdc, bg) == CLR_INVALID)
         WIN32_GDI_FAILED ("SetBkColor"), *ok = FALSE;

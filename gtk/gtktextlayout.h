@@ -89,6 +89,9 @@ extern "C" {
  * canvas item can use it, but users are not supposed
  * to use it.
  */
+#ifndef GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
+#error "You are not supposed to be including this file; the equivalent public API is in gtktextview.h"
+#endif
 
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextiter.h>

@@ -65,7 +65,7 @@ struct _GtkNotebook
   GList *focus_tab;
   
   GtkWidget *menu;
-  GdkWindow *panel;
+  GdkWindow *event_window;
   
   guint32 timer;
   
@@ -94,12 +94,12 @@ struct _GtkNotebookClass
 			      guint            page_num);
 
   /* Action signals for keybindings */
-  void (* select_page)       (GtkNotebook       *notebook,
-                              gboolean           move_focus);
-
-  void (* focus_tab)         (GtkNotebook       *notebook,
-                              GtkNotebookTab     type);
-  
+  void (* select_page)         (GtkNotebook       *notebook,
+                                gboolean           move_focus);
+  void (* focus_tab)           (GtkNotebook       *notebook,
+                                GtkNotebookTab     type);
+  void (* change_current_page) (GtkNotebook       *notebook,
+                                gint               offset);
 };
 
 /***********************************************************

@@ -132,8 +132,14 @@ void     gtk_selection_data_set      (GtkSelectionData     *selection_data,
 				      const guchar         *data,
 				      gint                  length);
 gboolean gtk_selection_data_set_text (GtkSelectionData     *selection_data,
-				      const guchar         *str);
+				      const gchar          *str,
+				      gint                  len);
 guchar * gtk_selection_data_get_text (GtkSelectionData     *selection_data);
+
+gboolean gtk_selection_data_get_targets          (GtkSelectionData  *selection_data,
+						  GdkAtom          **targets,
+						  gint              *n_atoms);
+gboolean gtk_selection_data_targets_include_text (GtkSelectionData  *selection_data);
 
 /* Called when a widget is destroyed */
 

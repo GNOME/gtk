@@ -24,15 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include "gdkimage.h"
 #include "gdkpixmap.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
-#include "gdkpixmap-win32.h"
 
 static GList *image_list = NULL;
 static gpointer parent_class = NULL;

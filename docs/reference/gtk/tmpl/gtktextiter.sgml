@@ -20,12 +20,6 @@ types related to the text widget and how they work together.
 
 </para>
 
-<!-- ##### STRUCT GtkTextBuffer ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### STRUCT GtkTextIter ##### -->
 <para>
 
@@ -254,6 +248,16 @@ types related to the text widget and how they work together.
 
 @iter: 
 @default_setting: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_can_insert ##### -->
+<para>
+
+</para>
+
+@iter: 
+@default_editability: 
 @Returns: 
 
 
@@ -708,6 +712,14 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### ENUM GtkTextSearchFlags ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_SEARCH_VISIBLE_ONLY: 
+@GTK_TEXT_SEARCH_TEXT_ONLY: 
+
 <!-- ##### FUNCTION gtk_text_iter_forward_search ##### -->
 <para>
 
@@ -715,12 +727,14 @@ types related to the text widget and how they work together.
 
 @iter: 
 @str: 
-@visible_only: 
-@slice: 
+@flags: 
 @match_start: 
 @match_end: 
 @limit: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@visible_only: 
+@slice: 
 
 
 <!-- ##### FUNCTION gtk_text_iter_backward_search ##### -->
@@ -730,12 +744,14 @@ types related to the text widget and how they work together.
 
 @iter: 
 @str: 
-@visible_only: 
-@slice: 
+@flags: 
 @match_start: 
 @match_end: 
 @limit: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@visible_only: 
+@slice: 
 
 
 <!-- ##### FUNCTION gtk_text_iter_equal ##### -->

@@ -21,6 +21,12 @@ types related to the text widget and how they work together.
 
 </para>
 
+<!-- ##### STRUCT GtkTextTagTable ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### USER_FUNCTION GtkTextTagTableForeach ##### -->
 <para>
 

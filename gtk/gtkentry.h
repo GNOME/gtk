@@ -86,6 +86,7 @@ struct _GtkEntry
   guint        in_click : 1;	/* Flag so we don't select all when clicking in entry to focus in */
 
   guint        is_cell_renderer : 1;
+  guint        editing_canceled : 1; /* Only used by GtkCellRendererText */
 
   guint   button;
   guint   blink_timeout;

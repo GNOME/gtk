@@ -94,6 +94,13 @@ functions such as g_signal_connect().
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_disable_setlocale ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gtk_get_default_language ##### -->
 <para>
 

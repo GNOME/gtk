@@ -58,6 +58,7 @@ demos.h: $(demos) geninclude.pl
 
 gtk_demo_SOURCES = 		\
 	$(demos)		\
+	demo-common.h		\
 	main.c			\
 	demos.h
 

@@ -116,6 +116,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   radio_button->group = g_slist_prepend (NULL, radio_button);
 
+  _gtk_button_set_depressed (GTK_BUTTON (radio_button), TRUE);
   gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
 }
 
@@ -238,9 +239,10 @@ gtk_radio_button_new_with_label (GSList      *group,
  *         mnemonic character
  * @returns: a new #GtkRadioButton
  *
- * Creates a new #GtkRadioButton containing a label. The label
- * will be created using gtk_label_new_with_mnemonic(), so underscores
- * in @label indicate the mnemonic for the button.
+ * Creates a new #GtkRadioButton containing a label, adding it to the same 
+ * group as @group. The label will be created using 
+ * gtk_label_new_with_mnemonic(), so underscores in @label indicate the 
+ * mnemonic for the button.
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,
@@ -494,6 +496,7 @@ gtk_radio_button_clicked (GtkButton *button)
   GtkStateType new_state;
   GSList *tmp_list;
   gint toggled;
+  gboolean depressed;
 
   g_return_if_fail (GTK_IS_RADIO_BUTTON (button));
 
@@ -551,11 +554,20 @@ gtk_radio_button_clicked (GtkButton *button)
       new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
     }
 
+  if (toggle_button->inconsistent)
+    depressed = FALSE;
+  else if (button->in_button && button->button_down)
+    depressed = !toggle_button->active;
+  else
+    depressed = toggle_button->active;
+
   if (GTK_WIDGET_STATE (button) != new_state)
     gtk_widget_set_state (GTK_WIDGET (button), new_state);
 
   if (toggled)
     gtk_toggle_button_toggled (toggle_button);
+
+  _gtk_button_set_depressed (button, depressed);
 
   gtk_widget_queue_draw (GTK_WIDGET (button));
 
@@ -609,6 +621,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
       x = widget->allocation.x + indicator_spacing + GTK_CONTAINER (widget)->border_width;
       y = widget->allocation.y + (widget->allocation.height - indicator_size) / 2;
       
+      state_type = GTK_WIDGET_STATE (widget) == GTK_STATE_ACTIVE ? GTK_STATE_NORMAL : GTK_WIDGET_STATE (widget);
       if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;
       else

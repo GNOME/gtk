@@ -21,6 +21,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkeditable.h"
 #include "gtkentry.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
 
@@ -54,7 +55,7 @@ static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 							      GdkEvent             *event,
 							      GtkWidget            *widget,
-							      gchar                *path,
+							      const gchar          *path,
 							      GdkRectangle         *background_area,
 							      GdkRectangle         *cell_area,
 							      GtkCellRendererState  flags);
@@ -413,7 +414,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCellRendererTextClass, edited),
-		    gtk_marshal_VOID__STRING_STRING,
+		    _gtk_marshal_VOID__STRING_STRING,
 		    GTK_TYPE_NONE, 2,
 		    G_TYPE_STRING,
 		    G_TYPE_STRING);
@@ -1272,7 +1273,10 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
     }
   else
     {
-      state = GTK_STATE_NORMAL;
+      if (GTK_WIDGET_STATE (widget) == GTK_STATE_INSENSITIVE)
+	state = GTK_STATE_INSENSITIVE;
+      else
+	state = GTK_STATE_NORMAL;
     }
 
   if (celltext->background_set && state != GTK_STATE_SELECTED)
@@ -1316,8 +1320,11 @@ static void
 gtk_cell_renderer_text_editing_done (GtkCellEditable *entry,
 				     gpointer         data)
 {
-  gchar *path;
-  gchar *new_text;
+  const gchar *path;
+  const gchar *new_text;
+
+  if (GTK_ENTRY (entry)->editing_canceled)
+    return;
 
   path = g_object_get_data (G_OBJECT (entry), GTK_CELL_RENDERER_TEXT_PATH);
   new_text = gtk_entry_get_text (GTK_ENTRY (entry));
@@ -1329,7 +1336,7 @@ static GtkCellEditable *
 gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      gchar                *path,
+				      const gchar          *path,
 				      GdkRectangle         *background_area,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags)

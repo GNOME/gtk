@@ -70,6 +70,8 @@ struct _GtkIMContextXIM
   XIMCallback status_draw_callback;
 
   XIC ic;
+
+  guint use_preedit : 1;
 };
 
 struct _GtkIMContextXIMClass

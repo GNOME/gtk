@@ -28,6 +28,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "gtkobject.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 
@@ -134,7 +135,7 @@ gtk_arg_set_from_value (GtkArg       *arg,
     case G_TYPE_STRING:         if (copy_string)
       GTK_VALUE_STRING (*arg) = g_value_dup_string (value);
     else
-      GTK_VALUE_STRING (*arg) = g_value_get_string (value);
+      GTK_VALUE_STRING (*arg) = (char *) g_value_get_string (value);
     break;
     default:
       return FALSE;
@@ -332,7 +333,7 @@ gtk_object_class_init (GtkObjectClass *class)
                     G_SIGNAL_RUN_CLEANUP | G_SIGNAL_NO_RECURSE | GTK_RUN_NO_HOOKS,
                     GTK_CLASS_TYPE (class),
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
 }
 
@@ -353,8 +354,8 @@ gtk_object_destroy (GtkObject *object)
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  if (!GTK_OBJECT_DESTROYED (object))
-      g_object_run_dispose (G_OBJECT (object));
+  if (!(GTK_OBJECT_FLAGS (object) & GTK_IN_DESTRUCTION))
+    g_object_run_dispose (G_OBJECT (object));
 }
 
 static void
@@ -365,13 +366,13 @@ gtk_object_dispose (GObject *gobject)
   /* guard against reinvocations during
    * destruction with the GTK_DESTROYED flag.
    */
-  if (!GTK_OBJECT_DESTROYED (object))
+  if (!(GTK_OBJECT_FLAGS (object) & GTK_IN_DESTRUCTION))
     {
-      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+      GTK_OBJECT_SET_FLAGS (object, GTK_IN_DESTRUCTION);
       
       gtk_signal_emit (object, object_signals[DESTROY]);
       
-      GTK_OBJECT_UNSET_FLAGS (object, GTK_DESTROYED);
+      GTK_OBJECT_UNSET_FLAGS (object, GTK_IN_DESTRUCTION);
     }
 
   G_OBJECT_CLASS (parent_class)->dispose (gobject);
@@ -388,6 +389,15 @@ gtk_object_finalize (GObject *gobject)
 {
   GtkObject *object = GTK_OBJECT (gobject);
 
+  if (GTK_OBJECT_FLOATING (object))
+    {
+      g_warning ("A floating object was finalized. This means that someone\n"
+		 "called g_object_unref() on an object that had only a floating\n"
+		 "reference; the initial floating reference is not owned by anyone\n"
+		 "and must be removed with gtk_object_sink() after a normal\n"
+		 "reference is obtained with g_object_ref().");
+    }
+  
   gtk_object_notify_weaks (object);
   
   G_OBJECT_CLASS (parent_class)->finalize (gobject);

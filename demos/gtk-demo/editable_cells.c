@@ -1,6 +1,6 @@
 /* Tree View/Editable Cells
  * 
- * This demo demostrates the use of editable cells in a GtkTreeView. If
+ * This demo demonstrates the use of editable cells in a GtkTreeView. If
  * you're new to the GtkTreeView widgets and associates, look into
  * the GtkListStore example first.
  *

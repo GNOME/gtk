@@ -76,7 +76,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtksignal.h"
+#include "gtkmarshalers.h"
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
@@ -178,7 +180,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE,
                   0);
 
@@ -188,7 +190,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__INT_INT_INT,
+                  _gtk_marshal_VOID__INT_INT_INT,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_INT,
@@ -201,7 +203,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT_INT_INT,
+                  _gtk_marshal_VOID__OBJECT_INT_INT,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_OBJECT,
@@ -209,7 +211,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
                   GTK_TYPE_INT);
 }
 
-void
+static void
 gtk_text_layout_init (GtkTextLayout *text_layout)
 {
   text_layout->cursor_visible = TRUE;
@@ -2116,14 +2118,6 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (target_iter != NULL);
 
-  /* Adjust pixels to be on-screen. This gives nice
-     behavior if the user is dragging with a pointer grab.
-  */
-  if (x < 0)
-    x = 0;
-  if (x > layout->width)
-    x = layout->width;
-
   get_line_at_y (layout, y, &line, &line_top);
 
   display = gtk_text_layout_get_line_display (layout, line, FALSE);
@@ -2131,16 +2125,22 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
   x -= display->x_offset;
   y -= line_top + display->top_margin;
 
-  /* We clamp y to the area of the actual layout so that the layouts
-   * hit testing works OK on the space above and below the layout
+  /* If we are below the layout, position the cursor at the last character
+   * of the line.
    */
-  y = CLAMP (y, 0, display->height - display->top_margin - display->bottom_margin - 1);
-
-  if (!pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
-                                 &byte_index, &trailing))
+  if (y > display->height - display->top_margin - display->bottom_margin)
     {
       byte_index = _gtk_text_line_byte_count (line);
       trailing = 0;
+    }
+  else
+    {
+       /* Ignore the "outside" return value from pango. Pango is doing
+        * the right thing even if we are outside the layout in the
+        * x-direction.
+        */
+      pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,
+                                &byte_index, &trailing);
     }
 
   line_display_index_to_iter (layout, display, target_iter, byte_index, trailing);

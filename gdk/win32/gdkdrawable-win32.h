@@ -28,6 +28,7 @@
 #define __GDK_DRAWABLE_WIN32_H__
 
 #include <gdk/gdkdrawable.h>
+#include <gdk/win32/gdkwin32.h>
 
 #ifdef __cplusplus
 extern "C" {

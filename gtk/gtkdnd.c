@@ -2057,8 +2057,7 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
 /**
  * gtk_drag_source_set_icon_stock:
  * @widget: a #GtkWidget
- * @stock: the ID of the stock icon to use
- * @size: size at which to render the stock icon
+ * @stock_id: the ID of the stock icon to use
  *
  * Sets the icon that will be used for drags from a particular source
  * to a stock icon. 
@@ -2224,7 +2223,7 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
  * gtk_drag_set_icon_stock:
  * @context: the context for a drag. (This must be called 
  *            with a  context for the source side of a drag)
- * @stock: the ID of the stock icon to use for the drag.
+ * @stock_id: the ID of the stock icon to use for the drag.
  * @hot_x: the X offset within the icon of the hotspot.
  * @hot_y: the Y offset within the icon of the hotspot.
  * 

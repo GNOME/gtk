@@ -29,7 +29,6 @@
 
 #include <pango/pangowin32.h>
 
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_win32_draw_rectangle (GdkDrawable    *drawable,
@@ -115,6 +114,8 @@ static GdkVisual*   gdk_win32_get_visual     (GdkDrawable    *drawable);
 
 static void gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass);
 
+static void gdk_drawable_impl_win32_finalize   (GObject *object);
+
 static gpointer parent_class = NULL;
 
 GType
@@ -149,8 +150,11 @@ static void
 gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_drawable_impl_win32_finalize;
 
   drawable_class->create_gc = _gdk_win32_gc_new;
   drawable_class->draw_rectangle = gdk_win32_draw_rectangle;
@@ -174,6 +178,14 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->get_image = _gdk_win32_get_image;
 }
 
+static void
+gdk_drawable_impl_win32_finalize (GObject *object)
+{
+  gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 /*****************************************************
  * Win32 specific implementations of generic functions *
  *****************************************************/
@@ -193,8 +205,6 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
 			GdkColormap *colormap)
 {
   GdkDrawableImplWin32 *impl;
-
-  g_return_if_fail (colormap != NULL);  
 
   impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
 
@@ -238,7 +248,7 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
       && (gc_private->values_mask & GDK_GC_TILE)    
       && (gc_private->values_mask & GDK_GC_FILL))
     {
-      gdk_win32_draw_tiles (drawable, gc, gc_private->tile, x, y, width, height);
+      _gdk_win32_draw_tiles (drawable, gc, gc_private->tile, x, y, width, height);
       return;
     }
 
@@ -537,15 +547,15 @@ gdk_win32_draw_text (GdkDrawable *drawable,
     {
       /* For single characters, don't try to interpret as UTF-8. */
       wc = (guchar) text[0];
-      gdk_wchar_text_handle (font, &wc, 1, gdk_draw_text_handler, &arg);
+      _gdk_wchar_text_handle (font, &wc, 1, gdk_draw_text_handler, &arg);
     }
   else
     {
       wcstr = g_new (wchar_t, text_length);
-      if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
-	g_warning ("gdk_win32_draw_text: gdk_nmbstowchar_ts failed");
+      if ((wlen = _gdk_win32_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
+	g_warning ("gdk_win32_draw_text: _gdk_win32_nmbstowchar_ts failed");
       else
-	gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
+	_gdk_wchar_text_handle (font, wcstr, wlen, gdk_draw_text_handler, &arg);
       g_free (wcstr);
     }
 
@@ -589,7 +599,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
   else
     wcstr = (wchar_t *) text;
 
-  gdk_wchar_text_handle (font, wcstr, text_length,
+  _gdk_wchar_text_handle (font, wcstr, text_length,
 			 gdk_draw_text_handler, &arg);
 
   if (sizeof (wchar_t) != sizeof (GdkWChar))
@@ -758,7 +768,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 }
 
 void
-gdk_win32_draw_tiles (GdkDrawable *drawable,
+_gdk_win32_draw_tiles (GdkDrawable *drawable,
 		      GdkGC       *gc,
 		      GdkPixmap   *tile,
 		      gint        x_from,
@@ -809,7 +819,7 @@ gdk_win32_draw_points (GdkDrawable *drawable,
 
   hdc = gdk_win32_hdc_get (drawable, gc, 0);
   
-  fg = gdk_colormap_color (impl->colormap, gc_private->foreground);
+  fg = _gdk_win32_colormap_color (impl->colormap, gc_private->foreground);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
 			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,

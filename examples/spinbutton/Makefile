@@ -2,7 +2,7 @@
 CC = gcc
 
 spinbutton: spinbutton.c 
-	$(CC) `gtk-config --cflags`  spinbutton.c -o spinbutton `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  spinbutton.c -o spinbutton `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o spinbutton

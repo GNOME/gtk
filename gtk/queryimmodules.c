@@ -22,9 +22,6 @@
 #include "config.h"
 
 #include <glib.h>
-#ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#endif
 #include <gmodule.h>
 
 #include <errno.h>
@@ -120,7 +117,7 @@ query_module (const char *dir, const char *name)
 
 int main (int argc, char **argv)
 {
-  char cwd[PATH_MAX];
+  char *cwd;
   int i;
   char *path;
   gboolean error = FALSE;
@@ -142,28 +139,30 @@ int main (int argc, char **argv)
 
       for (i=0; dirs[i]; i++)
 	{
-	  DIR *dir = opendir (dirs[i]);
+	  GDir *dir = g_dir_open (dirs[i], 0, NULL);
 	  if (dir)
 	    {
-	      struct dirent *dent;
+	      char *dent;
 
-	      while ((dent = readdir (dir)))
+	      while ((dent = g_dir_read_name (dir)))
 		{
-		  int len = strlen (dent->d_name);
-		  if (len > 3 && strcmp (dent->d_name + len - strlen (SOEXT), SOEXT) == 0)
-		    error |= query_module (dirs[i], dent->d_name);
+		  int len = strlen (dent);
+		  if (len > 3 && strcmp (dent + len - strlen (SOEXT), SOEXT) == 0)
+		    error |= query_module (dirs[i], dent);
 		}
 	      
-	      closedir (dir);
+	      g_dir_close (dir);
 	    }
 	}
     }
   else
     {
-      getcwd (cwd, PATH_MAX);
+      cwd = g_get_current_dir ();
       
       for (i=1; i<argc; i++)
 	error |= query_module (cwd, argv[i]);
+
+      g_free (cwd);
     }
   
   return error ? 1 : 0;

@@ -204,7 +204,8 @@ struct _GdkPointerHooks
 			           gint	           *x,
 			           gint   	   *y,
 			           GdkModifierType *mask);
-  GdkWindow* (*window_at_pointer) (gint            *win_x,
+  GdkWindow* (*window_at_pointer) (GdkScreen       *screen, /* unused for now*/
+                                   gint            *win_x,
                                    gint            *win_y);
 };
 
@@ -328,9 +329,9 @@ void          gdk_window_scroll                (GdkWindow *window,
  *  from gdk_pixmap_create_from_xpm.   Stefan Wille
  */
 void gdk_window_shape_combine_mask  (GdkWindow	    *window,
-                                     GdkBitmap	    *shape_mask,
-                                     gint	     offset_x,
-                                     gint	     offset_y);
+                                     GdkBitmap	    *mask,
+                                     gint	     x,
+                                     gint	     y);
 void gdk_window_shape_combine_region (GdkWindow	    *window,
                                       GdkRegion     *shape_region,
                                       gint	     offset_x,
@@ -400,9 +401,10 @@ void          gdk_window_set_modal_hint  (GdkWindow       *window,
 					  gboolean         modal);
 void          gdk_window_set_geometry_hints (GdkWindow        *window,
 					     GdkGeometry      *geometry,
-					     GdkWindowHints    flags);
+					     GdkWindowHints    geom_mask);
 void	      gdk_set_sm_client_id_for_display (GdkDisplay *display,
 					       const gchar *sm_client_id);
+void          gdk_set_sm_client_id         (const gchar *sm_client_id);
 
 void	      gdk_window_begin_paint_rect   (GdkWindow    *window,
 					     GdkRectangle *rectangle);
@@ -415,7 +417,7 @@ void	      gdk_window_set_title	   (GdkWindow	  *window,
 void          gdk_window_set_role          (GdkWindow       *window,
 					    const gchar     *role);
 void          gdk_window_set_transient_for (GdkWindow       *window, 
-					    GdkWindow       *leader);
+					    GdkWindow       *parent);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  GdkColor	  *color);
 void	      gdk_window_set_back_pixmap (GdkWindow	  *window,
@@ -502,12 +504,16 @@ void gdk_window_begin_move_drag   (GdkWindow     *window,
                                    guint32        timestamp);
 
 /* Interface for dirty-region queueing */
-void       gdk_window_invalidate_rect     (GdkWindow    *window,
-					   GdkRectangle *rect,
-					   gboolean      invalidate_children);
-void       gdk_window_invalidate_region   (GdkWindow    *window,
-					   GdkRegion    *region,
-					   gboolean      invalidate_children);
+void       gdk_window_invalidate_rect           (GdkWindow    *window,
+					         GdkRectangle *rect,
+					         gboolean      invalidate_children);
+void       gdk_window_invalidate_region         (GdkWindow    *window,
+					         GdkRegion    *region,
+					         gboolean      invalidate_children);
+void       gdk_window_invalidate_maybe_recurse  (GdkWindow *window,
+						 GdkRegion *region,
+						 gboolean (*child_func) (GdkWindow *, gpointer),
+						 gpointer   user_data);
 GdkRegion *gdk_window_get_update_area     (GdkWindow    *window);
 
 void       gdk_window_freeze_updates      (GdkWindow    *window);

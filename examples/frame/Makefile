@@ -2,7 +2,7 @@
 CC = gcc
 
 frame: frame.c 
-	$(CC) `gtk-config --cflags`  frame.c -o frame `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  frame.c -o frame `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o frame

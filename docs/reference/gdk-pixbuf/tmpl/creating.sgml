@@ -33,7 +33,7 @@ Creating a pixbuf from image data that is already in memory.
 
   <para>
     You can also copy an existing pixbuf with the gdk_pixbuf_copy()
-    function.  This is not the same as just doing a gdk_pixbuf_ref()
+    function.  This is not the same as just doing a g_object_ref()
     on the old pixbuf; the copy function will actually duplicate the
     pixel data in memory and create a new #GdkPixbuf structure for it.
   </para>

@@ -39,7 +39,7 @@ struct _GtkComposeTable
  * to obtain the relevant perl scripts.
  *
  * The following compose letter letter sequences confliced
- *   Dstroke/dstroke and ETH/eth; resolved to Dstroke (Croation, Vietnamese, Lappish), over 
+*   Dstroke/dstroke and ETH/eth; resolved to Dstroke (Croation, Vietnamese, Lappish), over 
  *                                ETH (Icelandic, Faroese, old English, IPA)   [ D- -D d- -d ]
  *   Amacron/amacron and ordfeminine; resolved to ordfeminine                  [ _A A_ a_ _a ]
  *   Amacron/amacron and Atilde/atilde; resolved to atilde	      	      [ -A A- a- -a ]
@@ -818,6 +818,13 @@ gtk_im_context_simple_finalize (GObject *obj)
   parent_class->finalize (obj);
 }
 
+/** 
+ * gtk_im_context_simple_new:
+ * 
+ * Creates a new #GtkIMContextSimple.
+ *
+ * Returns: a new #GtkIMContextSimple.
+ **/
 GtkIMContext *
 gtk_im_context_simple_new (void)
 {

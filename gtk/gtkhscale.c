@@ -211,6 +211,9 @@ gtk_hscale_expose (GtkWidget      *widget,
           y = 0;
           break;
         }
+
+      x += widget->allocation.x;
+      y += widget->allocation.y;
       
       state_type = GTK_STATE_NORMAL;
       if (!GTK_WIDGET_IS_SENSITIVE (scale))

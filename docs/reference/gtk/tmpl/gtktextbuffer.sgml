@@ -23,6 +23,12 @@ types related to the text widget and how they work together.
 #GtkTextView, #GtkTextIter, #GtkTextMark
 </para>
 
+<!-- ##### STRUCT GtkTextBuffer ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_text_buffer_new ##### -->
 <para>
 

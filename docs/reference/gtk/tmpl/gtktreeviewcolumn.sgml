@@ -20,7 +20,6 @@ GtkTreeViewColumn
 </para>
 
 @GTK_TREE_VIEW_COLUMN_GROW_ONLY: 
-@GTK_TREE_VIEW_COLUMN_RESIZABLE: 
 @GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
 @GTK_TREE_VIEW_COLUMN_FIXED: 
 
@@ -168,6 +167,24 @@ GtkTreeViewColumn
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_get_visible ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_resizable ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@resizable: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_resizable ##### -->
 <para>
 
 </para>
@@ -511,6 +528,11 @@ GtkTreeViewColumn
 @treeviewcolumn: the object which received the signal.
 
 <!-- ##### ARG GtkTreeViewColumn:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTreeViewColumn:resizable ##### -->
 <para>
 
 </para>

@@ -169,7 +169,7 @@ Creates a new #GtkSpinButton.
 @adjustment: the #GtkAdjustment object that this spin button should use.
 @climb_rate: specifies how much the spin button changes when an arrow is clicked on.
 @digits: the number of decimal places to display.
-@Returns: a #GtkWidget.
+@Returns: The new spin button as a #GtkWidget.
 
 
 <!-- ##### FUNCTION gtk_spin_button_new_with_range ##### -->

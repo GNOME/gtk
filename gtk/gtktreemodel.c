@@ -25,6 +25,7 @@
 #include "gtktreemodel.h"
 #include "gtktreeview.h"
 #include "gtktreeprivate.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 
@@ -76,7 +77,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_changed),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED,
+                    _gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
@@ -85,7 +86,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_inserted),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED,
+                    _gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
@@ -94,7 +95,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_has_child_toggled),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED,
+                    _gtk_marshal_VOID__BOXED_BOXED,
                     G_TYPE_NONE, 2,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER);
@@ -103,7 +104,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, row_deleted),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED,
+                    _gtk_marshal_VOID__BOXED,
                     G_TYPE_NONE, 1,
                     GTK_TYPE_TREE_PATH);
       g_signal_new ("rows_reordered",
@@ -111,7 +112,7 @@ gtk_tree_model_base_init (gpointer g_class)
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkTreeModelIface, rows_reordered),
                     NULL, NULL,
-                    gtk_marshal_VOID__BOXED_BOXED_POINTER,
+                    _gtk_marshal_VOID__BOXED_BOXED_POINTER,
                     G_TYPE_NONE, 3,
                     GTK_TYPE_TREE_PATH,
                     GTK_TYPE_TREE_ITER,
@@ -397,7 +398,7 @@ gtk_tree_path_compare (const GtkTreePath *a,
  * @path: a #GtkTreePath
  * @descendant: another #GtkTreePath
  *
- *
+ * Returns %TRUE if @descendant is a descendant of @path.
  *
  * Return value: %TRUE if @descendant is contained inside @path
  **/
@@ -959,7 +960,7 @@ gtk_tree_model_unref_node (GtkTreeModel *tree_model,
  * each column number followed by a place to store the value being
  * retrieved.  The list is terminated by a -1. For example, to get a
  * value from column 0 with type %G_TYPE_STRING, you would
- * write: gtk_tree_model_set (model, iter, 0, &place_string_here, -1),
+ * write: <literal>gtk_tree_model_get (model, iter, 0, &amp;place_string_here, -1)</literal>,
  * where place_string_here is a gchar* to be filled with the string.
  * If appropriate, the returned values have to be freed or unreferenced.
  *
@@ -1168,7 +1169,10 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
 
   path = gtk_tree_path_new_root ();
   if (gtk_tree_model_get_iter (model, &iter, path) == FALSE)
-    return;
+    {
+      gtk_tree_path_free (path);
+      return;
+    }
 
   gtk_tree_model_foreach_helper (model, &iter, path, func, user_data);
   gtk_tree_path_free (path);
@@ -1181,7 +1185,8 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
 
 static void gtk_tree_row_reference_unref_path (GtkTreePath  *path,
 					       GtkTreeModel *model,
-					       gboolean      free_last);
+					       gint          depth);
+
 
 #define ROW_REF_DATA_STRING "gtk-tree-row-refs"
 
@@ -1303,15 +1308,32 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 
       if (reference->path)
 	{
-	  if (gtk_tree_path_is_ancestor (path, reference->path))
+	  gint i;
+
+	  if (path->depth > reference->path->depth)
 	    {
-	      reference->path->indices[path->depth-1]-=1;
+	      tmp_list = g_slist_next (tmp_list);
+	      continue;
 	    }
-	  else if (gtk_tree_path_compare (path, reference->path) == 0)
+	  for (i = 0; i < path->depth - 1; i++)
 	    {
-	      gtk_tree_row_reference_unref_path (reference->path, reference->model, FALSE);
+	      if (path->indices[i] != reference->path->indices[i])
+		{
+		  tmp_list = g_slist_next (tmp_list);
+		  continue;
+		}
+	    }
+
+	  /* We know it affects us. */
+	  if (path->indices[i] == reference->path->indices[i])
+	    {
+	      gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth - 1);
 	      gtk_tree_path_free (reference->path);
 	      reference->path = NULL;
+	    }
+	  else if (path->indices[i] < reference->path->indices[i])
+	    {
+	      reference->path->indices[path->depth-1]-=1;
 	    }
 	}
       tmp_list = g_slist_next (tmp_list);
@@ -1394,32 +1416,30 @@ gtk_tree_row_reference_unref_path_helper (GtkTreePath  *path,
 					  GtkTreeModel *model,
 					  GtkTreeIter  *parent_iter,
 					  gint          depth,
-					  gboolean      free_last)
+					  gint          current_depth)
 {
   GtkTreeIter iter;
 
-  if (free_last == FALSE && path->depth - 1 == depth)
-    return;
-  if (path->depth == depth)
+  if (depth == current_depth)
     return;
 
-  gtk_tree_model_iter_nth_child (model, &iter, NULL, path->indices[depth]);
-  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth + 1, free_last);
+  gtk_tree_model_iter_nth_child (model, &iter, parent_iter, path->indices[current_depth]);
+  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth, current_depth + 1);
   gtk_tree_model_unref_node (model, &iter);
 }
 
 static void
 gtk_tree_row_reference_unref_path (GtkTreePath  *path,
 				   GtkTreeModel *model,
-				   gboolean      free_last)
+				   gint          depth)
 {
   GtkTreeIter iter;
 
-  if (free_last == FALSE && path->depth == 1)
+  if (depth <= 0)
     return;
-      
+  
   gtk_tree_model_iter_nth_child (model, &iter, NULL, path->indices[0]);
-  gtk_tree_row_reference_unref_path_helper (path, model, &iter, 1, free_last);
+  gtk_tree_row_reference_unref_path_helper (path, model, &iter, depth, 1);
   gtk_tree_model_unref_node (model, &iter);
 }
 
@@ -1602,7 +1622,7 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 
   if (reference->path)
     {
-      gtk_tree_row_reference_unref_path (reference->path, reference->model, TRUE);
+      gtk_tree_row_reference_unref_path (reference->path, reference->model, reference->path->depth);
       gtk_tree_path_free (reference->path);
     }
 

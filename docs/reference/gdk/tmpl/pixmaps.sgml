@@ -41,7 +41,7 @@ Create a new pixmap with a given size and depth.
 @depth: The depth (number of bits per pixel) of the new pixmap. 
   If -1, and @window is not %NULL, the depth of the new
   pixmap will be equal to that of @window.
-@Returns: the #GdkBitmap
+@Returns: the #GdkPixmap
 
 
 <!-- ##### FUNCTION gdk_bitmap_create_from_data ##### -->
@@ -170,7 +170,7 @@ reference count is zero, destroy the pixmap.
 <!-- ##### STRUCT GdkBitmap ##### -->
 <para>
 An opaque structure representing an offscreen drawable of depth
-1. Pointers to structures of type GdkPixmap, #GdkBitmap, and
+1. Pointers to structures of type #GdkPixmap, #GdkBitmap, and
 #GdkWindow, can often be used interchangeably.  The type #GdkDrawable
 refers generically to any of these types.
 </para>
@@ -183,9 +183,9 @@ Increase the reference count of a bitmap. An alias
 for gdk_pixmap_ref().
 </para>
 
-@Returns: 
+@Returns: @pixmap
 <!-- # Unused Parameters # -->
-@pixmap: 
+@pixmap: a #GdkBitmap
 
 
 <!-- ##### MACRO gdk_bitmap_unref ##### -->
@@ -195,6 +195,6 @@ for gdk_pixmap_unref().
 </para>
 
 <!-- # Unused Parameters # -->
-@pixmap: 
+@pixmap: a #GdkBitmap
 
 

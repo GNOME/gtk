@@ -168,7 +168,8 @@ static void
 gtk_box_init (GtkBox *box)
 {
   GTK_WIDGET_SET_FLAGS (box, GTK_NO_WINDOW);
-
+  gtk_widget_set_redraw_on_allocate (GTK_WIDGET (box), FALSE);
+  
   box->children = NULL;
   box->spacing = 0;
   box->homogeneous = FALSE;

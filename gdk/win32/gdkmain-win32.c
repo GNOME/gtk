@@ -95,7 +95,7 @@ _gdk_windowing_init_check (int    argc,
   gdk_win32_dropfiles_atom = gdk_atom_intern ("DROPFILES_DND", FALSE);
   gdk_ole2_dnd_atom = gdk_atom_intern ("OLE2_DND", FALSE);
 
-  gdk_win32_selection_init ();
+  _gdk_win32_selection_init ();
 
   return TRUE;
 }
@@ -243,14 +243,14 @@ gdk_beep (void)
 void
 _gdk_windowing_exit (void)
 {
-  gdk_win32_dnd_exit ();
+  _gdk_win32_dnd_exit ();
   CoUninitialize ();
   DeleteDC (gdk_display_hdc);
   gdk_display_hdc = NULL;
 }
 
 gchar *
-gdk_get_display(void)
+gdk_get_display (void)
 {
   return "Win32";
 }

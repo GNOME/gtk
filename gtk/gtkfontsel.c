@@ -516,7 +516,7 @@ gtk_font_selection_select_font (GtkWidget      *w,
 				gpointer        data)
 {
   GtkFontSelection *fontsel;
-  gchar *family_name;
+  const gchar *family_name;
   gint index;
   
   fontsel = GTK_FONT_SELECTION (data);
@@ -567,7 +567,7 @@ gtk_font_selection_show_available_fonts (GtkFontSelection *fontsel)
       
       gtk_clist_append (GTK_CLIST (fontsel->font_clist), (char **)&name);
 
-      if (!strcasecmp (name, "sans"))
+      if (!g_strcasecmp (name, "sans"))
 	match_row = i;
     }
 
@@ -774,7 +774,7 @@ gtk_font_selection_size_activate (GtkWidget   *w,
 {
   GtkFontSelection *fontsel;
   gint new_size;
-  gchar *text;
+  const gchar *text;
   
   fontsel = GTK_FONT_SELECTION (data);
 
@@ -848,7 +848,7 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
   gint new_height;
   GtkRequisition old_requisition;
   GtkWidget *preview_entry = fontsel->preview_entry;
-  gchar *text;
+  const gchar *text;
 
   gtk_widget_get_child_requisition (preview_entry, &old_requisition);
   
@@ -926,7 +926,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
   n_families = GTK_CLIST (fontsel->font_clist)->rows;
   for (i = 0; i < n_families; i++)
     {
-      if (strcasecmp (pango_font_family_get_name (fontsel->families[i]),
+      if (g_strcasecmp (pango_font_family_get_name (fontsel->families[i]),
 		      pango_font_description_get_family (new_desc)) == 0)
 	new_family = fontsel->families[i];
     }
@@ -968,7 +968,7 @@ gtk_font_selection_set_font_name (GtkFontSelection *fontsel,
 
 /* This returns the text in the preview entry. You should copy the returned
    text if you need it. */
-gchar*
+G_CONST_RETURN gchar*
 gtk_font_selection_get_preview_text  (GtkFontSelection *fontsel)
 {
   return gtk_entry_get_text (GTK_ENTRY (fontsel->preview_entry));
@@ -1051,22 +1051,21 @@ gtk_font_selection_dialog_init (GtkFontSelectionDialog *fontseldiag)
   
   /* Create the action area */
   fontseldiag->action_area = dialog->action_area;
-  
-  fontseldiag->ok_button = gtk_dialog_add_button (dialog,
-                                                  GTK_STOCK_OK,
-                                                  GTK_RESPONSE_OK);
-  gtk_widget_grab_default (fontseldiag->ok_button);
-  
+
+  fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
+                                                      GTK_STOCK_CANCEL,
+                                                      GTK_RESPONSE_CANCEL);
+
   fontseldiag->apply_button = gtk_dialog_add_button (dialog,
                                                      GTK_STOCK_APPLY,
                                                      GTK_RESPONSE_APPLY);
   gtk_widget_hide (fontseldiag->apply_button);
 
+  fontseldiag->ok_button = gtk_dialog_add_button (dialog,
+                                                  GTK_STOCK_OK,
+                                                  GTK_RESPONSE_OK);
+  gtk_widget_grab_default (fontseldiag->ok_button);
   
-  fontseldiag->cancel_button = gtk_dialog_add_button (dialog,
-                                                      GTK_STOCK_CANCEL,
-                                                      GTK_RESPONSE_CANCEL);
-
   gtk_window_set_title (GTK_WINDOW (fontseldiag),
                         _("Font Selection"));
 
@@ -1104,7 +1103,7 @@ gtk_font_selection_dialog_set_font_name (GtkFontSelectionDialog *fsd,
   return gtk_font_selection_set_font_name (GTK_FONT_SELECTION (fsd->fontsel), fontname);
 }
 
-gchar*
+G_CONST_RETURN gchar*
 gtk_font_selection_dialog_get_preview_text (GtkFontSelectionDialog *fsd)
 {
   return gtk_font_selection_get_preview_text (GTK_FONT_SELECTION (fsd->fontsel));

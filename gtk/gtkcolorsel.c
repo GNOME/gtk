@@ -43,6 +43,7 @@
 #include "gtkframe.h"
 #include "gtktable.h"
 #include "gtklabel.h"
+#include "gtkmarshalers.h"
 #include "gtkpixmap.h"
 #include "gtkspinbutton.h"
 #include "gtkrange.h"
@@ -165,13 +166,16 @@ static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colo
                                                          GdkColor          *color);
 static void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
                                                          gint               index);
+static void     default_change_palette_func             (GdkScreen	   *screen,
+							 const GdkColor    *colors,
+							 gint               n_colors);
 
 static gpointer parent_class = NULL;
 static guint color_selection_signals[LAST_SIGNAL] = { 0 };
 
 static gchar* default_colors = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
 
-static GtkColorSelectionChangePaletteFunc change_palette_hook = NULL;
+static GtkColorSelectionChangePaletteFunc change_palette_hook = default_change_palette_func;
 
 static GdkColor current_colors[GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT];
 
@@ -1710,7 +1714,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                     GTK_RUN_FIRST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkColorSelectionClass, color_changed),
-                    gtk_marshal_VOID__VOID,
+                    _gtk_marshal_VOID__VOID,
                     GTK_TYPE_NONE, 0);
 
   gtk_settings_install_property (g_param_spec_string ("gtk-color-palette",
@@ -1886,49 +1890,6 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     }
 }
 
-static void 
-gtk_color_selection_realize (GtkWidget *widget)
-{
-  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (widget);
-  ColorSelectionPrivate *priv = colorsel->private_data;
-  GdkScreen *screen = gtk_widget_get_screen (widget);
-  gchar *palette;
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-
-  /* Setup the gtksettings */
-  
-  g_object_get (G_OBJECT (gtk_settings_get_for_screen (screen)),
-                "gtk-color-palette",
-                &palette,
-                NULL);
-  
-  fill_palette_from_string (palette);
-  g_free (palette);
-
-  change_palette_hook = default_change_palette_func;
-  
-  g_signal_connect_data (G_OBJECT (gtk_settings_get_for_screen (screen)),
-                         "notify::gtk-color-palette",
-                         G_CALLBACK (palette_change_notify_class),
-                         NULL, NULL, 0);
-
-  /* Set default colors */
-
-  update_palette (colorsel);
-
-  priv->settings_connection = 
-    g_signal_connect_data (G_OBJECT (gtk_settings_get_for_screen (screen)),
-                           "notify::gtk-color-palette",
-                           G_CALLBACK (palette_change_notify_instance),
-                           colorsel, NULL, 0);
-  /* needed as there is no way to retrieve screen with 
-   * gtk_widget_get_screen in gtk_color_selection_finalize */
-  g_object_set_data (G_OBJECT (widget), "gtk-fs-screen", screen);
-  
-  if (GTK_WIDGET_CLASS( parent_class )->realize)
-      (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
-}
 
 static void
 gtk_color_selection_destroy (GtkObject *object)
@@ -1974,6 +1935,48 @@ gtk_color_selection_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+static void 
+gtk_color_selection_realize (GtkWidget *widget)
+{
+  GtkColorSelection *colorsel = GTK_COLOR_SELECTION (widget);
+  ColorSelectionPrivate *priv = colorsel->private_data;
+  GdkScreen *screen = gtk_widget_get_screen (widget);
+  gchar *palette;
+  static gboolean initialized = FALSE;
+  
+  if (!initialized)
+    {
+      g_object_get (G_OBJECT (gtk_settings_get_for_screen (screen)),
+		    "gtk-color-palette", &palette, NULL);
+     
+      fill_palette_from_string (palette);
+      g_free (palette);
+      
+      g_signal_connect (G_OBJECT (gtk_settings_get_for_screen (screen)),
+			"notify::gtk-color-palette",
+			G_CALLBACK (palette_change_notify_class),
+			NULL);
+      
+      initialized = TRUE;
+    }
+
+  /* Set default colors */
+
+  update_palette (colorsel);
+
+  priv->settings_connection = 
+    g_signal_connect (G_OBJECT (gtk_settings_get_for_screen (screen)),
+		      "notify::gtk-color-palette",
+		      G_CALLBACK (palette_change_notify_instance),
+		      colorsel);
+
+  /* needed as there is no way to retrieve screen with 
+   * gtk_widget_get_screen in gtk_color_selection_finalize */
+  g_object_set_data (G_OBJECT (widget), "gtk-fs-screen", screen);
+  
+  if (GTK_WIDGET_CLASS( parent_class )->realize)
+      (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
+}
 
 /**
  * gtk_color_selection_new:
@@ -2018,11 +2021,11 @@ gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_get_has_opacity_control:
- * @colorsel: A GtkColorSelection.
+ * @colorsel: a #GtkColorSelection.
  * 
  * Determines whether the colorsel has an opacity control.
  * 
- * Return value: TRUE if the @colorsel has an opacity control.  FALSE if it does't.
+ * Return value: %TRUE if the @colorsel has an opacity control.  %FALSE if it does't.
  **/
 gboolean
 gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel)
@@ -2038,8 +2041,8 @@ gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel)
 
 /**
  * gtk_color_selection_set_has_opacity_control:
- * @colorsel: A GtkColorSelection.
- * @has_opacity: TRUE if @colorsel can set the opacity, FALSE otherwise.
+ * @colorsel: a #GtkColorSelection.
+ * @has_opacity: %TRUE if @colorsel can set the opacity, %FALSE otherwise.
  *
  * Sets the @colorsel to use or not use opacity.
  * 
@@ -2078,11 +2081,11 @@ gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_get_has_palette:
- * @colorsel: A GtkColorSelection.
+ * @colorsel: a #GtkColorSelection.
  * 
  * Determines whether the color selector has a color palette.
  * 
- * Return value: TRUE if the selector has a palette.  FALSE if it hasn't.
+ * Return value: %TRUE if the selector has a palette.  %FALSE if it hasn't.
  **/
 gboolean
 gtk_color_selection_get_has_palette (GtkColorSelection *colorsel)
@@ -2098,8 +2101,8 @@ gtk_color_selection_get_has_palette (GtkColorSelection *colorsel)
 
 /**
  * gtk_color_selection_set_has_palette:
- * @colorsel: A GtkColorSelection.
- * @has_palette: TRUE if palette is to be visible, FALSE otherwise.
+ * @colorsel: a #GtkColorSelection.
+ * @has_palette: %TRUE if palette is to be visible, %FALSE otherwise.
  *
  * Shows and hides the palette based upon the value of @has_palette.
  * 
@@ -2128,12 +2131,11 @@ gtk_color_selection_set_has_palette (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_set_current_color:
- * @colorsel: A GtkColorSelection.
- * @color: A GdkColor to set the current color with.
+ * @colorsel: a #GtkColorSelection.
+ * @color: A #GdkColor to set the current color with.
  *
  * Sets the current color to be @color.  The first time this is called, it will
  * also set the original color to be @color too.
- * 
  **/
 void
 gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
@@ -2168,12 +2170,11 @@ gtk_color_selection_set_current_color (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_set_current_alpha:
- * @colorsel: A GtkColorSelection.
- * @alpha: an integer between 0 and 65535
+ * @colorsel: a #GtkColorSelection.
+ * @alpha: an integer between 0 and 65535.
  *
  * Sets the current opacity to be @alpha.  The first time this is called, it will
  * also set the original opacity to be @alpha too.
- * 
  **/
 void
 gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
@@ -2198,14 +2199,14 @@ gtk_color_selection_set_current_alpha (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_set_color:
- * @colorsel: A GtkColorSelection.
- * @color: A array of doubles that specifies the color to set the current color with.
+ * @colorsel: a #GtkColorSelection.
+ * @color: an array of 4 doubles specifying the red, green, blue and opacity 
+ *   to set the current color to.
  *
  * Sets the current color to be @color.  The first time this is called, it will
  * also set the original color to be @color too.
  *
  * This function is deprecated, use gtk_color_selection_set_current_color() instead.
- *
  **/
 void
 gtk_color_selection_set_color (GtkColorSelection    *colorsel,
@@ -2240,12 +2241,10 @@ gtk_color_selection_set_color (GtkColorSelection    *colorsel,
 
 /**
  * gtk_color_selection_get_current_color:
- * @colorsel: A GtkColorSelection.
- * @color: A GdkColor to fill in with the current color.
+ * @colorsel: a #GtkColorSelection.
+ * @color: a #GdkColor to fill in with the current color.
  *
  * Sets @color to be the current color in the GtkColorSelection widget.
- *
- * This function is deprecated, use gtk_color_selection_get_current_color() instead.
  **/
 void
 gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
@@ -2263,11 +2262,11 @@ gtk_color_selection_get_current_color (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_get_current_alpha:
- * @colorsel: A GtkColorSelection.
+ * @colorsel: a #GtkColorSelection.
  *
- * Returns the current alpha value
+ * Returns the current alpha value.
  *
- * Return value: an integer between 0 and 65535
+ * Return value: an integer between 0 and 65535.
  **/
 guint16
 gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
@@ -2282,11 +2281,12 @@ gtk_color_selection_get_current_alpha (GtkColorSelection *colorsel)
 
 /**
  * gtk_color_selection_get_color:
- * @colorsel: A GtkColorSelection.
- * @color: A color to fill in with the current color.
+ * @colorsel: a #GtkColorSelection.
+ * @color: an array of 4 #gdouble to fill in with the current color.
  *
  * Sets @color to be the current color in the GtkColorSelection widget.
  * 
+ * This function is deprecated, use gtk_color_selection_get_current_color() instead.
  **/
 void
 gtk_color_selection_get_color (GtkColorSelection *colorsel,
@@ -2305,14 +2305,13 @@ gtk_color_selection_get_color (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_set_previous_color:
- * @colorsel: A GtkColorSelection.
- * @color: A color to set the previous color with.
+ * @colorsel: a #GtkColorSelection.
+ * @color: a #GdkColor to set the previous color with.
  *
  * Sets the 'previous' color to be @color.  This function should be called with
  * some hesitations, as it might seem confusing to have that color change.
- * Calling gtk_color_selection_set_current_color will also set this color the first
+ * Calling gtk_color_selection_set_current_color() will also set this color the first
  * time it is called.
- * 
  **/
 void
 gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
@@ -2339,12 +2338,11 @@ gtk_color_selection_set_previous_color (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_set_previous_alpha:
- * @colorsel: A GtkColorSelection.
- * @alpha: an integer between 0 and 65535
+ * @colorsel: a #GtkColorSelection.
+ * @alpha: an integer between 0 and 65535.
  *
  * Sets the 'previous' alpha to be @alpha.  This function should be called with
- * some hesitations, as it might seem confusing to have that color change.
- * 
+ * some hesitations, as it might seem confusing to have that alpha change.
  **/
 void
 gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
@@ -2364,11 +2362,10 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_get_previous_color:
- * @colorsel: A GtkColorSelection.
- * @color: A GdkColor to fill in with the original color value.
+ * @colorsel: a #GtkColorSelection.
+ * @color: a #GdkColor to fill in with the original color value.
  *
  * Fills @color in with the original color value.
- * 
  **/
 void
 gtk_color_selection_get_previous_color (GtkColorSelection *colorsel,
@@ -2386,11 +2383,11 @@ gtk_color_selection_get_previous_color (GtkColorSelection *colorsel,
 
 /**
  * gtk_color_selection_get_previous_alpha:
- * @colorsel: A GtkColorSelection.
+ * @colorsel: a #GtkColorSelection.
  *
- * Returns the previous alpha value
+ * Returns the previous alpha value.
  *
- * Return value: an integer between 0 and 65535
+ * Return value: an integer between 0 and 65535.
  **/
 guint16
 gtk_color_selection_get_previous_alpha (GtkColorSelection *colorsel)
@@ -2405,11 +2402,11 @@ gtk_color_selection_get_previous_alpha (GtkColorSelection *colorsel)
 
 /**
  * gtk_color_selection_set_palette_color:
- * @colorsel: A GtkColorSelection.
- * @index: The color index of the palette.
- * @color: A GdkColor to set the palette with.
+ * @colorsel: a #GtkColorSelection.
+ * @index: the color index of the palette.
+ * @color: A #GdkColor to set the palette with.
  *
- * Set the palette located at at @index to have @color set as its color.
+ * Sets the palette located at @index to have @color as its color.
  * 
  **/
 static void
@@ -2437,14 +2434,14 @@ gtk_color_selection_set_palette_color (GtkColorSelection   *colorsel,
 
 /**
  * gtk_color_selection_get_palette_color:
- * @colorsel: A GtkColorSelection.
- * @index: The color index of the palette.
- * @color: A color to fill in with the color value.
+ * @colorsel: a #GtkColorSelection.
+ * @index: the color index of the palette.
+ * @color: a #GdkColor to fill in with the color value.
  * 
  * Set @color to have the color found in the palette at @index.  If
  * the palette is unset, it will leave the color unset.
  * 
- * Return value: TRUE if the palette located at @index has a color set.  FALSE
+ * Return value: %TRUE if the palette located at @index has a color set.  %FALSE
  * if it doesn't.
  **/
 static gboolean
@@ -2478,11 +2475,10 @@ gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
 
 /**
  * gtk_color_selection_unset_palette_color:
- * @colorsel: A GtkColorSelection.
- * @index: The color index in the palette.
+ * @colorsel: a #GtkColorSelection.
+ * @index: the color index in the palette.
  *
- * Change the palette located @index to have no color set.
- * 
+ * Changes the palette located @index to have no color set.
  **/
 static void
 gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
@@ -2503,11 +2499,11 @@ gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
 
 /**
  * gtk_color_selection_get_current_alpha:
- * @colorsel: A GtkColorSelection.
+ * @colorsel: a #GtkColorSelection.
  *
  * Returns the maximum number of palette colors.
  *
- * Return value: the maximum number of palette indexes
+ * Return value: the maximum number of palette indexes.
  **/
 static gint
 gtk_color_selection_get_palette_size (GtkColorSelection *colorsel)
@@ -2518,11 +2514,11 @@ gtk_color_selection_get_palette_size (GtkColorSelection *colorsel)
 
 /**
  * gtk_color_selection_is_adjusting:
- * @colorsel: A GtkColorSelection.
+ * @colorsel: a #GtkColorSelection.
  *
  * Gets the current state of the @colorsel.
  *
- * Return value: TRUE if the user is currently dragging a color around, and FALSE
+ * Return value: %TRUE if the user is currently dragging a color around, and %FALSE
  * if the selection has stopped.
  **/
 gboolean
@@ -2601,14 +2597,14 @@ gtk_color_selection_get_property (GObject     *object,
 
 /**
  * gtk_color_selection_palette_from_string:
- * @str: a string encoding a color palette
- * @colors: return location for allocated array of GdkColor
- * @n_colors: return location for length of array
+ * @str: a string encoding a color palette.
+ * @colors: return location for allocated array of #GdkColor.
+ * @n_colors: return location for length of array.
  * 
  * Parses a color palette string; the string is a colon-separated
  * list of color names readable by gdk_color_parse().
  * 
- * Return value: %TRUE if a palette was successfully parsed
+ * Return value: %TRUE if a palette was successfully parsed.
  **/
 gboolean
 gtk_color_selection_palette_from_string (const gchar *str,
@@ -2687,12 +2683,12 @@ gtk_color_selection_palette_from_string (const gchar *str,
 
 /**
  * gtk_color_selection_palette_to_string:
- * @colors: an array of colors
- * @n_colors: length of the array
+ * @colors: an array of colors.
+ * @n_colors: length of the array.
  * 
  * Encodes a palette as a string, useful for persistent storage.
  * 
- * Return value: allocated string encoding the palette
+ * Return value: allocated string encoding the palette.
  **/
 gchar*
 gtk_color_selection_palette_to_string (const GdkColor *colors,
@@ -2734,14 +2730,14 @@ gtk_color_selection_palette_to_string (const GdkColor *colors,
 
 /**
  * gtk_color_selection_set_change_palette_hook:
- * @func: a function to call when the custom palette needs saving
+ * @func: a function to call when the custom palette needs saving.
  * 
  * Installs a global function to be called whenever the user tries to
  * modify the palette in a color selection. This function should save
  * the new palette contents, and update the GtkSettings property
  * "gtk-color-palette" so all GtkColorSelection widgets will be modified.
  * 
- * Return value: the previous change palette hook (that was replaced)
+ * Return value: the previous change palette hook (that was replaced).
  **/
 GtkColorSelectionChangePaletteFunc
 gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc func)

@@ -1,0 +1,108 @@
+<!-- ##### SECTION Title ##### -->
+gtktreesortable
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkTreeSortable ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTreeSortableIface ##### -->
+<para>
+
+</para>
+
+@g_iface: 
+@sort_column_changed: 
+@get_sort_column_id: 
+@set_sort_column_id: 
+@set_sort_func: 
+@set_default_sort_func: 
+@has_default_sort_func: 
+
+<!-- ##### USER_FUNCTION GtkTreeIterCompareFunc ##### -->
+<para>
+
+</para>
+
+@model: 
+@a: 
+@b: 
+@user_data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_sortable_sort_column_changed ##### -->
+<para>
+
+</para>
+
+@sortable: 
+
+
+<!-- ##### FUNCTION gtk_tree_sortable_get_sort_column_id ##### -->
+<para>
+
+</para>
+
+@sortable: 
+@sort_column_id: 
+@order: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_sortable_set_sort_column_id ##### -->
+<para>
+
+</para>
+
+@sortable: 
+@sort_column_id: 
+@order: 
+
+
+<!-- ##### FUNCTION gtk_tree_sortable_set_sort_func ##### -->
+<para>
+
+</para>
+
+@sortable: 
+@sort_column_id: 
+@sort_func: 
+@user_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_sortable_set_default_sort_func ##### -->
+<para>
+
+</para>
+
+@sortable: 
+@sort_func: 
+@user_data: 
+@destroy: 
+
+
+<!-- ##### FUNCTION gtk_tree_sortable_has_default_sort_func ##### -->
+<para>
+
+</para>
+
+@sortable: 
+@Returns: 
+
+

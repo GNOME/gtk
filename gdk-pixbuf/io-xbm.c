@@ -365,10 +365,10 @@ gdk_pixbuf__xbm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 	context->update_func = update_func;
 	context->user_data = user_data;
 	context->all_okay = TRUE;
-	context->tempname = g_strdup ("/tmp/gdkpixbuf-xbm-tmp.XXXXXX");
-	fd = mkstemp (context->tempname);
+	fd = g_file_open_tmp ("gdkpixbuf-xbm-tmp.XXXXXX",
+			      &context->tempname,
+			      NULL);
 	if (fd < 0) {
-	        g_free (context->tempname);
 		g_free (context);
 		return NULL;
 	}

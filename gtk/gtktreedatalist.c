@@ -39,6 +39,7 @@ _gtk_tree_data_list_alloc (void)
 				  G_ALLOC_AND_FREE);
 
   list = g_chunk_new (GtkTreeDataList, tree_chunk);
+  memset (list, 0, sizeof (GtkTreeDataList));
 
   return list;
 }
@@ -57,9 +58,9 @@ _gtk_tree_data_list_free (GtkTreeDataList *list,
       next = tmp->next;
       if (g_type_is_a (column_headers [i], G_TYPE_STRING))
 	g_free ((gchar *) tmp->data.v_pointer);
-      else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT))
+      else if (g_type_is_a (column_headers [i], G_TYPE_OBJECT) && tmp->data.v_pointer != NULL)
 	g_object_unref (G_OBJECT (tmp->data.v_pointer));
-      else if (g_type_is_a (column_headers [i], G_TYPE_BOXED))
+      else if (g_type_is_a (column_headers [i], G_TYPE_BOXED) && tmp->data.v_pointer != NULL)
 	g_boxed_free (column_headers [i], (gpointer) tmp->data.v_pointer);
 
       g_mem_chunk_free (tree_chunk, tmp);
@@ -265,7 +266,7 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
   GValue a_value = {0, };
   GValue b_value = {0, };
   gint retval;
-  gchar *stra, *strb;
+  const gchar *stra, *strb;
 
   gtk_tree_model_get_value (model, a, column, &a_value);
   gtk_tree_model_get_value (model, b, column, &b_value);

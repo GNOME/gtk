@@ -144,7 +144,7 @@ gtk_fixed_child_type (GtkContainer     *container)
 static void
 gtk_fixed_init (GtkFixed *fixed)
 {
-  GTK_WIDGET_UNSET_FLAGS (fixed, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (fixed, GTK_NO_WINDOW);
  
   fixed->children = NULL;
 }
@@ -304,30 +304,6 @@ gtk_fixed_get_child_property (GtkContainer *container,
 }
 
 static void
-gtk_fixed_map (GtkWidget *widget)
-{
-  GtkFixed *fixed;
-  GtkFixedChild *child;
-  GList *children;
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  fixed = GTK_FIXED (widget);
-
-  children = fixed->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-
-  gdk_window_show (widget->window);
-}
-
-static void
 gtk_fixed_realize (GtkWidget *widget)
 {
   GdkWindowAttr attributes;
@@ -335,27 +311,32 @@ gtk_fixed_realize (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_FIXED (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+  if (GTK_WIDGET_NO_WINDOW (widget))
+    GTK_WIDGET_CLASS (parent_class)->realize (widget);
+  else
+    {
+      GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, 
-				   attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
-
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+      attributes.window_type = GDK_WINDOW_CHILD;
+      attributes.x = widget->allocation.x;
+      attributes.y = widget->allocation.y;
+      attributes.width = widget->allocation.width;
+      attributes.height = widget->allocation.height;
+      attributes.wclass = GDK_INPUT_OUTPUT;
+      attributes.visual = gtk_widget_get_visual (widget);
+      attributes.colormap = gtk_widget_get_colormap (widget);
+      attributes.event_mask = gtk_widget_get_events (widget);
+      attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK;
+      
+      attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
+      
+      widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, 
+				       attributes_mask);
+      gdk_window_set_user_data (widget->window, widget);
+      
+      widget->style = gtk_style_attach (widget->style, widget->window);
+      gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+    }
 }
 
 static void
@@ -414,13 +395,17 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
   fixed = GTK_FIXED (widget);
 
   widget->allocation = *allocation;
-  if (GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (widget->window,
-			    allocation->x, 
-			    allocation->y,
-			    allocation->width, 
-			    allocation->height);
 
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    {
+      if (GTK_WIDGET_REALIZED (widget))
+	gdk_window_move_resize (widget->window,
+				allocation->x, 
+				allocation->y,
+				allocation->width, 
+				allocation->height);
+    }
+      
   border_width = GTK_CONTAINER (fixed)->border_width;
   
   children = fixed->children;
@@ -434,6 +419,13 @@ gtk_fixed_size_allocate (GtkWidget     *widget,
 	  gtk_widget_get_child_requisition (child->widget, &child_requisition);
 	  child_allocation.x = child->x + border_width;
 	  child_allocation.y = child->y + border_width;
+
+	  if (GTK_WIDGET_NO_WINDOW (widget))
+	    {
+	      child_allocation.x += widget->allocation.x;
+	      child_allocation.y += widget->allocation.y;
+	    }
+	  
 	  child_allocation.width = child_requisition.width;
 	  child_allocation.height = child_requisition.height;
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
@@ -512,4 +504,48 @@ gtk_fixed_forall (GtkContainer *container,
 
       (* callback) (child->widget, callback_data);
     }
+}
+
+/**
+ * gtk_fixed_set_has_window:
+ * @fixed: a #GtkFixed
+ * @has_window: %TRUE if a separate window should be created
+ * 
+ * Sets whether a #GtkFixed widget is created with a separate
+ * #GdkWindow for widget->window or not. (By default, it will be
+ * created with no separate #GdkWindow). This function must be called
+ * while the #GtkFixed is not realized, for instance, immediately after the
+ * window is created.
+ **/
+void
+gtk_fixed_set_has_window (GtkFixed *fixed,
+			  gboolean  has_window)
+{
+  g_return_if_fail (GTK_IS_FIXED (fixed));
+  g_return_if_fail (!GTK_WIDGET_REALIZED (fixed));
+
+  if (!has_window != GTK_WIDGET_NO_WINDOW (fixed))
+    {
+      if (has_window)
+	GTK_WIDGET_UNSET_FLAGS (fixed, GTK_NO_WINDOW);
+      else
+	GTK_WIDGET_SET_FLAGS (fixed, GTK_NO_WINDOW);
+    }
+}
+
+/**
+ * gtk_fixed_get_has_window:
+ * @fixed: a #GtkWidget
+ * 
+ * Gets whether the #GtkFixed has it's own #GdkWindow.
+ * See gdk_fixed_set_has_window().
+ * 
+ * Return value: %TRUE if @fixed has its own window.
+ **/
+gboolean
+gtk_fixed_get_has_window (GtkFixed *fixed)
+{
+  g_return_val_if_fail (GTK_IS_FIXED (fixed), FALSE);
+
+  return !GTK_WIDGET_NO_WINDOW (fixed);
 }

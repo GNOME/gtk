@@ -40,7 +40,7 @@ GtkContainer
 
 <!-- ##### MACRO gtk_container_border_width ##### -->
 <para>
-
+Does the same as gtk_container_get_border_width().
 </para>
 
 
@@ -124,7 +124,7 @@ GtkContainer
 
 <!-- ##### MACRO gtk_container_children ##### -->
 <para>
-
+Does the same as gtk_container_get_children().
 </para>
 
 @Returns: 

@@ -21,7 +21,11 @@ For example, each #GtkButton has a #GdkWindow associated with it.
 
 <!-- ##### STRUCT GdkWindow ##### -->
 <para>
-
+An opaque structure representing an onscreen drawable.
+Pointers to structures of type #GdkPixmap, #GdkBitmap,
+and #GdkWindow, can often be used interchangeably.
+The type #GdkDrawable refers generically to any of
+these types.
 </para>
 
 @user_data: used to store the #GtkWidget associated with this window
@@ -84,7 +88,7 @@ simply passes them to the window manager; in contrast,
 gtk_window_set_geometry_hints() performs some interpretation. For example,
 #GtkWindow will apply the hints to the geometry widget instead of the toplevel
 window, if you set a geometry widget. Also, the
-min_width/min_height/max_width/max_height fields may be set to -1, and
+@min_width/@min_height/@max_width/@max_height fields may be set to -1, and
 #GtkWindow will substitute the size request of the window or geometry widget. If
 the minimum size hint is not provided, #GtkWindow will use its requisition as
 the minimum size.  If the minimum size is provided and a geometry widget is set,
@@ -97,7 +101,7 @@ The canonical use-case for gtk_window_set_geometry_hints() is to get a terminal
 widget to resize properly. Here, the terminal text area should be the geometry
 widget; #GtkWindow will then automatically set the base size to the size of
 other widgets in the terminal window, such as the menubar and scrollbar.  Then,
-the width_inc and height_inc fields should be set to the size of one character
+the @width_inc and @height_inc fields should be set to the size of one character
 in the terminal. Finally, the base size should be set to the size of one
 character. The net effect is that the minimum size of the terminal 
 will have a 1x1 character terminal area, and only terminal sizes on 
@@ -140,8 +144,8 @@ ratio.
 @min_height: 
 @max_width: maximum width of window (or -1 to use requisition, with #GtkWindow only)
 @max_height: maximum height of window (or -1 to use requisition, with #GtkWindow only)
-@base_width: allowed window widths are base_width + width_inc * N where N is any integer (-1 allowed with #GtkWindow)
-@base_height: allowed window widths are base_height + height_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@base_width: allowed window widths are @base_width + @width_inc * N where N is any integer (-1 allowed with #GtkWindow)
+@base_height: allowed window widths are @base_height + @height_inc * N where N is any integer (-1 allowed with #GtkWindow)
 @width_inc: width resize increment
 @height_inc: height resize increment
 @min_aspect: minimum width/height ratio
@@ -150,43 +154,50 @@ ratio.
 
 <!-- ##### ENUM GdkGravity ##### -->
 <para>
-
+Defines the reference point of a window and the meaning of coordinates
+passed to gtk_window_move(). See gtk_window_move() and the "implementation 
+notes" section of the 
+<ulink url="http://www.freedesktop.org/standards/wm-spec.html">extended 
+window manager hints</ulink> specification for more details.
 </para>
 
-@GDK_GRAVITY_NORTH_WEST: 
-@GDK_GRAVITY_NORTH: 
-@GDK_GRAVITY_NORTH_EAST: 
-@GDK_GRAVITY_WEST: 
-@GDK_GRAVITY_CENTER: 
-@GDK_GRAVITY_EAST: 
-@GDK_GRAVITY_SOUTH_WEST: 
-@GDK_GRAVITY_SOUTH: 
-@GDK_GRAVITY_SOUTH_EAST: 
-@GDK_GRAVITY_STATIC: 
+@GDK_GRAVITY_NORTH_WEST: the reference point is at the top left corner.
+@GDK_GRAVITY_NORTH: the reference point is in the middle of the top edge.
+@GDK_GRAVITY_NORTH_EAST: the reference point is at the top right corner.
+@GDK_GRAVITY_WEST: the reference point is at the middle of the left edge.
+@GDK_GRAVITY_CENTER: the reference point is at the center of the window.
+@GDK_GRAVITY_EAST: the reference point is at the middle of the right edge.
+@GDK_GRAVITY_SOUTH_WEST: the reference point is at the lower left corner.
+@GDK_GRAVITY_SOUTH: the reference point is at the middle of the lower edge.
+@GDK_GRAVITY_SOUTH_EAST: the reference point is at the lower right corner.
+@GDK_GRAVITY_STATIC: the reference point is at the top left corner of the 
+   window itself, ignoring window manager decorations.
 
 <!-- ##### ENUM GdkWindowEdge ##### -->
 <para>
-
+Determines a window edge or corner. 
 </para>
 
-@GDK_WINDOW_EDGE_NORTH_WEST: 
-@GDK_WINDOW_EDGE_NORTH: 
-@GDK_WINDOW_EDGE_NORTH_EAST: 
-@GDK_WINDOW_EDGE_WEST: 
-@GDK_WINDOW_EDGE_EAST: 
-@GDK_WINDOW_EDGE_SOUTH_WEST: 
-@GDK_WINDOW_EDGE_SOUTH: 
-@GDK_WINDOW_EDGE_SOUTH_EAST: 
+@GDK_WINDOW_EDGE_NORTH_WEST: the top left corner.
+@GDK_WINDOW_EDGE_NORTH: the top edge.
+@GDK_WINDOW_EDGE_NORTH_EAST: the top right corner.
+@GDK_WINDOW_EDGE_WEST: the left edge.
+@GDK_WINDOW_EDGE_EAST: the right edge.
+@GDK_WINDOW_EDGE_SOUTH_WEST: the lower left corner.
+@GDK_WINDOW_EDGE_SOUTH: the lower edge.
+@GDK_WINDOW_EDGE_SOUTH_EAST: the lower right corner.
 
 <!-- ##### ENUM GdkWindowTypeHint ##### -->
 <para>
-
+These are hints for the window manager that indicate what type of function 
+the window has. The window manager can use this when determining decoration 
+and behaviour of the window. The hint must be set before mapping the window.
 </para>
 
-@GDK_WINDOW_TYPE_HINT_NORMAL: 
-@GDK_WINDOW_TYPE_HINT_DIALOG: 
-@GDK_WINDOW_TYPE_HINT_MENU: 
-@GDK_WINDOW_TYPE_HINT_TOOLBAR: 
+@GDK_WINDOW_TYPE_HINT_NORMAL: Normal toplevel window.
+@GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
+@GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu.
+@GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
 
 <!-- ##### STRUCT GdkWindowAttr ##### -->
 <para>
@@ -214,7 +225,7 @@ Used to indicate which fields in the #GdkWindowAttr struct should be
 honored. For example, if you filled in the "cursor" and "x" fields of
 #GdkWindowAttr, pass "@GDK_WA_X | @GDK_WA_CURSOR" to gdk_window_new().  Fields
 in #GdkWindowAttr not covered by a bit in this enum are required; for example,
-the width/height, wclass, and window_type fields are required, they have no
+the @width/@height, @wclass, and @window_type fields are required, they have no
 corresponding flag in #GdkWindowAttributesType.
 </para>
 
@@ -252,8 +263,6 @@ Deprecated equivalent of g_object_ref()
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### MACRO gdk_window_unref ##### -->
@@ -261,8 +270,6 @@ Deprecated equivalent of g_object_ref()
 Deprecated equivalent of g_object_unref()
 </para>
 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### FUNCTION gdk_window_get_window_type ##### -->
@@ -528,10 +535,10 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 
 <!-- ##### FUNCTION gdk_window_register_dnd ##### -->
 <para>
-
+Registers a window as a potential drop destination.
 </para>
 
-@window: 
+@window: a #GdkWindow.
 
 
 <!-- ##### FUNCTION gdk_window_begin_resize_drag ##### -->
@@ -718,27 +725,30 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 
 <!-- ##### USER_FUNCTION GdkFilterFunc ##### -->
 <para>
-
+Specifies the type of function used to filter native events before they are
+converted to GDK events. A filter may translate the native event to a GDK
+event or handle it without translation.
 </para>
 
-@xevent: 
-@event: 
-@data: 
-@Returns: 
+@xevent: the native event to filter.
+@event: the GDK event to which the X event will be translated.
+@data: user data set when the filter was installed.
+@Returns: a #GdkFilterReturn value.
 
 
 <!-- ##### ENUM GdkFilterReturn ##### -->
 <para>
-
+Specifies the result of applying a #GdkFilterFunc to a native event.
 </para>
 
-@GDK_FILTER_CONTINUE: 
-@GDK_FILTER_TRANSLATE: 
-@GDK_FILTER_REMOVE: 
+@GDK_FILTER_CONTINUE: event not handled, continue processing.
+@GDK_FILTER_TRANSLATE: translated event stored.
+@GDK_FILTER_REMOVE: event handled, terminate processing.
 
 <!-- ##### TYPEDEF GdkXEvent ##### -->
 <para>
-
+Used to represent native events (<type>XEvent</type>s for the X11 
+backend, <type>MSG</type>s for Win32).
 </para>
 
 
@@ -748,9 +758,9 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 </para>
 
 @window: 
-@shape_mask: 
-@offset_x: 
-@offset_y: 
+@mask: 
+@x: 
+@y: 
 
 
 <!-- ##### FUNCTION gdk_window_shape_combine_region ##### -->
@@ -854,9 +864,6 @@ Deprecated equivalent to gdk_draw_drawable(), see that function for docs
 Deprecated equivalent to gdk_drawable_set_colormap()
 </para>
 
-<!-- # Unused Parameters # -->
-@window: 
-@colormap: 
 
 
 <!-- ##### FUNCTION gdk_window_get_user_data ##### -->
@@ -888,7 +895,7 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @geometry: 
-@flags: 
+@geom_mask: 
 
 
 <!-- ##### FUNCTION gdk_window_set_icon_list ##### -->
@@ -898,8 +905,6 @@ Deprecated equivalent to gdk_drawable_set_colormap()
 
 @window: 
 @pixbufs: 
-<!-- # Unused Parameters # -->
-@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_set_modal_hint ##### -->
@@ -962,8 +967,6 @@ Deprecated equivalent of gdk_drawable_get_visual().
 </para>
 
 @Returns: 
-<!-- # Unused Parameters # -->
-@window: 
 
 
 <!-- ##### MACRO gdk_window_get_colormap ##### -->
@@ -1117,7 +1120,7 @@ Deprecated equivalent of gdk_drawable_get_type().
 </para>
 
 @window: 
-@leader: 
+@parent: 
 
 
 <!-- ##### FUNCTION gdk_window_set_role ##### -->
@@ -1154,21 +1157,23 @@ Deprecated equivalent of gdk_drawable_get_type().
 
 @window: The window to get the decorations from
 @decorations: The window decorations will be written here
-@Returns: TRUE if the window has decorations set, FALSE otherwise.
+@Returns: %TRUE if the window has decorations set, %FALSE otherwise.
 
 
 <!-- ##### ENUM GdkWMDecoration ##### -->
 <para>
-
+These are hints originally defined by the Motif toolkit.
+The window manager can use them when determining how to decorate
+the window. The hint must be set before mapping the window.
 </para>
 
-@GDK_DECOR_ALL: 
-@GDK_DECOR_BORDER: 
-@GDK_DECOR_RESIZEH: 
-@GDK_DECOR_TITLE: 
-@GDK_DECOR_MENU: 
-@GDK_DECOR_MINIMIZE: 
-@GDK_DECOR_MAXIMIZE: 
+@GDK_DECOR_ALL: all decorations should be applied.
+@GDK_DECOR_BORDER: a frame should be drawn around the window.
+@GDK_DECOR_RESIZEH: the frame should have resize handles.
+@GDK_DECOR_TITLE: a titlebar should be placed above the window.
+@GDK_DECOR_MENU: a button for opening a menu should be included.
+@GDK_DECOR_MINIMIZE: a minimize button should be included.
+@GDK_DECOR_MAXIMIZE: a maximize button should be included.
 
 <!-- ##### FUNCTION gdk_window_set_functions ##### -->
 <para>
@@ -1181,15 +1186,18 @@ Deprecated equivalent of gdk_drawable_get_type().
 
 <!-- ##### ENUM GdkWMFunction ##### -->
 <para>
-
+These are hints originally defined by the Motif toolkit.
+The window manager can use them when determining the functions 
+to offer for the window. 
+The hint must be set before mapping the window.
 </para>
 
-@GDK_FUNC_ALL: 
-@GDK_FUNC_RESIZE: 
-@GDK_FUNC_MOVE: 
-@GDK_FUNC_MINIMIZE: 
-@GDK_FUNC_MAXIMIZE: 
-@GDK_FUNC_CLOSE: 
+@GDK_FUNC_ALL: all functions should be offered.
+@GDK_FUNC_RESIZE: the window should be resizable.
+@GDK_FUNC_MOVE: the window should be movable.
+@GDK_FUNC_MINIMIZE: the window should be minimizable.
+@GDK_FUNC_MAXIMIZE: the window should be maximizable.
+@GDK_FUNC_CLOSE: the window should be closable.
 
 <!-- ##### FUNCTION gdk_window_get_toplevels ##### -->
 <caution><para> gdk_window_get_toplevels() is not multihead safe use 
@@ -1220,11 +1228,22 @@ gdk_window_get_toplevels_for_screen() instead </para></caution>
 
 <!-- ##### STRUCT GdkPointerHooks ##### -->
 <para>
-
+A table of pointers to functions for getting quantities related to 
+the current pointer position. GDK has one global table of this type,
+which can be set using gdk_set_pointer_hooks().
+</para>
+<para>
+This is only useful for such low-level tools as an event recorder. 
+Applications should never have any reason to use this facility
 </para>
 
-@get_pointer: 
-@window_at_pointer: 
+@get_pointer: Obtains the current pointer position and modifier state.
+  The position is given in coordinates relative to the window containing 
+  the pointer, which is returned in @window.
+@window_at_pointer: Obtains the window underneath the mouse pointer, 
+  returning the location of that window in @win_x, @win_y. Returns %NULL 
+  if the window under the mouse pointer is not known to GDK (for example, 
+  belongs to another application).
 
 <!-- ##### FUNCTION gdk_set_pointer_hooks ##### -->
 <para>

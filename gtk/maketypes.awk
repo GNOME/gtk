@@ -32,7 +32,11 @@ BEGIN {
       printf ("#    define GTKTYPEBUILTINS_VAR extern __declspec(dllimport)\n");
       printf ("#  endif\n");
       printf ("#else\n");
-      printf ("#  define GTKTYPEBUILTINS_VAR extern\n");
+      printf ("#  ifdef GTK_COMPILATION\n");
+      printf ("#    define GTKTYPEBUILTINS_VAR\n");
+      printf ("#  else\n");
+      printf ("#    define GTKTYPEBUILTINS_VAR extern\n");
+      printf ("#  endif\n");
       printf ("#endif\n");
       printf ("\n");
     }
@@ -71,7 +75,7 @@ function generate (generate_what)
 {
   if (gen_macros)
     {
-      printf ("GTKTYPEBUILTINS_VAR GtkType %s;\n", type_macro);
+      printf ("GTKTYPEBUILTINS_VAR GType %s;\n", type_macro);
     }
   if (gen_entries)
     {
@@ -83,7 +87,7 @@ function generate (generate_what)
     }
   if (gen_vars)
     {
-      printf ("GtkType %s = 0;\n", type_macro);
+      printf ("GTKTYPEBUILTINS_VAR GType %s = 0;\n", type_macro);
     }
 }
 

@@ -25,8 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <string.h>
 
 /* #define OLE2_DND */
@@ -1007,7 +1005,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 	    }
 	  g_string_append (result, "\015\012");
 	}
-      gdk_sel_prop_store (_gdk_parent_root, text_uri_list_atom, 8,
+      _gdk_selection_property_store (_gdk_parent_root, text_uri_list_atom, 8,
 			  result->str, result->len + 1);
 
       DragFinish (hdrop);
@@ -1050,7 +1048,7 @@ _gdk_dnd_init (void)
 }      
 
 void
-gdk_win32_dnd_exit (void)
+_gdk_win32_dnd_exit (void)
 {
 #ifdef OLE2_DND
   OleUninitialize ();

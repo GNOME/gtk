@@ -18,8 +18,6 @@
  */
 
 #include	"gtksignal.h"
-#include	"gtkmarshal.c"
-
 
 /* the real parameter limit is of course given by GSignal, bu we need
  * an upper limit for the implementations. so this should be adjusted
@@ -43,7 +41,7 @@ gtk_signal_newv (const gchar         *name,
   
   g_return_val_if_fail (n_params < SIGNAL_MAX_PARAMS, 0);
   
-  closure = g_signal_type_cclosure_new (object_type, function_offset);
+  closure = function_offset ? g_signal_type_cclosure_new (object_type, function_offset) : 0;
   
   return g_signal_newv (name, object_type, signal_flags, closure, NULL, NULL, marshaller, return_val, n_params, params);
 }
@@ -106,7 +104,7 @@ gtk_signal_connect_object_while_alive (GtkObject    *object,
   
   g_signal_connect_closure_by_id (object,
 				  g_signal_lookup (signal, G_OBJECT_TYPE (object)), 0,
-				  g_cclosure_new_object_swap (func, alive_object),
+				  g_cclosure_new_object_swap (func, G_OBJECT (alive_object)),
 				  FALSE);
 }
 
@@ -254,7 +252,7 @@ gtk_arg_set_from_value (GtkArg  *arg,
     case G_TYPE_STRING:		if (copy_string)
       GTK_VALUE_STRING (*arg) = g_value_dup_string (value);
     else
-      GTK_VALUE_STRING (*arg) = g_value_get_string (value);
+      GTK_VALUE_STRING (*arg) = (char *) g_value_get_string (value);
     break;
     default:
       return FALSE;
@@ -286,7 +284,7 @@ gtk_argloc_set_from_value (GtkArg  *arg,
     case G_TYPE_STRING:		if (copy_string)
       *GTK_RETLOC_STRING (*arg) = g_value_dup_string (value);
     else
-      *GTK_RETLOC_STRING (*arg) = g_value_get_string (value);
+      *GTK_RETLOC_STRING (*arg) = (char *) g_value_get_string (value);
     break;
     default:
       return FALSE;

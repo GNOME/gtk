@@ -87,8 +87,8 @@ Create a new handle box.
 
 <!-- ##### FUNCTION gtk_handle_box_set_shadow_type ##### -->
 <para>
-Sets the type of shadow to be drawn around the border
-of the 
+Sets the type of shadow to be drawn around the border 
+of the handle box.
 </para>
 
 @handle_box: a #GtkHandleBox

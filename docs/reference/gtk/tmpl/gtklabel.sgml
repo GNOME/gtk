@@ -412,3 +412,13 @@ pointer, it isn't copied.
 
 </para>
 
+<!-- ##### ARG GtkLabel:cursor-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLabel:selection-bound ##### -->
+<para>
+
+</para>
+

@@ -9,7 +9,7 @@ WTKIT = ..\..\..\wtkit126
 # Nothing much configurable below
 
 TOP = ../../..
-!INCLUDE $(TOP)/build/win32/make.msc
+!INCLUDE $(TOP)/glib/build/win32/make.msc
 
 GTK_VER=1.3
 

@@ -83,9 +83,8 @@ static gboolean gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 						   GtkTreePath       *dest,
 						   GtkSelectionData  *selection_data);
 static gboolean gtk_tree_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
-						   GtkTreeModel      *src_model,
-						   GtkTreePath       *src_path,
-						   GtkTreePath       *dest_path);
+						   GtkTreePath       *dest_path,
+						   GtkSelectionData  *selection_data);
 
 /* Sortable Interfaces */
 
@@ -251,13 +250,17 @@ static void
 gtk_tree_store_init (GtkTreeStore *tree_store)
 {
   tree_store->root = g_node_new (NULL);
+  /* While the odds are against us getting 0...
+   */
   do
     {
       tree_store->stamp = g_random_int ();
     }
   while (tree_store->stamp == 0);
+
   tree_store->sort_list = NULL;
   tree_store->sort_column_id = -2;
+  tree_store->columns_dirty = FALSE;
 }
 
 /**
@@ -266,9 +269,9 @@ gtk_tree_store_init (GtkTreeStore *tree_store)
  * @Varargs: all #GType types for the columns, from first to last
  *
  * Creates a new tree store as with @n_columns columns each of the types passed
- * in.  As an example, gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF); will create a new GtkTreeStore with three columns, of type
- * int, string and GDkPixbuf respectively.
+ * in.  As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF);</literal> will create a new #GtkTreeStore with three columns, of type
+ * <type>int</type>, <type>string</type> and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkTreeStore
  **/
@@ -335,6 +338,40 @@ gtk_tree_store_newv (gint   n_columns,
     }
 
   return retval;
+}
+
+
+/**
+ * gtk_tree_store_set_column_types:
+ * @tree_store: A #GtkTreeStore
+ * @n_columns: Number of columns for the tree store
+ * @types: An array length n of @GTypes
+ * 
+ * This function is meant primarily for GObjects that inherit from GtkTreeStore,
+ * and should only be used when constructing a new @GtkTreeStore.  It will not
+ * function after a row has been added, or a method on the @GtkTreeModel
+ * interface is called.
+ **/
+void
+gtk_tree_store_set_column_types (GtkTreeStore *tree_store,
+				 gint          n_columns,
+				 GType        *types)
+{
+  gint i;
+
+  g_return_if_fail (GTK_IS_TREE_STORE (tree_store));
+  g_return_if_fail (tree_store->columns_dirty == 0);
+
+  gtk_tree_store_set_n_columns (tree_store, n_columns);
+   for (i = 0; i < n_columns; i++)
+    {
+      if (! _gtk_tree_data_list_check_type (types[i]))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_tree_store_set_column_types\n", G_STRLOC, g_type_name (types[i]));
+	  continue;
+	}
+      gtk_tree_store_set_column_type (tree_store, i, types[i]);
+    }
 }
 
 static void
@@ -439,20 +476,28 @@ gtk_tree_store_get_flags (GtkTreeModel *tree_model)
 static gint
 gtk_tree_store_get_n_columns (GtkTreeModel *tree_model)
 {
+  GtkTreeStore *tree_store = (GtkTreeStore *) tree_model;
+
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), 0);
 
-  return GTK_TREE_STORE (tree_model)->n_columns;
+  tree_store->columns_dirty = TRUE;
+
+  return tree_store->n_columns;
 }
 
 static GType
 gtk_tree_store_get_column_type (GtkTreeModel *tree_model,
 				gint          index)
 {
+  GtkTreeStore *tree_store = (GtkTreeStore *) tree_model;
+
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_model), G_TYPE_INVALID);
   g_return_val_if_fail (index < GTK_TREE_STORE (tree_model)->n_columns &&
 			index >= 0, G_TYPE_INVALID);
 
-  return GTK_TREE_STORE (tree_model)->column_headers[index];
+  tree_store->columns_dirty = TRUE;
+
+  return tree_store->column_headers[index];
 }
 
 static gboolean
@@ -466,7 +511,9 @@ gtk_tree_store_get_iter (GtkTreeModel *tree_model,
   gint depth, i;
 
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), FALSE);
-  
+
+  tree_store->columns_dirty = TRUE;
+
   indices = gtk_tree_path_get_indices (path);
   depth = gtk_tree_path_get_depth (path);
 
@@ -714,7 +761,7 @@ gtk_tree_store_iter_parent (GtkTreeModel *tree_model,
 
 
 /* Does not emit a signal */
-gboolean
+static gboolean
 gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
 			       GtkTreeIter  *iter,
 			       gint          column,
@@ -797,7 +844,8 @@ gtk_tree_store_real_set_value (GtkTreeStore *tree_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-
+  
+  retval = TRUE;
   gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);
@@ -847,7 +895,7 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
  * @iter: A valid #GtkTreeIter for the row being modified
  * @var_args: va_list of column/value pairs
  *
- * See @gtk_tree_store_set; this version takes a va_list for
+ * See gtk_tree_store_set(); this version takes a va_list for
  * use by language bindings.
  *
  **/
@@ -915,10 +963,10 @@ gtk_tree_store_set_valist (GtkTreeStore *tree_store,
  *
  * Sets the value of one or more cells in the row referenced by @iter.
  * The variable argument list should contain integer column numbers,
- * each column number followed by the value to be set. For example,
+ * each column number followed by the value to be set. 
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write gtk_tree_store_set (store, iter,
- * 0, "Foo", -1).
+ * %G_TYPE_STRING to "Foo", you would write <literal>gtk_tree_store_set (store, iter,
+ * 0, "Foo", -1)</literal>.
  **/
 void
 gtk_tree_store_set (GtkTreeStore *tree_store,
@@ -941,7 +989,7 @@ gtk_tree_store_set (GtkTreeStore *tree_store,
  * @iter: A valid #GtkTreeIter
  * 
  * Removes @iter from @tree_store.  After being removed, @iter is set to the
- * next valid row at that level, or invalidated if it previeously pointed to the
+ * next valid row at that level, or invalidated if it previously pointed to the
  * last one.
  **/
 void
@@ -1004,13 +1052,13 @@ gtk_tree_store_remove (GtkTreeStore *tree_store,
  * @parent: A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
  *
- * Creates a new row at @position.  If parent is non-NULL, then the row will be
+ * Creates a new row at @position.  If parent is non-%NULL, then the row will be
  * made a child of @parent.  Otherwise, the row will be created at the toplevel.
  * If @position is larger than the number of rows at that level, then the new
  * row will be inserted to the end of the list.  @iter will be changed to point
  * to this new row.  The row will be empty before this function is called.  To
- * fill in values, you need to call @gtk_list_store_set or
- * @gtk_list_store_set_value.
+ * fill in values, you need to call gtk_list_store_set() or
+ * gtk_list_store_set_value().
  *
  **/
 void
@@ -1030,6 +1078,8 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
     parent_node = parent->user_data;
   else
     parent_node = tree_store->root;
+
+  tree_store->columns_dirty = TRUE;
 
   iter->stamp = tree_store->stamp;
   iter->user_data = g_node_new (NULL);
@@ -1058,7 +1108,7 @@ gtk_tree_store_insert (GtkTreeStore *tree_store,
  *
  * @iter will be changed to point to this new row.  The row will be empty after
  * this function is called.  To fill in values, you need to call
- * @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * gtk_tree_store_set() or gtk_tree_store_set_value().
  *
  **/
 void
@@ -1077,6 +1127,8 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
     g_return_if_fail (VALID_ITER (parent, tree_store));
   if (sibling != NULL)
     g_return_if_fail (VALID_ITER (sibling, tree_store));
+
+  tree_store->columns_dirty = TRUE;
 
   new_node = g_node_new (NULL);
 
@@ -1122,7 +1174,7 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
  *
  * @iter will be changed to point to this new row.  The row will be empty after
  * this function is called.  To fill in values, you need to call
- * @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * gtk_tree_store_set() or gtk_tree_store_set_value().
  *
  **/
 void
@@ -1141,6 +1193,8 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
     g_return_if_fail (VALID_ITER (parent, tree_store));
   if (sibling != NULL)
     g_return_if_fail (VALID_ITER (sibling, tree_store));
+
+  tree_store->columns_dirty = TRUE;
 
   new_node = g_node_new (NULL);
 
@@ -1179,11 +1233,11 @@ gtk_tree_store_insert_after (GtkTreeStore *tree_store,
  * @iter: An unset #GtkTreeIter to set to the prepended row
  * @parent: A valid #GtkTreeIter, or %NULL
  * 
- * Prepends a new row to @tree_store.  If @parent is non-NULL, then it will prepend
- * the new row before the last child of @parent, otherwise it will prepend a row
+ * Prepends a new row to @tree_store.  If @parent is non-%NULL, then it will prepend
+ * the new row before the first child of @parent, otherwise it will prepend a row
  * to the top level.  @iter will be changed to point to this new row.  The row
  * will be empty after this function is called.  To fill in values, you need to
- * call @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * call gtk_tree_store_set() or gtk_tree_store_set_value().
  **/
 void
 gtk_tree_store_prepend (GtkTreeStore *tree_store,
@@ -1196,6 +1250,8 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
   g_return_if_fail (iter != NULL);
   if (parent != NULL)
     g_return_if_fail (VALID_ITER (parent, tree_store));
+
+  tree_store->columns_dirty = TRUE;
 
   if (parent == NULL)
     parent_node = tree_store->root;
@@ -1235,11 +1291,11 @@ gtk_tree_store_prepend (GtkTreeStore *tree_store,
  * @iter: An unset #GtkTreeIter to set to the appended row
  * @parent: A valid #GtkTreeIter, or %NULL
  * 
- * Appends a new row to @tree_store.  If @parent is non-NULL, then it will append the
+ * Appends a new row to @tree_store.  If @parent is non-%NULL, then it will append the
  * new row after the last child of @parent, otherwise it will append a row to
  * the top level.  @iter will be changed to point to this new row.  The row will
  * be empty after this function is called.  To fill in values, you need to call
- * @gtk_tree_store_set or @gtk_tree_store_set_value.
+ * gtk_tree_store_set() or gtk_tree_store_set_value().
  **/
 void
 gtk_tree_store_append (GtkTreeStore *tree_store,
@@ -1258,6 +1314,8 @@ gtk_tree_store_append (GtkTreeStore *tree_store,
     parent_node = tree_store->root;
   else
     parent_node = parent->user_data;
+
+  tree_store->columns_dirty = TRUE;
 
   if (parent_node->children == NULL)
     {
@@ -1328,9 +1386,8 @@ gtk_tree_store_iter_depth (GtkTreeStore *tree_store,
   g_return_val_if_fail (GTK_IS_TREE_STORE (tree_store), 0);
   g_return_val_if_fail (VALID_ITER (iter, tree_store), 0);
 
-  return g_node_depth (G_NODE (iter->user_data)) - 1;
+  return g_node_depth (G_NODE (iter->user_data)) - 2;
 }
-
 
 /**
  * gtk_tree_store_clear:
@@ -1391,9 +1448,9 @@ gtk_tree_store_drag_data_get (GtkTreeDragSource *drag_source,
    * default handler.
    */
 
-  if (gtk_selection_data_set_tree_row (selection_data,
-                                       GTK_TREE_MODEL (drag_source),
-                                       path))
+  if (gtk_tree_set_row_drag_data (selection_data,
+				  GTK_TREE_MODEL (drag_source),
+				  path))
     {
       return TRUE;
     }
@@ -1493,9 +1550,9 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 
   validate_tree (tree_store);
 
-  if (gtk_selection_data_get_tree_row (selection_data,
-                                       &src_model,
-                                       &src_path) &&
+  if (gtk_tree_get_row_drag_data (selection_data,
+				  &src_model,
+				  &src_path) &&
       src_model == tree_model)
     {
       /* Copy the given row to a new position */
@@ -1588,45 +1645,55 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 }
 
 static gboolean
-gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
-                                  GtkTreeModel    *src_model,
-                                  GtkTreePath     *src_path,
-                                  GtkTreePath     *dest_path)
+gtk_tree_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
+                                  GtkTreePath      *dest_path,
+				  GtkSelectionData *selection_data)
 {
+  GtkTreeModel *src_model = NULL;
+  GtkTreePath *src_path = NULL;
+  GtkTreePath *tmp = NULL;
+  gboolean retval = FALSE;
+  
+  if (!gtk_tree_get_row_drag_data (selection_data,
+				   &src_model,
+				   &src_path))
+    goto out;
+    
   /* can only drag to ourselves */
   if (src_model != GTK_TREE_MODEL (drag_dest))
-    return FALSE;
+    goto out;
 
   /* Can't drop into ourself. */
   if (gtk_tree_path_is_ancestor (src_path,
                                  dest_path))
-    return FALSE;
+    goto out;
 
   /* Can't drop if dest_path's parent doesn't exist */
   {
     GtkTreeIter iter;
-    GtkTreePath *tmp = gtk_tree_path_copy (dest_path);
 
-    /* if we can't go up, we know the parent exists, the root
-     * always exists.
-     */
-    if (gtk_tree_path_up (tmp))
+    if (gtk_tree_path_get_depth (dest_path) > 1)
       {
-        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_dest),
-                                      &iter, tmp))
-          {
-            if (tmp)
-              gtk_tree_path_free (tmp);
-            return FALSE;
-          }
+	tmp = gtk_tree_path_copy (dest_path);
+	gtk_tree_path_up (tmp);
+	
+	if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_dest),
+				      &iter, tmp))
+	  goto out;
       }
-
-    if (tmp)
-      gtk_tree_path_free (tmp);
   }
-
+  
   /* Can otherwise drop anywhere. */
-  return TRUE;
+  retval = TRUE;
+
+ out:
+
+  if (src_path)
+    gtk_tree_path_free (src_path);
+  if (tmp)
+    gtk_tree_path_free (tmp);
+
+  return retval;
 }
 
 /* Sorting */

@@ -92,6 +92,9 @@ struct _GtkTextView
   guint  need_im_reset : 1;	/* If we have reset the IM since the last character entered */
   /* just selected a word or line via double/triple click */
   guint just_selected_element : 1;
+
+  /* disable scrolling to cursor on focus */
+  guint disable_scroll_on_focus : 1;
   
   /* debug flag - means that we've validated onscreen since the
    * last "invalidate" signal from the layout
@@ -181,6 +184,11 @@ struct _GtkTextViewClass
   void (* paste_clipboard) (GtkTextView *text_view);
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
+
+  GtkFunction pad1;
+  GtkFunction pad2;
+  GtkFunction pad3;
+  GtkFunction pad4;
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;

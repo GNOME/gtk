@@ -39,7 +39,7 @@ typedef enum
 {
   GTK_CELL_RENDERER_MODE_INERT,
   GTK_CELL_RENDERER_MODE_ACTIVATABLE,
-  GTK_CELL_RENDERER_MODE_EDITABLE,
+  GTK_CELL_RENDERER_MODE_EDITABLE
 } GtkCellRendererMode;
 
 #define GTK_TYPE_CELL_RENDERER		  (gtk_cell_renderer_get_type ())
@@ -93,14 +93,14 @@ struct _GtkCellRendererClass
   gboolean         (* activate)      (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      gchar                *path,
+				      const gchar          *path,
 				      GdkRectangle         *background_area,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags);
   GtkCellEditable *(* start_editing) (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
-				      gchar                *path,
+				      const gchar          *path,
 				      GdkRectangle         *background_area,
 				      GdkRectangle         *cell_area,
 				      GtkCellRendererState  flags);
@@ -125,14 +125,14 @@ void             gtk_cell_renderer_render         (GtkCellRenderer      *cell,
 gboolean         gtk_cell_renderer_activate       (GtkCellRenderer      *cell,
 						   GdkEvent             *event,
 						   GtkWidget            *widget,
-						   gchar                *path,
+						   const gchar          *path,
 						   GdkRectangle         *background_area,
 						   GdkRectangle         *cell_area,
 						   GtkCellRendererState  flags);
 GtkCellEditable *gtk_cell_renderer_start_editing  (GtkCellRenderer      *cell,
 						   GdkEvent             *event,
 						   GtkWidget            *widget,
-						   gchar                *path,
+						   const gchar          *path,
 						   GdkRectangle         *background_area,
 						   GdkRectangle         *cell_area,
 						   GtkCellRendererState  flags);

@@ -10,6 +10,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_align_left.png 		\
 	stock_align_right.png 		\
 	stock_bottom.png 		\
+	stock_broken_image.png		\
 	stock_button_apply.png		\
 	stock_button_cancel.png		\
 	stock_button_close.png		\
@@ -114,6 +115,7 @@ VARIABLES = @STRIP_BEGIN@ 									\
                 stock_menu_print_preview	$(srcdir)/stock_menu_print_preview.png    	\
                 stock_menu_sort_ascending	$(srcdir)/stock_menu_sort_ascending.png        \
                 stock_menu_sort_descending	$(srcdir)/stock_menu_sort_descending.png        \
+		stock_missing_image		$(srcdir)/stock_broken_image.png                \
 		stock_new			$(srcdir)/stock_new.png				\
 		stock_open			$(srcdir)/stock_open.png  			\
                 stock_paste			$(srcdir)/stock_paste.png             		\

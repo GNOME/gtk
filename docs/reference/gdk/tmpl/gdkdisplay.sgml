@@ -1,0 +1,150 @@
+<!-- ##### SECTION Title ##### -->
+GdkDisplay
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GdkDisplay ##### -->
+<para>
+
+</para>
+
+@parent_instance: 
+
+<!-- ##### FUNCTION gdk_display_new ##### -->
+<para>
+
+</para>
+
+@argc: 
+@argv: 
+@display_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_pointer_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_display_pointer_is_grabbed ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_keyboard_ungrab ##### -->
+<para>
+
+</para>
+
+@display: 
+@time: 
+
+
+<!-- ##### FUNCTION gdk_display_get_screen ##### -->
+<para>
+
+</para>
+
+@display: 
+@screen_num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_screen ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_close ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_beep ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_sync ##### -->
+<para>
+
+</para>
+
+@display: 
+
+
+<!-- ##### FUNCTION gdk_display_get_n_screens ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_name ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_get_display_arg_name ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_get_use_xshm ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_display_set_use_xshm ##### -->
+<para>
+
+</para>
+
+@display: 
+@use_xshm: 
+
+

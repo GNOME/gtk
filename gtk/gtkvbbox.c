@@ -92,7 +92,8 @@ gtk_vbutton_box_new (void)
 
 /* set default value for spacing */
 
-void gtk_vbutton_box_set_spacing_default (gint spacing)
+void
+gtk_vbutton_box_set_spacing_default (gint spacing)
 {
   default_spacing = spacing;
 }
@@ -100,7 +101,8 @@ void gtk_vbutton_box_set_spacing_default (gint spacing)
 
 /* set default value for layout style */
 
-void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
+void
+gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 {
   g_return_if_fail (layout >= GTK_BUTTONBOX_DEFAULT_STYLE &&
 		    layout <= GTK_BUTTONBOX_END);
@@ -110,7 +112,8 @@ void gtk_vbutton_box_set_layout_default (GtkButtonBoxStyle layout)
 
 /* get default value for spacing */
 
-gint gtk_vbutton_box_get_spacing_default (void)
+gint
+gtk_vbutton_box_get_spacing_default (void)
 {
   return default_spacing;
 }
@@ -119,7 +122,8 @@ gint gtk_vbutton_box_get_spacing_default (void)
 
 /* get default value for layout style */
 
-GtkButtonBoxStyle gtk_vbutton_box_get_layout_default (void)
+GtkButtonBoxStyle
+gtk_vbutton_box_get_layout_default (void)
 {
   return default_layout_style;
 }

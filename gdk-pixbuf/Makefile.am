@@ -1,6 +1,39 @@
 
 SUBDIRS = pixops
 
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
+
+if OS_WIN32
+gdk_pixbuf_def = gdk_pixbuf.def
+gdk_pixbuf_symbols = -export-symbols $(gdk_pixbuf_def)
+
+install-libtool-import-lib:
+	$(INSTALL) .libs/libgdk_pixbuf-1.3.dll.a $(DESTDIR)$(libdir)
+uninstall-libtool-import-lib:
+	-rm $(DESTDIR)$(libdir)/libdk_pixbuf-1.3.dll.a
+else
+install-libtool-import-lib:
+uninstall-libtool-import-lib:
+endif
+
+if MS_LIB_AVAILABLE
+noinst_DATA = gdk_pixbuf-1.3.lib
+
+gdk_pixbuf-1.3.lib: libgdk_pixbuf-1.3.la gdk_pixbuf.def
+	lib -name:libgdk_pixbuf-1.3-@LT_CURRENT_MINUS_AGE@.dll -def:gdk_pixbuf.def -out:$@
+
+install-ms-lib:
+	$(INSTALL) gdk_pixbuf-1.3.lib $(DESTDIR)$(libdir)
+
+uninstall-ms-lib:
+	-rm $(DESTDIR)$(libdir)/gdk_pixbuf-1.3.lib
+else
+install-ms-lib:
+uninstall-ms-lib:
+endif
+
 lib_LTLIBRARIES = 		\
 	libgdk_pixbuf-1.3.la
 
@@ -12,7 +45,7 @@ module_libs = libgdk_pixbuf-1.3.la $(GDK_PIXBUF_DEP_LIBS)
 # The PNG plugin.
 #
 libpixbufloader_png_la_SOURCES = io-png.c
-libpixbufloader_png_la_LDFLAGS = -avoid-version -module
+libpixbufloader_png_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_png_la_LIBADD = $(LIBPNG) $(module_libs)
 libpixbufloader_static_png_la_SOURCES = io-png.c
 
@@ -21,7 +54,7 @@ libpixbufloader_static_png_la_SOURCES = io-png.c
 #
 libpixbufloader_static_jpeg_la_SOURCES = io-jpeg.c
 libpixbufloader_jpeg_la_SOURCES = io-jpeg.c
-libpixbufloader_jpeg_la_LDFLAGS = -avoid-version -module
+libpixbufloader_jpeg_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG) $(module_libs)
 
 #
@@ -29,7 +62,7 @@ libpixbufloader_jpeg_la_LIBADD = $(LIBJPEG) $(module_libs)
 #
 libpixbufloader_static_xpm_la_SOURCES = io-xpm.c
 libpixbufloader_xpm_la_SOURCES = io-xpm.c
-libpixbufloader_xpm_la_LDFLAGS = -avoid-version -module
+libpixbufloader_xpm_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_xpm_la_LIBADD = $(module_libs)
 
 #
@@ -37,7 +70,7 @@ libpixbufloader_xpm_la_LIBADD = $(module_libs)
 #
 libpixbufloader_static_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
 libpixbufloader_gif_la_SOURCES = io-gif.c io-gif-animation.c io-gif-animation.h
-libpixbufloader_gif_la_LDFLAGS = -avoid-version -module
+libpixbufloader_gif_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_gif_la_LIBADD = $(module_libs)
 
 #
@@ -45,7 +78,7 @@ libpixbufloader_gif_la_LIBADD = $(module_libs)
 #
 libpixbufloader_static_ico_la_SOURCES = io-ico.c
 libpixbufloader_ico_la_SOURCES = io-ico.c
-libpixbufloader_ico_la_LDFLAGS = -avoid-version -module
+libpixbufloader_ico_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_ico_la_LIBADD = $(module_libs)
 
 #
@@ -53,7 +86,7 @@ libpixbufloader_ico_la_LIBADD = $(module_libs)
 #
 libpixbufloader_static_ras_la_SOURCES = io-ras.c
 libpixbufloader_ras_la_SOURCES = io-ras.c
-libpixbufloader_ras_la_LDFLAGS = -avoid-version -module
+libpixbufloader_ras_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_ras_la_LIBADD = $(module_libs)
 
 #
@@ -61,7 +94,7 @@ libpixbufloader_ras_la_LIBADD = $(module_libs)
 #
 libpixbufloader_static_tiff_la_SOURCES = io-tiff.c
 libpixbufloader_tiff_la_SOURCES = io-tiff.c
-libpixbufloader_tiff_la_LDFLAGS = -avoid-version -module
+libpixbufloader_tiff_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_tiff_la_LIBADD = $(LIBTIFF) $(module_libs)
 
 #
@@ -69,7 +102,7 @@ libpixbufloader_tiff_la_LIBADD = $(LIBTIFF) $(module_libs)
 #
 libpixbufloader_static_pnm_la_SOURCES = io-pnm.c
 libpixbufloader_pnm_la_SOURCES = io-pnm.c
-libpixbufloader_pnm_la_LDFLAGS = -avoid-version -module
+libpixbufloader_pnm_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_pnm_la_LIBADD = $(module_libs)
 
 #
@@ -77,7 +110,7 @@ libpixbufloader_pnm_la_LIBADD = $(module_libs)
 #
 libpixbufloader_static_bmp_la_SOURCES = io-bmp.c
 libpixbufloader_bmp_la_SOURCES = io-bmp.c
-libpixbufloader_bmp_la_LDFLAGS = -avoid-version -module
+libpixbufloader_bmp_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_bmp_la_LIBADD = $(module_libs)
 
 #
@@ -85,21 +118,21 @@ libpixbufloader_bmp_la_LIBADD = $(module_libs)
 #
 libpixbufloader_static_wbmp_la_SOURCES = io-wbmp.c
 libpixbufloader_wbmp_la_SOURCES = io-wbmp.c
-libpixbufloader_wbmp_la_LDFLAGS = -avoid-version -module
+libpixbufloader_wbmp_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_wbmp_la_LIBADD = $(module_libs)
 
 #
 # The XBM loader
 #
 libpixbufloader_xbm_la_SOURCES = io-xbm.c
-libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module
+libpixbufloader_xbm_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_xbm_la_LIBADD = $(module_libs)
 
 #
 # The TGA loader
 #
 libpixbufloader_tga_la_SOURCES = io-tga.c
-libpixbufloader_tga_la_LDFLAGS = -avoid-version -module
+libpixbufloader_tga_la_LDFLAGS = -avoid-version -module $(no_undefined)
 libpixbufloader_tga_la_LIBADD = $(module_libs)
 
 if HAVE_PNG
@@ -175,6 +208,7 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) -I$(top_builddir) 	\
 	-I$(top_srcdir)/gdk-pixbuf 		\
 	-I$(top_builddir)/gdk-pixbuf 		\
+	-DGTK_VERSION=\"@GTK_VERSION@\"		\
 	@INCLUDED_LOADER_DEFINE@ 		\
 	@GTK_DEBUG_FLAGS@			\
 	@GDK_PIXBUF_DEP_CFLAGS@			\
@@ -217,10 +251,12 @@ libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
 libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
 	@LIBTOOL_EXPORT_OPTIONS@				\
+	$(no_undefined)						\
+	$(gdk_pixbuf_symbols)					\
 @STRIP_END@
 
 libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(GDK_PIXBUF_DEP_LIBS)
-libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs)
+libgdk_pixbuf_1_3_la_DEPENDENCIES = $(builtin_objs) $(gdk_pixbuf_def)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
@@ -238,7 +274,7 @@ noinst_HEADERS = 		\
 
 gdk_pixbuf_built_headers = gdk-pixbuf-enum-types.h gdk-pixbuf-marshal.h
 gdk_pixbuf_built_cfiles = gdk-pixbuf-enum-types.c 
-$(OBJECTS): $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
+$(libgdk_pixbuf_1_3_la_OBJECTS) $(OBJECTS): $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
 
 CLEANFILES =
 MAINTAINERCLEANFILES = $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
@@ -328,3 +364,7 @@ EXTRA_DIST =			\
 	pixbufloader_tiff.def		\
 	pixbufloader_wbmp.def		\
 	pixbufloader_xbm.def
+
+install-data-local: install-ms-lib install-libtool-import-lib
+
+uninstall-local: uninstall-ms-lib uninstall-libtool-import-lib

@@ -13,6 +13,7 @@ static GtkTextBuffer *source_buffer;
 
 static gchar *current_file = NULL;
 
+
 enum {
   TITLE_COLUMN,
   FILENAME_COLUMN,
@@ -27,6 +28,39 @@ struct _CallbackData
   GtkTreeModel *model;
   GtkTreePath *path;
 };
+
+/**
+ * demo_find_file:
+ * @base: base filename
+ * @err:  location to store error, or %NULL.
+ * 
+ * Looks for @base first in the current directory, then in the
+ * location GTK+ where it will be installed on make install,
+ * returns the first file found.
+ * 
+ * Return value: the filename, if found or %NULL
+ **/
+gchar *
+demo_find_file (const char *base,
+		GError    **err)
+{
+  g_return_val_if_fail (err == NULL || *err == NULL, FALSE);
+  
+  if (g_file_test (base, G_FILE_TEST_EXISTS))
+    return g_strdup (base);
+  else
+    {
+      char *filename = g_build_filename (DEMOCODEDIR, base, NULL);
+      if (!g_file_test (filename, G_FILE_TEST_EXISTS))
+	{
+	  g_set_error (err, G_FILE_ERROR, G_FILE_ERROR_NOENT,
+		       "Cannot find demo data file \"%s\"", base);
+	  g_free (filename);
+	  return NULL;
+	}
+      return filename;
+    }
+}
 
 static void
 window_closed_cb (GtkWidget *window, gpointer data)
@@ -53,7 +87,9 @@ read_line (FILE *stream, GString *str)
 {
   int n_read = 0;
   
+#ifndef G_OS_WIN32
   flockfile (stream);
+#endif
 
   g_string_truncate (str, 0);
   
@@ -61,7 +97,11 @@ read_line (FILE *stream, GString *str)
     {
       int c;
       
+#ifndef G_OS_WIN32
       c = getc_unlocked (stream);
+#else
+      c = getc (stream);
+#endif
 
       if (c == EOF)
 	goto done;
@@ -73,7 +113,11 @@ read_line (FILE *stream, GString *str)
 	case '\r':
 	case '\n':
 	  {
+#ifndef G_OS_WIN32
 	    int next_c = getc_unlocked (stream);
+#else
+	    int next_c = getc (stream);
+#endif
 	    
 	    if (!(next_c == EOF ||
 		  (c == '\r' && next_c == '\n') ||
@@ -89,7 +133,9 @@ read_line (FILE *stream, GString *str)
 
  done:
 
+#ifndef G_OS_WIN32
   funlockfile (stream);
+#endif
 
   return n_read > 0;
 }
@@ -364,6 +410,8 @@ load_file (const gchar *filename)
 {
   FILE *file;
   GtkTextIter start, end;
+  char *full_filename;
+  GError *err = NULL;
   GString *buffer = g_string_new (NULL);
   int state = 0;
   gboolean in_para = 0;
@@ -383,25 +431,23 @@ load_file (const gchar *filename)
   gtk_text_buffer_get_bounds (source_buffer, &start, &end);
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
-  file = fopen (filename, "r");
-
-  if (!file)
+  full_filename = demo_find_file (filename, &err);
+  if (!full_filename)
     {
-      char *installed = g_strconcat (DEMOCODEDIR,
-                                     G_DIR_SEPARATOR_S,
-                                     filename,
-                                     NULL);
-
-      file = fopen (installed, "r");
-
-      g_free (installed);
-    }
-  
-  if (!file)
-    {
-      g_warning ("Cannot open %s: %s\n", filename, g_strerror (errno));
+      g_warning ("%s", err->message);
+      g_error_free (err);
       return;
     }
+
+  file = fopen (full_filename, "r");
+
+  if (!file)
+    g_warning ("Cannot open %s: %s\n", full_filename, g_strerror (errno));
+
+  g_free (full_filename);
+
+  if (!file)
+    return;
 
   gtk_text_buffer_get_iter_at_offset (info_buffer, &start, 0);
   while (read_line (file, buffer))
@@ -505,72 +551,6 @@ load_file (const gchar *filename)
   fontify ();
 
   g_string_free (buffer, TRUE);
-}
-
-gboolean
-button_press_event_cb (GtkTreeView    *tree_view,
-		       GdkEventButton *event,
-		       GtkTreeModel   *model)
-{
-  if (event->type == GDK_2BUTTON_PRESS)
-    {
-      GtkTreePath *path = NULL;
-
-      gtk_tree_view_get_path_at_pos (tree_view,
-				     event->window,
-				     event->x,
-				     event->y,
-				     &path,
-                                     NULL,
-                                     NULL,
-				     NULL);
-
-      if (path)
-	{
-	  GtkTreeIter iter;
-	  gboolean italic;
-	  GDoDemoFunc func;
-	  GtkWidget *window;
-
-	  gtk_tree_model_get_iter (model, &iter, path);
-	  gtk_tree_model_get (GTK_TREE_MODEL (model),
-			      &iter,
-			      FUNC_COLUMN, &func,
-			      ITALIC_COLUMN, &italic,
-			      -1);
-
-	  if (func)
-	    {
-	      gtk_tree_store_set (GTK_TREE_STORE (model),
-				  &iter,
-				  ITALIC_COLUMN, !italic,
-				  -1);
-	      window = (func) ();
-	      if (window != NULL)
-		{
-		  CallbackData *cbdata;
-		  
-		  cbdata = g_new (CallbackData, 1);
-		  cbdata->model = model;
-		  cbdata->path = path;
-		  
-		  g_signal_connect (window, "destroy",
-				    G_CALLBACK (window_closed_cb), cbdata);
-		}
-	      else
-		{
-		  gtk_tree_path_free (path);
-		}
-	    }
-	  else
-	    gtk_tree_path_free (path);
-	}
-
-      g_signal_stop_emission_by_name (tree_view, "button_press_event");
-      return TRUE;
-    }
-  
-  return FALSE;
 }
 
 void
@@ -767,38 +747,36 @@ static void
 setup_default_icon (void)
 {
   GdkPixbuf *pixbuf;
-  
-  /* Try in current directory, in case we haven't yet been installed
-   * (would be wrong in a real app)
-   */
-  pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif", NULL);
+  char *filename;
+  GError *err;
 
-  if (pixbuf == NULL)
+  err = NULL;
+
+  pixbuf = NULL;
+  filename = demo_find_file ("gtk-logo-rgb.gif", &err);
+  if (filename)
     {
-      GError *err;
+      pixbuf = gdk_pixbuf_new_from_file (filename, &err);
+      g_free (filename);
+    }
 
-      err = NULL;
-      pixbuf = gdk_pixbuf_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif",
-                                         &err);
+  /* Ignoring this error (passing NULL instead of &err above)
+   * would probably be reasonable for most apps.  We're just
+   * showing off.
+   */
+  if (err)
+    {
+      GtkWidget *dialog;
+      
+      dialog = gtk_message_dialog_new (NULL, 0,
+				       GTK_MESSAGE_ERROR,
+				       GTK_BUTTONS_CLOSE,
+				       "Failed to read icon file: %s",
+				       err->message);
+      g_error_free (err);
 
-      /* Ignoring this error (passing NULL instead of &err above)
-       * would probably be reasonable for most apps.  We're just
-       * showing off.
-       */
-      if (err)
-        {
-          GtkWidget *dialog;
-          
-          dialog = gtk_message_dialog_new (NULL, 0,
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "Failed to read icon file "DEMOCODEDIR"/gtk-logo-rgb.gif: %s",
-                                           err->message);
-          g_error_free (err);
-
-          g_signal_connect (dialog, "response",
-			    G_CALLBACK (gtk_widget_destroy), NULL);
-        }
+      g_signal_connect (dialog, "response",
+			G_CALLBACK (gtk_widget_destroy), NULL);
     }
 
   if (pixbuf)

@@ -63,10 +63,6 @@ struct _GtkContainer
   guint resize_mode : 2;
   guint reallocate_redraws : 1;
   guint has_focus_chain : 1;
-  
-  /* The list of children that requested a resize
-   */
-  GSList *resize_widgets;
 };
 
 struct _GtkContainerClass
@@ -122,11 +118,13 @@ void    gtk_container_check_resize       (GtkContainer     *container);
 void     gtk_container_foreach      (GtkContainer       *container,
 				     GtkCallback         callback,
 				     gpointer            callback_data);
+#ifndef GTK_DISABLE_DEPRECATED
 void     gtk_container_foreach_full (GtkContainer       *container,
 				     GtkCallback         callback,
 				     GtkCallbackMarshal  marshal,
 				     gpointer            callback_data,
 				     GtkDestroyNotify    notify);
+#endif /*  GTK_DISABLE_DEPRECATED */
 GList*   gtk_container_get_children     (GtkContainer       *container);
 
 #ifndef GTK_DISABLE_DEPRECATED

@@ -39,3 +39,10 @@ GtkIMContextSimple
 @n_seqs: 
 
 
+<!-- ##### MACRO GTK_MAX_COMPOSE_LEN ##### -->
+<para>
+
+</para>
+
+
+

@@ -4,6 +4,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "demo-common.h"
 
 static GtkWidget *window = NULL;
 
@@ -52,7 +53,10 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences/Shape/_Rectangle",   NULL, menuitem_cb, 0, "/Preferences/Shape/Square" },
   { "/_Preferences/Shape/_Oval",        NULL, menuitem_cb, 0, "/Preferences/Shape/Rectangle" },
 
-  { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
+  /* If you wanted this to be right justified you would use "<LastBranch>", not "<Branch>".
+   * Right justified help menu items are generally considered a bad idea now days.
+   */
+  { "/_Help",            NULL,         0,                     0, "<Branch>" },
   { "/Help/_About",      NULL,         menuitem_cb,       0 },
 };
 
@@ -92,6 +96,7 @@ register_stock_icons (void)
     {
       GdkPixbuf *pixbuf;
       GtkIconFactory *factory;
+      char *filename;
 
       static GtkStockItem items[] = {
         { "demo-gtk-logo",
@@ -108,12 +113,17 @@ register_stock_icons (void)
       factory = gtk_icon_factory_new ();
       gtk_icon_factory_add_default (factory);
 
-      /* Try current directory */
-      pixbuf = gdk_pixbuf_new_from_file ("./gtk-logo-rgb.gif", NULL);
-
-      /* Try install directory */
-      if (pixbuf == NULL)
-        pixbuf = gdk_pixbuf_new_from_file (DEMOCODEDIR"/gtk-logo-rgb.gif", NULL);
+      /* demo_find_file() looks in the the current directory first,
+       * so you can run gtk-demo without installing GTK, then looks
+       * in the location where the file is installed.
+       */
+      pixbuf = NULL;
+      filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
+      if (filename)
+	{
+	  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+	  g_free (filename);
+	}
 
       /* Register icon to accompany stock item */
       if (pixbuf != NULL)
@@ -181,8 +191,6 @@ do_appwindow (void)
   if (!window)
     {
       GtkWidget *table;
-      GtkWidget *menubar_handle;
-      GtkWidget *toolbar_handle;
       GtkWidget *toolbar;
       GtkWidget *statusbar;
       GtkWidget *contents;
@@ -212,11 +220,9 @@ do_appwindow (void)
        */
       
       accel_group = gtk_accel_group_new ();
-      gtk_accel_group_attach (accel_group, G_OBJECT (window));
-      gtk_accel_group_unref (accel_group);
+      gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
+      g_object_unref (accel_group);
       
-      menubar_handle = gtk_handle_box_new ();
-
       item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", accel_group);
 
       /* Set up item factory to go away with the window */
@@ -231,11 +237,8 @@ do_appwindow (void)
       gtk_item_factory_create_items (item_factory, G_N_ELEMENTS (menu_items),
                                      menu_items, window);
 
-      gtk_container_add (GTK_CONTAINER (menubar_handle),
-			 gtk_item_factory_get_widget (item_factory, "<main>"));
-      
       gtk_table_attach (GTK_TABLE (table),
-			menubar_handle,
+			gtk_item_factory_get_widget (item_factory, "<main>"),
                         /* X direction */          /* Y direction */
                         0, 1,                      0, 1,
                         GTK_EXPAND | GTK_FILL,     0,
@@ -243,8 +246,6 @@ do_appwindow (void)
 
       /* Create the toolbar
        */
-      toolbar_handle = gtk_handle_box_new ();
-
       toolbar = gtk_toolbar_new ();
 
       gtk_toolbar_insert_stock (GTK_TOOLBAR (toolbar),
@@ -273,10 +274,8 @@ do_appwindow (void)
                                 window, /* user data for callback */
                                 -1);  /* -1 means "append" */
 
-      gtk_container_add (GTK_CONTAINER (toolbar_handle), toolbar);
-
       gtk_table_attach (GTK_TABLE (table),
-                        toolbar_handle,
+                        toolbar,
                         /* X direction */       /* Y direction */
                         0, 1,                   1, 2,
                         GTK_EXPAND | GTK_FILL,  0,

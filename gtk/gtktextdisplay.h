@@ -94,6 +94,7 @@ extern "C" {
  * x_offset/y_offset - Position of the drawable in layout coordinates
  * x/y/width/height  - Region of the layout to render. x,y must be inside
  *                     the drawable.
+ * widgets           - list of widgets that need exposing
  */
 void gtk_text_layout_draw (GtkTextLayout        *layout,
                            GtkWidget            *widget,
@@ -104,7 +105,8 @@ void gtk_text_layout_draw (GtkTextLayout        *layout,
                            gint                  x,
                            gint                  y,
                            gint                  width,
-                           gint                  height);
+                           gint                  height,
+                           GList               **widgets);
 
 
 

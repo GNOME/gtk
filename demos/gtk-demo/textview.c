@@ -8,36 +8,11 @@
  */
 
 #include <gtk/gtk.h>
+#include <stdlib.h> /* for exit() */
 
-/* Don't copy this bad example; inline RGB data is always a better
- * idea than inline XPMs.
- */
-static char *book_closed_xpm[] = {
-"16 16 6 1",
-"	c None s None",
-".	c black",
-"X	c red",
-"o	c yellow",
-"O	c #808080",
-"#	c white",
-"		 ",
-"	..	 ",
-"     ..XX.	 ",
-"   ..XXXXX.	 ",
-" ..XXXXXXXX.	 ",
-".ooXXXXXXXXX.	 ",
-"..ooXXXXXXXXX.	 ",
-".X.ooXXXXXXXXX. ",
-".XX.ooXXXXXX..	 ",
-" .XX.ooXXX..#O	 ",
-"  .XX.oo..##OO. ",
-"   .XX..##OO..	 ",
-"    .X.#OO..	 ",
-"     ..O..	 ",
-"      ..	 ",
-"		 "
-};
+#include "demo-common.h"
 
+static void easter_egg_callback (GtkWidget *button, gpointer data);
 
 #define gray50_width 2
 #define gray50_height 2
@@ -71,7 +46,7 @@ create_tags (GtkTextBuffer *buffer)
 
   gtk_text_buffer_create_tag (buffer, "heading",
 			      "weight", PANGO_WEIGHT_BOLD,
-			      "size", 20 * PANGO_SCALE,
+			      "size", 15 * PANGO_SCALE,
 			      NULL);
   
   gtk_text_buffer_create_tag (buffer, "italic",
@@ -82,7 +57,7 @@ create_tags (GtkTextBuffer *buffer)
   
   gtk_text_buffer_create_tag (buffer, "big",
 			      /* points times the PANGO_SCALE factor */
-			      "size", 30 * PANGO_SCALE, NULL);
+			      "size", 20 * PANGO_SCALE, NULL);
 
   gtk_text_buffer_create_tag (buffer, "xx-small",
 			      "scale", PANGO_SCALE_XX_SMALL, NULL);
@@ -176,8 +151,31 @@ insert_text (GtkTextBuffer *buffer)
   GtkTextIter iter;
   GtkTextIter start, end;
   GdkPixbuf *pixbuf;
+  GdkPixbuf *scaled;
+  GtkTextChildAnchor *anchor;
+  char *filename;
 
-  pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) book_closed_xpm);
+  /* demo_find_file() looks in the the current directory first,
+   * so you can run gtk-demo without installing GTK, then looks
+   * in the location where the file is installed.
+   */
+  pixbuf = NULL;
+  filename = demo_find_file ("gtk-logo-rgb.gif", NULL);
+  if (filename)
+    {
+      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
+      g_free (filename);
+    }
+
+  if (pixbuf == NULL)
+    {
+      g_printerr ("Failed to load image file gtk-logo-rgb.gif\n");
+      exit (1);
+    }
+
+  scaled = gdk_pixbuf_scale_simple (pixbuf, 32, 32, GDK_INTERP_BILINEAR);
+  g_object_unref (G_OBJECT (pixbuf));
+  pixbuf = scaled;
   
   /* get start of buffer; each insertion will revalidate the
    * iterator to point to just after the inserted text.
@@ -336,9 +334,21 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_insert (buffer, &iter,
 			  "You can put all sorts of Unicode text in the buffer.\n\nGerman (Deutsch Süd) Grüß Gott\nGreek (Ελληνικά) Γειά σας\nHebrew	שלום\nJapanese (日本語)\n\nThe widget properly handles bidirectional text, word wrapping, DOS/UNIX/Unicode paragraph separators, grapheme boundaries, and so on using the Pango internationalization framework.\n", -1);  
 
-      gtk_text_buffer_insert (buffer, &iter, "Here's a word-wrapped quote in a right-to-left language:\n", -1);
-      gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n\n", -1,
+  gtk_text_buffer_insert (buffer, &iter, "Here's a word-wrapped quote in a right-to-left language:\n", -1);
+  gtk_text_buffer_insert_with_tags_by_name (buffer, &iter, "وقد بدأ ثلاث من أكثر المؤسسات تقدما في شبكة اكسيون برامجها كمنظمات لا تسعى للربح، ثم تحولت في السنوات الخمس الماضية إلى مؤسسات مالية منظمة، وباتت جزءا من النظام المالي في بلدانها، ولكنها تتخصص في خدمة قطاع المشروعات الصغيرة. وأحد أكثر هذه المؤسسات نجاحا هو »بانكوسول« في بوليفيا.\n\n", -1,
 						"rtl_quote", NULL);
+      
+  gtk_text_buffer_insert (buffer, &iter, "You can put widgets in the buffer: Here's a button: ", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, " and a menu: ", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, " and a scale: ", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, " and an animation: ", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, " finally a text entry: ", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter, ".\n", -1);
   
   gtk_text_buffer_insert (buffer, &iter, "\n\nThis demo doesn't demonstrate all the GtkTextBuffer features; it leaves out, for example: invisible/hidden text (doesn't work in GTK 2, but planned), tab stops, application-drawn areas on the sides of the widget for displaying breakpoints and such...", -1);
 
@@ -347,6 +357,94 @@ insert_text (GtkTextBuffer *buffer)
   gtk_text_buffer_apply_tag_by_name (buffer, "word_wrap", &start, &end);
 
   g_object_unref (G_OBJECT (pixbuf));
+}
+
+static gboolean
+find_anchor (GtkTextIter *iter)
+{
+  while (gtk_text_iter_forward_char (iter))
+    {
+      if (gtk_text_iter_get_child_anchor (iter))
+        return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+attach_widgets (GtkTextView *text_view)
+{
+  GtkTextIter iter;
+  GtkTextBuffer *buffer;
+  int i;
+  
+  buffer = gtk_text_view_get_buffer (text_view);
+
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+
+  i = 0;
+  while (find_anchor (&iter))
+    {
+      GtkTextChildAnchor *anchor;
+      GtkWidget *widget;
+      
+      anchor = gtk_text_iter_get_child_anchor (&iter);
+
+      if (i == 0)
+        {
+          widget = gtk_button_new_with_label ("Click Me");
+
+          g_signal_connect (G_OBJECT (widget), "clicked",
+                            G_CALLBACK (easter_egg_callback),
+                            NULL);
+        }
+      else if (i == 1)
+        {
+          GtkWidget *menu_item;
+          GtkWidget *menu;
+
+          menu = gtk_menu_new ();
+          
+          widget = gtk_option_menu_new ();
+
+          menu_item = gtk_menu_item_new_with_label ("Option 1");
+          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+          menu_item = gtk_menu_item_new_with_label ("Option 2");
+          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+          menu_item = gtk_menu_item_new_with_label ("Option 3");
+          gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+
+          gtk_option_menu_set_menu (GTK_OPTION_MENU (widget), menu);
+        }
+      else if (i == 2)
+        {
+          widget = gtk_hscale_new (NULL);
+          gtk_range_set_range (GTK_RANGE (widget), 0, 100);
+          gtk_widget_set_size_request (widget, 70, -1);
+        }
+      else if (i == 3)
+        {
+	  gchar *filename = demo_find_file ("floppybuddy.gif", NULL);
+	  widget = gtk_image_new_from_file (filename);
+	  g_free (filename);
+        }
+      else if (i == 4)
+        {
+          widget = gtk_entry_new ();
+        }
+      else
+        {
+          widget = NULL; /* avoids a compiler warning */
+          g_assert_not_reached ();
+        }
+
+      gtk_text_view_add_child_at_anchor (text_view,
+                                         widget,
+                                         anchor);
+
+      gtk_widget_show_all (widget);
+
+      ++i;
+    }
 }
 
 GtkWidget *
@@ -403,6 +501,9 @@ do_textview (void)
 
       create_tags (buffer);
       insert_text (buffer);
+
+      attach_widgets (GTK_TEXT_VIEW (view1));
+      attach_widgets (GTK_TEXT_VIEW (view2));
       
       gtk_widget_show_all (vpaned);
     }
@@ -418,5 +519,86 @@ do_textview (void)
     }
 
   return window;
+}
+
+static void
+recursive_attach_view (int                 depth,
+                       GtkTextView        *view,
+                       GtkTextChildAnchor *anchor)
+{
+  GtkWidget *child_view;
+  GtkWidget *event_box;
+  GdkColor color;
+  GtkWidget *align;
+  
+  if (depth > 4)
+    return;
+  
+  child_view = gtk_text_view_new_with_buffer (gtk_text_view_get_buffer (view));
+
+  /* Event box is to add a black border around each child view */
+  event_box = gtk_event_box_new ();
+  gdk_color_parse ("black", &color);
+  gtk_widget_modify_bg (event_box, GTK_STATE_NORMAL, &color);
+
+  align = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
+  gtk_container_set_border_width (GTK_CONTAINER (align), 1);
+  
+  gtk_container_add (GTK_CONTAINER (event_box), align);
+  gtk_container_add (GTK_CONTAINER (align), child_view);
+  
+  gtk_text_view_add_child_at_anchor (view, event_box, anchor);
+
+  recursive_attach_view (depth + 1, GTK_TEXT_VIEW (child_view), anchor);
+}
+
+static void
+easter_egg_callback (GtkWidget *button,
+                     gpointer   data)
+{
+  static GtkWidget *window = NULL;
+  GtkTextBuffer *buffer;
+  GtkWidget     *view;
+  GtkTextIter    iter;
+  GtkTextChildAnchor *anchor;
+  GtkWidget *sw;
+
+  if (window)
+    {
+      gtk_window_present (GTK_WINDOW (window));
+      return;
+    }
+  
+  buffer = gtk_text_buffer_new (NULL);
+
+  gtk_text_buffer_get_start_iter (buffer, &iter);
+
+  gtk_text_buffer_insert (buffer, &iter,
+                          "This buffer is shared by a set of nested text views.\n Nested view:\n", -1);
+  anchor = gtk_text_buffer_create_child_anchor (buffer, &iter);
+  gtk_text_buffer_insert (buffer, &iter,
+                          "\nDon't do this in real applications, please.\n", -1);
+
+  view = gtk_text_view_new_with_buffer (buffer);
+  
+  recursive_attach_view (0, GTK_TEXT_VIEW (view), anchor);
+  
+  g_object_unref (G_OBJECT (buffer));
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_AUTOMATIC,
+                                  GTK_POLICY_AUTOMATIC);
+
+  gtk_container_add (GTK_CONTAINER (window), sw);
+  gtk_container_add (GTK_CONTAINER (sw), view);
+
+  g_object_add_weak_pointer (G_OBJECT (window),
+                             (gpointer *) &window);
+
+  gtk_window_set_default_size (GTK_WINDOW (window), 300, 400);
+  
+  gtk_widget_show_all (window);
 }
 

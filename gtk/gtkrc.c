@@ -53,6 +53,7 @@
 #include "gtkthemes.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
+#include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkwindow.h"
 #include "gdk/gdk.h"
@@ -296,39 +297,16 @@ static GSList *rc_dir_stack = NULL;
 
 /* RC file handling */
 
-#ifdef G_OS_WIN32
-gchar *
-get_gtk_win32_directory (gchar *subdir)
-{
-  static gchar *gtk_dll = NULL;
-
-  if (!gtk_dll)
-    gtk_dll = g_strdup_printf ("gtk-win32-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
-
-  if (subdir && strlen(subdir) > 0)
-    return g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
-							                gtk_dll,
-							                subdir);
-  else
-    return g_win32_get_package_installation_directory (GETTEXT_PACKAGE,
-							             gtk_dll);
-}
-#endif /* G_OS_WIN32 */
- 
 static gchar *
 gtk_rc_make_default_dir (const gchar *type)
 {
   gchar *var, *path;
 
-#ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
   else
-    path = g_build_filename (GTK_LIBDIR, "gtk-2.0,", type, GTK_BINARY_VERSION, NULL);
-#else
-  path = g_build_filename (get_gtk_win32_directory (""), type, NULL);
-#endif
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
 
   return path;
 }
@@ -359,36 +337,28 @@ gtk_rc_get_im_module_file (void)
       if (im_module_file)
 	result = g_strdup (im_module_file);
       else
-#ifndef G_OS_WIN32
 	result = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtk.immodules", NULL);
-#else
-	result = g_build_filename (get_gtk_win32_directory ("gtk-2.0"), "gtk.immodules", NULL);
-#endif
     }
 
   return result;
 }
 
 gchar *
-gtk_rc_get_theme_dir(void)
+gtk_rc_get_theme_dir (void)
 {
   gchar *var, *path;
 
-#ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_build_filename (var, "share", "themes", NULL);
   else
     path = g_build_filename (GTK_DATA_PREFIX, "share", "themes", NULL);
-#else
-  path = g_build_filename (get_gtk_win32_directory (""), "themes", NULL);
-#endif
 
   return path;
 }
 
 gchar *
-gtk_rc_get_module_dir(void)
+gtk_rc_get_module_dir (void)
 {
   return gtk_rc_make_default_dir ("engines");
 }
@@ -404,15 +374,11 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   
-#ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", GTK_VERSION, "engines", NULL);
   else
     path = g_build_filename (GTK_LIBDIR, "gtk-2.0", GTK_VERSION, "engines", NULL);
-#else
-  path = g_build_filename (get_gtk_win32_directory ("gtk-2.0"), GTK_VERSION, "engines", NULL);
-#endif
   module_path[n++] = path;
 
   var = g_get_home_dir ();
@@ -453,11 +419,7 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-#ifndef G_OS_WIN32
       str = g_build_filename (GTK_SYSCONFDIR, "gtk-2.0", "gtkrc", NULL);
-#else
-      str = g_build_filename (get_gtk_win32_directory (""), "gtkrc", NULL);
-#endif
 
       gtk_rc_add_default_file (str);
       g_free (str);
@@ -660,7 +622,7 @@ gtk_rc_parse_named (GtkRcContext *context,
 		    const gchar  *type)
 {
   gchar *path = NULL;
-  gchar *home_dir;
+  const gchar *home_dir;
   gchar *subpath;
 
   if (type)
@@ -1598,10 +1560,12 @@ gtk_rc_get_style (GtkWidget *widget)
  *
  * The action of gtk_rc_get_style() is similar to:
  *
- *  gtk_widget_path (widget, NULL, &path, NULL);
- *  gtk_widget_class_path (widget, NULL, &class_path, NULL);
+ * <programlisting>
+ *  gtk_widget_path (widget, NULL, &amp;path, NULL);
+ *  gtk_widget_class_path (widget, NULL, &amp;class_path, NULL);
  *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), path, class_path,
  *                             G_OBJECT_TYPE (widget));
+ * </programlisting>
  * 
  * Return value: A style created by matching with the supplied paths,
  *   or %NULL if nothign matching was specified and the  default style should

@@ -52,6 +52,7 @@
  *
  */
 
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtktextbtree.h"
 #include <string.h>
 #include <ctype.h>
@@ -941,8 +942,8 @@ _gtk_text_btree_delete (GtkTextIter *start,
 
 void
 _gtk_text_btree_insert (GtkTextIter *iter,
-                       const gchar *text,
-                       gint len)
+                        const gchar *text,
+                        gint         len)
 {
   GtkTextLineSegment *prev_seg;     /* The segment just before the first
                                      * new segment (NULL means new segment
@@ -979,10 +980,15 @@ _gtk_text_btree_insert (GtkTextIter *iter,
   /* extract iterator info */
   tree = _gtk_text_iter_get_btree (iter);
   line = _gtk_text_iter_get_text_line (iter);
+  
   start_line = line;
   start_byte_index = gtk_text_iter_get_line_index (iter);
 
-  /* Get our insertion segment split */
+  /* Get our insertion segment split. Note this assumes line allows
+   * char insertions, which isn't true of the "last" line. But iter
+   * should not be on that line, as we assert here.
+   */
+  g_assert (!_gtk_text_line_is_last (line, tree));
   prev_seg = gtk_text_line_segment_split (iter);
   cur_seg = prev_seg;
 
@@ -3233,6 +3239,9 @@ ensure_end_iter_segment (GtkTextBTree *tree)
       tree->end_iter_segment_char_offset = last_with_chars->char_count - 1;
       
       tree->end_iter_segment_stamp = tree->segments_changed_stamp;
+
+      g_assert (tree->end_iter_segment->type == &gtk_text_char_type);
+      g_assert (tree->end_iter_segment->body.chars[tree->end_iter_segment_byte_index] == '\n');
     }
 }
 

@@ -84,9 +84,8 @@ static gboolean gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                                    GtkTreePath       *dest,
                                                    GtkSelectionData  *selection_data);
 static gboolean gtk_list_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
-                                                   GtkTreeModel      *src_model,
-                                                   GtkTreePath       *src_path,
-                                                   GtkTreePath       *dest_path);
+                                                   GtkTreePath       *dest_path,
+						   GtkSelectionData  *selection_data);
 
 
 /* sortable */
@@ -253,6 +252,7 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->stamp = g_random_int ();
   list_store->length = 0;
   list_store->sort_column_id = -2;
+  list_store->columns_dirty = FALSE;
 }
 
 /**
@@ -337,6 +337,39 @@ gtk_list_store_newv (gint   n_columns,
   return retval;
 }
 
+/**
+ * gtk_list_store_set_column_types:
+ * @list_store: A #GtkListStore
+ * @n_columns: Number of columns for the list store
+ * @types: An array length n of @GTypes
+ * 
+ * This function is meant primarily for GObjects that inherit from GtkListStore,
+ * and should only be used when constructing a new @GtkListStore.  It will not
+ * function after a row has been added, or a method on the @GtkTreeModel
+ * interface is called.
+ **/
+void
+gtk_list_store_set_column_types (GtkListStore *list_store,
+				 gint          n_columns,
+				 GType        *types)
+{
+  gint i;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (list_store->columns_dirty == 0);
+
+  gtk_list_store_set_n_columns (list_store, n_columns);
+   for (i = 0; i < n_columns; i++)
+    {
+      if (! _gtk_tree_data_list_check_type (types[i]))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_list_store_set_column_types\n", G_STRLOC, g_type_name (types[i]));
+	  continue;
+	}
+      gtk_list_store_set_column_type (list_store, i, types[i]);
+    }
+}
+
 static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
@@ -417,20 +450,28 @@ gtk_list_store_get_flags (GtkTreeModel *tree_model)
 static gint
 gtk_list_store_get_n_columns (GtkTreeModel *tree_model)
 {
+  GtkListStore *list_store = (GtkListStore *) tree_model;
+
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), 0);
 
-  return GTK_LIST_STORE (tree_model)->n_columns;
+  list_store->columns_dirty = TRUE;
+
+  return list_store->n_columns;
 }
 
 static GType
 gtk_list_store_get_column_type (GtkTreeModel *tree_model,
 				gint          index)
 {
+  GtkListStore *list_store = (GtkListStore *) tree_model;
+
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), G_TYPE_INVALID);
   g_return_val_if_fail (index < GTK_LIST_STORE (tree_model)->n_columns &&
 			index >= 0, G_TYPE_INVALID);
 
-  return GTK_LIST_STORE (tree_model)->column_headers[index];
+  list_store->columns_dirty = TRUE;
+
+  return list_store->column_headers[index];
 }
 
 static gboolean
@@ -438,24 +479,28 @@ gtk_list_store_get_iter (GtkTreeModel *tree_model,
 			 GtkTreeIter  *iter,
 			 GtkTreePath  *path)
 {
+  GtkListStore *list_store = (GtkListStore *) tree_model;
   GSList *list;
   gint i;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), FALSE);
   g_return_val_if_fail (gtk_tree_path_get_depth (path) > 0, FALSE);
 
+  list_store->columns_dirty = TRUE;
+
   i = gtk_tree_path_get_indices (path)[0];
 
-  if (i >= GTK_LIST_STORE (tree_model)->length)
+  if (i >= list_store->length)
     return FALSE;
 
-  list = g_slist_nth (G_SLIST (GTK_LIST_STORE (tree_model)->root), i);
+  list = g_slist_nth (G_SLIST (list_store->root), i);
 
   /* If this fails, list_store->length has gotten mangled. */
   g_assert (list);
 
-  iter->stamp = GTK_LIST_STORE (tree_model)->stamp;
+  iter->stamp = list_store->stamp;
   iter->user_data = list;
+
   return TRUE;
 }
 
@@ -597,7 +642,7 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
   return FALSE;
 }
 
-gboolean
+static gboolean
 gtk_list_store_real_set_value (GtkListStore *list_store,
 			       GtkTreeIter  *iter,
 			       gint          column,
@@ -979,6 +1024,8 @@ gtk_list_store_insert (GtkListStore *list_store,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (position >= 0);
 
+  list_store->columns_dirty = TRUE;
+
   if (position == 0 ||
       GTK_LIST_STORE_IS_SORTED (list_store))
     {
@@ -1035,6 +1082,7 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   if (sibling)
     g_return_if_fail (VALID_ITER (sibling, list_store));
 
+  list_store->columns_dirty = TRUE;
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
     {
@@ -1123,6 +1171,8 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   if (sibling)
     g_return_if_fail (VALID_ITER (sibling, list_store));
 
+  list_store->columns_dirty = TRUE;
+
   if (sibling == NULL ||
       GTK_LIST_STORE_IS_SORTED (list_store))
     {
@@ -1172,6 +1222,8 @@ gtk_list_store_prepend (GtkListStore *list_store,
   iter->stamp = list_store->stamp;
   iter->user_data = g_slist_alloc ();
 
+  list_store->columns_dirty = TRUE;
+
   if (list_store->root == NULL)
     list_store->tail = iter->user_data;
 
@@ -1206,6 +1258,8 @@ gtk_list_store_append (GtkListStore *list_store,
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
+
+  list_store->columns_dirty = TRUE;
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
     {
@@ -1278,9 +1332,9 @@ gtk_list_store_drag_data_get (GtkTreeDragSource *drag_source,
    * default handler.
    */
 
-  if (gtk_selection_data_set_tree_row (selection_data,
-                                       GTK_TREE_MODEL (drag_source),
-                                       path))
+  if (gtk_tree_set_row_drag_data (selection_data,
+				  GTK_TREE_MODEL (drag_source),
+				  path))
     {
       return TRUE;
     }
@@ -1308,9 +1362,9 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
   tree_model = GTK_TREE_MODEL (drag_dest);
   list_store = GTK_LIST_STORE (drag_dest);
 
-  if (gtk_selection_data_get_tree_row (selection_data,
-                                       &src_model,
-                                       &src_path) &&
+  if (gtk_tree_get_row_drag_data (selection_data,
+				  &src_model,
+				  &src_path) &&
       src_model == tree_model)
     {
       /* Copy the given row to a new position */
@@ -1407,29 +1461,39 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 }
 
 static gboolean
-gtk_list_store_row_drop_possible (GtkTreeDragDest *drag_dest,
-                                  GtkTreeModel    *src_model,
-                                  GtkTreePath     *src_path,
-                                  GtkTreePath     *dest_path)
+gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
+                                  GtkTreePath      *dest_path,
+				  GtkSelectionData *selection_data)
 {
   gint *indices;
+  GtkTreeModel *src_model = NULL;
+  GtkTreePath *src_path = NULL;
+  gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (drag_dest), FALSE);
 
+  if (!gtk_tree_get_row_drag_data (selection_data,
+				   &src_model,
+				   &src_path))
+    goto out;
+    
   if (src_model != GTK_TREE_MODEL (drag_dest))
-    return FALSE;
+    goto out;
 
   if (gtk_tree_path_get_depth (dest_path) != 1)
-    return FALSE;
+    goto out;
 
   /* can drop before any existing node, or before one past any existing. */
 
   indices = gtk_tree_path_get_indices (dest_path);
 
   if (indices[0] <= GTK_LIST_STORE (drag_dest)->length)
-    return TRUE;
-  else
-    return FALSE;
+    retval = TRUE;
+
+ out:
+  gtk_tree_path_free (src_path);
+  
+  return retval;
 }
 
 

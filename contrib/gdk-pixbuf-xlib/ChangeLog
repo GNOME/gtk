@@ -1,3 +1,8 @@
+2001-11-26  Akira TAGOH  <tagoh@redhat.com>
+
+	* Makefile.am (libgdk_pixbuf_xlib_1_3_la_LDFLAGS):
+	Added -version-info.
+
 2001-05-19  Havoc Pennington  <hp@pobox.com>
 
 	* gdk-pixbuf-xlibrgb.c: docs

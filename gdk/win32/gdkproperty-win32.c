@@ -24,16 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <string.h>
 
 #include "gdkproperty.h"
 #include "gdkselection.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
-#include "gdkdrawable-win32.h"
-#include "gdkwindow-win32.h"
 
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -78,11 +73,12 @@ gdk_atom_intern (const gchar *atom_name,
 	    win32_atom = 0;
 	  else
 	    win32_atom = GlobalAddAtom (atom_name);
-	  retval = GUINT_TO_POINTER (win32_atom);
+	  retval = GUINT_TO_POINTER ((guint) win32_atom);
 	}
-      g_hash_table_insert (atom_hash, 
-			   g_strdup (atom_name), 
-			   retval);
+      if (retval != GDK_NONE)
+	g_hash_table_insert (atom_hash, 
+			     g_strdup (atom_name), 
+			     retval);
     }
 
   return retval;
@@ -94,25 +90,22 @@ gdk_atom_name (GdkAtom atom)
   gchar name[256];
   ATOM win32_atom;
 
-  switch (atom)
-    {
-    case GDK_SELECTION_PRIMARY: return g_strdup ("PRIMARY");
-    case GDK_SELECTION_SECONDARY: return g_strdup ("SECONDARY");
-    case GDK_SELECTION_CLIPBOARD: return g_strdup ("CLIPBOARD");
-    case GDK_SELECTION_TYPE_ATOM: return g_strdup ("ATOM");
-    case GDK_SELECTION_TYPE_BITMAP: return g_strdup ("BITMAP");
-    case GDK_SELECTION_TYPE_COLORMAP: return g_strdup ("COLORMAP");
-    case GDK_SELECTION_TYPE_DRAWABLE: return g_strdup ("DRAWABLE");
-    case GDK_SELECTION_TYPE_INTEGER: return g_strdup ("INTEGER");
-    case GDK_SELECTION_TYPE_PIXMAP: return g_strdup ("PIXMAP");
-    case GDK_SELECTION_TYPE_WINDOW: return g_strdup ("WINDOW");
-    case GDK_SELECTION_TYPE_STRING: return g_strdup ("STRING");
-    }
+  if (GDK_SELECTION_PRIMARY == atom) return g_strdup ("PRIMARY");
+  else if (GDK_SELECTION_SECONDARY == atom) return g_strdup ("SECONDARY");
+  else if (GDK_SELECTION_CLIPBOARD == atom) return g_strdup ("CLIPBOARD");
+  else if (GDK_SELECTION_TYPE_ATOM == atom) return g_strdup ("ATOM");
+  else if (GDK_SELECTION_TYPE_BITMAP == atom) return g_strdup ("BITMAP");
+  else if (GDK_SELECTION_TYPE_COLORMAP == atom) return g_strdup ("COLORMAP");
+  else if (GDK_SELECTION_TYPE_DRAWABLE == atom) return g_strdup ("DRAWABLE");
+  else if (GDK_SELECTION_TYPE_INTEGER == atom) return g_strdup ("INTEGER");
+  else if (GDK_SELECTION_TYPE_PIXMAP == atom) return g_strdup ("PIXMAP");
+  else if (GDK_SELECTION_TYPE_WINDOW == atom) return g_strdup ("WINDOW");
+  else if (GDK_SELECTION_TYPE_STRING == atom) return g_strdup ("STRING");
   
   win32_atom = GPOINTER_TO_UINT (atom);
   
   if (win32_atom < 0xC000)
-    return g_strdup_printf ("#%x", atom);
+    return g_strdup_printf ("#%p", atom);
   else if (GlobalGetAtomName (win32_atom, name, sizeof (name)) == 0)
     return NULL;
   return g_strdup (name);
@@ -225,7 +218,6 @@ gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
   gchar *prop_name;
-  extern void gdk_selection_property_delete (GdkWindow *);
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -238,7 +230,7 @@ gdk_property_delete (GdkWindow *window,
 	     g_free (prop_name)));
 
   if (property == _gdk_selection_property)
-    gdk_selection_property_delete (window);
+    _gdk_selection_property_delete (window);
   else
     g_warning ("gdk_property_delete: General case not implemented");
 }

@@ -28,8 +28,10 @@
 #include <string.h>
 #include <stdarg.h>
 
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtkclipboard.h"
 #include "gtkinvisible.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtktextbuffer.h"
 #include "gtktextbtree.h"
@@ -166,7 +168,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_text),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_STRING_INT,
+                  _gtk_marshal_VOID__BOXED_STRING_INT,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -179,7 +181,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_OBJECT,
+                  _gtk_marshal_VOID__BOXED_OBJECT,
                   GTK_TYPE_NONE,
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -191,7 +193,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_child_anchor),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_OBJECT,
+                  _gtk_marshal_VOID__BOXED_OBJECT,
                   GTK_TYPE_NONE,
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -203,7 +205,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, delete_range),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
+                  _gtk_marshal_VOID__BOXED_BOXED,
                   GTK_TYPE_NONE,
                   2,
                   GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -215,7 +217,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE,
                   0);
 
@@ -225,7 +227,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, modified_changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE,
                   0);
 
@@ -235,7 +237,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_set),
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED_OBJECT,
+                  _gtk_marshal_VOID__BOXED_OBJECT,
                   GTK_TYPE_NONE,
                   2,
                   GTK_TYPE_TEXT_ITER,
@@ -247,7 +249,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, mark_deleted),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT,
+                  _gtk_marshal_VOID__OBJECT,
                   GTK_TYPE_NONE,
                   1,
                   GTK_TYPE_TEXT_MARK);
@@ -258,7 +260,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, apply_tag),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT_BOXED_BOXED,
+                  _gtk_marshal_VOID__OBJECT_BOXED_BOXED,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_TEXT_TAG,
@@ -271,7 +273,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextBufferClass, remove_tag),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT_BOXED_BOXED,
+                  _gtk_marshal_VOID__OBJECT_BOXED_BOXED,
                   GTK_TYPE_NONE,
                   3,
                   GTK_TYPE_TEXT_TAG,
@@ -284,7 +286,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, begin_user_action),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE,
                   0);
 
@@ -294,12 +296,12 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                   G_SIGNAL_RUN_LAST,                   
                   G_STRUCT_OFFSET (GtkTextBufferClass, end_user_action),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE,
                   0);  
 }
 
-void
+static void
 gtk_text_buffer_init (GtkTextBuffer *buffer)
 {
   buffer->clipboard_contents_buffers = NULL;
@@ -439,7 +441,6 @@ gtk_text_buffer_set_text (GtkTextBuffer *buffer,
  */
 
 static void
-
 gtk_text_buffer_real_insert_text (GtkTextBuffer *buffer,
                                   GtkTextIter *iter,
                                   const gchar *text,
@@ -1786,7 +1787,7 @@ gtk_text_buffer_delete_mark_by_name (GtkTextBuffer     *buffer,
  *
  * Returns the mark that represents the cursor (insertion point).
  * Equivalent to calling gtk_text_buffer_get_mark () to get the mark
- * name "insert," but very slightly more efficient, and involves less
+ * named "insert", but very slightly more efficient, and involves less
  * typing.
  *
  * Return value: insertion point mark
@@ -1805,14 +1806,14 @@ gtk_text_buffer_get_insert (GtkTextBuffer *buffer)
  * @buffer: a #GtkTextBuffer
  *
  * Returns the mark that represents the selection bound.  Equivalent
- * to calling gtk_text_buffer_get_mark () to get the mark name
- * "selection_bound," but very slightly more efficient, and involves
+ * to calling gtk_text_buffer_get_mark () to get the mark named
+ * "selection_bound", but very slightly more efficient, and involves
  * less typing.
  *
  * The currently-selected text in @buffer is the region between the
  * "selection_bound" and "insert" marks. If "selection_bound" and
  * "insert" are in the same place, then there is no current selection.
- * gtk_text_buffer_get_selection_bounds () is another convenient function
+ * gtk_text_buffer_get_selection_bounds() is another convenient function
  * for handling the selection, if you just want to know whether there's a
  * selection and what its bounds are.
  *
@@ -1849,7 +1850,7 @@ gtk_text_buffer_get_iter_at_child_anchor (GtkTextBuffer      *buffer,
  *
  * This function moves the "insert" and "selection_bound" marks
  * simultaneously.  If you move them to the same place in two steps
- * with gtk_text_buffer_move_mark (), you will temporarily select a
+ * with gtk_text_buffer_move_mark(), you will temporarily select a
  * region in between their old and new locations, which can be pretty
  * inefficient since the temporarily-selected region will force stuff
  * to be recalculated. This function moves them as a unit, which can
@@ -1864,9 +1865,6 @@ gtk_text_buffer_place_cursor (GtkTextBuffer     *buffer,
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
 
   real = *where;
-
-  if (gtk_text_iter_is_end (&real))
-    gtk_text_iter_backward_char (&real);
 
   _gtk_text_btree_place_cursor (get_btree (buffer), &real);
   gtk_text_buffer_mark_set (buffer, &real,
@@ -2563,7 +2561,7 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
           gchar *str;
           
           str = gtk_text_iter_get_visible_text (&start, &end);
-          gtk_selection_data_set_text (selection_data, str);
+          gtk_selection_data_set_text (selection_data, str, -1);
           g_free (str);
         }
     }
@@ -2682,7 +2680,7 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
       gtk_text_buffer_get_bounds (contents, &start, &end);
       
       str = gtk_text_iter_get_visible_text (&start, &end);
-      gtk_selection_data_set_text (selection_data, str);
+      gtk_selection_data_set_text (selection_data, str, -1);
       g_free (str);
     }
 }
@@ -2902,8 +2900,6 @@ clipboard_clipboard_buffer_received (GtkClipboard     *clipboard,
       if (g_object_get_data (G_OBJECT (src_buffer), "gtk-text-buffer-clipboard"))
 	{
 	  gtk_text_buffer_get_bounds (src_buffer, &start, &end);
-	  /* There's an extra newline on clipboard_contents */
-	  gtk_text_iter_backward_char (&end);
       
 	  paste_from_buffer (request_data, src_buffer,
 			     &start, &end);

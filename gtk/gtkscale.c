@@ -28,7 +28,7 @@
 #include <math.h>
 #include "gtkintl.h"
 #include "gtkscale.h"
-#include "gtkmarshal.h"
+#include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 
@@ -87,14 +87,14 @@ gtk_scale_get_type (void)
   return scale_type;
 }
 
-gboolean
+static gboolean
 single_string_accumulator (GSignalInvocationHint *ihint,
                            GValue                *return_accu,
                            const GValue          *handler_return,
                            gpointer               dummy)
 {
   gboolean continue_emission;
-  gchar *str;
+  const gchar *str;
   
   str = g_value_get_string (handler_return);
   g_value_set_string (return_accu, str);
@@ -138,7 +138,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkScaleClass, format_value),
                   single_string_accumulator, NULL,
-                  gtk_marshal_STRING__DOUBLE,
+                  _gtk_marshal_STRING__DOUBLE,
                   G_TYPE_STRING, 1,
                   G_TYPE_DOUBLE);
 

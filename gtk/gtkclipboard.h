@@ -28,14 +28,13 @@ extern "C" {
 
 #include <gtk/gtkselection.h>
 
-typedef struct _GtkClipboard GtkClipboard;
 
-typedef void (* GtkClipboardReceivedFunc)     (GtkClipboard     *clipboard,
-					       GtkSelectionData *selection_data,
-					       gpointer          data);
-typedef void (* GtkClipboardTextReceivedFunc) (GtkClipboard     *clipboard,
-					       const gchar      *text,
-					       gpointer          data);
+typedef void (* GtkClipboardReceivedFunc)        (GtkClipboard     *clipboard,
+					          GtkSelectionData *selection_data,
+					          gpointer          data);
+typedef void (* GtkClipboardTextReceivedFunc)    (GtkClipboard     *clipboard,
+					          const gchar      *text,
+					          gpointer          data);
 
 /* Should these functions have GtkClipboard *clipboard as the first argument?
  * right now for ClearFunc, you may have trouble determining _which_ clipboard
@@ -72,19 +71,21 @@ void     gtk_clipboard_set_text       (GtkClipboard          *clipboard,
 				       const gchar           *text,
 				       gint                   len);
 
-void gtk_clipboard_request_contents (GtkClipboard                 *clipboard,
-				     GdkAtom                       target,
-				     GtkClipboardReceivedFunc      callback,
-				     gpointer                      user_data);
-void gtk_clipboard_request_text     (GtkClipboard                 *clipboard,
-				     GtkClipboardTextReceivedFunc  callback,
-				     gpointer                      user_data);
+void gtk_clipboard_request_contents (GtkClipboard                    *clipboard,
+				     GdkAtom                          target,
+				     GtkClipboardReceivedFunc         callback,
+				     gpointer                         user_data);
+void gtk_clipboard_request_text     (GtkClipboard                    *clipboard,
+				     GtkClipboardTextReceivedFunc     callback,
+				     gpointer                         user_data);
 
 GtkSelectionData *gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 						   GdkAtom       target);
 gchar *           gtk_clipboard_wait_for_text     (GtkClipboard *clipboard);
 
 GdkDisplay *gtk_clipboard_get_display (GtkClipboard *clipboard);
+
+gboolean gtk_clipboard_wait_is_text_available   (GtkClipboard         *clipboard);
 
 #ifdef __cplusplus
 }

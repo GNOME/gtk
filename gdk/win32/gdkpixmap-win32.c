@@ -25,14 +25,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "gdkpixmap.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 
 static void gdk_pixmap_impl_win32_get_size   (GdkDrawable        *drawable,
@@ -46,7 +43,7 @@ static void gdk_pixmap_impl_win32_finalize   (GObject                 *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_pixmap_impl_win32_get_type (void)
+_gdk_pixmap_impl_win32_get_type (void)
 {
   static GType object_type = 0;
 
@@ -76,7 +73,7 @@ gdk_pixmap_impl_win32_get_type (void)
 GType
 _gdk_pixmap_impl_get_type (void)
 {
-  return gdk_pixmap_impl_win32_get_type ();
+  return _gdk_pixmap_impl_win32_get_type ();
 }
 
 static void
@@ -442,10 +439,4 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
-}
-
-GdkWindow*
-gdk_window_lookup (GdkNativeWindow hbm)
-{
-  return (GdkPixmap*) gdk_win32_handle_table_lookup (hbm);
 }

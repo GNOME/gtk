@@ -71,7 +71,7 @@ struct _GtkSocketClass
 {
   GtkContainerClass parent_class;
 
-  gboolean (*plug_added)   (GtkSocket *socket);
+  void     (*plug_added)   (GtkSocket *socket);
   gboolean (*plug_removed) (GtkSocket *socket);
 };
 
@@ -80,7 +80,7 @@ GtkWidget*     gtk_socket_new      (void);
 GtkType        gtk_socket_get_type (void) G_GNUC_CONST;
 
 void            gtk_socket_add_id (GtkSocket       *socket,
-				   GdkNativeWindow  id);
+				   GdkNativeWindow  window_id);
 GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket);
 
 #ifndef GTK_DISABLE_DEPRECATED

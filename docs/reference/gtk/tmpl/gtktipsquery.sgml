@@ -97,61 +97,6 @@ the pointer has no tooltip.
 beneath the pointer has no tooltip.
 
 
-<!-- ##### MACRO GTK_TIPS_QUERY ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-
-<!-- ##### MACRO GTK_IS_TIPS_QUERY ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-
-<!-- ##### MACRO GTK_TYPE_TIPS_QUERY ##### -->
-<para>
-
-</para>
-
-
-
-<!-- ##### FUNCTION gtk_tips_query_get_type ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### MACRO GTK_TIPS_QUERY_CLASS ##### -->
-<para>
-
-</para>
-
-@klass: 
-
-
-<!-- ##### MACRO GTK_IS_TIPS_QUERY_CLASS ##### -->
-<para>
-
-</para>
-
-@klass: 
-
-
-<!-- ##### MACRO GTK_TIPS_QUERY_GET_CLASS ##### -->
-<para>
-
-</para>
-
-@obj: 
-
-
 <!-- ##### SIGNAL GtkTipsQuery::start-query ##### -->
 <para>
 Emitted when the query is started.

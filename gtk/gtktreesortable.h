@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define GTK_TREE_SORTABLE_GET_IFACE(obj)  ((GtkTreeSortableIface *)g_type_interface_peek (((GTypeInstance *)GTK_TREE_SORTABLE (obj))->g_class, GTK_TYPE_TREE_SORTABLE))
 
 enum {
-  GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID = -1,
+  GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID = -1
 };
 
 typedef struct _GtkTreeSortable      GtkTreeSortable; /* Dummy typedef */

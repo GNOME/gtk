@@ -26,7 +26,7 @@
  */
 
 #include "gtkmain.h"
-#include "gtkmarshal.h"
+#include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
 
@@ -62,7 +62,9 @@ static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xev
 						       GdkEvent         *event,
 						       gpointer          data);
 
+#if 0
 static void gtk_plug_free_grabbed_keys (GHashTable    *key_table);
+#endif
 static void handle_modality_off        (GtkPlug       *plug);
 static void send_xembed_message        (GtkPlug       *plug,
 					glong          message,
@@ -148,7 +150,7 @@ gtk_plug_class_init (GtkPlugClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPlugClass, embedded),
 		  NULL, NULL,
-		  gtk_marshal_VOID__VOID,
+		  _gtk_marshal_VOID__VOID,
 		  GTK_TYPE_NONE, 0);
 }
 
@@ -180,6 +182,14 @@ gtk_plug_set_is_child (GtkPlug  *plug,
 	  g_object_unref (plug->modality_group);
 	  plug->modality_group = NULL;
 	}
+      
+      /* As a toplevel, the MAPPED flag doesn't correspond
+       * to whether the widget->window is mapped; we unmap
+       * here, but don't bother remapping -- we will get mapped
+       * by gtk_widget_set_parent ().
+       */
+      if (GTK_WIDGET_MAPPED (plug))
+	gtk_widget_unmap (GTK_WIDGET (plug));
       
       GTK_WIDGET_UNSET_FLAGS (plug, GTK_TOPLEVEL);
       gtk_container_set_resize_mode (GTK_CONTAINER (plug), GTK_RESIZE_PARENT);
@@ -220,7 +230,10 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   gtk_plug_set_is_child (plug, TRUE);
   plug->same_app = TRUE;
+  socket->same_app = TRUE;
   socket->plug_widget = widget;
+
+  plug->socket_window = GTK_WIDGET (socket)->window;
 
   if (GTK_WIDGET_REALIZED (widget))
     gdk_window_reparent (widget->window, plug->socket_window, 0, 0);
@@ -231,7 +244,7 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 }
 
 /**
- * _gtk_plug_add_to_socket:
+ * _gtk_plug_remove_from_socket:
  * @plug: a #GtkPlug
  * @socket: a #GtkSocket
  * 
@@ -271,7 +284,7 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   socket->same_app = FALSE;
 
   plug->same_app = FALSE;
-  plug->socket_window = FALSE;
+  plug->socket_window = NULL;
 
   gtk_plug_set_is_child (plug, FALSE);
 		    

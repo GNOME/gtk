@@ -121,7 +121,6 @@ main (gint argc, gchar **argv)
   
   g_object_set (G_OBJECT (renderer),
 		"xalign", 0.0,
-		"mode", GTK_CELL_RENDERER_MODE_ACTIVATABLE,
 		NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Editable",

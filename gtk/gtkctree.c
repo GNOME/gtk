@@ -32,6 +32,7 @@
 #include "gtkctree.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkdnd.h"
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdk.h>
@@ -433,52 +434,52 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_select_row),
-		    gtk_marshal_VOID__BOXED_INT,
+		    _gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
+		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_INT);
   ctree_signals[TREE_UNSELECT_ROW] =
     gtk_signal_new ("tree_unselect_row",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_unselect_row),
-		    gtk_marshal_VOID__BOXED_INT,
+		    _gtk_marshal_VOID__POINTER_INT,
 		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
+		    GTK_TYPE_CTREE_NODE,
 		    GTK_TYPE_INT);
   ctree_signals[TREE_EXPAND] =
     gtk_signal_new ("tree_expand",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_expand),
-		    gtk_marshal_VOID__BOXED,
+		    _gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		    GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_COLLAPSE] =
     gtk_signal_new ("tree_collapse",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_collapse),
-		    gtk_marshal_VOID__BOXED,
+		    _gtk_marshal_VOID__POINTER,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		    GTK_TYPE_CTREE_NODE);
   ctree_signals[TREE_MOVE] =
     gtk_signal_new ("tree_move",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass, tree_move),
-		    gtk_marshal_VOID__BOXED_BOXED_BOXED,
+		    _gtk_marshal_VOID__POINTER_POINTER_POINTER,
 		    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE,
-		    GTK_TYPE_CTREE_NODE | G_SIGNAL_TYPE_STATIC_SCOPE);
+		    GTK_TYPE_CTREE_NODE,
+		    GTK_TYPE_CTREE_NODE,
+		    GTK_TYPE_CTREE_NODE);
   ctree_signals[CHANGE_FOCUS_ROW_EXPANSION] =
     gtk_signal_new ("change_focus_row_expansion",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCTreeClass,
 				       change_focus_row_expansion),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_CTREE_EXPANSION_TYPE);
 
   binding_set = gtk_binding_set_by_class (klass);
@@ -1936,7 +1937,7 @@ draw_row (GtkCList     *clist,
 		case GTK_CELL_TEXT:
 		  if (layout)
 		    {
-		      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height - 1) / 2;
+		      gint row_center_offset = (clist->row_height - logical_rect.height) / 2;
 
 		      gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
 		      gdk_draw_layout (clist->clist_window, fg_gc,
@@ -5227,8 +5228,9 @@ gtk_ctree_node_moveto (GtkCTree     *ctree,
   gtk_clist_moveto (clist, row, column, row_align, col_align);
 }
 
-GtkVisibility gtk_ctree_node_is_visible (GtkCTree     *ctree,
-                                         GtkCTreeNode *node)
+GtkVisibility 
+gtk_ctree_node_is_visible (GtkCTree     *ctree,
+                           GtkCTreeNode *node)
 {
   gint row;
   
@@ -6129,30 +6131,13 @@ gtk_ctree_drag_data_received (GtkWidget        *widget,
     }
 }
 
-/* dummy boxed type definition, used so that the GtkCTreeNode signal
- * arguments have a reasonable type.
- */
-gpointer
-ctree_node_copy (gpointer boxed)
-{
-  return boxed;
-}
-
-void
-ctree_node_free (gpointer boxed)
-{
-  /* nothing */
-}
-
 GType
 gtk_ctree_node_get_type (void)
 {
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkCTreeNode",
-                                             (GBoxedCopyFunc)ctree_node_copy,
-                                             (GBoxedFreeFunc)ctree_node_free);
+    our_type = g_pointer_type_register_static ("GtkCTreeNode");
 
   return our_type;
 }

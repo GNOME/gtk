@@ -22,7 +22,7 @@ Animated images.
 
 <!-- ##### STRUCT GdkPixbufFrame ##### -->
 <para>
-
+ This object describes an individual frame of an animation.
 </para>
 
 
@@ -34,7 +34,8 @@ Animated images.
 
 <!-- ##### STRUCT GdkPixbufAnimationIter ##### -->
 <para>
-
+A #GdkPixbufAnimationIter provides the necessary functionality to
+display an animation. See gdk_pixbuf_animation_get_iter().
 </para>
 
 

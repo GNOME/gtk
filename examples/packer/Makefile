@@ -2,7 +2,7 @@
 CC = gcc
 
 packer: pack.c 
-	$(CC) `gtk-config --cflags`  pack.c -o packer `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  pack.c -o packer `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o packer

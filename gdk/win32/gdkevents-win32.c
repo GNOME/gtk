@@ -25,8 +25,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "config.h"
-
 /* Cannot use TrackMouseEvent, as the stupid WM_MOUSELEAVE message
  * doesn't tell us where the mouse has gone. Thus we cannot use it to
  * generate a correct GdkNotifyType. Pity, as using TrackMouseEvent
@@ -41,26 +39,31 @@
 
 #include <stdio.h>
 
+#include "gdk.h"
 #include "gdkprivate-win32.h"
+#include "gdkinput-win32.h"
+#include "gdkkeysyms.h"
 
 #include <objbase.h>
+
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+# define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
+# define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#endif
+
 #include <imm.h>
+
+#if defined (__GNUC__) && defined (HAVE_DIMM_H)
+# undef IMEMENUITEMINFOA
+# undef IMEMENUITEMINFOW
+#endif
 
 #ifdef HAVE_DIMM_H
 #include <dimm.h>
-#else
-#include "surrogate-dimm.h"
 #endif
 
-#include "gdk.h"
-#include "gdkinternals.h"
-#include "gdkinput-win32.h"
 
-#include "gdkkeysyms.h"
-
-#define PING() printf("%s: %d\n",__FILE__,__LINE__),fflush(stdout)
-
-typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
 typedef enum
@@ -70,14 +73,6 @@ typedef enum
    */
   GDK_EVENT_PENDING = 1 << 0
 } GdkEventFlags;
-
-struct _GdkIOClosure
-{
-  GdkInputFunction function;
-  GdkInputCondition condition;
-  GdkDestroyNotify notify;
-  gpointer data;
-};
 
 struct _GdkEventPrivate
 {
@@ -141,8 +136,10 @@ static UINT msh_mousewheel_msg;
 static gboolean ignore_wm_char = FALSE;
 static gboolean is_altgr_key = FALSE;
 
+#ifdef HAVE_DIMM_H
 static IActiveIMMApp *active_imm_app = NULL;
 static IActiveIMMMessagePumpOwner *active_imm_msgpump_owner = NULL;
+#endif
 
 typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
 static PFN_TrackMouseEvent track_mouse_event = NULL;
@@ -159,7 +156,9 @@ real_window_procedure (HWND   hwnd,
   GdkEvent *eventp;
   MSG msg;
   DWORD pos;
+#ifdef HAVE_DIMM_H
   LRESULT lres;
+#endif
   gint ret_val;
   gboolean ret_val_flag;
 
@@ -261,28 +260,32 @@ real_window_procedure (HWND   hwnd,
     return ret_val;
   else
     {
+#ifndef HAVE_DIMM_H
+      return DefWindowProc (hwnd, message, wparam, lparam);
+#else
       if (active_imm_app == NULL
 	  || (*active_imm_app->lpVtbl->OnDefWindowProc) (active_imm_app, hwnd, message, wparam, lparam, &lres) == S_FALSE)
 	return DefWindowProc (hwnd, message, wparam, lparam);
       else
 	return lres;
+#endif
     }
 }
 
 LRESULT CALLBACK
-gdk_window_procedure (HWND   hwnd,
-		      UINT   message,
-		      WPARAM wparam,
-		      LPARAM lparam)
+_gdk_win32_window_procedure (HWND   hwnd,
+                             UINT   message,
+                             WPARAM wparam,
+                             LPARAM lparam)
 {
   LRESULT retval;
 
-  GDK_NOTE (MISC, g_print ("gdk_window_procedure: %#lx %s\n",
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %#lx %s\n",
 			     (gulong) hwnd, gdk_win32_message_name (message)));
 
   retval = real_window_procedure (hwnd, message, wparam, lparam);
 
-  GDK_NOTE (MISC, g_print ("gdk_window_procedure: %#lx returns %ld\n",
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %#lx returns %ld\n",
 			     (gulong) hwnd, retval));
 
   return retval;
@@ -292,7 +295,9 @@ void
 _gdk_events_init (void)
 {
   GSource *source;
+#ifdef HAVE_DIMM_H
   HRESULT hres;
+#endif
 #ifdef USE_TRACKMOUSEEVENT
   HMODULE user32, imm32;
   HINSTANCE commctrl32;
@@ -319,6 +324,7 @@ _gdk_events_init (void)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
+#ifdef HAVE_DIMM_H
   hres = CoCreateInstance (&CLSID_CActiveIMM,
 			   NULL,
 			   CLSCTX_ALL,
@@ -336,6 +342,7 @@ _gdk_events_init (void)
 				 active_imm_msgpump_owner));
       (active_imm_msgpump_owner->lpVtbl->Start) (active_imm_msgpump_owner);
     }
+#endif
 
 #ifdef USE_TRACKMOUSEEVENT
   user32 = GetModuleHandle ("user32.dll");
@@ -1065,6 +1072,7 @@ print_event (GdkEvent *event)
     CASE (GDK_NO_EXPOSE);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
+    CASE (GDK_SETTING);
 #undef CASE
     }
   g_print ("%#lx ", (gulong) GDK_WINDOW_HWND (event->any.window));
@@ -1646,8 +1654,8 @@ gdk_event_translate (GdkEvent *event,
 
       event->selection.type = GDK_SELECTION_NOTIFY;
       event->selection.window = window;
-      event->selection.selection = msg->wParam;
-      event->selection.target = msg->lParam;
+      event->selection.selection = GDK_POINTER_TO_ATOM (msg->wParam);
+      event->selection.target = GDK_POINTER_TO_ATOM (msg->lParam);
       event->selection.property = _gdk_selection_property;
       event->selection.time = msg->time;
 
@@ -1679,8 +1687,8 @@ gdk_event_translate (GdkEvent *event,
 
       event->selection.type = GDK_SELECTION_CLEAR;
       event->selection.window = window;
-      event->selection.selection = msg->wParam;
-      event->selection.target = msg->lParam;
+      event->selection.selection = GDK_POINTER_TO_ATOM (msg->wParam);
+      event->selection.target = GDK_POINTER_TO_ATOM (msg->lParam);
       event->selection.time = msg->time;
 
       return_val = !GDK_WINDOW_DESTROYED (window);
@@ -1753,7 +1761,11 @@ gdk_event_translate (GdkEvent *event,
       while (tmp_list)
 	{
 	  GdkClientFilter *filter = tmp_list->data;
-	  if (filter->type == msg->message)
+	  /* FIXME: under win32 messages are not really atoms
+	   * as the following cast suggest, but the appears to be right
+	   * Haven't found a use case though ...
+	   */
+	  if (filter->type == GDK_POINTER_TO_ATOM (msg->message))
 	    {
 	      GDK_NOTE (EVENTS, g_print ("client filter matched\n"));
 	      event->any.window = window;
@@ -1776,7 +1788,8 @@ gdk_event_translate (GdkEvent *event,
 		  return_val = TRUE;
 		  event->client.type = GDK_CLIENT_EVENT;
 		  event->client.window = window;
-		  event->client.message_type = msg->message;
+		  /* FIXME: check if the cast is correct, see above */
+		  event->client.message_type = GDK_POINTER_TO_ATOM (msg->message);
 		  event->client.data_format = 0;
 		  event->client.data.l[0] = msg->wParam;
 		  event->client.data.l[1] = msg->lParam;
@@ -2589,7 +2602,7 @@ gdk_event_translate (GdkEvent *event,
 
       if (GDK_WINDOW_OBJECT (window)->bg_pixmap == NULL)
 	{
-	  bg = gdk_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
+	  bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
 				   GDK_WINDOW_OBJECT (window)->bg_color.pixel);
 
 	  GetClipBox (hdc, &rect);
@@ -2922,6 +2935,16 @@ gdk_event_translate (GdkEvent *event,
 	  mmi->ptMaxSize.x = MIN(window_impl->hint_max_width, gdk_screen_width ());
 	  mmi->ptMaxSize.y = MIN(window_impl->hint_max_height, gdk_screen_height ());
 	}
+	else if (window_impl->hint_flags & GDK_HINT_MIN_SIZE)
+	{
+	  /* need to initialize */
+	  mmi->ptMaxSize.x = gdk_screen_width ();
+	  mmi->ptMaxSize.y = gdk_screen_height ();
+	}
+	/* lovely API inconsistence: return FALSE when handled */
+	if (ret_val_flagp)
+	  *ret_val_flagp = !(window_impl->hint_flags &
+	                     (GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE));
       break;
 
     case WM_MOVE:
@@ -3155,10 +3178,13 @@ _gdk_events_queue (void)
     {
       GDK_NOTE (EVENTS, g_print ("PeekMessage: %#lx %s\n",
 				 (gulong) msg.hwnd, gdk_win32_message_name (msg.message)));
-
+#ifndef HAVE_DIMM_H
+      TranslateMessage (&msg);
+#else
       if (active_imm_msgpump_owner == NULL
 	  || (active_imm_msgpump_owner->lpVtbl->OnTranslateMessage) (active_imm_msgpump_owner, &msg) != S_OK)
 	TranslateMessage (&msg);
+#endif
 
 #if 1 /* It was like this all the time */
       DispatchMessage (&msg);

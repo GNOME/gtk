@@ -40,7 +40,15 @@
 #include <unistd.h>
 #endif
 #include "gdk/gdk.h"
+#ifdef G_OS_WIN32
+#define STRICT
+#include <windows.h>
+#undef STRICT
+#endif
+
 #include <pango/pango-utils.h>	/* For pango_split_file_list */
+
+#include "gtkaccelmap.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
 #include "gtkmain.h"
@@ -224,26 +232,72 @@ check_setugid (void)
   return TRUE;
 }
 
+#ifdef G_OS_WIN32
+
+G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
+
+const gchar *
+_gtk_get_libdir (void)
+{
+  static char *gtk_libdir = NULL;
+  if (gtk_libdir == NULL)
+    gtk_libdir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "lib");
+
+  return gtk_libdir;
+}
+
+const gchar *
+_gtk_get_localedir (void)
+{
+  static char *gtk_localedir = NULL;
+  if (gtk_localedir == NULL)
+    gtk_localedir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "lib\\locale");
+
+  return gtk_localedir;
+}
+
+const gchar *
+_gtk_get_sysconfdir (void)
+{
+  static char *gtk_sysconfdir = NULL;
+  if (gtk_sysconfdir == NULL)
+    gtk_sysconfdir = g_win32_get_package_installation_subdirectory
+      (GETTEXT_PACKAGE, dll_name, "etc");
+
+  return gtk_sysconfdir;
+}
+
+const gchar *
+_gtk_get_data_prefix (void)
+{
+  static char *gtk_data_prefix = NULL;
+  if (gtk_data_prefix == NULL)
+    gtk_data_prefix = g_win32_get_package_installation_directory
+      (GETTEXT_PACKAGE, dll_name);
+
+  return gtk_data_prefix;
+}
+
+#endif /* G_OS_WIN32 */
+
 static gchar **
 get_module_path (void)
 {
-  gchar *module_path = g_getenv ("GTK_MODULE_PATH");
-  gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
+  const gchar *module_path_env = g_getenv ("GTK_MODULE_PATH");
+  const gchar *exe_prefix = g_getenv("GTK_EXE_PREFIX");
   gchar **result;
+  gchar *module_path;
   gchar *default_dir;
 
   if (exe_prefix)
     default_dir = g_build_filename (exe_prefix, "lib", "gtk-2.0", "modules", NULL);
   else
-    {
-#ifndef G_OS_WIN32
-      default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
-#else
-      default_dir = g_build_filename (get_gtk_win32_directory (""), "modules", NULL);
-#endif
-    }
-  module_path = g_strconcat (module_path ? module_path : "",
-			     module_path ? G_SEARCHPATH_SEPARATOR_S : "",
+    default_dir = g_build_filename (GTK_LIBDIR, "gtk-2.0", "modules", NULL);
+
+  module_path = g_strconcat (module_path_env ? module_path_env : "",
+			     module_path_env ? G_SEARCHPATH_SEPARATOR_S : "",
 			     default_dir, NULL);
 
   result = pango_split_file_list (module_path);
@@ -269,19 +323,18 @@ find_module (gchar      **module_path,
     {
       gchar *version_directory;
 
-#ifndef G_OS_WIN32 /* ignoring GTK_BINARY_VERSION elsewhere too */
       version_directory = g_build_filename (module_path[i], GTK_BINARY_VERSION, NULL);
       module_name = g_module_build_path (version_directory, name);
       g_free (version_directory);
       
       if (g_file_test (module_name, G_FILE_TEST_EXISTS))
 	{
+	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
 	  g_free (module_name);
-	  return g_module_open (module_name, G_MODULE_BIND_LAZY);
+	  return module;
 	}
       
       g_free (module_name);
-#endif
 
       module_name = g_module_build_path (module_path[i], name);
       
@@ -547,19 +600,10 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-#  ifndef G_OS_WIN32
   bindtextdomain (GETTEXT_PACKAGE, GTK_LOCALEDIR);
 #    ifdef HAVE_BIND_TEXTDOMAIN_CODESET
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 #    endif
-#  else /* !G_OS_WIN32 */
-  {
-    bindtextdomain (GETTEXT_PACKAGE,
-		    g_win32_get_package_installation_subdirectory (GETTEXT_PACKAGE,
-								   g_strdup_printf ("gtk-win32-%d.%d.dll", GTK_MAJOR_VERSION, GTK_MINOR_VERSION),
-								   "locale"));
-  }
-#endif
 #endif  
 
   {
@@ -584,8 +628,8 @@ gtk_init_check (int	 *argc,
   gtk_colormap = gdk_colormap_get_system_for_screen (gdk_get_default_screen ());
 
   gtk_type_init (0);
+  _gtk_accel_map_init ();  
   _gtk_rc_init ();
-  
   
   /* Register an exit function to make sure we are able to cleanup.
    */
@@ -1047,9 +1091,13 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_ENTER_NOTIFY:
       if (GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	{
+	  g_object_ref (event_widget);
+	  
 	  gtk_widget_event (grab_widget, event);
 	  if (event_widget == grab_widget)
 	    GTK_PRIVATE_SET_FLAG (event_widget, GTK_LEAVE_PENDING);
+	  
+	  g_object_unref (event_widget);
 	}
       break;
       

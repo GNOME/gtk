@@ -559,7 +559,7 @@ create_tree_model (void)
 			      t[6], t[7], t[8]);
 
   i = 0;
-  while (i < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
+  while (i < G_TYPE_FUNDAMENTAL_MAX)
     {
       typesystem_recurse (i, NULL, store);
       
@@ -656,18 +656,16 @@ main (int    argc,
 
   tv = gtk_tree_view_new_with_model (models[0]);
   
-  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (tv),
-                                      GDK_BUTTON1_MASK,
-                                      row_targets,
-                                      G_N_ELEMENTS (row_targets),
-                                      GDK_ACTION_MOVE | GDK_ACTION_COPY,
-                                      NULL, NULL);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
+					  GDK_BUTTON1_MASK,
+					  row_targets,
+					  G_N_ELEMENTS (row_targets),
+					  GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
-  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (tv),
-                                    row_targets,
-                                    G_N_ELEMENTS (row_targets),
-                                    GDK_ACTION_MOVE | GDK_ACTION_COPY,
-                                    NULL, NULL);
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tv),
+					row_targets,
+					G_N_ELEMENTS (row_targets),
+					GDK_ACTION_MOVE | GDK_ACTION_COPY);
   
   /* Model menu */
 
@@ -769,17 +767,7 @@ main (int    argc,
  * GtkTreeModelTypes
  */
 
-enum {
-  CHANGED,
-  INSERTED,
-  CHILD_TOGGLED,
-  DELETED,
-
-  LAST_SIGNAL
-};
-
 static void         gtk_tree_model_types_init                 (GtkTreeModelTypes      *model_types);
-static void         gtk_tree_model_types_class_init           (GtkTreeModelTypesClass *class);
 static void         gtk_tree_model_types_tree_model_init      (GtkTreeModelIface   *iface);
 static gint         gtk_real_model_types_get_n_columns   (GtkTreeModel        *tree_model);
 static GType        gtk_real_model_types_get_column_type (GtkTreeModel        *tree_model,
@@ -808,9 +796,6 @@ static gboolean     gtk_real_model_types_iter_parent     (GtkTreeModel        *t
 							   GtkTreeIter         *child);
 
 
-static guint model_types_signals[LAST_SIGNAL] = { 0 };
-
-
 GtkType
 gtk_tree_model_types_get_type (void)
 {
@@ -823,7 +808,7 @@ gtk_tree_model_types_get_type (void)
         sizeof (GtkTreeModelTypesClass),
 	NULL,		/* base_init */
 	NULL,		/* base_finalize */
-        (GClassInitFunc) gtk_tree_model_types_class_init,
+        NULL,           /* class_init */
 	NULL,		/* class_finalize */
 	NULL,		/* class_data */
         sizeof (GtkTreeModelTypes),
@@ -855,54 +840,6 @@ gtk_tree_model_types_new (void)
   retval = GTK_TREE_MODEL_TYPES (g_object_new (GTK_TYPE_MODEL_TYPES, NULL));
 
   return retval;
-}
-
-static void
-gtk_tree_model_types_class_init (GtkTreeModelTypesClass *class)
-{
-  GObjectClass *object_class;
-
-  object_class = (GObjectClass*) class;
-
-  model_types_signals[CHANGED] =
-    g_signal_new ("changed",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, changed),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER);
-  model_types_signals[INSERTED] =
-    g_signal_new ("inserted",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, inserted),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER);
-  model_types_signals[CHILD_TOGGLED] =
-    g_signal_new ("child_toggled",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, child_toggled),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED_BOXED,
-                  G_TYPE_NONE, 2,
-                  G_TYPE_POINTER,
-                  G_TYPE_POINTER);
-  model_types_signals[DELETED] =
-    g_signal_new ("deleted",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_FIRST,
-                  GTK_SIGNAL_OFFSET (GtkTreeModelTypesClass, deleted),
-                  NULL, NULL,
-                  gtk_marshal_VOID__BOXED,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_POINTER);
 }
 
 static void
@@ -1050,13 +987,17 @@ gtk_real_model_types_iter_next (GtkTreeModel  *tree_model,
   type = GPOINTER_TO_INT (iter->user_data);
 
   parent = g_type_parent (type);
-
+  
   if (parent == G_TYPE_INVALID)
     {
-      /* fundamental type, add 1 */
-      if ((type + 1) < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
-        {
-          iter->user_data = GINT_TO_POINTER (type + 1);
+      /* find next _valid_ fundamental type */
+      do
+	type++;
+      while (!g_type_name (type) && type <= G_TYPE_FUNDAMENTAL_MAX);
+      if (type <= G_TYPE_FUNDAMENTAL_MAX)
+	{
+	  /* found one */
+          iter->user_data = GINT_TO_POINTER (type);
           return TRUE;
         }
       else
@@ -1142,7 +1083,7 @@ gtk_real_model_types_iter_n_children (GtkTreeModel *tree_model,
 {
   if (iter == NULL)
     {
-      return G_TYPE_RESERVED_LAST_FUNDAMENTAL - 1;
+      return G_TYPE_FUNDAMENTAL_MAX;
     }
   else
     {
@@ -1169,7 +1110,7 @@ gtk_real_model_types_iter_nth_child (GtkTreeModel *tree_model,
   if (parent == NULL)
     {
       /* fundamental type */
-      if (n < G_TYPE_RESERVED_LAST_FUNDAMENTAL)
+      if (n < G_TYPE_FUNDAMENTAL_MAX)
         {
           iter->user_data = GINT_TO_POINTER (n);
           return TRUE;
@@ -1217,7 +1158,7 @@ gtk_real_model_types_iter_parent (GtkTreeModel *tree_model,
   
   if (parent == G_TYPE_INVALID)
     {
-      if (type >= G_TYPE_RESERVED_LAST_FUNDAMENTAL)
+      if (type > G_TYPE_FUNDAMENTAL_MAX)
         g_warning ("no parent for %d %s\n", type, g_type_name (type));
       return FALSE;
     }

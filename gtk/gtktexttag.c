@@ -54,6 +54,7 @@
 #include "gtksignal.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtktypebuiltins.h"
 
 #include <stdlib.h>
@@ -414,7 +415,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_int ("indent",
                                                      _("Indent"),
                                                      _("Amount to indent the paragraph, in pixels"),
-                                                     0,
+                                                     G_MININT,
                                                      G_MAXINT,
                                                      0,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -425,7 +426,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    g_param_spec_int ("rise",
                                                      _("Rise"),
                                                      _("Offset of text above the baseline (below the baseline if rise is negative)"),
-                                                     -G_MAXINT,
+						     G_MININT,
                                                      G_MAXINT,
                                                      0,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -621,7 +622,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   G_SIGNAL_RUN_LAST,
                   GTK_SIGNAL_OFFSET (GtkTextTagClass, event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
+                  _gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED,
                   G_TYPE_BOOLEAN,
                   3,
                   G_TYPE_OBJECT,
@@ -629,7 +630,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                   GTK_TYPE_TEXT_ITER);
 }
 
-void
+static void
 gtk_text_tag_init (GtkTextTag *text_tag)
 {
   /* 0 is basically a fine way to initialize everything in the
@@ -998,6 +999,8 @@ gtk_text_tag_set_property (GObject      *object,
           font_desc = pango_font_description_from_string (name);
 
         set_font_description (text_tag, font_desc);
+	if (font_desc)
+	  pango_font_description_free (font_desc);
         
         size_changed = TRUE;
       }

@@ -27,6 +27,7 @@
 
 #include "gtkframe.h"
 #include "gtklabel.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 #include "gtkstatusbar.h"
 #include "gtkwindow.h"
@@ -138,7 +139,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_pushed),
-		    gtk_marshal_VOID__UINT_STRING,
+		    _gtk_marshal_VOID__UINT_STRING,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);
@@ -147,7 +148,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkStatusbarClass, text_popped),
-		    gtk_marshal_VOID__UINT_STRING,
+		    _gtk_marshal_VOID__UINT_STRING,
 		    GTK_TYPE_NONE, 2,
 		    GTK_TYPE_UINT,
 		    GTK_TYPE_STRING);

@@ -19,7 +19,7 @@
 #undef GTK_COMPILED_WITH_DEBUGGING
 
 #undef HAVE_CATGETS
-#undef HAVE_DIRENT_H
+#undef HAVE_DIMM_H
 #undef HAVE_GETTEXT
 #undef HAVE_IPC_H
 #undef HAVE_LC_MESSAGES
@@ -31,8 +31,12 @@
 #undef HAVE_SHAPE_EXT
 #undef HAVE_SYS_SELECT_H
 #undef HAVE_SYS_TIME_H
+#undef HAVE_WINSOCK_H
+#undef HAVE_WINTAB
 #undef HAVE_XCONVERTCASE
 #undef HAVE_XFT
+
+#undef HAVE_SIGSETJMP
 
 #undef NO_FD_SET
 

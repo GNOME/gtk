@@ -30,7 +30,7 @@ automatically adds a #GtkAccelLabel to the #GtkMenuItem and calls
 gtk_accel_label_set_accel_widget() to set it up for you.
 </para>
 <para>
-A #GtkAccelLabel will only display accelerators which have GTK_ACCEL_VISIBLE
+A #GtkAccelLabel will only display accelerators which have %GTK_ACCEL_VISIBLE
 set (see #GtkAccelFlags).
 A #GtkAccelLabel can display multiple accelerators and even signal names,
 though it is almost always used to display just one accelerator key.
@@ -90,11 +90,20 @@ should be accessed using the functions below.
 Creates a new #GtkAccelLabel.
 </para>
 
-@string: the label string.
+@string: the label string. Must be non-%NULL.
 @Returns: a new #GtkAccelLabel.
 
 
-<!-- ##### FUNCTION gtk_accel_label_get_accel_object ##### -->
+<!-- ##### FUNCTION gtk_accel_label_set_accel_closure ##### -->
+<para>
+
+</para>
+
+@accel_label: 
+@closure: 
+
+
+<!-- ##### FUNCTION gtk_accel_label_get_accel_widget ##### -->
 <para>
 
 </para>
@@ -103,24 +112,7 @@ Creates a new #GtkAccelLabel.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_accel_label_set_accel_object ##### -->
-<para>
-
-</para>
-
-@accel_label: 
-@accel_object: 
-
-
-<!-- ##### MACRO gtk_accel_label_get_accel_widget ##### -->
-<para>
-
-</para>
-
-@accel_label: 
-
-
-<!-- ##### MACRO gtk_accel_label_set_accel_widget ##### -->
+<!-- ##### FUNCTION gtk_accel_label_set_accel_widget ##### -->
 <para>
 Sets the widget whose accelerators are to be shown.
 </para>
@@ -137,7 +129,7 @@ be needed by applications.
 </para>
 
 @accel_label: a #GtkAccelLabel.
-@Returns: 
+@Returns: the width needed to display the accelerator key(s).
 
 
 <!-- ##### FUNCTION gtk_accel_label_refetch ##### -->
@@ -148,11 +140,16 @@ accelerators are added or removed from the associated widget.
 </para>
 
 @accel_label: a #GtkAccelLabel.
-@Returns: always returns FALSE.
+@Returns: always returns %FALSE.
 
 
-<!-- ##### ARG GtkAccelLabel:accel-object ##### -->
+<!-- ##### ARG GtkAccelLabel:accel-closure ##### -->
 <para>
 
+</para>
+
+<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
+<para>
+The widget whose accelerators are to be shown by the #GtkAccelLabel.
 </para>
 

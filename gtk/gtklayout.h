@@ -59,9 +59,6 @@ struct _GtkLayout {
   guint width;
   guint height;
 
-  guint xoffset;
-  guint yoffset;
-
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 

@@ -2,7 +2,7 @@
 XlibRGB
 
 <!-- ##### SECTION Short_Description ##### -->
-Functions for rendering RGB buffers to X drawables.
+Rendering RGB buffers to X drawables.
 
 <!-- ##### SECTION Long_Description ##### -->
   <para>

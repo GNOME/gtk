@@ -40,7 +40,7 @@ extern "C" {
 typedef struct _GdkPixmapImplWin32 GdkPixmapImplWin32;
 typedef struct _GdkPixmapImplWin32Class GdkPixmapImplWin32Class;
 
-#define GDK_TYPE_PIXMAP_IMPL_WIN32              (gdk_pixmap_impl_win32_get_type ())
+#define GDK_TYPE_PIXMAP_IMPL_WIN32              (_gdk_pixmap_impl_win32_get_type ())
 #define GDK_PIXMAP_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXMAP_IMPL_WIN32, GdkPixmapImplWin32))
 #define GDK_PIXMAP_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXMAP_IMPL_WIN32, GdkPixmapImplWin32Class))
 #define GDK_IS_PIXMAP_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXMAP_IMPL_WIN32))
@@ -63,8 +63,8 @@ struct _GdkPixmapImplWin32Class
 
 };
 
-GType gdk_pixmap_impl_win32_get_type (void);
- 
+GType _gdk_pixmap_impl_win32_get_type (void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

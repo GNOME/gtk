@@ -37,6 +37,11 @@
 #include "config.h"
 #include "gtkintl.h"
 
+/* Do *not* include "gtkprivate.h" in this file. If you do, the
+ * correct_libdir_prefix() function below will have to move somewhere
+ * else.
+ */
+
 #define SIMPLE_ID "gtk-im-context-simple"
 
 typedef struct _GtkIMModule      GtkIMModule;
@@ -222,6 +227,39 @@ add_module (GtkIMModule *module, GSList *infos)
   modules_list = g_slist_prepend (modules_list, module);
 }
 
+#if defined (G_OS_WIN32) && defined (GTK_LIBDIR)
+/* This is needes on Win32, but not wanted when compiling with MSVC,
+ * as the makefile.msc doesn't define any GTK_LIBDIR value.
+ */
+
+#define DO_CORRECT_LIBDIR_PREFIX /* Flag to check below whether to call this */
+
+static void
+correct_libdir_prefix (gchar **path)
+{
+  /* GTK_LIBDIR here is supposed to still have the definition from
+   * Makefile.am, i.e. the build-time value. Do *not* include gtkprivate.h
+   * in this file.
+   */
+  if (strncmp (*path, GTK_LIBDIR, strlen (GTK_LIBDIR)) == 0)
+    {
+      /* This is an entry put there by make install on the
+       * packager's system. On Windows a prebuilt GTK+
+       * package can be installed in a random
+       * location. The gtk.immodules file distributed in
+       * such a package contains paths from the package
+       * builder's machine. Replace the path with the real
+       * one on this machine.
+       */
+      extern const gchar *_gtk_get_libdir ();
+      gchar *tem = *path;
+      *path = g_strconcat (_gtk_get_libdir (), tem + strlen (GTK_LIBDIR), NULL);
+      g_free (tem);
+    }
+}
+#endif
+
+
 static void
 gtk_im_module_init ()
 {
@@ -280,6 +318,9 @@ gtk_im_module_init ()
 	    }
 
 	  module->path = g_strdup (tmp_buf->str);
+#ifdef DO_CORRECT_LIBDIR_PREFIX
+	  correct_libdir_prefix (&module->path);
+#endif
 	  g_type_module_set_name (G_TYPE_MODULE (module), module->path);
 	}
       else
@@ -303,6 +344,9 @@ gtk_im_module_init ()
 	  if (!pango_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->domain_dirname = g_strdup (tmp_buf->str);
+#ifdef DO_CORRECT_LIBDIR_PREFIX
+	  correct_libdir_prefix (&info->domain_dirname);
+#endif
 
 	  if (!pango_scan_string (&p, tmp_buf))
 	    goto context_error;
@@ -482,7 +526,7 @@ _gtk_im_module_get_default_context_id (const gchar *locale)
   gint best_goodness = 0;
   gint i;
   gchar *tmp_locale, *tmp;
-  gchar *envvar;
+  const gchar *envvar;
       
   if (!contexts_hash)
     gtk_im_module_init ();

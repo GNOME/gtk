@@ -528,27 +528,15 @@ GtkWidget
 @accel_group: 
 @accel_key: 
 @accel_mods: 
+@Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_remove_accelerators ##### -->
+<!-- ##### FUNCTION gtk_widget_list_accel_closures ##### -->
 <para>
 
 </para>
 
 @widget: 
-@accel_signal: 
-@visible_only: 
-
-
-<!-- ##### FUNCTION gtk_widget_accelerator_signal ##### -->
-<para>
-
-</para>
-
-@widget: 
-@accel_group: 
-@accel_key: 
-@accel_mods: 
 @Returns: 
 
 
@@ -836,6 +824,20 @@ GtkWidget
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_widget_translate_coordinates ##### -->
+<para>
+
+</para>
+
+@src_widget: 
+@dest_widget: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_widget_hide_on_delete ##### -->
 <para>
 
@@ -1027,14 +1029,6 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_widget_lock_accelerators ##### -->
-<para>
-
-</para>
-
-@widget: 
-
-
 <!-- ##### FUNCTION gtk_widget_modify_style ##### -->
 <para>
 
@@ -1214,6 +1208,19 @@ GtkWidget
 @double_buffered: 
 
 
+<!-- ##### FUNCTION gtk_widget_set_redraw_on_allocate ##### -->
+<para>
+
+</para>
+
+@widget: 
+@redraw_on_allocate: 
+
+<!-- ##### FUNCTION gtk_widget_set_scroll_adjustments ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_widget_set_composite_name ##### -->
 <para>
 
@@ -1231,23 +1238,6 @@ GtkWidget
 @widget: 
 @hadjustment: 
 @vadjustment: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_widget_unlock_accelerators ##### -->
-<para>
-
-</para>
-
-@widget: 
-
-
-<!-- ##### FUNCTION gtk_widget_accelerators_locked ##### -->
-<para>
-
-</para>
-
-@widget: 
 @Returns: 
 
 
@@ -1483,17 +1473,12 @@ GtkWidget
 @requisition: 
 
 
-<!-- ##### SIGNAL GtkWidget::add-accelerator ##### -->
+<!-- ##### SIGNAL GtkWidget::accel-closures-changed ##### -->
 <para>
 
 </para>
 
 @widget: the object which received the signal.
-@accel_signal_id: 
-@accel_group: 
-@accel_key: 
-@accel_mods: 
-@accel_flags: 
 
 <!-- ##### SIGNAL GtkWidget::button-press-event ##### -->
 <para>
@@ -1860,16 +1845,6 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 @widget: the object which received the signal.
-
-<!-- ##### SIGNAL GtkWidget::remove-accelerator ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@accel_group: 
-@accel_key: 
-@accel_mods: 
 
 <!-- ##### SIGNAL GtkWidget::scroll-event ##### -->
 <para>

@@ -54,6 +54,7 @@ struct _GtkListStore
   GtkTreeIterCompareFunc default_sort_func;
   gpointer default_sort_data;
   GtkDestroyNotify default_sort_destroy;
+  guint columns_dirty : 1;
 };
 
 struct _GtkListStoreClass
@@ -62,37 +63,40 @@ struct _GtkListStoreClass
 };
 
 
-GtkType       gtk_list_store_get_type        (void);
-GtkListStore *gtk_list_store_new             (gint          n_columns,
-					      ...);
-GtkListStore *gtk_list_store_newv            (gint          n_columns,
-					      GType        *types);
-void          gtk_list_store_set_value       (GtkListStore *list_store,
-					      GtkTreeIter  *iter,
-					      gint          column,
-					      GValue       *value);
-void          gtk_list_store_set             (GtkListStore *list_store,
-					      GtkTreeIter  *iter,
-					      ...);
-void          gtk_list_store_set_valist      (GtkListStore *list_store,
-					      GtkTreeIter  *iter,
-					      va_list       var_args);
-void          gtk_list_store_remove          (GtkListStore *list_store,
-					      GtkTreeIter  *iter);
-void          gtk_list_store_insert          (GtkListStore *list_store,
-					      GtkTreeIter  *iter,
-					      gint          position);
-void          gtk_list_store_insert_before   (GtkListStore *list_store,
-					      GtkTreeIter  *iter,
-					      GtkTreeIter  *sibling);
-void          gtk_list_store_insert_after    (GtkListStore *list_store,
-					      GtkTreeIter  *iter,
-					      GtkTreeIter  *sibling);
-void          gtk_list_store_prepend         (GtkListStore *list_store,
-					      GtkTreeIter  *iter);
-void          gtk_list_store_append          (GtkListStore *list_store,
-					      GtkTreeIter  *iter);
-void          gtk_list_store_clear           (GtkListStore *list_store);
+GtkType       gtk_list_store_get_type         (void);
+GtkListStore *gtk_list_store_new              (gint          n_columns,
+					       ...);
+GtkListStore *gtk_list_store_newv             (gint          n_columns,
+					       GType        *types);
+void          gtk_list_store_set_column_types (GtkListStore *list_store,
+					       gint          n_columns,
+					       GType        *types);
+void          gtk_list_store_set_value        (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       gint          column,
+					       GValue       *value);
+void          gtk_list_store_set              (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       ...);
+void          gtk_list_store_set_valist       (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       va_list       var_args);
+void          gtk_list_store_remove           (GtkListStore *list_store,
+					       GtkTreeIter  *iter);
+void          gtk_list_store_insert           (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       gint          position);
+void          gtk_list_store_insert_before    (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       GtkTreeIter  *sibling);
+void          gtk_list_store_insert_after     (GtkListStore *list_store,
+					       GtkTreeIter  *iter,
+					       GtkTreeIter  *sibling);
+void          gtk_list_store_prepend          (GtkListStore *list_store,
+					       GtkTreeIter  *iter);
+void          gtk_list_store_append           (GtkListStore *list_store,
+					       GtkTreeIter  *iter);
+void          gtk_list_store_clear            (GtkListStore *list_store);
 
 
 #ifdef __cplusplus

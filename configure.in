@@ -34,7 +34,7 @@ GLIB_AC_DIVERT_BEFORE_HELP([
 #
 GTK_MAJOR_VERSION=1
 GTK_MINOR_VERSION=3
-GTK_MICRO_VERSION=9
+GTK_MICRO_VERSION=11
 GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
@@ -53,10 +53,12 @@ LT_RELEASE=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION
 LT_CURRENT=`expr $GTK_MICRO_VERSION - $GTK_INTERFACE_AGE`
 LT_REVISION=$GTK_INTERFACE_AGE
 LT_AGE=`expr $GTK_BINARY_AGE - $GTK_INTERFACE_AGE`
+LT_CURRENT_MINUS_AGE=`expr $LT_CURRENT - $LT_AGE`
 AC_SUBST(LT_RELEASE)
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
+AC_SUBST(LT_CURRENT_MINUS_AGE)
 
 # Define a string for the earliest version that this release has
 # binary compatibility with. This is used for module locations.
@@ -78,9 +80,9 @@ AC_SUBST(GDK_PIXBUF_MICRO)
 AC_SUBST(GDK_PIXBUF_VERSION)
 
 ## Versions of dependencies
-GLIB_REQUIRED_VERSION=1.3.9
-PANGO_REQUIRED_VERSION=0.20
-ATK_REQUIRED_VERSION=0.5
+GLIB_REQUIRED_VERSION=1.3.11
+PANGO_REQUIRED_VERSION=0.22
+ATK_REQUIRED_VERSION=0.7
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -100,6 +102,8 @@ AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 AM_CONFIG_HEADER(config.h)
 
 dnl Initialize libtool
+AC_PROG_CC
+AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
 
 dnl Set AS and ASFLAGS so that automake 1.5 will be happy
@@ -112,6 +116,35 @@ dnl Initialize maintainer mode
 AM_MAINTAINER_MODE
 
 AC_CANONICAL_HOST
+
+AC_MSG_CHECKING([for some Win32 platform])
+case "$host" in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$platform_win32])
+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
+
+AC_MSG_CHECKING([for native Win32])
+case "$host" in
+  *-*-mingw*)
+    os_win32=yes
+    ;;
+  *)
+    os_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$os_win32])
+AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+
+if test "$os_win32" = "yes"; then
+  AC_CHECK_PROG(ms_librarian, lib.exe, yes, no)
+fi
+AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
 
 dnl figure debugging default, prior to $ac_help setup
 dnl
@@ -139,17 +172,31 @@ AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogenera
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
 
-gdktarget=x11
-gdktargetlib=libgdk-x11-1.3.la
-gtktargetlib=libgtk-x11-1.3.la
-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[x11/linux-fb] select GDK target [default=x11] ],
+AC_ARG_WITH(wintab, [  --with-wintab=DIRECTORY use Wintab API with win32 backend])
+AC_ARG_WITH(ie55, [  --with-ie55=DIRECTORY IE5.5 libs and headers (for Active IMM)])
+
+GLIB_AC_DIVERT_BEFORE_HELP([
+if test "$platform_win32" = yes; then
+  gdktarget=win32
+else
+  gdktarget=x11
+fi
+])
+
+AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/linux-fb/win32]] select GDK target [default=$gdktarget]],
 	gdktarget=$with_gdktarget)
 
 AC_SUBST(gdktarget)
 case $gdktarget in
-  x11|linux-fb) ;;
-  *) AC_MSG_ERROR([Invalid target for GDK: use x11 or linux-fb.]);;
+  x11|linux-fb|win32) ;;
+  *) AC_MSG_ERROR([Invalid target for GDK: use x11, linux-fb or win32.]);;
 esac
+
+gdktargetlib=libgdk-$gdktarget-1.3.la
+gtktargetlib=libgtk-$gdktarget-1.3.la
+
+AC_SUBST(gdktargetlib)
+AC_SUBST(gtktargetlib)
 
 AC_ARG_ENABLE(shadowfb, [  --disable-shadowfb      disable shadowfb support for linux-fb],,enable_shadowfb=yes)
 
@@ -173,7 +220,6 @@ AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}")
 AM_SANITY_CHECK
 
 # Checks for programs.
-AC_PROG_CC
 AC_ISC_POSIX
 AM_PROG_CC_STDC
 AC_PROG_INSTALL
@@ -197,6 +243,13 @@ if test "x$GCC" = "xyes"; then
     *) CFLAGS="$CFLAGS -pedantic" ;;
     esac
   fi
+
+  if test "$os_win32" = "yes"; then
+    case "$CC $CFLAGS " in
+    *[[\ \	]]-fnative-struct[[\ \	]]*) ;;
+    *) CFLAGS="$CFLAGS -fnative-struct" ;;
+    esac
+  fi
 fi
 changequote([,])dnl
 
@@ -211,9 +264,14 @@ ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 ## annoying to construct
 PKG_CHECK_MODULES(BASE_DEPENDENCIES, glib-2.0 >= $GLIB_REQUIRED_VERSION atk >= $ATK_REQUIRED_VERSION pango >= $PANGO_REQUIRED_VERSION)
 
-# libtool option to control which symbols are exported
-# right now, symbols starting with _ are not exported
-LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
+if test "$os_win32" != yes; then
+    # libtool option to control which symbols are exported
+    # right now, symbols starting with _ are not exported
+    LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
+else
+    # We currently use .def files on Windows (for gdk-pixbuf, gdk and gtk)
+    LIBTOOL_EXPORT_OPTIONS=
+fi
 AC_SUBST(LIBTOOL_EXPORT_OPTIONS)
 
 # define a MAINT-like variable REBUILD which is set if Perl
@@ -234,7 +292,18 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 AC_SUBST(REBUILD)
 
-AC_CHECK_FUNCS(lstat mkstemp sigsetjmp bind_textdomain_codeset)
+AC_CHECK_FUNCS(lstat mkstemp bind_textdomain_codeset)
+
+# sigsetjmp is a macro on some platforms, so AC_CHECK_FUNCS is not reliable
+AC_MSG_CHECKING(for sigsetjmp)
+AC_TRY_LINK([#include <setjmp.h>], [
+sigjmp_buf env;
+sigsetjmp(env, 0);
+], gtk_ok=yes, gtk_ok=no)
+AC_MSG_RESULT($gtk_ok)
+if test "$gtk_ok" = "yes"; then
+  AC_DEFINE(HAVE_SIGSETJMP)
+fi
 
 AC_MSG_CHECKING(whether make is GNU Make)
 STRIP_BEGIN=
@@ -321,10 +390,74 @@ AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :,
 *** GLIB is always available from ftp://ftp.gtk.org/.]),
   gobject gmodule gthread)
 
-AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
 AC_CHECK_HEADERS(unistd.h, AC_DEFINE(HAVE_UNISTD_H))
+AC_CHECK_HEADERS(winsock.h, AC_DEFINE(HAVE_WINSOCK_H))
+
+if test "${with_ie55+set}" = set && test $with_ie55 != no; then
+  AC_MSG_CHECKING([for dimm.h])
+  saved_CFLAGS="$CFLAGS"
+  CFLAGS="$CFLAGS -idirafter $with_ie55/Include"
+  AC_TRY_COMPILE([#include <windows.h>
+#include <objbase.h>
+#ifdef __GNUC__
+/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+#define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
+#define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
+#include <imm.h>
+#undef IMEMENUITEMINFOA
+#undef IMEMENUITEMINFOW
+#endif
+#include <dimm.h>
+],
+   [],
+   [AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING([for IE55 uuid.lib])
+    if test -f $with_ie55/Lib/uuid.lib ; then
+      AC_MSG_RESULT(yes)
+      have_ie55=yes
+      AC_DEFINE(HAVE_DIMM_H)
+      IE55_UUID_LIB="$with_ie55/Lib/uuid.lib"
+      AC_SUBST(IE55_UUID_LIB)
+    else
+      AC_MSG_RESULT(no)
+      CFLAGS="$saved_CFLAGS"
+      have_ie55=no
+    fi
+    ],
+   [AC_MSG_RESULT(no)
+    CFLAGS="$saved_CFLAGS"
+    have_ie55=no])
+fi
+AM_CONDITIONAL(HAVE_IE55, test x$have_ie55 = xyes)
+
+if test "${with_wintab+set}" = set && test $with_wintab != no; then
+  AC_MSG_CHECKING([for wintab.h])
+  saved_CFLAGS="$CFLAGS"
+  CFLAGS="$CFLAGS -I$with_wintab/include"
+  AC_TRY_COMPILE([#include <windows.h>
+#include <wintab.h>], 
+   [],
+   [AC_MSG_RESULT(yes)
+    AC_MSG_CHECKING([for wntab32x.lib])
+    if test -f $with_wintab/lib/i386/wntab32x.lib ; then
+      AC_MSG_RESULT(yes)
+      have_wintab=yes
+      AC_DEFINE(HAVE_WINTAB)
+      WINTAB_LIB="$with_wintab/lib/i386/wntab32x.lib"
+      AC_SUBST(WINTAB_LIB)
+    else
+      AC_MSG_RESULT(no)
+      CFLAGS="$saved_cflags"
+      have_wintab=no
+    fi
+    ],
+   [AC_MSG_RESULT(no)
+    CFLAGS="$saved_cflags"
+    have_wintab=no])
+fi
+AM_CONDITIONAL(HAVE_WINTAB, test x$have_wintab = xyes)
 
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
@@ -461,18 +594,18 @@ fi
 dnl Test for libtiff
   if test -z "$LIBTIFF"; then
     AC_CHECK_LIB(tiff, TIFFReadScanline,
-      AC_CHECK_HEADER(tiffio.h,
+      [AC_CHECK_HEADER(tiffio.h,
         TIFF='tiff'; LIBTIFF='-ltiff',
-        AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***)),
-      AC_CHECK_LIB(tiff, TIFFWriteScanline,
-        AC_CHECK_HEADER(tiffio.h,
+        AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
+      [AC_CHECK_LIB(tiff, TIFFWriteScanline,
+        [AC_CHECK_HEADER(tiffio.h,
           TIFF='tiff'; LIBTIFF='-ltiff -ljpeg -lz',
-          AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***)),
-        AC_CHECK_LIB(tiff34, TIFFFlushData,
-          AC_CHECK_HEADER(tiffio.h,
+          AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
+        [AC_CHECK_LIB(tiff34, TIFFFlushData,
+          [AC_CHECK_HEADER(tiffio.h,
             TIFF='tiff'; LIBTIFF='-ltiff34 -ljpeg -lz',
-            AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***)),
-        AC_MSG_WARN(*** TIFF plug-in will not be built (TIFF library not found) ***), -ljpeg -lz -lm), -ljpeg -lz -lm), -lm)
+            AC_MSG_WARN(*** TIFF loader will not be built (TIFF header files not found) ***))],
+        AC_MSG_WARN(*** TIFF plug-in will not be built (TIFF library not found) ***), -ljpeg -lz -lm)], -ljpeg -lz -lm)], -lm)
   fi
 
 dnl Test for libjpeg
@@ -487,6 +620,7 @@ dnl Test for libjpeg
 [#include <stdio.h>
 #undef PACKAGE
 #undef VERSION
+#undef HAVE_STDLIB_H
 #include <jpeglib.h>],
         jpeg_ok=yes,
         jpeg_ok=no)
@@ -505,9 +639,9 @@ dnl Test for libjpeg
 dnl Test for libpng
   if test -z "$LIBPNG"; then
     AC_CHECK_LIB(png, png_read_info,
-      AC_CHECK_HEADER(png.h,
+      [AC_CHECK_HEADER(png.h,
         png_ok=yes,
-        png_ok=no),
+        png_ok=no)],
       AC_MSG_WARN(*** PNG loader will not be built (PNG library not found) ***), -lz -lm)
     if test "$png_ok" = yes; then
       AC_MSG_CHECKING([for png_structp in png.h])
@@ -577,7 +711,6 @@ IFS="$gtk_save_ifs"
 AC_SUBST(INCLUDED_LOADER_OBJ)
 AC_SUBST(INCLUDED_LOADER_DEFINE)
 
-AC_HEADER_DIRENT
 AC_HEADER_SYS_WAIT
 
 AC_TYPE_SIGNAL
@@ -828,13 +961,26 @@ if test "x$gdktarget" = "xx11"; then
   GDK_EXTRA_CFLAGS=
   GDK_EXTRA_LIBS="$x_extra_libs"
 
-  # these are already defined above
-  #gdktargetlib = "libgdk-x11-1.3.la"
-  #gtktargetlib = "libgtk-x11-1.3.la"
-
   AM_CONDITIONAL(USE_X11, true)
 else
   AM_CONDITIONAL(USE_X11, false)
+fi
+
+if test "x$gdktarget" = "xwin32"; then
+  # We start off with the libraries from Pango
+
+  ## be sure we also have Pango built with win32 support
+  PANGO_PACKAGES="pangowin32"
+
+  if test x$have_wintab = xyes; then
+    GDK_WIN32_EXTRA_CFLAGS="-I $with_wintab/include"
+    AC_SUBST(GDK_WIN32_EXTRA_CFLAGS)
+  fi
+
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -user32 -limm32 -lshell32 -lole32 -luuid"
+  AM_CONDITIONAL(USE_WIN32, true)
+else
+  AM_CONDITIONAL(USE_WIN32, false)
 fi
 
 AC_SUBST(xinput_progs)
@@ -850,9 +996,6 @@ AC_SUBST(GDK_PIXBUF_XLIB_DEP_LIBS)
 AC_SUBST(GDK_PIXBUF_XLIB_DEP_CFLAGS)
 
 if test "x$gdktarget" = "xlinux-fb"; then
-  gdktargetlib="libgdk-linux-fb-1.3.la"
-  gtktargetlib="libgtk-linux-fb-1.3.la"
-
   AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
   if test x$FREETYPE_CONFIG = xno ; then
     AC_MSG_ERROR([*** freetype-config not found])
@@ -882,9 +1025,6 @@ else
   AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
 fi
 
-AC_SUBST(gdktargetlib)
-AC_SUBST(gtktargetlib)
-
 #
 # Pick correct Pango packages to use
 #
@@ -895,6 +1035,8 @@ if test "x$gdktarget" = "xx11"; then
         else
             PANGO_PACKAGES=pangox
         fi
+elif test "x$gdktarget" = "xwin32"; then
+        PANGO_PACKAGES=pangowin32
 elif test "x$gdktarget" = "xlinux-fb"; then
         PANGO_PACKAGES=pangoft2
 else
@@ -1099,6 +1241,9 @@ esac
 if test "x$gdktarget" = "xx11" ; then
   gdk_windowing='
 #define GDK_WINDOWING_X11'
+elif test "x$gdktarget" = "xwin32" ; then
+  gdk_windowing='
+#define GDK_WINDOWING_WIN32'
 elif test "x$gdktarget" = "xlinux-fb" ; then
   gdk_windowing='
 #define GDK_WINDOWING_FB
@@ -1126,6 +1271,7 @@ AM_CONDITIONAL(HAVE_SGML2HTML, ! test x$SGML2HTML = xno)
 
 AC_OUTPUT([
 config.h.win32
+gtk-zip.sh
 gtk+.spec
 Makefile
 gdk-pixbuf-2.0.pc

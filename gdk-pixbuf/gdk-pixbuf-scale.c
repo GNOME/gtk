@@ -41,10 +41,11 @@
  * @scale_y: the scale factor in the Y direction
  * @interp_type: the interpolation type for the transformation.
  * 
- * Transforms the image by source image by scaling by @scale_x and @scale_y then
- * translating by @offset_x and @offset_y, then renders the rectangle
- * (@dest,@dest_y,@dest_width,@dest_height) of the resulting image onto the
- * destination drawable replacing the previous contents.
+ * Transforms the source image @src by scaling by @scale_x and
+ * @scale_y then translating by @offset_x and @offset_y, then renders
+ * the rectangle (@dest_x, @dest_y, @dest_width, @dest_height) of the
+ * resulting image onto the destination image replacing the
+ * previous contents.
  **/
 void
 gdk_pixbuf_scale (const GdkPixbuf *src,
@@ -91,10 +92,10 @@ gdk_pixbuf_scale (const GdkPixbuf *src,
  * @interp_type: the interpolation type for the transformation.
  * @overall_alpha: overall alpha for source image (0..255)
  * 
- * Transforms the image by source image by scaling by @scale_x and @scale_y then
- * translating by @offset_x and @offset_y, then composites the rectangle
- * (@dest,@dest_y,@dest_width,@dest_height) of the resulting image onto the
- * destination drawable.
+ * Transforms the source image @src by scaling by @scale_x and
+ * @scale_y then translating by @offset_x and @offset_y, then
+ * composites the rectangle (@dest_x, @dest_y, @dest_width,
+ * @dest_height) of the resulting image onto the destination image.
  **/
 void
 gdk_pixbuf_composite (const GdkPixbuf *src,
@@ -147,11 +148,11 @@ gdk_pixbuf_composite (const GdkPixbuf *src,
  * @color1: the color of check at upper left
  * @color2: the color of the other check
  * 
- * Transforms the image by source image by scaling by @scale_x and @scale_y then
+ * Transforms the source image @src by scaling by @scale_x and @scale_y then
  * translating by @offset_x and @offset_y, then composites the rectangle
- * (@dest,@dest_y,@dest_width,@dest_height) of the resulting image with
+ * (@dest_x ,@dest_y, @dest_width, @dest_height) of the resulting image with
  * a checkboard of the colors @color1 and @color2 and renders it onto the
- * destination drawable.
+ * destination image.
  **/
 void
 gdk_pixbuf_composite_color (const GdkPixbuf *src,
@@ -198,8 +199,8 @@ gdk_pixbuf_composite_color (const GdkPixbuf *src,
  * @dest_height: the height of destination image
  * @interp_type: the interpolation type for the transformation.
  * 
- * Scale the #GdkPixbuf @src to @dest_width x @dest_height and render the result into
- * a new #GdkPixbuf.
+ * Scale the #GdkPixbuf @src to @dest_width x @dest_height and render
+ * the result into a new #GdkPixbuf.
  * 
  * Return value: the new #GdkPixbuf, or NULL if not enough memory could be
  * allocated for it.
@@ -239,9 +240,9 @@ gdk_pixbuf_scale_simple (const GdkPixbuf *src,
  * @color1: the color of check at upper left
  * @color2: the color of the other check
  * 
- * Scale the #GdkPixbuf @src to @dest_width x @dest_height composite the result with
- * a checkboard of colors @color1 and @color2 and render the result into
- * a new #GdkPixbuf.
+ * Scale the #GdkPixbuf @src to @dest_width x @dest_height composite
+ * the result with a checkboard of colors @color1 and @color2 and
+ * render the result into a new #GdkPixbuf.
  * 
  * Return value: the new #GdkPixbuf, or NULL if not enough memory could be
  * allocated for it.

@@ -6,15 +6,15 @@ A vertical scrollbar
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-The VScrollbar widget is a widget arranged vertically creating a scroll bar. See
-#GtkScrollbar for details on scrollbars. #GtkAdjustment pointers may be added to
-handle the adjustment of the scrollbars or it may be left NULL in which case one
-will be created you. See #GtkAdjustment for details.
+The #GtkVScrollbar widget is a widget arranged vertically creating a scrollbar.
+See #GtkScrollbar for details on scrollbars. #GtkAdjustment pointers may be 
+added to handle the adjustment of the scrollbar or it may be left %NULL in which
+case one will be created for you. See #GtkAdjustment for details.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkScrollbar, #GtkScrolledWindow
 </para>
 
 <!-- ##### STRUCT GtkVScrollbar ##### -->
@@ -29,7 +29,7 @@ using the functions below.
 Creates a new vertical scrollbar.
 </para>
 
-@adjustment: 
-@Returns: the new GTKVScrollbar
+@adjustment: the #GtkAdjustment to use, or %NULL to create a new adjustment.
+@Returns: the new #GtkVScrollbar
 
 

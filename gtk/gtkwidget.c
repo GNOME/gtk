@@ -28,9 +28,11 @@
 #include <string.h>
 #include <locale.h>
 #include "gtkcontainer.h"
+#include "gtkaccelmap.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
@@ -72,8 +74,6 @@ enum {
   DIRECTION_CHANGED,
   GRAB_NOTIFY,
   CHILD_NOTIFY,
-  ADD_ACCELERATOR,
-  REMOVE_ACCELERATOR,
   MNEMONIC_ACTIVATE,
   GRAB_FOCUS,
   FOCUS,
@@ -117,6 +117,7 @@ enum {
   WINDOW_STATE_EVENT,
   POPUP_MENU,
   SHOW_HELP,
+  ACCEL_CLOSURES_CHANGED,
   LAST_SIGNAL
 };
 
@@ -216,6 +217,9 @@ static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
+static void             gtk_widget_invalidate_widget_windows    (GtkWidget        *widget,
+								 GdkRegion        *region);
+
 
 /* --- variables --- */
 static gpointer         parent_class = NULL;
@@ -229,6 +233,8 @@ static GParamSpecPool  *style_property_spec_pool = NULL;
 
 static GQuark		quark_property_parser = 0;
 static GQuark		quark_aux_info = 0;
+static GQuark		quark_accel_path = 0;
+static GQuark		quark_accel_closures = 0;
 static GQuark		quark_event_mask = 0;
 static GQuark		quark_extension_event_mode = 0;
 static GQuark		quark_parent_window = 0;
@@ -298,6 +304,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
   quark_aux_info = g_quark_from_static_string ("gtk-aux-info");
+  quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
+  quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
   quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
@@ -340,8 +348,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->direction_changed = gtk_widget_direction_changed;
   klass->grab_notify = NULL;
   klass->child_notify = NULL;
-  klass->add_accelerator = (void*) gtk_accel_group_handle_add;
-  klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
@@ -508,42 +514,42 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[HIDE] =
     gtk_signal_new ("hide",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hide),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[MAP] =
     gtk_signal_new ("map",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, map),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[UNMAP] =
     gtk_signal_new ("unmap",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unmap),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[REALIZE] =
     gtk_signal_new ("realize",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, realize),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[UNREALIZE] =
     gtk_signal_new ("unrealize",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[SIZE_REQUEST] =
     g_signal_new ("size_request",
@@ -551,7 +557,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   G_SIGNAL_RUN_FIRST,
 		   G_STRUCT_OFFSET (GtkWidgetClass, size_request),
 		   NULL, NULL,
-		   gtk_marshal_VOID__BOXED,
+		   _gtk_marshal_VOID__BOXED,
 		   GTK_TYPE_NONE, 1,
 		   GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SIZE_ALLOCATE] = 
@@ -559,7 +565,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_allocate),
-		    gtk_marshal_VOID__BOXED,
+		    _gtk_marshal_VOID__BOXED,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[STATE_CHANGED] =
@@ -567,7 +573,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, state_changed),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STATE_TYPE);
   widget_signals[PARENT_SET] =
@@ -575,7 +581,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   widget_signals[HIERARCHY_CHANGED] =
@@ -583,7 +589,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hierarchy_changed),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   widget_signals[STYLE_SET] =
@@ -591,7 +597,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_STYLE);
   widget_signals[DIRECTION_CHANGED] =
@@ -599,7 +605,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, direction_changed),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_TEXT_DIRECTION);
   widget_signals[GRAB_NOTIFY] =
@@ -607,7 +613,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_notify),
-		    gtk_marshal_VOID__BOOLEAN,
+		    _gtk_marshal_VOID__BOOLEAN,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_BOOL);
   widget_signals[CHILD_NOTIFY] =
@@ -619,19 +625,13 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		   g_cclosure_marshal_VOID__PARAM,
 		   G_TYPE_NONE,
 		   1, G_TYPE_PARAM);
-  widget_signals[ADD_ACCELERATOR] =
-    gtk_accel_group_create_add (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
-				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
-  widget_signals[REMOVE_ACCELERATOR] =
-    gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
-				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
   widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new ("mnemonic_activate",
                   GTK_CLASS_TYPE (object_class),
                   GTK_RUN_LAST,
                   GTK_SIGNAL_OFFSET (GtkWidgetClass, mnemonic_activate),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOOLEAN,
+                  _gtk_marshal_BOOLEAN__BOOLEAN,
                   GTK_TYPE_BOOL, 1,
                   GTK_TYPE_BOOL);
   widget_signals[GRAB_FOCUS] =
@@ -639,7 +639,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   widget_signals[FOCUS] =
     g_signal_new ("focus",
@@ -647,7 +647,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkWidgetClass, focus),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__ENUM,
+                  _gtk_marshal_BOOLEAN__ENUM,
                   G_TYPE_BOOLEAN, 1,
                   GTK_TYPE_DIRECTION_TYPE);
   widget_signals[EVENT] =
@@ -656,7 +656,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EVENT_AFTER] =
@@ -665,7 +665,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   0,
                   0,
                   NULL, NULL,
-                  gtk_marshal_VOID__BOXED,
+                  _gtk_marshal_VOID__BOXED,
                   G_TYPE_NONE, 1, GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[BUTTON_PRESS_EVENT] =
     g_signal_new ("button_press_event",
@@ -673,7 +673,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, button_press_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[BUTTON_RELEASE_EVENT] =
@@ -682,7 +682,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, button_release_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SCROLL_EVENT] =
@@ -691,7 +691,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, scroll_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[MOTION_NOTIFY_EVENT] =
@@ -700,7 +700,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, motion_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DELETE_EVENT] =
@@ -709,7 +709,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, delete_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DESTROY_EVENT] =
@@ -718,7 +718,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, destroy_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EXPOSE_EVENT] =
@@ -727,7 +727,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, expose_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[KEY_PRESS_EVENT] =
@@ -736,7 +736,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, key_press_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[KEY_RELEASE_EVENT] =
@@ -745,7 +745,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, key_release_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[ENTER_NOTIFY_EVENT] =
@@ -754,7 +754,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, enter_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[LEAVE_NOTIFY_EVENT] =
@@ -763,7 +763,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, leave_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[CONFIGURE_EVENT] =
@@ -772,7 +772,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, configure_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[FOCUS_IN_EVENT] =
@@ -781,7 +781,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, focus_in_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[FOCUS_OUT_EVENT] =
@@ -790,7 +790,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, focus_out_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[MAP_EVENT] =
@@ -799,7 +799,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, map_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[UNMAP_EVENT] =
@@ -808,7 +808,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, unmap_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[PROPERTY_NOTIFY_EVENT] =
@@ -817,7 +817,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, property_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_CLEAR_EVENT] =
@@ -826,7 +826,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, selection_clear_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_REQUEST_EVENT] =
@@ -835,7 +835,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, selection_request_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_NOTIFY_EVENT] =
@@ -844,7 +844,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, selection_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_RECEIVED] =
@@ -853,7 +853,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_received),
 		  NULL, NULL,
-		  gtk_marshal_VOID__BOXED_UINT,
+		  _gtk_marshal_VOID__BOXED_UINT,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT);
@@ -863,7 +863,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_get),
 		  NULL, NULL,
-		  gtk_marshal_VOID__BOXED_UINT_UINT,
+		  _gtk_marshal_VOID__BOXED_UINT_UINT,
 		  G_TYPE_NONE, 3,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
 		  G_TYPE_UINT,
@@ -874,7 +874,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, proximity_in_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[PROXIMITY_OUT_EVENT] =
@@ -883,7 +883,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, proximity_out_event),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__BOXED,
+                  _gtk_marshal_BOOLEAN__BOXED,
                   G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DRAG_LEAVE] =
@@ -891,7 +891,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_leave),
-		    gtk_marshal_VOID__OBJECT_UINT,
+		    _gtk_marshal_VOID__OBJECT_UINT,
 		    GTK_TYPE_NONE, 2,
 		    GDK_TYPE_DRAG_CONTEXT,
 		    GTK_TYPE_UINT);
@@ -900,7 +900,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_END] =
@@ -908,7 +908,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_DATA_DELETE] =
@@ -916,7 +916,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_delete),
-		    gtk_marshal_VOID__OBJECT,
+		    _gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
 		    GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_MOTION] =
@@ -925,7 +925,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, drag_motion),
                   _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
+		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		  G_TYPE_BOOLEAN, 4,
 		  GDK_TYPE_DRAG_CONTEXT,
 		  G_TYPE_INT,
@@ -937,7 +937,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkWidgetClass, drag_drop),
                   _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
+		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		  G_TYPE_BOOLEAN, 4,
 		  GDK_TYPE_DRAG_CONTEXT,
 		  G_TYPE_INT,
@@ -949,7 +949,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_get),
 		  NULL, NULL,
-		  gtk_marshal_VOID__OBJECT_BOXED_UINT_UINT,
+		  _gtk_marshal_VOID__OBJECT_BOXED_UINT_UINT,
 		  G_TYPE_NONE, 4,
 		  GDK_TYPE_DRAG_CONTEXT,
 		  GTK_TYPE_SELECTION_DATA | G_SIGNAL_TYPE_STATIC_SCOPE,
@@ -961,7 +961,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
 		  NULL, NULL,
-		  gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT_UINT,
+		  _gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT_UINT,
 		  G_TYPE_NONE, 6,
 		  GDK_TYPE_DRAG_CONTEXT,
 		  G_TYPE_INT,
@@ -975,7 +975,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET(GtkWidgetClass, visibility_notify_event),
                   _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__BOXED,
+		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
                   GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[CLIENT_EVENT] =
@@ -984,7 +984,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET(GtkWidgetClass, client_event),
 		  _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__BOXED,
+		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[NO_EXPOSE_EVENT] =
@@ -993,7 +993,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET(GtkWidgetClass, no_expose_event),
 		  _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__BOXED,
+		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[WINDOW_STATE_EVENT] =
@@ -1002,7 +1002,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET(GtkWidgetClass, window_state_event),
 		  _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__BOXED,
+		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[POPUP_MENU] =
@@ -1010,15 +1010,22 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, popup_menu),
-                    gtk_marshal_NONE__NONE,
+                    _gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   widget_signals[SHOW_HELP] =
     gtk_signal_new ("show_help",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show_help),
-                    gtk_marshal_NONE__ENUM,
+                    _gtk_marshal_NONE__ENUM,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_WIDGET_HELP_TYPE);
+  widget_signals[ACCEL_CLOSURES_CHANGED] =
+    gtk_signal_new ("accel_closures_changed",
+		    0,
+		    GTK_CLASS_TYPE (object_class),
+		    0,
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
   
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
@@ -1034,7 +1041,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                                 "show_help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
                                 GTK_WIDGET_HELP_TOOLTIP);
-  
   gtk_binding_entry_add_signal (binding_set, GDK_F1, GDK_SHIFT_MASK,
                                 "show_help", 1,
                                 GTK_TYPE_WIDGET_HELP_TYPE,
@@ -1250,6 +1256,8 @@ gtk_widget_init (GtkWidget *widget)
 			(composite_child_stack ? GTK_COMPOSITE_CHILD : 0) |
 			GTK_DOUBLE_BUFFERED);
 
+  GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
+
   widget->style = gtk_widget_get_default_style ();
   g_object_ref (widget->style);
 }
@@ -1414,7 +1422,6 @@ gtk_widget_unparent (GtkWidget *widget)
 {
   GObjectNotifyQueue *nqueue;
   GtkWidget *toplevel;
-  GtkWidget *ancestor;
   GtkWidget *old_parent;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1470,64 +1477,6 @@ gtk_widget_unparent (GtkWidget *widget)
     g_object_ref (toplevel);
   else
     toplevel = NULL;
-
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
-  
-  /* Remove the widget and all its children from any ->resize_widgets list
-   * of all the parents in our branch. This code should move into gtkcontainer.c
-   * somwhen, since we mess around with ->resize_widgets, which is
-   * actually not of our business.
-   *
-   * Two ways to make this prettier:
-   *   Write a g_slist_conditional_remove (GSList, gboolean (*)(gpointer))
-   *   Change resize_widgets to a GList
-   */
-  ancestor = widget->parent;
-  while (ancestor)
-    {
-      GSList *slist;
-      GSList *prev;
-
-      if (!GTK_CONTAINER (ancestor)->resize_widgets)
-	{
-	  ancestor = ancestor->parent;
-	  continue;
-	}
-
-      prev = NULL;
-      slist = GTK_CONTAINER (ancestor)->resize_widgets;
-      while (slist)
-	{
-	  GtkWidget *child;
-	  GtkWidget *parent;
-	  GSList *last;
-
-	  last = slist;
-	  slist = last->next;
-	  child = last->data;
-	  
-	  parent = child;
-	  while (parent && (parent != widget))
-	    parent = parent->parent;
-	  
-	  if (parent == widget)
-	    {
-	      GTK_PRIVATE_UNSET_FLAG (child, GTK_RESIZE_NEEDED);
-	      
-	      if (prev)
-		prev->next = slist;
-	      else
-		GTK_CONTAINER (ancestor)->resize_widgets = slist;
-	      
-	      g_slist_free_1 (last);
-	    }
-	  else
-	    prev = last;
-	}
-
-      ancestor = ancestor->parent;
-    }
 
   gtk_widget_queue_clear_child (widget);
 
@@ -1833,7 +1782,7 @@ gtk_widget_map (GtkWidget *widget)
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[MAP]);
 
       if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_draw (widget);
+	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
     }
 }
 
@@ -1853,7 +1802,7 @@ gtk_widget_unmap (GtkWidget *widget)
   if (GTK_WIDGET_MAPPED (widget))
     {
       if (GTK_WIDGET_NO_WINDOW (widget))
-	gtk_widget_queue_clear_child (widget);
+	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
     }
 }
@@ -2137,10 +2086,17 @@ gtk_widget_queue_clear (GtkWidget *widget)
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
+  GdkRegion *region;
+  
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_queue_clear (widget);
-
+  if (GTK_WIDGET_REALIZED (widget))
+    {
+      region = gdk_region_rectangle (&widget->allocation);
+      gtk_widget_invalidate_widget_windows (widget, region);
+      gdk_region_destroy (region);
+    }
+      
   _gtk_size_group_queue_resize (widget);
 }
 
@@ -2210,13 +2166,6 @@ gtk_widget_size_request (GtkWidget	*widget,
 #endif /* G_ENABLE_DEBUG */
 
   _gtk_size_group_compute_requisition (widget, requisition);
-
-#if 0  
-  if (requisition)
-    gtk_widget_get_child_requisition (widget, requisition);
-
-  gtk_widget_unref (widget);
-#endif  
 }
 
 /**
@@ -2249,6 +2198,38 @@ gtk_widget_get_child_requisition (GtkWidget	 *widget,
   _gtk_size_group_get_child_requisition (widget, requisition);
 }
 
+static gboolean
+invalidate_predicate (GdkWindow *window,
+		      gpointer   data)
+{
+  gpointer user_data;
+
+  gdk_window_get_user_data (window, &user_data);
+
+  return (user_data == data);
+}
+
+/* Invalidate @region in widget->window and all children
+ * of widget->window owned by widget. @region is in the
+ * same coordinates as widget->allocation and will be
+ * modified by this call.
+ */
+static void
+gtk_widget_invalidate_widget_windows (GtkWidget *widget,
+				      GdkRegion *region)
+{
+  if (!GTK_WIDGET_NO_WINDOW (widget))
+    {
+      int x, y;
+      
+      gdk_window_get_position (widget->window, &x, &y);
+      gdk_region_offset (region, -x, -y);
+    }
+
+  gdk_window_invalidate_maybe_recurse (widget->window, region,
+				       invalidate_predicate, widget);
+}
+
 /**
  * gtk_widget_size_allocate:
  * @widget: a #GtkWidget
@@ -2263,11 +2244,18 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 			  GtkAllocation *allocation)
 {
   GtkWidgetAuxInfo *aux_info;
-  GtkAllocation real_allocation;
-  gboolean needs_draw = FALSE;
+  GdkRectangle real_allocation;
+  GdkRectangle old_allocation;
+  gboolean alloc_needed;
+  gboolean size_changed;
+  gboolean position_changed;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  
+
+  alloc_needed = GTK_WIDGET_ALLOC_NEEDED (widget);
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_ALLOC_NEEDED);
+
+  old_allocation = widget->allocation;
   real_allocation = *allocation;
   aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   
@@ -2289,33 +2277,50 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation.width = MAX (real_allocation.width, 1);
   real_allocation.height = MAX (real_allocation.height, 1);
 
-  if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-      if (widget->allocation.x != real_allocation.x ||
-	  widget->allocation.y != real_allocation.y ||
-	  widget->allocation.width != real_allocation.width ||
-	  widget->allocation.height != real_allocation.height)
-	{
-	  gtk_widget_queue_clear_child (widget);
-	  needs_draw = TRUE;
-	}
-    }
-  else if (widget->allocation.width != real_allocation.width ||
-	   widget->allocation.height != real_allocation.height)
-    {
-      needs_draw = TRUE;
-    }
+  size_changed = (old_allocation.width != real_allocation.width ||
+		  old_allocation.height != real_allocation.height);
+  position_changed = (old_allocation.x != real_allocation.x ||
+		      old_allocation.y != real_allocation.y);
 
-  if (GTK_IS_RESIZE_CONTAINER (widget))
-    _gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
-
+  if (!alloc_needed && !size_changed && !position_changed)
+    return;
+  
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
-  if (needs_draw)
+  if (GTK_WIDGET_MAPPED (widget))
     {
-      gtk_widget_queue_draw (widget);
-      if (widget->parent && GTK_CONTAINER (widget->parent)->reallocate_redraws)
-	gtk_widget_queue_draw (widget->parent);
+      if (GTK_WIDGET_NO_WINDOW (widget) && GTK_WIDGET_REDRAW_ON_ALLOC (widget) && position_changed)
+	{
+	  /* Invalidate union(old_allaction,widget->allocation) in widget->window
+	   */
+	  GdkRegion *invalidate = gdk_region_rectangle (&widget->allocation);
+	  gdk_region_union_with_rect (invalidate, &old_allocation);
+
+	  gdk_window_invalidate_region (widget->window, invalidate, FALSE);
+	  gdk_region_destroy (invalidate);
+	}
+      
+      if (size_changed)
+	{
+	  if (GTK_WIDGET_REDRAW_ON_ALLOC (widget))
+	    {
+	      /* Invalidate union(old_allaction,widget->allocation) in widget->window and descendents owned by widget
+	       */
+	      GdkRegion *invalidate = gdk_region_rectangle (&widget->allocation);
+	      gdk_region_union_with_rect (invalidate, &old_allocation);
+
+	      gtk_widget_invalidate_widget_windows (widget, invalidate);
+	      gdk_region_destroy (invalidate);
+	    }
+	}
+    }
+
+  if ((size_changed || position_changed) && widget->parent &&
+      GTK_WIDGET_REALIZED (widget->parent) && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+    {
+      GdkRegion *invalidate = gdk_region_rectangle (&widget->parent->allocation);
+      gtk_widget_invalidate_widget_windows (widget->parent, invalidate);
+      gdk_region_destroy (invalidate);
     }
 }
 
@@ -2497,148 +2502,281 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
      }
 }
 
-static void
-gtk_widget_stop_add_accelerator (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_signal_emit_stop (GTK_OBJECT (widget), widget_signals[ADD_ACCELERATOR]);
-}
+typedef struct {
+  GClosure   closure;
+  guint      signal_id;
+} AccelClosure;
 
 static void
-gtk_widget_stop_remove_accelerator (GtkWidget *widget)
+closure_accel_activate (GClosure     *closure,
+			GValue       *return_value,
+			guint         n_param_values,
+			const GValue *param_values,
+			gpointer      invocation_hint,
+			gpointer      marshal_data)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  AccelClosure *aclosure = (AccelClosure*) closure;
 
-  gtk_signal_emit_stop (GTK_OBJECT (widget), widget_signals[REMOVE_ACCELERATOR]);
+  if (GTK_WIDGET_IS_SENSITIVE (closure->data))
+    g_signal_emit (closure->data, aclosure->signal_id, 0);
+
+  /* we handled the accelerator */
+  g_value_set_boolean (return_value, TRUE);
 }
 
-void
-gtk_widget_lock_accelerators (GtkWidget *widget)
+static void
+closures_destroy (gpointer data)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  if (!gtk_widget_accelerators_locked (widget))
+  GSList *slist, *closures = data;
+
+  for (slist = closures; slist; slist = slist->next)
     {
-      gtk_signal_connect (GTK_OBJECT (widget),
-			  "add_accelerator",
-			  GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
-			  NULL);
-      gtk_signal_connect (GTK_OBJECT (widget),
-			  "remove_accelerator",
-			  GTK_SIGNAL_FUNC (gtk_widget_stop_remove_accelerator),
-			  NULL);
+      g_closure_invalidate (slist->data);
+      g_closure_unref (slist->data);
     }
+  g_slist_free (closures);
 }
 
-void
-gtk_widget_unlock_accelerators (GtkWidget *widget)
+static GClosure*
+widget_new_accel_closure (GtkWidget *widget,
+			  guint      signal_id)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
-  if (gtk_widget_accelerators_locked (widget))
+  AccelClosure *aclosure;
+  GClosure *closure = NULL;
+  GSList *slist, *closures;
+
+  closures = g_object_steal_qdata (G_OBJECT (widget), quark_accel_closures);
+  for (slist = closures; slist; slist = slist->next)
+    if (!gtk_accel_group_from_accel_closure (slist->data))
+      {
+	/* reuse this closure */
+	closure = slist->data;
+	break;
+      }
+  if (!closure)
     {
-      gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
-				     GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
-				     NULL);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (widget),
-				     GTK_SIGNAL_FUNC (gtk_widget_stop_remove_accelerator),
-				     NULL);
+      closure = g_closure_new_object (sizeof (AccelClosure), G_OBJECT (widget));
+      closures = g_slist_prepend (closures, g_closure_ref (closure));
+      g_closure_sink (closure);
+      g_closure_set_marshal (closure, closure_accel_activate);
     }
-}
-
-gboolean
-gtk_widget_accelerators_locked (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_object_set_qdata_full (G_OBJECT (widget), quark_accel_closures, closures, closures_destroy);
   
-  return gtk_signal_handler_pending_by_func (GTK_OBJECT (widget),
-					     widget_signals[ADD_ACCELERATOR],
-					     TRUE,
-					     GTK_SIGNAL_FUNC (gtk_widget_stop_add_accelerator),
-					     NULL) > 0;
+  aclosure = (AccelClosure*) closure;
+  g_assert (closure->data == widget);
+  g_assert (closure->marshal == closure_accel_activate);
+  aclosure->signal_id = signal_id;
+
+  return closure;
 }
 
+/**
+ * gtk_widget_add_accelerator
+ * @widget:       widget to install an accelerator on
+ * @accel_signal: widget signal to emit on accelerator actiavtion
+ * @accel_group:  accel group for this widget, added to its toplevel
+ * @accel_key:    GDK keyval of the accelerator
+ * @accel_mods:   modifier key combination of the accelerator
+ * @accel_flags:  flag accelerators, e.g. GTK_ACCEL_VISIBLE
+ *
+ * Install an accelerator for this @widget in @accel_group, that causes
+ * @accel_signal to be emitted if the accelerator is actiavted.
+ * The @accel_group needs to be added to the widget's toplevel via
+ * gtk_window_add_accel_group(), and the signal must be of type %G_RUN_ACTION.
+ * Accelerators added through this function are not user changable during
+ * runtime. If you want to support accelerators that can be changed by the
+ * user, use gtk_accel_map_add_entry() and gtk_menu_item_set_accel_path()
+ * instead.
+ */
 void
-gtk_widget_add_accelerator (GtkWidget           *widget,
-			    const gchar         *accel_signal,
-			    GtkAccelGroup       *accel_group,
-			    guint                accel_key,
-			    guint                accel_mods,
-			    GtkAccelFlags        accel_flags)
+gtk_widget_add_accelerator (GtkWidget     *widget,
+			    const gchar   *accel_signal,
+			    GtkAccelGroup *accel_group,
+			    guint          accel_key,
+			    guint          accel_mods,
+			    GtkAccelFlags  accel_flags)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (accel_group != NULL);
+  GClosure *closure;
+  GSignalQuery query;
 
-  gtk_accel_group_add (accel_group,
-		       accel_key,
-		       accel_mods,
-		       accel_flags,
-		       (GObject*) widget,
-		       accel_signal);
-}
-
-void
-gtk_widget_remove_accelerator (GtkWidget           *widget,
-			       GtkAccelGroup       *accel_group,
-			       guint                accel_key,
-			       guint                accel_mods)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (accel_group != NULL);
-
-  gtk_accel_group_remove (accel_group,
-			  accel_key,
-			  accel_mods,
-			  (GObject*) widget);
-}
-
-void
-gtk_widget_remove_accelerators (GtkWidget           *widget,
-				const gchar         *accel_signal,
-				gboolean             visible_only)
-{
-  GSList *slist;
-  guint signal_id;
-  
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (accel_signal != NULL);
-  
-  signal_id = gtk_signal_lookup (accel_signal, GTK_OBJECT_TYPE (widget));
-  g_return_if_fail (signal_id != 0);
-  
-  slist = gtk_accel_group_entries_from_object (G_OBJECT (widget));
-  while (slist)
+  g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+
+  g_signal_query (g_signal_lookup (accel_signal, G_OBJECT_TYPE (widget)), &query);
+  if (!query.signal_id ||
+      !(query.signal_flags & G_SIGNAL_ACTION) ||
+      query.return_type != G_TYPE_NONE ||
+      query.n_params)
     {
-      GtkAccelEntry *ac_entry;
-      
-      ac_entry = slist->data;
-      slist = slist->next;
-      if (ac_entry->accel_flags & GTK_ACCEL_VISIBLE &&
-	  ac_entry->signal_id == signal_id)
-	gtk_widget_remove_accelerator (GTK_WIDGET (widget),
-				       ac_entry->accel_group,
-				       ac_entry->accelerator_key,
-				       ac_entry->accelerator_mods);
+      /* hmm, should be elaborate enough */
+      g_warning (G_STRLOC ": widget `%s' has no activatable signal \"%s\" without arguments",
+		 G_OBJECT_TYPE_NAME (widget), accel_signal);
+      return;
     }
+
+  closure = widget_new_accel_closure (widget, query.signal_id);
+
+  g_object_ref (widget);
+
+  /* install the accelerator. since we don't map this onto an accel_path,
+   * the accelerator will automatically be locked.
+   */
+  gtk_accel_group_connect (accel_group,
+			   accel_key,
+			   accel_mods,
+			   accel_flags | GTK_ACCEL_LOCKED,
+			   closure);
+
+  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
+
+  g_object_unref (widget);
 }
 
-guint
-gtk_widget_accelerator_signal (GtkWidget           *widget,
-			       GtkAccelGroup       *accel_group,
-			       guint                accel_key,
-			       guint                accel_mods)
+/**
+ * gtk_widget_remove_accelerator
+ * @widget:       widget to install an accelerator on
+ * @accel_group:  accel group for this widget
+ * @accel_key:    GDK keyval of the accelerator
+ * @accel_mods:   modifier key combination of the accelerator
+ * @returns:      whether an accelerator was installed and could be removed
+ *
+ * Remove an accelerator from @widget, previously installed with
+ * gtk_widget_add_accelerator().
+ */
+gboolean
+gtk_widget_remove_accelerator (GtkWidget     *widget,
+			       GtkAccelGroup *accel_group,
+			       guint          accel_key,
+			       guint          accel_mods)
 {
-  GtkAccelEntry *ac_entry;
+  GtkAccelGroupEntry *ag_entry;
+  GList *slist, *clist;
+  guint n;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_ACCEL_GROUP (accel_group), FALSE);
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-  g_return_val_if_fail (accel_group != NULL, 0);
+  ag_entry = gtk_accel_group_query (accel_group, accel_key, accel_mods, &n);
+  clist = gtk_widget_list_accel_closures (widget);
+  for (slist = clist; slist; slist = slist->next)
+    {
+      guint i;
 
-  ac_entry = gtk_accel_group_get_entry (accel_group, accel_key, accel_mods);
+      for (i = 0; i < n; i++)
+	if (slist->data == (gpointer) ag_entry[i].closure)
+	  {
+	    gboolean is_removed = gtk_accel_group_disconnect (accel_group, slist->data);
 
-  if (ac_entry && ac_entry->object == (GObject*) widget)
-    return ac_entry->signal_id;
-  return 0;
+	    g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
+
+	    g_list_free (clist);
+
+	    return is_removed;
+	  }
+    }
+  g_list_free (clist);
+
+  g_warning (G_STRLOC ": no accelerator (%u,%u) installed in accel group (%p) for %s (%p)",
+	     accel_key, accel_mods, accel_group,
+	     G_OBJECT_TYPE_NAME (widget), widget);
+
+  return FALSE;
+}
+
+/**
+ * gtk_widget_list_accel_closures
+ * @widget:  widget to list accelerator closures for
+ * @returns: a newly allocated #GList of closures
+ *
+ * List the closures used by @widget for accelerator group connections
+ * with gtk_accel_group_connect_by_path() or gtk_accel_group_connect().
+ * The closures can be used to monitor accelerator changes on @widget,
+ * by connecting to the ::accel_changed signal of the #GtkAccelGroup
+ * of a closure which can be found out with gtk_accel_group_from_accel_closure().
+ */
+GList*
+gtk_widget_list_accel_closures (GtkWidget *widget)
+{
+  GSList *slist;
+  GList *clist = NULL;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  for (slist = g_object_get_qdata (G_OBJECT (widget), quark_accel_closures); slist; slist = slist->next)
+    if (gtk_accel_group_from_accel_closure (slist->data))
+      clist = g_list_prepend (clist, slist->data);
+  return clist;
+}
+
+typedef struct {
+  GQuark         path_quark;
+  GtkWidget     *widget;
+  GtkAccelGroup *accel_group;
+  GClosure      *closure;
+} AccelPath;
+
+static void
+destroy_accel_path (gpointer data)
+{
+  AccelPath *apath = data;
+
+  gtk_accel_group_disconnect (apath->accel_group, apath->closure);
+
+  /* closures_destroy takes care of unrefing the closure */
+  g_object_unref (apath->accel_group);
+  
+  g_free (apath);
+}
+
+/* accel_group: the accel group used to activate this widget
+ * accel_path:  the accel path, associating the accelerator
+ *              to activate this widget
+ * set accel path through which this widget can be actiavated.
+ */
+void
+_gtk_widget_set_accel_path (GtkWidget     *widget,
+			    const gchar   *accel_path,
+			    GtkAccelGroup *accel_group)
+{
+  AccelPath *apath;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_GET_CLASS (widget)->activate_signal != 0);
+
+  if (accel_path)
+    {
+      g_return_if_fail (GTK_IS_ACCEL_GROUP (accel_group));
+      g_return_if_fail (_gtk_accel_path_is_valid (accel_path));
+
+      gtk_accel_map_add_entry (accel_path, 0, 0);
+      apath = g_new (AccelPath, 1);
+      apath->widget = widget;
+      apath->accel_group = g_object_ref (accel_group);
+      apath->path_quark = g_quark_from_string (accel_path);
+      apath->closure = widget_new_accel_closure (apath->widget, GTK_WIDGET_GET_CLASS (apath->widget)->activate_signal);
+    }
+  else
+    apath = NULL;
+
+  /* also removes possible old settings */
+  g_object_set_qdata_full (G_OBJECT (widget), quark_accel_path, apath, destroy_accel_path);
+
+  if (apath)
+    gtk_accel_group_connect_by_path (apath->accel_group, g_quark_to_string (apath->path_quark), apath->closure);
+
+  g_signal_emit (widget, widget_signals[ACCEL_CLOSURES_CHANGED], 0);
+}
+
+const gchar*
+_gtk_widget_get_accel_path (GtkWidget *widget)
+{
+  AccelPath *apath;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
+  return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
 gboolean
@@ -3186,12 +3324,12 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	  
 	  if (widget == focus_widget)
 	    {
-	      /* We call gtk_window_set_focus() here so that the
+	      /* We call _gtk_window_internal_set_focus() here so that the
 	       * toplevel window can request the focus if necessary.
 	       * This is needed when the toplevel is a GtkPlug
 	       */
 	      if (!GTK_WIDGET_HAS_FOCUS (widget))
-		gtk_window_set_focus (GTK_WINDOW (toplevel), focus_widget);
+		_gtk_window_internal_set_focus (GTK_WINDOW (toplevel), focus_widget);
 
 	      return;
 	    }
@@ -3226,7 +3364,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 	  widget = widget->parent;
 	}
       if (GTK_IS_WINDOW (widget))
-	gtk_window_set_focus (GTK_WINDOW (widget), focus_widget);
+	_gtk_window_internal_set_focus (GTK_WINDOW (widget), focus_widget);
     }
 }
 
@@ -3296,22 +3434,14 @@ void
 gtk_widget_grab_default (GtkWidget *widget)
 {
   GtkWidget *window;
-  GtkType window_type;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
   
-  window_type = GTK_TYPE_WINDOW;
-  window = widget->parent;
+  window = gtk_widget_get_toplevel (widget);
   
-  while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
-    window = window->parent;
-  
-  if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
-    {
-      gtk_window_set_default (GTK_WINDOW (window), widget);
-      g_object_notify (G_OBJECT (widget), "has_default");
-    }
+  if (window && GTK_WIDGET_TOPLEVEL (window))
+    gtk_window_set_default (GTK_WINDOW (window), widget);
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
 }
@@ -3455,6 +3585,40 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
     GTK_WIDGET_SET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
   else
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_DOUBLE_BUFFERED);
+}
+
+/**
+ * gtk_widget_set_redraw_on_allocate:
+ * @widget: a #GtkWidget
+ * @redraw_on_allocate: if %TRUE, the entire widget will be redrawn
+ *   when it is allocated to a new size. Otherwise, only the
+ *   new portion of the widget will be redrawn.
+ *
+ * Sets whether a when a widgets size allocation changes, the entire
+ * widget is queued for drawing. By default, this setting is %TRUE and
+ * the entire widget is redrawn on every size change. If your widget
+ * leaves the upper left are unchanged when made bigger, turning this
+ * setting on will improve performance.
+
+ * Note that for NO_WINDOW widgets setting this flag to %FALSE turns
+ * off all allocation on resizing: the widget will not even redraw if
+ * its position changes; this is to allow containers that don't draw
+ * anything to avoid excess invalidations. If you set this flag on a
+ * NO_WINDOW widget that _does_ draw on widget->window, you are
+ * responsible for invalidating both the old and new allocation of the
+ * widget when the widget is moved and responsible for invalidating
+ * regions newly when the widget increases size.
+ **/
+void
+gtk_widget_set_redraw_on_allocate (GtkWidget *widget,
+				   gboolean   redraw_on_allocate)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (redraw_on_allocate)
+    GTK_PRIVATE_SET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
+  else
+    GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_ON_ALLOC);
 }
 
 /**
@@ -3694,7 +3858,7 @@ gtk_widget_get_style (GtkWidget *widget)
  * @style: the #GtkRcStyle holding the style modifications
  * 
  * Modify style values on the widget. Modifications made using this
- * technique take precendence over style values set via an RC file,
+ * technique take precedence over style values set via an RC file,
  * however, they will be overriden if a style is explicitely set on
  * the widget using gtk_widget_set_style(). The #GtkRcStyle structure
  * is designed so each field can either be set or unset, so it is
@@ -3708,8 +3872,8 @@ gtk_widget_get_style (GtkWidget *widget)
  * make your modifications to the returned style, then call
  * gtk_widget_modify_style() with that style. On the other hand,
  * if you first call gtk_widget_modify_style(), subsequent calls
- * to such functions gtk_widget_modify_fg() will be have a cumulative
- * effect with the inital modifications.
+ * to such functions gtk_widget_modify_fg() will have a cumulative
+ * effect with the initial modifications.
  **/
 void       
 gtk_widget_modify_style (GtkWidget      *widget,
@@ -4801,7 +4965,6 @@ gtk_widget_set_events (GtkWidget *widget,
   gint *eventp;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   
   eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
@@ -4839,8 +5002,7 @@ gtk_widget_add_events (GtkWidget *widget,
   gint *eventp;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (!GTK_WIDGET_NO_WINDOW (widget));
-  
+
   eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
   
   if (events)
@@ -4862,8 +5024,25 @@ gtk_widget_add_events (GtkWidget *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      gdk_window_set_events (widget->window,
-			     gdk_window_get_events (widget->window) | events);
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	{
+	  GList *children = gdk_window_get_children (widget->window);
+	  GList *tmp_list = children;
+
+	  while (tmp_list)
+	    {
+	      GdkWindow *window = tmp_list->data;
+	      gpointer user_data;
+
+	      gdk_window_get_user_data (window, &user_data);
+	      if (user_data == widget)
+		gdk_window_set_events (window, gdk_window_get_events (window) | events);
+	    }
+	}
+      else
+	{
+	  gdk_window_set_events (widget->window, gdk_window_get_events (widget->window) | events);
+	}
     }
 
   g_object_notify (G_OBJECT (widget), "events");
@@ -5466,6 +5645,10 @@ gtk_widget_real_destroy (GtkObject *object)
    */
   widget = GTK_WIDGET (object);
 
+  /* wipe accelerator closures (keep order) */
+  g_object_set_qdata (G_OBJECT (widget), quark_accel_path, NULL);
+  g_object_set_qdata (G_OBJECT (widget), quark_accel_closures, NULL);
+
   gtk_grab_remove (widget);
   gtk_selection_remove_all (widget);
   
@@ -5702,8 +5885,8 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     {
       GtkWidget *window;
 
-      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
-      if (window)
+      window = gtk_widget_get_toplevel (widget);
+      if (window && GTK_WIDGET_TOPLEVEL (window))
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
@@ -6207,7 +6390,8 @@ gtk_requisition_free (GtkRequisition *requisition)
   g_free (requisition);
 }
 
-AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
+AtkObject* 
+gtk_widget_get_accessible (GtkWidget *widget)
 {
   GtkWidgetClass *klass;
 
@@ -6220,7 +6404,8 @@ AtkObject* gtk_widget_get_accessible (GtkWidget *widget)
   return klass->get_accessible (widget);
 }
 
-AtkObject* gtk_widget_real_get_accessible (GtkWidget *widget)
+static AtkObject* 
+gtk_widget_real_get_accessible (GtkWidget *widget)
 {
   AtkObject* accessible;
 
@@ -6263,5 +6448,33 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
   if (accessible)
     g_object_ref (G_OBJECT (accessible));
   return accessible;
+}
+
+/**
+ * gtk_widget_get_clipboard:
+ * @widget: a #GtkWidgetwhich identifies on which display
+ *          the clipboard is to be retrieved or created.
+ *          The widget needs to be attached to a toplevel
+ *          window.
+ * @selection: a #GdkAtom which identifies the clipboard
+ *             to use. A value of %GDK_NONE here is the
+ *             same as gdk_atom_intern ("CLIPBOARD", FALSE),
+ *             and provides the default clipboard. Another
+ *             common value is %GDK_SELECTION_PRIMARY, which
+ *             identifies the primary X selection. 
+ * 
+ * Returns the clipboard object for the given selection.
+ * 
+ * Return value: the appropriate clipboard object. If no
+ *             clipboard already exists, a new one will
+ *             be created. Once a clipboard object has
+ *             been created, it is persistent for all time.
+ **/
+GtkClipboard *
+gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
+					selection);
 }
 

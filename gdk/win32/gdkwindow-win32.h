@@ -58,7 +58,7 @@ struct _GdkWin32PositionInfo
 typedef struct _GdkWindowImplWin32 GdkWindowImplWin32;
 typedef struct _GdkWindowImplWin32Class GdkWindowImplWin32Class;
 
-#define GDK_TYPE_WINDOW_IMPL_WIN32              (gdk_window_impl_win32_get_type ())
+#define GDK_TYPE_WINDOW_IMPL_WIN32              (_gdk_window_impl_win32_get_type ())
 #define GDK_WINDOW_IMPL_WIN32(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32))
 #define GDK_WINDOW_IMPL_WIN32_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_WIN32, GdkWindowImplWin32Class))
 #define GDK_IS_WINDOW_IMPL_WIN32(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_WIN32))
@@ -97,7 +97,7 @@ struct _GdkWindowImplWin32Class
 
 };
 
-GType gdk_window_impl_win32_get_type (void);
+GType _gdk_window_impl_win32_get_type (void);
 
 #ifdef __cplusplus
 }

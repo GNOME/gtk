@@ -739,8 +739,9 @@ gdk_fb_window_send_crossing_events (GdkWindow *src,
     }
 }
 
-void
-gdk_window_show (GdkWindow *window)
+static void
+show_window_internal (GdkWindow *window,
+                      gboolean   raise)
 {
   GdkWindowObject *private;
   GdkWindow *mousewin;
@@ -752,7 +753,9 @@ gdk_window_show (GdkWindow *window)
   if (!private->destroyed && !GDK_WINDOW_IS_MAPPED (private))
     {
       private->state = 0;
-      gdk_fb_window_raise (window);
+
+      if (raise)
+        gdk_fb_window_raise (window);
       
       if (all_parents_shown ((GdkWindowObject *)private->parent))
 	{
@@ -777,6 +780,22 @@ gdk_window_show (GdkWindow *window)
 	  gdk_window_invalidate_rect (_gdk_parent_root, &rect, TRUE);
 	}
     }
+}
+
+void
+gdk_window_show_unraised (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+
+  show_window_internal (window, FALSE);
+}
+
+void
+gdk_window_show (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+
+  show_window_internal (window, TRUE);
 }
 
 void
@@ -1686,8 +1705,9 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (gint *win_x,
-				  gint *win_y)
+_gdk_windowing_window_at_pointer (GdkScreen *screen,
+				  gint      *win_x,
+				  gint      *win_y)
 {
   gint rx, ry;
   GdkWindow *retval = gdk_window_get_pointer (NULL, win_x, win_y, NULL);
@@ -2220,14 +2240,12 @@ void
 gdk_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
-  g_return_val_if_fail (window != NULL, 0);
+  g_return_if_fail (window != NULL);
   
   rect->x = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_x;
   rect->y = GDK_DRAWABLE_IMPL_FBDATA (window)->abs_y;
   rect->width = GDK_DRAWABLE_IMPL_FBDATA (window)->width;
   rect->height = GDK_DRAWABLE_IMPL_FBDATA (window)->height;
-
-  return TRUE;
 }
 
 GdkWindow*

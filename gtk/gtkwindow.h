@@ -104,6 +104,8 @@ struct _GtkWindow
   guint frame_top;
   guint frame_right;
   guint frame_bottom;
+
+  guint keys_changed_handler;
   
   GdkModifierType mnemonic_modifier;
   GdkScreen      *screen;
@@ -115,7 +117,7 @@ struct _GtkWindowClass
 
   void     (* set_focus)   (GtkWindow *window,
 			    GtkWidget *focus);
-  gboolean (* frame_event) (GtkWidget *widget,
+  gboolean (* frame_event) (GtkWindow *window,
 			    GdkEvent  *event);
 
   /* G_SIGNAL_ACTION signals for keybindings */
@@ -124,6 +126,7 @@ struct _GtkWindowClass
   void     (* activate_default)        (GtkWindow       *window);
   void     (* move_focus)              (GtkWindow       *window,
                                         GtkDirectionType direction);  
+  void	   (*keys_changed)	       (GtkWindow	*window);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
@@ -163,6 +166,11 @@ void       gtk_window_remove_accel_group       (GtkWindow           *window,
 void       gtk_window_set_position             (GtkWindow           *window,
 						GtkWindowPosition    position);
 gboolean   gtk_window_activate_focus	       (GtkWindow           *window);
+void       gtk_window_set_focus                (GtkWindow           *window,
+						GtkWidget           *focus);
+GtkWidget *gtk_window_get_focus                (GtkWindow           *window);
+void       gtk_window_set_default              (GtkWindow           *window,
+						GtkWidget           *default_widget);
 gboolean   gtk_window_activate_default	       (GtkWindow           *window);
 
 void       gtk_window_set_transient_for        (GtkWindow           *window, 
@@ -305,10 +313,8 @@ void             gtk_window_group_remove_window (GtkWindowGroup     *window_grou
 					         GtkWindow          *window);
 
 /* --- internal functions --- */
-void            gtk_window_set_focus           (GtkWindow *window,
+void            _gtk_window_internal_set_focus (GtkWindow *window,
 						GtkWidget *focus);
-void            gtk_window_set_default         (GtkWindow *window,
-						GtkWidget *defaultw);
 void            gtk_window_remove_embedded_xid (GtkWindow *window,
 						guint      xid);
 void            gtk_window_add_embedded_xid    (GtkWindow *window,
@@ -322,6 +328,11 @@ void            _gtk_window_constrain_size     (GtkWindow *window,
 						gint      *new_width,
 						gint      *new_height);
 GtkWindowGroup *_gtk_window_get_group          (GtkWindow *window);
+
+/* --- internal (GtkAcceleratable) --- */
+gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,
+						 guint		 accel_key,
+						 GdkModifierType accel_mods);
 
 #ifdef __cplusplus
 }

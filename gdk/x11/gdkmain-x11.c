@@ -122,7 +122,7 @@ _gdk_windowing_init_check_for_display (int argc,
 {
   XKeyboardState keyboard_state;
   XClassHint *class_hint;
-  guint pid;
+  gulong pid;
   GdkDisplay *display;
   GdkDisplayImplX11 *display_impl;
 

@@ -235,18 +235,15 @@ gdk_color_get_type (void)
 
 gboolean
 gdk_color_parse (const gchar *spec,
-		 GdkColor *color)
+		 GdkColor    *color)
 {
   PangoColor pango_color;
 
   if (pango_color_parse (&pango_color, spec))
     {
-      if (color)
-	{
-	  color->red = pango_color.red;
-	  color->green = pango_color.green;
-	  color->blue = pango_color.blue;
-	}
+      color->red = pango_color.red;
+      color->green = pango_color.green;
+      color->blue = pango_color.blue;
 
       return TRUE;
     }

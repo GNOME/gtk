@@ -25,7 +25,7 @@
 #define __GDK_DISPLAY_H__
 
 #include <gdk/gdktypes.h>
-#include <gobject/gobject.h>
+#include <glib-object.h>
 
 #ifdef __cplusplus
 extern "C"

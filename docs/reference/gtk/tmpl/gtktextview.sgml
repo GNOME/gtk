@@ -639,16 +639,6 @@ types related to the text widget and how they work together.
 
 @textview: the object which received the signal.
 
-<!-- ##### ARG GtkTextView:height-lines ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkTextView:width-columns ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextView:pixels-above-lines ##### -->
 <para>
 

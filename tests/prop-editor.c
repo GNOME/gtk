@@ -459,10 +459,10 @@ property_widget (GdkScreen  *screen,
   GtkWidget *prop_edit;
   GtkAdjustment *adj;
   gchar *msg;
-  
-  switch (G_PARAM_SPEC_TYPE (spec))
+  GType type = G_PARAM_SPEC_TYPE (spec);
+
+  if (type == G_TYPE_PARAM_INT)
     {
-    case G_TYPE_PARAM_INT:
       adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_INT (spec)->default_value,
 						G_PARAM_SPEC_INT (spec)->minimum,
 						G_PARAM_SPEC_INT (spec)->maximum,
@@ -480,17 +480,17 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
 			    object, spec->name, (GtkSignalFunc) int_modified);
-      break;
-      
-    case G_TYPE_PARAM_UINT:
+    }
+  else if (type == G_TYPE_PARAM_UINT)
+    {
       adj = GTK_ADJUSTMENT (
-	     gtk_adjustment_new (G_PARAM_SPEC_UINT (spec)->default_value,
-				 G_PARAM_SPEC_UINT (spec)->minimum,
-				 G_PARAM_SPEC_UINT (spec)->maximum,
-				 1,
-				 MAX ((G_PARAM_SPEC_UINT (spec)->maximum -
-				       G_PARAM_SPEC_UINT (spec)->minimum) / 10, 1),
-				 0.0));
+			    gtk_adjustment_new (G_PARAM_SPEC_UINT (spec)->default_value,
+						G_PARAM_SPEC_UINT (spec)->minimum,
+						G_PARAM_SPEC_UINT (spec)->maximum,
+						1,
+						MAX ((G_PARAM_SPEC_UINT (spec)->maximum -
+						      G_PARAM_SPEC_UINT (spec)->minimum) / 10, 1),
+						0.0));
       
       prop_edit = gtk_spin_button_new (adj, 1.0, 0);
       
@@ -501,9 +501,10 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
 			    object, spec->name, (GtkSignalFunc) uint_modified);
-      break;
-      
-    case G_TYPE_PARAM_FLOAT:
+    }
+  else if (type == G_TYPE_PARAM_FLOAT)
+    {
+
       adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_FLOAT (spec)->default_value,
 						G_PARAM_SPEC_FLOAT (spec)->minimum,
 						G_PARAM_SPEC_FLOAT (spec)->maximum,
@@ -521,9 +522,9 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
 			    object, spec->name, (GtkSignalFunc) float_modified);
-      break;
-      
-    case G_TYPE_PARAM_DOUBLE:
+    }
+  else if (type == G_TYPE_PARAM_DOUBLE)
+    {
       adj = GTK_ADJUSTMENT (gtk_adjustment_new (G_PARAM_SPEC_DOUBLE (spec)->default_value,
 						G_PARAM_SPEC_DOUBLE (spec)->minimum,
 						G_PARAM_SPEC_DOUBLE (spec)->maximum,
@@ -541,9 +542,9 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (adj), "value_changed",
 			    object, spec->name, (GtkSignalFunc) double_modified);
-      break;
-      
-    case G_TYPE_PARAM_STRING:
+    }
+  else if (type == G_TYPE_PARAM_STRING)
+    {
       prop_edit = gtk_entry_new ();
       
       g_object_connect_property (object, spec->name,
@@ -553,9 +554,9 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (prop_edit), "changed",
 			    object, spec->name, (GtkSignalFunc) string_modified);
-      break;
-      
-    case G_TYPE_PARAM_BOOLEAN:
+    }
+  else if (type == G_TYPE_PARAM_BOOLEAN)
+    {
       prop_edit = gtk_toggle_button_new_with_label ("");
       
       g_object_connect_property (object, spec->name,
@@ -565,9 +566,9 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (prop_edit), "toggled",
 			    object, spec->name, (GtkSignalFunc) bool_modified);
-      break;
-      
-    case G_TYPE_PARAM_ENUM:
+    }
+  else if (type == G_TYPE_PARAM_ENUM)
+    {
       {
 	GtkWidget *menu;
 	GEnumClass *eclass;
@@ -606,9 +607,9 @@ property_widget (GdkScreen  *screen,
 	  connect_controller (G_OBJECT (prop_edit), "changed",
 			      object, spec->name, (GtkSignalFunc) enum_modified);
       }
-      break;
-      
-    case G_TYPE_PARAM_UNICHAR:
+    }
+  else if (type == G_TYPE_PARAM_UNICHAR)
+    {
       prop_edit = gtk_entry_new ();
       gtk_entry_set_max_length (GTK_ENTRY (prop_edit), 1);
       
@@ -619,26 +620,25 @@ property_widget (GdkScreen  *screen,
       if (can_modify)
 	connect_controller (G_OBJECT (prop_edit), "changed",
 			    object, spec->name, (GtkSignalFunc) unichar_modified);
-      break;
-      
-    case G_TYPE_PARAM_POINTER:
+    }
+  else if (type == G_TYPE_PARAM_POINTER)
+    {
       prop_edit = gtk_label_new ("");
       
       g_object_connect_property (object, spec->name,
 				 GTK_SIGNAL_FUNC (pointer_changed),
 				 prop_edit, G_OBJECT (prop_edit));
-      break;
-      
-    case G_TYPE_PARAM_OBJECT:
+    }
+  else if (type == G_TYPE_PARAM_OBJECT)
+    {
       prop_edit = gtk_label_new ("");
       
       g_object_connect_property (object, spec->name,
 				 GTK_SIGNAL_FUNC (object_changed),
 				 prop_edit, G_OBJECT (prop_edit));
-      break;
-      
-      
-    default:
+    }
+  else
+    {  
       msg = g_strdup_printf ("uneditable property type: %s",
 			     g_type_name (G_PARAM_SPEC_TYPE (spec)));
       prop_edit = gtk_label_new (msg);            
@@ -700,7 +700,7 @@ properties_from_type (GdkScreen   *screen,
 	  continue;
 	}
 
-      label = gtk_label_new (g_param_get_nick (spec));
+      label = gtk_label_new (g_param_spec_get_nick (spec));
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
       
@@ -712,8 +712,8 @@ properties_from_type (GdkScreen   *screen,
           if (!can_modify)
             gtk_widget_set_sensitive (prop_edit, FALSE);
 
-	  if (g_param_get_blurb (spec))
-	    gtk_tooltips_set_tip (tips, prop_edit, g_param_get_blurb (spec), NULL);
+	  if (g_param_spec_get_blurb (spec))
+	    gtk_tooltips_set_tip (tips, prop_edit, g_param_spec_get_blurb (spec), NULL);
 	  
           /* set initial value */
           g_object_notify (object, spec->name);

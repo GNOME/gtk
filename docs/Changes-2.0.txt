@@ -116,6 +116,12 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
     have to be moved into the ::destroy implementations. The reason for doing
     this is that all object reference cycles should be broken at destruction 
     time.
+
+    Because the ::destroy signal can be emitted multiple times, it no longer
+    makes sense to check if a widget has been destroyed using the 
+    GTK_OBJECT_DESTROYED() macro, and this macro has been removed. If 
+    catching destruction is still needed, it can be done with a signal
+    connection to ::destroy.
     
 * Signal system changes:
   The Gtk 2.0 signal merly proxies the GSignal system now.
@@ -191,7 +197,7 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
 * A number of functions in GDK have been renamed for consistency and
   clarity. #defines to provide backwards compatibility have been
-  included, but can be disabled by defineing GDK_DISABLE_COMPAT_H.
+  included, but can be disabled by defineing GDK_DISABLE_DEPRECATED.
 
   #define gdk_draw_pixmap                gdk_draw_drawable
   #define gdk_draw_bitmap                gdk_draw_drawable
@@ -502,3 +508,41 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 
   If you aren't using GDK and GTK+ functions from multiple threads,
   there is no reason to call gdk_threads_init().
+
+* The GtkPreviewInfo struct has had its visual and colormap fields
+  removed.  Also, gtk_preview_get_cmap() and gtk_preview_get_visual()
+  are deprecated, as GdkRgb works on any colormap and visual.  You no
+  longer need to gtk_widget_push_cmap (gtk_preview_get_cmap ()) in
+  your code.
+
+* The GtkBox, GtkTable, and GtkAlignment widgets now call
+  gtk_widget_set_redraw_on_allocate (widget, FALSE); on themselves.
+  If you want to actually draw contents in a widget derived from
+  one of these widgets, you'll probably want to change this
+  in your init() function.
+
+* A number of widgets are now NO_WINDOW widgets (most importantly
+  GtkButton, but also GtkRange and GtkNotebook)
+
+  This has a couple of effects:
+
+   - If you are deriving from one of these widgets, you need to
+     adapt your code appropriately -- for instance, drawing coordinates
+     start from widget->allocation.x, widget->allocation.y.
+
+   - If you are embedding one of these widgets in a custom widget,
+     you must make sure you call gtk_container_propagate_expose()
+     correctly, as you must for any NO_WINDOW widgets.
+
+  GtkFixed is a little special; it is now created by default as
+  a NO_WINDOW widget, but if you do 
+
+    gtk_fixed_set_has_window (fixed, TRUE);
+
+  after creating a fixed widget, it will create a window and
+  handle it properly.
+
+* GtkLayout no longer has the xoffset, yoffset fields, which used
+  to store the difference between world and window coordinates for
+  layout->bin_window. These coordinate systems are now always
+  the same.

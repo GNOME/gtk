@@ -138,8 +138,8 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       menu_item = GTK_MENU_ITEM (widget);
       tearoff_item = GTK_TEAROFF_MENU_ITEM (widget);
 
-      x = GTK_CONTAINER (menu_item)->border_width;
-      y = GTK_CONTAINER (menu_item)->border_width;
+      x = widget->allocation.x + GTK_CONTAINER (menu_item)->border_width;
+      y = widget->allocation.y + GTK_CONTAINER (menu_item)->border_width;
       width = widget->allocation.width - x * 2;
       height = widget->allocation.height - y * 2;
       right_max = x + width;
@@ -218,6 +218,7 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 
   tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (menu_item);
   tearoff_menu_item->torn_off = !tearoff_menu_item->torn_off;
+  gtk_widget_queue_resize (GTK_WIDGET (menu_item));
 
   if (GTK_IS_MENU (GTK_WIDGET (menu_item)->parent))
     {
@@ -235,7 +236,5 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 				     GTK_SIGNAL_FUNC (gtk_tearoff_menu_item_delete_cb),
 				     GTK_OBJECT (menu_item));
     }
-  
-  gtk_widget_queue_resize (GTK_WIDGET (menu_item));
 }
 

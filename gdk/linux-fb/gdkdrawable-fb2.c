@@ -1185,7 +1185,6 @@ _gdk_fb_draw_glyphs (GdkDrawable      *drawable,
 {
   GdkFBDrawingContext fbdc;
   GdkPixmapFBData pixmap;
-  PangoFT2Subfont subfont_index;
   PangoGlyphInfo *gi;
   FT_Face face;
   FT_UInt glyph_index;
@@ -1211,9 +1210,8 @@ _gdk_fb_draw_glyphs (GdkDrawable      *drawable,
     {
       if (gi->glyph)
 	{
-	  glyph_index = PANGO_FT2_GLYPH_INDEX (gi->glyph);
-	  subfont_index = PANGO_FT2_GLYPH_SUBFONT (gi->glyph);
-	  face = pango_ft2_get_face (font, subfont_index);
+	  glyph_index = gi->glyph;
+	  face = pango_ft2_font_get_face (font);
 
 	  if (face)
 	    {

@@ -47,7 +47,7 @@
  *
  */
 
-
+#define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "gtktextbtree.h"
 
 static void gtk_text_mark_init       (GtkTextMark      *mark);

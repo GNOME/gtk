@@ -55,8 +55,6 @@ struct _GtkToggleButton
   guint active : 1;
   guint draw_indicator : 1;
   guint inconsistent : 1;
-  
-  GdkWindow *event_window;
 };
 
 struct _GtkToggleButtonClass

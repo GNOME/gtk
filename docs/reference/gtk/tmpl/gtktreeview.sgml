@@ -14,6 +14,12 @@ GtkTreeView
 
 </para>
 
+<!-- ##### STRUCT GtkTreeView ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ENUM GtkTreeViewDropPosition ##### -->
 <para>
 
@@ -25,12 +31,6 @@ GtkTreeView
 @GTK_TREE_VIEW_DROP_INTO_OR_AFTER: 
 
 <!-- ##### STRUCT GtkTreeViewPrivate ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### STRUCT GtkTreeSelection ##### -->
 <para>
 
 </para>
@@ -49,18 +49,6 @@ GtkTreeView
 @Returns: 
 
 
-<!-- ##### USER_FUNCTION GtkTreeViewDraggableFunc ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@context: 
-@path: 
-@user_data: 
-@Returns: 
-
-
 <!-- ##### USER_FUNCTION GtkTreeViewMappingFunc ##### -->
 <para>
 
@@ -69,19 +57,6 @@ GtkTreeView
 @tree_view: 
 @path: 
 @user_data: 
-
-
-<!-- ##### USER_FUNCTION GtkTreeViewDroppableFunc ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@context: 
-@path: 
-@pos: 
-@user_data: 
-@Returns: 
 
 
 <!-- ##### USER_FUNCTION GtkTreeViewSearchEqualFunc ##### -->
@@ -494,7 +469,6 @@ GtkTreeView
 </para>
 
 @tree_view: 
-@window: 
 @x: 
 @y: 
 @path: 
@@ -502,6 +476,8 @@ GtkTreeView
 @cell_x: 
 @cell_y: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@window: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_get_cell_area ##### -->
@@ -535,6 +511,15 @@ GtkTreeView
 @visible_rect: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_get_bin_window ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_widget_to_tree_coords ##### -->
 <para>
 
@@ -559,7 +544,18 @@ GtkTreeView
 @wy: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_source ##### -->
+<!-- ##### FUNCTION gtk_tree_view_enable_model_drag_dest ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@targets: 
+@n_targets: 
+@actions: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_enable_model_drag_source ##### -->
 <para>
 
 </para>
@@ -569,21 +565,6 @@ GtkTreeView
 @targets: 
 @n_targets: 
 @actions: 
-@row_draggable_func: 
-@user_data: 
-
-
-<!-- ##### FUNCTION gtk_tree_view_set_rows_drag_dest ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@targets: 
-@n_targets: 
-@actions: 
-@location_droppable_func: 
-@user_data: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_unset_rows_drag_source ##### -->
@@ -729,6 +710,13 @@ GtkTreeView
 
 
 <!-- ##### SIGNAL GtkTreeView::columns-changed ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::cursor-changed ##### -->
 <para>
 
 </para>

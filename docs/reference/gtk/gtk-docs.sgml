@@ -1,4 +1,7 @@
-<!doctype book PUBLIC "-//OASIS//DTD DocBook V4.1//EN" [
+<!doctype book PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
+<!notation PNG system "PNG">
+<!entity % local.notation.class "| PNG">
+
 <!entity hash "#">
 <!entity GtkAccelLabel SYSTEM "sgml/gtkaccellabel.sgml">
 <!entity GtkAdjustment SYSTEM "sgml/gtkadjustment.sgml">
@@ -96,12 +99,14 @@
 <!entity GtkTree SYSTEM "sgml/gtktree.sgml">
 <!entity GtkTreeItem SYSTEM "sgml/gtktreeitem.sgml">
 <!entity gtk-GtkTreeModel SYSTEM "sgml/gtktreemodel.sgml">
+<!entity gtk-GtkTreeSortable SYSTEM "sgml/gtktreesortable.sgml">
 <!entity gtk-GtkTreeModelSort SYSTEM "sgml/gtktreemodelsort.sgml">
 <!entity gtk-GtkTreeSelection SYSTEM "sgml/gtktreeselection.sgml">
 <!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
 <!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
 <!entity gtk-GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
 <!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
+<!entity gtk-GtkCellEditable SYSTEM "sgml/gtkcelleditable.sgml">
 <!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
 <!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
 <!entity gtk-GtkCellRendererToggle SYSTEM "sgml/gtkcellrenderertoggle.sgml">
@@ -124,7 +129,8 @@
 <!entity gtk-Styles SYSTEM "sgml/gtkstyle.sgml">
 <!entity gtk-Themes SYSTEM "sgml/gtkthemes.sgml">
 <!entity gtk-Resource-Files SYSTEM "sgml/gtkrc.sgml">
-<!entity gtk-Keyboard-Accelerators SYSTEM "sgml/gtkaccelgroup.sgml">
+<!entity GtkAccelGroup SYSTEM "sgml/gtkaccelgroup.sgml">
+<!entity gtk-accel-map SYSTEM "sgml/gtkaccelmap.sgml">
 <!entity gtk-Selections SYSTEM "sgml/gtkselection.sgml">
 <!entity gtk-Clipboards SYSTEM "sgml/gtkclipboard.sgml">
 <!entity gtk-Drag-and-Drop SYSTEM "sgml/gtkdnd.sgml">
@@ -246,7 +252,8 @@ that is, GUI components such as #GtkButton or #GtkTextView.
     <title>GTK+ Core Reference</title>
 
     &gtk-General;
-    &gtk-Keyboard-Accelerators;
+    &GtkAccelGroup;
+    &gtk-accel-map;
     &gtk-Clipboards;
     &gtk-Drag-and-Drop;
     &gtk-Stock-Items;
@@ -324,16 +331,18 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &gtk-TreeWidget;
         &gtk-GtkTreeModel;
         &gtk-GtkTreeSelection;
-        &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
         &gtk-GtkTreeDND;
+	&gtk-GtkTreeSortable;
         &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
+        &gtk-GtkCellEditable;
         &gtk-GtkCellRendererPixbuf;
         &gtk-GtkCellRendererText;
         &gtk-GtkCellRendererToggle;
         &gtk-GtkListStore;
+        &gtk-GtkTreeStore;
     </sect1>
     <sect1 id="MenusAndCombos">
       <title>Menus, Combo Box, Toolbar</title>

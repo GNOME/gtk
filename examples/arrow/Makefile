@@ -2,7 +2,7 @@
 CC = gcc
 
 arrow: arrow.c 
-	$(CC) `gtk-config --cflags`  arrow.c -o arrow `gtk-config --libs`
+	$(CC) `pkg-config --cflags gtk+-2.0`  arrow.c -o arrow `pkg-config --libs gtk+-2.0`
 
 clean: 
 	rm -f *.o arrow

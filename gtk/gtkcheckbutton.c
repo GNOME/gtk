@@ -261,6 +261,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_CHECK_BUTTON (widget));
   g_return_if_fail (allocation != NULL);
   
+  button = GTK_BUTTON (widget);
   check_button = GTK_CHECK_BUTTON (widget);
   toggle_button = GTK_TOGGLE_BUTTON (widget);
 
@@ -273,11 +274,9 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
 						    
       widget->allocation = *allocation;
       if (GTK_WIDGET_REALIZED (widget))
-	gdk_window_move_resize (toggle_button->event_window,
+	gdk_window_move_resize (button->event_window,
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
-      
-      button = GTK_BUTTON (widget);
       
       if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
 	{

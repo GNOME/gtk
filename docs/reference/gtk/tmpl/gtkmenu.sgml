@@ -171,6 +171,9 @@ at the current pointer position.
 <!-- ##### FUNCTION gtk_menu_set_accel_group ##### -->
 <para>
 Set the #GtkAccelGroup which holds global accelerators for the menu.
+This accelerator group needs to also be added to all windows that
+this menu is being used in with gtk_window_add_accel_group(), in order
+for those windows to support all the accelerators contained in this group.
 </para>
 
 @menu: a #GtkMenu.
@@ -179,11 +182,21 @@ Set the #GtkAccelGroup which holds global accelerators for the menu.
 
 <!-- ##### FUNCTION gtk_menu_get_accel_group ##### -->
 <para>
+Gets the #GtkAccelGroup which holds global accelerators for the menu.
+See gtk_menu_set_accel_group().
+</para>
+
+@menu: a #GtkMenu.
+@Returns: the #GtkAccelGroup associated with the menu.
+
+
+<!-- ##### FUNCTION gtk_menu_set_accel_path ##### -->
+<para>
 
 </para>
 
 @menu: 
-@Returns: 
+@accel_path: 
 
 
 <!-- ##### FUNCTION gtk_menu_set_title ##### -->

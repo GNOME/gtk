@@ -25,6 +25,7 @@
 #include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
+#include "gtkmarshalers.h"
 #include "gtkarrow.h"
 #include "gtkintl.h"
 #include <string.h>
@@ -33,6 +34,7 @@ enum
 {
   PROP_0,
   PROP_VISIBLE,
+  PROP_RESIZABLE,
   PROP_WIDTH,
   PROP_SIZING,
   PROP_FIXED_WIDTH,
@@ -162,7 +164,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewColumnClass, clicked),
                   NULL, NULL,
-                  gtk_marshal_VOID__VOID,
+                  _gtk_marshal_VOID__VOID,
                   GTK_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
@@ -171,6 +173,14 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                         _("Visible"),
                                                         _("Whether to display the column"),
                                                          TRUE,
+                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+  
+  g_object_class_install_property (object_class,
+                                   PROP_RESIZABLE,
+                                   g_param_spec_boolean ("resizable",
+							 _("Resizable"),
+							 _("Column is user-resizable"),
+                                                         FALSE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   
   g_object_class_install_property (object_class,
@@ -294,6 +304,7 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->max_width = -1;
   tree_column->column_type = GTK_TREE_VIEW_COLUMN_GROW_ONLY;
   tree_column->visible = TRUE;
+  tree_column->resizable = FALSE;
   tree_column->clickable = FALSE;
   tree_column->dirty = TRUE;
   tree_column->sort_order = GTK_SORT_ASCENDING;
@@ -665,7 +676,7 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	  gtk_widget_show_now (tree_column->button);
 	  if (tree_column->window)
 	    {
-	      if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_RESIZABLE)
+	      if (tree_column->resizable)
 		{
 		  gdk_window_show (tree_column->window);
 		  gdk_window_raise (tree_column->window);
@@ -695,7 +706,9 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
 	{
 	  GtkWidget *toplevel = gtk_widget_get_toplevel (tree_column->tree_view);
 	  if (GTK_WIDGET_TOPLEVEL (toplevel))
-	    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+	    {
+	      gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+	    }
 	}
     }
 
@@ -1407,6 +1420,34 @@ gtk_tree_view_column_get_visible (GtkTreeViewColumn *tree_column)
   return tree_column->visible;
 }
 
+void
+gtk_tree_view_column_set_resizable (GtkTreeViewColumn *tree_column,
+				    gboolean           resizable)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+
+  resizable = !! resizable;
+
+  if (tree_column->resizable == resizable)
+    return;
+
+  if (resizable && tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+    gtk_tree_view_column_set_sizing (tree_column, GTK_TREE_VIEW_COLUMN_GROW_ONLY);
+
+  gtk_tree_view_column_update_button (tree_column);
+
+  g_object_notify (G_OBJECT (tree_column), "resizable");
+}
+
+gboolean
+gtk_tree_view_column_get_resizable (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
+
+  return tree_column->resizable;
+}
+
+
 /**
  * gtk_tree_view_column_set_sizing:
  * @tree_column: A #GtkTreeViewColumn.
@@ -1423,16 +1464,23 @@ gtk_tree_view_column_set_sizing (GtkTreeViewColumn       *tree_column,
   if (type == tree_column->column_type)
     return;
 
+  if (type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
+    gtk_tree_view_column_set_resizable (tree_column, FALSE);
+
+#if 0
+  /* I was clearly on crack when I wrote this.  I'm not sure what's supposed to
+   * be below so I'll leave it until I figure it out.
+   */
   if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE &&
       tree_column->requested_width != -1)
     {
       gtk_tree_view_column_set_sizing (tree_column, tree_column->requested_width);
     }
+#endif
   tree_column->column_type = type;
 
   gtk_tree_view_column_update_button (tree_column);
 
-  if (type != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
   g_object_notify (G_OBJECT (tree_column), "sizing");
 }
 
@@ -1471,7 +1519,7 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @fixed_width: The size to set the @tree_column to.
+ * @fixed_width: The size to set the @tree_column to. Must be greater than 0.
  * 
  * Sets the size of the column in pixels.  This is meaningful only if the sizing
  * type is #GTK_TREE_VIEW_COLUMN_FIXED.  In this case, the value is discarded
@@ -1967,16 +2015,17 @@ gtk_tree_view_column_get_sort_indicator  (GtkTreeViewColumn     *tree_column)
  * @tree_column: a #GtkTreeViewColumn
  * @order: sort order that the sort indicator should indicate
  *
- * Changes the appearance of the sort indicator. (This <emphasis>does
- * not</emphasis> actually sort the model.  Use
+ * Changes the appearance of the sort indicator. 
+ * 
+ * This <emphasis>does not</emphasis> actually sort the model.  Use
  * gtk_tree_view_column_set_sort_column_id() if you want automatic sorting
  * support.  This function is primarily for custom sorting behavior, and should
- * be used in conjunction with #gtk_tree_sortable_set_sort_column() to do
- * that. For custom models, the mechanism will vary. The sort indicator changes
- * direction to indicate normal sort or reverse sort. Note that you must have
- * the sort indicator enabled to see anything when calling this function; see
- * gtk_tree_view_column_set_sort_indicator().
+ * be used in conjunction with gtk_tree_sortable_set_sort_column() to do
+ * that. For custom models, the mechanism will vary. 
  * 
+ * The sort indicator changes direction to indicate normal sort or reverse sort.
+ * Note that you must have the sort indicator enabled to see anything when 
+ * calling this function; see gtk_tree_view_column_set_sort_indicator().
  **/
 void
 gtk_tree_view_column_set_sort_order      (GtkTreeViewColumn     *tree_column,

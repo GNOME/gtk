@@ -1,4 +1,11 @@
-## Makefile.am for gtk+/demos
+## Makefile.am for gtk+/modules/input
+
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+SOSUFFIX=dll
+else
+SOSUFFIX=so
+endif
 
 INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\
@@ -24,7 +31,7 @@ LDADDS = @STRIP_BEGIN@ 					\
 
 moduledir = $(libdir)/gtk-2.0/immodules/$(GTK_BINARY_VERSION)
 
-im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_xim_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_xim_la_SOURCES = 		\
 	gtkimcontextxim.c 	\
 	gtkimcontextxim.h	\
@@ -34,23 +41,23 @@ if USE_X11
 IM_XIM_MODULE=im-xim.la 
 endif
 
-im_cyrillic_translit_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_cyrillic_translit_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_cyrillic_translit_la_SOURCES = imcyrillic-translit.c
 im_cyrillic_translit_la_LIBADD = $(LDADDS)
 
-im_thai_broken_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_thai_broken_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_thai_broken_la_SOURCES = imthai-broken.c
 im_thai_broken_la_LIBADD = $(LDADDS)
 
-im_viqr_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_viqr_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_viqr_la_SOURCES = imviqr.c
 im_viqr_la_LIBADD = $(LDADDS)
 
-im_inuktitut_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_inuktitut_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_inuktitut_la_SOURCES = iminuktitut.c
 im_inuktitut_la_LIBADD = $(LDADDS)
 
-im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module
+im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_ipa_la_SOURCES = imipa.c
 im_ipa_la_LIBADD = $(LDADDS)
 
@@ -66,6 +73,6 @@ module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai
                      im-inuktitut.la im-ipa.la
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-2.0 .libs/*.so > gtk.immodules
+	$(top_builddir)/gtk/gtk-query-immodules-2.0 .libs/*.$(SOSUFFIX) > gtk.immodules
 
 all-local: gtk.immodules

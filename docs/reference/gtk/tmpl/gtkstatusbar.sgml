@@ -11,7 +11,7 @@ A #GtkStatusbar is usually placed along the bottom of an application's main
 (as is usually the case in a web browser, for example), or may be used to
 simply output a message when the status changes, (when an upload is complete
 in an FTP client, for example). 
-It may also have a resize grip (a triangular area in the lower left corner) 
+It may also have a resize grip (a triangular area in the lower right corner) 
 which can be clicked on to resize the window containing the statusbar.
 </para>
 <para>
@@ -78,7 +78,7 @@ Pushes a new message onto a statusbar's stack.
 
 @statusbar: a #GtkStatusbar.
 @context_id: the message's context id, as returned by
-gkt_statusbar_get_context_id().
+gtk_statusbar_get_context_id().
 @text: the message to add to the statusbar.
 @Returns: the message's new message id for use with gtk_statusbar_remove().
 
@@ -94,7 +94,7 @@ Removes the message at the top of a #GtkStatusBar's stack.
 
 <!-- ##### FUNCTION gtk_statusbar_remove ##### -->
 <para>
-Forces the removal of a message from a statusbar's stack. The exact context_id and message_id must be specified.
+Forces the removal of a message from a statusbar's stack. The exact @context_id and @message_id must be specified.
 </para>
 
 @statusbar: a #GtkStatusBar.

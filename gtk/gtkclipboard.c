@@ -137,6 +137,7 @@ gtk_clipboard_get_for_display (GdkDisplay *display, GdkAtom selection)
   
   return clipboard;
 }
+
 #ifndef GDK_MULTIHEAD_SAFE
 GtkClipboard *
 gtk_clipboard_get (GdkAtom selection)
@@ -151,8 +152,8 @@ selection_get_cb (GtkWidget          *widget,
 		  guint               time,
 		  guint               info)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
-							   selection_data->selection);
+  GtkClipboard *clipboard = 
+    gtk_widget_get_clipboard (widget, selection_data->selection);
 
   if (clipboard && clipboard->get_func)
     clipboard->get_func (clipboard, selection_data, info, clipboard->user_data);
@@ -162,8 +163,8 @@ static gboolean
 selection_clear_event_cb (GtkWidget	    *widget,
 			  GdkEventSelection *event)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
-							   event->selection);
+  GtkClipboard *clipboard = gtk_widget_get_clipboard (widget,
+						      event->selection);
 
   if (clipboard)
     {
@@ -543,7 +544,7 @@ text_get_func (GtkClipboard     *clipboard,
 	       guint             info,
 	       gpointer          data)
 {
-  gtk_selection_data_set_text (selection_data, data);
+  gtk_selection_data_set_text (selection_data, data, -1);
 }
 
 static void 
@@ -619,8 +620,8 @@ selection_received (GtkWidget            *widget,
   RequestContentsInfo *request_info = get_request_contents_info (widget);
   set_request_contents_info (widget, NULL);
   
-  request_info->callback (gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
-							 selection_data->selection), 
+  request_info->callback (gtk_widget_get_clipboard (widget,
+						    selection_data->selection), 
 			  selection_data,
 			  request_info->user_data);
 
@@ -883,3 +884,36 @@ gtk_clipboard_get_display (GtkClipboard *clipboard)
   return clipboard->display;
 }
 
+
+/**
+ * gtk_clipboard_wait_is_text_available:
+ * @clipboard: a #GtkClipboard
+ * 
+ * Test to see if there is text available to be pasted
+ * This is done by requesting the TARGETS atom and checking
+ * if it contains any of the names: STRING, TEXT, COMPOUND_TEXT,
+ * UTF8_STRING. This function waits for the data to be received
+ * using the main loop, so events, timeouts, etc, may be dispatched
+ * during the wait.
+ *
+ * This function is a little faster than calling
+ * gtk_clipboard_wait_for_text() since it doesn't need to retrieve
+ * the actual text.
+ * 
+ * Return value: %TRUE is there is text available, %FALSE otherwise.
+ **/
+gboolean
+gtk_clipboard_wait_is_text_available (GtkClipboard *clipboard)
+{
+  GtkSelectionData *data;
+  gboolean result = FALSE;
+
+  data = gtk_clipboard_wait_for_contents (clipboard, gdk_atom_intern ("TARGETS", FALSE));
+  if (data)
+    {
+      result = gtk_selection_data_targets_include_text (data);
+      gtk_selection_data_free (data);
+    }
+
+  return result;
+}

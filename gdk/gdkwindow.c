@@ -324,7 +324,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	      private->bg_pixmap = NULL;
 	    }
 	  
-	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_FOREIGN)
+	    g_assert (private->children == NULL);
+	  else
 	    {
 	      children = tmp = private->children;
 	      private->children = NULL;
@@ -703,7 +705,8 @@ gdk_window_get_toplevels_for_screen (GdkScreen *screen)
   tmp_list = ((GdkWindowObject *)root_window)->children;
   while (tmp_list)
     {
-      new_list = g_list_prepend (new_list, tmp_list->data);
+      if (GDK_WINDOW_TYPE (tmp_list->data) != GDK_WINDOW_FOREIGN)
+	new_list = g_list_prepend (new_list, tmp_list->data);
       tmp_list = tmp_list->next;
     }
   
@@ -2173,10 +2176,12 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 }
 
 /**
- * gdk_window_invalidate_region:
+ * gdk_window_invalidate_maybe_recurse:
  * @window: a #GdkWindow
  * @region: a #GdkRegion
- * @invalidate_children: %TRUE to also invalidate child windows 
+ * @child_func: function to use to decide if to recurse to a child,
+ *              %NULL means never recurse.
+ * @child_func_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the
  * region that needs to be redrawn, or "dirty region." The call
@@ -2190,16 +2195,16 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
  * normally there's no need to do that manually, you just need to
  * invalidate regions that you know should be redrawn.
  *
- * The @invalidate_children parameter controls whether the region of
+ * The @child_func parameter controls whether the region of
  * each child window that intersects @region will also be invalidated.
- * If %FALSE, then the update area for child windows will remain
- * unaffected.
- *
+ * Only children for whic @child_func returns TRUE will have the area
+ * invalidated.
  **/
 void
-gdk_window_invalidate_region (GdkWindow *window,
-			      GdkRegion *region,
-			      gboolean   invalidate_children)
+gdk_window_invalidate_maybe_recurse (GdkWindow *window,
+				     GdkRegion *region,
+				     gboolean (*child_func) (GdkWindow *, gpointer),
+				     gpointer   user_data)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRegion *visible_region;
@@ -2254,7 +2259,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 					   gdk_window_update_idle, NULL, NULL);
 	}
       
-      if (invalidate_children)
+      if (child_func)
 	{
 	  GList *tmp_list;
 	  
@@ -2263,8 +2268,8 @@ gdk_window_invalidate_region (GdkWindow *window,
 	    {
 	      GdkWindowObject *child = tmp_list->data;
 	      tmp_list = tmp_list->next;
-	      
-	      if (!child->input_only)
+
+	      if (!child->input_only && (*child_func) ((GdkWindow *)child, user_data))
 		{
 		  GdkRegion *child_region;
 		  gint x, y;
@@ -2275,7 +2280,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 		  child_region = gdk_region_copy (visible_region);
 		  gdk_region_offset (child_region, -x, -y);
 		  
-		  gdk_window_invalidate_region ((GdkWindow *)child, child_region, TRUE);
+		  gdk_window_invalidate_maybe_recurse ((GdkWindow *)child, child_region, child_func, user_data);
 		  
 		  gdk_region_destroy (child_region);
 		}
@@ -2284,6 +2289,48 @@ gdk_window_invalidate_region (GdkWindow *window,
     }
   
   gdk_region_destroy (visible_region);
+}
+
+static gboolean
+true_predicate (GdkWindow *window,
+		gpointer   user_data)
+{
+  return TRUE;
+}
+
+/**
+ * gdk_window_invalidate_region:
+ * @window: a #GdkWindow
+ * @region: a #GdkRegion
+ * @invalidate_children: %TRUE to also invalidate child windows 
+ *
+ * Adds @region to the update area for @window. The update area is the
+ * region that needs to be redrawn, or "dirty region." The call
+ * gdk_window_process_updates() sends one or more expose events to the
+ * window, which together cover the entire update area. An
+ * application would normally redraw the contents of @window in
+ * response to those expose events.
+ *
+ * GDK will call gdk_window_process_all_updates() on your behalf
+ * whenever your program returns to the main loop and becomes idle, so
+ * normally there's no need to do that manually, you just need to
+ * invalidate regions that you know should be redrawn.
+ *
+ * The @invalidate_children parameter controls whether the region of
+ * each child window that intersects @region will also be invalidated.
+ * If %FALSE, then the update area for child windows will remain
+ * unaffected. See gdk_window_invalidate_maybe_recurse if you need
+ * fine grained control over which children are invalidated.
+ **/
+void
+gdk_window_invalidate_region (GdkWindow *window,
+			      GdkRegion *region,
+			      gboolean   invalidate_children)
+{
+  gdk_window_invalidate_maybe_recurse (window, region,
+				       invalidate_children ?
+				         true_predicate : (gboolean (*) (GdkWindow *, gpointer))NULL,
+				       NULL);
 }
 
 /**
@@ -2549,7 +2596,7 @@ gdk_window_constrain_size (GdkGeometry *geometry,
 
 /**
  * gdk_set_pointer_hooks:
- * @new_hooks: a table of pointer to functions for getting
+ * @new_hooks: a table of pointers to functions for getting
  *   quantities related to the current pointer position,
  *   or %NULL to restore the default table.
  * 
@@ -2617,7 +2664,7 @@ GdkWindow*
 gdk_window_at_pointer (gint *win_x,
 		       gint *win_y)
 {
-  return current_pointer_hooks->window_at_pointer (win_x, win_y);
+  return current_pointer_hooks->window_at_pointer (NULL, win_x, win_y);
 }
 
 /**

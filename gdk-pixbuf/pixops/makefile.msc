@@ -2,7 +2,7 @@ TOP = ../../..
 PACKAGE = pixops
 PRJ_TOP = ..\..
 
-!INCLUDE $(TOP)/build/win32/make.msc
+!INCLUDE $(TOP)/glib/build/win32/make.msc
 
 PKG_CFLAGS = -I.. $(GLIB_CFLAGS)
 

@@ -57,7 +57,7 @@ G_BEGIN_DECLS
  */
 typedef enum
 {
-  GTK_DESTROYED		= 1 << 0,
+  GTK_IN_DESTRUCTION	= 1 << 0, /* Used internally during dispose */
   GTK_FLOATING		= 1 << 1,
   GTK_RESERVED_1	= 1 << 2,
   GTK_RESERVED_2	= 1 << 3
@@ -66,7 +66,6 @@ typedef enum
 /* Macros for extracting the object_flags from GtkObject.
  */
 #define GTK_OBJECT_FLAGS(obj)		  (GTK_OBJECT (obj)->flags)
-#define GTK_OBJECT_DESTROYED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_DESTROYED) != 0)
 #define GTK_OBJECT_FLOATING(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_FLOATING) != 0)
 #define GTK_OBJECT_CONNECTED(obj)	  ((GTK_OBJECT_FLAGS (obj) & GTK_CONNECTED) != 0)
 

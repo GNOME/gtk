@@ -32,12 +32,11 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkmarshal.h>
 
-
 G_BEGIN_DECLS
   
 #ifndef GTK_DISABLE_DEPRECATED
 
-#define	gtk_signal_default_marshaller	gtk_marshal_VOID__VOID
+#define	gtk_signal_default_marshaller	g_cclosure_marshal_VOID__VOID
 
 
 /* --- compat defines --- */

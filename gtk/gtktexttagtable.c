@@ -1,5 +1,6 @@
 
 #include "gtktexttagtable.h"
+#include "gtkmarshalers.h"
 #include "gtksignal.h"
 
 #include <stdlib.h>
@@ -77,10 +78,10 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_changed),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT_BOOLEAN,
+                  _gtk_marshal_VOID__OBJECT_BOOLEAN,
                   G_TYPE_NONE,
                   2,
-                  G_TYPE_OBJECT,
+                  GTK_TYPE_TEXT_TAG,
                   G_TYPE_BOOLEAN);  
 
   signals[TAG_ADDED] =
@@ -89,10 +90,10 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT,
+                  _gtk_marshal_VOID__OBJECT,
                   GTK_TYPE_NONE,
                   1,
-                  G_TYPE_OBJECT);
+                  GTK_TYPE_TEXT_TAG);
 
   signals[TAG_REMOVED] =
     g_signal_new ("tag_removed",                   
@@ -100,13 +101,13 @@ gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),
                   NULL, NULL,
-                  gtk_marshal_VOID__OBJECT,
+                  _gtk_marshal_VOID__OBJECT,
                   GTK_TYPE_NONE,
                   1,
-                  G_TYPE_OBJECT);
+                  GTK_TYPE_TEXT_TAG);
 }
 
-void
+static void
 gtk_text_tag_table_init (GtkTextTagTable *table)
 {
   table->hash = g_hash_table_new (g_str_hash, g_str_equal);
@@ -149,7 +150,7 @@ gtk_text_tag_table_finalize (GObject *object)
   table = GTK_TEXT_TAG_TABLE (object);
 
   gtk_text_tag_table_foreach (table, foreach_unref, NULL);
-  
+
   g_hash_table_destroy (table->hash);
   g_slist_free (table->anonymous);
 

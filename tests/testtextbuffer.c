@@ -67,6 +67,15 @@ main (int argc, char** argv)
   if (n != 0)
     g_error ("%d chars, expected 0", n);
 
+  /* empty first line contains 0 chars */
+  gtk_text_buffer_get_start_iter (buffer, &start);
+  n = gtk_text_iter_get_chars_in_line (&start);
+  if (n != 0)
+    g_error ("%d chars in first line, expected 0", n);
+  n = gtk_text_iter_get_bytes_in_line (&start);
+  if (n != 0)
+    g_error ("%d bytes in first line, expected 0", n);
+  
   /* Run gruesome alien test suite on buffer */
   run_tests (buffer);
 
@@ -77,6 +86,8 @@ main (int argc, char** argv)
   check_get_set_text (buffer, "Hello\r");
   check_get_set_text (buffer, "Hello\nBar\nFoo");
   check_get_set_text (buffer, "Hello\nBar\nFoo\n");
+
+  g_print ("get/set tests passed.\n");
   
   /* Put stuff in the buffer */
 
@@ -101,6 +112,13 @@ main (int argc, char** argv)
 
   run_tests (buffer);
 
+  gtk_text_buffer_set_text (buffer, "adcdef", -1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &start, 1);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end, 3);
+  gtk_text_buffer_apply_tag_by_name (buffer, "fg_blue", &start, &end);
+  
+  run_tests (buffer);
+  
   g_object_unref (G_OBJECT (buffer));
   
   g_print ("All tests passed.\n");
@@ -112,7 +130,7 @@ static void
 check_get_set_text (GtkTextBuffer *buffer,
                     const char    *str)
 {
-  GtkTextIter start, end;
+  GtkTextIter start, end, iter;
   char *text;
   int n;
   
@@ -127,6 +145,32 @@ check_get_set_text (GtkTextBuffer *buffer,
     g_error ("Got '%s' as buffer contents", text);
   g_free (text);
 
+  /* line char counts */
+  iter = start;
+  n = 0;
+  do
+    {
+      n += gtk_text_iter_get_chars_in_line (&iter);
+    }
+  while (gtk_text_iter_forward_line (&iter));
+
+  if (n != gtk_text_buffer_get_char_count (buffer))
+    g_error ("Sum of chars in lines is %d but buffer char count is %d",
+             n, gtk_text_buffer_get_char_count (buffer));
+
+  /* line byte counts */
+  iter = start;
+  n = 0;
+  do
+    {
+      n += gtk_text_iter_get_bytes_in_line (&iter);
+    }
+  while (gtk_text_iter_forward_line (&iter));
+
+  if (n != strlen (str))
+    g_error ("Sum of chars in lines is %d but buffer byte count is %d",
+             n, strlen (str));
+  
   gtk_text_buffer_set_text (buffer, "", -1);
 
   n = gtk_text_buffer_get_line_count (buffer);
@@ -166,32 +210,48 @@ count_toggles_at_iter (GtkTextIter *iter,
 
   return count;
 }
-     
+
 static gint
-count_toggles_in_buffer (GtkTextBuffer *buffer,
-                         GtkTextTag    *of_tag)
+count_toggles_in_range_by_char (GtkTextBuffer     *buffer,
+                                GtkTextTag        *of_tag,
+                                const GtkTextIter *start,
+                                const GtkTextIter *end)
 {
   GtkTextIter iter;
   gint count = 0;
   
-  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  iter = *start;
   do
     {
       count += count_toggles_at_iter (&iter, of_tag);
+      if (!gtk_text_iter_forward_char (&iter))
+        {
+          /* end iterator */
+          count += count_toggles_at_iter (&iter, of_tag);
+          break;
+        }
     }
-  while (gtk_text_iter_forward_char (&iter));
-
-  /* Do the end iterator, because forward_char won't return TRUE
-   * on it.
-   */
-  count += count_toggles_at_iter (&iter, of_tag);
+  while (gtk_text_iter_compare (&iter, end) <= 0);
   
   return count;
 }
 
+static gint
+count_toggles_in_buffer (GtkTextBuffer *buffer,
+                         GtkTextTag    *of_tag)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+
+  return count_toggles_in_range_by_char (buffer, of_tag, &start, &end);
+}
+
 static void
-check_specific_tag (GtkTextBuffer *buffer,
-                    const gchar   *tag_name)
+check_specific_tag_in_range (GtkTextBuffer     *buffer,
+                             const gchar       *tag_name,
+                             const GtkTextIter *start,
+                             const GtkTextIter *end)
 {
   GtkTextIter iter;
   GtkTextTag *tag;
@@ -199,17 +259,23 @@ check_specific_tag (GtkTextBuffer *buffer,
   gint count;
   gint buffer_count;
   gint last_offset;
+
+  if (gtk_text_iter_compare (start, end) > 0)
+    {
+      g_print ("  (inverted range for checking tags, skipping)\n");
+      return;
+    }
   
   tag = gtk_text_tag_table_lookup (gtk_text_buffer_get_tag_table (buffer),
                                    tag_name);
 
-  buffer_count = count_toggles_in_buffer (buffer, tag);
+  buffer_count = count_toggles_in_range_by_char (buffer, tag, start, end);
   
   state = FALSE;
   count = 0;
 
   last_offset = -1;
-  gtk_text_buffer_get_iter_at_offset (buffer, &iter, 0);
+  iter = *start;
   if (gtk_text_iter_toggles_tag (&iter, tag) ||
       gtk_text_iter_forward_to_tag_toggle (&iter, tag))
     {
@@ -241,17 +307,18 @@ check_specific_tag (GtkTextBuffer *buffer,
           else
             g_error ("forward_to_tag_toggle went to a location without a toggle");
         }
-      while (gtk_text_iter_forward_to_tag_toggle (&iter, tag));
+      while (gtk_text_iter_forward_to_tag_toggle (&iter, tag) &&
+             gtk_text_iter_compare (&iter, end) <= 0);
     }
 
   if (count != buffer_count)
-    g_error ("Counted %d tags iterating by char, %d iterating by tag toggle\n",
+    g_error ("Counted %d tags iterating by char, %d iterating forward by tag toggle\n",
              buffer_count, count);
   
   state = FALSE;
   count = 0;
   
-  gtk_text_buffer_get_end_iter (buffer, &iter);
+  iter = *end;
   last_offset = gtk_text_iter_get_offset (&iter);
   if (gtk_text_iter_toggles_tag (&iter, tag) ||
       gtk_text_iter_backward_to_tag_toggle (&iter, tag))
@@ -284,13 +351,27 @@ check_specific_tag (GtkTextBuffer *buffer,
           else
             g_error ("backward_to_tag_toggle went to a location without a toggle");
         }
-      while (gtk_text_iter_backward_to_tag_toggle (&iter, tag));
+      while (gtk_text_iter_backward_to_tag_toggle (&iter, tag) &&
+             gtk_text_iter_compare (&iter, start) >= 0);
     }
 
   if (count != buffer_count)
-    g_error ("Counted %d tags iterating by char, %d iterating by tag toggle\n",
+    g_error ("Counted %d tags iterating by char, %d iterating backward by tag toggle\n",
              buffer_count, count);
+}
 
+static void
+check_specific_tag (GtkTextBuffer *buffer,
+                    const gchar   *tag_name)
+{
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (buffer, &start, &end);
+  check_specific_tag_in_range (buffer, tag_name, &start, &end);
+  gtk_text_iter_forward_chars (&start, 2);
+  gtk_text_iter_backward_chars (&end, 2);
+  if (gtk_text_iter_compare (&start, &end) < 0)
+    check_specific_tag_in_range (buffer, tag_name, &start, &end);
 }
 
 static void

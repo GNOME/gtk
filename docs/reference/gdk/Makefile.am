@@ -13,7 +13,7 @@ DOC_SOURCE_DIR=../../../gdk
 SCAN_OPTIONS=--deprecated-guards="GDK_ENABLE_BROKEN|GDK_DISABLE_DEPRECATED"
 
 # Extra options to supply to gtkdoc-mkdb
-MKDB_OPTIONS=
+MKDB_OPTIONS=--sgml-mode
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk-pixbuf/html
@@ -39,7 +39,84 @@ EXTRA_HFILES=			\
 	../../../gdk/x11/gdkx.h 
 
 # Images to copy into HTML directory
-HTML_IMAGES =
+HTML_IMAGES =				\
+	images/X_cursor.png 		\
+	images/arrow.png 		\
+	images/based_arrow_down.png 	\
+	images/based_arrow_up.png 	\
+	images/boat.png 		\
+	images/bogosity.png 		\
+	images/bottom_left_corner.png 	\
+	images/bottom_right_corner.png 	\
+	images/bottom_side.png 		\
+	images/bottom_tee.png 		\
+	images/box_spiral.png 		\
+	images/center_ptr.png 		\
+	images/circle.png 		\
+	images/clock.png 		\
+	images/coffee_mug.png 		\
+	images/cross.png 		\
+	images/cross_reverse.png 	\
+	images/crosshair.png 		\
+	images/diamond_cross.png 	\
+	images/dot.png 			\
+	images/dotbox.png 		\
+	images/double_arrow.png 	\
+	images/draft_large.png 		\
+	images/draft_small.png 		\
+	images/draped_box.png 		\
+	images/exchange.png 		\
+	images/fleur.png 		\
+	images/gobbler.png 		\
+	images/gumby.png 		\
+	images/hand1.png 		\
+	images/hand2.png 		\
+	images/heart.png 		\
+	images/icon.png 		\
+	images/iron_cross.png 		\
+	images/left_ptr.png 		\
+	images/left_side.png 		\
+	images/left_tee.png 		\
+	images/leftbutton.png 		\
+	images/ll_angle.png 		\
+	images/lr_angle.png 		\
+	images/man.png 			\
+	images/middlebutton.png 	\
+	images/mouse.png 		\
+	images/pencil.png 		\
+	images/pirate.png 		\
+	images/plus.png 		\
+	images/question_arrow.png 	\
+	images/right_ptr.png 		\
+	images/right_side.png 		\
+	images/right_tee.png 		\
+	images/rightbutton.png 		\
+	images/rtl_logo.png 		\
+	images/sailboat.png 		\
+	images/sb_down_arrow.png 	\
+	images/sb_h_double_arrow.png 	\
+	images/sb_left_arrow.png 	\
+	images/sb_right_arrow.png 	\
+	images/sb_up_arrow.png 		\
+	images/sb_v_double_arrow.png 	\
+	images/shuttle.png 		\
+	images/sizing.png 		\
+	images/spider.png 		\
+	images/spraycan.png 		\
+	images/star.png 		\
+	images/target.png 		\
+	images/tcross.png 		\
+	images/top_left_arrow.png 	\
+	images/top_left_corner.png 	\
+	images/top_right_corner.png 	\
+	images/top_side.png 		\
+	images/top_tee.png 		\
+	images/trek.png 		\
+	images/ul_angle.png 		\
+	images/umbrella.png 		\
+	images/ur_angle.png 		\
+	images/watch.png 		\
+	images/xterm.png 
 
 # Extra SGML files that are included by DOC_MAIN_SGML_FILE
 content_files =
@@ -121,7 +198,7 @@ tmpl.stamp: tmpl-build.stamp
 
 #### sgml ####
 
-sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) 
+sgml-build.stamp: tmpl.stamp $(CFILE_GLOB) $(srcdir)/tmpl/*.sgml
 	@echo '*** Building SGML ***'
 	cd $(srcdir) && \
 	gtkdoc-mkdb --module=$(DOC_MODULE) --source-dir=$(DOC_SOURCE_DIR) $(MKDB_OPTIONS)
@@ -134,7 +211,8 @@ sgml.stamp: sgml-build.stamp
 
 html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo '*** Building HTML ***'
-	test -d $(srcdir)/html || mkdir $(srcdir)/html
+	rm -rf $(srcdir)/html 
+	mkdir $(srcdir)/html
 	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
 	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
 	@echo '-- Fixing Crossreferences' 
@@ -152,8 +230,8 @@ maintainer-clean-local: clean
 
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(TARGET_DIR)
-	(installfiles=`echo $(srcdir)/html/*.html`; \
-	if test "$$installfiles" = '$(srcdir)/html/*.html'; \
+	(installfiles=`echo $(srcdir)/html/*`; \
+	if test "$$installfiles" = '$(srcdir)/html/*'; \
 	then echo '-- Nothing to install' ; \
 	else \
 	  for i in $$installfiles; do \
@@ -181,12 +259,6 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	mkdir $(distdir)/html
 	-cp $(srcdir)/tmpl/*.sgml $(distdir)/tmpl
 	-cp $(srcdir)/sgml/*.sgml $(distdir)/sgml
-	cp $(srcdir)/html/index.sgml $(distdir)/html
-	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(distdir)/html
-
-	images=$(HTML_IMAGES) ;    	      \
-	for i in $$images ; do		      \
-	  cp $(srcdir)/$$i $(distdir)/html ;  \
-	done
+	-cp $(srcdir)/html/* $(distdir)/html
 
 .PHONY : dist-hook-local

@@ -1,3 +1,52 @@
+2001-11-28  Manish Singh  <yosh@gimp.org>
+
+	* gdk-pixbuf/io-bmp.c (gdk_pixbuf__bmp_image_load_increment): Fill
+	in missing error parameters to DecodeHeader and DecodeColormap.
+
+2001-11-21  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix Ximian bug #12125; merged from gdk-pixbuf stable.
+
+	* gdk-pixbuf/io-bmp.c (gdk_pixbuf__bmp_image_load_increment): Use
+	a simple state machine instead of a scary if/else chain.
+	(DecodeHeader): Set the reading state.
+	(DecodeColormap): Set the reading state.
+	(decode_bitmasks): New function, decodes the bitmasks for
+	BI_BITFIELDS coding.
+	(OneLine32): Handle BI_BITFIELDS coding.
+	(OneLine16): Likewise.
+
+2001-11-18  Hans Breuer  <hans@breuer.org>
+
+	* io-xpm.c : use g_strcasecmp(), some poor platforms
+	don't have strcasecmp()
+
+	* makefile.msc : do INCLUDE_png etc. definition here to avoid
+	my temporary 'gdk-pixbuf-io-include.h' hack
+
+Sun Nov 18 07:54:22 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf-loader.c: Remove include of gobject/signal.h.
+
+2001-11-03  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
+
+	* gdk-pixbuf-loader.c, gdk-pixbuf-scale.c: Documentation fixes.
+
+2001-10-29  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile.am: Use -no-undefined on Win32. Make
+	libgdk_pixbuf_1_3_la_OBJECTS depend on
+	gdk-pixbuf-marshal.c. Install import libraries.
+
+	* gdk_pixbuf.def: Update.
+
+	* gdk-pixbuf-io.c: (Win32) Use G_WIN32_DLLMAIN_FOR_DLL_NAME, saves
+	the actual DLL name of libgdk_pixbuf.
+	(get_libdir): Use it instead of guessing.
+
+	* io-xbm.c (gdk_pixbuf__xbm_image_begin_load): Use
+	g_file_open_tmp() insread of mkstemp().
+
 2001-10-18  Matthias Clasen  <matthiasc@poet.de>
 
 	* io-xbm.c (gdk_pixbuf__xbm_image_load_real): Don't dereference

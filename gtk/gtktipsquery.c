@@ -31,6 +31,7 @@
 #include	"gtksignal.h"
 #include	"gtktooltips.h"
 #include	"gtkmain.h"
+#include        "gtkmarshalers.h"
 #include	"gtkintl.h"
 
 
@@ -139,21 +140,21 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, start_query),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_STOP_QUERY] =
     gtk_signal_new ("stop_query",
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, stop_query),
-		    gtk_marshal_VOID__VOID,
+		    _gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   tips_query_signals[SIGNAL_WIDGET_ENTERED] =
     gtk_signal_new ("widget_entered",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTipsQueryClass, widget_entered),
-		    gtk_marshal_VOID__OBJECT_STRING_STRING,
+		    _gtk_marshal_VOID__OBJECT_STRING_STRING,
 		    GTK_TYPE_NONE, 3,
 		    GTK_TYPE_WIDGET,
 		    GTK_TYPE_STRING,
@@ -164,7 +165,7 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET(GtkTipsQueryClass, widget_selected),
                   _gtk_boolean_handled_accumulator, NULL,
-                  gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED,
+                  _gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED,
                   G_TYPE_BOOLEAN, 4,
                   GTK_TYPE_WIDGET,
                   G_TYPE_STRING,

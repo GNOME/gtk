@@ -140,6 +140,7 @@ typedef struct _GtkSelectionData   GtkSelectionData;
 typedef struct _GtkWidgetClass	   GtkWidgetClass;
 typedef struct _GtkWidgetAuxInfo   GtkWidgetAuxInfo;
 typedef struct _GtkWidgetShapeInfo GtkWidgetShapeInfo;
+typedef struct _GtkClipboard	   GtkClipboard;
 typedef void     (*GtkCallback)        (GtkWidget        *widget,
 					gpointer	  data);
 
@@ -277,18 +278,6 @@ struct _GtkWidgetClass
   void (* child_notify)        (GtkWidget	 *widget,
 				GParamSpec       *pspec);
   
-  /* accelerators */
-  void (* add_accelerator)     (GtkWidget      *widget,
-				guint           accel_signal_id,
-				GtkAccelGroup  *accel_group,
-				guint           accel_key,
-				GdkModifierType accel_mods,
-				GtkAccelFlags   accel_flags);
-  void (* remove_accelerator)  (GtkWidget      *widget,
-				GtkAccelGroup  *accel_group,
-				guint           accel_key,
-				GdkModifierType accel_mods);
-
   /* Mnemonics */
   gboolean (* mnemonic_activate) (GtkWidget    *widget,
 				  gboolean      group_cycling);
@@ -496,20 +485,15 @@ void	   gtk_widget_add_accelerator	  (GtkWidget           *widget,
 					   guint                accel_key,
 					   guint                accel_mods,
 					   GtkAccelFlags        accel_flags);
-void	   gtk_widget_remove_accelerator  (GtkWidget           *widget,
+gboolean   gtk_widget_remove_accelerator  (GtkWidget           *widget,
 					   GtkAccelGroup       *accel_group,
 					   guint                accel_key,
 					   guint                accel_mods);
-void	   gtk_widget_remove_accelerators (GtkWidget           *widget,
-					   const gchar	       *accel_signal,
-					   gboolean		visible_only);
-guint	   gtk_widget_accelerator_signal  (GtkWidget           *widget,
-					   GtkAccelGroup       *accel_group,
-					   guint                accel_key,
-					   guint                accel_mods);
-void	   gtk_widget_lock_accelerators   (GtkWidget	       *widget);
-void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
-gboolean   gtk_widget_accelerators_locked (GtkWidget	       *widget);
+void         _gtk_widget_set_accel_path   (GtkWidget           *widget,
+					   const gchar         *accel_path,
+					   GtkAccelGroup       *accel_group);
+const gchar* _gtk_widget_get_accel_path   (GtkWidget           *widget);
+GList*     gtk_widget_list_accel_closures (GtkWidget	       *widget);
 gboolean   gtk_widget_mnemonic_activate   (GtkWidget           *widget,
 					   gboolean             group_cycling);
 gboolean   gtk_widget_event		  (GtkWidget	       *widget,
@@ -539,25 +523,27 @@ gboolean   gtk_widget_is_focus            (GtkWidget           *widget);
 void	   gtk_widget_grab_focus	  (GtkWidget	       *widget);
 void	   gtk_widget_grab_default	  (GtkWidget	       *widget);
 
-void	   gtk_widget_set_name		  (GtkWidget	       *widget,
-					   const gchar	       *name);
-G_CONST_RETURN gchar* gtk_widget_get_name (GtkWidget	       *widget);
-void	   gtk_widget_set_state		  (GtkWidget	       *widget,
-					   GtkStateType		state);
-void	   gtk_widget_set_sensitive	  (GtkWidget	       *widget,
-					   gboolean		sensitive);
-void	   gtk_widget_set_app_paintable	  (GtkWidget	       *widget,
-					   gboolean		app_paintable);
-void	   gtk_widget_set_double_buffered (GtkWidget	       *widget,
-					   gboolean	        double_buffered);
-void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
-					   GtkWidget	       *parent);
-void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
-					   GdkWindow	       *parent_window);
-void       gtk_widget_set_child_visible   (GtkWidget           *widget,
-					   gboolean             is_visible);
-gboolean   gtk_widget_get_child_visible   (GtkWidget           *widget);
-     
+void                  gtk_widget_set_name               (GtkWidget    *widget,
+							 const gchar  *name);
+G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
+void                  gtk_widget_set_state              (GtkWidget    *widget,
+							 GtkStateType  state);
+void                  gtk_widget_set_sensitive          (GtkWidget    *widget,
+							 gboolean      sensitive);
+void                  gtk_widget_set_app_paintable      (GtkWidget    *widget,
+							 gboolean      app_paintable);
+void                  gtk_widget_set_double_buffered    (GtkWidget    *widget,
+							 gboolean      double_buffered);
+void                  gtk_widget_set_redraw_on_allocate (GtkWidget    *widget,
+							 gboolean      redraw_on_allocate);
+void                  gtk_widget_set_parent             (GtkWidget    *widget,
+							 GtkWidget    *parent);
+void                  gtk_widget_set_parent_window      (GtkWidget    *widget,
+							 GdkWindow    *parent_window);
+void                  gtk_widget_set_child_visible      (GtkWidget    *widget,
+							 gboolean      is_visible);
+gboolean              gtk_widget_get_child_visible      (GtkWidget    *widget);
+
 GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
@@ -768,6 +754,8 @@ void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
 							   GtkWidget    *previous_toplevel);
 
 GdkColormap* _gtk_widget_peek_colormap (void);
+GtkClipboard* gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection);
+
 
 #ifdef __cplusplus
 }

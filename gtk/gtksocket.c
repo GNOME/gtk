@@ -27,7 +27,7 @@
 
 #include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
-#include "gtkmarshal.h"
+#include "gtkmarshalers.h"
 #include "gtkwindow.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
@@ -162,7 +162,7 @@ gtk_socket_class_init (GtkSocketClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSocketClass, plug_added),
 		  NULL, NULL,
-		  gtk_marshal_VOID__VOID,
+		  _gtk_marshal_VOID__VOID,
 		  GTK_TYPE_NONE, 0);
   socket_signals[PLUG_REMOVED] =
     g_signal_new ("plug_removed",
@@ -170,7 +170,7 @@ gtk_socket_class_init (GtkSocketClass *class)
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkSocketClass, plug_removed),
                   _gtk_boolean_handled_accumulator, NULL,
-		  gtk_marshal_BOOLEAN__VOID,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
 }
 
@@ -234,7 +234,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow wid)
 /**
  * gtk_socket_add_id:
  * @socket: a #GtkSocket
- * @id: the XID of a client participating in the XEMBED protocol.
+ * @window_id: the XID of a client participating in the XEMBED protocol.
  *
  * Adds an XEMBED client, such as a #GtkPlug, to the #GtkSocket.  The
  * client may be in the same process or in a different process. 
@@ -250,7 +250,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow wid)
  *  before you can make this call.
  **/
 void           
-gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow id)
+gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow window_id)
 {
   g_return_if_fail (GTK_IS_SOCKET (socket));
   g_return_if_fail (GTK_WIDGET_ANCHORED (socket));
@@ -258,7 +258,7 @@ gtk_socket_add_id (GtkSocket *socket, GdkNativeWindow id)
   if (!GTK_WIDGET_REALIZED (socket))
     gtk_widget_realize (GTK_WIDGET (socket));
 
-  gtk_socket_add_window (socket, id, TRUE);
+  gtk_socket_add_window (socket, window_id, TRUE);
 }
 
 /**
@@ -341,6 +341,8 @@ static void
 gtk_socket_unrealize (GtkWidget *widget)
 {
   GtkSocket *socket = GTK_SOCKET (widget);
+
+  GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED);
 
   if (socket->plug_widget)
     {
@@ -1081,8 +1083,8 @@ send_xembed_message (GtkSocket *socket,
 		     glong      data2,
 		     guint32    time)
 {
-  GTK_NOTE (PLUGSOCKET,
-	   g_message ("GtkSocket: Sending XEMBED message of type %d", message));
+  GTK_NOTE(PLUGSOCKET,
+	 g_message ("GtkSocket: Sending XEMBED message of type %ld", message));
   
   if (socket->plug_window)
     {

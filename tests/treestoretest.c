@@ -83,6 +83,25 @@ iter_insert (GtkWidget *button, GtkTreeView *tree_view)
 }
 
 static void
+iter_change (GtkWidget *button, GtkTreeView *tree_view)
+{
+  GtkWidget *entry;
+  GtkTreeIter selected;
+  GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+
+  entry = gtk_object_get_user_data (GTK_OBJECT (button));
+  if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+				       NULL, &selected))
+    {
+      gtk_tree_store_set (GTK_TREE_STORE (model),
+			  &selected,
+			  1,
+			  gtk_entry_get_text (GTK_ENTRY (entry)),
+			  -1);
+    }
+}
+
+static void
 iter_insert_before  (GtkWidget *button, GtkTreeView *tree_view)
 {
   GtkTreeIter iter;
@@ -281,7 +300,17 @@ make_window (gint view_type)
   gtk_signal_connect (GTK_OBJECT (button), "clicked", 
                       GTK_SIGNAL_FUNC (iter_insert), 
                       tree_view);
-
+  
+  button = gtk_button_new_with_label ("gtk_tree_store_set");
+  hbox = gtk_hbox_new (FALSE, 8);
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, FALSE, 0);
+  gtk_object_set_user_data (GTK_OBJECT (button), entry);
+  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+		      GTK_SIGNAL_FUNC (iter_change),
+		      tree_view);
   
   button = gtk_button_new_with_label ("gtk_tree_store_insert_before");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);

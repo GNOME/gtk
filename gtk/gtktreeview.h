@@ -84,6 +84,7 @@ struct _GtkTreeViewClass
 				           GtkTreeIter       *iter,
 				           GtkTreePath       *path);
   void     (* columns_changed)            (GtkTreeView       *tree_view);
+  void     (* cursor_changed)             (GtkTreeView       *tree_view);
 
   /* Key Binding signals */
   void     (* move_cursor)                (GtkTreeView       *tree_view,
@@ -107,21 +108,12 @@ typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView             *tree_vi
 						GtkTreeViewColumn       *prev_column,
 						GtkTreeViewColumn       *next_column,
 						gpointer                 data);
-typedef gboolean (* GtkTreeViewDraggableFunc)  (GtkTreeView             *tree_view,
-                                                GdkDragContext          *context,
-                                                GtkTreePath             *path,
-						gpointer                user_data);
 typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_view,
 						GtkTreePath             *path,
 						gpointer                 user_data);
-typedef gboolean (* GtkTreeViewDroppableFunc)  (GtkTreeView             *tree_view,
-						GdkDragContext          *context,
-						GtkTreePath             *path,
-						GtkTreeViewDropPosition *pos,
-						gpointer                 user_data);
 typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 						gint                     column,
-						gchar                   *key,
+						const gchar             *key,
 						GtkTreeIter             *iter,
 						gpointer                 search_data);
 
@@ -224,8 +216,8 @@ void                   gtk_tree_view_get_cursor                    (GtkTreeView 
 
 
 /* Layout information */
+GdkWindow             *gtk_tree_view_get_bin_window                (GtkTreeView               *tree_view);
 gboolean               gtk_tree_view_get_path_at_pos               (GtkTreeView               *tree_view,
-								    GdkWindow                 *window,
 								    gint                       x,
 								    gint                       y,
 								    GtkTreePath              **path,
@@ -254,19 +246,15 @@ void                   gtk_tree_view_tree_to_widget_coords         (GtkTreeView 
 								    gint                      *wy);
 
 /* Drag-and-Drop support */
-void                   gtk_tree_view_set_rows_drag_source          (GtkTreeView               *tree_view,
+void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,
 								    GdkModifierType            start_button_mask,
 								    const GtkTargetEntry      *targets,
 								    gint                       n_targets,
-								    GdkDragAction              actions,
-								    GtkTreeViewDraggableFunc   row_draggable_func,
-								    gpointer                   user_data);
-void                   gtk_tree_view_set_rows_drag_dest            (GtkTreeView               *tree_view,
+								    GdkDragAction              actions);
+void                   gtk_tree_view_enable_model_drag_dest        (GtkTreeView               *tree_view,
 								    const GtkTargetEntry      *targets,
 								    gint                       n_targets,
-								    GdkDragAction              actions,
-								    GtkTreeViewDroppableFunc   location_droppable_func,
-								    gpointer                   user_data);
+								    GdkDragAction              actions);
 void                   gtk_tree_view_unset_rows_drag_source        (GtkTreeView               *tree_view);
 void                   gtk_tree_view_unset_rows_drag_dest          (GtkTreeView               *tree_view);
 
@@ -309,8 +297,6 @@ void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
 					   GtkTreeDestroyCountFunc  func,
 					   gpointer                 data,
 					   GtkDestroyNotify         destroy);
-
-
 
 
 #ifdef __cplusplus

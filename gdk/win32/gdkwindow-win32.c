@@ -31,7 +31,6 @@
 #include "gdkevents.h"
 #include "gdkpixmap.h"
 #include "gdkwindow.h"
-#include "gdkinternals.h"
 #include "gdkprivate-win32.h"
 #include "gdkinput-win32.h"
 
@@ -53,7 +52,7 @@ static void gdk_window_impl_win32_finalize   (GObject                 *object);
 static gpointer parent_class = NULL;
 
 GType
-gdk_window_impl_win32_get_type (void)
+_gdk_window_impl_win32_get_type (void)
 {
   static GType object_type = 0;
 
@@ -83,7 +82,7 @@ gdk_window_impl_win32_get_type (void)
 GType
 _gdk_window_impl_get_type (void)
 {
-  return gdk_window_impl_win32_get_type ();
+  return _gdk_window_impl_win32_get_type ();
 }
 
 static void
@@ -178,15 +177,18 @@ gdk_window_impl_win32_set_colormap (GdkDrawable *drawable,
   GdkDrawableImplWin32 *draw_impl;
   
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (drawable));
-  g_return_if_fail (gdk_colormap_get_visual (cmap) != gdk_drawable_get_visual (drawable));
 
   impl = GDK_WINDOW_IMPL_WIN32 (drawable);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
 
-  GDK_DRAWABLE_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
+  /* chain up */
+  GDK_DRAWABLE_CLASS (parent_class)->set_colormap (drawable, cmap);
   
-  /* XXX */
-  g_print("gdk_window_impl_win32_set_colormap: XXX\n");
+  if (cmap)
+    {
+      /* XXX */
+      g_print("gdk_window_impl_win32_set_colormap: XXX\n");
+    }
 }
 
 static void
@@ -253,7 +255,7 @@ _gdk_windowing_window_init (void)
 /* The Win API function AdjustWindowRect may return negative values
  * resulting in obscured title bars. This helper function is coreccting it.
  */
-BOOL
+static BOOL
 SafeAdjustWindowRectEx (RECT* lpRect,
 			DWORD dwStyle, 
 			BOOL  bMenu, 
@@ -284,7 +286,7 @@ SafeAdjustWindowRectEx (RECT* lpRect,
  *   is ever needed (e.g Dialog specific), every such window should
  *   get its own class
  */
-ATOM
+static ATOM
 RegisterGdkClass (GdkWindowType wtype)
 {
   static ATOM klassTOPLEVEL = 0;
@@ -299,7 +301,7 @@ RegisterGdkClass (GdkWindowType wtype)
   wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
                   * on WM_SIZE and WM_MOVE. Flicker, Performance!
                   */
-  wcl.lpfnWndProc = gdk_window_procedure;
+  wcl.lpfnWndProc = _gdk_win32_window_procedure;
   wcl.cbClsExtra = 0;
   wcl.cbWndExtra = 0;
   wcl.hInstance = gdk_app_hmodule;
@@ -314,15 +316,12 @@ RegisterGdkClass (GdkWindowType wtype)
 	  hAppIcon = ExtractIcon (gdk_app_hmodule, sLoc, 0);
 	  if (0 == hAppIcon)
 	    {
-	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
-
-	      hAppIcon = ExtractIcon (gdk_app_hmodule, gdklibname, 0);
-	      g_free (gdklibname);
+	      if (0 != GetModuleFileName (gdk_dll_hinstance, sLoc, _MAX_PATH))
+		hAppIcon = ExtractIcon (gdk_dll_hinstance, sLoc, 0);
 	    }
-	  
-	  if (0 == hAppIcon) 
-	    hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
 	}
+      if (0 == hAppIcon) 
+	hAppIcon = LoadIcon (NULL, IDI_APPLICATION);
     }
 
   wcl.lpszMenuName = NULL;
@@ -407,7 +406,6 @@ gdk_window_new (GdkWindow     *parent,
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
 
@@ -439,7 +437,6 @@ gdk_window_new (GdkWindow     *parent,
 			(attributes->window_type == GDK_WINDOW_TEMP ? "TEMP" :
 			 "???"))))));
 
-  parent_private = (GdkWindowObject*) parent;
   if (GDK_WINDOW_DESTROYED (parent))
     return NULL;
   
@@ -451,6 +448,12 @@ gdk_window_new (GdkWindow     *parent,
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
 
+  /* Windows with a foreign parent are treated as if they are children
+   * of the root window, except for actual creation.
+   */
+  if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+    parent = _gdk_parent_root;
+  
   private->parent = (GdkWindowObject *)parent;
 
   if (attributes_mask & GDK_WA_X)
@@ -491,7 +494,7 @@ gdk_window_new (GdkWindow     *parent,
 
   impl->event_mask = GDK_STRUCTURE_MASK | attributes->event_mask;
       
-  if (parent_private && parent_private->guffaw_gravity)
+  if (private->parent && private->parent->guffaw_gravity)
     {
       /* XXX ??? */
     }
@@ -535,8 +538,8 @@ gdk_window_new (GdkWindow     *parent,
       GDK_NOTE (MISC, g_print ("...GDK_INPUT_ONLY, system colormap\n"));
     }
 
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, window);
+  if (private->parent)
+    private->parent->children = g_list_prepend (private->parent->children, window);
 
   switch (private->window_type)
     {
@@ -691,7 +694,6 @@ gdk_window_foreign_new (GdkNativeWindow anid)
 {
   GdkWindow *window;
   GdkWindowObject *private;
-  GdkWindowObject *parent_private;
   GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
 
@@ -707,11 +709,10 @@ gdk_window_foreign_new (GdkNativeWindow anid)
   parent = GetParent ((HWND)anid);
   
   private->parent = gdk_win32_handle_table_lookup ((GdkNativeWindow) parent);
+  if (!private->parent || GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_FOREIGN)
+    private->parent = (GdkWindowObject *)_gdk_parent_root;
   
-  parent_private = (GdkWindowObject *)private->parent;
-  
-  if (parent_private)
-    parent_private->children = g_list_prepend (parent_private->children, window);
+  private->parent->children = g_list_prepend (private->parent->children, window);
 
   draw_impl->handle = (HWND) anid;
   GetClientRect ((HWND) anid, &rect);
@@ -898,6 +899,9 @@ gdk_window_hide (GdkWindow *window)
 			       (guint) GDK_WINDOW_HWND (window)));
 
       private->state |= GDK_WINDOW_STATE_WITHDRAWN;
+
+      _gdk_window_clear_update_area (window);
+
       if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_TOPLEVEL)
 	ShowOwnedPopups (GDK_WINDOW_HWND (window), FALSE);
 
@@ -1084,6 +1088,9 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowImplWin32 *impl;
 
   g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
 
   if (!new_parent)
     new_parent = _gdk_parent_root;
@@ -1106,6 +1113,12 @@ gdk_window_reparent (GdkWindow *window,
 		       x, y, impl->width, impl->height, TRUE))
 	WIN32_API_FAILED ("MoveWindow");
     }
+
+  /* From here on, we treat parents of type GDK_WINDOW_FOREIGN like
+   * the root window
+   */
+  if (GDK_WINDOW_TYPE (new_parent) == GDK_WINDOW_FOREIGN)
+    new_parent = _gdk_parent_root;
   
   window_private->parent = (GdkWindowObject *)new_parent;
 
@@ -1119,6 +1132,7 @@ gdk_window_reparent (GdkWindow *window,
     gdk_window_set_static_win_gravity (window, parent_private->guffaw_gravity);
   
   parent_private->children = g_list_prepend (parent_private->children, window);
+  _gdk_window_init_position (GDK_WINDOW (window_private));
 }
 
 void
@@ -1251,6 +1265,14 @@ gdk_window_set_hints (GdkWindow *window,
 
   if (flags)
     {
+      GdkGeometry geom;
+      gint        geom_mask = 0;
+
+      geom.min_width  = min_width;
+      geom.min_height = min_height;
+      geom.max_width  = max_width;
+      geom.max_height = max_height;
+
       if (flags & GDK_HINT_POS)
 	{
 	  if (!GetWindowPlacement (GDK_WINDOW_HWND (window), &size_hints))
@@ -1298,47 +1320,12 @@ gdk_window_set_hints (GdkWindow *window,
 	}
 
       if (flags & GDK_HINT_MIN_SIZE)
-	{
-	  rect.left = 0;
-	  rect.top = 0;
-	  rect.right = min_width;
-	  rect.bottom = min_height;
-	  dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	  dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-	  SafeAdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-	  impl->hint_min_width = rect.right - rect.left;
-	  impl->hint_min_height = rect.bottom - rect.top;
-
-	  /* Also check if he current size of the window is in bounds. */
-	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
-	  if (rect.right < min_width && rect.bottom < min_height)
-	    gdk_window_resize (window, min_width, min_height);
-	  else if (rect.right < min_width)
-	    gdk_window_resize (window, min_width, rect.bottom);
-	  else if (rect.bottom < min_height)
-	    gdk_window_resize (window, rect.right, min_height);
-	}
+        geom_mask |= GDK_HINT_MIN_SIZE;
 
       if (flags & GDK_HINT_MAX_SIZE)
-	{
-	  rect.left = 0;
-	  rect.top = 0;
-	  rect.right = max_width;
-	  rect.bottom = max_height;
-	  dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	  dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-	  AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-	  impl->hint_max_width = rect.right - rect.left;
-	  impl->hint_max_height = rect.bottom - rect.top;
-	  /* Again, check if the window is too large currently. */
-	  GetClientRect (GDK_WINDOW_HWND (window), &rect);
-	  if (rect.right > max_width && rect.bottom > max_height)
-	    gdk_window_resize (window, max_width, max_height);
-	  else if (rect.right > max_width)
-	    gdk_window_resize (window, max_width, rect.bottom);
-	  else if (rect.bottom > max_height)
-	    gdk_window_resize (window, rect.right, max_height);
-	}
+        geom_mask |= GDK_HINT_MAX_SIZE;
+
+      gdk_window_set_geometry_hints (window, &geom, geom_mask);
     }
 }
 
@@ -1352,6 +1339,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
   RECT rect;
   DWORD dwStyle;
   DWORD dwExStyle;
+  gint new_width = 0, new_height = 0;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1381,13 +1369,20 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 
       /* Also check if he current size of the window is in bounds */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
+
       if (rect.right < geometry->min_width
 	  && rect.bottom < geometry->min_height)
-	gdk_window_resize (window, geometry->min_width, geometry->min_height);
+	{
+	  new_width = geometry->min_width; new_height = geometry->min_height;
+	}
       else if (rect.right < geometry->min_width)
-	gdk_window_resize (window, geometry->min_width, rect.bottom);
+	{
+	  new_width = geometry->min_width; new_height = rect.bottom;
+	}
       else if (rect.bottom < geometry->min_height)
-	gdk_window_resize (window, rect.right, geometry->min_height);
+	{
+	  new_width = rect.right; new_height = geometry->min_height;
+	}
     }
   
   if (geom_mask & GDK_HINT_MAX_SIZE)
@@ -1410,12 +1405,22 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
       if (rect.right > geometry->max_width
 	  && rect.bottom > geometry->max_height)
-	gdk_window_resize (window, geometry->max_width, geometry->max_height);
+	{
+	  new_width = geometry->max_width; new_height = geometry->max_height;
+	}
       else if (rect.right > geometry->max_width)
-	gdk_window_resize (window, geometry->max_width, rect.bottom);
+	{
+	  new_width = geometry->max_width; new_height = rect.bottom;
+	}
       else if (rect.bottom > geometry->max_height)
-	gdk_window_resize (window, rect.right, geometry->max_height);
+	{
+	  new_width = rect.right; new_height = geometry->max_height;
+	}
     }
+
+  /* finally apply new size constraints */
+  if (new_width != 0 && new_height != 0)
+    gdk_window_resize (window, new_width, new_height);
   
   /* I don't know what to do when called with zero base_width and height. */
   if (geom_mask & GDK_HINT_BASE_SIZE
@@ -1610,7 +1615,6 @@ gdk_window_set_cursor (GdkWindow *window,
   GdkCursorPrivate *cursor_private;
   HCURSOR hcursor;
   HCURSOR hprevcursor;
-  POINT pt;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1878,8 +1882,9 @@ _gdk_windowing_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-_gdk_windowing_window_at_pointer (gint *win_x,
-				  gint *win_y)
+_gdk_windowing_window_at_pointer (GdkScreen *screen,
+				  gint      *win_x,
+				  gint      *win_y)
 {
   GdkWindow *window;
   POINT point, pointc;

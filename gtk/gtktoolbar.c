@@ -37,6 +37,7 @@
 #include "gtkimage.h"
 #include "gtksettings.h"
 #include "gtkintl.h"
+#include "gtkmarshalers.h"
 
 
 #define DEFAULT_IPADDING 0
@@ -207,7 +208,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_ORIENTATION);
   toolbar_signals[STYLE_CHANGED] =
@@ -215,7 +216,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
 		    GTK_RUN_FIRST,
 		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
-		    gtk_marshal_VOID__ENUM,
+		    _gtk_marshal_VOID__ENUM,
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_TOOLBAR_STYLE);
   
@@ -341,6 +342,9 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->orientation  = GTK_ORIENTATION_HORIZONTAL;
   toolbar->icon_size    = DEFAULT_ICON_SIZE;
   toolbar->tooltips     = gtk_tooltips_new ();
+  g_object_ref (toolbar->tooltips);
+  gtk_object_sink (GTK_OBJECT (toolbar->tooltips));
+  
   toolbar->button_maxw  = 0;
   toolbar->button_maxh  = 0;
 

@@ -270,7 +270,7 @@ gdk_font_from_description_for_display (GdkDisplay           *display,
   g_return_val_if_fail (font_desc != NULL, NULL);
 
   font_map = pango_x_font_map_for_display (GDK_DISPLAY_IMPL_X11 (display)->xdisplay);
-  font = pango_font_map_load_font (font_map, font_desc);
+  font = pango_font_map_load_font (font_map, NULL, font_desc);
 
   if (font)
     {

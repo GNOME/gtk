@@ -158,6 +158,8 @@ Returns the current relief style of the given #GtkButton.
 </para>
 
 @button: 
+@use_stock: 
+<!-- # Unused Parameters # -->
 @value: 
 
 
@@ -176,6 +178,8 @@ Returns the current relief style of the given #GtkButton.
 </para>
 
 @button: 
+@use_underline: 
+<!-- # Unused Parameters # -->
 @value: 
 
 
