@@ -787,7 +787,7 @@ gtk_tool_item_real_set_tooltip (GtkToolItem *tool_item,
  * @tool_item: a #GtkToolItem: 
  * @tooltips: The #GtkTooltips object to be used
  * @tip_text: text to be used as tooltip text for @tool_item
- * @tip_private: text to be used as rpivate tooltip text
+ * @tip_private: text to be used as private tooltip text
  *
  * Sets the #GtkTooltips object to be used for @tool_item, the
  * text to be displayed as tooltip on the item and the private text

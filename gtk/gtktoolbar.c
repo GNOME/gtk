@@ -182,6 +182,7 @@ static ToolbarContent *gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
 						     gint         pos,
 						     gboolean     is_placeholder);
 
+static gboolean gtk_toolbar_check_new_api (GtkToolbar *toolbar);
 
 typedef enum {
   DONT_KNOW,
@@ -202,11 +203,8 @@ struct _ToolbarContent
 {
   GtkToolItem * item;
   guint         is_placeholder : 1;
-  gint	        start_width;
-  gint	        goal_width;
-  gint	        start_height;
-  gint          goal_height;
   GtkAllocation start_allocation;
+  GtkAllocation goal_allocation;
   ItemState     state;
 };
 
@@ -980,6 +978,34 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   toolbar->button_maxh = max_homogeneous_child_height;
 }
 
+#define SLIDE_SPEED 600		/* pixels per second */
+
+static gint
+position (gint from, gint to, gdouble elapsed)
+{
+  if (to > from)
+    return MIN (from + SLIDE_SPEED * elapsed, to);
+  else
+    return MAX (from - SLIDE_SPEED * elapsed, to);
+}
+
+static void
+compute_intermediate_allocation (GtkToolbar          *toolbar,
+				 const GtkAllocation *start,
+				 const GtkAllocation *goal,
+				 GtkAllocation       *intermediate)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  gdouble elapsed = g_timer_elapsed (priv->timer, NULL);
+
+  intermediate->x = position (start->x, goal->x, elapsed);
+  intermediate->y = position (start->y, goal->y, elapsed);
+  intermediate->width =
+    position (start->x + start->width, goal->x + goal->width, elapsed) - intermediate->x;
+  intermediate->height =
+    position (start->y + start->height, goal->y + goal->height, elapsed) - intermediate->y;
+}
+
 static void
 fixup_allocation_for_rtl (gint           total_size,
 			  GtkAllocation *allocation)
@@ -1026,6 +1052,172 @@ get_item_size (GtkToolbar *toolbar,
     }
 }
 
+static gboolean
+slide_idle_handler (gpointer data)
+{
+  GtkToolbar *toolbar = data;
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  GList *list;
+
+  if (priv->need_sync)
+    {
+      gdk_flush ();
+      priv->need_sync = FALSE;
+    }
+  
+  for (list = priv->content; list != NULL; list = list->next)
+    {
+      ToolbarContent *content = list->data;
+      GtkWidget *widget = GTK_WIDGET (content->item);
+
+      if ((content->state == NOT_ALLOCATED) ||
+	  (content->state == NORMAL &&
+	   ((content->goal_allocation.x != widget->allocation.x ||
+	     content->goal_allocation.y != widget->allocation.y ||
+	     content->goal_allocation.width != widget->allocation.width ||
+	     content->goal_allocation.height != widget->allocation.height))))
+	{
+	  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+	  return TRUE;
+	}
+    }
+
+  priv->is_sliding = FALSE;
+  if (priv->leaving_dnd)
+    {
+      priv->in_dnd = FALSE;
+      priv->leaving_dnd = FALSE;
+      priv->n_overflow_items_when_dnd_started = 0;
+    }
+
+  priv->idle_id = 0;
+  
+  return FALSE;
+}
+
+static gboolean
+rect_within (GtkAllocation *a1, GtkAllocation *a2)
+{
+  return (a1->x >= a2->x                         &&
+	  a1->x + a1->width <= a2->x + a2->width &&
+	  a1->y >= a2->y			 &&
+	  a1->y + a1->height <= a2->y + a2->height);
+}
+
+static void
+gtk_toolbar_begin_sliding (GtkToolbar *toolbar)
+{
+  GtkWidget *widget = GTK_WIDGET (toolbar);
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+  GList *list;
+  gint cur_x;
+  gint cur_y;
+  gint border_width;
+  gboolean rtl;
+  gboolean vertical;
+
+  /* Start the sliding. This function copies the allocation of every
+   * item into content->start_allocation. For items that haven't
+   * been allocated yet, we calculate their position and save that
+   * in start_allocatino along with zero width and zero height.
+   */
+  priv->is_sliding = TRUE;
+  
+  if (!priv->idle_id)
+    priv->idle_id = g_idle_add (slide_idle_handler, toolbar);
+
+  rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
+  vertical = (toolbar->orientation == GTK_ORIENTATION_VERTICAL);
+  border_width = get_internal_padding (toolbar) + GTK_CONTAINER (toolbar)->border_width;
+
+  if (rtl)
+    {
+      cur_x = widget->allocation.width - border_width - widget->style->xthickness;
+      cur_y = widget->allocation.height - border_width - widget->style->ythickness;
+    }
+  else
+    {
+      cur_x = border_width + widget->style->xthickness;
+      cur_y = border_width + widget->style->ythickness;
+    }
+
+  cur_x += widget->allocation.x;
+  cur_y += widget->allocation.y;
+  
+  for (list = priv->content; list != NULL; list = list->next)
+    {
+      ToolbarContent *content = list->data;
+      GtkWidget *item = GTK_WIDGET (content->item);
+      GtkAllocation *alloc = &(content->start_allocation);
+
+      if (content->state == NORMAL && rect_within (&(item->allocation), &(widget->allocation)))
+	{
+	  *alloc = item->allocation;
+	}
+      else
+	{
+	  alloc->x = cur_x;
+	  alloc->y = cur_y;
+
+	  if (vertical)
+	    {
+	      alloc->width = widget->allocation.width -
+		2 * border_width - 2 * widget->style->xthickness;
+	      alloc->height = 0;
+	    }
+	  else
+	    {
+	      alloc->width = 0;;
+	      alloc->height = widget->allocation.height -
+		2 * border_width - 2 * widget->style->ythickness;
+	    }
+	}
+
+      if (vertical)
+	cur_y = alloc->y + alloc->height;
+      else if (rtl)
+	cur_x = alloc->x;
+      else
+	cur_x = alloc->x + alloc->width;
+    }
+
+  g_timer_reset (priv->timer);
+}
+
+static void
+gtk_toolbar_stop_sliding (GtkToolbar *toolbar)
+{
+  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
+
+  if (priv->is_sliding)
+    {
+      GList *list;
+      
+      priv->is_sliding = FALSE;
+      priv->in_dnd = FALSE;
+      priv->leaving_dnd = FALSE;
+      priv->n_overflow_items_when_dnd_started = 0;
+      
+      if (priv->idle_id)
+	{
+	  g_source_remove (priv->idle_id);
+	  priv->idle_id = 0;
+	}
+
+      list = priv->content;
+      while (list)
+	{
+	  ToolbarContent *content = list->data;
+	  list = list->next;
+
+	  if (content->is_placeholder)
+	    gtk_toolbar_remove_tool_item (toolbar, content->item);
+	}
+      
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
+    }
+}
+
 static void
 gtk_toolbar_size_allocate (GtkWidget     *widget,
 			   GtkAllocation *allocation)
@@ -1048,7 +1240,21 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkRequisition arrow_requisition;
   gint n_overflowed;
   gboolean overflowing;
+  gboolean size_changed;
+  gdouble elapsed;
 
+  size_changed = FALSE;
+  if (widget->allocation.x != allocation->x		||
+      widget->allocation.y != allocation->y		||
+      widget->allocation.width != allocation->width	||
+      widget->allocation.height != allocation->height)
+    {
+      size_changed = TRUE;
+    }
+
+  if (size_changed)
+    gtk_toolbar_stop_sliding (toolbar);
+  
   widget->allocation = *allocation;
 
   border_width = GTK_CONTAINER (toolbar)->border_width;
@@ -1153,12 +1359,16 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   
   /* expand expandable items */
 
+  /* FIXME, there is a lot of status stuff (like n_overflowed_items_when_dnd_started)
+   * that should be removed. The comment below is obsolete.
+   */
+  
   /* We don't expand when dnd causes items to overflow. Doing so would result in
    * weird jumps as items are overflowed and expandable items suddenly get lots of
    * extra space. On the other hand we can't disable expanding completely, because
    * that would cause a weird jump when dnd begins
    */
-  if (!(priv->in_dnd && n_overflowed > priv->n_overflow_items_when_dnd_started))
+  if (!n_overflowed && !(priv->in_dnd && n_overflowed > priv->n_overflow_items_when_dnd_started))
     {
       n_expand_items = 0;
       for (i = 0, list = priv->content; list != NULL; list = list->next, ++i)
@@ -1253,23 +1463,67 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  arrow_allocation.y += widget->style->ythickness;
 	}
     }
-  
+
+  /* did anything change? */
+  for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
+    {
+      ToolbarContent *content = list->data;
+
+      if (content->state == NORMAL && new_states[i] != NORMAL)
+	{
+	  /* an item disappeared, begin sliding */
+	  if (!size_changed)
+	    gtk_toolbar_begin_sliding (toolbar);
+	}
+    }
+
   /* finally allocate the items */
   for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
     {
       ToolbarContent *content = list->data;
+
+      content->goal_allocation = allocations[i];
+    }
+  
+  for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
+    {
+      ToolbarContent *content = list->data;
       GtkToolItem *item = content->item;
       
-      if (new_states[i] == NORMAL)
-	{
-	  gtk_widget_size_allocate (GTK_WIDGET (item), &(allocations[i]));
-	  gtk_widget_set_child_visible (GTK_WIDGET (item), TRUE);
-	}
-      else
+      if (new_states[i] != NORMAL)
 	{
 	  gtk_widget_set_child_visible (GTK_WIDGET (item), FALSE);
 	}
-
+      else
+	{
+	  GtkAllocation alloc;
+	  elapsed = g_timer_elapsed (priv->timer, NULL);
+	  
+	  if (priv->is_sliding)
+	    {
+	      /* FIXME: we should use the same "elapsed" for all items */
+	      compute_intermediate_allocation (toolbar,
+					       &(content->start_allocation),
+					       &(content->goal_allocation),
+					       &alloc);
+	      priv->need_sync = TRUE;
+	    }
+	  else
+	    {
+	      alloc = allocations[i];
+	    }
+	  
+	  if (alloc.width == 0 || alloc.height == 0)
+	    {
+	      gtk_widget_set_child_visible (GTK_WIDGET (item), FALSE);
+	    }
+	  else
+	    {
+	      gtk_widget_set_child_visible (GTK_WIDGET (item), TRUE);
+	      gtk_widget_size_allocate (GTK_WIDGET (item), &alloc);
+	    }
+	}
+      
       content->state = new_states[i];
     }
 
@@ -1631,148 +1885,6 @@ find_drop_index (GtkToolbar *toolbar,
 }
 
 static void
-get_size (GtkToolItem *tool_item, gint *width, gint *height)
-{
-  if (!GTK_WIDGET_VISIBLE (tool_item))
-    {
-      *width = 0;
-      *height = 0;
-    }
-  else
-    {
-      GtkRequisition req;
-      
-      gtk_widget_get_child_requisition (GTK_WIDGET (tool_item), &req);
-      *width = req.width;
-      *height = req.height;
-    }
-}
-
-#define UPDATE_TIME (0.10)
-
-static gboolean
-update_dnd_animation (gpointer data)
-{
-  GtkToolbar *toolbar = data;
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-  GList *list;
-  gboolean cont;
-  gdouble elapsed;
-  double error;
-
-  GDK_THREADS_ENTER();
-  
-  if (priv->need_sync)
-    gdk_flush ();
-
-  elapsed = g_timer_elapsed (priv->timer, NULL);
-
-  cont = FALSE;
-  
-  list = priv->content;
-  error = 0.0;
-  while (list)
-    {
-      ToolbarContent *content = list->data;
-      GtkWidget *widget = GTK_WIDGET (content->item);
-      GList *next = list->next;
-      gdouble exact_value;
-      gint start_value, goal_value;
-      gint new_value, prev_value;
-	
-      if (content->is_placeholder)
-	{
-	  gint prev_width, prev_height;
-	  
-	  get_size (GTK_TOOL_ITEM (widget), &prev_width, &prev_height);
-	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    {
-	      start_value = content->start_width;
-	      goal_value = content->goal_width;
-	      prev_value = prev_width;
-	    }
-	  else
-	    {
-	      start_value = content->start_height;
-	      goal_value = content->goal_height;
-	      prev_value = prev_height;
-	    }
-
-	  if (elapsed <= UPDATE_TIME)
-	    {
-	      exact_value = start_value + (elapsed / UPDATE_TIME) * (goal_value - start_value);
-	      new_value = (int) (exact_value + error + 0.5);
-
-	      error += (exact_value - new_value);
-
-	      cont = TRUE;
-	    }
-	  else
-	    {
-	      exact_value = (double)goal_value;
-	      new_value = goal_value;
-	    }
-
-	  if (new_value == 0)
-	    gtk_widget_hide (widget);
-	  else
-	    gtk_widget_show (widget);
-	  
-	  /* We need to check for "elapsed > UPDATE_TIME" so that the widget
-	   * doesn't disappear before time. We need its contribution to
-	   * the error value, even if its pixel width is 0.
-	   */
-	  if (goal_value == 0 && elapsed > UPDATE_TIME)
-	    {
-	      gtk_toolbar_remove_tool_item (toolbar, GTK_TOOL_ITEM (widget));
-	    }
-	  else if (new_value != prev_value)
-	    {
-	      if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
-		gtk_widget_set_size_request (widget, new_value, 0);
-	      else
-		gtk_widget_set_size_request (widget, 0, new_value);
-	      
-	      priv->need_sync = TRUE;
-	      cont = TRUE;
-	    }
-	}
-      
-      list = next;
-    }
-
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (toolbar));
-  
-  if (!cont)
-    {
-      priv->idle_id = 0;
-      if (priv->leaving_dnd)
-	{
-	  priv->in_dnd = FALSE;
-	  priv->leaving_dnd = FALSE;
-	  priv->n_overflow_items_when_dnd_started = 0;
-	}
-      
-      GDK_THREADS_LEAVE();
-  
-      return FALSE;
-    }
-  
-  GDK_THREADS_LEAVE();
-  
-  return TRUE;
-}
-
-static void
-ensure_idle_handler (GtkToolbar *toolbar)
-{
-  GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
-
-  if (!priv->idle_id)
-    priv->idle_id = g_idle_add (update_dnd_animation, toolbar);
-}
-
-static void
 reset_all_placeholders (GtkToolbar *toolbar)
 {
   GtkToolbarPrivate *priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
@@ -1782,15 +1894,8 @@ reset_all_placeholders (GtkToolbar *toolbar)
     {
       ToolbarContent *content = list->data;
       if (content->is_placeholder)
-	{
-	  get_size (content->item,
-		    &(content->start_width), &(content->start_height));
-	  content->goal_width = 0;
-	  content->goal_height = 0;
-	}
+	gtk_widget_set_size_request (GTK_WIDGET (content->item), 0, 0);
     }
-
-  g_timer_reset (priv->timer);
 }
 
 static gint
@@ -1870,7 +1975,6 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 {
   ToolbarContent *content;
   GtkToolbarPrivate *priv;
-  gint start_width, start_height;
   GList *list;
   gint n_items;
   GtkRequisition requisition;
@@ -1878,6 +1982,8 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
   g_return_if_fail (tool_item == NULL || GTK_IS_TOOL_ITEM (tool_item));
 
+  gtk_toolbar_check_new_api (toolbar);
+  
   priv = GTK_TOOLBAR_GET_PRIVATE (toolbar);
 
   if (!tool_item)
@@ -1886,7 +1992,7 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
 	{
 	  priv->leaving_dnd = TRUE;
 	  reset_all_placeholders (toolbar);
-	  ensure_idle_handler (toolbar);
+	  gtk_toolbar_begin_sliding (toolbar);
 	  
 	  if (priv->highlight_tool_item)
 	    {
@@ -1950,42 +2056,30 @@ gtk_toolbar_set_drop_highlight_item (GtkToolbar  *toolbar,
       GtkWidget *placeholder;
 
       placeholder = GTK_WIDGET (gtk_separator_tool_item_new ());
-      gtk_widget_set_size_request (placeholder, 0, 0);
       content = gtk_toolbar_insert_tool_item (toolbar,
 					      GTK_TOOL_ITEM (placeholder),
 					      index, TRUE);
-      start_width = start_height = 0;
-    }
-  else
-    {
-      get_size (content->item, &start_width, &start_height);
+      gtk_widget_show (placeholder);
     }
 
   g_assert (content);
   g_assert (content->is_placeholder);
 
+  reset_all_placeholders (toolbar);
+  
   gtk_widget_size_request (GTK_WIDGET (priv->highlight_tool_item),
 			   &requisition);
+
+  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
+    requisition.height = -1;
+  else
+    requisition.width = -1;
   
-  if (content->start_width != start_width ||
-      content->start_height != start_height ||
-      content->goal_width != requisition.width ||
-      content->goal_height != requisition.height)
-    {
-      reset_all_placeholders (toolbar);
-      
-      content->start_width = start_width;
-      content->goal_width = requisition.width;
-      content->start_height = start_height;
-      content->goal_height = requisition.height;
+  gtk_widget_set_size_request (GTK_WIDGET (content->item),
+			       requisition.width,
+			       requisition.height);
 
-      ensure_idle_handler (toolbar);
-    }
-}
-
-void
-gtk_toolbar_unhighlight_drop_location (GtkToolbar *toolbar)
-{
+  gtk_toolbar_begin_sliding (toolbar);
 }
 
 static void
@@ -2428,6 +2522,10 @@ gtk_toolbar_insert_tool_item (GtkToolbar  *toolbar,
   priv->content = g_list_insert (priv->content, content, pos);
   
   gtk_widget_set_parent (GTK_WIDGET (item), GTK_WIDGET (toolbar));
+
+  if (!content->is_placeholder)
+    gtk_toolbar_stop_sliding (toolbar);
+
   return content;
 }
 

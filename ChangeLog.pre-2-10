@@ -1,3 +1,31 @@
+Mon Nov 24 01:47:10 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Rework sliding algorithm.
+	- No more weird jumping when items are dragged off and added to
+	the toolbar,
+	- More natural item movement
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Many changes. This
+	function is now responsible for calculating intermediate positions
+	during item sliding. It is also responsible for starting sliding
+	if items disappear.  Also turn off expanding when there is an
+	overflow menu.
+	(gtk_toolbar_begin_sliding, stop_sliding): New functions.
+	(slide_idle_handler): New function. All the sliding is now done by
+	gtk_toolbar_size_allocate(), so the idle handler now just checks
+	if there is more sliding to be done.
+	(compute_intermediate_allocation, position): new functions
+	calculating intermediate steps in the slide animations. The new
+	animation algorithm uses a constant speed instead of a constant
+	must-be-finished-within time.
+	(struct _ToolbarContent): use 
+	GtkAllocation goal_allocation; and 
+	GtkAllocation start_allocation; instead of 
+	gint start/goal_width;
+
+	* gtk/gtktoolitem.c (gtk_tool_item_set_tooltip): fix typo in
+	documentation
+
 Sun Nov 23 22:26:25 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktooltips.c (gtk_tooltips_draw_tips): Make tooltip 
