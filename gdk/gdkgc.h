@@ -192,6 +192,9 @@ GdkGC *gdk_gc_ref		  (GdkGC	    *gc);
 void   gdk_gc_unref		  (GdkGC	    *gc);
 void   gdk_gc_get_values	  (GdkGC	    *gc,
 				   GdkGCValues	    *values);
+void   gdk_gc_set_values          (GdkGC           *gc,
+                                   GdkGCValues	   *values,
+                                   GdkGCValuesMask  values_mask);
 void   gdk_gc_set_foreground	  (GdkGC	    *gc,
 				   GdkColor	    *color);
 void   gdk_gc_set_background	  (GdkGC	    *gc,
