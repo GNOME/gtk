@@ -1,11 +1,23 @@
-Tue May 12 00:24:59 1998  Owen Taylor  <otaylor@gtk.org>
+Tue May 12 12:35:34 1998  Owen Taylor  <otaylor@gtk.org>
 
-	* docs/gtk-config.1: Rewritten and hopefulyl improved.
+	* gdk/gdkregion.c: Initialize a variable so that invalid
+	inputs don't pass garbage to X.
 
-Mon May 11 20:26:39 PDT 1998 Manish Singh <yosh@gimp.org>
+Tue May 12 16:56:35 1998  Owen Taylor  <otaylor@gtk.org>
+	(James A <jamesa@demon.net> : gtk-jamesa-980511-4.patch)
+	
+	* gtk/gtkbbox.h gtk/gtkcolorsel.h gtk/gtkvbbox.h:
+	Changed #include "gtkfoo.h" to #include <gtk/gtkfoo.h>
 
-	* docs/Makefile.am
-	* docs/gtk-config.1: added man page for gtk-config by Ben Gertzfield
+	* gtk/gtkwindow.[ch]: Added const to gtk_window_set_wmclass
+
+Tue May 12 16:54:15 1998  Owen Taylor  <otaylor@gtk.org>
+	(James A <jamesa@demon.net> : gtk-jamesa-980511-4.patch)
+	
+	* glib.h gstring.c gmessages.c: Added some missing
+	const to arguments.
+
+	* gutils.c (g_strsignal.c): Added missing return statements.
 
 1998-05-11  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 

@@ -30,7 +30,7 @@ extern "C" {
  */
 #define GTK_MAJOR_VERSION				(1)
 #define GTK_MINOR_VERSION				(0)
-#define GTK_MICRO_VERSION				(2)
+#define GTK_MICRO_VERSION				(1)
 
 /* new gtk_container_set_focus_[hv]adjustment()
  */

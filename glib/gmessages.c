@@ -31,7 +31,7 @@ static GPrintFunc glib_print_func = NULL;
 extern char* g_vsprintf (const gchar *fmt, va_list *args, va_list *args2);
 
 void
-g_error (gchar *format, ...)
+g_error (const gchar *format, ...)
 {
   va_list args, args2;
   char *buf;
@@ -65,7 +65,7 @@ g_error (gchar *format, ...)
 }
 
 void
-g_warning (gchar *format, ...)
+g_warning (const gchar *format, ...)
 {
   va_list args, args2;
   char *buf;
@@ -89,7 +89,7 @@ g_warning (gchar *format, ...)
 }
 
 void
-g_message (gchar *format, ...)
+g_message (const gchar *format, ...)
 {
   va_list args, args2;
   char *buf;
@@ -113,7 +113,7 @@ g_message (gchar *format, ...)
 }
 
 void
-g_print (gchar *format, ...)
+g_print (const gchar *format, ...)
 {
   va_list args, args2;
   char *buf;

@@ -84,8 +84,8 @@ GtkWidget* gtk_window_new                      (GtkWindowType        type);
 void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);
 void       gtk_window_set_wmclass              (GtkWindow           *window,
-						gchar               *wmclass_name,
-						gchar               *wmclass_class);
+						const gchar         *wmclass_name,
+						const gchar         *wmclass_class);
 void       gtk_window_set_focus                (GtkWindow           *window,
 						GtkWidget           *focus);
 void       gtk_window_set_default              (GtkWindow           *window,

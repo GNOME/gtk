@@ -570,85 +570,85 @@ g_strsignal (gint signum)
     case SIGQUIT: return "Quit";
 #endif
 #ifdef SIGILL
-    case SIGILL: "Illegal instruction";
+    case SIGILL: return "Illegal instruction";
 #endif
 #ifdef SIGTRAP
-    case SIGTRAP: "Trace/breakpoint trap";
+    case SIGTRAP: return "Trace/breakpoint trap";
 #endif
 #ifdef SIGABRT
-    case SIGABRT: "IOT trap/Abort";
+    case SIGABRT: return "IOT trap/Abort";
 #endif
 #ifdef SIGBUS
-    case SIGBUS: "Bus error";
+    case SIGBUS: return "Bus error";
 #endif
 #ifdef SIGFPE
-    case SIGFPE: "Floating point exception";
+    case SIGFPE: return "Floating point exception";
 #endif
 #ifdef SIGKILL
-    case SIGKILL: "Killed";
+    case SIGKILL: return "Killed";
 #endif
 #ifdef SIGUSR1
-    case SIGUSR1: "User defined signal 1";
+    case SIGUSR1: return "User defined signal 1";
 #endif
 #ifdef SIGSEGV
-    case SIGSEGV: "Segmentation fault";
+    case SIGSEGV: return "Segmentation fault";
 #endif
 #ifdef SIGUSR2
-    case SIGUSR2: "User defined signal 2";
+    case SIGUSR2: return "User defined signal 2";
 #endif
 #ifdef SIGPIPE
-    case SIGPIPE: "Broken pipe";
+    case SIGPIPE: return "Broken pipe";
 #endif
 #ifdef SIGALRM
-    case SIGALRM: "Alarm clock";
+    case SIGALRM: return "Alarm clock";
 #endif
 #ifdef SIGTERM
-    case SIGTERM: "Terminated";
+    case SIGTERM: return "Terminated";
 #endif
 #ifdef SIGSTKFLT
-    case SIGSTKFLT: "Stack fault";
+    case SIGSTKFLT: return "Stack fault";
 #endif
 #ifdef SIGCHLD
-    case SIGCHLD: "Child exited";
+    case SIGCHLD: return "Child exited";
 #endif
 #ifdef SIGCONT
-    case SIGCONT: "Continued";
+    case SIGCONT: return "Continued";
 #endif
 #ifdef SIGSTOP
-    case SIGSTOP: "Stopped (signal)";
+    case SIGSTOP: return "Stopped (signal)";
 #endif
 #ifdef SIGTSTP
-    case SIGTSTP: "Stopped";
+    case SIGTSTP: return "Stopped";
 #endif
 #ifdef SIGTTIN
-    case SIGTTIN: "Stopped (tty input)";
+    case SIGTTIN: return "Stopped (tty input)";
 #endif
 #ifdef SIGTTOU
-    case SIGTTOU: "Stopped (tty output)";
+    case SIGTTOU: return "Stopped (tty output)";
 #endif
 #ifdef SIGURG
-    case SIGURG: "Urgent condition";
+    case SIGURG: return "Urgent condition";
 #endif
 #ifdef SIGXCPU
-    case SIGXCPU: "CPU time limit exceeded";
+    case SIGXCPU: return "CPU time limit exceeded";
 #endif
 #ifdef SIGXFSZ
-    case SIGXFSZ: "File size limit exceeded";
+    case SIGXFSZ: return "File size limit exceeded";
 #endif
 #ifdef SIGVTALRM
-    case SIGVTALRM: "Virtual time alarm";
+    case SIGVTALRM: return "Virtual time alarm";
 #endif
 #ifdef SIGPROF
-    case SIGPROF: "Profile signal";
+    case SIGPROF: return "Profile signal";
 #endif
 #ifdef SIGWINCH
-    case SIGWINCH: "Window size changed";
+    case SIGWINCH: return "Window size changed";
 #endif
 #ifdef SIGIO
-    case SIGIO: "Possible I/O";
+    case SIGIO: return "Possible I/O";
 #endif
 #ifdef SIGPWR
-    case SIGPWR: "Power failure";
+    case SIGPWR: return "Power failure";
 #endif
 #ifdef SIGUNUSED
     case SIGUNUSED: return "Unused signal";

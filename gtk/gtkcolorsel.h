@@ -24,22 +24,22 @@
 #include <math.h>
 #include <gdk/gdk.h>
 
-#include "gtkwindow.h"
-#include "gtkvbox.h"
-#include "gtkframe.h"
-#include "gtkpreview.h"
-#include "gtkbutton.h"
-#include "gtkentry.h"
-#include "gtkhbox.h"
-#include "gtklabel.h"
-#include "gtkmain.h"
-#include "gtksignal.h"
-#include "gtkmisc.h"
-#include "gtkrange.h"
-#include "gtkscale.h"
-#include "gtkhscale.h"
-#include "gtktable.h"
-#include "gtkeventbox.h"
+#include <gtk/gtkwindow.h>
+#include <gtk/gtkvbox.h>
+#include <gtk/gtkframe.h>
+#include <gtk/gtkpreview.h>
+#include <gtk/gtkbutton.h>
+#include <gtk/gtkentry.h>
+#include <gtk/gtkhbox.h>
+#include <gtk/gtklabel.h>
+#include <gtk/gtkmain.h>
+#include <gtk/gtksignal.h>
+#include <gtk/gtkmisc.h>
+#include <gtk/gtkrange.h>
+#include <gtk/gtkscale.h>
+#include <gtk/gtkhscale.h>
+#include <gtk/gtktable.h>
+#include <gtk/gtkeventbox.h>
 
 
 #ifdef __cplusplus
