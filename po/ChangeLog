@@ -1,3 +1,7 @@
+2002-04-22  Christophe Merlet  <christophe@merlet.net>
+
+	* fr.po: Updated French translation.
+
 2002-04-22  Abel Cheung  <maddog@linux.org.hk>
 
 	* README.translators: Added some few info.
@@ -28,7 +32,7 @@
 
 	* en_GB.po: Updated British translation.
 
-2002-04-11  Christophe Merlet  <redfox@eikonex.org>
+2002-04-11  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation from work of
 	Christophe Fergeau <christophe.fergeau@laposte.net>.
@@ -37,7 +41,7 @@
 
 	* sk.po: Updated Slovak translation.
 
-2002-04-08  Christophe Merlet  <redfox@eikonex.org>
+2002-04-08  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation from work of
 	Christophe Fergeau <christophe.fergeau@laposte.net>.
@@ -207,7 +211,7 @@ Fri Mar 08 13:09:28 2002  Matthias Warkus <mawarkus@gnome.org>
 	* pl.po: Updated Polish translation by
 	GNOME PL Team <translators@gnome.pl>.
 
-2002-02-28  Christophe Merlet  <redfox@eikonex.org>
+2002-02-28  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation.
 
@@ -484,7 +488,7 @@ Sat Nov 24 13:19:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* ru.po: updated russian translation.
 
-2001-10-13  Christophe Merlet  <redfox@eikonex.org>
+2001-10-13  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation.
 
@@ -701,7 +705,7 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 	* no.po: Updated Norwegian translation.
 	* POTFILES.in: Added a bunch of new files.
 	
-2001-02-20  Christophe Merlet  <redfox@eikonex.org>
+2001-02-20  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation.
 
@@ -709,11 +713,11 @@ Fri May 18 11:22:04 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* ru.po: updated russian translation.
 
-2001-02-06  Christophe Merlet  <redfox@eikonex.org>
+2001-02-06  Christophe Merlet  <christophe@merlet.net>
 
 	* update.sh: PACKAGE must be gtk20, isn't it ?.
 
-2001-02-06  Christophe Merlet  <redfox@eikonex.org>
+2001-02-06  Christophe Merlet  <christophe@merlet.net>
 
 	* fr.po: Updated French translation.
 

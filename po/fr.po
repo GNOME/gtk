@@ -1,15 +1,15 @@
 # gtk+.po
 # Copyright (C) 1998-2002 Free Software Foundation, Inc.
 # Vincent Renardias <vincent@debian.org>, 1998-1999.
-# maintainer: Christophe Merlet (RedFox) <redfox@eikonex.org>, 2000-2002.
+# maintainer: Christophe Merlet (RedFox) <christophe@merlet.net>, 2000-2002.
 # Christophe Fergeau <christophe.fergeau@laposte.net>, 2002.
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-04-11 22:44+0200\n"
-"PO-Revision-Date: 2002-04-11 22:44+0200\n"
-"Last-Translator: Christophe Fergeau <teuf@users.sourceforge.net>\n"
+"POT-Creation-Date: 2002-04-22 08:26+0200\n"
+"PO-Revision-Date: 2002-04-22 08:26+0200\n"
+"Last-Translator: Christophe Merlet (RedFox) <christophe@merlet.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -255,12 +255,12 @@ msgstr "Type d'icône non supporté"
 msgid "Not enough memory to load ICO file"
 msgstr "Pas assez de mémoire pour charger le fichier ICO"
 
-#: gdk-pixbuf/io-jpeg.c:125
+#: gdk-pixbuf/io-jpeg.c:126
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Erreur d'interprétation du fichier d'image JPEG (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:234
+#: gdk-pixbuf/io-jpeg.c:307
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -268,11 +268,11 @@ msgstr ""
 "Mémoire insuffisante pour charger l'image, essayez de quitter quelques "
 "applications pour libérer de la mémoire"
 
-#: gdk-pixbuf/io-jpeg.c:345 gdk-pixbuf/io-jpeg.c:538 gdk-pixbuf/io-jpeg.c:710
+#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Ne peut allouer de la mémoire pour chager le fichier JPEG"
 
-#: gdk-pixbuf/io-jpeg.c:664
+#: gdk-pixbuf/io-jpeg.c:721
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -281,7 +281,7 @@ msgstr ""
 "La qualité JPEG doit être une valeur entre 0 et 100 ; la valeur « %s » ne "
 "peut être analysée"
 
-#: gdk-pixbuf/io-jpeg.c:679
+#: gdk-pixbuf/io-jpeg.c:736
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -349,74 +349,74 @@ msgstr ""
 msgid "Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:254
+#: gdk-pixbuf/io-pnm.c:247
 msgid "PNM loader expected to find an integer, but didn't"
 msgstr ""
 "Le chargeur PNM attendait de recevoir un entier, mais ce n'en était pas un"
 
-#: gdk-pixbuf/io-pnm.c:286
+#: gdk-pixbuf/io-pnm.c:279
 msgid "PNM file has an incorrect initial byte"
 msgstr "Le fichier PNM a un octet initial incorrect"
 
-#: gdk-pixbuf/io-pnm.c:316
+#: gdk-pixbuf/io-pnm.c:309
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr "Le fichier PNM n'est pas un sous-format PNM reconnu"
 
-#: gdk-pixbuf/io-pnm.c:341
+#: gdk-pixbuf/io-pnm.c:334
 msgid "PNM file has an image width of 0"
 msgstr "Le fichier PNM a une largeur d'image de 0"
 
-#: gdk-pixbuf/io-pnm.c:362
+#: gdk-pixbuf/io-pnm.c:355
 msgid "PNM file has an image height of 0"
 msgstr "Le fichier PNM a une hauteur d'image de 0"
 
-#: gdk-pixbuf/io-pnm.c:385
+#: gdk-pixbuf/io-pnm.c:378
 msgid "Maximum color value in PNM file is 0"
 msgstr "La valeur maximale de couleur dans le fichier PNM est 0"
 
-#: gdk-pixbuf/io-pnm.c:393
+#: gdk-pixbuf/io-pnm.c:386
 msgid "Maximum color value in PNM file is too large"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:401
+#: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
 msgstr ""
 "Les images PNM avec des valeurs maximales de couleur supérieures à 255 ne "
 "sont pas supportées."
 
-#: gdk-pixbuf/io-pnm.c:440 gdk-pixbuf/io-pnm.c:468 gdk-pixbuf/io-pnm.c:500
+#: gdk-pixbuf/io-pnm.c:433 gdk-pixbuf/io-pnm.c:461 gdk-pixbuf/io-pnm.c:493
 msgid "Raw PNM image type is invalid"
 msgstr "Le type d'image PNM brut est invalide"
 
-#: gdk-pixbuf/io-pnm.c:560 gdk-pixbuf/io-pnm.c:602
+#: gdk-pixbuf/io-pnm.c:553 gdk-pixbuf/io-pnm.c:595
 msgid "PNM image format is invalid"
 msgstr "Le format d'image PNM est invalide"
 
-#: gdk-pixbuf/io-pnm.c:661
+#: gdk-pixbuf/io-pnm.c:654
 msgid "PNM image loader does not support this PNM subformat"
 msgstr "Le chargeur d'image PNM ne supporte pas ce sous-format PNM"
 
-#: gdk-pixbuf/io-pnm.c:716
+#: gdk-pixbuf/io-pnm.c:709
 msgid "Premature end-of-file encountered"
 msgstr "Fin de fichier rencontrée prématurément"
 
-#: gdk-pixbuf/io-pnm.c:748 gdk-pixbuf/io-pnm.c:967
+#: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
 msgid "Raw PNM formats require exactly one whitespace before sample data"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:775
+#: gdk-pixbuf/io-pnm.c:768
 msgid "Can't allocate memory for loading PNM image"
 msgstr "Impossible d'allouer de la mémoire pour charger l'image PNM"
 
-#: gdk-pixbuf/io-pnm.c:824
+#: gdk-pixbuf/io-pnm.c:817
 msgid "Insufficient memory to load PNM context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-pnm.c:874
+#: gdk-pixbuf/io-pnm.c:867
 msgid "Unexpected end of PNM image data"
 msgstr "Fin de données d'image PNM inattendue"
 
-#: gdk-pixbuf/io-pnm.c:996
+#: gdk-pixbuf/io-pnm.c:989
 msgid "Insufficient memory to load PNM file"
 msgstr "Mémoire insuffisante pour charger le fichier PNM"
 
@@ -448,102 +448,97 @@ msgstr "Impossible de réallouer les données d'IOBuffer"
 msgid "Can't allocate temporary IOBuffer data"
 msgstr "Impossible d'allouer les données d'IOBuffer temporaires"
 
-#: gdk-pixbuf/io-tga.c:251
+#: gdk-pixbuf/io-tga.c:282
 msgid "fread() failed -- premature end-of-file probably encountered"
 msgstr ""
 "fread() a échoué - ceci est probablement dû à une fin de fichier inattendue"
 
-#: gdk-pixbuf/io-tga.c:261
+#: gdk-pixbuf/io-tga.c:292
 msgid "fseek() failed -- premature end-of-file probably encountered"
 msgstr ""
 "fseek() a échoué - ceci est probablement dû à une fin de fichier prématurée"
 
-#: gdk-pixbuf/io-tga.c:295 gdk-pixbuf/io-tga.c:1030 gdk-pixbuf/io-tga.c:1142
-#: gdk-pixbuf/io-tga.c:1225
-msgid "Insufficient memory to load TGA image"
-msgstr "Mémoire insuffisante pour charger l'image TGA"
-
-#: gdk-pixbuf/io-tga.c:305
+#: gdk-pixbuf/io-tga.c:325
 msgid "Can't allocate new pixbuf"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:617
+#: gdk-pixbuf/io-tga.c:638
 msgid "Can't allocate colormap structure"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:624
+#: gdk-pixbuf/io-tga.c:645
 msgid "Can't allocate colormap entries"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:646
+#: gdk-pixbuf/io-tga.c:667
 msgid "Unexpected bitdepth for colormap entries"
 msgstr ""
 "Profondeur de couleur invalide pour les entrées de la palette de couleur"
 
-#: gdk-pixbuf/io-tga.c:664
+#: gdk-pixbuf/io-tga.c:685
 msgid "Can't allocate TGA header memory"
 msgstr "Impossible d'allouer la mémoire pour l'entête TGA"
 
-#: gdk-pixbuf/io-tga.c:697
+#: gdk-pixbuf/io-tga.c:718
 msgid "TGA image has invalid dimensions"
 msgstr "L'image TGA a des dimensions invalides"
 
-#: gdk-pixbuf/io-tga.c:703
+#: gdk-pixbuf/io-tga.c:724
 msgid "TGA image comment length is too long"
 msgstr "Le commentaire de l'image TGA est trop long"
 
-#: gdk-pixbuf/io-tga.c:712 gdk-pixbuf/io-tga.c:721 gdk-pixbuf/io-tga.c:731
-#: gdk-pixbuf/io-tga.c:741 gdk-pixbuf/io-tga.c:748
+#: gdk-pixbuf/io-tga.c:733 gdk-pixbuf/io-tga.c:742 gdk-pixbuf/io-tga.c:752
+#: gdk-pixbuf/io-tga.c:762 gdk-pixbuf/io-tga.c:769
 msgid "TGA image type not supported"
 msgstr "Type d'image TGA non supporté"
 
-#: gdk-pixbuf/io-tga.c:793
+#: gdk-pixbuf/io-tga.c:814
 msgid "Can't allocate memory for TGA context struct"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:857
+#: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
 msgstr "Trop de données dans le fichier"
 
-#: gdk-pixbuf/io-tga.c:903
+#: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
 msgstr "Impossible d'allouer de la mémoire pour l'entête TGA"
 
-#: gdk-pixbuf/io-tga.c:913
+#: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:937
+#: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:949
+#: gdk-pixbuf/io-tga.c:970
 #, fuzzy
 msgid "Can't allocate memory for TGA colormap struct"
 msgstr "Ne peut allouer de la mémoire pour chager le fichier JPEG"
 
-#: gdk-pixbuf/io-tga.c:958
+#: gdk-pixbuf/io-tga.c:979
 #, fuzzy
 msgid "Can't allocate memory for TGA colormap entries"
 msgstr "Ne peut allouer de la mémoire pour chager le fichier JPEG"
 
-#: gdk-pixbuf/io-tga.c:968
+#: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
 msgstr "Profondeur de couleur invalide pour la palette TGA"
 
-#: gdk-pixbuf/io-tga.c:1010
+#: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
 msgstr "Image en pseudo-couleurs sans palette"
 
-#: gdk-pixbuf/io-tga.c:1017
+#: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
 msgstr ""
 
-#: gdk-pixbuf/io-tga.c:1040 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1236
+#: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
 msgstr "Impossible d'allouer un tampon d'image"
 
-#: gdk-pixbuf/io-tga.c:1308 gdk-pixbuf/io-tga.c:1337
+#: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
 msgstr "Type d'image TGA non supporté"
 
@@ -561,7 +556,7 @@ msgstr "La largeur ou hauteur du fichier TIFF est nulle"
 
 #: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "Dimensions de l'image TIFF trop grande"
 
 #: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
 msgid "Insufficient memory to open TIFF file"
@@ -612,35 +607,35 @@ msgid "Failed to write to temporary file when loading XBM image"
 msgstr ""
 "Impossible d'écrire dans un fichier temporaire pour charger l'image XBM"
 
-#: gdk-pixbuf/io-xpm.c:1235
+#: gdk-pixbuf/io-xpm.c:1229
 msgid "No XPM header found"
 msgstr "Entête XPM non trouvé"
 
-#: gdk-pixbuf/io-xpm.c:1243
+#: gdk-pixbuf/io-xpm.c:1237
 msgid "XPM file has image width <= 0"
 msgstr "Le fichier XPM à une taille d'image négative"
 
-#: gdk-pixbuf/io-xpm.c:1251
+#: gdk-pixbuf/io-xpm.c:1245
 msgid "XPM file has image height <= 0"
 msgstr "Le fichier XPM a une hauteur négative"
 
-#: gdk-pixbuf/io-xpm.c:1259
+#: gdk-pixbuf/io-xpm.c:1253
 msgid "XPM file has invalid number of colors"
 msgstr "Le fichier XPM a un nombre de couleurs non valide"
 
-#: gdk-pixbuf/io-xpm.c:1267
+#: gdk-pixbuf/io-xpm.c:1261
 msgid "XPM has invalid number of chars per pixel"
 msgstr "Le nombre de caractères par pixel du fichier XPM est invalide"
 
-#: gdk-pixbuf/io-xpm.c:1285
+#: gdk-pixbuf/io-xpm.c:1279
 msgid "Can't read XPM colormap"
 msgstr "Impossible de lire la palette XPM"
 
-#: gdk-pixbuf/io-xpm.c:1326
+#: gdk-pixbuf/io-xpm.c:1317
 msgid "Can't allocate memory for loading XPM image"
 msgstr "Impossible d'allouer de la mémoire pour charger l'image XPM"
 
-#: gdk-pixbuf/io-xpm.c:1509
+#: gdk-pixbuf/io-xpm.c:1498
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 "Impossible d'écrire dans un fichier temporaire lors du chargement d'une "
@@ -735,7 +730,7 @@ msgstr ""
 
 #: gtk/gtkarrow.c:98
 msgid "Arrow direction"
-msgstr ""
+msgstr "Direction de flèche"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
@@ -976,7 +971,7 @@ msgstr "largeur"
 
 #: gtk/gtkcellrenderer.c:167
 msgid "The fixed width."
-msgstr ""
+msgstr "La largeur fixé."
 
 #: gtk/gtkcellrenderer.c:177
 msgid "height"
@@ -984,7 +979,7 @@ msgstr "hauteur"
 
 #: gtk/gtkcellrenderer.c:178
 msgid "The fixed height."
-msgstr ""
+msgstr "La hauteur fixé."
 
 #: gtk/gtkcellrenderer.c:188
 msgid "Is Expander"
@@ -1029,268 +1024,262 @@ msgstr "xpad pixbuf"
 msgid "Pixbuf for closed expander."
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:174 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
+#: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
 msgstr "Texte"
 
-#: gtk/gtkcellrenderertext.c:175
+#: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
 msgstr "Texte à rendre."
 
-#: gtk/gtkcellrenderertext.c:182
+#: gtk/gtkcellrenderertext.c:181
 msgid "Markup"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:183
+#: gtk/gtkcellrenderertext.c:182
 #, fuzzy
 msgid "Marked up text to render"
 msgstr "Texte à rendre."
 
-#: gtk/gtkcellrenderertext.c:190 gtk/gtklabel.c:287
+#: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
 msgstr "Attributs"
 
-#: gtk/gtkcellrenderertext.c:191
+#: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr ""
+msgstr "Une liste d'attribut de style à appliquer au style à rendre."
 
-#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:209
+#: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
 msgid "Background color name"
 msgstr "Nom de la couleur d'arrière-plan"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:210
+#: gtk/gtkcellrenderertext.c:198 gtk/gtktexttag.c:210
 msgid "Background color as a string"
 msgstr "Couleur d'arrière-plan comme chaine"
 
-#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:217
+#: gtk/gtkcellrenderertext.c:205 gtk/gtktexttag.c:217
 msgid "Background color"
 msgstr "Couleur d'arrière-plan"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:218
+#: gtk/gtkcellrenderertext.c:206 gtk/gtktexttag.c:218
 msgid "Background color as a GdkColor"
 msgstr "Couleur d'arrière-plan comme une GdkColor"
 
-#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:243
+#: gtk/gtkcellrenderertext.c:213 gtk/gtktexttag.c:243
 msgid "Foreground color name"
 msgstr "Nom de la couleur de premier plan"
 
-#: gtk/gtkcellrenderertext.c:215 gtk/gtktexttag.c:244
+#: gtk/gtkcellrenderertext.c:214 gtk/gtktexttag.c:244
 msgid "Foreground color as a string"
 msgstr "Couleur de premier plan comme une chaine"
 
-#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:251
+#: gtk/gtkcellrenderertext.c:221 gtk/gtktexttag.c:251
 msgid "Foreground color"
 msgstr "Couleur de premier plan"
 
-#: gtk/gtkcellrenderertext.c:223 gtk/gtktexttag.c:252
+#: gtk/gtkcellrenderertext.c:222 gtk/gtktexttag.c:252
 msgid "Foreground color as a GdkColor"
 msgstr "Couleur de premier plan comme une GdkColor"
 
-#: gtk/gtkcellrenderertext.c:231 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
+#: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
 msgid "Editable"
 msgstr "Éditable"
 
-#: gtk/gtkcellrenderertext.c:232 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
+#: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
 msgstr "Indique si le texte peut être modifié par l'utilisateur"
 
-#: gtk/gtkcellrenderertext.c:239 gtk/gtkcellrenderertext.c:247
+#: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Police"
 
-#: gtk/gtkcellrenderertext.c:240 gtk/gtktexttag.c:286
+#: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:286
 msgid "Font description as a string"
 msgstr "Description de police comme une chaine"
 
-#: gtk/gtkcellrenderertext.c:248 gtk/gtktexttag.c:294
+#: gtk/gtkcellrenderertext.c:247 gtk/gtktexttag.c:294
 msgid "Font description as a PangoFontDescription struct"
 msgstr "Description de police comme une structure PangoFontDescription"
 
-#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:302
+#: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
 msgid "Font family"
 msgstr "Famille de police"
 
-#: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:303
+#: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "Nom de la famille de police, càd. Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:264 gtk/gtkcellrenderertext.c:265
+#: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
 msgstr "Style de police"
 
-#: gtk/gtkcellrenderertext.c:273 gtk/gtkcellrenderertext.c:274
+#: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
 msgstr "Variante de police"
 
-#: gtk/gtkcellrenderertext.c:282 gtk/gtkcellrenderertext.c:283
+#: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
 msgstr "Épaisseur de police"
 
-#: gtk/gtkcellrenderertext.c:292 gtk/gtkcellrenderertext.c:293
+#: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
 msgstr "Étirement de la police"
 
-#: gtk/gtkcellrenderertext.c:301 gtk/gtkcellrenderertext.c:302
+#: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
 msgstr "Taille de la police"
 
-#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:368
+#: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
 msgid "Font points"
 msgstr "Points de la police"
 
-#: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:369
+#: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
 msgstr "Taille de la police en points"
 
-#: gtk/gtkcellrenderertext.c:321 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
+#: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
 msgstr "Échelle de police"
 
-#: gtk/gtkcellrenderertext.c:322
+#: gtk/gtkcellrenderertext.c:321
 msgid "Font scaling factor"
 msgstr "Facteur d'échelonnement des polices"
 
-#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:427
+#: gtk/gtkcellrenderertext.c:330 gtk/gtktexttag.c:427
 msgid "Rise"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:428
+#: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:467
+#: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
 msgid "Strikethrough"
 msgstr "Barré"
 
-#: gtk/gtkcellrenderertext.c:343 gtk/gtktexttag.c:468
+#: gtk/gtkcellrenderertext.c:342 gtk/gtktexttag.c:468
 #, fuzzy
 msgid "Whether to strike through the text"
 msgstr "Dessine une ligne à travers le texte."
 
-#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:475
+#: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:475
 msgid "Underline"
 msgstr "Soulignement"
 
-#: gtk/gtkcellrenderertext.c:351 gtk/gtktexttag.c:476
+#: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
 msgstr "Style de soulignement pour ce texte"
 
-#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:512
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:512
 msgid "Background set"
-msgstr "Chaîne de couleur d'arrière-plan"
+msgstr "Arrière-plan défini"
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:513
+#: gtk/gtkcellrenderertext.c:361 gtk/gtktexttag.c:513
 msgid "Whether this tag affects the background color"
 msgstr "Indique si cette balise affecte la couleur de fond"
 
-#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:524
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:364 gtk/gtktexttag.c:524
 msgid "Foreground set"
-msgstr "Chaîne de couleur d'avant-plan"
+msgstr "Premier plan défini"
 
-#: gtk/gtkcellrenderertext.c:366 gtk/gtktexttag.c:525
+#: gtk/gtkcellrenderertext.c:365 gtk/gtktexttag.c:525
 msgid "Whether this tag affects the foreground color"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:532
+#: gtk/gtkcellrenderertext.c:368 gtk/gtktexttag.c:532
 #, fuzzy
 msgid "Editability set"
 msgstr "Éditable"
 
-#: gtk/gtkcellrenderertext.c:370 gtk/gtktexttag.c:533
+#: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
 msgstr "Indique si cette balise affecte l'éditabilité du texte"
 
-#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:536
+#: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:536
 msgid "Font family set"
-msgstr ""
+msgstr "Famille de police défini"
 
-#: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:537
+#: gtk/gtkcellrenderertext.c:373 gtk/gtktexttag.c:537
 msgid "Whether this tag affects the font family"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:540
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:376 gtk/gtktexttag.c:540
 msgid "Font style set"
-msgstr "Style de police :"
+msgstr "Style de police défini"
 
-#: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:541
+#: gtk/gtkcellrenderertext.c:377 gtk/gtktexttag.c:541
 msgid "Whether this tag affects the font style"
 msgstr "Indique si cette balise affecte le style de la police"
 
-#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:544
+#: gtk/gtkcellrenderertext.c:380 gtk/gtktexttag.c:544
 msgid "Font variant set"
-msgstr ""
+msgstr "Variation de police défini"
 
-#: gtk/gtkcellrenderertext.c:382 gtk/gtktexttag.c:545
+#: gtk/gtkcellrenderertext.c:381 gtk/gtktexttag.c:545
 msgid "Whether this tag affects the font variant"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:548
+#: gtk/gtkcellrenderertext.c:384 gtk/gtktexttag.c:548
 msgid "Font weight set"
-msgstr ""
+msgstr "Épaisseur de police défini"
 
-#: gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:549
+#: gtk/gtkcellrenderertext.c:385 gtk/gtktexttag.c:549
 msgid "Whether this tag affects the font weight"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:552
+#: gtk/gtkcellrenderertext.c:388 gtk/gtktexttag.c:552
 msgid "Font stretch set"
-msgstr ""
+msgstr "Étirement de police défini"
 
-#: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:553
+#: gtk/gtkcellrenderertext.c:389 gtk/gtktexttag.c:553
 msgid "Whether this tag affects the font stretch"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:556
+#: gtk/gtkcellrenderertext.c:392 gtk/gtktexttag.c:556
 msgid "Font size set"
-msgstr ""
+msgstr "Taille de police défini"
 
-#: gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:557
+#: gtk/gtkcellrenderertext.c:393 gtk/gtktexttag.c:557
 msgid "Whether this tag affects the font size"
 msgstr "Indique si cette balise affecte la taille de la police"
 
-#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:560
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:396 gtk/gtktexttag.c:560
 msgid "Font scale set"
-msgstr "Style de police :"
+msgstr "Échelle de police défini"
 
-#: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:561
+#: gtk/gtkcellrenderertext.c:397 gtk/gtktexttag.c:561
 msgid "Whether this tag scales the font size by a factor"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:580
+#: gtk/gtkcellrenderertext.c:400 gtk/gtktexttag.c:580
 msgid "Rise set"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:581
+#: gtk/gtkcellrenderertext.c:401 gtk/gtktexttag.c:581
 msgid "Whether this tag affects the rise"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:596
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:404 gtk/gtktexttag.c:596
 msgid "Strikethrough set"
-msgstr "Barré"
+msgstr "Barré défini"
 
-#: gtk/gtkcellrenderertext.c:406 gtk/gtktexttag.c:597
+#: gtk/gtkcellrenderertext.c:405 gtk/gtktexttag.c:597
 msgid "Whether this tag affects strikethrough"
 msgstr ""
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:604
-#, fuzzy
+#: gtk/gtkcellrenderertext.c:408 gtk/gtktexttag.c:604
 msgid "Underline set"
-msgstr "Soulignement"
+msgstr "Soulignement défini"
 
-#: gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:605
+#: gtk/gtkcellrenderertext.c:409 gtk/gtktexttag.c:605
 msgid "Whether this tag affects underlining"
 msgstr ""
 
@@ -1737,11 +1726,11 @@ msgstr "Sélection :"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3164
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
 msgid "Select All"
 msgstr "Sélectionner tout"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3174
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
 msgid "Input Methods"
 msgstr "Méthodes de saisie"
 
@@ -1775,11 +1764,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:707
 msgid "Folders"
-msgstr "Dossiers"
+msgstr "Répertoires"
 
 #: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
-msgstr "_Dossiers"
+msgstr "_Répertoires"
 
 #: gtk/gtkfilesel.c:742
 msgid "Files"
@@ -1792,13 +1781,13 @@ msgstr "_Fichiers"
 #: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #, c-format
 msgid "Folder unreadable: %s"
-msgstr "Dossier illisible : %s"
+msgstr "Répertoire illisible : %s"
 
 #: gtk/gtkfilesel.c:946
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
-"availible to this program.\n"
+"available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
 "Le fichier « %s » est stocké sur une autre machine (appelée %s) et peut ne "
@@ -1807,11 +1796,11 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
-msgstr "_Nouveau dossier"
+msgstr "_Nouveau répertoire"
 
 #: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
-msgstr "Ef_facer le fichier"
+msgstr "_Supprimer le fichier"
 
 #: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
@@ -1822,8 +1811,8 @@ msgstr "_Renommer le fichier"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
-"Le nom du dossier « %s » contient des symboles non autorisés dans des noms "
-"de fichier."
+"Le nom du répertoire « %s » contient des symboles non autorisés dans des "
+"noms de fichier."
 
 #: gtk/gtkfilesel.c:1360
 #, c-format
@@ -1831,7 +1820,7 @@ msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
-"Error lors de la création du dossier « %s » : %s\n"
+"Error lors de la création du répertoire « %s » : %s\n"
 "%s"
 
 #: gtk/gtkfilesel.c:1361 gtk/gtkfilesel.c:1597
@@ -1842,17 +1831,15 @@ msgstr ""
 #: gtk/gtkfilesel.c:1369
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
-msgstr ""
-"E\n"
-"rror lors de la création du dossier « %s » : %s\n"
+msgstr "Erreur lors de la création du répertoire « %s » : %s\n"
 
 #: gtk/gtkfilesel.c:1403
 msgid "New Folder"
-msgstr "Nouveau dossier"
+msgstr "Nouveau répertoire"
 
 #: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
-msgstr "_Nom du dossier :"
+msgstr "_Nom du répertoire :"
 
 #: gtk/gtkfilesel.c:1444
 msgid "Create"
@@ -1887,11 +1874,11 @@ msgstr "Erreur lors de la suppression du fichier « %s » : %s"
 #: gtk/gtkfilesel.c:1542
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr "Voulez-vous reellement effacer le fichier « %s »"
+msgstr "Voulez-vous vraiment supprimer le fichier « %s »"
 
 #: gtk/gtkfilesel.c:1547
 msgid "Delete File"
-msgstr "Effacer le fichier"
+msgstr "Supprimer le fichier"
 
 #: gtk/gtkfilesel.c:1593 gtk/gtkfilesel.c:1607
 #, c-format
@@ -1938,7 +1925,7 @@ msgstr "Renommer"
 
 #: gtk/gtkfilesel.c:2103
 msgid "Selection: "
-msgstr "Sélection :"
+msgstr "Sélection : "
 
 #: gtk/gtkfilesel.c:2983
 #, c-format
@@ -2357,7 +2344,7 @@ msgstr "Ajustement vertical"
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustement pour cette position verticale."
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:190
+#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "Largeur"
 
@@ -2378,7 +2365,7 @@ msgstr "Hauteur de la mise en page"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:731
+#: gtk/gtkmain.c:732
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2555,7 +2542,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Indique si la taille des onglets doit être la même pour tous"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4695
+#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
 #, c-format
 msgid "Page %u"
 msgstr "Page %u"
@@ -2942,11 +2929,11 @@ msgid ""
 "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
-#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:524
+#: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
 msgid "Horizontal Adjustment"
 msgstr "Ajustement horizontal"
 
-#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:532
+#: gtk/gtkscrolledwindow.c:243 gtk/gtktext.c:606 gtk/gtktreeview.c:531
 msgid "Vertical Adjustment"
 msgstr "Ajustement vertical"
 
@@ -3593,7 +3580,7 @@ msgstr "Onglets"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "Onglets personnalisés pour ce texte"
 
 #: gtk/gtktexttag.c:502
 msgid "Invisible"
@@ -3632,7 +3619,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:564
 msgid "Justification set"
-msgstr ""
+msgstr "Justification défini"
 
 #: gtk/gtktexttag.c:565
 msgid "Whether this tag affects paragraph justification"
@@ -3640,7 +3627,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:568
 msgid "Language set"
-msgstr ""
+msgstr "Langue défini"
 
 #: gtk/gtktexttag.c:569
 msgid "Whether this tag affects the language the text is rendered as"
@@ -3649,16 +3636,15 @@ msgstr ""
 
 #: gtk/gtktexttag.c:572
 msgid "Left margin set"
-msgstr ""
+msgstr "Marge gauche défini"
 
 #: gtk/gtktexttag.c:573
 msgid "Whether this tag affects the left margin"
 msgstr "Indique si ce tag affecte la marge gauche"
 
 #: gtk/gtktexttag.c:576
-#, fuzzy
 msgid "Indent set"
-msgstr "Soulignement"
+msgstr "Indentation défini"
 
 #: gtk/gtktexttag.c:577
 msgid "Whether this tag affects indentation"
@@ -3775,16 +3761,15 @@ msgstr ""
 
 #: gtk/gtktextview.c:594
 msgid "Left Margin"
-msgstr ""
+msgstr "Marge gauche"
 
 #: gtk/gtktextview.c:604
 msgid "Right Margin"
 msgstr "Marge droite"
 
 #: gtk/gtktextview.c:632
-#, fuzzy
 msgid "Cursor Visible"
-msgstr "Désactivé"
+msgstr "Curseur visible"
 
 #: gtk/gtktextview.c:633
 msgid "If the insertion cursor is shown"
@@ -3792,7 +3777,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:6366
 msgid "Input _Methods"
-msgstr "Méthode d'entrée"
+msgstr "_Méthode d'entrées"
 
 #: gtk/gtkthemes.c:69
 #, c-format
@@ -3840,7 +3825,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:243
 msgid "Size of spacers"
-msgstr ""
+msgstr "Taille des espaces"
 
 #: gtk/gtktoolbar.c:252
 msgid "Amount of border space between the toolbar shadow and the buttons"
@@ -3893,217 +3878,217 @@ msgstr ""
 msgid "The model for the TreeModelSort to sort"
 msgstr "Modèle pour le TreeModelSort à trier"
 
-#: gtk/gtktreeview.c:516
+#: gtk/gtktreeview.c:515
 msgid "TreeView Model"
 msgstr ""
 
-#: gtk/gtktreeview.c:517
+#: gtk/gtktreeview.c:516
 msgid "The model for the tree view"
 msgstr "Modèle pour la vue de l'arbre"
 
-#: gtk/gtktreeview.c:525
+#: gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment for the widget"
 msgstr "Ajustement horizontal pour ce widget"
 
-#: gtk/gtktreeview.c:533
+#: gtk/gtktreeview.c:532
 msgid "Vertical Adjustment for the widget"
 msgstr "Ajustement vertical pour ce widget"
 
-#: gtk/gtktreeview.c:540 gtk/gtktreeviewcolumn.c:174 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Visible"
 
-#: gtk/gtktreeview.c:541
+#: gtk/gtktreeview.c:540
 msgid "Show the column header buttons"
 msgstr "Affiche les boutons d'entête de colonne"
 
-#: gtk/gtktreeview.c:548
+#: gtk/gtktreeview.c:547
 msgid "Headers Clickable"
-msgstr "Entêtes cliquables"
+msgstr "En-têtes cliquables"
 
-#: gtk/gtktreeview.c:549
+#: gtk/gtktreeview.c:548
 msgid "Column headers respond to click events"
 msgstr "Les entêtes de colonnes sont sensibles aux clics"
 
-#: gtk/gtktreeview.c:556
+#: gtk/gtktreeview.c:555
 msgid "Expander Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:557
+#: gtk/gtktreeview.c:556
 msgid "Set the column for the expander column"
 msgstr ""
 
-#: gtk/gtktreeview.c:564 gtk/gtktreeviewcolumn.c:273
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
 msgid "Reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:565
+#: gtk/gtktreeview.c:564
 msgid "View is reorderable"
 msgstr ""
 
-#: gtk/gtktreeview.c:572
+#: gtk/gtktreeview.c:571
 msgid "Rules Hint"
 msgstr ""
 
-#: gtk/gtktreeview.c:573
+#: gtk/gtktreeview.c:572
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
 msgstr ""
 
-#: gtk/gtktreeview.c:580
+#: gtk/gtktreeview.c:579
 msgid "Enable Search"
 msgstr "Activer la recherche"
 
-#: gtk/gtktreeview.c:581
+#: gtk/gtktreeview.c:580
 msgid "View allows user to search through columns interactively"
 msgstr ""
 
-#: gtk/gtktreeview.c:588
+#: gtk/gtktreeview.c:587
 msgid "Search Column"
 msgstr ""
 
-#: gtk/gtktreeview.c:589
+#: gtk/gtktreeview.c:588
 msgid "Model column to search through when searching through code"
 msgstr ""
 
-#: gtk/gtktreeview.c:602
+#: gtk/gtktreeview.c:601
 msgid "Expander Size"
 msgstr ""
 
-#: gtk/gtktreeview.c:603
+#: gtk/gtktreeview.c:602
 msgid "Size of the expander arrow."
 msgstr ""
 
-#: gtk/gtktreeview.c:611
+#: gtk/gtktreeview.c:610
 msgid "Vertical Separator Width"
 msgstr ""
 
-#: gtk/gtktreeview.c:612
+#: gtk/gtktreeview.c:611
 msgid "Vertical space between cells.  Must be an even number."
 msgstr ""
 
-#: gtk/gtktreeview.c:620
+#: gtk/gtktreeview.c:619
 msgid "Horizontal Separator Width"
 msgstr "Largeur du séparateur horizontal"
 
-#: gtk/gtktreeview.c:621
+#: gtk/gtktreeview.c:620
 msgid "Horizontal space between cells.  Must be an even number."
 msgstr "Espacement horizontal entre les cellules. Doit être un nombe pair."
 
-#: gtk/gtktreeview.c:629
+#: gtk/gtktreeview.c:628
 msgid "Allow Rules"
 msgstr ""
 
-#: gtk/gtktreeview.c:630
+#: gtk/gtktreeview.c:629
 msgid "Allow drawing of alternating color rows."
 msgstr ""
 
-#: gtk/gtktreeview.c:636
+#: gtk/gtktreeview.c:635
 #, fuzzy
 msgid "Indent Expanders"
 msgstr "Soulignement"
 
-#: gtk/gtktreeview.c:637
+#: gtk/gtktreeview.c:636
 #, fuzzy
 msgid "Make the expanders indented."
 msgstr "Rend le texte éditable."
 
-#: gtk/gtktreeviewcolumn.c:175
+#: gtk/gtktreeviewcolumn.c:176
 msgid "Whether to display the column"
 msgstr "Indique si cette colonne doit être affichée"
 
-#: gtk/gtktreeviewcolumn.c:182 gtk/gtkwindow.c:441
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
 msgid "Resizable"
 msgstr "Redimensionnable"
 
-#: gtk/gtktreeviewcolumn.c:183
+#: gtk/gtktreeviewcolumn.c:184
 msgid "Column is user-resizable"
 msgstr "La colonne est redimensionnable par l'utilisateur"
 
-#: gtk/gtktreeviewcolumn.c:191
+#: gtk/gtktreeviewcolumn.c:192
 msgid "Current width of the column"
 msgstr "Largeur actuelle de la colonne"
 
-#: gtk/gtktreeviewcolumn.c:199
+#: gtk/gtktreeviewcolumn.c:200
 msgid "Sizing"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Resize mode of the column"
 msgstr "Mode de redimensionnement de la colonne"
 
-#: gtk/gtktreeviewcolumn.c:208
+#: gtk/gtktreeviewcolumn.c:209
 msgid "Fixed Width"
 msgstr "Largeur fixe"
 
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Current fixed width of the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:218
+#: gtk/gtktreeviewcolumn.c:219
 msgid "Minimum Width"
 msgstr "Largeur minimum"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum allowed width of the column"
 msgstr "Largeur minimum de la colonne autorisée"
 
-#: gtk/gtktreeviewcolumn.c:228
+#: gtk/gtktreeviewcolumn.c:229
 msgid "Maximum Width"
 msgstr "Largeur maximum"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum allowed width of the column"
 msgstr "Largeur maximum de la colonne autorisée"
 
-#: gtk/gtktreeviewcolumn.c:238
+#: gtk/gtktreeviewcolumn.c:239
 msgid "Title"
 msgstr "Titre"
 
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title to appear in column header"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:246
+#: gtk/gtktreeviewcolumn.c:247
 msgid "Clickable"
 msgstr "Cliquable"
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Whether the header can be clicked"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:255
+#: gtk/gtktreeviewcolumn.c:256
 msgid "Widget"
 msgstr "Widget"
 
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget to put in column header button instead of column title"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:263
+#: gtk/gtktreeviewcolumn.c:264
 msgid "Alignment"
 msgstr "Alignement"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "X Alignment of the column header text or widget"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeviewcolumn.c:275
 msgid "Whether the column can be reordered around the headers"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:281
+#: gtk/gtktreeviewcolumn.c:282
 msgid "Sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Whether to show a sort indicator"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:289
+#: gtk/gtktreeviewcolumn.c:290
 msgid "Sort order"
 msgstr "Ordre de tri"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort direction the sort indicator should indicate"
 msgstr ""
 
@@ -4454,6 +4439,9 @@ msgstr ""
 msgid "X Input Method"
 msgstr ""
 
+#~ msgid "Insufficient memory to load TGA image"
+#~ msgstr "Mémoire insuffisante pour charger l'image TGA"
+
 #~ msgid "Directories"
 #~ msgstr "Répertoires"
 
@@ -4481,7 +4469,7 @@ msgstr ""
 #~ msgstr "Annuler"
 
 #~ msgid "Delete"
-#~ msgstr "Effacer"
+#~ msgstr "Supprimer"
 
 #~ msgid "OK"
 #~ msgstr "Valider"
