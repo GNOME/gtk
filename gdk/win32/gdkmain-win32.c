@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -52,6 +52,7 @@ GdkArgDesc _gdk_windowing_args[] = {
   { "event-func-from-window-proc",
 		     GDK_ARG_BOOL, &gdk_event_func_from_window_proc,
 						     (GdkArgFunc) NULL},
+  { "max-colors",    GDK_ARG_INT,  &gdk_max_colors,  (GdkArgFunc) NULL},
   { NULL }
 };
 

@@ -1,3 +1,63 @@
+2002-02-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/*.c: Massive changes. Too many to list here, but I'll
+	try a summary:
+
+	1) Unify GdkPixmap and GdkImage implementation: For each
+	GdkPixmap, allocate a GdkImage, and vice versa.
+	GdkPixmapImplWin32Data has a pointer to the GdkImage.
+	GdkImage::windowing_data is a pointer to the GdkPixmap.
+
+	This simplifies many pixmap and image related functions a lot, and
+	reduces duplicated code snippets. For instance, there is only one
+	place in gdk/win32 where CreateDIBSection() is called, in the
+	function _gdk_win32_new_pixmap(). Converting a bitmap (GdkPixmap)
+	to a Windows region is almost trivial, with the bitmap bits being
+	readily accessible in the associated GdkImage.
+
+	All blitting between GdkPixmaps, GdkWindows and GdkImages goes
+	through handled the _gdk_win32_blit() function, which calls
+	different functions to handle the cases of blitting from pixmaps,
+	inside windows (scrolling), or from windows, which all require
+	somewhat different handling.
+
+	2) Support 256-color mode. This has long been very broken, now it
+	works more or less OK. Keep the logical palette for each colormap
+	as small as possible while allocating and freeing colors. Select
+	and realize the logical palette associated with a GdkColormap into
+	a DC before drawing or blitting.
+
+	When the display is in 256-color mode, make it possible for the
+	user to override the size of the palette(s) used with either the
+	GDK_WIN32_MAX_COLORS environment variable, or a -max-colors
+	command line option. It is possible to reduce the palette size all
+	the way down to using just the 16 static colors (which causes the
+	system visual to be of type GDK_VISUAL_STATIC_COLOR. This could
+	possibly be useful if one desperately wants to avoid color
+	flashing. (Note that in order for this to work properly, an as of
+	yet not commited fix to gdkrgb.c is needed.)
+
+	Handle the palette messages. On WM_PALETTECHANGED, call
+	UpdateColors() for the given window hierarchy. Do this only if a
+	window in some other top-level window hierarchy caused the palette
+	change (realized a palette). Do this max five times in a row (an
+	arbitrarily chosen limit), though, otherwise redraw by generating
+	expose events. On WM_QUERYNEWPALETTE, cause a redraw of the whole
+	window hierarchy by generating GDK_EXPOSE events.
+
+	3) Code cleanup in general. For instance, remove the "emulated"
+	X11 structs ColormapStruct, Visual and XStandardColormap. Use the
+	new GDK_DEBUG_* flags for debugging output in the relevant source
+	files. Remove the unused colormap hash table in gdkcolor-win32.c
+
+	4) Plug some resource leaks.
+
+2002-02-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (gdk_dropfiles_filter): Use
+	g_filename_to_uri() to actually create legal URIs in the
+	text/uri-list data.
+
 2002-02-16  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkfilesel.[ch]: Added multiple selection API
@@ -1903,11 +1963,7 @@ Sat Jan 12 16:57:31 2002  Kristian Rietveld  <kris@gtk.org>
 	cursor, set the Windows cursor to none first.
 
 	* gdk/win32/gdkgc-win32.c (predraw_set_foreground): Delete the old
-	brush that was in the DC, like the win32-production branch does. I
-	guess this plugs a resource leak? With the HDC cache, the old
-	brush might be something we created ourselves, and not a stock
-	brush. And it doesn't do any harm to call DeleteObject on stock
-	brushes.
+	brush that was in the DC, like the win32-production branch does.
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_impl_win32_finalize): If
 	the window has a cursor which is the current Windows cursor,

@@ -1,6 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-1999 Tor Lillqvist
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -280,13 +280,13 @@ _gdk_win32_window_procedure (HWND   hwnd,
 {
   LRESULT retval;
 
-  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %#lx %s\n",
-			     (gulong) hwnd, gdk_win32_message_name (message)));
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %p %s\n",
+			   hwnd, gdk_win32_message_name (message)));
 
   retval = real_window_procedure (hwnd, message, wparam, lparam);
 
-  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %#lx returns %ld\n",
-			     (gulong) hwnd, retval));
+  GDK_NOTE (MISC, g_print ("_gdk_win32_window_procedure: %p returns %ld\n",
+			   hwnd, retval));
 
   return retval;
 }
@@ -533,10 +533,10 @@ gdk_pointer_grab (GdkWindow    *window,
     {
       if (!GDK_WINDOW_DESTROYED (window))
 	{
-	  GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#lx %s %#lx %s\n",
-				     (gulong) GDK_WINDOW_HWND (window),
+	  GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %p %s %p %s\n",
+				     GDK_WINDOW_HWND (window),
 				     (owner_events ? "TRUE" : "FALSE"),
-				     (gulong) hcursor,
+				     hcursor,
 				     event_mask_string (event_mask)));
 	  p_grab_mask = event_mask;
 	  p_grab_owner_events = (owner_events != 0);
@@ -698,8 +698,8 @@ gdk_keyboard_grab (GdkWindow *window,
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
-  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %#lx\n",
-			     (gulong) GDK_WINDOW_HWND (window)));
+  GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %p\n",
+			     GDK_WINDOW_HWND (window)));
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -1024,7 +1024,7 @@ print_event (GdkEvent *event)
     CASE (GDK_SETTING);
 #undef CASE
     }
-  g_print ("%#lx ", (gulong) GDK_WINDOW_HWND (event->any.window));
+  g_print ("%p ", GDK_WINDOW_HWND (event->any.window));
 
   switch (event->any.type)
     {
@@ -1287,6 +1287,127 @@ synthesize_crossing_events (GdkWindow *window,
   gdk_window_ref (current_window);
 }
 
+#if 0
+
+static GList *
+get_descendants (GdkWindow *window)
+{
+  GList *list = gdk_window_get_children (window);
+  GList *head = list;
+  GList *tmp = NULL;
+
+  while (list)
+    {
+      tmp = g_list_concat (tmp, get_descendants ((GdkWindow *) list->data));
+      list = list->next;
+    }
+
+  return g_list_concat (tmp, head);
+}
+
+#endif
+
+static void
+synthesize_expose_events (GdkWindow *window)
+{
+  RECT r;
+  HDC hdc;
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+  GList *list = gdk_window_get_children (window);
+  GList *head = list;
+  GdkEvent *event;
+  int k;
+  
+  while (list)
+    {
+      synthesize_expose_events ((GdkWindow *) list->data);
+      list = list->next;
+    }
+
+  g_list_free (head);
+
+  if (!(hdc = GetDC (impl->handle)))
+    WIN32_GDI_FAILED ("GetDC");
+  else
+    {
+      if ((k = GetClipBox (hdc, &r)) == ERROR)
+	WIN32_GDI_FAILED ("GetClipBox");
+      else if (k != NULLREGION)
+	{
+	  event = _gdk_event_new ();
+	  event->expose.type = GDK_EXPOSE;
+	  event->expose.window = window;
+	  gdk_window_ref (window);
+	  event->expose.area.x = r.left;
+	  event->expose.area.y = r.top;
+	  event->expose.area.width = r.right - r.left;
+	  event->expose.area.height = r.bottom - r.top;
+	  event->expose.region = gdk_region_rectangle (&(event->expose.area));
+	  event->expose.count = 0;
+  
+	  _gdk_event_queue_append (event);
+  
+	  GDK_NOTE (EVENTS_OR_COLORMAP, print_event (event));
+	}
+      if (!ReleaseDC (impl->handle, hdc))
+	WIN32_GDI_FAILED ("ReleaseDC");
+    }
+}
+
+static void
+update_colors (GdkWindow *window,
+	       gboolean   top)
+{
+  HDC hdc;
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
+  GList *list = gdk_window_get_children (window);
+  GList *head = list;
+
+  GDK_NOTE (COLORMAP, (top ? g_print ("update_colors:") : (void) 0));
+
+  while (list)
+    {
+      update_colors ((GdkWindow *) list->data, FALSE);
+      list = list->next;
+    }
+  g_list_free (head);
+
+  if (((GdkWindowObject *) window)->input_only ||
+      impl->colormap == NULL)
+    return;
+
+  if (!(hdc = GetDC (impl->handle)))
+    WIN32_GDI_FAILED ("GetDC");
+  else
+    {
+      GdkColormapPrivateWin32 *cmapp = GDK_WIN32_COLORMAP_DATA (impl->colormap);
+      HPALETTE holdpal;
+      gint k;
+      
+      if ((holdpal = SelectPalette (hdc, cmapp->hpal, TRUE)) == NULL)
+	WIN32_GDI_FAILED ("SelectPalette");
+      else if ((k = RealizePalette (hdc)) == GDI_ERROR)
+	WIN32_GDI_FAILED ("RealizePalette");
+      else
+	{
+	  GDK_NOTE (COLORMAP,
+		    (k > 0 ?
+		     g_print (" %p pal=%p: realized %d colors\n"
+			      "update_colors:",
+			      impl->handle, cmapp->hpal, k) :
+		     (void) 0,
+		     g_print (" %p", impl->handle)));
+	  if (!UpdateColors (hdc))
+	    WIN32_GDI_FAILED ("UpdateColors");
+	  SelectPalette (hdc, holdpal, TRUE);
+	  RealizePalette (hdc);
+	}
+      if (!ReleaseDC (impl->handle, hdc))
+	WIN32_GDI_FAILED ("ReleaseDC");
+    }
+  GDK_NOTE (COLORMAP, (top ? g_print ("\n") : (void) 0));
+}
+
 static void
 translate_mouse_coords (GdkWindow *window1,
 			GdkWindow *window2,
@@ -1324,8 +1445,8 @@ propagate (GdkWindow  **window,
 	}
       else
 	{
-	  GDK_NOTE (EVENTS, g_print ("...sending to grabber %#lx\n",
-				     (gulong) GDK_WINDOW_HWND (grab_window)));
+	  GDK_NOTE (EVENTS, g_print ("...sending to grabber %p\n",
+				     GDK_WINDOW_HWND (grab_window)));
 	  gdk_drawable_unref (*window);
 	  *window = grab_window;
 	  gdk_drawable_ref (*window);
@@ -1354,8 +1475,8 @@ propagate (GdkWindow  **window,
 		    {
 		      /* Grabbed! */
 		      GDK_NOTE (EVENTS,
-				g_print ("...sending to grabber %#lx\n",
-					 (gulong) GDK_WINDOW_HWND (grab_window)));
+				g_print ("...sending to grabber %p\n",
+					 GDK_WINDOW_HWND (grab_window)));
 		      gdk_drawable_unref (*window);
 		      *window = grab_window;
 		      gdk_drawable_ref (*window);
@@ -1373,9 +1494,9 @@ propagate (GdkWindow  **window,
 	      gdk_drawable_unref (*window);
 	      *window = GDK_WINDOW (GDK_WINDOW_OBJECT (*window)->parent);
 	      gdk_drawable_ref (*window);
-	      GDK_NOTE (EVENTS, g_print ("%s %#lx",
+	      GDK_NOTE (EVENTS, g_print ("%s %p",
 					 (in_propagation ? "," : " ...propagating to"),
-					 (gulong) GDK_WINDOW_HWND (*window)));
+					 GDK_WINDOW_HWND (*window)));
 	      /* The only branch where we actually continue the loop */
 	      in_propagation = TRUE;
 	    }
@@ -1462,6 +1583,199 @@ decode_key_lparam (LPARAM lParam)
   return buf;
 }
 
+static void
+erase_background (GdkWindow *window,
+		  HDC        hdc)
+{
+  HDC bgdc = NULL;
+  HBRUSH hbr = NULL;
+  HPALETTE holdpal = NULL;
+  RECT rect;
+  COLORREF bg;
+  GdkColormap *colormap;
+  GdkColormapPrivateWin32 *colormap_private;
+  int i, j;
+  
+  if (GDK_WINDOW_OBJECT (window)->input_only ||
+      GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_NO_BG ||
+      GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
+    return;
+
+  colormap = gdk_drawable_get_colormap (window);
+
+  if (colormap &&
+      (colormap->visual->type == GDK_VISUAL_PSEUDO_COLOR ||
+       colormap->visual->type == GDK_VISUAL_STATIC_COLOR))
+    {
+      int k;
+	  
+      colormap_private = GDK_WIN32_COLORMAP_DATA (colormap);
+
+      if (!(holdpal = SelectPalette (hdc,  colormap_private->hpal, FALSE)))
+        WIN32_GDI_FAILED ("SelectPalette");
+      else if ((k = RealizePalette (hdc)) == GDI_ERROR)
+	WIN32_GDI_FAILED ("RealizePalette");
+      else if (k > 0)
+	GDK_NOTE (COLORMAP, g_print ("gdk_win32_erase_background: realized %p: %d colors\n",
+				     colormap_private->hpal, k));
+    }
+  
+  while (window && GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
+    {
+      /* If this window should have the same background as the parent,
+       * fetch the parent. (And if the same goes for the parent, fetch
+       * the grandparent, etc.)
+       */
+      window = GDK_WINDOW (GDK_WINDOW_OBJECT (window)->parent);
+    }
+  
+  if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
+    {
+      /* Improves scolling effect, e.g. main buttons of testgtk */
+      return;
+    }
+
+  if (GDK_WINDOW_OBJECT (window)->bg_pixmap == NULL)
+    {
+      bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
+				      GDK_WINDOW_OBJECT (window)->bg_color.pixel);
+      
+      GetClipBox (hdc, &rect);
+      GDK_NOTE (EVENTS,
+		g_print ("...%ldx%ld@+%ld+%ld bg %06lx\n",
+			 rect.right - rect.left,
+			 rect.bottom - rect.top,
+			 rect.left, rect.top,
+			 (gulong) bg));
+      if (!(hbr = CreateSolidBrush (bg)))
+	WIN32_GDI_FAILED ("CreateSolidBrush");
+      else if (!FillRect (hdc, &rect, hbr))
+	WIN32_GDI_FAILED ("FillRect");
+      if (hbr != NULL)
+	DeleteObject (hbr);
+    }
+  else if (GDK_WINDOW_OBJECT (window)->bg_pixmap != NULL &&
+	   GDK_WINDOW_OBJECT (window)->bg_pixmap != GDK_NO_BG)
+    {
+      GdkPixmap *pixmap = GDK_WINDOW_OBJECT (window)->bg_pixmap;
+      GdkPixmapImplWin32 *pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
+      
+      GetClipBox (hdc, &rect);
+      
+      if (pixmap_impl->width <= 8 && pixmap_impl->height <= 8)
+	{
+	  GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
+	  if (!(hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (pixmap))))
+	    WIN32_GDI_FAILED ("CreatePatternBrush");
+	  else if (!FillRect (hdc, &rect, hbr))
+	    WIN32_GDI_FAILED ("FillRect");
+	  if (hbr != NULL)
+	    DeleteObject (hbr);
+	}
+      else
+	{
+	  HGDIOBJ oldbitmap;
+
+	  GDK_NOTE (EVENTS,
+		    g_print ("...blitting pixmap %p (%dx%d) "
+			     "all over the place,\n"
+			     "...clip box = %ldx%ld@+%ld+%ld\n",
+			     GDK_PIXMAP_HBITMAP (pixmap),
+			     pixmap_impl->width, pixmap_impl->height,
+			     rect.right - rect.left, rect.bottom - rect.top,
+			     rect.left, rect.top));
+	  
+	  if (!(bgdc = CreateCompatibleDC (hdc)))
+	    {
+	      WIN32_GDI_FAILED ("CreateCompatibleDC");
+	      return;
+	    }
+	  if (!(oldbitmap = SelectObject (bgdc, GDK_PIXMAP_HBITMAP (pixmap))))
+	    {
+	      WIN32_GDI_FAILED ("SelectObject");
+	      DeleteDC (bgdc);
+	      return;
+	    }
+	  i = 0;
+	  while (i < rect.right)
+	    {
+	      j = 0;
+	      while (j < rect.bottom)
+		{
+		  if (i + pixmap_impl->width >= rect.left
+		      && j + pixmap_impl->height >= rect.top)
+		    {
+		      if (!BitBlt (hdc, i, j,
+				   pixmap_impl->width, pixmap_impl->height,
+				   bgdc, 0, 0, SRCCOPY))
+			{
+			  WIN32_GDI_FAILED ("BitBlt");
+			  SelectObject (bgdc, oldbitmap);
+			  DeleteDC (bgdc);
+			  return;
+			}
+		    }
+		  j += pixmap_impl->height;
+		}
+	      i += pixmap_impl->width;
+	    }
+	  SelectObject (bgdc, oldbitmap);
+	  DeleteDC (bgdc);
+	}
+    }
+  else
+    {
+      GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
+      hbr = GetStockObject (BLACK_BRUSH);
+      GetClipBox (hdc, &rect);
+      if (!FillRect (hdc, &rect, hbr))
+	WIN32_GDI_FAILED ("FillRect");
+    }
+}
+
+static GdkRegion *
+_gdk_win32_hrgn_to_region (HRGN hrgn)
+{
+  RGNDATA *rgndata;
+  RECT *rects;
+  GdkRegion *result;
+  gint nbytes;
+  gint i;
+
+  if ((nbytes = GetRegionData (hrgn, 0, NULL)) == 0)
+    {
+      WIN32_GDI_FAILED ("GetRegionData");
+      return NULL;
+    }
+
+  rgndata = (RGNDATA *) g_malloc (nbytes);
+
+  if (GetRegionData (hrgn, nbytes, rgndata) == 0)
+    {
+      WIN32_GDI_FAILED ("GetRegionData");
+      g_free (rgndata);
+      return NULL;
+    }
+
+  result = gdk_region_new ();
+  rects = (RECT *) rgndata->Buffer;
+  for (i = 0; i < rgndata->rdh.nCount; i++)
+    {
+      GdkRectangle r;
+
+      r.x = rects[i].left;
+      r.y = rects[i].top;
+      r.width = rects[i].right - r.x;
+      r.height = rects[i].bottom - r.y;
+
+      gdk_region_union_with_rect (result, &r);
+    }
+
+  g_free (rgndata);
+
+  return result;
+}
+
 static gboolean
 gdk_event_translate (GdkEvent *event,
 		     MSG      *msg,
@@ -1473,15 +1787,12 @@ gdk_event_translate (GdkEvent *event,
   DWORD pidThis;
   PAINTSTRUCT paintstruct;
   HDC hdc;
-  HDC bgdc;
-  HGDIOBJ oldbitmap;
-  HBRUSH hbr;
-  COLORREF bg;
   RECT rect;
   POINT pt;
   MINMAXINFO *mmi;
   HWND hwnd;
   HCURSOR hcursor;
+  HRGN hrgn;
 
   /* Invariant:
    * window_impl == GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)
@@ -1493,19 +1804,14 @@ gdk_event_translate (GdkEvent *event,
    window_impl = (window ? GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl) : NULL))
 
   GdkWindow *orig_window, *new_window;
-  GdkColormap *colormap;
-  GdkColormapPrivateWin32 *colormap_private;
-  GdkPixmap *pixmap;
-  GdkPixmapImplWin32 *pixmap_impl;
   gint xoffset, yoffset;
 
-  int button;
-  int i, j;
+  static gint update_colors_counter = 0;
+  gint button;
+  gint k;
 
   gchar buf[256];
-  gboolean return_val;
-  
-  return_val = FALSE;
+  gboolean return_val = FALSE;
   
   if (ret_val_flagp)
     *ret_val_flagp = FALSE;
@@ -1537,8 +1843,8 @@ gdk_event_translate (GdkEvent *event,
 	   * removed it. Repost the same message to our queue so that
 	   * we will get it later when we are prepared.
 	   */
-	  GDK_NOTE(MISC, g_print("gdk_event_translate: %#lx %s posted.\n",
-				 (gulong) msg->hwnd, 
+	  GDK_NOTE(MISC, g_print("gdk_event_translate: %p %s posted.\n",
+				 msg->hwnd, 
 				 msg->message == WM_MOVE ?
 				 "WM_MOVE" : "WM_SIZE"));
 	
@@ -1598,8 +1904,8 @@ gdk_event_translate (GdkEvent *event,
 
   if (msg->message == msh_mousewheel_msg)
     {
-      GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#lx %d\n",
-				 (gulong) msg->hwnd, msg->wParam));
+      GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %p %d\n",
+				 msg->hwnd, msg->wParam));
       
       event->scroll.type = GDK_SCROLL;
 
@@ -1706,8 +2012,8 @@ gdk_event_translate (GdkEvent *event,
     {
     case WM_INPUTLANGCHANGE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_INPUTLANGCHANGE: %#lx  charset %lu locale %lx\n",
-			 (gulong) msg->hwnd, (gulong) msg->wParam, msg->lParam));
+		g_print ("WM_INPUTLANGCHANGE: %p  charset %lu locale %lx\n",
+			 msg->hwnd, (gulong) msg->wParam, msg->lParam));
       window_impl->input_locale = (HKL) msg->lParam;
       TranslateCharsetInfo ((DWORD FAR *) msg->wParam,
 			    &window_impl->charset_info,
@@ -1717,9 +2023,9 @@ gdk_event_translate (GdkEvent *event,
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SYSKEY%s: %#lx  %s %#x %s\n",
+		g_print ("WM_SYSKEY%s: %p  %s %#x %s\n",
 			 (msg->message == WM_SYSKEYUP ? "UP" : "DOWN"),
-			 (gulong) msg->hwnd,
+			 msg->hwnd,
 			 (GetKeyNameText (msg->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -1745,9 +2051,9 @@ gdk_event_translate (GdkEvent *event,
     case WM_KEYUP:
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_KEY%s: %#lx  %s %#x %s\n",
+		g_print ("WM_KEY%s: %p  %s %#x %s\n",
 			 (msg->message == WM_KEYUP ? "UP" : "DOWN"),
-			 (gulong) msg->hwnd,
+			 msg->hwnd,
 			 (GetKeyNameText (msg->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -2030,24 +2336,24 @@ gdk_event_translate (GdkEvent *event,
       if (!use_ime_composition)
 	break;
 
-      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %#lx  %#lx\n",
-				 (gulong) msg->hwnd, msg->lParam));
+      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %p  %#lx\n",
+				 msg->hwnd, msg->lParam));
       if (msg->lParam & GCS_RESULTSTR)
 	goto wm_char;
       break;
 
     case WM_IME_CHAR:
       GDK_NOTE (EVENTS,
-		g_print ("WM_IME_CHAR: %#lx  bytes: %#.04x\n",
-			 (gulong) msg->hwnd, msg->wParam));
+		g_print ("WM_IME_CHAR: %p  bytes: %#.04x\n",
+			 msg->hwnd, msg->wParam));
       goto wm_char;
       
     case WM_CHAR:
     case WM_SYSCHAR:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%sCHAR: %#lx  %#x %s %s\n",
+		g_print ("WM_%sCHAR: %p  %#x %s %s\n",
 			 (msg->message == WM_CHAR ? "" : "SYS"),
-			 (gulong) msg->hwnd, msg->wParam,
+			 msg->hwnd, msg->wParam,
 			 decode_key_lparam (msg->lParam),
 			 (ignore_wm_char ? "ignored" : "")));
 
@@ -2115,9 +2421,9 @@ gdk_event_translate (GdkEvent *event,
 
     buttondown0:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%cBUTTONDOWN: %#lx  (%d,%d)\n",
+		g_print ("WM_%cBUTTONDOWN: %p  (%d,%d)\n",
 			 " LMR"[button],
-			 (gulong) msg->hwnd,
+			 msg->hwnd,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       if (GDK_WINDOW_OBJECT (window)->extension_events != 0
@@ -2186,9 +2492,9 @@ gdk_event_translate (GdkEvent *event,
 
     buttonup0:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_%cBUTTONUP: %#lx  (%d,%d)\n",
+		g_print ("WM_%cBUTTONUP: %p  (%d,%d)\n",
 			 " LMR"[button],
-			 (gulong) msg->hwnd,
+			 msg->hwnd,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
@@ -2237,8 +2543,8 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_MOUSEMOVE: %#lx  %#x (%d,%d)\n",
-			 (gulong) msg->hwnd, msg->wParam,
+		g_print ("WM_MOUSEMOVE: %p  %#x (%d,%d)\n",
+			 msg->hwnd, msg->wParam,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       ASSIGN_WINDOW (find_window_for_pointer_event (window, msg));
@@ -2295,8 +2601,8 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_NCMOUSEMOVE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_NCMOUSEMOVE: %#lx  x,y: %d %d\n",
-			 (gulong) msg->hwnd,
+		g_print ("WM_NCMOUSEMOVE: %p  x,y: %d %d\n",
+			 msg->hwnd,
 			 LOWORD (msg->lParam), HIWORD (msg->lParam)));
       if (track_mouse_event == NULL
 	  && current_window != NULL
@@ -2329,8 +2635,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOUSEWHEEL:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#lx %d\n",
-				 (gulong) msg->hwnd, HIWORD (msg->wParam)));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %p %d\n",
+				 msg->hwnd, HIWORD (msg->wParam)));
 
       event->scroll.type = GDK_SCROLL;
 
@@ -2387,7 +2693,7 @@ gdk_event_translate (GdkEvent *event,
 
 #ifdef USE_TRACKMOUSEEVENT
     case WM_MOUSELEAVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %#lx\n", (gulong) msg->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %p\n", msg->hwnd));
 
       if (!(window_impl->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	break;
@@ -2423,12 +2729,40 @@ gdk_event_translate (GdkEvent *event,
       break;
 #endif
 	
+    case WM_QUERYNEWPALETTE:
+      GDK_NOTE (EVENTS_OR_COLORMAP, g_print ("WM_QUERYNEWPALETTE: %p\n",
+					     msg->hwnd));
+      synthesize_expose_events (window);
+      update_colors_counter = 0;
+      *ret_val_flagp = TRUE;
+      *ret_valp = FALSE;
+      break;
+
+    case WM_PALETTECHANGED:
+      GDK_NOTE (EVENTS_OR_COLORMAP, g_print ("WM_PALETTECHANGED: %p %p\n",
+					     msg->hwnd, (HWND) msg->wParam));
+      *ret_val_flagp = TRUE;
+      *ret_valp = FALSE;
+
+      if (msg->hwnd == (HWND) msg->wParam)
+	break;
+
+      if (++update_colors_counter == 5)
+	{
+	  synthesize_expose_events (window);
+	  update_colors_counter = 0;
+	  break;
+	}
+      
+      update_colors (window, TRUE);
+      break;
+
     case WM_SETFOCUS:
     case WM_KILLFOCUS:
-      GDK_NOTE (EVENTS, g_print ("WM_%sFOCUS: %#lx\n",
+      GDK_NOTE (EVENTS, g_print ("WM_%sFOCUS: %p\n",
 				 (msg->message == WM_SETFOCUS ?
 				  "SET" : "KILL"),
-				 (gulong) msg->hwnd));
+				 msg->hwnd));
       
       if (!(window_impl->event_mask & GDK_FOCUS_CHANGE_MASK))
 	break;
@@ -2440,178 +2774,36 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_ERASEBKGND:
-      GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %#lx  dc %#x\n",
-				 (gulong) msg->hwnd, msg->wParam));
+      GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %p  dc %#x\n",
+				 msg->hwnd, msg->wParam));
       
       if (GDK_WINDOW_DESTROYED (window))
 	break;
 
+      erase_background (window, (HDC) msg->wParam);
       *ret_val_flagp = TRUE; /* always claim as handled */
       *ret_valp = 1;
 
-      if (GDK_WINDOW_OBJECT (window)->input_only)
-	break;
-
-      if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
-	{
-	  /* improves scolling effect, e.g. main buttons of testgtk */
-	  *ret_val_flagp = TRUE;
-	  *ret_valp = 1;
-	  break;
-	}
-
-      colormap = gdk_drawable_get_colormap (window);
-      if (colormap)
-	colormap_private = GDK_COLORMAP_PRIVATE_DATA (colormap);
-      hdc = (HDC) msg->wParam;
-      if (colormap && colormap_private->xcolormap->rc_palette)
-	{
-	  int k;
-
-	  if (SelectPalette (hdc,  colormap_private->xcolormap->palette,
-			     FALSE) == NULL)
-	    WIN32_GDI_FAILED ("SelectPalette");
-	  if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	    WIN32_GDI_FAILED ("RealizePalette");
-#if 0
-	  g_print ("WM_ERASEBKGND: selected %#x, realized %d colors\n",
-		   colormap_private->xcolormap->palette, k);
-#endif
-	}
-
-      if (GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
-	{
-	  /* If this window should have the same background as the
-	   * parent, fetch the parent. (And if the same goes for
-	   * the parent, fetch the grandparent, etc.)
-	   */
-	  while (window && GDK_WINDOW_OBJECT (window)->bg_pixmap == GDK_PARENT_RELATIVE_BG)
-	    {
-	      gdk_drawable_unref (window);
-	      ASSIGN_WINDOW (GDK_WINDOW (GDK_WINDOW_OBJECT (window)->parent));
-	      gdk_drawable_ref (window);
-	    }
-	}
-
-      if (GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->position_info.no_bg)
-	{
-	  /* improves scolling effect, e.g. main buttons of testgtk */
-	  *ret_val_flagp = TRUE;
-	  *ret_valp = 1;
-	  break;
-	}
-
-      if (GDK_WINDOW_OBJECT (window)->bg_pixmap == NULL)
-	{
-	  bg = _gdk_win32_colormap_color (GDK_DRAWABLE_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl)->colormap,
-				   GDK_WINDOW_OBJECT (window)->bg_color.pixel);
-
-	  GetClipBox (hdc, &rect);
-	  GDK_NOTE (EVENTS,
-		    g_print ("...%ldx%ld@+%ld+%ld BG_PIXEL %.06lx\n",
-			     rect.right - rect.left,
-			     rect.bottom - rect.top,
-			     rect.left, rect.top,
-			     (gulong) bg));
-	  hbr = CreateSolidBrush (bg);
-#if 0
-	  g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
-#endif
-	  if (!FillRect (hdc, &rect, hbr))
-	    WIN32_GDI_FAILED ("FillRect");
-	  DeleteObject (hbr);
-	}
-      else if (GDK_WINDOW_OBJECT (window)->bg_pixmap != NULL &&
-	       GDK_WINDOW_OBJECT (window)->bg_pixmap != GDK_NO_BG)
-	{
-	  pixmap = GDK_WINDOW_OBJECT (window)->bg_pixmap;
-	  pixmap_impl = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl);
-	  GetClipBox (hdc, &rect);
-
-	  if (pixmap_impl->width <= 8 && pixmap_impl->height <= 8)
-	    {
-	      GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
-	      hbr = CreatePatternBrush (GDK_PIXMAP_HBITMAP (pixmap));
-	      if (!FillRect (hdc, &rect, hbr))
-		WIN32_GDI_FAILED ("FillRect");
-	      DeleteObject (hbr);
-	    }
-	  else
-	    {
-	      GDK_NOTE (EVENTS,
-			g_print ("...blitting pixmap %#lx (%dx%d) "
-				 "all over the place,\n"
-				 "...clip box = %ldx%ld@+%ld+%ld\n",
-				 (gulong) GDK_PIXMAP_HBITMAP (pixmap),
-				 pixmap_impl->width, pixmap_impl->height,
-				 rect.right - rect.left, rect.bottom - rect.top,
-				 rect.left, rect.top));
-
-	      if (!(bgdc = CreateCompatibleDC (hdc)))
-		{
-		  WIN32_GDI_FAILED ("CreateCompatibleDC");
-		  break;
-		}
-	      if (!(oldbitmap = SelectObject (bgdc, GDK_PIXMAP_HBITMAP (pixmap))))
-		{
-		  WIN32_GDI_FAILED ("SelectObject");
-		  DeleteDC (bgdc);
-		  break;
-		}
-	      i = 0;
-	      while (i < rect.right)
-		{
-		  j = 0;
-		  while (j < rect.bottom)
-		    {
-		      if (i + pixmap_impl->width >= rect.left
-			  && j + pixmap_impl->height >= rect.top)
-			{
-			  if (!BitBlt (hdc, i, j,
-				       pixmap_impl->width, pixmap_impl->height,
-				       bgdc, 0, 0, SRCCOPY))
-			    {
-			      WIN32_GDI_FAILED ("BitBlt");
-			      goto loopexit;
-			    }
-			}
-		      j += pixmap_impl->height;
-		    }
-		  i += pixmap_impl->width;
-		}
-	    loopexit:
-	      SelectObject (bgdc, oldbitmap);
-	      DeleteDC (bgdc);
-	    }
-	}
-      else
-	{
-	  GDK_NOTE (EVENTS, g_print ("...BLACK_BRUSH (?)\n"));
-	  hbr = GetStockObject (BLACK_BRUSH);
-	  GetClipBox (hdc, &rect);
-	  if (!FillRect (hdc, &rect, hbr))
-	    WIN32_GDI_FAILED ("FillRect");
-	}
       break;
 
     case WM_PAINT:
-      if (!GetUpdateRect(msg->hwnd, NULL, FALSE))
-        {
-          GDK_NOTE (EVENTS, g_print ("WM_PAINT: %#lx no update rect\n",
-				     (gulong) msg->hwnd));
-          break;
-        }
+      if (!GetUpdateRect (msg->hwnd, NULL, FALSE))
+	{
+          GDK_NOTE (EVENTS, g_print ("WM_PAINT: %p no update rgn\n",
+				     msg->hwnd));
+	  break;
+	}
 
       hdc = BeginPaint (msg->hwnd, &paintstruct);
 
       GDK_NOTE (EVENTS,
-		g_print ("WM_PAINT: %#lx  %ldx%ld@+%ld+%ld %s dc %#lx\n",
-			 (gulong) msg->hwnd,
+		g_print ("WM_PAINT: %p  %ldx%ld@+%ld+%ld %s dc %p\n",
+			 msg->hwnd,
 			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
 			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
 			 paintstruct.rcPaint.left, paintstruct.rcPaint.top,
 			 (paintstruct.fErase ? "erase" : ""),
-			 (gulong) hdc));
+			 hdc));
 
       EndPaint (msg->hwnd, &paintstruct);
 
@@ -2633,14 +2825,25 @@ gdk_event_translate (GdkEvent *event,
 
       if (return_exposes)
         {
+	  hrgn = CreateRectRgn (0, 0, 0, 0);
+	  if ((k = GetUpdateRgn (msg->hwnd, hrgn, FALSE)) == ERROR)
+	    WIN32_GDI_FAILED ("GetUpdateRgn");
+	  else if (k == NULLREGION)
+	    {
+	      DeleteObject (hrgn);
+	      break;
+	    }
+
           event->expose.type = GDK_EXPOSE;
           event->expose.window = window;
           event->expose.area.x = paintstruct.rcPaint.left;
           event->expose.area.y = paintstruct.rcPaint.top;
           event->expose.area.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
           event->expose.area.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
-          event->expose.region = gdk_region_rectangle (&(event->expose.area));
+          event->expose.region = _gdk_win32_hrgn_to_region (hrgn);
           event->expose.count = 0;
+
+	  DeleteObject (hrgn);
 
           return_val = !GDK_WINDOW_DESTROYED (window);
           if (return_val)
@@ -2673,14 +2876,14 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_GETICON:
-      GDK_NOTE (EVENTS, g_print ("WM_GETICON: %#lx %s\n",
-				 (gulong) msg->hwnd, 
+      GDK_NOTE (EVENTS, g_print ("WM_GETICON: %p %s\n",
+				 msg->hwnd, 
 				 (ICON_BIG == msg->wParam ? "big" : "small")));
       break;
  
     case WM_SETCURSOR:
-      GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %#lx %#x %#x\n",
-				 (gulong) msg->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %p %#x %#x\n",
+				 msg->hwnd,
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       if (LOWORD (msg->lParam) != HTCLIENT)
@@ -2695,7 +2898,7 @@ gdk_event_translate (GdkEvent *event,
 
       if (hcursor != NULL)
 	{
-	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#lx)\n", (gulong) hcursor));
+	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%p)\n", hcursor));
 	  SetCursor (hcursor);
 	  *ret_val_flagp = TRUE;
 	  *ret_valp = TRUE;
@@ -2703,9 +2906,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_SHOWWINDOW:
-      GDK_NOTE (EVENTS, g_print ("WM_SHOWWINDOW: %#lx  %d\n",
-				 (gulong) msg->hwnd,
-				 msg->wParam));
+      GDK_NOTE (EVENTS, g_print ("WM_SHOWWINDOW: %p  %d\n",
+				 msg->hwnd, msg->wParam));
 
       if (!(window_impl->event_mask & GDK_STRUCTURE_MASK))
 	break;
@@ -2726,8 +2928,8 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_SIZE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SIZE: %#lx  %s %dx%d\n",
-			 (gulong) msg->hwnd,
+		g_print ("WM_SIZE: %p  %s %dx%d\n",
+			 msg->hwnd,
 			 (msg->wParam == SIZE_MAXHIDE ? "MAXHIDE" :
 			  (msg->wParam == SIZE_MAXIMIZED ? "MAXIMIZED" :
 			   (msg->wParam == SIZE_MAXSHOW ? "MAXSHOW" :
@@ -2818,7 +3020,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 #endif
     case WM_GETMINMAXINFO:
-      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %#lx\n", (gulong) msg->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %p\n", msg->hwnd));
 
       mmi = (MINMAXINFO*) msg->lParam;
       if (window_impl->hint_flags & GDK_HINT_MIN_SIZE)
@@ -2849,8 +3051,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_MOVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOVE: %#lx  (%d,%d)\n",
-				 (gulong) msg->hwnd,
+      GDK_NOTE (EVENTS, g_print ("WM_MOVE: %p  (%d,%d)\n",
+				 msg->hwnd,
 				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
 
       if (!(window_impl->event_mask & GDK_STRUCTURE_MASK))
@@ -2902,8 +3104,8 @@ gdk_event_translate (GdkEvent *event,
 	  
 	  return_val = !GDK_WINDOW_DESTROYED (window);
 
-          GDK_NOTE (EVENTS, g_print ("WM_WINDOWPOSCHANGED: %#lx  %ldx%ld@+%ld+%ld\n",
-				     (gulong) msg->hwnd,
+          GDK_NOTE (EVENTS, g_print ("WM_WINDOWPOSCHANGED: %p  %ldx%ld@+%ld+%ld\n",
+				     msg->hwnd,
 				     lpwp->cx, lpwp->cy, lpwp->x, lpwp->y));
 
 	  if (ret_val_flagp)
@@ -2914,7 +3116,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 #endif
     case WM_CLOSE:
-      GDK_NOTE (EVENTS, g_print ("WM_CLOSE: %#lx\n", (gulong) msg->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_CLOSE: %p\n", msg->hwnd));
 
       event->any.type = GDK_DELETE;
       event->any.window = window;
@@ -2937,10 +3139,10 @@ gdk_event_translate (GdkEvent *event,
       flag = FALSE;
       GDK_NOTE (EVENTS, flag = TRUE);
       if (flag)
-	g_print ("WM_%s: %#lx %#x (%s)\n",
+	g_print ("WM_%s: %p %#x (%s)\n",
 		 (msg->message == WM_RENDERFORMAT ? "RENDERFORMAT" :
 		  "RENDERALLFORMATS"),
-		 (gulong) msg->hwnd,
+		 msg->hwnd,
 		 msg->wParam,
 		 (msg->wParam == CF_TEXT ? "CF_TEXT" :
 		  (msg->wParam == CF_DIB ? "CF_DIB" :
@@ -2982,7 +3184,7 @@ gdk_event_translate (GdkEvent *event,
 #endif /* No delayed rendering */
 
     case WM_DESTROY:
-      GDK_NOTE (EVENTS, g_print ("WM_DESTROY: %#lx\n", (gulong) msg->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_DESTROY: %p\n", msg->hwnd));
 
       event->any.type = GDK_DESTROY;
       event->any.window = window;
@@ -3011,20 +3213,18 @@ gdk_event_translate (GdkEvent *event,
        * constants as case labels.
        */
     case WT_PACKET:
-      GDK_NOTE (EVENTS, g_print ("WT_PACKET: %#lx %d %#lx\n",
-				 (gulong) msg->hwnd,
-				 msg->wParam, msg->lParam));
+      GDK_NOTE (EVENTS, g_print ("WT_PACKET: %p %d %#lx\n",
+				 msg->hwnd, msg->wParam, msg->lParam));
       goto wintab;
       
     case WT_CSRCHANGE:
-      GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %#lx %d %#lx\n",
-				 (gulong) msg->hwnd,
-				 msg->wParam, msg->lParam));
+      GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %p %d %#lx\n",
+				 msg->hwnd, msg->wParam, msg->lParam));
       goto wintab;
       
     case WT_PROXIMITY:
-      GDK_NOTE (EVENTS, g_print ("WT_PROXIMITY: %#lx %#x %d %d\n",
-				 (gulong) msg->hwnd, msg->wParam,
+      GDK_NOTE (EVENTS, g_print ("WT_PROXIMITY: %p %#x %d %d\n",
+				 msg->hwnd, msg->wParam,
 				 LOWORD (msg->lParam),
 				 HIWORD (msg->lParam)));
       /* Fall through */
@@ -3035,10 +3235,9 @@ gdk_event_translate (GdkEvent *event,
 #endif
 
     default:
-      GDK_NOTE (EVENTS, g_print ("%s: %#lx %#x %#lx\n",
+      GDK_NOTE (EVENTS, g_print ("%s: %p %#x %#lx\n",
 				 gdk_win32_message_name (msg->message),
-				 (gulong) msg->hwnd,
-				 msg->wParam, msg->lParam));
+				 msg->hwnd, msg->wParam, msg->lParam));
     }
 
 done:
@@ -3077,8 +3276,8 @@ _gdk_events_queue (void)
   while (!_gdk_event_queue_find_first ()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
-      GDK_NOTE (EVENTS, g_print ("PeekMessage: %#lx %s\n",
-				 (gulong) msg.hwnd, gdk_win32_message_name (msg.message)));
+      GDK_NOTE (EVENTS, g_print ("PeekMessage: %p %s\n",
+				 msg.hwnd, gdk_win32_message_name (msg.message)));
 #ifndef HAVE_DIMM_H
       TranslateMessage (&msg);
 #else
@@ -3197,14 +3396,14 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 void
 gdk_flush (void)
 {
+#if 0
   MSG msg;
 
-#if 0
   /* Process all messages currently available */
   while (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
-      TranslateMessage (&msg); /* Translate virt. key codes */
-      DispatchMessage (&msg);  /* Dispatch msg. to window */
+      TranslateMessage (&msg);
+      DispatchMessage (&msg);
     }
 #endif
 

@@ -43,8 +43,6 @@ guint _gdk_keymap_serial = 0;
 static gint min_keycode = 0;
 static gint max_keycode = 0;
 
-static gint keysyms_per_keycode = 0;
-static GdkModifierType group_switch_mask = 0;
 static GdkKeymap *default_keymap = NULL;
 
 GdkKeymap*

@@ -54,13 +54,15 @@ struct _GdkPixmapImplWin32
   gint width;
   gint height;
 
+  GdkImage *image;		/* A pointer to the GdkImage
+				 * containing the pixels.
+				 */
   guint is_foreign : 1;
 };
  
 struct _GdkPixmapImplWin32Class 
 {
   GdkDrawableImplWin32Class parent_class;
-
 };
 
 GType _gdk_pixmap_impl_win32_get_type (void);

@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -45,7 +46,8 @@ GdkAtom		  gdk_ole2_dnd;
 
 GdkAtom           _gdk_selection_property;
 
-DWORD		  windows_version = 0;
+DWORD		  windows_version;
 
 gint		  gdk_input_ignore_wintab = FALSE;
 gint              gdk_event_func_from_window_proc = FALSE;
+gint		  gdk_max_colors = 0;

@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -67,7 +68,7 @@ gdk_image_get_type (void)
 static void
 gdk_image_init (GdkImage *image)
 {
-  image->windowing_data = g_new0 (GdkImagePrivateWin32, 1);
+  image->windowing_data = NULL;
 }
 
 static void
@@ -103,86 +104,90 @@ _gdk_image_exit (void)
 }
 
 GdkImage *
+_gdk_win32_setup_pixmap_image (GdkPixmap *pixmap,
+			       GdkWindow *window,
+			       gint       width,
+			       gint       height,
+			       gint       depth,
+			       guchar    *bits)
+{
+  GdkImage *image;
+
+  image = g_object_new (gdk_image_get_type (), NULL);
+  image->windowing_data = pixmap;
+  image->type = GDK_IMAGE_SHARED;
+  image->visual = gdk_drawable_get_visual (window);
+  image->byte_order = GDK_LSB_FIRST;
+  image->width = width;
+  image->height = height;
+  image->depth = depth;
+  switch (depth)
+    {
+    case 1:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      image->bpp = 1;
+      break;
+    case 15:
+    case 16:
+      image->bpp = 2;
+      break;
+    case 24:
+      image->bpp = 3;
+      break;
+    case 32:
+      image->bpp = 4;
+      break;
+    default:
+      g_warning ("_gdk_win32_setup_pixmap_image: depth=%d", image->depth);
+      g_assert_not_reached ();
+    }
+  if (depth == 1)
+    image->bpl = ((width - 1)/32 + 1)*4;
+  else if (depth == 4)
+    image->bpl = ((width - 1)/8 + 1)*4;
+  else
+    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
+  image->bits_per_pixel = image->depth;
+  image->mem = bits;
+
+  return image;
+}
+
+GdkImage *
 gdk_image_new_bitmap (GdkVisual *visual,
 		      gpointer   data,
 		      gint       w,
 		      gint       h)
-/*
- * Desc: create a new bitmap image
- */
 {
-  Visual *xvisual;
+  GdkPixmap *pixmap;
   GdkImage *image;
-  GdkImagePrivateWin32 *private;
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[2];
-      RGBQUAD bmiColors[2];
-    } u;
-  } bmi;
-  char *bits;
-  int bpl = (w-1)/8 + 1;
-  int bpl32 = ((w-1)/32 + 1)*4;
+  gint data_bpl = (w-1)/8 + 1;
+  gint i;
 
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = IMAGE_PRIVATE_DATA (image);
+  pixmap = gdk_pixmap_new (NULL, w, h, 1);
 
-  image->type = GDK_IMAGE_SHARED;
-  image->visual = visual;
-  image->width = w;
-  image->height = h;
-  image->depth = 1;
-  xvisual = ((GdkVisualPrivate*) visual)->xvisual;
+  if (pixmap == NULL)
+    return NULL;
 
-  GDK_NOTE (MISC, g_print ("gdk_image_new_bitmap: %dx%d\n", w, h));
+  image = GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->image;
+
+  GDK_NOTE (IMAGE, g_print ("gdk_image_new_bitmap: %dx%d=%p\n",
+			    w, h, GDK_PIXMAP_HBITMAP (pixmap)));
   
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = w;
-  bmi.bmiHeader.biHeight = -h;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = 1;
-  bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
-  
-  bmi.u.bmiColors[0].rgbBlue = 
-    bmi.u.bmiColors[0].rgbGreen = 
-    bmi.u.bmiColors[0].rgbRed = 0x00;
-  bmi.u.bmiColors[0].rgbReserved = 0x00;
-
-  bmi.u.bmiColors[1].rgbBlue = 
-    bmi.u.bmiColors[1].rgbGreen = 
-    bmi.u.bmiColors[1].rgbRed = 0xFF;
-  bmi.u.bmiColors[1].rgbReserved = 0x00;
-  
-  private->hbitmap = CreateDIBSection (gdk_display_hdc, (BITMAPINFO *) &bmi,
-				       DIB_RGB_COLORS, &bits, NULL, 0);
-  if (bpl != bpl32)
+  if (data_bpl != image->bpl)
     {
-      /* Win32 expects scanlines in DIBs to be 32 bit aligned */
-      int i;
       for (i = 0; i < h; i++)
-	memmove (bits + i*bpl32, ((char *) data) + i*bpl, bpl);
+	memmove ((guchar *) image->mem + i*image->bpl, ((guchar *) data) + i*data_bpl, data_bpl);
     }
   else
-    memmove (bits, data, bpl*h);
-  image->mem = bits;
-  image->bpl = bpl32;
-  image->byte_order = GDK_MSB_FIRST;
+    memmove (image->mem, data, data_bpl*h);
 
-  image->bits_per_pixel = 1;
-  image->bpp = 1;
-
-  /* free data right now, in contrast to the X11 version we have made
-   * our own copy. Use free, it was malloc()ed.
-   */
-  free (data);
-  return(image);
-} /* gdk_image_new_bitmap() */
+  return image;
+}
 
 void
 _gdk_windowing_image_init (void)
@@ -197,19 +202,7 @@ _gdk_image_new_for_depth (GdkImageType  type,
 			  gint          height,
 			  gint          depth)
 {
-  GdkImage *image;
-  GdkImagePrivateWin32 *private;
-  Visual *xvisual = NULL;
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[256];
-      DWORD bmiMasks[3];
-      RGBQUAD bmiColors[256];
-    } u;
-  } bmi;
-  UINT iUsage;
-  int i;
+  GdkPixmap *pixmap;
 
   g_return_val_if_fail (!visual || GDK_IS_VISUAL (visual), NULL);
   g_return_val_if_fail (visual || depth != -1, NULL);
@@ -217,116 +210,15 @@ _gdk_image_new_for_depth (GdkImageType  type,
   if (visual)
     depth = visual->depth;
 
-  if (type == GDK_IMAGE_FASTEST || type == GDK_IMAGE_NORMAL)
-    type = GDK_IMAGE_SHARED;
+  pixmap = gdk_pixmap_new (NULL, width, height, depth);
 
-  GDK_NOTE (MISC, g_print ("gdk_image_new: %dx%d %s\n",
-			   width, height,
-			   (type == GDK_IMAGE_SHARED ? "shared" :
-			    "???")));
+  if (pixmap == NULL)
+    return NULL;
+
+  GDK_NOTE (IMAGE, g_print ("_gdk_image_new_for_depth: %dx%dx%d=%p\n",
+			    width, height, depth, GDK_PIXMAP_HBITMAP (pixmap)));
   
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = IMAGE_PRIVATE_DATA (image);
-
-  image->type = type;
-  image->visual = visual;
-  image->width = width;
-  image->height = height;
-  image->depth = depth;
-  
-  if (visual)
-    xvisual = ((GdkVisualPrivate*) visual)->xvisual;
-  
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = -height;
-  bmi.bmiHeader.biPlanes = 1;
-  if (image->depth == 15)
-    bmi.bmiHeader.biBitCount = 16;
-  else
-    bmi.bmiHeader.biBitCount = image->depth;
-  if (image->depth == 16)
-    bmi.bmiHeader.biCompression = BI_BITFIELDS;
-  else
-    bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
-
-  if (   (image->visual && image->visual->type == GDK_VISUAL_PSEUDO_COLOR)
-      || (8 == image->depth))
-    {
-      iUsage = DIB_PAL_COLORS;
-      for (i = 0; i < 256; i++)
-	bmi.u.bmiIndices[i] = i;
-    }
-  else
-    {
-      iUsage = DIB_RGB_COLORS;
-      if (image->depth == 1)
-	{
-	  bmi.u.bmiColors[0].rgbBlue = 
-	    bmi.u.bmiColors[0].rgbGreen =
-	    bmi.u.bmiColors[0].rgbRed = 0x00;
-	  bmi.u.bmiColors[0].rgbReserved = 0x00;
-
-	  bmi.u.bmiColors[1].rgbBlue = 
-	    bmi.u.bmiColors[1].rgbGreen =
-	    bmi.u.bmiColors[1].rgbRed = 0xFF;
-	  bmi.u.bmiColors[1].rgbReserved = 0x00;
-
-	}
-      else if (image->depth == 16)
-	{
-	  bmi.u.bmiMasks[0] = visual ? visual->red_mask   : 0x0000F800;
-	  bmi.u.bmiMasks[1] = visual ? visual->green_mask : 0x000007E0;
-	  bmi.u.bmiMasks[2] = visual ? visual->blue_mask  : 0x0000001F;
-	}
-    }
-
-  private->hbitmap = CreateDIBSection (gdk_display_hdc, (BITMAPINFO *) &bmi,
-				       iUsage, &image->mem, NULL, 0);
-
-  if (private->hbitmap == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateDIBSection");
-      g_free (image);
-      return NULL;
-    }
-
-  switch (image->depth)
-    {
-    case 1:
-    case 8:
-      image->bpp = 1;
-      break;
-    case 15:
-    case 16:
-      image->bpp = 2;
-      break;
-    case 24:
-      image->bpp = 3;
-      break;
-    case 32:
-      image->bpp = 4;
-      break;
-    default:
-      g_warning ("gdk_image_new: depth = %d", image->depth);
-      g_assert_not_reached ();
-    }
-  image->bits_per_pixel = image->depth;
-  image->byte_order = GDK_LSB_FIRST;
-  if (image->depth == 1)
-    image->bpl = ((width-1)/32 + 1)*4;
-  else
-    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
-
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
-			   (guint) private->hbitmap, image->mem, image->bpl));
-
-  return image;
+  return GDK_PIXMAP_IMPL_WIN32 (GDK_PIXMAP_OBJECT (pixmap)->impl)->image;
 }
 
 GdkImage*
@@ -336,250 +228,6 @@ gdk_image_new (GdkImageType  type,
 	       gint          height)
 {
   return _gdk_image_new_for_depth (type, visual, width, height, -1);
-}
-
-
-GdkImage*
-_gdk_win32_get_image (GdkDrawable *drawable,
-		      gint         x,
-		      gint         y,
-		      gint         width,
-		      gint         height)
-{
-  GdkImage *image;
-  GdkImagePrivateWin32 *private;
-  GdkDrawableImplWin32 *impl;
-  HDC hdc, memdc;
-  struct {
-    BITMAPINFOHEADER bmiHeader;
-    union {
-      WORD bmiIndices[256];
-      DWORD bmiMasks[3];
-      RGBQUAD bmiColors[256];
-    } u;
-  } bmi;
-  HGDIOBJ oldbitmap1 = NULL, oldbitmap2;
-  UINT iUsage;
-  BITMAP bm;
-  int i;
-
-  g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
-
-  GDK_NOTE (MISC, g_print ("_gdk_win32_get_image: %#x %dx%d@+%d+%d\n",
-			   (guint) GDK_DRAWABLE_IMPL_WIN32 (drawable)->handle,
-			   width, height, x, y));
-
-  impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-
-  image = g_object_new (gdk_image_get_type (), NULL);
-  private = IMAGE_PRIVATE_DATA (image);
-
-  image->type = GDK_IMAGE_SHARED;
-  image->visual = gdk_drawable_get_visual (drawable);
-  image->width = width;
-  image->height = height;
-
-  /* This function is called both to blit from a window and from
-   * a pixmap.
-   */
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
-    {
-      if ((hdc = CreateCompatibleDC (NULL)) == NULL)
-	{
-	  WIN32_GDI_FAILED ("CreateCompatibleDC");
-	  g_free (image);
-	  return NULL;
-	}
-      if ((oldbitmap1 = SelectObject (hdc, impl->handle)) == NULL)
-	{
-	  WIN32_GDI_FAILED ("SelectObject");
-	  DeleteDC (hdc);
-	  g_free (image);
-	  return NULL;
-	}
-      GetObject (impl->handle, sizeof (BITMAP), &bm);
-      GDK_NOTE (MISC,
-		g_print ("gdk_image_get: bmWidth:%ld bmHeight:%ld bmWidthBytes:%ld bmBitsPixel:%d\n",
-			 bm.bmWidth, bm.bmHeight, bm.bmWidthBytes, bm.bmBitsPixel));
-      image->depth = bm.bmBitsPixel;
-      if (image->depth <= 8)
-	{
-	  iUsage = DIB_PAL_COLORS;
-	  for (i = 0; i < 256; i++)
-	    bmi.u.bmiIndices[i] = i;
-	}
-      else
-	iUsage = DIB_RGB_COLORS;
-    }
-  else
-    {
-      if ((hdc = GetDC (impl->handle)) == NULL)
-	{
-	  WIN32_GDI_FAILED ("GetDC");
-	  g_free (image);
-	  return NULL;
-	}
-      image->depth = gdk_visual_get_system ()->depth;
-      if (image->visual && image->visual->type == GDK_VISUAL_PSEUDO_COLOR)
-	{
-	  iUsage = DIB_PAL_COLORS;
-	  for (i = 0; i < 256; i++)
-	    bmi.u.bmiIndices[i] = i;
-	}
-      else
-	iUsage = DIB_RGB_COLORS;
-    }
-
-  if ((memdc = CreateCompatibleDC (hdc)) == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateCompatibleDC");
-      if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  if (!DeleteDC (hdc))
-	    WIN32_GDI_FAILED ("DeleteDC");
-	}
-      else
-	{
-	  if (!ReleaseDC (impl->handle, hdc))
-	    WIN32_GDI_FAILED ("ReleaseDC");
-	}
-      g_free (image);
-      return NULL;
-    }
-
-  bmi.bmiHeader.biSize = sizeof (BITMAPINFOHEADER);
-  bmi.bmiHeader.biWidth = width;
-  bmi.bmiHeader.biHeight = -height;
-  bmi.bmiHeader.biPlanes = 1;
-  bmi.bmiHeader.biBitCount = image->depth;
-  if (image->depth == 16)
-    {
-      bmi.bmiHeader.biCompression = BI_BITFIELDS;
-      if (image->visual == NULL)
-	{
-	  /* XXX ??? Is it always this if depth==16 and a pixmap? Guess so. */
-	  bmi.u.bmiMasks[0] = 0xf800;
-	  bmi.u.bmiMasks[1] = 0x07e0;
-	  bmi.u.bmiMasks[2] = 0x001f;
-	}
-      else
-	{
-	  bmi.u.bmiMasks[0] = image->visual->red_mask;
-	  bmi.u.bmiMasks[1] = image->visual->green_mask;
-	  bmi.u.bmiMasks[2] = image->visual->blue_mask;
-	}
-    }
-  else
-    bmi.bmiHeader.biCompression = BI_RGB;
-  bmi.bmiHeader.biSizeImage = 0;
-  bmi.bmiHeader.biXPelsPerMeter =
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-  bmi.bmiHeader.biClrUsed = 0;
-  bmi.bmiHeader.biClrImportant = 0;
-
-  if ((private->hbitmap = CreateDIBSection (hdc, (BITMAPINFO *) &bmi, iUsage,
-					    &image->mem, NULL, 0)) == NULL)
-    {
-      WIN32_GDI_FAILED ("CreateDIBSection");
-      DeleteDC (memdc);
-      if (GDK_IS_PIXMAP (drawable))
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
-      else
-	{
-	  ReleaseDC (impl->handle, hdc);
-	}
-      g_free (image);
-      return NULL;
-    }
-
-  if ((oldbitmap2 = SelectObject (memdc, private->hbitmap)) == NULL)
-    {
-      WIN32_GDI_FAILED ("SelectObject");
-      DeleteObject (private->hbitmap);
-      DeleteDC (memdc);
-      if (GDK_IS_PIXMAP (drawable))
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
-      else
-	{
-	  ReleaseDC (impl->handle, hdc);
-	}
-      g_free (image);
-      return NULL;
-    }
-
-  if (!BitBlt (memdc, 0, 0, width, height, hdc, x, y, SRCCOPY))
-    {
-      WIN32_GDI_FAILED ("BitBlt");
-      SelectObject (memdc, oldbitmap2);
-      DeleteObject (private->hbitmap);
-      DeleteDC (memdc);
-      if (GDK_IS_PIXMAP (drawable))
-	{
-	  SelectObject (hdc, oldbitmap1);
-	  DeleteDC (hdc);
-	}
-      else
-	{
-	  ReleaseDC (impl->handle, hdc);
-	}
-      g_free (image);
-      return NULL;
-    }
-
-  if (SelectObject (memdc, oldbitmap2) == NULL)
-    WIN32_GDI_FAILED ("SelectObject");
-
-  if (!DeleteDC (memdc))
-    WIN32_GDI_FAILED ("DeleteDC");
-
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (drawable))
-    {
-      SelectObject (hdc, oldbitmap1);
-      DeleteDC (hdc);
-    }
-  else
-    {
-      ReleaseDC (impl->handle, hdc);
-    }
-
-  switch (image->depth)
-    {
-    case 1:
-    case 8:
-      image->bpp = 1;
-      break;
-    case 15:
-    case 16:
-      image->bpp = 2;
-      break;
-    case 24:
-      image->bpp = 3;
-      break;
-    case 32:
-      image->bpp = 4;
-      break;
-    default:
-      g_warning ("_gdk_win32_get_image: image->depth = %d", image->depth);
-      g_assert_not_reached ();
-    }
-  image->bits_per_pixel = image->depth;
-  image->byte_order = GDK_LSB_FIRST;
-  if (image->depth == 1)
-    image->bpl = ((width - 1)/32 + 1)*4;
-  else
-    image->bpl = ((width*image->bpp - 1)/4 + 1)*4;
-
-  GDK_NOTE (MISC, g_print ("... = %#x mem = %p, bpl = %d\n",
-			   (guint) private->hbitmap, image->mem, image->bpl));
-
-  return image;
 }
 
 GdkImage*
@@ -592,73 +240,24 @@ _gdk_win32_copy_to_image (GdkDrawable    *drawable,
 			  gint            width,
 			  gint            height)
 {
-  GdkImagePrivateWin32 *private;
-  GdkDrawableImplWin32 *impl;
-  GdkVisual *visual;
-  GdkGC *gc = NULL;
-  gboolean ok = TRUE, is_window_impl;
-  HBITMAP holdbmp = NULL;
-  HDC src_dc = NULL, dest_dc = NULL;
+  GdkGC *gc;
   
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable), NULL);
   g_return_val_if_fail (image != NULL || (dest_x == 0 && dest_y == 0), NULL);
 
-  visual = gdk_drawable_get_visual (drawable);
-  impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
-  is_window_impl = GDK_IS_WINDOW_IMPL_WIN32 (drawable);
-  
-  if (!image && !is_window_impl)
-    return _gdk_win32_get_image (drawable, src_x, src_y, width, height);
+  GDK_NOTE (IMAGE, g_print ("_gdk_win32_copy_to_image: %p\n",
+			    GDK_DRAWABLE_HANDLE (drawable)));
 
   if (!image)
-    image = _gdk_image_new_for_depth (GDK_IMAGE_FASTEST, visual, width, height, -1);
+    image = _gdk_image_new_for_depth (GDK_IMAGE_FASTEST, NULL, width, height,
+				      gdk_drawable_get_depth (drawable));
 
-  private = IMAGE_PRIVATE_DATA (image);
-
-  if (is_window_impl)
-    src_dc = GetDC (impl->handle);
-  else
-    {
-       gc = gdk_gc_new (drawable);
-       src_dc = gdk_win32_hdc_get (drawable, gc, 0);
-    }
-  ok = !!src_dc;
-
-  if (ok)
-    {
-      dest_dc = CreateCompatibleDC (NULL);
-      ok = !!dest_dc;
-    }
-
-  if (ok)
-    {
-      holdbmp = SelectObject (dest_dc, private->hbitmap);
-      ok = !!holdbmp;
-    }
-
-  if (ok && !BitBlt (dest_dc, dest_x, dest_y, width, height,
-                     src_dc, src_x, src_y, SRCCOPY))
-    WIN32_GDI_FAILED ("BitBlt");
-
-  if (is_window_impl)
-    {
-      if (src_dc && !ReleaseDC (impl->handle, src_dc))
-        WIN32_GDI_FAILED ("ReleaseDC");
-    }
-  else
-    {
-      gdk_win32_hdc_release (drawable, gc, 0);
-      g_object_unref (gc);
-    }
-
-  if (dest_dc)
-    {
-      if (holdbmp)
-        SelectObject (dest_dc, holdbmp);
-      if (!DeleteDC (dest_dc))
-        WIN32_GDI_FAILED ("DeleteDC");
-    }
-  g_return_val_if_fail (ok, image);
+  gc = gdk_gc_new ((GdkDrawable *) image->windowing_data);
+  _gdk_win32_blit
+    (FALSE,
+     GDK_DRAWABLE_IMPL_WIN32 (GDK_PIXMAP_OBJECT (image->windowing_data)->impl),
+     gc, drawable, src_x, src_y, dest_x, dest_y, width, height);
+  gdk_gc_unref (gc);
 
   return image;
 }
@@ -668,7 +267,7 @@ gdk_image_get_pixel (GdkImage *image,
 		     gint      x,
 		     gint      y)
 {
-  guint32 pixel = 0;
+  guchar *pixelp;
 
   g_return_val_if_fail (GDK_IS_IMAGE (image), 0);
 
@@ -676,37 +275,36 @@ gdk_image_get_pixel (GdkImage *image,
       return 0;
 
   if (image->depth == 1)
-    pixel = (((char *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
-  else
+    return (((guchar *) image->mem)[y * image->bpl + (x >> 3)] & (1 << (7 - (x & 0x7)))) != 0;
+
+  if (image->depth == 4)
     {
-      guchar *pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
-      
-      switch (image->bpp)
-	{
-	case 1:
-	  pixel = *pixelp;
-	  break;
+      pixelp = (guchar *) image->mem + y * image->bpl + (x >> 1);
+      if (x&1)
+	return (*pixelp) & 0x0F;
 
-	/* Windows is always LSB, no need to check image->byte_order. */
-	case 2:
-	  pixel = pixelp[0] | (pixelp[1] << 8);
-	  break;
-
-	case 3:
-	  pixel = pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
-	  break;
-
-	case 4:
-	  pixel = pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
-	  break;
-
-	default:
-	  g_warning ("gdk_image_get_pixel(): bpp = %d", image->bpp);
-	  g_assert_not_reached ();
-	}
+      return (*pixelp) >> 4;
     }
+    
+  pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
+      
+  switch (image->bpp)
+    {
+    case 1:
+      return *pixelp;
+      
+      /* Windows is always LSB, no need to check image->byte_order. */
+    case 2:
+      return pixelp[0] | (pixelp[1] << 8);
+      
+    case 3:
+      return pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
 
-  return pixel;
+    case 4:
+      return pixelp[0] | (pixelp[1] << 8) | (pixelp[2] << 16);
+    }
+  g_assert_not_reached ();
+  return 0;
 }
 
 void
@@ -715,19 +313,37 @@ gdk_image_put_pixel (GdkImage *image,
 		     gint       y,
 		     guint32    pixel)
 {
+  guchar *pixelp;
+
   g_return_if_fail (image != NULL);
 
   if  (!(x >= 0 && x < image->width && y >= 0 && y < image->height))
     return;
 
+  GdiFlush ();
   if (image->depth == 1)
     if (pixel & 1)
       ((guchar *) image->mem)[y * image->bpl + (x >> 3)] |= (1 << (7 - (x & 0x7)));
     else
       ((guchar *) image->mem)[y * image->bpl + (x >> 3)] &= ~(1 << (7 - (x & 0x7)));
+  else if (image->depth == 4)
+    {
+      pixelp = (guchar *) image->mem + y * image->bpl + (x >> 1);
+
+      if (x&1)
+	{
+	  *pixelp &= 0xF0;
+	  *pixelp |= (pixel & 0x0F);
+	}
+      else
+	{
+	  *pixelp &= 0x0F;
+	  *pixelp |= (pixel << 4);
+	}
+    }
   else
     {
-      guchar *pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
+      pixelp = (guchar *) image->mem + y * image->bpl + x * image->bpp;
       
       /* Windows is always LSB, no need to check image->byte_order. */
       switch (image->bpp)
@@ -747,46 +363,55 @@ gdk_image_put_pixel (GdkImage *image,
 static void
 gdk_win32_image_destroy (GdkImage *image)
 {
-  GdkImagePrivateWin32 *private;
+  GdkPixmap *pixmap;
 
   g_return_if_fail (GDK_IS_IMAGE (image));
 
-  private = IMAGE_PRIVATE_DATA (image);
+  pixmap = image->windowing_data;
 
-  if (private == NULL) /* This means that _gdk_image_exit() destroyed the
-                        * image already, and now we're called a second
-                        * time from _finalize()
-                        */
+  if (pixmap == NULL)		/* This means that _gdk_image_exit()
+				 * destroyed the image already, and
+				 * now we're called a second time from
+				 * _finalize()
+				 */
     return;
   
-  GDK_NOTE (MISC, g_print ("gdk_win32_image_destroy: %#x\n",
-			   (guint) private->hbitmap));
-  
-  switch (image->type)
-    {
-    case GDK_IMAGE_SHARED:
-      if (!DeleteObject (private->hbitmap))
-	WIN32_GDI_FAILED ("DeleteObject");
-      break;
+  GDK_NOTE (IMAGE, g_print ("gdk_win32_image_destroy: %p\n",
+			    GDK_PIXMAP_HBITMAP (pixmap)));
 
-    default:
-      g_assert_not_reached ();
-    }
-
-  g_free (private);
+  gdk_pixmap_unref (pixmap);
   image->windowing_data = NULL;
 }
 
 gint
 _gdk_windowing_get_bits_for_depth (gint depth)
 {
-  if ((1 == depth) || (8 == depth) || (16 == depth) || 
-      (24 == depth) || (32 == depth))
-    return depth;
-  else if (15 == depth)
-    return 16;
-  else
-    g_assert_not_reached ();
+  switch (depth)
+    {
+    case 1:
+      return 1;
 
+    case 2:
+    case 3:
+    case 4:
+      return 4;
+
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+      return 8;
+
+    case 15:
+    case 16:
+      return 16;
+
+    case 24:
+      return 24;
+
+    case 32:
+      return 32;
+    }
+  g_assert_not_reached ();
   return 0;
 }
