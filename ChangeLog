@@ -1,5 +1,8 @@
 2003-03-29  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkoptionmenu.c (gtk_option_menu_remove_contents): Set state
+	of labels back to normal before reparenting back.  (#102387)
+
         Fixes for bug #56248:
 	
 	* gtk/gtknotebook.c (stop_scrolling): New function to remove the
