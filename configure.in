@@ -637,17 +637,11 @@ fi
 
 AC_MSG_CHECKING(whether to build gmodulized gdk-pixbuf)
 
-AC_ARG_ENABLE(modules, [  --disable-modules       disable dynamic module loading],[
-	if test x$withval = xyes; then 
-	    with_modules=yes
-        else
-            with_modules=no
-	fi
-])
+AC_ARG_ENABLE(modules, [  --disable-modules       disable dynamic module loading])
 
 dynworks=false
 deps=
-if test x$with_modules = xno; then
+if test x$enable_modules = xno; then
     AC_MSG_RESULT(no)
 else
     AC_MSG_RESULT(yes)
@@ -1192,7 +1186,7 @@ if test "x$gdktarget" = "xx11"; then
     AC_DEFINE(XINPUT_NONE)
   fi
 
-  AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree)
+  AM_CONDITIONAL(XINPUT_XFREE, test x$with_xinput = xxfree || test x$with_xinput = xyes)
 
   # Check for the RANDR extension
 
