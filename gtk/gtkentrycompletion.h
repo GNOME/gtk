@@ -62,7 +62,7 @@ struct _GtkEntryCompletionClass
                                  GtkTreeModel       *model,
                                  GtkTreeIter        *iter);
   void     (* action_activated) (GtkEntryCompletion *completion,
-                                 gint                index);
+                                 gint                index_);
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
@@ -91,13 +91,13 @@ gint                gtk_entry_completion_get_minimum_key_length (GtkEntryComplet
 void                gtk_entry_completion_complete               (GtkEntryCompletion          *completion);
 
 void                gtk_entry_completion_insert_action_text     (GtkEntryCompletion          *completion,
-                                                                 gint                         index,
+                                                                 gint                         index_,
                                                                  const gchar                 *text);
 void                gtk_entry_completion_insert_action_markup   (GtkEntryCompletion          *completion,
-                                                                 gint                         index,
+                                                                 gint                         index_,
                                                                  const gchar                 *markup);
 void                gtk_entry_completion_delete_action          (GtkEntryCompletion          *completion,
-                                                                 gint                         index);
+                                                                 gint                         index_);
 
 /* convenience */
 void                gtk_entry_completion_set_text_column        (GtkEntryCompletion          *completion,
