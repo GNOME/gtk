@@ -430,8 +430,10 @@ gtk_list_store_finalize (GObject *object)
   
   if (list_store->default_sort_destroy)
     {
-      (* list_store->default_sort_destroy) (list_store->default_sort_data);
+      GtkDestroyNotify d = list_store->default_sort_destroy;
+
       list_store->default_sort_destroy = NULL;
+      d (list_store->default_sort_data);
       list_store->default_sort_data = NULL;
     }
 
@@ -1918,7 +1920,12 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
     }
 
   if (header->destroy)
-    (* header->destroy) (header->data);
+    {
+      GtkDestroyNotify d = header->destroy;
+
+      header->destroy = NULL;
+      d (header->data);
+    }
 
   header->func = func;
   header->data = data;
@@ -1937,7 +1944,12 @@ gtk_list_store_set_default_sort_func (GtkTreeSortable        *sortable,
   g_return_if_fail (GTK_IS_LIST_STORE (sortable));
 
   if (list_store->default_sort_destroy)
-    (* list_store->default_sort_destroy) (list_store->default_sort_data);
+    {
+      GtkDestroyNotify d = list_store->default_sort_destroy;
+
+      list_store->default_sort_destroy = NULL;
+      d (list_store->default_sort_data);
+    }
 
   list_store->default_sort_func = func;
   list_store->default_sort_data = data;

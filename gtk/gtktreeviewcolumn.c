@@ -329,8 +329,14 @@ gtk_tree_view_column_finalize (GObject *object)
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
-      if (info->func_data && info->destroy)
-	(info->destroy) (info->func_data);
+
+      if (info->destroy)
+	{
+	  GtkDestroyNotify d = info->destroy;
+
+	  info->destroy = NULL;
+	  d (info->func_data);
+	}
       gtk_tree_view_column_clear_attributes (tree_column, info->cell);
       g_object_unref (G_OBJECT (info->cell));
       g_free (info);
@@ -1333,13 +1339,13 @@ gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,
 
   g_return_if_fail (info != NULL);
 
-  if (func == info->func &&
-      func_data == info->func_data &&
-      destroy == info->destroy)
-    return;
+  if (info->destroy)
+    {
+      GtkDestroyNotify d = info->destroy;
 
-  if (info->func_data && info->destroy)
-    (info->destroy) (info->func_data);
+      info->destroy = NULL;
+      d (info->func_data);
+    }
 
   info->func = func;
   info->func_data = func_data;

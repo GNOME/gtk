@@ -1,3 +1,25 @@
+Sun Mar  3 06:39:19 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.c: added compile time switch to put the tree views
+	into a hpaned for owen to play with.
+
+	* gtk/gtktreedatalist.c (_gtk_tree_data_list_header_free): 
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_cell_data_func),
+	(gtk_tree_view_column_finalize): 
+	* gtk/gtktreestore.c (gtk_tree_store_set_default_sort_func),
+	(gtk_tree_store_set_sort_func), (gtk_tree_store_finalize): 
+	* gtk/gtktreeselection.c (gtk_tree_selection_finalize): 
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_reset_default_sort_func),
+	(gtk_tree_model_sort_set_default_sort_func),
+	(gtk_tree_model_sort_set_sort_func):
+	* gtk/gtkliststore.c (gtk_list_store_set_default_sort_func),
+	(gtk_list_store_set_default_sort_func),
+	(gtk_list_store_set_sort_func), (gtk_list_store_finalize): 
+	add reentrancy protection around destroy() function invocation.
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_set_select_function): fix
+	destroy function invocation (which was missing).
+
 Sat Mar  2 23:08:23 2002  Owen Taylor  <otaylor@redhat.com>
 
 	Fixes for uninstalled operation with module suffixes
