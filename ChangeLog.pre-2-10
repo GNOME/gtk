@@ -1,3 +1,18 @@
+Tue May 14 17:30:57 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c gtk/gtkclist.c: Fix format of 
+	selection data to be 8 rather than GTK_TYPE_POINTER.
+	(#79751, James Henstridge)
+	
+	* gtk/gtkmenu.c (gtk_menu_key_press): Call 
+	gtk_accelerator_valid() with cleaned up
+	accel_key/accel_mods, not the raw values from
+	the event. (#80513, Havoc Pennington.)
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Remove
+	some dead code that set the tearoff window not 
+	resizable and removed decorations. (#80235)
+
 Tue May 14 16:44:09 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_ensure_layout): Set
