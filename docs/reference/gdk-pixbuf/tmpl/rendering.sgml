@@ -96,7 +96,9 @@ In the future it will do full alpha compositing.
 @dest_y: 
 @width: 
 @height: 
-@alpha_threshold: <!--
+@alpha_threshold:
+
+<!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")

@@ -74,6 +74,7 @@ libgdk_pixbuf_la_SOURCES = 	\
 	gdk-pixbuf-loader.c	\
 	gdk-pixbuf-render.c	\
 	gdk-pixbuf-drawable.c	\
+	gdk-pixbuf-util.c	\
 	$(CANVAS_SOURCEFILES)
 
 libgdk_pixbuf_la_LDFLAGS = -version-info 1:0:0

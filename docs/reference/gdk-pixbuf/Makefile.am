@@ -24,7 +24,8 @@ tmpl_sources =					\
 	tmpl/gdk-pixbuf.sgml			\
 	tmpl/gnome-canvas-pixbuf.sgml		\
 	tmpl/refcounting.sgml			\
-	tmpl/rendering.sgml
+	tmpl/rendering.sgml			\
+	tmpl/util.sgml
 
 gdk_pixbuf_docdir = $(HTML_DIR)
 gdk_pixbuf_doc_DATA =			\

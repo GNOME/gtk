@@ -145,6 +145,11 @@ guchar *data, ArtPixFormat format, gboolean has_alpha,int width, int height, int
 <RETURNS>GdkPixbuf  *</RETURNS>
 const gchar **data
 </FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_add_alpha</NAME>
+<RETURNS>GdkPixbuf  *</RETURNS>
+GdkPixbuf *pixbuf, gboolean substitute_color,guchar r, guchar g, guchar b
+</FUNCTION>
 <ENUM>
 <NAME>GdkPixbufAlphaMode</NAME>
 typedef enum {

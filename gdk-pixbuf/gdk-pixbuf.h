@@ -83,6 +83,11 @@ GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean
 				     ArtDestroyNotify dfunc, gpointer dfunc_data);
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar **data);
 
+/* Adding or removing alpha */
+
+GdkPixbuf *gdk_pixbuf_add_alpha (GdkPixbuf *pixbuf, gboolean substitute_color,
+				 guchar r, guchar g, guchar b);
+
 /* Rendering to a drawable */
 
 typedef enum {

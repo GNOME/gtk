@@ -1,3 +1,18 @@
+1999-12-02  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gdk-pixbuf-util.c: New file with utility and convenience
+	functions for pixbufs.
+
+	* src/Makefile.am (libgdk_pixbuf_la_SOURCES): Added gdk-pixbuf-util.c.
+
+	* doc/gdk-pixbuf-sections.txt: Added section for utility functions.
+
+	* doc/Makefile.am (tmpl_sources): Added tmpl/util.sgml.
+
+	* doc/gdk-pixbuf.sgml: Added the utilities section.
+
+	* doc/tmpl/util.sgml: Documentation for the utility functions.
+
 1999-11-29  Owen Taylor  <otaylor@redhat.com>
 
 	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_to_drawable_alpha):

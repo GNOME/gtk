@@ -1,0 +1,38 @@
+<!-- ##### SECTION Title ##### -->
+Utilities
+
+<!-- ##### SECTION Short_Description ##### -->
+Utility and miscellaneous convenience functions.
+
+<!-- ##### SECTION Long_Description ##### -->
+  <para>
+    These functions provide miscellaneous utilities for manipulating
+    pixbufs.  The pixel data in pixbufs may of course be manipulated
+    directly by applications, but several common operations can be
+    performed by these functions instead.
+  </para>
+
+<!-- ##### SECTION See_Also ##### -->
+  <para>
+    #GdkPixbuf
+  </para>
+
+<!-- ##### FUNCTION gdk_pixbuf_add_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@substitute_color: 
+@r: 
+@g: 
+@b: 
+@Returns: 
+
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

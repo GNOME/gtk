@@ -253,14 +253,6 @@ Canvas item to display #GdkPixbuf images.
     linkend="GnomeCanvasPixbuf--x">x</link> argument.
   </para>
 
-
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
 <!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
   <para>
     Determines whether the <link
@@ -278,3 +270,9 @@ End:
     The default is %FALSE.
   </para>
 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->

@@ -71,6 +71,12 @@ Application-driven image loading.
     areas of an image that is being loaded.
   </para>
 
+@gdkpixbufloader: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+<!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
 @x: X offset of upper-left corner of the updated area.
 @y: Y offset of upper-left corner of the updated area.
@@ -86,6 +92,8 @@ Application-driven image loading.
     fetch the partially-loaded pixbuf.
   </para>
 
+@gdkpixbufloader: the object which received the signal.
+<!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
@@ -96,6 +104,8 @@ Application-driven image loading.
     drives it.
   </para>
 
+@gdkpixbufloader: the object which received the signal.
+<!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
 
 <!--
