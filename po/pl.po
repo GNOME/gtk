@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-07-08 12:24+0200\n"
-"PO-Revision-Date: 2002-07-08 12:25+0200\n"
+"POT-Creation-Date: 2002-07-19 12:21+0200\n"
+"PO-Revision-Date: 2002-07-19 15:52+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -430,6 +430,10 @@ msgstr "Błędny nagłówek obrazu RAS"
 #: gdk-pixbuf/io-ras.c:1
 msgid "RAS image has unknown type"
 msgstr "Nieznany format obrazu RAS"
+
+#: gdk-pixbuf/io-ras.c:1
+msgid "unsupported RAS image variation"
+msgstr "Nieobsługiwany typ obrazu RAS"
 
 #: gdk-pixbuf/io-ras.c:1 gdk-pixbuf/io-ras.c:1
 msgid "Not enough memory to load RAS image"
@@ -1928,7 +1932,7 @@ msgstr "Czy na pewno usunąć plik \"%s\"?"
 
 #: gtk/gtkfilesel.c:1
 msgid "Delete File"
-msgstr "Usuń plik"
+msgstr "Usunięcie pliku"
 
 #: gtk/gtkfilesel.c:1 gtk/gtkfilesel.c:1
 #, c-format
@@ -1961,7 +1965,7 @@ msgstr "Błąd przy zmienianiu nazwy pliku \"%s\" na \"%s\": %s"
 
 #: gtk/gtkfilesel.c:1
 msgid "Rename File"
-msgstr "Zmień nazwę"
+msgstr "Zmiana nazwy pliku"
 
 #: gtk/gtkfilesel.c:1
 #, c-format
