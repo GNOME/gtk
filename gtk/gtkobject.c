@@ -420,6 +420,9 @@ gtk_object_finalize (GtkObject *object)
 void
 gtk_object_sink (GtkObject *object)
 {
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+
   if (GTK_OBJECT_FLOATING (object))
     {
       GTK_OBJECT_UNSET_FLAGS (object, GTK_FLOATING);

@@ -556,6 +556,37 @@ gtk_alive_disconnecter (GtkDisconnectInfo *info)
 }
 
 void
+gtk_signal_connect_while_alive (GtkObject        *object,
+				const gchar      *signal,
+				GtkSignalFunc     func,
+				gpointer          func_data,
+				GtkObject        *alive_object)
+{
+  GtkDisconnectInfo *info;
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (object));
+  g_return_if_fail (signal != NULL);
+  g_return_if_fail (func != NULL);
+  g_return_if_fail (alive_object != NULL);
+  g_return_if_fail (GTK_IS_OBJECT (alive_object));
+
+  info = g_new (GtkDisconnectInfo, 1);
+  info->object1 = object;
+  info->object2 = alive_object;
+
+  info->signal_handler = gtk_signal_connect (object, signal, func, func_data);
+  info->disconnect_handler1 = gtk_signal_connect_object (info->object1,
+							 "destroy",
+							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+							 (GtkObject*) info);
+  info->disconnect_handler2 = gtk_signal_connect_object (info->object2,
+							 "destroy",
+							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+							 (GtkObject*) info);
+}
+
+void
 gtk_signal_connect_object_while_alive (GtkObject        *object,
 				       const gchar      *signal,
 				       GtkSignalFunc     func,
@@ -881,6 +912,13 @@ gtk_signal_handler_unref (GtkHandler *handler,
 {
   GtkHandler *tmp;
 
+  if (!handler->ref_count)
+    {
+      /* FIXME: i wanna get removed some when (maybe at gtk+-1.0?) */
+      g_warning ("gtk_signal_handler_unref(): handler with ref_count==0!");
+      return;
+    }
+
   handler->ref_count -= 1;
   if (handler->ref_count == 0)
     {
@@ -1013,6 +1051,7 @@ restart:
 				NULL, params);
     }
   
+  handlers = gtk_signal_get_handlers (object, signal_type);
   switch (gtk_handlers_run (handlers, &info, TRUE))
     {
     case DONE:
@@ -1223,13 +1262,13 @@ gtk_handlers_run (GtkHandler     *handlers,
   
   while (handlers)
     {
-      if (!after)
-	gtk_signal_handler_ref (handlers);
+      /* REMOVE: if (!after) */
+      gtk_signal_handler_ref (handlers);
       
       if (handlers->signal_type != info->signal_type)
 	{
-	  if (after)
-	    gtk_signal_handler_unref (handlers, info->object);
+	  /* REMOVE: if (after) */
+	  gtk_signal_handler_unref (handlers, info->object);
 	  break;
 	}
       
@@ -1270,8 +1309,8 @@ gtk_handlers_run (GtkHandler     *handlers,
 	      if (info->run_type & GTK_RUN_NO_RECURSE)
 		gtk_emission_remove (&restart_emissions, info->object,
 				     info->signal_type);
-	      if (after)
-		gtk_signal_handler_unref (handlers, info->object);
+	      /* REMOVE: if (after) */
+	      gtk_signal_handler_unref (handlers, info->object);
 	      return DONE;
 	    }
 	  else if ((info->run_type & GTK_RUN_NO_RECURSE) &&
@@ -1280,14 +1319,14 @@ gtk_handlers_run (GtkHandler     *handlers,
 	    {
 	      gtk_emission_remove (&restart_emissions, info->object,
 				   info->signal_type);
-	      if (after)
-		gtk_signal_handler_unref (handlers, info->object);
+	      /* REMOVE: if (after) */
+	      gtk_signal_handler_unref (handlers, info->object);
 	      return RESTART;
 	    }
 	}
 
       handlers_next = handlers->next;
-      if (after)
+      /* if (after) */
 	gtk_signal_handler_unref (handlers, info->object);
       handlers = handlers_next;
     }

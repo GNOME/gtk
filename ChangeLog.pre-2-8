@@ -1,3 +1,17 @@
+Tue Feb  3 15:09:55 1998  Tim Janik  <timj@gimp.org>
+
+        * gtk/gtksignal.c (gtk_signal_real_emit): for the emission
+          of AFTER signals, fetch the objects signals via
+          gtk_signal_get_handlers again. some handlers might have
+          been removed or added. not doing this would mess up the
+          memchunk allocation of signal handlers (this had been
+          triggered by multiple *_while_alive connections), bad, bad, bad!
+          (gtk_handlers_run): do the referencing on signal handlers
+          unconditionally, the invokation of AFTER handlers will now take
+          care of modified lists.
+
+        * gtk/gtksignal.h: added gtk_signal_connect_while_alive.
+
 Tue Feb  3 15:34:27 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gdk/gdkcolor.c (gdk_colormap_get_system): Only query

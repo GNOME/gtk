@@ -113,6 +113,11 @@ void   gtk_signal_connect_object_while_alive (GtkObject        *object,
 					      const gchar      *signal,
 					      GtkSignalFunc     func,
 					      GtkObject        *alive_object);
+void   gtk_signal_connect_while_alive	     (GtkObject        *object,
+					      const gchar      *signal,
+					      GtkSignalFunc     func,
+					      gpointer          func_data,
+					      GtkObject        *alive_object);
 
 void   gtk_signal_disconnect              (GtkObject           *object,
 					   gint                 anid);
