@@ -1,3 +1,13 @@
+2004-05-04  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #139562, based on a patch by Christian Neumair.
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault): Add
+	a filter_combo_hbox field to contain the filter combo.
+	(show_filters): Show/hide the filter_combo_hbox.
+	(create_filename_entry_and_filter_combo): Removed.
+	(file_pane_create): Create the filter_combo_hbox here.
+
 2004-05-04  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/gtkimcontextxim.c: Fix the recent

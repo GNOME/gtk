@@ -115,6 +115,7 @@ struct _GtkFileChooserDefault
 
   GtkFileSystemModel *browse_files_model;
 
+  GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
   GtkWidget *preview_box;
   GtkWidget *preview_label;
@@ -1459,7 +1460,7 @@ shortcuts_model_create (GtkFileChooserDefault *impl)
 					  NULL);
 }
 
-/* Callback used when the "New Folder" toolbar button is clicked */
+/* Callback used when the "New Folder" button is clicked */
 static void
 new_folder_button_clicked (GtkButton             *button,
 			   GtkFileChooserDefault *impl)
@@ -2810,23 +2811,6 @@ create_file_list (GtkFileChooserDefault *impl)
 }
 
 static GtkWidget *
-create_filename_entry_and_filter_combo (GtkFileChooserDefault *impl)
-{
-  GtkWidget *hbox;
-  GtkWidget *widget;
-
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox);
-
-  /* Filter combo */
-
-  widget = filter_create (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-
-  return hbox;
-}
-
-static GtkWidget *
 create_path_bar (GtkFileChooserDefault *impl)
 {
   GtkWidget *path_bar;
@@ -2881,13 +2865,16 @@ file_pane_create (GtkFileChooserDefault *impl,
   gtk_box_pack_start (GTK_BOX (hbox), impl->preview_box, FALSE, FALSE, 0);
   /* Don't show preview box initially */
 
-  /* Filename entry and filter combo */
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_size_group_add_widget (size_group, hbox);
-  widget = create_filename_entry_and_filter_combo (impl);
-  gtk_box_pack_end (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-  gtk_widget_show (hbox);
+  /* Filter combo */
+
+  impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
+
+  widget = filter_create (impl);
+  gtk_widget_show (widget);
+  gtk_box_pack_end (GTK_BOX (impl->filter_combo_hbox), widget, FALSE, FALSE, 0);
+
+  gtk_size_group_add_widget (size_group, impl->filter_combo_hbox);
+  gtk_box_pack_end (GTK_BOX (vbox), impl->filter_combo_hbox, FALSE, FALSE, 0);
 
   return vbox;
 }
@@ -4192,13 +4179,13 @@ gtk_file_chooser_default_get_file_system (GtkFileChooser *chooser)
 
 /* Shows or hides the filter widgets */
 static void
-toolbar_show_filters (GtkFileChooserDefault *impl,
-		      gboolean               show)
+show_filters (GtkFileChooserDefault *impl,
+	      gboolean               show)
 {
   if (show)
-    gtk_widget_show (impl->filter_combo);
+    gtk_widget_show (impl->filter_combo_hbox);
   else
-    gtk_widget_hide (impl->filter_combo);
+    gtk_widget_hide (impl->filter_combo_hbox);
 }
 
 static void
@@ -4227,7 +4214,7 @@ gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
   if (!g_slist_find (impl->filters, impl->current_filter))
     set_current_filter (impl, filter);
 
-  toolbar_show_filters (impl, TRUE);
+  show_filters (impl, TRUE);
 }
 
 static void
@@ -4265,7 +4252,7 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
   g_object_unref (filter);
 
   if (!impl->filters)
-    toolbar_show_filters (impl, FALSE);
+    show_filters (impl, FALSE);
 }
 
 static GSList *
