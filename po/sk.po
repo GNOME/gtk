@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-1.2.2\n"
-"POT-Creation-Date: 1999-10-07 12:52-0500\n"
+"POT-Creation-Date: 1999-10-08 10:56-0500\n"
 "PO-Revision-Date: 1999-04-19 16:30+0100\n"
 "Last-Translator: Stefan Ondrejicka <ondrej@idata.sk>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -446,12 +446,12 @@ msgstr "zmaza»"
 msgid "Page %u"
 msgstr "Stránka %u"
 
-#: gtk/gtkrc.c:1640
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Obrázok nebol nájdený v pixmap_path: \"%s\" riadok %d"
 
-#: gtk/gtkrc.c:1643
+#: gtk/gtkrc.c:1709
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Obrázok nebol nájdený v pixmap_path: \"%s\""

@@ -1,3 +1,7 @@
+Fri Oct  8 10:55:51 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.2.6
+
 Fri Oct  8 02:32:47 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklayout.c (gtk_layout_adjustment_changed): Fix bug
@@ -18,10 +22,6 @@ Thu Oct  7 22:52:42 1999  Tim Janik  <timj@gtk.org>
 	* gtk/gtkitemfactory.c (gtk_item_factory_popup_with_data): even
 	popup menus when the menu is already visible, but its parent
 	is still hidden, (happens after tornoff window got hidden).
-
-Thu Oct  7 12:50:23 CDT 1999 Shawn T. Amundson <amundson@gtk.org>
-
-	* Released GTK+ 1.2.6
 
 Thu Oct  7 11:09:55 1999  Owen Taylor  <otaylor@redhat.com>
 

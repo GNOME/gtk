@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-10-07 12:52-0500\n"
+"POT-Creation-Date: 1999-10-08 10:56-0500\n"
 "PO-Revision-Date: 1999-01-31 23:04+0100\n"
 "Last-Translator: Paul Siegmann <pauls@euronet.nl>\n"
 "Language-Team: dutch <nl@li.org>\n"
@@ -448,12 +448,12 @@ msgstr "wissen"
 msgid "Page %u"
 msgstr "Pagina %u"
 
-#: gtk/gtkrc.c:1640
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 
-#: gtk/gtkrc.c:1643
+#: gtk/gtkrc.c:1709
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.0\n"
-"POT-Creation-Date: 1999-10-07 12:52-0500\n"
+"POT-Creation-Date: 1999-10-08 10:56-0500\n"
 "PO-Revision-Date: 1999-02-28 02:00+0100\n"
 "Last-Translator: Tomislav Vujec <tvujec@carnet.hr>\n"
 "Language-Team: hr <LL@li.org>\n"
@@ -447,12 +447,12 @@ msgstr "obri¹i"
 msgid "Page %u"
 msgstr "Stranica %u"
 
-#: gtk/gtkrc.c:1640
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\" line %d"
 
-#: gtk/gtkrc.c:1643
+#: gtk/gtkrc.c:1709
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ne mogu pronaæi slikovnu datoteku u pixmap_path: \"%s\""

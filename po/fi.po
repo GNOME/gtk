@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-10-07 12:52-0500\n"
+"POT-Creation-Date: 1999-10-08 10:56-0500\n"
 "PO-Revision-Date: 1999-08-13 14:15+0100\n"
 "Last-Translator: Mikko Rauhala <lukka@iki.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -450,13 +450,13 @@ msgid "Page %u"
 msgstr "Sivu %u"
 
 # , c-format
-#: gtk/gtkrc.c:1640
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\" rivi %d"
 
 # , c-format
-#: gtk/gtkrc.c:1643
+#: gtk/gtkrc.c:1709
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
