@@ -1,3 +1,8 @@
+2005-03-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkiconview.c (gtk_icon_view_set_model): Queue a resize 
+	when the model is unset.  (#169528, Tomislav Jonjic)
+
 Thu Mar  3 16:59:44 2005  Manish Singh  <yosh@gimp.org>
 
 	* configure.in: URL escape the '+' in gtk+ in the bugzilla URL.
