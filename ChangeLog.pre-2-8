@@ -1,3 +1,10 @@
+Fri Nov  8 18:04:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/{linux-fb,win32,11}/Makefile.am: Try a different
+	hack to force gdkenumtypes.h to be updated before
+	building the subdir, last hack caused contents
+	to be rebuilt on every make.
+
 Wed Nov 13 21:45:36 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkhsv.c: get rid of deprecated gdk_rgb_gc_set_foreground
