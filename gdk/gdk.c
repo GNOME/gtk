@@ -3192,7 +3192,7 @@ gdk_dnd_drag_enter (Window dest)
 	    }
 	  else
 	    sev.xclient.data.l[3] = sev.xclient.data.l[4] = None;
-	  if (!gdk_send_xevent (dest, False, NoEventMask, &sev))
+	  if (!gdk_send_xevent (dest, False, StructureNotifyMask, &sev))
 		GDK_NOTE (DND, g_print("Sending XdeEnter to %#lx failed\n",
 				       dest));
 	}
@@ -3750,7 +3750,7 @@ gdk_dnd_drag_leave (Window dest)
     {
       wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
       sev.xclient.data.l[0] = wp->xwindow;
-      if (!gdk_send_xevent (dest, False, NoEventMask, &sev))
+      if (!gdk_send_xevent (dest, False, StructureNotifyMask, &sev))
 	GDK_NOTE (DND, g_print("Sending XdeLeave to %#lx failed\n",
 			       dest));
       wp->dnd_drag_accepted = 0;

@@ -1,3 +1,13 @@
+Tue Mar 17 02:02:02 1998  Miguel de Icaza  <miguel@nuclecu.unam.mx>
+
+	* gdk/gdk.c (gdk_dnd_drag_leave): Use StructureNotifyMaskMask as
+	the mask, as this enables an application listening to those events
+	to catch the root events.  Thanks to Maciej for pointing us in the
+	right direction.
+	(gdk_dnd_drag_enter): Likewise.
+	(gdk_dnd_drag_leave): Likewise.
+	* gdk/gdkwindow.c (gdk_window_dnd_data_set): Likewise.
+
 Mon Mar 16 22:31:02 1998  Federico Mena  <federico@nuclecu.unam.mx>
 
 	* gdk/gdkwindow.c (gdk_window_xid_at): Use signed integers so that

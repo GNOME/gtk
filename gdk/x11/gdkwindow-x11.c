@@ -15,6 +15,7 @@
  * License along with this library; if not, write to the Free
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -1647,7 +1648,7 @@ gdk_window_dnd_data_set (GdkWindow       *window,
   sev.xclient.data.l[4] = event->dragrequest.timestamp;
 
   if (!gdk_send_xevent (event->dragrequest.requestor, False,
-		       NoEventMask, &sev))
+		       StructureNotifyMask, &sev))
     GDK_NOTE (DND, g_print("Sending XdeDataAvailable to %#x failed\n",
 			   event->dragrequest.requestor));
 
