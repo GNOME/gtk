@@ -114,8 +114,9 @@ GDK_KEYBOARD_TYPE:
 
 HACKING:
 --------
-To be written.
+Pressing shift-F1 forces a repaint of the whole screen.
 
+To be written.
 
    - Alexander Larsson <alexl@redhat.com>
      2000/12/06
