@@ -3114,6 +3114,13 @@ gtk_widget_send_expose (GtkWidget *widget,
 static gboolean
 event_window_is_still_viewable (GdkEvent *event)
 {
+  /* Some programs, such as gnome-theme-manager, fake widgets
+   * into exposing onto a pixmap by sending expose events with
+   * event->window pointing to a pixmap
+   */
+  if (GDK_IS_PIXMAP (event->any.window))
+    return event->type == GDK_EXPOSE;
+  
   /* Check that we think the event's window is viewable before
    * delivering the event, to prevent suprises. We do this here
    * at the last moment, since the event may have been queued

@@ -1,3 +1,8 @@
+2003-06-12  Anders Carlsson  <andersca@codefactory.se>
+
+	* gtk/gtkwidget.c: (event_window_is_still_viewable):
+	Special case pixmaps. (#114880)
+	
 2003-06-12  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c: Document child-notify and drag-data-received
