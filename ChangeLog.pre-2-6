@@ -1,3 +1,13 @@
+Wed Dec 16 13:06:17 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.[ch] gtk/gtkmain.[ch] gtk/gtkprivate.h: Move main
+	thread lock back to GDK - we need it there for locking
+	when translating events. Rename things appropriately.
+
+Wed Dec 16 11:44:21 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_expose): Fix a x/y typo.
+
 Wed Dec 16 10:20:27 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.1.8

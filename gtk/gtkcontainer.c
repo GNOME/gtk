@@ -811,7 +811,7 @@ gtk_container_get_resize_container (GtkContainer *container)
 static gboolean
 gtk_container_idle_sizer (gpointer data)
 {
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
 
   /* we may be invoked with a container_resize_queue of NULL, because
    * queue_resize could have been adding an extra idle function while
@@ -833,7 +833,7 @@ gtk_container_idle_sizer (gpointer data)
       gtk_container_check_resize (GTK_CONTAINER (widget));
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }

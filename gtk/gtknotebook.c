@@ -19,7 +19,6 @@
 #include "gtknotebook.h"
 #include "gtksignal.h"
 #include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtklabel.h"
@@ -1837,7 +1836,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
 {
   gboolean retval = FALSE;
 
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
   
   if (notebook->timer)
     {
@@ -1866,7 +1865,7 @@ gtk_notebook_timer (GtkNotebook *notebook)
 	retval = TRUE;
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }

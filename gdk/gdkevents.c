@@ -1891,20 +1891,36 @@ gdk_event_prepare (gpointer  source_data,
 		   GTimeVal *current_time,
 		   gint     *timeout)
 {
+  gboolean retval;
+  
+  GDK_THREADS_ENTER ();
+
   *timeout = -1;
 
   gdk_events_queue ();
-  return (queued_events || putback_events);
+  retval = (queued_events || putback_events);
+
+  GDK_THREADS_LEAVE ();
+
+  return retval;
 }
 
 static gboolean  
 gdk_event_check   (gpointer  source_data,
 		   GTimeVal *current_time)
 {
+  gboolean retval;
+  
+  GDK_THREADS_ENTER ();
+
   if (event_poll_fd.revents & G_IO_IN)
       gdk_events_queue ();
 
-  return (queued_events || putback_events);
+  retval = (queued_events || putback_events);
+
+  GDK_THREADS_LEAVE ();
+
+  return retval;
 }
 
 static GdkEvent *
@@ -1942,7 +1958,11 @@ gdk_event_dispatch (gpointer  source_data,
 		    GTimeVal *current_time,
 		    gpointer  user_data)
 {
-  GdkEvent *event = gdk_event_unqueue();
+  GdkEvent *event;
+ 
+  GDK_THREADS_ENTER ();
+
+  event = gdk_event_unqueue();
 
   if (event)
     {
@@ -1952,6 +1972,8 @@ gdk_event_dispatch (gpointer  source_data,
       gdk_event_free (event);
     }
   
+  GDK_THREADS_LEAVE ();
+
   return TRUE;
 }
 

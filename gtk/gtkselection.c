@@ -49,7 +49,6 @@
 #include <gdk/gdkx.h>
 /* we need this for gdk_window_lookup() */
 #include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 
@@ -1092,7 +1091,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
   GList *tmp_list;
   gboolean retval;
 
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
@@ -1129,7 +1128,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
       retval = TRUE;		/* timeout will happen again */
     }
   
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }
@@ -1334,7 +1333,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
   GList *tmp_list;
   gboolean retval;
 
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
   
   /* Determine if retrieval has finished by checking if it still in
      list of pending retrievals */
@@ -1369,7 +1368,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
       retval =  TRUE;		/* timeout will happen again */
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }

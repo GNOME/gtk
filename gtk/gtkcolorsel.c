@@ -24,7 +24,6 @@
 #include "gtkwindow.h"
 #include "gtkhbbox.h"
 #include "gtkdnd.h"
-#include "gtkprivate.h"
 #include "gtkselection.h"
 
 /*
@@ -1028,13 +1027,13 @@ gtk_color_selection_value_timeout (GtkColorSelection *colorsel)
 {
   gint x, y;
   
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
   
   gdk_window_get_pointer (colorsel->value_area->window, &x, &y, NULL);
   gtk_color_selection_update_value (colorsel, y);
   gtk_color_selection_color_changed (colorsel);
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return (TRUE);
 }

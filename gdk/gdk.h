@@ -959,6 +959,27 @@ guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
 
+/* Threading
+ */
+
+extern GMutex *gdk_threads_mutex;
+
+void     gdk_threads_enter                (void);
+void     gdk_threads_leave                (void);
+
+#ifdef	G_THREADS_ENABLED
+#  define GDK_THREADS_ENTER()	G_STMT_START {	\
+      if (gdk_threads_mutex)                 	\
+        g_mutex_lock (gdk_threads_mutex);   	\
+   } G_STMT_END
+#  define GDK_THREADS_LEAVE()	G_STMT_START { 	\
+      if (gdk_threads_mutex)                 	\
+        g_mutex_unlock (gdk_threads_mutex); 	\
+   } G_STMT_END
+#else	/* !G_THREADS_ENABLED */
+#  define GDK_THREADS_ENTER()
+#  define GDK_THREADS_LEAVE()
+#endif	/* !G_THREADS_ENABLED */
 
 #include <gdk/gdkrgb.h>
 

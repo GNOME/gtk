@@ -19,7 +19,6 @@
 #include <stdio.h>
 #include "gtkmain.h"
 #include "gtkrange.h"
-#include "gtkprivate.h"
 #include "gtksignal.h"
 
 
@@ -815,12 +814,12 @@ gtk_range_expose (GtkWidget      *widget,
 	    (event->area.x + event->area.width <= 
 	     widget->allocation.width - xt) &&
 	    (event->area.y + event->area.height <= 
-	     widget->allocation.height - xt)))
+	     widget->allocation.height - yt)))
 	gtk_range_draw_trough (range);
     }
   else if (event->window == widget->window)
     {
-      gtk_range_draw_background (range);
+      gtk_range_draw_background (range); 
     }
   else if (event->window == range->slider)
     {
@@ -1237,7 +1236,7 @@ gtk_real_range_timer (GtkRange *range)
 {
   gint return_val;
 
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
 
   return_val = TRUE;
   if (range->click_child == RANGE_CLASS (range)->slider)
@@ -1259,7 +1258,7 @@ gtk_real_range_timer (GtkRange *range)
 					    (gpointer) range);
 	  else
 	    {
-	      GTK_THREADS_LEAVE ();
+	      GDK_THREADS_LEAVE ();
 	      return FALSE;
 	    }
 	  range->need_timer = FALSE;
@@ -1287,7 +1286,7 @@ gtk_real_range_timer (GtkRange *range)
 	return_val = gtk_range_scroll (range, -1);
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return return_val;
 }

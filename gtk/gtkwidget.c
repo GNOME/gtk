@@ -1958,7 +1958,7 @@ gtk_widget_idle_draw (gpointer data)
   GSList *draw_data_list;
   GtkWidget *widget;
   
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
   
   /* Translate all draw requests to be allocation-relative */
   widget_list = gtk_widget_redraw_queue;
@@ -2141,7 +2141,7 @@ gtk_widget_idle_draw (gpointer data)
   g_slist_free (gtk_widget_redraw_queue);
   gtk_widget_redraw_queue = NULL;
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }

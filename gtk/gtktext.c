@@ -21,7 +21,6 @@
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
 #include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtktext.h"
@@ -1701,7 +1700,7 @@ gtk_text_scroll_timeout (gpointer data)
   gint x, y;
   GdkModifierType mask;
   
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
 
   text = GTK_TEXT (data);
   
@@ -1718,7 +1717,7 @@ gtk_text_scroll_timeout (gpointer data)
       gtk_text_motion_notify (GTK_WIDGET (text), &event);
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }

@@ -22,7 +22,6 @@
 #include "gtkdnd.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 
@@ -2272,7 +2271,7 @@ gtk_drag_anim_timeout (gpointer data)
   gint x, y;
   gboolean retval;
 
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
 
   if (anim->step == anim->n_steps)
     {
@@ -2295,7 +2294,7 @@ gtk_drag_anim_timeout (gpointer data)
       retval = TRUE;
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }

@@ -23,7 +23,6 @@
 #include "gtkthemes.h"
 #include "gtkwidget.h"
 #include "gtkthemes.h"
-#include "gtkprivate.h"
 #include "gdk/gdkprivate.h"
 
 

@@ -131,9 +131,6 @@ void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
 GdkEvent*  gtk_get_current_event   (void);
 GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
 
-void       gtk_threads_enter       (void);
-void       gtk_threads_leave       (void);
-
 /* deprecated */
 guint	   gtk_idle_add_interp	   (GtkCallbackMarshal marshal,
 				    gpointer	       data,

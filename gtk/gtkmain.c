@@ -133,8 +133,6 @@ static GdkColormap *gtk_colormap;	   /* The colormap to be used in creating new
 
 guint gtk_debug_flags = 0;		   /* Global GTK debug flag */
 
-GMutex *gtk_threads_mutex = NULL;          /* Global GTK lock */
-
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gtk_debug_keys[] = {
   {"objects", GTK_DEBUG_OBJECTS},
@@ -185,9 +183,6 @@ gtk_init (int	 *argc,
    * single threaded until gtk_init().
    */
 
-  if (g_thread_supported ())
-    gtk_threads_mutex = g_mutex_new ();
-  
 #if	0
   g_set_error_handler (gtk_error);
   g_set_warning_handler (gtk_warning);
@@ -459,9 +454,9 @@ gtk_main (void)
   loop = g_main_new ();
   main_loops = g_slist_prepend (main_loops, loop);
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
   g_main_run (loop);
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
   
   g_main_destroy (loop);
 
@@ -1246,18 +1241,6 @@ gtk_propagate_event (GtkWidget *widget,
       gtk_widget_unref (widget);
       widget  = tmp;
     }
-}
-
-void
-gtk_threads_enter ()
-{
-  GTK_THREADS_ENTER ();
-}
-
-void
-gtk_threads_leave ()
-{
-  GTK_THREADS_LEAVE ();
 }
 
 #if 0

@@ -28,7 +28,6 @@
 #include "gtklistitem.h"
 #include "gtkscrolledwindow.h"
 #include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
 #include "gdk/gdkkeysyms.h"
@@ -237,9 +236,9 @@ gtk_combo_focus_idle (GtkCombo * combo)
 {
   if (combo)
     {
-      GTK_THREADS_ENTER ();
+      GDK_THREADS_ENTER ();
       gtk_widget_grab_focus (combo->entry);
-      GTK_THREADS_LEAVE ();
+      GDK_THREADS_LEAVE ();
     }
   return FALSE;
 }

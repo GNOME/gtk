@@ -64,6 +64,8 @@ GdkWindowPrivate *gdk_xgrab_window = NULL;  /* Window that currently holds the
 					     *	x pointer grab
 					     */
 
+GMutex *gdk_threads_mutex = NULL;          /* Global GDK lock */
+
 #ifdef USE_XIM
 GdkICPrivate *gdk_xim_ic;		/* currently using IC */
 GdkWindow *gdk_xim_window;	        /* currently using Window */

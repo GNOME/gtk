@@ -508,6 +508,9 @@ gtk_layout_unrealize (GtkWidget *widget)
 	
       tmp_list = tmp_list->next;
     }
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void 

@@ -28,7 +28,6 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkspinbutton.h"
 #include "gtkmain.h"
-#include "gtkprivate.h"
 #include "gtksignal.h"
 
 
@@ -910,7 +909,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 {
   gboolean retval = FALSE;
   
-  GTK_THREADS_ENTER ();
+  GDK_THREADS_ENTER ();
 
   if (spin_button->timer)
     {
@@ -943,7 +942,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
 	}
     }
 
-  GTK_THREADS_LEAVE ();
+  GDK_THREADS_LEAVE ();
 
   return retval;
 }

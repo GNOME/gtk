@@ -26,7 +26,6 @@
 #include "gtkselection.h"
 #include "gtksignal.h"
 #include "gtkwidget.h"
-#include "gtkprivate.h"
 #include "config.h"
 
 typedef struct _GtkThemeEnginePrivate GtkThemeEnginePrivate;

@@ -149,6 +149,9 @@ gdk_init (int	 *argc,
   if (gdk_initialized)
     return;
   
+  if (g_thread_supported ())
+    gdk_threads_mutex = g_mutex_new ();
+  
   if (argc && argv)
     {
       argc_orig = *argc;
@@ -1265,3 +1268,16 @@ gdk_keyval_is_lower (guint	  keyval)
     }
   return TRUE;
 }
+
+void
+gdk_threads_enter ()
+{
+  GDK_THREADS_ENTER ();
+}
+
+void
+gdk_threads_leave ()
+{
+  GDK_THREADS_LEAVE ();
+}
+
