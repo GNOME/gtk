@@ -482,13 +482,14 @@ static void
 init_xinerama_support (GdkScreen * screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+#ifdef HAVE_XINERAMA
+  int opcode, firstevent, firsterror;
+#endif
 
   if (screen_x11->monitors)
     g_free (screen_x11->monitors);
   
-#ifdef HAVE_XINERAMA
-  int opcode, firstevent, firsterror;
-  
+#ifdef HAVE_XINERAMA  
   if (XQueryExtension (GDK_SCREEN_XDISPLAY (screen), "XINERAMA",
 		       &opcode, &firstevent, &firsterror))
     {

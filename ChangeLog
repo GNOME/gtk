@@ -1,3 +1,7 @@
+2002-10-04  jacob berkman  <jacob@ximian.com>
+
+	* gdk/x11/gdkscreen-x11.c (init_xinerama_support): make legal C
+
 Fri Oct  4 12:05:27 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* demos/Makefile.am (pixbuf_csource): Fix envars
