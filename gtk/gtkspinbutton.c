@@ -1203,7 +1203,7 @@ gtk_spin_button_insert_text (GtkEditable *editable,
       gint i;
       GdkWChar pos_sign;
       GdkWChar neg_sign;
-      guint entry_length;
+      gint entry_length;
 
       entry_length = entry->text_length;
 
@@ -1238,7 +1238,7 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 	  }
 
       if (dotpos > -1 && *position > dotpos &&
-	  spin->digits - entry_length
+	  (gint)spin->digits - entry_length
 	    + dotpos - new_text_length + 1 < 0)
 	return;
 
@@ -1254,7 +1254,7 @@ gtk_spin_button_insert_text (GtkEditable *editable,
 	    {
 	      if (!spin->digits || dotpos > -1 || 
  		  (new_text_length - 1 - i + entry_length
-		    - *position > spin->digits)) 
+		    - *position > (gint)spin->digits)) 
 		return;
 	      dotpos = *position + i;
 	    }

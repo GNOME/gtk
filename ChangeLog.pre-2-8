@@ -1,3 +1,9 @@
+Thu Nov 30 12:39:22 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_insert_text): Fix 
+	some signed/unsigned comparison problems. (#6510,
+	David Kaelbling)
+
 Thu Nov 30 11:19:56 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_move_word): Fix stupid
