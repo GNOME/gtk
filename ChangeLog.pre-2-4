@@ -1,3 +1,10 @@
+Sun Sep 29 20:15:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+       * gtk/gtkwindow.c (gtk_window_move_resize): Clear
+        initial_pos_set even if it only causes a move, not
+        a resize as well. (Missed merge from stable,
+	may fix #89562)
+
 Sun Sep 29 14:22:47 2002 Manish Singh  <yosh@gimp.org>
 
 	* contrib/gdk-pixbuf-xlib/Makefile.am demos/Makefile.am

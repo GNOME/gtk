@@ -4851,6 +4851,8 @@ gtk_window_move_resize (GtkWindow *window)
 	  else
 	    gdk_window_move (widget->window,
 			     new_request.x, new_request.y);
+
+	  info->initial_pos_set = FALSE;
 	}
       
       /* And run the resize queue.
