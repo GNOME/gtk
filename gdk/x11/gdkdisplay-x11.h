@@ -135,8 +135,6 @@ struct _GdkDisplayX11
   gchar *input_gxid_host;
   gint   input_gxid_port;
 
-  gint   use_xft;
-
   /* Startup notification */
   gchar *startup_notification_id;
 

@@ -27,12 +27,9 @@
 #include "gdkx.h"
 #include "gdkregion-generic.h"
 
-#include <pango/pangox.h>
 #include <config.h>
 
-#if HAVE_XFT
 #include <pango/pangoxft.h>
-#endif
 
 #include <stdlib.h>
 #include <string.h>		/* for memcpy() */
@@ -122,7 +119,6 @@ static void gdk_x11_draw_image     (GdkDrawable     *drawable,
                                     gint             ydest,
                                     gint             width,
                                     gint             height);
-#ifdef HAVE_XFT
 static void gdk_x11_draw_pixbuf    (GdkDrawable     *drawable,
 				    GdkGC           *gc,
 				    GdkPixbuf       *pixbuf,
@@ -135,7 +131,6 @@ static void gdk_x11_draw_pixbuf    (GdkDrawable     *drawable,
 				    GdkRgbDither     dither,
 				    gint             x_dither,
 				    gint             y_dither);
-#endif /* HAVE_XFT */
 
 static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
                                     GdkColormap    *colormap);
@@ -201,9 +196,7 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->draw_lines = gdk_x11_draw_lines;
   drawable_class->draw_glyphs = gdk_x11_draw_glyphs;
   drawable_class->draw_image = gdk_x11_draw_image;
-#ifdef HAVE_XFT  
   drawable_class->draw_pixbuf = gdk_x11_draw_pixbuf;
-#endif /* HAVE_XFT */
   
   drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
@@ -223,7 +216,6 @@ gdk_drawable_impl_x11_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-#ifdef HAVE_XFT
 static void
 try_pixmap (Display *xdisplay,
 	    int      screen,
@@ -312,7 +304,6 @@ _gdk_x11_have_render (GdkDisplay *display)
   return x11display->have_render == GDK_YES;
 }
 
-#ifdef HAVE_XFT2
 static XftDraw *
 gdk_x11_drawable_get_xft_draw (GdkDrawable *drawable)
 {
@@ -380,81 +371,6 @@ gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
       XftDrawSetClip (xft_draw, NULL);
     }
 }
-
-#else /* !HAVE_XFT2 */
-
-static Picture
-gdk_x11_drawable_get_picture (GdkDrawable *drawable)
-{
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
- 
-  if (!_gdk_x11_have_render (gdk_drawable_get_display (drawable)))
-    return None;
-  
-  if (impl->picture == None)
-    {
-      GdkVisual *visual = gdk_drawable_get_visual (drawable);
-      XRenderPictFormat *format;
- 
-      if (!visual)
- 	{
- 	  g_warning ("Using Xft rendering requires the drawable argument to\n"
- 		     "have a specified colormap. All windows have a colormap,\n"
- 		     "however, pixmaps only have colormap by default if they\n"
- 		     "were created with a non-NULL window argument. Otherwise\n"
- 		     "a colormap must be set on them with gdk_drawable_set_colormap");
-	  return None;
- 	}
- 
-      format = XRenderFindVisualFormat (GDK_SCREEN_XDISPLAY (impl->screen),
-					gdk_x11_visual_get_xvisual(visual));
-      if (format)
-	impl->picture = XRenderCreatePicture (GDK_SCREEN_XDISPLAY (impl->screen),
-					      impl->xid, format, 0, NULL);
-    }
- 
-  return impl->picture;
-}
- 
-static void
-gdk_x11_drawable_update_xft_clip (GdkDrawable *drawable,
-				  GdkGC       *gc)
-{
-  GdkGCX11 *gc_private = gc ? GDK_GC_X11 (gc) : NULL;
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  Picture picture = gdk_x11_drawable_get_picture (drawable);
- 
-  if (gc && gc_private->clip_region)
-    {
-      GdkRegionBox *boxes = gc_private->clip_region->rects;
-      gint n_boxes = gc_private->clip_region->numRects;
-      XRectangle *rects = g_new (XRectangle, n_boxes);
-      int i;
- 
-      for (i=0; i < n_boxes; i++)
-	{
-	  rects[i].x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
-	  rects[i].y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
-	  rects[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rects[i].x;
-	  rects[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rects[i].y;
-	}
-
-      XRenderSetPictureClipRectangles (GDK_SCREEN_XDISPLAY (impl->screen),
-				       picture, 0, 0, rects, n_boxes);
- 
-      g_free (rects);
-    }
-  else
-    {
-      XRenderPictureAttributes pa;
-      pa.clip_mask = None;
-      XRenderChangePicture (GDK_SCREEN_XDISPLAY (impl->screen),
-			    picture, CPClipMask, &pa);
-    }
-}
-#endif /* HAVE_XFT2 */
-
-#endif /* HAVE_XFT */
 
 /*****************************************************
  * X11 specific implementations of generic functions *
@@ -847,42 +763,19 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 		     PangoGlyphString *glyphs)
 {
   GdkDrawableImplX11 *impl;
+  XftColor color;
+  XftDraw *draw;
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
-#if HAVE_XFT
-  if (PANGO_XFT_IS_FONT (font))
-    {
-#ifdef HAVE_XFT2
-      XftColor color;
-      XftDraw *draw;
+  g_return_if_fail (PANGO_XFT_IS_FONT (font));
  
-      _gdk_gc_x11_get_fg_xft_color (gc, &color);
-       
-      gdk_x11_drawable_update_xft_clip (drawable, gc);
-      draw = gdk_x11_drawable_get_xft_draw (drawable);
+  _gdk_gc_x11_get_fg_xft_color (gc, &color);
       
-      pango_xft_render (draw, &color, font, glyphs, x, y);
-#else /* !HAVE_XFT2 */
-      Picture src_picture;
-      Picture dest_picture;
+  gdk_x11_drawable_update_xft_clip (drawable, gc);
+  draw = gdk_x11_drawable_get_xft_draw (drawable);
       
-      src_picture = _gdk_x11_gc_get_fg_picture (gc);
-      
-      gdk_x11_drawable_update_xft_clip (drawable, gc);
-      dest_picture = gdk_x11_drawable_get_picture (drawable);
-      
-      pango_xft_picture_render (GDK_SCREEN_XDISPLAY (impl->screen), 
-				src_picture, dest_picture, 
-				font, glyphs, x, y);
-#endif /* HAVE_XFT2 */
-    }
-  else
-#endif  /* HAVE_XFT */
-    pango_x_render (GDK_SCREEN_XDISPLAY (impl->screen),
-		    impl->xid,
-		    GDK_GC_GET_XGC (gc),
-		    font, glyphs, x, y);
+  pango_xft_render (draw, &color, font, glyphs, x, y);
 }
 
 static void
@@ -999,7 +892,6 @@ gdk_x11_drawable_get_xid (GdkDrawable *drawable)
  * what's the fastest depending on the available picture formats,
  * whether we can used shared pixmaps, etc.
  */
-#ifdef HAVE_XFT
 typedef enum {
   FORMAT_NONE,
   FORMAT_EXACT_MASK,
@@ -1524,4 +1416,3 @@ gdk_x11_draw_pixbuf (GdkDrawable     *drawable,
 		      rowstride,
 		      dest_x, dest_y, width, height);
 }
-#endif /* HAVE_XFT */

@@ -28,8 +28,8 @@ m4_define([gtk_api_version], [2.0])
 m4_define([gtk_binary_version], [2.2.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.1.4])
-m4_define([pango_required_version], [1.0.1])
+m4_define([glib_required_version], [2.3.0])
+m4_define([pango_required_version], [1.2.0])
 m4_define([atk_required_version], [1.0.1])
 
 
@@ -993,90 +993,44 @@ fi
 if test "x$gdktarget" = "xx11"; then
   # We start off with the libraries from Pango
 
-  if $PKG_CONFIG --exists pangox ; then : ; else
-    AC_MSG_ERROR([pangox Pango backend is required for x11 target])
-  fi
-    
-  ## be sure we also have Pango built with xft support
-  if $PKG_CONFIG --exists pangoxft ; then
-    PANGO_PACKAGES="pangoxft pangox"
-    have_xft=true
-    AC_DEFINE(HAVE_XFT)
+  ## be sure we also have Pango built with Xft2 support
+  if $PKG_CONFIG --exists 'pangoxft >= 1.2.0' ; then
     if $have_freetype ; then
       :
     else
-      AC_MSG_ERROR([pangoxft Pango backend found but did not find freetype libraries])
+      AC_MSG_ERROR([Xft Pango backend found but did not find freetype libraries])
     fi
   else
-    PANGO_PACKAGES="pangox"
-    have_xft=false
+    AC_MSG_ERROR([Pango 1.2.0 and Xft backend is required for x11 target])
   fi
 
-  AM_CONDITIONAL(HAVE_XFT, $have_xft)
-
-  if $have_xft; then
-    if $PKG_CONFIG --exists xft ; then
-      AC_DEFINE(HAVE_XFT2, 1, [Define if we have Xft, version 2])
-    fi
+  if $PKG_CONFIG --exists xft ; then : ; else
+    AC_MSG_ERROR([Xft version 2 is required for x11 target])
   fi
 
   #
   # If Pango included the shared library dependencies from X11 in
   # the pkg-config output, then we use that (to avoid duplicates).
-  # but if they were omitted to avoid binary compatibility problems
+  # but if they were omitted to avoid binary compatibility problems,
   # then we need to repeat the checks.
   #
-  x_libs="`$PKG_CONFIG --libs $PANGO_PACKAGES`"
+  x_libs="`$PKG_CONFIG --libs pangoxft`"
   case "$x_libs" in
     *-lX11*) pango_omitted_x_deps=no ;;
     *)       pango_omitted_x_deps=yes ;;
   esac
 
-  x_cflags="`$PKG_CONFIG --cflags $PANGO_PACKAGES`"
+  x_cflags="`$PKG_CONFIG --cflags pangoxft`"
   x_extra_libs=
 
+  AC_PATH_XTRA
+  if test x$no_x = xyes ; then
+    AC_MSG_ERROR([X development libraries not found])
+  fi
+  
   if test $pango_omitted_x_deps = yes ; then
-    AC_PATH_XTRA
-
-    if test x$no_x = xyes ; then
-      AC_MSG_ERROR([X development libraries not found])
-    fi
-
-    x_libs="$X_LIBS -lX11 $X_EXTRA_LIBS"
-
-    #
-    # Checks for Xft/XRender
-    #
-    if test $have_xft = true ; then
-      have_xft=false
-
-      if pkg-config --exists pangoxft '>=' 1.1.0 ; then
-        x_libs="`pkg-config --libs xft` -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
-        have_xft=true
-      else
-        gtk_save_cppflags="$CPPFLAGS"
-        CPPFLAGS="$CPPFLAGS $x_cflags"
-      
-        AC_CHECK_LIB(Xrender, XRenderFindFormat, 
-	  [AC_CHECK_LIB(Xft, XftFontOpen,
-	    [AC_CHECK_HEADER(X11/Xft/XftFreetype.h,
-	      have_xft=true,:)],
-	    :,-lXrender -lXext $x_libs $FREETYPE_LIBS)]
-	  ,:,-lXext $x_libs)
-	  
-        if $have_xft ; then
-	  x_libs="$X_LIBS -lXft -lXrender -lXext -lX11 $FREETYPE_LIBS $X_EXTRA_LIBS"
-        fi
-
-        CPPFLAGS="$gtk_save_cppflags"
-      fi
-
-      if $have_xft ; then
-        :
-      else
-        AC_MSG_ERROR([pangoxft Pango backend found, but Xft not found])
-      fi
-    fi
+    # Old versions of Xft didn't necessarily include -lX11 in the output
+    x_libs="`pkg-config --libs xft` -lX11 $X_EXTRA_LIBS"
   fi    	
 
   ## Strip the .la files
@@ -1097,22 +1051,18 @@ if test "x$gdktarget" = "xx11"; then
   if test "x$enable_shm" = "xyes"; then
     # Check for the Xext library (needed for XShm extention)
     AC_CHECK_LIB(Xext, XShmAttach,
-        if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
-          x_extra_libs="-lXext"
-        fi,
+        [GTK_ADD_LIB(x_extra_libs,Xext)],
         # On AIX, it is in XextSam instead, but we still need -lXext
-        AC_CHECK_LIB(XextSam, XShmAttach, 
-            if test -z "`echo $x_libs | grep "\-lXext" 2> /dev/null`"; then
-               x_extra_libs="-lXextSam -lXext"
-            else
-               x_extra_libs="-lXextSam"
-            fi, , $x_libs_for_checks),
+        [AC_CHECK_LIB(XextSam, XShmAttach, 
+            [GTK_ADD_LIB(x_extra_libs,Xext)
+             GTK_ADD_LIB(x_extra_libs,XextSam)
+            ], , -lXext $x_libs_for_checks)],
         $x_libs_for_checks)
   fi
 
   GDK_PIXBUF_XLIB_EXTRA_CFLAGS="$x_cflags"
   # Don't ever pull in the pangoxft libraries for gdk-pixbuf-x11
-  GDK_PIXBUF_XLIB_EXTRA_LIBS="$x_extra_libs $x_libs"
+  GDK_PIXBUF_XLIB_EXTRA_LIBS="$X_LIBS -lX11 $x_extra_libs $X_EXTRA_LIBS"
 
   # Check for Xinerama extension (Solaris impl or Xfree impl)
 
@@ -1127,11 +1077,9 @@ if test "x$gdktarget" = "xx11"; then
 			use_solaris_xinerama=yes, use_solaris_xinerama=no)
 	  if test "x$use_solaris_xinerama" = "xyes"; then
 	      AC_CHECK_HEADER(X11/extensions/xinerama.h,
-		if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
-		    x_extra_libs="-lXext $x_extra_libs"
-		fi
+	        [GTK_ADD_LIB(x_extra_libs,Xext)
 		AC_DEFINE(HAVE_SOLARIS_XINERAMA)
-		AC_DEFINE(HAVE_XINERAMA), use_solaris_xinerama=no, -lXext $x_libs_for_checks)
+		AC_DEFINE(HAVE_XINERAMA)], use_solaris_xinerama=no, -lXext $x_libs_for_checks)
 	  fi	
 	  AC_MSG_CHECKING(for Xinerama support on Solaris)
 	  AC_MSG_RESULT($use_solaris_xinerama);
@@ -1141,12 +1089,10 @@ if test "x$gdktarget" = "xx11"; then
 	  use_xfree_xinerama=yes
 	  AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
 	      [AC_CHECK_HEADER(X11/extensions/Xinerama.h, 
-		  x_extra_libs="-lXinerama $x_extra_libs"   
-		  if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
-		      x_extra_libs="-lXext $x_extra_libs"
-		  fi
+	          [GTK_ADD_LIB(x_extra_libs,Xext)
+	          GTK_ADD_LIB(x_extra_libs,Xinerama)
 		  AC_DEFINE(HAVE_XFREE_XINERAMA)
-		  AC_DEFINE(HAVE_XINERAMA), 
+		  AC_DEFINE(HAVE_XINERAMA)], 
 		  use_xfree_xinerama=no,
                   [#include <X11/Xlib.h>])],
 	      use_xfree_xinerama=no, -lXext $x_libs_for_checks)
@@ -1160,10 +1106,8 @@ if test "x$gdktarget" = "xx11"; then
   # Check for shaped window extension
 
   AC_CHECK_LIB(Xext, XShapeCombineMask,
-      if test -z "`echo $x_extra_libs $x_libs | grep "\-lXext" 2> /dev/null`"; then
-           x_extra_libs="-lXext $x_extra_libs"
-      fi
-      AC_DEFINE(HAVE_SHAPE_EXT),
+      [GTK_ADD_LIB(x_extra_libs,Xext),
+       AC_DEFINE(HAVE_SHAPE_EXT)],
       ,
       $x_libs_for_checks)
 
@@ -1210,7 +1154,7 @@ if test "x$gdktarget" = "xx11"; then
 
   if test "x$with_xinput" = "xxfree" || test "x$with_xinput" = "xyes"; then
     AC_DEFINE(XINPUT_XFREE)
-    x_extra_libs="-lXi $x_extra_libs"
+    GTK_ADD_LIB(x_extra_libs, Xi)
   else
     AC_DEFINE(XINPUT_NONE)
   fi
@@ -1222,21 +1166,22 @@ if test "x$gdktarget" = "xx11"; then
   AC_CHECK_LIB(Xrandr, XRRUpdateConfiguration,
       [AC_CHECK_HEADER(X11/extensions/Xrandr.h,
           # RANDR requires RENDER
-	  if test -z "`echo $x_extra_libs $x_libs | grep "\-lXrender" 2> /dev/null`"; then
-	      x_extra_libs="-lXrender $x_extra_libs"
-	  fi
-	  x_extra_libs="-lXrandr $x_extra_libs"
-	  AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library),
+          [GTK_ADD_LIB(x_extra_libs, Xrender)
+          GTK_ADD_LIB(x_extra_libs, Xrandr)
+	  AC_DEFINE(HAVE_RANDR, 1, Have the Xrandr extension library)],
 	  :, [#include <X11/Xlib.h>])], : ,
        $X_LIBS -lXrandr -lXrender -lX11 $X_EXTRA_LIBS)
 
   # Checks for Xcursor library
+  
   have_xcursor=false
   PKG_CHECK_MODULES(XCURSOR, xcursor, have_xcursor=true, :)
 
   if $have_xcursor ; then
     AC_DEFINE(HAVE_XCURSOR, 1, Have the Xcursor library)
-    GDK_EXTRA_LIBS="$XCURSOR_LIBS $GDK_EXTRA_LIBS";
+    XCURSOR_PACKAGES="xcursor"
+  else
+    XCURSOR_PACKAGES=
   fi
     
   # Xshm checks
@@ -1273,14 +1218,13 @@ if test "x$gdktarget" = "xx11"; then
 
   GDK_EXTRA_CFLAGS=
   if test $pango_omitted_x_deps = yes ; then
-    GDK_EXTRA_LIBS="$x_extra_libs $x_libs $GDK_EXTRA_LIBS"
+    GDK_EXTRA_LIBS="$X_LIBS $x_extra_libs $x_libs $GDK_EXTRA_LIBS"
   else
-    GDK_EXTRA_LIBS="$x_extra_libs $GDK_EXTRA_LIBS"
+    GDK_EXTRA_LIBS="$X_LIBS $x_extra_libs $GDK_EXTRA_LIBS"
   fi
 
   AM_CONDITIONAL(USE_X11, true)
 else
-  AM_CONDITIONAL(HAVE_XFT, false)
   AM_CONDITIONAL(XINPUT_XFREE, false)
   AM_CONDITIONAL(USE_X11, false)
   AM_CONDITIONAL(HAVE_X11R6, false)
@@ -1288,9 +1232,6 @@ fi
 
 if test "x$gdktarget" = "xwin32"; then
   # We start off with the libraries from Pango
-
-  ## be sure we also have Pango built with win32 support
-  PANGO_PACKAGES="pangowin32"
 
   if test x$have_wintab = xyes; then
     GDK_WIN32_EXTRA_CFLAGS="-I $with_wintab/include"
@@ -1302,8 +1243,6 @@ if test "x$gdktarget" = "xwin32"; then
 else
   AM_CONDITIONAL(USE_WIN32, false)
 fi
-
-AC_SUBST(xinput_progs)
 
 GDK_PIXBUF_XLIB_PACKAGES=
 GDK_PIXBUF_XLIB_DEP_LIBS="`$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PIXBUF_XLIB_PACKAGES` $GDK_PIXBUF_XLIB_EXTRA_LIBS $GDK_PIXBUF_EXTRA_LIBS"
@@ -1357,11 +1296,13 @@ fi
 #
 
 if test "x$gdktarget" = "xx11"; then
-	if $have_xft = true ; then
-            PANGO_PACKAGES="pangoxft pangox"
-        else
-            PANGO_PACKAGES=pangox
-        fi
+        PANGO_PACKAGES=pangoxft
+	
+        # We no longer use pangox, but if we find it, we link to it 
+	# for binary compatibility.
+	if $PKG_CONFIG --exists pangox ; then
+		PANGO_PACKAGES="$PANGO_PACKAGES pangox"
+	fi
 elif test "x$gdktarget" = "xwin32"; then
         PANGO_PACKAGES=pangowin32
 elif test "x$gdktarget" = "xlinux-fb"; then
@@ -1403,7 +1344,7 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES=$PANGO_PACKAGES
+GDK_PACKAGES="$XCURSOR_PACKAGES $PANGO_PACKAGES"
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
 GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS"
 

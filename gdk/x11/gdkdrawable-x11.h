@@ -32,10 +32,7 @@
 #include <gdk/gdkdrawable.h>
 
 #include <X11/Xlib.h>
-
-#ifdef HAVE_XFT
 #include <X11/Xft/Xft.h>
-#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -65,11 +62,7 @@ struct _GdkDrawableImplX11
   Window xid;
   GdkScreen *screen;
 
-#ifdef HAVE_XFT2
   XftDraw *xft_draw;
-#elif defined (HAVE_XFT)
-  Picture picture;
-#endif  
 };
  
 struct _GdkDrawableImplX11Class 

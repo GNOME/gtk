@@ -890,6 +890,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkToplevelX11 *toplevel;
+  GdkDrawableImplX11 *draw_impl;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -902,19 +903,10 @@ _gdk_windowing_window_destroy (GdkWindow *window,
   if (toplevel)
     gdk_toplevel_x11_free_contents (toplevel);
 
-#ifdef HAVE_XFT  
-  {
-    GdkDrawableImplX11 *draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
-
-#ifdef HAVE_XFT2
-    if (draw_impl->xft_draw)
-      XftDrawDestroy (draw_impl->xft_draw);
-#else /* !HAVE_XFT2 */
-    if (draw_impl->picture)
-      XRenderFreePicture (GDK_DRAWABLE_XDISPLAY (window), draw_impl->picture);
-#endif /* HAVE_XFT2 */
-  }
-#endif /* HAVE_XFT */  
+  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
+    
+  if (draw_impl->xft_draw)
+    XftDrawDestroy (draw_impl->xft_draw);
 
   if (private->window_type == GDK_WINDOW_FOREIGN)
     {

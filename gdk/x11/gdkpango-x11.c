@@ -23,10 +23,7 @@
 #include "gdkx.h"
 #include "gdkdisplay-x11.h"
 #include "gdkpango.h"
-#include <pango/pangox.h>
-#ifdef HAVE_XFT
 #include <pango/pangoxft.h>
-#endif
 
 /**
  * gdk_pango_context_get_for_screen:
@@ -48,40 +45,14 @@ PangoContext *
 gdk_pango_context_get_for_screen (GdkScreen *screen)
 {
   PangoContext *context;
-  GdkDisplayX11 *display_x11;
   
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   if (screen->closed)
     return NULL;
   
-  display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
-  
-#ifdef HAVE_XFT
-  if (display_x11->use_xft == -1)
-    {
-      const char *val = g_getenv ("GDK_USE_XFT");
-      
-      /* Version 2 of Xft supports rendering FreeType fonts via
-       * the core X protocol, so we default to it everywhere.
-       *
-       * For Xft1, we only enable Xft if the user explicitely
-       * specifies it, and we have the RENDER extension
-       */
-#  ifdef HAVE_XFT2      
-      display_x11->use_xft = !val || (atoi (val) != 0);
-#  else
-      display_x11->use_xft = val && (atoi (val) != 0) && 
-	_gdk_x11_have_render (GDK_SCREEN_DISPLAY (screen));
-#  endif /* HAVE_XFT2 */      
-    }
-  
-  if (display_x11->use_xft)
-    context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
-				     GDK_SCREEN_X11 (screen)->screen_num);
-  else
-#endif /* HAVE_XFT */
-    context = pango_x_get_context (GDK_SCREEN_XDISPLAY (screen));
+  context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
+				   GDK_SCREEN_X11 (screen)->screen_num);
   
   g_object_set_data (G_OBJECT (context), "gdk-pango-screen", screen);
   

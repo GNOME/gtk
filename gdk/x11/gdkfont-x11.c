@@ -30,8 +30,6 @@
 #include <X11/Xos.h>
 #include <locale.h>
 
-#include <pango/pangox.h>
-
 #include "gdkx.h"
 #include "gdkfont.h"
 #include "gdkprivate-x11.h"
@@ -285,42 +283,12 @@ GdkFont *
 gdk_font_from_description_for_display (GdkDisplay           *display,
 				       PangoFontDescription *font_desc)
 {
-  PangoFontMap *font_map;
-  PangoFont *font;
-  GdkFont *result = NULL;
+  GdkFont *result;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (font_desc != NULL, NULL);
 
-  font_map = pango_x_font_map_for_display (GDK_DISPLAY_XDISPLAY (display));
-  font = pango_font_map_load_font (font_map, NULL, font_desc);
-
-  if (font)
-    {
-      gchar *charset = gdk_font_charset_for_locale ();
-      gint n_subfonts;
-      PangoXSubfont *subfont_ids;
-      gint *subfont_charsets;
-
-      n_subfonts = pango_x_list_subfonts (font, &charset, 1,
-					  &subfont_ids, &subfont_charsets);
-      if (n_subfonts > 0)
-	{
-	  gchar *xlfd = pango_x_font_subfont_xlfd (font, subfont_ids[0]);
-	  result = gdk_font_load_for_display (display, xlfd);
-
-	  g_free (xlfd);
-	}
-
-      g_free (subfont_ids);
-
-      g_free (subfont_charsets);
-
-      g_free (charset);
-      g_object_unref (font);
-    }
-
-  return result;
+  return gdk_font_load_for_display (display, "fixed");
 }
 
 /**

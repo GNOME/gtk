@@ -11,6 +11,17 @@ AC_DEFUN([GLIB_AC_DIVERT_BEFORE_HELP],
 $1
 AC_DIVERT_POP()])])])
 
+# GTK_ADD_LIB(VAR,LIBNAME)
+# ---------------------------------
+# Helper macro to add a -lBlah to a variable, avoiding repeats
+# Note that this needs to be quoted when used in an enclosing macro
+AC_DEFUN([GTK_ADD_LIB],
+[ case "$$1 " in
+    *-l$2[[\ \	]]*)               ;;
+    *)               $1="-l$2 $$1" ;;
+  esac
+])
+
 # Checks the location of the XML Catalog
 # Usage:
 #   JH_PATH_XML_CATALOG

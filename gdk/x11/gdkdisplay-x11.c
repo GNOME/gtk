@@ -153,7 +153,6 @@ gdk_display_open (const gchar *display_name)
   display = g_object_new (GDK_TYPE_DISPLAY_X11, NULL);
   display_x11 = GDK_DISPLAY_X11 (display);
 
-  display_x11->use_xft = -1;
   display_x11->use_xshm = TRUE;
   display_x11->xdisplay = xdisplay;
 

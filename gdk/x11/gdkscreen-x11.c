@@ -32,11 +32,6 @@
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
 
-#ifdef HAVE_XFT
-#include <pango/pangoxft.h>
-#endif
-#include <pango/pangox.h>
-
 #ifdef HAVE_SOLARIS_XINERAMA
 #include <X11/extensions/xinerama.h>
 #endif

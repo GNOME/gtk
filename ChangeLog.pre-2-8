@@ -1,10 +1,26 @@
+Sat Aug  2 12:53:16 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Requires glib-2.3.0, pango-1.2.0.
+
+	* configure.in: Require Xft version 2,
+	remove code for handling older versions of pango and Xft.
+	Many miscellaneous improvements to X checks
+
+	* acinclude.m4: Add GTK_ADD_LIB() macro for adding 
+	a library to a variable, avoiding dups.
+
+	* gdk/x11/gdkfont-x11.c (gdk_font_from_description_for_display): 
+	Always load "fixed"
+
+	* gdk/x11/gdk*-x11.[ch]: Remove support for Xft1 and
+	for pangox.
+
 2003-08-02  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkcolorsel.c (color_sample_drop_handle) 
-	(palette_drop_handle): 
-	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  Accept drops with the 
-	wrong format, since the KDE color chooser incorrectly drops application/x-color with 
-	format 8.
+	* gtk/gtkcolorsel.c (color_sample_drop_handle) (palette_drop_handle): 
+	* gtk/gtkcolorbutton.c (gtk_color_button_drag_data_received):  
+	Accept drops with the wrong format, since the KDE color chooser 
+	incorrectly drops application/x-color with format 8.
 
 2003-08-02  Tor Lillqvist  <tml@iki.fi>
 
@@ -536,11 +552,13 @@ Thu Jul 17 16:11:21 2003  Kristian Rietveld  <kris@gtk.org>
 
 2003-07-15  Matthias Clasen  <maclas@gmx.de>
 
-	* gdk/x11/gdkcursor-x11.c (gdk_display_get_maximal_cursor_size): Fight against gtk-doc stupidity.
+	* gdk/x11/gdkcursor-x11.c (gdk_display_get_maximal_cursor_size):
+	Fight against gtk-doc stupidity.
 
 2003-07-13  Matthias Clasen  <maclas@gmx.de>
 
-	* gtk/gtkdnd.c (gtk_drag_begin): Rename parameter target_list back to targets, to pacify gtk-doc.
+	* gtk/gtkdnd.c (gtk_drag_begin): Rename parameter target_list back to 
+	targets, to pacify gtk-doc.
 
 Sun Jul 13 15:57:57 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 

@@ -109,10 +109,8 @@ gdk_gc_x11_finalize (GObject *object)
   if (x11_gc->clip_region)
     gdk_region_destroy (x11_gc->clip_region);
   
-#if HAVE_XFT
   if (x11_gc->fg_picture != None)
     XRenderFreePicture (GDK_GC_XDISPLAY (x11_gc), x11_gc->fg_picture);
-#endif  
   
   XFreeGC (GDK_GC_XDISPLAY (x11_gc), GDK_GC_XGC (x11_gc));
 
@@ -816,7 +814,6 @@ gdk_x11_gc_get_xgc (GdkGC *gc)
   return gc_x11->xgc;
 }
 
-#ifdef HAVE_XFT
 /* Various bits of the below are roughly cribbed from XFree86
  * lib/Xft/xftdraw.c, Copyright 2000, Keith Packard
  */
@@ -942,5 +939,3 @@ _gdk_gc_x11_get_fg_xft_color (GdkGC    *gc,
   xftcolor->color.blue = color.blue;
   xftcolor->color.alpha = 0xffff;
 }
-
-#endif /* HAVE_XFT */
