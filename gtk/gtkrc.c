@@ -1457,7 +1457,7 @@ gtk_rc_reparse_all_for_settings (GtkSettings *settings,
       gtk_rc_reset_widgets (context);
     }
 
-  return mtime_modified;
+  return force_load || mtime_modified;
 }
 
 /**

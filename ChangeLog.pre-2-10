@@ -1,3 +1,9 @@
+Fri Sep 20 16:56:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_reparse_all_for_settings):
+	Return TRUE if force_load was specified. (#93738,
+	Vitaly Tishkov.)
+
 2002-09-20  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkmain.c (gtk_get_default_language): On Win32, look
