@@ -106,13 +106,9 @@ GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 void          gdk_keyboard_ungrab    (guint32       time);
 gboolean      gdk_pointer_is_grabbed (void);
 
-gint gdk_screen_width_for_screen (GdkScreen * screen);
 gint gdk_screen_width  (void) G_GNUC_CONST;
-gint gdk_screen_height_for_screen (GdkScreen * screen);
 gint gdk_screen_height (void) G_GNUC_CONST;
-gint gdk_screen_width_mm_for_screen (GdkScreen * screen);
 gint gdk_screen_width_mm  (void) G_GNUC_CONST;
-gint gdk_screen_height_mm_for_screen (GdkScreen * screen);
 gint gdk_screen_height_mm (void) G_GNUC_CONST;
 
 void gdk_flush (void);

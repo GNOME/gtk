@@ -54,7 +54,7 @@ GdkAtom		gdk_display_atom		(GdkDisplay * dpy,
 						 const gchar * atom_name,
 						 gboolean only_if_exists);
 gchar *		gdk_display_atom_name		(GdkDisplay * dpy, GdkAtom atom);
-
+void		gdk_display_sync		(GdkDisplay * display);
 
 #ifdef __cplusplus
 }

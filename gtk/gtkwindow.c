@@ -3007,8 +3007,8 @@ gtk_window_compute_reposition (GtkWindow *window,
     case GTK_WIN_POS_CENTER_ALWAYS:
       if (window->use_uposition)
 	{
-	  gint screen_width = gdk_screen_width_for_screen (widget->screen);
-	  gint screen_height = gdk_screen_height_for_screen (widget->screen);
+	  gint screen_width = gdk_screen_get_width (widget->screen);
+	  gint screen_height = gdk_screen_get_height (widget->screen);
 	  
 	  *x = (screen_width - new_width) / 2;
 	  *y = (screen_height - new_height) / 2;
@@ -3032,8 +3032,8 @@ gtk_window_compute_reposition (GtkWindow *window,
     case GTK_WIN_POS_MOUSE:
       if (window->use_uposition)
 	{
-	  gint screen_width = gdk_screen_width_for_screen (widget->screen);
-	  gint screen_height = gdk_screen_height_for_screen (widget->screen);
+	  gint screen_width = gdk_screen_get_width (widget->screen);
+	  gint screen_height = gdk_screen_get_height (widget->screen);
 	  
 	  gdk_window_get_pointer (window, x, y, NULL);
 	  *x -= new_width / 2;

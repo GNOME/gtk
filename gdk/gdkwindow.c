@@ -1786,7 +1786,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
           if (debug_updates)
             {
               /* Make sure we see the red invalid area before redrawing. */
-              gdk_flush ();
+              gdk_display_sync (gdk_window_get_display(window));
               g_usleep (70000);
             }
           

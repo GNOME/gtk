@@ -329,8 +329,8 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   
   widget = tooltips->active_tips_data->widget;
 
-  scr_w = gdk_screen_width_for_screen (widget->screen);
-  scr_h = gdk_screen_height_for_screen (widget->screen);
+  scr_w = gdk_screen_get_width (widget->screen);
+  scr_h = gdk_screen_get_height (widget->screen);
 
   data = tooltips->active_tips_data;
 

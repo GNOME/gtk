@@ -724,16 +724,12 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
       if (!image_info->cmap &&
 	  (gdk_rgb_install_cmap || image_info->visual != gdk_visual_get_system_for_screen (visual->screen)))
 	{
-	  image_info->cmap = gdk_colormap_new_for_screen (image_info->visual,
-							  visual->screen,
-							  FALSE);
+	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
 	  image_info->cmap_alloced = TRUE;
 	}
       if (!gdk_rgb_do_colormaps (image_info, image_info->cmap != NULL))
 	{
-	  image_info->cmap = gdk_colormap_new_for_screen (image_info->visual,
-							  visual->screen,
-							  FALSE);
+	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
 	  image_info->cmap_alloced = TRUE;
 	  gdk_rgb_do_colormaps (image_info, TRUE);
 	}
@@ -751,9 +747,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
     {
       if (!image_info->cmap)
 	{
-	  image_info->cmap = gdk_colormap_new_for_screen (image_info->visual,
-							  visual->screen,
-							  FALSE);
+	  image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
 	  image_info->cmap_alloced = TRUE;
 	}
       
@@ -770,9 +764,7 @@ gdk_rgb_create_info (GdkVisual *visual, GdkColormap *colormap)
 	    image_info->cmap = gdk_colormap_ref (gdk_colormap_get_system_for_screen (visual->screen));
 	  else
 	    {
-	      image_info->cmap = gdk_colormap_new_for_screen(image_info->visual,
-							     visual->screen,
-							     FALSE);
+	      image_info->cmap = gdk_colormap_new (image_info->visual, FALSE);
 	      image_info->cmap_alloced = TRUE;
 	    }
 	}
@@ -3102,7 +3094,7 @@ gdk_rgb_alloc_scratch_image (GdkRgbInfo *image_info)
   if (image_info->static_image_idx == N_REGIONS)
     {
 #ifndef NO_FLUSH
-      gdk_flush ();
+      gdk_display_sync (gdk_screen_get_display(image_info->visual->screen));
 #endif
 #ifdef VERBOSE
       g_print ("flush, %d puts since last flush\n", sincelast);

@@ -516,13 +516,8 @@ gdk_keyboard_ungrab (guint32 time)
 gint
 gdk_screen_width (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_width_for_screen instead\n"));  
-  return gdk_screen_width_for_screen (DEFAULT_GDK_SCREEN);
-}
-gint
-gdk_screen_width_for_screen (GdkScreen * screen)
-{
-  return GDK_SCREEN_GET_CLASS(screen)->get_width (screen);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_width instead\n"));  
+  return gdk_screen_get_width (DEFAULT_GDK_SCREEN);
 }
 
 /*
@@ -543,15 +538,10 @@ gdk_screen_width_for_screen (GdkScreen * screen)
 gint
 gdk_screen_height (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_height_for_screen instead\n"));
-  return gdk_screen_height_for_screen (DEFAULT_GDK_SCREEN);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_height instead\n"));
+  return gdk_screen_get_height (DEFAULT_GDK_SCREEN);
 }
 
-gint
-gdk_screen_height_for_screen (GdkScreen * screen)
-{
-  return GDK_SCREEN_GET_CLASS(screen)->get_height (screen);
-}
 
 
 /*
@@ -572,13 +562,8 @@ gdk_screen_height_for_screen (GdkScreen * screen)
 gint
 gdk_screen_width_mm (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_width_mm_for_screen instead\n"));
-  return gdk_screen_width_mm_for_screen(DEFAULT_GDK_SCREEN);
-}
-gint
-gdk_screen_width_mm_for_screen (GdkScreen * screen)
-{
-  return GDK_SCREEN_GET_CLASS(screen)->get_width_mm (screen);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_width_mm instead\n"));
+  return gdk_screen_get_width_mm (DEFAULT_GDK_SCREEN);
 }
 
 /*
@@ -599,13 +584,8 @@ gdk_screen_width_mm_for_screen (GdkScreen * screen)
 gint
 gdk_screen_height_mm (void)
 {
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_height_mm_for_screen instead\n"));
-  return gdk_screen_height_mm_for_screen(DEFAULT_GDK_SCREEN);
-}
-gint
-gdk_screen_height_mm_for_screen (GdkScreen * screen)
-{
-  return GDK_SCREEN_GET_CLASS(screen)->get_height_mm (screen);
+  GDK_NOTE(MULTIHEAD,g_message("Use gdk_screen_get_height_mm instead\n"));
+  return gdk_screen_get_height_mm(DEFAULT_GDK_SCREEN);
 }
 
 /*

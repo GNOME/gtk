@@ -736,8 +736,8 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
   twidth = GTK_WIDGET (menu)->requisition.width;
   theight = GTK_WIDGET (menu)->requisition.height;
 
-  screen_width = gdk_screen_width_for_screen (GTK_WIDGET (menu)->screen);
-  screen_height = gdk_screen_height_for_screen (GTK_WIDGET (menu)->screen);
+  screen_width = gdk_screen_get_width (GTK_WIDGET (menu)->screen);
+  screen_height = gdk_screen_get_height (GTK_WIDGET (menu)->screen);
 
   if (!gdk_window_get_origin (GTK_WIDGET (menu_item)->window, &tx, &ty))
     {

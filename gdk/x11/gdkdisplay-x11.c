@@ -280,3 +280,8 @@ gdk_display_atom_name (GdkDisplay * dpy, GdkAtom atom)
   }
 }
 
+void
+gdk_display_sync (GdkDisplay * display)
+{
+  XSync (GDK_DISPLAY_IMPL_X11(display)->xdisplay, False);
+}

@@ -1934,7 +1934,7 @@ gdk_net_wm_supports_for_screen (GdkAtom property, GdkScreen * screen)
    */
   XSelectInput (scr_impl->xdisplay, *xwindow, StructureNotifyMask);
 
-  gdk_flush ();
+  gdk_display_sync (scr_impl->display);
 
   if (gdk_error_trap_pop ()) {
     XFree (xwindow);

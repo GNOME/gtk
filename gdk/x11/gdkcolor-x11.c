@@ -128,9 +128,9 @@ gdk_colormap_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
-GdkColormap *
-gdk_colormap_new_for_screen (GdkVisual * visual,
-			     GdkScreen * screen, gboolean private_cmap)
+GdkColormap*
+gdk_colormap_new (GdkVisual *visual,
+		  gboolean   private_cmap)
 {
   GdkColormap *colormap;
   GdkColormapPrivateX11 *private;
@@ -154,7 +154,7 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
 
   colormap->size = visual->colormap_size;
 
-  colormap->screen = screen;
+  colormap->screen = visual->screen;
 
   switch (visual->type) {
   case GDK_VISUAL_GRAYSCALE:
@@ -166,8 +166,8 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
 				      (GEqualFunc) gdk_color_equal);
 
     private->private_val = private_cmap;
-    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (screen),
-					  GDK_SCREEN_XROOTWIN (screen),
+    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (visual->screen),
+					  GDK_SCREEN_XROOTWIN (visual->screen),
 					  xvisual,
 					  (private_cmap) ? (AllocAll)
 					  : (AllocNone));
@@ -180,9 +180,9 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
       for (i = 0; i < colormap->size; i++)
 	default_colors[i].pixel = i;
 
-      XQueryColors (GDK_SCREEN_XDISPLAY (screen),
-		    DefaultColormap (GDK_SCREEN_XDISPLAY (screen),
-				     GDK_SCREEN_IMPL_X11 (screen)->scr_num),
+      XQueryColors (GDK_SCREEN_XDISPLAY (visual->screen),
+		    DefaultColormap (GDK_SCREEN_XDISPLAY (visual->screen),
+				     GDK_SCREEN_IMPL_X11 (visual->screen)->scr_num),
 		    default_colors, colormap->size);
 
       for (i = 0; i < colormap->size; i++) {
@@ -200,8 +200,8 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
 
   case GDK_VISUAL_DIRECT_COLOR:
     private->private_val = TRUE;
-    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (screen),
-					  GDK_SCREEN_XROOTWIN (screen),
+    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (visual->screen),
+					  GDK_SCREEN_XROOTWIN (visual->screen),
 					  xvisual, AllocAll);
     colormap->colors = g_new (GdkColor, colormap->size);
 
@@ -223,8 +223,8 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
   case GDK_VISUAL_STATIC_GRAY:
   case GDK_VISUAL_STATIC_COLOR:
     private->private_val = FALSE;
-    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (screen),
-					  GDK_SCREEN_XROOTWIN (screen),
+    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (visual->screen),
+					  GDK_SCREEN_XROOTWIN (visual->screen),
 					  xvisual, AllocNone);
 
     colormap->colors = g_new (GdkColor, colormap->size);
@@ -233,8 +233,8 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
 
   case GDK_VISUAL_TRUE_COLOR:
     private->private_val = FALSE;
-    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (screen),
-					  GDK_SCREEN_XROOTWIN (screen),
+    private->xcolormap = XCreateColormap (GDK_SCREEN_XDISPLAY (visual->screen),
+					  GDK_SCREEN_XROOTWIN (visual->screen),
 					  xvisual, AllocNone);
     break;
   }
@@ -242,14 +242,6 @@ gdk_colormap_new_for_screen (GdkVisual * visual,
   gdk_colormap_add (colormap);
 
   return colormap;
-}
-
-GdkColormap*
-gdk_colormap_new (GdkVisual *visual,
-		  gboolean   private_cmap)
-{
-  GDK_NOTE(MULTIHEAD,g_message("Use gdk_colormap_new_for_screen instead\n"));  
-  return gdk_colormap_new_for_screen(visual,DEFAULT_GDK_SCREEN,private_cmap);
 }
 
 #define MIN_SYNC_TIME 2
@@ -358,16 +350,11 @@ gdk_colormap_get_system (void)
 }
 
 gint
-gdk_colormap_get_system_size_for_screen (GdkScreen * screen)
-{
-  return DisplayCells (GDK_SCREEN_XDISPLAY (screen),
-		       GDK_SCREEN_IMPL_X11 (screen)->scr_num);
-}
-
-gint
 gdk_colormap_get_system_size (void)
 {
-  return gdk_colormap_get_system_size_for_screen(DEFAULT_GDK_SCREEN);
+  GDK_NOTE(MULTIHEAD, g_message(" Use the DisplayCells X call instead\n"));
+  return DisplayCells (GDK_SCREEN_XDISPLAY (DEFAULT_GDK_SCREEN),
+		       GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->scr_num);
 }
 
 void

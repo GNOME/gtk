@@ -392,7 +392,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
   real_height = MIN (combo->entry->requisition.height, 
 		     combo->entry->allocation.height);
   *y += real_height;
-  avail_height = gdk_screen_height_for_screen (widget->screen) - *y;
+  avail_height = gdk_screen_get_height (widget->screen) - *y;
   
   gtk_widget_size_request (combo->list, &list_requisition);
   min_height = MIN (list_requisition.height, 

@@ -5159,8 +5159,8 @@ popup_position_func (GtkMenu   *menu,
   *x = CLAMP (*x, root_x, (root_x + widget->allocation.width));
   *y = CLAMP (*y, root_y, (root_y + widget->allocation.height));
 
-  *x = CLAMP (*x, 0, MAX (0, gdk_screen_width_for_screen (scr) - req.width));
-  *y = CLAMP (*y, 0, MAX (0, gdk_screen_height_for_screen (scr) - req.height));
+  *x = CLAMP (*x, 0, MAX (0, gdk_screen_get_width (scr) - req.width));
+  *y = CLAMP (*y, 0, MAX (0, gdk_screen_get_height (scr) - req.height));
 }
 
 static void

@@ -428,7 +428,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
 	gdk_colormap_ref (draw_impl->colormap);
       }
       else {
-	draw_impl->colormap = gdk_colormap_new_for_screen (visual, screen, FALSE);
+	draw_impl->colormap = gdk_colormap_new (visual, FALSE);
       }
     }
 
@@ -755,7 +755,7 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	  XSendEvent (GDK_WINDOW_XDISPLAY (window),
 		      GDK_WINDOW_XID (window),
 		      False, 0, (XEvent *)&xevent);
-	  gdk_flush ();
+	  gdk_display_sync (GDK_WINDOW_DISPLAY(window));
 	  gdk_error_trap_pop ();
 	}
     }

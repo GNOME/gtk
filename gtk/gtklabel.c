@@ -1054,7 +1054,7 @@ gtk_label_ensure_layout (GtkLabel *label,
 		       PANGO_SCALE * gdk_string_width (GTK_WIDGET (label)->style->font,
 						"This long string gives a good enough length for any line to have."));
 	  width = MIN (width,
-		       PANGO_SCALE * (gdk_screen_width_for_screen (GTK_WIDGET(label)->screen) + 1) / 2);
+		       PANGO_SCALE * (gdk_screen_get_width (GTK_WIDGET(label)->screen) + 1) / 2);
 
 	  pango_layout_set_width (label->layout, width);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);

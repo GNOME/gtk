@@ -206,7 +206,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
   gdk_window_hide (socket->plug_window);
   gdk_window_reparent (socket->plug_window, widget->window, 0, 0);
 
-  gdk_flush ();
+  gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
   gdk_error_trap_pop ();
   
   socket->need_map = TRUE;
@@ -262,7 +262,7 @@ gtk_socket_realize (GtkWidget *widget)
    * our window is passed to another application, SubstructureRedirectMask
    * will be set by the time the other app creates its window.
    */
-  gdk_flush();
+  gdk_display_sync(GDK_WINDOW_DISPLAY (widget->window));
 }
 
 static void
@@ -398,7 +398,7 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 	      socket->need_map = FALSE;
 	    }
 
-	  gdk_flush ();
+	  gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
 	  gdk_error_trap_pop ();
 	}
     }
@@ -617,7 +617,7 @@ gtk_socket_key_press_event (GtkWidget   *widget,
       XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
-      gdk_flush ();
+      gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
       gdk_error_trap_pop ();
       
       return TRUE;
@@ -697,7 +697,7 @@ gtk_socket_claim_focus (GtkSocket *socket)
       XSetInputFocus (GDK_WINDOW_XDISPLAY (socket->plug_window),
 		      GDK_WINDOW_XWINDOW (socket->plug_window),
 		      RevertToParent, GDK_CURRENT_TIME);
-      gdk_flush ();
+      gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
       gdk_error_trap_pop ();
 #endif
     }
@@ -790,7 +790,7 @@ gtk_socket_focus (GtkContainer *container, GtkDirectionType direction)
       XSendEvent (xevent.xkey.display,
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
-      gdk_flush();
+      gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
       gdk_error_trap_pop ();
       
       return TRUE;
@@ -828,7 +828,7 @@ gtk_socket_send_configure_event (GtkSocket *socket)
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
 	      GDK_WINDOW_XWINDOW (socket->plug_window),
 	      False, NoEventMask, &event);
-  gdk_flush ();
+  gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
   gdk_error_trap_pop ();
 }
 
@@ -859,7 +859,7 @@ gtk_socket_add_window (GtkSocket *socket, GdkNativeWindow xid)
       if (gdk_drag_get_protocol (GDK_WINDOW_DISPLAY(socket->plug_window), xid, &protocol))
 	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), socket->plug_window, 
 				 protocol, TRUE);
-      gdk_flush ();
+      gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
       gdk_error_trap_pop ();
 
       gdk_window_add_filter (socket->plug_window, 
@@ -908,7 +908,7 @@ send_xembed_message (GtkSocket *socket,
       XSendEvent (GDK_WINDOW_XDISPLAY(socket->plug_window),
 		  GDK_WINDOW_XWINDOW (socket->plug_window),
 		  False, NoEventMask, &xevent);
-      gdk_flush ();
+      gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
       gdk_error_trap_pop ();
     }
 }
@@ -999,7 +999,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 				   0, 0,
 				   widget->allocation.width, 
 				   widget->allocation.height);
-	    gdk_flush ();
+	    gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
 	    gdk_error_trap_pop ();
 	
 	    socket->request_width = xcwe->width;
@@ -1089,7 +1089,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  
 	  if (toplevel)
 	    {
-	      XSetInputFocus (GDK_DISPLAY (),
+	      XSetInputFocus (GDK_WINDOW_XDISPLAY (toplevel->window),
 			      GDK_WINDOW_XWINDOW (toplevel->window),
 			      RevertToParent, CurrentTime); /* FIXME? */
 	    }
@@ -1112,7 +1112,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	  
 	  gdk_error_trap_push ();
 	  gdk_window_show (socket->plug_window);
-	  gdk_flush ();
+	  gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
 	  gdk_error_trap_pop ();
 
 	  return_val = GDK_FILTER_REMOVE;
@@ -1138,7 +1138,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		gtk_drag_dest_set_proxy (GTK_WIDGET (socket),
 					 socket->plug_window,
 					 protocol, TRUE);
-	      gdk_flush ();
+	      gdk_display_sync(GDK_WINDOW_DISPLAY (socket->plug_window));
 	      gdk_error_trap_pop ();
 	    }
 	  return_val = GDK_FILTER_REMOVE;

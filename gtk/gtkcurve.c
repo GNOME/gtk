@@ -728,10 +728,10 @@ gtk_curve_size_graph (GtkCurve *curve)
   width  = (curve->max_x - curve->min_x) + 1;
   height = (curve->max_y - curve->min_y) + 1;
   aspect = width / (gfloat) height;
-  if (width > gdk_screen_width_for_screen (scr) / 4)
-    width  = gdk_screen_width_for_screen (scr) / 4;
-  if (height > gdk_screen_height_for_screen (scr) / 4)
-    height = gdk_screen_height_for_screen (scr) / 4;
+  if (width > gdk_screen_get_width (scr) / 4)
+    width  = gdk_screen_get_width (scr) / 4;
+  if (height > gdk_screen_get_height (scr) / 4)
+    height = gdk_screen_get_height (scr) / 4;
 
   if (aspect < 1.0)
     width  = height * aspect;
@@ -864,8 +864,8 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
   else
     {
       height = (c->max_y - c->min_y);
-      if (height > gdk_screen_height_for_screen (scr) / 4)
-	height = gdk_screen_height_for_screen (scr) / 4;
+      if (height > gdk_screen_get_height (scr) / 4)
+	height = gdk_screen_get_height (scr) / 4;
 
       c->height = height;
       c->num_points = veclen;

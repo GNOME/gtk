@@ -76,3 +76,29 @@ gdk_screen_get_window_at_pointer (GdkScreen *screen,
 							     win_y);
 }
 
+gint
+gdk_screen_get_width (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_width (screen);
+}
+
+gint
+gdk_screen_get_height (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_height (screen);
+}
+
+
+gint
+gdk_screen_get_width_mm (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_width_mm (screen);
+}
+
+gint
+gdk_screen_get_height_mm (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_height_mm (screen);
+}
+
+

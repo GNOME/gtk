@@ -154,18 +154,4 @@ static GdkWindow * gdk_X11_screen_get_window_at_pointer (GdkScreen *screen,
 
 
 
-/*
-GdkVisual * gdk_X11_screen_get_root_visual(GdkScreen * screen){
-
-
-}
-
-GdkColormap *	    gdk_X11_screen_get_default_colormap(GdkScreen * screen){
-
-}
-GdkGC *		    gdk_X11_screen_get_default_gc	(GdkScreen * screen){
-
-}
-*/
-
 

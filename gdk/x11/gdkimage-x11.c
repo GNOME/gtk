@@ -490,7 +490,7 @@ gdk_x11_image_destroy (GdkImage *image)
 
     case GDK_IMAGE_SHARED:
 #ifdef USE_SHM
-      gdk_flush();
+      gdk_display_sync (GDK_SCREEN_IMPL_X11(private->screen)->display);
 
       XShmDetach (GDK_SCREEN_XDISPLAY(private->screen), private->x_shm_info);
       XDestroyImage (private->ximage);

@@ -222,12 +222,12 @@ gtk_plug_realize (GtkWidget *widget)
   gdk_error_trap_push ();
   widget->window = gdk_window_new (plug->socket_window, 
 				   &attributes, attributes_mask);
-  gdk_flush ();
+  gdk_display_sync (GTK_WIDGET_GET_DISPLAY(widget));
   if (gdk_error_trap_pop ()) /* Uh-oh */
     {
       gdk_error_trap_push ();
       gdk_window_destroy (widget->window);
-      gdk_flush ();
+      gdk_display_sync (GTK_WIDGET_GET_DISPLAY(widget));
       gdk_error_trap_pop ();
       widget->window = gdk_window_new_for_screen (widget->screen,
       						  NULL,
@@ -282,7 +282,7 @@ gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event)
   XSendEvent (GDK_WINDOW_XDISPLAY (plug->socket_window),
 	      GDK_WINDOW_XWINDOW (plug->socket_window),
 	      False, NoEventMask, &xevent);
-  gdk_flush ();
+  gdk_display_sync (GDK_WINDOW_DISPLAY(plug->socket_window));
   gdk_error_trap_pop ();
 }
 
@@ -312,7 +312,7 @@ gtk_plug_set_focus (GtkWindow *window,
       XSendEvent (gdk_display,
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
-      gdk_flush ();
+      gdk_display_sync (GDK_WINDOW_DISPLAY(plug->socket_window));
       gdk_error_trap_pop ();
 #endif
 
@@ -504,10 +504,10 @@ gtk_plug_focus (GtkContainer     *container,
 	      gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 
 	      gdk_error_trap_push ();
-	      XSetInputFocus (GDK_DISPLAY (),
+	      XSetInputFocus (GDK_WINDOW_XDISPLAY (plug->socket_window),
 			      GDK_WINDOW_XWINDOW (plug->socket_window),
 			      RevertToParent, event->time);
-	      gdk_flush ();
+	      gdk_display_sync(GDK_WINDOW_DISPLAY (plug->socket_window));
 	      gdk_error_trap_pop ();
 
 	      gtk_plug_forward_key_press (plug, event);
@@ -566,7 +566,7 @@ send_xembed_message (GtkPlug *plug,
       XSendEvent (GDK_WINDOW_XDISPLAY(plug->socket_window),
 		  GDK_WINDOW_XWINDOW (plug->socket_window),
 		  False, NoEventMask, &xevent);
-      gdk_flush ();
+      gdk_display_sync(GDK_WINDOW_DISPLAY (plug->socket_window));
       gdk_error_trap_pop ();
     }
 }
