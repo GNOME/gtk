@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-02 01:40+0100\n"
-"PO-Revision-Date: 2004-02-02 01:45+0100\n"
+"POT-Creation-Date: 2004-02-07 12:51+0100\n"
+"PO-Revision-Date: 2004-02-07 12:54+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -941,7 +941,7 @@ msgstr ""
 "I pamundur shtimi i një libërshënuesi për %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2939
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -959,7 +959,7 @@ msgstr "Shtëpia"
 msgid "Desktop"
 msgstr "Hapësira e Punës"
 
-#: gtk/gtkfilechooserdefault.c:876
+#: gtk/gtkfilechooserdefault.c:878
 #, c-format
 msgid ""
 "Could not go to the parent folder of %s:\n"
@@ -968,7 +968,7 @@ msgstr ""
 "Nuk arrij të shkoj tek kartela fqinjë e %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:925
+#: gtk/gtkfilechooserdefault.c:927
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -977,28 +977,28 @@ msgstr ""
 "I pamundur krijimi i kartelës %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1001
+#: gtk/gtkfilechooserdefault.c:1003
 msgid "Add"
 msgstr "Shto"
 
-#: gtk/gtkfilechooserdefault.c:1011
+#: gtk/gtkfilechooserdefault.c:1013
 msgid "Remove"
 msgstr "Hiq"
 
-#: gtk/gtkfilechooserdefault.c:1021
+#: gtk/gtkfilechooserdefault.c:1023
 msgid "Up"
 msgstr "Sipër"
 
-#: gtk/gtkfilechooserdefault.c:1101 gtk/gtkfilechooserdefault.c:1456
+#: gtk/gtkfilechooserdefault.c:1103 gtk/gtkfilechooserdefault.c:1458
 msgid "File name"
 msgstr "Emri i file"
 
-#: gtk/gtkfilechooserdefault.c:1127
+#: gtk/gtkfilechooserdefault.c:1129
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
-#: gtk/gtkfilechooserdefault.c:1175
+#: gtk/gtkfilechooserdefault.c:1177
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1007,85 +1007,85 @@ msgstr ""
 "E pamundur fshirja e libërshënuesit për %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1330
+#: gtk/gtkfilechooserdefault.c:1332
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "I pamundur krijimi i një libërshënuesi për %s pasi është një emër pozicioni "
 "jo korrekt."
 
-#: gtk/gtkfilechooserdefault.c:1403
+#: gtk/gtkfilechooserdefault.c:1405
 msgid "Folder"
 msgstr "Kartela"
 
-#: gtk/gtkfilechooserdefault.c:1478
+#: gtk/gtkfilechooserdefault.c:1480
 msgid "Size"
 msgstr "Madhësi"
 
-#: gtk/gtkfilechooserdefault.c:1490
+#: gtk/gtkfilechooserdefault.c:1492
 msgid "Modified"
 msgstr "Ndryshuar"
 
 #. Label and entry
-#: gtk/gtkfilechooserdefault.c:1513
+#: gtk/gtkfilechooserdefault.c:1515
 msgid "_Filename:"
 msgstr "Emri i file:"
 
 #. Preview
-#: gtk/gtkfilechooserdefault.c:1598
+#: gtk/gtkfilechooserdefault.c:1600
 msgid "Preview"
 msgstr "Shikoje"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2130
+#: gtk/gtkfilechooserdefault.c:2132
 #, c-format
 msgid "Current folder: %s"
 msgstr "Kartela aktuale: %s"
 
-#: gtk/gtkfilechooserdefault.c:2533
+#: gtk/gtkfilechooserdefault.c:2535
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:3083
+#: gtk/gtkfilechooserdefault.c:3085
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
-#: gtk/gtkfilechooserdefault.c:3110
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:3112
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3114
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3116
+#: gtk/gtkfilechooserdefault.c:3118
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3161
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Today"
 msgstr "Sot"
 
-#: gtk/gtkfilechooserdefault.c:3163
+#: gtk/gtkfilechooserdefault.c:3165
 msgid "Yesterday"
 msgstr "Dje"
 
-#: gtk/gtkfilechooserdefault.c:3171
+#: gtk/gtkfilechooserdefault.c:3173
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3174
+#: gtk/gtkfilechooserdefault.c:3176
 msgid "Unknown"
 msgstr "I/e panjohur"
 
@@ -1270,26 +1270,26 @@ msgstr "I pamundur konvertimi i emrit të file"
 msgid "(Empty)"
 msgstr "(Bosh)"
 
-#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
+#: gtk/gtkfilesystemunix.c:379 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "Gabim gjatë krijimit të directory \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
+#: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Ky file sistemi nuk suporton montimin"
 
-#: gtk/gtkfilesystemunix.c:400
+#: gtk/gtkfilesystemunix.c:448
 msgid "Filesystem"
 msgstr "File sistemi"
 
-#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemunix.c:467 gtk/gtkfilesystemunix.c:1345
 #: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "gabim gjatë marrjes së informacioneve për \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
+#: gtk/gtkfilesystemunix.c:1053 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ruajtja e libërshënuesit dështoi (%s)"
@@ -1455,11 +1455,11 @@ msgstr "(i/e panjohur)"
 msgid "clear"
 msgstr "pastro"
 
-#: gtk/gtklabel.c:3225
+#: gtk/gtklabel.c:3217
 msgid "Select All"
 msgstr "Zgjidh gjithçka"
 
-#: gtk/gtklabel.c:3235
+#: gtk/gtklabel.c:3227
 msgid "Input Methods"
 msgstr "Metodat e input"
 
@@ -1773,11 +1773,11 @@ msgid "_Yes"
 msgstr "_Po"
 
 #: gtk/gtkstock.c:338
-msgid "Zoom _100%"
-msgstr "Rrit_100%"
+msgid "_Normal Size"
+msgstr "Madhësia _Normale"
 
 #: gtk/gtkstock.c:339
-msgid "Zoom to _Fit"
+msgid "Best _Fit"
 msgstr "_Përshtate"
 
 #: gtk/gtkstock.c:340
