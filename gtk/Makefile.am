@@ -166,6 +166,7 @@ source_headers = \
 	gtkhseparator.h		\
 	gtkimage.h		\
 	gtkinputdialog.h	\
+	gtkintl.h		\
 	gtkinvisible.h		\
 	gtkitem.h		\
 	gtkitemfactory.h	\

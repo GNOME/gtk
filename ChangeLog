@@ -1,3 +1,13 @@
+Wed Dec 16 10:20:27 CST 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.8
+
+	* ChangeLog:
+	  INSTALL:
+	  README:
+	  gtk+.spec:
+	  docs/gtk-config.1: version=1.1.8
+
 1998-12-16  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* gdk/gdkglobals.c: Define gdk_xim_ic only, if USE_XIM is defined.
