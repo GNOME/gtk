@@ -2286,16 +2286,15 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	  GtkTreePath *anchor;
 	  GtkTreeIter iter;
 
+	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+	  gtk_tree_view_column_cell_set_cell_data (column,
+						   tree_view->priv->model,
+						   &iter,
+						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						   node->children?TRUE:FALSE);
+
 	  if (tree_view->priv->anchor)
-	    {
-	      anchor = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
-	      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-	      gtk_tree_view_column_cell_set_cell_data (column,
-						       tree_view->priv->model,
-						       &iter,
-						       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						       node->children?TRUE:FALSE);
-	    }
+	    anchor = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
 	  else
 	    anchor = NULL;
 
