@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+.HEAD\n"
+"Project-Id-Version: gtk+.HEAD.sq\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-19 00:34+0100\n"
+"POT-Creation-Date: 2004-01-31 18:26+0100\n"
+"PO-Revision-Date: 2004-01-31 18:24+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -835,7 +835,7 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Klikoni pikatoren, e mandej klikoni një ngjyrë kudoqoftë në ekranin tuaj për "
+"Klikoni pikatoren, e pastaj klikoni një ngjyrë kudoqoftë në ekranin tuaj për "
 "të zgjedhur atë ngjyrë."
 
 #: gtk/gtkcolorsel.c:1873
@@ -950,7 +950,7 @@ msgstr ""
 "I pamundur shtimi i një libërshënuesi për %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -966,7 +966,7 @@ msgstr "Shtëpia"
 #. FIXME: What is the Right Way of finding the desktop directory?
 #: gtk/gtkfilechooserdefault.c:637
 msgid "Desktop"
-msgstr "Desktopi"
+msgstr "Hapësira e Punës"
 
 #: gtk/gtkfilechooserdefault.c:876
 #, c-format
@@ -992,7 +992,7 @@ msgstr "Shto"
 
 #: gtk/gtkfilechooserdefault.c:1011
 msgid "Remove"
-msgstr "Hiqe"
+msgstr "Hiq"
 
 #: gtk/gtkfilechooserdefault.c:1021
 msgid "Up"
@@ -1044,58 +1044,58 @@ msgstr "Emri i file:"
 #. Preview
 #: gtk/gtkfilechooserdefault.c:1598
 msgid "Preview"
-msgstr "Pamja e parë"
+msgstr "Shikoje"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Kartela aktuale: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "shtegu %s nuk ekziston"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
 msgstr "Shkruaj emrin e kartelës së re"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d byte"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "Sot"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "Dje"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%d/%b/%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "I/e panjohur"
 
@@ -1252,7 +1252,7 @@ msgstr "Po riemërtoj file \"%s\" si:"
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr "_Ndryshoi emrin"
+msgstr "_Riemërto"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
@@ -1283,38 +1283,31 @@ msgstr "I pamundur konvertimi i emrit të file"
 msgid "(Empty)"
 msgstr "(Bosh)"
 
-#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:351 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "Gabim gjatë krijimit të directory \"%s\": %s"
 
-#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
+#: gtk/gtkfilesystemunix.c:392 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Ky file sistemi nuk suporton montimin"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:400
 msgid "Filesystem"
 msgstr "File sistemi"
 
-#: gtk/gtkfilesystemunix.c:648
-msgid "This file system does not support icons"
-msgstr "Ky file sistemi nuk suporton ikonat"
-
-#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
-msgid "This file system does not support bookmarks"
-msgstr "Ky file sistemi nuk suporton libërshënuesit"
-
-#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
+#: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemunix.c:1295
+#: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "gabim gjatë marrjes së informacioneve për \"%s\": %s"
 
-#: gtk/gtkfilesystemwin32.c:820
+#: gtk/gtkfilesystemunix.c:1005 gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Ruajtja e libërshënuesit dështoi (%s)"
 
-#: gtk/gtkfilesystemwin32.c:976
+#: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
 msgstr "Ky file sistemi nuk suporton ikona për gjithçka"
 
@@ -1347,7 +1340,7 @@ msgstr "_Stili:"
 
 #: gtk/gtkfontsel.c:344
 msgid "Si_ze:"
-msgstr "Ma_dhësia:"
+msgstr "Madhë_sia:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:469
@@ -1369,7 +1362,7 @@ msgstr "Vlerë _gama"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1559
+#: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Gabim gjatë ngarkimit të ikonës: %s"
@@ -1382,6 +1375,10 @@ msgid ""
 "You can get a copy from:\n"
 "\t%s"
 msgstr ""
+"Nuk arrij të gjej ikonën '%s'. Tema '%s' nuk\n"
+"u gjet asgjëkundi, ndoshta do t'ju duhet ta instaloni.\n"
+"Mund të merrni një kopje nga:\n"
+"\t%s"
 
 #: gtk/gtkicontheme.c:1247
 #, c-format
@@ -1473,7 +1470,7 @@ msgstr "pastro"
 
 #: gtk/gtklabel.c:3225
 msgid "Select All"
-msgstr "Zgjidhe të gjithë"
+msgstr "Zgjidh gjithçka"
 
 #: gtk/gtklabel.c:3235
 msgid "Input Methods"
@@ -1567,7 +1564,7 @@ msgstr "_Kopjo"
 
 #: gtk/gtkstock.c:284
 msgid "Cu_t"
-msgstr "_Prije"
+msgstr "Pri_je"
 
 #: gtk/gtkstock.c:285
 msgid "_Delete"
@@ -1595,7 +1592,7 @@ msgstr "_Fund"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr "I _pari"
+msgstr "I/e _pari"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
@@ -1635,11 +1632,11 @@ msgstr "_Home"
 
 #: gtk/gtkstock.c:301
 msgid "Increase Indent"
-msgstr ""
+msgstr "Shto ngushtimin"
 
 #: gtk/gtkstock.c:302
 msgid "Decrease Indent"
-msgstr ""
+msgstr "Zvogëlo ngushtimin"
 
 #: gtk/gtkstock.c:303
 msgid "_Index"
@@ -1670,126 +1667,130 @@ msgid "_Right"
 msgstr "_Djathtas"
 
 #: gtk/gtkstock.c:310
+msgid "_Network"
+msgstr "_Rrjeti"
+
+#: gtk/gtkstock.c:311
 msgid "_New"
 msgstr "_E re"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_No"
 msgstr "_Jo"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Open"
 msgstr "_Hap"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Paste"
 msgstr "_Ngjite"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Preferences"
 msgstr "_Preferimet"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Print"
 msgstr "_Printo"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "Print Pre_view"
 msgstr "Pamja e _parë e printimit"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Properties"
 msgstr "_Pronësitë"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Quit"
 msgstr "_Dil"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Redo"
 msgstr "_Përsërit"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Refresh"
 msgstr "_Fresko"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "_Hiqe"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Revert"
 msgstr "_Rikthe"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Save"
 msgstr "_Ruaj"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "Save _As"
 msgstr "Ruaj _Si"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Color"
 msgstr "_Ngjyrë"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Font"
 msgstr "_Gërma"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Ascending"
 msgstr "_Rritës"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Descending"
 msgstr "_Zbritës"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Spell Check"
 msgstr "_Kontroll Drejtshkrimi"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Stop"
 msgstr "_Ndalo"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Strikethrough"
 msgstr "_Hequrvije"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Undelete"
 msgstr "_Risill"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Underline"
 msgstr "_Nënvizuar"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Undo"
 msgstr "_Anullo"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "_Yes"
 msgstr "_Po"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _100%"
 msgstr "Rrit_100%"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "Zoom to _Fit"
 msgstr "_Përshtate"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "Zoom _In"
 msgstr "Z_madho"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "Zoom _Out"
 msgstr "Z_vogëlo"
 
@@ -1915,3 +1916,6 @@ msgstr "Metodë Futjeje për X"
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacione për file '%s': %s"
+
+#~ msgid "This file system does not support bookmarks"
+#~ msgstr "Ky file sistemi nuk suporton libërshënuesit"
