@@ -70,6 +70,7 @@ struct _GtkWindow
 
   GtkWindowType type : 4;
   guint has_user_ref_count : 1;
+  guint has_focus : 1;
   guint allow_shrink : 1;
   guint allow_grow : 1;
   guint auto_shrink : 1;

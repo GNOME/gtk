@@ -58,6 +58,9 @@ struct _GtkSocket
   guint focus_in : 1;
   guint have_size : 1;
   guint need_map : 1;
+
+  GHashTable *grabbed_keys;
+  GtkWidget *toplevel;
 };
 
 struct _GtkSocketClass

@@ -359,6 +359,7 @@ gtk_c_sources = @STRIP_BEGIN@   \
 	gtkwindow-decorate.c    \
 	fnmatch.c		\
 	fnmatch.h		\
+	xembed.h		\
 @STRIP_END@
 
 # we use our own built_sources variable rules to avoid automake's
