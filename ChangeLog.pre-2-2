@@ -1,3 +1,10 @@
+Wed Nov 28 22:20:44 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* demos/gtk-demo/editable_cells.c: fix typo
+
+	* demos/gtk-demo/list_store.c (add_columns): remove call to
+	gtk_tree_view_column_set_clickable which didn't make sense
+
 2001-11-28  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_paint): put the warning
