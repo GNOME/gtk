@@ -71,7 +71,6 @@
 
 #define WINDOW_PRIVATE(wp) GDK_WINDOW_WIN32DATA (wp)
 
-typedef struct _GdkIOClosure GdkIOClosure;
 typedef struct _GdkEventPrivate GdkEventPrivate;
 
 typedef enum
@@ -81,14 +80,6 @@ typedef enum
    */
   GDK_EVENT_PENDING = 1 << 0
 } GdkEventFlags;
-
-struct _GdkIOClosure
-{
-  GdkInputFunction function;
-  GdkInputCondition condition;
-  GdkDestroyNotify notify;
-  gpointer data;
-};
 
 struct _GdkEventPrivate
 {
@@ -115,9 +106,6 @@ static gboolean gdk_event_dispatch (GSource     *source,
 				    GSourceFunc  callback,
 				    gpointer     user_data);
 
-static void	 gdk_synthesize_click	(GdkEvent     *event, 
-					 gint	       nclicks);
-
 /* Private variable declarations
  */
 
@@ -142,14 +130,13 @@ static GSourceFuncs event_funcs = {
   gdk_event_prepare,
   gdk_event_check,
   gdk_event_dispatch,
-  (GDestroyNotify)g_free
+  (void (*)(GSource *)) g_free
 };
 
 static GPollFD event_poll_fd;
 
 static GdkWindow *curWnd = NULL;
 static GdkWindow *curFocusWnd = NULL;
-static HWND active = NULL;
 static gint curX, curY;
 static gdouble curXroot, curYroot;
 static UINT gdk_ping_msg;
@@ -306,7 +293,7 @@ gdk_WindowProc (HWND hWnd,
   retval = inner_window_proc (hWnd, message, wParam, lParam);
 
   GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x returns %d\n",
-			     (guint) tid, (guint) hWnd, retval));
+			     (guint) tid, (guint) hWnd, (int) retval));
   return retval;
 }
 
@@ -352,12 +339,12 @@ gdk_events_init (void)
   
   if (hres == S_OK)
     {
-      GDK_NOTE (EVENTS, g_print ("IActiveIMMApp created %#x\n",
+      GDK_NOTE (EVENTS, g_print ("IActiveIMMApp created %p\n",
 				 paimmapp));
       (*paimmapp->lpVtbl->Activate) (paimmapp, TRUE);
       
-      hres = (*paimmapp->lpVtbl->QueryInterface) (paimmapp, &IID_IActiveIMMMessagePumpOwner, &paimmmpo);
-      GDK_NOTE (EVENTS, g_print ("IActiveIMMMessagePumpOwner created %#x\n",
+      hres = (*paimmapp->lpVtbl->QueryInterface) (paimmapp, &IID_IActiveIMMMessagePumpOwner, (void __RPC_FAR *__RPC_FAR *) &paimmmpo);
+      GDK_NOTE (EVENTS, g_print ("IActiveIMMMessagePumpOwner created %p\n",
 				 paimmmpo));
       (paimmmpo->lpVtbl->Start) (paimmmpo);
     }
@@ -428,9 +415,11 @@ gdk_events_pending (void)
 GdkEvent*
 gdk_event_get_graphics_expose (GdkWindow *window)
 {
+#if 0
   MSG xevent;
   GdkEvent *event;
   GdkWindowPrivate *private = (GdkWindowPrivate *) window;
+#endif
 
   g_return_val_if_fail (window != NULL, NULL);
   
@@ -651,7 +640,7 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
   pt.y = points.y;
   ClientToScreen (xevent->hwnd, &pt);
 
-  GDK_NOTE (EVENTS, g_print ("Finding window for grabbed pointer event at (%d, %d)\n",
+  GDK_NOTE (EVENTS, g_print ("Finding window for grabbed pointer event at (%ld, %ld)\n",
                              pt.x, pt.y));
 
   hwnd = WindowFromPoint(pt);
@@ -661,7 +650,8 @@ find_window_for_pointer_event (GdkWindow*  reported_window,
   if (other_window == NULL)
     return reported_window;
 
-  GDK_NOTE (EVENTS, g_print ("Found window %x for point (%d, %d)\n", hwnd,
+  GDK_NOTE (EVENTS, g_print ("Found window %#x for point (%ld, %ld)\n",
+			     (guint) hwnd,
                              pt.x, pt.y));
 
   gdk_window_unref(reported_window);
@@ -759,38 +749,6 @@ gdk_keyboard_ungrab (guint32 time)
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_ungrab\n"));
 
   k_grab_window = NULL;
-}
-
-static void
-gdk_io_destroy (gpointer data)
-{
-  GdkIOClosure *closure = data;
-
-  if (closure->notify)
-    closure->notify (closure->data);
-
-  g_free (closure);
-}
-
-static gboolean  
-gdk_io_invoke (GIOChannel   *source,
-	       GIOCondition  condition,
-	       gpointer      data)
-{
-  GdkIOClosure *closure = data;
-  GdkInputCondition gdk_cond = 0;
-
-  if (condition & (G_IO_IN | G_IO_PRI))
-    gdk_cond |= GDK_INPUT_READ;
-  if (condition & G_IO_OUT)
-    gdk_cond |= GDK_INPUT_WRITE;
-  if (condition & (G_IO_ERR | G_IO_HUP | G_IO_NVAL))
-    gdk_cond |= GDK_INPUT_EXCEPTION;
-
-  if (closure->condition & gdk_cond)
-    closure->function (closure->data, g_io_channel_unix_get_fd (source), gdk_cond);
-
-  return TRUE;
 }
 
 static GdkFilterReturn
@@ -2566,16 +2524,18 @@ build_keypress_event (GdkWindowWin32Data *windata,
   if (ucount == 0)
     event->key.keyval = GDK_VoidSymbol;
   else if (xevent->message == WM_CHAR || xevent->message == WM_SYSCHAR)
-    if (xevent->wParam < ' ')
-      {
-	event->key.keyval = xevent->wParam + '@';
-	/* This is needed in case of Alt+nnn or Alt+0nnn (on the numpad)
-	 * where nnn<32
-	 */
-	event->key.state |= GDK_CONTROL_MASK;
-      }
-    else
-      event->key.keyval = unicode_to_keyval (wbuf[0]);
+    {
+      if (xevent->wParam < ' ')
+	{
+	  event->key.keyval = xevent->wParam + '@';
+	  /* This is needed in case of Alt+nnn or Alt+0nnn (on the numpad)
+	   * where nnn<32
+	   */
+	  event->key.state |= GDK_CONTROL_MASK;
+	}
+      else
+	event->key.keyval = unicode_to_keyval (wbuf[0]);
+    }
 
   build_key_event_state (event);
 
@@ -2604,7 +2564,6 @@ build_keypress_event (GdkWindowWin32Data *windata,
   while (ucleft-- > 0)
     {
       int first;
-      int i;
       wchar_t c = *wcp++;
 
       if (c < 0x80)
@@ -3091,7 +3050,7 @@ translate_mouse_coords (GdkWindow *window1,
   ClientToScreen (GDK_DRAWABLE_XID (window1), &pt);
   ScreenToClient (GDK_DRAWABLE_XID (window2), &pt);
   xevent->lParam = MAKELPARAM (pt.x, pt.y);
-  GDK_NOTE (EVENTS, g_print ("...new coords are (%d,%d)\n", pt.x, pt.y));
+  GDK_NOTE (EVENTS, g_print ("...new coords are (%ld,%ld)\n", pt.x, pt.y));
 }
 
 static gboolean
@@ -3254,7 +3213,6 @@ gdk_win32_erase_background (GdkWindow *window,
                             HDC        hdc)
 {
   GdkColormapPrivateWin32 *colormap_private;
-  GdkEventMask mask;
   GdkPixmap *pixmap;
   GdkDrawablePrivate *pixmap_private;
   HDC bgdc = NULL;
@@ -3262,10 +3220,15 @@ gdk_win32_erase_background (GdkWindow *window,
   COLORREF bg;
   RECT rect;
   int i, j;
+  int xoff, yoff;
+  int xpos, ypos;
   HBITMAP oldbitmap = NULL;
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_TRANSPARENT)
     return;
+
+  xoff = 0;
+  yoff = 0;
 
   colormap_private = (GdkColormapPrivateWin32 *) ((GdkWindowPrivate *) window)->drawable.colormap;
   if (colormap_private
@@ -3289,12 +3252,17 @@ gdk_win32_erase_background (GdkWindow *window,
       /* If this window should have the same background as the
        * parent, fetch the parent. (And if the same goes for
        * the parent, fetch the grandparent, etc.) We don't need to
-       * ref the ancestors because they will be valid as long as
+       * ref the ancestors becauspose they will be valid as long as
        * the leaf is valid.
     `  */
       while (window
              && GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PARENT_RELATIVE)
-        window = ((GdkWindowPrivate *) window)->parent;
+	{
+	  gdk_window_get_position (window, &xpos, &ypos);
+	  xoff += xpos;
+	  yoff += ypos;
+	  window = ((GdkWindowPrivate *) window)->parent;
+	}
     }
 
   if (GDK_WINDOW_WIN32DATA (window)->bg_type == GDK_WIN32_BG_PIXEL)
@@ -3303,11 +3271,11 @@ gdk_win32_erase_background (GdkWindow *window,
                                GDK_WINDOW_WIN32DATA (window)->bg_pixel);
       
       GetClipBox (hdc, &rect);
-      GDK_NOTE (EVENTS, g_print ("...%dx%d@+%d+%d BG_PIXEL %.06x\n",
+      GDK_NOTE (EVENTS, g_print ("...%ldx%ld@+%ld+%ld BG_PIXEL %.06x\n",
 			         rect.right - rect.left,
 			         rect.bottom - rect.top,
                                  rect.left, rect.top,
-                                 bg));
+                                 (guint) bg));
       hbr = CreateSolidBrush (bg);
 #if 0
       g_print ("...CreateSolidBrush (%.08x) = %.08x\n", bg, hbr);
@@ -3322,8 +3290,11 @@ gdk_win32_erase_background (GdkWindow *window,
       pixmap_private = (GdkDrawablePrivate*) pixmap;
       GetClipBox (hdc, &rect);
       
-      if (pixmap_private->width <= 8
-          && pixmap_private->height <= 8)
+      if ((pixmap_private->width <= 8) &&
+	  (pixmap_private->height <= 8) &&
+	  (xoff == 0) &&
+	  (yoff == 0))
+	  
         {
           GDK_NOTE (EVENTS, g_print ("...small pixmap, using brush\n"));
           hbr = CreatePatternBrush (GDK_DRAWABLE_XID (pixmap));
@@ -3335,17 +3306,19 @@ gdk_win32_erase_background (GdkWindow *window,
         {
           GDK_NOTE (EVENTS, g_print ("...blitting pixmap %#x (%dx%d) "
                                      "all over the place,\n"
-                                     "...clip box = %dx%d@+%d+%d\n",
+                                     "...clip box = %ldx%ld@+%ld+%ld\n",
                                      (guint) GDK_DRAWABLE_XID (pixmap),
                                      pixmap_private->width, pixmap_private->height,
                                      rect.right - rect.left, rect.bottom - rect.top,
                                      rect.left, rect.top));
 
           bgdc = gdk_win32_obtain_offscreen_hdc (GDK_DRAWABLE_XID (pixmap));
-          i = 0;
+	  xoff = xoff % pixmap_private->width;
+	  yoff = yoff % pixmap_private->height;
+          i = -xoff;
           while (i < rect.right)
             {
-              j = 0;
+              j = -yoff;
               while (j < rect.bottom)
                 {
                   if (i + pixmap_private->width >= rect.left
@@ -3397,12 +3370,13 @@ gdk_event_translate (GdkEvent *event,
   HWND hwnd;
   HCURSOR xcursor;
   GdkWindow *window, *orig_window, *newwindow;
-  GdkEventMask mask;
   int button;
   gchar buf[256];
   gboolean return_val;
+#if 0
   gboolean flag;
-  
+#endif
+
   return_val = FALSE;
   
   if (ret_val_flagp)
@@ -3605,7 +3579,7 @@ gdk_event_translate (GdkEvent *event,
     {
     case WM_INPUTLANGCHANGE:
       GDK_NOTE (EVENTS,
-		g_print ("WM_INPUTLANGCHANGE: %#x  charset %d locale %x\n",
+		g_print ("WM_INPUTLANGCHANGE: %#x  charset %d locale %#lx\n",
 			 (guint) xevent->hwnd, xevent->wParam, xevent->lParam));
       GDK_WINDOW_WIN32DATA (window)->input_locale = (HKL) xevent->lParam;
       TranslateCharsetInfo ((DWORD FAR *) xevent->wParam,
@@ -3925,7 +3899,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_IME_COMPOSITION:
       if (!use_IME_COMPOSITION)
 	break;
-      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %#x  %#x\n",
+      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %#x  %#lx\n",
 				 (guint) xevent->hwnd, xevent->lParam));
       if (xevent->lParam & GCS_RESULTSTR)
 	goto wm_char;
@@ -4231,7 +4205,7 @@ gdk_event_translate (GdkEvent *event,
 #endif
 
     case WM_CAPTURECHANGED:
-      GDK_NOTE (EVENTS, g_print ("WM_CAPTURECHANGED: %#x %#x\n",
+      GDK_NOTE (EVENTS, g_print ("WM_CAPTURECHANGED: %#x %#lx\n",
 				 (guint) xevent->hwnd, xevent->lParam));
       if (p_grab_window != NULL)
 	{
@@ -4394,13 +4368,13 @@ gdk_event_translate (GdkEvent *event,
       hdc = BeginPaint (xevent->hwnd, &paintstruct);
 
       GDK_NOTE (EVENTS,
-		g_print ("WM_PAINT: %#x  %dx%d@+%d+%d %s dc %#x\n",
+		g_print ("WM_PAINT: %#x  %ldx%ld@+%ld+%ld %s dc %#x\n",
 			 (guint) xevent->hwnd,
 			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
 			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
 			 paintstruct.rcPaint.left, paintstruct.rcPaint.top,
 			 (paintstruct.fErase ? "erase" : ""),
-			 hdc));
+			 (guint) hdc));
 
       EndPaint (xevent->hwnd, &paintstruct);
 
@@ -4686,13 +4660,13 @@ gdk_event_translate (GdkEvent *event,
        * constants as case labels.
        */
     case WT_PACKET:
-      GDK_NOTE (EVENTS, g_print ("WT_PACKET: %#x %d %#x\n",
+      GDK_NOTE (EVENTS, g_print ("WT_PACKET: %#x %d %#lx\n",
 				 (guint) xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
       goto wintab;
       
     case WT_CSRCHANGE:
-      GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %#x %d %#x\n",
+      GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %#x %d %#lx\n",
 				 (guint) xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
       goto wintab;
@@ -4710,7 +4684,7 @@ gdk_event_translate (GdkEvent *event,
 #endif
 
     default:
-      GDK_NOTE (EVENTS, g_print ("%s: %#x %#x %#x\n",
+      GDK_NOTE (EVENTS, g_print ("%s: %#x %#x %#lx\n",
 				 gdk_win32_message_name (xevent->message),
 				 (guint) xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
@@ -4745,15 +4719,12 @@ bypass_switch:
 void
 gdk_events_queue (void)
 {
-  GList *node;
-  GdkEvent *event;
   MSG msg;
-  LRESULT lres;
 
   while (!gdk_event_queue_find_first ()
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
-      GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %#x\n",
+      GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %s\n",
 				 (guint) msg.hwnd,
 				 gdk_win32_message_name (msg.message)));
 #ifndef HAVE_DIMM_H
