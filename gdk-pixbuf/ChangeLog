@@ -1,3 +1,8 @@
+2005-03-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* io-gif-animation.c (gdk_pixbuf_gif_anim_frame_composite): Fix 
+	a C99ism.  (#169741, Morten Welinder)
+
 2005-03-03  Matthias Clasen  <mclasen@redhat.com>
 
 	* io-xpm.c (pixbuf_create_from_xpm): Check the number

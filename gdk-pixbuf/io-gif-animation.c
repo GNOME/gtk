@@ -391,12 +391,13 @@ gdk_pixbuf_gif_anim_frame_composite (GdkPixbufGifAnim *gif_anim,
                 
                 while (tmp != NULL) {
                         GdkPixbufFrame *f = tmp->data;
+                        gint clipped_width, clipped_height;
 
                         if (f->pixbuf == NULL)
                                 return;
 
-                        gint clipped_width = MIN (gif_anim->width - f->x_offset, gdk_pixbuf_get_width (f->pixbuf));
-                        gint clipped_height = MIN (gif_anim->height - f->y_offset, gdk_pixbuf_get_height (f->pixbuf));
+                        clipped_width = MIN (gif_anim->width - f->x_offset, gdk_pixbuf_get_width (f->pixbuf));
+                        clipped_height = MIN (gif_anim->height - f->y_offset, gdk_pixbuf_get_height (f->pixbuf));
   
                         if (f->need_recomposite) {
                                 if (f->composited) {
