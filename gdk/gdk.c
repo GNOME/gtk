@@ -495,6 +495,20 @@ gdk_threads_leave ()
   GDK_THREADS_LEAVE ();
 }
 
+static void
+gdk_threads_impl_lock (void)
+{
+  if (gdk_threads_mutex)
+    g_mutex_lock (gdk_threads_mutex);
+}
+
+static void
+gdk_threads_impl_unlock (void)
+{
+  if (gdk_threads_mutex)
+    g_mutex_unlock (gdk_threads_mutex);
+}
+
 /**
  * gdk_threads_init:
  * 
@@ -512,6 +526,48 @@ gdk_threads_init ()
     g_error ("g_thread_init() must be called before gdk_threads_init()");
 
   gdk_threads_mutex = g_mutex_new ();
+  if (!gdk_threads_lock)
+    gdk_threads_lock = gdk_threads_impl_lock;
+  if (!gdk_threads_unlock)
+    gdk_threads_unlock = gdk_threads_impl_unlock;
+}
+
+/**
+ * gdk_threads_set_lock_functions:
+ * @enter_fn:   function called to guard gtk+
+ * @leave_fn: function called to release the guard
+ *
+ * Allows the application to replace the standard method that
+ * GDK uses to protect its data structures. Normally, GDK
+ * creates a single #GMutex that is locked by gdk_threads_enter(),
+ * and released by gdk_threads_leave(); using this function an
+ * application provides, instead, a function @enter_fn that is
+ * called by gdk_threads_enter() and a function @leave_fn that is
+ * called by gdk_threads_leave().
+ *
+ * The functions must provide at least same locking functionality
+ * as the default implementation, but can also do extra application
+ * specific processing.
+ *
+ * As an example, consider an application that has its own recursive
+ * lock that when held, holds the GTK+ lock as well. When GTK+ unlocks
+ * the GTK+ lock when entering a recursive main loop, the application
+ * must temporarily release its lock as well.
+ *
+ * Most threaded GTK+ apps won't need to use this method.
+ *
+ * This method must be called before gdk_threads_init, and cannot
+ * be called multiple times.
+ **/
+void
+gdk_threads_set_lock_functions (GCallback enter_fn,
+				GCallback leave_fn)
+{
+  g_return_if_fail (gdk_threads_lock == NULL &&
+		    gdk_threads_unlock == NULL);
+
+  gdk_threads_lock = enter_fn;
+  gdk_threads_unlock = leave_fn;
 }
 
 G_CONST_RETURN char *

@@ -40,5 +40,6 @@ gchar              *_gdk_display_arg_name = NULL;
 
 GSList             *_gdk_displays = NULL;
 
-GMutex           *gdk_threads_mutex = NULL;          /* Global GDK lock */
-
+GMutex              *gdk_threads_mutex = NULL;          /* Global GDK lock */
+GCallback            gdk_threads_lock = NULL;
+GCallback            gdk_threads_unlock = NULL;
