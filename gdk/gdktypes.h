@@ -387,7 +387,7 @@ typedef enum
   GDK_DROP_FINISHED     = 27,
   GDK_CLIENT_EVENT	= 28,
   GDK_VISIBILITY_NOTIFY = 29,
-  GDK_NO_EXPOSE		= 30,
+  GDK_NO_EXPOSE		= 30
 } GdkEventType;
 
 /* Event masks. (Used to select what types of events a window
