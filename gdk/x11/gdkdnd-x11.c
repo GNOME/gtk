@@ -3656,8 +3656,6 @@ gdk_drop_finish (GdkDragContext   *context,
       xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->dest_window);
       if (success)
 	{
-	  g_print ("sending back success status; version %d\n", 
-		   PRIVATE_DATA (context)->version);
 	  xev.xclient.data.l[1] = 1;
 	  xev.xclient.data.l[2] = xdnd_action_to_atom (display, 
 						       context->action);
