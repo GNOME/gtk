@@ -204,6 +204,9 @@ static GdkWindow *button_window[2];                 /* The last 2 windows to rec
 						     */
 static guint button_number[2];                      /* The last 2 buttons to be pressed.
 						     */
+static gboolean pointer_is_grabbed = FALSE;	    /* Boolean value of wether the there is
+						     *  an active x pointer grab in effect
+						     */
 
 #ifdef USE_XIM
 static gint xim_using;				/* using XIM Protocol if TRUE */
@@ -1272,7 +1275,7 @@ gdk_pointer_grab (GdkWindow *     window,
 						time);
   else
     return_val = Success;;
-
+  
   if (return_val == Success)
     return_val = XGrabPointer (window_private->xdisplay,
 			       xwindow,
@@ -1282,7 +1285,10 @@ gdk_pointer_grab (GdkWindow *     window,
 			       xconfine_to,
 			       xcursor,
 			       time);
-
+  
+  if (return_val == GrabSuccess)
+    pointer_is_grabbed = TRUE;
+  
   return return_val;
 }
 
@@ -1308,6 +1314,28 @@ gdk_pointer_ungrab (guint32 time)
     gdk_input_vtable.ungrab_pointer (time);
 
   XUngrabPointer (gdk_display, time);
+  pointer_is_grabbed = FALSE;
+}
+
+/*
+ *--------------------------------------------------------------
+ * gdk_pointer_is_grabbed
+ *
+ *   Tell wether there is an active x pointer grab in effect
+ *
+ * Arguments:
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+gint
+gdk_pointer_is_grabbed (void)
+{
+  return pointer_is_grabbed;
 }
 
 /*

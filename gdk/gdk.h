@@ -81,6 +81,8 @@ gint gdk_keyboard_grab   (GdkWindow *     window,
                           guint32         time);
 void gdk_keyboard_ungrab (guint32         time);
 
+gint gdk_pointer_is_grabbed (void);
+
 gint gdk_screen_width  (void);
 gint gdk_screen_height (void);
 
