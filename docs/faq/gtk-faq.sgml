@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>November 24th 2003</date>
+  <date>January 9th 2004</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -2870,7 +2870,7 @@ be:</para>
 <!-- ----------------------------------------------------------------- -->
 
 <sect1>
-<title>How do I validate/limit/filter the input to a GtkEntry?</title>
+<title>How do I validate/limit/filter the input to a GtkEntry? <emphasis>[GTK 2.x]</emphasis></title>
 
 <para>If you want to validate the text that a user enters into
 a GtkEntry widget you can attach to the "insert_text" signal
@@ -2901,16 +2901,16 @@ void insert_text_handler (GtkEntry    *entry,
   }
   
   if (count > 0) {
-    gtk_signal_handler_block_by_func (GTK_OBJECT (editable),
-				      GTK_SIGNAL_FUNC (insert_text_handler),
-				      data);
+    g_signal_handlers_block_by_func (G_OBJECT (editable),
+                                     G_CALLBACK (insert_text_handler),
+                                     data);
     gtk_editable_insert_text (editable, result, count, position);
-    gtk_signal_handler_unblock_by_func (GTK_OBJECT (editable),
-					GTK_SIGNAL_FUNC (insert_text_handler),
-					data);
+    g_signal_handlers_unblock_by_func (G_OBJECT (editable),
+                                       G_CALLBACK (insert_text_handler),
+                                       data);
   }
-  gtk_signal_emit_stop_by_name (GTK_OBJECT (editable), "insert_text");
-  
+  g_signal_stop_emission_by_name (G_OBJECT (editable), "insert_text");
+
   g_free (result);
 }
 
@@ -2925,12 +2925,13 @@ int main (int   argc,
   /* create a new window */
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW (window), "GTK Entry");
-  gtk_signal_connect(GTK_OBJECT (window), "delete_event",
-		     (GtkSignalFunc) gtk_exit, NULL);
-  
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (gtk_main_quit),
+                    NULL);
+
   entry = gtk_entry_new();
-  gtk_signal_connect(GTK_OBJECT(entry), "insert_text",
-		     GTK_SIGNAL_FUNC(insert_text_handler),
+  g_signal_connect(G_OBJECT(entry), "insert_text",
+		     G_CALLBACK(insert_text_handler),
 		     NULL);
   gtk_container_add(GTK_CONTAINER (window), entry);
   gtk_widget_show(entry);
