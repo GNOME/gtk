@@ -35,7 +35,7 @@
 
 
 
-static unsigned long mask_table[] = {
+static guint32 mask_table[] = {
 	0x00000000, 0x00000001, 0x00000003, 0x00000007,
 	0x0000000f, 0x0000001f, 0x0000003f, 0x0000007f,
 	0x000000ff, 0x000001ff, 0x000003ff, 0x000007ff,
@@ -59,10 +59,10 @@ rgb1 (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
 	int xx, yy;
 	int width, height;
 	int bpl;
-	unsigned char *s;
-	register unsigned char data;
-	unsigned char *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *s;
+	register guint8 data;
+	guint8 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	d (printf ("1 bits/pixel\n"));
 
@@ -98,11 +98,11 @@ rgb1a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
 	int xx, yy;
 	int width, height;
 	int bpl;
-	unsigned char *s;
-	register unsigned char data;
-	unsigned char *o;
-	unsigned char *srow = image->mem, *orow = pixels;
-	unsigned long remap[2];
+	guint8 *s;
+	register guint8 data;
+	guint8 *o;
+	guint8 *srow = image->mem, *orow = pixels;
+	guint32 remap[2];
 
 	d (printf ("1 bits/pixel\n"));
 
@@ -150,11 +150,11 @@ rgb8 (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
 	int xx, yy;
 	int width, height;
 	int bpl;
-	unsigned long mask;
-	register unsigned long data;
-	unsigned char *srow = image->mem, *orow = pixels;
-	register unsigned char *s;
-	register unsigned char *o;
+	guint32 mask;
+	register guint32 data;
+	guint8 *srow = image->mem, *orow = pixels;
+	register guint8 *s;
+	register guint8 *o;
 
 	width = image->width;
 	height = image->height;
@@ -188,12 +188,12 @@ rgb8a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
 	int xx, yy;
 	int width, height;
 	int bpl;
-	unsigned long mask;
-	register unsigned long data;
-	unsigned long remap[256];
-	register unsigned char *s;	/* read 2 pixels at once */
-	register unsigned long *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint32 mask;
+	register guint32 data;
+	guint32 remap[256];
+	register guint8 *s;	/* read 2 pixels at once */
+	register guint32 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -219,7 +219,7 @@ rgb8a (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap)
 
 	for (yy = 0; yy < height; yy++) {
 		s = srow;
-		o = (unsigned long *) orow;
+		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx ++) {
 			data = *s++ & mask;
 			*o++ = remap[data];
@@ -242,12 +242,12 @@ rgb565lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned long *s;	/* read 2 pixels at once */
+	register guint32 *s;	/* read 2 pixels at once */
 #else
-	register unsigned char *s;	/* read 2 pixels at once */
+	register guint8 *s;	/* read 2 pixels at once */
 #endif
-	register unsigned short *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	register guint16 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -255,13 +255,13 @@ rgb565lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 
 	for (yy = 0; yy < height; yy++) {
 #ifdef LITTLE
-		s = (unsigned long *) srow;
+		s = (guint32 *) srow;
 #else
-		s = (unsigned char *) srow;
+		s = (guint32 *) srow;
 #endif
-		o = (unsigned short *) orow;
+		o = (guint16 *) orow;
 		for (xx = 1; xx < width; xx += 2) {
-			register unsigned long data;
+			register guint32 data;
 #ifdef LITTLE
 			data = *s++;
 			*o++ = (data & 0xf800) >> 8 | (data & 0x7e0) << 5;
@@ -278,7 +278,7 @@ rgb565lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 		}
 		/* check for last remaining pixel */
 		if (width & 1) {
-			register unsigned short data;
+			register guint16 data;
 #ifdef LITTLE
 			data = *((short *) s);
 #else
@@ -307,12 +307,12 @@ rgb565msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned char *s;	/* need to swap data order */
+	register guint8 *s;	/* need to swap data order */
 #else
-	register unsigned long *s;	/* read 2 pixels at once */
+	register guint32 *s;	/* read 2 pixels at once */
 #endif
-	register unsigned short *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	register guint16 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -322,11 +322,11 @@ rgb565msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 #ifdef LITTLE
 		s = srow;
 #else
-		s = (unsigned long *) srow;
+		s = (guint32 *) srow;
 #endif
-		o = (unsigned short *) orow;
+		o = (guint16 *) orow;
 		for (xx = 1; xx < width; xx += 2) {
-			register unsigned long data;
+			register guint32 data;
 #ifdef LITTLE
 			/* swap endianness first */
 			data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
@@ -343,7 +343,7 @@ rgb565msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 		}
 		/* check for last remaining pixel */
 		if (width & 1) {
-			register unsigned short data;
+			register guint16 data;
 #ifdef LITTLE
 			data = *((short *) s);
 			data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
@@ -372,13 +372,13 @@ rgb565alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned short *s;	/* read 1 pixels at once */
+	register guint16 *s;	/* read 1 pixels at once */
 #else
-	register unsigned char *s;
+	register guint8 *s;
 #endif
-	register unsigned long *o;
+	register guint32 *o;
 
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -386,13 +386,13 @@ rgb565alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 
 	for (yy = 0; yy < height; yy++) {
 #ifdef LITTLE
-		s = (unsigned short *) srow;
+		s = (guint16 *) srow;
 #else
-		s = (unsigned char *) srow;
+		s = (guint8 *) srow;
 #endif
-		o = (unsigned long *) orow;
+		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx ++) {
-			register unsigned long data;
+			register guint32 data;
 			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
 			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
 #ifdef LITTLE
@@ -425,13 +425,13 @@ rgb565amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned char *s;
+	register guint8 *s;
 #else
-	register unsigned short *s;	/* read 1 pixels at once */
+	register guint16 *s;	/* read 1 pixels at once */
 #endif
-	register unsigned long *o;
+	register guint32 *o;
 
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -439,9 +439,9 @@ rgb565amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 
 	for (yy = 0; yy < height; yy++) {
 		s = srow;
-		o = (unsigned long *) orow;
+		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx ++) {
-			register unsigned long data;
+			register guint32 data;
 			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
 			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
 #ifdef LITTLE
@@ -474,12 +474,12 @@ rgb555lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned long *s;	/* read 2 pixels at once */
+	register guint32 *s;	/* read 2 pixels at once */
 #else
-	register unsigned char *s;	/* read 2 pixels at once */
+	register guint8 *s;	/* read 2 pixels at once */
 #endif
-	register unsigned short *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	register guint16 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -487,13 +487,13 @@ rgb555lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 
 	for (yy = 0; yy < height; yy++) {
 #ifdef LITTLE
-		s = (unsigned long *) srow;
+		s = (guint32 *) srow;
 #else
 		s = srow;
 #endif
-		o = (unsigned short *) orow;
+		o = (guint16 *) orow;
 		for (xx = 1; xx < width; xx += 2) {
-			register unsigned long data;
+			register guint32 data;
 #ifdef LITTLE
 			data = *s++;
 			*o++ = (data & 0x7c00) >> 7 | (data & 0x3e0) << 6;
@@ -510,7 +510,7 @@ rgb555lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 		}
 		/* check for last remaining pixel */
 		if (width & 1) {
-			register unsigned short data;
+			register guint16 data;
 #ifdef LITTLE
 			data = *((short *) s);
 #else
@@ -539,12 +539,12 @@ rgb555msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned char *s;	/* read 2 pixels at once */
+	register guint8 *s;	/* read 2 pixels at once */
 #else
-	register unsigned long *s;	/* read 2 pixels at once */
+	register guint32 *s;	/* read 2 pixels at once */
 #endif
-	register unsigned short *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	register guint16 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -552,9 +552,9 @@ rgb555msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 
 	for (yy = 0; yy < height; yy++) {
 		s = srow;
-		o = (unsigned short *) orow;
+		o = (guint16 *) orow;
 		for (xx = 1; xx < width; xx += 2) {
-			register unsigned long data;
+			register guint32 data;
 #ifdef LITTLE
 			/* swap endianness first */
 			data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
@@ -571,7 +571,7 @@ rgb555msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 		}
 		/* check for last remaining pixel */
 		if (width & 1) {
-			register unsigned short data;
+			register guint16 data;
 #ifdef LITTLE
 			data = *((short *) s);
 			data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
@@ -600,13 +600,13 @@ rgb555alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned short *s;	/* read 1 pixels at once */
+	register guint16 *s;	/* read 1 pixels at once */
 #else
-	register unsigned char *s;
+	register guint8 *s;
 #endif
-	register unsigned long *o;
+	register guint32 *o;
 
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -614,13 +614,13 @@ rgb555alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 
 	for (yy = 0; yy < height; yy++) {
 #ifdef LITTLE
-		s = (unsigned short *) srow;
+		s = (guint16 *) srow;
 #else
 		s = srow;
 #endif
-		o = (unsigned long *) orow;
+		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx++) {
-			register unsigned long data;
+			register guint32 data;
 			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
 			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
 #ifdef LITTLE
@@ -653,13 +653,13 @@ rgb555amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	int bpl;
 
 #ifdef LITTLE
-	register unsigned short *s;	/* read 1 pixels at once */
+	register guint16 *s;	/* read 1 pixels at once */
 #else
-	register unsigned char *s;
+	register guint8 *s;
 #endif
-	register unsigned long *o;
+	register guint32 *o;
 
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -667,13 +667,13 @@ rgb555amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 
 	for (yy = 0; yy < height; yy++) {
 #ifdef LITTLE
-		s = (unsigned short *) srow;
+		s = (guint16 *) srow;
 #else
 		s = srow;
 #endif
-		o = (unsigned long *) orow;
+		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx++) {
-			register unsigned long data;
+			register guint32 data;
 			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
 			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
 #ifdef LITTLE
@@ -701,9 +701,9 @@ rgb888alsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	int width, height;
 	int bpl;
 
-	unsigned char *s;	/* for byte order swapping */
-	unsigned char *o;
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *s;	/* for byte order swapping */
+	guint8 *o;
+	guint8 *srow = image->mem, *orow = pixels;
 
 	width = image->width;
 	height = image->height;
@@ -734,8 +734,8 @@ rgb888lsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	int width, height;
 	int bpl;
 
-	unsigned char *srow = image->mem, *orow = pixels;
-	unsigned char *o, *s;
+	guint8 *srow = image->mem, *orow = pixels;
+	guint8 *o, *s;
 
 	width = image->width;
 	height = image->height;
@@ -764,13 +764,13 @@ rgb888amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	int width, height;
 	int bpl;
 
-	unsigned char *srow = image->mem, *orow = pixels;
+	guint8 *srow = image->mem, *orow = pixels;
 #ifdef LITTLE
-	unsigned long *o;
-	unsigned long *s;
+	guint32 *o;
+	guint32 *s;
 #else
-	unsigned char *s;	/* for byte order swapping */
-	unsigned char *o;
+	guint8 *s;	/* for byte order swapping */
+	guint8 *o;
 #endif
 
 	d (printf ("32 bit, msb, with alpha\n"));
@@ -782,8 +782,8 @@ rgb888amsb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colorma
 	/* msb data */
 	for (yy = 0; yy < height; yy++) {
 #ifdef LITTLE
-		s = (unsigned long *) srow;
-		o = (unsigned long *) orow;
+		s = (guint32 *) srow;
+		o = (guint32 *) orow;
 #else
 		s = srow;
 		o = orow;
@@ -812,9 +812,9 @@ rgb888msb (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *colormap
 	int width, height;
 	int bpl;
 
-	unsigned char *srow = image->mem, *orow = pixels;
-	unsigned char *s;
-	unsigned char *o;
+	guint8 *srow = image->mem, *orow = pixels;
+	guint8 *s;
+	guint8 *o;
 
 	d (printf ("32 bit, msb, no alpha\n"));
 
@@ -846,9 +846,9 @@ convert_real_slow (GdkImage *image, art_u8 *pixels, int rowstride, GdkColormap *
 	int xx, yy;
 	int width, height;
 	int bpl;
-	unsigned char *srow = image->mem, *orow = pixels;
-	unsigned char *s;
-	unsigned char *o;
+	guint8 *srow = image->mem, *orow = pixels;
+	guint8 *s;
+	guint8 *o;
 	guint32 pixel;
 	GdkVisual *v;
 
