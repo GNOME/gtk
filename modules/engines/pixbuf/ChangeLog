@@ -1,3 +1,8 @@
+Wed Mar 17 16:38:00 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* pixbuf-draw.c (match_theme_image): Fix problem with
+	NULL details. (#112066, MINAMI Hirokazu, Matthias Clasen)
+
 2003-07-15  Mark McLoughlin  <mark@skynet.ie>
 
 	* pixbuf-render.c: make pixbuf_cache static to avoid
