@@ -26,7 +26,7 @@ double-click_timeout = 42
 bell-duration = 39
 bell_duration = 40
 
-gtk-cursor-blink-time = 200
+# gtk-cursor-blink-time = 200
 # gtk-menu-bar-accel = F10
 
 style "global-style-properties"
