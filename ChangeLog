@@ -1,3 +1,8 @@
+2001-02-19    <alla@lysator.liu.se>
+
+	* gtk/testgtkrc:
+	Comment out property assignments, these don't work yet.
+
 2001-02-17  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkalignment.c (gtk_alignment_class_init): clean this up a
