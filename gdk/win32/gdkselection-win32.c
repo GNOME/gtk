@@ -179,7 +179,7 @@ _gdk_dropfiles_store (gchar *data)
 
       dropfiles_prop = g_new (GdkSelProp, 1);
       dropfiles_prop->data = data;
-      dropfiles_prop->length = strlen (data);
+      dropfiles_prop->length = strlen (data) + 1;
       dropfiles_prop->format = 8;
       dropfiles_prop->type = _text_uri_list;
     }

@@ -1,3 +1,12 @@
+2004-12-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdnd-win32.c (resolve_link, gdk_dropfiles_filter):
+	Use wide character API when available. Use UTF-8 for filenames.
+
+	* gdk/win32/gdkselection-win32.c (_gdk_dropfiles_store): Include
+	the string's trailing zero byte in the property's length, just for
+	safety.
+
 2004-12-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserentry.c (check_completion_callback) 
