@@ -215,6 +215,16 @@ gutter (the area between the two panes). It does nothing now.
 
 </para>
 
+<!-- ##### ARG GtkPaned:resize ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkPaned:shrink ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkPaned:handle-size ##### -->
 <para>
 

@@ -4,7 +4,6 @@ GtkColorButton
 <!-- ##### SECTION Short_Description ##### -->
 A button to launch a color selection dialog
 
-
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 The #GtkColorButton is a button which displays the currently selected color an allows to open a color 

@@ -149,6 +149,7 @@ Used to specify the style of the expanders drawn by a #GtkTreeView.
 
 @GTK_IM_PREEDIT_NOTHING: 
 @GTK_IM_PREEDIT_CALLBACK: 
+@GTK_IM_PREEDIT_NONE: 
 
 <!-- ##### ENUM GtkIMStatusStyle ##### -->
 <para>
@@ -157,6 +158,7 @@ Used to specify the style of the expanders drawn by a #GtkTreeView.
 
 @GTK_IM_STATUS_NOTHING: 
 @GTK_IM_STATUS_CALLBACK: 
+@GTK_IM_STATUS_NONE: 
 
 <!-- ##### ENUM GtkJustification ##### -->
 <para>

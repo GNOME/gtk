@@ -2,7 +2,7 @@
 GtkCellEditable
 
 <!-- ##### SECTION Short_Description ##### -->
-Interface for widgets which can are used for editing cells 
+Interface for widgets which can are used for editing cells
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

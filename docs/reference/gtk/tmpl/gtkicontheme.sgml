@@ -1,0 +1,398 @@
+<!-- ##### SECTION Title ##### -->
+GtkIconTheme
+
+<!-- ##### SECTION Short_Description ##### -->
+Looking up icons by name
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+#GtkIconTheme provides a facility for looking up icons by name
+and size. The main reason for using a name rather than simply
+providing a filename is to allow different icons to be used
+depending on what <firstterm>icon theme</firstterm> is selecetd
+by the user. The operation of icon themes on Linux and Unix
+follows the <ulink
+url="http://www.freedesktop.org/standards/icon-theme-spec.html">Icon
+Theme Specification</ulink>. There is a default icon theme,
+named <literal>hicolor</literal> where applications should install
+their icons, but more additional application themes can be
+installed as operating system vendors and users choose.
+</para>
+<para>
+Named icons are similar to the <xref linkend="gtk-Themeable-Stock-Images"/>
+facility, and the distinction between the two may be a bit confusing.
+A few things to keep in mind:
+</para>
+<itemizedlist>
+<listitem>
+<para>
+Stock images usually are used in conjunction with
+<xref linkend="gtk-Stock-Items"/>., such as %GTK_STOCK_OK or
+%GTK_STOCK_OPEN. Named icons are easier to set up and therefore
+are more useful for new icons that an application wants to
+add, such as application icons or window icons.
+</para>
+</listitem>
+<listitem>
+<para>
+Stock images can only be loaded at the symbolic sizes defined
+by the #GtkIconSize enumeration, or by custom sizes defined
+by gtk_icon_size_register(), while named icons are more flexible
+and any pixel size can be specified.
+</para>
+</listitem>
+<listitem>
+<para>
+Because stock images are closely tied to stock items, and thus
+to actions in the user interface, stock images may come in
+multiple variants for different widget states or writing
+directions. 
+</para>
+</listitem>
+</itemizedlist>
+<para>
+A good rule of thumb is that if there is a stock image for what
+you want to use, use it, otherwise use a named icon. It turns
+out that internally stock images are generally defined in
+terms of one or more named icons. (An example of the
+more than one case is icons that depend on writing direction;
+GTK_STOCK_GO_FORWARD uses the two themed icons
+"gtk-stock-go-forward-ltr" and "gtk-stock-go-forward-rtl".)
+</para>
+<para>
+In many cases, named themes are used indirectly, via #GtkImage
+or stock items, rather than directly, but looking up icons
+directly is also simple. The #GtkIconTheme object acts
+as a database of all the icons in the current theme. You
+can create new #GtkIconTheme objects, but its much more
+efficient to use the standard icon theme for the #GdkScreen
+so that the icon information is shared with other people
+looking up icons. In the case where the default screen is
+being used, looking up an icon can be as simple as:
+</para>
+<informalexample>
+<programlisting>
+GError *error = NULL;
+GtkIconTheme *icon_theme;
+GdkPixbuf *pixbuf;
+
+icon_theme = gtk_icon_theme_get_default ();
+pixbuf = gtk_icon_theme_load_icon (icon_theme,
+                                   "my-icon-name", /* icon name */
+                                   48, /* size */
+                                   0,  /* flags */);
+if (!pixbuf)
+  {
+    g_warning ("Couldn't load icon: &percnt;s", error->message);
+    g_error_free (message);
+  }
+else
+  {
+    /* Use the pixbuf */
+    g_object_unref (pixbuf);
+  }
+</programlisting>
+</informalexample>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkIconInfo ##### -->
+<para>
+Contains information found when looking up an icon in
+an icon theme.
+</para>
+
+
+<!-- ##### STRUCT GtkIconTheme ##### -->
+<para>
+Acts as a database of information about an icon theme.
+Normally, you retrieve the icon theme for a particular
+screen using gtk_icon_theme_get_for_screen() and it
+will contain information about current icon theme for
+that screen, but you can also create a new #GtkIconTheme
+object and set the icon theme name explicitely using
+gtk_icon_theme_set_custom_theme().
+</para>
+
+
+<!-- ##### ENUM GtkIconLookupFlags ##### -->
+<para>
+
+</para>
+
+@GTK_ICON_LOOKUP_NO_SVG: 
+@GTK_ICON_LOOKUP_FORCE_SVG: 
+@GTK_ICON_LOOKUP_USE_BUILTIN: 
+
+<!-- ##### MACRO GTK_ICON_THEME_ERROR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### ENUM GtkIconThemeError ##### -->
+<para>
+
+</para>
+
+@GTK_ICON_THEME_NOT_FOUND: 
+@GTK_ICON_THEME_FAILED: 
+
+<!-- ##### FUNCTION gtk_icon_theme_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_get_default ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_set_screen ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@screen: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_set_search_path ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@path: 
+@n_elements: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_get_search_path ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@path: 
+@n_elements: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_append_search_path ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_prepend_search_path ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@path: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_set_custom_theme ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@theme_name: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_has_icon ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@icon_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_lookup_icon ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@icon_name: 
+@size: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_load_icon ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@icon_name: 
+@size: 
+@flags: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_list_icons ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@context: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_get_example_icon_name ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_rescan_if_needed ##### -->
+<para>
+
+</para>
+
+@icon_theme: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_theme_add_builtin_icon ##### -->
+<para>
+
+</para>
+
+@icon_name: 
+@size: 
+@pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_copy ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_free ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_get_base_size ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_get_filename ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_get_builtin_pixbuf ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_load_icon ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_set_raw_coordinates ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@raw_coordinates: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_get_embedded_rect ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@rectangle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_get_attach_points ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@points: 
+@n_points: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_icon_info_get_display_name ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@Returns: 
+
+
+<!-- ##### SIGNAL GtkIconTheme::changed ##### -->
+<para>
+
+</para>
+
+@icontheme: the object which received the signal.
+

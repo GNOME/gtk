@@ -309,6 +309,24 @@ calling gtk_tree_view_column_set_cell_data_func()
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_tree_view_column_set_expand ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@expand: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_get_expand ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_tree_view_column_set_clickable ##### -->
 <para>
 
@@ -460,6 +478,18 @@ calling gtk_tree_view_column_set_cell_data_func()
 @y_offset: 
 @width: 
 @height: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_cell_get_position ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@cell_renderer: 
+@start_pos: 
+@width: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_cell_is_visible ##### -->

@@ -72,6 +72,50 @@ space allocated for the #GtkAlignment.
 unused space, from 0 to 1. The values are similar to @xscale.
 
 
+<!-- ##### FUNCTION gtk_alignment_get_padding ##### -->
+<para>
+
+</para>
+
+@alignment: 
+@padding_top: 
+@padding_bottom: 
+@padding_left: 
+@padding_right: 
+
+
+<!-- ##### FUNCTION gtk_alignment_set_padding ##### -->
+<para>
+
+</para>
+
+@alignment: 
+@padding_top: 
+@padding_bottom: 
+@padding_left: 
+@padding_right: 
+
+
+<!-- ##### ARG GtkAlignment:bottom-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:left-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:right-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAlignment:top-padding ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkAlignment:xalign ##### -->
 <para>
 

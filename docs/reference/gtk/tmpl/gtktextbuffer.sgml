@@ -343,6 +343,16 @@ types related to the text widget and how they work together.
 @where: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_select_range ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@ins: 
+@bound: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_apply_tag ##### -->
 <para>
 

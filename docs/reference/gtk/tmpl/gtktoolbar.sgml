@@ -360,6 +360,24 @@ Sets if the tooltips of a toolbar should be active or not.
 @toolbar: 
 
 
+<!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkToolbar::move-focus ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
+@arg1: 
+@Returns: 
+
 <!-- ##### SIGNAL GtkToolbar::orientation-changed ##### -->
 <para>
 Should be used if you wish to perform an action when the orientation of a toolbar is changed.
@@ -367,6 +385,13 @@ Should be used if you wish to perform an action when the orientation of a toolba
 
 @toolbar: the object which received the signal.
 @orientation: the new #GtkOrientation of the toolbar.
+
+<!-- ##### SIGNAL GtkToolbar::popup-context-menu ##### -->
+<para>
+
+</para>
+
+@toolbar: the object which received the signal.
 
 <!-- ##### SIGNAL GtkToolbar::style-changed ##### -->
 <para>
@@ -381,7 +406,27 @@ Should be used if you wish to perform an action when ever the style of a toolbar
 
 </para>
 
+<!-- ##### ARG GtkToolbar:show-arrow ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkToolbar:toolbar-style ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:homogeneous ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkToolbar:pack-end ##### -->
 <para>
 
 </para>

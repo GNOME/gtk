@@ -39,6 +39,7 @@ Returns the type name of @class.
 @class: a #GtkTypeClass.
 @Deprecated: Use g_type_name() and G_TYPE_FROM_CLASS() instead.
 
+
 <!-- ##### MACRO GTK_CLASS_TYPE ##### -->
 <para>
 Returns the type of @class.
@@ -46,6 +47,7 @@ Returns the type of @class.
 
 @class: a #GtkTypeClass.
 @Deprecated: Use G_TYPE_FROM_CLASS() instead.
+
 
 <!-- ##### MACRO GTK_TYPE_IS_OBJECT ##### -->
 <para>
@@ -55,12 +57,14 @@ Returns %TRUE if @type is a %GTK_TYPE_OBJECT.
 @type: a #GtkType.
 @Deprecated: Use G_TYPE_IS_OBJECT() instead.
 
+
 <!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_LAST ##### -->
 <para>
 The highest-numbered structured or flat enumerated type value.
 </para>
 
 @Deprecated: Use #G_TYPE_LAST_RESERVED_FUNDAMENTAL - 1 instead.
+
 
 <!-- ##### MACRO GTK_TYPE_FUNDAMENTAL_MAX ##### -->
 <para>
@@ -69,12 +73,14 @@ The maximum fundamental enumerated type value.
 
 @Deprecated: Use #G_TYPE_FUNDAMENTAL_MAX instead.
 
+
 <!-- ##### MACRO GTK_STRUCT_OFFSET ##### -->
 <para>
 Use in place of <function>offsetof()</function>, which is used if it exists.
 </para>
 
 @Deprecated: Use G_STRUCT_OFFSET() instead.
+
 
 <!-- ##### MACRO GTK_CHECK_CAST ##### -->
 <para>
@@ -83,6 +89,8 @@ defined, just cast it.  Otherwise, check to see if we can cast @tobj
 into a @cast.
 </para>
 
+
+
 <!-- ##### MACRO GTK_CHECK_CLASS_CAST ##### -->
 <para>
 Casts the object in @tobj into @cast.  If %G_DISABLE_CAST_CHECKS is
@@ -90,6 +98,7 @@ defined, just cast it.  Otherwise, check to see if we can cast @tobj
 into a @cast.
 </para>
 
+<!-- # Unused Parameters # -->
 @tclass: a #GtkClassInitFunc
 @cast_type: a GTK+ type.
 @cast: a C type
@@ -100,6 +109,7 @@ into a @cast.
 Determines whether @type_object is a type of @otype.
 </para>
 
+<!-- # Unused Parameters # -->
 @type_object: a #GtkTypeObject object
 @otype: 
 
@@ -109,6 +119,7 @@ Determines whether @type_object is a type of @otype.
 Determines whether @type_class is a type of @otype.
 </para>
 
+<!-- # Unused Parameters # -->
 @type_class: a #GtkTypeClass class.
 @otype: 
 
@@ -118,6 +129,7 @@ Determines whether @type_class is a type of @otype.
 Gets the class of @tobj.
 </para>
 
+<!-- # Unused Parameters # -->
 @tobj: a #GtkObject.
 
 
@@ -126,6 +138,7 @@ Gets the class of @tobj.
 Converts a GTK+ type into a fundamental type.
 </para>
 
+<!-- # Unused Parameters # -->
 @type: 
 
 

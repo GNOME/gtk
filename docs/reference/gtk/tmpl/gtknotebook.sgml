@@ -534,3 +534,23 @@ Emitted when the user or a function changes the current page.
 
 </para>
 
+<!-- ##### ARG GtkNotebook:has-backward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-forward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-secondary-backward-stepper ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:has-secondary-forward-stepper ##### -->
+<para>
+
+</para>
+

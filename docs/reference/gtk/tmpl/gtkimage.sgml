@@ -123,7 +123,7 @@ functions), but they will all return %NULL values.
 @GTK_IMAGE_PIXMAP: the widget contains a #GdkPixmap
 @GTK_IMAGE_IMAGE: the widget contains a #GdkImage
 @GTK_IMAGE_PIXBUF: the widget contains a #GdkPixbuf
-@GTK_IMAGE_STOCK: the widget contains a stock icon name
+@GTK_IMAGE_STOCK: the widget contains a stock icon name (see <xref linkend="gtk-Stock-Items"/>)
 @GTK_IMAGE_ICON_SET: the widget contains a #GtkIconSet
 @GTK_IMAGE_ANIMATION: the widget contains a #GdkPixbufAnimation
 

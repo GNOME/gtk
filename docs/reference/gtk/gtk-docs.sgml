@@ -140,6 +140,7 @@
 <!ENTITY gtk-Types SYSTEM "xml/gtktypeutils.xml">
 <!ENTITY gtk-Bindings SYSTEM "xml/gtkbindings.xml">
 <!ENTITY gtk-Standard-Enumerations SYSTEM "xml/gtkenums.xml">
+<!ENTITY gtk-Named-Icons SYSTEM "xml/gtkicontheme.xml">
 <!ENTITY gtk-Stock-Items SYSTEM "xml/gtkstock.xml">
 <!ENTITY gtk-Themeable-Stock-Images SYSTEM "xml/gtkiconfactory.xml">
 <!ENTITY gtk-Settings SYSTEM "xml/gtksettings.xml">
@@ -275,6 +276,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     &gtk-accel-map;
     &gtk-Clipboards;
     &gtk-Drag-and-Drop;
+    &gtk-Named-Icons;
     &gtk-Stock-Items;
     &gtk-Themeable-Stock-Images;
     &gtk-Resource-Files;   

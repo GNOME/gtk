@@ -319,6 +319,15 @@ looking up the icon to use for a given stock ID.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_source_get_icon_name ##### -->
+<para>
+
+</para>
+
+@source: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_source_get_size ##### -->
 <para>
 
@@ -397,6 +406,15 @@ looking up the icon to use for a given stock ID.
 
 @source: 
 @pixbuf: 
+
+
+<!-- ##### FUNCTION gtk_icon_source_set_icon_name ##### -->
+<para>
+
+</para>
+
+@source: 
+@icon_name: 
 
 
 <!-- ##### FUNCTION gtk_icon_source_set_size ##### -->

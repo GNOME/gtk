@@ -27,6 +27,7 @@ IGNORE_HFILES=			\
 	gdk-pixbuf-loader.h	\
 	gtkdebug.h		\
 	gtkhsv.h		\
+	gtkiconthemeparser.h	\
 	gtkimmodule.h		\
 	gtkintl.h		\
 	gtkkeyhash.h		\

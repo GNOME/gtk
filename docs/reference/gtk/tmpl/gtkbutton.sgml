@@ -184,6 +184,24 @@ Returns the current relief style of the given #GtkButton.
 @value: 
 
 
+<!-- ##### FUNCTION gtk_button_set_focus_on_click ##### -->
+<para>
+
+</para>
+
+@button: 
+@focus_on_click: 
+
+
+<!-- ##### FUNCTION gtk_button_get_focus_on_click ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkButton::activate ##### -->
 <para>
 
@@ -228,6 +246,11 @@ mouse cursor is.
 </para>
 
 @button: the object which received the signal.
+
+<!-- ##### ARG GtkButton:focus-on-click ##### -->
+<para>
+
+</para>
 
 <!-- ##### ARG GtkButton:label ##### -->
 <para>

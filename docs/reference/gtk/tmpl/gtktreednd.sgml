@@ -2,7 +2,7 @@
 GtkTreeView drag-and-drop
 
 <!-- ##### SECTION Short_Description ##### -->
-Interfaces for drag-and-drop support in GtkTreeView
+
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>

@@ -435,6 +435,24 @@ multiple views.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_view_set_overwrite ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@overwrite: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_overwrite ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_view_set_pixels_above_lines ##### -->
 <para>
 
@@ -669,6 +687,14 @@ in an idle job in the background.
 @textview: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL GtkTextView::select-all ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
 <!-- ##### SIGNAL GtkTextView::set-anchor ##### -->
 <para>
 
@@ -692,6 +718,11 @@ in an idle job in the background.
 
 @textview: the object which received the signal.
 
+<!-- ##### ARG GtkTextView:buffer ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextView:cursor-visible ##### -->
 <para>
 
@@ -713,6 +744,11 @@ in an idle job in the background.
 </para>
 
 <!-- ##### ARG GtkTextView:left-margin ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextView:overwrite ##### -->
 <para>
 
 </para>

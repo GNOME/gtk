@@ -1,3 +1,14 @@
+Wed Jul  2 18:15:21 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gtk/gtk-docs.sgml gtk/gtksections.txt
+	gtk/tmpl/gtkicontheme.sgml: Document named icon system.
+
+	* gtk/tmpl/gtkrc.sgml: Mention specifying named icons
+	as @"icon-name".
+
+	* gtk/tmpl/gtkimage.sgml: Add a cross-reference to stock
+	icons.
+
 2003-07-01  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkcolorbutton.sgml: 

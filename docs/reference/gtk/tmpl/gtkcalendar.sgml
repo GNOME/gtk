@@ -159,6 +159,24 @@ Remove all visual markers.
 @calendar: a #GtkCalendar.
 
 
+<!-- ##### FUNCTION gtk_calendar_get_display_options ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_calendar_set_display_options ##### -->
+<para>
+
+</para>
+
+@calendar: 
+@flags: 
+
+
 <!-- ##### FUNCTION gtk_calendar_display_options ##### -->
 <para>
 Sets display options (whether to display the heading and the month headings).
@@ -246,4 +264,44 @@ calendar.
 </para>
 
 @calendar: the object which received the signal.
+
+<!-- ##### ARG GtkCalendar:day ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:month ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:no-month-change ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-day-names ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-heading ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:show-week-numbers ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:week-start-monday ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCalendar:year ##### -->
+<para>
+
+</para>
 

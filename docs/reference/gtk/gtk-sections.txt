@@ -4518,6 +4518,55 @@ GTK_STOCK_ZOOM_IN
 GTK_STOCK_ZOOM_OUT
 </SECTION>
 
+<SECTION>
+<FILE>gtkicontheme</FILE>
+<TITLE>GtkIconTheme</TITLE>
+GtkIconInfo
+GtkIconTheme
+GtkIconLookupFlags
+GTK_ICON_THEME_ERROR
+GtkIconThemeError
+gtk_icon_theme_new
+gtk_icon_theme_get_default
+gtk_icon_theme_get_for_screen
+gtk_icon_theme_set_screen
+gtk_icon_theme_set_search_path
+gtk_icon_theme_get_search_path
+gtk_icon_theme_append_search_path
+gtk_icon_theme_prepend_search_path
+gtk_icon_theme_set_custom_theme
+gtk_icon_theme_has_icon
+gtk_icon_theme_lookup_icon
+gtk_icon_theme_load_icon
+gtk_icon_theme_list_icons
+gtk_icon_theme_get_example_icon_name
+gtk_icon_theme_rescan_if_needed
+gtk_icon_theme_add_builtin_icon
+gtk_icon_info_copy
+gtk_icon_info_free
+gtk_icon_info_get_base_size
+gtk_icon_info_get_filename
+gtk_icon_info_get_builtin_pixbuf
+gtk_icon_info_load_icon
+gtk_icon_info_set_raw_coordinates
+gtk_icon_info_get_embedded_rect
+gtk_icon_info_get_attach_points
+gtk_icon_info_get_display_name
+<SUBSECTION Standard>
+GtkIconThemeClass
+GTK_ICON_THEME
+GTK_IS_ICON_THEME
+GTK_TYPE_ICON_THEME
+gtk_icon_theme_get_type
+GTK_ICON_THEME_CLASS
+GTK_IS_ICON_THEME_CLASS
+GTK_ICON_THEME_GET_CLASS
+gtk_icon_info_get_type
+GTK_TYPE_ICON_INFO
+<SUBSECTION Private>
+GtkIconThemePrivate
+gtk_icon_theme_error_quark
+</SECTION>
 
 <SECTION>
 <FILE>gtkiconfactory</FILE>
@@ -4552,6 +4601,7 @@ gtk_icon_source_get_direction
 gtk_icon_source_get_direction_wildcarded
 gtk_icon_source_get_filename
 gtk_icon_source_get_pixbuf
+gtk_icon_source_get_icon_name
 gtk_icon_source_get_size
 gtk_icon_source_get_size_wildcarded
 gtk_icon_source_get_state
@@ -4561,6 +4611,7 @@ gtk_icon_source_set_direction
 gtk_icon_source_set_direction_wildcarded
 gtk_icon_source_set_filename
 gtk_icon_source_set_pixbuf
+gtk_icon_source_set_icon_name
 gtk_icon_source_set_size
 gtk_icon_source_set_size_wildcarded
 gtk_icon_source_set_state
