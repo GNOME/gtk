@@ -1,3 +1,16 @@
+Wed Feb 20 23:00:08 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkstyle.c: new radio buttons. handle inconsistent state for
+	check- and radiobuttons.
+
+	* gtk/theme-bits/check-13-inconsistent.png,
+	gtk/theme-bits/radio-13-inconsistent.png: new files
+
+	* gtk/theme-bits/radio-13.png: new radio buttons
+
+	* gtk/theme-bits/Makefile.am (EXTRA_DIST): add new
+	-inconsistent.png files
+
 Wed Feb 20 16:19:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c: Add a XSETTING mapping for

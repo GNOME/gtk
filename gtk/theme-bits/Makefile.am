@@ -8,4 +8,4 @@ noinst_PROGRAMS = decompose-bits
 decompose_bits_SOURCES = decompose-bits.c
 decompose_bits_LDADD = $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la
 
-EXTRA_DIST = check-13.png radio-13.png
+EXTRA_DIST = check-13.png check-13-inconsistent radio-13.png radio-13-inconsistent
