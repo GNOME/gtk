@@ -1,3 +1,10 @@
+Sun Mar  3 15:16:07 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktable.c: When increasing the row or column
+	requisitions to make them sufficient for spanning widgets,
+	favor rows or columns with expandable children in them.
+	(#1261, Jonathan Blandford.)
+
 Sun Mar  3 14:26:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.[ch] (_gtk_get_insertion_cursor_gc):
