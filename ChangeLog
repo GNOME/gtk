@@ -1,6 +1,12 @@
+Sat Mar  2 20:39:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_from_stock): 
+	Add a note to the docs about how to use this in the 
+	context of changeable accelerators. (#72382, Mark Patton)
+
 Sat Mar  2 19:48:10 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* configure.in: Add -lX11 into x_libs.
+	* configure.in: Fix missing -lX11 into x_libs with pangoxft.
 
 Fri Mar  1 00:46:49 2002  Owen Taylor  <otaylor@redhat.com>
 
