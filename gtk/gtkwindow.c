@@ -742,8 +742,7 @@ gtk_window_get_property (GObject      *object,
       g_value_set_boolean (value, window->destroy_with_parent);
       break;
     case PROP_ICON:
-      g_value_set_object (value,
-                          G_OBJECT (gtk_window_get_icon (window)));
+      g_value_set_object (value, gtk_window_get_icon (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

@@ -1,3 +1,11 @@
+Mon Sep 10 16:55:49 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkalignment.c (gtk_alignment_init): fix xscale and yscale
+	behaviour which havoc broke. they have to default to 1.0 for
+	expand behaviour.
+
+	* gtk/gtkwindow.c (gtk_window_get_property): don't cast NULL objects.
+
 2001-09-10  Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkstyle.c (_gtk_style_peek_property_value)

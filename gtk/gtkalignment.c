@@ -122,7 +122,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       _("Value between 0.0 and 1.0 to indicate X scale"),
                                                       0.0,
                                                       1.0,
-                                                      0.0,
+                                                      1.0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_YSCALE,
@@ -131,7 +131,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       _("Value between 0.0 and 1.0 to indicate Y scale"),
                                                       0.0,
                                                       1.0,
-                                                      0.0,
+                                                      1.0,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
@@ -142,8 +142,8 @@ gtk_alignment_init (GtkAlignment *alignment)
 
   alignment->xalign = 0.5;
   alignment->yalign = 0.5;
-  alignment->xscale = 0.0;
-  alignment->yscale = 0.0;
+  alignment->xscale = 1.0;
+  alignment->yscale = 1.0;
 }
 
 GtkWidget*
