@@ -1,3 +1,12 @@
+Sun Nov  1 20:05:55 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* Okay, so we need the X11R6 keysyms so programs don't have to
+	worry about them. They don't conflict anyway. Reverted the #ifdef
+	changes to gtk/*.c
+
+	* gdk/Makefile.am: remove the BUILT_SOURCES rule, and make a
+	special rule for them (X-derived-headers)
+
 Sun Nov  1 05:30:32 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/Makefile.am: changed the awk scripts to generate gdkcursors.h

@@ -704,40 +704,16 @@ gtk_accelerator_valid (guint		  keyval,
 {
   guint invalid_accelerator_vals[] = {
     GDK_BackSpace, GDK_Delete, GDK_KP_Delete,
-    GDK_Shift_L, GDK_Shift_R, GDK_Shift_Lock, GDK_Caps_Lock,
+    GDK_Shift_L, GDK_Shift_R, GDK_Shift_Lock, GDK_Caps_Lock, GDK_ISO_Lock,
     GDK_Control_L, GDK_Control_R, GDK_Meta_L, GDK_Meta_R,
     GDK_Super_L, GDK_Super_R, GDK_Hyper_L, GDK_Hyper_R,
     GDK_Mode_switch, GDK_Num_Lock, GDK_Multi_key,
     GDK_Scroll_Lock, GDK_Sys_Req, 
-    GDK_Up, GDK_Down, GDK_Left, GDK_Right, GDK_Tab,
+    GDK_Up, GDK_Down, GDK_Left, GDK_Right, GDK_Tab, GDK_ISO_Left_Tab,
     GDK_KP_Up, GDK_KP_Down, GDK_KP_Left, GDK_KP_Right, GDK_KP_Tab,
-
-/* These aren't available on X11R5 */
-#ifdef GDK_ISO_Lock
-    GDK_ISO_Lock,
-#endif
-#ifdef GDK_ISO_Left_Tab
-    GDK_ISO_Left_Tab,
-#endif
-#ifdef GDK_First_Virtual_Screen
-    GDK_First_Virtual_Screen,
-#endif
-#ifdef GDK_Prev_Virtual_Screen
-    GDK_Prev_Virtual_Screen,
-#endif
-#ifdef GDK_Next_Virtual_Screen
-    GDK_Next_Virtual_Screen,
-#endif
-#ifdef GDK_Last_Virtual_Screen
-    GDK_Last_Virtual_Screen,
-#endif
-#ifdef GDK_Terminate_Server
-    GDK_Terminate_Server,
-#endif
-#ifdef GDK_AudibleBell_Enable
-    GDK_AudibleBell_Enable,
-#endif
-
+    GDK_First_Virtual_Screen, GDK_Prev_Virtual_Screen,
+    GDK_Next_Virtual_Screen, GDK_Last_Virtual_Screen,
+    GDK_Terminate_Server, GDK_AudibleBell_Enable,
     0
   };
   guint *ac_val;

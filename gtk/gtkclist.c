@@ -4404,9 +4404,7 @@ gtk_clist_key_press (GtkWidget   *widget,
   switch (event->keyval)
     {
     case GDK_Tab: 
-#ifdef GDK_ISO_Left_Tab /* Not available on X11R5 */
     case GDK_ISO_Left_Tab:
-#endif
       if (event->state & GDK_SHIFT_MASK)
 	return gtk_container_focus (GTK_CONTAINER (widget),
 				    GTK_DIR_TAB_BACKWARD);

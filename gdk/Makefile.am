@@ -67,21 +67,14 @@ gxid_LDADD = \
 	@x_libs@	\
 	-lm
 
-BUILT_SOURCES = gdkcursors.h gdkkeysyms.h
-
-# cause the built sources to be rebuild when possible, even with --include-deps
-$(libgdk_la_SOURCES): $(BUILT_SOURCES)
-
-gdkcursors.h:
+X-derived-headers:
 	sed -e 's/^#define[ 	]*XC\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/GDK\1 = \2,/' \
 	    -e 'tb' -e 'd' -e ':b' \
 	    -e 'y/abcdefghijklmnopqrstuvwxyz/ABCDEFGHIJKLMNOPQRSTUVWXYZ/' \
-	    < @x_includes@/X11/cursorfont.h > $@
-
-gdkkeysyms.h:
+	    < @x_includes@/X11/cursorfont.h > gdkcursors.h ; \
 	sed -e 's/^#define[ 	]*XK\([^ 	]*\)[ 	]*\([^ 	]*\)[ 	]*.*$$/#define GDK\1 \2/' \
 	    -e 'tb' -e 'd' -e ':b' -e 's/ 0X/ 0x/' \
-	    < @x_includes@/X11/keysymdef.h > $@
+	    < @x_includes@/X11/keysymdef.h > gdkkeysyms.h
 
 .PHONY: files
 
