@@ -1,5 +1,11 @@
 2004-10-04  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkicontheme.c (icon_info_ensure_scale_and_pixbuf): 
+	Make the code work as intended for unthemed icons; don't scale
+	them up too much. Allow to scale them down, and do so 
+	exactly.  (#154142, Ross Burton)
+	(gtk_icon_info_load_icon): Amend docs.
+
 	* gtk/gtkcelllayout.c (gtk_cell_layout_clear): Improve 
 	docs.  (#154504, Dave Cook)
 
