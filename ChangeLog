@@ -1,3 +1,8 @@
+Wed Dec 12 16:43:10 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_unrealize): Remove
+	validate_rows_timer in unrealize.  Reported by Matthew Wilson.
+
 Wed Dec 12 16:18:26 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_realize): Remove support for

@@ -1325,6 +1325,12 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       tree_view->priv->presize_handler_timer = 0;
     }
 
+  if (tree_view->priv->validate_rows_timer != 0)
+    {
+      gtk_timeout_remove (tree_view->priv->validate_rows_timer);
+      tree_view->priv->validate_rows_timer = 0;
+    }
+
   for (list = tree_view->priv->columns; list; list = list->next)
     _gtk_tree_view_column_unrealize_button (GTK_TREE_VIEW_COLUMN (list->data));
 
