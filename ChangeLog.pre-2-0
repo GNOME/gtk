@@ -1,3 +1,7 @@
+Thu Feb 18 00:54:46 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.c: added widget arg ::titles_active.
+
 Thu Feb 18 00:27:46 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_queue_clear_area): only translate widget

@@ -159,6 +159,7 @@ enum {
   ARG_SHADOW_TYPE,
   ARG_SELECTION_MODE,
   ARG_ROW_HEIGHT,
+  ARG_TITLES_ACTIVE,
   ARG_REORDERABLE,
   ARG_USE_DRAG_ICONS
 };
@@ -501,6 +502,10 @@ gtk_clist_class_init (GtkCListClass *klass)
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_REORDERABLE);
+  gtk_object_add_arg_type ("GtkCList::titles_active",
+			   GTK_TYPE_BOOL,
+			   GTK_ARG_READWRITE,
+			   ARG_TITLES_ACTIVE);
   gtk_object_add_arg_type ("GtkCList::use_drag_icons",
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
@@ -825,6 +830,12 @@ gtk_clist_set_arg (GtkObject      *object,
     case ARG_REORDERABLE:
       gtk_clist_set_reorderable (clist, GTK_VALUE_BOOL (*arg));
       break;
+    case ARG_TITLES_ACTIVE:
+      if (GTK_VALUE_BOOL (*arg))
+	gtk_clist_column_titles_active (clist);
+      else
+	gtk_clist_column_titles_passive (clist);
+      break;
     case ARG_USE_DRAG_ICONS:
       gtk_clist_set_use_drag_icons (clist, GTK_VALUE_BOOL (*arg));
       break;
@@ -844,6 +855,8 @@ gtk_clist_get_arg (GtkObject      *object,
 
   switch (arg_id)
     {
+      guint i;
+
     case ARG_N_COLUMNS:
       GTK_VALUE_UINT (*arg) = clist->columns;
       break;
@@ -858,6 +871,16 @@ gtk_clist_get_arg (GtkObject      *object,
       break;
     case ARG_REORDERABLE:
       GTK_VALUE_BOOL (*arg) = GTK_CLIST_REORDERABLE (clist);
+      break;
+    case ARG_TITLES_ACTIVE:
+      GTK_VALUE_BOOL (*arg) = TRUE;
+      for (i = 0; i < clist->columns; i++)
+	if (clist->column[i].button &&
+	    !GTK_WIDGET_SENSITIVE (clist->column[i].button))
+	  {
+	    GTK_VALUE_BOOL (*arg) = FALSE;
+	    break;
+	  }
       break;
     case ARG_USE_DRAG_ICONS:
       GTK_VALUE_BOOL (*arg) = GTK_CLIST_USE_DRAG_ICONS (clist);
