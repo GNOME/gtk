@@ -69,6 +69,7 @@ endif
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
 LDFLAGS = @STRIP_BEGIN@ 						\
+	@LDFLAGS@							\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 		\
 	-export-dynamic 						\
 	-rpath $(libdir) 						\

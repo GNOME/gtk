@@ -65,6 +65,7 @@ endif
 # we use the general approach here
 libgtkincludedir = $(includedir)/gtk-2.0/gtk
 LDFLAGS = @STRIP_BEGIN@ \
+	@LDFLAGS@								\
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)			\
 	-export-dynamic								\
 	-rpath $(libdir)							\

@@ -1,3 +1,12 @@
+Mon Aug  5 17:01:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/Makefile.am (LDFLAGS): When overriding LDFLAGS,
+	include @LDFLAGS@, otherwise LDFLAGS the users passes
+	to configure don't get used. (#89946, Noah Levitt, 
+	Albert Chin)
+
+	* gdk/linux-fb/Makefile.am: Remove LDFLAGS setting.
+
 Mon Aug  5 15:25:40 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_pixmap_and_mask_for_colormap): 
