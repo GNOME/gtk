@@ -1,16 +1,16 @@
 # gtk+ yn Gymraeg.
 # Copyright (C) 2004 Free Software Foundation, Inc.
 # Rhoslyn Prys <rhoslyn.prys@ntlworld.com>, 2002.
-# Dafydd Harries <daf@parnassus.ath.cx>, 2003, 2004.
-# Rhys Jones <rhys@sucs.org>, 2004."
+# Dafydd Harries <daf@muse.19inch.net>, 2003, 2004.
+# Rhys Jones <rhys@sucs.org>, 2004.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-01-08 07:25+0000\n"
-"Last-Translator: Dafydd Harries <daf@parnassus.ath.cx>\n"
+"POT-Creation-Date: 2004-03-17 20:18+0100\n"
+"PO-Revision-Date: 2004-03-18 18:57+0000\n"
+"Last-Translator: Dafydd Harries <daf@muse.19inch.net>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -210,87 +210,76 @@ msgid "Whether the action is visible."
 msgstr "A ydy'r weithred yn weladwy."
 
 #: gtk/gtkaction.c:271
-#, fuzzy
 msgid "Action Group"
-msgstr "Gweithred"
+msgstr "Grŵp Gweithred"
 
 #: gtk/gtkaction.c:272
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
+"Y GtkActionGroup mae'r GtkAction hwn wedi ei gysylltu hefo, neu NULL (ar "
+"gyfer defnydd mewnol)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
 msgstr "Enw ar gyfer y grŵp gweithred."
 
 #: gtk/gtkactiongroup.c:142
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "A ydy'r weithred wedi ei alluogi"
+msgstr "A ydy'r grŵp gweithred wedi ei alluogi"
 
 #: gtk/gtkactiongroup.c:149
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "A ydy'r weithred yn weladwy."
+msgstr "A ydy'r grŵp gweithred yn weladwy."
 
 #: gtk/gtkadjustment.c:107 gtk/gtkspinbutton.c:302
 msgid "Value"
 msgstr "Gwerth"
 
 #: gtk/gtkadjustment.c:108
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "Enw'r teclyn"
+msgstr "Gwerth yr addasiad"
 
 #: gtk/gtkadjustment.c:117
-#, fuzzy
 msgid "Minimum Value"
-msgstr "X Lleiaf"
+msgstr "Gwerth Lleiaf"
 
 #: gtk/gtkadjustment.c:118
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "Enw'r teclyn"
+msgstr "Gwerth lleiaf yr addasiad"
 
 #: gtk/gtkadjustment.c:127
-#, fuzzy
 msgid "Maximum Value"
-msgstr "Hyd mwyaf"
+msgstr "Gwerth Mwyaf"
 
 #: gtk/gtkadjustment.c:128
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "Enw'r teclyn"
+msgstr "Gwerth mwyaf yr addasiad"
 
 #: gtk/gtkadjustment.c:137
-#, fuzzy
 msgid "Step Increment"
-msgstr "Sgrin"
+msgstr "Cynydd Cam"
 
 #: gtk/gtkadjustment.c:138
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "Cynnwys y cofnod"
+msgstr "Cynnydd cam yr addasiad"
 
 #: gtk/gtkadjustment.c:147
 msgid "Page Increment"
-msgstr ""
+msgstr "Cynydd Tudalen"
 
 #: gtk/gtkadjustment.c:148
-#, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "Cynnwys y cofnod"
+msgstr "Cynnydd tudalen yr addasiad"
 
 #: gtk/gtkadjustment.c:157
-#, fuzzy
 msgid "Page Size"
-msgstr "Maint Mwyaf"
+msgstr "Maint Tudalen"
 
 #: gtk/gtkadjustment.c:158
-#, fuzzy
 msgid "The page size of the adjustment"
-msgstr "Cyflwr toglu y botwm"
+msgstr "Maint tudalen yr addasiad"
 
 #: gtk/gtkalignment.c:117
 msgid "Horizontal alignment"
@@ -639,12 +628,11 @@ msgstr ""
 
 #: gtk/gtkbutton.c:378
 msgid "Show button images"
-msgstr ""
+msgstr "Dangos delweddau botymau"
 
 #: gtk/gtkbutton.c:379
-#, fuzzy
 msgid "Whether stock icons should be shown in buttons"
-msgstr "A ddylid dangos tabiau ai peidio"
+msgstr "A ddylid dangos eiconau stoc mewn botymau"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -847,9 +835,8 @@ msgid "Size"
 msgstr "Maint"
 
 #: gtk/gtkcellrendererpixbuf.c:170
-#, fuzzy
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "Maint yr eicon wedi ei lunio"
+msgstr "Y gwerth GtkIconSize sy'n penodi maint yr eicon lluniedig"
 
 #: gtk/gtkcellrendererpixbuf.c:179
 msgid "Detail"
@@ -1373,11 +1360,12 @@ msgstr "Yr eitem sydd yn weithredol yn gyfredol"
 
 #: gtk/gtkcombobox.c:504
 msgid "Appears as list"
-msgstr ""
+msgstr "Ymddangosir fel rhestr"
 
 #: gtk/gtkcombobox.c:505
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "A ddylai gollwnglenni blychau cyfun edrych fel rhestrau yn hytrach na "
+"dewislenni"
 
 #: gtk/gtkcomboboxentry.c:110
 msgid "Text Column"
@@ -1577,11 +1565,11 @@ msgid "X align"
 msgstr "Cyfuniad X"
 
 #: gtk/gtkentry.c:554 gtk/gtkmisc.c:100
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "Y cyfuniad llorweddol, o 0 (chwith) i 1 (de)"
+msgstr "Y cyfuniad llorweddol, o 0 (chwith) i 1 (de). Gwrthdroir ar gyfer "
+"llunwedd dde-at-chwith."
 
 #: gtk/gtkentry.c:787
 msgid "Select on focus"
@@ -1685,14 +1673,12 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Y math o weithred mae'r dewisydd ffeil yn ei gyflawni"
 
 #: gtk/gtkfilechooser.c:100
-#, fuzzy
 msgid "File System Backend"
-msgstr "System Ffeiliau"
+msgstr "Ochr Gefn System Ffeiliau"
 
 #: gtk/gtkfilechooser.c:101
-#, fuzzy
 msgid "Name of file system backend to use"
-msgstr "Enw'r thema eicon i'w ddefnyddio"
+msgstr "Enw'r ochr gefn system ffeiliau i'w ddefnyddio"
 
 #: gtk/gtkfilechooser.c:106
 msgid "Filter"
@@ -1730,13 +1716,12 @@ msgstr ""
 "addasiedig."
 
 #: gtk/gtkfilechooser.c:130
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "Defnyddio'r maint yn y label"
+msgstr "Defnyddio Label Rhagolwg"
 
 #: gtk/gtkfilechooser.c:131
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "A ddylir dangos label stoc gyda enw'r ffeil a rhagwelir."
 
 #: gtk/gtkfilechooser.c:136
 msgid "Extra widget"
@@ -1764,12 +1749,11 @@ msgstr "A ddylid dangos ffeiliau a phlygellau cudd"
 
 #: gtk/gtkfilechooserdefault.c:550
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "Ochr gefn rhagosod y dewisydd ffeil"
 
 #: gtk/gtkfilechooserdefault.c:551
-#, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Enw'r thema eicon i'w ddefnyddio"
+msgstr "Enw'r ochr gefn GtkFileChooser i'w ddefnyddio'n rhagosod"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:168
 msgid "Filename"
@@ -2033,14 +2017,12 @@ msgid "Child widget to appear next to the menu text"
 msgstr "Teclyn plentyn i ymddangos nesaf i destun y dewislen"
 
 #: gtk/gtkimagemenuitem.c:144
-#, fuzzy
 msgid "Show menu images"
-msgstr "Dangos Rhifau Wythnosau"
+msgstr "Dangos delweddau dewislen"
 
 #: gtk/gtkimagemenuitem.c:145
-#, fuzzy
 msgid "Whether images should be shown in menus"
-msgstr "A ddylid dangos tabiau ai peidio"
+msgstr "A ddylid dangos delweddau mewn dewislenni"
 
 #: gtk/gtkinvisible.c:115 gtk/gtkwindow.c:543
 msgid "Screen"
@@ -2282,14 +2264,14 @@ msgid "Width of border around the label and image in the message dialog"
 msgstr "Lled y border o amgylch y label a'r delwdd yn y deialog neges"
 
 #: gtk/gtkmessagedialog.c:123
-#, fuzzy
 msgid "Use separator"
-msgstr "Mae gwahanwr ganddo"
+msgstr "Defnyddio gwahannydd"
 
 #: gtk/gtkmessagedialog.c:124
 msgid ""
 "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
+"a ddylid rhoi gwahannyd rhwng testun y deialog neges a'r botymau"
 
 #: gtk/gtkmessagedialog.c:130
 msgid "Message Type"
@@ -2702,9 +2684,8 @@ msgid "Group"
 msgstr "Grŵp"
 
 #: gtk/gtkradioaction.c:156
-#, fuzzy
 msgid "The radio action whose group this action belongs."
-msgstr "Y botwm radio sydd berchen y grwp mae'r teclyn yma biau ati."
+msgstr "Y gweithred radio sydd berchen y grwp mae'r weithred yma biau ati."
 
 #: gtk/gtkradiobutton.c:113
 msgid "The radio button whose group this widget belongs."
@@ -3053,43 +3034,45 @@ msgstr "Rhestr meintiau eiconau (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:365
 msgid "Xft Antialias"
-msgstr ""
+msgstr "Datamgennu Xft"
 
 #: gtk/gtksettings.c:366
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "a ddylir datamgennu ffontiau Xft; 0=na, 1=ie, -1=rhagosodiad"
 
 #: gtk/gtksettings.c:375
 msgid "Xft Hinting"
-msgstr ""
+msgstr "Awrymmu Xft"
 
 #: gtk/gtksettings.c:376
 msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
-msgstr ""
+msgstr "A ddylir defnyddio awgrymiadau ffontiau Xft; 0=na, 1=ie, "
+"-1=rhagosodiad"
 
 #: gtk/gtksettings.c:385
 msgid "Xft Hint Style"
-msgstr ""
+msgstr "Arddull Awgrymiad Xft"
 
 #: gtk/gtksettings.c:386
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr ""
+msgstr "Pa radd o awgrymiadu i'w ddefnyddio; dim, ychydig, canolig, llawn"
 
 #: gtk/gtksettings.c:395
 msgid "Xft RGBA"
-msgstr ""
+msgstr "RGBA Xft"
 
 #: gtk/gtksettings.c:396
 msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
-msgstr ""
+msgstr "Y math o datamgennu isbicsel; dim, rgb, bgr, vrgb, vbgr"
 
 #: gtk/gtksettings.c:405
 msgid "Xft DPI"
-msgstr ""
+msgstr "Dot y Modfedd Xft"
 
 #: gtk/gtksettings.c:406
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr ""
+msgstr "Y cydranniad ar gyfer Xft, mewn 1024 * dotiau/modfed, neu -1 er mwyn "
+"defnyddio'r rhagosodiad"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
@@ -3667,14 +3650,12 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "A fydd gwasgu Tab yn mewnosod nod tab"
 
 #: gtk/gtktextview.c:684
-#, fuzzy
 msgid "Error underline color"
-msgstr "Lliw'r blaendir"
+msgstr "Lliw tanlinellu gwall"
 
 #: gtk/gtktextview.c:685
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "Pa liw i arlunio'r cyrchydd mewnosod efo"
+msgstr "Pa liw i arlunio'r tanlinellau amlygu gwall"
 
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
