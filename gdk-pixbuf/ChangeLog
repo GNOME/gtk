@@ -1,3 +1,8 @@
+2002-09-12  Federico Mena Quintero  <federico@ximian.com>
+
+	* io-jpeg.c (gdk_pixbuf__jpeg_image_load): Unref the pixbuf if we
+	hit an unsupported colorspace.
+
 2002-09-06  Matthias Clasen  <maclas@gmx.de>
 
 	* io-ani.c, io-ani-animation.h, io-ani-animation.c, 

@@ -375,6 +375,7 @@ gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 		      convert_cmyk_to_rgb (&cinfo, lines);
 		      break;
 		    default:
+		      g_object_unref (pixbuf);
 		      if (error && *error == NULL) {
                         g_set_error (error,
                                      GDK_PIXBUF_ERROR,
