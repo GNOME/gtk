@@ -60,11 +60,17 @@ INSTALL = copy
 
 CFLAGS = -I. -DHAVE_CONFIG_H
 
+sub-pixops :
+	cd pixops
+	nmake -f makefile.msc
+	cd ..
+
 ## targets
 all : \
 	$(PRJ_TOP)\config.h \
 	gdk-pixbuf-marshal.c \
 	gdk-pixbuf-marshal.h \
+	sub-pixops \
 	$(PACKAGE)-$(PKG_VER).dll \
 #	make-inline-pixbuf.exe \
 	gdk-pixbuf-csource.exe \
