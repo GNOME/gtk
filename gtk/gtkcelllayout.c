@@ -250,3 +250,27 @@ gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
   (* GTK_CELL_LAYOUT_GET_IFACE (cell_layout)->clear_attributes) (cell_layout,
                                                                  cell);
 }
+
+/**
+ * gtk_cell_layout_reorder:
+ * @cell_layout: A #GtkCellLayout.
+ * @cell: A #GtkCellRenderer to reorder.
+ * @position: New position to insert @cell at.
+ *
+ * Re-inserts @cell at @position. Note that @cell has already to be packed
+ * into @cell_layout for this to function properly.
+ *
+ * Since: 2.4
+ */
+void
+gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
+                         GtkCellRenderer *cell,
+                         gint             position)
+{
+  g_return_if_fail (GTK_IS_CELL_LAYOUT (cell_layout));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  (* GTK_CELL_LAYOUT_GET_IFACE (cell_layout)->reorder) (cell_layout,
+                                                        cell,
+                                                        position);
+}

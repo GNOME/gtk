@@ -252,6 +252,9 @@ static void     gtk_combo_box_cell_layout_set_cell_data_func (GtkCellLayout     
                                                               GDestroyNotify         destroy);
 static void     gtk_combo_box_cell_layout_clear_attributes   (GtkCellLayout         *layout,
                                                               GtkCellRenderer       *cell);
+static void     gtk_combo_box_cell_layout_reorder            (GtkCellLayout         *layout,
+                                                              GtkCellRenderer       *cell,
+                                                              gint                   position);
 
 
 GType
@@ -399,6 +402,7 @@ gtk_combo_box_cell_layout_init (GtkCellLayoutIface *iface)
   iface->add_attribute = gtk_combo_box_cell_layout_add_attribute;
   iface->set_cell_data_func = gtk_combo_box_cell_layout_set_cell_data_func;
   iface->clear_attributes = gtk_combo_box_cell_layout_clear_attributes;
+  iface->reorder = gtk_combo_box_cell_layout_reorder;
 }
 
 static void
@@ -2292,6 +2296,63 @@ gtk_combo_box_cell_layout_clear_attributes (GtkCellLayout   *layout,
     }
 
   gtk_widget_queue_resize (GTK_WIDGET (combo_box));
+}
+
+static void
+gtk_combo_box_cell_layout_reorder (GtkCellLayout   *layout,
+                                   GtkCellRenderer *cell,
+                                   gint             position)
+{
+  ComboCellInfo *info;
+  GtkComboBox *combo_box = GTK_COMBO_BOX (layout);
+  GtkWidget *menu;
+  GSList *link;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (layout));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  info = gtk_combo_box_get_cell_info (combo_box, cell);
+
+  g_return_if_fail (info != NULL);
+  g_return_if_fail (position >= 0);
+
+  link = g_slist_find (combo_box->priv->cells, info);
+
+  g_return_if_fail (link != NULL);
+
+  combo_box->priv->cells = g_slist_remove_link (combo_box->priv->cells, link);
+  combo_box->priv->cells = g_slist_insert (combo_box->priv->cells, info,
+                                           position);
+
+  if (combo_box->priv->cell_view)
+    gtk_cell_layout_reorder (GTK_CELL_LAYOUT (combo_box->priv->cell_view),
+                             cell, position);
+
+  if (combo_box->priv->column)
+    gtk_cell_layout_reorder (GTK_CELL_LAYOUT (combo_box->priv->column),
+                             cell, position);
+
+  menu = combo_box->priv->popup_widget;
+  if (GTK_IS_MENU (menu))
+    {
+      GList *i, *list;
+
+      list = gtk_container_get_children (GTK_CONTAINER (menu));
+      for (i = list; i; i = i->next)
+        {
+          GtkCellView *view;
+
+          if (GTK_IS_CELL_VIEW_MENU_ITEM (i->data))
+            view = GTK_CELL_VIEW (GTK_BIN (i->data)->child);
+          else
+            view = GTK_CELL_VIEW (i->data);
+
+          gtk_cell_layout_reorder (GTK_CELL_LAYOUT (view), cell, position);
+        }
+      g_list_free (list);
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (combo_box));
 }
 
 /*

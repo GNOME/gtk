@@ -107,6 +107,9 @@ static void gtk_tree_view_column_cell_layout_set_cell_data_func (GtkCellLayout  
                                                                  GDestroyNotify         destroy);
 static void gtk_tree_view_column_cell_layout_clear_attributes   (GtkCellLayout         *cell_layout,
                                                                  GtkCellRenderer       *cell);
+static void gtk_tree_view_column_cell_layout_reorder            (GtkCellLayout         *cell_layout,
+                                                                 GtkCellRenderer       *cell,
+                                                                 gint                   position);
 
 /* Button handling code */
 static void gtk_tree_view_column_create_button                 (GtkTreeViewColumn       *tree_column);
@@ -356,6 +359,7 @@ gtk_tree_view_column_cell_layout_init (GtkCellLayoutIface *iface)
   iface->add_attribute = gtk_tree_view_column_cell_layout_add_attribute;
   iface->set_cell_data_func = gtk_tree_view_column_cell_layout_set_cell_data_func;
   iface->clear_attributes = gtk_tree_view_column_cell_layout_clear_attributes;
+  iface->reorder = gtk_tree_view_column_cell_layout_reorder;
 }
 
 static void
@@ -737,6 +741,33 @@ gtk_tree_view_column_cell_layout_clear_attributes (GtkCellLayout    *cell_layout
 
   info = gtk_tree_view_column_get_cell_info (column, cell_renderer);
   gtk_tree_view_column_clear_attributes_by_info (column, info);
+}
+
+static void
+gtk_tree_view_column_cell_layout_reorder (GtkCellLayout   *cell_layout,
+                                          GtkCellRenderer *cell,
+                                          gint             position)
+{
+  GList *link;
+  GtkTreeViewColumn *column;
+  GtkTreeViewColumnCellInfo *info;
+
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (cell_layout));
+  column = GTK_TREE_VIEW_COLUMN (cell_layout);
+
+  info = gtk_tree_view_column_get_cell_info (column, cell);
+
+  g_return_if_fail (info != NULL);
+  g_return_if_fail (position >= 0);
+
+  link = g_list_find (column->cell_list, info);
+
+  g_return_if_fail (link != NULL);
+
+  column->cell_list = g_list_remove_link (column->cell_list, link);
+  column->cell_list = g_list_insert (column->cell_list, info, position);
+
+  gtk_widget_queue_draw (column->tree_view);
 }
 
 static void

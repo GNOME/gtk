@@ -65,6 +65,9 @@ struct _GtkCellLayoutIface
                                GDestroyNotify         destroy);
   void (* clear_attributes)   (GtkCellLayout         *cell_layout,
                                GtkCellRenderer       *cell);
+  void (* reorder)            (GtkCellLayout         *cell_layout,
+                               GtkCellRenderer       *cell,
+                               gint                   position);
 };
 
 GType gtk_cell_layout_get_type           (void);
@@ -89,6 +92,9 @@ void  gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
                                           GDestroyNotify         destroy);
 void  gtk_cell_layout_clear_attributes   (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell);
+void  gtk_cell_layout_reorder            (GtkCellLayout         *cell_layout,
+                                          GtkCellRenderer       *cell,
+                                          gint                   position);
 
 
 G_END_DECLS

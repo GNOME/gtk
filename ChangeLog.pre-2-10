@@ -1,3 +1,21 @@
+Fri Dec 19 23:36:00 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Fixes #108458.
+
+	* gtk/gtkcelllayout.[ch]: added a reorder method.
+
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_init),
+	(gtk_tree_view_column_cell_layout_reorder): implement reorder.
+
+	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_init),
+	(gtk_cell_view_cell_layout_reorder): ditto.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_cell_layout_init),
+	(gtk_combo_box_cell_layout_reorder): ditto.
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_cell_layout_init),
+	(gtk_entry_completion_reorder): ditto.
+
 Fri Dec 19 22:18:19 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_search_equal_func): use strstr

@@ -100,6 +100,9 @@ static void       gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout   
                                                                 GtkCellLayoutDataFunc  func,
                                                                 gpointer               func_data,
                                                                 GDestroyNotify         destroy);
+static void       gtk_cell_view_cell_layout_reorder            (GtkCellLayout         *layout,
+                                                                GtkCellRenderer       *cell,
+                                                                gint                   position);
 
 
 #define GTK_CELL_VIEW_GET_PRIVATE(obj)    (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_CELL_VIEW, GtkCellViewPrivate))
@@ -203,6 +206,7 @@ gtk_cell_view_cell_layout_init (GtkCellLayoutIface *iface)
   iface->add_attribute = gtk_cell_view_cell_layout_add_attribute;
   iface->set_cell_data_func = gtk_cell_view_cell_layout_set_cell_data_func;
   iface->clear_attributes = gtk_cell_view_cell_layout_clear_attributes;
+  iface->reorder = gtk_cell_view_cell_layout_reorder;
 }
 
 static void
@@ -698,6 +702,34 @@ gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
   info->attributes = NULL;
 }
 
+static void
+gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
+                                   GtkCellRenderer *cell,
+                                   gint             position)
+{
+  GList *link;
+  GtkCellViewCellInfo *info;
+  GtkCellView *cellview = GTK_CELL_VIEW (layout);
+
+  g_return_if_fail (GTK_IS_CELL_VIEW (cellview));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  info = gtk_cell_view_get_cell_info (cellview, cell);
+
+  g_return_if_fail (info != NULL);
+  g_return_if_fail (position >= 0);
+
+  link = g_list_find (cellview->priv->cell_list, info);
+
+  g_return_if_fail (link != NULL);
+
+  cellview->priv->cell_list = g_list_remove_link (cellview->priv->cell_list,
+                                                  link);
+  cellview->priv->cell_list = g_list_insert (cellview->priv->cell_list,
+                                             info, position);
+
+  gtk_widget_queue_draw (GTK_WIDGET (cellview));
+}
 
 /* public API */
 GtkWidget *

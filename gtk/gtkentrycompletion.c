@@ -84,6 +84,9 @@ static void     gtk_entry_completion_set_cell_data_func  (GtkCellLayout         
                                                           GDestroyNotify           destroy);
 static void     gtk_entry_completion_clear_attributes    (GtkCellLayout           *cell_layout,
                                                           GtkCellRenderer         *cell);
+static void     gtk_entry_completion_reorder             (GtkCellLayout           *cell_layout,
+                                                          GtkCellRenderer         *cell,
+                                                          gint                     position);
 
 static gboolean gtk_entry_completion_visible_func        (GtkTreeModel            *model,
                                                           GtkTreeIter             *iter,
@@ -216,6 +219,7 @@ gtk_entry_completion_cell_layout_init (GtkCellLayoutIface *iface)
   iface->add_attribute = gtk_entry_completion_add_attribute;
   iface->set_cell_data_func = gtk_entry_completion_set_cell_data_func;
   iface->clear_attributes = gtk_entry_completion_clear_attributes;
+  iface->reorder = gtk_entry_completion_reorder;
 }
 
 static void
@@ -465,6 +469,20 @@ gtk_entry_completion_clear_attributes (GtkCellLayout   *cell_layout,
   priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
 
   gtk_tree_view_column_clear_attributes (priv->column, cell);
+}
+
+static void
+gtk_entry_completion_reorder (GtkCellLayout   *cell_layout,
+                              GtkCellRenderer *cell,
+                              gint             position)
+{
+  GtkEntryCompletionPrivate *priv;
+
+  g_return_if_fail (GTK_IS_ENTRY_COMPLETION (cell_layout));
+
+  priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (cell_layout);
+
+  gtk_cell_layout_reorder (GTK_CELL_LAYOUT (priv->column), cell, position);
 }
 
 /* all those callbacks */
