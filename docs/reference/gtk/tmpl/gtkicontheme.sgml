@@ -80,7 +80,8 @@ icon_theme = gtk_icon_theme_get_default ();
 pixbuf = gtk_icon_theme_load_icon (icon_theme,
                                    "my-icon-name", /* icon name */
                                    48, /* size */
-                                   0,  /* flags */);
+                                   0,  /* flags */
+                                   &amp;error);
 if (!pixbuf)
   {
     g_warning ("Couldn't load icon: &percnt;s", error->message);

@@ -1,3 +1,7 @@
+Fri May  7 01:21:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkicontheme.sgml: Fix example.  (Steffen Röcker)
+
 Thu May  6 00:22:38 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_action_group_translate_string()
