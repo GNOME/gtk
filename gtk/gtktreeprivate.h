@@ -207,7 +207,7 @@ struct _GtkCellRendererInfo
   gulong focus_out_id;
 
   /* toggle renderer */
-  gboolean inconsistent :1;
+  guint inconsistent :1;
 };
 
 #ifdef __GNUC__

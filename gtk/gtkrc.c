@@ -2283,7 +2283,7 @@ gtk_rc_parse_assignment (GScanner      *scanner,
     case G_TOKEN_LEFT_BRACE:
       if (!negate)
 	{
-	  GString *gstring = g_string_new ("");
+	  GString *gstring = g_string_new (NULL);
 
 	  token = rc_parse_token_or_compound (scanner, gstring, 0);
 	  if (token == G_TOKEN_NONE)

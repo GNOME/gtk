@@ -43,9 +43,9 @@ struct _GdkWin32PositionInfo
   gint height;
   gint x_offset;		/* Offsets to add to Win32 coordinates */
   gint y_offset;		/* within window to get GDK coodinates */
-  gboolean big : 1;
-  gboolean mapped : 1;
-  gboolean no_bg : 1;	        /* Set when the window background
+  guint big : 1;
+  guint mapped : 1;
+  guint no_bg : 1;	        /* Set when the window background
 				 * is temporarily unset during resizing
 				 * and scaling
 				 */

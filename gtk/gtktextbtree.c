@@ -2211,7 +2211,7 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
 
   gtk_text_iter_order (&start, &end);
 
-  retval = g_string_new ("");
+  retval = g_string_new (NULL);
 
   tree = _gtk_text_iter_get_btree (&start);
 

@@ -736,7 +736,7 @@ escape_for_xmessage (const char *str)
   GString *retval;
   const char *p;
   
-  retval = g_string_new ("");
+  retval = g_string_new (NULL);
 
   p = str;
   while (*p)

@@ -635,7 +635,7 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   cdata.dump_rle_decoder = (dump_type & GDK_PIXDATA_DUMP_RLE_DECODER) > 0;
   cdata.static_prefix = (dump_type & GDK_PIXDATA_DUMP_STATIC) ? "static " : "";
   cdata.const_prefix = (dump_type & GDK_PIXDATA_DUMP_CONST) ? "const " : "";
-  gstring = g_string_new ("");
+  gstring = g_string_new (NULL);
   cdata.gstring = gstring;
 
   if (!cdata.dump_macros && cdata.dump_gtypes)

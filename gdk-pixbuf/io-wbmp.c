@@ -47,12 +47,12 @@ struct wbmp_progressive_state {
   GdkPixbufModuleUpdatedFunc updated_func;
   gpointer user_data;
 
-  gboolean need_type : 1;
-  gboolean need_header : 1;
-  gboolean need_width : 1;
-  gboolean need_height : 1;
-  gboolean needmore : 1;
-  gboolean call_progressive_updates : 1;
+  guint need_type : 1;
+  guint need_header : 1;
+  guint need_width : 1;
+  guint need_height : 1;
+  guint needmore : 1;
+  guint call_progressive_updates : 1;
 
   guchar last_buf[16]; /* Just needs to be big enough to hold the largest datum requestable via 'getin' */
   guint last_len;

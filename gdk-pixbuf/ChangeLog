@@ -1,3 +1,11 @@
+2003-05-27  Matthias Clasen  <maclas@gmx.de>
+
+	* io-wbmp.c: Remove dubious bitfields of
+	unspecified signedness.  (#112919, Morten Welinder)gdk-p
+
+	* gdk-pixdata.c (gdk_pixdata_to_csource): Replace all occurances
+	of g_string_new ("") by g_string_new (NULL). (#106975, Morten Welinder)
+
 2003-05-21  Matthias Clasen  <maclas@gmx.de>
 
 	* pixbufloader_pcx.def: 
