@@ -1,3 +1,9 @@
+Mon Nov 15 14:25:21 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_cell_set_dirty):
+	Patch from Gavin Romig-Koch <gavin@redhat.com> to no longer reset
+	the resized_width when marking a column dirty.
+
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/engines/Makefile.am (SUBDIRS): Add pixbuf.
