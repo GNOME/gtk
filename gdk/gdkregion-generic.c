@@ -222,6 +222,15 @@ gdk_region_get_rectangles (GdkRegion     *region,
     }
 }
 
+/**
+ * gdk_region_union_with_rect:
+ * @region: a #GdkRegion.
+ * @rect: a #GdkRectangle.
+ * 
+ * Sets the area of @region to the union of the areas of @region and
+ * @rect. The resulting area is the set of pixels contained in
+ * either @region or @rect.
+ **/
 void
 gdk_region_union_with_rect (GdkRegion    *region,
 			    GdkRectangle *rect)
@@ -513,9 +522,9 @@ miIntersectO (GdkRegion    *pReg,
  * @source1: a #GdkRegion
  * @source2: another #GdkRegion
  *
- * Converts @source1 into the intersection between @source1 and @source2.
- * That is, after calling this function @source2 will be unchanged and
- * @source1 will be the areas the two regions have in common.
+ * Sets the area of @source1 to the intersection of the areas of @source1
+ * and @source2. The resulting area is the set of pixels contained in
+ * both @source1 and @source2.
  **/
 void
 gdk_region_intersect (GdkRegion *region,
@@ -1123,6 +1132,15 @@ miUnionO (GdkRegion *pReg,
     }
 }
 
+/**
+ * gdk_region_union:
+ * @source1:  a #GdkRegion
+ * @source2: a #GdkRegion 
+ * 
+ * Sets the area of @source1 to the union of the areas of @source1 and
+ * @source2. The resulting area is the set of pixels contained in
+ * either @source1 or @source2.
+ **/
 void
 gdk_region_union (GdkRegion *region,
 		  GdkRegion *other)
@@ -1378,8 +1396,8 @@ miSubtractO (GdkRegion    *pReg,
  * @source1: a #GdkRegion
  * @source2: another #GdkRegion
  *
- * Subtracts any area in @source2 from the area in @source1.
- * 
+ * Subtracts the area of @source2 from the area @source1. The resulting
+ * area is the set of pixels contained in @source1 but not in @source2.
  **/
 void
 gdk_region_subtract (GdkRegion *region,
@@ -1407,11 +1425,9 @@ gdk_region_subtract (GdkRegion *region,
  * @source1: a #GdkRegion
  * @source2: another #GdkRegion
  *
- * XORs the two regions, placing the result in @source1.  The XOR of two
- * regions contains all areas in one or the other ofthe regions, but not both.
- * That is, it's the union of the regions minus the intersection of the
- * regions.
- * 
+ * Sets the area of @source1 to the exclusive-OR of the areas of @source1
+ * and @source2. The resulting area is the set of pixels contained in one
+ * or the other of the two sources but not in both.
  **/
 void
 gdk_region_xor (GdkRegion *sra,

@@ -32,6 +32,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkcolor-x11.c	   	\
 	gdkcursor-x11.c	   	\
 	gdkdisplay-x11.c	\
+	gdkdisplay-x11.h	\
 	gdkdnd-x11.c	   	\
 	gdkdrawable-x11.c  	\
 	gdkdrawable-x11.h	\
@@ -50,6 +51,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkpixmap-x11.h		\
 	gdkproperty-x11.c  	\
 	gdkscreen-x11.c		\
+	gdkscreen-x11.h		\
 	gdkselection-x11.c 	\
 	gdkvisual-x11.c	   	\
 	gdkwindow-x11.c    	\

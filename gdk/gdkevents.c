@@ -356,8 +356,8 @@ gdk_event_copy (GdkEvent *event)
  * 
  * Frees a #GdkEvent, freeing or decrementing any resources associated with it.
  * Note that this function should only be called with events returned from
- * gdk_event_peek(), gdk_event_get(), gdk_event_get_graphics_expose() and
- * gdk_event_copy().
+ * functions such as gdk_event_peek(), gdk_event_get(),
+ * gdk_event_get_graphics_expose() and gdk_event_copy().
  **/
 void
 gdk_event_free (GdkEvent *event)
@@ -774,9 +774,9 @@ gdk_set_show_events (gboolean show_events)
 /**
  * gdk_get_show_events:
  * 
- * Returns non-zero if event debugging output is enabled.
+ * Gets whether event debugging output is enabled.
  * 
- * Return value: non-zero if event debugging output is enabled.
+ * Return value: %TRUE if event debugging output is enabled.
  **/
 gboolean
 gdk_get_show_events (void)
