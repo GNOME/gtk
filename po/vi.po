@@ -1,19 +1,18 @@
 # GTK in Vietnamese
 # Copyright (C) 2002 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-# Hoa`ng Ngo.c Tu'<hntu@gmx.de>; NTN. Duy <pclouds@gmx.net>; T.M.Thanh <tmthanh@yahoo.com>, 2002.
+# H.N. Tu'<hntu@gmx.de>; N.T.N. Duy <pclouds@gmx.net>; T.M.Thanh <tmthanh@yahoo.com>, 2002.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.x\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-07-12 20:21+0700\n"
+"POT-Creation-Date: 2002-08-24 05:09+0200\n"
+"PO-Revision-Date: 2002-09-15 18:33+0700\n"
 "Last-Translator: Trinh Minh Thanh <tmthanh@linuxmail.org>\n"
 "Language-Team: Gnome-Vi Team <Gnomevi-list@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"org>\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
@@ -32,8 +31,7 @@ msgstr "Không biết nạp tập tin hoạt cảnh '%s' như thế nào"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "Lỗi khi nạp tập tin image '%s': không biết lý do, có lẽ tập tin bị hư"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
@@ -41,8 +39,7 @@ msgstr "Lỗi khi nạp tập tin image '%s': không biết lý do, có lẽ t�
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
-"Lỗi khi nạp tập tin hoạt cảnh '%s': không biết lý do, có lẽ tập tin bị hư"
+msgstr "Lỗi khi nạp tập tin hoạt cảnh '%s': không biết lý do, có lẽ tập tin bị hư"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
@@ -196,8 +193,7 @@ msgstr "Ảnh GIF chứa một khung vượt ra ngoài đường biên của ả
 
 #: gdk-pixbuf/io-gif.c:1173
 msgid "First frame of GIF image had 'revert to previous' as its disposal mode."
-msgstr ""
-"Khung thứ nhất của ảnh GIF đã có 'trở lại trước' theo chế độ xếp đặt của nó."
+msgstr "Khung thứ nhất của ảnh GIF đã có 'trở lại trước' theo chế độ xếp đặt của nó."
 
 #: gdk-pixbuf/io-gif.c:1208
 msgid ""
@@ -277,8 +273,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:736
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 "Hệ số chất lượng của JPEG phải nằm trong khoảng 0 và 100; không chấp nhận "
 "giá trị '%d'."
@@ -331,10 +326,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Lỗi nghiêm trọng khi đọc tập tin ảnh PNG: %s"
 
 #: gdk-pixbuf/io-png.c:765
-msgid ""
-"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
-msgstr ""
-"Các khóa cho các đoạn PNG tEXt phải có ít nhất 1 ký tự, nhiều nhất 79 ký tự."
+msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgstr "Các khóa cho các đoạn PNG tEXt phải có ít nhất 1 ký tự, nhiều nhất 79 ký tự."
 
 #: gdk-pixbuf/io-png.c:773
 msgid "Keys for PNG tEXt chunks must be ASCII characters."
@@ -394,8 +387,7 @@ msgstr "Phát hiện tập tin không hoàn chỉnh"
 
 #: gdk-pixbuf/io-pnm.c:741 gdk-pixbuf/io-pnm.c:960
 msgid "Raw PNM formats require exactly one whitespace before sample data"
-msgstr ""
-"Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu"
+msgstr "Dạng thức ảnh PNM thô cần một và chỉ một khoảng trắng trước dữ liệu mẫu"
 
 #: gdk-pixbuf/io-pnm.c:768
 msgid "Can't allocate memory for loading PNM image"
@@ -790,7 +782,7 @@ msgstr "Chiều cao tối thiểu của các nút bên trong hộp"
 
 #: gtk/gtkbbox.c:133
 msgid "Child internal width padding"
-msgstr ""
+msgstr "Đệm bề rộng bên trong hộp con"
 
 #: gtk/gtkbbox.c:134
 msgid "Amount to increase child's size on either side"
@@ -798,7 +790,7 @@ msgstr "Lượng tăng kích cỡ của child ở mỗi cạnh"
 
 #: gtk/gtkbbox.c:142
 msgid "Child internal height padding"
-msgstr ""
+msgstr "Đệm theo chiều cao bên trong hộp con"
 
 #: gtk/gtkbbox.c:143
 msgid "Amount to increase child's size on the top and bottom"
@@ -852,7 +844,9 @@ msgstr "Nhãn"
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget."
-msgstr "Văn bản của label bên trong button, nếu button chứa một label"
+msgstr ""
+"Văn bản của widget nhãn bên trong button, nếu button chứa một widget "
+"nhãn."
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
@@ -871,18 +865,16 @@ msgid "Use stock"
 msgstr "Dùng trong kho"
 
 #: gtk/gtkbutton.c:206
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
-msgstr ""
-"Nếu bật, label được dùng sẽ lấy từ trong kho thay vì được hiển thị ngay"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgstr "Nếu bật, label được dùng sẽ lấy từ trong kho thay vì được hiển thị ngay"
 
 #: gtk/gtkbutton.c:213
 msgid "Border relief"
-msgstr ""
+msgstr "Giải phóng đường viền"
 
 #: gtk/gtkbutton.c:214
 msgid "The border relief style."
-msgstr ""
+msgstr "Kiểu giải phóng đường viền."
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
@@ -909,8 +901,7 @@ msgid "Child X Displacement"
 msgstr "Sự chuyển vị trí Child X"
 
 #: gtk/gtkbutton.c:279
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
+msgid "How far in the x direction to move the child when the button is depressed"
 msgstr "Di chuyển bao nhiêu theo trục x khi nút được nhả"
 
 #: gtk/gtkbutton.c:286
@@ -918,8 +909,7 @@ msgid "Child Y Displacement"
 msgstr "Sự chuyển vị trí Child Y"
 
 #: gtk/gtkbutton.c:287
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
+msgid "How far in the y direction to move the child when the button is depressed"
 msgstr "Di chuyển bao nhiêu theo trục y khi button được nhả"
 
 #: gtk/gtkcellrenderer.c:103
@@ -1000,7 +990,7 @@ msgstr "Được mở rộng"
 
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr ""
+msgstr "Hàng là hàng mở rộng, và được mở rộng"
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
@@ -1012,19 +1002,19 @@ msgstr "Pixbuf để biểu hiện."
 
 #: gtk/gtkcellrendererpixbuf.c:113
 msgid "Pixbuf Expander Open"
-msgstr ""
+msgstr "Pixbuf Expander Mở"
 
 #: gtk/gtkcellrendererpixbuf.c:114
 msgid "Pixbuf for open expander."
-msgstr ""
+msgstr "Pixbuf cho expander mở."
 
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
-msgstr ""
+msgstr "Pixbuf Expander Đóng"
 
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
-msgstr ""
+msgstr "Pixbuf cho expander đóng."
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
@@ -1040,7 +1030,7 @@ msgstr "Markup"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
-msgstr ""
+msgstr "Văn bản được đánh dấu để biểu hiện"
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
@@ -1158,8 +1148,7 @@ msgid "Rise"
 msgstr "Tăng lên"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr "Độ dời chữ trên đường cơ bản (dưới đường cơ bản nếu sự tăng là âm)"
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
@@ -1512,8 +1501,7 @@ msgid "Always enable arrows"
 msgstr "Luôn cho phép các phím mũi tên"
 
 #: gtk/gtkcombo.c:147
-msgid ""
-"Whether the arrow keys work, even if the entry contents are not in the list"
+msgid "Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
 "Các phím mũi tên luôn hoạt động, kể cả khi nội dung ô này không có trong "
 "danh sách"
@@ -1651,9 +1639,8 @@ msgid "Selection Bound"
 msgstr "Biên vùng chọn"
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars."
-msgstr ""
+msgid "The position of the opposite end of the selection from the cursor in chars."
+msgstr "Vị trí của đầu tận đối diện của phần chọn từ con trỏ trong các ký tự."
 
 #: gtk/gtkentry.c:456
 msgid "Whether the entry contents can be edited"
@@ -1704,7 +1691,7 @@ msgid ""
 "Whether to activate the default widget (such as the default button in a "
 "dialog) when Enter is pressed."
 msgstr ""
-"Có kích hoạt ô điều khiển mặc định hay không (ví dụ như button mặc định "
+"Có kích hoạt widget mặc định hay không (ví dụ như button mặc định "
 "trong dialog) khi nhấn phím Enter."
 
 #: gtk/gtkentry.c:503
@@ -1735,15 +1722,15 @@ msgstr "Chọn khi có focus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Chọn toàn bộ nội dung entry khi entry nhận focus"
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Chọn tất cả"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Phương thức nhập"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6425
 msgid "_Insert Unicode control character"
 msgstr "Chèn ký tự điều khiển unicode"
 
@@ -1817,8 +1804,7 @@ msgstr "Đổi tên tập tin"
 
 #: gtk/gtkfilesel.c:1386
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Tên thư mục \"%s\" chứa các ký tự không hợp lệ"
 
 #: gtk/gtkfilesel.c:1388
@@ -1955,7 +1941,7 @@ msgstr "Toạ độ X"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
-msgstr "Toạ độ X của ô điều khiển"
+msgstr "Toạ độ X của widget con"
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
@@ -1963,7 +1949,7 @@ msgstr "Tọa độ Y"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
-msgstr "Toạ độ Y của ô điều khiển"
+msgstr "Tọa độ Y của widget con"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -2046,11 +2032,11 @@ msgstr "Diện mạo của đường viền khung."
 
 #: gtk/gtkframe.c:169
 msgid "Label widget"
-msgstr "Label"
+msgstr "Widget nhãn"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label."
-msgstr "Ô điều khiển dùng để hiển thị trong khung label bình thường"
+msgstr "Widget dùng để hiển thị trong khung label bình thường"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -2075,7 +2061,7 @@ msgstr "Vị trí handle"
 
 #: gtk/gtkhandlebox.c:202
 msgid "Position of the handle relative to the child widget."
-msgstr "Vị trí của handle so với ô điều khiển con."
+msgstr "Vị trí của handle so với widget con."
 
 #: gtk/gtkhandlebox.c:210
 msgid "Snap edge"
@@ -2086,6 +2072,8 @@ msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox."
 msgstr ""
+"Cạnh của handlebox được xắp hàng với docking point để đưa vào "
+"handlebox."
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
@@ -2285,6 +2273,9 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
+"Sự canh các dòng trong văn bản của nhãn liên quan với từng cái khác. "
+"Việc này không tác động tới sự canh dòng của nhãn bên trong cấp phát của nó. "
+"Hãy xem GtkMisc::xalign về điều này."
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
@@ -2294,8 +2285,7 @@ msgstr "Kiểu Mẫu"
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline."
-msgstr ""
-"Một chuỗi với ký tự _ tại vị trí tương ứng với các ký tự cần gạch dưới."
+msgstr "Một chuỗi với ký tự _ tại vị trí tương ứng với các ký tự cần gạch dưới."
 
 #: gtk/gtklabel.c:326
 msgid "Line wrap"
@@ -2327,7 +2317,7 @@ msgstr "Widget gợi nhớ"
 
 #: gtk/gtklabel.c:350
 msgid "The widget to be activated when the label's mnemonic key is pressed."
-msgstr "Ô điều khiển này được kích hoạt khi phím gợi nhớ của label được nhấn."
+msgstr "Widget được kích hoạt khi phím gợi nhớ của nhãn được nhấn."
 
 #: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
@@ -2378,8 +2368,7 @@ msgstr "Xé Tiêu đề"
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
-msgstr ""
-"Tiêu đề có thể được hiển thị bởi trình quản lý cửa sổ khi tắt menu này."
+msgstr "Tiêu đề có thể được hiển thị bởi trình quản lý cửa sổ khi tắt menu này."
 
 #: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
@@ -2448,8 +2437,7 @@ msgid "X pad"
 msgstr "Đệm X"
 
 #: gtk/gtkmisc.c:118
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
 msgstr "Khoảng trống bổ sung bên trái và phải của widget, theo pixel"
 
 #: gtk/gtkmisc.c:127
@@ -2457,8 +2445,7 @@ msgid "Y pad"
 msgstr "Đệm Y"
 
 #: gtk/gtkmisc.c:128
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Khoảng trống bổ sung bên trên và dưới của widget, theo pixel"
 
 #: gtk/gtknotebook.c:362
@@ -2567,9 +2554,8 @@ msgid "Position"
 msgstr "Vị trí"
 
 #: gtk/gtkpaned.c:209
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr ""
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgstr "Vị trí của trình chia ô theo pixel (0 nghĩa là toàn bộ đường đến trái/đỉnh)"
 
 #: gtk/gtkpaned.c:217
 msgid "Position Set"
@@ -2592,9 +2578,8 @@ msgid "Expand"
 msgstr "Mở rộng"
 
 #: gtk/gtkpreview.c:130
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
-msgstr "Ô điều khiển preview nên chiếm toàn bộ vùng trống hay không"
+msgid "Whether the preview widget should take up the entire space it is allocated"
+msgstr "Widget xem trước nên chiếm toàn bộ không gian mà nó được cấp phát hay không"
 
 #: gtk/gtkprogress.c:122
 msgid "Activity mode"
@@ -2628,7 +2613,9 @@ msgstr "Canh hàng X cho chữ"
 msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
-msgstr "Một giá trị giữa 0.0 và 1.0 xác định sự canh hàng ngang của text."
+msgstr ""
+"Một giá trị giữa 0.0 và 1.0 xác định sự canh hàng ngang của văn bản trong widget "
+"tiến trình"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2672,7 +2659,7 @@ msgstr "Bước hoạt động"
 
 #: gtk/gtkprogressbar.c:158
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr ""
+msgstr "Số gia được dùng cho từng lần lặp trong phương thức hoạt động (bị phản đối)"
 
 #: gtk/gtkprogressbar.c:167
 msgid "Activity Blocks"
@@ -2683,6 +2670,8 @@ msgid ""
 "The number of blocks which can fit in the progress bar area in activity mode "
 "(Deprecated)"
 msgstr ""
+"Số lượng các khối để vừa trong vùng của thanh tiến trình trong phương thức "
+"hoạt động (bị phản đối)"
 
 #: gtk/gtkprogressbar.c:177
 msgid "Discrete Blocks"
@@ -2693,6 +2682,8 @@ msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
 msgstr ""
+"Số lượng các khối riêng biệt trong thanh tiến trình (khi hiển thị trong kiểu "
+"dáng riêng biệt)"
 
 #: gtk/gtkprogressbar.c:187
 msgid "Fraction"
@@ -2700,15 +2691,15 @@ msgstr "Phân số"
 
 #: gtk/gtkprogressbar.c:188
 msgid "The fraction of total work that has been completed"
-msgstr ""
+msgstr "Phần chia của toàn bộ công việc đã được hoàn chỉnh"
 
 #: gtk/gtkprogressbar.c:197
 msgid "Pulse Step"
-msgstr ""
+msgstr "Bước theo nhịp đập"
 
 #: gtk/gtkprogressbar.c:198
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr ""
+msgstr "Phần chia của toàn bộ tiến trình để di chuyển khối nhảy bật lên khi được đập"
 
 #: gtk/gtkprogressbar.c:208
 msgid "Text to be displayed in the progress bar"
@@ -2724,7 +2715,7 @@ msgstr "Range nên được cập nhật lên màn hình thế nào"
 
 #: gtk/gtkrange.c:283
 msgid "The GtkAdjustment that contains the current value of this range object"
-msgstr ""
+msgstr "GtkAdjustment chứa giá trị hiện thời của range object"
 
 #: gtk/gtkrange.c:290
 msgid "Inverted"
@@ -2732,7 +2723,7 @@ msgstr "Được Đảo"
 
 #: gtk/gtkrange.c:291
 msgid "Invert direction slider moves to increase range value"
-msgstr ""
+msgstr "Đảo ngược hướng con trượt di chuyển để tăng giá trị dãy"
 
 #: gtk/gtkrange.c:297
 msgid "Slider Width"
@@ -2740,7 +2731,7 @@ msgstr "Bề rộng con trượt"
 
 #: gtk/gtkrange.c:298
 msgid "Width of scrollbar or scale thumb"
-msgstr ""
+msgstr "Bề ngang thanh cuộn hoặc scale thumb"
 
 #: gtk/gtkrange.c:305
 msgid "Trough Border"
@@ -2748,31 +2739,30 @@ msgstr "Đường viền Máng"
 
 #: gtk/gtkrange.c:306
 msgid "Spacing between thumb/steppers and outer trough bevel"
-msgstr ""
+msgstr "Không gian giữa thumb/steppers và outer trough bevel"
 
 #: gtk/gtkrange.c:313
 msgid "Stepper Size"
-msgstr ""
+msgstr "Kích thước Stepper"
 
 #: gtk/gtkrange.c:314
 msgid "Length of step buttons at ends"
-msgstr ""
+msgstr "Chiều dài của các nút step ở cuối"
 
 #: gtk/gtkrange.c:321
 msgid "Stepper Spacing"
-msgstr ""
+msgstr "Tạo khoảng trống Stepper"
 
 #: gtk/gtkrange.c:322
 msgid "Spacing between step buttons and thumb"
-msgstr ""
+msgstr "Khoảng trống giữa các nút step và thumb"
 
 #: gtk/gtkrange.c:329
 msgid "Arrow X Displacement"
 msgstr "Chuyển chỗ theo trục X"
 
 #: gtk/gtkrange.c:330
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
+msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Chuyển chỗ bao xa theo trục X khi thôi nhấn nút"
 
 #: gtk/gtkrange.c:337
@@ -2780,8 +2770,7 @@ msgid "Arrow Y Displacement"
 msgstr "Chuyển chỗ theo trục Y"
 
 #: gtk/gtkrange.c:338
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
+msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Di chuyển con trỏ bao xa theo trục Y khi thôi nhấn nút"
 
 #: gtk/gtkrc.c:2282
@@ -2833,7 +2822,7 @@ msgstr "Số"
 
 #: gtk/gtkscale.c:156
 msgid "The number of decimal places that are displayed in the value"
-msgstr ""
+msgstr "Số các số thập phân được hiển thị trong giá trị"
 
 #: gtk/gtkscale.c:165
 msgid "Draw Value"
@@ -2841,7 +2830,7 @@ msgstr "Giá trị Vẽ"
 
 #: gtk/gtkscale.c:166
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
+msgstr "Có để giá trị hiện thời được hiển thị thành một chuỗi sát cạnh con trượt"
 
 #: gtk/gtkscale.c:173
 msgid "Value Position"
@@ -2857,7 +2846,7 @@ msgstr "Độ dài con trượt"
 
 #: gtk/gtkscale.c:182
 msgid "Length of scale's slider"
-msgstr ""
+msgstr "Độ dài con trượt của scale"
 
 #: gtk/gtkscale.c:190
 msgid "Value spacing"
@@ -2865,7 +2854,7 @@ msgstr "Giá trị khoảng cách"
 
 #: gtk/gtkscale.c:191
 msgid "Space between value text and the slider/trough area"
-msgstr ""
+msgstr "Không gian giữa văn bản giá trị và vùng con trượt/rãnh"
 
 #: gtk/gtkscrollbar.c:76
 msgid "Minimum Slider Length"
@@ -2885,7 +2874,7 @@ msgstr "Không thay đổi cỡ con trượt, hãy khoá nó với chiều dài 
 
 #: gtk/gtkscrollbar.c:93
 msgid "Backward stepper"
-msgstr ""
+msgstr "Stepper lùi"
 
 #: gtk/gtkscrollbar.c:94
 msgid "Display the standard backward arrow button"
@@ -2893,7 +2882,7 @@ msgstr "Hiển thị nút mũi tên quay lại chuẩn"
 
 #: gtk/gtkscrollbar.c:101
 msgid "Forward stepper"
-msgstr ""
+msgstr "Stepper tiến"
 
 #: gtk/gtkscrollbar.c:102
 msgid "Display the standard forward arrow button"
@@ -2901,21 +2890,18 @@ msgstr "Hiển thị nút mũi tên chuyển tiếp chuẩn"
 
 #: gtk/gtkscrollbar.c:109
 msgid "Secondary backward stepper"
-msgstr ""
+msgstr "Stepper lùi thứ hai"
 
 #: gtk/gtkscrollbar.c:110
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
-msgstr ""
-"Hiển thị nút mũi tên trở lại chuẩn thứ hai trên đầu đối diện của thanh cuộn"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgstr "Hiển thị nút mũi tên trở lại chuẩn thứ hai trên đầu đối diện của thanh cuộn"
 
 #: gtk/gtkscrollbar.c:117
 msgid "Secondary forward stepper"
-msgstr ""
+msgstr "Stepper tiến thứ hai"
 
 #: gtk/gtkscrollbar.c:118
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Hiển thị nút mũi tên chuyển tiếp phụ trên đầu đối diện của thanh cuộn"
 
 #: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
@@ -3090,16 +3076,15 @@ msgstr "Ngắt dòng"
 
 #: gtk/gtkspinbutton.c:282
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr ""
+msgstr "Nút xoay có nên ngắt khi đạt đến giới hạn của nó không"
 
 #: gtk/gtkspinbutton.c:289
 msgid "Update Policy"
 msgstr "Chính sách cập nhật"
 
 #: gtk/gtkspinbutton.c:290
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
-msgstr ""
+msgid "Whether the spin button should update always, or only when the value is legal"
+msgstr "Nút xoay có nên cập luôn nhật hay chi khi giá trị là hợp lệ hay không"
 
 #: gtk/gtkspinbutton.c:298
 msgid "Value"
@@ -3439,7 +3424,7 @@ msgstr "Ngắt dòng"
 
 #: gtk/gtktext.c:615
 msgid "Whether lines are wrapped at widget edges"
-msgstr "Dòng được ngắt tại cạnh ô điều khiển"
+msgstr "Dòng được ngắt tại các cạnh của widget"
 
 #: gtk/gtktext.c:622
 msgid "Word Wrap"
@@ -3447,7 +3432,7 @@ msgstr "Ngắt từ"
 
 #: gtk/gtktext.c:623
 msgid "Whether words are wrapped at widget edges"
-msgstr "Từ được ngắt tại cạnh ô điều khiển"
+msgstr "Từ có được ngắt tại các cạnh của hay không"
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
@@ -3558,8 +3543,7 @@ msgid "Wrap mode"
 msgstr "Chế độ ngắt dòng"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Không ngắt dòng, ngắt theo từ, hoặc ngắt theo ký tự"
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
@@ -3652,8 +3636,7 @@ msgstr "Pixel bên trong thiết lập ngắt dòng"
 
 #: gtk/gtktexttag.c:593
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
-"Thẻ (tag) này có tác động tới lượng pixel giữa các dòng được ngắt hay không"
+msgstr "Thẻ (tag) này có tác động tới lượng pixel giữa các dòng được ngắt hay không"
 
 #: gtk/gtktexttag.c:600
 msgid "Right margin set"
@@ -3713,11 +3696,11 @@ msgstr "RLO o_verride phải-sang-trái"
 
 #: gtk/gtktextutil.c:52
 msgid "PDF _Pop directional formatting"
-msgstr ""
+msgstr "Định dạng định hướng PDF _Pop"
 
 #: gtk/gtktextutil.c:53
 msgid "ZWS _Zero width space"
-msgstr ""
+msgstr "Khoảng trống bề ngang ZWS _Zero"
 
 #: gtk/gtktextutil.c:54
 msgid "ZWJ Zero width _joiner"
@@ -3759,7 +3742,7 @@ msgstr "Con trỏ nhìn thấy được"
 msgid "If the insertion cursor is shown"
 msgstr "Sự lfng con trỏ có được hiển thị hay không"
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6416
 msgid "Input _Methods"
 msgstr "_Phương thức Nhập"
 
@@ -3802,15 +3785,15 @@ msgstr "Cách vẽ thanh công cụ"
 
 #: gtk/gtktoolbar.c:242
 msgid "Spacer size"
-msgstr ""
+msgstr "Kích thước dấu cách"
 
 #: gtk/gtktoolbar.c:243
 msgid "Size of spacers"
-msgstr ""
+msgstr "Kích thước các dấu cách"
 
 #: gtk/gtktoolbar.c:252
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr ""
+msgstr "Lượng không gian đường biên giữa bóng của thanh công cụ và các nút"
 
 #: gtk/gtktoolbar.c:260
 msgid "Space style"
@@ -3818,7 +3801,7 @@ msgstr "Kiểu khoảng cách"
 
 #: gtk/gtktoolbar.c:261
 msgid "Whether spacers are vertical lines or just blank"
-msgstr ""
+msgstr "Các dấu cách là đường dọc hay chỉ để trống"
 
 #: gtk/gtktoolbar.c:269
 msgid "Button relief"
@@ -3837,10 +3820,8 @@ msgid "Toolbar style"
 msgstr "Kiểu thanh công cụ"
 
 #: gtk/gtktoolbar.c:285
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
-"Nếu thanh công cụ mặc định chỉ có chữ, chữ và hình, hay chỉ có hình, v.v..."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr "Nếu thanh công cụ mặc định chỉ có chữ, chữ và hình, hay chỉ có hình, v.v..."
 
 #: gtk/gtktoolbar.c:291
 msgid "Toolbar icon size"
@@ -3868,11 +3849,11 @@ msgstr "Kiểu xem theo cây"
 
 #: gtk/gtktreeview.c:524
 msgid "Horizontal Adjustment for the widget"
-msgstr "Điều chỉnh ngang cho widget"
+msgstr "Điều chỉnh đường ngang cho widget"
 
 #: gtk/gtktreeview.c:532
 msgid "Vertical Adjustment for the widget"
-msgstr "Điều chỉnh dọc cho Widget"
+msgstr "Điều chỉnh đường dọc cho Widget"
 
 #: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
@@ -3888,15 +3869,15 @@ msgstr "Các Header có thể nhấn chuột lên"
 
 #: gtk/gtktreeview.c:548
 msgid "Column headers respond to click events"
-msgstr ""
+msgstr "Các Header của cột đáp ứng với các sự kiện nhấn chuột"
 
 #: gtk/gtktreeview.c:555
 msgid "Expander Column"
-msgstr ""
+msgstr "Cột Expander"
 
 #: gtk/gtktreeview.c:556
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "Đặt cột cho cột của expander"
 
 #: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
@@ -3920,7 +3901,7 @@ msgstr "Cho phép tìm kiếm"
 
 #: gtk/gtktreeview.c:580
 msgid "View allows user to search through columns interactively"
-msgstr ""
+msgstr "Xem cho phép người dùng tìm qua các cột kiểu tương tác"
 
 #: gtk/gtktreeview.c:587
 msgid "Search Column"
@@ -3932,15 +3913,15 @@ msgstr ""
 
 #: gtk/gtktreeview.c:601
 msgid "Expander Size"
-msgstr ""
+msgstr "Kích thước Expander"
 
 #: gtk/gtktreeview.c:602
 msgid "Size of the expander arrow."
-msgstr ""
+msgstr "Kích thước mũi tên của expander"
 
 #: gtk/gtktreeview.c:610
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "Bề rộng của trình phân tách dọc"
 
 #: gtk/gtktreeview.c:611
 msgid "Vertical space between cells.  Must be an even number."
@@ -3948,7 +3929,7 @@ msgstr "Khoảng cách dọc giữa các cell. Phải là một số cho phép."
 
 #: gtk/gtktreeview.c:619
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "Bề rộng của trình phân tách ngang"
 
 #: gtk/gtktreeview.c:620
 msgid "Horizontal space between cells.  Must be an even number."
@@ -3960,15 +3941,15 @@ msgstr "Cho phép dùng thước"
 
 #: gtk/gtktreeview.c:629
 msgid "Allow drawing of alternating color rows."
-msgstr ""
+msgstr "Cho phép vẽ các hàng màu thay thế."
 
 #: gtk/gtktreeview.c:635
 msgid "Indent Expanders"
-msgstr ""
+msgstr "Thụt dòng Expander"
 
 #: gtk/gtktreeview.c:636
 msgid "Make the expanders indented."
-msgstr ""
+msgstr "Làm cho các expander thụt vào."
 
 #: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
@@ -4040,7 +4021,7 @@ msgstr "Widget"
 
 #: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "Widget để đặt trong nút header của cột thay cho tiêu đề cột"
 
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
@@ -4048,11 +4029,11 @@ msgstr "Sắp hàng"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "Canh hàng X của văn bản của header cột hay widget"
 
 #: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Xem cột có thể được yêu cầu lại quanh các header hay không"
 
 #: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
@@ -4068,23 +4049,23 @@ msgstr "Yêu cầu phân loại"
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "Xếp loại hướng mà trình chỉ thị phân loại nên chỉ thị"
 
 #: gtk/gtkviewport.c:133
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
 "this viewport."
-msgstr ""
+msgstr "GtkAdjustment xác định các giá trị của vị trí ngang cho viewport này."
 
 #: gtk/gtkviewport.c:141
 msgid ""
 "The GtkAdjustment that determines the values of the vertical position for "
 "this viewport."
-msgstr ""
+msgstr "GtkAdjustment xác định các giá trị của vị trí dọc cho viewport này."
 
 #: gtk/gtkviewport.c:149
 msgid "Determines how the shadowed box around the viewport is drawn."
-msgstr ""
+msgstr "Xác định cách vẽ hộp có bóng hình quanh viewport."
 
 #: gtk/gtkwidget.c:390
 msgid "Widget name"
@@ -4100,7 +4081,7 @@ msgstr "Widget cha"
 
 #: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
-msgstr "Widget cha, phải là Container widget."
+msgstr "Widget cha của widget này. Phải là widget chứa đựng."
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
@@ -4111,6 +4092,8 @@ msgid ""
 "Override for width request of the widget, or -1 if natural request should be "
 "used."
 msgstr ""
+"Override cho yêu cầu bề rộng của widget, hay -1 nếu yêu cầu tự nhiên "
+"nên được dùng."
 
 #: gtk/gtkwidget.c:414
 msgid "Height request"
@@ -4121,10 +4104,12 @@ msgid ""
 "Override for height request of the widget, or -1 if natural request should "
 "be used."
 msgstr ""
+"Override cho yêu cầu chiều cao của widget, hay -1 nếu yêu cầu tự nhiên "
+"nên được dùng."
 
 #: gtk/gtkwidget.c:424
 msgid "Whether the widget is visible"
-msgstr "Nếu như widget có hiển thị hay không"
+msgstr "Widget có hiển thị hay không"
 
 #: gtk/gtkwidget.c:430
 msgid "Sensitive"
@@ -4132,7 +4117,7 @@ msgstr "Nhạy cảm"
 
 #: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
-msgstr "Nếu như widget trả lời tín hiệu vào hay không"
+msgstr "Widget trả lời tín hiệu vào hay không"
 
 #: gtk/gtkwidget.c:437
 msgid "Application paintable"
@@ -4140,7 +4125,7 @@ msgstr "Ứng dụng có thể vẽ"
 
 #: gtk/gtkwidget.c:438
 msgid "Whether the application will paint directly on the widget"
-msgstr "Nếu như ứng dụng sẽ vẽ trực tiếp lên widget"
+msgstr "Ứng dụng sẽ vẽ trực tiếp lên widget"
 
 #: gtk/gtkwidget.c:444
 msgid "Can focus"
@@ -4148,7 +4133,7 @@ msgstr "Có thể tập chung"
 
 #: gtk/gtkwidget.c:445
 msgid "Whether the widget can accept the input focus"
-msgstr "Nếu như widget có thể chấp nhận tập chung input hay không."
+msgstr "Widget có thể chấp nhận input focus hay không"
 
 #: gtk/gtkwidget.c:451
 msgid "Has focus"
@@ -4156,7 +4141,7 @@ msgstr "Có tập chung"
 
 #: gtk/gtkwidget.c:452
 msgid "Whether the widget has the input focus"
-msgstr "Nếu widget có tập chung input"
+msgstr "Widget có input focus hay không"
 
 #: gtk/gtkwidget.c:458
 msgid "Can default"
@@ -4164,7 +4149,7 @@ msgstr "Có thể mặc định"
 
 #: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
-msgstr "Nếu widget có thể là mặc định hay không"
+msgstr "Nếu widget có thể là widget mặc định hay không"
 
 #: gtk/gtkwidget.c:465
 msgid "Has default"
@@ -4172,7 +4157,7 @@ msgstr "Có Mặc định"
 
 #: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
-msgstr "Nếu widget là mặc định hay không"
+msgstr "Nếu widget là widget mặc định hay không"
 
 #: gtk/gtkwidget.c:472
 msgid "Receives default"
@@ -4188,7 +4173,7 @@ msgstr "Ghép widget con"
 
 #: gtk/gtkwidget.c:480
 msgid "Whether the widget is part of a composite widget"
-msgstr "Widget là một phần của widget composite"
+msgstr "Widget là một phần của widget ghép"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
@@ -4198,7 +4183,7 @@ msgstr "Kiểu"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)."
-msgstr "Kiểu widget, bao gồm các thông tin về widget như màu sắc..."
+msgstr "Kiểu dáng widget, bao gồm các thông tin về widget như màu sắc..."
 
 #: gtk/gtkwidget.c:493
 msgid "Events"
@@ -4206,7 +4191,7 @@ msgstr "Sự kiện"
 
 #: gtk/gtkwidget.c:494
 msgid "The event mask that decides what kind of GdkEvents this widget gets."
-msgstr "Mặt nạ sự kiện cho biết sự kiện GdkEvent nào ô điều khiển xử lý"
+msgstr "Mask sự kiện quyết định loại GdkEvent nào mà widget nhận."
 
 #: gtk/gtkwidget.c:501
 msgid "Extension events"
@@ -4214,7 +4199,7 @@ msgstr "Sự kiện mở rộng"
 
 #: gtk/gtkwidget.c:502
 msgid "The mask that decides what kind of extension events this widget gets."
-msgstr ""
+msgstr "Mask quyết định loại sự kiện mở rộng nào mà widget này nhận."
 
 #: gtk/gtkwidget.c:1051
 msgid "Interior Focus"
@@ -4222,15 +4207,15 @@ msgstr "Tập chung bên trong"
 
 #: gtk/gtkwidget.c:1052
 msgid "Whether to draw the focus indicator inside widgets."
-msgstr ""
+msgstr "Có vẽ focus indicator bên trong các widget hay không."
 
 #: gtk/gtkwidget.c:1058
 msgid "Focus linewidth"
-msgstr ""
+msgstr "Focus linewidth"
 
 #: gtk/gtkwidget.c:1059
 msgid "Width, in pixels, of the focus indicator line."
-msgstr ""
+msgstr "Bề rộng, theo pixel, của dòng của focus indicator."
 
 #: gtk/gtkwidget.c:1065
 msgid "Focus line dash pattern"
@@ -4242,11 +4227,11 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1071
 msgid "Focus padding"
-msgstr ""
+msgstr "Focus padding"
 
 #: gtk/gtkwidget.c:1072
 msgid "Width, in pixels, between focus indicator and the widget 'box'."
-msgstr ""
+msgstr "Bề rộng, theo pixel, giữa focus indicator và widget 'box'."
 
 #: gtk/gtkwidget.c:1077
 msgid "Cursor color"
@@ -4254,7 +4239,7 @@ msgstr "Màu con trỏ"
 
 #: gtk/gtkwidget.c:1078
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "Màu dùng để vẽ con trỏ chèn"
 
 #: gtk/gtkwidget.c:1083
 msgid "Secondary cursor color"
@@ -4265,14 +4250,16 @@ msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text."
 msgstr ""
+"Màu để vẽ con trỏ chèn thứ hai khi biên soạn văn bản pha trộn chữ viết từ "
+"trái sang phải và từ phải sang trái."
 
 #: gtk/gtkwidget.c:1089
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "Tỷ lệ bề ngoài theo dòng của con trỏ"
 
 #: gtk/gtkwidget.c:1090
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr ""
+msgstr "Tỷ lệ bề ngoài để vẽ con trỏ chèn"
 
 #: gtk/gtkwindow.c:411
 msgid "Window Type"
@@ -4340,8 +4327,7 @@ msgid "Default Width"
 msgstr "Độ rộng mặc định"
 
 #: gtk/gtkwindow.c:472
-msgid ""
-"The default width of the window, used when initially showing the window."
+msgid "The default width of the window, used when initially showing the window."
 msgstr "Độ rộng mặc định của window, khi hiển thị window lần đầu tiên"
 
 #: gtk/gtkwindow.c:481
@@ -4349,8 +4335,7 @@ msgid "Default Height"
 msgstr "Độ cao mặc định"
 
 #: gtk/gtkwindow.c:482
-msgid ""
-"The default height of the window, used when initially showing the window."
+msgid "The default height of the window, used when initially showing the window."
 msgstr "Độ cao mặc định của cửa sổ, khi hiển thị cửa sổ lần đầu tiên"
 
 #: gtk/gtkwindow.c:491
@@ -4416,3 +4401,4 @@ msgstr "Phương thức nhập X (XIM)"
 
 #~ msgid "Insufficient memory to load TGA image"
 #~ msgstr "Không đủ bộ nhớ để nạp ảnh TGA"
+
