@@ -1,3 +1,10 @@
+Wed Oct  8 00:06:17 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/ui_manager.c (activate_radio_action): New
+	callback to propertly report radio actions.
+
+	* demos/gtk-demo/ui_manager.c (do_ui_manager): Use it here.
+
 Tue Oct  7 23:23:05 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkplug.c (xembed_set_info): Put the supported protocol

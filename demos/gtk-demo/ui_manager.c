@@ -12,6 +12,13 @@ activate_action (GtkAction *action)
   g_message ("Action \"%s\" activated", gtk_action_get_name (action));
 }
 
+static void
+activate_radio_action (GtkAction *action, GtkRadioAction *current)
+{
+  g_message ("Radio action \"%s\" selected", 
+	     gtk_action_get_name (GTK_ACTION (current)));
+}
+
 static GtkActionEntry entries[] = {
   { "FileMenu", NULL, "_File" },               /* name, stock id, label */
   { "PreferencesMenu", NULL, "_Preferences" }, /* name, stock id, label */
@@ -164,12 +171,12 @@ do_ui_manager (void)
       gtk_action_group_add_radio_actions (actions, 
 					  color_entries, n_color_entries, 
 					  COLOR_RED,
-					  G_CALLBACK (activate_action), 
+					  G_CALLBACK (activate_radio_action), 
 					  NULL);
       gtk_action_group_add_radio_actions (actions, 
 					  shape_entries, n_shape_entries, 
 					  SHAPE_OVAL,
-					  G_CALLBACK (activate_action), 
+					  G_CALLBACK (activate_radio_action), 
 					  NULL);
 
       ui = gtk_ui_manager_new ();
