@@ -179,6 +179,7 @@
 <!ENTITY gtk-Questions SYSTEM "question_index.sgml">
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
+<!ENTITY gtk-migrating-checklist SYSTEM "migrating-checklist.sgml">
 <!ENTITY gtk-migrating-GtkFileChooser SYSTEM "migrating-GtkFileChooser.sgml">
 <!ENTITY gtk-migrating-GtkAction SYSTEM "migrating-GtkAction.sgml">
 <!ENTITY version SYSTEM "version.xml">
@@ -541,6 +542,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
       </para>
     </partintro>
 
+    &gtk-migrating-checklist;
     &gtk-Changes-1-2;
     &gtk-Changes-2-0;
     &gtk-migrating-GtkFileChooser;

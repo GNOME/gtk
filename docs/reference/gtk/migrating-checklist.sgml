@@ -1,0 +1,141 @@
+<chapter id="gtk-migrating-checklist">
+  <title>Migration Checklist</title>
+
+  <para>
+    This chapter includes a checklist of things you need to do to
+    ensure that your programs are good citizens in the GTK+ world.  By
+    paying attention to the points in the checklist, you ensure that
+    many automatic features of GTK+ will work correctly in your
+    program.
+  </para>
+
+  <section id="checklist-popup-menu">
+    <title>Implement GtkWidget::popup_menu</title>
+
+    <formalpara>
+      <title>Why</title>
+      <para>
+	By handling this signal, you let widgets have
+	context-sensitive menus that can be invoked with the standard
+	key bindings.
+      </para>
+    </formalpara>
+
+    <para>
+      The <link
+      linkend="GtkWidget-popup-menu">GtkWidget::popup_menu</link>
+      signal instructs the widget for which it is emitted to create a
+      context-sensitive popup menu.  By default, the <link
+      linkend="gtk-bindings">key binding mechanism</link> is set to
+      emit this signal when the
+      <keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
+      or <keycap>Menu</keycap> keys are pressed while a widget has the
+      focus.  If a widget in your application shows a popup menu when
+      you press a mouse button, you can make it work as well through
+      the normal key binding mechanism in the following fahion:
+    </para>
+
+    <orderedlist>
+      <listitem>
+	<para>
+	  Write a function to create and show a popup menu.  This
+	  function needs to know the button number and the event's
+	  time to pass them to gtk_menu_popup().  You can implement
+	  such a function like this:
+	</para>
+
+	<programlisting id="do_popup_menu">
+static void
+do_popup_menu (GtkWidget *my_widget, GdkEventButton *event)
+{
+  GtkWidget *menu;
+  int button, event_time;
+
+  menu = gtk_menu_new ();
+  g_signal_connect (menu, "deactivate", 
+                    G_CALLBACK (gtk_widget_destroy), NULL);
+
+  /* ... add menu items ... */
+
+  if (event)
+    {
+      button = event->button;
+      event_time = event->time;
+    }
+  else
+    {
+      button = 0;
+      event_time = gtk_get_current_event_time ();
+    }
+
+  gtk_menu_popup (GTK_MENU (popup), NULL, NULL, NULL, NULL, 
+                  button, event_time);
+}
+	</programlisting>
+      </listitem>
+
+      <listitem>
+	<para>
+	  In your button_press handler, call this function when you
+	  need to pop up a menu:
+	</para>
+
+	<programlisting>
+static gboolean
+my_widget_button_press_event_handler (GtkWidget *widget, GdkEventButton *event)
+{
+  /* Ignore double-clicks and triple-clicks */
+  if (event->button == 3 &amp;&amp; event->type == GDK_BUTTON_PRESS)
+    {
+      do_popup_menu (widget, event);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+	</programlisting>
+      </listitem>
+
+      <listitem>
+	<para>
+	  Implement a handler for the popup_menu signal:
+	</para>
+
+	<programlisting>
+static gboolean
+my_widget_popup_menu_handler (GtkWidget *widget)
+{
+  do_popup_menu (widget, NULL);
+  return TRUE;
+}
+	</programlisting>
+      </listitem>
+    </orderedlist>
+
+    <note>
+      <para>
+	If you do not pass a positioning function to gtk_menu_popup(),
+	it will show the menu at the mouse position by default.  This
+	is what you usually want when the menu is shown as a result of
+	pressing a mouse button.  However, if you press the
+	<keycombo><keycap>Shift</keycap><keycap>F10</keycap></keycombo>
+	or <keycap>Menu</keycap> keys while the widget is focused, the
+	mouse cursor may not be near the widget at all.  In the <link
+	linkend="do_popup_menu">example above</link>, you may want to
+	provide your own <link
+	linkend="GtkMenuPositionFunc">menu-positioning function</link>
+	in the case where the <parameter>event</parameter> is
+	<constant>NULL</constant>.  This function should compute the
+	desired position for a menu when it is invoked through the
+	keyboard.
+      </para>
+    </note>
+  </section>
+</chapter>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gtk-docs.sgml" "book" "part" "chapter")
+End:
+-->
