@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2005-01-06 20:45+0100\n"
+"POT-Creation-Date: 2005-01-09 12:22+0100\n"
+"PO-Revision-Date: 2005-01-09 14:55+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1173,9 +1173,8 @@ msgid "_Add to Shortcuts"
 msgstr "_Přidat mezi záložky"
 
 #: gtk/gtkfilechooserdefault.c:3007
-#, fuzzy
 msgid "Open _Location"
-msgstr "Otevřít umístění"
+msgstr "Otevřít _umístění"
 
 #: gtk/gtkfilechooserdefault.c:3019
 msgid "Show _Hidden Files"
