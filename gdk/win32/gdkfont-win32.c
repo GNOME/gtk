@@ -517,7 +517,8 @@ typedef enum
   U_SMALL_FORM_VARIANTS = 66,
   U_ARABIC_PRESENTATION_FORMS_B = 67,
   U_SPECIALS = 69,
-  U_HALFWIDTH_AND_FULLWIDTH_FORMS = 68
+  U_HALFWIDTH_AND_FULLWIDTH_FORMS = 68,
+  U_LAST_PLUS_ONE
 } unicode_subset;
 
 static struct {
@@ -696,18 +697,19 @@ static gboolean
 check_unicode_subranges (UINT           charset,
 			 FONTSIGNATURE *fsp)
 {
+  gint i;
   gboolean retval = FALSE;
 
-  /* If the fsUsb bit array has some bits set, trust it */
-  if (fsp->fsUsb[0] || fsp->fsUsb[1] || fsp->fsUsb[2] || fsp->fsUsb[3])
-    return FALSE;
+  /* If the fsUsb bit array has at least one of the bits set, trust it */
+  for (i = 0; i < U_LAST_PLUS_ONE; i++)
+    if (i != U_PRIVATE_USE_AREA && (fsp->fsUsb[i/32] & (1 << (i % 32))))
+      return FALSE;
 
   /* Otherwise, guess what subranges there should be in the font */
   fsp->fsUsb[0] = fsp->fsUsb[1] = fsp->fsUsb[2] = fsp->fsUsb[3] = 0;
 
 #define set_bit(bitno) (fsp->fsUsb[(bitno)/32] |= (1 << ((bitno) % 32)))
 
-#if 1
   /* Set Unicode subrange bits based on code pages supported.
    * This is mostly just guesswork.
    */
@@ -868,10 +870,16 @@ check_unicode_subranges (UINT           charset,
       set_bit (U_LATIN_1_SUPPLEMENT);
       retval = TRUE;
     }
-#else
-  /* Guess based on charset. These somewhat optimistic guesses are
-   * based on the table in Appendix M in the book "Developing ..."
-   * mentioned above.
+
+  if (retval)
+    return TRUE;
+
+  GDK_NOTE (MISC, g_print ("... No code page bits set!\n"));
+
+  /* Sigh. Not even any code page bits were set. Guess based on
+   * charset, then. These somewhat optimistic guesses are based on the
+   * table in Appendix M in the book "Developing ..."  mentioned
+   * above.
    */
   switch (charset)
     {
@@ -1101,7 +1109,6 @@ check_unicode_subranges (UINT           charset,
       retval = TRUE;
       break;
     }
-#endif
 
 #undef set_bit
   return retval;

@@ -15,6 +15,11 @@
 
 	* gdk/win32/makefile.msc: Update.
 
+	* gdk/win32/gdkfont-win32.c (check_unicode_subranges): More
+	tweaks. Check only if at least one of those Unicode subrange bits
+	we care for is set. If no code page bits are set, guess (wildly)
+	based on the charset.
+
 	* gdk/win32/gdkinput-win32.c: Remove debugging leftover.
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_new): Assure title is
