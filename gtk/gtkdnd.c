@@ -435,6 +435,9 @@ gtk_drag_get_event_action (GdkEvent *event, gint button, GdkDragAction actions)
 	}
       else
 	{
+	  if (state & (GDK_MOD1_MASK))
+	    return GDK_ACTION_ASK;
+
 	  if (actions & GDK_ACTION_COPY)
 	    return GDK_ACTION_COPY;
 	  else if (actions & GDK_ACTION_MOVE)
@@ -2475,7 +2478,7 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
    */
 
   send_event.button.type = GDK_BUTTON_RELEASE;
-  send_event.button.window = source_widget->window;
+  send_event.button.window = GDK_ROOT_PARENT ();
   send_event.button.send_event = TRUE;
   send_event.button.time = event->time;
   send_event.button.x = 0;
