@@ -279,7 +279,7 @@ libgdk_pixbuf_2_0_la_LDFLAGS = @STRIP_BEGIN@ \
 @STRIP_END@
 
 libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_win32res_lo) $(GDK_PIXBUF_DEP_LIBS)
-libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def)
+libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def) $(gdk_pixbuf_win32res_lo)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\

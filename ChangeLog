@@ -1,5 +1,8 @@
 2002-08-25  Tor Lillqvist  <tml@iki.fi>
 
+	* gtk/Makefile.am (libgtk_win32_2_0_la_DEPENDENCIES): Add
+	gtk_win32res_lo. (#87101, J. Ali Harlow)
+
 	* gdk/gdkevents.c
 	* gdk/gdkinternals.h
 	* gdk/x11/gdkevents-x11.c

@@ -551,7 +551,7 @@ libgtk_linux_fb_2_0_la_SOURCES = $(gtk_c_sources)
 libgtk_win32_2_0_la_SOURCES = $(gtk_c_sources)
 
 libgtk_win32_2_0_la_LIBADD = $(gtk_win32res_lo)
-libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def)
+libgtk_win32_2_0_la_DEPENDENCIES = $(gtk_def) $(gtk_win32res_lo)
 
 if USE_WIN32
 libgtk_target_ldflags = $(gtk_win32_symbols) -lwsock32
