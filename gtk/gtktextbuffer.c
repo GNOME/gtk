@@ -3,6 +3,8 @@
  *  Developed by Havoc Pennington
  */
 
+#include <string.h>
+
 #include "gtkinvisible.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
@@ -112,10 +114,10 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, insert_text),
-                    gtk_marshal_NONE__INT_POINTER_INT,
+                    gtk_marshal_NONE__POINTER_POINTER_INT,
                     GTK_TYPE_NONE,
                     3,
-                    GTK_TYPE_INT,
+                    GTK_TYPE_POINTER,
                     GTK_TYPE_POINTER,
                     GTK_TYPE_INT);
 
@@ -124,11 +126,11 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, delete_text),
-                    gtk_marshal_NONE__INT_INT,
+                    gtk_marshal_NONE__POINTER_POINTER,
                     GTK_TYPE_NONE,
                     2,
-                    GTK_TYPE_INT,
-                    GTK_TYPE_INT);
+                    GTK_TYPE_POINTER,
+                    GTK_TYPE_POINTER);
 
   signals[CHANGED] =
     gtk_signal_new ("changed",
@@ -174,24 +176,24 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, apply_tag),
-                    gtk_marshal_NONE__POINTER_INT_INT,
+                    gtk_marshal_NONE__POINTER_POINTER_POINTER,
                     GTK_TYPE_NONE,
                     3,
                     GTK_TYPE_POINTER,
-                    GTK_TYPE_INT,
-                    GTK_TYPE_INT);
+                    GTK_TYPE_POINTER,
+                    GTK_TYPE_POINTER);
     
   signals[REMOVE_TAG] =
     gtk_signal_new ("remove_tag",
                     GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkTextBufferClass, remove_tag),
-                    gtk_marshal_NONE__POINTER_INT_INT,
+                    gtk_marshal_NONE__POINTER_POINTER_POINTER,
                     GTK_TYPE_NONE,
                     3,
                     GTK_TYPE_POINTER,
-                    GTK_TYPE_INT,
-                    GTK_TYPE_INT);
+                    GTK_TYPE_POINTER,
+                    GTK_TYPE_POINTER);
   
   gtk_object_class_add_signals (object_class, signals, LAST_SIGNAL);
 
@@ -700,7 +702,7 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
      to modify the default behavior. */
   gtk_signal_emit(GTK_OBJECT(buffer),
                   signals[MARK_SET],
-                  &location,
+                  location,
                   mark);
 
 }
