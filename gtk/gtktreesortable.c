@@ -94,10 +94,12 @@ gtk_tree_sortable_sort_column_changed (GtkTreeSortable *sortable)
  * @order: The #GtkSortType to be filled in
  * 
  * Fills in @sort_column_id and @order with the current sort column and the
- * order, if applicable.  If the sort column is not set, then FALSE is returned,
- * and the values in @sort_column_id and @order are unchanged.
-  * 
- * Return value: %TRUE, if the sort column has been set
+ * order.  It returns %TRUE unless the @sort_column_id is 
+ * %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID or 
+ * %GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID.
+ * 
+ * Return value: %TRUE if the sort column is not one of the special sort
+ *   column ids.
  **/
 gboolean
 gtk_tree_sortable_get_sort_column_id (GtkTreeSortable  *sortable,

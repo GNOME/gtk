@@ -2833,15 +2833,16 @@ gtk_tree_store_get_sort_column_id (GtkTreeSortable  *sortable,
 
   g_return_val_if_fail (GTK_IS_TREE_STORE (sortable), FALSE);
 
-  if (tree_store->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
-    return FALSE;
-
   if (sort_column_id)
     * sort_column_id = tree_store->sort_column_id;
   if (order)
     * order = tree_store->order;
-  return TRUE;
 
+  if (tree_store->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID ||
+      tree_store->sort_column_id == GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
+    return FALSE;
+
+  return TRUE;
 }
 
 static void

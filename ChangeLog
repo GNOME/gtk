@@ -1,8 +1,20 @@
+2004-11-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreesortable.c (gtk_tree_sortable_get_sort_column_id): Update 
+	the documentation to specify a more useful behaviour, which can be
+	implemented with the multiple special values we have now.  (#159984,
+	Nicholas Rahn)
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_get_sort_column_id): 
+	* gtk/gtktreestore.c (gtk_tree_store_get_sort_column_id): 
+	* gtk/gtkliststore.c (gtk_list_store_get_sort_column_id): Update the
+	implementations.
+
 Tue Nov 30 16:25:29 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextdisplay.c (render_para): Don't paint in the
 	trailing end of a wrapped line when the selection 
-	starts after the line. (#159984, Matthias Clasen)
+	starts after the line. (#160000, Matthias Clasen)
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): pass in byte_count + 1 
 	for selection_end index when the selection end is past the end of the 
@@ -76,6 +88,11 @@ Tue Nov 23 19:37:34 2004  Owen Taylor  <otaylor@redhat.com>
 	of microoptimization of repeated GDK_GC_XDISPLAY()/XGC().
 
 2004-11-30  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_get_sort_column_id): 
+	* gtk/gtktreestore.c (gtk_tree_store_get_sort_column_id): 
+	* gtk/gtktreesortable.c (gtk_tree_sortable_get_sort_column_id): 
+	* gtk/gtkliststore.c (gtk_list_store_get_sort_column_id): 
 
 	* NEWS: Updates.
 

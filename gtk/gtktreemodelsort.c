@@ -1322,14 +1322,15 @@ gtk_tree_model_sort_get_sort_column_id (GtkTreeSortable *sortable,
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL_SORT (sortable), FALSE);
 
-  if (tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID)
-    return FALSE;
-
   if (sort_column_id)
     *sort_column_id = tree_model_sort->sort_column_id;
   if (order)
     *order = tree_model_sort->order;
 
+  if (tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID ||
+      tree_model_sort->sort_column_id == GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
+    return FALSE;
+  
   return TRUE;
 }
 
