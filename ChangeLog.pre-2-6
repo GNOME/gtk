@@ -1,3 +1,16 @@
+Mon Oct 29 12:21:49 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in: Don't use AC_CHECK_FILE to check for a 
+	file since it always spits warnings about cross compilation,
+	use -f instead. It's not like we cross compile properly
+	anyways.
+
+	* configure.in (gtktargetlib): Move call to AC_PROG_CC
+	to suppress autoconf warning.
+
+	* acconfig.h: Add some missing #undefs from recent
+	Win32 additions.
+
 Mon Oct 29 11:31:40 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* m4macros/gtk-2.0.m4: Don't try to use pkg-config

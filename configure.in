@@ -102,6 +102,7 @@ AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 AM_CONFIG_HEADER(config.h)
 
 dnl Initialize libtool
+AC_PROG_CC
 AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
 
@@ -216,7 +217,6 @@ AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}")
 AM_SANITY_CHECK
 
 # Checks for programs.
-AC_PROG_CC
 AC_ISC_POSIX
 AM_PROG_CC_STDC
 AC_PROG_INSTALL
@@ -391,12 +391,14 @@ if test ${with_wintab+set} = set && test $with_wintab != no; then
 #include <wintab.h>], 
    [],
    [AC_MSG_RESULT(yes)
-    AC_CHECK_FILE([$with_wintab/lib/i386/wntab32x.lib],
-      [have_wintab=yes
-       AC_DEFINE(HAVE_WINTAB)
-       WINTAB_LIB="$with_wintab/lib/i386/wntab32x.lib"
-       AC_SUBST(WINTAB_LIB)],
-      [have_wintab=no])
+    if test -f $with_wintab/lib/i386/wntab32x.lib ; then
+      have_wintab=yes
+      AC_DEFINE(HAVE_WINTAB)
+      WINTAB_LIB="$with_wintab/lib/i386/wntab32x.lib"
+      AC_SUBST(WINTAB_LIB)
+    else
+      have_wintab=no
+    fi
     ],
    [AC_MSG_RESULT(no)
     have_wintab=no])
