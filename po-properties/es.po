@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-12 16:39+0100\n"
-"PO-Revision-Date: 2004-02-12 16:41+0100\n"
+"POT-Creation-Date: 2004-02-17 02:32+0100\n"
+"PO-Revision-Date: 2004-02-17 02:33+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -846,14 +846,14 @@ msgid "Size"
 msgstr "Tamaño"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
-msgstr "El tamaño del icono renderizado"
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
+msgstr "El valor de GTKIconsize que especifica el tamaño del icono renderizado"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Detalle"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Detalle de renderizado a pasar al motor de temas"
 
@@ -1336,51 +1336,51 @@ msgstr "Valor en la lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica si los valores ingresados ya deben estar presentes en la lista"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:344
 msgid "ComboBox model"
 msgstr "Modelo de CajaCombo"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:345
 msgid "The model for the combo box"
 msgstr "El modelo para la caja combo"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:352
 msgid "Wrap width"
 msgstr "Ajustar anchura"
 
-#: gtk/gtkcombobox.c:355
+#: gtk/gtkcombobox.c:353
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ajusta la anchura para distribuir los elementos en una rejilla"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:362
 msgid "Row span column"
 msgstr "Expandir filas a columnas"
 
-#: gtk/gtkcombobox.c:365
+#: gtk/gtkcombobox.c:363
 msgid "TreeModel column containing the row span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de la fila"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:372
 msgid "Column span column"
 msgstr "Columna expande columna"
 
-#: gtk/gtkcombobox.c:375
+#: gtk/gtkcombobox.c:373
 msgid "TreeModel column containing the column span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de columna"
 
-#: gtk/gtkcombobox.c:384
+#: gtk/gtkcombobox.c:382
 msgid "Active item"
 msgstr "Elemento activo"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:383
 msgid "The item which is currently active"
 msgstr "El elemento que esta activo actualmente"
 
-#: gtk/gtkcombobox.c:393
+#: gtk/gtkcombobox.c:391
 msgid "ComboBox appareance"
 msgstr "Apariencia de ComboBox"
 
-#: gtk/gtkcombobox.c:394
+#: gtk/gtkcombobox.c:392
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Apariencia de la ComboBox, cuando sea TRUE significa Estilo-Ventana."
 
@@ -2821,44 +2821,44 @@ msgstr "Tamaño máximo"
 msgid "Maximum size of the ruler"
 msgstr "Tamaño máximo de la regla"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Dígitos"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "La cantidad de lugares decimales que se mostrarán en el valor"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Valor de dibujo"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Indica si el valor actual es mostrado como una cadena contigua al divisor"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Posición del valor"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "La posición en que se muestra el valor actual"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Largo del divisor"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Largo de la escala del divisor"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Espaciado del valor"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Espacio entre los valores de texto y el área del divisor"
 
