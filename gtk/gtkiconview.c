@@ -1640,7 +1640,7 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
     pixbuf = create_colorized_pixbuf (item->icon,
 				      &GTK_WIDGET (icon_list)->style->base[state]);
   else
-    pixbuf = gdk_pixbuf_ref (item->icon);
+    pixbuf = g_object_ref (item->icon);
 	
   gdk_pixbuf_render_to_drawable_alpha (pixbuf,
 				       icon_list->priv->bin_window,
