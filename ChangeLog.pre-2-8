@@ -1,3 +1,10 @@
+Thu Jun 10 00:09:06 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcalendar.c (gtk_calendar_button_press): Start 
+	spinning before calling arrow_action(), so that a signal
+	handler triggered from arrow_action() has a chance to 
+	stop the spinning.  (#143966, Davyd Madeley)
+
 Wed Jun  9 23:11:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstyle.c (_gtk_style_init_for_settings): Fix a 

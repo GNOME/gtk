@@ -328,6 +328,8 @@ static gint gtk_calendar_scroll         (GtkWidget         *widget,
 					 GdkEventScroll    *event);
 static void gtk_calendar_grab_notify    (GtkWidget          *widget,
 			 	         gboolean            was_grabbed);
+static gboolean gtk_calendar_focus_out  (GtkWidget          *widget,
+			 	         GdkEventFocus      *event);
 static void gtk_calendar_state_changed	(GtkWidget *widget,
 					 GtkStateType previous_state);
 static void gtk_calendar_style_set	(GtkWidget *widget,
@@ -443,6 +445,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->style_set = gtk_calendar_style_set;
   widget_class->state_changed = gtk_calendar_state_changed;
   widget_class->grab_notify = gtk_calendar_grab_notify;
+  widget_class->focus_out_event = gtk_calendar_focus_out;
 
   widget_class->drag_data_get = gtk_calendar_drag_data_get;
   widget_class->drag_motion = gtk_calendar_drag_motion;
@@ -2723,6 +2726,21 @@ gtk_calendar_grab_notify (GtkWidget *widget,
 }
 
 static gboolean
+gtk_calendar_focus_out (GtkWidget     *widget,
+			GdkEventFocus *event)
+{
+  GtkCalendarPrivateData *private_data;
+
+  private_data = GTK_CALENDAR_PRIVATE_DATA (widget);
+
+  stop_spinning (widget);
+  
+  private_data->in_drag = 0; 
+
+  return FALSE;
+}
+
+static gboolean
 gtk_calendar_button_press (GtkWidget	  *widget,
 			   GdkEventButton *event)
 {
@@ -2747,10 +2765,10 @@ gtk_calendar_button_press (GtkWidget	  *widget,
 	  /* only call the action on single click, not double */
 	  if (event->type == GDK_BUTTON_PRESS)
 	    {
-	      arrow_action (calendar, arrow);
-	      
 	      if (event->button == 1)
 		start_spinning (widget, arrow);
+
+	      arrow_action (calendar, arrow);	      
 	    }
 
 	  return TRUE;
