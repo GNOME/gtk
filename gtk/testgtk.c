@@ -269,7 +269,7 @@ create_buttons (void)
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
   else
-    gtk_widget_destroy (window);
+    gtk_widget_hide (window);
 }
 
 /*

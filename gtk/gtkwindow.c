@@ -981,7 +981,7 @@ gtk_window_unmap (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WINDOW (widget));
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  gdk_window_hide (widget->window);
+  gdk_window_withdraw (widget->window);
 
   window = GTK_WINDOW (widget);
   window->use_uposition = TRUE;
