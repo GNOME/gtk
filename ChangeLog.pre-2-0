@@ -1,3 +1,13 @@
+2000-11-20  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Removed unused arguments from gdk_fb_drawable_get_pixel().
+
+	* gdk/linux-fb/gdkinput-ps2.c (handle_input_ps2):
+	Renamed fidur specific mouse packet data in MouseDevice to
+	generic. Used it in ps2 mouse handling code to avoid blocking
+	reads.
+
 Sat Nov 18 18:00:17 2000  Jonathan Blandford  <jrb@redhat.com>
 
 	* demos/gtk-demo/main.c: Changed to have the list become

@@ -14,10 +14,7 @@ static GetPixelRet  gdk_fb_drawable_get_pixel (GdkDrawable      *drawable,
 					       GdkGC            *gc,
 					       int               x,
 					       int               y,
-					       GdkColor         *spot,
-					       gboolean          abs_coords,
-					       GdkDrawable      *bg_relto,
-					       GdkDrawable      *bgpm);
+					       GdkColor         *spot);
 void                gdk_fb_draw_rectangle     (GdkDrawable      *drawable,
 					       GdkGC            *gc,
 					       gint              filled,
@@ -798,22 +795,13 @@ gdk_fb_drawable_get_pixel (GdkDrawable *drawable,
 			   GdkGC *gc,
 			   int x,
 			   int y,
-			   GdkColor *spot,
-			   gboolean abs_coords,
-			   GdkDrawable *bg_relto,
-			   GdkDrawable *bgpm)
+			   GdkColor *spot)
 {
   GetPixelRet retval = GPR_NONE;
   GdkDrawableFBData *private = GDK_DRAWABLE_FBDATA (drawable);
   guchar *mem = private->mem;
   guint rowstride = private->rowstride;
 
-  if (!abs_coords)
-    {
-      x += private->abs_x;
-      y += private->abs_y;
-    }
-  
   switch (private->depth)
     {
     case 1:
@@ -824,21 +812,7 @@ gdk_fb_drawable_get_pixel (GdkDrawable *drawable,
 	else
 	  {
 	    retval = GPR_USED_BG;
-
-	    if (bgpm)
-	      {
-		int bgx, bgy;
-
-		bgx = (x - GDK_DRAWABLE_IMPL_FBDATA (bg_relto)->abs_x) % GDK_DRAWABLE_IMPL_FBDATA (bgpm)->width;
-		bgy = (y - GDK_DRAWABLE_IMPL_FBDATA (bg_relto)->abs_y) % GDK_DRAWABLE_IMPL_FBDATA (bgpm)->height;
-
-		gdk_fb_drawable_get_pixel (bgpm, gc, bgx, bgy, spot, FALSE, NULL, NULL);
-		retval = GPR_USED_BG;
-	      }
-	    else
-	      {
-		*spot = GDK_GC_FBDATA (gc)->values.background;
-	      }
+	    *spot = GDK_GC_FBDATA (gc)->values.background;
 	  }
       }
       break;
@@ -1242,7 +1216,7 @@ gdk_fb_draw_drawable_generic (GdkDrawable *drawable,
 		continue;
 	    }
 	  
-	  switch (gdk_fb_drawable_get_pixel (src, gc, cur_x + src_x_off, cur_y + src_y_off, &spot, TRUE, NULL, NULL))
+	  switch (gdk_fb_drawable_get_pixel (src, gc, cur_x + src_x_off, cur_y + src_y_off, &spot))
 	    {
 	    case GPR_AA_GRAYVAL:
 	      {
@@ -1279,9 +1253,9 @@ gdk_fb_draw_drawable_generic (GdkDrawable *drawable,
 			    {
 			      int bgx, bgy;
 			      
-			      bgx = (cur_x - GDK_DRAWABLE_IMPL_FBDATA (dc->bg_relto)->abs_x) % GDK_DRAWABLE_IMPL_FBDATA (dc->bgpm)->width;
-			      bgy = (cur_y - GDK_DRAWABLE_IMPL_FBDATA (dc->bg_relto)->abs_y) % GDK_DRAWABLE_IMPL_FBDATA (dc->bgpm)->height;
-			      gdk_fb_drawable_get_pixel (dc->bgpm, gc, bgx, bgy, &realspot, FALSE, NULL, NULL);
+			      bgx = (cur_x - GDK_DRAWABLE_IMPL_FBDATA (dc->bg_relto)->abs_x) % GDK_DRAWABLE_IMPL_FBDATA (dc->bgpm)->width + private->abs_x;
+			      bgy = (cur_y - GDK_DRAWABLE_IMPL_FBDATA (dc->bg_relto)->abs_y) % GDK_DRAWABLE_IMPL_FBDATA (dc->bgpm)->height + private->abs_y;
+			      gdk_fb_drawable_get_pixel (dc->bgpm, gc, bgx, bgy, &realspot);
 			    }
 			    break;
 			  case GPR_NONE:

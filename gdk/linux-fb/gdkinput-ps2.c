@@ -57,8 +57,8 @@ typedef struct {
   gboolean button1_pressed, button2_pressed, button3_pressed;
   gboolean click_grab;
 
-  guchar fidmour_bytes[5];
-  int fidmour_nbytes;
+  guchar mouse_packet[5];
+  int packet_nbytes;
 } MouseDevice;
 
 typedef struct {
@@ -652,7 +652,7 @@ pull_fidmour_packet (MouseDevice *mouse,
     {
       int n;
 
-      n = read (mouse->fd, mouse->fidmour_bytes + mouse->fidmour_nbytes, 5 - mouse->fidmour_nbytes);
+      n = read (mouse->fd, mouse->mouse_packet + mouse->packet_nbytes, 5 - mouse->packet_nbytes);
       if (n < 0)
 	return FALSE;
       else if (n == 0)
@@ -662,31 +662,31 @@ pull_fidmour_packet (MouseDevice *mouse,
 	  return FALSE;
 	}
 
-      mouse->fidmour_nbytes += n;
+      mouse->packet_nbytes += n;
 
       n = 0;
-      if (!(mouse->fidmour_bytes[0] & 0x80))
+      if (!(mouse->mouse_packet[0] & 0x80))
 	{
 	  int i;
 	  /* We haven't received any of the packet yet but there is no header at the beginning */
-	  for (i = 1; i < mouse->fidmour_nbytes; i++)
+	  for (i = 1; i < mouse->packet_nbytes; i++)
 	    {
-	      if (mouse->fidmour_bytes[i] & 0x80)
+	      if (mouse->mouse_packet[i] & 0x80)
 		{
 		  n = i;
 		  break;
 		}
 	    }
 	}
-      else if (mouse->fidmour_nbytes > 1 &&
-	       ((mouse->fidmour_bytes[0] & 0x90) == 0x90))
+      else if (mouse->packet_nbytes > 1 &&
+	       ((mouse->mouse_packet[0] & 0x90) == 0x90))
 	{
 	  /* eat the 0x90 and following byte, no clue what it's for */
 	  n = 2;
 	}
-      else if (mouse->fidmour_nbytes == 5)
+      else if (mouse->packet_nbytes == 5)
 	{
-	  switch (mouse->fidmour_bytes[0] & 0xF)
+	  switch (mouse->mouse_packet[0] & 0xF)
 	    {
 	    case 2:
 	      *btn_down = 0;
@@ -700,10 +700,10 @@ pull_fidmour_packet (MouseDevice *mouse,
 	      break;
 	    }
 
-	  *x = mouse->fidmour_bytes[1] + (mouse->fidmour_bytes[2] << 7);
+	  *x = mouse->mouse_packet[1] + (mouse->mouse_packet[2] << 7);
 	  if (*x > 8192)
 	    *x -= 16384;
-	  *y = mouse->fidmour_bytes[3] + (mouse->fidmour_bytes[4] << 7);
+	  *y = mouse->mouse_packet[3] + (mouse->mouse_packet[4] << 7);
 	  if (*y > 8192)
 	    *y -= 16384;
 	  /* Now map touchscreen coords to screen coords */
@@ -715,8 +715,8 @@ pull_fidmour_packet (MouseDevice *mouse,
 
       if (n)
 	{
-	  memmove (mouse->fidmour_bytes, mouse->fidmour_bytes+n, mouse->fidmour_nbytes-n);
-	  mouse->fidmour_nbytes -= n;
+	  memmove (mouse->mouse_packet, mouse->mouse_packet+n, mouse->packet_nbytes-n);
+	  mouse->packet_nbytes -= n;
 	}
     }
 
@@ -773,33 +773,32 @@ handle_input_ps2 (GIOChannel *gioc,
 		  gpointer data)
 {
   MouseDevice *mouse = data;
-  guchar buf[3];
-  int n, left, dx=0, dy=0;
+  int n, dx=0, dy=0;
   gboolean new_button1, new_button2, new_button3;
   time_t the_time;
   GTimeVal curtime;
   gboolean got_motion = FALSE;
+  guchar *buf;
 
   g_get_current_time (&curtime);
   the_time = curtime.tv_usec;
 
   while (1) /* Go through as many mouse events as we can */
     {
-      for (left = sizeof(buf); left > 0; )
-	{
-	  n = read (mouse->fd, buf+sizeof(buf)-left, left);
+      n = read (mouse->fd, mouse->mouse_packet + mouse->packet_nbytes, 3 - mouse->packet_nbytes);
+      if (n<=0) /* error or nothing to read */
+	break;
+      
+      mouse->packet_nbytes += n;
+      
+      if (mouse->packet_nbytes < 3) /* Mouse packet not finished */
+	break;
 
-	  if (n <= 0)
-	    {
-	      if (left != sizeof(buf))
-		continue; /* XXX FIXME - this will be slow compared to turning on blocking mode, etc. */
+      mouse->packet_nbytes = 0;
 
-	      goto done_reading_mouse_events;
-	    }
-
-	  left -= n;
-	}
-
+      /* Finished reading a packet */
+      buf = mouse->mouse_packet;
+      
       new_button1 = (buf[0] & 1) && 1;
       new_button3 = (buf[0] & 2) && 1;
       new_button2 = (buf[0] & 4) && 1;
@@ -848,7 +847,6 @@ handle_input_ps2 (GIOChannel *gioc,
 	got_motion = TRUE;
     }
 
- done_reading_mouse_events:
   if (got_motion)
     handle_mouse_input (mouse, TRUE);
 
