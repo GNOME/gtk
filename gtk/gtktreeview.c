@@ -2318,8 +2318,8 @@ gtk_tree_view_calc_size (GtkTreeView *tree_view,
 	    column->size = MAX (column->size, width);
 	}
       _gtk_rbtree_node_set_height (tree, temp, max_height);
-      if (gtk_tree_model_iter_children (tree_view->priv->model, &child, iter) &&
-	  temp->children != NULL)
+      if (temp->children != NULL &&
+	  gtk_tree_model_iter_children (tree_view->priv->model, &child, iter))
 	gtk_tree_view_calc_size (tree_view, temp->children, &child, depth + 1);
       temp = _gtk_rbtree_next (tree, temp);
     }

@@ -1,3 +1,10 @@
+2000-11-22    <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_calc_size): It's amazing what
+	reversing the order in an if statement will do.  Doing so managed
+	to make the treemodelsort half work.  Other half will follow after
+	I get the insert function fully fixed.
+
 2000-11-21  Elliot Lee  <sopwith@redhat.com>
 	* gtk/gtkmenushell.h: GdkEventButton->button can occupy significantly
 	more than 2 bits. Besides, I need to implement an evil hack. :)
