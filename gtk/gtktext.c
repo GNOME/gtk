@@ -609,7 +609,7 @@ gtk_text_set_point (GtkText *text,
 {
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
-  g_return_if_fail (index >= 0 && index <= TEXT_LENGTH (text));
+  g_return_if_fail (index <= TEXT_LENGTH (text));
 
   text->point = find_mark (text, index);
 }
@@ -664,13 +664,13 @@ gtk_text_insert (GtkText    *text,
 		 const char *chars,
 		 gint        nchars)
 {
-  gint i;
   GtkEditable *editable = GTK_EDITABLE (text);
   gboolean frozen = FALSE;
 
   gint new_line_count = 1;
   guint old_height = 0;
   guint length;
+  guint i;
 
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
@@ -839,7 +839,9 @@ gtk_text_get_chars (GtkEditable   *editable,
   if (end_pos < 0)
     end_pos = TEXT_LENGTH (text);
   
-  if ((end_pos > TEXT_LENGTH (text)) || (end_pos < start_pos))
+  if ((start_pos < 0) || 
+      (end_pos > TEXT_LENGTH (text)) || 
+      (end_pos < start_pos))
     return NULL;
 
   nchars = end_pos - start_pos;

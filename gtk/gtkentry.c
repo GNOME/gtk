@@ -1586,12 +1586,8 @@ gtk_move_backward_character (GtkEntry *entry)
   /* this routine is correct only if string is state-independent-encoded */
 
   if (0 < editable->current_pos)
-    {
-      editable->current_pos = move_backward_character (entry->text,
-      						    editable->current_pos);
-      if (editable->current_pos < 0)
-	editable->current_pos = 0;
-    }
+    editable->current_pos = move_backward_character (entry->text,
+						     editable->current_pos);
 }
 
 static void

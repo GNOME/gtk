@@ -1,3 +1,10 @@
+Sat Mar 14 13:26:09 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkentry.c gtk/gtktext.c: Some cleanups of signedness
+          warnings
+
+	* gtk/gtkhandlebox.h: Changed gint ... : 1 to guint ... : 1
+	 
 1998-03-14  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): Moved the
