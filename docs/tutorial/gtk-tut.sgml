@@ -2,7 +2,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>July 17th 2000</date>
+    <date>July 18th 2000</date>
     <title>GTK+ 1.2 Tutorial</title>
     <authorgroup>
       <author>
@@ -6846,7 +6846,8 @@ int main( int argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->   
-<sect1>The Alignment widget
+<sect1>
+<title>The Alignment widget</title>
 
 <para>The alignment widget allows you to place a widget within its window at
 a position and size relative to the size of the Alignment widget
@@ -6859,9 +6860,9 @@ within the window.</para>
 GtkWidget* gtk_alignment_new( gfloat xalign,
                               gfloat yalign,
                               gfloat xscale,
-                              gfloat yscale );</para>
+                              gfloat yscale );
 
-<para>void gtk_alignment_set( GtkAlignment *alignment,
+void gtk_alignment_set( GtkAlignment *alignment,
                         gfloat        xalign,
                         gfloat        yalign,
                         gfloat        xscale,
@@ -6891,7 +6892,7 @@ the <link linkend="ch-ProgressBar">Progress Bar</link> widget.</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Fixed Container</title>
+<title>Fixed Container</title>
 
 <para>The Fixed container allows you to place widgets at a fixed position
 within it's window, relative to it's upper left hand corner. The
@@ -6900,14 +6901,14 @@ position of the widgets can be changed dynamically.</para>
 <para>There are only three functions associated with the fixed widget:</para>
 
 <programlisting role="C">
-GtkWidget* gtk_fixed_new( void );</para>
+GtkWidget* gtk_fixed_new( void );
 
-<para>void gtk_fixed_put( GtkFixed  *fixed,
+void gtk_fixed_put( GtkFixed  *fixed,
                     GtkWidget *widget,
                     gint16     x,
-                    gint16     y );</para>
+                    gint16     y );
 
-<para>void gtk_fixed_move( GtkFixed  *fixed,
+void gtk_fixed_move( GtkFixed  *fixed,
                      GtkWidget *widget,
                      gint16     x,
                      gint16     y );
@@ -7032,9 +7033,9 @@ following two functions:</para>
 void gtk_layout_put( GtkLayout *layout,
                      GtkWidget *widget,
                      gint       x,
-                     gint       y );</para>
+                     gint       y );
 
-<para>void gtk_layout_move( GtkLayout *layout,
+void gtk_layout_move( GtkLayout *layout,
                       GtkWidget *widget,
                       gint       x,
                       gint       y );
@@ -7059,30 +7060,31 @@ you can use the following two functions to disable and re-enable this
 repainting functionality:</para>
 
 <programlisting role="C">
-void gtk_layout_freeze( GtkLayout *layout );</para>
+void gtk_layout_freeze( GtkLayout *layout );
 
-<para>void gtk_layout_thaw( GtkLayout *layout );
+void gtk_layout_thaw( GtkLayout *layout );
 </programlisting>
 
 <para>The final four functions for use with Layout widgets are for
 manipulating the horizontal and vertical adjustment widgets:</para>
 
 <programlisting role="C">
-GtkAdjustment* gtk_layout_get_hadjustment( GtkLayout *layout );</para>
+GtkAdjustment* gtk_layout_get_hadjustment( GtkLayout *layout );
 
-<para>GtkAdjustment* gtk_layout_get_vadjustment( GtkLayout *layout );</para>
+GtkAdjustment* gtk_layout_get_vadjustment( GtkLayout *layout );
 
-<para>void gtk_layout_set_hadjustment( GtkLayout     *layout,
-                                 GtkAdjustment *adjustment );</para>
+void gtk_layout_set_hadjustment( GtkLayout     *layout,
+                                 GtkAdjustment *adjustment );
 
-<para>void gtk_layout_set_vadjustment( GtkLayout     *layout,
+void gtk_layout_set_vadjustment( GtkLayout     *layout,
                                  GtkAdjustment *adjustment);
 </programlisting>
 
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1> Frames
+<sect1>
+<title>Frames</title>
 
 <para>Frames can be used to enclose one or a group of widgets with a box
 which can optionally be labelled. The position of the label and the
@@ -7189,8 +7191,7 @@ int main( int   argc,
   return(0);
 }
 /* example-end */
-
-<para></verb></tscreen></para>
+</programlisting>
 
 </sect1>
 
@@ -7204,37 +7205,37 @@ height) of the child widget to have a certain value, adding extra
 space if necessary. This is useful, for instance, if you want to
 preview a larger image. The size of the preview should vary when the
 user resizes the window, but the aspect ratio needs to always match
-the original image.
+the original image.</para>
   
-To create a new aspect frame use:
-   </para>
+<para>To create a new aspect frame use:</para>
+
 <programlisting role="C">
 GtkWidget *gtk_aspect_frame_new( const gchar *label,
                                  gfloat       xalign,
                                  gfloat       yalign,
                                  gfloat       ratio,
                                  gint         obey_child);
-</verb></tscreen>
+</programlisting>
    
-<literal>xalign</literal> and <literal>yalign</literal> specify alignment as with Alignment
+<para><literal>xalign</literal> and <literal>yalign</literal> specify alignment as with Alignment
 widgets. If <literal>obey_child</literal> is true, the aspect ratio of a child
 widget will match the aspect ratio of the ideal size it requests.
-Otherwise, it is given by <literal>ratio</literal>.
+Otherwise, it is given by <literal>ratio</literal>.</para>
    
-To change the options of an existing aspect frame, you can use:
-   </para>
+<para>To change the options of an existing aspect frame, you can use:</para>
+
 <programlisting role="C">
 void gtk_aspect_frame_set( GtkAspectFrame *aspect_frame,
                            gfloat          xalign,
                            gfloat          yalign,
                            gfloat          ratio,
                            gint            obey_child);
-</verb></tscreen>
+</programlisting>
    
-As an example, the following program uses an AspectFrame to present a
+<para>As an example, the following program uses an AspectFrame to present a
 drawing area whose aspect ratio will always be 2:1, no matter how the
-user resizes the top-level window.
-   </para>
+user resizes the top-level window.</para>
+
 <programlisting role="C">
 /* example-start aspectframe aspectframe.c */
 
@@ -7286,32 +7287,32 @@ int main( int argc,
 
 <!-- ----------------------------------------------------------------- -->   
 <sect1>
-<title> Paned Window Widgets</title>
+<title>Paned Window Widgets</title>
 
 <para>The paned window widgets are useful when you want to divide an area
 into two parts, with the relative size of the two parts controlled by
 the user. A groove is drawn between the two portions with a handle
 that the user can drag to change the ratio. The division can either be
-horizontal (HPaned) or vertical (VPaned).
+horizontal (HPaned) or vertical (VPaned).</para>
    
-To create a new paned window, call one of:
-   </para>
-<programlisting role="C">
-GtkWidget *gtk_hpaned_new (void);</para>
+<para>To create a new paned window, call one of:</para>
 
-<para>GtkWidget *gtk_vpaned_new (void);
+<programlisting role="C">
+GtkWidget *gtk_hpaned_new (void);
+
+GtkWidget *gtk_vpaned_new (void);
 </programlisting>
 
 <para>After creating the paned window widget, you need to add child widgets
-to its two halves. To do this, use the functions:
-   </para>
-<programlisting role="C">
-void gtk_paned_add1 (GtkPaned *paned, GtkWidget *child);</para>
+to its two halves. To do this, use the functions:</para>
 
-<para>void gtk_paned_add2 (GtkPaned *paned, GtkWidget *child);
-</verb></tscreen>
-   
-<literal>gtk_paned_add1()</literal> adds the child widget to the left or top half of
+<programlisting role="C">
+void gtk_paned_add1 (GtkPaned *paned, GtkWidget *child);
+
+void gtk_paned_add2 (GtkPaned *paned, GtkWidget *child);
+</programlisting>
+
+<para><literal>gtk_paned_add1()</literal> adds the child widget to the left or top half of
 the paned window. <literal>gtk_paned_add2()</literal> adds the child widget to the
 right or bottom half of the paned window.</para>
 
@@ -7320,9 +7321,9 @@ functions.</para>
 
 <programlisting role="C">
 void gtk_paned_set_handle_size( GtkPaned *paned,
-                                guint16   size);</para>
+                                guint16   size);
 
-<para>void gtk_paned_set_gutter_size( GtkPaned *paned,
+void gtk_paned_set_gutter_size( GtkPaned *paned,
                                 guint16   size);
 </programlisting>
 
@@ -7491,7 +7492,8 @@ int main( int   argc,
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Viewports
+<sect1>
+<title>Viewports</title>
 
 <para>It is unlikely that you will ever need to use the Viewport widget
 directly. You are much more likely to use the
@@ -7518,14 +7520,14 @@ its own if you pass NULL as the value of the arguments.</para>
 using the following four functions:</para>
 
 <programlisting role="C">
-GtkAdjustment *gtk_viewport_get_hadjustment (GtkViewport *viewport );</para>
+GtkAdjustment *gtk_viewport_get_hadjustment (GtkViewport *viewport );
 
-<para>GtkAdjustment *gtk_viewport_get_vadjustment (GtkViewport *viewport );</para>
+GtkAdjustment *gtk_viewport_get_vadjustment (GtkViewport *viewport );
 
-<para>void gtk_viewport_set_hadjustment( GtkViewport   *viewport,
-                                   GtkAdjustment *adjustment );</para>
+void gtk_viewport_set_hadjustment( GtkViewport   *viewport,
+                                   GtkAdjustment *adjustment );
 
-<para>void gtk_viewport_set_vadjustment( GtkViewport   *viewport,
+void gtk_viewport_set_vadjustment( GtkViewport   *viewport,
                                    GtkAdjustment *adjustment );
 </programlisting>
 
@@ -7543,12 +7545,13 @@ void gtk_viewport_set_shadow_type( GtkViewport   *viewport,
   GTK_SHADOW_OUT,
   GTK_SHADOW_ETCHED_IN,
   GTK_SHADOW_ETCHED_OUT
-</verb></tscreen>
+</programlisting>
  
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
-<sect1>Scrolled Windows
+<sect1>
+<title>Scrolled Windows</title>
 
 <para>Scrolled windows are used to create a scrollable area with another
 widget inside it. You may insert any type of widget into a scrolled
@@ -7708,35 +7711,35 @@ create a new Button Box with one of the following calls, which create
 a horizontal or vertical box, respectively:</para>
 
 <programlisting role="C">
-GtkWidget *gtk_hbutton_box_new( void );</para>
+GtkWidget *gtk_hbutton_box_new( void );
 
-<para>GtkWidget *gtk_vbutton_box_new( void );
+GtkWidget *gtk_vbutton_box_new( void );
 </programlisting>
 
 <para>The only attributes pertaining to button boxes effect how the buttons
 are laid out. You can change the spacing between the buttons with:</para>
 
 <programlisting role="C">
-void gtk_hbutton_box_set_spacing_default( gint spacing );</para>
+void gtk_hbutton_box_set_spacing_default( gint spacing );
 
-<para>void gtk_vbutton_box_set_spacing_default( gint spacing );
+void gtk_vbutton_box_set_spacing_default( gint spacing );
 </programlisting>
 
 <para>Similarly, the current spacing values can be queried using:</para>
 
 <programlisting role="C">
-gint gtk_hbutton_box_get_spacing_default( void );</para>
+gint gtk_hbutton_box_get_spacing_default( void );
 
-<para>gint gtk_vbutton_box_get_spacing_default( void );
+gint gtk_vbutton_box_get_spacing_default( void );
 </programlisting>
 
 <para>The second attribute that we can access effects the layout of the
 buttons within the box. It is set using one of:</para>
 
 <programlisting role="C">
-void gtk_hbutton_box_set_layout_default( GtkButtonBoxStyle layout );</para>
+void gtk_hbutton_box_set_layout_default( GtkButtonBoxStyle layout );
 
-<para>void gtk_vbutton_box_set_layout_default( GtkButtonBoxStyle layout );
+void gtk_vbutton_box_set_layout_default( GtkButtonBoxStyle layout );
 </programlisting>
 
 <para>The <literal>layout</literal> argument can take one of the following values:</para>
@@ -7752,9 +7755,9 @@ void gtk_hbutton_box_set_layout_default( GtkButtonBoxStyle layout );</para>
 <para>The current layout setting can be retrieved using:</para>
 
 <programlisting role="C">
-GtkButtonBoxStyle gtk_hbutton_box_get_layout_default( void );</para>
+GtkButtonBoxStyle gtk_hbutton_box_get_layout_default( void );
 
-<para>GtkButtonBoxStyle gtk_vbutton_box_get_layout_default( void );
+GtkButtonBoxStyle gtk_vbutton_box_get_layout_default( void );
 </programlisting>
 
 <para>Buttons are added to a Button Box using the usual function:</para>
@@ -7944,9 +7947,9 @@ GtkWidget *gtk_toolbar_append_item( GtkToolbar    *toolbar,
                                     const char    *tooltip_private_text,
                                     GtkWidget     *icon,
                                     GtkSignalFunc  callback,
-                                    gpointer       user_data );</para>
+                                    gpointer       user_data );
 
-<para>GtkWidget *gtk_toolbar_prepend_item( GtkToolbar    *toolbar,
+GtkWidget *gtk_toolbar_prepend_item( GtkToolbar    *toolbar,
                                      const char    *text,
                                      const char    *tooltip_text,
                                      const char    *tooltip_private_text,
@@ -7974,13 +7977,12 @@ GtkWidget *gtk_toolbar_insert_item( GtkToolbar    *toolbar,
 following functions:</para>
 
 <programlisting role="C">
-void gtk_toolbar_append_space( GtkToolbar *toolbar );</para>
+void gtk_toolbar_append_space( GtkToolbar *toolbar );
 
-<para>void gtk_toolbar_prepend_space( GtkToolbar *toolbar );</para>
+void gtk_toolbar_prepend_space( GtkToolbar *toolbar );
 
-<para>void gtk_toolbar_insert_space( GtkToolbar *toolbar,
+void gtk_toolbar_insert_space( GtkToolbar *toolbar,
                                gint        position );
- 
 </programlisting>
 
 <para>While the size of the added space can be set globally for a
@@ -7996,12 +7998,12 @@ changed "on the fly" using the following functions:</para>
 
 <programlisting role="C">
 void gtk_toolbar_set_orientation( GtkToolbar     *toolbar,
-                                  GtkOrientation  orientation );</para>
+                                  GtkOrientation  orientation );
 
-<para>void gtk_toolbar_set_style( GtkToolbar      *toolbar,
-                            GtkToolbarStyle  style );</para>
+void gtk_toolbar_set_style( GtkToolbar      *toolbar,
+                            GtkToolbarStyle  style );
 
-<para>void gtk_toolbar_set_tooltips( GtkToolbar *toolbar,
+void gtk_toolbar_set_tooltips( GtkToolbar *toolbar,
                                gint        enable );
 </programlisting>
 
@@ -8016,11 +8018,11 @@ the following program (we'll interrupt the listing with some
 additional explanations):</para>
 
 <programlisting role="C">
-#include &lt;gtk/gtk.h&gt;</para>
+#include &lt;gtk/gtk.h&gt;
 
-<para>#include "gtk.xpm"</para>
+#include "gtk.xpm"
 
-<para>/* This function is connected to the Close button or
+/* This function is connected to the Close button or
  * closing the window from the WM */
 gint delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
@@ -8060,9 +8062,9 @@ void radio_event (GtkWidget *widget, gpointer data)
     gtk_toolbar_set_style(GTK_TOOLBAR ( data ), GTK_TOOLBAR_ICONS);
   else if (GTK_TOGGLE_BUTTON (both_button)->active)
     gtk_toolbar_set_style(GTK_TOOLBAR ( data ), GTK_TOOLBAR_BOTH);
-}</para>
+}
 
-<para>/* even easier, just check given toggle button and enable/disable 
+/* even easier, just check given toggle button and enable/disable 
  * tooltips */
 void toggle_event (GtkWidget *widget, gpointer data)
 {
@@ -8081,34 +8083,34 @@ int main (int argc, char *argv[])
 {
   /* Here is our main window (a dialog) and a handle for the handlebox */
   GtkWidget* dialog;
-  GtkWidget* handlebox;</para>
+  GtkWidget* handlebox;
 
-<para>  /* Ok, we need a toolbar, an icon with a mask (one for all of 
+  /* Ok, we need a toolbar, an icon with a mask (one for all of 
      the buttons) and an icon widget to put this icon in (but 
      we'll create a separate widget for each button) */
   GtkWidget * toolbar;
   GdkPixmap * icon;
   GdkBitmap * mask;
-  GtkWidget * iconw;</para>
+  GtkWidget * iconw;
 
-<para>  /* this is called in all GTK application. */
+  /* this is called in all GTK application. */
   gtk_init (&amp;argc, &amp;argv);
   
   /* create a new window with a given title, and nice size */
   dialog = gtk_dialog_new ();
   gtk_window_set_title ( GTK_WINDOW ( dialog ) , "GTKToolbar Tutorial");
   gtk_widget_set_usize( GTK_WIDGET ( dialog ) , 600 , 300 );
-  GTK_WINDOW ( dialog ) ->allow_shrink = TRUE;</para>
+  GTK_WINDOW ( dialog ) ->allow_shrink = TRUE;
 
-<para>  /* typically we quit if someone tries to close us */
+  /* typically we quit if someone tries to close us */
   gtk_signal_connect ( GTK_OBJECT ( dialog ), "delete_event",
-                       GTK_SIGNAL_FUNC ( delete_event ), NULL);</para>
+                       GTK_SIGNAL_FUNC ( delete_event ), NULL);
 
-<para>  /* we need to realize the window because we use pixmaps for 
+  /* we need to realize the window because we use pixmaps for 
    * items on the toolbar in the context of it */
-  gtk_widget_realize ( dialog );</para>
+  gtk_widget_realize ( dialog );
 
-<para>  /* to make it nice we'll put the toolbar into the handle box, 
+  /* to make it nice we'll put the toolbar into the handle box, 
    * so that it can be detached from the main window */
   handlebox = gtk_handle_box_new ();
   gtk_box_pack_start ( GTK_BOX ( GTK_DIALOG(dialog)->vbox ),
@@ -8134,9 +8136,9 @@ together quite often.</para>
                               GTK_TOOLBAR_BOTH );
   gtk_container_set_border_width ( GTK_CONTAINER ( toolbar ) , 5 );
   gtk_toolbar_set_space_size ( GTK_TOOLBAR ( toolbar ), 5 );
-  gtk_container_add ( GTK_CONTAINER ( handlebox ) , toolbar );</para>
+  gtk_container_add ( GTK_CONTAINER ( handlebox ) , toolbar );
 
-<para>  /* now we create icon with mask: we'll reuse it to create
+  /* now we create icon with mask: we'll reuse it to create
    * icon widgets for toolbar items */
   icon = gdk_pixmap_create_from_xpm_d ( dialog->window, &amp;mask,
       &amp;dialog->style->white, gtk_xpm );
@@ -8149,7 +8151,7 @@ documentation or to the <link linkend="ch-Pixmaps">Pixmaps</link> section
 earlier in this tutorial.</para>
 
 <programlisting role="C">
-  /* our first item is <close> button */
+  /* our first item is &lt;close&gt; button */
   iconw = gtk_pixmap_new ( icon, mask ); /* icon widget */
   close_button = 
     gtk_toolbar_append_item ( GTK_TOOLBAR (toolbar), /* our toolbar */
@@ -8192,8 +8194,8 @@ gtk_toolbar_append_element.  In fact, using this function one can also
 or +<literal>GTK_TOOLBAR_CHILD_BUTTON</literal>). In the above case we start
 creating a radio group. In creating other radio buttons for this group
 a pointer to the previous button in the group is required, so that a
-list of buttons can be easily constructed (see the section on <ref
-id="ch-Radio_Buttons"> Radio Buttons </ulink> earlier in this
+list of buttons can be easily constructed (see the section on <link
+linkend="ch-RadioButtons"> Radio Buttons </link> earlier in this
 tutorial).</para>
 
 <programlisting role="C">
@@ -8257,9 +8259,9 @@ radio buttons already).</para>
   gtk_toolbar_append_widget( GTK_TOOLBAR (toolbar), 
                              entry, 
                              "This is just an entry", 
-                             "Private" );</para>
+                             "Private" );
 
-<para>  /* well, it isn't created within thetoolbar, so we must still show it */
+  /* well, it isn't created within thetoolbar, so we must still show it */
   gtk_widget_show ( entry );
 </programlisting>
 
@@ -8271,9 +8273,9 @@ one thing you have to remember is that this widget must be shown manually
   /* that's it ! let's show everything. */
   gtk_widget_show ( toolbar );
   gtk_widget_show (handlebox);
-  gtk_widget_show ( dialog );</para>
+  gtk_widget_show ( dialog );
 
-<para>  /* rest in gtk_main and wait for the fun to begin! */
+  /* rest in gtk_main and wait for the fun to begin! */
   gtk_main ();
   
   return 0;
@@ -8382,9 +8384,9 @@ together as they are quite similar.</para>
 <programlisting role="C">
 void gtk_notebook_append_page( GtkNotebook *notebook,
                                GtkWidget   *child,
-                               GtkWidget   *tab_label );</para>
+                               GtkWidget   *tab_label );
 
-<para>void gtk_notebook_prepend_page( GtkNotebook *notebook,
+void gtk_notebook_prepend_page( GtkNotebook *notebook,
                                 GtkWidget   *child,
                                 GtkWidget   *tab_label );
 </programlisting>
@@ -8438,9 +8440,9 @@ is on the first page, and gtk_notebook_prev_page is called, the
 notebook will wrap to the last page.</para>
 
 <programlisting role="C">
-void gtk_notebook_next_page( GtkNoteBook *notebook );</para>
+void gtk_notebook_next_page( GtkNoteBook *notebook );
 
-<para>void gtk_notebook_prev_page( GtkNoteBook *notebook );
+void gtk_notebook_prev_page( GtkNoteBook *notebook );
 </programlisting>
 
 <para>This next function sets the "active" page. If you wish the notebook to
@@ -8457,9 +8459,9 @@ notebook border respectively.</para>
 
 <programlisting role="C">
 void gtk_notebook_set_show_tabs( GtkNotebook *notebook,
-                                 gboolean     show_tabs);</para>
+                                 gboolean     show_tabs);
 
-<para>void gtk_notebook_set_show_border( GtkNotebook *notebook,
+void gtk_notebook_set_show_border( GtkNotebook *notebook,
                                    gboolean     show_border );
 </programlisting>
 
@@ -8697,9 +8699,9 @@ it have?</para>
 is related to a certain cell in the list.</para>
 
 <programlisting role="C">
-GtkWidget *gtk_clist_new ( gint columns );</para>
+GtkWidget *gtk_clist_new ( gint columns );
 
-<para>GtkWidget *gtk_clist_new_with_titles( gint   columns,
+GtkWidget *gtk_clist_new_with_titles( gint   columns,
                                       gchar *titles[] );
 </programlisting>
 
@@ -8736,21 +8738,21 @@ the time of this writing, the following modes are available to us:</para>
 
 <itemizedlist>
 <listitem><simpara> <literal>GTK_SELECTION_SINGLE</literal> - The selection is either NULL or contains
-a GList pointer for a single selected item.</para>
-</simpara>
+a GList pointer for a single selected item.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>GTK_SELECTION_BROWSE</literal> - The selection is NULL if the list
 contains no widgets or insensitive ones only, otherwise it contains a
 GList pointer for one GList structure, and therefore exactly one list
-item.</para>
-</simpara>
+item.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>GTK_SELECTION_MULTIPLE</literal> - The selection is NULL if no list items
 are selected or a GList pointer for the first selected item. That in
 turn points to a GList structure for the second selected item and so
-on. This is currently the <bf>default</bf> for the CList widget.</para>
-</simpara>
+on. This is currently the <emphasis>default</emphasis> for the CList widget.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>GTK_SELECTION_EXTENDED</literal> - The selection is always NULL.</simpara>
 </listitem>
 </itemizedlist>
@@ -8790,14 +8792,14 @@ status of the title buttons.</para>
 
 <programlisting role="C">
 void gtk_clist_column_title_active( GtkCList *clist,
-                                     gint     column );</para>
+                                     gint     column );
 
-<para>void gtk_clist_column_title_passive( GtkCList *clist,
-                                     gint      column );</para>
+void gtk_clist_column_title_passive( GtkCList *clist,
+                                     gint      column );
 
-<para>void gtk_clist_column_titles_active( GtkCList *clist );</para>
+void gtk_clist_column_titles_active( GtkCList *clist );
 
-<para>void gtk_clist_column_titles_passive( GtkCList *clist );
+void gtk_clist_column_titles_passive( GtkCList *clist );
 </programlisting>
 
 <para>An active title is one which acts as a normal button, a passive one is
@@ -8810,9 +8812,9 @@ and so they can be hidden and shown at will using the following two
 calls.</para>
 
 <programlisting role="C">
-void gtk_clist_column_titles_show( GtkCList *clist );</para>
+void gtk_clist_column_titles_show( GtkCList *clist );
 
-<para>void gtk_clist_column_titles_hide( GtkCList *clist );
+void gtk_clist_column_titles_hide( GtkCList *clist );
 </programlisting>
 
 <para>For titles to be really useful we need a mechanism to set and change
@@ -8860,17 +8862,17 @@ void gtk_clist_set_column_justification( GtkCList         *clist,
 
 <itemizedlist>
 <listitem><simpara><literal>GTK_JUSTIFY_LEFT</literal> - The text in the column will begin from the
-left edge.</para>
-</simpara>
+left edge.</simpara>
 </listitem>
+
 <listitem><simpara><literal>GTK_JUSTIFY_RIGHT</literal> - The text in the column will begin from the
-right edge.</para>
-</simpara>
+right edge.</simpara>
 </listitem>
+
 <listitem><simpara><literal>GTK_JUSTIFY_CENTER</literal> - The text is placed in the center of the
-column.</para>
-</simpara>
+column.</simpara>
 </listitem>
+
 <listitem><simpara><literal>GTK_JUSTIFY_FILL</literal> - The text will use up all available space in
 the column. It is normally done by inserting extra blank spaces
 between words (or between individual letters if it's a single
@@ -8952,9 +8954,9 @@ user, and the two functions that is used to do it are</para>
 <programlisting role="C">
 void gtk_clist_set_foreground( GtkCList *clist,
                                gint      row,
-                               GdkColor *color );</para>
+                               GdkColor *color );
 
-<para>void gtk_clist_set_background( GtkCList *clist,
+void gtk_clist_set_background( GtkCList *clist,
                                gint      row,
                                GdkColor *color );
 </programlisting>
@@ -8972,9 +8974,9 @@ the list using</para>
 
 <programlisting role="C">
 gint gtk_clist_prepend( GtkCList *clist,
-                        gchar    *text[] );</para>
+                        gchar    *text[] );
 
-<para>gint gtk_clist_append( GtkCList *clist,
+gint gtk_clist_append( GtkCList *clist,
                        gchar    *text[] );
 </programlisting>
 
@@ -9019,9 +9021,9 @@ do the updates to it, and finally thaw it which causes the list to be
 updated on the screen.</para>
 
 <programlisting role="C">
-void gtk_clist_freeze( GtkCList * clist );</para>
+void gtk_clist_freeze( GtkCList * clist );
 
-<para>void gtk_clist_thaw( GtkCList * clist );
+void gtk_clist_thaw( GtkCList * clist );
 </programlisting>
 
 </sect1>
@@ -9037,15 +9039,15 @@ functions are used.</para>
 void gtk_clist_set_text( GtkCList    *clist,
                          gint         row,
                          gint         column,
-                         const gchar *text );</para>
+                         const gchar *text );
 
-<para>void gtk_clist_set_pixmap( GtkCList  *clist,
+void gtk_clist_set_pixmap( GtkCList  *clist,
                            gint       row,
                            gint       column,
                            GdkPixmap *pixmap,
-                           GdkBitmap *mask );</para>
+                           GdkBitmap *mask );
 
-<para>void gtk_clist_set_pixtext( GtkCList  *clist,
+void gtk_clist_set_pixtext( GtkCList  *clist,
                             gint       row,
                             gint       column,
                             gchar     *text,
@@ -9066,15 +9068,15 @@ text. In all cases the data is copied into the widget.</para>
 gint gtk_clist_get_text( GtkCList  *clist,
                          gint       row,
                          gint       column,
-                         gchar    **text );</para>
+                         gchar    **text );
 
-<para>gint gtk_clist_get_pixmap( GtkCList   *clist,
+gint gtk_clist_get_pixmap( GtkCList   *clist,
                            gint        row,
                            gint        column,
                            GdkPixmap **pixmap,
-                           GdkBitmap **mask );</para>
+                           GdkBitmap **mask );
 
-<para>gint gtk_clist_get_pixtext( GtkCList   *clist,
+gint gtk_clist_get_pixtext( GtkCList   *clist,
                             gint        row,
                             gint        column,
                             gchar     **text,
@@ -9092,9 +9094,9 @@ cell that is of type pixtext, then we would do the following, assuming
 that clist, row and column already exist:</para>
 
 <programlisting role="C">
-gchar *mytext;</para>
+gchar *mytext;
 
-<para>gtk_clist_get_pixtext(clist, row, column, &amp;mytext, NULL, NULL, NULL);
+gtk_clist_get_pixtext(clist, row, column, &amp;mytext, NULL, NULL, NULL);
 </programlisting>
 
 <para>There is one more call that is related to what's inside a cell in the
@@ -9144,17 +9146,17 @@ additional data.</para>
 <programlisting role="C">
 void gtk_clist_set_row_data( GtkCList *clist,
                              gint      row,
-                             gpointer  data );</para>
+                             gpointer  data );
 
-<para>void gtk_clist_set_row_data_full( GtkCList         *clist,
+oid gtk_clist_set_row_data_full( GtkCList         *clist,
                                   gint              row,
                                   gpointer          data,
-                                  GtkDestroyNotify  destroy );</para>
+                                  GtkDestroyNotify  destroy );
 
-<para>gpointer gtk_clist_get_row_data( GtkCList *clist,
-                                 gint      row );</para>
+gpointer gtk_clist_get_row_data( GtkCList *clist,
+                                 gint      row );
 
-<para>gint gtk_clist_find_row_from_data( GtkCList *clist,
+gint gtk_clist_find_row_from_data( GtkCList *clist,
                                    gpointer  data );
 </programlisting>
 
@@ -9170,9 +9172,9 @@ of a row. These are</para>
 <programlisting role="C">
 void gtk_clist_select_row( GtkCList *clist,
                            gint      row,
-                           gint      column );</para>
+                           gint      column );
 
-<para>void gtk_clist_unselect_row( GtkCList *clist,
+void gtk_clist_unselect_row( GtkCList *clist,
                              gint      row,
                              gint      column );
 </programlisting>
@@ -9206,13 +9208,13 @@ same signals, but also adds the following:</para>
 
 <itemizedlist>
 <listitem><simpara>select_row - This signal will send the following information, in
-order: GtkCList *clist, gint row, gint column, GtkEventButton *event</para>
-</simpara>
+order: GtkCList *clist, gint row, gint column, GtkEventButton *event</simpara>
 </listitem>
+
 <listitem><simpara>unselect_row - When the user unselects a row, this signal is
-activated. It sends the same information as select_row</para>
-</simpara>
+activated. It sends the same information as select_row<</simpara>
 </listitem>
+
 <listitem><simpara>click_column - Send GtkCList *clist, gint column</simpara>
 </listitem>
 </itemizedlist>
@@ -9243,7 +9245,6 @@ gtk_signal_connect(GTK_OBJECT( clist),
 <sect1>
 <title>A CList example</title>
 
-</para>
 <programlisting role="C">
 /* example-start clist clist.c */
 
@@ -9429,13 +9430,12 @@ int main( int    argc,
 <title>CTree Widget</title>
 
 <!-- ----------------------------------------------------------------- -->
-<p>            
-The CTree widget is derived from the CList widget. It is designed to
+<para>The CTree widget is derived from the CList widget. It is designed to
 display hierarchically-organised data. The tree is displayed
 vertically, and branches of the tree can be clapsed and expanded as
 required by the user.</para>
 
-<para>This section of the tutorial is under development.
+<para>This section of the tutorial is under development.</para>
  
 <!-- ----------------------------------------------------------------- -->
 <sect1>
@@ -9449,9 +9449,9 @@ CTree widget:</para>
 <programlisting role="C">
 GtkWidget *gtk_ctree_new_with_titles( gint   columns, 
                                       gint   tree_column,
-                                      gchar *titles[] );</para>
+                                      gchar *titles[] );
 
-<para>GtkWidget *gtk_ctree_new( gint columns, 
+GtkWidget *gtk_ctree_new( gint columns, 
                           gint tree_column );
 </programlisting>
 
@@ -9468,17 +9468,19 @@ function would be:</para>
 <programlisting role="C">
     /* CTree column titles /*
     char *titles[] = { "Location" , "Description" };
-    GtkWidget *ctree;</para>
+    GtkWidget *ctree;
 
-<para>    ctree = gtk_ctree_new_with_titles(2, 0, titles);
+    ctree = gtk_ctree_new_with_titles(2, 0, titles);
 </programlisting>
 
 <para>This would create a new CTree with two columns entitled "Location"
 and "Description", with the first column containing the tree.</para>
 
+</sect1>
+
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Adding and Removing nodes</title>
+<title>Adding and Removing nodes</title>
 
 <para>The items in a CTree are termed <emphasis>nodes</emphasis>. Nodes are inserted
 into a CTree in such a way as to create a hierarchy (although the
@@ -9501,7 +9503,7 @@ GtkCTreeNode *gtk_ctree_insert_node( GtkCTree     *ctree,
 
 <para>This function looks a little daunting, but that is merely due to the
 power of the CTreee widget. Not all of the parameters above are
-required. </para>
+required.</para>
 
 <para>The CTree widget allows you to specify pixmaps to display in each
 node. For branch nodes, you can specify different pixmaps for when the
@@ -9513,32 +9515,42 @@ the user, but it is optional so you don't have to specify pixmaps.</para>
 <itemizedlist>
 <listitem><simpara> <literal>ctree</literal> - the CTree widget we are manipulating</simpara>
 </listitem>
+
 <listitem><simpara> <literal>parent</literal> - the parent node of the one we are inserting. May
                      be <literal>NULL</literal> for a root-level (i.e. initial)
 		     node.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>sibling</literal> - a sibling of the node we are inserting. May be
                       <literal>NULL</literal> if there are no siblings.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>text</literal> - the textual contents of each column in the tree for
-                   this node. This array <bf>must</bf> have an entry
+                   this node. This array <emphasis>must</emphasis> have an entry
 		   for each column, even if it is an empty string.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>spacing</literal> - specifies the padding between the nodes pixmap
                       and text elements, if a pixmap is provided</simpara>
 </listitem>
+
 <listitem><simpara> <literal>pixmap_closed</literal> - a pixmap to display for a collapsed branch
                             node and for a leaf node.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>mask_closed</literal> - a bitmap mask for the above pixmap.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>pixmap_opened</literal> - a pixmap to display for an expanded
                             branch node.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>mask_opened</literal> - a bitmap mask for the above pixmap.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>is_leaf</literal> - indicates whether this is a leaf or branch node.</simpara>
 </listitem>
+
 <listitem><simpara> <literal>expanded</literal> - indicates whether a branch node is initially
                        expanded or collapsed.</simpara>
 </listitem>
@@ -9572,9 +9584,9 @@ first group set padding attributes that effect how the widget is drawn:</para>
 
 <programlisting role="C">
 void gtk_ctree_set_indent( GtkCTree *ctree, 
-                           gint      indent );</para>
+                           gint      indent );
 
-<para>void gtk_ctree_set_spacing( GtkCTree *ctree, 
+void gtk_ctree_set_spacing( GtkCTree *ctree, 
                             gint      spacing );
 </programlisting>
 
@@ -9592,9 +9604,9 @@ the tree.</para>
 
 <programlisting role="C">
 void gtk_ctree_set_line_style( GtkCTree          *ctree, 
-                               GtkCTreeLineStyle  line_style );</para>
+                               GtkCTreeLineStyle  line_style );
 
-<para>void gtk_ctree_set_expander_style( GtkCTree              *ctree, 
+void gtk_ctree_set_expander_style( GtkCTree              *ctree, 
                                    GtkCTreeExpanderStyle  expander_style );
 </programlisting>
 
@@ -9624,7 +9636,7 @@ can be one of:</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Utilizing row data</title>
+<title>Utilizing row data</title>
 
 <para>The CTree widget allows you to associate data with each node of the
 tree. This is most often used in callback functions, such as when a
@@ -9639,9 +9651,9 @@ allows a set of data to be referenced.</para>
 <programlisting role="C">
 void gtk_ctree_node_set_row_data( GtkCTree     *ctree,
                                   GtkCTreeNode *node,
-                                  gpointer      data );</para>
+                                  gpointer      data );
 
-<para>void gtk_ctree_node_set_row_data_full( GtkCTree         *ctree,
+void gtk_ctree_node_set_row_data_full( GtkCTree         *ctree,
 				       GtkCTreeNode     *node,
                                        gpointer          data,
                                        GtkDestroyNotify  destroy );
@@ -9684,7 +9696,7 @@ background, as does CList. Also, most of the Tree methods work in
 the same way as the corresponding CList ones. However, Tree is
 not derived from CList, so you cannot use them interchangeably.</para>
 
-<para>
+<!-- ----------------------------------------------------------------- -->
 <sect1>
 <title> Creating a Tree</title>
 
@@ -9716,9 +9728,9 @@ below for more options):</para>
 
 <programlisting role="C">
 void gtk_tree_append( GtkTree    *tree,
-                       GtkWidget *tree_item );</para>
+                       GtkWidget *tree_item );
 
-<para>void gtk_tree_prepend( GtkTree   *tree,
+void gtk_tree_prepend( GtkTree   *tree,
                        GtkWidget *tree_item );
 </programlisting>
 
@@ -9729,7 +9741,7 @@ equivalent to gtk_list_*_items().</para>
 
 <!-- ----------------------------------------------------------------- -->
 <sect1>
-<title> Adding a Subtree</title>
+<title>Adding a Subtree</title>
 
 <para>A subtree is created like any other Tree widget. A subtree is added
 to another tree beneath a tree item, using:</para>
@@ -9770,8 +9782,8 @@ void gtk_tree_set_selection_mode( GtkTree          *tree,
 
 <para>The semantics associated with the various selection modes are
 described in the section on the CList widget. As with the CList
-widget, the "select_child", "unselect_child" (not really - see <ref
-id="ch-Tree_Signals"> Signals </ulink> below for an explanation),
+widget, the "select_child", "unselect_child" (not really - see <link
+linkend="ch-TreeSignals">Signals</link> below for an explanation),
 and "selection_changed" signals are emitted when list items are
 selected or unselected. However, in order to take advantage of these
 signals, you need to know <emphasis>which</emphasis> Tree widget they will be
@@ -9799,17 +9811,20 @@ emitted by the root tree. Consequently, if you want to handle the
 "select_child" signal for a tree and all its subtrees, you will have
 to call gtk_signal_connect() for every subtree.</para>
 
-<para><sect1>
-<title> Tree Widget Internals</title>
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>
+<title>Tree Widget Internals</title>
 
 <para>The Tree's struct definition looks like this:</para>
 
 <programlisting role="C">
 struct _GtkTree
 {
-  GtkContainer container;</para>
+  GtkContainer container;
 
-<para>  GList *children;
+  GList *children;
   
   GtkTree* root_tree; /* owner of selection list */
   GtkWidget* tree_owner;
@@ -9854,9 +9869,9 @@ is; root trees have level 0, and each successive level of subtrees has
 a level one greater than the parent level. This field is set only
 after a Tree widget is actually mapped (i.e. drawn on the screen).</para>
 
-<para>
 <!-- ----------------------------------------------------------------- -->
-<sect2> Signals
+<sect2>
+<title>Signals</title>
 
 <programlisting role="C">
 void selection_changed( GtkTree *tree );
@@ -9889,7 +9904,11 @@ gtk_tree_unselect_item() or gtk_tree_unselect_child(), and perhaps on
 other occasions, but <emphasis>not</emphasis> when a button press deselects a
 child, nor on emission of the "toggle" signal by gtk_item_toggle().</para>
 
-<para><sect2> Functions and Macros<label id="ch-Tree_Functions"></para>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Functions and Macros</title>
 
 <programlisting role="C">
 guint gtk_tree_get_type( void );
@@ -10067,7 +10086,12 @@ GList *GTK_TREE_SELECTION( gpointer obj)
 <para>Return the selection list of the root tree of a "GtkTree" object. The
 above warning applies here, too.</para>
 
-<para><sect1> Tree Item Widget<label id="ch-Tree_Item_Widget"></para>
+</sect2>
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>
+<title>Tree Item Widget</title>
 
 <para>The TreeItem widget, like CListItem, is derived from Item,
 which in turn is derived from Bin.  Therefore, the item itself is a
@@ -10080,15 +10104,15 @@ the only one we need be concerned with is the <literal>subtree</literal> field.<
 <programlisting role="C">
 struct _GtkTreeItem
 {
-  GtkItem item;</para>
+  GtkItem item;
 
-<para>  GtkWidget *subtree;
+  GtkWidget *subtree;
   GtkWidget *pixmaps_box;
-  GtkWidget *plus_pix_widget, *minus_pix_widget;</para>
+  GtkWidget *plus_pix_widget, *minus_pix_widget;
 
-<para>  GList *pixmaps;		/* pixmap node for this items color depth */</para>
+  GList *pixmaps;		/* pixmap node for this items color depth */
 
-<para>  guint expanded : 1;
+  guint expanded : 1;
 };
 </programlisting>
 
@@ -10110,9 +10134,9 @@ gtk_tree_item_new_with_label():</para>
 <programlisting role="C">
 tree_item = gtk_tree_item_new ();
 label_widget = gtk_label_new (label);
-gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);</para>
+gtk_misc_set_alignment (GTK_MISC (label_widget), 0.0, 0.5);
 
-<para>gtk_container_add (GTK_CONTAINER (tree_item), label_widget);
+gtk_container_add (GTK_CONTAINER (tree_item), label_widget);
 gtk_widget_show (label_widget);
 </programlisting>
 
@@ -10144,8 +10168,9 @@ each successive parent widget has a parent itself, all the way back to
 a toplevel or dialog window, when you call gtk_widget_dnd_drag_set()
 or gtk_widget_dnd_drop_set().  Otherwise, strange things will happen.</para>
 
-<para><sect2>
-<title> Signals</title>
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Signals</title>
 
 <para>TreeItem inherits the "select", "deselect", and "toggle" signals
 from Item. In addition, it adds two signals of its own, "expand"
@@ -10195,8 +10220,11 @@ void collapse( GtkTreeItem *tree_item );
 collapsed, that is, when the user clicks on the minus sign next to the
 item, or when the program calls gtk_tree_item_collapse().</para>
 
-<para><sect2>
-<title> Functions and Macros</title>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2>
+<title>Functions and Macros</title>
 
 <programlisting role="C">
 guint gtk_tree_item_get_type( void );
@@ -10280,8 +10308,8 @@ GtkTreeItemClass *GTK_TREE_ITEM_CLASS (gpointer obj)
 gint GTK_IS_TREE_ITEM (gpointer obj)
 </programlisting>
 
-<para>Determine if a generic pointer refers to a "GtkTreeItem" object.
- </para>
+<para>Determine if a generic pointer refers to a "GtkTreeItem" object.</para>
+
 <programlisting role="C">
 GtkWidget GTK_TREE_ITEM_SUBTREE (gpointer obj)
 </programlisting>
@@ -10289,8 +10317,12 @@ GtkWidget GTK_TREE_ITEM_SUBTREE (gpointer obj)
 <para>Returns a tree item's subtree (<literal>obj</literal> should point to a
 "GtkTreeItem" object).</para>
 
-<para><sect1>
-<title> Tree Example</title>
+</sect2>
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+<sect1>
+<title>Tree Example</title>
 
 <para>This is somewhat like the tree example in testgtk.c, but a lot less
 complete (although much better commented).  It puts up a window with a
