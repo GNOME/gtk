@@ -8,20 +8,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-05-23 17:08-0400\n"
-"PO-Revision-Date: 2002-05-19 04:40+0200\n"
+"POT-Creation-Date: 2002-06-13 09:02+0200\n"
+"PO-Revision-Date: 2002-06-13 09:03+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:581
+#: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Misslyckades med att öppna filen \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:591
+#: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
 msgstr "Bildfilen \"%s\" innehåller ingen data"
@@ -31,7 +31,7 @@ msgstr "Bildfilen \"%s\" innehåller ingen data"
 msgid "Don't know how to load the animation in file '%s'"
 msgstr "Vet inte hur man läser in animationen i filen \"%s\""
 
-#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
+#: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -48,12 +48,12 @@ msgstr ""
 "Misslyckades med att läsa in animationen \"%s\": anledningen är okänd, "
 "troligtvis en trasig animationsfil"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:354
+#: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
 msgid "Unable to load image-loading module: %s: %s"
 msgstr "Kan inte läsa in bildinläsningsmodulen: %s: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:373
+#: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
@@ -62,41 +62,41 @@ msgstr ""
 "Bildinläsningsmodulen %s exporterar inte rätt gränssnitt; den kanske är från "
 "en annan GTK-version?"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:490 gdk-pixbuf/gdk-pixbuf-io.c:516
+#: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
 msgstr "Bildtypen \"%s\" stöds inte"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:538
+#: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
 msgstr "Kunde inte känna igen bildfilformatet på filen \"%s\""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:544
+#: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
 msgstr "Okänt bildfilformat"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:614
+#: gdk-pixbuf/gdk-pixbuf-io.c:618
 #, c-format
 msgid "Don't know how to load the image in file '%s'"
 msgstr "Vet inte hur man läser in bilden i filen \"%s\""
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:647
+#: gdk-pixbuf/gdk-pixbuf-io.c:651
 #, c-format
 msgid "Failed to load image '%s': %s"
 msgstr "Misslyckades med att läsa in bilden \"%s\": %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:752
+#: gdk-pixbuf/gdk-pixbuf-io.c:756
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr "Detta bygge av gdk-pixbuf stöder inte sparande av bildformatet: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:859
+#: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
 msgstr "Misslyckades med att öppna \"%s\" för skrivning: %s"
 
-#: gdk-pixbuf/gdk-pixbuf-io.c:880
+#: gdk-pixbuf/gdk-pixbuf-io.c:884
 #, c-format
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
@@ -136,15 +136,15 @@ msgstr "Bildpunktsdata är trasigt"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "misslyckades med att allokera bildbuffert på %u byte"
 
-#: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
+#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
 msgid "Not enough memory to load bitmap image"
 msgstr "Inte tillräckligt med minne för att läsa in bilden"
 
-#: gdk-pixbuf/io-bmp.c:275
+#: gdk-pixbuf/io-bmp.c:292
 msgid "BMP image has unsupported header size"
 msgstr "BMP-bilden har huvudstorlek som inte stöds"
 
-#: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
+#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
 msgid "BMP image has bogus header data"
 msgstr "BMP-bilden har felaktig huvuddata"
 
@@ -589,15 +589,15 @@ msgstr "Inte tillräckligt med minne för att läsa in bilden"
 msgid "Couldn't save the rest"
 msgstr "Kunde inte spara resten"
 
-#: gdk-pixbuf/io-xbm.c:283
+#: gdk-pixbuf/io-xbm.c:284
 msgid "Invalid XBM file"
 msgstr "Ogiltig XBM-fil"
 
-#: gdk-pixbuf/io-xbm.c:293
+#: gdk-pixbuf/io-xbm.c:294
 msgid "Insufficient memory to load XBM image file"
 msgstr "Inte tillräckligt med minne för att läsa in XBM-bildfil"
 
-#: gdk-pixbuf/io-xbm.c:427
+#: gdk-pixbuf/io-xbm.c:429
 msgid "Failed to write to temporary file when loading XBM image"
 msgstr "Misslyckades med att skriva till temporär fil vid inläsning av XBM-fil"
 
@@ -1751,7 +1751,7 @@ msgstr "Markera allt"
 msgid "Input Methods"
 msgstr "Inmatningsmetoder"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6384
 msgid "_Insert Unicode control character"
 msgstr "_Infoga Unicode-styrtecken"
 
@@ -2359,7 +2359,7 @@ msgstr "Vertikal justering"
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment på den vertikala positionen."
 
-#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
 msgstr "Bredd"
 
@@ -2384,21 +2384,21 @@ msgstr "Höjden på layouten."
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenu.c:191
+#: gtk/gtkmenu.c:194
 msgid "Tearoff Title"
 msgstr "Löstagbar titel"
 
-#: gtk/gtkmenu.c:192
+#: gtk/gtkmenu.c:195
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off."
 msgstr "En titel som kan visas av fönsterhanteraren då denna meny tas loss."
 
-#: gtk/gtkmenu.c:260
+#: gtk/gtkmenu.c:264
 msgid "Can change accelerators"
 msgstr "Kan ändra snabbtangenter"
 
-#: gtk/gtkmenu.c:261
+#: gtk/gtkmenu.c:265
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu "
 "item."
@@ -2816,17 +2816,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hur långt bort i y-riktningen pilen ska flyttas då knappen trycks ned"
 
-#: gtk/gtkrc.c:2280
+#: gtk/gtkrc.c:2282
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan inte hitta inkluderingsfil: \"%s\""
 
-#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
+#: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kan inte hitta bildfil i \"pixmap_path\": \"%s\""
 
-#: gtk/gtkrc.c:3360
+#: gtk/gtkrc.c:3362
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Sökvägselement till bild: \"%s\" måste vara absolut, %s, rad %d"
@@ -3759,8 +3759,8 @@ msgid "ZWS _Zero width space"
 msgstr "ZWS-blanksteg _utan bredd"
 
 #: gtk/gtktextutil.c:54
-msgid "ZWN Zero width _joiner"
-msgstr "ZWN-_sammanslagare utan bredd"
+msgid "ZWJ Zero width _joiner"
+msgstr "ZWJ-_sammanslagare utan bredd"
 
 #: gtk/gtktextutil.c:55
 msgid "ZWNJ Zero width _non-joiner"
@@ -3798,7 +3798,7 @@ msgstr "Synlig markör"
 msgid "If the insertion cursor is shown"
 msgstr "Huruvida insättningsmarkören visas"
 
-#: gtk/gtktextview.c:6373
+#: gtk/gtktextview.c:6375
 msgid "Input _Methods"
 msgstr "Inmatnings_metoder"
 
@@ -3914,7 +3914,7 @@ msgstr "Horisontell justering för widgeten"
 msgid "Vertical Adjustment for the widget"
 msgstr "Vertikal justering för widgeten"
 
-#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:175 gtk/gtkwidget.c:423
+#: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
 msgstr "Synlig"
 
@@ -3938,7 +3938,7 @@ msgstr "Expanderarkolumn"
 msgid "Set the column for the expander column"
 msgstr "Ställ in kolumnen för expanderarkolumnen"
 
-#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:274
+#: gtk/gtktreeview.c:563 gtk/gtktreeviewcolumn.c:275
 msgid "Reorderable"
 msgstr "Omarrangeringsbar"
 
@@ -4010,103 +4010,103 @@ msgstr "Indentera expanderare"
 msgid "Make the expanders indented."
 msgstr "Gör expanderarna indenterade."
 
-#: gtk/gtktreeviewcolumn.c:176
+#: gtk/gtktreeviewcolumn.c:177
 msgid "Whether to display the column"
 msgstr "Huruvida kolumnen ska visas"
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
+#: gtk/gtktreeviewcolumn.c:184 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "Storleksändringsbar"
 
-#: gtk/gtktreeviewcolumn.c:184
+#: gtk/gtktreeviewcolumn.c:185
 msgid "Column is user-resizable"
 msgstr "Användaren kan ändra storleken på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:192
+#: gtk/gtktreeviewcolumn.c:193
 msgid "Current width of the column"
 msgstr "Aktuell bredd på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:200
+#: gtk/gtktreeviewcolumn.c:201
 msgid "Sizing"
 msgstr "Storleksändring"
 
-#: gtk/gtktreeviewcolumn.c:201
+#: gtk/gtktreeviewcolumn.c:202
 msgid "Resize mode of the column"
 msgstr "Kolumnens storleksändringsläge"
 
-#: gtk/gtktreeviewcolumn.c:209
+#: gtk/gtktreeviewcolumn.c:210
 msgid "Fixed Width"
 msgstr "Fast bredd"
 
-#: gtk/gtktreeviewcolumn.c:210
+#: gtk/gtktreeviewcolumn.c:211
 msgid "Current fixed width of the column"
 msgstr "Aktuell fast bredd på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:219
+#: gtk/gtktreeviewcolumn.c:220
 msgid "Minimum Width"
 msgstr "Minsta bredd"
 
-#: gtk/gtktreeviewcolumn.c:220
+#: gtk/gtktreeviewcolumn.c:221
 msgid "Minimum allowed width of the column"
 msgstr "Minsta tillåtna bredd på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:229
+#: gtk/gtktreeviewcolumn.c:230
 msgid "Maximum Width"
 msgstr "Största bredd"
 
-#: gtk/gtktreeviewcolumn.c:230
+#: gtk/gtktreeviewcolumn.c:231
 msgid "Maximum allowed width of the column"
 msgstr "Största tillåtna bredd på kolumnen"
 
-#: gtk/gtktreeviewcolumn.c:239
+#: gtk/gtktreeviewcolumn.c:240
 msgid "Title"
 msgstr "Titel"
 
-#: gtk/gtktreeviewcolumn.c:240
+#: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
 msgstr "Titel att visa i kolumnhuvudet"
 
-#: gtk/gtktreeviewcolumn.c:247
+#: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
 msgstr "Klickbar"
 
-#: gtk/gtktreeviewcolumn.c:248
+#: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
 msgstr "Huruvida huvudet kan klickas i"
 
-#: gtk/gtktreeviewcolumn.c:256
+#: gtk/gtktreeviewcolumn.c:257
 msgid "Widget"
 msgstr "Widget"
 
-#: gtk/gtktreeviewcolumn.c:257
+#: gtk/gtktreeviewcolumn.c:258
 msgid "Widget to put in column header button instead of column title"
 msgstr "Widget att placera kolumnhuvudets knapp istället för kolumntiteln"
 
-#: gtk/gtktreeviewcolumn.c:264
+#: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
 msgstr "Justering"
 
-#: gtk/gtktreeviewcolumn.c:265
+#: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
 msgstr "X-justering på kolumnhuvudets text eller widget"
 
-#: gtk/gtktreeviewcolumn.c:275
+#: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
 msgstr "Huruvida kolumnen kan omarrangeras runt huvudena"
 
-#: gtk/gtktreeviewcolumn.c:282
+#: gtk/gtktreeviewcolumn.c:283
 msgid "Sort indicator"
 msgstr "Sorteringsindikator"
 
-#: gtk/gtktreeviewcolumn.c:283
+#: gtk/gtktreeviewcolumn.c:284
 msgid "Whether to show a sort indicator"
 msgstr "Huruvida en sorteringsindikator ska visas"
 
-#: gtk/gtktreeviewcolumn.c:290
+#: gtk/gtktreeviewcolumn.c:291
 msgid "Sort order"
 msgstr "Sorteringsordning"
 
-#: gtk/gtktreeviewcolumn.c:291
+#: gtk/gtktreeviewcolumn.c:292
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Sorteringsriktning som sorteringsindikatorn ska indikera"
 

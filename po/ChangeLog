@@ -1,3 +1,9 @@
+2002-06-13  Christian Rose  <menthos@menthos.com>
+
+	* desk.pl, update.pl, update.sh, README.tools: Removed. These are
+	obsoleted by intltool.
+	* sv.po: Updated Swedish translation.
+
 2002-06-10  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* pt_BR.po: Remove duplicated message.  Although it was
