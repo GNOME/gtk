@@ -1127,6 +1127,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   gint xborder, yborder;
   PangoContext *context;
   
+  gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
 				       widget->style->font_desc,
@@ -1134,7 +1135,7 @@ gtk_entry_size_request (GtkWidget      *widget,
 
   entry->ascent = pango_font_metrics_get_ascent (metrics);
   entry->descent = pango_font_metrics_get_descent (metrics);
-
+  
   get_borders (entry, &xborder, &yborder);
   
   xborder += INNER_BORDER;
@@ -4703,19 +4704,23 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
       
       if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
         {
-          completion->priv->current_selected--;
-          if (completion->priv->current_selected < -1)
-            completion->priv->current_selected = -1;
+	  if (completion->priv->current_selected < 0)
+	    completion->priv->current_selected = matches + actions - 1;
+	  else
+	    completion->priv->current_selected--;
         }
       else if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
         {
-          completion->priv->current_selected++;
-          if (completion->priv->current_selected > matches + actions - 1)
-            completion->priv->current_selected = matches + actions - 1;
+          if (completion->priv->current_selected < matches + actions - 1)
+	    completion->priv->current_selected++;
+	  else
+            completion->priv->current_selected = -1;
         }
       else if (event->keyval == GDK_Page_Up)
 	{
-	  if (completion->priv->current_selected <= 0)
+	  if (completion->priv->current_selected < 0)
+	    completion->priv->current_selected = matches + actions - 1;
+	  else if (completion->priv->current_selected == 0)
 	    completion->priv->current_selected = -1;
 	  else if (completion->priv->current_selected < matches) 
 	    {
@@ -4740,7 +4745,11 @@ gtk_entry_completion_key_press (GtkWidget   *widget,
 	      if (completion->priv->current_selected > matches - 1)
 		completion->priv->current_selected = matches - 1;
 	    }
-	  else 
+	  else if (completion->priv->current_selected == matches + actions - 1)
+	    {
+	      completion->priv->current_selected = -1;
+	    }
+	  else
 	    {
 	      completion->priv->current_selected += 14;
 	      if (completion->priv->current_selected > matches + actions - 1)

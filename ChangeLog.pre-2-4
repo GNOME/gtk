@@ -1,3 +1,25 @@
+2004-04-12  Matthias Clasen  <mclasen@dhcp64-228.boston.redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_get_cell_area): Typo fix.
+
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_init): Don't add
+	a shadow inside the scrolled window, add it around the vbox.
+
+	* gtk/gtkentryprivate.h: 
+	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
+	Return a boolean indicating whether the popup is positioned above 
+	or below. Scroll the completions to the beginning or the end, 
+	depending on the positioning.
+
+	* gtk/gtkentry.c (gtk_entry_completion_key_press): Make keynav
+	wrap around in the entry completion popup, and allow GDK_UP to 
+	enter the popup.  (#137440)
+
+2004-04-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_size_request): Make sure the style is 
+	there before using it.
+
 Sun Apr 11 15:08:45 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtktreeprivate.h: Moved search entries into priv data.

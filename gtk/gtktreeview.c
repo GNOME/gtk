@@ -10725,7 +10725,7 @@ gtk_tree_view_get_path_at_pos (GtkTreeView        *tree_view,
  * gtk_tree_view_get_cell_area:
  * @tree_view: a #GtkTreeView
  * @path: a #GtkTreePath for the row, or %NULL to get only horizontal coordinates
- * @column: a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordiantes
+ * @column: a #GtkTreeViewColumn for the column, or %NULL to get only vertical coordinates
  * @rect: rectangle to fill with cell rect
  *
  * Fills the bounding rectangle in tree window coordinates for the cell at the

@@ -24,6 +24,7 @@
 
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
+#include "gtkframe.h"
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
 #include "gtkscrolledwindow.h"
@@ -254,6 +255,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   GtkCellRenderer *cell;
   GtkTreeSelection *sel;
   GtkEntryCompletionPrivate *priv;
+  GtkWidget *popup_frame;
 
   /* yes, also priv, need to keep the code readable */
   priv = completion->priv = GTK_ENTRY_COMPLETION_GET_PRIVATE (completion);
@@ -286,7 +288,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (priv->scrolled_window),
-                                       GTK_SHADOW_ETCHED_IN);
+                                       GTK_SHADOW_NONE);
 
   /* a nasty hack to get the completions treeview to size nicely */
   gtk_widget_set_size_request (GTK_SCROLLED_WINDOW (priv->scrolled_window)->vscrollbar, -1, 0);
@@ -323,8 +325,14 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
                     G_CALLBACK (gtk_entry_completion_popup_button_press),
                     completion);
 
+  popup_frame = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (popup_frame),
+			     GTK_SHADOW_ETCHED_IN);
+  gtk_widget_show (popup_frame);
+  gtk_container_add (GTK_CONTAINER (priv->popup_window), popup_frame);
+  
   priv->vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (priv->popup_window), priv->vbox);
+  gtk_container_add (GTK_CONTAINER (popup_frame), priv->vbox);
 
   gtk_container_add (GTK_CONTAINER (priv->scrolled_window), priv->tree_view);
   gtk_box_pack_start (GTK_BOX (priv->vbox), priv->scrolled_window,
@@ -1086,7 +1094,7 @@ get_borders (GtkEntry *entry,
 }
 
 /* some nasty size requisition */
-gint
+gboolean
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   gint x, y;
@@ -1095,6 +1103,8 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gint monitor_num;
   GdkRectangle monitor;
   GtkRequisition popup_req;
+  GtkTreePath *path;
+  gboolean above;
 
   gdk_window_get_origin (completion->priv->entry->window, &x, &y);
   get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
@@ -1151,13 +1161,24 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     x = monitor.x + monitor.width - popup_req.width;
   
   if (y + height + popup_req.height <= monitor.y + monitor.height)
-    y += height;
+    {
+      y += height;
+      above = FALSE;
+      path = gtk_tree_path_new_from_indices (0, -1);
+    }
   else
-    y -= popup_req.height;
+    {
+      y -= popup_req.height;
+      above = TRUE;
+      path = gtk_tree_path_new_from_indices (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL) - 1, -1);
+    }
+  
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (completion->priv->tree_view), path, NULL, FALSE, 0.0, 0.0);
+  gtk_tree_path_free (path);
 
   gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
 
-  return height;
+  return above;
 }
 
 void
@@ -1168,6 +1189,8 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   if (GTK_WIDGET_MAPPED (completion->priv->popup_window))
     return;
+
+  completion->priv->may_wrap = TRUE;
 
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
   renderers = gtk_tree_view_column_get_cell_renderers (column);
