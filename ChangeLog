@@ -1,3 +1,8 @@
+Fri Oct 19 12:24:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/linux-fb/gdkfont-fb.c: Fix up for change to 
+	Pango font API. #61933. (Untested, even for compilation.)
+
 Fri Oct 19 11:24:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkmain.[ch] (gtk_disable_setlocale): Actually
