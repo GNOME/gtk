@@ -296,10 +296,6 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
 		       GtkWidget    *child,
 		       gint          position)
 {
-  GList *tmp_list;
-  GList *new_list;
-  gint nchildren;
-
   g_return_if_fail (menu_shell != NULL);
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (child != NULL);
@@ -318,29 +314,7 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
 	gtk_widget_map (child);
     }
 
-  nchildren = g_list_length (menu_shell->children);
-  if ((position < 0) || (position > nchildren))
-    position = nchildren;
-
-  if (position == nchildren)
-    {
-      menu_shell->children = g_list_append (menu_shell->children, child);
-    }
-  else
-    {
-      tmp_list = g_list_nth (menu_shell->children, position);
-      new_list = g_list_alloc ();
-      new_list->data = child;
-
-      if (tmp_list->prev)
-	tmp_list->prev->next = new_list;
-      new_list->next = tmp_list;
-      new_list->prev = tmp_list->prev;
-      tmp_list->prev = new_list;
-
-      if (tmp_list == menu_shell->children)
-	menu_shell->children = new_list;
-    }
+  menu_shell->children = g_list_insert (menu_shell->children, child, position);
 
   if (GTK_WIDGET_VISIBLE (menu_shell))
     gtk_widget_queue_resize (GTK_WIDGET (menu_shell));

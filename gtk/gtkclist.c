@@ -2824,6 +2824,7 @@ real_remove_row (GtkCList *clist,
 
   /* get the row we're going to delete */
   list = g_list_nth (clist->row_list, row);
+  g_assert (list != NULL);
   clist_row = list->data;
 
   /* if we're removing a selected row, we have to make sure
@@ -2837,10 +2838,12 @@ real_remove_row (GtkCList *clist,
   /* reset the row end pointer if we're removing at the
    * end of the list */
   clist->rows--;
-  clist->row_list = g_list_remove (clist->row_list, clist_row);
+  if (clist->row_list == list)
+    clist->row_list = g_list_next (list);
+  if (clist->row_list_end == list)
+    clist->row_list_end = g_list_previous (list);
+  g_list_remove (list, clist_row);
 
-  if (row == clist->rows)
-    clist->row_list_end = list->prev;
   /*if (clist->focus_row >=0 &&
       (row <= clist->focus_row || clist->focus_row >= clist->rows))
       clist->focus_row--;*/

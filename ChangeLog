@@ -1,3 +1,17 @@
+Wed Jan 20 21:52:51 1999  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gtk/gtkclist.c (real_remove_row):
+	Don't search entire row list twice for element being removed.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_insert):
+	Replaced hand-coded implementation of g_list_insert with
+	call to g_list_insert.
+
+	* gtk/gtktooltips.c
+	  (gtk_tooltips_destroy_data, gtk_tooltips_layout_text):
+	tooltipsdata->row test not-null test now properly encompasses
+	both g_list_* calls.
+
 Thu Jan 21 02:47:36 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_focus): few cleanups.
