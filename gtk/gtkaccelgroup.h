@@ -64,7 +64,7 @@ typedef gboolean (*GtkAccelGroupActivate) (GtkAccelGroup  *accel_group,
 
 typedef gboolean (*GtkAccelGroupFindFunc) (GtkAccelKey    *key,
 					   GClosure       *closure,
-					   gpointer        data)
+					   gpointer        data);
 
 struct _GtkAccelGroup
 {
