@@ -315,16 +315,14 @@ gtk_action_init (GtkAction *action)
   action->private_data->short_label_set = FALSE;
 
   action->private_data->accel_count = 0;
+  action->private_data->accel_group = NULL;
+  action->private_data->accel_quark = 0;
   action->private_data->accel_closure = 
     g_closure_new_object (sizeof (GClosure), G_OBJECT (action));
   g_closure_set_marshal (action->private_data->accel_closure, 
 			 closure_accel_activate);
   g_closure_ref (action->private_data->accel_closure);
   g_closure_sink (action->private_data->accel_closure);
-
-  action->private_data->accel_quark = 0;
-  action->private_data->accel_count = 0;
-  action->private_data->accel_group = NULL;
 
   action->private_data->action_group = NULL;
 
@@ -1300,7 +1298,7 @@ closure_accel_activate (GClosure     *closure,
                         gpointer      marshal_data)
 {
   if (gtk_action_is_sensitive (GTK_ACTION (closure->data)))
-    g_signal_emit (closure->data, action_signals[ACTIVATE], 0);
+    _gtk_action_emit_activate (GTK_ACTION (closure->data));
 
   /* we handled the accelerator */
   g_value_set_boolean (return_value, TRUE);

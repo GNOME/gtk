@@ -584,7 +584,12 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
 			    action_group->private_data->name, "/", name, NULL);
 
   if (accelerator)
+    {
     gtk_accelerator_parse (accelerator, &accel_key, &accel_mods);
+      if (accel_key == 0)
+	g_warning ("Unable to parse accelerator '%s' for action '%s'",
+		   accelerator, name);
+    }
   else if (stock_id && gtk_stock_lookup (stock_id, &stock_item))
     {
       accel_key = stock_item.keyval;

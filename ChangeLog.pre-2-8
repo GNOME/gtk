@@ -1,5 +1,15 @@
 2004-04-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (closure_accel_activate): Use
+	_gtk_action_emit_activate() instead of directly
+	emitting the activate signal.  (#141429, Jody Goldberg)
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Warn people when the accelerator can not be 
+	parsed.  (#141429, Jody Goldberg)
+
+2004-04-29  Matthias Clasen  <mclasen@redhat.com>
+
 	* tests/testentrycompletion.c (main): Add a missing 
 	cat.  (#141070, Chris Sherlock)  
 
