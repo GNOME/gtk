@@ -1,3 +1,12 @@
+2000-11-09  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkentry.c (gtk_entry_class_init): Add an "invisible_char" 
+	argument to set the char displayed when visibility == FALSE
+	(gtk_entry_create_layout): If !entry->visible, replace 
+	all chars with the "invisible char"
+
+	* gtk/testgtk.c: Test the invisible_char deal
+	
 Mon Nov 13 02:16:33 2000  Robert Brady  <robert@suse.co.uk>
 
 	* gtk/gtkstyle.c (gtk_style_init): Fall back to "fixed" if we

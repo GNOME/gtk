@@ -70,7 +70,8 @@ enum {
   ARG_TEXT_POSITION,
   ARG_EDITABLE,
   ARG_MAX_LENGTH,
-  ARG_VISIBILITY
+  ARG_VISIBILITY,
+  ARG_INVISIBLE_CHAR
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -285,7 +286,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   gtk_object_add_arg_type ("GtkEntry::editable",      GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
   gtk_object_add_arg_type ("GtkEntry::max_length",    GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_MAX_LENGTH);
   gtk_object_add_arg_type ("GtkEntry::visibility",    GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBILITY);
-
+  gtk_object_add_arg_type ("GtkEntry::invisible_char", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_INVISIBLE_CHAR);
+  
   signals[INSERT_TEXT] =
     gtk_signal_new ("insert_text",
 		    GTK_RUN_LAST,
@@ -582,6 +584,9 @@ gtk_entry_set_arg (GtkObject      *object,
     case ARG_VISIBILITY:
       gtk_entry_set_visibility (entry, GTK_VALUE_BOOL (*arg));
       break;
+    case ARG_INVISIBLE_CHAR:
+      gtk_entry_set_invisible_char (entry, GTK_VALUE_INT (*arg));
+      break;
     default:
       break;
     }
@@ -610,6 +615,9 @@ gtk_entry_get_arg (GtkObject      *object,
     case ARG_VISIBILITY:
       GTK_VALUE_BOOL (*arg) = entry->visible;
       break;
+    case ARG_INVISIBLE_CHAR:
+      GTK_VALUE_INT (*arg) = entry->invisible_char;
+      break;
     default:
       arg->type = GTK_TYPE_INVALID;
       break;
@@ -627,7 +635,8 @@ gtk_entry_init (GtkEntry *entry)
 
   entry->editable = TRUE;
   entry->visible = TRUE;
-
+  entry->invisible_char = '*';
+  
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize().
    */
@@ -1571,7 +1580,7 @@ gtk_entry_preedit_changed_cb (GtkIMContext *context,
 				     &cursor_pos);
   entry->preedit_length = strlen (preedit_string);
   cursor_pos = CLAMP (cursor_pos, 0, g_utf8_strlen (preedit_string, -1));
-  entry->preedit_cursor = g_utf8_offset_to_pointer (preedit_string, cursor_pos) - preedit_string;
+  entry->preedit_cursor = cursor_pos;
   g_free (preedit_string);
 
   gtk_entry_recompute (entry);
@@ -1615,6 +1624,25 @@ gtk_entry_recompute (GtkEntry *entry)
     }
 }
 
+static void
+append_char (GString *str,
+             gunichar ch,
+             gint     count)
+{
+  gint i;
+  gint char_len;
+  gchar buf[7];
+  
+  char_len = g_unichar_to_utf8 (ch, buf);
+  
+  i = 0;
+  while (i < count)
+    {
+      g_string_append_len (str, buf, char_len);
+      ++i;
+    }
+}
+     
 static PangoLayout *
 gtk_entry_create_layout (GtkEntry *entry,
 			 gboolean  include_preedit)
@@ -1639,19 +1667,69 @@ gtk_entry_create_layout (GtkEntry *entry,
       
       gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
       
-      g_string_prepend_len (tmp_string, entry->text, entry->n_bytes);
-      g_string_insert (tmp_string, cursor_index, preedit_string);
+      if (entry->visible)
+        {
+          g_string_prepend_len (tmp_string, entry->text, entry->n_bytes);
+          g_string_insert (tmp_string, cursor_index, preedit_string);
+        }
+      else
+        {
+          gint ch_len;
+          gint preedit_len_chars;
+          gunichar invisible_char;
+          
+          ch_len = g_utf8_strlen (entry->text, entry->n_bytes);
+          preedit_len_chars = g_utf8_strlen (preedit_string, -1);
+          ch_len += preedit_len_chars;
+
+          if (entry->invisible_char != 0)
+            invisible_char = entry->invisible_char;
+          else
+            invisible_char = ' '; /* just pick a char */
+          
+          append_char (tmp_string, invisible_char, ch_len);
+          
+          /* Fix cursor index to point to invisible char corresponding
+           * to the preedit, fix preedit_length to be the length of
+           * the invisible chars representing the preedit
+           */
+          cursor_index =
+            g_utf8_offset_to_pointer (tmp_string->str, entry->current_pos) -
+            tmp_string->str;
+          preedit_length =
+            preedit_len_chars *
+            g_unichar_to_utf8 (invisible_char, NULL);
+        }
+      
       pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
       
       pango_attr_list_splice (tmp_attrs, preedit_attrs,
-			      cursor_index, entry->preedit_length);
+			      cursor_index, preedit_length);
       
       g_string_free (tmp_string, TRUE);
-
     }
   else
-    pango_layout_set_text (layout, entry->text, entry->n_bytes);
-
+    {
+      if (entry->visible)
+        {
+          pango_layout_set_text (layout, entry->text, entry->n_bytes);
+        }
+      else
+        {
+          GString *str = g_string_new (NULL);
+          gunichar invisible_char;
+          
+          if (entry->invisible_char != 0)
+            invisible_char = entry->invisible_char;
+          else
+            invisible_char = ' '; /* just pick a char */
+          
+          append_char (str, invisible_char, entry->text_length);
+          pango_layout_set_text (layout, str->str, str->len);
+          g_string_free (str, TRUE);
+        }
+    }
+      
   pango_layout_set_attributes (layout, tmp_attrs);
 
   if (preedit_string)
@@ -1691,6 +1769,9 @@ gtk_entry_draw_text (GtkEntry *entry)
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
+  if (!entry->visible && entry->invisible_char == 0)
+    return;
+  
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
@@ -1775,6 +1856,9 @@ gtk_entry_draw_cursor (GtkEntry *entry)
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
+  if (!entry->visible && entry->invisible_char == 0)
+    return;
+  
   if (GTK_WIDGET_DRAWABLE (entry))
     {
       GtkWidget *widget = GTK_WIDGET (entry);
@@ -1870,11 +1954,17 @@ gtk_entry_get_cursor_locations (GtkEntry *entry,
 				gint     *weak_x)
 {
   PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
-  gint index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
-
+  const gchar *text;
   PangoRectangle strong_pos, weak_pos;
+  gint index;
+  
+  text = pango_layout_get_text (layout);
 
-  index += entry->preedit_cursor;
+  index =
+    g_utf8_offset_to_pointer (text,
+                              entry->current_pos +
+                              entry->preedit_cursor) - text;
+  
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
   g_object_unref (G_OBJECT (layout));
 
@@ -1978,8 +2068,11 @@ gtk_entry_move_visually (GtkEntry *entry,
 {
   gint index;
   PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+  const gchar *text;
 
-  index = g_utf8_offset_to_pointer (entry->text, start) - entry->text;
+  text = pango_layout_get_text (layout);
+  
+  index = g_utf8_offset_to_pointer (text, start) - text;
 
   while (count != 0)
     {
@@ -2007,7 +2100,7 @@ gtk_entry_move_visually (GtkEntry *entry,
 
   g_object_unref (G_OBJECT (layout));
   
-  return g_utf8_pointer_to_offset (entry->text, entry->text + index);
+  return g_utf8_pointer_to_offset (text, text + index);
 }
 
 static gint
@@ -2321,6 +2414,20 @@ gtk_entry_set_visibility (GtkEntry *entry,
   entry->visible = visible ? TRUE : FALSE;
 
   gtk_entry_recompute (entry);
+}
+
+void
+gtk_entry_set_invisible_char (GtkEntry *entry,
+                              gunichar  ch)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+
+  if (ch == entry->invisible_char)
+    return;
+
+  entry->invisible_char = ch;
+
+  gtk_entry_recompute (entry);  
 }
 
 void

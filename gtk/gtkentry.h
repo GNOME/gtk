@@ -86,7 +86,9 @@ struct _GtkEntry
   guint16 n_bytes;	/* length in use, in bytes */
 
   guint16 preedit_length;	/* length of preedit string, in bytes */
-  guint16 preedit_cursor;	/* offset of cursor within preedit string, in bytes */
+  guint16 preedit_cursor;	/* offset of cursor within preedit string, in chars */
+  
+  gunichar invisible_char;
 };
 
 struct _GtkEntryClass
@@ -126,6 +128,8 @@ GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;
 GtkWidget* gtk_entry_new            		(void);
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
+void       gtk_entry_set_invisible_char         (GtkEntry      *entry,
+                                                 gunichar       ch);
 void       gtk_entry_set_editable   		(GtkEntry      *entry,
 						 gboolean       editable);
 /* text is truncated if needed */

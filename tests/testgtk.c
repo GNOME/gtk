@@ -3282,7 +3282,17 @@ entry_toggle_visibility (GtkWidget *checkbutton,
 			GtkWidget *entry)
 {
    gtk_entry_set_visibility(GTK_ENTRY(entry),
-			 GTK_TOGGLE_BUTTON(checkbutton)->active);
+                            GTK_TOGGLE_BUTTON(checkbutton)->active);
+}
+
+static void
+entry_toggle_invisible_char (GtkWidget *checkbutton,
+                             GtkWidget *entry)
+{
+  if (GTK_TOGGLE_BUTTON (checkbutton)->active)
+    gtk_entry_set_invisible_char (GTK_ENTRY (entry), 0);
+  else
+    gtk_entry_set_invisible_char (GTK_ENTRY (entry), '*');
 }
 
 static void
@@ -3293,6 +3303,7 @@ create_entry (void)
   GtkWidget *box2;
   GtkWidget *editable_check;
   GtkWidget *sensitive_check;
+  GtkWidget *invisible_char_check;
   GtkWidget *entry, *cb;
   GtkWidget *button;
   GtkWidget *separator;
@@ -3366,6 +3377,12 @@ create_entry (void)
       gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(sensitive_check), TRUE);
       gtk_widget_show (sensitive_check);
 
+      invisible_char_check = gtk_check_button_new_with_label("invisible_char = 0");
+      gtk_box_pack_start (GTK_BOX (box2), invisible_char_check, FALSE, TRUE, 0);
+      gtk_signal_connect (GTK_OBJECT(invisible_char_check), "toggled",
+			  GTK_SIGNAL_FUNC(entry_toggle_invisible_char), entry);
+      gtk_widget_show (invisible_char_check);
+      
       separator = gtk_hseparator_new ();
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
