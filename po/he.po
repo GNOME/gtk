@@ -1,50 +1,54 @@
+# translation of gtk+.gtk-2-0.he.po to Hebrew
+# translation of gtk+.gtk-2-0.he.po to Hebrew
+# translation of gtk+.gtk-2-0.he.po to Hebrew
 # Hebrew Translation for GTK+ - תרגום עברי ל-
-# Copyright (C) 2000 Free Software Foundation, Inc.
+# Copyright (C) 2000,2002 Free Software Foundation, Inc.
 # Tzafrir Cohen <tzafrir@technion.ac.il>, 2000.
+# Gil Osher <dolfin@rpg.org.il>, 2002
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2000-07-26 HO:MI+ZONE\n"
-"Last-Translator: Tzafrir Cohen <tzafrir@technion.ac.il>\n"
+"Project-Id-Version: gtk+.gtk-2-0.he\n"
+"POT-Creation-Date: 2002-09-17 05:07+0200\n"
+"PO-Revision-Date: 2002-09-17 15:24+0300\n"
+"Last-Translator: Gil Osher <dolfin@rpg.org.il>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.0beta2\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:144 gdk-pixbuf/gdk-pixbuf-io.c:585
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr ""
+msgstr "נכשל בפתיחת הקובץ '%s': %s"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr ""
+msgstr "קובץ התמונה '%s' לא מכיל מידע"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr ""
+msgstr "לא יודע כיצד לטעון את קובץ ההנפשה '%s'"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "נכשל בפתיחת התמונה '%s': סיבה לא ידועה, כנראה קובץ תמונה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
 #, c-format
 msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
-msgstr ""
+msgstr "נכשל בפתיחת ההנפשה '%s': סיבה לא ידועה, כנראה קובץ הנפשה פגום"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:358
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to load image-loading module: %s: %s"
-msgstr "לא מצליח לאתר את המודול הנטען ב-module_path: \"%s\","
+msgstr "לא ניתן לטעון את מודול טעינת התמונה: %s: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
@@ -56,7 +60,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "סוג התמונה '%s' אינו נתמך"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
@@ -263,8 +267,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:736
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:55
@@ -313,8 +316,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:765
-msgid ""
-"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:773
@@ -621,7 +623,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:116
 msgid "Shift"
-msgstr ""
+msgstr "Shift"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the control key. If the text on this key isn't typically
@@ -630,7 +632,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:122
 msgid "Ctrl"
-msgstr ""
+msgstr "Ctrl"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the alt key. If the text on this key isn't typically
@@ -639,7 +641,7 @@ msgstr ""
 #.
 #: gtk/gtkaccellabel.c:128
 msgid "Alt"
-msgstr ""
+msgstr "Alt"
 
 #: gtk/gtkaccellabel.c:136
 msgid "Accelerator Closure"
@@ -678,9 +680,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkalignment.c:121
-#, fuzzy
 msgid "Horizontal scale"
-msgstr "משפחה:"
+msgstr ""
 
 #: gtk/gtkalignment.c:122
 msgid ""
@@ -699,9 +700,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkarrow.c:98
-#, fuzzy
 msgid "Arrow direction"
-msgstr "יצירת תיקיב"
+msgstr "כיוון החץ"
 
 #: gtk/gtkarrow.c:99
 msgid "The direction the arrow should point"
@@ -709,7 +709,7 @@ msgstr ""
 
 #: gtk/gtkarrow.c:106
 msgid "Arrow shadow"
-msgstr ""
+msgstr "צללית לחץ"
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
@@ -733,7 +733,7 @@ msgstr ""
 
 #: gtk/gtkaspectframe.c:121
 msgid "Ratio"
-msgstr ""
+msgstr "יחס"
 
 #: gtk/gtkaspectframe.c:122
 msgid "Aspect ratio if obey_child is FALSE"
@@ -791,7 +791,7 @@ msgstr ""
 
 #: gtk/gtkbbox.c:160
 msgid "Secondary"
-msgstr ""
+msgstr "שני"
 
 #: gtk/gtkbbox.c:161
 msgid ""
@@ -801,7 +801,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:125
 msgid "Spacing"
-msgstr ""
+msgstr "מרווח"
 
 #: gtk/gtkbox.c:126
 msgid "The amount of space between children."
@@ -817,7 +817,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:189 gtk/gtkframe.c:125 gtk/gtklabel.c:280
 msgid "Label"
-msgstr ""
+msgstr "תוית"
 
 #: gtk/gtkbutton.c:190
 msgid ""
@@ -827,7 +827,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:197 gtk/gtklabel.c:301
 msgid "Use underline"
-msgstr ""
+msgstr "השתמש בקו תחתי"
 
 #: gtk/gtkbutton.c:198 gtk/gtklabel.c:302
 msgid ""
@@ -840,8 +840,7 @@ msgid "Use stock"
 msgstr ""
 
 #: gtk/gtkbutton.c:206
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
 #: gtk/gtkbutton.c:213
@@ -875,8 +874,7 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:279
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
+msgid "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:286
@@ -884,14 +882,12 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:287
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
+msgid "How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:103
-#, fuzzy
 msgid "mode"
-msgstr "מצב:"
+msgstr "מצב"
 
 #: gtk/gtkcellrenderer.c:104
 msgid "Editable mode of the CellRenderer"
@@ -899,7 +895,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:113
 msgid "visible"
-msgstr ""
+msgstr "נראה"
 
 #: gtk/gtkcellrenderer.c:114
 msgid "Display the cell"
@@ -995,7 +991,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
-msgstr ""
+msgstr "מלל"
 
 #: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
@@ -1011,7 +1007,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
-msgstr ""
+msgstr "מאפיינים"
 
 #: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
@@ -1052,7 +1048,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:230 gtk/gtkentry.c:455 gtk/gtktexttag.c:277
 #: gtk/gtktextview.c:568
 msgid "Editable"
-msgstr ""
+msgstr "ניתן לעריכה"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
@@ -1061,7 +1057,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
-msgstr ""
+msgstr "גופן"
 
 #: gtk/gtkcellrenderertext.c:239 gtk/gtktexttag.c:286
 msgid "Font description as a string"
@@ -1072,9 +1068,8 @@ msgid "Font description as a PangoFontDescription struct"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
-#, fuzzy
 msgid "Font family"
-msgstr "משפחה:"
+msgstr "משפחת הגופן"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -1083,7 +1078,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr ""
+msgstr "סגנון הגופן"
 
 #: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
@@ -1103,7 +1098,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
-msgstr ""
+msgstr "גודל הגופן"
 
 #: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
 msgid "Font points"
@@ -1114,9 +1109,8 @@ msgid "Font size in points"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
-#, fuzzy
 msgid "Font scale"
-msgstr "משפחה:"
+msgstr ""
 
 #: gtk/gtkcellrenderertext.c:321
 msgid "Font scaling factor"
@@ -1127,8 +1121,7 @@ msgid "Rise"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
@@ -1141,7 +1134,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:349 gtk/gtktexttag.c:475
 msgid "Underline"
-msgstr ""
+msgstr "קו תחתי"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:476
 msgid "Style of underline for this text"
@@ -1293,7 +1286,7 @@ msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
-msgstr ""
+msgstr "פעיל"
 
 #: gtk/gtkcheckmenuitem.c:116
 msgid "Whether the menu item is checked."
@@ -1322,7 +1315,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr ""
+msgstr "_שמור צבע כאן"
 
 #: gtk/gtkcolorsel.c:1079
 msgid ""
@@ -1348,11 +1341,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
-msgstr ""
+msgstr "צבע נוכחי"
 
 #: gtk/gtkcolorsel.c:1719
 msgid "The current color"
-msgstr ""
+msgstr "הצבע הנוכחי"
 
 #: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
@@ -1383,9 +1376,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1821
-#, fuzzy
 msgid "_Hue:"
-msgstr "כחול:"
+msgstr ""
 
 #: gtk/gtkcolorsel.c:1822
 msgid "Position on the color wheel."
@@ -1400,44 +1392,40 @@ msgid "\"Deepness\" of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1825
-#, fuzzy
 msgid "_Value:"
-msgstr "ערך:"
+msgstr "_ערך:"
 
 #: gtk/gtkcolorsel.c:1826
 msgid "Brightness of the color."
 msgstr ""
 
 #: gtk/gtkcolorsel.c:1827
-#, fuzzy
 msgid "_Red:"
-msgstr "אדום:"
+msgstr "_אדום:"
 
 #: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "כמות האור האדום בצבע."
 
 #: gtk/gtkcolorsel.c:1829
-#, fuzzy
 msgid "_Green:"
-msgstr "אדום:"
+msgstr "_ירוק:"
 
 #: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "כמות האור הירוק בצבע."
 
 #: gtk/gtkcolorsel.c:1831
-#, fuzzy
 msgid "_Blue:"
-msgstr "כחול:"
+msgstr "_כחול:"
 
 #: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "כמות האור הכחול בצבע."
 
 #: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
-msgstr ""
+msgstr "_שקיפות:"
 
 #: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
@@ -1445,7 +1433,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
-msgstr ""
+msgstr "_שם הצבע:"
 
 #: gtk/gtkcolorsel.c:1870
 msgid ""
@@ -1470,13 +1458,12 @@ msgid "Always enable arrows"
 msgstr ""
 
 #: gtk/gtkcombo.c:147
-msgid ""
-"Whether the arrow keys work, even if the entry contents are not in the list"
+msgid "Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
 
 #: gtk/gtkcombo.c:153
 msgid "Case sensitive"
-msgstr ""
+msgstr "תלוי רשיות"
 
 #: gtk/gtkcombo.c:154
 msgid "Whether list item matching is case sensitive"
@@ -1484,7 +1471,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:161
 msgid "Allow empty"
-msgstr ""
+msgstr "הרשה ריק"
 
 #: gtk/gtkcombo.c:162
 msgid "Whether an empty value may be entered in this field"
@@ -1492,7 +1479,7 @@ msgstr ""
 
 #: gtk/gtkcombo.c:169
 msgid "Value in list"
-msgstr ""
+msgstr "ערך ברשימה"
 
 #: gtk/gtkcombo.c:170
 msgid "Whether entered values must already be present in the list"
@@ -1508,7 +1495,7 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:208
 msgid "Border width"
-msgstr ""
+msgstr "עובי מסגרת"
 
 #: gtk/gtkcontainer.c:209
 msgid "The width of the empty border outside the containers children."
@@ -1516,16 +1503,15 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:217
 msgid "Child"
-msgstr ""
+msgstr "ילד"
 
 #: gtk/gtkcontainer.c:218
 msgid "Can be used to add a new child to the container."
 msgstr ""
 
 #: gtk/gtkcurve.c:121
-#, fuzzy
 msgid "Curve type"
-msgstr "יצירה"
+msgstr ""
 
 #: gtk/gtkcurve.c:122
 msgid "Is this curve linear, spline interpolated, or free-form"
@@ -1565,7 +1551,7 @@ msgstr ""
 
 #: gtk/gtkdialog.c:128
 msgid "Has separator"
-msgstr ""
+msgstr "יש מפריד"
 
 #: gtk/gtkdialog.c:129
 msgid "The dialog has a separator bar above its buttons"
@@ -1604,13 +1590,11 @@ msgid "The current position of the insertion cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:445 gtk/gtklabel.c:368
-#, fuzzy
 msgid "Selection Bound"
-msgstr "בחירה:"
+msgstr ""
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars."
+msgid "The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:456
@@ -1619,7 +1603,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:463
 msgid "Maximum length"
-msgstr ""
+msgstr "אורך מקסימלי"
 
 #: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry. Zero if no maximum."
@@ -1637,7 +1621,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:480
 msgid "Has Frame"
-msgstr ""
+msgstr "יש מסגרת"
 
 #: gtk/gtkentry.c:481
 msgid "FALSE removes outside bevel from entry."
@@ -1682,86 +1666,79 @@ msgid "The contents of the entry"
 msgstr ""
 
 #: gtk/gtkentry.c:739
-#, fuzzy
 msgid "Select on focus"
-msgstr "בחירה:"
+msgstr ""
 
 #: gtk/gtkentry.c:740
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr ""
 
-#: gtk/gtkentry.c:3870 gtk/gtklabel.c:3177
-#, fuzzy
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
 msgid "Select All"
-msgstr "מחיקה"
+msgstr "בחר הכל"
 
-#: gtk/gtkentry.c:3880 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
 msgid "Input Methods"
-msgstr ""
+msgstr "צורות קלט"
 
-#: gtk/gtkentry.c:3890 gtk/gtktextview.c:6395
+#: gtk/gtkentry.c:3897 gtk/gtktextview.c:6426
 msgid "_Insert Unicode control character"
-msgstr ""
+msgstr "_הכנס תו בקרה של Unicode"
 
-#: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
-#, fuzzy
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
 msgid "Filename"
-msgstr "שינוי שם"
+msgstr "שם קובץ"
 
-#: gtk/gtkfilesel.c:537
+#: gtk/gtkfilesel.c:514
 msgid "The currently selected filename."
-msgstr ""
+msgstr "שם הקובץ הנבחר הנוכחי."
 
-#: gtk/gtkfilesel.c:543
+#: gtk/gtkfilesel.c:520
 msgid "Show file operations"
-msgstr ""
+msgstr "הצג פעולות קבצים"
 
-#: gtk/gtkfilesel.c:544
+#: gtk/gtkfilesel.c:521
 msgid "Whether buttons for creating/manipulating files should be displayed."
 msgstr ""
 
-#: gtk/gtkfilesel.c:551
-#, fuzzy
+#: gtk/gtkfilesel.c:528
 msgid "Select multiple"
-msgstr "מחיקה"
+msgstr ""
 
-#: gtk/gtkfilesel.c:552
+#: gtk/gtkfilesel.c:529
 msgid "Whether to allow multiple files to be selected."
 msgstr ""
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilesel.c:707
-#, fuzzy
+#: gtk/gtkfilesel.c:684
 msgid "Folders"
-msgstr "קבצים"
+msgstr "תיקיות"
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilesel.c:711
-#, fuzzy
+#: gtk/gtkfilesel.c:688
 msgid "Fol_ders"
-msgstr "קבצים"
+msgstr "_תיקיות"
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilesel.c:742
+#: gtk/gtkfilesel.c:719
 msgid "Files"
 msgstr "קבצים"
 
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
-#: gtk/gtkfilesel.c:746
-#, fuzzy
+#: gtk/gtkfilesel.c:723
 msgid "_Files"
-msgstr "קבצים"
+msgstr "_קבצים"
 
-#: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2152
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:799 gtk/gtkfilesel.c:2138
+#, c-format
 msgid "Folder unreadable: %s"
-msgstr "תיקיה לא קריאה: %s"
+msgstr "תיקייה לא קריאה: %s"
 
-#: gtk/gtkfilesel.c:953
+#: gtk/gtkfilesel.c:930
 #, c-format
 msgid ""
 "The file \"%s\" resides on another machine (called %s) and may not be "
@@ -1769,148 +1746,144 @@ msgid ""
 "Are you sure that you want to select it?"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1086
+#: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
-msgstr ""
+msgstr "_תיקייה חדשה"
 
-#: gtk/gtkfilesel.c:1097
-#, fuzzy
+#: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
-msgstr "מחיקת קובץ"
+msgstr "_מחק קובץ"
 
-#: gtk/gtkfilesel.c:1108
-#, fuzzy
+#: gtk/gtkfilesel.c:1085
 msgid "_Rename File"
-msgstr "שינוי שם קובץ"
+msgstr "_שנה שם קובץ"
 
-#: gtk/gtkfilesel.c:1386
+#: gtk/gtkfilesel.c:1363
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1388
+#: gtk/gtkfilesel.c:1365
 #, c-format
 msgid ""
 "Error creating folder \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1389 gtk/gtkfilesel.c:1625
+#: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1397
+#: gtk/gtkfilesel.c:1374
 #, c-format
 msgid "Error creating folder \"%s\": %s\n"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1431
+#: gtk/gtkfilesel.c:1408
 msgid "New Folder"
-msgstr ""
+msgstr "תיקייה חדשה"
 
-#: gtk/gtkfilesel.c:1446
-#, fuzzy
+#: gtk/gtkfilesel.c:1423
 msgid "_Folder name:"
-msgstr "שינוי שם"
+msgstr "שם _תיקייה:"
 
-#: gtk/gtkfilesel.c:1472
+#: gtk/gtkfilesel.c:1449
 msgid "Create"
-msgstr "יצירה"
+msgstr "צור"
 
-#: gtk/gtkfilesel.c:1513
+#: gtk/gtkfilesel.c:1490
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1516
+#: gtk/gtkfilesel.c:1493
 #, c-format
 msgid ""
 "Error deleting file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1518 gtk/gtkfilesel.c:1639
+#: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
 
-#: gtk/gtkfilesel.c:1527
+#: gtk/gtkfilesel.c:1504
 #, c-format
 msgid "Error deleting file \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1570
+#: gtk/gtkfilesel.c:1547
 #, c-format
 msgid "Really delete file \"%s\" ?"
-msgstr ""
+msgstr "באמת למחוק את הקובץ \"%s\" ?"
 
-#: gtk/gtkfilesel.c:1575
+#: gtk/gtkfilesel.c:1552
 msgid "Delete File"
-msgstr "מחיקת קובץ"
+msgstr "_מחק קובץ"
 
-#: gtk/gtkfilesel.c:1621 gtk/gtkfilesel.c:1635
+#: gtk/gtkfilesel.c:1598 gtk/gtkfilesel.c:1612
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1623
+#: gtk/gtkfilesel.c:1600
 #, c-format
 msgid ""
 "Error renaming file to \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1637
+#: gtk/gtkfilesel.c:1614
 #, c-format
 msgid ""
 "Error renaming file \"%s\": %s\n"
 "%s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1647
+#: gtk/gtkfilesel.c:1624
 #, c-format
 msgid "Error renaming file \"%s\" to \"%s\": %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:1694
+#: gtk/gtkfilesel.c:1671
 msgid "Rename File"
 msgstr "שינוי שם קובץ"
 
-#: gtk/gtkfilesel.c:1709
-#, fuzzy, c-format
+#: gtk/gtkfilesel.c:1686
+#, c-format
 msgid "Rename file \"%s\" to:"
-msgstr "שינוי שם קובץ"
+msgstr "שינוי שם הקובץ \"%s\" ל:"
 
-#: gtk/gtkfilesel.c:1740
+#: gtk/gtkfilesel.c:1717
 msgid "Rename"
 msgstr "שינוי שם"
 
-#: gtk/gtkfilesel.c:2131
+#: gtk/gtkfilesel.c:2117
 msgid "Selection: "
 msgstr "בחירה:"
 
-#: gtk/gtkfilesel.c:3011
+#: gtk/gtkfilesel.c:2997
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3014
+#: gtk/gtkfilesel.c:3000
 msgid "Invalid Utf-8"
-msgstr ""
+msgstr "Utf-8 לא תקין"
 
-#: gtk/gtkfilesel.c:3880
+#: gtk/gtkfilesel.c:3866
 msgid "Name too long"
-msgstr ""
+msgstr "שם ארוך מידי"
 
-#: gtk/gtkfilesel.c:3882
+#: gtk/gtkfilesel.c:3868
 msgid "Couldn't convert filename"
 msgstr ""
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
-msgstr ""
+msgstr "מיקום X"
 
 #: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
@@ -1918,7 +1891,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
-msgstr ""
+msgstr "מיקום Y"
 
 #: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
@@ -1931,9 +1904,8 @@ msgid "abcdefghijk ABCDEFGHIJK"
 msgstr ""
 
 #: gtk/gtkfontsel.c:205
-#, fuzzy
 msgid "Font name"
-msgstr "משפחה:"
+msgstr "שם גופן"
 
 #: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
@@ -1944,34 +1916,29 @@ msgid "The GdkFont that is currently selected."
 msgstr ""
 
 #: gtk/gtkfontsel.c:219
-#, fuzzy
 msgid "Preview text"
-msgstr "מבט מקדים"
+msgstr "תצוגה מקדימה של מלל"
 
 #: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
 msgstr ""
 
 #: gtk/gtkfontsel.c:327
-#, fuzzy
 msgid "_Family:"
-msgstr "משפחה:"
+msgstr "_משפחה:"
 
 #: gtk/gtkfontsel.c:333
-#, fuzzy
 msgid "_Style:"
-msgstr "סגנון:"
+msgstr "_סגנון:"
 
 #: gtk/gtkfontsel.c:339
-#, fuzzy
 msgid "Si_ze:"
-msgstr "גודל:"
+msgstr "_גודל:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:468
-#, fuzzy
 msgid "_Preview:"
-msgstr "מבט מקדים"
+msgstr "_תצוגה מקדימה:"
 
 #: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
@@ -2022,14 +1989,13 @@ msgid "Gamma"
 msgstr "גאמה"
 
 #: gtk/gtkgamma.c:406
-#, fuzzy
 msgid "_Gamma value"
-msgstr "ערכי גאמה"
+msgstr "ערך _גאמה"
 
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
-msgstr ""
+msgstr "סוג צללית"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
@@ -2059,7 +2025,7 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
-msgstr ""
+msgstr "שגיאה בטעינת סמל: %s"
 
 #: gtk/gtkimage.c:129
 msgid "Pixbuf"
@@ -2078,9 +2044,8 @@ msgid "A GdkPixmap to display."
 msgstr ""
 
 #: gtk/gtkimage.c:145
-#, fuzzy
 msgid "Image"
-msgstr "דף %u"
+msgstr "תמונה"
 
 #: gtk/gtkimage.c:146
 msgid "A GdkImage to display."
@@ -2088,7 +2053,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:153
 msgid "Mask"
-msgstr ""
+msgstr "מסכה"
 
 #: gtk/gtkimage.c:154
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
@@ -2116,7 +2081,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:186
 msgid "Icon size"
-msgstr ""
+msgstr "גודל סמל"
 
 #: gtk/gtkimage.c:187
 msgid "Size to use for stock icon or icon set."
@@ -2124,16 +2089,15 @@ msgstr ""
 
 #: gtk/gtkimage.c:195
 msgid "Animation"
-msgstr ""
+msgstr "הנפשה"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
 msgstr ""
 
 #: gtk/gtkimage.c:203
-#, fuzzy
 msgid "Storage type"
-msgstr "יצירה"
+msgstr "סוג אחסון"
 
 #: gtk/gtkimage.c:204
 msgid "The representation being used for image data."
@@ -2157,13 +2121,12 @@ msgid "No input devices"
 msgstr "אין התקני קלט"
 
 #: gtk/gtkinputdialog.c:221
-#, fuzzy
 msgid "_Device:"
-msgstr "התקן:"
+msgstr "_התקן:"
 
 #: gtk/gtkinputdialog.c:238
 msgid "Disabled"
-msgstr ""
+msgstr "כבוי"
 
 #: gtk/gtkinputdialog.c:246
 msgid "Screen"
@@ -2174,29 +2137,26 @@ msgid "Window"
 msgstr "חלון"
 
 #: gtk/gtkinputdialog.c:262
-#, fuzzy
 msgid "_Mode: "
-msgstr "מצב:"
+msgstr "_מצב:"
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:293
-#, fuzzy
 msgid "_Axes"
-msgstr "צירים"
+msgstr "_צירים"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
-#, fuzzy
 msgid "_Keys"
-msgstr "מקשים"
+msgstr "_מקשים"
 
 #: gtk/gtkinputdialog.c:474
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:475
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:476
 msgid "Pressure"
@@ -2216,11 +2176,11 @@ msgstr "גלגל"
 
 #: gtk/gtkinputdialog.c:519
 msgid "none"
-msgstr ""
+msgstr "ללא"
 
 #: gtk/gtkinputdialog.c:553 gtk/gtkinputdialog.c:589
 msgid "(disabled)"
-msgstr ""
+msgstr "(כבוי)"
 
 #: gtk/gtkinputdialog.c:582
 msgid "(unknown)"
@@ -2229,7 +2189,7 @@ msgstr "(לא ידוע)"
 #. and clear button
 #: gtk/gtkinputdialog.c:667
 msgid "clear"
-msgstr ""
+msgstr "נקה"
 
 #: gtk/gtklabel.c:281
 msgid "The text of the label."
@@ -2249,7 +2209,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:309 gtk/gtktexttag.c:378 gtk/gtktextview.c:585
 msgid "Justification"
-msgstr ""
+msgstr "יישור"
 
 #: gtk/gtklabel.c:310
 msgid ""
@@ -2260,7 +2220,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:318
 msgid "Pattern"
-msgstr ""
+msgstr "דוגמה"
 
 #: gtk/gtklabel.c:319
 msgid ""
@@ -2277,9 +2237,8 @@ msgid "If set, wrap lines if the text becomes too wide."
 msgstr ""
 
 #: gtk/gtklabel.c:333
-#, fuzzy
 msgid "Selectable"
-msgstr "מחיקה"
+msgstr ""
 
 #: gtk/gtklabel.c:334
 msgid "Whether the label text can be selected with the mouse."
@@ -2319,7 +2278,7 @@ msgstr ""
 
 #: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:192
 msgid "Width"
-msgstr ""
+msgstr "עובי"
 
 #: gtk/gtklayout.c:640
 msgid "The width of the layout."
@@ -2327,7 +2286,7 @@ msgstr ""
 
 #: gtk/gtklayout.c:648
 msgid "Height"
-msgstr ""
+msgstr "גובה"
 
 #: gtk/gtklayout.c:649
 msgid "The height of the layout."
@@ -2384,7 +2343,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:113
 msgid "Message Type"
-msgstr ""
+msgstr "סוג הודעה"
 
 #: gtk/gtkmessagedialog.c:114
 msgid "The type of message"
@@ -2392,7 +2351,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:121
 msgid "Message Buttons"
-msgstr ""
+msgstr "כפתורי הודעה"
 
 #: gtk/gtkmessagedialog.c:122
 msgid "The buttons shown in the message dialog"
@@ -2419,8 +2378,7 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:118
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:127
@@ -2428,14 +2386,12 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:362
-#, fuzzy
 msgid "Page"
-msgstr "דף %u"
+msgstr "עמוד"
 
 #: gtk/gtknotebook.c:363
 msgid "The index of the current page"
@@ -2514,11 +2470,11 @@ msgstr ""
 #: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
 #, c-format
 msgid "Page %u"
-msgstr "דף %u"
+msgstr "עמוד %u"
 
 #: gtk/gtkoptionmenu.c:188
 msgid "Menu"
-msgstr ""
+msgstr "תפריט"
 
 #: gtk/gtkoptionmenu.c:189
 msgid "The menu of options"
@@ -2534,11 +2490,10 @@ msgstr ""
 
 #: gtk/gtkpaned.c:208 gtk/gtkruler.c:138
 msgid "Position"
-msgstr ""
+msgstr "מיקום"
 
 #: gtk/gtkpaned.c:209
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:217
@@ -2559,11 +2514,10 @@ msgstr ""
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
-msgstr ""
+msgstr "הרחב"
 
 #: gtk/gtkpreview.c:130
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
+msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:122
@@ -2580,7 +2534,7 @@ msgstr ""
 
 #: gtk/gtkprogress.c:130
 msgid "Show text"
-msgstr ""
+msgstr "הצג מלל"
 
 #: gtk/gtkprogress.c:131
 msgid "Whether the progress is shown as text"
@@ -2731,23 +2685,19 @@ msgid "Spacing between step buttons and thumb"
 msgstr ""
 
 #: gtk/gtkrange.c:329
-#, fuzzy
 msgid "Arrow X Displacement"
-msgstr "חלון"
+msgstr ""
 
 #: gtk/gtkrange.c:330
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
+msgid "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:337
-#, fuzzy
 msgid "Arrow Y Displacement"
-msgstr "חלון"
+msgstr ""
 
 #: gtk/gtkrange.c:338
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
+msgid "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2282
@@ -2767,7 +2717,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr ""
+msgstr "תחתון"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -2775,7 +2725,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr ""
+msgstr "עליון"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
@@ -2787,7 +2737,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:148
 msgid "Max Size"
-msgstr ""
+msgstr "גודל מקסימלי"
 
 #: gtk/gtkruler.c:149
 msgid "Maximum size of the ruler"
@@ -2795,7 +2745,7 @@ msgstr ""
 
 #: gtk/gtkscale.c:155 gtk/gtkspinbutton.c:255
 msgid "Digits"
-msgstr ""
+msgstr "ספרות"
 
 #: gtk/gtkscale.c:156
 msgid "The number of decimal places that are displayed in the value"
@@ -2870,8 +2820,7 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:110
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:117
@@ -2879,8 +2828,7 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:118
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
@@ -2892,9 +2840,8 @@ msgid "Vertical Adjustment"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:250
-#, fuzzy
 msgid "Horizontal Scrollbar Policy"
-msgstr "משפחה:"
+msgstr ""
 
 #: gtk/gtkscrolledwindow.c:251
 msgid "When the horizontal scrollbar is displayed"
@@ -2909,18 +2856,16 @@ msgid "When the vertical scrollbar is displayed"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:267
-#, fuzzy
 msgid "Window Placement"
-msgstr "חלון"
+msgstr "מיקום חלון"
 
 #: gtk/gtkscrolledwindow.c:268
 msgid "Where the contents are located with respect to the scrollbars"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:275
-#, fuzzy
 msgid "Shadow Type"
-msgstr "חלון"
+msgstr "סוג צללית"
 
 #: gtk/gtkscrolledwindow.c:276
 msgid "Style of bevel around the contents"
@@ -2938,7 +2883,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:156
 msgid "Cursor Blink"
-msgstr ""
+msgstr "הבהוב סמן"
 
 #: gtk/gtksettings.c:157
 msgid "Whether the cursor should blink"
@@ -2964,7 +2909,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:180
 msgid "Theme Name"
-msgstr ""
+msgstr "שם ערכת נושא"
 
 #: gtk/gtksettings.c:181
 msgid "Name of theme RC file to load"
@@ -2995,18 +2940,16 @@ msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 
 #: gtk/gtksettings.c:215
-#, fuzzy
 msgid "Font Name"
-msgstr "משפחה:"
+msgstr "שם גופן"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr ""
 
 #: gtk/gtksizegroup.c:242
-#, fuzzy
 msgid "Mode"
-msgstr "מצב:"
+msgstr "מצב"
 
 #: gtk/gtksizegroup.c:243
 msgid ""
@@ -3042,7 +2985,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:273
 msgid "Numeric"
-msgstr ""
+msgstr "מספרי"
 
 #: gtk/gtkspinbutton.c:274
 msgid "Whether non-numeric characters should be ignored"
@@ -3058,17 +3001,15 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:289
 msgid "Update Policy"
-msgstr ""
+msgstr "מדיניות עדכון"
 
 #: gtk/gtkspinbutton.c:290
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
+msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
-#, fuzzy
 msgid "Value"
-msgstr "ערך:"
+msgstr "ערך"
 
 #: gtk/gtkspinbutton.c:299
 msgid "Reads the current value, or sets a new value"
@@ -3081,11 +3022,11 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:267
 msgid "Information"
-msgstr ""
+msgstr "מידע"
 
 #: gtk/gtkstock.c:268
 msgid "Warning"
-msgstr ""
+msgstr "אזהרה"
 
 #: gtk/gtkstock.c:269
 msgid "Error"
@@ -3093,287 +3034,268 @@ msgstr "שגיאה"
 
 #: gtk/gtkstock.c:270
 msgid "Question"
-msgstr ""
+msgstr "שאלה"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr ""
+msgstr "_הוסף"
 
 #: gtk/gtkstock.c:276
-#, fuzzy
 msgid "_Apply"
-msgstr "יישום"
+msgstr "_החל"
 
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr ""
+msgstr "_מודגש"
 
 #: gtk/gtkstock.c:278
-#, fuzzy
 msgid "_Cancel"
-msgstr "ביטול"
+msgstr "_בטל"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "ת_קליטור"
 
 #: gtk/gtkstock.c:280
-#, fuzzy
 msgid "_Clear"
-msgstr "סגירה"
+msgstr "_נקה"
 
 #: gtk/gtkstock.c:281
-#, fuzzy
 msgid "_Close"
-msgstr "סגירה"
+msgstr "_סגור"
 
 #: gtk/gtkstock.c:282
-#, fuzzy
 msgid "_Convert"
-msgstr "יצירה"
+msgstr "_המר"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr ""
+msgstr "_העתק"
 
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr ""
+msgstr "_חתוך"
 
 #: gtk/gtkstock.c:285
-#, fuzzy
 msgid "_Delete"
-msgstr "מחיקה"
+msgstr "_מחק"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "_הפעל"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr ""
+msgstr "_מצא"
 
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr ""
+msgstr "מצא וה_חלף"
 
 #: gtk/gtkstock.c:289
-#, fuzzy
 msgid "_Floppy"
-msgstr "יישום"
+msgstr "_תקליטון"
 
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr ""
+msgstr "_תחתון"
 
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr ""
+msgstr "_ראשון"
 
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr ""
+msgstr "_אחרון"
 
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr ""
+msgstr "_עליון"
 
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr ""
+msgstr "_אחורה"
 
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr ""
+msgstr "_למטה"
 
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr ""
+msgstr "_קדימה"
 
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr ""
+msgstr "_מעלה"
 
 #: gtk/gtkstock.c:298
-#, fuzzy
 msgid "_Help"
-msgstr "עזרה"
+msgstr "_עזרה"
 
 #: gtk/gtkstock.c:299
-#, fuzzy
 msgid "_Home"
-msgstr "עזרה"
+msgstr "_בית"
 
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr ""
+msgstr "_אינדקס"
 
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr ""
+msgstr "_נטוי"
 
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr ""
+msgstr "_קפוץ אל"
 
 #: gtk/gtkstock.c:303
-#, fuzzy
 msgid "_Center"
-msgstr "יצירה"
+msgstr "_מרכז"
 
 #: gtk/gtkstock.c:304
-#, fuzzy
 msgid "_Fill"
-msgstr "משפחה:"
+msgstr "_מלא"
 
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr ""
+msgstr "_שמאלה"
 
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr ""
+msgstr "_ימינה"
 
 #: gtk/gtkstock.c:307
 msgid "_New"
-msgstr ""
+msgstr "_חדש"
 
 #: gtk/gtkstock.c:308
 msgid "_No"
-msgstr ""
+msgstr "_לא"
 
 #: gtk/gtkstock.c:309
-#, fuzzy
 msgid "_OK"
-msgstr "אישור"
+msgstr "_אישור"
 
 #: gtk/gtkstock.c:310
 msgid "_Open"
-msgstr ""
+msgstr "_פתח"
 
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr ""
+msgstr "ה_דבק"
 
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr ""
+msgstr "_העדפות"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr ""
+msgstr "_הדפס"
 
 #: gtk/gtkstock.c:314
-#, fuzzy
 msgid "Print Pre_view"
-msgstr "מבט מקדים"
+msgstr "תצוגה _מקדימה"
 
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr ""
+msgstr "_מאפיינים"
 
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr ""
+msgstr "_יציאה"
 
 #: gtk/gtkstock.c:317
-#, fuzzy
 msgid "_Redo"
-msgstr "אדום:"
+msgstr "בצע _שוב"
 
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr ""
+msgstr "_רענן"
 
 #: gtk/gtkstock.c:319
-#, fuzzy
 msgid "_Remove"
-msgstr "אדום:"
+msgstr "_הסר"
 
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr ""
+msgstr "_החזר"
 
 # hebrew note: note that "key" has a different meaning - "מפתח"
 #: gtk/gtkstock.c:321
-#, fuzzy
 msgid "_Save"
-msgstr "שמירה"
+msgstr "_שמור"
 
 # hebrew note: note that "key" has a different meaning - "מפתח"
 #: gtk/gtkstock.c:322
-#, fuzzy
 msgid "Save _As"
-msgstr "שמירה"
+msgstr "שמור _בשם"
 
 #: gtk/gtkstock.c:323
-#, fuzzy
 msgid "_Color"
-msgstr "סגירה"
+msgstr "_צבע"
 
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr ""
+msgstr "_גופן"
 
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr ""
+msgstr "סדר _עולה"
 
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr ""
+msgstr "סדר _יורד"
 
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr ""
+msgstr "_בדיקת איות"
 
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr ""
+msgstr "_עצור"
 
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
 msgstr ""
 
 #: gtk/gtkstock.c:330
-#, fuzzy
 msgid "_Undelete"
-msgstr "מחיקה"
+msgstr "_בטל מחיקה"
 
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr ""
+msgstr "_קו תחתי"
 
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr ""
+msgstr "_בצע שוב"
 
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr ""
+msgstr "_כן"
 
 #: gtk/gtkstock.c:334
 msgid "Zoom _100%"
-msgstr ""
+msgstr "קירוב _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "קירוב עד _התאמה"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "הת_קרב"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "הת_רחק"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
-msgstr ""
+msgstr "שורות"
 
 #: gtk/gtktable.c:157
 msgid "The number of rows in the table"
@@ -3381,7 +3303,7 @@ msgstr ""
 
 #: gtk/gtktable.c:165
 msgid "Columns"
-msgstr ""
+msgstr "עמודות"
 
 #: gtk/gtktable.c:166
 msgid "The number of columns in the table"
@@ -3437,7 +3359,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:199
 msgid "Tag name"
-msgstr ""
+msgstr "שם התג"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
@@ -3470,9 +3392,8 @@ msgid "Bitmap to use as a mask when drawing the text foreground"
 msgstr ""
 
 #: gtk/gtktexttag.c:268
-#, fuzzy
 msgid "Text direction"
-msgstr "יצירת תיקיב"
+msgstr "כיוון מלל"
 
 #: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
@@ -3484,7 +3405,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:387
 msgid "Language"
-msgstr ""
+msgstr "שפה"
 
 #: gtk/gtktexttag.c:388
 msgid "Language engine code to use for rendering the text"
@@ -3543,13 +3464,12 @@ msgid "Wrap mode"
 msgstr ""
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr ""
+msgstr "טאבים"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
@@ -3557,7 +3477,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:502
 msgid "Invisible"
-msgstr ""
+msgstr "בלתי נראה"
 
 #: gtk/gtktexttag.c:503
 msgid "Whether this text is hidden"
@@ -3743,14 +3663,14 @@ msgstr ""
 msgid "If the insertion cursor is shown"
 msgstr ""
 
-#: gtk/gtktextview.c:6386
+#: gtk/gtktextview.c:6417
 msgid "Input _Methods"
-msgstr ""
+msgstr "_שיטות קלט"
 
 #: gtk/gtkthemes.c:69
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "לא מצליח לאתר את המודול הנטען ב-module_path: \"%s\","
+msgstr "לא מצליח לאתר את מנוע ערכת הנושא ב-module_path: \"%s\","
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
@@ -3798,7 +3718,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:260
 msgid "Space style"
-msgstr ""
+msgstr "סוג רווח"
 
 #: gtk/gtktoolbar.c:261
 msgid "Whether spacers are vertical lines or just blank"
@@ -3818,11 +3738,10 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:284
 msgid "Toolbar style"
-msgstr ""
+msgstr "סגנון סרגל כלים"
 
 #: gtk/gtktoolbar.c:285
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:291
@@ -3859,7 +3778,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:539 gtk/gtktreeviewcolumn.c:176 gtk/gtkwidget.c:423
 msgid "Visible"
-msgstr ""
+msgstr "נראה"
 
 #: gtk/gtktreeview.c:540
 msgid "Show the column header buttons"
@@ -3899,7 +3818,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:579
 msgid "Enable Search"
-msgstr ""
+msgstr "אפשר חיפוש"
 
 #: gtk/gtktreeview.c:580
 msgid "View allows user to search through columns interactively"
@@ -4004,9 +3923,8 @@ msgstr ""
 # hebrew note: "תיקיה" is "folder", but there is no better word for
 # "directory"
 #: gtk/gtktreeviewcolumn.c:240
-#, fuzzy
 msgid "Title"
-msgstr "קבצים"
+msgstr "כותרת"
 
 #: gtk/gtktreeviewcolumn.c:241
 msgid "Title to appear in column header"
@@ -4014,7 +3932,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:248
 msgid "Clickable"
-msgstr ""
+msgstr "לחיץ"
 
 #: gtk/gtktreeviewcolumn.c:249
 msgid "Whether the header can be clicked"
@@ -4030,7 +3948,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:265
 msgid "Alignment"
-msgstr ""
+msgstr "יישור"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
@@ -4073,9 +3991,8 @@ msgid "Determines how the shadowed box around the viewport is drawn."
 msgstr ""
 
 #: gtk/gtkwidget.c:390
-#, fuzzy
 msgid "Widget name"
-msgstr "שינוי שם"
+msgstr ""
 
 #: gtk/gtkwidget.c:391
 msgid "The name of the widget"
@@ -4115,7 +4032,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:430
 msgid "Sensitive"
-msgstr ""
+msgstr "רגיש"
 
 #: gtk/gtkwidget.c:431
 msgid "Whether the widget responds to input"
@@ -4146,18 +4063,16 @@ msgid "Whether the widget has the input focus"
 msgstr ""
 
 #: gtk/gtkwidget.c:458
-#, fuzzy
 msgid "Can default"
-msgstr "default:RTL"
+msgstr "יכול להיות ברירת מחדל"
 
 #: gtk/gtkwidget.c:459
 msgid "Whether the widget can be the default widget"
 msgstr ""
 
 #: gtk/gtkwidget.c:465
-#, fuzzy
 msgid "Has default"
-msgstr "default:RTL"
+msgstr "יש ברירת מחדל"
 
 #: gtk/gtkwidget.c:466
 msgid "Whether the widget is the default widget"
@@ -4180,9 +4095,8 @@ msgid "Whether the widget is part of a composite widget"
 msgstr ""
 
 #: gtk/gtkwidget.c:486
-#, fuzzy
 msgid "Style"
-msgstr "סגנון:"
+msgstr "סגנון"
 
 #: gtk/gtkwidget.c:487
 msgid ""
@@ -4265,18 +4179,16 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
 #: gtk/gtkwindow.c:411
-#, fuzzy
 msgid "Window Type"
-msgstr "חלון"
+msgstr "סוג חלון"
 
 #: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr ""
 
 #: gtk/gtkwindow.c:421
-#, fuzzy
 msgid "Window Title"
-msgstr "חלון"
+msgstr "כותרת חלון"
 
 #: gtk/gtkwindow.c:422
 msgid "The title of the window"
@@ -4317,7 +4229,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:462
 msgid "Window Position"
-msgstr ""
+msgstr "מיקום חלון"
 
 #: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
@@ -4328,8 +4240,7 @@ msgid "Default Width"
 msgstr ""
 
 #: gtk/gtkwindow.c:472
-msgid ""
-"The default width of the window, used when initially showing the window."
+msgid "The default width of the window, used when initially showing the window."
 msgstr ""
 
 #: gtk/gtkwindow.c:481
@@ -4337,8 +4248,7 @@ msgid "Default Height"
 msgstr ""
 
 #: gtk/gtkwindow.c:482
-msgid ""
-"The default height of the window, used when initially showing the window."
+msgid "The default height of the window, used when initially showing the window."
 msgstr ""
 
 #: gtk/gtkwindow.c:491
@@ -4351,16 +4261,16 @@ msgstr ""
 
 #: gtk/gtkwindow.c:499
 msgid "Icon"
-msgstr ""
+msgstr "סמל"
 
 #: gtk/gtkwindow.c:500
 msgid "Icon for this window"
-msgstr ""
+msgstr "סמל החלון הזה"
 
 #. ID
 #: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
-msgstr ""
+msgstr "אמהרית (EZ+)"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:216
@@ -4380,7 +4290,7 @@ msgstr ""
 #. ID
 #: modules/input/imthai-broken.c:177
 msgid "Thai (Broken)"
-msgstr ""
+msgstr "תהית (שבור)"
 
 #. ID
 #: modules/input/imti-er.c:453
@@ -4395,12 +4305,12 @@ msgstr ""
 #. ID
 #: modules/input/imviqr.c:243
 msgid "Vietnamese (VIQR)"
-msgstr ""
+msgstr "ויאטנמית (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:27
 msgid "X Input Method"
-msgstr ""
+msgstr "שיטת קלט ל X"
 
 #~ msgid "Directories"
 #~ msgstr "תיקיות"
@@ -4442,3 +4352,4 @@ msgstr ""
 #, fuzzy
 #~ msgid "He_x Value:"
 #~ msgstr "ערך הקס':"
+
