@@ -1,3 +1,31 @@
+Fri Apr 19 16:49:01 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge TreeView fixes from HEAD up to Apr 19 2002:
+
+	(From Apr 16):
+        * gtk/gtktreeview.c (gtk_tree_view_real_collapse_row): check
+        ->priv->cursor and ->priv->anchor rowrefs before removing
+        node->children from the rbtree. Also check the
+        ->priv->last_single_clicked and ->priv->last_single_clicked_2 rowrefs
+        (I think I really need to rename those two someday).
+
+	(From Apr 17):
+        * gtk/gtktreestore.c (gtk_tree_store_insert_before): fix docs
+
+	(From Apr 18):
+        * gtk/gtktreemodelsort.c
+        (gtk_tree_model_sort_convert_path_to_child_path): so this function
+        was completely broken. Fix it and improve readability.
+
+	(From Apr 19):
+	* gtk/gtktreeprivate.h, gtk/gtktreeview.c: rename
+        last_single_clicked{,_2} to last_button_press{,_2}, as the latter
+        is a more sane name.
+
+        * gtk/gtktreeview.c (gtk_tree_view_button_press): use ->priv->anchor
+        instead of ->priv->cursor, check for the anchor at another place, as
+        you can go in edit mode without having an anchor.
+
 2002-04-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk-pixbuf/Makefile.am (uninstall-libtool-import-lib)

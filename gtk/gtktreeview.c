@@ -1102,16 +1102,16 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->drag_dest_row = NULL;
     }
 
-  if (tree_view->priv->last_single_clicked != NULL)
+  if (tree_view->priv->last_button_press != NULL)
     {
-      gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
-      tree_view->priv->last_single_clicked = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+      tree_view->priv->last_button_press = NULL;
     }
 
-  if (tree_view->priv->last_single_clicked_2 != NULL)
+  if (tree_view->priv->last_button_press_2 != NULL)
     {
-      gtk_tree_row_reference_free (tree_view->priv->last_single_clicked_2);
-      tree_view->priv->last_single_clicked_2 = NULL;
+      gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
+      tree_view->priv->last_button_press_2 = NULL;
     }
 
   if (tree_view->priv->top_row != NULL)
@@ -1790,20 +1790,25 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
       /* decide if we edit */
       if (event->type == GDK_BUTTON_PRESS &&
-	  !(event->state & gtk_accelerator_get_default_mod_mask ()) &&
-	  tree_view->priv->cursor)
+	  !(event->state & gtk_accelerator_get_default_mod_mask ()))
 	{
-	  GtkTreePath *cursor = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+	  GtkTreePath *anchor;
 	  GtkTreeIter iter;
 
-	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-	  gtk_tree_view_column_cell_set_cell_data (column,
-						   tree_view->priv->model,
-						   &iter,
-						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
-						   node->children?TRUE:FALSE);
+	  if (tree_view->priv->anchor)
+	    {
+	      anchor = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
+	      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+	      gtk_tree_view_column_cell_set_cell_data (column,
+						       tree_view->priv->model,
+						       &iter,
+						       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
+						       node->children?TRUE:FALSE);
+	    }
+	  else
+	    anchor = NULL;
 
-	  if ((cursor && !gtk_tree_path_compare (cursor, path))
+	  if ((anchor && !gtk_tree_path_compare (anchor, path))
 	      || !_gtk_tree_view_column_has_editable_cell (column))
 	    {
 	      GtkCellEditable *cell_editable = NULL;
@@ -1839,15 +1844,15 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 							(GdkEvent *)event,
 							flags);
 		      gtk_tree_path_free (path);
-		      gtk_tree_path_free (cursor);
+		      gtk_tree_path_free (anchor);
 		      return TRUE;
 		    }
 		  column_handled_click = TRUE;
 		}
 	      g_free (path_string);
 	    }
-	  if (cursor)
-	    gtk_tree_path_free (cursor);
+	  if (anchor)
+	    gtk_tree_path_free (anchor);
 	}
 
       /* select */
@@ -1890,18 +1895,18 @@ gtk_tree_view_button_press (GtkWidget      *widget,
         }
 
       if (event->button == 1 && event->type == GDK_2BUTTON_PRESS &&
-	  tree_view->priv->last_single_clicked)
+	  tree_view->priv->last_button_press)
 	{
 	  GtkTreePath *lsc;
 
-	  lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_single_clicked);
+	  lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press);
 
-	  if (tree_view->priv->last_single_clicked)
-	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
-	  if (tree_view->priv->last_single_clicked_2)
-	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked_2);
-	  tree_view->priv->last_single_clicked = NULL;
-	  tree_view->priv->last_single_clicked_2 = NULL;
+	  if (tree_view->priv->last_button_press)
+	    gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+	  if (tree_view->priv->last_button_press_2)
+	    gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
+	  tree_view->priv->last_button_press = NULL;
+	  tree_view->priv->last_button_press_2 = NULL;
 
 	  if (lsc)
 	    {
@@ -1912,10 +1917,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
       else if (event->button == 1 && event->type == GDK_BUTTON_PRESS)
         {
-	  if (tree_view->priv->last_single_clicked)
-	    gtk_tree_row_reference_free (tree_view->priv->last_single_clicked);
-	  tree_view->priv->last_single_clicked = tree_view->priv->last_single_clicked_2;
-	  tree_view->priv->last_single_clicked_2 = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+	  if (tree_view->priv->last_button_press)
+	    gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+	  tree_view->priv->last_button_press = tree_view->priv->last_button_press_2;
+	  tree_view->priv->last_button_press_2 = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
 	}
 
       GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
@@ -8846,6 +8851,53 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
       gtk_tree_path_free (child_path);
     }
 
+  if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
+    {
+      GtkTreePath *cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+      if (gtk_tree_path_is_ancestor (path, cursor_path))
+	{
+	  gtk_tree_row_reference_free (tree_view->priv->cursor);
+	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
+								      tree_view->priv->model,
+								      path);
+	}
+      gtk_tree_path_free (cursor_path);
+    }
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->anchor))
+    {
+      GtkTreePath *anchor_path = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
+      if (gtk_tree_path_is_ancestor (path, anchor_path))
+	{
+	  gtk_tree_row_reference_free (tree_view->priv->anchor);
+	  tree_view->priv->anchor = NULL;
+	}
+      gtk_tree_path_free (anchor_path);
+    }
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->last_button_press))
+    {
+      GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press);
+      if (gtk_tree_path_is_ancestor (path, lsc))
+        {
+	  gtk_tree_row_reference_free (tree_view->priv->last_button_press);
+	  tree_view->priv->last_button_press = NULL;
+	}
+      gtk_tree_path_free (lsc);
+    }
+
+  if (gtk_tree_row_reference_valid (tree_view->priv->last_button_press_2))
+    {
+      GtkTreePath *lsc = gtk_tree_row_reference_get_path (tree_view->priv->last_button_press_2);
+      if (gtk_tree_path_is_ancestor (path, lsc))
+        {
+	  gtk_tree_row_reference_free (tree_view->priv->last_button_press_2);
+	  tree_view->priv->last_button_press_2 = NULL;
+	}
+      gtk_tree_path_free (lsc);
+    }
+
   if (gtk_tree_view_unref_and_check_selection_tree (tree_view, node->children))
     {
       _gtk_rbtree_remove (node->children);
@@ -8880,32 +8932,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   if (GTK_WIDGET_MAPPED (tree_view))
     {
       gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-    }
-
-  if (gtk_tree_row_reference_valid (tree_view->priv->cursor))
-    {
-      GtkTreePath *cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
-
-      if (gtk_tree_path_is_ancestor (path, cursor_path))
-	{
-	  gtk_tree_row_reference_free (tree_view->priv->cursor);
-	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
-								      tree_view->priv->model,
-								      path);
-	}
-      gtk_tree_path_free (cursor_path);
-    }
-
-  if (gtk_tree_row_reference_valid (tree_view->priv->anchor))
-      {
-      GtkTreePath *anchor_path = gtk_tree_row_reference_get_path (tree_view->priv->anchor);
-      if (gtk_tree_path_is_ancestor (path, anchor_path))
-	{
-	  gtk_tree_row_reference_free (tree_view->priv->anchor);
-	  tree_view->priv->anchor = NULL;
-	}
-      gtk_tree_path_free (anchor_path);
-
     }
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
