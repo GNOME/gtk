@@ -661,8 +661,11 @@ gdouble g_strtod     (const gchar *nptr, gchar **endptr);
 gchar*	g_strerror   (gint errnum);
 gchar*	g_strsignal  (gint signum);
 gint    g_strcasecmp (const gchar *s1, const gchar *s2);
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+gint    g_snprintf   (gchar *str, gulong n, gchar const *fmt, ...) __attribute__ ((format (printf, 3, 4)));
+#else
 gint    g_snprintf   (gchar *str, gulong n, gchar const *fmt, ...);
-
+#endif
 
 /* We make the assumption that if memmove isn't available, then
  * bcopy will do the job. This isn't safe everywhere. (bcopy can't
@@ -724,12 +727,23 @@ GString* g_string_insert_c  (GString *fstring,
 GString* g_string_erase    (GString *fstring, 
 			     gint pos, 
 			     gint len);
+#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+void	 g_string_sprintf   (GString *string,
+			     gchar   *fmt,
+			     ...) __attribute__ ((format (printf, 2, 3)));
+
+void	 g_string_sprintfa  (GString *string,
+			     gchar   *fmt,
+			     ...) __attribute__ ((format (printf, 2, 3)));
+#else
 void	 g_string_sprintf   (GString *string,
 			     gchar   *fmt,
 			     ...);
+
 void	 g_string_sprintfa  (GString *string,
 			     gchar   *fmt,
 			     ...);
+#endif
 
 /* Resizable arrays
  */
