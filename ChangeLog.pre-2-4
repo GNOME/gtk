@@ -1,3 +1,8 @@
+2003-02-06  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkvisual-x11.c (gdk_visual_get_best_with_depth): Return
+	a GdkVisual *, not a GdkVisual **.  (#105243)
+
 Sun Feb  2 10:03:24 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* === Released 2.2.1 ===
