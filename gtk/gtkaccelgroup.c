@@ -554,7 +554,7 @@ gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,
 
   if (gtk_accel_map_lookup_entry (accel_path, &key))
     {
-      accel_key = gdk_keyval_to_lower (key.accel_key),
+      accel_key = gdk_keyval_to_lower (key.accel_key);
       accel_mods = key.accel_mods;
     }
 

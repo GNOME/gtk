@@ -1,3 +1,7 @@
+Sat Mar  2 04:44:10 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_connect_by_path): fix typo.
+
 Fri Mar  1 23:59:35 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_size): set
