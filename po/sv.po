@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2002-07-31 16:57-0400\n"
-"PO-Revision-Date: 2002-07-17 10:44+0200\n"
+"POT-Creation-Date: 2002-08-05 00:57+0200\n"
+"PO-Revision-Date: 2002-08-05 00:57+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -21,15 +21,16 @@ msgstr ""
 msgid "Failed to open file '%s': %s"
 msgstr "Misslyckades med att öppna filen \"%s\": %s"
 
+# SUN CHANGED MESSAGE
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Bildfilen \"%s\" innehåller ingen data"
+msgstr "Bildfilen \"%s\" innehåller inga data"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
 msgid "Don't know how to load the animation in file '%s'"
-msgstr "Vet inte hur man läser in animationen i filen \"%s\""
+msgstr "Vet inte hur man läser in animeringen i filen \"%s\""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:640
 #, c-format
@@ -45,8 +46,8 @@ msgid ""
 "Failed to load animation '%s': reason not known, probably a corrupt "
 "animation file"
 msgstr ""
-"Misslyckades med att läsa in animationen \"%s\": anledningen är okänd, "
-"troligtvis en trasig animationsfil"
+"Misslyckades med att läsa in animeringen \"%s\": anledningen är okänd, "
+"troligtvis en trasig animeringsfil"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:358
 #, c-format
@@ -236,13 +237,15 @@ msgstr "Inte tillräckligt med minne för att läsa in ikonen"
 msgid "Invalid header in icon"
 msgstr "Ogiltigt huvud i ikon"
 
+# SUN CHANGED MESSAGE
 #: gdk-pixbuf/io-ico.c:340
 msgid "Icon has zero width"
-msgstr "Ikonen har ingen bredd"
+msgstr "Ikonens bredd är noll"
 
+# SUN CHANGED MESSAGE
 #: gdk-pixbuf/io-ico.c:350
 msgid "Icon has zero height"
-msgstr "Ikonen har ingen höjd"
+msgstr "Ikonens höjd är noll"
 
 #: gdk-pixbuf/io-ico.c:395
 msgid "Compressed icons are not supported"
@@ -555,7 +558,7 @@ msgstr "Bredden eller höjden på TIFF-bilden är noll"
 
 #: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
-msgstr "Dimensionerna på TIFF-bilden är för stora"
+msgstr "TIFF-bildens dimensioner är för stora"
 
 #: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
@@ -674,7 +677,7 @@ msgstr "Genvägsstängning"
 
 #: gtk/gtkaccellabel.c:137
 msgid "The closure to be monitored for accelerator changes"
-msgstr "Stängningen att övervakas för genvägsändringar"
+msgstr "Stängningen som ska övervakas för genvägsändringar"
 
 #: gtk/gtkaccellabel.c:143
 msgid "Accelerator Widget"
@@ -682,7 +685,7 @@ msgstr "Genvägswidget"
 
 #: gtk/gtkaccellabel.c:144
 msgid "The widget to be monitored for accelerator changes"
-msgstr "Widgeten att övervakas för genvägsändringar"
+msgstr "Widgeten som ska övervakas för genvägsändringar"
 
 #: gtk/gtkalignment.c:102
 msgid "Horizontal alignment"
@@ -756,7 +759,7 @@ msgstr "Horisontell justering"
 
 #: gtk/gtkaspectframe.c:108
 msgid "X alignment of the child"
-msgstr "X-justering på barnet"
+msgstr "X-justering av barnet"
 
 #: gtk/gtkaspectframe.c:114
 msgid "Vertical Alignment"
@@ -893,9 +896,10 @@ msgstr ""
 msgid "Border relief"
 msgstr "Kantrelief"
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkbutton.c:214
 msgid "The border relief style."
-msgstr "Reliefstilen på kansten."
+msgstr "Reliefstilen på kanten."
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
@@ -951,33 +955,37 @@ msgstr "synlig"
 msgid "Display the cell"
 msgstr "Visa cellen"
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrenderer.c:122
 msgid "xalign"
-msgstr "xjustering"
+msgstr "x-justering"
 
 #: gtk/gtkcellrenderer.c:123
 msgid "The x-align."
 msgstr "X-justeringen."
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrenderer.c:133
 msgid "yalign"
-msgstr "yjustering"
+msgstr "y-justering"
 
 #: gtk/gtkcellrenderer.c:134
 msgid "The y-align."
 msgstr "Y-justeringen."
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrenderer.c:144
 msgid "xpad"
-msgstr "xutfyllnad"
+msgstr "x-utfyllnad"
 
 #: gtk/gtkcellrenderer.c:145
 msgid "The xpad."
 msgstr "X-utfyllnaden."
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrenderer.c:155
 msgid "ypad"
-msgstr "yutfyllnad"
+msgstr "y-utfyllnad"
 
 #: gtk/gtkcellrenderer.c:156
 msgid "The ypad."
@@ -1011,9 +1019,10 @@ msgstr "Rad har barn."
 msgid "Is Expanded"
 msgstr "Är utökad"
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrenderer.c:199
 msgid "Row is an expander row, and is expanded"
-msgstr "Raden är utökningsrad, och är utökad"
+msgstr "Raden är en utökningsrad, och är utökad"
 
 #: gtk/gtkcellrendererpixbuf.c:104
 msgid "Pixbuf Object"
@@ -1023,21 +1032,24 @@ msgstr "Pixbuf-objekt"
 msgid "The pixbuf to render."
 msgstr "Pixbuf:en att rendera."
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrendererpixbuf.c:113
 msgid "Pixbuf Expander Open"
-msgstr "Pixbuf-expanderare öppen"
+msgstr "Pixbuf-expanderare, öppen"
 
 #: gtk/gtkcellrendererpixbuf.c:114
 msgid "Pixbuf for open expander."
 msgstr "Pixbuf för öppen expanderare."
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrendererpixbuf.c:122
 msgid "Pixbuf Expander Closed"
-msgstr "Pixbuf-expanderare stängd"
+msgstr "Pixbuf-expanderare, stängd"
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcellrendererpixbuf.c:123
 msgid "Pixbuf for closed expander."
-msgstr "Pixbuf för närmaste expanderare."
+msgstr "Pixbuf för stängd expanderare."
 
 #: gtk/gtkcellrenderertext.c:173 gtk/gtkentry.c:523 gtk/gtkprogressbar.c:207
 msgid "Text"
@@ -1061,7 +1073,7 @@ msgstr "Attribut"
 
 #: gtk/gtkcellrenderertext.c:190
 msgid "A list of style attributes to apply to the text of the renderer."
-msgstr "En lista med stilattribut att verkställa på texten av renderaren."
+msgstr "En lista med stilattribut att applicera på texten av renderaren."
 
 #: gtk/gtkcellrenderertext.c:197 gtk/gtktexttag.c:209
 msgid "Background color name"
@@ -1216,7 +1228,7 @@ msgstr "Redigerbarhet inställd"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:533
 msgid "Whether this tag affects text editability"
-msgstr "Huruvida denna tagg påverkar redigerbarheten"
+msgstr "Huruvida denna tagg påverkar redigerbarheten för texten"
 
 #: gtk/gtkcellrenderertext.c:372 gtk/gtktexttag.c:536
 msgid "Font family set"
@@ -1346,13 +1358,14 @@ msgstr "Aktiv"
 msgid "Whether the menu item is checked."
 msgstr "Huruvida menyposten är ikryssad."
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
-msgstr "Inkonsistent"
+msgstr "Inkonsekvent"
 
 #: gtk/gtkcheckmenuitem.c:124
 msgid "Whether to display an \"inconsistent\" state."
-msgstr "Huruvida ett \"inkonsistent\" tillstånd ska visas."
+msgstr "Huruvida ett \"inkonsekvent\" tillstånd ska visas."
 
 #: gtk/gtkcolorsel.c:582
 msgid ""
@@ -1451,7 +1464,7 @@ msgstr "Position på färghjulet."
 
 #: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
-msgstr "_Mättnad"
+msgstr "_Mättnad:"
 
 #: gtk/gtkcolorsel.c:1824
 msgid "\"Deepness\" of the color."
@@ -1767,9 +1780,10 @@ msgstr "_Infoga Unicode-styrtecken"
 msgid "Filename"
 msgstr "Filnamn"
 
+# SUN CHANGED MESSAGE
 #: gtk/gtkfilesel.c:537
 msgid "The currently selected filename."
-msgstr "Filnamnet som är valt för tillfället."
+msgstr "Det filnamn som är valt för tillfället."
 
 #: gtk/gtkfilesel.c:543
 msgid "Show file operations"
@@ -2034,19 +2048,19 @@ msgstr "Text på ramens etikett."
 
 #: gtk/gtkframe.c:133
 msgid "Label xalign"
-msgstr "X-justering på etikett"
+msgstr "X-justering av etikett"
 
 #: gtk/gtkframe.c:134
 msgid "The horizontal alignment of the label."
-msgstr "Den horisontella justeringen på etiketten."
+msgstr "Den horisontella justeringen av etiketten."
 
 #: gtk/gtkframe.c:143
 msgid "Label yalign"
-msgstr "Y-justering på etikett"
+msgstr "Y-justering av etikett"
 
 #: gtk/gtkframe.c:144
 msgid "The vertical alignment of the label."
-msgstr "Den vertikala justeringen på etiketten."
+msgstr "Den vertikala justeringen av etiketten."
 
 #: gtk/gtkframe.c:153 gtk/gtkhandlebox.c:185
 msgid "Deprecated property, use shadow_type instead."
@@ -2175,7 +2189,7 @@ msgstr "Storlek att använda för standardikon eller ikonsamling."
 
 #: gtk/gtkimage.c:195
 msgid "Animation"
-msgstr "Animation"
+msgstr "Animering"
 
 #: gtk/gtkimage.c:196
 msgid "GdkPixbufAnimation to display."
@@ -2303,8 +2317,8 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
-"Justering på raderna i etikettens text relativt varandra. Detta påverkar "
-"INTE justeringen på etiketten inom dess allokering. Se GtkMisc::xalign för "
+"Justering av raderna i etikettens text relativt varandra. Detta påverkar "
+"INTE justeringen av etiketten inom dess allokering. Se GtkMisc::xalign för "
 "det."
 
 #: gtk/gtklabel.c:318
@@ -4096,7 +4110,7 @@ msgstr "Justering"
 
 #: gtk/gtktreeviewcolumn.c:266
 msgid "X Alignment of the column header text or widget"
-msgstr "X-justering på kolumnhuvudets text eller widget"
+msgstr "X-justering av kolumnhuvudets text eller widget"
 
 #: gtk/gtktreeviewcolumn.c:276
 msgid "Whether the column can be reordered around the headers"
