@@ -469,7 +469,7 @@ gdk_ic_real_new (GdkIC *ic)
       mask |= GDK_IC_PREEDIT_AREA_REQ;
 
       preedit_area.x = attr->preedit_area.x;
-      preedit_area.y = attr->preedit_area.x;
+      preedit_area.y = attr->preedit_area.y;
       preedit_area.width = attr->preedit_area.width;
       preedit_area.height = attr->preedit_area.height;
 
@@ -484,7 +484,7 @@ gdk_ic_real_new (GdkIC *ic)
       mask |= GDK_IC_PREEDIT_POSITION_REQ;
 
       preedit_area.x = attr->preedit_area.x;
-      preedit_area.y = attr->preedit_area.x;
+      preedit_area.y = attr->preedit_area.y;
       preedit_area.width = attr->preedit_area.width;
       preedit_area.height = attr->preedit_area.height;
 
@@ -506,7 +506,7 @@ gdk_ic_real_new (GdkIC *ic)
       mask |= GDK_IC_STATUS_AREA_REQ;
 
       status_area.x = attr->status_area.x;
-      status_area.y = attr->status_area.x;
+      status_area.y = attr->status_area.y;
       status_area.width = attr->status_area.width;
       status_area.height = attr->status_area.height;
 
@@ -877,7 +877,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNFontSet;
       arg->value = (gpointer) GDK_FONT_XFONT(attr->status_fontset);
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_FONTSET;
     }
 
@@ -893,7 +893,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNArea;
       arg->value = (gpointer) &rect;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_AREA;
     }
 
@@ -909,7 +909,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNArea;
       arg->value = (gpointer) &rect;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_AREA_NEEDED;
       else
 	private->mask &= ~GDK_IC_STATUS_AREA_NEEDED;
@@ -920,7 +920,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNForeground;
       arg->value = (gpointer) attr->status_foreground.pixel;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_FOREGROUND;
     }
 
@@ -929,7 +929,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNBackground;
       arg->value = (gpointer) attr->status_background.pixel;
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_BACKGROUND;
     }
 
@@ -938,7 +938,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNBackgroundPixmap;
       arg->value = (gpointer) GDK_WINDOW_XWINDOW(attr->status_pixmap);
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_PIXMAP;
     }
 
@@ -947,7 +947,7 @@ gdk_ic_real_set_attr (GdkIC *ic,
       arg->name = XNColormap;
       arg->value = (gpointer) GDK_COLORMAP_XCOLORMAP(attr->status_colormap);
 
-      if (XSetICValues (xic, XNPreeditAttributes, arg, NULL))
+      if (XSetICValues (xic, XNStatusAttributes, arg, NULL))
 	error |= GDK_IC_STATUS_COLORMAP;
     }
 
