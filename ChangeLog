@@ -1,3 +1,27 @@
+2005-02-24  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c: Use cairo_set_device_offset().
+
+	* gdk/win32/gdkdrawable-win32.[ch] gdk/win32/gdkwindow-win32.c
+	gdk/win32/gdkpixmap-win32.c: 
+	Add_gdk_win32_drawable_acquire/release_dc() to get a DC for the 
+	drawable. Add _gdk_drawable_win32_finish() to clean up resources
+	when a drawable is destroyed.
+
+	* gdk/win32/gdkgc-win32.c gdk/win32/gdkdrawable-win32.c
+	(blit_from_pixmap) gdk/win32/gdkprivate-win32.h : Use 
+	acquire/release_dc when getting a DC to use with a GC or for 
+	blitting from a pixmap.
+
+	* gdk/win32/gdkdrawable-win32.[ch]: Implement ref_cairo_surface()
+
+	* gdk/win32/gdkpango-win32.c gdk/win32/gdkdrawable-win32.c Makefile.am:
+	Remove gdk_screen_get_pango_context(), draw_glyph[_transformed]
+	implementations.
+
+	* gdk/win32/gdkdrawable-win32.c: Remove 
+	gdk_draw_rectangle_alpha_libgtk_only()
+
 2005-03-17  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkpango.c: Fix get_stipple_surface to actually work, set

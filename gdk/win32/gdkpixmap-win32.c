@@ -108,6 +108,8 @@ gdk_pixmap_impl_win32_finalize (GObject *object)
   GDK_NOTE (PIXMAP, g_print ("gdk_pixmap_impl_win32_finalize: %p\n",
 			     GDK_PIXMAP_HBITMAP (wrapper)));
 
+  _gdk_win32_drawable_finish (GDK_DRAWABLE (object));  
+
   GDI_CALL (DeleteObject, (GDK_PIXMAP_HBITMAP (wrapper)));
 
   gdk_win32_handle_table_remove (GDK_PIXMAP_HBITMAP (wrapper));

@@ -32,6 +32,7 @@
 #include <glib.h>
 
 #include <pango/pangowin32.h>
+#include <cairo-win32.h>
 
 #include "gdkscreen.h" /* gdk_screen_get_default() */
 #include "gdkregion-generic.h"
@@ -100,19 +101,6 @@ static void gdk_win32_draw_lines     (GdkDrawable    *drawable,
 				      GdkGC          *gc,
 				      GdkPoint       *points,
 				      gint            npoints);
-static void gdk_win32_draw_glyphs    (GdkDrawable      *drawable,
-				      GdkGC            *gc,
-				      PangoFont        *font,
-				      gint              x,
-				      gint              y,
-				      PangoGlyphString *glyphs);
-static void gdk_win32_draw_glyphs_transformed (GdkDrawable      *drawable,
-					     GdkGC            *gc,
-					     PangoMatrix      *matrix,
-					     PangoFont        *font,
-					     gint              x,
-					     gint              y,
-					     PangoGlyphString *glyphs);
 static void gdk_win32_draw_image     (GdkDrawable     *drawable,
 				      GdkGC           *gc,
 				      GdkImage        *image,
@@ -123,6 +111,8 @@ static void gdk_win32_draw_image     (GdkDrawable     *drawable,
 				      gint             width,
 				      gint             height);
 
+static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
+     
 static void gdk_win32_set_colormap   (GdkDrawable    *drawable,
 				      GdkColormap    *colormap);
 
@@ -139,6 +129,7 @@ static void gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass
 static void gdk_drawable_impl_win32_finalize   (GObject *object);
 
 static gpointer parent_class = NULL;
+static const cairo_user_data_key_t gdk_win32_cairo_key;
 
 GType
 gdk_drawable_impl_win32_get_type (void)
@@ -188,9 +179,9 @@ gdk_drawable_impl_win32_class_init (GdkDrawableImplWin32Class *klass)
   drawable_class->draw_points = gdk_win32_draw_points;
   drawable_class->draw_segments = gdk_win32_draw_segments;
   drawable_class->draw_lines = gdk_win32_draw_lines;
-  drawable_class->draw_glyphs = gdk_win32_draw_glyphs;
-  drawable_class->draw_glyphs_transformed = gdk_win32_draw_glyphs_transformed;
   drawable_class->draw_image = gdk_win32_draw_image;
+  
+  drawable_class->ref_cairo_surface = gdk_win32_ref_cairo_surface;
   
   drawable_class->set_colormap = gdk_win32_set_colormap;
   drawable_class->get_colormap = gdk_win32_get_colormap;
@@ -1489,121 +1480,6 @@ gdk_win32_draw_lines (GdkDrawable *drawable,
 }
 
 static void
-draw_glyphs (GdkGCWin32 *gcwin32,
-	     HDC         hdc,
-	     gint        x_offset,
-	     gint        y_offset,
-	     va_list     args)
-{
-  PangoFont *font;
-  gint x;
-  gint y;
-  PangoGlyphString *glyphs;
-
-  font = va_arg (args, PangoFont *);
-  x = va_arg (args, gint);
-  y = va_arg (args, gint);
-  glyphs = va_arg (args, PangoGlyphString *);
-
-  x -= x_offset;
-  y -= y_offset;
-
-  pango_win32_render (hdc, font, glyphs, x, y);
-}
-
-static void
-draw_glyphs_transformed (GdkGCWin32 *gcwin32,
-			 HDC         hdc,
-			 gint        x_offset,
-			 gint        y_offset,
-			 va_list     args)
-{
-  PangoFont *font;
-  gint x;
-  gint y;
-  PangoGlyphString *glyphs;
-  PangoMatrix *matrix;
-
-  matrix = va_arg(args, PangoMatrix *);
-  font = va_arg (args, PangoFont *);
-  x = va_arg (args, gint);
-  y = va_arg (args, gint);
-  glyphs = va_arg (args, PangoGlyphString *);
-
-  x -= x_offset;
-  y -= y_offset;
-
-  pango_win32_render_transformed (hdc, matrix, font, glyphs, x, y);
-}
-
-static void
-gdk_win32_draw_glyphs (GdkDrawable      *drawable,
-		       GdkGC            *gc,
-		       PangoFont        *font,
-		       gint              x,
-		       gint              y,
-		       PangoGlyphString *glyphs)
-{
-  GdkRectangle bounds;
-  GdkRegion *region;
-  PangoRectangle ink_rect;
-
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
-
-  bounds.x = x + PANGO_PIXELS (ink_rect.x) - 1;
-  bounds.y = y + PANGO_PIXELS (ink_rect.y) - 1;
-  bounds.width = PANGO_PIXELS (ink_rect.width) + 2;
-  bounds.height = PANGO_PIXELS (ink_rect.height) + 2;
-  region = gdk_region_rectangle (&bounds);
-  
-  generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
-		draw_glyphs, region, font, x, y, glyphs);
-
-  gdk_region_destroy (region);
-}
-
-static void 
-gdk_win32_draw_glyphs_transformed (GdkDrawable      *drawable,
-				   GdkGC            *gc,
-				   PangoMatrix      *matrix,
-				   PangoFont        *font,
-				   gint              x,
-				   gint              y,
-				   PangoGlyphString *glyphs)
-{
-  GdkRectangle bounds;
-  GdkRegion *region;
-  PangoRectangle ink_rect;
-
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
-
-  bounds.x = x + PANGO_PIXELS (ink_rect.x) - 1;
-  bounds.y = y + PANGO_PIXELS (ink_rect.y) - 1;
-  bounds.width = PANGO_PIXELS (ink_rect.width) + 2;
-  bounds.height = PANGO_PIXELS (ink_rect.height) + 2;
-  region = gdk_region_rectangle (&bounds);
-
-  if (matrix)
-    {
-      /* transform region */
-      bounds.x = bounds.x * matrix->xx + bounds.y * matrix->xy + matrix->x0;
-      bounds.y = bounds.x * matrix->yx + bounds.y * matrix->yy + matrix->x0;
-      bounds.width  = bounds.width  * matrix->xx + bounds.height * matrix->xy;
-      bounds.height = bounds.height * matrix->yx + bounds.width  * matrix->xy;
- 
-      generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
-		    draw_glyphs_transformed, region, matrix, font, x, y, glyphs);
-    }
-  else
-    { 
-       generic_draw (drawable, gc, GDK_GC_FOREGROUND|GDK_GC_FONT,
-		     draw_glyphs, region, font, x/PANGO_SCALE, y/PANGO_SCALE, glyphs);
-    }
-
-  gdk_region_destroy (region);
-}
-
-static void
 blit_from_pixmap (gboolean              use_fg_bg,
 		  GdkDrawableImplWin32 *dest,
 		  HDC                   hdc,
@@ -1626,12 +1502,10 @@ blit_from_pixmap (gboolean              use_fg_bg,
   
   GDK_NOTE (MISC, g_print ("blit_from_pixmap\n"));
 
-  if (!(srcdc = CreateCompatibleDC (NULL)))
-    {
-      WIN32_GDI_FAILED ("CreateCompatibleDC");
-      return;
-    }
-      
+  srcdc = _gdk_win32_drawable_acquire_dc (GDK_DRAWABLE (src));
+  if (!srcdc)
+    return;
+  
   if (!(holdbitmap = SelectObject (srcdc, ((GdkDrawableImplWin32 *) src)->handle)))
     WIN32_GDI_FAILED ("SelectObject");
   else
@@ -1736,7 +1610,8 @@ blit_from_pixmap (gboolean              use_fg_bg,
       
       GDI_CALL (SelectObject, (srcdc, holdbitmap));
     }
-  GDI_CALL (DeleteDC, (srcdc));
+  
+  _gdk_win32_drawable_release_dc (GDK_DRAWABLE (src));
 }
 
 static void
@@ -1935,6 +1810,130 @@ gdk_win32_draw_image (GdkDrawable     *drawable,
 		   xsrc, ysrc, xdest, ydest, width, height);
 }
 
+/**
+ * _gdk_win32_drawable_acquire_dc
+ * @drawable: a Win32 #GdkDrawable implementation
+ * 
+ * Gets a DC with the given drawable selected into
+ * it.
+ *
+ * Return value: The DC, on success. Otherwise
+ *  %NULL. If this function succeeded
+ *  _gdk_win32_drawable_release_dc()  must be called
+ *  release the DC when you are done using it.
+ **/
+HDC 
+_gdk_win32_drawable_acquire_dc (GdkDrawable *drawable)
+{
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  
+  if (GDK_IS_WINDOW_IMPL_WIN32 (drawable) &&
+      GDK_WINDOW_DESTROYED (impl->wrapper))
+    return NULL;
+
+  if (!impl->hdc)
+    {
+      if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
+	{
+	  impl->hdc = CreateCompatibleDC (NULL);
+	  if (!impl->hdc)
+	    WIN32_GDI_FAILED ("CreateCompatibleDC");
+	  
+	  if (impl->hdc)
+	    {
+	      impl->saved_dc_bitmap = SelectObject (impl->hdc,
+						    impl->handle);
+	      if (!impl->saved_dc_bitmap)
+		{
+		  WIN32_GDI_FAILED ("CreateCompatibleDC");
+		  DeleteDC (impl->hdc);
+		  impl->hdc = NULL;
+		}
+	    }
+	}
+      else
+	{
+	  impl->hdc = GetDC (impl->handle);
+	  if (!impl->hdc)
+	    WIN32_GDI_FAILED ("GetDC");
+	}
+    }
+
+  if (impl->hdc)
+    {
+      impl->hdc_count++;
+      return impl->hdc;
+    }
+  else
+    return NULL;
+}
+
+/**
+ * _gdk_win32_drawable_release_dc
+ * @drawable: a Win32 #GdkDrawable implementation
+ * 
+ * Releases the reference count for the DC
+ * from _gdk_win32_drawable_acquire_dc()
+ **/
+void
+_gdk_win32_drawable_release_dc (GdkDrawable *drawable)
+{
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+  
+  g_return_if_fail (impl->hdc_count > 0);
+
+  impl->hdc_count--;
+  if (impl->hdc_count == 0)
+    {
+      if (impl->saved_dc_bitmap)
+	{
+	  GDI_CALL (SelectObject, (impl->hdc, impl->saved_dc_bitmap));
+	  impl->saved_dc_bitmap = NULL;
+	}
+      
+      if (impl->hdc)
+	{
+	  GDI_CALL (DeleteDC, (impl->hdc));
+	  impl->hdc = NULL;
+	}
+    }
+}
+
+static void
+gdk_win32_cairo_surface_destroy (void *data)
+{
+  GdkDrawableImplWin32 *impl = data;
+
+  _gdk_win32_drawable_release_dc (GDK_DRAWABLE (impl));
+  impl->cairo_surface = NULL;
+}
+
+static cairo_surface_t *
+gdk_win32_ref_cairo_surface (GdkDrawable *drawable)
+{
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+
+  if (GDK_IS_WINDOW_IMPL_WIN32 (drawable) &&
+      GDK_WINDOW_DESTROYED (impl->wrapper))
+    return NULL;
+
+  if (!impl->cairo_surface)
+    {
+      HDC hdc = _gdk_win32_drawable_acquire_dc (drawable);
+      if (!hdc)
+	return NULL;
+
+      impl->cairo_surface = cairo_win32_surface_create (hdc);
+
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
+				   drawable, gdk_win32_cairo_surface_destroy);
+    }
+  else
+    cairo_surface_reference (impl->cairo_surface);
+
+  return impl->cairo_surface;
+}
+
 static gint
 gdk_win32_get_depth (GdkDrawable *drawable)
 {
@@ -1961,14 +1960,27 @@ gdk_win32_drawable_get_handle (GdkDrawable *drawable)
   return GDK_DRAWABLE_HANDLE (drawable);
 }
 
-gboolean
-gdk_draw_rectangle_alpha_libgtk_only (GdkDrawable *drawable,
-				      gint         x,
-				      gint         y,
-				      gint         width,
-				      gint         height,
-				      GdkColor    *color,
-				      guint16      alpha)
+/**
+ * _gdk_win32_drawable_finish
+ * @drawable: a Win32 #GdkDrawable implementation
+ * 
+ * Releases any resources allocated internally for the drawable.
+ * This is called when the drawable becomes unusable
+ * (gdk_window_destroy() for a window, or the refcount going to
+ * zero for a pixmap.)
+ **/
+void
+_gdk_win32_drawable_finish (GdkDrawable *drawable)
 {
-  return FALSE;
+  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (drawable);
+
+  if (impl->cairo_surface)
+    {
+      cairo_surface_finish (impl->cairo_surface);
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
+				   NULL, NULL);
+    }
+  
+  g_assert (impl->hdc_count == 0);
 }
+

@@ -857,6 +857,8 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 
   if (!recursing && !foreign_destroy)
     {
+      _gdk_win32_drawable_finish (private->impl);
+
       private->destroyed = TRUE;
       DestroyWindow (GDK_WINDOW_HWND (window));
     }

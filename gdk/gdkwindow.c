@@ -974,8 +974,8 @@ gdk_window_begin_paint_region (GdkWindow *window,
 		    MAX (clip_box.width, 1), MAX (clip_box.height, 1), -1);
 
   paint->surface = _gdk_drawable_ref_cairo_surface (paint->pixmap);
-  _gdk_windowing_set_surface_device_offset (paint->surface,
-					    - paint->x_offset, - paint->y_offset);
+  cairo_surface_set_device_offset (paint->surface,
+				   - paint->x_offset, - paint->y_offset);
   
   for (list = private->paint_stack; list != NULL; list = list->next)
     {

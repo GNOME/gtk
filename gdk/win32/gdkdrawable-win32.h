@@ -53,6 +53,11 @@ struct _GdkDrawableImplWin32
   GdkDrawable *wrapper;
   GdkColormap *colormap;
   HANDLE handle;
+
+  guint hdc_count;
+  HDC hdc;
+  HBITMAP saved_dc_bitmap;	/* Original bitmap for dc */
+  cairo_surface_t *cairo_surface;
 };
  
 struct _GdkDrawableImplWin32Class 
@@ -62,6 +67,10 @@ struct _GdkDrawableImplWin32Class
 };
 
 GType gdk_drawable_impl_win32_get_type (void);
+
+HDC  _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable);
+void _gdk_win32_drawable_release_dc (GdkDrawable *drawable);
+void _gdk_win32_drawable_finish     (GdkDrawable *drawable);
 
 #ifdef __cplusplus
 }

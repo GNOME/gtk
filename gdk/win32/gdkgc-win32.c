@@ -475,7 +475,6 @@ _gdk_win32_gc_new (GdkDrawable	  *drawable,
   GDK_NOTE (GC, g_print ("\n"));
 
   win32_gc->hdc = NULL;
-  win32_gc->hwnd = NULL;
 
   return gc;
 }
@@ -764,7 +763,6 @@ gdk_gc_copy (GdkGC *dst_gc,
 
   dst_win32_gc->hdc = NULL;
   dst_win32_gc->saved_dc = FALSE;
-  dst_win32_gc->hwnd = NULL;
   dst_win32_gc->holdpal = NULL;
   dst_win32_gc->pen_hbrbg = NULL;
 }
@@ -846,6 +844,21 @@ predraw (GdkGC       *gc,
   return ok;
 }
 
+static GdkDrawableImplWin32 *
+get_impl_drawable (GdkDrawable *drawable)
+{
+  if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
+    return GDK_DRAWABLE_IMPL_WIN32(drawable);
+  else if (GDK_IS_WINDOW (drawable))
+    return GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
+  else if (GDK_IS_PIXMAP (drawable))
+    return GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
+  else
+    g_assert_not_reached ();
+
+  return NULL;
+}
+
 /**
  * gdk_win32_hdc_get:
  * @drawable: destination #GdkDrawable
@@ -911,37 +924,14 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
 
   g_assert (win32_gc->hdc == NULL);
 
-  if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
-    impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
-  else if (GDK_IS_WINDOW (drawable))
-    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
-  else if (GDK_IS_PIXMAP (drawable))
-    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
-  else
-    g_assert_not_reached ();
+  impl = get_impl_drawable (drawable);
+  
+  win32_gc->hdc = _gdk_win32_drawable_acquire_dc (GDK_DRAWABLE (impl));
+  ok = win32_gc->hdc != NULL;
 
-  win32_gc->hwnd = impl->handle;
-
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
-    {
-      if ((win32_gc->hdc = CreateCompatibleDC (NULL)) == NULL)
-	WIN32_GDI_FAILED ("CreateCompatibleDC"), ok = FALSE;
-
-      if (ok && (win32_gc->saved_dc = SaveDC (win32_gc->hdc)) == 0)
-	WIN32_GDI_FAILED ("SaveDC"), ok = FALSE;
+  if (ok && (win32_gc->saved_dc = SaveDC (win32_gc->hdc)) == 0)
+    WIN32_GDI_FAILED ("SaveDC"), ok = FALSE;
       
-      if (ok && SelectObject (win32_gc->hdc, win32_gc->hwnd) == NULL)
-	WIN32_GDI_FAILED ("SelectObject"), ok = FALSE;
-    }
-  else
-    {
-      if ((win32_gc->hdc = GetDC (win32_gc->hwnd)) == NULL)
-	WIN32_GDI_FAILED ("GetDC");
-      
-      if (ok && (win32_gc->saved_dc = SaveDC (win32_gc->hdc)) == 0)
-	WIN32_GDI_FAILED ("SaveDC");
-    }
-
   if (ok && (usage & (GDK_GC_FOREGROUND | GDK_GC_BACKGROUND)))
       ok = predraw (gc, impl->colormap);
 
@@ -1061,14 +1051,7 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
 			 win32_gc, win32_gc->hdc,
 			 _gdk_win32_gcvalues_mask_to_string (usage)));
 
-  if (GDK_IS_DRAWABLE_IMPL_WIN32 (drawable))
-    impl = GDK_DRAWABLE_IMPL_WIN32(drawable);
-  else if (GDK_IS_WINDOW (drawable))
-    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_WINDOW_OBJECT (drawable))->impl);
-  else if (GDK_IS_PIXMAP (drawable))
-    impl = GDK_DRAWABLE_IMPL_WIN32 ((GDK_PIXMAP_OBJECT (drawable))->impl);
-  else
-    g_assert_not_reached ();
+  impl = get_impl_drawable (drawable);
 
   if (win32_gc->holdpal != NULL)
     {
@@ -1094,10 +1077,7 @@ gdk_win32_hdc_release (GdkDrawable    *drawable,
 
   GDI_CALL (RestoreDC, (win32_gc->hdc, win32_gc->saved_dc));
 
-  if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
-    GDI_CALL (DeleteDC, (win32_gc->hdc));
-  else
-    GDI_CALL (ReleaseDC, (win32_gc->hwnd, win32_gc->hdc));
+  _gdk_win32_drawable_release_dc (GDK_DRAWABLE (impl));
 
   if (hpen != NULL)
     GDI_CALL (DeleteObject, (hpen));

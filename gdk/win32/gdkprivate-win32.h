@@ -290,9 +290,6 @@ struct _GdkGCWin32
   HDC hdc;
   int saved_dc;
 
-  HANDLE hwnd;			/* For which window, or what bitmap is
-				 * selected into it
-				 */
   HPALETTE holdpal;
 };
 
