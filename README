@@ -1,14 +1,12 @@
 
+This is GTK+ version 0.99.0.   GTK, which stands for the Gimp ToolKit, 
+is a library for creating graphical user interfaces.  
+
 The official ftp site is:
   ftp://ftp.gimp.org/pub/gtk
 
 Patches can be uploaded to:
   ftp://ftp.gimp.org/incoming
-
-Anonymous CVS access for gtk+ (as well as 'gimp', 'gimp-data', and
-'gnome') is available via
-  CVSROOT=:pserver:anonymous@cvs.gnome.org:/home/cvs
-with an empty password.
 
 A mailing list is located at:
   gtk-list@redhat.com

@@ -31,6 +31,3 @@
 
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE
-
-/* #undef PACKAGE */
-/* #undef VERSION */

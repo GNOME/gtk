@@ -1,11 +1,20 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(gdk/gdktypes.h)
 
+GTK_MAJOR_VERSION=0
+GTK_MINOR_VERSION=99
+GTK_MICRO_VERSION=0
+GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
+
+# For automake.
+VERSION=$GTK_VERSION
+PACKAGE=gtk+
+
 # Configure glib
 AC_CONFIG_SUBDIRS(glib)
 
 dnl Initialize automake stuff
-AM_INIT_AUTOMAKE(gtk+, 971201)
+AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 # Specify a configuration file
 AM_CONFIG_HEADER(config.h)
