@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-13 04:18+0100\n"
-"PO-Revision-Date: 2003-12-13 12:27+0100\n"
+"POT-Creation-Date: 2003-12-15 10:46+0100\n"
+"PO-Revision-Date: 2003-12-15 10:47+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <franciscojavier.fernandez."
 "serrador@hispalinux.es>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -784,7 +784,7 @@ msgstr "Nombre"
 msgid "A unique name for the action."
 msgstr "Un nombre único para la acción."
 
-#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Etiqueta"
@@ -870,7 +870,7 @@ msgstr "Un nombre para el grupo de la acción."
 msgid "Horizontal alignment"
 msgstr "Alineación horizontal"
 
-#: gtk/gtkalignment.c:117
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -882,7 +882,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Alineación vertical"
 
-#: gtk/gtkalignment.c:127
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -1117,7 +1117,7 @@ msgstr "Posición"
 msgid "The index of the child in the parent"
 msgstr "La posición del hijo en el padre"
 
-#: gtk/gtkbutton.c:191
+#: gtk/gtkbutton.c:204
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
@@ -1125,12 +1125,12 @@ msgstr ""
 "Texto del widget etiqueta dentro del botón, si el botón contiene un widget "
 "etiqueta"
 
-#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Utilizar subrayado"
 
-#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1138,46 +1138,54 @@ msgstr ""
 "Si se selecciona, un subrayado en el texto indica que el siguiente carácter "
 "debe utilizarse como el nemotécnico de la combinación de teclas"
 
-#: gtk/gtkbutton.c:206
+#: gtk/gtkbutton.c:219
 msgid "Use stock"
 msgstr "Usar inventario"
 
-#: gtk/gtkbutton.c:207
+#: gtk/gtkbutton.c:220
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Si se selecciona, la etiqueta se utiliza para tomar un elemento del "
 "inventario en vez de ser mostrada"
 
-#: gtk/gtkbutton.c:214
+#: gtk/gtkbutton.c:227
 msgid "Focus on click"
 msgstr "Enfocar al pulsar"
 
-#: gtk/gtkbutton.c:215
+#: gtk/gtkbutton.c:228
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Indica si el botón obtiene el foco cuando es pulsado con el ratón"
 
-#: gtk/gtkbutton.c:222
+#: gtk/gtkbutton.c:235
 msgid "Border relief"
 msgstr "Relieve del borde"
 
-#: gtk/gtkbutton.c:223
+#: gtk/gtkbutton.c:236
 msgid "The border relief style"
 msgstr "Estilo del relieve del borde"
 
-#: gtk/gtkbutton.c:280
+#: gtk/gtkbutton.c:253
+msgid "Horizontal alignment for child"
+msgstr "Alineación horizontal para el descendiente"
+
+#: gtk/gtkbutton.c:272
+msgid "Vertical alignment for child"
+msgstr "Alineación vertical para el descendiente"
+
+#: gtk/gtkbutton.c:331
 msgid "Default Spacing"
 msgstr "Espaciado predeterminado"
 
-#: gtk/gtkbutton.c:281
+#: gtk/gtkbutton.c:332
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Espacio extra a añadir para los botones CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:287
+#: gtk/gtkbutton.c:338
 msgid "Default Outside Spacing"
 msgstr "Espaciado Exterior por Omisión"
 
-#: gtk/gtkbutton.c:288
+#: gtk/gtkbutton.c:339
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -1185,21 +1193,21 @@ msgstr ""
 "Espacio extra a agregar para los botones CAN_DEFAULT que están siempre "
 "dibujados fuera del borde"
 
-#: gtk/gtkbutton.c:293
+#: gtk/gtkbutton.c:344
 msgid "Child X Displacement"
 msgstr "Desplazamiento X del hijo"
 
-#: gtk/gtkbutton.c:294
+#: gtk/gtkbutton.c:345
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr ""
 "Cuan lejos en la dirección x debe moverse el hijo cuando es soltado el botón"
 
-#: gtk/gtkbutton.c:301
+#: gtk/gtkbutton.c:352
 msgid "Child Y Displacement"
 msgstr "Desplazamiento Y del hijo"
 
-#: gtk/gtkbutton.c:302
+#: gtk/gtkbutton.c:353
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr ""
@@ -2823,7 +2831,7 @@ msgstr "No se ha podido convertir el nombre del archivo"
 msgid "(Empty)"
 msgstr "(vacío)"
 
-#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:371
+#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:383
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "error al crear la carpeta «%s» : %s"
@@ -2836,15 +2844,19 @@ msgstr "Este sistema de archivo no soporta iconos"
 msgid "This file system does not support bookmarks"
 msgstr "Este sistema de archivo no soporta marcadores"
 
-#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:893
+#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:1069
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "Error al obtener información para «%s» : %s"
 
-#: gtk/gtkfilesystemwin32.c:680
+#: gtk/gtkfilesystemwin32.c:692
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Se ha producido un error al guardar el marcador (%s)"
+
+#: gtk/gtkfilesystemwin32.c:848
+msgid "This file system does not support icons for everything"
+msgstr "Este sistema de archivos no soporta iconos para todo"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
@@ -3341,7 +3353,7 @@ msgstr "La altura de la disposición"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:840
+#: gtk/gtkmain.c:851
 msgid "default:LTR"
 msgstr "default:LTR"
 
