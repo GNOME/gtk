@@ -1,3 +1,7 @@
+Tue Feb 22 08:52:52 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkthemes.h: add extern "C" scope.
+
 Mon Feb 21 20:16:42 2000  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c: applied  patch from Guy Harris <guy@netapp.com>
