@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.0\n"
-"POT-Creation-Date: 2000-01-28 15:19+0100\n"
+"POT-Creation-Date: 2000-02-03 23:51+0100\n"
 "PO-Revision-Date: Tue Jan 11 2000 16:35:38+0200\n"
 "Last-Translator: Vladimir Vuksan <vuksan@veus.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -46,14 +46,14 @@ msgid "Opacity:"
 msgstr "Prozirnost:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "U redu"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
+#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Poni¹ti"
@@ -387,11 +387,11 @@ msgstr "tanko"
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS prekoraèeno. Neka pisma mogu nedostajati."
 
-#: gtk/gtkfontsel.c:3779
+#: gtk/gtkfontsel.c:3770
 msgid "Apply"
 msgstr "Primijeni"
 
-#: gtk/gtkfontsel.c:3801
+#: gtk/gtkfontsel.c:3792
 msgid "Font Selection"
 msgstr "Izbor pisma"
 

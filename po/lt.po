@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.6\n"
-"POT-Creation-Date: 2000-01-28 15:19+0100\n"
+"POT-Creation-Date: 2000-02-03 23:51+0100\n"
 "PO-Revision-Date: 2000-01-28 15:19+0100\n"
 "Last-Translator: Kæstutis Kruþikas <DrKestas@takas.lt>\n"
 "Language-Team: Lithuanian\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr ""
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3772
+#: gtk/gtkcolorsel.c:1727 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3763
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "Gerai"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:961
-#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3785
+#: gtk/gtkfilesel.c:1065 gtk/gtkfilesel.c:1180 gtk/gtkfontsel.c:3776
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Nutraukti"
@@ -384,11 +384,11 @@ msgstr ""
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "MAX_FONTS virðytas. Kai kuriø ðriftø gali nebûti"
 
-#: gtk/gtkfontsel.c:3779
+#: gtk/gtkfontsel.c:3770
 msgid "Apply"
 msgstr "Pritaikyti"
 
-#: gtk/gtkfontsel.c:3801
+#: gtk/gtkfontsel.c:3792
 msgid "Font Selection"
 msgstr "Ðriftø pasirinkimas"
 
