@@ -1,3 +1,10 @@
+Tue May  5 17:04:14 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdk.c (gdk_event_translate): A guint * was
+	being passed where X expected a Keysym *, and
+	keysyms are long's on Alpha Linux. This was causing
+	segfaults in Xlib, apparently because of alignment.
+
 Tue May  5 11:03:00 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkselection.c (gtk_selection_clear): Fixed
