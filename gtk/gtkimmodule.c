@@ -33,10 +33,14 @@
 #include <pango/pango-utils.h>
 #include "gtkimmodule.h"
 #include "gtkimcontextsimple.h"
-#include "gtkprivate.h"
 #include "gtkrc.h"
 #include "config.h"
 #include "gtkintl.h"
+
+/* Do *not* include "gtkprivate.h" in this file. If you do, the
+ * correct_libdir_prefix() function below will have to move somewhere
+ * else.
+ */
 
 #define SIMPLE_ID "gtk-im-context-simple"
 
@@ -223,10 +227,20 @@ add_module (GtkIMModule *module, GSList *infos)
   modules_list = g_slist_prepend (modules_list, module);
 }
 
-#ifdef G_OS_WIN32
+#if defined (G_OS_WIN32) && defined (GTK_LIBDIR)
+/* This is needes on Win32, but not wanted when compiling with MSVC,
+ * as the makefile.msc doesn't define any GTK_LIBDIR value.
+ */
+
+#define DO_CORRECT_LIBDIR_PREFIX /* Flag to check below whether to call this */
+
 static void
 correct_libdir_prefix (gchar **path)
 {
+  /* GTK_LIBDIR here is supposed to still have the definition from
+   * Makefile.am, i.e. the build-time value. Do *not* include gtkprivate.h
+   * in this file.
+   */
   if (strncmp (*path, GTK_LIBDIR, strlen (GTK_LIBDIR)) == 0)
     {
       /* This is an entry put there by make install on the
@@ -237,8 +251,9 @@ correct_libdir_prefix (gchar **path)
        * builder's machine. Replace the path with the real
        * one on this machine.
        */
+      extern const gchar *_gtk_get_libdir ();
       gchar *tem = *path;
-      *path = g_strconcat (GTK_LIBDIR, tem + strlen (GTK_LIBDIR), NULL);
+      *path = g_strconcat (_gtk_get_libdir (), tem + strlen (GTK_LIBDIR), NULL);
       g_free (tem);
     }
 }
@@ -303,7 +318,7 @@ gtk_im_module_init ()
 	    }
 
 	  module->path = g_strdup (tmp_buf->str);
-#ifdef G_OS_WIN32
+#ifdef DO_CORRECT_LIBDIR_PREFIX
 	  correct_libdir_prefix (&module->path);
 #endif
 	  g_type_module_set_name (G_TYPE_MODULE (module), module->path);
@@ -329,7 +344,7 @@ gtk_im_module_init ()
 	  if (!pango_scan_string (&p, tmp_buf))
 	    goto context_error;
 	  info->domain_dirname = g_strdup (tmp_buf->str);
-#ifdef G_OS_WIN32
+#ifdef DO_CORRECT_LIBDIR_PREFIX
 	  correct_libdir_prefix (&info->domain_dirname);
 #endif
 

@@ -1,3 +1,10 @@
+2001-11-04  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkimmodule.c: Can't include gtkprivate.h (I added the
+	include yesterday, without really thinking), as that defeats the
+	working of correct_libdir_prefix() (it becomes a no-op.). Add
+	comment mentioning that. Thanks to Hans Breuer for noticing.
+	
 2001-11-03  Daniel Elstner  <daniel.elstner@gmx.net>
 
 	* gtk/gtkwindow.h (frame_event): Use GtkWindow* as first
