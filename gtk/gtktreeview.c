@@ -347,8 +347,6 @@ static void     gtk_tree_view_real_set_cursor                (GtkTreeView       
 							      GtkTreePath       *path,
 							      gboolean           clear_and_select,
 							      gboolean           clamp_node);
-static void     gtk_tree_view_column_autosize                (GtkTreeView       *tree_view,
-							      GtkTreeViewColumn *tree_column);
 
 /* interactive search */
 static void     gtk_tree_view_search_dialog_destroy     (GtkWidget        *search_dialog,
@@ -1947,9 +1945,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	{
 	  gpointer drag_data;
 
-	  if (event->type == GDK_2BUTTON_PRESS)
+	  if (event->type == GDK_2BUTTON_PRESS &&
+	      gtk_tree_view_column_get_sizing (column) != GTK_TREE_VIEW_COLUMN_AUTOSIZE)
 	    {
-	      gtk_tree_view_column_autosize (tree_view, column);
+	      _gtk_tree_view_column_autosize (tree_view, column);
 	      break;
 	    }
 
@@ -4223,6 +4222,28 @@ _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view)
   tree_view->priv->mark_rows_col_dirty = TRUE;
 
   install_presize_handler (tree_view);
+}
+
+/**
+ * This function works synchronously (due to the while (do_validate_rows...)
+ * loop).
+ *
+ * There was a check for column_type != GTK_TREE_VIEW_COLUMN_AUTOSIZE
+ * here. You now need to check that yourself.
+ */
+void
+_gtk_tree_view_column_autosize (GtkTreeView *tree_view,
+			        GtkTreeViewColumn *column)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
+
+  _gtk_tree_view_column_cell_set_dirty (column, FALSE);
+
+  do_presize_handler (tree_view);
+  while (do_validate_rows (tree_view));
+
+  gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
 
 /* Drag-and-drop */
@@ -7801,24 +7822,6 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
   g_object_notify (G_OBJECT (tree_view), "headers_visible");
-}
-
-static void
-gtk_tree_view_column_autosize (GtkTreeView *tree_view,
-			       GtkTreeViewColumn *column)
-{
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (column));
-
-  if (column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
-    return;
-
-  _gtk_tree_view_column_cell_set_dirty (column, FALSE);
-
-  do_presize_handler (tree_view);
-  while (do_validate_rows (tree_view));
-
-  gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
 
 /**

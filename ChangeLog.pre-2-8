@@ -1,3 +1,16 @@
+Fri Apr 19 23:38:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeprivate.h: add _gtk_tree_view_column_autosize
+
+	* gtk/gtktreeview.c: privately export _gtk_tree_view_column_autosize,
+	and add a small note about that function,
+	(gtk_tree_view_button_press): check for double click and
+	"not having an autosize" column before autosizing the column,
+	
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_set_min_width):
+	call _gtk_tree_view_column_autosize to update autosized column width
+	(gtk_tree_view_column_set_max_width): ditto
+
 2002-04-20  Matthias Clasen  <maclas@gmx.de>
 
 	* TODO, TODO.xml, README.nanox, docs/Changes-1.2.txt,
