@@ -236,8 +236,7 @@ gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
 
   if (height)
     *height = calc_height;
-  if (width && height)
-    g_print ("Checking width/height %d %d\n", *width, *height);
+
   if (cell_area)
     {
       if (x_offset)
