@@ -1,3 +1,25 @@
+Wed Jan 16 19:23:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.c (gtk_binding_entry_activate): 
+	Support "optional" bindings. If a binding signal
+	has a boolean return value, and returns FALSE it
+	is as if it didn't exist all.
+
+	* gtk/gtkbindings.c (binding_compose_params): Switch
+	over to GValue.
+
+	* gtk/gtknotebook.[ch]: Make the select_page() and
+	change_current_page() signals only take effect when
+	the focus is on the tab area so that key presses
+	in children pass up to the toplevel correctly.
+
+Wed Jan 16 12:16:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_size_request): Fix 
+	calculation error in the (shouldn't happen) case where
+	option_menu->height < child_requisition.height. (Patch
+	from Jacob Berkman, #66969)
+
 2002-01-15  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkenums.h (GtkMatchType): Deprecate. (#68183)

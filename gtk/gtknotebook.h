@@ -94,9 +94,9 @@ struct _GtkNotebookClass
 			      guint            page_num);
 
   /* Action signals for keybindings */
-  void (* select_page)         (GtkNotebook       *notebook,
+  gboolean (* select_page)     (GtkNotebook       *notebook,
                                 gboolean           move_focus);
-  void (* focus_tab)           (GtkNotebook       *notebook,
+  gboolean (* focus_tab)       (GtkNotebook       *notebook,
                                 GtkNotebookTab     type);
   void (* change_current_page) (GtkNotebook       *notebook,
                                 gint               offset);

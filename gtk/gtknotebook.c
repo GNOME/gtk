@@ -115,9 +115,9 @@ struct _GtkNotebookPage
 static void gtk_notebook_class_init          (GtkNotebookClass *klass);
 static void gtk_notebook_init                (GtkNotebook      *notebook);
 
-static void gtk_notebook_select_page         (GtkNotebook       *notebook,
-                                              gboolean           move_focus);
-static void gtk_notebook_focus_tab           (GtkNotebook       *notebook,
+static gboolean gtk_notebook_select_page     (GtkNotebook       *notebook,
+					      gboolean           move_focus);
+static gboolean gtk_notebook_focus_tab       (GtkNotebook       *notebook,
                                               GtkNotebookTab     type);
 static void gtk_notebook_change_current_page (GtkNotebook       *notebook,
 					      gint               offset);
@@ -448,7 +448,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, focus_tab),
                   NULL, NULL,
-                  _gtk_marshal_VOID__ENUM,
+                  _gtk_marshal_BOOLEAN__ENUM,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_NOTEBOOK_TAB);
   notebook_signals[SELECT_PAGE] = 
@@ -457,8 +457,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkNotebookClass, select_page),
                   NULL, NULL,
-                  _gtk_marshal_VOID__BOOLEAN,
-                  G_TYPE_NONE, 1,
+                  _gtk_marshal_BOOLEAN__BOOLEAN,
+                  G_TYPE_BOOLEAN, 1,
                   G_TYPE_BOOLEAN);
   notebook_signals[CHANGE_CURRENT_PAGE] = 
     g_signal_new ("change_current_page",
@@ -467,7 +467,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   G_STRUCT_OFFSET (GtkNotebookClass, change_current_page),
                   NULL, NULL,
                   gtk_marshal_VOID__INT,
-                  G_TYPE_NONE, 1,
+                  G_TYPE_BOOLEAN, 1,
                   G_TYPE_INT);
   
   binding_set = gtk_binding_set_by_class (object_class);
@@ -543,32 +543,45 @@ gtk_notebook_init (GtkNotebook *notebook)
   notebook->have_visible_child = FALSE;
 }
 
-static void
+static gboolean
 gtk_notebook_select_page (GtkNotebook *notebook,
                           gboolean     move_focus)
 {
-  gtk_notebook_page_select (notebook, move_focus);
+  if (gtk_widget_is_focus (GTK_WIDGET (notebook)))
+    {
+      gtk_notebook_page_select (notebook, move_focus);
+      return TRUE;
+    }
+  else
+    return FALSE;
 }
 
-static void
+static gboolean
 gtk_notebook_focus_tab (GtkNotebook       *notebook,
                         GtkNotebookTab     type)
 {
   GList *list;
-  
-  switch (type)
+
+  if (gtk_widget_is_focus (GTK_WIDGET (notebook)))
     {
-    case GTK_NOTEBOOK_TAB_FIRST:
-      list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, TRUE);
-      if (list)
-	gtk_notebook_switch_focus_tab (notebook, list);
-      break;
-    case GTK_NOTEBOOK_TAB_LAST:
-      list = gtk_notebook_search_page (notebook, NULL, STEP_PREV, TRUE);
-      if (list)
-	gtk_notebook_switch_focus_tab (notebook, list);
-      break;
+      switch (type)
+	{
+	case GTK_NOTEBOOK_TAB_FIRST:
+	  list = gtk_notebook_search_page (notebook, NULL, STEP_NEXT, TRUE);
+	  if (list)
+	    gtk_notebook_switch_focus_tab (notebook, list);
+	  break;
+	case GTK_NOTEBOOK_TAB_LAST:
+	  list = gtk_notebook_search_page (notebook, NULL, STEP_PREV, TRUE);
+	  if (list)
+	    gtk_notebook_switch_focus_tab (notebook, list);
+	  break;
+	}
+
+      return TRUE;
     }
+  else
+    return FALSE;
 }
 
 static void
@@ -3773,7 +3786,7 @@ gtk_notebook_mnemonic_activate_switch_page (GtkWidget *child,
     {
       GtkNotebookPage *page = list->data;
 
-      gtk_widget_grab_focus (notebook);	/* Do this first to avoid focusing new page */
+      gtk_widget_grab_focus (GTK_WIDGET (notebook));	/* Do this first to avoid focusing new page */
       gtk_notebook_switch_page (notebook, page,  -1);
       focus_tabs_in (notebook);
     }
