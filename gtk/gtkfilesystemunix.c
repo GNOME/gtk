@@ -282,7 +282,7 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTANT,
+		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   "error creating directory '%s': %s",
 		   filename_utf8 ? filename_utf8 : "???",
 		   g_strerror (errno));
@@ -645,7 +645,7 @@ gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
     {
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTANT,
+		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   "%s",
 		   tmp_error->message);
       
@@ -691,7 +691,7 @@ filename_get_info (const gchar     *filename,
       gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
       g_set_error (error,
 		   GTK_FILE_SYSTEM_ERROR,
-		   GTK_FILE_SYSTEM_ERROR_NONEXISTANT,
+		   GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
 		   "error getting information for '%s': %s",
 		   filename_utf8 ? filename_utf8 : "???",
 		   g_strerror (errno));

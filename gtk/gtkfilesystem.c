@@ -559,7 +559,7 @@ gtk_file_system_make_path (GtkFileSystem    *file_system,
  *
  * If parsing fails because a path was encountered that doesn't
  * exist on the filesystem, then an error of type
- * %GTK_FILE_SYSTEM_ERROR_NONEXISTANT will be set in @error
+ * %GTK_FILE_SYSTEM_ERROR_NONEXISTENT will be set in @error
  * and %FALSE returned. (This only applies to parsing relative paths,
  * not to interpretation of @file_part. No check is made as
  * to whether @file_part exists.)
