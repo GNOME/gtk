@@ -1,3 +1,14 @@
+1999-03-09  Federico Mena Quintero  <federico@nuclecu.unam.mx>
+
+	* gtk/gtkstyle.c (gtk_default_draw_handle): Significantly reduced
+	the number of calls to gdk_draw_point() (and thus to X) by
+	clipping the points by hand.
+
+	* gtk/gtkhandlebox.c (draw_textured_frame): Actually make use of
+	the clip parameter.
+	(gtk_handle_box_paint): Only paint the handle if the expose area
+	intersects it.
+
 Sun Mar  7 18:46:37 1999  ape@lrdpf.spacetec.no  (Asbjorn Pettersen)
 
 	* gtk/gtkmain.c (add_dll_suffix): Add this function (OS/2 ver.)

@@ -3054,7 +3054,9 @@ gtk_default_draw_handle (GtkStyle      *style,
   gint xx, yy;
   gint xthick, ythick;
   GdkGC *light_gc, *dark_gc;
+  GdkRectangle rect;
   GdkRectangle dest;
+  gint intersect;
   
   g_return_if_fail (style != NULL);
   g_return_if_fail (window != NULL);
@@ -3075,26 +3077,40 @@ gtk_default_draw_handle (GtkStyle      *style,
   xthick = style->klass->xthickness;
   ythick = style->klass->ythickness;
   
-  dest.x = x + xthick;
-  dest.y = y + ythick;
-  dest.width = width - (xthick * 2);
-  dest.height = height - (ythick * 2);
-  
-  gdk_gc_set_clip_rectangle (light_gc, &dest);
-  gdk_gc_set_clip_rectangle (dark_gc, &dest);
-  
+  rect.x = x + xthick;
+  rect.y = y + ythick;
+  rect.width = width - (xthick * 2);
+  rect.height = height - (ythick * 2);
+
+  if (area)
+    intersect = gdk_rectangle_intersect (area, &rect, &dest);
+  else
+    {
+      intersect = TRUE;
+      dest = rect;
+    }
+
+  if (!intersect)
+    return;
+
+#define DRAW_POINT(w, gc, clip, xx, yy)		\
+  {						\
+    if ((xx) >= (clip).x			\
+	&& (yy) >= (clip).y			\
+	&& (xx) < (clip).x + (clip).width	\
+	&& (yy) < (clip).y + (clip).height)	\
+      gdk_draw_point ((w), (gc), (xx), (yy));	\
+  }
+
   for (yy = y + ythick; yy < (y + height - ythick); yy += 3)
     for (xx = x + xthick; xx < (x + width - xthick); xx += 6)
       {
-        gdk_draw_point (window, light_gc, xx, yy);
-        gdk_draw_point (window, dark_gc, xx + 1, yy + 1);
-        
-        gdk_draw_point (window, light_gc, xx + 3, yy + 1);
-        gdk_draw_point (window, dark_gc, xx + 4, yy + 2);
+	DRAW_POINT (window, light_gc, dest, xx, yy);
+	DRAW_POINT (window, dark_gc, dest, xx + 1, yy + 1);
+
+	DRAW_POINT (window, light_gc, dest, xx + 3, yy + 1);
+	DRAW_POINT (window, dark_gc, dest, xx + 4, yy + 2);
       }
-  
-  gdk_gc_set_clip_rectangle (light_gc, NULL);
-  gdk_gc_set_clip_rectangle (dark_gc, NULL);
 }
 
 static void
