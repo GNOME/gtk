@@ -1,3 +1,7 @@
+Sat Feb 28 01:14:23 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/migrating-GtkComboBox.sgml: New chapter.
+
 Sat Feb 28 01:11:53 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: Include migrating-GtkComboBox.sgml.
