@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-08-01 01:25-0400\n"
-"PO-Revision-Date: 2004-01-15 16:03+0100\n"
+"PO-Revision-Date: 2004-08-03 00:53+0200\n"
 "Last-Translator: Thierry Vignaud <tvignaud@mandrakesoft.com>\n"
 "Language-Team: br <LL@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -53,7 +53,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:577 gdk-pixbuf/gdk-pixbuf-io.c:629
 #, c-format
 msgid "Image type '%s' is not supported"
-msgstr ""
+msgstr "Seurt skeudenn « %s » n'eo ket skoraet"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:671
 #, c-format
@@ -70,9 +70,8 @@ msgid "Failed to load image '%s': %s"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1166
-#, fuzzy, c-format
 msgid "Error writing to image file: %s"
-msgstr "Fazi en ur lenn ar restr skeudenn PNG: %s"
+msgstr "Fazi en ur skrivañ ar restr skeudenn : %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1210 gdk-pixbuf/gdk-pixbuf-io.c:1326
 #, c-format
@@ -86,7 +85,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:1251
 #, fuzzy
 msgid "Failed to open temporary file"
-msgstr "Fazi en ur zigeriñ « %s »: %s"
+msgstr "Fazi en ur zigeriñ ur restr"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1270
 msgid "Failed to read from temporary file"
@@ -95,7 +94,7 @@ msgstr ""
 #: gdk-pixbuf/gdk-pixbuf-io.c:1452
 #, c-format
 msgid "Failed to open '%s' for writing: %s"
-msgstr ""
+msgstr "N'hellan ket digeriñ restr '%s' evit skrivañ : %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1477
 #, c-format
@@ -719,15 +718,15 @@ msgstr ""
 #: gtk/gtkaboutdialog.c:534
 #, c-format
 msgid "About %s"
-msgstr ""
+msgstr "Diwar-benn %s"
 
 #: gtk/gtkaboutdialog.c:1655
 msgid "Credits"
-msgstr ""
+msgstr "Garedon"
 
 #: gtk/gtkaboutdialog.c:1680
 msgid "Written by"
-msgstr ""
+msgstr "Skrivet gant"
 
 #: gtk/gtkaboutdialog.c:1683
 msgid "Documented by"
@@ -760,11 +759,11 @@ msgstr ""
 #.
 #: gtk/gtkcalendar.c:709
 msgid "calendar:week_start:0"
-msgstr ""
+msgstr "0"
 
 #: gtk/gtkcolorbutton.c:219 gtk/gtkcolorbutton.c:573
 msgid "Pick a Color"
-msgstr ""
+msgstr "Dibabit ul Liv"
 
 #: gtk/gtkcolorbutton.c:465
 msgid "Received invalid color data\n"
@@ -823,7 +822,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1885
 msgid "_Value:"
-msgstr ""
+msgstr "_Gwerzh :"
 
 #: gtk/gtkcolorsel.c:1886
 msgid "Brightness of the color."
@@ -876,9 +875,8 @@ msgid "_Palette"
 msgstr "_Paliked"
 
 #: gtk/gtkcolorsel.c:1987
-#, fuzzy
 msgid "Color Wheel"
-msgstr "_Anv al liv"
+msgstr "Rodel al liv"
 
 #: gtk/gtkcolorseldialog.c:116
 msgid "Color Selection"
@@ -886,7 +884,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:4343 gtk/gtktextview.c:6936
 msgid "Select _All"
-msgstr ""
+msgstr "Diuz an &Holl"
 
 #: gtk/gtkentry.c:4353 gtk/gtktextview.c:6946
 msgid "Input _Methods"
@@ -900,7 +898,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:1702 gtk/gtkfilechooser.c:1746
 #, c-format
 msgid "Invalid filename: %s"
-msgstr ""
+msgstr "Anv ar restr direizh : %s"
 
 #: gtk/gtkfilechooserdefault.c:745
 #, c-format
@@ -931,13 +929,12 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:1083 gtk/gtkpathbar.c:842
-#, fuzzy
 msgid "Home"
-msgstr "_Ker"
+msgstr "Kêr"
 
 #: gtk/gtkfilechooserdefault.c:1101 gtk/gtkpathbar.c:844
 msgid "Desktop"
-msgstr ""
+msgstr "Burev"
 
 #: gtk/gtkfilechooserdefault.c:1545
 #, c-format
@@ -945,6 +942,8 @@ msgid ""
 "Could not create folder %s:\n"
 "%s"
 msgstr ""
+"Ne m'eus ket krouet ar _renkell : %s\n"
+"%s"
 
 #: gtk/gtkfilechooserdefault.c:1728
 #, c-format
@@ -965,11 +964,11 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:2570
 msgid "Shortcuts"
-msgstr ""
+msgstr "Berradennoù"
 
 #: gtk/gtkfilechooserdefault.c:2624
 msgid "Folder"
-msgstr "Roll-skrid"
+msgstr "Renkell"
 
 #: gtk/gtkfilechooserdefault.c:2671 gtk/gtkstock.c:294
 msgid "_Add"
@@ -981,7 +980,7 @@ msgstr "_Lemel"
 
 #: gtk/gtkfilechooserdefault.c:2771
 msgid "_Add to Shortcuts"
-msgstr ""
+msgstr "_Ouzhpennañ er Berradennoù"
 
 #: gtk/gtkfilechooserdefault.c:2785
 msgid "Show _Hidden Files"
@@ -992,43 +991,37 @@ msgid "Files"
 msgstr "Restroù"
 
 #: gtk/gtkfilechooserdefault.c:2937
-#, fuzzy
 msgid "Name"
-msgstr "_Anv al liv"
+msgstr "Anv"
 
 #: gtk/gtkfilechooserdefault.c:2962
 msgid "Size"
-msgstr "Brasentez"
+msgstr "Ment"
 
 #: gtk/gtkfilechooserdefault.c:2975
 msgid "Modified"
-msgstr ""
+msgstr " Kemmet"
 
-#. Create Folder
 #: gtk/gtkfilechooserdefault.c:3020
-#, fuzzy
 msgid "Create Fo_lder"
-msgstr "Roll-skrid nevez"
+msgstr "Krouiñ ar _renkell"
 
 #. Name entry
 #: gtk/gtkfilechooserdefault.c:3129
-#, fuzzy
 msgid "_Name:"
-msgstr "_Anv al liv"
+msgstr "_Anv :"
 
 #: gtk/gtkfilechooserdefault.c:3171
 msgid "_Browse for other folders"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:3408
-#, fuzzy
 msgid "Save in _folder:"
-msgstr "Roll-skrid nevez"
+msgstr "Enrollañ e _renkell :"
 
 #: gtk/gtkfilechooserdefault.c:3410
-#, fuzzy
 msgid "Create in _folder:"
-msgstr "Roll-skrid nevez"
+msgstr "Krouiñ en ur renkell :"
 
 #: gtk/gtkfilechooserdefault.c:4096
 msgid "Cannot change to folder because it is not local"
@@ -1036,23 +1029,21 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:4234
 msgid "Could not find the path"
-msgstr ""
+msgstr "Ne m'eus ket gallet kavout ar hent"
 
 #: gtk/gtkfilechooserdefault.c:4585
 #, c-format
 msgid "shortcut %s does not exist"
-msgstr ""
+msgstr "N'eus ket ur berradenn %s"
 
 #: gtk/gtkfilechooserdefault.c:5252
 msgid "Type name of new folder"
 msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:5281
-#, fuzzy, c-format
+#, c-format
 msgid "%d byte"
-msgid_plural "%d bytes"
-msgstr[0] "%d letrennioù"
-msgstr[1] "%d letrennioù"
+msgstr "%d okted"
 
 #: gtk/gtkfilechooserdefault.c:5283
 #, c-format
@@ -1079,7 +1070,7 @@ msgstr "Dec'h"
 
 #: gtk/gtkfilechooserdefault.c:5345
 msgid "Unknown"
-msgstr "Anavez"
+msgstr "Dianav"
 
 #: gtk/gtkfilechooserdefault.c:5440
 msgid "Cannot change to the folder you specified as it is an invalid path."
@@ -1094,15 +1085,15 @@ msgstr ""
 
 #: gtk/gtkfilechooserdefault.c:5556
 msgid "Open Location"
-msgstr ""
+msgstr "Digeriñ ul lec'hiadur"
 
 #: gtk/gtkfilechooserdefault.c:5563
 msgid "Save in Location"
-msgstr ""
+msgstr "Enrollañ e Lec'hiadur"
 
 #: gtk/gtkfilechooserdefault.c:5582
 msgid "_Location:"
-msgstr ""
+msgstr "_Lec'hiadur :"
 
 #: gtk/gtkfilesel.c:730
 msgid "Folders"
@@ -1135,11 +1126,11 @@ msgstr "Roll-skrid _nevez"
 
 #: gtk/gtkfilesel.c:1126
 msgid "De_lete File"
-msgstr ""
+msgstr "_Distruj ar Restr"
 
 #: gtk/gtkfilesel.c:1137
 msgid "_Rename File"
-msgstr ""
+msgstr "_Adenvel ar Restr"
 
 #: gtk/gtkfilesel.c:1439
 #, c-format
@@ -1203,7 +1194,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1628
 msgid "Delete File"
-msgstr "Dilemel ar restr"
+msgstr "Distruj Restr"
 
 #: gtk/gtkfilesel.c:1674 gtk/gtkfilesel.c:1688
 #, c-format
@@ -1231,20 +1222,20 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:1747
 msgid "Rename File"
-msgstr ""
+msgstr "Adenvel ar Restr"
 
 #: gtk/gtkfilesel.c:1762
 #, c-format
 msgid "Rename file \"%s\" to:"
-msgstr ""
+msgstr "Adenvel ar restr « %s » da :"
 
 #: gtk/gtkfilesel.c:1791
 msgid "_Rename"
-msgstr ""
+msgstr "_Adenvel"
 
 #: gtk/gtkfilesel.c:2223
 msgid "_Selection: "
-msgstr ""
+msgstr "_Diuzadenn :"
 
 #: gtk/gtkfilesel.c:3139
 #, c-format
@@ -1259,7 +1250,7 @@ msgstr ""
 
 #: gtk/gtkfilesel.c:4019
 msgid "Name too long"
-msgstr ""
+msgstr "Re hir eo an anv"
 
 #: gtk/gtkfilesel.c:4021
 msgid "Couldn't convert filename"
@@ -1272,7 +1263,7 @@ msgstr "(Goullo)"
 #: gtk/gtkfilesystemunix.c:419 gtk/gtkfilesystemwin32.c:386
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s : %s"
 
 #: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
 #: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
@@ -1283,16 +1274,15 @@ msgstr ""
 #: gtk/gtkfilesystemunix.c:490 gtk/gtkfilesystemwin32.c:434
 #, c-format
 msgid "error creating directory '%s': %s"
-msgstr ""
+msgstr "fazi en ur krouiñ ar renkell %s : %s"
 
 #: gtk/gtkfilesystemunix.c:570 gtk/gtkfilesystemwin32.c:494
 msgid "This file system does not support mounting"
 msgstr ""
 
 #: gtk/gtkfilesystemunix.c:578
-#, fuzzy
 msgid "Filesystem"
-msgstr "Restroù"
+msgstr "Reizhiad-restr"
 
 #: gtk/gtkfilesystemunix.c:731
 #, c-format
@@ -1322,7 +1312,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:177 gtk/gtkfontbutton.c:294
 msgid "Pick a Font"
-msgstr ""
+msgstr "Dibabit ur Nodrez"
 
 #. Initialize fields
 #: gtk/gtkfontbutton.c:288
@@ -1331,7 +1321,7 @@ msgstr "Sans 12"
 
 #: gtk/gtkfontbutton.c:806
 msgid "Font"
-msgstr "Nodrezh"
+msgstr "Nodrez"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
@@ -1345,11 +1335,11 @@ msgstr "_Familh:"
 
 #: gtk/gtkfontsel.c:365
 msgid "_Style:"
-msgstr ""
+msgstr "_Giz :"
 
 #: gtk/gtkfontsel.c:371
 msgid "Si_ze:"
-msgstr ""
+msgstr "_Ment"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:547
@@ -1392,7 +1382,7 @@ msgstr ""
 
 #: gtk/gtkimmodule.c:421
 msgid "Default"
-msgstr ""
+msgstr "Dre ziouer"
 
 #: gtk/gtkinputdialog.c:234
 msgid "Input"
@@ -1404,19 +1394,19 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:255
 msgid "_Device:"
-msgstr ""
+msgstr "_Trobarzhell :"
 
 #: gtk/gtkinputdialog.c:272
 msgid "Disabled"
-msgstr ""
+msgstr "Dizoberiet"
 
 #: gtk/gtkinputdialog.c:279
 msgid "Screen"
-msgstr ""
+msgstr "Skramm"
 
 #: gtk/gtkinputdialog.c:286
 msgid "Window"
-msgstr ""
+msgstr "Prenestr"
 
 #: gtk/gtkinputdialog.c:293
 msgid "_Mode: "
@@ -1430,15 +1420,15 @@ msgstr ""
 #. Keys listbox
 #: gtk/gtkinputdialog.c:341
 msgid "_Keys"
-msgstr ""
+msgstr "_Alc'hwezioù"
 
 #: gtk/gtkinputdialog.c:561
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gtk/gtkinputdialog.c:562
 msgid "Y"
-msgstr ""
+msgstr "Y"
 
 #: gtk/gtkinputdialog.c:563
 msgid "Pressure"
@@ -1454,11 +1444,11 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:566
 msgid "Wheel"
-msgstr ""
+msgstr "Rodel"
 
 #: gtk/gtkinputdialog.c:606
 msgid "none"
-msgstr ""
+msgstr "hini ebet"
 
 #: gtk/gtkinputdialog.c:642 gtk/gtkinputdialog.c:678
 msgid "(disabled)"
@@ -1466,16 +1456,16 @@ msgstr ""
 
 #: gtk/gtkinputdialog.c:671
 msgid "(unknown)"
-msgstr ""
+msgstr "(dianav)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:758
 msgid "clear"
-msgstr ""
+msgstr "goullonderiñ"
 
 #: gtk/gtklabel.c:3410
 msgid "Select All"
-msgstr ""
+msgstr "Diuz an Holl"
 
 #: gtk/gtklabel.c:3420
 msgid "Input Methods"
@@ -1493,11 +1483,11 @@ msgstr "default:LTR"
 #: gtk/gtknotebook.c:2711 gtk/gtknotebook.c:5059
 #, c-format
 msgid "Page %u"
-msgstr ""
+msgstr "Pajenn %u"
 
 #: gtk/gtkradiotoolbutton.c:90
 msgid "Group"
-msgstr ""
+msgstr "Strollad"
 
 #: gtk/gtkradiotoolbutton.c:91
 msgid "The radio tool button whose group this button belongs to."
@@ -1540,7 +1530,7 @@ msgstr "Goulenn"
 #.
 #: gtk/gtkstock.c:293
 msgid "_About"
-msgstr ""
+msgstr "A-brepoz"
 
 #: gtk/gtkstock.c:295
 msgid "_Apply"
@@ -1584,11 +1574,11 @@ msgstr "_Dilemel"
 
 #: gtk/gtkstock.c:305
 msgid "_Execute"
-msgstr ""
+msgstr "_Eveniñ"
 
 #: gtk/gtkstock.c:306
 msgid "_Edit"
-msgstr ""
+msgstr "_Aozañ"
 
 #: gtk/gtkstock.c:307
 msgid "_Find"
@@ -1596,7 +1586,7 @@ msgstr "_Enklask"
 
 #: gtk/gtkstock.c:308
 msgid "Find and _Replace"
-msgstr ""
+msgstr "Klask ha Erlec'hiañ"
 
 #: gtk/gtkstock.c:309
 msgid "_Floppy"
@@ -1636,7 +1626,7 @@ msgstr "_Uhel"
 
 #: gtk/gtkstock.c:318
 msgid "_Harddisk"
-msgstr ""
+msgstr "_Pladenn"
 
 #: gtk/gtkstock.c:319
 msgid "_Help"
@@ -1683,21 +1673,20 @@ msgid "_Right"
 msgstr "_Dehoù"
 
 #: gtk/gtkstock.c:331
-#, fuzzy
 msgid "_Next"
-msgstr "_Nevez"
+msgstr "_A-heul"
 
 #: gtk/gtkstock.c:332
 msgid "P_ause"
-msgstr ""
+msgstr "_Ehan"
 
 #: gtk/gtkstock.c:333
 msgid "_Play"
-msgstr ""
+msgstr "_Seniñ"
 
 #: gtk/gtkstock.c:334
 msgid "Pre_vious"
-msgstr ""
+msgstr "_Kent"
 
 #: gtk/gtkstock.c:335
 #, fuzzy
@@ -1714,9 +1703,8 @@ msgid "_Stop"
 msgstr "_Harz"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgid "_Network"
-msgstr "_Nevez"
+msgstr "_Rouedad"
 
 #: gtk/gtkstock.c:339
 msgid "_New"
@@ -1736,23 +1724,24 @@ msgstr "_Digoriñ"
 
 #: gtk/gtkstock.c:343
 msgid "_Paste"
-msgstr ""
+msgstr "_Pegañ"
 
 #: gtk/gtkstock.c:344
 msgid "_Preferences"
-msgstr ""
+msgstr "_Dibarzhoù"
 
 #: gtk/gtkstock.c:345
 msgid "_Print"
 msgstr "_Moulañ"
 
 #: gtk/gtkstock.c:346
+#, fuzzy
 msgid "Print Pre_view"
-msgstr ""
+msgstr "Raksell"
 
 #: gtk/gtkstock.c:347
 msgid "_Properties"
-msgstr ""
+msgstr "_Perzhioù"
 
 #: gtk/gtkstock.c:348
 msgid "_Quit"
@@ -1764,7 +1753,7 @@ msgstr "_Adober"
 
 #: gtk/gtkstock.c:350
 msgid "_Refresh"
-msgstr ""
+msgstr "_Adtresañ"
 
 #: gtk/gtkstock.c:352
 msgid "_Revert"
@@ -1828,11 +1817,11 @@ msgstr ""
 
 #: gtk/gtkstock.c:368
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Tostoc'h"
 
 #: gtk/gtkstock.c:369
 msgid "Zoom _Out"
-msgstr ""
+msgstr "_Pelloc'h"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
@@ -1881,7 +1870,7 @@ msgstr ""
 
 #: gtk/gtktipsquery.c:185
 msgid "--- No Tip ---"
-msgstr ""
+msgstr "--- Itrik ebet ---"
 
 #: gtk/gtkuimanager.c:1099
 #, c-format
@@ -1900,7 +1889,7 @@ msgstr ""
 
 #: gtk/gtkuimanager.c:2188
 msgid "Empty"
-msgstr ""
+msgstr "Gollo"
 
 #. ID
 #: modules/input/imam-et.c:454
@@ -1925,7 +1914,7 @@ msgstr ""
 #. ID
 #: modules/input/imipa.c:145
 msgid "IPA"
-msgstr ""
+msgstr "IPA"
 
 #. ID
 #: modules/input/imthai-broken.c:178
@@ -1957,27 +1946,76 @@ msgstr ""
 msgid "Could not get information for file '%s': %s"
 msgstr ""
 
-#~ msgid "Shift"
-#~ msgstr "Maj"
+msgid "Number of Channels"
+msgstr "Niver a Kanolioù"
 
-#~ msgid "Ctrl"
-#~ msgstr "Ctrl"
+msgid "Width"
+msgstr "Ledander"
 
-#~ msgid "Alt"
-#~ msgstr "Alt"
+msgid "Height"
+msgstr "Uhelder"
 
-#, fuzzy
-#~ msgid "Add"
-#~ msgstr "_Ouzhpennañ"
+msgid "Pixels"
+msgstr "Pikseloù"
 
-#, fuzzy
-#~ msgid "Remove"
-#~ msgstr "_Lemel"
+msgid "Value"
+msgstr "Gwerzh"
 
-#, fuzzy
-#~ msgid "Up"
-#~ msgstr "_Uhel"
+msgid "Page Size"
+msgstr "Ment ar bajenn"
 
-#, fuzzy
-#~ msgid "_Filename:"
-#~ msgstr "Anv ar restr"
+msgid "width"
+msgstr "ledander"
+
+msgid "Text"
+msgstr "Skrid"
+
+msgid "Language"
+msgstr "Yezh"
+
+msgid "Active"
+msgstr "Bev"
+
+msgid "Title"
+msgstr "Titl"
+
+msgid "Pixmap"
+msgstr "Piksmap"
+
+msgid "Image"
+msgstr "Skeudenn"
+
+msgid "Page"
+msgstr "Pajenn"
+
+msgid "Menu"
+msgstr "Meuziad"
+
+msgid "Resize"
+msgstr "Adventañ"
+
+msgid "Lower"
+msgstr "Izelaat"
+
+msgid "Style"
+msgstr "Giz"
+
+msgid "Window Title"
+msgstr "Titl ar prenestr"
+
+#: gtk/gtkwindow.c:461
+msgid "The title of the window"
+msgstr "Titl ar prenestr"
+
+
+#: gtk/gtkwindow.c:547
+msgid "Icon for this window"
+msgstr "Arlun evit ar prenestr-mañ"
+
+#: gtk/gtkwindow.c:562
+msgid "Icon Name"
+msgstr "Anv an Arlun"
+
+msgid "Gravity"
+msgstr "Dedennerezh"
+

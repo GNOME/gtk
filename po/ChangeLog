@@ -1,10 +1,14 @@
+2004-08-04  Pablo Saratxaga  <pablo@mandrakesoft.com>
+
+	* br.po,wa.po: Updated Breton and Walloon files
+
 2004-08-02  Funda Wang  <fundawang@linux.net.cn>
 
 	* zh_CN.po: Updated Simplified Chinese translation.
 
 2004-08-01  Matthias Clasen  <mclasen@redhat.com>
                                                                                 
-        * === Released 2.5.1 ===
+	* === Released 2.5.1 ===
                                                                                 
 2004-07-30  Kartik Mistry   <kartik_m@magnet-i.com>
 
