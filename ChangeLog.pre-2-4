@@ -1,3 +1,12 @@
+2000-11-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/gdkevents.h: Add comment that GdkXEvent isn't only for XEvent,
+	but in general for window system specific events.
+
+	* gtk/gtk.def
+	* gtk/makefile.mingw.in
+	* gtk/makefile.msc.in: Update.
+	
 Thu Nov 16 16:11:39 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (EXTRA_DIST): Do not, in any circumstances,

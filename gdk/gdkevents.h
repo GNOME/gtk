@@ -38,7 +38,9 @@ typedef void (*GdkEventFunc) (GdkEvent *event,
 
 /* Event filtering */
 
-typedef void GdkXEvent;	  /* Can be cast to XEvent */
+typedef void GdkXEvent;	  /* Can be cast to window system specific
+			   * even type, XEvent on X11, MSG on Win32.
+			   */
 
 typedef enum {
   GDK_FILTER_CONTINUE,	  /* Event not handled, continue processesing */

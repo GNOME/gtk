@@ -225,6 +225,16 @@ EXPORTS
 	gtk_calendar_select_month
 	gtk_calendar_thaw
 	gtk_calendar_unmark_day
+	gtk_cell_renderer_event
+	gtk_cell_renderer_get_size
+	gtk_cell_renderer_get_type
+	gtk_cell_renderer_pixbuf_get_type
+	gtk_cell_renderer_pixbuf_new
+	gtk_cell_renderer_render
+	gtk_cell_renderer_text_get_type
+	gtk_cell_renderer_text_new
+	gtk_cell_renderer_text_pixbuf_get_type
+	gtk_cell_renderer_text_pixbuf_new
 	gtk_check_button_get_type
 	gtk_check_button_new
 	gtk_check_button_new_with_label
@@ -1179,6 +1189,7 @@ EXPORTS
 	gtk_text_iter_backward_search
 	gtk_text_iter_backward_to_tag_toggle
 	gtk_text_iter_begins_tag
+	gtk_text_iter_compare
 	gtk_text_iter_ends_tag
 	gtk_text_iter_equal
 	gtk_text_iter_forward_chars
@@ -1207,7 +1218,6 @@ EXPORTS
 	gtk_text_tag_get_type
 	gtk_text_tag_table_lookup
 	gtk_text_thaw
-	gtk_text_unknown_char
 	gtk_text_unknown_char_utf8
 	gtk_text_view_buffer_to_window_coords
 	gtk_text_view_get_buffer
@@ -1217,12 +1227,12 @@ EXPORTS
 	gtk_text_view_get_left_margin
 	gtk_text_view_get_line_at_y
 	gtk_text_view_get_line_yrange
-	gtk_text_view_get_right_margin
-	gtk_text_view_get_type
 	gtk_text_view_get_pixels_above_lines
 	gtk_text_view_get_pixels_below_lines
 	gtk_text_view_get_pixels_inside_wrap
+	gtk_text_view_get_right_margin
 	gtk_text_view_get_tabs
+	gtk_text_view_get_type
 	gtk_text_view_get_window
 	gtk_text_view_get_wrap_mode
 	gtk_text_view_new_with_buffer

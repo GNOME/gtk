@@ -66,6 +66,11 @@ gtk_OBJECTS =					\
 	gtkbox.o				\
 	gtkbutton.o				\
 	gtkcalendar.o				\
+	gtkcellrenderer.o			\
+	gtkcellrenderertext.o			\
+	gtkcellrenderertextpixbuf.o		\
+	gtkcellrenderertoggle.o			\
+	gtkcellrendererpixbuf.o			\
 	gtkcheckbutton.o			\
 	gtkcheckmenuitem.o			\
 	gtkclipboard.o				\
@@ -241,6 +246,7 @@ gtk_public_h_sources =		\
 	gtkiconfactory.h	\
 	gtkimage.h		\
 	gtkimcontext.h		\
+	gtkimmodule.h		\
 	gtkimmulticontext.h	\
 	gtkinputdialog.h	\
 	gtkinvisible.h		\
@@ -261,6 +267,7 @@ gtk_public_h_sources =		\
 	gtkmisc.h		\
 	gtkmodelsimple.h	\
 	gtknotebook.h		\
+	gtkoldeditable.h	\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
@@ -300,7 +307,6 @@ gtk_public_h_sources =		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
 	gtktext.h		\
-	gtkthemes.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
 	gtktoolbar.h		\
@@ -308,6 +314,7 @@ gtk_public_h_sources =		\
 	gtktree.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
+	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreestore.h		\
 	gtktreeview.h		\
