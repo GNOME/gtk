@@ -306,7 +306,8 @@ gdk_input_wintab_init (void)
 	      WTInfo (WTI_DDCTXS + devix, CTX_SENSY, &lc.lcSensY);
 	      WTInfo (WTI_DDCTXS + devix, CTX_SENSZ, &lc.lcSensZ);
 	      WTInfo (WTI_DDCTXS + devix, CTX_SYSMODE, &lc.lcSysMode);
-	      lc.lcSysOrgX = lc.lcSysOrgY = 0;
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSORGX, &lc.lcSysOrgX);
+	      WTInfo (WTI_DDCTXS + devix, CTX_SYSORGY, &lc.lcSysOrgY);
 	      WTInfo (WTI_DDCTXS + devix, CTX_SYSEXTX, &lc.lcSysExtX);
 	      WTInfo (WTI_DDCTXS + devix, CTX_SYSEXTY, &lc.lcSysExtY);
 	      WTInfo (WTI_DDCTXS + devix, CTX_SYSSENSX, &lc.lcSysSensX);

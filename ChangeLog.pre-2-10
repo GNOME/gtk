@@ -1,3 +1,9 @@
+2004-09-25  Robert Ögren  <gtk@roboros.com>
+
+	* gdk/win32/gdkinput-win32.c (gdk_input_wintab_init): Set
+	lcSysOrgX and lcSysOrgY from device instead of hardcoding to 0,
+	a further fix for bug #145467.
+
 2004-09-25  Matthias Clasen  <mclasen@x1-6-00-50-fc-70-9f-e0>
 
 	* gtk/gtktextiter.c (inside_word_func): Don't access 
