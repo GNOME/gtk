@@ -33,16 +33,13 @@ Additionally, the <envar>GTK_RC_FILES</envar> environment variable
 can be set to a #G_SEARCHPATH_SEPARATOR_S-separated list of files
 in order to overwrite the set of default files at runtime.
 </para>
-<para>
-For each default file, in addition to the file itself,
-GTK+ will look for a locale-specific file that will
-be parsed before the main file. For instance,
-if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
-when loading the default file <filename>~/.gtkrc</filename>
-then GTK+ looks for <filename>~/.gtkrc.ja_JP.ujis</filename>,
-<filename>~/.gtkrc.ja_JP</filename>, and
-<filename>~/.gtkrc.ja</filename>, and parses all files that 
-it finds.
+<para><anchor id="locale-specific-rc">
+For each RC file, in addition to the file itself, GTK+ will look for 
+a locale-specific file that will be parsed after the main file. 
+For instance, if <envar>LANG</envar> is set to <literal>ja_JP.ujis</literal>,
+when loading the default file <filename>~/.gtkrc</filename> then GTK+ looks 
+for <filename>~/.gtkrc.ja_JP</filename> and <filename>~/.gtkrc.ja</filename>, 
+and parses the first of those that exists.
 </para>
 </refsect2>
 
@@ -130,7 +127,14 @@ The possible toplevel declarations are:
   <varlistentry>
     <term><literal>include <replaceable>filename</replaceable></literal></term>
     <listitem>
-      <para>Parses another file at this point.</para>
+      <para>Parses another file at this point. If
+        <replaceable>filename</replaceable> is not an absolute filename, 
+        it is searched in the directories of the currently open RC files.
+      </para>
+      <para>GTK+ also tries to load a 
+        <link linkend="locale-specific-rc">locale-specific variant</link> of
+        the included file.
+       </para>
     </listitem>
   </varlistentry>
   <varlistentry>
@@ -254,7 +258,9 @@ elements are:
     <term><literal>font = <replaceable>font</replaceable></literal></term>
      <listitem>
        <para>
-         Sets the font for a widget.
+         Sets the font for a widget. <replaceable>font</replaceable> must be
+         a XLFD font description, e.g. 
+         <literal>"-*-helvetica-medium-r-normal--10-*-*-*-*-*-*-*"</literal>.
        </para>
      </listitem>
   </varlistentry>
@@ -263,15 +269,40 @@ elements are:
      <listitem>
        <para>
          Sets the fontset for a widget. Overrides any
-         <literal>font</literal> declarations.
+         <literal>font</literal> declarations. <replaceable>font</replaceable> 
+         must be a comma-separated list of XLFD font descriptions, e.g.
+         <literal>"-JIS-Fixed-Medium-R-Normal--26-180-100-100-C-240,
+                   -JIS-Fixed-Medium-R-Normal--26-180-100-100-C-120,
+                   -GB-Fixed-Medium-R-Normal--26-180-100-100-C-240,
+                   -Adobe-Courier-Bold-R-Normal--25-180-100-100-M-150"</literal>.
        </para>
      </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>font_name = <replaceable>font</replaceable></literal></term>
+     <listitem>
+       <para>
+         Sets the font for a widget. Overrides any
+         <literal>font</literal> or <literal>fontset</literal> declarations. 
+         <replaceable>font</replaceable> must be a Pango font name, e.g.
+         <literal>"Sans Italic 10"</literal>.
+       </para>
+     </listitem>   
   </varlistentry>
   <varlistentry>
     <term><literal>stock[<replaceable>"stock-id"</replaceable>] = { <replaceable>icon source specifications</replaceable> }</literal></term>
      <listitem>
        <para>
         Defines the icon for a stock item.
+       </para>
+     </listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><literal>engine <replaceable>"engine"</replaceable> { <replaceable>engine-specific
+settings</replaceable> }</literal></term>
+     <listitem>
+       <para>
+        Defines the engine to be used when drawing with this style.
        </para>
      </listitem>
   </varlistentry>
@@ -336,7 +367,7 @@ state of the widget. The states are:
 </variablelist>
 </para>
 
-<para id="color-format">
+<para><anchor id="color-format">
 Colors can be specified as a string containing a color name (GTK+ knows
 all names from the X color database 
 <filename>/usr/lib/X11/rgb.txt</filename>),  
@@ -656,7 +687,8 @@ statement in a RC file.
 Parses a given resource file.
 </para>
 
-@filename: the filename of a file to parse.
+@filename: the filename of a file to parse. If @filename is not absolute, it
+  is searched in the current directory.
 
 
 <!-- ##### FUNCTION gtk_rc_parse_string ##### -->

@@ -456,7 +456,8 @@ gtk_rc_add_initial_default_files (void)
 
 /**
  * gtk_rc_add_default_file:
- * @filename: the pathname to the file.
+ * @filename: the pathname to the file. If @filename is not absolute, it
+ *    is searched in the current directory.
  * 
  * Adds a file to the list of files to be parsed at the
  * end of gtk_init().
@@ -808,11 +809,7 @@ gtk_rc_parse_file (GtkRcContext *context,
 
   if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
     {
-      /* Determine locale-specific suffixes for RC files
-       *
-       * We normalize the charset into a standard form,
-       * which has all '-' and '_' characters removed,
-       * and is lowercase.
+      /* Determine locale-specific suffixes for RC files.
        */
       length = strlen (locale);
       

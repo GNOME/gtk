@@ -1,3 +1,7 @@
+2002-02-05  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtkrc.c (gtk_rc_parse_file): Remove a (now) misleading comment.
+
 2002-02-05  Federico Mena Quintero  <federico@ximian.com>
 
 	* gdk/gdkwindow.h: Do not #include <gdk/gdkwindow.h>.
