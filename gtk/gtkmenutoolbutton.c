@@ -277,9 +277,15 @@ button_state_changed_cb (GtkWidget         *widget,
     {
       gtk_widget_set_state (other, state);
     }
-  else if (state == GTK_STATE_ACTIVE)
+  else if (state == GTK_STATE_ACTIVE ||
+           (state == GTK_STATE_INSENSITIVE && other == priv->arrow_button))
     {
       gtk_widget_set_state (other, GTK_STATE_NORMAL);
+    }
+
+  if (state == GTK_STATE_INSENSITIVE && other == priv->arrow_button && button->priv->menu)
+    {
+      gtk_menu_shell_deactivate (GTK_MENU_SHELL (button->priv->menu));
     }
 
   g_signal_handlers_unblock_by_func (other,
