@@ -48,6 +48,12 @@ enum
   SIGNAL_LAST
 };
 
+enum 
+{
+  PROP_ZERO,
+  PROP_HAS_RESIZE_GRIP
+};
+
 static void     gtk_statusbar_class_init     (GtkStatusbarClass *class);
 static void     gtk_statusbar_init           (GtkStatusbar      *statusbar);
 static void     gtk_statusbar_destroy        (GtkObject         *object);
@@ -70,6 +76,14 @@ static void     gtk_statusbar_size_allocate  (GtkWidget         *widget,
                                               GtkAllocation     *allocation);
 static void     gtk_statusbar_create_window  (GtkStatusbar      *statusbar);
 static void     gtk_statusbar_destroy_window (GtkStatusbar      *statusbar);
+static void     gtk_statusbar_get_property   (GObject           *object, 
+					      guint              prop_id, 
+					      GValue            *value, 
+					      GParamSpec        *pspec);
+static void    gtk_statusbar_set_property    (GObject           *object, 
+					      guint              prop_id, 
+					      const GValue      *value, 
+					      GParamSpec        *pspec);
 
 static GtkContainerClass *parent_class;
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
@@ -104,16 +118,21 @@ gtk_statusbar_get_type (void)
 static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
+  gobject_class = (GObjectClass *) class;
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
   parent_class = g_type_class_peek_parent (class);
   
+  gobject_class->set_property = gtk_statusbar_set_property;
+  gobject_class->get_property = gtk_statusbar_get_property;
+
   object_class->destroy = gtk_statusbar_destroy;
 
   widget_class->realize = gtk_statusbar_realize;
@@ -135,6 +154,20 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
   
+  /**
+   * GtkStatusbar:has-resize-grip:
+   *
+   * Whether the statusbar has a grip for resizing the toplevel window.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_HAS_RESIZE_GRIP,
+				   g_param_spec_boolean ("has_resize_grip",
+ 							 _("Has Resize Grip"),
+ 							 _("Whether the statusbar has a grip for resizing the toplevel"),
+ 							 TRUE,
+ 							 G_PARAM_READWRITE));
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
     g_signal_new ("text_pushed",
 		  G_OBJECT_CLASS_TYPE (class),
@@ -379,6 +412,8 @@ gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
           else if (!statusbar->has_resize_grip && statusbar->grip_window != NULL)
             gtk_statusbar_destroy_window (statusbar);
         }
+
+      g_object_notify (G_OBJECT (statusbar), "has_resize_grip");
     }
 }
 
@@ -419,6 +454,44 @@ gtk_statusbar_destroy (GtkObject *object)
   statusbar->keys = NULL;
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
+}
+
+static void
+gtk_statusbar_set_property (GObject      *object, 
+			    guint         prop_id, 
+			    const GValue *value, 
+			    GParamSpec   *pspec)
+{
+  GtkStatusbar *statusbar = GTK_STATUSBAR (object);
+
+  switch (prop_id) 
+    {
+    case PROP_HAS_RESIZE_GRIP:
+      gtk_statusbar_set_has_resize_grip (statusbar, g_value_get_boolean (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_statusbar_get_property (GObject    *object, 
+			    guint       prop_id, 
+			    GValue     *value, 
+			    GParamSpec *pspec)
+{
+  GtkStatusbar *statusbar = GTK_STATUSBAR (object);
+	
+  switch (prop_id) 
+    {
+    case PROP_HAS_RESIZE_GRIP:
+      g_value_set_boolean (value, statusbar->has_resize_grip);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static GdkWindowEdge

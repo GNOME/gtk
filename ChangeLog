@@ -1,3 +1,20 @@
+2003-07-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): Add a new keybinding signal, move_viewport.
+	(gtk_text_view_move_viewport): New function which implements the move_viewport functionality.
+	(gtk_text_view_move_cursor_internal): If the cursor is not visible, move the viewport. (#78669)
+
+	* gtk/gtkenums.h (GtkScrollStep): New enumeration, used for move_viewport argument.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_class_init): Add a has_resize_grip property.  (#111779)
+
+	* gtk/gtkwindow.h: 
+	* gtk/gtkwindow.c (gtk_window_set_default_icon): New method.  (#95816)
+
+	* gtk/gtkmessagedialog.h:
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_add_buttons): New method.  
+	(#65501, Sebastian Rittau)
+
 Fri Jul 18 20:06:57 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktextview.c (changed_handler): use

@@ -1689,6 +1689,7 @@ GtkMessageDialog
 GtkMessageType
 GtkButtonsType
 gtk_message_dialog_new
+gtk_message_dialog_new_with_markup
 <SUBSECTION Standard>
 GTK_MESSAGE_DIALOG
 GTK_IS_MESSAGE_DIALOG
@@ -3984,6 +3985,7 @@ gtk_window_parse_geometry
 gtk_window_reshow_with_initial_size
 gtk_window_resize
 gtk_window_set_default_icon_list
+gtk_window_set_default_icon
 gtk_window_set_default_icon_from_file
 gtk_window_set_icon
 gtk_window_set_icon_list

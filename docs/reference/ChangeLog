@@ -1,3 +1,7 @@
+2003-07-18  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-sections.txt: Add gtk_message_dialog_new_with_markup() and gtk_window_set_default_icon().
+
 2003-07-15  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkseparatortoolitem.sgml: 

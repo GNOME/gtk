@@ -117,6 +117,7 @@ enum
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
   MOVE_FOCUS,
+  MOVE_VIEWPORT,
   SELECT_ALL,
   LAST_SIGNAL
 };
@@ -239,6 +240,9 @@ static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
 static void gtk_text_view_page_horizontally (GtkTextView          *text_view,
                                              gint                  count,
                                              gboolean              extend_selection);
+static void gtk_text_view_move_viewport     (GtkTextView           *text_view,
+                                             GtkScrollStep          step,
+                                             gint                   count);
 static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
 static void gtk_text_view_scroll_pages     (GtkTextView           *text_view,
                                             gint                   count,
@@ -688,6 +692,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  G_TYPE_INT,
 		  G_TYPE_BOOLEAN);
   
+  signals[MOVE_VIEWPORT] =
+    _gtk_binding_signal_new ("move_viewport",
+			     G_OBJECT_CLASS_TYPE (gobject_class),
+			     G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+			     G_CALLBACK (gtk_text_view_move_viewport),
+			     NULL, NULL,
+			     _gtk_marshal_VOID__ENUM_INT,
+			     G_TYPE_NONE, 2,
+			     GTK_TYPE_SCROLL_STEP,
+			     G_TYPE_INT);
+
   signals[SET_ANCHOR] =
     g_signal_new ("set_anchor",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -4497,6 +4512,44 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
 
   gint cursor_x_pos = 0;
 
+  if (!text_view->cursor_visible) 
+    {
+      GtkScrollStep scroll_step;
+
+      switch (step) 
+	{
+	case GTK_MOVEMENT_LOGICAL_POSITIONS:
+        case GTK_MOVEMENT_VISUAL_POSITIONS:
+        case GTK_MOVEMENT_WORDS:
+	  scroll_step = GTK_SCROLL_HORIZONTAL_STEPS;
+	  break;
+        case GTK_MOVEMENT_DISPLAY_LINE_ENDS:
+	  scroll_step = GTK_SCROLL_HORIZONTAL_ENDS;
+	  break;	  
+        case GTK_MOVEMENT_DISPLAY_LINES:
+        case GTK_MOVEMENT_PARAGRAPHS:
+        case GTK_MOVEMENT_PARAGRAPH_ENDS:
+	  scroll_step = GTK_SCROLL_STEPS;
+	  break;
+	case GTK_MOVEMENT_PAGES:
+	  scroll_step = GTK_SCROLL_PAGES;
+	  break;
+	case GTK_MOVEMENT_HORIZONTAL_PAGES:
+	  scroll_step = GTK_SCROLL_HORIZONTAL_PAGES;
+	  break;
+	case GTK_MOVEMENT_BUFFER_ENDS:
+	  scroll_step = GTK_SCROLL_ENDS;
+	  break;
+	default:
+          scroll_step = GTK_SCROLL_PAGES;
+          break;
+	}
+      
+      gtk_text_view_move_viewport (text_view, scroll_step, count);
+
+      return;
+    }
+
   gtk_text_view_reset_im_context (text_view);
 
   if (step == GTK_MOVEMENT_PAGES)
@@ -4636,6 +4689,54 @@ gtk_text_view_page_horizontally (GtkTextView     *text_view,
 {
   gtk_text_view_move_cursor_internal (text_view, GTK_MOVEMENT_HORIZONTAL_PAGES,
                                       count, extend_selection);
+}
+
+
+static void
+gtk_text_view_move_viewport (GtkTextView     *text_view,
+                             GtkScrollStep    step,
+                             gint             count)
+{
+  GtkAdjustment *adjustment;
+  gdouble increment;
+  
+  switch (step) 
+    {
+    case GTK_SCROLL_STEPS:
+    case GTK_SCROLL_PAGES:
+    case GTK_SCROLL_ENDS:
+      adjustment = get_vadjustment (text_view);
+      break;
+    case GTK_SCROLL_HORIZONTAL_STEPS:
+    case GTK_SCROLL_HORIZONTAL_PAGES:
+    case GTK_SCROLL_HORIZONTAL_ENDS:
+      adjustment = get_hadjustment (text_view);
+      break;
+    default:
+      adjustment = get_vadjustment (text_view);
+      break;
+    }
+
+  switch (step) 
+    {
+    case GTK_SCROLL_STEPS:
+    case GTK_SCROLL_HORIZONTAL_STEPS:
+      increment = adjustment->step_increment;
+      break;
+    case GTK_SCROLL_PAGES:
+    case GTK_SCROLL_HORIZONTAL_PAGES:
+      increment = adjustment->page_increment;
+      break;
+    case GTK_SCROLL_ENDS:
+    case GTK_SCROLL_HORIZONTAL_ENDS:
+      increment = adjustment->upper - adjustment->lower;
+      break;
+    default:
+      increment = 0.0;
+      break;
+    }
+
+  set_adjustment_clamped (adjustment, adjustment->value + count * increment);
 }
 
 static void

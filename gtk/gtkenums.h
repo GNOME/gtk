@@ -193,7 +193,8 @@ typedef enum
   GTK_CENTIMETERS
 } GtkMetricType;
 
-typedef enum {
+typedef enum 
+{
   GTK_MOVEMENT_LOGICAL_POSITIONS, /* move by forw/back graphemes */
   GTK_MOVEMENT_VISUAL_POSITIONS,  /* move by left/right graphemes */
   GTK_MOVEMENT_WORDS,             /* move by forward/back words */
@@ -205,6 +206,16 @@ typedef enum {
   GTK_MOVEMENT_BUFFER_ENDS,       /* move to ends of the buffer */
   GTK_MOVEMENT_HORIZONTAL_PAGES   /* move horizontally by pages */
 } GtkMovementStep;
+
+typedef enum 
+{
+  GTK_SCROLL_STEPS,
+  GTK_SCROLL_PAGES,
+  GTK_SCROLL_ENDS,
+  GTK_SCROLL_HORIZONTAL_STEPS,
+  GTK_SCROLL_HORIZONTAL_PAGES,
+  GTK_SCROLL_HORIZONTAL_ENDS
+} GtkScrollStep;
 
 /* Orientation for toolbars, etc. */
 typedef enum

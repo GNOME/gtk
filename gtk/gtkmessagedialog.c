@@ -18,7 +18,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2003.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -302,7 +302,10 @@ gtk_message_dialog_new (GtkWindow     *parent,
   GtkDialog *dialog;
   gchar* msg = 0;
   va_list args;
-  
+
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
+  g_return_val_if_fail (message_format != NULL, NULL);
+
   widget = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
 			 "message_type", type,
 			 "buttons", buttons,
@@ -340,6 +343,79 @@ gtk_message_dialog_new (GtkWindow     *parent,
 
   if (flags & GTK_DIALOG_NO_SEPARATOR)
     gtk_dialog_set_has_separator (dialog, FALSE);
+
+  return widget;
+}
+
+/**
+ * gtk_message_dialog_new_with_markup:
+ * @parent: transient parent, or %NULL for none 
+ * @flags: flags
+ * @type: type of message
+ * @buttons: set of buttons to use
+ * @message_format: printf()-style format string, or %NULL
+ * @Varargs: arguments for @message_format
+ * 
+ * Creates a new message dialog, which is a simple dialog with an icon
+ * indicating the dialog type (error, warning, etc.) and some text which
+ * is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
+ * When the user clicks a button a "response" signal is emitted with
+ * response IDs from #GtkResponseType. See #GtkDialog for more details.
+ *
+ * Please note that if you have strings in the printf() arguments
+ * passed to this function, you might need to protect against
+ * them being interpreted as markup. You can do this using
+ * g_markup_escape_text() as in the following example:
+ * <informalexample><programlisting>
+ *   const gchar *error_text =
+ *     "&lt;span weight=\"bold\" size=\"larger\"&gt;"
+ *     "Could not open document '%s'."
+ *     "&lt;/span&gt;\n\n"
+ *     "You do not have appropriate permission to access this file.";
+ *   gchar *tmp;
+ *   GtkWidget *dialog;
+ *   
+ *   tmp = g_markup_escape_text (filename, -1);
+ *   dialog = gtk_message_dialog_new_with_markup (main_application_window,
+ *                                                GTK_DIALOG_DESTROY_WITH_PARENT,
+ *                                                GTK_MESSAGE_ERROR,
+ *                                                GTK_BUTTONS_CLOSE,
+ *                                                error_text, tmp);
+ *   g_free (tmp);
+ * </programlisting></informalexample>
+ * 
+ * Return value: a new #GtkMessageDialog
+ *
+ * Since: 2.4
+ **/
+GtkWidget*
+gtk_message_dialog_new_with_markup (GtkWindow     *parent,
+                                    GtkDialogFlags flags,
+                                    GtkMessageType type,
+                                    GtkButtonsType buttons,
+                                    const gchar   *message_format,
+                                    ...)
+{
+  GtkWidget *widget;
+  gchar* msg = 0;
+  va_list args;
+
+  g_return_val_if_fail (parent == NULL || GTK_IS_WINDOW (parent), NULL);
+  g_return_val_if_fail (message_format != NULL, NULL);
+
+  widget = gtk_message_dialog_new (parent, flags, type, buttons, "");
+
+  if (message_format)
+    {
+      va_start (args, message_format);
+      msg = g_strdup_vprintf(message_format, args);
+      va_end (args);
+
+      gtk_label_set_markup (GTK_LABEL (GTK_MESSAGE_DIALOG (widget)->label),
+                            msg);
+
+      g_free (msg);
+    }
 
   return widget;
 }

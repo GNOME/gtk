@@ -252,6 +252,7 @@ gboolean   gtk_window_set_icon_from_file           (GtkWindow   *window,
 GdkPixbuf* gtk_window_get_icon                     (GtkWindow  *window);
 void       gtk_window_set_default_icon_list        (GList      *list);
 GList*     gtk_window_get_default_icon_list        (void);
+void       gtk_window_set_default_icon             (GdkPixbuf  *icon);
 gboolean   gtk_window_set_default_icon_from_file   (const gchar *filename,
 						    GError     **err);
 

@@ -2784,6 +2784,25 @@ gtk_window_set_default_icon_list (GList *list)
 }
 
 /**
+ * gtk_window_set_default_icon:
+ * @pixbuf: the icon
+ *
+ * Sets an icon to be used as fallback for windows that haven't
+ * had gtk_window_set_icon() called on them from a pixbuf.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_window_set_default_icon (GdkPixbuf *pixbuf)
+{
+  g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
+
+  GList *list = g_list_prepend (NULL, pixbuf);
+  gtk_window_set_default_icon_list (list);
+  g_list_free (list);
+}
+
+/**
  * gtk_window_set_default_icon_from_file:
  * @filename: location of icon file
  * @err: location to store error, or %NULL.
@@ -2804,10 +2823,7 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
 
   if (pixbuf)
     {
-      GList *list = g_list_prepend (NULL, pixbuf);
-      gtk_window_set_default_icon_list (list);
-      g_list_free (list);
-
+      gtk_window_set_default_icon (pixbuf);
       g_object_unref (pixbuf);
       
       return TRUE;
@@ -3791,7 +3807,10 @@ gtk_window_realize (GtkWidget *widget)
   gdk_window_set_type_hint (widget->window, window->type_hint);
 
   if (gtk_window_get_skip_pager_hint (window))
+    {
+      g_print ("setting skip pager when realizing\n");
     gdk_window_set_skip_pager_hint (widget->window, TRUE);
+    }
 
   if (gtk_window_get_skip_taskbar_hint (window))
     gdk_window_set_skip_taskbar_hint (widget->window, TRUE);
