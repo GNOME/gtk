@@ -11,6 +11,7 @@ pixbuf-random-image
 pixbuf-random-seed
 pixbuf-read
 simple
+stresstest-toolbar
 testcalendar
 testdnd
 testgtk
