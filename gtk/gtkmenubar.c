@@ -149,6 +149,12 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
 	      requisition->width += child->requisition.width;
 	      requisition->height = MAX (requisition->height, child->requisition.height);
+	      /* Support for the right justified help menu */
+	      if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
+		   && (GTK_MENU_ITEM(child)->right_justify))
+		{
+		  requisition->width += CHILD_SPACING;
+		}
 
 	      nchildren += 1;
 	    }
@@ -210,10 +216,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 
 	  /* Support for the right justified help menu */
 	  if ( (children == NULL) && (GTK_IS_MENU_ITEM(child))
-	      && (GTK_MENU_ITEM(child)->right_justify)) {
-		  child_allocation.x = allocation->width -
-			  child_allocation.width - CHILD_SPACING - offset;
-	  }
+	      && (GTK_MENU_ITEM(child)->right_justify)) 
+	    {
+	      child_allocation.x = allocation->width -
+		  child->requisition.width - CHILD_SPACING - offset;
+	    }
 	  if (GTK_WIDGET_VISIBLE (child))
 	    {
 	      child_allocation.width = child->requisition.width;
