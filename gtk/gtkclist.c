@@ -1255,7 +1255,7 @@ gtk_clist_column_titles_show (GtkCList *clist)
     {
       GTK_CLIST_SET_FLAG (clist, CLIST_SHOW_TITLES);
       if (clist->title_window)
-	      gdk_window_show (clist->title_window);
+	gdk_window_show (clist->title_window);
       gtk_widget_queue_resize (GTK_WIDGET (clist));
     }
 }
@@ -1270,7 +1270,7 @@ gtk_clist_column_titles_hide (GtkCList *clist)
     {
       GTK_CLIST_UNSET_FLAG (clist, CLIST_SHOW_TITLES);
       if (clist->title_window)
-	      gdk_window_hide (clist->title_window);
+	gdk_window_hide (clist->title_window);
       gtk_widget_queue_resize (GTK_WIDGET (clist));
     }
 }
@@ -1283,6 +1283,8 @@ gtk_clist_column_title_active (GtkCList *clist,
   g_return_if_fail (GTK_IS_CLIST (clist));
 
   if (column < 0 || column >= clist->columns)
+    return;
+  if (!clist->column[column].button)
     return;
 
   if (!GTK_WIDGET_SENSITIVE (clist->column[column].button) ||
@@ -1304,6 +1306,8 @@ gtk_clist_column_title_passive (GtkCList *clist,
 
   if (column < 0 || column >= clist->columns)
     return;
+  if (!clist->column[column].button)
+    return;
 
   if (GTK_WIDGET_SENSITIVE (clist->column[column].button) ||
       GTK_WIDGET_CAN_FOCUS (clist->column[column].button))
@@ -1324,8 +1328,7 @@ gtk_clist_column_titles_active (GtkCList *clist)
   g_return_if_fail (GTK_IS_CLIST (clist));
 
   for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].button)
-      gtk_clist_column_title_active (clist, i);
+    gtk_clist_column_title_active (clist, i);
 }
 
 void
@@ -1336,9 +1339,11 @@ gtk_clist_column_titles_passive (GtkCList *clist)
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
+  if (!GTK_CLIST_SHOW_TITLES (clist))
+    return;
+
   for (i = 0; i < clist->columns; i++)
-    if (clist->column[i].button)
-      gtk_clist_column_title_passive (clist, i);
+    gtk_clist_column_title_passive (clist, i);
 }
 
 void
@@ -1554,10 +1559,14 @@ gtk_clist_set_column_visibility (GtkCList *clist,
     }
 
   clist->column[column].visible = visible;
-  if (visible)
-    gtk_widget_show (clist->column[column].button);
-  else
-    gtk_widget_hide (clist->column[column].button);
+
+  if (clist->column[column].button)
+    {
+      if (visible)
+	gtk_widget_show (clist->column[column].button);
+      else
+	gtk_widget_hide (clist->column[column].button);
+    }
 }
 
 void

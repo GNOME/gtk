@@ -4157,7 +4157,6 @@ gtk_ctree_export_to_gnode (GtkCTree          *ctree,
 {
   GtkCTreeNode *work;
   GNode *gnode;
-  GNode *new_sibling;
   gint depth;
 
   g_return_val_if_fail (ctree != NULL, NULL);
@@ -4182,15 +4181,17 @@ gtk_ctree_export_to_gnode (GtkCTree          *ctree,
   if (parent)
     g_node_insert_before (parent, sibling, gnode);
 
-  for (work = GTK_CTREE_ROW (node)->children, new_sibling = NULL; work;
-       work = GTK_CTREE_NODE_NEXT (work))
+  if (!GTK_CTREE_ROW (node)->is_leaf)
     {
-      sibling = gtk_ctree_export_to_gnode (ctree, gnode, new_sibling,
-					   work, func, data);
-      if (sibling)
-	new_sibling = sibling;
+      GNode *new_sibling = NULL;
+
+      for (work = GTK_CTREE_ROW (node)->children; work;
+	   work = GTK_CTREE_ROW (work)->sibling)
+	new_sibling = gtk_ctree_export_to_gnode (ctree, gnode, new_sibling,
+						 work, func, data);
+
+      g_node_reverse_children (gnode);
     }
-  g_node_reverse_children (gnode);
 
   return gnode;
 }
