@@ -1408,9 +1408,11 @@ gtk_label_ensure_layout (GtkLabel *label)
   GtkWidget *widget;
   PangoRectangle logical_rect;
   gint rwidth, rheight;
+  gboolean rtl;
 
   widget = GTK_WIDGET (label);
 
+  rtl = gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL;
   rwidth = label->misc.xpad * 2;
   rheight = label->misc.ypad * 2;
 
@@ -1426,17 +1428,17 @@ gtk_label_ensure_layout (GtkLabel *label)
       switch (label->jtype)
 	{
 	case GTK_JUSTIFY_LEFT:
-	  align = PANGO_ALIGN_LEFT;
+	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
 	  break;
 	case GTK_JUSTIFY_RIGHT:
-	  align = PANGO_ALIGN_RIGHT;
+	  align = rtl ? PANGO_ALIGN_LEFT : PANGO_ALIGN_RIGHT;
 	  break;
 	case GTK_JUSTIFY_CENTER:
 	  align = PANGO_ALIGN_CENTER;
 	  break;
 	case GTK_JUSTIFY_FILL:
 	  /* FIXME: This just doesn't work to do this */
-	  align = PANGO_ALIGN_LEFT;
+	  align = rtl ? PANGO_ALIGN_RIGHT : PANGO_ALIGN_LEFT;
 	  pango_layout_set_justify (label->layout, TRUE);
 	  break;
 	default:
