@@ -1,3 +1,9 @@
+2001-09-21  Hans Breuer  <hans@breuer.org>
+
+	* gdk-pixbuf.def : updated externals
+
+	* makefile.msc : generate gdk-pixbuf-enum-types.[hc]
+
 Thu Sep 20 17:22:48 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* io-tiff.c (gdk_pixbuf__tiff_image_load): On OSF, apparently fseek()
