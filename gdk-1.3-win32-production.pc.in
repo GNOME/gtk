@@ -6,5 +6,6 @@ includedir=@includedir@
 Name: GDK
 Description: GIMP Drawing Kit (Win32 "production" branch)
 Version: @VERSION@
+Requires: glib-2.0
 Libs: -L${libdir} -lgdk
 Cflags: -I${includedir}

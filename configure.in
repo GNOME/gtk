@@ -612,7 +612,8 @@ esac
 ],[
 if test "$os_win32" = "yes"; then
   gdk_windowing='
-#define GDK_WINDOWING_WIN32'
+#define GDK_WINDOWING_WIN32
+#define GDK_USE_UTF8_MBS'
 else
   gdk_windowing='
 #define GDK_WINDOWING_X11'
