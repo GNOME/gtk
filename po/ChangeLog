@@ -1,3 +1,7 @@
+Mon Nov  3 22:41:08 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* POTFILES.in: Add gtk/gtkactiongroup.c
+
 2003-11-03  Federico Mena Quintero  <federico@ximian.com>
 
 	* POTFILES.in: Added gtkfilechooser.c, gtkfilechooserdefault.c,

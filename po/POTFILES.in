@@ -22,6 +22,7 @@ gdk-pixbuf/io-xpm.c
 gdk/gdkdisplaymanager.c
 gtk/gtkaccellabel.c
 gtk/gtkaction.c
+gtk/gtkactiongroup.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
