@@ -807,18 +807,6 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
   k_grab_window = NULL;
 }
 
-/**
- * gdk_keyboard_grab_info_libgtk_only:
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
- *   the @owner_events flag to gdk_keyboard_grab() was %TRUE.
- * 
- * Determines information about the current keyboard grab.
- * This is not public API and must not be used by applications.
- * 
- * Return value: %TRUE if this application currently has the
- *  keyboard grabbed.
- **/
 gboolean
 gdk_keyboard_grab_info_libgtk_only (GdkDisplay *display,
 				    GdkWindow **grab_window,

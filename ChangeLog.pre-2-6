@@ -1,3 +1,26 @@
+2002-10-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/linux-fb/gdkselection-fb.c (gdk_utf8_to_string_target): 
+	(gdk_utf8_to_compound_text_for_display): 
+	(gdk_text_property_to_utf8_list_for_display): 
+	* gdk/linux-fb/gdkkeyboard-fb.c (gdk_keymap_get_entries_for_keyval): 
+	(gdk_keymap_get_entries_for_keycode): 
+	(gdk_keymap_lookup_key): 
+	(gdk_keymap_translate_keyboard_state): 
+	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_utf8_list_for_display): 
+	(gdk_utf8_to_string_target): 
+	(gdk_utf8_to_compound_text_for_display): 
+	* gdk/win32/gdkkeys-win32.c (gdk_keymap_get_entries_for_keyval): 
+	(gdk_keymap_get_entries_for_keycode): 
+	(gdk_keymap_lookup_key): 
+	(gdk_keymap_translate_keyboard_state): 
+	* gdk/win32/gdkgeometry-win32.c (gdk_window_scroll): 
+	* gdk/win32/gdkfont-win32.c (gdk_font_from_description_for_display): 
+	* gdk/win32/gdkevents-win32.c (gdk_keyboard_grab_info_libgtk_only): 
+	Remove doc comments for non-backend-specific functions from win32
+	and linux-fb backends. These functions should be documented in the
+	x11 backend.
+	
 Wed Oct 23 17:06:02 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodel.c: s/NULL/0/ on the g_signal_emit lines to
@@ -55,6 +78,10 @@ Wed Oct 23 00:56:15 2002  Kristian Rietveld  <kris@gtk.org>
 	Daniel Elstner).
 
 2002-10-23  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkinvisible.c (gtk_invisible_get_screen): 
+	* gtk/gtkcolorsel.c
+	(gtk_color_selection_set_change_palette_with_screen_hook): Fix doc comments.
 
 	* gdk/linux-fb/gdkselection-fb.c (gdk_text_property_to_utf8_list_for_display): 
 	(gdk_utf8_to_compound_text_for_display): Fix doc comments - why
@@ -2440,7 +2467,7 @@ Mon Jul 01 17:19:00 2002  Bill Haneman <bill.haneman@sun.com>
 
 Thu Jun 20 19:41:09 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gdk/gdkdisplay.h gdk/gdkscreen.h gdk/**.c gtk/*.c
+	* gdk/gdkdisplay.h gdk/gdkscreen.h gdk/*.c gtk/*.c
 	tests/*.c: Renames:
 
 	 gdk_get_default_display => gdk_display_get_default

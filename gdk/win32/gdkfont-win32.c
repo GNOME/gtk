@@ -1234,19 +1234,6 @@ gdk_font_load_for_display (GdkDisplay  *display,
   return gdk_font_from_one_singlefont (gdk_font_load_internal (font_name));
 }
 
-/**
- * gdk_font_from_description:
- * @font_desc: a #PangoFontDescription.
- * 
- * Load a #GdkFont based on a Pango font description. This font will
- * only be an approximation of the Pango font, and
- * internationalization will not be handled correctly. This function
- * should only be used for legacy code that cannot be easily converted
- * to use Pango. Using Pango directly will produce better results.
- * 
- * Return value: the newly loaded font, or %NULL if the font
- * cannot be loaded.
- **/
 GdkFont*
 gdk_font_from_description_for_display (GdkDisplay           *display,
                                        PangoFontDescription *font_desc)

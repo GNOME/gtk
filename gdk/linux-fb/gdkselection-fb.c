@@ -263,19 +263,6 @@ void gdk_free_compound_text (guchar *ctext)
   g_warning ("gdk_free_compound_text() not implemented\n");
 }
 
-/**
- * gdk_utf8_to_string_target:
- * @str: a UTF-8 string
- * 
- * Convert an UTF-8 string into the best possible representation
- * as a STRING. The representation of characters not in STRING
- * is not specified; it may be as pseudo-escape sequences
- * \x{ABCD}, or it may be in some other form of approximation.
- * 
- * Return value: the newly allocated string, or %NULL if the
- *               conversion failed. (It should not fail for
- *               any properly formed UTF-8 string.)
- **/
 gchar *
 gdk_utf8_to_string_target (const gchar *str)
 {
@@ -283,21 +270,6 @@ gdk_utf8_to_string_target (const gchar *str)
   return 0;
 }
 
-/**
- * gdk_utf8_to_compound_text_for_display:
- * @display:  a #GdkDisplay
- * @str:      a UTF-8 string
- * @encoding: location to store resulting encoding
- * @format:   location to store format of the result
- * @ctext:    location to store the data of the result
- * @length:   location to store the length of the data
- *            stored in @ctext
- * 
- * Convert from UTF-8 to compound text. 
- * 
- * Return value: %TRUE if the conversion succeeded, otherwise
- *               false.
- **/
 gboolean
 gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
 				       const gchar *str,
@@ -380,22 +352,6 @@ make_list (const gchar  *text,
 }
 
 
-/**
- * gdk_text_property_to_utf8_list_for_display:
- * @display:  a #GdkDisplay
- * @encoding: an atom representing the encoding of the text
- * @format:   the format of the property
- * @text:     the text to convert
- * @length:   the length of @text, in bytes
- * @list:     location to store the list of strings or %NULL. The
- *            list should be freed with g_strfreev().
- * 
- * Convert a text property in the giving encoding to
- * a list of UTF-8 strings. 
- * 
- * Return value: the number of strings in the resulting
- *               list.
- **/
 gint 
 gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
 					    GdkAtom        encoding,

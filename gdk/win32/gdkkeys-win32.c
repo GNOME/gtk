@@ -322,27 +322,6 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
     }
 }
 
-/**
- * gdk_keymap_get_entries_for_keyval:
- * @keymap: a #GdkKeymap, or %NULL to use the default keymap
- * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @keys: return location for an array of #GdkKeymapKey
- * @n_keys: return location for number of elements in returned array
- * 
- * Obtains a list of keycode/group/level combinations that will
- * generate @keyval. Groups and levels are two kinds of keyboard mode;
- * in general, the level determines whether the top or bottom symbol
- * on a key is used, and the group determines whether the left or
- * right symbol is used. On US keyboards, the shift key changes the
- * keyboard level, and there are no groups. A group switch key might
- * convert a keyboard between Hebrew to English modes, for example.
- * #GdkEventKey contains a %group field that indicates the active
- * keyboard group. The level is computed from the modifier mask.
- * The returned array should be freed
- * with g_free().
- *
- * Return value: %TRUE if keys were found and returned
- **/
 gboolean
 gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    guint          keyval,
@@ -419,23 +398,6 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   return *n_keys > 0;
 }
 
-/**
- * gdk_keymap_get_entries_for_keycode:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
- * @hardware_keycode: a keycode
- * @keys: return location for array of #GdkKeymapKey, or NULL
- * @keyvals: return location for array of keyvals, or NULL
- * @n_entries: length of @keys and @keyvals
- *
- * Returns the keyvals bound to @hardware_keycode.
- * The Nth #GdkKeymapKey in @keys is bound to the Nth
- * keyval in @keyvals. Free the returned arrays with g_free().
- * When a keycode is pressed by the user, the keyval from
- * this list of entries is selected by considering the effective
- * keyboard group and level. See gdk_keymap_translate_keyboard_state().
- *
- * Returns: %TRUE if there were any entries
- **/
 gboolean
 gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     guint          hardware_keycode,
@@ -530,20 +492,6 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   return *n_entries > 0;
 }
 
-
-/**
- * gdk_keymap_lookup_key:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
- * @key: a #GdkKeymapKey with keycode, group, and level initialized
- * 
- * Looks up the keyval mapped to a keycode/group/level triplet.
- * If no keyval is bound to @key, returns 0. For normal user input,
- * you want to use gdk_keymap_translate_keyboard_state() instead of
- * this function, since the effective group/level may not be
- * the same as the current keyboard state.
- * 
- * Return value: a keyval, or 0 if none was mapped to the given @key
- **/
 guint
 gdk_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
@@ -573,30 +521,6 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
     return sym;
 }
 
-/**
- * gdk_keymap_translate_keyboard_state:
- * @keymap: a #GdkKeymap, or %NULL to use the default
- * @hardware_keycode: a keycode
- * @state: a modifier state 
- * @group: active keyboard group
- * @keyval: return location for keyval
- * @effective_group: return location for effective group
- * @level: return location for level
- * @consumed_modifiers: return location for modifiers that were used to determine the group or level
- * 
- *
- * Translates the contents of a #GdkEventKey into a keyval, effective
- * group, and level. Modifiers that affected the translation and
- * are thus unavailable for application use are returned in
- * @consumed_modifiers.  See gdk_keyval_get_keys() for an explanation of
- * groups and levels.  The @effective_group is the group that was
- * actually used for the translation; some keys such as Enter are not
- * affected by the active keyboard group. The @level is derived from
- * @state. For convenience, #GdkEventKey already contains the translated
- * keyval, so this function isn't as useful as you might think.
- * 
- * Return value: %TRUE if there was a keyval bound to the keycode/state/group
- **/
 gboolean
 gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      guint            hardware_keycode,
