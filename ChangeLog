@@ -1,5 +1,8 @@
 2005-04-06  Matthias Clasen  <mclasen@redhat.com>
-	
+
+	* gtk/gtkwindow.c (gtk_window_set_keep_below): Fix the EWMH link,
+	noticed by Kristof Vansant.
+
 	* po/.cvsignore, po-properties/.cvsignore: Remove
 	Makefile.in.in.  (#171092, Stefan Kasal)
 

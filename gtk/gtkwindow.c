@@ -6332,7 +6332,7 @@ gtk_window_set_keep_above (GtkWindow *window,
  * on #GtkWidget.
  *
  * Note that, according to the <ulink 
- * url="http://www.freedesktop.org/standards/wm-spec">Extended Window Manager Hints</ulink>
+ * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window Manager Hints</ulink>
  * specification, the above state is mainly meant for user preferences and should not be used 
  * by applications e.g. for drawing attention to their dialogs.
  *
