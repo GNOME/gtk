@@ -1,3 +1,7 @@
+Thu Oct 23 15:13:56 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* NEWS: Partial update for 2.3.0.
+
 Thu Oct 23 01:09:04 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c: Convert GtkOptionMenu to

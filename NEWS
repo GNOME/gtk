@@ -2,7 +2,6 @@ Overview of Changes in GTK+ 2.3.0
 =================================
 * New action-based menu API: GtkUIManager, GtkActionGroup, 
   GtkAction, etc. [James Henstridge, Soeren Sandmann, Matthias Clasen]
-* New toolbar API [Soeren Sandmann]
 * New Combobox widget: GtkCombo [Kristian Rietveld]
 * Autocompletion and for entries: GtkEntryCompletion [Kristian]
 * New "disclosure triangle" widget: GtkExpander [Marc McLoughlin]
@@ -17,6 +16,24 @@ Overview of Changes in GTK+ 2.3.0
 * Add a filtering tree model: GtkTreeModelFilter [Kristian]
 * GtkCalendar improvements: make the arrows spin, support RTL flipping,
   automatic week start selection, DND support. [Matthias]
+* Add gtk_widget_queue_resize_no_redraw() [Soeren]
+* New positioning algoritm for menus [Soeren]
+* Theme improvements [Soeren]
+* Fix gdk_window_begin_paint() bug [Soeren]
+* New "focus_on_click" property for GtkButton [Soeren]
+* New "accepts_tab" property for GtkTextView [Soeren]
+
+GtkToolbar: [Soeren]
+  - New toolbar API [James, Anders Carlsson, Owen]
+  - Support for sliding buttons like OS X
+  - Keyboard navigation
+  - Support "priority text"
+  - Overflow menu [Owen]
+  - Drawing improvements
+  - Support context menu
+
+Other contributors: Krasimir Angelov, Mariano Suarez-Alvarez, David
+   Bordoley, Christian Persch, Morten Welinder
 
 Overview of Changes in GTK+ 2.2.0
 =================================
