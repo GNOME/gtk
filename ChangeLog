@@ -1,5 +1,11 @@
 2004-08-02  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.h: 
+	* gtk/gtktreeview.c: 
+	* gtk/gtktreeprivate.h: Add a new boolean property 
+	::hover-expand and make the treeview expand/collapse rows
+	on mouseover if it is set.
+
 	* gtk/gtkiconview.h: Remove some erroneous declarations.
 
 	* gtk/gtkcellview.c (gtk_cell_view_set_cell_data): Don't

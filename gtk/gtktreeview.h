@@ -322,6 +322,9 @@ gboolean gtk_tree_view_get_fixed_height_mode (GtkTreeView          *tree_view);
 void     gtk_tree_view_set_hover_selection   (GtkTreeView          *tree_view,
 					      gboolean              hover);
 gboolean gtk_tree_view_get_hover_selection   (GtkTreeView          *tree_view);
+void     gtk_tree_view_set_hover_expand      (GtkTreeView          *tree_view,
+					      gboolean              expand);
+gboolean gtk_tree_view_get_hover_expand      (GtkTreeView          *tree_view);
 
 GtkTreeViewRowSeparatorFunc gtk_tree_view_get_row_separator_func (GtkTreeView               *tree_view);
 void                        gtk_tree_view_set_row_separator_func (GtkTreeView                *tree_view,

@@ -48,6 +48,8 @@
 #define SCROLL_EDGE_SIZE 15
 #define EXPANDER_EXTRA_PADDING 4
 #define GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT 5000
+#define AUTO_EXPAND_TIMEOUT 500
+
 /* The "background" areas of all rows/cells add up to cover the entire tree.
  * The background includes all inter-row and inter-cell spacing.
  * The "cell" areas are the cell_area passed in to gtk_cell_renderer_render(),
@@ -128,7 +130,8 @@ enum {
   PROP_ENABLE_SEARCH,
   PROP_SEARCH_COLUMN,
   PROP_FIXED_HEIGHT_MODE,
-  PROP_HOVER_SELECTION
+  PROP_HOVER_SELECTION,
+  PROP_HOVER_EXPAND
 };
 
 static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);
@@ -665,6 +668,26 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            FALSE,
                                                            G_PARAM_READWRITE));
 
+    /**
+     * GtkTreeView:hover-expand:
+     * 
+     * Enables of disables the hover expansion mode of @tree_view.
+     * Hover expansion makes rows expand or collaps if the pointer moves 
+     * over them.
+     *
+     * This mode is primarily indended for treeviews in popups, e.g.
+     * in #GtkComboBox or #GtkEntryCompletion.
+     *
+     * Since: 2.6
+     */
+    g_object_class_install_property (o_class,
+                                     PROP_HOVER_EXPAND,
+                                     g_param_spec_boolean ("hover_expand",
+                                                           P_("Hover Expand"),
+                                                           P_("Whether rows should be expanded/collaped when the pointer moves over them"),
+                                                           FALSE,
+                                                           G_PARAM_READWRITE));
+
   /* Style properties */
 #define _TREE_VIEW_EXPANDER_SIZE 10
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
@@ -1135,6 +1158,7 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->width = 0;
           
   tree_view->priv->hover_selection = FALSE;
+  tree_view->priv->hover_expand = FALSE;
 }
 
 
@@ -1190,6 +1214,9 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_HOVER_SELECTION:
       tree_view->priv->hover_selection = g_value_get_boolean (value);
       break;
+    case PROP_HOVER_EXPAND:
+      tree_view->priv->hover_expand = g_value_get_boolean (value);
+      break;
     default:
       break;
     }
@@ -1239,6 +1266,9 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_HOVER_SELECTION:
       g_value_set_boolean (value, tree_view->priv->hover_selection);
+      break;
+    case PROP_HOVER_EXPAND:
+      g_value_set_boolean (value, tree_view->priv->hover_expand);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2672,6 +2702,45 @@ coords_are_over_arrow (GtkTreeView *tree_view,
 	  y < (arrow.y + arrow.height));
 }
 
+static gboolean
+auto_expand_timeout (gpointer data)
+{
+  GtkTreeView *tree_view = GTK_TREE_VIEW (data);
+  GtkTreePath *path;
+
+  GDK_THREADS_ENTER ();
+
+  if (tree_view->priv->prelight_node)
+    {
+      path = _gtk_tree_view_find_path (tree_view,
+				       tree_view->priv->prelight_tree,
+				       tree_view->priv->prelight_node);   
+
+      if (tree_view->priv->prelight_node->children)
+	gtk_tree_view_collapse_row (tree_view, path);
+      else
+	gtk_tree_view_expand_row (tree_view, path, FALSE);
+
+      gtk_tree_path_free (path);
+    }
+
+  tree_view->priv->auto_expand_timeout = 0;
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;
+}
+
+static void
+remove_auto_expand_timeout (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->auto_expand_timeout != 0)
+    {
+      g_source_remove (tree_view->priv->auto_expand_timeout);
+      tree_view->priv->auto_expand_timeout = 0;
+    }
+}
+
 static void
 do_prelight (GtkTreeView *tree_view,
              GtkRBTree   *tree,
@@ -2736,8 +2805,10 @@ do_prelight (GtkTreeView *tree_view,
     }
 
 
-  /*  Set the new prelight values  */
+  if (tree_view->priv->hover_expand)
+    remove_auto_expand_timeout (tree_view);
 
+  /*  Set the new prelight values  */
   tree_view->priv->prelight_node = node;
   tree_view->priv->prelight_tree = tree;
 
@@ -2756,6 +2827,12 @@ do_prelight (GtkTreeView *tree_view,
   GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_PRELIT);
 
   _gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+
+  if (tree_view->priv->hover_expand)
+    {
+      tree_view->priv->auto_expand_timeout = 
+	g_timeout_add (AUTO_EXPAND_TIMEOUT, auto_expand_timeout, tree_view);
+    }
 }
 
 static void
@@ -2789,10 +2866,11 @@ prelight_or_select (GtkTreeView *tree_view,
 	      gtk_tree_path_free (path);
 	    }
 	}
+
       else if (mode == GTK_SELECTION_SINGLE)
 	gtk_tree_selection_unselect_all (tree_view->priv->selection);
     }
-  else
+
     do_prelight (tree_view, tree, node, x, y);
 }
 
@@ -6014,7 +6092,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
            pos == GTK_TREE_VIEW_DROP_INTO_OR_BEFORE))
         {
           tree_view->priv->open_dest_timeout =
-            g_timeout_add (500, open_row_timeout, tree_view);
+            g_timeout_add (AUTO_EXPAND_TIMEOUT, open_row_timeout, tree_view);
         }
       else if (tree_view->priv->scroll_timeout == 0)
         {
@@ -10380,6 +10458,8 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   GtkTreeIter temp;
   gboolean expand;
 
+  remove_auto_expand_timeout (tree_view);
+
   if (node->children && !open_all)
     return FALSE;
 
@@ -10515,6 +10595,8 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   GList *list;
   GdkDisplay *display;
   GdkWindow *child, *parent;
+
+  remove_auto_expand_timeout (tree_view);
 
   if (node->children == NULL)
     return FALSE;
@@ -12739,6 +12821,46 @@ gtk_tree_view_get_hover_selection (GtkTreeView *tree_view)
   return tree_view->priv->hover_selection;
 }
 
+/**
+ * gtk_tree_view_set_hover_expand:
+ * @tree_view: a #GtkTreeView
+ * @expand: %TRUE to enable hover selection mode
+ *
+ * Enables of disables the hover expansion mode of @tree_view.
+ * Hover expansion makes rows expand or collaps if the pointer 
+ * moves over them.
+ * 
+ * Since: 2.6
+ **/
+void     
+gtk_tree_view_set_hover_expand (GtkTreeView *tree_view,
+				gboolean     expand)
+{
+  expand = expand != FALSE;
+
+  if (expand != tree_view->priv->hover_expand)
+    {
+      tree_view->priv->hover_expand = expand;
+
+      g_object_notify (G_OBJECT (tree_view), "hover-expand");
+    }
+}
+
+/**
+ * gtk_tree_view_get_hover_expand:
+ * @tree_view: a #GtkTreeView
+ * 
+ * Returns whether hover expansion mode is turned on for @tree_view.
+ * 
+ * Return value: %TRUE if @tree_view is in hover expansion mode
+ *
+ * Since: 2.6 
+ **/
+gboolean 
+gtk_tree_view_get_hover_expand (GtkTreeView *tree_view)
+{
+  return tree_view->priv->hover_expand;
+}
 
 /**
  * gtk_tree_view_get_row_separator_func:

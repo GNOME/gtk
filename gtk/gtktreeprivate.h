@@ -210,7 +210,11 @@ struct _GtkTreeViewPrivate
   guint disable_popdown : 1;
   
   guint hover_selection : 1;
+  guint hover_expand : 1;
   guint imcontext_changed : 1;
+
+  /* Auto expand/collapse timeout in hover mode */
+  guint auto_expand_timeout;
 
   gint selected_iter;
   gint search_column;
