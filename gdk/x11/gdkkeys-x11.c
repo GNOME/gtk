@@ -303,7 +303,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	       */
 	      if (mask == GDK_CONTROL_MASK || mask == GDK_SHIFT_MASK ||
 		  mask == GDK_LOCK_MASK || mask == GDK_MOD1_MASK)
-		continue;
+		goto next;
 	      
               while (j < keymap_x11->keysyms_per_keycode)
                 {
@@ -318,7 +318,8 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
                   ++j;
                 }
             }
-      
+
+	next:
           ++i;
         }
     }

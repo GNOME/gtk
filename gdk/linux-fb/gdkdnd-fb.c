@@ -378,8 +378,9 @@ gdk_drag_begin (GdkWindow     *window,
 }
 
 guint32
-gdk_drag_get_protocol (guint32          xid,
-		       GdkDragProtocol *protocol)
+gdk_drag_get_protocol_for_display (GdkDisplay      *display,
+				   guint32          xid,
+				   GdkDragProtocol *protocol)
 {
   GdkWindow *window;
 
@@ -444,12 +445,13 @@ get_toplevel_window_at (GdkWindow *ignore,
 
 
 void
-gdk_drag_find_window (GdkDragContext  *context,
-		      GdkWindow       *drag_window,
-		      gint             x_root,
-		      gint             y_root,
-		      GdkWindow      **dest_window,
-		      GdkDragProtocol *protocol)
+gdk_drag_find_window_for_screen (GdkDragContext  *context,
+				 GdkWindow       *drag_window,
+				 GdkScreen       *screen,
+				 gint             x_root,
+				 gint             y_root,
+				 GdkWindow      **dest_window,
+				 GdkDragProtocol *protocol)
 {
   GdkWindow *dest;
 

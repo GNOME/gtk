@@ -1,3 +1,21 @@
+Mon Oct  7 15:48:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkdnd.[ch] gdk/x11/gdkdnd-x11.c: Add 
+	gdk_drag_find_window_for_screen(), so that we can
+	interpret x_root / y_root relative to the correct screen.
+	
+	* gdk/gdkdnd.c Makefile.am gdk/x11/gdkdnd-x11.c 
+	gdk/fb/gdkdnd-fb.c gdk/win32/gdkdnd-win32.c: New file. 
+	Move gdk_drag_find_window(), gdk_drag_get_protocol() here.
+
+	* gtk/gtkdnd.c: Handle drags between screens; use 
+	a fallback icon for icons set as windows/pixmaps, 
+	move the drag icon between displays for icons set as 
+	pixbufs.
+
+	* gdk/x11/gdkkeys-x11.c (update_keymaps): Fix infinite
+	loop from last change.
+
 Mon Oct  7 15:10:00 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdisplay.[ch] gdk/gdkinternals.h 

@@ -129,6 +129,7 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkcolor.c		\
 	gdkcursor.c		\
 	gdkdisplay.c		\
+	gdkdnd.c		\
 	gdkdraw.c		\
 	gdkevents.c     	\
 	gdkfont.c		\

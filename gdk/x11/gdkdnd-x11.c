@@ -83,7 +83,7 @@ struct _GdkDragContextPrivateX11 {
   guint motif_targets_set : 1;  /* Whether we've already set motif initiator info */
   guint drag_status : 4;	/* current status of drag */
 
-  GdkWindowCache *window_cache;
+  GSList *window_caches;
 };
 
 #define PRIVATE_DATA(context) ((GdkDragContextPrivateX11 *) GDK_DRAG_CONTEXT (context)->windowing_data)
@@ -188,6 +188,7 @@ gdk_drag_context_finalize (GObject *object)
 {
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+  GSList *tmp_list;
   
   g_list_free (context->targets);
 
@@ -202,9 +203,10 @@ gdk_drag_context_finalize (GObject *object)
   
   if (context->dest_window)
     g_object_unref (context->dest_window);
-  
-  if (private->window_cache)
-    gdk_window_cache_destroy (private->window_cache);
+
+  for (tmp_list = private->window_caches; tmp_list; tmp_list = tmp_list->next)
+    gdk_window_cache_destroy (tmp_list->data);
+  g_slist_free (private->window_caches);
   
   contexts = g_list_remove (contexts, context);
 
@@ -2840,22 +2842,38 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
   return None;
 }
 
-guint32
-gdk_drag_get_protocol (guint32          xid,
-		       GdkDragProtocol *protocol)
+static GdkWindowCache *
+drag_context_find_window_cache (GdkDragContext  *context,
+				GdkScreen       *screen)
 {
-  return gdk_drag_get_protocol_for_display (gdk_display_get_default (), xid, protocol);
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+  GSList *tmp_list;
+  GdkWindowCache *cache;
+
+  for (tmp_list = private->window_caches; tmp_list; tmp_list = tmp_list->next)
+    {
+      cache = tmp_list->data;
+      if (cache->screen == screen)
+	return cache;
+    }
+
+  cache = gdk_window_cache_new (screen);
+  private->window_caches = g_slist_prepend (private->window_caches, cache);
+  
+  return cache;
 }
 
 void
-gdk_drag_find_window (GdkDragContext  *context,
-		      GdkWindow       *drag_window,
-		      gint             x_root,
-		      gint             y_root,
-		      GdkWindow      **dest_window,
-		      GdkDragProtocol *protocol)
+gdk_drag_find_window_for_screen (GdkDragContext  *context,
+				 GdkWindow       *drag_window,
+				 GdkScreen       *screen,
+				 gint             x_root,
+				 gint             y_root,
+				 GdkWindow      **dest_window,
+				 GdkDragProtocol *protocol)
 {
   GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+  GdkWindowCache *window_cache;
   GdkDisplay *display;
   Window dest;
 
@@ -2863,10 +2881,9 @@ gdk_drag_find_window (GdkDragContext  *context,
 
   display = GDK_WINDOW_DISPLAY (context->source_window);
 
-  if (!private->window_cache)
-    private->window_cache = gdk_window_cache_new (gdk_drawable_get_screen (context->source_window));
+  window_cache = drag_context_find_window_cache (context, screen);
 
-  dest = get_client_window_at_coords (private->window_cache,
+  dest = get_client_window_at_coords (window_cache,
 				      drag_window ? 
 				      GDK_DRAWABLE_XID (drag_window) : None,
 				      x_root, y_root);
