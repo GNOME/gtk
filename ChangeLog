@@ -1,3 +1,24 @@
+Thu Apr  9 14:24:35 1998  Owen Taylor  <owt1@cornell.edu>
+
+	(Found by Mattias.Gronlund" <Mattias.Gronlund@sa.erisoft.se>)
+	
+	* gtk/gtkcurve.c (gtk_curve_interpolate): Added a
+	missing g_free.
+
+	* gtk/gtkcurve.c (gtk_curve_graph_events): Limits
+	were off by one, resulting in writing past array
+	bounds. Removed some unused code.
+
+	* gdk/gdk.c (gdk_dnd_drag_begin): The event structure
+	used for gdk_event_put should be a GdkEvent, not a 
+	subtype, since it will all be copied.
+
+	* gtk/gtkcolorsel.c: Added a unrealize handler that
+	unref's the GC's that were created.
+
+	* gtk/testgtk.c (clist_warning_test): ref and sink
+	child because it may never be added to anything.
+
 Wed Apr  8 20:50:02 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkwindow.c (gtk_window_set_hints): Removed unsed

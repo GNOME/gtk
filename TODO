@@ -272,3 +272,6 @@ TODO AFTER GTK 1.0
    every widget realization involves a XGetGeometry and a
    XGetWindowAttributes. And every GdkWindow destruction
    involves a XQueryTree.
+
+ * Scrolled windows need to be smarter about when they size-request/allocate
+   their children.

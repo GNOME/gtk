@@ -26,7 +26,6 @@
 #include "gtksignal.h"
 #include "gtktable.h"
 
-#define BOUNDS(a,x,y)	(((a) < (x)) ? (x) : (((a) > (y)) ? (y) : (a)))
 #define RADIUS		3	/* radius of the control points */
 #define MIN_DISTANCE	8	/* min distance between control points */
 
@@ -214,6 +213,8 @@ gtk_curve_interpolate (GtkCurve *c, gint width, gint height)
       c->point[i].y = RADIUS + height
 	- project (vector[i], c->min_y, c->max_y, height);
     }
+
+  g_free (vector);
 }
 
 static void
@@ -294,8 +295,8 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 
   /*  get the pointer position  */
   gdk_window_get_pointer (w->window, &tx, &ty, NULL);
-  x = BOUNDS ((tx - RADIUS), 0, width);
-  y = BOUNDS ((ty - RADIUS), 0, height);
+  x = CLAMP ((tx - RADIUS), 0, width-1);
+  y = CLAMP ((ty - RADIUS), 0, height-1);
 
   min_x = c->min_x;
 
@@ -409,11 +410,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 
     case GDK_MOTION_NOTIFY:
       mevent = (GdkEventMotion *) event;
-      if (mevent->is_hint)
-	{
-	  mevent->x = tx;
-	  mevent->y = ty;
-	}
+
       switch (c->curve_type)
 	{
 	case GTK_CURVE_TYPE_LINEAR:

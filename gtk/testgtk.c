@@ -3076,7 +3076,11 @@ clist_warning_test (GtkWidget *button,
   static gboolean add_remove = FALSE;
 
   add_remove = !add_remove;
+
   child = gtk_label_new ("Test");
+  gtk_widget_ref (child);
+  gtk_object_sink (child);
+
   if (add_remove)
     gtk_container_add (GTK_CONTAINER (clist), child);
   else
@@ -3085,7 +3089,9 @@ clist_warning_test (GtkWidget *button,
       gtk_container_remove (GTK_CONTAINER (clist), child);
       child->parent = NULL;
     }
+
   gtk_widget_destroy (child);
+  gtk_widget_unref (child);
 }
 
 static void

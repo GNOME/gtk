@@ -3186,16 +3186,16 @@ gdk_signal (int sig_num)
 static void
 gdk_dnd_drag_begin (GdkWindow *initial_window)
 {
-  GdkEventDragBegin tev;
+  GdkEvent tev;
 
   GDK_NOTE(DND, g_print("------- STARTING DRAG from %p\n", initial_window));
 
   tev.type = GDK_DRAG_BEGIN;
-  tev.window = initial_window;
-  tev.u.allflags = 0;
-  tev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
+  tev.dragbegin.window = initial_window;
+  tev.dragbegin.u.allflags = 0;
+  tev.dragbegin.u.flags.protocol_version = DND_PROTOCOL_VERSION;
 
-  gdk_event_put ((GdkEvent *) &tev);
+  gdk_event_put (&tev);
 }
 
 static void
@@ -3927,28 +3927,28 @@ gdk_dnd_drag_end (Window     dest,
 		  GdkPoint   coords)
 {
   GdkWindowPrivate *wp;
-  GdkEventDragRequest tev;
+  GdkEvent tev;
   int i;
 
-  tev.type = GDK_DRAG_REQUEST;
-  tev.drop_coords = coords;
-  tev.requestor = dest;
-  tev.u.allflags = 0;
-  tev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
-  tev.isdrop = 1;
+  tev.dragrequest.type = GDK_DRAG_REQUEST;
+  tev.dragrequest.drop_coords = coords;
+  tev.dragrequest.requestor = dest;
+  tev.dragrequest.u.allflags = 0;
+  tev.dragrequest.u.flags.protocol_version = DND_PROTOCOL_VERSION;
+  tev.dragrequest.isdrop = 1;
 
   for (i = 0; i < gdk_dnd.drag_numwindows; i++)
     {
       wp = (GdkWindowPrivate *) gdk_dnd.drag_startwindows[i];
       if (wp->dnd_drag_accepted)
 	{
-	  tev.window = (GdkWindow *) wp;
-	  tev.u.flags.delete_data = wp->dnd_drag_destructive_op;
-          tev.timestamp = gdk_dnd.last_drop_time;
-	  tev.data_type = 
+	  tev.dragrequest.window = (GdkWindow *) wp;
+	  tev.dragrequest.u.flags.delete_data = wp->dnd_drag_destructive_op;
+          tev.dragrequest.timestamp = gdk_dnd.last_drop_time;
+	  tev.dragrequest.data_type = 
 	  	gdk_atom_name(wp->dnd_drag_data_type);
 
-	  gdk_event_put((GdkEvent *) &tev);
+	  gdk_event_put(&tev);
 	}
     }
 }
