@@ -708,12 +708,21 @@ gtk_ui_manager_get_widget (GtkUIManager *self,
    * widget */
   gtk_ui_manager_ensure_update (self);
 
+  if (strncmp ("/ui", path, 3) == 0)
+    path += 3;
   node = get_node (self, path, NODE_TYPE_UNDECIDED, FALSE);
 
   if (node == NULL)
     return NULL;
 
-  return NODE_INFO (node)->proxy;
+  if (NODE_INFO (node)->type == NODE_TYPE_MENU)
+    {
+      GtkWidget *proxy = NODE_INFO (node)->proxy;
+
+      return gtk_menu_item_get_submenu (GTK_MENU_ITEM (proxy));
+    }
+  else
+    return NODE_INFO (node)->proxy;
 }
 
 static void
@@ -928,7 +937,7 @@ get_node (GtkUIManager *self,
 			     create, FALSE);
       if (!node)
 	return NULL;
-      
+
       pos += length + 1; /* move past the node name and the slash too */
       parent = node;
     }

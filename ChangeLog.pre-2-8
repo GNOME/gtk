@@ -1,3 +1,9 @@
+Sun May  9 00:03:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkuimanager.c (gtk_ui_manager_get_widget): Make sure
+	that we actually return menus for nodes of type menu, not the
+	menuitems they're attached to.
+
 Sat May  8 22:50:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkactiongroup.c (gtk_action_group_set_translation_domain): 
