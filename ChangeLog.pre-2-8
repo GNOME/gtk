@@ -1,3 +1,8 @@
+Fri Oct 18 16:47:02 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (translate_key_event): Produce
+	C-m, not C-j for return. Handle Escape.
+
 2002-10-22  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstatusbar.c (gtk_statusbar_get_type): 
