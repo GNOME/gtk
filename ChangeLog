@@ -1,3 +1,10 @@
+Tue Jul  6 02:00:28 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilechooserdefault.c (popup_position_func): 
+	* gtk/gtkentry.c (popup_position_func): 
+	* gtk/gtktextview.c (popup_position_func): Improve positioning
+	of keyboard-activated menus with Xinerama.
+
 Tue Jul  6 00:29:03 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.c (do_updates): 
