@@ -966,12 +966,12 @@ filter_create (GtkFileChooserDefault *impl)
 }
 
 static GtkWidget *
-toolbar_button_new (GtkFileChooserDefault *impl,
-		    const char *text,
-		    const char *stock_id,
-		    gboolean    sensitive,
-		    gboolean    show,
-		    GCallback   callback)
+button_new (GtkFileChooserDefault *impl,
+	    const char *text,
+	    const char *stock_id,
+	    gboolean    sensitive,
+	    gboolean    show,
+	    GCallback   callback)
 {
   GtkWidget *button;
   GtkWidget *hbox;
@@ -999,43 +999,23 @@ toolbar_button_new (GtkFileChooserDefault *impl,
   return button;
 }
 
-/* Creates the widgets in the toolbar */
+/* Creates the widgets for the current folder indicator */
 static GtkWidget *
-toolbar_create (GtkFileChooserDefault *impl)
+current_folder_create (GtkFileChooserDefault *impl)
 {
   GtkWidget *hbox;
 
   hbox = gtk_hbox_new (FALSE, 12);
   gtk_widget_show (hbox);
 
-  /* Add bookmark button */
-
-  impl->add_bookmark_button = toolbar_button_new (impl,
-						  _("Add"),
-						  GTK_STOCK_ADD,
-						  FALSE,
-						  TRUE,
-						  G_CALLBACK (add_bookmark_button_clicked_cb));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, FALSE, FALSE, 0);
-
-  /* Remove bookmark button */
-
-  impl->remove_bookmark_button = toolbar_button_new (impl,
-						     _("Remove"),
-						     GTK_STOCK_REMOVE,
-						     FALSE,
-						     TRUE,
-						     G_CALLBACK (remove_bookmark_button_clicked_cb));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
-
   /* Up button */
 
-  impl->up_button = toolbar_button_new (impl,
-					_("Up"),
-					GTK_STOCK_GO_UP,
-					FALSE,
-					TRUE,
-					G_CALLBACK (up_button_clicked_cb));
+  impl->up_button = button_new (impl,
+				_("Up"),
+				GTK_STOCK_GO_UP,
+				FALSE,
+				TRUE,
+				G_CALLBACK (up_button_clicked_cb));
   gtk_box_pack_start (GTK_BOX (hbox), impl->up_button, FALSE, FALSE, 0);
 
   /* Current folder label */
@@ -1362,7 +1342,7 @@ shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
 
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
-create_shortcuts_tree (GtkFileChooserDefault *impl)
+shortcuts_tree_create (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
@@ -1430,6 +1410,51 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->shortcuts_tree), column);
 
   return impl->shortcuts_scrollwin;
+}
+
+/* Creates the widgets for the shortcuts/bookmarks pane */
+static GtkWidget *
+shortcuts_pane_create (GtkFileChooserDefault *impl)
+{
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *widget;
+
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_widget_show (vbox);
+
+  /* Shortcuts tree */
+
+  widget = shortcuts_tree_create (impl);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+
+  /* Box for buttons */
+
+  hbox = gtk_hbox_new (TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (hbox);
+
+  /* Add bookmark button */
+
+  impl->add_bookmark_button = button_new (impl,
+					  _("Add"),
+					  GTK_STOCK_ADD,
+					  FALSE,
+					  TRUE,
+					  G_CALLBACK (add_bookmark_button_clicked_cb));
+  gtk_box_pack_start (GTK_BOX (hbox), impl->add_bookmark_button, TRUE, TRUE, 0);
+
+  /* Remove bookmark button */
+
+  impl->remove_bookmark_button = button_new (impl,
+					     _("Remove"),
+					     GTK_STOCK_REMOVE,
+					     FALSE,
+					     TRUE,
+					     G_CALLBACK (remove_bookmark_button_clicked_cb));
+  gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, TRUE, TRUE, 0);
+
+  return vbox;
 }
 
 /* Creates the widgets for the file list */
@@ -1513,6 +1538,47 @@ create_file_list (GtkFileChooserDefault *impl)
   return impl->list_scrollwin;
 }
 
+/* Creates the widgets for the files/folders pane */
+static GtkWidget *
+file_pane_create (GtkFileChooserDefault *impl)
+{
+  GtkWidget *vbox;
+  GtkWidget *hbox;
+  GtkWidget *widget;
+
+  vbox = gtk_vbox_new (FALSE, 6);
+  gtk_widget_show (vbox);
+
+  /* Current folder indicator */
+
+  widget = current_folder_create (impl);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  /* Box for lists and preview */
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+  gtk_widget_show (hbox);
+
+  /* Folder tree */
+
+  widget = create_folder_tree (impl);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  /* File list */
+
+  widget = create_file_list (impl);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  /* Preview */
+
+  impl->preview_frame = gtk_frame_new (_("Preview"));
+  gtk_box_pack_start (GTK_BOX (hbox), impl->preview_frame, FALSE, FALSE, 0);
+  /* Don't show preview frame initially */
+
+  return vbox;
+}
+
 static GtkWidget *
 create_filename_entry_and_filter_combo (GtkFileChooserDefault *impl)
 {
@@ -1555,11 +1621,9 @@ gtk_file_chooser_default_constructor (GType                  type,
 {
   GtkFileChooserDefault *impl;
   GObject *object;
-  GtkWidget *vbox;
   GtkWidget *hpaned;
   GtkWidget *widget;
   GList *focus_chain;
-  GtkWidget *hbox;
   GtkWidget *entry_widget;
 
   object = parent_class->constructor (type,
@@ -1571,58 +1635,33 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   gtk_widget_push_composite_child ();
 
-  /* Toolbar */
-  widget = toolbar_create (impl);
-  gtk_box_pack_start (GTK_BOX (impl), widget, FALSE, FALSE, 0);
-
-  /* Basic box */
-
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_box_pack_start (GTK_BOX (impl), vbox, TRUE, TRUE, 0);
-  gtk_widget_show (vbox);
-
   /* Paned widget */
 
   hpaned = gtk_hpaned_new ();
-  gtk_box_pack_start (GTK_BOX (vbox), hpaned, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (impl), hpaned, TRUE, TRUE, 0);
   gtk_paned_set_position (GTK_PANED (hpaned), 200); /* FIXME: this sucks */
   gtk_widget_show (hpaned);
 
-  /* Shortcuts list */
+  /* Shortcuts pane */
 
-  widget = create_shortcuts_tree (impl);
+  widget = shortcuts_pane_create (impl);
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
 
-  /* Folder tree */
+  /* File/folder pane */
 
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_paned_pack2 (GTK_PANED (hpaned), hbox, TRUE, FALSE);
-  gtk_widget_show (hbox);
-
-  widget = create_folder_tree (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
-
-  /* File list */
-
-  widget = create_file_list (impl);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
-
-  /* Preview */
-
-  impl->preview_frame = gtk_frame_new (_("Preview"));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->preview_frame, FALSE, FALSE, 0);
-  /* Don't show preview frame initially */
+  widget = file_pane_create (impl);
+  gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
 
   /* Filename entry and filter combo */
 
   entry_widget = create_filename_entry_and_filter_combo (impl);
-  gtk_box_pack_start (GTK_BOX (vbox), entry_widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (impl), entry_widget, FALSE, FALSE, 0);
 
   /* Make the entry the first widget in the focus chain
    */
   focus_chain = g_list_append (NULL, entry_widget);
   focus_chain = g_list_append (focus_chain, hpaned);
-  gtk_container_set_focus_chain (GTK_CONTAINER (vbox), focus_chain);
+  gtk_container_set_focus_chain (GTK_CONTAINER (impl), focus_chain);
   g_list_free (focus_chain);
 
   gtk_widget_pop_composite_child ();

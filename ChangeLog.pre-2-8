@@ -1,3 +1,18 @@
+2004-02-18  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_tree_create): Renamed
+	from create_shortcuts_tree().
+	(shortcuts_pane_create): New function.
+	(button_new): Renamed from toolbar_button_new().
+	(shortcuts_pane_create): New function, create the whole shortcuts
+	pane here.
+	(current_folder_create): Renamed from toolbar_create().  Don't
+	create the bookmarks buttons here.
+	(file_pane_create): New function.
+	(gtk_file_chooser_default_constructor): Use the new helper
+	functions, and don't use an extra vbox as GtkFileChooserDefault is
+	already a vbox.
+
 Thu Feb 19 01:39:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkuimanager.h: 
