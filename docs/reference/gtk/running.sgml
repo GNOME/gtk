@@ -285,7 +285,7 @@ or <envar>DISPLAY</envar>; mostly to determine paths to look for certain files.
 </formalpara>
 
 <formalpara>
-  <title><envar>GTK_RC_FILES</envar></title>
+  <title><envar>GTK2_RC_FILES</envar></title>
   
   <para>
     Specifies a list of RC files to parse instead of the default ones;

@@ -1,3 +1,8 @@
+2004-09-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/running.sgml: Refer to GTK2_RC_FILES, not to
+	GTK_RC_FILES.  (#153326, Billy Biggs)
+
 2004-09-18  Matthias Clasen  <mclasen@redhat.com>
 
 	* === Released 2.4.10 ===
