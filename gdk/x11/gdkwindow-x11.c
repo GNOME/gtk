@@ -2214,6 +2214,7 @@ set_text_property (GdkDisplay  *display,
   Atom prop_type;
   gint prop_length;
   gint prop_format;
+  gboolean is_compound_text;
   
   if (utf8_is_latin1 (utf8_str))
     {
@@ -2221,6 +2222,7 @@ set_text_property (GdkDisplay  *display,
       prop_text = gdk_utf8_to_string_target (utf8_str);
       prop_length = prop_text ? strlen (prop_text) : 0;
       prop_format = 8;
+      is_compound_text = FALSE;
     }
   else
     {
@@ -2230,6 +2232,7 @@ set_text_property (GdkDisplay  *display,
 					     utf8_str, &gdk_type, &prop_format,
 					     &prop_text, &prop_length);
       prop_type = gdk_x11_atom_to_xatom_for_display (display, gdk_type);
+      is_compound_text = TRUE;
     }
 
   if (prop_text)
@@ -2241,7 +2244,10 @@ set_text_property (GdkDisplay  *display,
 		       PropModeReplace, prop_text,
 		       prop_length);
 
-      gdk_free_compound_text (prop_text);
+      if (is_compound_text)
+	gdk_free_compound_text (prop_text);
+      else
+	g_free (prop_text);
     }
 }
 

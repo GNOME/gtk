@@ -1,3 +1,8 @@
+Thu Feb 26 13:23:47 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-x11.c (set_text_property): Use the right
+	free() function. (#135511, George Bronnikov)
+
 2004-02-26  Federico Mena Quintero  <federico@ximian.com>
 
 	* configure.in: Added a comment to inform translators that they
