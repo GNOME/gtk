@@ -1,3 +1,8 @@
+Tue Aug 24 21:46:42 2004  Søren Sandmann  <sandmann@redhat.com>
+
+	* gtk/gtksequence.c (_gtk_sequence_move): Just return if the
+	parameters are identical. (#150159, Robert Ögren)
+
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkaction.c (connect_proxy, disconnect_proxy): Handle 

@@ -177,6 +177,7 @@ _gtk_sequence_append             (GtkSequence               *seq,
   last = _gtk_sequence_node_find_last (seq->node);
   _gtk_sequence_node_insert_before (last, node);
 }
+#if 0
 
 void
 _gtk_sequence_prepend            (GtkSequence               *seq,
@@ -192,6 +193,7 @@ _gtk_sequence_prepend            (GtkSequence               *seq,
   
   _gtk_sequence_node_insert_before (second, node);
 }
+#endif
 
 GtkSequencePtr 
 _gtk_sequence_insert             (GtkSequencePtr             ptr,
@@ -203,8 +205,14 @@ _gtk_sequence_insert             (GtkSequencePtr             ptr,
   
   node = _gtk_sequence_node_new (data);
   node->sequence = ptr->sequence;
+
+  g_print ("%p\n", ptr->sequence);
+
+  g_print ("before: %d\n", _gtk_sequence_get_length (ptr->sequence));
   
   _gtk_sequence_node_insert_before (ptr, node);
+
+  g_print ("after: %d\n", _gtk_sequence_get_length (ptr->sequence));
 
   return node;
 }
@@ -385,7 +393,10 @@ _gtk_sequence_get_ptr_at_pos     (GtkSequence               *seq,
   len = _gtk_sequence_get_length (seq);
   
   if (pos > len || pos == -1)
-    pos = len;
+  {
+      g_print ("adjusting pos from %d to %d\n", pos, len);
+      pos = len;
+  }
   
   return _gtk_sequence_node_find_by_pos (seq->node, pos);
 }
@@ -405,6 +416,9 @@ _gtk_sequence_ptr_is_begin       (GtkSequencePtr             ptr)
   return (_gtk_sequence_node_prev (ptr) == ptr);
 }
 
+/* If you call this on an end pointer you'll get
+ * the length of the sequence
+ */
 gint
 _gtk_sequence_ptr_get_position   (GtkSequencePtr             ptr)
 {
@@ -1086,6 +1100,9 @@ void
 _gtk_sequence_move (GtkSequencePtr ptr,
 		    GtkSequencePtr new_pos)
 {
+  if (ptr == new_pos)
+    return;
+  
   _gtk_sequence_unlink (ptr->sequence, ptr);
   _gtk_sequence_node_insert_before (new_pos, ptr);
 }
