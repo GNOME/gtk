@@ -5,12 +5,16 @@ noinst_LTLIBRARIES = libxdgmime.la
 libxdgmime_la_SOURCES = \
 	xdgmime.c 	\
 	xdgmime.h	\
+	xdgmimealias.c	\
+	xdgmimealias.h	\
 	xdgmimeglob.c 	\
 	xdgmimeglob.h 	\
 	xdgmimeint.c 	\
 	xdgmimeint.h 	\
 	xdgmimemagic.c  \
-	xdgmimemagic.h
+	xdgmimemagic.h	\
+	xdgmimeparent.c	\
+	xdgmimeparent.h
 
 noinst_PROGRAMS = test-mime
 

@@ -30,7 +30,16 @@
 
 #include "xdgmime.h"
 
-/* FIXME: Should be configure check */
+
+#ifndef	FALSE
+#define	FALSE (0)
+#endif
+
+#ifndef	TRUE
+#define	TRUE (!FALSE)
+#endif
+
+/* FIXME: Needs to be configure check */
 typedef unsigned int   xdg_unichar_t;
 typedef unsigned char  xdg_uchar8_t;
 typedef unsigned short xdg_uint16_t;

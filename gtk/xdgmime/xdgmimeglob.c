@@ -348,6 +348,8 @@ _xdg_glob_hash_free_nodes (XdgGlobHashNode *node)
        _xdg_glob_hash_free_nodes (node->child);
       if (node->next)
        _xdg_glob_hash_free_nodes (node->next);
+      if (node->mime_type)
+	free ((void *) node->mime_type);
       free (node);
     }
 }

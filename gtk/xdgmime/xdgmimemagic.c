@@ -636,8 +636,10 @@ _xdg_mime_magic_new (void)
 void
 _xdg_mime_magic_free (XdgMimeMagic *mime_magic)
 {
-  if (mime_magic)
+  if (mime_magic) {
+    _xdg_mime_magic_match_free (mime_magic->match_list);
     free (mime_magic);
+  }
 }
 
 int
