@@ -1240,7 +1240,6 @@ if test "x$gdktarget" = "xx11"; then
     fi
   fi
 
-  GDK_EXTRA_CFLAGS=
   if test $pango_omitted_x_deps = yes ; then
     GDK_EXTRA_LIBS="$X_LIBS $x_extra_libs $x_libs $GDK_EXTRA_LIBS"
   else
@@ -1304,7 +1303,6 @@ if test "x$gdktarget" = "xlinux-fb"; then
     AM_CONDITIONAL(ENABLE_FB_MANAGER, false)
   fi
   
-  GDK_EXTRA_CFLAGS=""
   if test $pango_omitted_ft2_deps = yes ; then
     GDK_EXTRA_LIBS="$FREETYPE_LIBS $GDK_EXTRA_LIBS"
   fi

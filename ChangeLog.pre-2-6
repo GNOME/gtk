@@ -1,3 +1,9 @@
+Sun Apr 18 16:59:21 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* configure.in: Don't erase GDK_EXTRA_CFLAGS. Fixes bug 139586,
+	reported by Pedro RODRIGUEZ, about compilation problems when
+	Xcursor is installed in a non-standard location.
+
 Sun Apr 18 16:15:15 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Support for _NET_WM_USER_TIME (bug 115650). Patch by Elijah
