@@ -495,9 +495,6 @@ gdk_window_foreign_new (guint32 anid)
   RECT rect;
   POINT point;
 
-  if (anid == 0)
-    return NULL;
-
   window = gdk_win32_window_alloc ();
   private = (GdkWindowPrivate *)window;
 

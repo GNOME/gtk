@@ -1,3 +1,8 @@
+2002-02-24  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_foreign_new): Do accept
+	window handle zero, as that is in fact HWND_DESKTOP.
+
 2002-02-18  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c
