@@ -456,7 +456,7 @@ msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" regel %d niet vinden"
 #: gtk/gtkrc.c:1705
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kan plaatjes bestand in pixmap_path: \"s\" niet vinden"
+msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" niet vinden"
 
 #: gtk/gtkthemes.c:79
 #, c-format
