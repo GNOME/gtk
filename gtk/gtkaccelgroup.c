@@ -513,7 +513,9 @@ gtk_accel_group_connect (GtkAccelGroup	*accel_group,
 
   g_object_ref (accel_group);
   if (!closure->is_invalid)
-    quick_accel_add (accel_group, accel_key, accel_mods, accel_flags, closure, 0);
+    quick_accel_add (accel_group,
+		     gdk_keyval_to_lower (accel_key),
+		     accel_mods, accel_flags, closure, 0);
   g_object_unref (accel_group);
 }
 
@@ -552,7 +554,7 @@ gtk_accel_group_connect_by_path (GtkAccelGroup	*accel_group,
 
   if (gtk_accel_map_lookup_entry (accel_path, &key))
     {
-      accel_key = key.accel_key;
+      accel_key = gdk_keyval_to_lower (key.accel_key),
       accel_mods = key.accel_mods;
     }
 
@@ -615,6 +617,7 @@ gtk_accel_group_disconnect_key (GtkAccelGroup  *accel_group,
 
   g_object_ref (accel_group);
   
+  accel_key = gdk_keyval_to_lower (accel_key);
   entries = quick_accel_find (accel_group, accel_key, accel_mods, &n);
   while (n--)
     {

@@ -1,3 +1,13 @@
+2002-02-23  Jody Goldberg <jody@gnome.org>
+
+	* gtk/gtkaccelgroup.c (gtk_accel_group_connect) : lower case the
+	  key_val.
+	(gtk_accel_group_connect_by_path) : ditto.
+	(gtk_accel_group_disconnect_key) : ditto.
+
+	* gtk/gtkwidget.c (gtk_widget_real_key_release_event) : simplify.
+	(gtk_widget_real_key_press_event) : ditto.
+
 Sat Feb 23 00:28:47 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviecolumn.c: Documented undocumented functions.

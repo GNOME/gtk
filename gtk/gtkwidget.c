@@ -2868,24 +2868,14 @@ static gboolean
 gtk_widget_real_key_press_event (GtkWidget         *widget,
 				 GdkEventKey       *event)
 {
-  gboolean handled = FALSE;
-
-  if (!handled)
-    handled = _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
-
-  return handled;
+  return _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 }
 
 static gboolean
 gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
-  gboolean handled = FALSE;
-
-  if (!handled)
-    handled = _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
-
-  return handled;
+  return _gtk_bindings_activate_event (GTK_OBJECT (widget), event);
 }
 
 static gboolean
