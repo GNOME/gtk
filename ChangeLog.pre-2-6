@@ -1,5 +1,9 @@
 2004-12-23  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkliststore.c (gtk_list_store_iter_children): 
+	Return TRUE if there are children.  (#162134, Iñigo Serna,
+	patch by John Finlay)
+
 	* gtk/gtkcombobox.c (gtk_combo_box_button_state_changed): 
 	Transfer state from the button to the cell view to get
 	prelighting right.  (#156327, Ricardo Veguilla)

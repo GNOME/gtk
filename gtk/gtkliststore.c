@@ -576,7 +576,7 @@ gtk_list_store_iter_children (GtkTreeModel *tree_model,
 
   list_store = GTK_LIST_STORE (tree_model);
 
-  if (_gtk_sequence_get_length (list_store->seq) == 0)
+  if (_gtk_sequence_get_length (list_store->seq) > 0)
     {
       iter->stamp = list_store->stamp;
       iter->user_data = _gtk_sequence_get_begin_ptr (list_store->seq);
