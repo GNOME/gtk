@@ -1409,7 +1409,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
-  if (!GTK_WIDGET_REALIZED (widget))
+  if (!GTK_WIDGET_REALIZED (GTK_WIDGET (combo_box)))
     return;
 
   if (GTK_IS_MENU (combo_box->priv->popup_widget))
