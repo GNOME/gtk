@@ -1,3 +1,9 @@
+Wed Apr 15 05:13:09 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_size_request): corrected a brace position
+	(Damon Chaplin), which i got wrong when applying Damon's patch the last
+ 	time.
+
 1998-04-14  Miguel de Icaza  <miguel@nuclecu.unam.mx>
 
 	* gdk/gdkwindow.c (gdk_window_xid_at): Fix the problem introduced

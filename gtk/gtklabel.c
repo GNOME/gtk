@@ -268,7 +268,7 @@ gtk_label_size_request (GtkWidget      *widget,
   	  width = MAX (width,
                        gdk_text_width (GTK_WIDGET (label)->style->font,
 				       row->data,
-                                       (gchar*) row->next->data - (gchar*) row->data) - 1);
+                                       (gchar*) row->next->data - (gchar*) row->data - 1));
       else
         width = MAX (width, gdk_string_width (GTK_WIDGET (label)->style->font, row->data));
       row = row->next;
