@@ -1,3 +1,10 @@
+Fri Jul 14 14:05:02 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_parse_pixmap_path_string): Remove
+	gtk_rc_append_default_pixmap_path(), since it wasn't
+	adding an interesting path and we don't have a meaningful
+	default for this value.
+
 Fri Jul 14 12:22:49 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in Makefile.am gtk-config.m4 gtk.m4: Move
@@ -28,7 +35,7 @@ Fri Jul 14 12:22:49 2000  Owen Taylor  <otaylor@redhat.com>
 	* gtk/Makefile.am gtk/gtkrc.c: Move RC file locations
 	$(sysconfdir)/gtk-2.0 ~/.gtkrc-2.0; theme subdir
 	to THEMENAME/gtk-2.0/. Move engine directory  to
-	$(libdir)/gtk-2.0/$(GTK_VERSION)/engines
+	$(libdir)/gtk-2.0/$(GTK_VERSION)/engines.
 	
 2000-07-12  Tor Lillqvist  <tml@iki.fi>
 

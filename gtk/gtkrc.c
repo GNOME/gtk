@@ -131,7 +131,6 @@ static void        gtk_rc_clear_hash_node            (gpointer         key,
                                                       gpointer         data,
                                                       gpointer         user_data);
 static void        gtk_rc_clear_styles               (void);
-static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_add_initial_default_files  (void);
 
@@ -328,32 +327,6 @@ gtk_rc_get_module_dir(void)
 #endif
 
   return path;
-}
-
-static void
-gtk_rc_append_default_pixmap_path(void)
-{
-  gchar *var, *path;
-  gint n;
-
-#ifndef G_OS_WIN32
-  var = getenv("GTK_DATA_PREFIX");
-  if (var)
-    path = g_strdup_printf("%s%s", var, "/share/gtk/themes");
-  else
-    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
-#else
-  path = g_strdup (get_themes_directory ());
-#endif      
-  
-  for (n = 0; pixmap_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
-    {
-      g_free (path);
-      return;
-    }
-  pixmap_path[n++] = path;
-  pixmap_path[n] = NULL;
 }
 
 static void
@@ -560,7 +533,6 @@ gtk_rc_init (void)
 
       pixmap_path[0] = NULL;
       module_path[0] = NULL;
-      gtk_rc_append_default_pixmap_path();
       gtk_rc_append_default_module_path();
       
       gtk_rc_add_initial_default_files ();
@@ -2313,7 +2285,6 @@ gtk_rc_parse_pixmap_path_string (gchar *pix_path)
 	}
     }
   g_free (buf);
-  gtk_rc_append_default_pixmap_path();
 }
 
 static guint
