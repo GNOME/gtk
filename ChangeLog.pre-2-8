@@ -1,5 +1,8 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktearoffmenuitem.c (tearoff_state_changed): Fix the signature
+	to avoid overwriting a pspec.  
+
 	* gtk/gtkmenuitem.c (gtk_real_menu_item_select): Revert a change
 	which prevented torn-off menus from being shown normally.
 

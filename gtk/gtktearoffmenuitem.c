@@ -257,8 +257,11 @@ gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 
 static void
 tearoff_state_changed (GtkMenu            *menu,
-		       GtkTearoffMenuItem *tearoff_menu_item)
+		       GParamSpec         *pspec,
+		       gpointer            data)
 {
+  GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (data);
+
   tearoff_menu_item->torn_off = gtk_menu_get_tearoff_state (menu);
 }
 
