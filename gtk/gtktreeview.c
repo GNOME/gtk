@@ -3154,9 +3154,6 @@ validate_row (GtkTreeView *tree_view,
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID) && !column->dirty)
 	continue;
 
-      if (column->column_type == GTK_TREE_VIEW_COLUMN_FIXED)
-	continue;
-
       gtk_tree_view_column_cell_set_cell_data (column, tree_view->priv->model, iter,
 					       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
 					       node->children?TRUE:FALSE);
@@ -3315,7 +3312,10 @@ validate_rows_handler (GtkTreeView *tree_view)
   GDK_THREADS_ENTER ();
 
   if (tree_view->priv->tree == NULL)
-    return FALSE;
+    {
+      tree_view->priv->validate_rows_timer = 0;
+      return FALSE;
+    }
 
   do
     {
@@ -4819,9 +4819,9 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
 	  gtk_tree_view_column_cell_set_dirty (column);
 	}
     }
-  install_presize_handler (tree_view);
 
  done:
+  install_presize_handler (tree_view);
   if (free_path)
     gtk_tree_path_free (path);
 }
@@ -4911,9 +4911,9 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
       tmpnode = _gtk_rbtree_find_count (tree, indices[depth - 1]);
       _gtk_rbtree_insert_after (tree, tmpnode, 0, FALSE);
     }
-  install_presize_handler (tree_view);
 
  done:
+  install_presize_handler (tree_view);
   if (free_path)
     gtk_tree_path_free (path);
 }
