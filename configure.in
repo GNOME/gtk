@@ -943,7 +943,7 @@ if test "x$gdktarget" = "xx11"; then
     
   ## be sure we also have Pango built with xft support
   if $PKG_CONFIG --exists pangoxft ; then
-    PANGO_PACKAGES="pangox pangoxft"
+    PANGO_PACKAGES="pangoxft pangox"
     have_xft=true
     AC_DEFINE(HAVE_XFT)
     if $have_freetype ; then
