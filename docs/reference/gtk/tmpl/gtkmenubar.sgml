@@ -2,73 +2,75 @@
 GtkMenuBar
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A subclass widget for #GtkMenuShell which holds #GtkMenuItem widgets
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GtkMenuBar is a subclass of #GtkMenuShell which contains one to many #GtkMenuItem. The result is a standard menu bar which can hold many menu items. #GtkMenuBar allows for a shadow type to be set for aesthetic purposes. The shadow types are defined in the #gtk_menu_bar_set_shadow_type function.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
-
+#GtkMenuShell, #GtkMenu, #GtkMenuItem
 </para>
 
 <!-- ##### STRUCT GtkMenuBar ##### -->
 <para>
-
+The #GtkMenuBar struct contains the following fields. (These fields should be considered read-only.  They should never be set by an application.)
 </para>
 
-@menu_shell: 
-@shadow_type: 
+@menu_shell: the #GtkMenuShell container
+@shadow_type: the GtkShadowType to use
 
 <!-- ##### FUNCTION gtk_menu_bar_new ##### -->
 <para>
-
+Creates the new #GtkMenuBar
 </para>
 
-@Returns: 
+@Returns: the #GtkMenuBar
 
 
 <!-- ##### FUNCTION gtk_menu_bar_append ##### -->
 <para>
-
+Adds a new #GtkMenuItem to the end of the GtkMenuBar
 </para>
 
-@menu_bar: 
-@child: 
+@menu_bar: a #GtkMenuBar
+@child: the #GtkMenuItem to add
 
 
 <!-- ##### FUNCTION gtk_menu_bar_prepend ##### -->
 <para>
-
+Adds a new #GtkMenuItem to the beginning of the GtkMenuBar
 </para>
 
-@menu_bar: 
-@child: 
+@menu_bar: a #GtkMenuBa
+@child: the #GtkMenuItem to add
 
 
 <!-- ##### FUNCTION gtk_menu_bar_insert ##### -->
 <para>
-
+Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 </para>
 
-@menu_bar: 
-@child: 
-@position: 
+@menu_bar: a #GtkMenuBar
+@child: the #GtkMenuItem to add
+@position: the position in the item list where the <em>child</em> is added.
 
 
 <!-- ##### FUNCTION gtk_menu_bar_set_shadow_type ##### -->
 <para>
-
+Sets the shadow type to use on the GtkMenuBar. The shadow types to use are:
+GTK_SHADOW_NONE, GTK_SHADOW_IN, GTK_SHADOW_OUT, GTK_SHADOW_ETCHED_IN, and GTK_SHADOW_ETCHED_OUT
 </para>
 
-@menu_bar: 
-@type: 
+@menu_bar: a #GtkMenuBa
+@type: the GtkShadowtype
 
 
 <!-- ##### ARG GtkMenuBar:shadow ##### -->
 <para>
-
+Used by #GtkMenuBar to determine the shadow type.
 </para>
+
 
