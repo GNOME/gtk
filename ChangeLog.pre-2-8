@@ -1,3 +1,11 @@
+Sat Aug 14 19:15:08 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* === Released 2.4.7 ===
+
+	* gtk/gtkfilechooserdefault.c (selection_check): Return the
+	number of files selected, not just whether the selection is empty.
+	Fixes #150099, fix pointed out by Tommi Komulainen.
+
 2004-08-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_append_home,

@@ -1840,7 +1840,7 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
 
 struct selection_check_closure {
   GtkFileChooserDefault *impl;
-  gboolean empty;
+  gint num_selected;
   gboolean all_files;
   gboolean all_folders;
 };
@@ -1858,7 +1858,7 @@ selection_check_foreach_cb (GtkTreeModel *model,
   gboolean is_folder;
 
   closure = data;
-  closure->empty = FALSE;
+  closure->num_selected++;
 
   gtk_tree_model_sort_convert_iter_to_child_iter (closure->impl->sort_model, &child_iter, iter);
 
@@ -1872,7 +1872,7 @@ selection_check_foreach_cb (GtkTreeModel *model,
 /* Checks whether the selected items in the file list are all files or all folders */
 static void
 selection_check (GtkFileChooserDefault *impl,
-		 gboolean              *empty,
+		 gboolean              *num_selected,
 		 gboolean              *all_files,
 		 gboolean              *all_folders)
 {
@@ -1884,11 +1884,10 @@ selection_check (GtkFileChooserDefault *impl,
   if (impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
       || impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
-      if (gtk_tree_selection_count_selected_rows (selection) == 0)
-	closure.empty = TRUE;
-      else
+      closure.num_selected = gtk_tree_selection_count_selected_rows (selection);
+
+      if (closure.num_selected > 0)
 	{
-	  closure.empty = FALSE;
 	  closure.all_files = FALSE;
 	  closure.all_folders = TRUE;
 	}
@@ -1899,7 +1898,7 @@ selection_check (GtkFileChooserDefault *impl,
 		|| impl->action == GTK_FILE_CHOOSER_ACTION_SAVE);
 
       closure.impl = impl;
-      closure.empty = TRUE;
+      closure.num_selected = 0;
       closure.all_files = TRUE;
       closure.all_folders = TRUE;
 
@@ -1908,10 +1907,10 @@ selection_check (GtkFileChooserDefault *impl,
 					   &closure);
     }
 
-  g_assert (closure.empty || !(closure.all_files && closure.all_folders));
+  g_assert (closure.num_selected == 0 || !(closure.all_files && closure.all_folders));
 
-  if (empty)
-    *empty = closure.empty;
+  if (num_selected)
+    *num_selected = closure.num_selected;
 
   if (all_files)
     *all_files = closure.all_files;

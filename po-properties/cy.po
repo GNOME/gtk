@@ -7,14 +7,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-13 14:11-0400\n"
+"POT-Creation-Date: 2004-08-14 20:18+0200\n"
 "PO-Revision-Date: 2004-03-18 18:57+0000\n"
 "Last-Translator: Dafydd Harries <daf@muse.19inch.net>\n"
 "Language-Team: Cymraeg <gnome-cy@pengwyn.linux.org.uk>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
+"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n == 2);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:101

@@ -9,14 +9,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.2.4\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-13 14:10-0400\n"
+"POT-Creation-Date: 2004-08-14 20:18+0200\n"
 "PO-Revision-Date: 2004-07-22 00:03-0300\n"
 "Last-Translator: Afonso Celso Medina <medina@maua.br>\n"
 "Language-Team: Portuguese/Brazil <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:150 gdk-pixbuf/gdk-pixbuf-io.c:779
@@ -958,7 +958,7 @@ msgstr ""
 "Impossível adicionar um marcador para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5422
+#: gtk/gtkfilechooserdefault.c:766 gtk/gtkfilechooserdefault.c:5434
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -976,15 +976,15 @@ msgstr ""
 "Impossível mudar a pasta atual para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1078 gtk/gtkpathbar.c:842
+#: gtk/gtkfilechooserdefault.c:1081 gtk/gtkpathbar.c:842
 msgid "Home"
 msgstr "Pasta Pessoal"
 
-#: gtk/gtkfilechooserdefault.c:1096 gtk/gtkpathbar.c:844
+#: gtk/gtkfilechooserdefault.c:1104 gtk/gtkpathbar.c:844
 msgid "Desktop"
 msgstr "Desktop"
 
-#: gtk/gtkfilechooserdefault.c:1540
+#: gtk/gtkfilechooserdefault.c:1548
 #, c-format
 msgid ""
 "Could not create folder %s:\n"
@@ -993,13 +993,13 @@ msgstr ""
 "Impossível criar a pasta %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:1723
+#: gtk/gtkfilechooserdefault.c:1731
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
 msgstr ""
 "Não foi possível adicionar um marcador para %s porque ele não é uma pasta."
 
-#: gtk/gtkfilechooserdefault.c:1819
+#: gtk/gtkfilechooserdefault.c:1827
 #, c-format
 msgid ""
 "Could not remove bookmark for %s:\n"
@@ -1008,132 +1008,132 @@ msgstr ""
 "Não foi possível remover os marcadores para %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:2402
+#: gtk/gtkfilechooserdefault.c:2409
 #, c-format
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr ""
 "Não foi possível adicionar um marcador para %s porque ele é um caminho "
 "inválido."
 
-#: gtk/gtkfilechooserdefault.c:2534
+#: gtk/gtkfilechooserdefault.c:2541
 msgid "Shortcuts"
 msgstr "Atalhos"
 
-#: gtk/gtkfilechooserdefault.c:2588
+#: gtk/gtkfilechooserdefault.c:2595
 msgid "Folder"
 msgstr "Pasta"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2642 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "A_dicionar"
 
-#: gtk/gtkfilechooserdefault.c:2645 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2652 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Remover"
 
-#: gtk/gtkfilechooserdefault.c:2724
+#: gtk/gtkfilechooserdefault.c:2731
 msgid "Show _Hidden Files"
 msgstr "Mostrar _Arquivos Escondidos"
 
-#: gtk/gtkfilechooserdefault.c:2839 gtk/gtkfilesel.c:766
+#: gtk/gtkfilechooserdefault.c:2846 gtk/gtkfilesel.c:766
 msgid "Files"
 msgstr "Arquivos"
 
-#: gtk/gtkfilechooserdefault.c:2866
+#: gtk/gtkfilechooserdefault.c:2873
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkfilechooserdefault.c:2888
+#: gtk/gtkfilechooserdefault.c:2895
 msgid "Size"
 msgstr "Tamanho"
 
-#: gtk/gtkfilechooserdefault.c:2900
+#: gtk/gtkfilechooserdefault.c:2907
 msgid "Modified"
 msgstr "Modificado"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2945
+#: gtk/gtkfilechooserdefault.c:2952
 msgid "Create Fo_lder"
 msgstr "Criar _Pasta"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3052
+#: gtk/gtkfilechooserdefault.c:3059
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3103
 msgid "_Browse for other folders"
 msgstr "_Navegar para outras pastas"
 
-#: gtk/gtkfilechooserdefault.c:3333
+#: gtk/gtkfilechooserdefault.c:3345
 msgid "Save in _folder:"
 msgstr "Salvar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:3335
+#: gtk/gtkfilechooserdefault.c:3347
 msgid "Create in _folder:"
 msgstr "Criar na _pasta:"
 
-#: gtk/gtkfilechooserdefault.c:4022
+#: gtk/gtkfilechooserdefault.c:4034
 msgid "Can't change to folder because it isn't local"
 msgstr "Não foi possível ir para a pasta porque ela não é local"
 
-#: gtk/gtkfilechooserdefault.c:4165
+#: gtk/gtkfilechooserdefault.c:4177
 msgid "Could not find the path"
 msgstr "Não foi possível achar o caminho"
 
-#: gtk/gtkfilechooserdefault.c:4521
+#: gtk/gtkfilechooserdefault.c:4533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "o atalho %s não existe"
 
-#: gtk/gtkfilechooserdefault.c:5195
+#: gtk/gtkfilechooserdefault.c:5207
 msgid "Type name of new folder"
 msgstr "Digite o nome da nova pasta"
 
-#: gtk/gtkfilechooserdefault.c:5224
+#: gtk/gtkfilechooserdefault.c:5236
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:5226
+#: gtk/gtkfilechooserdefault.c:5238
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5228
+#: gtk/gtkfilechooserdefault.c:5240
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5230
+#: gtk/gtkfilechooserdefault.c:5242
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5275
+#: gtk/gtkfilechooserdefault.c:5287
 msgid "Today"
 msgstr "Hoje"
 
-#: gtk/gtkfilechooserdefault.c:5277
+#: gtk/gtkfilechooserdefault.c:5289
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserdefault.c:5288
+#: gtk/gtkfilechooserdefault.c:5300
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserdefault.c:5383
+#: gtk/gtkfilechooserdefault.c:5395
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr ""
 "Impossível ir para a pasta que você especificou porque ela tem um caminho "
 "inválido."
 
-#: gtk/gtkfilechooserdefault.c:5460
+#: gtk/gtkfilechooserdefault.c:5472
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1142,15 +1142,15 @@ msgstr ""
 "Não foi possível selecionar %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5499
+#: gtk/gtkfilechooserdefault.c:5511
 msgid "Open Location"
 msgstr "Abrir Localização"
 
-#: gtk/gtkfilechooserdefault.c:5506
+#: gtk/gtkfilechooserdefault.c:5518
 msgid "Save in Location"
 msgstr "Salvar na Localização"
 
-#: gtk/gtkfilechooserdefault.c:5525
+#: gtk/gtkfilechooserdefault.c:5537
 msgid "_Location:"
 msgstr "_Localização:"
 
@@ -1346,7 +1346,7 @@ msgid "%s: %s"
 msgstr "%s: %s"
 
 #: gtk/gtkfilesystemunix.c:426 gtk/gtkfilesystemunix.c:617
-#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1357
+#: gtk/gtkfilesystemwin32.c:393 gtk/gtkfilesystemwin32.c:1358
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "erro ao obter informações para '%s': %s"
@@ -1388,7 +1388,7 @@ msgstr "Salvar o marcador falhou (%s)"
 msgid "error getting information for '%s'"
 msgstr "erro ao obter informações para '%s'"
 
-#: gtk/gtkfilesystemwin32.c:1119
+#: gtk/gtkfilesystemwin32.c:1120
 msgid "This file system does not support icons for everything"
 msgstr "Esse sistema de arquivos não suporta ícones para tudo"
 

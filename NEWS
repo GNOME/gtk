@@ -1,3 +1,9 @@
+Overview of Changes from GTK+ 2.4.6 to GTK+ 2.4.7
+=================================================
+* GtkFileChooser
+ - Fix for Open button not actually opening [Tommi Komulainen]
+ - Fix crash when g_get_home_dir() returns NULL [Tor Lillqvist]
+
 Overview of Changes from GTK+ 2.4.4 to GTK+ 2.4.6
 =================================================
 * GtkFileChooser
