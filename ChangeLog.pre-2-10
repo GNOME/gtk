@@ -1,3 +1,8 @@
+2003-12-08  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkdisplay-win32.c: Use <multimon.h> when compiling
+	with MSVC and old headers. (#126933, John Ehresman)
+
 Mon Dec  8 10:54:44 2003  Owen Taylor  <otaylor@redhat.com>
 	 
 	* === Released 2.3.1 ===

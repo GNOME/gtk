@@ -21,6 +21,10 @@
 #include "gdk.h"
 #include "gdkprivate-win32.h"
 
+#if defined(_MSC_VER) && (WINVER < 0x500)
+#include <multimon.h>
+#endif
+
 typedef BOOL (WINAPI *t_EnumDisplayMonitors)(HDC, LPCRECT, MONITORENUMPROC, LPARAM);
 typedef BOOL (WINAPI *t_GetMonitorInfoA)(HMONITOR, LPMONITORINFO);
 
