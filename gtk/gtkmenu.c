@@ -376,7 +376,11 @@ gtk_menu_popup (GtkMenu		    *menu,
 		       widget->window,
 		       0, 0, 0, 0, -1, -1);
       gdk_gc_unref(gc);
-      
+
+      gtk_widget_set_usize (menu->tearoff_window,
+			    widget->requisition.width,
+			    widget->requisition.height);
+		    
       gdk_window_set_back_pixmap (menu->tearoff_window->window, pixmap, FALSE);
       gdk_pixmap_unref (pixmap);
 
@@ -599,6 +603,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      GtkWidget *attach_widget;
 	      
 	      menu->tearoff_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
 	      gtk_signal_connect_object (GTK_OBJECT (menu->tearoff_window),  
 					 "key_press_event",
 					 GTK_SIGNAL_FUNC (gtk_menu_key_press), 

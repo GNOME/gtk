@@ -1,3 +1,9 @@
+Fri Dec 18 14:17:14 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Set the usize on the
+	tearoff window so when we reparent the window out,
+	the window doesn't shrink down.
+
 1998-12-18  Sebastian Wilhelmi  <wilhelmi@ira.uka.de>
 
 	* configure.in: do not export the glib flags for thread support to
