@@ -29,10 +29,25 @@
 	(ReadImage): lets get the offset right.  This will let transparent
 	gifs work.
 
-1999-10-28  Jonathan Blandford  <jrb@redhat.com>
+1999-10-29  Michael Fulbright  <drmike@redhat.com>
 
-	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): don't send a
-	0 length buffer.
+	* src/io-jpeg.c: image_load_increment(): Fixed bug when
+	image width was not a multiple of 4 - always use the
+	gdk_pixbuf rowstride to increment pointers!
+
+1999-10-29  Michael Fulbright  <drmike@redhat.com>
+
+	* src/io-jpeg.c: Added first cut at progressive jpeg loading.
+	Currently does not handle either progressive jpeg files (jpeg
+	files with multiple scans at different quality settings), but
+	I plan on adding this support soon. These are fairly rare in
+	my experience, so it shouldn't slow people down too much.
+	Grayscale jpegs also don't work but that should be easy to fix.
+
+1999-10-29  Michael Fulbright  <drmike@redhat.com>
+
+	* src/testpixbuf.c: Added title to windows so you can identify
+	progressive and file windows.
 
 1999-10-29  Michael Fulbright  <drmike@redhat.com>
 
@@ -48,6 +63,11 @@
 	the handler into memory. Both actions should possibly be combined
 	in a convenience function since one w/o the other doesn't seem to
 	make much sense.
+
+1999-10-28  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): don't send a
+	0 length buffer.
 
 1999-10-28  Federico Mena Quintero  <federico@redhat.com>
 
