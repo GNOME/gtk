@@ -163,7 +163,7 @@ gdk_events_init (void)
 gint
 gdk_events_pending (void)
 {
-  return g_main_pending();
+  return (queued_events || putback_events);
 }
 
 /*

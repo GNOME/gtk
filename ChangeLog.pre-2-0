@@ -1,3 +1,21 @@
+Sat Dec 19 05:37:51 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtklabel.c (gtk_label_expose): removed return_if_fail
+ 	(label->words != NULL) since that's a valid case when the label
+ 	is empty, or just default constructed.
+	fixed indentation prototype arguments and braces in some places.
+	also, pointer comparisions and initializations are done with NULL
+	not 0, there's a reason GLib defines NULL.
+
+	* gdk/gdkevents.c (gdk_events_pending): return (queued_events ||
+ 	putback_events) so this again returns whether events are pending,
+	not whether other sources like idles are pending.
+
+	* gtk/gtkmain.c (gtk_main_iteration_do): 
+	(gtk_main_iteration): return whether the loop is done, not whether
+	something got dispatch to restore the original behaviour (yosh: this
+ 	fixes code like in GleSelector).
+
 Fri Dec 18 19:20:45 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* gtkbutton.[ch]
