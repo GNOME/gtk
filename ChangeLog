@@ -1,3 +1,46 @@
+2003-01-19  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from stable:
+	
+	Fix for #103614 and some other problems with GtkFileSelection on
+	Windows:
+		
+	* gtk/fnmatch.c (get_char): Need to use g_unichar_tolower(), not
+	g_ascii_tolower(). Windows file names are case-insensitive for all
+	Unicode letters.
+
+	* gtk/gtkfilesel.c: Instead of checking for G_OS_WIN32 or
+	G_WITH_CYGWIN, check G_PLATFORM_WIN32. Move inclusion of gtkintl.h
+	earlier, as it includes config.h unconditionally, and gtkprivate.h
+	redefines GTK_LOCALEDIR.
+	(struct _CompletionDirSent): Ifdef out the fields not used on
+	Windows.
+	(compare_utf8_filenames, compare_sys_filenames): Need different
+	comparison implementation for UTF-8 file names and system locale
+	file names on Win32. Cannot simply use g_ascii_strcasecmp(), but
+	need to casefold all Unicode letters.
+	(cmpl_completion_matches, open_dir, correct_parent): Ifdef out
+	variables not used on Win32 to avoid warnings about unused
+	variables.
+	(open_ref_dir): Use g_path_skip_root() to skip past potential
+	drive letter in front of the leading (back)slash.
+	(open_new_dir): Ifdef out use of CompletionDirSent fields not
+	there on Win32.
+	(correct_parent): Bypass inode check also on Cygwin.
+
+	Fix bug noticed by Alex Shaduri: Tooltips and other
+	GDK_WINDOW_TEMP windows were activated. This looked very odd, and
+	was a regression from earlier versions.
+	
+	* gdk/win32/gdkwindow-win32.c (show_window_internal): Fine-tune
+	behaviour. Don't ever activate GDK_WINDOW_TEMP windows.
+	(gdk_window_move, gdk_window_resize): Add debug logging.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): When we get a
+	WM_SIZE message for a non-visible (withdrawn) window, don't clear
+	the GDK_WINDOW_STATE_WITHDRAWN bit. The window is still withdrawn
+	even if its size changes.
+
 2003-01-16  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_cursor_locations): Typo fixes.
