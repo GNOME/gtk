@@ -739,8 +739,9 @@ gdk_fb_window_send_crossing_events (GdkWindow *src,
     }
 }
 
-void
-gdk_window_show (GdkWindow *window)
+static void
+show_window_internal (GdkWindow *window,
+                      gboolean   raise)
 {
   GdkWindowObject *private;
   GdkWindow *mousewin;
@@ -752,7 +753,9 @@ gdk_window_show (GdkWindow *window)
   if (!private->destroyed && !GDK_WINDOW_IS_MAPPED (private))
     {
       private->state = 0;
-      gdk_fb_window_raise (window);
+
+      if (raise)
+        gdk_fb_window_raise (window);
       
       if (all_parents_shown ((GdkWindowObject *)private->parent))
 	{
@@ -777,6 +780,22 @@ gdk_window_show (GdkWindow *window)
 	  gdk_window_invalidate_rect (_gdk_parent_root, &rect, TRUE);
 	}
     }
+}
+
+void
+gdk_window_show_unraised (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+
+  show_window_internal (window, FALSE);
+}
+
+void
+gdk_window_show (GdkWindow *window)
+{
+  g_return_if_fail (window != NULL);
+
+  show_window_internal (window, TRUE);
 }
 
 void

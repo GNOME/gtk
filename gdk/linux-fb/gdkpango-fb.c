@@ -7,5 +7,5 @@
 PangoContext *
 gdk_pango_context_get (void)
 {
-  return pango_ft2_get_context ();
+  return pango_ft2_get_context (75.0, 75.0);
 }

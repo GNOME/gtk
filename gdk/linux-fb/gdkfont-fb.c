@@ -182,7 +182,7 @@ gdk_font_load (const gchar *font_name)
       break;
 
     if (strcmp (pieces[2], "*")!=0)
-      pango_font_description_set_family (desc, g_strdup (pieces[2]));
+      pango_font_description_set_family (desc, pieces[2]);
     
     if (!pieces[3])
       break;
@@ -212,7 +212,7 @@ gdk_font_load (const gchar *font_name)
       break;
 
     if (strcmp (pieces[7], "*")!=0)
-      pango_font_description_set_size  (desc, atoi (pieces[7]) * PANGO_SCALE);
+      pango_font_description_set_size (desc, atoi (pieces[7]) * PANGO_SCALE);
     if (pango_font_description_get_size (desc) == 0)
       pango_font_description_set_size (desc, 12 * PANGO_SCALE);
     
@@ -224,7 +224,7 @@ gdk_font_load (const gchar *font_name)
 
   gdk_font_hash_insert (GDK_FONT_FONT, font);
 
-  g_strfreev(pieces);
+  g_strfreev (pieces);
 
   pango_font_description_free (desc);
   

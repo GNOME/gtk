@@ -1,8 +1,10 @@
 #include <glib.h>
 
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
+#include <unistd.h>
 
 #include "gdkfbmanager.h"
 
@@ -72,4 +74,6 @@ main (int argc, char *argv[])
   /* Request a switch-to */
   send (fd, &init_msg, sizeof (init_msg), 0);
   g_print ("requested a switch to pid %d\n", init_msg.data);
+
+  return 0;
 }

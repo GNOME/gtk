@@ -1,3 +1,15 @@
+Sat Nov 24 13:39:51 2001  Manish Singh  <yosh@gimp.org>
+
+	* gdk/linux-fb/gdkdrawable-fb2.c
+	* gdk/linux-fb/gdkpango-fb.c: update to latest Pango API
+
+	* gdk/linux-fb/gdkwindow-fb.c: implement gdk_window_show_unraised
+
+	* gdk/linux-fb/gdkfont-fb.c (gdk_font_load): plug memleak on
+	set_family
+	
+	* gdk/linux-fb/gdkfbswitch.c: minor cleanups
+
 Sat Nov 24 22:05:27 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* gtk/gtkmenushell.c (gtk_menu_shell_button_release): don't
