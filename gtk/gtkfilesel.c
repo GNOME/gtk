@@ -1168,6 +1168,8 @@ gtk_file_selection_finalize (GObject *object)
   GtkFileSelection *filesel = GTK_FILE_SELECTION (object);
 
   g_free (filesel->fileop_file);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /* Begin file operations callbacks */

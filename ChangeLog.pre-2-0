@@ -1,3 +1,11 @@
+2001-11-03  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gtkfilesel.c (gtk_file_selection_finalize) : chain
+	finalize to parent class to get removed from the toplevel_list.
+	Should fix 'random' crashes of #63474.
+
+	* gtk/gtktreemodelsort.c : chain finalize() to parent class
+
 2001-11-03  Tor Lillqvist  <tml@iki.fi>
 
 	* modules/input/Makefile.am: Use -no-undefined on Windows. Look

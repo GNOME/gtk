@@ -214,6 +214,7 @@ static GtkTreePath *gtk_real_tree_model_sort_convert_child_path_to_path (GtkTree
 									 GtkTreePath      *child_path,
 									 gboolean          build_levels);
 
+static GObjectClass *parent_class = NULL;
 
 GType
 gtk_tree_model_sort_get_type (void)
@@ -280,6 +281,7 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
   GObjectClass *object_class;
 
   object_class = (GObjectClass *) class;
+  parent_class = g_type_class_peek_parent (class);
 
   object_class->finalize = gtk_tree_model_sort_finalize;
 }
@@ -351,6 +353,9 @@ gtk_tree_model_sort_finalize (GObject *object)
       _gtk_tree_data_list_header_free (tree_model_sort->sort_list);
       tree_model_sort->sort_list = NULL;
     }
+
+  /* must chain up */
+  parent_class->finalize (object);
 }
 
 static void
