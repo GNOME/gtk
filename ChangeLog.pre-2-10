@@ -1,3 +1,9 @@
+Tue Nov 27 20:17:55 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_activate):
+	Notify on the ::active property _here_, not in
+	gtk_check_menu_item_set_active.
+
 Mon Nov 26 19:11:18 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrendererpixbuf.c

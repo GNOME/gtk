@@ -204,10 +204,7 @@ gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
   is_active = is_active != 0;
 
   if (check_menu_item->active != is_active)
-     {
-	gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
-	g_object_notify (G_OBJECT(check_menu_item), "active");
-     }
+    gtk_menu_item_activate (GTK_MENU_ITEM (check_menu_item));
 }
 
 /**
@@ -335,6 +332,8 @@ gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 
   gtk_check_menu_item_toggled (check_menu_item);
   gtk_widget_queue_draw (GTK_WIDGET (check_menu_item));
+
+  g_object_notify (G_OBJECT(check_menu_item), "active");
 }
 
 static void
