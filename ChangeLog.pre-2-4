@@ -1,3 +1,11 @@
+Tue Jan 29 20:38:04 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscale.[ch]: Revert the last changes to make the
+	number of digits only effect drawing, instead, don't
+	round unless we are in the 'draw_value' mode -- this
+	is the behavior of GTK+-1.2, and keeps the behavior that
+	if the user sees a displayed value, it is the correct value.
+
 Tue Jan 29 19:51:05 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkenums.h: Deprecate GtkPreviewType,
@@ -413,7 +421,7 @@ Wed Jan 23 15:12:16 2002  Owen Taylor  <otaylor@redhat.com>
 
 Wed Jan 23 14:44:12 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkspinbutton.c (EPSILON): Decreate value since
+	* gtk/gtkspinbutton.c (EPSILON): Decrease value since
 	we now use doubles.
 
 Tue Jan 22 16:58:37 2002  Jonathan Blandford  <jrb@redhat.com>

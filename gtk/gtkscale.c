@@ -353,7 +353,7 @@ gtk_scale_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_DIGITS:
-      g_value_set_int (value, scale->draw_digits);
+      g_value_set_int (value, scale->digits);
       break;
     case PROP_DRAW_VALUE:
       g_value_set_boolean (value, scale->draw_value);
@@ -381,10 +381,11 @@ gtk_scale_init (GtkScale *scale)
   range->has_stepper_b = FALSE;
   range->has_stepper_c = FALSE;
   range->has_stepper_d = FALSE;
-
-  scale->draw_digits = 1;
+  
   scale->draw_value = TRUE;
   scale->value_pos = GTK_POS_TOP;
+  scale->digits = 1;
+  range->round_digits = scale->digits;
 }
 
 void
@@ -397,11 +398,13 @@ gtk_scale_set_digits (GtkScale *scale,
 
   range = GTK_RANGE (scale);
   
-  digits = CLAMP (digits, -1, MAX_DIGITS);
+  digits = CLAMP (digits, -1, 16);
 
-  if (scale->draw_digits != digits)
+  if (scale->digits != digits)
     {
-      scale->draw_digits = digits;
+      scale->digits = digits;
+      if (scale->draw_value)
+	range->round_digits = digits;
       
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -414,7 +417,7 @@ gtk_scale_get_digits (GtkScale *scale)
 {
   g_return_val_if_fail (GTK_IS_SCALE (scale), -1);
 
-  return scale->draw_digits;
+  return scale->digits;
 }
 
 void
@@ -428,6 +431,10 @@ gtk_scale_set_draw_value (GtkScale *scale,
   if (scale->draw_value != draw_value)
     {
       scale->draw_value = draw_value;
+      if (draw_value)
+	GTK_RANGE (scale)->round_digits = scale->digits;
+      else
+	GTK_RANGE (scale)->round_digits = -1;
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -607,6 +614,6 @@ _gtk_scale_format_value (GtkScale *scale,
   if (fmt)
     return fmt;
   else
-    return g_strdup_printf ("%0.*f", scale->draw_digits,
+    return g_strdup_printf ("%0.*f", scale->digits,
                             value);
 }

@@ -52,7 +52,7 @@ struct _GtkScale
 {
   GtkRange range;
 
-  gint  draw_digits;
+  gint digits;
   guint draw_value : 1;
   guint value_pos : 2;
 };
