@@ -95,7 +95,9 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
         object_class->finalize = gdk_pixbuf_finalize;
         object_class->set_property = gdk_pixbuf_set_property;
         object_class->get_property = gdk_pixbuf_get_property;
-        
+
+#define PIXBUF_PARAM_FLAGS G_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY|\
+                           G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
         /**
          * GdkPixbuf:n-channels:
          *
@@ -110,8 +112,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                            0,
                                                            G_MAXINT,
                                                            3,
-                                                           G_PARAM_READWRITE |
-                                                           G_PARAM_CONSTRUCT_ONLY));
+                                                           PIXBUF_PARAM_FLAGS));
 
         g_object_class_install_property (object_class,
                                          PROP_COLORSPACE,
@@ -120,9 +121,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                             P_("The colorspace in which the samples are interpreted"),
                                                             GDK_TYPE_COLORSPACE,
                                                             GDK_COLORSPACE_RGB,
-                                                            
-                                                            G_PARAM_READWRITE |
-                                                            G_PARAM_CONSTRUCT_ONLY));
+                                                            PIXBUF_PARAM_FLAGS));
 
         g_object_class_install_property (object_class,
                                          PROP_HAS_ALPHA,
@@ -130,8 +129,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                                P_("Has Alpha"),
                                                                P_("Whether the pixbuf has an alpha channel"),
                                                                FALSE,
-                                                               G_PARAM_READWRITE |
-                                                               G_PARAM_CONSTRUCT_ONLY));
+                                                               PIXBUF_PARAM_FLAGS));
 
         /**
          * GdkPixbuf:bits-per-sample:
@@ -147,8 +145,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                            1,
                                                            16,
                                                            8,
-                                                           G_PARAM_READWRITE |
-                                                           G_PARAM_CONSTRUCT_ONLY));
+                                                           PIXBUF_PARAM_FLAGS));
 
         g_object_class_install_property (object_class,
                                          PROP_WIDTH,
@@ -158,8 +155,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                            1,
                                                            G_MAXINT,
                                                            1,
-                                                           G_PARAM_READWRITE |
-                                                           G_PARAM_CONSTRUCT_ONLY));
+                                                           PIXBUF_PARAM_FLAGS));
 
         g_object_class_install_property (object_class,
                                          PROP_HEIGHT,
@@ -169,8 +165,7 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                            1,
                                                            G_MAXINT,
                                                            1,
-                                                           G_PARAM_READWRITE |
-                                                           G_PARAM_CONSTRUCT_ONLY));
+                                                           PIXBUF_PARAM_FLAGS));
 
         /**
          * GdkPixbuf:rowstride:
@@ -187,16 +182,14 @@ gdk_pixbuf_class_init (GdkPixbufClass *klass)
                                                            1,
                                                            G_MAXINT,
                                                            1,
-                                                           G_PARAM_READWRITE |
-                                                           G_PARAM_CONSTRUCT_ONLY));
+                                                           PIXBUF_PARAM_FLAGS));
 
         g_object_class_install_property (object_class,
                                          PROP_PIXELS,
                                          g_param_spec_pointer ("pixels",
                                                                P_("Pixels"),
                                                                P_("A pointer to the pixel data of the pixbuf"),
-                                                               G_PARAM_READWRITE |
-                                                               G_PARAM_CONSTRUCT_ONLY));
+                                                               PIXBUF_PARAM_FLAGS));
 }
 
 static void

@@ -1,3 +1,8 @@
+2005-03-21  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk-pixbuf.c (gdk_pixbuf_class_init): Mark param spec strings
+	as static.
+
 2005-03-14  Matthias Clasen  <mclasen@redhat.com>
 
 	Make PLT-reduction work with gcc4, and don't include
