@@ -1,3 +1,8 @@
+Tue Mar 31 15:41:57 PST 1998 Shawn T. Amundson
+
+	* Makefile.am:
+	* examples/*: added the rest of the tutorial examples
+
 Tue Mar 31 06:37:16 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/testgtk.c (create_cursors): forgot to set the initial `0' cursor.
