@@ -1640,8 +1640,6 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
 			 ROW_REF_DATA_STRING,
 			 NULL);
     }
-  g_object_unref (reference->proxy);
-  g_object_unref (reference->model);
 
   if (reference->path)
     {
@@ -1649,6 +1647,8 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
       gtk_tree_path_free (reference->path);
     }
 
+  g_object_unref (reference->proxy);
+  g_object_unref (reference->model);
   g_free (reference);
 }
 

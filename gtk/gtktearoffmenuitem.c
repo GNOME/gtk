@@ -131,8 +131,6 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
   gint x, y;
   gint right_max;
 
-  g_return_if_fail (GTK_IS_TEAROFF_MENU_ITEM (widget));
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       menu_item = GTK_MENU_ITEM (widget);
@@ -194,9 +192,6 @@ static gint
 gtk_tearoff_menu_item_expose (GtkWidget      *widget,
 			    GdkEventExpose *event)
 {
-  g_return_val_if_fail (GTK_IS_TEAROFF_MENU_ITEM (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   gtk_tearoff_menu_item_paint (widget, &event->area);
 
   return FALSE;
@@ -212,11 +207,8 @@ gtk_tearoff_menu_item_delete_cb (GtkMenuItem *menu_item, GdkEventAny *event)
 static void
 gtk_tearoff_menu_item_activate (GtkMenuItem *menu_item)
 {
-  GtkTearoffMenuItem *tearoff_menu_item;
+  GtkTearoffMenuItem *tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (menu_item);
 
-  g_return_if_fail (GTK_IS_TEAROFF_MENU_ITEM (menu_item));
-
-  tearoff_menu_item = GTK_TEAROFF_MENU_ITEM (menu_item);
   tearoff_menu_item->torn_off = !tearoff_menu_item->torn_off;
   gtk_widget_queue_resize (GTK_WIDGET (menu_item));
 

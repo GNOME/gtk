@@ -24,6 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#define GTK_MENU_INTERNALS
+
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
@@ -34,7 +36,6 @@
 #include "gtkwindow.h"
 
 #define MENU_SHELL_TIMEOUT   500
-
 
 enum {
   DEACTIVATE,
@@ -804,6 +805,8 @@ gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
     class->select_item (menu_shell, menu_item);
 }
 
+void _gtk_menu_item_set_placement (GtkMenuItem         *menu_item,
+				   GtkSubmenuPlacement  placement);
 
 static void
 gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,

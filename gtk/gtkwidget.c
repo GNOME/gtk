@@ -1084,9 +1084,7 @@ gtk_widget_set_property (GObject         *object,
 			 const GValue    *value,
 			 GParamSpec      *pspec)
 {
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (object);
+  GtkWidget *widget = GTK_WIDGET (object);
 
   switch (prop_id)
     {
@@ -1169,9 +1167,7 @@ gtk_widget_get_property (GObject         *object,
 			 GValue          *value,
 			 GParamSpec      *pspec)
 {
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (object);
+  GtkWidget *widget = GTK_WIDGET (object);
   
   switch (prop_id)
     {
@@ -1631,8 +1627,6 @@ gtk_widget_show (GtkWidget *widget)
 static void
 gtk_widget_real_show (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
   if (!GTK_WIDGET_VISIBLE (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
@@ -1712,8 +1706,6 @@ gtk_widget_hide (GtkWidget *widget)
 static void
 gtk_widget_real_hide (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
   if (GTK_WIDGET_VISIBLE (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_VISIBLE);
@@ -2516,8 +2508,6 @@ static void
 gtk_widget_real_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   widget->allocation = *allocation;
   
   if (GTK_WIDGET_REALIZED (widget) &&
@@ -2606,22 +2596,22 @@ widget_new_accel_closure (GtkWidget *widget,
  * @accel_mods:   modifier key combination of the accelerator
  * @accel_flags:  flag accelerators, e.g. %GTK_ACCEL_VISIBLE
  *
- * Installs an accelerator for this @widget in @accel_group, that causes
+ * Installs an accelerator for this @widget in @accel_group that causes
  * @accel_signal to be emitted if the accelerator is activated.
  * The @accel_group needs to be added to the widget's toplevel via
  * gtk_window_add_accel_group(), and the signal must be of type %G_RUN_ACTION.
  * Accelerators added through this function are not user changeable during
  * runtime. If you want to support accelerators that can be changed by the
- * user, use gtk_accel_map_add_entry() and gtk_menu_item_set_accel_path()
- * instead.
+ * user, use gtk_accel_map_add_entry() and gtk_widget_set_accel_path() or
+ * gtk_menu_item_set_accel_path() instead.
  */
 void
-gtk_widget_add_accelerator (GtkWidget     *widget,
-			    const gchar   *accel_signal,
-			    GtkAccelGroup *accel_group,
-			    guint          accel_key,
-			    guint          accel_mods,
-			    GtkAccelFlags  accel_flags)
+gtk_widget_add_accelerator (GtkWidget      *widget,
+			    const gchar    *accel_signal,
+			    GtkAccelGroup  *accel_group,
+			    guint           accel_key,
+			    GdkModifierType accel_mods,
+			    GtkAccelFlags   accel_flags)
 {
   GClosure *closure;
   GSignalQuery query;
@@ -2672,10 +2662,10 @@ gtk_widget_add_accelerator (GtkWidget     *widget,
  * gtk_widget_add_accelerator().
  */
 gboolean
-gtk_widget_remove_accelerator (GtkWidget     *widget,
-			       GtkAccelGroup *accel_group,
-			       guint          accel_key,
-			       guint          accel_mods)
+gtk_widget_remove_accelerator (GtkWidget      *widget,
+			       GtkAccelGroup  *accel_group,
+			       guint           accel_key,
+			       GdkModifierType accel_mods)
 {
   GtkAccelGroupEntry *ag_entry;
   GList *slist, *clist;
@@ -2756,15 +2746,35 @@ destroy_accel_path (gpointer data)
   g_free (apath);
 }
 
-/* accel_group: the accel group used to activate this widget
- * accel_path:  the accel path, associating the accelerator
- *              to activate this widget
- * set accel path through which this widget can be actiavated.
- */
+
+/**
+ * gtk_widget_set_accel_path:
+ * @widget: a #GtkWidget
+ * @accel_path: path used to look up the the accelerator
+ * @accel_group: a #GtkAccelGroup.
+ * 
+ * Given an accelerator group, @accel_group, and an accelerator path,
+ * @accel_path, sets up an accelerator in @accel_group so whenever the
+ * key binding that is defined for @accel_path is pressed, @widget
+ * will be activated.  This removes any accelerators (for any
+ * accelerator group) installed by previous calls to
+ * gtk_widget_set_accel_path(). Associating accelerators with
+ * paths allows them to be modified by the user and the modifications
+ * to be saved for future use. (See gtk_accel_map_save().)
+ *
+ * This function is a low level function that would most likely
+ * be used by a menu creation system like #GtkItemFactory. If you
+ * use #GtkItemFactory, setting up accelerator paths will be done
+ * automatically.
+ *
+ * Even when you you aren't using #GtkItemFactory, if you only want to
+ * set up accelerators on menu items gtk_menu_item_set_accel_path()
+ * provides a somewhat more convenient interface.
+ **/
 void
-_gtk_widget_set_accel_path (GtkWidget     *widget,
-			    const gchar   *accel_path,
-			    GtkAccelGroup *accel_group)
+gtk_widget_set_accel_path (GtkWidget     *widget,
+			   const gchar   *accel_path,
+			   GtkAccelGroup *accel_group)
 {
   AccelPath *apath;
 
@@ -2848,9 +2858,6 @@ gtk_widget_real_key_press_event (GtkWidget         *widget,
 {
   gboolean handled = FALSE;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), handled);
-  g_return_val_if_fail (event != NULL, handled);
-
   if (!handled)
     handled = gtk_bindings_activate (GTK_OBJECT (widget),
 				     event->keyval,
@@ -2864,9 +2871,6 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
 				   GdkEventKey       *event)
 {
   gboolean handled = FALSE;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), handled);
-  g_return_val_if_fail (event != NULL, handled);
 
   if (!handled)
     handled = gtk_bindings_activate (GTK_OBJECT (widget),
@@ -3156,7 +3160,6 @@ static void
 gtk_widget_reparent_container_child (GtkWidget *widget,
 				     gpointer   client_data)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (client_data != NULL);
   
   if (GTK_WIDGET_NO_WINDOW (widget))
@@ -3333,8 +3336,6 @@ reset_focus_recurse (GtkWidget *widget,
 static void
 gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (focus_widget));
-  
   if (GTK_WIDGET_CAN_FOCUS (focus_widget))
     {
       GtkWidget *toplevel;
@@ -3468,7 +3469,10 @@ gtk_widget_grab_default (GtkWidget *widget)
   window = gtk_widget_get_toplevel (widget);
   
   if (window && GTK_WIDGET_TOPLEVEL (window))
-    gtk_window_set_default (GTK_WINDOW (window), widget);
+    {
+       gtk_window_set_default (GTK_WINDOW (window), widget);
+       g_object_notify (G_OBJECT (widget), "has_default");
+    }
   else
     g_warning (G_STRLOC ": widget not within a GtkWindow");
 }
@@ -3908,6 +3912,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
 {
   GtkRcStyle *old_style;
 
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_RC_STYLE (style));
   
   old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
@@ -3952,6 +3957,8 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
 {
   GtkRcStyle *rc_style;
   
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
 					quark_rc_style);
 
@@ -4138,9 +4145,6 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 			       GtkStyle	 *style,
 			       gboolean   initial_emission)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (style != NULL);
-
   g_object_ref (G_OBJECT (widget));
   g_object_freeze_notify (G_OBJECT (widget));
 
@@ -5480,7 +5484,7 @@ gtk_widget_pop_composite_child (void)
 void
 gtk_widget_push_colormap (GdkColormap *cmap)
 {
-  g_return_if_fail (cmap != NULL);
+  g_return_if_fail (GDK_IS_COLORMAP (cmap));
 
   colormap_stack = g_slist_prepend (colormap_stack, cmap);
 }
@@ -5510,6 +5514,8 @@ gtk_widget_pop_colormap (void)
 void
 gtk_widget_set_default_colormap (GdkColormap *colormap)
 {
+  g_return_if_fail (GDK_IS_COLORMAP (colormap));
+
   if (gdk_screen_get_default_colormap (colormap->screen) != colormap)
     gdk_screen_set_default_colormap (colormap->screen, colormap);
 }
@@ -5710,11 +5716,8 @@ gtk_widget_dispose (GObject *object)
 static void
 gtk_widget_real_destroy (GtkObject *object)
 {
-  GtkWidget *widget;
-
-  /* gtk_object_destroy() will already hold a refcount on object
-   */
-  widget = GTK_WIDGET (object);
+  /* gtk_object_destroy() will already hold a refcount on object */
+  GtkWidget *widget = GTK_WIDGET (object);
 
   /* wipe accelerator closures (keep order) */
   g_object_set_qdata (G_OBJECT (widget), quark_accel_path, NULL);
@@ -5776,7 +5779,6 @@ gtk_widget_finalize (GObject *object)
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_REALIZED (widget) == TRUE);
   
   if (!GTK_WIDGET_MAPPED (widget))
@@ -5799,8 +5801,6 @@ gtk_widget_real_map (GtkWidget *widget)
 static void
 gtk_widget_real_unmap (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  
   if (GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
@@ -5821,7 +5821,6 @@ gtk_widget_real_unmap (GtkWidget *widget)
 static void
 gtk_widget_real_realize (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_NO_WINDOW (widget));
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -5844,8 +5843,6 @@ gtk_widget_real_realize (GtkWidget *widget)
 static void
 gtk_widget_real_unrealize (GtkWidget *widget)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   if (GTK_WIDGET_MAPPED (widget))
     gtk_widget_real_unmap (widget);
 
@@ -5887,8 +5884,6 @@ static void
 gtk_widget_real_size_request (GtkWidget         *widget,
 			      GtkRequisition    *requisition)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   requisition->width = widget->requisition.width;
   requisition->height = widget->requisition.height;
 }
@@ -6036,8 +6031,6 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
 static void
 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
 {
-  g_return_if_fail (aux_info != NULL);
-  
   g_mem_chunk_free (aux_info_mem_chunk, aux_info);
 }
 

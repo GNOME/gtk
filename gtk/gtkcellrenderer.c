@@ -261,43 +261,33 @@ gtk_cell_renderer_set_property (GObject      *object,
     {
     case PROP_MODE:
       cell->mode = g_value_get_enum (value);
-      g_object_notify (object, "mode");
       break;
     case PROP_VISIBLE:
       cell->visible = g_value_get_boolean (value);
-      g_object_notify (object, "visible");
       break;
     case PROP_XALIGN:
       cell->xalign = g_value_get_float (value);
-      g_object_notify (object, "xalign");
       break;
     case PROP_YALIGN:
       cell->yalign = g_value_get_float (value);
-      g_object_notify (object, "yalign");
       break;
     case PROP_XPAD:
       cell->xpad = g_value_get_uint (value);
-      g_object_notify (object, "xpad");
       break;
     case PROP_YPAD:
       cell->ypad = g_value_get_uint (value);
-      g_object_notify (object, "ypad");
       break;
     case PROP_WIDTH:
       cell->width = g_value_get_int (value);
-      g_object_notify (object, "width");
       break;
     case PROP_HEIGHT:
       cell->height = g_value_get_int (value);
-      g_object_notify (object, "height");
       break;
     case PROP_IS_EXPANDER:
       cell->is_expander = g_value_get_boolean (value);
-      g_object_notify (object, "is_expander");
       break;
     case PROP_IS_EXPANDED:
       cell->is_expanded = g_value_get_boolean (value);
-      g_object_notify (object, "is_expanded");
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

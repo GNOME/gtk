@@ -267,6 +267,8 @@ void
 gtk_button_box_set_child_size (GtkButtonBox *widget, 
                                gint width, gint height)
 {
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+
   widget->child_min_width = width;
   widget->child_min_height = height;
 }
@@ -275,6 +277,8 @@ void
 gtk_button_box_set_child_ipadding (GtkButtonBox *widget,
                                    gint ipad_x, gint ipad_y)
 {
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+
   widget->child_ipad_x = ipad_x;
   widget->child_ipad_y = ipad_y;
 }
@@ -283,6 +287,7 @@ void
 gtk_button_box_set_layout (GtkButtonBox      *widget, 
                            GtkButtonBoxStyle  layout_style)
 {
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
   g_return_if_fail (layout_style >= GTK_BUTTONBOX_DEFAULT_STYLE &&
 		    layout_style <= GTK_BUTTONBOX_END);
 
@@ -301,6 +306,10 @@ void
 gtk_button_box_get_child_size (GtkButtonBox *widget,
                                gint *width, gint *height)
 {
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+  g_return_if_fail (width != NULL);
+  g_return_if_fail (height != NULL);
+
   *width  = widget->child_min_width;
   *height = widget->child_min_height;
 }
@@ -309,6 +318,10 @@ void
 gtk_button_box_get_child_ipadding (GtkButtonBox *widget,
                                    gint* ipad_x, gint *ipad_y)
 {
+  g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
+  g_return_if_fail (ipad_x != NULL);
+  g_return_if_fail (ipad_y != NULL);
+
   *ipad_x = widget->child_ipad_x;
   *ipad_y = widget->child_ipad_y;
 }

@@ -355,8 +355,6 @@ gtk_ruler_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (GTK_IS_RULER (widget));
-
   ruler = GTK_RULER (widget);
   GTK_WIDGET_SET_FLAGS (ruler, GTK_REALIZED);
 
@@ -387,11 +385,7 @@ gtk_ruler_realize (GtkWidget *widget)
 static void
 gtk_ruler_unrealize (GtkWidget *widget)
 {
-  GtkRuler *ruler;
-
-  g_return_if_fail (GTK_IS_RULER (widget));
-
-  ruler = GTK_RULER (widget);
+  GtkRuler *ruler = GTK_RULER (widget);
 
   if (ruler->backing_store)
     gdk_pixmap_unref (ruler->backing_store);
@@ -409,11 +403,8 @@ static void
 gtk_ruler_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
 {
-  GtkRuler *ruler;
+  GtkRuler *ruler = GTK_RULER (widget);
 
-  g_return_if_fail (GTK_IS_RULER (widget));
-
-  ruler = GTK_RULER (widget);
   widget->allocation = *allocation;
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -431,9 +422,6 @@ gtk_ruler_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
   GtkRuler *ruler;
-
-  g_return_val_if_fail (GTK_IS_RULER (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_DRAWABLE (widget))
     {

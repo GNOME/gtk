@@ -434,7 +434,7 @@ gdk_image_new (GdkImageType  type,
 				   visual, width, height, -1);
 }
 
-GdkImage*
+static GdkImage*
 get_full_image (GdkDrawable    *drawable,
 		gint            src_x,
 		gint            src_y,
@@ -599,8 +599,6 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
   if (!gdk_rectangle_intersect (&req, &window_rect, &req))
     goto out;
 
-  private = PRIVATE_DATA (image);
-
   gdk_error_trap_push ();
   
   if (!image &&
@@ -621,6 +619,8 @@ _gdk_x11_copy_to_image (GdkDrawable    *drawable,
 					    gdk_drawable_get_depth (drawable));
 	  created_image = TRUE;
 	}
+
+      private = PRIVATE_DATA (image);
 
       /* In the ShmImage but no ShmPixmap case, we could use XShmGetImage when
        * we are getting the entire image.

@@ -1767,7 +1767,8 @@ gtk_style_real_set_background (GtkStyle    *style,
  * @source: the #GtkIconSource specifying the icon to render
  * @direction: a text direction
  * @state: a state
- * @size: the size to render the icon at
+ * @size: the size to render the icon at. A size of (GtkIconSize)-1
+ *        means render at the size of the source and don't scale.
  * @widget: the widget 
  * @detail: a style detail
  * @returns: a newly-created #GdkPixbuf containing the rendered icon
@@ -1906,16 +1907,16 @@ gtk_default_render_icon (GtkStyle            *style,
 
   g_return_val_if_fail (base_pixbuf != NULL, NULL);
   
-  if (!gtk_icon_size_lookup (size, &width, &height))
+  if (size != (GtkIconSize) -1 && !gtk_icon_size_lookup (size, &width, &height))
     {
       g_warning (G_STRLOC ": invalid icon size `%d'", size);
       return NULL;
     }
 
-  /* If the size was wildcarded, then scale; otherwise, leave it
-   * alone.
+  /* If the size was wildcarded, and we're allowed to scale, then scale; otherwise,
+   * leave it alone.
    */
-  if (gtk_icon_source_get_size_wildcarded (source))
+  if (size != (GtkIconSize)-1 && gtk_icon_source_get_size_wildcarded (source))
     scaled = scale_or_ref (base_pixbuf, width, height);
   else
     scaled = GDK_PIXBUF (g_object_ref (G_OBJECT (base_pixbuf)));
@@ -1952,24 +1953,17 @@ gtk_default_render_icon (GtkStyle            *style,
   return stated;
 }
 
-static gboolean
+static void
 sanitize_size (GdkWindow *window,
 	       gint      *width,
 	       gint      *height)
 {
-  gboolean set_bg = FALSE;
-
   if ((*width == -1) && (*height == -1))
-    {
-      set_bg = GDK_IS_WINDOW (window);
-      gdk_window_get_size (window, width, height);
-    }
+    gdk_window_get_size (window, width, height);
   else if (*width == -1)
     gdk_window_get_size (window, width, NULL);
   else if (*height == -1)
     gdk_window_get_size (window, NULL, height);
-
-  return set_bg;
 }
 
 static GdkBitmap * 
@@ -2126,7 +2120,7 @@ gtk_default_draw_vline (GtkStyle     *style,
 }
 
 
-void
+static void
 draw_thin_shadow (GtkStyle      *style,
 		  GdkWindow     *window,
 		  GtkStateType   state,
@@ -2166,7 +2160,7 @@ draw_thin_shadow (GtkStyle      *style,
     }
 }
 
-void
+static void
 draw_spin_entry_shadow (GtkStyle      *style,
 			GdkWindow     *window,
 			GtkStateType   state,
@@ -4388,6 +4382,18 @@ apply_affine_on_point (double affine[6], GdkPoint *point)
 }
 
 static void
+gtk_style_draw_polygon_with_gc (GdkWindow *window, GdkGC *gc, gint line_width,
+				gboolean do_fill, GdkPoint *points, gint n_points)
+{
+  gdk_gc_set_line_attributes (gc, line_width,
+			      GDK_LINE_SOLID,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+  gdk_draw_polygon (window, gc, do_fill, points, n_points);
+  gdk_gc_set_line_attributes (gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+}
+
+static void
 gtk_default_draw_expander (GtkStyle        *style,
                            GdkWindow       *window,
                            GtkStateType     state_type,
@@ -4401,12 +4407,14 @@ gtk_default_draw_expander (GtkStyle        *style,
   gint expander_size;
   GdkPoint points[3];
   gint i;
+  gint line_width;
   gdouble affine[6];
   gint degrees = 0;
   
   gtk_widget_style_get (widget,
 			"expander_size", &expander_size,
 			NULL);
+  line_width = MAX (1, expander_size/7);
 
   if (area)
     {
@@ -4414,12 +4422,13 @@ gtk_default_draw_expander (GtkStyle        *style,
       gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], area);
     }
 
-  points[0].x = 0;
-  points[0].y = 0;
-  points[1].x = expander_size / 2;
-  points[1].y =  expander_size / 2;
-  points[2].x = 0;
-  points[2].y = expander_size;
+  expander_size -= (line_width * 2 - 2);
+  points[0].x = line_width / 2;
+  points[0].y = line_width / 2;
+  points[1].x = expander_size / 2 + line_width / 2;
+  points[1].y = expander_size / 2 + line_width / 2;
+  points[2].x = line_width / 2;
+  points[2].y = expander_size + line_width / 2;
 
   switch (expander_style)
     {
@@ -4446,22 +4455,22 @@ gtk_default_draw_expander (GtkStyle        *style,
 
   if (state_type == GTK_STATE_PRELIGHT)
     {
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			TRUE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+				      1, TRUE, points, 3);
     }
   else if (state_type == GTK_STATE_ACTIVE)
     {
-      gdk_draw_polygon (window, style->light_gc[GTK_STATE_ACTIVE],
-			TRUE, points, 3);
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			FALSE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->light_gc[GTK_STATE_ACTIVE],
+				      1, TRUE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+				      line_width, FALSE, points, 3);
     }
   else
     {
-      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-			TRUE, points, 3);
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			FALSE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->base_gc[GTK_STATE_NORMAL],
+				      1, TRUE, points, 3);
+      gtk_style_draw_polygon_with_gc (window, style->fg_gc[GTK_STATE_NORMAL],
+				      line_width, FALSE, points, 3);
     }
   if (area)
     {

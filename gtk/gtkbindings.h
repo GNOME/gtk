@@ -65,7 +65,7 @@ struct _GtkBindingEntry
   /* key portion
    */
   guint			 keyval;
-  guint			 modifiers;
+  GdkModifierType	 modifiers;
   
   GtkBindingSet		*binding_set;
   guint			destroyed : 1;
@@ -101,18 +101,18 @@ GtkBindingSet*	gtk_binding_set_by_class(gpointer	 object_class);
 GtkBindingSet*	gtk_binding_set_find	(const gchar	*set_name);
 gboolean gtk_bindings_activate		(GtkObject	*object,
 					 guint		 keyval,
-					 guint		 modifiers);
+					 GdkModifierType modifiers);
 gboolean gtk_binding_set_activate	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
-					 guint		 modifiers,
+					 GdkModifierType modifiers,
 					 GtkObject	*object);
 #define	 gtk_binding_entry_add		gtk_binding_entry_clear
 void	 gtk_binding_entry_clear	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
-					 guint		 modifiers);
+					 GdkModifierType modifiers);
 void	 gtk_binding_entry_add_signal	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
-					 guint		 modifiers,
+					 GdkModifierType modifiers,
 					 const gchar	*signal_name,
 					 guint		 n_args,
 					 ...);
@@ -126,10 +126,10 @@ void	 gtk_binding_set_add_path	(GtkBindingSet	*binding_set,
 
 void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
-					 guint		 modifiers);
+					 GdkModifierType modifiers);
 void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
 					 guint		 keyval,
-					 guint		 modifiers,
+					 GdkModifierType modifiers,
 					 const gchar	*signal_name,
 					 GSList		*binding_args);
 guint	 gtk_binding_parse_binding	(GScanner	*scanner);

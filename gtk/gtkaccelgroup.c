@@ -774,7 +774,7 @@ gtk_accel_groups_activate (GObject	  *object,
       GQuark accel_quark;
       GSList *slist;
 
-      accel_name = gtk_accelerator_name (accel_key, accel_mods);
+      accel_name = gtk_accelerator_name (accel_key, (accel_mods & gtk_accelerator_get_default_mod_mask ()));
       accel_quark = g_quark_from_string (accel_name);
       g_free (accel_name);
       

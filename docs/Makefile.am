@@ -3,18 +3,18 @@
 SUBDIRS = tutorial faq reference
 
 EXTRA_DIST = \
-	Changes-1.2.txt			\
-	Changes-2.0.txt			\
 	debugging.txt			\
 	defsformat.txt			\
 	developers.txt			\
 	dnd_internals.txt		\
 	make-todo			\
 	refcounting.txt			\
+	sizing-test.txt			\
 	styles.txt			\
 	text_widget.txt 		\
+	tree-column-sizing.txt		\
+	widget_geometry.txt		\
 	widget_system.txt 		\
 	generation.txt			\
-        README.linux-fb  	        \
 	gtkdocs_fix
 

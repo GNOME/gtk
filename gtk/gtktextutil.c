@@ -42,7 +42,7 @@ struct _GtkTextUtilCallbackInfo
   gpointer data;
 };
 
-GtkUnicodeMenuEntry bidi_menu_entries[] = {
+static GtkUnicodeMenuEntry bidi_menu_entries[] = {
   { N_("LRM _Left-to-right mark"), 0x200E },
   { N_("RLM _Right-to-left mark"), 0x200F },
   { N_("LRE Left-to-right _embedding"), 0x202A },
@@ -102,7 +102,7 @@ _gtk_text_util_append_special_char_menuitems (GtkMenuShell              *menushe
       info->func = func;
       info->data = data;
       
-      menuitem = gtk_menu_item_new_with_mnemonic (bidi_menu_entries[i].label);
+      menuitem = gtk_menu_item_new_with_mnemonic (_(bidi_menu_entries[i].label));
       g_object_set_data (G_OBJECT (menuitem), "gtk-unicode-menu-entry",
                          &bidi_menu_entries[i]);
       

@@ -1,3 +1,42 @@
+Thu Jan 31 09:41:09 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* POTFILES.in: Add missing files (Christian Rose
+	#70165)
+
+2002-01-31  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Updated Swedish translation.
+
+2002-01-30  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Updated Danish translation.
+
+2002-01-29  Zbigniew Chyla  <cyba@gnome.pl>
+
+	* pl.po: Updated Polish translation by
+	GNOME PL Team <translators@gnome.pl>.
+
+2002-01-28 Szabolcs Ban <shooby@gnome.hu>      
+
+        * hu.po : Updated Hungarian Translation.
+ 	
+2002-01-28  Duarte Loreto <happyguy_pt@hotmail.com>
+
+        * pt.po: Converted to UTF-8 (I read the README but 
+                 forgot to do it before).
+
+2002-01-27  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Fixed a few type errors. :-)
+
+2002-01-27  Ole Laursen  <olau@hardworking.dk>
+
+	* da.po: Updated Danish translation and converted it to UTF-8.
+
+2002-01-24 Hasbullah Bin Pit <sebol@ikhlas.com>
+
+	* ms.po : Updated Malay Translation.
+
 2002-01-19  Duarte Loreto <happyguy_pt@hotmail.com>
 
         * pt.po: Updated Portuguese translation.

@@ -762,6 +762,10 @@ gtk_tree_view_column_button_event (GtkWidget *widget,
 				 (gint) ((GdkEventMotion *)event)->y)))
     {
       column->maybe_reordered = FALSE;
+      /* this is to change our drag_x to be relative to
+       * tree_view->priv->bin_window, instead of our window.
+       */
+      column->drag_x -= column->button->allocation.x;
       _gtk_tree_view_column_start_drag (GTK_TREE_VIEW (column->tree_view), column);
       return TRUE;
     }
@@ -1546,6 +1550,8 @@ gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
     {
       gtk_widget_queue_resize (tree_column->tree_view);
     }
+
+  g_object_notify (G_OBJECT (tree_column), "fixed_width");
 }
 
 /**
@@ -1592,12 +1598,14 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
     }
 
   tree_column->min_width = min_width;
+  g_object_freeze_notify (G_OBJECT (tree_column));
   if (tree_column->max_width != -1 && tree_column->max_width < min_width)
     {
       tree_column->max_width = min_width;
       g_object_notify (G_OBJECT (tree_column), "max_width");
     }
   g_object_notify (G_OBJECT (tree_column), "min_width");
+  g_object_thaw_notify (G_OBJECT (tree_column));
 }
 
 /**
@@ -1646,12 +1654,14 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
     }
 
   tree_column->max_width = max_width;
+  g_object_freeze_notify (G_OBJECT (tree_column));
   if (max_width != -1 && max_width < tree_column->min_width)
     {
       tree_column->min_width = max_width;
       g_object_notify (G_OBJECT (tree_column), "min_width");
     }
   g_object_notify (G_OBJECT (tree_column), "max_width");
+  g_object_thaw_notify (G_OBJECT (tree_column));
 }
 
 /**
@@ -2121,6 +2131,7 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
 {
   GList *list;
   gboolean first_cell = TRUE;
+  gint focus_line_width;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2129,6 +2140,8 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
   if (width)
     * width = 0;
 
+  gtk_widget_style_get (tree_column->tree_view, "focus-line-width", &focus_line_width, NULL);
+  
   for (list = tree_column->cell_list; list; list = list->next)
     {
       GtkTreeViewColumnCellInfo *info = (GtkTreeViewColumnCellInfo *) list->data;
@@ -2152,8 +2165,8 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn *tree_column,
 				  &new_height);
 
       if (height)
-	* height = MAX (*height, new_height);
-      info->requested_width = MAX (info->requested_width, new_width);
+	* height = MAX (*height, new_height + focus_line_width * 2);
+      info->requested_width = MAX (info->requested_width, new_width + focus_line_width * 2);
       if (width)
 	* width += info->requested_width;
       first_cell = TRUE;
@@ -2180,6 +2193,7 @@ gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
   gint full_requested_width = 0;
   gint extra_space;
   gint min_x, min_y, max_x, max_y;
+  gint focus_line_width;
 
   min_x = G_MAXINT;
   min_y = G_MAXINT;
@@ -2188,6 +2202,8 @@ gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
 
   real_cell_area = *cell_area;
 
+  gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
+			"focus-line-width", &focus_line_width, NULL);
   /* Find out how my extra space we have to allocate */
   for (list = tree_column->cell_list; list; list = list->next)
     {
@@ -2217,6 +2233,7 @@ gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
 
       real_cell_area.width = info->requested_width +
 	(info->expand?extra_space:0);
+      real_cell_area.x += focus_line_width;
       if (render)
 	{
 	  gtk_cell_renderer_render (info->cell,
@@ -2274,17 +2291,17 @@ gtk_tree_view_column_cell_render_or_focus (GtkTreeViewColumn *tree_column,
       if (min_x >= max_x || min_y >= max_y)
 	{
 	  *focus_rectangle = *cell_area;
-	  focus_rectangle->x -= 1;
-	  focus_rectangle->y -= 1;
-	  focus_rectangle->width += 2;
-	  focus_rectangle->height += 2;
+	  focus_rectangle->x -= focus_line_width;
+	  focus_rectangle->y -= focus_line_width;
+	  focus_rectangle->width += 2 * focus_line_width;
+	  focus_rectangle->height += 2 * focus_line_width;
 	}
       else
 	{
-	  focus_rectangle->x = min_x - 1;
-	  focus_rectangle->y = min_y - 1;
-	  focus_rectangle->width = (max_x - min_x) + 2;
-	  focus_rectangle->height = (max_y - min_y) + 2;
+	  focus_rectangle->x = min_x - focus_line_width;
+	  focus_rectangle->y = min_y - focus_line_width;
+	  focus_rectangle->width = (max_x - min_x) + 2 * focus_line_width;
+	  focus_rectangle->height = (max_y - min_y) + 2 * focus_line_width;
 	}
     }
 }
@@ -2390,23 +2407,28 @@ gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
 				      GdkRectangle            *expose_area,
 				      guint                    flags)
 {
+  gint focus_line_width;
+  GtkStateType cell_state;
+  
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  gtk_widget_style_get (GTK_WIDGET (tree_column->tree_view),
+			"focus-line-width", &focus_line_width, NULL);
   if (tree_column->editable_widget)
     {
       /* This function is only called on the editable row when editing.
        */
-
+#if 0
       gtk_paint_focus (tree_column->tree_view->style,
 		       window,
 		       GTK_WIDGET_STATE (tree_column->tree_view),
 		       NULL,
 		       tree_column->tree_view,
 		       "treeview",
-		       cell_area->x - 1,
-		       cell_area->y - 1,
-		       cell_area->width + 2,
-		       cell_area->height + 2);
-      
+		       cell_area->x - focus_line_width,
+		       cell_area->y - focus_line_width,
+		       cell_area->width + 2 * focus_line_width,
+		       cell_area->height + 2 * focus_line_width);
+#endif      
     }
   else
     {
@@ -2419,10 +2441,13 @@ gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
 						 flags,
 						 FALSE,
 						 &focus_rectangle);
-      
+
+      cell_state = flags & GTK_CELL_RENDERER_SELECTED ? GTK_STATE_SELECTED :
+	      (flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
+	      (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
       gtk_paint_focus (tree_column->tree_view->style,
 		       window,
-		       GTK_WIDGET_STATE (tree_column->tree_view),
+		       cell_state,
 		       NULL,
 		       tree_column->tree_view,
 		       "treeview",

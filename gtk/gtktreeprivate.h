@@ -84,13 +84,13 @@ struct _GtkTreeViewPrivate
   /* tree information */
   GtkRBTree *tree;
 
-  gint tab_offset;
   GtkRBNode *button_pressed_node;
   GtkRBTree *button_pressed_tree;
 
   GList *children;
   gint width;
   gint height;
+  gint expander_size;
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;

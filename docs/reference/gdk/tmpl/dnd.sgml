@@ -155,12 +155,13 @@ This function is called by the drag destination.
 Finds out the DND protocol supported by a window.
 </para>
 
-@display: 
 @xid: the X id of the destination window.
 @protocol: location where the supported DND protocol is returned.
 @Returns: the X id of the window where the drop should happen. This 
   may be @xid or the X id of a proxy window, or None if @xid doesn't
   support Drag and Drop.
+<!-- # Unused Parameters # -->
+@display: 
 
 
 <!-- ##### ENUM GdkDragProtocol ##### -->

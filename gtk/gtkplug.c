@@ -925,7 +925,7 @@ gtk_plug_focus (GtkWidget        *widget,
     {
       /* Try to focus the first widget in the window */
       
-      if (gtk_widget_child_focus (bin->child, direction))
+      if (bin->child && gtk_widget_child_focus (bin->child, direction))
         return TRUE;
     }
 
@@ -1003,8 +1003,8 @@ handle_modality_on (GtkPlug *plug)
       plug->modality_window = gtk_window_new (GTK_WINDOW_POPUP);
       gtk_window_set_screen (GTK_WINDOW (plug->modality_window),
 			     gtk_widget_get_screen (GTK_WIDGET (plug)));
-      gtk_window_group_add_window (plug->modality_group, 
-				   GTK_WINDOW (plug->modality_window));
+      gtk_widget_realize (plug->modality_window);
+      gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug->modality_window));
       gtk_grab_add (plug->modality_window);
     }
 }

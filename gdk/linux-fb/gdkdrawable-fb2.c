@@ -221,7 +221,7 @@ gdk_drawable_impl_fb_class_init (GdkDrawableFBClass *klass)
   drawable_class->get_depth = gdk_fb_get_depth;
   drawable_class->get_visual = gdk_fb_get_visual;
   
-  drawable_class->get_image = _gdk_fb_get_image;
+  drawable_class->_copy_to_image = _gdk_fb_copy_to_image;
 }
 
 static void

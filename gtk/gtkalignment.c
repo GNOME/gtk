@@ -264,22 +264,22 @@ gtk_alignment_set (GtkAlignment *alignment,
       if (alignment->xalign != xalign)
         {
            alignment->xalign = xalign;
-           g_object_notify (G_OBJECT(alignment), "xalign");
+           g_object_notify (G_OBJECT (alignment), "xalign");
         }
       if (alignment->yalign != yalign)
         {
            alignment->yalign = yalign;
-           g_object_notify (G_OBJECT(alignment), "yalign");
+           g_object_notify (G_OBJECT (alignment), "yalign");
         }
       if (alignment->xscale != xscale)
         {
            alignment->xscale = xscale;
-           g_object_notify (G_OBJECT(alignment), "xscale");
+           g_object_notify (G_OBJECT (alignment), "xscale");
         }
       if (alignment->yscale != yscale)
         {
            alignment->yscale = yscale;
-           g_object_notify (G_OBJECT(alignment), "yscale");
+           g_object_notify (G_OBJECT (alignment), "yscale");
         }
       g_object_thaw_notify (G_OBJECT (alignment));
 
@@ -296,9 +296,6 @@ gtk_alignment_size_request (GtkWidget      *widget,
 {
   GtkAlignment *alignment;
   GtkBin *bin;
-
-  g_return_if_fail (GTK_IS_ALIGNMENT (widget));
-  g_return_if_fail (requisition != NULL);
 
   alignment = GTK_ALIGNMENT (widget);
   bin = GTK_BIN (widget);
@@ -327,9 +324,6 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   GtkRequisition child_requisition;
   gint width, height;
   gint x, y;
-
-  g_return_if_fail (GTK_IS_ALIGNMENT (widget));
-  g_return_if_fail (allocation != NULL);
 
   widget->allocation = *allocation;
   alignment = GTK_ALIGNMENT (widget);

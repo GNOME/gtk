@@ -275,6 +275,8 @@ GtkTextLine    *    _gtk_text_line_previous_could_contain_tag (GtkTextLine      
                                                                GtkTextBTree        *tree,
                                                                GtkTextTag          *tag);
 
+GtkTextLineData    *_gtk_text_line_data_new                   (GtkTextLayout     *layout,
+                                                               GtkTextLine       *line);
 
 /* Debug */
 void _gtk_text_btree_check (GtkTextBTree *tree);

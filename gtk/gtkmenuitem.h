@@ -95,8 +95,6 @@ void       gtk_menu_item_set_submenu          (GtkMenuItem         *menu_item,
 					       GtkWidget           *submenu);
 GtkWidget* gtk_menu_item_get_submenu          (GtkMenuItem         *menu_item);
 void       gtk_menu_item_remove_submenu       (GtkMenuItem         *menu_item);
-void       _gtk_menu_item_set_placement       (GtkMenuItem         *menu_item,
-					       GtkSubmenuPlacement  placement);
 void       gtk_menu_item_select               (GtkMenuItem         *menu_item);
 void       gtk_menu_item_deselect             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_activate             (GtkMenuItem         *menu_item);

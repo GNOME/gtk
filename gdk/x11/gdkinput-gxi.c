@@ -388,10 +388,10 @@ _gdk_input_enable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 
   if (!gdkdev->claimed)
     {
-      if (gxid_claim_device(display_impl->gdk_input_gxid_host, 
-			    display_impl->gdk_input_gxid_port,
-			    gdkdev->deviceid,
-			    GDK_WINDOW_XWINDOW(window), FALSE) !=
+      if (_gxid_claim_device(display_impl->gdk_input_gxid_host, 
+			     display_impl->gdk_input_gxid_port,
+			     gdkdev->deviceid,
+			     GDK_WINDOW_XWINDOW(window), FALSE) !=
 	  GXID_RETURN_OK)
 	{
 	  g_warning("Could not get device (is gxid running?)\n");
@@ -420,10 +420,10 @@ _gdk_input_disable_window (GdkWindow *window, GdkDevicePrivate *gdkdev)
 
   if (gdkdev->claimed)
     {
-      gxid_release_device(display_impl->gdk_input_gxid_host,
-			  display_impl->gdk_input_gxid_port,
-			  gdkdev->deviceid,
-			  GDK_WINDOW_XWINDOW(window));
+      _gxid_release_device(display_impl->gdk_input_gxid_host,
+			   display_impl->gdk_input_gxid_port,
+			   gdkdev->deviceid,
+			   GDK_WINDOW_XWINDOW(window));
 
       gdkdev->claimed = FALSE;
     }

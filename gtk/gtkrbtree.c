@@ -853,6 +853,30 @@ _gtk_rbtree_column_invalid (GtkRBTree *tree)
   while ((node = _gtk_rbtree_next (tree, node)) != NULL);
 }
 
+void
+_gtk_rbtree_mark_invalid (GtkRBTree *tree)
+{
+  GtkRBNode *node;
+
+  if (tree == NULL)
+    return;
+  node = tree->root;
+  g_assert (node);
+
+  while (node->left != tree->nil)
+    node = node->left;
+
+  do
+    {
+      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_INVALID);
+      GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_DESCENDANTS_INVALID);
+
+      if (node->children)
+	_gtk_rbtree_mark_invalid (node->children);
+    }
+  while ((node = _gtk_rbtree_next (tree, node)) != NULL);
+}
+
 typedef struct _GtkRBReorder
 {
   GtkRBTree *children;

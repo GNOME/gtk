@@ -67,6 +67,9 @@ static void gtk_layout_set_property       (GObject        *object,
                                            guint           prop_id,
                                            const GValue   *value,
                                            GParamSpec     *pspec);
+static GObject *gtk_layout_constructor    (GType                  type,
+					   guint                  n_properties,
+					   GObjectConstructParam *properties);
 static void gtk_layout_init               (GtkLayout      *layout);
 static void gtk_layout_finalize           (GObject        *object);
 static void gtk_layout_realize            (GtkWidget      *widget);
@@ -104,6 +107,8 @@ static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
 static void gtk_layout_style_set          (GtkWidget      *widget,
 					   GtkStyle       *old_style);
 
+static void gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
+					     gdouble        upper);
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -127,9 +132,10 @@ gtk_layout_new (GtkAdjustment *hadjustment,
 {
   GtkLayout *layout;
 
-  layout = gtk_type_new (GTK_TYPE_LAYOUT);
-
-  gtk_layout_set_adjustments (layout, hadjustment, vadjustment);
+  layout = g_object_new (GTK_TYPE_LAYOUT,
+			 "hadjustment", hadjustment,
+			 "vadjustment", vadjustment,
+			 NULL);
 
   return GTK_WIDGET (layout);
 }
@@ -175,6 +181,12 @@ gtk_layout_get_vadjustment (GtkLayout     *layout)
   return layout->vadjustment;
 }
 
+static GtkAdjustment *
+new_default_adjustment (void)
+{
+  return GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+}
+
 static void           
 gtk_layout_set_adjustments (GtkLayout     *layout,
 			    GtkAdjustment *hadj,
@@ -186,12 +198,12 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
 
   if (hadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
-  else
-    hadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+  else if (layout->hadjustment)
+    hadj = new_default_adjustment ();
   if (vadj)
     g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
-  else
-    vadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+  else if (layout->vadjustment)
+    vadj = new_default_adjustment ();
   
   if (layout->hadjustment && (layout->hadjustment != hadj))
     {
@@ -210,6 +222,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       layout->hadjustment = hadj;
       gtk_object_ref (GTK_OBJECT (layout->hadjustment));
       gtk_object_sink (GTK_OBJECT (layout->hadjustment));
+      gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
       
       gtk_signal_connect (GTK_OBJECT (layout->hadjustment), "value_changed",
 			  (GtkSignalFunc) gtk_layout_adjustment_changed,
@@ -222,6 +235,7 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       layout->vadjustment = vadj;
       gtk_object_ref (GTK_OBJECT (layout->vadjustment));
       gtk_object_sink (GTK_OBJECT (layout->vadjustment));
+      gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
       
       gtk_signal_connect (GTK_OBJECT (layout->vadjustment), "value_changed",
 			  (GtkSignalFunc) gtk_layout_adjustment_changed,
@@ -229,7 +243,9 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
       need_adjust = TRUE;
     }
 
-  if (need_adjust)
+  /* vadj or hadj can be NULL while constructing; don't emit a signal
+     then */
+  if (need_adjust && vadj && hadj)
     gtk_layout_adjustment_changed (NULL, layout);
 }
 
@@ -458,8 +474,10 @@ gtk_layout_set_size (GtkLayout     *layout,
      }
   g_object_thaw_notify (G_OBJECT (layout));
 
-  gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
-  gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
+  if (layout->hadjustment)
+    gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width);
+  if (layout->vadjustment)
+    gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height);
 
   if (GTK_WIDGET_REALIZED (layout))
     {
@@ -568,6 +586,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   gobject_class->set_property = gtk_layout_set_property;
   gobject_class->get_property = gtk_layout_get_property;
   gobject_class->finalize = gtk_layout_finalize;
+  gobject_class->constructor = gtk_layout_constructor;
 
   container_class->set_child_property = gtk_layout_set_child_property;
   container_class->get_child_property = gtk_layout_get_child_property;
@@ -778,6 +797,30 @@ gtk_layout_init (GtkLayout *layout)
   layout->visibility = GDK_VISIBILITY_PARTIAL;
 
   layout->freeze_count = 0;
+}
+
+static GObject *
+gtk_layout_constructor (GType                  type,
+			guint                  n_properties,
+			GObjectConstructParam *properties)
+{
+  GtkLayout *layout;
+  GObject *object;
+  GtkAdjustment *hadj, *vadj;
+  
+  object = G_OBJECT_CLASS (parent_class)->constructor (type,
+						       n_properties,
+						       properties);
+
+  layout = GTK_LAYOUT (object);
+
+  hadj = layout->hadjustment ? layout->hadjustment : new_default_adjustment ();
+  vadj = layout->vadjustment ? layout->vadjustment : new_default_adjustment ();
+
+  if (!layout->hadjustment || !layout->vadjustment)
+    gtk_layout_set_adjustments (layout, hadj, vadj);
+
+  return object;
 }
 
 /* Widget methods

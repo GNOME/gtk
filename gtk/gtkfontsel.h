@@ -66,22 +66,18 @@ struct _GtkFontSelection
 {
   GtkVBox parent_instance;
   
-  GtkWidget *font_label;
   GtkWidget *font_entry;
-  GtkWidget *font_clist;
+  GtkWidget *family_list;
   GtkWidget *font_style_entry;
-  GtkWidget *font_style_clist;
+  GtkWidget *face_list;
   GtkWidget *size_entry;
-  GtkWidget *size_clist;
+  GtkWidget *size_list;
   GtkWidget *pixels_button;
   GtkWidget *points_button;
   GtkWidget *filter_button;
   GtkWidget *preview_entry;
 
-  PangoFontFamily **families;
   PangoFontFamily *family;	/* Current family */
-  
-  PangoFontFace **faces;
   PangoFontFace *face;		/* Current face */
   
   gint size;

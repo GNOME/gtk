@@ -14,6 +14,13 @@ X Window System Interaction
 
 </para>
 
+<!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
+<para>
+Obtains the Xlib window id of the root window of the current screen. 
+</para>
+
+
+
 <!-- ##### MACRO GDK_ROOT_PARENT ##### -->
 <para>
 Obtains the Xlib window id of the root window of the default screen.

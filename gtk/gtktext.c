@@ -871,6 +871,7 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_object_unref (GTK_OBJECT (text->vadj));
     }
   
+  g_object_freeze_notify (G_OBJECT (text));
   if (text->hadj != hadj)
     {
       text->hadj = hadj;
@@ -910,6 +911,7 @@ gtk_text_set_adjustments (GtkText       *text,
 
       g_object_notify (G_OBJECT (text), "vadjustment");
     }
+  g_object_thaw_notify (G_OBJECT (text));
 }
 
 void

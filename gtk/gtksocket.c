@@ -614,7 +614,7 @@ toplevel_key_press_handler (GtkWidget   *toplevel,
 
 #endif
 
-static void
+static gboolean
 toplevel_focus_in_handler (GtkWidget     *toplevel,
 			   GdkEventFocus *event,
 			   GtkSocket     *socket)
@@ -627,15 +627,19 @@ toplevel_focus_in_handler (GtkWidget     *toplevel,
   if (GTK_WIDGET_VISIBLE (toplevel))
     send_xembed_message (socket, XEMBED_WINDOW_ACTIVATE, 0, 0, 0,
 			 gtk_get_current_event_time ()); /* Will be GDK_CURRENT_TIME */
+
+  return FALSE;
 }
 
-static void
+static gboolean
 toplevel_focus_out_handler (GtkWidget     *toplevel,
 			    GdkEventFocus *event,
 			    GtkSocket     *socket)
 {
   send_xembed_message (socket, XEMBED_WINDOW_DEACTIVATE, 0, 0, 0,
 		       gtk_get_current_event_time ()); /* Will be GDK_CURRENT_TIME */
+
+  return FALSE;
 }
 
 static void
@@ -685,9 +689,12 @@ static void
 gtk_socket_grab_notify (GtkWidget *widget,
 			gboolean   was_grabbed)
 {
-  send_xembed_message (GTK_SOCKET (widget),
-		       was_grabbed ? XEMBED_MODALITY_OFF : XEMBED_MODALITY_ON,
-		       0, 0, 0, gtk_get_current_event_time ());
+  GtkSocket *socket = GTK_SOCKET (widget);
+
+  if (!socket->same_app)
+    send_xembed_message (GTK_SOCKET (widget),
+			 was_grabbed ? XEMBED_MODALITY_OFF : XEMBED_MODALITY_ON,
+			 0, 0, 0, gtk_get_current_event_time ());
 }
 
 static gboolean

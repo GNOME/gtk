@@ -32,6 +32,13 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 
+
+#define	MAX_DIGITS	(64)	/* don't change this,
+				 * a) you don't need to and
+				 * b) you might cause buffer owerflows in
+				 *    unrelated code portions otherwise
+				 */
+
 enum {
   PROP_0,
   PROP_DIGITS,
@@ -147,9 +154,9 @@ gtk_scale_class_init (GtkScaleClass *class)
                                    g_param_spec_int ("digits",
 						     _("Digits"),
 						     _("The number of decimal places that are displayed in the value"),
-						     0,
-						     G_MAXINT,
-						     0,
+						     -1,
+						     MAX_DIGITS,
+						     1,
 						     G_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
@@ -391,12 +398,13 @@ gtk_scale_set_digits (GtkScale *scale,
 
   range = GTK_RANGE (scale);
   
-  digits = CLAMP (digits, -1, 16);
+  digits = CLAMP (digits, -1, MAX_DIGITS);
 
   if (scale->digits != digits)
     {
       scale->digits = digits;
-      range->round_digits = digits;
+      if (scale->draw_value)
+	range->round_digits = digits;
       
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
@@ -423,6 +431,10 @@ gtk_scale_set_draw_value (GtkScale *scale,
   if (scale->draw_value != draw_value)
     {
       scale->draw_value = draw_value;
+      if (draw_value)
+	GTK_RANGE (scale)->round_digits = scale->digits;
+      else
+	GTK_RANGE (scale)->round_digits = -1;
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 

@@ -328,12 +328,6 @@ gtk_handle_box_new (void)
 static void
 gtk_handle_box_destroy (GtkObject *object)
 {
-  GtkHandleBox *hb;
-
-  g_return_if_fail (GTK_IS_HANDLE_BOX (object));
-
-  hb = GTK_HANDLE_BOX (object);
-
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
@@ -343,8 +337,6 @@ gtk_handle_box_map (GtkWidget *widget)
 {
   GtkBin *bin;
   GtkHandleBox *hb;
-
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
 
@@ -371,8 +363,6 @@ gtk_handle_box_unmap (GtkWidget *widget)
 {
   GtkHandleBox *hb;
 
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
   hb = GTK_HANDLE_BOX (widget);
@@ -391,8 +381,6 @@ gtk_handle_box_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   GtkHandleBox *hb;
-
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
 
   hb = GTK_HANDLE_BOX (widget);
 
@@ -460,11 +448,7 @@ gtk_handle_box_realize (GtkWidget *widget)
 static void
 gtk_handle_box_unrealize (GtkWidget *widget)
 {
-  GtkHandleBox *hb;
-
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-
-  hb = GTK_HANDLE_BOX (widget);
+  GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
 
   gdk_window_set_user_data (hb->bin_window, NULL);
   gdk_window_destroy (hb->bin_window);
@@ -481,11 +465,7 @@ static void
 gtk_handle_box_style_set (GtkWidget *widget,
 			  GtkStyle  *previous_style)
 {
-  GtkHandleBox *hb;
-
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-
-  hb = GTK_HANDLE_BOX (widget);
+  GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
 
   if (GTK_WIDGET_REALIZED (widget) &&
       !GTK_WIDGET_NO_WINDOW (widget))
@@ -504,9 +484,6 @@ gtk_handle_box_size_request (GtkWidget      *widget,
   GtkBin *bin;
   GtkHandleBox *hb;
   GtkRequisition child_requisition;
-
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-  g_return_if_fail (requisition != NULL);
 
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
@@ -579,9 +556,6 @@ gtk_handle_box_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkHandleBox *hb;
   GtkRequisition child_requisition;
-  
-  g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
-  g_return_if_fail (allocation != NULL);
   
   bin = GTK_BIN (widget);
   hb = GTK_HANDLE_BOX (widget);
@@ -771,6 +745,8 @@ void
 gtk_handle_box_set_handle_position  (GtkHandleBox    *handle_box,
 				     GtkPositionType  position)
 {
+  g_return_if_fail (GTK_IS_HANDLE_BOX (handle_box));
+
   if ((GtkPositionType) handle_box->handle_position != position)
     {
       handle_box->handle_position = position;
@@ -920,9 +896,6 @@ gtk_handle_box_expose (GtkWidget      *widget,
 {
   GtkHandleBox *hb;
 
-  g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       hb = GTK_HANDLE_BOX (widget);
@@ -946,9 +919,6 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
   GtkHandleBox *hb;
   gboolean event_handled;
   GdkCursor *fleur;
-  
-  g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   hb = GTK_HANDLE_BOX (widget);
 
@@ -1066,9 +1036,6 @@ gtk_handle_box_motion (GtkWidget      *widget,
   gint new_x, new_y;
   gint snap_edge;
   gboolean is_snapped = FALSE;
-
-  g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
 
   hb = GTK_HANDLE_BOX (widget);
   if (!hb->in_drag)
@@ -1211,6 +1178,12 @@ gtk_handle_box_motion (GtkWidget      *widget,
 
 	  width = child_requisition.width + 2 * GTK_CONTAINER (hb)->border_width;
 	  height = child_requisition.height + 2 * GTK_CONTAINER (hb)->border_width;
+
+	  if (hb->handle_position == GTK_POS_LEFT || hb->handle_position == GTK_POS_RIGHT)
+	    width += DRAG_HANDLE_SIZE;
+	  else
+	    height += DRAG_HANDLE_SIZE;
+	  
 	  gdk_window_move_resize (hb->float_window, new_x, new_y, width, height);
 	  gdk_window_reparent (hb->bin_window, hb->float_window, 0, 0);
 	  gdk_window_set_hints (hb->float_window, new_x, new_y, 0, 0, 0, 0, GDK_HINT_POS);
@@ -1240,10 +1213,6 @@ static void
 gtk_handle_box_add (GtkContainer *container,
 		    GtkWidget    *widget)
 {
-  g_return_if_fail (GTK_IS_HANDLE_BOX (container));
-  g_return_if_fail (GTK_BIN (container)->child == NULL);
-  g_return_if_fail (widget->parent == NULL);
-
   gtk_widget_set_parent_window (widget, GTK_HANDLE_BOX (container)->bin_window);
   GTK_CONTAINER_CLASS (parent_class)->add (container, widget);
 }
@@ -1252,9 +1221,6 @@ static void
 gtk_handle_box_remove (GtkContainer *container,
 		       GtkWidget    *widget)
 {
-  g_return_if_fail (GTK_IS_HANDLE_BOX (container));
-  g_return_if_fail (GTK_BIN (container)->child == widget);
-
   GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
 
   gtk_handle_box_reattach (GTK_HANDLE_BOX (container));
@@ -1264,12 +1230,7 @@ static gint
 gtk_handle_box_delete_event (GtkWidget *widget,
 			     GdkEventAny  *event)
 {
-  GtkHandleBox *hb;
-
-  g_return_val_if_fail (GTK_IS_HANDLE_BOX (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  hb = GTK_HANDLE_BOX (widget);
+  GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
 
   if (event->window == hb->float_window)
     {

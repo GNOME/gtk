@@ -109,9 +109,9 @@ binding_entries_compare (gconstpointer  a,
 }
 
 static GtkBindingEntry*
-binding_entry_new (GtkBindingSet *binding_set,
-		   guint          keyval,
-		   guint          modifiers)
+binding_entry_new (GtkBindingSet  *binding_set,
+		   guint           keyval,
+		   GdkModifierType modifiers)
 {
   GtkBindingEntry *entry;
   
@@ -222,8 +222,8 @@ binding_entry_destroy (GtkBindingEntry *entry)
 }
 
 static GtkBindingEntry*
-binding_ht_lookup_list (guint keyval,
-			guint modifiers)
+binding_ht_lookup_list (guint           keyval,
+			GdkModifierType modifiers)
 {
   GtkBindingEntry lookup_entry = { 0 };
   
@@ -237,9 +237,9 @@ binding_ht_lookup_list (guint keyval,
 }
 
 static GtkBindingEntry*
-binding_ht_lookup_entry (GtkBindingSet *set,
-			 guint		keyval,
-			 guint		modifiers)
+binding_ht_lookup_entry (GtkBindingSet  *set,
+			 guint		 keyval,
+			 GdkModifierType modifiers)
 {
   GtkBindingEntry lookup_entry = { 0 };
   GtkBindingEntry *entry;
@@ -542,13 +542,12 @@ gtk_binding_set_find (const gchar    *set_name)
 gboolean
 gtk_binding_set_activate (GtkBindingSet	 *binding_set,
 			  guint		  keyval,
-			  guint		  modifiers,
+			  GdkModifierType modifiers,
 			  GtkObject	 *object)
 {
   GtkBindingEntry *entry;
   
   g_return_val_if_fail (binding_set != NULL, FALSE);
-  g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
   
   keyval = gdk_keyval_to_lower (keyval);
@@ -564,7 +563,7 @@ gtk_binding_set_activate (GtkBindingSet	 *binding_set,
 void
 gtk_binding_entry_clear (GtkBindingSet	*binding_set,
 			 guint		 keyval,
-			 guint		 modifiers)
+			 GdkModifierType modifiers)
 {
   GtkBindingEntry *entry;
   
@@ -583,7 +582,7 @@ gtk_binding_entry_clear (GtkBindingSet	*binding_set,
 void
 gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
 			  guint		  keyval,
-			  guint		  modifiers)
+			  GdkModifierType modifiers)
 {
   GtkBindingEntry *entry;
   
@@ -600,7 +599,7 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
 void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 			       guint	       keyval,
-			       guint	       modifiers,
+			       GdkModifierType modifiers,
 			       const gchar    *signal_name,
 			       GSList	      *binding_args)
 {
@@ -678,7 +677,7 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 void
 gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 			      guint           keyval,
-			      guint           modifiers,
+			      GdkModifierType modifiers,
 			      const gchar    *signal_name,
 			      guint           n_args,
 			      ...)
@@ -920,13 +919,12 @@ gtk_binding_entries_sort_patterns (GtkBindingEntry    *entries,
 gboolean
 gtk_bindings_activate (GtkObject      *object,
 		       guint           keyval,
-		       guint           modifiers)
+		       GdkModifierType modifiers)
 {
   GtkBindingEntry *entries;
   GtkWidget *widget;
   gboolean handled = FALSE;
 
-  g_return_val_if_fail (object != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_OBJECT (object), FALSE);
 
   if (!GTK_IS_WIDGET (object))
@@ -1002,7 +1000,7 @@ static guint
 gtk_binding_parse_signal (GScanner       *scanner,
 			  GtkBindingSet  *binding_set,
 			  guint		  keyval,
-			  guint		  modifiers)
+			  GdkModifierType modifiers)
 {
   gchar *signal;
   guint expected_token = 0;
@@ -1161,7 +1159,7 @@ gtk_binding_parse_bind (GScanner       *scanner,
 			GtkBindingSet  *binding_set)
 {
   guint keyval = 0;
-  guint modifiers = 0;
+  GdkModifierType modifiers = 0;
 
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
   
