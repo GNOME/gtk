@@ -159,13 +159,10 @@ static void
 setup_column (GtkTreeViewColumn *col)
 {
   gtk_tree_view_column_set_clickable (col, TRUE);
-  g_signal_connect_data (G_OBJECT (col),
-                         "clicked",
-                         (GCallback) col_clicked_cb,
-                         NULL,
-                         NULL,
-                         FALSE,
-                         FALSE);
+  g_signal_connect (G_OBJECT (col),
+		    "clicked",
+		    (GCallback) col_clicked_cb,
+		    NULL);
 }
 
 static void
@@ -302,9 +299,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
 
       rend = gtk_cell_renderer_toggle_new ();
 
-      g_signal_connect_data (G_OBJECT (rend), "toggled",
-                             GTK_SIGNAL_FUNC (toggled_callback), tree_view,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (rend), "toggled",
+			GTK_SIGNAL_FUNC (toggled_callback), tree_view);
       
       col = gtk_tree_view_column_new_with_attributes ("Column 3",
                                                       rend,
@@ -335,9 +331,8 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
        */
       g_object_set (G_OBJECT (rend), "radio", TRUE, NULL);
       
-      g_signal_connect_data (G_OBJECT (rend), "toggled",
-                             G_CALLBACK (toggled_callback), tree_view,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (rend), "toggled",
+			G_CALLBACK (toggled_callback), tree_view);
       
       col = gtk_tree_view_column_new_with_attributes ("Column 4",
                                                       rend,

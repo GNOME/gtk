@@ -285,17 +285,14 @@ progressive_timeout (gpointer data)
       
       lc->pixbuf_loader = gdk_pixbuf_loader_new ();
       
-      g_signal_connect_data (G_OBJECT (lc->pixbuf_loader),
-                             "area_prepared",
-                             G_CALLBACK (progressive_prepared_callback),
-                             image,
-                             NULL, FALSE, FALSE);
-      
-      g_signal_connect_data (G_OBJECT (lc->pixbuf_loader),
-                             "area_updated",
-                             G_CALLBACK (progressive_updated_callback),
-                             image,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (lc->pixbuf_loader),
+			"area_prepared",
+			G_CALLBACK (progressive_prepared_callback),
+			image);
+      g_signal_connect (G_OBJECT (lc->pixbuf_loader),
+			"area_updated",
+			G_CALLBACK (progressive_updated_callback),
+			image);
     }
 
   /* leave timeout installed */

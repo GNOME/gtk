@@ -1659,7 +1659,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
   g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
                          "notify::gtk-color-palette",
                          G_CALLBACK (palette_change_notify_class),
-                         NULL, NULL, FALSE, FALSE);
+                         NULL, NULL, 0);
 }
 
 /* widget functions */
@@ -1825,7 +1825,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
     g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
                            "notify::gtk-color-palette",
                            G_CALLBACK (palette_change_notify_instance),
-                           colorsel, NULL, FALSE, FALSE);
+                           colorsel, NULL, 0);
   
   /* hide unused stuff */
   

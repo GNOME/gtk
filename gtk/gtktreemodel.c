@@ -1324,29 +1324,18 @@ gtk_tree_row_ref_reordered_callback (GObject     *object,
 static void
 connect_ref_callbacks (GtkTreeModel *model)
 {
-  g_signal_connect_data (G_OBJECT (model),
-                         "inserted",
-                         (GCallback) gtk_tree_row_ref_inserted_callback,
-                         model,
-                         NULL,
-                         FALSE,
-                         FALSE);
-
-  g_signal_connect_data (G_OBJECT (model),
-                         "deleted",
-                         (GCallback) gtk_tree_row_ref_deleted_callback,
-			 model,
-                         NULL,
-                         FALSE,
-                         FALSE);
-
-  g_signal_connect_data (G_OBJECT (model),
-                         "reordered",
-                         (GCallback) gtk_tree_row_ref_reordered_callback,
-			 model,
-                         NULL,
-                         FALSE,
-                         FALSE);
+  g_signal_connect (G_OBJECT (model),
+		    "inserted",
+		    (GCallback) gtk_tree_row_ref_inserted_callback,
+		    model);
+  g_signal_connect (G_OBJECT (model),
+		    "deleted",
+		    (GCallback) gtk_tree_row_ref_deleted_callback,
+		    model);
+  g_signal_connect (G_OBJECT (model),
+		    "reordered",
+		    (GCallback) gtk_tree_row_ref_reordered_callback,
+		    model);
 }
 
 static void

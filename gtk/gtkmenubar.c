@@ -437,17 +437,13 @@ add_to_window (GtkWindow  *window,
                      "gtk-menu-bar",
                      menubar);
 
-  g_signal_connect_data (G_OBJECT (window),
-                         "key_press_event",
-                         G_CALLBACK (window_key_press_handler),
-                         menubar,
-                         NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (window),
+		    "key_press_event",
+		    G_CALLBACK (window_key_press_handler),
+		    menubar);
 
   menubar->toplevel = GTK_WIDGET (window);
 }
-
-/* Hack-around */
-#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
 
 static void
 remove_from_window (GtkWindow  *window,

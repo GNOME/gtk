@@ -1,3 +1,51 @@
+Thu Jun 28 17:18:41 2001  Tim Janik  <timj@gtk.org>
+
+	* configure.in (GTK_MICRO_VERSION): up version to 1.3.7, interface
+	age 0, binary age 0. depend on glib 1.3.7.
+
+	* gtk/gtkcontainer.c: remove g_signal_handlers_disconnect_by_func() hack.
+
+	* gtk/gtkmenubar.c: same here.
+	
+	* gtk/gtkcontainer.c (gtk_container_focus_tab): fix param-spec retrival.
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): fix connect_data() usage.
+
+	* gtk/gtkentry.c (gtk_entry_focus_in): same here.
+	
+	* gtk/gtkmenubar.c (add_to_window): likewise.
+	
+	* gtk/gtktextbtree.c: and here...
+	
+	* gtk/gtktextview.c (gtk_text_view_ensure_layout): same thing.
+	
+	* gtk/gtktoolbar.c (gtk_toolbar_init): once more.
+	
+	* gtk/gtktreemodel.c (connect_ref_callbacks): and another time.
+	
+	* gtk/gtktreeviewcolumn.c:
+	(_gtk_tree_view_column_set_tree_view): yet again.
+
+	* demos/gtk-demo/images.c (progressive_timeout): demonstrate
+	signal connections without g_signal_connect_data().
+	
+	* demos/gtk-demo/stock_browser.c (do_stock_browser): second
+	demo of the matter.
+	
+	* demos/testpixbuf.c (main): running out of equality phrases for the
+	ChangeLog, but had to adapt connections here as well.
+	
+	* demos/testanimation.c (progressive_timeout): and for the fun of it,
+	tackled this the same way.
+	
+	* tests/testtext.c (create_view): ok, it's becoming a pain at this
+	point, but had enough enery for one more fix.
+
+	* tests/testtreecolumns.c (main): stand up man, do your work!
+
+	* tests/testtreeview.c (set_columns_type): ok, this is the last file i
+	fix, either that's been all of it or CVS gtk is broken yet again.
+	
 2001-06-29  James Henstridge  <james@daa.com.au>
 
 	The following changes correspond to bug #56812

@@ -154,7 +154,7 @@ gtk_container_base_class_finalize (GtkContainerClass *class)
 {
   GList *list, *node;
 
-  list = g_param_spec_pool_belongings (_gtk_widget_child_property_pool, G_OBJECT_CLASS_TYPE (class));
+  list = g_param_spec_pool_list_owned (_gtk_widget_child_property_pool, G_OBJECT_CLASS_TYPE (class));
   for (node = list; node; node = node->next)
     {
       GParamSpec *pspec = node->data;
@@ -2036,10 +2036,6 @@ gtk_container_children_callback (GtkWidget *widget,
   children = (GList**) client_data;
   *children = g_list_prepend (*children, widget);
 }
-
-
-/* Hack-around */
-#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
 
 static void
 chain_widget_destroyed (GtkWidget *widget,

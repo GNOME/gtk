@@ -1028,9 +1028,8 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       text_view->first_para_pixels = 0;
 
-      g_signal_connect_data (G_OBJECT (text_view->buffer), "mark_set",
-                             G_CALLBACK (gtk_text_view_mark_set_handler), text_view,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (text_view->buffer), "mark_set",
+			G_CALLBACK (gtk_text_view_mark_set_handler), text_view);
     }
 
   if (GTK_WIDGET_VISIBLE (text_view))
@@ -3366,10 +3365,9 @@ gtk_text_view_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
       gtk_text_view_check_cursor_blink (text_view);
     }
 
-  g_signal_connect_data (gdk_keymap_get_default (),
-			 "direction_changed",
-			 G_CALLBACK (keymap_direction_changed), text_view, NULL,
-			 FALSE, FALSE);
+  g_signal_connect (gdk_keymap_get_default (),
+		    "direction_changed",
+		    G_CALLBACK (keymap_direction_changed), text_view);
   gtk_text_view_check_keymap_direction (text_view);
   
   text_view->need_im_reset = TRUE;
@@ -4331,23 +4329,20 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       
       text_view->layout = gtk_text_layout_new ();
 
-      g_signal_connect_data (G_OBJECT (text_view->layout),
-                             "invalidated",
-                             G_CALLBACK (invalidated_handler),
-                             text_view,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (text_view->layout),
+			"invalidated",
+			G_CALLBACK (invalidated_handler),
+			text_view);
 
-      g_signal_connect_data (G_OBJECT (text_view->layout),
-                             "changed",
-                             G_CALLBACK (changed_handler),
-                             text_view,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (text_view->layout),
+			"changed",
+			G_CALLBACK (changed_handler),
+			text_view);
 
-      g_signal_connect_data (G_OBJECT (text_view->layout),
-                             "allocate_child",
-                             G_CALLBACK (gtk_text_view_child_allocated),
-                             text_view,
-                             NULL, FALSE, FALSE);
+      g_signal_connect (G_OBJECT (text_view->layout),
+			"allocate_child",
+			G_CALLBACK (gtk_text_view_child_allocated),
+			text_view);
       
       if (get_buffer (text_view))
         gtk_text_layout_set_buffer (text_view->layout, get_buffer (text_view));

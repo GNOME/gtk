@@ -358,16 +358,16 @@ gtk_toolbar_init (GtkToolbar *toolbar)
                 NULL);
   
   toolbar->style_set_connection =
-    g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
-                           "notify::gtk-toolbar-style",
-                           G_CALLBACK (style_change_notify),
-                           toolbar, NULL, FALSE, FALSE);
+    g_signal_connect (G_OBJECT (gtk_settings_get_global ()),
+		      "notify::gtk-toolbar-style",
+		      G_CALLBACK (style_change_notify),
+		      toolbar);
 
   toolbar->icon_size_connection =
-    g_signal_connect_data (G_OBJECT (gtk_settings_get_global ()),
-                           "notify::gtk-toolbar-icon-size",
-                           G_CALLBACK (icon_size_change_notify),
-                           toolbar, NULL, FALSE, FALSE);  
+    g_signal_connect (G_OBJECT (gtk_settings_get_global ()),
+		      "notify::gtk-toolbar-icon-size",
+		      G_CALLBACK (icon_size_change_notify),
+		      toolbar);
 }
 
 static void

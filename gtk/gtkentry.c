@@ -1524,10 +1524,9 @@ gtk_entry_focus_in (GtkWidget     *widget,
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_in (entry->im_context);
 
-  g_signal_connect_data (gdk_keymap_get_default (),
-			 "direction_changed",
-			 G_CALLBACK (gtk_entry_keymap_direction_changed), entry, NULL,
-			 FALSE, FALSE);
+  g_signal_connect (gdk_keymap_get_default (),
+		    "direction_changed",
+		    G_CALLBACK (gtk_entry_keymap_direction_changed), entry);
 
   gtk_entry_check_cursor_blink (entry);
   
