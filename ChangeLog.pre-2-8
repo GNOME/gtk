@@ -1,3 +1,15 @@
+Wed Oct  6 16:38:36 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gtk/gtkrc*: Make naming of gtkrc files
+	consistent, put each style that a gtkrc.* file creates
+	in a unique namespace, remove old files before installing.
+
+Wed Oct  6 14:31:16 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.c (gtk_rc_init): Avoid leaking memory when
+	gtk_rc_init is called multiple times. (Yes, people who
+	do that have bugs in their code.)
+
 Tue Oct  5 11:36:57 PDT 1999 Manish Singh <yosh@gimp.org>
 
 	* gtk/Makefile.am: listing gtkrc in gtkconf_DATA seems to barf.

@@ -1,6 +1,6 @@
-style "default" {
+style "gtk-default-tr" {
        fontset = "-*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
 		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-9"
 }
-class "GtkWidget" style "default"
+class "GtkWidget" style "gtk-default-tr"
 

@@ -1811,10 +1811,27 @@ open_ref_dir(gchar* text_to_complete,
 
   if (text_to_complete[0] == '/' || !cmpl_state->reference_dir)
     {
-      new_dir = open_dir("/", cmpl_state);
+      gchar *tmp = g_strdup(text_to_complete);
+      gchar *p;
+
+      p = tmp;
+      while (*p && *p != '*' && *p != '?')
+	p++;
+
+      *p = '\0';
+      p = strrchr(tmp, '/');
+      if (p == tmp)
+	p++;
+      
+      *p = '\0';
+
+      new_dir = open_dir(tmp, cmpl_state);
 
       if(new_dir)
-	*remaining_text = text_to_complete + 1;
+	*remaining_text = text_to_complete + 
+	  ((p == tmp + 1) ? (p - tmp) : (p + 1 - tmp));
+
+      g_free (tmp);
     }
   else if (text_to_complete[0] == '~')
     {

@@ -10,9 +10,9 @@
 # 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
 #
 
-style "default" {
+style "gtk-default-georgianacademy" {
        fontset = "-adobe-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-*,\
 		  -*-*-medium-r-normal--14-*-*-*-*-*-georgian-academy"
 }
-class "GtkWidget" style "default"
+class "GtkWidget" style "gtk-default-georgianacademy"
 

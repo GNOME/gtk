@@ -6,10 +6,10 @@
 # 1999, Pablo Saratxaga <srtxg@chanae.alphanet.ch>
 #
 
-style "default" {
+style "gtk-default-th" {
        fontset = "-*-helvetica-medium-r-normal--14-*-*-*-*-*-iso8859-1,\
 		  -*-phaisarn-medium-r-normal--14-*-*-*-*-*-tis620.2533-1,\
 		  -*-*-medium-r-normal--14-*-*-*-*-*-tis620.2533-1"
 }
-class "GtkWidget" style "default"
+class "GtkWidget" style "gtk-default-th"
 

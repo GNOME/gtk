@@ -391,46 +391,54 @@ gtk_rc_get_default_files (void)
 void
 gtk_rc_init (void)
 {
-  gchar *locale_suffixes[3];
-  gint n_locale_suffixes = 0;
+  static gchar *locale_suffixes[3];
+  static gint n_locale_suffixes = 0;
+
   gint i, j;
-#if defined (HAVE_LC_MESSAGES) && !defined (X_LOCALE)
-  char *locale = setlocale (LC_MESSAGES, NULL);
-#else
-  char *locale = setlocale (LC_CTYPE, NULL);
-#endif
-  guint length;
-  char *p;
 
-  pixmap_path[0] = NULL;
-  module_path[0] = NULL;
-  gtk_rc_append_default_pixmap_path();
-  gtk_rc_append_default_module_path();
+  static gboolean initted = FALSE;
 
-  gtk_rc_add_initial_default_files ();
-
-  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+  if (!initted)
     {
-      /* Determine locale-specific suffixes for RC files
-       */
-      p = strchr (locale, '@');
-      length = p ? (p -locale) : strlen (locale);
+#if defined (HAVE_LC_MESSAGES) && !defined (X_LOCALE)
+      char *locale = setlocale (LC_MESSAGES, NULL);
+#else
+      char *locale = setlocale (LC_CTYPE, NULL);
+#endif
+      char *p;
       
-      p = strchr (locale, '.');
-      if (p)
-	{
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
-	  length = p - locale;
-	}
-      
-      p = strchr (locale, '_');
-      if (p)
-	{
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
-	  length = p - locale;
-	}
+      initted = TRUE;
 
-      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+      pixmap_path[0] = NULL;
+      module_path[0] = NULL;
+      gtk_rc_append_default_pixmap_path();
+      gtk_rc_append_default_module_path();
+      
+      gtk_rc_add_initial_default_files ();
+
+      if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+	{
+	  /* Determine locale-specific suffixes for RC files
+	   */
+	  p = strchr (locale, '@');
+	  length = p ? (p -locale) : strlen (locale);
+	  
+	  p = strchr (locale, '.');
+	  if (p)
+	    {
+	      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	      length = p - locale;
+	    }
+	  
+	  p = strchr (locale, '_');
+	  if (p)
+	    {
+	      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	      length = p - locale;
+	    }
+	  
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+	}
     }
   
   i = 0;
