@@ -1215,10 +1215,10 @@ gtk_tree_store_insert_before (GtkTreeStore *tree_store,
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
  * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be
- * prepended to the beginning of the @parent 's children.  If @parent and
- * @sibling are %NULL, then the row will be prepended to the toplevel.  If both
- * @sibling and @parent are set, then @parent must be the parent of @sibling.
- * When @sibling is set, @parent is optional.
+ * prepended to @parent 's children.  If @parent and @sibling are %NULL, then
+ * the row will be prepended to the toplevel.  If both @sibling and @parent are
+ * set, then @parent must be the parent of @sibling.  When @sibling is set,
+ * @parent is optional.
  *
  * @iter will be changed to point to this new row.  The row will be empty after
  * this function is called.  To fill in values, you need to call

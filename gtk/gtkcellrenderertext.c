@@ -187,7 +187,7 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
 				   PROP_ATTRIBUTES,
 				   g_param_spec_boxed ("attributes",
 						       _("Attributes"),
-						       _("A list of style attributes to apply to the text of the renderer."),
+						       _("A list of style attributes to apply to the text of the renderer"),
 						       PANGO_TYPE_ATTR_LIST,
 						       G_PARAM_READWRITE));
   

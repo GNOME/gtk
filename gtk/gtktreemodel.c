@@ -886,11 +886,14 @@ gtk_tree_model_iter_next (GtkTreeModel  *tree_model,
  * gtk_tree_model_iter_children:
  * @tree_model: A #GtkTreeModel.
  * @iter: The new #GtkTreeIter to be set to the child.
- * @parent: The #GtkTreeIter.
+ * @parent: The #GtkTreeIter, or %NULL
  *
  * Sets @iter to point to the first child of @parent.  If @parent has no children,
  * %FALSE is returned and @iter is set to be invalid.  @parent will remain a valid
  * node after this function has been called.
+ *
+ * If @parent is %NULL returns the first node, equivalent to
+ * <literal>gtk_tree_model_get_iter_first (tree_model, iter);</literal>
  *
  * Return value: %TRUE, if @child has been set to the first child.
  **/

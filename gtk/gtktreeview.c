@@ -600,7 +600,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("expander_size",
 							     _("Expander Size"),
-							     _("Size of the expander arrow."),
+							     _("Size of the expander arrow"),
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_EXPANDER_SIZE,
@@ -609,7 +609,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical_separator",
 							     _("Vertical Separator Width"),
-							     _("Vertical space between cells.  Must be an even number."),
+							     _("Vertical space between cells.  Must be an even number"),
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_VERTICAL_SEPARATOR,
@@ -618,7 +618,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("horizontal_separator",
 							     _("Horizontal Separator Width"),
-							     _("Horizontal space between cells.  Must be an even number."),
+							     _("Horizontal space between cells.  Must be an even number"),
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
@@ -627,14 +627,14 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("allow_rules",
 								 _("Allow Rules"),
-								 _("Allow drawing of alternating color rows."),
+								 _("Allow drawing of alternating color rows"),
 								 TRUE,
 								 G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("indent_expanders",
 								 _("Indent Expanders"),
-								 _("Make the expanders indented."),
+								 _("Make the expanders indented"),
 								 TRUE,
 								 G_PARAM_READABLE));
   /* Signals */

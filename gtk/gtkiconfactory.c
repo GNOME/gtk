@@ -1754,11 +1754,12 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
  * gtk_icon_source_get_filename:
  * @source: a #GtkIconSource
  * 
- * Retrieves the source filename, or %NULL if none is set.  The
+ * Retrieves the source filename, or %NULL if none is set. The
  * filename is not a copy, and should not be modified or expected to
  * persist beyond the lifetime of the icon source.
  * 
- * Return value: image filename
+ * Return value: image filename. This string must not be modified
+ * or freed.
  **/
 G_CONST_RETURN gchar*
 gtk_icon_source_get_filename (const GtkIconSource *source)

@@ -113,7 +113,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
                                                          _("Active"),
-                                                         _("Whether the menu item is checked."),
+                                                         _("Whether the menu item is checked"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
@@ -121,7 +121,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                    PROP_INCONSISTENT,
                                    g_param_spec_boolean ("inconsistent",
                                                          _("Inconsistent"),
-                                                         _("Whether to display an \"inconsistent\" state."),
+                                                         _("Whether to display an \"inconsistent\" state"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   

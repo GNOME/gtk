@@ -123,7 +123,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                    PROP_LABEL,
                                    g_param_spec_string ("label",
                                                         _("Label"),
-                                                        _("Text of the frame's label."),
+                                                        _("Text of the frame's label"),
                                                         NULL,
                                                         G_PARAM_READABLE |
 							G_PARAM_WRITABLE));
@@ -131,7 +131,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 				   PROP_LABEL_XALIGN,
 				   g_param_spec_float ("label_xalign",
 						       _("Label xalign"),
-						       _("The horizontal alignment of the label."),
+						       _("The horizontal alignment of the label"),
 						       0.0,
 						       1.0,
 						       0.5,
@@ -141,7 +141,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 				   PROP_LABEL_YALIGN,
 				   g_param_spec_float ("label_yalign",
 						       _("Label yalign"),
-						       _("The vertical alignment of the label."),
+						       _("The vertical alignment of the label"),
 						       0.0,
 						       1.0,
 						       0.5,
@@ -150,7 +150,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW,
                                    g_param_spec_enum ("shadow", NULL,
-                                                      _("Deprecated property, use shadow_type instead."),
+                                                      _("Deprecated property, use shadow_type instead"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_ETCHED_IN,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -158,7 +158,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow_type",
                                                       _("Frame shadow"),
-                                                      _("Appearance of the frame border."),
+                                                      _("Appearance of the frame border"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_ETCHED_IN,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -167,7 +167,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                                    PROP_LABEL_WIDGET,
                                    g_param_spec_object ("label_widget",
                                                         _("Label widget"),
-                                                        _("A widget to display in place of the usual frame label."),
+                                                        _("A widget to display in place of the usual frame label"),
                                                         GTK_TYPE_WIDGET,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   
@@ -334,7 +334,8 @@ gtk_frame_set_label (GtkFrame *frame,
  * 
  * Return value: the text in the label, or %NULL if there
  *               was no label widget or the lable widget was not
- *               a #GtkLabel. This value must be freed with g_free().
+ *               a #GtkLabel. This string is owned by GTK+ and
+ *               must not be modified or freed.
  **/
 G_CONST_RETURN gchar *
 gtk_frame_get_label (GtkFrame *frame)

@@ -158,7 +158,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 					      CHILD_PROP_SECONDARY,
 					      g_param_spec_boolean ("secondary", 
 								    _("Secondary"),
-								    _("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons."),
+								    _("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"),
 								    FALSE,
 								    G_PARAM_READWRITE));
 }

@@ -148,12 +148,12 @@ format_value_callback (GtkScale *scale,
 
 </para>
 
-<!-- ##### ARG GtkScale:slider-length ##### -->
+<!-- ##### ARG GtkScale:value-spacing ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkScale:value-spacing ##### -->
+<!-- ##### ARG GtkScale:slider-length ##### -->
 <para>
 
 </para>

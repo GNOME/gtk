@@ -97,8 +97,9 @@ struct _GtkDialog
 {
   GtkWindow window;
 
-  GtkWidget *vbox;
+  /*< public >*/
   GtkWidget *action_area;
+  GtkWidget *vbox;
 
   /*< private >*/
   GtkWidget *separator;

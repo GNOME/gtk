@@ -433,7 +433,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_CURSOR_POSITION,
                                    g_param_spec_int ("cursor_position",
                                                      _("Cursor Position"),
-                                                     _("The current position of the insertion cursor in chars."),
+                                                     _("The current position of the insertion cursor in chars"),
                                                      0,
                                                      MAX_SIZE,
                                                      0,
@@ -443,7 +443,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_SELECTION_BOUND,
                                    g_param_spec_int ("selection_bound",
                                                      _("Selection Bound"),
-                                                     _("The position of the opposite end of the selection from the cursor in chars."),
+                                                     _("The position of the opposite end of the selection from the cursor in chars"),
                                                      0,
                                                      MAX_SIZE,
                                                      0,
@@ -461,7 +461,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_MAX_LENGTH,
                                    g_param_spec_int ("max_length",
                                                      _("Maximum length"),
-                                                     _("Maximum number of characters for this entry. Zero if no maximum."),
+                                                     _("Maximum number of characters for this entry. Zero if no maximum"),
                                                      0,
                                                      MAX_SIZE,
                                                      0,
@@ -478,7 +478,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_HAS_FRAME,
                                    g_param_spec_boolean ("has_frame",
 							 _("Has Frame"),
-							 _("FALSE removes outside bevel from entry."),
+							 _("FALSE removes outside bevel from entry"),
                                                          TRUE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -494,14 +494,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    PROP_ACTIVATES_DEFAULT,
                                    g_param_spec_boolean ("activates_default",
 							 _("Activates default"),
-							 _("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed."),
+							 _("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
                                                          FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_WIDTH_CHARS,
                                    g_param_spec_int ("width_chars",
                                                      _("Width in chars"),
-                                                     _("Number of characters to leave space for in the entry."),
+                                                     _("Number of characters to leave space for in the entry"),
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
@@ -737,7 +737,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-entry-select-on-focus",
 						       _("Select on focus"),
-						       _("Whether to select the contents of an entry when it is focused."),
+						       _("Whether to select the contents of an entry when it is focused"),
 						       TRUE,
 						       G_PARAM_READWRITE));
 }
@@ -3440,6 +3440,18 @@ gtk_entry_set_editable (GtkEntry *entry,
   gtk_editable_set_editable (GTK_EDITABLE (entry), editable);
 }
 
+/**
+ * gtk_entry_get_text:
+ * @entry: a #GtkEntry
+ *
+ * Retrieves the contents of the entry widget.
+ * See also gtk_editable_get_chars().
+ *
+ * Return value: a pointer to the contents of the widget as a
+ *      string.  This string points to internally allocated
+ *      storage in the widget and must not be freed, modified or
+ *      stored.
+ **/
 G_CONST_RETURN gchar*
 gtk_entry_get_text (GtkEntry *entry)
 {

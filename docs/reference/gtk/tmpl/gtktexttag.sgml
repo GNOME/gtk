@@ -58,7 +58,6 @@ GTK+ structs, the fields in this struct should only be read, never
 modified directly.
 </para>
 
-@refcount: private field, ignore
 @appearance: pointer to sub-struct containing certain attributes
 @justification: 
 @direction: 
@@ -73,15 +72,10 @@ modified directly.
 @tabs: 
 @wrap_mode: 
 @language: 
-@padding1: 
 @invisible: 
 @bg_full_height: 
 @editable: 
 @realized: 
-@pad1: 
-@pad2: 
-@pad3: 
-@pad4: 
 
 <!-- ##### FUNCTION gtk_text_tag_new ##### -->
 <para>
@@ -132,16 +126,11 @@ modified directly.
 @bg_stipple: 
 @fg_stipple: 
 @rise: 
-@padding1: 
 @underline: 
 @strikethrough: 
 @draw_bg: 
 @inside_selection: 
 @is_text: 
-@pad1: 
-@pad2: 
-@pad3: 
-@pad4: 
 
 <!-- ##### FUNCTION gtk_text_attributes_new ##### -->
 <para>

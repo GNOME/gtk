@@ -22,7 +22,18 @@ GtkWidget
 
 <!-- ##### STRUCT GtkWidgetClass ##### -->
 <para>
+<structfield>activate_signal</structfield>
+The signal to emit when a widget of this class is activated,
+gtk_widget_activate() handles the emission. Implementation of this
+signal is optional. 
+</para>
 
+<para>
+<structfield>set_scroll_adjustment_signal</structfield>
+This signal is emitted  when a widget of this class is added
+to a scrolling aware parent, gtk_widget_set_scroll_adjustments()
+handles the emission.
+Implementation of this signal is optional.
 </para>
 
 
@@ -1603,7 +1614,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::button-release-event ##### -->
 <para>
@@ -1612,7 +1623,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::child-notify ##### -->
 <para>
@@ -1629,7 +1640,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::configure-event ##### -->
 <para>
@@ -1638,7 +1649,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::delete-event ##### -->
 <para>
@@ -1647,7 +1658,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::destroy-event ##### -->
 <para>
@@ -1656,7 +1667,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::direction-changed ##### -->
 <para>
@@ -1754,7 +1765,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::event ##### -->
 <para>
@@ -1763,7 +1774,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::event-after ##### -->
 <para>
@@ -1780,7 +1791,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::focus ##### -->
 <para>
@@ -1789,7 +1800,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @arg1: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::focus-in-event ##### -->
 <para>
@@ -1798,7 +1809,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::focus-out-event ##### -->
 <para>
@@ -1807,7 +1818,7 @@ This function is deprecated; it does nothing.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::grab-focus ##### -->
 <para>
@@ -1850,7 +1861,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::key-release-event ##### -->
 <para>
@@ -1859,7 +1870,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::leave-notify-event ##### -->
 <para>
@@ -1868,7 +1879,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::map ##### -->
 <para>
@@ -1884,7 +1895,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::mnemonic-activate ##### -->
 <para>
@@ -1902,7 +1913,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::no-expose-event ##### -->
 <para>
@@ -1911,7 +1922,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::parent-set ##### -->
 <para>
@@ -1936,7 +1947,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::proximity-in-event ##### -->
 <para>
@@ -1945,7 +1956,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::proximity-out-event ##### -->
 <para>
@@ -1954,7 +1965,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::realize ##### -->
 <para>
@@ -1970,7 +1981,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::selection-clear-event ##### -->
 <para>
@@ -1979,7 +1990,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::selection-get ##### -->
 <para>
@@ -1998,7 +2009,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::selection-received ##### -->
 <para>
@@ -2016,7 +2027,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::show ##### -->
 <para>
@@ -2080,7 +2091,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::unrealize ##### -->
 <para>
@@ -2096,7 +2107,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### SIGNAL GtkWidget::window-state-event ##### -->
 <para>
@@ -2105,7 +2116,7 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 @widget: the object which received the signal.
 @event: 
-@Returns: 
+@Returns: %TRUE to stop other handlers from being invoked for the event. %FALSE to propagate the event further.
 
 <!-- ##### ARG GtkWidget:name ##### -->
 <para>
@@ -2192,21 +2203,6 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:cursor-color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkWidget:focus-line-width ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkWidget:interior-focus ##### -->
 <para>
 
@@ -2217,12 +2213,27 @@ a widget changes from un-anchored to anchored or vice-versa.
 
 </para>
 
-<!-- ##### ARG GtkWidget:focus-padding ##### -->
+<!-- ##### ARG GtkWidget:secondary-cursor-color ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkWidget:focus-line-pattern ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:cursor-color ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-padding ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:focus-line-width ##### -->
 <para>
 
 </para>

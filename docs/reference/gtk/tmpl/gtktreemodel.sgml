@@ -310,7 +310,7 @@ section.
 
 <!-- ##### MACRO gtk_tree_path_new_root ##### -->
 <para>
-A alternate name for gtk_tree_path_new_root() provided for
+An alternate name for gtk_tree_path_new_iter() provided for
 compatibility reasons; this macro will be deprecated in future
 versions of GTK+.
 </para>

@@ -293,7 +293,8 @@ gdk_internal_connection_watch (Display  *display,
  *
  * Gets the name of the display.
  * 
- * Returns: a string representing the display name.
+ * Returns: a string representing the display name. This string is owned
+ * by GDK and should not be modified or freed.
  */
 G_CONST_RETURN gchar *
 gdk_display_get_name (GdkDisplay * display)
@@ -448,8 +449,8 @@ gdk_display_beep (GdkDisplay * display)
  * gdk_display_sync() before gdk_error_trap_pop() makes sure that any errors
  * generated from earlier requests are handled before the error trap is removed.
  *
- * This is most useful for X11. On windowing systems where requests handled
- * synchronously, this function will do nothing.
+ * This is most useful for X11. On windowing systems where requests are
+ * handled synchronously, this function will do nothing.
  */
 void
 gdk_display_sync (GdkDisplay * display)

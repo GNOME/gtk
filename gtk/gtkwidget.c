@@ -397,7 +397,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_PARENT,
 				   g_param_spec_object ("parent",
 							_("Parent widget"), 
-							_("The parent widget of this widget. Must be a Container widget."),
+							_("The parent widget of this widget. Must be a Container widget"),
 							GTK_TYPE_CONTAINER,
 							G_PARAM_READWRITE));
 
@@ -405,7 +405,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_WIDTH_REQUEST,
 				   g_param_spec_int ("width_request",
  						     _("Width request"),
- 						     _("Override for width request of the widget, or -1 if natural request should be used."),
+ 						     _("Override for width request of the widget, or -1 if natural request should be used"),
  						     -1,
  						     G_MAXINT,
  						     -1,
@@ -414,7 +414,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_HEIGHT_REQUEST,
 				   g_param_spec_int ("height_request",
  						     _("Height request"),
- 						     _("Override for height request of the widget, or -1 if natural request should be used."),
+ 						     _("Override for height request of the widget, or -1 if natural request should be used"),
  						     -1,
  						     G_MAXINT,
  						     -1,
@@ -479,7 +479,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_RECEIVES_DEFAULT,
 				   g_param_spec_boolean ("receives_default",
  							 _("Receives default"),
- 							 _("If TRUE, the widget will receive the default action when it is focused."),
+ 							 _("If TRUE, the widget will receive the default action when it is focused"),
  							 FALSE,
  							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -493,14 +493,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_STYLE,
 				   g_param_spec_object ("style",
  							_("Style"),
- 							_("The style of the widget, which contains information about how it will look (colors etc)."),
+ 							_("The style of the widget, which contains information about how it will look (colors etc)"),
  							GTK_TYPE_STYLE,
  							G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_EVENTS,
 				   g_param_spec_flags ("events",
  						       _("Events"),
- 						       _("The event mask that decides what kind of GdkEvents this widget gets."),
+ 						       _("The event mask that decides what kind of GdkEvents this widget gets"),
  						       GDK_TYPE_EVENT_MASK,
  						       GDK_STRUCTURE_MASK,
  						       G_PARAM_READWRITE));
@@ -508,7 +508,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_EXTENSION_EVENTS,
 				   g_param_spec_enum ("extension_events",
  						      _("Extension events"),
- 						      _("The mask that decides what kind of extension events this widget gets."),
+ 						      _("The mask that decides what kind of extension events this widget gets"),
  						      GDK_TYPE_EXTENSION_MODE,
  						      GDK_EXTENSION_EVENTS_NONE,
  						      G_PARAM_READWRITE));
@@ -1058,27 +1058,27 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boolean ("interior_focus",
 								 _("Interior Focus"),
-								 _("Whether to draw the focus indicator inside widgets."),
+								 _("Whether to draw the focus indicator inside widgets"),
 								 TRUE,
 								 G_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-line-width",
 							     _("Focus linewidth"),
-							     _("Width, in pixels, of the focus indicator line."),
+							     _("Width, in pixels, of the focus indicator line"),
 							     0, G_MAXINT, 1,
 							     G_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_string ("focus-line-pattern",
 								_("Focus line dash pattern"),
-								_("Dash pattern used to draw the focus indicator."),
+								_("Dash pattern used to draw the focus indicator"),
 								"\1\1",
 								G_PARAM_READWRITE));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-padding",
 							     _("Focus padding"),
-							     _("Width, in pixels, between focus indicator and the widget 'box'."),
+							     _("Width, in pixels, between focus indicator and the widget 'box'"),
 							     0, G_MAXINT, 1,
 							     G_PARAM_READWRITE));
   gtk_widget_class_install_style_property (klass,
@@ -1090,7 +1090,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("secondary-cursor-color",
 							       _("Secondary cursor color"),
-							       _("Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text."),
+							       _("Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"),
 							       GDK_TYPE_COLOR,
 							       G_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
@@ -3560,11 +3560,11 @@ gtk_widget_set_name (GtkWidget	 *widget,
  * gtk_widget_get_name:
  * @widget: a #GtkWidget
  * 
- * Retrieves the name of a widget. The return value should not be
- * freed. See gtk_widget_set_name() for the significance of widget
- * names.
+ * Retrieves the name of a widget. See gtk_widget_set_name() for the
+ * significance of widget names.
  * 
- * Return value: name of the widget
+ * Return value: name of the widget. This string is owned by GTK+ and
+ * should not be modified or freed
  **/
 G_CONST_RETURN gchar*
 gtk_widget_get_name (GtkWidget *widget)
@@ -4476,7 +4476,11 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * such as #GTK_ICON_SIZE_MENU. @detail should be a string that
  * identifies the widget or code doing the rendering, so that
  * theme engines can special-case rendering for that widget or code.
- * 
+ *
+ * The pixels in the returned #GdkPixbuf are shared with the rest of
+ * the application and should not be modified. The pixbuf should be freed
+ * after use with g_object_unref().
+ *
  * Return value: a new pixbuf, or %NULL if the stock ID wasn't known
  **/
 GdkPixbuf*

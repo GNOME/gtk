@@ -130,7 +130,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                    PROP_HADJUSTMENT,
                                    g_param_spec_object ("hadjustment",
 							_("Horizontal adjustment"),
-							_("The GtkAdjustment that determines the values of the horizontal position for this viewport."),
+							_("The GtkAdjustment that determines the values of the horizontal position for this viewport"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
@@ -138,7 +138,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                    PROP_VADJUSTMENT,
                                    g_param_spec_object ("vadjustment",
 							_("Vertical adjustment"),
-							_("The GtkAdjustment that determines the values of the vertical position for this viewport."),
+							_("The GtkAdjustment that determines the values of the vertical position for this viewport"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
@@ -146,7 +146,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow_type",
 						      _("Shadow type"),
-						      _("Determines how the shadowed box around the viewport is drawn."),
+						      _("Determines how the shadowed box around the viewport is drawn"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_IN,
 						      G_PARAM_READWRITE));

@@ -111,7 +111,7 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
 				   PROP_SCREEN,
 				   g_param_spec_object ("screen",
  							_("Screen"),
- 							_("The screen where this window will be displayed."),
+ 							_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
  							G_PARAM_READWRITE));
 }

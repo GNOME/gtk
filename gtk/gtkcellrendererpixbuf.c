@@ -128,7 +128,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 					 PROP_PIXBUF,
 					 g_param_spec_object ("pixbuf",
 							      _("Pixbuf Object"),
-							      _("The pixbuf to render."),
+							      _("The pixbuf to render"),
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READABLE |
 							      G_PARAM_WRITABLE));
@@ -137,7 +137,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 					 PROP_PIXBUF_EXPANDER_OPEN,
 					 g_param_spec_object ("pixbuf_expander_open",
 							      _("Pixbuf Expander Open"),
-							      _("Pixbuf for open expander."),
+							      _("Pixbuf for open expander"),
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READABLE |
 							      G_PARAM_WRITABLE));
@@ -146,7 +146,7 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 					 PROP_PIXBUF_EXPANDER_CLOSED,
 					 g_param_spec_object ("pixbuf_expander_closed",
 							      _("Pixbuf Expander Closed"),
-							      _("Pixbuf for closed expander."),
+							      _("Pixbuf for closed expander"),
 							      GDK_TYPE_PIXBUF,
 							      G_PARAM_READABLE |
 							      G_PARAM_WRITABLE));

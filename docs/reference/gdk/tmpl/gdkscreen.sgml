@@ -166,14 +166,6 @@ when GDK gets multihead support.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_screen_close ##### -->
-<para>
-
-</para>
-
-@screen: 
-
-
 <!-- ##### FUNCTION gdk_screen_list_visuals ##### -->
 <para>
 

@@ -866,7 +866,7 @@ gtk_tree_selection_path_is_selected (GtkTreeSelection *selection,
  * @selection: A #GtkTreeSelection
  * @iter: A valid #GtkTreeIter
  * 
- * Returns %TRUE if the row pointed to by @path is currently selected.
+ * Returns %TRUE if the row at @iter is currently selected.
  * 
  * Return value: %TRUE, if @iter is selected
  **/

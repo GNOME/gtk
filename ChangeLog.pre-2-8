@@ -1,3 +1,40 @@
+2002-08-10  Soren Sandmann  <sandmann@daimi.au.dk>
+
+	* docs/reference/gtk/tree_widget.sgml,
+	docs/reference/gtk/tmpl/gtkdialog.sgml,
+	docs/reference/gtk/tmpl/gtkentry.sgml,
+	docs/reference/gtk/tmpl/gtkfilesel.sgml,
+	docs/reference/gtk/tmpl/gtkfontsel.sgml,
+	docs/reference/gtk/tmpl/gtkfontseldlg.sgml,
+	docs/reference/gtk/tmpl/gtktreemodel.sgml,
+	docs/reference/gtk/tmpl/gtkwidget.sgml, gdk/x11/gdkdisplay-x11.c,
+	gtk/gtkbbox.c, gtk/gtkbox.c, gtk/gtkbutton.c, gtk/gtkcellrenderer.c,
+	gtk/gtkcellrendererpixbuf.c, gtk/gtkcellrenderertext.c,
+	gtk/gtkcheckmenuitem.c, gtk/gtkcontainer.c, gtk/gtkcurve.c,
+	gtk/gtkdialog.h, gtk/gtkentry.c, gtk/gtkfilesel.c, gtk/gtkfontsel.c,
+	gtk/gtkframe.c, gtk/gtkhandlebox.c, gtk/gtkiconfactory.c,
+	gtk/gtkimage.c, gtk/gtkinvisible.c, gtk/gtkitemfactory.c,
+	gtk/gtklabel.c, gtk/gtklayout.c, gtk/gtkmenu.c, gtk/gtkprogress.c,
+	gtk/gtkprogressbar.c, gtk/gtkscrolledwindow.c, gtk/gtksizegroup.c,
+	gtk/gtktable.c, gtk/gtktextiter.c, gtk/gtktexttag.c, 
+	gtk/gtktexttag.h, gtk/gtktextview.c, gtk/gtktogglebutton.c, 
+	gtk/gtktoolbar.c, gtk/gtktreemodel.c, gtk/gtktreeselection.c, 
+	gtk/gtktreestore.c, gtk/gtktreeview.c, gtk/gtktreeviewcolumn.c, 
+	gtk/gtkviewport.c, gtk/gtkwidget.c, gtk/gtkwidget.h,
+	gtk/gtkwindow.c: 
+
+	Minor documentation fixes
+
+	(#89254, patch from Brett Nash; 
+	 #85809, patch from daten@dnetc.org;
+	 #76391, patch from Ross Burton; 
+	 #74559, Manuel Clos; 
+	 #73569, #72005, Alexey A. Malyshev; 
+	 #70061, patch from Dennis Bj"orklund;
+	 #64566, #63388, #58328, #57499, #81007, #77349, Vitaly Tishkov; 
+	 #78932, Vitaly Tishkov, patch from Ross Burton;
+	 #73306)
+
 2002-08-10  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkrgb.c (gdk_rgb_try_colormap): 

@@ -226,7 +226,7 @@ gtk_table_class_init (GtkTableClass *class)
 					      CHILD_PROP_X_OPTIONS,
 					      g_param_spec_flags ("x_options", 
 								  _("Horizontal options"), 
-								  _("Options specifying the horizontal behaviour of the child."),
+								  _("Options specifying the horizontal behaviour of the child"),
 								  GTK_TYPE_ATTACH_OPTIONS, GTK_EXPAND | GTK_FILL,
 								  G_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,

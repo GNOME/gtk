@@ -115,7 +115,8 @@ Gets the text displayed in the preview area.
 </para>
 
 @fsd: a #GtkFontSelectionDialog.
-@Returns: the text displayed in the preview area.
+@Returns: the text displayed in the preview area. This string is owned
+   by the widget and should not be modified or freed.
 
 
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_preview_text ##### -->

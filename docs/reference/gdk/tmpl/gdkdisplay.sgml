@@ -205,3 +205,11 @@ of an X display. All its fields are private and should not be accessed directly.
 @sm_client_id: 
 
 
+<!-- ##### SIGNAL GdkDisplay::closed ##### -->
+<para>
+
+</para>
+
+@gdkdisplay: the object which received the signal.
+@arg1: 
+

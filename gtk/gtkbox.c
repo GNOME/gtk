@@ -123,7 +123,7 @@ gtk_box_class_init (GtkBoxClass *class)
                                    PROP_SPACING,
                                    g_param_spec_int ("spacing",
                                                      _("Spacing"),
-                                                     _("The amount of space between children."),
+                                                     _("The amount of space between children"),
                                                      0,
                                                      G_MAXINT,
                                                      0,
@@ -133,7 +133,7 @@ gtk_box_class_init (GtkBoxClass *class)
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
 							 _("Homogeneous"),
-							 _("Whether the children should all be the same size."),
+							 _("Whether the children should all be the same size"),
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 

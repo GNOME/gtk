@@ -278,21 +278,21 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_LABEL,
                                    g_param_spec_string ("label",
                                                         _("Label"),
-                                                        _("The text of the label."),
+                                                        _("The text of the label"),
                                                         NULL,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_ATTRIBUTES,
 				   g_param_spec_boxed ("attributes",
 						       _("Attributes"),
-						       _("A list of style attributes to apply to the text of the label."),
+						       _("A list of style attributes to apply to the text of the label"),
 						       PANGO_TYPE_ATTR_LIST,
 						       G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_USE_MARKUP,
                                    g_param_spec_boolean ("use_markup",
 							 _("Use markup"),
-							 _("The text of the label includes XML markup. See pango_parse_markup()."),
+							 _("The text of the label includes XML markup. See pango_parse_markup()"),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
@@ -307,7 +307,7 @@ gtk_label_class_init (GtkLabelClass *class)
 				   PROP_JUSTIFY,
                                    g_param_spec_enum ("justify",
                                                       _("Justification"),
-                                                      _("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that."),
+                                                      _("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that"),
 						      GTK_TYPE_JUSTIFICATION,
 						      GTK_JUSTIFY_LEFT,
                                                       G_PARAM_READWRITE));
@@ -316,7 +316,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_PATTERN,
                                    g_param_spec_string ("pattern",
                                                         _("Pattern"),
-                                                        _("A string with _ characters in positions correspond to characters in the text to underline."),
+                                                        _("A string with _ characters in positions correspond to characters in the text to underline"),
                                                         NULL,
                                                         G_PARAM_WRITABLE));
 
@@ -324,21 +324,21 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_WRAP,
                                    g_param_spec_boolean ("wrap",
                                                         _("Line wrap"),
-                                                        _("If set, wrap lines if the text becomes too wide."),
+                                                        _("If set, wrap lines if the text becomes too wide"),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTABLE,
                                    g_param_spec_boolean ("selectable",
                                                         _("Selectable"),
-                                                        _("Whether the label text can be selected with the mouse."),
+                                                        _("Whether the label text can be selected with the mouse"),
                                                         FALSE,
                                                         G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_MNEMONIC_KEYVAL,
                                    g_param_spec_uint ("mnemonic_keyval",
 						      _("Mnemonic key"),
-						      _("The mnemonic accelerator key for this label."),
+						      _("The mnemonic accelerator key for this label"),
 						      0,
 						      G_MAXUINT,
 						      GDK_VoidSymbol,
@@ -348,7 +348,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    g_param_spec_object ("mnemonic_widget",
 							_("Mnemonic widget"),
 							_("The widget to be activated when the label's mnemonic "
-							  "key is pressed."),
+							  "key is pressed"),
 							GTK_TYPE_WIDGET,
 							G_PARAM_READWRITE));
 
@@ -356,7 +356,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_CURSOR_POSITION,
                                    g_param_spec_int ("cursor_position",
                                                      _("Cursor Position"),
-                                                     _("The current position of the insertion cursor in chars."),
+                                                     _("The current position of the insertion cursor in chars"),
                                                      0,
                                                      G_MAXINT,
                                                      0,
@@ -366,7 +366,7 @@ gtk_label_class_init (GtkLabelClass *class)
                                    PROP_SELECTION_BOUND,
                                    g_param_spec_int ("selection_bound",
                                                      _("Selection Bound"),
-                                                     _("The position of the opposite end of the selection from the cursor in chars."),
+                                                     _("The position of the opposite end of the selection from the cursor in chars"),
                                                      0,
                                                      G_MAXINT,
                                                      0,
@@ -929,7 +929,8 @@ gtk_label_set_text (GtkLabel    *label,
  * 
  * Sets a #PangoAttrList; the attributes in the list are applied to the
  * label text. The attributes set with this function will be ignored
- * if label->use_underline or label->use_markup is %TRUE.
+ * if the "use_underline" property or the "use_markup" property
+ * is %TRUE.
  **/
 void
 gtk_label_set_attributes (GtkLabel         *label,

@@ -427,7 +427,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    g_param_spec_boolean ("allow_shrink",
 							 _("Allow Shrink"),
 							 /* xgettext:no-c-format */
-							 _("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea."),
+							 _("If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the time a bad idea"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
@@ -435,7 +435,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_ALLOW_GROW,
                                    g_param_spec_boolean ("allow_grow",
 							 _("Allow Grow"),
-							 _("If TRUE, users can expand the window beyond its minimum size."),
+							 _("If TRUE, users can expand the window beyond its minimum size"),
 							 TRUE,
 							 G_PARAM_READWRITE));
 
@@ -443,7 +443,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_RESIZABLE,
                                    g_param_spec_boolean ("resizable",
 							 _("Resizable"),
-							 _("If TRUE, users can resize the window."),
+							 _("If TRUE, users can resize the window"),
 							 TRUE,
 							 G_PARAM_READWRITE));
   
@@ -451,7 +451,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_MODAL,
                                    g_param_spec_boolean ("modal",
 							 _("Modal"),
-							 _("If TRUE, the window is modal (other windows are not usable while this one is up)."),
+							 _("If TRUE, the window is modal (other windows are not usable while this one is up)"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
@@ -459,7 +459,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_WIN_POS,
                                    g_param_spec_enum ("window_position",
 						      _("Window Position"),
-						      _("The initial position of the window."),
+						      _("The initial position of the window"),
 						      GTK_TYPE_WINDOW_POSITION,
 						      GTK_WIN_POS_NONE,
 						      G_PARAM_READWRITE));
@@ -468,7 +468,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_DEFAULT_WIDTH,
                                    g_param_spec_int ("default_width",
 						     _("Default Width"),
-						     _("The default width of the window, used when initially showing the window."),
+						     _("The default width of the window, used when initially showing the window"),
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -478,7 +478,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                    PROP_DEFAULT_HEIGHT,
                                    g_param_spec_int ("default_height",
 						     _("Default Height"),
-						     _("The default height of the window, used when initially showing the window."),
+						     _("The default height of the window, used when initially showing the window"),
 						     -1,
 						     G_MAXINT,
 						     -1,
@@ -504,7 +504,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 				   PROP_SCREEN,
 				   g_param_spec_object ("screen",
  							_("Screen"),
- 							_("The screen where this window will be displayed."),
+ 							_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
  							G_PARAM_READWRITE));
 

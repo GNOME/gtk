@@ -232,20 +232,15 @@ struct _GtkWidgetClass
    *  pointer.
    */
   GtkObjectClass parent_class;
+
+  /*< public >*/
   
-  /* The signal to emit when a widget of this class is activated,
-   * gtk_widget_activate() handles the emission.
-   * Implementation of this signal is optional.
-   */
   guint activate_signal;
 
-  /* This signal is emitted  when a widget of this class is added
-   * to a scrolling aware parent, gtk_widget_set_scroll_adjustments()
-   * handles the emission.
-   * Implementation of this signal is optional.
-   */
   guint set_scroll_adjustments_signal;
 
+  /*< private >*/
+  
   /* seldomly overidden */
   void (*dispatch_child_properties_changed) (GtkWidget   *widget,
 					     guint        n_pspecs,

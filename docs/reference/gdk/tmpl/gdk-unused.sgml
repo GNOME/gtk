@@ -882,6 +882,13 @@ they will be ignored.
 </para>
 
 
+<!-- ##### FUNCTION gdk_screen_close ##### -->
+<para>
+
+</para>
+
+@screen: 
+
 <!-- ##### FUNCTION gdk_screen_use_virtual_screen ##### -->
 <para>
 

@@ -621,7 +621,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 				   PROP_HADJUSTMENT,
 				   g_param_spec_object ("hadjustment",
 							_("Horizontal adjustment"),
-							_("The GtkAdjustment for the horizontal position."),
+							_("The GtkAdjustment for the horizontal position"),
 							GTK_TYPE_ADJUSTMENT,
 							G_PARAM_READWRITE));
   
@@ -629,7 +629,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 				   PROP_VADJUSTMENT,
 				   g_param_spec_object ("vadjustment",
 							_("Vertical adjustment"),
-							_("The GtkAdjustment for the vertical position."),
+							_("The GtkAdjustment for the vertical position"),
 							GTK_TYPE_ADJUSTMENT,
 							G_PARAM_READWRITE));
 
@@ -637,7 +637,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 				   PROP_WIDTH,
 				   g_param_spec_uint ("width",
 						     _("Width"),
-						     _("The width of the layout."),
+						     _("The width of the layout"),
 						     0,
 						     G_MAXINT,
 						     100,
@@ -646,7 +646,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 				   PROP_HEIGHT,
 				   g_param_spec_uint ("height",
 						     _("Height"),
-						     _("The height of the layout."),
+						     _("The height of the layout"),
 						     0,
 						     G_MAXINT,
 						     100,

@@ -95,15 +95,11 @@ gtk_editable_set_position() instead.
 
 <!-- ##### FUNCTION gtk_entry_get_text ##### -->
 <para>
-Retrieve the contents of the entry widget. The returned
-pointer points to internally allocated storage in the
-widget and must not be freed, modified or stored.
-See also gtk_editable_get_chars().
+
 </para>
 
-@entry: a #GtkEntry.
-@Returns: the pointer the the contents of the text widget as a
-          string.
+@entry: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_entry_select_region ##### -->

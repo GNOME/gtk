@@ -138,7 +138,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 				   PROP_MAX_X,
 				   g_param_spec_float ("max_x",
 						       _("Maximum X"),
-						       _("Maximum possible X value."),
+						       _("Maximum possible X value"),
 						       -G_MAXFLOAT,
 						       G_MAXFLOAT,
                                                        1.0,

@@ -206,7 +206,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                    PROP_BORDER_WIDTH,
                                    g_param_spec_uint ("border_width",
                                                       _("Border width"),
-                                                      _("The width of the empty border outside the containers children."),
+                                                      _("The width of the empty border outside the containers children"),
 						      0,
 						      G_MAXINT,
 						      0,
@@ -215,7 +215,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
                                                       _("Child"),
-                                                      _("Can be used to add a new child to the container."),
+                                                      _("Can be used to add a new child to the container"),
                                                       GTK_TYPE_WIDGET,
 						      G_PARAM_WRITABLE));
   container_signals[ADD] =

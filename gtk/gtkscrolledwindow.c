@@ -234,14 +234,14 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 				   PROP_HADJUSTMENT,
 				   g_param_spec_object ("hadjustment",
 							_("Horizontal Adjustment"),
-							_("The GtkAdjustment for the horizontal position."),
+							_("The GtkAdjustment for the horizontal position"),
 							GTK_TYPE_ADJUSTMENT,
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
 				   PROP_VADJUSTMENT,
 				   g_param_spec_object ("vadjustment",
 							_("Vertical Adjustment"),
-							_("The GtkAdjustment for the vertical position."),
+							_("The GtkAdjustment for the vertical position"),
 							GTK_TYPE_ADJUSTMENT,
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,

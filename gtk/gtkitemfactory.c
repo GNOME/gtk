@@ -590,8 +590,8 @@ gtk_item_factory_from_widget (GtkWidget	       *widget)
 /**
  * gtk_item_factory_path_from_widget:
  * @widget: a widget
- * @returns: the full path to @widget if it been created by an item factory, 
- *   %NULL otherwise. This value is owned by GTK+ and must not be
+ * @returns: the full path to @widget if it has been created by an item
+ *   factory, %NULL otherwise. This value is owned by GTK+ and must not be
  *   modified or freed.
  * 
  * If @widget has been created by an item factory, returns the full path

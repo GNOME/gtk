@@ -241,7 +241,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 				   g_param_spec_enum ("mode",
 						      _("Mode"),
 						      _("The directions in which the size group effects the requested sizes"
-							" of its component widgets."),
+							" of its component widgets"),
 						      GTK_TYPE_SIZE_GROUP_MODE,
 						      GTK_SIZE_GROUP_HORIZONTAL,
 						      G_PARAM_READWRITE));

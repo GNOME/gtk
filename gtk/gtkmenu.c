@@ -223,7 +223,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                    PROP_TEAROFF_TITLE,
                                    g_param_spec_string ("tearoff-title",
                                                         _("Tearoff Title"),
-                                                        _("A title that may be displayed by the window manager when this menu is torn-off."),
+                                                        _("A title that may be displayed by the window manager when this menu is torn-off"),
                                                         "",
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
   object_class->destroy = gtk_menu_destroy;
@@ -293,7 +293,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
 						       _("Can change accelerators"),
-						       _("Whether menu accelerators can be changed by pressing a key over the menu item."),
+						       _("Whether menu accelerators can be changed by pressing a key over the menu item"),
 						       FALSE,
 						       G_PARAM_READWRITE));
 }
@@ -1286,7 +1286,8 @@ gtk_menu_set_title (GtkMenu     *menu,
  * Returns the title of the menu. See gtk_menu_set_title().
  *
  * Return value: the title of the menu, or %NULL if the menu has no
- *               title set on it.
+ * title set on it. This string is owned by the widget and should
+ * not be modified or freed.
  **/
 G_CONST_RETURN gchar *
 gtk_menu_get_title (GtkMenu *menu)

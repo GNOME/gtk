@@ -853,7 +853,7 @@ gtk_text_iter_get_visible_line_index (const GtkTextIter *iter)
  * @iter: an iterator
  *
  * Returns the Unicode character at this iterator.  (Equivalent to
- * operator* on a C++ iterator.)  If the iterator points at a
+ * operator* on a C++ iterator.)  If the element at this iterator is a
  * non-character element, such as an image embedded in the buffer, the
  * Unicode "unknown" character 0xFFFC is returned. If invoked on
  * the end iterator, zero is returned; zero is not a valid Unicode character.
@@ -999,8 +999,8 @@ gtk_text_iter_get_visible_text (const GtkTextIter  *start,
  * gtk_text_iter_get_pixbuf:
  * @iter: an iterator
  *
- * If the location pointed to by @iter contains a pixbuf, the pixbuf
- * is returned (with no new reference count added). Otherwise,
+ * If the element at @iter is a pixbuf, the pixbuf is returned
+ * (with no new reference count added). Otherwise,
  * %NULL is returned.
  *
  * Return value: the pixbuf at @iter
@@ -1029,7 +1029,7 @@ gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
  * gtk_text_iter_get_child_anchor:
  * @iter: an iterator
  *
- * If the location pointed to by @iter contains a child anchor, the
+ * If the location at @iter contains a child anchor, the
  * anchor is returned (with no new reference count added). Otherwise,
  * %NULL is returned.
  *
@@ -3392,7 +3392,7 @@ gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
  * 
  * Like gtk_text_iter_forward_cursor_position(), but moves backward.
  * 
- * Return value: %TRUE if we moved and the new position is dereferenceable
+ * Return value: %TRUE if we moved
  **/
 gboolean
 gtk_text_iter_backward_cursor_position (GtkTextIter *iter)

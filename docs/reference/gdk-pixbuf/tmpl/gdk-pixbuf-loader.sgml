@@ -99,6 +99,16 @@ Application-driven progressive image loading.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_loader_set_size ##### -->
+<para>
+
+</para>
+
+@loader: 
+@width: 
+@height: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_loader_get_pixbuf ##### -->
 <para>
 
@@ -126,16 +136,6 @@ Application-driven progressive image loading.
 @error: 
 @Returns: 
 
-<!-- ##### SIGNAL GdkPixbufLoader::size-prepared ##### -->
-  <para>
-    This signal is emitted when the pixbuf loader has been fed the
-    initial amount of data that is required to figure out the size
-    of the image that it will create.  Applications can call  
-    gdk_pixbuf_loader_set_size() in response to this signal to set
-    the desired size to which the image should be scaled.
-  </para>
-@width: the original width of the image
-@height: the original height of the image
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
   <para>
@@ -143,6 +143,8 @@ Application-driven progressive image loading.
     in the desired size.  After this signal is emitted, applications can 
     call gdk_pixbuf_loader_get_pixbuf() to fetch the partially-loaded pixbuf.
   </para>
+
+@gdkpixbufloader: the object which received the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
   <para>
@@ -154,6 +156,11 @@ Application-driven progressive image loading.
   </para>
 
 @gdkpixbufloader: Loader which emitted the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+<!-- # Unused Parameters # -->
 @x: X offset of upper-left corner of the updated area.
 @y: Y offset of upper-left corner of the updated area.
 @width: Width of updated area.
@@ -176,4 +183,19 @@ sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
 
+<!-- ##### SIGNAL GdkPixbufLoader::size-prepared ##### -->
+  <para>
+    This signal is emitted when the pixbuf loader has been fed the
+    initial amount of data that is required to figure out the size
+    of the image that it will create.  Applications can call  
+    gdk_pixbuf_loader_set_size() in response to this signal to set
+    the desired size to which the image should be scaled.
+  </para>
+
+@gdkpixbufloader: the object which received the signal.
+@arg1: 
+@arg2: 
+<!-- # Unused Parameters # -->
+@width: the original width of the image
+@height: the original height of the image
 

@@ -187,7 +187,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                    PROP_LABEL,
                                    g_param_spec_string ("label",
                                                         _("Label"),
-                                                        _("Text of the label widget inside the button, if the button contains a label widget."),
+                                                        _("Text of the label widget inside the button, if the button contains a label widget"),
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   
@@ -211,7 +211,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                    PROP_RELIEF,
                                    g_param_spec_enum ("relief",
                                                       _("Border relief"),
-                                                      _("The border relief style."),
+                                                      _("The border relief style"),
                                                       GTK_TYPE_RELIEF_STYLE,
                                                       GTK_RELIEF_NORMAL,
                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -1127,13 +1127,13 @@ gtk_button_set_label (GtkButton   *button,
  * @button: a #GtkButton
  *
  * Fetches the text from the label of the button, as set by
- * gtk_button_set_label().  This string is owned by the widget 
- * and must not be modified or freed.  If the label text has not 
- * been set the return value  will be %NULL. This will be the 
+ * gtk_button_set_label(). If the label text has not 
+ * been set the return value will be %NULL. This will be the 
  * case if you create an empty button with gtk_button_new() to 
  * use as a container.
  *
- * Return value: the text of the label widget. 
+ * Return value: The text of the label widget. This string is owned
+ * by the widget and must not be modified or freed.
  **/
 G_CONST_RETURN gchar *
 gtk_button_get_label (GtkButton *button)

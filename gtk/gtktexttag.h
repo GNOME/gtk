@@ -112,6 +112,7 @@ typedef struct _GtkTextAppearance GtkTextAppearance;
 
 struct _GtkTextAppearance
 {
+  /*< public >*/
   GdkColor bg_color;
   GdkColor fg_color;
   GdkBitmap *bg_stipple;
@@ -120,11 +121,13 @@ struct _GtkTextAppearance
   /* super/subscript rise, can be negative */
   gint rise;
 
+  /*< private >*/
   /* I'm not sure this can really be used without breaking some things
    * an app might do :-/
    */
   gpointer padding1;
-  
+
+  /*< public >*/
   guint underline : 4;          /* PangoUnderline */
   guint strikethrough : 1;
 
@@ -142,6 +145,7 @@ struct _GtkTextAppearance
   guint inside_selection : 1;
   guint is_text : 1;
 
+  /*< private >*/
   guint pad1 : 1;
   guint pad2 : 1;
   guint pad3 : 1;
@@ -150,8 +154,10 @@ struct _GtkTextAppearance
 
 struct _GtkTextAttributes
 {
+  /*< private >*/
   guint refcount;
 
+  /*< public >*/
   GtkTextAppearance appearance;
 
   GtkJustification justification;
@@ -183,11 +189,13 @@ struct _GtkTextAttributes
 
   PangoLanguage *language;
 
+  /*< private >*/
   /* I'm not sure this can really be used without breaking some things
    * an app might do :-/
    */
   gpointer padding1;
-  
+
+  /*< public >*/
   /* hide the text  */
   guint invisible : 1;
 
@@ -202,6 +210,7 @@ struct _GtkTextAttributes
   /* colors are allocated etc. */
   guint realized : 1;
 
+  /*< private >*/
   guint pad1 : 1;
   guint pad2 : 1;
   guint pad3 : 1;
