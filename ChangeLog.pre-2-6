@@ -1,3 +1,11 @@
+2004-06-25  Bastien Nocera  <hadess@hadess.net>
+
+	reviewed by: Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkkeys-x11.c: (get_symbol), (update_keymaps),
+	(gdk_keymap_lookup_key), (translate_keysym): fix keys parsing when
+	the number of keysyms per keycode is odd. Fixes #144808.
+
 2004-06-25  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfontbutton.c (gtk_font_button_update_font_info): Avoid
