@@ -1,5 +1,13 @@
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (GTK_SELECTION_MAX_SIZE): Make sure 
+	this gets defined for all backends, so linux-fb has a 
+	chance of compiling.
+
+	* gtk/gtktreestore.c (gtk_tree_store_swap): Make this work
+	for children of the root.  (#139785, Jean-François Wauthy,
+	patch by John Finlay)
+
 	* gtk/gtkicontheme.h (GTK_ICON_THEME_GET_CLASS): Typo
 	fix.  (#144750, Jeff Franks) 
 
