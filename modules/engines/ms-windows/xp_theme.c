@@ -161,7 +161,8 @@ void
 xp_theme_reset (void)
 {
   xp_theme_close_open_handles ();
-  was_theming_active = (*is_theme_active_func) ();
+  was_theming_active = is_theme_active_func
+    ? (*is_theme_active_func) () : FALSE;
 }
 
 void
