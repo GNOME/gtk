@@ -1,3 +1,43 @@
+2000-10-07  Tor Lillqvist  <tml@iki.fi>
+
+	Changes from the gtk+-src-20001007.zip snapshot:
+
+	* README.win32: Update.
+
+	* gdk\win32\gdkevents-win32.c: gdk_event_prepare() and
+	gdk_event_check() functions need an extra user_data parameter.
+	(inner_window_proc,gdk_WindowProc): Better debugging output.
+	(gdk_events_init): Don't register the g-pipe-readable message any
+	longer.
+	(gdk_event_translate): Handle more VK_OEM virtual keycodes. Bugfixes
+	for non-US keyboards.
+	(gdk_events_queue): Don't check for g_pipe_readable message.
+
+	* gdk\win32\gdkfont-win32.c (gdk_font_load_internal): Try to use
+	only TrueType fonts, and antialiasing.
+
+	* gdk\win32\gdkprivate-win32.h (VK_OEM_COMMA..VK_OEM_8): Define
+	here in case missing from headers.
+
+	* gdk\win32\gdkwindow-win32.c (gdk_window_clear_area): Some
+	testing coee, but ifdeffed out. Use SendNotifyMessage().
+	(gdk_window_set_cursor): Message if DestroyCursor() fails.
+
+	* gtk\makefile.cygwin
+	* gtk\gtk.def: Updates.
+
+	* gtk\gtkfilesel.c: Handle file names that are in the system
+	codepage when passed to/from the C library, converting back and
+	forth to the UTF-8 that GTK+ uses as necessary.
+
+	* gtk\gtkmain.h
+	* gtk\gtkmain.c (gtk_init_abi_check,gtk_init_check_abi_check):
+	(Win32) New functions. Calling gtk_init() and gtk_init_check()
+	from user code #defined to actually go to these wrappers that
+	first check if the compiler's idea of sizeof(GtkWindow) is the
+	same as when gtk was compiled. This catches not using gcc's
+	-fnative-struct switch.
+
 2001-02-22  Tor Lillqvist  <tml@iki.fi>
 
 	Started a CVS branch for the GTK+ in production use on

@@ -1367,9 +1367,9 @@ gdk_font_load_internal (const gchar *font_name)
 	  fdwCharSet = ANSI_CHARSET; /* XXX ??? */
       else
 	fdwCharSet = ANSI_CHARSET; /* XXX ??? */
-      fdwOutputPrecision = OUT_TT_PRECIS;
+      fdwOutputPrecision = OUT_TT_ONLY_PRECIS;
       fdwClipPrecision = CLIP_DEFAULT_PRECIS;
-      fdwQuality = PROOF_QUALITY;
+      fdwQuality = ANTIALIASED_QUALITY;
       if (g_strcasecmp (spacing, "m") == 0)
 	fdwPitchAndFamily = FIXED_PITCH;
       else if (g_strcasecmp (spacing, "p") == 0)

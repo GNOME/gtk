@@ -730,7 +730,7 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
 {
   static gchar nothing[2] = "";
   static gchar something[MAXPATHLEN*2];
-  char *filename;
+  char *sys_filename;
   char *text;
 
   g_return_val_if_fail (filesel != NULL, nothing);
@@ -742,9 +742,9 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   text = gtk_entry_get_text (GTK_ENTRY (filesel->selection_entry));
   if (text)
     {
-      filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state));
-      strncpy (something, filename, sizeof (something));
-      g_free (filename);
+      sys_filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state));
+      strncpy (something, sys_filename, sizeof (something));
+      g_free (sys_filename);
       return something;
     }
 
@@ -874,6 +874,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
   gchar *dirname;
   gchar *path;
   gchar *full_path;
+  gchar *sys_full_path;
   gchar *buf;
   CompletionState *cmpl_state;
   
@@ -885,13 +886,15 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
   path = cmpl_reference_position (cmpl_state);
   
   full_path = g_strconcat (path, G_DIR_SEPARATOR_S, dirname, NULL);
-  if ( (mkdir (full_path, 0755) < 0) ) 
+  sys_full_path = g_filename_from_utf8 (full_path);
+  if (mkdir (sys_full_path, 0755) < 0) 
     {
       buf = g_strconcat ("Error creating directory \"", dirname, "\":  ", 
 			 g_strerror(errno), NULL);
       gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (full_path);
+  g_free (sys_full_path);
   
   gtk_widget_destroy (fs->fileop_dialog);
   gtk_file_selection_populate (fs, "", FALSE);
@@ -973,6 +976,7 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
   CompletionState *cmpl_state;
   gchar *path;
   gchar *full_path;
+  gchar *sys_full_path;
   gchar *buf;
   
   g_return_if_fail (fs != NULL);
@@ -982,13 +986,15 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
   path = cmpl_reference_position (cmpl_state);
   
   full_path = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
-  if ( (unlink (full_path) < 0) ) 
+  sys_full_path = g_filename_from_utf8 (full_path);
+  if (unlink (sys_full_path) < 0) 
     {
       buf = g_strconcat ("Error deleting file \"", fs->fileop_file, "\":  ", 
 			 g_strerror(errno), NULL);
       gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (full_path);
+  g_free (sys_full_path);
   
   gtk_widget_destroy (fs->fileop_dialog);
   gtk_file_selection_populate (fs, "", FALSE);
@@ -1080,6 +1086,8 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
   gchar *path;
   gchar *new_filename;
   gchar *old_filename;
+  gchar *sys_new_filename;
+  gchar *sys_old_filename;
   CompletionState *cmpl_state;
   
   g_return_if_fail (fs != NULL);
@@ -1092,7 +1100,10 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
   new_filename = g_strconcat (path, G_DIR_SEPARATOR_S, file, NULL);
   old_filename = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
 
-  if ( (rename (old_filename, new_filename)) < 0) 
+  sys_new_filename = g_filename_from_utf8 (new_filename);
+  sys_old_filename = g_filename_from_utf8 (old_filename);
+
+  if (rename (sys_old_filename, sys_new_filename) < 0)
     {
       buf = g_strconcat ("Error renaming file \"", file, "\":  ", 
 			 g_strerror(errno), NULL);
@@ -1100,6 +1111,8 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
     }
   g_free (new_filename);
   g_free (old_filename);
+  g_free (sys_new_filename);
+  g_free (sys_old_filename);
   
   gtk_widget_destroy (fs->fileop_dialog);
   gtk_file_selection_populate (fs, "", FALSE);
@@ -1754,12 +1767,16 @@ cmpl_is_a_completion (PossibleCompletion* pc)
 static CompletionState*
 cmpl_init_state (void)
 {
-  gchar *getcwd_buf;
+  gchar *sys_getcwd_buf;
+  gchar *utf8_cwd;
   CompletionState *new_state;
 
   new_state = g_new (CompletionState, 1);
 
-  getcwd_buf = g_get_current_dir ();
+  /* g_get_current_dir() returns a string in the current locale charset */
+  sys_getcwd_buf = g_get_current_dir ();
+  utf8_cwd = g_filename_to_utf8 (sys_getcwd_buf);
+  g_free (sys_getcwd_buf);
 
 tryagain:
 
@@ -1776,16 +1793,16 @@ tryagain:
   new_state->user_dir_name_buffer = NULL;
   new_state->user_directories = NULL;
 
-  new_state->reference_dir =  open_dir (getcwd_buf, new_state);
+  new_state->reference_dir =  open_dir (utf8_cwd, new_state);
 
   if (!new_state->reference_dir)
     {
       /* Directories changing from underneath us, grumble */
-      strcpy (getcwd_buf, G_DIR_SEPARATOR_S);
+      strcpy (utf8_cwd, G_DIR_SEPARATOR_S);
       goto tryagain;
     }
 
-  g_free (getcwd_buf);
+  g_free (utf8_cwd);
   return new_state;
 }
 
@@ -2043,14 +2060,17 @@ open_ref_dir(gchar* text_to_complete,
       else
 	{
 	  /* If no possible candidates, use the cwd */
-	  gchar *curdir = g_get_current_dir ();
+	  gchar *sys_curdir = g_get_current_dir ();
+	  gchar *utf8_curdir = g_filename_to_utf8 (sys_curdir);
+
+	  g_free (sys_curdir);
 	  
-	  new_dir = open_dir(curdir, cmpl_state);
+	  new_dir = open_dir(utf8_curdir, cmpl_state);
 
 	  if (new_dir)
 	    *remaining_text = text_to_complete;
 
-	  g_free (curdir);
+	  g_free (utf8_curdir);
 	}
 
       g_free (tmp);
@@ -2078,6 +2098,7 @@ static CompletionDir*
 open_user_dir(gchar* text_to_complete,
 	      CompletionState *cmpl_state)
 {
+  CompletionDir *result;
   gchar *first_slash;
   gint cmp_len;
 
@@ -2094,17 +2115,22 @@ open_user_dir(gchar* text_to_complete,
     {
       /* ~/ */
       gchar *homedir = g_get_home_dir ();
+      gchar *utf8_home = g_filename_to_utf8 (homedir);
 
-      if (homedir)
-	return open_dir(homedir, cmpl_state);
+      g_free (homedir);
+
+      if (utf8_homedir)
+	result = open_dir (utf8_homedir, cmpl_state);
       else
-	return NULL;
+	result = NULL;
     }
   else
     {
       /* ~user/ */
       char* copy = g_new(char, cmp_len + 1);
+      gchar *utf8_dir;
       struct passwd *pwd;
+
       strncpy(copy, text_to_complete + 1, cmp_len);
       copy[cmp_len] = 0;
       pwd = getpwnam(copy);
@@ -2115,8 +2141,11 @@ open_user_dir(gchar* text_to_complete,
 	  return NULL;
 	}
 
-      return open_dir(pwd->pw_dir, cmpl_state);
+      utf8_dir = g_filename_to_utf8 (pwd->pw_dir);
+      result = open_dir (utf8_dir, cmpl_state);
+      g_free (utf8_dir);
     }
+  return result;
 }
 
 #endif
@@ -2156,7 +2185,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
   gint i;
   struct stat ent_sbuf;
   GString *path;
-  gchar *xdir;
+  gchar *sys_dir_name;
 
   sent = g_new(CompletionDirSent, 1);
   sent->mtime = sbuf->st_mtime;
@@ -2165,13 +2194,13 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
   path = g_string_sized_new (2*MAXPATHLEN + 10);
 
-  xdir = g_filename_from_utf8 (dir_name);
-  directory = opendir(xdir);
-  g_free (xdir);
+  sys_dir_name = g_filename_from_utf8 (dir_name);
+  directory = opendir(sys_dir_name);
 
   if(!directory)
     {
       cmpl_errno = errno;
+      g_free (sys_dir_name);
       return NULL;
     }
 
@@ -2193,12 +2222,13 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 	{
 	  cmpl_errno = errno;
 	  closedir(directory);
+	  g_free (sys_dir_name);
 	  return NULL;
 	}
 
       sent->entries[i].entry_name = g_filename_to_utf8 (dirent_ptr->d_name);
 
-      g_string_assign (path, dir_name);
+      g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
 	{
 	  g_string_append_c (path, G_DIR_SEPARATOR);
@@ -2207,6 +2237,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
       if (stat_subdirs)
 	{
+	  /* Here we know path->str is a "system charset" string */
 	  if(stat(path->str, &ent_sbuf) >= 0 && S_ISDIR(ent_sbuf.st_mode))
 	    sent->entries[i].is_dir = TRUE;
 	  else
@@ -2218,6 +2249,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 	sent->entries[i].is_dir = 1;
     }
 
+  g_free (sys_dir_name);
   g_string_free (path, TRUE);
   qsort(sent->entries, sent->entry_count, sizeof(CompletionDirEntry), compare_cmpl_dir);
 
@@ -2247,7 +2279,7 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
 
   static const gint n_no_stat_dirs = sizeof(no_stat_dirs) / sizeof(no_stat_dirs[0]);
   static gboolean initialized = FALSE;
-
+  gchar *sys_dir_name;
   gint i;
 
   if (!initialized)
@@ -2260,11 +2292,14 @@ check_dir(gchar *dir_name, struct stat *result, gboolean *stat_subdirs)
 	}
     }
 
-  if(stat(dir_name, result) < 0)
+  sys_dir_name = g_filename_from_utf8 (dir_name);
+  if(stat(sys_dir_name, result) < 0)
     {
+      g_free (sys_dir_name);
       cmpl_errno = errno;
       return FALSE;
     }
+  g_free (sys_dir_name);
 
   *stat_subdirs = TRUE;
   for (i=0; i<n_no_stat_dirs; i++)
@@ -2347,6 +2382,7 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 {
   gint length = strlen(cmpl_dir->fullname);
   gchar *first_slash = strchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
+  gchar *sys_filename;
   struct stat sbuf;
 
   /* Does it end with /. (\.) ? */
@@ -2385,11 +2421,14 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 	  return TRUE;
 	}
 
-      if(stat(cmpl_dir->fullname, &sbuf) < 0)
+      sys_filename = g_filename_from_utf8 (cmpl_dir->fullname);
+      if(stat(sys_filename, &sbuf) < 0)
 	{
+	  g_free (sys_filename);
 	  cmpl_errno = errno;
 	  return FALSE;
 	}
+      g_free (sys_filename);
 
       cmpl_dir->fullname[length - 3] = 0;
 
@@ -2410,11 +2449,14 @@ correct_dir_fullname(CompletionDir* cmpl_dir)
 	  return TRUE;
 	}
 
-      if(stat(cmpl_dir->fullname, &sbuf) < 0)
+      sys_filename = g_filename_from_utf8 (cmpl_dir->fullname);
+      if (stat (sys_filename, &sbuf) < 0)
 	{
+	  g_free (sys_filename);
 	  cmpl_errno = errno;
 	  return FALSE;
 	}
+      g_free (sys_filename);
 
       cmpl_dir->fullname[length - 4] = 0;
 
@@ -2434,6 +2476,7 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
   gchar *last_slash;
   gchar *first_slash;
   gchar *new_name;
+  gchar *sys_filename;
   gchar c = 0;
 
   last_slash = strrchr(cmpl_dir->fullname, G_DIR_SEPARATOR);
@@ -2453,13 +2496,16 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
       last_slash[1] = 0;
     }
 
-  if (stat(cmpl_dir->fullname, &parbuf) < 0)
+  sys_filename = g_filename_from_utf8 (cmpl_dir->fullname);
+  if (stat (sys_filename, &parbuf) < 0)
     {
+      g_free (sys_filename);
       cmpl_errno = errno;
       if (!c)
 	last_slash[0] = G_DIR_SEPARATOR;
       return FALSE;
     }
+  g_free (sys_filename);
 
 #ifndef G_OS_WIN32		/* No inode numbers on Win32 */
   if (parbuf.st_ino == sbuf->st_ino && parbuf.st_dev == sbuf->st_dev)
@@ -2491,26 +2537,34 @@ correct_parent(CompletionDir* cmpl_dir, struct stat *sbuf)
 static gchar*
 find_parent_dir_fullname(gchar* dirname)
 {
-  gchar *orig_dir;
+  gchar *sys_orig_dir;
   gchar *result;
+  gchar *sys_cwd;
+  gchar *sys_dirname;
 
-  orig_dir = g_get_current_dir ();
-
-  if(chdir(dirname) != 0 || chdir("..") != 0)
+  sys_orig_dir = g_get_current_dir ();
+  sys_dirname = g_filename_from_utf8 (dirname);
+  if(chdir(sys_dirname) != 0 || chdir("..") != 0)
     {
+      g_free (sys_dirname);
+      g_free (sys_orig_dir);
       cmpl_errno = errno;
       return NULL;
     }
+  g_free (sys_dirname);
 
-  result = g_get_current_dir ();
+  sys_cwd = g_get_current_dir ();
+  result = g_filename_to_utf8 (sys_cwd);
+  g_free (sys_cwd);
 
-  if(chdir(orig_dir) != 0)
+  if(chdir(sys_orig_dir) != 0)
     {
       cmpl_errno = errno;
+      g_free (sys_orig_dir);
       return NULL;
     }
 
-  g_free (orig_dir);
+  g_free (sys_orig_dir);
   return result;
 }
 
@@ -2880,7 +2934,8 @@ static gint
 get_pwdb(CompletionState* cmpl_state)
 {
   struct passwd *pwd_ptr;
-  gchar* buf_ptr;
+  gchar *buf_ptr;
+  gchar *utf8;
   gint len = 0, i, count = 0;
 
   if(cmpl_state->user_dir_name_buffer)
@@ -2889,8 +2944,12 @@ get_pwdb(CompletionState* cmpl_state)
 
   while ((pwd_ptr = getpwent()) != NULL)
     {
-      len += strlen(pwd_ptr->pw_name);
-      len += strlen(pwd_ptr->pw_dir);
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_name);
+      len += strlen (utf8);
+      g_free (utf8);
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_dir);
+      len += strlen (utf8);
+      g_free (utf8);
       len += 2;
       count += 1;
     }
@@ -2912,12 +2971,21 @@ get_pwdb(CompletionState* cmpl_state)
 	  goto error;
 	}
 
-      strcpy(buf_ptr, pwd_ptr->pw_name);
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_name);
+      strcpy (buf_ptr, utf8);
+      g_free (utf8);
+
       cmpl_state->user_directories[i].login = buf_ptr;
+
       buf_ptr += strlen(buf_ptr);
       buf_ptr += 1;
-      strcpy(buf_ptr, pwd_ptr->pw_dir);
+
+      utf8 = g_filename_to_utf8 (pwd_ptr->pw_dir);
+      strcpy (buf_ptr, utf8);
+      g_free (utf8);
+
       cmpl_state->user_directories[i].homedir = buf_ptr;
+
       buf_ptr += strlen(buf_ptr);
       buf_ptr += 1;
     }

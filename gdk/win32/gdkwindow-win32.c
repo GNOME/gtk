@@ -30,9 +30,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "gdkevents.h"
-#include "gdkpixmap.h"
-#include "gdkwindow.h"
+#include "gdk.h"
 #include "gdkprivate-win32.h"
 #include "gdkinputprivate.h"
 #include "gdkwin32.h"
@@ -1030,6 +1028,8 @@ gdk_window_clear_area (GdkWindow *window,
 		       gint       width,
 		       gint       height)
 {
+  gboolean threaded_gdk = FALSE;
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1045,7 +1045,24 @@ gdk_window_clear_area (GdkWindow *window,
 			       GDK_DRAWABLE_XID (window), width, height, x, y));
       hdc = GetDC (GDK_DRAWABLE_XID (window));
       IntersectClipRect (hdc, x, y, x + width, y + height);
-      SendMessage (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
+#ifdef G_THREADS_ENABLEDxxx /* No, doesn't work any better anyway. Just testing. */
+      if (gdk_threads_mutex)
+	if (!g_mutex_trylock (gdk_threads_mutex))
+	  threaded_gdk = TRUE;
+	else
+	  g_mutex_unlock (gdk_threads_mutex);
+      if (threaded_gdk)
+	GDK_THREADS_LEAVE();
+#endif
+#if 1
+      SendNotifyMessage (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
+#else
+      gdk_WindowProc (GDK_DRAWABLE_XID (window), WM_ERASEBKGND, (WPARAM) hdc, 0);
+#endif
+#ifdef G_THREADS_ENABLEDxxx
+      if (threaded_gdk)
+	GDK_THREADS_ENTER();
+#endif
       ReleaseDC (GDK_DRAWABLE_XID (window), hdc);
     }
 }
@@ -1498,7 +1515,8 @@ gdk_window_set_cursor (GdkWindow *window,
 	  GDK_NOTE (MISC, g_print ("...DestroyCursor (%#x)\n",
 				   GDK_WINDOW_WIN32DATA (window)->xcursor));
 	  
-	  DestroyCursor (GDK_WINDOW_WIN32DATA (window)->xcursor);
+	  if (!DestroyCursor (GDK_WINDOW_WIN32DATA (window)->xcursor))
+	    WIN32_API_FAILED ("DestroyCursor");
 	  GDK_WINDOW_WIN32DATA (window)->xcursor = NULL;
 	}
       if (xcursor != NULL)

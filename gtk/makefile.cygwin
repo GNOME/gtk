@@ -29,8 +29,6 @@ AWK = awk
 INCLUDES = -I . -I .. -I ../gdk -I $(GLIB) -I $(GLIB)/gmodule -I $(INTL)
 DEFINES = -DGTK_DISABLE_COMPAT_H -DGTK_COMPILATION -DG_LOG_DOMAIN=\"Gtk\" -DG_LOG_DOMAIN=\"Gtk\" 
 
-WIN32APIHEADERS=$(shell echo "\#include <winver.h>" | $(CC) -M -E - | tail -1 | sed -e 's![\\/]winver.h!!' | tr -d '\015')
-
 all : \
 	../config.h	\
 	gtkcompat.h	\

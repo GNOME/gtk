@@ -82,6 +82,20 @@ void	   gtk_init		 (int	       *argc,
 				  char	     ***argv);
 gboolean   gtk_init_check        (int	       *argc,
 				  char	     ***argv);
+#ifdef G_OS_WIN32
+
+void	 gtk_init_abi_check       (int	  *argc,
+				   char	***argv,
+				   size_t  sizeof_GtkWindow);
+gboolean gtk_init_check_abi_check (int	  *argc,
+				   char	***argv,
+				   size_t  sizeof_GtkWindow);
+
+#define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, sizeof (GtkWindow))
+#define gtk_init_check(argc, argv) gtk_init_check_abi_check (argc, argv, sizeof (GtkWindow))
+
+#endif
+
 void	   gtk_exit		 (gint		error_code);
 gchar*	   gtk_set_locale	 (void);
 gint	   gtk_events_pending	 (void);

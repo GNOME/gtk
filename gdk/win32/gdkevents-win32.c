@@ -101,9 +101,11 @@ static gboolean  gdk_event_translate	(GdkEvent *event,
 					 gint     *ret_valp);
 static gboolean  gdk_event_prepare      (gpointer  source_data, 
 				 	 GTimeVal *current_time,
-					 gint     *timeout);
+					 gint     *timeout,
+					 gpointer  user_data);
 static gboolean  gdk_event_check        (gpointer  source_data,
-				 	 GTimeVal *current_time);
+				 	 GTimeVal *current_time,
+					 gpointer  user_data);
 static gboolean  gdk_event_dispatch     (gpointer  source_data,
 					 GTimeVal *current_time,
 					 gpointer  user_data);
@@ -156,11 +158,11 @@ static PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
 
 static gboolean use_IME_COMPOSITION = FALSE;
 
-LRESULT CALLBACK 
-gdk_WindowProc (HWND hWnd,
-		UINT message,
-		WPARAM wParam,
-		LPARAM lParam)
+static LRESULT 
+inner_window_proc (HWND hWnd,
+		   UINT message,
+		   WPARAM wParam,
+		   LPARAM lParam)
 {
   GdkEventPrivate event;
   GdkEvent *eventp;
@@ -169,9 +171,6 @@ gdk_WindowProc (HWND hWnd,
   LRESULT lres;
   gint ret_val;
   gboolean ret_val_flag;
-
-  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: %#x %s\n",
-			     hWnd, gdk_win32_message_name (message)));
 
   msg.hwnd = hWnd;
   msg.message = message;
@@ -279,17 +278,31 @@ gdk_WindowProc (HWND hWnd,
     }
 }
 
+LRESULT CALLBACK 
+gdk_WindowProc (HWND hWnd,
+		UINT message,
+		WPARAM wParam,
+		LPARAM lParam)
+{
+  LRESULT retval;
+  gint tid = GetCurrentThreadId ();
+
+  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x %s\n",
+			     tid, hWnd, gdk_win32_message_name (message)));
+
+  retval = inner_window_proc (hWnd, message, wParam, lParam);
+
+  GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x returns %d\n",
+			     tid, hWnd, retval));
+  return retval;
+}
+
 void 
 gdk_events_init (void)
 {
   HRESULT hres;
   HMODULE user32, imm32;
   HINSTANCE commctrl32;
-
-  if (g_pipe_readable_msg == 0)
-    g_pipe_readable_msg = RegisterWindowMessage ("g-pipe-readable");
-  GDK_NOTE (EVENTS, g_print ("g-pipe-readable = %#.03x\n",
-			     g_pipe_readable_msg));
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
   GDK_NOTE (EVENTS, g_print ("gdk-ping = %#.03x\n",
@@ -3363,24 +3376,58 @@ gdk_event_translate (GdkEvent *event,
 	case '9':
 	  if (!is_AltGr_key && (GetKeyState (VK_CONTROL) < 0
 				|| GetKeyState (VK_MENU) < 0))
-	    /* Control- or Alt-digits won't come in as a WM_CHAR,
-	     * but beware of AltGr-digits, which are used for instance
-	     * on Finnish keyboards.
+	    /* Control- or Alt- digits won't come in as a WM_CHAR, but
+	     * beware of AltGr-digits, which are used for instance on
+	     * Finnish keyboards.
 	     */
 	    event->key.keyval = GDK_0 + (xevent->wParam - '0');
 	  else
 	    ignore_WM_CHAR = FALSE;
 	  break;
 	case VK_OEM_PLUS:	/* On my Win98, the '+' key comes in
-				 * as VK_OEM_PLUS
+				 * as VK_OEM_PLUS, etc
 				 */
+	case VK_OEM_COMMA:
+	case VK_OEM_MINUS:
+	case VK_OEM_PERIOD:
+	case VK_OEM_2:
+	case VK_OEM_4:
+	case VK_OEM_5:
+	case VK_OEM_6:
 	  if (!is_AltGr_key && (GetKeyState (VK_CONTROL) < 0
 				|| GetKeyState (VK_MENU) < 0))
-	    /* Control- or Alt-plus won't come in as WM_CHAR,
-	     * but beware of AltGr-plus which is backslash on
-	     * Finnish keyboards
+	    /* Control- or Alt- plus, comma, minus or period won't
+	     * come in as WM_CHAR, but beware of AltGr-plus which is
+	     * backslash on Finnish keyboards
 	     */
-	    event->key.keyval = '+';
+	    /* All these VK_OEM keycodes are the corresponding ASCII
+	     * char + 0x90
+	     */
+	    event->key.keyval = xevent->wParam - 0x90;
+	  else
+	    ignore_WM_CHAR = FALSE;
+	  break;
+	case VK_OEM_1:
+	  if (!is_AltGr_key && (GetKeyState (VK_CONTROL) < 0
+				|| GetKeyState (VK_MENU) < 0))
+	    /* ;: on US keyboard */
+	    event->key.keyval = ';';
+	  else
+	    ignore_WM_CHAR = FALSE;
+	  break;
+	case VK_OEM_3:
+	  if (!is_AltGr_key && (GetKeyState (VK_CONTROL) < 0
+				|| GetKeyState (VK_MENU) < 0))
+	    /* `~ on US keyboard */
+	    event->key.keyval = '`';
+	  else
+	    ignore_WM_CHAR = FALSE;
+	  break;
+	case VK_OEM_7:
+	  if (!is_AltGr_key && (GetKeyState (VK_CONTROL) < 0
+				|| GetKeyState (VK_MENU) < 0))
+	    /* '" on US keyboard */
+	    event->key.keyval = '\'';
 	  else
 	    ignore_WM_CHAR = FALSE;
 	  break;
@@ -4326,16 +4373,6 @@ gdk_events_queue (void)
 	  || (paimmmpo->lpVtbl->OnTranslateMessage) (paimmmpo, &msg) != S_OK)
 	TranslateMessage (&msg);
 
-      if (msg.message == g_pipe_readable_msg)
-	{
-	  GDK_NOTE (EVENTS, g_print ("g_pipe_readable_msg: %d %d\n",
-				     msg.wParam, msg.lParam));
-
-	  g_io_channel_win32_pipe_readable (msg.wParam, msg.lParam);
-
-	  continue;
-	}
-      
       DispatchMessage (&msg);
     }
 }
@@ -4343,7 +4380,8 @@ gdk_events_queue (void)
 static gboolean  
 gdk_event_prepare (gpointer  source_data, 
 		   GTimeVal *current_time,
-		   gint     *timeout)
+		   gint     *timeout,
+		   gpointer  user_data)
 {
   MSG msg;
   gboolean retval;
@@ -4362,7 +4400,8 @@ gdk_event_prepare (gpointer  source_data,
 
 static gboolean  
 gdk_event_check (gpointer  source_data,
-		 GTimeVal *current_time)
+		 GTimeVal *current_time,
+		 gpointer  user_data)
 {
   MSG msg;
   gboolean retval;
