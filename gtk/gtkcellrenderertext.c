@@ -1253,7 +1253,7 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 
 static void
 gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
-			       GdkWindow            *window,
+			       GdkDrawable          *window,
 			       GtkWidget            *widget,
 			       GdkRectangle         *background_area,
 			       GdkRectangle         *cell_area,

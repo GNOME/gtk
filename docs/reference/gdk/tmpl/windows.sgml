@@ -416,6 +416,24 @@ Deprecated equivalent of g_object_unref()
 @window: 
 
 
+<!-- ##### FUNCTION gdk_window_set_keep_above ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gdk_window_set_keep_below ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
 <!-- ##### FUNCTION gdk_window_move ##### -->
 <para>
 

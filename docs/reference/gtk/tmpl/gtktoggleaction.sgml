@@ -48,10 +48,33 @@ private members and should not be accessed directly.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_toggle_action_set_draw_as_radio ##### -->
+<para>
+
+</para>
+
+@action: 
+@draw_as_radio: 
+
+
+<!-- ##### FUNCTION gtk_toggle_action_get_draw_as_radio ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
 <!-- ##### SIGNAL GtkToggleAction::toggled ##### -->
 <para>
 
 </para>
 
 @toggleaction: the object which received the signal.
+
+<!-- ##### ARG GtkToggleAction:draw-as-radio ##### -->
+<para>
+
+</para>
 

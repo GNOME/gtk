@@ -31,3 +31,13 @@ Creates a new #GtkEventBox.
 @Returns: a new #GtkEventBox.
 
 
+<!-- ##### ARG GtkEventBox:above-child ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEventBox:visible-window ##### -->
+<para>
+
+</para>
+

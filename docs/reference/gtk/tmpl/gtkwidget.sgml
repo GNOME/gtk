@@ -39,6 +39,7 @@ gtk_widget_style_get_valist() to obtain the value of a style property.
 @allocation: The widgets allocated size.
 @window: The widgets window or its parent window if it does not have a window. (Which 
  will be indicated by the #GTK_NO_WINDOW flag being set).
+@parent: 
 
 <!-- ##### STRUCT GtkWidgetClass ##### -->
 <para>
@@ -128,6 +129,7 @@ Tells about certain properties of the widget.
 @GTK_DOUBLE_BUFFERED: 
         Set and unset by gtk_widget_set_double_buffered().
         Indicates that exposes done on the widget should be double-buffered.
+@GTK_NO_SHOW_ALL: 
 
 <!-- ##### MACRO GTK_WIDGET_TYPE ##### -->
 <para>
@@ -1610,6 +1612,24 @@ This function is deprecated; it does nothing.
 @widget: 
 
 
+<!-- ##### FUNCTION gtk_widget_set_no_show_all ##### -->
+<para>
+
+</para>
+
+@widget: 
+@no_show_all: 
+
+
+<!-- ##### FUNCTION gtk_widget_get_no_show_all ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_requisition_copy ##### -->
 <para>
 
@@ -2218,6 +2238,11 @@ a widget changes from un-anchored to anchored or vice-versa.
 </para>
 
 <!-- ##### ARG GtkWidget:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWidget:no-show-all ##### -->
 <para>
 
 </para>

@@ -86,7 +86,7 @@ struct _GtkCellRendererClass
 				      gint                 *width,
 				      gint                 *height);
   void             (* render)        (GtkCellRenderer      *cell,
-				      GdkWindow            *window,
+				      GdkDrawable          *window,
 				      GtkWidget            *widget,
 				      GdkRectangle         *background_area,
 				      GdkRectangle         *cell_area,

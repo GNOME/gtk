@@ -127,6 +127,22 @@ and should not be accessed directly.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_action_connect_accelerator ##### -->
+<para>
+
+</para>
+
+@action: 
+
+
+<!-- ##### FUNCTION gtk_action_disconnect_accelerator ##### -->
+<para>
+
+</para>
+
+@action: 
+
+
 <!-- ##### FUNCTION gtk_action_block_activate_from ##### -->
 <para>
 
@@ -154,12 +170,37 @@ and should not be accessed directly.
 @accel_path: 
 
 
+<!-- ##### FUNCTION gtk_action_set_accel_group ##### -->
+<para>
+
+</para>
+
+@action: 
+@accel_group: 
+
+
 <!-- ##### SIGNAL GtkAction::activate ##### -->
 <para>
 
 </para>
 
 @action: the object which received the signal.
+
+<!-- ##### SIGNAL GtkAction::connect-proxy ##### -->
+<para>
+
+</para>
+
+@action: the object which received the signal.
+@widget: 
+
+<!-- ##### SIGNAL GtkAction::disconnect-proxy ##### -->
+<para>
+
+</para>
+
+@action: the object which received the signal.
+@widget: 
 
 <!-- ##### ARG GtkAction:is-important ##### -->
 <para>

@@ -1411,6 +1411,13 @@ produce superscript and subscript.
 @user_data: 
 @Returns: 
 
+<!-- ##### SIGNAL GtkUIManager::changed ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+
 <!-- ##### ARG GtkVScale:adjustment ##### -->
 <para>
 the #GtkAdjustment which sets the range of the scale.

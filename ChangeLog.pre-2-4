@@ -1,3 +1,13 @@
+2003-09-30  Murray Cumming  <murrayc@usa.net>
+ 
+ 	* gtk/gtkcellrenderer.h: The render vfunc takes a GdkDrawable*
+ 	instead of a GdkWindow*, because that what it is given. The 
+ 	documentation was already correct. This should cause no API/ABI
+ 	breakage with C compilers.
+ 	* gtk/gtkcellrenderertext.c, gtkcellrendererpixbuf.c, 
+ 	gtkcellrenderertogger.c: Updated the declarations of the render vfunc
+ 	implementation accordingly.
+
 2003-09-30  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkkeys.c (gdk_keymap_class_init): Document the

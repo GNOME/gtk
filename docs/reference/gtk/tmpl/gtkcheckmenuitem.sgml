@@ -147,6 +147,11 @@ field of the #GtkCheckMenuItem-struct struct to discover the new state.
 
 </para>
 
+<!-- ##### ARG GtkCheckMenuItem:draw-as-radio ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCheckMenuItem:inconsistent ##### -->
 <para>
 

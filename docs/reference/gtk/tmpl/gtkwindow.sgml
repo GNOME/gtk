@@ -420,6 +420,24 @@ Deprecated alias for gtk_window_set_position().
 @window: 
 
 
+<!-- ##### FUNCTION gtk_window_set_keep_above ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_window_set_keep_below ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_window_begin_resize_drag ##### -->
 <para>
 
