@@ -1228,6 +1228,8 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   gint did_recurse = FALSE;
   gint possible_count = 0;
   gint selection_index = -1;
+  gint file_list_width;
+  gint dir_list_width;
   
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
@@ -1257,6 +1259,12 @@ gtk_file_selection_populate (GtkFileSelection *fs,
   text[0] = "../";
   row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
 
+  /*reset the max widths of the lists*/
+  dir_list_width = gdk_string_width(fs->dir_list->style->font,"../");
+  gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,dir_list_width);
+  file_list_width = 1;
+  gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,file_list_width);
+
   while (poss)
     {
       if (cmpl_is_a_completion (poss))
@@ -1272,12 +1280,28 @@ gtk_file_selection_populate (GtkFileSelection *fs,
               if (strcmp (filename, "./") != 0 &&
                   strcmp (filename, "../") != 0)
 		{
+		  int width = gdk_string_width(fs->dir_list->style->font,
+					       filename);
 		  row = gtk_clist_append (GTK_CLIST (fs->dir_list), text);
+		  if(width > dir_list_width)
+		    {
+		      dir_list_width = width;
+		      gtk_clist_set_column_width(GTK_CLIST(fs->dir_list),0,
+						 width);
+		    }
  		}
 	    }
           else
 	    {
+	      int width = gdk_string_width(fs->file_list->style->font,
+				           filename);
 	      row = gtk_clist_append (GTK_CLIST (fs->file_list), text);
+	      if(width > file_list_width)
+	        {
+	          file_list_width = width;
+	          gtk_clist_set_column_width(GTK_CLIST(fs->file_list),0,
+					     width);
+	        }
             }
 	}
 

@@ -1,3 +1,9 @@
+Fri Mar 13 01:17:44 1998  George Lebl  <jirka@5z.com>
+
+	* gtk/gtkfilesel.c: Set the column width of the clists
+	  to the longest string length so that the bottom scrollbar
+	  appears when you get some long files in the list
+
 1998-03-12  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* docs/gtk_tut.sgml: fix one missing quote.
