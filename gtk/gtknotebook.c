@@ -2884,7 +2884,12 @@ gtk_notebook_update_labels (GtkNotebook *notebook,
       if (notebook->show_tabs && page->default_tab)
 	gtk_label_set (GTK_LABEL (page->tab_label), string);
       if (notebook->menu && page->default_menu)
-	gtk_label_set (GTK_LABEL (page->menu_label), string);
+	{
+	  if (GTK_IS_LABEL (page->tab_label))
+	    gtk_label_set (GTK_LABEL (page->menu_label), GTK_LABEL (page->tab_label)->label);
+	  else
+	    gtk_label_set (GTK_LABEL (page->menu_label), string);
+	}
       page_num++;
     }  
 }
@@ -2902,8 +2907,8 @@ gtk_notebook_menu_item_create (GtkNotebook     *notebook,
 	page->menu_label = gtk_label_new (GTK_LABEL (page->tab_label)->label);
       else
 	page->menu_label = gtk_label_new ("");
-      gtk_widget_show (page->menu_label);
     }
+  gtk_widget_show (page->menu_label);
   menu_item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_menu_insert (GTK_MENU (notebook->menu), menu_item, position);
