@@ -180,8 +180,8 @@ enum
       g_print ("Row &percnt;d: (&percnt;s,&percnt;d)\n", row_count, str_data, int_data);
       g_free (str_data);
 
-      row_count ++;
-      valid = gtk_tree_model_iter_next (model, &amp;iter))
+      row_count++;
+      valid = gtk_tree_model_iter_next (model, &amp;iter);
     }
 }
 </programlisting>
