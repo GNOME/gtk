@@ -1117,20 +1117,7 @@ set_para_values (GtkTextLayout      *layout,
   display->left_margin = style->left_margin;
   display->right_margin = style->right_margin;
   
-  if (style->indent < 0)
-    {
-      /* This means the margins can be negative. FIXME
-       * test that things work if they are.
-       */
-      
-      if (pango_align == PANGO_ALIGN_LEFT)
-        display->left_margin += style->indent;
-      else if (pango_align == PANGO_ALIGN_RIGHT)
-        display->right_margin += style->indent;
-    }
-  
   display->x_offset = display->left_margin;
-
 
   pango_layout_set_indent (display->layout,
                            style->indent * PANGO_SCALE);
