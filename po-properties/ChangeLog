@@ -1,5 +1,10 @@
 2004-02-20  Christian Rose  <menthos@menthos.com>
 
+	* en_CA.po: Added Canadian English translation by
+	Adam Weinberger <adamw@FreeBSD.org>.
+
+2004-02-20  Christian Rose  <menthos@menthos.com>
+
 	* sv.po: Updated Swedish translation.
 
 2004-02-20  Miloslav Trmac  <mitr@volny.cz>
