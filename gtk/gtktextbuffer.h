@@ -81,10 +81,22 @@ struct _GtkTextBufferClass
                             const gchar *text,
                             gint length);
 
+  void (* insert_pixbuf)   (GtkTextBuffer *buffer,
+                            GtkTextIter   *pos,
+                            GdkPixbuf     *pixbuf);
 
-  void (* delete_text)     (GtkTextBuffer *buffer,
-                            GtkTextIter *start,
-                            GtkTextIter *end);
+#if 0
+  /* FIXME To do this, first have to implement the sequence
+   * gtk_text_child_anchor_new(); gtk_text_buffer_insert_child_anchor();
+   */
+  void (* insert_child_anchor)   (GtkTextBuffer *buffer,
+                                  GtkTextIter   *pos,
+                                  GtkTextChildAnchor *anchor);
+#endif
+  
+  void (* delete_range)     (GtkTextBuffer *buffer,
+                             GtkTextIter   *start,
+                             GtkTextIter   *end);
 
   /* Only for text/widgets/pixbuf changed, marks/tags don't cause this
    * to be emitted

@@ -759,16 +759,16 @@ gtk_progress_bar_paint (GtkProgress *progress)
 	    2 * widget->style->xthickness - 3;
 	  rect.height = widget->allocation.height -
 	    2 * widget->style->ythickness - 3;
+      
+          gtk_paint_layout (widget->style,
+                            progress->offscreen_pixmap,
+                            GTK_WIDGET_STATE (widget),
+                            &rect,
+                            widget,
+                            "progressbar",
+                            x, y,
+                            layout);
 
-	  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
-				     &rect);
-
-	  gdk_draw_layout (progress->offscreen_pixmap, 
-			   widget->style->fg_gc[widget->state],
-			   x, y, layout);
-
-	  gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state],
-				     NULL);
           g_object_unref (G_OBJECT (layout));
 	  g_free (buf);
  	}

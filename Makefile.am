@@ -3,8 +3,6 @@
 SRC_SUBDIRS = gdk-pixbuf gdk modules gtk demos contrib
 SUBDIRS = po $(SRC_SUBDIRS) docs build
 
-bin_SCRIPTS = gtk-config-2.0
-
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
 
@@ -117,8 +115,26 @@ EXTRA_DIST =			\
 	examples/spinbutton/Makefile  \
 	examples/find-examples.sh
 
+GDKTARGET=@gdktarget@
+
+## Copy .pc files to target-specific names
+gtk+-$(GDKTARGET)-2.0.pc: gtk+-2.0.pc
+	/bin/rm -f gtk+-$(GDKTARGET)-2.0.pc && \
+	/bin/cp gtk+-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+
+gdk-$(GDKTARGET)-2.0.pc: gdk-2.0.pc
+	/bin/rm -f gdk-$(GDKTARGET)-2.0.pc && \
+	/bin/cp gdk-2.0.pc gdk-$(GDKTARGET)-2.0.pc
+
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-2.0.pc gtk+-2.0.pc
+pkgconfig_DATA= gdk-pixbuf-2.0.pc gdk-$(GDKTARGET)-2.0.pc gtk+-$(GDKTARGET)-2.0.pc
+
+## symlink gdk-2.0.pc and gtk+-2.0.pc to default target for the platform 
+DEFAULT_GDKTARGET=x11
+install-data-local:
+	(cd $(DESTDIR)$(pkgconfigdir) && \
+	 $(LN_S) -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
+         $(LN_S) -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc)
 
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \

@@ -7,10 +7,12 @@ AC_INIT(gdk/gdktypes.h)
 # GLIB_CFLAGS:  cflags for compiling libraries and example progs
 # GLIB_LIBS:    libraries for linking example programs
 # GLIB_DEPLIBS: libraries for linking libraries against
-# glib_cflags:  cflags to store in gtk-config
-# glib_libs:    libs to store in gtk-config
-# glib_thread_cflags: cflags to store in gtk-config for gtk-config gthread
-# glib_thread_libs:   libs to store in gtk-config for gtk-config gthread
+
+
+## We could have pkg-config uniquify the ldflags and cflags by calling
+## it once with both the GLib and Pango package names, but we don't,
+## someone should fix that.
+
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
@@ -280,44 +282,53 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
     CFLAGS="$gtk_save_CFLAGS"
     AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
+
+#
+# Find pkg-config
+#
+AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+if test x$PKG_CONFIG = xno ; then
+  AC_MSG_ERROR([*** pkg-config not found. See http://pkgconfig.sourceforge.net])
+fi
+
+if ! pkg-config --atleast-pkgconfig-version 0.5 ; then
+  AC_MSG_ERROR([*** pkg-config too old; version 0.5 or better required.])
+fi
+
 if test x$with_glib = xyes ; then
   AC_MSG_ERROR([
 *** Directory must be specified for --with-glib])
 fi
 
 if test x$with_glib = x ; then 
+
   # Look for separately installed glib
 
-  AM_PATH_GLIB_2_0(1.3.1,,
-    AC_MSG_ERROR([
-*** GLIB 1.3.1 or better is required. The latest version of GLIB
-*** is always available from ftp://ftp.gtk.org/.]),
-    gobject gmodule gthread)
+  GLIB_PACKAGES="gobject-2.0 gmodule-2.0 gthread-2.0"
+  GLIB_REQUIRED_VERSION=1.3.2
 
-  # we do not want to make all gtk progs to link to thread libraries.
-  glib_cflags=`$GLIB_CONFIG_2_0 glib gobject gmodule --cflags`
-  glib_thread_cflags="$GLIB_CFLAGS"
-  glib_libs=`$GLIB_CONFIG_2_0 glib gobject gmodule --libs`
-  glib_thread_libs="$GLIB_LIBS"
-  GLIB_LIBS="$glib_libs"
-  GLIB_DEPLIBS="$glib_libs"
+  AC_MSG_CHECKING(GLib flags)
+  if $PKG_CONFIG --atleast-version $GLIB_REQUIRED_VERSION glib-2.0 ; then
+        GLIB_CFLAGS=`$PKG_CONFIG --cflags $GLIB_PACKAGES`
+        GLIB_LIBS=`$PKG_CONFIG --libs $GLIB_PACKAGES`
+        GLIB_DEPLIBS=$GLIB_LIBS
+
+        AC_MSG_RESULT($GLIB_CFLAGS $GLIB_LIBS)
+  else
+        AC_MSG_ERROR([
+*** GLIB $GLIB_REQUIRED_VERSION or newer is required. The latest version of GLIB
+*** is always available from ftp://ftp.gtk.org/.
+  ])
+  fi
+
 else
   # Use uninstalled glib (assume they got the version right)
 
-  GLIB_CONFIG_2_0=$with_glib/glib-config-2.0
-  if test -x $GLIB_CONFIG_2_0 ; then 
+  if test -e glib-2.0.pc ; then
     :
   else
     AC_MSG_ERROR([GLIB directory ($with_glib) not present or not configured])
   fi
-
-  # For use in gtk-config
-  glib_cflags=`$GLIB_CONFIG_2_0 --cflags gmodule`
-  glib_thread_cflags=`$GLIB_CONFIG_2_0 --cflags gmodule gthread`
-  glib_libs=`$GLIB_CONFIG_2_0 --libs gmodule`
-  glib_thread_libs=`$GLIB_CONFIG_2_0 --libs gmodule gthread`
-
-  glib_release=`$GLIB_CONFIG_2_0 --version | sed 's%\\.[[0-9]]*$%%'`
 
   # canonicalize relative paths
   case $with_glib in 
@@ -332,15 +343,11 @@ else
   GLIB_CFLAGS="-I$glib_dir -I$glib_dir/gmodule"
   GLIB_LIBS="$glib_dir/libglib-1.3.la $glib_dir/gmodule/libgmodule-1.3.la"
   GLIB_DEPLIBS=
-
-  AC_SUBST(GLIB_CFLAGS)
-  AC_SUBST(GLIB_LIBS)
 fi
 
-AC_SUBST(glib_cflags)
-AC_SUBST(glib_libs)
-AC_SUBST(glib_thread_cflags)
-AC_SUBST(glib_thread_libs)
+CFLAGS="$CFLAGS $GLIB_CFLAGS"
+AC_SUBST(GLIB_CFLAGS)
+AC_SUBST(GLIB_LIBS)
 AC_SUBST(GLIB_DEPLIBS)
 
 AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
@@ -410,7 +417,7 @@ if test "x$gdktarget" = "xx11"; then
   FREETYPE_CFLAGS=
   have_freetype=false
   AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
-  if test "x$FREE_CONFIG" != "xno" ; then
+  if test "x$FREETYPE_CONFIG" != "xno" ; then
     FREETYPE_CFLAGS=`freetype-config --cflags`
     FREETYPE_LIBS=`freetype-config --libs`
 
@@ -593,32 +600,46 @@ AC_SUBST(FREETYPE_LIBS)
 AC_SUBST(FREETYPE_CFLAGS)
 
 #
-# Check for Pango
+# Pick correct Pango packages to use
 #
-AC_PATH_PROG(PANGO_CONFIG, pango-config, no)
-if test x$PANGO_CONFIG = xno ; then
-  AC_MSG_ERROR([*** pango-config not found])
-fi
 
 if test "x$gdktarget" = "xx11"; then
-	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangox`"
-	PANGO_LIBS="`$PANGO_CONFIG --libs pangox`"
 	if $have_xft = true ; then
-            PANGO_LIBS="$PANGO_LIBS -lpangoxft"
+            PANGO_PACKAGES="pangox pangoxft"
+        else
+            PANGO_PACKAGES=pangox
         fi
 elif test "x$gdktarget" = "xlinux-fb"; then
-	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pangoft2`"
-	PANGO_LIBS="`$PANGO_CONFIG --libs pangoft2`"
+        PANGO_PACKAGES=pangoft2
 else
-	PANGO_CFLAGS="`$PANGO_CONFIG --cflags pango`"
-	PANGO_LIBS="`$PANGO_CONFIG --libs pango`"
+        PANGO_PACKAGES=pango
 fi
+
+AC_SUBST(PANGO_PACKAGES)
+
+# Check for Pango flags
+
+AC_MSG_CHECKING(Pango flags)
+if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
+        PANGO_CFLAGS=`$PKG_CONFIG --cflags $PANGO_PACKAGES`
+        PANGO_LIBS=`$PKG_CONFIG --libs $PANGO_PACKAGES`
+
+        AC_MSG_RESULT($PANGO_CFLAGS $PANGO_LIBS)
+else
+        AC_MSG_ERROR([
+*** Pango not found. Pango is required to build GTK+.
+*** See http://www.pango.org for Pango information.
+*** For the framebuffer target, you will need to build 
+*** Pango with freetype support.
+])
+fi
+
 CFLAGS="$CFLAGS $PANGO_CFLAGS"
 AC_SUBST(PANGO_LIBS)
 AC_SUBST(PANGO_CFLAGS)
 
 AC_CHECK_LIB(pango, pango_context_new, :, AC_MSG_ERROR([
-*** Pango not found. Pango is required to build
+*** Can't link to Pango. Pango is required to build
 *** GTK+. For more information see http://www.pango.org]), $PANGO_LIBS $x_ldflags $x_libs)
 
 CFLAGS="$saved_cflags"
@@ -794,10 +815,6 @@ fi
 
 if $dynworks; then
    AC_DEFINE(USE_GMODULE)
-   GMODULE_LIBS="`$GLIB_CONFIG_2_0 --libs gmodule`"
-   GMODULE_FLAGS="`$GLIB_CONFIG_2_0 --cflags gmodule`"
-   AC_SUBST(GMODULE_LIBS)
-   AC_SUBST(GMODULE_FLAGS)
    AC_MSG_RESULT(yes)
 else
    AC_MSG_RESULT(no)
@@ -1086,7 +1103,6 @@ AC_OUTPUT([
 gtk+.spec
 docs/gtk-config.1
 Makefile
-gtk-config-2.0
 gdk-pixbuf-2.0.pc
 gdk-2.0.pc
 gtk+-2.0.pc

@@ -288,19 +288,15 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	       misc->yalign) + 1.5;
 	  
 	  layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
-	  
-	  if (GTK_WIDGET_STATE (accel_label) == GTK_STATE_INSENSITIVE)
-	    gdk_draw_layout (widget->window,
-			     widget->style->white_gc,
-			     x + 1,
-			     y + 1,
-			     layout);
-	  
-	  gdk_draw_layout (widget->window,
-			   widget->style->fg_gc[GTK_WIDGET_STATE (accel_label)],
-			   x,
-			   y,
-			   layout);
+
+          gtk_paint_layout (widget->style,
+                            widget->window,
+                            GTK_WIDGET_STATE (widget),
+                            &event->area,
+                            widget,
+                            "accellabel",
+                            x, y,
+                            layout);                            
 
           g_object_unref (G_OBJECT (layout));
 	}

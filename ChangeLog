@@ -1,3 +1,97 @@
+2001-01-03  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextbtree.c: Adapt to uscore-ification of gtktextiterprivate
+
+	* gtk/gtktextdisplay.c (gtk_text_layout_draw): remove use 
+	of private functions; remove inclusion of private headers.
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_iter_at_line): Add this 
+	function, so we don't need private functions in gtktextdisplay.c
+
+	* gtk/gtktextiterprivate.h: underscore-ification
+
+	* gtk/gtkwidget.c: Clean up a bunch of docs that said "INTERNAL"
+	to instead say "only useful to implement widgets"
+
+	* gtk/gtkenums.h (GtkMovementStep): Rename GTK_MOVEMENT_CHARS,
+	GTK_MOVEMENT_POSITIONS to GTK_MOVEMENT_LOGICAL_POSITIONS,
+	GTK_MOVEMENT_VISUAL_POSITIONS. Resolves bug 40249.
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_set_colormap):
+	This function was completely broken
+
+	* gtk/testtext.c (line_numbers_expose): use gtk_paint_layout
+
+	* gtk/gtkvscale.c (gtk_vscale_draw_value): use gtk_paint_layout
+
+	* gtk/gtkvruler.c (gtk_vruler_draw_ticks): use gtk_paint_layout
+
+	* gtk/gtklabel.c (gtk_label_expose): use gtk_paint_layout
+
+	* gtk/gtkhscale.c (gtk_hscale_draw_value): use gtk_paint_layout
+
+	* gtk/gtkhruler.c (gtk_hruler_draw_ticks): use gtk_paint_layout
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): use
+	gtk_paint_layout
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): use
+	gtk_paint_layout
+
+	* gtk/gtkstyle.h: Add draw/paint expander to draw tree expanders.
+	Progress on bug 40103. Add draw_layout to draw a PangoLayout.
+	(struct _GtkStyleClass): Remove draw_cross, draw_oval, draw_ramp,
+	which were not implemented.	
+
+	* gtk/gtktextbuffer.h (struct _GtkTextBufferClass): Add
+	insert_pixbuf signal. Rename delete_text to delete_range since it
+	also deletes pixbufs and child anchors. This almost closes bug
+	40245 (still need to deal with child anchors)
+
+	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): Add
+	insert_pixbuf, change signal names as appropriate, change types of
+	signals taking marks/tags to have the specific type, not just
+	G_TYPE_OBJECT
+	
+	* gtk/gtkmain.c (gtk_get_current_event_state): Add this function; 
+	closes bug 40051
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_set_history): clean up
+	unnecessary remove_contents() call
+	(gtk_option_menu_class_init): add a "changed" signal, closes
+	bug 40039
+	(gtk_option_menu_update_contents): emit "changed" if the 
+	active menu item changes
+
+	* gtk/gdk-pixbuf-loader.c (gdk_pixbuf_loader_frame_done): fix bad
+	cast to GtkObject, reported by Jonas Borgstrom
+	(gdk_pixbuf_loader_finalize): don't close the loader on finalize;
+	we can't do stuff with side effects in finalize. Instead, spew a
+	warning if the loader isn't closed.
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_drawable_impl_x11_finalize): free
+	colormap in here, non-X ports probably need to sync to this change
+
+	* gdk/x11/gdkdrawable-x11.c (gdk_x11_set_colormap): remove 
+	assertion that colormap != NULL, you can set the colormap to NULL
+	if you like.
+	
+	* Makefile.am: remove gtk-config-2.0
+
+	* configure.in: Use pkg-config to locate GLib. Remove
+	separated-out GMODULE_LIBS, GMODULE_CFLAGS; these were not used,
+	and the gmodule libs/cflags were in GLIB_LIBS GLIB_CFLAGS anyhow.
+	Use pkg-config to locate Pango. Output correct Pango libs to
+	gdk-2.0.pc.in. Fix test for FREETYPE_CONFIG (typo fix).
+
+	* Makefile.am (pkgconfig_DATA): install only target-specific pc
+	files
+	(install-data-local): symlink gtk+-2.0.pc and gdk-2.0.pc to the
+	X11 pc files
+
+	* gtk+-2.0.pc.in (Requires): require the GDK for the current target
+	unref from here
+
 2001-01-03  Alexander Larsson  <alla@lysator.liu.se>
 
 	* configure.in:

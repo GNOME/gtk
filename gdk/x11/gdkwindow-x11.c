@@ -210,20 +210,23 @@ gdk_window_impl_x11_set_colormap (GdkDrawable *drawable,
   GdkDrawableImplX11 *draw_impl;
   
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (drawable));
-  g_return_if_fail (gdk_colormap_get_visual (cmap) != gdk_drawable_get_visual (drawable));
 
   impl = GDK_WINDOW_IMPL_X11 (drawable);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 
-  GDK_DRAWABLE_GET_CLASS (draw_impl)->set_colormap (drawable, cmap);
-  
-  XSetWindowColormap (draw_impl->xdisplay,
-                      draw_impl->xid,
-                      GDK_COLORMAP_XCOLORMAP (cmap));
+  /* chain up */
+  GDK_DRAWABLE_CLASS (parent_class)->set_colormap (drawable, cmap);
 
-  if (((GdkWindowObject*)draw_impl->wrapper)->window_type !=
-      GDK_WINDOW_TOPLEVEL)
-    gdk_window_add_colormap_windows (GDK_WINDOW (draw_impl->wrapper));
+  if (cmap)
+    {
+      XSetWindowColormap (draw_impl->xdisplay,
+                          draw_impl->xid,
+                          GDK_COLORMAP_XCOLORMAP (cmap));
+      
+      if (((GdkWindowObject*)draw_impl->wrapper)->window_type !=
+          GDK_WINDOW_TOPLEVEL)
+        gdk_window_add_colormap_windows (GDK_WINDOW (draw_impl->wrapper));
+    }
 }
 
 

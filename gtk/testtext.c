@@ -2078,12 +2078,14 @@ line_numbers_expose (GtkWidget      *widget,
 
       pango_layout_set_text (layout, str, -1);
 
-
-      gdk_draw_layout (target,
-                       widget->style->fg_gc [widget->state],
-                       /* 2 is just a random padding */
-                       2, pos + 2,
-                       layout);
+      gtk_paint_layout (widget->style,
+                        target,
+                        GTK_WIDGET_STATE (widget),
+                        NULL,
+                        widget,
+                        NULL,
+                        2, pos + 2,
+                        layout);
 
       g_free (str);
       

@@ -261,9 +261,14 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	      pango_layout_set_text (layout, unit_str, -1);
 	      pango_layout_get_extents (layout, &logical_rect, NULL);
 
-	      gdk_draw_layout (ruler->backing_store, gc,
-			       pos + 2, ythickness + PANGO_PIXELS (logical_rect.y - digit_offset),
-			       layout);
+              gtk_paint_layout (widget->style,
+                                ruler->backing_store,
+                                GTK_WIDGET_STATE (widget),
+                                NULL,
+                                widget,
+                                "hruler",
+                                pos + 2, ythickness + PANGO_PIXELS (logical_rect.y - digit_offset),
+                                layout);
 	    }
 	}
     }

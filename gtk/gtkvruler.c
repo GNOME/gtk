@@ -256,11 +256,17 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 		{
 		  pango_layout_set_text (layout, unit_str + j, 1);
 		  pango_layout_get_extents (layout, NULL, &logical_rect);
-		  
-		  gdk_draw_layout (ruler->backing_store, gc,
-				   xthickness + 1,
-				   pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset),
-				   layout);
+
+      
+                  gtk_paint_layout (widget->style,
+                                    ruler->backing_store,
+                                    GTK_WIDGET_STATE (widget),
+                                    NULL,
+                                    widget,
+                                    "vruler",
+                                    xthickness + 1,
+                                    pos + digit_height * j + 2 + PANGO_PIXELS (logical_rect.y - digit_offset),
+                                    layout);
 		}
 	    }
 	}

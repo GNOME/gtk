@@ -721,12 +721,6 @@ gtk_label_expose (GtkWidget      *widget,
 	xalign = misc->xalign;
       else
 	xalign = 1. - misc->xalign;
-
-      /*
-       * GC Clipping
-       */
-      gdk_gc_set_clip_rectangle (widget->style->white_gc, &event->area);
-      gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], &event->area);
       
       x = floor (widget->allocation.x + (gint)misc->xpad
 		 + ((widget->allocation.width - widget->requisition.width) * xalign)
@@ -736,10 +730,15 @@ gtk_label_expose (GtkWidget      *widget,
 		 + ((widget->allocation.height - widget->requisition.height) * misc->yalign)
 		 + 0.5);
 
-      gdk_draw_layout (widget->window, widget->style->fg_gc [widget->state], x, y, label->layout);
       
-      gdk_gc_set_clip_rectangle (widget->style->white_gc, NULL);
-      gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], NULL);
+      gtk_paint_layout (widget->style,
+                        widget->window,
+                        GTK_WIDGET_STATE (widget),
+                        &event->area,
+                        widget,
+                        "label",
+                        x, y,
+                        label->layout);
     }
 
   return TRUE;

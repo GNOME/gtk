@@ -356,6 +356,11 @@ gboolean gtk_text_layout_move_iter_visually         (GtkTextLayout *layout,
 gboolean gtk_text_layout_iter_starts_line           (GtkTextLayout       *layout,
                                                      const GtkTextIter   *iter);
 
+void     gtk_text_layout_get_iter_at_line           (GtkTextLayout *layout,
+                                                     GtkTextIter    *iter,
+                                                     GtkTextLine    *line,
+                                                     gint            byte_offset);
+
 /* Don't use these. Use gtk_text_view_add_child_at_anchor().
  * These functions are defined in gtktextchild.c, but here
  * since they are semi-public and require GtkTextLayout to

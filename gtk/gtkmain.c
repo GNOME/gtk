@@ -1327,6 +1327,20 @@ gtk_get_current_event_time (void)
     return GDK_CURRENT_TIME;
 }
 
+gboolean
+gtk_get_current_event_state (GdkModifierType *state)
+{
+  g_return_val_if_fail (state != NULL, FALSE);
+  
+  if (current_events)
+    return gdk_event_get_state (current_events->data, state);
+  else
+    {
+      *state = 0;
+      return FALSE;
+    }
+}
+
 GtkWidget*
 gtk_get_event_widget (GdkEvent *event)
 {

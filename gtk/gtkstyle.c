@@ -141,17 +141,6 @@ static void gtk_default_draw_diamond    (GtkStyle        *style,
 					 gint             y,
 					 gint             width,
 					 gint             height);
-static void gtk_default_draw_oval       (GtkStyle        *style,
-					 GdkWindow       *window,
-					 GtkStateType     state_type,
-					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
-					 GtkWidget       *widget,
-					 const gchar     *detail,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
 static void gtk_default_draw_string     (GtkStyle        *style,
 					 GdkWindow       *window,
 					 GtkStateType     state_type,
@@ -201,29 +190,6 @@ static void gtk_default_draw_option     (GtkStyle        *style,
 					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
-static void gtk_default_draw_cross      (GtkStyle        *style,
-					 GdkWindow       *window,
-					 GtkStateType     state_type,
-					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
-					 GtkWidget       *widget,
-					 const gchar     *detail,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
-static void gtk_default_draw_ramp       (GtkStyle        *style,
-					 GdkWindow       *window,
-					 GtkStateType     state_type,
-					 GtkShadowType    shadow_type,
-					 GdkRectangle    *area,
-					 GtkWidget       *widget,
-					 const gchar     *detail,
-					 GtkArrowType     arrow_type,
 					 gint             x,
 					 gint             y,
 					 gint             width,
@@ -312,6 +278,24 @@ static void gtk_default_draw_handle     (GtkStyle        *style,
 					 gint             width,
 					 gint             height,
 					 GtkOrientation   orientation);
+static void gtk_default_draw_expander   (GtkStyle        *style,
+                                         GdkWindow       *window,
+                                         GtkStateType     state_type,
+                                         GdkRectangle    *area,
+                                         GtkWidget       *widget,
+                                         const gchar     *detail,
+                                         gint             x,
+                                         gint             y,
+                                         gboolean         is_open);
+static void gtk_default_draw_layout     (GtkStyle        *style,
+                                         GdkWindow       *window,
+                                         GtkStateType     state_type,
+                                         GdkRectangle    *area,
+                                         GtkWidget       *widget,
+                                         const gchar     *detail,
+                                         gint             x,
+                                         gint             y,
+                                         PangoLayout     *layout);
 
 static void gtk_style_shade (GdkColor *a, GdkColor *b, gdouble k);
 static void rgb_to_hls (gdouble *r, gdouble *g, gdouble *b);
@@ -465,14 +449,11 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_polygon = gtk_default_draw_polygon;
   klass->draw_arrow = gtk_default_draw_arrow;
   klass->draw_diamond = gtk_default_draw_diamond;
-  klass->draw_oval = gtk_default_draw_oval;
   klass->draw_string = gtk_default_draw_string;
   klass->draw_box = gtk_default_draw_box;
   klass->draw_flat_box = gtk_default_draw_flat_box;
   klass->draw_check = gtk_default_draw_check;
   klass->draw_option = gtk_default_draw_option;
-  klass->draw_cross = gtk_default_draw_cross;
-  klass->draw_ramp = gtk_default_draw_ramp;
   klass->draw_tab = gtk_default_draw_tab;
   klass->draw_shadow_gap = gtk_default_draw_shadow_gap;
   klass->draw_box_gap = gtk_default_draw_box_gap;
@@ -480,6 +461,8 @@ gtk_style_class_init (GtkStyleClass *klass)
   klass->draw_focus = gtk_default_draw_focus;
   klass->draw_slider = gtk_default_draw_slider;
   klass->draw_handle = gtk_default_draw_handle;
+  klass->draw_expander = gtk_default_draw_expander;
+  klass->draw_layout = gtk_default_draw_layout;
 }
 
 static void
@@ -803,22 +786,6 @@ gtk_draw_diamond (GtkStyle      *style,
 
 
 void
-gtk_draw_oval (GtkStyle      *style,
-               GdkWindow     *window,
-               GtkStateType   state_type,
-               GtkShadowType  shadow_type,
-               gint           x,
-               gint           y,
-               gint           width,
-               gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_oval != NULL);
-  
-  GTK_STYLE_GET_CLASS (style)->draw_oval (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
-}
-
-void
 gtk_draw_string (GtkStyle      *style,
                  GdkWindow     *window,
                  GtkStateType   state_type,
@@ -894,39 +861,6 @@ gtk_draw_option (GtkStyle      *style,
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_option != NULL);
   
   GTK_STYLE_GET_CLASS (style)->draw_option (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
-}
-
-void
-gtk_draw_cross (GtkStyle      *style,
-		GdkWindow     *window,
-		GtkStateType   state_type,
-		GtkShadowType  shadow_type,
-		gint           x,
-		gint           y,
-		gint           width,
-		gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_cross != NULL);
-  
-  GTK_STYLE_GET_CLASS (style)->draw_cross (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height);
-}
-
-void
-gtk_draw_ramp (GtkStyle      *style,
-	       GdkWindow     *window,
-	       GtkStateType   state_type,
-	       GtkShadowType  shadow_type,
-	       GtkArrowType   arrow_type,
-	       gint           x,
-	       gint           y,
-	       gint           width,
-	       gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_ramp != NULL);
-  
-  GTK_STYLE_GET_CLASS (style)->draw_ramp (style, window, state_type, shadow_type, NULL, NULL, NULL, arrow_type, x, y, width, height);
 }
 
 void
@@ -1046,6 +980,38 @@ gtk_draw_handle (GtkStyle      *style,
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_handle != NULL);
   
   GTK_STYLE_GET_CLASS (style)->draw_handle (style, window, state_type, shadow_type, NULL, NULL, NULL, x, y, width, height, orientation);
+}
+
+void
+gtk_draw_expander (GtkStyle        *style,
+                   GdkWindow       *window,
+                   GtkStateType     state_type,
+                   gint             x,
+                   gint             y,
+                   gboolean         is_open)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
+  
+  GTK_STYLE_GET_CLASS (style)->draw_expander (style, window, state_type,
+                                              NULL, NULL, NULL,
+                                              x, y, is_open);
+}
+
+void
+gtk_draw_layout (GtkStyle        *style,
+                 GdkWindow       *window,
+                 GtkStateType     state_type,
+                 gint             x,
+                 gint             y,
+                 PangoLayout     *layout)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
+  
+  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type,
+                                            NULL, NULL, NULL,
+                                            x, y, layout);
 }
 
 void
@@ -2362,25 +2328,6 @@ gtk_default_draw_diamond (GtkStyle      *style,
 }
 
 static void
-gtk_default_draw_oval (GtkStyle      *style,
-                       GdkWindow     *window,
-                       GtkStateType   state_type,
-                       GtkShadowType  shadow_type,
-                       GdkRectangle  *area,
-                       GtkWidget     *widget,
-                       const gchar   *detail,
-                       gint           x,
-                       gint           y,
-                       gint           width,
-                       gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-
-  g_warning ("gtk_default_draw_oval(): FIXME, this function is currently unimplemented");
-}
-
-static void
 gtk_default_draw_string (GtkStyle      *style,
                          GdkWindow     *window,
                          GtkStateType   state_type,
@@ -2548,45 +2495,6 @@ gtk_default_draw_option (GtkStyle      *style,
 {
   gtk_paint_diamond (style, window, state_type, shadow_type, area, widget, 
                      detail, x, y, width, height);
-}
-
-static void 
-gtk_default_draw_cross (GtkStyle      *style,
-			GdkWindow     *window,
-			GtkStateType   state_type,
-			GtkShadowType  shadow_type,
-			GdkRectangle  *area,
-			GtkWidget     *widget,
-			const gchar   *detail,
-			gint           x,
-			gint           y,
-			gint           width,
-			gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-
-  g_warning ("gtk_default_draw_cross(): FIXME, this function is currently unimplemented");
-}
-
-static void 
-gtk_default_draw_ramp    (GtkStyle      *style,
-                          GdkWindow     *window,
-                          GtkStateType   state_type,
-                          GtkShadowType  shadow_type,
-                          GdkRectangle  *area,
-                          GtkWidget     *widget,
-                          const gchar   *detail,
-                          GtkArrowType   arrow_type,
-                          gint           x,
-                          gint           y,
-                          gint           width,
-                          gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (window != NULL);
-
-  g_warning ("gtk_default_draw_ramp(): FIXME, this function is currently unimplemented");
 }
 
 static void
@@ -3457,6 +3365,97 @@ gtk_default_draw_handle (GtkStyle      *style,
 }
 
 static void
+gtk_default_draw_expander (GtkStyle        *style,
+                           GdkWindow       *window,
+                           GtkStateType     state_type,
+                           GdkRectangle    *area,
+                           GtkWidget       *widget,
+                           const gchar     *detail,
+                           gint             x,
+                           gint             y,
+                           gboolean         is_open)
+{
+  /* FIXME replace macro with a style property */
+#define PM_SIZE 8
+  
+  GdkPoint points[3];
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], area);
+      gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], area);
+    }
+
+  if (is_open)
+    {
+      points[0].x = x;
+      points[0].y = y + (PM_SIZE + 2) / 6;
+      points[1].x = points[0].x + 1 * (PM_SIZE + 2);
+      points[1].y = points[0].y;
+      points[2].x = (points[0].x + 1 * (PM_SIZE + 2) / 2);
+      points[2].y = y + 2 * (PM_SIZE + 2) / 3;
+    }
+  else
+    {
+      points[0].x = x + 1 * ((PM_SIZE + 2) / 6 + 2);
+      points[0].y = y - 1;
+      points[1].x = points[0].x;
+      points[1].y = points[0].y + (PM_SIZE + 2);
+      points[2].x = (points[0].x + 1 * (2 * (PM_SIZE + 2) / 3 - 1));
+      points[2].y = points[0].y + (PM_SIZE + 2) / 2;
+    }
+
+  gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
+                    TRUE, points, 3);
+  gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+                    FALSE, points, 3);
+  
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->fg_gc[GTK_STATE_NORMAL], NULL);
+      gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], NULL);
+    }
+  
+#undef PM_SIZE
+}
+
+static void
+gtk_default_draw_layout (GtkStyle        *style,
+                         GdkWindow       *window,
+                         GtkStateType     state_type,
+                         GdkRectangle    *area,
+                         GtkWidget       *widget,
+                         const gchar     *detail,
+                         gint             x,
+                         gint             y,
+                         PangoLayout     *layout)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (window != NULL);
+  
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->white_gc, area);
+      gdk_gc_set_clip_rectangle (style->fg_gc[state_type], area);
+    }
+
+  /* FIXME this is frickin' ugly with any kind of attributes set on the
+   * text being rendered
+   */
+  if (state_type == GTK_STATE_INSENSITIVE)
+    gdk_draw_layout (window, style->white_gc, x + 1, y + 1, layout);
+
+  gdk_draw_layout (window, style->fg_gc[state_type], x, y, layout);
+
+  if (area)
+    {
+      gdk_gc_set_clip_rectangle (style->white_gc, NULL);
+      gdk_gc_set_clip_rectangle (style->fg_gc[state_type], NULL);
+    }
+}
+
+static void
 gtk_style_shade (GdkColor *a,
                  GdkColor *b,
                  gdouble   k)
@@ -3752,25 +3751,6 @@ gtk_paint_diamond (GtkStyle      *style,
 }
 
 void
-gtk_paint_oval (GtkStyle      *style,
-                GdkWindow     *window,
-                GtkStateType   state_type,
-                GtkShadowType  shadow_type,
-                GdkRectangle  *area,
-                GtkWidget     *widget,
-                const gchar   *detail,
-                gint           x,
-                gint           y,
-                gint           width,
-                gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_oval != NULL);
-  
-  GTK_STYLE_GET_CLASS (style)->draw_oval (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-}
-
-void
 gtk_paint_string (GtkStyle      *style,
                   GdkWindow     *window,
                   GtkStateType   state_type,
@@ -3861,45 +3841,6 @@ gtk_paint_option (GtkStyle      *style,
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_option != NULL);
   
   GTK_STYLE_GET_CLASS (style)->draw_option (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-}
-
-void
-gtk_paint_cross (GtkStyle      *style,
-                 GdkWindow     *window,
-                 GtkStateType   state_type,
-                 GtkShadowType  shadow_type,
-                 GdkRectangle  *area,
-                 GtkWidget     *widget,
-                 const gchar   *detail,
-                 gint           x,
-                 gint           y,
-                 gint           width,
-                 gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_cross != NULL);
-  
-  GTK_STYLE_GET_CLASS (style)->draw_cross (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height);
-}
-
-void
-gtk_paint_ramp (GtkStyle      *style,
-                GdkWindow     *window,
-                GtkStateType   state_type,
-                GtkShadowType  shadow_type,
-                GdkRectangle  *area,
-                GtkWidget     *widget,
-                const gchar   *detail,
-                GtkArrowType   arrow_type,
-                gint           x,
-                gint           y,
-                gint           width,
-                gint           height)
-{
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_ramp != NULL);
-  
-  GTK_STYLE_GET_CLASS (style)->draw_ramp (style, window, state_type, shadow_type, area, widget, detail, arrow_type, x, y, width, height);
 }
 
 void
@@ -4042,3 +3983,41 @@ gtk_paint_handle (GtkStyle      *style,
   
   GTK_STYLE_GET_CLASS (style)->draw_handle (style, window, state_type, shadow_type, area, widget, detail, x, y, width, height, orientation);
 }
+
+void
+gtk_paint_expander (GtkStyle        *style,
+                    GdkWindow       *window,
+                    GtkStateType     state_type,
+                    GdkRectangle    *area,
+                    GtkWidget       *widget,
+                    const gchar     *detail,
+                    gint             x,
+                    gint             y,
+                    gboolean         is_open)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_expander != NULL);
+  
+  GTK_STYLE_GET_CLASS (style)->draw_expander (style, window, state_type, area,
+                                              widget, detail, x, y, is_open);
+}
+
+void
+gtk_paint_layout (GtkStyle        *style,
+                  GdkWindow       *window,
+                  GtkStateType     state_type,
+                  GdkRectangle    *area,
+                  GtkWidget       *widget,
+                  const gchar     *detail,
+                  gint             x,
+                  gint             y,
+                  PangoLayout     *layout)
+{
+  g_return_if_fail (GTK_IS_STYLE (style));
+  g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_layout != NULL);
+  
+  GTK_STYLE_GET_CLASS (style)->draw_layout (style, window, state_type, area,
+                                            widget, detail, x, y, layout);
+}
+
+

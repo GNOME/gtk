@@ -527,17 +527,14 @@ gtk_hscale_draw_value (GtkScale *scale)
       if (!GTK_WIDGET_IS_SENSITIVE (scale))
         state_type = GTK_STATE_INSENSITIVE;
 
-#if 0      
-      gtk_paint_string (GTK_WIDGET (scale)->style,
-                        GTK_WIDGET (scale)->window,
-                        state_type, 
-                        NULL, GTK_WIDGET (scale), "hscale", 
-                        x, y, buffer);
-#endif
-      
-      gdk_draw_layout (GTK_WIDGET (scale)->window,
-		       GTK_WIDGET (scale)->style->fg_gc [state_type],
-		       x, y, layout);
+      gtk_paint_layout (widget->style,
+                        widget->window,
+                        state_type,
+                        NULL,
+                        widget,
+                        "hscale",
+                        x, y,
+                        layout);
 
       g_object_unref (G_OBJECT (layout));
     }

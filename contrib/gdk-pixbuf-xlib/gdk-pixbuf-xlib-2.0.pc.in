@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: GdkPixbufXlib
-Description: Image loading and scaling for Xlib
+Name: GdkPixbuf Xlib
+Description: GdkPixbuf rendering for Xlib
 Version: @VERSION@
 Requires: gobject-2.0,gmodule-2.0,gdk-pixbuf-2.0
 Libs: -L${libdir} -lgdk_pixbuf_xlib-1.3

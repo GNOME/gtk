@@ -1106,7 +1106,7 @@ gtk_widget_queue_clear_child (GtkWidget *widget)
  * gtk_widget_unparent:
  * @widget: a #GtkWidget
  * 
- * INTERNAL FUNCTION, only for use in widget implementations.
+ * This function is only for use in widget implementations.
  * Should be called by implementations of the remove method
  * on #GtkContainer, to dissociate a child from the container.
  **/
@@ -1491,7 +1491,7 @@ gtk_widget_hide_all (GtkWidget *widget)
  * gtk_widget_map:
  * @widget: a #GtkWidget
  * 
- * INTERNAL FUNCTION, only for use in widget implementations. Causes
+ * This function is only for use in widget implementations. Causes
  * a widget to be mapped if it isn't already.
  * 
  **/
@@ -1517,7 +1517,7 @@ gtk_widget_map (GtkWidget *widget)
  * gtk_widget_unmap:
  * @widget: a #GtkWidget
  *
- * INTERNAL FUNCTION, only for use in widget implementations. Causes
+ * This function is only for use in widget implementations. Causes
  * a widget to be unmapped if it's currently mapped.
  * 
  **/
@@ -1616,7 +1616,7 @@ gtk_widget_realize (GtkWidget *widget)
  * gtk_widget_unrealize:
  * @widget: a #GtkWidget
  *
- * INTERNAL FUNCTION, only useful in widget implementations.
+ * This function is only useful in widget implementations.
  * Causes a widget to be unrealized (frees all GDK resources
  * associated with the widget, such as widget->window).
  * 
@@ -1811,7 +1811,7 @@ gtk_widget_queue_clear (GtkWidget *widget)
  * gtk_widget_queue_resize:
  * @widget: a #GtkWidget
  *
- * INTERNAL FUNCTION, for use in widget implementations.
+ * This function is only for use in widget implementations.
  * Flags a widget to have its size renegotiated; should
  * be called when a widget for some reason has a new size request.
  * For example, when you change the text in a #GtkLabel, #GtkLabel
@@ -1874,7 +1874,7 @@ gtk_widget_draw (GtkWidget    *widget,
  * gtk_widget_draw_focus:
  * @widget: a #GtkWidget
  *
- * INTERNAL FUNCTION for use in widget implementations. Invokes the
+ * This function is only for use in widget implementations. Invokes the
  * "draw_focus" virtual method/signal on @widget, causing the focus
  * rectangle to be drawn or undrawn according to the focus state of
  * the widget. Normally called from widget implementations in the
@@ -1894,7 +1894,7 @@ gtk_widget_draw_focus (GtkWidget *widget)
  * gtk_widget_draw_default:
  * @widget: a #GtkWidget
  * 
- * INTERNAL FUNCTION for use in widget implementations. Invokes the
+ * This function is only for use in widget implementations. Invokes the
  * "draw_default" virtual method/signal on a widget, causing it to
  * draw the default rectangle (indicating that the widget is
  * the default widget, i.e. the one that's activated by pressing
@@ -1914,7 +1914,7 @@ gtk_widget_draw_default (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @requisition: a #GtkRequisition to be filled in
  * 
- * INTERNAL FUNCTION used when implementing a #GtkContainer subclass.
+ * This function is only used when implementing a #GtkContainer subclass.
  * Obtains the preferred size of a widget. The container uses this
  * information to arrange its child widgets and decide what size allocations
  * to give them with gtk_widget_size_allocate().
@@ -1947,7 +1947,7 @@ gtk_widget_size_request (GtkWidget	*widget,
  * @widget: a #GtkWidget
  * @requisition: a #GtkRequisition to be filled in
  * 
- * INTERNAL FUNCTION for use in widget implementations. Obtains
+ * This function is only for use in widget implementations. Obtains
  * @widget->requisition, unless someone has forced a particular
  * geometry on the widget (e.g. with gtk_widget_set_usize()), in which
  * case it returns that geometry instead of the widget's requisition.
@@ -1978,7 +1978,7 @@ gtk_widget_get_child_requisition (GtkWidget	 *widget,
  * @widget: a #GtkWidget
  * @allocation: position and size to be allocated to @widget
  *
- * INTERNAL FUNCTION used by containers to assign a size
+ * This function is only used by #GtkContainer subclasses, to assign a size
  * and position to their child widgets. 
  * 
  **/
@@ -2257,7 +2257,7 @@ gtk_widget_real_key_release_event (GtkWidget         *widget,
  * @widget: a #GtkWidget
  * @event: a #GdkEvent
  * 
- * INTERNAL FUNCTION. This function is used to emit
+ * Rarely-used function. This function is used to emit
  * the event signals on a widget (those signals should never
  * be emitted without using this function to do so).
  * If you want to synthesize an event though, don't use this function;
@@ -2815,7 +2815,7 @@ gtk_widget_get_name (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @state: new state for @widget
  *
- * INTERNAL FUNCTION for use in widget implementations. Sets the state
+ * This function is for use in widget implementations. Sets the state
  * of a widget (insensitive, prelighted, etc.) Usually you should set
  * the state using wrapper functions such as gtk_widget_set_sensitive().
  * 
@@ -2958,7 +2958,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
  * @widget: a #GtkWidget
  * @parent: parent container
  *
- * INTERNAL FUNCTION for use while implementing subclasses of #GtkContainer.
+ * This function is useful only when implementing subclasses of #GtkContainer.
  * Sets the container as the parent of @widget, and takes care of
  * some details such as updating the state and style of the child
  * to reflect its new location. The opposite function is

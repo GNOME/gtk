@@ -69,9 +69,14 @@ static void gtk_option_menu_show_all        (GtkWidget          *widget);
 static void gtk_option_menu_hide_all        (GtkWidget          *widget);
 static GtkType gtk_option_menu_child_type   (GtkContainer       *container);
 
-				       
+enum
+{
+  CHANGED,
+  LAST_SIGNAL
+};
 
 static GtkButtonClass *parent_class = NULL;
+static guint           signals[LAST_SIGNAL] = { 0 };
 
 
 GtkType
@@ -114,6 +119,15 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
 
   parent_class = gtk_type_class (gtk_button_get_type ());
 
+  signals[CHANGED] =
+    g_signal_newc ("changed",
+                   G_TYPE_FROM_CLASS (class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkOptionMenuClass, changed),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   G_TYPE_NONE, 0);
+  
   object_class->destroy = gtk_option_menu_destroy;
   
   widget_class->size_request = gtk_option_menu_size_request;
@@ -238,10 +252,7 @@ gtk_option_menu_set_history (GtkOptionMenu *option_menu,
       menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
 
       if (menu_item != option_menu->menu_item)
-	{
-	  gtk_option_menu_remove_contents (option_menu);
-	  gtk_option_menu_update_contents (option_menu);
-	}
+        gtk_option_menu_update_contents (option_menu);
     }
 }
 
@@ -258,7 +269,7 @@ gtk_option_menu_get_history (GtkOptionMenu *option_menu)
 
       if (active_widget)
 	return g_list_index (GTK_MENU_SHELL (option_menu->menu)->children,
-			 active_widget);
+                             active_widget);
       else
 	return -1;
     }
@@ -540,6 +551,14 @@ gtk_option_menu_deactivate (GtkMenuShell  *menu_shell,
 }
 
 static void
+gtk_option_menu_changed (GtkOptionMenu *option_menu)
+{
+  g_return_if_fail (GTK_IS_OPTION_MENU (option_menu));
+
+  g_signal_emit (G_OBJECT (option_menu), signals[CHANGED], 0);
+}
+
+static void
 gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 {
   GtkWidget *child;
@@ -550,6 +569,8 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 
   if (option_menu->menu)
     {
+      GtkWidget *old_item = option_menu->menu_item;
+      
       gtk_option_menu_remove_contents (option_menu);
 
       option_menu->menu_item = gtk_menu_get_active (GTK_MENU (option_menu->menu));
@@ -574,6 +595,9 @@ gtk_option_menu_update_contents (GtkOptionMenu *option_menu)
 	  if (GTK_WIDGET_DRAWABLE (option_menu))
 	    gtk_widget_queue_draw (GTK_WIDGET (option_menu));
 	}
+
+      if (old_item != option_menu->menu_item)
+        gtk_option_menu_changed (option_menu);
     }
 }
 

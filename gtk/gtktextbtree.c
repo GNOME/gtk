@@ -566,12 +566,12 @@ _gtk_text_btree_delete (GtkTextIter *start,
 
   g_return_if_fail (start != NULL);
   g_return_if_fail (end != NULL);
-  g_return_if_fail (gtk_text_iter_get_btree (start) ==
-                    gtk_text_iter_get_btree (end));
+  g_return_if_fail (_gtk_text_iter_get_btree (start) ==
+                    _gtk_text_iter_get_btree (end));
 
   gtk_text_iter_reorder (start, end);
 
-  tree = gtk_text_iter_get_btree (start);
+  tree = _gtk_text_iter_get_btree (start);
 
   {
     /*
@@ -636,8 +636,8 @@ _gtk_text_btree_delete (GtkTextIter *start,
   /* Save the byte offset so we can reset the iterators */
   start_byte_offset = gtk_text_iter_get_line_index (start);
 
-  start_line = gtk_text_iter_get_text_line (start);
-  end_line = gtk_text_iter_get_text_line (end);
+  start_line = _gtk_text_iter_get_text_line (start);
+  end_line = _gtk_text_iter_get_text_line (end);
 
   /*
    * Split the start and end segments, so we have a place
@@ -947,8 +947,8 @@ _gtk_text_btree_insert (GtkTextIter *iter,
     len = strlen (text);
 
   /* extract iterator info */
-  tree = gtk_text_iter_get_btree (iter);
-  line = gtk_text_iter_get_text_line (iter);
+  tree = _gtk_text_iter_get_btree (iter);
+  line = _gtk_text_iter_get_text_line (iter);
   start_line = line;
   start_byte_index = gtk_text_iter_get_line_index (iter);
 
@@ -1083,8 +1083,8 @@ insert_pixbuf_or_widget_segment (GtkTextIter        *iter,
   GtkTextBTree *tree;
   gint start_byte_offset;
 
-  line = gtk_text_iter_get_text_line (iter);
-  tree = gtk_text_iter_get_btree (iter);
+  line = _gtk_text_iter_get_text_line (iter);
+  tree = _gtk_text_iter_get_btree (iter);
   start_byte_offset = gtk_text_iter_get_line_index (iter);
 
   prevPtr = gtk_text_line_segment_split (iter);
@@ -1133,7 +1133,7 @@ _gtk_text_btree_create_child_anchor (GtkTextIter *iter)
   
   seg = _gtk_widget_segment_new ();
 
-  tree = seg->body.child.tree = gtk_text_iter_get_btree (iter);
+  tree = seg->body.child.tree = _gtk_text_iter_get_btree (iter);
   
   insert_pixbuf_or_widget_segment (iter, seg);
 
@@ -1572,8 +1572,8 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
   g_return_if_fail (start_orig != NULL);
   g_return_if_fail (end_orig != NULL);
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (gtk_text_iter_get_btree (start_orig) ==
-                    gtk_text_iter_get_btree (end_orig));
+  g_return_if_fail (_gtk_text_iter_get_btree (start_orig) ==
+                    _gtk_text_iter_get_btree (end_orig));
 
 #if 0
   printf ("%s tag %s from %d to %d\n",
@@ -1591,14 +1591,14 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
 
   gtk_text_iter_reorder (&start, &end);
 
-  tree = gtk_text_iter_get_btree (&start);
+  tree = _gtk_text_iter_get_btree (&start);
 
   queue_tag_redisplay (tree, tag, &start, &end);
 
   info = gtk_text_btree_get_tag_info (tree, tag);
 
-  start_line = gtk_text_iter_get_text_line (&start);
-  end_line = gtk_text_iter_get_text_line (&end);
+  start_line = _gtk_text_iter_get_text_line (&start);
+  end_line = _gtk_text_iter_get_text_line (&end);
 
   /* Find all tag toggles in the region; we are going to delete them.
      We need to find them in advance, because
@@ -1669,9 +1669,9 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
       GtkTextLineSegment *indexable_seg;
       GtkTextLine *line;
 
-      line = gtk_text_iter_get_text_line (&iter);
-      seg = gtk_text_iter_get_any_segment (&iter);
-      indexable_seg = gtk_text_iter_get_indexable_segment (&iter);
+      line = _gtk_text_iter_get_text_line (&iter);
+      seg = _gtk_text_iter_get_any_segment (&iter);
+      indexable_seg = _gtk_text_iter_get_indexable_segment (&iter);
 
       g_assert (seg != NULL);
       g_assert (indexable_seg != NULL);
@@ -1973,8 +1973,8 @@ _gtk_text_btree_get_tags (const GtkTextIter *iter,
 
 #define NUM_TAG_INFOS 10
 
-  line = gtk_text_iter_get_text_line (iter);
-  tree = gtk_text_iter_get_btree (iter);
+  line = _gtk_text_iter_get_text_line (iter);
+  tree = _gtk_text_iter_get_btree (iter);
   byte_index = gtk_text_iter_get_line_index (iter);
 
   tagInfo.numTags = 0;
@@ -2084,8 +2084,8 @@ copy_segment (GString *string,
   if (gtk_text_iter_equal (start, end))
     return;
 
-  seg = gtk_text_iter_get_indexable_segment (start);
-  end_seg = gtk_text_iter_get_indexable_segment (end);
+  seg = _gtk_text_iter_get_indexable_segment (start);
+  end_seg = _gtk_text_iter_get_indexable_segment (end);
 
   if (seg->type == &gtk_text_char_type)
     {
@@ -2102,12 +2102,12 @@ copy_segment (GString *string,
           /* printf (" <invisible>\n"); */
         }
 
-      copy_start = gtk_text_iter_get_segment_byte (start);
+      copy_start = _gtk_text_iter_get_segment_byte (start);
 
       if (seg == end_seg)
         {
           /* End is in the same segment; need to copy fewer bytes. */
-          gint end_byte = gtk_text_iter_get_segment_byte (end);
+          gint end_byte = _gtk_text_iter_get_segment_byte (end);
 
           copy_bytes = end_byte - copy_start;
         }
@@ -2170,8 +2170,8 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
 
   g_return_val_if_fail (start_orig != NULL, NULL);
   g_return_val_if_fail (end_orig != NULL, NULL);
-  g_return_val_if_fail (gtk_text_iter_get_btree (start_orig) ==
-                        gtk_text_iter_get_btree (end_orig), NULL);
+  g_return_val_if_fail (_gtk_text_iter_get_btree (start_orig) ==
+                        _gtk_text_iter_get_btree (end_orig), NULL);
 
   start = *start_orig;
   end = *end_orig;
@@ -2180,19 +2180,19 @@ _gtk_text_btree_get_text (const GtkTextIter *start_orig,
 
   retval = g_string_new ("");
 
-  tree = gtk_text_iter_get_btree (&start);
+  tree = _gtk_text_iter_get_btree (&start);
 
-  end_seg = gtk_text_iter_get_indexable_segment (&end);
+  end_seg = _gtk_text_iter_get_indexable_segment (&end);
   iter = start;
-  seg = gtk_text_iter_get_indexable_segment (&iter);
+  seg = _gtk_text_iter_get_indexable_segment (&iter);
   while (seg != end_seg)
     {
       copy_segment (retval, include_hidden, include_nonchars,
                     &iter, &end);
 
-      gtk_text_iter_forward_indexable_segment (&iter);
+      _gtk_text_iter_forward_indexable_segment (&iter);
 
-      seg = gtk_text_iter_get_indexable_segment (&iter);
+      seg = _gtk_text_iter_get_indexable_segment (&iter);
     }
 
   copy_segment (retval, include_hidden, include_nonchars, &iter, &end);
@@ -2237,8 +2237,8 @@ _gtk_text_btree_char_is_invisible (const GtkTextIter *iter)
   GtkTextBTree *tree;
   gint byte_index;
 
-  line = gtk_text_iter_get_text_line (iter);
-  tree = gtk_text_iter_get_btree (iter);
+  line = _gtk_text_iter_get_text_line (iter);
+  tree = _gtk_text_iter_get_btree (iter);
   byte_index = gtk_text_iter_get_line_index (iter);
 
   numTags = gtk_text_tag_table_size (tree->table);
@@ -2385,8 +2385,8 @@ redisplay_region (GtkTextBTree      *tree,
       end = tmp;
     }
 
-  start_line = gtk_text_iter_get_text_line (start);
-  end_line = gtk_text_iter_get_text_line (end);
+  start_line = _gtk_text_iter_get_text_line (start);
+  end_line = _gtk_text_iter_get_text_line (end);
 
   view = tree->views;
   while (view != NULL)
@@ -2463,7 +2463,7 @@ real_set_mark (GtkTextBTree      *tree,
 
   g_return_val_if_fail (tree != NULL, NULL);
   g_return_val_if_fail (where != NULL, NULL);
-  g_return_val_if_fail (gtk_text_iter_get_btree (where) == tree, NULL);
+  g_return_val_if_fail (_gtk_text_iter_get_btree (where) == tree, NULL);
 
   if (existing_mark)
     mark = existing_mark->segment;
@@ -2486,7 +2486,7 @@ real_set_mark (GtkTextBTree      *tree,
   iter = *where;
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    gtk_text_iter_check (&iter);
+    _gtk_text_iter_check (&iter);
   
   if (mark != NULL)
     {
@@ -2518,8 +2518,8 @@ real_set_mark (GtkTextBTree      *tree,
          This could hose our iterator... */
       gtk_text_btree_unlink_segment (tree, mark,
                                      mark->body.mark.line);
-      mark->body.mark.line = gtk_text_iter_get_text_line (&iter);
-      g_assert (mark->body.mark.line == gtk_text_iter_get_text_line (&iter));
+      mark->body.mark.line = _gtk_text_iter_get_text_line (&iter);
+      g_assert (mark->body.mark.line == _gtk_text_iter_get_text_line (&iter));
 
       segments_changed (tree); /* make sure the iterator recomputes its
                                   segment */
@@ -2530,7 +2530,7 @@ real_set_mark (GtkTextBTree      *tree,
                                     left_gravity,
                                     name);
 
-      mark->body.mark.line = gtk_text_iter_get_text_line (&iter);
+      mark->body.mark.line = _gtk_text_iter_get_text_line (&iter);
 
       if (mark->body.mark.name)
         g_hash_table_insert (tree->mark_table,
@@ -2539,7 +2539,7 @@ real_set_mark (GtkTextBTree      *tree,
     }
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    gtk_text_iter_check (&iter);
+    _gtk_text_iter_check (&iter);
   
   /* Link mark into new location */
   gtk_text_btree_link_segment (mark, &iter);
@@ -2554,7 +2554,7 @@ real_set_mark (GtkTextBTree      *tree,
   redisplay_mark_if_visible (mark);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    gtk_text_iter_check (&iter);
+    _gtk_text_iter_check (&iter);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
     _gtk_text_btree_check (tree);
@@ -6092,8 +6092,8 @@ gtk_text_btree_link_segment (GtkTextLineSegment *seg,
   GtkTextLine *line;
   GtkTextBTree *tree;
 
-  line = gtk_text_iter_get_text_line (iter);
-  tree = gtk_text_iter_get_btree (iter);
+  line = _gtk_text_iter_get_text_line (iter);
+  tree = _gtk_text_iter_get_btree (iter);
 
   prev = gtk_text_line_segment_split (iter);
   if (prev == NULL)

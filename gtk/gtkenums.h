@@ -144,8 +144,8 @@ typedef enum
 } GtkMetricType;
 
 typedef enum {
-  GTK_MOVEMENT_CHARS,             /* move by forw/back chars */
-  GTK_MOVEMENT_POSITIONS,         /* move by left/right chars */
+  GTK_MOVEMENT_LOGICAL_POSITIONS, /* move by forw/back graphemes */
+  GTK_MOVEMENT_VISUAL_POSITIONS,  /* move by left/right graphemes */
   GTK_MOVEMENT_WORDS,             /* move by forward/back words */
   GTK_MOVEMENT_DISPLAY_LINES,     /* move up/down lines (wrapped lines) */
   GTK_MOVEMENT_DISPLAY_LINE_ENDS, /* move up/down lines (wrapped lines) */

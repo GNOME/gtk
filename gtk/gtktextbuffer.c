@@ -48,7 +48,8 @@ struct _ClipboardRequest
 
 enum {
   INSERT_TEXT,
-  DELETE_TEXT,
+  INSERT_PIXBUF,
+  DELETE_RANGE,
   CHANGED,
   MODIFIED_CHANGED,
   MARK_SET,
@@ -83,7 +84,10 @@ static void gtk_text_buffer_real_insert_text           (GtkTextBuffer     *buffe
                                                         GtkTextIter       *iter,
                                                         const gchar       *text,
                                                         gint               len);
-static void gtk_text_buffer_real_delete_text           (GtkTextBuffer     *buffer,
+static void gtk_text_buffer_real_insert_pixbuf         (GtkTextBuffer     *buffer,
+                                                        GtkTextIter       *iter,
+                                                        GdkPixbuf         *pixbuf);
+static void gtk_text_buffer_real_delete_range          (GtkTextBuffer     *buffer,
                                                         GtkTextIter       *start,
                                                         GtkTextIter       *end);
 static void gtk_text_buffer_real_apply_tag             (GtkTextBuffer     *buffer,
@@ -141,7 +145,8 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
   object_class->finalize = gtk_text_buffer_finalize;
 
   klass->insert_text = gtk_text_buffer_real_insert_text;
-  klass->delete_text = gtk_text_buffer_real_delete_text;
+  klass->insert_pixbuf = gtk_text_buffer_real_insert_pixbuf;
+  klass->delete_range = gtk_text_buffer_real_delete_range;
   klass->apply_tag = gtk_text_buffer_real_apply_tag;
   klass->remove_tag = gtk_text_buffer_real_remove_tag;
   klass->changed = gtk_text_buffer_real_changed;
@@ -164,11 +169,27 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    GTK_TYPE_POINTER,
                    GTK_TYPE_INT);
 
-  signals[DELETE_TEXT] =
-    g_signal_newc ("delete_text",
+  signals[INSERT_PIXBUF] =
+    g_signal_newc ("insert_pixbuf",
                    G_TYPE_FROM_CLASS (object_class),
                    G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTextBufferClass, delete_text),
+                   G_STRUCT_OFFSET (GtkTextBufferClass, insert_pixbuf),
+                   NULL,
+                   gtk_marshal_VOID__BOXED_OBJECT,
+                   GTK_TYPE_NONE,
+                   2,
+#if 0
+                   /* FIXME */
+                   GTK_TYPE_TEXT_ITER,
+#endif
+                   GTK_TYPE_POINTER,
+                   GDK_TYPE_PIXBUF);
+  
+  signals[DELETE_RANGE] =
+    g_signal_newc ("delete_range",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextBufferClass, delete_range),
                    NULL,
                    gtk_marshal_VOID__BOXED_BOXED,
                    GTK_TYPE_NONE,
@@ -211,7 +232,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    GTK_TYPE_NONE,
                    2,
                    GTK_TYPE_TEXT_ITER,
-                   G_TYPE_OBJECT);
+                   GTK_TYPE_TEXT_MARK);
 
   signals[MARK_DELETED] =
     g_signal_newc ("mark_deleted",
@@ -222,7 +243,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__OBJECT,
                    GTK_TYPE_NONE,
                    1,
-                   G_TYPE_OBJECT);
+                   GTK_TYPE_TEXT_MARK);
   
   signals[APPLY_TAG] =
     g_signal_newc ("apply_tag",
@@ -233,7 +254,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__OBJECT_BOXED_BOXED,
                    GTK_TYPE_NONE,
                    3,
-                   G_TYPE_OBJECT,
+                   GTK_TYPE_TEXT_TAG,
                    GTK_TYPE_TEXT_ITER,
                    GTK_TYPE_TEXT_ITER);
 
@@ -246,7 +267,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                    gtk_marshal_VOID__OBJECT_BOXED_BOXED,
                    GTK_TYPE_NONE,
                    3,
-                   G_TYPE_OBJECT,
+                   GTK_TYPE_TEXT_TAG,
                    GTK_TYPE_TEXT_ITER,
                    GTK_TYPE_TEXT_ITER);
 
@@ -1077,9 +1098,9 @@ gtk_text_buffer_insert_with_tags_by_name  (GtkTextBuffer *buffer,
  */
 
 static void
-gtk_text_buffer_real_delete_text (GtkTextBuffer *buffer,
-                                  GtkTextIter *start,
-                                  GtkTextIter *end)
+gtk_text_buffer_real_delete_range (GtkTextBuffer *buffer,
+                                   GtkTextIter   *start,
+                                   GtkTextIter   *end)
 {
   g_return_if_fail (GTK_IS_TEXT_BUFFER (buffer));
   g_return_if_fail (start != NULL);
@@ -1116,7 +1137,7 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
    * to fix.
    */
   g_signal_emit (G_OBJECT (buffer),
-                 signals[DELETE_TEXT],
+                 signals[DELETE_RANGE],
                  0,
                  start, end);
 }
@@ -1129,7 +1150,7 @@ gtk_text_buffer_emit_delete (GtkTextBuffer *buffer,
  *
  * Deletes text between @start and @end. The order of @start and @end
  * is not actually relevant; gtk_text_buffer_delete () will reorder
- * them. This function actually emits the "delete_text" signal, and
+ * them. This function actually emits the "delete_range" signal, and
  * the default handler of that signal deletes the text. Because the
  * buffer is modified, all outstanding iterators become invalid after
  * calling this function; however, the @start and @end will be
@@ -1360,8 +1381,18 @@ gtk_text_buffer_get_slice (GtkTextBuffer      *buffer,
 }
 
 /*
- * Pixmaps
+ * Pixbufs
  */
+
+static void
+gtk_text_buffer_real_insert_pixbuf (GtkTextBuffer     *buffer,
+                                    GtkTextIter       *iter,
+                                    GdkPixbuf         *pixbuf)
+{
+  _gtk_text_btree_insert_pixbuf (iter, pixbuf);
+
+  g_signal_emit (G_OBJECT (buffer), signals[CHANGED], 0);
+}
 
 void
 gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
@@ -1372,11 +1403,8 @@ gtk_text_buffer_insert_pixbuf         (GtkTextBuffer      *buffer,
   g_return_if_fail (iter != NULL);
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
-  _gtk_text_btree_insert_pixbuf (iter, pixbuf);
-
-  /* FIXME pixbuf-specific signal like insert_text */
-
-  g_signal_emit (G_OBJECT (buffer), signals[CHANGED], 0);
+  g_signal_emit (G_OBJECT (buffer), signals[INSERT_PIXBUF], 0,
+                 iter, pixbuf);
 }
 
 /*
@@ -1411,7 +1439,7 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
                           const GtkTextIter *location,
                           GtkTextMark       *mark)
 {
-  /* IMO this should NOT work like insert_text and delete_text,
+  /* IMO this should NOT work like insert_text and delete_range,
      where the real action happens in the default handler.
 
      The reason is that the default handler would be _required_,

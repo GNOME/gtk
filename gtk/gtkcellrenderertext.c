@@ -387,16 +387,10 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
   PangoLayout *layout;
   PangoAttribute *attr;
   PangoUnderline underline;
-
+  GtkStateType state;
+  
   gint real_xoffset;
   gint real_yoffset;
-
-  GdkGC *font_gc = NULL;
-
-  if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    font_gc = widget->style->fg_gc [GTK_STATE_SELECTED];
-  else
-    font_gc = widget->style->fg_gc [GTK_STATE_NORMAL];
 
   layout = gtk_widget_create_pango_layout (widget, celltext->text);
 
@@ -425,20 +419,25 @@ gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
   pango_attr_list_change (celltext->attr_list, attr);
   pango_layout_set_attributes (layout, celltext->attr_list);
 
-  gdk_gc_set_clip_rectangle (font_gc, cell_area);
-
   real_xoffset = cell->xalign * (cell_area->width - rect.width - (2 * cell->xpad));
   real_xoffset = MAX (real_xoffset, 0) + cell->xpad;
   real_yoffset = cell->yalign * (cell_area->height - rect.height - (2 * cell->ypad));
   real_yoffset = MAX (real_yoffset, 0) + cell->ypad;
 
-  gdk_draw_layout (window,
-		   font_gc,
-		   cell_area->x + real_xoffset,
-		   cell_area->y + real_yoffset,
-		   layout);
+  if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
+    state = GTK_STATE_SELECTED;
+  else
+    state = GTK_STATE_NORMAL;
+  
+  gtk_paint_layout (widget->style,
+                    window,
+                    state,
+                    cell_area,
+                    widget,
+                    "cellrenderertext",
+                    cell_area->x + real_xoffset,
+                    cell_area->y + real_yoffset,
+                    layout);
 
   g_object_unref (G_OBJECT (layout));
-
-  gdk_gc_set_clip_rectangle (font_gc, NULL);
 }

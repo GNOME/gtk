@@ -131,6 +131,8 @@ static GdkVisual*   gdk_x11_get_visual     (GdkDrawable    *drawable);
 
 static void gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass);
 
+static void gdk_drawable_impl_x11_finalize   (GObject *object);
+
 static gpointer parent_class = NULL;
 
 GType
@@ -165,9 +167,12 @@ static void
 gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
-
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
   parent_class = g_type_class_peek_parent (klass);
 
+  object_class->finalize = gdk_drawable_impl_x11_finalize;
+  
   drawable_class->create_gc = _gdk_x11_gc_new;
   drawable_class->draw_rectangle = gdk_x11_draw_rectangle;
   drawable_class->draw_arc = gdk_x11_draw_arc;
@@ -190,6 +195,14 @@ gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
   drawable_class->get_image = _gdk_x11_get_image;
 }
 
+static void
+gdk_drawable_impl_x11_finalize (GObject *object)
+{
+  gdk_drawable_set_colormap (GDK_DRAWABLE (object), NULL);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 /*****************************************************
  * X11 specific implementations of generic functions *
  *****************************************************/
@@ -209,8 +222,6 @@ gdk_x11_set_colormap (GdkDrawable *drawable,
                       GdkColormap *colormap)
 {
   GdkDrawableImplX11 *impl;
-  
-  g_return_if_fail (colormap != NULL);  
 
   impl = GDK_DRAWABLE_IMPL_X11 (drawable);
 

@@ -62,6 +62,8 @@ struct _GtkOptionMenu
 struct _GtkOptionMenuClass
 {
   GtkButtonClass parent_class;
+
+  void (*changed) (GtkOptionMenu *option_menu);
 };
 
 

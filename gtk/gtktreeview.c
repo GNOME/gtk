@@ -2674,12 +2674,14 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
 {
   GdkRectangle area;
   GtkStateType state;
-  GtkShadowType shadow;
   GdkPoint points[3];
-
+  GtkWidget *widget;
+  
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return;
 
+  widget = GTK_WIDGET (tree_view);
+  
   area.x = 0;
   area.y = offset + TREE_VIEW_VERTICAL_SEPARATOR;
   area.width = tree_view->priv->tab_offset - 2;
@@ -2689,61 +2691,27 @@ gtk_tree_view_draw_arrow (GtkTreeView *tree_view,
     {
       if (x >= area.x && x <= (area.x + area.width) &&
 	  y >= area.y && y <= (area.y + area.height))
-	{
-	  state = GTK_STATE_ACTIVE;
-	  shadow = GTK_SHADOW_IN;
-	}
+        state = GTK_STATE_ACTIVE;
       else
-	{
-	  state = GTK_STATE_NORMAL;
-	  shadow = GTK_SHADOW_OUT;
-	}
+        state = GTK_STATE_NORMAL;
     }
   else
     {
       state = (node==tree_view->priv->prelight_node&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT)?GTK_STATE_PRELIGHT:GTK_STATE_NORMAL);
-      shadow = GTK_SHADOW_OUT;
     }
 
-  if (node->children == NULL)
-    {
-      points[0].x = area.x + 2;
-      points[0].y = area.y + (area.height - TREE_VIEW_EXPANDER_HEIGHT)/2;
-      points[1].x = points[0].x + TREE_VIEW_EXPANDER_WIDTH/2;
-      points[1].y = points[0].y + TREE_VIEW_EXPANDER_HEIGHT/2;
-      points[2].x = points[0].x;
-      points[2].y = points[0].y + TREE_VIEW_EXPANDER_HEIGHT;
-    }
-  else
-    {
-      points[0].x = area.x;
-      points[0].y = area.y + (area.height - TREE_VIEW_EXPANDER_WIDTH/2)/2;
-      points[1].x = points[0].x + TREE_VIEW_EXPANDER_WIDTH;
-      points[1].y = points[0].y;
-      points[2].x = points[0].x + (TREE_VIEW_EXPANDER_WIDTH) /2;
-      points[2].y = points[0].y + TREE_VIEW_EXPANDER_HEIGHT/2;
-    }
-
-  /* FIXME this should be in the theme engine */
-  
-  gdk_draw_polygon (tree_view->priv->bin_window,
-		    GTK_WIDGET (tree_view)->style->base_gc[state],
-		    TRUE, points, 3);
-  gdk_draw_polygon (tree_view->priv->bin_window,
-		    GTK_WIDGET (tree_view)->style->fg_gc[state],
-		    FALSE, points, 3);
-  
-  /*    gtk_paint_arrow (GTK_WIDGET (tree_view)->style, */
-  /*  		   tree_view->priv->bin_window, */
-  /*  		   state, */
-  /*  		   shadow, */
-  /*  		   &area, */
-  /*  		   GTK_WIDGET (tree_view), */
-  /*  		   "GtkTreeView", */
-  /*  		   arrow_dir, */
-  /*  		   TRUE, */
-  /*  		   area.x, area.y, */
-  /*  		   area.width, area.height); */
+  /* FIXME expander size should come from a style property */
+#define EXPANDER_SIZE 8
+  gtk_paint_expander (widget->style,
+                      tree_view->priv->bin_window,
+                      state,
+                      &area,
+                      widget,
+                      "treeview",
+                      area.x,
+                      (area.y + (area.height - EXPANDER_SIZE) / 2 - (area.height + 1) % 2),
+                      node->children != NULL);
+#undef EXPANDER_SIZE
 }
 
 void

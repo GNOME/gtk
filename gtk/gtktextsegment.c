@@ -97,13 +97,13 @@ gtk_text_line_segment_split (const GtkTextIter *iter)
   GtkTextLine *line;
   int count;
 
-  line = gtk_text_iter_get_text_line (iter);
-  tree = gtk_text_iter_get_btree (iter);
+  line = _gtk_text_iter_get_text_line (iter);
+  tree = _gtk_text_iter_get_btree (iter);
 
   count = gtk_text_iter_get_line_index (iter);
 
   if (gtk_debug_flags & GTK_DEBUG_TEXT)
-    gtk_text_iter_check (iter);
+    _gtk_text_iter_check (iter);
   
   prev = NULL;
   seg = line->segments;

@@ -183,7 +183,7 @@ gdk_pixbuf_loader_finalize (GObject *object)
   priv = loader->private;
 
   if (!priv->closed)
-    gdk_pixbuf_loader_close (loader);
+    g_warning ("GdkPixbufLoader finalized without calling gdk_pixbuf_loader_close() - this is not allowed. You must explicitly end the data stream to the loader before dropping the last reference.");
   
   if (priv->animation)
     gdk_pixbuf_animation_unref (priv->animation);
@@ -193,8 +193,7 @@ gdk_pixbuf_loader_finalize (GObject *object)
   
   g_free (priv);
   
-  if (G_OBJECT_CLASS (parent_class)->finalize)
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -269,7 +268,7 @@ gdk_pixbuf_loader_frame_done (GdkPixbufFrame *frame,
   
   priv->animation->frames = g_list_append (priv->animation->frames, frame);
   priv->animation->n_frames++;
-  g_signal_emit (GTK_OBJECT (loader),
+  g_signal_emit (G_OBJECT (loader),
                  pixbuf_loader_signals[FRAME_DONE],
                  0,
                  frame);

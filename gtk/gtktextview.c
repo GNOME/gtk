@@ -541,16 +541,16 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /* Moving the insertion point */
   add_move_binding (binding_set, GDK_Right, 0,
-                    GTK_MOVEMENT_POSITIONS, 1);
+                    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
 
   add_move_binding (binding_set, GDK_Left, 0,
-                    GTK_MOVEMENT_POSITIONS, -1);
+                    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_CHARS, 1);
+                    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
 
   add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
-                    GTK_MOVEMENT_CHARS, -1);
+                    GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
 
   add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_WORDS, 1);
@@ -3278,11 +3278,11 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
 
   switch (step)
     {
-    case GTK_MOVEMENT_CHARS:
+    case GTK_MOVEMENT_LOGICAL_POSITIONS:
       gtk_text_iter_forward_cursor_positions (&newplace, count);
       break;
 
-    case GTK_MOVEMENT_POSITIONS:
+    case GTK_MOVEMENT_VISUAL_POSITIONS:
       gtk_text_layout_move_iter_visually (text_view->layout,
                                           &newplace, count);
       break;

@@ -420,16 +420,16 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   /* Moving the insertion point */
   add_move_binding (binding_set, GDK_Right, 0,
-		    GTK_MOVEMENT_POSITIONS, 1);
+		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
   
   add_move_binding (binding_set, GDK_Left, 0,
-		    GTK_MOVEMENT_POSITIONS, -1);
+		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
   add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_CHARS, 1);
+		    GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
   
   add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
-		    GTK_MOVEMENT_CHARS, -1);
+		    GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
   
   add_move_binding (binding_set, GDK_Right, GDK_CONTROL_MASK,
 		    GTK_MOVEMENT_WORDS, 1);
@@ -1353,10 +1353,10 @@ gtk_entry_move_cursor (GtkEntry       *entry,
   
   switch (step)
     {
-    case GTK_MOVEMENT_CHARS:
+    case GTK_MOVEMENT_LOGICAL_POSITIONS:
       new_pos = CLAMP (new_pos + count, 0, entry->text_length);
       break;
-    case GTK_MOVEMENT_POSITIONS:
+    case GTK_MOVEMENT_VISUAL_POSITIONS:
       new_pos = gtk_entry_move_visually (entry, new_pos, count);
       break;
     case GTK_MOVEMENT_WORDS:
