@@ -921,12 +921,12 @@ gtk_label_expose (GtkWidget      *widget,
       gdk_gc_set_clip_rectangle (widget->style->fg_gc[widget->state], &event->area);
       
       x = widget->allocation.x + misc->xpad +
-	(widget->allocation.width - label->max_width) 
+	(widget->allocation.width - label->max_width - 2 * misc->xpad) 
 	* misc->xalign + 0.5;
       
       y = (widget->allocation.y
 	   + (widget->allocation.height
-	      - widget->requisition.height) * misc->yalign
+	      - widget->requisition.height - 2 * misc->ypad) * misc->yalign
 	   + misc->ypad + 0.5);
       for (word = label->words; word; word = word->next)
 	{

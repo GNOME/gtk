@@ -1,3 +1,14 @@
+Tue Jan 12 15:41:20 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.c (gtk_label_expose): Minor fix
+	to handling of misc->[x/y]pad
+
+Tue Jan 12 14:31:43 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.[ch] (gtk_style_apply_default_pixmap): 
+	Add back as wrapper function to restore source/binary 
+	compatibility. grrrr.
+
 Tue Jan 12 13:47:07 1999  Tim Janik  <timj@gtk.org>
 
 	* reworked the redrawing heuristics somewhat, this fixed a bunch of
