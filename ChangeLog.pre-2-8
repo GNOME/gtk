@@ -1,3 +1,8 @@
+2001-07-21  Jonas Borgström  <jonas@codefactory.se>
+
+	* gtk/gtktreemodel.c (gtk_tree_model_foreach): Check the return
+	value from gtk_tree_model_get_iter, the model might be empty.
+
 2001-07-20  Hans Breuer  <hans@breuer.org>
 
 	* gdk/win32/gdkinput-win32.c : gdk_device_get_history moved to

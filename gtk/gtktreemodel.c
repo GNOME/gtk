@@ -1127,7 +1127,9 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
   g_return_if_fail (func != NULL);
 
   path = gtk_tree_path_new_root ();
-  gtk_tree_model_get_iter (model, &iter, path);
+  if (gtk_tree_model_get_iter (model, &iter, path) == FALSE)
+    return;
+
   gtk_tree_model_foreach_helper (model, &iter, path, func, user_data);
   gtk_tree_path_free (path);
 }
