@@ -1,3 +1,10 @@
+Mon Dec 14 02:42:11 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c: made GtkWidget::grab_focus a RUN_LAST and
+	RUN_ACTION signal. moved stuff from gtk_widget_grab_focus() into
+	gtk_widget_real_grab_focus() so a signal is always emitted
+	if the focus is grabbed on a widget.
+
 Mon Dec 14 02:13:01 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkmenuitem.c: fixed submenu popup timeouts, we decide whether or

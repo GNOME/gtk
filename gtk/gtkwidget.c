@@ -151,6 +151,7 @@ static gint gtk_widget_real_key_release_event    (GtkWidget         *widget,
 						  GdkEventKey       *event);
 static void gtk_widget_style_set		 (GtkWidget	    *widget,
 						  GtkStyle          *previous_style);
+static void gtk_widget_real_grab_focus           (GtkWidget         *focus_widget);
 
 static void  gtk_widget_redraw_queue_remove       (GtkWidget         *widget);
 
@@ -390,7 +391,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
   widget_signals[GRAB_FOCUS] =
     gtk_signal_new ("grab_focus",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
 		    gtk_marshal_NONE__NONE,
@@ -729,7 +730,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->style_set = gtk_widget_style_set;
   klass->add_accelerator = (void*) gtk_accel_group_handle_add;
   klass->remove_accelerator = (void*) gtk_accel_group_handle_remove;
-  klass->grab_focus = gtk_widget_grab_focus;
+  klass->grab_focus = gtk_widget_real_grab_focus;
   klass->event = NULL;
   klass->button_press_event = NULL;
   klass->button_release_event = NULL;
@@ -2842,6 +2843,15 @@ gtk_widget_intersect (GtkWidget	   *widget,
  *   results:
  *****************************************/
 
+void
+gtk_widget_grab_focus (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[GRAB_FOCUS]);
+}
+
 static void
 reset_focus_recurse (GtkWidget *widget,
 		     gpointer   data)
@@ -2859,8 +2869,8 @@ reset_focus_recurse (GtkWidget *widget,
     }
 }
 
-void
-gtk_widget_grab_focus (GtkWidget *focus_widget)
+static void
+gtk_widget_real_grab_focus (GtkWidget *focus_widget)
 {
   g_return_if_fail (focus_widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (focus_widget));
