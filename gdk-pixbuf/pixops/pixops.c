@@ -177,10 +177,24 @@ pixops_composite_nearest (guchar        *dest_buf,
 
 	  if (dest_has_alpha)
 	    {
-	      dest[0] = (a0 * src[0] + (0xff - a0) * dest[0]) / 0xff;
-	      dest[1] = (a0 * src[1] + (0xff - a0) * dest[1]) / 0xff;
-	      dest[2] = (a0 * src[2] + (0xff - a0) * dest[2]) / 0xff;
-	      dest[3] = (0xff * a0 + (0xff - a0) * dest[3]) / 0xff;
+	      unsigned int w0 = 0xff * a0;
+	      unsigned int w1 = (0xff - a0) * dest[3];
+	      unsigned int w = w0 + w1;
+
+	      if (w != 0)
+		{
+		  dest[0] = (w0 * src[0] + w1 * dest[0]) / w;
+		  dest[1] = (w0 * src[1] + w1 * dest[1]) / w;
+		  dest[2] = (w0 * src[2] + w1 * dest[2]) / w;
+		  dest[3] = w / 0xff;
+		}
+	      else
+		{
+		  dest[0] = 0;
+		  dest[1] = 0;
+		  dest[2] = 0;
+		  dest[3] = 0;
+		}
 	    }
 	  else
 	    {
@@ -296,12 +310,24 @@ composite_pixel (guchar *dest, int dest_x, int dest_channels, int dest_has_alpha
 {
   if (dest_has_alpha)
     {
-      unsigned int w = (0xff0000 - a) * dest[3];
+      unsigned int w0 = a - (a >> 8);
+      unsigned int w1 = ((0xff0000 - a) >> 8) * dest[3];
+      unsigned int w = w0 + w1;
       
-      dest[0] = (r + (0xff0000 - a) * dest[0]) / 0xff0000;
-      dest[1] = (g + (0xff0000 - a) * dest[1]) / 0xff0000;
-      dest[2] = (b + (0xff0000 - a) * dest[2]) / 0xff0000;
-      dest[3] = (0xff * a + (0xff0000 - a) * dest[3]) / 0xff0000;
+      if (w != 0)
+	{
+	  dest[0] = (r - (r >> 8) + w1 * dest[0]) / w;
+	  dest[1] = (g - (g >> 8) + w1 * dest[1]) / w;
+	  dest[2] = (b - (b >> 8) + w1 * dest[2]) / w;
+	  dest[3] = w / 0xff00;
+	}
+      else
+	{
+	  dest[0] = 0;
+	  dest[1] = 0;
+	  dest[2] = 0;
+	  dest[3] = 0;
+	}
     }
   else
     {
@@ -354,12 +380,24 @@ composite_line (int *weights, int n_x, int n_y,
 
       if (dest_has_alpha)
 	{
-	  unsigned int w = (0xff0000 - a) * dest[3];
+	  unsigned int w0 = a - (a >> 8);
+	  unsigned int w1 = ((0xff0000 - a) >> 8) * dest[3];
+	  unsigned int w = w0 + w1;
 
-	  dest[0] = (r + (0xff0000 - a) * dest[0]) / 0xff0000;
-	  dest[1] = (g + (0xff0000 - a) * dest[1]) / 0xff0000;
-	  dest[2] = (b + (0xff0000 - a) * dest[2]) / 0xff0000;
-	  dest[3] = (0xff * a + (0xff0000 - a) * dest[3]) / 0xff0000;
+	  if (w != 0)
+	    {
+	      dest[0] = (r - (r >> 8) + w1 * dest[0]) / w;
+	      dest[1] = (g - (g >> 8) + w1 * dest[1]) / w;
+	      dest[2] = (b - (b >> 8) + w1 * dest[2]) / w;
+	      dest[3] = w / 0xff00;
+	    }
+	  else
+	    {
+	      dest[0] = 0;
+	      dest[1] = 0;
+	      dest[2] = 0;
+	      dest[3] = 0;
+	    }
 	}
       else
 	{

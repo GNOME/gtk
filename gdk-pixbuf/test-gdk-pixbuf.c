@@ -201,7 +201,8 @@ simple_composite_test_one_type (GdkInterpType type)
 	success &= simple_composite_test_one (type, 0x00000000, TRUE, 0xFF0000FF, TRUE, 0xFF0000FF);
 	success &= simple_composite_test_one (type, 0x00000000, TRUE, 0x00FF00FF, TRUE, 0x00FF00FF);
 	success &= simple_composite_test_one (type, 0x00000000, TRUE, 0x0000FFFF, TRUE, 0x0000FFFF);
-	success &= simple_composite_test_one (type, 0x00FF0080, TRUE, 0xFFFFFF00, TRUE, 0x7FFF7F80);
+	success &= simple_composite_test_one (type, 0x00FF0080, TRUE, 0xFFFFFF00, TRUE, 0x00FF0080);
+	success &= simple_composite_test_one (type, 0xFF000080, TRUE, 0x00FF0040, TRUE, 0xCC32009F);
 	success &= simple_composite_test_one (type, 0xFFFFFFFF, TRUE, 0xFFFFFFFF, TRUE, 0xFFFFFFFF);
 
 	return success;

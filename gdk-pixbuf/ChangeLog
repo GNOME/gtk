@@ -1,5 +1,14 @@
 2000-05-04  Darin Adler  <darin@eazel.com>
 
+	* gdk-pixbuf/pixops/pixops.c: (pixops_composite_nearest),
+	(composite_pixel), (composite_line):
+	* gdk-pixbuf/test-gdk-pixbuf.c: (simple_composite_test_one_type):
+	Now that Owen explained the algorithm, I think I implemented it
+	right for the cases where the destination pixbuf is not opaque.
+	The test does seem to confirm it.
+
+2000-05-04  Darin Adler  <darin@eazel.com>
+
 	* gdk-pixbuf/.cvsignore:
 	* gdk-pixbuf/Makefile.am:
 	* gdk-pixbuf/test-gdk-pixbuf.c (store_pixel), (fill_with_pixel),
