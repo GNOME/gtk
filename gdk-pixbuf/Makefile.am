@@ -44,14 +44,14 @@ testpixbuf_LDADD = $(LDADDS)
 libgdk_pixbufincludedir = $(includedir)/gdk-pixbuf
 
 libgdk_pixbuf_la_SOURCES = 	\
+#	gdk-pixbuf-drawable.c	\
 	gdk-pixbuf.c		\
-	gdk-pixbuf-io.c		\
-	gdk-pixbuf-drawable.c
+	gdk-pixbuf-io.c
 
 libgdk_pixbufinclude_HEADERS =	\
+#	gdk-pixbuf-drawable.h	\
 	gdk-pixbuf.h		\
-	gdk-pixbuf-io.h		\
-	gdk-pixbuf-drawable.h
+	gdk-pixbuf-io.h
 
 #
 # The PNG plugin.
