@@ -61,36 +61,50 @@ struct _GtkToolbar
 struct _GtkToolbarClass
 {
   GtkContainerClass parent_class;
+
+  void (* orientation_changed) (GtkToolbar      *toolbar,
+				GtkOrientation   orientation);
+  void (* style_changed)       (GtkToolbar      *toolbar,
+				GtkToolbarStyle  style);
 };
 
 
-guint      gtk_toolbar_get_type      (void);
-GtkWidget *gtk_toolbar_new           (GtkOrientation   orientation,
-				      GtkToolbarStyle  style);
+guint      gtk_toolbar_get_type        (void);
+GtkWidget *gtk_toolbar_new             (GtkOrientation   orientation,
+					GtkToolbarStyle  style);
 
-void       gtk_toolbar_append_item   (GtkToolbar      *toolbar,
-				      const char      *text,
-				      const char      *tooltip_text,
-				      GtkPixmap       *icon,
-				      GtkSignalFunc    callback,
-				      gpointer         user_data);
-void       gtk_toolbar_prepend_item  (GtkToolbar      *toolbar,
-				      const char      *text,
-				      const char      *tooltip_text,
-				      GtkPixmap       *icon,
-				      GtkSignalFunc    callback,
-				      gpointer         user_data);
-void       gtk_toolbar_insert_item   (GtkToolbar      *toolbar,
-				      const char      *text,
-				      const char      *tooltip_text,
-				      GtkPixmap       *icon,
-				      GtkSignalFunc    callback,
-				      gpointer         user_data,
-				      gint             position);
-void       gtk_toolbar_append_space  (GtkToolbar      *toolbar);
-void       gtk_toolbar_prepend_space (GtkToolbar      *toolbar);
-void       gtk_toolbar_insert_space  (GtkToolbar      *toolbar,
-				      gint             position);
+void       gtk_toolbar_append_item     (GtkToolbar      *toolbar,
+					const char      *text,
+					const char      *tooltip_text,
+					GtkPixmap       *icon,
+					GtkSignalFunc    callback,
+					gpointer         user_data);
+void       gtk_toolbar_prepend_item    (GtkToolbar      *toolbar,
+					const char      *text,
+					const char      *tooltip_text,
+					GtkPixmap       *icon,
+					GtkSignalFunc    callback,
+					gpointer         user_data);
+void       gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
+					const char      *text,
+					const char      *tooltip_text,
+					GtkPixmap       *icon,
+					GtkSignalFunc    callback,
+					gpointer         user_data,
+					gint             position);
+void       gtk_toolbar_append_space    (GtkToolbar      *toolbar);
+void       gtk_toolbar_prepend_space   (GtkToolbar      *toolbar);
+void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
+					gint             position);
+
+void       gtk_toolbar_set_orientation (GtkToolbar      *toolbar,
+					GtkOrientation   orientation);
+void       gtk_toolbar_set_style       (GtkToolbar      *toolbar,
+					GtkToolbarStyle  style);
+void       gtk_toolbar_set_space_size  (GtkToolbar      *toolbar,
+					gint             space_size);
+void       gtk_toolbar_set_tooltips    (GtkToolbar      *toolbar,
+					gint             enable);
 
 
 #ifdef __cplusplus

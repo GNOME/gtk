@@ -549,7 +549,9 @@ create_button_box ()
 }
 
 GtkWidget *
-new_pixmap (char *filename, GdkWindow *window, GdkColor *background)
+new_pixmap (char      *filename,
+	    GdkWindow *window,
+	    GdkColor  *background)
 {
   GtkWidget *wpixmap;
   GdkPixmap *pixmap;
@@ -564,6 +566,69 @@ new_pixmap (char *filename, GdkWindow *window, GdkColor *background)
 }
 
 void
+set_toolbar_horizontal (GtkWidget *widget,
+			gpointer   data)
+{
+  gtk_toolbar_set_orientation (GTK_TOOLBAR (data), GTK_ORIENTATION_HORIZONTAL);
+}
+
+void
+set_toolbar_vertical (GtkWidget *widget,
+		      gpointer   data)
+{
+  gtk_toolbar_set_orientation (GTK_TOOLBAR (data), GTK_ORIENTATION_VERTICAL);
+}
+
+void
+set_toolbar_icons (GtkWidget *widget,
+		   gpointer   data)
+{
+  gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_ICONS);
+}
+
+void
+set_toolbar_text (GtkWidget *widget,
+	          gpointer   data)
+{
+  gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_TEXT);
+}
+
+void
+set_toolbar_both (GtkWidget *widget,
+		  gpointer   data)
+{
+  gtk_toolbar_set_style (GTK_TOOLBAR (data), GTK_TOOLBAR_BOTH);
+}
+
+void
+set_toolbar_small_space (GtkWidget *widget,
+			 gpointer   data)
+{
+  gtk_toolbar_set_space_size (GTK_TOOLBAR (data), 5);
+}
+
+void
+set_toolbar_big_space (GtkWidget *widget,
+		       gpointer   data)
+{
+  gtk_toolbar_set_space_size (GTK_TOOLBAR (data), 10);
+}
+
+void
+set_toolbar_enable (GtkWidget *widget,
+		    gpointer   data)
+{
+  gtk_toolbar_set_tooltips (GTK_TOOLBAR (data), TRUE);
+}
+
+void
+set_toolbar_disable (GtkWidget *widget,
+		     gpointer   data)
+{
+  gtk_toolbar_set_tooltips (GTK_TOOLBAR (data), FALSE);
+}
+
+void
 create_toolbar (void)
 {
   static GtkWidget *window = NULL;
@@ -573,6 +638,7 @@ create_toolbar (void)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Toolbar test");
+      gtk_window_set_policy (GTK_WINDOW (window), TRUE, TRUE, TRUE);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			  GTK_SIGNAL_FUNC (destroy_window),
@@ -587,31 +653,59 @@ create_toolbar (void)
       toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
 
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "New", "New document",
+			       "Horizontal", "Horizontal toolbar layout",
 			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
 						       &window->style->bg[GTK_STATE_NORMAL])),
-			       NULL, NULL);
+			       (GtkSignalFunc) set_toolbar_horizontal, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Open", "Open existing",
+			       "Vertical", "Vertical toolbar layout",
 			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
 						       &window->style->bg[GTK_STATE_NORMAL])),
-			       NULL, NULL);
+			       (GtkSignalFunc) set_toolbar_vertical, toolbar);
+
+      gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
+
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Close", "Close current document",
+			       "Icons", "Only show toolbar icons",
 			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
 						       &window->style->bg[GTK_STATE_NORMAL])),
-			       NULL, NULL);
+			       (GtkSignalFunc) set_toolbar_icons, toolbar);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Text", "Only show toolbar text",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       (GtkSignalFunc) set_toolbar_text, toolbar);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Both", "Show toolbar icons and text",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       (GtkSignalFunc) set_toolbar_both, toolbar);
+
       gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Undo", "Undo screw-up",
+			       "Small", "Use small spaces",
 			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
 						       &window->style->bg[GTK_STATE_NORMAL])),
-			       NULL, NULL);
+			       (GtkSignalFunc) set_toolbar_small_space, toolbar);
       gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
-			       "Redo", "Redo not-screwup-after-all",
+			       "Big", "Use big spaces",
 			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
 						       &window->style->bg[GTK_STATE_NORMAL])),
-			       NULL, NULL);
+			       (GtkSignalFunc) set_toolbar_big_space, toolbar);
+
+      gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Enable", "Enable tooltips",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       (GtkSignalFunc) set_toolbar_enable, toolbar);
+      gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			       "Disable", "Disable tooltips",
+			       GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						       &window->style->bg[GTK_STATE_NORMAL])),
+			       (GtkSignalFunc) set_toolbar_disable, toolbar);
 
       gtk_container_add (GTK_CONTAINER (window), toolbar);
       gtk_widget_show (toolbar);
@@ -621,6 +715,74 @@ create_toolbar (void)
     gtk_widget_show (window);
   else
     gtk_widget_destroy (window);
+}
+
+GtkWidget *
+make_toolbar (GtkWidget *window)
+{
+  GtkWidget *toolbar;
+
+  if (!GTK_WIDGET_REALIZED (window))
+    gtk_widget_realize (window);
+
+  toolbar = gtk_toolbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_TOOLBAR_BOTH);
+
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Horizontal", "Horizontal toolbar layout",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_horizontal, toolbar);
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Vertical", "Vertical toolbar layout",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_vertical, toolbar);
+
+  gtk_toolbar_append_space (GTK_TOOLBAR(toolbar));
+
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Icons", "Only show toolbar icons",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_icons, toolbar);
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Text", "Only show toolbar text",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_text, toolbar);
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Both", "Show toolbar icons and text",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_both, toolbar);
+
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Small", "Use small spaces",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_small_space, toolbar);
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Big", "Use big spaces",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_big_space, toolbar);
+
+  gtk_toolbar_append_space (GTK_TOOLBAR (toolbar));
+
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Enable", "Enable tooltips",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_enable, toolbar);
+  gtk_toolbar_append_item (GTK_TOOLBAR (toolbar),
+			   "Disable", "Disable tooltips",
+			   GTK_PIXMAP (new_pixmap ("test.xpm", window->window,
+						   &window->style->bg[GTK_STATE_NORMAL])),
+			   (GtkSignalFunc) set_toolbar_disable, toolbar);
+
+  return toolbar;
 }
 
 void
@@ -650,7 +812,7 @@ create_handle_box ()
     gtk_container_add (GTK_CONTAINER (window), hbox);
     gtk_widget_set_usize(hbox, 300, 40);
     gtk_widget_show (hbox);
-
+#if 0
 #if 0
     button = gtk_toggle_button_new_with_label ("Let's try this");
 #else
@@ -659,6 +821,13 @@ create_handle_box ()
     gtk_container_add (GTK_CONTAINER (hbox), button);
     gtk_widget_set_usize(button, 250, 40);
     gtk_widget_show (button);
+#else
+    {
+      GtkWidget *toolbar = make_toolbar (window);
+      gtk_container_add (GTK_CONTAINER (hbox), toolbar);
+      gtk_widget_show (toolbar);
+    }
+#endif
   }
 
   if (!GTK_WIDGET_VISIBLE (window))

@@ -26,6 +26,13 @@
 #define DEFAULT_SPACE_SIZE 5
 
 
+enum {
+	ORIENTATION_CHANGED,
+	STYLE_CHANGED,
+	LAST_SIGNAL
+};
+
+
 typedef struct {
 	GtkWidget *button;
 	GtkWidget *icon;
@@ -33,24 +40,41 @@ typedef struct {
 } Child;
 
 
-static void gtk_toolbar_class_init    (GtkToolbarClass *class);
-static void gtk_toolbar_init          (GtkToolbar      *toolbar);
-static void gtk_toolbar_destroy       (GtkObject       *object);
-static void gtk_toolbar_map           (GtkWidget       *widget);
-static void gtk_toolbar_unmap         (GtkWidget       *widget);
-static void gtk_toolbar_draw          (GtkWidget       *widget,
-				       GdkRectangle    *area);
-static void gtk_toolbar_size_request  (GtkWidget       *widget,
-				       GtkRequisition  *requisition);
-static void gtk_toolbar_size_allocate (GtkWidget       *widget,
-				       GtkAllocation   *allocation);
-static void gtk_toolbar_add           (GtkContainer    *container,
-				       GtkWidget       *widget);
-static void gtk_toolbar_foreach       (GtkContainer    *container,
-				       GtkCallback      callback,
-				       gpointer         callback_data);
+typedef void (*GtkToolbarSignal1) (GtkObject *object,
+				   gint       arg1,
+				   gpointer   data);
+
+static void gtk_toolbar_marshal_signal_1 (GtkObject     *object,
+					  GtkSignalFunc  func,
+					  gpointer       func_data,
+					  GtkArg        *args);
+
+
+static void gtk_toolbar_class_init               (GtkToolbarClass *class);
+static void gtk_toolbar_init                     (GtkToolbar      *toolbar);
+static void gtk_toolbar_destroy                  (GtkObject       *object);
+static void gtk_toolbar_map                      (GtkWidget       *widget);
+static void gtk_toolbar_unmap                    (GtkWidget       *widget);
+static void gtk_toolbar_draw                     (GtkWidget       *widget,
+				                  GdkRectangle    *area);
+static void gtk_toolbar_size_request             (GtkWidget       *widget,
+				                  GtkRequisition  *requisition);
+static void gtk_toolbar_size_allocate            (GtkWidget       *widget,
+				                  GtkAllocation   *allocation);
+static void gtk_toolbar_add                      (GtkContainer    *container,
+				                  GtkWidget       *widget);
+static void gtk_toolbar_foreach                  (GtkContainer    *container,
+				                  GtkCallback      callback,
+				                  gpointer         callback_data);
+static void gtk_real_toolbar_orientation_changed (GtkToolbar      *toolbar,
+						  GtkOrientation   orientation);
+static void gtk_real_toolbar_style_changed       (GtkToolbar      *toolbar,
+						  GtkToolbarStyle  style);
+
 
 static GtkContainerClass *parent_class;
+
+static gint toolbar_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
@@ -87,6 +111,25 @@ gtk_toolbar_class_init(GtkToolbarClass *class)
 
 	parent_class = gtk_type_class(gtk_container_get_type());
 
+	toolbar_signals[ORIENTATION_CHANGED] =
+		gtk_signal_new("orientation_changed",
+			       GTK_RUN_FIRST,
+			       object_class->type,
+			       GTK_SIGNAL_OFFSET(GtkToolbarClass, orientation_changed),
+			       gtk_toolbar_marshal_signal_1,
+			       GTK_TYPE_NONE, 1,
+			       GTK_TYPE_INT);
+	toolbar_signals[STYLE_CHANGED] =
+		gtk_signal_new("style_changed",
+			       GTK_RUN_FIRST,
+			       object_class->type,
+			       GTK_SIGNAL_OFFSET(GtkToolbarClass, style_changed),
+			       gtk_toolbar_marshal_signal_1,
+			       GTK_TYPE_NONE, 1,
+			       GTK_TYPE_INT);
+
+	gtk_object_class_add_signals(object_class, toolbar_signals, LAST_SIGNAL);
+
 	object_class->destroy = gtk_toolbar_destroy;
 
 	widget_class->map = gtk_toolbar_map;
@@ -97,6 +140,9 @@ gtk_toolbar_class_init(GtkToolbarClass *class)
 
 	container_class->add = gtk_toolbar_add;
 	container_class->foreach = gtk_toolbar_foreach;
+
+	class->orientation_changed = gtk_real_toolbar_orientation_changed;
+	class->style_changed = gtk_real_toolbar_style_changed;
 }
 
 static void
@@ -139,7 +185,7 @@ gtk_toolbar_destroy(GtkObject *object)
 
 	toolbar = GTK_TOOLBAR(object);
 
-	gtk_tooltips_unref(toolbar->tooltips); /* XXX: do I have to unref the tooltips? */
+	gtk_tooltips_unref(toolbar->tooltips); /* XXX: do I have to unref the tooltips to destroy them? */
 
 	for (children = toolbar->children; children; children = children->next) {
 		child = children->data;
@@ -390,6 +436,9 @@ gtk_toolbar_insert_item(GtkToolbar      *toolbar,
 		gtk_signal_connect(GTK_OBJECT(child->button), "clicked",
 				   callback, user_data);
 
+	if (tooltip_text)
+		gtk_tooltips_set_tips(toolbar->tooltips, child->button, tooltip_text);
+
 	if (text)
 		child->label = gtk_label_new(text);
 	else
@@ -478,4 +527,124 @@ gtk_toolbar_insert_space(GtkToolbar *toolbar,
 
 	if (GTK_WIDGET_VISIBLE(toolbar))
 		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
+}
+
+void
+gtk_toolbar_set_orientation(GtkToolbar     *toolbar,
+			    GtkOrientation  orientation)
+{
+	gtk_signal_emit(GTK_OBJECT(toolbar), toolbar_signals[ORIENTATION_CHANGED], orientation);
+}
+
+void
+gtk_toolbar_set_style(GtkToolbar      *toolbar,
+		      GtkToolbarStyle  style)
+{
+	gtk_signal_emit(GTK_OBJECT(toolbar), toolbar_signals[STYLE_CHANGED], style);
+}
+
+void
+gtk_toolbar_set_space_size(GtkToolbar *toolbar,
+			   gint        space_size)
+{
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+
+	if (toolbar->space_size != space_size) {
+		toolbar->space_size = space_size;
+		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
+	}
+}
+
+void
+gtk_toolbar_set_tooltips(GtkToolbar *toolbar,
+			 gint        enable)
+{
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+
+	if (enable)
+		gtk_tooltips_enable(toolbar->tooltips);
+	else
+		gtk_tooltips_disable(toolbar->tooltips);
+}
+
+static void
+gtk_toolbar_marshal_signal_1(GtkObject     *object,
+			     GtkSignalFunc  func,
+			     gpointer       func_data,
+			     GtkArg        *args)
+{
+	GtkToolbarSignal1 rfunc;
+
+	rfunc = (GtkToolbarSignal1) func;
+
+	(*rfunc) (object, GTK_VALUE_ENUM(args[0]), func_data);
+}
+
+static void
+gtk_real_toolbar_orientation_changed(GtkToolbar      *toolbar,
+				     GtkOrientation   orientation)
+{
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+
+	if (toolbar->orientation != orientation) {
+		toolbar->orientation = orientation;
+		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
+	}
+}
+
+static void
+gtk_real_toolbar_style_changed(GtkToolbar      *toolbar,
+			       GtkToolbarStyle  style)
+{
+	GList *children;
+	Child *child;
+
+	g_return_if_fail(toolbar != NULL);
+	g_return_if_fail(GTK_IS_TOOLBAR(toolbar));
+
+	if (toolbar->style != style) {
+		toolbar->style = style;
+
+		for (children = toolbar->children; children; children = children->next) {
+			child = children->data;
+
+			if (child)
+				switch (style) {
+					case GTK_TOOLBAR_ICONS:
+						if (!GTK_WIDGET_VISIBLE(child->icon))
+							gtk_widget_show(child->icon);
+
+						if (GTK_WIDGET_VISIBLE(child->label))
+							gtk_widget_hide(child->label);
+
+						break;
+
+					case GTK_TOOLBAR_TEXT:
+						if (GTK_WIDGET_VISIBLE(child->icon))
+							gtk_widget_hide(child->icon);
+
+						if (!GTK_WIDGET_VISIBLE(child->label))
+							gtk_widget_show(child->label);
+
+						break;
+
+					case GTK_TOOLBAR_BOTH:
+						if (!GTK_WIDGET_VISIBLE(child->icon))
+							gtk_widget_show(child->icon);
+
+						if (!GTK_WIDGET_VISIBLE(child->label))
+							gtk_widget_show(child->label);
+
+						break;
+
+					default:
+						g_assert_not_reached();
+				}
+		}
+		
+		gtk_widget_queue_resize(GTK_WIDGET(toolbar));
+	}
 }
