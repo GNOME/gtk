@@ -1,3 +1,11 @@
+Wed Nov 13 10:53:37 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c:
+	Fix #90661: add im_info->im switch at the top of setup_im() and
+	get_ic_real().
+	Fix #97674: make sure only one status window for the focused
+	input context should be shown.
+
 Wed Nov 13 11:55:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_button_press): 

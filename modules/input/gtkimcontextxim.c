@@ -244,6 +244,9 @@ setup_im (GtkXIMInfo *info)
 {
   XIMValuesList *ic_values = NULL;
 
+  if (info->im == NULL)
+    return;
+
   XGetIMValues (info->im,
 		XNQueryInputStyle, &info->xim_styles,
 		XNQueryICValuesList, &ic_values,
@@ -318,7 +321,9 @@ xim_info_display_closed (GdkDisplay *display,
   XFree (info->xim_styles->supported_styles);
   XFree (info->xim_styles);
   g_free (info->locale);
-  XCloseIM (info->im);
+
+  if (info->im)
+    XCloseIM (info->im);
 
   g_free (info);
 }
@@ -356,27 +361,24 @@ get_im (GdkWindow *client_window,
       if (!im)
 	g_warning ("Unable to open XIM input method, falling back to XLookupString()");
 
-      if (im)
-	{
-	  info = g_new (GtkXIMInfo, 1);
-	  open_ims = g_slist_prepend (open_ims, info);
+      info = g_new (GtkXIMInfo, 1);
+      open_ims = g_slist_prepend (open_ims, info);
 
-	  info->screen = screen;
-	  info->locale = g_strdup (locale);
-	  info->im = im;
-	  info->xim_styles = NULL;
-	  info->preedit_style_setting = 0;
-	  info->status_style_setting = 0;
-	  info->settings = NULL;
-	  info->preedit_set = 0;
-	  info->status_set = 0;
-	  info->ics = NULL;
+      info->screen = screen;
+      info->locale = g_strdup (locale);
+      info->im = im;
+      info->xim_styles = NULL;
+      info->preedit_style_setting = 0;
+      info->status_style_setting = 0;
+      info->settings = NULL;
+      info->preedit_set = 0;
+      info->status_set = 0;
+      info->ics = NULL;
 
-	  setup_im (info);
+      setup_im (info);
 
-	  g_signal_connect (display, "closed",
-			    G_CALLBACK (xim_info_display_closed), info);
-	}
+      g_signal_connect (display, "closed",
+			G_CALLBACK (xim_info_display_closed), info);
     }
 
   return info;
@@ -406,6 +408,7 @@ gtk_im_context_xim_init (GtkIMContextXIM *im_context_xim)
 {
   im_context_xim->use_preedit = TRUE;
   im_context_xim->filter_key_release = FALSE;
+  im_context_xim->status_visible = FALSE;
 }
 
 static void
@@ -426,6 +429,7 @@ reinitialize_ic (GtkIMContextXIM *context_xim,
   if (context_xim->ic)
     {
       XDestroyIC (context_xim->ic);
+      status_window_hide (context_xim);
       context_xim->ic = NULL;
 
       if (context_xim->preedit_length)
@@ -1000,6 +1004,9 @@ status_draw_callback (XIC      xic,
 {
   GtkIMContextXIM *context = GTK_IM_CONTEXT_XIM (client_data);
 
+  if (context->status_visible == FALSE)
+    return;
+
   if (call_data->type == XIMTextType)
     {
       gchar *text;
@@ -1061,6 +1068,9 @@ get_ic_real (GtkIMContextXIM *context_xim)
   const char *name2 = NULL;
   XVaNestedList list2 = NULL;
   XIMStyle im_style = 0;
+
+  if (context_xim->im_info->im == NULL)
+    return (XIC)0;
 
   if (context_xim->use_preedit &&
       (context_xim->im_info->style & PREEDIT_MASK) == XIMPreeditCallbacks)
@@ -1288,10 +1298,6 @@ status_window_show (GtkIMContextXIM *context_xim)
   GtkWidget *status_window = status_window_get (context_xim, TRUE);
 
   context_xim->status_visible = TRUE;
-  
-  if ((context_xim->im_info->style & STATUS_MASK) == XIMStatusCallbacks &&
-      status_window && status_window_has_text (status_window))
-    gtk_widget_show (status_window);
 }
 
 static void
@@ -1301,8 +1307,7 @@ status_window_hide (GtkIMContextXIM *context_xim)
 
   context_xim->status_visible = FALSE;
   
-  if (status_window)
-    gtk_widget_hide (status_window);
+  status_window_set_text (context_xim, "");
 }
 
 static void
