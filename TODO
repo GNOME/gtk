@@ -1,6 +1,7 @@
 For 1.2.0 release:
--	remove deprecated functions from *.[hc] files, especially the
-	non-functional ones.
+-	remove deprecated functions from *.[hc] files.
+-	finish composite child stuff.
+-	implement constructor functionality for all widgets.
 	
 Bugs:
  * Change bitfields to guints from enums, or vice versa?

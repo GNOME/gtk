@@ -1,14 +1,24 @@
 What is new in GTK+ 1.1.5:
 
 * Theme integration
+* Widget style modification is now handled through GtkRcStyles
 * GtkPixmaps now grey out pixmaps when insensitive
 * Notebook enhancements
 * Shadow configurability for menubars and handleboxes
 * DND enhancements
-* gtkfilesel how supports automounters better
+* gtkfilesel now supports automounters better
 * Implementation of expose compression
 * Queued redraws of partial areas
-* Scrolledwindow/Viewport enhancements
+* Scrolledwindow (+Viewport) source incompatibilities, children that are added
+  to a scrolled window don't get an automatic viewport anymore. a convenience
+  function gtk_scrolled_window_add_with_viewport() is suplied for this task
+* Deprecated functions will now issue a message, informing the programmer about
+  the use of this function. These functions will get removed in future versions
+* Non-functional functions got removed entirely
+* gtk_widget_new() and gtk_object_new() will now auto-construct new objects.
+  A new function gtk_object_default_construct() is provided now which should
+  be called after every gtk_type_new() to perfom the auto-construction
+* Improved argument support of several widgets
 * Bug Fixes
 
 What is new in GTK+ 1.1.3:

@@ -1,3 +1,8 @@
+Mon Nov 23 03:21:17 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktext.c (gtk_text_destroy): disconnect hadj & vadj, not
+	2 * hadj.
+
 Sat Nov 21 18:41:13 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* configure.in:

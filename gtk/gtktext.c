@@ -794,6 +794,14 @@ gtk_text_set_adjustments (GtkText       *text,
 {
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
+  if (hadj)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
+  else
+    hadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
+  if (vadj)
+    g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
+  else
+    vadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
   
   if (text->hadj && (text->hadj != hadj))
     {
@@ -806,12 +814,6 @@ gtk_text_set_adjustments (GtkText       *text,
       gtk_signal_disconnect_by_data (GTK_OBJECT (text->vadj), text);
       gtk_object_unref (GTK_OBJECT (text->vadj));
     }
-  
-  if (!hadj)
-    hadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
-  
-  if (!vadj)
-    vadj = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0));
   
   if (text->hadj != hadj)
     {
@@ -1140,7 +1142,7 @@ gtk_text_destroy (GtkObject *object)
   text = (GtkText*) object;
 
   gtk_signal_disconnect_by_data (GTK_OBJECT (text->hadj), text);
-  gtk_signal_disconnect_by_data (GTK_OBJECT (text->hadj), text);
+  gtk_signal_disconnect_by_data (GTK_OBJECT (text->vadj), text);
 
   if (text->timer)
     {
