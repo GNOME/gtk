@@ -1,3 +1,10 @@
+2001-10-26  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkbutton.[ch]
+	* gtk/gtkdnd.c: fixed inline comments
+	
+	* gtk/gtkgamma.c: gtk_entry_get_text() returns a const gchar.
+
 2001-10-26  Hans Breuer  <hans@breuer.org>
 
 	* gdk-pixbuf/gdk_pixbuf.def : 
