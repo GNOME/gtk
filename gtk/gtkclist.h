@@ -618,14 +618,14 @@ gint gtk_clist_get_pixtext (GtkCList   *clist,
 			    GdkPixmap **pixmap,
 			    GdkBitmap **mask);
 
-/* sets the foreground color of a row, the colar must already
+/* sets the foreground color of a row, the color must already
  * be allocated
  */
 void gtk_clist_set_foreground (GtkCList *clist,
 			       gint      row,
 			       GdkColor *color);
 
-/* sets the background color of a row, the colar must already
+/* sets the background color of a row, the color must already
  * be allocated
  */
 void gtk_clist_set_background (GtkCList *clist,
