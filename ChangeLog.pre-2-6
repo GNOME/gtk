@@ -1,3 +1,11 @@
+Mon Aug  9 15:19:34 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk.h: 
+	* gdk/gdkrgb.h: Add the exported functions 
+	gdk_rgb_colormap_ditherable(), gdk_pointer_grab_info_libgtk_only(),
+	gdk_keyboard_grab_info_libgtk_only() to the appropriate
+	headers.
+
 Mon Aug  9 14:24:46 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c (gdk_event_send_client_message_to_all_recurse): 
