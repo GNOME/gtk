@@ -3026,13 +3026,11 @@ gtk_clist_set_row_height (GtkCList *clist,
     {
       PangoContext *context = gtk_widget_get_pango_context (widget);
       PangoFontMetrics metrics;
-      PangoFont *font = pango_context_load_font (context, widget->style->font_desc);
 
-      pango_font_get_metrics (font,
-			      pango_context_get_language (context),
-			      &metrics);
-      
-      g_object_unref (G_OBJECT (font));
+      pango_context_get_metrics (context,
+				 widget->style->font_desc,
+				 pango_context_get_language (context),
+				 &metrics);
       
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
 	clist->row_height = PANGO_PIXELS (metrics.ascent + metrics.descent);

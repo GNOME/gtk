@@ -569,18 +569,15 @@ gtk_spin_button_size_request (GtkWidget      *widget,
     {
       PangoContext *context;
       PangoFontMetrics metrics;
-      PangoFont *font;
       gint width;
       gint w;
       int string_len;
 
       context = gtk_widget_get_pango_context (widget);
-      font = pango_context_load_font (context,
-                                      widget->style->font_desc);
-      pango_font_get_metrics (font,
-			      pango_context_get_language (context),
-			      &metrics);
-      g_object_unref (G_OBJECT (font));
+      pango_context_get_metrics (context,
+				 widget->style->font_desc,
+				 pango_context_get_language (context),
+				 &metrics);
       
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
       

@@ -1,3 +1,10 @@
+Tue Jun 26 11:06:34 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkclist.c gtk/gtkentry.c gtk/gtkspinbutton.c:
+	Use new pango_context_get_metrics() to fix problems
+	with font lists in descriptions. (#56184, reported by
+	Jonas Borgström)
+
 Tue Jun 26 10:04:30 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkiconfactory.c:
