@@ -357,10 +357,14 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 	i.x = 1.0;
 	i.y = 0.0;
 	art_affine_point (&i_c, &i, i2c);
+	i_c.x -= orig_c.x;
+	i_c.y -= orig_c.y;
 
 	j.x = 0.0;
 	j.y = 1.0;
 	art_affine_point (&j_c, &j, i2c);
+	j_c.x -= orig_c.x;
+	j_c.y -= orig_c.y;
 
 	/* Compute size components.  If a dimension is specified in pixels, we
 	 * normalize the base vector first so that it will represent the size in
@@ -413,17 +417,17 @@ recompute_bounding_box (GnomeCanvasPixbuf *gcp)
 
 	/* Compute vertices */
 
-	x1 = orig.x;
-	y1 = orig.y;
+	x1 = orig_c.x;
+	y1 = orig_c.y;
 
-	x2 = orig.x + i_c.x;
-	y2 = orig.y + i_c.y;;
+	x2 = orig_c.x + i_c.x;
+	y2 = orig_c.y + i_c.y;;
 
-	x3 = orig.x + j_c.x;
-	y3 = orig.y + j_c.y;
+	x3 = orig_c.x + j_c.x;
+	y3 = orig_c.y + j_c.y;
 
-	x4 = orig.x + i_c.x + j_c.x;
-	y4 = orig.y + i_c.y + j_c.y;
+	x4 = orig_c.x + i_c.x + j_c.x;
+	y4 = orig_c.y + i_c.y + j_c.y;
 
 	/* Compute bounds */
 
