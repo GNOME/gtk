@@ -1,3 +1,9 @@
+2003-05-05  Christian Rose  <menthos@menthos.com>
+
+	* sr.po, sr@Latn.po: Added Serbian translation by
+	Danilo Šegan <dsegan@gmx.net>.
+	* sp.po: Removed, it's replaced by sr@Latn.po.
+
 2003-05-05  Dmitry G. Mastrukov  <dmitry@taurussoft.org>
 
 	* be.po: Updated Belarusian translation
