@@ -184,6 +184,7 @@ gtk_target_list_unref (GtkTargetList *list)
 
 	  tmp_list = tmp_list->next;
 	}
+      g_free (list);
     }
 }
 
