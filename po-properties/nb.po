@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2004-11-14 21:33+0100\n"
+"POT-Creation-Date: 2005-01-19 15:03+0100\n"
+"PO-Revision-Date: 2005-01-19 15:16+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -93,9 +93,8 @@ msgid "Screen"
 msgstr "Skjerm"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "Modell for treevisning"
+msgstr "GdkScreen for rendreren"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -105,86 +104,82 @@ msgstr "Navn på program"
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
-msgstr ""
+msgstr "Navnet på programmet. Hvis dette ikke er satt vil forvalgt verdi være returverdien fra g_get_application_name()"
 
 #: gtk/gtkaboutdialog.c:210
 msgid "Program version"
 msgstr "Programversjon"
 
 #: gtk/gtkaboutdialog.c:211
-#, fuzzy
 msgid "The version of the program"
-msgstr "Orientering for verktøylinjen"
+msgstr "Programmets versjon"
 
 #: gtk/gtkaboutdialog.c:225
 msgid "Copyright string"
-msgstr ""
+msgstr "Informasjon om opphavsrett"
 
 #: gtk/gtkaboutdialog.c:226
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "Informasjon om opphavsrett for programmet"
 
 #: gtk/gtkaboutdialog.c:243
-#, fuzzy
 msgid "Comments string"
-msgstr "Avstand mellom kolonner"
+msgstr "Kommentarfelt"
 
 #: gtk/gtkaboutdialog.c:244
 msgid "Comments about the program"
-msgstr ""
+msgstr "Kommentarer om programmet"
 
 #: gtk/gtkaboutdialog.c:276
 msgid "Website URL"
-msgstr ""
+msgstr "URL til nettside"
 
 #: gtk/gtkaboutdialog.c:277
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "URL for lenke til programmets nettside"
 
 #: gtk/gtkaboutdialog.c:293
-#, fuzzy
 msgid "Website label"
-msgstr "Bruk størrelse i etikett"
+msgstr "Etikett for nettside"
 
 #: gtk/gtkaboutdialog.c:294
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
-msgstr ""
+msgstr "Etikett for lenken til programmets nettside. Hvis denne ikke er satt vil forvalgt verdi være URLen"
 
 #: gtk/gtkaboutdialog.c:310
 msgid "Authors"
 msgstr "Forfattere"
 
 #: gtk/gtkaboutdialog.c:311
-#, fuzzy
 msgid "List of authors of the program"
-msgstr "Orientering for verktøylinjen"
+msgstr "Liste med programmets forfattere"
 
 #: gtk/gtkaboutdialog.c:327
 msgid "Documenters"
-msgstr ""
+msgstr "Dokumenterere"
 
 #: gtk/gtkaboutdialog.c:328
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "Liste med personer som har skrevet dokumentasjon for programmet"
 
 #: gtk/gtkaboutdialog.c:344
 msgid "Artists"
-msgstr ""
+msgstr "Artister"
 
 #: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
-msgstr ""
+msgstr "Liste med personer som har laget grafikk for programmet"
 
 #: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
-msgstr ""
+msgstr "Oversettere"
 
 #: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
-msgstr ""
+msgstr "Oversettere. Denne strengen skal markeres som oversettbar"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Logo"
@@ -194,25 +189,23 @@ msgstr "Logo"
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
-msgstr ""
+msgstr "En logo for Om-boksen. Hvis denne ikke er satt vil forvalgt verdi være returverdien fra gtk_window_get_default_icon_list()"
 
 #: gtk/gtkaboutdialog.c:394
-#, fuzzy
 msgid "Logo Icon Name"
-msgstr "Navn på ikontema"
+msgstr "Navn på logoikon"
 
 #: gtk/gtkaboutdialog.c:395
 msgid "A named icon to use as the logo for the about box."
-msgstr ""
+msgstr "Et navngitt ikon som skal brukes som logo i Om-boksen."
 
 #: gtk/gtkaboutdialog.c:402
-#, fuzzy
 msgid "Link Color"
-msgstr "Aktiv farge"
+msgstr "Lenkefarge"
 
 #: gtk/gtkaboutdialog.c:403
 msgid "Color of hyperlinks"
-msgstr ""
+msgstr "Farge på hyperlenker"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
@@ -872,9 +865,8 @@ msgid "Display the cell"
 msgstr "Vis cellen"
 
 #: gtk/gtkcellrenderer.c:223
-#, fuzzy
 msgid "Display the cell sensitive"
-msgstr "Vis cellen"
+msgstr "Vis cellen som sensitiv"
 
 #: gtk/gtkcellrenderer.c:230
 msgid "xalign"
@@ -965,14 +957,12 @@ msgid "Whether this tag affects the cell background color"
 msgstr "Om denne merkingen påvirker bakgrunnsfargen for cellen"
 
 #: gtk/gtkcellrenderercombo.c:88
-#, fuzzy
 msgid "Model"
-msgstr "Modus"
+msgstr "Modell"
 
 #: gtk/gtkcellrenderercombo.c:89
-#, fuzzy
 msgid "The model containing the possible values for the combo box"
-msgstr "Modell for komboboksen"
+msgstr "Modell som inneholder mulige verdier for komboboksen"
 
 #: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
@@ -984,11 +974,11 @@ msgstr "En kolonne i datakildemodellen hvor man kan hente strenger"
 
 #: gtk/gtkcellrenderercombo.c:127
 msgid "Has Entry"
-msgstr ""
+msgstr "Har oppføring"
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
+msgstr "Hvis FALSE, vil ikke andre strenger enn de valgte tillates"
 
 #: gtk/gtkcellrendererpixbuf.c:136
 msgid "Pixbuf Object"
@@ -1039,9 +1029,8 @@ msgid "Render detail to pass to the theme engine"
 msgstr "Rendringsdetalj som skal sendes til temamotor"
 
 #: gtk/gtkcellrendererprogress.c:116
-#, fuzzy
 msgid "Value of the progress bar"
-msgstr "Tekst som skal vises i fremgangsmåleren"
+msgstr "Verdi for fremgangsmåleren"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:213
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
@@ -1049,9 +1038,8 @@ msgid "Text"
 msgstr "Tekst"
 
 #: gtk/gtkcellrendererprogress.c:134
-#, fuzzy
 msgid "Text on the progress bar"
-msgstr "Tekst som skal vises i fremgangsmåleren"
+msgstr "Tekst på fremgangsmåleren"
 
 #: gtk/gtkcellrenderertext.c:214
 msgid "Text to render"
@@ -1236,13 +1224,12 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:434 gtk/gtkfilechooserbutton.c:365
 #: gtk/gtklabel.c:453
-#, fuzzy
 msgid "Width In Characters"
 msgstr "Bredde i tegn"
 
 #: gtk/gtkcellrenderertext.c:435 gtk/gtklabel.c:454
 msgid "The desired width of the label, in characters"
-msgstr ""
+msgstr "Ønsket bredde for etiketten i tegn"
 
 #: gtk/gtkcellrenderertext.c:447 gtk/gtkcellview.c:197 gtk/gtktexttag.c:510
 msgid "Background set"
@@ -1592,18 +1579,16 @@ msgid "Add tearoffs to menus"
 msgstr "Legg til avrivningsfelt til menyer"
 
 #: gtk/gtkcombobox.c:655
-#, fuzzy
 msgid "Whether dropdowns should have a tearoff menu item"
-msgstr "Om faner skal ha ensartet størrelse"
+msgstr "Om nedtrekksmenyer skal ha avrivningsoppføring"
 
 #: gtk/gtkcombobox.c:670 gtk/gtkentry.c:530
 msgid "Has Frame"
 msgstr "Har ramme"
 
 #: gtk/gtkcombobox.c:671
-#, fuzzy
 msgid "Whether the combo box draws a frame around the child"
-msgstr "Kolonnen kan omorganiseres etter titler"
+msgstr "Om komboboksen tegner en ramme rundt avkom"
 
 #: gtk/gtkcombobox.c:679
 #, fuzzy
@@ -1808,13 +1793,10 @@ msgid "X align"
 msgstr "X-justering"
 
 #: gtk/gtkentry.c:590 gtk/gtkmisc.c:101
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
-msgstr ""
-"Horisontal justering, fra 0 (venstre) til 1 (høyre). Omvendt for RTL-"
-"utforminger"
+msgstr "Horisontal justering, fra 0 (venstre) til 1 (høyre). Omvendt for RTL-utforminger."
 
 #: gtk/gtkentry.c:828
 msgid "Select on focus"
@@ -1841,14 +1823,12 @@ msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimumslengde på nøkkel for søk for å slå opp treff"
 
 #: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:370
-#, fuzzy
 msgid "Text column"
 msgstr "Tekstkolonne"
 
 #: gtk/gtkentrycompletion.c:296
-#, fuzzy
 msgid "The column of the model containing the strings."
-msgstr "En kolonne i datakildemodellen hvor man kan hente strenger"
+msgstr "Kolonnen i modellen som inneholder strenger."
 
 #: gtk/gtkentrycompletion.c:313
 msgid "Inline completion"
@@ -2021,26 +2001,25 @@ msgstr "Om skjulte filer og mapper skal vises"
 
 #: gtk/gtkfilechooserbutton.c:336
 msgid "Dialog"
-msgstr ""
+msgstr "Dialog"
 
 #: gtk/gtkfilechooserbutton.c:337
 msgid "The file chooser dialog to use."
-msgstr ""
+msgstr "Filvelgerdialog som skal brukes."
 
 #: gtk/gtkfilechooserbutton.c:352
-#, fuzzy
 msgid "The title of the file chooser dialog."
-msgstr "Tittelen på dialogen for skriftvalg"
+msgstr "Tittel på filvelgerdialogen."
 
 #: gtk/gtkfilechooserbutton.c:366
 msgid "The desired width of the button widget, in characters."
-msgstr ""
+msgstr "Ønsket bredde på knappekomponenten i tegn."
 
-#: gtk/gtkfilechooserdefault.c:625
+#: gtk/gtkfilechooserdefault.c:627
 msgid "Default file chooser backend"
 msgstr "Forvalgt motor for filvelger"
 
-#: gtk/gtkfilechooserdefault.c:626
+#: gtk/gtkfilechooserdefault.c:628
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Navn på GtkFileChooser-motor som skal brukes som forvalg"
 
@@ -2221,19 +2200,16 @@ msgstr ""
 "handle_position skal brukes"
 
 #: gtk/gtkiconview.c:333
-#, fuzzy
 msgid "Selection mode"
-msgstr "Utvalg bundet"
+msgstr "Utvalgsmodus"
 
 #: gtk/gtkiconview.c:334
-#, fuzzy
 msgid "The selection mode"
-msgstr "Valgt år"
+msgstr "Valgt modus"
 
 #: gtk/gtkiconview.c:352
-#, fuzzy
 msgid "Pixbuf column"
-msgstr "Pixbuf"
+msgstr "Pixbuf-kolonne"
 
 #: gtk/gtkiconview.c:353
 msgid "Model column used to retrieve the icon pixbuf from"
@@ -2286,7 +2262,6 @@ msgid "Space which is inserted between cells of an item"
 msgstr ""
 
 #: gtk/gtkiconview.c:465
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Avstand mellom rader"
 
@@ -2295,7 +2270,6 @@ msgid "Space which is inserted between grid rows"
 msgstr ""
 
 #: gtk/gtkiconview.c:481
-#, fuzzy
 msgid "Column Spacing"
 msgstr "Avstand mellom kolonner"
 
@@ -2304,9 +2278,8 @@ msgid "Space which is inserted between grid column"
 msgstr ""
 
 #: gtk/gtkiconview.c:497
-#, fuzzy
 msgid "Margin"
-msgstr "Venstre marg"
+msgstr "Marg"
 
 #: gtk/gtkiconview.c:498
 msgid "Space which is inserted at the edges of the icon view"
@@ -2399,9 +2372,8 @@ msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "Størrelse som skal brukes for standardikon eller ikonsett"
 
 #: gtk/gtkimage.c:232
-#, fuzzy
 msgid "Pixel size"
-msgstr "Piksler"
+msgstr "Pikselstørrelse"
 
 #: gtk/gtkimage.c:233
 #, fuzzy
@@ -2417,14 +2389,12 @@ msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation som skal vises"
 
 #: gtk/gtkimage.c:257 gtk/gtkwindow.c:525
-#, fuzzy
 msgid "Icon Name"
-msgstr "Skriftnavn"
+msgstr "Ikonnavn"
 
 #: gtk/gtkimage.c:258
-#, fuzzy
 msgid "The name of the icon from the icon theme"
-msgstr "Navn på valgt skrift"
+msgstr "Navn på ikonet fra ikontemaet"
 
 #: gtk/gtkimage.c:265
 msgid "Storage type"
@@ -2534,16 +2504,15 @@ msgstr "Om etiketten tegnes med valgt skrift"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
-msgstr ""
+msgstr "Vinkel"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Vinkel for rotasjon av etiketten"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Bredde i tegn"
+msgstr "Maksimal bredde i tegn"
 
 #: gtk/gtklabel.c:514
 msgid "The desired maximum width of the label, in characters"
@@ -3483,11 +3452,11 @@ msgstr "Liste over ikonstørrelser (gtk-menu=16,16;gtk-button=20,20..."
 
 #: gtk/gtksettings.c:372
 msgid "GTK Modules"
-msgstr ""
+msgstr "GTK-moduler"
 
 #: gtk/gtksettings.c:373
 msgid "List of currently active GTK modules"
-msgstr ""
+msgstr "Liste over aktive GTK-moduler"
 
 #: gtk/gtksettings.c:382
 msgid "Xft Antialias"
@@ -3533,7 +3502,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:432
 msgid "Alternative button order"
-msgstr ""
+msgstr "Alternativ rekkefølge for knapper"
 
 #: gtk/gtksettings.c:433
 #, fuzzy
@@ -4953,11 +4922,3 @@ msgstr "IM statusstil"
 #: modules/input/gtkimcontextxim.c:340
 msgid "How to draw the input method statusbar"
 msgstr "Hvordan statuslinjen for inndatametoden tegnes"
-
-#, fuzzy
-#~ msgid "Width In Chararacters"
-#~ msgstr "Bredde i tegn"
-
-#, fuzzy
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "Widgetet er synlig"
