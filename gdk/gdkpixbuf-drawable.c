@@ -257,23 +257,29 @@ rgb565lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 #ifdef LITTLE
 		s = (guint32 *) srow;
 #else
-		s = (guint32 *) srow;
+		s = srow;
 #endif
 		o = (guint16 *) orow;
 		for (xx = 1; xx < width; xx += 2) {
 			register guint32 data;
 #ifdef LITTLE
 			data = *s++;
-			*o++ = (data & 0xf800) >> 8 | (data & 0x7e0) << 5;
-			*o++ = (data & 0x1f) << 3 | (data & 0xf8000000) >> 16;
-			*o++ = ((data & 0x7e00000) >> 19) | (data & 0x1f0000) >> 5;
+			*o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
+				| (data & 0x7e0) << 5 | (data & 0x600) >> 1;
+			*o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
+				| (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21;
+			*o++ = (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25
+				| (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 			/* swap endianness first */
 			data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
 			s += 4;
-			*o++ = (data & 0xf800) | (data & 0x7e0) >> 3;
-			*o++ = (data & 0x1f) << 11 | (data & 0xf8000000) >> 24;
-			*o++ = ((data & 0x7e00000) >> 11) | (data & 0x1f0000) >> 13;
+			*o++ = (data & 0xf800) | (data & 0xe000) >> 5
+				| (data & 0x7e0) >> 3 | (data & 0x600) >> 9;
+			*o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| (data & 0xf8000000) >> 24 | (data & 0xe0000000) >> 29;
+			*o++ = (data & 0x7e00000) >> 11 | (data & 0x6000000) >> 17
+				| (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
 #endif
 		}
 		/* check for last remaining pixel */
@@ -285,9 +291,9 @@ rgb565lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 			data = *((short *) s);
 			data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
 #endif
-			((char *) o)[0] = (data >> 8) & 0xf8;
-			((char *) o)[1] = (data >> 3) & 0xfc;
-			((char *) o)[2] = (data << 3) & 0xf8;
+			((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
+			((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
+			((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
 		}
 		srow += bpl;
 		orow += rowstride;
@@ -331,14 +337,20 @@ rgb565msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 			/* swap endianness first */
 			data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
 			s += 4;
-			*o++ = (data & 0xf800) >> 8 | (data & 0x7e0) << 5;
-			*o++ = (data & 0x1f) << 3 | (data & 0xf8000000) >> 16;
-			*o++ = ((data & 0x7e00000) >> 19) | (data & 0x1f0000) >> 5;
+			*o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
+				| (data & 0x7e0) << 5 | (data & 0x600) >> 1;
+			*o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
+				| (data & 0xf8000000) >> 16 | (data & 0xe0000000) >> 21;
+			*o++ = (data & 0x7e00000) >> 19 | (data & 0x6000000) >> 25
+				| (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 			data = *s++;
-			*o++ = (data & 0xf800) | (data & 0x7e0) >> 3;
-			*o++ = (data & 0x1f) << 11 | (data & 0xf8000000) >> 24;
-			*o++ = ((data & 0x7e00000) >> 11) | (data & 0x1f0000) >> 13;
+			*o++ = (data & 0xf800) | (data & 0xe000) >> 5
+				| (data & 0x7e0) >> 3 | (data & 0x600) >> 9;
+			*o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| (data & 0xf8000000) >> 24 | (data & 0xe0000000) >> 29;
+			*o++ = (data & 0x7e00000) >> 11 | (data & 0x6000000) >> 17
+				| (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
 #endif
 		}
 		/* check for last remaining pixel */
@@ -350,9 +362,9 @@ rgb565msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 #else
 			data = *((short *) s);
 #endif
-			((char *) o)[0] = (data >> 8) & 0xf8;
-			((char *) o)[1] = (data >> 3) & 0xfc;
-			((char *) o)[2] = (data << 3) & 0xf8;
+			((char *) o)[0] = ((data >> 8) & 0xf8) | ((data >> 13) & 0x7);
+			((char *) o)[1] = ((data >> 3) & 0xfc) | ((data >> 9) & 0x3);
+			((char *) o)[2] = ((data << 3) & 0xf8) | ((data >> 2) & 0x7);
 		}
 		srow += bpl;
 		orow += rowstride;
@@ -393,18 +405,22 @@ rgb565alsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colorma
 		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx ++) {
 			register guint32 data;
-			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
-			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
+			/*  rrrrrggg gggbbbbb -> rrrrrRRR ggggggGG bbbbbBBB aaaaaaaa */
+			/*  little endian: aaaaaaaa bbbbbBBB ggggggGG rrrrrRRR */
 #ifdef LITTLE
 			data = *s++;
-			*o++ = (data & 0xf800) >> 8 | (data & 0x7e0) << 5
-				| (data & 0x1f) << 19 | 0xff000000;
+			*o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
+				| (data & 0x7e0) << 5 | (data & 0x600) >> 1
+				| (data & 0x1f) << 19 | (data & 0x1c) << 14
+				| 0xff000000;
 #else
 			/* swap endianness first */
 			data = s[0] | s[1] << 8;
 			s += 2;
-			*o++ = (data & 0xf800) << 16 | (data & 0x7e0) << 13
-				| (data & 0x1f) <<  11 | 0xff;
+			*o++ = (data & 0xf800) << 16 | (data & 0xe000) << 11
+				| (data & 0x7e0) << 13 | (data & 0x600) << 7
+				| (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| 0xff;
 #endif
 		}
 		srow += bpl;
@@ -442,18 +458,22 @@ rgb565amsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colorma
 		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx ++) {
 			register guint32 data;
-			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
-			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
+			/*  rrrrrggg gggbbbbb -> rrrrrRRR gggggg00 bbbbbBBB aaaaaaaa */
+			/*  little endian: aaaaaaaa bbbbbBBB gggggg00 rrrrrRRR */
 #ifdef LITTLE
 			/* swap endianness first */
 			data = s[0] | s[1] << 8;
 			s += 2;
-			*o++ = (data & 0xf800) >> 8 | (data & 0x7e0) << 5
-				| (data & 0x1f) << 19 | 0xff000000;
+			*o++ = (data & 0xf800) >> 8 | (data & 0xe000) >> 13
+				| (data & 0x7e0) << 5 | (data & 0x600) >> 1
+				| (data & 0x1f) << 19 | (data & 0x1c) << 14
+				| 0xff000000;
 #else
 			data = *s++;
-			*o++ = (data & 0xf800) << 16 | (data & 0x7e0) << 13
-				| (data & 0x1f) <<  11 | 0xff;
+			*o++ = (data & 0xf800) << 16 | (data & 0xe000) << 11
+				| (data & 0x7e0) << 13 | (data & 0x600) << 7
+				| (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| 0xff;
 #endif
 		}
 		srow += bpl;
@@ -496,16 +516,22 @@ rgb555lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 			register guint32 data;
 #ifdef LITTLE
 			data = *s++;
-			*o++ = (data & 0x7c00) >> 7 | (data & 0x3e0) << 6;
-			*o++ = (data & 0x1f) << 3 | (data & 0x7c000000) >> 15;
-			*o++ = ((data & 0x3e00000) >> 18) | (data & 0x1f0000) >> 5;
+			*o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
+				| (data & 0x3e0) << 6 | (data & 0x380) << 1;
+			*o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
+				| (data & 0x7c000000) >> 15 | (data & 0x70000000) >> 20;
+			*o++ = (data & 0x3e00000) >> 18 | (data & 0x3800000) >> 23
+				| (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 			/* swap endianness first */
 			data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
 			s += 4;
-			*o++ = (data & 0x7c00) << 1 | (data & 0x3e0) >> 2;
-			*o++ = (data & 0x1f) << 11 | (data & 0x7c000000) >> 23;
-			*o++ = ((data & 0x3e00000) >> 10) | (data & 0x1f0000) >> 13;
+			*o++ = (data & 0x7c00) << 1 | (data & 0x7000) >> 4
+				| (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
+			*o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| (data & 0x7c000000) >> 23 | (data & 0x70000000) >> 28;
+			*o++ = (data & 0x3e00000) >> 10 | (data & 0x3800000) >> 15
+				| (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
 #endif
 		}
 		/* check for last remaining pixel */
@@ -517,9 +543,9 @@ rgb555lsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 			data = *((short *) s);
 			data = ((data >> 8) & 0xff) | ((data & 0xff) << 8);
 #endif
-			((char *) o)[0] = (data & 0x7c0) >> 7;
-			((char *) o)[1] = (data & 0x3e0) >> 2;
-			((char *) o)[2] = (data & 0x1f) << 3;
+			((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
+			((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
+			((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
 		}
 		srow += bpl;
 		orow += rowstride;
@@ -559,14 +585,20 @@ rgb555msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 			/* swap endianness first */
 			data = s[0] | s[1] << 8 | s[2] << 16 | s[3] << 24;
 			s += 4;
-			*o++ = (data & 0x7c00) >> 7 | (data & 0x3e0) << 6;
-			*o++ = (data & 0x1f) << 3 | (data & 0x7c000000) >> 15;
-			*o++ = ((data & 0x3e00000) >> 18) | (data & 0x1f0000) >> 5;
+			*o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
+				| (data & 0x3e0) << 6 | (data & 0x380) << 1;
+			*o++ = (data & 0x1f) << 3 | (data & 0x1c) >> 2
+				| (data & 0x7c000000) >> 15 | (data & 0x70000000) >> 20;
+			*o++ = (data & 0x3e00000) >> 18 | (data & 0x3800000) >> 23
+				| (data & 0x1f0000) >> 5 | (data & 0x1c0000) >> 10;
 #else
 			data = *s++;
-			*o++ = (data & 0x7c00) << 1 | (data & 0x3e0) >> 2;
-			*o++ = (data & 0x1f) << 11 | (data & 0x7c000000) >> 23;
-			*o++ = ((data & 0x3e00000) >> 10) | (data & 0x1f0000) >> 13;
+			*o++ = (data & 0x7c00) << 1 | (data & 0x7000) >> 4
+				| (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
+			*o++ = (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| (data & 0x7c000000) >> 23 | (data & 0x70000000) >> 28;
+			*o++ = (data & 0x3e00000) >> 10 | (data & 0x3800000) >> 15
+				| (data & 0x1f0000) >> 13 | (data & 0x1c0000) >> 18;
 #endif
 		}
 		/* check for last remaining pixel */
@@ -578,9 +610,9 @@ rgb555msb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colormap
 #else
 			data = *((short *) s);
 #endif
-			((char *) o)[0] = (data & 0x7c0) >> 7;
-			((char *) o)[1] = (data & 0x3e0) >> 2;
-			((char *) o)[2] = (data & 0x1f) << 3;
+			((char *) o)[0] = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12;
+			((char *) o)[1] = (data & 0x3e0) >> 2 | (data & 0x380) >> 7;
+			((char *) o)[2] = (data & 0x1f) << 3 | (data & 0x1c) >> 2;
 		}
 		srow += bpl;
 		orow += rowstride;
@@ -621,18 +653,22 @@ rgb555alsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colorma
 		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx++) {
 			register guint32 data;
-			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
-			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
+			/*  rrrrrggg gggbbbbb -> rrrrrRRR gggggGGG bbbbbBBB aaaaaaaa */
+			/*  little endian: aaaaaaaa bbbbbBBB gggggGGG rrrrrRRR */
 #ifdef LITTLE
 			data = *s++;
-			*o++ = (data & 0x7c00) >> 7 | (data & 0x3e0) << 6
-				| (data & 0x1f) << 19 | 0xff000000;
+			*o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
+				| (data & 0x3e0) << 6 | (data & 0x380) << 1
+				| (data & 0x1f) << 19 | (data & 0x1c) << 14
+				| 0xff000000;
 #else
 			/* swap endianness first */
 			data = s[0] | s[1] << 8;
 			s += 2;
-			*o++ = (data & 0x7c00) << 17 | (data & 0x3e0) << 14
-				| (data & 0x1f) <<  11 | 0xff;
+			*o++ = (data & 0x7c00) << 17 | (data & 0x7000) << 12
+				| (data & 0x3e0) << 14 | (data & 0x380) << 9
+				| (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| 0xff;
 #endif
 		}
 		srow += bpl;
@@ -674,18 +710,22 @@ rgb555amsb (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *colorma
 		o = (guint32 *) orow;
 		for (xx = 0; xx < width; xx++) {
 			register guint32 data;
-			/*  rrrrrggg gggbbbbb -> rrrrr000 gggggg00 bbbbb000 aaaaaaaa */
-			/*  little endian: aaaaaaaa bbbbb000 gggggg00 rrrrr000 */
+			/*  rrrrrggg gggbbbbb -> rrrrrRRR gggggGGG bbbbbBBB aaaaaaaa */
+			/*  little endian: aaaaaaaa bbbbbBBB gggggGGG rrrrrRRR */
 #ifdef LITTLE
 			/* swap endianness first */
 			data = s[0] | s[1] << 8;
 			s += 2;
-			*o++ = (data & 0x7c00) >>7 | (data & 0x3e0) << 6
-				| (data & 0x1f) << 19 | 0xff000000;
+			*o++ = (data & 0x7c00) >> 7 | (data & 0x7000) >> 12
+				| (data & 0x3e0) << 6 | (data & 0x380) << 1
+				| (data & 0x1f) << 19 | (data & 0x1c) << 14
+				| 0xff000000;
 #else
 			data = *s++;
-			*o++ = (data & 0x7c00) << 17 | (data & 0x3e0) << 14
-				| (data & 0x1f) <<  11 | 0xff;
+			*o++ = (data & 0x7c00) << 17 | (data & 0x7000) << 12
+				| (data & 0x3e0) << 14 | (data & 0x380) << 9
+				| (data & 0x1f) << 11 | (data & 0x1c) << 6
+				| 0xff;
 #endif
 		}
 		srow += bpl;
@@ -851,6 +891,8 @@ convert_real_slow (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *
 	guint8 *o;
 	guint32 pixel;
 	GdkVisual *v;
+	guint8 component;
+	int i;
 
 	width = image->width;
 	height = image->height;
@@ -878,12 +920,21 @@ convert_real_slow (GdkImage *image, guchar *pixels, int rowstride, GdkColormap *
 				*o++ = cmap->colors[pixel].blue;
 				break;
 			case GDK_VISUAL_TRUE_COLOR:
-				/* this is odd because it must sometimes shift left (otherwise
-				   i'd just shift >> *_shift - 8 + *_prec), so this logic
-				   should work for all bit sizes/shifts/etc */
-				*o++ = ((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> 24;
-				*o++ = ((pixel & v->green_mask) << (32 - v->green_shift - v->green_prec)) >> 24;
-				*o++ = ((pixel & v->blue_mask) << (32 - v->blue_shift - v->blue_prec)) >> 24;
+				/* This is odd because it must sometimes shift left (otherwise
+				   I'd just shift >> (*_shift - 8 + *_prec + <0-7>). This logic
+				   should work for all bit sizes/shifts/etc. */
+				component = 0;
+				for (i = 24; i < 32; i += v->red_prec)
+					component |= ((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> i;
+				*o++ = component;
+				component = 0;
+				for (i = 24; i < 32; i += v->green_prec)
+					component |= ((pixel & v->green_mask) << (32 - v->green_shift - v->green_prec)) >> i;
+				*o++ = component;
+				component = 0;
+				for (i = 24; i < 32; i += v->blue_prec)
+					component |= ((pixel & v->blue_mask) << (32 - v->blue_shift - v->blue_prec)) >> i;
+				*o++ = component;
 				break;
 			case GDK_VISUAL_DIRECT_COLOR:
 				*o++ = cmap->colors[((pixel & v->red_mask) << (32 - v->red_shift - v->red_prec)) >> 24].red;

@@ -1,3 +1,11 @@
+2000-05-09  Darin Adler  <darin@eazel.com>
+
+	* gdk-pixbuf/gdk-pixbuf-drawable.c: (rgb565lsb), (rgb565msb),
+	(rgb565alsb), (rgb565amsb), (rgb555lsb), (rgb555msb), (rgb555alsb),
+	(rgb555amsb), (convert_real_slow): Change all conversion from 16-bit
+	formats to 32-bit formats to re-use the high bits of the color values
+	so that white maps to full white.
+
 Fri May  5 12:16:32 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/DETAILS: Add beginnings of file with 
