@@ -51,31 +51,35 @@ typedef struct _GtkFrameClass  GtkFrameClass;
 struct _GtkFrame
 {
   GtkBin bin;
-  
-  gchar *label;
+
+  GtkWidget *label_widget;
   gint16 shadow_type;
-  gint16 label_width;
-  gint16 label_height;
   gfloat label_xalign;
   gfloat label_yalign;
+
+  GtkAllocation child_allocation;
 };
 
 struct _GtkFrameClass
 {
   GtkBinClass parent_class;
+
+  void (*compute_child_allocation) (GtkFrame *frame, GtkAllocation *allocation);
 };
 
 
-GtkType    gtk_frame_get_type        (void);
-GtkWidget* gtk_frame_new             (const gchar   *label);
-void       gtk_frame_set_label       (GtkFrame      *frame,
-				      const gchar   *label);
-void       gtk_frame_set_label_align (GtkFrame      *frame,
-				      gfloat         xalign,
-				      gfloat         yalign);
-void       gtk_frame_set_shadow_type (GtkFrame      *frame,
-				      GtkShadowType  type);
-
+GtkType    gtk_frame_get_type         (void);
+GtkWidget* gtk_frame_new              (const gchar   *label);
+void       gtk_frame_set_label        (GtkFrame      *frame,
+				       const gchar   *label);
+gchar *    gtk_frame_get_label        (GtkFrame      *frame);
+void       gtk_frame_set_label_widget (GtkFrame      *frame,
+				       GtkWidget     *title_widget);
+void       gtk_frame_set_label_align  (GtkFrame      *frame,
+				       gfloat         xalign,
+				       gfloat         yalign);
+void       gtk_frame_set_shadow_type  (GtkFrame      *frame,
+				       GtkShadowType  type);
 
 #ifdef __cplusplus
 }

@@ -48,11 +48,15 @@
  * 
  */
 
+#include "gtkbindings.h"
+#include "gtkdnd.h"
+#include "gtkmain.h"
+#include "gtksignal.h"
 #include "gtktext.h"
 #include "gtktextdisplay.h"
 #include "gtktextview.h"
 #include "gtkimmulticontext.h"
-#include <gdk/gdkkeysyms.h>
+#include "gdk/gdkkeysyms.h"
 
 enum {
   MOVE_INSERT,
@@ -264,10 +268,10 @@ gtk_text_view_get_type (void)
 
 static void
 add_move_insert_binding (GtkBindingSet *binding_set,
-                        guint keyval,
-                        guint modmask,
-                        GtkTextViewMovementStep step,
-                        gint count)
+			 guint keyval,
+			 guint modmask,
+			 GtkTextViewMovementStep step,
+			 gint count)
 {
   g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
   

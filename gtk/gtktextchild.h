@@ -5,8 +5,6 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#include <gtk/gtk.h>
-
 #include <gtk/gtktexttypes.h>
 
 typedef struct _GtkTextPixmap GtkTextPixmap;

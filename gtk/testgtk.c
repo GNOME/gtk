@@ -56,7 +56,7 @@ file_exists (const char *filename)
 {
   struct stat statbuf;
 
-  return stat("filename", &statbuf) == 0;
+  return stat (filename, &statbuf) == 0;
 }
 
 GtkWidget *
@@ -3973,9 +3973,8 @@ insert_row_clist (GtkWidget *widget, gpointer data)
       style3 = gtk_style_copy (GTK_WIDGET (data)->style);
       style3->fg[GTK_STATE_NORMAL] = col1;
       style3->base[GTK_STATE_NORMAL] = col2;
-      gdk_font_unref (style3->font);
-      style3->font =
-	gdk_font_load ("-*-courier-medium-*-*-*-*-120-*-*-*-*-*-*");
+      pango_font_description_free (style3->font_desc);
+      style3->font_desc = pango_font_description_from_string ("courier 12");
     }
 
   gtk_clist_set_cell_style (GTK_CLIST (data), row, 3, style1);
@@ -4224,10 +4223,9 @@ create_clist (void)
       style = gtk_style_new ();
       style->fg[GTK_STATE_NORMAL] = col1;
       style->base[GTK_STATE_NORMAL] = col2;
-      
-      gdk_font_unref (style->font);
-      style->font =
-	gdk_font_load ("-adobe-helvetica-bold-r-*-*-*-140-*-*-*-*-*-*");
+
+      style->font_desc->size = 14 * PANGO_SCALE;
+      style->font_desc->weight = PANGO_WEIGHT_BOLD;
 
       for (i = 0; i < 10; i++)
 	{
@@ -4396,9 +4394,8 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
       style2->base[GTK_STATE_SELECTED] = col2;
       style2->fg[GTK_STATE_NORMAL] = col1;
       style2->base[GTK_STATE_NORMAL] = col2;
-      gdk_font_unref (style2->font);
-      style2->font =
-	gdk_font_load ("-*-courier-medium-*-*-*-*-300-*-*-*-*-*-*");
+      pango_font_description_free (style2->font_desc);
+      style2->font_desc = pango_font_description_from_string ("courier 30");
     }
 
   gtk_ctree_node_set_cell_style (ctree, node, 1, style1);

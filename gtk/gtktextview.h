@@ -5,6 +5,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <gtk/gtkcontainer.h>
+#include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
 
 typedef enum {
@@ -95,7 +97,7 @@ struct _GtkTextView {
 };
 
 struct _GtkTextViewClass {
-  GtkLayoutClass parent_class;
+  GtkContainerClass parent_class;
 
   /* These are all RUN_ACTION signals for keybindings */
 

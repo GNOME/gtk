@@ -48,6 +48,7 @@
  * 
  */
 
+#include "gtksignal.h"
 #include "gtktextlayout.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"

@@ -57,6 +57,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "gtksignal.h"
 #include "gtktexttag.h"
 #include "gtktexttagtable.h"
 #include "gtktextlayout.h"

@@ -205,7 +205,7 @@ gtk_label_set_text_internal (GtkLabel *label,
 
   label->label = str;
   if (label->layout)
-    pango_layout_set_text (label->layout, str, strlen (str));
+    pango_layout_set_text (label->layout, str, -1);
   
   gtk_widget_queue_resize (GTK_WIDGET (label));
 }
@@ -217,6 +217,24 @@ gtk_label_set_text (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
 
   gtk_label_set_text_internal (label, g_strdup (str ? str : ""));
+}
+
+/**
+ * gtk_label_get_text:
+ * @label: a #GtkLabel
+ * 
+ * Fetches the text from a label widget
+ * 
+ * Return value: the text in the label widget. This value must
+ * be freed with g_free().
+ **/
+gchar *
+gtk_label_get_text (GtkLabel *label)
+{
+  g_return_if_fail (label != NULL);
+  g_return_if_fail (GTK_IS_LABEL (label));
+
+  return g_strdup (label->label);
 }
 
 void
@@ -395,7 +413,7 @@ gtk_label_size_request (GtkWidget      *widget,
       pango_layout_set_attributes (label->layout, attrs);
       pango_attr_list_unref (attrs);
 
-      pango_layout_set_text (label->layout, label->label, strlen (label->label));
+      pango_layout_set_text (label->layout, label->label, -1);
 
       switch (label->jtype)
 	{
@@ -425,15 +443,16 @@ gtk_label_size_request (GtkWidget      *widget,
       GtkWidgetAuxInfo *aux_info;
       gint longest_paragraph;
       gint width, height;
+      gint real_width;
 
       aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
       if (aux_info && aux_info->width > 0)
 	{
-	  pango_layout_set_width (label->layout, aux_info->width * 1000);
+	  pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
 	  requisition->width += aux_info->width;
-	  requisition->height += logical_rect.height / 1000;
+	  requisition->height += logical_rect.height / PANGO_SCALE;
 	}
       else
 	{
@@ -448,13 +467,14 @@ gtk_label_size_request (GtkWidget      *widget,
 	  longest_paragraph = width;
 
 	  width = MIN (width,
-		       1000 * gdk_string_width (GTK_WIDGET (label)->style->font,
+		       PANGO_SCALE * gdk_string_width (GTK_WIDGET (label)->style->font,
 						"This long string gives a good enough length for any line to have."));
 	  width = MIN (width,
-		       1000 * (gdk_screen_width () + 1) / 2);
+		       PANGO_SCALE * (gdk_screen_width () + 1) / 2);
 
 	  pango_layout_set_width (label->layout, width);
 	  pango_layout_get_extents (label->layout, NULL, &logical_rect);
+	  real_width = logical_rect.width;
 	  height = logical_rect.height;
 	  
 	  /* Unfortunately, the above may leave us with a very unbalanced looking paragraph,
@@ -464,7 +484,7 @@ gtk_label_size_request (GtkWidget      *widget,
 	    {
 	      gint nlines, perfect_width;
 
-	      nlines = (longest_paragraph + width - 1) / width;
+	      nlines = pango_layout_get_line_count (label->layout);
 	      perfect_width = (longest_paragraph + nlines - 1) / nlines;
 	      
 	      if (perfect_width < width)
@@ -475,6 +495,7 @@ gtk_label_size_request (GtkWidget      *widget,
 		  if (logical_rect.height <= height)
 		    {
 		      width = perfect_width;
+		      real_width = logical_rect.width;
 		      height = logical_rect.height;
 		    }
 		  else
@@ -489,17 +510,17 @@ gtk_label_size_request (GtkWidget      *widget,
 			  if (logical_rect.height <= height)
 			    {
 			      width = mid_width;
+			      real_width = logical_rect.width;
 			      height = logical_rect.height;
 			    }
 			}
 		    }
 		}
 	    }
-	  
 	  pango_layout_set_width (label->layout, width);
-	  
-	  requisition->width += width / 1000;
-	  requisition->height += height / 1000;
+
+	  requisition->width += real_width / PANGO_SCALE;
+	  requisition->height += height / PANGO_SCALE;
 	}
     }
   else				/* !label->wrap */
@@ -507,8 +528,8 @@ gtk_label_size_request (GtkWidget      *widget,
       pango_layout_set_width (label->layout, -1);
       pango_layout_get_extents (label->layout, NULL, &logical_rect);
 
-      requisition->width += logical_rect.width / 1000;
-      requisition->height += logical_rect.height / 1000;
+      requisition->width += logical_rect.width / PANGO_SCALE;
+      requisition->height += logical_rect.height / PANGO_SCALE;
     }
 }
 

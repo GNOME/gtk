@@ -3,13 +3,12 @@
  *  Developed by Havoc Pennington
  */
 
+#include "gtkinvisible.h"
+#include "gtkselection.h"
+#include "gtksignal.h"
 #include "gtktextbuffer.h"
-
 #include "gtktextbtree.h"
-
 #include "gtktextiterprivate.h"
-
-#include <gtk/gtkinvisible.h>
 
 enum {
   INSERT_TEXT,

@@ -14,7 +14,7 @@
 
 style 'main_buttons' = 'button'
 {
-  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+  font_name = "Monospace 10"
   bg[PRELIGHT] = { 0, 0, 0.75 }
 }
 

@@ -934,7 +934,6 @@ gtk_clist_init (GtkCList *clist)
   clist->freeze_count = 0;
 
   clist->rows = 0;
-  clist->row_center_offset = 0;
   clist->row_height = 0;
   clist->row_list = NULL;
   clist->row_list_end = NULL;
@@ -2502,51 +2501,95 @@ set_cell_contents (GtkCList    *clist,
     column_auto_resize (clist, clist_row, column, requisition.width);
 }
 
+PangoLayout *
+_gtk_clist_create_cell_layout (GtkCList       *clist,
+			       GtkCListRow    *clist_row,
+			       gint            column)
+{
+  PangoContext *context;
+  PangoLayout *layout;
+  GtkStyle *style;
+  GtkCell *cell;
+  gchar *text;
+  
+  get_cell_style (clist, clist_row, GTK_STATE_NORMAL, column, &style,
+		  NULL, NULL);
+
+
+  cell = &clist_row->cell[column];
+  switch (cell->type)
+    {
+    case GTK_CELL_TEXT:
+    case GTK_CELL_PIXTEXT:
+      text = ((cell->type == GTK_CELL_PIXTEXT) ?
+	      GTK_CELL_PIXTEXT (*cell)->text :
+	      GTK_CELL_TEXT (*cell)->text);
+
+      if (!text)
+	return NULL;
+      
+      context = gtk_widget_create_pango_context (GTK_WIDGET (clist));
+      pango_context_set_font_description (context, style->font_desc);
+      
+      layout = pango_layout_new (context);
+      pango_layout_set_text (layout, ((cell->type == GTK_CELL_PIXTEXT) ?
+				      GTK_CELL_PIXTEXT (*cell)->text :
+				      GTK_CELL_TEXT (*cell)->text), -1);
+      
+      pango_context_unref (context);
+
+      return layout;
+      
+    default:
+      return NULL;
+    }
+}
+
 static void
 cell_size_request (GtkCList       *clist,
 		   GtkCListRow    *clist_row,
 		   gint            column,
 		   GtkRequisition *requisition)
 {
-  GtkStyle *style;
   gint width;
   gint height;
+  PangoLayout *layout;
+  PangoRectangle logical_rect;
 
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
   g_return_if_fail (requisition != NULL);
 
-  get_cell_style (clist, clist_row, GTK_STATE_NORMAL, column, &style,
-		  NULL, NULL);
+  layout = _gtk_clist_create_cell_layout (clist, clist_row, column);
+  if (layout)
+    {
+      pango_layout_get_extents (layout, NULL, &logical_rect);
+      
+      requisition->width = logical_rect.width / PANGO_SCALE;
+      requisition->height = logical_rect.height / PANGO_SCALE;
+      
+      pango_layout_unref (layout);
+    }
+  else
+    {
+      requisition->width  = 0;
+      requisition->height = 0;
+    }
+
+  if (layout && clist_row->cell[column].type == GTK_CELL_PIXTEXT)
+    requisition->width += GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing;
 
   switch (clist_row->cell[column].type)
     {
-    case GTK_CELL_TEXT:
-      requisition->width =
-	gdk_string_width (style->font,
-			  GTK_CELL_TEXT (clist_row->cell[column])->text);
-      requisition->height = style->font->ascent + style->font->descent;
-      break;
     case GTK_CELL_PIXTEXT:
-      gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap,
-			   &width, &height);
-      requisition->width = width +
-	GTK_CELL_PIXTEXT (clist_row->cell[column])->spacing +
-	gdk_string_width (style->font,
-			  GTK_CELL_TEXT (clist_row->cell[column])->text);
-
-      requisition->height = MAX (style->font->ascent + style->font->descent,
-				 height);
-      break;
     case GTK_CELL_PIXMAP:
       gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap,
 			   &width, &height);
-      requisition->width = width;
-      requisition->height = height;
+      requisition->width += width;
+      requisition->height = MAX (requisition->height, height);
       break;
+      
     default:
-      requisition->width  = 0;
-      requisition->height = 0;
       break;
     }
 
@@ -2980,18 +3023,21 @@ gtk_clist_set_row_height (GtkCList *clist,
       clist->row_height = 0;
     }
 
-  if (GTK_WIDGET_REALIZED (clist))
+  if (widget->style->font_desc)
     {
+      PangoContext *context = gtk_widget_create_pango_context (widget);
+      PangoFontMetrics metrics;
+      PangoFont *font = pango_context_load_font (context, widget->style->font_desc);
+      gchar *lang = pango_context_get_lang (context);
+
+      pango_font_get_metrics (font, lang, &metrics);
+      
+      g_free (lang);
+      g_object_unref (G_OBJECT (font));
+      pango_context_unref (context);
+      
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
-	{
-	  clist->row_height = (widget->style->font->ascent +
-			       widget->style->font->descent + 1);
-	  clist->row_center_offset = widget->style->font->ascent + 1.5;
-	}
-      else
-	clist->row_center_offset = 1.5 + (clist->row_height +
-					  widget->style->font->ascent -
-					  widget->style->font->descent - 1) / 2;
+	clist->row_height = (metrics.ascent + metrics.descent) / PANGO_SCALE;
     }
       
   CLIST_REFRESH (clist);
@@ -4840,15 +4886,8 @@ gtk_clist_style_set (GtkWidget *widget,
 
   /* text properties */
   if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
-    {
-      clist->row_height = (widget->style->font->ascent +
-			   widget->style->font->descent + 1);
-      clist->row_center_offset = widget->style->font->ascent + 1.5;
-    }
-  else
-    clist->row_center_offset = 1.5 + (clist->row_height +
-				      widget->style->font->ascent -
-				      widget->style->font->descent - 1) / 2;
+    /* Reset clist->row_height */
+    gtk_clist_set_row_height (clist, 0);
 
   /* Column widths */
   if (!GTK_CLIST_AUTO_RESIZE_BLOCKED(clist))
@@ -5773,12 +5812,13 @@ draw_row (GtkCList     *clist,
       GtkStyle *style;
       GdkGC *fg_gc;
       GdkGC *bg_gc;
+      PangoLayout *layout;
+      PangoRectangle logical_rect;
 
       gint width;
       gint height;
       gint pixmap_width;
       gint offset = 0;
-      gint row_center_offset;
 
       if (!clist->column[i].visible)
 	continue;
@@ -5804,31 +5844,33 @@ draw_row (GtkCList     *clist,
       clip_rectangle.width -= (2 * COLUMN_INSET + CELL_SPACING +
 			       (i == last_column) * CELL_SPACING);
 
+
       /* calculate real width for column justification */
+      
+      layout = _gtk_clist_create_cell_layout (clist, clist_row, i);
+      if (layout)
+	{
+	  pango_layout_get_extents (layout, NULL, &logical_rect);
+	  width = logical_rect.width / PANGO_SCALE;
+	}
+      else
+	width = 0;
+
       pixmap_width = 0;
       offset = 0;
       switch (clist_row->cell[i].type)
 	{
-	case GTK_CELL_TEXT:
-	  width = gdk_string_width (style->font,
-				    GTK_CELL_TEXT (clist_row->cell[i])->text);
-	  break;
 	case GTK_CELL_PIXMAP:
 	  gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap,
 			       &pixmap_width, &height);
-	  width = pixmap_width;
+	  width += pixmap_width;
 	  break;
 	case GTK_CELL_PIXTEXT:
 	  gdk_window_get_size (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
 			       &pixmap_width, &height);
-	  width = (pixmap_width +
-		   GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing +
-		   gdk_string_width (style->font,
-				     GTK_CELL_PIXTEXT
-				     (clist_row->cell[i])->text));
+	  width += pixmap_width + GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
 	  break;
 	default:
-	  continue;
 	  break;
 	}
 
@@ -5870,23 +5912,21 @@ draw_row (GtkCList     *clist,
 			      (clip_rectangle.height - height) / 2,
 			      pixmap_width, height);
 	  offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
-	case GTK_CELL_TEXT:
-	  if (style != GTK_WIDGET (clist)->style)
-	    row_center_offset = (((clist->row_height - style->font->ascent -
-				  style->font->descent - 1) / 2) + 1.5 +
-				 style->font->ascent);
-	  else
-	    row_center_offset = clist->row_center_offset;
 
-	  gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
-	  gdk_draw_string (clist->clist_window, style->font, fg_gc,
-			   offset,
-			   row_rectangle.y + row_center_offset + 
-			   clist_row->cell[i].vertical,
-			   (clist_row->cell[i].type == GTK_CELL_PIXTEXT) ?
-			   GTK_CELL_PIXTEXT (clist_row->cell[i])->text :
-			   GTK_CELL_TEXT (clist_row->cell[i])->text);
-	  gdk_gc_set_clip_rectangle (fg_gc, NULL);
+	  /* Fall through */
+	case GTK_CELL_TEXT:
+	  if (layout)
+	    {
+	      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height / PANGO_SCALE - 1) / 2;
+
+	      gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
+	      gdk_draw_layout (clist->clist_window, fg_gc,
+			       offset,
+			       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
+			       layout);
+	      pango_layout_unref (layout);
+	      gdk_gc_set_clip_rectangle (fg_gc, NULL);
+	    }
 	  break;
 	default:
 	  break;

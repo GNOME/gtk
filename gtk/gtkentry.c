@@ -37,6 +37,7 @@
 
 #include <pango/pango.h>
 #include <unicode.h>
+#include <glib-object.h>
 
 #define MIN_ENTRY_WIDTH  150
 #define DRAW_TIMEOUT     20
@@ -661,7 +662,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   GtkEntry *entry;
   PangoFontMetrics metrics;
   PangoFont *font;
-  char *lang;
+  gchar *lang;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -681,14 +682,13 @@ gtk_entry_size_request (GtkWidget      *widget,
 
   /* hackish for now, get metrics
    */
-  
   font = pango_context_load_font (pango_layout_get_context (entry->layout),
 				  widget->style->font_desc);
   lang = pango_context_get_lang (pango_layout_get_context (entry->layout));
   pango_font_get_metrics (font, lang, &metrics);
   g_free (lang);
   
-  pango_font_unref (font);
+  g_object_unref (G_OBJECT (font));
 
   entry->ascent = metrics.ascent;
   

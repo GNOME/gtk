@@ -542,9 +542,9 @@ gtk_vscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->trough, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->slider, NULL, &height);
           
-          x -= SCALE_CLASS (scale)->value_spacing + logical_rect.width / 1000;
-          y += widget->allocation.y + (height - logical_rect.height / 1000) / 2 +
-                                       PANGO_ASCENT (logical_rect) / 1000;
+          x -= SCALE_CLASS (scale)->value_spacing + logical_rect.width / PANGO_SCALE;
+          y += widget->allocation.y + (height - logical_rect.height / PANGO_SCALE) / 2 +
+                                       PANGO_ASCENT (logical_rect) / PANGO_SCALE;
           break;
         case GTK_POS_RIGHT:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, NULL);
@@ -553,24 +553,24 @@ gtk_vscale_draw_value (GtkScale *scale)
           gdk_window_get_size (GTK_RANGE (scale)->slider, NULL, &height);
           
           x += width + SCALE_CLASS (scale)->value_spacing;
-          y += widget->allocation.y + (height - logical_rect.height / 1000) / 2 +
-                                       PANGO_ASCENT (logical_rect) / 1000;
+          y += widget->allocation.y + (height - logical_rect.height / PANGO_SCALE) / 2 +
+                                       PANGO_ASCENT (logical_rect) / PANGO_SCALE;
           break;
         case GTK_POS_TOP:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, &y);
           gdk_window_get_size (GTK_RANGE (scale)->slider, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
-          x += (width - logical_rect.width / 1000) / 2;
-          y -= PANGO_DESCENT (logical_rect) / 1000;
+          x += (width - logical_rect.width / PANGO_SCALE) / 2;
+          y -= PANGO_DESCENT (logical_rect) / PANGO_SCALE;
           break;
         case GTK_POS_BOTTOM:
           gdk_window_get_position (GTK_RANGE (scale)->trough, &x, &y);
           gdk_window_get_size (GTK_RANGE (scale)->slider, &width, NULL);
           gdk_window_get_size (GTK_RANGE (scale)->trough, NULL, &height);
           
-          x += (width - logical_rect.width / 1000) / 2;
-          y += height + PANGO_ASCENT (logical_rect) / 1000;
+          x += (width - logical_rect.width / PANGO_SCALE) / 2;
+          y += height + PANGO_ASCENT (logical_rect) / PANGO_SCALE;
           break;
         }
       

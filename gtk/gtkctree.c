@@ -1750,13 +1750,14 @@ draw_row (GtkCList     *clist,
       GtkStyle *style;
       GdkGC *fg_gc; 
       GdkGC *bg_gc;
+      PangoLayout *layout = NULL;
+      PangoRectangle logical_rect;
 
       gint width;
       gint height;
       gint pixmap_width;
       gint string_width;
       gint old_offset;
-      gint row_center_offset;
 
       if (!clist->column[i].visible)
 	continue;
@@ -1787,32 +1788,31 @@ draw_row (GtkCList     *clist,
 	  gdk_draw_rectangle (clist->clist_window, bg_gc, TRUE,
 			      crect->x, crect->y, crect->width, crect->height);
 
-	  /* calculate real width for column justification */
+
+	  layout = _gtk_clist_create_cell_layout (clist, clist_row, i);
+	  if (layout)
+	    {
+	      pango_layout_get_extents (layout, NULL, &logical_rect);
+	      width = logical_rect.width / PANGO_SCALE;
+	    }
+	  else
+	    width = 0;
+
 	  switch (clist_row->cell[i].type)
 	    {
-	    case GTK_CELL_TEXT:
-	      width = gdk_string_width
-		(style->font, GTK_CELL_TEXT (clist_row->cell[i])->text);
-	      break;
 	    case GTK_CELL_PIXMAP:
 	      gdk_window_get_size
 		(GTK_CELL_PIXMAP (clist_row->cell[i])->pixmap, &pixmap_width,
 		 &height);
-	      width = pixmap_width;
+	      width += pixmap_width;
 	      break;
 	    case GTK_CELL_PIXTEXT:
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
-		gdk_window_get_size
-		  (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
-		   &pixmap_width, &height);
-
-	      width = pixmap_width;
-
-	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->text)
 		{
-		  string_width = gdk_string_width
-		    (style->font, GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
-		  width += string_width;
+		  gdk_window_get_size 
+		    (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap,
+		     &pixmap_width, &height);
+		  width += pixmap_width;
 		}
 
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->text &&
@@ -1824,7 +1824,6 @@ draw_row (GtkCList     *clist,
 			  ((GtkCTreeRow *)clist_row)->level);
 	      break;
 	    default:
-	      continue;
 	      break;
 	    }
 
@@ -1869,25 +1868,21 @@ draw_row (GtkCList     *clist,
 		     (clip_rectangle.height - height) / 2,
 		     pixmap_width, height);
 		  offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
-		case GTK_CELL_TEXT:
-		  if (style != GTK_WIDGET (clist)->style)
-		    row_center_offset = (((clist->row_height -
-					   style->font->ascent -
-					   style->font->descent - 1) / 2) +
-					 1.5 + style->font->ascent);
-		  else
-		    row_center_offset = clist->row_center_offset;
 
-		  gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
-		  gdk_draw_string
-		    (clist->clist_window, style->font, fg_gc,
-		     offset,
-		     row_rectangle.y + row_center_offset +
-		     clist_row->cell[i].vertical,
-		     (clist_row->cell[i].type == GTK_CELL_PIXTEXT) ?
-		     GTK_CELL_PIXTEXT (clist_row->cell[i])->text :
-		     GTK_CELL_TEXT (clist_row->cell[i])->text);
-		  gdk_gc_set_clip_rectangle (fg_gc, NULL);
+		  /* Fall through */
+		case GTK_CELL_TEXT:
+		  if (layout)
+		    {
+		      gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height / PANGO_SCALE - 1) / 2;
+
+		      gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
+		      gdk_draw_layout (clist->clist_window, fg_gc,
+				       offset,
+				       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
+				       layout);
+		      gdk_gc_set_clip_rectangle (fg_gc, NULL);
+		      pango_layout_unref (layout);
+		    }
 		  break;
 		default:
 		  break;
@@ -1905,7 +1900,11 @@ draw_row (GtkCList     *clist,
 
       if (area && !gdk_rectangle_intersect (area, &cell_rectangle,
 					    &intersect_rectangle))
-	continue;
+	{
+	  if (layout)
+	    pango_layout_unref (layout);
+	  continue;
+	}
 
       /* draw lines */
       offset = gtk_ctree_draw_lines (ctree, (GtkCTreeRow *)clist_row, row, i,
@@ -1935,8 +1934,10 @@ draw_row (GtkCList     *clist,
 				 + (clip_rectangle.height - height) / 2,
 				 pixmap_width, height);
 
-      if (string_width)
-	{ 
+      if (layout)
+	{
+	  gint row_center_offset = 1.5 + (clist->row_height - logical_rect.height / PANGO_SCALE - 1) / 2;
+	  
 	  if (clist->column[i].justification == GTK_JUSTIFY_RIGHT)
 	    {
 	      offset = (old_offset - string_width);
@@ -1948,19 +1949,14 @@ draw_row (GtkCList     *clist,
 	      if (GTK_CELL_PIXTEXT (clist_row->cell[i])->pixmap)
 		offset += GTK_CELL_PIXTEXT (clist_row->cell[i])->spacing;
 	    }
-
-	  if (style != GTK_WIDGET (clist)->style)
-	    row_center_offset = (((clist->row_height - style->font->ascent -
-				   style->font->descent - 1) / 2) +
-				 1.5 + style->font->ascent);
-	  else
-	    row_center_offset = clist->row_center_offset;
 	  
 	  gdk_gc_set_clip_rectangle (fg_gc, &clip_rectangle);
-	  gdk_draw_string (clist->clist_window, style->font, fg_gc, offset,
-			   row_rectangle.y + row_center_offset +
-			   clist_row->cell[i].vertical,
-			   GTK_CELL_PIXTEXT (clist_row->cell[i])->text);
+	  gdk_draw_layout (clist->clist_window, fg_gc,
+			   offset,
+			   row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
+			   layout);
+
+	  pango_layout_unref (layout);
 	}
       gdk_gc_set_clip_rectangle (fg_gc, NULL);
     }
@@ -2806,9 +2802,10 @@ cell_size_request (GtkCList       *clist,
 		   GtkRequisition *requisition)
 {
   GtkCTree *ctree;
-  GtkStyle *style;
   gint width;
   gint height;
+  PangoLayout *layout;
+  PangoRectangle logical_rect;
 
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CTREE (clist));
@@ -2816,17 +2813,24 @@ cell_size_request (GtkCList       *clist,
 
   ctree = GTK_CTREE (clist);
 
-  get_cell_style (clist, clist_row, GTK_STATE_NORMAL, column, &style,
-		  NULL, NULL);
+  layout = _gtk_clist_create_cell_layout (clist, clist_row, column);
+  if (layout)
+    {
+      pango_layout_get_extents (layout, NULL, &logical_rect);
+
+      requisition->width = logical_rect.width / PANGO_SCALE;
+      requisition->height = logical_rect.height / PANGO_SCALE;
+      
+      pango_layout_unref (layout);
+    }
+  else
+    {
+      requisition->width  = 0;
+      requisition->height = 0;
+    }
 
   switch (clist_row->cell[column].type)
     {
-    case GTK_CELL_TEXT:
-      requisition->width =
-	gdk_string_width (style->font,
-			  GTK_CELL_TEXT (clist_row->cell[column])->text);
-      requisition->height = style->font->ascent + style->font->descent;
-      break;
     case GTK_CELL_PIXTEXT:
       if (GTK_CELL_PIXTEXT (clist_row->cell[column])->pixmap)
 	{
@@ -2838,12 +2842,9 @@ cell_size_request (GtkCList       *clist,
       else
 	width = height = 0;
 	  
-      requisition->width = width +
-	gdk_string_width (style->font,
-			  GTK_CELL_TEXT (clist_row->cell[column])->text);
-
-      requisition->height = MAX (style->font->ascent + style->font->descent,
-				 height);
+      requisition->width += width;
+      requisition->height = MAX (requisition->height, height);
+      
       if (column == ctree->tree_column)
 	{
 	  requisition->width += (ctree->tree_spacing + ctree->tree_indent *
@@ -2867,8 +2868,8 @@ cell_size_request (GtkCList       *clist,
     case GTK_CELL_PIXMAP:
       gdk_window_get_size (GTK_CELL_PIXMAP (clist_row->cell[column])->pixmap,
 			   &width, &height);
-      requisition->width = width;
-      requisition->height = height;
+      requisition->width += width;
+      requisition->height = MAX (requisition->height, height);
       break;
     default:
       requisition->width  = 0;
