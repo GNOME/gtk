@@ -892,7 +892,7 @@ fi
 if test "x$gdktarget" = "xx11"; then
   # We start off with the libraries from Pango
 
-  if $PKG_CONFIG --exists pangoxft ; then : ; else
+  if $PKG_CONFIG --exists pangox ; then : ; else
     AC_MSG_ERROR([pangox Pango backend is required for x11 target])
   fi
     
