@@ -1,0 +1,502 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 1999 Free Software Foundation, Inc.
+# Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gtk+ VERSION\n"
+"POT-Creation-Date: 1999-07-05 19:17+0200\n"
+"PO-Revision-Date: 1999-07-05 19:17+0200\n"
+"Last-Translator: Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>\n"
+"Language-Team: euskare <linux-eu@chanae.alphanet.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bits\n"
+
+#: gtk/gtkcolorsel.c:213
+msgid "Hue:"
+msgstr "Kolorea:"
+
+#: gtk/gtkcolorsel.c:214
+msgid "Saturation:"
+msgstr "Saturazioa:"
+
+#: gtk/gtkcolorsel.c:215
+msgid "Value:"
+msgstr "Balioa:"
+
+#: gtk/gtkcolorsel.c:216
+msgid "Red:"
+msgstr "Gorria:"
+
+#: gtk/gtkcolorsel.c:217
+msgid "Green:"
+msgstr "Berdea:"
+
+#: gtk/gtkcolorsel.c:218
+msgid "Blue:"
+msgstr "Urdina"
+
+#: gtk/gtkcolorsel.c:219
+msgid "Opacity:"
+msgstr "Opazitatea"
+
+#. The OK button
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:571 gtk/gtkfontsel.c:3718
+#: gtk/gtkgamma.c:416
+msgid "OK"
+msgstr "Ados"
+
+#. The Cancel button
+#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:578 gtk/gtkfilesel.c:956
+#: gtk/gtkfilesel.c:1060 gtk/gtkfilesel.c:1175 gtk/gtkfontsel.c:3731
+#: gtk/gtkgamma.c:424
+msgid "Cancel"
+msgstr "Ezeztatu"
+
+#: gtk/gtkcolorsel.c:1679
+msgid "Help"
+msgstr "Laguntza"
+
+#. The directories clist
+#: gtk/gtkfilesel.c:520
+msgid "Directories"
+msgstr "Direktorioak"
+
+#. The files clist
+#: gtk/gtkfilesel.c:539
+msgid "Files"
+msgstr "Fitxatefiak"
+
+#: gtk/gtkfilesel.c:609 gtk/gtkfilesel.c:1639
+#, c-format
+msgid "Directory unreadable: %s"
+msgstr "Direktorio irakurtezina: %s"
+
+#: gtk/gtkfilesel.c:641
+msgid "Create Dir"
+msgstr "Sortu Dir"
+
+#: gtk/gtkfilesel.c:652 gtk/gtkfilesel.c:1029
+msgid "Delete File"
+msgstr "Ezabatu fitxategia"
+
+#: gtk/gtkfilesel.c:663 gtk/gtkfilesel.c:1133
+msgid "Rename File"
+msgstr "Berizendatu fitxategia"
+
+#.
+#. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
+#. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
+#. (gpointer) fs);
+#.
+#: gtk/gtkfilesel.c:827
+msgid "Error"
+msgstr "Errorea"
+
+#. close button
+#: gtk/gtkfilesel.c:845 gtk/gtkinputdialog.c:354
+msgid "Close"
+msgstr "Itxi"
+
+#: gtk/gtkfilesel.c:920
+msgid "Create Directory"
+msgstr "Sortu Direktorioa"
+
+#: gtk/gtkfilesel.c:934
+msgid "Directory name:"
+msgstr "Direktorioaren izena"
+
+#. buttons
+#: gtk/gtkfilesel.c:947
+msgid "Create"
+msgstr "Sortu"
+
+#. buttons
+#: gtk/gtkfilesel.c:1051
+msgid "Delete"
+msgstr "Ezabatu"
+
+#. buttons
+#: gtk/gtkfilesel.c:1166
+msgid "Rename"
+msgstr "Berizendatu"
+
+#: gtk/gtkfilesel.c:1618
+msgid "Selection: "
+msgstr "Aukera: "
+
+#: gtk/gtkfontsel.c:216
+msgid "Foundry:"
+msgstr "Ola:"
+
+#: gtk/gtkfontsel.c:217
+msgid "Family:"
+msgstr "Familia:"
+
+#: gtk/gtkfontsel.c:218
+msgid "Weight:"
+msgstr "Pisua:"
+
+#: gtk/gtkfontsel.c:219
+msgid "Slant:"
+msgstr "Alborapena:"
+
+#: gtk/gtkfontsel.c:220
+msgid "Set Width:"
+msgstr "Zabalera: "
+
+#: gtk/gtkfontsel.c:221
+msgid "Add Style:"
+msgstr "Gehitu estiloa"
+
+#: gtk/gtkfontsel.c:222
+msgid "Pixel Size:"
+msgstr "Pixel tamaina:"
+
+#: gtk/gtkfontsel.c:223
+msgid "Point Size:"
+msgstr "Puntu tamaina:"
+
+#: gtk/gtkfontsel.c:224
+msgid "Resolution X:"
+msgstr "X erresoluzioa:"
+
+#: gtk/gtkfontsel.c:225
+msgid "Resolution Y:"
+msgstr "Y erresoluzioa:"
+
+#: gtk/gtkfontsel.c:226
+msgid "Spacing:"
+msgstr "Tartea:"
+
+#: gtk/gtkfontsel.c:227
+msgid "Average Width:"
+msgstr "Batazbesteko zabalera:"
+
+#: gtk/gtkfontsel.c:228
+msgid "Charset:"
+msgstr "Charset:"
+
+#. Number of internationalized titles here must match number
+#. of NULL initializers above
+#: gtk/gtkfontsel.c:472
+msgid "Font Property"
+msgstr "Font-aren ezaugarriak"
+
+#: gtk/gtkfontsel.c:473
+msgid "Requested Value"
+msgstr "Eskatutako balioa"
+
+#: gtk/gtkfontsel.c:474
+msgid "Actual Value"
+msgstr "Oraingo balioa"
+
+#: gtk/gtkfontsel.c:507
+msgid "Font"
+msgstr "Font"
+
+#: gtk/gtkfontsel.c:517 gtk/gtkfontsel.c:2202 gtk/gtkfontsel.c:2432
+msgid "Font:"
+msgstr "Font"
+
+#: gtk/gtkfontsel.c:522
+msgid "Font Style:"
+msgstr "Font-aren estiloa"
+
+#: gtk/gtkfontsel.c:527
+msgid "Size:"
+msgstr "Tamaina"
+
+#: gtk/gtkfontsel.c:659 gtk/gtkfontsel.c:881
+msgid "Reset Filter"
+msgstr "Berrosatu iragazkia"
+
+#: gtk/gtkfontsel.c:673
+msgid "Metric:"
+msgstr "Metrotan"
+
+#: gtk/gtkfontsel.c:677
+msgid "Points"
+msgstr "Puntutan"
+
+#: gtk/gtkfontsel.c:684
+msgid "Pixels"
+msgstr "Pixeletan"
+
+#. create the text entry widget
+#: gtk/gtkfontsel.c:700
+msgid "Preview:"
+msgstr "Aurrikusi"
+
+#: gtk/gtkfontsel.c:729
+msgid "Font Information"
+msgstr "Font-aren informazioa"
+
+#: gtk/gtkfontsel.c:762
+msgid "Requested Font Name:"
+msgstr "Eskatutako Font-aren izena"
+
+#: gtk/gtkfontsel.c:773
+msgid "Actual Font Name:"
+msgstr "Oraingo Font-aren izena"
+
+#: gtk/gtkfontsel.c:784
+#, c-format
+msgid "%i fonts available with a total of %i styles."
+msgstr "%i font aukeran guztira %i estiloez"
+
+#: gtk/gtkfontsel.c:799
+msgid "Filter"
+msgstr "Iragazkia"
+
+#: gtk/gtkfontsel.c:812
+msgid "Font Types:"
+msgstr "Font motak"
+
+#: gtk/gtkfontsel.c:820
+msgid "Bitmap"
+msgstr "Bitmap"
+
+#: gtk/gtkfontsel.c:826
+msgid "Scalable"
+msgstr "Eskalatzeko gai"
+
+#: gtk/gtkfontsel.c:832
+msgid "Scaled Bitmap"
+msgstr "Eskalaratutako bitmap"
+
+#: gtk/gtkfontsel.c:903
+msgid "*"
+msgstr "*"
+
+#. Convert '(nil)' weights to 'regular', since it looks nicer.
+#: gtk/gtkfontsel.c:1228
+msgid "(nil)"
+msgstr "(nil)"
+
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:2698
+msgid "regular"
+msgstr "arrunta"
+
+#: gtk/gtkfontsel.c:1233 gtk/gtkfontsel.c:1994
+msgid "italic"
+msgstr "italikoa"
+
+#: gtk/gtkfontsel.c:1234 gtk/gtkfontsel.c:1995
+msgid "oblique"
+msgstr "laprana"
+
+#: gtk/gtkfontsel.c:1235 gtk/gtkfontsel.c:1996
+msgid "reverse italic"
+msgstr "atzerazko italikoa"
+
+#: gtk/gtkfontsel.c:1236 gtk/gtkfontsel.c:1997
+msgid "reverse oblique"
+msgstr "atzerazko laprana"
+
+#: gtk/gtkfontsel.c:1237 gtk/gtkfontsel.c:1998
+msgid "other"
+msgstr "bestelakoa"
+
+#: gtk/gtkfontsel.c:1244
+msgid "[M]"
+msgstr "[M]"
+
+#: gtk/gtkfontsel.c:1245
+msgid "[C]"
+msgstr "[C]"
+
+#: gtk/gtkfontsel.c:1793
+msgid "The selected font is not available."
+msgstr "Aukeratutako Font-a ez dago"
+
+#: gtk/gtkfontsel.c:1799
+msgid "The selected font is not a valid font."
+msgstr "Aukeratutako Font-a ez da Font baliagarria."
+
+#: gtk/gtkfontsel.c:1860
+msgid "This is a 2-byte font and may not be displayed correctly."
+msgstr "Hau 2 byteko Font-a da eta agian ezin da modu egokian agertu."
+
+#: gtk/gtkfontsel.c:1982 gtk/gtkinputdialog.c:607
+msgid "(unknown)"
+msgstr "(ezezaguna)"
+
+#: gtk/gtkfontsel.c:1993
+msgid "roman"
+msgstr "erromatarra"
+
+#: gtk/gtkfontsel.c:2005
+msgid "proportional"
+msgstr "proportziozkoa"
+
+#: gtk/gtkfontsel.c:2006
+msgid "monospaced"
+msgstr "tartebakarrekoa"
+
+#: gtk/gtkfontsel.c:2007
+msgid "char cell"
+msgstr "zelula ikuzia"
+
+#: gtk/gtkfontsel.c:2207
+msgid "Font: (Filter Applied)"
+msgstr "Font-a: (Iragazkiaz)"
+
+#: gtk/gtkfontsel.c:2680
+msgid "heavy"
+msgstr "astuna"
+
+#: gtk/gtkfontsel.c:2682
+msgid "extrabold"
+msgstr "extrailuna"
+
+#: gtk/gtkfontsel.c:2684
+msgid "bold"
+msgstr "iluna"
+
+#: gtk/gtkfontsel.c:2686
+msgid "demibold"
+msgstr "erdi iluna"
+
+#: gtk/gtkfontsel.c:2688
+msgid "medium"
+msgstr "ertaina"
+
+#: gtk/gtkfontsel.c:2690
+msgid "normal"
+msgstr "arrunta"
+
+#: gtk/gtkfontsel.c:2692
+msgid "light"
+msgstr "argia"
+
+#: gtk/gtkfontsel.c:2694
+msgid "extralight"
+msgstr "extra argia"
+
+#: gtk/gtkfontsel.c:2696
+msgid "thin"
+msgstr "mehea"
+
+#: gtk/gtkfontsel.c:2871
+msgid "MAX_FONTS exceeded. Some fonts may be missing."
+msgstr "MAX_FONTS gehiegizkoa. Zenbait Font galduta daitezke."
+
+#: gtk/gtkfontsel.c:3725
+msgid "Apply"
+msgstr "Ezarri"
+
+#: gtk/gtkfontsel.c:3747
+msgid "Font Selection"
+msgstr "Font aukera"
+
+#: gtk/gtkgamma.c:396
+msgid "Gamma"
+msgstr "Gamma"
+
+#: gtk/gtkgamma.c:403
+msgid "Gamma value"
+msgstr "Gamma balioa"
+
+#. shell and main vbox
+#: gtk/gtkinputdialog.c:200
+msgid "Input"
+msgstr "Sarrera"
+
+#: gtk/gtkinputdialog.c:208
+msgid "No input devices"
+msgstr "Ez dago sarrerarako tresnarik"
+
+#: gtk/gtkinputdialog.c:237
+msgid "Device:"
+msgstr "Tresna:"
+
+#: gtk/gtkinputdialog.c:253
+msgid "Disabled"
+msgstr "Ezindua"
+
+#: gtk/gtkinputdialog.c:261
+msgid "Screen"
+msgstr "Pantaila"
+
+#: gtk/gtkinputdialog.c:269
+msgid "Window"
+msgstr "Lehioa"
+
+#: gtk/gtkinputdialog.c:277
+msgid "Mode: "
+msgstr "Modua: "
+
+#. The axis listbox
+#: gtk/gtkinputdialog.c:307
+msgid "Axes"
+msgstr "Ardatzak"
+
+#. Keys listbox
+#: gtk/gtkinputdialog.c:323
+msgid "Keys"
+msgstr "Giltzak"
+
+#. We create the save button in any case, so that clients can
+#. connect to it, without paying attention to whether it exits
+#: gtk/gtkinputdialog.c:345
+msgid "Save"
+msgstr "Gorde"
+
+#: gtk/gtkinputdialog.c:500
+msgid "X"
+msgstr "X"
+
+#: gtk/gtkinputdialog.c:501
+msgid "Y"
+msgstr "Y"
+
+#: gtk/gtkinputdialog.c:502
+msgid "Pressure"
+msgstr "Presioa"
+
+#: gtk/gtkinputdialog.c:503
+msgid "X Tilt"
+msgstr "X makur"
+
+#: gtk/gtkinputdialog.c:504
+msgid "Y Tilt"
+msgstr "Y makur"
+
+#: gtk/gtkinputdialog.c:544
+msgid "none"
+msgstr "batez"
+
+#: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
+msgid "(disabled)"
+msgstr "(ezindua)"
+
+#. and clear button
+#: gtk/gtkinputdialog.c:692
+msgid "clear"
+msgstr "garbitu"
+
+#: gtk/gtknotebook.c:2017 gtk/gtknotebook.c:4092
+#, c-format
+msgid "Page %u"
+msgstr "Orria %u"
+
+#: gtk/gtkrc.c:1609
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
+msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\",%d lerroa"
+
+#: gtk/gtkrc.c:1612
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Imaginaren fitxategia ezin aurkitu pixmap_path-en: \"%s\""
+
+#: gtk/gtkthemes.c:103
+#, c-format
+msgid "Unable to locate loadable module in module_path: \"%s\","
+msgstr "Modulua ezin aurkitu modulu_path-en: \"%s\","
+
+#: gtk/gtktipsquery.c:180
+msgid "--- No Tip ---"
+msgstr "--- Erpinik ez ---"
