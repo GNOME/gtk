@@ -11608,8 +11608,8 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
   gboolean retval = TRUE;
   gchar *normalized_string;
   gchar *normalized_key;
-  gchar *case_normalized_string;
-  gchar *case_normalized_key;
+  gchar *case_normalized_string = NULL;
+  gchar *case_normalized_key = NULL;
   GValue value = {0,};
   GValue transformed = {0,};
   gint key_len;
@@ -11628,12 +11628,18 @@ gtk_tree_view_search_equal_func (GtkTreeModel *model,
 
   normalized_string = g_utf8_normalize (g_value_get_string (&transformed), -1, G_NORMALIZE_ALL);
   normalized_key = g_utf8_normalize (key, -1, G_NORMALIZE_ALL);
-  case_normalized_string = g_utf8_casefold (normalized_string, -1);
-  case_normalized_key = g_utf8_casefold (normalized_key, -1);
 
-  key_len = strlen (case_normalized_key);
+  if (normalized_string && normalized_key)
+    {
+      case_normalized_string = g_utf8_casefold (normalized_string, -1);
+      case_normalized_key = g_utf8_casefold (normalized_key, -1);
 
-  if (!strncmp (case_normalized_key, case_normalized_string, key_len))
+      key_len = strlen (case_normalized_key);
+
+      if (!strncmp (case_normalized_key, case_normalized_string, key_len))
+        retval = FALSE;
+    }
+  else
     retval = FALSE;
 
   g_value_unset (&transformed);

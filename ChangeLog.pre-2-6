@@ -1,3 +1,10 @@
+Wed Dec 17 23:31:19 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_search_equal_func): only
+	try to strcmp or strlen if we managed to normalize and casefold
+	the string correctly. Fixes crashes with non-UTF8 strings.
+	(#121617, Patch from Tim-Philipp Müller).
+
 Wed Dec 17 23:20:23 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkexpander.c (gtk_expander_animation_timeout): Add missing
