@@ -626,7 +626,7 @@ main (int argc, char **argv)
 
 			status.readlen = readlen;
 
-                        status.timeout = gtk_timeout_add (100, update_timeout, &status);
+                        status.timeout = g_timeout_add (100, update_timeout, &status);
                 }
 #endif
 	}

@@ -187,7 +187,7 @@ static guint timeout_id;
 static void
 destroy_cb (GtkObject *object, gpointer data)
 {
-	gtk_timeout_remove (timeout_id);
+	g_source_remove (timeout_id);
 	timeout_id = 0;
 
 	gtk_main_quit ();
@@ -225,7 +225,7 @@ main (int argc, char **argv)
 
 	gtk_container_add (GTK_CONTAINER (window), da);
 
-	timeout_id = gtk_timeout_add (FRAME_DELAY, timeout, NULL);
+	timeout_id = g_timeout_add (FRAME_DELAY, timeout, NULL);
 
 	gtk_widget_show_all (window);
 	gtk_main ();

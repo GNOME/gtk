@@ -1,3 +1,10 @@
+Fri Jan 31 17:48:53 2003  Manish Singh  <yosh@gimp.org>
+                                                                                
+        * demos/pixbuf-demo.c
+        * demos/testpixbuf.c
+        * demos/gtk-demo/pixbufs.c
+	* tests/testtext.c: sync with HEAD (removed gtk_timeout_* usage)
+
 Fri Jan 31 17:23:59 2003  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtknotebook.c (gtk_notebook_remove_tab_label): set_state
