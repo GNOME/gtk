@@ -314,33 +314,37 @@ update_keymap (void)
 		      /* Use dead keysyms instead of "undead" ones */
 		      switch (gdk_unicode_to_keyval (wcs[0]))
 			{
-			case GDK_grave:
-			  *ksymp = GDK_dead_grave; break;
-			case GDK_acute:
-			  *ksymp = GDK_dead_acute; break;
-			case GDK_asciicircum:
-			  *ksymp = GDK_dead_circumflex; break;
-			case GDK_asciitilde:
-			  *ksymp = GDK_dead_tilde; break;
-			case GDK_breve:
-			  *ksymp = GDK_dead_breve; break;
-			case GDK_abovedot:
-			  *ksymp = GDK_dead_abovedot; break;
-			case GDK_diaeresis:
+			case '"': /* 0x022 */
 			  *ksymp = GDK_dead_diaeresis; break;
-			case GDK_doubleacute:
-			  *ksymp = GDK_dead_doubleacute; break;
-			case GDK_caron:
-			  *ksymp = GDK_dead_caron; break;
-			case GDK_cedilla:
-			  *ksymp = GDK_dead_cedilla; break;
-			case GDK_ogonek:
-			  *ksymp = GDK_dead_ogonek; break;
-			case GDK_degree:
+			case '\'': /* 0x027 */
+			  *ksymp = GDK_dead_acute; break;
+			case GDK_asciicircum: /* 0x05e */
+			  *ksymp = GDK_dead_circumflex; break;
+			case GDK_grave:	/* 0x060 */
+			  *ksymp = GDK_dead_grave; break;
+			case GDK_asciitilde: /* 0x07e */
+			  *ksymp = GDK_dead_tilde; break;
+			case GDK_diaeresis: /* 0x0a8 */
+			  *ksymp = GDK_dead_diaeresis; break;
+			case GDK_degree: /* 0x0b0 */
 			  *ksymp = GDK_dead_abovering; break;
-			case GDK_periodcentered:
+			case GDK_acute:	/* 0x0b4 */
+			  *ksymp = GDK_dead_acute; break;
+			case GDK_periodcentered: /* 0x0b7 */
 			  *ksymp = GDK_dead_abovedot; break;
-			case GDK_Greek_accentdieresis:
+			case GDK_cedilla: /* 0x0b8 */
+			  *ksymp = GDK_dead_cedilla; break;
+			case GDK_breve:	/* 0x1a2 */
+			  *ksymp = GDK_dead_breve; break;
+			case GDK_ogonek: /* 0x1b2 */
+			  *ksymp = GDK_dead_ogonek; break;
+			case GDK_caron:	/* 0x1b7 */
+			  *ksymp = GDK_dead_caron; break;
+			case GDK_doubleacute: /* 0x1bd */
+			  *ksymp = GDK_dead_doubleacute; break;
+			case GDK_abovedot: /* 0x1ff */
+			  *ksymp = GDK_dead_abovedot; break;
+			case GDK_Greek_accentdieresis: /* 0x7ae */
 			  *ksymp = GDK_Greek_accentdieresis; break;
 			default:
 			  GDK_NOTE (EVENTS,
@@ -661,8 +665,8 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
     return FALSE;
 
   if ((state & GDK_SHIFT_MASK) && (state & GDK_LOCK_MASK))
-    shift_level = 0;		/* shift disables shift lock */
-  else if ((state & GDK_SHIFT_MASK) || (state & GDK_LOCK_MASK))
+    shift_level = 0;		/* shift disables caps lock */
+  else if (state & GDK_SHIFT_MASK)
     shift_level = 1;
   else
     shift_level = 0;
@@ -717,6 +721,13 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 
   if (effective_group)
     *effective_group = group;
+
+  if (!(state & GDK_SHIFT_MASK) && (state & GDK_LOCK_MASK))
+    {
+      guint upper = gdk_keyval_to_upper (tmp_keyval);
+      if (upper != tmp_keyval)
+	tmp_keyval = upper;
+    }
 
   if (level)
     *level = shift_level;

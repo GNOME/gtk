@@ -1,3 +1,12 @@
+2003-09-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkkeys-win32.c (update_keymap): Handle dead keysyms
+	present on the US-International keyboard. For clarity, order
+	keysyms in case statement according to numeric value.
+
+	(gdk_keymap_translate_keyboard_state): Handle Caps Lock
+	correctly. (#120176, Ken Rastatter and Owen Taylor)
+
 2003-09-18  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkaction.c (gtk_action_finalize): Call g_closure_unref() to
