@@ -5724,7 +5724,13 @@ gdk_window_enable_synchronized_configure (GdkWindow *window)
 void
 gdk_window_configure_finished (GdkWindow *window)
 {
+  GdkWindowImplX11 *impl;
+
   g_return_if_fail (GDK_IS_WINDOW (window));
+  
+  impl = GDK_WINDOW_IMPL_X11 (((GdkWindowObject *)window)->impl);
+  if (!impl->use_synchronized_configure)
+    return;
   
 #ifdef HAVE_XSYNC
   if (!GDK_WINDOW_DESTROYED (window))
@@ -5732,9 +5738,8 @@ gdk_window_configure_finished (GdkWindow *window)
       GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
 
-      g_return_if_fail (toplevel->update_counter != None);
-      
-      if (toplevel && GDK_DISPLAY_X11 (display)->use_sync &&
+      if (toplevel && toplevel->update_counter != None &&
+	  GDK_DISPLAY_X11 (display)->use_sync &&
 	  !XSyncValueIsZero (toplevel->current_counter_value))
 	{
 	  XSyncSetCounter (GDK_WINDOW_XDISPLAY (window), 
