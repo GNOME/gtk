@@ -278,7 +278,7 @@ pixops_composite_color_nearest (art_u8        *dest_buf,
 	  else
 	    a0 = overall_alpha;
 
-	  if ((j + check_x >> check_shift) & 1)
+	  if (((j + check_x) >> check_shift) & 1)
 	    {
 	      dest[0] = r2 + ((a0 * ((int)p[0] - r2) + 0xff) >> 8);
 	      dest[1] = g2 + ((a0 * ((int)p[1] - g2) + 0xff) >> 8);
@@ -933,7 +933,7 @@ pixops_process (art_u8         *dest_buf,
   int dest_x;
   int scaled_x_offset = floor (filter->x_offset * (1 << SCALE_SHIFT));
 
-  int run_end_index = ((src_width - filter->n_x + 1 << SCALE_SHIFT) - scaled_x_offset - 1) / x_step + 1 - render_x0;
+  int run_end_index = (((src_width - filter->n_x + 1) << SCALE_SHIFT) - scaled_x_offset - 1) / x_step + 1 - render_x0;
   int check_shift = check_size ? get_check_shift (check_size) : 0;
 
   y = render_y0 * y_step + floor (filter->y_offset * (1 << SCALE_SHIFT));

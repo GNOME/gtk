@@ -1,5 +1,23 @@
 2000-01-22  Federico Mena Quintero  <federico@helixcode.com>
 
+	* configure.in: Bumped version number to 0.5.0.
+
+	* gdk-pixbuf/pixops/timescale.c (dump_array): Removed unused variable.
+	(main): Return 0.
+
+	* gdk-pixbuf/pixops/pixops.c (pixops_composite_color_nearest): Put
+	parentheses around + in a shift to remove a compiler warning.
+	(pixops_process): Likewise.
+
+	Patch from Ross Golder <rossigee@bigfoot.com> to create an RPM
+	specfile:
+
+	* configure.in: Added gdk-pixbuf.spec to AC_OUTPUT.
+
+	* Makefile.am (EXTRA_DIST): Added gdk-pixbuf.spec.in
+
+2000-01-22  Federico Mena Quintero  <federico@helixcode.com>
+
 	* gdk-pixbuf/gnome-canvas-pixbuf.c (PixbufPrivate): Removed the
 	x_set and y_set arguments.  Now they are always on and start with
 	defaults of 0.0 in units.
@@ -121,6 +139,7 @@
 	Return 0 if gdk_pixbuf_load_loader_module returns FALSE.
 
 2000-01-05 Elliot Lee <sopwith@redhat.com>
+
 	* gdk-pixbuf/pixops/Makefile.am: Link with -lm (to get 'ceil' function)
 
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
@@ -603,6 +622,7 @@ Mon Nov 15 17:18:28 1999  George Lebl <jirka@5z.com>
 	* src/Makefile.am: Build testpixbuf-drawable.
 
 1999-11-12  Cody Russell  <bratsche@dfw.net>
+
 	* src/gdk-pixbuf-drawable.c: Merged in Michael Zucchi's changes.
 
 1999-11-10  Federico Mena Quintero  <federico@redhat.com>

@@ -48,7 +48,7 @@ init_array (double times[3][3][4])
 void
 dump_array (double times[3][3][4])
 {
-  int i, j, k;
+  int i, j;
   
   printf("        3\t4\t4a\n");
   for (i=0; i<3; i++)
@@ -228,4 +228,5 @@ int main (int argc, char **argv)
 
   printf ("COMPOSITE_COLOR\n===============\n\n");
   dump_array (composite_color_times);
+  return 0;
 }
