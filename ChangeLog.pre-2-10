@@ -1,3 +1,14 @@
+Wed Apr 22 04:15:26 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_handle_current_timeouts): prepend the
+ 	running_timeouts list with the tmp_list link itself, not with a new
+	GList structure pointing to our link. that would fill up memory and
+	causes the GList.data fields of the running_timeouts list to point to
+	GList structures and not GtkTimeoutFunction structures which is a
+ 	*really* bad thing.
+	(gtk_handle_current_idles): likewise (exchange "timout" with "idle" in
+	the above entry ;).
+
 Sat Apr 18 22:18:12 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkradiomenuitem.h: 
