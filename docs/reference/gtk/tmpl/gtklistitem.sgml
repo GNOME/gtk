@@ -30,42 +30,6 @@ only be accessed using the functions below.
 </para>
 
 
-<!-- ##### FUNCTION gtk_list_item_new ##### -->
-<para>
-Creates a new #GtkListitem.
-</para>
-
-@Returns: a new #GtkListItem.
-
-
-<!-- ##### FUNCTION gtk_list_item_new_with_label ##### -->
-<para>
-Creates a new #GtkListItem with a child label containing the given string.
-</para>
-
-@label: the string to use for the child label.
-@Returns: a new #GtkListItem with a child #GtkLabel with the text set to
-@label.
-
-
-<!-- ##### FUNCTION gtk_list_item_select ##### -->
-<para>
-Selects the item, by emitting the item's "select" signal.
-Depending on the selection mode of the list, this may cause other items to
-be deselected.
-</para>
-
-@list_item: a #GtkListItem.
-
-
-<!-- ##### FUNCTION gtk_list_item_deselect ##### -->
-<para>
-Deselects the item, by emitting the item's "deselect" signal.
-</para>
-
-@list_item: a #GtkListItem.
-
-
 <!-- ##### SIGNAL GtkListItem::end-selection ##### -->
 <para>
 
@@ -142,4 +106,40 @@ Deselects the item, by emitting the item's "deselect" signal.
 </para>
 
 @listitem: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_list_item_new ##### -->
+<para>
+Creates a new #GtkListitem.
+</para>
+
+@Returns: a new #GtkListItem.
+
+
+<!-- ##### FUNCTION gtk_list_item_new_with_label ##### -->
+<para>
+Creates a new #GtkListItem with a child label containing the given string.
+</para>
+
+@label: the string to use for the child label.
+@Returns: a new #GtkListItem with a child #GtkLabel with the text set to
+@label.
+
+
+<!-- ##### FUNCTION gtk_list_item_select ##### -->
+<para>
+Selects the item, by emitting the item's "select" signal.
+Depending on the selection mode of the list, this may cause other items to
+be deselected.
+</para>
+
+@list_item: a #GtkListItem.
+
+
+<!-- ##### FUNCTION gtk_list_item_deselect ##### -->
+<para>
+Deselects the item, by emitting the item's "deselect" signal.
+</para>
+
+@list_item: a #GtkListItem.
+
 

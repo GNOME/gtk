@@ -8,14 +8,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
-"POT-Creation-Date: 2004-02-22 14:16+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2004-02-22 14:16+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Report-Msgid-Bugs-To: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk-pixbuf/gdk-pixbuf.c:100
@@ -1324,51 +1324,51 @@ msgstr "Värde i lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Huruvida angivna värden redan måste finnas i listan"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "ComboBox-modell"
 
-#: gtk/gtkcombobox.c:345
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "Modellen för comboboxen"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Radbrytningsbredd"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Radbrytningsbredd för utläggning av objekten i ett rutnät"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "Radspannskolumn"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolumn som innehåller radspannsvärden"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "Kolumnspannskolumn"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolumn som innehåller kolumnspannsvärden"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Aktivt objekt"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "Det objekt som är aktivt för tillfället"
 
-#: gtk/gtkcombobox.c:391
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "ComboBox-utseende"
 
-#: gtk/gtkcombobox.c:392
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "ComboBox-utseende, där SANT betyder av Windows-typ."
 

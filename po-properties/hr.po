@@ -1,7 +1,6 @@
 # Translation of gtk+-properties to Croatiann
 # Copyright (C) Croatiann team
 # Translators: Automatski Prijevod <>,pr pr <delacko@192.168.0.1>,
-
 # Translation of gtk+-properties to Croatiann
 # Copyright (C) Croatiann team
 # Translators: Automatski Prijevod <>,pr pr <delacko@192.168.0.1>,
@@ -11,7 +10,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 0\n"
-"POT-Creation-Date: 2004-02-09 04:25+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2004-02-09 15:10+CET\n"
 "Last-Translator: Robert Sedak <robert.sedak@sk.tel.hr>\n"
 "Language-Team: Croatian <lokalizacija@linux.hr>\n"
@@ -73,7 +73,8 @@ msgid "Rowstride"
 msgstr "Korak"
 
 #: gdk-pixbuf/gdk-pixbuf.c:165
-msgid "The number of bytes between the start of a row and the start of the next row"
+msgid ""
+"The number of bytes between the start of a row and the start of the next row"
 msgstr "Broj bajtova izmeđru početka retka i početka sljedećeg retka"
 
 #: gdk-pixbuf/gdk-pixbuf.c:175
@@ -116,14 +117,15 @@ msgstr "Ime"
 msgid "A unique name for the action."
 msgstr "Jedinstveno ime za aktivnost."
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:209 gtk/gtkexpander.c:202
 #: gtk/gtkframe.c:125 gtk/gtklabel.c:288 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Oznaka"
 
 #: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "Oznaka koja se koristi za stavke menija i dugmad koji pokreću ovu akciju."
+msgstr ""
+"Oznaka koja se koristi za stavke menija i dugmad koji pokreću ovu akciju."
 
 #: gtk/gtkaction.c:208
 msgid "Short label"
@@ -147,14 +149,15 @@ msgstr "Sličica dionice"
 
 #: gtk/gtkaction.c:223
 msgid "The stock icon displayed in widgets representing this action."
-msgstr """Isporučena sličica koja se prikazuje u elementima koji predstavljaju ovu "
+msgstr ""
+"Isporučena sličica koja se prikazuje u elementima koji predstavljaju ovu "
 "akciju."
 
-#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:157
 msgid "Visible when horizontal"
 msgstr "Vodoravno"
 
-#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:158
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
@@ -162,11 +165,11 @@ msgstr ""
 "Može li se atavka trake s alatima prikazati kada je traka s alatima "
 "postavljena vodoravno."
 
-#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:164
 msgid "Visible when vertical"
 msgstr "Okomito"
 
-#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:165
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
@@ -174,7 +177,7 @@ msgstr ""
 "Može li se stavka trake s alatima prikazati kada je traka s alatima "
 "postavljnea okomito."
 
-#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:171
 msgid "Is important"
 msgstr "Važno je"
 
@@ -193,7 +196,8 @@ msgstr "Sakrij ako je prazno"
 
 #: gtk/gtkaction.c:251
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr """Ako je postavljeno, isprazni posrednici izbornika za ovu aktivnost su "
+msgstr ""
+"Ako je postavljeno, isprazni posrednici izbornika za ovu aktivnost su "
 "sakriveni."
 
 #: gtk/gtkaction.c:257 gtk/gtkactiongroup.c:141 gtk/gtkwidget.c:446
@@ -221,7 +225,8 @@ msgstr "Grupa aktivnosti"
 msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
-msgstr "GtkActionGroup ovog GtkAction je povezana ili  je NULL (za internu uporabu)."
+msgstr ""
+"GtkActionGroup ovog GtkAction je povezana ili  je NULL (za internu uporabu)."
 
 #: gtk/gtkactiongroup.c:134
 msgid "A name for the action group."
@@ -235,11 +240,69 @@ msgstr "Može li grupa aktivnost biti uključena."
 msgid "Whether the action group is visible."
 msgstr "Može li grupa aktivnost biti vidljiva."
 
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Vrijednost"
+
+#: gtk/gtkadjustment.c:107
+#, fuzzy
+msgid "The value of the adjustment"
+msgstr "Ime forme"
+
+#: gtk/gtkadjustment.c:116
+#, fuzzy
+msgid "Minimum Value"
+msgstr "Najmanje X"
+
+#: gtk/gtkadjustment.c:117
+#, fuzzy
+msgid "The minimum value of the adjustment"
+msgstr "Ime forme"
+
+#: gtk/gtkadjustment.c:126
+#, fuzzy
+msgid "Maximum Value"
+msgstr "Najveća dužina"
+
+#: gtk/gtkadjustment.c:127
+#, fuzzy
+msgid "The maximum value of the adjustment"
+msgstr "Ime forme"
+
+#: gtk/gtkadjustment.c:136
+#, fuzzy
+msgid "Step Increment"
+msgstr "Zaslon"
+
+#: gtk/gtkadjustment.c:137
+#, fuzzy
+msgid "The step increment of the adjustment"
+msgstr "Sadržaj polja"
+
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr ""
+
+#: gtk/gtkadjustment.c:147
+#, fuzzy
+msgid "The page increment of the adjustment"
+msgstr "Sadržaj polja"
+
+#: gtk/gtkadjustment.c:156
+#, fuzzy
+msgid "Page Size"
+msgstr "Najveća veličina"
+
+#: gtk/gtkadjustment.c:157
+#, fuzzy
+msgid "The page size of the adjustment"
+msgstr "Stanje preklopnog gumba"
+
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
 msgstr "Vodoravno poravnanje"
 
-#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:260
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -251,7 +314,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Okomito poravnanje"
 
-#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:279
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -361,8 +424,9 @@ msgstr "Prema sadržanom elementu"
 
 #: gtk/gtkaspectframe.c:130
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr """Primorati da se odnos dimenzija slaže sa odnosom dimenzija okvira "
-"sadržanog elementa"
+msgstr ""
+"Primorati da se odnos dimenzija slaže sa odnosom dimenzija okvira sadržanog "
+"elementa"
 
 #: gtk/gtkbbox.c:119
 msgid "Minimum child width"
@@ -443,7 +507,8 @@ msgstr "Proširi"
 
 #: gtk/gtkbox.c:147
 msgid "Whether the child should receive extra space when the parent grows"
-msgstr "Može li nasljedna komponenta dobiti dodatni prostor kada mu izvor raste"
+msgstr ""
+"Može li nasljedna komponenta dobiti dodatni prostor kada mu izvor raste"
 
 #: gtk/gtkbox.c:153
 msgid "Fill"
@@ -463,7 +528,8 @@ msgstr "Popunjavanje"
 
 #: gtk/gtkbox.c:161
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr """Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
+msgstr ""
+"Dodatni razmak koji se postavlja između sadržanog elementa i njegovih "
 "susjeda, u pikselima"
 
 #: gtk/gtkbox.c:167
@@ -485,18 +551,18 @@ msgstr "Položaj"
 msgid "The index of the child in the parent"
 msgstr "Indeks sadržanog elementa u sadržaocu"
 
-#: gtk/gtkbutton.c:204
+#: gtk/gtkbutton.c:210
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Sadržaj oznake unutar gumbta, ukoliko gumb sadrži oznaku"
 
-#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
+#: gtk/gtkbutton.c:217 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Podvuci"
 
-#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -504,52 +570,54 @@ msgstr ""
 "Ukoliko je postavljeno, podvlačenje označava da se sljedeći znak koristi kao "
 "kratica"
 
-#: gtk/gtkbutton.c:219
+#: gtk/gtkbutton.c:225
 msgid "Use stock"
 msgstr "Koristi već pripremljene"
 
-#: gtk/gtkbutton.c:220
-msgid "If set, the label is used to pick a stock item instead of being displayed"
-msgstr """Ukoliko je postavljeno, oznaka se bira od već pripremljenih stavki "
-"umjesto da se prikazuje"
+#: gtk/gtkbutton.c:226
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
+msgstr ""
+"Ukoliko je postavljeno, oznaka se bira od već pripremljenih stavki umjesto "
+"da se prikazuje"
 
-#: gtk/gtkbutton.c:227
+#: gtk/gtkbutton.c:233
 msgid "Focus on click"
 msgstr "Fokusiranje klikom"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:234
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr "Može li gumb dobiti fokus kada se pritisne na njega mišem"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:241
 msgid "Border relief"
 msgstr "Izgled ruba"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:242
 msgid "The border relief style"
 msgstr "Stil izgleda ruba"
 
-#: gtk/gtkbutton.c:253
+#: gtk/gtkbutton.c:259
 msgid "Horizontal alignment for child"
 msgstr "Vodoravno poravnanje za nasljedni objekt"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:278
 msgid "Vertical alignment for child"
 msgstr "Okomito poravnanje za "
 
-#: gtk/gtkbutton.c:340
+#: gtk/gtkbutton.c:346
 msgid "Default Spacing"
 msgstr "Uobičajeni razmak"
 
-#: gtk/gtkbutton.c:341
+#: gtk/gtkbutton.c:347
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Razmak koji treba dodati za CAN_DEFAULT gumbe"
 
-#: gtk/gtkbutton.c:347
+#: gtk/gtkbutton.c:353
 msgid "Default Outside Spacing"
 msgstr "Uobičajni rubni razmak"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:354
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -557,21 +625,32 @@ msgstr ""
 "Razmak koji treba dodati uvijek oko CAN_DEFAULT koji je nacrtan oko vanjske "
 "granice"
 
-#: gtk/gtkbutton.c:353
+#: gtk/gtkbutton.c:359
 msgid "Child X Displacement"
 msgstr "Vodoravni pomak djeteta"
 
-#: gtk/gtkbutton.c:354
-msgid "How far in the x direction to move the child when the button is depressed"
+#: gtk/gtkbutton.c:360
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr "Koliko pomaknuti dijete u x smjeru kada se pritisne gumb"
 
-#: gtk/gtkbutton.c:361
+#: gtk/gtkbutton.c:367
 msgid "Child Y Displacement"
 msgstr "Okomiti pomak djeteta"
 
-#: gtk/gtkbutton.c:362
-msgid "How far in the y direction to move the child when the button is depressed"
+#: gtk/gtkbutton.c:368
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr "Koliko pomaknuti dijete u y smjeru kada se pritisne gumb"
+
+#: gtk/gtkbutton.c:375
+msgid "Show button images"
+msgstr ""
+
+#: gtk/gtkbutton.c:376
+#, fuzzy
+msgid "Whether stock icons should be shown in buttons"
+msgstr "Mogu li tabovi prikazivati ili ne"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -598,8 +677,7 @@ msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
 msgstr ""
-"Odabrani dan (broj između 1 i 31 ili 0 da se odoznači trenutno odabrani "
-"dan)"
+"Odabrani dan (broj između 1 i 31 ili 0 da se odoznači trenutno odabrani dan)"
 
 #: gtk/gtkcalendar.c:493
 msgid "Show Heading"
@@ -774,14 +852,15 @@ msgid "Size"
 msgstr "Veličina"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "Veličina iscrtane sličice"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Detalj"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Detalj iscrtavanja koji se prosljeđuje mehanizam teme"
 
@@ -807,7 +886,8 @@ msgstr "Atributi"
 
 #: gtk/gtkcellrenderertext.c:209
 msgid "A list of style attributes to apply to the text of the renderer"
-msgstr "Popis stilskih osobina koje se trebaju primjeniti na iscrtavajući tekst"
+msgstr ""
+"Popis stilskih osobina koje se trebaju primjeniti na iscrtavajući tekst"
 
 #: gtk/gtkcellrenderertext.c:216
 msgid "Single Paragraph Mode"
@@ -925,9 +1005,10 @@ msgid "Rise"
 msgstr "Dizanje"
 
 #: gtk/gtkcellrenderertext.c:359
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr """Odmak teksta od osnovne linije (ispod linije ukoliko je vrijednost "
-"negativna)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr ""
+"Odmak teksta od osnovne linije (ispod linije ukoliko je vrijednost negativna)"
 
 #: gtk/gtkcellrenderertext.c:369 gtk/gtktexttag.c:463
 msgid "Strikethrough"
@@ -1103,11 +1184,11 @@ msgstr "Stanje okruglog gumba"
 msgid "Draw the toggle button as a radio button"
 msgstr "Iscrtaj sklopku kao okrugli gumb"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+#: gtk/gtkcheckbutton.c:98 gtk/gtkcheckmenuitem.c:139 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Veličina pokazatelja"
 
-#: gtk/gtkcheckbutton.c:99
+#: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:141
 msgid "Size of check or radio indicator"
 msgstr "Veličina pokazatelja označavanja ili jednoodabirnika"
 
@@ -1117,29 +1198,30 @@ msgstr "Greška u sintaksi"
 
 #: gtk/gtkcheckbutton.c:107
 msgid "Spacing around check or radio indicator"
-msgstr "Razmaci oko pokazatelja označavanja ili naznake putem okruglog gumba :)"
+msgstr ""
+"Razmaci oko pokazatelja označavanja ili naznake putem okruglog gumba :)"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:116 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Aktivan"
 
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:117
 msgid "Whether the menu item is checked"
 msgstr "Može li stavka izbornika biti označena"
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:124 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Nedosljedno"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:125
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Može li biti prikazano \"nedosljedno\" stanje"
 
-#: gtk/gtkcheckmenuitem.c:134
+#: gtk/gtkcheckmenuitem.c:132
 msgid "Draw as radio menu item"
 msgstr "Iscrtaj stavku kao okrugli gumb"
 
-#: gtk/gtkcheckmenuitem.c:135
+#: gtk/gtkcheckmenuitem.c:133
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Može li stavka izbornika izgledati kao isključiva stavka izbornika"
 
@@ -1174,7 +1256,8 @@ msgstr "Trenutna providnost"
 
 #: gtk/gtkcolorbutton.c:248
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr """Trenutna vrijednost providnosti (0 — potpuno providno, 65535 — potpuno "
+msgstr ""
+"Trenutna vrijednost providnosti (0 — potpuno providno, 65535 — potpuno "
 "neprovidno)"
 
 #: gtk/gtkcolorsel.c:1761
@@ -1199,7 +1282,8 @@ msgstr "Tekuća boja"
 
 #: gtk/gtkcolorsel.c:1783
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr """Trenutna vrijednost providnosti (0 — potpuno providno, 65535 — potpuno "
+msgstr ""
+"Trenutna vrijednost providnosti (0 — potpuno providno, 65535 — potpuno "
 "neprovidno)"
 
 #: gtk/gtkcolorsel.c:1797
@@ -1250,51 +1334,51 @@ msgstr "Vrijednost sa spiska"
 msgid "Whether entered values must already be present in the list"
 msgstr "Mogu li upisane vrijednosti već biti nazočne na popisu"
 
-#: gtk/gtkcombobox.c:346
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "Model padajućeg popisa"
 
-#: gtk/gtkcombobox.c:347
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "Model za padajuću popis"
 
-#: gtk/gtkcombobox.c:354
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Omotaj širinu"
 
-#: gtk/gtkcombobox.c:355
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Širina omatanj za prelom pri raspoređivanju stavki u mreži"
 
-#: gtk/gtkcombobox.c:364
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "Razmak između reda i kolone"
 
-#: gtk/gtkcombobox.c:365
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "Model stupca stabla koji sadrži vrijednosti obuhvaćanja redaka"
 
-#: gtk/gtkcombobox.c:374
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "Stupac obuhvaća stupac"
 
-#: gtk/gtkcombobox.c:375
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "Model stupca stabla koji sadrži vrijednosti obuhvaćanja stupaca"
 
-#: gtk/gtkcombobox.c:384
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Aktivna stavka"
 
-#: gtk/gtkcombobox.c:385
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "Stavka koja je trenutno aktivna"
 
-#: gtk/gtkcombobox.c:393
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "Izgled padajućeg popisa"
 
-#: gtk/gtkcombobox.c:394
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Izgled padajućeg popisa, ako je postavljeno označava Windows stil."
 
@@ -1415,7 +1499,8 @@ msgid "Selection Bound"
 msgstr "Vezano označavanje"
 
 #: gtk/gtkentry.c:457 gtk/gtklabel.c:377
-msgid "The position of the opposite end of the selection from the cursor in chars"
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozicija suprotnog kraja odabira u odnosu na kursor kao broj znakova"
 
 #: gtk/gtkentry.c:467
@@ -1428,7 +1513,8 @@ msgstr "Najveća dužina"
 
 #: gtk/gtkentry.c:475
 msgid "Maximum number of characters for this entry. Zero if no maximum"
-msgstr "Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
+msgstr ""
+"Najviše dozvoljenih znakova za ovo polje. Nula ukoliko nema ograničenja"
 
 #: gtk/gtkentry.c:483
 msgid "Visibility"
@@ -1498,19 +1584,19 @@ msgstr "Označi s naglaskom"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Može li biti označen sadržaj kada polje u fokusu"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:199
 msgid "Completion Model"
 msgstr "Model dopunjavanja"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "The model to find matches in"
 msgstr "Model po kojem se traže poklapanja"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:206
 msgid "Minimum Key Length"
 msgstr "Najmanja dužina ključa"
 
-#: gtk/gtkentrycompletion.c:205
+#: gtk/gtkentrycompletion.c:207
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Najmanja dužina ključa za pretragu radi nalaženja poklapanja"
 
@@ -1591,12 +1677,14 @@ msgid "The type of operation that the file selector is performing"
 msgstr "Vrsta aktivnosti koju izvršava izbornik datoteka"
 
 #: gtk/gtkfilechooser.c:99
-msgid "File System"
+#, fuzzy
+msgid "File System Backend"
 msgstr "Sustav datoteka"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr "Objekt datotečnog sustava za korištenje"
+#, fuzzy
+msgid "Name of file system backend to use"
+msgstr "Ime teme sličica koja će se koristiti"
 
 #: gtk/gtkfilechooser.c:105
 msgid "Filter"
@@ -1620,7 +1708,8 @@ msgstr "Samo lokalno"
 
 #: gtk/gtkfilechooser.c:118
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "Može li odabrana datoteka(e) biti ograničena na lokalnu datoteku: URL-ovi"
+msgstr ""
+"Može li odabrana datoteka(e) biti ograničena na lokalnu datoteku: URL-ovi"
 
 #: gtk/gtkfilechooser.c:123
 msgid "Preview widget"
@@ -1635,8 +1724,10 @@ msgid "Preview Widget Active"
 msgstr "Uključen pregled komponente"
 
 #: gtk/gtkfilechooser.c:130
-msgid "Whether the application supplied widget for custom previews should be shown."
-msgstr """Trebaju li biti prikazane komponente, koje dolaze uz program, za prilagođene "
+msgid ""
+"Whether the application supplied widget for custom previews should be shown."
+msgstr ""
+"Trebaju li biti prikazane komponente, koje dolaze uz program, za prilagođene "
 "preglede"
 
 #: gtk/gtkfilechooser.c:135
@@ -1910,13 +2001,23 @@ msgstr "Vrsta pohrane"
 msgid "The representation being used for image data"
 msgstr "Način zapisa koji se koristi za podatke za sliku"
 
-#: gtk/gtkimagemenuitem.c:124
+#: gtk/gtkimagemenuitem.c:137
 msgid "Image widget"
 msgstr "Element za sliku"
 
-#: gtk/gtkimagemenuitem.c:125
+#: gtk/gtkimagemenuitem.c:138
 msgid "Child widget to appear next to the menu text"
 msgstr "Dijete se pojavljuje pored teksta izbornika"
+
+#: gtk/gtkimagemenuitem.c:143
+#, fuzzy
+msgid "Show menu images"
+msgstr "Prikaži broj tjedana"
+
+#: gtk/gtkimagemenuitem.c:144
+#, fuzzy
+msgid "Whether images should be shown in menus"
+msgstr "Mogu li tabovi prikazivati ili ne"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
@@ -1955,7 +2056,8 @@ msgstr "Uzorak"
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
-msgstr "Niz znakova gdje podvlake „_“ označavaju znakove koje treba podvući u tekstu"
+msgstr ""
+"Niz znakova gdje podvlake „_“ označavaju znakove koje treba podvući u tekstu"
 
 #: gtk/gtklabel.c:334
 msgid "Line wrap"
@@ -2049,7 +2151,8 @@ msgstr "Vodoravni razmak"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr "Kada je izbornik podizbornik, pomakni ga vodoravno za ovaj broj piksela"
+msgstr ""
+"Kada je izbornik podizbornik, pomakni ga vodoravno za ovaj broj piksela"
 
 #: gtk/gtkmenu.c:388
 msgid "Left Attach"
@@ -2088,8 +2191,10 @@ msgid "Can change accelerators"
 msgstr "Dozvoljena izmjena kratica"
 
 #: gtk/gtkmenu.c:501
-msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr """Može li kratica izbornika biti izmjenjena pritiskom na tipke nad stavkom "
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+"Može li kratica izbornika biti izmjenjena pritiskom na tipke nad stavkom "
 "izbornika"
 
 #: gtk/gtkmenu.c:506
@@ -2097,8 +2202,10 @@ msgid "Delay before submenus appear"
 msgstr "Vrijeme prije pojave podizbornika"
 
 #: gtk/gtkmenu.c:507
-msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr """Najmanje vrijeme koje se pokazivač miša mora zadržati preko stavke izbornika "
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+"Najmanje vrijeme koje se pokazivač miša mora zadržati preko stavke izbornika "
 "da bi se pojavio podizbornik"
 
 #: gtk/gtkmenu.c:514
@@ -2133,35 +2240,36 @@ msgstr "Vrijeme prije pojave padajućih izbornika"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Vrijeme prije pojave podmenija sa menu linije"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Rub slike/oznake"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Širina okvira oko oznake i slike u okviru s porukom"
 
-#: gtk/gtkmessagedialog.c:122
+#: gtk/gtkmessagedialog.c:125
 msgid "Use separator"
 msgstr "Razdjeljnik"
 
-#: gtk/gtkmessagedialog.c:123
-msgid "Whether to put a separator between the message dialog's text and the buttons"
+#: gtk/gtkmessagedialog.c:126
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
 msgstr "Da stavim razdjeljnik između teksta i gumba dijaloškog teksta"
 
-#: gtk/gtkmessagedialog.c:129
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Vrsta obaviještenja"
 
-#: gtk/gtkmessagedialog.c:130
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "Vrsta poruke"
 
-#: gtk/gtkmessagedialog.c:137
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Dugmići obaveštenja"
 
-#: gtk/gtkmessagedialog.c:138
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "gumbići koji se prikazuju u prozoru sa porukom"
 
@@ -2186,7 +2294,8 @@ msgid "X pad"
 msgstr "X popuna"
 
 #: gtk/gtkmisc.c:119
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr "Količina razmaka koji se dodaje levo i desno od elementa, u pikselima"
 
 #: gtk/gtkmisc.c:128
@@ -2194,7 +2303,8 @@ msgid "Y pad"
 msgstr "Y popuna"
 
 #: gtk/gtkmisc.c:129
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr "Količina razmaka koji se dodaje na vrhu i na dnu elementa, u pikselima"
 
 #: gtk/gtknotebook.c:396
@@ -2259,7 +2369,8 @@ msgstr "Može se pomicati"
 
 #: gtk/gtknotebook.c:455
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
-msgstr """Ukoliko je postavljeno, dodaju se strelice kada ima previše tabova da bi "
+msgstr ""
+"Ukoliko je postavljeno, dodaju se strelice kada ima previše tabova da bi "
 "stali na predviđeni prostor"
 
 #: gtk/gtknotebook.c:461
@@ -2319,7 +2430,8 @@ msgid "Secondary backward stepper"
 msgstr "Druga koračnica unazad"
 
 #: gtk/gtknotebook.c:528
-msgid "Display a second backward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Prikaži drugu strelicu za nazad na drugom kraju zone taba"
 
 #: gtk/gtknotebook.c:544 gtk/gtkscrollbar.c:121
@@ -2327,7 +2439,8 @@ msgid "Secondary forward stepper"
 msgstr "Druga koračnica unaprijed"
 
 #: gtk/gtknotebook.c:545
-msgid "Display a second forward arrow button on the opposite end of the tab area"
+msgid ""
+"Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Prikaži drugu strelicu za naprijed na drugom kraju zone taba"
 
 #: gtk/gtknotebook.c:560 gtk/gtkscrollbar.c:97
@@ -2363,8 +2476,10 @@ msgid "Spacing around indicator"
 msgstr "Razmak oko pokazatelja"
 
 #: gtk/gtkpaned.c:239
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
-msgstr """Pozicija razdvojnika ploča u pikselima (0 označava skroz na lijevoj strani "
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgstr ""
+"Pozicija razdvojnika ploča u pikselima (0 označava skroz na lijevoj strani "
 "ili na vrhu)"
 
 #: gtk/gtkpaned.c:247
@@ -2405,7 +2520,8 @@ msgstr "Promjena veličine"
 
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr """Ukoliko je postavljeno, dijete se širi i skuplja zajedno sa okvirnim "
+msgstr ""
+"Ukoliko je postavljeno, dijete se širi i skuplja zajedno sa okvirnim "
 "elementom"
 
 #: gtk/gtkpaned.c:323
@@ -2414,11 +2530,13 @@ msgstr "Smanji"
 
 #: gtk/gtkpaned.c:324
 msgid "If TRUE, the child can be made smaller than its requisition"
-msgstr """Ukoliko je postavljeno, dijete nemože biti manje nego što je u početku "
+msgstr ""
+"Ukoliko je postavljeno, dijete nemože biti manje nego što je u početku "
 "postavljeno"
 
 #: gtk/gtkpreview.c:133
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr "Može li komponenta za pregled zauzmati sav dostupni prostor"
 
 #: gtk/gtkprogress.c:129
@@ -2497,7 +2615,8 @@ msgstr "Korak djelovanja"
 
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr """Korak koji se koristi pri svakom uvećanju dok je delovanje u toku "
+msgstr ""
+"Korak koji se koristi pri svakom uvećanju dok je delovanje u toku "
 "(prevaziđeno)"
 
 #: gtk/gtkprogressbar.c:178
@@ -2538,7 +2657,8 @@ msgstr "Korak uvećanja"
 
 #: gtk/gtkprogressbar.c:209
 msgid "The fraction of total progress to move the bouncing block when pulsed"
-msgstr """Koliko od ukupnog napretka unaprijediti pomerajući blok pri skokovitom "
+msgstr ""
+"Koliko od ukupnog napretka unaprijediti pomerajući blok pri skokovitom "
 "priraštaju"
 
 #: gtk/gtkprogressbar.c:219
@@ -2626,7 +2746,8 @@ msgid "Arrow X Displacement"
 msgstr "Strelica X pomaka"
 
 #: gtk/gtkrange.c:338
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr "Koliko pomaknuti strelicu u X smjeru kada se pritisne gumb"
 
 #: gtk/gtkrange.c:345
@@ -2634,7 +2755,8 @@ msgid "Arrow Y Displacement"
 msgstr "Strelica Y pomaka"
 
 #: gtk/gtkrange.c:346
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr "Koliko pomaknuti strelicu u y smjeru kada se pritisne gumb"
 
 #: gtk/gtkruler.c:118
@@ -2665,43 +2787,43 @@ msgstr "Najveća veličina"
 msgid "Maximum size of the ruler"
 msgstr "Najveća dozvoljena veličina ravnala"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Znamenki"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Broj decimalnih mesta koja će biti prikazana za vrijednost"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Vrijednos izvlačenja"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr "Može li se trenutna vrijednost prikazivati kao tekst uz klizač"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Mjesto za vrijednost"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "Mjesto na kojem se prikazuje tekuća vrijednost"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Dužina klizača"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Dužina klizača za razmjernik"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Razmak vrijednosti"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Razmak između teksta sa vrijednošću i površine klizača"
 
@@ -2719,15 +2841,18 @@ msgstr "Utvrđena veličina klizača"
 
 #: gtk/gtkscrollbar.c:90
 msgid "Don't change slider size, just lock it to the minimum length"
-msgstr """Ne dozvoljava promjenu veličine klizača, već je utvrđuje na najmanju "
+msgstr ""
+"Ne dozvoljava promjenu veličine klizača, već je utvrđuje na najmanju "
 "dozvoljenu dužinu"
 
 #: gtk/gtkscrollbar.c:114
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr "Prikaži drugu strelicu unazad na suprotnoj strani klizača"
 
 #: gtk/gtkscrollbar.c:122
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr "Prikaži drugu strelicu unaprijed na suprotnoj strani klizača"
 
 #: gtk/gtkscrolledwindow.c:235 gtk/gtktext.c:601 gtk/gtktreeview.c:535
@@ -2786,11 +2911,11 @@ msgstr "Crtaj"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Može li razdjeljnik biti iscrtan ili ne"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:262
 msgid "Double Click Time"
 msgstr "Vrijeme dvostrukog pritiska"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2798,11 +2923,11 @@ msgstr ""
 "Najduži dozvoljeni razmak između dva klika kako bi se oni smatrali jednim "
 "dvoklikom (u milisekundama)"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:270
 msgid "Double Click Distance"
 msgstr "Duljina dvostrukog pritiska"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:271
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2810,27 +2935,27 @@ msgstr ""
 "Najveća dozvoljena udaljenost između dva pritiska da bi se mogla smatrati "
 "kao dvostruki pritisak (u točkama)"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:278
 msgid "Cursor Blink"
 msgstr "Treperenje kursora"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
 msgstr "Može li pokazivač treptati"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
 msgstr "Vrijeme treperenja kursora"
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Vrijeme između dva treptaja kursora, u milisekundama"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:294
 msgid "Split Cursor"
 msgstr "Razdvojeni kursor"
 
-#: gtk/gtksettings.c:203
+#: gtk/gtksettings.c:295
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2838,61 +2963,101 @@ msgstr ""
 "Može li se prikazati dva pokazivača za mješani slijeva-na-desno i sdesna-na-"
 "lijevo tekst"
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:302
 msgid "Theme Name"
 msgstr "Ime teme"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
 msgstr "Ime RC datoteke teme za učitavanje"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:310
 msgid "Icon Theme Name"
 msgstr "Ime teme sličica"
 
-#: gtk/gtksettings.c:219
+#: gtk/gtksettings.c:311
 msgid "Name of icon theme to use"
 msgstr "Ime teme sličica koja će se koristiti"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:318
 msgid "Key Theme Name"
 msgstr "Ime teme tipki"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:319
 msgid "Name of key theme RC file to load"
 msgstr "Ime RC datoteke teme ključa za učitavanje"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:327
 msgid "Menu bar accelerator"
 msgstr "Prečica za traku izbornika"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:328
 msgid "Keybinding to activate the menu bar"
 msgstr "Odabir tipki za pristup meni liniji"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:336
 msgid "Drag threshold"
 msgstr "Prag prevlačenja "
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:337
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Koliko se točaka smije kursor pomjeriti prije povlačenja"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:345
 msgid "Font Name"
 msgstr "Ime pisma"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:346
 msgid "Name of default font to use"
 msgstr "Ime uobičajenog pisma koje će se koristiti"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:354
 msgid "Icon Sizes"
 msgstr "Veličina sličice"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:355
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Popis veličina sličica (gtk-menu=16,16;gtk-button=20,20...)"
+
+#: gtk/gtksettings.c:364
+msgid "Xft Antialias"
+msgstr ""
+
+#: gtk/gtksettings.c:365
+msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
+msgstr ""
+
+#: gtk/gtksettings.c:374
+msgid "Xft Hinting"
+msgstr ""
+
+#: gtk/gtksettings.c:375
+msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
+msgstr ""
+
+#: gtk/gtksettings.c:384
+msgid "Xft Hint Style"
+msgstr ""
+
+#: gtk/gtksettings.c:385
+msgid "What degree of hinting to use; none, slight, medium, or full"
+msgstr ""
+
+#: gtk/gtksettings.c:394
+msgid "Xft RGBA"
+msgstr ""
+
+#: gtk/gtksettings.c:395
+msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
+msgstr ""
+
+#: gtk/gtksettings.c:404
+msgid "Xft DPI"
+msgstr ""
+
+#: gtk/gtksettings.c:405
+msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
+msgstr ""
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -2955,13 +3120,11 @@ msgid "Update Policy"
 msgstr "Način osvježavanja"
 
 #: gtk/gtkspinbutton.c:293
-msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr """Može li se okretni gumb uvijek osvježavati, ili samo kada je vrijednost "
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
+msgstr ""
+"Može li se okretni gumb uvijek osvježavati, ili samo kada je vrijednost "
 "dozvoljena"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Vrijednost"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
@@ -2977,8 +3140,9 @@ msgstr "Ima hvataljku za promjenu veličine"
 
 #: gtk/gtkstatusbar.c:168
 msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr """Može li se u statusnoj traci nalaziti hvataljka za promijenu veličine "
-"prve razine"
+msgstr ""
+"Može li se u statusnoj traci nalaziti hvataljka za promijenu veličine prve "
+"razine"
 
 #: gtk/gtkstatusbar.c:195
 msgid "Style of bevel around the statusbar text"
@@ -3022,7 +3186,8 @@ msgstr "Homogeno"
 
 #: gtk/gtktable.c:195
 msgid "If TRUE this means the table cells are all the same width/height"
-msgstr "Ukoliko je postavljeno, onda su sva polja tablice jednake širine i visine"
+msgstr ""
+"Ukoliko je postavljeno, onda su sva polja tablice jednake širine i visine"
 
 #: gtk/gtktable.c:202
 msgid "Left attachment"
@@ -3073,8 +3238,8 @@ msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
 msgstr ""
-"Dodatni razmak između sadržanog elementa i njegovog lijevog i desnog "
-"suseda, u pikselima"
+"Dodatni razmak između sadržanog elementa i njegovog lijevog i desnog suseda, "
+"u pikselima"
 
 #: gtk/gtktable.c:251
 msgid "Vertical padding"
@@ -3170,7 +3335,8 @@ msgstr "Smjer teksta"
 
 #: gtk/gtktexttag.c:265
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr """Smijer teksta, npr. „right-to-left“ (sa desna na ljievo) ili „left-to-"
+msgstr ""
+"Smijer teksta, npr. „right-to-left“ (sa desna na ljievo) ili „left-to-"
 "right“ (sa ljieva na desno)"
 
 #: gtk/gtktexttag.c:282
@@ -3274,7 +3440,8 @@ msgid "Wrap mode"
 msgstr "Način omatanja"
 
 #: gtk/gtktexttag.c:481 gtk/gtktextview.c:594
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr "Može li se prijelom ne izvrši, između reči ili između znakova"
 
 #: gtk/gtktexttag.c:490 gtk/gtktextview.c:641
@@ -3359,8 +3526,8 @@ msgstr "Postavljen broj piksela između linija u odlomku"
 
 #: gtk/gtktexttag.c:589
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr """Može li ovaj tag utjecati na broj tačaka između linija unutar omotanih "
-"redova"
+msgstr ""
+"Može li ovaj tag utjecati na broj tačaka između linija unutar omotanih redova"
 
 #: gtk/gtktexttag.c:596
 msgid "Right margin set"
@@ -3456,7 +3623,8 @@ msgstr "Napravi iste proxije kao akcije okruglog gumba"
 
 #: gtk/gtktoggleaction.c:130
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr """Možgu li posrednici za ovu aktivnost izgledaju kao posrednici za radio-"
+msgstr ""
+"Možgu li posrednici za ovu aktivnost izgledaju kao posrednici za radio-"
 "aktivnosti"
 
 #: gtk/gtktogglebutton.c:133
@@ -3540,8 +3708,10 @@ msgid "Toolbar style"
 msgstr "Stil trake s alatima"
 
 #: gtk/gtktoolbar.c:582
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr """Može li uobičajena trake alata imati samo tekst, tekst i sličice, samo "
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr ""
+"Može li uobičajena trake alata imati samo tekst, tekst i sličice, samo "
 "sličice, itd."
 
 #: gtk/gtktoolbar.c:588
@@ -3584,7 +3754,7 @@ msgstr "Komponenta sličice"
 msgid "Icon widget to display in the item"
 msgstr "Element sličice koji se prikazuje u stavci"
 
-#: gtk/gtktoolitem.c:169
+#: gtk/gtktoolitem.c:172
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -3650,7 +3820,8 @@ msgstr "Savjet za pravila"
 
 #: gtk/gtktreeview.c:584
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr """Postavite savjet za mehanizam teme radi iscrtavanja redova u izmijeničnim "
+msgstr ""
+"Postavite savjet za mehanizam teme radi iscrtavanja redova u izmijeničnim "
 "bojama"
 
 #: gtk/gtktreeview.c:591
@@ -3825,19 +3996,19 @@ msgstr "Poredak sortiranja"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Smijer uređivanja koji pokazatelj uređenja treba pokazivati"
 
-#: gtk/gtkuimanager.c:217
+#: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Dodaj otcijepljivanje u menije"
 
-#: gtk/gtkuimanager.c:218
+#: gtk/gtkuimanager.c:221
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Mogu li se stavke izbornika odvati izbornicima"
 
-#: gtk/gtkuimanager.c:225
+#: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
 msgstr "Spojena definicija sučelja"
 
-#: gtk/gtkuimanager.c:226
+#: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
 msgstr "XML znakovni niz koji opisuje spojeno sučelje"
 
@@ -3959,7 +4130,8 @@ msgstr "Prima uobičajeno"
 
 #: gtk/gtkwidget.c:496
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr """Ukoliko je postavljeno, element će primiti uobičajenu akciju kada je "
+msgstr ""
+"Ukoliko je postavljeno, element će primiti uobičajenu akciju kada je "
 "fokusiran"
 
 #: gtk/gtkwidget.c:502
@@ -3978,7 +4150,8 @@ msgstr "Stil"
 msgid ""
 "The style of the widget, which contains information about how it will look "
 "(colors etc)"
-msgstr "Stil elementa, koji sadrži podatke o tome kako će izgledati (boja itd.)"
+msgstr ""
+"Stil elementa, koji sadrži podatke o tome kako će izgledati (boja itd.)"
 
 #: gtk/gtkwidget.c:516
 msgid "Events"
@@ -3986,7 +4159,8 @@ msgstr "Događaji"
 
 #: gtk/gtkwidget.c:517
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr "Maska za događaje koja određuje koje vrste GdkEvents-a ovaj element prima"
+msgstr ""
+"Maska za događaje koja određuje koje vrste GdkEvents-a ovaj element prima"
 
 #: gtk/gtkwidget.c:524
 msgid "Extension events"
@@ -3994,7 +4168,8 @@ msgstr "Dodatni događaji"
 
 #: gtk/gtkwidget.c:525
 msgid "The mask that decides what kind of extension events this widget gets"
-msgstr """Maska za događaje koja određuje koje vrste dodatnih događaja ovaj element "
+msgstr ""
+"Maska za događaje koja određuje koje vrste dodatnih događaja ovaj element "
 "prima"
 
 #: gtk/gtkwidget.c:532
@@ -4035,8 +4210,8 @@ msgstr "Fokusna popuna"
 
 #: gtk/gtkwidget.c:1395
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr """Širina, u tačkama, između pokazatelja elementa u fokusu i komponente "
-"okvira"
+msgstr ""
+"Širina, u tačkama, između pokazatelja elementa u fokusu i komponente okvira"
 
 #: gtk/gtkwidget.c:1400
 msgid "Cursor color"
@@ -4088,7 +4263,8 @@ msgstr "Funkcija prozora"
 
 #: gtk/gtkwindow.c:457
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr "Jedinstveni identifikator prozora koji se koristi pri obnavljanju sesije"
+msgstr ""
+"Jedinstveni identifikator prozora koji se koristi pri obnavljanju sesije"
 
 #: gtk/gtkwindow.c:464
 msgid "Allow Shrink"
@@ -4109,7 +4285,8 @@ msgstr "Dopusti povećanje"
 
 #: gtk/gtkwindow.c:474
 msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr """Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
+msgstr ""
+"Ukoliko je postavljeno, korisnici mogu povećati prozor preko njegove "
 "najmanje veličine"
 
 #: gtk/gtkwindow.c:482
@@ -4149,7 +4326,8 @@ msgid "Default Height"
 msgstr "Uobičajena visina"
 
 #: gtk/gtkwindow.c:517
-msgid "The default height of the window, used when initially showing the window"
+msgid ""
+"The default height of the window, used when initially showing the window"
 msgstr "Uobičajena visina prozora, koristi se pri prvom prikazivanju prozora"
 
 #: gtk/gtkwindow.c:526
@@ -4158,7 +4336,8 @@ msgstr "Ukloni sa Roditeljem"
 
 #: gtk/gtkwindow.c:527
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr """Da li ovaj prozor treba ukloniti kada se ukloni prozor iz kojeg je ovaj "
+msgstr ""
+"Da li ovaj prozor treba ukloniti kada se ukloni prozor iz kojeg je ovaj "
 "pozvan"
 
 #: gtk/gtkwindow.c:534
@@ -4253,23 +4432,26 @@ msgstr "Stil stanja IM-a"
 msgid "How to draw the input method statusbar"
 msgstr "Kako iscrtati statusnu traku načina unosa"
 
-#, c-format
+#~ msgid "File system object to use"
+#~ msgstr "Objekt datotečnog sustava za korištenje"
+
 #~ msgid "Failed to open file '%s': %s"
 #~ msgstr "Greška pri otvaranju datoteke '%s': %s"
 
-#, c-format
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "Slika „%s“ ne sadrži podatke"
 
-#, c-format
-#~ msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
-#~ msgstr "Ne mogu učitati sliku „%s“: razlog nepoznat, vjerojatno neispravan zapis"
+#~ msgid ""
+#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
+#~ msgstr ""
+#~ "Ne mogu učitati sliku „%s“: razlog nepoznat, vjerojatno neispravan zapis"
 
-#, c-format
 #~ msgid ""
 #~ "Failed to load animation '%s': reason not known, probably a corrupt "
 #~ "animation file"
-#~ msgstr "Ne mogu učitati animaciju „%s“: razlog nepoznat, vjerojatno neispravan zapis"
+#~ msgstr ""
+#~ "Ne mogu učitati animaciju „%s“: razlog nepoznat, vjerojatno neispravan "
+#~ "zapis"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "Ne mogu učitati modul za učitavanje slika: %s: %s"
@@ -4281,26 +4463,23 @@ msgstr "Kako iscrtati statusnu traku načina unosa"
 #~ "Dio za učitavanje slike %s ne podržava odgovarajuće sučelje; možda je iz "
 #~ "različite GTK inačice?"
 
-#, c-format
 #~ msgid "Image type '%s' is not supported"
 #~ msgstr "Vrsta slike „%s“ nije podržana"
 
-#, c-format
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "Ne mogu prepoznati datotečni format slike za datoteku „%s“"
 
 #~ msgid "Unrecognized image file format"
 #~ msgstr "Nepoznat način zapisa slike"
 
-#, c-format
 #~ msgid "Failed to load image '%s': %s"
 #~ msgstr "Ne mogu učitati sliku „%s“: %s"
 
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "Greška pri interpretiranju JPEG slike (%s)"
 
-#, c-format
-#~ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr "Ovo izdanje programa gdk-pixbuf ne podržava ovu sliku vrste %s"
 
 #~ msgid "Insufficient memory to save image to callback"
@@ -4312,7 +4491,6 @@ msgstr "Kako iscrtati statusnu traku načina unosa"
 #~ msgid "Failed to read from temporary file"
 #~ msgstr "Nisam uspio čitati iz privremene datoteke"
 
-#, c-format
 #~ msgid "Failed to open '%s' for writing: %s"
 #~ msgstr "Ne mogu otvoriti '%s' za pisanje: %s"
 
@@ -4326,7 +4504,6 @@ msgstr "Kako iscrtati statusnu traku načina unosa"
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr "Nema dovoljno memorije za spremanje slike u međuspremnik"
 
-#, c-format
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "Nije podržano postepeno učitavanje slike vrste „%s“"
 
@@ -4346,8 +4523,8 @@ msgstr "Kako iscrtati statusnu traku načina unosa"
 #~ msgid "Image pixel data corrupt"
 #~ msgstr "Oštećeni podaci o točkama slike"
 
-msgid "failed to allocate image buffer of %u byte"
-msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
+#~ msgid "failed to allocate image buffer of %u byte"
+#~ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 
 #~ msgid "Unexpected icon chunk in animation"
 #~ msgstr "Neočekivani dio sličice u animaciji"
@@ -4379,14 +4556,12 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "The BMP image format"
 #~ msgstr "BMP zapis slike"
 
-#, c-format
 #~ msgid "Failure reading GIF: %s"
 #~ msgstr "Greška pri čitanju GIF-a: %s"
 
 #~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
 #~ msgstr "GIF datoteci nedostaje nešto podataka (možda je nekako odjsečena?)"
 
-#, c-format
 #~ msgid "Internal error in the GIF loader (%s)"
 #~ msgstr "Unutrašnja greška pri učitavanju GIF-a (%s)"
 
@@ -4411,14 +4586,14 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "File does not appear to be a GIF file"
 #~ msgstr "Izgleda da se ne radi o GIF datoteci"
 
-#, c-format
 #~ msgid "Version %s of the GIF file format is not supported"
 #~ msgstr "Izdanje %s GIF načina zapisa nije podržano"
 
 #~ msgid ""
 #~ "GIF image has no global colormap, and a frame inside it has no local "
 #~ "colormap."
-#~ msgstr "GIF slika nema opću mapu boja, a kadar u njoj nema zasebnu mapu boja."
+#~ msgstr ""
+#~ "GIF slika nema opću mapu boja, a kadar u njoj nema zasebnu mapu boja."
 
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "GIF slika je skraćena ili nepotpuna."
@@ -4450,14 +4625,12 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "Cursor hotspot outside image"
 #~ msgstr "Pokazivač žarišta je van slike"
 
-#, c-format
 #~ msgid "Unsupported depth for ICO file: %d"
 #~ msgstr "Nepodržana dubina za ICO datoteku: %d"
 
 #~ msgid "The ICO image format"
 #~ msgstr "ICO zapis slike"
 
-#, c-format
 #~ msgid "Error interpreting JPEG image file (%s)"
 #~ msgstr "Greška pri interpretiranju JPEG slike (%s)"
 
@@ -4465,30 +4638,27 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ "Insufficient memory to load image, try exiting some applications to free "
 #~ "memory"
 #~ msgstr ""
-#~ "Nema dovoljno memorije za učitavanje slike, zatvorite neke programe kako bi "
-#~ "oslobodili memoriju"
+#~ "Nema dovoljno memorije za učitavanje slike, zatvorite neke programe kako "
+#~ "bi oslobodili memoriju"
 
-#, c-format
 #~ msgid "Unsupported JPEG color space (%s)"
 #~ msgstr "Nepodržan JPEG prostor boja (%s)"
 
 #~ msgid "Couldn't allocate memory for loading JPEG file"
 #~ msgstr "Ne mogu pronaći dovoljno memorije za učitavanje JPEG datoteke"
 
-#, c-format
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 #~ "parsed."
 #~ msgstr ""
-#~ "Kakvoća JPEG-a mora biti vrijednost između 0 i 100; ne može da razume vrijednost "
-#~ "„%s“."
+#~ "Kakvoća JPEG-a mora biti vrijednost između 0 i 100; ne može da razume "
+#~ "vrijednost „%s“."
 
-#, c-format
 #~ msgid ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr ""
-#~ "Kakvoća JPEG-a mora biti vrijednost između 0 i 100; nije dozvoljena vrijednost „%"
-#~ "d“."
+#~ "Kakvoća JPEG-a mora biti vrijednost između 0 i 100; nije dozvoljena "
+#~ "vrijednost „%d“."
 
 #~ msgid "The JPEG image format"
 #~ msgstr "JPEG zapis slike"
@@ -4505,7 +4675,6 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "Image has unsupported bpp"
 #~ msgstr "Slika koristi nepodržani broj bitova po točki"
 
-#, c-format
 #~ msgid "Image has unsupported number of %d-bit planes"
 #~ msgstr "Slika sadrži nepodržani broj %d-bitnih ravnina"
 
@@ -4540,16 +4709,15 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgstr "Transformirani PNG nije RGB ili RGBA."
 
 #~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr "Nepodržan broj kanala u transformiranoj  PNG slici; mora biti 3 ili 4."
+#~ msgstr ""
+#~ "Nepodržan broj kanala u transformiranoj  PNG slici; mora biti 3 ili 4."
 
-#, c-format
 #~ msgid "Fatal error in PNG image file: %s"
 #~ msgstr "Kobna greška u PNG slici: %s"
 
 #~ msgid "Insufficient memory to load PNG file"
 #~ msgstr "Nema dovoljno memorije za učitavanje PNG  datoteke"
 
-#, c-format
 #~ msgid ""
 #~ "Insufficient memory to store a %ld by %ld image; try exiting some "
 #~ "applications to reduce memory usage"
@@ -4560,25 +4728,30 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "Kobna greška tijekom čitanja PNG slike"
 
-#, c-format
 #~ msgid "Fatal error reading PNG image file: %s"
 #~ msgstr "Nepovratna greška pri čitanju PNG slike: %s"
 
-#~ msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "Ključevi za PNG tekstualne odjeljke moraju imati bar 1, a najviše 79 znakova."
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "Ključevi za PNG tekstualne odjeljke moraju imati bar 1, a najviše 79 "
+#~ "znakova."
 
 #~ msgid "Keys for PNG text chunks must be ASCII characters."
 #~ msgstr "Ključevi za PNG tekstualne odjeljke moraju biti ASCII znakovi."
 
-#, c-format
-#~ msgid "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
-#~ msgstr "Vrijednost PNG tekstualnog odeljka %s se ne može pretvoriti u ISO-8859-1 zapis."
+#~ msgid ""
+#~ "Value for PNG text chunk %s can not be converted to ISO-8859-1 encoding."
+#~ msgstr ""
+#~ "Vrijednost PNG tekstualnog odeljka %s se ne može pretvoriti u ISO-8859-1 "
+#~ "zapis."
 
 #~ msgid "The PNG image format"
 #~ msgstr "PNG zapis slike"
 
 #~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "Dio za učitavanje PNM slika je očekivao da naiđe na cijeli broj, ali nije"
+#~ msgstr ""
+#~ "Dio za učitavanje PNM slika je očekivao da naiđe na cijeli broj, ali nije"
 
 #~ msgid "PNM file has an incorrect initial byte"
 #~ msgstr "PNM datoteka sadrži neispravan početni bajt"
@@ -4599,7 +4772,9 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgstr "Najveća vrijednost boje u PNM datoteci je prevelika"
 
 #~ msgid "Can't handle PNM files with maximum color values greater than 255"
-#~ msgstr "Ne mogu rukovati PNM datotekama sa maksimalnim veličinama boja većim od 255"
+#~ msgstr ""
+#~ "Ne mogu rukovati PNM datotekama sa maksimalnim veličinama boja većim od "
+#~ "255"
 
 #~ msgid "Raw PNM image type is invalid"
 #~ msgstr "Sirova PNM vrsta slike neispravna"
@@ -4656,7 +4831,8 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgstr "Ne mogu realocirati podatke ulazno/izlaznog međuspremnika"
 
 #~ msgid "Can't allocate temporary IOBuffer data"
-#~ msgstr "Ne mogu alocirati memoriju za privremeni ulazno/izlazni međuspremnik"
+#~ msgstr ""
+#~ "Ne mogu alocirati memoriju za privremeni ulazno/izlazni međuspremnik"
 
 #~ msgid "Can't allocate new pixbuf"
 #~ msgstr "Ne mogu alocirati memoriju za novi pixbuf"
@@ -4816,8 +4992,8 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ "Select the color you want from the outer ring. Select the darkness or "
 #~ "lightness of that color using the inner triangle."
 #~ msgstr ""
-#~ "Odaberite boju koju želite iz vanjskog prstena. Odaberite osvjetljenost ili "
-#~ "zatamnjenost te boje pomoću unutrašnjeg prstena."
+#~ "Odaberite boju koju želite iz vanjskog prstena. Odaberite osvjetljenost "
+#~ "ili zatamnjenost te boje pomoću unutrašnjeg prstena."
 
 #~ msgid ""
 #~ "Click the eyedropper, then click a color anywhere on your screen to "
@@ -4863,8 +5039,8 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ "You can enter an HTML-style hexadecimal color value, or simply a color "
 #~ "name such as 'orange' in this entry."
 #~ msgstr ""
-#~ "Možete upisati vrijednost boje kao heksadecimalnu vrijednost u HTML obliku, "
-#~ "ili jednostavno englesko ime boje kao što je \"orange\"."
+#~ "Možete upisati vrijednost boje kao heksadecimalnu vrijednost u HTML "
+#~ "obliku, ili jednostavno englesko ime boje kao što je \"orange\"."
 
 #~ msgid "Color Selection"
 #~ msgstr "Odabir boje"
@@ -4878,11 +5054,9 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "_Insert Unicode Control Character"
 #~ msgstr "_Ubaciti Unicode kontrolni znak"
 
-#, c-format
 #~ msgid "Invalid filename: %s"
 #~ msgstr "Neispravno ime datoteke: %s"
 
-#, c-format
 #~ msgid ""
 #~ "Could not retrieve information about %s:\n"
 #~ "%s"
@@ -4890,7 +5064,6 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ "Nisam mogao dohvatiti informaciju o %s:\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Could not add a bookmark for %s:\n"
 #~ "%s"
@@ -4898,7 +5071,6 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ "Nisam mogao dodati knjižnu oznaku za %s:\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Could not build file name from '%s' and '%s':\n"
 #~ "%s"
@@ -4912,7 +5084,6 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "Desktop"
 #~ msgstr "Radna površina"
 
-#, c-format
 #~ msgid ""
 #~ "Could not go to the parent folder of %s:\n"
 #~ "%s"
@@ -4936,11 +5107,9 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "Up"
 #~ msgstr "Gore"
 
-#, c-format
 #~ msgid "Could not add bookmark for %s because it is not a folder."
 #~ msgstr "Nisam mogao dodati knjižnu oznaku za %s, jer to nije mapa."
 
-#, c-format
 #~ msgid ""
 #~ "Could not remove bookmark for %s:\n"
 #~ "%s"
@@ -4948,9 +5117,9 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ "Nisam mogao ukloniti knjišku oznaku za %s:\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "Could not add a bookmark for %s because it is an invalid path name."
-#~ msgstr "Nisam mogao dodati knjižnu oznaku za %s, jer je to neispravno ime putanje."
+#~ msgstr ""
+#~ "Nisam mogao dodati knjižnu oznaku za %s, jer je to neispravno ime putanje."
 
 #~ msgid "Modified"
 #~ msgstr "Mijenjano"
@@ -4958,22 +5127,18 @@ msgstr "polje koje dodjeljuje međuspremnik slike veličine %u bajtova"
 #~ msgid "_Filename:"
 #~ msgstr "_Ime datoteke:"
 
-#, c-format
 #~ msgid "shortcut %s does not exist"
 #~ msgstr "Ne postoji kratica %s"
 
-msgid "%d byte"
-msgstr "%d bajt"
+#~ msgid "%d byte"
+#~ msgstr "%d bajt"
 
-#, c-format
 #~ msgid "%.1f K"
 #~ msgstr "%.1f K"
 
-#, c-format
 #~ msgid "%.1f M"
 #~ msgstr "%.1f M"
 
-#, c-format
 #~ msgid "%.1f G"
 #~ msgstr "%.1f G"
 
@@ -4998,7 +5163,6 @@ msgstr "%d bajt"
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Nečitljiva mapa: %s"
 
-#, c-format
 #~ msgid ""
 #~ "The file \"%s\" resides on another machine (called %s) and may not be "
 #~ "available to this program.\n"
@@ -5017,11 +5181,12 @@ msgstr "%d bajt"
 #~ msgid "_Rename File"
 #~ msgstr "_Promijeni ime datoteke"
 
-#, c-format
-#~ msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Ime direktorija „%s“ sadrži simbole koji nisu dozvoljeni u imenima datoteka"
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Ime direktorija „%s“ sadrži simbole koji nisu dozvoljeni u imenima "
+#~ "datoteka"
 
-#, c-format
 #~ msgid ""
 #~ "Error creating folder \"%s\": %s\n"
 #~ "%s"
@@ -5032,7 +5197,6 @@ msgstr "%d bajt"
 #~ msgid "You probably used symbols not allowed in filenames."
 #~ msgstr "Vjerojatno ste koristili nedozvoljene simbole u imenu datoteke."
 
-#, c-format
 #~ msgid "Error creating folder \"%s\": %s\n"
 #~ msgstr "Greška pri pravljenju direktorija „%s“: %s\n"
 
@@ -5045,11 +5209,11 @@ msgstr "%d bajt"
 #~ msgid "C_reate"
 #~ msgstr "_Stvori"
 
-#, c-format
-#~ msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Ime datoteke „%s“ sadrži simbole koji su nedozvoljeni u imenima datoteka"
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgstr ""
+#~ "Ime datoteke „%s“ sadrži simbole koji su nedozvoljeni u imenima datoteka"
 
-#, c-format
 #~ msgid ""
 #~ "Error deleting file \"%s\": %s\n"
 #~ "%s"
@@ -5060,7 +5224,6 @@ msgstr "%d bajt"
 #~ msgid "It probably contains symbols not allowed in filenames."
 #~ msgstr "Vjerojatno sadrži simbole nedozvoljene u imenima datoteka."
 
-#, c-format
 #~ msgid "Error deleting file \"%s\": %s"
 #~ msgstr "Greška pri brisanju datoteke \"%s\": %s"
 
@@ -5070,11 +5233,10 @@ msgstr "%d bajt"
 #~ msgid "Delete File"
 #~ msgstr "Obriši datoteku"
 
-#, c-format
-#~ msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgid ""
+#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr "Ime datoteke „%s“ sadrži simbole koji su nedozvoljeni u imenima"
 
-#, c-format
 #~ msgid ""
 #~ "Error renaming file to \"%s\": %s\n"
 #~ "%s"
@@ -5082,7 +5244,6 @@ msgstr "%d bajt"
 #~ "Greška pri preimenovanju datoteke u \"%s\": %s\n"
 #~ "%s"
 
-#, c-format
 #~ msgid ""
 #~ "Error renaming file \"%s\": %s\n"
 #~ "%s"
@@ -5090,7 +5251,6 @@ msgstr "%d bajt"
 #~ "Greška pri preimenovanju datoteke \"%s\": %s\n"
 #~ "%s"
 
-#, c-format
 #~ msgid "Error renaming file \"%s\" to \"%s\": %s"
 #~ msgstr "Greška pri preimenovanju datoteke \"%s\" to \"%s\": %s"
 
@@ -5103,7 +5263,6 @@ msgstr "%d bajt"
 #~ msgid "_Rename"
 #~ msgstr "_Promijeni ime"
 
-#, c-format
 #~ msgid ""
 #~ "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 #~ "environment variable G_BROKEN_FILENAMES): %s"
@@ -5123,15 +5282,12 @@ msgstr "%d bajt"
 #~ msgid "(Empty)"
 #~ msgstr "(Prazno)"
 
-#, c-format
 #~ msgid "error creating directory '%s': %s"
 #~ msgstr "Greška kod stvarnja mape '%s': %s"
 
-#, c-format
 #~ msgid "error getting information for '%s': %s"
 #~ msgstr "Greška kod dohvaćanja informacje za '%s': %s"
 
-#, c-format
 #~ msgid "Bookmark saving failed (%s)"
 #~ msgstr "Nije uspjelo spremanje knjižnih oznaka (%s)"
 
@@ -5156,11 +5312,9 @@ msgstr "%d bajt"
 #~ msgid "_Gamma value"
 #~ msgstr "_Gama vrijednost"
 
-#, c-format
 #~ msgid "Error loading icon: %s"
 #~ msgstr "Greška pri učitavanju sličice: %s"
 
-#, c-format
 #~ msgid "Icon '%s' not present in theme"
 #~ msgstr "Sličica %s nije prisutna u temi"
 
@@ -5209,15 +5363,12 @@ msgstr "%d bajt"
 #~ msgid "default:LTR"
 #~ msgstr "default:LTR"
 
-#, c-format
 #~ msgid "Unable to find include file: \"%s\""
 #~ msgstr "Ne mogu uključiti datoteku: „%s“"
 
-#, c-format
 #~ msgid "Unable to locate image file in pixmap_path: \"%s\""
 #~ msgstr "Ne mogu pronaći slikovnu datoteku u pixmap_path: \"%s\""
 
-#, c-format
 #~ msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 #~ msgstr "Dio putanje za slike: „%s“ mora biti apsolutna putanja, %s, %d. red"
 
@@ -5428,15 +5579,12 @@ msgstr "%d bajt"
 #~ msgid "--- No Tip ---"
 #~ msgstr "--- Nema savjeta ---"
 
-#, c-format
 #~ msgid "Unknown attribute '%s' on line %d char %d"
 #~ msgstr "Nepoznat atribut „%s“ u %d. redu, %d. znak"
 
-#, c-format
 #~ msgid "Unexpected start tag '%s' on line %d char %d"
 #~ msgstr "Neočekivana početna oznaka „%s“ u %d. redu, %d. znak"
 
-#, c-format
 #~ msgid "Unexpected character data on line %d char %d"
 #~ msgstr "Neočekivani znakovni podaci u %d. redu, %d. znak"
 
@@ -5473,7 +5621,5 @@ msgstr "%d bajt"
 #~ msgid "X Input Method"
 #~ msgstr "X način unosa (XIM)"
 
-#, c-format
 #~ msgid "Could not get information for file '%s': %s"
 #~ msgstr "Nisam mogao dobhvatiti informacije za datoteku '%s': %s"
-

@@ -12,16 +12,19 @@ Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
  - File system module support. [Alexander Larsson]
  - Pathbar widget. [Jonathan R. Blandford]
  - Miscellaneous fixes. [Christian Persch, Jan Arne Petersen, Anders Carlsson,
-   Alexander, Jonathan]
+   Padraig O'Briain, Alexander, Jonathan]
  - Win32 fixes, GtkFileSystemWin32 work. [Hans Breuer]
  - Memory leak fixes [Morten Welinder]
 * GtkTreeView:
  - Fix return values. [Federico, R. McFarland]
  - Properly cancel the arrow animation. [Michael Zucchi]
  - Allow custom icon sizes in pixbuf cell renderer. [Erik Grinaker]
+ - Don't darken the sort column unless there are three visible columns
+   [Jonathan]
 * GtkToolbar:
  - Improve the sliding implementation. [Soeren Sandmann]
- - Add writeonly ::group property to GtkRadioToolButton. [Soeren, Olivier Andrieu]
+ - Add writeonly ::group property to GtkRadioToolButton. [Soeren, 
+   Olivier Andrieu]
  - Misc fixes. [Morten, Jeroen Zwartepoorte, Michel Meeks, Soeren]
 * Menus:
  - Make menus work better on Xinerama [Matthias]
@@ -29,11 +32,15 @@ Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
  - Fix grid mode, removing of items. [Matthias, Vincent Noel]
  - Make tearoff menu items work anywhere in menus. [Matthias]
  - Improve popup/popdown behaviour. [Soeren]
+* gdk-pixbuf:
+ - Fix some problems with indexed BMPs [Kazuho Okui, Matthias]
+ - Work around some libjpeg header file craziness [Manish Singh]
 * Assume gravity works. [Soeren]
 * Cache GCs for drawing. [Brian Cameron, Soeren]
-* Handle focus adjustment correctly for deeply nested focus locations. [Matthias, 
-  Owen Taylor]
-* Use reference counting for shared data in GtkActionGroup. [Matthias, Adam Hooper]
+* Handle focus adjustment correctly for deeply nested focus locations. 
+  [Matthias, Owen Taylor]
+* Use reference counting for shared data in GtkActionGroup. 
+  [Matthias, Adam Hooper]
 * Add a "use-separator" style property to GtkMessageDialog, and make
   it not resizable. [Federico]
 * Add 'const' to uses of GdkColor that need it. [Federico]
@@ -52,17 +59,20 @@ Overview of Changes from GTK+ 2.3.2 to GTK+ 2.3.3
 * Remove C++-style comments. [Damien Carbery]
 * Memory leak fixes. [Christian Persch, Richard Hult, Morten, Matthias]
 * RTL mode (flipping) fixes. [Mitsuru Chinen, Semion Chichelnitsky]
-* Accessibility improvements for tooltips, GtkScale. [Padraig O'Briain]
+* Accessibility improvements for tooltips, GtkScale. [Padraig]
 * Make the ZOOM_100 and ZOOM_FIT labels HIG-compliant. [Mariano Suarez-Alvarez]
 * Win32 fixes. [Tor Lillqvist]
 * Documentation:
  - New section on how to check for modifier keys correctly. [Federico]
- - Miscellaneous improvements.  [Tim-Philipp Müller, Matthias]
-* Other contributors: Marco Pesenti Gritti, Jonas Jonsson,
-  Yao Zhang, Felipe Heidrich, Joshua N. Pritikin, Theppitak Karoonboonyanan,
-  Manish Singh, Yu Shao, John Ellis, Tommi Komulainen, Julio M. Merino Vidal,
-  Benjamin Otte, Rodney Dawes, David Hawthorne, Dan Damian,
-  Christopher Blizzard, Christian Biere, Paolo Borelli
+ - Miscellaneous improvements.  [Pascal Haakmat, Jan Huelsbergen,
+   Tim-Philipp Müller, Matthias]
+* New and updated translations (ar,az,cs,da,de,en_CA,el,es,fi,fr,ga,hr,it,ja,
+  ko,mi,mn,ms,nl,nn,no,pl,pt,ru,sq,sr,sr@Latn,sv,ta,th,uz,uz@Latn)
+* Other contributors: Christian Biere, Christopher Blizzard, Paolo Borelli, 
+  Dan Damian, Rodney Dawes, John Ellis, David Hawthorne, Marco Pesenti Gritti,
+  Felipe Heidrich, Jonas Jonsson, Theppitak Karoonboonyanan, Tommi Komulainen,
+  Julio M. Merino Vidal, Gregory Merchan, Benjamin Otte, Joshua N. Pritikin,
+  Yu Shao, Yao Zhang
 
 Overview of Changes from GTK+ 2.3.1 to GTK+ 2.3.2
 =================================================

@@ -1,3 +1,7 @@
+Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.3 ===
+
 Fri Feb 13 10:32:09 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf-xlibrgb.h: Remove a couple of unneeded

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2003-06-28 20:55+0700\n"
 "Last-Translator: Mohammad DAMT <mdamt@bisnisweb.com>\n"
 "Language-Team: Indonesia <sukarelawan@gnome.linux.or.id>\n"
@@ -122,8 +122,8 @@ msgstr "Nama font"
 msgid "A unique name for the action."
 msgstr ""
 
-#: gtk/gtkaction.c:201 gtk/gtkbutton.c:203 gtk/gtkexpander.c:202
-#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
+#: gtk/gtkaction.c:201 gtk/gtkbutton.c:209 gtk/gtkexpander.c:202
+#: gtk/gtkframe.c:125 gtk/gtklabel.c:288 gtk/gtktoolbutton.c:179
 msgid "Label"
 msgstr "Label"
 
@@ -157,27 +157,27 @@ msgstr "ID stok"
 msgid "The stock icon displayed in widgets representing this action."
 msgstr ""
 
-#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:154
+#: gtk/gtkaction.c:229 gtk/gtktoolitem.c:157
 msgid "Visible when horizontal"
 msgstr ""
 
-#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:155
+#: gtk/gtkaction.c:230 gtk/gtktoolitem.c:158
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a horizontal "
 "orientation."
 msgstr ""
 
-#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:161
+#: gtk/gtkaction.c:236 gtk/gtktoolitem.c:164
 msgid "Visible when vertical"
 msgstr ""
 
-#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:162
+#: gtk/gtkaction.c:237 gtk/gtktoolitem.c:165
 msgid ""
 "Whether the toolbar item is visible when the toolbar is in a vertical "
 "orientation."
 msgstr ""
 
-#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:168
+#: gtk/gtkaction.c:243 gtk/gtktoolitem.c:171
 msgid "Is important"
 msgstr ""
 
@@ -239,11 +239,69 @@ msgstr "Menentukan apakah widget terlihat atau tidak"
 msgid "Whether the action group is visible."
 msgstr "Menentukan apakah widget terlihat atau tidak"
 
+#: gtk/gtkadjustment.c:106 gtk/gtkspinbutton.c:301
+msgid "Value"
+msgstr "Nilai"
+
+#: gtk/gtkadjustment.c:107
+#, fuzzy
+msgid "The value of the adjustment"
+msgstr "Nama widget"
+
+#: gtk/gtkadjustment.c:116
+#, fuzzy
+msgid "Minimum Value"
+msgstr "X Minimum"
+
+#: gtk/gtkadjustment.c:117
+#, fuzzy
+msgid "The minimum value of the adjustment"
+msgstr "Nama widget"
+
+#: gtk/gtkadjustment.c:126
+#, fuzzy
+msgid "Maximum Value"
+msgstr "Panjang maksimum"
+
+#: gtk/gtkadjustment.c:127
+#, fuzzy
+msgid "The maximum value of the adjustment"
+msgstr "Nama widget"
+
+#: gtk/gtkadjustment.c:136
+#, fuzzy
+msgid "Step Increment"
+msgstr "Layar"
+
+#: gtk/gtkadjustment.c:137
+#, fuzzy
+msgid "The step increment of the adjustment"
+msgstr "Isi"
+
+#: gtk/gtkadjustment.c:146
+msgid "Page Increment"
+msgstr ""
+
+#: gtk/gtkadjustment.c:147
+#, fuzzy
+msgid "The page increment of the adjustment"
+msgstr "Isi"
+
+#: gtk/gtkadjustment.c:156
+#, fuzzy
+msgid "Page Size"
+msgstr "Ukuran Maksimum"
+
+#: gtk/gtkadjustment.c:157
+#, fuzzy
+msgid "The page size of the adjustment"
+msgstr "Status togel tombol"
+
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
 msgstr "Penyesuaian Horisontal"
 
-#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:254
+#: gtk/gtkalignment.c:117 gtk/gtkbutton.c:260
 msgid ""
 "Horizontal position of child in available space. 0.0 is left aligned, 1.0 is "
 "right aligned"
@@ -255,7 +313,7 @@ msgstr ""
 msgid "Vertical alignment"
 msgstr "Pernyesualan vertikal"
 
-#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:273
+#: gtk/gtkalignment.c:127 gtk/gtkbutton.c:279
 msgid ""
 "Vertical position of child in available space. 0.0 is top aligned, 1.0 is "
 "bottom aligned"
@@ -431,7 +489,7 @@ msgstr "Jarak"
 msgid "The amount of space between children"
 msgstr "Jarak antar anak"
 
-#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:534
+#: gtk/gtkbox.c:138 gtk/gtknotebook.c:468 gtk/gtktoolbar.c:533
 msgid "Homogeneous"
 msgstr "Homogen"
 
@@ -439,7 +497,7 @@ msgstr "Homogen"
 msgid "Whether the children should all be the same size"
 msgstr "Menentukan apakah semua anak memiliki ukuran yang sama atau tidak"
 
-#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:526
+#: gtk/gtkbox.c:146 gtk/gtkpreview.c:132 gtk/gtktoolbar.c:525
 #: gtk/gtktreeviewcolumn.c:294
 msgid "Expand"
 msgstr "Ekspansi"
@@ -490,19 +548,19 @@ msgstr "Posisi"
 msgid "The index of the child in the parent"
 msgstr "Indek anak dalam bapak"
 
-#: gtk/gtkbutton.c:204
+#: gtk/gtkbutton.c:210
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr ""
 "Tulisan pada widget label dalam tombol, (jika tombol berisi widget label"
 
-#: gtk/gtkbutton.c:211 gtk/gtkexpander.c:210 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:217 gtk/gtkexpander.c:210 gtk/gtklabel.c:309
 #: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Gunakan garis bawah"
 
-#: gtk/gtkbutton.c:212 gtk/gtkexpander.c:211 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:218 gtk/gtkexpander.c:211 gtk/gtklabel.c:310
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -510,55 +568,55 @@ msgstr ""
 "Jika ini diisi maka ada garis bawah pada teks yang menunjukkan bahwa huruf "
 "tersebut berisi singkatan tombol jalan pintas"
 
-#: gtk/gtkbutton.c:219
+#: gtk/gtkbutton.c:225
 msgid "Use stock"
 msgstr "Gunakan stok"
 
-#: gtk/gtkbutton.c:220
+#: gtk/gtkbutton.c:226
 msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Jika ini diisi, tulisan pada label akan dipilih dari item stok"
 
-#: gtk/gtkbutton.c:227
+#: gtk/gtkbutton.c:233
 msgid "Focus on click"
 msgstr "Klik untuk membuat fokus"
 
-#: gtk/gtkbutton.c:228
+#: gtk/gtkbutton.c:234
 msgid "Whether the button grabs focus when it is clicked with the mouse"
 msgstr ""
 "Menentukan apakah tombol mendapatkan fokus pada saat diklik dengan mouse"
 
-#: gtk/gtkbutton.c:235
+#: gtk/gtkbutton.c:241
 msgid "Border relief"
 msgstr "Relief sisi"
 
-#: gtk/gtkbutton.c:236
+#: gtk/gtkbutton.c:242
 msgid "The border relief style"
 msgstr "Gaya relief pada sisi"
 
-#: gtk/gtkbutton.c:253
+#: gtk/gtkbutton.c:259
 #, fuzzy
 msgid "Horizontal alignment for child"
 msgstr "Penyesuaian Horisontal"
 
-#: gtk/gtkbutton.c:272
+#: gtk/gtkbutton.c:278
 #, fuzzy
 msgid "Vertical alignment for child"
 msgstr "Pernyesualan vertikal"
 
-#: gtk/gtkbutton.c:340
+#: gtk/gtkbutton.c:346
 msgid "Default Spacing"
 msgstr "Jarak default"
 
-#: gtk/gtkbutton.c:341
+#: gtk/gtkbutton.c:347
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Ruangan tambahan untuk tombol yang bernilai CAN_DEFAULT"
 
-#: gtk/gtkbutton.c:347
+#: gtk/gtkbutton.c:353
 msgid "Default Outside Spacing"
 msgstr "Jarak luar default"
 
-#: gtk/gtkbutton.c:348
+#: gtk/gtkbutton.c:354
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
@@ -566,23 +624,32 @@ msgstr ""
 "Ruang tambahan yang disediakan untuk tombol-tombol jenis CAN_DEFAULT yang "
 "digambar di luar batas tombol"
 
-#: gtk/gtkbutton.c:353
+#: gtk/gtkbutton.c:359
 msgid "Child X Displacement"
 msgstr "Relokasi X Anak"
 
-#: gtk/gtkbutton.c:354
+#: gtk/gtkbutton.c:360
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
 msgstr "Seberapa jauh arah x saat memindahkan anak pada saat tombol ditekan"
 
-#: gtk/gtkbutton.c:361
+#: gtk/gtkbutton.c:367
 msgid "Child Y Displacement"
 msgstr "Relokasi Y Anak"
 
-#: gtk/gtkbutton.c:362
+#: gtk/gtkbutton.c:368
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
 msgstr "Seberapa jauh arah y saat memindahkan anak pada saat tombol ditekan"
+
+#: gtk/gtkbutton.c:375
+msgid "Show button images"
+msgstr ""
+
+#: gtk/gtkbutton.c:376
+#, fuzzy
+msgid "Whether stock icons should be shown in buttons"
+msgstr "Menentukan apakah tab digambar atau tidak"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -786,14 +853,15 @@ msgid "Size"
 msgstr "Ukuran"
 
 #: gtk/gtkcellrendererpixbuf.c:169
-msgid "The size of the rendered icon"
+#, fuzzy
+msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "Ukuran ikon yang digambar"
 
-#: gtk/gtkcellrendererpixbuf.c:177
+#: gtk/gtkcellrendererpixbuf.c:178
 msgid "Detail"
 msgstr "Detil"
 
-#: gtk/gtkcellrendererpixbuf.c:178
+#: gtk/gtkcellrendererpixbuf.c:179
 msgid "Render detail to pass to the theme engine"
 msgstr "Detil render yang diberikan pada mesin tematik"
 
@@ -813,7 +881,7 @@ msgstr "Markup"
 msgid "Marked up text to render"
 msgstr "Teks bermarkup yang hendak ditulis"
 
-#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:297
+#: gtk/gtkcellrenderertext.c:208 gtk/gtklabel.c:295
 msgid "Attributes"
 msgstr "Atribut"
 
@@ -1119,11 +1187,11 @@ msgstr "Kondisi radio"
 msgid "Draw the toggle button as a radio button"
 msgstr "Menggambar tombol togel sebagai tombol radio"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+#: gtk/gtkcheckbutton.c:98 gtk/gtkcheckmenuitem.c:139 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Ukuran indikator"
 
-#: gtk/gtkcheckbutton.c:99
+#: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:141
 msgid "Size of check or radio indicator"
 msgstr "Ukuran indikator cek atau radio"
 
@@ -1135,27 +1203,27 @@ msgstr "Jarak Indikator"
 msgid "Spacing around check or radio indicator"
 msgstr "Jarak antara indikator cek atau radio"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:116 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Aktif"
 
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:117
 msgid "Whether the menu item is checked"
 msgstr "Apakah menu item sedang dipilih atau tidak"
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:124 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Tidak konsisten"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:125
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Menentukan apakah menampilkan kondisi 'tidak konsisten' atau tidak"
 
-#: gtk/gtkcheckmenuitem.c:134
+#: gtk/gtkcheckmenuitem.c:132
 msgid "Draw as radio menu item"
 msgstr ""
 
-#: gtk/gtkcheckmenuitem.c:135
+#: gtk/gtkcheckmenuitem.c:133
 #, fuzzy
 msgid "Whether the menu item looks like a radio menu item"
 msgstr "Apakah menu item sedang dipilih atau tidak"
@@ -1271,66 +1339,66 @@ msgstr "Nilai dalam daftar"
 msgid "Whether entered values must already be present in the list"
 msgstr "Menentukan apakah nilai yang dimasukan selalu ada pada daftar"
 
-#: gtk/gtkcombobox.c:341
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr ""
 
-#: gtk/gtkcombobox.c:342
+#: gtk/gtkcombobox.c:350
 #, fuzzy
 msgid "The model for the combo box"
 msgstr "Model TreeView"
 
-#: gtk/gtkcombobox.c:349
+#: gtk/gtkcombobox.c:357
 #, fuzzy
 msgid "Wrap width"
 msgstr "Lebar"
 
-#: gtk/gtkcombobox.c:350
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr ""
 
-#: gtk/gtkcombobox.c:359
+#: gtk/gtkcombobox.c:367
 #, fuzzy
 msgid "Row span column"
 msgstr "Jarak antar baris"
 
-#: gtk/gtkcombobox.c:360
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:369
+#: gtk/gtkcombobox.c:377
 #, fuzzy
 msgid "Column span column"
 msgstr "Jarak antar kolom"
 
-#: gtk/gtkcombobox.c:370
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr ""
 
-#: gtk/gtkcombobox.c:379
+#: gtk/gtkcombobox.c:387
 #, fuzzy
 msgid "Active item"
 msgstr "Aktif"
 
-#: gtk/gtkcombobox.c:380
+#: gtk/gtkcombobox.c:388
 #, fuzzy
 msgid "The item which is currently active"
 msgstr "GdkFont yang sedang dipilih"
 
-#: gtk/gtkcombobox.c:388
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr ""
 
-#: gtk/gtkcombobox.c:389
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr ""
 
-#: gtk/gtkcomboboxentry.c:104
+#: gtk/gtkcomboboxentry.c:109
 #, fuzzy
 msgid "Text Column"
 msgstr "Kolom pencarian"
 
-#: gtk/gtkcomboboxentry.c:105
+#: gtk/gtkcomboboxentry.c:110
 msgid "A column in the data source model to get the strings from"
 msgstr ""
 
@@ -1399,51 +1467,51 @@ msgstr "Y Maksimum"
 msgid "Maximum possible value for Y"
 msgstr "Nilai maksimum yang mungkin untuk Y"
 
-#: gtk/gtkdialog.c:136
+#: gtk/gtkdialog.c:144
 msgid "Has separator"
 msgstr "Ada pembatas"
 
-#: gtk/gtkdialog.c:137
+#: gtk/gtkdialog.c:145
 msgid "The dialog has a separator bar above its buttons"
 msgstr "Dialog memiliki garis pembatas di atas tombol-tombol"
 
-#: gtk/gtkdialog.c:162
+#: gtk/gtkdialog.c:170
 msgid "Content area border"
 msgstr "Batas area isi"
 
-#: gtk/gtkdialog.c:163
+#: gtk/gtkdialog.c:171
 msgid "Width of border around the main dialog area"
 msgstr "Lebar batas disekeliling area dialog utama"
 
-#: gtk/gtkdialog.c:170
+#: gtk/gtkdialog.c:178
 msgid "Button spacing"
 msgstr "Ruangan tombol"
 
-#: gtk/gtkdialog.c:171
+#: gtk/gtkdialog.c:179
 msgid "Spacing between buttons"
 msgstr "Ruangan antara tombol-tombol"
 
-#: gtk/gtkdialog.c:179
+#: gtk/gtkdialog.c:187
 msgid "Action area border"
 msgstr "Batas area aksi"
 
-#: gtk/gtkdialog.c:180
+#: gtk/gtkdialog.c:188
 msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Lebar batas disekeliling area tombol di bawah dialog"
 
-#: gtk/gtkentry.c:446 gtk/gtklabel.c:368
+#: gtk/gtkentry.c:446 gtk/gtklabel.c:366
 msgid "Cursor Position"
 msgstr "Posisi kursor"
 
-#: gtk/gtkentry.c:447 gtk/gtklabel.c:369
+#: gtk/gtkentry.c:447 gtk/gtklabel.c:367
 msgid "The current position of the insertion cursor in chars"
 msgstr "Posisi kursor saat ini untuk memasukkan karakter"
 
-#: gtk/gtkentry.c:456 gtk/gtklabel.c:378
+#: gtk/gtkentry.c:456 gtk/gtklabel.c:376
 msgid "Selection Bound"
 msgstr "Batas seleksi"
 
-#: gtk/gtkentry.c:457 gtk/gtklabel.c:379
+#: gtk/gtkentry.c:457 gtk/gtklabel.c:377
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisi lawan pilihan dari kursor dalam satuan karakter"
@@ -1529,21 +1597,21 @@ msgstr "Langsung pilih saat fokus"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Menentukan apakah isi langsung dipilih saat isian mendapat fokus"
 
-#: gtk/gtkentrycompletion.c:196
+#: gtk/gtkentrycompletion.c:199
 msgid "Completion Model"
 msgstr ""
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:200
 #, fuzzy
 msgid "The model to find matches in"
 msgstr "Model TreeView"
 
-#: gtk/gtkentrycompletion.c:203
+#: gtk/gtkentrycompletion.c:206
 #, fuzzy
 msgid "Minimum Key Length"
 msgstr "Panjang slider minimal"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:207
 msgid "Minimum length of the search key in order to look up matches"
 msgstr ""
 
@@ -1584,11 +1652,11 @@ msgstr "Menentukan apakah widget dapat menjadi widget default"
 msgid "Text of the expander's label"
 msgstr "Teks pada bingkai label"
 
-#: gtk/gtkexpander.c:218 gtk/gtklabel.c:304
+#: gtk/gtkexpander.c:218 gtk/gtklabel.c:302
 msgid "Use markup"
 msgstr "Gunakan markup"
 
-#: gtk/gtkexpander.c:219 gtk/gtklabel.c:305
+#: gtk/gtkexpander.c:219 gtk/gtklabel.c:303
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "Label teks termasuk markup XML-nya. Silakan baca pango_parse_markup() untuk "
@@ -1633,12 +1701,13 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:99
 #, fuzzy
-msgid "File System"
+msgid "File System Backend"
 msgstr "File"
 
 #: gtk/gtkfilechooser.c:100
-msgid "File system object to use"
-msgstr ""
+#, fuzzy
+msgid "Name of file system backend to use"
+msgstr "Font default yang digunakan"
 
 #: gtk/gtkfilechooser.c:105
 #, fuzzy
@@ -1863,7 +1932,7 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Widget yang digunakan untuk menampilkan letak label bingkai"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:194
-#: gtk/gtktoolbar.c:575 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:574 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipe shadow"
 
@@ -1975,13 +2044,23 @@ msgstr "Tipe penyimpanan"
 msgid "The representation being used for image data"
 msgstr "Metode yang digunakan untuk data gambar"
 
-#: gtk/gtkimagemenuitem.c:124
+#: gtk/gtkimagemenuitem.c:137
 msgid "Image widget"
 msgstr "Widget gambar"
 
-#: gtk/gtkimagemenuitem.c:125
+#: gtk/gtkimagemenuitem.c:138
 msgid "Child widget to appear next to the menu text"
 msgstr "Widget anak yang ditampilkan di samping teks menu"
+
+#: gtk/gtkimagemenuitem.c:143
+#, fuzzy
+msgid "Show menu images"
+msgstr "Tampilkan angka minggu"
+
+#: gtk/gtkimagemenuitem.c:144
+#, fuzzy
+msgid "Whether images should be shown in menus"
+msgstr "Menentukan apakah tab digambar atau tidak"
 
 #: gtk/gtkinvisible.c:114 gtk/gtkwindow.c:542
 msgid "Screen"
@@ -1991,19 +2070,19 @@ msgstr "Layar"
 msgid "The screen where this window will be displayed"
 msgstr "Layar tempat window hendak ditampilkan"
 
-#: gtk/gtklabel.c:291
+#: gtk/gtklabel.c:289
 msgid "The text of the label"
 msgstr "Label teks"
 
-#: gtk/gtklabel.c:298
+#: gtk/gtklabel.c:296
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Daftar gaya atribut yang hendak ditempelkan pada label teks"
 
-#: gtk/gtklabel.c:319 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
+#: gtk/gtklabel.c:317 gtk/gtktexttag.c:374 gtk/gtktextview.c:602
 msgid "Justification"
 msgstr "Rata"
 
-#: gtk/gtklabel.c:320
+#: gtk/gtklabel.c:318
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -2013,11 +2092,11 @@ msgstr ""
 "lainnya. Hal ini tidak berpengaruh pada penyesuaian letak label dalam "
 "lokasinya.  Silakan baca GtkMis::xalign untuk informasi lengkapnya"
 
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:326
 msgid "Pattern"
 msgstr "Pola"
 
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:327
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -2025,35 +2104,35 @@ msgstr ""
 "Kalimat dengan karakter _ (underscore) pada suatu karakter akan membuat "
 "karakter tersebut diberi garis bawah"
 
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:334
 msgid "Line wrap"
 msgstr "potong baris"
 
-#: gtk/gtklabel.c:337
+#: gtk/gtklabel.c:335
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Jika diset, baris akan dipotong bila terlalu lebar"
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:341
 msgid "Selectable"
 msgstr "Dapat dipilih"
 
-#: gtk/gtklabel.c:344
+#: gtk/gtklabel.c:342
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Menentukan apakah teks label dapat dipilih dengan mouse atau tidak"
 
-#: gtk/gtklabel.c:350
+#: gtk/gtklabel.c:348
 msgid "Mnemonic key"
 msgstr "Tombol singkat"
 
-#: gtk/gtklabel.c:351
+#: gtk/gtklabel.c:349
 msgid "The mnemonic accelerator key for this label"
 msgstr "Tombol singkat untuk label ini"
 
-#: gtk/gtklabel.c:359
+#: gtk/gtklabel.c:357
 msgid "Mnemonic widget"
 msgstr "Widget mnemonik"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:358
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget yang diaktifkan saat tombol singkat ditekan"
 
@@ -2197,7 +2276,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Gaya kotak sekitar kotak menu"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:551
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:550
 msgid "Internal padding"
 msgstr "Isian internal"
 
@@ -2213,27 +2292,37 @@ msgstr "Jeda sebelum membuka menu drop-down"
 msgid "Delay before the submenus of a menu bar appear"
 msgstr "Jeda sebelum submenu suatu menu muncul"
 
-#: gtk/gtkmessagedialog.c:106
+#: gtk/gtkmessagedialog.c:109
 msgid "Image/label border"
 msgstr "Batas gambar/label"
 
-#: gtk/gtkmessagedialog.c:107
+#: gtk/gtkmessagedialog.c:110
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Lebar batas di sekitar label dan gambar pada dialog pesan"
 
-#: gtk/gtkmessagedialog.c:115
+#: gtk/gtkmessagedialog.c:125
+#, fuzzy
+msgid "Use separator"
+msgstr "Ada pembatas"
+
+#: gtk/gtkmessagedialog.c:126
+msgid ""
+"Whether to put a separator between the message dialog's text and the buttons"
+msgstr ""
+
+#: gtk/gtkmessagedialog.c:132
 msgid "Message Type"
 msgstr "Tipe Pesan"
 
-#: gtk/gtkmessagedialog.c:116
+#: gtk/gtkmessagedialog.c:133
 msgid "The type of message"
 msgstr "Tipe pesan"
 
-#: gtk/gtkmessagedialog.c:123
+#: gtk/gtkmessagedialog.c:140
 msgid "Message Buttons"
 msgstr "Tombol pesan"
 
-#: gtk/gtkmessagedialog.c:124
+#: gtk/gtkmessagedialog.c:141
 msgid "The buttons shown in the message dialog"
 msgstr "Tombol yang ditampilkan pada tombol pesan"
 
@@ -2563,7 +2652,7 @@ msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr ""
 "GtkAdjustment yang terhubung ke progress bar (Sebaiknya tidak digunakan)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:500
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:499
 msgid "Orientation"
 msgstr "Orientasi"
 
@@ -2761,44 +2850,44 @@ msgstr "Ukuran Maksimum"
 msgid "Maximum size of the ruler"
 msgstr "Ukuran penggaris maksimum"
 
-#: gtk/gtkscale.c:156 gtk/gtkspinbutton.c:258
+#: gtk/gtkscale.c:170 gtk/gtkspinbutton.c:258
 msgid "Digits"
 msgstr "Digit"
 
-#: gtk/gtkscale.c:157
+#: gtk/gtkscale.c:171
 msgid "The number of decimal places that are displayed in the value"
 msgstr "Jumlah desimal yang disajikan pada nilai"
 
-#: gtk/gtkscale.c:166
+#: gtk/gtkscale.c:180
 msgid "Draw Value"
 msgstr "Gambarkan nilai"
 
-#: gtk/gtkscale.c:167
+#: gtk/gtkscale.c:181
 msgid "Whether the current value is displayed as a string next to the slider"
 msgstr ""
 "Menentukan apakah nilai saat ini ditampilkan di samping slider sebagai string"
 
-#: gtk/gtkscale.c:174
+#: gtk/gtkscale.c:188
 msgid "Value Position"
 msgstr "Posisi nilai"
 
-#: gtk/gtkscale.c:175
+#: gtk/gtkscale.c:189
 msgid "The position in which the current value is displayed"
 msgstr "Posisi tempat nilai saat ini ditampilkan"
 
-#: gtk/gtkscale.c:182
+#: gtk/gtkscale.c:196
 msgid "Slider Length"
 msgstr "Panjang slider"
 
-#: gtk/gtkscale.c:183
+#: gtk/gtkscale.c:197
 msgid "Length of scale's slider"
 msgstr "Panjang slider skala"
 
-#: gtk/gtkscale.c:191
+#: gtk/gtkscale.c:205
 msgid "Value spacing"
 msgstr "Jarak Nilai"
 
-#: gtk/gtkscale.c:192
+#: gtk/gtkscale.c:206
 msgid "Space between value text and the slider/trough area"
 msgstr "Jarakn ruangan antara nilai teks dengan area slider"
 
@@ -2889,11 +2978,11 @@ msgid "Whether the separator is drawn, or just blank"
 msgstr ""
 "Menentukan apakah pengisi ruangan digambar secara vertikal atau kosong saja"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:262
 msgid "Double Click Time"
 msgstr "Waktu Klik ganda"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2901,12 +2990,12 @@ msgstr ""
 "Waktu maksimum antara dua klik yang dianggap sebagai klik ganda (dalam "
 "satuan milidetik)"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:270
 #, fuzzy
 msgid "Double Click Distance"
 msgstr "Waktu Klik ganda"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:271
 #, fuzzy
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
@@ -2915,27 +3004,27 @@ msgstr ""
 "Waktu maksimum antara dua klik yang dianggap sebagai klik ganda (dalam "
 "satuan milidetik)"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:278
 msgid "Cursor Blink"
 msgstr "Kursor berkedip"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
 msgstr "Menentukan apakah kursor berkedip atau tidak"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
 msgstr "Waktu Berkedip kursor"
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Panjang periode kedipan kursor, dalam satuan milidetik"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:294
 msgid "Split Cursor"
 msgstr "Kursor terbagi"
 
-#: gtk/gtksettings.c:203
+#: gtk/gtksettings.c:295
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -2943,63 +3032,103 @@ msgstr ""
 "Menentukan apakah dua kursor akan ditampilkan sebagai gabungan teks kiri-ke-"
 "kanan dan kanan-ke-kiri"
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:302
 msgid "Theme Name"
 msgstr "Nama Tema"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
 msgstr "Nama file RC tema yang akan dibuka"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:310
 #, fuzzy
 msgid "Icon Theme Name"
 msgstr "Nama Tema"
 
-#: gtk/gtksettings.c:219
+#: gtk/gtksettings.c:311
 #, fuzzy
 msgid "Name of icon theme to use"
 msgstr "Font default yang digunakan"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:318
 msgid "Key Theme Name"
 msgstr "Nama key tema"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:319
 msgid "Name of key theme RC file to load"
 msgstr "Nama key file RC tema yang akan dibuka"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:327
 msgid "Menu bar accelerator"
 msgstr "Akselerator menu bar"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:328
 msgid "Keybinding to activate the menu bar"
 msgstr "Kombinasi tombol yang digunakan untuk mengaktifkan menu bar"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:336
 msgid "Drag threshold"
 msgstr "Derajat seret"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:337
 msgid "Number of pixels the cursor can move before dragging"
 msgstr "Jumlah piksel pada kursor yang dipindahkan sebelum memulai seret"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:345
 msgid "Font Name"
 msgstr "Nama font"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:346
 msgid "Name of default font to use"
 msgstr "Font default yang digunakan"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:354
 msgid "Icon Sizes"
 msgstr "Ukuran ikon"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:355
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Daftar ukuran ikon (gtk-menu=16,16;gtk-button=20,20..."
+
+#: gtk/gtksettings.c:364
+msgid "Xft Antialias"
+msgstr ""
+
+#: gtk/gtksettings.c:365
+msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
+msgstr ""
+
+#: gtk/gtksettings.c:374
+msgid "Xft Hinting"
+msgstr ""
+
+#: gtk/gtksettings.c:375
+msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
+msgstr ""
+
+#: gtk/gtksettings.c:384
+msgid "Xft Hint Style"
+msgstr ""
+
+#: gtk/gtksettings.c:385
+msgid "What degree of hinting to use; none, slight, medium, or full"
+msgstr ""
+
+#: gtk/gtksettings.c:394
+msgid "Xft RGBA"
+msgstr ""
+
+#: gtk/gtksettings.c:395
+msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
+msgstr ""
+
+#: gtk/gtksettings.c:404
+msgid "Xft DPI"
+msgstr ""
+
+#: gtk/gtksettings.c:405
+msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
+msgstr ""
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -3067,10 +3196,6 @@ msgid ""
 msgstr ""
 "Menentukan apakah spin button selalu diupdate, atau hanya pada saat nilainya "
 "bernilai benar"
-
-#: gtk/gtkspinbutton.c:301
-msgid "Value"
-msgstr "Nilai"
 
 #: gtk/gtkspinbutton.c:302
 msgid "Reads the current value, or sets a new value"
@@ -3596,88 +3721,88 @@ msgstr "Indikator gambar"
 msgid "If the toggle part of the button is displayed"
 msgstr "Menentukan apakah bagian togel tombol ditampilkan"
 
-#: gtk/gtktoolbar.c:501
+#: gtk/gtktoolbar.c:500
 msgid "The orientation of the toolbar"
 msgstr "Arah orientasi toolbar"
 
-#: gtk/gtktoolbar.c:509
+#: gtk/gtktoolbar.c:508
 msgid "Toolbar Style"
 msgstr "Gaya toolbar"
 
-#: gtk/gtktoolbar.c:510
+#: gtk/gtktoolbar.c:509
 msgid "How to draw the toolbar"
 msgstr "Cara menggambar toolbar"
 
-#: gtk/gtktoolbar.c:517
+#: gtk/gtktoolbar.c:516
 msgid "Show Arrow"
 msgstr "Tampilkan Panah"
 
-#: gtk/gtktoolbar.c:518
+#: gtk/gtktoolbar.c:517
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Menentukan apakah panah harus ditampilkan pada toolbar bila ruangannya sudah "
 "tidak cukup"
 
-#: gtk/gtktoolbar.c:527
+#: gtk/gtktoolbar.c:526
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Menentukan apakah obyek bisa menambah ruang saat toolbar bertambah besar"
 
-#: gtk/gtktoolbar.c:535
+#: gtk/gtktoolbar.c:534
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Menentukan apakah obyek memiliki ukuran yang sama dengan obyek homogen lain "
 "atau tidak"
 
-#: gtk/gtktoolbar.c:542
+#: gtk/gtktoolbar.c:541
 msgid "Spacer size"
 msgstr "Ukuran pengisi ruang"
 
-#: gtk/gtktoolbar.c:543
+#: gtk/gtktoolbar.c:542
 msgid "Size of spacers"
 msgstr "Ukuran pengisi ruang"
 
-#: gtk/gtktoolbar.c:552
+#: gtk/gtktoolbar.c:551
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Jumlah ruangan dalam batas antara bayangan toolbar dan tombolnya"
 
-#: gtk/gtktoolbar.c:560
+#: gtk/gtktoolbar.c:559
 msgid "Space style"
 msgstr "Gaya pengisi ruangan"
 
-#: gtk/gtktoolbar.c:561
+#: gtk/gtktoolbar.c:560
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 "Menentukan apakah pengisi ruangan digambar secara vertikal atau kosong saja"
 
-#: gtk/gtktoolbar.c:568
+#: gtk/gtktoolbar.c:567
 msgid "Button relief"
 msgstr "Relief tombol"
 
-#: gtk/gtktoolbar.c:569
+#: gtk/gtktoolbar.c:568
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipe gaya dekorasi di sekeliling tombol toolbar"
 
-#: gtk/gtktoolbar.c:576
+#: gtk/gtktoolbar.c:575
 msgid "Style of bevel around the toolbar"
 msgstr "Gaya dekorasi sekeliling toolbar"
 
-#: gtk/gtktoolbar.c:582
+#: gtk/gtktoolbar.c:581
 msgid "Toolbar style"
 msgstr "Gaya toolbar"
 
-#: gtk/gtktoolbar.c:583
+#: gtk/gtktoolbar.c:582
 msgid ""
 "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Menentukan apakah toolbar default hanya berisi teks, teks dan ikon, ikon "
 "saja, dsb."
 
-#: gtk/gtktoolbar.c:589
+#: gtk/gtktoolbar.c:588
 msgid "Toolbar icon size"
 msgstr "Ukuran ikon toolbar"
 
-#: gtk/gtktoolbar.c:590
+#: gtk/gtktoolbar.c:589
 msgid "Size of icons in default toolbars"
 msgstr "Ukuran ikon pada toolbar default"
 
@@ -3720,7 +3845,7 @@ msgstr "Set ikon"
 msgid "Icon widget to display in the item"
 msgstr "Set ikon yang hendak ditampilkan"
 
-#: gtk/gtktoolitem.c:169
+#: gtk/gtktoolitem.c:172
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
@@ -3963,20 +4088,20 @@ msgstr "Arah pengurutan"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Arah pengurutan yang ditampilkan oleh indikator pengurutan"
 
-#: gtk/gtkuimanager.c:217
+#: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr ""
 
-#: gtk/gtkuimanager.c:218
+#: gtk/gtkuimanager.c:221
 #, fuzzy
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Apakah menu item sedang dipilih atau tidak"
 
-#: gtk/gtkuimanager.c:225
+#: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
 msgstr ""
 
-#: gtk/gtkuimanager.c:226
+#: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
 msgstr ""
 

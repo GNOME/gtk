@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-21 19:40+0100\n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2004-02-21 19:43+0100\n"
 "Last-Translator: Francisco Javier F. Serrador <serrador@cvs.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -651,7 +651,8 @@ msgstr "Mostrar imágenes en los botones"
 
 #: gtk/gtkbutton.c:376
 msgid "Whether stock icons should be shown in buttons"
-msgstr "Indica si deben mostrarse o no los iconos predeterminados en los botones"
+msgstr ""
+"Indica si deben mostrarse o no los iconos predeterminados en los botones"
 
 #: gtk/gtkcalendar.c:464
 msgid "Year"
@@ -1188,11 +1189,11 @@ msgstr "Estado del radio"
 msgid "Draw the toggle button as a radio button"
 msgstr "Dibujar el botón de activación como un botón de radio"
 
-#: gtk/gtkcheckbutton.c:98 gtk/gtkoptionmenu.c:199
+#: gtk/gtkcheckbutton.c:98 gtk/gtkcheckmenuitem.c:139 gtk/gtkoptionmenu.c:199
 msgid "Indicator Size"
 msgstr "Tamaño del indicador"
 
-#: gtk/gtkcheckbutton.c:99
+#: gtk/gtkcheckbutton.c:99 gtk/gtkcheckmenuitem.c:141
 msgid "Size of check or radio indicator"
 msgstr "Tamaño del·indicador·de·radio·o·chequeo"
 
@@ -1204,27 +1205,27 @@ msgstr "Espacio del Indicador"
 msgid "Spacing around check or radio indicator"
 msgstr "Espacio que rodea el indicador de radio o chequeo"
 
-#: gtk/gtkcheckmenuitem.c:118 gtk/gtktogglebutton.c:132
+#: gtk/gtkcheckmenuitem.c:116 gtk/gtktogglebutton.c:132
 msgid "Active"
 msgstr "Activo"
 
-#: gtk/gtkcheckmenuitem.c:119
+#: gtk/gtkcheckmenuitem.c:117
 msgid "Whether the menu item is checked"
 msgstr "Indica si el elemento de menú esta marcado"
 
-#: gtk/gtkcheckmenuitem.c:126 gtk/gtktogglebutton.c:140
+#: gtk/gtkcheckmenuitem.c:124 gtk/gtktogglebutton.c:140
 msgid "Inconsistent"
 msgstr "Inconsistente"
 
-#: gtk/gtkcheckmenuitem.c:127
+#: gtk/gtkcheckmenuitem.c:125
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Indica si se debe mostrar un estado «inconsistente»"
 
-#: gtk/gtkcheckmenuitem.c:134
+#: gtk/gtkcheckmenuitem.c:132
 msgid "Draw as radio menu item"
 msgstr "Dibujar como un elemento de menú de radio"
 
-#: gtk/gtkcheckmenuitem.c:135
+#: gtk/gtkcheckmenuitem.c:133
 msgid "Whether the menu item looks like a radio menu item"
 msgstr ""
 "Indica si la apariencia del elemento de menú es como un elemento de radio"
@@ -1344,51 +1345,51 @@ msgstr "Valor en la lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Indica si los valores ingresados ya deben estar presentes en la lista"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "Modelo de CajaCombo"
 
-#: gtk/gtkcombobox.c:345
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "El modelo para la caja combo"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Ajustar anchura"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ajusta la anchura para distribuir los elementos en una rejilla"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "Expandir filas a columnas"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de la fila"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "Columna expande columna"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "Columna TreeModel que contiene los valores de expansión de columna"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Elemento activo"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "El elemento que esta activo actualmente"
 
-#: gtk/gtkcombobox.c:391
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "Apariencia de ComboBox"
 
-#: gtk/gtkcombobox.c:392
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Apariencia de la ComboBox, cuando sea TRUE significa Estilo-Ventana."
 
@@ -1603,19 +1604,19 @@ msgstr ""
 "Indica si se deben seleccionar los contenidos de una entrada cuando obtiene "
 "el foco"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:199
 msgid "Completion Model"
 msgstr "Modelo de completado"
 
-#: gtk/gtkentrycompletion.c:198
+#: gtk/gtkentrycompletion.c:200
 msgid "The model to find matches in"
 msgstr "El modelo para encontrar coincidencias"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:206
 msgid "Minimum Key Length"
 msgstr "Longitud mínima de clave"
 
-#: gtk/gtkentrycompletion.c:205
+#: gtk/gtkentrycompletion.c:207
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Longitud mínima de la clave de búsqueda para buscar coincidencias"
 
@@ -2966,11 +2967,11 @@ msgstr "Dibujar"
 msgid "Whether the separator is drawn, or just blank"
 msgstr "Indica si el separador se dibuja, o sólo de deja en blanco"
 
-#: gtk/gtksettings.c:170
+#: gtk/gtksettings.c:262
 msgid "Double Click Time"
 msgstr "Tiempo del doble pulsación"
 
-#: gtk/gtksettings.c:171
+#: gtk/gtksettings.c:263
 msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
@@ -2978,11 +2979,11 @@ msgstr ""
 "Tiempo máximo permitido entre dos pulsaciones para ser considerados como una "
 "pulsación doble  (en milisegundos)"
 
-#: gtk/gtksettings.c:178
+#: gtk/gtksettings.c:270
 msgid "Double Click Distance"
 msgstr "Distancia de la pulsación doble"
 
-#: gtk/gtksettings.c:179
+#: gtk/gtksettings.c:271
 msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
@@ -2990,27 +2991,27 @@ msgstr ""
 "Distancia máxima permitida entre dos pulsaciones para ser considerados como "
 "una pulsación doble  (en píxeles)"
 
-#: gtk/gtksettings.c:186
+#: gtk/gtksettings.c:278
 msgid "Cursor Blink"
 msgstr "Parpadeo del cursor"
 
-#: gtk/gtksettings.c:187
+#: gtk/gtksettings.c:279
 msgid "Whether the cursor should blink"
 msgstr "Indica si el cursor debe parpadear"
 
-#: gtk/gtksettings.c:194
+#: gtk/gtksettings.c:286
 msgid "Cursor Blink Time"
 msgstr "Tiempo de parpadeo del cursor"
 
-#: gtk/gtksettings.c:195
+#: gtk/gtksettings.c:287
 msgid "Length of the cursor blink cycle, in milleseconds"
 msgstr "Duración del ciclo de parpadeo del cursor, en milisegundos"
 
-#: gtk/gtksettings.c:202
+#: gtk/gtksettings.c:294
 msgid "Split Cursor"
 msgstr "Cursor dividido"
 
-#: gtk/gtksettings.c:203
+#: gtk/gtksettings.c:295
 msgid ""
 "Whether two cursors should be displayed for mixed left-to-right and right-to-"
 "left text"
@@ -3018,62 +3019,102 @@ msgstr ""
 "Indica si deben mostrarse dos cursores para el texto mezclado de izquierda-a-"
 "derecha y derecha-a-izquierda"
 
-#: gtk/gtksettings.c:210
+#: gtk/gtksettings.c:302
 msgid "Theme Name"
 msgstr "Nombre del tema"
 
-#: gtk/gtksettings.c:211
+#: gtk/gtksettings.c:303
 msgid "Name of theme RC file to load"
 msgstr "Nombre del archivo de tema RC a cargar"
 
-#: gtk/gtksettings.c:218
+#: gtk/gtksettings.c:310
 msgid "Icon Theme Name"
 msgstr "Nombre del tema de iconos"
 
-#: gtk/gtksettings.c:219
+#: gtk/gtksettings.c:311
 msgid "Name of icon theme to use"
 msgstr "Nombre del tema de iconos a utilizar"
 
-#: gtk/gtksettings.c:226
+#: gtk/gtksettings.c:318
 msgid "Key Theme Name"
 msgstr "Nombre del tema principal"
 
-#: gtk/gtksettings.c:227
+#: gtk/gtksettings.c:319
 msgid "Name of key theme RC file to load"
 msgstr "Nombre del archivo de tema RC principal a cargar"
 
-#: gtk/gtksettings.c:235
+#: gtk/gtksettings.c:327
 msgid "Menu bar accelerator"
 msgstr "Combinación de teclas de la barra de menús"
 
-#: gtk/gtksettings.c:236
+#: gtk/gtksettings.c:328
 msgid "Keybinding to activate the menu bar"
 msgstr "Combinación de teclas para activar la barra de menús"
 
-#: gtk/gtksettings.c:244
+#: gtk/gtksettings.c:336
 msgid "Drag threshold"
 msgstr "Umbral del arrastre"
 
-#: gtk/gtksettings.c:245
+#: gtk/gtksettings.c:337
 msgid "Number of pixels the cursor can move before dragging"
 msgstr ""
 "Cantidad de píxeles que el cursor puede mover antes de iniciar el arrastre"
 
-#: gtk/gtksettings.c:253
+#: gtk/gtksettings.c:345
 msgid "Font Name"
 msgstr "Nombre de la tipografía"
 
-#: gtk/gtksettings.c:254
+#: gtk/gtksettings.c:346
 msgid "Name of default font to use"
 msgstr "Nombre de la tipografía predeterminada a utilizar"
 
-#: gtk/gtksettings.c:262
+#: gtk/gtksettings.c:354
 msgid "Icon Sizes"
 msgstr "Tamaños de los iconos"
 
-#: gtk/gtksettings.c:263
+#: gtk/gtksettings.c:355
 msgid "List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."
 msgstr "Lista de los tamaños de los iconos (gtk-menu=16,16;gtk-button=20,20..."
+
+#: gtk/gtksettings.c:364
+msgid "Xft Antialias"
+msgstr ""
+
+#: gtk/gtksettings.c:365
+msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
+msgstr ""
+
+#: gtk/gtksettings.c:374
+msgid "Xft Hinting"
+msgstr ""
+
+#: gtk/gtksettings.c:375
+msgid "Whether to hint Xft fonts; 0=no, 1=yes, -1=default"
+msgstr ""
+
+#: gtk/gtksettings.c:384
+msgid "Xft Hint Style"
+msgstr ""
+
+#: gtk/gtksettings.c:385
+msgid "What degree of hinting to use; none, slight, medium, or full"
+msgstr ""
+
+#: gtk/gtksettings.c:394
+msgid "Xft RGBA"
+msgstr ""
+
+#: gtk/gtksettings.c:395
+msgid "Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"
+msgstr ""
+
+#: gtk/gtksettings.c:404
+msgid "Xft DPI"
+msgstr ""
+
+#: gtk/gtksettings.c:405
+msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
+msgstr ""
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"
@@ -4045,19 +4086,19 @@ msgstr "Orden de la ordenación"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Dirección de ordenación que el indicador deberá indicar"
 
-#: gtk/gtkuimanager.c:217
+#: gtk/gtkuimanager.c:220
 msgid "Add tearoffs to menus"
 msgstr "Añadir tiradores a los menús"
 
-#: gtk/gtkuimanager.c:218
+#: gtk/gtkuimanager.c:221
 msgid "Whether tearoff menu items should be added to menus"
 msgstr "Indica si deben añadirse tiradores a los menús"
 
-#: gtk/gtkuimanager.c:225
+#: gtk/gtkuimanager.c:228
 msgid "Merged UI definition"
 msgstr "Definición del IU combinado"
 
-#: gtk/gtkuimanager.c:226
+#: gtk/gtkuimanager.c:229
 msgid "An XML string describing the merged UI"
 msgstr "Una cadena XML describiendo el IU combinado"
 

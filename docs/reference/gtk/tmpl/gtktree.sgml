@@ -45,6 +45,29 @@ struct _GtkTree
 </para>
 
 
+<!-- ##### SIGNAL GtkTree::select-child ##### -->
+<para>
+This signal is emitted by @tree whenever @widget is about to be selected.
+</para>
+
+@tree: the object which received the signal.
+@widget: The child that is about to be selected.
+
+<!-- ##### SIGNAL GtkTree::selection-changed ##### -->
+<para>
+This signal is emitted by the root tree whenever the selection changes.
+</para>
+
+@tree: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTree::unselect-child ##### -->
+<para>
+This signal is emitted by @tree whenever @widget is about to be unselected.
+</para>
+
+@tree: the object which received the signal.
+@widget: The child that is about to be unselected.
+
 <!-- ##### MACRO GTK_IS_ROOT_TREE ##### -->
 <para>
 A macro that returns a boolean value which indicates if @obj is a root tree or not.
@@ -277,27 +300,4 @@ Removes the item @child from the #GtkTree @tree.
 @tree: A pointer to a #GtkTree.
 @child: A pointer to the #GtkWidget that is to be removed from the tree.
 
-
-<!-- ##### SIGNAL GtkTree::select-child ##### -->
-<para>
-This signal is emitted by @tree whenever @widget is about to be selected.
-</para>
-
-@tree: the object which received the signal.
-@widget: The child that is about to be selected.
-
-<!-- ##### SIGNAL GtkTree::selection-changed ##### -->
-<para>
-This signal is emitted by the root tree whenever the selection changes.
-</para>
-
-@tree: the object which received the signal.
-
-<!-- ##### SIGNAL GtkTree::unselect-child ##### -->
-<para>
-This signal is emitted by @tree whenever @widget is about to be unselected.
-</para>
-
-@tree: the object which received the signal.
-@widget: The child that is about to be unselected.
 

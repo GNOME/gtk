@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-22 08:53+0100\n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2004-02-22 08:55+0100\n"
 "Last-Translator: Александар Урошевић <urke@users.sourceforge.net>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
@@ -1321,51 +1321,51 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "Модел падајуће листе"
 
-#: gtk/gtkcombobox.c:345
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "Модел за падајућу листу"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Ширина за прелом"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Ширина за прелом при распоређивању ставки у мрежи"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "Ред обухвата колону"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "Модел колоне стабла који садржи вредности обухватања редова"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "Колона обухвата колону"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "Модел колоне стабла који садржи вредности обухватања колона"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Активна ставка"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "Ставка која је тренутно активна"
 
-#: gtk/gtkcombobox.c:391
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "Изглед падајуће листе"
 
-#: gtk/gtkcombobox.c:392
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Изглед падајуће листе, ако је постављено означава Windows стил."
 

@@ -1,3 +1,7 @@
+Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.3 ===
+
 2004-02-24  Miloslav Trmac  <mitr@volny.cz>
 
 	* cs.po: Updated Czech translation.
@@ -120,7 +124,7 @@
 	* sr.po, sr@Latn.po: Updated Serbian translation.
 
 2004-02-11  Arafat Medini  <lumina@silverpen.de>
-                                                                                
+
         * ar.po: Updated Arabic translation.
 
 2004-02-11  Christian Neumair  <chris@gnome-de.org>

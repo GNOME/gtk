@@ -66,6 +66,78 @@ it cannot be individually modified.
 </para>
 
 
+<!-- ##### SIGNAL GtkCellRenderer::editing-canceled ##### -->
+<para>
+
+</para>
+
+@cellrenderer: the object which received the signal.
+
+<!-- ##### ARG GtkCellRenderer:cell-background ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:cell-background-gdk ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:cell-background-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:height ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:visible ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:width ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:xpad ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRenderer:ypad ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
 <para>
 
@@ -151,76 +223,4 @@ it cannot be individually modified.
 @width: 
 @height: 
 
-
-<!-- ##### SIGNAL GtkCellRenderer::editing-canceled ##### -->
-<para>
-
-</para>
-
-@cellrenderer: the object which received the signal.
-
-<!-- ##### ARG GtkCellRenderer:cell-background ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:cell-background-gdk ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:cell-background-set ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:height ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expanded ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:is-expander ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:mode ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:visible ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:width ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:xpad ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRenderer:ypad ##### -->
-<para>
-
-</para>
 

@@ -40,6 +40,55 @@ members and should not be accessed directly.
 </para>
 
 
+<!-- ##### SIGNAL GtkActionGroup::connect-proxy ##### -->
+<para>
+
+</para>
+
+@actiongroup: the object which received the signal.
+@arg1: 
+@widget: 
+
+<!-- ##### SIGNAL GtkActionGroup::disconnect-proxy ##### -->
+<para>
+
+</para>
+
+@actiongroup: the object which received the signal.
+@arg1: 
+@widget: 
+
+<!-- ##### SIGNAL GtkActionGroup::post-activate ##### -->
+<para>
+
+</para>
+
+@actiongroup: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkActionGroup::pre-activate ##### -->
+<para>
+
+</para>
+
+@actiongroup: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkActionGroup:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkActionGroup:sensitive ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkActionGroup:visible ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_action_group_new ##### -->
 <para>
 
@@ -282,53 +331,4 @@ gtk_action_group_add_radio_actions() to construct groups of radio actions.
 @action_group: 
 @domain: 
 
-
-<!-- ##### SIGNAL GtkActionGroup::connect-proxy ##### -->
-<para>
-
-</para>
-
-@actiongroup: the object which received the signal.
-@arg1: 
-@widget: 
-
-<!-- ##### SIGNAL GtkActionGroup::disconnect-proxy ##### -->
-<para>
-
-</para>
-
-@actiongroup: the object which received the signal.
-@arg1: 
-@widget: 
-
-<!-- ##### SIGNAL GtkActionGroup::post-activate ##### -->
-<para>
-
-</para>
-
-@actiongroup: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkActionGroup::pre-activate ##### -->
-<para>
-
-</para>
-
-@actiongroup: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkActionGroup:name ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkActionGroup:sensitive ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkActionGroup:visible ##### -->
-<para>
-
-</para>
 

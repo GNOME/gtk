@@ -1,3 +1,7 @@
+Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.3 ===
+
 Sun Feb 22 01:09:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* io-bmp.c (gdk_pixbuf__bmp_image_begin_load): Remove debugging

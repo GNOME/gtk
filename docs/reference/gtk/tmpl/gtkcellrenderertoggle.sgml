@@ -20,6 +20,34 @@ Renders a toggle button in a cell
 </para>
 
 
+<!-- ##### SIGNAL GtkCellRendererToggle::toggled ##### -->
+<para>
+
+</para>
+
+@cellrenderertoggle: the object which received the signal.
+@arg1: 
+
+<!-- ##### ARG GtkCellRendererToggle:activatable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererToggle:active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererToggle:inconsistent ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererToggle:radio ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_cell_renderer_toggle_new ##### -->
 <para>
 
@@ -63,32 +91,4 @@ Renders a toggle button in a cell
 @toggle: 
 @setting: 
 
-
-<!-- ##### SIGNAL GtkCellRendererToggle::toggled ##### -->
-<para>
-
-</para>
-
-@cellrenderertoggle: the object which received the signal.
-@arg1: 
-
-<!-- ##### ARG GtkCellRendererToggle:activatable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererToggle:active ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererToggle:inconsistent ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCellRendererToggle:radio ##### -->
-<para>
-
-</para>
 

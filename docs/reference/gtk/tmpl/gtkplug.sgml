@@ -34,6 +34,13 @@ inside the first applications window.
 </para>
 
 
+<!-- ##### SIGNAL GtkPlug::embedded ##### -->
+<para>
+
+</para>
+
+@plug: the object which received the signal.
+
 <!-- ##### FUNCTION gtk_plug_construct ##### -->
 <para>
 </para>
@@ -78,11 +85,4 @@ inside the first applications window.
 @plug: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkPlug::embedded ##### -->
-<para>
-
-</para>
-
-@plug: the object which received the signal.
 

@@ -35,6 +35,34 @@ type.</para></listitem>
 </para>
 
 
+<!-- ##### SIGNAL GtkList::select-child ##### -->
+<para>
+The child @widget has just been selected.
+</para>
+
+@list: the object which received the signal.
+@widget: the newly selected child.
+
+<!-- ##### SIGNAL GtkList::selection-changed ##### -->
+<para>
+The selection of the widget has just changed.
+</para>
+
+@list: the object which received the signal.
+
+<!-- ##### SIGNAL GtkList::unselect-child ##### -->
+<para>
+The child @widget has just been unselected.
+</para>
+
+@list: the object which received the signal.
+@widget: the newly unselected child.
+
+<!-- ##### ARG GtkList:selection-mode ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_list_new ##### -->
 <para>
 Creates a new #GtkList.
@@ -331,32 +359,4 @@ effect if a drag selection is not active.
 
 @list: the list widget.
 
-
-<!-- ##### SIGNAL GtkList::select-child ##### -->
-<para>
-The child @widget has just been selected.
-</para>
-
-@list: the object which received the signal.
-@widget: the newly selected child.
-
-<!-- ##### SIGNAL GtkList::selection-changed ##### -->
-<para>
-The selection of the widget has just changed.
-</para>
-
-@list: the object which received the signal.
-
-<!-- ##### SIGNAL GtkList::unselect-child ##### -->
-<para>
-The child @widget has just been unselected.
-</para>
-
-@list: the object which received the signal.
-@widget: the newly unselected child.
-
-<!-- ##### ARG GtkList:selection-mode ##### -->
-<para>
-
-</para>
 

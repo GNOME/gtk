@@ -75,6 +75,58 @@ only be accessed using the functions below.
 </para>
 
 
+<!-- ##### SIGNAL GtkScrolledWindow::move-focus-out ##### -->
+<para>
+
+</para>
+
+@scrolledwindow: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkScrolledWindow::scroll-child ##### -->
+<para>
+
+</para>
+
+@scrolledwindow: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### ARG GtkScrolledWindow:hadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:hscrollbar-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:shadow-type ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:vadjustment ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:vscrollbar-policy ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:window-placement ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkScrolledWindow:scrollbar-spacing ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_scrolled_window_new ##### -->
 <para>
 Creates a new scrolled window. The two arguments are the scrolled
@@ -224,56 +276,4 @@ Sets the #GtkAdjustment for the vertical scrollbar.
 @scrolled_window: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkScrolledWindow::move-focus-out ##### -->
-<para>
-
-</para>
-
-@scrolledwindow: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkScrolledWindow::scroll-child ##### -->
-<para>
-
-</para>
-
-@scrolledwindow: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### ARG GtkScrolledWindow:hadjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScrolledWindow:hscrollbar-policy ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScrolledWindow:shadow-type ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScrolledWindow:vadjustment ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScrolledWindow:vscrollbar-policy ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScrolledWindow:window-placement ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkScrolledWindow:scrollbar-spacing ##### -->
-<para>
-
-</para>
 

@@ -76,6 +76,36 @@ fields.
 </para>
 
 
+<!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
+  <para>
+  </para>
+
+@gdkpixbufloader: 
+
+<!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
+  <para>
+  </para>
+
+@gdkpixbufloader: 
+@arg1: 
+@arg2: 
+@arg3: 
+@arg4: 
+
+<!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
+  <para>
+  </para>
+
+@gdkpixbufloader: 
+
+<!-- ##### SIGNAL GdkPixbufLoader::size-prepared ##### -->
+  <para>
+  </para>
+
+@gdkpixbufloader: 
+@arg1: 
+@arg2: 
+
 <!-- ##### FUNCTION gdk_pixbuf_loader_new ##### -->
 <para>
 
@@ -169,34 +199,4 @@ sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
 
-
-<!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
-  <para>
-  </para>
-
-@gdkpixbufloader: 
-
-<!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
-  <para>
-  </para>
-
-@gdkpixbufloader: 
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-
-<!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
-  <para>
-  </para>
-
-@gdkpixbufloader: 
-
-<!-- ##### SIGNAL GdkPixbufLoader::size-prepared ##### -->
-  <para>
-  </para>
-
-@gdkpixbufloader: 
-@arg1: 
-@arg2: 
 

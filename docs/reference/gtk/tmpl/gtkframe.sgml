@@ -24,6 +24,36 @@ label can be controlled with gtk_frame_set_label_align().
 </para>
 
 
+<!-- ##### ARG GtkFrame:label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label-xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:label-yalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:shadow ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFrame:shadow-type ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_frame_new ##### -->
 <para>
 Create a new Frame, with optional label @label.
@@ -114,34 +144,4 @@ Set the shadow type for the Frame widget.
 @frame: 
 @Returns: 
 
-
-<!-- ##### ARG GtkFrame:label ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFrame:label-widget ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFrame:label-xalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFrame:label-yalign ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFrame:shadow ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkFrame:shadow-type ##### -->
-<para>
-
-</para>
 

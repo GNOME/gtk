@@ -1,3 +1,7 @@
+Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.3 ===
+
 Thu Feb 19 00:11:23 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-sections.txt: Add gtk_radio_menu_item_new_from_widget

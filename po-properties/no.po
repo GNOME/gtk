@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-22 11:47+0100\n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2004-02-22 11:51+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
@@ -1313,51 +1313,51 @@ msgstr "Verdi i listen"
 msgid "Whether entered values must already be present in the list"
 msgstr "Verdier som spesifiseres må allerede være i listen"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "Modell for ComboBox"
 
-#: gtk/gtkcombobox.c:345
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "Modell for komboboksen"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Bredde for bryting"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Brytningsbredde for utplassering av oppføringer i et rutenett"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "Kolonne for radutbredelse"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "TreeModel-kolonne som inneholder verdier for radutbredelse"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "Kolonne for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "TreeModel-kolonne som inneholder verdier for kolonneutbredelse"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Aktiv oppføring"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "Oppføringen som er aktiv"
 
-#: gtk/gtkcombobox.c:391
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "Utseende for ComboBox"
 
-#: gtk/gtkcombobox.c:392
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Utseende for ComboBox. TRUE betyr Windows-stil."
 
@@ -2992,7 +2992,8 @@ msgstr "Xft skriftutjevning"
 
 #: gtk/gtksettings.c:365
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
-msgstr "Om skriftutjevning skal brukes for Xft-skrifter; 0=nei, 1=ja, -1=forvalg"
+msgstr ""
+"Om skriftutjevning skal brukes for Xft-skrifter; 0=nei, 1=ja, -1=forvalg"
 
 #: gtk/gtksettings.c:374
 msgid "Xft Hinting"
@@ -3024,7 +3025,8 @@ msgstr "Xft DPI"
 
 #: gtk/gtksettings.c:405
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr "Oppløsning for Xft i 1024 * punkter per tomme. -1 for å bruke forvalgt verdi"
+msgstr ""
+"Oppløsning for Xft i 1024 * punkter per tomme. -1 for å bruke forvalgt verdi"
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"

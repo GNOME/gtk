@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-02-22 15:23+0100\n"
+"POT-Creation-Date: 2004-02-24 16:26-0500\n"
 "PO-Revision-Date: 2004-02-22 17:05+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
@@ -1310,51 +1310,51 @@ msgstr "Hodnota v seznamu"
 msgid "Whether entered values must already be present in the list"
 msgstr "Jestli musí být zadaná hodnota již přítomna v seznamu"
 
-#: gtk/gtkcombobox.c:344
+#: gtk/gtkcombobox.c:349
 msgid "ComboBox model"
 msgstr "Model ComboBoxu"
 
-#: gtk/gtkcombobox.c:345
+#: gtk/gtkcombobox.c:350
 msgid "The model for the combo box"
 msgstr "Model pro kombinované pole"
 
-#: gtk/gtkcombobox.c:352
+#: gtk/gtkcombobox.c:357
 msgid "Wrap width"
 msgstr "Šířka zalamování"
 
-#: gtk/gtkcombobox.c:353
+#: gtk/gtkcombobox.c:358
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Šířka zalamování pro rozložení položek v mřížce"
 
-#: gtk/gtkcombobox.c:362
+#: gtk/gtkcombobox.c:367
 msgid "Row span column"
 msgstr "Sloupec rozsahu řádků"
 
-#: gtk/gtkcombobox.c:363
+#: gtk/gtkcombobox.c:368
 msgid "TreeModel column containing the row span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu řádků"
 
-#: gtk/gtkcombobox.c:372
+#: gtk/gtkcombobox.c:377
 msgid "Column span column"
 msgstr "Sloupec rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:373
+#: gtk/gtkcombobox.c:378
 msgid "TreeModel column containing the column span values"
 msgstr "Sloupec TreeModel obsahující hodnoty rozsahu sloupců"
 
-#: gtk/gtkcombobox.c:382
+#: gtk/gtkcombobox.c:387
 msgid "Active item"
 msgstr "Aktivní položka"
 
-#: gtk/gtkcombobox.c:383
+#: gtk/gtkcombobox.c:388
 msgid "The item which is currently active"
 msgstr "Položka, která je právě aktivní"
 
-#: gtk/gtkcombobox.c:391
+#: gtk/gtkcombobox.c:396
 msgid "ComboBox appareance"
 msgstr "Vzhled ComboBoxu"
 
-#: gtk/gtkcombobox.c:392
+#: gtk/gtkcombobox.c:397
 msgid "ComboBox appearance, where TRUE means Windows-style."
 msgstr "Vzhled ComboBoxu, kde TRUE znamená ve stylu Windows."
 
@@ -3005,7 +3005,8 @@ msgstr "DPI Xft"
 
 #: gtk/gtksettings.c:405
 msgid "Resolution for Xft, in 1024 * dots/inch. -1 to use default value"
-msgstr "Rozlišení pro Xft v 1024 * bodů/palec, -1 pro použití implicitní hodnoty"
+msgstr ""
+"Rozlišení pro Xft v 1024 * bodů/palec, -1 pro použití implicitní hodnoty"
 
 #: gtk/gtksizegroup.c:241
 msgid "Mode"

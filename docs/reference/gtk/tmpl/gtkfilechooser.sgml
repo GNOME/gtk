@@ -127,6 +127,84 @@ update_preview_cb (GtkFileChooser *file_chooser, gpointer data)
 </para>
 
 
+<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
+<para>
+
+</para>
+
+@filechooser: the object which received the signal.
+
+<!-- ##### ARG GtkFileChooser:action ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:extra-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:file-system-backend ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:filter ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:folder-mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:local-only ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:preview-widget ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:preview-widget-active ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:select-multiple ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkFileChooser:show-hidden ##### -->
+<para>
+
+</para>
+
 <!-- ##### ENUM GtkFileChooserAction ##### -->
     <para>
       Describes whether a #GtkFileChooser is being used to open
@@ -583,32 +661,4 @@ sgml-parent-document: ("../gtk-docs.sgml" "book" "refentry")
 End:
 -->
 
-
-<!-- ##### SIGNAL GtkFileChooser::current-folder-changed ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::file-activated ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::selection-changed ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
-
-<!-- ##### SIGNAL GtkFileChooser::update-preview ##### -->
-<para>
-
-</para>
-
-@filechooser: the object which received the signal.
 

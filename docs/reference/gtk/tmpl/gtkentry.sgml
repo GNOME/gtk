@@ -31,6 +31,131 @@ The #GtkEntry-struct struct contains only private data.
 </para>
 
 
+<!-- ##### SIGNAL GtkEntry::activate ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::cut-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::delete-from-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntry::move-cursor ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### SIGNAL GtkEntry::paste-clipboard ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### SIGNAL GtkEntry::populate-popup ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkEntry::toggle-overwrite ##### -->
+<para>
+
+</para>
+
+@entry: the object which received the signal.
+
+<!-- ##### ARG GtkEntry:activates-default ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:cursor-position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:editable ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:has-frame ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:invisible-char ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:max-length ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:scroll-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:selection-bound ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:text ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:visibility ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:width-chars ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION gtk_entry_new ##### -->
 <para>
 Creates a new #GtkEntry widget.
@@ -282,129 +407,4 @@ use gtk_editable_set_editable() instead.
 @entry: 
 @Returns: 
 
-
-<!-- ##### SIGNAL GtkEntry::activate ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEntry::cut-clipboard ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEntry::delete-from-cursor ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkEntry::move-cursor ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-
-<!-- ##### SIGNAL GtkEntry::paste-clipboard ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEntry::populate-popup ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkEntry::toggle-overwrite ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
-<!-- ##### ARG GtkEntry:activates-default ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:cursor-position ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:editable ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:has-frame ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:invisible-char ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:max-length ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:scroll-offset ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:selection-bound ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:text ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:visibility ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkEntry:width-chars ##### -->
-<para>
-
-</para>
 

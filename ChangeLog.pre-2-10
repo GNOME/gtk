@@ -1,3 +1,11 @@
+Tue Feb 24 14:45:03 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* === Released 2.3.3 ===
+
+	* configure.in: Version 2.3.3, interface age 0.
+
+	* NEWS: Finish updates for 2.3.3.
+
 2004-02-24  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (save_widgets_create): Use a plain
