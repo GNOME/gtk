@@ -684,8 +684,11 @@ apply_queued_setting (GtkSettings             *data,
   if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
 				   pspec, &tmp_value))
     {
-      g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
-      data->property_values[pspec->param_id - 1].source = qvalue->source;
+      if (data->property_values[pspec->param_id - 1].source <= qvalue->source)
+	{
+	  g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
+	  data->property_values[pspec->param_id - 1].source = qvalue->source;
+	}
     }
   else
     {

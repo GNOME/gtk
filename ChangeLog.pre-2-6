@@ -1,3 +1,8 @@
+2004-03-11  Mark McLoughlin  <mark@skynet.ie>
+
+	* gtk/gtksettings.c: (apply_queued_setting): don't overwrite
+	application properties. Fixes bug #136802.
+
 2004-03-11  Dov Grobgeld  <dov@imagic.weizmann.ac.il>
 
 	* gtk/gtktextlayer.c: (gtk_text_layout_set_buffer): Added
