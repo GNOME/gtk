@@ -105,7 +105,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="2.0">
+    <entry size="medium" status="100%" target="2.0">
       <title>Make GdkRGB work on any visual</title>
       <description>
 	<p>
@@ -123,7 +123,7 @@
   <section>
     <title>Internationalization</title>
     
-    <entry size="big" status="85%" target="2.0">
+    <entry size="big" status="90%" target="2.0">
       <title>Integrate Pango</title>
       <description>
 	<p>
@@ -158,7 +158,7 @@
       <contact>gtk-i18n-list@redhat.com</contact>
     </entry>
 
-    <entry size="big" status="40%" target="2.0">
+    <entry size="big" status="60%" target="2.0">
       <title>Rewrite Input Method Support</title>
       <description>
 	<p>
@@ -301,7 +301,7 @@
     </entry>
 
 
-    <entry size="small" status="0%" target="2.0">
+    <entry size="small" status="20%" target="2.0">
       <title>Convenient widget setup</title>
       <description>
 	<p>
@@ -334,7 +334,7 @@
     </entry>
 
 
-    <entry size="small" status="50%" target="2.0">
+    <entry size="small" status="80%" target="2.0">
       <title>Stock label/icon system</title>
       <description>
 	<p>
@@ -641,7 +641,7 @@
       <contact>gtk-devel-list@gnome.org</contact>
     </entry>
 
-    <entry size="medium" status="0%" target="2.0">
+    <entry size="medium" status="40%" target="2.0">
       <title>Menu scroll</title>
       <description>
 	<p>
