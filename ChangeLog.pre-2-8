@@ -1,3 +1,16 @@
+2001-10-23  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c (changed_handler): Correctly keep the same
+	text on the top of the screen, considering that the changed region
+	may have overlapped the first paragraph. Should fix msw's "text
+	widget scrolled to wrong place on map" bug, and probably some
+	other scrolling cases as well.
+	(gtk_text_view_set_scroll_adjustments): start adjustments at 0.0, 
+	instead of some random value
+
+	* gtk/gtktextview.c (gtk_text_view_class_init): actually override
+	grab_focus, so #59708 is really fixed
+
 2001-10-24  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkentry.c: (append_action_signal): Use an image menu item here
@@ -13,7 +26,7 @@
 
 	* gtk/gtktextview.c (changed_handler): queue a resize here; will
 	temporarily slow down the widget a lot, until we figure out how to
-	optimize to avoid full redraw everytime we queue a resize
+	optimize to avoid full redraw everytime we queue a resize.
 
 2001-10-23  Havoc Pennington  <hp@redhat.com>
 

@@ -470,7 +470,8 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
-
+  widget_class->grab_focus = gtk_text_view_grab_focus;
+  
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
   widget_class->drag_data_get = gtk_text_view_drag_data_get;
@@ -2823,11 +2824,11 @@ invalidated_handler (GtkTextLayout *layout,
 }
 
 static void
-changed_handler (GtkTextLayout *layout,
-                 gint           start_y,
-                 gint           old_height,
-                 gint           new_height,
-                 gpointer       data)
+changed_handler (GtkTextLayout     *layout,
+                 gint               start_y,
+                 gint               old_height,
+                 gint               new_height,
+                 gpointer           data)
 {
   GtkTextView *text_view;
   GtkWidget *widget;
@@ -2883,10 +2884,29 @@ changed_handler (GtkTextLayout *layout,
     {
       gboolean yoffset_changed = FALSE;
       GSList *tmp_list;
+      int new_first_para_top;
+      int old_first_para_top;
       
-      if (start_y + old_height <= text_view->yoffset - text_view->first_para_pixels)
+      /* If the bottom of the old area was above the top of the
+       * screen, we need to scroll to keep the current top of the
+       * screen in place.  Remember that first_para_pixels is the
+       * position of the top of the screen in coordinates relative to
+       * the first paragraph onscreen.
+       *
+       * In short we are adding the height delta of the portion of the
+       * changed region above first_para_mark to text_view->yoffset.
+       */
+      gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &first,
+                                        text_view->first_para_mark);
+
+      gtk_text_layout_get_line_yrange (layout, &first, &new_first_para_top, NULL);
+
+      old_first_para_top = text_view->yoffset - text_view->first_para_pixels;
+
+      if (new_first_para_top != old_first_para_top)
         {
-          text_view->yoffset += new_height - old_height;
+          text_view->yoffset += new_first_para_top - old_first_para_top;
+          
           get_vadjustment (text_view)->value = text_view->yoffset;
           yoffset_changed = TRUE;
         }
@@ -5090,7 +5110,7 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
       text_view->hadjustment = hadj;
       g_object_ref (G_OBJECT (text_view->hadjustment));
       gtk_object_sink (GTK_OBJECT (text_view->hadjustment));
-
+      
       gtk_signal_connect (GTK_OBJECT (text_view->hadjustment), "value_changed",
                           (GtkSignalFunc) gtk_text_view_value_changed,
                           text_view);
@@ -5102,7 +5122,7 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
       text_view->vadjustment = vadj;
       g_object_ref (G_OBJECT (text_view->vadjustment));
       gtk_object_sink (GTK_OBJECT (text_view->vadjustment));
-
+      
       gtk_signal_connect (GTK_OBJECT (text_view->vadjustment), "value_changed",
                           (GtkSignalFunc) gtk_text_view_value_changed,
                           text_view);
@@ -5122,9 +5142,15 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
   gint dx = 0;
   gint dy = 0;
 
+  /* Note that we oddly call this function with adj == NULL
+   * sometimes
+   */
+  
   text_view->onscreen_validated = FALSE;
 
-  DV(g_print(">Scroll offset changed, onscreen_validated = FALSE ("G_STRLOC")\n"));
+  DV(g_print(">Scroll offset changed %s/%g, onscreen_validated = FALSE ("G_STRLOC")\n",
+             adj == text_view->hadjustment ? "hadj" : adj == text_view->vadjustment ? "vadj" : "none",
+             adj ? adj->value : 0.0));
   
   if (adj == text_view->hadjustment)
     {
