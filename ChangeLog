@@ -1,3 +1,8 @@
+2005-01-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkselection-win32.c (_gdk_selection_property_store):
+	Fix braino. (#163232, Arnaud Charlet)
+
 2005-01-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkiconview.c: Make markup_column work, and fix some
