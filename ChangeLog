@@ -1,3 +1,9 @@
+Tue Apr 13 16:19:23 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkpathbar.c (make_directory_button): patch from Owen to
+	make the buttons sized by a bold label.  This makes the text
+	'swim' a little, but stops the buttons from resizign, #137210
+
 2004-04-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkuimanager.c (get_child_node): Don't crash if a node 

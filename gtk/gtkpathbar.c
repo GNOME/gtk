@@ -21,6 +21,7 @@
 #include <string.h>
 #include "gtkpathbar.h"
 #include "gtktogglebutton.h"
+#include "gtkalignment.h"
 #include "gtkarrow.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -834,19 +835,50 @@ button_data_free (ButtonData *button_data)
   g_free (button_data);
 }
 
+static const char *
+get_dir_name (ButtonData *button_data)
+{
+  if (button_data->type == HOME_BUTTON)
+    return _("Home");
+  else if (button_data->type == DESKTOP_BUTTON)
+    return _("Desktop");
+  else
+    return button_data->dir_name;
+
+}
+
+/* We always want to request the same size for the label, whether
+ * or not the contents are bold
+ */
+static void
+label_size_request_cb (GtkWidget      *widget,
+		       GtkRequisition *requisition,
+		       ButtonData     *button_data)
+{
+  const gchar *dir_name = get_dir_name (button_data);
+  PangoLayout *layout = gtk_widget_create_pango_layout (button_data->label, dir_name);
+  gint bold_width, bold_height;
+  gchar *markup;
+
+  pango_layout_get_pixel_size (layout, &requisition->width, &requisition->height);
+  
+  markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
+  pango_layout_set_markup (layout, markup, -1);
+  g_free (markup);
+
+  pango_layout_get_pixel_size (layout, &bold_width, &bold_height);
+  requisition->width = MAX (requisition->width, bold_width);
+  requisition->height = MAX (requisition->height, bold_height);
+  
+  g_object_unref (layout);
+}
+
 static void
 gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 				       ButtonData *button_data,
 				       gboolean    current_dir)
 {
-  const gchar *dir_name;
-
-  if (button_data->type == HOME_BUTTON)
-    dir_name = _("Home");
-  else if (button_data->type == DESKTOP_BUTTON)
-    dir_name = _("Desktop");
-  else
-    dir_name = button_data->dir_name;
+  const gchar *dir_name = get_dir_name (button_data);
 
   if (button_data->label != NULL)
     {
@@ -901,6 +933,7 @@ make_directory_button (GtkPathBar  *path_bar,
 		       gboolean     file_is_hidden)
 {
   GtkWidget *child = NULL;
+  GtkWidget *label_alignment = NULL;
   ButtonData *button_data;
 
   /* Is it a special button? */
@@ -920,16 +953,29 @@ make_directory_button (GtkPathBar  *path_bar,
     case DESKTOP_BUTTON:
       button_data->image = gtk_image_new ();
       button_data->label = gtk_label_new (NULL);
+      label_alignment = gtk_alignment_new (0.5, 0.5, 0., 0.);
+      gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
       child = gtk_hbox_new (FALSE, 2);
       gtk_box_pack_start (GTK_BOX (child), button_data->image, FALSE, FALSE, 0);
-      gtk_box_pack_start (GTK_BOX (child), button_data->label, FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (child), label_alignment, FALSE, FALSE, 0);
       break;
     case NORMAL_BUTTON:
     default:
       button_data->label = gtk_label_new (NULL);
-      child = button_data->label;
+      label_alignment = gtk_alignment_new (0.5, 0.5, 0., 0.);
+      gtk_container_add (GTK_CONTAINER (label_alignment), button_data->label);
+      child = label_alignment;
+      gtk_box_pack_start (GTK_BOX (child), label_alignment, FALSE, FALSE, 0);
       button_data->image = NULL;
     }
+
+  /* label_alignment is created because we can't override size-request
+   * on label itself and still have the contents of the label centered
+   * properly in the label's requisition
+   */
+  if (label_alignment)
+    g_signal_connect (label_alignment, "size-request",
+		      G_CALLBACK (label_size_request_cb), button_data);
 
   button_data->dir_name = g_strdup (dir_name);
   button_data->path = gtk_file_path_new_dup (gtk_file_path_get_string (path));
