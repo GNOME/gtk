@@ -1,3 +1,13 @@
+Thu Nov 15 12:54:36 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_key_press_event): Propagate
+	key press events not just to focus/window but also to
+	intermediate widgets.
+
+	* gtk/gtknotebook.c: Handle Ctrl-PageUp/Ctrl-PageDown
+	to switch pages. (Needs some work on handling focus
+	when switching pages.)
+
 Fri Nov 16 14:06:31 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c: Fix child allocations to be relative to 
