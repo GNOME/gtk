@@ -596,6 +596,23 @@ status information, so the application does not need to do anything.
 </para>
 
 
+<!-- ##### FUNCTION gdk_font_full_name_free ##### -->
+<para>
+Frees a full font name obtained from gdk_font_full_name_get().
+</para>
+
+@name: a full font name.
+
+<!-- ##### FUNCTION gdk_font_full_name_get ##### -->
+<para>
+Returns a comma-separated list of XLFDs for the
+fonts making up a given #GdkFont.
+</para>
+
+@font: a #GdkFont
+@Returns: a newly-allocated string containing a list of XLFDs, 
+  should be freed with gdk_font_full_name_free() when no longer needed.
+
 <!-- ##### FUNCTION gdk_get_client_window ##### -->
 <para>
 
@@ -909,4 +926,13 @@ they will be ignored.
 </para>
 
 @display: 
+
+<!-- ##### FUNCTION gdkx_visual_get_for_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@xvisualid: 
+@Returns: 
 

@@ -274,8 +274,10 @@ gdk_event_handler_set().
 </para>
 
 @event: 
-@xid: 
+@winid: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@xid: 
 
 
 <!-- ##### FUNCTION gdk_event_send_client_message_for_display ##### -->
@@ -285,8 +287,10 @@ gdk_event_handler_set().
 
 @display: 
 @event: 
-@xid: 
+@winid: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@xid: 
 
 
 <!-- ##### FUNCTION gdk_event_send_clientmessage_toall ##### -->

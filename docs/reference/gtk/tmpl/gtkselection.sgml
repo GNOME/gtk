@@ -284,6 +284,16 @@ called by applications.
 @widget: a #GtkWidget
 
 
+<!-- ##### FUNCTION gtk_selection_clear ##### -->
+<para>
+Internal function.
+</para>
+
+@widget: 
+@event: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_selection_data_copy ##### -->
 <para>
 Makes a copy of a #GtkSelectionData structure and its data.

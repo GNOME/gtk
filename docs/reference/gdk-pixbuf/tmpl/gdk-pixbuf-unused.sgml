@@ -365,6 +365,12 @@ XlibRGB
 
 @obj: A GTK+ object.
 
+<!-- ##### STRUCT GdkPixbufFrame ##### -->
+<para>
+ This object describes an individual frame of an animation.
+</para>
+
+
 <!-- ##### ENUM GdkPixbufFrameAction ##### -->
 <para>
 

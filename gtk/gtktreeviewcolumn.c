@@ -1210,8 +1210,9 @@ gtk_tree_view_column_get_cell_info (GtkTreeViewColumn *tree_column,
  * @cell: The #GtkCellRenderer. 
  * @expand: %TRUE if @cell is to be given extra space allocated to box.
  *
- * Packs the @cell into the beginning column.  If @expand is %TRUE, then the
- * @cell is allocated a share of all available space that the @tree_column has.
+ * Packs the @cell into the beginning of the column. If @expand is FALSE, then
+ * the @cell is allocated no more space than it needs. Any unused space is divided
+ * evenly between cells for which @expand is TRUE.
  **/
 void
 gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
@@ -1243,8 +1244,9 @@ gtk_tree_view_column_pack_start (GtkTreeViewColumn *tree_column,
  * @cell: The #GtkCellRenderer. 
  * @expand: %TRUE if @cell is to be given extra space allocated to box.
  *
- * Packs the @cell into the column.  If @expand is %TRUE, then the @cell is
- * allocated a share of all available space that the @tree_column has.
+ * Adds the @cell to end of the column. If @expand is FALSE, then the @cell
+ * is allocated no more space than it needs. Any unused space is divided
+ * evenly between cells for which @expand is TRUE.
  **/
 void
 gtk_tree_view_column_pack_end (GtkTreeViewColumn  *tree_column,
@@ -2254,9 +2256,9 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
  * @is_expander: %TRUE, if the row has children
  * @is_expanded: %TRUE, if the row has visible children
  * 
- * Sets the cell renderer based on the @tree_model and @tree_node.  That is, for
+ * Sets the cell renderer based on the @tree_model and @iter.  That is, for
  * every attribute mapping in @tree_column, it will get a value from the set
- * column on the @tree_node, and use that value to set the attribute on the cell
+ * column on the @iter, and use that value to set the attribute on the cell
  * renderer.  This is used primarily by the #GtkTreeView.
  **/
 void

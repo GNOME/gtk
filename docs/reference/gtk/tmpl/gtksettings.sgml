@@ -209,6 +209,11 @@ GtkSettings
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-icon-sizes ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-color-palette ##### -->
 <para>
 

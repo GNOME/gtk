@@ -584,25 +584,6 @@ relation to the baseline. See gdk_text_extents().
 @Returns: the height of the character in pixels.
 
 
-<!-- ##### FUNCTION gdk_font_full_name_get ##### -->
-<para>
-Returns a comma-separated list of XLFDs for the
-fonts making up a given #GdkFont.
-</para>
-
-@font: a #GdkFont
-@Returns: a newly-allocated string containing a list of XLFDs, 
-  should be freed with gdk_font_full_name_free() when no longer needed.
-
-
-<!-- ##### FUNCTION gdk_font_full_name_free ##### -->
-<para>
-Frees a full font name obtained from gdk_font_full_name_get().
-</para>
-
-@name: a full font name.
-
-
 <!-- ##### TYPEDEF GdkWChar ##### -->
 <para>
 Specifies a wide character type, used to represent character codes.

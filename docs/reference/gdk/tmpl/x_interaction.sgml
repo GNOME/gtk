@@ -259,16 +259,6 @@ Returns a #GdkVisual corresponding to a X visual.
 @Returns: the #GdkVisual.
 
 
-<!-- ##### FUNCTION gdkx_visual_get_for_screen ##### -->
-<para>
-
-</para>
-
-@screen: 
-@xvisualid: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdkx_colormap_get ##### -->
 <para>
 </para>

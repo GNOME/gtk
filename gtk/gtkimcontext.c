@@ -390,7 +390,8 @@ gtk_im_context_reset (GtkIMContext   *context)
  * @area: new location
  *
  * Notify the input method that a change in cursor 
- * position has been made.
+ * position has been made. The location is relative to the client
+ * window.
  **/
 void
 gtk_im_context_set_cursor_location (GtkIMContext *context,

@@ -844,6 +844,21 @@ Deprecated alias for gtk_window_set_position().
 
 </para>
 
+<!-- ##### ARG GtkWindow:type-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:skip-taskbar-hint ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkWindow:skip-pager-hint ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:is-active ##### -->
 <para>
 

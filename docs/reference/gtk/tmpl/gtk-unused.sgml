@@ -2638,15 +2638,6 @@ Sets the function that GTK+ will use to load images
 
 @ruler: the gtkruler
 
-<!-- ##### FUNCTION gtk_selection_clear ##### -->
-<para>
-Internal function.
-</para>
-
-@widget: 
-@event: 
-@Returns: 
-
 <!-- ##### FUNCTION gtk_selection_incr_event ##### -->
 <para>
 Internal function.

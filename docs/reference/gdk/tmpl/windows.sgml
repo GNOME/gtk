@@ -197,6 +197,10 @@ and behaviour of the window. The hint must be set before mapping the window.
 @GDK_WINDOW_TYPE_HINT_DIALOG: Dialog window.
 @GDK_WINDOW_TYPE_HINT_MENU: Window used to implement a menu.
 @GDK_WINDOW_TYPE_HINT_TOOLBAR: Window used to implement toolbars.
+@GDK_WINDOW_TYPE_HINT_SPLASHSCREEN: 
+@GDK_WINDOW_TYPE_HINT_UTILITY: 
+@GDK_WINDOW_TYPE_HINT_DOCK: 
+@GDK_WINDOW_TYPE_HINT_DESKTOP: 
 
 <!-- ##### STRUCT GdkWindowAttr ##### -->
 <para>

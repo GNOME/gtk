@@ -20,12 +20,6 @@ Animated images.
     #GdkPixbufLoader
   </para>
 
-<!-- ##### STRUCT GdkPixbufFrame ##### -->
-<para>
- This object describes an individual frame of an animation.
-</para>
-
-
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
     This object describes an animation.
