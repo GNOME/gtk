@@ -5130,17 +5130,17 @@ gtk_clist_motion (GtkWidget      *widget,
   gint y;
   gint row;
   gint new_width;
-  gint button_actions;
+  gint button_actions = 0;
 
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CLIST (widget), FALSE);
 
   clist = GTK_CLIST (widget);
-  if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)) ||
-      !clist->drag_button)
+  if (!(gdk_pointer_is_grabbed () && GTK_WIDGET_HAS_GRAB (clist)))
     return FALSE;
 
-  button_actions = clist->button_actions[clist->drag_button - 1];
+  if (clist->drag_button > 0)
+    button_actions = clist->button_actions[clist->drag_button - 1];
 
   if (GTK_CLIST_IN_DRAG(clist))
     {

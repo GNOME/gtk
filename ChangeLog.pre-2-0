@@ -1,3 +1,7 @@
+Mon Dec 21 22:01:49 1998  Lars Hamann  <lars@gtk.org>
+
+	* gtk/gtkclist.c (gtk_clist_motion): fixed column resize bug
+
 Sun Dec 20 04:48:59 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.h (GDK_PRIORITY_EVENTS): export the priority at which
