@@ -135,7 +135,7 @@ xp_theme_exit()
   if(!uxtheme_dll)
     return;
 
-  for (i=0; i<XP_THEME_CLASS__SIZEOF; i++)
+  for (i=0; i < XP_THEME_CLASS__SIZEOF; i++)
     {
       if (open_themes[i])
         {

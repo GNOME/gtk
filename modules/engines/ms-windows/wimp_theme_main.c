@@ -20,28 +20,67 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <windows.h>
 #include <gmodule.h>
 #include <gtk/gtk.h>
 
 #include "wimp_style.h"
 #include "wimp_rc_style.h"
 
+#ifndef WM_THEMECHANGED
+#define WM_THEMECHANGED 0x031A /* winxp only */
+#endif
+
+static GdkFilterReturn
+global_filter_func (void     *xevent,
+		    GdkEvent *event,
+		    gpointer  data)
+{
+  MSG *msg = (MSG *) xevent;
+  GList * toplevels, *iter;
+  GtkWidget * toplevel;
+
+  switch (msg->message)
+    {
+    case WM_THEMECHANGED:
+	case WM_SYSCOLORCHANGE:
+		toplevels = gtk_window_list_toplevels ();
+		if (toplevels) {
+			xp_theme_exit();
+			for (iter = g_list_first(toplevels);
+				 iter;
+				 iter = g_list_next (iter)) {
+				toplevel = (GtkWidget*)iter->data;
+				if (toplevel)
+					gtk_widget_reset_rc_styles (toplevel);
+			}
+			g_list_free (toplevels);
+		}
+		return GDK_FILTER_REMOVE;
+	default:
+		return GDK_FILTER_CONTINUE;
+	}
+}
+
 G_MODULE_EXPORT void
 theme_init (GTypeModule *module)
 {
   wimp_rc_style_register_type (module);
   wimp_style_register_type (module);
+
+  gdk_window_add_filter (NULL, global_filter_func, NULL);
 }
 
 G_MODULE_EXPORT void
 theme_exit (void)
 {
+	gdk_window_remove_filter (NULL, global_filter_func, NULL);
 }
 
 G_MODULE_EXPORT GtkRcStyle *
 theme_create_rc_style (void)
 {
-  return GTK_RC_STYLE (g_object_new (WIMP_TYPE_RC_STYLE, NULL));  
+  return GTK_RC_STYLE (g_object_new (WIMP_TYPE_RC_STYLE, NULL));
 }
 
 /* The following function will be called by GTK+ when the module
