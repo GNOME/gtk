@@ -4,9 +4,13 @@ Mon Nov  1 13:37:31 2004  Jonathan Blandford  <jrb@redhat.com>
 
 2004-11-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/question_index.sgml: Add a "ref and sink" question.  
+	(#156865, Philip Langdale, text based on a comment by Owen
+	Taylor)
+
 	* gtk/tmpl/gtkrc.sgml: Document im_module_file and settings
 	assignments as toplevel statements.
-
+	
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/windows.sgml: s/PRETEND_WIN9X/G_WIN32_PRETEND_WIN9X/.

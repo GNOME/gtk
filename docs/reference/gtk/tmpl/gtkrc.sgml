@@ -219,7 +219,7 @@ The possible toplevel declarations are:
   </varlistentry>
 
   <varlistentry>
-    <term><replaceable>setting</replaceable> = <replaceable>value<replaceable></literal></term>
+    <term><replaceable>setting</replaceable> = <replaceable>value</replaceable></term>
     <listitem>
       <para>Specifies a value for a <link linkend="GtkSettings">setting</link>. Note that
         settings in RC files are overwritten by system-wide settings which are managed by

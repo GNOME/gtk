@@ -116,9 +116,51 @@ url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>.)
 </para>
 
 </answer>
-
 </qandaentry>
 
+<qandaentry>
+<question>
+<para>
+Why does my program leak memory, if I destroy a widget immediately 
+after creating it ?
+</para>
+</question>
+
+<answer>
+<para>
+If <structname>GtkFoo</structname> isn't a toplevel window, then
+<informalexample><programlisting>
+ foo = gtk_foo_new (<!-- -->);
+ gtk_widget_destroy (foo);
+</programlisting></informalexample>
+is a memory leak, because no one assumed the initial floating 
+reference. If you are using a widget and you aren't immediately 
+packing it into a container, then you probably want standard 
+reference counting, not floating reference counting.
+</para>
+
+<para>
+To to get this, you must acquire a reference to the widget and drop the floating 
+reference (<quote>ref and sink</quote> in GTK+ parlance) after creating it:
+<informalexample><programlisting>
+ foo = gtk_foo_new (<!-- -->);
+ g_object_ref (foo); 
+ gtk_object_sink (GTK_OBJECT (foo));
+</programlisting></informalexample>
+When you want to get rid of the widget, you must call gtk_widget_destroy()
+to break any external connections to the widget before dropping your 
+reference:
+<informalexample><programlisting>
+ gtk_widget_destroy (foo); 
+ g_object_unref (foo); 
+</programlisting></informalexample>
+When you immediately add a widget to a container, it takes care of
+assuming the initial floating reference and you don't have to worry
+about reference counting at all ... just call gtk_widget_destroy()
+to get rid of the widget.
+</para>
+</answer>
+</qandaentry>
 
 <qandaentry>
 <question><para>
@@ -483,7 +525,7 @@ to the GNOME 2.0 platform</ulink>.
 <qandaentry>
 <question>
 <para>
-Why are types not registered if I use their <literal>GTK_TYPE_BLAH;</literal> macro ?
+Why are types not registered if I use their <literal>GTK_TYPE_BLAH</literal> macro ?
 </para>
 </question>
 
