@@ -1,3 +1,8 @@
+Thu Sep 20 15:10:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkdialog.c (gtk_dialog_init): Automatically set
+	set dialogs to GTK_WIN_POS_CENTER_ON_PARENT. (#60554)
+	
 Thu Sep 20 18:00:56 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* tests/testgtk.c (struct OptionMenuItem): get rid of it,
