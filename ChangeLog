@@ -10,6 +10,10 @@ Sun Apr  1 03:28:14 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.[hc]: partially reverted patch from havoc,
 	applied by owen.
+	backed out gtk_window_get_location(), gtk_window_set_location(),
+	gtk_window_get_size() and gtk_window_set_size(), these
+	have to be sorted out wrg x/y/width/height/default_with/default_height
+	properties.
 	kept a flag in GtkWindowGeometryInfo to handle user
 	resetting default sizes.
 	cleaned up ZVT comments.
