@@ -11,7 +11,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.7\n"
-"POT-Creation-Date: 2000-05-19 07:11+0200\n"
+"POT-Creation-Date: 2000-11-25 15:44+0100\n"
 "PO-Revision-Date: 1999-02-07 17:37+0100\n"
 "Last-Translator: Pablo Saratxaga <pablo@mandrakesoft.com>\n"
 "Language-Team: walon <linux-wa@chanae.alphanet.ch>\n"
@@ -62,7 +62,7 @@ msgstr "Rinoncî"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
-msgstr "Aide"
+msgstr "Aidance"
 
 #. The directories clist
 #: gtk/gtkfilesel.c:418
@@ -85,7 +85,7 @@ msgstr "Fé on Ridant"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:925
 msgid "Delete File"
-msgstr "Rafacer li fitchî"
+msgstr "Disfacer li fitchî"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1029
 msgid "Rename File"
@@ -121,7 +121,7 @@ msgstr "Fé"
 #. buttons
 #: gtk/gtkfilesel.c:947
 msgid "Delete"
-msgstr "Rafacer"
+msgstr "Disfacer"
 
 #. buttons
 #: gtk/gtkfilesel.c:1062
@@ -158,7 +158,7 @@ msgstr "Stîle di Rawete:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Grandeu è Pixels:"
+msgstr "Grandeu è Picsels:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
@@ -174,7 +174,7 @@ msgstr "Spexheu y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
-msgstr "Espacemint:"
+msgstr "Espaçmint:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
@@ -182,7 +182,7 @@ msgstr "Emetrinne lårdjeu"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
-msgstr "Ecôdaeje:"
+msgstr "Ecôdaedje:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
@@ -192,7 +192,7 @@ msgstr "Prôpietés del fonte"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
-msgstr "Valixhance dimandeye"
+msgstr "Valixhance dimandéye"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
@@ -216,7 +216,7 @@ msgstr "Grandeu:"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
-msgstr "Renonder passete"
+msgstr "Rinonder passete"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
@@ -228,7 +228,7 @@ msgstr "Ponts"
 
 #: gtk/gtkfontsel.c:671
 msgid "Pixels"
-msgstr "Pixels"
+msgstr "Picsels"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
@@ -241,7 +241,7 @@ msgstr "Informåcion sol Fonte"
 
 #: gtk/gtkfontsel.c:749
 msgid "Requested Font Name:"
-msgstr "No del fonte dimandeye:"
+msgstr "No del fonte dimandéye:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
@@ -324,11 +324,11 @@ msgstr "Li fonte ki vos avoz tchwezi n' est nén valåbe"
 #: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr ""
-"Ci fonte est ecôdeye so 2 octets, èt mutwet pout nén esse håyneye comufåt"
+"Ci fonte est ecôdéye so 2 octets, èt mutwè pout nén esse håyneye comufåt"
 
 #: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(nén cnoxhu)"
+msgstr "(nén cnoxhou)"
 
 #: gtk/gtkfontsel.c:1972
 msgid "roman"
@@ -486,10 +486,10 @@ msgstr "--- Nole Racsegne ---"
 #~ msgstr "demi cråsses"
 
 #~ msgid "medium"
-#~ msgstr "moyénnes"
+#~ msgstr "moyénes"
 
 #~ msgid "normal"
-#~ msgstr "miernuwes"
+#~ msgstr "miernowes"
 
 #~ msgid "light"
 #~ msgstr "ledjîres"
