@@ -544,9 +544,9 @@ main (int argc, char **argv)
 				entries, n_entries, 
 				NULL);
   action = gtk_action_group_get_action (action_group, "EmptyMenu1Action");
-  g_object_set (G_OBJECT (action), "is_important", TRUE, NULL);
+  g_object_set (G_OBJECT (action), "hide_if_empty", FALSE, NULL);
   action = gtk_action_group_get_action (action_group, "EmptyMenu2Action");
-  g_object_set (G_OBJECT (action), "is_important", FALSE, NULL);
+  g_object_set (G_OBJECT (action), "hide_if_empty", TRUE, NULL);
   gtk_action_group_add_toggle_actions (action_group, 
 				       toggle_entries, n_toggle_entries, 
 				       NULL);

@@ -60,6 +60,7 @@ struct _GtkActionPrivate
   guint label_set       : 1; /* these two used so we can set label */
   guint short_label_set : 1; /* based on stock id */
   guint is_important    : 1;
+  guint hide_if_empty   : 1;
 
   /* accelerator */
   guint          accel_count;
@@ -88,6 +89,7 @@ enum
   PROP_TOOLTIP,
   PROP_STOCK_ID,
   PROP_IS_IMPORTANT,
+  PROP_HIDE_IF_EMPTY,
   PROP_SENSITIVE,
   PROP_VISIBLE
 };
@@ -217,8 +219,15 @@ gtk_action_class_init (GtkActionClass *klass)
 				   PROP_IS_IMPORTANT,
 				   g_param_spec_boolean ("is_important",
 							 _("Is important"),
-							 _("Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode, and empty menu proxies for this action are not hidden."),
+							 _("Whether the action is considered important. When TRUE, toolitem proxies for this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."),
 							 FALSE,
+							 G_PARAM_READWRITE));
+  g_object_class_install_property (gobject_class,
+				   PROP_HIDE_IF_EMPTY,
+				   g_param_spec_boolean ("hide_if_empty",
+							 _("Hide if empty"),
+							 _("When TRUE, empty menu proxies for this action are hidden."),
+							 TRUE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
@@ -307,6 +316,7 @@ gtk_action_init (GtkAction *action)
   action->private_data->tooltip = NULL;
   action->private_data->stock_id = NULL;
   action->private_data->is_important = FALSE;
+  action->private_data->hide_if_empty = TRUE;
 
   action->private_data->sensitive = TRUE;
   action->private_data->visible = TRUE;
@@ -429,6 +439,9 @@ gtk_action_set_property (GObject         *object,
     case PROP_IS_IMPORTANT:
       action->private_data->is_important = g_value_get_boolean (value);
       break;
+    case PROP_HIDE_IF_EMPTY:
+      action->private_data->hide_if_empty = g_value_get_boolean (value);
+      break;
     case PROP_SENSITIVE:
       action->private_data->sensitive = g_value_get_boolean (value);
       break;
@@ -470,6 +483,9 @@ gtk_action_get_property (GObject    *object,
       break;
     case PROP_IS_IMPORTANT:
       g_value_set_boolean (value, action->private_data->is_important);
+      break;
+    case PROP_HIDE_IF_EMPTY:
+      g_value_set_boolean (value, action->private_data->hide_if_empty);
       break;
     case PROP_SENSITIVE:
       g_value_set_boolean (value, action->private_data->sensitive);
@@ -541,7 +557,8 @@ gtk_action_sync_property (GtkAction  *action,
  * <itemizedlist>
  * <listitem><para>if @action is invisible, @proxy is too
  * </para></listitem>
- * <listitem><para>if @empty is %TRUE, hide @proxy unless @action is important
+ * <listitem><para>if @empty is %TRUE, hide @proxy unless the "hide-if-empty" 
+ *   property of @action indicates otherwise
  * </para></listitem>
  * </itemizedlist>
  * 
@@ -552,21 +569,19 @@ _gtk_action_sync_menu_visible (GtkAction *action,
 			       GtkWidget *proxy,
 			       gboolean   empty)
 {
-  gboolean visible, important;
+  gboolean visible, hide_if_empty;
 
   g_return_if_fail (GTK_IS_MENU_ITEM (proxy));
   g_return_if_fail (action == NULL || GTK_IS_ACTION (action));
   
   if (action == NULL)
     action = g_object_get_data (G_OBJECT (proxy), "gtk-action");
-  
-  g_object_get (G_OBJECT (action), 
-		"visible", &visible, 
-		"is_important", &important,
-		NULL);
+
+  visible = action->private_data->visible;
+  hide_if_empty = action->private_data->hide_if_empty;
 
   g_object_set (G_OBJECT (proxy),
-		"visible", visible && (important || !empty),
+		"visible", visible && !(empty && hide_if_empty),
 		NULL);
 }
 

@@ -1,5 +1,12 @@
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkaction.c (gtk_action_class_init): 
+	(gtk_action_[gs]et_property): Introduce a separate
+	"hide_if_empty" property for empty menu handling.
+	(_gtk_action_sync_menu_visible): ...and use it here.
+
+	* tests/testmerge.c (main): ...and here.
+
 	* gtk/gtktoolitem.c (gtk_tool_item_class_init): Fix signal doc 
 	comments to pacify gtk-doc.
 
