@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "POT-Creation-Date: 2002-05-10 14:30+0200\n"
-"PO-Revision-Date: 2002-05-10 14:43+0200\n"
+"PO-Revision-Date: 2002-05-12 00:26+0200\n"
 "Last-Translator: GNOME PL Team <translators@gnome.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -877,6 +877,8 @@ msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
 msgstr ""
+"Określa, czy pokreślenie jest używane w tekście w roli znacznika, który "
+"poprzedza znak akceleratora."
 
 #: gtk/gtkbutton.c:1
 msgid "Use stock"
@@ -1707,6 +1709,9 @@ msgid ""
 "FALSE displays the \"invisible char\" instead of the actual text (password "
 "mode)"
 msgstr ""
+"Określa, czy wpisany tekst będzie wyświetlany. Jeśli opcja nie jest aktywna, "
+"wówczas tekst będzie widoczny w postaci ciągu \"niewidocznych znaków\", co "
+"jest przydatne przy wprowadzaniu haseł."
 
 #: gtk/gtkentry.c:1
 msgid "Has Frame"
@@ -2326,6 +2331,9 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkMisc::xalign for that."
 msgstr ""
+"Wzajemne wyrównanie wierszy tekstu etykiety względem siebie. Nie wpływa to "
+"na wyrównanie etykiety wewnątrz przydzielonego jej obszaru - to określa "
+"atrybut GtkMisc::xalign."
 
 #: gtk/gtklabel.c:1
 msgid "Pattern"
@@ -2565,6 +2573,8 @@ msgstr "Przewijalny"
 #: gtk/gtknotebook.c:1
 msgid "If TRUE, scroll arrows are added if there are to many tabs to fit"
 msgstr ""
+"Określa, czy w razie braku miejsca na zakładki powinny być wyświetlane "
+"strzałki przewijania."
 
 #: gtk/gtknotebook.c:1
 msgid "Enable Popup"
@@ -2650,6 +2660,10 @@ msgid ""
 "is used when you're doing something that you don't know how long it will "
 "take."
 msgstr ""
+"Określa, czy widget GtkProgress działa w trybie aktywności, tj. sygnalizuje, "
+"że wykonywana jest operacja, lecz nie określa postępu jej wykonania. Tryb "
+"ten jest używany, jeśli nie jest możliwe określenie czasu trwania ani "
+"postępu operacji."
 
 #: gtk/gtkprogress.c:1
 msgid "Show text"
@@ -2685,7 +2699,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:1 gtk/gtkrange.c:1 gtk/gtkspinbutton.c:1
 msgid "Adjustment"
-msgstr ""
+msgstr "Widget dopasowania"
 
 #: gtk/gtkprogressbar.c:1
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
@@ -2768,7 +2782,7 @@ msgstr "Reguła odświeżania"
 
 #: gtk/gtkrange.c:1
 msgid "How the range should be updated on the screen"
-msgstr ""
+msgstr "Określa sposób odświeżania widgetu na ekranie."
 
 #: gtk/gtkrange.c:1
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -2800,7 +2814,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:1
 msgid "Stepper Size"
-msgstr ""
+msgstr "Rozmiary przycisków"
 
 #: gtk/gtkrange.c:1
 msgid "Length of step buttons at ends"
@@ -2808,11 +2822,11 @@ msgstr "Długość przycisków krokowych na końcach"
 
 #: gtk/gtkrange.c:1
 msgid "Stepper Spacing"
-msgstr ""
+msgstr "Odstępy przycisków"
 
 #: gtk/gtkrange.c:1
 msgid "Spacing between step buttons and thumb"
-msgstr ""
+msgstr "Odstępy pomiędzy przyciskami krokowymi a suwakiem"
 
 #: gtk/gtkrange.c:1
 msgid "Arrow X Displacement"
@@ -3763,11 +3777,11 @@ msgstr "Określa, czy ten znacznik wpływa na widoczność"
 
 #: gtk/gtktextutil.c:1
 msgid "LRM _Left-to-right mark"
-msgstr ""
+msgstr "LRM - znacznik kierunku od _lewej do prawej"
 
 #: gtk/gtktextutil.c:1
 msgid "RLM _Right-to-left mark"
-msgstr ""
+msgstr "RLM - znacznik kierunku od p_rawej do lewej"
 
 #: gtk/gtktextutil.c:1
 msgid "LRE Left-to-right _embedding"
@@ -4040,11 +4054,11 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1
 msgid "Allow Rules"
-msgstr ""
+msgstr "Dopuszczalne różnicowanie wierszy"
 
 #: gtk/gtktreeview.c:1
 msgid "Allow drawing of alternating color rows."
-msgstr ""
+msgstr "Możliwość rysowania sąsiadujących wierszy w różnych kolorach."
 
 #: gtk/gtktreeview.c:1
 msgid "Indent Expanders"
@@ -4136,7 +4150,7 @@ msgstr "Poziome wyrównanie tekstu lub widgetu w nagłówku kolumny"
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "Określa, czy może być zmieniany porządek kolumny względem innych."
 
 #: gtk/gtktreeviewcolumn.c:1
 msgid "Sort indicator"
@@ -4503,12 +4517,12 @@ msgstr "Tajska (błędna)"
 #. ID
 #: modules/input/imti-er.c:1
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr ""
+msgstr "Tigre-Erytrea (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:1
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr ""
+msgstr "Tigre-Etiopia (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:1
