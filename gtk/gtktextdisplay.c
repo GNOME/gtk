@@ -510,10 +510,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   if (width == 0 || height == 0)
     return;
 
-  line_list =  gtk_text_layout_get_lines (layout,
-					  y,
-					  y + height + 1, /* one past what we draw */
-					  &current_y);
+  line_list =  gtk_text_layout_get_lines (layout, y, y + height, &current_y);
   current_y -= y_offset;
   
   if (line_list == NULL)
@@ -612,7 +609,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 	}
 
       current_y += line_display->height;
-      gtk_text_layout_free_line_display (layout, line, line_display);
+      gtk_text_layout_free_line_display (layout, line_display);
       
       tmp_list = g_slist_next (tmp_list);
     }

@@ -54,6 +54,11 @@ struct _GtkTextLayout
    * over long runs with the same style. */
   GtkTextStyleValues *one_style_cache;
 
+  /* A cache of one line display. Getting the same line
+   * many times in a row is the most common case.
+   */
+  GtkTextLineDisplay *one_display_cache;
+  
   /* Whether we are allowed to wrap right now */
   gint wrap_loop_count;
 };
@@ -62,8 +67,16 @@ struct _GtkTextLayoutClass
 {
   GtkObjectClass parent_class;
 
-  void (* need_repaint)     (GtkTextLayout *layout,
-                             gint x, gint y, gint width, gint height);
+  /* Some portion of the layout was invalidated
+   */
+  void (* invalidated) (GtkTextLayout *layout);
+
+  /* A range of the layout changed appearance and possibly height
+   */
+  void (* changed)  (GtkTextLayout *layout,
+		     gint           y,
+		     gint           old_height,
+		     gint           new_height);
 
   
   GtkTextLineData *(* wrap) (GtkTextLayout *layout,
@@ -71,9 +84,12 @@ struct _GtkTextLayoutClass
                              /* may be NULL */
                              GtkTextLineData *line_data);
   
-  void       (* invalidate) (GtkTextLayout *layout,
+  void  (* invalidate)      (GtkTextLayout *layout,
                              const GtkTextIter *start,
-                             const GtkTextIter *end);  
+                             const GtkTextIter *end);
+  void  (* free_line_data) (GtkTextLayout   *layout,
+			    GtkTextLine     *line,
+			    GtkTextLineData *line_data);
 };
 
 struct _GtkTextAttrAppearance
@@ -106,6 +122,9 @@ struct _GtkTextLineDisplay
   gint right_margin;
   gint top_margin;
   gint bottom_margin;
+
+  gboolean size_only;
+  GtkTextLine *line;
 };
 
 extern PangoAttrType gtk_text_attr_appearance_type;
@@ -149,9 +168,12 @@ GtkTextLineDisplay *gtk_text_layout_get_line_display  (GtkTextLayout      *layou
 						       GtkTextLine        *line,
 						       gboolean            size_only);
 void                gtk_text_layout_free_line_display (GtkTextLayout      *layout,
-						       GtkTextLine        *line,
 						       GtkTextLineDisplay *display);
 
+void gtk_text_layout_get_line_at_y     (GtkTextLayout     *layout,
+					GtkTextIter       *target_iter,
+					gint               y,
+					gint              *line_top);
 void gtk_text_layout_get_iter_at_pixel (GtkTextLayout     *layout,
 					GtkTextIter       *iter,
 					gint               x,
@@ -159,20 +181,38 @@ void gtk_text_layout_get_iter_at_pixel (GtkTextLayout     *layout,
 void gtk_text_layout_invalidate        (GtkTextLayout     *layout,
 					const GtkTextIter *start,
 					const GtkTextIter *end);
+void gtk_text_layout_free_line_data    (GtkTextLayout     *layout,
+					GtkTextLine       *line,
+					GtkTextLineData   *line_data);
 
+gboolean gtk_text_layout_is_valid        (GtkTextLayout *layout);
+void     gtk_text_layout_validate_yrange (GtkTextLayout *layout,
+					  GtkTextIter   *anchor_line,
+					  gint           y0,
+					  gint           y1);
+void     gtk_text_layout_validate        (GtkTextLayout *layout,
+					  gint           max_pixels);
+
+      /* This function should return the passed-in line data,
+         OR remove the existing line data from the line, and
+         return a NEW line data after adding it to the line.
+         That is, invariant after calling the callback is that
+         there should be exactly one line data for this view
+         stored on the btree line. */
 GtkTextLineData *gtk_text_layout_wrap (GtkTextLayout   *layout,
 				       GtkTextLine     *line,
                                          /* may be NULL */
 				       GtkTextLineData *line_data);
 
-void     gtk_text_layout_need_repaint         (GtkTextLayout     *layout,
-					       gint               x,
+void     gtk_text_layout_changed              (GtkTextLayout     *layout,
 					       gint               y,
-					       gint               width,
-					       gint               height);
+					       gint               old_height,
+					       gint               new_height);
 void     gtk_text_layout_get_iter_location    (GtkTextLayout     *layout,
 					       const GtkTextIter *iter,
 					       GdkRectangle      *rect);
+gint     gtk_text_layout_get_line_y           (GtkTextLayout     *layout,
+					       const GtkTextIter *iter);
 void     gtk_text_layout_get_cursor_locations (GtkTextLayout     *layout,
 					       GtkTextIter       *iter,
 					       GdkRectangle      *strong_pos,

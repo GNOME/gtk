@@ -720,6 +720,20 @@ gtk_text_buffer_mark_set (GtkTextBuffer     *buffer,
 
 }
 
+/**
+ * gtk_text_buffer_set_mark:
+ * @buffer:       a #GtkTextBuffer
+ * @mark_name:    name of the mark
+ * @iter:         location for the mark.
+ * @left_gravity: if the mark is created by this function, gravity for the new
+ *                mark.
+ * @should_exist: if %TRUE, warn if the mark does not exist, and return
+ *                immediately.
+ * 
+ * Move the mark to the given position, if not @should_exist, create the mark.
+ * 
+ * Return value: 
+ **/
 static GtkTextMark*
 gtk_text_buffer_set_mark(GtkTextBuffer *buffer,
                          const gchar *mark_name,
@@ -1622,16 +1636,10 @@ gtk_text_buffer_get_selection_bounds   (GtkTextBuffer      *buffer,
                                         GtkTextIter        *start,
                                         GtkTextIter        *end)
 {
-  gtk_text_buffer_get_iter_at_mark(buffer, start, "insert");
-  gtk_text_buffer_get_iter_at_mark(buffer, end, "selection_bound");
-  
-  if (gtk_text_iter_equal(start, end))
-    return FALSE;
-  else
-    {
-      gtk_text_iter_reorder(start, end);
-      return TRUE;
-    }
+  g_return_val_if_fail (buffer != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW_BUFFER (buffer), FALSE);
+
+  return gtk_text_btree_get_selection_bounds (buffer->tree, start, end);
 }
 
 

@@ -59,8 +59,7 @@
 #include "gtktexttagtable.h"
 #include "gtktextlayout.h"
 #include "gtktextiterprivate.h"
-
-extern gboolean gtk_text_view_debug_btree;
+#include "gtkdebug.h"
 
 /*
  *--------------------------------------------------------------
@@ -200,10 +199,8 @@ char_segment_new(const gchar *text, guint len)
 
   seg->char_count = gtk_text_view_num_utf_chars(seg->body.chars, seg->byte_count);
 
-  if (gtk_text_view_debug_btree)
-    {
-      char_segment_self_check(seg);
-    }
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    char_segment_self_check(seg);
   
   return seg;
 }
@@ -229,10 +226,8 @@ char_segment_new_from_two_strings(const gchar *text1, guint len1,
      as args, since it's typically used to merge two char segments */
   seg->char_count = gtk_text_view_num_utf_chars(seg->body.chars, seg->byte_count);
 
-  if (gtk_text_view_debug_btree)
-    {
-      char_segment_self_check(seg);
-    }
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    char_segment_self_check(seg);
   
   return seg;
 }
@@ -262,7 +257,7 @@ char_segment_split_func(GtkTextLineSegment *seg, int index)
 
   g_assert(index < seg->byte_count);
   
-  if (gtk_text_view_debug_btree)
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
     {
       char_segment_self_check(seg);
     }
@@ -278,7 +273,7 @@ char_segment_split_func(GtkTextLineSegment *seg, int index)
   new1->next = new2;
   new2->next = seg->next;
 
-  if (gtk_text_view_debug_btree)
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
     {
       char_segment_self_check(new1);
       char_segment_self_check(new2);
@@ -316,10 +311,8 @@ char_segment_cleanup_func(segPtr, line)
 {
   GtkTextLineSegment *segPtr2, *newPtr;
 
-  if (gtk_text_view_debug_btree)
-    {
-      char_segment_self_check(segPtr);
-    }
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    char_segment_self_check(segPtr);
   
   segPtr2 = segPtr->next;
   if ((segPtr2 == NULL) || (segPtr2->type != &gtk_text_char_type))
@@ -332,10 +325,8 @@ char_segment_cleanup_func(segPtr, line)
 
   newPtr->next = segPtr2->next;
 
-  if (gtk_text_view_debug_btree)
-    {
-      char_segment_self_check(newPtr);
-    }
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
+    char_segment_self_check(newPtr);
   
   g_free(segPtr);
   g_free(segPtr2);

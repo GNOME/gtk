@@ -70,11 +70,17 @@ struct _GtkTextView {
    * In case a), virtual_cursor_x is preserved, but not virtual_cursor_y
    * In case b), both virtual_cursor_x and virtual_cursor_y are preserved.
    */
-  gint virtual_cursor_x;	/* -1 means use actual cursor position */
-  gint virtual_cursor_y;	/* -1 means use actual cursor position */
+  gint virtual_cursor_x;	   /* -1 means use actual cursor position */
+  gint virtual_cursor_y;	   /* -1 means use actual cursor position */
+  
+  GtkTextMark *first_para_mark;	   /* Mark at the beginning of the first onscreen paragraph */
+  gint first_para_pixels;	   /* Offset of top of screen in the first onscreen paragraph */
 
   GtkTextMark *dnd_mark;
   guint blink_timeout;
+
+  guint first_validate_idle;     	/* Idle to revalidate onscreen portion, runs before resize */
+  guint incremental_validate_idle;      /* Idle to revalidate offscreen portions, runs after redraw */
 
   GtkIMContext *im_context;
 };

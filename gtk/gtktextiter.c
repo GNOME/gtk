@@ -1,6 +1,7 @@
 #include "gtktextiter.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtkdebug.h"
 #include <ctype.h>
 
 typedef struct _GtkTextRealIter GtkTextRealIter;
@@ -331,7 +332,7 @@ ensure_byte_offsets(GtkTextRealIter *iter)
 static void
 check_invariants(const GtkTextIter *iter)
 {
-  if (gtk_text_view_debug_btree)
+  if (gtk_debug_flags & GTK_DEBUG_TEXT)
     gtk_text_iter_check(iter);
 }
 #else
