@@ -124,7 +124,7 @@ gtk_tree_model_base_init (gpointer g_class)
 /**
  * gtk_tree_path_new:
  *
- * Creates a new #GtkTreePath.
+ * Creates a new #GtkTreePath.  This structure refers to a row 
  *
  * Return value: A newly created #GtkTreePath.
  **/
@@ -148,7 +148,7 @@ gtk_tree_path_new (void)
  * colon separated list of numbers.  For example, the string "10:4:0" would
  * create a path of depth 3 pointing to the 11th child of the root node, the 5th
  * child of that 11th child, and the 1st child of that 5th child.  If an invalid
- * path is passed in, %NULL is returned.
+ * path string is passed in, %NULL is returned.
  *
  * Return value: A newly-created #GtkTreePath, or %NULL
  **/
@@ -310,7 +310,7 @@ gtk_tree_path_get_depth (GtkTreePath *path)
  * @path: A #GtkTreePath.
  *
  * Returns the current indices of @path.  This is an array of integers, each
- * representing a node in a tree.
+ * representing a node in a tree.  This value should not be freed.
  *
  * Return value: The current indices, or %NULL.
  **/
@@ -1485,12 +1485,12 @@ disconnect_ref_callbacks (GtkTreeModel *model)
 /**
  * gtk_tree_row_reference_new:
  * @model: A #GtkTreeModel
- * @path: A valid #GtkTreePath
+ * @path: A valid #GtkTreePath to monitor
  * 
  * Creates a row reference based on @path.  This reference will keep pointing to
  * the node pointed to by @path, so long as it exists.  It listens to all
- * signals on model, and updates it's path appropriately.  If @path isn't a
- * valid path in @model, then %NULL is returned.
+ * signals emitted by @model, and updates it's path appropriately.  If @path
+ * isn't a valid path in @model, then %NULL is returned.
  * 
  * Return value: A newly allocated #GtkTreeRowReference, or %NULL
  **/
@@ -1504,6 +1504,28 @@ gtk_tree_row_reference_new (GtkTreeModel *model,
   return gtk_tree_row_reference_new_proxy (G_OBJECT (model), model, path);
 }
 
+/**
+ * gtk_tree_row_reference_new_proxy:
+ * @proxy: A proxy #GObject
+ * @model: A #GtkTreeModel
+ * @path: A valid #GtkTreePath to monitor
+ * 
+ * You do not need to use this function.  Creates a row reference based on
+ * @path.  This reference will keep pointing to the node pointed to by @path, so
+ * long as it exists.  If @path isn't a valid path in @model, then %NULL is
+ * returned.  However, unlike references created with
+ * gtk_tree_row_reference_new(), it does not listen to the model for changes.
+ * The creator of the row reference must do this explicitly using
+ * gtk_tree_row_reference_inserted(), gtk_tree_row_reference_deleted(),
+ * gtk_tree_row_reference_reordered().  This must be called once per signal per
+ * proxy.
+ *
+ * This type of row reference is primarily meant by structures that need to
+ * carefully monitor exactly when a row_reference updates itself, and is not
+ * generally needed by most applications.
+ *
+ * Return value: A newly allocated #GtkTreeRowReference, or %NULL
+ **/
 GtkTreeRowReference *
 gtk_tree_row_reference_new_proxy (GObject      *proxy,
 				  GtkTreeModel *model,
@@ -1568,10 +1590,10 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
  * gtk_tree_row_reference_get_path:
  * @reference: A #GtkTreeRowReference
  * 
- * Returns a path that the row reference currently points to, or NULL if the
+ * Returns a path that the row reference currently points to, or %NULL if the
  * path pointed to is no longer valid.
  * 
- * Return value: A current path, or NULL.
+ * Return value: A current path, or %NULL.
  **/
 GtkTreePath *
 gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
@@ -1648,6 +1670,14 @@ gtk_tree_row_reference_free (GtkTreeRowReference *reference)
   g_free (reference);
 }
 
+/**
+ * gtk_tree_row_reference_inserted:
+ * @proxy: A #GObject
+ * @path: The row position that was inserted
+ * 
+ * Lets a set of row reference created by gtk_tree_row_reference_new_proxy()
+ * know that the model emitted the "row_inserted" signal.
+ **/
 void
 gtk_tree_row_reference_inserted (GObject     *proxy,
 				 GtkTreePath *path)
@@ -1658,6 +1688,14 @@ gtk_tree_row_reference_inserted (GObject     *proxy,
   
 }
 
+/**
+ * gtk_tree_row_reference_inserted:
+ * @proxy: A #GObject
+ * @path: The path position that was deleted
+ * 
+ * Lets a set of row reference created by gtk_tree_row_reference_new_proxy()
+ * know that the model emitted the "row_deleted" signal.
+ **/
 void
 gtk_tree_row_reference_deleted (GObject     *proxy,
 				GtkTreePath *path)
@@ -1667,6 +1705,16 @@ gtk_tree_row_reference_deleted (GObject     *proxy,
   gtk_tree_row_ref_deleted_callback (NULL, path, proxy);
 }
 
+/**
+ * gtk_tree_row_reference_reordered:
+ * @proxy: A #GObject
+ * @path: The parent path of the reordered signal
+ * @iter: The iter pointing to the parent of the reordered
+ * @new_order: The new order of rows
+ * 
+ * Lets a set of row reference created by gtk_tree_row_reference_new_proxy()
+ * know that the model emitted the "rows_reordered" signal.
+ **/
 void
 gtk_tree_row_reference_reordered (GObject     *proxy,
 				  GtkTreePath *path,
