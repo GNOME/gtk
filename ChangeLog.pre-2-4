@@ -1,3 +1,8 @@
+Wed Feb 27 14:08:26 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/imxim.c: Add ko and zh to the locales
+	where this is the default.
+
 Wed Feb 27 12:34:21 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkiconfactory.c: Register all stock icons
