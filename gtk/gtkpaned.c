@@ -327,7 +327,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 								    TRUE,
 								    G_PARAM_READWRITE));
 
-  signals [CYCLE_HANDLE_FOCUS] =
+  signals [CYCLE_CHILD_FOCUS] =
     g_signal_new ("cycle_child_focus",
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,

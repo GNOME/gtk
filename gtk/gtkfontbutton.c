@@ -236,7 +236,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
    * Since: 2.4
    */
   g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_SIZE,
+                                   PROP_SHOW_STYLE,
                                    g_param_spec_boolean ("show_style",
                                                          P_("Show style"),
                                                          P_("Whether the selected font style is shown in the label"),

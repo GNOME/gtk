@@ -1,3 +1,13 @@
+Sun Aug 22 15:46:56 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.c (gtk_paned_class_init):
+	s/CYCLE_HANDLE_FOCUS/CYCLE_CHILD_FOCUS/
+
+	* gtk/gtkfontbutton.c (gtk_font_button_class_init):
+	s/PROP_SHOW_SIZE/PROP_SHOW_STYLE/
+
+	Both pointed out by Tommi Komulainen.
+
 Sun Aug 22 13:44:53 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkpaned.c (gtk_paned_class_init): Use PROP_MAX_POSITION,
