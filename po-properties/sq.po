@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-11-20 16:26+0100\n"
+"POT-Creation-Date: 2004-12-17 04:30+0100\n"
+"PO-Revision-Date: 2004-12-17 17:16+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -70,8 +70,7 @@ msgid "Rowstride"
 msgstr "Rowstride"
 
 #: gdk-pixbuf/gdk-pixbuf.c:186
-msgid ""
-"The number of bytes between the start of a row and the start of the next row"
+msgid "The number of bytes between the start of a row and the start of the next row"
 msgstr ""
 "Numri i bytes midis fillimit të një rreshti dhe fillimit të rreshtit në "
 "vazhdim"
@@ -97,9 +96,8 @@ msgid "Screen"
 msgstr "Ekrani"
 
 #: gdk/gdkpango.c:575
-#, fuzzy
 msgid "the GdkScreen for the renderer"
-msgstr "Modeli për paraqitjen e degëzuar"
+msgstr "GdkScreen për vizatuesin"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -186,8 +184,7 @@ msgid "Translator credits"
 msgstr "Të dhënat mbi përkthyesin"
 
 #: gtk/gtkaboutdialog.c:363
-msgid ""
-"Credits to the translators. This string should be marked as translatable"
+msgid "Credits to the translators. This string should be marked as translatable"
 msgstr "Kreditë e përkthyesve. Kjo frazë duhet shënuar si e përkthyeshme"
 
 #: gtk/gtkaboutdialog.c:378
@@ -709,8 +706,7 @@ msgid "Use stock"
 msgstr "Përdor rezervë"
 
 #: gtk/gtkbutton.c:237
-msgid ""
-"If set, the label is used to pick a stock item instead of being displayed"
+msgid "If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 "Nëse vihet, etiketa përdoret për të marrë  një element rezervë në vend që të "
 "shfaqet"
@@ -772,8 +768,7 @@ msgid "Child X Displacement"
 msgstr "Zhvendosja X e Birit"
 
 #: gtk/gtkbutton.c:387
-msgid ""
-"How far in the x direction to move the child when the button is depressed"
+msgid "How far in the x direction to move the child when the button is depressed"
 msgstr "Sa larg sipas x-it të zhvendoset biri kur shtypet pulsanti"
 
 #: gtk/gtkbutton.c:394
@@ -781,8 +776,7 @@ msgid "Child Y Displacement"
 msgstr "Zhvendosja Y e birit"
 
 #: gtk/gtkbutton.c:395
-msgid ""
-"How far in the y direction to move the child when the button is depressed"
+msgid "How far in the y direction to move the child when the button is depressed"
 msgstr "Sa larg sipas y-it të zhvendoset biri kur shtypet pulsanti"
 
 #: gtk/gtkbutton.c:411
@@ -1146,8 +1140,7 @@ msgstr "Familja e gërmave"
 
 #: gtk/gtkcellrenderertext.c:305 gtk/gtktexttag.c:301
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
-"Emri i familjes së gërmave, për shembull Sans, Helvetica, Times, Monospace"
+msgstr "Emri i familjes së gërmave, për shembull Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
 #: gtk/gtktexttag.c:308
@@ -1195,10 +1188,8 @@ msgid "Rise"
 msgstr "Sfazimi"
 
 #: gtk/gtkcellrenderertext.c:380
-msgid ""
-"Offset of text above the baseline (below the baseline if rise is negative)"
-msgstr ""
-"Sfazimi i tekstit mbi vijën bazë (nën vijën bazë nëse vlera është negative)"
+msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgstr "Sfazimi i tekstit mbi vijën bazë (nën vijën bazë nëse vlera është negative)"
 
 #: gtk/gtkcellrenderertext.c:390 gtk/gtktexttag.c:465
 msgid "Strikethrough"
@@ -1361,8 +1352,7 @@ msgstr "Përcaktimi i gjuhës"
 
 #: gtk/gtkcellrenderertext.c:500 gtk/gtktexttag.c:567
 msgid "Whether this tag affects the language the text is rendered as"
-msgstr ""
-"Tregon nëse ky tag ka efekt tek gjuha e përdorur për shfaqjen e tekstit"
+msgstr "Tregon nëse ky tag ka efekt tek gjuha e përdorur për shfaqjen e tekstit"
 
 #: gtk/gtkcellrenderertext.c:503
 msgid "Ellipsize set"
@@ -1503,8 +1493,7 @@ msgstr "Ngjyra aktuale"
 
 #: gtk/gtkcolorsel.c:1856
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
-"Vlera aktuale për patejdukshmërinë (0 krejt i tejdukshëm, 65535 krejt opak)"
+msgstr "Vlera aktuale për patejdukshmërinë (0 krejt i tejdukshëm, 65535 krejt opak)"
 
 #: gtk/gtkcolorsel.c:1870
 msgid "Custom palette"
@@ -1578,8 +1567,7 @@ msgstr "Hapësira e kollonave"
 
 #: gtk/gtkcombobox.c:589
 msgid "TreeModel column containing the row span values"
-msgstr ""
-"Kollona e modelit të degëzimit që përmban vlerat e hapësirave të rreshtave"
+msgstr "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të rreshtave"
 
 #: gtk/gtkcombobox.c:610
 msgid "Column span column"
@@ -1587,8 +1575,7 @@ msgstr "Kollona e hapësirës së kollonës"
 
 #: gtk/gtkcombobox.c:611
 msgid "TreeModel column containing the column span values"
-msgstr ""
-"Kollona e modelit të degëzimit që përmban vlerat e hapësirave të kollonave"
+msgstr "Kollona e modelit të degëzimit që përmban vlerat e hapësirave të kollonave"
 
 #: gtk/gtkcombobox.c:631
 msgid "Active item"
@@ -1737,8 +1724,7 @@ msgid "Selection Bound"
 msgstr "Kufiri i zgjedhjes"
 
 #: gtk/gtkentry.c:496 gtk/gtklabel.c:409
-msgid ""
-"The position of the opposite end of the selection from the cursor in chars"
+msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Pozicioni i fundit të pjesës së zgjedhur nga kursori në gërma"
 
 #: gtk/gtkentry.c:506
@@ -1845,8 +1831,7 @@ msgstr "Gjatësia më e Vogël e Kyçit"
 
 #: gtk/gtkentrycompletion.c:280
 msgid "Minimum length of the search key in order to look up matches"
-msgstr ""
-"Gjatësia më e vogël e kyçit të kërkimit që të mund të kërkohen përputhje"
+msgstr "Gjatësia më e vogël e kyçit të kërkimit që të mund të kërkohen përputhje"
 
 #: gtk/gtkentrycompletion.c:295 gtk/gtkiconview.c:368
 msgid "Text column"
@@ -1914,8 +1899,7 @@ msgstr "Përdor \"markup\""
 
 #: gtk/gtkexpander.c:223 gtk/gtklabel.c:335
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
-msgstr ""
-"Teksti i etiketës përfshin \"XML markup\". Shih \"pango_parse_markup()\""
+msgstr "Teksti i etiketës përfshin \"XML markup\". Shih \"pango_parse_markup()\""
 
 #: gtk/gtkexpander.c:231
 msgid "Space to put between the label and the child"
@@ -1988,8 +1972,7 @@ msgid "Preview Widget Active"
 msgstr "Pamja e parë e widget aktiv"
 
 #: gtk/gtkfilechooser.c:208
-msgid ""
-"Whether the application supplied widget for custom previews should be shown."
+msgid "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
 "Nëse programi i afruar për të paraqitur pamjet e personalizuara të widget "
 "duhet shfaqur."
@@ -2184,8 +2167,7 @@ msgstr "Paraqitja e kornizës së frame"
 
 #: gtk/gtkframe.c:172
 msgid "A widget to display in place of the usual frame label"
-msgstr ""
-"Një \"widget\" që do të shfaqet në vend të frame të zakonshme të etiketës"
+msgstr "Një \"widget\" që do të shfaqet në vend të frame të zakonshme të etiketës"
 
 #: gtk/gtkhandlebox.c:207 gtk/gtkmenubar.c:157 gtk/gtkstatusbar.c:204
 #: gtk/gtktoolbar.c:582 gtk/gtkviewport.c:152
@@ -2254,8 +2236,7 @@ msgstr "Kollona markuese"
 
 #: gtk/gtkiconview.c:389
 msgid "Model column used to retrieve the text if using Pango markup"
-msgstr ""
-"Kollona modeli e përdorur për të marrë tekstin nëse përdoret markimi Pango"
+msgstr "Kollona modeli e përdorur për të marrë tekstin nëse përdoret markimi Pango"
 
 #: gtk/gtkiconview.c:396
 msgid "Icon View Model"
@@ -2266,68 +2247,56 @@ msgid "The model for the icon view"
 msgstr "Modeli për paraqitjen me ikona"
 
 #: gtk/gtkiconview.c:413
-#, fuzzy
 msgid "Number of columns"
-msgstr "Numri i kanaleve"
+msgstr "Numri i kolonave"
 
 #: gtk/gtkiconview.c:414
-#, fuzzy
 msgid "Number of columns to display"
-msgstr "Numri i vendeve dhjetore që të shfaqen"
+msgstr "Numri i kolonave që duhen shfaqur"
 
 #: gtk/gtkiconview.c:431
-#, fuzzy
 msgid "Width for each item"
-msgstr "Widget që duhet përdorur si etiketë për elementin"
+msgstr "Gjerësia për çdo element"
 
 #: gtk/gtkiconview.c:432
 msgid "The width used for each item"
-msgstr ""
+msgstr "Gjerësia e përdorur për çdo element"
 
 #: gtk/gtkiconview.c:448
-#, fuzzy
 msgid "Space which is inserted between cells of an item"
-msgstr "Hapësira midis qelive"
+msgstr "Hapësira e shtuar midis qelive të një elementi"
 
 #: gtk/gtkiconview.c:463
-#, fuzzy
 msgid "Row Spacing"
 msgstr "Hapësira e rreshtave"
 
 #: gtk/gtkiconview.c:464
-#, fuzzy
 msgid "Space which is inserted between grid rows"
-msgstr "Hapësira midis qelive"
+msgstr "Hapësira e shtuar midis rreshtave të rrjetës"
 
 #: gtk/gtkiconview.c:479
-#, fuzzy
 msgid "Column Spacing"
 msgstr "Hapësira e kollonave"
 
 #: gtk/gtkiconview.c:480
-#, fuzzy
 msgid "Space which is inserted between grid column"
-msgstr "Hapësira midis qelive"
+msgstr "Hapësira e shtuar midis kollonave të rrjetës"
 
 #: gtk/gtkiconview.c:495
-#, fuzzy
 msgid "Margin"
-msgstr "Kufiri i majtë"
+msgstr "Kufiri"
 
 #: gtk/gtkiconview.c:496
-#, fuzzy
 msgid "Space which is inserted at the edges of the icon view"
-msgstr "Hapësira midis qelive"
+msgstr "Hapësira e shtuar tek skajet në paraqitjen me ikona"
 
 #: gtk/gtkiconview.c:512 gtk/gtkprogressbar.c:152 gtk/gtktoolbar.c:507
 msgid "Orientation"
 msgstr "Orientimi"
 
 #: gtk/gtkiconview.c:513
-msgid ""
-"How the text and icon of each item are positioned relative to each other"
-msgstr ""
-"Si teksti dhe ikona e çdo elementi pozicionohet në krahasim me të tjerët"
+msgid "How the text and icon of each item are positioned relative to each other"
+msgstr "Si teksti dhe ikona e çdo elementi pozicionohet në krahasim me të tjerët"
 
 #: gtk/gtkiconview.c:521
 msgid "Selection Box Color"
@@ -2515,8 +2484,7 @@ msgstr "\"Mnemonic widget\""
 
 #: gtk/gtklabel.c:390
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr ""
-"\"Widget\"-i që duhet aktivuar kur shtypet një kyç \"mnemonic\" etikete"
+msgstr "\"Widget\"-i që duhet aktivuar kur shtypet një kyç \"mnemonic\" etikete"
 
 #: gtk/gtklabel.c:434
 msgid ""
@@ -2536,21 +2504,19 @@ msgstr "Nëse etiketa vizatohet në modalitetin me rresht të vetëm"
 
 #: gtk/gtklabel.c:492
 msgid "Angle"
-msgstr ""
+msgstr "Këndi"
 
 #: gtk/gtklabel.c:493
 msgid "Angle at which the label is rotated"
-msgstr ""
+msgstr "Këndi me të cilin është rrotulluar etiketa"
 
 #: gtk/gtklabel.c:513
-#, fuzzy
 msgid "Maximum Width In Characters"
-msgstr "Gjerësia llogaritur në gërma"
+msgstr "Gjerësia maksimum llogaritur në gërma"
 
 #: gtk/gtklabel.c:514
-#, fuzzy
 msgid "The desired maximum width of the label, in characters"
-msgstr "Gjerësia e dëshiruar e etiketës, në gërma"
+msgstr "Gjerësia maksimum e dëshiruar e etiketës, në gërma"
 
 #: gtk/gtklayout.c:635 gtk/gtkviewport.c:136
 msgid "Horizontal adjustment"
@@ -2612,8 +2578,7 @@ msgstr "Degëzimi Vertikal"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr ""
-"Kur menuja është një nënmenu, zhvendose vertikalisht me këtë numër pikselësh"
+msgstr "Kur menuja është një nënmenu, zhvendose vertikalisht me këtë numër pikselësh"
 
 #: gtk/gtkmenu.c:564
 msgid "Horizontal Offset"
@@ -2664,8 +2629,7 @@ msgid "Can change accelerators"
 msgstr "Mund të ndryshojë përshpejtuesit"
 
 #: gtk/gtkmenu.c:688
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 "Nëse përshpejtuesit e menuve mund të ndryshohen me anë të shtypjes së një "
 "butoni tek elementi i menusë"
@@ -2675,8 +2639,7 @@ msgid "Delay before submenus appear"
 msgstr "Vonesa para se nënmenutë të shfaqen"
 
 #: gtk/gtkmenu.c:694
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 "Koha më e vogël që treguesi duhet të qëndrojë mbi një element menuje para se "
 "nënmenuja të shfaqet"
@@ -2703,8 +2666,7 @@ msgstr "Mbushje e brendshme"
 
 #: gtk/gtkmenubar.c:166
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr ""
-"Sasia e hapësirës së kornizës midis hijes së panelit dhe elementëve të menusë"
+msgstr "Sasia e hapësirës së kornizës midis hijes së panelit dhe elementëve të menusë"
 
 #: gtk/gtkmenubar.c:173
 msgid "Delay before drop down menus appear"
@@ -2737,8 +2699,7 @@ msgid "Use separator"
 msgstr "Përdor ndarës"
 
 #: gtk/gtkmessagedialog.c:141
-msgid ""
-"Whether to put a separator between the message dialog's text and the buttons"
+msgid "Whether to put a separator between the message dialog's text and the buttons"
 msgstr ""
 "Nëse duhet vendosur një ndarës midis tekstit të mesazhit të dialogut dhe "
 "pulsantëve"
@@ -2772,20 +2733,16 @@ msgid "X pad"
 msgstr "Zbutës X"
 
 #: gtk/gtkmisc.c:121
-msgid ""
-"The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
-"Sasi hapësire në piksel për t'u shtuar majtas dhe djathtas \"widget\"-it"
+msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgstr "Sasi hapësire në piksel për t'u shtuar majtas dhe djathtas \"widget\"-it"
 
 #: gtk/gtkmisc.c:130
 msgid "Y pad"
 msgstr "Zbutës Y"
 
 #: gtk/gtkmisc.c:131
-msgid ""
-"The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
-"Sasi hapësire në piksel për t'u shtuar në krye dhe në fund të \"widget\"-it"
+msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgstr "Sasi hapësire në piksel për t'u shtuar në krye dhe në fund të \"widget\"-it"
 
 #: gtk/gtknotebook.c:401
 msgid "Page"
@@ -2897,8 +2854,7 @@ msgstr "Mbushja e skedave"
 
 #: gtk/gtknotebook.c:510
 msgid "Whether the child's tab should fill the allocated area or not"
-msgstr ""
-"Tregon nëse e gjithë hapësira në dispozicion mund të përdoret nga skedat bij"
+msgstr "Tregon nëse e gjithë hapësira në dispozicion mund të përdoret nga skedat bij"
 
 #: gtk/gtknotebook.c:516
 msgid "Tab pack type"
@@ -2909,20 +2865,16 @@ msgid "Secondary backward stepper"
 msgstr "Pulsanti \"kthehu mbrapa\" dytësor"
 
 #: gtk/gtknotebook.c:533
-msgid ""
-"Display a second backward arrow button on the opposite end of the tab area"
-msgstr ""
-"Shfaq një buton të dytë shigjete prapa në anën e kundërt te zona e cepit"
+msgid "Display a second backward arrow button on the opposite end of the tab area"
+msgstr "Shfaq një buton të dytë shigjete prapa në anën e kundërt te zona e cepit"
 
 #: gtk/gtknotebook.c:549 gtk/gtkscrollbar.c:123
 msgid "Secondary forward stepper"
 msgstr "Pulsanti vazhdo dytësor"
 
 #: gtk/gtknotebook.c:550
-msgid ""
-"Display a second forward arrow button on the opposite end of the tab area"
-msgstr ""
-"Shfaq një buton të dytë shigjete para në anën e kundërt te zona e cepit"
+msgid "Display a second forward arrow button on the opposite end of the tab area"
+msgstr "Shfaq një buton të dytë shigjete para në anën e kundërt te zona e cepit"
 
 #: gtk/gtknotebook.c:565 gtk/gtkscrollbar.c:99
 msgid "Backward stepper"
@@ -2953,8 +2905,7 @@ msgid "Spacing around indicator"
 msgstr "Hapësira rreth treguesit"
 
 #: gtk/gtkpaned.c:241
-msgid ""
-"Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr "Pozicioni, në pixel, i veçuesve të panelit (0 tregon lart majtas)"
 
 #: gtk/gtkpaned.c:249
@@ -3006,8 +2957,7 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Nëse TRUE, biri mund të jetë më i vogël nga ç'duhet"
 
 #: gtk/gtkpreview.c:134
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
+msgid "Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 "Tregon nëse widget \"pamja e parë\" mund të shfrytëzojë të gjithë hapësirën "
 "në dispozicion"
@@ -3064,8 +3014,7 @@ msgstr "Përshtatja"
 
 #: gtk/gtkprogressbar.c:145
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr ""
-"Widget GtkAdjustment i lidhur me shtyllën e progresit (nuk përdoret më)"
+msgstr "Widget GtkAdjustment i lidhur me shtyllën e progresit (nuk përdoret më)"
 
 #: gtk/gtkprogressbar.c:153
 msgid "Orientation and growth direction of the progress bar"
@@ -3226,20 +3175,16 @@ msgid "Arrow X Displacement"
 msgstr "Zhvendosja X e Shigjetës"
 
 #: gtk/gtkrange.c:382
-msgid ""
-"How far in the x direction to move the arrow when the button is depressed"
-msgstr ""
-"Sa larg në drejtimin horizontal të zhvendoset shigjeta kur shtypet butoni"
+msgid "How far in the x direction to move the arrow when the button is depressed"
+msgstr "Sa larg në drejtimin horizontal të zhvendoset shigjeta kur shtypet butoni"
 
 #: gtk/gtkrange.c:389
 msgid "Arrow Y Displacement"
 msgstr "Zhvendosja Y e Shigjetës"
 
 #: gtk/gtkrange.c:390
-msgid ""
-"How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
-"Sa larg në drejtimin vertikal të zhvendoset shigjeta kur shtypet butoni"
+msgid "How far in the y direction to move the arrow when the button is depressed"
+msgstr "Sa larg në drejtimin vertikal të zhvendoset shigjeta kur shtypet butoni"
 
 #: gtk/gtkruler.c:120
 msgid "Lower"
@@ -3283,8 +3228,7 @@ msgstr "Shfaq vlerën"
 
 #: gtk/gtkscale.c:183
 msgid "Whether the current value is displayed as a string next to the slider"
-msgstr ""
-"Tregon nëse vlera aktuale do të shfaqet si stringë ngjitur me rrëshqitësin"
+msgstr "Tregon nëse vlera aktuale do të shfaqet si stringë ngjitur me rrëshqitësin"
 
 #: gtk/gtkscale.c:190
 msgid "Value Position"
@@ -3329,15 +3273,13 @@ msgstr ""
 "vogël"
 
 #: gtk/gtkscrollbar.c:116
-msgid ""
-"Display a second backward arrow button on the opposite end of the scrollbar"
+msgid "Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Shfaq një buton të dytë shigjetë prapa në anën e kundërt të panelit të "
 "rrëshqitësit"
 
 #: gtk/gtkscrollbar.c:124
-msgid ""
-"Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 "Shfaq një buton të dytë shigjetë para në anën e kundërt të panelit të "
 "rrëshqitësit"
@@ -3488,8 +3430,7 @@ msgstr "Kufiri për zvarritjen"
 
 #: gtk/gtksettings.c:346
 msgid "Number of pixels the cursor can move before dragging"
-msgstr ""
-"Numër pikselësh sa mund të lëvizë kursori para se të fillojë të tërheqë"
+msgstr "Numër pikselësh sa mund të lëvizë kursori para se të fillojë të tërheqë"
 
 #: gtk/gtksettings.c:354
 msgid "Font Name"
@@ -3539,8 +3480,7 @@ msgstr "Stili i reformimit Xft"
 
 #: gtk/gtksettings.c:403
 msgid "What degree of hinting to use; none, slight, medium, or full"
-msgstr ""
-"Çfarë grade reformimi duhet përdorur; asnjë, e lehtë, mestare, ose e plotë"
+msgstr "Çfarë grade reformimi duhet përdorur; asnjë, e lehtë, mestare, ose e plotë"
 
 #: gtk/gtksettings.c:412
 msgid "Xft RGBA"
@@ -3566,8 +3506,7 @@ msgstr "Rreshtimi i pulsantëve alternativë"
 
 #: gtk/gtksettings.c:433
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr ""
-"Nëse pulsantët në dialogë duhet të përdorin pulsantin e rreshtimit alternativ"
+msgstr "Nëse pulsantët në dialogë duhet të përdorin pulsantin e rreshtimit alternativ"
 
 #: gtk/gtksizegroup.c:243
 msgid "Mode"
@@ -3605,8 +3544,7 @@ msgstr "Bllokoje tek takat"
 msgid ""
 "Whether erroneous values are automatically changed to a spin button's "
 "nearest step increment"
-msgstr ""
-"Tregon nëse janë ndryshuar automatikisht vlerat e një pulsanti spin rritjeje"
+msgstr "Tregon nëse janë ndryshuar automatikisht vlerat e një pulsanti spin rritjeje"
 
 #: gtk/gtkspinbutton.c:278
 msgid "Numeric"
@@ -3622,16 +3560,14 @@ msgstr "Mbështill"
 
 #: gtk/gtkspinbutton.c:287
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr ""
-"Tregon nëse një pulsant spin duhet zgjeruar deri sa të arrijë limitet e tij"
+msgstr "Tregon nëse një pulsant spin duhet zgjeruar deri sa të arrijë limitet e tij"
 
 #: gtk/gtkspinbutton.c:294
 msgid "Update Policy"
 msgstr "Politika e rifreskimit"
 
 #: gtk/gtkspinbutton.c:295
-msgid ""
-"Whether the spin button should update always, or only when the value is legal"
+msgid "Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 "Tregon nëse pulsanti spin duhet rifreskuar gjithmonë, apo vetëm kur merr "
 "vlerën korrekte"
@@ -3840,8 +3776,7 @@ msgstr "Apliko maskën e retinimit të planit të parë"
 
 #: gtk/gtktexttag.c:259
 msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
-"Bitmap që duhen përdorur për shfaqjen e ngjyrës së planit të parë të tekstit"
+msgstr "Bitmap që duhen përdorur për shfaqjen e ngjyrës së planit të parë të tekstit"
 
 #: gtk/gtktexttag.c:266
 msgid "Text direction"
@@ -3849,8 +3784,7 @@ msgstr "Drejtimi i tekstit"
 
 #: gtk/gtktexttag.c:267
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
-"Drejtim teksti, p.sh. nga e djathta-në-të majtë ose nga e majta-në-të djathtë"
+msgstr "Drejtim teksti, p.sh. nga e djathta-në-të majtë ose nga e majta-në-të djathtë"
 
 #: gtk/gtktexttag.c:284
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
@@ -3964,8 +3898,7 @@ msgid "Wrap mode"
 msgstr "Në krye automatikisht"
 
 #: gtk/gtktexttag.c:483 gtk/gtktextview.c:586
-msgid ""
-"Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Nëse duhet të mos mbështillen vija kurrë, në kufij fjalësh ose në kufij "
 "gërmash"
@@ -4052,8 +3985,7 @@ msgstr "Përcakto pixels e brendshëm të kryerradhës"
 
 #: gtk/gtktexttag.c:591
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
-"Tregon nëse ky tag influencon numrin e pixels e brendshëm të kryerradhës"
+msgstr "Tregon nëse ky tag influencon numrin e pixels e brendshëm të kryerradhës"
 
 #: gtk/gtktexttag.c:598
 msgid "Right margin set"
@@ -4197,8 +4129,7 @@ msgstr "Nëse duhet shfaqur një shigjetë nëse kollona e mjeteve nuk hyn"
 
 #: gtk/gtktoolbar.c:534
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr ""
-"Nëse ky element duhet të marrë hapësirë shtesë kur kollona e mjeteve rritet"
+msgstr "Nëse ky element duhet të marrë hapësirë shtesë kur kollona e mjeteve rritet"
 
 #: gtk/gtktoolbar.c:542
 msgid "Whether the item should be the same size as other homogeneous items"
@@ -4245,8 +4176,7 @@ msgid "Toolbar style"
 msgstr "Stili i panelit të instrumenteve"
 
 #: gtk/gtktoolbar.c:590
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
+msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Nëse paneli i prezgjedhur i instrumentëve ka vetëm tekst, tekst dhe ikona, "
 "vetëm ikona, etj. "
@@ -4403,8 +4333,7 @@ msgid "Hover Expand"
 msgstr "Shpalosja e lirë"
 
 #: gtk/gtktreeview.c:693
-msgid ""
-"Whether rows should be expanded/collaped when the pointer moves over them"
+msgid "Whether rows should be expanded/collaped when the pointer moves over them"
 msgstr "Nëse rreshtat duhet të shpalosen/përmblidhen kur kursori kalon mbi ta"
 
 #: gtk/gtktreeview.c:713
@@ -4647,8 +4576,7 @@ msgstr "I ngjyrueshëm nga programi"
 
 #: gtk/gtkwidget.c:458
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
-"Tregon nëse programi është në gjendje të ngjyrosë drejtpërsëdrejti \"widget\""
+msgstr "Tregon nëse programi është në gjendje të ngjyrosë drejtpërsëdrejti \"widget\""
 
 #: gtk/gtkwidget.c:464
 msgid "Can focus"
@@ -4764,8 +4692,7 @@ msgstr "Lloji i vijës së ndërprerë për treguesin e fokus"
 
 #: gtk/gtkwidget.c:1422
 msgid "Dash pattern used to draw the focus indicator"
-msgstr ""
-"Lloji i vijës së ndërprerë të përdorur për të vizatuar treguesin e fokus"
+msgstr "Lloji i vijës së ndërprerë të përdorur për të vizatuar treguesin e fokus"
 
 #: gtk/gtkwidget.c:1427
 msgid "Focus padding"
@@ -4881,18 +4808,15 @@ msgstr "Gjerësia e prezgjedhur"
 
 #: gtk/gtkwindow.c:482
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
-"Gjerësia e prezgjedhur e dritares, e përdorur në fillim kur shfaqet dritarja"
+msgstr "Gjerësia e prezgjedhur e dritares, e përdorur në fillim kur shfaqet dritarja"
 
 #: gtk/gtkwindow.c:491
 msgid "Default Height"
 msgstr "Lartësia e prezgjedhur"
 
 #: gtk/gtkwindow.c:492
-msgid ""
-"The default height of the window, used when initially showing the window"
-msgstr ""
-"Lartësia e prezgjedhur e dritares, e përdorur në fillim kur shfaqet dritarja"
+msgid "The default height of the window, used when initially showing the window"
+msgstr "Lartësia e prezgjedhur e dritares, e përdorur në fillim kur shfaqet dritarja"
 
 #: gtk/gtkwindow.c:501
 msgid "Destroy with Parent"
@@ -5006,9 +4930,3 @@ msgstr "Gjendja e stilit IM"
 msgid "How to draw the input method statusbar"
 msgstr "Tregon si duhet shfaqur metod e input e panelit të gjendjes"
 
-#~ msgid "Width In Chararacters"
-#~ msgstr "Gjerësia në gërma"
-
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr ""
-#~ "Nëse dritarja e dialogut të shfletimit duhet të jetë e dukshme apo jo."

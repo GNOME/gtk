@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-12-16 13:24-0500\n"
-"PO-Revision-Date: 2004-10-19 17:14+0200\n"
+"POT-Creation-Date: 2004-12-17 04:30+0100\n"
+"PO-Revision-Date: 2004-12-17 16:41+0100\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: Albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -32,10 +32,8 @@ msgstr "File '%s' nuk përmban të dhëna"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:210 gdk-pixbuf/gdk-pixbuf-io.c:887
 #: gdk-pixbuf/gdk-pixbuf-io.c:1110 tests/testfilechooser.c:244
 #, c-format
-msgid ""
-"Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr ""
-"Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
+msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgstr "Hapja e figurës '%s' dështoi: shkaku nuk njihet, ndoshta file është i dëmtuar"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:241
 #, c-format
@@ -87,8 +85,7 @@ msgstr "Gabim gjatë shkrimit tek file i figurës: %s"
 #: gdk-pixbuf/gdk-pixbuf-io.c:1383 gdk-pixbuf/gdk-pixbuf-io.c:1512
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
-msgstr ""
-"Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
+msgstr "Ky variant i gdk-pixbuf nuk suporton ruajtjen e figurës në formatin: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:1417
 msgid "Insufficient memory to save image to callback"
@@ -339,10 +336,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:909
 #, c-format
-msgid ""
-"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-msgstr ""
-"Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
+msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgstr "Cilësia JPEG duhet të jetë një vlerë midis 0 dhe 100; vlera '%d' nuk lejohet."
 
 #: gdk-pixbuf/io-jpeg.c:1071
 msgid "The JPEG image format"
@@ -403,8 +398,7 @@ msgstr "Figura e transformuar në PNG ka gjerësi apo lartësi zero."
 
 #: gdk-pixbuf/io-png.c:144
 msgid "Bits per channel of transformed PNG is not 8."
-msgstr ""
-"Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
+msgstr "Numri i bit-eve për kanal të figurës së transformuar në PNG nuk është 8."
 
 #: gdk-pixbuf/io-png.c:153
 msgid "Transformed PNG not RGB or RGBA."
@@ -444,8 +438,7 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr "Gabim fatal gjatë leximit të file PNG: %s"
 
 #: gdk-pixbuf/io-png.c:813
-msgid ""
-"Keys for PNG text chunks must have at least 1 and at most 79 characters."
+msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 msgstr ""
 "Kyçet për segmentet e tekstit PNG duhet të kenë të paktën 1 dhe në maksimum "
 "79 simbole."
@@ -495,8 +488,7 @@ msgstr "Vlera më e madhe e ngjyrës në file PNM është tepër e madhe"
 
 #: gdk-pixbuf/io-pnm.c:396
 msgid "Cannot handle PNM files with maximum color values greater than 255"
-msgstr ""
-"I pamundur trajtimi i files PNM me vlera maksimum ngjyrash më të mëdha se 255"
+msgstr "I pamundur trajtimi i files PNM me vlera maksimum ngjyrash më të mëdha se 255"
 
 #: gdk-pixbuf/io-pnm.c:435 gdk-pixbuf/io-pnm.c:463 gdk-pixbuf/io-pnm.c:495
 msgid "Raw PNM image type is invalid"
@@ -688,8 +680,7 @@ msgstr "Kujtesë e pamjaftueshme për ngarkimin e file XBM"
 
 #: gdk-pixbuf/io-xbm.c:441
 msgid "Failed to write to temporary file when loading XBM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
+msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XBM"
 
 #: gdk-pixbuf/io-xbm.c:476
 msgid "The XBM image format"
@@ -725,8 +716,7 @@ msgstr "I pamundur leximi i hartës së ngjyrave XPM"
 
 #: gdk-pixbuf/io-xpm.c:1524
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-"Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
+msgstr "Dështova në shkrimin e file të përkohshëm gjatë ngarkimit të figurës XPM"
 
 #: gdk-pixbuf/io-xpm.c:1559
 msgid "The XPM image format"
@@ -919,7 +909,7 @@ msgstr "kalendari:week_start:0"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "etiketa e treguesit të ecurisë|%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
@@ -1094,7 +1084,7 @@ msgstr "Zgjidh një file"
 
 #: gtk/gtkfilechooserbutton.c:1503
 msgid "Other..."
-msgstr ""
+msgstr "Tjetër..."
 
 #: gtk/gtkfilechooserdefault.c:863
 #, c-format
@@ -1144,8 +1134,7 @@ msgstr ""
 #: gtk/gtkfilechooserdefault.c:1829
 #, c-format
 msgid "Could not add bookmark for %s because it is not a folder."
-msgstr ""
-"I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
+msgstr "I pamundur shtimi i një libërshënuesi për %s pasi nuk është një kartelë."
 
 #: gtk/gtkfilechooserdefault.c:1941
 #, c-format
@@ -1371,8 +1360,7 @@ msgstr "_Riemërto File"
 
 #: gtk/gtkfilesel.c:1445
 #, c-format
-msgid ""
-"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr "Emri i kartelës \"%s\" përmban simbole që nuk lejohen në emrat e files"
 
 #: gtk/gtkfilesel.c:1447
@@ -1788,8 +1776,7 @@ msgstr "E pamundur gjetja e file së figurës në pixmap_path: \"%s\""
 #: gtk/gtkrc.c:3515
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-"Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
+msgstr "Pozicioni i elementit pixmap: \"%s\" duhet të jetë absolut, %s, rreshti %d"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: gtk/gtkstock.c:286
@@ -2226,8 +2213,3 @@ msgstr "Metodë Futjeje për X"
 msgid "Could not get information for file '%s': %s"
 msgstr "E pamundur marrja e informacioneve për file '%s': %s"
 
-#~ msgid "Could not find the path"
-#~ msgstr "E pamundur gjetja e pozicionit"
-
-#~ msgid "Input Methods"
-#~ msgstr "Metodat e input"
