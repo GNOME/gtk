@@ -440,7 +440,7 @@ gtk_editable_selection_received  (GtkWidget         *widget,
     {
     case STRING:
       selection_data->data[selection_data->length] = 0;
-      gtk_editable_insert_text (editable, selection_data->data,
+      gtk_editable_insert_text (editable, (gchar *)selection_data->data,
 				strlen ((gchar *)selection_data->data), 
 				&tmp_pos);
       editable->current_pos = tmp_pos;

@@ -1,3 +1,19 @@
+Thu Apr  9 18:36:31 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkmisc.c gdk/gdkwindow gtk/gtkentry.c gtk/testgtk.c:
+	Picky --enable-ansi cleanups.
+
+	* gtk/gtkstatusbar.c (gtk_statusbar_pop): Pop top message
+	off _belonging_to_this_context_. (gtk-d4bjorn-980409-0)
+
+	From "Damon Chaplin" <DAChaplin@email.msn.com>
+	
+	* gtk/gtktable.c (gtk_table_size_request_pass3): Small fix to size
+	requisition code.
+
+	* gtk/gtknotebook.c: Make sure not to do things to page->tab_label
+	if it doesn't exist.
+
 Thu Apr  9 14:24:35 1998  Owen Taylor  <owt1@cornell.edu>
 
 	(Found by Mattias.Gronlund" <Mattias.Gronlund@sa.erisoft.se>)

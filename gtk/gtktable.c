@@ -724,9 +724,9 @@ gtk_table_size_request_pass3 (GtkTable *table)
                *  its requisition, then divide up the needed space evenly
                *  amongst the columns it spans.
                */
-              if (width < child->widget->requisition.width)
+              if (width < child->widget->requisition.width + child->xpadding * 2)
                 {
-                  width = child->widget->requisition.width - width;
+                  width = child->widget->requisition.width + child->xpadding * 2 - width;
 
                   for (col = child->left_attach; col < child->right_attach; col++)
                     {
@@ -756,9 +756,9 @@ gtk_table_size_request_pass3 (GtkTable *table)
                *  its requisition, then divide up the needed space evenly
                *  amongst the columns it spans.
                */
-              if (height < child->widget->requisition.height)
+              if (height < child->widget->requisition.height + child->ypadding * 2)
                 {
-                  height = child->widget->requisition.height - height;
+                  height = child->widget->requisition.height + child->ypadding * 2 - height;
 
                   for (row = child->top_attach; row < child->bottom_attach; row++)
                     {

@@ -790,7 +790,10 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 	  page = children->data;
 	  children = children->next;
 	  if (page->default_tab)
-	    gtk_widget_destroy (page->tab_label);
+	    {
+	      gtk_widget_destroy (page->tab_label);
+	      page->tab_label = NULL;
+	    }
 	  else
 	    gtk_widget_hide (page->tab_label);
 	}
@@ -1547,7 +1550,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	  page = children->data;
 	  
 	  if (GTK_WIDGET_VISIBLE (page->child) &&
-	      GTK_WIDGET_MAPPED (page->tab_label) &&
+	      page->tab_label && GTK_WIDGET_MAPPED (page->tab_label) &&
 	      (event->x >= page->allocation.x) &&
 	      (event->y >= page->allocation.y) &&
 	      (event->x <= (page->allocation.x + page->allocation.width)) &&
@@ -2423,7 +2426,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	      page = children->data;
 	      children = children->next;
 	      
-	      if (GTK_WIDGET_MAPPED (page->tab_label))
+	      if (page->tab_label && GTK_WIDGET_MAPPED (page->tab_label))
 		gtk_widget_unmap (page->tab_label);
 	      
 	    }
@@ -2433,7 +2436,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	      page = children->data;
 	      children = children->next;
 	      
-	      if (GTK_WIDGET_MAPPED (page->tab_label))
+	      if (page->tab_label && GTK_WIDGET_MAPPED (page->tab_label))
 		gtk_widget_unmap (page->tab_label);
 	    }
 	}
@@ -2485,7 +2488,7 @@ gtk_notebook_pages_allocate (GtkNotebook   *notebook,
 	    }
 	  
 	  if (GTK_WIDGET_REALIZED (notebook) &&
-	      !GTK_WIDGET_MAPPED (page->tab_label))
+	      page->tab_label && !GTK_WIDGET_MAPPED (page->tab_label))
 	    gtk_widget_map (page->tab_label);
 	}
     }
@@ -2557,7 +2560,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
       break;
     }
 
-  gtk_widget_size_allocate (page->tab_label, &child_allocation);
+  if (page->tab_label)
+    gtk_widget_size_allocate (page->tab_label, &child_allocation);
 }
 
 static void

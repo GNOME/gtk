@@ -64,9 +64,11 @@ gdk_window_xid_at(Window base, gint bx, gint by, gint x, gint y,
    Display *disp;
    Window *list=NULL;
    Window child=0,parent_win=0,root_win=0;
-   int num,i,ww,wh,wb,wd;
+   int i;
+   guint num;
    int wx,wy;
-   
+   guint ww,wh,wb,wd;
+
    window=(GdkWindow*)&gdk_root_parent;
    private=(GdkWindowPrivate*)window;
    disp=private->xdisplay;

@@ -24,7 +24,7 @@ enum {
   ARG_XALIGN,
   ARG_YALIGN,
   ARG_XPAD,
-  ARG_YPAD,
+  ARG_YPAD
 };
 
 static void gtk_misc_class_init (GtkMiscClass *klass);

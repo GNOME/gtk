@@ -3079,7 +3079,7 @@ clist_warning_test (GtkWidget *button,
 
   child = gtk_label_new ("Test");
   gtk_widget_ref (child);
-  gtk_object_sink (child);
+  gtk_object_sink (GTK_OBJECT (child));
 
   if (add_remove)
     gtk_container_add (GTK_CONTAINER (clist), child);

@@ -245,16 +245,25 @@ gtk_statusbar_pop (GtkStatusbar *statusbar,
   if (statusbar->messages)
     {
       GSList *list;
-      GtkStatusbarClass *class;
 
-      list = statusbar->messages;
-      msg = list->data;
-      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
-      
-      statusbar->messages = g_slist_remove_link (statusbar->messages, list);
-      g_free (msg->text);
-      g_mem_chunk_free (class->messages_mem_chunk, msg);
-      g_slist_free_1 (list);
+      for (list = statusbar->messages; list; list = list->next)
+	{
+	  msg = list->data;
+
+	  if (msg->context_id == context_id)
+	    {
+	      GtkStatusbarClass *class;
+
+	      class = GTK_STATUSBAR_CLASS (GTK_OBJECT (statusbar)->klass);
+
+	      statusbar->messages = g_slist_remove_link (statusbar->messages,
+							 list);
+	      g_free (msg->text);
+	      g_mem_chunk_free (class->messages_mem_chunk, msg);
+	      g_slist_free_1 (list);
+	      break;
+	    }
+	}
     }
 
   msg = statusbar->messages ? statusbar->messages->data : NULL;
