@@ -150,14 +150,16 @@ gtk_fixed_put (GtkFixed       *fixed,
 
   fixed->children = g_list_append (fixed->children, child_info); 
 
-  if (GTK_WIDGET_REALIZED (fixed) && !GTK_WIDGET_REALIZED (widget))
+  if (GTK_WIDGET_REALIZED (fixed))
     gtk_widget_realize (widget);
 
-  if (GTK_WIDGET_MAPPED (fixed) && !GTK_WIDGET_MAPPED (widget))
-    gtk_widget_map (widget);
-
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (fixed))
-    gtk_widget_queue_resize (GTK_WIDGET (fixed));
+  if (GTK_WIDGET_VISIBLE (fixed) && GTK_WIDGET_VISIBLE (widget))
+    {
+      if (GTK_WIDGET_MAPPED (fixed))
+	gtk_widget_map (widget);
+      
+      gtk_widget_queue_resize (GTK_WIDGET (fixed));
+    }
 }
 
 void

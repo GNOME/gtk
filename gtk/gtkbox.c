@@ -341,20 +341,17 @@ gtk_box_pack_start (GtkBox    *box,
   box->children = g_list_append (box->children, child_info);
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
+  
+  if (GTK_WIDGET_REALIZED (box))
+    gtk_widget_realize (child);
 
-  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (box)))
+  if (GTK_WIDGET_VISIBLE (box) && GTK_WIDGET_VISIBLE (child))
     {
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (box)) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-      
-      if (GTK_WIDGET_MAPPED (GTK_WIDGET (box)) &&
-	  !GTK_WIDGET_MAPPED (child))
+      if (GTK_WIDGET_MAPPED (box))
 	gtk_widget_map (child);
-    }
 
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
-    gtk_widget_queue_resize (child);
+      gtk_widget_queue_resize (child);
+    }
 }
 
 void
@@ -382,19 +379,16 @@ gtk_box_pack_end (GtkBox    *box,
 
   gtk_widget_set_parent (child, GTK_WIDGET (box));
 
-  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (box)))
+  if (GTK_WIDGET_REALIZED (box))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (box) && GTK_WIDGET_VISIBLE (child))
     {
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (box)) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-      
-      if (GTK_WIDGET_MAPPED (GTK_WIDGET (box)) &&
-	  !GTK_WIDGET_MAPPED (child))
+      if (GTK_WIDGET_MAPPED (box))
 	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
     }
-  
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
-    gtk_widget_queue_resize (child);
 }
 
 void

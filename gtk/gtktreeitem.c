@@ -308,40 +308,36 @@ gtk_tree_item_set_subtree (GtkTreeItem *tree_item,
   g_return_if_fail (subtree != NULL);
   g_return_if_fail (GTK_IS_TREE (subtree));
 
-  if(tree_item->subtree) {
-    g_warning("there is already a subtree for this tree item\n");
-    return;
-  }
+  if (tree_item->subtree)
+    {
+      g_warning("there is already a subtree for this tree item\n");
+      return;
+    }
 
   tree_item->subtree = subtree; 
-  GTK_TREE(subtree)->tree_owner = GTK_WIDGET(tree_item);
+  GTK_TREE (subtree)->tree_owner = GTK_WIDGET (tree_item);
 
   /* show subtree button */
   if (tree_item->pixmaps_box)
     gtk_widget_show (tree_item->pixmaps_box);
 
-  /* set parent widget */
-  gtk_widget_set_parent(subtree, GTK_WIDGET(tree_item)->parent);
-
-  if(GTK_WIDGET_VISIBLE(GTK_WIDGET(tree_item))) 
-    {
-      if(GTK_WIDGET_REALIZED (GTK_WIDGET(tree_item)) &&
-	 !GTK_WIDGET_REALIZED (GTK_WIDGET(subtree)))
-	gtk_widget_realize (GTK_WIDGET(subtree));
-
-      if(GTK_WIDGET_MAPPED (GTK_WIDGET(tree_item)) &&
-	 !GTK_WIDGET_MAPPED (GTK_WIDGET(subtree)))
-	gtk_widget_map (GTK_WIDGET(subtree));
-    }
-
   if (tree_item->expanded)
-    gtk_widget_show(subtree);
+    gtk_widget_show (subtree);
   else
-    gtk_widget_hide(subtree);
-  
-  if (GTK_WIDGET_VISIBLE (tree_item) && GTK_WIDGET_VISIBLE (tree_item))
-    gtk_widget_queue_resize (GTK_WIDGET(tree_item));
+    gtk_widget_hide (subtree);
 
+  gtk_widget_set_parent (subtree, GTK_WIDGET (tree_item)->parent);
+
+  if (GTK_WIDGET_REALIZED (subtree->parent))
+    gtk_widget_realize (subtree);
+
+  if (GTK_WIDGET_VISIBLE (subtree->parent) && GTK_WIDGET_VISIBLE (subtree))
+    {
+      if (GTK_WIDGET_MAPPED (subtree->parent))
+	gtk_widget_map (subtree);
+
+      gtk_widget_queue_resize (subtree);
+    }
 }
 
 void

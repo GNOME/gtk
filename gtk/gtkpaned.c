@@ -308,69 +308,63 @@ gtk_paned_add2 (GtkPaned  *paned,
 
 void
 gtk_paned_pack1 (GtkPaned     *paned,
-		 GtkWidget    *widget,
+		 GtkWidget    *child,
 		 gboolean      resize,
 		 gboolean      shrink)
 {
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
   
   if (!paned->child1)
     {
-      gtk_widget_set_parent (widget, GTK_WIDGET (paned));
-      
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
-	  
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
-	    gtk_widget_map (widget);
-	}
-      
-      paned->child1 = widget;
+      paned->child1 = child;
       paned->child1_resize = resize;
       paned->child1_shrink = shrink;
-      
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (paned))
-        gtk_widget_queue_resize (widget);
+
+      gtk_widget_set_parent (child, GTK_WIDGET (paned));
+
+      if (GTK_WIDGET_REALIZED (child->parent))
+	gtk_widget_realize (child);
+
+      if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+	{
+	  if (GTK_WIDGET_MAPPED (child->parent))
+	    gtk_widget_map (child);
+
+	  gtk_widget_queue_resize (child);
+	}
     }
 }
 
 void
 gtk_paned_pack2 (GtkPaned  *paned,
-		 GtkWidget *widget,
+		 GtkWidget *child,
 		 gboolean   resize,
 		 gboolean   shrink)
 {
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
   
   if (!paned->child2)
     {
-      gtk_widget_set_parent (widget, GTK_WIDGET (paned));
-      
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
-	  
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
-	    gtk_widget_map (widget);
-	}
-      
-      paned->child2 = widget;
+      paned->child2 = child;
       paned->child2_resize = resize;
       paned->child2_shrink = shrink;
       
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (paned))
-        gtk_widget_queue_resize (widget);
+      gtk_widget_set_parent (child, GTK_WIDGET (paned));
+
+      if (GTK_WIDGET_REALIZED (child->parent))
+	gtk_widget_realize (child);
+
+      if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+	{
+	  if (GTK_WIDGET_MAPPED (child->parent))
+	    gtk_widget_map (child);
+
+	  gtk_widget_queue_resize (child);
+	}
     }
 }
 

@@ -260,19 +260,16 @@ gtk_layout_put (GtkLayout     *layout,
   if (!IS_ONSCREEN (x, y))
     GTK_PRIVATE_SET_FLAG (child_widget, GTK_IS_OFFSCREEN);
 
-  if (GTK_WIDGET_VISIBLE (layout))
+  if (GTK_WIDGET_REALIZED (layout))
+    gtk_widget_realize (child_widget);
+    
+  if (GTK_WIDGET_VISIBLE (layout) && GTK_WIDGET_VISIBLE (child_widget))
     {
-      if (GTK_WIDGET_REALIZED (layout) &&
-	  !GTK_WIDGET_REALIZED (child_widget))
-	gtk_widget_realize (child_widget);
-      
-      if (GTK_WIDGET_MAPPED (layout) &&
-	  !GTK_WIDGET_MAPPED (child_widget))
+      if (GTK_WIDGET_MAPPED (layout))
 	gtk_widget_map (child_widget);
-    }
 
-  if (GTK_WIDGET_VISIBLE (child_widget) && GTK_WIDGET_VISIBLE (layout))
-    gtk_widget_queue_resize (child_widget);
+      gtk_widget_queue_resize (child_widget);
+    }
 }
 
 void           

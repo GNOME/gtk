@@ -2379,12 +2379,12 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences",     		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/_Color", 		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/Color/_Red",      	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "/Preferences/Color/Red" },
+  { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "/Preferences/Color/Red" },
   { "/_Preferences/_Shape", 		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/Shape/_Square",      NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
+  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
 
   { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
   { "/Help/_About",      NULL,         gtk_ifactory_cb,       0 },
@@ -2423,9 +2423,15 @@ create_item_factory (void)
 				item_factory,
 				(GtkDestroyNotify) gtk_object_unref);
       gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
-      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
+      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
+      
+      /* preselect /Preferences/Shape/Oval over the other radios
+      */
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
+                                                                                      "/Preferences/Shape/Oval")),
+                                      TRUE);
       
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);

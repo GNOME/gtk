@@ -900,8 +900,8 @@ gtk_scrolled_window_add (GtkContainer *container,
 
   scrolled_window = GTK_SCROLLED_WINDOW (container);
 
-  gtk_widget_set_parent (child, GTK_WIDGET (bin));
   bin->child = child;
+  gtk_widget_set_parent (child, GTK_WIDGET (bin));
 
   /* this is a temporary message */
   if (!gtk_widget_set_scroll_adjustments (child,
@@ -910,19 +910,16 @@ gtk_scrolled_window_add (GtkContainer *container,
     g_warning ("gtk_scrolled_window_add(): cannot add non scrollable widget "
 	       "use gtk_scrolled_window_add_with_viewport() instead");
 
-  if (GTK_WIDGET_VISIBLE (child->parent))
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
     {
-      if (GTK_WIDGET_REALIZED (child->parent) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-
-      if (GTK_WIDGET_MAPPED (child->parent) &&
-	  !GTK_WIDGET_MAPPED (child))
+      if (GTK_WIDGET_MAPPED (child->parent))
 	gtk_widget_map (child);
-    }
 
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (container))
-    gtk_widget_queue_resize (child);
+      gtk_widget_queue_resize (child);
+    }
 }
 
 static void

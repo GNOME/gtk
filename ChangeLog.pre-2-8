@@ -1,3 +1,42 @@
+Thu May  6 04:53:26 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/testgtk.c: in the ItemFactory test, link radio items together,
+	and show how preselection of radio items is done.
+
+Sun May  2 13:31:14 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_set_subtree): 
+	* gtk/gtktree.c (gtk_tree_add) (gtk_tree_insert):
+	* gtk/gtktoolbar.c (gtk_toolbar_insert_element): 
+	* gtk/gtkpaned.c (gtk_paned_pack2) (gtk_paned_pack1):
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_add): 
+	* gtk/gtktable.c (gtk_table_attach): 
+	* gtk/gtklist.c (gtk_list_insert_items): 
+	* gtk/gtkmenushell.c (gtk_menu_shell_insert): 
+	* gtk/gtknotebook.c (gtk_notebook_insert_page_menu): 
+	* gtk/gtkpacker.c (gtk_packer_add_defaults) (gtk_packer_add): 
+	* gtk/gtkbin.c (gtk_bin_add): 
+	* gtk/gtkbox.c (gtk_box_pack_start) (gtk_box_pack_end): 
+	* gtk/gtkfixed.c (gtk_fixed_put): 
+	* gtk/gtklayout.c (gtk_layout_put):
+	general fixups to container_add logic. always realize child if
+	child->parent is realized, only map the child and queue a resize
+	if child and child->parent are both visible.
+
+Fri Apr 30 09:02:28 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_real_unrealize): use gtk_container_forall
+	instead of gtk_container_foreach to walk and unrealize children, so
+	composite children get also unrealized.
+	(gtk_widget_real_show): don't call gtk_widget_map() if we don't need to.
+	(gtk_widget_map): assert that the widget is visible (basic constrain).
+	(gtk_widget_real_map): assert that the widget is realized (basic
+	constrain).
+
+Fri Apr 29 00:53:20 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkbindings.c (gtk_pattern_spec_init): plugged a memory leak.
+
 Wed May  5 12:42:01 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_set_geometry_hints):

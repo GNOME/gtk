@@ -1136,6 +1136,7 @@ gtk_pattern_spec_init (GtkPatternSpec	      *pspec,
       t = pspec->pattern_reversed;
       pspec->pattern_reversed = g_strdup (p);
       g_free (t);
+      g_free (pspec->pattern);
       pspec->pattern = g_strdup (pspec->pattern_reversed);
       g_strreverse (pspec->pattern);
       pspec->pattern_length = strlen (pspec->pattern);

@@ -917,22 +917,21 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
   toolbar->num_children++;
 
   if (type != GTK_TOOLBAR_CHILD_SPACE)
-    gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
-
-  if ((type != GTK_TOOLBAR_CHILD_SPACE) && GTK_WIDGET_VISIBLE (toolbar))
     {
-      if (GTK_WIDGET_REALIZED (toolbar)
-	  && !GTK_WIDGET_REALIZED (child->widget))
-	gtk_widget_realize (child->widget);
-	
-      if (GTK_WIDGET_MAPPED (toolbar)
-	  && !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
+      gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
 
-  if (GTK_WIDGET_VISIBLE (toolbar) &&
-      ((type == GTK_TOOLBAR_CHILD_SPACE) ||
-       GTK_WIDGET_VISIBLE (child->widget)))
+      if (GTK_WIDGET_REALIZED (child->widget->parent))
+	gtk_widget_realize (child->widget);
+
+      if (GTK_WIDGET_VISIBLE (child->widget->parent) && GTK_WIDGET_VISIBLE (child->widget))
+	{
+	  if (GTK_WIDGET_MAPPED (child->widget->parent))
+	    gtk_widget_map (child->widget);
+
+	  gtk_widget_queue_resize (child->widget);
+	}
+    }
+  else
     gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 
   return child->widget;

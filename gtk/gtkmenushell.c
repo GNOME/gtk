@@ -308,23 +308,20 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
-  gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
-
-  if (GTK_WIDGET_VISIBLE (child->parent))
-    {
-      if (GTK_WIDGET_REALIZED (child->parent) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-
-      if (GTK_WIDGET_MAPPED (child->parent) &&
-	  !GTK_WIDGET_MAPPED (child))
-	gtk_widget_map (child);
-    }
-
   menu_shell->children = g_list_insert (menu_shell->children, child, position);
 
-  if (GTK_WIDGET_VISIBLE (menu_shell))
-    gtk_widget_queue_resize (GTK_WIDGET (menu_shell));
+  gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
+
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+    {
+      if (GTK_WIDGET_MAPPED (child->parent))
+	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
+    }
 }
 
 void

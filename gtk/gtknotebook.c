@@ -3620,15 +3620,20 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
       gtk_notebook_switch_focus_tab (notebook, NULL);
     }
 
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
   if (GTK_WIDGET_VISIBLE (notebook))
     {
-      if (GTK_WIDGET_REALIZED (notebook) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-
-      if (GTK_WIDGET_MAPPED (notebook) &&
-	  !GTK_WIDGET_MAPPED (child) && notebook->cur_page == page)
-	gtk_widget_map (child);
+      if (GTK_WIDGET_VISIBLE (child))
+	{
+	  if (GTK_WIDGET_MAPPED (notebook) &&
+	      !GTK_WIDGET_MAPPED (child) &&
+	      notebook->cur_page == page)
+	    gtk_widget_map (child);
+	  
+	  gtk_widget_queue_resize (child);
+	}
 
       if (tab_label)
 	{
@@ -3636,11 +3641,11 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 	    {
 	      if (!GTK_WIDGET_VISIBLE (tab_label))
 		gtk_widget_show (tab_label);
-
+	      
 	      if (GTK_WIDGET_REALIZED (notebook) &&
 		  !GTK_WIDGET_REALIZED (tab_label))
 		gtk_widget_realize (tab_label);
-
+	      
 	      if (GTK_WIDGET_MAPPED (notebook) &&
 		  !GTK_WIDGET_MAPPED (tab_label))
 		gtk_widget_map (tab_label);
@@ -3649,9 +3654,6 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 	    gtk_widget_hide (tab_label);
 	}
     }
-
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (notebook))
-    gtk_widget_queue_resize (child);
 }
 
 void
@@ -3659,10 +3661,10 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
 			  gint         page_num)
 {
   GList *list;
-
+  
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
-
+  
   if (page_num >= 0)
     {
       list = g_list_nth (notebook->children, page_num);

@@ -1451,7 +1451,9 @@ gtk_widget_real_show (GtkWidget *widget)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
 
-      if (widget->parent && GTK_WIDGET_MAPPED (widget->parent))
+      if (widget->parent &&
+	  GTK_WIDGET_MAPPED (widget->parent) &&
+	  !GTK_WIDGET_MAPPED (widget))
 	gtk_widget_map (widget);
     }
 }
@@ -1586,8 +1588,8 @@ gtk_widget_hide_all (GtkWidget *widget)
 void
 gtk_widget_map (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_VISIBLE (widget) == TRUE);
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
@@ -4398,10 +4400,10 @@ gtk_widget_finalize (GtkObject *object)
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget) == TRUE);
   
-  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
+  if (!GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
       
@@ -4476,7 +4478,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
-  /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT(widget)->klass->type));
+  /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT (widget)->klass->type));
    */
 
    /* We must do unrealize child widget BEFORE container widget.
@@ -4486,9 +4488,9 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     */
 
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   (GtkCallback) gtk_widget_unrealize,
-			   NULL);
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  (GtkCallback) gtk_widget_unrealize,
+			  NULL);
 
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))

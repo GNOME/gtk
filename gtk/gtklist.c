@@ -1104,15 +1104,16 @@ gtk_list_insert_items (GtkList *list,
       gtk_signal_connect (GTK_OBJECT (widget), "toggle",
 			  GTK_SIGNAL_FUNC (gtk_list_signal_item_toggle),
 			  list);
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
 
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
+      if (GTK_WIDGET_REALIZED (widget->parent))
+	gtk_widget_realize (widget);
+
+      if (GTK_WIDGET_VISIBLE (widget->parent) && GTK_WIDGET_VISIBLE (widget))
+	{
+	  if (GTK_WIDGET_MAPPED (widget->parent))
 	    gtk_widget_map (widget);
+
+	  gtk_widget_queue_resize (widget);
 	}
     }
 
@@ -1155,9 +1156,6 @@ gtk_list_insert_items (GtkList *list,
       widget = list->children->data;
       gtk_list_select_child (list, widget);
     }
-
-  if (GTK_WIDGET_VISIBLE (list))
-    gtk_widget_queue_resize (GTK_WIDGET (list));
 }
 
 void
