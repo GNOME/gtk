@@ -824,6 +824,25 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
   return gtk_file_path_new_dup (filename);
 }
 
+static const char *
+get_icon_for_directory (const char *path)
+{
+  static char *desktop_path = NULL;
+
+  if (!g_get_home_dir ())
+    return "gnome-fs-directory";
+
+  if (!desktop_path)
+      desktop_path = g_build_filename (g_get_home_dir (), "Desktop", NULL);
+
+  if (strcmp (g_get_home_dir (), path) == 0)
+    return "gnome-fs-home";
+  else if (strcmp (desktop_path, path) == 0)
+    return "gnome-fs-desktop";
+  else
+    return "gnome-fs-directory";
+}
+
 static GdkPixbuf *
 gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
 				  const GtkFilePath *path,
@@ -862,7 +881,7 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
 	  name = "gnome-fs-chardev";
 	  break;
 	case ICON_DIRECTORY:
-	  name = "gnome-fs-directory";
+	  name = get_icon_for_directory (filename);
 	  break;
 	case ICON_EXECUTABLE:
 	  name ="gnome-fs-executable";
