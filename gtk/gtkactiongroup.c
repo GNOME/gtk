@@ -603,7 +603,7 @@ gtk_action_group_add_action_with_accel (GtkActionGroup *action_group,
     }
 
   if (accel_key)
-    gtk_accel_map_add_entry (accel_path, accel_key, accel_mods);
+    gtk_accel_map_change_entry (accel_path, accel_key, accel_mods, TRUE);
 
   gtk_action_set_accel_path (action, accel_path);
   gtk_action_group_add_action (action_group, action);

@@ -1,3 +1,9 @@
+2005-04-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_action_with_accel): 
+	Use gtk_accel_map_change_entry(), so that reusing the same
+	action name works.  (#170727, Paolo Borelli)
+
 2005-04-04  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkmain.c (_gdk_win32_cf_to_string): New debugging
