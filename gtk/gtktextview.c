@@ -7704,11 +7704,19 @@ gtk_text_view_starts_display_line (GtkTextView       *text_view,
  * gtk_text_view_move_visually:
  * @text_view: a #GtkTextView
  * @iter: a #GtkTextIter
- * @count: number of lines to move
- * 
- * Moves @iter up or down by @count display (wrapped) lines.
- * See gtk_text_view_forward_display_line() for an explanation of
- * display lines vs. paragraphs.
+ * @count:   number of characters to move (negative moves left, positive moves right)
+ *
+ * Move the iterator a given number of characters visually, treating
+ * it as the strong cursor position. If @count is positive, then the
+ * new strong cursor position will be @count positions to the right of
+ * the old cursor position. If @count is negative then the new strong
+ * cursor position will be @count positions to the left of the old
+ * cursor position.
+ *
+ * In the presence of bidirection text, the correspondence
+ * between logical and visual order will depend on the direction
+ * of the current run, and there may be jumps when the cursor
+ * is moved off of the end of a run.
  * 
  * Return value: %TRUE if @iter moved and is not on the end iterator
  **/
