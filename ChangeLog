@@ -1,3 +1,7 @@
+Fri Oct 26 20:13:36 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* tests/Makefile.am: fixed a small typo
+
 Fri Oct 26 18:27:11 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* demos/gtk-demo/list_store.c (create_model): Anders
