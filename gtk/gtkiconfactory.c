@@ -2702,7 +2702,10 @@ copy_cache (GtkIconSet *icon_set,
       *icon_copy = *icon;
 
       if (icon_copy->style)
-        attach_to_style (copy_recipient, icon_copy->style);
+	{
+	  attach_to_style (copy_recipient, icon_copy->style);
+	  g_object_ref (icon_copy->style);
+	}
         
       g_object_ref (icon_copy->pixbuf);
 

@@ -1,3 +1,9 @@
+Thu Mar  4 21:53:46 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (copy_cache): Increment the reference
+	count of the style when copying the cached icon.  (#135890, Crispin
+	Flowerday)
+
 Thu Mar  4 21:45:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c: In list mode, set the background color 
