@@ -138,6 +138,8 @@ gtk_file_chooser_dialog_finalize (GObject *object)
   GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (object);
 
   g_free (dialog->priv->file_system);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);  
 }
 
 /* Callback used when the user activates a file in the file chooser widget */
