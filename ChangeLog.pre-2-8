@@ -1,3 +1,8 @@
+Sat Feb 14 00:00:52 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Suppress xsltproc and xmlcatalog checks
+	if enable_man=no.  (#134162, Julio M. Merino Vidal)
+
 Fri Feb 13 23:54:48 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* configure.in: Remove checks for sgml2html. It was once
