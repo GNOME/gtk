@@ -1,3 +1,10 @@
+Sat Jun 26 00:40:02 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.c (render_icon_name_pixbuf): 
+	* gtk/gtkiconfactory.c (gtk_icon_set_render_icon): 
+	* gtk/gtkstyle.c (gtk_default_render_icon): Accept a NULL 
+	style.
+
 Sat Jun 26 00:06:38 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model): 
@@ -8,7 +15,11 @@ Fri Jun 25 23:35:42 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model):
 	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Allow passing
-	NULL to unset the model.  (#137211, patch by  Mariano Suárez-Alvarez)
+	NULL to unset th	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_model):
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): 
+Sat Jun 26 00:04:36 2004  Matthias Clasen  <maclas@gmx.de>
+
+e model.  (#137211, patch by  Mariano Suárez-Alvarez)
 
 Fri Jun 25 23:33:05 2004  Matthias Clasen  <maclas@gmx.de>
 
