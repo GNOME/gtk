@@ -4,14 +4,14 @@
 # ôtes libes programes) sicrijhoz-mu a l' adresse emile
 # <srtxg@chanae.alphanet.ch>; nos avans co bråmint di l' ovraedje a fé.
 #
-# Copyright (C) 2001 Free Software Foundation, Inc.
-# Pablo Saratxaga <srtxg@chanae.alphanet.ch> 2001
+# Copyright (C) 2001,2002 Free Software Foundation, Inc.
+# Pablo Saratxaga <pablo@mandrakesoft.com>, 2001,2002
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
-"POT-Creation-Date: 2002-11-20 20:37+0100\n"
-"PO-Revision-Date: 2002-05-17 12:09MET\n"
+"POT-Creation-Date: 2002-12-20 15:11+0100\n"
+"PO-Revision-Date: 2002-12-20 15:39+0100\n"
 "Last-Translator: Pablo Saratxaga <pablo@mandrakesoft.com>\n"
 "Language-Team: Walon <linux-wa@chanae.alphanet.ch>\n"
 "MIME-Version: 1.0\n"
@@ -66,7 +66,7 @@ msgstr "Li sôre d' imådje %s n' est nén sopoirté"
 #: gdk-pixbuf/gdk-pixbuf-io.c:542
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr ""
+msgstr "Dji n' a polou ricnoxhe li sôre di fitchî imådje pol fitchî «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:548
 msgid "Unrecognized image file format"
@@ -86,6 +86,8 @@ msgstr "Dji n' a savou tcherdjî l' imådje «%s»: %s"
 #, c-format
 msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 msgstr ""
+"Ci copilaedje chal di gdk-pixbuf ni sopoite nén li schapaedje viè l' sôre di "
+"fitchî imådje: %s "
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:863
 #, c-format
@@ -117,7 +119,7 @@ msgstr "Li tiestire di l' imådje est crombe"
 
 #: gdk-pixbuf/gdk-pixdata.c:151
 msgid "Image format unknown"
-msgstr ""
+msgstr "Sôre di fitchî imådje nén cnoxhowe"
 
 #: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
 msgid "Image pixel data corrupt"
@@ -181,12 +183,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1072
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Li fitchî n' rishonne nén on fitchî d' imådjes GIF"
 
 #: gdk-pixbuf/io-gif.c:1084
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Li modêye %s del sôre di fitchî imådje GIF n' est nén sopoirtêye"
 
 #: gdk-pixbuf/io-gif.c:1157
 msgid "GIF image contained a frame with height or width 0."
@@ -226,7 +228,7 @@ msgstr "Nén del memwere assez po tcherdjî l' imådjete"
 
 #: gdk-pixbuf/io-ico.c:303
 msgid "Invalid header in icon"
-msgstr ""
+msgstr "Tiestire nén valåbe dins l' imådjete"
 
 #: gdk-pixbuf/io-ico.c:340
 msgid "Icon has zero width"
@@ -251,7 +253,7 @@ msgstr "Nén del memwere assez po tcherdjî l' fitchî ICO"
 #: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr ""
+msgstr "Åk n' a nén stî tot-z eterpretant l' fitchî d' imådje JPEG (%s)"
 
 #: gdk-pixbuf/io-jpeg.c:346
 msgid ""
@@ -274,6 +276,8 @@ msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
 "parsed."
 msgstr ""
+"Li cwålité JPEG doet esse ene valixhance etur 0 eyet 100; li valixhance «%s» "
+"èn pout nén esse analijheye."
 
 #: gdk-pixbuf/io-jpeg.c:813
 #, c-format
@@ -304,7 +308,7 @@ msgstr ""
 #: gdk-pixbuf/io-png.c:183
 #, c-format
 msgid "Fatal error in PNG image file: %s"
-msgstr ""
+msgstr "Aroke moirt dins l' fitchî d' imådje PNG: %s"
 
 #: gdk-pixbuf/io-png.c:296
 msgid "Insufficient memory to load PNG file"
@@ -350,6 +354,8 @@ msgstr ""
 #: gdk-pixbuf/io-pnm.c:309
 msgid "PNM file is not in a recognized PNM subformat"
 msgstr ""
+"Li fitchî PNM n' est nén dins ene des cognes ricnoxhowes pol sôre di fitchîs "
+"PNM. "
 
 #: gdk-pixbuf/io-pnm.c:334
 msgid "PNM file has an image width of 0"
@@ -361,11 +367,11 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:378
 msgid "Maximum color value in PNM file is 0"
-msgstr ""
+msgstr "Li nombe macsimom di coleurs dins l' fitchî PNM est 0"
 
 #: gdk-pixbuf/io-pnm.c:386
 msgid "Maximum color value in PNM file is too large"
-msgstr ""
+msgstr "Li nombe macsimom di coleurs dins l' fitchî PNM est trop grand"
 
 #: gdk-pixbuf/io-pnm.c:394
 msgid "Can't handle PNM files with maximum color values greater than 255"
@@ -488,7 +494,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
-msgstr ""
+msgstr "Pår trop di dnêyes dins l' fitchî"
 
 #: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
@@ -540,7 +546,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "Li lårdjeu oudonbén l' hôteu del imådje TIFF est zero"
 
 #: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
@@ -576,7 +582,7 @@ msgstr "L' imådje a-st ene lårdjeu di zero"
 
 #: gdk-pixbuf/io-wbmp.c:296
 msgid "Image has zero height"
-msgstr ""
+msgstr "L' imådje a-st ene hôteu di zero"
 
 #: gdk-pixbuf/io-wbmp.c:307
 msgid "Not enough memory to load image"
@@ -727,7 +733,7 @@ msgstr ""
 
 #: gtk/gtkarrow.c:107
 msgid "Appearance of the shadow surrounding the arrow"
-msgstr ""
+msgstr "Rivnance di l' ombion åtoû del fretche"
 
 #: gtk/gtkaspectframe.c:107
 msgid "Horizontal Alignment"
@@ -1020,7 +1026,7 @@ msgstr "Sorbriyance"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
-msgstr "Tecse a håyner è sorbriyance"
+msgstr "Tecse a håyner e sorbriyance"
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
@@ -1069,7 +1075,7 @@ msgstr "Aspougnåve"
 
 #: gtk/gtkcellrenderertext.c:231 gtk/gtktexttag.c:278 gtk/gtktextview.c:569
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Defini si l' tecse pout esse candjî pa l' uzeu"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
 #: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
@@ -1123,7 +1129,7 @@ msgstr "Ponts del fonte"
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr "Grandeu del fonte (è ponts)"
+msgstr "Grandeu del fonte (e ponts)"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
@@ -1141,7 +1147,7 @@ msgstr "Hôteu"
 msgid ""
 "Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
-"Eplaeçmint è hôteu pa rapoirt al roye di båze pol tecse (å dzo del roye si "
+"Eplaeçmint e hôteu pa rapoirt al roye di båze pol tecse (å dzo del roye si "
 "l' valixhance est negative)"
 
 #: gtk/gtkcellrenderertext.c:341 gtk/gtktexttag.c:467
@@ -1496,15 +1502,15 @@ msgstr ""
 
 #: gtk/gtkcombo.c:162
 msgid "Whether an empty value may be entered in this field"
-msgstr ""
+msgstr "Defini si ene vude valixhance pout esse dinêye po ç' tchamp chal"
 
 #: gtk/gtkcombo.c:169
 msgid "Value in list"
-msgstr ""
+msgstr "Valixhance dins l' djivêye"
 
 #: gtk/gtkcombo.c:170
 msgid "Whether entered values must already be present in the list"
-msgstr ""
+msgstr "Defini si les valixhances dinêyes divèt esse dedja dins l' djivêye"
 
 #: gtk/gtkcontainer.c:200
 msgid "Resize mode"
@@ -1584,7 +1590,7 @@ msgstr ""
 
 #: gtk/gtkdialog.c:153
 msgid "Width of border around the main dialog area"
-msgstr ""
+msgstr "Lårdjeu do boird åtoû del mwaisse zône di dialogue"
 
 #: gtk/gtkdialog.c:160
 msgid "Button spacing"
@@ -1596,7 +1602,7 @@ msgstr "Espåçmint inte les botons"
 
 #: gtk/gtkdialog.c:169
 msgid "Action area border"
-msgstr ""
+msgstr "Boird del zône d' accion"
 
 #: gtk/gtkdialog.c:170
 msgid "Width of border around the button area at the bottom of the dialog"
@@ -1658,6 +1664,8 @@ msgstr "Caractere nén veyåve"
 #: gtk/gtkentry.c:489
 msgid "The character to use when masking entry contents (in \"password mode\")"
 msgstr ""
+"Li caractere a-z eployî po catchî çou k' est tapé dins l' intrêye (e «môde "
+"sicret»)"
 
 #: gtk/gtkentry.c:496
 msgid "Activates default"
@@ -1671,7 +1679,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:503
 msgid "Width in chars"
-msgstr "Lårdjeu è caracteres"
+msgstr "Lårdjeu e caracteres"
 
 #: gtk/gtkentry.c:504
 msgid "Number of characters to leave space for in the entry."
@@ -1761,10 +1769,13 @@ msgid ""
 "available to this program.\n"
 "Are you sure that you want to select it?"
 msgstr ""
+"Li fitchî «%s» est so ene ôte éndjole (lomêye %s) et i s' pout k' i n' soeye "
+"nén disponibe po ç' programe chal.\n"
+"Estoz vs seur del voleur tchoezi?"
 
 #: gtk/gtkfilesel.c:1063
 msgid "_New Folder"
-msgstr ""
+msgstr "_Novea ridant"
 
 #: gtk/gtkfilesel.c:1074
 msgid "De_lete File"
@@ -1779,6 +1790,8 @@ msgstr "_Rilomer li fitchî"
 msgid ""
 "The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Li no do ridant «%s» a-st å dvins des simboles ki n' si polèt nén eployî po "
+"les nos d' fitchîs "
 
 #: gtk/gtkfilesel.c:1365
 #, c-format
@@ -1792,6 +1805,8 @@ msgstr ""
 #: gtk/gtkfilesel.c:1366 gtk/gtkfilesel.c:1602
 msgid "You probably used symbols not allowed in filenames."
 msgstr ""
+"Vos avoz probåblumint eployî des simboles ki n' si polèt nén eployî dins les "
+"nos d' fitchîs."
 
 #: gtk/gtkfilesel.c:1374
 #, c-format
@@ -1814,6 +1829,8 @@ msgstr "Fé"
 #, c-format
 msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Li no do fitchî «%s» a-st å dvins des simboles ki n' si polèt nén eployî po "
+"les nos d' fitchîs"
 
 #: gtk/gtkfilesel.c:1493
 #, c-format
@@ -1827,6 +1844,8 @@ msgstr ""
 #: gtk/gtkfilesel.c:1495 gtk/gtkfilesel.c:1616
 msgid "It probably contains symbols not allowed in filenames."
 msgstr ""
+"Il a probåblumint des simboles ki n' si polèt nén eployî dins les nos d' "
+"fitchîs."
 
 #: gtk/gtkfilesel.c:1504
 #, c-format
@@ -1846,6 +1865,8 @@ msgstr "Disfacer li fitchî"
 #, c-format
 msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
+"Li no d' fitchî «%s» a-st å dvins des simboles ki n' si polèt nén eployî po "
+"les nos d' fitchîs"
 
 #: gtk/gtkfilesel.c:1600
 #, c-format
@@ -1887,24 +1908,26 @@ msgstr "Rilomer"
 msgid "Selection: "
 msgstr "Tchuze: "
 
-#: gtk/gtkfilesel.c:3005
+#: gtk/gtkfilesel.c:3008
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
 msgstr ""
+"Li no d' fitchî «%s» èn pout nén esse kiviersî en UTF-8 (sayîz di defini li "
+"variåve d' evironmint G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3008
+#: gtk/gtkfilesel.c:3011
 msgid "Invalid Utf-8"
 msgstr ""
 
-#: gtk/gtkfilesel.c:3875
+#: gtk/gtkfilesel.c:3878
 msgid "Name too long"
 msgstr "Li no est pår trop long"
 
-#: gtk/gtkfilesel.c:3877
+#: gtk/gtkfilesel.c:3880
 msgid "Couldn't convert filename"
-msgstr "Dji n' a savou convierti l' no do fitchî"
+msgstr "Dji n' a savou covierti l' no do fitchî"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
@@ -2020,11 +2043,11 @@ msgstr "Valixhance _gama"
 #: gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 #: gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
 msgid "Shadow type"
-msgstr "Sôre d' ombre"
+msgstr "Sôre d' ombion"
 
 #: gtk/gtkhandlebox.c:193
 msgid "Appearance of the shadow that surrounds the container."
-msgstr ""
+msgstr "Rivnance di l' ombion åtoû do contneu."
 
 #: gtk/gtkhandlebox.c:201
 msgid "Handle position"
@@ -2050,7 +2073,7 @@ msgstr ""
 #: gtk/gtkiconfactory.c:1318
 #, c-format
 msgid "Error loading icon: %s"
-msgstr "Åk n' a nén stî come dji sayîve di tcherdjî l' imådjete: %s"
+msgstr "Åk n' a nén stî come dji sayive di tcherdjî l' imådjete: %s"
 
 #: gtk/gtkimage.c:133
 msgid "Pixbuf"
@@ -2110,7 +2133,7 @@ msgstr "Grandeu del imådjete"
 
 #: gtk/gtkimage.c:191
 msgid "Size to use for stock icon or icon set."
-msgstr ""
+msgstr "Grandeu a-z eployî po les imådjetes di stok."
 
 #: gtk/gtkimage.c:199
 msgid "Animation"
@@ -2426,43 +2449,43 @@ msgstr "L' indecse del pådje do moumint"
 
 #: gtk/gtknotebook.c:371
 msgid "Tab Position"
-msgstr ""
+msgstr "Eplaeçmint des linwetes"
 
 #: gtk/gtknotebook.c:372
 msgid "Which side of the notebook holds the tabs"
-msgstr ""
+msgstr "Di ké costé sont metowes les linwetes"
 
 #: gtk/gtknotebook.c:379
 msgid "Tab Border"
-msgstr ""
+msgstr "Boird des linwetes"
 
 #: gtk/gtknotebook.c:380
 msgid "Width of the border around the tab labels"
-msgstr ""
+msgstr "Lårdjeu do boird åtoû des etiketes des linwetes"
 
 #: gtk/gtknotebook.c:388
 msgid "Horizontal Tab Border"
-msgstr ""
+msgstr "Boird di coûtchî des linwetes"
 
 #: gtk/gtknotebook.c:389
 msgid "Width of the horizontal border of tab labels"
-msgstr ""
+msgstr "Lårdjeu do boird di coûtchî des etiketes des linwetes"
 
 #: gtk/gtknotebook.c:397
 msgid "Vertical Tab Border"
-msgstr ""
+msgstr "Boird d' astampé des linwetes"
 
 #: gtk/gtknotebook.c:398
 msgid "Width of the vertical border of tab labels"
-msgstr ""
+msgstr "Lårdjeu do boird d' astampé des etiketes des linwetes"
 
 #: gtk/gtknotebook.c:406
 msgid "Show Tabs"
-msgstr ""
+msgstr "Mostrer les linwetes"
 
 #: gtk/gtknotebook.c:407
 msgid "Whether tabs should be shown or not"
-msgstr ""
+msgstr "Defini si les linwetes divèt esse mostrêyes ou nén"
 
 #: gtk/gtknotebook.c:413
 msgid "Show Border"
@@ -2534,11 +2557,11 @@ msgstr ""
 
 #: gtk/gtkpaned.c:224
 msgid "Handle Size"
-msgstr ""
+msgstr "Grandeu del pougnêye"
 
 #: gtk/gtkpaned.c:225
 msgid "Width of handle"
-msgstr ""
+msgstr "Lårdjeu del pougnêye"
 
 #: gtk/gtkpreview.c:129
 msgid "Expand"
@@ -2663,7 +2686,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:208
 msgid "Text to be displayed in the progress bar"
-msgstr ""
+msgstr "Tecse a håyner dins l' bår d' avançmint"
 
 #: gtk/gtkrange.c:273
 msgid "Update policy"
@@ -2743,7 +2766,7 @@ msgstr ""
 #: gtk/gtkrc.c:2924 gtk/gtkrc.c:2927
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Dji n' sai nén trover on fitchî imådje è pixmap_path: «%s»"
+msgstr "Dji n' sai nén trover on fitchî imådje e pixmap_path: «%s»"
 
 #: gtk/gtkrc.c:3362
 #, c-format
@@ -2752,7 +2775,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
-msgstr ""
+msgstr "Basse"
 
 #: gtk/gtkruler.c:119
 msgid "Lower limit of ruler"
@@ -2760,7 +2783,7 @@ msgstr ""
 
 #: gtk/gtkruler.c:128
 msgid "Upper"
-msgstr ""
+msgstr "Hôte"
 
 #: gtk/gtkruler.c:129
 msgid "Upper limit of ruler"
@@ -2982,7 +3005,7 @@ msgstr "No del fonte"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
-msgstr ""
+msgstr "No del prémetowe fonte a-z eployî"
 
 #: gtk/gtksizegroup.c:242
 msgid "Mode"
@@ -3095,7 +3118,7 @@ msgstr "_Rinoncî"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr ""
+msgstr "Plake _lazer"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
@@ -3107,14 +3130,13 @@ msgstr "_Clôre"
 
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "_Convierti"
+msgstr "_Covierti"
 
 #: gtk/gtkstock.c:283
 msgid "_Copy"
 msgstr "_Copyî"
 
 #: gtk/gtkstock.c:284
-#, fuzzy
 msgid "Cu_t"
 msgstr "Cô_per"
 
@@ -3124,7 +3146,7 @@ msgstr "_Disfacer"
 
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr ""
+msgstr "_Enonder"
 
 #: gtk/gtkstock.c:287
 msgid "_Find"
@@ -3232,7 +3254,7 @@ msgstr "_Preferinces"
 
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "_Eprimer"
+msgstr "_Eprimî"
 
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
@@ -3315,20 +3337,21 @@ msgid "_Yes"
 msgstr "_Oyi"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
-msgstr ""
+msgstr "Zoumer a _100%"
 
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr ""
+msgstr "Zoumer po _rimpli"
 
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr ""
+msgstr "_Zoumer"
 
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr ""
+msgstr "_Diszoumer"
 
 #: gtk/gtktable.c:156
 msgid "Rows"
@@ -3400,7 +3423,7 @@ msgstr "No del etikete"
 
 #: gtk/gtktexttag.c:200
 msgid "Name used to refer to the text tag"
-msgstr ""
+msgstr "No eployî po s' referer a l' etikete di tecse"
 
 #: gtk/gtktexttag.c:225
 msgid "Background full height"
@@ -3508,7 +3531,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
 msgid "Tabs"
-msgstr ""
+msgstr "Linwetes"
 
 #: gtk/gtktexttag.c:495 gtk/gtktextview.c:625
 msgid "Custom tabs for this text"
@@ -3709,7 +3732,7 @@ msgstr "_Metôdes d' intrêye"
 #: gtk/gtkthemes.c:69
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Dji n' sai nén trover on moteur di tinmes è module_path: «%s»,"
+msgstr "Dji n' sai nén trover on moteur di tinmes e module_path: «%s»,"
 
 #: gtk/gtktipsquery.c:182
 msgid "--- No Tip ---"
