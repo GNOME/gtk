@@ -162,6 +162,7 @@ GdkColormap*
 gdk_colormap_ref (GdkColormap *cmap)
 {
   GdkColormapPrivate *private = (GdkColormapPrivate *)cmap;
+
   g_return_val_if_fail (cmap != NULL, NULL);
 
   private->ref_count += 1;
@@ -172,7 +173,9 @@ void
 gdk_colormap_unref (GdkColormap *cmap)
 {
   GdkColormapPrivate *private = (GdkColormapPrivate *)cmap;
+
   g_return_if_fail (cmap != NULL);
+  g_return_if_fail (private->ref_count > 0);
 
   private->ref_count -= 1;
   if (private->ref_count == 0)

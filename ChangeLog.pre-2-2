@@ -1,3 +1,7 @@
+Wed Jan 27 09:19:07 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdkcolor.c (gdk_colormap_unref): assert ref_count>0.
+
 Mon Jan 25 20:05:22 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_set_{visual,colormap}): 
