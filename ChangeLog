@@ -1,3 +1,8 @@
+2004-01-29  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkiconfactory.c (render_icon_name_pixbuf): Free the GError.
+	Patch provided by Christian Persch <chpe@stud.uni-saarland.de>
+
 Thu Jan 29 11:00:18 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c (gtk_selection_default_handler): 
