@@ -1,3 +1,9 @@
+2002-01-07  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render): Remove
+	unused pixels and rowstride variables.
+	(gtk_cell_renderer_pixbuf_get_size): Check for non-NULL width.
+
 Mon Jan  7 08:48:23 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkdnd.c (gtk_drag_find_widget): don't forget to offset
