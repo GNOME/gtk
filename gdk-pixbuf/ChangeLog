@@ -1,3 +1,11 @@
+2003-07-04  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf-io.c: Document ICO save parameters.
+
+	* io-ico.c: Support saving of ICOs and CURs. Currently, only single-image ICOs are produced,
+	but the code for multi-image ICOs is already in place. The saver understands the options
+	"depth" (can be "32", "24" or "16") and "x_hot"/"y_hot" for hotspot coordinates of CURs.
+
 2003-06-28  Matthias Clasen  <maclas@gmx.de>
 
 	* io-ico.c (DecodeHeader): Stop discriminating against 32bpp ICOs a): Use the byte 

@@ -891,8 +891,8 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * @error: return location for error, or %NULL
  * @Varargs: list of key-value save options
  *
- * Saves pixbuf to a file in @type, which is currently "jpeg" or
- * "png".  If @error is set, %FALSE will be returned. Possible errors include 
+ * Saves pixbuf to a file in @type, which is currently "jpeg", "png" or
+ * "ico".  If @error is set, %FALSE will be returned. Possible errors include 
  * those in the #GDK_PIXBUF_ERROR domain and those in the #G_FILE_ERROR domain.
  *
  * The variable argument list should be %NULL-terminated; if not empty,
@@ -908,6 +908,9 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
  * Text chunks can be attached to PNG images by specifying parameters of
  * the form "tEXt::key", where key is an ASCII string of length 1-79.
  * The values are UTF-8 encoded strings. 
+ * ICO images can be saved in depth 16, 24, or 32, by using the "depth"
+ * parameter. When the ICO saver is given "x_hot" and "y_hot" parameters,
+ * it produces a CUR instead of an ICO.
  *
  * Return value: whether an error was set
  **/

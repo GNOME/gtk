@@ -36,6 +36,7 @@ Known bugs:
 
 #include <config.h>
 #include <stdio.h>
+#include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -837,12 +838,327 @@ gdk_pixbuf__ico_image_load_increment(gpointer data,
 	return TRUE;
 }
 
+/* saving ICOs */ 
+
+static gint
+write8 (FILE     *f,
+	guint8   *data,
+	gint      count)
+{
+  gint bytes;
+  gint written;
+
+  written = 0;
+  while (count > 0)
+    {
+      bytes = fwrite ((char*) data, sizeof (char), count, f);
+      if (bytes <= 0)
+        break;
+      count -= bytes;
+      data += bytes;
+      written += bytes;
+    }
+
+  return written;
+}
+
+static gint
+write16 (FILE     *f,
+	 guint16  *data,
+	 gint      count)
+{
+  gint i;
+
+  for (i = 0; i < count; i++)
+	  data[i] = GUINT16_TO_LE (data[i]);
+
+  return write8 (f, (guint8*) data, count * 2);
+}
+
+static gint
+write32 (FILE     *f,
+	 guint32  *data,
+	 gint      count)
+{
+  gint i;
+
+  for (i = 0; i < count; i++)
+	  data[i] = GUINT32_TO_LE (data[i]);
+  
+  return write8 (f, (guint8*) data, count * 4);
+}
+
+typedef struct _IconEntry IconEntry;
+struct _IconEntry {
+	gint width;
+	gint height;
+	gint depth;
+	gint hot_x;
+	gint hot_y;
+
+	guint8 n_colors;
+	guint32 *colors;
+	guint xor_rowstride;
+	guint8 *xor;
+	guint and_rowstride;
+	guint8 *and;
+};
+
+static gboolean
+fill_entry (IconEntry *icon, 
+	    GdkPixbuf *pixbuf, 
+	    gint       hot_x, 
+	    gint       hot_y, 
+	    GError   **error) 
+ {
+	guchar *p, *pixels, *and, *xor;
+	gint n_channels, v, x, y;
+
+	if (icon->width > 255 || icon->height > 255) {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_BAD_OPTION,
+			     _("Image too large to be saved as ICO"));
+		return FALSE;
+	} 
+	
+	if (hot_x > -1 && hot_y > -1) {
+		icon->hot_x = hot_x;
+		icon->hot_x = hot_y;
+		if (icon->hot_x >= icon->width || icon->hot_y >= icon->height) {
+			g_set_error (error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_BAD_OPTION,
+				     _("Cursor hotspot outside image"));
+			return FALSE;
+		}
+	}
+	else {
+		icon->hot_x = -1;
+		icon->hot_y = -1;
+	}
+	
+	switch (icon->depth) {
+	case 32:
+		icon->xor_rowstride = icon->width * 4;
+		break;
+	case 24:
+		icon->xor_rowstride = icon->width * 3;
+		break;
+	case 16:
+		icon->xor_rowstride = icon->width * 2;
+		break;
+	default:
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_BAD_OPTION,
+			     _("Unsupported depth for ICO file: %d"), icon->depth);
+		return FALSE;
+	}
+
+	if ((icon->xor_rowstride % 4) != 0) 		
+		icon->xor_rowstride = 4 * ((icon->xor_rowstride / 4) + 1);
+	icon->xor = g_new0 (guchar, icon->xor_rowstride * icon->height);
+
+	icon->and_rowstride = icon->width / 8;
+	if ((icon->and_rowstride % 4) != 0) 		
+		icon->and_rowstride = 4 * ((icon->and_rowstride / 4) + 1);
+	icon->and = g_new0 (guchar, icon->and_rowstride * icon->height);
+
+	pixels = gdk_pixbuf_get_pixels (pixbuf);
+	n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+	for (y = 0; y < icon->height; y++) {
+		p = pixels + gdk_pixbuf_get_rowstride (pixbuf) * (icon->height - 1 - y);
+		and = icon->and + icon->and_rowstride * y;
+		xor = icon->xor + icon->xor_rowstride * y;
+		for (x = 0; x < icon->width; x++) {
+			switch (icon->depth) {
+			case 32:
+				xor[0] = p[2];
+				xor[1] = p[1];
+				xor[2] = p[0];
+				xor[3] = 0xff;
+				if (n_channels == 4) {
+					xor[3] = p[3];
+					if (p[3] < 0x80)
+						*and |= 1 << (7 - x % 8);
+				}
+				xor += 4;
+				break;
+			case 24:
+				xor[0] = p[2];
+				xor[1] = p[1];
+				xor[2] = p[0];
+				if (n_channels == 4 && p[3] < 0x80)
+					*and |= 1 << (7 - x % 8);
+				xor += 3;
+				break;
+			case 16:
+				v = ((p[0] >> 3) << 10) | ((p[1] >> 3) << 5) | (p[2] >> 3);
+				xor[0] = v & 0xff;
+				xor[1] = v >> 8;
+				if (n_channels == 4 && p[3] < 0x80)
+					*and |= 1 << (7 - x % 8);
+				xor += 2;
+				break;
+			}
+			
+			p += n_channels;
+			if (x % 8 == 7) 
+				and++;
+		}
+	}
+
+	return TRUE;
+}
+
+static void
+free_entry (IconEntry *icon)
+{
+	g_free (icon->colors);
+	g_free (icon->and);
+	g_free (icon->xor);
+	g_free (icon);
+}
+
+static void
+write_icon (FILE *f, GSList *entries)
+{
+	IconEntry *icon;
+	GSList *entry;
+	guint8 bytes[4];
+	guint16 words[4];
+	guint32 dwords[6];
+	gint type;
+	gint n_entries;
+	gint offset;
+	gint size;
+
+	if (((IconEntry *)entries->data)->hot_x > -1)
+		type = 2;
+	else 
+		type = 1;
+	n_entries = g_slist_length (entries);
+
+	/* header */
+	words[0] = 0;
+	words[1] = type;
+	words[2] = n_entries;
+	write16 (f, words, 3);
+	
+	offset = 6 + 16 * n_entries;
+
+	for (entry = entries; entry; entry = entry->next) {
+		icon = (IconEntry *)entry->data;
+		size = 40 + icon->height * (icon->and_rowstride + icon->xor_rowstride);
+		
+		/* directory entry */
+		bytes[0] = icon->width;
+		bytes[1] = icon->height;
+		bytes[2] = icon->n_colors;
+		bytes[3] = 0;
+		write8 (f, bytes, 4);
+		if (type == 1) {
+			words[0] = 1;
+			words[1] = icon->depth;
+		}
+		else {
+			words[0] = icon->hot_x;
+			words[1] = icon->hot_y;
+		}
+		write16 (f, words, 2);
+		dwords[0] = size;
+		dwords[1] = offset;
+		write32 (f, dwords, 2);
+
+		offset += size;
+	}
+
+	for (entry = entries; entry; entry = entry->next) {
+		icon = (IconEntry *)entry->data;
+
+		/* bitmap header */
+		dwords[0] = 40;
+		dwords[1] = icon->width;
+		dwords[2] = icon->height * 2;
+		write32 (f, dwords, 3);
+		words[0] = 1;
+		words[1] = icon->depth;
+		write16 (f, words, 2);
+		dwords[0] = 0;
+		dwords[1] = 0;
+		dwords[2] = 0;
+		dwords[3] = 0;
+		dwords[4] = 0;
+		dwords[5] = 0;
+		write32 (f, dwords, 6);
+
+		/* image data */
+		write8 (f, icon->xor, icon->xor_rowstride * icon->height);
+		write8 (f, icon->and, icon->and_rowstride * icon->height);
+	}
+}
+
+static gboolean
+gdk_pixbuf__ico_image_save (FILE          *f, 
+                            GdkPixbuf     *pixbuf, 
+                            gchar        **keys,
+                            gchar        **values,
+                            GError       **error)
+{
+	gint hot_x, hot_y;
+	IconEntry *icon;
+	GSList *entries = NULL;
+
+	/* support only single-image ICOs for now */
+	icon = g_new0 (IconEntry, 1);
+	icon->width = gdk_pixbuf_get_width (pixbuf);
+	icon->height = gdk_pixbuf_get_height (pixbuf);
+	icon->depth = gdk_pixbuf_get_has_alpha (pixbuf) ? 32 : 24;
+	hot_x = -1;
+	hot_y = -1;
+	
+	/* parse options */
+	if (keys && *keys) {
+		gchar **kiter;
+		gchar **viter;
+		
+		for (kiter = keys, viter = values; *kiter && *viter; kiter++, viter++) {
+			char *endptr;
+			if (strcmp (*kiter, "depth") == 0) {
+				sscanf (*viter, "%d", &icon->depth);
+			}
+			else if (strcmp (*kiter, "x_hot") == 0) {
+				hot_x = strtol (*viter, &endptr, 10);
+			}
+			else if (strcmp (*kiter, "y_hot") == 0) {
+				hot_y = strtol (*viter, &endptr, 10);
+			}
+
+		}
+	}
+
+	if (!fill_entry (icon, pixbuf, hot_x, hot_y, error)) {
+		free_entry (icon);
+		return FALSE;
+	}
+
+	entries = g_slist_append (entries, icon); 
+	write_icon (f, entries);
+
+	g_slist_foreach (entries, (GFunc)free_entry, NULL);
+	g_slist_free (entries);
+
+	return TRUE;
+}
+
 void
 MODULE_ENTRY (ico, fill_vtable) (GdkPixbufModule *module)
 {
 	module->begin_load = gdk_pixbuf__ico_image_begin_load;
 	module->stop_load = gdk_pixbuf__ico_image_stop_load;
 	module->load_increment = gdk_pixbuf__ico_image_load_increment;
+        module->save = gdk_pixbuf__ico_image_save;
 }
 
 void
@@ -868,7 +1184,7 @@ MODULE_ENTRY (ico, fill_info) (GdkPixbufFormat *info)
 	info->description = N_("The ICO image format");
 	info->mime_types = mime_types;
 	info->extensions = extensions;
-	info->flags = 0;
+	info->flags = GDK_PIXBUF_FORMAT_WRITABLE;
 }
 
 
