@@ -254,13 +254,14 @@ gtk_list_store_new (void)
 /**
  * gtk_list_store_new_with_types:
  * @n_columns: number of columns in the list store
- * @Varargs: pairs of column number and #GType
+ * @Varargs: all #GType types for the columns, from first to last
  *
- * Creates a new list store as with gtk_list_store_new(),
- * simultaneously setting up the columns and column types as with
- * gtk_list_store_set_n_columns() and
- * gtk_list_store_set_column_type().
- *
+ * Creates a new list store as with gtk_list_store_new(), simultaneously setting
+ * up the columns and column types as with gtk_list_store_set_n_columns() and
+ * gtk_list_store_set_column_type().  As an example,
+ * gtk_tree_store_new_with_types (3, G_TYPE_INT, G_TYPE_STRING,
+ * GTK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
+ * int, string and GtkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
  **/

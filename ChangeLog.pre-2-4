@@ -1,3 +1,11 @@
+Fri Jun  8 12:38:49 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktable.c (gtk_table_resize): warn if row/cols are out of
+	range.  Fix bug #55921
+
+	* gtk/gtkliststore.c (gtk_list_store_new_with_types): fix doc bug
+	(#55920).
+
 Fri Jun  8 12:03:07 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkkeys.[ch]: Add a direction-changed signal,

@@ -469,12 +469,13 @@ gtk_table_resize (GtkTable *table,
 		  guint     n_rows,
 		  guint     n_cols)
 {
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
+  g_return_if_fail (n_rows > 0 && n_rows < 65536);
+  g_return_if_fail (n_rows > 0 && n_cols < 65536);
 
   n_rows = MAX (n_rows, 1);
   n_cols = MAX (n_cols, 1);
-  
+
   if (n_rows != table->nrows ||
       n_cols != table->ncols)
     {
