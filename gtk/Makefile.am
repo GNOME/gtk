@@ -98,6 +98,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhsv.h		\
 	gtkimage.h		\
 	gtkimcontext.h		\
+	gtkimmodule.h		\
 	gtkimmulticontext.h	\
 	gtkinputdialog.h	\
 	gtkinvisible.h		\
@@ -114,7 +115,9 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkmenuitem.h		\
 	gtkmenushell.h		\
 	gtkmisc.h		\
+	gtkmodule.h		\
 	gtknotebook.h		\
+	gtkoldeditable.h	\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
 	gtkpacker.h		\
@@ -150,7 +153,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtktexttagtable.h	\
 	gtktextview.h		\
 	gtktext.h		\
-	gtkthemes.h		\
 	gtktipsquery.h		\
 	gtktogglebutton.h	\
 	gtktoolbar.h		\
@@ -189,6 +191,7 @@ gtk_semipublic_h_sources = @STRIP_BEGIN@ \
 # GTK+ header files that don't get installed
 gtk_private_h_sources = @STRIP_BEGIN@ \
 	gtktexttagprivate.h	\
+	gtkthemes.h		\
 @STRIP_END@
 
 # GTK+ C sources to build the library from
@@ -242,6 +245,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkimcontext.c		\
 	gtkimcontextsimple.c	\
 	gtkimcontextsimple.h	\
+	gtkimmodule.c		\
 	gtkimmulticontext.c	\
 	gtkinputdialog.c	\
 	gtkintl.h		\
@@ -260,8 +264,10 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkmenuitem.c		\
 	gtkmenushell.c		\
 	gtkmisc.c		\
+	gtkmodule.c		\
 	gtknotebook.c		\
 	gtkobject.c		\
+	gtkoldeditable.c	\
 	gtkoptionmenu.c		\
 	gtkpacker.c		\
 	gtkpaned.c		\
@@ -518,11 +524,11 @@ install-data-local:
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
-#
-# test programs, not to be installed
-#
-noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
-DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la  $(top_builddir)/gdk/@gdktargetlib@
+############################################################################
+
+DEPS = @gtktargetlib@ $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la $(top_builddir)/gdk/@gdktargetlib@
+TEST_DEPS = $(DEPS) gtk.immodules
+
 LDADDS = @STRIP_BEGIN@ \
 	@gtktargetlib@					\
 	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
@@ -535,15 +541,34 @@ LDADDS = @STRIP_BEGIN@ \
 	@GTK_LIBS_EXTRA@				\
 	-lm						\
 @STRIP_END@
-testgtk_DEPENDENCIES = $(DEPS)
-testcalendar_DEPENDENCIES = $(DEPS)
-testinput_DEPENDENCIES = $(DEPS)
-testselection_DEPENDENCIES = $(DEPS)
-testrgb_DEPENDENCIES = $(DEPS)
-testtext_DEPENDENCIES = $(DEPS)
-testdnd_DEPENDENCIES = $(DEPS)
-simple_DEPENDENCIES = $(DEPS)
-#testthreads_DEPENDENCIES = $(DEPS)
+
+#
+# Installed tools
+#
+bin_PROGRAMS = gtk-query-immodules-2.0
+
+gtk_query_immodules_2_0_DEPENDENCIES = $(DEPS)
+gtk_query_immodules_2_0_LDADD = $(LDADDS)
+
+gtk_query_immodules_2_0_SOURCES = queryimmodules.c
+
+gtk.immodules: gtk-query-immodules-2.0
+	./gtk-query-immodules-2.0 ../modules/input/.libs/*.so > gtk.immodules
+
+#
+# test programs, not to be installed
+#
+noinst_PROGRAMS = testgtk testcalendar testinput testselection testrgb testdnd testtext simple testtextbuffer # testthreads
+testgtk_DEPENDENCIES = $(TEST_DEPS)
+testcalendar_DEPENDENCIES = $(TEST_DEPS)
+testinput_DEPENDENCIES = $(TEST_DEPS)
+testselection_DEPENDENCIES = $(TEST_DEPS)
+testrgb_DEPENDENCIES = $(TEST_DEPS)
+testtext_DEPENDENCIES = $(TEST_DEPS)
+testdnd_DEPENDENCIES = $(TEST_DEPS)
+simple_DEPENDENCIES = $(TEST_DEPS)
+#testthreads_DEPENDENCIES = $(TEST_DEPS)
+
 testcalendar_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)

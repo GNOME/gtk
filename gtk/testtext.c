@@ -1419,15 +1419,32 @@ create_view (Buffer *buffer)
   return view;
 }
 
+static gboolean
+file_exists (const char *filename)
+{
+  struct stat statbuf;
+
+  return stat (filename, &statbuf) == 0;
+}
+void
+test_init ()
+{
+  if (file_exists ("../gdk-pixbuf/.libs/libpixbufloader-pnm.so"))
+    {
+      putenv ("GDK_PIXBUF_MODULEDIR=../gdk-pixbuf/.libs");
+      putenv ("GTK_IM_MODULE_FILE=./gtk.immodules");
+    }
+}
+
 int
 main (int argc, char** argv)
 {
   Buffer *buffer;
   View *view;
   int i;
-  
+
+  test_init ();
   gtk_init (&argc, &argv);
-  gdk_rgb_init (); /* FIXME remove this */
   
   buffer = create_buffer ();
   view = create_view (buffer);
