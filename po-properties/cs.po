@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-15 13:07+0100\n"
+"POT-Creation-Date: 2004-01-24 04:51+0100\n"
+"PO-Revision-Date: 2004-01-26 23:19+0100\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -76,7 +76,7 @@ msgstr "Krok řádků"
 #: gdk-pixbuf/gdk-pixbuf.c:165
 msgid ""
 "The number of bytes between the start of a row and the start of the next row"
-msgstr "Počet bajtů mezi začátekm řádku a začátkem dalšího řádku"
+msgstr "Počet bajtů mezi začátkem řádku a začátkem dalšího řádku"
 
 #: gdk-pixbuf/gdk-pixbuf.c:175
 msgid "Pixels"
@@ -125,7 +125,7 @@ msgstr "Popis"
 
 #: gtk/gtkaction.c:202
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "Popis používaný propoložky menu a tlačíka, která aktivují tuto akci."
+msgstr "Popis používaný pro položky menu a tlačítka, která aktivují tuto akci."
 
 #: gtk/gtkaction.c:208
 msgid "Short label"
@@ -183,9 +183,7 @@ msgstr "Je důležitá"
 msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
-msgstr ""
-"Jestli je akce považována za důležitou. Je-li TRUE, zobrazují proxy toolitem "
-"protuto akci text v režimu GTK_TOOLBAR_BOTH_HORIZ."
+msgstr "Jestli je akce považována za důležitou. Je-li TRUE, zobrazují proxy toolitem pro tuto akci text v režimu GTK_TOOLBAR_BOTH_HORIZ."
 
 #: gtk/gtkaction.c:250
 msgid "Hide if empty"
@@ -1083,7 +1081,7 @@ msgstr "Stav přepnutí"
 
 #: gtk/gtkcellrenderertoggle.c:141
 msgid "The toggle state of the button"
-msgstr "Stav přepnutíc tlačítka"
+msgstr "Stav přepnutí tlačítka"
 
 #: gtk/gtkcellrenderertoggle.c:149
 msgid "Inconsistent state"
@@ -1502,19 +1500,19 @@ msgstr "Vybrat při fokusu"
 msgid "Whether to select the contents of an entry when it is focused"
 msgstr "Jestli vybrat obsah položky, pokud položka získá fokus"
 
-#: gtk/gtkentrycompletion.c:196
+#: gtk/gtkentrycompletion.c:197
 msgid "Completion Model"
 msgstr "Model doplňování"
 
-#: gtk/gtkentrycompletion.c:197
+#: gtk/gtkentrycompletion.c:198
 msgid "The model to find matches in"
 msgstr "Model, kde hledat odpovídající položky"
 
-#: gtk/gtkentrycompletion.c:203
+#: gtk/gtkentrycompletion.c:204
 msgid "Minimum Key Length"
 msgstr "Minimální délka klíče"
 
-#: gtk/gtkentrycompletion.c:204
+#: gtk/gtkentrycompletion.c:205
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Minimální délka hledaného klíče, aby se hledaly odpovídající položky"
 
@@ -1624,7 +1622,7 @@ msgstr "Jen místní"
 
 #: gtk/gtkfilechooser.c:118
 msgid "Whether the selected file(s) should be limited to local file: URLs"
-msgstr "Jestli mají být vybrané soubory omezeny na místí URL file:"
+msgstr "Jestli mají být vybrané soubory omezeny na místní URL file:"
 
 #: gtk/gtkfilechooser.c:123
 msgid "Preview widget"
@@ -1818,7 +1816,7 @@ msgstr "Pozice ovládací části"
 
 #: gtk/gtkhandlebox.c:212
 msgid "Position of the handle relative to the child widget"
-msgstr "Umístění ovládací části relativně k wigetu potomka"
+msgstr "Umístění ovládací části relativně k widgetu potomka"
 
 #: gtk/gtkhandlebox.c:220
 msgid "Snap edge"
@@ -1968,7 +1966,7 @@ msgstr "Zalamovaní řádků"
 
 #: gtk/gtklabel.c:337
 msgid "If set, wrap lines if the text becomes too wide"
-msgstr "Je-li nastaveno, zaloamovat řádky, pokud bude text moc široký"
+msgstr "Je-li nastaveno, zalamovat řádky, pokud bude text moc široký"
 
 #: gtk/gtklabel.c:343
 msgid "Selectable"
@@ -2045,7 +2043,7 @@ msgstr "Svislé posunutí"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr "Když menu je podmenu, umístit je svisle pousunuté o tolik pixelů"
+msgstr "Když menu je podmenu, umístit je svisle posunuté o tolik pixelů"
 
 #: gtk/gtkmenu.c:377
 msgid "Horizontal Offset"
@@ -2055,7 +2053,7 @@ msgstr "Vodorovné posunutí"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr "Když menu je podmenu, umístit je vodorovně pousunuté o tolik pixelů"
+msgstr "Když menu je podmenu, umístit je vodorovně posunuté o tolik pixelů"
 
 #: gtk/gtkmenu.c:388
 msgid "Left Attach"
@@ -2244,7 +2242,7 @@ msgstr "Zobrazovat záložky"
 
 #: gtk/gtknotebook.c:441
 msgid "Whether tabs should be shown or not"
-msgstr "fJestli se mají zobrazovat záložky"
+msgstr "Jestli se mají zobrazovat záložky"
 
 #: gtk/gtknotebook.c:447
 msgid "Show Border"
@@ -2393,7 +2391,7 @@ msgstr "Minimální pozice"
 
 #: gtk/gtkpaned.c:272
 msgid "Smallest possible value for the \"position\" property"
-msgstr "Nejmenší možná hodnota vlasnosti \"position\""
+msgstr "Nejmenší možná hodnota vlastnosti \"position\""
 
 #: gtk/gtkpaned.c:289
 msgid "Maximal Position"
@@ -2401,7 +2399,7 @@ msgstr "Maximální pozice"
 
 #: gtk/gtkpaned.c:290
 msgid "Largest possible value for the \"position\" property"
-msgstr "Největší možná hodnota vlasnosti \"position\""
+msgstr "Největší možná hodnota vlastnosti \"position\""
 
 #: gtk/gtkpaned.c:307
 msgid "Resize"
@@ -2409,7 +2407,7 @@ msgstr "Měnit velikost"
 
 #: gtk/gtkpaned.c:308
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
-msgstr "Je-li TRUE, potomek se zvětšuje a změnšuje spolu s widgetem paned"
+msgstr "Je-li TRUE, potomek se zvětšuje a zmenšuje spolu s widgetem paned"
 
 #: gtk/gtkpaned.c:323
 msgid "Shrink"
@@ -2519,7 +2517,7 @@ msgstr "Oddělené bloky"
 msgid ""
 "The number of discrete blocks in a progress bar (when shown in the discrete "
 "style)"
-msgstr "Počet oddělených bloků v pruhu průběhu v režimu zaktiity (Zastaralé)"
+msgstr "Počet oddělených bloků v pruhu průběhu (při zobrazování v odděleném stylu)"
 
 #: gtk/gtkprogressbar.c:198
 msgid "Fraction"
@@ -2559,11 +2557,11 @@ msgstr "Skupina"
 
 #: gtk/gtkradioaction.c:156
 msgid "The radio action whose group this action belongs."
-msgstr "Přepínací tlačíto, do jejíž skupiny patří tato akce."
+msgstr "Přepínací tlačítko, do jehož skupiny patří tato akce."
 
 #: gtk/gtkradiobutton.c:110
 msgid "The radio button whose group this widget belongs."
-msgstr "Přepínací tlačíto, do jejíž skupiny patří tento widget."
+msgstr "Přepínací tlačítko, do jehož skupiny patří tento widget."
 
 #: gtk/gtkrange.c:281
 msgid "Update policy"
@@ -3093,7 +3091,7 @@ msgstr "Vodorovné zarovnání widgetu textu"
 
 #: gtk/gtktext.c:610
 msgid "Vertical adjustment for the text widget"
-msgstr "Svislé zarovnání wigetu textu"
+msgstr "Svislé zarovnání widgetu textu"
 
 #: gtk/gtktext.c:617
 msgid "Line Wrap"
@@ -3101,7 +3099,7 @@ msgstr "Zalamování řádků"
 
 #: gtk/gtktext.c:618
 msgid "Whether lines are wrapped at widget edges"
-msgstr "fJestli jsou řádky zalamovány na hranicích widgetu"
+msgstr "Jestli jsou řádky zalamovány na hranicích widgetu"
 
 #: gtk/gtktext.c:625
 msgid "Word Wrap"
@@ -3488,7 +3486,7 @@ msgstr "Jak kreslit nástrojovou lištu"
 
 #: gtk/gtktoolbar.c:517
 msgid "Show Arrow"
-msgstr "Zobraozvat šipku"
+msgstr "Zobrazovat šipku"
 
 #: gtk/gtktoolbar.c:518
 msgid "If an arrow should be shown if the toolbar doesn't fit"
@@ -3501,7 +3499,7 @@ msgstr ""
 
 #: gtk/gtktoolbar.c:535
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr "Jestli má mít položk stejnou velikost jako ostatní rovnoměrné položky"
+msgstr "Jestli má mít položka stejnou velikost jako ostatní rovnoměrné položky"
 
 #: gtk/gtktoolbar.c:542
 msgid "Spacer size"
@@ -3590,9 +3588,7 @@ msgstr "Widget ikony, kterou zobrazovat v položce"
 msgid ""
 "Whether the toolbar item is considered important. When TRUE, toolbar buttons "
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
-"Jesetli je položka nástrojové lišty považována za důležitou. Je-li TRUE, "
-"zobrazují tlačítka nástrojové lišty text v režimu GTK_TOOLBAR_BOTH_HORIZ"
+msgstr "Jestli je položka nástrojové lišty považována za důležitou. Je-li TRUE, zobrazují tlačítka nástrojové lišty text v režimu GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktreemodelsort.c:328
 msgid "TreeModelSort Model"
