@@ -719,24 +719,38 @@ gtk_clipboard_set_text (GtkClipboard *clipboard,
 			const gchar  *text,
 			gint          len)
 {
-  static const GtkTargetEntry targets[] = {
-    { "STRING", 0, TARGET_STRING },
-    { "TEXT",   0, TARGET_TEXT }, 
-    { "COMPOUND_TEXT", 0, TARGET_COMPOUND_TEXT },
-    { "UTF8_STRING", 0, TARGET_UTF8_STRING }
-  };
+  GtkTargetList *list;
+  GList *l;
+  GtkTargetEntry *targets;
+  gint n_targets, i;
 
   g_return_if_fail (clipboard != NULL);
   g_return_if_fail (text != NULL);
-  
+
+  list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_text_targets (list, 0);
+
+  n_targets = g_list_length (list->list);
+  targets = g_new (GtkTargetEntry, n_targets);
+  for (l = list->list, i = 0; l; l = l->next, i++)
+    {
+      GtkTargetPair *pair = (GtkTargetPair *)l->data;
+      targets[i].target = gdk_atom_name (pair->target);
+      targets[i].flags = 0;
+      targets[i].info = 0;
+    }
+
   if (len < 0)
     len = strlen (text);
   
   gtk_clipboard_set_with_data (clipboard, 
-			       targets, G_N_ELEMENTS (targets),
+			       targets, n_targets,
 			       text_get_func, text_clear_func,
 			       g_strndup (text, len));
   gtk_clipboard_set_can_store (clipboard, NULL, 0);
+
+  g_free (targets);
+  gtk_target_list_unref (list);
 }
 
 static void
