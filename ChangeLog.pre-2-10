@@ -1,3 +1,19 @@
+2004-02-06  Federico Mena Quintero  <federico@ximian.com>
+
+	Fix #132327.
+
+	* gtk/gtkfilesystemunix.c (struct _GtkFileSystemUnix): Add a
+	folder_hash field to keep a list of live folder objects.
+	(gtk_file_system_unix_init): Create the folder_hash.
+	(gtk_file_system_unix_finalize): Destroy the folder_hash.
+	(gtk_file_system_unix_get_folder): Ref and return an existing
+	folder if we have it around, otherwise return a new folder object.
+	(struct _GtkFileFolderUnix): Add a field for the parent file system.
+	(gtk_file_folder_unix_finalize): Remove the folder from the file
+	system's hash table.
+	(gtk_file_system_unix_create_folder):  Emit "files-added" on the
+	newly-created folder's parent.  Fixes #132327.
+
 Fri Feb  6 00:51:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkstock.c (builtin_items): Change the labels of the 

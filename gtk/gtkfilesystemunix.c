@@ -50,6 +50,8 @@ struct _GtkFileSystemUnixClass
 struct _GtkFileSystemUnix
 {
   GObject parent_instance;
+
+  GHashTable *folder_hash;
 };
 
 /* Icon type, supplemented by MIME type
@@ -86,6 +88,7 @@ struct _GtkFileFolderUnix
 {
   GObject parent_instance;
 
+  GtkFileSystemUnix *system_unix;
   GtkFileInfoType types;
   gchar *filename;
 };
@@ -280,11 +283,19 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
 static void
 gtk_file_system_unix_init (GtkFileSystemUnix *system_unix)
 {
+  system_unix->folder_hash = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 static void
 gtk_file_system_unix_finalize (GObject *object)
 {
+  GtkFileSystemUnix *system_unix;
+
+  system_unix = GTK_FILE_SYSTEM_UNIX (object);
+
+  /* FIXME: assert that the hash is empty? */
+  g_hash_table_destroy (system_unix->folder_hash);
+
   system_parent_class->finalize (object);
 }
 
@@ -314,18 +325,31 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 				 GtkFileInfoType    types,
 				 GError           **error)
 {
+  GtkFileSystemUnix *system_unix;
   GtkFileFolderUnix *folder_unix;
   const char *filename;
+
+  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
-  folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
-  folder_unix->filename = g_strdup (filename);
-  folder_unix->types = types;
+  folder_unix = g_hash_table_lookup (system_unix->folder_hash, filename);
 
-  return GTK_FILE_FOLDER (folder_unix);
+  if (folder_unix)
+    return g_object_ref (folder_unix);
+  else
+    {
+      folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
+      folder_unix->system_unix = system_unix;
+      folder_unix->filename = g_strdup (filename);
+      folder_unix->types = types;
+
+      g_hash_table_insert (system_unix->folder_hash, folder_unix->filename, folder_unix);
+
+      return GTK_FILE_FOLDER (folder_unix);
+    }
 }
 
 static gboolean
@@ -333,8 +357,12 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 				    const GtkFilePath *path,
 				    GError           **error)
 {
+  GtkFileSystemUnix *system_unix;
   const char *filename;
   gboolean result;
+  char *parent;
+
+  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
   filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
@@ -352,9 +380,29 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 		   filename_utf8 ? filename_utf8 : "???",
 		   g_strerror (errno));
       g_free (filename_utf8);
+      return FALSE;
     }
 
-  return result;
+  if (filename_is_root (filename))
+    return TRUE; /* hmmm, but with no notification */
+
+  parent = g_path_get_dirname (filename);
+  if (parent)
+    {
+      GtkFileFolderUnix *folder_unix;
+
+      folder_unix = g_hash_table_lookup (system_unix->folder_hash, parent);
+      if (folder_unix)
+	{
+	  GSList *paths;
+
+	  paths = g_slist_append (NULL, (GtkFilePath *) path);
+	  g_signal_emit_by_name (folder_unix, "files-added", paths);
+	  g_slist_free (paths);
+	}
+    }
+
+  return TRUE;
 }
 
 static void
@@ -1201,6 +1249,8 @@ static void
 gtk_file_folder_unix_finalize (GObject *object)
 {
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (object);
+
+  g_hash_table_remove (folder_unix->system_unix->folder_hash, folder_unix->filename);
 
   g_free (folder_unix->filename);
 
