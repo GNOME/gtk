@@ -3,9 +3,9 @@
 	* gdk-pixbuf/gdk-pixbuf-loader.c (gdk_pixbuf_loader_frame_done):
 	take frame offest into account when trying to calculate the
 	animation bbox.  Also set the width to the width not the height.
-	(gdk_pixbuf_loader_frame_done): cycle over the frames to calculate
-	bbox since only now do we have all the offset information for each
-	frame.
+	(gdk_pixbuf_loader_animation_done): cycle over the frames to
+	calculate bbox because now we finally have all the offset
+	information for each frame.
 
 2000-06-05	Mathieu Lacage  <mathieu@gnome.org>
 
