@@ -76,6 +76,8 @@ static void         gtk_combo_get_pos            (GtkCombo         *combo,
 						  gint             *height,
 						  gint             *width);
 static void         gtk_combo_popup_list         (GtkCombo         *combo);
+static void         gtk_combo_popdown_list       (GtkCombo         *combo);
+
 static void         gtk_combo_activate           (GtkWidget        *widget,
 						  GtkCombo         *combo);
 static gboolean     gtk_combo_popup_button_press (GtkWidget        *button,
@@ -84,8 +86,7 @@ static gboolean     gtk_combo_popup_button_press (GtkWidget        *button,
 static gboolean     gtk_combo_popup_button_leave (GtkWidget        *button,
 						  GdkEventCrossing *event,
 						  GtkCombo         *combo);
-static void         gtk_combo_update_entry       (GtkList          *list,
-						  GtkCombo         *combo);
+static void         gtk_combo_update_entry       (GtkCombo         *combo);
 static void         gtk_combo_update_list        (GtkEntry         *entry,
 						  GtkCombo         *combo);
 static gint         gtk_combo_button_press       (GtkWidget        *widget,
@@ -145,7 +146,7 @@ gtk_combo_class_init (GtkComboClass * klass)
                                    PROP_ENABLE_ARROWS_ALWAYS,
                                    g_param_spec_boolean ("enable_arrows_always",
                                                          _("Always enable arrows"),
-                                                         _("Whether the arrow keys work, even if the entry contents are not in the list"),
+                                                         _("Obsolete property, ignored"),
                                                          TRUE,
                                                          G_PARAM_READABLE | G_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
@@ -199,11 +200,11 @@ static int
 gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * combo)
 {
   GList *li;
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
   /* completion */
-  if ((event->keyval == GDK_Tab ||
-       event->keyval == GDK_KP_Tab) &&
-      (event->state & GDK_MOD1_MASK)) 
+  if ((event->keyval == GDK_Tab ||  event->keyval == GDK_KP_Tab) &&
+      state == GDK_MOD1_MASK)
     {
       GtkEditable *editable = GTK_EDITABLE (entry);
       GCompletion * cmpl;
@@ -214,8 +215,6 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
       if ( !GTK_LIST (combo->list)->children )
 	return FALSE;
     
-      g_signal_stop_emission_by_name (entry, "key_press_event");
-
       cmpl = g_completion_new ((GCompletionFunc)gtk_combo_func);
       g_completion_add_items (cmpl, GTK_LIST (combo->list)->children);
 
@@ -239,44 +238,49 @@ gtk_combo_entry_key_press (GtkEntry * entry, GdkEventKey * event, GtkCombo * com
       return TRUE;
     }
 
+  if ((event->keyval == GDK_Down || event->keyval == GDK_KP_Down) &&
+      state == GDK_MOD1_MASK)
+    {
+      gtk_combo_activate (NULL, combo);
+      return TRUE;
+    }
+
   if (!combo->use_arrows || !GTK_LIST (combo->list)->children)
     return FALSE;
 
+  gtk_combo_update_list (GTK_ENTRY (combo->entry), combo);
   li = g_list_find (GTK_LIST (combo->list)->children, gtk_combo_find (combo));
 
-  if ((event->keyval == GDK_Up)
-      || (event->keyval == GDK_KP_Up)
-      || ((event->state & GDK_MOD1_MASK) && ((event->keyval == 'p') || (event->keyval == 'P'))))
+  if (((event->keyval == GDK_Up || event->keyval == GDK_KP_Up) && state == 0) ||
+      ((event->keyval == 'p' || event->keyval == 'P') && state == GDK_MOD1_MASK))
     {
-      if (li)
+      if (!li)
+	li = g_list_last (GTK_LIST (combo->list)->children);
+      else
 	li = li->prev;
-      if (!li && combo->use_arrows_always)
-	{
-	  li = g_list_last (GTK_LIST (combo->list)->children);
-	}
+
       if (li)
 	{
 	  gtk_list_select_child (GTK_LIST (combo->list), GTK_WIDGET (li->data));
-	  g_signal_stop_emission_by_name (entry, "key_press_event");
-	  return TRUE;
+	  gtk_combo_update_entry (combo);
 	}
+      
+      return TRUE;
     }
-  else if ((event->keyval == GDK_Down)
-	   || (event->keyval == GDK_KP_Down)
-	   || ((event->state & GDK_MOD1_MASK) && ((event->keyval == 'n') || (event->keyval == 'N'))))
+  if (((event->keyval == GDK_Down || event->keyval == GDK_KP_Down) && state == 0) ||
+      ((event->keyval == 'n' || event->keyval == 'N') && state == GDK_MOD1_MASK))
     {
-      if (li)
+      if (!li)
+	li = GTK_LIST (combo->list)->children;
+      else if (li)
 	li = li->next;
-      if (!li && combo->use_arrows_always)
-	{
-	  li = GTK_LIST (combo->list)->children;
-	}
       if (li)
 	{
 	  gtk_list_select_child (GTK_LIST (combo->list), GTK_WIDGET (li->data));
-	  g_signal_stop_emission_by_name (entry, "key_press_event");
-	  return TRUE;
+	  gtk_combo_update_entry (combo);
 	}
+      
+      return TRUE;
     }
   return FALSE;
 }
@@ -286,25 +290,27 @@ gtk_combo_window_key_press (GtkWidget   *window,
 			    GdkEventKey *event,
 			    GtkCombo    *combo)
 {
-  if (event->keyval == GDK_Return || event->keyval == GDK_KP_Enter)
-    {
-      if (GTK_WIDGET_VISIBLE (combo->popwin))
-	{
-	  gtk_widget_hide (combo->popwin);
-	  
-	  if (GTK_WIDGET_HAS_GRAB (combo->popwin))
-	    {
-	      gtk_grab_remove (combo->popwin);
-	      gdk_display_pointer_ungrab (gtk_widget_get_display (window),
-					  event->time);
-	      gdk_display_keyboard_ungrab (gtk_widget_get_display (window),
-					   event->time);
-	    }
-	}
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
 
-      g_signal_stop_emission_by_name (window, "key_press_event");
+  if ((event->keyval == GDK_Return || event->keyval == GDK_KP_Enter) &&
+      state == 0)
+    {
+      gtk_combo_popdown_list (combo);
+      gtk_combo_update_entry (combo);
 
       return TRUE;
+    }
+  else if ((event->keyval == GDK_Up || event->keyval == GDK_KP_Up) &&
+	   state == GDK_MOD1_MASK)
+    {
+      gtk_combo_popdown_list (combo);
+
+      return TRUE;
+    }
+  else if ((event->keyval == GDK_space || event->keyval == GDK_KP_Space) &&
+	   state == 0)
+    {
+      gtk_combo_update_entry (combo);
     }
 
   return FALSE;
@@ -538,6 +544,7 @@ gtk_combo_popup_list (GtkCombo * combo)
     {
       GTK_WIDGET_SET_FLAGS (list, GTK_CAN_FOCUS);
       gtk_widget_grab_focus (combo->list);
+      GTK_LIST (combo->list)->last_focus_child = NULL;
       GTK_WIDGET_UNSET_FLAGS (list, GTK_CAN_FOCUS);
     }
   
@@ -604,7 +611,7 @@ gtk_combo_activate (GtkWidget        *widget,
     return;
 
   gtk_combo_popup_list (combo);
-
+  
   /* This must succeed since we already have the grab */
   popup_grab_on_window (combo->popwin->window,
 			gtk_get_current_event_time ());
@@ -657,12 +664,11 @@ gtk_combo_popup_button_leave (GtkWidget        *button,
 }
 
 static void
-gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
+gtk_combo_update_entry (GtkCombo * combo)
 {
+  GtkList *list = GTK_LIST (combo->list);
   char *text;
 
-  gtk_grab_remove (GTK_WIDGET (combo));
-  g_signal_handler_block (list, combo->list_change_id);
   if (list->selection)
     {
       text = gtk_combo_func (GTK_LIST_ITEM (list->selection->data));
@@ -670,7 +676,6 @@ gtk_combo_update_entry (GtkList * list, GtkCombo * combo)
 	text = "";
       gtk_entry_set_text (GTK_ENTRY (combo->entry), text);
     }
-  g_signal_handler_unblock (list, combo->list_change_id);
 }
 
 static void
@@ -720,6 +725,13 @@ gtk_combo_button_press (GtkWidget * widget, GdkEvent * event, GtkCombo * combo)
   return TRUE;
 }
 
+static gboolean
+is_within (GtkWidget *widget,
+	   GtkWidget *ancestor)
+{
+  return widget == ancestor || gtk_widget_is_ancestor (widget, ancestor);
+}
+
 static void
 gtk_combo_button_event_after (GtkWidget *widget,
 			      GdkEvent  *event,
@@ -730,6 +742,8 @@ gtk_combo_button_event_after (GtkWidget *widget,
   if (event->type != GDK_BUTTON_RELEASE)
     return;
   
+  child = gtk_get_event_widget ((GdkEvent*) event);
+
   if ((combo->current_button != 0) && (event->button.button == 1))
     {
       /* This was the initial button press */
@@ -737,12 +751,7 @@ gtk_combo_button_event_after (GtkWidget *widget,
       combo->current_button = 0;
 
       /* Check to see if we released inside the button */
-      child = gtk_get_event_widget ((GdkEvent*) event);
-
-      while (child && child != (combo->button))
-	child = child->parent;
-
-      if (child == combo->button)
+      if (child && is_within (child, combo->button))
 	{
 	  gtk_grab_add (combo->popwin);
 	  gdk_pointer_grab (combo->popwin->window, TRUE,
@@ -754,7 +763,11 @@ gtk_combo_button_event_after (GtkWidget *widget,
 	}
     }
 
+  if (is_within (child, combo->list))
+    gtk_combo_update_entry (combo);
+    
   gtk_combo_popdown_list (combo);
+
 }
 
 static void
@@ -837,7 +850,9 @@ gtk_combo_list_enter (GtkWidget        *widget,
 static int
 gtk_combo_list_key_press (GtkWidget * widget, GdkEventKey * event, GtkCombo * combo)
 {
-  if (event->keyval == GDK_Escape)
+  guint state = event->state & gtk_accelerator_get_default_mod_mask ();
+
+  if (event->keyval == GDK_Escape && state == 0)
     {
       if (GTK_WIDGET_HAS_GRAB (combo->list))
 	gtk_list_end_drag_selection (GTK_LIST (combo->list));
@@ -939,10 +954,6 @@ gtk_combo_init (GtkCombo * combo)
 				       gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (combo->popup)));
   gtk_widget_show (combo->list);
 
-  combo->list_change_id = g_signal_connect (combo->list,
-					    "selection_changed",
-					    G_CALLBACK (gtk_combo_update_entry),
-					    combo);
   g_signal_connect (combo->popwin, "key_press_event",
 		    G_CALLBACK (gtk_combo_list_key_press), combo);
   g_signal_connect (combo->popwin, "button_press_event",

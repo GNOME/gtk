@@ -1,3 +1,32 @@
+Wed Nov 13 17:03:19 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcombo.c: Change so that updates of selection
+	don't take effect immediately, but only when popdown
+	is closed with a button release within the combo
+	or Return/Enter.
+
+	* gtk/gtkcombo.c: Support Alt-Down to pop down the 
+	combo, Alt-Up to pop it back up, Space to immediately 
+	select current item.
+	
+	* gtk/gtkcombo.c (gtk_combo_entry_key_press): Don't
+	move the focus when we get to the ends of the list
+	entries.
+
+	* gtk/gtkcombo.c: Fix handling of state in ad-hoc 
+	keybinding handling to be a bit more reasonable.
+
+	* gtk/gtkcombo.c (gtk_combo_popup_list): Clear 
+	last_focus_child when no item is selected so we 
+	don't start focusing from some random place.
+
+	* gtk/gtkcombo.c (gtk_combo_init): Make
+	gtk_combo_set_use_arrows_always, enable_arrows_always 
+	properties have no effect, they were an awful idea.
+	Always behave as if enable_arrows_always is true.
+
+	* gtk/gtknotebook.c: Fix a warning.
+
 Wed Nov 13 13:50:25 2002  Eric Warmenhoven <warmenhoven@yahoo.com>
 
 	* gdk/linux-fb/gdkinput.c: add gdk_display_get_devices to fix

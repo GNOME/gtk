@@ -23,15 +23,6 @@ By default, the user can step through the items in the list using the
 arrow (cursor) keys, though this behaviour can be turned off with
 gtk_combo_set_use_arrows().
 </para>
-<para>
-Normally the arrow keys are only active when the contents of the text entry
-field matches one of the items in the list. If the contents of the entry field
-do not match any of the list items, then pressing the arrow keys does nothing.
-However, by calling gtk_combo_set_use_arrows_always() you can specify that the
-arrow keys are always active. If the contents of the entry field does not match
-any of the items in the list, then pressing the up or down arrow key will set
-the entry field to the last or first item in the list, respectively.
-</para>
 
 <example id="gtkcombo-simple-example">
 <title>Creating a <structname>GtkCombo</structname> widget with simple text 
@@ -112,6 +103,8 @@ an application.)
 </tbody></tgroup></informaltable>
 </para>
 
+@entry: 
+@list: 
 
 <!-- ##### FUNCTION gtk_combo_new ##### -->
 <para>
@@ -158,13 +151,11 @@ the list. This is on by default.
 
 <!-- ##### FUNCTION gtk_combo_set_use_arrows_always ##### -->
 <para>
-Specifies if the arrow keys will still work even if the current contents of the
-#GtkEntry field do not match any of the list items. 
+Obsolete function, does nothing.
 </para>
 
 @combo: a #GtkCombo.
-@val: %TRUE if the arrow keys will still work even if the current contents of
-the #GtkEntry field do not match any of the list items.
+@val: unused
 
 
 <!-- ##### FUNCTION gtk_combo_set_case_sensitive ##### -->

@@ -48,14 +48,21 @@ typedef struct _GtkComboClass	GtkComboClass;
 /* you should access only the entry and list fields directly */
 struct _GtkCombo {
 	GtkHBox hbox;
+  
+        /*< public >*/
 	GtkWidget *entry;
+	
+        /*< private >*/
 	GtkWidget *button;
 	GtkWidget *popup;
 	GtkWidget *popwin;
+	
+        /*< public >*/
 	GtkWidget *list;
 
+        /*< private >*/
 	guint entry_change_id;
-	guint list_change_id;
+	guint list_change_id;	/* unused */
 
 	guint value_in_list:1;
 	guint ok_if_empty:1;

@@ -1610,7 +1610,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	  (y <= (page->allocation.y + page->allocation.height)))
 	{
 	  gboolean page_changed = page != notebook->cur_page;
-	  gboolean was_focus = gtk_widget_is_focus (notebook);
+	  gboolean was_focus = gtk_widget_is_focus (widget);
 	  
 	  gtk_notebook_switch_focus_tab (notebook, children);
 	  gtk_widget_grab_focus (widget);
