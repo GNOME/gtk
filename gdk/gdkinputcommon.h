@@ -257,7 +257,29 @@ gdk_input_device_new(XDeviceInfo *device, gint include_core)
     }
 
   if (device->use != IsXPointer)
+    {
+      int error_warn = gdk_error_warnings;
+
+      gdk_error_warnings = 0;
+      gdk_error_code = 0;
       gdkdev->xdevice = XOpenDevice(gdk_display, gdkdev->info.deviceid);
+      gdk_error_warnings = error_warn;
+
+      /* return NULL if device is not ready */
+      if (gdk_error_code)
+	{
+	  g_free (gdkdev->info.name);
+	  if (gdkdev->axes)
+	    g_free (gdkdev->axes);
+	  if (gdkdev->info.keys)
+	    g_free (gdkdev->info.keys);
+	  if (gdkdev->info.axes)
+	    g_free (gdkdev->info.axes);
+	  g_free (gdkdev);
+
+	  return NULL;
+	}
+    }
 
   gdkdev->buttonpress_type = 0;
   gdkdev->buttonrelease_type = 0;

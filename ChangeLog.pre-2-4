@@ -1,3 +1,9 @@
+Fri Mar  6 14:47:33 PST 1998 Shawn T. Amundson <amundson@gimp.org>
+
+        * Applied gtk-matsu-980205-0 (oops, should be 980305)
+	  gdk/gdkinputcommon.h: return NULL if device is not ready
+          gtk/gtkwindow.h: check for GDK_ISO_Left_Tab
+
 Fri Mar  6 13:17:58 1998  Marc Ewing  <marc@.redhat.com>
 
 	* gtk/gtkclist.c (real_select_row, real_unselect_row): 

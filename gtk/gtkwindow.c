@@ -806,6 +806,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	case GDK_Left:
 	case GDK_Right:
 	case GDK_Tab:
+	case GDK_ISO_Left_Tab:
 	  switch (event->keyval)
 	    {
 	    case GDK_Up:
@@ -821,6 +822,7 @@ gtk_window_key_press_event (GtkWidget   *widget,
 	      direction = GTK_DIR_RIGHT;
 	      break;
 	    case GDK_Tab:
+	    case GDK_ISO_Left_Tab:
 	      if (event->state & GDK_SHIFT_MASK)
 		direction = GTK_DIR_TAB_BACKWARD;
 	      else
