@@ -282,8 +282,8 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 
   gtk_text_freeze (GTK_TEXT (selection_text));
   gtk_text_set_point (GTK_TEXT (selection_text), 0);
-  gtk_text_foreward_delete (GTK_TEXT (selection_text), 
-			    gtk_text_get_length (GTK_TEXT (selection_text)));
+  gtk_text_forward_delete (GTK_TEXT (selection_text), 
+			   gtk_text_get_length (GTK_TEXT (selection_text)));
 
   position = 0;
   while (position < data->length)

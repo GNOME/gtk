@@ -192,7 +192,7 @@ void       gtk_text_insert          (GtkText       *text,
 				     gint           length);
 gint       gtk_text_backward_delete (GtkText       *text,
 				     guint          nchars);
-gint       gtk_text_foreward_delete (GtkText       *text,
+gint       gtk_text_forward_delete  (GtkText       *text,
 				     guint          nchars);
 
 

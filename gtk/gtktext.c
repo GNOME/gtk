@@ -578,11 +578,11 @@ gtk_text_backward_delete (GtkText *text,
 
   gtk_text_set_point (text, text->point.index - nchars);
 
-  return gtk_text_foreward_delete (text, nchars);
+  return gtk_text_forward_delete (text, nchars);
 }
 
 gint
-gtk_text_foreward_delete (GtkText *text,
+gtk_text_forward_delete (GtkText *text,
 			  guint    nchars)
 {
   g_return_val_if_fail (text != NULL, 0);
@@ -1080,7 +1080,7 @@ gtk_text_key_press (GtkWidget   *widget,
 	      if (!text->has_cursor || LAST_INDEX (text, text->cursor_mark))
 		break;
 
-	      gtk_text_foreward_delete (text, 1);
+	      gtk_text_forward_delete (text, 1);
 	      break;
 	    case GDK_Tab:
 	      if (!text->has_cursor)

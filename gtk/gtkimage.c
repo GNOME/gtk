@@ -127,17 +127,17 @@ static gint
 gtk_image_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkImage *image;
-  GtkMisc *misc;
-  GdkRectangle area;
-  gint x, y;
-
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
     {
+      GtkImage *image;
+      GtkMisc *misc;
+      GdkRectangle area, image_bound, intersection;
+      gint x, y;
+      
       image = GTK_IMAGE (widget);
       misc = GTK_MISC (widget);
 
@@ -156,20 +156,23 @@ gtk_image_expose (GtkWidget      *widget,
 	  gdk_gc_set_clip_origin (widget->style->black_gc, x, y);
 	}
 
+      image_bound.x = x;
+      image_bound.y = y;      
+      image_bound.width = image->image->width;
+      image_bound.height = image->image->height;      
+
       area = event->area;
-      if ((area.x < 0) || (area.y < 0))
-	{
-	  area.x = area.y = 0;
-	  area.width = image->image->width;
-	  area.height = image->image->height;
-	}
-
-      gdk_draw_image (widget->window,
-		      widget->style->black_gc,
-		      image->image,
-		      area.x, area.y, x+area.x, y+area.y,
-		      area.width, area.height);
-
+      
+      if(gdk_rectangle_intersect(&image_bound, &area, &intersection))
+        {
+          gdk_draw_image (widget->window,
+                          widget->style->black_gc,
+                          image->image,
+                          image_bound.x - x, image_bound.y - y,
+                          image_bound.x, image_bound.y,
+                          image_bound.width, image_bound.height);
+        }
+      
       if (image->mask)
 	{
 	  gdk_gc_set_clip_mask (widget->style->black_gc, NULL);
