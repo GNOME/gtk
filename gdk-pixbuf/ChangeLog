@@ -1,3 +1,17 @@
+1999-12-17  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-io.c (gdk_pixbuf_animation_new_from_file):
+	moved the file here.  It seems natural to put this function here,
+	as that's where the gdk_pixbuf_new_from_file function is, but it's
+	still a little convoluted.  The source files might be played with
+	in a bit.
+
+1999-12-14  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-loader.c
+	(gdk_pixbuf_loader_get_animation):  Gets the animation from the
+	loader.
+
 1999-12-16  Federico Mena Quintero  <federico@redhat.com>
 
 	* doc/tmpl/rendering.sgml: Added notice about initializing GdkRGB

@@ -38,7 +38,7 @@ libexec_LTLIBRARIES =		\
 	$(PNM_LIB)	\
 	$(BMP_LIB)
 
-noinst_PROGRAMS = testpixbuf testpixbuf-drawable
+noinst_PROGRAMS = testpixbuf testpixbuf-drawable testanimation
 
 DEPS = libgdk_pixbuf.la
 INCLUDES = -I$(top_srcdir) -I$(top_builddir) \
@@ -56,6 +56,15 @@ else
 testpixbuf_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
 testpixbuf_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
 endif
+
+if INSIDE_GNOME_LIBS
+testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) -lgmodule
+testanimation_drawable_LDADD = $(LDADDS)
+else
+testanimation_LDADD = $(LDADDS) $(LIBART_LIBS) $(GNOME_LIBS) -lgmodule
+testanimation_drawable_LDADD = $(LDADDS) $(GNOME_LIBS)
+endif
+
 
 GDK_PIXBUF_LIBS = $(LIBART_LIBS) $(GLIB_LIBS) $(GTK_LIBS)
 

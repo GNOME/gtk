@@ -234,6 +234,9 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module)
 
         if (g_module_symbol (module, "image_load_increment", &load_sym))
 		image_module->load_increment = load_sym;
+
+        if (g_module_symbol (module, "image_load_animation", &load_sym))
+		image_module->load_animation = load_sym;
 }
 
 
@@ -311,10 +314,10 @@ gdk_pixbuf_new_from_file (const char *filename)
 /**
  * gdk_pixbuf_new_from_xpm_data:
  * @data: Pointer to inline XPM data.
- * 
+ *
  * Creates a new pixbuf by parsing XPM data in memory.  This data is commonly
  * the result of including an XPM file into a program's C source.
- * 
+ *
  * Return value: A newly-created pixbuf with a reference count of 1.
  **/
 GdkPixbuf *
@@ -340,4 +343,76 @@ gdk_pixbuf_new_from_xpm_data (const gchar **data)
         pixbuf = load_xpm_data(data);
 
         return pixbuf;
+}
+
+
+/**
+ * gdk_pixbuf_animation_new_from_file:
+ * @filename: The filename.
+ * 
+ * Creates a new @GdkPixbufAnimation with @filename loaded as the animation.  If
+ * @filename doesn't exist or is an invalid file, the @n_frames member will be
+ * 0.  If @filename is a static image (and not an animation) then the @n_frames
+ * member will be 1.
+ * 
+ * Return value: A newly created GdkPixbufAnimation.
+ **/
+GdkPixbufAnimation *
+gdk_pixbuf_animation_new_from_file (const gchar *filename)
+{
+	GdkPixbufAnimation *animation;
+	gint size;
+	FILE *f;
+	char buffer [128];
+	GdkPixbufModule *image_module;
+
+	f = fopen (filename, "r");
+	if (!f)
+		return NULL;
+
+	size = fread (&buffer, 1, sizeof (buffer), f);
+
+	if (size == 0) {
+		fclose (f);
+		return NULL;
+	}
+
+	image_module = gdk_pixbuf_get_module (buffer, size);
+	if (image_module){
+		if (image_module->module == NULL)
+			gdk_pixbuf_load_module (image_module);
+
+		if (image_module->load_animation == NULL) {
+			GdkPixbufFrame *frame;
+			if (image_module->load == NULL) {
+				fclose (f);
+				return NULL;
+			}
+			animation = g_new (GdkPixbufAnimation, 1);
+			frame = g_new (GdkPixbufFrame, 1);
+
+			animation->n_frames = 1;
+			animation->frames = g_list_prepend (NULL, (gpointer) frame);
+
+			frame->x_offset = 0;
+			frame->y_offset = 0;
+			frame->delaytime = -1;
+			frame->action = GDK_PIXBUF_FRAME_RETAIN;
+
+			fseek (f, 0, SEEK_SET);
+			frame->pixbuf = (* image_module->load) (f);
+			fclose (f);
+		} else {
+			fseek (f, 0, SEEK_SET);
+			animation = (* image_module->load_animation) (f);
+			fclose (f);
+		}
+
+		return animation;
+	} else {
+		g_warning ("Unable to find handler for file: %s", filename);
+	}
+
+	fclose (f);
+	return NULL;
 }

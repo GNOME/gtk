@@ -293,32 +293,6 @@ gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
 	return (pixbuf->art_pixbuf->rowstride);
 }
 
-
-/**
- * gdk_pixbuf_animation_new_from_file:
- * @filename: The filename.
- * 
- * Creates a new @GdkPixbufAnimation with @filename loaded as the animation.  If
- * @filename doesn't exist or is an invalid file, the @n_frames member will be
- * 0.  If @filename is a static image (and not an animation) then the @n_frames
- * member will be 1.
- * 
- * Return value: A newly created GdkPixbufAnimation.
- **/
-GdkPixbufAnimation *
-gdk_pixbuf_animation_new_from_file (const char *filename)
-{
-	GdkPixbufAnimation *retval;
-
-	g_return_val_if_fail (filename != NULL, NULL);
-
-	retval = g_new (GdkPixbufAnimation, 1);
-	retval->n_frames = 0;
-	retval->frames = NULL;
-
-	return retval;
-}
-
 /**
  * gdk_pixbuf_animation_destroy:
  * @animation: An animation.

@@ -56,6 +56,7 @@ static guint pixbuf_loader_signals[LAST_SIGNAL] = { 0 };
 
 typedef struct {
 	GdkPixbuf *pixbuf;
+	GdkPixbufAnimation *animation;
 	gboolean closed;
 	gchar header_buf[LOADER_HEADER_SIZE];
 	gint header_buf_offset;
@@ -378,6 +379,30 @@ gdk_pixbuf_loader_get_pixbuf (GdkPixbufLoader *loader)
 	priv = loader->private;
 
 	return priv->pixbuf;
+}
+
+/**
+ * gdk_pixbuf_loader_get_animation:
+ * @loader: A pixbuf loader
+ * 
+ * Queries the GdkPixbufAnimation that a pixbuf loader is currently creating.
+ * In general it only makes sense to call this function afer the "area_prepared"
+ * signal has been emitted by the loader.
+ * 
+ * Return value: The GdkPixbufAnimation that the loader is loading, or NULL if
+ not enough data has been read to determine the information.
+ **/
+GdkPixbufAnimation *
+gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader)
+{
+	GdkPixbufLoaderPrivate *priv;
+
+	g_return_val_if_fail (loader != NULL, NULL);
+	g_return_val_if_fail (GDK_IS_PIXBUF_LOADER (loader), NULL);
+
+	priv = loader->private;
+
+	return priv->animation;
 }
 
 /**
