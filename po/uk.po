@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
 "POT-Creation-Date: 2003-02-13 18:23+0200\n"
-"PO-Revision-Date: 2003-02-19 15:21--500\n"
+"PO-Revision-Date: 2003-02-20 08:42--500\n"
 "Last-Translator: Yuriy Syrota <yuri@renome.rovno.ua>\n"
 "Language-Team: Ukrainian <uk@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -923,14 +923,13 @@ msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr "Додатковий промідок між вкладеним елементом і його сусідами, в точках"
 
 #: gtk/gtkbox.c:167
-#, fuzzy
 msgid "Pack type"
-msgstr "Тип тіні"
+msgstr "Тип вкладання"
 
 #: gtk/gtkbox.c:168
 #: gtk/gtknotebook.c:488
 msgid "A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"
-msgstr ""
+msgstr "Об'єкт GtkPackType, що визначає, має вкладений об'єкт вкладатися з прив'язкою до початку чи до кінця батьківського об'єкта"
 
 #: gtk/gtkbox.c:174
 #: gtk/gtknotebook.c:466
@@ -941,9 +940,8 @@ msgstr "Позиція"
 
 #: gtk/gtkbox.c:175
 #: gtk/gtknotebook.c:467
-#, fuzzy
 msgid "The index of the child in the parent"
-msgstr "Індекс поточної сторінки"
+msgstr "Індекс вкладеного елемента у батьківському"
 
 #: gtk/gtkbutton.c:189
 #: gtk/gtkframe.c:125
@@ -1277,13 +1275,13 @@ msgstr "Назва родини шрифтів, наприклад, Sans, Helvet
 #: gtk/gtkcellrenderertext.c:266
 #: gtk/gtktexttag.c:306
 msgid "Font style"
-msgstr "Стиль"
+msgstr "Стиль шрифта"
 
 #: gtk/gtkcellrenderertext.c:274
 #: gtk/gtkcellrenderertext.c:275
 #: gtk/gtktexttag.c:315
 msgid "Font variant"
-msgstr "Варіант"
+msgstr "Варіант шрифта"
 
 #: gtk/gtkcellrenderertext.c:283
 #: gtk/gtkcellrenderertext.c:284
@@ -1301,7 +1299,7 @@ msgstr "Розтягненість шрифта"
 #: gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
 msgid "Font size"
-msgstr "Розмір"
+msgstr "Розмір шрифта"
 
 #: gtk/gtkcellrenderertext.c:312
 #: gtk/gtktexttag.c:364
@@ -2870,7 +2868,7 @@ msgstr "Вирівнювання"
 
 #: gtk/gtkprogressbar.c:143
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr ""
+msgstr "Об'єкт GtkAdjustment пов'язаний з панеллю поступу (застаріле)"
 
 #: gtk/gtkprogressbar.c:150
 #: gtk/gtktoolbar.c:231
@@ -2887,19 +2885,19 @@ msgstr "Стиль панелі"
 
 #: gtk/gtkprogressbar.c:160
 msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr ""
+msgstr "Визначає стиль відображення пінелі у відсотковому режими (застаріле)"
 
 #: gtk/gtkprogressbar.c:168
 msgid "Activity Step"
-msgstr ""
+msgstr "Крок активності"
 
 #: gtk/gtkprogressbar.c:169
 msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr ""
+msgstr "Приріст для кожної ітерації в режимі активності (застаріле)"
 
 #: gtk/gtkprogressbar.c:178
 msgid "Activity Blocks"
-msgstr ""
+msgstr "Блоки активності"
 
 #: gtk/gtkprogressbar.c:179
 msgid "The number of blocks which can fit in the progress bar area in activity mode (Deprecated)"
@@ -2955,11 +2953,11 @@ msgstr "Об'єкт GtkAdjustment, що містить поточне значе
 
 #: gtk/gtkrange.c:292
 msgid "Inverted"
-msgstr ""
+msgstr "Зворотній"
 
 #: gtk/gtkrange.c:293
 msgid "Invert direction slider moves to increase range value"
-msgstr ""
+msgstr "Зворотній напрямок руху повзунка призводить до збільшення значення"
 
 #: gtk/gtkrange.c:299
 msgid "Slider Width"
@@ -2967,7 +2965,7 @@ msgstr "Ширина повзунка"
 
 #: gtk/gtkrange.c:300
 msgid "Width of scrollbar or scale thumb"
-msgstr ""
+msgstr "Ширина повзунка чи вказівника"
 
 #: gtk/gtkrange.c:307
 #, fuzzy
@@ -3000,7 +2998,7 @@ msgstr "Горизонтальний зсув стрілки"
 
 #: gtk/gtkrange.c:332
 msgid "How far in the x direction to move the arrow when the button is depressed"
-msgstr ""
+msgstr "Наскільку посувати стрілку по горизонталі, коли натиснуто кнопку"
 
 #: gtk/gtkrange.c:339
 msgid "Arrow Y Displacement"
@@ -3008,7 +3006,7 @@ msgstr "Вертикальний зсув стрілки"
 
 #: gtk/gtkrange.c:340
 msgid "How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
+msgstr "Наскільку посувати стрілку по вертикалі, коли натиснуто кнопку"
 
 #: gtk/gtkrc.c:2376
 #, c-format
@@ -3194,15 +3192,15 @@ msgstr "Міжстовпчиковий проміжок"
 
 #: gtk/gtkscrolledwindow.c:283
 msgid "Number of pixels between the scrollbars and the scrolled window"
-msgstr ""
+msgstr "Кількість точок між панелями прокрутки і прокручуваним вікном"
 
 #: gtk/gtksettings.c:168
 msgid "Double Click Time"
-msgstr ""
+msgstr "Час подвійного клацання"
 
 #: gtk/gtksettings.c:169
 msgid "Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"
-msgstr ""
+msgstr "Максимальний час між двома клацаннями, щоб вважати їх одним подвійним клацанням (в мілісекундах)"
 
 #: gtk/gtksettings.c:176
 msgid "Cursor Blink"
@@ -3218,7 +3216,7 @@ msgstr "Період блимання курсора"
 
 #: gtk/gtksettings.c:185
 msgid "Length of the cursor blink cycle, in milleseconds"
-msgstr ""
+msgstr "Величина циклу блимання курсора, в мілісекундах"
 
 #: gtk/gtksettings.c:192
 msgid "Split Cursor"
@@ -3234,15 +3232,15 @@ msgstr "Назва теми"
 
 #: gtk/gtksettings.c:201
 msgid "Name of theme RC file to load"
-msgstr ""
+msgstr "Назва RC-файла з темою, який необхідно завантажити"
 
 #: gtk/gtksettings.c:208
 msgid "Key Theme Name"
-msgstr ""
+msgstr "Назва ключової теми"
 
 #: gtk/gtksettings.c:209
 msgid "Name of key theme RC file to load"
-msgstr ""
+msgstr "Назва RC-файла з ключовою темою, який необхідно завантажити"
 
 #: gtk/gtksettings.c:217
 msgid "Menu bar accelerator"
@@ -3810,19 +3808,19 @@ msgstr "Опис шрифта у вигляді рядка, наприклад \
 
 #: gtk/gtktexttag.c:307
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "Шрифт у вигляді PangoStyle, наприклад, PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:316
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
+msgstr "Варіант шрифта у вигляді PangoVariant, наприклад, PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:325
 msgid "Font weight as an integer, see predefined values in PangoWeight; for example, PANGO_WEIGHT_BOLD"
-msgstr ""
+msgstr "Варіант шрифта у вигляді цілого числа, дивіться передвизначені значення у PangoWeight, наприклад PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:336
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
+msgstr "Розтягненість шрифта у вигляді PangoStretch, наприклад PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:345
 msgid "Font size in Pango units"
@@ -3830,7 +3828,7 @@ msgstr "Розмір шрифта в одиницях Pango"
 
 #: gtk/gtktexttag.c:355
 msgid "Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE"
-msgstr ""
+msgstr "Розмір шрифта у вигляді множника масштабу відносно звичайного розміру шрифта. Ця властивіть до змін у темі, і тому є рекеомендованою. Pango визначає декілька масштабів, наприклад, PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:375
 #: gtk/gtktextview.c:588
@@ -4082,19 +4080,19 @@ msgstr ""
 
 #: gtk/gtktextview.c:540
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "Точок над рядками"
 
 #: gtk/gtktextview.c:550
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "Точок під рядками"
 
 #: gtk/gtktextview.c:560
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr "Точок в загортанні"
 
 #: gtk/gtktextview.c:578
 msgid "Wrap Mode"
-msgstr ""
+msgstr "Режим загортання"
 
 #: gtk/gtktextview.c:596
 msgid "Left Margin"
@@ -4110,7 +4108,7 @@ msgstr "Видимий курсор"
 
 #: gtk/gtktextview.c:635
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Чи показується курсор вставляння"
 
 #: gtk/gtktextview.c:6575
 msgid "Input _Methods"
@@ -4164,7 +4162,7 @@ msgstr "Розмір пропусків"
 
 #: gtk/gtktoolbar.c:259
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr ""
+msgstr "Відстань між тінню пенала і кнопками"
 
 #: gtk/gtktoolbar.c:267
 msgid "Space style"
@@ -4192,7 +4190,7 @@ msgstr "Стиль панелі інструментів"
 
 #: gtk/gtktoolbar.c:292
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
+msgstr "Чи матимуть пенали, початково, лише текст, текст і піктограми, лише піктограми тощо."
 
 #: gtk/gtktoolbar.c:298
 msgid "Toolbar icon size"
@@ -4204,19 +4202,19 @@ msgstr "Розмір піктограм в типових пеналах"
 
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
-msgstr ""
+msgstr "Модель TreeModelSort"
 
 #: gtk/gtktreemodelsort.c:307
 msgid "The model for the TreeModelSort to sort"
-msgstr ""
+msgstr "Модель для сортування TreeModelSort"
 
 #: gtk/gtktreeview.c:519
 msgid "TreeView Model"
-msgstr ""
+msgstr "Модель TreeView"
 
 #: gtk/gtktreeview.c:520
 msgid "The model for the tree view"
-msgstr ""
+msgstr "Модель для перегляду у вигляді дерева"
 
 #: gtk/gtktreeview.c:528
 msgid "Horizontal Adjustment for the widget"
