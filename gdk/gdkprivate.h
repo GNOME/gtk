@@ -94,6 +94,7 @@ struct _GdkWindowPrivate
   guint8 resize_count;
   guint mapped : 1;
   guint guffaw_gravity : 1;
+  guint input_only : 1;
 
   gint extension_events;
 

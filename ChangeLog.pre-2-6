@@ -1,3 +1,18 @@
+Thu Feb 24 23:58:21 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkgeometry-x11.c: Don't worry about clipping of
+	toplevel windows and their immediate children by their parents,
+	since the size of toplevel windows is out of our immediate
+	control and we don't get any real benefit from trying to track
+	this size for clipping.
+
+	* gdk/gdkprivate.h (struct _GdkWindowPrivate) gdk/x11/gdkwindow-x11.c : Add a flag
+	for input_only windows.
+
+	* gdk/gdkwindow.c gdk/x11/gdkgeometry-x11.c: Use the above flag
+	to fix some hacks and make sure that we don't try to set the
+	background of input only windows.
+
 Thu Feb 24 18:11:46 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkinternals.h gdk/gdkprivate.h gdk/Makefile.am: Add a header file for

@@ -327,8 +327,13 @@ gdk_window_compute_position (GdkWindow          *window,
   info->x_offset = parent_x_offset + info->x - private->x;
   info->y_offset = parent_y_offset + info->y - private->y;
 
+  /* We don't considering the clipping of toplevel windows and their immediate children
+   * by their parents, and simply always map those windows.
+   */
+  if (parent_pos->clip_rect.width == G_MAXINT)
+    info->mapped = TRUE;
   /* Check if the window would wrap around into the visible space in either direction */
-  if (info->x + parent_x_offset < parent_pos->clip_rect.x + parent_pos->clip_rect.width - 65536 ||
+  else if (info->x + parent_x_offset < parent_pos->clip_rect.x + parent_pos->clip_rect.width - 65536 ||
       info->x + info->width + parent_x_offset > parent_pos->clip_rect.x + 65536 ||
       info->y + parent_y_offset < parent_pos->clip_rect.y + parent_pos->clip_rect.height - 65536 ||
       info->y + info->width + parent_y_offset  > parent_pos->clip_rect.y + 65536)
@@ -337,16 +342,26 @@ gdk_window_compute_position (GdkWindow          *window,
     info->mapped = TRUE;
 
   info->no_bg = FALSE;
-  
-  info->clip_rect.x = private->x;
-  info->clip_rect.y = private->y;
-  info->clip_rect.width = private->drawable.width;
-  info->clip_rect.height = private->drawable.height;
 
-  gdk_rectangle_intersect (&info->clip_rect, &parent_pos->clip_rect, &info->clip_rect);
+  if (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
+    {
+      info->clip_rect.x = private->x;
+      info->clip_rect.y = private->y;
+      info->clip_rect.width = private->drawable.width;
+      info->clip_rect.height = private->drawable.height;
+      
+      gdk_rectangle_intersect (&info->clip_rect, &parent_pos->clip_rect, &info->clip_rect);
 
-  info->clip_rect.x -= private->x;
-  info->clip_rect.y -= private->y;
+      info->clip_rect.x -= private->x;
+      info->clip_rect.y -= private->y;
+    }
+  else
+    {
+      info->clip_rect.x = 0;
+      info->clip_rect.y = 0;
+      info->clip_rect.width = G_MAXINT;
+      info->clip_rect.height = G_MAXINT;
+    }
 }
 
 static void
@@ -365,16 +380,33 @@ gdk_window_compute_parent_pos (GdkWindow          *window,
   parent_pos->x11_x = 0;
   parent_pos->x11_y = 0;
 
-  private = (GdkWindowPrivate *)private->parent;
-
+  /* We take a simple approach here and simply consider toplevel
+   * windows not to clip their children on the right/bottom, since the
+   * size of toplevel windows is not directly under our
+   * control. Clipping only really matters when scrolling and
+   * generally we aren't going to be moving the immediate child of a
+   * toplevel beyond the bounds of that toplevel.
+   *
+   * We could go ahead and recompute the clips of toplevel windows and
+   * their descendents when we receive size notification, but it would
+   * probably not be an improvement in most cases.
+   */
   parent_pos->clip_rect.x = 0;
   parent_pos->clip_rect.y = 0;
-  parent_pos->clip_rect.width = private->drawable.width;
-  parent_pos->clip_rect.height = private->drawable.height;
+  parent_pos->clip_rect.width = G_MAXINT;
+  parent_pos->clip_rect.height = G_MAXINT;
 
+  private = (GdkWindowPrivate *)private->parent;
   while (private && private->drawable.window_type == GDK_WINDOW_CHILD)
     {
       data = (GdkWindowXData *)private->drawable.klass_data;
+
+      tmp_clip.x = - clip_xoffset;
+      tmp_clip.y = - clip_yoffset;
+      tmp_clip.width = private->drawable.width;
+      tmp_clip.height = private->drawable.height;
+
+      gdk_rectangle_intersect (&parent_pos->clip_rect, &tmp_clip, &parent_pos->clip_rect);
 
       parent_pos->x += private->x;
       parent_pos->y += private->y;
@@ -385,16 +417,6 @@ gdk_window_compute_parent_pos (GdkWindow          *window,
       clip_yoffset += private->y;
 
       private = (GdkWindowPrivate *)private->parent;
-
-      if (private)
-	{
-	  tmp_clip.x = - clip_xoffset;
-	  tmp_clip.y = - clip_yoffset;
-	  tmp_clip.width = private->drawable.width;
-	  tmp_clip.height = private->drawable.height;
-
-	  gdk_rectangle_intersect (&parent_pos->clip_rect, &tmp_clip, &parent_pos->clip_rect);
-	}
     }
 }
 
@@ -647,16 +669,22 @@ gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle
 {
   GdkWindowPrivate *private = (GdkWindowPrivate *)window;
 
-  GdkRegion *old_clip_region = gdk_region_rectangle (old_clip);
-  GdkRegion *new_clip_region = gdk_region_rectangle (new_clip);
+  GdkRegion *old_clip_region;
+  GdkRegion *new_clip_region;
 
-  /* Trim invalid region of window to new clip rectangle */
+  if (private->input_only)
+    return;
+    
+  old_clip_region = gdk_region_rectangle (old_clip);
+  new_clip_region = gdk_region_rectangle (new_clip);
 
+  /* Trim invalid region of window to new clip rectangle
+   */
   if (private->update_area)
     gdk_region_intersect (private->update_area, new_clip_region);
 
-  /* Invalidate newly exposed portion of window */
-
+  /* Invalidate newly exposed portion of window
+   */
   gdk_region_subtract (new_clip_region, old_clip_region);
   if (!gdk_region_empty (new_clip_region))
     {

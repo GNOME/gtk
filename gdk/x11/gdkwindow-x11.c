@@ -248,6 +248,7 @@ gdk_window_new (GdkWindow     *parent,
       class = InputOutput;
       depth = visual->depth;
 
+      private->input_only = FALSE;
       private->drawable.depth = depth;
       
       if (attributes_mask & GDK_WA_COLORMAP)
@@ -319,6 +320,7 @@ gdk_window_new (GdkWindow     *parent,
     {
       depth = 0;
       class = InputOnly;
+      private->input_only = TRUE;
       private->drawable.colormap = NULL;
     }
 

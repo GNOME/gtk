@@ -1170,6 +1170,9 @@ gdk_window_invalidate_region (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  if (private->input_only)
+    return;
+  
   if (private->update_area)
     {
       gdk_region_union (private->update_area, region);
@@ -1196,10 +1199,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 	  GdkWindowPrivate *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  /* FIXME: this is a HACK to figure out if the child is
-	   *        input-only.
-	   */
-	  if (child->drawable.colormap)
+	  if (child->input_only)
 	    {
 	      child_rect.x = child->x;
 	      child_rect.y = child->y;
