@@ -112,6 +112,78 @@ GdkArgDesc _gdk_windowing_args[] = {
   { NULL }
 };
 
+/*
+ * XLib internal connection handling
+ */
+typedef struct _GdkInternalConnection GdkInternalConnection;
+
+struct _GdkInternalConnection
+{
+  gint	         fd;
+  GSource	*source;
+  Display	*display;
+};
+
+static gboolean
+process_internal_connection (GIOChannel  *gioc,
+			     GIOCondition cond,
+			     gpointer     data)
+{
+  GdkInternalConnection *connection = (GdkInternalConnection *)data;
+
+  GDK_THREADS_ENTER ();
+
+  XProcessInternalConnection ((Display*)connection->display, connection->fd);
+
+  GDK_THREADS_LEAVE ();
+
+  return TRUE;
+}
+
+static GdkInternalConnection *
+gdk_add_connection_handler (Display *display,
+			    guint    fd)
+{
+  GIOChannel *io_channel;
+  GdkInternalConnection *connection;
+
+  connection = g_new (GdkInternalConnection, 1);
+
+  connection->fd = fd;
+  connection->display = display;
+  
+  io_channel = g_io_channel_unix_new (fd);
+  
+  connection->source = g_io_create_watch (io_channel, G_IO_IN);
+  g_source_set_callback (connection->source,
+			 (GSourceFunc)process_internal_connection, connection, NULL);
+  g_source_attach (connection->source, NULL);
+  
+  g_io_channel_unref (io_channel);
+  
+  return connection;
+}
+
+static void
+gdk_remove_connection_handler (GdkInternalConnection *connection)
+{
+  g_source_destroy (connection->source);
+  g_free (connection);
+}
+
+static void
+gdk_internal_connection_watch (Display  *display,
+			       XPointer  arg,
+			       gint      fd,
+			       gboolean  opening,
+			       XPointer *watch_data)
+{
+  if (opening)
+    *watch_data = (XPointer)gdk_add_connection_handler (display, fd);
+  else
+    gdk_remove_connection_handler ((GdkInternalConnection *)watch_data);
+}
+
 gboolean
 _gdk_windowing_init_check (int argc, char **argv)
 {
@@ -127,6 +199,8 @@ _gdk_windowing_init_check (int argc, char **argv)
   gdk_display = XOpenDisplay (_gdk_display_name);
   if (!gdk_display)
     return FALSE;
+
+  XAddConnectionWatch (gdk_display, gdk_internal_connection_watch, NULL);
   
   if (gdk_synchronize)
     XSynchronize (gdk_display, True);

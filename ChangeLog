@@ -1,3 +1,8 @@
+Mon May 20 15:02:21 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdisplay-x11.c: Patch from HideToshi Tajima
+	to handle Xlib internal connections. (#76681)
+
 Mon May 20 12:59:14 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktooltips.c: Set the private LEAVE_PENDING
