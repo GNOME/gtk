@@ -1,3 +1,8 @@
+Fri Sep 24 02:00:21 1999  Tim Janik  <timj@gtk.org>
+
+	* configure.in (GTK_VERSION): changed version from Gtk+-1.2.5-pre2,
+	to Gtk+-1.2.5, interface age 0, binary age 5.
+        
 Thu Sep 23 16:41:03 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am (LDADDS): Add GDK_WLIBS to LDADDS 
