@@ -1,5 +1,9 @@
 2005-02-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk/x11/gdkdrawable-x11.c (_gdk_x11_have_render_with_trapezoids): 
+	Set have_render_with_trapezoids to GDK_YES when we have 
+	a new enough Render extension.  (#167965,Billy Biggs) 
+
 	* gtk/gtkwindow.c (gtk_window_present): Use the timestamp of
 	the last user interaction when focusing the window.  (#166379, 
 	Elijah Newren)

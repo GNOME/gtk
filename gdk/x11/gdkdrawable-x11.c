@@ -336,9 +336,8 @@ _gdk_x11_have_render_with_trapezoids (GdkDisplay *display)
 
   if (x11display->have_render_with_trapezoids == GDK_UNKNOWN)
     {
-      if (!_gdk_x11_have_render (display))
-	x11display->have_render_with_trapezoids = GDK_NO;
-      else
+      x11display->have_render_with_trapezoids = GDK_NO;
+      if (_gdk_x11_have_render (display))
 	{
 	  /*
 	   * Require protocol >= 0.4 for CompositeTrapezoids support.
@@ -350,10 +349,11 @@ _gdk_x11_have_render_with_trapezoids (GdkDisplay *display)
 	
 	  if (XRenderQueryVersion (xdisplay, &major_version,
 				   &minor_version))
-	    if ((major_version < XRENDER_TETRAPEZOIDS_MAJOR) ||
-		((major_version == XRENDER_TETRAPEZOIDS_MAJOR) &&
-		   (minor_version < XRENDER_TETRAPEZOIDS_MINOR)))
-	      x11display->have_render_with_trapezoids = GDK_NO;
+	    {
+	      if ((major_version == XRENDER_TETRAPEZOIDS_MAJOR) &&
+		  (minor_version >= XRENDER_TETRAPEZOIDS_MINOR))
+		x11display->have_render_with_trapezoids = GDK_YES;
+	    }
 	}
     }
 
