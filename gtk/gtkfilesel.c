@@ -2797,7 +2797,12 @@ attempt_file_completion(CompletionState *cmpl_state)
 
       pat_buf = g_new (gchar, len + 2);
       strcpy(pat_buf, dir->cmpl_text);
-      strcpy(pat_buf + len, "*");
+      /* Don't append a * if the user entered one herself.
+       * This way one can complete *.h and don't get matches
+       * on any .help files, for instance.
+       */
+      if (strchr(pat_buf, '*') == NULL)
+	strcpy(pat_buf + len, "*");
     }
 
   if(first_slash)
