@@ -957,13 +957,19 @@ _gtk_action_emit_activate (GtkAction *action)
 {
   GtkActionGroup *group = action->private_data->action_group;
 
-  if (group != NULL)
-    _gtk_action_group_emit_pre_activate (group, action);
+  if (group != NULL) 
+    {
+      g_object_ref (group);
+      _gtk_action_group_emit_pre_activate (group, action);
+    }
 
     g_signal_emit (action, action_signals[ACTIVATE], 0);
 
-  if (group != NULL)
-    _gtk_action_group_emit_post_activate (group, action);
+  if (group != NULL) 
+    {
+      _gtk_action_group_emit_post_activate (group, action);
+      g_object_unref (group);
+    }
 }
 
 /**

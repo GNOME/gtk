@@ -246,6 +246,14 @@ gtk_action_group_class_init (GtkActionGroupClass *klass)
   g_type_class_add_private (gobject_class, sizeof (GtkActionGroupPrivate));
 }
 
+
+static void 
+remove_action (GtkAction *action) 
+{
+  g_object_set (action, "action_group", NULL, NULL);
+  g_object_unref (action);
+}
+
 static void
 gtk_action_group_init (GtkActionGroup *self)
 {
@@ -255,7 +263,7 @@ gtk_action_group_init (GtkActionGroup *self)
   self->private_data->visible = TRUE;
   self->private_data->actions = g_hash_table_new_full (g_str_hash, g_str_equal,
 						       (GDestroyNotify) g_free,
-						       (GDestroyNotify) g_object_unref);
+						       (GDestroyNotify) remove_action);
   self->private_data->translate_func = NULL;
   self->private_data->translate_data = NULL;
   self->private_data->translate_notify = NULL;
@@ -609,7 +617,6 @@ gtk_action_group_remove_action (GtkActionGroup *action_group,
   /* extra protection to make sure action->name is valid */
   g_object_ref (action);
   g_hash_table_remove (action_group->private_data->actions, gtk_action_get_name (action));
-  g_object_set (G_OBJECT (action), "action_group", NULL, NULL);
   g_object_unref (action);
 }
 

@@ -1,3 +1,14 @@
+Wed Jan 21 23:27:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #131869: 
+	
+	* gtk/gtkaction.c (_gtk_action_emit_activate): Hold
+	a reference to the group while emitting the signals.
+
+	* gtk/gtkactiongroup.c (gtk_action_group_init): Use a 
+	destroy notify which does not only unref, but also resets
+	the action_group property of the action.
+
 2004-01-20  Federico Mena Quintero  <federico@ximian.com>
 
 	* NEWS: Added details about GtkFileChooser changes.
