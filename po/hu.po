@@ -263,7 +263,7 @@ msgstr "(ismeretlen)"
 
 #: gtk/gtkinputdialog.c:664
 msgid "clear"
-msgstr "törlés"
+msgstr "tÃ¶rlÃ©s"
 
 #: gtk/gtkmain.c:417
 msgid "default:LTR"
