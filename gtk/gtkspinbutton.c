@@ -43,9 +43,9 @@
 #define ARROW_SIZE                         11
 #define SPIN_BUTTON_INITIAL_TIMER_DELAY    200
 #define SPIN_BUTTON_TIMER_DELAY            20
-#define MAX_TEXT_LENGTH                    256
 #define MAX_TIMER_CALLS                    5
 #define EPSILON                            1e-5
+#define	MAX_DIGITS			   20
 
 enum {
   PROP_0,
@@ -221,7 +221,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 						      _("Digits"),
 						      _("The number of decimal places to display"),
 						      0,
-						      5,
+						      MAX_DIGITS,
 						      0,
 						      G_PARAM_READWRITE));
   
@@ -1451,11 +1451,11 @@ gtk_spin_button_default_input (GtkSpinButton *spin_button,
 static gint
 gtk_spin_button_default_output (GtkSpinButton *spin_button)
 {
-  gchar buf[MAX_TEXT_LENGTH];
+  gchar *buf = g_strdup_printf ("%0.*f", spin_button->digits, spin_button->adjustment->value);
 
-  sprintf (buf, "%0.*f", spin_button->digits, spin_button->adjustment->value);
   if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
     gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
+  g_free (buf);
   return FALSE;
 }
 
@@ -1547,8 +1547,8 @@ gtk_spin_button_new_with_range (gdouble min,
     digits = 0;
   else {
     digits = abs ((gint) floor (log10 (fabs (step))));
-    if (digits > 5)
-      digits = 5;
+    if (digits > MAX_DIGITS)
+      digits = MAX_DIGITS;
   }
 
   gtk_spin_button_configure (spin, GTK_ADJUSTMENT (adj), step, digits);
@@ -1632,7 +1632,7 @@ gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)
  * @spin_button: a #GtkSpinButton
  * @digits: the number of digits to be displayed for the spin button's value
  * 
- * Set the precision to be displayed by @spin_button. Up to 5 digit precision
+ * Set the precision to be displayed by @spin_button. Up to 20 digit precision
  * is allowed.
  **/
 void

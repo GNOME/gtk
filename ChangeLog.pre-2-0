@@ -1,3 +1,10 @@
+Wed Jun 20 05:32:05 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkspinbutton.c: make maximum digits compile time configurable
+	via MAX_DIGITS and up to 20. 5 was just ridiculously small.
+	don't use automatic fixed size buffer for printf-ing floats, doubles
+ 	can expand to really _huge_ strings, use g_strdup_printf() instead.
+
 Wed Jun 20 04:28:24 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrange.c (gtk_range_class_init): hum, "adjustment" was a

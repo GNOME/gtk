@@ -93,7 +93,7 @@ struct _GtkSpinButton
   guint button : 2;
   guint need_timer : 1;
   guint timer_calls : 3;
-  guint digits : 3;
+  guint digits : 10;
   guint numeric : 1;
   guint wrap : 1;
   guint snap_to_ticks : 1;
