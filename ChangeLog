@@ -1,3 +1,54 @@
+Wed Jun 24 14:14:32 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c: new function gtk_container_child_arg_set, similar
+	to gtk_container_child_arg_setv, but takes a variable argument list.
+	new function gtk_container_get_child_arg_type, which is needed by
+	gtk_object_collect_args.
+
+	* gtk/gtkobject.c: changed prototype for gtk_object_collect_args, to
+	take a function pointer to figure the argument type.
+	adapted callers to pass gtk_object_get_arg_type.
+	* gtk/gtkwidget.c: adapted gtk_object_collect_args callers to pass
+	gtk_object_get_arg_type..
+
+	* gtk/gtkpacker.h: 
+	* gtk/gtkpacker.c:
+ 	(gtk_packer_reorder_child): new function to change the packing order
+	of a child.
+	(gtk_packer_size_request): 
+	(gtk_packer_size_allocate): take container->border_width into acount.
+
+	* gtk/gtkpacker.c: implemented widget arguments:
+	"GtkPacker::spacing", "GtkPacker::border_width", "GtkPacker::pad_x",
+	"GtkPacker::pad_y", "GtkPacker::ipad_x", "GtkPacker::ipad_y".
+	implemented child arguments:
+	"GtkPacker::side", "GtkPacker::anchor", "GtkPacker::expand",
+	"GtkPacker::fill_x", "GtkPacker::fill_y", "GtkPacker::use_default",
+	"GtkPacker::border_width", "GtkPacker::pad_x", "GtkPacker::pad_y",
+	"GtkPacker::ipad_x", "GtkPacker::ipad_y", "GtkPacker::position".
+
+	* gtk/gtkmisc.c (gtk_misc_set_arg): for padding args, set the padding,
+	not the alignment.
+
+	* gtk/gtkeventbox.h:
+	* gtk/gtkeventbox.c: GtkType and macro fixups.
+
+	* gtk/testgtk.c (entry_toggle_sensitive): new function to toggle
+	sensitivity of an entry.
+
+	* gtk/gtkstyle.c (gtk_style_new): support normal grey as default color
+	for insensitive base and text.
+
+	* gtk/gtkentry.c (gtk_entry_realize): set the window backgrounds
+	widget state dependent.
+	(gtk_entry_style_set): likewise.
+	(gtk_entry_state_changed): set background color on state changes.
+	(gtk_entry_draw_text): for non selected text, use state dependent
+	colors.
+
+	* gtk/gtktogglebutton.c: support for widget arguments
+ 	"GtkToggleButton::active" and "GtkToggleButton::draw_indicator".
+
 Wed Jun 24 08:35:45 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkspinbutton.c (gtk_spin_button_spin): Added compatibility 
@@ -18,7 +69,7 @@ Wed Jun 24 07:47:29 1998  Tim Janik  <timj@gtk.org>
 	* gtk/gtkframe.c: GtkType and macro corrections.
 
 	* gtk/gtkradiobutton.c (gtk_radio_button_set_arg): new function to
- 	support radio grouping.
+ 	support widget argument "GtkRadioButton::group".
 
 Tue Jun 23 08:01:09 1998  Tim Janik  <timj@gtk.org>
 
