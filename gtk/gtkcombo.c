@@ -515,6 +515,7 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 static void
 gtk_combo_popup_list (GtkCombo * combo)
 {
+  GtkWidget *toplevel;
   GtkList *list;
   gint height, width, x, y;
   gint old_width, old_height;
@@ -553,6 +554,15 @@ gtk_combo_popup_list (GtkCombo * combo)
     }
   
   gtk_window_move (GTK_WINDOW (combo->popwin), x, y);
+
+  toplevel = gtk_widget_get_toplevel (combo);
+
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+                                   GTK_WINDOW (combo->popwin));
+    }
+
   gtk_widget_set_size_request (combo->popwin, width, height);
   gtk_widget_show (combo->popwin);
 
@@ -580,6 +590,8 @@ gtk_combo_popdown_list (GtkCombo *combo)
     }
   
   gtk_widget_hide (combo->popwin);
+
+  gtk_window_group_add_window (_gtk_window_get_group (NULL), GTK_WINDOW (combo->popwin));
 }
 
 static gboolean

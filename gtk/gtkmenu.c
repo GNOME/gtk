@@ -1268,6 +1268,16 @@ gtk_menu_popup (GtkMenu		    *menu,
 
       gtk_menu_reparent (menu, menu->toplevel, FALSE);
     }
+ 
+  if (parent_menu_shell) 
+    {
+      GtkWidget *toplevel;
+
+      toplevel = gtk_widget_get_toplevel (parent_menu_shell);
+      if (GTK_IS_WINDOW (toplevel))
+	gtk_window_group_add_window (_gtk_window_get_group (GTK_WINDOW (toplevel)), 
+				     GTK_WINDOW (menu->toplevel));
+    }
   
   menu->parent_menu_item = parent_menu_item;
   menu->position_func = func;
@@ -1347,6 +1357,7 @@ gtk_menu_popdown (GtkMenu *menu)
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
   gtk_widget_hide (menu->toplevel);
+  gtk_window_group_add_window (_gtk_window_get_group (NULL), GTK_WINDOW (menu->toplevel));
 
   if (menu->torn_off)
     {

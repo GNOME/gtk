@@ -1,5 +1,24 @@
+#undef GTK_DISABLE_DEPRECATED
+
 #include "x11/gdkx.h"
 #include <gtk/gtk.h>
+
+static void
+print_hello (GtkWidget *w, gpointer data)
+{
+  g_message (data);
+}
+
+static GtkItemFactoryEntry menu_items[] = {
+  { "/_File",         NULL,         NULL,           0, "<Branch>" },
+  { "/File/_New",     "<control>N", print_hello,    GPOINTER_TO_INT("File New activated"), "<Item>" },
+  { "/File/_Open",    "<control>O", print_hello,    GPOINTER_TO_INT("File Open activated"), "<Item>" },
+  { "/File/sep1",     NULL,         NULL,           0, "<Separator>" },
+  { "/File/Quit",     "<control>Q", gtk_main_quit,  0, "<Item>" },
+  { "/O_K",            "<control>K",print_hello,    GPOINTER_TO_INT("OK activated"), "<Item>" },
+  { "/_Help",         NULL,         NULL,           0, "<LastBranch>" },
+  { "/_Help/About",   NULL,         print_hello,    GPOINTER_TO_INT("Help About activated "), "<Item>" },
+};
 
 static void
 remove_buttons (GtkWidget *widget, GtkWidget *other_button)
@@ -72,15 +91,116 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 		    add_button);
 }
 
+static GtkWidget *
+create_combo (void)
+{
+  GList *cbitems;
+  GtkCombo *combo;
+
+  cbitems = NULL;
+  cbitems = g_list_append (cbitems, "item0");
+  cbitems = g_list_append (cbitems, "item1 item1");
+  cbitems = g_list_append (cbitems, "item2 item2 item2");
+  cbitems = g_list_append (cbitems, "item3 item3 item3 item3");
+  cbitems = g_list_append (cbitems, "item4 item4 item4 item4 item4");
+  cbitems = g_list_append (cbitems, "item5 item5 item5 item5 item5 item5");
+  cbitems = g_list_append (cbitems, "item6 item6 item6 item6 item6");
+  cbitems = g_list_append (cbitems, "item7 item7 item7 item7");
+  cbitems = g_list_append (cbitems, "item8 item8 item8");
+  cbitems = g_list_append (cbitems, "item9 item9");
+
+  combo = GTK_COMBO (gtk_combo_new ());
+  gtk_combo_set_popdown_strings (combo, cbitems);
+  gtk_entry_set_text (GTK_ENTRY (combo->entry), "hello world");
+  gtk_editable_select_region (GTK_EDITABLE (combo->entry), 0, -1);
+
+  return GTK_WIDGET (combo);
+}
+
+static GtkWidget *
+create_menubar (GtkWindow *window)
+{
+  GtkItemFactory *item_factory;
+  GtkAccelGroup *accel_group=NULL;
+  GtkWidget *menubar;
+  
+  accel_group = gtk_accel_group_new ();
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>",
+                                       accel_group);
+  gtk_item_factory_create_items (item_factory,
+				 G_N_ELEMENTS (menu_items),
+				 menu_items, NULL);
+  
+  gtk_window_add_accel_group (window, accel_group);
+  menubar = gtk_item_factory_get_widget (item_factory, "<main>");
+
+  return menubar;
+}
+
+static GtkWidget *
+create_combo_box (void)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (gtk_combo_box_new_text ());
+
+  gtk_combo_box_append_text (combo_box, "This");
+  gtk_combo_box_append_text (combo_box, "Is");
+  gtk_combo_box_append_text (combo_box, "A");
+  gtk_combo_box_append_text (combo_box, "ComboBox");
+  
+  return GTK_WIDGET (combo_box);
+}
+
+static GtkWidget *
+create_content (GtkWindow *window, gboolean local)
+{
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *frame;
+
+  frame = gtk_frame_new (local? "Local" : "Remote");
+  gtk_container_set_border_width (GTK_CONTAINER (frame), 3);
+  vbox = gtk_vbox_new (TRUE, 0);
+  gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
+
+  gtk_container_add (GTK_CONTAINER (frame), vbox);
+  
+  /* Combo */
+  gtk_box_pack_start (GTK_BOX (vbox), create_combo(), TRUE, TRUE, 0);
+
+  /* Entry */
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_entry_new(), TRUE, TRUE, 0);
+
+  /* Close Button */
+  button = gtk_button_new_with_mnemonic ("_Close");
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  g_signal_connect_swapped (button, "clicked",
+			    G_CALLBACK (gtk_widget_destroy), window);
+
+  /* Blink Button */
+  button = gtk_button_new_with_mnemonic ("_Blink");
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (blink),
+		    window);
+
+  /* Menubar */
+  gtk_box_pack_start (GTK_BOX (vbox), create_menubar (GTK_WINDOW (window)),
+		      TRUE, TRUE, 0);
+
+  /* Combo Box */
+  gtk_box_pack_start (GTK_BOX (vbox), create_combo_box (), TRUE, TRUE, 0);
+  
+  add_buttons (NULL, vbox);
+
+  return frame;
+}
+
 guint32
 create_child_plug (guint32  xid,
 		   gboolean local)
 {
   GtkWidget *window;
-  GtkWidget *hbox;
-  GtkWidget *entry;
-  GtkWidget *button;
-  GtkWidget *label;
+  GtkWidget *content;
 
   window = gtk_plug_new (xid);
 
@@ -90,30 +210,10 @@ create_child_plug (guint32  xid,
 		    NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-  hbox = gtk_hbox_new (FALSE, 0);
-  gtk_container_add (GTK_CONTAINER (window), hbox);
-
-  label = gtk_label_new (local ? "Local:" : "Remote:");
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  content = create_content (GTK_WINDOW (window), local);
   
-  entry = gtk_entry_new ();
-  gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (window), content);
 
-  button = gtk_button_new_with_mnemonic ("_Close");
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-
-  g_signal_connect_swapped (button, "clicked",
-			    G_CALLBACK (gtk_widget_destroy), window);
-
-  button = gtk_button_new_with_mnemonic ("_Blink");
-  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (blink),
-		    window);
-
-  add_buttons (NULL, hbox);
-  
   gtk_widget_show_all (window);
 
   if (GTK_WIDGET_REALIZED (window))

@@ -1,3 +1,19 @@
+Tue Mar  2 21:23:30 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Patch from Frederic Crozat, test code from Jean-Philippe
+	Chancelier. Fixes bug #120479.
+	
+	* gtk/gtkcombo.c (gtk_combo_popup_list): Make sure popup belongs
+	to the right window group.
+
+	* gtk/gtkmenu.c (gtk_menu_popup): Same
+
+	* tests/testsocket.c (main): Pack the plugs into an hbox instead
+	of a vbox.
+
+	* tests/testsocket_common.c: Add a GtkMenuBar, a GtkCombo and a
+	GtkComboBox to the children.
+
 Tue Mar  2 14:38:23 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_model_row_inserted):
@@ -89,6 +105,7 @@ Tue Mar  2 17:55:31 2004  Matthias Clasen  <maclas@gmx.de>
 	(gtk_file_chooser_default_get_resizable_hints): Test the
 	resize_horizontally pointer, not the deferenced pointer.
 
+>>>>>>> 1.5102
 2004-03-01  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault): New
