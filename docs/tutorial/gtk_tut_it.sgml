@@ -5,7 +5,7 @@
 			      name="&lt;imain@gtk.org&gt;"></tt>,
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
-<date>April 6th, 1998  - Traduzione aggiornata al 1 Maggio 1998
+<date>May 24th, 1998  - Traduzione aggiornata al 27 Maggio 1998
 
 <abstract>Tradotto da Michel Morelli, <tt><htmlurl url="mailto:ziobudda@chiara.dei.unipd.it" name="ziobudda@chiara.dei.unipd.it"></tt>, Daniele Canazza, <tt><htmlurl url="mailto:dcanazz@tin.it" name="dcanazz@tin.it"></tt> e Antonio Schifano, <tt><htmlurl url="mailto:schifano@cli.di.unipi.it" name="schifano@cli.di.unipi.it"></tt>
 </abstract>
@@ -342,7 +342,7 @@ La funzione specificata come terzo argomento &egrave; chiamata ``funzione di
 ritorno (callback)'', e dovrebbe essere della forma:
 
 <tscreen><verb>
-void callback_func(GtkWidget *widget, gpointer *callback_data);
+void callback_func(GtkWidget *widget, gpointer callback_data);
 </verb></tscreen>
 <p>
 Dove il primo argomento sar&agrave; un puntatore al widget che emette il segnale
@@ -391,7 +391,7 @@ difficile farci invece qualcosa. Il prossimo esempio user&agrave; l'argomento pa
 per dire quale bottone &egrave; stato premuto.
 
 <tscreen><verb>
-void hello (GtkWidget *widget, gpointer *data)
+void hello (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello World\n");
 }
@@ -423,7 +423,7 @@ chiamando gtk_main_quit(). Questa funzione dice a GTK che deve uscire da gtk_mai
 quando gli viene restituito il controllo.
 
 <tscreen><verb>
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -661,13 +661,13 @@ l'impacchettamento dei widget.
 
 /* La nostra funzione di callback migliorata. I dati passati a questa
  * vengono stampati su stdout. */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* Un'altra callback */
-void delete_event (GtkWidget *widget, gpointer *data)
+void delete_event (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -901,7 +901,7 @@ problemi nel seguirlo. Compilatelo voi stessi e provate a giocarci un po'.
 #include "gtk/gtk.h"
 
 void
-delete_event (GtkWidget *widget, gpointer *data)
+delete_event (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -1348,13 +1348,13 @@ Ecco il codice sorgente:
 
 /* la nostra funzione di ritorno.
  * i dati passati a questa funzione vengono stampati su stdout */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* questa funzione fa uscire dal programma */
-void delete_event (GtkWidget *widget, gpointer *data)
+void delete_event (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -1699,7 +1699,7 @@ GtkWidget *xpm_label_box (GtkWidget *parent, gchar *xpm_filename, gchar *label_t
 }
 
 /* la nostra solita funzione di callback */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
@@ -1922,7 +1922,7 @@ Nel seguente esempio creiamo un gruppo di tre radio-bottoni.
 #include <gtk/gtk.h>
 #include <glib.h>
  
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
   gtk_main_quit();
 }
 
@@ -2059,8 +2059,8 @@ distribuito con GTK.
 Con alcuni widget (per esempio con l'etichetta) i suggerimenti non funzionano.
 <p>
 La prima chiamata che si usa per creare un nuovo tooltip &egrave; la seguente.
-In una data funzione, &egrave; necessario chiamarla una sola volta: il GtkTooltip
-che viene ritornato da questa funzione pu&ograve; essere usato per creare suggerimenti
+In una data funzione, &egrave; necessario chiamarla una sola volta: il <tt/GtkTooltip/
+che viene restituito da questa funzione pu&ograve; essere usato per creare suggerimenti
 multipli.
 
 <tscreen><verb>
@@ -2071,14 +2071,15 @@ Una volta creato un nuovo suggerimento e il widget su cui lo volete usare,
 basta usare la seguente chiamata per fare l'assegnazione:
 
 <tscreen><verb>
-void gtk_tooltips_set_tips   (GtkTooltips *tooltips,
-			      GtkWidget   *widget,
-			      gchar	  *tips_text);
+void gtk_tooltips_set_tip (GtkTooltips *tooltips,
+                           GtkWidget   *widget,
+                           const gchar *tip_text,
+                           const gchar *tip_private);
 </verb></tscreen>
 
 Il primo argomento &egrave; il suggerimento che era gi&agrave; stato creato, che &egrave; seguito
 dal widget da cui volete che spunti il suggerimento e dal testo che volete
-venga mostrato.
+venga mostrato. L'ultimo argomento pu&ograve; essere posto a NULL.
 <p>
 Ecco un piccolo esempio:
 
@@ -2089,9 +2090,8 @@ GtkWidget *button;
 tooltips = gtk_tooltips_new ();
 button = gtk_button_new_with_label ("button 1");
 ...
-gtk_tooltips_set_tips (tooltips, button, "This is button 1");
+gtk_tooltips_set_tips (tooltips, button, "This is button 1", NULL);
 </verb></tscreen>
-
 Ci sono anche altre funzioni che si usano con i suggerimenti. Eccone una lista
 con una breve descrizione di quello che fanno.
 
@@ -2209,7 +2209,7 @@ void progress_r (void)
     pstat = FALSE;  
 }
 
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -2331,7 +2331,7 @@ GtkWidget* gtk_dialog_new (void);
 Per cui, per creare una nuova finestra di dialogo, uate:
 
 <tscreen><verb>
-GtkWidget window;
+GtkWidget *window;
 window = gtk_dialog_new ();
 </verb></tscreen>
 
@@ -2521,12 +2521,12 @@ static const char * xpm_data[] = {
 
 
 /* quando invocata (con il segnale delete_event), termina l'applicazione. */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
     gtk_main_quit();
 }
 
 /* invocata se il bottone &egrave; clickato. Stampa semplicemente un messaggio */
-void button_clicked( GtkWidget *widget, gpointer *data ) {
+void button_clicked( GtkWidget *widget, gpointer data ) {
     printf( "button clicked\n" );
 }
 
@@ -2724,7 +2724,7 @@ static char * WheelbarrowFull_xpm[] = {
 
 
 /* quando invocata (con il segnale delete_event), termina l'applicazione. */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
     gtk_main_quit();
 }
 
@@ -2884,7 +2884,7 @@ La sistemazione dell'area di disegno e dei righelli viene fatta usando una tabel
 
 /* il controllo raggiunge questa routine quando si preme il bottone close 
  */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
     gtk_main_quit();
 }
 
@@ -3010,7 +3010,7 @@ elementi sulla barra di stato e l'altro per riuovere l'ultimo elemento..
 
 GtkWidget *status_bar;
  
-void push_item (GtkWidget *widget, gpointer *data)
+void push_item (GtkWidget *widget, gpointer data)
 {
   static int count = 1;
   char buff[20];
@@ -3021,7 +3021,7 @@ void push_item (GtkWidget *widget, gpointer *data)
   return;
 }
 
-void pop_item (GtkWidget *widget, gpointer *data)
+void pop_item (GtkWidget *widget, gpointer data)
 {
   gtk_statusbar_pop( GTK_STATUSBAR(status_bar), (guint) &amp;data );
   return;
@@ -3559,7 +3559,7 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -3752,7 +3752,7 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
     gtk_widget_draw(GTK_WIDGET(notebook), NULL);
 }
 
-void delete (GtkWidget *widget, gpointer *data)
+void delete (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -3930,7 +3930,7 @@ visualizzata, mentre con GTK_POLICY_ALWAYS la barra verr&agrave; sempre mostrata
 
 #include <gtk/gtk.h>
 
-void destroy(GtkWidget *widget, gpointer *data)
+void destroy(GtkWidget *widget, gpointer data)
 {
     gtk_main_quit();
 }
@@ -5116,7 +5116,7 @@ void gtk_menu_bar_append( GtkMenuBar *menu_bar, GtkWidget *menu_item);
 che nel nostro caso &egrave;:
 
 <tscreen><verb>
-gtk_menu_bar_append( menu_bar, file_item );
+gtk_menu_bar_append( GTK_MENU_BAR(menu_bar), file_item );
 </verb></tscreen>
 
 
@@ -5855,7 +5855,7 @@ caldamente di dare un'occhiata ai loro rispettivi file header nella
 distribuzione di GTK. I nomi delle funzioni di GTK sono molto descrittivi.
 Non appena si capisce come funzionano le cose, non &egrave; 
 difficile dedurre il modo d'uso di un widget semplicemente guardando la
-dichiarazione di funzione ad esso associata. Aggiungendo a questo qualche
+dichiarazione di funzione associata ad esso. Aggiungendo a questo qualche
 spunto tratto dal codice di altri non dovrebbero esserci problemi.
 
 Quando avrete raggiunto una comprensione globale di tutte le funzioni
