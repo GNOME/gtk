@@ -1,5 +1,10 @@
 2002-09-27  Federico Mena Quintero  <federico@ximian.com>
 
+	* io-ico.c (gdk_pixbuf__ico_image_begin_load): Free the context if
+	we cannot allocate the HeaderBuf.
+
+2002-09-27  Federico Mena Quintero  <federico@ximian.com>
+
 	* io-bmp.c (OneLine): Fix the update region notification to handle
 	top-to-bottom and bottom-to-top BMPs correctly.
 
