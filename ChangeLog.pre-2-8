@@ -1,3 +1,15 @@
+Thu Oct 22 02:29:53 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkfilesel.h: GtkType and macro fixups
+	* gtk/gtkfilesel.c (gtk_file_selection_complete): set a pattern
+	for the file selection widget to try a completion on (set the
+	initial filter).
+
+Wed Oct 14 14:34:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c: implement idle functions via GHook. this gives a
+ 	slight speed improvement and lessens code duplication.
+
 Tue Oct 20 14:53:28 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c: Always send "drag_leave" to dests

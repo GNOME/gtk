@@ -48,7 +48,7 @@
 typedef struct _GtkInitFunction		 GtkInitFunction;
 typedef struct _GtkQuitFunction		 GtkQuitFunction;
 typedef struct _GtkTimeoutFunction	 GtkTimeoutFunction;
-typedef struct _GtkIdleFunction		 GtkIdleFunction;
+typedef struct _GtkIdleHook		 GtkIdleHook;
 typedef struct _GtkInputFunction	 GtkInputFunction;
 typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
 
@@ -80,15 +80,17 @@ struct _GtkTimeoutFunction
   GtkDestroyNotify destroy;
 };
 
-struct _GtkIdleFunction
+enum
 {
-  guint tag;
-  gint priority;
-  GtkCallbackMarshal marshal;
-  GtkFunction function;
-  gpointer data;
-  GtkDestroyNotify destroy;
+  GTK_HOOK_MARSHAL	= 1 << (G_HOOK_FLAG_USER_SHIFT)
 };
+
+struct _GtkIdleHook
+{
+  GHook	hook;
+  gint  priority;
+};
+#define	GTK_IDLE_HOOK(hook)	((GtkIdleHook*) hook)
 
 struct _GtkInputFunction
 {
@@ -104,16 +106,18 @@ struct _GtkKeySnooperData
   guint id;
 };
 
-static void  gtk_exit_func		 (void);
+static void  	gtk_exit_func		 (void);
+static void	gtk_invoke_hook		 (GHookList *hook_list,
+					  GHook     *hook);
+static void  	gtk_handle_idles	 (void);
+static gboolean	gtk_finish_idles	 (void);
 static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
 static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static void  gtk_timeout_insert		 (GtkTimeoutFunction *timeoutf);
 static void  gtk_handle_current_timeouts (guint32	      the_time);
-static void  gtk_handle_current_idles	 (void);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
 					  GdkEvent	     *event);
 static void  gtk_handle_timeouts	 (void);
-static void  gtk_handle_idle		 (void);
 static void  gtk_handle_timer		 (void);
 static void  gtk_propagate_event	 (GtkWidget	     *widget,
 					  GdkEvent	     *event);
@@ -124,16 +128,9 @@ static void  gtk_message		 (gchar		     *str);
 static void  gtk_print			 (gchar		     *str);
 #endif
 
-static gint  gtk_idle_remove_from_list    (GList               **list, 
-					   guint                 tag, 
-					   gpointer              data, 
-					   gint                  remove_link);
 static gint  gtk_timeout_remove_from_list (GList               **list, 
 					   guint                 tag, 
 					   gint                  remove_link);
-
-static gint  gtk_idle_compare		 (gconstpointer      a, 
-					  gconstpointer      b);
 
 static gint  gtk_timeout_compare	 (gconstpointer      a, 
 					  gconstpointer      b);
@@ -191,23 +188,20 @@ static GList *timeout_functions = NULL;	   /* A list of timeout functions sorted
 					    *  function to expire is at the head of
 					    *  the list and the last to expire is at
 					    *  the tail of the list.  */
-static GList *idle_functions = NULL;	   /* A list of idle functions.
-					    */
+/* Prioritized idle callbacks */
+static GHookList	idle_hooks = { 0 };
+static GHook		*last_idle = NULL;
 
-/* The idle functions / timeouts that are currently being processed 
- *  by gtk_handle_current_(timeouts/idles) 
+/* The timeouts that are currently being processed 
+ *  by gtk_handle_current_timeouts
  */
-static GList *current_idles = NULL;
 static GList *current_timeouts = NULL;
 
-/* A stack of idle functions / timeouts that are currently being
- * being executed
+/* A stack of timeouts that is currently being executed
  */
-static GList *running_idles = NULL;
 static GList *running_timeouts = NULL;
 
 static GMemChunk *timeout_mem_chunk = NULL;
-static GMemChunk *idle_mem_chunk = NULL;
 static GMemChunk *quit_mem_chunk = NULL;
 
 static GSList *key_snoopers = NULL;
@@ -590,14 +584,16 @@ gtk_events_pending (void)
   result += next_event != NULL;
   result += gdk_events_pending();
 
-  result += current_idles != NULL;
+  result += last_idle != NULL;
   result += current_timeouts != NULL;
 
   if (!result)
     {
-      result += (idle_functions &&
-		 (((GtkIdleFunction *)idle_functions->data)->priority <=
-		  GTK_PRIORITY_INTERNAL));
+      GHook *hook;
+
+      hook = g_hook_first_valid (&idle_hooks, FALSE);
+
+      result += hook && GTK_IDLE_HOOK (hook)->priority <= GTK_PRIORITY_INTERNAL;
     }
   
   if (!result && timeout_functions)
@@ -644,10 +640,8 @@ gtk_main_iteration_do (gboolean blocking)
 
       return iteration_done;
     }
-  if (current_idles)
+  if (last_idle && gtk_finish_idles ())
     {
-      gtk_handle_current_idles ();
-
       if (iteration_done)
 	gdk_flush ();
 
@@ -674,7 +668,8 @@ gtk_main_iteration_do (gboolean blocking)
        */
       gtk_handle_timer ();
       
-      if (blocking) event = gdk_event_get ();
+      if (blocking)
+	event = gdk_event_get ();
     }
   
   /* "gdk_event_get" can return FALSE if the timer goes off
@@ -864,7 +859,7 @@ gtk_main_iteration_do (gboolean blocking)
   else
     {
       if (gdk_events_pending() == 0)
-	gtk_handle_idle ();
+	gtk_handle_idles ();
     }
   
 event_handling_done:
@@ -1110,17 +1105,6 @@ gtk_timeout_remove (guint tag)
     return;
 }
 
-/* We rely on some knowledge of how g_list_insert_sorted works to make
- * sure that we insert at the _end_ of the idles of this priority
- */
-static gint
-gtk_idle_compare (gconstpointer a, gconstpointer b)
-{
-  return (((const GtkIdleFunction *)a)->priority <
-	  ((const GtkIdleFunction *)b)->priority)
-    ? -1 : 1;
-}
-
 guint
 gtk_quit_add_full (guint		main_level,
 		   GtkFunction		function,
@@ -1151,6 +1135,20 @@ gtk_quit_add_full (guint		main_level,
   return quitf->id;
 }
 
+gint
+gtk_idle_compare (GHook *new_g_hook,
+		  GHook *g_sibling)
+{
+  GtkIdleHook *new_hook = GTK_IDLE_HOOK (new_g_hook);
+  GtkIdleHook *sibling = GTK_IDLE_HOOK (g_sibling);
+  
+  /* We add an extra +1 to the comparision result to make sure
+   * that we get inserted at the end of the list of hooks with
+   * the same priority.
+   */
+  return new_hook->priority - sibling->priority + 1;
+}
+
 guint
 gtk_idle_add_full (gint			priority,
 		   GtkFunction		function,
@@ -1158,34 +1156,54 @@ gtk_idle_add_full (gint			priority,
 		   gpointer		data,
 		   GtkDestroyNotify	destroy)
 {
-  static guint idle_tag = 1;
-  GtkIdleFunction *idlef;
-  
-  g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
+  GHook *hook;
+  GtkIdleHook *ihook;
 
-  if (!idle_mem_chunk)
-    idle_mem_chunk = g_mem_chunk_new ("idle mem chunk", sizeof (GtkIdleFunction),
-				      1024, G_ALLOC_AND_FREE);
-  
-  idlef = g_chunk_new (GtkIdleFunction, idle_mem_chunk);
-  
-  idlef->tag = idle_tag++;
-  idlef->priority = priority;
-  idlef->function = function;
-  idlef->marshal = marshal;
-  idlef->data = data;
-  idlef->destroy = destroy;
+  if (function)
+    g_return_val_if_fail (marshal == NULL, 0);
+  else
+    g_return_val_if_fail (marshal != NULL, 0);
+
+  if (!idle_hooks.seq_id)
+    g_hook_list_init (&idle_hooks, sizeof (GtkIdleHook));
+
+  hook = g_hook_alloc (&idle_hooks);
+  ihook = GTK_IDLE_HOOK (hook);
+  hook->data = data;
+  if (marshal)
+    {
+      hook->flags |= GTK_HOOK_MARSHAL;
+      hook->func = marshal;
+    }
+  else
+    hook->func = function;
+  hook->destroy = destroy;
+  ihook->priority = priority;
 
   /* If we are adding the first idle function, possibly wake up
    * the main thread out of its select().
    */
-  if (!idle_functions)
+  if (!g_hook_first_valid (&idle_hooks, TRUE))
     gdk_threads_wake ();
 
-  idle_functions = g_list_insert_sorted (idle_functions, idlef, gtk_idle_compare);
-
+  g_hook_insert_sorted (&idle_hooks, hook, gtk_idle_compare);
   
-  return idlef->tag;
+  return hook->hook_id;
+}
+
+guint
+gtk_idle_add (GtkFunction function,
+	      gpointer	  data)
+{
+  return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, function, NULL, data, NULL);
+}
+
+guint	    
+gtk_idle_add_priority	(gint		    priority,
+			 GtkFunction	    function,
+			 gpointer	    data)
+{
+  return gtk_idle_add_full (priority, function, NULL, data, NULL);
 }
 
 guint
@@ -1196,12 +1214,209 @@ gtk_idle_add_interp  (GtkCallbackMarshal   marshal,
   return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, NULL, marshal, data, destroy);
 }
 
-static void
-gtk_idle_destroy (GtkIdleFunction *idlef)
+void
+gtk_idle_remove (guint tag)
 {
-  if (idlef->destroy)
-    idlef->destroy (idlef->data);
-  g_mem_chunk_free (idle_mem_chunk, idlef);
+  g_return_if_fail (tag > 0);
+
+  if (!g_hook_destroy (&idle_hooks, tag))
+    g_warning ("gtk_idle_remove(%d): no such idle function", tag);
+}
+
+void
+gtk_idle_remove_by_data (gpointer data)
+{
+  GHook *hook;
+
+  hook = g_hook_find_data (&idle_hooks, TRUE, data);
+  if (hook)
+    g_hook_destroy_link (&idle_hooks, hook);
+  else
+    g_warning ("gtk_idle_remove_by_data(%p): no such idle function", data);
+}
+
+static gboolean
+gtk_finish_idles (void)
+{
+  gboolean idles_called;
+
+  idles_called = FALSE;
+  while (last_idle)
+    {
+      GHook *hook;
+
+      hook = g_hook_next_valid (last_idle, FALSE);
+
+      if (!hook || GTK_IDLE_HOOK (hook)->priority != GTK_IDLE_HOOK (last_idle)->priority)
+	{
+	  g_hook_unref (&idle_hooks, last_idle);
+	  last_idle = NULL;
+	}
+      else
+	{
+	  g_hook_unref (&idle_hooks, last_idle);
+	  last_idle = hook;
+	  g_hook_ref (&idle_hooks, last_idle);
+
+	  idles_called = TRUE;
+	  gtk_invoke_hook (&idle_hooks, last_idle);
+	}
+    }
+
+  return idles_called;
+}
+
+static void
+gtk_handle_idles (void)
+{
+  GHook *hook;
+
+  /* Caller must already have called gtk_finish_idles() if necessary
+   */
+  g_assert (last_idle == NULL);
+
+  hook = g_hook_first_valid (&idle_hooks, FALSE);
+
+  if (hook)
+    {
+      last_idle = hook;
+      g_hook_ref (&idle_hooks, last_idle);
+
+      gtk_invoke_hook (&idle_hooks, last_idle);
+
+      gtk_finish_idles ();
+    }
+}
+
+static void
+gtk_invoke_hook (GHookList *hook_list,
+		 GHook     *hook)
+{
+  gboolean keep_alive;
+
+  if (hook->flags & GTK_HOOK_MARSHAL)
+    {
+      GtkArg args[1];
+      register GtkCallbackMarshal marshal;
+
+      keep_alive = FALSE;
+      args[0].name = NULL;
+      args[0].type = GTK_TYPE_BOOL;
+      GTK_VALUE_POINTER (args[0]) = &keep_alive;
+      marshal = hook->func;
+      marshal (NULL, hook->data, 0, args);
+    }
+  else
+    {
+      register GtkFunction func;
+
+      func = hook->func;
+      keep_alive = func (hook->data);
+    }
+  if (!keep_alive)
+    g_hook_destroy_link (hook_list, hook);
+}
+
+static gint
+gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
+{
+  if (!timeoutf->marshal)
+    return timeoutf->function (timeoutf->data);
+  else
+    {
+      GtkArg args[1];
+      gint ret_val = FALSE;
+      args[0].name = NULL;
+      args[0].type = GTK_TYPE_BOOL;
+      args[0].d.pointer_data = &ret_val;
+      timeoutf->marshal (NULL, timeoutf->data,  0, args);
+      return ret_val;
+    }
+}
+
+static void
+gtk_handle_current_timeouts (guint32 the_time)
+{
+  gint result;
+  GList *tmp_list;
+  GtkTimeoutFunction *timeoutf;
+  
+  while (current_timeouts)
+    {
+      tmp_list = current_timeouts;
+      timeoutf = tmp_list->data;
+      
+      current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
+      if (running_timeouts)
+	{
+	  running_timeouts->prev = tmp_list;
+	  tmp_list->next = running_timeouts;
+	}
+      running_timeouts = tmp_list;
+      
+      result = gtk_invoke_timeout_function (timeoutf);
+
+      running_timeouts = g_list_remove_link (running_timeouts, tmp_list);
+      timeoutf = tmp_list->data;
+      
+      g_list_free_1 (tmp_list);
+
+      if (timeoutf)
+	{
+	  if (!result)
+	    {
+	      gtk_timeout_destroy (timeoutf);
+	    }
+	  else
+	    {
+	      timeoutf->interval = timeoutf->originterval;
+	      timeoutf->start = the_time;
+	      gtk_timeout_insert (timeoutf);
+	    }
+	}
+    }
+}
+
+static void
+gtk_handle_timeouts (void)
+{
+  guint32 the_time;
+  GList *tmp_list;
+  GList *tmp_list2;
+  GtkTimeoutFunction *timeoutf;
+  
+  /* Caller must already have called gtk_handle_current_timeouts if
+   * necessary */
+  g_assert (current_timeouts == NULL);
+  
+  if (timeout_functions)
+    {
+      the_time = gdk_time_get ();
+      
+      tmp_list = timeout_functions;
+      while (tmp_list)
+	{
+	  timeoutf = tmp_list->data;
+	  
+	  if (timeoutf->interval <= (the_time - timeoutf->start))
+	    {
+	      tmp_list2 = tmp_list;
+	      tmp_list = tmp_list->next;
+	      
+	      timeout_functions = g_list_remove_link (timeout_functions, tmp_list2);
+	      current_timeouts = g_list_concat (current_timeouts, tmp_list2);
+	    }
+	  else
+	    {
+	      timeoutf->interval -= (the_time - timeoutf->start);
+	      timeoutf->start = the_time;
+	      tmp_list = tmp_list->next;
+	    }
+	}
+      
+      if (current_timeouts)
+	gtk_handle_current_timeouts (the_time);
+    }
 }
 
 static void
@@ -1247,21 +1462,6 @@ gtk_quit_add (guint	  main_level,
 	      gpointer	  data)
 {
   return gtk_quit_add_full (main_level, function, NULL, data, NULL);
-}
-
-guint
-gtk_idle_add (GtkFunction function,
-	      gpointer	  data)
-{
-  return gtk_idle_add_full (GTK_PRIORITY_DEFAULT, function, NULL, data, NULL);
-}
-
-guint	    
-gtk_idle_add_priority	(gint		    priority,
-			 GtkFunction	    function,
-			 gpointer	    data)
-{
-  return gtk_idle_add_full (priority, function, NULL, data, NULL);
 }
 
 void
@@ -1310,72 +1510,6 @@ gtk_quit_remove_by_data (gpointer data)
       
       tmp_list = tmp_list->next;
     }
-}
-
-/* Search for the specified tag in a list of idles. If it
- * is found, destroy the idle, and either remove the link
- * or set link->data to NULL depending on remove_link
- *
- * If tag != 0, match tag against idlef->tag, otherwise, match
- * data against idlef->data
- */
-static gint
-gtk_idle_remove_from_list (GList  **list, 
-			   guint    tag, 
-			   gpointer data, 
-			   gint     remove_link)
-{
-  GtkIdleFunction *idlef;
-  GList *tmp_list;
-  
-  tmp_list = *list;
-  while (tmp_list)
-    {
-      idlef = tmp_list->data;
-      
-      if (((tag != 0) && (idlef->tag == tag)) ||
-	  ((tag == 0) && (idlef->data == data)))
-	{
-	  if (remove_link)
-	    {
-	      *list = g_list_remove_link (*list, tmp_list);
-	      g_list_free (tmp_list);
-	    }
-	  else
-	    tmp_list->data = NULL;
-
-	  gtk_idle_destroy (idlef);
-	  
-	  return TRUE;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-  return FALSE;
-}
-
-void
-gtk_idle_remove (guint tag)
-{
-  g_return_if_fail (tag != 0);
-  
-  if (gtk_idle_remove_from_list (&idle_functions, tag, NULL, TRUE))
-    return;
-  if (gtk_idle_remove_from_list (&current_idles, tag, NULL, TRUE))
-    return;
-  if (gtk_idle_remove_from_list (&running_idles, tag, NULL, FALSE))
-    return;
-}
-
-void
-gtk_idle_remove_by_data (gpointer data)
-{
-  if (gtk_idle_remove_from_list (&idle_functions, 0, data, TRUE))
-    return;
-  if (gtk_idle_remove_from_list (&current_idles, 0, data, TRUE))
-    return;
-  if (gtk_idle_remove_from_list (&running_idles, 0, data, FALSE))
-    return;
 }
 
 static void
@@ -1494,108 +1628,6 @@ gtk_timeout_insert (GtkTimeoutFunction *timeoutf)
 }
 
 static gint
-gtk_invoke_timeout_function (GtkTimeoutFunction *timeoutf)
-{
-  if (!timeoutf->marshal)
-    return timeoutf->function (timeoutf->data);
-  else
-    {
-      GtkArg args[1];
-      gint ret_val = FALSE;
-      args[0].name = NULL;
-      args[0].type = GTK_TYPE_BOOL;
-      args[0].d.pointer_data = &ret_val;
-      timeoutf->marshal (NULL, timeoutf->data,  0, args);
-      return ret_val;
-    }
-}
-
-static void
-gtk_handle_current_timeouts (guint32 the_time)
-{
-  gint result;
-  GList *tmp_list;
-  GtkTimeoutFunction *timeoutf;
-  
-  while (current_timeouts)
-    {
-      tmp_list = current_timeouts;
-      timeoutf = tmp_list->data;
-      
-      current_timeouts = g_list_remove_link (current_timeouts, tmp_list);
-      if (running_timeouts)
-	{
-	  running_timeouts->prev = tmp_list;
-	  tmp_list->next = running_timeouts;
-	}
-      running_timeouts = tmp_list;
-      
-      result = gtk_invoke_timeout_function (timeoutf);
-
-      running_timeouts = g_list_remove_link (running_timeouts, tmp_list);
-      timeoutf = tmp_list->data;
-      
-      g_list_free_1 (tmp_list);
-
-      if (timeoutf)
-	{
-	  if (!result)
-	    {
-	      gtk_timeout_destroy (timeoutf);
-	    }
-	  else
-	    {
-	      timeoutf->interval = timeoutf->originterval;
-	      timeoutf->start = the_time;
-	      gtk_timeout_insert (timeoutf);
-	    }
-	}
-    }
-}
-
-static void
-gtk_handle_timeouts (void)
-{
-  guint32 the_time;
-  GList *tmp_list;
-  GList *tmp_list2;
-  GtkTimeoutFunction *timeoutf;
-  
-  /* Caller must already have called gtk_handle_current_timeouts if
-   * necessary */
-  g_assert (current_timeouts == NULL);
-  
-  if (timeout_functions)
-    {
-      the_time = gdk_time_get ();
-      
-      tmp_list = timeout_functions;
-      while (tmp_list)
-	{
-	  timeoutf = tmp_list->data;
-	  
-	  if (timeoutf->interval <= (the_time - timeoutf->start))
-	    {
-	      tmp_list2 = tmp_list;
-	      tmp_list = tmp_list->next;
-	      
-	      timeout_functions = g_list_remove_link (timeout_functions, tmp_list2);
-	      current_timeouts = g_list_concat (current_timeouts, tmp_list2);
-	    }
-	  else
-	    {
-	      timeoutf->interval -= (the_time - timeoutf->start);
-	      timeoutf->start = the_time;
-	      tmp_list = tmp_list->next;
-	    }
-	}
-      
-      if (current_timeouts)
-	gtk_handle_current_timeouts (the_time);
-    }
-}
-
-static gint
 gtk_quit_invoke_function (GtkQuitFunction *quitf)
 {
   if (!quitf->marshal)
@@ -1615,128 +1647,12 @@ gtk_quit_invoke_function (GtkQuitFunction *quitf)
     }
 }
 
-static gint
-gtk_idle_invoke_function (GtkIdleFunction *idlef)
-{
-  if (!idlef->marshal)
-    return idlef->function (idlef->data);
-  else
-    {
-      GtkArg args[1];
-      gint ret_val = FALSE;
-
-      args[0].name = NULL;
-      args[0].type = GTK_TYPE_BOOL;
-      args[0].d.pointer_data = &ret_val;
-      ((GtkCallbackMarshal) idlef->marshal) (NULL,
-					     idlef->data,
-					     0, args);
-      return ret_val;
-    }
-}
-
-static void
-gtk_handle_current_idles (void)
-{
-  GList *tmp_list;
-  GList *tmp_list2;
-  GtkIdleFunction *idlef;
-  gint result;
-  
-  while (current_idles)
-    {
-      tmp_list = current_idles;
-      idlef = tmp_list->data;
-      
-      current_idles = g_list_remove_link (current_idles, tmp_list);
-      if (running_idles)
-	{
-	  running_idles->prev = tmp_list;
-	  tmp_list->next = running_idles;
-	}
-      running_idles = tmp_list;
-
-      result = gtk_idle_invoke_function (idlef);
-      
-      running_idles = g_list_remove_link (running_idles, tmp_list);
-      idlef = tmp_list->data;
-      
-      if (!idlef || !result)
-	{
-	  g_list_free (tmp_list);
-	  if (idlef)
-	    gtk_idle_destroy (idlef);
-	}
-      else
-	{
-	  /* Insert the idle function back into the list of idle
-	   * functions at the end of the idles of this priority
-	   */
-	  tmp_list2 = idle_functions;
-	  while (tmp_list2 &&
-		 (((GtkIdleFunction *)tmp_list2->data)->priority <= idlef->priority))
-	    tmp_list2 = tmp_list2->next;
-
-	  if (!tmp_list2)
-	    idle_functions = g_list_concat (idle_functions, tmp_list);
-	  else if (tmp_list2 == idle_functions)
-	    {
-	      tmp_list->next = idle_functions;
-	      if (idle_functions)
-		idle_functions->prev = tmp_list;
-	      idle_functions = tmp_list;
-	    }
-	  else
-	    {
-	      tmp_list->prev = tmp_list2->prev;
-	      tmp_list->next = tmp_list2;
-	      tmp_list2->prev->next = tmp_list;
-	      tmp_list2->prev = tmp_list;
-	    }
-	}
-    }
-}
-
-static void
-gtk_handle_idle (void)
-{
-  /* Caller must already have called gtk_handle_current_idles if
-   * necessary
-   */
-  g_assert (current_idles == NULL);
-  
-  /* Handle only the idle functions that have the highest priority */
-  if (idle_functions)
-    {
-      GList *tmp_list;
-      gint top_priority;
-
-      tmp_list = idle_functions;
-      top_priority = ((GtkIdleFunction *)tmp_list->data)->priority;
- 
-      while (tmp_list &&
-	     (((GtkIdleFunction *)tmp_list->data)->priority == top_priority))
-	tmp_list = tmp_list->next;
-
-      current_idles = idle_functions;
-      idle_functions = tmp_list;
-
-      if (tmp_list) 
-	{
-	  tmp_list->prev->next = NULL;
-	  tmp_list->prev = NULL;
-	}
-      
-      gtk_handle_current_idles();
-    }
-}
-
 static void
 gtk_handle_timer (void)
 {
   GtkTimeoutFunction *timeoutf;
   
-  if (idle_functions)
+  if (g_hook_first_valid (&idle_hooks, FALSE))
     {
       gdk_timer_set (0);
       gdk_timer_enable ();
