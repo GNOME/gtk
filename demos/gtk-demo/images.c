@@ -196,7 +196,7 @@ progressive_timeout (gpointer data)
 	}
       else
 	{
-	  image_stream = fopen (filename, "r");
+	  image_stream = fopen (filename, "rb");
 	  g_free (filename);
 
 	  if (!image_stream)
