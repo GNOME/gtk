@@ -1817,16 +1817,16 @@ gtk_menu_key_press (GtkWidget	*widget,
       (delete || gtk_accelerator_valid (event->keyval, event->state)))
     {
       GtkWidget *menu_item = menu_shell->active_menu_item;
-      gboolean replace_accels = TRUE;
+      gboolean locked, replace_accels = TRUE;
       const gchar *path;
 
-      path = _gtk_widget_get_accel_path (menu_item);
-      if (!path)
+      path = _gtk_widget_get_accel_path (menu_item, &locked);
+      if (!path || locked)
 	{
 	  /* can't change accelerators on menu_items without paths
 	   * (basically, those items are accelerator-locked).
 	   */
-	  /* g_print("item has no path, menu prefix: %s\n", menu->accel_path); */
+	  /* g_print("item has no path or is locked, menu prefix: %s\n", menu->accel_path); */
 	  gdk_beep ();
 	}
       else

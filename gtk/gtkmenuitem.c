@@ -1082,7 +1082,7 @@ _gtk_menu_item_refresh_accel_path (GtkMenuItem   *menu_item,
       return;
     }
 
-  path = _gtk_widget_get_accel_path (widget);
+  path = _gtk_widget_get_accel_path (widget, NULL);
   if (!path)					/* no active accel_path yet */
     {
       path = menu_item->accel_path;

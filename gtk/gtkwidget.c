@@ -2828,13 +2828,16 @@ gtk_widget_set_accel_path (GtkWidget     *widget,
 }
 
 const gchar*
-_gtk_widget_get_accel_path (GtkWidget *widget)
+_gtk_widget_get_accel_path (GtkWidget *widget,
+			    gboolean  *locked)
 {
   AccelPath *apath;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   apath = g_object_get_qdata (G_OBJECT (widget), quark_accel_path);
+  if (locked)
+    *locked = apath ? apath->accel_group->lock_count > 0 : TRUE;
   return apath ? g_quark_to_string (apath->path_quark) : NULL;
 }
 
