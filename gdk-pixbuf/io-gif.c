@@ -27,7 +27,6 @@
 #include <config.h>
 #include <stdio.h>
 #include <glib.h>
-#include <gif_lib.h>
 #include <string.h>
 #include "gdk-pixbuf.h"
 #include "gdk-pixbuf-io.h"
@@ -78,10 +77,6 @@ struct _GifContext
 };
 
 
-int verbose = FALSE;
-int showComment = TRUE;
-char *globalcomment = NULL;
-gint globalusecomment = TRUE;
 
 static int ReadColorMap (FILE *, int, CMap, int *);
 static int DoExtension (FILE *file, GifContext *context, int label);
@@ -165,7 +160,7 @@ DoExtension (FILE *file, GifContext *context, int label)
 	return FALSE;
 }
 
-int ZeroDataBlock = FALSE;
+static int ZeroDataBlock = FALSE;
 
 static int
 GetDataBlock (FILE          *file,
@@ -375,29 +370,27 @@ ReadImage (FILE *file,
 		return;
 	}
 
-	g_print ("c = %d\n", c);
 	if (LWZReadByte (file, TRUE, c) < 0) {
 		/*g_message (_("GIF: error while reading\n"));*/
 		return;
 	}
 
 	context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
-					  TRUE,//context->gif89.transparent,
+					  context->gif89.transparent,
 					  8,
 					  context->width,
 					  context->height);
 
 	dest = gdk_pixbuf_get_pixels (context->pixbuf);
 	while ((v = LWZReadByte (file, FALSE, c)) >= 0) {
-//		g_print ("in inner loop: xpos = %d, ypos = %d\n", xpos, ypos);
-		if (TRUE || context->gif89.transparent) {
-			temp = dest + (ypos * len + xpos) * 4;
+		if (context->gif89.transparent) {
+			temp = dest + ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + xpos * 4;
 			*temp = cmap [0][(guchar) v];
 			*(temp+1) = cmap [1][(guchar) v];
 			*(temp+2) = cmap [2][(guchar) v];
 			*(temp+3) = (guchar) ((v == context->gif89.transparent) ? 0 : 65535);
 		} else {
-			temp = dest + (ypos * len + xpos) * 3;
+			temp = dest + ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + xpos * 3;
 			*temp = cmap [0][(guchar) v];
 			*(temp+1) = cmap [1][(guchar) v];
 			*(temp+2) = cmap [2][(guchar) v];
@@ -446,13 +439,9 @@ ReadImage (FILE *file,
 
  fini:
 	ypos = 0;
-/*	while (ReadOK (file, &c, 1) >= 0)
-	ypos++;
-	g_print ("ypos%d\n", ypos);*/
-/*
+
 	if (LWZReadByte (file, FALSE, c) >= 0)
 		g_print ("GIF: too much input data, ignoring extra...\n");
-*/
 }
 
 /* Shared library entry point */
@@ -519,7 +508,6 @@ image_load (FILE *file)
 	}
 
 	for (;;) {
-		g_print ("in loop\n");
 		if (!ReadOK (file, &c, 1)) {
 			/*g_message (_("GIF: EOF / read error on image data\n"));*/
 			return context->pixbuf;
