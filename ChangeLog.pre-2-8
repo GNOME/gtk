@@ -1,6 +1,11 @@
+2003-09-06  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaction.c (gtk_action_connect_proxy): Disconnect from 
+	prev_action, not from action.  (Fix by David Hampton)
+
 Fri Sep  5 14:15:10 2003  Owen Taylor  <otaylor@redhat.com>
  
- 	* Back out locale-dependent interpretation of
+	* Back out locale-dependent interpretation of
  	KP_Decimal, the official XFree86 interpretation
  	is that KP_Decimal => . KP_Separator => ,
  	always, independent of locale. 

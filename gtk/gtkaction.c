@@ -814,9 +814,7 @@ gtk_action_connect_proxy (GtkAction *action,
   prev_action = g_object_get_data (G_OBJECT (proxy), "gtk-action");
 
   if (prev_action)
-    {
-      (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (action, proxy);  
-    }
+    (* GTK_ACTION_GET_CLASS (action)->disconnect_proxy) (prev_action, proxy);  
 
   (* GTK_ACTION_GET_CLASS (action)->connect_proxy) (action, proxy);
 }
