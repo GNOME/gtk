@@ -154,7 +154,7 @@ update_keymaps (void)
         XFreeModifiermap (mod_keymap);
       
       keymap = XGetKeyboardMapping (gdk_display, min_keycode,
-                                    max_keycode - min_keycode,
+                                    max_keycode - min_keycode + 1,
                                     &keysyms_per_keycode);
 
 
@@ -164,7 +164,7 @@ update_keymaps (void)
        * we we fudge the map here.
        */
       keycode = min_keycode;
-      while (keycode < max_keycode)
+      while (keycode <= max_keycode)
         {
           KeySym *syms = keymap + (keycode - min_keycode) * keysyms_per_keycode;
 	  /* Check both groups */
@@ -414,7 +414,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
       gint keycode;
       
       keycode = min_keycode;
-      while (keycode < max_keycode)
+      while (keycode <= max_keycode)
         {
           const KeySym *syms = map + (keycode - min_keycode) * keysyms_per_keycode;
           gint i = 0;
