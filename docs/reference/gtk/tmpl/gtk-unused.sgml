@@ -1401,6 +1401,22 @@ a gtk_object_unref().
 @tree_model: 
 @iter: 
 
+<!-- ##### FUNCTION gtk_tree_model_sort_set_compare ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@func: 
+
+<!-- ##### FUNCTION gtk_tree_model_sort_set_sort_column ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sort_col: 
+
 <!-- ##### FUNCTION gtk_tree_model_unref_iter ##### -->
 <para>
 

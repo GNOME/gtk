@@ -196,9 +196,10 @@ libgdk_pixbuf_1_3_la_SOURCES = 	\
 	gdk-pixbuf-data.c	\
 	gdk-pixbuf-io.c		\
 	gdk-pixbuf-loader.c	\
-	gdk-pixbuf-marshal.h	\
 	gdk-pixbuf-scale.c	\
 	gdk-pixbuf-util.c
+
+#	gdk-pixbuf-marshal.h	
 
 libgdk_pixbuf_1_3_la_LDFLAGS = 				        \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
@@ -220,6 +221,7 @@ EXTRA_DIST =			\
 	makefile.mingw		\
 	makefile.mingw.in	\
 	gdk_pixbuf.def		\
+	gdk-pixbuf-marshal.list		\
 	pixbufloader_ico.def		\
 	pixbufloader_pnm.def		\
 	pixbufloader_xpm.def		\
@@ -233,13 +235,13 @@ EXTRA_DIST =			\
 	pixbufloader_xbm.def
 
 
-gdk-pixbuf-marshal.h: gdk-pixbuf-marshal.list
+gdk-pixbuf-marshal.h: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
 	cd $(srcdir) \
 	&& glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --header >> xgen-gmh \
 	&& (cmp -s xgen-gmh gdk-pixbuf-marshal.h || cp xgen-gmh gdk-pixbuf-marshal.h) \
 	&& rm -f xgen-gmh xgen-gmh~
 
-gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
+gdk-pixbuf-marshal.c: @REBUILD@ $(srcdir)/gdk-pixbuf-marshal.list
 	cd $(srcdir) \
 	&& glib-genmarshal --prefix=gdk_pixbuf_marshal gdk-pixbuf-marshal.list --body >> xgen-gmc \
 	&& (cmp -s xgen-gmc gdk-pixbuf-marshal.c || cp xgen-gmc gdk-pixbuf-marshal.c) \

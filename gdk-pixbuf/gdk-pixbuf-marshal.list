@@ -15,6 +15,7 @@
 #   FLOAT       for single-precision float types (gfloat)
 #   DOUBLE      for double-precision float types (gdouble)
 #   STRING      for string types (gchar*)
+#   PARAM       for GParamSpec or derived types  (GParamSpec*)
 #   BOXED       for boxed (anonymous but reference counted) types (GBoxed*)
 #   POINTER     for anonymous pointer types (gpointer)
 #   OBJECT      for GObject or derived types (GObject*)

@@ -1,3 +1,13 @@
+Wed Apr  4 01:41:02 2001  Tim Janik  <timj@gtk.org>
+
+	* pixops/Makefile.am (noinst_LTLIBRARIES): include $top_srcdir
+	so we don't try to get <gtk/gtkobject.h> from standard search
+	paths.
+
+	* Makefile.am (gdk-pixbuf-marshal.c): use deps from srcdir.
+	add gdk-pixbuf-marshal.list to EXTRA_DIST.
+	take gdk-pixbuf-marshal.h out of _la sources.
+
 2001-03-19  Tor Lillqvist  <tml@iki.fi>
 
 	* makefile.mingw.in: Handle gdk-pixbuf-marshal.c.

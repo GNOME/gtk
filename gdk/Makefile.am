@@ -8,6 +8,7 @@ EXTRA_DIST =			\
 	gdk.def 		\
 	makefile.mingw 		\
 	makefile.mingw.in 	\
+	makeenums.pl		\
 	makefile.msc
 
 common_includes = @STRIP_BEGIN@ 	\
@@ -181,11 +182,11 @@ install-exec-local: gdkconfig.h
 #note: not gdkconfig.h
 BUILT_SOURCES = stamp-gc-h @REBUILD@ gdkenumtypes.c gdkenumtypes.h
 
-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) makeenums.pl
+gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) $(srcdir)/makeenums.pl
 	cd $(srcdir) \
 	&& $(PERL) ./makeenums.pl include $(gdk_public_h_sources) > gdkenumtypes.h
 
-gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) makeenums.pl
+gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) $(srcdir)/makeenums.pl
 	cd $(srcdir) \
 	&& $(PERL) ./makeenums.pl cfile $(gdk_public_h_sources) > gdkenumtypes.c
 

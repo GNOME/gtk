@@ -63,24 +63,6 @@ GtkTreeModelSort
 @model: 
 
 
-<!-- ##### FUNCTION gtk_tree_model_sort_set_sort_column ##### -->
-<para>
-
-</para>
-
-@tree_model_sort: 
-@sort_col: 
-
-
-<!-- ##### FUNCTION gtk_tree_model_sort_set_compare ##### -->
-<para>
-
-</para>
-
-@tree_model_sort: 
-@func: 
-
-
 <!-- ##### FUNCTION gtk_tree_model_sort_convert_path ##### -->
 <para>
 

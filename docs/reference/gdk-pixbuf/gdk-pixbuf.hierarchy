@@ -5,5 +5,4 @@ GObject
       GdkWindowImplX11
   GdkColormap
   GtkSettings
-  GtkRcStyle
   GdkPixbufLoader
