@@ -1,3 +1,9 @@
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* pixbuf-render.c: 
+	* pixbuf-draw.c: 
+	* pixbuf-rc-style.c: Remove uses of deprecated symbols. 
+
 Thu Mar 18 10:07:15 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* pixbuf-draw.c (match_theme_image): Fix ./-> typo.

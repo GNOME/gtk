@@ -103,14 +103,14 @@ draw_simple_image(GtkStyle       *style,
   
   if ((width == -1) && (height == -1))
     {
-      gdk_window_get_size(window, &width, &height);
+      gdk_drawable_get_size(window, &width, &height);
       if (allow_setbg)
       	setbg = TRUE;
     }
   else if (width == -1)
-    gdk_window_get_size(window, &width, NULL);
+    gdk_drawable_get_size(window, &width, NULL);
   else if (height == -1)
-    gdk_window_get_size(window, NULL, &height);
+    gdk_drawable_get_size(window, NULL, &height);
 
   if (!(match_data->flags & THEME_MATCH_ORIENTATION))
     {
@@ -166,13 +166,13 @@ draw_gap_image(GtkStyle       *style,
   
   if ((width == -1) && (height == -1))
     {
-      gdk_window_get_size(window, &width, &height);
+      gdk_drawable_get_size(window, &width, &height);
       setbg = TRUE;
     }
   else if (width == -1)
-    gdk_window_get_size(window, &width, NULL);
+    gdk_drawable_get_size(window, &width, NULL);
   else if (height == -1)
-    gdk_window_get_size(window, NULL, &height);
+    gdk_drawable_get_size(window, NULL, &height);
 
   if (!(match_data->flags & THEME_MATCH_ORIENTATION))
     {

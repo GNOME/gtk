@@ -409,7 +409,7 @@ pixbuf_render (GdkPixbuf    *src,
 			x_scale, y_scale,
 			GDK_INTERP_BILINEAR);
 
-      gdk_pixbuf_unref (partial_src);
+      g_object_unref (partial_src);
 
       x_offset = 0;
       y_offset = 0;
@@ -431,7 +431,7 @@ pixbuf_render (GdkPixbuf    *src,
 				       GDK_PIXBUF_ALPHA_FULL, 128,
 				       GDK_RGB_DITHER_NORMAL,
 				       0, 0);
-  gdk_pixbuf_unref (tmp_pixbuf);
+  g_object_unref (tmp_pixbuf);
 }
 
 ThemePixbuf *
@@ -661,7 +661,7 @@ theme_pixbuf_get_pixbuf (ThemePixbuf *theme_pb)
     {
       if (!pixbuf_cache)
 	pixbuf_cache = g_cache_new ((GCacheNewFunc)pixbuf_cache_value_new,
-				    (GCacheDestroyFunc)gdk_pixbuf_unref,
+				    (GCacheDestroyFunc)g_object_unref,
 				    (GCacheDupFunc)g_strdup,
 				    (GCacheDestroyFunc)g_free,
 				    g_str_hash, g_direct_hash, g_str_equal);
@@ -797,7 +797,7 @@ theme_pixbuf_render (ThemePixbuf  *theme_pb,
 	    gdk_draw_rectangle (window, tmp_gc, TRUE, x, y, width, height);
 	  
 	  gdk_gc_unref (tmp_gc);
-	  gdk_pixmap_unref (tmp_pixmap);
+	  g_object_unref (tmp_pixmap);
 	}
     }
 }
