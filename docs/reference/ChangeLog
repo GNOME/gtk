@@ -4,6 +4,7 @@ Fri Oct 26 11:54:53 2001  Owen Taylor  <otaylor@redhat.com>
 
 2001-10-27  Anders Carlsson  <andersca@gnu.org>
 
+	* gtk/gtk-sections.txt,
 	* gtk/tmpl/gtktreeviewcolumn.sgml: Remove documentation for
 	gtk_tree_view_column_cell_event since that function has been
 	removed. This fixes #62084.
