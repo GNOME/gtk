@@ -1,3 +1,9 @@
+Thu Nov 13 01:46:32 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_init): Use 
+	GTK_DATADIR/{icons,pixmaps} instead of 
+	GTK_DATA_PREFIX/{icons,pixmaps}.  (#123365, Marco Pesenti Gritti)
+
 Wed Nov 12 21:40:10 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Changes to improve menu positioning on Xinerama (#108328, #126150):
