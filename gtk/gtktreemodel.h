@@ -32,10 +32,11 @@ extern "C" {
 #define GTK_TREE_MODEL_GET_IFACE(obj)  ((GtkTreeModelIface *)g_type_interface_peek (((GTypeInstance *)GTK_TREE_MODEL (obj))->g_class, GTK_TYPE_TREE_MODEL))
 					
 
-typedef struct _GtkTreeIter       GtkTreeIter;
-typedef struct _GtkTreePath       GtkTreePath;
-typedef struct _GtkTreeModel      GtkTreeModel; /* Dummy typedef */
-typedef struct _GtkTreeModelIface GtkTreeModelIface;
+typedef struct _GtkTreeIter         GtkTreeIter;
+typedef struct _GtkTreePath         GtkTreePath;
+typedef struct _GtkTreeRowReference GtkTreeRowReference;
+typedef struct _GtkTreeModel        GtkTreeModel; /* Dummy typedef */
+typedef struct _GtkTreeModelIface   GtkTreeModelIface;
 
 
 typedef enum
@@ -132,6 +133,16 @@ void         gtk_tree_path_next             (GtkTreePath       *path);
 gboolean     gtk_tree_path_prev             (GtkTreePath       *path);
 gboolean     gtk_tree_path_up               (GtkTreePath       *path);
 void         gtk_tree_path_down             (GtkTreePath       *path);
+
+/* Row reference (an object that tracks model changes so it refers to the
+ * same row always; a path refers to a position, not a fixed row)
+ */
+
+GtkTreeRowReference *gtk_tree_row_reference_new      (GtkTreeModel        *model,
+                                                      GtkTreePath         *path);
+/* returns NULL if the row was deleted or the model was destroyed. */
+GtkTreePath         *gtk_tree_row_reference_get_path (GtkTreeRowReference *reference);
+void                 gtk_tree_row_reference_free     (GtkTreeRowReference *reference);
 
 
 /* GtkTreeIter operations */

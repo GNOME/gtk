@@ -180,13 +180,22 @@ gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
 
       if (selection->tree_view->priv->anchor)
 	{
-	  _gtk_tree_view_find_node (selection->tree_view,
-				    selection->tree_view->priv->anchor,
-				    &tree,
-				    &node);
+          GtkTreePath *anchor_path;
 
-	  if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-	    selected = TRUE;
+          anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
+
+          if (anchor_path)
+            {
+              _gtk_tree_view_find_node (selection->tree_view,
+                                        anchor_path,
+                                        &tree,
+                                        &node);
+              
+              if (node && GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+                selected = TRUE;
+
+              gtk_tree_path_free (anchor_path);
+            }
 	}
       /* FIXME: if user_func is set, then it needs to unconditionally unselect
        * all.
@@ -267,7 +276,9 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
 {
   GtkRBTree *tree;
   GtkRBNode *node;
-
+  GtkTreePath *anchor_path;
+  gboolean retval;
+  
   g_return_val_if_fail (selection != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
 
@@ -276,24 +287,43 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   
   if (selection->tree_view->priv->anchor == NULL)
     return FALSE;
-  else if (iter == NULL)
-    return TRUE;
+
+  anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
+
+  if (anchor_path == NULL)
+    return FALSE;
+  
+  if (iter == NULL)
+    {
+      gtk_tree_path_free (anchor_path);
+      return TRUE;
+    }
 
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
   g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
 
+  retval = FALSE;
+  
   if (!_gtk_tree_view_find_node (selection->tree_view,
-				selection->tree_view->priv->anchor,
-				&tree,
-				&node) &&
+                                 anchor_path,
+                                 &tree,
+                                 &node) &&
       ! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-    /* We don't want to return the anchor if it isn't actually selected.
-     */
-      return FALSE;
+    {
+      /* We don't want to return the anchor if it isn't actually selected.
+       */
+      retval = FALSE;
+    }
+  else
+    {
+      retval = gtk_tree_model_get_iter (selection->tree_view->priv->model,
+                                        iter,
+                                        anchor_path);
+    }
 
-  return gtk_tree_model_get_iter (selection->tree_view->priv->model,
-				  iter,
-				  selection->tree_view->priv->anchor);
+  gtk_tree_path_free (anchor_path);
+  
+  return retval;
 }
 
 /**
@@ -661,13 +691,23 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
     {
       GtkRBTree *tree = NULL;
       GtkRBNode *node = NULL;
+      GtkTreePath *anchor_path;
+      
       if (selection->tree_view->priv->anchor == NULL)
 	return FALSE;
 
+      anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
+
+      if (anchor_path == NULL)
+        return FALSE;
+      
       _gtk_tree_view_find_node (selection->tree_view,
-				selection->tree_view->priv->anchor,
+                                anchor_path,
 				&tree,
 				&node);
+
+      gtk_tree_path_free (anchor_path);
+      
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
 	{
 	  gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
@@ -839,16 +879,25 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 {
   gint flags;
   gint dirty = FALSE;
+  GtkTreePath *anchor_path = NULL;
 
-  if (((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) && (selection->tree_view->priv->anchor == NULL))
+  if (selection->tree_view->priv->anchor)
+    anchor_path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
+
+  if (((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) && (anchor_path == NULL))
     {
-      selection->tree_view->priv->anchor = gtk_tree_path_copy (path);
+      if (selection->tree_view->priv->anchor)
+        gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+      
+      selection->tree_view->priv->anchor =
+        gtk_tree_row_reference_new (selection->tree_view->priv->model,
+                                    path);
       dirty = gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
     }
   else if ((state & (GDK_CONTROL_MASK|GDK_SHIFT_MASK)) == (GDK_SHIFT_MASK|GDK_CONTROL_MASK))
     {
       gtk_tree_selection_select_range (selection,
-				       selection->tree_view->priv->anchor,
+                                       anchor_path,
 				       path);
     }
   else if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
@@ -858,8 +907,11 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	dirty = gtk_tree_selection_real_unselect_all (selection);
 
       if (selection->tree_view->priv->anchor)
-	gtk_tree_path_free (selection->tree_view->priv->anchor);
-      selection->tree_view->priv->anchor = gtk_tree_path_copy (path);
+        gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+      
+      selection->tree_view->priv->anchor =
+        gtk_tree_row_reference_new (selection->tree_view->priv->model,
+                                    path);      
 
       if ((flags & GTK_RBNODE_IS_SELECTED) == GTK_RBNODE_IS_SELECTED)
 	dirty |= gtk_tree_selection_real_select_node (selection, tree, node, FALSE);
@@ -870,18 +922,26 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     {
       dirty = gtk_tree_selection_real_unselect_all (selection);
       dirty |= gtk_tree_selection_real_select_range (selection,
-						     selection->tree_view->priv->anchor,
+                                                     anchor_path,
 						     path);
     }
   else
     {
       dirty = gtk_tree_selection_real_unselect_all (selection);
+
       if (selection->tree_view->priv->anchor)
-	gtk_tree_path_free (selection->tree_view->priv->anchor);
-      selection->tree_view->priv->anchor = gtk_tree_path_copy (path);
+        gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
+      
+      selection->tree_view->priv->anchor =
+        gtk_tree_row_reference_new (selection->tree_view->priv->model,
+                                    path);
+      
       dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
     }
 
+  if (anchor_path)
+    gtk_tree_path_free (anchor_path);
+  
   if (dirty)
     gtk_signal_emit (GTK_OBJECT (selection), tree_selection_signals[SELECTION_CHANGED]);
 }

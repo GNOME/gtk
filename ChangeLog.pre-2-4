@@ -1,5 +1,15 @@
 2001-01-26  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktreemodel.c, gtk/gtktreemodel.h: add GtkTreeRowReference
+	which holds a handle to a specific row (particular set of values
+	in the model, i.e. pointer-identity row).
+
+	* gtk/gtktreeview.c, gtk/gtktreeprivate.h, gtk/gtktreeselection.c:
+	use GtkTreeRowReference for anchor, cursor, and drag_dest_row.
+	Still need to use it for the src/dest row saved on the drag context.
+
+2001-01-26  Havoc Pennington  <hp@redhat.com>
+
 	* gtk/gtktextlayout.c (convert_color): adapt to handle PangoColor
 
 	* gtk/gtktreeview.c (gtk_tree_view_widget_to_tree_coords): fix to

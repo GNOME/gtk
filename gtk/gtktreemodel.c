@@ -393,6 +393,297 @@ gtk_tree_path_down (GtkTreePath *path)
   gtk_tree_path_append_index (path, 0);
 }
 
+struct _GtkTreeRowReference
+{
+  GtkTreeModel *model;
+  GtkTreePath *path;
+};
+
+typedef struct _RowRefList RowRefList;
+
+struct _RowRefList
+{
+  GSList *list;
+};
+
+static void
+release_row_references (gpointer data)
+{
+  RowRefList *refs = data;
+  GSList *tmp_list = NULL;
+  
+  tmp_list = refs->list;
+  while (tmp_list != NULL)
+    {
+      GtkTreeRowReference *reference = tmp_list->data;
+
+      reference->model = NULL;
+
+      /* we don't free the reference, users are responsible for that. */
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+
+  g_slist_free (refs->list);
+  g_free (refs);
+}
+
+static void
+inserted_callback (GtkTreeModel *tree_model,
+                   GtkTreePath  *path,
+                   GtkTreeIter  *iter,
+                   gpointer      data)
+{
+  RowRefList *refs = data;
+  GSList *tmp_list;
+
+  tmp_list = refs->list;
+
+  while (tmp_list != NULL)
+    {
+      GtkTreeRowReference *reference = tmp_list->data;
+
+      /* if reference->path == NULL then the reference was already
+       * deleted.
+       */
+      
+      if (reference->path)
+        {
+          gint i;
+          gint depth = gtk_tree_path_get_depth (path);
+          gint *indices = gtk_tree_path_get_indices (path);
+          gint ref_depth = gtk_tree_path_get_depth (reference->path);
+          gint *ref_indices = gtk_tree_path_get_indices (reference->path);
+
+          for (i = 0; i < depth && i < ref_depth; i++)
+            {
+              if (indices[i] < ref_indices[i])
+                {
+                  /* inserted node was before the referenced row;
+                   * move referenced path down 1
+                   */
+                  ref_indices[i] += 1;
+                  break;
+                }
+              else if (indices[i] > ref_indices[i])
+                {
+                  /* inserted node was past the referenced row */
+                  break;
+                }
+              else if (i == depth - 1)
+                {
+                  /* referenced row or its parent was inserted, this
+                   * is possible if you create the path and row reference
+                   * before you actually insert the row.
+                   */                  
+                  break;
+                }
+            }
+
+          /* If we didn't break out of the for loop, the inserted path
+           * was a child of the referenced path
+           */
+        }
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+}
+
+static void
+deleted_callback (GtkTreeModel *tree_model,
+                  GtkTreePath  *path,
+                  gpointer      data)
+{
+  RowRefList *refs = data;
+  GSList *tmp_list;
+
+  tmp_list = refs->list;
+
+  while (tmp_list != NULL)
+    {
+      GtkTreeRowReference *reference = tmp_list->data;
+
+      /* if reference->path == NULL then the reference was already
+       * deleted.
+       */
+      
+      if (reference->path)
+        {
+          gint i;
+          gint depth = gtk_tree_path_get_depth (path);
+          gint *indices = gtk_tree_path_get_indices (path);
+          gint ref_depth = gtk_tree_path_get_depth (reference->path);
+          gint *ref_indices = gtk_tree_path_get_indices (reference->path);
+
+          for (i = 0; i < depth && i < ref_depth; i++)
+            {
+              if (indices[i] < ref_indices[i])
+                {
+                  /* deleted node was before the referenced row;
+                   * move referenced path up 1
+                   */
+                  ref_indices[i] -= 1;
+                  break;
+                }
+              else if (indices[i] > ref_indices[i])
+                {
+                  /* deleted node is past the referenced row */
+                  break;
+                }
+              else if (i == depth - 1)
+                {
+                  /* referenced row or its parent was deleted, mark it
+                   * invalid
+                   */
+                  gtk_tree_path_free (reference->path);
+                  reference->path = NULL;
+                  break;
+                }
+            }
+
+          /* If we didn't break out of the for loop, the deleted path
+           * was a child of the referenced path
+           */
+        }
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+}
+
+static void
+reordered_callback (GtkTreeModel *tree_model,
+                    GtkTreePath  *path,
+                    gint         *new_order,
+                    gpointer      data)
+{
+
+  /* FIXME */
+}
+
+static void
+connect_ref_callbacks (GtkTreeModel *model,
+                       RowRefList   *refs)
+{
+  g_signal_connect_data (G_OBJECT (model),
+                         "inserted",
+                         (GCallback) inserted_callback,
+                         refs,
+                         NULL,
+                         FALSE,
+                         FALSE);
+
+  g_signal_connect_data (G_OBJECT (model),
+                         "deleted",
+                         (GCallback) deleted_callback,
+                         refs,
+                         NULL,
+                         FALSE,
+                         FALSE);
+
+#if 0
+  /* FIXME */
+  g_signal_connect_data (G_OBJECT (model),
+                         "reordered",
+                         (GCallback) reordered_callback,
+                         refs,
+                         NULL,
+                         FALSE,
+                         FALSE);
+#endif
+}
+
+static void
+disconnect_ref_callbacks (GtkTreeModel *model,
+                          RowRefList   *refs)
+{
+  g_signal_handlers_disconnect_matched (G_OBJECT (model),
+                                        G_SIGNAL_MATCH_DATA,
+                                        0,
+                                        0,
+                                        NULL,
+                                        NULL,
+                                        refs);
+}
+
+GtkTreeRowReference*
+gtk_tree_row_reference_new (GtkTreeModel *model,
+                            GtkTreePath  *path)
+{
+  GtkTreeRowReference *reference;
+  RowRefList *refs;
+  
+  reference = g_new (GtkTreeRowReference, 1);
+
+  reference->model = model;
+  reference->path = gtk_tree_path_copy (path);
+
+  refs = g_object_get_data (G_OBJECT (model),
+                            "gtk-tree-row-refs");
+
+  if (refs == NULL)
+    {
+      refs = g_new (RowRefList, 1);
+      refs->list = NULL;
+      connect_ref_callbacks (model, refs);
+      g_object_set_data_full (G_OBJECT (model),
+                              "gtk-tree-row-refs",
+                              refs,
+                              release_row_references);  
+    }
+  
+  refs->list = g_slist_prepend (refs->list, reference);
+  
+  return reference;
+}
+
+GtkTreePath*
+gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
+{
+  g_return_val_if_fail (reference != NULL, NULL);
+
+  if (reference->model == NULL)
+    return NULL;
+
+  if (reference->path == NULL)
+    return NULL;
+
+  return gtk_tree_path_copy (reference->path);
+}
+
+void
+gtk_tree_row_reference_free (GtkTreeRowReference *reference)
+{
+  RowRefList *refs;
+
+  g_return_if_fail (reference != NULL);
+  
+  if (reference->model)
+    {
+      refs = g_object_get_data (G_OBJECT (reference->model),
+                                "gtk-tree-row-refs");
+
+      if (refs == NULL)
+        {
+          g_warning (G_STRLOC": bad row reference, model has no outstanding row references");
+          return;
+        }
+          
+      refs->list = g_slist_remove (refs->list, reference);
+
+      if (refs->list == NULL)
+        {
+          disconnect_ref_callbacks (reference->model, refs);
+          g_object_set_data (G_OBJECT (reference->model),
+                             "gtk-tree-row-refs",
+                             NULL);
+        }
+    }
+  
+  if (reference->path)
+    gtk_tree_path_free (reference->path);
+
+  g_free (reference);
+}
 
 /**
  * gtk_tree_iter_copy:

@@ -72,8 +72,8 @@ struct _GtkTreeViewPrivate
   gint expander_column;
   
   /* Selection stuff */
-  GtkTreePath *anchor;
-  GtkTreePath *cursor;
+  GtkTreeRowReference *anchor;
+  GtkTreeRowReference *cursor;
 
   /* Column Resizing */
   GdkCursor *cursor_drag;
@@ -97,7 +97,7 @@ struct _GtkTreeViewPrivate
   guint scroll_timeout;
   
   /* Row drag-and-drop */
-  GtkTreePath *drag_dest_row;
+  GtkTreeRowReference *drag_dest_row;
   GtkTreeViewDropPosition drag_dest_pos;
   guint open_dest_timeout;
   
