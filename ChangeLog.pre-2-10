@@ -1,3 +1,8 @@
+Sat Feb 23 19:05:34 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (validate_visible_area): Didn't refind node
+	when it was NULL.  Bug found by Tor Lillqvist.
+
 2002-02-24  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (build_keypress_event,

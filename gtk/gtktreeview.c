@@ -3725,6 +3725,7 @@ validate_visible_area (GtkTreeView *tree_view)
 	{
 	  /* In this case, nothing has been validated */
 	  path = gtk_tree_path_new_root ();
+	  _gtk_tree_view_find_node (tree_view, path, &tree, &node);
 	}
       else
 	{
