@@ -165,6 +165,7 @@ struct _GdkDndGlobals {
   GdkRectangle dnd_drag_dropzone;
   GdkWindowPrivate *real_sw;
   Window dnd_drag_curwin;
+  Time last_drop_time; /* An incredible hack, sosumi miguel */
 };
 typedef struct _GdkDndGlobals GdkDndGlobals;
 

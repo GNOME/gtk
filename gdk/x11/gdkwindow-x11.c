@@ -1549,8 +1549,8 @@ gdk_window_dnd_data_set (GdkWindow       *window,
       (event->dragrequest.drop_coords.y << 16);
   else
     sev.xclient.data.l[3] = 0;
-  
-  sev.xclient.data.l[4] = 0;
+
+  sev.xclient.data.l[4] = event->dragrequest.timestamp;
 
   if (!gdk_send_xevent (event->dragrequest.requestor, False,
 		       NoEventMask, &sev))

@@ -1064,6 +1064,7 @@ struct _GdkEventDragRequest
 
   GdkPoint drop_coords;
   gchar *data_type;
+  guint32 timestamp;
 };
 
 struct _GdkEventDragBegin
@@ -1129,6 +1130,8 @@ struct _GdkEventDropDataAvailable
   gchar *data_type; /* MIME type */
   gulong data_numbytes;
   gpointer data;
+  guint32 timestamp;
+  GdkPoint coords;
 };
 
 struct _GdkEventClient

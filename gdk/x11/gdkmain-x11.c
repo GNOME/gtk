@@ -1976,6 +1976,7 @@ gdk_event_translate (GdkEvent *event,
       event->button.source = GDK_SOURCE_MOUSE;
       event->button.deviceid = GDK_CORE_POINTER;
 
+      gdk_dnd.last_drop_time = xevent->xbutton.time;
       if(gdk_dnd.drag_perhaps)
 	{
 	  {
@@ -2806,6 +2807,11 @@ gdk_event_translate (GdkEvent *event,
 	    g_print("GDK_DROP_DATA_AVAIL\n");
 #endif	  
 	    event->dropdataavailable.u.allflags = xevent->xclient.data.l[1];
+	    event->dropdataavailable.timestamp = xevent->xclient.data.l[4];
+	    event->dropdataavailable.coords.x =
+			xevent->xclient.data.l[3] & 0xffff;
+	    event->dropdataavailable.coords.y =
+			(xevent->xclient.data.l[3] >> 16) & 0xffff;
 	    if(window
 	       /* No preview of data ATM */
 	       && event->dropdataavailable.u.flags.isdrop)
@@ -3769,6 +3775,7 @@ gdk_dnd_drag_end (Window     dest,
 	{
 	  tev.window = (GdkWindow *) wp;
 	  tev.u.flags.delete_data = wp->dnd_drag_destructive_op;
+          tev.timestamp = gdk_dnd.last_drop_time;
 	  tev.data_type = 
 	  	gdk_atom_name(wp->dnd_drag_data_type);
 
