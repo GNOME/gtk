@@ -989,7 +989,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
 				     label,
 				     tooltip,
 				     entries[i].stock_id,
-				     value);
+				     entries[i].value);
 
       if (i == 0) 
 	first_action = action;

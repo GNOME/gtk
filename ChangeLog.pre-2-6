@@ -1,3 +1,8 @@
+Thu Feb 19 21:26:10 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): 
+	Give each radio action its own value.  (#134889, Paolo Borelli)
+
 2004-02-19  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdialog.c (gtk_file_chooser_dialog_finalize):
