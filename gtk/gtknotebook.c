@@ -1595,6 +1595,9 @@ gtk_notebook_button_press (GtkWidget      *widget,
       return TRUE;
     }
 
+  if (event->button != 1)
+    return FALSE;
+  
   num = 0;
   children = notebook->children;
   while (children)
