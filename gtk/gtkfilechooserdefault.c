@@ -4295,6 +4295,7 @@ select_func (GtkFileSystemModel *model,
 
   sorted_path = gtk_tree_model_sort_convert_child_path_to_path (impl->sort_model, path);
   gtk_tree_view_set_cursor (tree_view, sorted_path, NULL, FALSE);
+  gtk_tree_view_scroll_to_cell (tree_view, sorted_path, NULL, FALSE, 0.0, 0.0);
   gtk_tree_path_free (sorted_path);
 }
 

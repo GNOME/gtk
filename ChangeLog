@@ -1,5 +1,10 @@
 2004-09-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserdefault.c (select_func): Scroll to the selected
+	row.  (#143868, Christian Persch)
+
+2004-09-17  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render): Remove
 	leftover debug code.
 
