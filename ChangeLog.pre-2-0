@@ -1,3 +1,8 @@
+Wed Feb  6 18:25:24 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodelsort.c: rip out all the debugging ifdefs, as
+	modelsort seems to be stable (and nobody complained :)
+
 Tue Feb  5 19:13:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkgeometry-x11.c (gdk_window_queue): Keep

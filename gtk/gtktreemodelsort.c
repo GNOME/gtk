@@ -432,10 +432,6 @@ gtk_tree_model_sort_row_changed (GtkTreeModel *s_model,
 
   g_return_if_fail (start_s_path != NULL || start_s_iter != NULL);
 
-#ifdef VERBOSE
-  g_print ("::row_changed run\n");
-#endif
-
   if (!start_s_path)
     {
       free_s_path = TRUE;
@@ -534,10 +530,6 @@ gtk_tree_model_sort_row_inserted (GtkTreeModel          *s_model,
   SortLevel *parent_level = NULL;
 
   parent_level = level = SORT_LEVEL (tree_model_sort->root);
-
-#ifdef VERBOSE
-  g_print ("::row_inserted\n");
-#endif
 
   g_return_if_fail (s_path != NULL || s_iter != NULL);
 
@@ -684,10 +676,6 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
 
   g_return_if_fail (s_path != NULL);
 
-#ifdef VERBOSE
-  g_print ("::row_deleted\n");
-#endif
-
   path = gtk_real_tree_model_sort_convert_child_path_to_path (tree_model_sort, s_path, FALSE);
   if (path == NULL)
     return;
@@ -708,9 +696,6 @@ gtk_tree_model_sort_row_deleted (GtkTreeModel *s_model,
     {
       /* This will prune the level, so I can just emit the signal and not worry
        * about cleaning this level up. */
-#ifdef VERBOSE
-      g_print ("ref_count == 0, prune level\n");
-#endif
 
       gtk_tree_path_free (path);
       return;
@@ -1470,9 +1455,6 @@ gtk_tree_model_sort_sort_level (GtkTreeModelSort *tree_model_sort,
   new_array = g_array_sized_new (FALSE, FALSE, sizeof (SortElt), level->array->len);
   new_order = g_new (gint, level->array->len);
 
-#ifdef VERBOSE
-  g_print ("---- sort\n");
-#endif
   for (i = 0; i < level->array->len; i++)
     {
       SortElt *elt;
@@ -2064,10 +2046,6 @@ gtk_tree_model_sort_build_level (GtkTreeModelSort *tree_model_sort,
       g_array_append_val (new_level->array, sort_elt);
     }
 
-#ifdef VERBOSE
-  g_print ("-- new level\n");
-#endif
-
   /* sort level */
   gtk_tree_model_sort_sort_level (tree_model_sort, new_level,
 				  FALSE, FALSE);
@@ -2079,18 +2057,7 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
 {
   gint i;
 
-#ifdef VERBOSE
-  g_print ("freeing level: %p, %p (ref = %d)\n", sort_level, 
-	   sort_level->array, sort_level->ref_count);
-  g_print ("-- parents - elt: %p, level %p\n",
-	   sort_level->parent_elt, sort_level->parent_level);
-#endif
-
   g_assert (sort_level);
-
-#ifdef VERBOSE  
-  g_print ("-- freeing current level (ref = %d)\n",sort_level->ref_count);
-#endif
 
   if (sort_level->ref_count == 0)
     {
@@ -2113,10 +2080,6 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
       while (parent_level);
     }
 
-#ifdef VERBOSE
-  g_print ("-- freeing children\n");
-#endif
-
   for (i = 0; i < sort_level->array->len; i++)
     {
       if (g_array_index (sort_level->array, SortElt, i).children)
@@ -2133,23 +2096,11 @@ gtk_tree_model_sort_free_level (GtkTreeModelSort *tree_model_sort,
       tree_model_sort->root = NULL;
     }
 
-#ifdef VERBOSE  
-  g_print ("free %p\n", sort_level->array);
-#endif
-
   g_array_free (sort_level->array, TRUE);
   sort_level->array = NULL;
 
-#ifdef VERBOSE
-  g_print ("free %p\n", sort_level);
-#endif
-
   g_free (sort_level);
   sort_level = NULL;
-
-#ifdef VERBOSE
-  g_print ("-------- done ---------\n");
-#endif
 }
 
 static void
