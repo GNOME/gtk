@@ -1,3 +1,8 @@
+2004-02-09  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_folder): If
+	the folder is already open, add the requested info types to it.
+
 Sun Feb  8 01:28:02 2004  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_popup_widget): Add appropriate

@@ -338,7 +338,10 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   folder_unix = g_hash_table_lookup (system_unix->folder_hash, filename);
 
   if (folder_unix)
-    return g_object_ref (folder_unix);
+    {
+      folder_unix->types |= types;
+      return g_object_ref (folder_unix);
+    }
   else
     {
       folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
