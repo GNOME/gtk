@@ -806,14 +806,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				GTK_TYPE_INT, -1);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_SHIFT_MASK, "move_cursor", 2,
-				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
-				GTK_TYPE_INT, 1);
-
-  gtk_binding_entry_add_signal (binding_set, GDK_Left, GDK_SHIFT_MASK, "move_cursor", 2,
-				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
-				GTK_TYPE_INT, -1);
-
   gtk_binding_entry_add_signal (binding_set, GDK_Right, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "move_cursor", 2,
 				GTK_TYPE_ENUM, GTK_MOVEMENT_VISUAL_POSITIONS,
 				GTK_TYPE_INT, 1);
@@ -7586,6 +7578,8 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 
   if (node->children)
     return TRUE;
+  if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
+    return FALSE;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
   if (! gtk_tree_model_iter_has_child (tree_view->priv->model, &iter))
@@ -7689,6 +7683,9 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
   gboolean collapse;
   gint x, y;
   GList *list;
+
+  if (node->children == NULL)
+    return FALSE;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
 

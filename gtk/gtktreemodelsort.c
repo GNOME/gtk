@@ -676,7 +676,7 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
   SortLevel *level;
   GtkTreeIter iter;
   gint *tmp_array;
-  int i;
+  int i, j;
   GtkTreePath *path;
   GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (data);
   
@@ -716,11 +716,18 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 
   tmp_array = g_new (int, level->array->len);
   for (i = 0; i < level->array->len; i++)
-    tmp_array[new_order[i]] = g_array_index (level->array, SortElt, i).offset;
+    {
+      for (j = 0; j < level->array->len; j++)
+	{
+	  if (g_array_index (level->array, SortElt, i).offset == new_order[j])
+	    tmp_array[i] = j;
+	}
+    }
+
   for (i = 0; i < level->array->len; i++)
     g_array_index (level->array, SortElt, i).offset = tmp_array[i];
   g_free (tmp_array);
-  
+
   if (tree_model_sort->sort_column_id == -1 &&
       tree_model_sort->default_sort_func == (GtkTreeIterCompareFunc) 0x1)
     {
