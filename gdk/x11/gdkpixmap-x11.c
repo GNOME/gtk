@@ -340,7 +340,18 @@ gdk_pixmap_extract_color (gchar *buffer)
     return NULL;
   else if (ptr[0] == '#')
     {
-      retcol = g_strdup (ptr);
+      counter = 1;
+      while (ptr[counter] != 0 && 
+             ((ptr[counter] >= '0' && ptr[counter] <= '9') ||
+              (ptr[counter] >= 'a' && ptr[counter] <= 'f') ||
+              (ptr[counter] >= 'A' && ptr[counter] <= 'F')))
+        counter++;
+
+      retcol = g_new (gchar, counter+1);
+      strncpy (retcol, ptr, counter);
+
+      retcol[counter] = 0;
+      
       return retcol;
     }
 

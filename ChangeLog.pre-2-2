@@ -1,3 +1,9 @@
+Sat Jun 13 11:48:26 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gdk/gdkpixmap.c (gdk_pixmap_extract_color): 
+	Patch from Tom Bech <tomb@ii.uib.no>, to handle color
+	specs of the form c #abcdef [ more keys ] properly.
+
 Sat Jun 13 10:51:56 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtkspinbutton.h gtkspinbutton.c testgtk.c 
