@@ -92,7 +92,7 @@ _gdk_windowing_init_check (int    argc,
 		 LOCALE_IDEFAULTANSICODEPAGE,
 		 buf, sizeof (buf));
   _gdk_input_codepage = atoi (buf);
-  GDK_NOTE (EVENTS, g_print ("input_locale:%#lx, codepage:%d\n",
+  GDK_NOTE (EVENTS, g_print ("input_locale:%p, codepage:%d\n",
 			     _gdk_input_locale, _gdk_input_codepage));
   
   CoInitialize (NULL);

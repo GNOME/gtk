@@ -1,5 +1,8 @@
 2002-09-21  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkmain-win32.c (_gdk_windowing_init_check): Silence a
+	gcc warning, use %p to print a HKL.
+
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate):
 	WM_SYSKEYDOWN, WM_SYSKEYUP: Need to handle F10 specially here in
 	order to be able to handle it normally in the application. Set
