@@ -1,3 +1,8 @@
+Tue Nov 16 19:26:30 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkdnd-x11.c (_gdk_drag_get_protocol_for_display): 
+	Squash strict aliasing warnings. 
+
 2004-11-17  Davyd Madeley  <davyd@madeley.id.au>
 
 	* gtk/gtkfilechooserdefault.c: Allow backspace to move up the
