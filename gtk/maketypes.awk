@@ -133,7 +133,7 @@ function generate (generate_what)
 	      sub (";.*", "", $0);
 	  } while ($0 ~ /^[ \t]*$/);
 	  tmp_var2 = $1;
-	  sub ("\).*", "", tmp_var2);
+	  sub (/\).*/, "", tmp_var2);
 	  if (tmp_var1 ~ /^[_A-Za-z][_A-Za-z0-9]*$/ &&
 	      tmp_var2 ~ /^[_A-Za-z][_A-Za-z0-9]*$/)
 	      {

@@ -3573,7 +3573,7 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
   if (!set_destination_row (tree_view, context, x, y, &suggested_action, &target))
     return FALSE;
 
-  //  gtk_tree_view_ensure_scroll_timeout (tree_view);
+  /*  gtk_tree_view_ensure_scroll_timeout (tree_view); */
 
   gtk_tree_view_get_drag_dest_row (tree_view, &path, &pos);
 
@@ -6976,7 +6976,7 @@ gtk_tree_view_move_column_after (GtkTreeView       *tree_view,
 
   if (GTK_WIDGET_REALIZED (tree_view))
     {
-      //gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+      /*gtk_widget_queue_resize (GTK_WIDGET (tree_view)); */
       _gtk_tree_view_update_size (tree_view);
       gtk_tree_view_size_allocate_buttons (GTK_WIDGET (tree_view));
     }

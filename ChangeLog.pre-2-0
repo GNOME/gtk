@@ -1,3 +1,12 @@
+Wed Sep 19 16:01:27 2001  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Frank Belew #59037 for Solaris compilation.
+
+	* gtk/maketypes.awk: Change syntax slightly for a call
+	to sub(), apparently making awk on Solaris happier.
+
+	* gtk/gtktreeview.c: Remove C++ comments.
+
 Wed Sep 19 15:46:29 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwindow.c: Add xgettext:no-c-format comment to
