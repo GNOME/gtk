@@ -1,3 +1,8 @@
+2004-08-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): Fix
+	an off-by-one error.  (#141809, Markku Vire)
+
 2004-07-28  Robert Ögren  <gtk@roboros.com>
 
 	* gdk/win32/gdkinput-win32.c (_gdk_input_other_event): Set x_root
