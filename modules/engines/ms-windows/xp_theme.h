@@ -1,6 +1,6 @@
-/* Wimp "Windows Impersonator" Engine
+/* MS-Windows Engine (aka GTK-Wimp)
  *
- * Copyright (C) 2003 Raymond Penners <raymond@dotsphinx.com>
+ * Copyright (C) 2003, 2004 Raymond Penners <raymond@dotsphinx.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public

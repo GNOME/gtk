@@ -1,6 +1,6 @@
-/* Wimp "Windows Impersonator" Engine
+/* MS-Windows Engine (aka GTK-Wimp)
  *
- * Copyright (C) 2003 Raymond Penners <raymond@dotsphinx.com>
+ * Copyright (C) 2003, 2004 Raymond Penners <raymond@dotsphinx.com>
  * Includes code adapted from redmond95 by Owen Taylor, and
  * gtk-nativewin by Evan Martin
  *
@@ -24,8 +24,8 @@
 #include <gmodule.h>
 #include <gtk/gtk.h>
 
-#include "wimp_style.h"
-#include "wimp_rc_style.h"
+#include "msw_style.h"
+#include "msw_rc_style.h"
 
 #ifndef WM_THEMECHANGED
 #define WM_THEMECHANGED 0x031A /* winxp only */
@@ -50,7 +50,7 @@ global_filter_func (void     *xevent,
     case WM_THEMECHANGED:
     case WM_SYSCOLORCHANGE:
       xp_theme_reset ();
-      wimp_style_init ();
+      msw_style_init ();
 
       /* force all gtkwidgets to redraw */
       gtk_rc_reparse_all_for_settings (gtk_settings_get_default(), TRUE);
@@ -59,7 +59,7 @@ global_filter_func (void     *xevent,
 
     case WM_SETTINGCHANGE:
       /* catch cursor blink, etc... changes */
-      wimp_style_setup_system_settings (); 
+      msw_style_setup_system_settings (); 
       return GDK_FILTER_REMOVE;
 
     default:
@@ -70,9 +70,9 @@ global_filter_func (void     *xevent,
 G_MODULE_EXPORT void
 theme_init (GTypeModule *module)
 {
-  wimp_rc_style_register_type (module);
-  wimp_style_register_type (module);
-  wimp_style_init ();
+  msw_rc_style_register_type (module);
+  msw_style_register_type (module);
+  msw_style_init ();
   gdk_window_add_filter (NULL, global_filter_func, NULL);
 }
 
@@ -85,7 +85,7 @@ theme_exit (void)
 G_MODULE_EXPORT GtkRcStyle *
 theme_create_rc_style (void)
 {
-  return GTK_RC_STYLE (g_object_new (WIMP_TYPE_RC_STYLE, NULL));
+  return GTK_RC_STYLE (g_object_new (MSW_TYPE_RC_STYLE, NULL));
 }
 
 /* The following function will be called by GTK+ when the module

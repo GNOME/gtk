@@ -1,3 +1,7 @@
+2004-03-20  Raymond Penners  <raymond@dotsphinx.com>
+
+	* all: Renamed GTK-Wimp to MS-Windows Engine
+	
 2004-03-11  Raymond Penners  <raymond@dotsphinx.com>
 
 	* === Released 0.5.4 ===

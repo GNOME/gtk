@@ -1,7 +1,7 @@
 # TODO: we should probably obtain these from a Win32 IconMetrics struct
 gtk-icon-sizes="gtk-menu=16,16:gtk-small-toolbar=18,18:gtk-large-toolbar=24,24:gtk-dnd=32,32"
 
-style "wimp-default"
+style "msw-default"
 {
   GtkWidget::interior_focus = 1
   GtkOptionMenu::indicator_size = { 9, 5 }
@@ -14,8 +14,8 @@ style "wimp-default"
   GtkTreeView::allow-rules = 0
   GtkTreeView::expander_size = 11
   
-  engine "wimp" 
+  engine "ms-windows-engine" 
   {
   }
 }
-class "*" style "wimp-default"
+class "*" style "msw-default"

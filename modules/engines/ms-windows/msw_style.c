@@ -1,6 +1,6 @@
-/* Wimp "Windows Impersonator" Engine
+/* MS-Windows Engine (aka GTK-Wimp)
  *
- * Copyright (C) 2003 Raymond Penners <raymond@dotsphinx.com>
+ * Copyright (C) 2003, 2004 Raymond Penners <raymond@dotsphinx.com>
  * Includes code adapted from redmond95 by Owen Taylor, and
  * gtk-nativewin by Evan Martin
  *
@@ -20,7 +20,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "wimp_style.h"
+#include "msw_style.h"
 #include "xp_theme.h"
 
 #include <windows.h>
@@ -481,7 +481,7 @@ setup_menu_settings (void)
 }
 
 void
-wimp_style_setup_system_settings (void)
+msw_style_setup_system_settings (void)
 {
   GtkSettings * settings;
   int cursor_blink_time;
@@ -600,7 +600,7 @@ setup_default_style (void)
 	text_aa[4].blue = (windowtext.blue + window.blue) / 2;
 
   	g_snprintf(buf, sizeof (buf),
-  		  "style \"wimp-base\" = \"wimp-default\"\n"
+  		  "style \"msw-base\" = \"msw-default\"\n"
 		  "{\n"
 		  "bg[NORMAL] = { %d, %d, %d }\n"
 		  "bg[SELECTED] = { %d, %d, %d }\n"
@@ -637,7 +637,7 @@ setup_default_style (void)
 		  "text_aa[INSENSITIVE] = { %d, %d, %d }\n"
 		  "text_aa[ACTIVE] = { %d, %d, %d }\n"
 		  "text_aa[PRELIGHT] = { %d, %d, %d }\n"
-		  "}widget_class \"*\" style \"wimp-base\"\n",
+		  "}widget_class \"*\" style \"msw-base\"\n",
 
 		  /* bg */
 		  btnface.red, btnface.green, btnface.blue,
@@ -693,7 +693,7 @@ setup_default_style (void)
 #endif
 
 static void
-setup_wimp_rc_style(void)
+setup_msw_rc_style(void)
 {
   /* TODO: Owen says:
   	 "If your setup_system_styles() function called gtk_rc_parse_string(), then you are just piling a new set of strings on top each time the theme changes .. the old ones won't be removed" */
@@ -738,7 +738,7 @@ setup_wimp_rc_style(void)
   /* Enable coloring for menus. */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-menu\" = \"wimp-default\"\n"
+	     "style \"msw-menu\" = \"msw-default\"\n"
 	     "{\n"
 	     "fg[PRELIGHT] = { %d, %d, %d }\n"
 	     "bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -747,9 +747,9 @@ setup_wimp_rc_style(void)
 	     "fg[NORMAL] = { %d, %d, %d }\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
 	     "%s = \"%s\"\n"
-	     "}widget_class \"*MenuItem*\" style \"wimp-menu\"\n"
-	     "widget_class \"*GtkMenu\" style \"wimp-menu\"\n"
-	     "widget_class \"*GtkMenuShell*\" style \"wimp-menu\"\n",
+	     "}widget_class \"*MenuItem*\" style \"msw-menu\"\n"
+	     "widget_class \"*GtkMenu\" style \"msw-menu\"\n"
+	     "widget_class \"*GtkMenuShell*\" style \"msw-menu\"\n",
 	     fg_prelight.red,
 	     fg_prelight.green,
 	     fg_prelight.blue,
@@ -775,10 +775,10 @@ setup_wimp_rc_style(void)
   /* Enable coloring for menu bars. */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_MENU, XP_THEME_FONT_MENU,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-menu-bar\" = \"wimp-menu\"\n"
+	     "style \"msw-menu-bar\" = \"msw-menu\"\n"
 	     "{\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget_class \"*MenuBar*\" style \"wimp-menu-bar\"\n",
+	     "}widget_class \"*MenuBar*\" style \"msw-menu-bar\"\n",
 	     btn_face.red,
 	     btn_face.green,
 	     btn_face.blue);
@@ -787,10 +787,10 @@ setup_wimp_rc_style(void)
   /* enable tooltip fonts */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-tooltips-caption\" = \"wimp-default\"\n"
+	     "style \"msw-tooltips-caption\" = \"msw-default\"\n"
 	     "{fg[NORMAL] = { %d, %d, %d }\n"
 	     "%s = \"%s\"\n"
-	     "}widget \"gtk-tooltips.GtkLabel\" style \"wimp-tooltips-caption\"\n",
+	     "}widget \"gtk-tooltips.GtkLabel\" style \"msw-tooltips-caption\"\n",
 	     tooltip_fore.red,
 	     tooltip_fore.green,
 	     tooltip_fore.blue,
@@ -799,9 +799,9 @@ setup_wimp_rc_style(void)
   gtk_rc_parse_string(buf);
 
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-tooltips\" = \"wimp-default\"\n"
+	     "style \"msw-tooltips\" = \"msw-default\"\n"
 	     "{bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
+	     "}widget \"gtk-tooltips*\" style \"msw-tooltips\"\n",
 	     tooltip_back.red,
 	     tooltip_back.green,
 	     tooltip_back.blue);
@@ -810,10 +810,10 @@ setup_wimp_rc_style(void)
   /* enable font theming for status bars */
   font_ptr = sys_font_to_pango_font (XP_THEME_CLASS_STATUS, XP_THEME_FONT_STATUS,font_buf, sizeof (font_buf));
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-status\" = \"wimp-default\"\n"
+	     "style \"msw-status\" = \"msw-default\"\n"
 	     "{%s = \"%s\"\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget_class \"*Status*\" style \"wimp-status\"\n",
+	     "}widget_class \"*Status*\" style \"msw-status\"\n",
 	     (font_ptr ? "font_name" : "#"),
 	     (font_ptr ? font_ptr : " font name should go here"),
 	     btn_face.red, btn_face.green, btn_face.blue);
@@ -822,7 +822,7 @@ setup_wimp_rc_style(void)
   /* enable coloring for text on buttons
      TODO: use GetThemeMetric for the border and outside border */
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-button\" = \"wimp-default\"\n"
+	     "style \"msw-button\" = \"msw-default\"\n"
 	     "{\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
 	     "bg[PRELIGHT] = { %d, %d, %d }\n"
@@ -832,7 +832,7 @@ setup_wimp_rc_style(void)
 	     "GtkButton::default-outside-border = { 0, 0, 0, 0 }\n"
 	     "GtkButton::child-displacement-x = 1\n"
 	     "GtkButton::child-displacement-y = 1\n"
-	     "}widget_class \"*Button*\" style \"wimp-button\"\n",
+	     "}widget_class \"*Button*\" style \"msw-button\"\n",
 	     btn_face.red, btn_face.green, btn_face.blue,
 	     btn_face.red, btn_face.green, btn_face.blue,
 	     btn_face.red, btn_face.green, btn_face.blue,
@@ -842,10 +842,10 @@ setup_wimp_rc_style(void)
 
   /* enable coloring for progress bars */
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-progress\" = \"wimp-default\"\n"
+	     "style \"msw-progress\" = \"msw-default\"\n"
 	     "{bg[PRELIGHT] = { %d, %d, %d }\n"
 	     "bg[NORMAL] = { %d, %d, %d }\n"
-	     "}widget_class \"*Progress*\" style \"wimp-progress\"\n",
+	     "}widget_class \"*Progress*\" style \"msw-progress\"\n",
 	     progress_back.red,
 	     progress_back.green,
 	     progress_back.blue,
@@ -854,33 +854,33 @@ setup_wimp_rc_style(void)
 
   /* scrollbar thumb width and height */
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-vscrollbar\" = \"wimp-default\"\n"
+	     "style \"msw-vscrollbar\" = \"msw-default\"\n"
 	     "{GtkRange::slider-width = %d\n"
 	     "GtkRange::stepper-size = %d\n"
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
-	     "}widget_class \"*VScrollbar*\" style \"wimp-vscrollbar\"\n",
+	     "}widget_class \"*VScrollbar*\" style \"msw-vscrollbar\"\n",
 	     GetSystemMetrics(SM_CYVTHUMB),
 	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CXVSCROLL));
   gtk_rc_parse_string(buf);
 
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-hscrollbar\" = \"wimp-default\"\n"
+	     "style \"msw-hscrollbar\" = \"msw-default\"\n"
 	     "{GtkRange::slider-width = %d\n"
 	     "GtkRange::stepper-size = %d\n"
 	     "GtkRange::stepper-spacing = 0\n"
 	     "GtkRange::trough_border = 0\n"
-	     "}widget_class \"*HScrollbar*\" style \"wimp-hscrollbar\"\n",
+	     "}widget_class \"*HScrollbar*\" style \"msw-hscrollbar\"\n",
 	     GetSystemMetrics(SM_CXHTHUMB),
 	     get_system_metric(XP_THEME_CLASS_SCROLLBAR, SM_CYHSCROLL));
   gtk_rc_parse_string(buf);
 
   /* radio/check button sizes */
   g_snprintf(buf, sizeof (buf),
-	     "style \"wimp-checkbutton\" = \"wimp-button\"\n"
+	     "style \"msw-checkbutton\" = \"msw-button\"\n"
 	     "{GtkCheckButton::indicator-size = 13\n"
-	     "}widget_class \"*CheckButton*\" style \"wimp-checkbutton\"\n"
-	     "widget_class \"*RadioButton*\" style \"wimp-checkbutton\"\n");
+	     "}widget_class \"*CheckButton*\" style \"msw-checkbutton\"\n"
+	     "widget_class \"*RadioButton*\" style \"msw-checkbutton\"\n");
   gtk_rc_parse_string(buf);
 }
 
@@ -1985,7 +1985,7 @@ draw_handle (GtkStyle        *style,
 }
 
 static void
-wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
+msw_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 {
   setup_system_font (style);
   setup_menu_settings ();
@@ -1994,13 +1994,13 @@ wimp_style_init_from_rc (GtkStyle * style, GtkRcStyle * rc_style)
 }
 
 static void
-wimp_style_class_init (WimpStyleClass *klass)
+msw_style_class_init (MswStyleClass *klass)
 {
   GtkStyleClass *style_class = GTK_STYLE_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 
-  style_class->init_from_rc = wimp_style_init_from_rc;
+  style_class->init_from_rc = msw_style_init_from_rc;
   style_class->draw_arrow = draw_arrow;
   style_class->draw_box = draw_box;
   style_class->draw_check = draw_check;
@@ -2017,34 +2017,34 @@ wimp_style_class_init (WimpStyleClass *klass)
   style_class->draw_resize_grip = draw_resize_grip;
 }
 
-GType wimp_type_style = 0;
+GType msw_type_style = 0;
 
 void
-wimp_style_register_type (GTypeModule *module)
+msw_style_register_type (GTypeModule *module)
 {
   static const GTypeInfo object_info =
   {
-    sizeof (WimpStyleClass),
+    sizeof (MswStyleClass),
     (GBaseInitFunc) NULL,
     (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) wimp_style_class_init,
+    (GClassInitFunc) msw_style_class_init,
     NULL,           /* class_finalize */
     NULL,           /* class_data */
-    sizeof (WimpStyle),
+    sizeof (MswStyle),
     0,              /* n_preallocs */
     (GInstanceInitFunc) NULL,
   };
 
-  wimp_type_style = g_type_module_register_type (module,
+  msw_type_style = g_type_module_register_type (module,
 						   GTK_TYPE_STYLE,
-						   "WimpStyle",
+						   "MswStyle",
 						   &object_info, 0);
 }
 
 void
-wimp_style_init (void)
+msw_style_init (void)
 {
   xp_theme_init ();
-  wimp_style_setup_system_settings ();
-  setup_wimp_rc_style ();
+  msw_style_setup_system_settings ();
+  setup_msw_rc_style ();
 }
