@@ -1009,7 +1009,7 @@ gdk_fb_fill_rectangle_generic (GdkDrawable    *drawable,
   private = GDK_DRAWABLE_FBDATA (drawable);
 
   spans = g_new (GdkSpan, rect->height);
-  for (i=0;i<rect->height;i++)
+  for (i = 0; i < rect->height; i++)
     {
       spans[i].x = rect->x - private->abs_x;
       spans[i].y = rect->y+i - private->abs_y;
@@ -1123,7 +1123,7 @@ _gdk_fb_gc_calc_state (GdkGC           *gc,
   gc_private->fill_span = gdk_fb_fill_span_generic;
   gc_private->fill_rectangle = gdk_fb_fill_rectangle_generic;
 
-  for (i=0;i<GDK_NUM_FB_SRCBPP;i++)
+  for (i = 0; i < GDK_NUM_FB_SRCBPP; i++)
     gc_private->draw_drawable[i] = gdk_fb_draw_drawable_generic;
   
   if (changed & _GDK_FB_GC_DEPTH)
@@ -1245,7 +1245,7 @@ gdk_shadow_fb_copy_rect_90 (gint x, gint y, gint width, gint height)
       w = width;
       pdst = dst;
       while (w>0) {
-	for (i=0;i<depth;i++)
+	for (i = 0; i < depth; i++)
 	  *pdst++ = *src++;
 	pdst -= gdk_display->sinfo.line_length + depth;
 	w--;
@@ -1274,7 +1274,7 @@ gdk_shadow_fb_copy_rect_180 (gint x, gint y, gint width, gint height)
       w = width;
       pdst = dst;
       while (w>0) {
-	for (i=0;i<depth;i++)
+	for (i = 0; i < depth; i++)
 	  *pdst++ = *src++;
 	pdst -= 2 * depth;
 	w--;
@@ -1303,7 +1303,7 @@ gdk_shadow_fb_copy_rect_270 (gint x, gint y, gint width, gint height)
       w = width;
       pdst = dst;
       while (w>0) {
-	for (i=0;i<depth;i++)
+	for (i = 0; i < depth; i++)
 	  *pdst++ = *src++;
 	pdst += gdk_display->sinfo.line_length - depth;
 	w--;

@@ -172,7 +172,7 @@ fb_modes_parse_mode (GScanner *scanner,
       switch (GPOINTER_TO_INT (scanner->value.v_symbol))
 	{
 	case FB_GEOMETRY:
-	  for (i=0;i<5;i++) {
+	  for (i = 0; i < 5;i++) {
 	    token = g_scanner_get_next_token (scanner);
 	    if (token != G_TOKEN_INT)
 	      {
@@ -184,7 +184,7 @@ fb_modes_parse_mode (GScanner *scanner,
 	  found_geometry = TRUE;
 	  break;
 	case FB_TIMINGS:
-	  for (i=0;i<7;i++) {
+	  for (i = 0; i < 7; i++) {
 	    token = g_scanner_get_next_token (scanner);
 	    if (token != G_TOKEN_INT)
 	      {
@@ -380,7 +380,7 @@ gdk_fb_setup_mode_from_name (struct fb_var_screeninfo *modeinfo,
   scanner = g_scanner_new ((GScannerConfig *) &fb_modes_scanner_config);
   scanner->input_name = filename;
 
-  for (i=0;i<sizeof(fb_modes_keywords)/sizeof(fb_modes_keywords[0]);i++)
+  for (i = 0; i < sizeof(fb_modes_keywords)/sizeof(fb_modes_keywords[0]); i++)
     g_scanner_add_symbol (scanner, fb_modes_keywords[i], GINT_TO_POINTER (i));
 
   g_scanner_input_file (scanner, fd);

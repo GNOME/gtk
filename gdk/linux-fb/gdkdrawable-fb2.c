@@ -820,7 +820,7 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
 
   /* Convert latin-1 to utf8 */
   p = utf8;
-  for (i=0;i<text_length;i++)
+  for (i = 0; i < text_length; i++)
     {
       if (text[i]==0)
 	*p++ = 1; /* Hack to handle embedded nulls */
@@ -1387,7 +1387,7 @@ gdk_shadow_fb_draw_polygon (GdkDrawable      *drawable,
       minx = maxx = points[0].x;
       miny = maxy = points[0].y;
 
-      for (i=1;i<npoints;i++)
+      for (i = 1; i < npoints; i++)
 	{
 	  minx = MIN(minx, points[i].x);
 	  maxx = MAX(maxx, points[i].x);
@@ -1513,7 +1513,7 @@ gdk_shadow_fb_draw_points (GdkDrawable      *drawable,
       minx = maxx = points[0].x;
       miny = maxy = points[0].y;
 
-      for (i=1;i<npoints;i++)
+      for (i = 1; i < npoints; i++)
 	{
 	  minx = MIN(minx, points[i].x);
 	  maxx = MAX(maxx, points[i].x);
@@ -1546,7 +1546,7 @@ gdk_shadow_fb_draw_segments (GdkDrawable      *drawable,
       minx = maxx = segs[0].x1;
       miny = maxy = segs[0].y1;
 
-      for (i=0;i<nsegs;i++)
+      for (i = 0; i < nsegs; i++)
 	{
 	  minx = MIN(minx, segs[i].x1);
 	  maxx = MAX(maxx, segs[i].x1);
@@ -1592,7 +1592,7 @@ gdk_shadow_fb_draw_lines (GdkDrawable      *drawable,
       minx = maxx = points[0].x;
       miny = maxy = points[0].y;
 
-      for (i=1;i<npoints;i++)
+      for (i = 1; i < npoints; i++)
 	{
 	  minx = MIN(minx, points[i].x);
 	  maxx = MAX(maxx, points[i].x);

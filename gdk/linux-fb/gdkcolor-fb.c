@@ -474,7 +474,7 @@ gdk_colormap_free_colors (GdkColormap *colormap,
       (colormap->visual->type != GDK_VISUAL_GRAYSCALE))
     return;
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       gulong pixel = colors[i].pixel;
       
@@ -596,7 +596,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
   index = -1;
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       if (!success[i])
 	{
@@ -618,7 +618,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
       
       while (nremaining > 0)
 	{
-	  for (i=0; i<ncolors; i++)
+	  for (i = 0; i < ncolors; i++)
 	    {
 	      if (!success[i])
 		{
@@ -663,7 +663,7 @@ gdk_colormap_alloc_colors_shared (GdkColormap *colormap,
   /* Change back the values we flagged as permanent failures */
   if (nfailed > 0)
     {
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	if (success[i] == 2)
 	  success[i] = FALSE;
       nremaining = nfailed;
@@ -689,7 +689,7 @@ gdk_colormap_alloc_colors_pseudocolor (GdkColormap *colormap,
 
   /* Check for an exact match among previously allocated colors */
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     {
       if (!success[i])
 	{
@@ -732,7 +732,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 
   private = GDK_COLORMAP_PRIVATE_DATA (colormap);
 
-  for (i=0; i<ncolors; i++)
+  for (i = 0; i < ncolors; i++)
     success[i] = FALSE;
 
   visual = colormap->visual;
@@ -748,7 +748,7 @@ gdk_colormap_alloc_colors (GdkColormap *colormap,
 
     case GDK_VISUAL_DIRECT_COLOR:
     case GDK_VISUAL_TRUE_COLOR:
-      for (i=0; i<ncolors; i++)
+      for (i = 0; i < ncolors; i++)
 	{
 	  colors[i].pixel = (((colors[i].red >> (16 - visual->red_prec)) << visual->red_shift) +
 			     ((colors[i].green >> (16 - visual->green_prec)) << visual->green_shift) +
@@ -929,24 +929,25 @@ gdk_colormap_query_color (GdkColormap *colormap,
   
   visual = gdk_colormap_get_visual (colormap);
 
-  switch (visual->type) {
-  case GDK_VISUAL_DIRECT_COLOR:
-  case GDK_VISUAL_TRUE_COLOR:
-    result->red = 65535. * (double)((pixel & visual->red_mask) >> visual->red_shift) / ((1 << visual->red_prec) - 1);
-    result->green = 65535. * (double)((pixel & visual->green_mask) >> visual->green_shift) / ((1 << visual->green_prec) - 1);
-    result->blue = 65535. * (double)((pixel & visual->blue_mask) >> visual->blue_shift) / ((1 << visual->blue_prec) - 1);
-    break;
-  case GDK_VISUAL_STATIC_GRAY:
-  case GDK_VISUAL_GRAYSCALE:
-    result->red = result->green = result->blue = 65535. * (double)pixel/((1<<visual->depth) - 1);
-    break;
-  case GDK_VISUAL_PSEUDO_COLOR:
-    result->red = colormap->colors[pixel].red;
-    result->green = colormap->colors[pixel].green;
-    result->blue = colormap->colors[pixel].blue;
-    break;
-  default:
-    g_assert_not_reached ();
-    break;
-  }
+  switch (visual->type)
+    {
+    case GDK_VISUAL_DIRECT_COLOR:
+    case GDK_VISUAL_TRUE_COLOR:
+      result->red = 65535. * (gdouble) ((pixel & visual->red_mask) >> visual->red_shift) / ((1 << visual->red_prec) - 1);
+      result->green = 65535. * (gdouble) ((pixel & visual->green_mask) >> visual->green_shift) / ((1 << visual->green_prec) - 1);
+      result->blue = 65535. * (gdouble) ((pixel & visual->blue_mask) >> visual->blue_shift) / ((1 << visual->blue_prec) - 1);
+      break;
+    case GDK_VISUAL_STATIC_GRAY:
+    case GDK_VISUAL_GRAYSCALE:
+      result->red = result->green = result->blue = 65535. * (double)pixel/((1<<visual->depth) - 1);
+      break;
+    case GDK_VISUAL_PSEUDO_COLOR:
+      result->red = colormap->colors[pixel].red;
+      result->green = colormap->colors[pixel].green;
+      result->blue = colormap->colors[pixel].blue;
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
 }

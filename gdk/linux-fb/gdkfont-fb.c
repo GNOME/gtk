@@ -174,7 +174,7 @@ gdk_font_load (const gchar *font_name)
   
   desc.size = 0;
   
-  pieces = g_strsplit(font_name, "-", 8);
+  pieces = g_strsplit (font_name, "-", 8);
 
   do {
     if (!pieces[0])
@@ -317,7 +317,7 @@ gdk_text_extents (GdkFont     *font,
 
   /* Convert latin-1 to utf8 */
   p = utf8;
-  for (i=0;i<text_length;i++)
+  for (i = 0; i < text_length; i++)
     {
       if (text[i]==0)
 	*p++ = 1; /* Hack to handle embedded nulls */

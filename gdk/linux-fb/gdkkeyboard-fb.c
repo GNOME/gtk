@@ -164,7 +164,7 @@ gdk_fb_keyboard_open (void)
   if (!keyb_type)
     keyb_type = "xlate";
 
-  for (i=0;i<G_N_ELEMENTS(keyb_devs);i++)
+  for (i = 0; i < G_N_ELEMENTS(keyb_devs); i++)
     {
       if (g_strcasecmp(keyb_type, keyb_devs[i].name)==0)
 	break;
@@ -723,7 +723,7 @@ iscode (char *code, char *str, int str_max)
 {
   int i;
 
-  for (i=0;code[i] && (i<str_max);i++)
+  for (i = 0; code[i] && (i < str_max); i++)
     {
       if (code[i] != str[i])
 	return FALSE;
@@ -748,7 +748,7 @@ xlate_io (GIOChannel *gioc,
   if (n <= 0)
     g_error ("Nothing from keyboard!");
 
-  for (i=0;i<n;i++)
+  for (i = 0; i < n; i++)
     {
       handled = FALSE;
       modifier = 0;

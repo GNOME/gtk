@@ -422,7 +422,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
       if (list)
 	*list = g_new (gchar *, local_count + 1);
       
-      for (i=0; i<local_count; i++)
+      for (i = 0; i < local_count; i++)
 	{
 	  /* list contains stuff in our default encoding
 	   */

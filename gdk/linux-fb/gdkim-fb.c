@@ -202,7 +202,7 @@ gdk_wcstombs (const GdkWChar *src)
   
   mbstr = g_new (gchar, length + 1);
   
-  for (i=0; i<length+1; i++)
+  for (i = 0; i < length + 1; i++)
     mbstr[i] = src[i];
 
   return mbstr;
@@ -220,7 +220,7 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
   gint i;
   
-  for (i=0; i<dest_max && src[i]; i++)
+  for (i = 0; i < dest_max && src[i]; i++)
     dest[i] = src[i];
 
   return i;

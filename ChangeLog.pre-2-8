@@ -1,3 +1,16 @@
+2001-01-31  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/linux-fb/gdkselection-fb.c: 
+	* gdk/linux-fb/gdkcolor-fb.c: 
+	* gdk/linux-fb/gdkdrawable-fb2.c: 
+	* gdk/linux-fb/gdkfont-fb.c: 
+	* gdk/linux-fb/gdkim-fb.c: 
+	* gdk/linux-fb/gdkinput.c: 
+	* gdk/linux-fb/gdkkeyboard-fb.c: 
+	* gdk/linux-fb/gdkmain-fb.c: 
+	* gdk/linux-fb/gdkrender-fb.c: 
+	A bunch of whitespace cleanup.
+	
 2001-01-30  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktreeitem.h, gtk/gtktree.h, gtk/gtktext.h: bracket in 

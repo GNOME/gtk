@@ -140,7 +140,7 @@ gdk_device_free_history (GdkTimeCoord **events,
 {
   gint i;
   
-  for (i=0; i<n_events; i++)
+  for (i = 0; i < n_events; i++)
     g_free (events[i]);
 
   g_free (events);
@@ -335,7 +335,7 @@ gdk_device_get_axis (GdkDevice *device, gdouble *axes, GdkAxisUse use, gdouble *
   if (axes == NULL)
     return FALSE;
   
-  for (i=0; i<device->num_axes; i++)
+  for (i = 0; i < device->num_axes; i++)
     if (device->axes[i].use == use)
       {
 	if (value)
