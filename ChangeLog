@@ -1,3 +1,8 @@
+2001-08-09  Matthias Clasen  <matthiasc@waldgeist.poet.de>
+
+	* gdk/gdkgc.c (gdk_gc_set_rgb_bg_color): Set the background color,
+	not the foreground color. (#57621)
+
 2001-08-09  Alexander Larsson <alexl@redhat.com>
 
 	* gdk/win32/gdkfont-win32.c:
