@@ -1,3 +1,8 @@
+Thu Feb 26 14:47:22 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.[ch]: Export gtk_rc_reset_styles(). 
+	(Request from Dom Lachowicz, #123769)
+
 Wed Feb 25 19:11:31 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkradiobutton.[ch] gtk/gtkradiomenuitem.[ch]: Add a

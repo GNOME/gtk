@@ -1332,23 +1332,22 @@ gtk_rc_clear_realized_style (gpointer key,
 }
 
 /**
- * _gtk_rc_reset_styles:
+ * gtk_rc_reset_styles:
  * @settings: a #GtkSettings
  * 
- * This setting resets all of our styles; we use it when the font
- * rendering parameters or the icon sizes have changed. It's both less
- * and more comprehensive then we actually need:
- *
- * Less comprehensive: it doesn't affect widgets that have a style
- *   set on them.
- *
- * More comprehensive: it resets the styles, but the styles haven't
- *   changed. The main reason for resetting the styles is becaues
- *   most widgets will redo all their font stuff when their style
- *   change.
+ * This function recomputes the styles for all widgets that use a
+ * particular #GtkSettings object. (There is one #GtkSettings object
+ * per #GdkScreen, see gtk_settings_get_for_screen()); It is useful
+ * when some global parameter has changed that affects the appearance
+ * of all widgets, because when a widget gets a new style, it will
+ * both redraw and recompute any cached information about its
+ * appearance. As an example, it is used when the default font size
+ * set by the operating system changes. Note that this function
+ * doesn't affect widgets that have a style set explicitely on them
+ * with gtk_widget_set_style().
  **/
 void
-_gtk_rc_reset_styles (GtkSettings *settings)
+gtk_rc_reset_styles (GtkSettings *settings)
 {
   GtkRcContext *context;
   gboolean reset = FALSE;

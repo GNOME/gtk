@@ -133,6 +133,8 @@ GtkStyle* gtk_rc_get_style_by_paths     (GtkSettings *settings,
 
 gboolean gtk_rc_reparse_all_for_settings (GtkSettings *settings,
 					  gboolean     force_load);
+void     gtk_rc_reset_styles             (GtkSettings *settings);
+
 gchar*   gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
 				     GScanner     *scanner,
 				     const gchar  *pixmap_file);
@@ -213,7 +215,6 @@ guint	  gtk_rc_parse_state	(GScanner	     *scanner,
 guint	  gtk_rc_parse_priority	(GScanner	     *scanner,
 				 GtkPathPriorityType *priority);
 
-
 /* rc properties
  * (structure forward declared in gtkstyle.h)
  */
@@ -232,7 +233,6 @@ const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 						       GQuark      property_name);
 
 const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
-void         _gtk_rc_reset_styles                  (GtkSettings *settings);
 
 #ifdef __cplusplus
 }
