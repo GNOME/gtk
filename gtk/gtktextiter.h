@@ -147,12 +147,12 @@ gboolean gtk_text_iter_backward_find_tag_toggle (GtkTextIter *iter,
 typedef gboolean (* GtkTextViewCharPredicate) (guint16 ch, gpointer user_data);
 
 gboolean gtk_text_iter_forward_find_char      (GtkTextIter *iter,
-                                                GtkTextViewCharPredicate pred,
-                                                gpointer user_data);
+					       GtkTextViewCharPredicate pred,
+					       gpointer user_data);
 
-gboolean gtk_text_iter_backward_find_char      (GtkTextIter *iter,
-                                                 GtkTextViewCharPredicate pred,
-                                                 gpointer user_data);
+gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
+					       GtkTextViewCharPredicate pred,
+					       gpointer user_data);
 
 /*
  * Comparisons

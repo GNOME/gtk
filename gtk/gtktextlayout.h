@@ -84,6 +84,10 @@ struct _GtkTextLayoutClass
                              /* may be NULL */
                              GtkTextLineData *line_data);
   
+  void (* get_log_attrs) (GtkTextLayout  *layout,
+			  GtkTextLine    *line,
+			  PangoLogAttr  **attrs,
+			  gint           *n_attrs);
   void  (* invalidate)      (GtkTextLayout *layout,
                              const GtkTextIter *start,
                              const GtkTextIter *end);
@@ -203,7 +207,10 @@ GtkTextLineData *gtk_text_layout_wrap (GtkTextLayout   *layout,
 				       GtkTextLine     *line,
                                          /* may be NULL */
 				       GtkTextLineData *line_data);
-
+void     gtk_text_layout_get_log_attrs (GtkTextLayout  *layout,
+					GtkTextLine    *line,
+					PangoLogAttr  **attrs,
+					gint           *n_attrs);
 void     gtk_text_layout_changed              (GtkTextLayout     *layout,
 					       gint               y,
 					       gint               old_height,

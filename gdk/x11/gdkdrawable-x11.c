@@ -91,11 +91,6 @@ static void gdk_x11_draw_glyphs      (GdkDrawable      *drawable,
 				      gint              x,
 				      gint              y,
 				      PangoGlyphString *glyphs);
-static void gdk_x11_draw_layout      (GdkDrawable      *drawable,
-				      GdkGC            *gc,
-				      gint              x,
-				      gint              y,
-				      PangoLayout      *layout);
 
 GdkDrawableClass _gdk_x11_drawable_class = {
   gdk_x11_drawable_destroy,
@@ -110,7 +105,6 @@ GdkDrawableClass _gdk_x11_drawable_class = {
   gdk_x11_draw_segments,
   gdk_x11_draw_lines,
   gdk_x11_draw_glyphs,
-  gdk_x11_draw_layout
 };
 
 /*****************************************************
@@ -497,17 +491,4 @@ gdk_x11_draw_glyphs (GdkDrawable      *drawable,
 		  GDK_DRAWABLE_XID (drawable),
 		  GDK_GC_GET_XGC (gc),
 		  font, glyphs, x, y);
-}
-
-static void
-gdk_x11_draw_layout (GdkDrawable *drawable,
-		     GdkGC       *gc,
-		     gint         x,
-		     gint         y,
-		     PangoLayout *layout)
-{
-  pango_x_render_layout (GDK_DRAWABLE_XDISPLAY (drawable),
-			 GDK_DRAWABLE_XID (drawable),
-			 GDK_GC_GET_XGC (gc),
-			 layout, x, y);
 }

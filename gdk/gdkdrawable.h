@@ -114,11 +114,6 @@ struct _GdkDrawableClass
 			  gint              x,
 			  gint              y,
 			  PangoGlyphString *glyphs);
-  void (*draw_layout)    (GdkDrawable      *drawable,
-			  GdkGC	           *gc,
-			  gint              x,
-			  gint              y,
-			  PangoLayout      *layout);
 };
 
 /* Manipulation of drawables
@@ -228,18 +223,23 @@ void gdk_draw_lines     (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkPoint         *points,
 			 gint              npoints);
-void gdk_draw_glyphs    (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 PangoFont        *font,
-			 gint              x,
-			 gint              y,
-			 PangoGlyphString *glyphs);
-void gdk_draw_layout    (GdkDrawable      *drawable,
-			 GdkGC            *gc,
-			 gint              x,
-			 gint              y,
-			 PangoLayout      *layout);
 
+void gdk_draw_glyphs      (GdkDrawable      *drawable,
+			   GdkGC            *gc,
+			   PangoFont        *font,
+			   gint              x,
+			   gint              y,
+			   PangoGlyphString *glyphs);
+void gdk_draw_layout_line (GdkDrawable      *drawable,
+			   GdkGC            *gc,
+			   gint              x,
+			   gint              y,
+			   PangoLayoutLine  *line);
+void gdk_draw_layout      (GdkDrawable      *drawable,
+			   GdkGC            *gc,
+			   gint              x,
+			   gint              y,
+			   PangoLayout      *layout);
 
 #ifdef __cplusplus
 }

@@ -4,6 +4,7 @@
  * Copyright (c) 1994-1997 Sun Microsystems, Inc.
  * Copyright (c) 2000 Red Hat, Inc.
  * Tk->Gtk port by Havoc Pennington
+ * Pango support by Owen Taylor
  *
  *
  * This software is copyrighted by the Regents of the University of
@@ -62,6 +63,11 @@ static GtkTextLineData *gtk_text_layout_real_wrap (GtkTextLayout *layout,
                                                      GtkTextLine *line,
                                                      /* may be NULL */
                                                      GtkTextLineData *line_data);
+
+static void gtk_text_layout_real_get_log_attrs (GtkTextLayout  *layout,
+						GtkTextLine    *line,
+						PangoLogAttr  **attrs,
+						gint           *n_attrs);
 
 static void gtk_text_layout_invalidated     (GtkTextLayout     *layout);
 
@@ -163,6 +169,7 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
   object_class->finalize = gtk_text_layout_finalize;
 
   klass->wrap = gtk_text_layout_real_wrap;
+  klass->get_log_attrs = gtk_text_layout_real_get_log_attrs;
   klass->invalidate = gtk_text_layout_real_invalidate;
   klass->free_line_data = gtk_text_layout_real_free_line_data;
 }
@@ -383,6 +390,16 @@ gtk_text_layout_wrap (GtkTextLayout *layout,
                        GtkTextLineData *line_data)
 {
   return (* GTK_TEXT_LAYOUT_CLASS (GTK_OBJECT (layout)->klass)->wrap) (layout, line, line_data);
+}
+
+void
+gtk_text_layout_get_log_attrs (GtkTextLayout  *layout,
+			       GtkTextLine    *line,
+			       PangoLogAttr  **attrs,
+			       gint           *n_attrs)
+{
+  (* GTK_TEXT_LAYOUT_CLASS (GTK_OBJECT (layout)->klass)->get_log_attrs)
+    (layout, line, attrs, n_attrs);
 }
 
 GSList*
@@ -731,6 +748,21 @@ gtk_text_layout_real_wrap (GtkTextLayout   *layout,
   gtk_text_layout_free_line_display (layout, display);
 
   return line_data;
+}
+
+static void
+gtk_text_layout_real_get_log_attrs (GtkTextLayout  *layout,
+				    GtkTextLine    *line,
+				    PangoLogAttr  **attrs,
+				    gint           *n_attrs)
+{
+  GtkTextLineDisplay *display;
+  
+  g_return_val_if_fail (GTK_IS_TEXT_LAYOUT (layout), NULL);
+  
+  display = gtk_text_layout_get_line_display (layout, line, TRUE);
+  pango_layout_get_log_attrs (display->layout, attrs, n_attrs);
+  gtk_text_layout_free_line_display (layout, display);
 }
 
 /*

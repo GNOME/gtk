@@ -105,11 +105,6 @@ static void   gdk_window_draw_glyphs    (GdkDrawable      *drawable,
 					 gint              x,
 					 gint              y,
 					 PangoGlyphString *glyphs);
-static void   gdk_window_draw_layout    (GdkDrawable      *drawable,
-					 GdkGC            *gc,
-					 gint              x,
-					 gint              y,
-					 PangoLayout      *layout);
 
 /* All drawing operations on windows are forwarded through the following
  * class to enable the automatic-backing-store feature.
@@ -127,7 +122,6 @@ GdkDrawableClass _gdk_window_class = {
   gdk_window_draw_segments,
   gdk_window_draw_lines,
   gdk_window_draw_glyphs,
-  gdk_window_draw_layout
 };
 
 GdkWindow *
@@ -949,29 +943,6 @@ gdk_window_draw_glyphs (GdkDrawable      *drawable,
   else
     _gdk_windowing_window_class.draw_glyphs (drawable, gc, font,
 					     x - x_offset, y - y_offset, glyphs);
-
-  RESTORE_GC (gc);
-}
-
-static void
-gdk_window_draw_layout (GdkDrawable  *drawable,
-			GdkGC        *gc,
-			gint          x,
-			gint          y,
-			PangoLayout  *layout)
-{
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
-
-  OFFSET_GC (gc);
-
-  if (private->paint_stack)
-    {
-      GdkWindowPaint *paint = private->paint_stack->data;
-      gdk_draw_layout (paint->pixmap, gc, x - x_offset, y - y_offset, layout);
-    }
-  else
-    _gdk_windowing_window_class.draw_layout (drawable, gc,
-					     x - x_offset, y - y_offset, layout);
 
   RESTORE_GC (gc);
 }

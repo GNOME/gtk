@@ -1,3 +1,26 @@
+Thu Jun  1 01:54:11 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am gdk/gdkpango.c: Copy the layout render function from
+	pangox to here, so we can write them independent of rendering
+	system, using GDK primitives.
+
+	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkwindow.c
+	gdk/x11/gdkdrawable-x11.c: Remove draw_layout() from the vtable,
+	since we have a rendering-system independent implementation in
+	terms of draw_glyphs().
+	
+	* gdk/gdkpango.c gdkdrawable.h (gdk_draw_layout_line): New
+	function to render a single line.
+
+	* gdk/x11/gdkpango.c: Move the guts of this file mostly
+	into ../gdkpango.c, which simplifies things, since we
+	don't have to deal with raw X gc's.
+
+Fri May 19 04:28:16 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.[ch]: Add get_log_attrs() function to
+	get the logical attributes for a given GtkTextLine.
+
 Tue May 30 16:05:39 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkfont-x11.c (gdk_font_charset_for_locale): Track
