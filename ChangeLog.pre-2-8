@@ -1,3 +1,8 @@
+2001-11-04  jacob berkman  <jacob@ximian.com>
+
+	* gtk/gtkmain.c (find_module): don't free the module name until
+	after we load the module
+
 Sat Nov  3 13:57:21 2001  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkctree.c: Convert GTK_TYPE_CTREE_NODE to pointer

@@ -327,8 +327,9 @@ find_module (gchar      **module_path,
       
       if (g_file_test (module_name, G_FILE_TEST_EXISTS))
 	{
+	  module = g_module_open (module_name, G_MODULE_BIND_LAZY);
 	  g_free (module_name);
-	  return g_module_open (module_name, G_MODULE_BIND_LAZY);
+	  return module;
 	}
       
       g_free (module_name);
