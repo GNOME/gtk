@@ -19,3 +19,4 @@ gtktypebuiltins.h
 gtkmarshal.c
 gtktypebuiltins_ids.c
 gtktypebuiltins_vars.c
+gtktypebuiltins_evals.c
