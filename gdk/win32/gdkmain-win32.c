@@ -170,13 +170,13 @@ gdk_screen_get_height (GdkScreen *screen)
 gint
 gdk_screen_get_width_mm (GdkScreen *screen)
 {
-  return GetDeviceCaps (gdk_display_hdc, HORZSIZE);
+  return (double) GetDeviceCaps (gdk_display_hdc, HORZRES) / GetDeviceCaps (gdk_display_hdc, LOGPIXELSX) * 25.4;
 }
 
 gint
 gdk_screen_get_height_mm (GdkScreen *screen)
 {
-  return GetDeviceCaps (gdk_display_hdc, VERTSIZE);
+  return (double) GetDeviceCaps (gdk_display_hdc, VERTRES) / GetDeviceCaps (gdk_display_hdc, LOGPIXELSY) * 25.4;
 }
 
 void
