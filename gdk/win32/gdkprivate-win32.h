@@ -357,6 +357,12 @@ HRGN	  _gdk_win32_gdkregion_to_hrgn  (GdkRegion   *region,
 					 gint         x_origin,
 					 gint         y_origin);
 
+void	_gdk_win32_adjust_client_rect   (GdkWindow *window,
+					 RECT      *RECT);
+
+void	_gdk_win32_get_adjusted_client_rect (GdkWindow *window,
+					     RECT      *RECT);
+
 void    _gdk_selection_property_store (GdkWindow *owner,
                                        GdkAtom    type,
                                        gint       format,
@@ -452,6 +458,16 @@ extern GdkWindow        *_gdk_parent_root;
 
 extern GdkDisplay       *_gdk_display;
 extern GdkScreen        *_gdk_screen;
+
+extern gint		 _gdk_num_monitors;
+extern GdkRectangle     *_gdk_monitors;
+
+/* Offsets to add to Windows coordinates (which are relative to the
+ * primary monitor's origin, and thus might be negative for monitors
+ * to the left and/or above the primary monitor) to get GDK
+ * coordinates, which should be non-negative on the whole screen.
+ */
+extern gint		 _gdk_offset_x, _gdk_offset_y;
 
 extern HDC		 _gdk_display_hdc;
 extern HINSTANCE	 _gdk_dll_hinstance;

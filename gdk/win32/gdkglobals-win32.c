@@ -32,6 +32,11 @@ GdkDisplay	 *_gdk_display = NULL;
 GdkScreen	 *_gdk_screen = NULL;
 GdkWindow	 *_gdk_parent_root = NULL;
 
+gint		  _gdk_num_monitors;
+GdkRectangle     *_gdk_monitors;
+
+gint		 _gdk_offset_x, _gdk_offset_y;
+
 HWND              _gdk_root_window = NULL;
 HDC		  _gdk_display_hdc;
 HINSTANCE	  _gdk_dll_hinstance;

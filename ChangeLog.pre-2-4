@@ -1,3 +1,81 @@
+2003-08-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkinput-win32.h
+	* gdk/win32/gdkinput-win32.c (_gdk_input_configure_event,
+	_gdk_input_enter_event): Drop the GdkEvent* parameter, it wasn't
+	used.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Adapt caller
+	accordingly, in fact an uninitialised variable was dereferenced.
+	
+
+	[Win32] Add support for multiple monitors. 
+	
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c: New global variables for
+	multiple-monitor info: _gdk_num_monitors, _gdk_monitors, and
+	_gdk_offset_x and _gdk_offset_y.
+	
+	* gdk/win32/gdkdisplay-win32.c (count_monitor, enum_monitor): New
+	functions, enumeration functions passed to EnumDisplayMonitors().
+
+	(gdk_display_open): If the EnumDisplayMonitors() and
+	GetMonitorInfo() API is present (on Win98, Win2000 and newer), use
+	if to find out monitor info.
+
+	Calculate the offset between Win32 coordinates (relative to the
+	primary monitor's origin (and thus negative on monitors to the
+	left of or above it), and GDK's (visible coordinates should be
+	non-negative).
+	
+	* gdk/win32/gdkscreen-win32 (gdk_screen_get_n_monitors,
+	gdk_screen_get_monitor_geometry): Use information collected above.
+
+	(gdk_window_move, gdk_window_move_resize_window_get_geometry):
+	Subtract _gdk_offset_{x,y} from GDK root window coordinates.
+
+	(gdk_window_get_geometry, gdk_window_get_origin,
+	gdk_window_get_frame_extents): For top-level windows, add
+	_gdk_offset_{x,y} to GDK root window coordinates
+
+	Still need to handle multiple monitors in
+	gdk_window_fullscreen(). Probably should make the window
+	fullscreen on the monitor where the cursor is?
+
+	* gdk/win32/gdkevents-win32.c: Add _gdk_offset_{x,y} to all GDK
+	root window coordinates in GdkEvents.
+
+	
+	[Win32] Fix geometry hint handling. Add support for resize
+	increment and base size, and aspect ratio geometry hints. The
+	"gridded geometry" test in testgtk now works beautifully.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_set_geometry_hints):
+	Turns out this function shouldn't actually ever modify the
+	window's size, just store the hints. (Old code kept for a while
+	inside #if 0.)
+
+	(gdk_window_set_hints): Remove presumably broken code that handles
+	the position hints, this function is obsolete anyway.
+
+	* gdk/win32/gdkevents-win32.c: Drop the current_{x,y}_root
+	variables, not used.
+
+	(adjust_drag): New function, used to implement resize increment
+	hints.
+
+	(gdk_event_translate): Handle WM_SIZING, implement resize
+	increment and base size, and aspect ratio geometry hints here. The
+	WM_GETMINMAXINFO handler takes care of the minimum and maximum
+	size hints as before. Fix the WM_GETMINMAXINFO handler to take
+	into account window decorations. No need to modify the
+	ptMaxPosition and ptMaxSize fields in the MINMAXINFO struct,
+	the defaults are fine.
+	
+	* gdk/win32/gdkprivate-win32.h 
+	* gdk/win32/gdkwindow-win32.c (_gdk_win32_adjust_client_rect,
+	_gdk_win32_get_adjusted_client_rect): New helper functions.
+
 2003-08-07  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkevents-x11.c (gdk_check_wm_state_changed): Reset the toplevel->have_* flags before 

@@ -655,8 +655,7 @@ gdk_input_motion_events (GdkWindow *window,
 }
 
 void
-_gdk_input_configure_event (GdkEventConfigure *event,
-			    GdkWindow         *window)
+_gdk_input_configure_event (GdkWindow         *window)
 {
   GdkInputWindow *input_window;
   int root_x, root_y;
@@ -672,8 +671,7 @@ _gdk_input_configure_event (GdkEventConfigure *event,
 }
 
 void 
-_gdk_input_enter_event (GdkEventCrossing *event, 
-			GdkWindow        *window)
+_gdk_input_enter_event (GdkWindow        *window)
 {
   GdkInputWindow *input_window;
   int root_x, root_y;

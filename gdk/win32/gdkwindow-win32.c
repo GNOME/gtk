@@ -151,6 +151,25 @@ gdk_window_impl_win32_finalize (GObject *object)
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
+void
+_gdk_win32_adjust_client_rect (GdkWindow *window,
+			       RECT      *rect)
+{
+  LONG style, exstyle;
+
+  style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+  exstyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
+  API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
+}
+
+void
+_gdk_win32_get_adjusted_client_rect (GdkWindow *window,
+				     RECT      *rect)
+{
+  GetClientRect (GDK_WINDOW_HWND (window), rect);
+  _gdk_win32_adjust_client_rect (window, rect);
+}
+
 static GdkColormap*
 gdk_window_impl_win32_get_colormap (GdkDrawable *drawable)
 {
@@ -227,16 +246,11 @@ _gdk_windowing_window_init (void)
   GdkWindowObject *private;
   GdkWindowImplWin32 *impl;
   GdkDrawableImplWin32 *draw_impl;
-  RECT rect;
-  guint width;
-  guint height;
+  GdkRectangle rect;
+  gint i;
 
   g_assert (_gdk_parent_root == NULL);
   
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &rect, 0);
-  width  = rect.right - rect.left;
-  height = rect.bottom - rect.top;
-
   _gdk_parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)_gdk_parent_root;
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
@@ -250,8 +264,12 @@ _gdk_windowing_window_init (void)
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = gdk_visual_get_system ()->depth;
 
-  impl->width = width;
-  impl->height = height;
+  rect = _gdk_monitors[0];
+  for (i = 1; i < _gdk_num_monitors; i++)
+    gdk_rectangle_union (&rect, _gdk_monitors+i, &rect);
+
+  impl->width = rect.width;
+  impl->height = rect.height;
 
   _gdk_window_init_position (GDK_WINDOW (private));
 
@@ -1063,7 +1081,7 @@ gdk_window_move (GdkWindow *window,
       adjust_for_gravity_hints (impl, &outer_rect, &x, &y);
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-			       x, y, 0, 0,
+			       x - _gdk_offset_x, y - _gdk_offset_y, 0, 0,
 			       SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOZORDER));
     }
 }
@@ -1152,7 +1170,7 @@ gdk_window_move_resize (GdkWindow *window,
       adjust_for_gravity_hints (impl, &outer_rect, &x, &y);
 
       API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-			       x, y,
+			       x - _gdk_offset_x, y - _gdk_offset_y,
 			       outer_rect.right - outer_rect.left,
 			       outer_rect.bottom - outer_rect.top,
 			       SWP_NOACTIVATE | SWP_NOZORDER));
@@ -1324,12 +1342,7 @@ gdk_window_set_hints (GdkWindow *window,
   /* Note that this function is obsolete */
 
   GdkWindowImplWin32 *impl;
-  WINDOWPLACEMENT size_hints;
-  RECT rect;
-  DWORD dwStyle;
-  DWORD dwExStyle;
-  int diff;
-  
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1343,9 +1356,6 @@ gdk_window_set_hints (GdkWindow *window,
 			   min_width, min_height, max_width, max_height,
 			   x, y));
 
-  impl->hint_flags = flags;
-  size_hints.length = sizeof (size_hints);
-
   if (flags)
     {
       GdkGeometry geom;
@@ -1355,50 +1365,6 @@ gdk_window_set_hints (GdkWindow *window,
       geom.min_height = min_height;
       geom.max_width  = max_width;
       geom.max_height = max_height;
-
-      if (flags & GDK_HINT_POS)
-	{
-	  if (API_CALL (GetWindowPlacement, (GDK_WINDOW_HWND (window), &size_hints)))
-	    {
-	      GDK_NOTE (MISC, g_print ("...rcNormalPosition:"
-				       " (%ld,%ld)--(%ld,%ld)\n",
-				       size_hints.rcNormalPosition.left,
-				       size_hints.rcNormalPosition.top,
-				       size_hints.rcNormalPosition.right,
-				       size_hints.rcNormalPosition.bottom));
-	      /* What are the corresponding window coordinates for client
-	       * area coordinates x, y
-	       */
-
-	      /* FIXME: Is the hint client area pos or border? */
-	      rect.left = x;
-	      rect.top = y;
-	      rect.right = rect.left + 200;	/* dummy */
-	      rect.bottom = rect.top + 200;
-	      dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-	      dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-	      AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-	      size_hints.flags = 0;
-	      size_hints.showCmd = SW_SHOWNA;
-	      
-	      /* Set the normal position hint to that location, with unchanged
-	       * width and height.
-	       */
-	      diff = size_hints.rcNormalPosition.left - rect.left;
-	      size_hints.rcNormalPosition.left = rect.left;
-	      size_hints.rcNormalPosition.right -= diff;
-	      diff = size_hints.rcNormalPosition.top - rect.top;
-	      size_hints.rcNormalPosition.top = rect.top;
-	      size_hints.rcNormalPosition.bottom -= diff;
-	      GDK_NOTE (MISC, g_print ("...setting: (%ld,%ld)--(%ld,%ld)\n",
-				       size_hints.rcNormalPosition.left,
-				       size_hints.rcNormalPosition.top,
-				       size_hints.rcNormalPosition.right,
-				       size_hints.rcNormalPosition.bottom));
-	      API_CALL (SetWindowPlacement, (GDK_WINDOW_HWND (window),
-					     &size_hints));
-	    }
-	}
 
       if (flags & GDK_HINT_MIN_SIZE)
         geom_mask |= GDK_HINT_MIN_SIZE;
@@ -1416,10 +1382,12 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 			       GdkWindowHints  geom_mask)
 {
   GdkWindowImplWin32 *impl;
+#if 0
   WINDOWPLACEMENT size_hints;
   RECT rect;
   gint new_width = 0, new_height = 0;
-  
+#endif
+
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
@@ -1430,7 +1398,6 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 			   GDK_WINDOW_HWND (window)));
 
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-  size_hints.length = sizeof (size_hints);
 
   impl->hint_flags = geom_mask;
   impl->hints = *geometry;
@@ -1443,6 +1410,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GDK_NOTE (MISC, g_print ("... MIN_SIZE: %dx%d\n",
 			       geometry->min_width, geometry->min_height));
 
+#if 0
       /* Check if the current size of the window is in bounds */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
 
@@ -1462,6 +1430,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 	  new_width = rect.right;
 	  new_height = geometry->min_height;
 	}
+#endif
     }
   
   if (geom_mask & GDK_HINT_MAX_SIZE)
@@ -1469,6 +1438,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
       GDK_NOTE (MISC, g_print ("... MAX_SIZE: %dx%d\n",
 			       geometry->max_width, geometry->max_height));
 
+#if 0
       /* Check if the current size of the window is in bounds */
       GetClientRect (GDK_WINDOW_HWND (window), &rect);
 
@@ -1488,19 +1458,22 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 	  new_width = rect.right;
 	  new_height = geometry->max_height;
 	}
+#endif
     }
 
+#if 0
   /* Apply new size constraints */
   if (new_width != 0 && new_height != 0)
     gdk_window_resize (window, new_width, new_height);
-  
-  /* I don't know what to do when called with zero base_width and height. */
-  if (geom_mask & GDK_HINT_BASE_SIZE
-      && geometry->base_width > 0
-      && geometry->base_height > 0)
+#endif
+
+  if (geom_mask & GDK_HINT_BASE_SIZE)
     {
       GDK_NOTE (MISC, g_print ("... BASE_SIZE: %dx%d\n",
 			       geometry->base_width, geometry->base_height));
+
+#if 0
+      size_hints.length = sizeof (size_hints);
 
       if (API_CALL (GetWindowPlacement, (GDK_WINDOW_HWND (window), &size_hints)))
 	{
@@ -1521,6 +1494,7 @@ gdk_window_set_geometry_hints (GdkWindow      *window,
 				   size_hints.rcNormalPosition.bottom));
 	  API_CALL (SetWindowPlacement, (GDK_WINDOW_HWND (window), &size_hints));
 	}
+#endif
     }
   
   if (geom_mask & GDK_HINT_RESIZE_INC)
@@ -1804,6 +1778,14 @@ gdk_window_get_geometry (GdkWindow *window,
 	  ScreenToClient (GDK_WINDOW_HWND (parent), &pt);
 	  rect.right = pt.x;
 	  rect.bottom = pt.y;
+
+	  if (parent == _gdk_parent_root)
+	    {
+	      rect.left += _gdk_offset_x;
+	      rect.top += _gdk_offset_y;
+	      rect.right += _gdk_offset_x;
+	      rect.bottom += _gdk_offset_y;
+	    }
 	}
 
       if (x)
@@ -1851,9 +1833,9 @@ gdk_window_get_origin (GdkWindow *window,
     return_val = 0;
   
   if (x)
-    *x = tx;
+    *x = tx + _gdk_offset_x;
   if (y)
-    *y = ty;
+    *y = ty + _gdk_offset_y;
 
   GDK_NOTE (MISC, g_print ("gdk_window_get_origin: %p: +%d+%d\n",
 			   GDK_WINDOW_HWND (window),
@@ -1928,8 +1910,8 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 
   API_CALL (GetWindowRect, (hwnd, &r));
 
-  rect->x = r.left;
-  rect->y = r.top;
+  rect->x = r.left + _gdk_offset_x;
+  rect->y = r.top + _gdk_offset_y;
   rect->width = r.right - r.left;
   rect->height = r.bottom - r.top;
 
@@ -2111,8 +2093,6 @@ gdk_window_shape_combine_mask (GdkWindow *window,
   else
     {
       HRGN hrgn;
-      DWORD dwStyle;
-      DWORD dwExStyle;
       RECT rect;
 
       /* Convert mask bitmap to region */
@@ -2122,13 +2102,9 @@ gdk_window_shape_combine_mask (GdkWindow *window,
 			       GDK_WINDOW_HWND (window),
 			       GDK_WINDOW_HWND (mask)));
 
-      /* SetWindowRgn wants window (not client) coordinates */ 
-      dwStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
-      dwExStyle = GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE);
-      GetClientRect (GDK_WINDOW_HWND (window), &rect);
-      AdjustWindowRectEx (&rect, dwStyle, FALSE, dwExStyle);
-      OffsetRgn (hrgn, -rect.left, -rect.top);
+      _gdk_win32_get_adjusted_client_rect (window, &rect);
 
+      OffsetRgn (hrgn, -rect.left, -rect.top);
       OffsetRgn (hrgn, x, y);
 
       /* If this is a top-level window, add the title bar to the region */
@@ -2267,7 +2243,7 @@ gdk_window_set_icon (GdkWindow *window,
         }
     }
 
-  GDK_NOTE (MISC, g_print ("gdk_window_set_icon : %p %dx%d\n", hIcon, w, h));
+  GDK_NOTE (MISC, g_print ("gdk_window_set_icon: %p: %p %dx%d\n", GDK_WINDOW_HWND (window), impl->hicon, w, h));
 }
 
 void
@@ -2668,9 +2644,6 @@ gdk_window_fullscreen (GdkWindow *window)
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  width = GetSystemMetrics (SM_CXSCREEN);
-  height = GetSystemMetrics (SM_CYSCREEN);
- 
   fi = g_new (FullscreenInfo, 1);
 
   if (!GetWindowRect (GDK_WINDOW_HWND (window), &(fi->r)))
@@ -2679,6 +2652,9 @@ gdk_window_fullscreen (GdkWindow *window)
     {
       GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 
+      width = GetSystemMetrics (SM_CXSCREEN);
+      height = GetSystemMetrics (SM_CYSCREEN);
+ 
       /* remember for restoring */
       fi->hint_flags = impl->hint_flags;
       impl->hint_flags &= ~GDK_HINT_MAX_SIZE;
