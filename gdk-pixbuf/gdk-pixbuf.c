@@ -454,7 +454,9 @@ gdk_pixbuf_get_bits_per_sample (const GdkPixbuf *pixbuf)
  *
  * Queries a pointer to the pixel data of a pixbuf.
  *
- * Return value: A pointer to the pixbuf's pixel data.
+ * Return value: A pointer to the pixbuf's pixel data.  Please see <xref linkend="image-data"/>
+ * for information about how the pixel data is stored in
+ * memory.
  **/
 guchar *
 gdk_pixbuf_get_pixels (const GdkPixbuf *pixbuf)
