@@ -1,3 +1,9 @@
+Mon Mar 23 15:26:25 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkentry.c (gtk_entry_append_text): check for text!=NULL.
+	(gtk_entry_prepend_text): likewise.
+	some else picky indentation fixes.
+
 Mon Mar 23 12:03:03 CST 1998 Shawn T. Amundson <amundson@gtk.org>
 
         * examples/: added this directory with stuff from

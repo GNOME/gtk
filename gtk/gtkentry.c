@@ -312,6 +312,7 @@ gtk_entry_append_text (GtkEntry *entry,
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text != NULL);
 
   tmp_pos = entry->text_length;
   gtk_editable_insert_text (GTK_EDITABLE(entry), text, strlen (text), &tmp_pos);
@@ -326,6 +327,7 @@ gtk_entry_prepend_text (GtkEntry *entry,
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text != NULL);
 
   tmp_pos = 0;
   gtk_editable_insert_text (GTK_EDITABLE(entry), text, strlen (text), &tmp_pos);
@@ -361,8 +363,9 @@ gtk_entry_set_editable(GtkEntry *entry,
 {
   g_return_if_fail (entry != NULL);
   g_return_if_fail (GTK_IS_ENTRY (entry));
-  GTK_EDITABLE(entry)->editable = editable;
-  gtk_entry_queue_draw(entry);
+
+  GTK_EDITABLE (entry)->editable = editable;
+  gtk_entry_queue_draw (entry);
 }
 
 gchar*
@@ -1766,6 +1769,7 @@ static void
 gtk_move_backward_character (GtkEntry *entry)
 {
   GtkEditable *editable;
+
   editable = GTK_EDITABLE (entry);
 
   if (0 < editable->current_pos)
@@ -1781,12 +1785,12 @@ gtk_move_backward_character (GtkEntry *entry)
 static void
 gtk_move_forward_word (GtkEntry *entry)
 {
+  GtkEditable *editable;
   gchar *text;
   gint i;
   wchar_t c;
   gint len;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   if (entry->text && (editable->current_pos < entry->text_length))
@@ -1839,11 +1843,11 @@ gtk_move_forward_word (GtkEntry *entry)
 static void
 gtk_move_backward_word (GtkEntry *entry)
 {
+  GtkEditable *editable;
   gchar *text;
   gint i;
   wchar_t c;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   if (entry->text && editable->current_pos > 0)
@@ -1910,21 +1914,21 @@ gtk_move_backward_word (GtkEntry *entry)
 static void
 gtk_move_beginning_of_line (GtkEntry *entry)
 {
-  GTK_EDITABLE(entry)->current_pos = 0;
+  GTK_EDITABLE (entry)->current_pos = 0;
 }
 
 static void
 gtk_move_end_of_line (GtkEntry *entry)
 {
-  GTK_EDITABLE(entry)->current_pos = entry->text_length;
+  GTK_EDITABLE (entry)->current_pos = entry->text_length;
 }
 
 static void
 gtk_delete_forward_character (GtkEntry *entry)
 {
+  GtkEditable *editable;
   gint old_pos;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   if (editable->selection_start_pos != editable->selection_end_pos)
@@ -1940,9 +1944,9 @@ gtk_delete_forward_character (GtkEntry *entry)
 static void
 gtk_delete_backward_character (GtkEntry *entry)
 {
+  GtkEditable *editable;
   gint old_pos;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   if (editable->selection_start_pos != editable->selection_end_pos)
@@ -1958,9 +1962,9 @@ gtk_delete_backward_character (GtkEntry *entry)
 static void
 gtk_delete_forward_word (GtkEntry *entry)
 {
+  GtkEditable *editable;
   gint old_pos;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   if (editable->selection_start_pos != editable->selection_end_pos)
@@ -1976,9 +1980,9 @@ gtk_delete_forward_word (GtkEntry *entry)
 static void
 gtk_delete_backward_word (GtkEntry *entry)
 {
+  GtkEditable *editable;
   gint old_pos;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   if (editable->selection_start_pos != editable->selection_end_pos)
@@ -2004,12 +2008,13 @@ gtk_delete_to_line_end (GtkEntry *entry)
 }
 
 static void
-gtk_select_word (GtkEntry *entry, guint32 time)
+gtk_select_word (GtkEntry *entry,
+		 guint32   time)
 {
+  GtkEditable *editable;
   gint start_pos;
   gint end_pos;
 
-  GtkEditable *editable;
   editable = GTK_EDITABLE (entry);
 
   gtk_move_backward_word (entry);
@@ -2024,9 +2029,11 @@ gtk_select_word (GtkEntry *entry, guint32 time)
 }
 
 static void
-gtk_select_line (GtkEntry *entry, guint32 time)
+gtk_select_line (GtkEntry *entry,
+		 guint32   time)
 {
   GtkEditable *editable;
+
   editable = GTK_EDITABLE (entry);
 
   editable->has_selection = TRUE;
@@ -2037,10 +2044,11 @@ gtk_select_line (GtkEntry *entry, guint32 time)
 }
 
 static void 
-gtk_entry_set_selection       (GtkEditable       *editable,
-			       gint               start,
-			       gint               end)
+gtk_entry_set_selection (GtkEditable       *editable,
+			 gint               start,
+			 gint               end)
 {
+  g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_ENTRY (editable));
 
   if (end < 0)
@@ -2057,15 +2065,15 @@ gtk_entry_select_region  (GtkEntry       *entry,
 			  gint            start,
 			  gint            end)
 {
-  gtk_editable_select_region (GTK_EDITABLE(entry), start, end);
+  gtk_editable_select_region (GTK_EDITABLE (entry), start, end);
 }
 
 void
 gtk_entry_set_max_length (GtkEntry     *entry,
                           guint16       max)
 {
-  g_return_if_fail(entry != NULL);
-  g_return_if_fail(GTK_IS_ENTRY(entry));
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (GTK_IS_ENTRY (entry));
 
   if (max && entry->text_length > max)
   	gtk_editable_delete_text(GTK_EDITABLE(entry), max, -1);

@@ -2,17 +2,13 @@ TODO BEFORE GTK 1.0
 -------------------
 
 Bugs:
- * scrolled windows get cought in an endless reallocation loop under
-   certain (rare) circumstances.
+ * Scrolled windows (GtkList?) get cought in an endless reallocation loop
+   under certain (rare) circumstances.
 
  * Widget redrawing when the window resizes sometimes messes up.
    GtkLabels sometimes redraw without clearing up the underlying background on
    window resizes.
  
- * GtkTree and GtkList should express in their *_add implementations,
-   that they expect GtkListItems/GtkTreeItems as children. Similar
-   things might apply to other containers.
-
  * delay dnd settings to take effect once a widget is realized, this is
    to avoid force realizations. i think this goes along with owens dnd
    changes?
@@ -79,6 +75,7 @@ TODO AFTER GTK 1.0
  * Make all widget attributes configurable after the widget is created (timj).
 
  * GtkCList improvements. (Jay Painter)
+
  * Seperate GtkObject and signaling system from Gdk dependancies?
   
  * move *_input_add (wrappers for select(2)) mechanism into glib.
