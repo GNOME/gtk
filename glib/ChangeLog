@@ -1,3 +1,8 @@
+Wed Jul  1 20:14:03 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* ltconfig: fix for properly detecting shared lib support on
+	SunPro cc (taken from libtool 1.2.a)
+
 Wed May 20 05:02:26 1998  Tim Janik  <timj@gtk.org>
 
 	* glib.h: conditionally define NULL, FALSE and TRUE.
