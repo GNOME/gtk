@@ -1,3 +1,8 @@
+Sun Aug 22 12:04:59 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkliststore.c (gtk_list_store_sort_iter_changed): Use the
+	correct tree path (#150289, Morten Welinder).
+
 Sun Aug 22 00:08:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	Fix #150406, reported by Fernando San Martín Woerner, patch
@@ -1521,6 +1526,7 @@ Mon Jul 12 00:52:04 2004  Matthias Clasen  <maclas@gmx.de>
 	items.  (#102530, #68015, #109811, Jordi Mallach, Benjamin Otte,
 	Michael Opdenacker)
 
+>>>>>>> 1.5542
 Sun Jul 11 15:24:03 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Bug 143330, support update counter spec.

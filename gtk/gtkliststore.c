@@ -1669,7 +1669,7 @@ gtk_list_store_sort_iter_changed (GtkListStore *list_store,
 			      gtk_list_store_compare_func,
 			      list_store);
 
-  tmp_path = gtk_tree_path_new ();
+  tmp_path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
   gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), tmp_path, iter);
   gtk_tree_path_free (tmp_path);
 }
