@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 2.4.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
-"PO-Revision-Date: 2005-02-02 20:56+0200\n"
+"POT-Creation-Date: 2005-02-06 07:08+0100\n"
+"PO-Revision-Date: 2005-02-06 10:54+0200\n"
 "Last-Translator: Vladimir Petkov <vpetkov@i-space.org>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -916,7 +916,7 @@ msgstr "calendar:week_start:0"
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
