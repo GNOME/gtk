@@ -1,3 +1,13 @@
+Fri Dec 13 21:35:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_motion): Handle
+	the case where the pointer is moved between screens
+	during a handle box drag by resetting the original
+	location. (#94562)
+
+	* gtk/gtkinputdialog.c (gtk_input_dialog_get_private): 
+	Fix a leftover variable name from cut-and-paste.
+
 Fri Dec 13 18:57:20 2002  Owen Taylor  <otaylor@redhat.com>
 
  	* gtk/gtkdialog.c: Change the Escape key binding to only close

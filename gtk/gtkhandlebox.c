@@ -32,6 +32,14 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 
+typedef struct _GtkHandleBoxPrivate GtkHandleBoxPrivate;
+
+struct _GtkHandleBoxPrivate
+{
+  gint orig_x;
+  gint orig_y;
+};
+
 enum {
   PROP_0,
   PROP_SHADOW,
@@ -262,6 +270,27 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 		  _gtk_marshal_VOID__OBJECT,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_WIDGET);
+}
+
+GtkHandleBoxPrivate *
+gtk_handle_box_get_private (GtkHandleBox *hb)
+{
+  GtkHandleBoxPrivate *private;
+  static GQuark private_quark = 0;
+
+  if (!private_quark)
+    private_quark = g_quark_from_static_string ("gtk-handle-box-private");
+
+  private = g_object_get_qdata (G_OBJECT (hb), private_quark);
+
+  if (!private)
+    {
+      private = g_new0 (GtkHandleBoxPrivate, 1);
+      g_object_set_qdata_full (G_OBJECT (hb), private_quark,
+			       private, g_free);
+    }
+
+  return private;
 }
 
 static void
@@ -1022,13 +1051,17 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	{
 	  if (event->type == GDK_BUTTON_PRESS) /* Start a drag */
 	    {
+	      GtkHandleBoxPrivate *private = gtk_handle_box_get_private (hb);
 	      gint desk_x, desk_y;
 	      gint root_x, root_y;
 	      gint width, height;
-	      
+
 	      gdk_window_get_deskrelative_origin (hb->bin_window, &desk_x, &desk_y);
 	      gdk_window_get_origin (hb->bin_window, &root_x, &root_y);
 	      gdk_drawable_get_size (hb->bin_window, &width, &height);
+
+	      private->orig_x = event->x_root;
+	      private->orig_y = event->y_root;
 	      
 	      hb->float_allocation.x = root_x - event->x_root;
 	      hb->float_allocation.y = root_y - event->y_root;
@@ -1095,6 +1128,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
   gboolean is_snapped = FALSE;
   gint handle_position;
   GdkGeometry geometry;
+  GdkScreen *screen, *pointer_screen;
 
   hb = GTK_HANDLE_BOX (widget);
   if (!hb->in_drag)
@@ -1110,8 +1144,18 @@ gtk_handle_box_motion (GtkWidget      *widget,
    */
   new_x = 0;
   new_y = 0;
-  gdk_window_get_pointer (gtk_widget_get_root_window (widget), 
-			  &new_x, &new_y, NULL);
+  screen = gtk_widget_get_screen (widget);
+  gdk_display_get_pointer (gdk_screen_get_display (screen),
+			   &pointer_screen, 
+			   &new_x, &new_y, NULL);
+  if (pointer_screen != screen)
+    {
+      GtkHandleBoxPrivate *private = gtk_handle_box_get_private (hb);
+
+      new_x = private->orig_x;
+      new_y = private->orig_y;
+    }
+  
   new_x += hb->float_allocation.x;
   new_y += hb->float_allocation.y;
 

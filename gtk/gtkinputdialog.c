@@ -146,7 +146,7 @@ gtk_input_dialog_get_type (void)
 }
 
 GtkInputDialogPrivate *
-gtk_input_dialog_get_private (GtkInputDialog *menu)
+gtk_input_dialog_get_private (GtkInputDialog *input_dialog)
 {
   GtkInputDialogPrivate *private;
   static GQuark private_quark = 0;
@@ -154,12 +154,12 @@ gtk_input_dialog_get_private (GtkInputDialog *menu)
   if (!private_quark)
     private_quark = g_quark_from_static_string ("gtk-input-dialog-private");
 
-  private = g_object_get_qdata (G_OBJECT (menu), private_quark);
+  private = g_object_get_qdata (G_OBJECT (input_dialog), private_quark);
 
   if (!private)
     {
       private = g_new0 (GtkInputDialogPrivate, 1);
-      g_object_set_qdata_full (G_OBJECT (menu), private_quark,
+      g_object_set_qdata_full (G_OBJECT (input_dialog), private_quark,
 			       private, g_free);
     }
 
