@@ -264,7 +264,7 @@ setup_menu_settings (void)
 }
 
 void
-setup_system_settings (void)
+wimp_style_setup_system_settings (void)
 {
   GtkSettings * settings;
   int cursor_blink_time;
@@ -1363,11 +1363,12 @@ draw_extension(GtkStyle *style,
 	height -= XP_EDGE_SIZE;
 #endif
 
-      if (xp_theme_draw (window,
-			 gtk_notebook_get_current_page(notebook)==0
-			 ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
-			 : XP_THEME_ELEMENT_TAB_ITEM,
-			 style, x, y, width, height, state_type, area))
+      if (pos_type == GTK_POS_TOP
+          && xp_theme_draw
+          (window, gtk_notebook_get_current_page(notebook)==0
+           ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
+           : XP_THEME_ELEMENT_TAB_ITEM,
+           style, x, y, width, height, state_type, area))
         {
           return;
         }
@@ -1588,9 +1589,9 @@ wimp_style_register_type (GTypeModule *module)
 }
 
 void
-wimp_init (void)
+wimp_style_init (void)
 {
-	xp_theme_init ();
-	setup_system_settings ();
-	setup_wimp_rc_style ();
+  xp_theme_init ();
+  wimp_style_setup_system_settings ();
+  setup_wimp_rc_style ();
 }

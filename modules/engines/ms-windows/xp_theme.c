@@ -139,7 +139,6 @@ void
 xp_theme_exit(void)
 {
   int i;
-
   if (! uxtheme_dll)
     return;
 
@@ -592,7 +591,7 @@ xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
   GdkDrawable *drawable;
   int part_state;
 
-  if (!uxtheme_dll)
+  if (! xp_theme_is_drawable (element))
     return FALSE;
 
   theme = xp_theme_get_handle_by_element(element);

@@ -1,5 +1,8 @@
 2003-10-07  Raymond Penners  <raymond@dotsphinx.com>
 
+	* src/wimp_style.c: Tabs not located on top of the notebook are
+	now (again) no longer rendered using XP theming. 
+	
 	* src/xp_theme.c: We now properly use IsThemeActive().
 	
 	* src/xp_theme_defs.h: Renamed from xp_theme_dfns.h
