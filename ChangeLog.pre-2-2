@@ -1,3 +1,9 @@
+Fri Nov  8 19:07:39 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* demos/Makefile.am (test-inline-pixbufs.h): Depend
+	on gdk-pixbuf.loaders as well as gdk-pixbuf.csource.
+	(#97096, Jeff Waugh)
+
 2002-11-09  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testgtk.c (create_resize_grips): Draw grips in all edges.

@@ -38,7 +38,7 @@ else
 pixbuf_csource=GDK_PIXBUF_MODULE_FILE=$$topdir/gdk-pixbuf/gdk-pixbuf.loaders $$topdir/gdk-pixbuf/gdk-pixbuf-csource
 endif
 
-test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource apple-red.png gnome-foot.png
+test-inline-pixbufs.h: $(top_builddir)/gdk-pixbuf/gdk-pixbuf-csource $(top_builddir)/gdk-pixbuf/gdk-pixbuf.loaders apple-red.png gnome-foot.png
 	(topdir=`cd $(top_builddir) && pwd` ; curdir=`pwd` ; \
 	  cd $(srcdir) &&				     \
 	      $(pixbuf_csource) --build-list \
