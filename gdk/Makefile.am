@@ -136,7 +136,7 @@ libgdk_linux_fb_2_0_la_LDFLAGS = $(LDADD)
 libgdk_win32_2_0_la_SOURCES = $(common_sources) gdkkeynames.c
 libgdk_win32_2_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS) \
   $(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la
-libgdk_win32_2_0_la_DEPENDENCIES = gdk.def
+libgdk_win32_2_0_la_DEPENDENCIES = win32/libgdk-win32.la gdk.def
 libgdk_win32_2_0_la_LDFLAGS = -export-symbols gdk.def $(LDADD)
 if HAVE_WINTAB
 libgdk_win32_2_0_la_LIBADD += -Lwin32 -lwntab32x

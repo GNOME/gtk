@@ -1843,6 +1843,7 @@ EXPORTS
 	gtk_tree_view_collapse_all
 	gtk_tree_view_collapse_row
 	gtk_tree_view_column_add_attribute
+	gtk_tree_view_column_cell_get_position
 	gtk_tree_view_column_cell_get_size
 	gtk_tree_view_column_cell_is_visible
 	gtk_tree_view_column_cell_set_cell_data
