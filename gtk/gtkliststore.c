@@ -2088,7 +2088,7 @@ gtk_list_store_sort (GtkListStore *list_store)
 
   for (i = 0; i < list_store->length; i++)
     {
-      SortTuple tuple;
+      SortTuple tuple = {0,};
 
       /* If this fails, we are in an inconsistent state.  Bad */
       g_return_if_fail (list != NULL);
