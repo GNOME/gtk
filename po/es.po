@@ -320,7 +320,7 @@ msgstr "(desconocido)"
 
 #: gtk/gtkfontsel.c:1944
 msgid "roman"
-msgstr "redonda"
+msgstr "romana"
 
 #: gtk/gtkfontsel.c:1956
 msgid "proportional"
