@@ -1,4 +1,3 @@
-/* example-start buttonbox buttonbox.c */
 
 #include <gtk/gtk.h>
 
@@ -26,8 +25,8 @@ GtkWidget *create_bbox( gint  horizontal,
 
   /* Set the appearance of the Button Box */
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), layout);
-  gtk_button_box_set_spacing (GTK_BUTTON_BOX (bbox), spacing);
-  gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);
+  gtk_box_set_spacing (GTK_BOX (bbox), spacing);
+  /*gtk_button_box_set_child_size (GTK_BUTTON_BOX (bbox), child_w, child_h);*/
 
   button = gtk_button_new_with_label ("OK");
   gtk_container_add (GTK_CONTAINER (bbox), button);
@@ -57,9 +56,9 @@ int main( int   argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Button Boxes");
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC(gtk_main_quit),
-		      NULL);
+  g_signal_connect (GTK_OBJECT (window), "destroy",
+		    GTK_SIGNAL_FUNC(gtk_main_quit),
+		    NULL);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -119,4 +118,3 @@ int main( int   argc,
     
   return(0);
 }
-/* example-end */

@@ -1,5 +1,5 @@
-/* example-start scrolledwin scrolledwin.c */
 
+#include <stdio.h>
 #include <gtk/gtk.h>
 
 void destroy( GtkWidget *widget,
@@ -23,11 +23,11 @@ int main( int   argc,
     /* Create a new dialog window for the scrolled window to be
      * packed into.  */
     window = gtk_dialog_new ();
-    gtk_signal_connect (GTK_OBJECT (window), "destroy",
+    g_signal_connect (GTK_OBJECT (window), "destroy",
 			(GtkSignalFunc) destroy, NULL);
     gtk_window_set_title (GTK_WINDOW (window), "GtkScrolledWindow example");
     gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-    gtk_widget_set_usize(window, 300, 300);
+    gtk_widget_set_size_request (window, 300, 300);
     
     /* create a new scrolled window. */
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -71,7 +71,7 @@ int main( int   argc,
     
     /* Add a "close" button to the bottom of the dialog */
     button = gtk_button_new_with_label ("close");
-    gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+    g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
 			       (GtkSignalFunc) gtk_widget_destroy,
 			       GTK_OBJECT (window));
     
@@ -89,6 +89,5 @@ int main( int   argc,
     
     gtk_main();
     
-    return(0);
+    return 0;
 }
-/* example-end */

@@ -1,4 +1,3 @@
-/* example-start frame frame.c */
 
 #include <gtk/gtk.h>
 
@@ -8,8 +7,6 @@ int main( int   argc,
   /* GtkWidget is the storage type for widgets */
   GtkWidget *window;
   GtkWidget *frame;
-  GtkWidget *button;
-  gint i;
 
   /* Initialise GTK */
   gtk_init(&argc, &argv);
@@ -19,10 +16,10 @@ int main( int   argc,
   gtk_window_set_title(GTK_WINDOW(window), "Frame Example");
 
   /* Here we connect the "destroy" event to a signal handler */ 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+  g_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
 
-  gtk_widget_set_usize(window, 300, 300);
+  gtk_widget_set_size_request (window, 300, 300);
   /* Sets the border width of the window. */
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -47,6 +44,5 @@ int main( int   argc,
   /* Enter the event loop */
   gtk_main ();
     
-  return(0);
+  return 0;
 }
-/* example-end */

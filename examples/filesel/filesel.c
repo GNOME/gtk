@@ -1,4 +1,3 @@
-/* example-start filesel filesel.c */
 
 #include <gtk/gtk.h>
 
@@ -25,16 +24,16 @@ int main( int   argc,
     /* Create a new file selection widget */
     filew = gtk_file_selection_new ("File selection");
     
-    gtk_signal_connect (GTK_OBJECT (filew), "destroy",
-			(GtkSignalFunc) destroy, &filew);
+    g_signal_connect (GTK_OBJECT (filew), "destroy",
+			GTK_SIGNAL_FUNC (destroy), &filew);
     /* Connect the ok_button to file_ok_sel function */
-    gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
-			"clicked", (GtkSignalFunc) file_ok_sel, filew );
+    g_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filew)->ok_button),
+			"clicked", GTK_SIGNAL_FUNC (file_ok_sel), filew );
     
     /* Connect the cancel_button to destroy the widget */
-    gtk_signal_connect_object (GTK_OBJECT (GTK_FILE_SELECTION
+    g_signal_connect_swapped (GTK_OBJECT (GTK_FILE_SELECTION
                                             (filew)->cancel_button),
-			       "clicked", (GtkSignalFunc) gtk_widget_destroy,
+			       "clicked", GTK_SIGNAL_FUNC (gtk_widget_destroy),
 			       GTK_OBJECT (filew));
     
     /* Lets set the filename, as if this were a save dialog, and we are giving
@@ -46,4 +45,3 @@ int main( int   argc,
     gtk_main ();
     return 0;
 }
-/* example-end */

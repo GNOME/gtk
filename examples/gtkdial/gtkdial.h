@@ -1,4 +1,3 @@
-/* example-start gtkdial gtkdial.h */
 
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -77,7 +76,7 @@ struct _GtkDialClass
 
 
 GtkWidget*     gtk_dial_new                    (GtkAdjustment *adjustment);
-guint          gtk_dial_get_type               (void);
+GtkType        gtk_dial_get_type               (void);
 GtkAdjustment* gtk_dial_get_adjustment         (GtkDial      *dial);
 void           gtk_dial_set_update_policy      (GtkDial      *dial,
 						GtkUpdateType  policy);
@@ -90,4 +89,3 @@ void           gtk_dial_set_adjustment         (GtkDial      *dial,
 
 
 #endif /* __GTK_DIAL_H__ */
-/* example-end */

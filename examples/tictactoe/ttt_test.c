@@ -1,5 +1,5 @@
-/* example-start tictactoe ttt_test.c */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include "tictactoe.h"
 
@@ -22,8 +22,8 @@ int main( int   argc,
   
   gtk_window_set_title (GTK_WINDOW (window), "Aspect Frame");
   
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
-		      GTK_SIGNAL_FUNC (gtk_exit), NULL);
+  g_signal_connect (GTK_OBJECT (window), "destroy",
+		      GTK_SIGNAL_FUNC (exit), NULL);
   
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -32,7 +32,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (window), ttt);
   gtk_widget_show (ttt);
 
-  gtk_signal_connect (GTK_OBJECT (ttt), "tictactoe",
+  g_signal_connect (GTK_OBJECT (ttt), "tictactoe",
 		      GTK_SIGNAL_FUNC (win), NULL);
 
   gtk_widget_show (window);
@@ -42,4 +42,3 @@ int main( int   argc,
   return 0;
 }
 
-/* example-end */

@@ -1,4 +1,3 @@
-/* example-start base base.c */
 
 #include <gtk/gtk.h>
 
@@ -16,4 +15,3 @@ int main( int   argc,
     
     return(0);
 }
-/* example-end */

@@ -1,5 +1,5 @@
-/* example-start statusbar statusbar.c */
 
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <glib.h>
 
@@ -38,10 +38,10 @@ int main( int   argc,
 
     /* create a new window */
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize( GTK_WIDGET (window), 200, 100);
+    gtk_widget_set_size_request (GTK_WIDGET (window), 200, 100);
     gtk_window_set_title(GTK_WINDOW (window), "GTK Statusbar Example");
-    gtk_signal_connect(GTK_OBJECT (window), "delete_event",
-                       (GtkSignalFunc) gtk_exit, NULL);
+    g_signal_connect(GTK_OBJECT (window), "delete_event",
+                       GTK_SIGNAL_FUNC (exit), NULL);
  
     vbox = gtk_vbox_new(FALSE, 1);
     gtk_container_add(GTK_CONTAINER(window), vbox);
@@ -55,23 +55,15 @@ int main( int   argc,
                           GTK_STATUSBAR(status_bar), "Statusbar example");
 
     button = gtk_button_new_with_label("push item");
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
+    g_signal_connect(GTK_OBJECT(button), "clicked",
         GTK_SIGNAL_FUNC (push_item), GINT_TO_POINTER(context_id) );
     gtk_box_pack_start(GTK_BOX(vbox), button, TRUE, TRUE, 2);
     gtk_widget_show(button);              
 
     button = gtk_button_new_with_label("pop last item");
-    gtk_signal_connect(GTK_OBJECT(button), "clicked",
+    g_signal_connect(GTK_OBJECT(button), "clicked",
         GTK_SIGNAL_FUNC (pop_item), GINT_TO_POINTER(context_id) );
     gtk_box_pack_start(GTK_BOX(vbox), button, TRUE, TRUE, 2);
-    gtk_widget_show(button);              
+    gtk_widget_show(button);
 
     /* always display the window as the last step so it all splashes on
-     * the screen at once. */
-    gtk_widget_show(window);
-
-    gtk_main ();
-
-    return 0;
-}
-/* example-end */

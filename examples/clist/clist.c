@@ -1,4 +1,3 @@
-/* example-start clist clist.c */
 
 #include <gtk/gtk.h>
 
@@ -90,7 +89,7 @@ int main( int    argc,
     gtk_init(&argc, &argv);
     
     window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_widget_set_usize(GTK_WIDGET(window), 300, 150);
+    gtk_widget_set_size_request (GTK_WIDGET (window), 300, 150);
 
     gtk_window_set_title(GTK_WINDOW(window), "GtkCList Example");
     gtk_signal_connect(GTK_OBJECT(window),
@@ -171,4 +170,3 @@ int main( int    argc,
     
     return(0);
 }
-/* example-end */

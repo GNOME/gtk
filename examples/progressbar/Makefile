@@ -1,8 +1,16 @@
 
 CC = gcc
 
+#CFLAGS = -Wall			 	\
+#	-DG_DISABLE_DEPRECATED 	 	\
+#	-DGDK_DISABLE_DEPRECATED 	\
+#	-DGDK_PIXBUF_DISABLE_DEPRECATED \
+#	-DGTK_DISABLE_DEPRECATED
+
+CFLAGS = 
+
 progressbar: progressbar.c 
-	$(CC) `pkg-config --cflags gtk+-2.0`  progressbar.c -o progressbar `pkg-config --libs gtk+-2.0`
+	$(CC) progressbar.c -o progressbar $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 clean: 
 	rm -f *.o progressbar

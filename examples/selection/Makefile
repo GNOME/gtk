@@ -1,13 +1,19 @@
 
 CC = gcc
 
+CFLAGS = -Wall			 	\
+	-DG_DISABLE_DEPRECATED 	 	\
+	-DGDK_DISABLE_DEPRECATED 	\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED \
+	-DGTK_DISABLE_DEPRECATED
+
 all: gettargets setselection
 
 gettargets: gettargets.c 
-	$(CC) `pkg-config --cflags gtk+-2.0` gettargets.c -o gettargets `pkg-config --libs gtk+-2.0`
+	$(CC) gettargets.c -o gettargets $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 setselection: setselection.c
-	$(CC) `pkg-config --cflags gtk+-2.0` setselection.c -o setselection `pkg-config --libs gtk+-2.0`
+	$(CC) setselection.c -o setselection $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 clean: 
 	rm -f *.o gettargets setselection

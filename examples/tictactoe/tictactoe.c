@@ -1,4 +1,3 @@
-/* example-start tictactoe tictactoe.c */
 
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -34,25 +33,27 @@ static void tictactoe_toggle              (GtkWidget *widget, Tictactoe *ttt);
 
 static gint tictactoe_signals[LAST_SIGNAL] = { 0 };
 
-guint
+GType
 tictactoe_get_type ()
 {
-  static guint ttt_type = 0;
+  static GType ttt_type = 0;
 
   if (!ttt_type)
     {
-      GtkTypeInfo ttt_info =
+      static const GTypeInfo ttt_info =
       {
-	"Tictactoe",
-	sizeof (Tictactoe),
 	sizeof (TictactoeClass),
-	(GtkClassInitFunc) tictactoe_class_init,
-	(GtkObjectInitFunc) tictactoe_init,
-        (GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL
+	NULL,
+        NULL,
+	(GClassInitFunc) tictactoe_class_init,
+        NULL,
+	NULL,
+        sizeof (Tictactoe),
+	0,
+	(GInstanceInitFunc) tictactoe_init,
       };
 
-      ttt_type = gtk_type_unique (gtk_vbox_get_type (), &ttt_info);
+      ttt_type = g_type_register_static (GTK_TYPE_VBOX, "Tictactoe", &ttt_info, 0);
     }
 
   return ttt_type;
@@ -65,16 +66,15 @@ tictactoe_class_init (TictactoeClass *class)
 
   object_class = (GtkObjectClass*) class;
   
-  tictactoe_signals[TICTACTOE_SIGNAL] = gtk_signal_new ("tictactoe",
-					 GTK_RUN_FIRST,
-					 object_class->type,
-					 GTK_SIGNAL_OFFSET (TictactoeClass,
-                                                            tictactoe),
-					 gtk_signal_default_marshaller,
-                                         GTK_TYPE_NONE, 0);
+  tictactoe_signals[TICTACTOE_SIGNAL] = g_signal_new ("tictactoe",
+					 G_TYPE_FROM_CLASS (object_class),
+	                                 G_SIGNAL_RUN_FIRST,
+	                                 0,
+                                         NULL, 
+                                         NULL,                
+					 g_cclosure_marshal_VOID__VOID,
+                                         G_TYPE_NONE, 0, NULL);
 
-
-  gtk_object_class_add_signals (object_class, tictactoe_signals, LAST_SIGNAL);
 
   class->tictactoe = NULL;
 }
@@ -95,9 +95,9 @@ tictactoe_init (Tictactoe *ttt)
 	ttt->buttons[i][j] = gtk_toggle_button_new ();
 	gtk_table_attach_defaults (GTK_TABLE(table), ttt->buttons[i][j], 
 				   i, i+1, j, j+1);
-	gtk_signal_connect (GTK_OBJECT (ttt->buttons[i][j]), "toggled",
+	g_signal_connect (GTK_OBJECT (ttt->buttons[i][j]), "toggled",
 			    GTK_SIGNAL_FUNC (tictactoe_toggle), ttt);
-	gtk_widget_set_usize (ttt->buttons[i][j], 20, 20);
+	gtk_widget_set_size_request (ttt->buttons[i][j], 20, 20);
 	gtk_widget_show (ttt->buttons[i][j]);
       }
 }
@@ -105,7 +105,7 @@ tictactoe_init (Tictactoe *ttt)
 GtkWidget*
 tictactoe_new ()
 {
-  return GTK_WIDGET ( gtk_type_new (tictactoe_get_type ()));
+  return GTK_WIDGET (g_object_new (tictactoe_get_type (), NULL));
 }
 
 void	       
@@ -116,10 +116,10 @@ tictactoe_clear (Tictactoe *ttt)
   for (i=0;i<3;i++)
     for (j=0;j<3;j++)
       {
-	gtk_signal_handler_block_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	g_signal_handlers_block_by_func (GTK_OBJECT(ttt->buttons[i][j]), NULL, ttt);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (ttt->buttons[i][j]),
 				     FALSE);
-	gtk_signal_handler_unblock_by_data (GTK_OBJECT(ttt->buttons[i][j]), ttt);
+	g_signal_handlers_unblock_by_func (GTK_OBJECT(ttt->buttons[i][j]), NULL, ttt);
       }
 }
 
@@ -152,11 +152,10 @@ tictactoe_toggle (GtkWidget *widget, Tictactoe *ttt)
       
       if (success && found)
 	{
-	  gtk_signal_emit (GTK_OBJECT (ttt), 
-			   tictactoe_signals[TICTACTOE_SIGNAL]);
+	  g_signal_emit (GTK_OBJECT (ttt), 
+			   tictactoe_signals[TICTACTOE_SIGNAL], 0);
 	  break;
 	}
     }
 }
 
-/* example-end */

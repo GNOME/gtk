@@ -1,5 +1,5 @@
-/* example-start tree tree.c */
 
+#define GTK_ENABLE_BROKEN
 #include <gtk/gtk.h>
 
 /* for all the GtkItem:: and GtkTreeItem:: signals */
@@ -44,7 +44,7 @@ static void cb_selection_changed( GtkWidget *tree )
   g_print ("selection_change called for tree %p\n", tree);
   g_print ("selected objects are:\n");
 
-  i = GTK_TREE_SELECTION(tree);
+  i = GTK_TREE_SELECTION_OLD(tree);
   while (i){
     gchar *name;
     GtkLabel *label;
@@ -81,7 +81,7 @@ int main( int   argc,
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
 				  GTK_POLICY_AUTOMATIC,
 				  GTK_POLICY_AUTOMATIC);
-  gtk_widget_set_usize (scrolled_win, 150, 200);
+  gtk_widget_set_size_request (scrolled_win, 150, 200);
   gtk_container_add (GTK_CONTAINER(window), scrolled_win);
   gtk_widget_show (scrolled_win);
   
@@ -179,4 +179,3 @@ int main( int   argc,
   gtk_main();
   return 0;
 }
-/* example-end */

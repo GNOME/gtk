@@ -1,5 +1,5 @@
-/* example-start paned paned.c */
 
+#include <stdio.h>
 #include <gtk/gtk.h>
    
 /* Create the list of "messages" */
@@ -113,16 +113,12 @@ int main( int   argc,
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC (gtk_main_quit), NULL);
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
-    gtk_widget_set_usize (GTK_WIDGET(window), 450, 400);
+    gtk_widget_set_size_request (GTK_WIDGET (window), 450, 400);
 
     /* create a vpaned widget and add it to our toplevel window */
    
     vpaned = gtk_vpaned_new ();
     gtk_container_add (GTK_CONTAINER(window), vpaned);
-    gtk_paned_set_handle_size (GTK_PANED(vpaned),
-                               10);
-    gtk_paned_set_gutter_size (GTK_PANED(vpaned),
-                               15);                       
     gtk_widget_show (vpaned);
    
     /* Now create the contents of the two halves of the window */
@@ -138,4 +134,3 @@ int main( int   argc,
     gtk_main ();
     return 0;
 }
-/* example-end */

@@ -1,5 +1,5 @@
-/* example-start spinbutton spinbutton.c */
 
+#include <stdio.h>
 #include <gtk/gtk.h>
 
 static GtkWidget *spinner1;
@@ -31,12 +31,12 @@ void get_value( GtkWidget *widget,
   GtkSpinButton *spin;
 
   spin = GTK_SPIN_BUTTON (spinner1);
-  label = GTK_LABEL (gtk_object_get_user_data (GTK_OBJECT (widget)));
+  label = GTK_LABEL (g_object_get_data (G_OBJECT (widget), "user_data"));
   if (GPOINTER_TO_INT (data) == 1)
     sprintf (buf, "%d", gtk_spin_button_get_value_as_int (spin));
   else
     sprintf (buf, "%0.*f", spin->digits,
-             gtk_spin_button_get_value_as_float (spin));
+             gtk_spin_button_get_value (spin));
   gtk_label_set_text (label, buf);
 }
 
@@ -62,7 +62,7 @@ int main( int   argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-  gtk_signal_connect (GTK_OBJECT (window), "destroy",
+  g_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC (gtk_main_quit),
 		      NULL);
 
@@ -121,7 +121,7 @@ int main( int   argc,
 					      1.0, 100.0, 0.0);
   spinner = gtk_spin_button_new (adj, 0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), FALSE);
-  gtk_widget_set_usize (spinner, 55, 0);
+  gtk_widget_set_size_request (spinner, 55, -1);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
   
   frame = gtk_frame_new ("Accelerated");
@@ -145,7 +145,7 @@ int main( int   argc,
 					      0.5, 100.0, 0.0);
   spinner1 = gtk_spin_button_new (adj, 1.0, 2);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
-  gtk_widget_set_usize (spinner1, 100, 0);
+  gtk_widget_set_size_request (spinner1, 100, -1);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
   
   vbox2 = gtk_vbox_new (FALSE, 0);
@@ -158,7 +158,7 @@ int main( int   argc,
   adj = (GtkAdjustment *) gtk_adjustment_new (2, 1, 5, 1, 1, 0);
   spinner2 = gtk_spin_button_new (adj, 0.0, 0);
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner2), TRUE);
-  gtk_signal_connect (GTK_OBJECT (adj), "value_changed",
+  g_signal_connect (GTK_OBJECT (adj), "value_changed",
 		      GTK_SIGNAL_FUNC (change_digits),
 		      (gpointer) spinner2);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
@@ -167,14 +167,14 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   
   button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+  g_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (toggle_snap),
 		      spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
   
   button = gtk_check_button_new_with_label ("Numeric only input mode");
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+  g_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (toggle_numeric),
 		      spinner1);
   gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
@@ -185,15 +185,15 @@ int main( int   argc,
   hbox = gtk_hbox_new (FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   button = gtk_button_new_with_label ("Value as Int");
-  gtk_object_set_user_data (GTK_OBJECT (button), val_label);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+  g_object_set_data (G_OBJECT (button), "user_data", val_label);
+  g_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (get_value),
 		      GINT_TO_POINTER (1));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
   
   button = gtk_button_new_with_label ("Value as Float");
-  gtk_object_set_user_data (GTK_OBJECT (button), val_label);
-  gtk_signal_connect (GTK_OBJECT (button), "clicked",
+  g_object_set_data (G_OBJECT (button), "user_data", val_label);
+  g_signal_connect (GTK_OBJECT (button), "clicked",
 		      GTK_SIGNAL_FUNC (get_value),
 		      GINT_TO_POINTER (2));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
@@ -205,7 +205,7 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
   
   button = gtk_button_new_with_label ("Close");
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+  g_signal_connect_swapped (GTK_OBJECT (button), "clicked",
 			     GTK_SIGNAL_FUNC (gtk_widget_destroy),
 			     GTK_OBJECT (window));
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 5);
@@ -215,6 +215,5 @@ int main( int   argc,
   /* Enter the event loop */
   gtk_main ();
     
-  return(0);
+  return 0;
 }
-/* example-end */

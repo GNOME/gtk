@@ -1,3 +1,15 @@
+2002-02-17  Matthias Clasen  <matthias@YAST_ASK>
+
+	More work on #71430.
+
+	* examples/*/Makefile (CFLAGS): add deprecation guards.
+	
+	* docs/tutorial/gtk-tut.sgml, examples/*/*.c: make most examples
+	deprecation-clean; the major offenders right now are the examples
+	that make heavy use of completely deprecated or broken widgets:
+	list, tree, text, pixmap, paned and progressbar. These will have
+	to be redone from scratch.
+
 Sun Feb 17 00:13:06 2002  Kristian Rietveld  <kris@gtk.org>
 
 	This commit lands the 'dy patch'.
@@ -6,6 +18,10 @@ Sun Feb 17 00:13:06 2002  Kristian Rietveld  <kris@gtk.org>
 	(gtk_tree_view_top_row_to_dy): new function,
 	(gtk_tree_view_row_changed): update top_row or dy,
 	(gtk_tree_view_rows_reordered): update top_row
+
+2002-02-16  Matthias Clasen  <matthias@YAST_ASK>
+
+	* demos/Makefile.am (INCLUDES): add -DGDK_PIXBUF_DISABLE_DEPRECATED.
 
 2002-02-16  Matthias Clasen  <matthias@YAST_ASK>
 

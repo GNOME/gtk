@@ -1,4 +1,3 @@
-/* example-start menu itemfactory.c */
 
 #include <gtk/gtk.h>
 #include <strings.h>
@@ -91,14 +90,14 @@ int main( int argc,
   gtk_init (&argc, &argv);
   
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_signal_connect (GTK_OBJECT (window), "destroy", 
+  g_signal_connect (GTK_OBJECT (window), "destroy", 
 		      GTK_SIGNAL_FUNC (gtk_main_quit), 
 		      "WM destroy");
   gtk_window_set_title (GTK_WINDOW(window), "Item Factory");
-  gtk_widget_set_usize (GTK_WIDGET(window), 300, 200);
+  gtk_widget_set_size_request (GTK_WIDGET (window), 300, 200);
   
   main_vbox = gtk_vbox_new (FALSE, 1);
-  gtk_container_border_width (GTK_CONTAINER (main_vbox), 1);
+  gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 1);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
   gtk_widget_show (main_vbox);
   
@@ -109,6 +108,5 @@ int main( int argc,
   gtk_widget_show (window);
   gtk_main ();
   
-  return(0);
+  return 0;
 }
-/* example-end */

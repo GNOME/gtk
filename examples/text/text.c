@@ -1,7 +1,7 @@
-/* example-start text text.c */
 
 /* text.c */
 
+#define GTK_ENABLE_BROKEN
 #include <stdio.h>
 #include <gtk/gtk.h>
 
@@ -47,7 +47,7 @@ int main( int argc,
   gtk_init (&argc, &argv);
  
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_usize (window, 600, 500);
+  gtk_widget_set_size_request (window, 600, 500);
   gtk_window_set_policy (GTK_WINDOW(window), TRUE, TRUE, FALSE);  
   gtk_signal_connect (GTK_OBJECT (window), "destroy",
 		      GTK_SIGNAL_FUNC(close_application),
@@ -181,4 +181,3 @@ int main( int argc,
   
   return(0);       
 }
-/* example-end */

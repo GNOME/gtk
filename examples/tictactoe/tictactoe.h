@@ -1,4 +1,3 @@
-/* example-start tictactoe tictactoe.h */
 
 /* GTK - The GIMP Toolkit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
@@ -52,7 +51,7 @@ struct _TictactoeClass
   void (* tictactoe) (Tictactoe *ttt);
 };
 
-guint          tictactoe_get_type        (void);
+GtkType        tictactoe_get_type        (void);
 GtkWidget*     tictactoe_new             (void);
 void	       tictactoe_clear           (Tictactoe *ttt);
 
@@ -62,4 +61,3 @@ void	       tictactoe_clear           (Tictactoe *ttt);
 
 #endif /* __TICTACTOE_H__ */
 
-/* example-end */

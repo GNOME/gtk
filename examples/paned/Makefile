@@ -1,8 +1,16 @@
 
 CC = gcc
 
+#CFLAGS = -Wall			 	\
+#	-DG_DISABLE_DEPRECATED 	 	\
+#	-DGDK_DISABLE_DEPRECATED 	\
+#	-DGDK_PIXBUF_DISABLE_DEPRECATED \
+#	-DGTK_DISABLE_DEPRECATED
+
+CFLAGS = -DGTK_ENABLE_BROKEN
+
 paned: paned.c 
-	$(CC) `pkg-config --cflags gtk+-2.0`  paned.c -o paned `pkg-config --libs gtk+-2.0`
+	$(CC) paned.c -o paned $(CFLAGS) `pkg-config gtk+-2.0 --cflags --libs`
 
 clean: 
 	rm -f *.o paned
