@@ -110,18 +110,16 @@ g_slist_append (GSList   *list,
   new_list = g_slist_alloc ();
   new_list->data = data;
 
-  if (!list)
-    {
-      list = new_list;
-    }
-  else
+  if (list)
     {
       last = g_slist_last (list);
-      g_assert (last != NULL);
+      /* g_assert (last != NULL); */
       last->next = new_list;
-    }
 
-  return list;
+      return list;
+    }
+  else
+      return new_list;
 }
 
 GSList*
@@ -146,29 +144,35 @@ g_slist_insert (GSList   *list,
   GSList *tmp_list;
   GSList *new_list;
 
+  if (position < 0)
+    return g_slist_append (list, data);
+  else if (position == 0)
+    return g_slist_prepend (list, data);
+
+  new_list = g_slist_alloc ();
+  new_list->data = data;
+
+  if (!list)
+    return new_list;
+
   prev_list = NULL;
   tmp_list = list;
 
-  while (tmp_list && (position-- > 0))
+  while ((position-- > 0) && tmp_list)
     {
       prev_list = tmp_list;
       tmp_list = tmp_list->next;
     }
 
-  if (!tmp_list && !prev_list)
-    return list;
-
-  new_list = g_slist_alloc ();
-
-  if (!prev_list)
-    {
-      new_list->next = list;
-      list = new_list;
-    }
-  else
+  if (prev_list)
     {
       new_list->next = prev_list->next;
       prev_list->next = new_list;
+    }
+  else
+    {
+      new_list->next = list;
+      list = new_list;
     }
 
   return list;
