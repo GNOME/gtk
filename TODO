@@ -1,21 +1,60 @@
-Now
----
 
-3. Fix focus activation of list items. Does list item activation have to be
+TODO BEFORE GTK 1.0
+-------------------
+
+BUGS
+----
+ * Fix focus activation of list items. Does list item activation have to be
    completely reorganized?
 
-4. Lists should scroll to center the recently selected item if it isn't
+ * Lists should scroll to center the recently selected item if it isn't
    visible.
 
+ * Notbook: there are a few cosmetic problems left
 
-The Future
-----------
+ * Verticle scrollbar: the expose event looks hosed and is causing 
+   quite a bit of flickering
 
--Documentation
+ * Entry: the entire text line is getting re-drawn with every keystroke
+   and every mouse selection.  it's causing flickering, this needs to be
+   fixed
 
--Tree widget
+NEW FEATURES
+------------
+ * gdk_expose_compress: ala-Xt, this would really help for opaque moves and
+   such
 
--Text widget (needs to be finished)
+WIDGETS
+-------
+ * Tree widget (we have a new copy to look at)
+ * Column-list (Jay Painter)
+ * Combobox (one around somewhere?)
+ * Text widget (needs to be finished)
+ * Entry should have a password mode (and it should show stars
+   for user feedback)
+
+DND
+---
+  It seems to be having problems again.  The way DND data types are set in
+  GtkWidget really needs to be fixed.  This is pretty high on my priority
+  list, and I'll get to it as soon as the column list widget is done.  The
+  correct way dnd data needs to be set is to have a additional keyed data
+  type with GtkWidget, which is applied to the widget's window upon realize.
+  There also needs to be a way to set dnd-data on widget windows which are
+  not the main window (for widgets that create more than one window).
+    -Jay Painter
+
+OTHER
+-----
+ * Documentation
+
+
+PLANNED FOR GTK AFTER 1.0
+-------------------------
+(add your thoughts here)
+
+============================================================================
+Other stuff todo, as of yet not categorized into the above:
 
 -Widget redrawing when the window resizes sometimes messes up.
 
