@@ -1,3 +1,7 @@
+Mon Apr 13 19:16:22 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.0.0
+
 Mon Apr 13 21:40:14 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtktext.c (find_char_width): Don't read the
