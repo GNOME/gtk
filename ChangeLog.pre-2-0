@@ -1,3 +1,89 @@
+Thu Sep 14 12:21:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtktexttypes.[ch]: Remove g_convert (moved to
+	glib) and now useless utf_to_latin1() latin1_to_utf()
+
+	* gtk/gtktextview.[ch]: Change ::move_insert and
+	::delete_text action signals to ::move and ::delete;
+	create the signals with the right enumeration type,
+	not GTK_TYPE_ENUM so that bindings work. Add C-d, M-d,
+	C-v bindings, change Home, End to move to beginning/end
+	of line, Add C-Home C-End to move to beginning/end
+	of buffer. Change ::cut_text to ::cut_clipboard, etc;
+	combine ::scroll_text into ::move; use new GtkSelectionData
+	functions to simplify DND text handling.
+	
+	* gtk/gtkenums.h gtk/gtktextview.h: Move movement,
+	deletion enumerations here, rename enumeration values to 
+	be consistently plural.
+
+	* gtk/gtktextbuffer.c: Use new clipboard interfaces
+	for cut/copy/paste and primary selection.
+
+	* gtk/gtktextbuffer.[ch]: Remove excess time and
+	'interactive' arguments from cut/copy/paste;
+	rename cut to cut_clipboard, etc; remove
+	gtk_text_buffer_get_clipboard_contents().
+
+	* gtk/gtktextlayout.[ch]: Add 
+	gtk_text_layout_move_iter_to_line_end() to move	the iter to 
+	line ends.
+
+	* gtk/gtkselection.[ch] (gtk_selection_data_set/get_text):
+	Functions to set or get a UTF-8 string on the selection
+	data.
+
+	* gtk/gtkclipboard.[ch]: New, simplified selection handling
+	interfaces.
+
+	* gtk/gtkinvisible.c (gtk_invisible_new): Realize newly
+	created widgets - one of these is useless if we don't.
+
+	* gtk/gtkselection.[ch] (gtk_selection_clear_targets): Export
+	a public function clear all targets registered for the
+	widget.
+
+	* gtk/gtkselection.c (gtk_selection_owner_set) docs/Changes-2.0.txt:
+	Never call gtk_widget_realize() - that was just asking
+	for bizarre side-effects.
+
+	* gtk/gtkselection.c (gtk_selection_owner_set): Call
+	gdk_selection_owner_set even if the widget is the
+	same so that we reliably update the timestamp on
+	the server.
+
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkx.h: Add a 
+	gdk_x11_get_server_time() function.
+	
+	* gdk/x11/gdkevents-x11.c gdk/x11/gdkprivate-x11.h
+	gdk/x11/gdkselection-x11.c gdk/x11/gdkwindow-x11.h:
+	Add some tricky filtering on serial numbers for
+	selection clear events to fix up long-standard
+	race condition FIXME's in gtkselection.c.
+
+	* gdk/gdkproperty.h gdk/x11/gdkselection-x11.h: Add
+	routines to convert from utf8 to compound text or
+	STRING and from a text property to UTF-8.
+
+	* gtk/gtkmain.[ch] (gtk_get_current_event_time): Add 
+	a convenience function gdk_get_current_event_time().
+
+	* gtk/gtkselection.c (gtk_selection_data_copy/free): Copy
+	and free selection_data->data properly
+
+Sat Sep  9 17:15:45 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrc.[ch] (gtk_rc_get_im_module_file): Add
+	extra config options "im_module_file" (cache file for
+	input method modules), and "im_module_path" - path
+	to look for modules when generating cache file.
+
+	This doesn't scale.
+
+Sat Sep  9 10:23:53 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkthemes.c: Remove some unecessary includes.
+
 2000-09-08  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktextdisplay.c
@@ -6,7 +92,6 @@
 	* gtk/gtktexttag.h
 	* gtk/testtext.c: Change the overstrike property to strikethrough,
 	to closer match pango.
-
 
 Fri Sep  8 14:28:00 2000  Owen Taylor  <otaylor@redhat.com>
 
