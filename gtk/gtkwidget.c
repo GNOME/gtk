@@ -74,7 +74,7 @@ enum {
   CHILD_NOTIFY,
   ADD_ACCELERATOR,
   REMOVE_ACCELERATOR,
-  ACTIVATE_MNEMONIC,
+  MNEMONIC_ACTIVATE,
   GRAB_FOCUS,
   FOCUS,
   EVENT,
@@ -577,7 +577,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
 		    gtk_marshal_VOID__OBJECT,
 		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_OBJECT);
+		    GTK_TYPE_WIDGET);
   widget_signals[HIERARCHY_CHANGED] =
     gtk_signal_new ("hierarchy_changed",
 		    GTK_RUN_LAST,
@@ -625,7 +625,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   widget_signals[REMOVE_ACCELERATOR] =
     gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
 				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
-  widget_signals[ACTIVATE_MNEMONIC] =
+  widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new ("mnemonic_activate",
                   GTK_CLASS_TYPE (object_class),
                   GTK_RUN_LAST,
@@ -2319,6 +2319,167 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     }
 }
 
+/**
+ * gtk_widget_common_ancestor:
+ * @widget_a: a #GtkWidget
+ * @widget_b: a #GtkWidget
+ * 
+ * Find the common ancestor of @widget_a and @widget_b that
+ * is closest to the two widgets.
+ * 
+ * Return value: the closest common ancestor of @widget_a and
+ *   @widget_b or %NULL if @widget_a and @widget_b do not
+ *   share a common ancestor.
+ **/
+static GtkWidget *
+gtk_widget_common_ancestor (GtkWidget *widget_a,
+			    GtkWidget *widget_b)
+{
+  GtkWidget *parent_a;
+  GtkWidget *parent_b;
+  gint depth_a = 0;
+  gint depth_b = 0;
+
+  parent_a = widget_a;
+  while (parent_a->parent)
+    {
+      parent_a = parent_a->parent;
+      depth_a++;
+    }
+
+  parent_b = widget_b;
+  while (parent_b->parent)
+    {
+      parent_b = parent_b->parent;
+      depth_b++;
+    }
+
+  if (parent_a != parent_b)
+    return NULL;
+
+  while (depth_a > depth_b)
+    {
+      widget_a = widget_a->parent;
+      depth_a--;
+    }
+
+  while (depth_b > depth_a)
+    {
+      widget_b = widget_b->parent;
+      depth_b--;
+    }
+
+  while (widget_a != widget_b)
+    {
+      widget_a = widget_a->parent;
+      widget_b = widget_b->parent;
+    }
+
+  return widget_a;
+}
+
+/**
+ * gtk_widget_translate_coordinates:
+ * @src_widget:  a #GtkWidget
+ * @dest_widget: a #GtkWidget
+ * @src_x: X position relative to @src_widget
+ * @src_y: Y position relative to @src_widget
+ * @dest_x: location to store X position relative to @dest_widget
+ * @dest_y: location to store Y position relative to @dest_widget
+ * 
+ * Translate coordinates relative to @src_widget's allocation to coordinates
+ * relative to @dest_widget's allocations. In order to perform this
+ * operation, both widgets must be realized, and must share a common
+ * toplevel.
+ * 
+ * Return value: %FALSE if either widget was not realized, or there
+ *   was no common ancestor. In this case, nothing is stored in
+ *   *@dest_x and *@dest_y. Otherwise %TRUE.
+ **/
+gboolean
+gtk_widget_translate_coordinates (GtkWidget  *src_widget,
+				  GtkWidget  *dest_widget,
+				  gint        src_x,
+				  gint        src_y,
+				  gint       *dest_x,
+				  gint       *dest_y)
+{
+  GtkWidget *ancestor;
+  GdkWindow *window;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (src_widget), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (dest_widget), FALSE);
+
+  ancestor = gtk_widget_common_ancestor (src_widget, dest_widget);
+  if (!ancestor || !GTK_WIDGET_REALIZED (src_widget) || !GTK_WIDGET_REALIZED (dest_widget))
+    return FALSE;
+
+  /* Translate from allocation relative to window relative */
+  if (!GTK_WIDGET_NO_WINDOW (src_widget) && src_widget->parent)
+    {
+      gint wx, wy;
+      gdk_window_get_position (src_widget->window, &wx, &wy);
+
+      src_x -= wx - src_widget->allocation.x;
+      src_y -= wy - src_widget->allocation.y;
+    }
+  else
+    {
+      src_x += src_widget->allocation.x;
+      src_y += src_widget->allocation.y;
+    }
+
+  /* Translate to the common ancestor */
+  window = src_widget->window;
+  while (window != ancestor->window)
+    {
+      gint dx, dy;
+      
+      gdk_window_get_position (window, &dx, &dy);
+      
+      src_x += dx;
+      src_y += dy;
+      
+      window = gdk_window_get_parent (window);
+    }
+
+  /* And back */
+  window = dest_widget->window;
+  while (window != ancestor->window)
+    {
+      gint dx, dy;
+      
+      gdk_window_get_position (window, &dx, &dy);
+      
+      src_x -= dx;
+      src_y -= dy;
+      
+      window = gdk_window_get_parent (window);
+    }
+
+  /* Translate from window relative to allocation relative */
+  if (!GTK_WIDGET_NO_WINDOW (dest_widget) && dest_widget->parent)
+    {
+      gint wx, wy;
+      gdk_window_get_position (dest_widget->window, &wx, &wy);
+
+      src_x += wx - dest_widget->allocation.x;
+      src_y += wy - dest_widget->allocation.y;
+    }
+  else
+    {
+      src_x -= dest_widget->allocation.x;
+      src_y -= dest_widget->allocation.y;
+    }
+
+  if (dest_x)
+    *dest_x = src_x;
+  if (dest_y)
+    *dest_y = src_y;
+
+  return TRUE;
+}
+
 static void
 gtk_widget_real_size_allocate (GtkWidget     *widget,
 			       GtkAllocation *allocation)
@@ -2493,7 +2654,7 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
     handled = TRUE;
   else
     gtk_signal_emit (GTK_OBJECT (widget),
-		     widget_signals[ACTIVATE_MNEMONIC],
+		     widget_signals[MNEMONIC_ACTIVATE],
 		     group_cycling,
 		     &handled);
   return handled;
@@ -3648,9 +3809,9 @@ gtk_widget_modify_color_component (GtkWidget     *widget,
 
 /**
  * gtk_widget_modify_fg:
- * @widget: a #GtkWidget
+ * @widget: a #GtkWidget.
  * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * @color: the color to assign (does not need to be allocated).
  * 
  * Set the foreground color for a widget in a particular state.  All
  * other style values are left untouched. See also
@@ -3670,9 +3831,9 @@ gtk_widget_modify_fg (GtkWidget   *widget,
 
 /**
  * gtk_widget_modify_bg:
- * @widget: a #GtkWidget
- * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * @widget: a #GtkWidget.
+ * @state: the state for which to set the background color.
+ * @color: the color to assign (does not need to be allocated).
  * 
  * Set the background color for a widget in a particular state.  All
  * other style values are left untouched. See also
@@ -3691,10 +3852,10 @@ gtk_widget_modify_bg (GtkWidget   *widget,
 }
 
 /**
- * gtk_widget_modify_base:
- * @widget: a #GtkWidget
- * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * gtk_widget_modify_text:
+ * @widget: a #GtkWidget.
+ * @state: the state for which to set the text color.
+ * @color: the color to assign (does not need to be allocated).
  * 
  * Set the text color for a widget in a particular state.  All other
  * style values are left untouched. The text color is the foreground
@@ -3716,11 +3877,11 @@ gtk_widget_modify_text (GtkWidget   *widget,
 
 /**
  * gtk_widget_modify_base:
- * @widget: a #GtkWidget
- * @state: the state for which to set the foreground color.
- * @color: the color to assign (does not need to be allocated)
+ * @widget: a #GtkWidget.
+ * @state: the state for which to set the base color.
+ * @color: the color to assign (does not need to be allocated).
  * 
- * Set the text color for a widget in a particular state.
+ * Set the base color for a widget in a particular state.
  * All other style values are left untouched. The base color
  * is the background color used along with the text color
  * (see gtk_widget_modify_text) for widgets such as #GtkEntry
@@ -4242,8 +4403,8 @@ gtk_widget_has_screen (GtkWidget *widget)
   GtkWidget *toplevel = NULL;
   GdkScreen *screen = NULL;
   
-  g_return_val_if_fail (widget != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
 
   toplevel = gtk_widget_get_toplevel (widget);
 
@@ -5815,7 +5976,7 @@ gtk_widget_style_get_property (GtkWidget   *widget,
       else if (g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
 	g_value_transform (peek_value, value);
       else
-	g_warning ("can't retrive style property `%s' of type `%s' as value of type `%s'",
+	g_warning ("can't retrieve style property `%s' of type `%s' as value of type `%s'",
 		   pspec->name,
 		   g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
 		   G_VALUE_TYPE_NAME (value));

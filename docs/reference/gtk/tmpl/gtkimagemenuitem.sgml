@@ -19,7 +19,6 @@ GtkImageMenuItem
 
 </para>
 
-@menu_item: 
 
 <!-- ##### STRUCT GtkImageMenuItemClass ##### -->
 <para>
@@ -83,4 +82,9 @@ GtkImageMenuItem
 @label: 
 @Returns: 
 
+
+<!-- ##### ARG GtkImageMenuItem:image ##### -->
+<para>
+
+</para>
 

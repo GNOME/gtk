@@ -170,6 +170,16 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_keymap_get_direction ##### -->
+<para>
+Returns the direction of the keymap. 
+</para>
+
+@keymap: a #GdkKeymap or %NULL to use the default keymap.
+Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_keyval_name ##### -->
 <para>
 Converts a key value into a symbolic name.

@@ -268,7 +268,7 @@ gtk_im_context_xim_new (void)
   if (!info)
     return NULL;
 
-  result = GTK_IM_CONTEXT_XIM (gtk_type_new (GTK_TYPE_IM_CONTEXT_XIM));
+  result = GTK_IM_CONTEXT_XIM (g_object_new (GTK_TYPE_IM_CONTEXT_XIM, NULL));
 
   result->im_info = info;
   
@@ -365,7 +365,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
 					       * control characters into strings
 					       */
 	    {
-	      gtk_signal_emit_by_name (GTK_OBJECT (context), "commit", result_utf8);
+	      g_signal_emit_by_name (context, "commit", result_utf8);
 	      result = TRUE;
 	    }
 	  
@@ -472,7 +472,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
       char *result_utf8 = mb_to_utf8 (context_xim, result);
       if (result_utf8)
 	{
-	  gtk_signal_emit_by_name (GTK_OBJECT (context), "commit", result_utf8);
+	  g_signal_emit_by_name (context, "commit", result_utf8);
 	  g_free (result_utf8);
 	}
     }
@@ -480,7 +480,7 @@ gtk_im_context_xim_reset (GtkIMContext *context)
   if (context_xim->preedit_length)
     {
       context_xim->preedit_length = 0;
-      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_changed");
+      g_signal_emit_by_name (context, "preedit_changed");
     }
 
   XFree (result);
@@ -580,7 +580,7 @@ preedit_start_callback (XIC      xic,
 {
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
   
-  gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_start");
+  g_signal_emit_by_name (context, "preedit_start");
   g_print ("Starting preedit!\n");
 }		     
 
@@ -591,7 +591,7 @@ preedit_done_callback (XIC      xic,
 {
   GtkIMContext *context = GTK_IM_CONTEXT (client_data);
   
-  gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_end");  
+  g_signal_emit_by_name (context, "preedit_end");  
   g_print ("Ending preedit!\n");
 }		     
 
@@ -717,7 +717,7 @@ preedit_draw_callback (XIC                           xic,
   if (new_text)
     g_free (new_text);
 
-  gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_changed");
+  g_signal_emit_by_name (context, "preedit_changed");
 }
     
 
@@ -731,7 +731,7 @@ preedit_caret_callback (XIC                            xic,
   if (call_data->direction == XIMAbsolutePosition)
     {
       context->preedit_cursor = call_data->position;
-      gtk_signal_emit_by_name (GTK_OBJECT (context), "preedit_changed");
+      g_signal_emit_by_name (context, "preedit_changed");
     }
   else
     {

@@ -169,7 +169,7 @@ _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
  * @type: The selection mode
  *
  * Sets the selection mode of the @selection.  If the previous type was
- * #GTK_SELECTION_MULTIPLE and, then the anchor is kept selected, if it was
+ * #GTK_SELECTION_MULTIPLE, then the anchor is kept selected, if it was
  * previously selected.
  **/
 void
@@ -245,6 +245,8 @@ gtk_tree_selection_get_mode (GtkTreeSelection *selection)
  *
  * Sets the selection function.  If set, this function is called before any node
  * is selected or unselected, giving some control over which nodes are selected.
+ * The select function should return %TRUE if the state of the node may be toggled,
+ * and %FALSE if the state of the node should be left unchanged.
  **/
 void
 gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
@@ -602,6 +604,71 @@ gtk_tree_selection_unselect_iter (GtkTreeSelection *selection,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_tree_selection_path_is_selected:
+ * @selection: A #GtkTreeSelection.
+ * @path: A #GtkTreePath to check selection on.
+ * 
+ * Returns %TRUE if the row pointed to by @path is currently selected.  If @path
+ * does not point to a valid location, %FALSE is returned
+ * 
+ * Return value: %TRUE if @path is selected.
+ **/
+gboolean
+gtk_tree_selection_path_is_selected (GtkTreeSelection *selection,
+				     GtkTreePath      *path)
+{
+  GtkRBNode *node;
+  GtkRBTree *tree;
+
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (selection->tree_view != NULL, FALSE);
+  g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
+
+  _gtk_tree_view_find_node (selection->tree_view,
+			    path,
+			    &tree,
+			    &node);
+
+  if ((node == NULL) || !GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
+ * gtk_tree_selection_iter_is_selected:
+ * @selection: A #GtkTreeSelection
+ * @iter: A valid #GtkTreeIter
+ * 
+ * Returns %TRUE if the row pointed to by @path is currently selected.
+ * 
+ * Return value: %TRUE, if @iter is selected
+ **/
+gboolean
+gtk_tree_selection_iter_is_selected (GtkTreeSelection *selection,
+				     GtkTreeIter      *iter)
+{
+  GtkTreePath *path;
+  gboolean retval;
+
+  g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (selection->tree_view != NULL, FALSE);
+  g_return_val_if_fail (selection->tree_view->priv->model != NULL, FALSE);
+
+  path = gtk_tree_model_get_path (selection->tree_view->priv->model, iter);
+  if (path == NULL)
+    return FALSE;
+
+  retval = gtk_tree_selection_path_is_selected (selection, path);
+  gtk_tree_path_free (path);
+
+  return retval;
+}
+
+
 /* Wish I was in python, right now... */
 struct _TempTuple {
   GtkTreeSelection *selection;
@@ -672,7 +739,7 @@ gtk_tree_selection_select_all (GtkTreeSelection *selection)
   g_return_if_fail (selection->tree_view != NULL);
   if (selection->tree_view->priv->tree == NULL)
     return;
-  g_return_if_fail (selection->type != GTK_SELECTION_MULTIPLE);
+  g_return_if_fail (selection->type == GTK_SELECTION_MULTIPLE);
 
   if (gtk_tree_selection_real_select_all (selection))
     g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
@@ -1010,7 +1077,9 @@ gtk_tree_selection_real_select_node (GtkTreeSelection *selection,
       path = _gtk_tree_view_find_path (selection->tree_view, tree, node);
       if (selection->user_func)
 	{
-	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path, selection->user_data))
+	  if ((*selection->user_func) (selection, selection->tree_view->priv->model, path,
+                                       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED),
+                                       selection->user_data))
 	    selected = TRUE;
 	}
       else

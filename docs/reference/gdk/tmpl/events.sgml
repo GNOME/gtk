@@ -141,7 +141,8 @@ This is the priority that events from the X server are given in the
 
 <!-- ##### MACRO GDK_PRIORITY_REDRAW ##### -->
 <para>
-
+This is the priority that the idle handler processing window updates
+is given in the <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
 </para>
 
 
@@ -246,6 +247,28 @@ no timestamp.
 @event: 
 @axis_use: 
 @value: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_get_coords ##### -->
+<para>
+
+</para>
+
+@event: 
+@x_win: 
+@y_win: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_event_get_root_coords ##### -->
+<para>
+
+</para>
+
+@event: 
+@x_root: 
+@y_root: 
 @Returns: 
 
 

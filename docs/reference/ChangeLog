@@ -1,3 +1,127 @@
+Sat Oct 20 18:35:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkentry.sgml (Note): Remove note about
+	deprecation. (We've standard on G_CONST_RETURN 
+	rather than the reverse.) #58768, Vitaly Tishkov.
+
+2001-10-20  jacob berkman  <jacob@ximian.com>
+
+	* gtk/Makefile.am (HTML_IMAGES): get them from
+	$(top_srcdir)/gtk/stock-icons/ rather than
+	../../../gtk/stock-items/
+
+Fri Oct 19 15:44:52 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am gtk/gtk-sections.txt gtk/gtk-docs.sgml:
+	Add gtkimcontextsimple.
+
+2001-10-19  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/gtk-docs.sgml: Switch to DocBook 4.1 (for the PNG notation).
+
+	* gtk/Makefile.am, gtk/tmpl/gtkstock.sgml: Add inlinegraphics for
+	the stock icons.
+
+2001-10-18  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk/tmpl/visuals.sgml: Resurrect 1.2 documentation. (#62604)
+
+	* gtk/tmpl/gtkpaned.sgml: Fixes. (#62146)
+
+	* gtk/tmpl/gtkgamma.sgml: Fixes. (#62155)
+
+	* gtk/Makefile.am (IGNORE_HFILES): Add xembed.h (#61929)
+
+	* gdk-pixbuf/gdk-pixbuf.types: Add GdkPixbuf, 
+	GdkPixbufAnimation and GdkPixbufAnimationIter. (#62590)
+
+	* gtk/tmpl/gtkscrolledwindow.sgml: Replace GtkCList by
+	GtkTreeView in example. (#62200)
+
+2001-10-17  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkdnd.sgml, gtk/tmpl/gtkclipboard.sgml,
+	gdk/tmpl/general.sgml, gdk/tmpl/threads.sgml, 
+	gdk/tmpl/x_interaction.sgml: Updates.
+
+2001-10-13  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk/tmpl/x_interaction.sgml: Update.
+
+2001-10-10  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/gtk-sections.txt, gtk/tmpl/gtkspinbutton.sgml,
+	gtk/tmpl/gtkseparatormenuitem.sgml, gtk/tmpl/gtknotebook.sgml,
+	gtk/tmpl/gtkstatusbar.sgml, gtk/tmpl/gtkradiobutton.sgml,
+	gtk/tmpl/gtkradiomenuitem.sgml: Updates.
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt, 
+	gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Follow recent API changes.
+
+2001-10-10  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkcalendar.sgml, gtk/tmpl/gtkeditable.sgml: Update.
+
+	* gdk-pixbuf/gdk-pixbuf.sgml: Add entity for tmpl/inline.sgml.
+
+	* gdk-pixbuf/tmpl/inline.sgml: Update.
+
+	* gtk/gtk-sections.sgml: Update.
+
+2001-10-08  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt,
+	gdk-pixbuf/Makefile.am, gdk-pixbuf/tmpl/creating.sgml: Update.
+
+	* gdk-pixbuf/tmpl/inline.sgml: New file.
+	
+2001-10-07  Matthias Clasen   <matthiasc@poet.de>
+
+	* gdk/tmpl/properties.sgml, gdk/tmpl/events.sgml,
+	gdk/tmpl/regions.sgml, gdk/tmpl/general.sgml,
+	gdk/tmpl/keys.sgml: Update. 
+
+	* gdk/gdk-overrides.txt, gdk/gdk-sections.txt: Remove nanox traces.
+
+2001-10-06  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/gtk-docs.sgml: add gtkimagemenuitem, 
+	gtksettings, gtkseparatormenuitem.
+	
+	* gtk/tmpl/gtktreemodelsimple.sgml: remove unused file.
+
+2001-10-05  Matthias Clasen   <matthiasc@poet.de>
+
+	* gtk/gtk-sections.sgml, gtk/objects_grouped.sgml: remove GtkPacker.
+
+2001-10-05  Sven Neumann  <sven@gimp.org>
+
+	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: adapt to changes in GDK_PIXBUF_ERROR
+	enum.
+
+2001-10-04  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/tmpl/gtkimage.sgml: fix GtkImage overview
+
+Wed Oct  3 15:09:18 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtk.types: remove gtk_cell_editable_get_type
+
+2001-10-02  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/tree_widget.sgml: s/empahsis/emphasis/
+
+	* gtk/tmpl/gtkobject.sgml: update docs
+
+2001-10-01  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtk-sections.txt: Move standard gobject stuff to
+	the 'Standard' sections. (#61483)
+
+Wed Sep 26 15:05:28 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtk.types: Add missing types.
+
 Mon Sep 24 12:43:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk-sections.txt: Updates for removed/renamed functions.

@@ -1766,7 +1766,7 @@ gtk_rc_parse_any (GtkRcContext *context,
   scanner->input_name = input_name;
 
   for (i = 0; i < G_N_ELEMENTS (symbols); i++)
-    g_scanner_add_symbol (scanner, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
+    g_scanner_scope_add_symbol (scanner, 0, symbols[i].name, GINT_TO_POINTER (symbols[i].token));
   
   done = FALSE;
   while (!done)
@@ -2019,10 +2019,10 @@ rc_parse_token_or_compound (GScanner  *scanner,
     {
       gchar *string;
     case G_TOKEN_INT:
-      g_string_printfa (gstring, " 0x%lx", scanner->value.v_int);
+      g_string_append_printf (gstring, " 0x%lx", scanner->value.v_int);
       break;
     case G_TOKEN_FLOAT:
-      g_string_printfa (gstring, " %f", scanner->value.v_float);
+      g_string_append_printf (gstring, " %f", scanner->value.v_float);
       break;
     case G_TOKEN_STRING:
       string = g_strescape (scanner->value.v_string, NULL);

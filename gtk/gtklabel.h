@@ -84,7 +84,6 @@ struct _GtkLabelClass
 			    gint            count,
 			    gboolean        extend_selection);
   void (* copy_clipboard)  (GtkLabel       *label);
-  void (* select_all)      (GtkLabel       *label);
   
   /* Hook to customize right-click popup for selectable labels */
   void (* populate_popup)   (GtkLabel       *label,

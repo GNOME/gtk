@@ -2054,6 +2054,20 @@ gtk_notebook_find_child (GtkNotebook *notebook,
 }
 
 static void
+gtk_notebook_remove_tab_label (GtkNotebook     *notebook,
+			       GtkNotebookPage *page)
+{
+  if (page->tab_label)
+    {
+      if (page->mnemonic_activate_signal)
+	gtk_signal_disconnect (page->tab_label,
+			       page->mnemonic_activate_signal);
+
+      gtk_widget_unparent (page->tab_label);
+    }
+}
+
+static void
 gtk_notebook_real_remove (GtkNotebook *notebook,
 			  GList       *list)
 {
@@ -2082,15 +2096,10 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
   if (GTK_WIDGET_VISIBLE (page->child) && GTK_WIDGET_VISIBLE (notebook))
     need_resize = TRUE;
 
-  if (page->tab_label && page->mnemonic_activate_signal)
-    gtk_signal_disconnect (page->tab_label,
-			   page->mnemonic_activate_signal);
-
   gtk_widget_unparent (page->child);
 
-  if (page->tab_label)
-    gtk_widget_unparent (page->tab_label);
-
+  gtk_notebook_remove_tab_label (notebook, page);
+  
   if (notebook->menu)
     {
       gtk_container_remove (GTK_CONTAINER (notebook->menu), 
@@ -4496,9 +4505,12 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
    * we need to set the associated label
    */
   page = list->data;
-  if (page->tab_label)
-    gtk_widget_unparent (page->tab_label);
-
+  
+  if (page->tab_label == tab_label)
+    return;
+  
+  gtk_notebook_remove_tab_label (notebook, page);
+  
   if (tab_label)
     {
       page->default_tab = FALSE;

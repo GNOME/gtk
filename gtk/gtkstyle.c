@@ -1343,7 +1343,7 @@ _gtk_style_peek_property_value (GtkStyle           *style,
     {
       gchar *contents = g_strdup_value_contents (&rcprop->value);
       
-      g_message ("%s: failed to retrive property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
+      g_message ("%s: failed to retrieve property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
 		 rcprop->origin,
 		 g_type_name (pspec->owner_type), pspec->name,
 		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
@@ -2587,15 +2587,31 @@ gtk_default_draw_arrow (GtkStyle      *style,
   
   if (detail && strcmp (detail, "spinbutton") == 0)
     {
-      x += (width - 7) / 2;
+      int hpad, vpad;
+      int my_height = height;
+      int my_width = width;
+      int vpad_add = 0;
 
-      if (arrow_type == GTK_ARROW_UP)
-	y += (height - 4) / 2;
-      else
-	y += (1 + height - 4) / 2;
+      if (my_height > my_width)
+	{
+	  vpad_add = (my_height - my_width) / 2;
+	  my_height = my_width;
+	}
+
+      hpad = my_width / 4;
+
+      if (hpad < 4)
+	hpad = 4;
+
+      vpad = 2 * hpad - 1;
+
+      x += hpad / 2;
+      y += vpad / 2;
+
+      y += vpad_add;
 
       draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
-		   x, y, 7, 4);
+		   x, y, my_width - hpad, my_height - vpad);
     }
   else if (detail && strcmp (detail, "vscrollbar") == 0)
     {
@@ -2604,10 +2620,9 @@ gtk_default_draw_arrow (GtkStyle      *style,
       
       x += (width - 7) / 2;
       y += (height - 5) / 2;
-
+      
       draw_varrow (window, style->fg_gc[state], shadow, area, arrow_type,
 		   x, y, 7, 5);
-      
     }
   else if (detail && strcmp (detail, "hscrollbar") == 0)
     {
@@ -3048,7 +3063,12 @@ gtk_default_draw_check (GtkStyle      *style,
   if (detail && strcmp (detail, "cellcheck") == 0)
     {
       gdk_draw_rectangle (window,
-			  widget->style->fg_gc[state_type],
+			  widget->style->base_gc[state_type],
+			  TRUE,
+                          x, y,
+			  width, height);
+      gdk_draw_rectangle (window,
+			  widget->style->text_gc[state_type],
 			  FALSE,
                           x, y,
 			  width, height);
@@ -4087,10 +4107,8 @@ gtk_default_draw_expander (GtkStyle        *style,
 
   if (state_type == GTK_STATE_PRELIGHT)
     {
-      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
-			TRUE, points, 3);
       gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
-			FALSE, points, 3);
+			TRUE, points, 3);
     }
   else if (state_type == GTK_STATE_ACTIVE)
     {
@@ -4101,8 +4119,10 @@ gtk_default_draw_expander (GtkStyle        *style,
     }
   else
     {
-      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+      gdk_draw_polygon (window, style->base_gc[GTK_STATE_NORMAL],
 			TRUE, points, 3);
+      gdk_draw_polygon (window, style->fg_gc[GTK_STATE_NORMAL],
+			FALSE, points, 3);
     }
   if (area)
     {

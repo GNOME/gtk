@@ -199,3 +199,16 @@ gdk_pixmap_create_from_data (GdkWindow   *window,
 
   return pixmap;
 }
+
+GdkPixmap*
+gdk_pixmap_foreign_new (GdkNativeWindow anid)
+{
+  return (GdkPixmap*) gdk_drawable_ref (anid);
+}
+
+GdkPixmap*
+gdk_pixmap_lookup (GdkNativeWindow anid)
+{
+  return (GdkPixmap*) (anid);
+}
+

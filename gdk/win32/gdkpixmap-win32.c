@@ -443,3 +443,9 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
 
   return pixmap;
 }
+
+GdkWindow*
+gdk_window_lookup (GdkNativeWindow hbm)
+{
+  return (GdkPixmap*) gdk_win32_handle_table_lookup (hbm);
+}

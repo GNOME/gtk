@@ -64,22 +64,25 @@ GtkType
 gtk_im_multicontext_get_type (void)
 {
   static GtkType im_multicontext_type = 0;
-
+ 
   if (!im_multicontext_type)
     {
-      static const GtkTypeInfo im_multicontext_info =
+      static const GTypeInfo im_multicontext_info =
       {
-	"GtkIMMulticontext",
-	sizeof (GtkIMMulticontext),
-	sizeof (GtkIMMulticontextClass),
-	(GtkClassInitFunc) gtk_im_multicontext_class_init,
-	(GtkObjectInitFunc) gtk_im_multicontext_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+        sizeof (GtkIMMulticontextClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_im_multicontext_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkIMMulticontext),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_im_multicontext_init,
       };
-
-      im_multicontext_type = gtk_type_unique (GTK_TYPE_IM_CONTEXT, &im_multicontext_info);
+      
+      im_multicontext_type = g_type_register_static (GTK_TYPE_IM_CONTEXT,
+						     "GtkIMMulticontext",
+						     &im_multicontext_info, 0);
     }
 
   return im_multicontext_type;
@@ -113,7 +116,7 @@ gtk_im_multicontext_init (GtkIMMulticontext *multicontext)
 GtkIMContext *
 gtk_im_multicontext_new (void)
 {
-  return GTK_IM_CONTEXT (gtk_type_new (GTK_TYPE_IM_MULTICONTEXT));
+  return GTK_IM_CONTEXT (g_object_new (GTK_TYPE_IM_MULTICONTEXT, NULL));
 }
 
 static void
@@ -130,30 +133,41 @@ gtk_im_multicontext_set_slave (GtkIMMulticontext *multicontext,
 {
   if (multicontext->slave)
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (multicontext->slave), multicontext);
-      gtk_object_unref (GTK_OBJECT (multicontext->slave));
+      g_signal_handlers_disconnect_by_func (multicontext->slave,
+					    gtk_im_multicontext_preedit_start_cb,
+					    multicontext);
+      g_signal_handlers_disconnect_by_func (multicontext->slave,
+					    gtk_im_multicontext_preedit_end_cb,
+					    multicontext);
+      g_signal_handlers_disconnect_by_func (multicontext->slave,
+					    gtk_im_multicontext_preedit_changed_cb,
+					    multicontext);
+      g_signal_handlers_disconnect_by_func (multicontext->slave,
+					    gtk_im_multicontext_commit_cb,
+					    multicontext);
+      
+      g_object_unref (multicontext->slave);
     }
   
   multicontext->slave = slave;
 
   if (multicontext->slave)
     {
-      gtk_object_ref (GTK_OBJECT (multicontext->slave));
-      gtk_object_sink (GTK_OBJECT (multicontext->slave));
+      g_object_ref (multicontext->slave);
 
-      gtk_signal_connect (GTK_OBJECT (multicontext->slave), "preedit_start",
-			  GTK_SIGNAL_FUNC (gtk_im_multicontext_preedit_start_cb),
-			  multicontext);
-      gtk_signal_connect (GTK_OBJECT (multicontext->slave), "preedit_end",
-			  GTK_SIGNAL_FUNC (gtk_im_multicontext_preedit_end_cb),
-			  multicontext);
-      gtk_signal_connect (GTK_OBJECT (multicontext->slave), "preedit_changed",
-			  GTK_SIGNAL_FUNC (gtk_im_multicontext_preedit_changed_cb),
-			  multicontext);
-      gtk_signal_connect (GTK_OBJECT (multicontext->slave), "commit",
-			  GTK_SIGNAL_FUNC (gtk_im_multicontext_commit_cb),
-			  multicontext);
-
+      g_signal_connect (multicontext->slave, "preedit_start",
+			G_CALLBACK (gtk_im_multicontext_preedit_start_cb),
+			multicontext);
+      g_signal_connect (multicontext->slave, "preedit_end",
+			G_CALLBACK (gtk_im_multicontext_preedit_end_cb),
+			multicontext);
+      g_signal_connect (multicontext->slave, "preedit_changed",
+			G_CALLBACK (gtk_im_multicontext_preedit_changed_cb),
+			multicontext);
+      g_signal_connect (multicontext->slave, "commit",
+			G_CALLBACK (gtk_im_multicontext_commit_cb),
+			multicontext);
+      
       if (multicontext->client_window)
 	gtk_im_context_set_client_window (slave, multicontext->client_window);
     }
@@ -284,21 +298,21 @@ void
 gtk_im_multicontext_preedit_start_cb   (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
 {
-  gtk_signal_emit_by_name (GTK_OBJECT (multicontext), "preedit_start");
+  g_signal_emit_by_name (multicontext, "preedit_start");
 }
 
 void
 gtk_im_multicontext_preedit_end_cb (GtkIMContext      *slave,
 				    GtkIMMulticontext *multicontext)
 {
-  gtk_signal_emit_by_name (GTK_OBJECT (multicontext), "preedit_end");
+  g_signal_emit_by_name (multicontext, "preedit_end");
 }
 
 void
 gtk_im_multicontext_preedit_changed_cb (GtkIMContext      *slave,
 					GtkIMMulticontext *multicontext)
 {
-  gtk_signal_emit_by_name (GTK_OBJECT (multicontext), "preedit_changed");
+  g_signal_emit_by_name (multicontext, "preedit_changed");
 }
 
 void
@@ -306,7 +320,7 @@ gtk_im_multicontext_commit_cb (GtkIMContext      *slave,
 			       const gchar       *str,
 			       GtkIMMulticontext *multicontext)
 {
-  gtk_signal_emit_by_name (GTK_OBJECT (multicontext), "commit", str);;
+  g_signal_emit_by_name (multicontext, "commit", str);;
 }
 
 static void
@@ -361,7 +375,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
       gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-context-id",
 			   (char *)contexts[i]->context_id);
       gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
-			  GTK_SIGNAL_FUNC (activate_cb), context);
+			  G_CALLBACK (activate_cb), context);
 
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (menushell, menuitem);

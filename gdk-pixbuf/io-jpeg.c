@@ -660,7 +660,7 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
                                if (endptr == *viter) {
                                        g_set_error (error,
                                                     GDK_PIXBUF_ERROR,
-                                                    GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION,
                                                     _("JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."),
                                                     *viter);
 
@@ -675,7 +675,7 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
                                         */
                                        g_set_error (error,
                                                     GDK_PIXBUF_ERROR,
-                                                    GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION,
                                                     _("JPEG quality must be a value between 0 and 100; value '%d' is not allowed."),
                                                     quality);
 

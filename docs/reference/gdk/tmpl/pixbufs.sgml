@@ -80,7 +80,36 @@ Pixbufs
 @alpha_threshold: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask_for_colormap ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@colormap: 
+@pixmap_return: 
+@mask_return: 
+@alpha_threshold: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@cmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_from_image ##### -->
 <para>
 
 </para>

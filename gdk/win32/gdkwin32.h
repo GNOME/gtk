@@ -361,18 +361,11 @@ GType gdk_gc_win32_get_type (void);
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_DISPLAY()                 NULL
 
-/* Functions to create GDK pixmaps and windows from their native equivalents */
-GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
-GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
-
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
 
 /* Translate from drawable to windows handle */
 HWND          gdk_win32_drawable_get_handle (GdkDrawable *drawable);
-
-#define gdk_window_lookup(hwnd) (GdkWindow*) gdk_win32_handle_table_lookup (hwnd)
-#define gdk_pixmap_lookup(hbm)	(GdkPixmap*) gdk_win32_handle_table_lookup (hbm)
 
 /* Return a device context to draw in a drawable, given a GDK GC,
  * and a mask indicating which GC values might be used (for efficiency,

@@ -182,17 +182,39 @@ free_buffer (guchar *pixels, gpointer data)
 	g_free (pixels);
 }
 
+static gboolean
+png_text_to_pixbuf_option (png_text   text_ptr,
+                           gchar    **key,
+                           gchar    **value)
+{
+        *value = g_convert (text_ptr.text, -1, 
+                            "UTF-8", "ISO-8859-1", 
+                            NULL, NULL, NULL);
+        if (*value) {
+                *key = g_strconcat ("tEXt::", text_ptr.key, NULL);
+                return TRUE;
+        } else {
+                g_warning ("Couldn't convert tEXt chunk value to UTF-8.");
+                *key = NULL;
+                return FALSE;
+        }
+}
+
 /* Shared library entry point */
 static GdkPixbuf *
 gdk_pixbuf__png_image_load (FILE *f, GError **error)
 {
+        GdkPixbuf *pixbuf;
 	png_structp png_ptr;
 	png_infop info_ptr, end_info;
+        png_textp text_ptr;
         gboolean failed = FALSE;
 	gint i, ctype, bpp;
 	png_uint_32 w, h;
 	png_bytepp rows;
 	guchar *pixels;
+        gint    num_texts;
+        gchar **options = NULL;
 
 	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING,
                                           error,
@@ -255,17 +277,42 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 		rows[i] = pixels + i * w * bpp;
 
 	png_read_image (png_ptr, rows);
+
+        if (png_get_text (png_ptr, info_ptr, &text_ptr, &num_texts)) {
+                options = g_new (gchar *, num_texts * 2);
+                for (i = 0; i < num_texts; i++) {
+                        png_text_to_pixbuf_option (text_ptr[i], 
+                                                   options + 2*i, 
+                                                   options + 2*i + 1);
+                }
+        }
 	png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 	g_free (rows);
 
 	if (ctype & PNG_COLOR_MASK_ALPHA)
-		return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, TRUE, 8,
-						 w, h, w * 4,
-						 free_buffer, NULL);
+		pixbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, TRUE, 8,
+                                                   w, h, w * 4,
+                                                   free_buffer, NULL);
 	else
-		return gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
-						 w, h, w * 3,
-						 free_buffer, NULL);
+		pixbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
+                                                   w, h, w * 3,
+                                                   free_buffer, NULL);
+
+        if (options) {
+                for (i = 0; i < num_texts; i++) {
+                        if (pixbuf) {
+                                if (!gdk_pixbuf_set_option (pixbuf, 
+                                                            options[2*i], 
+                                                            options[2*i+1]))
+                                        g_warning ("Got multiple tEXt chunks for the same key.");
+                        }
+                        g_free (options[2*i]);
+                        g_free (options[2*i+1]);
+                }
+                g_free (options);
+        }
+
+        return pixbuf;
 }
 
 /* I wish these avoided the setjmp()/longjmp() crap in libpng instead
@@ -501,6 +548,8 @@ png_info_callback   (png_structp png_read_ptr,
 {
         LoadContext* lc;
         png_uint_32 width, height;
+        png_textp png_text_ptr;
+        int i, num_texts;
         int color_type;
         gboolean have_alpha = FALSE;
         gboolean failed = FALSE;
@@ -538,7 +587,22 @@ png_info_callback   (png_structp png_read_ptr,
                 }
                 return;
         }
+
+        /* Extract tEXt chunks and attach them as pixbuf options */
         
+        if (png_get_text (png_read_ptr, png_info_ptr, &png_text_ptr, &num_texts)) {
+                for (i = 0; i < num_texts; i++) {
+                        gchar *key, *value;
+
+                        if (png_text_to_pixbuf_option (png_text_ptr[i],
+                                                       &key, &value)) {
+                                gdk_pixbuf_set_option (lc->pixbuf, key, value);
+                                g_free (key);
+                                g_free (value);
+                        }
+                }
+        }
+
         /* Notify the client that we are ready to go */
 
         if (lc->prepare_func)
@@ -653,32 +717,76 @@ gdk_pixbuf__png_image_save (FILE          *f,
 {
        png_structp png_ptr;
        png_infop info_ptr;
+       png_textp text_ptr = NULL;
        guchar *ptr;
        guchar *pixels;
-       int x, y, j;
+       int x, y;
+       int i, j;
        png_bytep row_ptr;
        png_bytep data;
        png_color_8 sig_bit;
        int w, h, rowstride;
        int has_alpha;
        int bpc;
+       int num_keys;
+
+       num_keys = 0;
 
        if (keys && *keys) {
-               g_warning ("Bad option name '%s' passed to PNG saver",
-                          *keys);
-               return FALSE;
-#if 0
-               gchar **kiter = keys;
-               gchar **viter = values;
+               gchar **kiter;
+               gchar  *key;
+               int     len;
 
-               
-               while (*kiter) {
-                       
-                       ++kiter;
-                       ++viter;
+               for (kiter = keys; *kiter; kiter++) {
+                       if (strncmp (*kiter, "tEXt::", 6) != 0) {
+                                g_warning ("Bad option name '%s' passed to PNG saver", *kiter);
+                                return FALSE;
+                       }
+                       key = *kiter + 6;
+                       len = strlen (key);
+                       if (len <= 1 || len > 79) {
+                               g_set_error (error,
+                                            GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_BAD_OPTION,
+                                            _("Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."));
+                               return FALSE;
+                       }
+                       for (i = 0; i < len; i++) {
+                               if ((guchar) key[i] > 127) {
+                                       g_set_error (error,
+                                                    GDK_PIXBUF_ERROR,
+                                                    GDK_PIXBUF_ERROR_BAD_OPTION,
+                                                    _("Keys for PNG tEXt chunks must be ASCII characters."));
+                                       return FALSE;
+                               }
+                       }
+                       num_keys++;
                }
-#endif
        }
+
+       if (num_keys > 0) {
+               text_ptr = g_new0 (png_text, num_keys);
+               for (i = 0; i < num_keys; i++) {
+                       text_ptr[i].compression = PNG_TEXT_COMPRESSION_NONE;
+                       text_ptr[i].key  = keys[i] + 6;
+                       text_ptr[i].text = g_convert (values[i], -1, 
+                                                     "ISO-8859-1", "UTF-8", 
+                                                     NULL, &text_ptr[i].text_length, 
+                                                     NULL);
+                       if (!text_ptr[i].text) {
+                               g_set_error (error,
+                                            GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_BAD_OPTION,
+                                            _("Value for PNG tEXt chunk can not be converted to ISO-8859-1 encoding."));
+                               num_keys = i;
+                               for (i = 0; i < num_keys; i++)
+                                       g_free (text_ptr[i].text);
+                               g_free (text_ptr);
+                               return FALSE;
+                       }
+               }
+       }
+
        data = NULL;
        
        bpc = gdk_pixbuf_get_bits_per_sample (pixbuf);
@@ -704,7 +812,13 @@ gdk_pixbuf__png_image_save (FILE          *f,
                png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
                return FALSE;
        }
+
+       if (num_keys > 0) {
+               png_set_text (png_ptr, info_ptr, text_ptr, num_keys);
+       }
+
        png_init_io (png_ptr, f);
+
        if (has_alpha) {
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
                              PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
@@ -762,6 +876,12 @@ gdk_pixbuf__png_image_save (FILE          *f,
 
        png_write_end (png_ptr, info_ptr);
        png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
+
+       if (num_keys > 0) {
+               for (i = 0; i < num_keys; i++)
+                       g_free (text_ptr[i].text);
+               g_free (text_ptr);
+       }
 
        return TRUE;
 }

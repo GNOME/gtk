@@ -113,6 +113,25 @@ of g_atexit()).
 @error_code: the error code to pass to the exit() call.
 
 
+<!-- ##### FUNCTION gdk_get_program_class ##### -->
+<para>
+Gets the program class. Unless the program class has explicitly
+been set with gdk_set_program_class() or with the <option>--class</option> 
+commandline option, the default value is the program name (determined 
+with g_get_prgname()) with the first character converted to uppercase. 
+</para>
+
+@Returns: the program class.
+
+
+<!-- ##### FUNCTION gdk_set_program_class ##### -->
+<para>
+Sets the program class.
+</para>
+
+@program_class: a string.
+
+
 <!-- ##### FUNCTION gdk_get_display ##### -->
 <para>
 Gets the name of the display, which usually comes from the DISPLAY
@@ -350,28 +369,21 @@ Removes the X error trap installed with gdk_error_trap_push().
 
 <!-- ##### MACRO GDK_WINDOWING_X11 ##### -->
 <para>
-
+This macro is defined if GDK is configured to use the X backend.
 </para>
 
 
 
 <!-- ##### MACRO GDK_WINDOWING_WIN32 ##### -->
 <para>
-
-</para>
-
-
-
-<!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
-<para>
-
+This macro is defined if GDK is configured to use the Win32 backend.
 </para>
 
 
 
 <!-- ##### MACRO GDK_WINDOWING_FB ##### -->
 <para>
-
+This macro is defined if GDK is configured to use the Linux framebuffer backend.
 </para>
 
 

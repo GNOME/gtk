@@ -199,6 +199,7 @@ void gdk_draw_polygon   (GdkDrawable      *drawable,
 			 gint              filled,
 			 GdkPoint         *points,
 			 gint              npoints);
+#ifndef GDK_DISABLE_DEPRECATED
 void gdk_draw_string    (GdkDrawable      *drawable,
 			 GdkFont          *font,
 			 GdkGC            *gc,
@@ -219,6 +220,7 @@ void gdk_draw_text_wc   (GdkDrawable      *drawable,
 			 gint              y,
 			 const GdkWChar   *text,
 			 gint              text_length);
+#endif /* GDK_DISABLE_DEPRECATED */
 void gdk_draw_drawable  (GdkDrawable      *drawable,
 			 GdkGC            *gc,
 			 GdkDrawable      *src,

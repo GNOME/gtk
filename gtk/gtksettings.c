@@ -29,6 +29,7 @@ enum {
   PROP_SPLIT_CURSOR,
   PROP_THEME_NAME,
   PROP_KEY_THEME_NAME,
+  PROP_MENU_BAR_ACCEL,
   PROP_SCREEN
 };
 
@@ -196,7 +197,17 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  NULL,
 								  G_PARAM_READWRITE),
                                              NULL);
-  g_assert (result == PROP_KEY_THEME_NAME);
+  g_assert (result == PROP_KEY_THEME_NAME);    
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-menu-bar-accel",
+                                                                  _("Menu bar accelerator"),
+                                                                  _("Keybinding to activate the menu bar"),
+                                                                  "F10",
+                                                                  G_PARAM_READWRITE),
+                                             NULL);
+
+  g_assert (result == PROP_MENU_BAR_ACCEL);
 }
 
 static void
@@ -384,12 +395,12 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
       else if (G_VALUE_HOLDS_LONG (src_value))
 	{
 	  gstring = g_string_new ("");
-	  g_string_printfa (gstring, "%ld", g_value_get_long (src_value));
+	  g_string_append_printf (gstring, "%ld", g_value_get_long (src_value));
 	}
       else if (G_VALUE_HOLDS_DOUBLE (src_value))
 	{
 	  gstring = g_string_new ("");
-	  g_string_printfa (gstring, "%f", g_value_get_double (src_value));
+	  g_string_append_printf (gstring, "%f", g_value_get_double (src_value));
 	}
       else if (G_VALUE_HOLDS_STRING (src_value))
 	{
@@ -435,7 +446,7 @@ apply_queued_setting (GtkSettings      *data,
     {
       gchar *debug = g_strdup_value_contents (&tmp_value);
       
-      g_message ("%s: failed to retrive property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
+      g_message ("%s: failed to retrieve property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
 		 qvalue->origin,
 		 pspec->name,
 		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),

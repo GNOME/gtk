@@ -700,7 +700,7 @@ gtk_drag_finish (GdkDragContext *context,
 			     time);
     }
   
-  if (!del)
+  if (!(success && del))
     gdk_drop_finish (context, success, time);
 }
 
@@ -1062,7 +1062,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * gtk_drag_dest_find_target:
  * @widget: drag destination widget
  * @context: drag context
- * @target_list: list of droppable targets
+ * @target_list: list of droppable targets, or %NULL to use
+ *    gtk_drag_dest_get_target_list (@widget).
  * 
  * Looks for a match between @context->targets and the
  * @dest_target_list, returning the first matching target, otherwise
@@ -1081,8 +1082,16 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 {
   GList *tmp_target;
   GList *tmp_source = NULL;
-  GtkWidget *source_widget = gtk_drag_get_source_widget (context);
+  GtkWidget *source_widget;
 
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
+
+  source_widget = gtk_drag_get_source_widget (context);
+
+  if (target_list == NULL)
+    target_list = gtk_drag_dest_get_target_list (widget);
+  
   if (target_list == NULL)
     return GDK_NONE;
   
@@ -1345,7 +1354,7 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
   while (tmp_list)
     {
       gtk_target_list_add (source_info->target_list, 
-			   GPOINTER_TO_UINT (tmp_list->data), 0, 0);
+			   GDK_POINTER_TO_ATOM (tmp_list->data), 0, 0);
       tmp_list = tmp_list->next;
     }
 
@@ -1570,7 +1579,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	    }
 	}
       
-      if (action && gtk_drag_dest_find_target (widget, context, site->target_list))
+      if (action && gtk_drag_dest_find_target (widget, context, NULL))
 	{
 	  if (!site->have_drag)
 	    {
@@ -1677,12 +1686,15 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 
       if (site->flags & GTK_DEST_DEFAULT_DROP)
 	{
-	  GdkAtom target = gtk_drag_dest_find_target (widget, context, site->target_list);
+	  GdkAtom target = gtk_drag_dest_find_target (widget, context, NULL);
       
 	  if (target == GDK_NONE)
-	    return FALSE;
-	  
-	  gtk_drag_get_data (widget, context, target, time);
+	    {
+	      gtk_drag_finish (context, FALSE, FALSE, time);
+	      return TRUE;
+	    }
+	  else
+	    gtk_drag_get_data (widget, context, target, time);
 	}
 
       gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_drop",
@@ -1964,8 +1976,8 @@ gtk_drag_source_unset_icon (GtkDragSourceSite *site)
  * @mask: the transparency mask for an image.
  * 
  * Sets the icon that will be used for drags from a particular widget
- * from a pixmap/mask. GTK+ retains a reference count for the
- * arguments, and will release them when they are no longer needed.
+ * from a pixmap/mask. GTK+ retains references for the arguments, and 
+ * will release them when they are no longer needed.
  * Use gtk_drag_source_set_icon_pixbuf() instead.
  **/
 void 
@@ -2004,8 +2016,8 @@ gtk_drag_source_set_icon (GtkWidget     *widget,
  * @pixbuf: the #GdkPixbuf for the drag icon
  * 
  * Sets the icon that will be used for drags from a particular widget
- * from a #GdkPixbuf. GTK+ retains a reference count @pixbuf.
- * and will release it when it is no longer needed.
+ * from a #GdkPixbuf. GTK+ retains a reference for @pixbuf and will 
+ * release it when it is no longer needed.
  **/
 void 
 gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
@@ -2017,8 +2029,7 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-site-data");
-  g_return_if_fail (site != NULL);
-  
+  g_return_if_fail (site != NULL); 
   gdk_pixbuf_ref (pixbuf);
 
   gtk_drag_source_unset_icon (site);
@@ -2030,11 +2041,11 @@ gtk_drag_source_set_icon_pixbuf (GtkWidget   *widget,
 /**
  * gtk_drag_source_set_icon_stock:
  * @widget: a #GtkWidget
- * @stock: the ID of the stock icon to use..
+ * @stock: the ID of the stock icon to use
  * @size: size at which to render the stock icon
  *
- * Sets the icon that will be used for drags from a particular to
- * a stock icon. 
+ * Sets the icon that will be used for drags from a particular source
+ * to a stock icon. 
  **/
 void 
 gtk_drag_source_set_icon_stock (GtkWidget   *widget,
@@ -2194,7 +2205,7 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
 }
 
 /**
- * gtk_drag_set_icon_pixbuf:
+ * gtk_drag_set_icon_stock:
  * @context: the context for a drag. (This must be called 
  *            with a  context for the source side of a drag)
  * @stock: the ID of the stock icon to use for the drag.
@@ -2225,8 +2236,8 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
  * @hot_x: the X offset within @pixmap of the hotspot.
  * @hot_y: the Y offset within @pixmap of the hotspot.
  * 
- * Sets @pixmap as the icon for a given drag. GTK+ retains a
- * reference count for the arguments, and will release them when
+ * Sets @pixmap as the icon for a given drag. GTK+ retains
+ * references for the arguments, and will release them when
  * they are no longer needed. In general, gtk_drag_set_icon_pixbuf()
  * will be more convenient to use.
  **/
@@ -2299,10 +2310,10 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
  * @hot_x: The X offset within @widget of the hotspot.
  * @hot_y: The Y offset within @widget of the hotspot.
  * 
- * Changes the default drag icon. GTK+ retains a reference count for the
+ * Changes the default drag icon. GTK+ retains references for the
  * arguments, and will release them when they are no longer needed.
  * This function is obsolete. The default icon should now be changed
- * via the stock system by changing the stock pixbuf for GTK_STOCK_DND.
+ * via the stock system by changing the stock pixbuf for %GTK_STOCK_DND.
  **/
 void 
 gtk_drag_set_default_icon (GdkColormap   *colormap,
@@ -2445,7 +2456,7 @@ gtk_drag_source_check_selection (GtkDragSourceInfo *info,
   tmp_list = info->selections;
   while (tmp_list)
     {
-      if (GPOINTER_TO_UINT (tmp_list->data) == selection)
+      if (GDK_POINTER_TO_ATOM (tmp_list->data) == selection)
 	return;
       tmp_list = tmp_list->next;
     }
@@ -2550,8 +2561,9 @@ gtk_drag_source_release_selections (GtkDragSourceInfo *info,
   
   while (tmp_list)
     {
-      GdkAtom selection = GPOINTER_TO_UINT (tmp_list->data);
-      if (gdk_selection_owner_get_for_display (display, selection) == info->ipc_widget->window)
+      GdkAtom selection = GDK_POINTER_TO_ATOM (tmp_list->data);
+      if (gdk_selection_owner_get_for_display (display, selection) == 
+	  info->ipc_widget->window)
 	gtk_selection_owner_set_for_display (display, NULL, selection, time);
 
       tmp_list = tmp_list->next;

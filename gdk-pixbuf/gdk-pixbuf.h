@@ -75,18 +75,12 @@ typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
 #define GDK_PIXBUF_ERROR gdk_pixbuf_error_quark ()
 
 typedef enum {
-        /* stream header corrupt */
-	GDK_PIXBUF_ERROR_HEADER_CORRUPT,
-        /* stream pixel data corrupt */
-	GDK_PIXBUF_ERROR_PIXEL_CORRUPT,
-        /* stream header corrupt */
-	GDK_PIXBUF_ERROR_UNKNOWN_FORMAT,
         /* image data hosed */
         GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
         /* no mem to load image */
         GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
-        /* bad option value passed to save routine */
-        GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
+        /* bad option passed to save routine */
+        GDK_PIXBUF_ERROR_BAD_OPTION,
         /* unsupported image type (sort of an ENOSYS) */
         GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
         /* unsupported operation (load, save) for image type */
@@ -148,8 +142,8 @@ GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 				     gpointer destroy_fn_data);
 
 GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
-GdkPixbuf* gdk_pixbuf_new_from_stream	(gint          stream_length,
-					 const guint8 *stream,
+GdkPixbuf* gdk_pixbuf_new_from_inline	(gint          data_length,
+					 const guint8 *data,
 					 gboolean      copy_pixels,
 					 GError      **error);
        
@@ -286,6 +280,12 @@ gboolean                gdk_pixbuf_animation_iter_advance                    (Gd
                                                                               const GTimeVal         *current_time);
 
 
+
+
+G_CONST_RETURN gchar * gdk_pixbuf_get_option (GdkPixbuf   *pixbuf,
+                                              const gchar *key);
+
+
  
 #include <gdk-pixbuf/gdk-pixbuf-loader.h>
 #include <gdk-pixbuf/gdk-pixbuf-enum-types.h>

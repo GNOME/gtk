@@ -93,7 +93,7 @@ gdk_font_from_description (PangoFontDescription *desc)
   GdkFontPrivateFB *private;
   PangoFont *pango_font;
   PangoContext *context;
-  PangoFontMetrics metrics;
+  PangoFontMetrics *metrics;
   PangoLanguage *lang;
   
   g_return_val_if_fail (desc, NULL);
@@ -113,15 +113,14 @@ gdk_font_from_description (PangoFontDescription *desc)
   if (!pango_font)
     {
       desc = pango_font_description_copy (desc);
-      g_free (desc->family_name);
-      desc->family_name = g_strdup ("sans");
+      pango_font_description_set_family (desc, "sans");
       pango_font = pango_context_load_font (context, desc);
       if (!pango_font)
 	{
-	  desc->style = PANGO_STYLE_NORMAL;
-	  desc->weight = PANGO_WEIGHT_NORMAL;
-	  desc->variant = PANGO_VARIANT_NORMAL;
-	  desc->stretch = PANGO_STRETCH_NORMAL;
+	  pango_font_description_set_style (desc, PANGO_STYLE_NORMAL);
+	  pango_font_description_set_weight (desc, PANGO_WEIGHT_NORMAL);
+	  pango_font_description_set_variant (desc, PANGO_VARIANT_NORMAL);
+	  pango_font_description_set_stretch (desc, PANGO_STRETCH_NORMAL);
 	  pango_font = pango_context_load_font (context, desc);
 	}
       pango_font_description_free (desc);
@@ -135,20 +134,20 @@ gdk_font_from_description (PangoFontDescription *desc)
       return NULL;
     }
   
-  metrics.ascent = 0;
-  metrics.descent = 0;
   lang = pango_context_get_language (context);
-  pango_font_get_metrics (pango_font, lang, &metrics);
+  metrics = pango_font_get_metrics (pango_font, lang);
 
   private->pango_font = pango_font;
   
   g_free (lang);
   g_object_unref (G_OBJECT (context));
 
-  font->ascent = PANGO_PIXELS (metrics.ascent);
-  font->descent = PANGO_PIXELS (metrics.descent);
+  font->ascent = PANGO_PIXELS (metrics->ascent);
+  font->descent = PANGO_PIXELS (metrics->descent);
 
   g_assert ((font->ascent > 0) || (font->descent > 0));
+
+  pango_metrics_unref (metrics);
   
   return font;
 }
@@ -453,7 +452,7 @@ gdk_font_from_description (PangoFontDescription *font_desc)
 {
   g_return_val_if_fail (font_desc, NULL);
 
-  return gdk_fb_bogus_font (PANGO_PIXELS (font_desc->size));
+  return gdk_fb_bogus_font (PANGO_PIXELS (pango_font_description_get_size (font_desc)));
 }
 
 GdkFont*

@@ -107,9 +107,8 @@ gtk_editable_set_position() instead.
 <para>
 Retrieve the contents of the entry widget. The returned
 pointer points to internally allocated storage in the
-widget and must not be freed, modified or stored. For
-this reason, this function is deprecated. Use 
-gtk_editable_get_chars() instead.
+widget and must not be freed, modified or stored.
+See also gtk_editable_get_chars().
 </para>
 
 @entry: a #GtkEntry.
@@ -287,13 +286,6 @@ to fit.
 
 @entry: the object which received the signal.
 
-<!-- ##### SIGNAL GtkEntry::changed ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-
 <!-- ##### SIGNAL GtkEntry::copy-clipboard ##### -->
 <para>
 
@@ -317,15 +309,6 @@ to fit.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkEntry::delete-text ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-@arg2: 
-
 <!-- ##### SIGNAL GtkEntry::insert-at-cursor ##### -->
 <para>
 
@@ -333,16 +316,6 @@ to fit.
 
 @entry: the object which received the signal.
 @arg1: 
-
-<!-- ##### SIGNAL GtkEntry::insert-text ##### -->
-<para>
-
-</para>
-
-@entry: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 
 <!-- ##### SIGNAL GtkEntry::move-cursor ##### -->
 <para>
@@ -419,6 +392,11 @@ are visible or not. See gtk_entry_set_visibility().
 </para>
 
 <!-- ##### ARG GtkEntry:scroll-offset ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkEntry:text ##### -->
 <para>
 
 </para>

@@ -119,8 +119,9 @@ gtk_tree_sortable_get_sort_column_id (GtkTreeSortable  *sortable,
  * 
  * Sets the current sort column to be @sort_column_id.  The @sortable will
  * resort itself to reflect this change, after emitting a
- * GtkTreeSortable::sort_column_changed signal.  If @sort_column_id is -1, then
- * the default sort function will be used, if it is set.
+ * GtkTreeSortable::sort_column_changed signal.  If @sort_column_id is
+ * %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, then the default sort function
+ * will be used, if it is set.
  **/
 void
 gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,
@@ -137,7 +138,6 @@ gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,
   g_return_if_fail (iface->set_sort_column_id != NULL);
   
   (* iface->set_sort_column_id) (sortable, sort_column_id, order);
-
 }
 
 /**
@@ -167,7 +167,8 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
 
   g_return_if_fail (iface != NULL);
   g_return_if_fail (iface->set_sort_func != NULL);
-  
+  g_return_if_fail (sort_column_id > 0);
+
   (* iface->set_sort_func) (sortable, sort_column_id, sort_func, user_data, destroy);
 }
 
@@ -179,8 +180,10 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
  * @destroy: Destroy notifier of @user_data, or %NULL
  * 
  * Sets the default comparison function used when sorting to be @sort_func.  If
- * the current sort column id of @sortable is the same as @sort_column_id, then
- * the model will sort.
+ * the current sort column id of @sortable is
+ * %GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID, then the model will sort.  If
+ * @sort_func is %NULL, then the default sort_func, and there will be no default
+ * sort_func.  In this case, the model is unsorted.
  **/
 void
 gtk_tree_sortable_set_default_sort_func (GtkTreeSortable        *sortable,

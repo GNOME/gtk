@@ -50,7 +50,7 @@ struct _GtkEditableClass
 {
   GTypeInterface		   base_iface;
   
-  /* Signals for notification/filtering of changes */
+  /* signals */
   void (* insert_text)              (GtkEditable    *editable,
 				     const gchar    *text,
 				     gint            length,
@@ -58,6 +58,17 @@ struct _GtkEditableClass
   void (* delete_text)              (GtkEditable    *editable,
 				     gint            start_pos,
 				     gint            end_pos);
+  void (* changed)                  (GtkEditable    *editable);
+
+  /* vtable */
+  void (* do_insert_text)           (GtkEditable    *editable,
+				     const gchar    *text,
+				     gint            length,
+				     gint           *position);
+  void (* do_delete_text)           (GtkEditable    *editable,
+				     gint            start_pos,
+				     gint            end_pos);
+
   gchar* (* get_chars)              (GtkEditable    *editable,
 				     gint            start_pos,
 				     gint            end_pos);

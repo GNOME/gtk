@@ -35,19 +35,20 @@ enum {
 };
 
 
-static void gtk_radio_button_class_init     (GtkRadioButtonClass  *klass);
-static void gtk_radio_button_init           (GtkRadioButton       *radio_button);
-static void gtk_radio_button_destroy        (GtkObject            *object);
-static void gtk_radio_button_clicked        (GtkButton            *button);
-static void gtk_radio_button_draw_indicator (GtkCheckButton       *check_button,
-					     GdkRectangle         *area);
-static void gtk_radio_button_set_arg	    (GtkObject		  *object,
-					     GtkArg        	  *arg,
-					     guint         	   arg_id);
-static void gtk_radio_button_get_arg	    (GtkObject		  *object,
-					     GtkArg        	  *arg,
-					     guint         	   arg_id);
-
+static void     gtk_radio_button_class_init     (GtkRadioButtonClass *klass);
+static void     gtk_radio_button_init           (GtkRadioButton      *radio_button);
+static void     gtk_radio_button_destroy        (GtkObject           *object);
+static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
+						 GtkDirectionType     direction);
+static void     gtk_radio_button_clicked        (GtkButton           *button);
+static void     gtk_radio_button_draw_indicator (GtkCheckButton      *check_button,
+						 GdkRectangle        *area);
+static void     gtk_radio_button_set_arg        (GtkObject           *object,
+						 GtkArg              *arg,
+						 guint                arg_id);
+static void     gtk_radio_button_get_arg        (GtkObject           *object,
+						 GtkArg              *arg,
+						 guint                arg_id);
 
 static GtkCheckButtonClass *parent_class = NULL;
 
@@ -83,8 +84,10 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   GtkObjectClass *object_class;
   GtkButtonClass *button_class;
   GtkCheckButtonClass *check_button_class;
+  GtkWidgetClass *widget_class;
 
   object_class = (GtkObjectClass*) class;
+  widget_class = (GtkWidgetClass*) class;
   button_class = (GtkButtonClass*) class;
   check_button_class = (GtkCheckButtonClass*) class;
 
@@ -95,6 +98,8 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
   object_class->set_arg = gtk_radio_button_set_arg;
   object_class->get_arg = gtk_radio_button_get_arg;
   object_class->destroy = gtk_radio_button_destroy;
+
+  widget_class->focus = gtk_radio_button_focus;
 
   button_class->clicked = gtk_radio_button_clicked;
 
@@ -328,6 +333,156 @@ gtk_radio_button_destroy (GtkObject *object)
   
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+}
+
+static void
+get_coordinates (GtkWidget    *widget,
+		 GtkWidget    *reference,
+		 gint         *x,
+		 gint         *y)
+{
+  *x = widget->allocation.x + widget->allocation.width / 2;
+  *y = widget->allocation.y + widget->allocation.height / 2;
+  
+  gtk_widget_translate_coordinates (widget, reference, *x, *y, x, y);
+}
+
+static gint
+left_right_compare (gconstpointer a,
+		    gconstpointer b,
+		    gpointer      data)
+{
+  gint x1, y1, x2, y2;
+
+  get_coordinates ((GtkWidget *)a, data, &x1, &y1);
+  get_coordinates ((GtkWidget *)b, data, &x2, &y2);
+
+  if (y1 == y2)
+    return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
+  else
+    return (y1 < y2) ? -1 : 1;
+}
+
+static gint
+up_down_compare (gconstpointer a,
+		 gconstpointer b,
+		 gpointer      data)
+{
+  gint x1, y1, x2, y2;
+  
+  get_coordinates ((GtkWidget *)a, data, &x1, &y1);
+  get_coordinates ((GtkWidget *)b, data, &x2, &y2);
+  
+  if (x1 == x2)
+    return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
+  else
+    return (x1 < x2) ? -1 : 1;
+}
+
+static gboolean
+gtk_radio_button_focus (GtkWidget         *widget,
+			GtkDirectionType   direction)
+{
+  GtkRadioButton *radio_button = GTK_RADIO_BUTTON (widget);
+  GSList *tmp_slist;
+  
+  if (gtk_widget_is_focus (widget))
+    {
+      GSList *focus_list, *tmp_list;
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      GtkWidget *new_focus = NULL;
+
+      focus_list = g_slist_copy (radio_button->group);
+      
+      switch (direction)
+	{
+	case GTK_DIR_TAB_FORWARD:
+	case GTK_DIR_TAB_BACKWARD:
+	  return FALSE;
+	case GTK_DIR_LEFT:
+	case GTK_DIR_RIGHT:
+	  focus_list = g_slist_sort_with_data (focus_list, left_right_compare, toplevel);
+	  break;
+	case GTK_DIR_UP:
+	case GTK_DIR_DOWN:
+	  focus_list = g_slist_sort_with_data (focus_list, up_down_compare, toplevel);
+	  break;
+	}
+
+      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_UP)
+	focus_list = g_slist_reverse (focus_list);
+
+      tmp_list = g_slist_find (focus_list, widget);
+
+      if (tmp_list)
+	{
+	  tmp_list = tmp_list->next;
+	  
+	  while (tmp_list)
+	    {
+	      GtkWidget *child = tmp_list->data;
+	      
+	      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_IS_SENSITIVE (child))
+		{
+		  new_focus = child;
+		  break;
+		}
+
+	      tmp_list = tmp_list->next;
+	    }
+	}
+
+      if (!new_focus)
+	{
+	  tmp_list = focus_list;
+
+	  while (tmp_list)
+	    {
+	      GtkWidget *child = tmp_list->data;
+	      
+	      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_IS_SENSITIVE (child))
+		{
+		  new_focus = child;
+		  break;
+		}
+	      
+	      tmp_list = tmp_list->next;
+	    }
+	}
+      
+      g_slist_free (focus_list);
+
+      if (new_focus)
+	{
+	  gtk_widget_grab_focus (new_focus);
+	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (new_focus), TRUE);
+	}
+
+      return TRUE;
+    }
+  else
+    {
+      GtkRadioButton *selected_button = NULL;
+      
+      /* We accept the focus if, we don't have the focus and
+       *  - we are the currently active button in the group
+       *  - there is no currently active radio button.
+       */
+      
+      tmp_slist = radio_button->group;
+      while (tmp_slist)
+	{
+	  if (GTK_TOGGLE_BUTTON (tmp_slist->data)->active)
+	    selected_button = tmp_slist->data;
+	  tmp_slist = tmp_slist->next;
+	}
+      
+      if (selected_button && selected_button != radio_button)
+	return FALSE;
+
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
 }
 
 static void

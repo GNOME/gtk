@@ -12,7 +12,7 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
         GtkDrawingArea *da = (GtkDrawingArea*)data;
         GError *err = NULL;
         
-        pixbuf = (GdkPixbuf *) gtk_object_get_data (GTK_OBJECT (da), "pixbuf");
+        pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (da), "pixbuf");
 
         if (evt->keyval == 'q')
                 gtk_main_quit ();
@@ -36,7 +36,10 @@ keypress_check (GtkWidget *widget, GdkEventKey *evt, gpointer data)
                         return;
                 }
 
-                if (!gdk_pixbuf_save (pixbuf, "foo.png", "png", &err, NULL)) {
+                if (!gdk_pixbuf_save (pixbuf, "foo.png", "png", 
+                                      &err,
+                                      "tEXt::Software", "testpixbuf-save",
+                                      NULL)) {
                         fprintf (stderr, "%s", err->message);
                         g_error_free (err);
                 }
@@ -56,8 +59,8 @@ expose_cb (GtkWidget *drawing_area, GdkEventExpose *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
          
-        pixbuf = (GdkPixbuf *) gtk_object_get_data (GTK_OBJECT (drawing_area),
-                                                    "pixbuf");
+        pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (drawing_area),
+						  "pixbuf");
         if (gdk_pixbuf_get_has_alpha (pixbuf)) {
                 gdk_draw_rgb_32_image (drawing_area->window,
                                        drawing_area->style->black_gc,
@@ -89,8 +92,8 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
 {
         GdkPixbuf *pixbuf;
                            
-        pixbuf = (GdkPixbuf *) gtk_object_get_data (GTK_OBJECT (drawing_area),   
-                                                    "pixbuf");
+        pixbuf = (GdkPixbuf *) g_object_get_data (G_OBJECT (drawing_area),   
+						  "pixbuf");
     
         g_print ("X:%d Y:%d\n", evt->width, evt->height);
         if (evt->width != gdk_pixbuf_get_width (pixbuf) || evt->height != gdk_pixbuf_get_height (pixbuf)) {
@@ -100,7 +103,7 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
                 root = gdk_screen_get_root_window (gtk_widget_get_screen (drawing_area));
                 new_pixbuf = gdk_pixbuf_get_from_drawable (NULL, root, NULL,
                                                            0, 0, 0, 0, evt->width, evt->height);
-                gtk_object_set_data (GTK_OBJECT (drawing_area), "pixbuf", new_pixbuf);
+                g_object_set_data (G_OBJECT (drawing_area), "pixbuf", new_pixbuf);
                 gdk_pixbuf_unref (pixbuf);
         }
 
@@ -126,10 +129,10 @@ main (int argc, char **argv)
                                                0, 0, 0, 0, 150, 160);
    
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-        gtk_signal_connect (GTK_OBJECT (window), "delete_event",
-                            GTK_SIGNAL_FUNC (close_app), NULL);
-        gtk_signal_connect (GTK_OBJECT (window), "destroy",   
-                            GTK_SIGNAL_FUNC (close_app), NULL);
+        g_signal_connect (window, "delete_event",
+			  G_CALLBACK (close_app), NULL);
+        g_signal_connect (window, "destroy",   
+			  G_CALLBACK (close_app), NULL);
    
         vbox = gtk_vbox_new (FALSE, 0);
         gtk_container_add (GTK_CONTAINER (window), vbox);  
@@ -138,14 +141,14 @@ main (int argc, char **argv)
         gtk_widget_set_size_request (GTK_WIDGET (drawing_area),
                                      gdk_pixbuf_get_width (pixbuf),
                                      gdk_pixbuf_get_height (pixbuf));
-        gtk_signal_connect (GTK_OBJECT (drawing_area), "expose_event",
-                            GTK_SIGNAL_FUNC (expose_cb), NULL);
+        g_signal_connect (drawing_area, "expose_event",
+			  G_CALLBACK (expose_cb), NULL);
 
-        gtk_signal_connect (GTK_OBJECT (drawing_area), "configure_event",
-                            GTK_SIGNAL_FUNC (configure_cb), NULL);
-        gtk_signal_connect (GTK_OBJECT (window), "key_press_event", 
-                            GTK_SIGNAL_FUNC (keypress_check), drawing_area);    
-        gtk_object_set_data (GTK_OBJECT (drawing_area), "pixbuf", pixbuf);
+        g_signal_connect (drawing_area, "configure_event",
+			  G_CALLBACK (configure_cb), NULL);
+        g_signal_connect (window, "key_press_event", 
+			  G_CALLBACK (keypress_check), drawing_area);    
+        g_object_set_data (G_OBJECT (drawing_area), "pixbuf", pixbuf);
         gtk_box_pack_start (GTK_BOX (vbox), drawing_area, TRUE, TRUE, 0);
    
         gtk_widget_show_all (window);

@@ -55,14 +55,6 @@
 #include <string.h>
 #include "gdk.h"
 
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"		/* For gdk_window_lookup() */
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"	/* For gdk_window_lookup() */
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"	/* For gdk_window_lookup() */
-#endif
-
 #include "gtkmain.h"
 #include "gtkselection.h"
 #include "gtksignal.h"
@@ -810,7 +802,7 @@ init_atoms (void)
  * The string is converted to the form determined by
  * @selection_data->target.
  * 
- * Return value: %TRUE if the selection was succesfully set,
+ * Return value: %TRUE if the selection was successfully set,
  *   otherwise %FALSE.
  **/
 gboolean
@@ -1009,7 +1001,6 @@ gtk_selection_request (GtkWidget *widget,
   
   /* Create GdkWindow structure for the requestor */
   
-#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_FB) 
   info->requestor =
     gdk_window_lookup_for_display (gtk_widget_get_display (widget),
 				   event->requestor);
@@ -1017,9 +1008,6 @@ gtk_selection_request (GtkWidget *widget,
     info->requestor = 
       gdk_window_foreign_new_for_display (gtk_widget_get_display (widget),
 					  event->requestor);
-#else
-  info->requestor = NULL;
-#endif
   
   /* Determine conversions we need to perform */
   

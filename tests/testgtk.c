@@ -10921,7 +10921,6 @@ main (int argc, char *argv[])
   srand (time (NULL));
 
   test_init ();
-  gtk_set_locale ();
 
   /* Check to see if we are being run from the correct
    * directory.

@@ -2423,7 +2423,7 @@ void
 gtk_menu_set_screen (GtkMenu *menu, 
 		     GdkScreen *screen)
 {
-  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+  g_return_if_fail (GTK_IS_MENU (menu));
   gtk_window_set_screen (GTK_WINDOW (menu->toplevel), 
 			 screen);
   g_object_set_data (G_OBJECT (menu), "gtk-menu-explicit-screen", screen);

@@ -110,6 +110,16 @@ widget.
 @GTK_DIR_LEFT: 
 @GTK_DIR_RIGHT: 
 
+<!-- ##### ENUM GtkExpanderStyle ##### -->
+<para>
+
+</para>
+
+@GTK_EXPANDER_COLLAPSED: 
+@GTK_EXPANDER_SEMI_COLLAPSED: 
+@GTK_EXPANDER_SEMI_EXPANDED: 
+@GTK_EXPANDER_EXPANDED: 
+
 <!-- ##### ENUM GtkJustification ##### -->
 <para>
 Used for justifying the text inside a #GtkLabel widget. (See also
@@ -185,7 +195,6 @@ Represents the packing location #GtkBox children. (See: #GtkVBox,
 @GTK_PATH_PRIO_THEME: 
 @GTK_PATH_PRIO_RC: 
 @GTK_PATH_PRIO_HIGHEST: 
-@GTK_PATH_PRIO_MASK: 
 
 <!-- ##### ENUM GtkPathType ##### -->
 <para>

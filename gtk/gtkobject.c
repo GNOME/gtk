@@ -354,12 +354,7 @@ gtk_object_destroy (GtkObject *object)
   g_return_if_fail (GTK_IS_OBJECT (object));
   
   if (!GTK_OBJECT_DESTROYED (object))
-    {
-      /* need to hold a reference count around all class method
-       * invocations.
-       */
       g_object_run_dispose (G_OBJECT (object));
-    }
 }
 
 static void

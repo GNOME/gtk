@@ -1,0 +1,41 @@
+<!-- ##### SECTION Title ##### -->
+GtkIMContextSimple
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### STRUCT GtkIMContextSimple ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_im_context_simple_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_im_context_simple_add_table ##### -->
+<para>
+
+</para>
+
+@context_simple: 
+@data: 
+@max_seq_len: 
+@n_seqs: 
+
+

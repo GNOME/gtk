@@ -4552,11 +4552,3 @@ msgstr ""
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr ""
-
-# gtk/gtkcellrenderer.c:105
-#~ msgid "can_activate"
-#~ msgstr "can_activate"
-
-# gtk/gtkcellrenderer.c:106
-#~ msgid "Cell can get activate events."
-#~ msgstr "Hücre aktif olayları içerir"

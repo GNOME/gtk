@@ -63,6 +63,26 @@ GtkContainer
 @widget: 
 
 
+<!-- ##### FUNCTION gtk_container_add_with_properties ##### -->
+<para>
+
+</para>
+
+@container: 
+@widget: 
+@first_prop_name: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION gtk_container_get_resize_mode ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_container_set_resize_mode ##### -->
 <para>
 
@@ -112,6 +132,15 @@ GtkContainer
 @container: 
 
 
+<!-- ##### FUNCTION gtk_container_get_children ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_container_set_reallocate_redraws ##### -->
 <para>
 
@@ -130,6 +159,15 @@ GtkContainer
 @child: 
 
 
+<!-- ##### FUNCTION gtk_container_get_focus_vadjustment ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_container_set_focus_vadjustment ##### -->
 <para>
 
@@ -137,6 +175,15 @@ GtkContainer
 
 @container: 
 @adjustment: 
+
+
+<!-- ##### FUNCTION gtk_container_get_focus_hadjustment ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_focus_hadjustment ##### -->
@@ -165,6 +212,17 @@ GtkContainer
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_container_child_get ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@first_prop_name: 
+@Varargs: 
+
+
 <!-- ##### FUNCTION gtk_container_child_set ##### -->
 <para>
 
@@ -178,6 +236,50 @@ GtkContainer
 @first_arg_name: 
 
 
+<!-- ##### FUNCTION gtk_container_child_get_property ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@property_name: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_container_child_set_property ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@property_name: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_container_child_get_valist ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@first_property_name: 
+@var_args: 
+
+
+<!-- ##### FUNCTION gtk_container_child_set_valist ##### -->
+<para>
+
+</para>
+
+@container: 
+@child: 
+@first_property_name: 
+@var_args: 
+
+
 <!-- ##### FUNCTION gtk_container_forall ##### -->
 <para>
 
@@ -186,6 +288,15 @@ GtkContainer
 @container: 
 @callback: 
 @callback_data: 
+
+
+<!-- ##### FUNCTION gtk_container_get_border_width ##### -->
+<para>
+
+</para>
+
+@container: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_container_set_border_width ##### -->
@@ -207,6 +318,16 @@ GtkContainer
 @event: 
 
 
+<!-- ##### FUNCTION gtk_container_get_focus_chain ##### -->
+<para>
+
+</para>
+
+@container: 
+@focusable_widgets: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_container_set_focus_chain ##### -->
 <para>
 
@@ -222,6 +343,36 @@ GtkContainer
 </para>
 
 @container: 
+
+
+<!-- ##### FUNCTION gtk_container_class_find_child_property ##### -->
+<para>
+
+</para>
+
+@cclass: 
+@property_name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_container_class_install_child_property ##### -->
+<para>
+
+</para>
+
+@cclass: 
+@property_id: 
+@pspec: 
+
+
+<!-- ##### FUNCTION gtk_container_class_list_child_properties ##### -->
+<para>
+
+</para>
+
+@cclass: 
+@n_properties: 
+@Returns: 
 
 
 <!-- ##### SIGNAL GtkContainer::add ##### -->

@@ -33,6 +33,7 @@
 
 gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */
 gchar            *_gdk_display_name = NULL;
+GdkAtom           _gdk_selection_property;
 
 GdkWindowObject *_gdk_xgrab_window = NULL;  /* Window that currently holds the
                                             *	x pointer grab

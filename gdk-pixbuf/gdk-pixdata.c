@@ -22,6 +22,7 @@
 #include "gdk-pixbuf-i18n.h"
 #include <string.h>
 
+#define APPEND g_string_append_printf
 
 /* --- functions --- */
 static guint
@@ -79,16 +80,16 @@ pixdata_get_length (const GdkPixdata *pixdata)
 
 /**
  * gdk_pixdata_serialize:
- * @pixdata: A valid GdkPixdata structure to serialize
- * @stream_length_p: Location to store the resulting stream length in
+ * @pixdata: a valid #GdkPixdata structure to serialize.
+ * @stream_length_p: location to store the resulting stream length in.
  *
- * Serialize a #GdkPixdata structure into a byte stream.
- * The byte stream consists of a straight forward write out of the
- * #GdkPixdata fields in network byte order, plus the pixel_data
+ * Serializes a #GdkPixdata structure into a byte stream.
+ * The byte stream consists of a straightforward writeout of the
+ * #GdkPixdata fields in network byte order, plus the @pixel_data
  * bytes the structure points to.
  *
  * Return value: A newly-allocated string containing the serialized
- * GdkPixdata structure
+ * #GdkPixdata structure.
  **/
 guint8* /* free result */
 gdk_pixdata_serialize (const GdkPixdata *pixdata,
@@ -142,38 +143,37 @@ gdk_pixdata_serialize (const GdkPixdata *pixdata,
 
 #define	return_header_corrupt(error)	{ \
   g_set_error (error, GDK_PIXBUF_ERROR, \
-	       GDK_PIXBUF_ERROR_HEADER_CORRUPT, _("Image header corrupt")); \
+	       GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image header corrupt")); \
   return FALSE; \
 }
 #define	return_invalid_format(error)	{ \
   g_set_error (error, GDK_PIXBUF_ERROR, \
-	       GDK_PIXBUF_ERROR_UNKNOWN_FORMAT, _("Image format unknown")); \
+	       GDK_PIXBUF_ERROR_UNKNOWN_TYPE, _("Image format unknown")); \
   return FALSE; \
 }
 #define	return_pixel_corrupt(error)	{ \
   g_set_error (error, GDK_PIXBUF_ERROR, \
-	       GDK_PIXBUF_ERROR_PIXEL_CORRUPT, _("Image pixel data corrupt")); \
+	       GDK_PIXBUF_ERROR_CORRUPT_IMAGE, _("Image pixel data corrupt")); \
   return FALSE; \
 }
 
 /**
  * gdk_pixdata_deserialize:
- * @pixdata: A GdkPixdata structure to be filled in
- * @stream_length: Length of the stream used for deserialization
- * @stream: Stream of bytes containing a serialized pixdata structure
- * @error: GError location to indicate failures (maybe NULL to ignore errors)
+ * @pixdata: a #GdkPixdata structure to be filled in.
+ * @stream_length: length of the stream used for deserialization.
+ * @stream: stream of bytes containing a serialized #GdkPixdata structure.
+ * @error: #GError location to indicate failures (maybe %NULL to ignore errors).
  *
- * Deserialize (reconstruct) a #GdkPixdata structure from a byte stream.
- * The byte stream consists of a straight forward write out of the
- * #GdkPixdata fields in network byte order, plus the pixel_data
+ * Deserializes (reconstruct) a #GdkPixdata structure from a byte stream.
+ * The byte stream consists of a straightforward writeout of the
+ * #GdkPixdata fields in network byte order, plus the @pixel_data
  * bytes the structure points to.
- * The pixdata contents are reconstructed byte by byte and are checked
- * for validity, due to the checks, this function may prematurely abort
- * with errors, such as #GDK_PIXBUF_ERROR_HEADER_CORRUPT,
- * #GDK_PIXBUF_ERROR_PIXEL_CORRUPT or #GDK_PIXBUF_ERROR_UNKNOWN_FORMAT.
+ * The @pixdata contents are reconstructed byte by byte and are checked
+ * for validity. This function may fail with %GDK_PIXBUF_CORRUPT_IMAGE
+ * or %GDK_PIXBUF_ERROR_UNKNOWN_TYPE.
  *
- * Return value: Upon successfull deserialization #TRUE is returned,
- * #FALSE otherwise
+ * Return value: Upon successful deserialization %TRUE is returned,
+ * %FALSE otherwise.
  **/
 gboolean
 gdk_pixdata_deserialize (GdkPixdata   *pixdata,
@@ -290,6 +290,19 @@ rl_encode_rgbx (guint8 *bp,	/* dest buffer */
   return bp;
 }
 
+/**
+ * gdk_pixdata_from_pixbuf:
+ * @pixdata: a #GdkPixdata to fill.
+ * @pixbuf: the data to fill @pixdata with.
+ * @use_rle: whether to use run-length encoding for the pixel data.
+ *
+ * Converts a #GdkPixbuf to a #GdkPixdata. If @use_rle is %TRUE, the
+ * pixel data is run-length encoded into newly-allocated memory and a 
+ * pointer to that memory is returned. 
+ *
+ * Returns: If @ure_rle is %TRUE, a pointer to the newly-allocated memory 
+ *   for the run-length encoded pixel data, otherwise %NULL.
+ **/
 gpointer
 gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
 			 const GdkPixbuf *pixbuf,
@@ -345,6 +358,19 @@ gdk_pixdata_from_pixbuf (GdkPixdata      *pixdata,
   return free_me;
 }
 
+/**
+ * gdk_pixbuf_from_pixdata:
+ * @pixdata: a #GdkPixdata to convert into a #GdkPixbuf.
+ * @copy_pixels: whether to copy raw pixel data; run-length encoded
+ *     pixel data is always copied.
+ * @error: location to store possible errors.
+ * 
+ * Converts a #GdkPixdata to a #GdkPixbuf. If @copy_pixels is %TRUE or
+ * if the pixel data is run-length-encoded, the pixel data is copied into
+ * newly-allocated memory; otherwise it is reused.
+ *
+ * Returns: a new #GdkPixbuf.
+ **/
 GdkPixbuf*
 gdk_pixbuf_from_pixdata (const GdkPixdata *pixdata,
 			 gboolean          copy_pixels,
@@ -428,7 +454,7 @@ gdk_pixbuf_from_pixdata (const GdkPixdata *pixdata,
 	{
 	  g_free (data);
 	  g_set_error (error, GDK_PIXBUF_ERROR,
-		       GDK_PIXBUF_ERROR_PIXEL_CORRUPT,
+		       GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
 		       _("Image pixel data corrupt"));
 	  return NULL;
 	}
@@ -482,7 +508,7 @@ save_uchar (CSourceData *cdata,
     }
   if (d < 33 || d > 126)
     {
-      g_string_printfa (gstring, "\\%o", d);
+      APPEND (gstring, "\\%o", d);
       cdata->pos += 1 + 1 + (d > 7) + (d > 63);
       cdata->pad = d < 64;
       return;
@@ -519,30 +545,46 @@ save_rle_decoder (GString     *gstring,
 		  const gchar *s_uint_8,
 		  guint        n_ch)
 {
-  g_string_printfa (gstring, "#define %s_RUN_LENGTH_DECODE(image_buf, rle_data, size, bpp) do \\\n",
-		    macro_name);
-  g_string_printfa (gstring, "{ %s __bpp; %s *__ip; const %s *__il, *__rd; \\\n", s_uint, s_uint_8, s_uint_8);
-  g_string_printfa (gstring, "  __bpp = (bpp); __ip = (image_buf); __il = __ip + (size) * __bpp; \\\n");
+  APPEND (gstring, "#define %s_RUN_LENGTH_DECODE(image_buf, rle_data, size, bpp) do \\\n",
+	  macro_name);
+  APPEND (gstring, "{ %s __bpp; %s *__ip; const %s *__il, *__rd; \\\n", s_uint, s_uint_8, s_uint_8);
+  APPEND (gstring, "  __bpp = (bpp); __ip = (image_buf); __il = __ip + (size) * __bpp; \\\n");
   
-  g_string_printfa (gstring, "  __rd = (rle_data); if (__bpp > 3) { /* RGBA */ \\\n");
+  APPEND (gstring, "  __rd = (rle_data); if (__bpp > 3) { /* RGBA */ \\\n");
   
-  g_string_printfa (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
-  g_string_printfa (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
-  g_string_printfa (gstring, "        do { memcpy (__ip, __rd, 4); __ip += 4; } while (--__l); __rd += 4; \\\n");
-  g_string_printfa (gstring, "      } else { __l *= 4; memcpy (__ip, __rd, __l); \\\n");
-  g_string_printfa (gstring, "               __ip += __l; __rd += __l; } } \\\n");
+  APPEND (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
+  APPEND (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
+  APPEND (gstring, "        do { memcpy (__ip, __rd, 4); __ip += 4; } while (--__l); __rd += 4; \\\n");
+  APPEND (gstring, "      } else { __l *= 4; memcpy (__ip, __rd, __l); \\\n");
+  APPEND (gstring, "               __ip += __l; __rd += __l; } } \\\n");
   
-  g_string_printfa (gstring, "  } else { /* RGB */ \\\n");
+  APPEND (gstring, "  } else { /* RGB */ \\\n");
   
-  g_string_printfa (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
-  g_string_printfa (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
-  g_string_printfa (gstring, "        do { memcpy (__ip, __rd, 3); __ip += 3; } while (--__l); __rd += 3; \\\n");
-  g_string_printfa (gstring, "      } else { __l *= 3; memcpy (__ip, __rd, __l); \\\n");
-  g_string_printfa (gstring, "               __ip += __l; __rd += __l; } } \\\n");
+  APPEND (gstring, "    while (__ip < __il) { %s __l = *(__rd++); \\\n", s_uint);
+  APPEND (gstring, "      if (__l & 128) { __l = __l - 128; \\\n");
+  APPEND (gstring, "        do { memcpy (__ip, __rd, 3); __ip += 3; } while (--__l); __rd += 3; \\\n");
+  APPEND (gstring, "      } else { __l *= 3; memcpy (__ip, __rd, __l); \\\n");
+  APPEND (gstring, "               __ip += __l; __rd += __l; } } \\\n");
   
-  g_string_printfa (gstring, "  } } while (0)\n");
+  APPEND (gstring, "  } } while (0)\n");
 }
 
+/**
+ * gdk_pixdata_to_csource:
+ * @pixdata: a #GdkPixdata to convert to C source.
+ * @name: used for naming generated data structures or macros.
+ * @dump_type: a #GdkPixdataDumpType determining the kind of C
+ *   source to be generated.
+ *
+ * Generates C source code suitable for compiling images directly 
+ * into programs. 
+ *
+ * Gtk+ ships with a program called gdk-pixbuf-csource which offers 
+ * a cmdline interface to this functions.
+ *
+ * Returns: a newly-allocated string containing the C source form
+ *   of @pixdata.
+ **/
 GString*
 gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 			const gchar	  *name,
@@ -634,11 +676,11 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 
   /* initial comment
    */
-  g_string_printfa (gstring,
-		    "/* GdkPixbuf %s C-Source image dump %s*/\n\n",
-		    bpp > 3 ? "RGBA" : "RGB",
-		    rle_encoded ? "1-byte-run-length-encoded " : "");
-
+  APPEND (gstring,
+	  "/* GdkPixbuf %s C-Source image dump %s*/\n\n",
+	  bpp > 3 ? "RGBA" : "RGB",
+	  rle_encoded ? "1-byte-run-length-encoded " : "");
+  
   /* dump RLE decoder for structures
    */
   if (cdata.dump_rle_decoder && cdata.dump_struct)
@@ -652,33 +694,33 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
    */
   if (cdata.dump_macros)
     {
-      g_string_printfa (gstring, "#define %s_ROWSTRIDE (%u)\n",
-			macro_name, rowstride);
-      g_string_printfa (gstring, "#define %s_WIDTH (%u)\n",
-			macro_name, width);
-      g_string_printfa (gstring, "#define %s_HEIGHT (%u)\n",
-			macro_name, height);
-      g_string_printfa (gstring, "#define %s_BYTES_PER_PIXEL (%u) /* 3:RGB, 4:RGBA */\n",
-			macro_name, bpp);
+      APPEND (gstring, "#define %s_ROWSTRIDE (%u)\n",
+	      macro_name, rowstride);
+      APPEND (gstring, "#define %s_WIDTH (%u)\n",
+	      macro_name, width);
+      APPEND (gstring, "#define %s_HEIGHT (%u)\n",
+	      macro_name, height);
+      APPEND (gstring, "#define %s_BYTES_PER_PIXEL (%u) /* 3:RGB, 4:RGBA */\n",
+	      macro_name, bpp);
     }
   if (cdata.dump_struct)
     {
-      g_string_printfa (gstring, "%s%sGdkPixdata %s = {\n",
-			cdata.static_prefix, cdata.const_prefix, name);
-      g_string_printfa (gstring, "  0x%x, /* Pixbuf magic: 'GdkP' */\n",
-			GDK_PIXBUF_MAGIC_NUMBER);
-      g_string_printfa (gstring, "  %u + %u, /* header length + pixel_data length */\n",
-			GDK_PIXDATA_HEADER_LENGTH,
-			rle_encoded ? img_buffer_end - img_buffer : rowstride * height);
-      g_string_printfa (gstring, "  0x%x, /* pixdata_type */\n",
-			pixdata->pixdata_type);
-      g_string_printfa (gstring, "  %u, /* rowstride */\n",
-			rowstride);
-      g_string_printfa (gstring, "  %u, /* width */\n",
-			width);
-      g_string_printfa (gstring, "  %u, /* height */\n",
-			height);
-      g_string_printfa (gstring, "  /* pixel_data: */\n");
+      APPEND (gstring, "%s%sGdkPixdata %s = {\n",
+	      cdata.static_prefix, cdata.const_prefix, name);
+      APPEND (gstring, "  0x%x, /* Pixbuf magic: 'GdkP' */\n",
+	      GDK_PIXBUF_MAGIC_NUMBER);
+      APPEND (gstring, "  %u + %u, /* header length + pixel_data length */\n",
+	      GDK_PIXDATA_HEADER_LENGTH,
+	      rle_encoded ? img_buffer_end - img_buffer : rowstride * height);
+      APPEND (gstring, "  0x%x, /* pixdata_type */\n",
+	      pixdata->pixdata_type);
+      APPEND (gstring, "  %u, /* rowstride */\n",
+	      rowstride);
+      APPEND (gstring, "  %u, /* width */\n",
+	      width);
+      APPEND (gstring, "  %u, /* height */\n",
+	      height);
+      APPEND (gstring, "  /* pixel_data: */\n");
     }
   if (cdata.dump_stream)
     {
@@ -687,40 +729,40 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
       stream = gdk_pixdata_serialize (pixdata, &stream_length);
       img_buffer_end = stream + stream_length;
 
-      g_string_printfa (gstring, "%s%s%s %s[] = \n",
-			cdata.static_prefix, cdata.const_prefix,
-			cdata.dump_gtypes ? "guint8" : "unsigned char",
-			name);
-      g_string_printfa (gstring, "( \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
-			GDK_PIXBUF_MAGIC_NUMBER);
+      APPEND (gstring, "%s%s%s %s[] = \n",
+	      cdata.static_prefix, cdata.const_prefix,
+	      cdata.dump_gtypes ? "guint8" : "unsigned char",
+	      name);
+      APPEND (gstring, "( \"\"\n  /* Pixbuf magic (0x%x) */\n  \"",
+	      GDK_PIXBUF_MAGIC_NUMBER);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* length: header (%u) + pixel_data (%u) */\n  \"",
-			GDK_PIXDATA_HEADER_LENGTH,
-			rle_encoded ? pix_length : rowstride * height);
+      APPEND (gstring, "\"\n  /* length: header (%u) + pixel_data (%u) */\n  \"",
+	      GDK_PIXDATA_HEADER_LENGTH,
+	      rle_encoded ? pix_length : rowstride * height);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* pixdata_type (0x%x) */\n  \"",
-			pixdata->pixdata_type);
+      APPEND (gstring, "\"\n  /* pixdata_type (0x%x) */\n  \"",
+	      pixdata->pixdata_type);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* rowstride (%u) */\n  \"",
-			rowstride);
+      APPEND (gstring, "\"\n  /* rowstride (%u) */\n  \"",
+	      rowstride);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* width (%u) */\n  \"", width);
+      APPEND (gstring, "\"\n  /* width (%u) */\n  \"", width);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* height (%u) */\n  \"", height);
+      APPEND (gstring, "\"\n  /* height (%u) */\n  \"", height);
       cdata.pos = 3;
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
       save_uchar (&cdata, *stream++); save_uchar (&cdata, *stream++);
-      g_string_printfa (gstring, "\"\n  /* pixel_data: */\n");
+      APPEND (gstring, "\"\n  /* pixel_data: */\n");
       img_buffer = stream;
     }
 
@@ -728,21 +770,21 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
    */
   if (cdata.dump_macros)
     {
-      g_string_printfa (gstring, "#define %s_%sPIXEL_DATA ((%s*) \\\n",
-			macro_name,
-			rle_encoded ? "RLE_" : "",
-			s_uint_8);
-      g_string_printfa (gstring, "  \"");
+      APPEND (gstring, "#define %s_%sPIXEL_DATA ((%s*) \\\n",
+	      macro_name,
+	      rle_encoded ? "RLE_" : "",
+	      s_uint_8);
+      APPEND (gstring, "  \"");
       cdata.pos = 2;
     }
   if (cdata.dump_struct)
     {
-      g_string_printfa (gstring, "  \"");
+      APPEND (gstring, "  \"");
       cdata.pos = 3;
     }
   if (cdata.dump_stream)
     {
-      g_string_printfa (gstring, "  \"");
+      APPEND (gstring, "  \"");
       cdata.pos = 3;
     }
     
@@ -755,11 +797,11 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
   /* pixel_data trailer
    */
   if (cdata.dump_macros)
-    g_string_printfa (gstring, "\")\n\n");
+    APPEND (gstring, "\")\n\n");
   if (cdata.dump_struct)
-    g_string_printfa (gstring, "\",\n};\n\n");
+    APPEND (gstring, "\",\n};\n\n");
   if (cdata.dump_stream)
-    g_string_printfa (gstring, "\");\n\n");
+    APPEND (gstring, "\");\n\n");
 
   /* dump RLE decoder for macros
    */
@@ -778,23 +820,30 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
 }
 
 /**
- * gdk_pixbuf_new_from_stream:
- * @stream_length: Length in bytes of the @stream argument
- * @stream: Byte stream containing a serialized GdkPixdata structure
- * @copy_pixels: Whether to copy the pixels data, or keep direct pointers into the
- *               stream data for the resulting pixbuf
- * @error: GError return location, may be NULL to ignore errors
+ * gdk_pixbuf_new_from_inline:
+ * @data_length: Length in bytes of the @data argument
+ * @data: Byte data containing a serialized GdkPixdata structure
+ * @copy_pixels: Whether to copy the pixel data, or use direct pointers
+ *               @data for the resulting pixbuf
+ * @error: GError return location, may be %NULL to ignore errors
  *
- * Create a #GdkPixbuf from a serialized GdkPixdata structure.
- * Gtk+ ships with a program called gdk-pixbuf-csource which allowes
- * for conversion of #GdkPixbufs into various kinds of C sources.
- * This is useful if you want to ship a program with images, but
- * don't want to depend on any external files.
+ * Create a #GdkPixbuf from a flat representation that is suitable for
+ * storing as inline data in a program. This is useful if you want to
+ * ship a program with images, but don't want to depend on any
+ * external files.
  *
- * Since the inline pixbuf is read-only static data, you
- * don't need to copy it unless you intend to write to it.
- * For deserialization of streams that are run length encoded, the
- * decoded data is always a copy of the input stream.
+ * Gtk+ ships with a program called gdk-pixbuf-csource which allows
+ * for conversion of #GdkPixbufs into such a inline representation.
+ * In almost all cases, you should pass the --raw flag to
+ * gdk-pixbuf-csource. A sample invocation would be:
+ *
+ *  gdk-pixbuf-csource --raw --name=myimage_inline myimage.png
+ * 
+ * For the typical case where the inline pixbuf is read-only static data,
+ * you don't need to copy the pixel data unless you intend to write to
+ * it, so you can pass %FALSE for @copy_pixels.  (If you pass --rle to
+ * gdk-pixbuf-csource, a copy will be made even if @copy_pixels is
+ * %FALSE, so using this option is generally a bad idea.)
  *
  * If you create a pixbuf from const inline data compiled into your
  * program, it's probably safe to ignore errors, since things will
@@ -802,22 +851,22 @@ gdk_pixdata_to_csource (GdkPixdata        *pixdata,
  * memory. For untrusted inline data located at runtime, you could
  * have corrupt inline data in addition.
  *
- * Return value: A newly-created #GdkPixbuf structure with a reference count of
- * 1, or NULL If error is set.
+ * Return value: A newly-created #GdkPixbuf structure with a reference,
+ *   count of 1, or %NULL if error is set.
  **/
 GdkPixbuf*
-gdk_pixbuf_new_from_stream (gint          stream_length,
-			    const guint8 *stream,
+gdk_pixbuf_new_from_inline (gint          data_length,
+			    const guint8 *data,
 			    gboolean      copy_pixels,
 			    GError      **error)
 {
   GdkPixdata pixdata;
 
-  if (stream_length != -1)
-    g_return_val_if_fail (stream_length > GDK_PIXDATA_HEADER_LENGTH, NULL);
-  g_return_val_if_fail (stream != NULL, NULL);
+  if (data_length != -1)
+    g_return_val_if_fail (data_length > GDK_PIXDATA_HEADER_LENGTH, NULL);
+  g_return_val_if_fail (data != NULL, NULL);
 
-  if (!gdk_pixdata_deserialize (&pixdata, stream_length, stream, error))
+  if (!gdk_pixdata_deserialize (&pixdata, data_length, data, error))
     return NULL;
 
   return gdk_pixbuf_from_pixdata (&pixdata, copy_pixels, error);

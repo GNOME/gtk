@@ -4,6 +4,7 @@
 <!entity gdk-pixbuf-refcounting SYSTEM "sgml/refcounting.sgml">
 <!entity gdk-pixbuf-file-loading SYSTEM "sgml/file-loading.sgml">
 <!entity gdk-pixbuf-creating SYSTEM "sgml/creating.sgml">
+<!entity gdk-pixbuf-inline SYSTEM "sgml/inline.sgml">
 <!entity gdk-pixbuf-scaling SYSTEM "sgml/scaling.sgml">
 <!entity gdk-pixbuf-util SYSTEM "sgml/util.sgml">
 <!entity gdk-pixbuf-animation SYSTEM "sgml/animation.sgml">
@@ -87,6 +88,7 @@
     &gdk-pixbuf-refcounting;
     &gdk-pixbuf-file-loading;
     &gdk-pixbuf-creating;
+    &gdk-pixbuf-inline;
     &gdk-pixbuf-scaling;
     &gdk-pixbuf-util;
     &gdk-pixbuf-animation;

@@ -29,6 +29,10 @@
 #include "gtkeditable.h"
 #include "gtksignal.h"
 
+
+static void   gtk_editable_base_init             (gpointer g_class);
+
+
 GtkType
 gtk_editable_get_type (void)
 {
@@ -39,7 +43,7 @@ gtk_editable_get_type (void)
       static const GTypeInfo editable_info =
       {
 	sizeof (GtkEditableClass),  /* class_size */
-	NULL,			    /* base_init */
+	gtk_editable_base_init,	    /* base_init */
 	NULL,			    /* base_finalize */
       };
 
@@ -47,6 +51,44 @@ gtk_editable_get_type (void)
     }
 
   return editable_type;
+}
+
+static void
+gtk_editable_base_init (gpointer g_class)
+{
+  static gboolean initialized = FALSE;
+
+  if (! initialized)
+    {
+      g_signal_new ("insert_text",
+		    GTK_TYPE_EDITABLE,
+		    G_SIGNAL_RUN_LAST,
+		    G_STRUCT_OFFSET (GtkEditableClass, insert_text),
+		    NULL, NULL,
+		    gtk_marshal_VOID__STRING_INT_POINTER,
+		    G_TYPE_NONE, 3,
+		    GTK_TYPE_STRING,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_POINTER);
+      g_signal_new ("delete_text",
+		    GTK_TYPE_EDITABLE,
+		    G_SIGNAL_RUN_LAST,
+		    G_STRUCT_OFFSET (GtkEditableClass, delete_text),
+		    NULL, NULL,
+		    gtk_marshal_VOID__INT_INT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT);
+      g_signal_new ("changed",
+		    GTK_TYPE_EDITABLE,
+		    G_SIGNAL_RUN_LAST,
+		    G_STRUCT_OFFSET (GtkEditableClass, changed),
+		    NULL, NULL,
+		    gtk_marshal_VOID__VOID,
+		    GTK_TYPE_NONE, 0);
+
+      initialized = TRUE;
+    }
 }
 
 void
@@ -61,7 +103,7 @@ gtk_editable_insert_text (GtkEditable *editable,
   if (new_text_length < 0)
     new_text_length = strlen (new_text);
   
-  GTK_EDITABLE_GET_CLASS (editable)->insert_text (editable, new_text, new_text_length, position);
+  GTK_EDITABLE_GET_CLASS (editable)->do_insert_text (editable, new_text, new_text_length, position);
 }
 
 void
@@ -71,7 +113,7 @@ gtk_editable_delete_text (GtkEditable *editable,
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
-  GTK_EDITABLE_GET_CLASS (editable)->delete_text (editable, start_pos, end_pos);
+  GTK_EDITABLE_GET_CLASS (editable)->do_delete_text (editable, start_pos, end_pos);
 }
 
 gchar *    

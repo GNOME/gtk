@@ -260,7 +260,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                    PROP_REORDERABLE,
                                    g_param_spec_boolean ("reorderable",
 							 _("Reorderable"),
-							 _("Wether the column can be reordered around the headers"),
+							 _("Whether the column can be reordered around the headers"),
 							 FALSE,
 							 G_PARAM_READABLE | G_PARAM_WRITABLE));
 
@@ -793,45 +793,52 @@ gtk_tree_view_model_sort_column_changed (GtkTreeSortable   *sortable,
 	  gtk_tree_view_column_set_sort_indicator (column, FALSE);
 	}
     }
+  else
+    {
+      gtk_tree_view_column_set_sort_indicator (column, FALSE);
+    }
 }
 
 static void
 gtk_tree_view_column_sort (GtkTreeViewColumn *tree_column,
 			   gpointer           data)
 {
-  GList *list;
+  gint sort_column_id;
+  GtkSortType order;
+  gboolean has_sort_column;
+  gboolean has_default_sort_func;
 
   g_return_if_fail (tree_column->tree_view != NULL);
 
-  if (tree_column->show_sort_indicator)
+  has_sort_column =
+    gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					  &sort_column_id,
+					  &order);
+  has_default_sort_func =
+    gtk_tree_sortable_has_default_sort_func (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model));
+
+  if (has_sort_column &&
+      sort_column_id == tree_column->sort_column_id)
     {
-      if (tree_column->sort_order == GTK_SORT_ASCENDING)
-	gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_DESCENDING);
+      if (order == GTK_SORT_ASCENDING)
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					      tree_column->sort_column_id,
+					      GTK_SORT_DESCENDING);
+      else if (order == GTK_SORT_DESCENDING && has_default_sort_func)
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					      GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+					      GTK_SORT_ASCENDING);
       else
-	gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					      tree_column->sort_column_id,
+					      GTK_SORT_ASCENDING);
     }
   else
     {
-      gtk_tree_view_column_set_sort_order (tree_column, GTK_SORT_ASCENDING);
-      gtk_tree_view_column_set_sort_indicator (tree_column, TRUE);
+      gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
+					    tree_column->sort_column_id,
+					    GTK_SORT_ASCENDING);
     }
-
-  list = (GTK_TREE_VIEW (tree_column->tree_view)->priv->columns);
-  g_assert (list);
-  while (list)
-    {
-      GtkTreeViewColumn *tmp_column;
-
-      tmp_column = GTK_TREE_VIEW_COLUMN (list->data);
-      if (tmp_column->visible && tmp_column != tree_column)
-	gtk_tree_view_column_set_sort_indicator (tmp_column, FALSE);
-
-      list = list->next;
-    }
-
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (GTK_TREE_VIEW (tree_column->tree_view)->priv->model),
-					tree_column->sort_column_id,
-					tree_column->sort_order);
 }
 
 
@@ -1243,6 +1250,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
 /**
  * gtk_tree_view_column_set_cell_data_func:
  * @tree_column: A #GtkTreeViewColumn
+ * @cell_renderer: A #GtkCellRenderer
  * @func: The #GtkTreeViewColumnFunc to use. 
  * @func_data: The user data for @func.
  * @destroy: The destroy notification for @func_data
@@ -1463,7 +1471,7 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_fixed_width:
  * @tree_column: A #GtkTreeViewColumn.
- * @width: The size to set the @tree_column to.
+ * @fixed_width: The size to set the @tree_column to.
  * 
  * Sets the size of the column in pixels.  This is meaningful only if the sizing
  * type is #GTK_TREE_VIEW_COLUMN_FIXED.  In this case, the value is discarded
@@ -1472,17 +1480,17 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
  **/
 void
 gtk_tree_view_column_set_fixed_width (GtkTreeViewColumn *tree_column,
-				      gint               width)
+				      gint               fixed_width)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
-  g_return_if_fail (width > 0);
+  g_return_if_fail (fixed_width > 0);
 
   if (tree_column->column_type == GTK_TREE_VIEW_COLUMN_AUTOSIZE)
     return;
 
-  tree_column->fixed_width = width;
-  tree_column->requested_width = width;
-  _gtk_tree_view_column_set_width (tree_column, width);
+  tree_column->fixed_width = fixed_width;
+  tree_column->requested_width = fixed_width;
+  _gtk_tree_view_column_set_width (tree_column, fixed_width);
 }
 
 /**
@@ -1777,9 +1785,11 @@ gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
 /**
  * gtk_tree_view_column_set_alignment:
  * @tree_column: A #GtkTreeViewColumn.
- * @xalign: alignment (0.0 for left, 0.5 for center, 1.0 for right)
+ * @xalign: The alignment, which is between [0.0 and 1.0] inclusive.
  * 
  * Sets the alignment of the title or custom widget inside the column header.
+ * The alignment determines its location inside the button -- 0.0 for left, 0.5
+ * for center, 1.0 for right.
  **/
 void
 gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,

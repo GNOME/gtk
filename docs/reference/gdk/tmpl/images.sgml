@@ -159,6 +159,24 @@ Destroys a #GdkImage, freeing any resources allocated for it.
 @image: a #GdkImage.
 
 
+<!-- ##### FUNCTION gdk_image_get_colormap ##### -->
+<para>
+
+</para>
+
+@image: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_image_set_colormap ##### -->
+<para>
+
+</para>
+
+@image: 
+@colormap: 
+
+
 <!-- ##### FUNCTION gdk_image_put_pixel ##### -->
 <para>
 Sets a pixel in a #GdkImage to a given pixel value.

@@ -205,6 +205,7 @@ static void  gtk_text_get_property   (GObject         *object,
 				      guint            prop_id,
 				      GValue          *value,
 				      GParamSpec      *pspec);
+static void  gtk_text_editable_init  (GtkEditableClass *iface);
 static void  gtk_text_init           (GtkText        *text);
 static void  gtk_text_destroy        (GtkObject      *object);
 static void  gtk_text_finalize       (GObject        *object);
@@ -221,11 +222,11 @@ static void  gtk_text_size_allocate  (GtkWidget      *widget,
 				      GtkAllocation  *allocation);
 static void  gtk_text_adjustment     (GtkAdjustment  *adjustment,
 				      GtkText        *text);
-static void   gtk_text_insert_text       (GtkOldEditable *old_editable,
+static void   gtk_text_insert_text       (GtkEditable    *editable,
 					  const gchar    *new_text,
 					  gint            new_text_length,
 					  gint           *position);
-static void   gtk_text_delete_text       (GtkOldEditable *old_editable,
+static void   gtk_text_delete_text       (GtkEditable    *editable,
 					  gint            start_pos,
 					  gint            end_pos);
 static void   gtk_text_update_text       (GtkOldEditable *old_editable,
@@ -527,8 +528,18 @@ gtk_text_get_type (void)
         /* reserved_2 */ NULL,
         (GtkClassInitFunc) NULL,
       };
+
+      static const GInterfaceInfo editable_info =
+      {
+	(GInterfaceInitFunc) gtk_text_editable_init, /* interface_init */
+	NULL, /* interface_finalize */
+	NULL  /* interface_data */
+      };
       
       text_type = gtk_type_unique (GTK_TYPE_OLD_EDITABLE, &text_info);
+      g_type_add_interface_static (text_type,
+				   GTK_TYPE_EDITABLE,
+				   &editable_info);
     }
   
   return text_type;
@@ -569,8 +580,6 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->focus_out_event = gtk_text_focus_out;
 
   old_editable_class->set_editable = gtk_text_real_set_editable;
-  old_editable_class->insert_text = gtk_text_insert_text;
-  old_editable_class->delete_text = gtk_text_delete_text;
   
   old_editable_class->move_cursor = gtk_text_move_cursor;
   old_editable_class->move_word = gtk_text_move_word;
@@ -692,6 +701,13 @@ gtk_text_get_property (GObject         *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_text_editable_init (GtkEditableClass *iface)
+{
+  iface->insert_text = gtk_text_insert_text;
+  iface->delete_text = gtk_text_delete_text;
 }
 
 static void
@@ -1877,12 +1893,12 @@ gtk_text_motion_notify (GtkWidget      *widget,
 }
 
 static void 
-gtk_text_insert_text    (GtkOldEditable    *old_editable,
+gtk_text_insert_text    (GtkEditable       *editable,
 			 const gchar       *new_text,
 			 gint               new_text_length,
 			 gint              *position)
 {
-  GtkText *text = GTK_TEXT (old_editable);
+  GtkText *text = GTK_TEXT (editable);
   GdkFont *font;
   GdkColor *fore, *back;
 
@@ -1901,7 +1917,7 @@ gtk_text_insert_text    (GtkOldEditable    *old_editable,
 }
 
 static void 
-gtk_text_delete_text    (GtkOldEditable    *old_editable,
+gtk_text_delete_text    (GtkEditable       *editable,
 			 gint               start_pos,
 			 gint               end_pos)
 {
@@ -1909,7 +1925,7 @@ gtk_text_delete_text    (GtkOldEditable    *old_editable,
   
   g_return_if_fail (start_pos >= 0);
   
-  text = GTK_TEXT (old_editable);
+  text = GTK_TEXT (editable);
   
   gtk_text_set_point (text, start_pos);
   if (end_pos < 0)

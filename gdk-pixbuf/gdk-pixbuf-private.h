@@ -128,8 +128,16 @@ struct _GdkPixbufAnimationIterClass {
                                         const GTimeVal         *current_time);
 };
       
-
 
 GdkPixbufAnimation* gdk_pixbuf_non_anim_new (GdkPixbuf *pixbuf);
+
+
+
+/*  key/value pairs that can be attached by the pixbuf loader  */
+
+gboolean gdk_pixbuf_set_option  (GdkPixbuf   *pixbuf,
+                                 const gchar *key,
+                                 const gchar *value);
+
 
 #endif

@@ -134,10 +134,18 @@ Window gdk_window_xid_at        (Display  *xdisplay,
 				 gint      y,
 				 GList    *excludes,
 				 gboolean  excl_child);
+#ifndef GDK_MULTIHEAD_SAFE
 Window gdk_window_xid_at_coords (gint      x,
 				 gint      y,
 				 GList    *excludes,
 				 gboolean  excl_child);
+#endif
+Window gdk_window_xid_at_coords_for_screen (GdkScreen *screen,
+					    gint       x,
+					    gint       y,
+					    GList     *excludes,
+					    gboolean   excl_child);
+
 
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_init_position     (GdkWindow     *window);
@@ -167,9 +175,12 @@ void _gdk_keymap_state_changed      (GdkDisplay *display);
 
 GC _gdk_x11_gc_flush (GdkGC *gc);
 
+void _gdk_x11_initialize_locale (void);
+
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;
 extern const int         _gdk_nenvent_masks;
 extern const int         _gdk_event_mask_table[];
+extern GdkAtom		 _gdk_selection_property;
 extern gchar		*_gdk_display_name;
 #endif /* __GDK_PRIVATE_X11_H__ */

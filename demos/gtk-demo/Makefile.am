@@ -10,14 +10,17 @@ demos = @STRIP_BEGIN@	\
 	colorsel.c	\
 	dialog.c	\
 	drawingarea.c	\
+	editable_cells.c \
 	images.c	\
 	item_factory.c	\
+	list_store.c	\
 	menus.c		\
 	panes.c		\
 	pixbufs.c	\
 	sizegroup.c	\
 	stock_browser.c	\
 	textview.c	\
+	tree_store.c	\
 @STRIP_END@
 
 INCLUDES = @STRIP_BEGIN@ \

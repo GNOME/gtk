@@ -161,7 +161,20 @@ the device ID for the core pointer device.
 
 <!-- ##### MACRO GDK_ROOT_WINDOW ##### -->
 <para>
+Obtains the Xlib window id of the root window of the current screen. 
+</para>
 
+
+<!-- ##### MACRO GDK_WINDOWING_NANOX ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### TYPEDEF GdkAtom ##### -->
+<para>
+A numeric type representing a string as an index into a table
+of strings on the X server.
 </para>
 
 

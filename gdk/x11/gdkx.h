@@ -55,8 +55,8 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_COLORMAP_XDISPLAY(cmap)   (gdk_x11_colormap_get_xdisplay (cmap))
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (gdk_x11_colormap_get_xcolormap (cmap))
-#define GDK_CURSOR_XDISPLAY(win)      (gdk_x11_cursor_get_xdisplay (win))
-#define GDK_CURSOR_XCURSOR(win)       (gdk_x11_cursor_get_xid (win))
+#define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
+#define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
 
@@ -119,24 +119,13 @@ GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 Window        gdk_get_client_window      (Display  *display,
                                           Window    win);
 
-/* Functions to create pixmaps and windows from their X equivalents */
-GdkPixmap   *gdk_pixmap_foreign_new_for_screen (GdkScreen * screen,
-						GdkNativeWindow anid);
-
-GdkWindow    *gdk_window_foreign_new_for_display (GdkDisplay * display,
-						  GdkNativeWindow anid);
-
 /* Return the Gdk* for a particular XID */
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
 gpointer      gdk_xid_table_lookup_for_all_displays (XID xid);
 
-#define gdk_window_lookup_for_display(display, xid) \
-	((GdkWindow*) gdk_xid_table_lookup_for_display(display, xid))
 #define gdk_window_lookup_for_all_displays(xid) \
 	((GdkWindow*) gdk_xid_table_lookup_for_all_displays(xid))
-#define gdk_pixmap_lookup_for_display(display , xid)  \
-	((GdkPixmap*) gdk_xid_table_lookup_for_display(display, xid))
 #define gdk_pixmap_lookup_for_all_displays(xid)  \
 	((GdkPixmap*) gdk_xid_table_lookup_for_all_displays(xid))
 
@@ -147,15 +136,10 @@ gboolean gdk_net_wm_supports_for_screen (GdkScreen *screen,
 					 GdkAtom    property);
 
 #ifndef GDK_MULTIHEAD_SAFE
-GdkPixmap    *gdk_pixmap_foreign_new (GdkNativeWindow anid);
-GdkWindow    *gdk_window_foreign_new (GdkNativeWindow anid);
 gpointer      gdk_xid_table_lookup   (XID              xid);
 gboolean      gdk_net_wm_supports    (GdkAtom    property);
 void          gdk_x11_grab_server    ();
 void          gdk_x11_ungrab_server  ();
-
-#define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
-#define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 
 #endif
 
@@ -164,14 +148,20 @@ GList *gdk_list_visuals_for_screen (GdkScreen *screen);
 
 
 /* Functions to get the X Atom equivalent to the GdkAtom */
-GdkAtom     gdk_x11_get_real_atom         (GdkDisplay  *display,
-					   GdkAtom      virtual_atom);
-GdkAtom     gdk_x11_get_virtual_atom      (GdkDisplay  *display,
-					   GdkAtom      xatom);
-GdkAtom     gdk_x11_get_real_atom_by_name (GdkDisplay  *display,
-					   const gchar *atom_name);
-gchar	   *gdk_x11_get_real_atom_name    (GdkDisplay  *display,
-				           GdkAtom      xatom);
+Atom	              gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
+							 GdkAtom      virtual_atom);
+GdkAtom		      gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
+							 Atom	      xatom);
+Atom		      gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
+							     const gchar *atom_name);
+G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
+							  Atom         xatom);
+#ifndef GDK_MULTIHEAD_SAFE
+Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
+GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
+Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
+G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
+#endif
 
 #ifndef GDK_DISABLE_DEPRECATED
 

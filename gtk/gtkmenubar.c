@@ -142,12 +142,6 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
-  
-  gtk_settings_install_property (g_param_spec_string ("gtk-menu-bar-accel",
-                                                      _("Menu bar accelerator"),
-                                                      _("Keybinding to activate the menu bar"),
-                                                      "F10",
-                                                      G_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("shadow_type",

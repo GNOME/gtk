@@ -303,11 +303,9 @@ gtk_tree_data_list_compare_func (GtkTreeModel *model,
     case G_TYPE_STRING:
       stra = g_value_get_string (&a_value);
       strb = g_value_get_string (&b_value);
-      if (stra == NULL)
-	stra = "";
-      if (strb == NULL)
-	strb = "";
-      retval = strcmp (stra, strb);
+      if (stra == NULL) stra = "";
+      if (strb == NULL) strb = "";
+      retval = g_utf8_collate (stra, strb);
       break;
     case G_TYPE_POINTER:
     case G_TYPE_BOXED:

@@ -37,12 +37,6 @@
 
 #include <locale.h>
 
-/* If this variable is FALSE, it indicates that we should
- * avoid trying to use multibyte conversion functions and
- * assume everything is 1-byte per character
- */
-static gboolean gdk_use_mb;
-
 /*
  *--------------------------------------------------------------
  * gdk_set_locale
@@ -59,42 +53,10 @@ static gboolean gdk_use_mb;
 gchar*
 gdk_set_locale (void)
 {
-  wchar_t result;
-  gchar *current_locale;
-
-  gdk_use_mb = FALSE;
-
   if (!setlocale (LC_ALL,""))
     g_warning ("locale not supported by C library");
   
-  current_locale = setlocale (LC_ALL, NULL);
-
-  if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
-    {
-      gdk_use_mb = TRUE;
-
-#ifndef X_LOCALE
-      /* Detect GNU libc, where mb == UTF8. Not useful unless it's
-       * really a UTF8 locale. The below still probably will
-       * screw up on Greek, Cyrillic, etc, encoded as UTF8.
-       */
-      
-      if ((MB_CUR_MAX == 2) &&
-	  (mbstowcs (&result, "\xdd\xa5", 1) > 0) &&
-	  result == 0x765)
-	{
-	  if ((strlen (current_locale) < 4) ||
-	      g_strcasecmp (current_locale + strlen(current_locale) - 4, "utf8"))
-	    gdk_use_mb = FALSE;
-	}
-#endif /* X_LOCALE */
-    }
-
-  GDK_NOTE (MISC,
-	    g_message ("%s multi-byte string functions.", 
-		       gdk_use_mb ? "Using" : "Not using"));
-  
-  return current_locale;
+  return setlocale (LC_ALL, NULL);
 }
 
 /*

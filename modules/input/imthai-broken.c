@@ -207,7 +207,7 @@ GtkIMContext *
 im_module_create (const gchar *context_id)
 {
   if (strcmp (context_id, "thai_broken") == 0)
-    return GTK_IM_CONTEXT (gtk_type_new (type_thai_broken));
+    return GTK_IM_CONTEXT (g_object_new (type_thai_broken, NULL));
   else
     return NULL;
 }

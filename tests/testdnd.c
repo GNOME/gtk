@@ -320,7 +320,7 @@ target_drag_motion	   (GtkWidget	       *widget,
   tmp_list = context->targets;
   while (tmp_list)
     {
-      char *name = gdk_atom_name (GPOINTER_TO_UINT (tmp_list->data));
+      char *name = gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data));
       g_print ("%s\n", name);
       g_free (name);
       
@@ -346,7 +346,7 @@ target_drag_drop	   (GtkWidget	       *widget,
   if (context->targets)
     {
       gtk_drag_get_data (widget, context, 
-			 GPOINTER_TO_INT (context->targets->data), 
+			 GDK_POINTER_TO_ATOM (context->targets->data), 
 			 time);
       return TRUE;
     }

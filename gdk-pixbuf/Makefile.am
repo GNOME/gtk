@@ -251,7 +251,7 @@ $(srcdir)/gdk-pixbuf-enum-types.h: s-enum-types-h
 
 s-enum-types-h: @REBUILD@ $(gdk_pixbuf_headers) Makefile
 	( cd $(srcdir) && glib-mkenums \
-			--fhead "#ifndef __GDK_PIXBUF__ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
+			--fhead "#ifndef __GDK_PIXBUF_ENUM_TYPES_H__\n#define __GDK_PIXBUF_ENUM_TYPES_H__\n" \
 			--fprod "/* enumerations from \"@filename@\" */\n" \
 			--vhead "GType @enum_name@_get_type (void);\n#define GDK_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
 			--ftail "#endif /* __GDK_PIXBUF_ENUM_TYPES_H__ */" \

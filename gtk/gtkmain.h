@@ -38,8 +38,12 @@ extern "C" {
 
 /* Priorities for redrawing and resizing
  */
-#define GTK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 #define GTK_PRIORITY_RESIZE     (G_PRIORITY_HIGH_IDLE + 10)
+
+#ifndef GTK_DISABLE_DEPRECATED
+
+/* Use GDK_PRIORITY_REDRAW */
+#define GTK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 
 /* Deprecated. Use G_PRIORITY #define's instead
  */
@@ -47,6 +51,8 @@ extern "C" {
 #define GTK_PRIORITY_INTERNAL   GTK_PRIORITY_REDRAW
 #define GTK_PRIORITY_DEFAULT	G_PRIORITY_DEFAULT_IDLE
 #define GTK_PRIORITY_LOW	G_PRIORITY_LOW
+
+#endif /* GTK_DISABLE_DEPRECATED */
 
 typedef void	(*GtkModuleInitFunc)	(gint		*argc,
 					 gchar	      ***argv);
@@ -113,6 +119,8 @@ gchar *get_gtk_win32_directory (gchar *subdir);
 #ifndef GTK_DISABLE_DEPRECATED
 void     gtk_exit                 (gint    error_code);
 #endif /* GTK_DISABLE_DEPRECATED */
+
+void           gtk_disable_setlocale    (void);
 gchar *        gtk_set_locale           (void);
 PangoLanguage *gtk_get_default_language (void);
 gint           gtk_events_pending       (void);

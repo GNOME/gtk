@@ -1854,10 +1854,11 @@ _gtk_text_btree_tag (const GtkTextIter *start_orig,
  * "Getters"
  */
 
-GtkTextLine*
-_gtk_text_btree_get_line (GtkTextBTree *tree,
-                         gint  line_number,
-                         gint *real_line_number)
+static GtkTextLine*
+get_line_internal (GtkTextBTree *tree,
+                   gint          line_number,
+                   gint         *real_line_number,
+                   gboolean      include_last)
 {
   GtkTextBTreeNode *node;
   GtkTextLine *line;
@@ -1865,7 +1866,9 @@ _gtk_text_btree_get_line (GtkTextBTree *tree,
   int line_count;
 
   line_count = _gtk_text_btree_line_count (tree);
-
+  if (!include_last)
+    line_count -= 1;
+  
   if (line_number < 0)
     {
       line_number = line_count;
@@ -1927,6 +1930,22 @@ _gtk_text_btree_get_end_iter_line (GtkTextBTree *tree)
     _gtk_text_btree_get_line (tree,
                               _gtk_text_btree_line_count (tree) - 1,
                               NULL);
+}
+
+GtkTextLine*
+_gtk_text_btree_get_line (GtkTextBTree *tree,
+                          gint          line_number,
+                          gint         *real_line_number)
+{
+  return get_line_internal (tree, line_number, real_line_number, TRUE);
+}
+
+GtkTextLine*
+_gtk_text_btree_get_line_no_last (GtkTextBTree      *tree,
+                                  gint               line_number,
+                                  gint              *real_line_number)
+{
+  return get_line_internal (tree, line_number, real_line_number, FALSE);
 }
 
 GtkTextLine*
@@ -2919,7 +2938,7 @@ _gtk_text_btree_last_could_contain_tag (GtkTextBTree *tree,
          at least not without complexity.
          So, we just return the last line.
       */
-      return _gtk_text_btree_get_line (tree, -1, NULL);
+      return _gtk_text_btree_get_end_iter_line (tree);
     }
 }
 
@@ -3181,7 +3200,7 @@ ensure_end_iter_line (GtkTextBTree *tree)
  
       g_assert (n_lines >= 1);
 
-      tree->end_iter_line = _gtk_text_btree_get_line (tree, n_lines - 1, &real_line);
+      tree->end_iter_line = _gtk_text_btree_get_line_no_last (tree, -1, &real_line);
       
       tree->end_iter_line_stamp = tree->chars_changed_stamp;
     }

@@ -5992,7 +5992,7 @@ gtk_ctree_drag_motion (GtkWidget      *widget,
       list = context->targets;
       while (list)
 	{
-	  if (atom == GPOINTER_TO_INT (list->data))
+	  if (atom == GDK_POINTER_TO_ATOM (list->data))
 	    break;
 	  list = list->next;
 	}

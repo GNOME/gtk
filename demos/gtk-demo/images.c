@@ -93,10 +93,8 @@ progressive_timeout (gpointer data)
 					   "Failure reading image file 'alphatest.png': %s",
 					   g_strerror (errno));
 
-	  gtk_signal_connect (GTK_OBJECT (dialog),
-			      "response",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      NULL);
+	  g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
 
 	  fclose (image_stream);
 	  image_stream = NULL;
@@ -123,10 +121,8 @@ progressive_timeout (gpointer data)
 
 	  g_error_free (error);
 	  
-	  gtk_signal_connect (GTK_OBJECT (dialog),
-			      "response",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      NULL);
+	  g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
 
 	  fclose (image_stream);
 	  image_stream = NULL;
@@ -162,10 +158,8 @@ progressive_timeout (gpointer data)
 	      
 	      g_error_free (error);
 	      
-	      gtk_signal_connect (GTK_OBJECT (dialog),
-				  "response",
-				  GTK_SIGNAL_FUNC (gtk_widget_destroy),
-				  NULL);
+	      g_signal_connect (dialog, "response",
+				G_CALLBACK (gtk_widget_destroy), NULL);
 	      
 	      gtk_widget_show (dialog);
 
@@ -203,10 +197,8 @@ progressive_timeout (gpointer data)
 					   "Unable to open image file 'alphatest.png': %s",
 					   g_strerror (errno));
 
-	  gtk_signal_connect (GTK_OBJECT (dialog),
-			      "response",
-			      GTK_SIGNAL_FUNC (gtk_widget_destroy),
-			      NULL);
+	  g_signal_connect (dialog, "response",
+			    G_CALLBACK (gtk_widget_destroy), NULL);
 	  
 	  gtk_widget_show (dialog);
 
@@ -224,15 +216,11 @@ progressive_timeout (gpointer data)
       
       pixbuf_loader = gdk_pixbuf_loader_new ();
       
-      g_signal_connect (G_OBJECT (pixbuf_loader),
-			"area_prepared",
-			G_CALLBACK (progressive_prepared_callback),
-			image);
+      g_signal_connect (G_OBJECT (pixbuf_loader), "area_prepared",
+			G_CALLBACK (progressive_prepared_callback), image);
       
-      g_signal_connect (G_OBJECT (pixbuf_loader),
-			"area_updated",
-			G_CALLBACK (progressive_updated_callback),
-			image);
+      g_signal_connect (G_OBJECT (pixbuf_loader), "area_updated",
+			G_CALLBACK (progressive_updated_callback), image);
     }
 
   /* leave timeout installed */
@@ -290,8 +278,10 @@ do_images (void)
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Images");
 
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
-      gtk_signal_connect (GTK_OBJECT (window), "destroy", GTK_SIGNAL_FUNC (cleanup_callback), NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (cleanup_callback), NULL);
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -341,10 +331,8 @@ do_images (void)
 					       error->message);
 	      g_error_free (error);
 	      
-	      gtk_signal_connect (GTK_OBJECT (dialog),
-				  "response",
-				  GTK_SIGNAL_FUNC (gtk_widget_destroy),
-				  NULL);
+	      g_signal_connect (dialog, "response",
+				G_CALLBACK (gtk_widget_destroy), NULL);
 	      
 	      gtk_widget_show (dialog);
 	    }

@@ -90,23 +90,26 @@ gint          gdk_visual_get_best_depth_for_screen      (GdkScreen     *screen);
 GdkVisualType gdk_visual_get_best_type_for_screen       (GdkScreen     *screen);
 GdkVisual *   gdk_visual_get_system_for_screen          (GdkScreen     *screen);
 GdkVisual*    gdk_visual_get_best_for_screen            (GdkScreen     *screen);
-GdkVisual*    gdk_visual_get_best_with_depth_for_screen (GdkScreen     *screen,
-							 gint           depth);
 GdkVisual*    gdk_visual_get_best_with_type_for_screen  (GdkScreen     *screen,
 							 GdkVisualType  visual_type);
 GdkVisual*    gdk_visual_get_best_with_both_for_screen  (GdkScreen     *screen,
 							 gint           depth,
 							 GdkVisualType  visual_type);
-
+GdkVisual*    gdk_visual_get_best_with_depth_for_screen (GdkScreen     *screen,
+							 gint           depth);
+void	      gdk_query_depths_for_screen		(GdkScreen     *screen,
+							 gint	      **depths,
+							 gint	       *count);
+void	      gdk_query_visual_types_for_screen		(GdkScreen      *screen,
+							 GdkVisualType **visual_types,
+							 gint           *count);
+GList *	      gdk_list_visuals_for_screen		(GdkScreen	*screen);
 #ifndef GTK_DISABLE_DEPRECATED
 #define gdk_visual_ref(v) g_object_ref(v)
 #define gdk_visual_unref(v) g_object_unref(v)
 #endif
 
 
-void gdk_query_visual_types_for_screen (GdkScreen      *screen,
-					GdkVisualType **visual_types,
-					gint           *count);
 
 GList *gdk_list_visuals_for_screen (GdkScreen *screen);
 

@@ -733,6 +733,7 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
   
   g_return_if_fail (binding_set != NULL);
   g_return_if_fail (path_pattern != NULL);
+  g_return_if_fail (priority <= GTK_PATH_PRIO_MASK);
 
   priority &= GTK_PATH_PRIO_MASK;
   
@@ -755,8 +756,7 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
   
   pspec = g_new (PatternSpec, 1);
   pspec->pspec = g_pattern_spec_new (path_pattern);
-  pspec->seq_id = seq_id++ & 0x0fffffff;
-  pspec->seq_id |= priority << 28;
+  pspec->seq_id = priority << 28;
   pspec->user_data = binding_set;
   
   slist = *slist_p;
@@ -767,17 +767,26 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
       tmp_pspec = slist->data;
       slist = slist->next;
       
-      if (tmp_pspec->pspec->pattern_length == pspec->pspec->pattern_length &&
-	  g_str_equal (tmp_pspec->pspec->pattern_reversed, pspec->pspec->pattern_reversed))
+      if (g_pattern_spec_equal (tmp_pspec->pspec, pspec->pspec))
 	{
+	  GtkPathPriorityType lprio = tmp_pspec->seq_id >> 28;
+
 	  g_pattern_spec_free (pspec->pspec);
 	  g_free (pspec);
 	  pspec = NULL;
+	  if (lprio < priority)
+	    {
+	      tmp_pspec->seq_id &= 0x0fffffff;
+	      tmp_pspec->seq_id |= priority << 28;
+	    }
 	  break;
 	}
     }
   if (pspec)
-    *slist_p = g_slist_prepend (*slist_p, pspec);
+    {
+      pspec->seq_id |= seq_id++ & 0x0fffffff;
+      *slist_p = g_slist_prepend (*slist_p, pspec);
+    }
 }
 
 static inline gboolean

@@ -7,35 +7,33 @@
 extern "C" {
 #endif /* __cplusplus */
 
-/* The next three types define enums for predefined atoms relating
-   to selections. In general, one will need to use gdk_intern_atom */
+/* Predefined atoms relating to selections. In general, one will need to use
+ * gdk_intern_atom
+ */
+#define GDK_SELECTION_PRIMARY 		_GDK_MAKE_ATOM (1)
+#define GDK_SELECTION_SECONDARY 	_GDK_MAKE_ATOM (2)
+#define GDK_SELECTION_CLIPBOARD 	_GDK_MAKE_ATOM (69)
+#define GDK_TARGET_BITMAP 		_GDK_MAKE_ATOM (5)
+#define GDK_TARGET_COLORMAP 		_GDK_MAKE_ATOM (7)
+#define GDK_TARGET_DRAWABLE 		_GDK_MAKE_ATOM (17)
+#define GDK_TARGET_PIXMAP 		_GDK_MAKE_ATOM (20)
+#define GDK_TARGET_STRING 		_GDK_MAKE_ATOM (3)
+#define GDK_SELECTION_TYPE_ATOM 	_GDK_MAKE_ATOM (4)
+#define GDK_SELECTION_TYPE_BITMAP 	_GDK_MAKE_ATOM (5)
+#define GDK_SELECTION_TYPE_COLORMAP 	_GDK_MAKE_ATOM (7)
+#define GDK_SELECTION_TYPE_DRAWABLE 	_GDK_MAKE_ATOM (17)
+#define GDK_SELECTION_TYPE_INTEGER 	_GDK_MAKE_ATOM (19)
+#define GDK_SELECTION_TYPE_PIXMAP 	_GDK_MAKE_ATOM (20)
+#define GDK_SELECTION_TYPE_WINDOW 	_GDK_MAKE_ATOM (33)
+#define GDK_SELECTION_TYPE_STRING 	_GDK_MAKE_ATOM (3)
 
-typedef enum
-{
-  GDK_SELECTION_PRIMARY = 1,
-  GDK_SELECTION_SECONDARY = 2
-} GdkSelection;
+#ifndef GDK_DISABLE_DEPRECATED
 
-typedef enum
-{
-  GDK_TARGET_BITMAP = 5,
-  GDK_TARGET_COLORMAP = 7,
-  GDK_TARGET_DRAWABLE = 17,
-  GDK_TARGET_PIXMAP = 20,
-  GDK_TARGET_STRING = 31
-} GdkTarget;
+typedef GdkAtom GdkSelection;
+typedef GdkAtom GdkTarget;
+typedef GdkAtom GdkSelectionType;
 
-typedef enum
-{
-  GDK_SELECTION_TYPE_ATOM = 4,
-  GDK_SELECTION_TYPE_BITMAP = 5,
-  GDK_SELECTION_TYPE_COLORMAP = 7,
-  GDK_SELECTION_TYPE_DRAWABLE = 17,
-  GDK_SELECTION_TYPE_INTEGER = 19,
-  GDK_SELECTION_TYPE_PIXMAP = 20,
-  GDK_SELECTION_TYPE_WINDOW = 33,
-  GDK_SELECTION_TYPE_STRING = 31
-} GdkSelectionType;
+#endif /* GDK_DISABLE_DEPRECATED */
 
 /* Selections
  */

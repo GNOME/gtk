@@ -955,7 +955,7 @@ gtk_text_view_init (GtkTextView *text_view)
   text_view->editable = TRUE;
 
   gtk_drag_dest_set (widget,
-                     GTK_DEST_DEFAULT_DROP,
+		     0,
                      target_table, G_N_ELEMENTS (target_table),
                      GDK_ACTION_COPY | GDK_ACTION_MOVE);
 
@@ -967,11 +967,11 @@ gtk_text_view_init (GtkTextView *text_view)
    */
   text_view->im_context = gtk_im_multicontext_new ();
 
-  gtk_signal_connect (GTK_OBJECT (text_view->im_context), "commit",
-                      GTK_SIGNAL_FUNC (gtk_text_view_commit_handler), text_view);
+  g_signal_connect (G_OBJECT (text_view->im_context), "commit",
+                    G_CALLBACK (gtk_text_view_commit_handler), text_view);
 
-  gtk_signal_connect (GTK_OBJECT (text_view->im_context), "preedit_changed",
- 		      GTK_SIGNAL_FUNC (gtk_text_view_preedit_changed_handler), text_view);
+  g_signal_connect (G_OBJECT (text_view->im_context), "preedit_changed",
+ 		    G_CALLBACK (gtk_text_view_preedit_changed_handler), text_view);
 
   text_view->cursor_visible = TRUE;
 
@@ -2735,7 +2735,7 @@ gtk_text_view_validate_onscreen (GtkTextView *text_view)
    */
   gtk_text_view_update_adjustments (text_view);
 
-  g_assert (text_view->onscreen_validated);
+  /* g_assert (text_view->onscreen_validated); */
 }
 
 static gboolean
@@ -3787,6 +3787,8 @@ cursor_blinks (GtkTextView *text_view)
 #ifdef DEBUG_VALIDATION_AND_SCROLLING
   return FALSE;
 #endif
+  if (gtk_debug_flags & GTK_DEBUG_UPDATES)
+    return FALSE;
   
   g_object_get (G_OBJECT (settings), "gtk-cursor-blink", &blink, NULL);
   return blink;
@@ -4262,8 +4264,7 @@ gtk_text_view_delete_from_cursor (GtkTextView   *text_view,
 static void
 gtk_text_view_cut_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
-							   GDK_NONE);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)), GDK_SELECTION_CLIPBOARD);
   
   gtk_text_buffer_cut_clipboard (get_buffer (text_view),
 				 clipboard,
@@ -4277,8 +4278,7 @@ gtk_text_view_cut_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_copy_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
-							   GDK_NONE);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)), GDK_SELECTION_CLIPBOARD);
   
   gtk_text_buffer_copy_clipboard (get_buffer (text_view),
 				  clipboard);
@@ -4291,8 +4291,7 @@ gtk_text_view_copy_clipboard (GtkTextView *text_view)
 static void
 gtk_text_view_paste_clipboard (GtkTextView *text_view)
 {
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
-							   GDK_NONE);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)), GDK_SELECTION_CLIPBOARD);
   
   gtk_text_buffer_paste_clipboard (get_buffer (text_view),
 				   clipboard,
@@ -4921,6 +4920,8 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
                          guint             time)
 {
   GtkTextView *text_view;
+  GtkTextIter drop_point;
+  GdkAtom target = GDK_NONE;
   
   text_view = GTK_TEXT_VIEW (widget);
   
@@ -4930,7 +4931,19 @@ gtk_text_view_drag_drop (GtkWidget        *widget,
   text_view->scroll_timeout = 0;
 
   gtk_text_mark_set_visible (text_view->dnd_mark, FALSE);
-  
+
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
+                                    &drop_point,
+                                    text_view->dnd_mark);
+
+  if (gtk_text_iter_can_insert (&drop_point, text_view->editable))
+    target = gtk_drag_dest_find_target (widget, context, NULL);
+
+  if (target != GDK_NONE)
+    gtk_drag_get_data (widget, context, target, time);
+  else
+    gtk_drag_finish (context, FALSE, FALSE, time);
+
   return TRUE;
 }
 
@@ -4963,19 +4976,19 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 {
   GtkTextIter drop_point;
   GtkTextView *text_view;
-  GtkTextMark *drag_target_mark;
+  gboolean success = FALSE;
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  drag_target_mark = gtk_text_buffer_get_mark (get_buffer (text_view),
-                                               "gtk_drag_target");
-
-  if (drag_target_mark == NULL)
-    return;
+  if (!text_view->dnd_mark)
+    goto done;
 
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
                                     &drop_point,
-                                    drag_target_mark);
+                                    text_view->dnd_mark);
+  
+  if (!gtk_text_iter_can_insert (&drop_point, text_view->editable))
+    goto done;
 
   if (selection_data->target == gdk_atom_intern ("GTK_TEXT_BUFFER_CONTENTS", FALSE))
     {
@@ -5021,6 +5034,13 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
     }
   else
     insert_text_data (text_view, &drop_point, selection_data);
+
+  success = TRUE;
+
+ done:
+  gtk_drag_finish (context, success,
+		   success && context->action == GDK_ACTION_MOVE,
+		   time);
 }
 
 static GtkAdjustment*

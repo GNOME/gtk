@@ -43,6 +43,11 @@ extern "C" {
 typedef struct _GtkTextBuffer GtkTextBuffer;
 
 struct _GtkTextIter {
+  /* GtkTextIter is an opaque datatype; ignore all these fields.
+   * Initialize the iter with gtk_text_buffer_get_iter_*
+   * functions
+   */
+  /*< private >*/
   gpointer dummy1;
   gpointer dummy2;
   gint dummy3;

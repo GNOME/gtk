@@ -92,12 +92,10 @@ do_menus (void)
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
-			  &window);
-      gtk_signal_connect (GTK_OBJECT (window), "delete-event",
-			  GTK_SIGNAL_FUNC (gtk_true),
-			  NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK(gtk_widget_destroyed), &window);
+      g_signal_connect (window, "delete-event",
+			G_CALLBACK (gtk_true), NULL);
       
       accel_group = gtk_accel_group_new ();
       gtk_accel_group_attach (accel_group, G_OBJECT (window));
@@ -195,9 +193,8 @@ do_menus (void)
       gtk_widget_show (box2);
 
       button = gtk_button_new_with_label ("close");
-      gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				 GTK_SIGNAL_FUNC(gtk_widget_destroy),
-				 GTK_OBJECT (window));
+      g_signal_connect_swapped (button, "clicked",
+				G_CALLBACK(gtk_widget_destroy), window);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
       gtk_widget_grab_default (button);

@@ -30,8 +30,8 @@
 	<member>the cell renderers (GtkCellRenderer etc.)</member>
 	<member>and the model interface (GtkTreeModel)</member>
       </simplelist>
-      The <emphasis>View</empahsis> is composed of the first three,
-	while the last is the <empahsis>Model</empahsis>.  One of the
+      The <emphasis>View</emphasis> is composed of the first three,
+	while the last is the <emphasis>Model</emphasis>.  One of the
 	prime benefits of the MVC design is that multiple views can be
 	created of a single model.  For example, a model mapping the file
 	system could be created for a file manager.  Many views could be

@@ -93,6 +93,15 @@ Creates a new #GtkAdjustment.
 @Returns: a new #GtkAdjustment.
 
 
+<!-- ##### FUNCTION gtk_adjustment_get_value ##### -->
+<para>
+
+</para>
+
+@adjustment: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_adjustment_set_value ##### -->
 <para>
 Sets the #GtkAdjustment value.

@@ -41,17 +41,20 @@ gdk_atom_intern (const gchar *atom_name,
 {
   GdkAtom retval;
   static GHashTable *atom_hash = NULL;
+  ATOM win32_atom;
   
   if (!atom_hash)
     atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
 
-  retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash, atom_name));
+  retval = g_hash_table_lookup (atom_hash, atom_name);
   if (!retval)
     {
       if (strcmp (atom_name, "PRIMARY") == 0)
 	retval = GDK_SELECTION_PRIMARY;
       else if (strcmp (atom_name, "SECONDARY") == 0)
 	retval = GDK_SELECTION_SECONDARY;
+      else if (strcmp (atom_name, "CLIPBOARD") == 0)
+	retval = GDK_SELECTION_CLIPBOARD;
       else if (strcmp (atom_name, "ATOM") == 0)
 	retval = GDK_SELECTION_TYPE_ATOM;
       else if (strcmp (atom_name, "BITMAP") == 0)
@@ -70,15 +73,16 @@ gdk_atom_intern (const gchar *atom_name,
 	retval = GDK_SELECTION_TYPE_STRING;
       else
 	{
-	  retval = GlobalFindAtom (atom_name);
+	  win32_atom = GlobalFindAtom (atom_name);
 	  if (only_if_exists && retval == 0)
-	    retval = 0;
+	    win32_atom = 0;
 	  else
-	    retval = GlobalAddAtom (atom_name);
+	    win32_atom = GlobalAddAtom (atom_name);
+	  retval = GUINT_TO_POINTER (win32_atom);
 	}
       g_hash_table_insert (atom_hash, 
 			   g_strdup (atom_name), 
-			   GUINT_TO_POINTER (retval));
+			   retval);
     }
 
   return retval;
@@ -88,11 +92,13 @@ gchar *
 gdk_atom_name (GdkAtom atom)
 {
   gchar name[256];
+  ATOM win32_atom;
 
   switch (atom)
     {
     case GDK_SELECTION_PRIMARY: return g_strdup ("PRIMARY");
     case GDK_SELECTION_SECONDARY: return g_strdup ("SECONDARY");
+    case GDK_SELECTION_CLIPBOARD: return g_strdup ("CLIPBOARD");
     case GDK_SELECTION_TYPE_ATOM: return g_strdup ("ATOM");
     case GDK_SELECTION_TYPE_BITMAP: return g_strdup ("BITMAP");
     case GDK_SELECTION_TYPE_COLORMAP: return g_strdup ("COLORMAP");
@@ -102,9 +108,12 @@ gdk_atom_name (GdkAtom atom)
     case GDK_SELECTION_TYPE_WINDOW: return g_strdup ("WINDOW");
     case GDK_SELECTION_TYPE_STRING: return g_strdup ("STRING");
     }
-  if (atom < 0xC000)
-    return g_strdup_printf ("#%x", (guint) atom);
-  else if (GlobalGetAtomName (atom, name, sizeof (name)) == 0)
+  
+  win32_atom = GPOINTER_TO_UINT (atom);
+  
+  if (win32_atom < 0xC000)
+    return g_strdup_printf ("#%x", atom);
+  else if (GlobalGetAtomName (win32_atom, name, sizeof (name)) == 0)
     return NULL;
   return g_strdup (name);
 }

@@ -455,6 +455,7 @@ GdkPixbuf*  gtk_style_render_icon     (GtkStyle            *style,
                                        GtkIconSize          size,
                                        GtkWidget           *widget,
                                        const gchar         *detail);
+#ifndef GTK_DISABLE_DEPRECATED
 void gtk_draw_hline      (GtkStyle        *style,
 			  GdkWindow       *window,
 			  GtkStateType     state_type,
@@ -608,7 +609,6 @@ void gtk_draw_layout     (GtkStyle        *style,
                           gint             x,
                           gint             y,
                           PangoLayout     *layout);
-
 void gtk_draw_resize_grip (GtkStyle       *style,
                            GdkWindow      *window,
                            GtkStateType    state_type,
@@ -617,6 +617,7 @@ void gtk_draw_resize_grip (GtkStyle       *style,
                            gint            y,
                            gint            width,
                            gint            height);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 void gtk_paint_hline      (GtkStyle        *style,
 			   GdkWindow       *window,

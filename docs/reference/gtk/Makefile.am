@@ -29,7 +29,6 @@ IGNORE_HFILES=			\
 	gtkdebug.h		\
 	gtkhsv.h		\
 	gtkimmodule.h		\
-	gtkimcontextsimple.h	\
 	gtkintl.h		\
 	gtkmarshal.h		\
 	gtkprivate.h		\
@@ -45,10 +44,81 @@ IGNORE_HFILES=			\
 	gtktextsegment.h	\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
-	gtktypebuiltins.h
+	gtktypebuiltins.h	\
+	xembed.h
 
 # Images to copy into HTML directory
-HTML_IMAGES =
+HTML_IMAGES = \
+	$(top_srcdir)/gtk/stock-icons/stock_add.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_button_apply.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_text_bold.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_button_cancel.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_cdrom.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_clear.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_close.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_convert.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_menu_copy.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_menu_cut.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_menu_trash.png		\
+	$(top_srcdir)/gtk/stock-icons/dialog_error.png			\
+	$(top_srcdir)/gtk/stock-icons/dialog_info.png			\
+	$(top_srcdir)/gtk/stock-icons/dialog_question.png		\
+	$(top_srcdir)/gtk/stock-icons/dialog_warning.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_dnd.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_dnd_multiple.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_exec.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_search.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_search_replace.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_save.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_bottom.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_first.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_last.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_top.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_left_arrow.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_down_arrow.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_right_arrow.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_up_arrow.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_help.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_home.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_index.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_text_italic.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_jump_to.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_align_center.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_align_justify.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_align_left.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_align_right.png		\
+	$(top_srcdir)/gtk/stock-icons/dialog_error.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_new.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_button_no.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_button_ok.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_open.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_paste.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_preferences.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_print.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_print_preview.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_properties.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_exit.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_redo.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_refresh.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_remove.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_revert.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_save.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_save_as.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_colorselector.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_font.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_sort_ascending.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_sort_descending.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_spellcheck.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_stop.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_text_strikeout.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_undelete.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_text_underline.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_undo.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_button_yes.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_zoom_1.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_zoom_fit.png		\
+	$(top_srcdir)/gtk/stock-icons/stock_zoom_in.png			\
+	$(top_srcdir)/gtk/stock-icons/stock_zoom_out.png
 
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files = 		\
@@ -164,7 +234,10 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files)
 	@echo '*** Building HTML ***'
 	test -d $(srcdir)/html || mkdir $(srcdir)/html
 	cd $(srcdir)/html && gtkdoc-mkhtml $(DOC_MODULE) ../$(DOC_MAIN_SGML_FILE)
-	test "x$(HTML_IMAGES)" = "x" || ( cd $(srcdir) && cp $(HTML_IMAGES) html )
+	images="$(HTML_IMAGES)" ; 		\
+	for i in $$images ; do			\
+	  cp $$i html ;  			\
+	done
 	@echo '-- Fixing Crossreferences' 
 	cd $(srcdir) && gtkdoc-fixxref --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	touch html-build.stamp
@@ -212,7 +285,7 @@ dist-hook: dist-check-gtkdoc dist-hook-local
 	cp $(srcdir)/html/index.sgml $(distdir)/html
 	-cp $(srcdir)/html/*.html $(srcdir)/html/*.css $(distdir)/html
 
-	images=$(HTML_IMAGES) ;    	      \
+	images="$(HTML_IMAGES)" ;    	      \
 	for i in $$images ; do		      \
 	  cp $(srcdir)/$$i $(distdir)/html ;  \
 	done

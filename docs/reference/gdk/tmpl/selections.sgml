@@ -47,19 +47,14 @@ to the X Inter-client Communication Conventions Manual
 
 </para>
 
-<!-- ##### ENUM GdkSelection ##### -->
+<!-- ##### TYPEDEF GdkSelection ##### -->
 <para>
 The #GdkSelection enumeration contains predefined 
 atom values for several common selections.
 </para>
 
-@GDK_SELECTION_PRIMARY: The primary X selection. Programs
-typically claim this selection when the user
-selects text and paste its contents in response
-to a middle button press.
-@GDK_SELECTION_SECONDARY: An additional X selection.
 
-<!-- ##### ENUM GdkSelectionType ##### -->
+<!-- ##### TYPEDEF GdkSelectionType ##### -->
 <para>
 The #GdkSelectionType enumeration contains predefined
 atom values used to represent the types of data transferred
@@ -71,18 +66,8 @@ types for this purpose. However, supporting these types
 may be useful for compatibility with older programs.
 </para>
 
-@GDK_SELECTION_TYPE_ATOM: An atom. (format 32)
-@GDK_SELECTION_TYPE_BITMAP: A bitmap ID. (format 32)
-@GDK_SELECTION_TYPE_COLORMAP: A colormap ID. (format 32)
-@GDK_SELECTION_TYPE_DRAWABLE: A drawable ID. (format 32)
-@GDK_SELECTION_TYPE_INTEGER: An integer. (format 32)
-@GDK_SELECTION_TYPE_PIXMAP: A pixmap ID. (format 32)
-@GDK_SELECTION_TYPE_WINDOW: A window ID. (format 32)
-@GDK_SELECTION_TYPE_STRING: A string encoded
-    in ISO Latin-1. (With the additional of <symbol>TAB</symbol>
-     and <symbol>NEWLINE</symbol>.) (format 8)
 
-<!-- ##### ENUM GdkTarget ##### -->
+<!-- ##### TYPEDEF GdkTarget ##### -->
 <para>
 The #GdkTarget enumeration contains predefined atom values which are
 used to describe possible targets for a selection. Other atoms can be
@@ -91,13 +76,6 @@ for this purpose. However, supporting these types may be useful for
 compatibility with older programs.
 </para>
 
-@GDK_TARGET_BITMAP: A bitmap ID.
-@GDK_TARGET_COLORMAP: A colormap ID.
-@GDK_TARGET_DRAWABLE: A drawable ID.
-@GDK_TARGET_PIXMAP: A pixmap ID.
-@GDK_TARGET_STRING: A string encoded in ISO Latin-1. 
-     (With the additional of <symbol>TAB</symbol>
-       and <symbol>NEWLINE</symbol>.)
 
 <!-- ##### FUNCTION gdk_selection_owner_set ##### -->
 <para>

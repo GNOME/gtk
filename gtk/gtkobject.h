@@ -32,11 +32,7 @@
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkdebug.h>
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
 
 /* macros for casting a pointer to a GtkObject or GtkObjectClass pointer,
  * and to test whether `object' and `klass' are of type GTK_TYPE_OBJECT.
@@ -136,17 +132,22 @@ GtkType	gtk_object_get_type		(void) G_GNUC_CONST;
 GtkObject*	gtk_object_new		  (GtkType	       type,
 					   const gchar	      *first_property_name,
 					   ...);
+
+void gtk_object_sink	  (GtkObject *object);
+void gtk_object_destroy	  (GtkObject *object);
+
+/****************************************************************/
+
+#ifndef GTK_DISABLE_DEPRECATED 
+
 GtkObject*	gtk_object_ref		  (GtkObject	      *object);
 void		gtk_object_unref	  (GtkObject	      *object);
-void gtk_object_sink	  (GtkObject	    *object);
 void gtk_object_weakref	  (GtkObject	    *object,
 			   GtkDestroyNotify  notify,
 			   gpointer	     data);
 void gtk_object_weakunref (GtkObject	    *object,
 			   GtkDestroyNotify  notify,
 			   gpointer	     data);
-void gtk_object_destroy	  (GtkObject *object);
-
 
 /* Set 'data' to the "object_data" field of the object. The
  *  data is indexed by the "key". If there is already data
@@ -203,10 +204,6 @@ void  gtk_object_remove_no_notify_by_id	(GtkObject	 *object,
 #define	gtk_object_data_try_key	    g_quark_try_string
 #define	gtk_object_data_force_id    g_quark_from_string
 
-
-/* Non-public methods */
-
-
 /* GtkArg flag bits for gtk_object_add_arg_type
  */
 typedef enum
@@ -229,10 +226,8 @@ void	gtk_object_add_arg_type		(const gchar	*arg_name,
 					 guint		 arg_flags,
 					 guint		 arg_id);
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_OBJECT_H__ */

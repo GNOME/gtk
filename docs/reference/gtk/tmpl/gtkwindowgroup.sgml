@@ -19,8 +19,6 @@ GtkWindowGroup
 
 </para>
 
-@parent_instance: 
-@grabs: 
 
 <!-- ##### FUNCTION gtk_window_group_new ##### -->
 <para>

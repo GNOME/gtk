@@ -215,6 +215,7 @@ void   gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 					    gpointer             data,
 					    GtkDestroyNotify     notify);
 
+#ifndef GTK_DISABLE_DEPRECATED
 /* Compatibility functions for deprecated GtkMenuFactory code
  */
 typedef void (*GtkMenuCallback) (GtkWidget *widget,
@@ -239,7 +240,7 @@ void	gtk_item_factory_create_items_ac (GtkItemFactory	*ifactory,
 					  GtkItemFactoryEntry	*entries,
 					  gpointer		 callback_data,
 					  guint			 callback_type);
-
+#endif /* GTK_DISABLE_DEPRECATED */
 
 
 #ifdef __cplusplus

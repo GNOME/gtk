@@ -35,6 +35,7 @@ static void         gtk_list_store_tree_model_init (GtkTreeModelIface *iface);
 static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *iface);
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_list_store_sortable_init   (GtkTreeSortableIface   *iface);
+static void         gtk_list_store_finalize        (GObject           *object);
 static guint        gtk_list_store_get_flags       (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_list_store_get_column_type (GtkTreeModel      *tree_model,
@@ -110,6 +111,8 @@ static void     gtk_list_store_set_default_sort_func (GtkTreeSortable        *so
 						      GtkDestroyNotify        destroy);
 static gboolean gtk_list_store_has_default_sort_func (GtkTreeSortable        *sortable);
 
+
+static GObjectClass *parent_class = NULL;
 
 
 static void
@@ -194,7 +197,10 @@ gtk_list_store_class_init (GtkListStoreClass *class)
 {
   GObjectClass *object_class;
 
+  parent_class = g_type_class_peek_parent (class);
   object_class = (GObjectClass*) class;
+
+  object_class->finalize = gtk_list_store_finalize;
 }
 
 static void
@@ -378,6 +384,25 @@ gtk_list_store_set_column_type (GtkListStore *list_store,
     }
 
   list_store->column_headers[column] = type;
+}
+
+static void
+gtk_list_store_finalize (GObject *object)
+{
+  GtkListStore *list_store = GTK_LIST_STORE (object);
+
+  g_list_foreach (list_store->root, (GFunc) _gtk_tree_data_list_free, list_store->column_headers);
+  _gtk_tree_data_list_header_free (list_store->sort_list);
+  g_free (list_store->column_headers);
+  
+  if (list_store->default_sort_destroy)
+    {
+      (* list_store->default_sort_destroy) (list_store->default_sort_data);
+      list_store->default_sort_destroy = NULL;
+      list_store->default_sort_data = NULL;
+    }
+
+  (* parent_class->finalize) (object);
 }
 
 /* Fulfill the GtkTreeModel requirements */
@@ -572,23 +597,11 @@ gtk_list_store_iter_parent (GtkTreeModel *tree_model,
   return FALSE;
 }
 
-/**
- * gtk_list_store_set_value:
- * @list_store: A #GtkListStore
- * @iter: A valid #GtkTreeIter for the row being modified
- * @column: column number to modify
- * @value: new value for the cell
- *
- * Sets the data in the cell specified by @iter and @column.
- * The type of @value must be convertible to the type of the
- * column.
- *
- **/
-void
-gtk_list_store_set_value (GtkListStore *list_store,
-			  GtkTreeIter  *iter,
-			  gint          column,
-			  GValue       *value)
+gboolean
+gtk_list_store_real_set_value (GtkListStore *list_store,
+			       GtkTreeIter  *iter,
+			       gint          column,
+			       GValue       *value)
 {
   GtkTreeDataList *list;
   GtkTreeDataList *prev;
@@ -596,11 +609,12 @@ gtk_list_store_set_value (GtkListStore *list_store,
   GValue real_value = {0, };
   gboolean converted = FALSE;
   gint orig_column = column;
+  gboolean retval = FALSE;
 
-  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (VALID_ITER (iter, list_store));
-  g_return_if_fail (column >= 0 && column < list_store->n_columns);
-  g_return_if_fail (G_IS_VALUE (value));
+  g_return_val_if_fail (GTK_IS_LIST_STORE (list_store), FALSE);
+  g_return_val_if_fail (VALID_ITER (iter, list_store), FALSE);
+  g_return_val_if_fail (column >= 0 && column < list_store->n_columns, FALSE);
+  g_return_val_if_fail (G_IS_VALUE (value), FALSE);
 
   if (! g_type_is_a (G_VALUE_TYPE (value), list_store->column_headers[column]))
     {
@@ -611,7 +625,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
 		     G_STRLOC,
 		     g_type_name (G_VALUE_TYPE (value)),
 		     g_type_name (list_store->column_headers[column]));
-	  return;
+	  return retval;
 	}
       if (!g_value_transform (value, &real_value))
 	{
@@ -620,7 +634,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
 		     g_type_name (G_VALUE_TYPE (value)),
 		     g_type_name (list_store->column_headers[column]));
 	  g_value_unset (&real_value);
-	  return;
+	  return retval;
 	}
       converted = TRUE;
     }
@@ -636,11 +650,11 @@ gtk_list_store_set_value (GtkListStore *list_store,
 	    _gtk_tree_data_list_value_to_node (list, &real_value);
 	  else
 	    _gtk_tree_data_list_value_to_node (list, value);
-	  gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+	  retval = TRUE;
 	  gtk_tree_path_free (path);
 	  if (converted)
 	    g_value_unset (&real_value);
-	  return;
+	  return retval;
 	}
 
       column--;
@@ -672,13 +686,49 @@ gtk_list_store_set_value (GtkListStore *list_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-  gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+  retval = TRUE;
   gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
     gtk_list_store_sort_iter_changed (list_store, iter, orig_column);
+
+  return retval;
+}
+
+
+/**
+ * gtk_list_store_set_value:
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter for the row being modified
+ * @column: column number to modify
+ * @value: new value for the cell
+ *
+ * Sets the data in the cell specified by @iter and @column.
+ * The type of @value must be convertible to the type of the
+ * column.
+ *
+ **/
+void
+gtk_list_store_set_value (GtkListStore *list_store,
+			  GtkTreeIter  *iter,
+			  gint          column,
+			  GValue       *value)
+{
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (VALID_ITER (iter, list_store));
+  g_return_if_fail (column >= 0 && column < list_store->n_columns);
+  g_return_if_fail (G_IS_VALUE (value));
+
+  if (gtk_list_store_real_set_value (list_store, iter, column, value))
+    {
+      GtkTreePath *path;
+
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
+      gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+      gtk_tree_path_free (path);
+    }
 }
 
 /**
@@ -687,8 +737,8 @@ gtk_list_store_set_value (GtkListStore *list_store,
  * @iter: A valid #GtkTreeIter for the row being modified
  * @var_args: va_list of column/value pairs
  *
- * See @gtk_list_store_set; this version takes a va_list for
- * use by language bindings.
+ * See gtk_list_store_set(); this version takes a va_list for use by language
+ * bindings.
  *
  **/
 void
@@ -697,6 +747,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
                            va_list	 var_args)
 {
   gint column;
+  gboolean emit_signal = FALSE;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (VALID_ITER (iter, list_store));
@@ -728,14 +779,23 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 	}
 
       /* FIXME: instead of calling this n times, refactor with above */
-      gtk_list_store_set_value (list_store,
-				iter,
-				column,
-				&value);
+      emit_signal = gtk_list_store_real_set_value (list_store,
+						   iter,
+						   column,
+						   &value) || emit_signal;
 
       g_value_unset (&value);
 
       column = va_arg (var_args, gint);
+    }
+
+  if (emit_signal)
+    {
+      GtkTreePath *path;
+
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (list_store), iter);
+      gtk_tree_model_row_changed (GTK_TREE_MODEL (list_store), path, iter);
+      gtk_tree_path_free (path);
     }
 }
 
@@ -835,7 +895,9 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
  * @list_store: A #GtkListStore
  * @iter: A valid #GtkTreeIter
  *
- * Removes the given row from the list store.  After being removed, @iter is set to be the next valid row, or invalidated if it pointed to the last row inn @list_store
+ * Removes the given row from the list store.  After being removed, 
+ * @iter is set to be the next valid row, or invalidated if it pointed 
+ * to the last row in @list_store.
  *
  **/
 void
@@ -900,8 +962,8 @@ insert_after (GtkListStore *list_store,
  * Creates a new row at @position.  @iter will be changed to point to this new
  * row.  If @position is larger than the number of rows on the list, then the
  * new row will be appended to the list.  The row will be empty before this
- * function is called.  To fill in values, you need to call @gtk_list_store_set
- * or @gtk_list_store_set_value.
+ * function is called.  To fill in values, you need to call gtk_list_store_set()
+ * or gtk_list_store_set_value().
  *
  **/
 void
@@ -953,10 +1015,10 @@ gtk_list_store_insert (GtkListStore *list_store,
  * @iter: An unset #GtkTreeIter to set to the new row
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row before @sibling.  If @sibling is %NULL, then the row will be
- * appended to the beginning of the list.  @iter will be changed to point to
- * this new row.  The row will be empty before this function is called.  To fill
- * in values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * Inserts a new row before @sibling. If @sibling is %NULL, then the row will be
+ * appended to the end of the list. @iter will be changed to point to this new 
+ * row. The row will be empty before this function is called. To fill in values,
+ * you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1041,10 +1103,10 @@ gtk_list_store_insert_before (GtkListStore *list_store,
  * @iter: An unset #GtkTreeIter to set to the new row
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row after @sibling.  If @sibling is %NULL, then the row will be
- * prepended to the beginning of the list.  @iter will be changed to point to
- * this new row.  The row will be empty after this function is called.  To fill
- * in values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * Inserts a new row after @sibling. If @sibling is %NULL, then the row will be
+ * prepended to the beginning of the list. @iter will be changed to point to
+ * this new row. The row will be empty after this function is called. To fill
+ * in values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1093,9 +1155,9 @@ gtk_list_store_insert_after (GtkListStore *list_store,
  * @list_store: A #GtkListStore
  * @iter: An unset #GtkTreeIter to set to the prepend row
  *
- * Prepend a new row to @list_store.  @iter will be changed to point to this new
- * row.  The row will be empty after this function is called.  To fill in
- * values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * Prepend a new row to @list_store. @iter will be changed to point to this new
+ * row. The row will be empty after this function is called. To fill in
+ * values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1133,7 +1195,7 @@ gtk_list_store_prepend (GtkListStore *list_store,
  *
  * Appends a new row to @list_store.  @iter will be changed to point to this new
  * row.  The row will be empty after this function is called.  To fill in
- * values, you need to call @gtk_list_store_set or @gtk_list_store_set_value.
+ * values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void

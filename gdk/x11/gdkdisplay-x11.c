@@ -385,7 +385,7 @@ gdk_x11_display_impl_finalize (GObject *object)
   /* Free all GdkScreens */
   for (stmp = display_impl->screen_list; stmp; stmp = stmp->next)
       g_object_unref (G_OBJECT (stmp->data));
-  g_list_free (display_impl->screen_list);
+  g_slist_free (display_impl->screen_list);
   
   XCloseDisplay (display_impl->xdisplay);
   G_OBJECT_CLASS (parent_class)->finalize (object);

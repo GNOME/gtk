@@ -284,9 +284,8 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
                                                      G_MAXINT,
                                                      PANGO_WEIGHT_NORMAL,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
-  
 
-  g_object_class_install_property (object_class,
+   g_object_class_install_property (object_class,
                                    PROP_STRETCH,
                                    g_param_spec_enum ("stretch",
                                                       _("Font stretch"),
@@ -940,7 +939,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	    break;
 	  case PROP_WEIGHT:
 	    pango_font_description_set_weight (celltext->font,
-					       g_value_get_enum (value));
+					       g_value_get_int (value));
 	    break;
 	  case PROP_STRETCH:
 	    pango_font_description_set_stretch (celltext->font,

@@ -116,10 +116,10 @@ do_sizegroup (void)
 					    NULL);
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       
-      gtk_signal_connect (GTK_OBJECT (window), "response",
-			  GTK_SIGNAL_FUNC (gtk_widget_destroy), NULL);
-      gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			  GTK_SIGNAL_FUNC (gtk_widget_destroyed), &window);
+      g_signal_connect (window, "response",
+			G_CALLBACK (gtk_widget_destroy), NULL);
+      g_signal_connect (window, "destroy",
+			G_CALLBACK (gtk_widget_destroyed), &window);
 
       vbox = gtk_vbox_new (FALSE, 5);
       gtk_box_pack_start (GTK_BOX (GTK_DIALOG (window)->vbox), vbox, TRUE, TRUE, 0);
@@ -160,8 +160,8 @@ do_sizegroup (void)
       gtk_box_pack_start (GTK_BOX (vbox), check_button, FALSE, FALSE, 0);
       
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (check_button), TRUE);
-      gtk_signal_connect (GTK_OBJECT (check_button), "toggled",
-			  GTK_SIGNAL_FUNC (toggle_grouping), size_group);
+      g_signal_connect (check_button, "toggled",
+			G_CALLBACK (toggle_grouping), size_group);
     }
 
   if (!GTK_WIDGET_VISIBLE (window))

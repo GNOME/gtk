@@ -79,7 +79,7 @@ Add a child to the top or left pane with
 default parameters. This is equivalent
 to
 <programlisting>
-gtk_paned_pack1(paned, FALSE, TRUE);
+gtk_paned_pack1(paned, child, FALSE, TRUE);
 </programlisting>
 </para>
 
@@ -92,7 +92,7 @@ gtk_paned_pack1(paned, FALSE, TRUE);
 Add a child to the bottom or right pane with default
 parameters. This is equivalent to 
 <programlisting>
-gtk_paned_pack1(paned, FALSE, FALSE);
+gtk_paned_pack2(paned, child, TRUE, TRUE);
 </programlisting>
 </para>
 

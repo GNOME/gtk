@@ -1225,7 +1225,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       GdkPixbuf *pixbuf = NULL;
       image = NULL;
 
-      pixbuf = gdk_pixbuf_new_from_stream (-1,
+      pixbuf = gdk_pixbuf_new_from_inline (-1,
 					   entry->extra_data,
 					   FALSE,
 					   NULL);
@@ -1733,8 +1733,8 @@ gtk_item_factory_parse_rc_scanner (GScanner *scanner)
     gtk_type_class (GTK_TYPE_ITEM_FACTORY);
 
   saved_symbol = g_scanner_lookup_symbol (scanner, "menu-path");
-  g_scanner_remove_symbol (scanner, "menu-path");
-  g_scanner_add_symbol (scanner, "menu-path", gtk_item_factory_parse_menu_path);
+  g_scanner_scope_remove_symbol (scanner, 0, "menu-path");
+  g_scanner_scope_add_symbol (scanner, 0, "menu-path", gtk_item_factory_parse_menu_path);
 
   g_scanner_peek_next_token (scanner);
 
@@ -1747,8 +1747,8 @@ gtk_item_factory_parse_rc_scanner (GScanner *scanner)
       g_scanner_peek_next_token (scanner);
     }
 
-  g_scanner_remove_symbol (scanner, "menu-path");
-  g_scanner_add_symbol (scanner, "menu-path", saved_symbol);
+  g_scanner_scope_remove_symbol (scanner, 0, "menu-path");
+  g_scanner_scope_add_symbol (scanner, 0, "menu-path", saved_symbol);
 }
 
 void

@@ -318,7 +318,7 @@ expose_func (GtkWidget *drawing_area, GdkEventExpose *event, gpointer data)
 {
 	GdkPixbuf *pixbuf;
 
-	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
+	pixbuf = (GdkPixbuf *)g_object_get_data (G_OBJECT (drawing_area), "pixbuf");
 
 	if (gdk_pixbuf_get_has_alpha (pixbuf)) {
 		gdk_draw_rgb_32_image (drawing_area->window,
@@ -350,14 +350,14 @@ config_func (GtkWidget *drawing_area, GdkEventConfigure *event, gpointer data)
 {
 	GdkPixbuf *pixbuf;
     
-	pixbuf = (GdkPixbuf *)gtk_object_get_data(GTK_OBJECT(drawing_area), "pixbuf");
+	pixbuf = (GdkPixbuf *)g_object_get_data (G_OBJECT (drawing_area), "pixbuf");
 
-	g_print("X:%d Y:%d\n", event->width, event->height);
+	g_print ("X:%d Y:%d\n", event->width, event->height);
 
 #if 0
 	if (((event->width) != gdk_pixbuf_get_width (pixbuf)) ||
 	    ((event->height) != gdk_pixbuf_get_height (pixbuf)))
-		gdk_pixbuf_scale(pixbuf, event->width, event->height);
+		gdk_pixbuf_scale (pixbuf, event->width, event->height);
 #endif
 }
 
@@ -381,8 +381,8 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 				 "GtkWindow::title", title ? title : "testrgb",
 				 "GtkWindow::allow_shrink", TRUE,
 				 NULL);
-	gtk_signal_connect (GTK_OBJECT (window), "destroy",
-			    (GtkSignalFunc) quit_func, NULL);
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (quit_func), NULL);
 
 	vbox = gtk_vbox_new (FALSE, 0);
 
@@ -393,25 +393,24 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 	drawing_area = gtk_drawing_area_new ();
 
 	temp_box = gtk_hbox_new (FALSE, 0);
-	gtk_widget_set_size_request (GTK_WIDGET(drawing_area), w, h);
+	gtk_widget_set_size_request (GTK_WIDGET (drawing_area), w, h);
 	gtk_box_pack_start (GTK_BOX (temp_box), drawing_area, FALSE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (vbox), temp_box, FALSE, FALSE, 0);
 	
 
-	gtk_signal_connect (GTK_OBJECT(drawing_area), "expose_event",
-			    GTK_SIGNAL_FUNC(expose_func), NULL);
-	gtk_signal_connect (GTK_OBJECT(drawing_area), "configure_event",
-			    GTK_SIGNAL_FUNC (config_func), NULL);
+	g_signal_connect (drawing_area, "expose_event",
+			  G_CALLBACK (expose_func), NULL);
+	g_signal_connect (drawing_area, "configure_event",
+			  G_CALLBACK (config_func), NULL);
 
-	gtk_object_set_data (GTK_OBJECT(drawing_area), "pixbuf", pixbuf);
+	g_object_set_data (G_OBJECT (drawing_area), "pixbuf", pixbuf);
 
 	gtk_widget_show (drawing_area);
 
 	button = gtk_button_new_with_label ("Quit");
 	gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-	gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
-				   (GtkSignalFunc) gtk_widget_destroy,
-				   GTK_OBJECT (window));
+	g_signal_connect_swapped (button, "clicked",
+				  G_CALLBACK (gtk_widget_destroy), window);
 
 	gtk_widget_show (button);
 
@@ -425,7 +424,7 @@ new_testrgb_window (GdkPixbuf *pixbuf, gchar *title)
 
 
 static gint
-update_timeout(gpointer data)
+update_timeout (gpointer data)
 {
         ProgressFileStatus *status = data;
 	gboolean done;
@@ -433,10 +432,10 @@ update_timeout(gpointer data)
         
 	done = FALSE;
         error = FALSE;
-	if (!feof(status->imagefile)) {
+	if (!feof (status->imagefile)) {
 		gint nbytes;
                 
-		nbytes = fread(status->buf, 1, status->readlen, 
+		nbytes = fread (status->buf, 1, status->readlen, 
 			       status->imagefile);
 
 
@@ -467,31 +466,31 @@ update_timeout(gpointer data)
 
 
 static void
-progressive_prepared_callback(GdkPixbufLoader* loader, gpointer data)
+progressive_prepared_callback (GdkPixbufLoader* loader, gpointer data)
 {
         GtkWidget** retloc = data;
         GdkPixbuf* pixbuf;
 
-        pixbuf = gdk_pixbuf_loader_get_pixbuf(loader);
-        g_assert(pixbuf != NULL);
+        pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+        g_assert (pixbuf != NULL);
 
-        gdk_pixbuf_ref(pixbuf); /* for the RGB window */
+        gdk_pixbuf_ref (pixbuf); /* for the RGB window */
 
-        *retloc = new_testrgb_window(pixbuf, "Progressive");
+        *retloc = new_testrgb_window (pixbuf, "Progressive");
 
         return;
 }
 
 
 static void
-progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint width, guint height, gpointer data)
+progressive_updated_callback (GdkPixbufLoader* loader, guint x, guint y, guint width, guint height, gpointer data)
 {
         GtkWidget** window_loc = data;
 
 /*  	g_print ("progressive_updated_callback:\n\t%d\t%d\t%d\t%d\n", x, y, width, height); */
 
         if (*window_loc != NULL)
-                gtk_widget_queue_draw_area(*window_loc,
+                gtk_widget_queue_draw_area (*window_loc,
 					   x, y, width, height);
 
         return;
@@ -499,7 +498,7 @@ progressive_updated_callback(GdkPixbufLoader* loader, guint x, guint y, guint wi
 
 static int readlen = 4096;
 
-extern void pixbuf_init();
+extern void pixbuf_init ();
 
 int
 main (int argc, char **argv)
@@ -520,16 +519,16 @@ main (int argc, char **argv)
 	      gdk_rgb_get_colormap_for_screen (gdk_get_default_screen ()));
 
 	{
-		char *tbf_readlen = getenv("TBF_READLEN");
-		if(tbf_readlen) readlen = atoi(tbf_readlen);
+		char *tbf_readlen = getenv ("TBF_READLEN");
+		if (tbf_readlen) readlen = atoi (tbf_readlen);
 	}
 
 	{
-		char *tbf_bps = getenv("TBF_KBPS");
+		char *tbf_bps = getenv ("TBF_KBPS");
 		guint bps;
 
 		if (tbf_bps) {
-			bps = atoi(tbf_bps);
+			bps = atoi (tbf_bps);
 			g_print ("Simulating %d kBytes/sec\n", bps);
 			readlen = (bps*1024)/10;
 		}
@@ -553,7 +552,7 @@ main (int argc, char **argv)
                 }
 
                 /* Test loading from inline data. */
-                pixbuf = gdk_pixbuf_new_from_stream (-1, apple_red, FALSE, &error);
+                pixbuf = gdk_pixbuf_new_from_inline (-1, apple_red, FALSE, &error);
 		if (!pixbuf)
 		  {
 		    fprintf (stderr, "failed to construct \"red apple\" pixbuf: %s\n",
@@ -563,7 +562,7 @@ main (int argc, char **argv)
 		else
 		  new_testrgb_window (pixbuf, "Red apple from inlined RLE data");
 
-                pixbuf = gdk_pixbuf_new_from_stream (sizeof (gnome_foot), gnome_foot, TRUE, NULL);
+                pixbuf = gdk_pixbuf_new_from_inline (sizeof (gnome_foot), gnome_foot, TRUE, NULL);
                 new_testrgb_window (pixbuf, "GNOME Foot from inlined RLE data");
                 
 		found_valid = TRUE;
@@ -581,7 +580,7 @@ main (int argc, char **argv)
                         }
                         
 #if 0
-			pixbuf = gdk_pixbuf_rotate(pixbuf, 10.0);
+			pixbuf = gdk_pixbuf_rotate (pixbuf, 10.0);
 #endif
 
 			if (pixbuf) {
@@ -600,13 +599,11 @@ main (int argc, char **argv)
 			status.rgbwin = &rgb_window;
 
 			status.buf = g_malloc (readlen);
-                        g_signal_connect (G_OBJECT(pixbuf_loader),
-					  "area_prepared",
-					  GTK_SIGNAL_FUNC(progressive_prepared_callback),
+                        g_signal_connect (pixbuf_loader, "area_prepared",
+					  G_CALLBACK (progressive_prepared_callback),
 					  &rgb_window);
-                        g_signal_connect (G_OBJECT(pixbuf_loader),
-					  "area_updated",
-					  GTK_SIGNAL_FUNC(progressive_updated_callback),
+                        g_signal_connect (pixbuf_loader, "area_updated",
+					  G_CALLBACK (progressive_updated_callback),
 					  &rgb_window);
 			
                         status.imagefile = fopen (argv[1], "r");
@@ -614,7 +611,7 @@ main (int argc, char **argv)
 
 			status.readlen = readlen;
 
-                        status.timeout = gtk_timeout_add(100, update_timeout, &status);
+                        status.timeout = gtk_timeout_add (100, update_timeout, &status);
                 }
 #endif
 	}

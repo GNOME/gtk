@@ -125,6 +125,60 @@ Returns the current relief style of the given #GtkButton.
 @Returns: The current #GtkReliefStyle
 
 
+<!-- ##### FUNCTION gtk_button_get_label ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_set_label ##### -->
+<para>
+
+</para>
+
+@button: 
+@label: 
+
+
+<!-- ##### FUNCTION gtk_button_get_use_stock ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_set_use_stock ##### -->
+<para>
+
+</para>
+
+@button: 
+@value: 
+
+
+<!-- ##### FUNCTION gtk_button_get_use_underline ##### -->
+<para>
+
+</para>
+
+@button: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_set_use_underline ##### -->
+<para>
+
+</para>
+
+@button: 
+@value: 
+
+
 <!-- ##### SIGNAL GtkButton::activate ##### -->
 <para>
 

@@ -3018,8 +3018,11 @@ gtk_label_copy_clipboard (GtkLabel *label)
         start = len;
 
       if (start != end)
-	gtk_clipboard_set_text (gtk_clipboard_get (GDK_NONE),
-				label->text + start, end - start);
+	gtk_clipboard_set_text 
+	  (gtk_clipboard_get_for_display 
+	   (gtk_widget_get_display (GTK_WIDGET (label)),
+				    GDK_SELECTION_CLIPBOARD),
+	   label->text + start, end - start);
     }
 }
 

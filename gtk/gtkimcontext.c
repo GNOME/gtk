@@ -47,19 +47,22 @@ gtk_im_context_get_type (void)
 
   if (!im_context_type)
     {
-      static const GtkTypeInfo im_context_info =
+      static const GTypeInfo im_context_info =
       {
-	"GtkIMContext",
-	sizeof (GtkIMContext),
-	sizeof (GtkIMContextClass),
-	(GtkClassInitFunc) gtk_im_context_class_init,
-	(GtkObjectInitFunc) gtk_im_context_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+        sizeof (GtkIMContextClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_im_context_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkIMContext),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_im_context_init,
       };
-
-      im_context_type = gtk_type_unique (GTK_TYPE_OBJECT, &im_context_info);
+      
+      im_context_type = g_type_register_static (G_TYPE_OBJECT,
+						"GtkIMContext",
+						&im_context_info, 0);
     }
 
   return im_context_type;

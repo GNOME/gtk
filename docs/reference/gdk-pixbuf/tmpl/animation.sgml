@@ -20,35 +20,22 @@ Animated images.
     #GdkPixbufLoader
   </para>
 
-<!-- ##### ENUM GdkPixbufFrameAction ##### -->
-<para>
-
-</para>
-
-@GDK_PIXBUF_FRAME_RETAIN: 
-@GDK_PIXBUF_FRAME_DISPOSE: 
-@GDK_PIXBUF_FRAME_REVERT: 
-
 <!-- ##### STRUCT GdkPixbufFrame ##### -->
 <para>
 
 </para>
 
-@pixbuf: 
-@x_offset: 
-@y_offset: 
-@delay_time: 
-@elapsed: 
-@action: 
-@need_recomposite: 
-@bg_transparent: 
-@composited: 
-@revert: 
 
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
     This object describes an animation.
   </para>
+
+
+<!-- ##### STRUCT GdkPixbufAnimationIter ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
@@ -93,6 +80,71 @@ Animated images.
 </para>
 
 @animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_iter ##### -->
+<para>
+
+</para>
+
+@animation: 
+@start_time: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_is_static_image ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_get_static_image ##### -->
+<para>
+
+</para>
+
+@animation: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_advance ##### -->
+<para>
+
+</para>
+
+@iter: 
+@current_time: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_get_delay_time ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_on_currently_loading_frame ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_animation_iter_get_pixbuf ##### -->
+<para>
+
+</para>
+
+@iter: 
 @Returns: 
 
 

@@ -212,42 +212,42 @@ gtk_button_class_init (GtkButtonClass *klass)
 
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[RELEASED] =
     gtk_signal_new ("released",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, released),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[CLICKED] =
     gtk_signal_new ("clicked",
-                    GTK_RUN_FIRST | GTK_RUN_ACTION,
+                    GTK_RUN_LAST | GTK_RUN_ACTION,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[ENTER] =
     gtk_signal_new ("enter",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[LEAVE] =
     gtk_signal_new ("leave",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
                     gtk_marshal_VOID__VOID,
 		    GTK_TYPE_NONE, 0);
   button_signals[ACTIVATE] =
     gtk_signal_new ("activate",
-                    GTK_RUN_FIRST,
+                    GTK_RUN_LAST,
                     GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, activate),
                     gtk_marshal_VOID__VOID,
@@ -465,16 +465,24 @@ gtk_button_new_with_label (const gchar *label)
 /**
  * gtk_button_new_from_stock:
  * @stock_id: the name of the stock item 
- * @returns: a new #GtkButton
  *
  * Creates a new #GtkButton containing the image and text from a stock item.
  * Some stock ids have preprocessor macros like #GTK_STOCK_OK and
  * #GTK_STOCK_APPLY.
+ *
+ * If @stock_id is unknown, then it will be treated as a mnemonic
+ * label (as for gtk_button_new_with_mnemonic()).
+ *
+ * Returns: a new #GtkButton
  **/
 GtkWidget*
-gtk_button_new_from_stock (const gchar   *stock_id)
+gtk_button_new_from_stock (const gchar *stock_id)
 {
-  return g_object_new (GTK_TYPE_BUTTON, "label", stock_id, "use_stock", TRUE,  NULL);
+  return g_object_new (GTK_TYPE_BUTTON,
+                       "label", stock_id,
+                       "use_stock", TRUE,
+                       "use_underline", TRUE,
+                       NULL);
 }
 
 /**

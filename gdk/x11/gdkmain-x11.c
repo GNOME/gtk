@@ -89,7 +89,9 @@ static int	    gdk_x_io_error		 (Display     *display);
 static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 						     * 0 otherwise.
 						     */
-
+/* FIXME no multihead support for autorepeat yet, as it is not
+ * used nor exported */
+static gint autorepeat;
 static gboolean gdk_synchronize = FALSE;
 
 #ifdef G_ENABLE_DEBUG
@@ -106,10 +108,10 @@ static const int gdk_ndebug_keys = sizeof(gdk_debug_keys)/sizeof(GDebugKey);
 #endif /* G_ENABLE_DEBUG */
 
 GdkArgDesc _gdk_windowing_args[] = {
-  { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL   },
-  { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,     (GdkArgFunc)NULL   },
-  { "gxid-host",   GDK_ARG_STRING,   &_gdk_input_gxid_host, (GdkArgFunc)NULL   },
-  { "gxid-port",   GDK_ARG_INT,      &_gdk_input_gxid_port, (GdkArgFunc)NULL   },
+  { "display",     GDK_ARG_STRING,   &_gdk_display_name,    (GdkArgFunc)NULL },
+  { "sync",        GDK_ARG_BOOL,     &gdk_synchronize,      (GdkArgFunc)NULL },
+  { "gxid-host",   GDK_ARG_STRING,   &_gdk_input_gxid_host, (GdkArgFunc)NULL },
+  { "gxid-port",   GDK_ARG_INT,      &_gdk_input_gxid_port, (GdkArgFunc)NULL },
   { NULL }
 };
 
@@ -118,10 +120,13 @@ _gdk_windowing_init_check_for_display (int argc,
 				       char **argv,
 				       char *display_name)
 {
+  XKeyboardState keyboard_state;
   XClassHint *class_hint;
   guint pid;
   GdkDisplay *display;
   GdkDisplayImplX11 *display_impl;
+
+  _gdk_x11_initialize_locale ();
   
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
@@ -151,8 +156,14 @@ _gdk_windowing_init_check_for_display (int argc,
   pid = getpid ();
   XChangeProperty (display_impl->xdisplay,
 		   display_impl->leader_window,
-		   gdk_x11_get_real_atom_by_name (display, "_NET_WM_PID"),
+		   gdk_x11_get_xatom_by_name_for_display (display, 
+							  "_NET_WM_PID"),
 		   XA_CARDINAL, 32, PropModeReplace, (guchar *) & pid, 1);
+  
+  _gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
+
+  XGetKeyboardControl (display_impl->xdisplay, &keyboard_state);
+  autorepeat = keyboard_state.global_auto_repeat;
 
 #ifdef HAVE_XKB
   {
@@ -163,7 +174,8 @@ _gdk_windowing_init_check_for_display (int argc,
         xkb_major = XkbMajorVersion;
         xkb_minor = XkbMinorVersion;
 	    
-        if (XkbQueryExtension (display_impl->xdisplay, NULL, &display_impl->xkb_event_type, NULL,
+        if (XkbQueryExtension (display_impl->xdisplay, 
+			       NULL, &display_impl->xkb_event_type, NULL,
                                &xkb_major, &xkb_minor))
           {
 	    Bool detectable_autorepeat_supported;
@@ -180,7 +192,8 @@ _gdk_windowing_init_check_for_display (int argc,
 					&detectable_autorepeat_supported);
 
 	    GDK_NOTE (MISC, g_message ("Detectable autorepeat %s.",
-				       detectable_autorepeat_supported ? "supported" : "not supported"));
+				       detectable_autorepeat_supported ? 
+				       "supported" : "not supported"));
 	    
 	    display_impl->have_xkb_autorepeat = detectable_autorepeat_supported;
           }
@@ -375,7 +388,8 @@ gdk_pointer_ungrab (guint32 time)
 gboolean
 gdk_pointer_is_grabbed (void)
 {
-  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_pointer_is_grabbed instead\n"));
+  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_display_pointer_is_grabbed "
+				  "instead\n"));
   return gdk_display_pointer_is_grabbed (gdk_get_default_display ());
 }
 #endif
@@ -568,7 +582,8 @@ gdk_screen_height_mm (void)
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_set_sm_client_id_for_display instead\n"));
+  GDK_NOTE (MULTIHEAD, g_message ("Use gdk_set_sm_client_id_for_display "
+				  "instead\n"));
   gdk_set_sm_client_id_for_display (gdk_get_default_display (),sm_client_id);
 }
 #endif
@@ -582,13 +597,15 @@ gdk_set_sm_client_id_for_display (GdkDisplay *display,
   if (sm_client_id && strcmp (sm_client_id, ""))
     {
       XChangeProperty (display_impl->xdisplay, display_impl->leader_window,
-		       gdk_x11_get_real_atom_by_name (display, "SM_CLIENT_ID"),
+		       gdk_x11_get_xatom_by_name_for_display (display, 
+							      "SM_CLIENT_ID"),
 		       XA_STRING, 8, PropModeReplace, sm_client_id,
 		       strlen (sm_client_id));
     }
   else
     XDeleteProperty (display_impl->xdisplay, display_impl->leader_window,
-		     gdk_x11_get_real_atom_by_name (display, "SM_CLIENT_ID"));
+		     gdk_x11_get_xatom_by_name_for_display (display, 
+							    "SM_CLIENT_ID"));
 }
 
 #ifndef GDK_MULTIHEAD_SAFE
@@ -800,8 +817,10 @@ _gdk_region_get_xrectangles (GdkRegion   *region,
     {
       rectangles[i].x = CLAMP (boxes[i].x1 + x_offset, G_MINSHORT, G_MAXSHORT);
       rectangles[i].y = CLAMP (boxes[i].y1 + y_offset, G_MINSHORT, G_MAXSHORT);
-      rectangles[i].width = CLAMP (boxes[i].x2 + x_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
-      rectangles[i].height = CLAMP (boxes[i].y2 + y_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
+      rectangles[i].width = CLAMP 
+	(boxes[i].x2 + x_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
+      rectangles[i].height = CLAMP 
+	(boxes[i].y2 + y_offset, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
     }
 
   *rects = rectangles;

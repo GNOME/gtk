@@ -28,14 +28,6 @@
 #include "gdkconfig.h"
 #include <math.h>
 
-#if defined (GDK_WINDOWING_X11)
-#include "x11/gdkx.h"
-#elif defined (GDK_WINDOWING_WIN32)
-#include "win32/gdkwin32.h"
-#elif defined (GDK_WINDOWING_FB)
-#include "linux-fb/gdkfb.h"
-#endif
-
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkcolorsel.h"
@@ -1779,7 +1771,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       GTK_SIGNAL_FUNC (get_screen_color), NULL);
-  picker_pix = gdk_pixbuf_new_from_xpm_data (&picker);
+  picker_pix = gdk_pixbuf_new_from_xpm_data ((const char **) &picker);
   picker_image = gtk_image_new_from_pixbuf (picker_pix);
   gtk_container_add (GTK_CONTAINER (button), picker_image);
   gtk_widget_show (GTK_WIDGET (picker_image));

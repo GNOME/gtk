@@ -96,12 +96,17 @@ gtk_gc_release (GdkGC *gc)
   g_cache_remove (gc_cache, gc);
 }
 
-void 
+static void 
 free_gc_drawable (gpointer data)
 {
   GtkGCDrawable * drawable = data;
   g_object_unref (G_OBJECT (drawable->drawable));
   g_free (drawable);
+}
+
+static void free_ht (gpointer data)
+{
+  g_hash_table_destroy ((GHashTable*) data);
 }
 
 static GHashTable*
@@ -113,7 +118,9 @@ gtk_gc_get_drawable_ht (GdkScreen *screen)
       ht = g_hash_table_new_full ((GHashFunc) gtk_gc_drawable_hash,
 				  (GEqualFunc) gtk_gc_drawable_equal,
 				  NULL, free_gc_drawable);
-      g_object_set_data_full (G_OBJECT (screen), "gtk-gc-drawable-ht", ht, g_hash_table_destroy);
+      g_object_set_data_full (G_OBJECT (screen), 
+			      "gtk-gc-drawable-ht", ht, 
+			      free_ht);
     }
   return ht;
 }

@@ -212,7 +212,7 @@ gdk_X11_screen_get_window_at_pointer (GdkScreen *screen,
 Window   
 gdk_x11_screen_get_root_xwindow  (GdkScreen   *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_IMPL_X11 (screen)->xroot_window;
 }
 
@@ -220,7 +220,7 @@ static void
 gdk_X11_screen_finalize (GObject *object)
 {
   GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (object);
-  int i;
+  /* int i; */
   g_object_unref (G_OBJECT (screen_impl->root_window));
   
   /* Visual Part (Need to implement finalize for Visuals for a clean

@@ -50,7 +50,9 @@ typedef void (* GtkClipboardClearFunc)        (GtkClipboard     *clipboard,
 
 GtkClipboard *gtk_clipboard_get_for_display (GdkDisplay *display,
 					     GdkAtom     selection);
+#ifndef GDK_MULTIHEAD_SAFE
 GtkClipboard *gtk_clipboard_get             (GdkAtom     selection);
+#endif
 
 gboolean gtk_clipboard_set_with_data  (GtkClipboard          *clipboard,
 				       const GtkTargetEntry  *targets,

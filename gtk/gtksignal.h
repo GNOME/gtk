@@ -33,11 +33,9 @@
 #include <gtk/gtkmarshal.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
+G_BEGIN_DECLS
   
+#ifndef GTK_DISABLE_DEPRECATED
 
 #define	gtk_signal_default_marshaller	gtk_marshal_VOID__VOID
 
@@ -143,10 +141,8 @@ void	gtk_signal_compat_matched		(GtkObject	    *object,
 						 GSignalMatchType    match,
 						 guint               action);
 
+#endif /* GTK_DISABLE_DEPRECATED */
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
-
+G_END_DECLS
 
 #endif /* __GTK_SIGNAL_H__ */
