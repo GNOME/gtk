@@ -154,6 +154,7 @@ struct _GtkText
   gint timer;
   
   guint button;			/* currently pressed mouse button */
+  GdkGC *bg_gc;			/* gc for drawing background pixmap */
 };
 
 struct _GtkTextClass

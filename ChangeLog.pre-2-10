@@ -1,3 +1,13 @@
+Wed Jan 20 13:06:51 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.[ch] (clear_[focus_]area): Instead of drawing
+	a background pixmap in with gdk_draw_pixmap(), set
+	it as a tile pixmap for a GC. This should speed
+	up things considerably and also will hide a bug
+	where text->first_onscreen_ver_pixel is being
+	corrupted, causing the bg pixmap drawing code to generate
+	graphics exposes.
+
 Tue Jan 19 22:15:10 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtklist.c

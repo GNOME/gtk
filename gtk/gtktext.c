@@ -296,6 +296,7 @@ static void delete_expose (GtkText* text,
 			   guint nchars,
 			   guint old_lines, 
 			   guint old_pixels);
+static GdkGC *create_bg_gc (GtkText *text);
 static void clear_area (GtkText *text, GdkRectangle *area);
 static void draw_line (GtkText* text,
 		       gint pixel_height,
@@ -669,6 +670,7 @@ gtk_text_init (GtkText *text)
   text->hadj = NULL;
   text->vadj = NULL;
   text->gc = NULL;
+  text->bg_gc = NULL;
   text->line_wrap_bitmap = NULL;
   text->line_arrow_bitmap = NULL;
   
@@ -1302,6 +1304,9 @@ gtk_text_realize (GtkWidget *widget)
   /* Can't call gtk_style_set_background here because it's handled specially */
   gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
   gdk_window_set_background (text->text_area, &widget->style->base[GTK_STATE_NORMAL]);
+
+  if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
+    text->bg_gc = create_bg_gc (text);
   
   text->line_wrap_bitmap = gdk_bitmap_create_from_data (text->text_area,
 							(gchar*) line_wrap_bits,
@@ -1407,6 +1412,15 @@ gtk_text_style_set	(GtkWidget      *widget,
       gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
       gdk_window_set_background (text->text_area, &widget->style->base[GTK_STATE_NORMAL]);
       
+      if (text->bg_gc)
+	{
+	  gdk_gc_destroy (text->bg_gc);
+	  text->bg_gc = NULL;
+	}
+
+      if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
+	text->bg_gc = create_bg_gc (text);
+
       recompute_geometry (text);
     }
 
@@ -1447,6 +1461,12 @@ gtk_text_unrealize (GtkWidget *widget)
   
   gdk_gc_destroy (text->gc);
   text->gc = NULL;
+
+  if (text->bg_gc)
+    {
+      gdk_gc_destroy (text->bg_gc);
+      text->bg_gc = NULL;
+    }
   
   gdk_pixmap_unref (text->line_wrap_bitmap);
   gdk_pixmap_unref (text->line_arrow_bitmap);
@@ -1466,47 +1486,16 @@ clear_focus_area (GtkText *text, gint area_x, gint area_y, gint area_width, gint
   gint xthick = TEXT_BORDER_ROOM + widget->style->klass->xthickness;
   
   gint width, height;
-  gint xorig, yorig;
-  gint x, y;
   
   gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
   
-  yorig = - text->first_onscreen_ver_pixel + ythick;
-  xorig = - text->first_onscreen_hor_pixel + xthick;
-  
-  while (yorig > 0)
-    yorig -= height;
-  
-  while (xorig > 0)
-    xorig -= width;
-  
-  for (y = area_y; y < area_y + area_height; )
-    {
-      gint yoff = (y - yorig) % height;
-      gint yw = MIN(height - yoff, (area_y + area_height) - y);
-      
-      for (x = area_x; x < area_x + area_width; )
-	{
-	  gint xoff = (x - xorig) % width;
-	  gint xw = MIN(width - xoff, (area_x + area_width) - x);
-	  
-	  gdk_draw_pixmap (widget->window,
-			   text->gc,
-			   widget->style->bg_pixmap[GTK_STATE_NORMAL],
-			   xoff,
-			   yoff,
-			   x,
-			   y,
-			   xw,
-			   yw);
-	  
-	  x += width - xoff;
-	}
-      y += height - yoff;
-    }
+  gdk_gc_set_ts_origin (text->bg_gc,
+			(- text->first_onscreen_hor_pixel + xthick) % width,
+			(- text->first_onscreen_ver_pixel + ythick) % height);
+
+  gdk_draw_rectangle (GTK_WIDGET (text)->window, text->bg_gc, TRUE,
+		      area_x, area_y, area_width, area_height);
 }
-
-
 
 static void
 gtk_text_draw_focus (GtkWidget *widget)
@@ -5231,46 +5220,35 @@ draw_cursor (GtkText* text, gint absolute)
     }
 }
 
+static GdkGC *
+create_bg_gc (GtkText *text)
+{
+  GdkGCValues values;
+  
+  values.tile = GTK_WIDGET (text)->style->bg_pixmap[GTK_STATE_NORMAL];
+  values.fill = GDK_TILED;
+
+  return gdk_gc_new_with_values (text->text_area, &values,
+				 GDK_GC_FILL | GDK_GC_TILE);
+}
+
 static void
 clear_area (GtkText *text, GdkRectangle *area)
 {
   GtkWidget *widget = GTK_WIDGET (text);
   
-  if (widget->style->bg_pixmap[GTK_STATE_NORMAL])
+  if (text->bg_gc)
     {
       gint width, height;
-      gint x = area->x, y = area->y;
-      gint xorig, yorig;
       
       gdk_window_get_size (widget->style->bg_pixmap[GTK_STATE_NORMAL], &width, &height);
       
-      yorig = - text->first_onscreen_ver_pixel;
-      xorig = - text->first_onscreen_hor_pixel;
-      
-      for (y = area->y; y < area->y + area->height; )
-	{
-	  gint yoff = (y - yorig) % height;
-	  gint yw = MIN(height - yoff, (area->y + area->height) - y);
-	  
-	  for (x = area->x; x < area->x + area->width; )
-	    {
-	      gint xoff = (x - xorig) % width;
-	      gint xw = MIN(width - xoff, (area->x + area->width) - x);
-	      
-	      gdk_draw_pixmap (text->text_area,
-			       text->gc,
-			       widget->style->bg_pixmap[GTK_STATE_NORMAL],
-			       xoff,
-			       yoff,
-			       x,
-			       y,
-			       xw,
-			       yw);
-	      
-	      x += width - xoff;
-	    }
-	  y += height - yoff;
-	}
+      gdk_gc_set_ts_origin (text->bg_gc,
+			    (- text->first_onscreen_hor_pixel) % width,
+			    (- text->first_onscreen_ver_pixel) % height);
+
+      gdk_draw_rectangle (text->text_area, text->bg_gc, TRUE,
+			  area->x, area->y, area->width, area->height);
     }
   else
     gdk_window_clear_area (text->text_area, area->x, area->y, area->width, area->height);
