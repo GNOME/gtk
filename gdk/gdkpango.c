@@ -48,14 +48,17 @@ gdk_pango_context_destroy (GdkPangoContextInfo *info)
 static GdkPangoContextInfo *
 gdk_pango_context_get_info (PangoContext *context, gboolean create)
 {
-  GdkPangoContextInfo *info = pango_context_get_data (context, GDK_INFO_KEY);
+  GdkPangoContextInfo *info =
+    g_object_get_qdata (G_OBJECT (context),
+                        g_quark_try_string (GDK_INFO_KEY));
   if (!info && create)
     {
       info = g_new (GdkPangoContextInfo, 1);
       info->colormap = NULL;
 
-      pango_context_set_data (context, GDK_INFO_KEY,
-			      info, (GDestroyNotify)gdk_pango_context_destroy);
+      g_object_set_qdata_full (G_OBJECT (context),
+                               g_quark_from_static_string (GDK_INFO_KEY),
+                               info, (GDestroyNotify)gdk_pango_context_destroy);
     }
 
   return info;

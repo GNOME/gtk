@@ -3250,7 +3250,7 @@ gtk_widget_create_pango_layout (GtkWidget *widget)
 
   context = gtk_widget_create_pango_context (widget);
   layout = pango_layout_new (context);
-  pango_context_unref (context);
+  g_object_unref (G_OBJECT (context));
 
   return layout;
 }
