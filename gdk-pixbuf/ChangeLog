@@ -1,3 +1,9 @@
+2001-02-18  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): prepend underscore
+	(gdk_pixbuf_get_named_module): prepend underscore
+	(gdk_pixbuf_get_module): prepend underscore
+
 2001-02-19  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf-io.c (gdk_pixbuf_load_module): const fix

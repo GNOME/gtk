@@ -316,23 +316,23 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
 
   if (image_type)
     {
-      priv->image_module = gdk_pixbuf_get_named_module (image_type,
-                                                        error);
+      priv->image_module = _gdk_pixbuf_get_named_module (image_type,
+                                                         error);
     }
   else
     {
       g_return_val_if_fail (priv->header_buf_offset > 0, 0);
-      priv->image_module = gdk_pixbuf_get_module (priv->header_buf,
-                                                  priv->header_buf_offset,
-                                                  NULL,
-                                                  error);
+      priv->image_module = _gdk_pixbuf_get_module (priv->header_buf,
+                                                   priv->header_buf_offset,
+                                                   NULL,
+                                                   error);
     }
   
   if (priv->image_module == NULL)
     return 0;
   
   if (priv->image_module->module == NULL)
-    if (!gdk_pixbuf_load_module (priv->image_module, error))
+    if (!_gdk_pixbuf_load_module (priv->image_module, error))
       return 0;
   
   if (priv->image_module->module == NULL)

@@ -140,14 +140,14 @@ gdk_pixbuf_animation_new_from_file (const char *filename,
 		return NULL;
 	}
 
-	image_module = gdk_pixbuf_get_module (buffer, size, filename, error);
+	image_module = _gdk_pixbuf_get_module (buffer, size, filename, error);
 	if (!image_module) {
 		fclose (f);
 		return NULL;
 	}
 
 	if (image_module->module == NULL)
-                if (!gdk_pixbuf_load_module (image_module, error)) {
+                if (!_gdk_pixbuf_load_module (image_module, error)) {
                         fclose (f);
                         return NULL;
                 }

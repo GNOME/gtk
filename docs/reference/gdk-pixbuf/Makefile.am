@@ -25,6 +25,7 @@ CFILE_GLOB=$(top_srcdir)/gdk-pixbuf/*.c $(top_srcdir)/contrib/gdk-pixbuf-xlib/*.
 # Header files to ignore when scanning
 IGNORE_HFILES=				\
 	pixops				\
+	gdk-pixbuf-marshal.h		\
 	gdk-pixbuf-xlib-private.h 	\
 	gdk-pixbuf-i18n.h 		\
 	gdk-pixbuf-private.h

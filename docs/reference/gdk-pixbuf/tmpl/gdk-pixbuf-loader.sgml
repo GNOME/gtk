@@ -128,6 +128,8 @@ Application-driven progressive image loading.
 </para>
 
 @loader: 
+@error: 
+@Returns: 
 
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->

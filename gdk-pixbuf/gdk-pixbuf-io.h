@@ -87,13 +87,13 @@ struct _GdkPixbufModule {
 
 typedef void (* ModuleFillVtableFunc) (GdkPixbufModule *module);
 
-GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size,
-                                        const gchar *filename,
-                                        GError **error);
-GdkPixbufModule *gdk_pixbuf_get_named_module (const char *name,
-                                              GError **error);
-gboolean gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-                                 GError **error);
+GdkPixbufModule *_gdk_pixbuf_get_module (guchar *buffer, guint size,
+                                         const gchar *filename,
+                                         GError **error);
+GdkPixbufModule *_gdk_pixbuf_get_named_module (const char *name,
+                                               GError **error);
+gboolean _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+                                  GError **error);
 
 
 

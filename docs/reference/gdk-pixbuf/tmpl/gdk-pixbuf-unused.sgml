@@ -42,193 +42,6 @@ Drawables to Pixbufs
 gdk-pixbuf-io
 
 
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-loader.sgml:Long_Description ##### -->
-  <para>
-    #GdkPixbufLoader provides a way for applications to drive the
-    process of loading an image, by letting them send the image data
-    directly to the loader instead of having the loader read the data
-    from a file.  Applications can use this functionality instead of
-    gdk_pixbuf_new_from_file() when they need to parse image data in
-    small chunks.  For example, it should be used when reading an
-    image from a (potentially) slow network connection, or when
-    loading an extremely large file.
-  </para>
-
-  <para>
-    To use #GdkPixbufLoader to load an image, just create a new one,
-    and call gdk_pixbuf_loader_write() to send the data to it.  When
-    done, gdk_pixbuf_loader_close() should be called to end the stream
-    and finalize everything.  The loader will emit two important
-    signals throughout the process.  The first, "<link
-    linkend="GdkPixbufLoader-area-prepared">area_prepared</link>",
-    will be called as soon as the image has enough information to
-    determine the size of the image to be used.  It will pass a
-    @GdkPixbuf in.  If you want to use it, you can simply ref it.  In
-    addition, no actual information will be passed in yet, so the
-    pixbuf can be safely filled with any temporary graphics (or an
-    initial color) as needed.  You can also call the
-    gdk_pixbuf_loader_get_pixbuf() once this signal has been emitted
-    and get the same pixbuf.
-  </para>
-
-  <para>
-    The other signal, "<link
-    linkend="GdkPixbufLoader-area-updated">area_updated</link>" gets
-    called every time a region is updated.  This way you can update a
-    partially completed image.  Note that you do not know anything
-    about the completeness of an image from the area updated.  For
-    example, in an interlaced image, you need to make several passes
-    before the image is done loading.
-  </para>
-
-  <refsect2>
-    <title>Loading an animation</title>
-
-    <para>
-      Loading an animation is a little more complex then loading an
-      image.  In addition to the above signals, there is also a "<link
-      linkend="GdkPixbufLoader-frame-done">frame_done</link>" signal,
-      as well as an "<link
-      linkend="GdkPixbufLoader-animation-done">animation_done</link>"
-      signal.  The first lets the application know that it is dealing
-      with an animation, instead of a static image.  It also passes a
-      #GdkPixbufFrame in the signal.  As before, if you want to keep
-      the frame, you need to ref it.  Once the first "<link
-      linkend="GdkPixbufLoader-frame-done">frame_done</link>" signal
-      has been emitted, you can call gdk_pixbuf_loader_get_animation()
-      to get the #GdkPixbufAnimation struct.  Each subsequent frame
-      goes through a similar lifecycle.  For example "<link
-      linkend="GdkPixbufLoader-area-prepared">area_prepared</link>" is
-      re-emitted.  Then "<link
-      linkend="GdkPixbufLoader-area-updated">area_updated</link>" is
-      emitted as many times as necessary.  Finally, "<link
-      linkend="GdkPixbufLoader-animation-done">animation_done</link>"
-      is emitted as soon as all frames are done.
-    </para>
-  </refsect2>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-loader.sgml:See_Also ##### -->
-  <para>
-    gdk_pixbuf_new_from_file()
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-loader.sgml:Short_Description ##### -->
-Application-driven progressive image loading.
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-loader.sgml:Title ##### -->
-GdkPixbufLoader
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-from-drawables.sgml:Long_Description ##### -->
-  <para>
-    The functions in this section allow you to take the image data
-    from an X drawable and dump it into a #GdkPixbuf.  This can be
-    used for screenshots and other special effects.  Note that these
-    operations can be expensive, since the image data has to be
-    transferred from the X server to the client program and converted.
-  </para>
-
-  <para>
-    These functions are analogous to those for the Gdk version of
-    &gdk-pixbuf;.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-from-drawables.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-from-drawables.sgml:Short_Description ##### -->
-Getting parts of an X drawable's image data into a pixbuf.
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-from-drawables.sgml:Title ##### -->
-X Drawables to Pixbufs
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-init.sgml:Long_Description ##### -->
-  <para>
-    In addition to the normal Gdk-specific functions, the &gdk-pixbuf;
-    package provides a small library that lets Xlib-only applications
-    use #GdkPixbuf structures and render them to X drawables.  The
-    functions in this section are used to initialize the &gdk-pixbuf;
-    Xlib library.  This library must be initialized near the beginning
-    or the program or before calling any of the other &gdk-pixbuf;
-    Xlib functions; it cannot be initialized automatically since
-    Xlib-only applications do not call gdk_rgb_init() like GNOME
-    applications do.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-init.sgml:See_Also ##### -->
-  <para>
-    XlibRGB
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-init.sgml:Short_Description ##### -->
-Initializing the &gdk-pixbuf; Xlib library.
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-init.sgml:Title ##### -->
-&gdk-pixbuf; Xlib initialization
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rendering.sgml:Long_Description ##### -->
-  <para>
-    The &gdk-pixbuf; Xlib library provides several convenience
-    functions to render pixbufs to X drawables.  It uses XlibRGB to
-    render the image data.
-  </para>
-
-  <para>
-    These functions are analogous to those for the Gdk version of
-    &gdk-pixbuf;.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rendering.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rendering.sgml:Short_Description ##### -->
-Rendering a pixbuf to an X drawable.
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rendering.sgml:Title ##### -->
-Xlib Rendering
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rgb.sgml:Long_Description ##### -->
-  <para>
-    The XlibRGB set of functions is a port of the GdkRGB library to
-    use plain Xlib and X drawables.  You can use these functions to
-    render RGB buffers into drawables very quickly with high-quality
-    dithering.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rgb.sgml:See_Also ##### -->
-  <para>
-    GdkRGB
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rgb.sgml:Short_Description ##### -->
-Functions for rendering RGB buffers to X drawables.
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-xlib-rgb.sgml:Title ##### -->
-XlibRGB
-
-
 <!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Long_Description ##### -->
   <para>
     This canvas item displays #GdkPixbuf images.  It handles full
@@ -412,26 +225,6 @@ Canvas item to display #GdkPixbuf images.
 GnomeCanvasPixbuf
 
 
-<!-- ##### SECTION ./tmpl/module_interface.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/module_interface.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/module_interface.sgml:Short_Description ##### -->
-
-
-
-<!-- ##### SECTION ./tmpl/module_interface.sgml:Title ##### -->
-Module Interface
-
-
 <!-- ##### SECTION ./tmpl/rendering.sgml:Long_Description ##### -->
   <para>
     The &gdk-pixbuf; library provides several convenience functions to
@@ -469,80 +262,6 @@ Rendering a pixbuf to a GDK drawable.
 
 <!-- ##### SECTION ./tmpl/rendering.sgml:Title ##### -->
 Rendering
-
-
-<!-- ##### SECTION ./tmpl/scaling.sgml:Long_Description ##### -->
-  <para>
-    The &gdk-pixbuf; contains functions to scale pixbufs, to scale
-    pixbufs and composite against an existing image, and to scale
-    pixbufs and composite against a solid color or checkerboard.
-    Compositing a checkerboard is a common way to show an image with
-    an alpha channel in image-viewing and editing software.
-  </para>
-
-  <para>
-    Since the full-featured functions (gdk_pixbuf_scale(),
-    gdk_pixbuf_composite(), and gdk_pixbuf_composite_color()) are
-    rather complex to use and have many arguments, two simple
-    convenience functions are provided, gdk_pixbuf_scale_simple() and
-    gdk_pixbuf_composite_color_simple() which create a new pixbuf of a
-    given size, scale an original image to fit, and then return the
-    new pixmap.
-  </para>
-
-  <para>
-    The following example demonstrates handling an expose event by
-    rendering the appropriate area of a source image (which is scaled
-    to fit the widget) onto the widget's window.  The source image is
-    rendered against a checkerboard, which provides a visual
-    representation of the alpha channel if the image has one. If the
-    image doesn't have an alpha channel, calling
-    gdk_pixbuf_composite_color() function has exactly the same effect
-    as calling gdk_pixbuf_scale().
-  </para>
-
-  <programlisting>
-gboolean
-expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
-{
-  GdkPixbuf *dest;
-
-  gdk_window_set_back_pixmap (widget->window, NULL, FALSE);
-  
-  dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, event->area.width, event->area.height);
-
-  gdk_pixbuf_composite_color (pixbuf, dest,
-                              0, 0, event->area.width, event->area.height,
-                              -event->area.x, -event->area.y,
-                              (double) widget->allocation.width / gdk_pixbuf_get_width (pixbuf),
-                              (double) widget->allocation.height / gdk_pixbuf_get_height (pixbuf),
-                              GDK_INTERP_BILINEAR, 255,
-                              event->area.x, event->area.y, 16, 0xaaaaaa, 0x555555);
-
-  gdk_pixbuf_render_to_drawable (dest, widget->window, widget->style->fg_gc[GTK_STATE_NORMAL],
-                                 0, 0, event->area.x, event->area.y,
-                                 event->area.width, event->area.height,
-                                 GDK_RGB_DITHER_NORMAL, event->area.x, event->area.y);
-  
-  gdk_pixbuf_unref (dest);
-  
-  return TRUE;
-}
-  </programlisting>
-
-
-<!-- ##### SECTION ./tmpl/scaling.sgml:See_Also ##### -->
-  <para>
-    GdkRGB
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/scaling.sgml:Short_Description ##### -->
-Scaling pixbufs and scaling and compositing pixbufs
-
-
-<!-- ##### SECTION ./tmpl/scaling.sgml:Title ##### -->
-Scaling
 
 
 <!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Long_Description ##### -->
@@ -694,75 +413,6 @@ XlibRGB
 
 @pixbuf: The pixbuf that is losing its last reference.
 @data: User closure data.
-
-<!-- ##### SIGNAL GdkPixbufLoader::animation-done ##### -->
-  <para>
-    This signal is emitted when an animation is done loading.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-@loader: Loader which emitted the signal.
-
-<!-- ##### SIGNAL GdkPixbufLoader::area-prepared ##### -->
-  <para>
-    This signal is emitted when the pixbuf loader has been fed the
-    initial amount of data that is required to figure out the size and
-    format of the image that it will create.  After this signal is
-    emitted, applications can call gdk_pixbuf_loader_get_pixbuf() to
-    fetch the partially-loaded pixbuf.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-@loader: Loader which emitted the signal.
-
-<!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
-  <para>
-    This signal is emitted when a significant area of the image being
-    loaded has been updated.  Normally it means that a complete
-    scanline has been read in, but it could be a different area as
-    well.  Applications can use this signal to know when to repaint
-    areas of an image that is being loaded.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
-@arg4: 
-@loader: Loader which emitted the signal.
-@x: X offset of upper-left corner of the updated area.
-@y: Y offset of upper-left corner of the updated area.
-@width: Width of updated area.
-@height: Height of updated area.
-
-<!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
-  <para>
-    This signal is emitted when gdk_pixbuf_loader_close() is called.
-    It can be used by different parts of an application to receive
-    notification when an image loader is closed by the code that
-    drives it.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-@loader: Loader which emitted the signal.
-
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
-<!-- ##### SIGNAL GdkPixbufLoader::frame-done ##### -->
-  <para>
-    This signal is emitted when a frame is done loading.  It will be
-    emitted for each frame in an animation data stream.
-  </para>
-
-@gdkpixbufloader: the object which received the signal.
-@arg1: 
-@loader: Loader which emitted the signal.
-@frame: Frame which just completed loading.
 
 <!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
   <para>
@@ -975,11 +625,40 @@ sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
 
+<!-- ##### FUNCTION _gdk_pixbuf_get_module ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@size: 
+@filename: 
+@error: 
+@Returns: 
+
+<!-- ##### FUNCTION _gdk_pixbuf_get_named_module ##### -->
+<para>
+
+</para>
+
+@name: 
+@error: 
+@Returns: 
+
 <!-- ##### FUNCTION gdk_pixbuf_init ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### FUNCTION _gdk_pixbuf_load_module ##### -->
+<para>
+
+</para>
+
+@image_module: 
+@error: 
+@Returns: 
 
 <!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
 <para>

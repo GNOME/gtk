@@ -254,8 +254,8 @@ get_libdir (void)
 /* reference to the module to load, it doesn't actually load it       */
 /* perhaps these actions should be combined in one function           */
 gboolean
-gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-                        GError         **error)
+_gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+                         GError         **error)
 {
 	char *module_name;
 	char *path;
@@ -338,8 +338,8 @@ m_fill_vtable (xpm);
 m_fill_vtable (xbm);
 
 gboolean
-gdk_pixbuf_load_module (GdkPixbufModule *image_module,
-                        GError         **error)
+_gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+                         GError         **error)
 {
         ModuleFillVtableFunc fill_vtable = NULL;
 	image_module->module = (void *) 1;
@@ -435,8 +435,8 @@ gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 
 
 GdkPixbufModule *
-gdk_pixbuf_get_named_module (const char *name,
-                             GError **error)
+_gdk_pixbuf_get_named_module (const char *name,
+                              GError **error)
 {
 	int i;
 
@@ -455,9 +455,9 @@ gdk_pixbuf_get_named_module (const char *name,
 }
 
 GdkPixbufModule *
-gdk_pixbuf_get_module (guchar *buffer, guint size,
-                       const gchar *filename,
-                       GError **error)
+_gdk_pixbuf_get_module (guchar *buffer, guint size,
+                        const gchar *filename,
+                        GError **error)
 {
 	int i;
 
@@ -530,14 +530,14 @@ gdk_pixbuf_new_from_file (const char *filename,
 		return NULL;
 	}
 
-	image_module = gdk_pixbuf_get_module (buffer, size, filename, error);
+	image_module = _gdk_pixbuf_get_module (buffer, size, filename, error);
         if (image_module == NULL) {
                 fclose (f);
                 return NULL;
         }
 
 	if (image_module->module == NULL)
-		if (!gdk_pixbuf_load_module (image_module, error)) {
+                if (!_gdk_pixbuf_load_module (image_module, error)) {
                         fclose (f);
                         return NULL;
                 }
@@ -605,7 +605,7 @@ gdk_pixbuf_new_from_xpm_data (const char **data)
         GError *error = NULL;
 
 	if (file_formats[XPM_FILE_FORMAT_INDEX].module == NULL) {
-                if (!gdk_pixbuf_load_module (&file_formats[XPM_FILE_FORMAT_INDEX], &error)) {
+                if (!_gdk_pixbuf_load_module (&file_formats[XPM_FILE_FORMAT_INDEX], &error)) {
                         g_warning ("Error loading XPM image loader: %s", error->message);
                         g_error_free (error);
                         return FALSE;
@@ -671,13 +671,13 @@ gdk_pixbuf_real_save (GdkPixbuf     *pixbuf,
 {
        GdkPixbufModule *image_module = NULL;       
 
-       image_module = gdk_pixbuf_get_named_module (type, error);
+       image_module = _gdk_pixbuf_get_named_module (type, error);
 
        if (image_module == NULL)
                return FALSE;
        
        if (image_module->module == NULL)
-               if (!gdk_pixbuf_load_module (image_module, error))
+               if (!_gdk_pixbuf_load_module (image_module, error))
                        return FALSE;
 
        if (image_module->save == NULL) {

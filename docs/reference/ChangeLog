@@ -1,3 +1,9 @@
+2001-02-18  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): add gdk-pixbuf-marshal.h
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: fixes
+
 Sun Feb 11 22:16:34 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* */Makefile.am: Use the new snazzy mother-of-all-gtk-doc-makefiles.

@@ -70,35 +70,3 @@ Module Interface
 @load_animation: 
 @save: 
 
-<!-- ##### FUNCTION gdk_pixbuf_get_module ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@size: 
-@filename: 
-@error: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_get_named_module ##### -->
-<para>
-
-</para>
-
-@name: 
-@error: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixbuf_load_module ##### -->
-<para>
-
-</para>
-
-@image_module: 
-@error: 
-@Returns: 
-
-

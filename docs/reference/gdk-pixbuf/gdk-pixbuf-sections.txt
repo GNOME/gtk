@@ -1,11 +1,8 @@
 <INCLUDE>gdk-pixbuf/gdk-pixbuf.h</INCLUDE>
 
 <SECTION>
-<TITLE>Initialization and Versions</TITLE>
+<TITLE>Versioning</TITLE>
 <FILE>initialization_versions</FILE>
-gdk_pixbuf_init
-gdk_pixbuf_preinit
-gdk_pixbuf_postinit
 
 <SUBSECTION>
 gdk_pixbuf_version
@@ -146,9 +143,9 @@ ModuleUpdatedNotifyFunc
 ModuleFrameDoneNotifyFunc
 ModuleAnimationDoneNotifyFunc
 GdkPixbufModule
-gdk_pixbuf_get_module
-gdk_pixbuf_get_named_module
-gdk_pixbuf_load_module
+_gdk_pixbuf_get_module
+_gdk_pixbuf_get_named_module
+_gdk_pixbuf_load_module
 </SECTION>
 
 <SECTION>
