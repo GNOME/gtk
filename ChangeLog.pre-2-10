@@ -1,3 +1,25 @@
+2001-06-01  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_commit_cb): implement overwrite mode
+	
+	* gtk/gtktextview.c (gtk_text_view_commit_handler): don't
+	overwrite in overwrite mode if we already deleted the selection
+	and replaced it with new text.	
+
+	* gtk/gtklabel.c (gtk_label_select_region_index): if you set the
+	selection to an empty range, clear the clipboard if we owned it.
+	(gtk_label_set_selectable): give up selection if we become
+	unselectable.
+	(gtk_label_state_changed): override state changed to unselect text
+	when insensitive
+	(get_text_callback): add paranoia check that indexes aren't
+	outside of label->text
+	(gtk_label_select_region): make -1 for start_offset mean "end of
+	label," for consistency with GtkEditable
+
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_new): honor
+	GTK_DIALOG_NO_SEPARATOR flag
+
 Fri Jun  1 11:47:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_set_use_arrows_always): Fix 

@@ -108,6 +108,9 @@ gboolean gtk_label_get_selectable                 (GtkLabel         *label);
 void     gtk_label_select_region                  (GtkLabel         *label,
 						   gint              start_offset,
 						   gint              end_offset);
+gboolean gtk_label_get_selection_bounds           (GtkLabel         *label,
+                                                   gint             *start,
+                                                   gint             *end);
 void     gtk_label_get_layout_offsets             (GtkLabel         *label,
 						   gint             *x,
 						   gint             *y);

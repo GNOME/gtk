@@ -4906,8 +4906,13 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                               const gchar   *str,
                               GtkTextView   *text_view)
 {
+  gboolean had_selection;
+  
   gtk_text_buffer_begin_user_action (get_buffer (text_view));
 
+  had_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
+                                                        NULL, NULL);
+  
   gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
                                     text_view->editable);
 
@@ -4918,7 +4923,7 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
     }
   else
     {
-      if (text_view->overwrite_mode)
+      if (!had_selection && text_view->overwrite_mode)
         gtk_text_view_delete_from_cursor (text_view, GTK_DELETE_CHARS, 1);
       gtk_text_buffer_insert_interactive_at_cursor (get_buffer (text_view), str, -1,
                                                     text_view->editable);

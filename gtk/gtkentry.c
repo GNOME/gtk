@@ -1584,7 +1584,7 @@ gtk_entry_insert_text (GtkEditable *editable,
 
   text[new_text_length] = '\0';
   strncpy (text, new_text, new_text_length);
-
+  
   gtk_signal_emit (GTK_OBJECT (editable), signals[INSERT_TEXT], text, new_text_length, position);
   gtk_signal_emit (GTK_OBJECT (editable), signals[CHANGED]);
 
@@ -2017,7 +2017,13 @@ gtk_entry_commit_cb (GtkIMContext *context,
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint tmp_pos = entry->current_pos;
 
-  gtk_editable_delete_selection (editable);
+  if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
+    gtk_editable_delete_selection (editable);
+  else
+    {
+      if (entry->overwrite_mode)
+        gtk_entry_delete_from_cursor (entry, GTK_DELETE_CHARS, 1);
+    }
 
   gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
   gtk_editable_set_position (editable, tmp_pos);

@@ -74,6 +74,8 @@ static void gtk_label_size_request      (GtkWidget        *widget,
 					 GtkRequisition   *requisition);
 static void gtk_label_size_allocate     (GtkWidget        *widget,
                                          GtkAllocation    *allocation);
+static void gtk_label_state_changed     (GtkWidget        *widget,
+                                         GtkStateType      state);
 static void gtk_label_style_set         (GtkWidget        *widget,
 					 GtkStyle         *previous_style);
 static void gtk_label_direction_changed (GtkWidget        *widget,
@@ -175,6 +177,7 @@ gtk_label_class_init (GtkLabelClass *class)
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->size_allocate = gtk_label_size_allocate;
+  widget_class->state_changed = gtk_label_state_changed;
   widget_class->style_set = gtk_label_style_set;
   widget_class->direction_changed = gtk_label_direction_changed;
   widget_class->expose_event = gtk_label_expose;
@@ -1156,6 +1159,21 @@ gtk_label_size_allocate (GtkWidget     *widget,
     }
 }
 
+static void
+gtk_label_state_changed (GtkWidget   *widget,
+                         GtkStateType prev_state)
+{
+  GtkLabel *label;
+  
+  label = GTK_LABEL (widget);
+
+  if (label->select_info)
+    gtk_label_select_region (label, 0, 0);
+
+  if (GTK_WIDGET_CLASS (parent_class)->state_changed)
+    GTK_WIDGET_CLASS (parent_class)->state_changed (widget, prev_state);
+}
+
 static void 
 gtk_label_style_set (GtkWidget *widget,
 		     GtkStyle  *previous_style)
@@ -1782,6 +1800,9 @@ gtk_label_set_selectable (GtkLabel *label,
     {
       if (label->select_info)
         {
+          /* unselect, to give up the selection */
+          gtk_label_select_region (label, 0, 0);
+          
           if (label->select_info->window)
             gtk_label_destroy_window (label);
 
@@ -1821,12 +1842,21 @@ get_text_callback (GtkClipboard     *clipboard,
       label->text)
     {
       gint start, end;
+      gint len;
       
       start = MIN (label->select_info->selection_anchor,
                    label->select_info->selection_end);
       end = MAX (label->select_info->selection_anchor,
                  label->select_info->selection_end);
-      
+
+      len = strlen (label->text);
+
+      if (end > len)
+        end = len;
+
+      if (start > len)
+        start = len;
+
       str = g_strndup (label->text + start,
                        end - start);
       
@@ -1877,19 +1907,39 @@ gtk_label_select_region_index (GtkLabel *label,
       label->select_info->selection_end = end_index;
 
       clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);      
-
-      gtk_clipboard_set_with_owner (clipboard,
-                                    targets,
-                                    G_N_ELEMENTS (targets),
-                                    get_text_callback,
-                                    clear_text_callback,
-                                    G_OBJECT (label));
+      
+      if (anchor_index != end_index)
+        {
+          gtk_clipboard_set_with_owner (clipboard,
+                                        targets,
+                                        G_N_ELEMENTS (targets),
+                                        get_text_callback,
+                                        clear_text_callback,
+                                        G_OBJECT (label));
+        }
+      else
+        {
+          if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (label))
+            gtk_clipboard_clear (clipboard);
+        }
 
       gtk_label_clear_layout (label);
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
 }
 
+/**
+ * gtk_label_select_region:
+ * @label: a #GtkLabel
+ * @start_offset: start offset (in characters not bytes)
+ * @end_offset: end offset (in characters not bytes)
+ *
+ * Selects a range of characters in the label, if the label is selectable.
+ * See gtk_label_set_selectable(). If the label is not selectable,
+ * this function has no effect. If @start_offset or
+ * @end_offset are -1, then the end of the label will be substituted.
+ * 
+ **/
 void
 gtk_label_select_region  (GtkLabel *label,
                           gint      start_offset,
@@ -1900,14 +1950,81 @@ gtk_label_select_region  (GtkLabel *label,
   if (label->text && label->select_info)
     {
       if (start_offset < 0)
-        start_offset = 0;
-
+        start_offset = g_utf8_strlen (label->text, -1);
+      
       if (end_offset < 0)
         end_offset = g_utf8_strlen (label->text, -1);
       
       gtk_label_select_region_index (label,
                                      g_utf8_offset_to_pointer (label->text, start_offset) - label->text,
                                      g_utf8_offset_to_pointer (label->text, end_offset) - label->text);
+    }
+}
+
+/**
+ * gtk_label_get_selection_bounds:
+ * @label: a #GtkLabel
+ * @start: return location for start of selection, as a character offset
+ * @end: return location for end of selection, as a character offset
+ * 
+ * Gets the selected range of characters in the label, returning %TRUE
+ * if there's a selection.
+ * 
+ * Return value: %TRUE if selection is non-empty
+ **/
+gboolean
+gtk_label_get_selection_bounds (GtkLabel  *label,
+                                gint      *start,
+                                gint      *end)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), FALSE);
+
+  if (label->select_info == NULL)
+    {
+      /* not a selectable label */
+      if (start)
+        *start = 0;
+      if (end)
+        *end = 0;
+
+      return FALSE;
+    }
+  else
+    {
+      gint start_index, end_index;
+      gint start_offset, end_offset;
+      gint len;
+      
+      start_index = MIN (label->select_info->selection_anchor,
+                   label->select_info->selection_end);
+      end_index = MAX (label->select_info->selection_anchor,
+                 label->select_info->selection_end);
+
+      len = strlen (label->text);
+
+      if (end_index > len)
+        end_index = len;
+
+      if (start_index > len)
+        start_index = len;
+      
+      start_offset = g_utf8_strlen (label->text, start_index);
+      end_offset = g_utf8_strlen (label->text, end_index);
+
+      if (start_offset > end_offset)
+        {
+          gint tmp = start_offset;
+          start_offset = end_offset;
+          end_offset = tmp;
+        }
+      
+      if (start)
+        *start = start_offset;
+
+      if (end)
+        *end = end_offset;
+
+      return start_offset != end_offset;
     }
 }
 
