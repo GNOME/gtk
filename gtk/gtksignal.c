@@ -1120,7 +1120,7 @@ gtk_handlers_run (GtkHandler     *handlers,
 							info->nparams,
 							info->params);
 	      else if (handlers->object_signal)
-		(* info->marshaller) (GTK_OBJECT (handlers->func_data),
+		(* info->marshaller) ((GtkObject*) handlers->func_data, /* don't GTK_OBJECT() cast */
 				      handlers->func,
 				      handlers->func_data,
 				      info->params);
