@@ -1,3 +1,11 @@
+Fri Mar 16 18:24:53 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* demos/gtk-demo/main.c (row_activated_cb): modified to use
+	"row_activated" signal.
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_activated): oh, the
+	stupidity.  Lets actually pass in the row with this signal...
+
 Fri Mar 16 18:01:17 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.[ch]: s/GTK_TREE_COLUMN/GTK_TREE_VIEW_COLUMN

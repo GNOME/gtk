@@ -245,6 +245,7 @@ static gboolean gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_v
                                                         GdkEventMotion   *event);
 static void     _gtk_tree_view_update_col_width    (GtkTreeView      *tree_view);
 static void     gtk_tree_view_row_activated        (GtkTreeView      *tree_view,
+						    GtkTreePath      *path,
 						    GtkTreeViewColumn *column);
 
 static GtkContainerClass *parent_class = NULL;
@@ -399,8 +400,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						     GTK_RUN_LAST | GTK_RUN_ACTION,
 						     GTK_CLASS_TYPE (object_class),
 						     GTK_SIGNAL_OFFSET (GtkTreeViewClass, row_activated),
-						     gtk_marshal_VOID__OBJECT,
-						     GTK_TYPE_NONE, 1,
+						     gtk_marshal_VOID__BOXED_OBJECT,
+						     GTK_TYPE_NONE, 2,
+						     GTK_TYPE_TREE_PATH,
 						     GTK_TYPE_TREE_VIEW_COLUMN);
 
 }
@@ -1904,12 +1906,11 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 						tree,
 						path,
 						event->state);
-      gtk_tree_path_free (path);
 
       if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
-	{
-	  gtk_tree_view_row_activated (tree_view, column );
-	}
+	  gtk_tree_view_row_activated (tree_view, path, column);
+
+      gtk_tree_path_free (path);
       return TRUE;
     }
 
@@ -2688,14 +2689,15 @@ gtk_tree_view_forall (GtkContainer *container,
     }
 }
 
-static void
+void
 gtk_tree_view_row_activated (GtkTreeView       *tree_view,
+			     GtkTreePath       *path,
 			     GtkTreeViewColumn *column)
 {
   g_return_if_fail (tree_view != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
 
-  g_signal_emit (G_OBJECT(tree_view), tree_view_signals[ROW_ACTIVATED], 0, column);
+  g_signal_emit (G_OBJECT(tree_view), tree_view_signals[ROW_ACTIVATED], 0, path, column);
 }
 
 /* TreeModel Callbacks

@@ -299,6 +299,47 @@ button_press_event_cb (GtkTreeView    *tree_view,
   return FALSE;
 }
 
+gboolean
+row_activated_cb (GtkTreeView       *tree_view,
+		  GtkTreePath       *path,
+		  GtkTreeViewColumn *column,
+		  GtkTreeModel      *model)
+{
+  GtkTreeIter iter;
+  gboolean italic;
+  GDoDemoFunc func;
+  GtkWidget *window;
+  
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (GTK_TREE_MODEL (model),
+		      &iter,
+		      FUNC_COLUMN, &func,
+		      ITALIC_COLUMN, &italic,
+		      -1);
+  gtk_tree_store_set (GTK_TREE_STORE (model),
+		      &iter,
+		      ITALIC_COLUMN, !italic,
+		      -1);
+  window = (func) ();
+  if (window != NULL)
+    {
+      CallbackData *cbdata;
+      
+      cbdata = g_new (CallbackData, 1);
+      cbdata->model = model;
+      cbdata->path = gtk_tree_path_copy (path);
+      
+      gtk_signal_connect (GTK_OBJECT (window),
+			  "destroy",
+			  window_closed_cb,
+			  cbdata);
+    }
+  else
+    {
+      gtk_tree_path_free (path);
+    }
+}
+
 static void
 selection_cb (GtkTreeSelection *selection,
 	      GtkTreeModel     *model)
@@ -400,7 +441,7 @@ create_tree (void)
 			       GTK_TREE_VIEW_COLUMN (column));
 
   gtk_signal_connect (GTK_OBJECT (selection), "selection_changed", selection_cb, model);
-  gtk_signal_connect (GTK_OBJECT (tree_view), "button_press_event", GTK_SIGNAL_FUNC (button_press_event_cb), model);
+  gtk_signal_connect (GTK_OBJECT (tree_view), "row_activated", GTK_SIGNAL_FUNC (row_activated_cb), model);
 
   return tree_view;
 }
