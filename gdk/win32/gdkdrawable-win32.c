@@ -612,7 +612,7 @@ generic_draw (GdkDrawable    *drawable,
        * the areas where mask is one. (It is filled with said pattern.)
        */
 
-      if (IS_WIN_NT ())
+      if (G_WIN32_IS_NT_BASED ())
 	{
 	  GDI_CALL (MaskBlt, (hdc, region->extents.x1, region->extents.y1,
 			      width, height,
@@ -727,7 +727,7 @@ draw_rectangle (GdkGCWin32 *gcwin32,
   x -= x_offset;
   y -= y_offset;
 
-  if (!filled && gcwin32->pen_dashes && !IS_WIN_NT ())
+  if (!filled && gcwin32->pen_dashes && !G_WIN32_IS_NT_BASED ())
     {
       render_line_vertical (hdc, x, y, y+height+1,
 			    gcwin32->pen_width,
@@ -1187,7 +1187,7 @@ draw_segments (GdkGCWin32 *gcwin32,
         }
     }
 
-  if (gcwin32->pen_dashes && !IS_WIN_NT ())
+  if (gcwin32->pen_dashes && !G_WIN32_IS_NT_BASED ())
     {
       for (i = 0; i < nsegs; i++)
 	{
@@ -1329,7 +1329,7 @@ draw_lines (GdkGCWin32 *gcwin32,
 	pts[i].y -= y_offset;
       }
   
-  if (gcwin32->pen_dashes && !IS_WIN_NT ())
+  if (gcwin32->pen_dashes && !G_WIN32_IS_NT_BASED ())
     {
       for (i = 0; i < npoints - 1; i++)
         {

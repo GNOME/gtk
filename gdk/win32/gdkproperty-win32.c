@@ -321,7 +321,7 @@ gdk_property_change (GdkWindow    *window,
 	  size++;
 	  GDK_NOTE (DND, g_print ("...as text: %.40s\n", data));
 	}
-      else if (IS_WIN_NT ())
+      else if (G_WIN32_IS_NT_BASED ())
 	{
 	  /* On NT, use CF_UNICODETEXT if any non-system codepage char
 	   * present.

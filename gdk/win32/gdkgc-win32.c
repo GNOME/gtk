@@ -238,7 +238,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
        * it shouldn't be necessary at all, but win9x would do the clipping
        */
 	  if (   (sw != 8 || sh != 8)
-	      && !IS_WIN_NT ()) /* HB: the MSDN says it's a Win95 limitation */
+	      && !G_WIN32_IS_NT_BASED ()) /* HB: the MSDN says it's a Win95 limitation */
 	    {
 	      /* It seems that it *must* be 8x8, at least on my machine. 
 	       * Thus, tile an 8x8 bitmap with the stipple in case it is
@@ -955,7 +955,7 @@ gdk_win32_hdc_get (GdkDrawable    *drawable,
       logbrush.lbColor = fg;
       logbrush.lbHatch = 0;
       
-      if (win32_gc->pen_num_dashes > 0 && !IS_WIN_NT ())
+      if (win32_gc->pen_num_dashes > 0 && !G_WIN32_IS_NT_BASED ())
 	{
 	  /* The Win9x GDI is rather limited so we either draw dashed
 	   * lines ourselves (only horizontal and vertical) or let them be

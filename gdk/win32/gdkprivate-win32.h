@@ -488,9 +488,6 @@ extern GdkAtom		 _gdk_selection_property;
 
 extern GdkAtom		 _wm_transient_for;
 
-extern DWORD		 _windows_version;
-#define IS_WIN_NT()      (_windows_version < 0x80000000)
-
 /* Options */
 extern gboolean		 _gdk_input_ignore_wintab;
 extern gint		 _gdk_max_colors;

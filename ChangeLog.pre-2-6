@@ -1,3 +1,12 @@
+2004-10-31  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c: Remove _windows_version and the
+	IS_WIN_NT() macro.
+
+	* gdk/win32/*.c: Use G_WIN32_IS_NT_BASED() from GLib instead.
+
 2004-10-31  Matthias Clasen  <mclasen@redhat.com>
 
 	Add api for image transfer via copy-and-paste (#156408)

@@ -850,7 +850,7 @@ build_key_event_state (GdkEvent *event,
    * does indicate correctly whether it is the right Control or Alt
    * key. But that would be a bit messy.
    */
-  if (!IS_WIN_NT () &&
+  if (!G_WIN32_IS_NT_BASED () &&
       _gdk_keyboard_has_altgr &&
       key_state[VK_CONTROL] & 0x80 &&
       key_state[VK_MENU] & 0x80)

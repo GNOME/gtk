@@ -98,13 +98,6 @@ _gdk_windowing_init (void)
   _gdk_app_hmodule = GetModuleHandle (NULL);
   _gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   _gdk_root_window = GetDesktopWindow ();
-  _windows_version = GetVersion ();
-
-  if (getenv ("PRETEND_WIN9X"))
-    _windows_version = 0x80000004;
-
-  GDK_NOTE (MISC, g_print ("Windows version: %08x\n", (guint) _windows_version));
-
   _gdk_input_locale = GetKeyboardLayout (0);
   _gdk_input_locale_is_ime = ImmIsIME (_gdk_input_locale);
   GetLocaleInfo (MAKELCID (LOWORD (_gdk_input_locale), SORT_DEFAULT),
@@ -160,7 +153,7 @@ _gdk_win32_gdi_failed (const gchar *where,
   /* On Win9x GDI calls are implemented in 16-bit code and thus
    * don't set the 32-bit error code, sigh.
    */
-  if (IS_WIN_NT ())
+  if (G_WIN32_IS_NT_BASED ())
     _gdk_win32_api_failed (where, line, api);
   else
     _gdk_other_api_failed (where, line, api);
