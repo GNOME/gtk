@@ -31,6 +31,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdio.h>
+
+#define BOOKMARKS_FILENAME ".gtk-bookmarks"
+#define BOOKMARKS_TMP_FILENAME ".gtk-bookmarks-XXXXXX"
 
 typedef struct _GtkFileSystemUnixClass GtkFileSystemUnixClass;
 
@@ -174,7 +178,6 @@ static gboolean     gtk_file_folder_unix_list_children (GtkFileFolder  *folder,
 							GSList        **children,
 							GError        **error);
 
-static gchar *      filename_from_path (const GtkFilePath *path);
 static GtkFilePath *filename_to_path   (const gchar       *filename);
 
 static gboolean     filename_is_root  (const char       *filename);
@@ -312,13 +315,14 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
 				 GError           **error)
 {
   GtkFileFolderUnix *folder_unix;
-  gchar *filename;
+  const char *filename;
 
-  filename = filename_from_path (path);
+  filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
   folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
-  folder_unix->filename = filename;
+  folder_unix->filename = g_strdup (filename);
   folder_unix->types = types;
 
   return GTK_FILE_FOLDER (folder_unix);
@@ -329,11 +333,12 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 				    const GtkFilePath *path,
 				    GError           **error)
 {
-  gchar *filename;
+  const char *filename;
   gboolean result;
 
-  filename = filename_from_path (path);
+  filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
   result = mkdir (filename, 0777) == 0;
 
@@ -348,8 +353,6 @@ gtk_file_system_unix_create_folder (GtkFileSystem     *file_system,
 		   g_strerror (errno));
       g_free (filename_utf8);
     }
-
-  g_free (filename);
 
   return result;
 }
@@ -468,7 +471,7 @@ static void
 icon_theme_changed (GtkIconTheme *icon_theme)
 {
   GHashTable *cache;
-  
+
   /* Difference from the initial creation is that we don't
    * reconnect the signal
    */
@@ -487,13 +490,13 @@ get_cached_icon (GtkWidget   *widget,
   GtkIconTheme *icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
   GHashTable *cache = g_object_get_data (G_OBJECT (icon_theme), "gtk-file-icon-cache");
   IconCacheElement *element;
-  
+
   if (!cache)
     {
       cache = g_hash_table_new_full (g_str_hash, g_str_equal,
 				     (GDestroyNotify)g_free,
 				     (GDestroyNotify)icon_cache_element_free);
-      
+
       g_object_set_data_full (G_OBJECT (icon_theme), "gtk-file-icon-cache",
 			      cache, (GDestroyNotify)g_hash_table_destroy);
       g_signal_connect (icon_theme, "changed",
@@ -536,8 +539,11 @@ gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
 				 GtkFilePath      **parent,
 				 GError           **error)
 {
-  gchar *filename = filename_from_path (path);
+  const char *filename;
+
+  filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
 
   if (filename_is_root (filename))
     {
@@ -550,8 +556,6 @@ gtk_file_system_unix_get_parent (GtkFileSystem     *file_system,
       g_free (parent_filename);
     }
 
-  g_free (filename);
-
   return TRUE;
 }
 
@@ -561,14 +565,15 @@ gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
 			       const gchar       *display_name,
 			       GError           **error)
 {
-  gchar *base_filename;
+  const char *base_filename;
   gchar *filename;
   gchar *full_filename;
   GError *tmp_error = NULL;
   GtkFilePath *result;
 
-  base_filename = filename_from_path (base_path);
+  base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (base_filename), NULL);
 
   filename = g_filename_from_utf8 (display_name, -1, NULL, NULL, &tmp_error);
   if (!filename)
@@ -580,14 +585,12 @@ gtk_file_system_unix_make_path (GtkFileSystem    *file_system,
 		   tmp_error->message);
 
       g_error_free (tmp_error);
-      g_free (base_filename);
 
       return NULL;
     }
 
   full_filename = g_build_filename (base_filename, filename, NULL);
   result = filename_to_path (full_filename);
-  g_free (base_filename);
   g_free (filename);
   g_free (full_filename);
 
@@ -675,12 +678,13 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 			    gchar            **file_part,
 			    GError           **error)
 {
-  char *base_filename;
+  const char *base_filename;
   gchar *last_slash;
   gboolean result = FALSE;
 
-  base_filename = filename_from_path (base_path);
+  base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (base_filename), FALSE);
 
   last_slash = strrchr (str, G_DIR_SEPARATOR);
   if (!last_slash)
@@ -730,8 +734,6 @@ gtk_file_system_unix_parse (GtkFileSystem     *file_system,
 	  result = TRUE;
 	}
     }
-
-  g_free (base_filename);
 
   return result;
 }
@@ -793,7 +795,7 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
   if (icon_type != ICON_REGULAR)
     {
       const char *name;
-      
+
       switch (icon_type)
 	{
 	case ICON_BLOCK_DEVICE:
@@ -856,17 +858,205 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
   return get_cached_icon (widget, "gnome-fs-regular", pixel_size);
 }
 
+static void
+bookmark_list_free (GSList *list)
+{
+  GSList *l;
+
+  for (l = list; l; l = l->next)
+    g_free (l->data);
+
+  g_slist_free (list);
+}
+
+/* Returns whether a URI is a local file:// */
+static gboolean
+is_local_uri (const char *uri)
+{
+  char *filename;
+  char *hostname;
+  gboolean result;
+
+  /* This is rather crude, but hey */
+  filename = g_filename_from_uri (uri, &hostname, NULL);
+
+  result = (filename && !hostname);
+
+  g_free (filename);
+  g_free (hostname);
+
+  return result;
+}
+
+static char *
+bookmark_get_filename (gboolean tmp_file)
+{
+  char *filename;
+
+  filename = g_build_filename (g_get_home_dir (),
+			       tmp_file ? BOOKMARKS_TMP_FILENAME : BOOKMARKS_FILENAME,
+			       NULL);
+  g_assert (filename != NULL);
+  return filename;
+}
+
+static gboolean
+bookmark_list_read (GSList **bookmarks, GError **error)
+{
+  gchar *filename;
+  gchar *contents;
+  gboolean result;
+
+  filename = bookmark_get_filename (FALSE);
+  *bookmarks = NULL;
+
+  if (g_file_get_contents (filename, &contents, NULL, error))
+    {
+      gchar **lines = g_strsplit (contents, "\n", -1);
+      int i;
+      GHashTable *table;
+
+      table = g_hash_table_new (g_str_hash, g_str_equal);
+
+      for (i = 0; lines[i]; i++)
+	{
+	  if (lines[i][0] && !g_hash_table_lookup (table, lines[i]))
+	    {
+	      *bookmarks = g_slist_prepend (*bookmarks, g_strdup (lines[i]));
+	      g_hash_table_insert (table, lines[i], lines[i]);
+	    }
+	}
+
+      g_free (contents);
+      g_hash_table_destroy (table);
+      g_strfreev (lines);
+
+      *bookmarks = g_slist_reverse (*bookmarks);
+      result = TRUE;
+    }
+
+  g_free (filename);
+
+  return result;
+}
+
+static gboolean
+bookmark_list_write (GSList *bookmarks, GError **error)
+{
+  char *tmp_filename;
+  char *filename;
+  gboolean result = TRUE;
+  FILE *file;
+  int fd;
+  int saved_errno;
+
+  /* First, write a temporary file */
+
+  tmp_filename = bookmark_get_filename (TRUE);
+  filename = bookmark_get_filename (FALSE);
+
+  fd = g_mkstemp (tmp_filename);
+  if (fd == -1)
+    {
+      saved_errno = errno;
+      goto io_error;
+    }
+
+  if ((file = fdopen (fd, "w")) != NULL)
+    {
+      GSList *l;
+
+      for (l = bookmarks; l; l = l->next)
+	if (fputs (l->data, file) == EOF
+	    || fputs ("\n", file) == EOF)
+	  {
+	    saved_errno = errno;
+	    goto io_error;
+	  }
+
+      if (fclose (file) == EOF)
+	{
+	  saved_errno = errno;
+	  goto io_error;
+	}
+
+      if (rename (tmp_filename, filename) == -1)
+	{
+	  saved_errno = errno;
+	  goto io_error;
+	}
+
+      result = TRUE;
+      goto out;
+    }
+  else
+    {
+      saved_errno = errno;
+
+      /* fdopen() failed, so we can't do much error checking here anyway */
+      close (fd);
+    }
+
+ io_error:
+
+  g_set_error (error,
+	       GTK_FILE_SYSTEM_ERROR,
+	       GTK_FILE_SYSTEM_ERROR_FAILED,
+	       _("Bookmark saving failed (%s)"),
+	       g_strerror (saved_errno));
+  result = FALSE;
+
+  if (fd != -1)
+    unlink (tmp_filename); /* again, not much error checking we can do here */
+
+ out:
+
+  g_free (filename);
+  g_free (tmp_filename);
+
+  return result;
+}
+
 static gboolean
 gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
 				   const GtkFilePath *path,
 				   GError           **error)
 {
-  /* FIXME: Implement as a really simple ~/.gtk-bookmarks */
-  g_set_error (error,
-	       GTK_FILE_SYSTEM_ERROR,
-	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("This file system does not support bookmarks"));
-  return FALSE;
+  GSList *bookmarks;
+  GSList *l;
+  char *uri;
+  gboolean result;
+
+  if (!bookmark_list_read (&bookmarks, error))
+    return FALSE;
+
+  result = FALSE;
+
+  uri = gtk_file_system_unix_path_to_uri (file_system, path);
+
+  for (l = bookmarks; l; l = l->next)
+    {
+      const char *bookmark;
+
+      bookmark = l->data;
+      if (strcmp (bookmark, uri) == 0)
+	break;
+    }
+
+  if (!l)
+    {
+      bookmarks = g_slist_append (bookmarks, g_strdup (uri));
+      if (bookmark_list_write (bookmarks, error))
+	{
+	  result = TRUE;
+	  g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+	}
+    }
+
+  g_free (uri);
+  bookmark_list_free (bookmarks);
+
+  return result;
 }
 
 static gboolean
@@ -874,19 +1064,74 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 				      const GtkFilePath *path,
 				      GError           **error)
 {
-  /* FIXME: Implement as a really simple ~/.gtk-bookmarks */
-  g_set_error (error,
-	       GTK_FILE_SYSTEM_ERROR,
-	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("This file system does not support bookmarks"));
-  return FALSE;
+  GSList *bookmarks;
+  char *uri;
+  GSList *l;
+  gboolean result;
+
+  if (!bookmark_list_read (&bookmarks, error))
+    return FALSE;
+
+  result = FALSE;
+
+  uri = gtk_file_system_path_to_uri (file_system, path);
+
+  for (l = bookmarks; l; l = l->next)
+    {
+      const char *bookmark;
+
+      bookmark = l->data;
+      if (strcmp (bookmark, uri) == 0)
+	break;
+    }
+
+  if (l)
+    {
+      g_free (l->data);
+      bookmarks = g_slist_remove_link (bookmarks, l);
+      g_slist_free_1 (l);
+
+      if (bookmark_list_write (bookmarks, error))
+	result = TRUE;
+    }
+  else
+    result = TRUE;
+
+  g_free (uri);
+  bookmark_list_free (bookmarks);
+
+  if (result)
+    g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+
+  return result;
 }
 
 static GSList *
 gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
 {
-  /* FIXME: Implement as a really simple ~/.gtk-bookmarks */
-  return NULL;
+  GSList *bookmarks;
+  GSList *result;
+  GSList *l;
+
+  if (!bookmark_list_read (&bookmarks, NULL))
+    return NULL;
+
+  result = NULL;
+
+  for (l = bookmarks; l; l = l->next)
+    {
+      const char *name;
+
+      name = l->data;
+
+      if (is_local_uri (name))
+	result = g_slist_prepend (result, gtk_file_system_unix_uri_to_path (file_system, name));
+    }
+
+  bookmark_list_free (bookmarks);
+
+  result = g_slist_reverse (result);
+  return result;
 }
 
 /*
@@ -970,18 +1215,17 @@ gtk_file_folder_unix_get_info (GtkFileFolder  *folder,
   GtkFileFolderUnix *folder_unix = GTK_FILE_FOLDER_UNIX (folder);
   GtkFileInfo *info;
   gchar *dirname;
-  gchar *filename;
+  const char *filename;
 
-  filename = filename_from_path (path);
+  filename = gtk_file_path_get_string (path);
   g_return_val_if_fail (filename != NULL, NULL);
+  g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
   dirname = g_path_get_dirname (filename);
   g_return_val_if_fail (strcmp (dirname, folder_unix->filename) == 0, NULL);
   g_free (dirname);
 
   info = filename_get_info (filename, folder_unix->types, error);
-
-  g_free (filename);
 
   return info;
 }
@@ -1111,12 +1355,6 @@ filename_get_info (const gchar     *filename,
     }
 
   return info;
-}
-
-static gchar *
-filename_from_path (const GtkFilePath *path)
-{
-  return g_strdup (gtk_file_path_get_string (path));
 }
 
 static GtkFilePath *

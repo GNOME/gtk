@@ -1,5 +1,29 @@
 2004-01-30  Federico Mena Quintero  <federico@ximian.com>
 
+	Fix #129872, based on a patch by Jan Arne Petersen
+	<jpetersen@uni-bonn.de>
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_list_bookmarks):
+	Implement.
+	(gtk_file_system_unix_add_bookmark): Implement.
+	(gtk_file_system_unix_remove_bookmark): Implement.
+
+2004-01-29  Federico Mena Quintero  <federico@ximian.com>
+
+	Fixes #132693.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_get_parent): Don't
+	use filename_from_path().  Also, check that the filename is
+	absolute.
+	(gtk_file_system_unix_get_folder): Likewise.
+	(gtk_file_system_unix_create_folder): Likewise.
+	(gtk_file_system_unix_make_path): Likewise.
+	(gtk_file_system_unix_parse): Likewise.
+	(gtk_file_folder_unix_get_info): Likewise.
+	(filename_from_path): Removed.
+
+2004-01-30  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkcalendar.c (arrow_action): Remove C++ comment; reported
 	by Damien Carbery <damien.carbery@sun.com>.  Fixes #132956.
 
