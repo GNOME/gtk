@@ -281,8 +281,7 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Invalid XBM file: %s"),
-                             context->tempname);
+                             _("Invalid XBM file"));
 		return NULL;
 	}
 
