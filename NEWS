@@ -1,6 +1,13 @@
 Overview of Changes in GTK+ 1.1.0:
 
-* Significant speedups to widget creation, destruction and signal emissions
+* Significant speedups to widget creation and destruction through caching
+  colormap and visual queries to the XServer.
+* Speedups for type creation and especially gtk_type_is_a() checks.
+* Speedups in signal lookup and creation and especaially with signal
+  emissions.
+* Minor speedups with object data allocation and destruction.  
+* Newly included file gtkfeatures.h which defines compatibility macros to
+  test for certain API features upon program compilation.  
 * New widget GtkCTree
 * Upgrade to libtool-1.2
 * Lots of bug fixes, including one that fixed a major memory leak

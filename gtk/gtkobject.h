@@ -55,10 +55,10 @@ extern "C" {
 /* Determines whether `obj' and `klass' are a type of `otype'.
  */
 #define GTK_CHECK_TYPE(obj,otype)	   ( \
-  GTK_TYPE_IS_A (((GtkObject*) (obj))->klass->type, (otype)) \
+  gtk_type_is_a (((GtkObject*) (obj))->klass->type, (otype)) \
 )
 #define GTK_CHECK_CLASS_TYPE(klass,otype)  ( \
-  GTK_TYPE_IS_A (((GtkObjectClass*) (klass))->type, (otype)) \
+  gtk_type_is_a (((GtkObjectClass*) (klass))->type, (otype)) \
 )
 
 /* Macro for casting a pointer to a GtkObject or GtkObjectClass pointer.

@@ -36,17 +36,19 @@ extern "C" {
  */
 #define GTK_HAVE_CONTAINER_FOCUS_ADJUSTMENTS		1-0-1
 
-/* from now on we export the gtk_signal_init() function
+/* new macros for checking of class types
+ */
+#define	GTK_HAVE_IS_CLASS				1-1-0
+
+/* export the gtk_signal_init() function
+ * new gtk_signal_n_emissions*() functions
+ * "signal-name" is now an alias for "signal_name"
+ * new gtk_signal_emitv*() interface
  */
 #define GTK_HAVE_SIGNAL_INIT				1-1-0
-
-/* we have a new gtk_signal_emitv*() interface
- */
-#define GTK_HAVE_SIGNAL_EMITV				1-1-0
-
-/* "signal-name" is now an alias for "signal_name"
- */
+#define	GTK_HAVE_N_EMISSIONS				1-1-0
 #define GTK_HAVE_SIGNAL_LISP_SYNTAX			1-1-0
+#define GTK_HAVE_SIGNAL_EMITV				1-1-0
   
 
 
