@@ -1,3 +1,23 @@
+Sun Apr 29 03:02:02 2001  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtkpacker.h:
+        * gtk/gtkenums.h: moved GtkAnchorType and GtkSideType from gtkpacker.h
+	 to gtkenum.h.
+
+	* gtk/gtkmain.c (gtk_main_do_event): silence compiler (GDK_SETTING not
+	handled in switch).
+
+	* gtk/Makefile.am:
+	(gtk.defs): generate enum portions with  glib-mkenums.
+	(gtktypebuiltins_evals.c): generate this with glib-mkenums.
+	got rid of makeenums.pl and makeenums.awk in distributed tarballs.
+	
+	* gtk/gtkaccelgroup.c (gtk_accel_group_add): refined havocs warning
+	addition.
+
+	* docs/Changes-2.0.txt: keep a note on signal handlers now
+	not getting emitted during the emission they were connected within.
+
 2001-04-28  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkcolorsel.c (palette_new): fix bug in tooltip

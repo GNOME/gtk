@@ -394,8 +394,6 @@ gtk_built_sources = @STRIP_BEGIN@ \
 # their own .lo rules and don't get publically installed
 gtk_extra_sources = @STRIP_BEGIN@ \
 	gtkcompat.h.in		\
-	makeenums.pl		\
-	makeenums.awk		\
 	maketypes.awk		\
 	makeenums.h		\
 	gtkargcollector.c	\
@@ -432,9 +430,14 @@ gtk.defs gtkmarshal.h gtktypebuiltins.h:          # never add deps here
 # versions in the build dir. thus a development setup requires
 # srcdir to be writable, passing --disable-rebuilds to
 # ../configure will supress all autogeneration rules.
-$(srcdir)/stamp-gtk.defs: @REBUILD@ makeenums.pl gtk.defs gtk-boxed.defs $(gtk_public_h_sources)
+$(srcdir)/stamp-gtk.defs: @REBUILD@ gtk.defs gtk-boxed.defs $(gtk_public_h_sources)
 	cd $(srcdir) \
-	&& $(PERL) makeenums.pl defs $(gtk_public_h_sources) > xgen-gdef \
+	&& glib-mkenums --comments ";; @comment@" \
+			--fprod "; enumerations from \"@filename@\"\n " \
+	                --vhead "(define-@type@ @EnumName@" \
+	                --vprod "   (@valuenick@ @VALUENAME@)" \
+	                --vtail ")" \
+	                $(gtk_public_h_sources) > xgen-gdef \
 	&& cat gtk-boxed.defs >> xgen-gdef \
 	&& (cmp -s xgen-gdef gtk.defs || cp xgen-gdef gtk.defs) \
 	&& rm -f xgen-gdef \
@@ -466,9 +469,14 @@ $(srcdir)/gtktypebuiltins_ids.c: @REBUILD@ maketypes.awk stamp-gtk.defs
 	&& LC_ALL=C $(AWK) -f maketypes.awk gtk.defs entries > xgen-gtbic \
 	&& cp xgen-gtbic $(@F) \
 	&& rm -f xgen-gtbic
-$(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl $(gtk_public_h_sources)
+$(srcdir)/gtktypebuiltins_evals.c: @REBUILD@ $(gtk_public_h_sources)
 	cd $(srcdir) \
-	&& $(PERL) makeenums.pl arrays $(gtk_public_h_sources) > xgen-gtbec \
+	&& glib-mkenums \
+			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--vhead "static const GtkEnumValue _@enum_name@_values[] = {" \
+			--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+			--vtail "  { 0, NULL, NULL }\n};" \
+			$(gtk_public_h_sources) > xgen-gtbec \
 	&& cp xgen-gtbec $(@F) \
 	&& rm -f xgen-gtbec
 

@@ -135,6 +135,10 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   not supported anymore.
   For many of the removed functions, similar variants are available
   in the g_signal_* namespace.
+  The GSignal system perfomrs emissions in a slightly different manner than
+  the old GtkSignal code. Signal handlers that are connected to signal "foo"
+  on object "bar" while "foo" is being emitted, will not be called anymore
+  during the emission they were connected within.
 
 * Inserting and deleting text in GtkEntry though functions such
   as gtk_entry_insert_text() now leave the cursor at its original

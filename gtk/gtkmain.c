@@ -944,6 +944,9 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DROP_START:
       gtk_drag_dest_handle_event (event_widget, event);
       break;
+    default:
+      g_assert_not_reached ();
+      break;
     }
   
   tmp_list = current_events;

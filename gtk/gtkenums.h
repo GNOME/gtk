@@ -33,6 +33,29 @@
 extern "C" {
 #endif /* __cplusplus */
 
+
+/* Anchor types */
+typedef enum
+{
+  GTK_ANCHOR_CENTER,
+  GTK_ANCHOR_NORTH,
+  GTK_ANCHOR_NORTH_WEST,
+  GTK_ANCHOR_NORTH_EAST,
+  GTK_ANCHOR_SOUTH,
+  GTK_ANCHOR_SOUTH_WEST,
+  GTK_ANCHOR_SOUTH_EAST,
+  GTK_ANCHOR_WEST,
+  GTK_ANCHOR_EAST,
+  GTK_ANCHOR_N		= GTK_ANCHOR_NORTH,
+  GTK_ANCHOR_NW		= GTK_ANCHOR_NORTH_WEST,
+  GTK_ANCHOR_NE		= GTK_ANCHOR_NORTH_EAST,
+  GTK_ANCHOR_S		= GTK_ANCHOR_SOUTH,
+  GTK_ANCHOR_SW		= GTK_ANCHOR_SOUTH_WEST,
+  GTK_ANCHOR_SE		= GTK_ANCHOR_SOUTH_EAST,
+  GTK_ANCHOR_W		= GTK_ANCHOR_WEST,
+  GTK_ANCHOR_E		= GTK_ANCHOR_EAST
+} GtkAnchorType;
+
 /* Arrow types */
 typedef enum
 {
@@ -102,6 +125,15 @@ typedef enum
   GTK_ICON_SIZE_BUTTON,
   GTK_ICON_SIZE_DIALOG
 } GtkIconSize;
+
+/* side types */
+typedef enum
+{
+  GTK_SIDE_TOP,
+  GTK_SIDE_BOTTOM,
+  GTK_SIDE_LEFT,
+  GTK_SIDE_RIGHT
+} GtkSideType;
 
 /* Reading directions for text */
 typedef enum
