@@ -1,3 +1,7 @@
+2000-12-05  Elliot Lee  <sopwith@redhat.com>
+	* gdk/gdkcolor.h: Make GdkColor specify element sizes
+	to avoid waste on 64-bit platforms.
+
 Tue Dec  5 15:49:31 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* INSTALL: Fix link to PNG home, remove reference

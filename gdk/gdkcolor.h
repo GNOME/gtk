@@ -16,10 +16,10 @@ extern "C" {
  */
 struct _GdkColor
 {
-  gulong  pixel;
-  gushort red;
-  gushort green;
-  gushort blue;
+  guint32 pixel;
+  guint16 red;
+  guint16 green;
+  guint16 blue;
 };
 
 /* The colormap type.
