@@ -1,3 +1,69 @@
+Overview of Changes in GTK+ 2.2.2
+=================================
+
+* GdkPixbuf [Matthias Clasen]
+ - Fix animation of slow-loading progressive GIFS
+ - Fix long-standing animated GIF display bug with transparency
+ - Misc bug and portability fixes [Rick Jones, Tim Mooney, Marijn Ross]
+* GDK [Owen Taylor]
+ - Draw continuous underlines between Pango layout runs when 
+   possible [Kang Jeong-Hee]
+ - Fix gdk_pixbuf_from_drawable() for big endian [Christian Petig]
+   Major rewrite of 16-bit handling for pixbuf_from_drawable()
+* X11 backend [Owen]
+ - Fix build on X11R5 [Albert Chin]
+ - Fix switching keyboard layouts while running [Egmont Koblinger]
+ - Work around RENDER extension bugs on certain Sun X servers [Morten Welinder]
+ - Zero unused fields in client messages we send Lubos Lunak]
+ - Fix occasional segfault when drawing pixbufs [Hans Petter Jansson]
+ - Fix wrong initializaiton that was keeping XShm from being used.
+* Win32 backend [Tor Lillqvist]
+ - Tweak line drawing
+ - Mouse/cursor fixes [Allin Cottrell]
+ - Better handling of floppy drives in GtkFileSelection
+ - Misc fixes [Arnaud Charlet, Cedric Gustin, Martyn Russell]
+* Input methods [Hidetoshi Tajima]
+ - Add rules for Greek accents to GtkIMContextSimple [Vasilis Vasaitis]
+ - Fix sorting of rules in GtkIMContextSimple [Vasilis]
+ - Miscellaneous GtkIMContextXIM fixes 
+ - Fix translation of input context names
+* Fix keyboard accelerators/bindings on Numeric Keypad [Owen, Olivier Ripoll]
+* Add Delete to GtkEntry context menu, Delete/Select All 
+  to GtkTextView context menu [Matthias]
+* Keynav tweaks in GtkFileSelection, GtkColorSel [Matthias]
+* Add C-A-PgUp/Down as alternative notebook page switching keys [Matthias]
+* GtkTextView
+ - Fix redrawing on color-only changes [Owen, Gustavo Giráldez]
+ - Don't scroll to cursor on focus in [Paolo Maggi]
+ - Fix spot location reported to input method [Owen, TOKUNAGA Hiroyuki, 
+   Yao Zhang]
+ - Miscellaneous bug fixes [Torbjörn Andersson, Matthias, Manual Clos,
+   Padraig O'Briain, Owen]
+* GtkTreeView [Kristian Rietveld]
+ - Fix prelighting [Sven Neumann]
+ - Set drag cursor earlier to allow apps to override [Daniel Elstner]
+ - Speed up insertions into GtkTreeModelSort [Owen, Jonathan Blandford]
+ - Bug fixes [Benjamin Bayart, Jonathan Blandford, Peter Bloomfield, 
+   Dave Cook, Felipe Heidrich, Richard Hult, Markus Lausser, Michael Natterer,
+   Mariano Suarez-Alvarez, Owen]
+* Fix handling of border width for GtkToolbar [Rodney Dawes]
+* Rewrite adjustment handling of GtkViewport, fixing many bugs
+  [Owen, Thomas Leonard, Michael]
+* Misc bug fixes [Dennis Björklund, Jonathan, Dave Bordoley, Rich Burridge, 
+  Anders Carlsson, Arnaud, Matthias, Vasco Alexandre da Silva Costa, 
+  Tim Evans, Larry Ewing, John Finlay, Jeff Franks, Jody Goldberg, 
+  Jason D. Hildebrand, Charles Kerr, Alex Larsson, Noah Levitt, Xan Lopez, 
+  Loban Rahman, Richard Reich, Soeren Sandmann, Charles Schmidt, 
+  Rajkumar Siva, Owen, Sergey V. Udaltsov, Morten Welinder, Michael Zucchi]
+* Code cleanups [Matthias, Glynn Foster, Britton Kerin, Sven Neumann, 
+  Doug Quale, Manish Singh, Morten Welinder]
+* Switch to using libtool-1.5
+* Build fixes [Matthias, J. Ali Harlowe, Rich Kinder, Jon Nall, Sven, 
+  Christian Rose]
+* Documentation improvements [Matthias, Noah Levitt, Sven Neumann]
+* New and updated translations (am,az,be,ca,cs,cy,da,de,el,es,fa,fi,fr,id,
+  it,ko,li,ml,mn,ms,nl,no,pl,pt,sr,sr@Latn,sv,ta,uk,yi,zh_TW)
+
 Overview of Changes in GTK+ 2.2.1
 =================================
 * Win32 [Tor Lillqvist]

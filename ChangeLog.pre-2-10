@@ -1,3 +1,9 @@
+Sun Jun  8 23:43:47 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* NEWS: Updated.
+
+	* configure.in: Version to 2.2.2, interface age 2.
+
 Sun Jun  8 22:03:09 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testdnd.c: Use application/x-rootwindow-drop for
@@ -484,7 +490,7 @@ Tue May 20 15:09:29 2003  Owen Taylor  <otaylor@redhat.com>
 	
 	* gtk/gtkselection.c (_gtk_selection_request): Handle the
 	case where the property type for the multiple atoms is
-	ATOM_PAIR by doing the conversions ourselve. This is
+	ATOM_PAIR by doing the conversions ourselves. This is
 	needed for Xt inter-operation.
 
 Wed May 14 18:12:45 2003  Owen Taylor  <otaylor@redhat.com>
@@ -505,7 +511,7 @@ Wed May 14 16:00:51 2003  Owen Taylor  <otaylor@redhat.com>
 Wed May 14 09:06:59 2003    Hidetoshi Tajima <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (get_ic_real): use type of guint32
-	instead of gumake for XNFilterEvents event mask(#110493).
+	instead of guint for XNFilterEvents event mask (#110493).
 
 2003-05-13  Sven Neumann  <sven@gimp.org>
 
@@ -630,7 +636,7 @@ Fri Apr 18 16:31:49 2003  Owen Taylor  <otaylor@redhat.com>
 	* configure.in gdk/x11/gdkdisplay-x11.c modules/input/Makefile.am:
 	Check for XAddConnectionWatch()/X11R6, and if found, disable XIM and
 	use of XAddConnectionWatch. Remove --enable-xim config option.
-	Should fix building on X11R6 (#110523, Albert Chin)
+	Should fix building on X11R5 (#110523, Albert Chin)
 
 Fri Apr 18 15:56:46 2003  Owen Taylor  <otaylor@redhat.com>
 
@@ -698,6 +704,9 @@ Mon Apr  7 19:43:15 2003  Owen Taylor  <otaylor@redhat.com>
 
  	* gdk/x11/gdkwindow-x11.c (_gdk_windowing_window_at_pointer):
  	Use gdk_x11_display_grab/ungrab.
+ 
+	* gdk/x11/gdkdisplay-x11.c (gdk_display_open): Initialize
+	use_xshm to TRUE so SHM gets used when present.
  
 2003-04-07  Matthias Clasen  <maclas@gmx.de>
 
