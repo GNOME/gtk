@@ -1105,9 +1105,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
     case GTK_LEFT_RIGHT:
       parent_menu_item = GTK_MENU (widget->parent)->parent_menu_item;
       parent_xthickness = widget->parent->style->xthickness;
-      if (parent_menu_item && 
-	  !GTK_MENU (widget->parent)->torn_off && 
-	  !GTK_MENU_SHELL (menu)->active)
+      if (parent_menu_item && !GTK_MENU (widget->parent)->torn_off)
 	menu_item->submenu_direction = GTK_MENU_ITEM (parent_menu_item)->submenu_direction;
       else if (direction == GTK_TEXT_DIR_LTR)
 	menu_item->submenu_direction = GTK_DIRECTION_RIGHT;

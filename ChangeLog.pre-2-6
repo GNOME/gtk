@@ -1,5 +1,8 @@
 2004-12-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenuitem.c (gtk_menu_item_position_menu): Inherit
+	submenu direction from the parent menu.
+
 	* gtk/gtkmenushell.c (gtk_menu_shell_select_submenu_first): 
 	Return a boolean indicating whether an item in the submenu
 	was selected.
