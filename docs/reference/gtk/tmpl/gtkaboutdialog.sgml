@@ -17,7 +17,11 @@ the <literal>Help</literal> menu. All parts of the dialog are optional.
 About dialog often contain links and email addresses. #GtkAboutDialog 
 supports this by offering global hooks, which are called when the user
 clicks on a link or email address, see gtk_about_dialog_set_email_hook()
-and gtk_about_dialog_set_url_hook().
+and gtk_about_dialog_set_url_hook(). Email addresses in the 
+authors, documenters and artists properties are recognized by looking for
+<literal>&lt;user@host&gt;</literal>, URLs are recognized by looking for
+<literal>http://url</literal>, with <literal>url</literal> extending to 
+the next space, tab or line break.
 </para>
 <para>
 To make constructing a #GtkAboutDialog as convenient as possible, you can
