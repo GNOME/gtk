@@ -4,7 +4,7 @@
      version updated. If you modify this file, you should check for
      parse errors by running:
 
-     $ docs/make-todo > /dev/null
+     $ docs/make-todo TODO.xml > /dev/null
 
      before committing, or you may screw up the online version --> 
 <todo logourl="gtk-logo-rgb.gif">
