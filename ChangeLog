@@ -1,3 +1,9 @@
+2004-10-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* === Released 2.5.4 ===
+
+	* Makefile.am (EXTRA_DIST): Remove po/makefile.mingw
+
 2004-10-28  Anders Carlsson  <andersca@gnome.org>
 
 	* gtk/gtkclipboard.c: (gtk_clipboard_set_can_store):
@@ -5,6 +11,12 @@
 	Make targets const.
 
 2004-10-27  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/Makefile.am (gtkalias.h): 
+	* gdk/Makefile.am (gdkalias.h): Fix srcdir != builddir build.
+	(#156547, Thomas Fitzsimmons)
+	
+	* NEWS: Updates.
 
 	* gtk/gtkclipboard.c (gtk_clipboard_set_can_store): Silently
 	ignore non-CLIPBOARD clipboards.  (#156610, Christian Persch)
