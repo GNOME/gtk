@@ -126,15 +126,14 @@ static void           file_model_node_ref        (FileModelNode      *node);
 static void           file_model_node_unref      (GtkFileSystemModel *model,
 						  FileModelNode      *node);
 
-const GtkFileInfo *   file_model_node_get_info   (GtkFileSystemModel *model,
-						  FileModelNode      *node);
-static gboolean       file_model_node_is_visible (GtkFileSystemModel *model,
-						  FileModelNode      *node);
-static void           file_model_node_clear      (GtkFileSystemModel *model,
-						  FileModelNode      *node);
-
-static FileModelNode *file_model_node_get_children (GtkFileSystemModel *model,
-						    FileModelNode      *node);
+static const GtkFileInfo *file_model_node_get_info     (GtkFileSystemModel *model,
+							FileModelNode      *node);
+static gboolean           file_model_node_is_visible   (GtkFileSystemModel *model,
+							FileModelNode      *node);
+static void               file_model_node_clear        (GtkFileSystemModel *model,
+							FileModelNode      *node);
+static FileModelNode *    file_model_node_get_children (GtkFileSystemModel *model,
+							FileModelNode      *node);
 
 GType
 _gtk_file_system_model_get_type (void)
@@ -505,6 +504,30 @@ gtk_file_system_model_unref_node (GtkTreeModel *tree_model,
 			 iter->user_data);
 }
 
+/**
+ * _gtk_file_system_model_new:
+ * @file_system: an object implementing #GtkFileSystem
+ * @root_uri: the URI of root of the file system to display,
+ *            or %NULL to display starting from the
+ *            root or roots of the fielsystem.
+ * @max_depth: the maximum depth from the children of @root_uri
+ *             or the roots of the file system to display in
+ *             the file selector). A depth of 0 displays
+ *             only the immediate children of @root_uri,
+ *             or the roots of the filesystem. -1 for no
+ *             maximum depth.
+ * @types: a bitmask indicating the types of information
+ *         that is desired about the files. This will
+ *         determine what information is returned by
+ *         _gtk_file_system_model_get_info().
+ *
+ * Creates a new #GtkFileSystemModel object. The #GtkFileSystemModel
+ * object wraps a #GtkFileSystem interface as a #GtkTreeModel.
+ * Using the @root_uri and @max_depth parameters, the tree model
+ * can be restricted to a subportion of the entire file system.
+ * 
+ * Return value: the newly created #GtkFileSystemModel object.
+ **/
 GtkFileSystemModel *
 _gtk_file_system_model_new (GtkFileSystem  *file_system,
 			    const gchar    *root_uri,
@@ -625,6 +648,14 @@ model_refilter_recurse (GtkFileSystemModel *model,
     }
 }
 
+/**
+ * _gtk_file_system_model_set_show_hidden:
+ * @model: a #GtkFileSystemModel
+ * @show_hidden: whether hidden files should be displayed
+ * 
+ * Sets whether hidden files should be included in the #GtkTreeModel
+ * for display.
+ **/
 void
 _gtk_file_system_model_set_show_hidden (GtkFileSystemModel *model,
 					gboolean            show_hidden)
@@ -643,6 +674,14 @@ _gtk_file_system_model_set_show_hidden (GtkFileSystemModel *model,
     }
 }
 
+/**
+ * _gtk_file_system_model_set_show_folders:
+ * @model: a #GtkFileSystemModel
+ * @show_folders: whether folders should be displayed
+ * 
+ * Sets whether folders should be included in the #GtkTreeModel for
+ * display.
+ **/
 void
 _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
 					 gboolean            show_folders)
@@ -661,6 +700,15 @@ _gtk_file_system_model_set_show_folders (GtkFileSystemModel *model,
     }
 }
 
+/**
+ * _gtk_file_system_model_set_show_files:
+ * @model: a #GtkFileSystemModel
+ * @show_files: whether files (as opposed to folders) should
+ *              be displayed.
+ * 
+ * Sets whether files (as opposed to folders) should be included
+ * in the #GtkTreeModel for display.
+ **/
 void
 _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
 				       gboolean            show_files)
@@ -679,6 +727,22 @@ _gtk_file_system_model_set_show_files (GtkFileSystemModel *model,
     }
 }
 
+/**
+ * _gtk_file_system_model_get_info:
+ * @model: a #GtkFileSystemModel
+ * @iter: a #GtkTreeIter pointing to a row of @model
+ * 
+ * Gets the #GtkFileInfo structure for a particular row
+ * of @model. The information included in this structure
+ * is determined by the @types parameter to
+ * _gtk_file_system_model_new().
+ * 
+ * Return value: a #GtkFileInfo structure. This structure
+ *   is owned by @model and must not be modified or freed.
+ *   If you want to save the information for later use,
+ *   you must make a copy, since the structure may be
+ *   freed on later changes to the file system.
+ **/
 const GtkFileInfo *
 _gtk_file_system_model_get_info (GtkFileSystemModel *model,
 				 GtkTreeIter        *iter)
@@ -686,6 +750,18 @@ _gtk_file_system_model_get_info (GtkFileSystemModel *model,
   return file_model_node_get_info (model, iter->user_data);
 }
 
+/**
+ * _gtk_file_system_model_get_uri:
+ * @model: a #GtkFileSystemModel
+ * @iter: a #GtkTreeIter pointing to a row of @model
+ * 
+ * Gets the URI for a particular row in @model. 
+ *
+ * Return value: the URI. This string is owned by @model and
+ *   or freed. If you want to save the URI for later use,
+ *   you must make a copy, since the string may be freed
+ *   on later changes to the file system.
+ **/
 const gchar *
 _gtk_file_system_model_get_uri (GtkFileSystemModel *model,
 				GtkTreeIter        *iter)
@@ -749,6 +825,32 @@ find_and_ref_uri (GtkFileSystemModel *model,
   return FALSE;
 }
 
+/**
+ * _gtk_file_system_model_uri_do:
+ * @model: a #GtkFileSystemModel
+ * @uri: a URI pointing to a file in the filesystem
+ *       for @model.
+ * @func: Function to call with the path and iter corresponding
+ *        to @uri.
+ * @user_data: data to pass to @func
+ * 
+ * Locates @uri within @model, referencing
+ * (gtk_tree_model_ref_node ()) all parent nodes,
+ * calls @func passing in the path and iter for @uri,
+ * then unrefs all the parent nodes.
+ *
+ * The reason for doing this operation as a callback
+ * is so that if the operation performed with the the
+ * path and iter results in referencing the the node
+ * and/or parent nodes, we don't load all the information
+ * about the nodes.
+ *
+ * This function is particularly useful for expanding
+ * a #GtkTreeView to a particular point in the file system.
+ * 
+ * Return value: %TRUE if the URI was successfully
+ *  found in @model and @func was called.
+ **/
 gboolean
 _gtk_file_system_model_uri_do (GtkFileSystemModel       *model,
 			       const gchar              *uri,
@@ -873,7 +975,7 @@ file_model_node_free (FileModelNode *node)
   g_free (node);
 }
 
-const GtkFileInfo *
+static const GtkFileInfo *
 file_model_node_get_info (GtkFileSystemModel *model,
 			  FileModelNode      *node)
 {

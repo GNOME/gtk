@@ -105,7 +105,7 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *chooser_widget)
   
   gtk_widget_push_composite_child ();
 
-  priv->impl = _gtk_file_chooser_impl_default_new (g_object_new (GTK_TYPE_FILE_SYSTEM_UNIX, NULL));
+  priv->impl = _gtk_file_chooser_impl_default_new (_gtk_file_system_unix_new ());
   gtk_box_pack_start (GTK_BOX (chooser_widget), priv->impl, TRUE, TRUE, 0);
   gtk_widget_show (priv->impl);
 

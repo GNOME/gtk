@@ -154,6 +154,21 @@ _gtk_file_system_unix_get_type (void)
   return file_system_unix_type;
 }
 
+/**
+ * _gtk_file_system_unix_new:
+ * 
+ * Creates a new #GtkFileSystemUnix object. #GtkFileSystemUnix
+ * implements the #GtkFileSystem interface with direct access to
+ * the filesystem using Unix/Linux API calls
+ * 
+ * Return value: the new #GtkFileSystemUnix object
+ **/
+GtkFileSystem *
+_gtk_file_system_unix_new (void)
+{
+  return g_object_new (GTK_TYPE_FILE_SYSTEM_UNIX, NULL);
+}
+
 static void
 gtk_file_system_unix_class_init (GtkFileSystemUnixClass *class)
 {

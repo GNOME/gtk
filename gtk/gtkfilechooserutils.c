@@ -39,6 +39,17 @@ static void    delegate_current_folder_changed (GtkFileChooser *chooser,
 static void    delegate_selection_changed      (GtkFileChooser *chooser,
 						gpointer        data);
 
+/**
+ * _gtk_file_chooser_install_properties:
+ * @klass: the class structure for a type deriving from #GObject
+ * 
+ * Installs the necessary properties for a class implementing
+ * #GtkFileChooser. A #GtkParamSpecOverride property is installed
+ * for each property, using the values from the #GtkFileChooserProp
+ * enumeration. The caller must make sure itself that the enumeration
+ * values don't collide with some other property values they
+ * are using.
+ **/
 void
 _gtk_file_chooser_install_properties (GObjectClass *klass)
 {
@@ -79,6 +90,17 @@ _gtk_file_chooser_install_properties (GObjectClass *klass)
 							  G_PARAM_READWRITE));
 }
 
+/**
+ * _gtk_file_chooser_delegate_iface_init:
+ * @iface: a #GtkFileChoserIface structure
+ * 
+ * An interface-initialization function for use in cases where
+ * an object is simply delegating the methods, signals of
+ * the #GtkFileChooser interface to another object.
+ * _gtk_file_chooser_set_delegate() must be called on each
+ * instance of the object so that the delegate object can
+ * be found.
+ **/
 void
 _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
 {
@@ -91,6 +113,17 @@ _gtk_file_chooser_delegate_iface_init (GtkFileChooserIface *iface)
   iface->get_uris = delegate_get_uris;
 }
 
+/**
+ * _gtk_file_chooser_set_delegate:
+ * @receiver: a GOobject implementing #GtkFileChooser
+ * @delegate: another GObject implementing #GtkFileChooser
+ *
+ * Establishes that calls on @receiver for #GtkFileChooser
+ * methods should be delegated to @delegate, and that
+ * #GtkFileChooser signals emitted on @delegate should be
+ * forwarded to @receiver. Must be used in confunction with
+ * _gtk_file_chooser_delegate_iface_init().
+ **/
 void
 _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 				GtkFileChooser *delegate)
@@ -106,7 +139,7 @@ _gtk_file_chooser_set_delegate (GtkFileChooser *receiver,
 		    G_CALLBACK (delegate_selection_changed), receiver);
 }
 
-GtkFileChooser *
+static GtkFileChooser *
 get_delegate (GtkFileChooser *receiver)
 {
   return g_object_get_data (G_OBJECT (receiver), "gtk-file-chooser-delegate");

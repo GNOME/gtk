@@ -515,7 +515,7 @@ list_selection_changed (GtkTreeSelection          *selection,
   g_signal_emit_by_name (impl, "selection_changed", 0);
 }
 
-void
+static void
 name_data_func (GtkTreeViewColumn *tree_column,
 		GtkCellRenderer   *cell,
 		GtkTreeModel      *tree_model,

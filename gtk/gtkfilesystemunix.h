@@ -31,8 +31,9 @@ G_BEGIN_DECLS
 
 typedef struct _GtkFileSystemUnix      GtkFileSystemUnix;
 
-GType _gtk_file_system_unix_get_type (void);
-
+GtkFileSystem *_gtk_file_system_unix_new       (void);
+GType          _gtk_file_system_unix_get_type (void);
+     
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_UNIX_H__ */
