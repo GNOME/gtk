@@ -1128,7 +1128,6 @@ void
 gtk_widget_unparent (GtkWidget *widget)
 {
   GtkWidget *toplevel;
-  GtkWidget *child;
   GtkWidget *old_parent;
   GSList *tmp_list, *prev_list;
   
@@ -1139,18 +1138,30 @@ gtk_widget_unparent (GtkWidget *widget)
   /* keep this function in sync with gtk_menu_detach()
    */
 
+  /* unset focused and default children properly
+   */
   toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+    {
+      gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), NULL);
+
+      if (GTK_IS_WINDOW (toplevel))
+	{
+	  GtkWidget *child;
+      
+	  child = GTK_WINDOW (toplevel)->focus_widget;
+	  
+	  while (child && child != widget)
+	    child = child->parent;
+	  
+	  if (child == widget)
+	    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+	}
+    }
   if (GTK_IS_WINDOW (toplevel))
     {
-      child = GTK_WINDOW (toplevel)->focus_widget;
+      GtkWidget *child;
       
-      while (child && child != widget)
-	child = child->parent;
-      
-      if (child == widget)
-	gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
-
-
       child = GTK_WINDOW (toplevel)->default_widget;
       
       while (child && child != widget)
@@ -2249,25 +2260,25 @@ gtk_widget_grab_focus (GtkWidget *widget)
 
   if (GTK_WIDGET_CAN_FOCUS (widget))
     {
-      GtkWidget *window;
+      GtkWidget *parent;
       GtkWidget *child;
       GtkType window_type;
       
       window_type = gtk_window_get_type ();
-      window = widget->parent;
+      parent = widget->parent;
       child = widget;
       
-      while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
+      while (parent && !gtk_type_is_a (GTK_WIDGET_TYPE (parent), window_type))
 	{
-	  GTK_CONTAINER (window)->focus_child = child;
-	  child = window;
-	  window = window->parent;
+	  gtk_container_set_focus_child (GTK_CONTAINER (parent), child);
+	  child = parent;
+	  parent = parent->parent;
 	}
       
-      if (window && gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
+      if (parent && gtk_type_is_a (GTK_WIDGET_TYPE (parent), window_type))
 	{
-	  GTK_CONTAINER (window)->focus_child = child;
-	  gtk_window_set_focus (GTK_WINDOW (window), widget);
+	  gtk_container_set_focus_child (GTK_CONTAINER (parent), child);
+	  gtk_window_set_focus (GTK_WINDOW (parent), widget);
 	}
     }
 }

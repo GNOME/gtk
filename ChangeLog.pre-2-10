@@ -1,3 +1,23 @@
+Sun May  3 16:55:43 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcontainer.c (gtk_container_set_focus_child): new function to
+	set the current focus_child of a container, does proper referencing and
+	adjusts the vadjustment/hadjustment associated with the focus widget.
+
+	* gtk/gtkwidget.c (gtk_widget_grab_focus): set the focused child on
+	containers via gtk_container_set_focus_child.
+
+	* gtk/gtknotebook.c: modifications to use gtk_container_set_focus_child
+ 	where appropriate.
+
+	* gtk/gtkcontainer.c (gtk_container_remove): removed unsetting of focus
+ 	child since not every child removal goes through this function (this
+	showed up after gtk_container_set_focus_child() started to reference the
+ 	focus_child of a container).
+
+	* gtk/gtkwidget.c (gtk_widget_unparent): moved unsetting the focus_child
+	of a container from gtk_container_remove into this place.
+
 Sat May  2 22:33:45 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.c: added new functions to operate on intermediate

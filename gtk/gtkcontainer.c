@@ -359,9 +359,6 @@ gtk_container_remove (GtkContainer *container,
   g_return_if_fail (widget->parent == GTK_WIDGET (container));
   
   gtk_signal_emit (GTK_OBJECT (container), container_signals[REMOVE], widget);
-
-  if (container->focus_child == widget)
-    container->focus_child = NULL;
 }
 
 void
@@ -538,6 +535,47 @@ gtk_container_unregister_toplevel (GtkContainer *container)
   gtk_widget_unref (GTK_WIDGET (container));
 }
 
+void
+gtk_container_set_focus_child (GtkContainer     *container,
+			       GtkWidget        *child)
+{
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  if (child)
+    g_return_if_fail (GTK_IS_WIDGET (child));
+
+  if (child != container->focus_child)
+    {
+      if (container->focus_child)
+	gtk_widget_unref (container->focus_child);
+      container->focus_child = child;
+      if (container->focus_child)
+	gtk_widget_ref (container->focus_child);
+    }
+
+
+  /* check for h/v adjustments
+   */
+  if (container->focus_child)
+    {
+      GtkAdjustment *adjustment;
+      
+      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container), vadjustment_key_id);
+      if (adjustment)
+	gtk_adjustment_clamp_page (adjustment,
+				   container->focus_child->allocation.y,
+				   (container->focus_child->allocation.y +
+				    container->focus_child->allocation.height));
+
+      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container), hadjustment_key_id);
+      if (adjustment)
+	gtk_adjustment_clamp_page (adjustment,
+				   container->focus_child->allocation.x,
+				   (container->focus_child->allocation.x +
+				    container->focus_child->allocation.width));
+    }
+}
+
 static void
 gtk_container_marshal_signal_1 (GtkObject      *object,
 				GtkSignalFunc   func,
@@ -617,7 +655,6 @@ gtk_real_container_focus (GtkContainer     *container,
   GList *tmp_list;
   GList *tmp_list2;
   gint return_val;
-  GtkAdjustment *adjustment;
 
   g_return_val_if_fail (container != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), FALSE);
@@ -677,25 +714,6 @@ gtk_real_container_focus (GtkContainer     *container,
 
 	  g_list_free (children);
 	}
-    }
-
-  /* check for h/v adjustments
-   */
-  if (container->focus_child)
-    {
-      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container), vadjustment_key_id);
-      if (adjustment)
-	gtk_adjustment_clamp_page (adjustment,
-				   container->focus_child->allocation.y,
-				   (container->focus_child->allocation.y +
-				    container->focus_child->allocation.height));
-
-      adjustment = gtk_object_get_data_by_id (GTK_OBJECT (container), hadjustment_key_id);
-      if (adjustment)
-	gtk_adjustment_clamp_page (adjustment,
-				   container->focus_child->allocation.x,
-				   (container->focus_child->allocation.x +
-				    container->focus_child->allocation.width));
     }
 
   return return_val;
@@ -1001,7 +1019,7 @@ gtk_container_focus_move (GtkContainer     *container,
   GtkWidget *child;
 
   focus_child = container->focus_child;
-  container->focus_child = NULL;
+  gtk_container_set_focus_child (container, NULL);
 
   while (children)
     {

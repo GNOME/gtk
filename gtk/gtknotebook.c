@@ -1485,10 +1485,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
   if (event->window == notebook->panel)
     {
       if (!GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  GTK_CONTAINER (widget)->focus_child = NULL;
-	  gtk_widget_grab_focus (widget);
-	}
+	gtk_widget_grab_focus (widget);
 
       gtk_grab_add (widget);
       notebook->button = event->button;
@@ -1557,7 +1554,7 @@ gtk_notebook_button_press (GtkWidget      *widget,
 	      (event->x <= (page->allocation.x + page->allocation.width)) &&
 	      (event->y <= (page->allocation.y + page->allocation.height)))
 	    {
-	      GTK_CONTAINER (notebook)->focus_child = NULL;
+	      gtk_container_set_focus_child (GTK_CONTAINER (notebook), NULL);
 
 	      if (page == notebook->cur_page &&
                   notebook->focus_tab != children && 
@@ -2088,7 +2085,7 @@ gtk_notebook_focus_in (GtkWidget     *widget,
       if (gtk_notebook_page_select (GTK_NOTEBOOK (widget)))
 	return FALSE;
       else
-	GTK_CONTAINER (widget)->focus_child = NULL;
+	gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
     }
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
@@ -2647,7 +2644,7 @@ gtk_notebook_focus (GtkContainer     *container,
     return FALSE;
 
   focus_child = container->focus_child;
-  container->focus_child = NULL;
+  gtk_container_set_focus_child (container, NULL);
 
   if (!notebook->show_tabs)
     {

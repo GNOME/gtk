@@ -105,11 +105,12 @@ void   gtk_container_register_toplevel	 (GtkContainer	   *container);
 void   gtk_container_unregister_toplevel (GtkContainer	   *container);
 gint   gtk_container_focus		   (GtkContainer     *container,
 					    GtkDirectionType  direction);
+void   gtk_container_set_focus_child	   (GtkContainer     *container,
+					    GtkWidget	     *child);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
-
 
 
 
