@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-20 16:46+0100\n"
-"PO-Revision-Date: 2005-01-20 16:47+0100\n"
+"POT-Creation-Date: 2005-01-23 16:54+0100\n"
+"PO-Revision-Date: 2005-01-23 16:55+0100\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -917,6 +917,12 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
+#. do not translate the part before the |
+#: gtk/gtkcellrendererprogress.c:236 gtk/gtkcellrendererprogress.c:294
+#, c-format
+msgid "progress bar label|%d %%"
+msgstr "etikett för förloppsmätare|%d %%"
+
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
 msgid "Pick a Color"
 msgstr "Välj en färg"
@@ -1485,7 +1491,7 @@ msgstr "(Tom)"
 
 #: gtk/gtkfilesystemunix.c:440 gtk/gtkfilesystemunix.c:632
 #: gtk/gtkfilesystemunix.c:1739 gtk/gtkfilesystemwin32.c:482
-#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1530
+#: gtk/gtkfilesystemwin32.c:495 gtk/gtkfilesystemwin32.c:1533
 #, c-format
 msgid "Error getting information for '%s': %s"
 msgstr "Fel vid hämtning av information för \"%s\": %s"
@@ -1517,7 +1523,7 @@ msgstr ""
 "Namnet \"%s\" är inte giltigt eftersom det innehåller tecknet \"%s\". Använd "
 "ett annat namn."
 
-#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1004
+#: gtk/gtkfilesystemunix.c:1446 gtk/gtkfilesystemwin32.c:1007
 #, c-format
 msgid "Bookmark saving failed: %s"
 msgstr "Bokmärkessparande misslyckades: %s"
@@ -1536,6 +1542,16 @@ msgstr "\"%s\" finns inte i bokmärkeslistan"
 #, c-format
 msgid "Error getting information for '/': %s"
 msgstr "Fel vid hämtning av information för \"/\": %s"
+
+#: gtk/gtkfilesystemwin32.c:611
+#, c-format
+msgid "Network Drive (%s)"
+msgstr "Nätverksenhet (%s)"
+
+#: gtk/gtkfilesystemwin32.c:626
+#, c-format
+msgid "%s (%s)"
+msgstr "%s (%s)"
 
 #: gtk/gtkfontbutton.c:178 gtk/gtkfontbutton.c:295
 msgid "Pick a Font"
@@ -2205,11 +2221,14 @@ msgstr "X-inmatningsmetod"
 msgid "Could not get information for file '%s': %s"
 msgstr "Kunde inte hämta information för filen \"%s\": %s"
 
+#~ msgid "Network Drive"
+#~ msgstr "Nätverksenhet"
+
+#~ msgid "%s: %s"
+#~ msgstr "%s: %s"
+
 #~ msgid "_Credits"
 #~ msgstr "_Tack"
-
-#~ msgid "progress bar label|%d %%"
-#~ msgstr "etikett för förloppsmätare|%d %%"
 
 #~ msgid "Error getting information for '%s'"
 #~ msgstr "Fel vid hämtning av information för \"%s\""
@@ -2219,9 +2238,6 @@ msgstr "Kunde inte hämta information för filen \"%s\": %s"
 
 #~ msgid "Select a file"
 #~ msgstr "Välj en fil"
-
-#~ msgid "%s: %s"
-#~ msgstr "%s: %s"
 
 #~ msgid "error getting information for '%s': %s"
 #~ msgstr "fel vid hämtning av information för \"%s\": %s"
