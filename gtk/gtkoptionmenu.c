@@ -379,6 +379,18 @@ gtk_option_menu_expose (GtkWidget      *widget,
     {
       gtk_option_menu_paint (widget, &event->area);
 
+
+      /* The following code tries to draw the child in two places at
+       * once. It fails miserably for several reasons
+       *
+       * - If the child is not no-window, removing generates
+       *   more expose events. Bad, bad, bad.
+       * 
+       * - Even if the child is no-window, removing it now (properly)
+       *   clears the space where it was, so it does no good
+       */
+      
+#if 0
       remove_child = FALSE;
       child = GTK_BUTTON (widget)->child;
 
@@ -401,6 +413,14 @@ gtk_option_menu_expose (GtkWidget      *widget,
 
       if (remove_child)
 	gtk_option_menu_remove_contents (GTK_OPTION_MENU (widget));
+#else
+      child = GTK_BUTTON (widget)->child;
+      child_event = *event;
+      if (child && GTK_WIDGET_NO_WINDOW (child) &&
+	  gtk_widget_intersect (child, &event->area, &child_event.area))
+	gtk_widget_event (child, (GdkEvent*) &child_event);
+
+#endif /* 0 */
     }
 
   return FALSE;
@@ -491,7 +511,6 @@ gtk_option_menu_remove_contents (GtkOptionMenu *option_menu)
       if (GTK_WIDGET (option_menu->menu_item)->state != GTK_BUTTON (option_menu)->child->state)
 	gtk_widget_set_state (GTK_BUTTON (option_menu)->child,
 			      GTK_WIDGET (option_menu->menu_item)->state);
-      gtk_widget_unrealize (GTK_BUTTON (option_menu)->child);
       gtk_widget_reparent (GTK_BUTTON (option_menu)->child, option_menu->menu_item);
       gtk_widget_unref (option_menu->menu_item);
       option_menu->menu_item = NULL;
