@@ -1,3 +1,8 @@
+2001-12-30  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkdialog.h (GtkDialogFlags): fix GtkDialogFlags to have 
+	the right values, reported by Jeff Franks
+
 2001-12-30  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/gtkwindow.c, gtk/gtkimcontextsimple.c: Minor documentation tweaks.
