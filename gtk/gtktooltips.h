@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -26,19 +26,20 @@
 extern "C" {
 #endif /* __cplusplus */
 
-#define GTK_TOOLTIPS(obj)          GTK_CHECK_CAST (obj, gtk_tooltips_get_type (), GtkTooltips)
+#define GTK_TOOLTIPS(obj)	   GTK_CHECK_CAST (obj, gtk_tooltips_get_type (), GtkTooltips)
 #define GTK_TOOLTIPS_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_tooltips_get_type (), GtkTooltipsClass)
-#define GTK_IS_TOOLTIPS(obj)       GTK_CHECK_TYPE (obj, gtk_tooltips_get_type ())
+#define GTK_IS_TOOLTIPS(obj)	   GTK_CHECK_TYPE (obj, gtk_tooltips_get_type ())
 
-typedef struct _GtkTooltips      GtkTooltips;
+typedef struct _GtkTooltips	 GtkTooltips;
 typedef struct _GtkTooltipsClass GtkTooltipsClass;
-typedef struct _GtkTooltipsData  GtkTooltipsData;
+typedef struct _GtkTooltipsData	 GtkTooltipsData;
 
 struct _GtkTooltipsData
 {
   GtkTooltips *tooltips;
   GtkWidget *widget;
-  gchar *tips_text;
+  gchar *tip_text;
+  gchar *tip_private;
   GdkFont *font;
   gint width;
   GList *row;
@@ -56,12 +57,10 @@ struct _GtkTooltips
   GdkColor *foreground;
   GdkColor *background;
 
-  gint numwidgets;
-  gint enabled;
-  gint inside;
-  gint delay;
-  gint timer_tag;
-  gint timer_active;
+  gint16 delay;
+  gint	 enabled : 1;
+  gint	 timer_active : 1;
+  gint	 timer_tag;
 };
 
 struct _GtkTooltipsClass
@@ -69,19 +68,27 @@ struct _GtkTooltipsClass
   GtkDataClass parent_class;
 };
 
-GtkType      gtk_tooltips_get_type   (void);
-GtkTooltips* gtk_tooltips_new        (void);
+GtkType		 gtk_tooltips_get_type	 (void);
+GtkTooltips*	 gtk_tooltips_new	 (void);
 
-void         gtk_tooltips_enable     (GtkTooltips *tooltips);
-void         gtk_tooltips_disable    (GtkTooltips *tooltips);
-void         gtk_tooltips_set_delay  (GtkTooltips *tooltips,
-                                      gint         delay);
-void         gtk_tooltips_set_tips   (GtkTooltips *tooltips,
-                                      GtkWidget   *widget,
-                                      const gchar *tips_text);
-void         gtk_tooltips_set_colors (GtkTooltips *tooltips,
-                                      GdkColor    *background,
-                                      GdkColor    *foreground);
+void		 gtk_tooltips_enable	 (GtkTooltips     *tooltips);
+void		 gtk_tooltips_disable	 (GtkTooltips     *tooltips);
+void		 gtk_tooltips_set_delay	 (GtkTooltips     *tooltips,
+					  gint	           delay);
+void		 gtk_tooltips_set_tip	 (GtkTooltips     *tooltips,
+					  GtkWidget	  *widget,
+					  const gchar     *tip_text,
+					  const gchar     *tip_private);
+void		 gtk_tooltips_set_colors (GtkTooltips     *tooltips,
+					  GdkColor	  *background,
+					  GdkColor	  *foreground);
+GtkTooltipsData* gtk_tooltips_data_get	 (GtkWidget	  *widget);
+
+/* discouraged old function name
+ */
+#define	gtk_tooltips_set_tips(t,w,x)	gtk_tooltips_set_tip(t,w,x,NULL)
+
+
 
 #ifdef __cplusplus
 }

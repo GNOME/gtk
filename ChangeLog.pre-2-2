@@ -1,3 +1,23 @@
+Wed Feb 18 02:58:50 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtktooltips.h:
+ 	  new functions gtk_tooltips_data_get and
+	  gtk_tooltips_set_tip, gtk_tooltips_set_tips is discouraged now.
+	(_GtkTooltips): removed some fields that were never used.
+	  changed boolean fields to one bit size, to pack together with
+ 	  the delay field.
+ 	(_GtkTooltipsData): added tip_private, renamed tips_text to
+ 	  tip_text.
+	* gtk/gtktooltips.c:
+ 	  (gtk_tooltips_data_get): new function to retrive the
+ 	  _GtkTooltipsData structure of a widget.
+	(gtk_tooltips_set_tip): new function for more extensible tooltips
+	  settings than gtk_tooltips_set_tips which is discuraged now.
+	  removed a bug that caused a stale object_data key to a
+ 	  _GtkTooltipsData structure.
+ 	  removed a bug that caused tips falsly to come up for a grab widget
+ 	  on widgets where events were grabbed from.
+
 1998-02-17  Federico Mena Quintero  <federico@nuclecu.unam.mx>
 
 	* gdk/gdkcc.c: Added some missing newlines on debug messages.
