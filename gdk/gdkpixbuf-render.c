@@ -452,7 +452,7 @@ gdk_pixbuf_render_pixmap_and_mask_for_screen (GdkPixbuf  *pixbuf,
       
       *pixmap_return = gdk_pixmap_new (gdk_screen_get_root_window (screen),
 				       pixbuf->width, pixbuf->height,
-				       gdk_rgb_get_visual ()->depth);
+				       gdk_rgb_get_visual_for_screen (screen)->depth);
 
       gc = gdk_gc_new (*pixmap_return);
       gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,

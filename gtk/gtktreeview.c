@@ -8721,6 +8721,8 @@ gtk_tree_view_interactive_search (GtkTreeView *tree_view,
 
   /* set up window */
   window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_screen (GTK_WINDOW (window),
+			 gtk_widget_get_screen (GTK_WIDGET (tree_view)));
   gtk_window_set_title (GTK_WINDOW (window), "search dialog");
   gtk_container_set_border_width (GTK_CONTAINER (window), 3);
   gtk_window_set_modal (GTK_WINDOW (window), TRUE);

@@ -750,7 +750,7 @@ set_cross_grab (GtkHSV *hsv,
   
   priv = hsv->priv;
   
-  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (hsv),
+  cursor = gdk_cursor_new_for_screen (gtk_widget_get_screen (GTK_WIDGET (hsv)),
 				      GDK_CROSSHAIR);
   gdk_pointer_grab (priv->window, FALSE,
 		    (GDK_POINTER_MOTION_MASK
@@ -977,7 +977,8 @@ paint_ring (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (drawable, width, height, 1);
+  mask = gdk_pixmap_new (gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (hsv))),
+			 width, height, 1);
 
   gc = gdk_gc_new (mask);
   
@@ -1212,7 +1213,8 @@ paint_triangle (GtkHSV      *hsv,
   
   /* Create clipping mask */
   
-  mask = gdk_pixmap_new (drawable, width, height, 1);
+  mask = gdk_pixmap_new (gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (hsv))),
+			 width, height, 1);
 
   gc = gdk_gc_new (mask);
   

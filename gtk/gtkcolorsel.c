@@ -273,6 +273,8 @@ color_sample_drag_begin (GtkWidget      *widget,
   
   priv = colorsel->private_data;
   window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_screen (GTK_WINDOW (window),
+			 gtk_widget_get_screen (widget));
   gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
   gtk_widget_set_usize (window, 48, 32);
   gtk_widget_realize (window);
@@ -672,6 +674,8 @@ palette_drag_begin (GtkWidget      *widget,
   
   priv = colorsel->private_data;
   window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_screen (GTK_WINDOW (window),
+			 gtk_widget_get_screen (widget));
   gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
   gtk_widget_set_usize (window, 48, 32);
   gtk_widget_realize (window);
@@ -1743,7 +1747,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   GtkWidget *table, *label, *hbox, *frame, *vbox, *button;
   GtkAdjustment *adjust;
   GdkPixbuf *picker_pix = NULL;
-  GtkImage  *picker_image;
+  GtkWidget *picker_image;
   gint i, j;
   ColorSelectionPrivate *priv;
   
@@ -1784,7 +1788,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       GTK_SIGNAL_FUNC (get_screen_color), NULL);
-  picker_pix = gdk_pixbuf_new_from_xpm_data (picker);
+  picker_pix = gdk_pixbuf_new_from_xpm_data (&picker);
   picker_image = gtk_image_new_from_pixbuf (picker_pix);
   gtk_container_add (GTK_CONTAINER (button), picker_image);
   gtk_widget_show (GTK_WIDGET (picker_image));

@@ -24,7 +24,7 @@ main (int argc, char *argv[])
   }
 
   window = gtk_color_selection_dialog_new("Toto");
-/*  gtk_window_set_screen (GTK_WINDOW (window),  gdk_display_get_default_screen (dpy2));*/
+  gtk_window_set_screen (GTK_WINDOW (window),  gdk_display_get_default_screen (dpy2));
 	
 	  
   gtk_widget_show (window);

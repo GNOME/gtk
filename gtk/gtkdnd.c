@@ -2168,7 +2168,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 			gdk_pixbuf_get_height (pixbuf));
   gtk_widget_realize (window);
 
-  gdk_pixbuf_render_pixmap_and_mask_for_screen (screen,	pixbuf, &pixmap, &mask, 128);
+  gdk_pixbuf_render_pixmap_and_mask_for_screen (pixbuf, screen, &pixmap, &mask, 128);
   
   gdk_window_set_back_pixmap (window->window, pixmap, FALSE);
   

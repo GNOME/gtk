@@ -173,6 +173,8 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
   if (!tooltips->tip_window)
     {
       tooltips->tip_window = gtk_window_new (GTK_WINDOW_POPUP);
+        gtk_window_set_screen (GTK_WINDOW (tooltips->tip_window),
+			       gtk_widget_get_screen (tooltips->active_tips_data->widget));
       gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
       gtk_window_set_policy (GTK_WINDOW (tooltips->tip_window), FALSE, FALSE, TRUE);
       gtk_widget_set_name (tooltips->tip_window, "gtk-tooltips");
@@ -332,7 +334,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   style = tooltips->tip_window->style;
   
   widget = tooltips->active_tips_data->widget;
-  screen = gtk_widget_get_screen (screen);
+  screen = gtk_widget_get_screen (widget);
 
   screen_w = gdk_screen_get_width (screen);
   screen_h = gdk_screen_get_height (screen);

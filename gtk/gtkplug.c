@@ -900,6 +900,8 @@ handle_modality_on (GtkPlug *plug)
   if (!plug->modality_window)
     {
       plug->modality_window = gtk_window_new (GTK_WINDOW_POPUP);
+      gtk_window_set_screen (GTK_WIDGET (plug->modality_window),
+			     gtk_widget_get_screen (GTK_WIDGET (plug)));
       gtk_window_group_add_window (plug->modality_group, GTK_WINDOW (plug->modality_window));
       gtk_grab_add (plug->modality_window);
     }
