@@ -65,11 +65,13 @@
 
 	* gdk/win32/gdkglobals-win32.c: New global variable: gdk_max_colors.
 
-	* gdk/win32/gdkimage-win32.c (gdk_image_get): Call
-	gdk_win32_blit() with use_fg_bg FALSE.
+	* gdk/win32/gdkimage-win32.c (gdk_image_get): Call gdk_win32_blit()
+	with use_fg_bg FALSE.
 
 	(gdk_image_get_pixel, gdk_image_put_pixel): Handle depth == 4 case
 	(two packed pixels per byte).
+
+	(gdk_image_put): Call gdk_win32_blit() with use_fg_bg TRUE.
 
 	* gdk/win32/gdkmain-win32.c: New command-line option -max-colors.
 
