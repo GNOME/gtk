@@ -992,7 +992,7 @@ gtk_exit (gint errorcode)
  * Return value: a string corresponding to the locale set, as with the
  * C library function <function>setlocale()</function>.
  **/
-gchar*
+gchar *
 gtk_set_locale (void)
 {
   return gdk_set_locale ();
@@ -1001,13 +1001,14 @@ gtk_set_locale (void)
 /**
  * gtk_get_default_language:
  *
- * Returns the ISO language code for the default language currently in
+ * Returns the #PangoLanguage for the default language currently in
  * effect. (Note that this can change over the life of an
  * application.)  The default language is derived from the current
  * locale. It determines, for example, whether GTK+ uses the
  * right-to-left or left-to-right text direction.
  * 
- * Return value: the default language as an allocated string, must be freed
+ * Return value: the default language as a #PangoLanguage, must not be
+ * freed
  **/
 PangoLanguage *
 gtk_get_default_language (void)

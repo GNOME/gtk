@@ -1,3 +1,7 @@
+2003-02-24  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkmain.c (gtk_get_default_language): fixed documentation.
+
 2003-02-21  Tomas Ogren  <stric@ing.umu.se>
 
 	* docs/reference/gtk/tmpl/gtktreemodel.sgml: Fix typos in an example
