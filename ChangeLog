@@ -1,3 +1,24 @@
+Thu Aug 26 22:44:12 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Provide information about how an adjustment change in a range 
+	widget happened. Add a "slider-moved" signal which reports how 
+	a user is interacting with the range, whether they are clicking 
+	on a stepper or the trough, or dragging the slider.  (#133263,
+	Thomas Fitzsimmons)
+
+	* gtk/gtkmarshalers.list: Add signal type BOOLEAN:ENUM,DOUBLE.
+	* gtk/gtkrange.c (gtk_range_class_init): Add "change-value"
+	signal.
+	(gtk_range_internal_set_value): Rename to
+	gtk_range_real_change_value.  Add GtkScrollType parameter.  Emit
+	the change-value signal when the range's value changes.
+	(update_slider_position, gtk_range_scroll_event, step_back,
+	step_forward, page_back, page_forward, scroll_begin,
+	scroll_end): Change gtk_range_internal_set_value to
+	gtk_range_real_change_value.
+	* gtk/gtkrange.h (struct _GtkRangeClass): Declare change_value
+	function.
+
 2004-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	* modules/input/Makefile.am: Build imime.la on Windows.

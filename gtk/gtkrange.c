@@ -19,7 +19,7 @@
  */
 
 /*
- * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * Modified by the GTK+ Team and others 1997-2004.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
@@ -51,6 +51,7 @@ enum {
   VALUE_CHANGED,
   ADJUST_BOUNDS,
   MOVE_SLIDER,
+  CHANGE_VALUE,
   LAST_SIGNAL
 };
 
@@ -173,8 +174,10 @@ static void          gtk_range_reset_update_timer       (GtkRange      *range);
 static void          gtk_range_remove_update_timer      (GtkRange      *range);
 static GdkRectangle* get_area                           (GtkRange      *range,
                                                          MouseLocation  location);
-static void          gtk_range_internal_set_value       (GtkRange      *range,
-                                                         gdouble        value);
+static gboolean      gtk_range_real_change_value       (GtkRange      *range,
+                                                        GtkScrollType  scroll,
+                                                        gdouble        value,
+                                                        gpointer       data);
 static void          gtk_range_update_value             (GtkRange      *range);
 
 
@@ -246,6 +249,7 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->style_set = gtk_range_style_set;
 
   class->move_slider = gtk_range_move_slider;
+  class->change_value = gtk_range_real_change_value;
 
   class->slider_detail = "slider";
   class->stepper_detail = "stepper";
@@ -278,6 +282,43 @@ gtk_range_class_init (GtkRangeClass *class)
                   _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_SCROLL_TYPE);
+
+  /**
+   * GtkRange::change-value:
+   * @range: the range that received the signal.
+   * @scroll: the type of scroll action that was performed.
+   * @value: the new value resulting from the scroll action.
+   * @returns: %TRUE to prevent other handlers from being invoked for the
+   * signal.  %FALSE to propagate the signal further.
+   *
+   * The ::change-value signal is emitted when a scroll action is
+   * performed on a range.  It allows an application to determine the
+   * type of scroll event that occurred and the resultant new value.
+   * The application can handle the event itself and return %TRUE to
+   * prevent further processing.  Or, by returning %FALSE, it can pass
+   * the event to other handlers until the default GTK+ handler is
+   * reached.
+   *
+   * The value parameter is unrounded.  An application that overrides
+   * the ::change-value signal is responsible for clamping the value to
+   * the desired number of digits; the default GTK+ handler clamps the
+   * value based on @range->round_digits.
+   *
+   * It is not possible to use delayed update policies in an overridden
+   * ::change-value handler.
+   *
+   * Since: 2.6
+   */
+  signals[CHANGE_VALUE] =
+    g_signal_new ("change_value",
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkRangeClass, change_value),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__ENUM_DOUBLE,
+                  G_TYPE_BOOLEAN, 2,
+                  GTK_TYPE_SCROLL_TYPE,
+                  G_TYPE_DOUBLE);
   
   g_object_class_install_property (gobject_class,
                                    PROP_UPDATE_POLICY,
@@ -1310,7 +1351,8 @@ update_slider_position (GtkRange *range,
   gint delta;
   gint c;
   gdouble new_value;
-  
+  gboolean handled;
+
   if (range->orientation == GTK_ORIENTATION_VERTICAL)
     delta = mouse_y - range->slide_initial_coordinate;
   else
@@ -1320,7 +1362,8 @@ update_slider_position (GtkRange *range,
 
   new_value = coord_to_value (range, c);
   
-  gtk_range_internal_set_value (range, new_value);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0, GTK_SCROLL_JUMP, new_value,
+                 &handled);
 }
 
 static void stop_scrolling (GtkRange *range)
@@ -1411,9 +1454,13 @@ gtk_range_scroll_event (GtkWidget      *widget,
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
       gdouble delta;
+      gboolean handled;
 
       delta = _gtk_range_get_wheel_delta (range, event->direction);
-      gtk_range_internal_set_value (range, adj->value + delta);
+
+      g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                     GTK_SCROLL_JUMP, adj->value + delta,
+                     &handled);
       
       /* Policy DELAYED makes sense with scroll events,
        * but DISCONTINUOUS doesn't, so we update immediately
@@ -1553,18 +1600,22 @@ static void
 step_back (GtkRange *range)
 {
   gdouble newval;
+  gboolean handled;
   
   newval = range->adjustment->value - range->adjustment->step_increment;
-  gtk_range_internal_set_value (range, newval);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_STEP_BACKWARD, newval, &handled);
 }
 
 static void
 step_forward (GtkRange *range)
 {
   gdouble newval;
+  gboolean handled;
 
   newval = range->adjustment->value + range->adjustment->step_increment;
-  gtk_range_internal_set_value (range, newval);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_STEP_FORWARD, newval, &handled);
 }
 
 
@@ -1572,33 +1623,42 @@ static void
 page_back (GtkRange *range)
 {
   gdouble newval;
+  gboolean handled;
 
   newval = range->adjustment->value - range->adjustment->page_increment;
-  gtk_range_internal_set_value (range, newval);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_PAGE_BACKWARD, newval, &handled);
 }
 
 static void
 page_forward (GtkRange *range)
 {
   gdouble newval;
+  gboolean handled;
 
   newval = range->adjustment->value + range->adjustment->page_increment;
-  gtk_range_internal_set_value (range, newval);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_PAGE_FORWARD, newval, &handled);
 }
 
 static void
 scroll_begin (GtkRange *range)
 {
-  gtk_range_internal_set_value (range, range->adjustment->lower);
+  gboolean handled;
+  g_signal_emit (range, signals[CHANGE_VALUE], 0,
+                 GTK_SCROLL_START, range->adjustment->lower,
+                 &handled);
 }
 
 static void
 scroll_end (GtkRange *range)
 {
   gdouble newval;
+  gboolean handled;
 
   newval = range->adjustment->upper - range->adjustment->page_size;
-  gtk_range_internal_set_value (range, newval);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0, GTK_SCROLL_END, newval,
+                 &handled);
 }
 
 static void
@@ -2322,9 +2382,11 @@ get_area (GtkRange     *range,
   return NULL;
 }
 
-static void
-gtk_range_internal_set_value (GtkRange *range,
-                              gdouble   value)
+static gboolean
+gtk_range_real_change_value (GtkRange     *range,
+                             GtkScrollType scroll,
+                             gdouble       value,
+                             gpointer      data)
 {
   /* potentially adjust the bounds _before we clamp */
   g_signal_emit (range, signals[ADJUST_BOUNDS], 0, value);
@@ -2367,6 +2429,7 @@ gtk_range_internal_set_value (GtkRange *range,
           break;
         }
     }
+  return FALSE;
 }
 
 static void
