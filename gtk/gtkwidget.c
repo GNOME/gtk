@@ -1279,6 +1279,18 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+/**
+ * GtkWidget::popup-menu
+ * @widget: the object which received the signal
+ * @returns: TRUE if a menu was activated
+ *
+ * This signal gets emitted whenever a widget should pop up a context-sensitive
+ * menu.  This usually happens through the standard key binding mechanism; by
+ * pressing a certain key while a widget is focused, the user can cause the
+ * widget to pop up a menu.  For example, the #GtkEntry widget creates a menu
+ * with clipboard commands.  See <xref linkend="checklist-popup-menu"/> for an
+ * example of how to use this signal.
+ */
   widget_signals[POPUP_MENU] =
     g_signal_new ("popup_menu",
 		  G_TYPE_FROM_CLASS (gobject_class),
