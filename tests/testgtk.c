@@ -9265,15 +9265,26 @@ struct PropertiesData {
 };
 
 static void
-destroy_properties (GtkWidget  *widget,
+destroy_properties (GtkWidget             *widget,
 		    struct PropertiesData *data)
 {
-  *data->window = NULL;
+  if (data->window)
+    {
+      *data->window = NULL;
+      data->window = NULL;
+    }
 
   if (data->cursor)
-    gdk_cursor_destroy (data->cursor);
-    
-  gtk_signal_disconnect (widget, data->handler);
+    {
+      gdk_cursor_destroy (data->cursor);
+      data->cursor = NULL;
+    }
+
+  if (data->handler)
+    {
+      gtk_signal_disconnect (widget, data->handler);
+      data->handler = 0;
+    }
 
   g_free (data);
 }
@@ -9345,9 +9356,9 @@ create_properties (void)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
-      data->handler = gtk_signal_connect_object (GTK_OBJECT (window), "destroy",
-						 GTK_SIGNAL_FUNC(destroy_properties),
-						 data);
+      data->handler = gtk_signal_connect (GTK_OBJECT (window), "destroy",
+					  GTK_SIGNAL_FUNC(destroy_properties),
+					  data);
 
       gtk_window_set_title (GTK_WINDOW (window), "test properties");
       gtk_container_set_border_width (GTK_CONTAINER (window), 10);
@@ -10761,6 +10772,5 @@ main (int argc, char *argv[])
 	g_main_iteration (FALSE);
 #endif
     }
-
   return 0;
 }

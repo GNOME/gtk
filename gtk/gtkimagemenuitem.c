@@ -399,7 +399,7 @@ gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
 
   if (gtk_stock_lookup (stock_id, &stock_item))
     {
-      item = gtk_image_menu_item_new_with_label (stock_item.label);
+      item = gtk_image_menu_item_new_with_mnemonic (stock_item.label);
 
       gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
       

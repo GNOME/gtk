@@ -1,3 +1,12 @@
+2001-06-05  Alex Larsson  <alexl@redhat.com>
+
+	* tests/testgtk.c (destroy_properties):
+	Don't crash when the properties window is destroyed.
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_new_from_stock):
+	Use with_mnemonics to handle the case of stock items with
+	underscores in them.
+
 2001-06-05  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (gtk_text_iter_order): rename from 
