@@ -1,5 +1,8 @@
 2004-10-01  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): Add a comment regarding
+	cell renderers to the docs.
+
 	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear_attributes): 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_layout_clear_attributes): 
 	Silently ignore info being NULL. This is unavoidable with the 
