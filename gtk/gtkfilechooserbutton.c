@@ -2158,14 +2158,18 @@ dialog_response_cb (GtkDialog *dialog,
 
   update_label_and_image (user_data);
   update_combo_box (user_data);
+  
+  if (priv->active)
+    {
+      g_signal_handler_unblock (priv->dialog,
+				priv->dialog_folder_changed_id);
+      g_signal_handler_unblock (priv->dialog,
+				priv->dialog_file_activated_id);
+      g_signal_handler_unblock (priv->dialog,
+				priv->dialog_selection_changed_id);
+      priv->active = FALSE;
+    }
 
-  g_signal_handler_unblock (priv->dialog,
-			    priv->dialog_folder_changed_id);
-  g_signal_handler_unblock (priv->dialog,
-			    priv->dialog_file_activated_id);
-  g_signal_handler_unblock (priv->dialog,
-			    priv->dialog_selection_changed_id);
-  priv->active = FALSE;
   gtk_widget_set_sensitive (priv->combo_box, TRUE);
   gtk_widget_hide (priv->dialog);
 }

@@ -1,5 +1,8 @@
 2004-12-16  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkfilechooserbutton.c (dialog_response_cb): Only unblock the handlers
+	if they are blocked.
+
 	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search): Don't
 	crash if enable_search is FALSE.  (#161267, Jorn Baayen)
 
