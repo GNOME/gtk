@@ -1,5 +1,7 @@
 ## Makefile.am for gtk+/demos
 
+democodedir=$(datadir)/gtk-demo
+
 demos = @STRIP_BEGIN@	\
 	button_box.c	\
 	item_factory.c	\
@@ -8,6 +10,7 @@ demos = @STRIP_BEGIN@	\
 @STRIP_END@
 
 INCLUDES = @STRIP_BEGIN@ \
+	-DDEMOCODEDIR="\"$(democodedir)\""		\
 	-I$(top_srcdir) 				\
 	-I$(top_builddir)/gdk				\
 	-DGTK_DISABLE_COMPAT_H				\
@@ -37,7 +40,7 @@ LDADDS = @STRIP_BEGIN@ 					\
 	-lm						\
 @STRIP_END@
 
-noinst_PROGRAMS = testgtk
+bin_PROGRAMS = gtk-demo
 
 BUILT_SOURCES = demos.h
 
@@ -47,10 +50,12 @@ EXTRA_DIST = \
 demos.h: $(demos) geninclude.pl
 	(cd $(srcdir) && ./geninclude.pl $(demos) > demos.h)
 
-testgtk_SOURCES = 		\
+gtk_demo_SOURCES = 		\
 	$(demos)		\
 	main.c			\
 	demos.h
 
-testgtk_DEPENDENCIES = $(DEPS)
-testgtk_LDADD = $(LDADDS)
+gtk_demo_DEPENDENCIES = $(DEPS)
+gtk_demo_LDADD = $(LDADDS)
+
+democode_DATA = $(demos)

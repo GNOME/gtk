@@ -1,6 +1,6 @@
 ## Makefile.am for gtk+/demos
 
-SUBDIRS = testgtk
+SUBDIRS = gtk-demo
 
 INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\

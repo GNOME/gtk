@@ -1,3 +1,22 @@
+2000-11-12  Havoc Pennington  <hp@pobox.com>
+
+        Rename this testgtk to gtk-demo to avoid confusion, and 
+	install it so people can use it as a supplement to 
+	the documentation.
+	
+        * demos/gtk-demo: Moved from demos/testgtk
+
+	* demos/testgtk: Removed
+
+	* configure.in: make Makefile in gtk-demo
+	
+	* demos/gtk-demo/Makefile.am: Install sample source to 
+	datadir/gtk-demo (maybe there's a better place?), and 
+	rename the binary to gtk-demo
+	
+	* demos/gtk-demo/main.c (load_file): Load installed sample
+	source if source isn't found in pwd.
+
 2000-11-09  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkentry.c (gtk_entry_class_init): Add an "invisible_char" 

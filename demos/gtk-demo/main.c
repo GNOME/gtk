@@ -88,6 +88,19 @@ load_file (const gchar *filename)
   gtk_text_buffer_delete (source_buffer, &start, &end);
 
   file = fopen (filename, "r");
+
+  if (!file)
+    {
+      char *installed = g_strconcat (DEMOCODEDIR,
+                                     G_DIR_SEPARATOR_S,
+                                     filename,
+                                     NULL);
+
+      file = fopen (installed, "r");
+
+      g_free (installed);
+    }
+  
   if (!file)
     {
       g_warning ("Cannot open %s: %s\n", filename, g_strerror (errno));
