@@ -905,7 +905,7 @@ bookmark_list_read (GSList **bookmarks, GError **error)
 {
   gchar *filename;
   gchar *contents;
-  gboolean result;
+  gboolean result = FALSE;
 
   filename = bookmark_get_filename (FALSE);
   *bookmarks = NULL;

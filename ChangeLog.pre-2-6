@@ -1,3 +1,8 @@
+Thu Feb  5 22:05:52 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkfilesystemunix.c (bookmark_list_read): Initialize result
+	to FALSE.  (#133539, Morten Welinder)
+
 Thu Feb  5 21:36:43 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_active_iter): Fix the logic
