@@ -1,3 +1,12 @@
+2000-04-15  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkclist.c (gtk_clist_motion)
+	* gtk/gtklist.c (gtk_list_motion_notify): If we get a motion event
+	with is_hint FALSE, get x and y from the event. They used to be
+	used uninitialised. The Win32 backend never sends motion events
+	marked as hints. This for instance fixes the annoying file and
+	font selector behaviour in the Win32 version.
+
 2000-04-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtksignal.c: (Win32:) Export the gtk_private_signals and

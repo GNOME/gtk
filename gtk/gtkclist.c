@@ -5266,6 +5266,11 @@ gtk_clist_motion (GtkWidget      *widget,
 
   if (event->is_hint || event->window != clist->clist_window)
     gdk_window_get_pointer (clist->clist_window, &x, &y, NULL);
+  else
+    {
+      x = event->x;
+      y = event->y;
+    }
 
   if (GTK_CLIST_REORDERABLE(clist) && button_actions & GTK_BUTTON_DRAGS)
     {
