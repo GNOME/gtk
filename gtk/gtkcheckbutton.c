@@ -235,6 +235,9 @@ gtk_check_button_size_request (GtkWidget      *widget,
       requisition->width = border_width * 2;
       requisition->height = border_width * 2;
 
+      _gtk_check_button_get_props (GTK_CHECK_BUTTON (widget),
+ 				   &indicator_size, &indicator_spacing);
+      
       child = GTK_BIN (widget)->child;
       if (child && GTK_WIDGET_VISIBLE (child))
 	{
@@ -245,9 +248,6 @@ gtk_check_button_size_request (GtkWidget      *widget,
 	  requisition->width += child_requisition.width + indicator_spacing;
 	  requisition->height += child_requisition.height;
 	}
-      
-      _gtk_check_button_get_props (GTK_CHECK_BUTTON (widget),
- 				   &indicator_size, &indicator_spacing);
       
       requisition->width += (indicator_size + indicator_spacing * 2 + 2 * (focus_width + focus_pad));
       

@@ -67,7 +67,9 @@ struct _GdkKeymapX11
   KeySym* keymap;
   gint keysyms_per_keycode;
   XModifierKeymap* mod_keymap;
+  guint lock_keysym;
   GdkModifierType group_switch_mask;
+  GdkModifierType num_lock_mask;
   PangoDirection current_direction;
   gboolean have_direction;
   guint current_serial;
@@ -121,7 +123,9 @@ gdk_keymap_x11_init (GdkKeymapX11 *keymap)
   keymap->keysyms_per_keycode = 0;
   keymap->mod_keymap = NULL;
   
+  keymap->num_lock_mask = 0;
   keymap->group_switch_mask = 0;
+  keymap->lock_keysym = GDK_Caps_Lock;
   keymap->have_direction = FALSE;
   
 #ifdef HAVE_XKB
@@ -201,6 +205,8 @@ gdk_keymap_get_for_display (GdkDisplay *display)
  */
 #define KEYSYM_INDEX(keymap_impl, group, level) \
   (2 * ((group) % (keymap_impl->keysyms_per_keycode / 2)) + (level))
+#define KEYSYM_IS_KEYPAD(s) (((s) >= 0xff80 && (s) <= 0xffbd) || \
+                             ((s) >= 0x11000000 && (s) <= 0x1100ffff))
 
 static void
 update_keymaps (GdkKeymapX11 *keymap_x11)
@@ -273,8 +279,9 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 
       keymap_x11->mod_keymap = XGetModifierMapping (xdisplay);
 
-
+      keymap_x11->lock_keysym = GDK_VoidSymbol;
       keymap_x11->group_switch_mask = 0;
+      keymap_x11->num_lock_mask = 0;
 
       /* there are 8 modifiers, and the first 3 are shift, shift lock,
        * and control
@@ -292,7 +299,7 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
           if (keycode >= keymap_x11->min_keycode &&
               keycode <= keymap_x11->max_keycode)
             {
-              gint j = 0;
+              gint j;
               KeySym *syms = keymap_x11->keymap + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
 	      /* GDK_MOD1_MASK is 1 << 3 for example, i.e. the
 	       * fourth modifier, i / keyspermod is the modifier
@@ -300,6 +307,17 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 	       */
 	      guint mask = 1 << ( i / keymap_x11->mod_keymap->max_keypermod);
 
+	      if (mask == GDK_LOCK_MASK)
+		{
+		  for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
+		    {
+		      if (syms[j] == GDK_Caps_Lock)
+			keymap_x11->lock_keysym = syms[j];
+		      else if (syms[j] == GDK_Shift_Lock && keymap_x11->lock_keysym == GDK_VoidSymbol)
+			keymap_x11->lock_keysym = syms[j];
+		    }
+		}
+	      
 	      /* Some keyboard maps are known to map Mode_Switch as an extra
 	       * Mod1 key. In circumstances like that, it won't be used to
 	       * switch groups.
@@ -308,17 +326,20 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 		  mask == GDK_LOCK_MASK || mask == GDK_MOD1_MASK)
 		goto next;
 	      
-              while (j < keymap_x11->keysyms_per_keycode)
+              for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
                 {
                   if (syms[j] == GDK_Mode_switch)
                     {
                       /* This modifier swaps groups */
 
                       keymap_x11->group_switch_mask |= mask;
-                      break;
                     }
-              
-                  ++j;
+                  if (syms[j] == GDK_Num_Lock)
+                    {
+                      /* This modifier swaps groups */
+
+                      keymap_x11->num_lock_mask |= mask;
+                    }
                 }
             }
 
@@ -927,6 +948,75 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 }
 #endif /* HAVE_XKB */
 
+/* Translates from keycode/state to keysymbol using the traditional interpretation
+ * of the keyboard map. See section 12.7 of the Xlib reference manual
+ */
+static guint
+translate_keysym (GdkKeymapX11   *keymap_x11,
+		  guint           hardware_keycode,
+		  gint            group,
+		  GdkModifierType state,
+		  guint          *effective_group,
+		  guint          *effective_level)
+{
+  const KeySym *map = get_keymap (keymap_x11);
+  const KeySym *syms = map + (hardware_keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
+
+#define SYM(k,g,l) syms[KEYSYM_INDEX (k,g,l)]
+
+  GdkModifierType shift_modifiers;
+  gint shift_level;
+  guint tmp_keyval;
+
+  shift_modifiers = GDK_SHIFT_MASK;
+  if (keymap_x11->lock_keysym == GDK_Shift_Lock)
+    shift_modifiers |= GDK_LOCK_MASK;
+
+  /* Fall back to the first group if the passed in group is empty
+   */
+  if (!(SYM (keymap_x11, group, 0) || SYM (keymap_x11, group, 1)) &&
+      (SYM (keymap_x11, 0, 0) || SYM (keymap_x11, 0, 1)))
+    group = 0;
+
+  if ((state & GDK_SHIFT_MASK) != 0 &&
+      KEYSYM_IS_KEYPAD (SYM (keymap_x11, group, 1)))
+    {
+      /* Shift, Shift_Lock cancel Num_Lock
+       */
+       shift_level = (state & shift_modifiers) ? 0 : 1;
+      
+       tmp_keyval = SYM (keymap_x11, group, shift_level);
+    }
+  else
+    {
+      /* Fall back to the the first level if no symbol for the level
+       * we were passed.
+       */
+      shift_level = (state & shift_modifiers) ? 1 : 0;
+      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, group, 0))
+	shift_level = 0;
+  
+      tmp_keyval = SYM (keymap_x11, group, shift_level);
+      
+      if (keymap_x11->lock_keysym == GDK_Caps_Lock && (state & GDK_SHIFT_MASK) != 0)
+	{
+	  guint upper = gdk_keyval_to_upper (tmp_keyval);
+	  if (upper != tmp_keyval)
+	    tmp_keyval = upper;
+	}
+    }
+
+  if (effective_group)
+    *effective_group = group;
+      
+  if (effective_level)
+    *effective_level = shift_level;
+
+  return tmp_keyval;
+  
+#undef SYM
+}
+
 /**
  * gdk_keymap_translate_keyboard_state:
  * @keymap: a #GdkKeymap, or %NULL to use the default
@@ -1013,68 +1103,36 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   else
 #endif
     {
-      const KeySym *map = get_keymap (keymap_x11);
-      const KeySym *syms;
-      gint shift_level;
-      gboolean ignore_shift = FALSE;
-      gboolean ignore_group = FALSE;
+      GdkModifierType bit;
       
-      if ((state & GDK_SHIFT_MASK) &&
-          (state & GDK_LOCK_MASK))
-	shift_level = 0; /* shift disables shift lock */
-      else if ((state & GDK_SHIFT_MASK) ||
-               (state & GDK_LOCK_MASK))
-	shift_level = 1;
-      else
-	shift_level = 0;
+      tmp_modifiers = 0;
 
-      syms = map + (hardware_keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
-
-#define SYM(k,g,l) syms[KEYSYM_INDEX (k,g,l)]
-
-      /* Drop group and shift if there are no keysymbols on
-       * the specified key.
+      /* We see what modifiers matter by trying the translation with
+       * and without each possible modifier
        */
-      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, group, 0))
+      for (bit = GDK_SHIFT_MASK; bit < GDK_BUTTON1_MASK; bit <<= 1)
 	{
-	  shift_level = 0;
-	  ignore_shift = TRUE;
+	  /* Handling of the group here is a bit funky; a traditional
+	   * X keyboard map can have more than two groups, but no way
+	   * of accessing the extra groups is defined. We allow a
+	   * caller to pass in any group to this function, but we 
+	   * only can represent switching between group 0 and 1 in
+	   * consumed modifiers.
+	   */
+	  if (translate_keysym (keymap_x11, hardware_keycode,
+				(bit == keymap_x11->group_switch_mask) ? 0 : group,
+				state & ~bit,
+				NULL, NULL) !=
+	      translate_keysym (keymap_x11, hardware_keycode,
+				(bit == keymap_x11->group_switch_mask) ? 1 : group,
+				state | bit,
+				NULL, NULL))
+	    tmp_modifiers |= bit;
 	}
-      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, 0, shift_level))
-	{
-	  group = 0;
-	  ignore_group = TRUE;
-	}
-      if (!SYM (keymap_x11, group, shift_level) && SYM (keymap_x11, 0, 0))
-	{
-	  shift_level = 0;
-	  group = 0;
-	  ignore_group = TRUE;
-	  ignore_shift = TRUE;
-	}
-
-      /* See whether the group and shift level actually mattered
-       * to know what to put in consumed_modifiers
-       */
-      if (!SYM (keymap_x11, group, 1) ||
-	  SYM (keymap_x11, group, 0) == SYM (keymap_x11, group, 1))
-	ignore_shift = TRUE;
-
-      if (!SYM (keymap_x11, 1, shift_level) ||
-	  SYM (keymap_x11, 0, shift_level) == SYM (keymap_x11, 1, shift_level))
-	ignore_group = TRUE;
-
-      tmp_keyval = SYM (keymap_x11, group, shift_level);
-
-      tmp_modifiers = ignore_group ? 0 : keymap_x11->group_switch_mask;
-      tmp_modifiers |= ignore_shift ? 0 : (GDK_SHIFT_MASK | GDK_LOCK_MASK);
-
-      if (effective_group)
-        *effective_group = group;
-
-      if (level)
-        *level = shift_level;
-#undef SYM	  
+      
+      tmp_keyval = translate_keysym (keymap_x11, hardware_keycode,
+				     group, state,
+				     level, effective_group);
     }
 
   if (consumed_modifiers)

@@ -512,6 +512,94 @@ set_screen_from_root (GdkDisplay *display,
   gdk_event_set_screen (event, screen);
 }
 
+static void
+translate_key_event (GdkDisplay *display,
+		     GdkEvent   *event,
+		     XEvent     *xevent)
+{
+  GdkKeymap *keymap = gdk_keymap_get_for_display (display);
+  gunichar c = 0;
+  guchar buf[7];
+
+  event->key.type = xevent->xany.type == KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
+  event->key.time = xevent->xkey.time;
+
+  event->key.state = (GdkModifierType) xevent->xkey.state;
+  event->key.group = _gdk_x11_get_group_for_state (display, xevent->xkey.state);
+  event->key.hardware_keycode = xevent->xkey.keycode;
+
+  event->key.keyval = GDK_VoidSymbol;
+
+  gdk_keymap_translate_keyboard_state (keymap,
+				       event->key.hardware_keycode,
+				       event->key.state,
+				       event->key.group,
+				       &event->key.keyval,
+				       NULL, NULL, NULL);
+
+  /* Fill in event->string crudely, since various programs
+   * depend on it.
+   */
+  event->key.string = NULL;
+  
+  if (event->key.keyval != GDK_VoidSymbol)
+    c = gdk_keyval_to_unicode (event->key.keyval);
+
+  if (c)
+    {
+      gsize bytes_written;
+      gint len;
+
+      /* Apply the control key - Taken from Xlib
+       */
+      if (event->key.state & GDK_CONTROL_MASK)
+	{
+	  if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+	  else if (c == '2')
+	    {
+	      event->key.string = g_memdup ("\0\0", 2);
+	      event->key.length = 1;
+	      buf[0] = '\0';
+	      goto out;
+	    }
+	  else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+	  else if (c == '8') c = '\177';
+	  else if (c == '/') c = '_' & 0x1F;
+	}
+      
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+      
+      event->key.string = g_locale_from_utf8 (buf, len,
+					      NULL, &bytes_written,
+					      NULL);
+      if (event->key.string)
+	event->key.length = bytes_written;
+    }
+
+  if (!event->key.string)
+    {
+      event->key.length = 0;
+      event->key.string = g_strdup ("");
+    }
+  
+ out:
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
+    {
+      g_message ("%s:\t\twindow: %ld	 key: %12s  %d",
+		 event->type == GDK_KEY_PRESS ? "key press  " : "key release",
+		 xevent->xkey.window,
+		 event->key.keyval ? gdk_keyval_name (event->key.keyval) : "(none)",
+		 event->key.keyval);
+  
+      if (event->key.length > 0)
+	g_message ("\t\tlength: %4d string: \"%s\"",
+		   event->key.length, buf);
+    }
+#endif /* G_ENABLE_DEBUG */  
+}
+
 /* Return the window this has to do with, if any, rather
  * than the frame or root window that was selecting
  * for substructure
@@ -569,10 +657,6 @@ gdk_event_translate (GdkDisplay *display,
   GdkWindow *window;
   GdkWindowObject *window_private;
   GdkWindowImplX11 *window_impl = NULL;
-  static XComposeStatus compose;
-  KeySym keysym;
-  int charcount;
-  char buf[16];
   gint return_val;
   gint xoffset, yoffset;
   GdkScreen *screen = NULL;
@@ -750,48 +834,9 @@ gdk_event_translate (GdkDisplay *display,
           return_val = FALSE;
           break;
         }
-      
-      /* Lookup the string corresponding to the given keysym.
-       */
-
-      charcount = XLookupString (&xevent->xkey, buf, 16,
-				 &keysym, &compose);
-      event->key.keyval = keysym;
-      event->key.hardware_keycode = xevent->xkey.keycode;
-      
-      if (charcount > 0 && buf[charcount-1] == '\0')
-	charcount --;
-      else
-	buf[charcount] = '\0';
-      
-#ifdef G_ENABLE_DEBUG
-      if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
-	{
-	  g_message ("key press:\twindow: %ld  key: %12s  %d",
-		     xevent->xkey.window,
-		     event->key.keyval ? XKeysymToString (event->key.keyval) : "(none)",
-		     event->key.keyval);
-	  if (charcount > 0)
-	    g_message ("\t\tlength: %4d string: \"%s\"",
-		       charcount, buf);
-	}
-#endif /* G_ENABLE_DEBUG */
-
-      event->key.type = GDK_KEY_PRESS;
-      event->key.window = window;
-      event->key.time = xevent->xkey.time;
-      event->key.state = (GdkModifierType) xevent->xkey.state;
-      event->key.string = g_strdup (buf);
-      event->key.length = charcount;
-
-      /* bits 13 and 14 in the "state" field are the keyboard group */
-#define KEYBOARD_GROUP_SHIFT 13
-#define KEYBOARD_GROUP_MASK ((1 << 13) | (1 << 14))
-      
-      event->key.group = _gdk_x11_get_group_for_state (display, xevent->xkey.state);
-      
+      translate_key_event (display, event, xevent);
       break;
-      
+
     case KeyRelease:
       if (window_private == NULL)
         {
@@ -799,9 +844,6 @@ gdk_event_translate (GdkDisplay *display,
           break;
         }
       
-      /* Lookup the string corresponding to the given keysym.
-       */
-
       /* Emulate detectable auto-repeat by checking to see
        * if the next event is a key press with the same
        * keycode and timestamp, and if so, ignoring the event.
@@ -816,30 +858,13 @@ gdk_event_translate (GdkDisplay *display,
 	  if (next_event.type == KeyPress &&
 	      next_event.xkey.keycode == xevent->xkey.keycode &&
 	      next_event.xkey.time == xevent->xkey.time)
-	    break;
+	    {
+	      return_val = FALSE;
+	      break;
+	    }
 	}
-      
-      keysym = GDK_VoidSymbol;
-      charcount = XLookupString (&xevent->xkey, buf, 16,
-				 &keysym, &compose);
-      event->key.keyval = keysym;      
-      event->key.hardware_keycode = xevent->xkey.keycode;
-      
-      GDK_NOTE (EVENTS, 
-		g_message ("key release:\t\twindow: %ld	 key: %12s  %d",
-			   xevent->xkey.window,
-			   XKeysymToString (event->key.keyval),
-			   event->key.keyval));
-      
-      event->key.type = GDK_KEY_RELEASE;
-      event->key.window = window;
-      event->key.time = xevent->xkey.time;
-      event->key.state = (GdkModifierType) xevent->xkey.state;
-      event->key.length = 0;
-      event->key.string = NULL;
-      
-      event->key.group = (xevent->xkey.state & KEYBOARD_GROUP_MASK) >> KEYBOARD_GROUP_SHIFT;
 
+      translate_key_event (display, event, xevent);
       break;
       
     case ButtonPress:

@@ -293,13 +293,25 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   g_object_unref (layout);
 }
 
+static gint
+get_first_baseline (PangoLayout *layout)
+{
+  PangoLayoutIter *iter;
+  gint result;
+
+  iter = pango_layout_get_iter (layout);
+  result = pango_layout_iter_get_baseline (iter);
+  pango_layout_iter_free (iter);
+
+  return PANGO_PIXELS (result);
+}
+
 static gboolean 
 gtk_accel_label_expose_event (GtkWidget      *widget,
 			      GdkEventExpose *event)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   GtkMisc *misc = GTK_MISC (accel_label);
-  PangoLayout *layout;
 	  
   if (GTK_WIDGET_DRAWABLE (accel_label))
     {
@@ -309,8 +321,11 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
       
       if (widget->allocation.width >= widget->requisition.width + ac_width)
 	{
-	  guint x;
-	  guint y;
+	  PangoLayout *label_layout;
+	  PangoLayout *accel_layout;
+
+	  gint x;
+	  gint y;
 	  
 	  widget->allocation.width -= ac_width;
 	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
@@ -318,13 +333,13 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  widget->allocation.width += ac_width;
 	  
 	  x = widget->allocation.x + widget->allocation.width - misc->xpad - ac_width;
-	  
-	  y = (widget->allocation.y * (1.0 - misc->yalign) +
-	       (widget->allocation.y + widget->allocation.height -
-		(widget->requisition.height - misc->ypad * 2)) *
-	       misc->yalign) + 1.5;
-	  
-	  layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
+
+	  label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
+	  gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
+
+	  accel_layout = gtk_widget_create_pango_layout (widget, accel_label->accel_string);
+
+	  y += get_first_baseline (label_layout) - get_first_baseline (accel_layout);
 
           gtk_paint_layout (widget->style,
                             widget->window,
@@ -334,9 +349,9 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
                             widget,
                             "accellabel",
                             x, y,
-                            layout);                            
+                            accel_layout);                            
 
-          g_object_unref (layout);
+          g_object_unref (accel_layout);
 	}
       else
 	{

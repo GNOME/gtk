@@ -1,3 +1,26 @@
+Thu Oct 17 17:17:05 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcheckbutton.c (gtk_check_button_size_request): 
+	Fix use of uninitialized variable.
+
+Thu Oct 17 14:38:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): 
+	Align the baseline of the accelerator label with the 
+	first baseline of the main label of the menu item. (#76593)
+
+Wed Oct 16 18:25:24 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (translate_key_event): 
+	Use gdk_keymap_translate_keyboard_state() rather than
+	XLookupString() to get the keysymbol, since XLookupString
+	can confuse the input method handling. (#93575)
+
+	* gdk/x11/gdkkeys-x11.c: Rewrite the handling of
+	key translation for the non-XKB case to properly
+	handle Shift_Lock, Caps_Lock, Num_Lock according
+	to the Xlib spec. (#67066)
+
 2002-10-17  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwindow.c (gtk_window_compute_configure_request): fix
@@ -31,6 +54,7 @@ Thu Oct 17 22:37:57 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	Unbreaks various things using SubstructureNotifyMask.
 
+>>>>>>> 1.3770
 Thu Oct 17 16:13:28 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcheckbutton.c gtk/gtkradiobutton.c: Make
