@@ -1,3 +1,38 @@
+2001-08-16  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/dialog_info.png: new style bulb
+	* gtk/stock-icons/dialog_error.png: maybe a little drastic ;)
+	* gtk/stock-icons/dialog_warning.png: need a hand?
+	* gtk/stock-icons/stock_add.png, stock_remove.png: I hope 
+     the aa border gets chopped off ok
+	* gtk/stock-icons/stock_colorselector.png: using the new hand
+	* gtk/stock-icons/stock_dnd_multiple.png: I'm not totally sure what 
+     this one is for, but the old icon was butt ugly.
+	* gtk/stock-icons/stock*_insert_image.png: not sure if it belongs here
+	* gtk/stock-icons/stock*_insert_object.png: "
+	* gtk/stock-icons/stock_index.png: using new hand icon
+	* gtk/stock-icons/stock*_new.png: the document template being used 
+     elsewhere too
+	* gtk/stock-icons/stock*_print*.png: new print and print preview 
+     icons (panel/menu)  
+	* gtk/stock-icons/stock*_save*.png, stock*_revert.png: new save/revert 
+     icons based on Tuomas' floppy image.
+	* gtk/stock-icons/stock*_search*.png: search and s'n'r icons for panel/menu
+	* gtk/stock-icons/stock*_stop.png: replacing the old 'x' button
+	* gtk/stock-icons/stock*_trash.png: based on Tuomas' trash icon
+	* gtk/stock-icons/stock*_undelete.png: "
+	* gtk/stock-icons/stock_preferences.png: I have a version with a 
+     document base if the sliders are no good.
+	* gtk/stock-icons/stock_properties.png: properties 
+	
+
+	* gtk/stock-icons/stock*_copy.png, stock*_cut.png, stock*_paste.png: Tuomas' 
+	  (tigert@ximian.com) clipboard icons
+	* gtk/stock-icons/stock_{up,down,left,right}_arrow.png: tigert's new arrows
+	* gtk/stock-icons/stock*_{undo,redo}.png: tigert's undo/redo icons.
+	* gtk/stock-icons/stock_open.png: shaded open icon by Tuomas. we should make it a
+	  little bigger IMHO
+
 2001-08-16  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkbox.c (gtk_box_class_init): removed unused widget_class.
