@@ -1,3 +1,9 @@
+2001-11-19  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtknotebook.c: show notebook->event_window with
+	gdk_window_show_unraised(), so it doesn't catch the events which
+	should go to the tab widgets first.
+
 Mon Nov 19 15:30:51 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): Add a

@@ -823,7 +823,7 @@ gtk_notebook_map (GtkWidget *widget)
     }
 
   if (gtk_notebook_get_event_window_position (notebook, NULL))
-    gdk_window_show (notebook->event_window);
+    gdk_window_show_unraised (notebook->event_window);
 }
 
 static void
@@ -3809,7 +3809,7 @@ gtk_notebook_insert_page_menu (GtkNotebook *notebook,
 			  notebook);
 
   if (notebook->show_tabs && GTK_WIDGET_MAPPED (notebook))
-    gdk_window_show (notebook->event_window);
+    gdk_window_show_unraised (notebook->event_window);
 
   gtk_widget_child_notify (child, "tab_expand");
   gtk_widget_child_notify (child, "tab_fill");
