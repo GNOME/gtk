@@ -509,43 +509,13 @@ EXTRA_LTLIBRARIES = libgtk-x11-1.3.la libgtk-nanox-1.3.la libgtk-linux-fb-1.3.la
 
 
 gtkconfdir = $(sysconfdir)/gtk-2.0
-gtkconf_DATA = gtkrc.az gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
-	gtkrc.ko gtkrc.ru gtkrc.tr gtkrc.th gtkrc.uk gtkrc.iso-8859-2 \
-	gtkrc.iso-8859-5 gtkrc.iso-8859-13 gtkrc.iso-8859-14 \
-	gtkrc.iso-8859-15 gtkrc.zh_CN gtkrc.zh_TW.big5 \
-	gtkrc.ka_GE.georgianacademy gtkrc.ka_GE.georgianps \
-	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii \
-	gtkrc.cp1251 gtk.immodules
+gtkconf_DATA = gtk.immodules
 
 # We create a dummy theme for the default GTK+ theme
 install-data-local:
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-2.0
 	echo "# Empty gtkrc for default theme" > $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 	$(mkinstalldirs) $(DESTDIR)$(gtkconfdir)
-	cd $(DESTDIR)$(gtkconfdir) \
-	&& for i in cs hr hu pl ro sk sl sq sr ; do \
-	     rm -f gtkrc.$$i ; \
-	     ln -s gtkrc.iso-8859-2 gtkrc.$$i ; \
-	   done \
-	&& for i in bg_BG.iso88595 mk sp ru_RU.iso88595 ; do \
-	     rm -f gtkrc.$$i ; \
-	     ln -s gtkrc.iso-8859-5 gtkrc.$$i ; \
-	   done \
-	&& rm -f gtkrc.lt gtkrc.lv gtkrc.cy gtkrc.ga gtkrc.et gtkrc.ka \
-	         gtkrc.vi_VN.viscii111 gtkrc.vi_VN.tcvn5712 gtkrc.vi \
-	         gtkrc.be gtkrc.bg gtkrc.mi \
-	&& ln -s gtkrc.iso-8859-13 gtkrc.mi \
-	&& ln -s gtkrc.iso-8859-13 gtkrc.lt \
-	&& ln -s gtkrc.iso-8859-13 gtkrc.lv \
-	&& ln -s gtkrc.iso-8859-14 gtkrc.cy \
-	&& ln -s gtkrc.iso-8859-14 gtkrc.ga \
-	&& ln -s gtkrc.iso-8859-15 gtkrc.et \
-	&& ln -s gtkrc.ka_GE.georgianps gtkrc.ka \
-	&& ln -s gtkrc.vi_VN.viscii gtkrc.vi_VN.viscii111 \
-	&& ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 \
-	&& ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi \
-	&& ln -s gtkrc.cp1251 gtkrc.be \
-	&& ln -s gtkrc.cp1251 gtkrc.bg
 uninstall-local:
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-2.0/gtkrc
 
@@ -575,7 +545,7 @@ gtk_query_immodules_2_0_LDADD = $(LDADDS)
 
 gtk_query_immodules_2_0_SOURCES = queryimmodules.c
 
-gtk.immodules: gtk-query-immodules-2.0
+gtk.immodules: gtk-query-immodules-2.0 ../modules/input/Makefile.am
 	./gtk-query-immodules-2.0 ../modules/input/.libs/*.so > gtk.immodules
 
 #

@@ -1003,16 +1003,6 @@ gtk_entry_button_release (GtkWidget      *widget,
 
   entry->button = 0;
   
-  if (event->button == 1)
-    {
-      gint tmp_pos;
-
-      tmp_pos = gtk_entry_find_position (entry, event->x + entry->scroll_offset);
-      gtk_editable_select_region (editable, entry->selection_bound, tmp_pos);
-
-      return TRUE;
-    }
-
   return FALSE;
 }
 

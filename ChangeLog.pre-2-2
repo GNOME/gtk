@@ -1,3 +1,11 @@
+Thu Nov 16 01:25:51 2000  Robert Brady  <robert@suse.co.uk>
+
+	* gtk/gtkrc.*: Remove the locale-specific gtkrc's, as they
+	only contain a "fontset" line, which is now ignored.
+
+	* gtk/gtkentry.c (gtk_entry_button_release): Make 
+	double-click-to-select-word work.
+	
 Wed Nov 15 20:16:54 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_line_end): 
