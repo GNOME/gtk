@@ -1,5 +1,7 @@
 2001-11-28  Matthias Clasen  <matthiasc@poet.de>
 
+	* gtk/gtkwindow.c (gtk_window_move): Add markup to docs.
+
 	* gdk/gdkcursor.h: Directly include the contents
 	of gdkcursors.h in the GdkCursorType enum.
 

@@ -2593,9 +2593,10 @@ gtk_window_get_size (GtkWindow *window,
  * gtk_window_move (window, gdk_screen_width () - window_width,
  * gdk_screen_height () - window_height).
  *
- * The extended window manager hints specification at
- * http://www.freedesktop.org/standards/wm-spec.html has a nice table
- * of gravities in the "implementation notes" section.
+ * The extended window manager hints specification at <ulink 
+ * url="http://www.freedesktop.org/standards/wm-spec.html"
+ * >http://www.freedesktop.org/standards/wm-spec.html</ulink> has a 
+ * nice table of gravities in the "implementation notes" section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
  * 
