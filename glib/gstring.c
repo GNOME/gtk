@@ -322,6 +322,7 @@ get_length_upper_bound (gchar* fmt, va_list *args)
   int short_int;
   int long_int;
   int done;
+  char *tmp;
 
   while (*fmt)
     {
@@ -362,7 +363,11 @@ get_length_upper_bound (gchar* fmt, va_list *args)
 		  /* I ignore 'q' and 'L', they're not portable anyway. */
 
 		case 's':
-		  len += strlen (va_arg (*args, char *));
+		  tmp = va_arg(*args, char *);
+		  if(tmp)
+		    len += strlen (tmp);
+		  else
+		    len += strlen ("(null)");
 		  done = TRUE;
 		  break;
 		case 'd':
