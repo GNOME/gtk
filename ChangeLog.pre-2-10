@@ -1,3 +1,8 @@
+2001-12-12  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkmenu.c (gtk_menu_key_press): check GTK_MENU_ITEM
+	(menu_item)->accel_path first when looking up the accel path.
+
 Tue Dec 11 19:18:21 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* tests/testgtk.c (layout_expose_handler): Only draw

@@ -1659,7 +1659,9 @@ gtk_menu_key_press (GtkWidget	*widget,
       gboolean replace_accels = TRUE;
       const gchar *path;
 
-      path = _gtk_widget_get_accel_path (menu_item);
+      path = GTK_MENU_ITEM (menu_item)->accel_path;
+      if (!path)
+	path = _gtk_widget_get_accel_path (menu_item);
       if (!path)
 	{
 	  /* can't change accelerators on menu_items without paths
