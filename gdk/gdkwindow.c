@@ -979,6 +979,59 @@ gdk_window_get_offsets (GdkWindow *window,
     _gdk_windowing_window_get_offsets (window, x_offset, y_offset);
 }
 
+/**
+ * gdk_window_get_internal_paint_info:
+ * @window: a #GdkWindow
+ * @real_drawable: location to store the drawable to which drawing should be done.
+ * @x_offset: location to store the X offset between coordinates in @window, and
+ *            the underlying window system primitive coordinates for *@real_drawable.
+ * @y_offset: location to store the Y offset between coordinates in @window, and
+ *            the underlying window system primitive coordinates for *@real_drawable.
+ * 
+ * If you bypass the GDK layer and use windowing system primitives to
+ * draw directly onto a #GdkWindow, then you need to deal with two
+ * details: there may be an offset between GDK coordinates and windowing
+ * system coordinates, and GDK may have redirected drawing to a offscreen
+ * pixmap as the result of a gdk_window_begin_paint_region() calls.
+ * This function allows retrieving the information you need to compensate
+ * for these effects.
+ *
+ * This function exposes details of the GDK implementation, and is thus
+ * likely to change in future releases of GDK.
+ **/
+void
+gdk_window_get_internal_paint_info (GdkWindow    *window,
+				    GdkDrawable **real_drawable,
+				    gint         *x_offset,
+				    gint         *y_offset)
+{
+  gint x_off, y_off;
+  
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;
+
+  if (real_drawable)
+    {
+      if (private->paint_stack)
+	{
+	  GdkWindowPaint *paint = private->paint_stack->data;
+	  *real_drawable = paint->pixmap;
+	}
+      else
+	*real_drawable = window;
+    }
+
+  gdk_window_get_offsets (window, &x_off, &y_off);
+
+  if (x_offset)
+    *x_offset = x_off;
+  if (y_offset)
+    *y_offset = y_off;
+}
+
 #define OFFSET_GC(gc)                                         \
     gint x_offset, y_offset; 				      \
     gint old_clip_x = gc->clip_x_origin;    \

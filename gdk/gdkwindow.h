@@ -507,6 +507,11 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint         *new_width,
                                            gint         *new_height);
 
+void gdk_window_get_internal_paint_info (GdkWindow    *window,
+					 GdkDrawable **real_drawable,
+					 gint         *x_offset,
+					 gint         *y_offset);
+
 GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
 
 #ifdef __cplusplus

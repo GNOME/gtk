@@ -1,3 +1,13 @@
+Fri Jul 13 15:33:32 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.[ch]: Add a function gdk_window_get_internal_paint_info(),
+	so that using X functions on a GdkWindow is possible, if
+	a little hairy.
+
+	* gdk/gdkgc.c (gdk_gc_offset): Add a function to offset the clip
+	and ts_origin of a GC, so that external parties can offset/restore
+	a GC, when using gdk_window_get_internal_paint_info().
+
 2001-07-17  Darin Adler  <darin@bentspoon.com>
 
 	* .cvsignore: Ignore the sgml directory made by gtkdoc.
