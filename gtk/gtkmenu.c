@@ -531,6 +531,19 @@ gtk_menu_finalize (GObject *object)
 }
 
 static void
+menu_change_screen (GtkMenu   *menu,
+		    GdkScreen *new_screen)
+{
+  if (menu->torn_off)
+    {
+      gtk_window_set_screen (GTK_WINDOW (menu->tearoff_window), new_screen);
+      gtk_menu_position (menu);
+    }
+
+  gtk_window_set_screen (GTK_WINDOW (menu->toplevel), new_screen);
+}
+
+static void
 attach_widget_screen_changed (GtkWidget *attach_widget,
 			      GdkScreen *previous_screen,
 			      GtkMenu   *menu)
@@ -538,8 +551,7 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
   if (gtk_widget_has_screen (attach_widget) &&
       !g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
     {
-      gtk_window_set_screen (GTK_WINDOW (menu->toplevel),
-			     gtk_widget_get_screen (attach_widget));
+      menu_change_screen (menu, gtk_widget_get_screen (attach_widget));
     }
 }
 
@@ -1307,6 +1319,12 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	{
 	  gtk_widget_hide (menu->tearoff_window);
 	  gtk_menu_reparent (menu, menu->toplevel, FALSE);
+	  gtk_widget_destroy (menu->tearoff_window);
+	  
+	  menu->tearoff_window = NULL;
+	  menu->tearoff_hbox = NULL;
+	  menu->tearoff_scrollbar = NULL;
+	  menu->tearoff_adjustment = NULL;
 	}
     }
 }
@@ -2972,7 +2990,7 @@ gtk_menu_set_screen (GtkMenu   *menu,
 
   if (screen)
     {
-      gtk_window_set_screen (GTK_WINDOW (menu->toplevel), screen);
+      menu_change_screen (menu, screen);
     }
   else
     {

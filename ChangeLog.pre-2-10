@@ -1,3 +1,12 @@
+Fri Dec 13 22:55:27 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (menu_change_screen): If the screen
+	for the menu changes while the menu is torn off, move
+	the tearoff along with it. (#85669)
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): When 
+	reattaching, get rid of the get rid of the tearoff window.
+
 Fri Dec 13 21:35:12 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_motion): Handle
