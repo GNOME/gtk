@@ -1,7 +1,39 @@
-2000-01-15  Federico Mena Quintero  <federico@helixcode.com>
+2000-01-16  Federico Mena Quintero  <federico@helixcode.com>
+
+	* configure.in: Removed the broken --enable-canvas-pixbuf option.
+	Added the stuff necessary to substitute the variables in
+	gnomecanvaspixbufConf.sh.in.
+
+	* gnomecanvaspixbufConf.sh.in: New gnome-config handler for the
+	tiny gnomecanvaspixbuf library.
+
+	* Makefile.am: Build gnomecanvaspixbufConf.sh.
+
+	* gdk-pixbuf/Makefile.am: Create a libgnomecanvaspixbuf and only
+	build it if gdk-pixbuf is being built outside of gnome-libs.
+
+	* doc/gdk-pixbuf-sections.txt: Added gdk_pixbuf_render_pixmap_and_mask().
+
+	* gdk-pixbuf/gdk-pixbuf-render.c
+	(gdk_pixbuf_render_pixmap_and_mask): Renamed from
+	gdk_pixbuf_render_pixmap().  Do not create the mask if it is not
+	needed, and do not use a clipping mask when rendering the pixmap.
+	Tweaked documentation a little.
 
 	* HACKING: New file with hacking policies for the gdk-pixbuf
 	module.
+
+	* doc/Makefile.am (tmpl_sources): Added missing backslash.
+
+	* doc/Makefile.am: Use gnomecanvaspixbuf in gnome-config when
+	scanning for docstrings.
+
+	* gdk-pixbuf/gdk-pixbuf-util.c (gdk_pixbuf_copy_area): Made sanity
+	checks more stringent.  Removed "gint" abominations.  Made
+	documentation consistent with the rest of the functions.
+
+	* doc/gdk-pixbuf-sections.txt: Added gdk_pixbuf_copy_area() to the
+	utilities section.
 
 2000-01-14  Jonathan Blandford  <jrb@redhat.com>
 
@@ -17,9 +49,14 @@
 
 	* configure.in, gdk-pixbuf/Makefile.am: Build a libcanvas_pixbuf.
 
-	* configure.in: Define version macros. Generate gdk-pixbuf/gdk-pixbuf-features.h. Always INSIDE_GNOME.
+	* configure.in: Define version macros. Generate
+	gdk-pixbuf/gdk-pixbuf-features.h. Always INSIDE_GNOME.
+
 	* gdk-pixbuf/Makefile.am: Add gdk-pixbuf-features.h
-	* gdk-pixbuf/gdk-pixbuf.c: Add definitions of gdk-pixbuf-features.h declarations, plus some initialization stubs.
+
+	* gdk-pixbuf/gdk-pixbuf.c: Add definitions of
+	gdk-pixbuf-features.h declarations, plus some initialization
+	stubs.
 
 2000-01-05  Owen Taylor  <otaylor@redhat.com>
 

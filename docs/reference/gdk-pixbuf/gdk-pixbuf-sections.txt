@@ -38,6 +38,7 @@ GdkPixbufAlphaMode
 gdk_pixbuf_render_to_drawable_alpha
 gdk_pixbuf_render_to_drawable
 gdk_pixbuf_render_threshold_alpha
+gdk_pixbuf_render_pixmap_and_mask
 </SECTION>
 
 <SECTION>
@@ -48,6 +49,7 @@ gdk_pixbuf_get_from_drawable
 <SECTION>
 <FILE>util</FILE>
 gdk_pixbuf_add_alpha
+gdk_pixbuf_copy_area
 </SECTION>
 
 <SECTION>

@@ -147,11 +147,6 @@ void gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
 				    GdkRgbDither dither,
 				    int x_dither, int y_dither);
 
-void gdk_pixbuf_render_pixmap (GdkPixbuf        *pixbuf,
-			       GdkPixmap       **pixmap,
-			       GdkBitmap       **mask,
-			       gint              alpha_threshold);
-
 void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 					  int src_x, int src_y,
 					  int dest_x, int dest_y,
@@ -161,6 +156,10 @@ void gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawab
 					  GdkRgbDither dither,
 					  int x_dither, int y_dither);
 
+void gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf *pixbuf,
+					GdkPixmap **pixmap_return, GdkBitmap **mask_return,
+					int alpha_threshold);
+
 /* Fetching a region from a drawable */
 GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 GdkDrawable *src, GdkColormap *cmap,
@@ -168,12 +167,12 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 int dest_x, int dest_y,
 					 int width, int height);
 
-/* Copy an area of a pixbuf into another one */
+/* Copy an area of a pixbuf onto another one */
 void gdk_pixbuf_copy_area (GdkPixbuf *src_pixbuf,
-			   gint src_x, gint src_y,
-			   gint width, gint height,
+			   int src_x, int src_y,
+			   int width, int height,
 			   GdkPixbuf *dest_pixbuf,
-			   gint dest_x, gint dest_y);
+			   int dest_x, int dest_y);
 
 /* Scaling */
 

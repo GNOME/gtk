@@ -152,11 +152,11 @@ expose_cb (GtkWidget *widget, GdkEventExpose *event, gpointer data)
 @check_size: 
 @color1: 
 @color2: 
-@Returns: 
-
-<!--
+@Returns: <!--
 Local variables:
 mode: sgml
 sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
 End:
 -->
+
+

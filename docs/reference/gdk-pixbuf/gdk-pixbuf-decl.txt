@@ -14,8 +14,7 @@ GdkPixbuf *pixbuf,
 <USER_FUNCTION>
 <NAME>ModuleFrameDoneNotifyFunc</NAME>
 <RETURNS>void </RETURNS>
-GdkPixbuf *pixbuf,
-					    gint frame,
+GdkPixbufFrame *frame,
 					    gpointer user_data
 </USER_FUNCTION>
 <USER_FUNCTION>
@@ -286,9 +285,19 @@ GdkPixbuf *pixbuf,GdkDrawable *drawable, GdkGC *gc,int src_x, int src_y,int dest
 GdkPixbuf *pixbuf, GdkDrawable *drawable,int src_x, int src_y,int dest_x, int dest_y,int width, int height,GdkPixbufAlphaMode alpha_mode,int alpha_threshold,GdkRgbDither dither,int x_dither, int y_dither
 </FUNCTION>
 <FUNCTION>
+<NAME>gdk_pixbuf_render_pixmap_and_mask</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *pixbuf,GdkPixmap **pixmap_return, GdkBitmap **mask_return,int alpha_threshold
+</FUNCTION>
+<FUNCTION>
 <NAME>gdk_pixbuf_get_from_drawable</NAME>
 <RETURNS>GdkPixbuf  *</RETURNS>
 GdkPixbuf *dest,GdkDrawable *src, GdkColormap *cmap,int src_x, int src_y,int dest_x, int dest_y,int width, int height
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_copy_area</NAME>
+<RETURNS>void  </RETURNS>
+GdkPixbuf *src_pixbuf,int src_x, int src_y,int width, int height,GdkPixbuf *dest_pixbuf,int dest_x, int dest_y
 </FUNCTION>
 <FUNCTION>
 <NAME>gdk_pixbuf_scale</NAME>
@@ -329,6 +338,16 @@ GdkPixbufAnimation *animation
 <NAME>gdk_pixbuf_animation_unref</NAME>
 <RETURNS>void  </RETURNS>
 GdkPixbufAnimation *animation
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_preinit</NAME>
+<RETURNS>void  </RETURNS>
+gpointer app, gpointer modinfo
+</FUNCTION>
+<FUNCTION>
+<NAME>gdk_pixbuf_postinit</NAME>
+<RETURNS>void  </RETURNS>
+gpointer app, gpointer modinfo
 </FUNCTION>
 <MACRO>
 <NAME>GNOME_TYPE_CANVAS_PIXBUF</NAME>
@@ -373,3 +392,23 @@ struct GnomeCanvasPixbuf {
 <RETURNS>GtkType  </RETURNS>
 void
 </FUNCTION>
+<MACRO>
+<NAME>GDK_PIXBUF_MAJOR</NAME>
+#define GDK_PIXBUF_MAJOR (0)
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_MINOR</NAME>
+#define GDK_PIXBUF_MINOR (4)
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_MICRO</NAME>
+#define GDK_PIXBUF_MICRO (0)
+</MACRO>
+<MACRO>
+<NAME>GDK_PIXBUF_VERSION</NAME>
+#define GDK_PIXBUF_VERSION "0.4.0"
+</MACRO>
+<VARIABLE>
+<NAME>gdk_pixbuf_version</NAME>
+extern const char *gdk_pixbuf_version;
+</VARIABLE>

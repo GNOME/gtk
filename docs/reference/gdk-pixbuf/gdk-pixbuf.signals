@@ -15,6 +15,18 @@ GdkPixbufLoader *gdkpixbufloader
 </SIGNAL>
 
 <SIGNAL>
+<NAME>GdkPixbufLoader::frame-done</NAME>
+<RETURNS>void</RETURNS>
+GdkPixbufLoader *gdkpixbufloader
+</SIGNAL>
+
+<SIGNAL>
+<NAME>GdkPixbufLoader::animation-done</NAME>
+<RETURNS>void</RETURNS>
+GdkPixbufLoader *gdkpixbufloader
+</SIGNAL>
+
+<SIGNAL>
 <NAME>GdkPixbufLoader::closed</NAME>
 <RETURNS>void</RETURNS>
 GdkPixbufLoader *gdkpixbufloader

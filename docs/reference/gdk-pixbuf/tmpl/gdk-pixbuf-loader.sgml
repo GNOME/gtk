@@ -54,6 +54,7 @@ Application-driven progressive image loading.
       frames are done.
     </para>  
   </refsect2>
+
 <!-- ##### SECTION See_Also ##### -->
   <para>
     gdk_pixbuf_new_from_file()
@@ -145,6 +146,20 @@ Application-driven progressive image loading.
 @gdkpixbufloader: the object which received the signal.
 <!-- # Unused Parameters # -->
 @loader: Loader which emitted the signal.
+
+<!-- ##### SIGNAL GdkPixbufLoader::frame-done ##### -->
+<para>
+
+</para>
+
+@gdkpixbufloader: the object which received the signal.
+
+<!-- ##### SIGNAL GdkPixbufLoader::animation-done ##### -->
+<para>
+
+</para>
+
+@gdkpixbufloader: the object which received the signal.
 
 <!-- ##### SIGNAL GdkPixbufLoader::closed ##### -->
   <para>

@@ -170,7 +170,7 @@ remove_alpha (ArtPixBuf *apb, int x, int y, int width, int height, int *rowstrid
  * @dither: Dithering mode for GdkRGB.
  * @x_dither: X offset for dither.
  * @y_dither: Y offset for dither.
- * 
+ *
  * Renders a rectangular portion of a pixbuf to a drawable while using the
  * specified GC.  This is done using GdkRGB, so the specified drawable must have
  * the GdkRGB visual and colormap.  Note that this function will ignore the
@@ -199,7 +199,7 @@ gdk_pixbuf_render_to_drawable (GdkPixbuf *pixbuf,
 
 	g_return_if_fail (pixbuf != NULL);
 	apb = pixbuf->art_pixbuf;
-	
+
 	g_return_if_fail (apb->format == ART_PIX_RGB);
 	g_return_if_fail (apb->n_channels == 3 || apb->n_channels == 4);
 	g_return_if_fail (apb->bits_per_sample == 8);
@@ -321,69 +321,49 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 }
 
 /**
- * gdk_pixbuf_render_pixmap:
+ * gdk_pixbuf_render_pixmap_and_mask:
  * @pixbuf: A pixbuf
- * @pixmap: A pointer to a pixmap to fill in.
- * @mask_retval: A pointer to the mask to be filled in.
- * @alpha_threshold: Specifies the threshold value for opacity
- * values if the pixbuf has opacity.
+ * @pixmap_return: Return value for the created pixmap.
+ * @mask_return: Return value for the created mask.
+ * @alpha_threshold: Threshold value for opacity values.
  *
- * Generates a #GdkPixmap from a #GdkPixbuf, along with an optional mask.  The
- * alpha threshold can be used to determine how the mask is created, if the
- * pixbuf has an alpha channel.  This function is mainly provided for
- * compatibility reasons, as you will rarely want a #GdkPixmap.
- * 
+ * Creates a pixmap and a mask bitmap which are returned in the @pixmap_return
+ * and @mask_return arguments, respectively, and renders a pixbuf and its
+ * corresponding tresholded alpha mask to them.  This is merely a convenience
+ * function; applications that need to render pixbufs with dither offsets or to
+ * given drawables should use gdk_pixbuf_render_to_drawable_alpha() or
+ * gdk_pixbuf_render_to_drawable(), and gdk_pixbuf_render_threshold_alpha().
  **/
 void
-gdk_pixbuf_render_pixmap (GdkPixbuf  *pixbuf,
-			  GdkPixmap **pixmap,
-			  GdkBitmap **mask_retval,
-			  gint        alpha_threshold)
+gdk_pixbuf_render_pixmap_and_mask (GdkPixbuf *pixbuf,
+				   GdkPixmap **pixmap_return, GdkBitmap **mask_return,
+				   int alpha_threshold)
 {
-	GdkBitmap *mask = NULL;
+	ArtPixBuf *apb;
 
-        g_return_if_fail(pixbuf != NULL);
+        g_return_if_fail (pixbuf != NULL);
 
-        /* generate mask */
-        if (gdk_pixbuf_get_has_alpha(pixbuf)) {
-                mask = gdk_pixmap_new(NULL,
-                                      gdk_pixbuf_get_width(pixbuf),
-                                      gdk_pixbuf_get_height(pixbuf),
-                                      1);
+	apb = pixbuf->art_pixbuf;
 
-                gdk_pixbuf_render_threshold_alpha(pixbuf, mask,
-                                                  0, 0, 0, 0,
-                                                  gdk_pixbuf_get_width(pixbuf),
-                                                  gdk_pixbuf_get_height(pixbuf),
-                                                  alpha_threshold);
-        }
+	if (pixmap_return) {
+		GdkGC *gc;
 
-        /* Draw to pixmap */
-        if (pixmap != NULL) {
-                GdkGC* gc;
+		*pixmap_return = gdk_pixmap_new (NULL, apb->width, apb->height,
+						 gdk_rgb_get_visual ()->depth);
+		gc = gdk_gc_new (*pixmap_return);
+		gdk_pixbuf_render_to_drawable (pixbuf, *pixmap_return, gc,
+					       0, 0, 0, 0,
+					       apb->width, apb->height,
+					       GDK_RGB_DITHER_NORMAL,
+					       0, 0);
+		gdk_gc_unref (gc);
+	}
 
-                *pixmap = gdk_pixmap_new(NULL,
-                                         gdk_pixbuf_get_width(pixbuf),
-                                         gdk_pixbuf_get_height(pixbuf),
-                                         gdk_rgb_get_visual()->depth);
-
-                gc = gdk_gc_new(*pixmap);
-
-                gdk_gc_set_clip_mask(gc, mask);
-
-                gdk_pixbuf_render_to_drawable(pixbuf, *pixmap,
-                                              gc,
-                                              0, 0, 0, 0,
-                                              gdk_pixbuf_get_width(pixbuf),
-                                              gdk_pixbuf_get_height(pixbuf),
-                                              GDK_RGB_DITHER_NORMAL,
-                                              0, 0);
-
-                gdk_gc_unref(gc);
-        }
-
-        if (mask_retval)
-                *mask_retval = mask;
-        else
-                gdk_bitmap_unref(mask);
+	if (mask_return) {
+		*mask_return = gdk_pixmap_new (NULL, apb->width, apb->height, 1);
+		gdk_pixbuf_render_threshold_alpha (pixbuf, *mask_return,
+						   0, 0, 0, 0,
+						   apb->width, apb->height,
+						   alpha_threshold);
+	}
 }

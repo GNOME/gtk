@@ -35,3 +35,18 @@ End:
 -->
 
 
+<!-- ##### FUNCTION gdk_pixbuf_copy_area ##### -->
+<para>
+
+</para>
+
+@src_pixbuf: 
+@src_x: 
+@src_y: 
+@width: 
+@height: 
+@dest_pixbuf: 
+@dest_x: 
+@dest_y: 
+
+

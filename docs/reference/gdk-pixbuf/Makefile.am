@@ -9,15 +9,15 @@ DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 # The directory containing the source code (if it contains documentation).
 DOC_SOURCE_DIR=$(GDK_PIXBUF_DIR)/gdk-pixbuf
 
-CFLAGS=`gnome-config --cflags gnomeui gdk_pixbuf`
-LDFLAGS=`gnome-config --libs gnomeui gdk_pixbuf`
+CFLAGS=`gnome-config --cflags gnomeui gdk_pixbuf gnomecanvaspixbuf`
+LDFLAGS=`gnome-config --libs gnomeui gdk_pixbuf gnomecanvaspixbuf`
 
 HTML_DIR=$(datadir)/gnome/html
 
 TARGET_DIR=$(HTML_DIR)/$(DOC_MODULE)
 
 tmpl_sources =					\
-	tmpl/animation.sgml
+	tmpl/animation.sgml			\
 	tmpl/creating.sgml			\
 	tmpl/file-loading.sgml			\
 	tmpl/from-drawables.sgml		\

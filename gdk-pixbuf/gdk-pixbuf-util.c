@@ -97,58 +97,47 @@ gdk_pixbuf_add_alpha (GdkPixbuf *pixbuf, gboolean substitute_color, guchar r, gu
 
 /**
  * gdk_pixbuf_copy_area:
- * @src_pixbuf: The pixbuf to be copied.
- * @src_x: The X coordinate of the upper left corner of the area to copy.
- * @src_y: The Y coordinate of the upper left corner of the area to copy.
- * @width: The width of the area to copy.
- * @height: The height of the area to copy.
- * @dest_pixbuf: The pixbuf to store the copy in.
- * @dest_x: X coordinate for the upper left corner of the rectangle to draw to in @dest_pixbuf.
- * @dest_y: Y coordinate for the upper left corner of the rectangle to draw to in @dest_pixbuf.
+ * @src_pixbuf: Source pixbuf.
+ * @src_x: Source X coordinate within @src_pixbuf.
+ * @src_y: Source Y coordinate within @src_pixbuf.
+ * @width: Width of the area to copy.
+ * @height: Height of the area to copy.
+ * @dest_pixbuf: Destination pixbuf.
+ * @dest_x: X coordinate within @dest_pixbuf.
+ * @dest_y: Y coordinate within @dest_pixbuf.
  *
- * Takes a rectangle area beginning at (@src_x, @src_y) @width pixels wide
- * and @height pixels high from @src_pixbuf and copy it into @dest_pixbuf
- * at (@dest_x, @dest_y). @dest_pixbuf must already be created and must be
- * large enough to hold the requested area.
- *
- * Return value: void
+ * Copies a rectangular area from @src_pixbuf to @dest_pixbuf.  Conversion of
+ * pixbuf formats is done automatically.
  **/
-void gdk_pixbuf_copy_area(GdkPixbuf *src_pixbuf,
-			  gint src_x, gint src_y,
-			  gint width, gint height,
-			  GdkPixbuf *dest_pixbuf,
-			  gint dest_x, gint dest_y)
+void
+gdk_pixbuf_copy_area (GdkPixbuf *src_pixbuf,
+		      int src_x, int src_y,
+		      int width, int height,
+		      GdkPixbuf *dest_pixbuf,
+		      int dest_x, int dest_y)
 {
-	gint src_width, src_height, dest_width, dest_height;
+	ArtPixBuf *src_apb, *dest_apb;
 
-	/* Ensure that we have a source pixbuf, and that the requested
-	 * area is not larger than that pixbuf.
-	 */
-	g_return_if_fail(src_pixbuf != NULL);
+	g_return_if_fail (src_pixbuf != NULL);
+	g_return_if_fail (dest_pixbuf != NULL);
 
-	src_width = gdk_pixbuf_get_width(src_pixbuf);
-	src_height = gdk_pixbuf_get_height(src_pixbuf);
+	src_apb = src_pixbuf->art_pixbuf;
+	dest_apb = dest_pixbuf->art_pixbuf;
 
-	g_return_if_fail(src_x >= 0 && width <= src_width);
-	g_return_if_fail(src_y >= 0 && height <= src_height);
+	g_return_if_fail (src_x >= 0 && src_x + width <= src_apb->width);
+	g_return_if_fail (src_y >= 0 && src_y + height <= src_apb->height);
 
-	/* Ensure that we have a destination pixbuf, and that the
-	 * requested area is not larger than that pixbuf.
-	 */
-	g_return_if_fail(dest_pixbuf != NULL);
+	g_return_if_fail (dest_x >= 0 && dest_x + width <= dest_apb->width);
+	g_return_if_fail (dest_y >= 0 && dest_y + height <= dest_apb->height);
 
-	dest_width = gdk_pixbuf_get_width(dest_pixbuf);
-	dest_height = gdk_pixbuf_get_height(dest_pixbuf);
+	/* This will perform format conversions automatically */
 
-	g_return_if_fail(dest_x >= 0 && width <= dest_width);
-	g_return_if_fail(dest_y >= 0 && height <= dest_height);
-
-	/* Scale 1:1 the source pixbuf into the destination pixbuf. */
-	gdk_pixbuf_scale(src_pixbuf,
-			 dest_pixbuf,
-			 dest_x, dest_y,
-			 width, height,
-			 (double)(dest_x - src_x),
-			 (double)(dest_y - src_y),
-			 1., 1., ART_FILTER_NEAREST);
+	gdk_pixbuf_scale (src_pixbuf,
+			  dest_pixbuf,
+			  dest_x, dest_y,
+			  width, height,
+			  (double) (dest_x - src_x),
+			  (double) (dest_y - src_y),
+			  1.0, 1.0,
+			  ART_FILTER_NEAREST);
 }

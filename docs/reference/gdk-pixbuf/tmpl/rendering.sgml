@@ -115,3 +115,14 @@ End:
 -->
 
 
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@pixmap_return: 
+@mask_return: 
+@alpha_threshold: 
+
+
