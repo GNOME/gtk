@@ -1912,7 +1912,9 @@ static struct
   const char *gdk_name;
 } settings_map[] = {
   { "Net/DoubleClickTime", "gtk-double-click-timeout" },
-  { "Net/DragThreshold", "gtk-drag-threshold" }
+  { "Net/DragThreshold", "gtk-drag-threshold" },
+  { "Net/CursorBlink", "gtk-cursor-blink" },
+  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" }
 };
 
 static void
@@ -1981,6 +1983,7 @@ gdk_setting_get (const gchar *name,
   XSettingsSetting *setting;
   gboolean success = FALSE;
   gint i;
+  GValue tmp_val = { 0, };
 
   for (i = 0; i < G_N_ELEMENTS (settings_map) ; i++)
     if (strcmp (settings_map[i].gdk_name, name) == 0)
@@ -2001,14 +2004,20 @@ gdk_setting_get (const gchar *name,
     case XSETTINGS_TYPE_INT:
       if (check_transform (xsettings_name, G_TYPE_INT, G_VALUE_TYPE (value)))
 	{
-	  g_value_set_int (value, setting->data.v_int);
+	  g_value_init (&tmp_val, G_TYPE_INT);
+	  g_value_set_int (&tmp_val, setting->data.v_int);
+	  g_value_transform (&tmp_val, value);
+
 	  success = TRUE;
 	}
       break;
     case XSETTINGS_TYPE_STRING:
       if (check_transform (xsettings_name, G_TYPE_STRING, G_VALUE_TYPE (value)))
 	{
-	  g_value_set_string (value, setting->data.v_string);
+	  g_value_init (&tmp_val, G_TYPE_STRING);
+	  g_value_set_string (&tmp_val, setting->data.v_string);
+	  g_value_transform (&tmp_val, value);
+
 	  success = TRUE;
 	}
       break;
@@ -2017,17 +2026,23 @@ gdk_setting_get (const gchar *name,
 	{
 	  GdkColor color;
 	  
+	  g_value_init (&tmp_val, GDK_TYPE_COLOR);
+
 	  color.pixel = 0;
 	  color.red = setting->data.v_color.red;
 	  color.green = setting->data.v_color.green;
 	  color.blue = setting->data.v_color.blue;
 	  
-	  g_value_set_boxed (value, &color);
+	  g_value_set_boxed (&tmp_val, &color);
+	  
+	  g_value_transform (&tmp_val, value);
 	  
 	  success = TRUE;
 	}
       break;
     }
+  
+  g_value_unset (&tmp_val);
 
   xsettings_setting_free (setting);
 

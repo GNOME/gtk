@@ -21,7 +21,9 @@
 
 enum {
   PROP_0,
-  PROP_DOUBLE_CLICK_TIMEOUT
+  PROP_DOUBLE_CLICK_TIME,
+  PROP_CURSOR_BLINK,
+  PROP_CURSOR_BLINK_TIME,
 };
 
 
@@ -126,13 +128,29 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (quark_property_id != 0);	/* special quarks from GObjectClass */
 
   result = settings_install_property_parser (class,
-                                             g_param_spec_int ("gtk-double-click-timeout",
-                                                               _("Double Click Timeout"),
-                                                               _("Maximum time allowed between two clicks for them to be considered a double click"),
+                                             g_param_spec_int ("gtk-double-click-time",
+                                                               _("Double Click Time"),
+                                                               _("Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"),
                                                                0, G_MAXINT, 250,
                                                                G_PARAM_READWRITE),
                                              NULL);
-  g_assert (result == PROP_DOUBLE_CLICK_TIMEOUT);
+  g_assert (result == PROP_DOUBLE_CLICK_TIME);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-cursor-blink",
+								   _("Cursor Blink"),
+								   _("Whether the cursor should blink"),
+								   TRUE,
+								   G_PARAM_READWRITE),
+					     NULL);
+  g_assert (result == PROP_CURSOR_BLINK);
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-cursor-blink-time",
+                                                               _("Cursor Blink Time"),
+                                                               _("Length of the cursor blink cycle, in milleseconds"),
+                                                               100, G_MAXINT, 1200,
+                                                               G_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_CURSOR_BLINK_TIME);
 }
 
 static void
@@ -201,7 +219,9 @@ gtk_settings_get_property (GObject     *object,
 {
   GtkSettings *settings = GTK_SETTINGS (object);
 
-  if (!gdk_setting_get (pspec->name, value))
+  if (gdk_setting_get (pspec->name, value))
+    g_param_value_validate (pspec, value);
+  else
     g_value_copy (settings->property_values + property_id - 1, value);
 }
 
@@ -221,7 +241,7 @@ gtk_settings_notify (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_DOUBLE_CLICK_TIMEOUT:
+    case PROP_DOUBLE_CLICK_TIME:
       g_object_get (object, pspec->name, &double_click_time, NULL);
       gdk_set_double_click_time (double_click_time);
       break;

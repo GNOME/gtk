@@ -80,9 +80,11 @@ struct _GtkEntry
   guint        has_frame : 1;
 
   guint        activates_default : 1;
+
+  guint        cursor_visible : 1;
   
   guint   button;
-  guint   timer;
+  guint   blink_timeout;
   guint   recompute_idle;
   gint    scroll_offset;
   gint    ascent;	/* font ascent, in pango units  */

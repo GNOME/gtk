@@ -1,3 +1,25 @@
+Wed May 30 15:56:30 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c (gtk_settings_get_property): Validate
+	value from GDK settings against parameter spec.
+
+	* gdk/x11/gdkevents-x11.c (gdk_setting_get): Add assignments
+	to temporary values and use g_value_transform(), since
+	thinking that GValue was going to be easy or efficient
+	to use was, of course, a mistake.
+
+        * gtk/gtksettings.c: Add cursor blink setting.
+	
+	* gdk/x11/gdkevents-x11.c: Add cursor blink X settings.
+
+	* gtk/gtkentry.c: Add cursor blinking.
+
+	* gtk/gtktextview.c (gtk_text_view_check_cursor_blink): Use
+	cursor blink global settings.
+
+	* gtk/gtkentry.c (gtk_entry_button_press): Add notification
+	for :text_position in places where it is missing.
+
 Tue May 29 18:17:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* autogen.sh (have_libtool): Fix GNU sedism (#55430)
