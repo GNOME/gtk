@@ -199,13 +199,6 @@ png_simple_warning_callback(png_structp png_save_ptr,
          */
 }
 
-/* Destroy notification function for the pixbuf */
-static void
-free_buffer (guchar *pixels, gpointer data)
-{
-	g_free (pixels);
-}
-
 static gboolean
 png_text_to_pixbuf_option (png_text   text_ptr,
                            gchar    **key,
@@ -240,16 +233,16 @@ png_free_callback (png_structp o, png_voidp x)
 static GdkPixbuf *
 gdk_pixbuf__png_image_load (FILE *f, GError **error)
 {
-        GdkPixbuf *pixbuf;
+        GdkPixbuf * volatile pixbuf = NULL;
 	png_structp png_ptr;
 	png_infop info_ptr;
         png_textp text_ptr;
-	gint i, ctype, bpp;
+	gint i, ctype;
 	png_uint_32 w, h;
 	png_bytepp volatile rows = NULL;
-	guchar * volatile pixels = NULL;
         gint    num_texts;
-        gchar **options = NULL;
+        gchar *key;
+        gchar *value;
 
 #ifdef PNG_USER_MEM_SUPPORTED
 	png_ptr = png_create_read_struct_2 (PNG_LIBPNG_VER_STRING,
@@ -278,8 +271,8 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 	    	if (rows)
 		  	g_free (rows);
 
-		if (pixels)
-			g_free (pixels);
+		if (pixbuf)
+			g_object_unref (pixbuf);
 
 		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
@@ -293,16 +286,9 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                 return NULL;
         }
         
-	if (ctype & PNG_COLOR_MASK_ALPHA)
-		bpp = 4;
-	else
-		bpp = 3;
+        pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, ctype & PNG_COLOR_MASK_ALPHA, 8, w, h);
 
-	pixels = g_try_malloc (w * h * bpp);
-	if (!pixels) {
-                /* Check error NULL, normally this would be broken,
-                 * but libpng makes me want to code defensively.
-                 */
+	if (!pixbuf) {
                 if (error && *error == NULL) {
                         g_set_error (error,
                                      GDK_PIXBUF_ERROR,
@@ -310,6 +296,7 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
                                      _("Insufficient memory to load PNG file"));
                 }
                 
+
 		png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 		return NULL;
 	}
@@ -317,44 +304,22 @@ gdk_pixbuf__png_image_load (FILE *f, GError **error)
 	rows = g_new (png_bytep, h);
 
 	for (i = 0; i < h; i++)
-		rows[i] = pixels + i * w * bpp;
+		rows[i] = pixbuf->pixels + i * pixbuf->rowstride;
 
 	png_read_image (png_ptr, rows);
         png_read_end (png_ptr, info_ptr);
 
         if (png_get_text (png_ptr, info_ptr, &text_ptr, &num_texts)) {
-                options = g_new (gchar *, num_texts * 2);
                 for (i = 0; i < num_texts; i++) {
-                        png_text_to_pixbuf_option (text_ptr[i], 
-                                                   options + 2*i, 
-                                                   options + 2*i + 1);
+                        png_text_to_pixbuf_option (text_ptr[i], &key, &value);
+                        gdk_pixbuf_set_option (pixbuf, key, value);
+                        g_free (key);
+                        g_free (value);
                 }
         }
-	png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
+
 	g_free (rows);
-
-	if (ctype & PNG_COLOR_MASK_ALPHA)
-		pixbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, TRUE, 8,
-                                                   w, h, w * 4,
-                                                   free_buffer, NULL);
-	else
-		pixbuf = gdk_pixbuf_new_from_data (pixels, GDK_COLORSPACE_RGB, FALSE, 8,
-                                                   w, h, w * 3,
-                                                   free_buffer, NULL);
-
-        if (options) {
-                for (i = 0; i < num_texts; i++) {
-                        if (pixbuf) {
-                                if (!gdk_pixbuf_set_option (pixbuf, 
-                                                            options[2*i], 
-                                                            options[2*i+1]))
-                                        g_warning ("Got multiple tEXt chunks for the same key.");
-                        }
-                        g_free (options[2*i]);
-                        g_free (options[2*i+1]);
-                }
-                g_free (options);
-        }
+	png_destroy_read_struct (&png_ptr, &info_ptr, NULL);
 
         return pixbuf;
 }

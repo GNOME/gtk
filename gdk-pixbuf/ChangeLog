@@ -1,3 +1,9 @@
+2002-04-06  Matthias Clasen  <maclas@gmx.de>
+
+	* io-png.c (gdk_pixbuf__png_image_load): Restructured to use
+	gdk_pixbuf_new instead of manually allocating image storage. This
+	gives us a good rowstride and overflow checks.  (#77807)
+
 2002-04-05  Matthias Clasen  <maclas@gmx.de>
 
 	* io-tiff.c (tiff_image_parse): Avoid allocating an extra copy of
