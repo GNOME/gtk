@@ -377,7 +377,7 @@ gtk_entry_new (void)
 static GdkWChar
 gtk_entry_get_invisible_char (GtkEntry *entry)
 {
-  GdkWChar ch;
+  GdkWChar ch = 0;
 
   if (entry->use_wchar)
     gdk_mbstowcs (&ch, "*", 1);

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
+"POT-Creation-Date: 2001-03-28 16:12-0500\n"
 "PO-Revision-Date: 2001-02-12 03:42+0200\n"
 "Last-Translator: Gediminas Paulauskas <menesis@delfi.lt>\n"
 "Language-Team: Lithuanian\n"
@@ -447,12 +447,12 @@ msgstr "iðvalyti"
 msgid "Page %u"
 msgstr "%u puslapis"
 
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Negaliu rasti paveikslëlio bylos pixmap_path: ¥%s´ eilutë %d"
 
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Negaliu rasti paveikslëlio bylos pixmap_path: ¥%s´"

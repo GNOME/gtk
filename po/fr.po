@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
-"POT-Creation-Date: 2001-02-28 19:20-0500\n"
+"POT-Creation-Date: 2001-03-28 16:12-0500\n"
 "PO-Revision-Date: 2001-03-01 11:13+0100\n"
 "Last-Translator: Christophe Merlet (RedFox) <redfox@eikonex.org>\n"
 "Language-Team: GNOME French Team <gnomefr@gnomefr.traduc.org>\n"
@@ -449,13 +449,13 @@ msgstr "effacer"
 msgid "Page %u"
 msgstr "Page %u"
 
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr ""
 "Impossible de localiser le fichier image dans pixmap_path : « %s » ligne %d"
 
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Impossible de localiser le fichier image dans pixmap_path : « %s »"

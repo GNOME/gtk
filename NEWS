@@ -7,6 +7,8 @@ Overview of Changes in GTK+ 1.2.10:
 * Fix rare problem with enter events and menus
 * Fix problem with --with-native-locale and GNU libc-2.1
 * Further fixes for using fonts, not fontsets, with non iso-8859-1.
+* Fix problem with dropping onto internal children, such as CList buttons 
+* Translation updates
 
 Overview of Changes in GTK+ 1.2.9:
 

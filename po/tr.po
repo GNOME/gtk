@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.10\n"
-"POT-Creation-Date: 2001-02-22 20:39-0500\n"
+"POT-Creation-Date: 2001-03-28 16:12-0500\n"
 "PO-Revision-Date: 2001-03-18 18:33+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@technologist.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -446,12 +446,12 @@ msgstr "temizle"
 msgid "Page %u"
 msgstr "Sayfa %u"
 
-#: gtk/gtkrc.c:1702
+#: gtk/gtkrc.c:1703
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Resim dosyasý konumlanamadý. pixmap_path: \"%s\" satýr %d"
 
-#: gtk/gtkrc.c:1705
+#: gtk/gtkrc.c:1706
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Resim dosyasý konumlanamadý. pixmap_path: \"%s\""
@@ -464,4 +464,3 @@ msgstr "Yüklenebilir modül konumlanamadý. module_path: \"%s\" "
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--Ýpucu yok--"
-

@@ -403,12 +403,14 @@ gdk_text_width_wc (GdkFont	  *font,
 	gchar *glyphs;
 	int glyphs_len;
 
-	_gdk_font_wc_to_glyphs (font, text, text_length,
-				&glyphs, &glyphs_len);
-
-	width = gdk_text_width (font, glyphs, glyphs_len);
-
-	g_free (glyphs);
+	if (_gdk_font_wc_to_glyphs (font, text, text_length,
+				    &glyphs, &glyphs_len))
+	  {
+	    width = gdk_text_width (font, glyphs, glyphs_len);
+	    g_free (glyphs);
+	  }
+	else
+	  width = 0;
 
 	break;
       }
@@ -510,12 +512,14 @@ gdk_char_width_wc (GdkFont *font,
 	{
 	  gchar *glyphs;
 	  int glyphs_len;
-	  
-	  _gdk_font_wc_to_glyphs (font, &character, 1, &glyphs, &glyphs_len);
-	  
-	  width = gdk_text_width (font, glyphs, glyphs_len);
-	  
-	  g_free (glyphs);
+
+	  if (_gdk_font_wc_to_glyphs (font, &character, 1, &glyphs, &glyphs_len))
+	    {
+	      width = gdk_text_width (font, glyphs, glyphs_len);
+	      g_free (glyphs);
+	    }
+	  else
+	    width = 0;
 	  
 	  break;
 	}
@@ -637,13 +641,26 @@ gdk_text_extents_wc (GdkFont        *font,
 	gchar *glyphs;
 	int glyphs_len;
 
-	_gdk_font_wc_to_glyphs (font, text, text_length,
-				&glyphs, &glyphs_len);
-
-	gdk_text_extents (font, glyphs, glyphs_len,
-			  lbearing, rbearing, width, ascent, descent);
-
-	g_free (glyphs);
+	if (_gdk_font_wc_to_glyphs (font, text, text_length,
+				    &glyphs, &glyphs_len))
+	  {
+	    gdk_text_extents (font, glyphs, glyphs_len,
+			      lbearing, rbearing, width, ascent, descent);
+	    g_free (glyphs);
+	  }
+	else
+	  {
+	    if (lbearing)
+	      *lbearing = 0;
+	    if (rbearing)
+	      *rbearing = 0;
+	    if (width)
+	      *width = 0;
+	    if (ascent)
+	      *ascent = 0;
+	    if (descent)
+	      *descent = 0;
+	  }
 
 	break;
       }
@@ -821,7 +838,7 @@ gdk_char_height (GdkFont *font,
   return gdk_text_height (font, &character, 1);
 }
 
-void
+gboolean
 _gdk_font_wc_to_glyphs (GdkFont        *font,
 			const GdkWChar *text,
 			gint            text_length,
@@ -831,8 +848,8 @@ _gdk_font_wc_to_glyphs (GdkFont        *font,
   XFontStruct *xfont;
   GdkFontPrivate *font_private = (GdkFontPrivate*) font;
 
-  g_return_if_fail (font != NULL);
-  g_return_if_fail (font->type == GDK_FONT_FONT);
+  g_return_val_if_fail (font != NULL, FALSE);
+  g_return_val_if_fail (font->type == GDK_FONT_FONT, FALSE);
 
   xfont = (XFontStruct *) font_private->xfont;
 
@@ -844,12 +861,14 @@ _gdk_font_wc_to_glyphs (GdkFont        *font,
       char *mbstr = _gdk_wcstombs_len (text, text_length);
 
       if (result_length)
-	*result_length = strlen (mbstr);
+	*result_length = mbstr ? strlen (mbstr) : 0;
 
       if (result)
 	*result = mbstr;
       else
 	g_free (mbstr);
+
+      return mbstr != NULL;
     }
   else
     {
@@ -872,5 +891,7 @@ _gdk_font_wc_to_glyphs (GdkFont        *font,
 
       if (result_length)
 	*result_length = text_length;
+
+      return TRUE;
     }
 }

@@ -1647,7 +1647,7 @@ gtk_font_selection_select_size (GtkWidget      *w,
 				gpointer        data)
 {
   GtkFontSelection *fontsel;
-  gint new_size;
+  gdouble new_size;
   gchar *text;
   gchar buffer[16];
   gint i;
@@ -1673,11 +1673,11 @@ gtk_font_selection_select_size (GtkWidget      *w,
   gtk_entry_set_text(GTK_ENTRY(fontsel->size_entry), buffer);
   
   /* Check if the font size has changed, and return if it hasn't. */
-  new_size = atoi(text);
+  new_size = atof(text);
   if (fontsel->metric == GTK_FONT_METRIC_POINTS)
     new_size *= 10;
   
-  if (fontsel->size == new_size)
+  if (fontsel->size == (gint)new_size)
     return;
   
   /* If the size was selected by the user we set the selected_size. */

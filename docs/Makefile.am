@@ -101,11 +101,7 @@ FAQ_FILES=html/gtkfaq.html		\
 	html/gtkfaq-7.html		\
 	text/gtkfaq.txt
 
-html/gtk_tut_table.gif: gdk.html gtk.html
-
 .PHONY: html htmldir faq tutorial tutorial_it tutorial_fr files
-
-distdocs: gdk.html gtk.html faq tutorial tutorial_it tutorial_fr
 
 htmldir:
 	(cd $(srcdir); mkdir -p html; cp gtk_tut*gif html)

@@ -322,11 +322,11 @@ extern GdkWindow *gdk_xim_window;	        /* currently using Window */
 extern guint gdk_debug_flags;
 
 
-void   _gdk_font_wc_to_glyphs (GdkFont         *font,
-			       const GdkWChar  *text,
-			       gint             text_length,
-			       gchar          **result,
-			       gint            *result_length);
+gboolean _gdk_font_wc_to_glyphs (GdkFont         *font,
+				 const GdkWChar  *text,
+				 gint             text_length,
+				 gchar          **result,
+				 gint            *result_length);
 gchar *_gdk_wcstombs_len      (const GdkWChar  *src,
 			       int              length);
 

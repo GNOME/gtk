@@ -1,3 +1,36 @@
+Sun Apr  1 23:01:31 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 1.2.10.
+
+Sun Apr  1 22:22:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	[ Addition of safety checks to try to avoid segfaulting
+	  on broken setups always. ]
+
+	* gdk/gdkfont.c (_gdk_font_wc_to_glyphs): Add a boolean
+	return value to deal with failure of conversion of
+	wide characters to glyphs.
+
+	* gtk/gtkentry.c gtk/gtklabel.c: Handle failure of 
+	mbstowcs/wcstombs a bit better.
+
+	* gdk/gdkfont.c gdk/gdkdraw.c: Deal with failure of
+	_gdk_font_wc_to_glyphs() gracefully
+
+	* gdk/gdkim.c (_gdk_wcstombs_len): quietly return NULL on
+	failure instead of g_return_if_fail().
+
+Wed Mar 28 16:05:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfontsel.c (gtk_font_selection_select_size): Fix 
+	problem where fractional sizes caused infinite loop.
+	(bugzilla.redhat.com #33081)
+
+Wed Mar 28 14:52:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/Makefile.am: Remove excess rules breaking
+	distcheck.
+
 Wed Mar 28 12:33:20 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkdnd.c: Fix problem where dropping into

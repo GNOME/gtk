@@ -12,7 +12,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.8\n"
-"POT-Creation-Date: 2001-03-15 10:09+0100\n"
+"POT-Creation-Date: 2001-03-28 16:12-0500\n"
 "PO-Revision-Date: 2000-06-20 16:12+0200\n"
 "Last-Translator: Jesús Bravo Álvarez <jba@pobox.com>\n"
 "Language-Team: Galician <trasno@ceu.fi.udc.es>\n"

@@ -946,6 +946,7 @@ gtk_label_parse_uline (GtkLabel    *label,
   GdkWChar *p, *q, *string_wc;
   gchar *r;
   gchar *pattern;
+  gchar *result_str;
   gint length, wc_length;
   gboolean underscore;
   
@@ -1001,9 +1002,13 @@ gtk_label_parse_uline (GtkLabel    *label,
     }
   *q = 0;
   *r = 0;
-  
-  gtk_label_set_text_internal (label, gdk_wcstombs (string_wc), string_wc);
-  gtk_label_set_pattern (label, pattern);
+
+  result_str = gdk_wcstombs (string_wc);
+  if (string)
+    {
+      gtk_label_set_text_internal (label, result_str, string_wc);
+      gtk_label_set_pattern (label, pattern);
+    }
   
   g_free (pattern);
   

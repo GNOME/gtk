@@ -329,13 +329,13 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
     {
       gchar *glyphs;
       int glyphs_len;
-      
-      _gdk_font_wc_to_glyphs (font, text, text_length,
-			      &glyphs, &glyphs_len);
 
-      gdk_draw_text (drawable, font, gc, x, y, glyphs, glyphs_len);
-
-      g_free (glyphs);
+      if (_gdk_font_wc_to_glyphs (font, text, text_length,
+				  &glyphs, &glyphs_len))
+	{
+	  gdk_draw_text (drawable, font, gc, x, y, glyphs, glyphs_len);
+	  g_free (glyphs);
+	}
     }
   else if (font->type == GDK_FONT_FONTSET)
     {

@@ -1493,13 +1493,13 @@ gdk_ic_get_events (GdkIC *ic)
 #ifdef USE_NATIVE_LOCALE
 gchar *
 _gdk_wcstombs_len (const GdkWChar *src,
-		   int             src_len)
+		   gint            src_len)
 {
-  int len = 0;
-  int i;
-  char *result;
-  char buf[16];
-  char *p;
+  gint len = 0;
+  gint i;
+  gchar *result = NULL;
+  gchar buf[16];
+  gchar *p;
 
   if (MB_CUR_MAX <= 16)
     p = buf;
@@ -1510,8 +1510,9 @@ _gdk_wcstombs_len (const GdkWChar *src,
 
   for (i=0; (src_len < 0 || i < src_len) && src[i]; i++)
     {
-      int charlen = wctomb (p, src[i]);
-      g_return_val_if_fail (charlen >= 0, NULL);
+      gint charlen = wctomb (p, src[i]);
+      if (charlen < 0)
+	goto out;
       
       len += charlen;
     }
@@ -1525,6 +1526,7 @@ _gdk_wcstombs_len (const GdkWChar *src,
   
   result[len] = '\0';
 
+ out:
   if (p != buf)
     g_free (p);
 
