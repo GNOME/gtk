@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.5\n"
-"POT-Creation-Date: 2002-07-21 21:35+0900\n"
-"PO-Revision-Date: 2002-07-21 21:36+0900\n"
+"POT-Creation-Date: 2002-07-27 03:09+0900\n"
+"PO-Revision-Date: 2002-07-27 03:09+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgstr "파일 '%s' 열기 실패 : %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:155 gdk-pixbuf/gdk-pixbuf-io.c:595
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "그림 파일 '%s' 는 데이타가 없습니다"
+msgstr "그림 파일 '%s'은(는) 데이타가 없습니다"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:183
 #, c-format
@@ -54,7 +54,9 @@ msgstr "그림 읽기 모듈을 읽을 수 없습니다: %s: %s"
 msgid ""
 "Image-loading module %s does not export the proper interface; perhaps it's "
 "from a different GTK version?"
-msgstr "그림 읽기 모듈 %s이(가) 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버전의 모듈일 것입니다"
+msgstr ""
+"그림 읽기 모듈 %s이(가) 올바른 인터페이스를 내놓지 않습니다; 아마 다른 GTK 버"
+"전의 모듈일 것입니다"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:494 gdk-pixbuf/gdk-pixbuf-io.c:520
 #, c-format
@@ -95,7 +97,9 @@ msgstr "쓰기용 '%s' 열기 실패: %s"
 msgid ""
 "Failed to close '%s' while writing image, all data may not have been saved: %"
 "s"
-msgstr "그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되지 않았을 것입니다: %s"
+msgstr ""
+"그림을 저장하는 동안 '%s'을(를) 닫는데 실패하였습니다, 모든 데이타가 저장되"
+"지 않았을 것입니다: %s"
 
 #: gdk-pixbuf/gdk-pixbuf-loader.c:250
 #, c-format
@@ -1322,7 +1326,7 @@ msgstr "표시기 간격"
 msgid "Spacing around check or radio indicator"
 msgstr "체크 혹은 라디오 표시기 주위의 간격"
 
-#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:130
+#: gtk/gtkcheckmenuitem.c:115 gtk/gtktogglebutton.c:133
 msgid "Active"
 msgstr "활성"
 
@@ -1330,7 +1334,7 @@ msgstr "활성"
 msgid "Whether the menu item is checked."
 msgstr "메뉴 아이템을 체크할 것인지 여부"
 
-#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:138
+#: gtk/gtkcheckmenuitem.c:123 gtk/gtktogglebutton.c:141
 msgid "Inconsistent"
 msgstr "모순"
 
@@ -3771,19 +3775,19 @@ msgstr "모듈을 module_path에서 찾을 수 없습니다: \"%s\","
 msgid "--- No Tip ---"
 msgstr "--- 팁 없음 ---"
 
-#: gtk/gtktogglebutton.c:131
+#: gtk/gtktogglebutton.c:134
 msgid "If the toggle button should be pressed in or not"
 msgstr "토글 단추를 눌러져야 하는 지 아닌지"
 
-#: gtk/gtktogglebutton.c:139
+#: gtk/gtktogglebutton.c:142
 msgid "If the toggle button is in an \"in between\" state."
 msgstr "토글 단추가 \"이도 저도 아닌 상태\"에 놓이는 지 여부"
 
-#: gtk/gtktogglebutton.c:146
+#: gtk/gtktogglebutton.c:149
 msgid "Draw Indicator"
 msgstr "표시기 그리기"
 
-#: gtk/gtktogglebutton.c:147
+#: gtk/gtktogglebutton.c:150
 msgid "If the toggle part of the button is displayed"
 msgstr "단추의 토글 부분을 표시할 지 여부"
 
