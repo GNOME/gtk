@@ -1,3 +1,13 @@
+Overview of Changes in GTK+ 1.2.1:
+
+* Many Bug fixes have been applied to the menu and accelerator code.
+* GtkItemFactory can "adopt" foreign menu items now and manage their
+  accelerator installation. This is often required to get GtkItemFactory
+  like accelerator propagation between different windows with the same
+  menu heirarchy and for centralized parsing and saving of accelerators.
+* GtkCList/GtkCTree buttons should always display correctly now.
+* Miscellaneous other bug fixes.
+
 What's New in GTK+ 1.2.0 (since 1.0.x):
 
 * New widgets: GtkFontSelector, GtkPacker, GtkItemFactory, GtkCTree,
