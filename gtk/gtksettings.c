@@ -74,6 +74,7 @@ static void	gtk_settings_notify		 (GObject		*object,
 static guint	settings_install_property_parser (GtkSettingsClass      *class,
 						  GParamSpec            *pspec,
 						  GtkRcPropertyParser    parser);
+static void    settings_update_double_click_time (GtkSettings           *settings);
 
 
 /* --- variables --- */
@@ -289,6 +290,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       settings->screen = screen;
       g_object_set_data (G_OBJECT (screen), "gtk-settings", settings); 
       gtk_rc_reparse_all_for_settings (settings, TRUE);
+      settings_update_double_click_time (settings);
     }
   
   return settings;
@@ -402,7 +404,6 @@ gtk_settings_notify (GObject    *object,
 {
   GtkSettings *settings = GTK_SETTINGS (object);
   guint property_id = pspec->param_id;
-  gint double_click_time;
 
   if (settings->screen == NULL) /* initialization */
     return;
@@ -410,15 +411,8 @@ gtk_settings_notify (GObject    *object,
   switch (property_id)
     {
     case PROP_DOUBLE_CLICK_TIME:
-      {
-	GdkDisplay *display;
-	
-	g_object_get (object, pspec->name, &double_click_time, NULL);
-	display = gdk_screen_get_display (settings->screen);
-	if (settings->screen == gdk_display_get_screen (display, 0))
-	  gdk_display_set_double_click_time (display, double_click_time);
-	break;
-      }
+      settings_update_double_click_time (settings);
+      break;
     }
 }
 
@@ -1080,3 +1074,17 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
   g_free (pspecs);
 }
 
+static void
+settings_update_double_click_time (GtkSettings *settings)
+{
+  if (gdk_screen_get_number (settings->screen) == 0)
+    {
+      GdkDisplay *display = gdk_screen_get_display (settings->screen);
+      gint double_click_time;
+  
+      g_object_get (G_OBJECT (settings), "gtk-double-click-time",
+		    &double_click_time, NULL);
+      
+      gdk_display_set_double_click_time (display, double_click_time);
+    }
+}

@@ -1,3 +1,10 @@
+Wed Jan 15 15:55:47 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtksettings.c: Set the double click speed from
+	XSETTINGS when creating a new GtkSettings object
+	as well as when getting a notify. (#103601, reported
+	by Louis Garcia)
+
 Wed Jan 15 14:56:09 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtknotebook.c (gtk_notebook_size_allocate): 
