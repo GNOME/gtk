@@ -1057,6 +1057,12 @@ gtk_real_tree_select_child (GtkTree   *tree,
   g_return_if_fail (GTK_IS_TREE (tree));
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (child));
+
+  if (!tree->root_tree)
+    {
+      g_warning (G_STRLOC ": unable to select a child in a tree prior to realization");
+      return;
+    }
   
   root_selection = tree->root_tree->selection;
   

@@ -1,3 +1,10 @@
+Tue Jul 11 08:04:58 2000  Tim Janik  <timj@gtk.org>
+
+        * gtk/gtktree.c (gtk_real_tree_select_child): eek, i've never seen
+        a bug here, never been here and never fixed anything ;(
+        (don't segfault if tree->root_tree is NULL, which happens prior
+        to widget realization, but puke instead).
+
 Tue Jul 11 06:38:42 2000  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrc.h: add xthickness and ythickness to GtkRcStyle and
