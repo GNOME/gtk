@@ -1,3 +1,8 @@
+2004-07-09  Federico Mena Quintero  <federico@ximian.com>
+
+	* gdk/x11/gdkdnd-x11.c (xdnd_send_xevent): Fix typo; tmp_event ->
+	temp_event.
+
 2004-07-09  Matthias Clasen  <mclasen@redhat.com>
 
  	Make GtkEntry work harder to protect passwords:  (#143955,

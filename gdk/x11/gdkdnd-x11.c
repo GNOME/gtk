@@ -2195,7 +2195,7 @@ xdnd_send_xevent (GdkDragContext *context,
 	      if  ((*xdnd_filters[i].func) (event_send, &temp_event, NULL) == GDK_FILTER_TRANSLATE)
 		{
 		  gdk_event_put (&temp_event);
-		  g_object_unref (tmp_event.dnd.context);
+		  g_object_unref (temp_event.dnd.context);
 		}
 	      
 	      return TRUE;
