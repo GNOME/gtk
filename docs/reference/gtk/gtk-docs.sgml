@@ -180,6 +180,7 @@
 <!ENTITY gtk-Changes-1-2 SYSTEM "changes-1.2.sgml">
 <!ENTITY gtk-Changes-2-0 SYSTEM "changes-2.0.sgml">
 <!ENTITY gtk-migrating-GtkFileChooser SYSTEM "migrating-GtkFileChooser.sgml">
+<!ENTITY gtk-migrating-GtkAction SYSTEM "migrating-GtkAction.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
 ]>
@@ -545,6 +546,7 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
     </partintro>
 
     &gtk-migrating-GtkFileChooser;
+    &gtk-migrating-GtkAction;
   </part>
 
   <part>

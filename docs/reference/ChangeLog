@@ -1,3 +1,12 @@
+2003-12-08  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/migrating-GtkAction.sgml: New chapter about how to migrate
+	from gnome-ui/bonobo-ui/etc. to GtkAction.
+
+	* gtk/gtk-docs.sgml: Integrated the above.
+
+	* gtk/Makefile.am (content_files): Added migrating-GtkAction.sgml.
+
 Sun Nov 23 20:59:57 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tree_widget.sgml: Add a missing comma.
