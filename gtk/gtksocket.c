@@ -612,7 +612,7 @@ toplevel_key_press_handler (GtkWidget   *toplevel,
 
 #endif
 
-static void
+static gboolean
 toplevel_focus_in_handler (GtkWidget     *toplevel,
 			   GdkEventFocus *event,
 			   GtkSocket     *socket)
@@ -625,15 +625,19 @@ toplevel_focus_in_handler (GtkWidget     *toplevel,
   if (GTK_WIDGET_VISIBLE (toplevel))
     send_xembed_message (socket, XEMBED_WINDOW_ACTIVATE, 0, 0, 0,
 			 gtk_get_current_event_time ()); /* Will be GDK_CURRENT_TIME */
+
+  return FALSE;
 }
 
-static void
+static gboolean
 toplevel_focus_out_handler (GtkWidget     *toplevel,
 			    GdkEventFocus *event,
 			    GtkSocket     *socket)
 {
   send_xembed_message (socket, XEMBED_WINDOW_DEACTIVATE, 0, 0, 0,
 		       gtk_get_current_event_time ()); /* Will be GDK_CURRENT_TIME */
+
+  return FALSE;
 }
 
 static void
