@@ -1,3 +1,11 @@
+Sun May  9 02:01:13 2004  Matthias Clasen  <maclas@gmx.de>
+
+        Merge from 2.4:
+	
+	* gtk/gtkcombobox.c (gtk_combo_box_list_button_released): 
+	In list mode, accept the same mouse/wheel bindings on 
+	the cellview as on the button.  (#136967)
+
 Sun May  9 01:25:37 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkiconfactory.c (add_to_cache): Actually count the

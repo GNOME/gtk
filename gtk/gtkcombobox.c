@@ -2147,7 +2147,18 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
       gtk_cell_view_set_background_color (GTK_CELL_VIEW (combo_box->priv->cell_view), 
 					  &GTK_WIDGET (combo_box)->style->base[GTK_WIDGET_STATE (combo_box)]);
 
-      gtk_widget_show (combo_box->priv->cell_view_frame);
+      combo_box->priv->box = gtk_event_box_new ();
+      gtk_event_box_set_visible_window (GTK_EVENT_BOX (combo_box->priv->box), 
+					FALSE);
+
+      gtk_container_add (GTK_CONTAINER (combo_box->priv->cell_view_frame),
+			 combo_box->priv->box);
+
+      gtk_widget_show_all (combo_box->priv->cell_view_frame);
+
+      g_signal_connect (combo_box->priv->box, "button_press_event",
+			G_CALLBACK (gtk_combo_box_list_button_pressed), 
+			combo_box);
     }
 
   combo_box->priv->tree_view = gtk_tree_view_new ();
@@ -2226,6 +2237,11 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
                                         0, 0, NULL,
                                         gtk_combo_box_list_button_pressed,
                                         NULL);
+  g_signal_handlers_disconnect_matched (combo_box->priv->box,
+                                        G_SIGNAL_MATCH_DATA,
+                                        0, 0, NULL,
+                                        gtk_combo_box_list_button_pressed,
+                                        NULL);
 
   /* destroy things (unparent will kill the latest ref from us)
    * last unref on button will destroy the arrow
@@ -2245,6 +2261,7 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
     {
       gtk_widget_unparent (combo_box->priv->cell_view_frame);
       combo_box->priv->cell_view_frame = NULL;
+      combo_box->priv->box = NULL;
     }
 
   gtk_widget_destroy (combo_box->priv->tree_view);
@@ -2280,7 +2297,7 @@ gtk_combo_box_list_button_pressed (GtkWidget      *widget,
   if (ewidget == combo_box->priv->tree_view)
     return TRUE;
 
-  if ((ewidget != combo_box->priv->button) ||
+  if ((ewidget != combo_box->priv->button && ewidget != combo_box->priv->box) ||
       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (combo_box->priv->button)))
     return FALSE;
 
