@@ -1,3 +1,9 @@
+2005-03-29  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_set_visible_func): 
+	Document the need to refilter if parameters of the visibility function
+	change.  (#169516, Olivier Sessink)
+
 2005-03-28  Jeroen Zwartepoorte  <jeroen.zwartepoorte@gmail.com>
 
 	* gtk/gtkfilechooserdefault.c: (update_preview_widget_visibility): Make
