@@ -1,5 +1,9 @@
 2002-02-16  Manish Singh  <yosh@gimp.org>
 
+	* gtk/gtkfilesel.[ch]: Added multiple selection API
+
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
 	* gdk/linux-fb/miarc.c: use fabs() on a double instead of abs()
 
 2002-02-17  Matthias Clasen  <matthias@YAST_ASK>

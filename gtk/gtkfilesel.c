@@ -396,10 +396,17 @@ static void gtk_file_selection_abort         (GtkFileSelection      *fs);
 static void gtk_file_selection_update_history_menu (GtkFileSelection       *fs,
 						    gchar                  *current_dir);
 
-static void gtk_file_selection_create_dir (GtkWidget *widget, gpointer data);
+static void gtk_file_selection_create_dir  (GtkWidget *widget, gpointer data);
 static void gtk_file_selection_delete_file (GtkWidget *widget, gpointer data);
 static void gtk_file_selection_rename_file (GtkWidget *widget, gpointer data);
 
+static void free_selected_names (GPtrArray *names);
+
+#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
+#define compare_filenames(a, b) strcmp(a, b)
+#else
+#define compare_filenames(a, b) g_ascii_strcasecmp(a, b)
+#endif
 
 
 static GtkWindowClass *parent_class = NULL;
@@ -1116,8 +1123,8 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
  * gtk_file_selection_get_filename:
  * @filesel: a #GtkFileSelection
  * 
- * This function returns the selected filename in the C runtime's
- * multibyte string encoding, which may or may not be the same as that
+ * This function returns the selected filename in encoding of
+ * g_filename_from_utf8(), which may or may not be the same as that
  * used by GTK+ (UTF-8). To convert to UTF-8, call g_filename_to_utf8().
  * The returned string points to a statically allocated buffer and
  * should be copied if you plan to keep it around.
@@ -1199,7 +1206,19 @@ gtk_file_selection_destroy (GtkObject *object)
       cmpl_free_state (filesel->cmpl_state);
       filesel->cmpl_state = NULL;
     }
-  
+ 
+  if (filesel->selected_names)
+    {
+      free_selected_names (filesel->selected_names);
+      filesel->selected_names = NULL;
+    } 
+
+  if (filesel->last_selected)
+    {
+      g_free (filesel->last_selected);
+      filesel->last_selected = NULL;
+    }
+
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
@@ -1815,7 +1834,8 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
 }
 
 static gchar *
-get_real_filename (gchar *filename)
+get_real_filename (gchar    *filename,
+                   gboolean  free_old)
 {
 #ifdef G_WITH_CYGWIN
   /* Check to see if the selection was a drive selector */
@@ -1823,7 +1843,10 @@ get_real_filename (gchar *filename)
     {
       /* It is... map it to a CYGWIN32 drive */
       gchar *temp_filename = g_strdup_printf ("//%c/", tolower (filename[0]));
-      g_free(filename);
+
+      if (free_old)
+	g_free (filename);
+
       return temp_filename;
     }
 #else
@@ -1844,33 +1867,12 @@ gtk_file_selection_file_activate (GtkTreeView       *tree_view,
   
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_model_get (model, &iter, FILE_COLUMN, &filename, -1);
-  filename = get_real_filename (filename);
+  filename = get_real_filename (filename, TRUE);
 
   gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
   gtk_button_clicked (GTK_BUTTON (fs->ok_button));
 
   g_free (filename);
-}
-
-static void
-gtk_file_selection_file_changed (GtkTreeSelection *selection,
-				 gpointer          user_data)
-{
-  GtkFileSelection *fs = GTK_FILE_SELECTION (user_data);
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-  
-  if (gtk_tree_selection_get_selected (selection, &model, &iter))
-    {
-      gchar *filename;
-      
-      gtk_tree_model_get (model, &iter, FILE_COLUMN, &filename, -1);
-      filename = get_real_filename (filename);
-
-      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-
-      g_free (filename);
-    }
 }
 
 static void
@@ -2089,6 +2091,261 @@ gtk_file_selection_abort (GtkFileSelection *fs)
 
   if (fs->selection_entry)
     gtk_label_set_text (GTK_LABEL (fs->selection_text), err_buf);
+}
+
+/**
+ * gtk_file_selection_set_select_multiple:
+ * @filesel: a #GtkFileSelection
+ * @select_multiple: whether or not the user is allowed to select multiple
+ * files in the file list.
+ *
+ * Sets whether the user is allowed to select multiple files in the file list.
+ * Use gtk_file_selection_get_selections () to get the list of selected files.
+ **/
+void
+gtk_file_selection_set_select_multiple (GtkFileSelection *filesel,
+					gboolean          select_multiple)
+{
+  GtkTreeSelection *sel;
+  GtkSelectionMode mode;
+
+  g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
+
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (filesel->file_list));
+
+  mode = select_multiple ? GTK_SELECTION_MULTIPLE : GTK_SELECTION_SINGLE;
+
+  gtk_tree_selection_set_mode (sel, mode);
+}
+
+/**
+ * gtk_file_selection_get_select_multiple:
+ * @filesel: a #GtkFileSelection
+ *
+ * Determines whether or not the user is allowed to select multiple files in
+ * the file list. See gtk_file_selection_set_select_multiple().
+ *
+ * Return value: %TRUE if the user is allowed to select multiple files in the
+ * file list
+ **/
+gboolean
+gtk_file_selection_get_select_multiple (GtkFileSelection *filesel)
+{
+  GtkTreeSelection *sel;
+
+  g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), FALSE);
+
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (filesel->file_list));
+  return (gtk_tree_selection_get_mode (sel) == GTK_SELECTION_MULTIPLE);
+}
+
+static void
+multiple_changed_foreach (GtkTreeModel *model,
+			  GtkTreePath  *path,
+			  GtkTreeIter  *iter,
+			  gpointer      data)
+{
+  GPtrArray *names = data;
+  gchar *filename;
+
+  gtk_tree_model_get (model, iter, FILE_COLUMN, &filename, -1);
+
+  g_ptr_array_add (names, filename);
+}
+
+static void
+free_selected_names (GPtrArray *names)
+{
+  gint i;
+
+  for (i = 0; i < names->len; i++)
+    g_free (g_ptr_array_index (names, i));
+
+  g_ptr_array_free (names, TRUE);
+}
+
+static void
+gtk_file_selection_file_changed (GtkTreeSelection *selection,
+				 gpointer          user_data)
+{
+  GtkFileSelection *fs = GTK_FILE_SELECTION (user_data);
+  GPtrArray *new_names;
+  gchar *filename;
+  const gchar *entry;
+  gint index = -1;
+
+  new_names = g_ptr_array_sized_new (8);
+
+  gtk_tree_selection_selected_foreach (selection,
+				       multiple_changed_foreach,
+				       new_names);
+
+  /* nothing selected */
+  if (new_names->len == 0)
+    {
+      g_ptr_array_free (new_names, TRUE);
+
+      if (fs->selected_names != NULL)
+	{
+	  free_selected_names (fs->selected_names);
+	  fs->selected_names = NULL;
+	}
+
+      goto maybe_clear_entry;
+    }
+
+  if (new_names->len != 1)
+    {
+      GPtrArray *old_names = fs->selected_names;
+
+      if (old_names != NULL)
+	{
+	  /* A common case is selecting a range of files from top to bottom,
+	   * so quickly check for that to avoid looping over the entire list
+	   */
+	  if (compare_filenames (g_ptr_array_index (old_names, old_names->len - 1),
+				 g_ptr_array_index (new_names, new_names->len - 1)) != 0)
+	    index = new_names->len - 1;
+	  else
+	    {
+	      gint i = 0, j = 0, cmp;
+
+	      /* do a quick diff, stopping at the first file not in the
+	       * old list
+	       */
+	      while (i < old_names->len && j < new_names->len)
+		{
+		  cmp = compare_filenames (g_ptr_array_index (old_names, i),
+					   g_ptr_array_index (new_names, j));
+		  if (cmp < 0)
+		    {
+		      i++;
+		    }
+		  else if (cmp == 0)
+		    {
+		      i++;
+		      j++;
+		    }
+		  else if (cmp > 0)
+		    {
+		      index = j;
+		      break;
+		    }
+		}
+
+	      /* we ran off the end of the old list */
+	      if (index == -1 && i < new_names->len)
+		index = j;
+	    }
+	}
+      else
+	{
+	  /* A phantom anchor still exists at the point where the last item
+	   * was selected, which is used for subsequent range selections.
+	   * So search up from there.
+	   */
+	  if (compare_filenames (fs->last_selected,
+				 g_ptr_array_index (new_names, 0)) == 0)
+	    index = new_names->len - 1;
+	  else
+	    index = 0;
+	}
+    }
+  else
+    index = 0;
+
+  if (fs->selected_names != NULL)
+    free_selected_names (fs->selected_names);
+
+  fs->selected_names = new_names;
+
+  if (index != -1)
+    {
+      if (fs->last_selected != NULL)
+	g_free (fs->last_selected);
+
+      fs->last_selected = g_strdup (g_ptr_array_index (new_names, index));
+      filename = get_real_filename (fs->last_selected, FALSE);
+
+      gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
+
+      if (filename != fs->last_selected)
+	g_free (filename);
+      
+      return;
+    }
+  
+maybe_clear_entry:
+
+  entry = gtk_entry_get_text (GTK_ENTRY (fs->selection_entry));
+  if ((entry != NULL) && (fs->last_selected != NULL) &&
+      (compare_filenames (entry, fs->last_selected) == 0))
+    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
+}
+
+/**
+ * gtk_file_selection_get_selections:
+ * @filesel: a #GtkFileSelection
+ *
+ * Retrieves the list of file selections the user has made in the dialog box.
+ * This function is intended for use when the user can select multiple files
+ * in the file list. The first file in the list is equivalent to what
+ * gtk_file_selection_get_filename() would return.
+ *
+ * The filenames are in the encoding of g_filename_from_utf8, which may or may
+ * not be the same as that used by GTK+ (UTF-8). To convert to UTF-8, call
+ * g_filename_to_utf8() on each string.
+ *
+ * Return value: a newly-allocated %NULL-terminated array of strings. Use
+ * g_strfreev() to free it.
+ **/
+gchar **
+gtk_file_selection_get_selections (GtkFileSelection *filesel)
+{
+  GPtrArray *names;
+  gchar **selections;
+  gchar *filename, *dirname;
+  gchar *current, *buf;
+  gint i, count;
+
+  g_return_val_if_fail (GTK_IS_FILE_SELECTION (filesel), NULL);
+
+  names = filesel->selected_names;
+
+  selections = g_new (gchar *, names->len + 2);
+
+  filename = g_strdup (gtk_file_selection_get_filename (filesel));
+
+  if (strlen (filename) == 0)
+    {
+      g_free (filename);
+      return NULL;
+    }
+
+  count = 0;
+  selections[count++] = filename;
+
+  if (names != NULL)
+    {
+      dirname = g_path_get_dirname (filename);
+
+      for (i = 0; i < names->len; i++)
+	{
+	  buf = g_filename_from_utf8 (g_ptr_array_index (names, i), -1,
+				      NULL, NULL, NULL);
+	  current = g_build_filename (dirname, buf, NULL);
+	  g_free (buf);
+
+	  if (compare_filenames (current, filename) != 0)
+	    selections[count++] = current;
+	  else
+	    g_free (current);
+	}
+    }
+
+  selections[count] = NULL;
+
+  return selections;
 }
 
 /**********************************************************************/
@@ -3524,13 +3781,8 @@ static gint
 compare_cmpl_dir (const void *a,
 		  const void *b)
 {
-#if !defined(G_OS_WIN32) && !defined(G_WITH_CYGWIN)
-  return strcmp ((((CompletionDirEntry*)a))->entry_name,
-		 (((CompletionDirEntry*)b))->entry_name);
-#else
-  return g_strcasecmp ((((CompletionDirEntry*)a))->entry_name,
-		       (((CompletionDirEntry*)b))->entry_name);
-#endif
+  return compare_filenames ((((CompletionDirEntry*)a))->entry_name,
+			    (((CompletionDirEntry*)b))->entry_name);
 }
 
 static gint
