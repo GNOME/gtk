@@ -90,6 +90,7 @@ gtk/gtkruler.c
 gtk/gtkscale.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
+gtk/gtkseparatortoolitem.c
 gtk/gtksettings.c
 gtk/gtksizegroup.c
 gtk/gtkspinbutton.c
@@ -128,3 +129,4 @@ modules/input/imti-er.c
 modules/input/imti-et.c
 modules/input/imviqr.c
 modules/input/imxim.c
+tests/testfilechooser.c

@@ -1,3 +1,8 @@
+2003-11-04  Christian Rose  <menthos@menthos.com>
+
+	* POTFILES.in: Added missing files.
+	* sv.po: Updated Swedish translation.
+
 2003-11-04   Vincent van Adrighem  <adrighem@gnome.org>
 
 	* nl.po: Dutch translation updated by Tino Meinen.
