@@ -6,9 +6,6 @@
 /* Define if you don't have vprintf but do have _doprnt.  */
 #undef HAVE_DOPRNT
 
-/* Define if the `long double' type works.  */
-#undef HAVE_LONG_DOUBLE
-
 /* Define if you have the vprintf function.  */
 #undef HAVE_VPRINTF
 
@@ -22,6 +19,7 @@
 #undef HAVE_DOPRNT
 #undef HAVE_FLOAT_H
 #undef HAVE_LIMITS_H
+#undef HAVE_LONG_DOUBLE
 #undef HAVE_SYS_SELECT_H
 #undef HAVE_STRERROR
 #undef HAVE_STRSIGNAL
@@ -31,6 +29,10 @@
 #undef NO_FD_SET
 #undef NO_SYS_ERRLIST
 #undef NO_SYS_SIGLIST
+
+#undef HAVE_WCHAR_H
+#undef HAVE_WCSTR_H
+#undef HAVE_WCTYPE_H
 
 /* #undef PACKAGE */
 /* #undef VERSION */
@@ -50,14 +52,14 @@
 /* The number of bytes in a void *.  */
 #undef SIZEOF_VOID_P
 
+/* Define if you have the memmove function.  */
+#undef HAVE_MEMMOVE
+
 /* Define if you have the strerror function.  */
 #undef HAVE_STRERROR
 
 /* Define if you have the strsignal function.  */
 #undef HAVE_STRSIGNAL
-
-/* Define if you have the memmove function */
-#undef HAVE_MEMMOVE
 
 /* Define if you have the <float.h> header file.  */
 #undef HAVE_FLOAT_H
@@ -67,13 +69,3 @@
 
 /* Define if you have the <values.h> header file.  */
 #undef HAVE_VALUES_H
-
-/* Define if you have the <wchar.h> header file */
-#undef HAVE_WCHAR_H
-
-/* Define if you have the <wcstr.h> header file */
-#undef HAVE_WCSTR_H
-
-/* Define if you have the <wctype.h> header file */
-#undef HAVE_WCTYPE_H
-
