@@ -1,5 +1,7 @@
 2004-09-29  Matthias Clasen  <mclasen@redhat.com>
 
+	Allow keynav to selectable labels (#138085, David Hawthorne):
+	
 	* gtk/gtkdialog.c (gtk_dialog_map): Skip selectable labels when
 	looking for the initial focus widget.
 
