@@ -18,21 +18,21 @@
  */
 
 #include "gtkcombobox.h"
+
+#include "gtkarrow.h"
+#include "gtkbindings.h"
 #include "gtkcelllayout.h"
+#include "gtkcellrenderertext.h"
 #include "gtkcellview.h"
 #include "gtkcellviewmenuitem.h"
-
-#include "gtktreeselection.h"
-#include "gtkframe.h"
-#include "gtktogglebutton.h"
-#include "gtkvseparator.h"
-#include "gtkarrow.h"
-#include "gtkmenu.h"
-#include "gtkmain.h"
 #include "gtkeventbox.h"
-#include "gtkcellrenderertext.h"
-#include "gtkbindings.h"
+#include "gtkframe.h"
 #include "gtkliststore.h"
+#include "gtkmain.h"
+#include "gtkmenu.h"
+#include "gtktogglebutton.h"
+#include "gtktreeselection.h"
+#include "gtkvseparator.h"
 #include "gtkwindow.h"
 
 #include <gdk/gdkkeysyms.h>
@@ -191,8 +191,7 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GParamSpec      *spec);
 
 static void     gtk_combo_box_style_set            (GtkWidget       *widget,
-                                                    GtkStyle        *previous_style,
-                                                    gpointer         data);
+                                                    GtkStyle        *previous);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
                                                     gpointer         data);
 static void     gtk_combo_box_add                  (GtkContainer    *container,
@@ -557,8 +556,7 @@ gtk_combo_box_get_property (GObject    *object,
 
 static void
 gtk_combo_box_style_set (GtkWidget *widget,
-                         GtkStyle  *previous_style,
-                         gpointer   data)
+                         GtkStyle  *previous)
 {
   gboolean appearance;
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
@@ -732,7 +730,8 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
       if (combo_box->priv->popup_window)
         {
           gtk_widget_destroy (combo_box->priv->popup_window);
-          combo_box->priv->popup_window = combo_box->priv->popup_frame = NULL;
+          combo_box->priv->popup_window = NULL;
+	  combo_box->priv->popup_frame = NULL;
         }
 
       combo_box->priv->popup_widget = popup;
@@ -751,6 +750,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
       if (!combo_box->priv->popup_window)
         {
           combo_box->priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
+	  gtk_window_set_resizable (GTK_WINDOW (combo_box->priv->popup_window), FALSE);
           gtk_window_set_screen (GTK_WINDOW (combo_box->priv->popup_window),
                                  gtk_widget_get_screen (GTK_WIDGET (combo_box)));
 
@@ -759,6 +759,7 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
                                      GTK_SHADOW_NONE);
           gtk_container_add (GTK_CONTAINER (combo_box->priv->popup_window),
                              combo_box->priv->popup_frame);
+
           gtk_widget_show (combo_box->priv->popup_frame);
         }
 
@@ -818,7 +819,7 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
 void
 gtk_combo_box_popup (GtkComboBox *combo_box)
 {
-  gint x, y, width, height, popup_height;
+  gint x, y, width, height;
   GtkWidget *sample;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
@@ -862,9 +863,7 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
             GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
     }
 
-  gtk_window_get_size (combo_box->priv->popup_window, NULL, &popup_height);
   gtk_widget_set_size_request (combo_box->priv->popup_window, width, -1);
-  gtk_window_resize (combo_box->priv->popup_window, width, popup_height);
   
   if (GTK_WIDGET_NO_WINDOW (sample))
     {
@@ -1982,6 +1981,7 @@ gtk_combo_box_list_remove_grabs (GtkComboBox *combo_box)
   if (GTK_WIDGET_HAS_GRAB (combo_box->priv->popup_window))
     {
       gtk_grab_remove (combo_box->priv->popup_window);
+      gdk_keyboard_ungrab (GDK_CURRENT_TIME);
       gdk_pointer_ungrab (GDK_CURRENT_TIME);
     }
 }
@@ -2585,7 +2585,7 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
       combo_box->priv->wrap_width = width;
       
       gtk_combo_box_relayout (combo_box);
-      gtk_combo_box_style_set (combo_box, NULL, NULL);
+      gtk_combo_box_style_set (GTK_WIDGET (combo_box), NULL);
       
       g_object_notify (G_OBJECT (combo_box), "wrap_width");
     }
