@@ -1,3 +1,8 @@
+2004-03-10  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkstyle.c (draw_dot): Remove spurious semicolon.  Thanks to
+	Kjartan Maraas for pointing it out.
+
 Wed Mar 10 23:40:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_popup): Set the background

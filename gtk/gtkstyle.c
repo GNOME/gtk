@@ -4786,7 +4786,7 @@ draw_dot (GdkWindow    *window,
       gdk_draw_point (window, light_gc, x, y);
       gdk_draw_point (window, light_gc, x+1, y+1);
     }
-  else if (size == 3);
+  else if (size == 3)
     {
       gdk_draw_point (window, light_gc, x, y);
       gdk_draw_point (window, light_gc, x+1, y);
