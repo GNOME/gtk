@@ -469,7 +469,6 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 	    gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	  return TRUE;
 	}
-      
       menu_shell->button = 0;
       menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent*) event);
 
@@ -614,6 +613,15 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
 	return TRUE;
 
       menu_item = GTK_MENU_ITEM (event_widget);
+
+      if (menu_shell->have_xgrab && event->mode == GDK_CROSSING_UNGRAB)
+	{
+	  /* This happens on Windows, where a pointer grab is not permanent,
+	   * but the user might switch to another app using the taskbar
+	   * or Alt-Tab.
+	   */
+	  gtk_menu_shell_deactivate (menu_shell);
+	}
 
       if (menu_shell->ignore_leave)
 	{

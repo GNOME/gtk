@@ -126,7 +126,7 @@ static GList *client_filters;	/* Filters for client messages */
 static gboolean p_grab_automatic;
 static GdkEventMask p_grab_mask;
 static gboolean p_grab_owner_events, k_grab_owner_events;
-static HCURSOR p_grab_cursor;
+static HCURSOR p_grab_cursor = NULL;
 
 static GList *client_filters;	            /* Filters for client messages */
 
@@ -140,6 +140,7 @@ static GSourceFuncs event_funcs = {
 static GPollFD event_poll_fd;
 
 static GdkWindow *curWnd = NULL;
+static GdkWindow *curFocusWnd = NULL;
 static HWND active = NULL;
 static gint curX, curY;
 static gdouble curXroot, curYroot;
@@ -538,28 +539,29 @@ gdk_pointer_grab (GdkWindow *	  window,
   if (return_val == Success)
     {
       if (!GDK_DRAWABLE_DESTROYED (window))
-      {
-	GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x %s\n",
-				   xwindow,
-				   (owner_events ? "TRUE" : "FALSE"),
-				   xcursor,
-				   event_mask_string (event_mask)));
-	p_grab_mask = event_mask;
-	p_grab_owner_events = (owner_events != 0);
-	p_grab_automatic = FALSE;
+	{
+	  GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x %s\n",
+				     xwindow,
+				     (owner_events ? "TRUE" : "FALSE"),
+				     xcursor,
+				     event_mask_string (event_mask)));
+	  p_grab_mask = event_mask;
+	  p_grab_owner_events = (owner_events != 0);
+	  p_grab_automatic = FALSE;
+	  
+	  SetCapture (xwindow);
 
-	SetCapture (xwindow);
-
-	return_val = GrabSuccess;
-      }
+	  p_grab_window = window;
+	  if (xcursor != NULL)
+	    {
+	      p_grab_cursor = CopyCursor (xcursor);
+	      SetCursor (p_grab_cursor);
+	    }
+	  
+	  return_val = GrabSuccess;
+	}
       else
 	return_val = AlreadyGrabbed;
-    }
-  
-  if (return_val == GrabSuccess)
-    {
-      p_grab_window = window;
-      p_grab_cursor = xcursor;
     }
   
   return return_val;
@@ -583,13 +585,14 @@ gdk_pointer_grab (GdkWindow *	  window,
 void
 gdk_pointer_ungrab (guint32 time)
 {
+  GDK_NOTE (EVENTS, g_print ("gdk_pointer_ungrab\n"));
   if (gdk_input_vtable.ungrab_pointer)
     gdk_input_vtable.ungrab_pointer (time);
   if (GetCapture () != NULL)
-    ReleaseCapture ();
-  GDK_NOTE (EVENTS, g_print ("gdk_pointer_ungrab\n"));
-
-  p_grab_window = NULL;
+    {
+      p_grab_window = NULL;
+      ReleaseCapture ();
+    }
 }
 
 /*
@@ -2757,11 +2760,20 @@ print_event (GdkEvent *event)
       break;
     case GDK_ENTER_NOTIFY:
     case GDK_LEAVE_NOTIFY:
-      g_print ("%s ",
+      g_print ("%s %s ",
 	       (event->crossing.detail == GDK_NOTIFY_INFERIOR ? "INFERIOR" :
 		(event->crossing.detail == GDK_NOTIFY_ANCESTOR ? "ANCESTOR" :
-		 (event->crossing.detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
+		 (event->crossing.detail == GDK_NOTIFY_VIRTUAL ? "VIRTUAL" :
+		  (event->crossing.detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
+		   (event->crossing.detail == GDK_NOTIFY_NONLINEAR_VIRTUAL ? "NONLINEAR_VIRTUAL" :
+		    "???"))))),
+	       (event->crossing.mode == GDK_CROSSING_NORMAL ? "NORMAL" :
+		(event->crossing.mode == GDK_CROSSING_GRAB ? "GRAB" :
+		 (event->crossing.mode == GDK_CROSSING_UNGRAB ? "UNGRAB" :
 		  "???"))));
+      break;
+    case GDK_FOCUS_CHANGE:
+      g_print ("%s ", event->focus_change.in ? "IN" : "OUT");
       break;
     case GDK_SCROLL:
       g_print ("%s ",
@@ -2788,12 +2800,13 @@ gdk_window_is_child (GdkWindow *parent,
 }
 
 static void
-synthesize_enter_or_leave_event (GdkWindow    *window,
-				 MSG          *xevent,
-				 GdkEventType  type,
-				 GdkNotifyType detail,
-				 gint          x,
-				 gint          y)
+synthesize_enter_or_leave_event (GdkWindow    	*window,
+				 MSG          	*xevent,
+				 GdkEventType 	 type,
+				 GdkNotifyType	 detail,
+				 GdkCrossingMode mode,
+				 gint            x,
+				 gint            y)
 {
   GdkEvent *event;
   
@@ -2808,9 +2821,10 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
   event->crossing.y = y;
   event->crossing.x_root = xevent->pt.x;
   event->crossing.y_root = xevent->pt.y;
-  event->crossing.mode = GDK_CROSSING_NORMAL;
+  event->crossing.mode = mode;
   event->crossing.detail = detail;
-  event->crossing.focus = TRUE; /* ??? */
+  event->crossing.focus = (window == curFocusWnd
+			   || gdk_window_is_child (curFocusWnd, window));
   event->crossing.state = 0; /* ??? */
   
   gdk_event_queue_append (event);
@@ -2824,9 +2838,10 @@ synthesize_enter_or_leave_event (GdkWindow    *window,
 }
 
 static void
-synthesize_leave_event (GdkWindow    *window,
-			MSG          *xevent,
-			GdkNotifyType detail)
+synthesize_leave_event (GdkWindow      *window,
+			MSG            *xevent,
+			GdkNotifyType   detail,
+			GdkCrossingMode mode)
 {
   POINT pt;
 
@@ -2841,10 +2856,10 @@ synthesize_leave_event (GdkWindow    *window,
       pt.y = curY;
       ClientToScreen (GDK_DRAWABLE_XID (curWnd), &pt);
       ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
-      synthesize_enter_or_leave_event (window, xevent, GDK_LEAVE_NOTIFY, detail, pt.x, pt.y);
+      synthesize_enter_or_leave_event (window, xevent, GDK_LEAVE_NOTIFY, detail, mode, pt.x, pt.y);
     }
   else
-    synthesize_enter_or_leave_event (window, xevent, GDK_LEAVE_NOTIFY, detail, curX, curY);
+    synthesize_enter_or_leave_event (window, xevent, GDK_LEAVE_NOTIFY, detail, mode, curX, curY);
 
 }
   
@@ -2858,8 +2873,9 @@ synthesize_enter_event (GdkWindow    *window,
   if (!GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_ENTER_NOTIFY_MASK)
     return;
 
-  /* Enter events are at LOWORD (xevent->lParam), HIWORD
-   * (xevent->lParam) in xevent->hwnd */
+  /* Enter events are at (LOWORD(xevent->lParam), HIWORD(xevent->lParam))
+   * in xevent->hwnd
+   */
 
   pt.x = LOWORD (xevent->lParam);
   pt.y = HIWORD (xevent->lParam);
@@ -2868,7 +2884,8 @@ synthesize_enter_event (GdkWindow    *window,
       ClientToScreen (xevent->hwnd, &pt);
       ScreenToClient (GDK_DRAWABLE_XID (window), &pt);
     }
-  synthesize_enter_or_leave_event (window, xevent, GDK_ENTER_NOTIFY, detail, pt.x, pt.y);
+  synthesize_enter_or_leave_event (window, xevent, GDK_ENTER_NOTIFY,
+				   detail, GDK_CROSSING_NORMAL, pt.x, pt.y);
 }
   
 static void
@@ -2885,28 +2902,47 @@ synthesize_enter_events (GdkWindow    *from,
 }
 			 
 static void
-synthesize_leave_events (GdkWindow    *from,
-			 GdkWindow    *to,
-			 MSG          *xevent,
-			 GdkNotifyType detail)
+synthesize_leave_events (GdkWindow      *from,
+			 GdkWindow      *to,
+			 MSG            *xevent,
+			 GdkNotifyType   detail,
+			 GdkCrossingMode mode)
 {
   GdkWindow *next = gdk_window_get_parent (from);
   
-  synthesize_leave_event (from, xevent, detail);
+  synthesize_leave_event (from, xevent, detail, mode);
   if (next != to)
-    synthesize_leave_events (next, to, xevent, detail);
+    synthesize_leave_events (next, to, xevent, detail, mode);
 }
 			 
+static void
+synthesize_leave_app_events (MSG             *xevent,
+			     GdkCrossingMode  mode)
+{
+  GdkWindow *intermediate;
+
+  synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_NONLINEAR, mode);
+  intermediate = gdk_window_get_parent (curWnd);
+  if (intermediate != gdk_parent_root)
+    {
+      synthesize_leave_events (intermediate, gdk_parent_root,
+			       xevent, GDK_NOTIFY_NONLINEAR_VIRTUAL, mode);
+    }
+  gdk_window_unref (curWnd);
+  curWnd = NULL;
+}
+
 static void
 synthesize_crossing_events (GdkWindow *window,
 			    MSG       *xevent)
 {
-  GdkWindow *intermediate, *tem, *common_ancestor;
+  GdkWindow *intermediate, *common_ancestor;
 
   if (gdk_window_is_child (curWnd, window))
     {
       /* Pointer has moved to an inferior window. */
-      synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_INFERIOR);
+      synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_INFERIOR,
+			      GDK_CROSSING_NORMAL);
       
       /* If there are intermediate windows, generate ENTER_NOTIFY
        * events for them
@@ -2922,7 +2958,8 @@ synthesize_crossing_events (GdkWindow *window,
   else if (gdk_window_is_child (window, curWnd))
     {
       /* Pointer has moved to an ancestor window. */
-      synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_ANCESTOR);
+      synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_ANCESTOR,
+			      GDK_CROSSING_NORMAL);
       
       /* If there are intermediate windows, generate LEAVE_NOTIFY
        * events for them
@@ -2930,26 +2967,29 @@ synthesize_crossing_events (GdkWindow *window,
       intermediate = gdk_window_get_parent (curWnd);
       if (intermediate != window)
 	{
-	  synthesize_leave_events (intermediate, window, xevent, GDK_NOTIFY_VIRTUAL);
+	  synthesize_leave_events (intermediate, window,
+				   xevent, GDK_NOTIFY_VIRTUAL,
+				   GDK_CROSSING_NORMAL);
 	}
     }
   else if (curWnd)
     {
       /* Find least common ancestor of curWnd and window */
-      tem = curWnd;
+      common_ancestor = curWnd;
       do {
-	common_ancestor = gdk_window_get_parent (tem);
-	tem = common_ancestor;
+	common_ancestor = gdk_window_get_parent (common_ancestor);
       } while (common_ancestor &&
 	       !gdk_window_is_child (common_ancestor, window));
       if (common_ancestor)
 	{
-	  synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_NONLINEAR);
+	  synthesize_leave_event (curWnd, xevent, GDK_NOTIFY_NONLINEAR,
+				  GDK_CROSSING_NORMAL);
 	  intermediate = gdk_window_get_parent (curWnd);
 	  if (intermediate != common_ancestor)
 	    {
 	      synthesize_leave_events (intermediate, common_ancestor,
-				       xevent, GDK_NOTIFY_NONLINEAR_VIRTUAL);
+				       xevent, GDK_NOTIFY_NONLINEAR_VIRTUAL,
+				       GDK_CROSSING_NORMAL);
 	    }
 	  intermediate = gdk_window_get_parent (window);
 	  if (intermediate != common_ancestor)
@@ -4097,34 +4137,62 @@ gdk_event_translate (GdkEvent *event,
 		g_print ("WM_NCMOUSEMOVE: %#x  x,y: %d %d\n",
 			 xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
-      if (p_TrackMouseEvent == NULL
-	  && curWnd != NULL
-	  && (GDK_WINDOW_WIN32DATA (curWnd)->event_mask & GDK_LEAVE_NOTIFY_MASK))
+
+      if (p_TrackMouseEvent != NULL)
+	break;
+
+      if (curWnd == NULL)
+	break;
+
+      synthesize_leave_app_events (xevent, GDK_CROSSING_NORMAL);
+      break;
+
+#if 0
+    /* Umm, no, this is wrong. Deactivating a window has noting to do with
+     * pointer leave events.
+     */
+    case WM_ACTIVATE:
+      GDK_NOTE (EVENTS, g_print ("WM_ACTIVATE: %#x %d\n",
+				 xevent->hwnd, xevent->wParam));
+      /* If being activated, just ignore it, let other messages
+       * generate the enter event when pointer is really in some of
+       * our window.
+       */
+      if (LOWORD (xevent->wParam) != WA_INACTIVE)
+	break;
+
+      /* If we already have generated a leave event, ignore it. */
+      if (curWnd == NULL)
+	break;
+
+      synthesize_leave_app_events (xevent, GDK_CROSSING_NORMAL);
+      break;
+#endif
+
+    case WM_CAPTURECHANGED:
+      GDK_NOTE (EVENTS, g_print ("WM_CAPTURECHANGED: %#x %#x\n",
+				 xevent->hwnd, xevent->lParam));
+      if (p_grab_window != NULL)
 	{
-	  GDK_NOTE (EVENTS, g_print ("...synthesizing LEAVE_NOTIFY event\n"));
+	  /* We aren't calling gdk_pointer_ungrab() ourselves. */
+	  if (xevent->lParam != 0)
+	    newwindow = gdk_window_lookup ((HWND) xevent->lParam);
+	  else
+	    newwindow = NULL;
 
-	  event->crossing.type = GDK_LEAVE_NOTIFY;
-	  event->crossing.window = curWnd;
-	  event->crossing.subwindow = NULL;
-	  event->crossing.time = xevent->time;
-	  event->crossing.x = curX;
-	  event->crossing.y = curY;
-	  event->crossing.x_root = curXroot;
-	  event->crossing.y_root = curYroot;
-	  event->crossing.mode = GDK_CROSSING_NORMAL;
-	  event->crossing.detail = GDK_NOTIFY_NONLINEAR;
+	  if (newwindow == NULL)
+	    synthesize_leave_app_events (xevent, GDK_CROSSING_UNGRAB);
 
-	  event->crossing.focus = TRUE; /* ??? */
-	  event->crossing.state = 0; /* ??? */
-	  return_val = TRUE;
+	  p_grab_window = NULL;
 	}
 
-      if (curWnd)
+      if (p_grab_cursor != NULL)
 	{
-	  gdk_window_unref (curWnd);
-	  curWnd = NULL;
+	  SetCursor (NULL);
+	  if (!DestroyCursor (p_grab_cursor))
+	    WIN32_API_FAILED ("DestroyCursor");
+	  p_grab_cursor = NULL;
 	}
-
       break;
 
     case WM_MOUSEWHEEL:
@@ -4132,7 +4200,7 @@ gdk_event_translate (GdkEvent *event,
 				 xevent->hwnd, HIWORD (xevent->wParam)));
 
       event->scroll.type = GDK_SCROLL;
-
+      
       /* WM_MOUSEWHEEL seems to be delivered to the focus window Work
        * around that, we want it to the window that the mouse is
        * in. Also, the position is in screen coordinates, not client
@@ -4184,7 +4252,6 @@ gdk_event_translate (GdkEvent *event,
       event->scroll.source = GDK_SOURCE_MOUSE;
       event->scroll.deviceid = GDK_CORE_POINTER;
       return_val = !GDK_DRAWABLE_DESTROYED (window);
-      
       break;
 
 #ifdef USE_TRACKMOUSEEVENT
@@ -4232,12 +4299,20 @@ gdk_event_translate (GdkEvent *event,
 				  "SET" : "KILL"),
 				 xevent->hwnd));
       
+      if (xevent->message == WM_SETFOCUS)
+	curFocusWnd = window;
+      else
+	curFocusWnd = NULL;
+
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_FOCUS_CHANGE_MASK))
 	break;
 
       event->focus_change.type = GDK_FOCUS_CHANGE;
       event->focus_change.window = window;
-      event->focus_change.in = (xevent->message == WM_SETFOCUS);
+      if (xevent->message == WM_SETFOCUS)
+	event->focus_change.in = TRUE;
+      else
+	event->focus_change.in = FALSE;
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       break;
 
@@ -4302,9 +4377,12 @@ gdk_event_translate (GdkEvent *event,
       if (LOWORD (xevent->lParam) != HTCLIENT)
 	break;
 
+#if 0 /* We never get WM_SETCURSOR if grabbed, so this test never fires */
       if (p_grab_window != NULL && p_grab_cursor != NULL)
 	xcursor = p_grab_cursor;
-      else if (!GDK_DRAWABLE_DESTROYED (window))
+      else 
+#endif
+      if (!GDK_DRAWABLE_DESTROYED (window))
 	xcursor = GDK_WINDOW_WIN32DATA (window)->xcursor;
       else
 	xcursor = NULL;
@@ -4537,7 +4615,6 @@ gdk_event_translate (GdkEvent *event,
 
       if (window != NULL)
 	gdk_window_destroy_notify (window);
-
       break;
 
 #ifdef HAVE_WINTAB

@@ -1,3 +1,42 @@
+2001-02-25  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c (gdk_pointer_grab): Set grabbing
+	cursor here. When mouse is captured, no WM_SETCURSOR messages are
+	sent. Copy the cursor before setting.
+	(print_event): Print out more details of crossing and focus change
+	events.
+	(synthesize_enter_or_leave_event, etc): Also pass the
+	GdkCrossingMode. Set focus field correctly.
+	(synthesize_leave_app_events): New function, to generate the
+	GDK_NOTIFY_NONLINEAR and GDK_NOTIFY_NONLINEAR_VIRTUAL leave events
+	when the pointer has moved to another app.
+	(gdk_event_translate): Use it for WM_NCMOUSEMOVE. 
+
+	Handle WM_CAPTURECHANGED messages, for which we now generate
+	GDK_CROSSING_UNGRAB leave notifications, and destroy the grabbing
+	cursor.
+
+	At first I thought of handling WM_ACTIVATE messages about
+	deactivated windows to generate (normal) leave notifications, but
+	that is wrong (ifdeffed out).
+	
+	Keep track of focus window.
+	
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_drawable): Correct
+	function name in GDK_NOTE call.
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_leave_notify): If we think we
+	have the pointer grabbed, but get a GDK_CROSSING_UNGRAB leave
+	notification, deactivate. This happens on Windows when switching
+	apps. This now fixes menus being left active when switching apps.
+
+	By jpe@archaeopteryx.com:
+	
+	* gtk/makefile.msc: Get gmodule library from right place.
+
+	* gtk/gtktable.c (gtk_table_attach): Backported fix from gtk+
+	1.2.something.
+
 2001-02-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/bdfcursor.c: New file. A program that generates

@@ -645,7 +645,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   src_private = (GdkDrawablePrivate*) src;
   gc_private = (GdkGCPrivate*) gc;
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_pixmap: dest: %#x "
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: dest: %#x "
 			   "src: %#x %dx%d@+%d+%d"
 			   " dest: %#x @+%d+%d\n",
 			   GDK_DRAWABLE_XID (drawable),
