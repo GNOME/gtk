@@ -1,3 +1,10 @@
+Mon Aug 26 12:21:16 BST 2002  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/package-db-tutorial.sh: cleanups
+
+	* docs/tutorial/gtk-tut.sgml: new content for the
+	ItemFactory section. Originally from Robert Cleaver Ancell.
+
 2002-08-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilesel.c: Don't include <winsock.h> on Cygwin (#91654,

@@ -10,6 +10,7 @@
 
 TARGET=`pwd`/gtk-tut.sgml
 IMAGES="`pwd`/images"
+IMAGESDIR="images"
 EXAMPLES=`pwd`/../../examples
 
 PATH=`pwd`:$PATH
@@ -46,7 +47,7 @@ if [ ! -d sgml ]; then
   mkdir sgml
 fi
 
-(cd sgml ; cp $TARGET . ; cp -R $IMAGES . ; rm -rf images/CVS)
+(cd sgml ; cp $TARGET . ; cp -R $IMAGES . ; rm -rf $IMAGESDIR/CVS)
 echo "done"
 
 # HTML Format
@@ -59,8 +60,8 @@ if [ ! -d html ]; then
   mkdir html
 fi
 
-(db2html gtk-tut.sgml ; mv gtk-tut/* html ; cp -R $IMAGES html ; rm -rf gtk-tut) > /dev/null
-(cd html ; ln -s book1.html index.html ; rm -rf images/CVS)
+(db2html gtk-tut.sgml ; mv gtk-tut/* html ; cp -R $IMAGES html ; rm html/$IMAGESDIR/*.eps ; rm -rf gtk-tut) > /dev/null
+(cd html ; ln -s book1.html index.html ; rm -rf $IMAGESDIR/CVS)
 echo "done"
 
 # PS, PDF and DVI Format
@@ -81,28 +82,11 @@ if [ ! -d pdf ]; then
   mkdir pdf
 fi
 
-#sed 's/gtk_tut_packbox1.jpg/gtk_tut_packbox1.eps/ ; s/gtk_tut_packbox2.jpg/gtk_tut_packbox2.eps/ ; s/gtk_tut_table.jpg/gtk_tut_table.eps/' gtk-tut.sgml > ps/gtk-tut.sgml
 sed "s/images\/\(.*\)\.png/images\/\1.eps/g" gtk-tut.sgml > ps/gtk-tut.sgml
-cp -R ../images ps
+cp -R $IMAGES ps
 (cd ps ; db2dvi gtk-tut.sgml ; dvips gtk-tut.dvi -o gtk-tut.ps ; dvipdf gtk-tut.dvi ../pdf/gtk-tut.pdf) > /dev/null 2>&1
-#sed 's/gtk_tut_packbox1.jpg/gtk_tut_packbox1.eps/ ; s/gtk_tut_packbox2.jpg/gtk_tut_packbox2.eps/ ; s/gtk_tut_table.jpg/gtk_tut_table.eps/' gtk-tut.sgml > ps/gtk-tut.sgml
-#sed "s/images\/\(.*\)\.png/images\/\1.eps/g" gtk-tut.sgml > ps/gtk-tut.sgml
-#cp -R images ps
-(cd ps ; rm gtk-tut.aux gtk-tut.log gtk-tut.sgml gtk-tut.tex ; rm -Rf images) > /dev/null 2>&1
+(cd ps ; rm gtk-tut.aux gtk-tut.log gtk-tut.sgml gtk-tut.tex ; rm -Rf $IMAGESDIR) > /dev/null 2>&1
 echo "done"
-
-# PDF Format
-#echo -n "Formatting into PDF.... "
-#if [ ! -d pdf ]; then
-#  if [ -e pdf ]; then
-#    echo "ERROR: pdf is not a directory"
-#    exit
-#  fi
-#  mkdir pdf
-#fi
-
-#(db2pdf gtk-tut.sgml ; mv gtk-tut.pdf pdf) > /dev/null
-#echo "done"
 
 # RTF Format
 echo -n "Formatting into RTF.... "
@@ -115,7 +99,7 @@ if [ ! -d rtf ]; then
 fi
 
 (db2rtf gtk-tut.sgml ; mv gtk-tut.rtf rtf) > /dev/null
-cp -R $IMAGES rtf
+(cd rtf ; cp -R $IMAGES . ; rm -f $IMAGESDIR/*.eps ; rm -rf $IMAGESDIR/CVS)
 echo "done"
 
 # Copy examples
@@ -125,7 +109,7 @@ cp -R $EXAMPLES .
 echo "done"
 
 rm -f *
-rm -rf images
+rm -rf $IMAGESDIR
 
 # Package it all up
 echo -n "Creating packages.... "

@@ -5,7 +5,7 @@
 <book id="gtk-tut">
 
 <bookinfo>
-    <date>August 24, 2002</date>
+    <date>August 26, 2002</date>
     <title>GTK+ 2.0 Tutorial</title>
     <authorgroup>
       <author>
@@ -8586,6 +8586,326 @@ table, bind keys to menu functions.</para>
 <para>Now that we've shown you the hard way, here's how you do it using the
 gtk_item_factory calls.</para>
 
+<para>ItemFactory creates a menu out of an array of ItemFactory entries. This 
+means you can define your menu in its simplest form and then create the
+menu/menubar widgets with a minimum of function calls.</para>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2 id="sec-ItemFactoryEntries">
+<title>ItemFactory entries</title>
+
+<para>At the core of ItemFactory is the ItemFactoryEntry. This structure defines
+one menu item, and when an array of these entries is defined a whole
+menu is formed. The ItemFactory entry struct definition looks like this:</para>
+
+<programlisting role="C">
+struct _GtkItemFactoryEntry
+{
+  gchar *path;
+  gchar *accelerator;
+
+  GtkItemFactoryCallback callback;
+  guint                  callback_action;
+
+  gchar          *item_type;
+};
+</programlisting>
+
+<para>Each field defines part of the menu item.</para>
+
+<para><literal>*path</literal> is a string which defines both the name and the
+path of a menu item, for example, "/File/Open" would be the name of a menu
+item which would come under the ItemFactory entry with path "/File". Note however
+that "/File/Open" would be displayed in the File menu as "Open". Also note
+since the forward slashes are used to define the path of the menu,
+they cannot be used as part of the name. A letter preceded by an underscore
+indicates an accelerator (shortcut) key once the menu is open.</para>
+
+<para>
+<literal>*accelerator</literal> is a string that indicates a key combination
+that can be used as a shortcut to that menu item. The string can be made up
+of either a single character, or a combination of modifier keys with a single
+character. It is case insensitive.</para>
+
+
+<para>The available modifier keys are:</para>
+
+<programlisting role="C">
+"&lt;ALT&gt;                             - alt
+"&lt;CTL&gt;" or "&lt;CTRL&gt;" or "&lt;CONTROL&gt;" - control
+"&lt;MOD1&gt;" to "&lt;MOD5&gt;"               - modn
+"&lt;SHFT&gt;" or "&lt;SHIFT&gt;"              - shift
+</programlisting>
+
+<para>Examples:</para>
+<programlisting role="C">
+"&lt;ConTroL&gt;a"
+"&lt;SHFT&gt;&lt;ALT&gt;&lt;CONTROL&gt;X"
+</programlisting>
+
+<para>
+<literal>callback</literal> is the function that is called when the menu item
+emits the "activate" signal. The form of the callback is described
+in the <link linkend="sec-ItemFactoryCallback">Callback Description</link>
+section.</para>
+
+<para>
+The value of <literal>callback_action</literal> is passed to the callback
+function. It also affects the function prototype, as shown
+in the <link linkend="sec-ItemFactoryCallback">Callback Description</link>
+section.</para>
+
+<para>
+<literal>item_type</literal> is a string that defines what type of widget is
+packed into the menu items container. It can be:</para>
+
+<programlisting role="C">
+NULL or "" or "&lt;Item&gt;" - create a simple item
+"&lt;Title&gt;"              - create a title item
+"&lt;CheckItem&gt;"          - create a check item
+"&lt;ToggleItem&gt;"         - create a toggle item
+"&lt;RadioItem&gt;"          - create a (root) radio item
+"Path"                 - create a sister radio item
+"&lt;Tearoff&gt;"            - create a tearoff
+"&lt;Separator&gt;"          - create a separator
+"&lt;Branch&gt;"             - create an item to hold submenus (optional)
+"&lt;LastBranch&gt;"         - create a right justified branch
+</programlisting>
+
+<para>Note that &lt;LastBranch&gt; is only useful for one submenu of
+a menubar.</para>
+
+<!-- ----------------------------------------------------------------- -->
+<sect3 id="sec-ItemFactoryCallback">
+<title>Callback Description</title>
+
+<para>
+The callback for an ItemFactory entry can take two forms. If
+<literal>callback_action</literal> is zero, it is of the following
+form:</para>
+
+<programlisting role="C">
+void callback(void)
+</programlisting>
+
+<para>otherwise it is of the form:</para>
+
+<programlisting role="C">
+void callback(gpointer    callback_data,
+              guint       callback_action,
+              GtkWidget  *widget)
+</programlisting>
+
+<para>
+<literal>callback_data</literal> is a pointer to an arbitrary piece of data and
+is set during the call to gtk_item_factory_create_items().</para>
+
+<para>
+<literal>callback_action</literal> is the same value as
+<literal>callback_action</literal> in the ItemFactory entry.</para>
+
+<para>
+<literal>*widget</literal> is a pointer to a menu item widget
+(described in <link linkend="sec-ManualMenuCreation">Manual Menu Creation</link>).
+</para>
+</sect3>
+
+<!-- ----------------------------------------------------------------- -->
+<sect3 id="sec-ItemFactoryEntryExamples">
+<title>ItemFactory entry examples</title>
+
+<para>Creating a simple menu item:</para>
+
+<programlisting role="C">
+GtkItemFactoryEntry entry = {"/_File/_Open...", "&lt;CTRL&gt;O", print_hello,
+				0, "&lt;Item&gt;"};
+</programlisting>
+
+<para>This will define a new simple menu entry "/File/Open" (displayed as "Open"),
+under the menu entry "/File". It has the accelerator (shortcut) control+'O'
+that when clicked calls the function print_hello(). print_hello() is of
+the form <literal>void print_hello(void)</literal> since the callback_action
+field is zero. When displayed the 'O' in "Open" will be underlined and if the
+menu item is visible on the screen pressing 'O' will activate the item. Note
+that "File/_Open" could also have been used as the path instead of
+"/_File/_Open".</para>
+
+<para>Creating an entry with a more complex callback:</para>
+
+<programlisting role="C">
+GtkItemFactoryEntry entry = {"/_View/Display _FPS", NULL, print_state,
+				7,"&lt;CheckItem&gt;"};
+</programlisting>
+
+<para>This defines a new menu item displayed as "Display FPS" which is under
+the menu item "View". When clicked the function print_state() will be called.
+Since <literal>callback_action</literal> is not zero print_state() is of the
+form:</para>
+
+<programlisting role="C">
+void print_state(gpointer    callback_data,
+                 guint       callback_action,
+                 GtkWidget  *widget)
+</programlisting>
+
+<para>with <literal>callback_action</literal> equal to 7.</para>
+
+<para>Creating a radio button set:</para>
+
+<programlisting role="C">
+GtkItemFactoryEntry entry1 = {"/_View/_Low Resolution", NULL, change_resolution,
+				1, "&lt;RadioButton&gt;"};
+GtkItemFactoryEntry entry2 = {"/_View/_High Resolution", NULL, change_resolution,
+				2, "/View/Low Resolution"};
+</programlisting>
+
+<para><literal>entry1</literal> defines a lone radio button that when toggled
+calls the function change_resolution() with the parameter
+<literal>callback_action</literal> equal to 1. change_resolution() is of
+the form:</para>
+
+<programlisting role="C">
+void change_resolution(gpointer    callback_data,
+                       guint       callback_action,
+                       GtkWidget  *widget)
+</programlisting>
+
+<para><literal>entry2</literal> defines a radio button that belongs to the
+radio group that entry1 belongs to. It calls the same function when toggled
+but with the parameter <literal>callback_action</literal> equal to 2. Note that
+the item_type of <literal>entry2</literal> is the path of entry1
+<emphasis>without</emphasis> the accelerators ('_'). If another radio button was
+required in the same group then it would be defined in the same way as
+<literal>entry2</literal> was with its <literal>item_type</literal> again
+equal to "/View/Low Resolution".</para>
+</sect3>
+
+<!-- ----------------------------------------------------------------- -->
+<sect3 id="sec-ItemFactoryEntryArrays">
+<title>ItemFactoryEntry Arrays</title>
+
+<para>An ItemFactoryEntry on it's own however isn't useful. An array of
+entries is what's required to define a menu. Below is an example of how
+you'd declare this array.</para>
+
+<programlisting role="C">
+static GtkItemFactoryEntry entries[] = {
+  { "/_File",         NULL,      NULL,         0, "&lt;Branch&gt;" },
+  { "/File/tear1",    NULL,      NULL,         0, "&lt;Tearoff&gt;" },
+  { "/File/_New",     "&lt;CTRL&gt;N", new_file,     1, "&lt;Item&gt;" },
+  { "/File/_Open...", "&lt;CTRL&gt;O", open_file,    1, "&lt;Item&gt;" },
+  { "/File/sep1",     NULL,      NULL,         0, "&lt;Seperator&gt;" },
+  { "/File/_Quit",    "&lt;CTRL&gt;Q", quit_program, 0, "&lt;Item&gt;"} };
+</programlisting>
+</sect3>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2 id="sec-ItemFactoryCreation">
+<title>Creating an ItemFactory</title>
+
+<para>An array of GtkItemFactoryEntry items defines a menu. Once this
+array is defined then the item factory can be created. The function that
+does this is:</para>
+
+<programlisting role="C">
+GtkItemFactory* gtk_item_factory_new( GtkType        container_type,
+                                      const gchar   *path,
+                                      GtkAccelGroup *accel_group );
+</programlisting>
+
+<para><literal>container_type</literal> can be one of:</para>
+
+<programlisting role="C">
+GTK_TYPE_MENU
+GTK_TYPE_MENU_BAR
+GTK_TYPE_OPTION_MENU
+</programlisting>
+
+<para><literal>container_type</literal> defines what type of menu
+you want, so when you extract it later it is either a menu (for pop-ups
+for instance), a menu bar, or an option menu (like a combo box but with
+a menu of pull downs).</para>
+
+<para><literal>path</literal> defines the path of the root of the menu.
+Basically it is a unique name for the root of the menu, it must be
+surrounded by "&lt;&gt;". This is important for the naming of the
+accelerators and should be unique. It should be unique both for each
+menu and between each program. For example in a program named 'foo', the
+main menu should be called "&lt;FooMain&gt;", and a pop-up menu
+"&lt;FooImagePopUp&gt;", or similar. What's important is that they're unique.</para>
+
+<para><literal>accel_group</literal> is a pointer to a gtk_accel_group. The
+item factory sets up the accelerator table while generating menus. New
+accelerator groups are generated by gtk_accel_group_new().</para>
+
+<para>But this is just the first step. To convert the array of GtkItemFactoryEntry
+information into widgets the following function is used:</para>
+
+<programlisting role="C">
+void gtk_item_factory_create_items( GtkItemFactory      *ifactory,
+                                    guint                n_entries,
+                                    GtkItemFactoryEntry *entries,
+                                    gpointer             callback_data );
+</programlisting>
+
+<para><literal>*ifactory</literal> a pointer to the above created item factory.</para>
+<para><literal>n_entries</literal> is the number of entries in the
+GtkItemFactoryEntry array.</para>
+<para><literal>*entries</literal> is a pointer to the GtkItemFactoryEntry array.</para>
+<para><literal>callback_data</literal> is what gets passed to all the callback functions
+for all the entries with callback_action != 0.</para>
+
+<para>The accelerator group has now been formed, so you'll probably want
+to attach it to the window the menu is in:</para>
+
+<programlisting role="C">
+void gtk_window_add_accel_group( GtkWindow     *window,
+                                 GtkAccelGroup *accel_group);
+</programlisting>
+</sect2>
+
+<!-- ----------------------------------------------------------------- -->
+<sect2 id="sec-UsingMenuandItems">
+<title>Making use of the menu and its menu items</title>
+
+<para>The last thing to do is make use of the menu. The following function
+extracts the relevant widgets from the ItemFactory:</para>
+
+<programlisting role="C">
+GtkWidget* gtk_item_factory_get_widget( GtkItemFactory *ifactory,
+                                        const gchar    *path );
+</programlisting>
+
+<para>For instance if an ItemFactory has two entries "/File" and "/File/New",
+using a path of "/File" would retrieve a <emphasis>menu</emphasis> widget from the
+ItemFactory. Using a path of "/File/New" would retrieve a
+<emphasis>menu item</emphasis> widget. This makes it possible to set the initial state
+of menu items. For example to set the default radio
+item to the one with the path "/Shape/Oval" then the following code would
+be used:</para>
+
+<programlisting role="C">
+gtk_check_menu_item_set_active(
+	GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory, "/Shape/Oval")),
+	TRUE);
+</programlisting>
+
+<para>Finally to retrieve the root of the menu use gtk_item_factory_get_item()
+with a path of "&lt;main&gt;" (or whatever path was used in
+gtk_item_factory_new()). In the case of the ItemFactory being created with
+type GTK_TYPE_MENU_BAR this returns a menu bar widget. With type GTK_TYPE_MENU
+a menu widget is returned. With type GTK_TYPE_OPTION_MENU an option menu
+widget is returned.</para>
+
+<para><emphasis>Remember</emphasis> for an entry defined with path "/_File"
+the path here is actually "/File".</para>
+
+<para>Now you have a menubar or menu which can be manipulated in the same
+way as shown in the
+<link linkend="sec-ManualMenuCreation">Manual Menu Creation</link>
+section.</para>
+</sect2>
 </sect1>
 
 <!-- ----------------------------------------------------------------- -->
@@ -8595,10 +8915,10 @@ gtk_item_factory calls.</para>
 <para>Here is an example using the GTK item factory.</para>
 
 <programlisting role="C">
-<!-- example-start menu itemfactory.c -->
+/* example-start menu itemfactory.c */
 
-#include &lt;gtk/gtk.h&gt;
-#include &lt;strings.h&gt;
+#include &amp;lt;gtk/gtk.h&amp;gt;
+#include &amp;lt;strings.h&amp;gt;
 
 /* Obligatory basic callback */
 static void print_hello( GtkWidget *w,
@@ -8607,63 +8927,58 @@ static void print_hello( GtkWidget *w,
   g_message ("Hello, World!\n");
 }
 
-/* This is the GtkItemFactoryEntry structure used to generate new menus.
-   Item 1: The menu path. The letter after the underscore indicates an
-           accelerator key once the menu is open.
-   Item 2: The accelerator key for the entry
-   Item 3: The callback function.
-   Item 4: The callback action.  This changes the parameters with
-           which the function is called.  The default is 0.
-   Item 5: The item type, used to define what kind of an item it is.
-           Here are the possible values:
+/* For the check button */
+static void print_toggle(gpointer   callback_data,
+                         guint      callback_action,
+                         GtkWidget *menu_item)
+{
+   g_message ("Check button state - %d\n",
+              GTK_CHECK_MENU_ITEM(menu_item)-&amp;gt;active);
+}
 
-           NULL               -&gt; "&lt;Item&gt;"
-           ""                 -&gt; "&lt;Item&gt;"
-           "&lt;Title&gt;"          -&gt; create a title item
-           "&lt;Item&gt;"           -&gt; create a simple item
-           "&lt;CheckItem&gt;"      -&gt; create a check item
-           "&lt;ToggleItem&gt;"     -&gt; create a toggle item
-           "&lt;RadioItem&gt;"      -&gt; create a radio item
-           &lt;path&gt;             -&gt; path of a radio item to link against
-           "&lt;Separator&gt;"      -&gt; create a separator
-           "&lt;Branch&gt;"         -&gt; create an item to hold sub items (optional)
-           "&lt;LastBranch&gt;"     -&gt; create a right justified branch 
-*/
+/* For the radio buttons */
+static void print_selected(gpointer   callback_data,
+                           guint      callback_action,
+                           GtkWidget *menu_item)
+{
+   if(GTK_CHECK_MENU_ITEM(menu_item)-&amp;gt;active)
+     g_message("Radio button %d selected\n", callback_action);
+}
 
+/* Our menu, an array of GtkItemFactoryEntry structures that defines each menu item */
 static GtkItemFactoryEntry menu_items[] = {
-  { "/_File",         NULL,         NULL, 0, "&lt;Branch&gt;" },
-  { "/File/_New",     "&lt;control&gt;N", print_hello, 0, NULL },
-  { "/File/_Open",    "&lt;control&gt;O", print_hello, 0, NULL },
-  { "/File/_Save",    "&lt;control&gt;S", print_hello, 0, NULL },
-  { "/File/Save _As", NULL,         NULL, 0, NULL },
-  { "/File/sep1",     NULL,         NULL, 0, "&lt;Separator&gt;" },
-  { "/File/Quit",     "&lt;control&gt;Q", gtk_main_quit, 0, NULL },
-  { "/_Options",      NULL,         NULL, 0, "&lt;Branch&gt;" },
-  { "/Options/Test",  NULL,         NULL, 0, NULL },
-  { "/_Help",         NULL,         NULL, 0, "&lt;LastBranch&gt;" },
-  { "/_Help/About",   NULL,         NULL, 0, NULL },
+  { "/_File",         NULL,         NULL,           0, "&amp;lt;Branch&amp;gt;" },
+  { "/File/_New",     "&amp;lt;control&amp;gt;N", print_hello,    0, "&lt;Item&gt;" },
+  { "/File/_Open",    "&amp;lt;control&amp;gt;O", print_hello,    0, "&lt;Item&gt;" },
+  { "/File/_Save",    "&amp;lt;control&amp;gt;S", print_hello,    0, "&lt;Item&gt;" },
+  { "/File/Save _As", NULL,         NULL,           0, "&lt;Item&gt;" },
+  { "/File/sep1",     NULL,         NULL,           0, "&amp;lt;Separator&amp;gt;" },
+  { "/File/Quit",     "&amp;lt;control&amp;gt;Q", gtk_main_quit,  0, "&lt;Item&gt;" },
+  { "/_Options",      NULL,         NULL,           0, "&amp;lt;Branch&amp;gt;" },
+  { "/Options/tear",  NULL,         NULL,           0, "&amp;lt;Tearoff&amp;gt;" },
+  { "/Options/Check", NULL,         print_toggle,   1, "&amp;lt;CheckItem&amp;gt;" },
+  { "/Options/sep",   NULL,         NULL,           0, "&amp;lt;Separator&amp;gt;" },
+  { "/Options/Rad1",  NULL,         print_selected, 1, "&amp;lt;RadioItem&amp;gt;" },
+  { "/Options/Rad2",  NULL,         print_selected, 2, "/Options/Rad1" },
+  { "/Options/Rad3",  NULL,         print_selected, 3, "/Options/Rad1" },
+  { "/_Help",         NULL,         NULL,           0, "&amp;lt;LastBranch&amp;gt;" },
+  { "/_Help/About",   NULL,         NULL,           0, "&lt;Item&gt;" },
 };
 
+static gint nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
-void get_main_menu( GtkWidget  *window,
-                    GtkWidget **menubar )
+/* Returns a menubar widget made from the above menu */
+GtkWidget *get_menubar_menu( GtkWidget  *window)
 {
   GtkItemFactory *item_factory;
   GtkAccelGroup *accel_group;
-  gint nmenu_items = sizeof (menu_items) / sizeof (menu_items[0]);
 
+  /* Make an accelerator group (shortcut keys) */
   accel_group = gtk_accel_group_new ();
 
-  /* This function initializes the item factory.
-     Param 1: The type of menu - can be GTK_TYPE_MENU_BAR, GTK_TYPE_MENU,
-              or GTK_TYPE_OPTION_MENU.
-     Param 2: The path of the menu.
-     Param 3: A pointer to a gtk_accel_group.  The item factory sets up
-              the accelerator table while generating menus.
-  */
-
-  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&lt;main&gt;", 
-				       accel_group);
+  /* Make an ItemFactory (that makes a menubar) */
+  item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "&amp;lt;main&amp;gt;",
+                                       accel_group);
 
   /* This function generates the menu items. Pass the item factory,
      the number of items in the array, the array itself, and any
@@ -8673,47 +8988,111 @@ void get_main_menu( GtkWidget  *window,
   /* Attach the new accelerator group to the window. */
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
 
-  if (menubar)
-    /* Finally, return the actual menu bar created by the item factory. */ 
-    *menubar = gtk_item_factory_get_widget (item_factory, "&lt;main&gt;");
+  /* Finally, return the actual menu bar created by the item factory. */
+  return gtk_item_factory_get_widget (item_factory, "&amp;lt;main&amp;gt;");
 }
 
+/* Popup the menu when the popup button is pressed */
+static gint popup_cb(GtkWidget *widget, GdkEvent *event, GtkWidget *menu)
+{
+   GdkEventButton *bevent = (GdkEventButton *)event;
+  
+   /* Only take button presses */
+   if(event-&amp;gt;type != GDK_BUTTON_PRESS)
+     return FALSE;
+  
+   /* Show the menu */
+   gtk_menu_popup(GTK_MENU(menu), NULL, NULL,
+                  NULL, NULL, bevent-&amp;gt;button, bevent-&amp;gt;time);
+  
+   return TRUE;
+}
+
+/* Same as with get_menubar_menu() but just return a button with a signal to
+   call a popup menu */
+GtkWidget *get_popup_menu(void)
+{
+   GtkItemFactory *item_factory;
+   GtkWidget *button, *menu;
+  
+   /* Same as before but don't bother with the accelerators */
+   item_factory = gtk_item_factory_new (GTK_TYPE_MENU, "&amp;lt;main&amp;gt;",
+                                        NULL);
+   gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
+   menu = gtk_item_factory_get_widget(item_factory, "&amp;lt;main&amp;gt;");
+  
+   /* Make a button to activate the popup menu */
+   button = gtk_button_new_with_label("Popup");
+   /* Make the menu popup when clicked */
+   g_signal_connect(G_OBJECT(button),
+                    "event",
+                    G_CALLBACK(popup_cb),
+                    (gpointer) menu);
+
+   return button;
+}
+
+/* Same again but return an option menu */
+GtkWidget *get_option_menu(void)
+{
+   GtkItemFactory *item_factory;
+   GtkWidget *option_menu;
+  
+   /* Same again, not bothering with the accelerators */
+   item_factory = gtk_item_factory_new (GTK_TYPE_OPTION_MENU, "&amp;lt;main&amp;gt;",
+                                        NULL);
+   gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
+   option_menu = gtk_item_factory_get_widget(item_factory, "&amp;lt;main&amp;gt;");
+
+   return option_menu;
+}
+
+/* You have to start somewhere */
 int main( int argc,
           char *argv[] )
 {
   GtkWidget *window;
   GtkWidget *main_vbox;
-  GtkWidget *menubar;
-  
+  GtkWidget *menubar, *option_menu, *popup_button;
+ 
+  /* Initialize GTK */
   gtk_init (&amp;argc, &amp;argv);
-  
+ 
+  /* Make a window */
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  g_signal_connect (G_OBJECT (window), "destroy", 
-		    G_CALLBACK (gtk_main_quit), 
-		    NULL);
-  gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
-  gtk_widget_set_size_request (GTK_WIDGET (window), 300, 200);
-  
+  g_signal_connect (G_OBJECT (window), "destroy",
+                    G_CALLBACK (gtk_main_quit),
+                    NULL);
+  gtk_window_set_title (GTK_WINDOW(window), "Item Factory");
+  gtk_widget_set_size_request (GTK_WIDGET(window), 300, 200);
+ 
+  /* Make a vbox to put the three menus in */
   main_vbox = gtk_vbox_new (FALSE, 1);
   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 1);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
-  gtk_widget_show (main_vbox);
+ 
+  /* Get the three types of menu */
+  /* Note: all three menus are separately created, so they are not the
+     same menu */
+  menubar = get_menubar_menu (window);
+  popup_button = get_popup_menu();
+  option_menu = get_option_menu();
   
-  get_main_menu (window, &amp;menubar);
+  /* Pack it all together */
   gtk_box_pack_start (GTK_BOX (main_vbox), menubar, FALSE, TRUE, 0);
-  gtk_widget_show (menubar);
-  
-  gtk_widget_show (window);
+  gtk_box_pack_end (GTK_BOX (main_vbox), popup_button, FALSE, TRUE, 0);
+  gtk_box_pack_end (GTK_BOX (main_vbox), option_menu, FALSE, TRUE, 0);
 
+  /* Show the widgets */
+  gtk_widget_show_all (window);
+  
+  /* Finished! */
   gtk_main ();
-  
-  return 0;
+ 
+  return(0);
 }
-<!-- example-end -->
+/* example-end */
 </programlisting>
-
-<para>For now, there's only this example. An explanation and lots 'o' comments
-will follow later.</para>
 
 </sect1>
 </chapter>
