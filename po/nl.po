@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-02 20:17+0100\n"
-"PO-Revision-Date: 2003-12-03 02:07+0100\n"
+"POT-Creation-Date: 2003-12-04 04:14+0100\n"
+"PO-Revision-Date: 2003-12-04 13:18+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@nl.linux.org>\n"
 "MIME-Version: 1.0\n"
@@ -2815,7 +2815,7 @@ msgstr "Kon bestandsnaam niet converteren"
 msgid "(Empty)"
 msgstr "(Leeg)"
 
-#: gtk/gtkfilesystemunix.c:306
+#: gtk/gtkfilesystemunix.c:306 gtk/gtkfilesystemwin32.c:377
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "fout bij aanmaken van map '%s': %s"
@@ -2828,10 +2828,15 @@ msgstr "Dit bestandsysteem ondersteunt geen pictogrammen"
 msgid "This file system does not support bookmarks"
 msgstr "Dit bestandsysteem ondersteunt geen favorieten"
 
-#: gtk/gtkfilesystemunix.c:765
+#: gtk/gtkfilesystemunix.c:765 gtk/gtkfilesystemwin32.c:900
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "fout bij verkrijgen vna in formatie over '%s': %s"
+
+#: gtk/gtkfilesystemwin32.c:686
+#, c-format
+msgid "Bookmark saving failed (%s)"
+msgstr "Opslaan favorieten mislukt (%s)"
 
 #: gtk/gtkfixed.c:120 gtk/gtklayout.c:611
 msgid "X position"
