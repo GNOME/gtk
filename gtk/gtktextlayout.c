@@ -1294,7 +1294,7 @@ set_para_values (GtkTextLayout      *layout,
     case GTK_WRAP_NONE:
       break;
     }
-  
+
   display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
 }
 
@@ -2090,6 +2090,26 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   display->width = PIXEL_BOUND (extents.width) + display->left_margin + display->right_margin;
   display->height += PANGO_PIXELS (extents.height);
+
+  /* If we aren't wrapping, we need to do the alignment of each
+   * paragraph ourselves.
+   */
+  if (pango_layout_get_width (display->layout) < 0)
+    {
+      gint excess = display->total_width - display->width;
+
+      switch (pango_layout_get_alignment (display->layout))
+	{
+	case PANGO_ALIGN_LEFT:
+	  break;
+	case PANGO_ALIGN_CENTER:
+	  display->x_offset += excess / 2;
+	  break;
+	case PANGO_ALIGN_RIGHT:
+	  display->x_offset += excess;
+	  break;
+	}
+    }
   
   /* Free this if we aren't in a loop */
   if (layout->wrap_loop_count == 0)

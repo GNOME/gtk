@@ -1,3 +1,9 @@
+Sat Mar 13 18:13:13 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): When not
+	wrapping, do the offset of the line for justification ourselves.
+	(#120256, Felipe Heidrich)
+
 Sun Mar 14 00:03:18 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellview.c (gtk_cell_view_expose): Support the
