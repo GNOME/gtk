@@ -185,7 +185,7 @@ DND
 
  - Use a cursor instead of an ICON when over Motif windows,
    to get rid of the current junk that Motif leaves because
-   of it's XCopyArea stupidity for doing highlighting.
+   of its XCopyArea stupidity for doing highlighting.
 
  - Add a GTK_DRAG_VERIFY target flag and a "drag_data_verify"   
    signal so that apps can easily check if a, say, 

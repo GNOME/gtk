@@ -355,7 +355,7 @@ handle_claim_device(GxidClaimDevice *msg)
     {
       /* FIXME: this is a bit improper. We probably should do this only
 	 when a window is first claimed. But we might be fooled if
-	 an old client died without releasing it's windows. So until
+	 an old client died without releasing its windows. So until
 	 we look for client-window closings, do it here 
 	 
 	 (We do look for closings now...)
