@@ -21,7 +21,6 @@
 #include <gtk/gtk.h>
 #include <stdio.h>
 #include <string.h>
-#include <time.h>
 
 #define DEF_PAD 10
 #define DEF_PAD_SMALL 5
@@ -55,15 +54,15 @@ void calendar_date_to_string( CalendarData *data,
 			      char         *buffer,
 			      gint          buff_len )
 {
-  struct tm tm;
-  time_t time;
-
-  memset (&tm, 0, sizeof (tm));
+  GDate *date;
+  guint year, month, day;
+  
   gtk_calendar_get_date (GTK_CALENDAR(data->window),
-			 &tm.tm_year, &tm.tm_mon, &tm.tm_mday);
-  tm.tm_year -= TM_YEAR_BASE;
-  time = mktime(&tm);
-  strftime (buffer, buff_len-1, "%x", gmtime(&time));
+			 &year, &month, &day);
+  date = g_date_new_dmy (day, month, year);
+  g_date_strftime (buffer, buff_len-1, "%x", date);
+
+  g_date_free (date);
 }
 
 void calendar_set_signal_strings (char         *sig_str,

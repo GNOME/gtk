@@ -1,3 +1,8 @@
+Thu Nov  7 14:51:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testcalendar.c (calendar_date_to_string): 
+	Use g_date_strftime(), fixing #74745. (Alper Ersoy)
+
 Mon Nov  4 16:55:37 2002  Owen Taylor  <otaylor@redhat.com>
 
         * ==== Released 2.0.7 ====
