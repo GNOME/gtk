@@ -77,6 +77,11 @@ struct _GtkTextMarkClass
 {
   GObjectClass parent_class;
 
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GType        gtk_text_mark_get_type   (void) G_GNUC_CONST;
@@ -85,12 +90,10 @@ void           gtk_text_mark_set_visible (GtkTextMark *mark,
                                           gboolean     setting);
 gboolean       gtk_text_mark_get_visible (GtkTextMark *mark);
 
-/* FIXME gconst */
-const char  *  gtk_text_mark_get_name    (GtkTextMark *mark);
-gboolean       gtk_text_mark_get_deleted (GtkTextMark *mark);
-GtkTextBuffer* gtk_text_mark_get_buffer  (GtkTextMark *mark);
-gboolean       gtk_text_mark_get_left_gravity (GtkTextMark *mark);
-
+G_CONST_RETURN gchar* gtk_text_mark_get_name         (GtkTextMark *mark);
+gboolean              gtk_text_mark_get_deleted      (GtkTextMark *mark);
+GtkTextBuffer*        gtk_text_mark_get_buffer       (GtkTextMark *mark);
+gboolean              gtk_text_mark_get_left_gravity (GtkTextMark *mark);
 
 #ifdef __cplusplus
 }

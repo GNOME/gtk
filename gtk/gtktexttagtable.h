@@ -20,7 +20,8 @@ typedef void (* GtkTextTagTableForeach) (GtkTextTag *tag, gpointer data);
 
 typedef struct _GtkTextTagTableClass GtkTextTagTableClass;
 
-struct _GtkTextTagTable {
+struct _GtkTextTagTable
+{
   GObject parent_instance;
 
   GHashTable *hash;
@@ -30,15 +31,19 @@ struct _GtkTextTagTable {
   GSList *buffers;
 };
 
-struct _GtkTextTagTableClass {
+struct _GtkTextTagTableClass
+{
   GObjectClass parent_class;
 
   void (* tag_changed) (GtkTextTagTable *table, GtkTextTag *tag, gboolean size_changed);
   void (* tag_added) (GtkTextTagTable *table, GtkTextTag *tag);
   void (* tag_removed) (GtkTextTagTable *table, GtkTextTag *tag);
 
-  GtkFunction pad1;
-  GtkFunction pad2;
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GType          gtk_text_tag_table_get_type (void) G_GNUC_CONST;

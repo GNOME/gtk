@@ -66,6 +66,12 @@ struct _GtkAdjustmentClass
   
   void (* changed)	 (GtkAdjustment *adjustment);
   void (* value_changed) (GtkAdjustment *adjustment);
+  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

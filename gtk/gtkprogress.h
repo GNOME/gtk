@@ -74,6 +74,12 @@ struct _GtkProgressClass
   void (* paint)            (GtkProgress *progress);
   void (* update)           (GtkProgress *progress);
   void (* act_mode_enter)   (GtkProgress *progress);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 /* This entire interface is deprecated. Use GtkProgressBar

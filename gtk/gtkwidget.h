@@ -402,10 +402,14 @@ struct _GtkWidgetClass
   AtkObject*   (* get_accessible)  (GtkWidget          *widget);
 
   /* Padding for future expansion */
-  GtkFunction pad1;
-  GtkFunction pad2;
-  GtkFunction pad3;
-  GtkFunction pad4;
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 struct _GtkWidgetAuxInfo

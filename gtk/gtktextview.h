@@ -201,15 +201,15 @@ struct _GtkTextViewClass
                              GtkDirectionType direction);  
   
   
-  GtkFunction pad1;
-  GtkFunction pad2;
-  GtkFunction pad3;
-  GtkFunction pad4;
-  
-  GtkFunction pad5;
-  GtkFunction pad6;
-  GtkFunction pad7;
-  GtkFunction pad8;
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 GtkType        gtk_text_view_get_type              (void) G_GNUC_CONST;

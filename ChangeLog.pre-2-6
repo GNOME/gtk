@@ -1,3 +1,9 @@
+Sat Feb 23 11:54:12 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/*.h gdk/*.h: Massive padding addition to class structures.
+
+	* gtk/gtktextmark.h: Fix a FIXME about G_CONST_RETURN.
+
 Fri Feb 22 20:28:18 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c: Applied patch from Thomas Leonard to make

@@ -733,6 +733,13 @@ GtkTreeView
 @arg2: 
 @arg3: 
 
+<!-- ##### SIGNAL GtkTreeView::focus-column-header ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
 <!-- ##### SIGNAL GtkTreeView::move-cursor ##### -->
 <para>
 
@@ -828,6 +835,13 @@ GtkTreeView
 @Returns: 
 
 <!-- ##### SIGNAL GtkTreeView::toggle-cursor-row ##### -->
+<para>
+
+</para>
+
+@treeview: the object which received the signal.
+
+<!-- ##### SIGNAL GtkTreeView::unselect-all ##### -->
 <para>
 
 </para>

@@ -88,6 +88,12 @@ struct _GtkRulerClass
 
   void (* draw_ticks) (GtkRuler *ruler);
   void (* draw_pos)   (GtkRuler *ruler);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 struct _GtkRulerMetric

@@ -83,10 +83,13 @@ struct _GtkIMContextClass
 				   gchar         **text,
 				   gint           *cursor_index);
 
-  /* Some padding for future expansion. Must be left NULL for now */
-  void     (*pad1)                (void);
-  void     (*pad2)                (void);
-  void     (*pad3)                (void);
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
 };
 
 GtkType       gtk_im_context_get_type           (void) G_GNUC_CONST;

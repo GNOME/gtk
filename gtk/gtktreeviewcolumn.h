@@ -108,6 +108,12 @@ struct _GtkTreeViewColumnClass
   GtkObjectClass parent_class;
 
   void (*clicked) (GtkTreeViewColumn *tree_column);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType                 gtk_tree_view_column_get_type            (void);

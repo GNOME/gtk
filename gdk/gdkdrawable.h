@@ -154,12 +154,22 @@ struct _GdkDrawableClass
 				  gint            width,
 				  gint            height);
 
-  void         (*_gdk_reserved1) (void);
-  void         (*_gdk_reserved2) (void);
-  void         (*_gdk_reserved3) (void);
-  void         (*_gdk_reserved4) (void);
-  void         (*_gdk_reserved5) (void);
-  void         (*_gdk_reserved6) (void);
+  /* Padding for future expansion */
+  void         (*_gdk_reserved1)  (void);
+  void         (*_gdk_reserved2)  (void);
+  void         (*_gdk_reserved3)  (void);
+  void         (*_gdk_reserved4)  (void);
+  void         (*_gdk_reserved5)  (void);
+  void         (*_gdk_reserved6)  (void);
+  void         (*_gdk_reserved7)  (void);
+  void         (*_gdk_reserved9)  (void);
+  void         (*_gdk_reserved10) (void);
+  void         (*_gdk_reserved11) (void);
+  void         (*_gdk_reserved12) (void);
+  void         (*_gdk_reserved13) (void);
+  void         (*_gdk_reserved14) (void);
+  void         (*_gdk_reserved15) (void);
+  void         (*_gdk_reserved16) (void);
 };
 
 GType           gdk_drawable_get_type     (void);

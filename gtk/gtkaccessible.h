@@ -60,6 +60,12 @@ struct _GtkAccessibleClass
   AtkObjectClass parent_class;
 
   void (*connect_widget_destroyed)              (GtkAccessible     *accessible);
+  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 void gtk_accessible_connect_widget_destroyed    (GtkAccessible     *accessible);

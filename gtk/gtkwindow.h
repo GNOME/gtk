@@ -128,6 +128,12 @@ struct _GtkWindowClass
                                         GtkDirectionType direction);
   
   void	   (*keys_changed)	       (GtkWindow	*window);
+  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 #define GTK_TYPE_WINDOW_GROUP             (gtk_window_group_get_type ())
@@ -147,6 +153,12 @@ struct _GtkWindowGroup
 struct _GtkWindowGroupClass
 {
   GObjectClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GtkType    gtk_window_get_type                 (void) G_GNUC_CONST;

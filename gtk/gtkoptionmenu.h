@@ -64,6 +64,12 @@ struct _GtkOptionMenuClass
   GtkButtonClass parent_class;
 
   void (*changed) (GtkOptionMenu *option_menu);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

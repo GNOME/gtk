@@ -93,9 +93,12 @@ struct _GtkContainerClass
 				 guint            property_id,
 				 GValue          *value,
 				 GParamSpec      *pspec);
+
   /* Padding for future expansion */
-  GtkFunction pad1;
-  GtkFunction pad2;
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 /* Application-level methods */

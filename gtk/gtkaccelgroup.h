@@ -70,6 +70,7 @@ struct _GtkAccelGroup
   guint		      n_accels;
   GtkAccelGroupEntry *priv_accels;
 };
+
 struct _GtkAccelGroupClass
 {
   GObjectClass parent_class;
@@ -78,7 +79,14 @@ struct _GtkAccelGroupClass
 				 guint           keyval,
 				 GdkModifierType modifier,
 				 GClosure       *accel_closure);
+  
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
+
 struct _GtkAccelKey
 {
   guint           accel_key;
