@@ -951,16 +951,6 @@ show_window_internal (GdkWindow *window,
     gdk_synthesize_window_state (window,
 				 GDK_WINDOW_STATE_WITHDRAWN,
 				 0);
-  if (GetWindowLong (GDK_WINDOW_HWND (window), GWL_EXSTYLE) & WS_EX_TRANSPARENT)
-    {
-      /* Don't really know if this makes sense, can't remember whether
-       * this case is handled like this because it is necessary, or
-       * if this is just old crap.
-       */
-      SetWindowPos(GDK_WINDOW_HWND (window), HWND_TOP, 0, 0, 0, 0,
-		   SWP_SHOWWINDOW | SWP_NOREDRAW | SWP_NOMOVE | SWP_NOSIZE);
-      return;
-    }
 
   old_active_window = GetActiveWindow ();
 
