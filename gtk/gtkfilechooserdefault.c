@@ -1627,7 +1627,10 @@ renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
 		    const gchar           *new_text,
 		    GtkFileChooserDefault *impl)
 {
-  queue_edited_idle (impl, new_text);
+ /* work around bug #154921 */
+  g_object_set (cell_renderer_text, 
+		"mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
+   queue_edited_idle (impl, new_text);
 }
 
 /* Callback used from the text cell renderer when the new folder edition gets
@@ -1637,7 +1640,10 @@ static void
 renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
 			      GtkFileChooserDefault *impl)
 {
-  queue_edited_idle (impl, NULL);
+ /* work around bug #154921 */
+  g_object_set (cell_renderer_text, 
+		"mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
+   queue_edited_idle (impl, NULL);
 }
 
 /* Creates the widgets for the filter combo box */
