@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
-"POT-Creation-Date: 2002-05-17 10:46+0200\n"
+"POT-Creation-Date: 2002-05-23 17:08-0400\n"
 "PO-Revision-Date: 2002-05-17 12:09MET\n"
 "Last-Translator: Pablo Saratxaga <pablo@mandrakesoft.com>\n"
 "Language-Team: Walon <linux-wa@chanae.alphanet.ch>\n"
@@ -35,7 +35,8 @@ msgstr "Dji n' sai cmint tcherdjî l' animåcion do fitchî «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:205 gdk-pixbuf/gdk-pixbuf-io.c:636
 #, c-format
-msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+msgid ""
+"Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:233
@@ -267,7 +268,8 @@ msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:736
 #, c-format
-msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+msgid ""
+"JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:55
@@ -316,7 +318,8 @@ msgid "Fatal error reading PNG image file: %s"
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:765
-msgid "Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
+msgid ""
+"Keys for PNG tEXt chunks must have at least 1 and at most 79 characters."
 msgstr ""
 
 #: gdk-pixbuf/io-png.c:773
@@ -409,11 +412,13 @@ msgstr "Nén del memwere assez po tcherdjî l' imådje RAS"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
-msgstr "Dji n' sai alouwer del memwere pol sitructeure tampon d' I/R (IOBuffer)"
+msgstr ""
+"Dji n' sai alouwer del memwere pol sitructeure tampon d' I/R (IOBuffer)"
 
 #: gdk-pixbuf/io-tga.c:178
 msgid "Can't allocate memory for IOBuffer data"
-msgstr "Dji n' sai alouwer del memwere po les dnêyes do tampon d' I/R (IOBuffer)"
+msgstr ""
+"Dji n' sai alouwer del memwere po les dnêyes do tampon d' I/R (IOBuffer)"
 
 #: gdk-pixbuf/io-tga.c:189
 msgid "Can't realloc IOBuffer data"
@@ -528,7 +533,7 @@ msgstr ""
 msgid "Dimensions of TIFF image too large"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr "Nén del memwere assez po tcherdjî l' imådje TIFF"
 
@@ -536,15 +541,15 @@ msgstr "Nén del memwere assez po tcherdjî l' imådje TIFF"
 msgid "Failed to load RGB data from TIFF file"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr "Dji n' a savou drovi l' imådje TIFF"
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr "L' operåcion TIFFClose a fwait berwete"
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr "Dji n' a savou tcherdjî l' imådje TIFF"
 
@@ -832,7 +837,8 @@ msgid "Use stock"
 msgstr ""
 
 #: gtk/gtkbutton.c:206
-msgid "If set, the label is used to pick a stock item instead of being displayed"
+msgid ""
+"If set, the label is used to pick a stock item instead of being displayed"
 msgstr ""
 
 #: gtk/gtkbutton.c:213
@@ -866,7 +872,8 @@ msgid "Child X Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:279
-msgid "How far in the x direction to move the child when the button is depressed"
+msgid ""
+"How far in the x direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkbutton.c:286
@@ -874,7 +881,8 @@ msgid "Child Y Displacement"
 msgstr ""
 
 #: gtk/gtkbutton.c:287
-msgid "How far in the y direction to move the child when the button is depressed"
+msgid ""
+"How far in the y direction to move the child when the button is depressed"
 msgstr ""
 
 #: gtk/gtkcellrenderer.c:103
@@ -1113,7 +1121,8 @@ msgid "Rise"
 msgstr "Hôteu"
 
 #: gtk/gtkcellrenderertext.c:331 gtk/gtktexttag.c:428
-msgid "Offset of text above the baseline (below the baseline if rise is negative)"
+msgid ""
+"Offset of text above the baseline (below the baseline if rise is negative)"
 msgstr ""
 "Eplaeçmint è hôteu pa rapoirt al roye di båze pol tecse (å dzo del roye si "
 "l' valixhance est negative)"
@@ -1452,7 +1461,8 @@ msgid "Always enable arrows"
 msgstr ""
 
 #: gtk/gtkcombo.c:147
-msgid "Whether the arrow keys work, even if the entry contents are not in the list"
+msgid ""
+"Whether the arrow keys work, even if the entry contents are not in the list"
 msgstr ""
 
 #: gtk/gtkcombo.c:153
@@ -1588,7 +1598,8 @@ msgid "Selection Bound"
 msgstr ""
 
 #: gtk/gtkentry.c:446 gtk/gtklabel.c:369
-msgid "The position of the opposite end of the selection from the cursor in chars."
+msgid ""
+"The position of the opposite end of the selection from the cursor in chars."
 msgstr ""
 
 #: gtk/gtkentry.c:456
@@ -1602,8 +1613,8 @@ msgstr "Longeu macsimom"
 #: gtk/gtkentry.c:464
 msgid "Maximum number of characters for this entry. Zero if no maximum."
 msgstr ""
-"Li nombe macsimom di caracteres po ciste intrêye chal. Zero "
-"s' i gn a nén on macsimom."
+"Li nombe macsimom di caracteres po ciste intrêye chal. Zero s' i gn a nén on "
+"macsimom."
 
 #: gtk/gtkentry.c:472
 msgid "Visibility"
@@ -1748,7 +1759,8 @@ msgstr "_Rilomer li fitchî"
 
 #: gtk/gtkfilesel.c:1358
 #, c-format
-msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
 msgstr ""
 
 #: gtk/gtkfilesel.c:1360
@@ -2374,7 +2386,8 @@ msgid "X pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:118
-msgid "The amount of space to add on the left and right of the widget, in pixels"
+msgid ""
+"The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtkmisc.c:127
@@ -2382,7 +2395,8 @@ msgid "Y pad"
 msgstr ""
 
 #: gtk/gtkmisc.c:128
-msgid "The amount of space to add on the top and bottom of the widget, in pixels"
+msgid ""
+"The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
 
 #: gtk/gtknotebook.c:362
@@ -2489,7 +2503,8 @@ msgid "Position"
 msgstr "Eplaeçmint"
 
 #: gtk/gtkpaned.c:209
-msgid "Position of paned separator in pixels (0 means all the way to the left/top)"
+msgid ""
+"Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 
 #: gtk/gtkpaned.c:217
@@ -2513,7 +2528,8 @@ msgid "Expand"
 msgstr ""
 
 #: gtk/gtkpreview.c:130
-msgid "Whether the preview widget should take up the entire space it is allocated"
+msgid ""
+"Whether the preview widget should take up the entire space it is allocated"
 msgstr ""
 
 #: gtk/gtkprogress.c:122
@@ -2545,8 +2561,8 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the horizontal alignment of the text "
 "in the progresswidget"
 msgstr ""
-"On limero inte 0.0 eyet 1.0 ki dene l' aroymint di coûtchî "
-"pol tecse e l' ahesse d' avançmint"
+"On limero inte 0.0 eyet 1.0 ki dene l' aroymint di coûtchî pol tecse e "
+"l' ahesse d' avançmint"
 
 #: gtk/gtkprogress.c:147
 msgid "Text y alignment"
@@ -2557,8 +2573,8 @@ msgid ""
 "A number between 0.0 and 1.0 specifying the vertical alignment of the text "
 "in the progress widget"
 msgstr ""
-"On limero inte 0.0 eyet 1.0 ki dene l' aroymint d' astampé "
-"pol tecse e l' ahesse d' avançmint"
+"On limero inte 0.0 eyet 1.0 ki dene l' aroymint d' astampé pol tecse e "
+"l' ahesse d' avançmint"
 
 #: gtk/gtkprogressbar.c:131 gtk/gtkrange.c:282 gtk/gtkspinbutton.c:237
 msgid "Adjustment"
@@ -2689,7 +2705,8 @@ msgid "Arrow X Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:330
-msgid "How far in the x direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrange.c:337
@@ -2697,7 +2714,8 @@ msgid "Arrow Y Displacement"
 msgstr ""
 
 #: gtk/gtkrange.c:338
-msgid "How far in the y direction to move the arrow when the button is depressed"
+msgid ""
+"How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
 #: gtk/gtkrc.c:2280
@@ -2820,7 +2838,8 @@ msgid "Secondary backward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:110
-msgid "Display a second backward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a second backward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:117
@@ -2828,7 +2847,8 @@ msgid "Secondary forward stepper"
 msgstr ""
 
 #: gtk/gtkscrollbar.c:118
-msgid "Display a secondary forward arrow button on the opposite end of the scrollbar"
+msgid ""
+"Display a secondary forward arrow button on the opposite end of the scrollbar"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:236 gtk/gtktext.c:598 gtk/gtktreeview.c:523
@@ -3004,7 +3024,8 @@ msgid "Update Policy"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:290
-msgid "Whether the spin button should update always, or only when the value is legal"
+msgid ""
+"Whether the spin button should update always, or only when the value is legal"
 msgstr ""
 
 #: gtk/gtkspinbutton.c:298
@@ -3276,7 +3297,6 @@ msgid "_Yes"
 msgstr "_Oyi"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr ""
 
@@ -3396,7 +3416,8 @@ msgstr "Sinse do tecse"
 
 #: gtk/gtktexttag.c:269
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr "Sinse do tecse, eg del droete al hintche oudonbén del hintche al droete"
+msgstr ""
+"Sinse do tecse, eg del droete al hintche oudonbén del hintche al droete"
 
 #: gtk/gtktexttag.c:379 gtk/gtktextview.c:586
 msgid "Left, right, or center justification"
@@ -3463,7 +3484,8 @@ msgid "Wrap mode"
 msgstr "Môde côpaedje di roye"
 
 #: gtk/gtktexttag.c:485 gtk/gtktextview.c:577
-msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
+msgid ""
+"Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 
 #: gtk/gtktexttag.c:494 gtk/gtktextview.c:624
@@ -3740,7 +3762,8 @@ msgid "Toolbar style"
 msgstr "Stîle del bår ås usteyes"
 
 #: gtk/gtktoolbar.c:285
-msgid "Whether default toolbars have text only, text and icons, icons only, etc."
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 
 #: gtk/gtktoolbar.c:291
@@ -3875,7 +3898,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:442
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr ""
 
@@ -4002,8 +4025,8 @@ msgstr "Ahesse parint"
 #: gtk/gtkwidget.c:398
 msgid "The parent widget of this widget. Must be a Container widget."
 msgstr ""
-"L' ahesse parint di ciste ahesse chal. Ci doet esse ene ahesse del "
-"sôre «Container»."
+"L' ahesse parint di ciste ahesse chal. Ci doet esse ene ahesse del sôre "
+"«Container»."
 
 #: gtk/gtkwidget.c:405
 msgid "Width request"
@@ -4177,92 +4200,94 @@ msgstr ""
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "Sôre di purnea"
 
-#: gtk/gtkwindow.c:408
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "Li sôre do purnea"
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr "Tite do purnea"
 
-#: gtk/gtkwindow.c:418
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr "Li tite do purnea."
 
-#: gtk/gtkwindow.c:425
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr ""
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 
-#: gtk/gtkwindow.c:443
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr "Modå"
 
-#: gtk/gtkwindow.c:451
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr "Eplaeçmint do purnea"
 
-#: gtk/gtkwindow.c:459
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr "Lårdjeu prémetowe"
 
-#: gtk/gtkwindow.c:468
-msgid "The default width of the window, used when initially showing the window."
+#: gtk/gtkwindow.c:472
+msgid ""
+"The default width of the window, used when initially showing the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "Hôteu prémetowe"
 
-#: gtk/gtkwindow.c:478
-msgid "The default height of the window, used when initially showing the window."
+#: gtk/gtkwindow.c:482
+msgid ""
+"The default height of the window, used when initially showing the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr ""
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr "Imådjete"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr ""
 
@@ -4310,4 +4335,3 @@ msgstr "Vietnamyin (VIQR)"
 #: modules/input/imxim.c:27
 msgid "X Input Method"
 msgstr "Intrêye viè on sierveu XIM"
-

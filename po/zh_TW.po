@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-04-22 06:01+0800\n"
+"POT-Creation-Date: 2002-05-23 17:08-0400\n"
 "PO-Revision-Date: 2002-04-22 06:14+0800\n"
 "Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -532,7 +532,7 @@ msgstr "TIFF 圖像的寬度或高度為零"
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF 圖像的尺寸太大"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr "記憶體不足以開啟 TIFF 檔"
 
@@ -540,15 +540,15 @@ msgstr "記憶體不足以開啟 TIFF 檔"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "無法載入 TIFF 檔裡的 RGB 資料"
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr "無法開啟 TIFF 圖像"
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose 操作失敗"
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr "無法載入 TIFF 圖像"
 
@@ -1055,7 +1055,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "使用者可否修改文字"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
-#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "字型"
 
@@ -1685,15 +1685,15 @@ msgstr ""
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "可否編輯欄位的內容"
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "選擇全部"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "輸入法"
 
-#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
+#: gtk/gtkentry.c:3870 gtk/gtktextview.c:6382
 msgid "_Insert Unicode control character"
 msgstr ""
 
@@ -1896,19 +1896,19 @@ msgstr "名稱過長"
 msgid "Couldn't convert filename"
 msgstr "無法轉換檔案名稱"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
 msgstr "水平位置"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
 msgstr ""
 
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
 msgstr "垂直位置"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
 msgstr ""
 
@@ -1918,44 +1918,44 @@ msgstr ""
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK"
 
-#: gtk/gtkfontsel.c:202
+#: gtk/gtkfontsel.c:205
 msgid "Font name"
 msgstr "字型名稱"
 
-#: gtk/gtkfontsel.c:203
+#: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
 msgstr "表示此字型的 X 字串。"
 
-#: gtk/gtkfontsel.c:210
+#: gtk/gtkfontsel.c:213
 msgid "The GdkFont that is currently selected."
 msgstr "目前選擇的 GdkFont。"
 
-#: gtk/gtkfontsel.c:216
+#: gtk/gtkfontsel.c:219
 msgid "Preview text"
 msgstr "預覽文字"
 
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "示範所選擇的字型時使用的文字。"
 
-#: gtk/gtkfontsel.c:321
+#: gtk/gtkfontsel.c:327
 msgid "_Family:"
 msgstr "字集(_F)："
 
-#: gtk/gtkfontsel.c:327
+#: gtk/gtkfontsel.c:333
 msgid "_Style:"
 msgstr "款式(_S)："
 
-#: gtk/gtkfontsel.c:333
+#: gtk/gtkfontsel.c:339
 msgid "Si_ze:"
 msgstr "大小(_Z)："
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:462
+#: gtk/gtkfontsel.c:468
 msgid "_Preview:"
 msgstr "預覽(_P)："
 
-#: gtk/gtkfontsel.c:1253
+#: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
 msgstr "字型選擇"
 
@@ -2275,35 +2275,35 @@ msgstr ""
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 
-#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "水平調整"
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr ""
 
-#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "垂直調整"
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr ""
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "寬度"
 
-#: gtk/gtklayout.c:634
+#: gtk/gtklayout.c:640
 msgid "The width of the layout."
 msgstr ""
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:648
 msgid "Height"
 msgstr "高度"
 
-#: gtk/gtklayout.c:643
+#: gtk/gtklayout.c:649
 msgid "The height of the layout."
 msgstr ""
 
@@ -2721,17 +2721,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 
-#: gtk/gtkrc.c:2270
+#: gtk/gtkrc.c:2280
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr ""
 
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "無法在 pixmap_path 中找到圖像檔：“%s”"
 
-#: gtk/gtkrc.c:3350
+#: gtk/gtkrc.c:3360
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Pixmap 路徑組成部份“%s”必須為絕對路徑，%s，第 %d 行"
@@ -3688,7 +3688,7 @@ msgstr "可見游標"
 msgid "If the insertion cursor is shown"
 msgstr "是否顯示插入游標"
 
-#: gtk/gtktextview.c:6366
+#: gtk/gtktextview.c:6373
 msgid "Input _Methods"
 msgstr "輸入法(_M)"
 
@@ -3902,7 +3902,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "可重定尺寸"
 
@@ -4115,8 +4115,9 @@ msgid "Composite child"
 msgstr ""
 
 #: gtk/gtkwidget.c:480
-msgid "Whether the widget is composed of other widgets"
-msgstr ""
+#, fuzzy
+msgid "Whether the widget is part of a composite widget"
+msgstr "視窗元件是否預設元件"
 
 #: gtk/gtkwidget.c:486
 msgid "Style"
@@ -4206,94 +4207,94 @@ msgstr ""
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "繪畫插入游標使用的顏色"
 
-#: gtk/gtkwindow.c:406
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "視窗類型"
 
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "視窗的類型"
 
-#: gtk/gtkwindow.c:416
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr "視窗標題"
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr "視窗的標題"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr "可縮小"
 
-#: gtk/gtkwindow.c:426
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr "若設為 TRUE，視窗沒有最小尺寸。這樣的設定十居其九會出現問題。"
 
-#: gtk/gtkwindow.c:433
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr "可擴大"
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "若設為 TRUE，使用者可以將視窗擴大至超過最小尺寸。"
 
-#: gtk/gtkwindow.c:442
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr "若設為 TRUE，使用者可以重定視窗的尺寸。"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr ""
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr "視窗位置"
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr "視窗的起始位置。"
 
-#: gtk/gtkwindow.c:466
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr "預設寬度"
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:472
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "預設的視窗寬度，在初次顯示視窗時使用。"
 
-#: gtk/gtkwindow.c:476
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "預設高度"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:482
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "預設的視窗高度，在初次顯示視窗時使用。"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr "隨主視窗關閉"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "當關閉主視窗時是否連此視窗也一起關閉"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr "圖示"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr "此視窗所用的圖示"
 

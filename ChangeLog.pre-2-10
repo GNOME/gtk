@@ -1,3 +1,19 @@
+Thu May 23 17:19:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* Released 2.0.3.
+
+	* gtk/gtktooltips.c (gtk_tooltips_event_handler): Disable
+	tooltips for menu items with submenus .. they still
+	don't really work properly.
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Clear
+	initial_pos_set even if it only causes a move, not
+	a resize as well.
+
+	* configure.in: GTK+-2.0.3, interface age, binary age 3.
+
+	* NEWS: Updated.
+
 2002-05-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Use correct path to the loaders and immodules

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
-"POT-Creation-Date: 2002-05-06 23:24+0900\n"
+"POT-Creation-Date: 2002-05-23 17:08-0400\n"
 "PO-Revision-Date: 2002-05-06 23:26+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <gnome-kr-translation@lists.sourceforge.net>\n"
@@ -546,7 +546,7 @@ msgstr "TIFF 그림의 너비나 높이가 0입니다"
 msgid "Dimensions of TIFF image too large"
 msgstr "TIFF 그림의 크기가 너무 큽니다"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr "TIFF 파일 여는데 메모리 부족"
 
@@ -554,15 +554,15 @@ msgstr "TIFF 파일 여는데 메모리 부족"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "TIFF 파일에서 RGB 데이타 읽기 실패"
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr "TIFF 그림 열기 실패"
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose 작업 실패"
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr "TIFF 그림을 읽어들이는 데 실패"
 
@@ -1088,7 +1088,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "텍스트를 사용자가 수정할 수 있는 지 여부"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
-#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "글꼴"
 
@@ -1726,11 +1726,11 @@ msgstr "포커스시 선택"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "포커스될 때 항목의 내용을 선택할 것인지 여부"
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "모두 선택"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "입력기"
 
@@ -1943,19 +1943,19 @@ msgstr "너무 긴 이름"
 msgid "Couldn't convert filename"
 msgstr "파일이름 변환할 수 없음"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
 msgstr "가로 위치"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
 msgstr "하위 위젯의 가로 위치"
 
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
 msgstr "세로 위치"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
 msgstr "하위 위젯의 세로 위치"
 
@@ -1965,44 +1965,44 @@ msgstr "하위 위젯의 세로 위치"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijk ABCDEFGHIJK 가나다라마바사"
 
-#: gtk/gtkfontsel.c:202
+#: gtk/gtkfontsel.c:205
 msgid "Font name"
 msgstr "글꼴 이름"
 
-#: gtk/gtkfontsel.c:203
+#: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
 msgstr "이 글꼴을 표현하는 X 문자열"
 
-#: gtk/gtkfontsel.c:210
+#: gtk/gtkfontsel.c:213
 msgid "The GdkFont that is currently selected."
 msgstr "현재 선택된 Gdk글꼴"
 
-#: gtk/gtkfontsel.c:216
+#: gtk/gtkfontsel.c:219
 msgid "Preview text"
 msgstr "미리보기 텍스트"
 
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "선택한 글꼴을 데모하기 위해서 보여줄 텍스트"
 
-#: gtk/gtkfontsel.c:321
+#: gtk/gtkfontsel.c:327
 msgid "_Family:"
 msgstr "패밀리(_F)"
 
-#: gtk/gtkfontsel.c:327
+#: gtk/gtkfontsel.c:333
 msgid "_Style:"
 msgstr "유형(_S):"
 
-#: gtk/gtkfontsel.c:333
+#: gtk/gtkfontsel.c:339
 msgid "Si_ze:"
 msgstr "크기(_Z):"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:462
+#: gtk/gtkfontsel.c:468
 msgid "_Preview:"
 msgstr "미리보기(_P):"
 
-#: gtk/gtkfontsel.c:1253
+#: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
 msgstr "글꼴 선택"
 
@@ -2326,35 +2326,35 @@ msgstr "단축 위젯"
 msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr "이 레이블의 단축 키가 눌렸을 경우 활성화할 위젯"
 
-#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "가로 조정"
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "가로 위치의 GtkAdjustment"
 
-#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "세로 조정"
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr "세로 위치의 GtkAdjustment"
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "너비"
 
-#: gtk/gtklayout.c:634
+#: gtk/gtklayout.c:640
 msgid "The width of the layout."
 msgstr "레이아웃의 너비"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:648
 msgid "Height"
 msgstr "높이"
 
-#: gtk/gtklayout.c:643
+#: gtk/gtklayout.c:649
 msgid "The height of the layout."
 msgstr "레이아웃의 높이"
 
@@ -2779,17 +2779,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "단추를 눌렀을 때 화살표가 세로 방향으로 움직이는 거리"
 
-#: gtk/gtkrc.c:2270
+#: gtk/gtkrc.c:2280
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "include 파일을 찾을 수 없습니다: \"%s\""
 
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
-#: gtk/gtkrc.c:3350
+#: gtk/gtkrc.c:3360
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
@@ -3365,7 +3365,6 @@ msgid "_Yes"
 msgstr "예(_Y)"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "확대/축소 _100%"
 
@@ -3970,7 +3969,7 @@ msgstr "확장을 들여쓸 것인지."
 msgid "Whether to display the column"
 msgstr "열을 표시할 것인지 여부"
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "크기 조절 가능"
 
@@ -4279,27 +4278,27 @@ msgstr "커서 선 가로 세로 비율"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "삽입 커서를 그릴때 사용할 가로 세로 비율"
 
-#: gtk/gtkwindow.c:406
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "창 형식"
 
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "창의 형식"
 
-#: gtk/gtkwindow.c:416
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr "창 제목"
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr "창의 제목"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr "축소 허용"
 
-#: gtk/gtkwindow.c:426
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4308,68 +4307,68 @@ msgstr ""
 "참이면, 창에 최소 사이즈가 없습니다. 참으로 하는 것은 99%의 경우 좋지 않은 생"
 "각입니다."
 
-#: gtk/gtkwindow.c:433
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr "확대 허용"
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "참이면, 사용자가 창을 그 최소 사이즈보다 크게 조정할 수 있습니다."
 
-#: gtk/gtkwindow.c:442
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr "참이면, 사용자가 창의 크기를 조정할 수 있습니다."
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr "모달"
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 "참이면, 창이 모달입니다 (이 창이 떠 있으면 다른 창을 사용할 수 없게 됩니다)"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr "창 위치"
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr "창의 최초 위치"
 
-#: gtk/gtkwindow.c:466
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr "기본 너비"
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:472
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "창이 처음으로 보여질때 사용되는 창의 기본 너비."
 
-#: gtk/gtkwindow.c:476
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "기본 높이"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:482
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "창이 처음으로 보여질때 사용되는 창의 기본 높이."
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr "상위 위젯과 함께 파괴"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "상위 윈도우가 파괴될 때 이 윈도우도 파괴되어야 하는지"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr "아이콘"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr "이 창의 아이콘"
 

@@ -28,7 +28,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-05-11 13:01+0200\n"
+"POT-Creation-Date: 2002-05-23 17:08-0400\n"
 "PO-Revision-Date: 2002-05-11 13:02+0200\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -579,7 +579,7 @@ msgstr "Bredde eller højde på TIFF-billede er nul"
 msgid "Dimensions of TIFF image too large"
 msgstr "Dimensionerne af TIFF-billede er for store"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr "Ikke tilstrækkelig hukommelse til åbning af TIFF-fil"
 
@@ -587,15 +587,15 @@ msgstr "Ikke tilstrækkelig hukommelse til åbning af TIFF-fil"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Fejl under indlæsning af RGB-data fra TIFF-fil"
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr "Kunne ikke åbne TIFF-billede"
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr "TIFFClose-operationen mislykkedes"
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr "Fejl under indlæsning af TIFF-billede"
 
@@ -1127,7 +1127,7 @@ msgid "Whether the text can be modified by the user"
 msgstr "Om teksten kan ændres af brugeren"
 
 #: gtk/gtkcellrenderertext.c:238 gtk/gtkcellrenderertext.c:246
-#: gtk/gtkfontsel.c:209 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
+#: gtk/gtkfontsel.c:212 gtk/gtktexttag.c:285 gtk/gtktexttag.c:293
 msgid "Font"
 msgstr "Skrifttype"
 
@@ -1780,11 +1780,11 @@ msgstr "Markér ved fokus"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Om indholdet af indtastningsfeltet markeres når feltet modtager fokus"
 
-#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3176
+#: gtk/gtkentry.c:3850 gtk/gtklabel.c:3177
 msgid "Select All"
 msgstr "Markér alt"
 
-#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3186
+#: gtk/gtkentry.c:3860 gtk/gtklabel.c:3187
 msgid "Input Methods"
 msgstr "Indtastningsmetoder"
 
@@ -1995,19 +1995,19 @@ msgstr "Navnet er for langt"
 msgid "Couldn't convert filename"
 msgstr "Kunne ikke konvertere filnavnet"
 
-#: gtk/gtkfixed.c:120 gtk/gtklayout.c:597
+#: gtk/gtkfixed.c:120 gtk/gtklayout.c:603
 msgid "X position"
 msgstr "x-position"
 
-#: gtk/gtkfixed.c:121 gtk/gtklayout.c:598
+#: gtk/gtkfixed.c:121 gtk/gtklayout.c:604
 msgid "X position of child widget"
 msgstr "x-position for barnekontrollen"
 
-#: gtk/gtkfixed.c:130 gtk/gtklayout.c:607
+#: gtk/gtkfixed.c:130 gtk/gtklayout.c:613
 msgid "Y position"
 msgstr "y-position"
 
-#: gtk/gtkfixed.c:131 gtk/gtklayout.c:608
+#: gtk/gtkfixed.c:131 gtk/gtklayout.c:614
 msgid "Y position of child widget"
 msgstr "y-position for barnekontrollen"
 
@@ -2017,45 +2017,45 @@ msgstr "y-position for barnekontrollen"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijkæøå ABCDEFGHIJKÆØÅ"
 
-#: gtk/gtkfontsel.c:202
+#: gtk/gtkfontsel.c:205
 msgid "Font name"
 msgstr "Skrifttypenavn"
 
-#: gtk/gtkfontsel.c:203
+#: gtk/gtkfontsel.c:206
 msgid "The X string that represents this font."
 msgstr "X-strengen som repræsenterer denne skrifttype"
 
-#: gtk/gtkfontsel.c:210
+#: gtk/gtkfontsel.c:213
 msgid "The GdkFont that is currently selected."
 msgstr "Den GdkFont som er valgt i øjeblikket"
 
-#: gtk/gtkfontsel.c:216
+#: gtk/gtkfontsel.c:219
 msgid "Preview text"
 msgstr "Eksempeltekst"
 
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:220
 msgid "The text to display in order to demonstrate the selected font."
 msgstr "Den tekst der vises for at demonstrere den valgte skrifttype"
 
-#: gtk/gtkfontsel.c:321
+#: gtk/gtkfontsel.c:327
 msgid "_Family:"
 msgstr "_Familie:"
 
-#: gtk/gtkfontsel.c:327
+#: gtk/gtkfontsel.c:333
 msgid "_Style:"
 msgstr "_Stil:"
 
-#: gtk/gtkfontsel.c:333
+#: gtk/gtkfontsel.c:339
 msgid "Si_ze:"
 msgstr "Stø_rrelse"
 
 # passer godt her
 #. create the text entry widget
-#: gtk/gtkfontsel.c:462
+#: gtk/gtkfontsel.c:468
 msgid "_Preview:"
 msgstr "_Udseende:"
 
-#: gtk/gtkfontsel.c:1253
+#: gtk/gtkfontsel.c:1269
 msgid "Font Selection"
 msgstr "Skrifttypevælger"
 
@@ -2385,35 +2385,35 @@ msgid "The widget to be activated when the label's mnemonic key is pressed."
 msgstr ""
 "Den kontrol der skal aktiveres når etikettens genvejstast bliver tastet"
 
-#: gtk/gtklayout.c:617 gtk/gtkviewport.c:132
+#: gtk/gtklayout.c:623 gtk/gtkviewport.c:132
 msgid "Horizontal adjustment"
 msgstr "Vandret justering"
 
-#: gtk/gtklayout.c:618 gtk/gtkscrolledwindow.c:237
+#: gtk/gtklayout.c:624 gtk/gtkscrolledwindow.c:237
 msgid "The GtkAdjustment for the horizontal position."
 msgstr "GtkAdjustment til den vandrette position"
 
-#: gtk/gtklayout.c:625 gtk/gtkviewport.c:140
+#: gtk/gtklayout.c:631 gtk/gtkviewport.c:140
 msgid "Vertical adjustment"
 msgstr "Lodret justering"
 
-#: gtk/gtklayout.c:626 gtk/gtkscrolledwindow.c:244
+#: gtk/gtklayout.c:632 gtk/gtkscrolledwindow.c:244
 msgid "The GtkAdjustment for the vertical position."
 msgstr "GtkAdjustment til den lodrette position"
 
-#: gtk/gtklayout.c:633 gtk/gtktreeviewcolumn.c:191
+#: gtk/gtklayout.c:639 gtk/gtktreeviewcolumn.c:191
 msgid "Width"
 msgstr "Bredde"
 
-#: gtk/gtklayout.c:634
+#: gtk/gtklayout.c:640
 msgid "The width of the layout."
 msgstr "Bredden af layoutet"
 
-#: gtk/gtklayout.c:642
+#: gtk/gtklayout.c:648
 msgid "Height"
 msgstr "Højde"
 
-#: gtk/gtklayout.c:643
+#: gtk/gtklayout.c:649
 msgid "The height of the layout."
 msgstr "Højden af layoutet"
 
@@ -2862,17 +2862,17 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hvor lang i y-retningen pilen flyttes når knappen trykkes ned"
 
-#: gtk/gtkrc.c:2270
+#: gtk/gtkrc.c:2280
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kun ikke finde inkluderingsfil: \"%s\""
 
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#: gtk/gtkrc.c:2922 gtk/gtkrc.c:2925
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3350
+#: gtk/gtkrc.c:3360
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element i billedsti: \"%s\" skal være absolut, %s, linje %d"
@@ -3449,7 +3449,6 @@ msgid "_Yes"
 msgstr "_Ja"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
@@ -4061,7 +4060,7 @@ msgstr "Ryk udviderne ind"
 msgid "Whether to display the column"
 msgstr "Om kolonnen skal vises"
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:441
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "Kan ændre størrelse"
 
@@ -4383,27 +4382,27 @@ msgstr "Formatforhold for markørlinje"
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Det formatforhold indtastningsmarkøren skal tegnes med"
 
-#: gtk/gtkwindow.c:406
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "Vinduestype"
 
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "Typen af vindue"
 
-#: gtk/gtkwindow.c:416
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr "Vinduestitel"
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr "Titlen på vinduet"
 
-#: gtk/gtkwindow.c:424
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr "Tillad formindskelse"
 
-#: gtk/gtkwindow.c:426
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4412,23 +4411,23 @@ msgstr ""
 "Hvis TRUE, har vinduet ingen mindste størrelse. At sætte dette til TRUE er "
 "99% af gangene en dårlig idé"
 
-#: gtk/gtkwindow.c:433
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr "Tillad forstørrelse"
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr "Hvis TRUE, kan brugere udvide vinduet ud over dets minimumstørrelse"
 
-#: gtk/gtkwindow.c:442
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr "Hvis TRUE, kan brugere ændre størrelsen på vinduet"
 
-#: gtk/gtkwindow.c:449
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
@@ -4436,45 +4435,45 @@ msgstr ""
 "Hvis TRUE, er vinduet modalt (andre vinduer kan ikke tilgås så længe dette "
 "er åbent)"
 
-#: gtk/gtkwindow.c:457
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr "Vinduesplacering"
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr "Startplaceringen af vinduet"
 
-#: gtk/gtkwindow.c:466
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr "Standardbredde"
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:472
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr "Den forvalgte bredde af vinduet, bruges når vinduet vises først"
 
-#: gtk/gtkwindow.c:476
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "Standardhøjde"
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:482
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr "Den forvalgte højde af vinduet, bruges når vinduet vises først"
 
-#: gtk/gtkwindow.c:486
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr "Ødelæg med ophav"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Fjern alle spor af dette vindue når ophavet fjernes"
 
-#: gtk/gtkwindow.c:494
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr "Ikon"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr "Ikonet for dette vindue"
 

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk2 1.3.0\n"
-"POT-Creation-Date: 2002-05-17 10:46+0200\n"
+"POT-Creation-Date: 2002-05-23 17:08-0400\n"
 "PO-Revision-Date: 2002-04-30 20:11+01:00\n"
 "Last-Translator: Softcatala <tradgnome@softcatala.org>\n"
 "Language-Team: tradgnome@softcatala.org\n"
@@ -563,7 +563,7 @@ msgstr "L'amplada o l'alçada de la imatge TIFF és zero"
 msgid "Dimensions of TIFF image too large"
 msgstr "Les dimensions de la imatge TIFF són massa grans"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr "Memòria insuficient per obrir l'arxiu TIFF"
 
@@ -571,15 +571,15 @@ msgstr "Memòria insuficient per obrir l'arxiu TIFF"
 msgid "Failed to load RGB data from TIFF file"
 msgstr "No s'ha pogut carregar les dades RGB des de l'arxiu TIFF"
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr "No s'ha pogut obrir la imatge TIFF"
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr "L'operació TIFFClos falla"
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr "No s'ha pogut carregar la imatge TIFF"
 
@@ -3435,7 +3435,6 @@ msgid "_Yes"
 msgstr "_Sí"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Augments _100%"
 
@@ -4049,7 +4048,7 @@ msgid "Whether to display the column"
 msgstr "Quan es mostra la columna"
 
 #
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:442
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr "Reajustable"
 
@@ -4370,28 +4369,28 @@ msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Ràtio d'aspecte amb el que dibuixar el cursor d'inserció"
 
 #
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr "Tipus de Finestra"
 
-#: gtk/gtkwindow.c:408
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr "El tipus de finestra"
 
 #
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr "Títol de Finestra"
 
-#: gtk/gtkwindow.c:418
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr "El títol de finestra"
 
-#: gtk/gtkwindow.c:425
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr "Permet encongir"
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
@@ -4400,25 +4399,25 @@ msgstr ""
 "Si és VERITAT, la finestra no té la mida mínima. Fixant això com a VERITATés "
 "en el 99% dels casos una mala idea."
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr "Permet creixement"
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 "Si és VERITAT, els usuaris poden engrandir la finestra més enllà de la "
 "sevamida mínima"
 
-#: gtk/gtkwindow.c:443
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr "Si és VERITAT, els usuaris poden redimensionar la finestra."
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkwindow.c:451
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
@@ -4426,49 +4425,49 @@ msgstr ""
 "Si és VERITAT, la finestra és modal (no es poden utilitzar altres "
 "finestresmentres aquestes siguin obertes)."
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr "Posició de la finestra"
 
-#: gtk/gtkwindow.c:459
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr "La posició inicial de la finestra."
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr "Amplada per defecte"
 
-#: gtk/gtkwindow.c:468
+#: gtk/gtkwindow.c:472
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr ""
 "L'amplada per defecte de la finestra, utilitzada quan es mostra "
 "inicialmentla finestra."
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr "Alçada per defecte"
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:482
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr ""
 "L'alçada per defecte de la finestra, utilitzada quan inicialment es mostrala "
 "finestra"
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr "Destrueix amb el pare"
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Si es destrueix aquesta finestra quan destrueixen al pare"
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr "Icona"
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr "Icona per aquesta finestra"
 

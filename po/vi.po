@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.x\n"
-"POT-Creation-Date: 2002-05-17 10:46+0200\n"
+"POT-Creation-Date: 2002-05-23 17:08-0400\n"
 "PO-Revision-Date: 2002-04-15 19:14+01:00\n"
 "Last-Translator: Hoang Ngoc Tu <hntu@gmx.de>\n"
 "Language-Team: Vietnamese <vi@li.org>\n"
@@ -540,7 +540,7 @@ msgstr ""
 msgid "Dimensions of TIFF image too large"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:521
+#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
 msgid "Insufficient memory to open TIFF file"
 msgstr ""
 
@@ -548,15 +548,15 @@ msgstr ""
 msgid "Failed to load RGB data from TIFF file"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:309
+#: gdk-pixbuf/io-tiff.c:324
 msgid "Failed to open TIFF image"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:322
+#: gdk-pixbuf/io-tiff.c:337
 msgid "TIFFClose operation failed"
 msgstr ""
 
-#: gdk-pixbuf/io-tiff.c:455 gdk-pixbuf/io-tiff.c:469
+#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
 msgid "Failed to load TIFF image"
 msgstr ""
 
@@ -3288,7 +3288,6 @@ msgid "_Yes"
 msgstr "Có"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr ""
 
@@ -3889,7 +3888,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr ""
 
-#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:442
+#: gtk/gtktreeviewcolumn.c:183 gtk/gtkwindow.c:446
 msgid "Resizable"
 msgstr ""
 
@@ -4189,94 +4188,94 @@ msgstr ""
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwindow.c:407
+#: gtk/gtkwindow.c:411
 msgid "Window Type"
 msgstr ""
 
-#: gtk/gtkwindow.c:408
+#: gtk/gtkwindow.c:412
 msgid "The type of the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:417
+#: gtk/gtkwindow.c:421
 msgid "Window Title"
 msgstr ""
 
-#: gtk/gtkwindow.c:418
+#: gtk/gtkwindow.c:422
 msgid "The title of the window"
 msgstr ""
 
-#: gtk/gtkwindow.c:425
+#: gtk/gtkwindow.c:429
 msgid "Allow Shrink"
 msgstr ""
 
-#: gtk/gtkwindow.c:427
+#: gtk/gtkwindow.c:431
 #, no-c-format
 msgid ""
 "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
 "time a bad idea."
 msgstr ""
 
-#: gtk/gtkwindow.c:434
+#: gtk/gtkwindow.c:438
 msgid "Allow Grow"
 msgstr ""
 
-#: gtk/gtkwindow.c:435
+#: gtk/gtkwindow.c:439
 msgid "If TRUE, users can expand the window beyond its minimum size."
 msgstr ""
 
-#: gtk/gtkwindow.c:443
+#: gtk/gtkwindow.c:447
 msgid "If TRUE, users can resize the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:450
+#: gtk/gtkwindow.c:454
 msgid "Modal"
 msgstr ""
 
-#: gtk/gtkwindow.c:451
+#: gtk/gtkwindow.c:455
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)."
 msgstr ""
 
-#: gtk/gtkwindow.c:458
+#: gtk/gtkwindow.c:462
 msgid "Window Position"
 msgstr ""
 
-#: gtk/gtkwindow.c:459
+#: gtk/gtkwindow.c:463
 msgid "The initial position of the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:467
+#: gtk/gtkwindow.c:471
 msgid "Default Width"
 msgstr ""
 
-#: gtk/gtkwindow.c:468
+#: gtk/gtkwindow.c:472
 msgid ""
 "The default width of the window, used when initially showing the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:477
+#: gtk/gtkwindow.c:481
 msgid "Default Height"
 msgstr ""
 
-#: gtk/gtkwindow.c:478
+#: gtk/gtkwindow.c:482
 msgid ""
 "The default height of the window, used when initially showing the window."
 msgstr ""
 
-#: gtk/gtkwindow.c:487
+#: gtk/gtkwindow.c:491
 msgid "Destroy with Parent"
 msgstr ""
 
-#: gtk/gtkwindow.c:488
+#: gtk/gtkwindow.c:492
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr ""
 
-#: gtk/gtkwindow.c:495
+#: gtk/gtkwindow.c:499
 msgid "Icon"
 msgstr ""
 
-#: gtk/gtkwindow.c:496
+#: gtk/gtkwindow.c:500
 msgid "Icon for this window"
 msgstr ""
 

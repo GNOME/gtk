@@ -585,7 +585,8 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 	  /* do nothing */
 	  break;
 	case GDK_ENTER_NOTIFY:
-	  gtk_tooltips_start_delay (tooltips, widget);
+	  if (!(GTK_IS_MENU_ITEM (widget) && GTK_MENU_ITEM (widget)->submenu))
+	    gtk_tooltips_start_delay (tooltips, widget);
 	  break;
 	  
 	case GDK_LEAVE_NOTIFY:
@@ -603,7 +604,7 @@ gtk_tooltips_event_handler (GtkWidget *widget,
 	  /* Handle menu items specially ... pend popup for each motion
 	   * on other widgets, we ignore motion.
 	   */
-	  if (GTK_IS_MENU_ITEM (widget))
+	  if (GTK_IS_MENU_ITEM (widget) && !GTK_MENU_ITEM (widget)->submenu)
 	    {
 	      /* Completely evil hack to make sure we get the LEAVE_NOTIFY
 	       */
