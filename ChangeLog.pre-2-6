@@ -1,3 +1,7 @@
+Wed Sep  3 17:38:01 BST 2003  Tony Gale <gale@gtk.org>
+
+	* docs/faq/gtk-faq.sgml: Correct compile line for threads example.
+
 2003-09-02  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdisplay-win32.c (gdk_display_open): Don't call

@@ -1245,7 +1245,7 @@ illustrate how to use threads within GTK+ programs.</para>
 /*
  * Compile with:
  *
- * cc -o gtk-thread gtk-thread.c `pkg-config --cflags --libs gtk+-2.0 gthread`
+ * cc -o gtk-thread gtk-thread.c `pkg-config --cflags --libs gtk+-2.0 gthread-2.0`
  *
  * Thanks to Sebastian Wilhelmi for pointing out some bugs in earlier versions.
  *
