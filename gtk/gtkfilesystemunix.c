@@ -91,6 +91,12 @@ static gchar *        gtk_file_system_unix_make_uri      (GtkFileSystem    *file
 							  const gchar      *base_uri,
 							  const gchar      *display_name,
 							  GError          **error);
+static gboolean       gtk_file_system_unix_parse         (GtkFileSystem    *file_system,
+							  const gchar      *base_uri,
+							  const gchar      *str,
+							  gchar           **folder,
+							  gchar           **file_part,
+							  GError          **error);
 
 static GType gtk_file_folder_unix_get_type   (void);
 static void  gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class);
@@ -186,6 +192,7 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
   iface->create_folder = gtk_file_system_unix_create_folder;
   iface->get_parent = gtk_file_system_unix_get_parent;
   iface->make_uri = gtk_file_system_unix_make_uri;
+  iface->parse = gtk_file_system_unix_parse;
 }
 
 static void
@@ -329,6 +336,149 @@ gtk_file_system_unix_make_uri (GtkFileSystem *file_system,
   g_free (base_filename);
   g_free (filename);
   g_free (full_filename);
+  
+  return result;
+}
+
+/* If this was a publically exported function, it should return
+ * a dup'ed result, but we make it modify-in-place for efficiency
+ * here, and because it works for us.
+ */
+static void
+canonicalize_filename (gchar *filename)
+{
+  gchar *p, *q;
+  gboolean last_was_slash = FALSE;
+
+  p = filename;
+  q = filename;
+
+  while (*p)
+    {
+      if (*p == G_DIR_SEPARATOR)
+	{
+	  if (!last_was_slash)
+	    *q++ = G_DIR_SEPARATOR;
+
+	  last_was_slash = TRUE;
+	}
+      else
+	{
+	  if (last_was_slash && *p == '.')
+	    {
+	      if (*(p + 1) == G_DIR_SEPARATOR ||
+		  *(p + 1) == '\0')
+		{
+		  if (*(p + 1) == '\0')
+		    break;
+		  
+		  p += 1;
+		}
+	      else if (*(p + 1) == '.' &&
+		       (*(p + 2) == G_DIR_SEPARATOR ||
+			*(p + 2) == '\0'))
+		{
+		  if (q > filename + 1)
+		    {
+		      q--;
+		      while (q > filename + 1 &&
+			     *(q - 1) != G_DIR_SEPARATOR)
+			q--;
+		    }
+
+		  if (*(p + 2) == '\0')
+		    break;
+		  
+		  p += 2;
+		}
+	      else
+		{
+		  *q++ = *p;
+		  last_was_slash = FALSE;
+		}
+	    }
+	  else
+	    {
+	      *q++ = *p;
+	      last_was_slash = FALSE;
+	    }
+	}
+
+      p++;
+    }
+
+  if (q > filename + 1 && *(q - 1) == G_DIR_SEPARATOR)
+    q--;
+
+  *q = '\0';
+}
+
+static gboolean
+gtk_file_system_unix_parse (GtkFileSystem  *file_system,
+			    const gchar    *base_uri,
+			    const gchar    *str,
+			    gchar         **folder,
+			    gchar         **file_part,
+			    GError        **error)
+{
+  char *base_filename;
+  gchar *last_slash;
+  gboolean result = FALSE;
+
+  base_filename = filename_from_uri (base_uri, error);
+  if (!base_filename)
+    return FALSE;
+  
+  last_slash = strrchr (str, G_DIR_SEPARATOR);
+  if (!last_slash)
+    {
+      *folder = g_strdup (base_uri);
+      *file_part = g_strdup (str);
+      result = TRUE;
+    }
+  else
+    {
+      gchar *folder_part;
+      gchar *folder_path;
+      GError *tmp_error = NULL;
+
+      if (last_slash == str)
+	folder_part = g_strdup ("/");
+      else
+	folder_part = g_filename_from_utf8 (str, last_slash - str,
+					    NULL, NULL, &tmp_error);
+
+      if (!folder_part)
+	{
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_BAD_FILENAME,
+		       "%s",
+		       tmp_error->message);
+	  g_error_free (tmp_error);
+	}
+      else
+	{
+	  if (folder_part[0] == G_DIR_SEPARATOR)
+	    folder_path = folder_part;
+	  else
+	    {
+	      folder_path = g_build_filename (base_filename, folder_part, NULL);
+	      g_free (folder_part);
+	    }
+
+	  canonicalize_filename (folder_path);
+	  
+	  *folder = filename_to_uri (folder_path);
+	  *file_part = g_strdup (last_slash + 1);
+
+	  g_free (folder_path);
+
+	  result = TRUE;
+	}
+    }
+
+  g_free (base_filename);
   
   return result;
 }

@@ -346,7 +346,9 @@ gtk_file_system_get_parent (GtkFileSystem *file_system,
 
   if (parent)
     *parent = tmp_parent;
-
+  else
+    g_free (tmp_parent);
+  
   return result;
 }
 
@@ -364,6 +366,71 @@ gtk_file_system_make_uri (GtkFileSystem    *file_system,
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->make_uri (file_system, base_uri, display_name, error);
 }
 
+/**
+ * gtk_file_system_parse:
+ * @file_system: a #GtkFileSystem
+ * @base_uri: reference folder with respect to which relative
+ *            paths should be interpreted.
+ * @str: the string to parse
+ * @folder: location to store folder portion of result, or %NULL
+ * @file_part: location to store file portion of result, or %NULL
+ * @error: location to store error, or %NULL
+ * 
+ * Given a string entered by a user, parse it (possibly using
+ * heuristics) into a folder URI and a UTF-8 encoded
+ * filename part. (Suitable for passing to gtk_file_system_make_uri())
+ *
+ * Note that the returned filename point may point to a subfolder
+ * of the returned folder. Adding a trailing path separator is needed
+ * to enforce the interpretation as a folder name.
+ *
+ * If parsing fails because the syntax of @str is not understood,
+ * and error of type GTK_FILE_SYSTEM_ERROR_BAD_FILENAME will
+ * be set in @error and %FALSE returned.
+ *
+ * If parsing fails because a path was encountered that doesn't
+ * exist on the filesystem, then an error of type
+ * %GTK_FILE_SYSTEM_ERROR_NONEXISTANT will be set in @error
+ * and %FALSE returned. (This only applies to parsing relative paths,
+ * not to interpretation of @file_part. No check is made as
+ * to whether @file_part exists.)
+ *
+ * Return value: %TRUE if the parsing succeeds, otherwise, %FALSE.
+ **/
+gboolean
+gtk_file_system_parse (GtkFileSystem   *file_system,
+		       const gchar     *base_uri,
+		       const gchar     *str,
+		       gchar          **folder,
+		       gchar          **file_part,
+		       GError         **error)
+{
+  gchar *tmp_folder = NULL;
+  gchar *tmp_file_part = NULL;
+  gboolean result;
+
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), FALSE);
+  g_return_val_if_fail (base_uri != NULL, FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+
+  result = GTK_FILE_SYSTEM_GET_IFACE (file_system)->parse (file_system, base_uri, str,
+							    &tmp_folder, &tmp_file_part,
+							    error);
+  g_assert (result || (tmp_folder == NULL && tmp_file_part == NULL));
+
+  if (folder)
+    *folder = tmp_folder;
+  else
+    g_free (tmp_folder);
+
+  if (file_part)
+    *file_part = tmp_file_part;
+  else
+    g_free (tmp_file_part);
+
+  return result;
+}
 
 /*****************************************
  *             GtkFileFolder             *
@@ -448,6 +515,11 @@ gtk_file_folder_list_children (GtkFileFolder    *folder,
 
   if (children)
     *children = tmp_children;
+  else
+    {
+      g_slist_foreach (tmp_children, (GFunc)g_free, NULL);
+      g_slist_free (tmp_children);
+    }
 
   return result;
 }

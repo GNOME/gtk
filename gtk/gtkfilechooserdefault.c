@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkfilechooserwidget.c: Embeddable file selector widget
+ * gtkfilechooserimpldefault.c: Default implementation of GtkFileChooser
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,12 +19,15 @@
  */
 
 #include "gtkfilechooserimpldefault.h"
+#include "gtkfilechooserentry.h"
 #include "gtkfilechooserenums.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooser.h"
 #include "gtkfilesystemmodel.h"
 
 #include <gtk/gtkcellrenderertext.h>
+#include <gtk/gtkentry.h>
+#include <gtk/gtkhbox.h>
 #include <gtk/gtkhpaned.h>
 #include <gtk/gtklabel.h>
 #include <gtk/gtkscrolledwindow.h>
@@ -69,12 +72,14 @@ struct _GtkFileChooserImplDefault
   GtkWidget *tree;
   GtkWidget *list_scrollwin;
   GtkWidget *list;
+  GtkWidget *entry;
   GtkWidget *preview_widget;
 };
 
 static void gtk_file_chooser_impl_default_class_init   (GtkFileChooserImplDefaultClass *class);
 static void gtk_file_chooser_impl_default_iface_init   (GtkFileChooserIface            *iface);
 static void gtk_file_chooser_impl_default_init         (GtkFileChooserImplDefault      *impl);
+static void gtk_file_chooser_impl_default_finalize     (GObject                        *object);
 static void gtk_file_chooser_impl_default_set_property (GObject                        *object,
 							guint                           prop_id,
 							const GValue                   *value,
@@ -98,6 +103,8 @@ static GSList *gtk_file_chooser_impl_default_get_uris           (GtkFileChooser 
 static void tree_selection_changed (GtkTreeSelection          *tree_selection,
 				    GtkFileChooserImplDefault *impl);
 static void list_selection_changed (GtkTreeSelection          *tree_selection,
+				    GtkFileChooserImplDefault *impl);
+static void entry_activate         (GtkEntry                  *entry,
 				    GtkFileChooserImplDefault *impl);
 
 GType
@@ -142,6 +149,7 @@ gtk_file_chooser_impl_default_class_init (GtkFileChooserImplDefaultClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
+  gobject_class->finalize = gtk_file_chooser_impl_default_finalize;
   gobject_class->set_property = gtk_file_chooser_impl_default_set_property;
   gobject_class->get_property = gtk_file_chooser_impl_default_get_property;
 
@@ -164,13 +172,20 @@ static void
 gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
 {
   GtkWidget *hpaned;
+  GtkWidget *hbox;
+  GtkWidget *label;
   GtkTreeSelection *selection;
+#if 0  
+  GList *focus_chain;
+#endif  
 
   impl->folder_mode = FALSE;
   impl->local_only = TRUE;
   impl->preview_widget_active = TRUE;
   impl->select_multiple = FALSE;
   impl->show_hidden = FALSE;
+
+  gtk_container_set_border_width (GTK_CONTAINER (impl), 5);
   
   gtk_widget_push_composite_child ();
 
@@ -181,6 +196,8 @@ gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
   impl->tree_scrollwin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (impl->tree_scrollwin),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->tree_scrollwin),
+				       GTK_SHADOW_IN);
   gtk_paned_add1 (GTK_PANED (hpaned), impl->tree_scrollwin);
   gtk_widget_show (impl->tree_scrollwin);
   
@@ -199,6 +216,8 @@ gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
   impl->list_scrollwin = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (impl->list_scrollwin),
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->list_scrollwin),
+				       GTK_SHADOW_IN);
   gtk_paned_add2 (GTK_PANED (hpaned), impl->list_scrollwin);
   gtk_widget_show (impl->list_scrollwin);
   
@@ -210,8 +229,42 @@ gtk_file_chooser_impl_default_init (GtkFileChooserImplDefault *impl)
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
   g_signal_connect (selection, "changed",
 		    G_CALLBACK (list_selection_changed), impl);
+
+  hbox = gtk_hbox_new (FALSE, 6);
+  gtk_box_pack_start (GTK_BOX (impl), hbox, FALSE, FALSE, 6);
+  gtk_widget_show (hbox);
+
+  label = gtk_label_new_with_mnemonic ("_Location:");
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+  
+  impl->entry = _gtk_file_chooser_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (impl->entry), TRUE);
+  g_signal_connect (impl->entry, "activate",
+		    G_CALLBACK (entry_activate), impl);
+  
+  gtk_box_pack_start (GTK_BOX (hbox), impl->entry, TRUE, TRUE, 0);
+  gtk_widget_show (impl->entry);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->entry);
+
+#if 0  
+  focus_chain = g_list_append (NULL, impl->entry);
+  focus_chain = g_list_append (focus_chain, impl->tree);
+  focus_chain = g_list_append (focus_chain, impl->list);
+  gtk_container_set_focus_chain (GTK_CONTAINER (impl), focus_chain);
+  g_list_free (focus_chain);
+#endif  
   
   gtk_widget_pop_composite_child ();
+}
+
+static void
+gtk_file_chooser_impl_default_finalize (GObject *object)
+{
+  GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (object);
+
+  g_object_unref (impl->file_system);
 }
 
 static void
@@ -356,7 +409,7 @@ expand_and_select_func (GtkFileSystemModel *model,
   gtk_tree_view_expand_to_path (tree_view, path);
   gtk_tree_view_expand_row (tree_view, path, FALSE);
   gtk_tree_view_set_cursor (tree_view, path, NULL, FALSE);
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->tree), path, NULL, TRUE, 0.3, 0.0);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (impl->tree), path, NULL, TRUE, 0.3, 0.5);
 }
 
 static void
@@ -364,6 +417,7 @@ gtk_file_chooser_impl_default_set_current_folder (GtkFileChooser *chooser,
 						  const char     *uri)
 {
   GtkFileChooserImplDefault *impl = GTK_FILE_CHOOSER_IMPL_DEFAULT (chooser);
+
   _gtk_file_system_model_uri_do (impl->tree_model, uri,
 				 expand_and_select_func, impl);
 }
@@ -593,6 +647,27 @@ open_and_close (GtkTreeView *tree_view,
 }
 
 static void
+update_chooser_entry (GtkFileChooserImplDefault *impl)
+{
+  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->list));
+  const GtkFileInfo *info;
+  GtkTreeIter iter;
+  GtkTreeIter child_iter;
+
+  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
+    return;
+
+  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
+						  &child_iter,
+						  &iter);
+
+  info = _gtk_file_system_model_get_info (impl->list_model, &child_iter);
+  
+  _gtk_file_chooser_entry_set_file_part (GTK_FILE_CHOOSER_ENTRY (impl->entry),
+					 gtk_file_info_get_display_name (info));
+}
+     
+static void
 tree_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
 {
@@ -610,6 +685,7 @@ tree_selection_changed (GtkTreeSelection          *selection,
   if (impl->current_folder)
     g_free (impl->current_folder);
   impl->current_folder = g_strdup (uri);
+  _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (impl->entry), uri);
   
   if (impl->list_model)
     {
@@ -647,16 +723,83 @@ tree_selection_changed (GtkTreeSelection          *selection,
 			   GTK_TREE_MODEL (impl->sort_model));
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (impl->list),
 				   GTK_FILE_SYSTEM_MODEL_DISPLAY_NAME);
-  
+
   g_signal_emit_by_name (impl, "current_folder_changed", 0);
+
+  update_chooser_entry (impl);
+
   g_signal_emit_by_name (impl, "selection_changed", 0);
+
 }
 
 static void
 list_selection_changed (GtkTreeSelection          *selection,
 			GtkFileChooserImplDefault *impl)
 {
+  update_chooser_entry (impl);
+  
   g_signal_emit_by_name (impl, "selection_changed", 0);
+}
+
+static void
+entry_activate (GtkEntry                  *entry,
+		GtkFileChooserImplDefault *impl)
+{
+  GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (entry);
+  const gchar *folder_uri = _gtk_file_chooser_entry_get_current_folder (chooser_entry);
+  const gchar *file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
+  gchar *new_folder = NULL;
+
+  /* If the file part is non-empty, we need to figure out if it
+   * refers to a folder within folder. We could optimize the case
+   * here where the folder is already loaded for one of our tree models.
+   */
+  if (file_part[0] == '\0' && strcmp (impl->current_folder, folder_uri) != 0)
+    new_folder = g_strdup (folder_uri);
+  else
+    {
+      GtkFileFolder *folder = NULL;
+      gchar *subfolder_uri = NULL;
+      GtkFileInfo *info = NULL;
+      
+      folder = gtk_file_system_get_folder (impl->file_system,
+					   folder_uri,
+					   GTK_FILE_INFO_IS_FOLDER,
+					   NULL);	/* NULL-GError */
+      
+      if (folder)
+	subfolder_uri = gtk_file_system_make_uri (impl->file_system,
+						  folder_uri,
+						  file_part,
+						  NULL); /* NULL-GError */
+
+      if (subfolder_uri)
+	info = gtk_file_folder_get_info (folder,
+					 subfolder_uri,
+					 NULL); /* NULL-GError */
+
+      if (info && gtk_file_info_get_is_folder (info))
+	new_folder = g_strdup (subfolder_uri);
+
+      if (folder)
+	g_object_unref (folder);
+
+      if (subfolder_uri)
+	g_free (subfolder_uri);
+
+      if (info)
+	gtk_file_info_free (info);
+    }
+
+  if (new_folder)
+    {
+      g_signal_stop_emission_by_name (entry, "activate");
+
+      gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER (impl), new_folder);
+      _gtk_file_chooser_entry_set_file_part (chooser_entry, "");
+
+      g_free (new_folder);
+    }
 }
 
 const GtkFileInfo *
@@ -749,7 +892,7 @@ _gtk_file_chooser_impl_default_new (GtkFileSystem *file_system)
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
 
-  impl->file_system = file_system;
+  impl->file_system = g_object_ref(file_system);
   impl->tree_model = _gtk_file_system_model_new (file_system, NULL, -1,
 						 GTK_FILE_INFO_DISPLAY_NAME);
   _gtk_file_system_model_set_show_files (impl->tree_model, FALSE);
@@ -781,6 +924,9 @@ _gtk_file_chooser_impl_default_new (GtkFileSystem *file_system)
 					   list_size_data_func, impl, NULL);
   gtk_tree_view_column_set_sort_column_id (column, 1);
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->list), column);
+
+  _gtk_file_chooser_entry_set_file_system (GTK_FILE_CHOOSER_ENTRY (impl->entry),
+					   file_system);
 
   return result;
 }

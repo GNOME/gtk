@@ -133,6 +133,12 @@ struct _GtkFileSystemIface
   gchar *            (*make_uri)       (GtkFileSystem  *file_system,
 					const gchar    *base_uri,
 					const gchar    *display_name,
+				        GError        **error);					
+  gboolean           (*parse)          (GtkFileSystem  *file_system,
+					const gchar    *base_uri,
+					const gchar    *str,
+					gchar         **folder,
+					gchar         **file_part,
 				        GError        **error);
   /* Signals
    */
@@ -161,6 +167,12 @@ gboolean          gtk_file_system_create_folder  (GtkFileSystem    *file_system,
 gchar *           gtk_file_system_make_uri       (GtkFileSystem    *file_system,
 						  const gchar      *base_uri,
 						  const gchar      *display_name,
+						  GError          **error);
+gboolean          gtk_file_system_parse          (GtkFileSystem    *file_system,
+						  const gchar      *base_uri,
+						  const gchar      *str,
+						  gchar           **folder,
+						  gchar           **file_part,
 						  GError          **error);
 /*
  * Detailed information about a particular folder

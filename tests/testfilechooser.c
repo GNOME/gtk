@@ -30,6 +30,13 @@ print_selected (GtkFileChooser *chooser)
   g_slist_free (uris);
 }
 
+static void
+response_cb (GtkDialog *dialog,
+	     gint       response_id)
+{
+  gtk_main_quit ();
+}
+
 int
 main (int argc, char **argv)
 {
@@ -46,10 +53,14 @@ main (int argc, char **argv)
 					GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 					GTK_STOCK_OPEN, GTK_RESPONSE_OK,
 					NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+  
   g_signal_connect (dialog, "selection_changed",
 		    G_CALLBACK (print_selected), NULL);
   g_signal_connect (dialog, "current_folder_changed",
 		    G_CALLBACK (print_current_folder), NULL);
+  g_signal_connect (dialog, "response",
+		    G_CALLBACK (response_cb), NULL);
   
   gtk_window_set_default_size (GTK_WINDOW (dialog), 600, 400);
   gtk_widget_show (dialog);

@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtkfilechooserwidget.h: Embeddable file selector widget
+ * gtkfilechooserimpldefault.h: Default implementation of GtkFileChooser
  * Copyright (C) 2003, Red Hat, Inc.
  *
  * This library is free software; you can redistribute it and/or
