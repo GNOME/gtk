@@ -2148,11 +2148,11 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
   xdir = g_filename_from_utf8 (dir_name);
   directory = opendir(xdir);
-  g_free (xdir);
 
   if(!directory)
     {
       cmpl_errno = errno;
+      g_free (xdir);
       return NULL;
     }
 
@@ -2174,12 +2174,13 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 	{
 	  cmpl_errno = errno;
 	  closedir(directory);
+	  g_free (xdir);
 	  return NULL;
 	}
 
       sent->entries[i].entry_name = g_filename_to_utf8 (dirent_ptr->d_name);
 
-      g_string_assign (path, dir_name);
+      g_string_assign (path, xdir);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
 	{
 	  g_string_append_c (path, G_DIR_SEPARATOR);
@@ -2188,7 +2189,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 
       if (stat_subdirs)
 	{
-	  if(stat(path->str, &ent_sbuf) >= 0 && S_ISDIR(ent_sbuf.st_mode))
+	  if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
 	    sent->entries[i].is_dir = TRUE;
 	  else
 	    /* stat may fail, and we don't mind, since it could be a
@@ -2199,6 +2200,7 @@ open_new_dir(gchar* dir_name, struct stat* sbuf, gboolean stat_subdirs)
 	sent->entries[i].is_dir = 1;
     }
 
+  g_free (xdir);
   g_string_free (path, TRUE);
   qsort(sent->entries, sent->entry_count, sizeof(CompletionDirEntry), compare_cmpl_dir);
 
