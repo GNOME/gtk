@@ -86,13 +86,22 @@ gdk_fontset_load (gchar *fontset_name)
     }
   else
     {
-      XFontSetExtents *extent = XExtentsOfFontSet(fontset);
-
+      gint num_fonts;
+      gint i;
+      XFontStruct **font_structs;
+      gchar **font_names;
+      
       private->xfont = fontset;
       font->type = GDK_FONT_FONTSET;
-      /* how to define ascent and descent for fontset ??? */
-      font->ascent =  extent->max_logical_extent.height;
-      font->descent = font->ascent / 4 ;
+      num_fonts = XFontsOfFontSet (fontset, &font_structs, &font_names);
+
+      font->ascent = font->descent = 0;
+      
+      for (i = 0; i < num_fonts; i++)
+	{
+	  font->ascent = MAX (font->ascent, font_structs[i]->ascent);
+	  font->descent = MAX (font->descent, font_structs[i]->descent);
+	}
     }
   return font;
 }

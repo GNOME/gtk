@@ -1240,6 +1240,48 @@ gtk_widget_show (GtkWidget *widget)
     gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
 }
 
+
+/*************************************************************
+ * gtk_widget_show_now:
+ *   Show a widget, and if it is an unmapped toplevel widget
+ *   wait for the map_event before returning
+ *
+ *   Warning: This routine will call the main loop recursively.
+ *       
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+static void
+gtk_widget_show_map_callback (GtkWidget *widget, GdkEvent *event, gint *flag)
+{
+  *flag = TRUE;
+  gtk_signal_disconnect_by_data (GTK_OBJECT (widget), flag);
+}
+
+void
+gtk_widget_show_now (GtkWidget *widget)
+{
+  gint flag = FALSE;
+  
+  /* make sure we will get event */
+  if (!GTK_WIDGET_MAPPED (widget) &&
+      GTK_WIDGET_TOPLEVEL (widget))
+    {
+      gtk_widget_show (widget);
+
+      gtk_signal_connect (GTK_OBJECT (widget), "map_event",
+			  GTK_SIGNAL_FUNC (gtk_widget_show_map_callback), 
+			  &flag);
+
+      while (!flag)
+	gtk_main_iteration();
+    }
+  else
+    gtk_widget_show (widget);
+}
+
 /*****************************************
  * gtk_widget_hide:
  *

@@ -1,3 +1,15 @@
+Fri Mar 27 17:58:41 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_paint): Don't clear
+	the window on an expose event. On draws, just clear the
+	portion we are redrawing.
+
+	* gdk/gdkfont.c (gdk_fontset_load): Corrected calculation
+	of fontset ascent/descent.
+
+	* gtk/gtkwidget.[ch]: Added new function to show a toplevel
+	window and wait for it to be mapped, gtk_window_show_now ()
+
 Fri Mar 27 08:51:17 PST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* docs/Makefile.sgml: some stuff for doing plain text and

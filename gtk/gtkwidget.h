@@ -377,6 +377,7 @@ void	   gtk_widget_setv		  (GtkWidget	       *widget,
 					   GtkArg	       *args);
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
+void       gtk_widget_show_now            (GtkWidget           *widget);
 void	   gtk_widget_hide		  (GtkWidget	       *widget);
 void	   gtk_widget_show_all		  (GtkWidget	       *widget);
 void	   gtk_widget_hide_all		  (GtkWidget	       *widget);

@@ -620,8 +620,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
       width = widget->allocation.width;
       height = widget->allocation.height - DRAG_HANDLE_SIZE;
     }
-
-  gdk_window_clear (hb->bin_window);
+  
+  if (!event)
+    gdk_window_clear_area (hb->bin_window,
+			   area->x,
+			   area->y,
+			   area->width,
+			   area->height);
+  
   gtk_draw_shadow (widget->style,
 		   hb->bin_window,
 		   GTK_WIDGET_STATE (widget),
