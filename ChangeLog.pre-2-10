@@ -1,3 +1,8 @@
+2004-09-22  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (selection_check_foreach_cb): Don't use
+	bitops on booleans.
+
 Wed Sep 22 00:54:34 2004  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/pixbufs.c (do_pixbufs): Don't leak the frame

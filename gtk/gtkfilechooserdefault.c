@@ -1913,8 +1913,8 @@ selection_check_foreach_cb (GtkTreeModel *model,
   info = _gtk_file_system_model_get_info (closure->impl->browse_files_model, &child_iter);
   is_folder = gtk_file_info_get_is_folder (info);
 
-  closure->all_folders &= is_folder;
-  closure->all_files &= !is_folder;
+  closure->all_folders = closure->all_folders && is_folder;
+  closure->all_files = closure->all_files && !is_folder;
 }
 
 /* Checks whether the selected items in the file list are all files or all folders */
