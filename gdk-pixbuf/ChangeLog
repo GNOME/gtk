@@ -1,3 +1,10 @@
+2000-04-13  James Henstridge  <james@daa.com.au>
+
+	* configure.in: when performing the configure check to see if
+	gmodule works, set CFLAGS to GLIB_CFLAGS and LIBS to GLIB_LIBS,
+	rather than the other way round.  Also, call AC_MSG_RESULT in the
+	even that dynamic modules were not supported.
+
 2000-04-12  Federico Mena Quintero  <federico@helixcode.com>
 
 	This comes from an excellent idea by Tim Janik (timj@gtk.org) to
