@@ -42,12 +42,6 @@ void             gtk_theme_engine_ref             (GtkThemeEngine  *engine);
 void             gtk_theme_engine_unref           (GtkThemeEngine  *engine);
 GtkRcStyle     * gtk_theme_engine_create_rc_style (GtkThemeEngine  *engine);
 
-GType            gtk_theme_engine_register_type   (GtkThemeEngine  *engine,
-						   GType            parent_type,
-						   const gchar     *type_name,
-						   const GTypeInfo *type_info);
-
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
