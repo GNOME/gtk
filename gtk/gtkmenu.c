@@ -2609,7 +2609,6 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
    */
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
   if (!menu_item || !GTK_IS_MENU_ITEM (menu_item) ||
-      !_gtk_menu_item_is_selectable (menu_item) ||
       !GTK_IS_MENU (menu_item->parent))
     return FALSE;
 
@@ -2622,6 +2621,15 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
    */
   if (gtk_menu_navigating_submenu (menu, event->x_root, event->y_root))
     return TRUE; 
+
+  /* Make sure we pop down if we enter a non-selectable menu item, so we
+   * don't show a submenu when the cursor is outside the stay-up triangle.
+   */
+  if (!_gtk_menu_item_is_selectable (menu_item))
+    {
+      gtk_menu_shell_deselect (menu_shell);
+      return FALSE;
+    }
 
   if (need_enter)
     {
@@ -2870,6 +2878,15 @@ gtk_menu_leave_notify (GtkWidget        *widget,
       if (GTK_MENU_SHELL (menu_item->submenu)->active)
 	{
 	  gtk_menu_set_submenu_navigation_region (menu, menu_item, event);
+	  return TRUE;
+	}
+      else if (menu_item == menu_shell->active_menu_item)
+	{
+	  /* We are leaving an active menu item with nonactive submenu.
+	   * Deselect it so we don't surprise the user with by popping
+	   * up a submenu _after_ he left the item.
+	   */
+	  gtk_menu_shell_deselect (menu_shell);
 	  return TRUE;
 	}
     }

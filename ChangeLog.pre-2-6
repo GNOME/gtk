@@ -1,3 +1,13 @@
+Sat Feb 21 19:18:26 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	Bug 132502
+	
+	* gtk/gtkmenu.c (gtk_menu_motion_notify): Make sure we pop down
+	if we enter a non-selectable menu item.
+
+	* gtk/gtkmenu.c (gtk_menu_leave_notify): Don't pop a submenu
+	when the user has left the item.
+
 Sat Feb 21 17:57:35 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/docs: Commit auto-generated changes
