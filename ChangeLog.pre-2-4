@@ -2,6 +2,8 @@
 
 	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): Install "draw_as_radio"
 	as a separate property, not as an alias of "inconsistent".
+	(gtk_check_menu_item_get_property): 
+	(gtk_check_menu_item_set_property): Also support "draw_as_radio".
 
 Fri Aug 29 20:32:07 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
 

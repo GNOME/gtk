@@ -494,6 +494,9 @@ gtk_check_menu_item_get_property (GObject     *object,
     case PROP_INCONSISTENT:
       g_value_set_boolean (value, checkitem->inconsistent);
       break;
+    case PROP_DRAW_AS_RADIO:
+      g_value_set_boolean (value, checkitem->draw_as_radio);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -516,6 +519,9 @@ gtk_check_menu_item_set_property (GObject      *object,
       break;
     case PROP_INCONSISTENT:
       gtk_check_menu_item_set_inconsistent (checkitem, g_value_get_boolean (value));
+      break;
+    case PROP_DRAW_AS_RADIO:
+      gtk_check_menu_item_set_draw_as_radio (checkitem, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
