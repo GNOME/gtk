@@ -76,7 +76,7 @@ enum {
   PROP_DEFAULT_WIDTH,
   PROP_DEFAULT_HEIGHT,
   PROP_DESTROY_WITH_PARENT,
-
+  
   LAST_ARG
 };
 
@@ -93,7 +93,7 @@ typedef struct {
   GdkGeometry    geometry;	/* Geometry hints */
   GdkWindowHints mask;
   GtkWidget     *widget;	/* subwidget to which hints apply */
-  gint           width;		/* Default size */
+  gint           width;		/* gtk_window_set_default_size () */
   gint           height;
 
   GtkWindowLastGeometryInfo last;
@@ -166,11 +166,11 @@ static void  gtk_window_constrain_size      (GtkWindow       *window,
 static void gtk_window_compute_hints      (GtkWindow         *window, 
 					   GdkGeometry       *new_geometry,
 					   guint             *new_flags);
-static void gtk_window_compute_reposition (GtkWindow         *window,
-					   gint               new_width,
-					   gint               new_height,
-					   gint              *x,
-					   gint              *y);
+static gboolean gtk_window_compute_reposition (GtkWindow         *window,
+					       gint               new_width,
+					       gint               new_height,
+					       gint              *x,
+					       gint              *y);
 
 static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
@@ -450,6 +450,7 @@ gtk_window_init (GtkWindow *window)
   window->frame_top = 0;
   window->frame_bottom = 0;
   window->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+  window->gravity = GDK_GRAVITY_NORTH_WEST;
   window->decorated = TRUE;
   window->mnemonic_modifier = GDK_MOD1_MASK;
   
@@ -1478,8 +1479,24 @@ gtk_window_set_default_size (GtkWindow   *window,
     g_object_notify (G_OBJECT (window), "width");
   if (height >= 0)
     g_object_notify (G_OBJECT (window), "height");
-  
-  gtk_widget_queue_resize (GTK_WIDGET (window));
+
+  if (GTK_WIDGET_REALIZED (window) && window->allow_grow)
+    {
+      /* Resize as if the user had resized */
+      GdkGeometry new_geometry;
+      GdkWindowHints new_flags;
+      
+      gtk_window_compute_hints (window, &new_geometry, &new_flags);
+      gtk_window_constrain_size (window,
+                                 &new_geometry, new_flags,
+                                 width, height,
+                                 &width, &height);          
+      
+      gdk_window_resize (GTK_WIDGET (window)->window,
+                         width, height);
+    }
+  else
+    gtk_widget_queue_resize (GTK_WIDGET (window));
 }
   
 static void
@@ -2457,6 +2474,7 @@ gtk_window_move_resize (GtkWindow *window)
   GtkWindowLastGeometryInfo saved_last_info;
   GdkGeometry new_geometry;
   guint new_flags;
+  gboolean need_reposition;
   gint x, y;
   gint width, height;
   gint new_width, new_height;
@@ -2502,10 +2520,10 @@ gtk_window_move_resize (GtkWindow *window)
   /* From the default size and the allocation, figure out the size
    * the window should be.
    */
-  if (!default_size_changed ||
-      (!window->auto_shrink &&
-       new_width <= widget->allocation.width &&
-       new_height <= widget->allocation.height))
+  if (!window->auto_shrink &&
+      (!default_size_changed ||
+       (new_width <= widget->allocation.width &&
+        new_height <= widget->allocation.height)))
     {
       new_width = widget->allocation.width;
       new_height = widget->allocation.height;
@@ -2519,8 +2537,8 @@ gtk_window_move_resize (GtkWindow *window)
 
   /* compute new window position if a move is required
    */
-  gtk_window_compute_reposition (window, new_width, new_height, &x, &y);
-  if (x != 1 && y != -1 && !(new_flags & GDK_HINT_POS))
+  need_reposition = gtk_window_compute_reposition (window, new_width, new_height, &x, &y);
+  if (need_reposition && !(new_flags & GDK_HINT_POS))
     {
       new_flags |= GDK_HINT_POS;
       hints_changed = TRUE;
@@ -2583,7 +2601,7 @@ gtk_window_move_resize (GtkWindow *window)
 	   * the new size had been set.
 	   */
 	  
-	  if (x != -1 && y != -1)
+	  if (need_reposition)
 	    {
 	      if (window->frame)
 		gdk_window_move (window->frame, x - window->frame_left, y - window->frame_top);
@@ -2632,7 +2650,7 @@ gtk_window_move_resize (GtkWindow *window)
        */
       
       /* request a new window size */
-      if (x != -1 && y != -1)
+      if (need_reposition)
 	{
 	  if (window->frame)
 	    {
@@ -2675,7 +2693,7 @@ gtk_window_move_resize (GtkWindow *window)
     }
   else
     {
-      if (x != -1 && y != -1)
+      if (need_reposition)
 	{
 	  if (window->frame)
 	    gdk_window_move (window->frame, x - window->frame_left, y - window->frame_top);
@@ -2724,6 +2742,10 @@ gtk_window_compare_hints (GdkGeometry *geometry_a,
        geometry_a->height_inc != geometry_b->height_inc))
     return FALSE;
 
+  if ((flags_a & GDK_HINT_WIN_GRAVITY) &&
+      (geometry_a->win_gravity != geometry_b->win_gravity))
+    return FALSE;
+  
   return TRUE;
 }
 
@@ -2837,8 +2859,8 @@ gtk_window_compute_hints (GtkWindow   *window,
   ux = 0;
   uy = 0;
   
-  aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
-  if (aux_info && (aux_info->x != -1) && (aux_info->y != -1))
+  aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+  if (aux_info && aux_info->x_set && aux_info->y_set)
     {
       ux = aux_info->x;
       uy = aux_info->y;
@@ -2899,13 +2921,16 @@ gtk_window_compute_hints (GtkWindow   *window,
       new_geometry->max_width = requisition.width;
       new_geometry->max_height = requisition.height;
     }
+
+  *new_flags |= GDK_HINT_WIN_GRAVITY;
+  new_geometry->win_gravity = window->gravity;
 }
 
 /* Compute a new position for the window based on a new
- * size. *x and *y will be set to the new coordinates, or to -1 if the
- * window does not need to be moved
+ * size. *x and *y will be set to the new coordinates. Returns
+ * TRUE if the window needs to be moved;
  */
-static void 
+static gboolean
 gtk_window_compute_reposition (GtkWindow  *window,
 			       gint        new_width,
 			       gint        new_height,
@@ -2915,11 +2940,9 @@ gtk_window_compute_reposition (GtkWindow  *window,
   GtkWidget *widget;
   GtkWindowPosition pos;
   GtkWidget *parent_widget;
+  gboolean result = FALSE;
   
   widget = GTK_WIDGET (window);
-
-  *x = -1;
-  *y = -1;
 
   parent_widget = (GtkWidget*) window->transient_parent;
   
@@ -2940,6 +2963,8 @@ gtk_window_compute_reposition (GtkWindow  *window,
 	  
 	  *x = (screen_width - new_width) / 2;
 	  *y = (screen_height - new_height) / 2;
+
+	  result = TRUE;
 	}
       break;
 
@@ -2952,6 +2977,8 @@ gtk_window_compute_reposition (GtkWindow  *window,
                                  
           *x = ox + (parent_widget->allocation.width - new_width) / 2;
           *y = oy + (parent_widget->allocation.height - new_height) / 2;
+
+	  result = TRUE;
         }
       break;
 
@@ -2966,43 +2993,37 @@ gtk_window_compute_reposition (GtkWindow  *window,
 	  *y -= new_height / 2;
 	  *x = CLAMP (*x, 0, screen_width - new_width);
 	  *y = CLAMP (*y, 0, screen_height - new_height);
+
+	  result = TRUE;
 	}
       break;
     default:
       if (window->use_uposition)
 	{
-	  GtkWidgetAuxInfo *aux_info;
-	  
-	  aux_info = gtk_object_get_data (GTK_OBJECT (window), "gtk-aux-info");
-	  if (aux_info &&
-	      aux_info->x != -1 && aux_info->y != -1 &&
-	      aux_info->x != -2 && aux_info->y != -2)
+	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+	  if (aux_info && aux_info->x_set && aux_info->y_set)
 	    {
 	      *x = aux_info->x;
 	      *y = aux_info->y;
 	    }
+
+	  result = TRUE;
 	}
       break;
     }
 
-  if (*x != -1 && *y != -1)
+  if (result)
     {
-      GtkWidgetAuxInfo *aux_info;
+      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (widget, TRUE);
       
-      /* we handle necessary window positioning by hand here,
-       * so we can coalesce the window movement with possible
-       * resizes to get only one configure event.
-       * keep this in sync with gtk_widget_set_uposition()
-       * and gtk_window_reposition().
-       */
-      gtk_widget_set_uposition (widget, -1, -1); /* ensure we have aux_info */
-      
-      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
+      aux_info->x_set = aux_info->y_set = TRUE;
       aux_info->x = *x;
       aux_info->y = *y;
 
       window->use_uposition = FALSE;
     }
+
+  return result;
 }
 
 /***********************
@@ -3375,6 +3396,375 @@ gtk_window_unmaximize (GtkWindow *window)
 }
 
 /**
+ * gtk_window_set_resizeable:
+ * @window: a #GtkWindow
+ * @setting: %TRUE if the user can resize this window
+ *
+ * Sets whether the user can resize a window. Windows are user resizeable
+ * by default.
+ * 
+ **/
+void
+gtk_window_set_resizeable (GtkWindow *window,
+                                gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (setting)
+    gtk_window_set_policy (window, FALSE, TRUE, FALSE);
+  else
+    gtk_window_set_policy (window, FALSE, FALSE, TRUE);
+}
+
+/**
+ * gtk_window_get_resizeable:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_resizeable().
+ * 
+ * Return value: %TRUE if the user can resize the window
+ **/
+gboolean
+gtk_window_get_resizeable (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+
+  /* allow_grow is most likely to indicate the semantic concept we
+   * mean by "resizeable" (and will be a reliable indicator if
+   * set_policy() hasn't been called)
+   */
+  return window->allow_grow;
+}
+
+
+/**
+ * gtk_window_set_size:
+ * @window: a #GtkWindow
+ * @width: width, or -1 to use the default width
+ * @height: height, or -1 to use the default height
+ *
+ * Sets the size of @window, but only works for resizeable windows
+ * (see gtk_window_set_resizeable()). Setting the size emulates a user
+ * resize operation. Therefore, setting the size less than the minimum
+ * size for the window will simply make the window its minimum size,
+ * and the user will be able to change the size that's set.
+ *
+ * This call also sets the default size of the window, so replaces
+ * gtk_window_set_default_size().
+ *
+ * To set a minimum size, or to set the size of a non-resizeable window,
+ * use gtk_widget_set_usize() on the window. Though normally it makes
+ * more sense to instead call gtk_widget_set_usize() on a child widget inside
+ * the window, rather than the window itself.
+ *
+ * Under the X Window System, window managers are allowed to ignore GTK+'s
+ * request to change a window's size. So your program should not rely on
+ * getting a specific size. (And, as noted in gtk_window_get_size(),
+ * a program that crucially relies on a specific size will generally have
+ * race conditions and be buggy anyway - rather than assuming a
+ * call to gtk_window_set_size() has taken effect, you should react
+ * to configure_event signals on your #GtkWindow.)
+ *
+ * If you set a geometry widget for the window with
+ * gtk_window_set_geometry_hints(), the size applies to the geometry
+ * widget, not the window itself.
+ *
+ * If you've called the deprecated gtk_window_set_policy() function,
+ * gtk_window_set_size() may not behave as expected, due to interaction
+ * with window policies.
+ **/
+void
+gtk_window_set_size (GtkWindow *window,
+                     gint       width,
+                     gint       height)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (width != 0);
+  g_return_if_fail (height != 0);
+  
+  /* set_default_size() uses "0" to mean "unset", but we allow "-1"
+   * for that in this newer function
+   */
+  if (width < 0)
+    width = 0;
+  if (height < 0)
+    height = 0;
+
+  gtk_window_set_default_size (window, width, height);
+}
+
+/**
+ * gtk_window_get_size:
+ * @window: a #GtkWindow
+ * @width: return location for current width, or %NULL
+ * @height: return location for current height, or %NULL
+ * 
+ * Obtains the current size of @window. If the window is not onscreen
+ * (i.e. has not been received its first configure_event after being
+ * shown with gtk_widget_show()), the size will be the size GTK+ will
+ * request for this window when it's shown.  The window manager may
+ * not choose to give the window exactly this requested size.
+ *
+ * In general, code which depends on window size should connect to the
+ * configure_event on the window so that it can respond to changes in
+ * size caused by the user or by the window manager, in addition to
+ * changes in size created by your program.
+ *
+ * If you set a geometry widget for the window with
+ * gtk_window_set_geometry_hints(), the size retrieved is the size of
+ * the geometry widget, not the window itself.
+ * 
+ **/
+void
+gtk_window_get_size (GtkWindow *window,
+                     gint      *width,
+                     gint      *height)
+{
+  GtkWindowGeometryInfo *info;
+  GtkWidget *widget = GTK_WIDGET (window);
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (GTK_WIDGET_REALIZED (window))
+    {
+      gdk_window_get_size (GTK_WIDGET (window)->window,
+                           width, height);
+    }
+  else
+    {
+      GdkGeometry new_geometry;
+      GdkWindowHints new_flags;
+      gint w, h;
+      
+      gtk_widget_size_request (widget, NULL);  
+      gtk_window_compute_default_size (window, &w, &h);
+      
+      gtk_window_compute_hints (window, &new_geometry, &new_flags);
+      gtk_window_constrain_size (window,
+                                 &new_geometry, new_flags,
+                                 w, h,
+                                 &w, &h);
+
+      if (width)
+        *width = w;
+      if (height)
+        *height = h;
+    }
+
+  info = gtk_window_get_geometry_info (window, TRUE);
+  if (info->widget)
+    {
+      gint extra_width = widget->requisition.width - info->widget->requisition.width;
+      gint extra_height = widget->requisition.height - info->widget->requisition.height;
+      
+      if (width)
+        *width -= extra_width;
+      if (height)
+        *height -= extra_height;
+    }
+}
+
+/**
+ * gtk_window_set_location:
+ * @window: a #GtkWindow
+ * @root_x: X position of gravity-determined reference point in root window coordinates
+ * @root_y: Y position of gravity-determined reference point in root window coordinates
+ *
+ * Requests a new position for a #GtkWindow. The position is given in
+ * root window coordinates, and is the position of the window's
+ * "reference point" as determined by the window gravity (see
+ * gtk_window_set_gravity()). By default, the reference point is the
+ * northwest (top left) corner of the window's titlebar.  So if you
+ * set the window position to (0,0), the window's titlebar will end up
+ * in the top left corner of the root window. Note that the root
+ * window does not always correspond to the user's desktop area, so
+ * you may want to call gdk_workspace_get_extents() or
+ * gdk_desktop_get_extents() to decide where to place a window.  The
+ * extents of the root window can be obtained using gdk_screen_width()
+ * and gdk_screen_height().
+ * 
+ **/
+void
+gtk_window_set_location (GtkWindow *window,
+                         gint       root_x,
+                         gint       root_y)
+{
+  GtkWidgetAuxInfo *aux_info;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (window), TRUE);
+
+  aux_info->x_set = aux_info->y_set = TRUE;
+  aux_info->x = root_x;
+  aux_info->y = root_y;
+  
+  gtk_window_reposition (window, root_x, root_y);
+}
+
+/**
+ * gtk_window_get_location:
+ * @window: a #GtkWindow
+ * @root_x: return location for X coordinate of gravity-determined reference point
+ * @root_y: return location for Y coordinate of gravity-determined reference point
+ *
+ * Attempts to obtain the current position of the reference point, as
+ * set by gtk_window_set_position(). This computation is accurate when
+ * the reference point is a corner of the window itself (as with
+ * #GDK_GRAVITY_STATIC), but may not be accurate when the reference
+ * point is a position on the titlebar or window border, because the X
+ * Window System does not provide a reliable way of obtaining this
+ * information. GTK+ will do a "best guess" which may not be fully
+ * accurate with some window managers, but will probably be
+ * reasonable.
+ * 
+ **/
+void
+gtk_window_get_location (GtkWindow *window,
+                         gint      *root_x,
+                         gint      *root_y)
+{
+  GdkRectangle frame_extents;
+  GtkWidget *widget;
+  GtkWidgetAuxInfo *aux_info;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+  
+  if (GTK_WIDGET_REALIZED (window))
+    {
+      if (window->gravity == GDK_GRAVITY_STATIC)
+        {
+          gdk_window_get_origin (widget->window, root_x, root_y);
+          return;
+        }
+      else
+        {
+          gint x, y;
+          
+          gdk_window_get_frame_extents (widget->window, &frame_extents);
+          
+          x = frame_extents.x;
+          y = frame_extents.y;
+
+          switch (window->gravity)
+            {
+            case GDK_GRAVITY_NORTH:
+            case GDK_GRAVITY_CENTER:
+            case GDK_GRAVITY_SOUTH:
+              x += frame_extents.width / 2;
+              break;
+            case GDK_GRAVITY_SOUTH_EAST:
+            case GDK_GRAVITY_EAST:
+            case GDK_GRAVITY_NORTH_EAST:
+              x += frame_extents.width;
+              break;
+            default:
+              break;
+            }
+
+          switch (window->gravity)
+            {
+            case GDK_GRAVITY_WEST:
+            case GDK_GRAVITY_CENTER:
+            case GDK_GRAVITY_EAST:
+              y += frame_extents.height / 2;
+              break;
+            case GDK_GRAVITY_SOUTH_WEST:
+            case GDK_GRAVITY_SOUTH:
+            case GDK_GRAVITY_SOUTH_EAST:
+              y += frame_extents.height;
+              break;
+            default:
+              break;
+            }
+
+          if (root_x)
+            *root_x = x;
+          if (root_y)
+            *root_y = y;
+        }
+    }
+  else
+    {
+      /* We really don't have a location yet, so we make up some stuff,
+       * using the uposition if it's been set.
+       */
+      if (root_x)
+        *root_x = 0;
+
+      if (root_y)
+        *root_y = 0;
+      
+      aux_info = _gtk_widget_get_aux_info (widget, FALSE);
+      if (aux_info && aux_info->x_set && aux_info->y_set)
+        {
+	  *root_x = aux_info->x;
+	  *root_y = aux_info->y;
+        }
+    }
+}
+
+/**
+ * gtk_window_set_gravity:
+ * @window: a #GtkWindow
+ * @gravity: window gravity
+ *
+ * Window gravity defines the "reference point" to be used when
+ * positioning or resizing a window. Calls to
+ * gtk_window_set_position() will position a different point on the
+ * window depending on the window gravity. When the window changes size
+ * the reference point determined by the window's gravity will stay in
+ * a fixed location.
+ *
+ * See #GdkGravity for full details. To briefly summarize,
+ * #GDK_GRAVITY_NORTH_WEST means that the reference point is the
+ * northwest (top left) corner of the window
+ * frame. #GDK_GRAVITY_SOUTH_EAST would be the bottom right corner of
+ * the frame, and so on. If you want to position the window contents,
+ * rather than the window manager's frame, #GDK_GRAVITY_STATIC moves
+ * the reference point to the northwest corner of the #GtkWindow
+ * itself.
+ *
+ * The default window gravity is #GDK_GRAVITY_NORTH_WEST.
+ * 
+ **/
+void
+gtk_window_set_gravity (GtkWindow *window,
+                        GdkGravity gravity)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  if (gravity != window->gravity)
+    {
+      window->gravity = gravity;
+
+      /* This is sort of odd, but it keeps the hints recomputation
+       * in one place. Otherwise we're likely to mess up the
+       * recording of the last hints, etc.
+       */
+      gtk_widget_queue_resize (GTK_WIDGET (window));
+    }
+}
+
+/**
+ * gtk_window_get_gravity:
+ * @window: a #GtkWindow
+ * 
+ * Gets the value set by gtk_window_set_gravity().
+ * 
+ * Return value: window gravity
+ **/
+GdkGravity
+gtk_window_get_gravity (GtkWindow *window)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), 0);
+
+  return window->gravity;
+}
+
+/**
  * gtk_window_begin_resize_drag:
  * @window: a #GtkWindow
  * @button: mouse button that initiated the drag
@@ -3416,7 +3806,6 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
                                 root_x, root_y,
                                 timestamp);
 }
-
 
 /**
  * gtk_window_begin_move_drag:

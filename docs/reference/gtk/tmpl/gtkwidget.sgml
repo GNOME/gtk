@@ -294,6 +294,8 @@ GtkWidget
 @y: 
 @width: 
 @height: 
+@x_set: 
+@y_set: 
 
 <!-- ##### STRUCT GtkWidgetShapeInfo ##### -->
 <para>

@@ -1013,7 +1013,7 @@ gtk_label_ensure_layout (GtkLabel *label,
       gint width, height;
       gint real_width;
 
-      aux_info = gtk_object_get_data (GTK_OBJECT (widget), "gtk-aux-info");
+      aux_info = _gtk_widget_get_aux_info (widget, FALSE);
       if (aux_info && aux_info->width > 0)
 	{
 	  pango_layout_set_width (label->layout, aux_info->width * PANGO_SCALE);

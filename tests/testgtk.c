@@ -8207,6 +8207,325 @@ create_window_states (void)
 }
 
 /*
+ * Window sizing
+ */
+
+static gint
+configure_event_callback (GtkWidget *widget,
+                          GdkEventConfigure *event,
+                          gpointer data)
+{
+  GtkWidget *label = data;
+  gchar *msg;
+  gint x, y;
+
+  gtk_window_get_location (GTK_WINDOW (widget), &x, &y);
+  
+  msg = g_strdup_printf ("event: %d,%d  %d x %d\n"
+                         "location: %d, %d",
+                         event->x, event->y, event->width, event->height,
+                         x, y);
+  
+  gtk_label_set_text (GTK_LABEL (label), msg);
+
+  g_free (msg);
+
+  return FALSE;
+}
+
+static void
+get_ints (GtkWidget *window,
+          gint      *a,
+          gint      *b)
+{
+  GtkWidget *spin1;
+  GtkWidget *spin2;
+
+  spin1 = g_object_get_data (G_OBJECT (window), "spin1");
+  spin2 = g_object_get_data (G_OBJECT (window), "spin2");
+
+  *a = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spin1));
+  *b = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spin2));
+}
+
+static void
+set_size_callback (GtkWidget *widget,
+                   gpointer   data)
+{
+  gint w, h;
+  
+  get_ints (data, &w, &h);
+
+  gtk_window_set_size (g_object_get_data (data, "target"),
+                       w, h);
+}
+     
+static void
+set_default_size_callback (GtkWidget *widget,
+                           gpointer   data)
+{
+  gint w, h;
+  
+  get_ints (data, &w, &h);
+
+  gtk_window_set_default_size (g_object_get_data (data, "target"),
+                               w, h);
+}
+
+static void
+set_usize_callback (GtkWidget *widget,
+                    gpointer   data)
+{
+  gint w, h;
+  
+  get_ints (data, &w, &h);
+
+  gtk_widget_set_usize (g_object_get_data (data, "target"),
+                        w, h);
+}
+
+static void
+set_location_callback (GtkWidget *widget,
+                       gpointer   data)
+{
+  gint x, y;
+  
+  get_ints (data, &x, &y);
+
+  gtk_window_set_location (g_object_get_data (data, "target"),
+                           x, y);
+}
+
+static void
+allow_shrink_callback (GtkWidget *widget,
+                       gpointer   data)
+{
+  g_object_set (G_OBJECT (g_object_get_data (data, "target")),
+                "allow_shrink",
+                GTK_TOGGLE_BUTTON (widget)->active,
+                NULL);
+}
+
+static void
+allow_grow_callback (GtkWidget *widget,
+                     gpointer   data)
+{
+  g_object_set (G_OBJECT (g_object_get_data (data, "target")),
+                "allow_grow",
+                GTK_TOGGLE_BUTTON (widget)->active,
+                NULL);
+}
+
+static void
+auto_shrink_callback (GtkWidget *widget,
+                      gpointer   data)
+{
+  g_object_set (G_OBJECT (g_object_get_data (data, "target")),
+                "auto_shrink",
+                GTK_TOGGLE_BUTTON (widget)->active,
+                NULL);
+}
+
+static void
+gravity_selected (GtkWidget *widget,
+                  gpointer data)
+{
+  gtk_window_set_gravity (G_OBJECT (g_object_get_data (data, "target")),
+                          gtk_option_menu_get_history (GTK_OPTION_MENU (widget)) + GDK_GRAVITY_NORTH_WEST);
+}
+
+static GtkWidget*
+window_controls (GtkWidget *window)
+{
+  GtkWidget *control_window;
+  GtkWidget *label;
+  GtkWidget *vbox;
+  GtkWidget *button;
+  GtkWidget *spin;
+  GtkAdjustment *adj;
+  GtkWidget *om;
+  GtkWidget *menu;
+  gint i;
+  
+  control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  gtk_window_set_title (GTK_WINDOW (control_window), "Size controls");
+  
+  g_object_set_data (G_OBJECT (control_window),
+                     "target",
+                     window);
+  
+  gtk_signal_connect_object (GTK_OBJECT (control_window),
+                             "destroy",
+                             GTK_SIGNAL_FUNC (gtk_widget_destroy),
+                             GTK_OBJECT (window));
+
+  vbox = gtk_vbox_new (FALSE, 5);
+  
+  gtk_container_add (GTK_CONTAINER (control_window), vbox);
+  
+  label = gtk_label_new ("<no configure events>");
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  
+  gtk_signal_connect (GTK_OBJECT (window),
+                      "configure_event",
+                      GTK_SIGNAL_FUNC (configure_event_callback),
+                      label);
+
+  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -3.0, 800.0, 1.0,
+                                              5.0, 0.0);
+  spin = gtk_spin_button_new (adj, 0, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
+
+  g_object_set_data (G_OBJECT (control_window), "spin1", spin);
+
+  adj = (GtkAdjustment *) gtk_adjustment_new (10.0, -3.0, 800.0, 1.0,
+                                              5.0, 0.0);
+  spin = gtk_spin_button_new (adj, 0, 0);
+
+  gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
+
+  g_object_set_data (G_OBJECT (control_window), "spin2", spin);
+
+  button = gtk_button_new_with_label ("Queue resize");
+  gtk_signal_connect_object (GTK_WIDGET (button),
+                             "clicked",
+                             GTK_SIGNAL_FUNC (gtk_widget_queue_resize),
+                             GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
+  button = gtk_button_new_with_label ("Set size");
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (set_size_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Set default size");
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (set_default_size_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Set usize");
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (set_usize_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_button_new_with_label ("Set location");
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "clicked",
+                      GTK_SIGNAL_FUNC (set_location_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_check_button_new_with_label ("Allow shrink");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "toggled",
+                      GTK_SIGNAL_FUNC (allow_shrink_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  button = gtk_check_button_new_with_label ("Allow grow");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "toggled",
+                      GTK_SIGNAL_FUNC (allow_grow_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+  
+  button = gtk_check_button_new_with_label ("Auto shrink");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), FALSE);
+  gtk_signal_connect (GTK_WIDGET (button),
+                      "toggled",
+                      GTK_SIGNAL_FUNC (auto_shrink_callback),
+                      GTK_OBJECT (control_window));
+  gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
+
+  menu = gtk_menu_new ();
+  
+  i = 0;
+  while (i < 10)
+    {
+      GtkWidget *mi;
+      static gchar *names[10] = {
+        "GDK_GRAVITY_NORTH_WEST",
+        "GDK_GRAVITY_NORTH",
+        "GDK_GRAVITY_NORTH_EAST",
+        "GDK_GRAVITY_WEST",
+        "GDK_GRAVITY_CENTER",
+        "GDK_GRAVITY_EAST",
+        "GDK_GRAVITY_SOUTH_WEST",
+        "GDK_GRAVITY_SOUTH",
+        "GDK_GRAVITY_SOUTH_EAST",
+        "GDK_GRAVITY_STATIC",
+        NULL
+      };
+
+      g_assert (names[i]);
+      
+      mi = gtk_menu_item_new_with_label (names[i]);
+
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+
+      ++i;
+    }
+  
+  gtk_widget_show_all (menu);
+  
+  om = gtk_option_menu_new ();
+  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
+  
+
+  gtk_signal_connect (GTK_OBJECT (om),
+                      "changed",
+                      GTK_SIGNAL_FUNC (gravity_selected),
+                      control_window);
+
+  gtk_box_pack_end (GTK_BOX (vbox), om, FALSE, FALSE, 0);
+  
+  gtk_widget_show_all (vbox);
+  
+  return control_window;
+}
+
+void
+create_window_sizing (void)
+{
+  static GtkWidget *window = NULL;
+  
+  if (!window)
+    {
+      GtkWidget *label;
+      
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label), "<span foreground=\"purple\"><big>Window being resized</big></span>\nBlah blah blah blah\nblah blah blah\nblah blah blah blah blah");
+      gtk_container_add (GTK_CONTAINER (window), label);
+      gtk_widget_show (label);
+      
+      gtk_signal_connect (GTK_OBJECT (window), "destroy",
+			  GTK_SIGNAL_FUNC(gtk_widget_destroyed),
+			  &window);
+
+      gtk_window_set_title (GTK_WINDOW (window), "Window to size");
+
+      gtk_widget_show (window_controls (window));
+    }
+
+  if (!GTK_WIDGET_VISIBLE (window))
+    gtk_widget_show (window);
+  else
+    gtk_widget_destroy (window);
+}
+
+/*
  * GtkProgressBar
  */
 
@@ -9848,6 +10167,7 @@ create_main_window (void)
       { "tooltips", create_tooltips },
       { "tree", create_tree_mode_window},
       { "WM hints", create_wmhints },
+      { "window sizing", create_window_sizing },
       { "window states", create_window_states }
     };
   int nbuttons = sizeof (buttons) / sizeof (buttons[0]);

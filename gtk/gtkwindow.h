@@ -93,7 +93,9 @@ struct _GtkWindow
 
   guint decorated : 1;
   
-  GdkWindowTypeHint type_hint : 2;
+  GdkWindowTypeHint type_hint : 3;
+
+  GdkGravity gravity : 5;
   
   guint frame_left;
   guint frame_top;
@@ -123,10 +125,6 @@ void       gtk_window_set_wmclass              (GtkWindow           *window,
 						const gchar         *wmclass_class);
 void       gtk_window_set_role                 (GtkWindow           *window,
                                                 const gchar         *role);
-void       gtk_window_set_policy               (GtkWindow           *window,
-						gboolean	     allow_shrink,
-						gboolean	     allow_grow,
-						gboolean	     auto_shrink);
 void       gtk_window_add_accel_group          (GtkWindow           *window,
 						GtkAccelGroup	    *accel_group);
 void       gtk_window_remove_accel_group       (GtkWindow           *window,
@@ -142,22 +140,41 @@ void       gtk_window_set_type_hint            (GtkWindow           *window,
 						GdkWindowTypeHint    hint);
 void       gtk_window_set_destroy_with_parent  (GtkWindow           *window,
                                                 gboolean             setting);
-void       gtk_window_set_geometry_hints       (GtkWindow           *window,
-						GtkWidget           *geometry_widget,
-						GdkGeometry         *geometry,
-						GdkWindowHints       geom_mask);
 void       gtk_window_set_decorations_hint     (GtkWindow	    *window,
                                                 GdkWMDecoration      decorations);
 void       gtk_window_set_functions_hint       (GtkWindow	    *window,
                                                 GdkWMFunction	     functions);
 
-/* The following differs from gtk_widget_set_usize, in that
- * gtk_widget_set_usize() overrides the requisition, so sets a minimum
- * size, while this only sets the size requested from the WM.
- */
-void       gtk_window_set_default_size         (GtkWindow           *window,
-						gint                 width,
-						gint                 height);
+
+void       gtk_window_set_resizeable           (GtkWindow           *window,
+                                                gboolean             setting);
+gboolean   gtk_window_get_resizeable           (GtkWindow           *window);
+
+
+void       gtk_window_set_size                 (GtkWindow           *window,
+                                                gint                 width,
+                                                gint                 height);
+void       gtk_window_get_size                 (GtkWindow           *window,
+                                                gint                *width,
+                                                gint                *height);
+
+void       gtk_window_set_location             (GtkWindow           *window,
+                                                gint                 root_x,
+                                                gint                 root_y);
+void       gtk_window_get_location             (GtkWindow           *window,
+                                                gint                *root_x,
+                                                gint                *root_y);
+
+void       gtk_window_set_gravity              (GtkWindow           *window,
+                                                GdkGravity           gravity);
+GdkGravity gtk_window_get_gravity              (GtkWindow           *window);
+
+
+void       gtk_window_set_geometry_hints       (GtkWindow           *window,
+						GtkWidget           *geometry_widget,
+						GdkGeometry         *geometry,
+						GdkWindowHints       geom_mask);
+
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
 void       gtk_window_set_has_frame            (GtkWindow *window);
 void       gtk_window_set_frame_dimensions     (GtkWindow *window, 
@@ -186,7 +203,6 @@ gboolean gtk_window_activate_mnemonic     (GtkWindow       *window,
 void     gtk_window_set_mnemonic_modifier (GtkWindow       *window,
 					   GdkModifierType  modifier);
 
-
 void     gtk_window_present       (GtkWindow *window);
 void     gtk_window_iconify       (GtkWindow *window);
 void     gtk_window_deiconify     (GtkWindow *window);
@@ -207,6 +223,19 @@ void gtk_window_begin_move_drag   (GtkWindow     *window,
                                    gint           root_y,
                                    guint32        timestamp);
 
+#ifndef GTK_DISABLE_DEPRECATED
+void       gtk_window_set_policy               (GtkWindow           *window,
+						gint                 allow_shrink,
+						gint                 allow_grow,
+						gint                 auto_shrink);
+/* The following differs from gtk_widget_set_usize, in that
+ * gtk_widget_set_usize() overrides the requisition, so sets a minimum
+ * size, while this only sets the size requested from the WM.
+ */
+void       gtk_window_set_default_size         (GtkWindow           *window,
+						gint                 width,
+						gint                 height);
+#endif
 
 /* --- internal functions --- */
 void       gtk_window_set_focus                (GtkWindow           *window,

@@ -394,6 +394,8 @@ struct _GtkWidgetAuxInfo
   gint y;
   gint width;
   gint height;
+  guint x_set : 1;
+  guint y_set : 1;
 };
 
 struct _GtkWidgetShapeInfo
@@ -679,6 +681,8 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
+GtkWidgetAuxInfo *_gtk_widget_get_aux_info (GtkWidget *widget,
+					    gboolean   create);
 
 #ifdef __cplusplus
 }

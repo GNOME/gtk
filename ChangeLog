@@ -1,3 +1,31 @@
+Wed Mar 28 20:30:26 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] (_gtk_widget_get_aux_info): Add private function
+	to get the aux info structure fo the widget.
+
+	* gtk/gtklabel.c gtk/gtkscrolledwindow.c gtk/gtkwindow.c: Use
+	above function.
+
+        [ Patch from  Havoc Pennington  <hp@redhat.com> ]
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_get_frame_extents): function
+	to get the size of the window manager frame, basically the same
+	code that gdk_window_get_root_origin() had
+	(gdk_window_get_root_origin): use gdk_window_get_frame_extents()
+
+	* gtk/gtkwindow.c (gtk_window_set_default_size): use
+	gdk_window_resize() if the window is realized and resizeable
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_geometry_hints): fix
+	typo so that setting gravity works
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): don't ever use
+	allocation if auto_shrink is on, even if the default size
+	has not changed.
+
+	* gtk/gtkwidget.c (gtk_widget_render_icon): remove bogus
+	g_return_if_fail
+
 Thu Mar 29 16:29:12 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtkliststore.c (gtk_list_store_iter_changed): Massive

@@ -666,20 +666,14 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
   
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      static guint quark_aux_info = 0;
-
-      if (!quark_aux_info)
-	quark_aux_info = g_quark_from_static_string ("gtk-aux-info");
-
       gtk_widget_size_request (bin->child, &child_requisition);
 
       if (scrolled_window->hscrollbar_policy == GTK_POLICY_NEVER)
 	requisition->width += child_requisition.width;
       else
 	{
-	  GtkWidgetAuxInfo *aux_info;
+	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (bin->child, FALSE);
 
-	  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (bin->child), quark_aux_info);
 	  if (aux_info && aux_info->width > 0)
 	    {
 	      requisition->width += aux_info->width;
@@ -693,9 +687,7 @@ gtk_scrolled_window_size_request (GtkWidget      *widget,
 	requisition->height += child_requisition.height;
       else
 	{
-	  GtkWidgetAuxInfo *aux_info;
-
-	  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (bin->child), quark_aux_info);
+	  GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (bin->child, FALSE);
 	  if (aux_info && aux_info->height > 0)
 	    {
 	      requisition->height += aux_info->height;

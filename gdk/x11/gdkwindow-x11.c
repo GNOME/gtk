@@ -1676,6 +1676,19 @@ gdk_window_get_geometry (GdkWindow *window,
     }
 }
 
+/**
+ * gdk_window_get_origin:
+ * @window: a #GdkWindow
+ * @x: return location for X coordinate
+ * @y: return location for Y coordinate
+ * 
+ * Obtains the position of a window in root window coordinates.
+ * (Compare with gdk_window_get_position() and
+ * gdk_window_get_geometry() which return the position of a window
+ * relative to its parent window.)
+ * 
+ * Return value: not meaningful, ignore
+ **/
 gint
 gdk_window_get_origin (GdkWindow *window,
 		       gint      *x,
@@ -1708,6 +1721,21 @@ gdk_window_get_origin (GdkWindow *window,
   return return_val;
 }
 
+/**
+ * gdk_window_get_deskrelative_origin:
+ * @window: a #GdkWindow
+ * @x: return location for X coordinate
+ * @y: return location for Y coordinate
+ * 
+ * This gets the origin of a #GdkWindow relative to
+ * an Enlightenment-window-manager desktop. As long as you don't
+ * assume that the user's desktop/workspace covers the entire
+ * root window (i.e. you don't assume that the desktop begins
+ * at root window coordinate 0,0) this function is not necessary.
+ * It's deprecated for that reason.
+ * 
+ * Return value: not meaningful
+ **/
 gboolean
 gdk_window_get_deskrelative_origin (GdkWindow *window,
 				    gint      *x,
@@ -1772,10 +1800,48 @@ gdk_window_get_deskrelative_origin (GdkWindow *window,
   return return_val;
 }
 
+/**
+ * gdk_window_get_root_origin:
+ * @window: a #GdkWindow
+ * @x: return location for X position of window frame
+ * @y: return location for Y position of window frame
+ *
+ * Obtains the top-left corner of the window manager frame in root
+ * window coordinates.
+ * 
+ **/
 void
 gdk_window_get_root_origin (GdkWindow *window,
 			    gint      *x,
 			    gint      *y)
+{
+  GdkRectangle rect;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  gdk_window_get_frame_extents (window, &rect);
+
+  if (x)
+    *x = rect.x;
+
+  if (y)
+    *y = rect.y;
+}
+
+/**
+ * gdk_window_get_frame_extents:
+ * @window: a #GdkWindow
+ * @rect: rectangle to fill with bounding box of the window frame
+ *
+ * Obtains the bounding box of the window, including window manager
+ * titlebar/borders if any. The frame position is given in root window
+ * coordinates. To get the position of the window itself (rather than
+ * the frame) in root window coordinates, use gdk_window_get_origin().
+ * 
+ **/
+void
+gdk_window_get_frame_extents (GdkWindow    *window,
+                              GdkRectangle *rect)
 {
   GdkWindowObject *private;
   Window xwindow;
@@ -1784,15 +1850,16 @@ gdk_window_get_root_origin (GdkWindow *window,
   Window *children;
   unsigned int nchildren;
   
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (rect != NULL);
   
   private = (GdkWindowObject*) window;
-  if (x)
-    *x = 0;
-  if (y)
-    *y = 0;
-
+  
+  rect->x = 0;
+  rect->y = 0;
+  rect->width = 1;
+  rect->height = 1;
+  
   if (GDK_WINDOW_DESTROYED (window))
     return;
   
@@ -1822,10 +1889,10 @@ gdk_window_get_root_origin (GdkWindow *window,
       
       if (XGetGeometry (GDK_WINDOW_XDISPLAY (window), xwindow, &root, &wx, &wy, &ww, &wh, &wb, &wd))
 	{
-	  if (x)
-	    *x = wx;
-	  if (y)
-	    *y = wy;
+          rect->x = wx;
+          rect->y = wy;
+          rect->width = ww;
+          rect->height = wh;
 	}
     }
 }
@@ -3442,7 +3509,6 @@ update_pos (gint new_root_x,
           w += dx;
           h += dy;
           break;
-
         }
 
       w = MAX (w, 1);

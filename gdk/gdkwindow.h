@@ -416,6 +416,8 @@ gboolean      gdk_window_get_deskrelative_origin (GdkWindow	  *window,
 void	      gdk_window_get_root_origin (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
+void          gdk_window_get_frame_extents (GdkWindow     *window,
+                                            GdkRectangle  *rect);
 GdkWindow*    gdk_window_get_pointer	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y,

@@ -198,6 +198,8 @@ static gboolean gtk_widget_real_activate_mnemonic  (GtkWidget *widget,
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
+static void  gtk_widget_do_uposition (GtkWidget *widget);
+     
 static gpointer         parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 
@@ -837,6 +839,7 @@ gtk_widget_set_arg (GtkObject   *object,
 		    guint	 arg_id)
 {
   GtkWidget *widget;
+  GtkWidgetAuxInfo *aux_info;
 
   widget = GTK_WIDGET (object);
 
@@ -851,10 +854,26 @@ gtk_widget_set_arg (GtkObject   *object,
       gtk_container_add (GTK_CONTAINER (GTK_VALUE_OBJECT (*arg)), widget);
       break;
     case ARG_X:
-      gtk_widget_set_uposition (widget, GTK_VALUE_INT (*arg), -2);
+      aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+      if (GTK_VALUE_INT (*arg) == -1)
+	aux_info->x_set = FALSE;
+      else
+	{
+	  aux_info->x_set = TRUE;
+	  aux_info->x = GTK_VALUE_INT (*arg);
+	}
+      gtk_widget_do_uposition (widget);
       break;
     case ARG_Y:
-      gtk_widget_set_uposition (widget, -2, GTK_VALUE_INT (*arg));
+      aux_info = _gtk_widget_get_aux_info (widget, TRUE);
+      if (GTK_VALUE_INT (*arg) == -1)
+	aux_info->y_set = FALSE;
+      else
+	{
+	  aux_info->y_set = TRUE;
+	  aux_info->y = GTK_VALUE_INT (*arg);
+	}
+      gtk_widget_do_uposition (widget);
       break;
     case ARG_WIDTH:
       gtk_widget_set_usize (widget, GTK_VALUE_INT (*arg), -2);
@@ -960,28 +979,28 @@ gtk_widget_get_arg (GtkObject   *object,
       GTK_VALUE_OBJECT (*arg) = (GtkObject*) widget->parent;
       break;
     case ARG_X:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
-      if (!aux_info)
+      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
+      if (!aux_info || !aux_info->x_set)
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->x;
       break;
     case ARG_Y:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
-      if (!aux_info)
+      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
+      if (!aux_info || !aux_info->y_set)
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->y;
       break;
     case ARG_WIDTH:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
       if (!aux_info)
 	GTK_VALUE_INT (*arg) = -1;
       else
 	GTK_VALUE_INT (*arg) = aux_info->width;
       break;
     case ARG_HEIGHT:
-      aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+      aux_info =_gtk_widget_get_aux_info (widget, FALSE);
       if (!aux_info)
 	GTK_VALUE_INT (*arg) = -1;
       else
@@ -1970,7 +1989,7 @@ gtk_widget_get_child_requisition (GtkWidget	 *widget,
 
   *requisition = widget->requisition;
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+  aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   if (aux_info)
     {
       if (aux_info->width > 0)
@@ -2001,7 +2020,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
   real_allocation = *allocation;
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+  aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   
   if (aux_info)
     {
@@ -3930,11 +3949,26 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
   return (parent_window != NULL) ? parent_window : widget->parent->window;
 }
 
+/* Update the position from aux_info. Used from gtk_widget_set_uposition
+ * and gtk_widget_set_arg().
+ */
+static void
+gtk_widget_do_uposition (GtkWidget *widget)
+{
+  GtkWidgetAuxInfo *aux_info =_gtk_widget_get_aux_info (widget, FALSE);
+
+  if (GTK_IS_WINDOW (widget) && aux_info->x_set && aux_info->y_set)
+    gtk_window_reposition (GTK_WINDOW (widget), aux_info->x, aux_info->y);
+  
+  if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
+    gtk_widget_size_allocate (widget, &widget->allocation);
+}
+
 /**
  * gtk_widget_set_uposition:
  * @widget: a #GtkWidget
- * @x: x position
- * @y: y position
+ * @x: x position; -1 to unset x; -2 to leave x unchanged
+ * @y: y position; -1 to unset y; -2 to leave y unchanged
  * 
  *
  * Sets the position of a widget. The funny "u" in the name comes from
@@ -3946,7 +3980,12 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
  * window; most window managers will do the centering on your behalf
  * if you call gtk_window_set_transient_for(), and it's really not
  * possible to get the centering to work correctly in all cases from
- * application code.
+ * application code. But if you insist, use gtk_window_set_position()
+ * to set #GTK_WIN_POS_CENTER_ON_PARENT, don't do the centering
+ * manually.
+ *
+ * Note that although x and y can be individually unset, the position
+ * is not honoured unless both x and y are set.
  **/
 void
 gtk_widget_set_uposition (GtkWidget *widget,
@@ -3958,25 +3997,33 @@ gtk_widget_set_uposition (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
-  if (!aux_info)
-    {
-      aux_info = gtk_widget_aux_info_new ();
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
-    }
+  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
 
-  /* keep this in sync with gtk_window_compute_reposition() */
+  /* keep this in sync with gtk_window_set_location() */
   
   if (x > -2)
-    aux_info->x = x;
+    {
+      if (x == -1)
+	aux_info->x_set = FALSE;
+      else
+	{
+	  aux_info->x_set = TRUE;
+	  aux_info->x = x;
+	}
+    }
+
   if (y > -2)
-    aux_info->y = y;
-  
-  if (GTK_IS_WINDOW (widget) && (aux_info->x != -1) && (aux_info->y != -1))
-    gtk_window_reposition (GTK_WINDOW (widget), x, y);
-  
-  if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
-    gtk_widget_size_allocate (widget, &widget->allocation);
+    {
+      if (y == -1)
+	aux_info->y_set = FALSE;
+      else
+	{
+	  aux_info->y_set = TRUE;
+	  aux_info->y = y;
+	}
+    }
+
+  gtk_widget_do_uposition (widget);
 }
 
 /**
@@ -4014,12 +4061,7 @@ gtk_widget_set_usize (GtkWidget *widget,
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
-  if (!aux_info)
-    {
-      aux_info = gtk_widget_aux_info_new ();
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
-    }
+  aux_info =_gtk_widget_get_aux_info (widget, TRUE);
   
   if (width > -2)
     aux_info->width = width;
@@ -4742,7 +4784,7 @@ gtk_widget_finalize (GObject *object)
   if (widget->name)
     g_free (widget->name);
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+  aux_info =_gtk_widget_get_aux_info (widget, FALSE);
   if (aux_info)
     gtk_widget_aux_info_destroy (aux_info);
   
@@ -4976,6 +5018,36 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	}
       gtk_widget_unref (widget);
     }
+}
+
+/**
+ * _gtk_widget_get_aux_info:
+ * @widget: a #GtkWidget
+ * @create: if %TRUE, create the structure if it doesn't exist
+ * 
+ * Get the #GtkWidgetAuxInfo structure for the widget.
+ * 
+ * Return value: the #GtkAuxInfo structure for the widget, or
+ *    %NULL if @create is %FALSE and one doesn't already exist.
+ **/
+GtkWidgetAuxInfo *
+_gtk_widget_get_aux_info (GtkWidget *widget,
+			  gboolean   create)
+{
+  GtkWidgetAuxInfo *aux_info;
+  
+  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+  if (!aux_info && create)
+    {
+      aux_info = gtk_widget_aux_info_new ();
+      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
+
+      aux_info->width = aux_info->height = -1;
+      aux_info->x = aux_info->y = 0;
+      aux_info->x_set = aux_info->y_set = FALSE;
+    }
+  
+  return aux_info;
 }
 
 /*****************************************
