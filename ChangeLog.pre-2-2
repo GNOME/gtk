@@ -1,3 +1,11 @@
+2001-09-11  Jakub Steiner <jimmac@ximian.com>
+
+	* gtk/stock-icons/dialog-error.png: less drastic
+	* gtk/stock-icons/dialog-warning.png: no body parts. (I hope
+	  "STOP" is international enough.
+	* gtk/stock-icons/stock_dnd*.png: get rid of the cursor
+	* gtk/stock-icons/stock_menu_properties.png: 16x16 version
+
 Mon Sep 10 21:26:24 2001  Joshua N Pritikin  <vishnu@pobox.com>
 
 	* gtk/gtktextview.c (gtk_text_view_set_buffer): Make
@@ -1036,6 +1044,7 @@ Wed Aug 15 12:36:55 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/demos/gtk-demo/*: Remove all uses of deprecated functions.
 
+>>>>>>> 1.2276
 2001-08-17  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkstyle.c (create_expander_affine): Divide with floating
