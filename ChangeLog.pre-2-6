@@ -1,3 +1,8 @@
+2004-11-17  Davyd Madeley  <davyd@madeley.id.au>
+
+	* gtk/gtkfilechooserdefault.c: Allow backspace to move up the
+	FileChooser tree to make it consistent with Nautilus and others.
+
 2004-11-16  Matthias Clasen  <mclasen@redhat.com>
 
 	* demos/gtk-demo/*.c: Don't include config.h in the examples.

@@ -567,6 +567,10 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				"up-folder",
 				0);
   gtk_binding_entry_add_signal (binding_set,
+		  		GDK_BackSpace, 0,
+				"up-folder",
+				0);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_KP_Up, GDK_MOD1_MASK,
 				"up-folder",
 				0);
