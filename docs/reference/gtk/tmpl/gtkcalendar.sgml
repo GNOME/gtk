@@ -255,8 +255,8 @@ Obtains the selected date from a #GtkCalendar.
 
 @calendar: a #GtkCalendar.
 @year: location to store the year number.
-@month: location to store the month number.
-@day: location to store the day number.
+@month: location to store the month number (between 0 and 11).
+@day: location to store the day number (between 1 and 31).
 
 
 <!-- ##### FUNCTION gtk_calendar_freeze ##### -->

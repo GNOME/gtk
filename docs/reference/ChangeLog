@@ -1,3 +1,8 @@
+2005-02-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/tmpl/gtkcalendar.sgml: Add some more 
+	info.  (#167356, Hubert Sokolowski)
+
 2005-02-11  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-sections.txt: Add GtkPackDirection and 
