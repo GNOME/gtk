@@ -1,5 +1,8 @@
 2004-08-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtksizegroup.c (gtk_size_group_add_widget): Fix
+	a typo, noticed by Tim Janik.
+
 	* configure.in: Post-release version bump.
 
 	* === Released 2.4.9 ===
@@ -12,9 +15,10 @@
 
 2004-08-25  Matthias Clasen  <mclasen@redhat.com>
 
-	* gtk/gtkfilechooserdefault.c (check_is_folder): Use get_file_info() rather 
-	than trying get_folder() and checking for an error directly because older 
-	versions of the gnome-vfs backend don't return an error 
+	* gtk/gtkfilechooserdefault.c (check_is_folder): Use 
+	get_file_info() rather than trying get_folder() and 
+	checking for an error directly because older versions 
+	of the gnome-vfs backend don't return an error 
 	immediately.  (#150852, Zack Cerza )
 
 2004-08-24  Matthias Clasen  <mclasen@redhat.com>
