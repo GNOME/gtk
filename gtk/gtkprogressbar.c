@@ -35,7 +35,7 @@ static void gtk_progress_bar_paint         (GtkProgressBar      *pbar);
 
 
 guint
-gtk_progress_bar_get_type ()
+gtk_progress_bar_get_type (void)
 {
   static guint progress_bar_type = 0;
 
@@ -83,7 +83,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
 
 
 GtkWidget*
-gtk_progress_bar_new ()
+gtk_progress_bar_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_progress_bar_get_type ()));
 }

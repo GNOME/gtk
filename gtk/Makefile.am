@@ -122,6 +122,7 @@ gtkinclude_HEADERS = \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
+	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkframe.h		\
@@ -205,6 +206,7 @@ EXTRA_DIST = \
 	testgtkrc 		\
 	testgtkrc2 		\
 	gtk.defs		\
+	gtkfeatures.h		\
 	runelisp 		\
 	gentypeinfo.el 		\
 	gtktypebuiltins.c	\
@@ -222,6 +224,7 @@ EXTRA_DIST = \
 INCLUDES = -I$(top_srcdir) -I../glib -I$(top_srcdir)/glib @x_cflags@ 
 
 noinst_PROGRAMS = testgtk testinput testselection simple 
+
 testgtk_LDADD = \
 	libgtk.la				\
 	$(top_builddir)/gdk/libgdk.la		\

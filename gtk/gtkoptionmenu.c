@@ -63,7 +63,7 @@ static GtkButtonClass *parent_class = NULL;
 
 
 guint
-gtk_option_menu_get_type ()
+gtk_option_menu_get_type (void)
 {
   static guint option_menu_type = 0;
 
@@ -123,7 +123,7 @@ gtk_option_menu_init (GtkOptionMenu *option_menu)
 }
 
 GtkWidget*
-gtk_option_menu_new ()
+gtk_option_menu_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_option_menu_get_type ()));
 }

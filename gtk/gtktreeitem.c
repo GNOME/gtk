@@ -93,7 +93,7 @@ static GtkContainerClass *container_class = NULL;
 static guint tree_item_signals[LAST_SIGNAL] = { 0 };
 
 guint
-gtk_tree_item_get_type ()
+gtk_tree_item_get_type (void)
 {
   static guint tree_item_type = 0;
 
@@ -261,7 +261,7 @@ gtk_tree_item_init (GtkTreeItem *tree_item)
 
 
 GtkWidget*
-gtk_tree_item_new ()
+gtk_tree_item_new (void)
 {
   GtkWidget *tree_item;
 

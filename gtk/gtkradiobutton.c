@@ -36,7 +36,7 @@ static GtkCheckButtonClass *parent_class = NULL;
 
 
 guint
-gtk_radio_button_get_type ()
+gtk_radio_button_get_type (void)
 {
   static guint radio_button_type = 0;
 

@@ -46,7 +46,7 @@ static gint gtk_hscale_trough_keys   (GtkRange *range,
 				      GtkTroughType *pos);
 
 guint
-gtk_hscale_get_type ()
+gtk_hscale_get_type (void)
 {
   static guint hscale_type = 0;
 

@@ -1,3 +1,30 @@
+Thu May  7 08:17:28 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * glib.h (G_GNUC_PRINTF):
+        (G_GNUC_SCANF): macros to facilitate the printf/scanf format argument
+        checking of gcc.
+
+        * gstring.c: const corrections, string!=NULL checks at function entry.
+        (g_string_down): new function for tolower(3) conversion.
+        (g_string_up): new function for toupper(3) conversion.
+
+        * gutils.c: const corrections.
+        (g_strdown): g_string_down() counterpart.
+        (g_strup): g_string_up() counterpart.
+
+        * gslist.c:
+        (g_slist_index): find out about about the position of a
+        certain data pointer.
+        (g_slist_position): find out about about the position of a
+        certain node.
+
+        * glist.c:
+        (g_list_index): find out about about the position of a
+        certain data pointer.
+        (g_list_position): find out about about the position of a
+        certain data pointer.
+
 Fri May  1 16:36:08 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gutils.c: (g_strcasecmp). Check for isupper before

@@ -48,7 +48,7 @@ static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 static GtkBinClass *parent_class;
 
 guint
-gtk_viewport_get_type ()
+gtk_viewport_get_type (void)
 {
   static guint viewport_type = 0;
 

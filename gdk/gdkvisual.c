@@ -58,7 +58,7 @@ static gchar* visual_names[] =
 static GHashTable *visual_hash = NULL;
 
 void
-gdk_visual_init ()
+gdk_visual_init (void)
 {
   static gint possible_depths[6] = { 32, 24, 16, 15, 8, 1 };
   static GdkVisualType possible_types[6] =
@@ -263,25 +263,25 @@ gdk_visual_unref (GdkVisual *visual)
 }
 
 gint
-gdk_visual_get_best_depth ()
+gdk_visual_get_best_depth (void)
 {
   return available_depths[0];
 }
 
 GdkVisualType
-gdk_visual_get_best_type ()
+gdk_visual_get_best_type (void)
 {
   return available_types[0];
 }
 
 GdkVisual*
-gdk_visual_get_system ()
+gdk_visual_get_system (void)
 {
   return ((GdkVisual*) system_visual);
 }
 
 GdkVisual*
-gdk_visual_get_best ()
+gdk_visual_get_best (void)
 {
   return ((GdkVisual*) &(visuals[0]));
 }

@@ -318,7 +318,7 @@ static GtkWindowClass *parent_class = NULL;
 static gint cmpl_errno;
 
 guint
-gtk_file_selection_get_type ()
+gtk_file_selection_get_type (void)
 {
   static guint file_selection_type = 0;
 

@@ -33,7 +33,7 @@ static GtkRangeClass *parent_class = NULL;
 
 
 guint
-gtk_scale_get_type ()
+gtk_scale_get_type (void)
 {
   static guint scale_type = 0;
 

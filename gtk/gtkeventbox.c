@@ -34,7 +34,7 @@ static gint gtk_event_box_expose                   (GtkWidget      *widget,
 
 
 guint
-gtk_event_box_get_type ()
+gtk_event_box_get_type (void)
 {
   static guint event_box_type = 0;
 
@@ -79,7 +79,7 @@ gtk_event_box_init (GtkEventBox *event_box)
 }
 
 GtkWidget*
-gtk_event_box_new ()
+gtk_event_box_new (void)
 {
   return GTK_WIDGET ( gtk_type_new (gtk_event_box_get_type ()));
 }

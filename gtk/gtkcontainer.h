@@ -32,11 +32,12 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_CONTAINER(obj)	    (GTK_CHECK_CAST ((obj), gtk_container_get_type (), GtkContainer))
-#define GTK_CONTAINER_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_container_get_type (), GtkContainerClass))
-#define GTK_IS_CONTAINER(obj)	    (GTK_CHECK_TYPE ((obj), gtk_container_get_type ()))
+#define GTK_TYPE_CONTAINER	      (gtk_container_get_type ())
+#define GTK_CONTAINER(obj)	      (GTK_CHECK_CAST ((obj), GTK_TYPE_CONTAINER, GtkContainer))
+#define GTK_CONTAINER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CONTAINER, GtkContainerClass))
+#define GTK_IS_CONTAINER(obj)	      (GTK_CHECK_TYPE ((obj), GTK_TYPE_CONTAINER))
+#define GTK_IS_CONTAINER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CONTAINER))
 
-#define GTK_TYPE_CONTAINER	    (gtk_container_get_type ())
 
 typedef struct _GtkContainer	   GtkContainer;
 typedef struct _GtkContainerClass  GtkContainerClass;

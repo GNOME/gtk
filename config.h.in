@@ -22,6 +22,10 @@
 #undef HAVE_SHAPE_EXT
 #undef HAVE_SYS_SELECT_H
 
+/* some systems do not allow to ipcrm pages prior to
+ * actual usage, namely: OSF1 V3.2, SunOS 4.1.1, 5.5, 5.5.1, 5.6,
+ * IRIX 5.2 and 6.2.
+ */
 #undef IPC_RMID_DEFERRED_RELEASE
 
 #undef NO_FD_SET
@@ -31,11 +35,6 @@
 #undef XINPUT_NONE
 #undef XINPUT_GXI
 #undef XINPUT_XFREE
-
-#undef GTK_MAJOR_VERSION
-#undef GTK_MINOR_VERSION
-#undef GTK_MICRO_VERSION
-#undef GTK_VERSION
 
 /* Define as the return type of signal handlers (int or void).  */
 #undef RETSIGTYPE

@@ -191,7 +191,7 @@ scale_val_type scale_vals[NUM_CHANNELS] =
 };
 
 guint
-gtk_color_selection_get_type ()
+gtk_color_selection_get_type (void)
 {
   static guint color_selection_type = 0;
 
@@ -1428,7 +1428,7 @@ gtk_color_selection_rgb_to_hsv (gdouble  r, gdouble  g, gdouble  b,
 /***************************/
 
 guint
-gtk_color_selection_dialog_get_type ()
+gtk_color_selection_dialog_get_type (void)
 {
   static guint color_selection_dialog_type = 0;
 

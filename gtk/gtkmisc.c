@@ -40,7 +40,7 @@ static void gtk_misc_get_arg    (GtkMisc      *misc,
 
 
 guint
-gtk_misc_get_type ()
+gtk_misc_get_type (void)
 {
   static guint misc_type = 0;
 

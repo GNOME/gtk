@@ -26,10 +26,17 @@
 #include <gtk/gtkenums.h>
 #include <gtk/gtkwidget.h>
 
+#ifdef __cplusplus
+extern "C" {
+#pragma }
+#endif /* __cplusplus */
 
-#define GTK_WINDOW(obj)          GTK_CHECK_CAST (obj, gtk_window_get_type (), GtkWindow)
-#define GTK_WINDOW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_window_get_type (), GtkWindowClass)
-#define GTK_IS_WINDOW(obj)       GTK_CHECK_TYPE (obj, gtk_window_get_type ())
+
+#define GTK_TYPE_WINDOW			(gtk_window_get_type ())
+#define GTK_WINDOW(obj)			(GTK_CHECK_CAST (obj, GTK_TYPE_WINDOW, GtkWindow))
+#define GTK_WINDOW_CLASS(klass)		(GTK_CHECK_CLASS_CAST (klass, GTK_TYPE_WINDOW, GtkWindowClass))
+#define GTK_IS_WINDOW(obj)		(GTK_CHECK_TYPE (obj, GTK_TYPE_WINDOW))
+#define GTK_IS_WINDOW_CLASS(klass)	(GTK_CHECK_CLASS_TYPE (klass, GTK_TYPE_WINDOW))
 
 
 typedef struct _GtkWindow       GtkWindow;
@@ -72,12 +79,7 @@ struct _GtkWindowClass
 };
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-
-guint      gtk_window_get_type                 (void);
+GtkType    gtk_window_get_type                 (void);
 GtkWidget* gtk_window_new                      (GtkWindowType        type);
 void       gtk_window_set_title                (GtkWindow           *window,
 						const gchar         *title);

@@ -31,7 +31,7 @@ static gint default_spacing = 30;
 static gint default_layout_style = GTK_BUTTONBOX_EDGE;
 
 guint
-gtk_hbutton_box_get_type ()
+gtk_hbutton_box_get_type (void)
 {
   static guint hbutton_box_type = 0;
 
@@ -72,7 +72,7 @@ gtk_hbutton_box_init (GtkHButtonBox *hbutton_box)
 }
 
 GtkWidget*
-gtk_hbutton_box_new ()
+gtk_hbutton_box_new (void)
 {
   GtkHButtonBox *hbutton_box;
 

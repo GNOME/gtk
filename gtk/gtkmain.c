@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "gtkbutton.h"
+#include "gtkfeatures.h"
 #include "gtkhscrollbar.h"
 #include "gtkhseparator.h"
 #include "gtkmain.h"
@@ -327,7 +328,7 @@ gtk_init (int	 *argc,
    * C locale, or were using X's mb functions. (-DX_LOCALE && locale != C)
    */
 
-  current_locale = g_strdup(setlocale (LC_CTYPE, NULL));
+  current_locale = g_strdup (setlocale (LC_CTYPE, NULL));
 
 #ifdef X_LOCALE
   if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
@@ -342,7 +343,7 @@ gtk_init (int	 *argc,
 
   g_free (current_locale);
 
-  GTK_NOTE(MISC, g_print("%s multi-byte string functions.\n", 
+  GTK_NOTE (MISC, g_print("%s multi-byte string functions.\n", 
 			  gtk_use_mb ? "Using" : "Not using"));
 
   /* Initialize the default visual and colormap to be
@@ -351,9 +352,11 @@ gtk_init (int	 *argc,
    */
   gtk_visual = gdk_visual_get_system ();
   gtk_colormap = gdk_colormap_get_system ();
+
+  gtk_type_init ();
+  gtk_signal_init ();
   gtk_rc_init ();
   
-  gtk_type_init ();
   
   /* Register an exit function to make sure we are able to cleanup.
    */
@@ -377,13 +380,13 @@ gtk_exit (int errorcode)
 }
 
 gchar*
-gtk_set_locale ()
+gtk_set_locale (void)
 {
   return gdk_set_locale ();
 }
 
 void
-gtk_main ()
+gtk_main (void)
 {
   GList *tmp_list;
   GList *functions;
@@ -454,7 +457,7 @@ gtk_main_level (void)
 }
 
 void
-gtk_main_quit ()
+gtk_main_quit (void)
 {
   iteration_done = TRUE;
 }
@@ -498,7 +501,7 @@ gtk_events_pending (void)
 }
 
 gint 
-gtk_main_iteration ()
+gtk_main_iteration (void)
 {
   return gtk_main_iteration_do (TRUE);
 }
@@ -1314,7 +1317,7 @@ gtk_input_remove (guint tag)
 }
 
 GdkEvent *
-gtk_get_current_event ()
+gtk_get_current_event (void)
 {
   if (current_events)
     return gdk_event_copy ((GdkEvent *) current_events->data);
@@ -1335,7 +1338,7 @@ gtk_get_event_widget (GdkEvent *event)
 }
 
 static void
-gtk_exit_func ()
+gtk_exit_func (void)
 {
   if (initialized)
     {
@@ -1430,7 +1433,7 @@ gtk_handle_current_timeouts (guint32 the_time)
 }
 
 static void
-gtk_handle_timeouts ()
+gtk_handle_timeouts (void)
 {
   guint32 the_time;
   GList *tmp_list;
@@ -1512,7 +1515,7 @@ gtk_idle_invoke_function (GtkIdleFunction *idlef)
 }
 
 static void
-gtk_handle_current_idles ()
+gtk_handle_current_idles (void)
 {
   GList *tmp_list;
   GList *tmp_list2;
@@ -1574,7 +1577,7 @@ gtk_handle_current_idles ()
 }
 
 static void
-gtk_handle_idle ()
+gtk_handle_idle (void)
 {
   /* Caller must already have called gtk_handle_current_idles if
    * necessary
@@ -1608,7 +1611,7 @@ gtk_handle_idle ()
 }
 
 static void
-gtk_handle_timer ()
+gtk_handle_timer (void)
 {
   GtkTimeoutFunction *timeoutf;
   

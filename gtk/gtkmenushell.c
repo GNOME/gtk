@@ -63,7 +63,7 @@ static guint menu_shell_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_menu_shell_get_type ()
+gtk_menu_shell_get_type (void)
 {
   static guint menu_shell_type = 0;
 

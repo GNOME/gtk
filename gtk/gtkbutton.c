@@ -93,10 +93,10 @@ static GtkContainerClass *parent_class;
 static guint button_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_button_get_type (void)
 {
-  static guint button_type = 0;
+  static GtkType button_type = 0;
 
   if (!button_type)
     {

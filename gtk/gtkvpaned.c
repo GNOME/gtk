@@ -37,7 +37,7 @@ static gint gtk_vpaned_motion           (GtkWidget *widget,
 					 GdkEventMotion *event);
 
 guint
-gtk_vpaned_get_type ()
+gtk_vpaned_get_type (void)
 {
   static guint vpaned_type = 0;
 
@@ -81,7 +81,7 @@ gtk_vpaned_init (GtkVPaned *vpaned)
 }
 
 GtkWidget*
-gtk_vpaned_new ()
+gtk_vpaned_new (void)
 {
   GtkVPaned *vpaned;
 

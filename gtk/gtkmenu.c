@@ -66,7 +66,7 @@ static const gchar	*attach_data_key = "gtk-menu-attach-data";
 
 
 guint
-gtk_menu_get_type ()
+gtk_menu_get_type (void)
 {
   static guint menu_type = 0;
 
@@ -244,7 +244,7 @@ gtk_menu_detach (GtkMenu             *menu)
 }
 
 GtkWidget*
-gtk_menu_new ()
+gtk_menu_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_menu_get_type ()));
 }

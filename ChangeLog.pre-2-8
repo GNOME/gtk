@@ -1,3 +1,134 @@
+Sat May  9 16:30:33 BST 1998 Tony Gale  <gale@gtk.org>
+	[1-1-0-Merge]
+
+        * docs/gtk_tut_it.sgml: update of Italian tutorial
+          translation from Daniele Canazza <dcanazz@tin.it>
+
+Sat May  9 02:34:41 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtkfeatures.h.in: new file used as template for
+        * gtk/gtkfeatures.h: new file to define macros indicating newly
+        introduced features, such as GTK_HAVE_SIGNAL_INIT.
+
+        * gtk/gtksignal.c:
+        (gtk_signal_emitv_by_name):
+        (gtk_signal_emitv):
+        new functions to emit signals with an already provided parameter set.
+        (provided by Kenneth Albanowski <kjahds@kjahds.com>).
+        (gtk_signal_real_emit): prototype changes, so this functions always
+        gets its parameters and signal structure as arguments.
+        (gtk_signal_emit): provide the signal structure and parameter list for
+        gtk_signal_real_emit.
+        (gtk_signal_emit_by_name): likewise.
+
+Sat May  9 00:03:12 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtksignal.c (gtk_signal_handler_unref): reflect the presence of
+        signal connections through unsetting GTK_CONNECTED.
+        (gtk_signal_handler_insert): reflect the presence of signal connections
+        through setting GTK_CONNECTED.
+        (gtk_signal_real_emit): only check for handler emissions if the object
+        has the GTK_CONNECTED flag set.
+        (gtk_signal_handler_pending): don't check for pending handlers if the
+        GTK_CONNECTED flag is not set for this object.
+
+        * gtk/gtkobject.h (enum): new flag GTK_CONNECTED to indicate whether
+        a GtkObject has signal handler connections.
+
+        * gtk/gtkobject.c (gtk_object_real_destroy): only if GTK_CONNECTED is
+        set for this object call gtk_signal_handlers_destroy().
+
+        * gtk/gtktypeutils.c (gtk_type_unique): asure that the type system has
+        been initialized.
+
+Thu May  7 12:52:45 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtkobject.c (gtk_object_set_data_by_id_full): allocate object
+        data chunks through a global object data structure list. unlink
+        object data before invoking its destroy function.
+        (gtk_object_finalize): slight modification to allow usage of object
+        data during object finalization.
+
+        * gtk/gtksignal.c (gtk_signal_newv): suport middle dashes ('-') in
+        signal names, e.g. "signal-name" is now an alias for "signal_name".
+        (gtk_signal_handler_new): allocate handlers through a global handler
+        structure list, that's faster than memchunks.
+        (gtk_emission_new): allocate emissions through a global emission
+        structure list, that's faster than memchunks.
+
+Wed May  6 02:16:34 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtksignal.c: reimplemented the signal storage system to use a
+        linear array rather than a hash table.
+        be carefull *not* to keep any GtkSignal pointers across invokations
+        of gtk_signal_next_and_invalidate() and therefore gtk_signal_new[v]().
+        general code cleanups, made all allocations through memchunks.
+        (gtk_signal_lookup): we now do the lookup of signals through a key_id
+        for the signal names to avoid multiple hashing of the signal name on
+        lookups for the several hirarchy levels of an object.
+
+Tue May  5 15:33:27 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtkmain.c (gtk_init): added gtk_signal_init() to avoid repeatedly
+        checking for signal initialization in gtksignal.c.
+
+        * gtk/gtktypeutils.c (TYPE_NODES_BLOCK_SIZE): reseted this to 200 after
+        a long debugging period ;)
+
+Mon May  4 00:30:11 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtktypeutils.h (GTK_TYPE_IS_A): new macro to speedup
+        gtk_type_is_a().
+        * gtk/gtktypeutils.c: reimplemented the type storage system to use a
+        linear array rather than a hash table. it actually speeded up testgtk
+        for a *considerable* amount. be carefull *not* to keep any GtkTypeNode
+        pointers across invokations of gtk_type_node_next_and_invalidate() and
+        therefore gtk_type_unique()!
+
+        * gtk/gtkobject.h (GTK_IS_OBJECT_CLASS): new macro to test for the
+        inheritance of a class pointer.
+        (GTK_OBJECT): modifications for speedups.
+        (GTK_IS_OBJECT): likewise.
+        (GTK_OBJECT_CLASS): likewise.
+        (suggested by owen).
+
+        * gtk/gtkcontainer.h (GTK_IS_CONTAINER_CLASS): new macro.
+
+        * gtk/gtkwidget.h (GTK_IS_WIDGET_CLASS): new macro.
+
+        * gtk/gtk.defs (GtkTooltips): define GtkTooltips as object not as boxed,
+        since its derivation changed 4 month ago ;(. showed up with the unique
+        type name checking code in gtk_type_unique().
+
+        * random guint->GtkType and macro fixups.
+
+Sat May  2 22:33:45 1998  Tim Janik  <timj@gtk.org>
+	[1-1-0-Merge]
+
+        * gtk/gtksignal.c: added new functions to operate on intermediate
+        function pointers. implemented incremental blocking.
+        (gtk_signal_disconnect_by_func): new function.
+        (gtk_signal_handler_block_by_func): new function.
+        (gtk_signal_handler_unblock_by_func): new function
+
+Fri May  1 16:40:57 1998  Owen Taylor  <otaylor@gtk.org>
+	[1-1-0-Merge]
+
+        * */* (almost):
+
+        Style: All
+          int foo () { ... }
+        changed to
+          int foo (void) { ... }
+
+        Even where there were proper prototypes elsewhere.
+
 Sun May 10 00:16:44 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk.m4: Work around inability of HP/UX to

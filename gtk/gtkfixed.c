@@ -47,7 +47,7 @@ static GtkContainerClass *parent_class = NULL;
 
 
 guint
-gtk_fixed_get_type ()
+gtk_fixed_get_type (void)
 {
   static guint fixed_type = 0;
 
@@ -106,7 +106,7 @@ gtk_fixed_init (GtkFixed *fixed)
 }
 
 GtkWidget*
-gtk_fixed_new ()
+gtk_fixed_new (void)
 {
   GtkFixed *fixed;
 

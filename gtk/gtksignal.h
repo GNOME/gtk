@@ -27,13 +27,14 @@
 
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
   
 #ifdef offsetof
-#define GTK_SIGNAL_OFFSET(t, f) ((int) offsetof (t, f))
+#define GTK_SIGNAL_OFFSET(t, f) ((gint) offsetof (t, f))
 #else /* offsetof */
-#define GTK_SIGNAL_OFFSET(t, f) ((int) ((char*) &((t*) 0)->f))
+#define GTK_SIGNAL_OFFSET(t, f) ((gint) ((gchar*) &((t*) 0)->f))
 #endif /* offsetof */
   
   
@@ -52,13 +53,14 @@ struct	_GtkSignalQuery
   GtkType	   object_type;
   guint		   signal_id;
   const gchar	  *signal_name;
-  gboolean	   is_user_signal;
+  guint		   is_user_signal : 1;
   GtkSignalRunType run_type;
   GtkType	   return_val;
   guint		   nparams;
   const GtkType	  *params;
 };
 
+void   gtk_signal_init			  (void);
 guint  gtk_signal_new			  (const gchar	       *name,
 					   GtkSignalRunType	run_type,
 					   GtkType		object_type,
@@ -84,6 +86,16 @@ void   gtk_signal_emit			  (GtkObject	       *object,
 void   gtk_signal_emit_by_name		  (GtkObject	       *object,
 					   const gchar	       *name,
 					   ...);
+void   gtk_signal_emitv			  (GtkObject           *object,
+					   guint                signal_id,
+					   GtkArg              *params);
+void   gtk_signal_emitv_by_name		  (GtkObject           *object,
+					   const gchar	       *name,
+					   GtkArg              *params);
+guint  gtk_signal_n_emissions		  (GtkObject   	       *object,
+					   guint                signal_id);
+guint  gtk_signal_n_emissions_by_name	  (GtkObject   	       *object,
+					   const gchar         *name);
 void   gtk_signal_emit_stop		  (GtkObject	       *object,
 					   guint		signal_id);
 void   gtk_signal_emit_stop_by_name	  (GtkObject	       *object,
@@ -131,14 +143,23 @@ void   gtk_signal_connect_while_alive	     (GtkObject	       *object,
 
 void   gtk_signal_disconnect		  (GtkObject	       *object,
 					   guint		handler_id);
+void   gtk_signal_disconnect_by_func	  (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_disconnect_by_data	  (GtkObject	       *object,
 					   gpointer		data);
 void   gtk_signal_handler_block		  (GtkObject	       *object,
 					   guint		handler_id);
+void   gtk_signal_handler_block_by_func	  (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_handler_block_by_data	  (GtkObject	       *object,
 					   gpointer		data);
 void   gtk_signal_handler_unblock	  (GtkObject	       *object,
 					   guint		handler_id);
+void   gtk_signal_handler_unblock_by_func (GtkObject	       *object,
+					   GtkSignalFunc	func,
+					   gpointer		data);
 void   gtk_signal_handler_unblock_by_data (GtkObject	       *object,
 					   gpointer		data);
 guint  gtk_signal_handler_pending	  (GtkObject	       *object,

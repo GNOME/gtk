@@ -47,7 +47,7 @@ static GtkItemClass *parent_class = NULL;
 
 
 guint
-gtk_list_item_get_type ()
+gtk_list_item_get_type (void)
 {
   static guint list_item_type = 0;
 
@@ -103,7 +103,7 @@ gtk_list_item_init (GtkListItem *list_item)
 }
 
 GtkWidget*
-gtk_list_item_new ()
+gtk_list_item_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_list_item_get_type ()));
 }

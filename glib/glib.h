@@ -285,8 +285,22 @@
 
 #endif /* G_DISABLE_CHECKS */
 
+/* Provide macros to feature the GCC printf format function attribute.
+ */
+#if	__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
+#define G_GNUC_PRINTF( format_idx, arg_idx )	\
+  __attribute__((format (printf, format_idx, arg_idx)))
+#define G_GNUC_SCANF( format_idx, arg_idx )	\
+  __attribute__((format (scanf, format_idx, arg_idx)))
+#else   /* !__GNUC__ */
+#define G_GNUC_PRINTF( format_idx, arg_idx )
+#define G_GNUC_SCANF( format_idx, arg_idx )
+#endif  /* !__GNUC__ */
+
+
 #ifdef __cplusplus
 extern "C" {
+#pragma }
 #endif /* __cplusplus */
 
 /* Provide type definitions for commonly used types.
@@ -344,35 +358,43 @@ typedef unsigned long	guint32;
 #endif /* SIZEOF_INT */
 
 
-typedef struct _GList	       GList;
-typedef struct _GSList	       GSList;
-typedef struct _GHashTable     GHashTable;
-typedef struct _GCache	       GCache;
-typedef struct _GTree	       GTree;
-typedef struct _GTimer	       GTimer;
-typedef struct _GMemChunk      GMemChunk;
-typedef struct _GListAllocator GListAllocator;
-typedef struct _GStringChunk   GStringChunk;
-typedef struct _GString	       GString;
-typedef struct _GArray	       GArray;
-typedef struct _GDebugKey      GDebugKey;
+typedef struct _GList		GList;
+typedef struct _GSList		GSList;
+typedef struct _GHashTable	GHashTable;
+typedef struct _GCache		GCache;
+typedef struct _GTree		GTree;
+typedef struct _GTimer		GTimer;
+typedef struct _GMemChunk	GMemChunk;
+typedef struct _GListAllocator	GListAllocator;
+typedef struct _GStringChunk	GStringChunk;
+typedef struct _GString		GString;
+typedef struct _GArray		GArray;
+typedef struct _GDebugKey	GDebugKey;
+typedef struct _GScannerConfig	GScannerConfig;
+typedef struct _GScanner	GScanner;
+typedef union  _GValue		GValue;
 
-typedef void (*GFunc) (gpointer data, gpointer user_data);
-typedef void (*GHFunc) (gpointer key, gpointer value, gpointer user_data);
-typedef guint (*GHashFunc) (gpointer key);
-typedef gint (*GCompareFunc) (gpointer a, gpointer b);
-typedef gpointer (*GCacheNewFunc) (gpointer key);
-typedef gpointer (*GCacheDupFunc) (gpointer value);
-typedef void (*GCacheDestroyFunc) (gpointer value);
-typedef gint (*GTraverseFunc) (gpointer key,
-			       gpointer value,
-			       gpointer data);
-typedef gint (*GSearchFunc) (gpointer key,
-			     gpointer data);
-typedef void (*GErrorFunc) (gchar *str);
-typedef void (*GWarningFunc) (gchar *str);
-typedef void (*GPrintFunc) (gchar *str);
 
+typedef void		(*GFunc)		(gpointer  data,
+						 gpointer  user_data);
+typedef void		(*GHFunc)		(gpointer  key,
+						 gpointer  value,
+						 gpointer  user_data);
+typedef guint		(*GHashFunc)		(gpointer  key);
+typedef gint		(*GCompareFunc)		(gpointer  a,
+						 gpointer  b);
+typedef gpointer	(*GCacheNewFunc)	(gpointer  key);
+typedef gpointer	(*GCacheDupFunc)	(gpointer  value);
+typedef void		(*GCacheDestroyFunc)	(gpointer  value);
+typedef gint		(*GTraverseFunc)	(gpointer  key,
+						 gpointer  value,
+						 gpointer  data);
+typedef gint		(*GSearchFunc)		(gpointer  key,
+						 gpointer  data);
+typedef void		(*GErrorFunc)		(gchar	  *str);
+typedef void		(*GWarningFunc)		(gchar    *str);
+typedef void		(*GPrintFunc)		(gchar    *str);
+  
 
 struct _GList
 {
@@ -447,6 +469,10 @@ GList* g_list_nth	  (GList     *list,
 			   guint      n);
 GList* g_list_find	  (GList     *list,
 			   gpointer   data);
+gint   g_list_position    (GList     *list,
+			   GList     *link);
+gint   g_list_index	  (GList     *list,
+			   gpointer   data);
 GList* g_list_last	  (GList     *list);
 GList* g_list_first	  (GList     *list);
 guint  g_list_length	  (GList     *list);
@@ -483,6 +509,10 @@ GSList* g_slist_reverse	    (GSList   *list);
 GSList* g_slist_nth	    (GSList   *list,
 			     guint     n);
 GSList* g_slist_find	    (GSList   *list,
+			     gpointer  data);
+gint    g_slist_position    (GSList   *list,
+			     GSList   *link);
+gint	g_slist_index	    (GSList   *list,
 			     gpointer  data);
 GSList* g_slist_last	    (GSList   *list);
 guint	g_slist_length	    (GSList   *list);
@@ -646,31 +676,35 @@ gdouble g_timer_elapsed (GTimer	 *timer,
 
 /* Output
  */
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-void g_error   (gchar *format, ...) __attribute__ ((format (printf, 1, 2)));
-void g_warning (gchar *format, ...) __attribute__ ((format (printf, 1, 2)));
-void g_message (gchar *format, ...) __attribute__ ((format (printf, 1, 2)));
-void g_print   (gchar *format, ...) __attribute__ ((format (printf, 1, 2)));
-#else
-void g_error   (gchar *format, ...);
-void g_warning (gchar *format, ...);
-void g_message (gchar *format, ...);
-void g_print   (gchar *format, ...);
-#endif
+void g_error   (gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_warning (gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_message (gchar *format, ...) G_GNUC_PRINTF (1, 2);
+void g_print   (gchar *format, ...) G_GNUC_PRINTF (1, 2);
 
 /* Utility functions
  */
-gchar*	g_strdup     (const gchar *str);
-gchar*	g_strconcat  (const gchar *string1, ...); /* NULL terminated */
-gdouble g_strtod     (const gchar *nptr, gchar **endptr);
-gchar*	g_strerror   (gint errnum);
-gchar*	g_strsignal  (gint signum);
-gint    g_strcasecmp (const gchar *s1, const gchar *s2);
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-gint    g_snprintf   (gchar *str, gulong n, gchar const *fmt, ...) __attribute__ ((format (printf, 3, 4)));
-#else
-gint    g_snprintf   (gchar *str, gulong n, gchar const *fmt, ...);
-#endif
+#define G_STR_DELIMITERS     "_-|> <."
+void    g_strdelimit		(gchar       *string,
+				 const gchar *delimiters,
+				 gchar        new_delimiter);
+gchar*	g_strdup     		(const gchar *str);
+gchar*	g_strconcat  		(const gchar *string1,
+				 ...); /* NULL terminated */
+gdouble g_strtod     		(const gchar *nptr,
+				 gchar      **endptr);
+gchar*	g_strerror   		(gint         errnum);
+gchar*	g_strsignal  		(gint         signum);
+gint    g_strcasecmp 		(const gchar *s1,
+				 const gchar *s2);
+void    g_strdown    		(gchar       *string);
+void    g_strup      		(gchar       *string);
+guint   g_parse_debug_string	(const gchar *string, 
+				 GDebugKey   *keys, 
+				 guint        nkeys);
+gint    g_snprintf		(gchar       *string,
+				 gulong       n,
+				 gchar const *format,
+				 ...) G_GNUC_PRINTF (3, 4);
 
 /* We make the assumption that if memmove isn't available, then
  * bcopy will do the job. This isn't safe everywhere. (bcopy can't
@@ -688,13 +722,11 @@ GWarningFunc g_set_warning_handler (GWarningFunc func);
 GPrintFunc   g_set_message_handler (GPrintFunc func);
 GPrintFunc   g_set_print_handler   (GPrintFunc func);
 
-guint        g_parse_debug_string  (const gchar *string, 
-				    GDebugKey   *keys, 
-				    guint        nkeys);
-
-void g_debug	      (char *progname);
-void g_attach_process (char *progname, int query);
-void g_stack_trace    (char *progname, int query);
+void g_debug	      (const gchar *progname);
+void g_attach_process (const gchar *progname,
+		       gint         query);
+void g_stack_trace    (const gchar *progname,
+		       gint         query);
 
 
 /* String Chunks
@@ -708,47 +740,38 @@ gchar*	      g_string_chunk_insert_const  (GStringChunk *chunk,
 
 /* Strings
  */
-GString* g_string_new	    (gchar   *init);
-void	 g_string_free	    (GString *string,
-			     gint     free_segment);
-GString* g_string_assign    (GString *lval,
-			     gchar   *rval);
-GString* g_string_truncate  (GString *string,
-			     gint     len);
-GString* g_string_append    (GString *string,
-			     gchar   *val);
-GString* g_string_append_c  (GString *string,
-			     gchar    c);
-GString* g_string_prepend   (GString *string,
-			     gchar   *val);
-GString* g_string_prepend_c (GString *string,
-			     gchar    c);
-GString* g_string_insert    (GString *fstring, 
-			     gint pos, 
-			     gchar *val);
-GString* g_string_insert_c  (GString *fstring, 
-			     gint pos, 
-			     gchar c);
-GString* g_string_erase    (GString *fstring, 
-			     gint pos, 
-			     gint len);
-#if __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ > 4)
-void	 g_string_sprintf   (GString *string,
-			     gchar   *fmt,
-			     ...) __attribute__ ((format (printf, 2, 3)));
-
-void	 g_string_sprintfa  (GString *string,
-			     gchar   *fmt,
-			     ...) __attribute__ ((format (printf, 2, 3)));
-#else
-void	 g_string_sprintf   (GString *string,
-			     gchar   *fmt,
-			     ...);
-
-void	 g_string_sprintfa  (GString *string,
-			     gchar   *fmt,
-			     ...);
-#endif
+GString* g_string_new	    (const gchar *init);
+void	 g_string_free	    (GString     *string,
+			     gint         free_segment);
+GString* g_string_assign    (GString     *lval,
+			     const gchar *rval);
+GString* g_string_truncate  (GString     *string,
+			     gint         len);
+GString* g_string_append    (GString     *string,
+			     const gchar *val);
+GString* g_string_append_c  (GString     *string,
+			     gchar        c);
+GString* g_string_prepend   (GString     *string,
+			     const gchar *val);
+GString* g_string_prepend_c (GString     *string,
+			     gchar        c);
+GString* g_string_insert    (GString	 *string, 
+			     gint 	  pos, 
+			     const gchar *val);
+GString* g_string_insert_c  (GString     *string, 
+			     gint         pos, 
+			     gchar        c);
+GString* g_string_erase     (GString     *string, 
+			     gint         pos, 
+			     gint         len);
+GString* g_string_down      (GString     *string);
+GString* g_string_up        (GString     *string);
+void	 g_string_sprintf   (GString     *string,
+			     const gchar *format,
+			     ...) G_GNUC_PRINTF (2, 3);
+void	 g_string_sprintfa  (GString     *string,
+			     const gchar *format,
+			     ...) G_GNUC_PRINTF (2, 3);
 
 /* Resizable arrays
  */
@@ -792,7 +815,6 @@ guint g_direct_hash (gpointer key);
 
 
 /* GScanner: Flexible lexical scanner for general purpose.
- * Copyright (C) 1997 Tim Janik
  */
 
 /* Character sets */
@@ -806,10 +828,6 @@ guint g_direct_hash (gpointer key);
 			"\347\350\351\352\353\354\355\356\357\360"\
 			"\361\362\363\364\365\366"\
 			"\370\371\372\373\374\375\376\377"
-
-typedef union	_GValue		GValue;
-typedef struct	_GScannerConfig GScannerConfig;
-typedef struct	_GScanner	GScanner;
 
 /* Error types */
 typedef enum

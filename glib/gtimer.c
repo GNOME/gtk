@@ -32,7 +32,7 @@ struct _GRealTimer
 
 
 GTimer*
-g_timer_new ()
+g_timer_new (void)
 {
   GRealTimer *timer;
 

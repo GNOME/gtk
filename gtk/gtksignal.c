@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
  * Library General Public License for more details.
  *
  * You should have received a copy of the GNU Library General Public
@@ -20,226 +20,286 @@
 #include "gtksignal.h"
 
 
-#define MAX_PARAMS       20
-#define DONE             1
-#define RESTART          2
+#define	SIGNAL_BLOCK_SIZE		(100)
+#define	HANDLER_BLOCK_SIZE		(200)
+#define	EMISSION_BLOCK_SIZE		(100)
+#define	DISCONNECT_INFO_BLOCK_SIZE	(64)
+#define MAX_SIGNAL_PARAMS		(32)
 
-#define GTK_RUN_TYPE(x)  ((x) & GTK_RUN_MASK)
+enum
+{
+  EMISSION_CONTINUE,
+  EMISSION_RESTART,
+  EMISSION_DONE
+};
+
+#define GTK_RUN_TYPE(x)	 ((x) & GTK_RUN_MASK)
 
 
-typedef struct _GtkSignal       GtkSignal;
-typedef struct _GtkSignalInfo   GtkSignalInfo;
-typedef struct _GtkHandler	GtkHandler;
-typedef struct _GtkHandlerInfo  GtkHandlerInfo;
-typedef struct _GtkEmission     GtkEmission;
+typedef struct _GtkSignal		GtkSignal;
+typedef struct _GtkSignalHash		GtkSignalHash;
+typedef struct _GtkHandler		GtkHandler;
+typedef struct _GtkHandlerInfo		GtkHandlerInfo;
+typedef struct _GtkEmission		GtkEmission;
+typedef union  _GtkEmissionAllocator	GtkEmissionAllocator;
+typedef struct _GtkDisconnectInfo	GtkDisconnectInfo;
 
 typedef void (*GtkSignalMarshaller0) (GtkObject *object,
-				      gpointer   data);
-
-struct _GtkSignalInfo
-{
-  gchar *name;
-  GtkType object_type;
-  guint signal_type;
-};
+				      gpointer	 data);
 
 struct _GtkSignal
 {
-  GtkSignalInfo info;
-  guint function_offset;
-  GtkSignalRunType run_type;
+  guint		      signal_id;
+  GtkType	      object_type;
+  gchar		     *name;
+  guint		      function_offset;
+  GtkSignalRunType    run_type;
   GtkSignalMarshaller marshaller;
-  GtkType return_val;
-  GtkType *params;
-  guint nparams;
+  GtkType	      return_val;
+  GtkType	     *params;
+  guint		      nparams;
+};
+
+struct _GtkSignalHash
+{
+  GtkType object_type;
+  guint	  name_key_id;
+  guint	  signal_id;
 };
 
 struct _GtkHandler
 {
-  guint id : 28;
-  guint blocked : 1;
-  guint object_signal : 1;
-  guint after : 1;
-  guint no_marshal : 1;
-  guint16 ref_count;
-  guint16 signal_type;
-  GtkSignalFunc func;
-  gpointer func_data;
+  guint		   id;
+  guint		   blocked : 20;
+  guint		   object_signal : 1;
+  guint		   after : 1;
+  guint		   no_marshal : 1;
+  guint16	   ref_count;
+  guint16	   signal_id;
+  GtkSignalFunc	   func;
+  gpointer	   func_data;
   GtkSignalDestroy destroy_func;
-  GtkHandler *prev;
-  GtkHandler *next;
+  GtkHandler	  *prev;
+  GtkHandler	  *next;
 };
 
 struct _GtkHandlerInfo
 {
-  GtkObject *object;
+  GtkObject	     *object;
   GtkSignalMarshaller marshaller;
-  GtkArg *params;
-  GtkType *param_types;
-  GtkType return_val;
-  GtkSignalRunType run_type;
-  guint nparams;
-  guint signal_type;
+  GtkArg	     *params;
+  GtkType	     *param_types;
+  GtkType	      return_val;
+  GtkSignalRunType    run_type;
+  guint		      nparams;
+  guint		      signal_id;
 };
 
 struct _GtkEmission
 {
   GtkObject *object;
-  guint signal_type;
+  guint	     signal_id;
+};
+
+union _GtkEmissionAllocator
+{
+  GtkEmissionAllocator *next;
+  GtkEmission		emission;
+};
+
+struct _GtkDisconnectInfo
+{
+  GtkObject	*object1;
+  guint		 disconnect_handler1;
+  guint		 signal_handler;
+  GtkObject	*object2;
+  guint		 disconnect_handler2;
 };
 
 
-static void         gtk_signal_init            (void);
-static guint        gtk_signal_hash            (guint         *key);
-static gint         gtk_signal_compare         (guint         *a,
-						guint         *b);
-static guint        gtk_signal_info_hash       (GtkSignalInfo *a);
-static gint         gtk_signal_info_compare    (GtkSignalInfo *a,
-						GtkSignalInfo *b);
+static guint	    gtk_signal_hash	       (const gpointer h);
+static gint	    gtk_signal_compare	       (const gpointer h1,
+						const gpointer h2);
 static GtkHandler*  gtk_signal_handler_new     (void);
-static void         gtk_signal_handler_ref     (GtkHandler    *handler);
-static void         gtk_signal_handler_unref   (GtkHandler    *handler,
+static void	    gtk_signal_handler_ref     (GtkHandler    *handler);
+static void	    gtk_signal_handler_unref   (GtkHandler    *handler,
 						GtkObject     *object);
-static void         gtk_signal_handler_insert  (GtkObject     *object,
+static void	    gtk_signal_handler_insert  (GtkObject     *object,
 						GtkHandler    *handler);
-static void         gtk_signal_real_emit       (GtkObject     *object,
-						guint          signal_type,
-						va_list        args);
+static void	    gtk_signal_real_emit       (GtkObject     *object,
+						GtkSignal     *signal,
+						GtkArg	      *params);
 static GtkHandler*  gtk_signal_get_handlers    (GtkObject     *object,
-						guint          signal_type);
-static guint        gtk_signal_connect_by_type (GtkObject     *object,
-						guint          signal_type,
+						guint	       signal_type);
+static guint	    gtk_signal_connect_by_type (GtkObject     *object,
+						guint	       signal_id,
 						GtkSignalFunc  func,
 						gpointer       func_data,
 						GtkSignalDestroy destroy_func,
-						gint           object_signal,
-						gint           after,
-						gint           no_marshal);
-static GtkEmission* gtk_emission_new           (void);
-static void         gtk_emission_destroy       (GtkEmission    *emission);
-static void         gtk_emission_add           (GList         **emissions,
+						gint	       object_signal,
+						gint	       after,
+						gint	       no_marshal);
+static guint	    gtk_alive_disconnecter     (GtkDisconnectInfo *info);
+static GtkEmission* gtk_emission_new	       (void);
+static void	    gtk_emission_add	       (GList	      **emissions,
 						GtkObject      *object,
-						guint           signal_type);
-static void         gtk_emission_remove        (GList         **emissions,
+						guint		signal_type);
+static void	    gtk_emission_remove	       (GList	      **emissions,
 						GtkObject      *object,
-						guint           signal_type);
-static gint         gtk_emission_check         (GList          *emissions,
+						guint		signal_type);
+static gint	    gtk_emission_check	       (GList	       *emissions,
 						GtkObject      *object,
-						guint           signal_type);
-static gint         gtk_handlers_run           (GtkHandler     *handlers,
+						guint		signal_type);
+static gint	    gtk_handlers_run	       (GtkHandler     *handlers,
 						GtkHandlerInfo *info,
-						gint            after);
-static void         gtk_params_get             (GtkArg         *params,
-						guint           nparams,
-						GtkType        *param_types,
-						GtkType         return_val,
-						va_list         args);
+						gint		after);
+static void	    gtk_params_get	       (GtkArg	       *params,
+						guint		nparams,
+						GtkType	       *param_types,
+						GtkType		return_val,
+						va_list		args);
+
+#define LOOKUP_SIGNAL_ID(signal_id)	( \
+  signal_id > 0 && signal_id < gtk_n_signals ? \
+    (GtkSignal*) gtk_signals + signal_id : \
+    (GtkSignal*) 0 \
+)
 
 
-static gint initialize = TRUE;
-static GHashTable *signal_hash_table = NULL;
-static GHashTable *signal_info_hash_table = NULL;
-static guint next_signal = 1;
-static guint next_handler_id = 1;
+static GtkSignalMarshal global_marshaller = NULL;
+static GtkSignalDestroy global_destroy_notify = NULL;
 
-static const gchar *handler_key = "gtk-signal-handlers";
-static guint        handler_key_id = 0;
+static guint	   		 gtk_handler_id = 1;
+static guint	   		 handler_key_id = 0;
+static GHashTable  		*gtk_signal_hash_table = NULL;
+static GtkSignal   		*gtk_signals = NULL;
+static guint	   		 gtk_n_signals = 0;
+static GMemChunk   		*gtk_signal_hash_mem_chunk = NULL;
+static GMemChunk   		*gtk_disconnect_info_mem_chunk = NULL;
+static GtkHandler  		*gtk_handler_free_list = NULL;
+static GtkEmissionAllocator	*gtk_emission_free_list = NULL;
 
-static GMemChunk *handler_mem_chunk = NULL;
-static GMemChunk *emission_mem_chunk = NULL;
+
 
 static GList *current_emissions = NULL;
 static GList *stop_emissions = NULL;
 static GList *restart_emissions = NULL;
 
-static GtkSignalMarshal marshal = NULL;
-static GtkSignalDestroy destroy = NULL;
-
-
-guint
-gtk_signal_new (const gchar         *name,
-		GtkSignalRunType     run_type,
-		GtkType              object_type,
-		guint                function_offset,
-		GtkSignalMarshaller  marshaller,
-		GtkType              return_val,
-		guint                nparams,
-		...)
+static GtkSignal*
+gtk_signal_next_and_invalidate (void)
 {
-  GtkType *params;
-  guint i;
-  va_list args;
-  guint return_id;
+  static guint gtk_n_free_signals = 0;
+  register GtkSignal *signal;
+  register guint new_signal_id;
   
-  g_return_val_if_fail (nparams < 16, 0);
+  /* don't keep *any* GtkSignal pointers across invokation of this function!!!
+   */
   
-  if (nparams > 0)
+  if (gtk_n_free_signals == 0)
     {
-      params = g_new (GtkType, nparams);
+      register guint i;
+      register guint size;
       
-      va_start (args, nparams);
+      /* nearest pow
+       */
+      size = gtk_n_signals + SIGNAL_BLOCK_SIZE;
+      size *= sizeof (GtkSignal);
+      i = 1;
+      while (i < size)
+	i <<= 1;
+      size = i;
       
-      for (i = 0; i < nparams; i++)
-	params[i] = va_arg (args, GtkType);
+      gtk_signals = g_realloc (gtk_signals, size);
       
-      va_end (args);
+      gtk_n_free_signals = size / sizeof (GtkSignal) - gtk_n_signals;
+      
+      memset (gtk_signals + gtk_n_signals, 0, gtk_n_free_signals * sizeof (GtkSignal));
     }
-  else
-    params = NULL;
   
-  return_id = gtk_signal_newv (name,
-			       run_type,
-			       object_type,
-			       function_offset,
-			       marshaller,
-			       return_val,
-			       nparams,
-			       params);
+  new_signal_id = gtk_n_signals++;
+  gtk_n_free_signals--;
   
-  g_free (params);
+  signal = LOOKUP_SIGNAL_ID (new_signal_id);
+  if (signal)
+    signal->signal_id = new_signal_id;
   
-  return return_id;
+  return signal;
+}
+
+void
+gtk_signal_init (void)
+{
+  if (!handler_key_id)
+    {
+      GtkSignal *zero;
+      
+      zero = gtk_signal_next_and_invalidate ();
+      g_assert (zero == NULL);
+      
+      handler_key_id = gtk_object_data_force_id ("gtk-signal-handlers");
+      
+      gtk_signal_hash_mem_chunk =
+	g_mem_chunk_new ("GtkSignalHash mem chunk",
+			 sizeof (GtkSignalHash),
+			 sizeof (GtkSignalHash) * SIGNAL_BLOCK_SIZE,
+			 G_ALLOC_ONLY);
+      gtk_disconnect_info_mem_chunk =
+	g_mem_chunk_new ("GtkDisconnectInfo mem chunk",
+			 sizeof (GtkDisconnectInfo),
+			 sizeof (GtkDisconnectInfo) * DISCONNECT_INFO_BLOCK_SIZE,
+			 G_ALLOC_AND_FREE);
+      gtk_handler_free_list = NULL;
+      gtk_emission_free_list = NULL;
+      
+      gtk_signal_hash_table = g_hash_table_new (gtk_signal_hash,
+						gtk_signal_compare);
+    }
 }
 
 guint
-gtk_signal_newv (const gchar         *name,
+gtk_signal_newv (const gchar	     *r_name,
 		 GtkSignalRunType     run_type,
-		 GtkType              object_type,
-		 guint                function_offset,
+		 GtkType	      object_type,
+		 guint		      function_offset,
 		 GtkSignalMarshaller  marshaller,
-		 GtkType              return_val,
-		 guint                nparams,
+		 GtkType	      return_val,
+		 guint		      nparams,
 		 GtkType	     *params)
 {
   GtkSignal *signal;
-  GtkSignalInfo info;
-  guint *type;
+  GtkSignalHash *hash;
+  guint id;
   guint i;
+  gchar *name;
   
-  g_return_val_if_fail (name != NULL, 0);
+  g_return_val_if_fail (r_name != NULL, 0);
   g_return_val_if_fail (marshaller != NULL, 0);
-  g_return_val_if_fail (nparams < 16, 0);
+  g_return_val_if_fail (nparams <= MAX_SIGNAL_PARAMS, 0);
   if (nparams)
     g_return_val_if_fail (params != NULL, 0);
   
-  if (initialize)
+  if (!handler_key_id)
     gtk_signal_init ();
+
+  name = g_strdup (r_name);
+  g_strdelimit (name, NULL, '_');
   
-  info.name = (char*)name;
-  info.object_type = object_type;
-  
-  type = g_hash_table_lookup (signal_info_hash_table, &info);
-  if (type)
+  id = gtk_signal_lookup (name, object_type);
+  if (id)
     {
       g_warning ("gtk_signal_newv(): signal \"%s\" already exists in the `%s' class ancestry\n",
-		 name, gtk_type_name (object_type));
+		 r_name,
+		 gtk_type_name (object_type));
+      g_free (name);
       return 0;
     }
   
-  signal = g_new (GtkSignal, 1);
-  signal->info.name = g_strdup (name);
-  signal->info.object_type = object_type;
-  signal->info.signal_type = next_signal++;
+  signal = gtk_signal_next_and_invalidate ();
+  
+  /* signal->signal_id already set */
+  
+  signal->object_type = object_type;
+  signal->name = name;
   signal->function_offset = function_offset;
   signal->run_type = run_type;
   signal->marshaller = marshaller;
@@ -255,11 +315,103 @@ gtk_signal_newv (const gchar         *name,
     }
   else
     signal->params = NULL;
+
+  /* insert "signal_name" into hash table
+   */
+  hash = g_chunk_new (GtkSignalHash, gtk_signal_hash_mem_chunk);
+  hash->object_type = object_type;
+  hash->name_key_id = gtk_object_data_force_id (signal->name);
+  hash->signal_id = signal->signal_id;
+  g_hash_table_insert (gtk_signal_hash_table, hash, (gpointer) hash->signal_id);
+
+  /* insert "signal-name" into hash table
+   */
+  g_strdelimit (signal->name, NULL, '-');
+  id = gtk_object_data_force_id (signal->name);
+  if (id != hash->name_key_id)
+    {
+      hash = g_chunk_new (GtkSignalHash, gtk_signal_hash_mem_chunk);
+      hash->object_type = object_type;
+      hash->name_key_id = id;
+      hash->signal_id = signal->signal_id;
+      g_hash_table_insert (gtk_signal_hash_table, hash, (gpointer) hash->signal_id);
+    }
   
-  g_hash_table_insert (signal_hash_table, &signal->info.signal_type, signal);
-  g_hash_table_insert (signal_info_hash_table, &signal->info, &signal->info.signal_type);
+  return signal->signal_id;
+}
+
+guint
+gtk_signal_new (const gchar	    *name,
+		GtkSignalRunType     run_type,
+		GtkType		     object_type,
+		guint		     function_offset,
+		GtkSignalMarshaller  marshaller,
+		GtkType		     return_val,
+		guint		     nparams,
+		...)
+{
+  GtkType *params;
+  guint i;
+  va_list args;
+  guint signal_id;
   
-  return signal->info.signal_type;
+  g_return_val_if_fail (nparams <= MAX_SIGNAL_PARAMS, 0);
+  
+  if (nparams > 0)
+    {
+      params = g_new (GtkType, nparams);
+      
+      va_start (args, nparams);
+      
+      for (i = 0; i < nparams; i++)
+	params[i] = va_arg (args, GtkType);
+      
+      va_end (args);
+    }
+  else
+    params = NULL;
+  
+  signal_id = gtk_signal_newv (name,
+			       run_type,
+			       object_type,
+			       function_offset,
+			       marshaller,
+			       return_val,
+			       nparams,
+			       params);
+  
+  g_free (params);
+  
+  return signal_id;
+}
+
+guint
+gtk_signal_lookup (const gchar *name,
+		   GtkType	object_type)
+{
+  GtkSignalHash hash;
+  
+  g_return_val_if_fail (name != NULL, 0);
+  g_return_val_if_fail (gtk_type_is_a (object_type, GTK_TYPE_OBJECT), 0);
+  
+  hash.name_key_id = gtk_object_data_try_key (name);
+  if (hash.name_key_id)
+    {
+      while (object_type)
+	{
+	  guint signal_id;
+	  
+	  hash.object_type = object_type;
+	  
+	  signal_id = (guint) g_hash_table_lookup (gtk_signal_hash_table, &hash);
+	  if (signal_id)
+	    return signal_id;
+	  
+	  object_type = gtk_type_parent (object_type);
+	}
+    }
+  
+  return 0;
 }
 
 GtkSignalQuery*
@@ -270,14 +422,14 @@ gtk_signal_query (guint signal_id)
   
   g_return_val_if_fail (signal_id >= 1, NULL);
   
-  signal = g_hash_table_lookup (signal_hash_table, &signal_id);
+  signal = LOOKUP_SIGNAL_ID (signal_id);
   if (signal)
     {
       query = g_new (GtkSignalQuery, 1);
       
-      query->object_type = signal->info.object_type;
+      query->object_type = signal->object_type;
       query->signal_id = signal_id;
-      query->signal_name = signal->info.name;
+      query->signal_name = signal->name;
       query->is_user_signal = signal->function_offset == 0;
       query->run_type = signal->run_type;
       query->return_val = signal->return_val;
@@ -290,36 +442,6 @@ gtk_signal_query (guint signal_id)
   return query;
 }
 
-guint
-gtk_signal_lookup (const gchar *name,
-		   GtkType      object_type)
-{
-  GtkSignalInfo info;
-  
-  g_return_val_if_fail (name != NULL, 0);
-  g_return_val_if_fail (gtk_type_is_a (object_type, GTK_TYPE_OBJECT), 0);
-  
-  if (initialize)
-    gtk_signal_init ();
-  
-  info.name = (char*)name;
-  
-  while (object_type)
-    {
-      guint *type;
-      
-      info.object_type = object_type;
-      
-      type = g_hash_table_lookup (signal_info_hash_table, &info);
-      if (type)
-	return *type;
-      
-      object_type = gtk_type_parent (object_type);
-    }
-  
-  return 0;
-}
-
 gchar*
 gtk_signal_name (guint signal_id)
 {
@@ -327,223 +449,328 @@ gtk_signal_name (guint signal_id)
   
   g_return_val_if_fail (signal_id >= 1, NULL);
   
-  signal = g_hash_table_lookup (signal_hash_table, &signal_id);
+  signal = LOOKUP_SIGNAL_ID (signal_id);
   if (signal)
-    return signal->info.name;
+    return signal->name;
   
   return NULL;
 }
 
 void
-gtk_signal_emit (GtkObject *object,
-		 guint       signal_id,
-		 ...)
+gtk_signal_emitv (GtkObject           *object,
+		  guint                signal_id,
+		  GtkArg              *params)
 {
-  va_list args;
-  
+  GtkSignal *signal;
+
   g_return_if_fail (object != NULL);
   g_return_if_fail (signal_id >= 1);
+  g_return_if_fail (params != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
-  
-  va_start (args, signal_id);
-  
-  gtk_signal_real_emit (object, signal_id, args);
-  
-  va_end (args);
+  signal = LOOKUP_SIGNAL_ID (signal_id);
+  g_return_if_fail (signal != NULL);
+  g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
+
+  gtk_signal_real_emit (object, signal, params);
 }
 
 void
-gtk_signal_emit_by_name (GtkObject       *object,
-			 const gchar     *name,
+gtk_signal_emit (GtkObject *object,
+		 guint	    signal_id,
+		 ...)
+{
+  GtkSignal *signal;
+  va_list    args;
+  GtkArg     params[MAX_SIGNAL_PARAMS];
+
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (signal_id >= 1);
+  
+  signal = LOOKUP_SIGNAL_ID (signal_id);
+  g_return_if_fail (signal != NULL);
+  g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
+
+  va_start (args, signal_id);
+  gtk_params_get (params,
+		  signal->nparams,
+		  signal->params,
+		  signal->return_val,
+		  args);
+  va_end (args);
+
+  gtk_signal_real_emit (object, signal, params);
+}
+
+void
+gtk_signal_emitv_by_name (GtkObject           *object,
+			  const gchar         *name,
+			  GtkArg              *params)
+{
+  guint signal_id;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (params != NULL);
+  
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  
+  if (signal_id >= 1)
+    {
+      GtkSignal *signal;
+      
+      signal = LOOKUP_SIGNAL_ID (signal_id);
+      g_return_if_fail (signal != NULL);
+      g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
+
+      gtk_signal_real_emit (object, signal, params);
+    }
+  else
+    {
+      g_warning ("gtk_signal_emitv_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
+    }
+}
+
+void
+gtk_signal_emit_by_name (GtkObject	 *object,
+			 const gchar	 *name,
 			 ...)
 {
-  guint type;
-  va_list args;
+  guint signal_id;
   
   g_return_if_fail (object != NULL);
   g_return_if_fail (name != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
   
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  
-  if (type >= 1)
+  if (signal_id >= 1)
     {
+      GtkSignal *signal;
+      GtkArg     params[MAX_SIGNAL_PARAMS];
+      va_list    args;
+      
+      signal = LOOKUP_SIGNAL_ID (signal_id);
+      g_return_if_fail (signal != NULL);
+      g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
+
       va_start (args, name);
-      
-      gtk_signal_real_emit (object, type, args);
-      
+      gtk_params_get (params,
+		      signal->nparams,
+		      signal->params,
+		      signal->return_val,
+		      args);
       va_end (args);
+
+      gtk_signal_real_emit (object, signal, params);
     }
   else
     {
       g_warning ("gtk_signal_emit_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
-		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
     }
 }
 
 void
 gtk_signal_emit_stop (GtkObject *object,
-		      guint       signal_id)
+		      guint	  signal_id)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (signal_id >= 1);
-  
-  if (initialize)
-    gtk_signal_init ();
   
   if (gtk_emission_check (current_emissions, object, signal_id))
     gtk_emission_add (&stop_emissions, object, signal_id);
   else
     g_warning ("gtk_signal_emit_stop(): no current emission (%u) for object `%s'",
-	       signal_id, gtk_type_name (GTK_OBJECT_TYPE (object)));
+	       signal_id,
+	       gtk_type_name (GTK_OBJECT_TYPE (object)));
 }
 
 void
-gtk_signal_emit_stop_by_name (GtkObject       *object,
+gtk_signal_emit_stop_by_name (GtkObject	      *object,
 			      const gchar     *name)
 {
-  guint type;
+  guint signal_id;
   
   g_return_if_fail (object != NULL);
   g_return_if_fail (name != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
-  
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  if (type)
-    gtk_signal_emit_stop (object, type);
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (signal_id)
+    gtk_signal_emit_stop (object, signal_id);
   else
     g_warning ("gtk_signal_emit_stop_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
-	       name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+	       name,
+	       gtk_type_name (GTK_OBJECT_TYPE (object)));
 }
 
 guint
-gtk_signal_connect (GtkObject     *object,
-		    const gchar   *name,
-		    GtkSignalFunc  func,
-		    gpointer       func_data)
+gtk_signal_n_emissions (GtkObject  *object,
+			guint	    signal_id)
 {
-  guint type;
+  GList *list;
+  guint n;
   
   g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
   
-  if (initialize)
-    gtk_signal_init ();
+  n = 0;
+  for (list = current_emissions; list; list = list->next)
+    {
+      GtkEmission *emission;
+      
+      emission = list->data;
+      
+      if ((emission->object == object) &&
+	  (emission->signal_id == signal_id))
+	n++;
+    }
   
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  if (!type)
+  return n;
+}
+
+guint
+gtk_signal_n_emissions_by_name (GtkObject	*object,
+				const gchar	*name)
+{
+  guint signal_id;
+  guint n;
+  
+  g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
+  g_return_val_if_fail (name != NULL, 0);
+  
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (signal_id)
+    n = gtk_signal_n_emissions (object, signal_id);
+  else
+    {
+      g_warning ("gtk_signal_n_emissions_by_name(): could not find signal \"%s\" in the `%s' class ancestry",
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
+      n = 0;
+    }
+  
+  return n;
+}
+
+guint
+gtk_signal_connect (GtkObject	  *object,
+		    const gchar	  *name,
+		    GtkSignalFunc  func,
+		    gpointer	   func_data)
+{
+  guint signal_id;
+  
+  g_return_val_if_fail (object != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
+  
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (!signal_id)
     {
       g_warning ("gtk_signal_connect(): could not find signal \"%s\" in the `%s' class ancestry",
-		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
   
-  return gtk_signal_connect_by_type (object, type, 
+  return gtk_signal_connect_by_type (object, signal_id, 
 				     func, func_data, NULL,
 				     FALSE, FALSE, FALSE);
 }
 
 guint
-gtk_signal_connect_after (GtkObject     *object,
-			  const gchar   *name,
-			  GtkSignalFunc  func,
-			  gpointer       func_data)
+gtk_signal_connect_after (GtkObject	*object,
+			  const gchar	*name,
+			  GtkSignalFunc	 func,
+			  gpointer	 func_data)
 {
-  guint type;
+  guint signal_id;
   
   g_return_val_if_fail (object != NULL, 0);
   
-  if (initialize)
-    gtk_signal_init ();
-  
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  if (!type)
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (!signal_id)
     {
       g_warning ("gtk_signal_connect_after(): could not find signal \"%s\" in the `%s' class ancestry",
-		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
   
-  return gtk_signal_connect_by_type (object, type, 
+  return gtk_signal_connect_by_type (object, signal_id, 
 				     func, func_data, NULL,
 				     FALSE, TRUE, FALSE);
 }
 
-guint   
-gtk_signal_connect_full (GtkObject           *object,
-			 const gchar         *name,
-			 GtkSignalFunc        func,
+guint	
+gtk_signal_connect_full (GtkObject	     *object,
+			 const gchar	     *name,
+			 GtkSignalFunc	      func,
 			 GtkCallbackMarshal   marshal,
-			 gpointer             func_data,
+			 gpointer	      func_data,
 			 GtkDestroyNotify     destroy_func,
-			 gint                 object_signal,
-			 gint                 after)
+			 gint		      object_signal,
+			 gint		      after)
 {
-  guint type;
+  guint signal_id;
   
   g_return_val_if_fail (object != NULL, 0);
   
-  if (initialize)
-    gtk_signal_init ();
-  
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  if (!type)
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (!signal_id)
     {
       g_warning ("gtk_signal_connect_full(): could not find signal \"%s\" in the `%s' class ancestry",
-		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
   
   if (marshal)
-    return gtk_signal_connect_by_type (object, type, (GtkSignalFunc) marshal, 
+    return gtk_signal_connect_by_type (object, signal_id, (GtkSignalFunc) marshal, 
 				       func_data, destroy_func, 
 				       object_signal, after, TRUE);
   else
-    return gtk_signal_connect_by_type (object, type, func, 
+    return gtk_signal_connect_by_type (object, signal_id, func, 
 				       func_data, destroy_func, 
 				       object_signal, after, FALSE);
 }
 
 guint
-gtk_signal_connect_interp (GtkObject         *object,
-			   const gchar       *name,
+gtk_signal_connect_interp (GtkObject	     *object,
+			   const gchar	     *name,
 			   GtkCallbackMarshal func,
-			   gpointer           func_data,
+			   gpointer	      func_data,
 			   GtkDestroyNotify   destroy_func,
-			   gint               after)
+			   gint		      after)
 {
   return gtk_signal_connect_full (object, name, NULL, func,
 				  func_data, destroy_func, FALSE, after);
 }
 
 guint
-gtk_signal_connect_object (GtkObject     *object,
-			   const gchar   *name,
+gtk_signal_connect_object (GtkObject	 *object,
+			   const gchar	 *name,
 			   GtkSignalFunc  func,
-			   GtkObject     *slot_object)
+			   GtkObject	 *slot_object)
 {
-  guint type;
+  guint signal_id;
   
   g_return_val_if_fail (object != NULL, 0);
-  /* slot_object needs to be treated as ordinary pointer */
+  /* slot_object needs to be treated as ordinary pointer
+   */
   
-  if (initialize)
-    gtk_signal_init ();
-  
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  if (!type)
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (!signal_id)
     {
       g_warning ("gtk_signal_connect_object(): could not find signal \"%s\" in the `%s' class ancestry",
-		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
   
-  return gtk_signal_connect_by_type (object, type, 
+  return gtk_signal_connect_by_type (object, signal_id, 
 				     func, slot_object, NULL,
 				     TRUE, FALSE, FALSE);
 }
@@ -551,58 +778,33 @@ gtk_signal_connect_object (GtkObject     *object,
 guint
 gtk_signal_connect_object_after (GtkObject     *object,
 				 const gchar   *name,
-				 GtkSignalFunc  func,
+				 GtkSignalFunc	func,
 				 GtkObject     *slot_object)
 {
-  guint type;
+  guint signal_id;
   
   g_return_val_if_fail (object != NULL, 0);
   
-  if (initialize)
-    gtk_signal_init ();
-  
-  type = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
-  if (!type)
+  signal_id = gtk_signal_lookup (name, GTK_OBJECT_TYPE (object));
+  if (!signal_id)
     {
       g_warning ("gtk_signal_connect_object_after(): could not find signal \"%s\" in the `%s' class ancestry",
-		 name, gtk_type_name (GTK_OBJECT_TYPE (object)));
+		 name,
+		 gtk_type_name (GTK_OBJECT_TYPE (object)));
       return 0;
     }
   
-  return gtk_signal_connect_by_type (object, type, 
+  return gtk_signal_connect_by_type (object, signal_id, 
 				     func, slot_object, NULL,
 				     TRUE, TRUE, FALSE);
 }
 
-typedef struct _GtkDisconnectInfo       GtkDisconnectInfo;
-struct _GtkDisconnectInfo
-{
-  GtkObject     *object1;
-  guint          disconnect_handler1;
-  guint          signal_handler;
-  GtkObject     *object2;
-  guint          disconnect_handler2;
-};
-
-static guint
-gtk_alive_disconnecter (GtkDisconnectInfo *info)
-{
-  g_return_val_if_fail (info != NULL, 0);
-  
-  gtk_signal_disconnect (info->object1, info->disconnect_handler1);
-  gtk_signal_disconnect (info->object1, info->signal_handler);
-  gtk_signal_disconnect (info->object2, info->disconnect_handler2);
-  g_free (info);
-  
-  return 0;
-}
-
 void
-gtk_signal_connect_while_alive (GtkObject        *object,
-				const gchar      *signal,
-				GtkSignalFunc     func,
-				gpointer          func_data,
-				GtkObject        *alive_object)
+gtk_signal_connect_while_alive (GtkObject	 *object,
+				const gchar	 *signal,
+				GtkSignalFunc	  func,
+				gpointer	  func_data,
+				GtkObject	 *alive_object)
 {
   GtkDisconnectInfo *info;
   
@@ -613,26 +815,28 @@ gtk_signal_connect_while_alive (GtkObject        *object,
   g_return_if_fail (alive_object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (alive_object));
   
-  info = g_new (GtkDisconnectInfo, 1);
+  info = g_chunk_new (GtkDisconnectInfo, gtk_disconnect_info_mem_chunk);
   info->object1 = object;
   info->object2 = alive_object;
   
   info->signal_handler = gtk_signal_connect (object, signal, func, func_data);
-  info->disconnect_handler1 = gtk_signal_connect_object (info->object1,
-							 "destroy",
-							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
-							 (GtkObject*) info);
-  info->disconnect_handler2 = gtk_signal_connect_object (info->object2,
-							 "destroy",
-							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
-							 (GtkObject*) info);
+  info->disconnect_handler1 =
+    gtk_signal_connect_object (info->object1,
+			       "destroy",
+			       GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+			       (GtkObject*) info);
+  info->disconnect_handler2 =
+    gtk_signal_connect_object (info->object2,
+			       "destroy",
+			       GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+			       (GtkObject*) info);
 }
 
 void
-gtk_signal_connect_object_while_alive (GtkObject        *object,
-				       const gchar      *signal,
-				       GtkSignalFunc     func,
-				       GtkObject        *alive_object)
+gtk_signal_connect_object_while_alive (GtkObject	*object,
+				       const gchar	*signal,
+				       GtkSignalFunc	 func,
+				       GtkObject	*alive_object)
 {
   GtkDisconnectInfo *info;
   
@@ -643,24 +847,26 @@ gtk_signal_connect_object_while_alive (GtkObject        *object,
   g_return_if_fail (alive_object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (alive_object));
   
-  info = g_new (GtkDisconnectInfo, 1);
+  info = g_chunk_new (GtkDisconnectInfo, gtk_disconnect_info_mem_chunk);
   info->object1 = object;
   info->object2 = alive_object;
   
   info->signal_handler = gtk_signal_connect_object (object, signal, func, alive_object);
-  info->disconnect_handler1 = gtk_signal_connect_object (info->object1,
-							 "destroy",
-							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
-							 (GtkObject*) info);
-  info->disconnect_handler2 = gtk_signal_connect_object (info->object2,
-							 "destroy",
-							 GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
-							 (GtkObject*) info);
+  info->disconnect_handler1 =
+    gtk_signal_connect_object (info->object1,
+			       "destroy",
+			       GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+			       (GtkObject*) info);
+  info->disconnect_handler2 =
+    gtk_signal_connect_object (info->object2,
+			       "destroy",
+			       GTK_SIGNAL_FUNC (gtk_alive_disconnecter),
+			       (GtkObject*) info);
 }
 
 void
 gtk_signal_disconnect (GtkObject *object,
-		       guint      handler_id)
+		       guint	  handler_id)
 {
   GtkHandler *handler;
   
@@ -674,7 +880,7 @@ gtk_signal_disconnect (GtkObject *object,
       if (handler->id == handler_id)
 	{
 	  handler->id = 0;
-	  handler->blocked = TRUE;
+	  handler->blocked += 1;
 	  gtk_signal_handler_unref (handler, object);
 	  return;
 	}
@@ -685,8 +891,43 @@ gtk_signal_disconnect (GtkObject *object,
 }
 
 void
+gtk_signal_disconnect_by_func (GtkObject     *object,
+			       GtkSignalFunc  func,
+			       gpointer	      data)
+{
+  GtkHandler *handler;
+  gint found_one;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (func != NULL);
+  
+  found_one = FALSE;
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  
+  while (handler)
+    {
+      GtkHandler *handler_next;
+      
+      handler_next = handler->next;
+      if ((handler->id > 0) &&
+	  (handler->func == func) &&
+	  (handler->func_data == data))
+	{
+	  found_one = TRUE;
+	  handler->id = 0;
+	  handler->blocked += 1;
+	  gtk_signal_handler_unref (handler, object);
+	}
+      handler = handler_next;
+    }
+  
+  if (!found_one)
+    g_warning ("gtk_signal_disconnect_by_func(): could not find handler (0x%0lX) containing data (0x%0lX)", (long) func, (long) data);
+}
+
+void
 gtk_signal_disconnect_by_data (GtkObject *object,
-			       gpointer   data)
+			       gpointer	  data)
 {
   GtkHandler *handler;
   gint found_one;
@@ -701,12 +942,12 @@ gtk_signal_disconnect_by_data (GtkObject *object,
       GtkHandler *handler_next;
       
       handler_next = handler->next;
-      if (handler->func_data == data &&
-	  handler->id > 0)
+      if ((handler->id > 0) &&
+	  (handler->func_data == data))
 	{
 	  found_one = TRUE;
 	  handler->id = 0;
-	  handler->blocked = TRUE;
+	  handler->blocked += 1;
 	  gtk_signal_handler_unref (handler, object);
 	}
       handler = handler_next;
@@ -720,25 +961,54 @@ void
 gtk_signal_handler_block (GtkObject *object,
 			  guint	     handler_id)
 {
-  GtkHandler *tmp;
+  GtkHandler *handler;
   
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  tmp = gtk_object_get_data_by_id (object, handler_key_id);
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
   
-  while (tmp)
+  while (handler)
     {
-      if (tmp->id == handler_id)
+      if (handler->id == handler_id)
 	{
-	  tmp->blocked = TRUE;
+	  handler->blocked += 1;
 	  return;
 	}
-      
-      tmp = tmp->next;
+      handler = handler->next;
     }
   
   g_warning ("gtk_signal_handler_block(): could not find handler (%u)", handler_id);
+}
+
+void
+gtk_signal_handler_block_by_func (GtkObject	*object,
+				  GtkSignalFunc	 func,
+				  gpointer	 data)
+{
+  GtkHandler *handler;
+  gint found_one;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (func != NULL);
+  
+  found_one = FALSE;
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  
+  while (handler)
+    {
+      if ((handler->id > 0) &&
+	  (handler->func == func) &&
+	  (handler->func_data == data))
+	{
+	  found_one = TRUE;
+	  handler->blocked += 1;
+	}
+      handler = handler->next;
+    }
+  
+  if (!found_one)
+    g_warning ("gtk_signal_handler_block_by_func(): could not find handler (0x%0lX) containing data (0x%0lX)", (long) func, (long) data);
 }
 
 void
@@ -750,21 +1020,17 @@ gtk_signal_handler_block_by_data (GtkObject *object,
   
   g_return_if_fail (object != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
-  
   found_one = FALSE;
   handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
-      if (handler->func_data == data &&
-	  handler->id > 0)
+      if ((handler->id > 0) &&
+	  (handler->func_data == data))
 	{
 	  found_one = TRUE;
-	  handler->blocked = TRUE;
+	  handler->blocked += 1;
 	}
-      
       handler = handler->next;
     }
   
@@ -781,23 +1047,53 @@ gtk_signal_handler_unblock (GtkObject *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (handler_id > 0);
   
-  if (initialize)
-    gtk_signal_init ();
-  
   handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
       if (handler->id == handler_id)
 	{
-	  handler->blocked = FALSE;
+	  if (handler->blocked > 0)
+	    handler->blocked -= 1;
+	  else
+	    g_warning ("gtk_signal_handler_unblock(): handler (%u) is not blocked", handler_id);
 	  return;
 	}
-      
       handler = handler->next;
     }
   
   g_warning ("gtk_signal_handler_unblock(): could not find handler (%u)", handler_id);
+}
+
+void
+gtk_signal_handler_unblock_by_func (GtkObject	  *object,
+				    GtkSignalFunc  func,
+				    gpointer	   data)
+{
+  GtkHandler *handler;
+  gint found_one;
+  
+  g_return_if_fail (object != NULL);
+  g_return_if_fail (func != NULL);
+  
+  found_one = FALSE;
+  handler = gtk_object_get_data_by_id (object, handler_key_id);
+  
+  while (handler)
+    {
+      if ((handler->id > 0) &&
+	  (handler->func == func) &&
+	  (handler->func_data == data) &&
+	  (handler->blocked > 0))
+	{
+	  handler->blocked -= 1;
+	  found_one = TRUE;
+	}
+      handler = handler->next;
+    }
+  
+  if (!found_one)
+    g_warning ("gtk_signal_handler_unblock_by_func(): could not find blocked handler (0x%0lX) containing data (0x%0lX)", (long) func, (long) data);
 }
 
 void
@@ -809,26 +1105,23 @@ gtk_signal_handler_unblock_by_data (GtkObject *object,
   
   g_return_if_fail (object != NULL);
   
-  if (initialize)
-    gtk_signal_init ();
-  
   found_one = FALSE;
   handler = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handler)
     {
-      if (handler->func_data == data &&
-	  handler->id > 0)
+      if ((handler->id > 0) &&
+	  (handler->func_data == data) &&
+	  (handler->blocked > 0))
 	{
+	  handler->blocked -= 1;
 	  found_one = TRUE;
-	  handler->blocked = FALSE;
 	}
-      
       handler = handler->next;
     }
   
   if (!found_one)
-    g_warning ("gtk_signal_handler_unblock_by_data(): could not find handler containing data (0x%0lX)", (long) data);
+    g_warning ("gtk_signal_handler_unblock_by_data(): could not find blocked handler containing data (0x%0lX)", (long) data);
 }
 
 void
@@ -861,8 +1154,8 @@ gtk_signal_handlers_destroy (GtkObject *object)
 void
 gtk_signal_default_marshaller (GtkObject      *object,
 			       GtkSignalFunc   func,
-			       gpointer        func_data,
-			       GtkArg         *params)
+			       gpointer	       func_data,
+			       GtkArg	      *params)
 {
   GtkSignalMarshaller0 rfunc;
   
@@ -875,69 +1168,75 @@ void
 gtk_signal_set_funcs (GtkSignalMarshal marshal_func,
 		      GtkSignalDestroy destroy_func)
 {
-  marshal = marshal_func;
-  destroy = destroy_func;
-}
-
-
-static void
-gtk_signal_init ()
-{
-  if (initialize)
-    {
-      initialize = FALSE;
-      signal_hash_table = g_hash_table_new ((GHashFunc) gtk_signal_hash,
-					    (GCompareFunc) gtk_signal_compare);
-      signal_info_hash_table = g_hash_table_new ((GHashFunc) gtk_signal_info_hash,
-						 (GCompareFunc) gtk_signal_info_compare);
-    }
+  global_marshaller = marshal_func;
+  global_destroy_notify = destroy_func;
 }
 
 static guint
-gtk_signal_hash (guint *key)
+gtk_signal_hash (const gpointer h)
 {
-  return *key;
+  register GtkSignalHash *hash = h;
+  
+  return hash->object_type ^ hash->name_key_id;
 }
 
 static gint
-gtk_signal_compare (guint *a,
-		    guint *b)
+gtk_signal_compare (const gpointer h1,
+		    const gpointer h2)
 {
-  return (*a == *b);
+  register GtkSignalHash *hash1 = h1;
+  register GtkSignalHash *hash2 = h2;
+  
+  return (hash1->name_key_id == hash2->name_key_id &&
+	  hash1->object_type == hash2->object_type);
 }
 
 static guint
-gtk_signal_info_hash (GtkSignalInfo *a)
+gtk_alive_disconnecter (GtkDisconnectInfo *info)
 {
-  return (g_str_hash (a->name) + a->object_type);
-}
-
-static gint
-gtk_signal_info_compare (GtkSignalInfo *a,
-			 GtkSignalInfo *b)
-{
-  return ((a->object_type == b->object_type) &&
-	  g_str_equal (a->name, b->name));
+  g_return_val_if_fail (info != NULL, 0);
+  
+  gtk_signal_disconnect (info->object1, info->disconnect_handler1);
+  gtk_signal_disconnect (info->object1, info->signal_handler);
+  gtk_signal_disconnect (info->object2, info->disconnect_handler2);
+  
+  g_mem_chunk_free (gtk_disconnect_info_mem_chunk, info);
+  
+  return 0;
 }
 
 static GtkHandler*
-gtk_signal_handler_new ()
+gtk_signal_handler_new (void)
 {
   GtkHandler *handler;
-  
-  if (!handler_mem_chunk)
-    handler_mem_chunk = g_mem_chunk_new ("handler mem chunk", sizeof (GtkHandler),
-					 1024, G_ALLOC_AND_FREE);
-  
-  handler = g_chunk_new (GtkHandler, handler_mem_chunk);
+
+  if (!gtk_handler_free_list)
+    {
+      GtkHandler *handler_block;
+      guint i;
+
+      handler_block = g_new0 (GtkHandler, HANDLER_BLOCK_SIZE);
+      for (i = 1; i < HANDLER_BLOCK_SIZE; i++)
+	{
+	  (handler_block + i)->next = gtk_handler_free_list;
+	  gtk_handler_free_list = (handler_block + i);
+	}
+      
+      handler = handler_block;
+    }
+  else
+    {
+      handler = gtk_handler_free_list;
+      gtk_handler_free_list = handler->next;
+    }
   
   handler->id = 0;
-  handler->ref_count = 1;
-  handler->signal_type = 0;
-  handler->blocked = FALSE;
+  handler->blocked = 0;
+  handler->signal_id = 0;
   handler->object_signal = FALSE;
   handler->after = FALSE;
   handler->no_marshal = FALSE;
+  handler->ref_count = 1;
   handler->func = NULL;
   handler->func_data = NULL;
   handler->destroy_func = NULL;
@@ -959,28 +1258,34 @@ gtk_signal_handler_unref (GtkHandler *handler,
 {
   if (!handler->ref_count)
     {
-      /* FIXME: i wanna get removed some when */
+      /* FIXME: i wanna get removed somewhen */
       g_warning ("gtk_signal_handler_unref(): handler with ref_count==0!");
       return;
     }
   
   handler->ref_count -= 1;
+  
   if (handler->ref_count == 0)
     {
-      if (!handler->func && destroy)
-	(* destroy) (handler->func_data);
-      else if (handler->destroy_func)
+      if (handler->destroy_func)
 	(* handler->destroy_func) (handler->func_data);
-      
+      else if (!handler->func && global_destroy_notify)
+	(* global_destroy_notify) (handler->func_data);
       
       if (handler->prev)
 	handler->prev->next = handler->next;
-      else
+      else if (handler->next)
 	gtk_object_set_data_by_id (object, handler_key_id, handler->next);
+      else
+	{
+	  GTK_OBJECT_UNSET_FLAGS (object, GTK_CONNECTED);
+	  gtk_object_set_data_by_id (object, handler_key_id, NULL);
+	}
       if (handler->next)
 	handler->next->prev = handler->prev;
       
-      g_mem_chunk_free (handler_mem_chunk, handler);
+      handler->next = gtk_handler_free_list;
+      gtk_handler_free_list = handler;
     }
 }
 
@@ -996,14 +1301,13 @@ gtk_signal_handler_insert (GtkObject  *object,
   tmp = gtk_object_get_data_by_id (object, handler_key_id);
   if (!tmp)
     {
-      if (!handler_key_id)
-	handler_key_id = gtk_object_data_force_id (handler_key);
+      GTK_OBJECT_SET_FLAGS (object, GTK_CONNECTED);
       gtk_object_set_data_by_id (object, handler_key_id, handler);
     }
   else
     while (tmp)
       {
-	if (tmp->signal_type < handler->signal_type)
+	if (tmp->signal_id < handler->signal_id)
 	  {
 	    if (tmp->prev)
 	      {
@@ -1029,35 +1333,26 @@ gtk_signal_handler_insert (GtkObject  *object,
 
 static void
 gtk_signal_real_emit (GtkObject *object,
-		      guint      signal_type,
-		      va_list    args)
+		      GtkSignal *signal,
+		      GtkArg	*params)
 {
-  GtkSignal *signal;
-  GtkHandler *handlers;
+  GtkHandler	*handlers;
   GtkHandlerInfo info;
-  guchar **signal_func_offset;
-  GtkArg         params[MAX_PARAMS];
-  
-  signal = g_hash_table_lookup (signal_hash_table, &signal_type);
-  g_return_if_fail (signal != NULL);
-  g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object),
-				   signal->info.object_type));
+  guchar       **signal_func_offset;
+  register guint signal_id = signal->signal_id;
   
   if ((signal->run_type & GTK_RUN_NO_RECURSE) &&
-      gtk_emission_check (current_emissions, object, signal_type))
+      gtk_emission_check (current_emissions, object, signal_id))
     {
-      gtk_emission_add (&restart_emissions, object, signal_type);
+      gtk_emission_add (&restart_emissions, object, signal_id);
       return;
     }
   
-  gtk_params_get (params, signal->nparams, signal->params,
-		  signal->return_val, args);
-  
-  gtk_emission_add (&current_emissions, object, signal_type);
-  
   gtk_object_ref (object);
+
+  gtk_emission_add (&current_emissions, object, signal_id);
   
-restart:
+ emission_restart:
   if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_LAST && signal->function_offset != 0)
     {
       signal_func_offset = (guchar**) ((guchar*) object->klass +
@@ -1067,25 +1362,37 @@ restart:
 				NULL, params);
     }
   
-  info.object = object;
-  info.marshaller = signal->marshaller;
-  info.params = params;
-  info.param_types = signal->params;
-  info.return_val = signal->return_val;
-  info.nparams = signal->nparams;
-  info.run_type = signal->run_type;
-  info.signal_type = signal_type;
-  
-  handlers = gtk_signal_get_handlers (object, signal_type);
-  switch (gtk_handlers_run (handlers, &info, FALSE))
+  if (GTK_OBJECT_CONNECTED (object))
     {
-    case DONE:
-      goto done;
-    case RESTART:
-      goto restart;
+      handlers = gtk_signal_get_handlers (object, signal_id);
+      if (handlers)
+	{
+	  info.object = object;
+	  info.marshaller = signal->marshaller;
+	  info.params = params;
+	  info.param_types = signal->params;
+	  info.return_val = signal->return_val;
+	  info.nparams = signal->nparams;
+	  info.run_type = signal->run_type;
+	  info.signal_id = signal_id;
+
+	  switch (gtk_handlers_run (handlers, &info, FALSE))
+	    {
+	    case  EMISSION_CONTINUE:
+	      break;
+	    case  EMISSION_RESTART:
+	      goto emission_restart;
+	    case  EMISSION_DONE:
+	      goto emission_done;
+	    }
+	}
+      else
+	info.object = NULL;
     }
+  else
+    info.object = NULL;
   
-  if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_FIRST  && signal->function_offset != 0)
+  if (GTK_RUN_TYPE (signal->run_type) != GTK_RUN_FIRST	&& signal->function_offset != 0)
     {
       signal_func_offset = (guchar**) ((guchar*) object->klass +
 				       signal->function_offset);
@@ -1094,39 +1401,55 @@ restart:
 				NULL, params);
     }
   
-  handlers = gtk_signal_get_handlers (object, signal_type);
-  switch (gtk_handlers_run (handlers, &info, TRUE))
+  if (GTK_OBJECT_CONNECTED (object))
     {
-    case DONE:
-      goto done;
-    case RESTART:
-      goto restart;
+      handlers = gtk_signal_get_handlers (object, signal_id);
+      if (handlers)
+	{
+	  if (!info.object)
+	    {
+	      info.object = object;
+	      info.marshaller = signal->marshaller;
+	      info.params = params;
+	      info.param_types = signal->params;
+	      info.return_val = signal->return_val;
+	      info.nparams = signal->nparams;
+	      info.run_type = signal->run_type;
+	      info.signal_id = signal_id;
+	    }
+	  switch (gtk_handlers_run (handlers, &info, TRUE))
+	    {
+	    case  EMISSION_CONTINUE:
+	      break;
+	    case  EMISSION_RESTART:
+	      goto emission_restart;
+	    case  EMISSION_DONE:
+	      goto emission_done;
+	    }
+	}
     }
   
-done:
+ emission_done:
   
-  gtk_emission_remove (&current_emissions, object, signal_type);
+  gtk_emission_remove (&current_emissions, object, signal_id);
   
   if (signal->run_type & GTK_RUN_NO_RECURSE)
-    gtk_emission_remove (&restart_emissions, object, signal_type);
+    gtk_emission_remove (&restart_emissions, object, signal_id);
   
   gtk_object_unref (object);
 }
 
 static GtkHandler*
 gtk_signal_get_handlers (GtkObject *object,
-			 guint      signal_type)
+			 guint	    signal_id)
 {
   GtkHandler *handlers;
-  
-  g_return_val_if_fail (object != NULL, NULL);
-  g_return_val_if_fail (signal_type >= 1, NULL);
   
   handlers = gtk_object_get_data_by_id (object, handler_key_id);
   
   while (handlers)
     {
-      if (handlers->signal_type == signal_type)
+      if (handlers->signal_id == signal_id)
 	return handlers;
       handlers = handlers->next;
     }
@@ -1135,8 +1458,8 @@ gtk_signal_get_handlers (GtkObject *object,
 }
 
 guint
-gtk_signal_handler_pending (GtkObject           *object,
-			    guint                signal_id,
+gtk_signal_handler_pending (GtkObject		*object,
+			    guint		 signal_id,
 			    gboolean		 may_be_blocked)
 {
   GtkHandler *handlers;
@@ -1144,15 +1467,17 @@ gtk_signal_handler_pending (GtkObject           *object,
   
   g_return_val_if_fail (object != NULL, 0);
   g_return_val_if_fail (signal_id >= 1, 0);
-  
-  handlers = gtk_signal_get_handlers (object, signal_id);
+
+  if (GTK_OBJECT_CONNECTED (object))
+    handlers = gtk_signal_get_handlers (object, signal_id);
+  else
+    return 0;
   
   handler_id = 0;
-  while (handlers && handlers->signal_type == signal_id)
+  while (handlers && handlers->signal_id == signal_id)
     {
       if (handlers->id > 0 &&
-	  (may_be_blocked ||
-	   !handlers->blocked))
+	  (may_be_blocked || handlers->blocked == 0))
 	{
 	  handler_id = handlers->id;
 	  break;
@@ -1165,14 +1490,14 @@ gtk_signal_handler_pending (GtkObject           *object,
 }
 
 static guint
-gtk_signal_connect_by_type (GtkObject       *object,
-			    guint            signal_type,
+gtk_signal_connect_by_type (GtkObject	    *object,
+			    guint	     signal_id,
 			    GtkSignalFunc    func,
-			    gpointer         func_data,
+			    gpointer	     func_data,
 			    GtkSignalDestroy destroy_func,
-			    gint             object_signal,
-			    gint             after,
-			    gint             no_marshal)
+			    gint	     object_signal,
+			    gint	     after,
+			    gint	     no_marshal)
 {
   GtkObjectClass *class;
   GtkHandler *handler;
@@ -1199,7 +1524,7 @@ gtk_signal_connect_by_type (GtkObject       *object,
       nsignals = class->nsignals;
       
       for (i = 0; i < nsignals; i++)
-	if (object_signals[i] == signal_type)
+	if (object_signals[i] == signal_id)
 	  {
 	    found_it = TRUE;
 	    break;
@@ -1215,14 +1540,14 @@ gtk_signal_connect_by_type (GtkObject       *object,
   if (!found_it)
     {
       g_warning ("gtk_signal_connect_by_type(): could not find signal id (%u) in the `%s' class ancestry",
-		 signal_type,
-		 gtk_type_name (class->type));
+		 signal_id,
+		 gtk_type_name (object->klass->type));
       return 0;
     }
   
   handler = gtk_signal_handler_new ();
-  handler->id = next_handler_id++;
-  handler->signal_type = signal_type;
+  handler->id = gtk_handler_id++;
+  handler->signal_id = signal_id;
   handler->object_signal = object_signal;
   handler->func = func;
   handler->func_data = func_data;
@@ -1235,32 +1560,40 @@ gtk_signal_connect_by_type (GtkObject       *object,
 }
 
 static GtkEmission*
-gtk_emission_new ()
+gtk_emission_new (void)
 {
   GtkEmission *emission;
   
-  if (!emission_mem_chunk)
-    emission_mem_chunk = g_mem_chunk_new ("emission mem chunk", sizeof (GtkEmission),
-					  1024, G_ALLOC_AND_FREE);
-  
-  emission = g_chunk_new (GtkEmission, emission_mem_chunk);
-  
+  if (!gtk_emission_free_list)
+    {
+      GtkEmissionAllocator *emission_block;
+      guint i;
+
+      emission_block = g_new0 (GtkEmissionAllocator, EMISSION_BLOCK_SIZE);
+      for (i = 1; i < EMISSION_BLOCK_SIZE; i++)
+	{
+	  (emission_block + i)->next = gtk_emission_free_list;
+	  gtk_emission_free_list = (emission_block + i);
+	}
+
+      emission = &emission_block->emission;
+    }
+  else
+    {
+      emission = &gtk_emission_free_list->emission;
+      gtk_emission_free_list = gtk_emission_free_list->next;
+    }
+
   emission->object = NULL;
-  emission->signal_type = 0;
+  emission->signal_id = 0;
   
   return emission;
 }
 
 static void
-gtk_emission_destroy (GtkEmission *emission)
-{
-  g_mem_chunk_free (emission_mem_chunk, emission);
-}
-
-static void
-gtk_emission_add (GList     **emissions,
+gtk_emission_add (GList	    **emissions,
 		  GtkObject  *object,
-		  guint       signal_type)
+		  guint	      signal_id)
 {
   GtkEmission *emission;
   
@@ -1269,17 +1602,16 @@ gtk_emission_add (GList     **emissions,
   
   emission = gtk_emission_new ();
   emission->object = object;
-  emission->signal_type = signal_type;
+  emission->signal_id = signal_id;
   
   *emissions = g_list_prepend (*emissions, emission);
 }
 
 static void
 gtk_emission_remove (GList     **emissions,
-		     GtkObject  *object,
-		     guint       signal_type)
+		     GtkObject	*object,
+		     guint	 signal_id)
 {
-  GtkEmission *emission;
   GList *tmp;
   
   g_return_if_fail (emissions != NULL);
@@ -1287,14 +1619,18 @@ gtk_emission_remove (GList     **emissions,
   tmp = *emissions;
   while (tmp)
     {
-      emission = tmp->data;
+      GtkEmissionAllocator *ea;
       
-      if ((emission->object == object) &&
-	  (emission->signal_type == signal_type))
+      ea = tmp->data;
+      
+      if ((ea->emission.object == object) &&
+	  (ea->emission.signal_id == signal_id))
 	{
-	  gtk_emission_destroy (emission);
 	  *emissions = g_list_remove_link (*emissions, tmp);
 	  g_list_free (tmp);
+
+	  ea->next = gtk_emission_free_list;
+	  gtk_emission_free_list = ea;
 	  break;
 	}
       
@@ -1305,7 +1641,7 @@ gtk_emission_remove (GList     **emissions,
 static gint
 gtk_emission_check (GList     *emissions,
 		    GtkObject *object,
-		    guint      signal_type)
+		    guint      signal_id)
 {
   GtkEmission *emission;
   GList *tmp;
@@ -1317,32 +1653,32 @@ gtk_emission_check (GList     *emissions,
       tmp = tmp->next;
       
       if ((emission->object == object) &&
-	  (emission->signal_type == signal_type))
+	  (emission->signal_id == signal_id))
 	return TRUE;
     }
   return FALSE;
 }
 
 static gint
-gtk_handlers_run (GtkHandler     *handlers,
+gtk_handlers_run (GtkHandler	 *handlers,
 		  GtkHandlerInfo *info,
-		  gint            after)
+		  gint		  after)
 {
-  while (handlers && handlers->signal_type == info->signal_type)
+  while (handlers && handlers->signal_id == info->signal_id)
     {
       GtkHandler *handlers_next;
       
       gtk_signal_handler_ref (handlers);
       
-      if (!handlers->blocked && (handlers->after == after))
+      if (handlers->blocked == 0 && (handlers->after == after))
 	{
 	  if (handlers->func)
 	    {
 	      if (handlers->no_marshal)
-		(* (GtkCallbackMarshal)handlers->func) (info->object,
-							handlers->func_data,
-							info->nparams,
-							info->params);
+		(* (GtkCallbackMarshal) handlers->func) (info->object,
+							 handlers->func_data,
+							 info->nparams,
+							 info->params);
 	      else if (handlers->object_signal)
 		(* info->marshaller) ((GtkObject*) handlers->func_data, /* don't GTK_OBJECT() cast */
 				      handlers->func,
@@ -1354,34 +1690,34 @@ gtk_handlers_run (GtkHandler     *handlers,
 				      handlers->func_data,
 				      info->params);
 	    }
-	  else if (marshal)
-	    (* marshal) (info->object,
-			 handlers->func_data,
-			 info->nparams,
-			 info->params,
-			 info->param_types,
-			 info->return_val);
+	  else if (global_marshaller)
+	    (* global_marshaller) (info->object,
+				   handlers->func_data,
+				   info->nparams,
+				   info->params,
+				   info->param_types,
+				   info->return_val);
 	  
-          if (gtk_emission_check (stop_emissions, info->object,
-				  info->signal_type))
+	  if (gtk_emission_check (stop_emissions, info->object,
+				  info->signal_id))
 	    {
 	      gtk_emission_remove (&stop_emissions, info->object,
-				   info->signal_type);
+				   info->signal_id);
 	      
 	      if (info->run_type & GTK_RUN_NO_RECURSE)
 		gtk_emission_remove (&restart_emissions, info->object,
-				     info->signal_type);
+				     info->signal_id);
 	      gtk_signal_handler_unref (handlers, info->object);
-	      return DONE;
+	      return EMISSION_DONE;
 	    }
 	  else if ((info->run_type & GTK_RUN_NO_RECURSE) &&
 		   gtk_emission_check (restart_emissions, info->object,
-				       info->signal_type))
+				       info->signal_id))
 	    {
 	      gtk_emission_remove (&restart_emissions, info->object,
-				   info->signal_type);
+				   info->signal_id);
 	      gtk_signal_handler_unref (handlers, info->object);
-	      return RESTART;
+	      return EMISSION_RESTART;
 	    }
 	}
       
@@ -1390,15 +1726,15 @@ gtk_handlers_run (GtkHandler     *handlers,
       handlers = handlers_next;
     }
   
-  return 0;
+  return EMISSION_CONTINUE;
 }
 
 static void
-gtk_params_get (GtkArg         *params,
-		guint           nparams,
-		GtkType        *param_types,
-		GtkType         return_val,
-		va_list         args)
+gtk_params_get (GtkArg	       *params,
+		guint		nparams,
+		GtkType	       *param_types,
+		GtkType		return_val,
+		va_list		args)
 {
   gint i;
   

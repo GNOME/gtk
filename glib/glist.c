@@ -33,7 +33,7 @@ static GRealListAllocator *current_allocator = NULL;
 
 
 GListAllocator*
-g_list_allocator_new ()
+g_list_allocator_new (void)
 {
   GRealListAllocator* allocator = g_new (GRealListAllocator, 1);
   
@@ -80,7 +80,7 @@ g_list_set_allocator (GListAllocator* fallocator)
 
 
 GList*
-g_list_alloc ()
+g_list_alloc (void)
 {
   GList *new_list;
   
@@ -312,6 +312,42 @@ g_list_find (GList    *list,
     }
   
   return list;
+}
+
+gint
+g_list_position (GList *list,
+		 GList *link)
+{
+  gint i;
+
+  i = 0;
+  while (list)
+    {
+      if (list == link)
+	return i;
+      i++;
+      list = list->next;
+    }
+
+  return -1;
+}
+
+gint
+g_list_index (GList   *list,
+	      gpointer data)
+{
+  gint i;
+
+  i = 0;
+  while (list)
+    {
+      if (list->data == data)
+	return i;
+      i++;
+      list = list->next;
+    }
+
+  return -1;
 }
 
 GList*

@@ -30,7 +30,7 @@ static gint default_spacing = 10;
 static GtkButtonBoxStyle default_layout_style = GTK_BUTTONBOX_EDGE;
 
 guint
-gtk_vbutton_box_get_type ()
+gtk_vbutton_box_get_type (void)
 {
   static guint vbutton_box_type = 0;
 
@@ -71,7 +71,7 @@ gtk_vbutton_box_init (GtkVButtonBox *vbutton_box)
 }
 
 GtkWidget*
-gtk_vbutton_box_new ()
+gtk_vbutton_box_new (void)
 {
   GtkVButtonBox *vbutton_box;
 

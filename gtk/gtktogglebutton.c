@@ -46,7 +46,7 @@ static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 
 
 guint
-gtk_toggle_button_get_type ()
+gtk_toggle_button_get_type (void)
 {
   static guint toggle_button_type = 0;
 
@@ -112,7 +112,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 
 
 GtkWidget*
-gtk_toggle_button_new ()
+gtk_toggle_button_new (void)
 {
   return GTK_WIDGET (gtk_type_new (gtk_toggle_button_get_type ()));
 }

@@ -55,7 +55,7 @@
 
 
 static int  do_query (char *prompt);
-static void debug (char *progname, int method);
+static void debug (const gchar *progname, int method);
 static void stack_trace (char **);
 static void stack_trace_sigchld (int);
 
@@ -63,7 +63,7 @@ static void stack_trace_sigchld (int);
 static int stack_trace_done;
 
 void
-g_debug (char *progname)
+g_debug (const gchar *progname)
 {
   char buf[32];
 
@@ -82,14 +82,16 @@ g_debug (char *progname)
 }
 
 void
-g_attach_process (char *progname, int query)
+g_attach_process (const gchar *progname,
+		  int          query)
 {
   if (!query || do_query ("attach to process"))
     debug (progname, INTERACTIVE);
 }
 
 void
-g_stack_trace (char *progname, int query)
+g_stack_trace (const gchar *progname,
+	       int          query)
 {
   if (!query || do_query ("print stack trace"))
     debug (progname, STACK_TRACE);
@@ -114,7 +116,7 @@ do_query (char *prompt)
 }
 
 static void
-debug (char *progname,
+debug (const char *progname,
        int   method)
 {
   pid_t pid;
@@ -124,7 +126,7 @@ debug (char *progname,
 
   sprintf (buf, "%d", (int) getpid ());
 
-  args[1] = progname;
+  args[1] = (gchar*) progname;
   args[2] = buf;
 
   switch (method)

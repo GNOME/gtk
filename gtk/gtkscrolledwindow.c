@@ -52,7 +52,7 @@ static GtkContainerClass *parent_class = NULL;
 
 
 guint
-gtk_scrolled_window_get_type ()
+gtk_scrolled_window_get_type (void)
 {
   static guint scrolled_window_type = 0;
 

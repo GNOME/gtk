@@ -3,7 +3,7 @@
 
 
 void
-hello ()
+hello (void)
 {
   g_print ("hello world\n");
 }

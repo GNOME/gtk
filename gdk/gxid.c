@@ -479,7 +479,7 @@ handle_release_device(GxidReleaseDevice *msg)
 }
 
 void
-handle_connection(void)
+handle_connection (void)
 {
   GxidMessage msg;
   GxidU32 type;

@@ -47,7 +47,7 @@ static gint gtk_vscale_trough_keys   (GtkRange *range,
 
 
 guint
-gtk_vscale_get_type ()
+gtk_vscale_get_type (void)
 {
   static guint vscale_type = 0;
 
