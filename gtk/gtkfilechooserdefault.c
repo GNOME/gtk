@@ -3205,6 +3205,21 @@ gtk_file_chooser_default_get_property (GObject    *object,
     }
 }
 
+/* Removes the settings signal handler.  It's safe to call multiple times */
+static void
+remove_settings_signal (GtkFileChooserDefault *impl,
+			GdkScreen             *screen)
+{
+  if (impl->settings_signal_id)
+    {
+      GtkSettings *settings;
+
+      settings = gtk_settings_get_for_screen (screen);
+      g_signal_handler_disconnect (settings,
+				   impl->settings_signal_id);
+      impl->settings_signal_id = 0;
+    }
+}
 
 static void
 gtk_file_chooser_default_dispose (GObject *object)
@@ -3217,14 +3232,7 @@ gtk_file_chooser_default_dispose (GObject *object)
       impl->extra_widget = NULL;
     }
 
-  if (impl->settings_signal_id)
-    {
-      GtkSettings *settings;
-
-      settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (impl)));
-      g_signal_handler_disconnect (settings, impl->settings_signal_id);
-      impl->settings_signal_id = 0;
-    }
+  remove_settings_signal (impl, gtk_widget_get_screen (GTK_WIDGET (impl)));
 
   G_OBJECT_CLASS (parent_class)->dispose (object);
 }
@@ -3322,6 +3330,7 @@ gtk_file_chooser_default_screen_changed (GtkWidget *widget,
   if (GTK_WIDGET_CLASS (parent_class)->screen_changed)
     GTK_WIDGET_CLASS (parent_class)->screen_changed (widget, previous_screen);
 
+  remove_settings_signal (impl, previous_screen);
   check_icon_theme (impl);
 
   g_signal_emit_by_name (widget, "default-size-changed");

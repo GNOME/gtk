@@ -1,3 +1,13 @@
+2004-03-11  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (remove_settings_signal): New
+	function, copied from gtkpathbar.c.
+	(gtk_file_chooser_default_dispose): Use remove_settings_signal()
+	rather than our own code.
+	(gtk_file_chooser_default_screen_changed): Use
+	remove_settings_signal(); this should handle per-screen settings
+	correctly.
+
 Thu Mar 11 14:07:18 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_focus): Fix a missing return
