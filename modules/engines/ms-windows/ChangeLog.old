@@ -1,3 +1,7 @@
+2003-09-08  Dom Lachowicz <cinamod@hotmail.com>
+
+	* src/wimp_style.c: Honor scrollbar sizes, radio/check button sizes, paned sizes
+	
 2003-09-03  Dom Lachowicz <cinamod@hotmail.com>
 
 	* src/wimp_style.c: Honor tooltip color, font

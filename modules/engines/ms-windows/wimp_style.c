@@ -156,55 +156,49 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
   const char * weight;
   const char * style;
 
-/*
-TODO: I don't think that pango font descriptions let you set these
-  BYTE lfUnderline; underline=single|none
-  BYTE lfStrikeOut; strikethrough=true|false
-*/
-
   if (get_system_font(type, &lf))
     {
-	  switch (lf.lfWeight) {
-		case FW_THIN:
-		case FW_EXTRALIGHT:
-			weight = "ultralight";
-			break;
+      switch (lf.lfWeight) {
+      case FW_THIN:
+      case FW_EXTRALIGHT:
+	weight = "ultralight";
+	break;
 
-		case FW_LIGHT:
-			weight = "light";
-			break;
+      case FW_LIGHT:
+	weight = "light";
+	break;
 
-		case FW_SEMIBOLD:
-		case FW_BOLD:
-			weight = "bold";
-			break;
+      case FW_SEMIBOLD:
+      case FW_BOLD:
+	weight = "bold";
+	break;
 
-		case FW_ULTRABOLD:
-			weight = "ultrabold";
-			break;
+      case FW_ULTRABOLD:
+	weight = "ultrabold";
+	break;
 
-		case FW_HEAVY:
-			weight = "heavy";
+      case FW_HEAVY:
+	weight = "heavy";
 
-		default:
-			weight = "normal";
-			break;
-	  }
+      default:
+	weight = "normal";
+	break;
+      }
 
-	  if (lf.lfItalic)
-		  style="italic";
-	  else
-		  style="normal";
+      if (lf.lfItalic)
+	style="italic";
+      else
+	style="normal";
 
       pt_size = -MulDiv(lf.lfHeight, 72,
                         GetDeviceCaps(GetDC(GetDesktopWindow()),
                                       LOGPIXELSY));
       sprintf(buf, "%s %s %s %d", lf.lfFaceName, style, weight, pt_size);
 
-	  return buf;
-	}
+      return buf;
+    }
 
-	return NULL;
+  return NULL;
 }
 
 static void
@@ -213,9 +207,7 @@ setup_system_font(GtkStyle *style)
   char buf[256], * font; /* It's okay, lfFaceName is smaller than 32 chars */
 
   if ((font = sys_font_to_pango_font(MESSAGE_FONT, buf)) != NULL)
-    {
-      style->font_desc = pango_font_description_from_string(font);
-    }
+    style->font_desc = pango_font_description_from_string(font);
 }
 
 static void
@@ -242,6 +234,9 @@ setup_system_styles(GtkStyle *style)
   GdkColor tooltip_fore;
   GdkColor btn_fore;
   GdkColor progress_back;
+
+  NONCLIENTMETRICS nc;
+  gint paned_size = 15;
 
   int i;
 
@@ -292,12 +287,6 @@ setup_system_styles(GtkStyle *style)
   /* progress bar background color */
   sys_color_to_gtk_color(COLOR_HIGHLIGHT, &progress_back);
 
-  /* TODO: scrollbars
-  http://lxr.mozilla.org/mozilla/source/gfx/src/windows/nsNativeThemeWin.cpp#1317
-  http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getsystemmetrics.asp
-  http://developer.gnome.org/doc/API/2.0/gtk/GtkRange.html
-  */
-
   for (i = 0; i < 5; i++)
     {
       sys_color_to_gtk_color(COLOR_3DSHADOW, &style->dark[i]);
@@ -314,7 +303,7 @@ setup_system_styles(GtkStyle *style)
 
   /* Enable coloring for menus. */
   font_ptr = sys_font_to_pango_font (MENU_FONT,font_buf);
-  sprintf(buf, "style \"wimp-menu\"\n"
+  sprintf(buf, "style \"wimp-menu\" = \"wimp-default\"\n"
           "{fg[PRELIGHT] = { %d, %d, %d }\n"
           "bg[PRELIGHT] = { %d, %d, %d }\n"
           "text[PRELIGHT] = { %d, %d, %d }\n"
@@ -347,7 +336,7 @@ setup_system_styles(GtkStyle *style)
 
   /* enable tooltip fonts */
   font_ptr = sys_font_to_pango_font (STATUS_FONT,font_buf);
-  sprintf(buf, "style \"wimp-tooltips-caption\"\n"
+  sprintf(buf, "style \"wimp-tooltips-caption\" = \"wimp-default\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
 	  "%s = \"%s\"\n"
 	  "}widget \"gtk-tooltips.GtkLabel\" style \"wimp-tooltips-caption\"\n",
@@ -358,7 +347,7 @@ setup_system_styles(GtkStyle *style)
           (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
 
-  sprintf(buf, "style \"wimp-tooltips\"\n"
+  sprintf(buf, "style \"wimp-tooltips\" = \"wimp-default\"\n"
 	  "{bg[NORMAL] = { %d, %d, %d }\n"
 	  "}widget \"gtk-tooltips*\" style \"wimp-tooltips\"\n",
           tooltip_back.red,
@@ -368,7 +357,7 @@ setup_system_styles(GtkStyle *style)
 
   /* enable font theming for status bars */
   font_ptr = sys_font_to_pango_font (STATUS_FONT,font_buf);
-  sprintf(buf, "style \"wimp-statusbar\"\n"
+  sprintf(buf, "style \"wimp-statusbar\" = \"wimp-default\"\n"
 	  "{%s = \"%s\"\n"
 	  "}widget_class \"*GtkStatusbar*\" style \"wimp-statusbar\"\n",
           (font_ptr ? "font_name" : "#"),
@@ -377,7 +366,7 @@ setup_system_styles(GtkStyle *style)
 
   /* enable coloring for text on buttons
      TODO: use GetThemeMetric for the border and outside border */
-  sprintf(buf, "style \"wimp-button\"\n"
+  sprintf(buf, "style \"wimp-button\" = \"wimp-default\"\n"
 	  "fg[NORMAL] = { %d, %d, %d }\n"
 	  "default_border = { 1, 1, 1, 1 }\n"
 	  "default_outside_border = { 0, 0, 0, 0 }\n"
@@ -390,12 +379,48 @@ setup_system_styles(GtkStyle *style)
   gtk_rc_parse_string(buf);
 
   /* enable coloring for progress bars */
-  sprintf(buf, "style \"wimp-progress\"\n"
+  sprintf(buf, "style \"wimp-progress\" = \"wimp-default\"\n"
 	  "{bg[PRELIGHT] = { %d, %d, %d }\n"
 	  "}widget_class \"*GtkProgress*\" style \"wimp-progress\"\n",
 	  progress_back.red,
       progress_back.green,
       progress_back.blue);
+  gtk_rc_parse_string(buf);
+
+  /* scrollbar thumb width and height */
+  sprintf(buf, "style \"wimp-vscrollbar\" = \"wimp-default\"\n"
+	  "{GtkRange::slider-width = %d\n"
+	  "GtkRange::stepper-size = %d\n"
+	  "GtkRange::stepper-spacing = 0\n"
+	  "GtkRange::trough_border = 0\n"
+	  "}widget_class \"*GtkVScrollbar*\" style \"wimp-vscrollbar\"\n",
+	  GetSystemMetrics(SM_CYVTHUMB),
+	  GetSystemMetrics(SM_CXVSCROLL));
+  gtk_rc_parse_string(buf);
+
+  sprintf(buf, "style \"wimp-hscrollbar\" = \"wimp-default\"\n"
+	  "{GtkRange::slider-width = %d\n"
+	  "GtkRange::stepper-size = %d\n"
+	  "GtkRange::stepper-spacing = 0\n"
+	  "GtkRange::trough_border = 0\n"
+	  "}widget_class \"*GtkHScrollbar*\" style \"wimp-hscrollbar\"\n",
+	  GetSystemMetrics(SM_CXHTHUMB),
+	  GetSystemMetrics(SM_CYHSCROLL));
+  gtk_rc_parse_string(buf);
+
+  /* radio/check button sizes */
+  sprintf(buf, "style \"wimp-checkbutton\" = \"wimp-default\"\n"
+	  "{GtkCheckButton::indicator-size = 13\n"
+	  "}widget_class \"*GtkCheckButton*\" style \"wimp-checkbutton\"\n");
+  gtk_rc_parse_string(buf);
+
+  /* the width/height of the paned resizer grippies */
+  nc.cbSize = sizeof(nc);
+  if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(nc), &nc, 0))
+    paned_size = abs(nc.lfStatusFont.lfHeight) + 4;
+  sprintf(buf, "style \"wimp-paned\" = \"wimp-default\"\n"
+	  "{GtkPaned::handle-size = %d\n"
+	  "}widget_class \"*GtkPaned*\" style \"wimp-paned\"\n", paned_size);
   gtk_rc_parse_string(buf);
 }
 
@@ -1186,7 +1211,7 @@ draw_tab (GtkStyle      *style,
 }
 
 /* this is an undefined magic value that, according to the mozilla folks,
-	worked for all the various themes that they tried */
+   worked for all the various themes that they tried */
 #define XP_EDGE_SIZE 2
 
 static void
