@@ -1,3 +1,8 @@
+1999-10-28  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): don't send a
+	0 length buffer.
+
 1999-10-29  Michael Fulbright  <drmike@redhat.com>
 
 	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_write): Actually
