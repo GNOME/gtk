@@ -1,5 +1,11 @@
 1999-11-08  Michael Fulbright  <drmike@redhat.com>
 
+	* src/io-pnm.c image_load (): Fixed so we do not create a separate
+	pixel buffer when reading in image - we reuse the pixel data in
+	the GdkPixbuf structure instead.
+	
+1999-11-08  Michael Fulbright  <drmike@redhat.com>
+
 	* src/io-pnm.c pnm_read_ascii_scanline (): Added support for
 	ASCII PNM files. Note I haven't tested loaded ASCII PBM files because
 	I can't seem to find a utility to convert into this format.

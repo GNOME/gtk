@@ -612,8 +612,8 @@ image_load (FILE *f)
 		/* ran out of data and we haven't exited main loop */
 		/* something is wrong                              */
 		if (inbuf->bytes_left == 0) {
-			if (context.pixels)
-				g_free (context.pixels);
+			if (context.pixbuf)
+				gdk_pixbuf_unref (context.pixbuf);
 			g_warning ("io-pnm.c: Ran out of data...\n");
 			return NULL;
 		}
@@ -641,8 +641,20 @@ image_load (FILE *f)
 
 			context.pixels = g_malloc (context.height * 
 					   context.width * 3);
-			if (!context.pixels)
-				return NULL;
+
+			context.pixbuf = gdk_pixbuf_new(ART_PIX_RGB, 
+							 /*have_alpha*/ FALSE,
+							 8, 
+							 context.width,
+							 context.height);
+
+
+			if (context.pixbuf == NULL) {
+				/* Failed to allocate memory */
+				g_error ("Couldn't allocate gdkpixbuf");
+			}
+
+			context.pixels = context.pixbuf->art_pixbuf->pixels;
 		}
 
 		/* if we got here we're reading image data */
@@ -652,8 +664,8 @@ image_load (FILE *f)
 			if (rc == PNM_SUSPEND) {
 				break;
 			} else if (rc == PNM_FATAL_ERR) {
-				if (context.pixels)
-					g_free (context.pixels);
+				if (context.pixbuf)
+					gdk_pixbuf_unref (context.pixbuf);
 				g_warning ("io-pnm.c: error reading rows..\n");
 				return NULL;
 			}
@@ -717,8 +729,9 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 		src->skip_next = num_bytes - num_can_do;
 	}
 }
+#endif
 
- 
+#if 0 
 /* 
  * func - called when we have pixmap created (but no image data)
  * user_data - passed as arg 1 to func
@@ -730,34 +743,18 @@ image_begin_load (ModulePreparedNotifyFunc prepared_func,
 		  ModuleUpdatedNotifyFunc  updated_func,
 		  gpointer user_data)
 {
-	JpegProgContext *context;
-	my_source_mgr   *src;
+	PnmLoaderContext *context;
 
 	context = g_new0 (JpegProgContext, 1);
 	context->prepared_func = prepared_func;
 	context->updated_func  = updated_func;
 	context->user_data = user_data;
-	context->pixbuf = NULL;
+	context->pixbuf = context->pixels = NULL;
 	context->got_header = FALSE;
 	context->did_prescan = FALSE;
-	context->src_initialized = FALSE;
 
-	/* create libjpeg structures */
-	jpeg_create_decompress (&context->cinfo);
-
-	context->cinfo.src = (struct jpeg_source_mgr *) g_new0 (my_source_mgr, 1);
-	src = (my_src_ptr) context->cinfo.src;
-
-	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
-
-	src = (my_src_ptr) context->cinfo.src;
-	src->pub.init_source = init_source;
-	src->pub.fill_input_buffer = fill_input_buffer;
-	src->pub.skip_input_data = skip_input_data;
-	src->pub.resync_to_restart = jpeg_resync_to_restart;
-	src->pub.term_source = term_source;
-	src->pub.bytes_in_buffer = 0;
-	src->pub.next_input_byte = NULL;
+	context->inbuf.bytes_left = 0;
+	context->inbuf.next_byte  = NULL;
 
 	return (gpointer) context;
 }
@@ -770,21 +767,12 @@ image_begin_load (ModulePreparedNotifyFunc prepared_func,
 void
 image_stop_load (gpointer data)
 {
-	JpegProgContext *context = (JpegProgContext *) data;
+	PnmLoaderContext *context = (PnmLoaderContext *) data;
 
 	g_return_if_fail (context != NULL);
 
 	if (context->pixbuf)
 		gdk_pixbuf_unref (context->pixbuf);
-
-	jpeg_finish_decompress(&context->cinfo);
-	jpeg_destroy_decompress(&context->cinfo);
-
-	if (context->cinfo.src) {
-		my_src_ptr src = (my_src_ptr) context->cinfo.src;
-		
-		g_free (src);
-	}
 
 	g_free (context);
 }
