@@ -26,7 +26,6 @@
 
 #include "gtkimagemenuitem.h"
 #include "gtkaccellabel.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
@@ -65,26 +64,29 @@ enum {
 
 static GtkMenuItemClass *parent_class = NULL;
 
-GtkType
+GType
 gtk_image_menu_item_get_type (void)
 {
-  static GtkType image_menu_item_type = 0;
+  static GType image_menu_item_type = 0;
 
   if (!image_menu_item_type)
     {
-      static const GtkTypeInfo image_menu_item_info =
+      static const GTypeInfo image_menu_item_info =
       {
-        "GtkImageMenuItem",
-        sizeof (GtkImageMenuItem),
         sizeof (GtkImageMenuItemClass),
-        (GtkClassInitFunc) gtk_image_menu_item_class_init,
-        (GtkObjectInitFunc) gtk_image_menu_item_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_image_menu_item_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkImageMenuItem),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_image_menu_item_init,
       };
 
-      image_menu_item_type = gtk_type_unique (GTK_TYPE_MENU_ITEM, &image_menu_item_info);
+      image_menu_item_type =
+	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkImageMenuItem",
+				&image_menu_item_info, 0);
     }
 
   return image_menu_item_type;
@@ -94,18 +96,16 @@ static void
 gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMenuItemClass *menu_item_class;
   GtkContainerClass *container_class;
 
   gobject_class = (GObjectClass*) klass;
-  object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
-  parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
+  parent_class = g_type_class_peek_parent (klass);
   
   widget_class->size_request = gtk_image_menu_item_size_request;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
@@ -301,8 +301,7 @@ gtk_image_menu_item_new_with_label (const gchar *label)
   GtkImageMenuItem *image_menu_item;
   GtkWidget *accel_label;
   
-  image_menu_item = GTK_IMAGE_MENU_ITEM (g_object_new (GTK_TYPE_IMAGE_MENU_ITEM,
-                                                       NULL));
+  image_menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
 
   accel_label = gtk_accel_label_new (label);
   gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
@@ -332,10 +331,9 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
   GtkImageMenuItem *image_menu_item;
   GtkWidget *accel_label;
   
-  image_menu_item = GTK_IMAGE_MENU_ITEM (g_object_new (GTK_TYPE_IMAGE_MENU_ITEM,
-                                                       NULL));
+  image_menu_item = g_object_new (GTK_TYPE_IMAGE_MENU_ITEM, NULL);
 
-  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
   gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
   gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 

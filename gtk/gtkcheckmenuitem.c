@@ -26,7 +26,6 @@
 
 #include "gtkcheckmenuitem.h"
 #include "gtkaccellabel.h"
-#include "gtksignal.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 
@@ -68,26 +67,29 @@ static GtkMenuItemClass *parent_class = NULL;
 static guint check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
 
-GtkType
+GType
 gtk_check_menu_item_get_type (void)
 {
-  static GtkType check_menu_item_type = 0;
+  static GType check_menu_item_type = 0;
 
   if (!check_menu_item_type)
     {
-      static const GtkTypeInfo check_menu_item_info =
+      static const GTypeInfo check_menu_item_info =
       {
-        "GtkCheckMenuItem",
-        sizeof (GtkCheckMenuItem),
         sizeof (GtkCheckMenuItemClass),
-        (GtkClassInitFunc) gtk_check_menu_item_class_init,
-        (GtkObjectInitFunc) gtk_check_menu_item_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_check_menu_item_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkCheckMenuItem),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_check_menu_item_init,
       };
 
-      check_menu_item_type = gtk_type_unique (GTK_TYPE_MENU_ITEM, &check_menu_item_info);
+      check_menu_item_type =
+	g_type_register_static (GTK_TYPE_MENU_ITEM, "GtkCheckMenuItem",
+				&check_menu_item_info, 0);
     }
 
   return check_menu_item_type;
@@ -96,20 +98,20 @@ gtk_check_menu_item_get_type (void)
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
   GtkMenuItemClass *menu_item_class;
   
-  object_class = (GtkObjectClass*) klass;
+  gobject_class = G_OBJECT_CLASS (klass);
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
   
-  parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
+  parent_class = g_type_class_peek_parent (klass);
 
-  G_OBJECT_CLASS(object_class)->set_property = gtk_check_menu_item_set_property;
-  G_OBJECT_CLASS(object_class)->get_property = gtk_check_menu_item_get_property;
+  gobject_class->set_property = gtk_check_menu_item_set_property;
+  gobject_class->get_property = gtk_check_menu_item_get_property;
 
-  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_ACTIVE,
                                    g_param_spec_boolean ("active",
                                                          _("Active"),
@@ -117,7 +119,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
                                                          FALSE,
                                                          G_PARAM_READWRITE));
   
-  g_object_class_install_property (G_OBJECT_CLASS (object_class),
+  g_object_class_install_property (gobject_class,
                                    PROP_INCONSISTENT,
                                    g_param_spec_boolean ("inconsistent",
                                                          _("Inconsistent"),
@@ -135,18 +137,19 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
 
   check_menu_item_signals[TOGGLED] =
-    gtk_signal_new ("toggled",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("toggled",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCheckMenuItemClass, toggled),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 }
 
 GtkWidget*
 gtk_check_menu_item_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (GTK_TYPE_CHECK_MENU_ITEM));
+  return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, NULL);
 }
 
 GtkWidget*
@@ -184,7 +187,7 @@ gtk_check_menu_item_new_with_mnemonic (const gchar *label)
   GtkWidget *accel_label;
 
   check_menu_item = gtk_check_menu_item_new ();
-  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
   gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
   gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 
@@ -247,7 +250,7 @@ gtk_check_menu_item_set_show_toggle (GtkCheckMenuItem *menu_item,
 void
 gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
 {
-  gtk_signal_emit (GTK_OBJECT (check_menu_item), check_menu_item_signals[TOGGLED]);
+  g_signal_emit (check_menu_item, check_menu_item_signals[TOGGLED], 0);
 }
 
 /**

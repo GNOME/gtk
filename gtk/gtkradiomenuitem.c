@@ -37,26 +37,29 @@ static void gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem      *check_men
 
 static GtkCheckMenuItemClass *parent_class = NULL;
 
-GtkType
+GType
 gtk_radio_menu_item_get_type (void)
 {
-  static GtkType radio_menu_item_type = 0;
+  static GType radio_menu_item_type = 0;
 
   if (!radio_menu_item_type)
     {
-      static const GtkTypeInfo radio_menu_item_info =
+      static const GTypeInfo radio_menu_item_info =
       {
-        "GtkRadioMenuItem",
-        sizeof (GtkRadioMenuItem),
         sizeof (GtkRadioMenuItemClass),
-        (GtkClassInitFunc) gtk_radio_menu_item_class_init,
-        (GtkObjectInitFunc) gtk_radio_menu_item_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+        (GClassInitFunc) gtk_radio_menu_item_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+        sizeof (GtkRadioMenuItem),
+	0,		/* n_preallocs */
+        (GInstanceInitFunc) gtk_radio_menu_item_init,
       };
 
-      radio_menu_item_type = gtk_type_unique (gtk_check_menu_item_get_type (), &radio_menu_item_info);
+      radio_menu_item_type =
+	g_type_register_static (GTK_TYPE_CHECK_MENU_ITEM, "GtkRadioMenuItem",
+				&radio_menu_item_info, 0);
     }
 
   return radio_menu_item_type;
@@ -67,7 +70,7 @@ gtk_radio_menu_item_new (GSList *group)
 {
   GtkRadioMenuItem *radio_menu_item;
 
-  radio_menu_item = gtk_type_new (gtk_radio_menu_item_get_type ());
+  radio_menu_item = g_object_new (GTK_TYPE_RADIO_MENU_ITEM, NULL);
 
   gtk_radio_menu_item_set_group (radio_menu_item, group);
 
@@ -157,7 +160,7 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
   GtkWidget *accel_label;
 
   radio_menu_item = gtk_radio_menu_item_new (group);
-  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
   gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
   gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 
@@ -188,7 +191,7 @@ gtk_radio_menu_item_class_init (GtkRadioMenuItemClass *klass)
   menu_item_class = (GtkMenuItemClass*) klass;
   check_menu_item_class = (GtkCheckMenuItemClass*) klass;
 
-  parent_class = gtk_type_class (gtk_check_menu_item_get_type ());
+  parent_class = g_type_class_peek_parent (klass);
 
   object_class->destroy = gtk_radio_menu_item_destroy;
 

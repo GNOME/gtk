@@ -34,7 +34,6 @@
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
-#include "gtksignal.h"
 
 
 #define BORDER_SPACING  3
@@ -103,10 +102,10 @@ static guint32	last_submenu_deselect_time = 0;
 
 
 
-GtkType
+GType
 gtk_menu_item_get_type (void)
 {
-  static GtkType menu_item_type = 0;
+  static GType menu_item_type = 0;
 
   if (!menu_item_type)
     {
@@ -123,7 +122,8 @@ gtk_menu_item_get_type (void)
 	(GInstanceInitFunc) gtk_menu_item_init,
       };
 
-      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem", &menu_item_info, 0);
+      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem",
+					       &menu_item_info, 0);
     }
 
   return menu_item_type;
@@ -169,39 +169,43 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   klass->hide_on_activate = TRUE;
 
   menu_item_signals[ACTIVATE] =
-    gtk_signal_new ("activate",
-                    GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
-                    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("activate",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkMenuItemClass, activate),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_class->activate_signal = menu_item_signals[ACTIVATE];
 
   menu_item_signals[ACTIVATE_ITEM] =
-    gtk_signal_new ("activate_item",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate_item),
-                    gtk_signal_default_marshaller,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("activate_item",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkMenuItemClass, activate_item),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
 
   menu_item_signals[TOGGLE_SIZE_REQUEST] =
-    gtk_signal_new ("toggle_size_request",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_request),
-                    _gtk_marshal_VOID__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
+    g_signal_new ("toggle_size_request",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_request),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__POINTER,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_POINTER);
 
   menu_item_signals[TOGGLE_SIZE_ALLOCATE] =
-    gtk_signal_new ("toggle_size_allocate",
-                    GTK_RUN_FIRST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkMenuItemClass, toggle_size_allocate),
-                    _gtk_marshal_NONE__INT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_INT);
+    g_signal_new ("toggle_size_allocate",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkMenuItemClass, toggle_size_allocate),
+		  NULL, NULL,
+		  _gtk_marshal_NONE__INT,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_INT);
 
   gtk_widget_class_install_style_property_parser (widget_class,
 						  g_param_spec_enum ("selected_shadow_type",
@@ -232,7 +236,7 @@ gtk_menu_item_init (GtkMenuItem *menu_item)
 GtkWidget*
 gtk_menu_item_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_menu_item_get_type ()));
+  return g_object_new (GTK_TYPE_MENU_ITEM, NULL);
 }
 
 GtkWidget*
@@ -270,7 +274,7 @@ gtk_menu_item_new_with_mnemonic (const gchar *label)
   GtkWidget *accel_label;
 
   menu_item = gtk_menu_item_new ();
-  accel_label = gtk_type_new (GTK_TYPE_ACCEL_LABEL);
+  accel_label = g_object_new (GTK_TYPE_ACCEL_LABEL, NULL);
   gtk_label_set_text_with_mnemonic (GTK_LABEL (accel_label), label);
   gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
 
@@ -399,7 +403,7 @@ gtk_menu_item_activate (GtkMenuItem *menu_item)
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
   
-  gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[ACTIVATE]);
+  g_signal_emit (menu_item, menu_item_signals[ACTIVATE], 0);
 }
 
 void
@@ -408,7 +412,7 @@ gtk_menu_item_toggle_size_request (GtkMenuItem *menu_item,
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[TOGGLE_SIZE_REQUEST], requisition);
+  g_signal_emit (menu_item, menu_item_signals[TOGGLE_SIZE_REQUEST], 0, requisition);
 }
 
 void
@@ -417,7 +421,7 @@ gtk_menu_item_toggle_size_allocate (GtkMenuItem *menu_item,
 {
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  gtk_signal_emit (GTK_OBJECT (menu_item), menu_item_signals[TOGGLE_SIZE_ALLOCATE], allocation);
+  g_signal_emit (menu_item, menu_item_signals[TOGGLE_SIZE_ALLOCATE], 0, allocation);
 }
 
 static void
@@ -540,7 +544,7 @@ gtk_menu_item_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   widget->window = gtk_widget_get_parent_window (widget);
-  gdk_window_ref (widget->window);
+  g_object_ref (widget->window);
   
   attributes.x = widget->allocation.x;
   attributes.y = widget->allocation.y;
@@ -773,7 +777,7 @@ gtk_menu_item_mnemonic_activate (GtkWidget *widget,
 
     }
   else
-    gtk_signal_emit (GTK_OBJECT (widget), menu_item_signals[ACTIVATE_ITEM]);
+    g_signal_emit (widget, menu_item_signals[ACTIVATE_ITEM], 0);
   
   return TRUE;
 }

@@ -38,11 +38,11 @@ extern "C" {
 
 
 #define	GTK_TYPE_MENU_SHELL		(gtk_menu_shell_get_type ())
-#define GTK_MENU_SHELL(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShell))
-#define GTK_MENU_SHELL_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_SHELL, GtkMenuShellClass))
-#define GTK_IS_MENU_SHELL(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MENU_SHELL))
-#define GTK_IS_MENU_SHELL_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_SHELL))
-#define GTK_MENU_SHELL_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShellClass))
+#define GTK_MENU_SHELL(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShell))
+#define GTK_MENU_SHELL_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_SHELL, GtkMenuShellClass))
+#define GTK_IS_MENU_SHELL(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU_SHELL))
+#define GTK_IS_MENU_SHELL_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_SHELL))
+#define GTK_MENU_SHELL_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_SHELL, GtkMenuShellClass))
 
 
 typedef struct _GtkMenuShell	   GtkMenuShell;
@@ -95,7 +95,7 @@ struct _GtkMenuShellClass
 };
 
 
-GtkType gtk_menu_shell_get_type	  (void) G_GNUC_CONST;
+GType   gtk_menu_shell_get_type	  (void) G_GNUC_CONST;
 void	gtk_menu_shell_append	  (GtkMenuShell *menu_shell,
 				   GtkWidget	*child);
 void	gtk_menu_shell_prepend	  (GtkMenuShell *menu_shell,

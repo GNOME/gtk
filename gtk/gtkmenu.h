@@ -38,11 +38,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #define GTK_TYPE_MENU			(gtk_menu_get_type ())
-#define GTK_MENU(obj)			(GTK_CHECK_CAST ((obj), GTK_TYPE_MENU, GtkMenu))
-#define GTK_MENU_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU, GtkMenuClass))
-#define GTK_IS_MENU(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_MENU))
-#define GTK_IS_MENU_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU))
-#define GTK_MENU_GET_CLASS(obj)         (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_MENU, GtkMenuClass))
+#define GTK_MENU(obj)			(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU, GtkMenu))
+#define GTK_MENU_CLASS(klass)		(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU, GtkMenuClass))
+#define GTK_IS_MENU(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU))
+#define GTK_IS_MENU_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU))
+#define GTK_MENU_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU, GtkMenuClass))
 
 
 typedef struct _GtkMenu	      GtkMenu;
@@ -121,7 +121,7 @@ struct _GtkMenuClass
 };
 
 
-GtkType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
+GType	   gtk_menu_get_type		  (void) G_GNUC_CONST;
 GtkWidget* gtk_menu_new			  (void);
 
 /* Display the menu onscreen */

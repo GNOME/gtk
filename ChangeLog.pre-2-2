@@ -1,3 +1,9 @@
+Fri Oct  4 18:40:50 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtkcheckmenuitem.[ch] gtkimagemenuitem.[ch] gtkmenu.[ch]
+	gtkmenubar.[ch] gtkmenuitem.[ch] gtkmenushell.[ch]
+	gtkradiomenuitem.[ch]: Deprecation cleanup
+
 Fri Oct  4 16:48:27 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtkaspectframe.[ch] gtkbin.[ch] gtkframe.[ch] gtkhruler.[ch]

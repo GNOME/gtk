@@ -35,7 +35,6 @@
 #include "gtksettings.h"
 #include "gtkintl.h"
 #include "gtkwindow.h"
-#include "gtksignal.h"
 
 
 #define BORDER_SPACING  0
@@ -57,26 +56,28 @@ static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
 static GtkMenuShellClass *parent_class = NULL;
 
-GtkType
+GType
 gtk_menu_bar_get_type (void)
 {
-  static GtkType menu_bar_type = 0;
+  static GType menu_bar_type = 0;
 
   if (!menu_bar_type)
     {
-      static const GtkTypeInfo menu_bar_info =
+      static const GTypeInfo menu_bar_info =
       {
-	"GtkMenuBar",
-	sizeof (GtkMenuBar),
 	sizeof (GtkMenuBarClass),
-	(GtkClassInitFunc) gtk_menu_bar_class_init,
-	(GtkObjectInitFunc) NULL,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_menu_bar_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkMenuBar),
+	0,		/* n_preallocs */
+	NULL,		/* instance_init */
       };
 
-      menu_bar_type = gtk_type_unique (gtk_menu_shell_get_type (), &menu_bar_info);
+      menu_bar_type = g_type_register_static (GTK_TYPE_MENU_SHELL, "GtkMenuBar",
+					      &menu_bar_info, 0);
     }
 
   return menu_bar_type;
@@ -168,7 +169,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 GtkWidget*
 gtk_menu_bar_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_menu_bar_get_type ()));
+  return g_object_new (GTK_TYPE_MENU_BAR, NULL);
 }
 
 static void
@@ -472,7 +473,7 @@ add_to_window (GtkWindow  *window,
 
   if (!menubars)
     {
-      g_signal_connect (G_OBJECT (window),
+      g_signal_connect (window,
 			"key_press_event",
 			G_CALLBACK (window_key_press_handler),
 			NULL);
@@ -494,8 +495,8 @@ remove_from_window (GtkWindow  *window,
 
   if (!menubars)
     {
-      g_signal_handlers_disconnect_by_func (G_OBJECT (window),
-					    (gpointer) window_key_press_handler,
+      g_signal_handlers_disconnect_by_func (window,
+					    window_key_press_handler,
 					    NULL);
     }
 
