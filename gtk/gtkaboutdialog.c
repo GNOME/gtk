@@ -1225,6 +1225,7 @@ icon_set_new_from_pixbufs (GList *pixbufs)
       GtkIconSource *icon_source = gtk_icon_source_new ();
       gtk_icon_source_set_pixbuf (icon_source, pixbuf);
       gtk_icon_set_add_source (icon_set, icon_source);
+      gtk_icon_source_free (icon_source);
     }
   
   return icon_set;

@@ -1,3 +1,8 @@
+Mon Aug  9 00:13:03 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaboutdialog.c (icon_set_new_from_pixbufs): Don't
+	leak the icon source.
+
 Sun Aug  8 23:46:20 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons): Don't
