@@ -122,7 +122,7 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 </para>
 
 @drawable: 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_gc_new_with_values ##### -->
@@ -132,7 +132,7 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 
 @drawable: 
 @values: 
-@values_mask:
+@values_mask: 
 @Returns: 
 
 
@@ -167,9 +167,10 @@ useful. For bitmaps, %GDK_AND and %GDK_OR are also useful.
 This function is obsolete and should not be used.
 </para>
 
+@Deprecated: Use gdk_object_unref() instead
 <!-- # Unused Parameters # -->
 @gc: a #GdkGC.
-@Deprecated: Use gdk_object_unref() instead
+
 
 <!-- ##### FUNCTION gdk_gc_set_values ##### -->
 <para>
@@ -186,8 +187,8 @@ This function is obsolete and should not be used.
 
 </para>
 
-@gc:
-@values:
+@gc: 
+@values: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_foreground ##### -->
@@ -204,8 +205,8 @@ This function is obsolete and should not be used.
 
 </para>
 
-@gc:
-@color:
+@gc: 
+@color: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_rgb_fg_color ##### -->
@@ -231,8 +232,8 @@ This function is obsolete and should not be used.
 
 </para>
 
-@gc:
-@font:
+@gc: 
+@font: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_function ##### -->
@@ -240,7 +241,7 @@ This function is obsolete and should not be used.
 
 </para>
 
-@gc:
+@gc: 
 @function: 
 
 
@@ -249,8 +250,8 @@ This function is obsolete and should not be used.
 
 </para>
 
-@gc:
-@fill:
+@gc: 
+@fill: 
 
 
 <!-- ##### ENUM GdkFill ##### -->
@@ -274,8 +275,8 @@ Determines how primitives are drawn.
 
 </para>
 
-@gc:
-@tile:
+@gc: 
+@tile: 
 
 
 <!-- ##### FUNCTION gdk_gc_set_stipple ##### -->
@@ -292,7 +293,7 @@ Determines how primitives are drawn.
 
 </para>
 
-@gc:
+@gc: 
 @x: 
 @y: 
 
@@ -302,7 +303,7 @@ Determines how primitives are drawn.
 
 </para>
 
-@gc:
+@gc: 
 @x: 
 @y: 
 
@@ -329,7 +330,7 @@ Determines how primitives are drawn.
 
 </para>
 
-@gc:
+@gc: 
 @region: 
 
 
@@ -369,7 +370,7 @@ windows of that window.
 @line_width: 
 @line_style: 
 @cap_style: 
-@join_style:
+@join_style: 
 
 
 <!-- ##### ENUM GdkLineStyle ##### -->
@@ -423,7 +424,7 @@ Determines how the joins between segments of a polygon are drawn.
 
 </para>
 
-@dst_gc:
+@dst_gc: 
 @src_gc: 
 
 

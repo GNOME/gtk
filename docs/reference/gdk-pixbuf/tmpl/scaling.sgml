@@ -200,3 +200,33 @@ End:
 @color2: 
 
 
+<!-- ##### ENUM GdkPixbufRotation ##### -->
+<para>
+
+</para>
+
+@GDK_PIXBUF_ROTATE_NONE: 
+@GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE: 
+@GDK_PIXBUF_ROTATE_UPSIDEDOWN: 
+@GDK_PIXBUF_ROTATE_CLOCKWISE: 
+
+<!-- ##### FUNCTION gdk_pixbuf_rotate_simple ##### -->
+<para>
+
+</para>
+
+@src: 
+@angle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_flip ##### -->
+<para>
+
+</para>
+
+@src: 
+@horizontal: 
+@Returns: 
+
+

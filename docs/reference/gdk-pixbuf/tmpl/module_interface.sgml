@@ -138,6 +138,33 @@ They are not covered by the same stability guarantees as the regular
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_format_is_disabled ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_set_disabled ##### -->
+<para>
+
+</para>
+
+@format: 
+@disabled: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_format_get_license ##### -->
+<para>
+
+</para>
+
+@format: 
+@Returns: 
+
+
 <!-- ##### STRUCT GdkPixbufFormat ##### -->
 <para>
 A #GdkPixbufFormat contains information about the image format accepted by a

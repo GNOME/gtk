@@ -331,11 +331,3 @@ A widget which displays a list of icons in a grid
 @path: 
 
 
-<!-- ##### FUNCTION gtk_icon_view_get_type ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-

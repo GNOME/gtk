@@ -405,6 +405,20 @@ Generated when a setting is modified.
   %GDK_SETTING_ACTION_CHANGED or %GDK_SETTING_ACTION_DELETED).
 @name: the name of the setting.
 
+<!-- ##### STRUCT GdkEventOwnerChange ##### -->
+<para>
+
+</para>
+
+@type: 
+@window: 
+@send_event: 
+@owner: 
+@reason: 
+@selection: 
+@time: 
+@selection_time: 
+
 <!-- ##### ENUM GdkScrollDirection ##### -->
 <para>
 Specifies the direction for #GdkEventScroll. 
@@ -485,4 +499,13 @@ Specifies the kind of modification applied to a setting in a #GdkEventSetting.
 @GDK_SETTING_ACTION_NEW: a setting was added.
 @GDK_SETTING_ACTION_CHANGED: a setting was changed.
 @GDK_SETTING_ACTION_DELETED: a setting was deleted.
+
+<!-- ##### ENUM GdkOwnerChange ##### -->
+<para>
+
+</para>
+
+@GDK_OWNER_CHANGE_NEW_OWNER: 
+@GDK_OWNER_CHANGE_DESTROY: 
+@GDK_OWNER_CHANGE_CLOSE: 
 

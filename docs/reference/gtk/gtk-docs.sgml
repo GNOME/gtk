@@ -188,6 +188,7 @@
 <!ENTITY gtk-migrating-GtkComboBox SYSTEM "migrating-GtkComboBox.sgml">
 <!ENTITY version SYSTEM "version.xml">
 <!ENTITY gtk-query-immodules SYSTEM "gtk-query-immodules-2.0.xml">
+<!ENTITY gtk-glossary SYSTEM "glossary.xml">
 ]>
 <book id="index">
   <bookinfo>
@@ -562,6 +563,8 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
 
      &gtk-query-immodules;
   </part>
+
+  &gtk-glossary;
 
   <index>
     <title>Index</title>

@@ -1,3 +1,11 @@
+2004-07-12  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/glossary.xml: Start of the GTK+ glossary.
+
+	* gtk/Makefile.am (content_files): Added glossary.xml.
+
+	* gtk/gtk-docs.sgml: Likewise.
+
 2004-07-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtk-docs.sgml: Add GtkAboutDialog to "Display 

@@ -1,0 +1,307 @@
+<glossary id="glossary">
+  <title>Glossary</title>
+
+  <glossentry id="allocation">
+    <glossterm>allocation</glossterm>
+    <glossdef>
+      <para>
+	The final size of a <glossterm
+	linkend="widget">widget</glossterm> within its <glossterm
+	linkend="parent">parent</glossterm>.  For example, a widget
+	may request a minimum size of 20&times;20 pixels, but its
+	parent may decide to allocate 50&times;20 pixels for it
+	instead.
+      </para>
+      <glossseealso>
+	<glossterm linkend="requisition">requisition</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="bin">
+    <glossterm>bin</glossterm>
+    <glossdef>
+      <para>
+	A <glossterm linkend="container">container</glossterm> that
+	can hold at most one child widget.  The base class for bins is
+	<link linkend="GtkBin">GtkBin</link>.
+      </para>
+      <glossseealso>
+	<glossterm linkend="container">container</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="child">
+    <glossterm>child</glossterm>
+    <glossdef>
+      <para>
+	A <glossterm linkend="container">container's</glossterm> child
+	is a <glossterm linkend="widget">widget</glossterm> contained
+	inside it.
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="column">
+    <glossterm>column</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+      <glossseealso>model column</glossseealso>
+      <glossseealso>view column</glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="container">
+    <glossterm>container</glossterm>
+    <glossdef>
+      <para>
+	A <glossterm linkend="widget">widget</glossterm> that contains
+	other widgets; in that case, the container is the
+	<emphasis>parent</emphasis> of the <emphasis>child</emphasis>
+	widgets.  Some containers don't draw anything on their own,
+	but rather just organize their children's <glossterm
+	linkend="geometry">geometry</glossterm>; for example, <link
+	linkend="GtkVBox">GtkVBox</link> lays out its children
+	vertically without painting anything on its own.  Other
+	containers include decorative elements; for example, <link
+	linkend="GtkFrame">GtkFrame</link> contains the frame's child
+	and a label in addition to the shaded frame it draws.  The
+	base class for containers is <link
+	linkend="GtkContainer">GtkContainer</link>.
+      </para>
+      <glossseealso>
+	<glossterm linkend="container">widget</glossterm>
+	<glossterm linkend="container">geometry</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="display">
+    <glossterm>display</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="event">
+    <glossterm>event</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="geometry">
+    <glossterm>geometry</glossterm>
+    <glossdef>
+      <para>
+	A <glossterm linkend="widget">widget's</glossterm> position
+	and size.  Within its parent, this is called the widget's
+	<glossterm linkend="allocation">allocation</glossterm>.
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="mapping">
+    <glossterm>mapping</glossterm>
+    <glossdef>
+      <para>
+	This is the step in a <glossterm
+	linkend="widget">widget's</glossterm> life cycle where it
+	actually shows the GdkWindows it created when it was
+	<glossterm linkend="realization">realized</glossterm>.  When a
+	widget is mapped, it must turn on its
+	<constant>GTK_MAPPED</constant> <link
+	linkend="GtkWidgetFlags">flag</link>.
+      </para>
+
+      <para>
+	Note that due to the asynchronous nature of the X window
+	system, a widget's window may not appear on the screen
+	immediatly after one calls <link
+	linkend="gdk-window-show"><function>gdk_window_show()</function></link>:
+	you must wait for the corresponding map <glossterm
+	linkend="event">event</glossterm> to be received.  You can do
+	this with the <link
+	linkend="GtkWidget-map-event"><methodname>GtkWidget::map-event</methodname>
+	signal</link>.
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="model-column">
+    <glossterm>model column</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="no-window">
+    <glossterm>no-window widget</glossterm>
+    <glossdef>
+      <para>
+	A widget that does not have a GdkWindow of its own on which to
+	draw its contents, but rather shares its <glossterm
+	linkend="parent">parent's</glossterm>.  Such a widget has the
+	<constant>GTK_NO_WINDOW</constant> <link
+	linkend="GtkWidgetFlags">flag</link> set, and can be tested
+	with the <link
+	linkend="gtk-widget-no-window-caps"><function>GTK_WIDGET_NO_WINDOW()</function></link>
+	macro.
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="parent">
+    <glossterm>parent</glossterm>
+    <glossdef>
+      <para>
+	A <glossterm linkend="widget">widget's</glossterm> parent is
+	the <glossterm linkend="container">container</glossterm>
+	inside which it resides.
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="realization">
+    <glossterm>realization</glossterm>
+    <glossdef>
+      <para>
+	This is the step in a <glossterm
+	linkend="widget">widget's</glossterm> life cycle where it
+	creates its own GdkWindow, or otherwise associates itself with
+	its <glossterm linkend="parent">parent's</glossterm>
+	GdkWindow.  If the widget has its own window, then it must
+	also attach a <glossterm linkend="style">style</glossterm> to
+	it.  A widget becomes unrealized by destroying its associated
+	GdkWindow.  When a widget is realized, it must turn on its
+	<constant>GTK_REALIZED</constant> <link
+	linkend="GtkWidgetFlags">flag</link>.
+      </para>
+
+      <para>
+	Widgets that don't own the GdkWindow on which they draw are
+	called <glossterm linkend="no-window">no-window
+	widgets</glossterm>.  This can be tested with the <link
+	linkend="gtk-widget-no-window-caps"><function>GTK_WIDGET_NO_WINDOW()</function></link>
+	macro.  Normally, these widgets draw on their parent's
+	GdkWindow.
+      </para>
+
+      <para>
+	Note that when a widget creates a window in its <link
+	linkend="gtkwidget-realize"><methodname>::realize()</methodname></link>
+	handler, it does not actually show the window.  That is, the
+	window's structure is just created in memory.  The widget
+	actually shows the window when it gets <glossterm
+	linkend="mapping">mapped</glossterm>.
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="requisition">
+    <glossterm>requisition</glossterm>
+    <glossdef>
+      <para>
+	The size requisition of a <glossterm
+	linkend="widget">widget</glossterm> is the minimum amount of
+	space it requests from its <glossterm
+	linkend="parent">parent</glossterm>.  Once the parent computes
+	the widget's final size, it gives it its <glossterm
+	linkend="allocation">size allocation</glossterm>.
+      </para>
+      <glossseealso>
+	<glossterm linkend="allocation">allocation</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="screen">
+    <glossterm>screen</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="style">
+    <glossterm>style</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="toplevel">
+    <glossterm>toplevel</glossterm>
+    <glossdef>
+      <para>
+	A <glossterm linkend="widget">widget</glossterm> that does not
+	require a <glossterm linkend="parent">parent</glossterm>
+	container.  The only toplevel widget in GTK+ is <link
+	linkend="GtkWindow">GtkWindow</link>.
+      </para>
+      <glossseealso>
+	<glossterm linkend="container">container</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="unmap">
+    <glossterm>unmap</glossterm>
+    <glosssee><glossterm linkend="mapping">mapping</glossterm></glosssee>
+  </glossentry>
+
+  <glossentry id="unrealize">
+    <glossterm>unrealize</glossterm>
+    <glosssee><glossterm linkend="realization">realization</glossterm></glosssee>
+  </glossentry>
+
+  <glossentry id="view-column">
+    <glossterm>view column</glossterm>
+    <glossdef>
+      <para>
+	FIXME
+      </para>
+    </glossdef>
+  </glossentry>
+
+  <glossentry id="widget">
+    <glossterm>widget</glossterm>
+    <glossdef>
+      <para>
+	A control in a graphical user interface.  Widgets can draw
+	themselves and process events from the mouse and keyboard.
+	Widget types include buttons, menus, text entry lines, and
+	lists.  Widgets can be arranged into <glossterm
+	linkend="container">containers</glossterm>, and these take
+	care of assigning the <glossterm
+	linkend="geometry">geometry</glossterm> of the widgets:  every
+	widget thus has a parent except those widgets which are
+	<glossterm linkend="toplevel">toplevels</glossterm>.  The base
+	class for widgets is <link
+	linkend="GtkWidget">GtkWidget</link>.
+      </para>
+      <glossseealso>
+	<glossterm linkend="container">container</glossterm>
+      </glossseealso>
+    </glossdef>
+  </glossentry>
+</glossary>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("gtk-docs.sgml" "book" "glossary")
+End:
+-->

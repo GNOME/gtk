@@ -1021,7 +1021,7 @@ returns.
 
 @model: the #GtkTreeModel
 @iter: a #GtkTreeIter pointing at a row in @model
-@data: user data 
+@data: user data
 @Returns: %TRUE if the row is a separator
 
 
@@ -1030,8 +1030,8 @@ returns.
 
 </para>
 
-@tree_view:
-@Returns:
+@tree_view: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_set_row_separator_func ##### -->
@@ -1040,8 +1040,8 @@ returns.
 </para>
 
 @tree_view: 
-@func:
-@data:
+@func: 
+@data: 
 @destroy: 
 
 

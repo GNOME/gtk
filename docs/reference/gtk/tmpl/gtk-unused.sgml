@@ -2166,6 +2166,13 @@ will be shown, or NULL to show all spacings.
 @charsets: a NULL-terminated array of strings containing charset names which
 will be shown, or NULL to show all charsets.
 
+<!-- ##### FUNCTION gtk_icon_view_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### FUNCTION gtk_identifier_get_type ##### -->
 <para>
 Get the type of GtkIdentifier.
