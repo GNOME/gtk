@@ -607,12 +607,11 @@ palette_paint (GtkWidget    *drawing_area,
 {
   if (drawing_area->window == NULL)
     return;
-  
-  gdk_window_clear_area (drawing_area->window,
-			 area->x,
-			 area->y,
-			 area->width, 
-			 area->height);
+
+  gdk_draw_rectangle (drawing_area->window,
+                      drawing_area->style->bg_gc[GTK_STATE_NORMAL],
+                      TRUE,
+                      area->x, area->y, area->width, area->height);
   
   if (GTK_WIDGET_HAS_FOCUS (drawing_area))
     {

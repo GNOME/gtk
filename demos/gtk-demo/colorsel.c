@@ -12,6 +12,27 @@ static GtkWidget *da;
 static GdkColor color;
 static GtkWidget *frame;
 
+/* Expose callback for the drawing area
+ */
+static gboolean
+expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+{
+  if (widget->window)
+    {
+      GtkStyle *style;
+
+      style = gtk_widget_get_style (widget);
+
+      gdk_draw_rectangle (widget->window,
+                          style->bg_gc[GTK_STATE_NORMAL],
+                          TRUE,
+                          event->area.x, event->area.y,
+                          event->area.width, event->area.height);
+    }
+
+  return TRUE;
+}
+
 static void
 change_color_callback (GtkWidget *button,
 		       gpointer	  data)
@@ -76,8 +97,12 @@ do_colorsel (void)
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
-      
+
       da = gtk_drawing_area_new ();
+
+      g_signal_connect (da, "expose_event",
+			G_CALLBACK (expose_event_callback), NULL);
+
       /* set a minimum size */
       gtk_widget_set_size_request (da, 200, 200);
       /* set the color */

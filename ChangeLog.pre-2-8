@@ -1,3 +1,13 @@
+2003-01-30  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtkcolorsel.c (palette_paint): Explicitely draw an opaque
+	rectangle using the background color rather than relying on
+	gdk_window_clear_area(), so that the palette works properly with
+	pixmap themes.
+
+	* demos/gtk-demo/colorsel.c: Install an "expose_event" handler
+	to fill the drawing area in the background color.
+
 Wed Jan 29 14:11:21 2003  Hidetoshi Tajima  <hidetoshi.tajima@sun.com>
 
 	* modules/input/gtkimcontextxim.c (choose_better_style): fix a memory
