@@ -364,6 +364,10 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   g_return_val_if_fail (selection->type != GTK_SELECTION_MULTIPLE, FALSE);
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
 
+  /* Clear the iter */
+  if (iter)
+    memset (iter, 0, sizeof (GtkTreeIter));
+
   if (model)
     *model = selection->tree_view->priv->model;
 
