@@ -27,8 +27,8 @@ AWK = gawk
 
 INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -DPANGO_ENABLE_BACKEND
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
-		$(INTL_CFLAGS) $(ATK_CFLAGS) $(DIRENT_CFLAGS)
-LDFLAGS = $(ATK_LIBS) $(DIRENT_LIBS) /link /machine:ix86 $(LINKDEBUG)
+		$(INTL_CFLAGS) $(ATK_CFLAGS)
+LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
 DEFINES = $(G_DEBUGGING) -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear \
@@ -46,14 +46,15 @@ all :						\
 	generated				\
 	gtk-stocks-icons			\
 	gtk-win32-$(GTK_VER).dll		\
+	gtk-query-immodules-$(GTK_VER).exe \
 #	gtk-win32-$(GTK_VER)s.lib \
 #	gtk-x11-$(GTK_VER).dll
 
 gtk_OBJECTS = 					\
 	fnmatch.obj				\
-#	gdk-pixbuf-loader.obj			\
 	gtkaccelgroup.obj			\
 	gtkaccellabel.obj			\
+	gtkaccelmap.obj	\
 	gtkaccessible.obj \
 	gtkadjustment.obj			\
 	gtkalignment.obj			\
@@ -118,6 +119,8 @@ gtk_OBJECTS = 					\
 	gtklistitem.obj				\
 	gtkliststore.obj				\
 	gtkmain.obj				\
+	gtkmarshalers.obj		\
+	gtkmarshal.obj		\
 	gtkmenu.obj				\
 	gtkmenubar.obj				\
 	gtkmenuitem.obj				\
@@ -179,7 +182,6 @@ gtk_OBJECTS = 					\
 	gtktreednd.obj				\
 	gtktreeitem.obj				\
 	gtktreemodel.obj			\
-#	gtktreemodelsimple.obj			\
 	gtktreemodelsort.obj			\
 	gtktreeselection.obj			\
 	gtktreesortable.obj \
@@ -268,6 +270,7 @@ gtk_public_h_sources =		\
 	gtklistitem.h		\
 	gtkliststore.h		\
 	gtkmain.h		\
+	gtkmarshal.h	\
 	gtkmenu.h		\
 	gtkmenubar.h		\
 	gtkmenuitem.h		\
@@ -278,9 +281,7 @@ gtk_public_h_sources =		\
 	gtkoldeditable.h	\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
-#	gtkpacker.h		\
 	gtkpaned.h		\
-#	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
 	gtkplug.h		\
 	gtkpreview.h		\
@@ -323,7 +324,6 @@ gtk_public_h_sources =		\
 	gtktree.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
-#	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreesortable.h	\
@@ -353,7 +353,7 @@ gtk_extra_sources = \
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
 
-GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c
+GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_ids.c gtktypebuiltins_evals.c gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c
 
 #
 # Generated source files:
@@ -382,8 +382,18 @@ gtktypebuiltins_ids.c: gtk.defs maketypes.awk
 gtktypebuiltins_evals.c: makeenums.pl gtk.defs
 	$(PERL) makeenums.pl arrays $(gtk_public_h_sources) $(gdk_headers) >gtktypebuiltins_evals.c
 
+# private marshalers
+gtkmarshalers.h : gtkmarshalers.list
+	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --header >>gtkmarshalers.h
+
+gtkmarshalers.c : gtkmarshalers.list
+	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >gtkmarshalers.c
+
+# public, deprecated marshalers
 gtkmarshal.h : gtkmarshal.list
-	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >gtkmarshal.h
+	echo #ifndef GTK_DISABLE_DEPRECATED >gtkmarshal.h
+	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >>gtkmarshal.h
+	echo #endif /* GTK_DISABLE_DEPRECATED */ >>gtkmarshal.h
 
 gtkmarshal.c : gtkmarshal.list
 	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
@@ -399,6 +409,9 @@ gtk-win32-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
 	lib /out:gtk-win32-$(GTK_VER)s.lib $(gtk_OBJECTS)
+
+gtk-query-immodules-$(GTK_VER).exe : queryimmodules.obj
+	$(CC) $(CFLAGS) -Fe$@ queryimmodules.obj $(GTK_LIBS) $(GLIB_LIBS) $(PANGO_LIBS) $(LDFLAGS)
 
 gtk-x11-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
 	$(CC) $(CFLAGS) -LD -Fm -Fegtk-x11-$(GTK_VER).dll $(gtk_OBJECTS) ../gdk/gdk-x11-$(GTK_VER).lib $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def

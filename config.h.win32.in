@@ -22,7 +22,7 @@
 
 /* #undef HAVE_CATGETS */
 /* #undef HAVE_DIMM_H */
-#define HAVE_DIRENT_H 1 /* MSVC users: include it from build/win32/dirent */
+/* #undef HAVE_DIRENT_H */
 #define HAVE_GETTEXT 1
 /* #undef HAVE_IPC_H */
 /* #undef HAVE_LC_MESSAGES */
@@ -115,7 +115,7 @@
 /* #undef HAVE_DIMM_H */
 
 /* Define if you have the <dirent.h> header file, and it defines `DIR'. */
-#define HAVE_DIRENT_H 1
+/* #undef HAVE_DIRENT_H */
 
 /* Define if you have the <dlfcn.h> header file. */
 /* #undef HAVE_DLFCN_H */

@@ -89,11 +89,17 @@ EXPORTS
 
 	gtk_accel_group_connect
 	gtk_accel_group_disconnect
+	gtk_accel_group_find
+	gtk_accel_group_from_accel_closure
 	gtk_accel_group_get_type
 	gtk_accel_group_lock
 	gtk_accel_group_new
+	gtk_accel_group_query
 	gtk_accel_group_unlock
 	gtk_accel_groups_activate
+	gtk_accel_groups_disconnect_closure
+	gtk_accel_groups_from_acceleratable
+	gtk_accel_label_get_accel_widget
 	gtk_accel_label_get_accel_width
 	gtk_accel_label_get_type
 	gtk_accel_label_new
@@ -105,13 +111,14 @@ EXPORTS
 	gtk_accel_map_add_notifer
 	gtk_accel_map_change_entry
 	gtk_accel_map_foreach
+	gtk_accel_map_foreach_unfiltered
 	gtk_accel_map_load
 	gtk_accel_map_load_fd
 	gtk_accel_map_load_scanner
-	gtk_accel_map_save
-	gtk_accel_map_save_fd
 	gtk_accel_map_lookup_entry
 	gtk_accel_map_remove_notifer
+	gtk_accel_map_save
+	gtk_accel_map_save_fd
 	gtk_accelerator_get_default_mod_mask
 	gtk_accelerator_name
 	gtk_accelerator_parse
@@ -873,6 +880,7 @@ EXPORTS
 	gtk_list_store_prepend
 	gtk_list_store_remove
 	gtk_list_store_set
+	gtk_list_store_set_column_types
 	gtk_list_store_set_valist
 	gtk_list_store_set_value
 	gtk_list_toggle_add_mode
@@ -889,51 +897,31 @@ EXPORTS
 	gtk_main_level
 	gtk_main_quit
 	gtk_major_version
-	gtk_marshal_BOOLEAN__BOOLEAN
-	gtk_marshal_BOOLEAN__BOXED
-	gtk_marshal_BOOLEAN__BOXED_BOXED
-	gtk_marshal_BOOLEAN__ENUM
-	gtk_marshal_BOOLEAN__INT_INT
-	gtk_marshal_BOOLEAN__OBJECT_BOXED_BOXED
-	gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT
-	gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED
+	gtk_marshal_BOOLEAN__POINTER
+	gtk_marshal_BOOLEAN__POINTER_INT_INT
+	gtk_marshal_BOOLEAN__POINTER_INT_INT_UINT
+	gtk_marshal_BOOLEAN__POINTER_POINTER_INT_INT
+	gtk_marshal_BOOLEAN__POINTER_STRING_STRING_POINTER
 	gtk_marshal_BOOLEAN__VOID
 	gtk_marshal_ENUM__ENUM
 	gtk_marshal_INT__POINTER
-	gtk_marshal_STRING__DOUBLE
-	gtk_marshal_VOID__BOOLEAN_BOOLEAN_BOOLEAN
-	gtk_marshal_VOID__BOXED_BOXED
-	gtk_marshal_VOID__BOXED_BOXED_POINTER
-	gtk_marshal_VOID__BOXED_OBJECT
-	gtk_marshal_VOID__BOXED_POINTER
-	gtk_marshal_VOID__BOXED_STRING_INT
-	gtk_marshal_VOID__BOXED_UINT
-	gtk_marshal_VOID__BOXED_UINT_FLAGS
-	gtk_marshal_VOID__BOXED_UINT_UINT
-	gtk_marshal_VOID__ENUM_ENUM
+	gtk_marshal_INT__POINTER_CHAR_CHAR
 	gtk_marshal_VOID__ENUM_FLOAT
 	gtk_marshal_VOID__ENUM_FLOAT_BOOLEAN
-	gtk_marshal_VOID__ENUM_INT
-	gtk_marshal_VOID__ENUM_INT_BOOLEAN
 	gtk_marshal_VOID__INT_INT
-	gtk_marshal_VOID__INT_INT_BOXED
-	gtk_marshal_VOID__INT_INT_INT
-	gtk_marshal_VOID__OBJECT_BOOLEAN
-	gtk_marshal_VOID__OBJECT_BOXED_BOXED
-	gtk_marshal_VOID__OBJECT_BOXED_UINT_UINT
-	gtk_marshal_VOID__OBJECT_INT_INT
-	gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT_UINT
-	gtk_marshal_VOID__OBJECT_OBJECT
-	gtk_marshal_VOID__OBJECT_STRING_STRING
-	gtk_marshal_VOID__OBJECT_UINT
-	gtk_marshal_VOID__OBJECT_UINT_FLAGS
+	gtk_marshal_VOID__INT_INT_POINTER
 	gtk_marshal_VOID__POINTER_INT
+	gtk_marshal_VOID__POINTER_INT_INT_POINTER_UINT_UINT
+	gtk_marshal_VOID__POINTER_POINTER
 	gtk_marshal_VOID__POINTER_POINTER_POINTER
+	gtk_marshal_VOID__POINTER_POINTER_UINT_UINT
+	gtk_marshal_VOID__POINTER_STRING_STRING
 	gtk_marshal_VOID__POINTER_UINT
+	gtk_marshal_VOID__POINTER_UINT_ENUM
+	gtk_marshal_VOID__POINTER_UINT_UINT
 	gtk_marshal_VOID__STRING_INT_POINTER
-	gtk_marshal_VOID__STRING_STRING
-	gtk_marshal_VOID__UINT_BOXED_UINT_FLAGS_FLAGS
-	gtk_marshal_VOID__UINT_OBJECT_UINT_FLAGS_FLAGS
+	gtk_marshal_VOID__UINT_POINTER_UINT_ENUM_ENUM_POINTER
+	gtk_marshal_VOID__UINT_POINTER_UINT_UINT_ENUM
 	gtk_marshal_VOID__UINT_STRING
 	gtk_menu_attach_to_widget
 	gtk_menu_bar_get_type
@@ -1711,6 +1699,7 @@ EXPORTS
 	gtk_tree_drag_source_drag_data_delete
 	gtk_tree_drag_source_drag_data_get
 	gtk_tree_drag_source_get_type
+	gtk_tree_drag_source_row_draggable
 	gtk_tree_get_row_drag_data
 	gtk_tree_get_type
 	gtk_tree_insert
@@ -1831,6 +1820,7 @@ EXPORTS
 	gtk_tree_store_prepend
 	gtk_tree_store_remove
 	gtk_tree_store_set
+	gtk_tree_store_set_column_types
 	gtk_tree_store_set_valist
 	gtk_tree_store_set_value
 	gtk_tree_unselect_child
@@ -1888,11 +1878,12 @@ EXPORTS
 	gtk_tree_view_column_set_widget
 	gtk_tree_view_columns_autosize
 	gtk_tree_view_create_row_drag_icon
-	gtk_tree_view_enable_model_drag_source
 	gtk_tree_view_enable_model_drag_dest
+	gtk_tree_view_enable_model_drag_source
 	gtk_tree_view_expand_all
 	gtk_tree_view_expand_row
 	gtk_tree_view_get_background_area
+	gtk_tree_view_get_bin_window
 	gtk_tree_view_get_cell_area
 	gtk_tree_view_get_column
 	gtk_tree_view_get_columns
@@ -2071,6 +2062,7 @@ EXPORTS
 	gtk_widget_set_name
 	gtk_widget_set_parent
 	gtk_widget_set_parent_window
+	gtk_widget_set_redraw_on_allocate
 	gtk_widget_set_scroll_adjustments
 	gtk_widget_set_sensitive
 	gtk_widget_set_size_request

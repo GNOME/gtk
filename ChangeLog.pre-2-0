@@ -1,3 +1,21 @@
+2001-11-18  Hans Breuer  <hans@breuer.org>
+
+	* gtk/gdkaccelmap.c : make it compile with msvc: !HAVE_UNISTD_H;
+	no label without op, even if it's a no-op.
+
+	* gtk/gtk.def :
+	* gtk/makefile.msc.in : reflect marshaler split, some clean-up	
+
+	* config.h.win32.in : remove definition of HAVE_DIRENT_H
+	* gtk/gtkfilesel.c : due to GDir (new in glib) DIR isn't
+	required anymore, replace it.
+	* gtk/queryimmodules.c : DIR -> GDir replacement, also
+	getcwd() -> g_get_current_dir()
+
+	* gdk/win32/gdkgeometry-win32.c : adapt to refactored gdkgeometry-x11.c
+	Even 'noisy laugh' scolling appears to work, though I still can't
+	claim to have fully understood what it is supposed to do ...
+
 Sat Nov 17 21:07:46 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkenums.h: Include glib-object.h instead of

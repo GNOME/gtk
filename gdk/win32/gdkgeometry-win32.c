@@ -26,6 +26,7 @@
  * The X11 version by Owen Taylor <otaylor@redhat.com>
  * Copyright Red Hat, Inc. 2000
  * Win32 hack by Tor Lillqvist <tml@iki.fi>
+ * and Hans Breuer <hans@breuer.org>
  */
 
 #include "gdk.h"		/* For gdk_rectangle_intersect */
@@ -68,11 +69,11 @@ struct _GdkWindowParentPos
   GdkRectangle clip_rect;
 };
 
-static void gdk_window_compute_position   (GdkWindowImplWin32   *window,
-					   GdkWindowParentPos   *parent_pos,
-					   GdkWin32PositionInfo *info);
-static void gdk_window_compute_parent_pos (GdkWindowImplWin32 *window,
-					   GdkWindowParentPos *parent_pos);
+static void gdk_window_compute_position   (GdkWindowImplWin32          *window,
+					   GdkWindowParentPos     *parent_pos,
+					   GdkWin32PositionInfo   *info);
+static void gdk_window_compute_parent_pos (GdkWindowImplWin32      *window,
+					   GdkWindowParentPos   *parent_pos);
 static void gdk_window_premove            (GdkWindow          *window,
 					   GdkWindowParentPos *parent_pos);
 static void gdk_window_postmove           (GdkWindow          *window,
@@ -105,13 +106,180 @@ _gdk_window_init_position (GdkWindow *window)
 {
   GdkWindowParentPos parent_pos;
   GdkWindowImplWin32 *impl;
-
+  
   g_return_if_fail (GDK_IS_WINDOW (window));
-
+  
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-
+  
   gdk_window_compute_parent_pos (impl, &parent_pos);
   gdk_window_compute_position (impl, &parent_pos, &impl->position_info);
+}
+
+static void
+gdk_window_copy_area_scroll (GdkWindow    *window,
+			     GdkRectangle *dest_rect,
+			     gint          dx,
+			     gint          dy)
+{
+  GdkWindowObject *obj = GDK_WINDOW_OBJECT (window);
+  GList *tmp_list;
+
+  if (dest_rect->width > 0 && dest_rect->height > 0)
+    {
+      RECT clipRect;
+      clipRect.left   = dest_rect->x - dx;
+      clipRect.top    = dest_rect->y - dy;
+      clipRect.right  = clipRect.left + dest_rect->width;
+      clipRect.bottom = clipRect.top + dest_rect->height;
+
+      gdk_window_queue_translation (window, dx, dy);
+
+      if (!ScrollWindowEx (GDK_WINDOW_HWND (window),
+                           dx, dy, /* in: scroll offsets */
+                           NULL, /* in: scroll rect, NULL == entire client area */
+                           &clipRect, /* in: restrict to, XXX: really want this ?? */
+                           NULL, /* out: update region */
+                           NULL, /* out: update rect */
+                           SW_INVALIDATE))
+        WIN32_API_FAILED ("ScrollWindowEx");
+    }
+
+  tmp_list = obj->children;
+  while (tmp_list)
+    {
+      GdkWindow *child = GDK_WINDOW (tmp_list->data);
+      GdkWindowObject *child_obj = GDK_WINDOW_OBJECT (child);
+	  
+      gdk_window_move (child, child_obj->x + dx, child_obj->y + dy);
+      
+      tmp_list = tmp_list->next;
+    }
+}
+
+static void
+compute_intermediate_position (GdkWin32PositionInfo *position_info,
+			       GdkWin32PositionInfo *new_info,
+			       gint              d_xoffset,
+			       gint              d_yoffset,
+			       GdkRectangle     *new_position)
+{
+  gint new_x0, new_x1, new_y0, new_y1;
+  
+  /* Wrap d_xoffset, d_yoffset into [-32768,32767] range. For the
+   * purposes of subwindow movement, it doesn't matter if we are
+   * off by a factor of 65536, and if we don't do this range
+   * reduction, we'll end up with invalid widths.
+   */
+  d_xoffset = (gint16)d_xoffset;
+  d_yoffset = (gint16)d_yoffset;
+  
+  if (d_xoffset < 0)
+    {
+      new_x0 = position_info->x + d_xoffset;
+      new_x1 = position_info->x + position_info->width;
+    }
+  else
+    {
+      new_x0 = position_info->x;
+      new_x1 = position_info->x + new_info->width + d_xoffset;
+    }
+
+  new_position->x = new_x0;
+  new_position->width = new_x1 - new_x0;
+  
+  if (d_yoffset < 0)
+    {
+      new_y0 = position_info->y + d_yoffset;
+      new_y1 = position_info->y + position_info->height;
+    }
+  else
+    {
+      new_y0 = position_info->y;
+      new_y1 = position_info->y + new_info->height + d_yoffset;
+    }
+  
+  new_position->y = new_y0;
+  new_position->height = new_y1 - new_y0;
+}
+
+static void
+gdk_window_guffaw_scroll (GdkWindow    *window,
+			  gint          dx,
+			  gint          dy)
+{
+  GdkWindowObject *obj = GDK_WINDOW_OBJECT (window);
+  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
+
+  gint d_xoffset = -dx;
+  gint d_yoffset = -dy;
+  GdkRectangle new_position;
+  GdkWin32PositionInfo new_info;
+  GdkWindowParentPos parent_pos;
+  GList *tmp_list;
+  
+  gdk_window_compute_parent_pos (impl, &parent_pos);
+  gdk_window_compute_position (impl, &parent_pos, &new_info);
+
+  parent_pos.x += obj->x;
+  parent_pos.y += obj->y;
+  parent_pos.win32_x += new_info.x;
+  parent_pos.win32_y += new_info.y;
+  parent_pos.clip_rect = new_info.clip_rect;
+
+  gdk_window_tmp_unset_bg (window);
+
+  if (d_xoffset < 0 || d_yoffset < 0)
+    gdk_window_queue_translation (window, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
+	
+  gdk_window_set_static_gravities (window, TRUE);
+
+  compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
+				 &new_position);
+  
+  /* XXX: this is only translating the X11 code. Don't know why the
+   *  window movement needs to be done in three steps there, and here ??
+   */
+  if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+                     new_position.x, new_position.y,
+	               new_position.width, new_position.height,
+                     SWP_NOACTIVATE | SWP_NOZORDER))
+    WIN32_API_FAILED ("SetWindowPos");
+  
+  tmp_list = obj->children;
+  while (tmp_list)
+    {
+      GDK_WINDOW_OBJECT(tmp_list->data)->x -= d_xoffset;
+      GDK_WINDOW_OBJECT(tmp_list->data)->y -= d_yoffset;
+
+      gdk_window_premove (tmp_list->data, &parent_pos);
+      tmp_list = tmp_list->next;
+    }
+  
+  if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+                     new_position.x - d_xoffset, new_position.y - d_yoffset, 1, 1,
+                     SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE))
+    WIN32_API_FAILED ("SetWindowPos");
+
+  if (d_xoffset > 0 || d_yoffset > 0)
+    gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
+  
+  if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
+                     impl->position_info.x, impl->position_info.y,
+                     impl->position_info.width, impl->position_info.height,
+                     SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE))
+    WIN32_API_FAILED ("SetWindowPos");
+  
+  if (impl->position_info.no_bg)
+    gdk_window_tmp_reset_bg (window);
+  
+  impl->position_info = new_info;
+  
+  tmp_list = obj->children;
+  while (tmp_list)
+    {
+      gdk_window_postmove (tmp_list->data, &parent_pos);
+      tmp_list = tmp_list->next;
+    }
 }
 
 /**
@@ -120,15 +288,14 @@ _gdk_window_init_position (GdkWindow *window)
  * @dx: Amount to scroll in the X direction
  * @dy: Amount to scroll in the Y direction
  * 
- * Scroll the contents of its window, both pixels and children, by
- * the given amount. Portions of the window that the scroll operation
- * brings in from offscreen areas are invalidated. The invalidated
- * region may be bigger than what would strictly be necessary.
- * (For X11, a minimum area will be invalidated if the window has
- * no subwindows, or if the edges of the window's parent do not extend
- * beyond the edges of the window. In other cases, a multi-step process
- * is used to scroll the window which may produce temporary visual
- * artifacts and unnecessary invalidations.)
+ * Scroll the contents of @window, both pixels and children, by the given
+ * amount. @window itself does not move.  Portions of the window that the scroll
+ * operation brings in from offscreen areas are invalidated. The invalidated
+ * region may be bigger than what would strictly be necessary.  (For Win32, a
+ * minimum area will be invalidated if the window has no subwindows, or if the
+ * edges of the window's parent do not extend beyond the edges of the window. In
+ * other cases, a multi-step process is used to scroll the window which may
+ * produce temporary visual artifacts and unnecessary invalidations.)
  **/
 void
 gdk_window_scroll (GdkWindow *window,
@@ -136,125 +303,60 @@ gdk_window_scroll (GdkWindow *window,
 		   gint       dy)
 {
   gboolean can_guffaw_scroll = FALSE;
+  GdkRegion *invalidate_region;
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
+  GdkRectangle dest_rect;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  obj = GDK_WINDOW_OBJECT (window);
-  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);  
-  
   if (GDK_WINDOW_DESTROYED (window))
     return;
+  
+  obj = GDK_WINDOW_OBJECT (window);
+  impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);  
 
+  if (dx == 0 && dy == 0)
+    return;
+  
   /* Move the current invalid region */
   if (obj->update_area)
     gdk_region_offset (obj->update_area, dx, dy);
+  
+  invalidate_region = gdk_region_rectangle (&impl->position_info.clip_rect);
+  
+  dest_rect = impl->position_info.clip_rect;
+  dest_rect.x += dx;
+  dest_rect.y += dy;
+  gdk_rectangle_intersect (&dest_rect, &impl->position_info.clip_rect, &dest_rect);
+
+  if (dest_rect.width > 0 && dest_rect.height > 0)
+    {
+      GdkRegion *tmp_region;
+
+      tmp_region = gdk_region_rectangle (&dest_rect);
+      gdk_region_subtract (invalidate_region, tmp_region);
+      gdk_region_destroy (tmp_region);
+    }
+  
+  gdk_window_invalidate_region (window, invalidate_region, TRUE);
+  gdk_region_destroy (invalidate_region);
 
   /* We can guffaw scroll if we are a child window, and the parent
-   * does not extend beyond our edges.
+   * does not extend beyond our edges. Otherwise, we use XCopyArea, then
+   * move any children later
    */
-  
   if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
     {
       GdkWindowImplWin32 *parent_impl = GDK_WINDOW_IMPL_WIN32 (obj->parent->impl);  
-      can_guffaw_scroll = (obj->x <= 0 &&
-			   obj->y <= 0 &&
-			   obj->x + impl->width >= parent_impl->width &&
-			   obj->y + impl->height >= parent_impl->height);
+      can_guffaw_scroll = ((dx == 0 || (obj->x <= 0 && obj->x + impl->width >= parent_impl->width)) &&
+			   (dy == 0 || (obj->y <= 0 && obj->y + impl->height >= parent_impl->height)));
     }
 
   if (!obj->children || !can_guffaw_scroll)
-    {
-#if 0 /* this may be the better way to do it, though there seems to 
-         be an offset error in it */
-      GList *tmp_list = obj->children;
-      int num_windows = g_list_length (tmp_list) + 1;
-      HDWP hWinPosInfo = BeginDeferWindowPos (num_windows);
-
-      GDK_NOTE (MISC, 
-                g_print ("gdk_window_scroll (%x, %d, %d), %d childs\n",
-                         GDK_WINDOW_HWND (window), dx, dy, num_windows -1));
-      if (!hWinPosInfo)
-        WIN32_API_FAILED ("BeginDeferWindowPos");
-      else
-        {
-
-          hWinPosInfo = 
-            DeferWindowPos (hWinPosInfo, /* may change on return */
-                            GDK_WINDOW_HWND (window),
-                            NULL, /* placement-order handle, ignored */
-                            obj->x + dx, obj->y + dy, /* new pos */
-                            30, 20,  /* new size, ignored */
-                            SWP_NOSIZE | SWP_NOZORDER);
-
-          while (tmp_list)
-	    {
-	      GdkWindowObject * child = GDK_WINDOW_OBJECT (tmp_list->data);
-	  
-              hWinPosInfo = 
-                DeferWindowPos (hWinPosInfo, /* may change on return */
-                                GDK_WINDOW_HWND (child),
-                                NULL, /* placement-order handle, ignored */
-                                child->x + dx, child->y + dy, /* new pos */
-                                30, 20,  /* new size, ignored */
-                                SWP_NOSIZE | SWP_NOZORDER);
-	  
-	      tmp_list = tmp_list->next;
-	    }
-
-          if (!EndDeferWindowPos (hWinPosInfo))
-	    WIN32_API_FAILED ("EndDeferWindowPos");
-       }
-#else
-      /* Use ScrollWindowEx, then move any children later
-       */
-      GList *tmp_list;
-      GdkRegion *invalidate_region;
-      GdkRectangle dest_rect;
-
-      invalidate_region = gdk_region_rectangle (&impl->position_info.clip_rect);
-      
-      dest_rect = impl->position_info.clip_rect;
-      dest_rect.x += dx;
-      dest_rect.y += dy;
-      gdk_rectangle_intersect (&dest_rect, &impl->position_info.clip_rect, &dest_rect);
-
-      if (dest_rect.width > 0 && dest_rect.height > 0)
-	{
-	  GdkRegion *tmp_region;
-
-	  tmp_region = gdk_region_rectangle (&dest_rect);
-	  gdk_region_subtract (invalidate_region, tmp_region);
-	  gdk_region_destroy (tmp_region);
-	  
-	  gdk_window_queue_translation (window, dx, dy);
-
-	  if (ScrollWindowEx (GDK_WINDOW_HWND (window), dx, dy,
-			      NULL, NULL, NULL, NULL, 0) == ERROR)
-	    WIN32_API_FAILED ("ScrollWindowEx");
-	}
-
-      gdk_window_invalidate_region (window, invalidate_region, TRUE);
-      gdk_region_destroy (invalidate_region);
-
-      tmp_list = obj->children;
-      while (tmp_list)
-	{
-	  GdkWindow * child = GDK_WINDOW (tmp_list->data);
-	  
-	  gdk_window_move (child, obj->x + dx, obj->y + dy);
-	  
-	  tmp_list = tmp_list->next;
-	}
-#endif
-    }
+    gdk_window_copy_area_scroll (window, &dest_rect, dx, dy);
   else
-    {
-      /* Guffaw scroll
-       */
-      g_warning ("gdk_window_scroll(): guffaw scrolling not yet implemented");
-    }
+    gdk_window_guffaw_scroll (window, dx, dy);
 }
 
 void
@@ -279,7 +381,7 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
   obj = GDK_WINDOW_OBJECT (window);
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
-
+  
   dx = x - obj->x;
   dy = y - obj->y;
   
@@ -310,40 +412,22 @@ _gdk_window_move_resize_child (GdkWindow *window,
   
   if (d_xoffset != 0 || d_yoffset != 0)
     {
-      gint new_x0, new_y0, new_x1, new_y1;
+      GdkRectangle new_position;
 
       gdk_window_set_static_gravities (window, TRUE);
 
       if (d_xoffset < 0 || d_yoffset < 0)
 	gdk_window_queue_translation (window, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
-	
-      if (d_xoffset < 0)
-	{
-	  new_x0 = impl->position_info.x + d_xoffset;
-	  new_x1 = impl->position_info.x + impl->position_info.width;
-	}
-      else
-	{
-	  new_x0 = impl->position_info.x;
-	  new_x1 = impl->position_info.x + new_info.width + d_xoffset;
-	}
 
-      if (d_yoffset < 0)
-	{
-	  new_y0 = impl->position_info.y + d_yoffset;
-	  new_y1 = impl->position_info.y + impl->position_info.height;
-	}
-      else
-	{
-	  new_y0 = impl->position_info.y;
-	  new_y1 = impl->position_info.y + new_info.height + d_yoffset;
-	}
+      compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
+				     &new_position);
       
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		       new_x0, new_y0, new_x1 - new_x0, new_y1 - new_y0,
-		       SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW))
-	  WIN32_API_FAILED ("SetWindowPos");
-      
+                         new_position.x, new_position.y, 
+                         new_position.width, new_position.height,
+                         SWP_NOACTIVATE | SWP_NOZORDER))
+        WIN32_API_FAILED ("SetWindowPos");
+        
       tmp_list = obj->children;
       while (tmp_list)
 	{
@@ -352,24 +436,18 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	}
 
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		       new_x0 + dx, new_y0 + dy, 0, 0,
-		       SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW))
-	  WIN32_API_FAILED ("SetWindowPos");
+                         new_position.x + dx, new_position.y + dy, 0, 0,
+                         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE | SWP_NOREDRAW))
+        WIN32_API_FAILED ("SetWindowPos");
       
       if (d_xoffset > 0 || d_yoffset > 0)
 	gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
-
-      /* FIXME: 
-       */
-      if (new_info.x + new_info.width > SIZE_LIMIT)
-        new_info.width = SIZE_LIMIT - new_info.x;
-      if (new_info.y + new_info.height > SIZE_LIMIT)
-        new_info.height = SIZE_LIMIT - new_info.y;
-
+      
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		       new_info.x, new_info.y, new_info.width, new_info.height,
-		       SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW))
-	  WIN32_API_FAILED ("SetWindowPos");
+                         new_info.x, new_info.y, 
+                         new_info.width, new_info.height,
+                         SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOREDRAW))
+        WIN32_API_FAILED ("SetWindowPos");
       
       if (impl->position_info.no_bg)
 	gdk_window_tmp_reset_bg (window);
@@ -402,10 +480,11 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	}
 
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-			   new_info.x, new_info.y, new_info.width, new_info.height,
-			   SWP_NOACTIVATE | SWP_NOZORDER |
-			   (is_resize ? 0 : SWP_NOSIZE)))
-	  WIN32_API_FAILED ("SetWindowPos");
+                         new_info.x, new_info.y, 
+                         new_info.width, new_info.height,
+                         SWP_NOACTIVATE | SWP_NOZORDER | 
+                         (is_resize ? 0 : SWP_NOSIZE)))
+        WIN32_API_FAILED ("SetWindowPos");
 
       tmp_list = obj->children;
       while (tmp_list)
@@ -426,17 +505,17 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
 static void
 gdk_window_compute_position (GdkWindowImplWin32   *window,
-			     GdkWindowParentPos   *parent_pos,
-			     GdkWin32PositionInfo *info)
+			     GdkWindowParentPos *parent_pos,
+			     GdkWin32PositionInfo   *info)
 {
   GdkWindowObject *wrapper;
   int parent_x_offset;
   int parent_y_offset;
-  
+
   g_return_if_fail (GDK_IS_WINDOW_IMPL_WIN32 (window));
 
   wrapper = GDK_WINDOW_OBJECT (GDK_DRAWABLE_IMPL_WIN32 (window)->wrapper);
-
+  
   info->big = FALSE;
   
   if (window->width <= SIZE_LIMIT)
@@ -523,7 +602,7 @@ gdk_window_compute_position (GdkWindowImplWin32   *window,
 }
 
 static void
-gdk_window_compute_parent_pos (GdkWindowImplWin32 *window,
+gdk_window_compute_parent_pos (GdkWindowImplWin32      *window,
 			       GdkWindowParentPos *parent_pos)
 {
   GdkWindowObject *wrapper;
@@ -592,7 +671,7 @@ gdk_window_premove (GdkWindow          *window,
   GList *tmp_list;
   gint d_xoffset, d_yoffset;
   GdkWindowParentPos this_pos;
-  
+
   obj = (GdkWindowObject *) window;
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
   
@@ -614,37 +693,19 @@ gdk_window_premove (GdkWindow          *window,
   
   if (d_xoffset != 0 || d_yoffset != 0)
     {
-      gint new_x0, new_y0, new_x1, new_y1;
+      GdkRectangle new_position;
 
       if (d_xoffset < 0 || d_yoffset < 0)
 	gdk_window_queue_translation (window, MIN (d_xoffset, 0), MIN (d_yoffset, 0));
-	
-      if (d_xoffset < 0)
-	{
-	  new_x0 = impl->position_info.x + d_xoffset;
-	  new_x1 = impl->position_info.x + impl->position_info.width;
-	}
-      else
-	{
-	  new_x0 = impl->position_info.x;
-	  new_x1 = impl->position_info.x + new_info.width + d_xoffset;
-	}
 
-      if (d_yoffset < 0)
-	{
-	  new_y0 = impl->position_info.y + d_yoffset;
-	  new_y1 = impl->position_info.y + impl->position_info.height;
-	}
-      else
-	{
-	  new_y0 = impl->position_info.y;
-	  new_y1 = impl->position_info.y + new_info.height + d_yoffset;
-	}
+      compute_intermediate_position (&impl->position_info, &new_info, d_xoffset, d_yoffset,
+				     &new_position);
 
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		       new_x0, new_y0, new_x1 - new_x0, new_y1 - new_y0,
+                         new_position.x, new_position.y, 
+                         new_position.width, new_position.height,
 		       SWP_NOREDRAW | SWP_NOZORDER | SWP_NOACTIVATE))
-	WIN32_API_FAILED ("SetWindowPos");
+        WIN32_API_FAILED ("SetWindowPos");
     }
 
   tmp_list = obj->children;
@@ -665,7 +726,7 @@ gdk_window_postmove (GdkWindow          *window,
   GList *tmp_list;
   gint d_xoffset, d_yoffset;
   GdkWindowParentPos this_pos;
-  
+
   obj = (GdkWindowObject *) window;
   impl = GDK_WINDOW_IMPL_WIN32 (obj->impl);
   
@@ -686,9 +747,10 @@ gdk_window_postmove (GdkWindow          *window,
 	gdk_window_queue_translation (window, MAX (d_xoffset, 0), MAX (d_yoffset, 0));
 	
       if (!SetWindowPos (GDK_WINDOW_HWND (window), NULL,
-		       new_info.x, new_info.y, new_info.width, new_info.height,
-		       SWP_NOREDRAW | SWP_NOZORDER | SWP_NOACTIVATE))
-	WIN32_API_FAILED ("SetWindowPos");
+                         new_info.x, new_info.y, 
+                         new_info.width, new_info.height,
+                         SWP_NOREDRAW | SWP_NOZORDER | SWP_NOACTIVATE))
+        WIN32_API_FAILED ("SetWindowPos");
     }
 
   if (!impl->position_info.mapped && new_info.mapped && GDK_WINDOW_IS_MAPPED (obj))
@@ -781,13 +843,13 @@ _gdk_window_process_expose (GdkWindow    *window,
   GdkRegion *invalidate_region = gdk_region_rectangle (area);
   GdkRegion *clip_region;
   GSList *tmp_list = translate_queue;
-
+  
   impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
   
   GDK_NOTE (EVENTS, g_print ("_gdk_window_process_expose %#x %ld %dx%d@+%d+%d\n",
 			     (guint) GDK_WINDOW_HWND (window), serial,
 			     area->width, area->height, area->x, area->y));
-
+  
   while (tmp_list)
     {
       GdkWindowQueueItem *item = tmp_list->data;
@@ -823,7 +885,7 @@ _gdk_window_process_expose (GdkWindow    *window,
 
   if (!gdk_region_empty (invalidate_region))
     gdk_window_invalidate_region (window, invalidate_region, FALSE);
-
+  
   gdk_region_destroy (invalidate_region);
   gdk_region_destroy (clip_region);
 }
@@ -872,15 +934,13 @@ gdk_window_tmp_reset_bg (GdkWindow *window)
 }
 
 static void
-gdk_window_clip_changed (GdkWindow    *window,
-			 GdkRectangle *old_clip,
-			 GdkRectangle *new_clip)
+gdk_window_clip_changed (GdkWindow *window, GdkRectangle *old_clip, GdkRectangle *new_clip)
 {
   GdkWindowImplWin32 *impl;
   GdkWindowObject *obj;
   GdkRegion *old_clip_region;
   GdkRegion *new_clip_region;
-
+  
   if (((GdkWindowObject *)window)->input_only)
     return;
 
@@ -890,6 +950,11 @@ gdk_window_clip_changed (GdkWindow    *window,
   old_clip_region = gdk_region_rectangle (old_clip);
   new_clip_region = gdk_region_rectangle (new_clip);
 
+  /* We need to update this here because gdk_window_invalidate_region makes
+   * use if it (through gdk_drawable_get_visible_region
+   */
+  impl->position_info.clip_rect = *new_clip;
+  
   /* Trim invalid region of window to new clip rectangle
    */
   if (obj->update_area)

@@ -32,9 +32,6 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
-#ifdef HAVE_DIRENT_H
-#include <dirent.h>
-#endif
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -2592,8 +2589,9 @@ open_new_dir (gchar       *dir_name,
 	      gboolean     stat_subdirs)
 {
   CompletionDirSent *sent;
-  DIR *directory;
-  struct dirent *dirent_ptr;
+  GDir *directory;
+  char *dirent;
+  GError *error;
   gint entry_count = 0;
   gint n_entries = 0;
   gint i;
@@ -2615,38 +2613,38 @@ open_new_dir (gchar       *dir_name,
       return NULL;
     }
   
-  directory = opendir (sys_dir_name);
+  directory = g_dir_open (sys_dir_name, 0, &error);
   if (!directory)
     {
-      cmpl_errno = errno;
+      cmpl_errno = error->code; /* ??? */
       g_free (sys_dir_name);
       return NULL;
     }
 
-  while ((dirent_ptr = readdir (directory)) != NULL)
+  while ((dirent = g_dir_read_name (directory)) != NULL)
     entry_count++;
 
   sent->entries = g_new (CompletionDirEntry, entry_count);
   sent->entry_count = entry_count;
 
-  rewinddir (directory);
+  g_dir_rewind (directory);
 
   for (i = 0; i < entry_count; i += 1)
     {
-      dirent_ptr = readdir (directory);
+      dirent = g_dir_read_name (directory);
 
-      if (!dirent_ptr)
+      if (!dirent)
 	{
-	  cmpl_errno = errno;
-	  closedir (directory);
+	  g_warning ("Failure reading directory '%s'", sys_dir_name);
+	  g_dir_close (directory);
 	  g_free (sys_dir_name);
 	  return NULL;
 	}
 
-      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent_ptr->d_name, -1, NULL, NULL, NULL);
+      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent, -1, NULL, NULL, NULL);
       if (!g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
 	{
-	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent_ptr->d_name);
+	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent);
 	  continue;
 	}
 
@@ -2655,7 +2653,7 @@ open_new_dir (gchar       *dir_name,
 	{
 	  g_string_append_c (path, G_DIR_SEPARATOR);
 	}
-      g_string_append (path, dirent_ptr->d_name);
+      g_string_append (path, dirent);
 
       if (stat_subdirs)
 	{
@@ -2678,7 +2676,7 @@ open_new_dir (gchar       *dir_name,
   g_string_free (path, TRUE);
   qsort (sent->entries, sent->entry_count, sizeof (CompletionDirEntry), compare_cmpl_dir);
 
-  closedir (directory);
+  g_dir_close (directory);
 
   return sent;
 }

@@ -16,13 +16,21 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
+
+#include "config.h"
+
 #include "gtkaccelmap.h"
 
 #include "gtkwindow.h"  /* in lack of GtkAcceleratable */
 
 #include <string.h>
 #include <fcntl.h>
+#ifdef HAVE_UNISTD_H
 #include <unistd.h>
+#endif
+#ifdef G_OS_WIN32
+#include <io.h>
+#endif
 #include <errno.h>
 
 
@@ -816,6 +824,7 @@ gtk_accel_map_foreach (gpointer           data,
 	  goto skip_accel;
       foreach_func (data, entry->accel_path, entry->accel_key, entry->accel_mods, changed);
     skip_accel:
+      /* noop */;
     }
   g_slist_free (entries);
 }
