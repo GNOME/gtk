@@ -1,3 +1,8 @@
+Tue Aug 11 17:49:33 1998  Tim Janik  <timj@gtk.org>
+
+	* examples/packbox/packbox.c: #include fixes (reported by Asbjoern
+ 	Pettersen).
+
 Tue Aug 11 00:35:56 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkgc.c gdk/gdktypes.h: Applied gtk-pedersen-980727-0; 

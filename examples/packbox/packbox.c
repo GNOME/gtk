@@ -2,7 +2,9 @@
 
 /* packbox.c */
 
-#include "gtk/gtk.h"
+#include <stdio.h>
+#include <gtk/gtk.h>
+#include <stdlib.h>
 
 void
 delete_event (GtkWidget *widget, GdkEvent *event, gpointer data)
