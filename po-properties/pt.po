@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 2.6\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-02 17:21-0500\n"
-"PO-Revision-Date: 2004-02-26 23:00+0000\n"
+"Report-Msgid-Bugs-To: Duarte Loreto <happyguy_pt@hotmail.com>\n"
+"POT-Creation-Date: 2004-03-05 01:31+0000\n"
+"PO-Revision-Date: 2004-03-05 01:35+0000\n"
 "Last-Translator: Duarte Loreto <happyguy_pt@hotmail.com>\n"
 "Language-Team: Portuguese <gnome_pt@yahoogroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -1319,53 +1319,53 @@ msgstr "Valor na lista"
 msgid "Whether entered values must already be present in the list"
 msgstr "Se valores inseridos têm ou não de já existir na lista"
 
-#: gtk/gtkcombobox.c:430
+#: gtk/gtkcombobox.c:451
 msgid "ComboBox model"
 msgstr "Modelo de ComboBox"
 
-#: gtk/gtkcombobox.c:431
+#: gtk/gtkcombobox.c:452
 msgid "The model for the combo box"
 msgstr "O modelo para a caixa de selecção única"
 
-#: gtk/gtkcombobox.c:438
+#: gtk/gtkcombobox.c:459
 msgid "Wrap width"
 msgstr "Largura de quebra"
 
-#: gtk/gtkcombobox.c:439
+#: gtk/gtkcombobox.c:460
 msgid "Wrap width for layouting the items in a grid"
 msgstr "Largura de quebra para dispôr os itens numa grelha"
 
-#: gtk/gtkcombobox.c:448
+#: gtk/gtkcombobox.c:469
 msgid "Row span column"
 msgstr "Coluna de abrangência de linha"
 
-#: gtk/gtkcombobox.c:449
+#: gtk/gtkcombobox.c:470
 msgid "TreeModel column containing the row span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de linha"
 
-#: gtk/gtkcombobox.c:458
+#: gtk/gtkcombobox.c:479
 msgid "Column span column"
 msgstr "Coluna de abrangência de coluna"
 
-#: gtk/gtkcombobox.c:459
+#: gtk/gtkcombobox.c:480
 msgid "TreeModel column containing the column span values"
 msgstr "Coluna de TreeModel que contém os valores de abrangência de coluna"
 
-#: gtk/gtkcombobox.c:468
+#: gtk/gtkcombobox.c:489
 msgid "Active item"
 msgstr "Item activo"
 
-#: gtk/gtkcombobox.c:469
+#: gtk/gtkcombobox.c:490
 msgid "The item which is currently active"
 msgstr "O item actualmente activo"
 
-#: gtk/gtkcombobox.c:477
+#: gtk/gtkcombobox.c:498
 msgid "Appears as list"
-msgstr ""
+msgstr "Apresentar como lista"
 
-#: gtk/gtkcombobox.c:478
+#: gtk/gtkcombobox.c:499
 msgid "Whether combobox dropdowns should look like lists rather than menus"
-msgstr ""
+msgstr "Se caixas de lista deverão ter a aparência de listas em vez de menus"
 
 #: gtk/gtkcomboboxentry.c:109
 msgid "Text Column"
@@ -1566,11 +1566,12 @@ msgid "X align"
 msgstr "Alinh x"
 
 #: gtk/gtkentry.c:553 gtk/gtkmisc.c:99
-#, fuzzy
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts"
-msgstr "O alinhamento horizontal, de 0 (esquerda) até 1 (direita)"
+msgstr ""
+"O alinhamento horizontal, de 0 (esquerda) até 1 (direita). Invertido para "
+"disposições RTL (direita para a esquerda)"
 
 #: gtk/gtkentry.c:786
 msgid "Select on focus"
@@ -1717,13 +1718,12 @@ msgstr ""
 "deverá ser visível."
 
 #: gtk/gtkfilechooser.c:129
-#, fuzzy
 msgid "Use Preview Label"
-msgstr "Utilizar o tamanho da etiqueta"
+msgstr "Utilizar Etiqueta de Antevisão"
 
 #: gtk/gtkfilechooser.c:130
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr ""
+msgstr "Se apresentar ou não uma etiqueta base com o nome do ficheiro antevisto."
 
 #: gtk/gtkfilechooser.c:135
 msgid "Extra widget"
@@ -1749,14 +1749,13 @@ msgstr "Mostrar Escondidos"
 msgid "Whether the hidden files and folders should be displayed"
 msgstr "Se mostrar ou não os ficheiros e pastas escondidos"
 
-#: gtk/gtkfilechooserdefault.c:473
+#: gtk/gtkfilechooserdefault.c:475
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "Motor por omissão de selecção de ficheiro"
 
-#: gtk/gtkfilechooserdefault.c:474
-#, fuzzy
+#: gtk/gtkfilechooserdefault.c:476
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr "Nome do motor de sistema de ficheiros a utilizar"
+msgstr "Nome do motor a utilizar por omissão para o GtkFileChooser"
 
 #: gtk/gtkfilesel.c:559 gtk/gtkimage.c:167
 msgid "Filename"
@@ -3645,14 +3644,12 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "Se o Tab resultará na introdução de um caracter de tabulação"
 
 #: gtk/gtktextview.c:683
-#, fuzzy
 msgid "Error underline color"
-msgstr "Cor de 1º plano"
+msgstr "Cor de sublinhado de erro"
 
 #: gtk/gtktextview.c:684
-#, fuzzy
 msgid "Color with which to draw error-indication underlines"
-msgstr "Com que cor desenhar o cursor de inserção"
+msgstr "Com que cor desenhar o sublinhado indicador de erros"
 
 #: gtk/gtktoggleaction.c:129
 msgid "Create the same proxies as a radio action"
