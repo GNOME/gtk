@@ -85,10 +85,10 @@ struct _GdkEventPrivate
  */
 
 static GdkFilterReturn
-		 gdk_event_apply_filters(MSG      *msg,
+		gdk_event_apply_filters (MSG      *msg,
 					 GdkEvent *event,
 					 GList    *filters);
-static gboolean  gdk_event_translate	(GdkEvent *event, 
+static gboolean gdk_event_translate	(GdkEvent *event, 
 					 MSG      *msg,
 					 gboolean *ret_val_flagp,
 					 gint     *ret_valp,
@@ -145,6 +145,9 @@ typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
 static PFN_TrackMouseEvent track_mouse_event = NULL;
 
 static gboolean use_ime_composition = FALSE;
+
+static HKL latin_locale = NULL;
+static gboolean latin_locale_loaded = FALSE;
 
 static LRESULT 
 real_window_procedure (HWND   hwnd,
@@ -244,6 +247,9 @@ real_window_procedure (HWND   hwnd,
       else
 	{
 	  _gdk_event_queue_append (eventp);
+
+	  if (eventp->type == GDK_BUTTON_PRESS)
+	    _gdk_event_button_generate (eventp);
 #if 1
 	  /* Wake up WaitMessage */
 	  PostMessage (NULL, gdk_ping_msg, 0, 0);
@@ -302,6 +308,43 @@ _gdk_events_init (void)
   HMODULE user32, imm32;
   HINSTANCE commctrl32;
 #endif
+  int i, j, n;
+
+  /* List of languages that use a latin keyboard. Somewhat sorted in
+   * "order of least surprise", in case we have to load one of them if
+   * the user only has arabic loaded, for instance.
+   */
+  static int latin_languages[] = {
+    LANG_ENGLISH,
+    LANG_SPANISH,
+    LANG_PORTUGUESE,
+    LANG_FRENCH,
+    LANG_GERMAN,
+    /* Rest in numeric order */
+    LANG_CZECH,
+    LANG_DANISH,
+    LANG_FINNISH,
+    LANG_HUNGARIAN,
+    LANG_ICELANDIC,
+    LANG_ITALIAN,
+    LANG_DUTCH,
+    LANG_NORWEGIAN,
+    LANG_POLISH,
+    LANG_ROMANIAN,
+    LANG_SLOVAK,
+    LANG_ALBANIAN,
+    LANG_SWEDISH,
+    LANG_TURKISH,
+    LANG_INDONESIAN,
+    LANG_SLOVENIAN,
+    LANG_ESTONIAN,
+    LANG_LATVIAN,
+    LANG_LITHUANIAN,
+    LANG_VIETNAMESE,
+    LANG_AFRIKAANS,
+    LANG_FAEROESE,
+    LANG_SWAHILI
+  };
 
   gdk_ping_msg = RegisterWindowMessage ("gdk-ping");
   GDK_NOTE (EVENTS, g_print ("gdk-ping = %#x\n", gdk_ping_msg));
@@ -313,6 +356,47 @@ _gdk_events_init (void)
    */
   msh_mousewheel_msg = RegisterWindowMessage ("MSWHEEL_ROLLMSG");
   GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL = %#x\n", msh_mousewheel_msg));
+
+  /* Check if we have some input locale identifier loaded that uses a
+   * latin keyboard, to be able to get the virtual-key code for the
+   * latin characters corresponding to ASCII control characters.
+   */
+  if ((n = GetKeyboardLayoutList (0, NULL)) == 0)
+    WIN32_API_FAILED ("GetKeyboardLayoutList");
+  else
+    {
+      HKL *hkl_list = g_new (HKL, n);
+      if (GetKeyboardLayoutList (n, hkl_list) == 0)
+	WIN32_API_FAILED ("GetKeyboardLayoutList");
+      else
+	{
+	  for (i = 0; latin_locale == NULL && i < n; i++)
+	    for (j = 0; j < G_N_ELEMENTS (latin_languages); j++)
+	      if (PRIMARYLANGID (LOWORD (hkl_list[i])) == latin_languages[j])
+		{
+		  latin_locale = hkl_list [i];
+		  break;
+		}
+	}
+      g_free (hkl_list);
+    }
+
+  if (latin_locale == NULL)
+    {
+      /* Try to load a keyboard layout with latin characters then.
+       */
+      i = 0;
+      while (latin_locale == NULL && i < G_N_ELEMENTS (latin_languages))
+	{
+	  char id[9];
+	  sprintf (id, "%08x", MAKELANGID (latin_languages[i++], SUBLANG_DEFAULT));
+	  latin_locale = LoadKeyboardLayout (id, KLF_NOTELLSHELL|KLF_SUBSTITUTE_OK);
+	  if (latin_locale != NULL)
+	    latin_locale_loaded = TRUE;
+	}
+    }
+
+  GDK_NOTE (EVENTS, g_print ("latin_locale = %08x\n", (guint) latin_locale));
 
   source = g_source_new (&event_funcs, sizeof (GSource));
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
@@ -387,7 +471,7 @@ gdk_events_pending (void)
 {
   MSG msg;
 
-  return (_gdk_event_queue_find_first() ||
+  return (_gdk_event_queue_find_first () ||
 	  PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE));
 }
 
@@ -445,27 +529,27 @@ event_mask_string (GdkEventMask mask)
 #define BIT(x) \
   if (mask & GDK_##x##_MASK) \
     p += sprintf (p, "%s" #x, (p > bfr ? " " : ""))
-  BIT(EXPOSURE);
-  BIT(POINTER_MOTION);
-  BIT(POINTER_MOTION_HINT);
-  BIT(BUTTON_MOTION);
-  BIT(BUTTON1_MOTION);
-  BIT(BUTTON2_MOTION);
-  BIT(BUTTON3_MOTION);
-  BIT(BUTTON_PRESS);
-  BIT(BUTTON_RELEASE);
-  BIT(KEY_PRESS);
-  BIT(KEY_RELEASE);
-  BIT(ENTER_NOTIFY);
-  BIT(LEAVE_NOTIFY);
-  BIT(FOCUS_CHANGE);
-  BIT(STRUCTURE);
-  BIT(PROPERTY_CHANGE);
-  BIT(VISIBILITY_NOTIFY);
-  BIT(PROXIMITY_IN);
-  BIT(PROXIMITY_OUT);
-  BIT(SUBSTRUCTURE);
-  BIT(SCROLL);
+  BIT (EXPOSURE);
+  BIT (POINTER_MOTION);
+  BIT (POINTER_MOTION_HINT);
+  BIT (BUTTON_MOTION);
+  BIT (BUTTON1_MOTION);
+  BIT (BUTTON2_MOTION);
+  BIT (BUTTON3_MOTION);
+  BIT (BUTTON_PRESS);
+  BIT (BUTTON_RELEASE);
+  BIT (KEY_PRESS);
+  BIT (KEY_RELEASE);
+  BIT (ENTER_NOTIFY);
+  BIT (LEAVE_NOTIFY);
+  BIT (FOCUS_CHANGE);
+  BIT (STRUCTURE);
+  BIT (PROPERTY_CHANGE);
+  BIT (VISIBILITY_NOTIFY);
+  BIT (PROXIMITY_IN);
+  BIT (PROXIMITY_OUT);
+  BIT (SUBSTRUCTURE);
+  BIT (SCROLL);
 #undef BIT
 
   return bfr;
@@ -886,15 +970,21 @@ build_pointer_event_state (MSG *msg)
 static guint
 vk_from_char (guint c)
 {
-  switch (c)
+  HKL locale = _gdk_input_locale;
+
+  /* For some control characters (control-C, control-J and control-M),
+   * VkKeyScanEx returns special keycodes (different from the
+   * corresponding uncontrolified character).  Thus, for control
+   * characters, uncontrolify it first and return the virtual-key code
+   * it would have on a Latin-based keyboard, otherwise stuff breaks.
+   */
+  if (latin_locale != NULL && c >= '\000' && c <= '\032')
     {
-    case '\b':
-      return 'H';
-    case '\t':
-      return 'I';
-    default:
-      return (VkKeyScanEx (c, _gdk_input_locale) & 0xFF);
+      c += '@';
+      locale = latin_locale;
     }
+
+  return (VkKeyScanEx (c, locale) & 0xFF);
 }
 
 static void
@@ -1005,6 +1095,7 @@ build_keyrelease_event (GdkEvent *event,
 
   if (msg->message == WM_CHAR || msg->message == WM_SYSCHAR)
     {
+      event->key.hardware_keycode = vk_from_char (msg->wParam);
       if (msg->wParam < ' ')
 	{
 	  event->key.keyval = msg->wParam + '@';
@@ -1018,7 +1109,6 @@ build_keyrelease_event (GdkEvent *event,
 	  
 	  event->key.keyval = gdk_unicode_to_keyval (wbuf);
 	}
-      event->key.hardware_keycode = vk_from_char (msg->wParam);
     }
   else
     {
@@ -1155,6 +1245,11 @@ print_event (GdkEvent *event)
 		(event->crossing.detail == GDK_NOTIFY_ANCESTOR ? "ANCESTOR" :
 		 (event->crossing.detail == GDK_NOTIFY_NONLINEAR ? "NONLINEAR" :
 		  "???"))));
+      break;
+    case GDK_CONFIGURE:
+      g_print ("x:%d y:%d w:%d h:%d",
+	       event->configure.x, event->configure.y,
+	       event->configure.width, event->configure.height);
       break;
     case GDK_SCROLL:
       g_print ("%s ",
@@ -1367,7 +1462,8 @@ synthesize_crossing_events (GdkWindow *window,
   if (current_window)
     gdk_window_unref (current_window);
   current_window = window;
-  gdk_window_ref (current_window);
+  if (current_window)
+    gdk_window_ref (current_window);
 }
 
 #if 0
@@ -1572,6 +1668,11 @@ propagate (GdkWindow  **window,
 		  return FALSE;
 		}
 	    }
+	  else if (GDK_WINDOW_OBJECT (*window)->parent == NULL)
+	    {
+	      GDK_NOTE (EVENTS, g_print ("...parent NULL (?), undelivered\n"));
+	      return FALSE;
+	    }
 	  else
 	    {
 	      gdk_drawable_unref (*window);
@@ -1580,8 +1681,8 @@ propagate (GdkWindow  **window,
 	      GDK_NOTE (EVENTS, g_print ("%s %p",
 					 (in_propagation ? "," : " ...propagating to"),
 					 GDK_WINDOW_HWND (*window)));
-	      /* The only branch where we actually continue the loop */
 	      in_propagation = TRUE;
+	      /* The only branch where we actually continue the loop */
 	    }
 	}
       else
@@ -1930,10 +2031,10 @@ gdk_event_translate (GdkEvent *event,
 	   * removed it. Repost the same message to our queue so that
 	   * we will get it later when we are prepared.
 	   */
-	  GDK_NOTE(MISC, g_print("gdk_event_translate: %p %s posted.\n",
-				 msg->hwnd, 
-				 msg->message == WM_MOVE ?
-				 "WM_MOVE" : "WM_SIZE"));
+	  GDK_NOTE (MISC, g_print ("gdk_event_translate: %p %s posted.\n",
+				   msg->hwnd, 
+				   msg->message == WM_MOVE ?
+				   "WM_MOVE" : "WM_SIZE"));
 	
 	  PostMessage (msg->hwnd, msg->message,
 		       msg->wParam, msg->lParam);
@@ -1943,8 +2044,8 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  window = (UNALIGNED GdkWindow*) (((LPCREATESTRUCT) msg->lParam)->lpCreateParams);
 	  GDK_WINDOW_HWND (window) = msg->hwnd;
-	  GDK_NOTE (EVENTS, g_print ("gdk_event_translate: created %#x\n",
-				     (guint) msg->hwnd));
+	  GDK_NOTE (EVENTS, g_print ("gdk_event_translate: created %p\n",
+				     msg->hwnd));
 # if 0
 	  /* This should handle allmost all the other window==NULL cases.
 	   * This code is executed while gdk_window_new is in it's 
@@ -1952,14 +2053,14 @@ gdk_event_translate (GdkEvent *event,
 	   * Don't insert xid there a second time, if it's done here. 
 	   */
 	  gdk_drawable_ref (window);
-	  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND(window), window);
+	  gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 # endif
 	}
       else
       {
-        GDK_NOTE (EVENTS, g_print ("gdk_event_translate: %s for %#x (NULL)\n",
-                                   gdk_win32_message_name(msg->message),
-				   (guint) msg->hwnd));
+        GDK_NOTE (EVENTS, g_print ("gdk_event_translate: %s for %p (NULL)\n",
+                                   gdk_win32_message_name (msg->message),
+				   msg->hwnd));
       }
 #endif
       return FALSE;
@@ -2111,7 +2212,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_SYSKEYUP:
     case WM_SYSKEYDOWN:
       GDK_NOTE (EVENTS,
-		g_print ("WM_SYSKEY%s: %p  %s vk:%.02x %s\n",
+		g_print ("WM_SYSKEY%s: %p  %s ch:%.02x %s\n",
 			 (msg->message == WM_SYSKEYUP ? "UP" : "DOWN"),
 			 msg->hwnd,
 			 (GetKeyNameText (msg->lParam, buf,
@@ -2135,7 +2236,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_KEYUP:
     case WM_KEYDOWN:
       GDK_NOTE (EVENTS, 
-		g_print ("WM_KEY%s: %p  %s vk:%.02x %s\n",
+		g_print ("WM_KEY%s: %p  %s ch:%.02x %s\n",
 			 (msg->message == WM_KEYUP ? "UP" : "DOWN"),
 			 msg->hwnd,
 			 (GetKeyNameText (msg->lParam, buf,
@@ -2163,7 +2264,7 @@ gdk_event_translate (GdkEvent *event,
 	case VK_BACK:
 	  event->key.keyval = GDK_BackSpace; break;
 	case VK_TAB:
-	  event->key.keyval = (GetKeyState(VK_SHIFT) < 0 ? 
+	  event->key.keyval = (GetKeyState (VK_SHIFT) < 0 ? 
 	    GDK_ISO_Left_Tab : GDK_Tab);
 	  break;
 	case VK_CLEAR:
@@ -2560,8 +2661,6 @@ gdk_event_translate (GdkEvent *event,
       event->button.button = button;
       event->button.device = _gdk_core_pointer;
 
-      _gdk_event_button_generate (event);
-      
       return_val = !GDK_WINDOW_DESTROYED (window);
       break;
 
@@ -2644,8 +2743,8 @@ gdk_event_translate (GdkEvent *event,
 	break;
 
       /* HB: only process mouse move messages if we own the active window. */
-      GetWindowThreadProcessId(GetActiveWindow(), &pidActWin);
-      GetWindowThreadProcessId(msg->hwnd, &pidThis);
+      GetWindowThreadProcessId (GetActiveWindow (), &pidActWin);
+      GetWindowThreadProcessId (msg->hwnd, &pidThis);
       if (pidActWin != pidThis)
 	break;
 
@@ -2969,9 +3068,9 @@ gdk_event_translate (GdkEvent *event,
           expose_rect.width = paintstruct.rcPaint.right - paintstruct.rcPaint.left;
           expose_rect.height = paintstruct.rcPaint.bottom - paintstruct.rcPaint.top;
 
-	    _gdk_window_process_expose (window, msg->time, &expose_rect);
+	  _gdk_window_process_expose (window, msg->time, &expose_rect);
 
-	    return_val = FALSE;
+	  return_val = FALSE;
         }
       break;
 
@@ -3158,8 +3257,8 @@ gdk_event_translate (GdkEvent *event,
 	break;
 
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD
-	  && !IsIconic(msg->hwnd)
-          && IsWindowVisible(msg->hwnd))
+	  && !IsIconic (msg->hwnd)
+          && IsWindowVisible (msg->hwnd))
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
@@ -3186,8 +3285,8 @@ gdk_event_translate (GdkEvent *event,
 	break;
 
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD
-	  && !IsIconic(msg->hwnd)
-          && IsWindowVisible(msg->hwnd))
+	  && !IsIconic (msg->hwnd)
+          && IsWindowVisible (msg->hwnd))
 	{
 	  LPWINDOWPOS lpwp = (LPWINDOWPOS) (msg->lParam);
 
@@ -3330,7 +3429,7 @@ gdk_event_translate (GdkEvent *event,
       /* Fall through */
     wintab:
       event->any.window = window;
-      return_val = _gdk_input_other_event(event, msg, window);
+      return_val = _gdk_input_other_event (event, msg, window);
       break;
 #endif
 
@@ -3384,33 +3483,7 @@ _gdk_events_queue (void)
 	TranslateMessage (&msg);
 #endif
 
-#if 1 /* It was like this all the time */
       DispatchMessage (&msg);
-#else /* but this one is more similar to the X implementation. Any effect ? */
-      event = _gdk_event_new ();
-      
-      event->any.type = GDK_NOTHING;
-      event->any.window = NULL;
-      event->any.send_event = InSendMessage ();
-
-      ((GdkEventPrivate *)event)->flags |= GDK_EVENT_PENDING;
-
-      _gdk_event_queue_append (event);
-      node = _gdk_queued_tail;
-
-      if (gdk_event_translate (event, &msg, NULL, NULL, FALSE))
-	{
-	  ((GdkEventPrivate *)event)->flags &= ~GDK_EVENT_PENDING;
-	}
-      else
-	{
-	  _gdk_event_queue_remove_link (node);
-	  g_list_free_1 (node);
-	  gdk_event_free (event);
-        DispatchMessage (&msg);
-	}
-
-#endif
     }
 }
 
@@ -3426,7 +3499,7 @@ gdk_event_prepare (GSource *source,
   *timeout = -1;
 
   retval = (_gdk_event_queue_find_first () != NULL)
-	      || PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE);
+	    || PeekMessage (&msg, NULL, 0, 0, PM_NOREMOVE);
 
   GDK_THREADS_LEAVE ();
 
@@ -3461,8 +3534,8 @@ gdk_event_dispatch (GSource     *source,
  
   GDK_THREADS_ENTER ();
 
-  _gdk_events_queue();
-  event = _gdk_event_unqueue();
+  _gdk_events_queue ();
+  event = _gdk_event_unqueue ();
 
   if (event)
     {

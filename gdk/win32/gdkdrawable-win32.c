@@ -255,13 +255,13 @@ gdk_win32_set_colormap (GdkDrawable *drawable,
  * too limited to do so
  */
 static inline gboolean
-render_line_horizontal (HDC hdc,
-                        int x1, 
-                        int x2,
-                        int y,
-                        int pen_width,
-                        int *dashes,
-                        int num_dashes)
+render_line_horizontal (HDC    hdc,
+                        int    x1, 
+                        int    x2,
+                        int    y,
+                        int    pen_width,
+                        DWORD *dashes,
+                        int    num_dashes)
 {
   int n;
   for (n = 0; x1 < x2; n++)
@@ -282,17 +282,19 @@ render_line_horizontal (HDC hdc,
 
       x1 += dashes[n % num_dashes];
     }
+
+  return TRUE;
 }
 
 
 static inline gboolean
-render_line_vertical (HDC hdc,
-                        int x, 
-                        int y1,
-                        int y2,
-                        int pen_width,
-                        int *dashes,
-                        int num_dashes)
+render_line_vertical (HDC    hdc,
+		      int    x, 
+		      int    y1,
+		      int    y2,
+		      int    pen_width,
+		      DWORD *dashes,
+		      int    num_dashes)
 {
   int n;
   for (n = 0; y1 < y2; n++)
@@ -311,6 +313,8 @@ render_line_vertical (HDC hdc,
           }
       y1 += dashes[n % num_dashes];
     }
+
+  return TRUE;
 }
 
 static void

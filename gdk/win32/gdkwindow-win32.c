@@ -946,9 +946,7 @@ gdk_window_resize (GdkWindow *window,
 		   gint       width,
 		   gint       height)
 {
-  GdkWindowObject *private = (GdkWindowObject*) window;
-  GdkWindowImplWin32 *impl;
-  int x, y;
+  GdkWindowObject *private;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -958,7 +956,7 @@ gdk_window_resize (GdkWindow *window,
   if (height < 1)
     height = 1;
 
-  impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+  private = (GdkWindowObject*) window;
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -967,10 +965,15 @@ gdk_window_resize (GdkWindow *window,
 				       width, height);
       else
 	{
+	  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
 	  POINT pt;
 	  RECT rect;
 	  DWORD dwStyle;
 	  DWORD dwExStyle;
+	  int x, y;
+
+	  if (width != impl->width || height != impl->height)
+	    private->resize_count += 1;
 
 	  pt.x = 0;
 	  pt.y = 0; 
@@ -994,7 +997,6 @@ gdk_window_resize (GdkWindow *window,
 	                     SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER))
 	    WIN32_API_FAILED ("SetWindowPos");
 	}
-      private->resize_count += 1;
     }
 }
 
@@ -1005,8 +1007,7 @@ gdk_window_move_resize (GdkWindow *window,
 			gint       width,
 			gint       height)
 {
-  GdkWindowObject *private = (GdkWindowObject*) window;
-  GdkWindowImplWin32 *impl;
+  GdkWindowObject *private;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1016,14 +1017,10 @@ gdk_window_move_resize (GdkWindow *window,
   if (height < 1)
     height = 1;
   
-  impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+  private = (GdkWindowObject*) window;
 
-  if (!private->destroyed)
+  if (!GDK_WINDOW_DESTROYED (window))
     {
-      RECT rect;
-      DWORD dwStyle;
-      DWORD dwExStyle;
-
       GDK_NOTE (MISC, g_print ("gdk_window_move_resize: %p %dx%d@+%d+%d\n",
 			       GDK_WINDOW_HWND (window),
 			       width, height, x, y));
@@ -1032,6 +1029,14 @@ gdk_window_move_resize (GdkWindow *window,
 	_gdk_window_move_resize_child (window, x, y, width, height);
       else
 	{
+	  GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
+	  RECT rect;
+	  DWORD dwStyle;
+	  DWORD dwExStyle;
+
+	  if (width != impl->width || height != impl->height)
+	    private->resize_count += 1;
+	  
 	  rect.left = x;
 	  rect.top = y;
 	  rect.right = x + width;

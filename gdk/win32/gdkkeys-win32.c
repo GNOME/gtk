@@ -44,6 +44,30 @@ static GdkKeymap *default_keymap = NULL;
 
 static guint *keysym_tab = NULL;
 
+#ifdef G_ENABLE_DEBUG
+static void
+print_keysym_tab (void)
+{
+  gint vk;
+  
+  g_print ("keymap:\n");
+  for (vk = 0; vk < 256; vk++)
+    {
+      gint state;
+      
+      g_print ("%#.02x: ", vk);
+      for (state = 0; state < 4; state++)
+	{
+	  gchar *name = gdk_keyval_name (keysym_tab[vk*4 + state]);
+	  if (name == NULL)
+	    name = "(none)";
+	  g_print ("%s ", name);
+	}
+      g_print ("\n");
+    }
+}
+#endif
+
 static void
 update_keymap (void)
 {
@@ -262,28 +286,7 @@ update_keymap (void)
 	  key_state[vk] = 0;
 	}
     }
-#ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_EVENTS)
-    {
-      gint vk;
-
-      g_print ("keymap:\n");
-      for (vk = 0; vk < 256; vk++)
-	{
-	  gint state;
-
-	  g_print ("%#.02x: ", vk);
-	  for (state = 0; state < 4; state++)
-	    {
-	      gchar *name = gdk_keyval_name (keysym_tab[vk*4 + state]);
-	      if (name == NULL)
-		name = "(none)";
-	      g_print ("%s ", name);
-	    }
-	  g_print ("\n");
-	}
-    }
-#endif
+  GDK_NOTE (EVENTS, print_keysym_tab ());
 } 
 
 GdkKeymap*

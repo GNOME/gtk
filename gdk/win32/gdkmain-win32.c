@@ -57,9 +57,9 @@ GdkArgDesc _gdk_windowing_args[] = {
 };
 
 int __stdcall
-DllMain(HINSTANCE hinstDLL,
-	DWORD     dwReason,
-	LPVOID    reserved)
+DllMain (HINSTANCE hinstDLL,
+	 DWORD     dwReason,
+	 LPVOID    reserved)
 {
   gdk_dll_hinstance = hinstDLL;
 
@@ -92,9 +92,9 @@ _gdk_windowing_init_check (int    argc,
 		 LOCALE_IDEFAULTANSICODEPAGE,
 		 buf, sizeof (buf));
   _gdk_input_codepage = atoi (buf);
-  GDK_NOTE (MISC, g_print ("input_locale: %#lx, codepage:%d\n",
-			   _gdk_input_locale, _gdk_input_codepage));
-
+  GDK_NOTE (EVENTS, g_print ("input_locale:%#lx, codepage:%d\n",
+			     _gdk_input_locale, _gdk_input_codepage));
+  
   CoInitialize (NULL);
 
   cf_rtf = RegisterClipboardFormat ("Rich Text Format");
@@ -246,13 +246,13 @@ gdk_screen_height_mm (void)
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)
 {
-  g_warning("gdk_set_sm_client_id %s", sm_client_id ? sm_client_id : "NULL");
+  g_warning ("gdk_set_sm_client_id %s", sm_client_id ? sm_client_id : "NULL");
 }
 
 void
 gdk_beep (void)
 {
-  Beep(1000, 50);
+  Beep (1000, 50);
 }
 
 void
