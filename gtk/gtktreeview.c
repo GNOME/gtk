@@ -8708,15 +8708,45 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
   GtkTreeIter temp;
   gboolean expand;
 
-
   if (node->children && !open_all)
-    return TRUE;
+    return FALSE;
+
   if (! GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT))
     return FALSE;
 
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
   if (! gtk_tree_model_iter_has_child (tree_view->priv->model, &iter))
     return FALSE;
+
+
+   if (node->children && open_all)
+    {
+      gboolean retval = FALSE;
+      GtkTreePath *tmp_path = gtk_tree_path_copy (path);
+
+      gtk_tree_path_append_index (tmp_path, 0);
+      tree = node->children;
+      node = tree->root;
+      while (node->left != tree->nil)
+	node = node->left;
+      /* try to expand the children */
+      do
+        {
+         gboolean t;
+	 t = gtk_tree_view_real_expand_row (tree_view, tmp_path, tree, node,
+					    TRUE, animate);
+         if (t)
+           retval = TRUE;
+
+         gtk_tree_path_next (tmp_path);
+	 node = _gtk_rbtree_next (tree, node);
+       }
+      while (node != NULL);
+
+      gtk_tree_path_free (tmp_path);
+
+      return retval;
+    }
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[TEST_EXPAND_ROW], 0, &iter, path, &expand);
 
@@ -10424,8 +10454,6 @@ gtk_tree_view_search_iter (GtkTreeModel     *model,
   GtkTreePath *path;
 
   GtkTreeView *tree_view = gtk_tree_selection_get_tree_view (selection);
-  GtkTreeViewColumn *column =
-    gtk_tree_view_get_column (tree_view, tree_view->priv->search_column);
 
   path = gtk_tree_model_get_path (model, iter);
   _gtk_tree_view_find_node (tree_view, path, &tree, &node);
