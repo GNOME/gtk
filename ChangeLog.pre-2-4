@@ -1,3 +1,8 @@
+2003-02-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkiconfactory.h: Use GDK_MULTIHEAD_SAFE like all other gtk
+	headers. Sorry about gtk_selection_clear, Yosh.
+
 Thu Jan 30 17:16:05 2003  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkselection.h: declare gtk_selection_clear in GTK_COMPILATION
