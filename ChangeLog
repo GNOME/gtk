@@ -1,3 +1,8 @@
+Fri Dec 26 23:24:35 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkactiongroup.c (gtk_action_group_add_radio_actions_full): 
+	Don't use first_action without initializing it if n_entries is 0.
+
 Thu Dec 25 00:26:34 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/x11/gdkcursor-x11.c (gdk_display_get_default_cursor_size):

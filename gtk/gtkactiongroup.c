@@ -630,7 +630,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
   GtkTranslateFunc translate_func;
   gpointer translate_data;
   GSList *group = NULL;
-  GtkAction *first_action;
+  GtkAction *first_action = NULL;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
@@ -694,7 +694,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup      *action_group,
       g_object_unref (action);
     }
 
-  if (on_change)
+  if (on_change && first_action)
     g_signal_connect_data (first_action, "changed",
 			   on_change, user_data, 
 			   (GClosureNotify)destroy, 0);
