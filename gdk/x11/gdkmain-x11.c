@@ -1876,6 +1876,14 @@ gdk_event_translate (GdkEvent *event,
 
       if(dnd_drag_perhaps)
 	{
+	  {
+	    XSetWindowAttributes attrs;
+	    /* Reset event mask to pre-drag value, assuming event_mask
+	       doesn't change during drag */
+	    attrs.event_mask = real_sw->dnd_drag_savedeventmask;
+	    XChangeWindowAttributes(gdk_display, real_sw->xwindow,
+				      CWEventMask, &attrs);
+	  }
 	if(gdk_dnd.drag_really)
 	  {
 	  GdkPoint foo;
@@ -1887,16 +1895,6 @@ gdk_event_translate (GdkEvent *event,
 	  if(dnd_drag_target != None)
 	    gdk_dnd_drag_end(dnd_drag_target, foo);
 	  gdk_dnd.drag_really = 0;
-
-	  if(gdk_dnd.drag_numwindows)
-	    {
-	      XSetWindowAttributes attrs;
-	      /* Reset event mask to pre-drag value, assuming event_mask
-		 doesn't change during drag */
-	      attrs.event_mask = real_sw->dnd_drag_savedeventmask;
-	      XChangeWindowAttributes(gdk_display, real_sw->xwindow,
-				      CWEventMask, &attrs);
-	    }
 
 	  gdk_dnd.drag_numwindows = 0;
 	  if(gdk_dnd.drag_startwindows)
@@ -1913,8 +1911,9 @@ gdk_event_translate (GdkEvent *event,
 	dnd_drag_dropzone.x = dnd_drag_dropzone.y = 0;
 	dnd_drag_dropzone.width = dnd_drag_dropzone.height = 0;
 	dnd_drag_curwin = None;
-      }
-      return_val = window_private && !window_private->destroyed;
+	return_val = window_private?TRUE:FALSE;
+      } else
+	return_val = window_private && !window_private->destroyed;
       break;
 
     case MotionNotify:
