@@ -717,10 +717,12 @@ pango_fb_font_get_metrics (PangoFont        *font,
 
   ftf = PANGO_FB_FONT (font)->ftf;
 
+  pango_fb_font_set_size (font);
+
   if (metrics)
     {
-      metrics->ascent = ftf->ascender * PANGO_SCALE >> 6;
-      metrics->descent = ftf->descender * PANGO_SCALE >> 6;
+      metrics->ascent = ftf->size->metrics.ascender * PANGO_SCALE >> 6;
+      metrics->descent = ftf->size->metrics.descender * PANGO_SCALE >> 6;
     }
 }
 

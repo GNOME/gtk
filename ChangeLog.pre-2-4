@@ -1,3 +1,55 @@
+2000-11-22  Alexander Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkpango-fb.c (pango_fb_font_get_metrics):
+	Correct calculation of font metrics. Now GtkEntrys have sane
+	size.
+
+2000-11-22  Alexander Larsson  <alexl@redhat.com>
+
+        * gdk/gdktypes.h:
+	Add new type GdkSpan
+	
+	* docs/reference/gdk/gdk-sections.txt,
+	docs/reference/gdk/tmpl/regions.sgml, gdk/gdkregion-generic.c,
+	gdk/gdkregion.h:
+	Implement and document gdk_region_spans_intersect_foreach.
+
+	* gdk/linux-fb/Makefile.am, gdk/linux-fb/gdkrender-fb.c:
+	Add new file gdkrender-fb.c which contains all core
+	rendering code.
+	Add gdk_fb_fill_rectangle_generic (old rectangle code) and
+	gdk_fb_fill_rectangle_simple_16, gdk_fb_fill_rectangle_simple_32
+	(optimized rectangle fillers).
+
+	* gdk/linux-fb/gdkdrawable-fb2.c:
+	Move all rendering code to gdkrender-fb.c.
+	Change from using GdkRectangles and GdkSegments for spans to GdkSpan.
+	Use the new span intersection functions in gdk_fb_fill_spans.
+	gdk_fb_draw_rectangle() clips filled rectangles and calls
+	gc->fill_rectangle with the result.
+	gdk_fb_fill_spans() gets extra argument "sorted".
+
+	* gdk/linux-fb/gdkevents-fb.c:
+	Remove unused includes and defines.
+	New function gdk_fb_get_time() to get correct time for events.
+
+	* gdk/linux-fb/gdkinput-ps2.c:
+	Use gdk method of generating multiple-clicks (gdk_event_button_generate)
+	Make sure to set the time of all events.
+
+	* gdk/linux-fb/gdkmain-fb.c:
+	Use gdk_fb_get_time ().
+
+	* gdk/linux-fb/gdkprivate-fb.h:
+	New virtual GC calls: fill_span & fill_rectangle.
+	Export gdk_fb_get_time().
+	gdk_fb_fill_spans() gets extra argument "sorted".
+
+	* gdk/linux-fb/mi*.c:
+	Use GdkSpan instead of GdkRectangle.
+	Pass correct sorted to gdk_fb_fill_spans. (sorted value taken
+	from XFree 4 source)
+	
 2000-11-22    <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_calc_size): It's amazing what
