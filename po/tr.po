@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.9\n"
 "POT-Creation-Date: 2001-02-28 19:20-0500\n"
-"PO-Revision-Date: 2001-03-02 19:41+0100\n"
+"PO-Revision-Date: 2001-03-18 16:35+0100\n"
 "Last-Translator: Fatih Demir <kabalak@gtranslator.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -22,19 +22,19 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
-msgstr "Deðer"
+msgstr "Deðer:"
 
 #: gtk/gtkcolorsel.c:224
 msgid "Red:"
-msgstr "Kýrmýzý"
+msgstr "Kýrmýzý:"
 
 #: gtk/gtkcolorsel.c:225
 msgid "Green:"
-msgstr "Yeþil"
+msgstr "Yeþil:"
 
 #: gtk/gtkcolorsel.c:226
 msgid "Blue:"
-msgstr "Mavi"
+msgstr "Mavi:"
 
 #: gtk/gtkcolorsel.c:227
 msgid "Opacity:"
@@ -74,15 +74,15 @@ msgstr "Dizin okunamýyor: %s"
 
 #: gtk/gtkfilesel.c:551
 msgid "Create Dir"
-msgstr "Dizin yarat"
+msgstr "Dizin Yarat"
 
 #: gtk/gtkfilesel.c:562 gtk/gtkfilesel.c:937
 msgid "Delete File"
-msgstr "Dosyayý sil"
+msgstr "Sil"
 
 #: gtk/gtkfilesel.c:573 gtk/gtkfilesel.c:1041
 msgid "Rename File"
-msgstr "Dosyayý yeniden adlandýr"
+msgstr "Yeniden Adlandýr"
 
 #.
 #. gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
@@ -100,11 +100,11 @@ msgstr "Kapat"
 
 #: gtk/gtkfilesel.c:832
 msgid "Create Directory"
-msgstr "Dizin yarat"
+msgstr "Dizin Yarat"
 
 #: gtk/gtkfilesel.c:846
 msgid "Directory name:"
-msgstr "Dizin adý"
+msgstr "Dizin adý:"
 
 #. buttons
 #: gtk/gtkfilesel.c:859
@@ -135,7 +135,7 @@ msgstr "Aile:"
 
 #: gtk/gtkfontsel.c:212
 msgid "Weight:"
-msgstr ""
+msgstr "Aðýrlýk:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
@@ -143,7 +143,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr ""
+msgstr "Geniþliði Belirle:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -151,11 +151,11 @@ msgstr "Stil ekle:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr ""
+msgstr "Piksel:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
-msgstr ""
+msgstr "Punto:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
@@ -171,7 +171,7 @@ msgstr "Boþluk:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr ""
+msgstr "Ortalama Geniþlik:"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -341,7 +341,7 @@ msgstr ""
 
 #: gtk/gtkfontsel.c:2185
 msgid "Font: (Filter Applied)"
-msgstr ""
+msgstr "Yaz#_i tipi: (Filtra uygulan#_iyor)"
 
 #: gtk/gtkfontsel.c:2661
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
@@ -390,7 +390,7 @@ msgstr "Pencere"
 
 #: gtk/gtkinputdialog.c:277
 msgid "Mode: "
-msgstr ""
+msgstr "Tür:"
 
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
@@ -464,3 +464,4 @@ msgstr ""
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
 msgstr "--- Yardým yok ---"
+
