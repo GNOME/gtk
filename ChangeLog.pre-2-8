@@ -1,3 +1,12 @@
+Tue Sep 14 22:01:49 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: New option --disable-visibility to disable
+	the use of ELF visibility attributes for PLT reduction.
+
+	* gtk/makegtkalias.pl: 
+	* gdk/makegdkalias.pl: Respect the DISABLE_VISIBILITY
+	define.
+
 Tue Sep 14 23:20:56 2004  Søren Sandmann  <sandmann@redhat.com>
 
 	* gtk/gtkaction.c (connect_proxy): Call
