@@ -1190,9 +1190,8 @@ if test "x$gdktarget" = "xx11"; then
 
   if $have_xcursor ; then
     AC_DEFINE(HAVE_XCURSOR, 1, Have the Xcursor library)
-    XCURSOR_PACKAGES="xcursor"
-  else
-    XCURSOR_PACKAGES=
+    GDK_EXTRA_CFLAGS="`$PKG_CONFIG --cflags xcursor` $GDK_EXTRA_CFLAGS"
+    GDK_EXTRA_LIBS="`$PKG_CONFIG --libs xcursor` $GDK_EXTRA_LIBS"
   fi
     
   # Xshm checks
@@ -1355,7 +1354,7 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-GDK_PACKAGES="$XCURSOR_PACKAGES $PANGO_PACKAGES"
+GDK_PACKAGES="$PANGO_PACKAGES"
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_LIBS"
 GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PIXBUF_PACKAGES $GDK_PACKAGES` $GDK_PIXBUF_EXTRA_CFLAGS $GDK_EXTRA_CFLAGS"
 

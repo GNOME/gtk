@@ -38,7 +38,6 @@
 
 
 #define BORDER_SPACING  0
-#define CHILD_SPACING   3
 #define DEFAULT_IPADDING 1
 
 static void gtk_menu_bar_class_init        (GtkMenuBarClass *klass);
@@ -227,13 +226,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
               requisition->width += toggle_size;
               
 	      requisition->height = MAX (requisition->height, child_requisition.height);
-	      /* Support for the right justified help menu */
-	      if ((children == NULL) && GTK_IS_MENU_ITEM(child) &&
-		  GTK_MENU_ITEM(child)->right_justify)
-		{
-		  requisition->width += CHILD_SPACING;
-		}
-
 	      nchildren += 1;
 	    }
 	}
@@ -252,9 +244,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	  requisition->width += widget->style->xthickness * 2;
 	  requisition->height += widget->style->ythickness * 2;
 	}
-
-      if (nchildren > 0)
-	requisition->width += 2 * CHILD_SPACING * (nchildren - 1);
     }
 }
 
@@ -269,9 +258,9 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   GtkAllocation child_allocation;
   GtkRequisition child_requisition;
   guint offset;
-  gint ipadding;
   GtkTextDirection direction;
   gint ltr_x;
+  gint ipadding;
 
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (allocation != NULL);
@@ -292,10 +281,9 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   if (menu_shell->children)
     {
       child_allocation.x = (GTK_CONTAINER (menu_bar)->border_width +
-                            ipadding + 
+			    ipadding + 
 			    BORDER_SPACING);
       child_allocation.y = (GTK_CONTAINER (menu_bar)->border_width +
-                            ipadding +
 			    BORDER_SPACING);
 
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
@@ -344,7 +332,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
                                                   toggle_size);
 	      gtk_widget_size_allocate (child, &child_allocation);
 
-	      ltr_x += child_allocation.width + CHILD_SPACING * 2;
+	      ltr_x += child_allocation.width;
 	    }
 	}
     }

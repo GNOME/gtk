@@ -2858,7 +2858,7 @@ gtk_toolbar_get_icon_size (GtkToolbar *toolbar)
  * @toolbar: a #GtkToolbar
  * 
  * Returns the relief style of buttons on @toolbar. See
- * gtk_button_set_relief_style().
+ * gtk_button_set_relief().
  * 
  * Return value: The relief style of buttons on @toolbar.
  * 

@@ -673,6 +673,10 @@ _gtk_rc_init (void)
 		       "  bg[NORMAL]   = \"#bab5ab\"\n"
 		       "}\n"
 		       "\n"
+		       "style \"gtk-default-menu-bar-item-style\" {\n"
+		       "  GtkMenuItem::horizontal_padding = 5\n"
+		       "}\n"
+		       "\n"
 		       "style \"gtk-default-menu-item-style\" {\n"
 		       "  bg[PRELIGHT] = \"#4b6983\"\n"
 		       "  fg[PRELIGHT] = \"#ffffff\"\n"
@@ -689,6 +693,11 @@ _gtk_rc_init (void)
 		       "widget_class \"*.GtkCheckMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
 		       "widget_class \"*.GtkImageMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
 		       "widget_class \"*.GtkSeparatorMenuItem.*\" style : gtk \"gtk-default-menu-item-style\"\n"
+		       "widget_class \"*GtkMenuBar*GtkMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
+		       "widget_class \"*GtkMenuBar*GtkAccelMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
+		       "widget_class \"*GtkMenuBar*GtkRadioMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
+		       "widget_class \"*GtkMenuBar*GtkCheckMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
+		       "widget_class \"*GtkMenuBar*GtkImageMenuItem\" style : gtk \"gtk-default-menu-bar-item-style\"\n"
       );
 }
   

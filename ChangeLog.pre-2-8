@@ -1,3 +1,24 @@
+Thu Feb 26 23:26:00 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkstatusbar.c (set_grip_cursor): New function. Use resize
+	cursors for resize grips. (Bug #129621)
+
+	* gtk/gtktoolbar.c (gtk_toolbar_get_relief_style): Documentation
+	fix - patch by Torsten Schoenfeld.
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_request): don't request
+	space between the items. (Bug #110775)
+
+	* gtk/gtkrc.c (_gtk_rc_init): Provide extra horizontal padding
+	inside menu items that are inside a menu bar. (Bug #110775)
+	
+	* configure.in (HAVE_XCURSOR): Make XCurosr part of GDK_EXTRA_,
+	not GDK_PACKAGES, to prevent applications from getting linked to
+	it (Bug #119804)
+
+	* gtk/gtkmenubar.c (gtk_menu_bar_size_allocate): Put the vertical
+	ipadding inside the item. (Bug #61843)
+
 Thu Feb 26 22:56:40 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkwidget.c: Replace gtk_widget_get_mnemonic_widgets() 
@@ -26,6 +47,7 @@ Thu Feb 26 22:19:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_new_text): Improve the docs.
 
+>>>>>>> 1.5032
 Thu Feb 26 15:43:43 2004  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkstyle.[ch]: Export insertion cursor drawing functionality
