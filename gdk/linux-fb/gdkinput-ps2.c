@@ -525,8 +525,6 @@ handle_mouse_input(MouseDevice *mouse, gboolean got_motion)
   GdkWindow *win;
   guint state;
 
-  g_print("mous pos: %f, %f\n", mouse->x, mouse->y);
-  
   if(_gdk_fb_pointer_grab_confine)
     mousewin = _gdk_fb_pointer_grab_confine;
   else
