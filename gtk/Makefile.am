@@ -262,7 +262,7 @@ gtktypebuiltins_evals.c: @REBUILD@ makeenums.pl gtk.defs
 	&& mv s-gtbe gtktypebuiltins_evals.c
 
 gtkmarshal.c gtkmarshal.h: @REBUILD@ gtkmarshal.list genmarshal.pl
-	srcdir=$(srcdir) perl $(srcdir)/genmarshal.pl
+	srcdir=$(srcdir) INDENT=$(INDENT) perl $(srcdir)/genmarshal.pl
 
 # ???
 # special remake rules

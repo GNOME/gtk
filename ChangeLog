@@ -1,3 +1,13 @@
+Sun Sep 20 09:52:39 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* HACKING: indent other than GNU indent should be OK
+	  now.
+
+	* gtk/genmarshal.pl gtk/Makefile.am: Call indent on file
+	  instead of piping through indent. If indent wasn't
+	  found in ./configure don't bother indenting at 
+	  all.
+
 Fri Sep 18 19:11:10 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdk.h: Add names to prototype for gdk_image_new_bitmap.

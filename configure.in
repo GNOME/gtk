@@ -113,6 +113,9 @@ fi
 AC_PROG_AWK
 AC_CHECK_PROGS(PERL, perl5 perl)
 
+# We would like indent, but don't require it.
+AC_CHECK_PROG(INDENT, indent, indent)
+
 REBUILD=\#
 if test -n "$PERL" && perl -v | grep 'version 5.' > /dev/null ; then
   if test -n "$AWK" ; then 
@@ -120,7 +123,7 @@ if test -n "$PERL" && perl -v | grep 'version 5.' > /dev/null ; then
   fi
 fi
 AC_SUBST(REBUILD)
-  
+
 dnl The DU4 header files don't provide library prototypes unless 
 dnl -std1 is given to the native cc.
 AC_MSG_CHECKING([for extra flags to get ANSI library prototypes])
