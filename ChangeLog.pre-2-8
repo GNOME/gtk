@@ -53,6 +53,15 @@ Sat Mar  7 20:20:53 1998  Tim Janik  <timj@gimp.org>
 	* gdk/gdk.c (gdk_signal): abort() on a signal if G_ENABLE_DEBUG
  	  is defined, so we dump core (gtk-draco-980305-0.patch.gz).
 
+Sat Mar  7 13:00:00 1998  The Rasterman <raster@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_xid_at_coords),(gdk_window_xid_at):
+	  added these two calls, gdk_window_xid_at_coords beign the one
+	  to actually call to look up the current X Window ID at a particular
+	  x,y co-ordinate onscreen accounting for a list of windows to be 
+	  excluded from this search. Useful for DND support.
+	* gdk/gdkprivate.h added in above function calls.
+
 Sat Mar  7 01:07:24 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkrange.c (gtk_range_expose): Fixed the vscrollbar
