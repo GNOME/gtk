@@ -1,3 +1,16 @@
+Overview of Changes in GTK+ 2.2.1
+=================================
+* GtkTreeView [Kristian Rietveld]
+  - made GtkTreeSortable work as the documentation advertises [Jarek Dukat]
+  - fixed gtk_tree_view_set_sort_column_id so you can disable sorting [Soeren
+    Sandmann, Jarek Dukat]
+  - TreeView search now works on all values transformable by GValue and not
+    just strings [Muktha Narayan]
+  - _move/_swap fixage in the Stores [Matthew Tuck, Paolo Maggi]
+  - a lot of misc bug fixes [Alex Duggan, Carlos Garnacho Parro, Hans Petter
+    Jansson, Kjartan Maraas, Soeren, Dave Camp, Murray Cumming, Dave Cook,
+    Gaël Le Mignot, Vasco Alexandre da Silva Costa]
+
 Overview of Changes in GTK+ 2.2.0
 =================================
 * Fix problem with the DND code and event filters [Bolian Yin, Owen Taylor]
