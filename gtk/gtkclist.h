@@ -189,9 +189,9 @@ struct _GtkCListClass
 {
   GtkContainerClass parent_class;
   
-  void  (*scroll_adjustments)   (GtkCList       *clist,
-				 GtkAdjustment  *hadjustment,
-				 GtkAdjustment  *vadjustment);
+  void  (*set_scroll_adjustments) (GtkCList       *clist,
+				   GtkAdjustment  *hadjustment,
+				   GtkAdjustment  *vadjustment);
   void   (*refresh)             (GtkCList       *clist);
   void   (*select_row)          (GtkCList       *clist,
 				 gint            row,

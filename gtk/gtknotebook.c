@@ -3565,9 +3565,9 @@ gtk_notebook_get_current_page (GtkNotebook *notebook)
   return g_list_index (notebook->children, notebook->cur_page);
 }
 
-GtkWidget *
-gtk_notebook_nth_page (GtkNotebook *notebook,
-		       gint         page_num)
+GtkWidget*
+gtk_notebook_get_nth_page (GtkNotebook *notebook,
+			   gint         page_num)
 {
   GtkNotebookPage *page;
 

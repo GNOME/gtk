@@ -55,9 +55,9 @@ struct _GtkViewportClass
 {
   GtkBinClass parent_class;
 
-  void	(*scroll_adjustments)	(GtkViewport	*viewport,
-				 GtkAdjustment	*hadjustment,
-				 GtkAdjustment	*vadjustment);
+  void	(*set_scroll_adjustments)	(GtkViewport	*viewport,
+					 GtkAdjustment	*hadjustment,
+					 GtkAdjustment	*vadjustment);
 };
 
 

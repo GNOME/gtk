@@ -680,22 +680,24 @@ gtk_window_size_request (GtkWidget      *widget,
 			 GtkRequisition *requisition)
 {
   GtkWindow *window;
+  GtkBin *bin;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
   g_return_if_fail (requisition != NULL);
 
   window = GTK_WINDOW (widget);
+  bin = GTK_BIN (window);
+  
+  requisition->width = GTK_CONTAINER (window)->border_width * 2;
+  requisition->height = GTK_CONTAINER (window)->border_width * 2;
 
-  if (window->bin.child)
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
-      requisition->width = GTK_CONTAINER (window)->border_width * 2;
-      requisition->height = GTK_CONTAINER (window)->border_width * 2;
+      gtk_widget_size_request (bin->child, &bin->child->requisition);
 
-      gtk_widget_size_request (window->bin.child, &window->bin.child->requisition);
-
-      requisition->width += window->bin.child->requisition.width;
-      requisition->height += window->bin.child->requisition.height;
+      requisition->width += bin->child->requisition.width;
+      requisition->height += bin->child->requisition.height;
     }
   else
     {
@@ -1292,7 +1294,8 @@ gtk_window_set_hints (GtkWidget      *widget,
       if (!window->allow_grow)
 	flags |= GDK_HINT_MAX_SIZE;
 
-      gdk_window_set_hints (widget->window, ux, uy,
+      gdk_window_set_hints (widget->window,
+			    ux, uy,
 			    requisition->width, requisition->height,
 			    requisition->width, requisition->height,
 			    flags);

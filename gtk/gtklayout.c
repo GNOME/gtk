@@ -343,11 +343,11 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->draw = gtk_layout_draw;
   widget_class->expose_event = gtk_layout_expose;
 
-  widget_class->scroll_adjustments_signal =
-    gtk_signal_new ("scroll_adjustments",
+  widget_class->set_scroll_adjustments_signal =
+    gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkLayoutClass, scroll_adjustments),
+		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
@@ -356,7 +356,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
 
-  class->scroll_adjustments = gtk_layout_set_adjustments;
+  class->set_scroll_adjustments = gtk_layout_set_adjustments;
 }
 
 static void
@@ -531,6 +531,9 @@ gtk_layout_size_request (GtkWidget     *widget,
   g_return_if_fail (GTK_IS_LAYOUT (widget));
 
   layout = GTK_LAYOUT (widget);
+
+  requisition->width = 0;
+  requisition->height = 0;
 
   tmp_list = layout->children;
 

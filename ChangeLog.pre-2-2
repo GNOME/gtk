@@ -1,3 +1,56 @@
+Wed Dec  2 01:39:02 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtknotebook.h: 
+	* gtk/gtknotebook.c: s/gtk_notebook_nth_page/gtk_notebook_get_nth_page/.
+
+	* incremented version number to 1.1.6 and made Gtk
+ 	dependant on GLib 1.1.6.
+
+	* gtk/gtkwidget.h (struct _GtkRequisition): changed width and height
+ 	from guint16 to gint16, since sizes bigger than 32767 are not supported
+ 	anyways, and aritmethics with intermediate negative values are possible
+ 	now.
+
+Tue Dec  1 00:00:04 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkscrolledwindow.c:
+	implementation of GTK_POLICY_NEVER functionality, added rationales
+	on the policy and size requisition handling at the top.
+	(gtk_scrolled_window_size_request):
+	we assume a default minimum for our child's width and height
+	if [hv]scrollbar_policy != GTK_POLICY_NEVER, except when the user
+	specified the dimension explicitely.
+ 	(gtk_scrolled_window_size_allocate): 
+	do not show scrollbars if [hv]scrollbar_policy == GTK_POLICY_NEVER.
+
+	* gtk/gtkviewport.c (gtk_viewport_size_request): report the real
+	size we require (including the child).
+
+        * gtk/gtkclist.c:
+	(gtk_clist_size_request): report the real size required.
+
+	* gtk/gtkenums.h (enum GtkPolicyType): added GTK_POLICY_NEVER.
+
+	* gtk/gtkobject.c (gtk_object_init_type): object_type doesn't
+	need to be a static variable.
+
+Mon Nov 30 22:41:25 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkclist.h: 
+	* gtk/gtkclist.c: 
+	* gtk/gtkviewport.h:
+	* gtk/gtkviewport.c:
+	* gtk/gtktext.h:
+	* gtk/gtktext.c:
+	* gtk/gtklayout.h:
+	* gtk/gtklayout.c:
+	* gtk/gtkwidget.h:
+	* gtk/gtkwidget.c:
+	* gtk/gtkscrolledwindow.h:
+	* gtk/gtkscrolledwindow.c:
+	s/scroll_adjustements/scroll_adjustments/
+	s/scroll_adjustments/set_scroll_adjustments/g
+
 Tue Dec  1 22:45:58 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.h (struct _GtkCListClass): new class method/signal

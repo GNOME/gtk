@@ -157,9 +157,9 @@ struct _GtkTextClass
 {
   GtkEditableClass parent_class;
 
-  void  (*scroll_adjustments)   (GtkText	*text,
-				 GtkAdjustment  *hadjustment,
-				 GtkAdjustment  *vadjustment);
+  void  (*set_scroll_adjustments)   (GtkText	    *text,
+				     GtkAdjustment  *hadjustment,
+				     GtkAdjustment  *vadjustment);
 };
 
 

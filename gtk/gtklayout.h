@@ -77,9 +77,9 @@ struct _GtkLayout {
 struct _GtkLayoutClass {
   GtkContainerClass parent_class;
 
-  void  (*scroll_adjustments)   (GtkLayout	*text,
-				 GtkAdjustment  *hadjustment,
-				 GtkAdjustment  *vadjustment);
+  void  (*set_scroll_adjustments)   (GtkLayout	    *layout,
+				     GtkAdjustment  *hadjustment,
+				     GtkAdjustment  *vadjustment);
 };
 
 GtkType        gtk_layout_get_type        (void);

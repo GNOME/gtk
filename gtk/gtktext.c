@@ -571,11 +571,11 @@ gtk_text_class_init (GtkTextClass *class)
   widget_class->focus_in_event = gtk_text_focus_in;
   widget_class->focus_out_event = gtk_text_focus_out;
   
-  widget_class->scroll_adjustments_signal =
-    gtk_signal_new ("scroll_adjustments",
+  widget_class->set_scroll_adjustments_signal =
+    gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkTextClass, scroll_adjustments),
+		    GTK_SIGNAL_OFFSET (GtkTextClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
@@ -598,7 +598,7 @@ gtk_text_class_init (GtkTextClass *class)
   editable_class->set_selection = gtk_text_set_selection;
   editable_class->set_position = gtk_text_set_position;
 
-  class->scroll_adjustments = gtk_text_set_adjustments;
+  class->set_scroll_adjustments = gtk_text_set_adjustments;
 }
 
 static void

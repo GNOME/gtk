@@ -110,8 +110,8 @@ typedef void (*GtkCallback) (GtkWidget *widget,
  */
 struct _GtkRequisition
 {
-  guint16 width;
-  guint16 height;
+  gint16 width;
+  gint16 height;
 };
 
 /* An allocation is a size and position. Where a widget
@@ -235,7 +235,7 @@ struct _GtkWidgetClass
    * handles the emission.
    * Implementation of this signal is optional.
    */
-  guint scroll_adjustments_signal;
+  guint set_scroll_adjustments_signal;
   
   /* basics */
   void (* show)		       (GtkWidget      *widget);
@@ -470,10 +470,10 @@ void	   gtk_widget_unlock_accelerators (GtkWidget	       *widget);
 gint	   gtk_widget_event		  (GtkWidget	       *widget,
 					   GdkEvent	       *event);
 
-gboolean   gtk_widget_activate		  (GtkWidget	       *widget);
-gboolean   gtk_widget_scroll_adjustements (GtkWidget           *widget,
-					   GtkAdjustment       *hadjustment,
-					   GtkAdjustment       *vadjustment);
+gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
+gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,
+					      GtkAdjustment    *hadjustment,
+					      GtkAdjustment    *vadjustment);
      
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 					   GtkWidget	       *new_parent);

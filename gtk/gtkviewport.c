@@ -37,7 +37,7 @@ static void gtk_viewport_set_arg		  (GtkObject        *object,
 static void gtk_viewport_get_arg		  (GtkObject        *object,
 						   GtkArg           *arg,
 						   guint             arg_id);
-static void gtk_viewport_scroll_adjustments	  (GtkViewport	    *viewport,
+static void gtk_viewport_set_scroll_adjustments	  (GtkViewport	    *viewport,
 						   GtkAdjustment    *hadjustment,
 						   GtkAdjustment    *vadjustment);
 static void gtk_viewport_map                      (GtkWidget        *widget);
@@ -130,17 +130,17 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->style_set = gtk_viewport_style_set;
 
-  widget_class->scroll_adjustments_signal =
-    gtk_signal_new ("scroll_adjustments",
+  widget_class->set_scroll_adjustments_signal =
+    gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkViewportClass, scroll_adjustments),
+		    GTK_SIGNAL_OFFSET (GtkViewportClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
   
   container_class->add = gtk_viewport_add;
 
-  class->scroll_adjustments = gtk_viewport_scroll_adjustments;
+  class->set_scroll_adjustments = gtk_viewport_set_scroll_adjustments;
 }
 
 static void
@@ -341,9 +341,9 @@ gtk_viewport_set_vadjustment (GtkViewport   *viewport,
 }
 
 static void
-gtk_viewport_scroll_adjustments (GtkViewport      *viewport,
-				 GtkAdjustment    *hadjustment,
-				 GtkAdjustment    *vadjustment)
+gtk_viewport_set_scroll_adjustments (GtkViewport      *viewport,
+				     GtkAdjustment    *hadjustment,
+				     GtkAdjustment    *vadjustment)
 {
   if (viewport->hadjustment != hadjustment)
     gtk_viewport_set_hadjustment (viewport, hadjustment);
@@ -636,7 +636,11 @@ gtk_viewport_size_request (GtkWidget      *widget,
 			 GTK_WIDGET (widget)->style->klass->ythickness) * 2 + 5;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
-    gtk_widget_size_request (bin->child, &bin->child->requisition);
+    {
+      gtk_widget_size_request (bin->child, &bin->child->requisition);
+      requisition->width += bin->child->requisition.width;
+      requisition->height += bin->child->requisition.height;
+    }
 }
 
 static void

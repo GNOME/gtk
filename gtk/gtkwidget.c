@@ -703,7 +703,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   object_class->finalize = gtk_widget_finalize;
   
   klass->activate_signal = 0;
-  klass->scroll_adjustments_signal = 0;
+  klass->set_scroll_adjustments_signal = 0;
   klass->show = gtk_widget_real_show;
   klass->show_all = gtk_widget_show;
   klass->hide = gtk_widget_real_hide;
@@ -2638,9 +2638,9 @@ gtk_widget_activate (GtkWidget *widget)
 }
 
 gboolean
-gtk_widget_scroll_adjustements (GtkWidget     *widget,
-				GtkAdjustment *hadjustment,
-				GtkAdjustment *vadjustment)
+gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
+				   GtkAdjustment *hadjustment,
+				   GtkAdjustment *vadjustment)
 {
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
@@ -2649,11 +2649,11 @@ gtk_widget_scroll_adjustements (GtkWidget     *widget,
   if (vadjustment)
     g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadjustment), FALSE);
 
-  if (WIDGET_CLASS (widget)->scroll_adjustments_signal)
+  if (WIDGET_CLASS (widget)->set_scroll_adjustments_signal)
     {
       /* FIXME: we should eventually check the signals signature here */
       gtk_signal_emit (GTK_OBJECT (widget),
-		       WIDGET_CLASS (widget)->scroll_adjustments_signal,
+		       WIDGET_CLASS (widget)->set_scroll_adjustments_signal,
 		       hadjustment, vadjustment);
       return TRUE;
     }

@@ -171,9 +171,9 @@ static void gtk_clist_get_arg  (GtkObject *object,
 				guint      arg_id);
 
 /* GtkWidget Methods */
-static void gtk_clist_scroll_adjustments (GtkCList      *clist,
-					  GtkAdjustment *hadjustment,
-					  GtkAdjustment *vadjustment);
+static void gtk_clist_set_scroll_adjustments (GtkCList      *clist,
+					      GtkAdjustment *hadjustment,
+					      GtkAdjustment *vadjustment);
 static void gtk_clist_realize         (GtkWidget        *widget);
 static void gtk_clist_unrealize       (GtkWidget        *widget);
 static void gtk_clist_map             (GtkWidget        *widget);
@@ -450,11 +450,11 @@ gtk_clist_class_init (GtkCListClass *klass)
   object_class->finalize = gtk_clist_finalize;
 
 
-  widget_class->scroll_adjustments_signal =
-    gtk_signal_new ("scroll_adjustments",
+  widget_class->set_scroll_adjustments_signal =
+    gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
 		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkCListClass, scroll_adjustments),
+		    GTK_SIGNAL_OFFSET (GtkCListClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
 
@@ -602,7 +602,7 @@ gtk_clist_class_init (GtkCListClass *klass)
   container_class->focus = gtk_clist_focus;
   container_class->set_focus_child = gtk_clist_set_focus_child;
 
-  klass->scroll_adjustments = gtk_clist_scroll_adjustments;
+  klass->set_scroll_adjustments = gtk_clist_set_scroll_adjustments;
   klass->refresh = clist_refresh;
   klass->select_row = real_select_row;
   klass->unselect_row = real_unselect_row;
@@ -1138,9 +1138,9 @@ gtk_clist_get_vadjustment (GtkCList *clist)
 }
 
 static void
-gtk_clist_scroll_adjustments (GtkCList      *clist,
-			      GtkAdjustment *hadjustment,
-			      GtkAdjustment *vadjustment)
+gtk_clist_set_scroll_adjustments (GtkCList      *clist,
+				  GtkAdjustment *hadjustment,
+				  GtkAdjustment *vadjustment)
 {
   if (clist->hadjustment != hadjustment)
     gtk_clist_set_hadjustment (clist, hadjustment);
@@ -5271,10 +5271,10 @@ gtk_clist_size_request (GtkWidget      *widget,
 			  (widget->style->klass->ythickness +
 			   GTK_CONTAINER (widget)->border_width) * 2);
 
-  if (!clist->hadjustment)
-    requisition->width += list_requisition_width (clist);
-  if (!clist->vadjustment)
-    requisition->height += LIST_HEIGHT (clist);
+  /* if (!clist->hadjustment) */
+  requisition->width += list_requisition_width (clist);
+  /* if (!clist->vadjustment) */
+  requisition->height += LIST_HEIGHT (clist);
 }
 
 static void

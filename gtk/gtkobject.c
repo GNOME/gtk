@@ -96,7 +96,6 @@ gtk_object_debug (void)
 void
 gtk_object_init_type (void)
 {
-  static GtkType object_type = 0;
   static const GtkTypeInfo object_info =
   {
     "GtkObject",
@@ -108,6 +107,7 @@ gtk_object_init_type (void)
     /* reserved_2 */ NULL,
     (GtkClassInitFunc) gtk_object_base_class_init,
   };
+  GtkType object_type;
 
   object_type = gtk_type_unique (0, &object_info);
   g_assert (object_type == GTK_TYPE_OBJECT);
