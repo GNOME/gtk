@@ -1848,6 +1848,7 @@ EXPORTS
 	gtk_tree_view_collapse_row
 	gtk_tree_view_column_add_attribute
 	gtk_tree_view_column_cell_draw_focus
+	gtk_tree_view_column_cell_event
 	gtk_tree_view_column_cell_focus
 	gtk_tree_view_column_cell_get_size
 	gtk_tree_view_column_cell_is_visible
@@ -2007,6 +2008,7 @@ EXPORTS
 	gtk_widget_ensure_style
 	gtk_widget_event
 	gtk_widget_freeze_child_notify
+	gtk_widget_get_accessible
 	gtk_widget_get_ancestor
 	gtk_widget_get_child_requisition
 	gtk_widget_get_child_visible

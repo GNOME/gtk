@@ -149,11 +149,11 @@ install-data-hook:
 	(cd $(DESTDIR)$(pkgconfigdir) && \
 	 test -e gdk-$(DEFAULT_GDKTARGET)-2.0.pc && \
 	 test -e gtk+-$(DEFAULT_GDKTARGET)-2.0.pc && \
-	 $(LN_S) -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 $(LN_S) -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
+	 cp -f gdk-$(DEFAULT_GDKTARGET)-2.0.pc gdk-2.0.pc && \
+	 cp -f gtk+-$(DEFAULT_GDKTARGET)-2.0.pc gtk+-2.0.pc) || \
 	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 $(LN_S) -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
-	 $(LN_S) -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
+	 cp -f gdk-$(GDKTARGET)-2.0.pc gdk-2.0.pc && \
+	 cp -f gtk+-$(GDKTARGET)-2.0.pc gtk+-2.0.pc)
 
 dist-hook: gtk+.spec
 	if test -e $(srcdir)/INSTALL.in && test -e $(srcdir)/README.in ; then \

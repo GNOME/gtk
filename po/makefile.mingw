@@ -5,21 +5,19 @@
 ## To convert the clear-text message catalogs to binary form (.gmo)
 ## files you will need msgfmt, from GNU gettext.
 
-# This file is included from other po directories, too.
-# They should define their own PACKAGE and possibly INSTALLSUBDIR
-# and LOCALEDIR macros
+# This file is possibly included from other po directories, too.  They
+# should define their own PACKAGE and possibly INSTALLSUBDIR and
+# LOCALEDIR macros
 
 ifndef PACKAGE
 PACKAGE = gtk20
 endif
-ifndef INSTALLSUBDIR
-INSTALLSUBDIR = $(PACKAGE)
-endif
+
 ifndef LOCALEDIR
 # This is what I use as installation target, from where the installer-builder
 # will pick it up. The end-user installation location will be asked by
-# the installer (typically %WinDir%\gtk+).
-LOCALEDIR = /install/$(INSTALLSUBDIR)/locale
+# an installer.
+LOCALEDIR = /target/lib/locale
 endif
 
 LANGUAGES = $(subst .po,,$(wildcard *.po))

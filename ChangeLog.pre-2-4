@@ -1,3 +1,25 @@
+2001-11-03  Tor Lillqvist  <tml@iki.fi>
+
+	* modules/input/Makefile.am: Use -no-undefined on Windows. Look
+	for .dll or .so as appropriate as module suffix.
+
+	* gtk-zip.sh.in: Use correct import library names.
+
+	* gtk/gtk.def: Add a couple of missing entry points. (#63585)
+
+2001-11-02  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkrc.c (gtk_rc_make_default_dir): Fix typo: extraneous
+	comma.  Include gtkprivate.h for GTK_LIBDIR etc definitions on
+	Windows.
+
+2001-10-30  Tor Lillqvist  <tml@iki.fi>
+
+	* Makefile (install-data-hook): Use cp, not $(LN_S) on the .pc
+	files. Configure on Win32 (running on Cygwin) thinks symlinks
+	exist, but pkg-config is not necesarily a Cygwin program, and
+	doesn't understand them.
+
 Fri Nov  2 16:45:17 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkrbtree.c (_gtk_rbtree_remove_node): Clean up height code
@@ -173,7 +195,6 @@ Thu Nov  1 00:44:50 2001  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Support Shift,
 	Control, and Shift|Control L<->R, #63475
 
->>>>>>> 1.2518
 Wed Oct 31 18:53:51 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): fix

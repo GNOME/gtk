@@ -53,6 +53,7 @@
 #include "gtkthemes.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
+#include "gtkprivate.h"
 #include "gtksettings.h"
 #include "gtkwindow.h"
 
@@ -304,7 +305,7 @@ gtk_rc_make_default_dir (const gchar *type)
   if (var)
     path = g_build_filename (var, "lib", "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
   else
-    path = g_build_filename (GTK_LIBDIR, "gtk-2.0,", type, GTK_BINARY_VERSION, NULL);
+    path = g_build_filename (GTK_LIBDIR, "gtk-2.0", type, GTK_BINARY_VERSION, NULL);
 
   return path;
 }
