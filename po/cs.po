@@ -1,15 +1,15 @@
 # This is the Czech locale definition for Gtk+.
-# Copyright (C) 2002 Free Software Foundation, Inc.
+# Copyright (C) 1999 Free Software Foundation, Inc.
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
-# Jiri Pavlovsky <pavlovsk@ff.cuni.cz> (Jiří Pavlovský), 1998.
-# George Lebl <jirka@5z.com> (Jiří Lebl), 2002.
+# Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
+# Jiří Lebl <jirka@5z.com>, 2002.
 # Michal Bukovjan <bukm@centrum.cz>, 2002
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.0\n"
 "POT-Creation-Date: 2002-08-22 05:09+0200\n"
-"PO-Revision-Date: 2002-08-23 18:06GMT\n"
+"PO-Revision-Date: 2002-09-02 16:39GMT\n"
 "Last-Translator: Michal Bukovjan <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -1120,12 +1120,12 @@ msgstr "Rodina písma"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Název písma, např. Sans, Helvetica, Times, Monospace"
+msgstr "Název rodiny písma, např. Sans, Helvetica, Times, Monospace"
 
 #: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr "Typ písma"
+msgstr "Styl písma"
 
 #: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
@@ -1135,7 +1135,7 @@ msgstr "Varianta písma"
 #: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
-msgstr "Váha písma"
+msgstr "Řez písma"
 
 #: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
@@ -1380,11 +1380,11 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1704
 msgid "Has Opacity Control"
-msgstr "Má ovládání neprůhlednosti"
+msgstr "Má ovládání stupně krytí"
 
 #: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
-msgstr "Zda má prvek pro výběr barvy povolit nastavení neprůhlednosti"
+msgstr "Zda má prvek pro výběr barvy povolit nastavení stupně krytí"
 
 #: gtk/gtkcolorsel.c:1711
 msgid "Has palette"
@@ -1408,7 +1408,7 @@ msgstr "Aktuální hodnota Alfa"
 
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr "Aktuální hodnota neprůhlednosti (0 zcela průhledné, 65535 zcela neprůhledné)"
+msgstr "Aktuální hodnota stupně krytí (0 zcela průhledné, 65535 zcela neprůhledné)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1484,7 +1484,7 @@ msgstr "Množství modrého světla v barvě."
 
 #: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
-msgstr "N_eprůhlednost:"
+msgstr "Stup_eň krytí:"
 
 #: gtk/gtkcolorsel.c:1843
 msgid "Transparency of the currently-selected color."
