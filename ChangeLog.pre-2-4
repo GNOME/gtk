@@ -1,3 +1,9 @@
+2004-01-28  Changwoo Ryu  <cwryu@debian.org>
+
+	* modules/input/imhangul-defs.h: 
+	* modules/input/imhangul.c:
+	* modules/input/Makefile.am: Remove broken hangul input module.
+	
 Tue Jan 27 01:56:46 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c: Remove obsolete comment.

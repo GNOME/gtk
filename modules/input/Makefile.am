@@ -75,10 +75,6 @@ im_ipa_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_ipa_la_SOURCES = imipa.c
 im_ipa_la_LIBADD = $(LDADDS)
 
-im_hangul_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
-im_hangul_la_SOURCES = imhangul.c imhangul-defs.h
-im_hangul_la_LIBADD = $(LDADDS)
-
 if CROSS_COMPILING
 RUN_QUERY_IMMODULES_TEST=false
 else
@@ -114,7 +110,6 @@ module_LTLIBRARIES =				\
 	im-am-et.la				\
 	im-cedilla.la				\
 	im-cyrillic-translit.la			\
-	im-hangul.la				\
 	im-inuktitut.la				\
 	im-ipa.la				\
 	im-thai-broken.la			\
