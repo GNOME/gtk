@@ -66,6 +66,7 @@
 #include "gtkoptionmenu.h"
 #include "gtkclist.h"
 #include "gtkdialog.h"
+#include "gtkmessagedialog.h"
 #include "gtkintl.h"
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
@@ -134,6 +135,7 @@ typedef struct _PossibleCompletion PossibleCompletion;
 #define FNMATCH_FLAGS (FNM_PATHNAME | FNM_PERIOD)
 
 #define CMPL_ERRNO_TOO_LONG ((1<<16)-1)
+#define CMPL_ERRNO_DID_NOT_CONVERT ((1<<16)-2)
 
 /* This structure contains all the useful information about a directory
  * for the purposes of filename completion.  These structures are cached
@@ -342,6 +344,11 @@ static void gtk_file_selection_destroy       (GtkObject             *object);
 static gint gtk_file_selection_key_press     (GtkWidget             *widget,
 					      GdkEventKey           *event,
 					      gpointer               user_data);
+static gint gtk_file_selection_insert_text   (GtkWidget             *widget,
+					      const gchar           *new_text,
+					      gint                   new_text_length,
+					      gint                  *position,
+					      gpointer               user_data);
 
 static void gtk_file_selection_file_button (GtkWidget *widget,
 					    gint row, 
@@ -489,7 +496,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   char *file_title [2];
 
   dialog = GTK_DIALOG (filesel);
-  
+
   filesel->cmpl_state = cmpl_init_state ();
 
   /* The dialog-sized vertical box  */
@@ -596,6 +603,8 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   filesel->selection_entry = gtk_entry_new ();
   gtk_signal_connect (GTK_OBJECT (filesel->selection_entry), "key_press_event",
 		      (GtkSignalFunc) gtk_file_selection_key_press, filesel);
+  gtk_signal_connect (GTK_OBJECT (filesel->selection_entry), "insert_text",
+		      (GtkSignalFunc) gtk_file_selection_insert_text, NULL);
   gtk_signal_connect_object (GTK_OBJECT (filesel->selection_entry), "focus_in_event",
 			     (GtkSignalFunc) gtk_widget_grab_default,
 			     GTK_OBJECT (filesel->ok_button));
@@ -628,6 +637,7 @@ gtk_file_selection_new (const gchar *title)
 
   filesel = gtk_type_new (GTK_TYPE_FILE_SELECTION);
   gtk_window_set_title (GTK_WINDOW (filesel), title);
+  gtk_dialog_set_has_separator (GTK_DIALOG (filesel), FALSE);
 
   return GTK_WIDGET (filesel);
 }
@@ -752,6 +762,8 @@ gtk_file_selection_get_filename (GtkFileSelection *filesel)
   if (text)
     {
       sys_filename = g_filename_from_utf8 (cmpl_completion_fullname (text, filesel->cmpl_state), -1, NULL, NULL, NULL);
+      if (sys_filename)
+	return nothing;
       strncpy (something, sys_filename, sizeof (something));
       g_free (sys_filename);
       return something;
@@ -819,52 +831,25 @@ static void
 gtk_file_selection_fileop_error (GtkFileSelection *fs,
 				 gchar            *error_message)
 {
-  GtkWidget *label;
-  GtkWidget *vbox;
-  GtkWidget *button;
   GtkWidget *dialog;
-  
+    
   g_return_if_fail (error_message != NULL);
-  
+
   /* main dialog */
-  dialog = gtk_dialog_new ();
-  /*
-  gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
-		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
-		      (gpointer) fs);
-  */
-  gtk_window_set_title (GTK_WINDOW (dialog), _("Error"));
-  gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
-  
-  /* If file dialog is grabbed, make this dialog modal too */
-  /* When error dialog is closed, file dialog will be grabbed again */
-  if (GTK_WINDOW (fs)->modal)
-      gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-
-  vbox = gtk_vbox_new (FALSE, 0);
-  gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), vbox,
-		     FALSE, FALSE, 0);
-  gtk_widget_show (vbox);
-
-  label = gtk_label_new (error_message);
-  gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.0);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 5);
-  gtk_widget_show (label);
+  dialog = gtk_message_dialog_new (GTK_WINDOW (fs),
+				   GTK_DIALOG_DESTROY_WITH_PARENT,
+				   GTK_MESSAGE_ERROR,
+				   GTK_BUTTONS_CLOSE,
+				   "%s", error_message);
 
   /* yes, we free it */
   g_free (error_message);
-  
-  /* close button */
-  button = gtk_button_new_with_label (_("Close"));
-  gtk_signal_connect_object (GTK_OBJECT (button), "clicked",
+
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  gtk_signal_connect_object (GTK_OBJECT (dialog), "response",
 			     (GtkSignalFunc) gtk_widget_destroy, 
 			     (gpointer) dialog);
-  gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
-		     button, TRUE, TRUE, 0);
-  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-  gtk_widget_grab_default (button);
-  gtk_widget_show (button);
 
   gtk_widget_show (dialog);
 }
@@ -892,6 +877,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
   gchar *full_path;
   gchar *sys_full_path;
   gchar *buf;
+  GError *error = NULL;
   CompletionState *cmpl_state;
   
   g_return_if_fail (fs != NULL);
@@ -902,13 +888,27 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
   path = cmpl_reference_position (cmpl_state);
   
   full_path = g_strconcat (path, G_DIR_SEPARATOR_S, dirname, NULL);
-  sys_full_path = g_filename_from_utf8 (full_path, -1, NULL, NULL, NULL);
+  sys_full_path = g_filename_from_utf8 (full_path, -1, NULL, NULL, &error);
+  if (error)
+    {
+      if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+	buf = g_strdup_printf (_("The directory name \"%s\" contains symbols that are not allowed in filenames"), dirname);
+      else
+	buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n%s"), dirname, error->message,
+			       _("You probably used symbols not allowed in filenames."));
+      gtk_file_selection_fileop_error (fs, buf);
+      g_error_free (error);
+      goto out;
+    }
+
   if (mkdir (sys_full_path, 0755) < 0) 
     {
-      buf = g_strconcat ("Error creating directory \"", dirname, "\":  ", 
-			 g_strerror (errno), NULL);
+      buf = g_strdup_printf (_("Error creating directory \"%s\": %s\n"), dirname,
+			     g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
+
+ out:
   g_free (full_path);
   g_free (sys_full_path);
   
@@ -996,6 +996,7 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
   gchar *path;
   gchar *full_path;
   gchar *sys_full_path;
+  GError *error = NULL;
   gchar *buf;
   
   g_return_if_fail (fs != NULL);
@@ -1005,13 +1006,30 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
   path = cmpl_reference_position (cmpl_state);
   
   full_path = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
-  sys_full_path = g_filename_from_utf8 (full_path, -1, NULL, NULL, NULL);
+  sys_full_path = g_filename_from_utf8 (full_path, -1, NULL, NULL, &error);
+  if (error)
+    {
+      if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+	buf = g_strdup_printf (_("The filename \"%s\" contains symbols that are not allowed in filenames"),
+			       fs->fileop_file);
+      else
+	buf = g_strdup_printf (_("Error deleting file \"%s\": %s\n%s"),
+			       fs->fileop_file, error->message,
+			       _("It probably contains symbols not allowed in filenames."));
+      
+      gtk_file_selection_fileop_error (fs, buf);
+      g_error_free (error);
+      goto out;
+    }
+
   if (unlink (sys_full_path) < 0) 
     {
-      buf = g_strconcat ("Error deleting file \"", fs->fileop_file, "\":  ", 
-			 g_strerror (errno), NULL);
+      buf = g_strdup_printf (_("Error deleting file \"%s\": %s"),
+			     fs->fileop_file, g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
+  
+ out:
   g_free (full_path);
   g_free (sys_full_path);
   
@@ -1110,6 +1128,7 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   gchar *sys_new_filename;
   gchar *sys_old_filename;
   CompletionState *cmpl_state;
+  GError *error = NULL;
   
   g_return_if_fail (fs != NULL);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
@@ -1121,19 +1140,49 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   new_filename = g_strconcat (path, G_DIR_SEPARATOR_S, file, NULL);
   old_filename = g_strconcat (path, G_DIR_SEPARATOR_S, fs->fileop_file, NULL);
 
-  sys_new_filename = g_filename_from_utf8 (new_filename, -1, NULL, NULL, NULL);
-  sys_old_filename = g_filename_from_utf8 (old_filename, -1, NULL, NULL, NULL);
+  sys_new_filename = g_filename_from_utf8 (new_filename, -1, NULL, NULL, &error);
+  if (error)
+    {
+      if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+	buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), new_filename);
+      else
+	buf = g_strdup_printf (_("Error renaming file to \"%s\": %s\n%s"),
+			       new_filename, error->message,
+			       _("You probably used symbols not allowed in filenames."));
+      gtk_file_selection_fileop_error (fs, buf);
+      g_error_free (error);
+      goto out1;
+    }
 
+  sys_old_filename = g_filename_from_utf8 (old_filename, -1, NULL, NULL, &error);
+  if (error)
+    {
+      if (g_error_matches (error, G_CONVERT_ERROR, G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+	buf = g_strdup_printf (_("The file name \"%s\" contains symbols that are not allowed in filenames"), old_filename);
+      else
+	buf = g_strdup_printf (_("Error renaming file \"%s\": %s\n%s"),
+			       old_filename, error->message,
+			       _("It probably contains symbols not allowed in filenames."));
+      gtk_file_selection_fileop_error (fs, buf);
+      g_error_free (error);
+      goto out2;
+    }
+  
   if (rename (sys_old_filename, sys_new_filename) < 0) 
     {
-      buf = g_strconcat ("Error renaming file \"", file, "\":  ", 
-			 g_strerror (errno), NULL);
+      buf = g_strdup_printf (_("Error renaming file \"%s\" to \"%s\": %s"),
+			     sys_old_filename, sys_new_filename,
+			     g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
     }
+  
+ out2:
+  g_free (sys_old_filename);
+
+ out1:
   g_free (new_filename);
   g_free (old_filename);
   g_free (sys_new_filename);
-  g_free (sys_old_filename);
   
   gtk_widget_destroy (fs->fileop_dialog);
   gtk_file_selection_populate (fs, "", FALSE);
@@ -1220,6 +1269,28 @@ gtk_file_selection_rename_file (GtkWidget *widget,
   gtk_widget_show (dialog);
 }
 
+static gint
+gtk_file_selection_insert_text (GtkWidget   *widget,
+				const gchar *new_text,
+				gint         new_text_length,
+				gint        *position,
+				gpointer     user_data)
+{
+  gchar *filename;
+
+  filename = g_filename_from_utf8 (new_text, new_text_length, NULL, NULL, NULL);
+
+  if (!filename)
+    {
+      gdk_beep ();
+      gtk_signal_emit_stop_by_name (GTK_OBJECT (widget), "insert_text");
+      return FALSE;
+    }
+  
+  g_free (filename);
+  
+  return TRUE;
+}
 
 static gint
 gtk_file_selection_key_press (GtkWidget   *widget,
@@ -2185,6 +2256,7 @@ open_new_dir (gchar       *dir_name,
   DIR *directory;
   struct dirent *dirent_ptr;
   gint entry_count = 0;
+  gint n_entries = 0;
   gint i;
   struct stat ent_sbuf;
   GString *path;
@@ -2198,8 +2270,13 @@ open_new_dir (gchar       *dir_name,
   path = g_string_sized_new (2*MAXPATHLEN + 10);
 
   sys_dir_name = g_filename_from_utf8 (dir_name, -1, NULL, NULL, NULL);
+  if (!sys_dir_name)
+    {
+      cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+      return NULL;
+    }
+  
   directory = opendir (sys_dir_name);
-
   if (!directory)
     {
       cmpl_errno = errno;
@@ -2227,7 +2304,13 @@ open_new_dir (gchar       *dir_name,
 	  return NULL;
 	}
 
-      sent->entries[i].entry_name = g_filename_to_utf8 (dirent_ptr->d_name, -1, NULL, NULL, NULL);
+      sent->entries[n_entries].entry_name = g_filename_to_utf8 (dirent_ptr->d_name, -1, NULL, NULL, NULL);
+      if (!g_utf8_validate (sent->entries[n_entries].entry_name, -1, NULL))
+	{
+	  g_warning (_("The filename %s couldn't be converted to UTF-8. Try setting the environment variable G_BROKEN_FILENAMES."), dirent_ptr->d_name);
+	  continue;
+	}
+      n_entries++;
 
       g_string_assign (path, sys_dir_name);
       if (path->str[path->len-1] != G_DIR_SEPARATOR)
@@ -2240,16 +2323,17 @@ open_new_dir (gchar       *dir_name,
 	{
 	  /* Here we know path->str is a "system charset" string */
 	  if (stat (path->str, &ent_sbuf) >= 0 && S_ISDIR (ent_sbuf.st_mode))
-	    sent->entries[i].is_dir = TRUE;
+	    sent->entries[n_entries].is_dir = TRUE;
 	  else
 	    /* stat may fail, and we don't mind, since it could be a
 	     * dangling symlink. */
-	    sent->entries[i].is_dir = FALSE;
+	    sent->entries[n_entries].is_dir = FALSE;
 	}
       else
-	sent->entries[i].is_dir = 1;
+	sent->entries[n_entries].is_dir = 1;
     }
-
+  sent->entry_count = n_entries;
+  
   g_free (sys_dir_name);
   g_string_free (path, TRUE);
   qsort (sent->entries, sent->entry_count, sizeof (CompletionDirEntry), compare_cmpl_dir);
@@ -2296,6 +2380,12 @@ check_dir (gchar       *dir_name,
     }
 
   sys_dir_name = g_filename_from_utf8 (dir_name, -1, NULL, NULL, NULL);
+  if (!sys_dir_name)
+    {
+      cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+      return FALSE;
+    }
+  
   if (stat (sys_dir_name, result) < 0)
     {
       g_free (sys_dir_name);
@@ -2429,6 +2519,12 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
 	}
 
       sys_filename = g_filename_from_utf8 (cmpl_dir->fullname, -1, NULL, NULL, NULL);
+      if (!sys_filename)
+	{
+	  cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+	  return FALSE;
+	}
+      
       if (stat (sys_filename, &sbuf) < 0)
 	{
 	  g_free (sys_filename);
@@ -2457,6 +2553,12 @@ correct_dir_fullname (CompletionDir* cmpl_dir)
 	}
 
       sys_filename = g_filename_from_utf8 (cmpl_dir->fullname, -1, NULL, NULL, NULL);
+      if (!sys_filename)
+	{
+	  cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+	  return FALSE;
+	}
+      
       if (stat (sys_filename, &sbuf) < 0)
 	{
 	  g_free (sys_filename);
@@ -2505,6 +2607,14 @@ correct_parent (CompletionDir *cmpl_dir,
     }
 
   sys_filename = g_filename_from_utf8 (cmpl_dir->fullname, -1, NULL, NULL, NULL);
+  if (!sys_filename)
+    {
+      cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+      if (!c)
+	last_slash[0] = G_DIR_SEPARATOR;
+      return FALSE;
+    }
+  
   if (stat (sys_filename, &parbuf) < 0)
     {
       g_free (sys_filename);
@@ -2552,6 +2662,13 @@ find_parent_dir_fullname (gchar* dirname)
 
   sys_orig_dir = g_get_current_dir ();
   sys_dirname = g_filename_from_utf8 (dirname, -1, NULL, NULL, NULL);
+  if (!sys_dirname)
+    {
+      g_free (sys_orig_dir);
+      cmpl_errno = CMPL_ERRNO_DID_NOT_CONVERT;
+      return NULL;
+    }
+  
   if (chdir (sys_dirname) != 0 || chdir ("..") != 0)
     {
       g_free (sys_dirname);
@@ -3057,7 +3174,9 @@ static gchar*
 cmpl_strerror (gint err)
 {
   if (err == CMPL_ERRNO_TOO_LONG)
-    return "Name too long";
+    return _("Name too long");
+  else if (err == CMPL_ERRNO_DID_NOT_CONVERT)
+    return _("Couldn't convert filename");
   else
     return g_strerror (err);
 }

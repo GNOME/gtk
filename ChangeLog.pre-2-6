@@ -1,4 +1,11 @@
-2001-03-12  Alexander Larsson  <alla@lysator.liu.se>
+2001-03-12  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkfilesel.c:
+	Add more test when converting filenames from/to utf-8.
+	Don't allow entering text in the filename entry which isn't allowed in
+	a filename. Just beep instead.
+
+2001-03-12  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkclist.c:
 	Scroll using gdk_window_scroll(). Don't wait for exposes.
