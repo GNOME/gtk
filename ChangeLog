@@ -1,3 +1,9 @@
+Fri Dec 19 01:47:34 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_size_request): 
+	Test extra_width, not extra_height, when determining whether to
+	set extra_width.  (#129647, Jan Arne Petersen)
+
 Fri Dec 19 01:35:34 2003  Matthias Clasen  <maclas@gmx.de>
 
 	Fix the behaviour of insensitive actions, which was broken
