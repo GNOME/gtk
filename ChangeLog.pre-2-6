@@ -29,7 +29,6 @@ Wed Jun  9 12:50:48 1999  Tim Janik  <timj@gtk.org>
         * gtk/gtklist.c: ::selection_mode
         * gtk/gtkhandlebox.c: ::handle_position, ::snap_edge
         * gtk/gtkcurve.c: ::curve_type, ::min_x, ::max_x, ::min_y, ::max_y
-        * gtk/gtkcolorsel.c: ::policy, ::use_opacity
         * gtk/gtkcolorsel.c: ::update_policy, ::use_opacity
         * gtk/gtkclist.c: ::sort_type
         * gtk/gtkcheckmenuitem.c: ::active, ::show_toggle
