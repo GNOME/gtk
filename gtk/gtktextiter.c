@@ -469,7 +469,7 @@ gtk_text_iter_get_type (void)
   static GType our_type = 0;
   
   if (our_type == 0)
-    our_type = g_boxed_type_register_static ("GtkTypeTextIter",
+    our_type = g_boxed_type_register_static ("GtkTextIter",
 					     (GBoxedCopyFunc) gtk_text_iter_copy,
 					     (GBoxedFreeFunc) gtk_text_iter_free);
 

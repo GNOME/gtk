@@ -1,3 +1,29 @@
+Overview of Changes in GTK+ 2.0.4
+=================================
+
+* Fix a number of types which were registered with the 
+  type system with the wrong names [James Henstridge, Jonathan Blandford]
+* Support missing data types in GtkList/TreeStore [Daniel Elstner]
+* Misc GtkTreeView bug fixes [Dave Camp, Jonathan, Daniel Elstner, 
+  Josh Parsons]
+* Drag and drop fixes, including a stuck grab. [Dave, Thomas Leonard, 
+  Owen Taylor]
+* Calculate screen size on win32 from the "logical DPI" 
+  [Joaquin Cuenca Abela, Tor Lillqvist]
+* Misc Win32 bug fixes. [Florent Duguet, Torn]
+* Fix theme changes for GtkMenu [Soeren Sandmann]
+* Fix gdk_pixbuf_from_drawable() for big endian. [Federico Mena Quintero]
+* Fix encoding handling for gtk_file_selection_set_filename()
+  [Sebastian Ritau, Owen]
+* Fix crash with DND, Qt and Metacity [Cha Young-Ho, Havoc, Owen]
+* Fixes for DirectColor visuals [Shivaram Upadhyayula]
+* Memory leak and UMR fixes [Michael Meeks, Matthias Clasen, Valgrind]
+* Misc bug fixes
+
+Other contributors: Jacob Berkman, Remus Draica, Nano Golveia, 
+  Tim Janik, Sergey Kuzminov, George Lebl, Garrett Lesage, 
+  Timo Meinen, Michel Selten, Boris Shingarov, Jeff Waugh
+
 Overview of Changes in GTK+ 2.0.3
 =================================
 
