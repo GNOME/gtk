@@ -680,7 +680,7 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 			     gpointer  user_data)
 {
   GtkMenuItem *menu_item;
-  GtkMenuItem *parent_menu_item;
+  GtkWidget *parent_menu_item;
   gint screen_width;
   gint screen_height;
   gint twidth, theight;
@@ -720,9 +720,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
     case GTK_LEFT_RIGHT:
       menu_item->submenu_direction = GTK_DIRECTION_RIGHT;
-      parent_menu_item = GTK_MENU_ITEM (GTK_MENU (GTK_WIDGET (menu_item)->parent)->parent_menu_item);
+      parent_menu_item = GTK_MENU (GTK_WIDGET (menu_item)->parent)->parent_menu_item;
       if (parent_menu_item)
-	menu_item->submenu_direction = parent_menu_item->submenu_direction;
+	menu_item->submenu_direction = GTK_MENU_ITEM (parent_menu_item)->submenu_direction;
 
       switch (menu_item->submenu_direction)
 	{
