@@ -1,3 +1,13 @@
+Fri Sep 27 18:14:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	(#91249, Thomas Leonard)
+
+	* gtk/gtkselection.c (gtk_selection_convert): Initialize
+	idle time to 0.
+
+	* gtk/gtkselection.c: Up idle timeout to 5 minutes
+	from 5 seconds.
+
 Fri Sep 27 17:40:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/Makefile.am: Patch from J. Ali Harlow
