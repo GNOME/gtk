@@ -794,7 +794,7 @@ otherwise %NULL.
 <para>
 </para>
 
-@Returns:
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_rc_get_im_module_path ##### -->

@@ -171,3 +171,13 @@ Layout width, see gtk_layout_set_size()
 Layout height, see gtk_layout_set_size()
 </para>
 
+<!-- ##### ARG GtkLayout:x ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkLayout:y ##### -->
+<para>
+
+</para>
+

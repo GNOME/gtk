@@ -496,3 +496,33 @@ Whether the popup menu for switching pages is enabled.
 whether the tabs must have all the same size.
 </para>
 
+<!-- ##### ARG GtkNotebook:tab-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:menu-label ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:position ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-expand ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-fill ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkNotebook:tab-pack ##### -->
+<para>
+
+</para>
+

@@ -245,6 +245,7 @@ the @window_at_pointer function in #GdkPointerHooks. It will be used
 when GDK gets multihead support. 
 </para>
 
+@parent_instance: 
 
 <!-- ##### FUNCTION gdk_window_new ##### -->
 <para>
