@@ -2163,7 +2163,11 @@ update_im_cursor_location (GtkEntry *entry)
 static gboolean
 recompute_idle_func (gpointer data)
 {
-  GtkEntry *entry = GTK_ENTRY (data);
+  GtkEntry *entry;
+
+  GDK_THREADS_ENTER ();
+
+  entry = GTK_ENTRY (data);
 
   gtk_entry_adjust_scroll (entry);
   gtk_entry_queue_draw (entry);
@@ -2171,6 +2175,8 @@ recompute_idle_func (gpointer data)
   entry->recompute_idle = FALSE;
   
   update_im_cursor_location (entry);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }
@@ -3807,7 +3813,11 @@ hide_cursor (GtkEntry *entry)
 static gint
 blink_cb (gpointer data)
 {
-  GtkEntry *entry = GTK_ENTRY (data);
+  GtkEntry *entry;
+
+  GDK_THREADS_ENTER ();
+
+  entry = GTK_ENTRY (data);
   
   g_assert (GTK_WIDGET_HAS_FOCUS (entry));
   g_assert (entry->selection_bound == entry->current_pos);
@@ -3826,6 +3836,8 @@ blink_cb (gpointer data)
 					      blink_cb,
 					      entry);
     }
+
+  GDK_THREADS_LEAVE ();
 
   /* Remove ourselves */
   return FALSE;

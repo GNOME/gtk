@@ -1033,7 +1033,11 @@ gtk_real_button_leave (GtkButton *button)
 static gboolean
 button_activate_timeout (gpointer data)
 {
+  GDK_THREADS_ENTER ();
+  
   gtk_button_finish_activate (data, TRUE);
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

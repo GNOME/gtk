@@ -2705,6 +2705,8 @@ first_validate_callback (gpointer data)
 {
   GtkTextView *text_view = data;
 
+  GDK_THREADS_ENTER ();
+  
   /* Note that some of this code is duplicated at the end of size_allocate,
    * keep in sync with that.
    */
@@ -2728,19 +2730,23 @@ first_validate_callback (gpointer data)
   if (text_view->first_validate_idle != 0)
     {
       DV(g_print(">Width change forced requeue ("G_STRLOC")\n"));
-      return FALSE;
+    }
+  else
+    {
+      /* scroll to any marks, if that's pending. This can
+       * jump us to the validation codepath used for scrolling
+       * onscreen, if so we bail out.
+       */
+      if (!gtk_text_view_flush_scroll (text_view))
+	gtk_text_view_validate_onscreen (text_view);
+      
+      DV(g_print(">Leaving first validate idle ("G_STRLOC")\n"));
+      
+      g_assert (text_view->onscreen_validated);
+      
     }
   
-  /* scroll to any marks, if that's pending. This can
-   * jump us to the validation codepath used for scrolling
-   * onscreen, if so we bail out.
-   */
-  if (!gtk_text_view_flush_scroll (text_view))
-    gtk_text_view_validate_onscreen (text_view);
-
-  DV(g_print(">Leaving first validate idle ("G_STRLOC")\n"));
-
-  g_assert (text_view->onscreen_validated);
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }
@@ -2749,7 +2755,10 @@ static gboolean
 incremental_validate_callback (gpointer data)
 {
   GtkTextView *text_view = data;
+  gboolean result = TRUE;
 
+  GDK_THREADS_ENTER ();
+  
   DV(g_print(G_STRLOC"\n"));
   
   gtk_text_layout_validate (text_view->layout, 2000);
@@ -2759,10 +2768,12 @@ incremental_validate_callback (gpointer data)
   if (gtk_text_layout_is_valid (text_view->layout))
     {
       text_view->incremental_validate_idle = 0;
-      return FALSE;
+      result = FALSE;
     }
-  else
-    return TRUE;
+
+  GDK_THREADS_LEAVE ();
+
+  return result;
 }
 
 static void
@@ -3688,8 +3699,12 @@ get_cursor_time (GtkTextView *text_view)
 static gint
 blink_cb (gpointer data)
 {
-  GtkTextView *text_view = GTK_TEXT_VIEW (data);
+  GtkTextView *text_view;
   gboolean visible;
+
+  GDK_THREADS_ENTER ();
+
+  text_view = GTK_TEXT_VIEW (data);
   
   g_assert (text_view->layout);
   g_assert (GTK_WIDGET_HAS_FOCUS (text_view));
@@ -3708,6 +3723,8 @@ blink_cb (gpointer data)
   
   gtk_text_layout_set_cursor_visible (text_view->layout,
                                       !visible);
+
+  GDK_THREADS_LEAVE ();
 
   /* Remove ourselves */
   return FALSE;
@@ -4224,10 +4241,14 @@ selection_scan_timeout (gpointer data)
 {
   GtkTextView *text_view;
 
+  GDK_THREADS_ENTER ();
+  
   text_view = GTK_TEXT_VIEW (data);
 
   move_mark_to_pointer_and_scroll (text_view, "insert");
 
+  GDK_THREADS_LEAVE ();
+  
   return TRUE; /* remain installed. */
 }
 
@@ -4240,6 +4261,8 @@ drag_scan_timeout (gpointer data)
   gint x, y;
   GdkModifierType state;
   GtkTextIter newplace;
+
+  GDK_THREADS_ENTER ();
   
   text_view = GTK_TEXT_VIEW (data);
 
@@ -4259,6 +4282,8 @@ drag_scan_timeout (gpointer data)
                                 text_view->dnd_mark,
                                 DND_SCROLL_MARGIN, FALSE, 0.0, 0.0);
 
+  GDK_THREADS_LEAVE ();
+  
   return TRUE;
 }
 

@@ -1628,6 +1628,8 @@ gtk_menu_scroll_timeout (gpointer  data)
   gint offset;
   gint view_width, view_height;
 
+  GDK_THREADS_ENTER ();
+
   menu = GTK_MENU (data);
   widget = GTK_WIDGET (menu);
 
@@ -1656,6 +1658,8 @@ gtk_menu_scroll_timeout (gpointer  data)
     offset = widget->requisition.height - view_height;
 
   gtk_menu_scroll_to (menu, offset);
+
+  GDK_THREADS_LEAVE ();
 
   return TRUE;
 }
@@ -1846,6 +1850,8 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
   GtkMenu *menu = user_data;
   GdkWindow *child_window;
 
+  GDK_THREADS_ENTER ();
+
   gtk_menu_stop_navigating_submenu (menu);
   
   if (GTK_WIDGET_REALIZED (menu))
@@ -1865,6 +1871,8 @@ gtk_menu_stop_navigating_submenu_cb (gpointer user_data)
 	  GTK_WIDGET_CLASS (parent_class)->enter_notify_event (GTK_WIDGET (menu), &send_event); 
 	}
     }
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE; 
 }

@@ -844,6 +844,8 @@ animation_timeout (gpointer data)
 {
   GtkImage *image;
 
+  GDK_THREADS_ENTER ();
+
   image = GTK_IMAGE (data);
   
   image->data.anim.frame_timeout = 0;
@@ -857,6 +859,8 @@ animation_timeout (gpointer data)
                      image);
   
   gtk_widget_queue_draw (GTK_WIDGET (image));
+
+  GDK_THREADS_LEAVE ();
 
   return FALSE;
 }

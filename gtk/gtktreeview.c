@@ -3021,6 +3021,7 @@ remove_info (GtkTreeView *tree_view)
   g_object_set_data (G_OBJECT (tree_view), "gtk-tree-view-drag-info", NULL);
 }
 
+#if 0
 static gint
 drag_scan_timeout (gpointer data)
 {
@@ -3030,6 +3031,8 @@ drag_scan_timeout (gpointer data)
   GtkTreePath *path = NULL;
   GtkTreeViewColumn *column = NULL;
   GdkRectangle visible_rect;
+
+  GDK_THREADS_ENTER ();
 
   tree_view = GTK_TREE_VIEW (data);
 
@@ -3063,9 +3066,11 @@ drag_scan_timeout (gpointer data)
         }
     }
 
+  GDK_THREADS_LEAVE ();
+
   return TRUE;
 }
-
+#endif /* 0 */
 
 static void
 remove_scroll_timeout (GtkTreeView *tree_view)
@@ -3117,7 +3122,10 @@ open_row_timeout (gpointer data)
   GtkTreeView *tree_view = data;
   GtkTreePath *dest_path = NULL;
   GtkTreeViewDropPosition pos;
+  gboolean result = FALSE;
 
+  GDK_THREADS_ENTER ();
+  
   gtk_tree_view_get_drag_dest_row (tree_view,
                                    &dest_path,
                                    &pos);
@@ -3130,15 +3138,18 @@ open_row_timeout (gpointer data)
       tree_view->priv->open_dest_timeout = 0;
 
       gtk_tree_path_free (dest_path);
-
-      return FALSE;
     }
   else
     {
       if (dest_path)
         gtk_tree_path_free (dest_path);
-      return TRUE;
+      
+      result = TRUE;
     }
+  
+  GDK_THREADS_LEAVE ();
+
+  return result;
 }
 
 /* Returns TRUE if event should not be propagated to parent widgets */

@@ -754,7 +754,11 @@ gtk_clipboard_wait_for_contents (GtkClipboard *clipboard,
 				  &results);
 
   if (g_main_is_running (results.loop))
-    g_main_run (results.loop);
+    {
+      GDK_THREADS_LEAVE ();
+      g_main_run (results.loop);
+      GDK_THREADS_ENTER ();
+    }
 
   g_main_destroy (results.loop);
 
@@ -805,7 +809,11 @@ gtk_clipboard_wait_for_text (GtkClipboard *clipboard)
 			      &results);
 
   if (g_main_is_running (results.loop))
-    g_main_run (results.loop);
+    {
+      GDK_THREADS_LEAVE ();
+      g_main_run (results.loop);
+      GDK_THREADS_ENTER ();
+    }
 
   g_main_destroy (results.loop);
 

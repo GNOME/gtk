@@ -1,3 +1,13 @@
+Wed Jul 18 18:23:05 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbutton.c gtk/gtkentry.c gtk/gtkmenu.c gtk/gtktextview.c
+	gtktreeview.c: Fix idles and timeouts to be properly surrounded by 
+	GDK_THREADS_ENTER()/LEAVE() pairs.
+
+	* gtk/gtkdialog.c gtk/gtkclipboard.c: Surround calls
+	to g_main_loop_run() with GDK_THREADS_LEAVE()/ENTER()
+	pairs. (Problem found by M. Meeks)
+
 2001-07-18  Darin Adler  <darin@bentspoon.com>
 
 	* gtk/gtkiconfactory.c: (gtk_icon_size_register): Reorder code so
