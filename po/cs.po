@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-07-10 15:49+0200\n"
-"PO-Revision-Date: 2004-07-10 19:46+0200\n"
+"POT-Creation-Date: 2004-07-15 04:55+0200\n"
+"PO-Revision-Date: 2004-07-15 18:54+0200\n"
 "Last-Translator: Miloslav Trmac <bukm@centrum.cz>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -908,15 +908,15 @@ msgstr "Barevné kolo"
 msgid "Color Selection"
 msgstr "Výběr barvy"
 
-#: gtk/gtkentry.c:4300 gtk/gtktextview.c:6933
+#: gtk/gtkentry.c:4312 gtk/gtktextview.c:6933
 msgid "Select _All"
 msgstr "Vybrat _vše"
 
-#: gtk/gtkentry.c:4310 gtk/gtktextview.c:6943
+#: gtk/gtkentry.c:4322 gtk/gtktextview.c:6943
 msgid "Input _Methods"
 msgstr "Vstupní _metody"
 
-#: gtk/gtkentry.c:4320 gtk/gtktextview.c:6954
+#: gtk/gtkentry.c:4332 gtk/gtktextview.c:6954
 msgid "_Insert Unicode Control Character"
 msgstr "_Vložit řídící znak Unicode"
 
@@ -944,7 +944,7 @@ msgstr ""
 "Nemohu přidat záložku pro %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5332
+#: gtk/gtkfilechooserdefault.c:760 gtk/gtkfilechooserdefault.c:5351
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -998,77 +998,85 @@ msgstr ""
 msgid "Could not add a bookmark for %s because it is an invalid path name."
 msgstr "Nemohu přidat záložku pro %s, protože je to neplatný název cesty."
 
-#: gtk/gtkfilechooserdefault.c:2578
+#: gtk/gtkfilechooserdefault.c:2525
+msgid "Shortcuts"
+msgstr "Zkratky"
+
+#: gtk/gtkfilechooserdefault.c:2579
 msgid "Folder"
 msgstr "Adresář"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkfilechooserdefault.c:2625 gtk/gtkstock.c:293
+#: gtk/gtkfilechooserdefault.c:2626 gtk/gtkstock.c:293
 msgid "_Add"
 msgstr "_Přidat"
 
-#: gtk/gtkfilechooserdefault.c:2635 gtk/gtkstock.c:341
+#: gtk/gtkfilechooserdefault.c:2636 gtk/gtkstock.c:341
 msgid "_Remove"
 msgstr "_Odstranit"
 
-#: gtk/gtkfilechooserdefault.c:2714
+#: gtk/gtkfilechooserdefault.c:2715
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: gtk/gtkfilechooserdefault.c:2855
+#: gtk/gtkfilechooserdefault.c:2830 gtk/gtkfilesel.c:766
+msgid "Files"
+msgstr "Soubory"
+
+#: gtk/gtkfilechooserdefault.c:2857
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkfilechooserdefault.c:2877
+#: gtk/gtkfilechooserdefault.c:2879
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/gtkfilechooserdefault.c:2889
+#: gtk/gtkfilechooserdefault.c:2891
 msgid "Modified"
 msgstr "Změněn"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:2934
+#: gtk/gtkfilechooserdefault.c:2936
 msgid "Create Fo_lder"
 msgstr "Vytvořit _adresář"
 
 #. Name entry
-#: gtk/gtkfilechooserdefault.c:3044
+#: gtk/gtkfilechooserdefault.c:3046
 msgid "_Name:"
 msgstr "_Název:"
 
-#: gtk/gtkfilechooserdefault.c:3086
+#: gtk/gtkfilechooserdefault.c:3088
 msgid "_Browse for other folders"
 msgstr "_Procházet jiné adresáře"
 
-#: gtk/gtkfilechooserdefault.c:3323
+#: gtk/gtkfilechooserdefault.c:3325
 msgid "Save in _folder:"
 msgstr "Uložit do _adresáře:"
 
-#: gtk/gtkfilechooserdefault.c:3325
+#: gtk/gtkfilechooserdefault.c:3327
 msgid "Create in _folder:"
 msgstr "Vytvořit v _adresáři:"
 
-#: gtk/gtkfilechooserdefault.c:3969
+#: gtk/gtkfilechooserdefault.c:3971
 msgid "Can't change to folder because it isn't local"
 msgstr "Nemohu přejít do adresáře, protože není místní"
 
-#: gtk/gtkfilechooserdefault.c:4107
+#: gtk/gtkfilechooserdefault.c:4109
 msgid "Could not find the path"
 msgstr "Nemohu najít cestu"
 
-#: gtk/gtkfilechooserdefault.c:4458
+#: gtk/gtkfilechooserdefault.c:4460
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "zkratka %s neexistuje"
 
-#: gtk/gtkfilechooserdefault.c:5105
+#: gtk/gtkfilechooserdefault.c:5124
 msgid "Type name of new folder"
 msgstr "Napište název nového adresáře"
 
-#: gtk/gtkfilechooserdefault.c:5134
+#: gtk/gtkfilechooserdefault.c:5153
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
@@ -1076,38 +1084,38 @@ msgstr[0] "%d bajt"
 msgstr[1] "%d bajty"
 msgstr[2] "%d bajtů"
 
-#: gtk/gtkfilechooserdefault.c:5136
+#: gtk/gtkfilechooserdefault.c:5155
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:5138
+#: gtk/gtkfilechooserdefault.c:5157
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:5159
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:5185
+#: gtk/gtkfilechooserdefault.c:5204
 msgid "Today"
 msgstr "Dnes"
 
-#: gtk/gtkfilechooserdefault.c:5187
+#: gtk/gtkfilechooserdefault.c:5206
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserdefault.c:5198
+#: gtk/gtkfilechooserdefault.c:5217
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserdefault.c:5293
+#: gtk/gtkfilechooserdefault.c:5312
 msgid "Cannot change to the folder you specified as it is an invalid path."
 msgstr "Nemohu přejít do určeného adresáře, protože je to neplatná cesta."
 
-#: gtk/gtkfilechooserdefault.c:5370
+#: gtk/gtkfilechooserdefault.c:5389
 #, c-format
 msgid ""
 "Could not select %s:\n"
@@ -1116,15 +1124,15 @@ msgstr ""
 "Nemohu vybrat %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:5409
+#: gtk/gtkfilechooserdefault.c:5428
 msgid "Open Location"
 msgstr "Otevřít umístění"
 
-#: gtk/gtkfilechooserdefault.c:5416
+#: gtk/gtkfilechooserdefault.c:5435
 msgid "Save in Location"
 msgstr "Uložit do umístění"
 
-#: gtk/gtkfilechooserdefault.c:5435
+#: gtk/gtkfilechooserdefault.c:5454
 msgid "_Location:"
 msgstr "_Umístění:"
 
@@ -1135,10 +1143,6 @@ msgstr "Adresáře"
 #: gtk/gtkfilesel.c:734
 msgid "Fol_ders"
 msgstr "_Adresáře"
-
-#: gtk/gtkfilesel.c:766
-msgid "Files"
-msgstr "Soubory"
 
 #: gtk/gtkfilesel.c:770
 msgid "_Files"
@@ -1553,17 +1557,17 @@ msgstr "Skupina"
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Přepínací tlačíko, do jehož skupiny patří toto tlačítko."
 
-#: gtk/gtkrc.c:2390
+#: gtk/gtkrc.c:2391
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Nemohu nalézt vložený soubor: \"%s\""
 
-#: gtk/gtkrc.c:3029 gtk/gtkrc.c:3032
+#: gtk/gtkrc.c:3030 gtk/gtkrc.c:3033
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nemohu nalézt soubor obrázku v pixmap_path: \"%s\""
 
-#: gtk/gtkrc.c:3467
+#: gtk/gtkrc.c:3468
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr "Element cesty k pixmapám: \"%s\" musí být absolutní, %s, řádek %d"
