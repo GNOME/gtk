@@ -1,3 +1,12 @@
+2002-09-17  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/stock-icons/stock_color_picker_25.png:
+	* gtk/stock-icons/Makefile.am (VARIABLES1): 
+	* gtk/gtkstock.h (GTK_STOCK_COLOR_PICKER): 
+	* gtk/gtkiconfactory.c (get_default_icons):  
+	* gtk/gtkcolorsel.c (gtk_color_selection_init): Stockify color
+	picker icon.   (#89880)
+
 2002-09-14  Sven Neumann  <sven@gimp.org>
 
 	* gdk/gdkpixbuf-drawable.c: fixed my latest change.

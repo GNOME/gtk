@@ -792,6 +792,7 @@ get_default_icons (GtkIconFactory *factory)
 
   add_unsized (factory, stock_clear_24, GTK_STOCK_CLEAR);
   add_unsized (factory, stock_colorselector_24, GTK_STOCK_SELECT_COLOR);
+  add_unsized (factory, stock_color_picker_25, GTK_STOCK_COLOR_PICKER);
   add_unsized (factory, stock_index_24, GTK_STOCK_INDEX);
   add_unsized (factory, stock_zoom_1_24, GTK_STOCK_ZOOM_100);
   add_unsized (factory, stock_zoom_fit_24, GTK_STOCK_ZOOM_FIT);

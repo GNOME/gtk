@@ -22,6 +22,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_close_20.png		\
 	stock_close_24.png 		\
 	stock_colorselector_24.png 	\
+	stock_color_picker_25.png	\
 	stock_convert_16.png		\
 	stock_convert_24.png 		\
 	stock_copy_16.png		\
@@ -143,6 +144,7 @@ VARIABLES1 = @STRIP_BEGIN@ 									\
 		stock_close_20		      	$(srcdir)/stock_close_20.png  			\
                 stock_close_24			$(srcdir)/stock_close_24.png             	\
                 stock_colorselector_24		$(srcdir)/stock_colorselector_24.png            \
+                stock_color_picker_25		$(srcdir)/stock_color_picker_25.png            \
 @STRIP_END@
 VARIABLES2 = @STRIP_BEGIN@ 									\
 		stock_convert_16		$(srcdir)/stock_convert_16.png			\

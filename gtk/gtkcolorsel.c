@@ -57,6 +57,7 @@
 #include "gtksettings.h"
 #include "gtkintl.h"
 #include "gtkimage.h"
+#include "gtkstock.h"
 
 #include <string.h>
 
@@ -202,47 +203,6 @@ static char dropper_mask[] = {
   0xc0, 0x3f, 0x00, 0xe0, 0x13, 0x00, 0xf0, 0x01, 0x00, 0xf8, 0x00, 0x00,
   0x7c, 0x00, 0x00, 0x3e, 0x00, 0x00, 0x1e, 0x00, 0x00, 0x0d, 0x00, 0x00,
   0x02, 0x00, 0x00, };
-
-
-/* XPM */
-static char *picker[] = {
-  /* columns rows colors chars-per-pixel */
-  "25 25 8 1",
-  "  c Gray0",
-  ". c #020202",
-  "X c Gray12",
-  "o c Gray13",
-  "O c Gray52",
-  "+ c #929292",
-  "@ c Gray100",
-  "# c None",
-  /* pixels */
-  "#########################",
-  "#########################",
-  "#########################",
-  "#########################",
-  "#########################",
-  "#################   #####",
-  "################     ####",
-  "################     +###",
-  "#############        +###",
-  "##############      ++###",
-  "#############+@   +++####",
-  "############+@@@  +######",
-  "###########+@@@ + +######",
-  "##########+@@@ ++#+######",
-  "#########+@@@ ++#########",
-  "########+@@@ ++##########",
-  "#######+@@@ ++###########",
-  "######+@@@ ++############",
-  "######+@@ ++#############",
-  "#####+@  ++##############",
-  "###### +++###############",
-  "#########################",
-  "#########################",
-  "#########################",
-  "#########################"
-};
 
 
 /*
@@ -1802,7 +1762,6 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   GtkWidget *top_right_vbox;
   GtkWidget *table, *label, *hbox, *frame, *vbox, *button;
   GtkAdjustment *adjust;
-  GdkPixbuf *picker_pix = NULL;
   GtkWidget *picker_image;
   gint i, j;
   ColorSelectionPrivate *priv;
@@ -1848,8 +1807,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_object_set_data (GTK_OBJECT (button), "COLORSEL", colorsel); 
   gtk_signal_connect (GTK_OBJECT (button), "clicked",
                       GTK_SIGNAL_FUNC (get_screen_color), NULL);
-  picker_pix = gdk_pixbuf_new_from_xpm_data ((const char **) &picker);
-  picker_image = gtk_image_new_from_pixbuf (picker_pix);
+  picker_image = gtk_image_new_from_stock (GTK_STOCK_COLOR_PICKER, GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (button), picker_image);
   gtk_widget_show (GTK_WIDGET (picker_image));
   gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);

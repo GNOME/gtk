@@ -77,6 +77,7 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_CDROM            "gtk-cdrom"
 #define GTK_STOCK_CLEAR            "gtk-clear"
 #define GTK_STOCK_CLOSE            "gtk-close"
+#define GTK_STOCK_COLOR_PICKER     "gtk-color-picker"
 #define GTK_STOCK_CONVERT          "gtk-convert"
 #define GTK_STOCK_COPY             "gtk-copy"
 #define GTK_STOCK_CUT              "gtk-cut"
