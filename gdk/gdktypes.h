@@ -63,7 +63,6 @@ extern "C" {
 
 /* Type definitions for the basic structures.
  */
-typedef struct _GdkKeyInfo            GdkKeyInfo;
 typedef struct _GdkPoint	      GdkPoint;
 typedef struct _GdkRectangle	      GdkRectangle;
 typedef struct _GdkSegment	      GdkSegment;
@@ -169,16 +168,6 @@ typedef void (*GdkInputFunction) (gpointer	    data,
 				  GdkInputCondition condition);
 
 typedef void (*GdkDestroyNotify) (gpointer data);
-
-/* GdkKeyInfo is a description of a the hardware key and state that
- * can be mapped to some keysym.
- */
-struct _GdkKeyInfo
-{
-  guint keycode;
-  gint  group;
-  gint  level;
-};
 
 struct _GdkPoint
 {

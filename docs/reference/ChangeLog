@@ -1,3 +1,8 @@
+2001-12-04  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtkwidget.sgml: Updates.
+	* gtk/Makefile.am (IGNORE_HFILES): Remove gtktextchild.h.
+
 2001-12-03  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/tmpl/input_devices.sgml, 

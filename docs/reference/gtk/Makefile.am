@@ -36,7 +36,6 @@ IGNORE_HFILES=			\
 	gtkrbtree.h		\
 	gtktreedatalist.h	\
 	gtktextbtree.h		\
-	gtktextchild.h		\
 	gtktextdisplay.h	\
 	gtktextiterprivate.h	\
 	gtktextlayout.h		\

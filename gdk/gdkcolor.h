@@ -69,11 +69,9 @@ void	     gdk_colormap_unref	  (GdkColormap *cmap);
 GdkColormap* gdk_colormap_get_system	   (void);
 #ifndef GDK_DISABLE_DEPRECATED
 gint	     gdk_colormap_get_system_size  (void);
-#endif 
-
 void gdk_colormap_change (GdkColormap	*colormap,
 			  gint		 ncolors);
-
+#endif 
 
 gint  gdk_colormap_alloc_colors   (GdkColormap *colormap,
 				   GdkColor    *colors,

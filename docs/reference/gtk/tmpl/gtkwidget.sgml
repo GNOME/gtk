@@ -1368,14 +1368,14 @@ GtkWidget
 
 <!-- ##### MACRO gtk_widget_pop_visual ##### -->
 <para>
-
+This function is deprecated; it does nothing.
 </para>
 
 
 
 <!-- ##### MACRO gtk_widget_push_visual ##### -->
 <para>
-
+This function is deprecated; it does nothing.
 </para>
 
 @visual: 
@@ -1392,7 +1392,7 @@ GtkWidget
 
 <!-- ##### MACRO gtk_widget_set_default_visual ##### -->
 <para>
-
+This function is deprecated; it does nothing.
 </para>
 
 @visual: 
@@ -1410,7 +1410,7 @@ GtkWidget
 
 <!-- ##### MACRO gtk_widget_set_visual ##### -->
 <para>
-
+This function is deprecated; it does nothing.
 </para>
 
 @widget: 
