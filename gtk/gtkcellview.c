@@ -81,6 +81,7 @@ static void        gtk_cell_view_set_valuesv              (GtkCellView      *cel
                                                            va_list           args);
 static GtkCellViewCellInfo *gtk_cell_view_get_cell_info   (GtkCellView      *cellview,
                                                            GtkCellRenderer  *renderer);
+static void        gtk_cell_view_set_cell_data            (GtkCellView      *cell_view);
 
 
 static void        gtk_cell_view_cell_layout_pack_start        (GtkCellLayout         *layout,
@@ -534,7 +535,7 @@ gtk_cell_view_get_cell_info (GtkCellView     *cellview,
   return NULL;
 }
 
-void
+static void
 gtk_cell_view_set_cell_data (GtkCellView *cell_view)
 {
   GList *i;
@@ -1115,6 +1116,8 @@ gtk_cell_view_get_cell_renderers (GtkCellView *cell_view)
   GList *retval = NULL, *list;
 
   g_return_val_if_fail (cell_view != NULL, NULL);
+
+  gtk_cell_view_set_cell_data (cell_view);
 
   for (list = cell_view->priv->cell_list; list; list = list->next)
     {

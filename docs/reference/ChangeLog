@@ -1,5 +1,7 @@
 2004-11-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtk-sections.txt: Remove gtk_cell_view_set_cell_data().
+
 	* gtk/tmpl/gtkfilefilter.sgml: Mention subclassing, aliasing
 	and supertypes.
 

@@ -1389,7 +1389,6 @@ cell_view_is_sensitive (GtkCellView *cell_view)
   GList *cells, *list;
   gboolean sensitive;
   
-  gtk_cell_view_set_cell_data (cell_view);
   cells = gtk_cell_view_get_cell_renderers (cell_view);
 
   sensitive = FALSE;
@@ -1525,6 +1524,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
   if (combo_box->priv->wrap_width == 0)
     {
       width = GTK_WIDGET (combo_box)->allocation.width;
+      gtk_widget_set_size_request (combo_box->priv->popup_widget, -1, -1);
       gtk_widget_size_request (combo_box->priv->popup_widget, &requisition);
       
       gtk_widget_set_size_request (combo_box->priv->popup_widget,

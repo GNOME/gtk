@@ -1,5 +1,17 @@
 2004-11-29  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkcombobox.c (cell_view_is_sensitive): Don't call
+	gtk_cell_view_set_cell_data() from here.
+
+	* gtk/gtk.symbols: Remove gtk_cell_view_set_cell_data()
+
+	* gtk/gtkcellview.c (gtk_cell_view_get_cell_renderers): Call 
+	gtk_cell_view_set_cell_data() from here.
+	(gtk_cell_view_set_cell_data): Make static.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_popup): Make menu mode
+	work better when resizing the combo box.
+
 	Determine the direction of XKB groups from their content, 
 	not by looking for hardcoded keymap names.  (#116626, patch by 
 	Behdad Esfahbod, based on an earlier patch by Ilya Konstantinov)
