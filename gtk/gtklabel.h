@@ -111,9 +111,13 @@ void     gtk_label_select_region                  (GtkLabel         *label,
 gboolean gtk_label_get_selection_bounds           (GtkLabel         *label,
                                                    gint             *start,
                                                    gint             *end);
-void     gtk_label_get_layout_offsets             (GtkLabel         *label,
-						   gint             *x,
-						   gint             *y);
+
+PangoLayout *gtk_label_get_layout         (GtkLabel *label);
+void         gtk_label_get_layout_offsets (GtkLabel *label,
+                                           gint     *x,
+                                           gint     *y);
+
+
 
 #ifndef	GTK_DISABLE_COMPAT_H
 #  define gtk_label_set				gtk_label_set_text

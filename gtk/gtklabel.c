@@ -2036,6 +2036,29 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
     }
 }
 
+
+/**
+ * gtk_label_get_layout:
+ * @label: a #GtkLabel
+ * 
+ * Gets the #PangoLayout used to display the label.
+ * The layout is useful to e.g. convert text positions to
+ * pixel positions, in combination with gtk_label_get_layout_offsets().
+ * The returned layout is owned by the label so need not be
+ * freed by the caller.
+ * 
+ * Return value: the #PangoLayout for this label
+ **/
+PangoLayout*
+gtk_label_get_layout (GtkLabel *label)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
+
+  gtk_label_ensure_layout (label, NULL, NULL);
+
+  return label->layout;
+}
+
 /**
  * gtk_label_get_layout_offsets:
  * @label: a #GtkLabel
@@ -2047,7 +2070,9 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
  * into coordinates inside the #PangoLayout, e.g. to take some action
  * if some part of the label is clicked. Of course you will need to
  * create a #GtkEventBox to receive the events, and pack the label
- * inside it, since labels are a #GTK_NO_WINDOW widget.
+ * inside it, since labels are a #GTK_NO_WINDOW widget. Remember
+ * when using the #PangoLayout functions you need to convert to
+ * and from pixels using PANGO_PIXELS() or #PANGO_SCALE.
  * 
  **/
 void

@@ -174,6 +174,11 @@ void                  gtk_entry_set_text        (GtkEntry      *entry,
 /* returns a reference to the text */
 G_CONST_RETURN gchar* gtk_entry_get_text        (GtkEntry      *entry);
 
+PangoLayout* gtk_entry_get_layout               (GtkEntry      *entry);
+void         gtk_entry_get_layout_offsets       (GtkEntry      *entry,
+                                                 gint          *x,
+                                                 gint          *y);
+
 /* Deprecated compatibility functions
  */
 GtkWidget* gtk_entry_new_with_max_length	(gint           max);

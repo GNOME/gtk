@@ -1,3 +1,18 @@
+2001-06-08  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_class_init): add read-only
+	"scroll_offset" property for notification when the layout offsets
+	may have changed
+	(gtk_entry_adjust_scroll): add notify for scroll_offset
+	(gtk_entry_layout_index_to_text_index): function to compensate for
+	preedit string when doing coordinate stuff on the entry's layout
+	(gtk_entry_text_index_to_layout_index): inverse function
+	(gtk_entry_get_layout_offsets): hook to get current position of
+	the layout	
+	(gtk_entry_get_layout): hook to get the layout itself.
+
+	* gtk/gtklabel.c (gtk_label_get_layout): new function
+
 Fri Jun  8 19:49:29 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_select_cursor_row): New

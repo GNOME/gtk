@@ -78,7 +78,8 @@ enum {
   PROP_VISIBILITY,
   PROP_INVISIBLE_CHAR,
   PROP_ACTIVATES_DEFAULT,
-  PROP_WIDTH_CHARS
+  PROP_WIDTH_CHARS,
+  PROP_SCROLL_OFFSET
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -228,8 +229,8 @@ static void         gtk_entry_set_positions            (GtkEntry       *entry,
 static void         gtk_entry_draw_text                (GtkEntry       *entry);
 static void         gtk_entry_draw_cursor              (GtkEntry       *entry,
 							CursorType      type);
-static PangoLayout *gtk_entry_get_layout               (GtkEntry       *entry,
-							gboolean        include_preedit);
+static PangoLayout *gtk_entry_ensure_layout            (GtkEntry       *entry,
+                                                        gboolean        include_preedit);
 static void         gtk_entry_queue_draw               (GtkEntry       *entry);
 static void         gtk_entry_reset_im_context         (GtkEntry       *entry);
 static void         gtk_entry_recompute                (GtkEntry       *entry);
@@ -437,6 +438,17 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      -1,
                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
 
+  g_object_class_install_property (gobject_class,
+                                   PROP_SCROLL_OFFSET,
+                                   g_param_spec_int ("scroll_offset",
+                                                     _("Scroll offset"),
+                                                     _("Number of pixels of the entry scrolled off the screen to the left"),
+                                                     0,
+                                                     G_MAXINT,
+                                                     
+                                                     0,
+                                                     G_PARAM_READABLE));
+  
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("cursor_color",
 							       _("Cursor color"),
@@ -775,7 +787,8 @@ gtk_entry_set_property (GObject         *object,
     case PROP_WIDTH_CHARS:
       gtk_entry_set_width_chars (entry, g_value_get_int (value));
       break;
-      
+
+    case PROP_SCROLL_OFFSET:
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -814,6 +827,9 @@ gtk_entry_get_property (GObject         *object,
       break;
     case PROP_WIDTH_CHARS:
       g_value_set_int (value, entry->width_chars);
+      break;
+    case PROP_SCROLL_OFFSET:
+      g_value_set_int (value, entry->scroll_offset);
       break;
       
     default:
@@ -2286,8 +2302,8 @@ gtk_entry_create_layout (GtkEntry *entry,
 }
 
 static PangoLayout *
-gtk_entry_get_layout (GtkEntry *entry,
-		      gboolean  include_preedit)
+gtk_entry_ensure_layout (GtkEntry *entry,
+                         gboolean  include_preedit)
 {
   if (entry->preedit_length > 0 &&
       !include_preedit != !entry->cache_includes_preedit)
@@ -2299,7 +2315,6 @@ gtk_entry_get_layout (GtkEntry *entry,
       entry->cache_includes_preedit = include_preedit;
     }
   
-  g_object_ref (G_OBJECT (entry->cached_layout));
   return entry->cached_layout;
 }
 
@@ -2314,7 +2329,7 @@ get_layout_position (GtkEntry *entry,
   gint y_pos;
   PangoLayoutLine *line;
   
-  layout = gtk_entry_get_layout (entry, TRUE);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
 
   get_text_area_size (entry, NULL, NULL, &area_width, &area_height);      
       
@@ -2358,7 +2373,7 @@ gtk_entry_draw_text (GtkEntry *entry)
   
   if (GTK_WIDGET_DRAWABLE (entry))
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
       gint area_width, area_height;
       gint x, y;
       gint start_pos, end_pos;
@@ -2417,8 +2432,6 @@ gtk_entry_draw_text (GtkEntry *entry)
 	  gdk_region_destroy (clip_region);
 	  g_free (ranges);
 	}
-
-      g_object_unref (G_OBJECT (layout));
     }
 }
 
@@ -2518,12 +2531,10 @@ gtk_entry_find_position (GtkEntry *entry,
   gboolean trailing;
   gint cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
   
-  layout = gtk_entry_get_layout (entry, TRUE);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
   
   line = pango_layout_get_lines (layout)->data;
   pango_layout_line_x_to_index (line, x * PANGO_SCALE, &index, &trailing);
-  
-  g_object_unref (G_OBJECT (layout));
 
   if (index >= cursor_index && entry->preedit_length)
     {
@@ -2548,7 +2559,7 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
 				gint       *strong_x,
 				gint       *weak_x)
 {
-  PangoLayout *layout = gtk_entry_get_layout (entry, TRUE);
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
   const gchar *text;
   PangoRectangle strong_pos, weak_pos;
   gint index;
@@ -2566,7 +2577,6 @@ gtk_entry_get_cursor_locations (GtkEntry   *entry,
     }
       
   pango_layout_get_cursor_pos (layout, index, &strong_pos, &weak_pos);
-  g_object_unref (G_OBJECT (layout));
 
   if (strong_x)
     *strong_x = strong_pos.x / PANGO_SCALE;
@@ -2598,11 +2608,10 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
   gdk_window_get_size (entry->text_area, &text_area_width, NULL);
   text_area_width -= 2 * INNER_BORDER;
 
-  layout = gtk_entry_get_layout (entry, TRUE);
+  layout = gtk_entry_ensure_layout (entry, TRUE);
   line = pango_layout_get_lines (layout)->data;
 
   pango_layout_line_get_extents (line, NULL, &logical_rect);
-  g_object_unref (G_OBJECT (layout));
 
   /* Display as much text as we can */
 
@@ -2659,6 +2668,8 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
     {
       entry->scroll_offset += weak_xoffset - text_area_width;
     }
+
+  g_object_notify (G_OBJECT (entry), "scroll_offset");
 }
 
 static gint
@@ -2667,7 +2678,7 @@ gtk_entry_move_visually (GtkEntry *entry,
 			 gint      count)
 {
   gint index;
-  PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
   const gchar *text;
 
   text = pango_layout_get_text (layout);
@@ -2714,8 +2725,6 @@ gtk_entry_move_visually (GtkEntry *entry,
       while (new_trailing--)
 	index = g_utf8_next_char (entry->text + new_index) - entry->text;
     }
-
-  g_object_unref (G_OBJECT (layout));
   
   return g_utf8_pointer_to_offset (text, text + index);
 }
@@ -2734,7 +2743,7 @@ gtk_entry_move_logically (GtkEntry *entry,
     }
   else if (entry->text)
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
@@ -2758,7 +2767,6 @@ gtk_entry_move_logically (GtkEntry *entry,
 	}
       
       g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
     }
 
   return new_pos;
@@ -2777,7 +2785,7 @@ gtk_entry_move_forward_word (GtkEntry *entry,
     }
   else if (entry->text && (new_pos < entry->text_length))
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
@@ -2789,7 +2797,6 @@ gtk_entry_move_forward_word (GtkEntry *entry,
 	new_pos++;
 
       g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
     }
 
   return new_pos;
@@ -2809,7 +2816,7 @@ gtk_entry_move_backward_word (GtkEntry *entry,
     }
   else if (entry->text && start > 0)
     {
-      PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+      PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
 
@@ -2822,7 +2829,6 @@ gtk_entry_move_backward_word (GtkEntry *entry,
 	new_pos--;
 
       g_free (log_attrs);
-      g_object_unref (G_OBJECT (layout));
     }
 
   return new_pos;
@@ -2831,7 +2837,7 @@ gtk_entry_move_backward_word (GtkEntry *entry,
 static void
 gtk_entry_delete_whitespace (GtkEntry *entry)
 {
-  PangoLayout *layout = gtk_entry_get_layout (entry, FALSE);
+  PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
   PangoLogAttr *log_attrs;
   gint n_attrs;
   gint start, end;
@@ -2847,7 +2853,6 @@ gtk_entry_delete_whitespace (GtkEntry *entry)
     end++;
 
   g_free (log_attrs);
-  g_object_unref (G_OBJECT (layout));
 
   if (start != end)
     gtk_editable_delete_text (GTK_EDITABLE (entry), start, end);
@@ -3260,16 +3265,122 @@ gtk_entry_get_has_frame (GtkEntry *entry)
   return entry->has_frame;
 }
 
+
+/**
+ * gtk_entry_get_layout:
+ * @entry: a #GtkEntry
+ * 
+ * Gets the #PangoLayout used to display the entry.
+ * The layout is useful to e.g. convert text positions to
+ * pixel positions, in combination with gtk_entry_get_layout_offsets().
+ * The returned layout is owned by the entry so need not be
+ * freed by the caller.
+ *
+ * Keep in mind that the layout text may contain a preedit string, so
+ * gtk_entry_layout_index_to_text_index() and
+ * gtk_entry_text_index_to_layout_index() are needed to convert byte
+ * indices in the layout to byte indices in the entry contents.
+ * 
+ * Return value: the #PangoLayout for this entry
+ **/
+PangoLayout*
+gtk_entry_get_layout (GtkEntry *entry)
+{
+  PangoLayout *layout;
+  
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  layout = gtk_entry_ensure_layout (entry, TRUE);
+
+  return layout;
+}
+
+
+/**
+ * gtk_entry_layout_index_to_text_index:
+ * @entry: a #GtkEntry
+ * @layout_index: byte index into the entry layout text
+ * 
+ * Converts from a position in the entry contents (returned
+ * by gtk_entry_get_text()) to a position in the
+ * entry's #PangoLayout (returned by gtk_entry_get_layout(),
+ * with text retrieved via pango_layout_get_text()).
+ * 
+ * Return value: byte index into the entry contents
+ **/
+gint
+gtk_entry_layout_index_to_text_index (GtkEntry *entry,
+                                      gint      layout_index)
+{
+  gint cursor_index;
+  
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  
+  if (layout_index >= cursor_index && entry->preedit_length)
+    {
+      if (layout_index >= cursor_index + entry->preedit_length)
+	layout_index -= entry->preedit_length;
+      else
+        layout_index = cursor_index;
+    }
+
+  return layout_index;
+}
+
+/**
+ * gtk_entry_text_index_to_layout_index:
+ * @entry: a #GtkEntry
+ * @text_index: byte index into the entry contents
+ * 
+ * Converts from a position in the entry's #PangoLayout(returned by
+ * gtk_entry_get_layout()) to a position in the entry contents
+ * (returned by gtk_entry_get_text()).
+ * 
+ * Return value: byte index into the entry layout text
+ **/
+gint
+gtk_entry_text_index_to_layout_index (GtkEntry *entry,
+                                      gint      text_index)
+{
+  gint cursor_index;
+  g_return_val_if_fail (GTK_IS_ENTRY (entry), 0);
+
+  cursor_index = g_utf8_offset_to_pointer (entry->text, entry->current_pos) - entry->text;
+  
+  if (text_index > cursor_index)
+    text_index += entry->preedit_length;
+
+  return text_index;
+}
+
 /**
  * gtk_entry_get_layout_offsets:
  * @entry: a #GtkEntry
- * @x: location to store X coordinate of layout
- * @y: location to store Y coordinate of layout
+ * @x: location to store X offset of layout, or %NULL
+ * @y: location to store Y offset of layout, or %NULL
+ *
  *
  * Obtains the position of the #PangoLayout used to render text
  * in the entry, in widget coordinates. Useful if you want to line
  * up the text in an entry with some other text, e.g. when using the
  * entry to implement editable cells in a sheet widget.
+ *
+ * Also useful to convert mouse events into coordinates inside the
+ * #PangoLayout, e.g. to take some action if some part of the entry text
+ * is clicked.
+ * 
+ * Note that as the user scrolls around in the entry the offsets will
+ * change; you'll need to connect to the "notify::scroll_offset"
+ * signal to track this. Remember when using the #PangoLayout
+ * functions you need to convert to and from pixels using
+ * PANGO_PIXELS() or #PANGO_SCALE.
+ *
+ * Keep in mind that the layout text may contain a preedit string, so
+ * gtk_entry_layout_index_to_text_index() and
+ * gtk_entry_text_index_to_layout_index() are needed to convert byte
+ * indices in the layout to byte indices in the entry contents.
  * 
  **/
 void
