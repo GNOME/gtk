@@ -282,4 +282,6 @@ gtk_aspect_frame_compute_child_allocation (GtkFrame      *frame,
       child_allocation->x = full_allocation.x + aspect_frame->xalign * (full_allocation.width - child_allocation->width);
       child_allocation->y = full_allocation.y + aspect_frame->yalign * (full_allocation.height - child_allocation->height);
     }
+  else
+    parent_class->compute_child_allocation (frame, child_allocation);
 }

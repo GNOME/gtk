@@ -506,29 +506,27 @@ gtk_frame_size_allocate (GtkWidget     *widget,
 {
   GtkFrame *frame = GTK_FRAME (widget);
   GtkBin *bin = GTK_BIN (widget);
+  GtkAllocation new_allocation;
 
   widget->allocation = *allocation;
 
+  gtk_frame_compute_child_allocation (frame, &new_allocation);
+  
+  /* If the child allocation changed, that means that the frame is drawn
+   * in a new place, so we must redraw the entire widget.
+   */
+  if (GTK_WIDGET_MAPPED (widget) &&
+      (new_allocation.x != frame->child_allocation.x ||
+       new_allocation.y != frame->child_allocation.y ||
+       new_allocation.width != frame->child_allocation.width ||
+       new_allocation.height != frame->child_allocation.height))
+    gtk_widget_queue_clear (widget);
+  
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
-    {
-      GtkAllocation new_allocation;
-      
-      gtk_frame_compute_child_allocation (frame, &new_allocation);
-
-      /* If the child allocation changed, that means that the frame is drawn
-       * in a new place, so we must redraw the entire widget.
-       */
-      if (GTK_WIDGET_MAPPED (widget) &&
-	  (new_allocation.x != frame->child_allocation.x ||
-	   new_allocation.y != frame->child_allocation.y ||
-	   new_allocation.width != frame->child_allocation.width ||
-	   new_allocation.height != frame->child_allocation.height))
-	gtk_widget_queue_clear (widget);
-      
-      gtk_widget_size_allocate (bin->child, &new_allocation);
-      frame->child_allocation = new_allocation;
-    }
-
+    gtk_widget_size_allocate (bin->child, &new_allocation);
+  
+  frame->child_allocation = new_allocation;
+  
   if (frame->label_widget && GTK_WIDGET_VISIBLE (frame->label_widget))
     {
       GtkRequisition child_requisition;
