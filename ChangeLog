@@ -1,3 +1,8 @@
+Thu Mar 26 08:31:58 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmain.c (gtk_propagate_event): do not propagate unhandled key
+ 	events on widgets with parent==NULL twice.
+
 Tue Mar 24 14:59:50 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkhandlebox.h:

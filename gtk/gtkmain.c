@@ -1539,6 +1539,7 @@ gtk_propagate_event (GtkWidget *widget,
       handled_event = (parent &&
 		       GTK_WIDGET_IS_SENSITIVE (parent) &&
 		       gtk_widget_event (parent, event));
+      handled_event |= parent == widget;
     }
   
   /* Other events get propagated up the widget tree
