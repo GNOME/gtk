@@ -1578,7 +1578,8 @@ gtk_widget_map (GtkWidget *widget)
 
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[MAP]);
 
-      gtk_widget_queue_draw (widget);
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_queue_draw (widget);
     }
 }
 
@@ -1598,7 +1599,8 @@ gtk_widget_unmap (GtkWidget *widget)
   
   if (GTK_WIDGET_MAPPED (widget))
     {
-      gtk_widget_queue_clear_child (widget);
+      if (GTK_WIDGET_NO_WINDOW (widget))
+	gtk_widget_queue_clear_child (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
     }
 }
@@ -2380,7 +2382,6 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   else if (widget->allocation.width != real_allocation.width ||
 	   widget->allocation.height != real_allocation.height)
     {
-      gtk_widget_queue_clear_child (widget);
       needs_draw = TRUE;
     }
 

@@ -250,14 +250,17 @@ gtk_label_set_text (GtkLabel *label,
   g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
-  
-  /* Convert text to wide characters */
-  len = strlen (str);
-  str_wc = g_new (GdkWChar, len + 1);
-  wc_len = gdk_mbstowcs (str_wc, str, len + 1);
-  str_wc[wc_len] = '\0';
-  
-  gtk_label_set_text_internal (label, g_strdup (str), str_wc);
+
+  if (!label->label || strcmp (label->label, str))
+    {
+      /* Convert text to wide characters */
+      len = strlen (str);
+      str_wc = g_new (GdkWChar, len + 1);
+      wc_len = gdk_mbstowcs (str_wc, str, len + 1);
+      str_wc[wc_len] = '\0';
+      
+      gtk_label_set_text_internal (label, g_strdup (str), str_wc);
+    }
 }
 
 void

@@ -1,3 +1,16 @@
+Wed Jan 13 13:28:00 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c: eliminate queue_clears or queue_draws where we know
+	that expose events will be generated.
+	(gtk_widget_map): only queue_draw for NO_WINDOW widgets.
+	(gtk_widget_unmap): only queue_clear_child for NO_WINDOW widgets.
+	(gtk_widget_size_allocate): we don't need a queue_clear on changing
+	allocations of !NO_WINDOW widgets, we do still need a full redraw for
+	them though.
+
+	* gtk/gtklabel.c (gtk_label_set_text): check whether the new string
+	actually differs from the original.
+
 Tue Jan 12 22:50:44 PST 1999 Manish Singh <yosh@gimp.org>
 
 	* acinclude.m4
