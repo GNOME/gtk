@@ -606,7 +606,7 @@ gtk_tree_view_column_new (void)
 {
   GtkTreeViewColumn *retval;
 
-  retval = GTK_TREE_VIEW_COLUMN (gtk_type_new (GTK_TYPE_TREE_COLUMN));
+  retval = GTK_TREE_VIEW_COLUMN (gtk_type_new (GTK_TYPE_TREE_VIEW_COLUMN));
 
   return retval;
 }

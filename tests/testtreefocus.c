@@ -266,7 +266,6 @@ tim_toggled (GtkCellRendererToggle *cell,
   gtk_tree_path_free (path);
 }
 
-
 int
 main (int argc, char *argv[])
 {
@@ -370,10 +369,9 @@ main (int argc, char *argv[])
   gtk_tree_view_column_set_width (GTK_TREE_VIEW_COLUMN (column), 50);
   g_object_unref (renderer);
 
-
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
-  gtk_widget_show_all (window);
 
+  gtk_widget_show_all (window);
   gtk_main ();
 
   return 0;

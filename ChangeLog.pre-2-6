@@ -1,3 +1,12 @@
+Fri Mar 16 18:01:17 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.[ch]: s/GTK_TREE_COLUMN/GTK_TREE_VIEW_COLUMN
+
+	* gtk/gtktreeview.c (gtk_tree_view_row_activated): New signal.
+
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): moved pretty much
+	everything into the ::destroy function, and freed a lot more.
+
 2001-03-16  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkwidget.h (struct _GtkWidgetAuxInfo): change to use gint
