@@ -158,6 +158,7 @@ guint	   gtk_quit_add_full	   (guint	       main_level,
 				    GtkDestroyNotify   destroy);
 void	   gtk_quit_remove	   (guint	       quit_handler_id);
 void	   gtk_quit_remove_by_data (gpointer	       data);
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 guint	   gtk_timeout_add	   (guint32	       interval,
 				    GtkFunction	       function,
 				    gpointer	       data);
@@ -187,7 +188,7 @@ guint	   gtk_input_add_full	   (gint	       source,
 				    gpointer	       data,
 				    GtkDestroyNotify   destroy);
 void	   gtk_input_remove	   (guint	       input_handler_id);
-
+#endif /* !GTK_DISABLE_DEPRECATED || GTK_COMPILATION */
 
 guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 				    gpointer	    func_data);

@@ -1,3 +1,20 @@
+2003-01-31  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkpaned.h: Deprecate gtk_paned_computed_position(). (#97077)
+
+	* gtk/gtkmain.h: Deprecate the gtk_timeout_*, gtk_idle_*
+	and gtk_input_* functions.  (#71596)
+	
+	* gtk/gtkentry.c (gtk_entry_move_cursor): 
+	* gtk/gtklabel.c (gtk_label_move_cursor): Handle
+	GTK_MOVEMENT_HORIZONTAL_PAGES in switches.
+
+	* gdk/gdk.h: Deprecate gdk_wcstombs() and gdk_mbstowcs().  (#79803)
+
+	* gtk/gtkitemfactory.h: 
+	* gtk/gtkitemfactory.c (gtk_item_factory_add_foreign): Deprecate. 
+	(#69244)
+
 Thu Jan 30 23:48:30 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_count_special_cell):

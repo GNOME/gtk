@@ -259,7 +259,9 @@ gtk_item_factory_item_remove_widget (GtkWidget		*widget,
  * This function can be used to make widgets participate in the accel
  * saving/restoring functionality provided by gtk_accel_map_save() and
  * gtk_accel_map_load(), even if they haven't been created by an item
- * factory. The recommended API for this purpose are the functions 
+ * factory. 
+ *
+ * Deprecated: The recommended API for this purpose are the functions 
  * gtk_menu_item_set_accel_path() and gtk_widget_set_accel_path(); don't 
  * use gtk_item_factory_add_foreign() in new code, since it is likely to
  * be removed in the future.

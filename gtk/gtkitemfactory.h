@@ -148,11 +148,13 @@ void		gtk_item_factory_construct (GtkItemFactory	*ifactory,
      
 /* These functions operate on GtkItemFactoryClass basis.
  */
+#ifndef GTK_DISABLE_DEPRECATED
 void		gtk_item_factory_add_foreign        (GtkWidget	    *accel_widget,
 						     const gchar    *full_path,
 						     GtkAccelGroup  *accel_group,
 						     guint	     keyval,
 						     GdkModifierType modifiers);
+#endif
      
 GtkItemFactory*       gtk_item_factory_from_widget      (GtkWidget *widget);
 G_CONST_RETURN gchar* gtk_item_factory_path_from_widget (GtkWidget *widget);

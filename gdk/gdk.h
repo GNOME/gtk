@@ -149,10 +149,12 @@ GType gdk_rectangle_get_type (void);
 
 /* Conversion functions between wide char and multibyte strings. 
  */
+#ifndef GDK_DISABLE_DEPRECATED
 gchar     *gdk_wcstombs          (const GdkWChar   *src);
 gint       gdk_mbstowcs          (GdkWChar         *dest,
 				  const gchar      *src,
 				  gint              dest_max);
+#endif
 
 /* Miscellaneous */
 #ifndef GDK_MULTIHEAD_SAFE

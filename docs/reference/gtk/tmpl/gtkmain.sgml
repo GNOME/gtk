@@ -456,7 +456,7 @@ point the timeout is destroyed and will not be called again.
 @data: The data to pass to the function.
 @destroy: Function to call when the timeout is destroyed or %NULL.
 @Returns: A unique id for the event source.
-
+@Deprecated: Use g_timeout_add_full() instead.
 
 <!-- ##### FUNCTION gtk_timeout_add ##### -->
 <para>
@@ -470,7 +470,7 @@ point the timeout is destroyed and will not be called again.
 @function: The function to call periodically.
 @data: The data to pass to the function.
 @Returns: A unique id for the event source.
-
+@Deprecated: Use g_timeout_add() instead.
 
 <!-- ##### FUNCTION gtk_timeout_remove ##### -->
 <para>
@@ -478,6 +478,7 @@ Removes the given timeout destroying all information about it.
 </para>
 
 @timeout_handler_id: The identifier returned when installing the timeout.
+@Deprecated: Use g_source_remove() instead.
 
 
 <!-- ##### FUNCTION gtk_idle_add ##### -->
@@ -490,6 +491,7 @@ higher priority are to be processed. The default priority is
 @function: The function to call.
 @data: The information to pass to the function.
 @Returns: a unique handle for this registration.
+@Deprecated: Use g_idle_add() instead.
 
 
 <!-- ##### FUNCTION gtk_idle_add_priority ##### -->
@@ -505,7 +507,7 @@ Note that you will interfere with GTK+ if you use a priority above
 @function: The function to call.
 @data: Data to pass to that function.
 @Returns: A unique id for the event source.
-
+@Deprecated: Use g_idle_add_full() instead.
 
 <!-- ##### FUNCTION gtk_idle_add_full ##### -->
 <para>
@@ -522,6 +524,7 @@ Note that you will interfere with GTK+ if you use a priority above
 @data: Data to pass to that function.
 @destroy: Function to call when the timeout is destroyed or %NULL.
 @Returns: A unique id for the event source.
+@Deprecated: Use g_idle_add_full() instead.
 
 
 <!-- ##### FUNCTION gtk_idle_remove ##### -->
@@ -530,6 +533,7 @@ Removes the idle function with the given id.
 </para>
 
 @idle_handler_id: Identifies the idle function to remove.
+@Deprecated: Use g_source_remove() instead.
 
 
 <!-- ##### FUNCTION gtk_idle_remove_by_data ##### -->
@@ -538,6 +542,7 @@ Removes the idle function identified by the user data.
 </para>
 
 @data: remove the idle function which was registered with this user data.
+@Deprecated: Use g_idle_remove_by_data() instead.
 
 
 <!-- ##### FUNCTION gtk_input_add_full ##### -->
@@ -554,7 +559,7 @@ on a file descriptor.
 @destroy: callback function to call with @data when the input
   handler is removed, or %NULL.
 @Returns: A unique id for the event source; to be used with gtk_input_remove().
-
+@Deprecated: Use g_io_watch_full() instead.
 
 <!-- ##### FUNCTION gtk_input_remove ##### -->
 <para>
@@ -562,6 +567,7 @@ Removes the function with the given id.
 </para>
 
 @input_handler_id: Identifies the function to remove.
+@Deprecated: Use g_source_remove() instead.
 
 
 <!-- ##### MACRO GTK_PRIORITY_REDRAW ##### -->

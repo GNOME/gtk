@@ -1799,7 +1799,7 @@ gtk_label_expose (GtkWidget      *widget,
       label->text && (*label->text != '\0'))
     {
       get_layout_location (label, &x, &y);
-      
+
       gtk_paint_layout (widget->style,
                         widget->window,
                         GTK_WIDGET_STATE (widget),
@@ -3036,6 +3036,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
 	case GTK_MOVEMENT_PAGES:
+	case GTK_MOVEMENT_HORIZONTAL_PAGES:
 	  break;
 	}
     }
@@ -3070,6 +3071,7 @@ gtk_label_move_cursor (GtkLabel       *label,
 	case GTK_MOVEMENT_DISPLAY_LINES:
 	case GTK_MOVEMENT_PARAGRAPHS:
 	case GTK_MOVEMENT_PAGES:
+	case GTK_MOVEMENT_HORIZONTAL_PAGES:
 	  break;
 	}
     }
