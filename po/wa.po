@@ -28,7 +28,7 @@ msgstr "Saturaedje:"
 
 #: gtk/gtkcolorsel.c:215
 msgid "Value:"
-msgstr "Valixhance:"
+msgstr "Loumance:"
 
 #: gtk/gtkcolorsel.c:216
 msgid "Red:"
@@ -145,7 +145,7 @@ msgstr "Pwed:"
 
 #: gtk/gtkfontsel.c:213
 msgid "Slant:"
-msgstr ""
+msgstr "Clintchaedje"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
@@ -165,11 +165,11 @@ msgstr "Grandeu è Ponts:"
 
 #: gtk/gtkfontsel.c:218
 msgid "Resolution X:"
-msgstr ""
+msgstr "Spexheu x:"
 
 #: gtk/gtkfontsel.c:219
 msgid "Resolution Y:"
-msgstr ""
+msgstr "Spexheu y:"
 
 #: gtk/gtkfontsel.c:220
 msgid "Spacing:"
@@ -177,7 +177,7 @@ msgstr "Espacemint:"
 
 #: gtk/gtkfontsel.c:221
 msgid "Average Width:"
-msgstr ""
+msgstr "Emetrinne lårdjeu"
 
 #: gtk/gtkfontsel.c:222
 msgid "Charset:"
@@ -195,7 +195,7 @@ msgstr "Valixhance dimandeye"
 
 #: gtk/gtkfontsel.c:461
 msgid "Actual Value"
-msgstr ""
+msgstr "Vraiye valixhance"
 
 #: gtk/gtkfontsel.c:494
 msgid "Font"
@@ -244,7 +244,7 @@ msgstr "No del fonte dimandeye:"
 
 #: gtk/gtkfontsel.c:760
 msgid "Actual Font Name:"
-msgstr ""
+msgstr "Vrai no del fonte:"
 
 #: gtk/gtkfontsel.c:771
 #, c-format
@@ -286,11 +286,11 @@ msgstr "oblikes"
 
 #: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1947
 msgid "reverse italic"
-msgstr ""
+msgstr "clintcheyes å rvier"
 
 #: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1948
 msgid "reverse oblique"
-msgstr ""
+msgstr "oblikes å rvier"
 
 #: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1949
 msgid "other"
@@ -336,15 +336,15 @@ msgstr "tenes"
 
 #: gtk/gtkfontsel.c:1777
 msgid "The selected font is not available."
-msgstr ""
+msgstr "Vos n' avoz nén li fonte ki vos avoz tchwezi"
 
 #: gtk/gtkfontsel.c:1783
 msgid "The selected font is not a valid font."
-msgstr ""
+msgstr "Li fonte ki vos avoz tchwezi n' est nén valåbe"
 
 #: gtk/gtkfontsel.c:1841
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Ci fonte est ecôdeye so 2 oktèts, èt mutwet pout nén esse håyneye comufåt"
+msgstr "Ci fonte est ecôdeye so 2 octets, èt mutwet pout nén esse håyneye comufåt"
 
 #: gtk/gtkfontsel.c:1933 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
@@ -356,11 +356,11 @@ msgstr "romane"
 
 #: gtk/gtkfontsel.c:1956
 msgid "proportional"
-msgstr ""
+msgstr "propôrcionel"
 
 #: gtk/gtkfontsel.c:1957
 msgid "monospaced"
-msgstr ""
+msgstr "d' espåçmint egål"
 
 #: gtk/gtkfontsel.c:1958
 msgid "char cell"
@@ -372,7 +372,7 @@ msgstr "Fonte: (passete eployî)"
 
 #: gtk/gtkfontsel.c:2634
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr ""
+msgstr "MAX_FONTS passé. Sacwantès fontes polèt manker"
 
 #: gtk/gtkfontsel.c:3479
 msgid "Apply"
@@ -380,7 +380,7 @@ msgstr "Mete èn oûve"
 
 #: gtk/gtkfontsel.c:3501
 msgid "Font Selection"
-msgstr ""
+msgstr "Tchwezi les fontes"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -405,7 +405,7 @@ msgstr "Éndjin:"
 
 #: gtk/gtkinputdialog.c:253
 msgid "Disabled"
-msgstr ""
+msgstr "Essocté"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
@@ -422,7 +422,7 @@ msgstr "Môde: "
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr ""
+msgstr "Assis"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
@@ -445,7 +445,7 @@ msgstr "Y"
 
 #: gtk/gtkinputdialog.c:502
 msgid "Pressure"
-msgstr ""
+msgstr "Tchôke"
 
 #: gtk/gtkinputdialog.c:503
 msgid "X Tilt"
@@ -461,7 +461,7 @@ msgstr "nole"
 
 #: gtk/gtkinputdialog.c:578 gtk/gtkinputdialog.c:614
 msgid "(disabled)"
-msgstr ""
+msgstr "(essocté)"
 
 #. and clear button
 #: gtk/gtkinputdialog.c:692
