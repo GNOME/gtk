@@ -1,11 +1,11 @@
-2001-05-07  Christian Rose  <menthos@menthos.com>
+2001-05-09  Michael Natterer  <mitch@convergence.de>
 
-	* sv.po: Updated Swedish translation.
+	* ja.po: fixed invalid end-of-line.
 
 2001-04-27  Michael Natterer  <mitch@convergence.de>
 
 	* da.po: removed invalid multibyte sequence.
-	* jp.po: fixed invalid end-of-line.
+	* ja.po: fixed invalid end-of-line.
 
 2001-04-12  Christian Rose  <menthos@menthos.com>
 

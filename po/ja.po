@@ -200,9 +200,7 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
-msgstr ""
-"GIFアニメーションに正しくないサイズのフレームがあり�"
-"�す"
+msgstr "GIFアニメーションに正しくないサイズのフレームがあります"
 
 #: gdk-pixbuf/io-jpeg.c:127
 #, c-format
