@@ -1,5 +1,8 @@
 1999-11-03  Federico Mena Quintero  <federico@redhat.com>
 
+	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_point): I'm a
+	doofus.  Return a distance, not a boolean, for opaque images.
+
 	* src/gnome-canvas-pixbuf.c (recompute_bounding_box): Do proper
 	rounding of bounding box coordinates.
 	(gnome_canvas_pixbuf_bounds): Implemented the ::bounds() method.

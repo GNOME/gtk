@@ -788,7 +788,7 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 		return no_hit;
 
 	if (!apb->has_alpha)
-		return TRUE;
+		return 0.0;
 
 	src = apb->pixels + py * apb->rowstride + px * apb->n_channels;
 
