@@ -33,12 +33,16 @@ Atom              gdk_wm_take_focus;
 Atom              gdk_wm_protocols;
 Atom              gdk_wm_window_protocols[2];
 Atom              gdk_selection_property;
+GdkDndCursorInfo  gdk_dnd_cursorinfo = {None, None, NULL, NULL,
+					{0,0}, {0,0}};
 GdkDndGlobals     gdk_dnd = {None,None,None,
 			     None,None,None,
 			     None,
-			     None,None,
+			     &gdk_dnd_cursorinfo,
 			     NULL,
-			     0, 0,
+			     0,
+			     FALSE, FALSE, FALSE,
+			     None,
 			     {0,0}};
 gchar            *gdk_progname = NULL;
 gchar            *gdk_progclass = NULL;

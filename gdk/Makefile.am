@@ -9,6 +9,7 @@ libgdk_la_SOURCES = \
 	gdkcc.c		\
 	gdkcolor.c	\
 	gdkcursor.c	\
+	gdk_dnd.c	\
 	gdkdraw.c	\
 	gdkfont.c	\
 	gdkgc.c		\

@@ -229,7 +229,12 @@ void gdk_window_dnd_data_set (GdkWindow  *window,
 			      GdkEvent   *event,
 			      gpointer    data,
 			      gulong      data_numbytes);
-
+void gdk_dnd_set_drag_cursors(GdkCursor *default_cursor,
+			      GdkCursor *goahead_cursor);
+void gdk_dnd_set_drag_shape(GdkWindow *default_pixmapwin,
+			    GdkPoint *default_hotspot,
+			    GdkWindow *goahead_pixmapwin,
+			    GdkPoint *goahead_hotspot);
 
 void          gdk_window_set_hints       (GdkWindow       *window,
 					  gint             x,

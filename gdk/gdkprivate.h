@@ -141,14 +141,23 @@ struct _GdkCursorPrivate
   Display *xdisplay;
 };
 
+struct _GdkDndCursorInfo {
+  Cursor          gdk_cursor_dragdefault, gdk_cursor_dragok;
+  GdkWindow      *drag_pm_default, *drag_pm_ok;
+  GdkPoint        default_hotspot, ok_hotspot;
+};
+typedef struct _GdkDndCursorInfo GdkDndCursorInfo;
+
 struct _GdkDndGlobals {
   GdkAtom            gdk_XdeEnter, gdk_XdeLeave, gdk_XdeRequest;
   GdkAtom            gdk_XdeDataAvailable, gdk_XdeDataShow, gdk_XdeCancel;
   GdkAtom            gdk_XdeTypelist;
-  Cursor          gdk_cursor_dragdefault, gdk_cursor_dragok;
+
+  GdkDndCursorInfo  *c;
   GdkWindow     **drag_startwindows;
   guint           drag_numwindows;
-  guint8          drag_really;
+  gboolean        drag_really, drag_perhaps, dnd_grabbed;
+  Window          dnd_drag_target;
   GdkPoint        drag_dropcoords;
 };
 typedef struct _GdkDndGlobals GdkDndGlobals;
@@ -201,6 +210,16 @@ void     gdk_xid_table_insert (XID      *xid,
 			       gpointer  data);
 void     gdk_xid_table_remove (XID       xid);
 gpointer gdk_xid_table_lookup (XID       xid);
+
+/* If you pass x = y = -1, it queries the pointer
+   to find out where it currently is.
+   If you pass x = y = -2, it does anything necessary
+   to know that the drag is ending.
+*/
+void gdk_dnd_display_drag_cursor(gint x,
+				 gint y,
+				 gboolean drag_ok,
+				 gboolean change_made);
 
 
 extern gint              gdk_debug_level;

@@ -21,6 +21,12 @@
 #include "../gdk/gdk.h"
 #include "../gdk/gdkx.h"
 
+/* Variables used by the Drag/Drop and Shape Window demos */
+static GtkWidget *modeller = NULL;
+static GtkWidget *sheets = NULL;
+static GtkWidget *rings = NULL;
+void create_shapes(void);
+
 void
 destroy_window (GtkWidget  *widget,
 		GtkWidget **window)
@@ -3314,8 +3320,17 @@ create_dnd ()
   char *possible_drag_types[] = {"text/plain"};
   char *accepted_drop_types[] = {"text/plain"};
 
+  if(!modeller)
+    create_shapes();
+
   if (!window)
     {
+      GdkPoint hotspot = {5,5};
+      gdk_dnd_set_drag_shape(modeller->window,
+			     &hotspot,
+			     rings->window,
+			     &hotspot);
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
       gtk_signal_connect (GTK_OBJECT (window), "destroy",
@@ -3415,6 +3430,8 @@ create_dnd ()
       gtk_widget_show (button);
     }
 
+  gtk_widget_hide(modeller); gtk_widget_hide(rings);
+
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show (window);
   else
@@ -3425,9 +3442,6 @@ create_dnd ()
  * Shaped Windows
  */
 static GdkWindow *root_win = NULL;
-static GtkWidget *modeller = NULL;
-static GtkWidget *sheets = NULL;
-static GtkWidget *rings = NULL;
 
 typedef struct _cursoroffset {gint x,y;} CursorOffset;
 
