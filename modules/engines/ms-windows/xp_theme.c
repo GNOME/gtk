@@ -310,6 +310,9 @@ xp_theme_get_handle_by_element (XpThemeElement element)
     case XP_THEME_ELEMENT_TREEVIEW_EXPANDER_CLOSED:
       klazz = XP_THEME_CLASS_TREEVIEW;
       break;
+
+    default:
+      break;
     }
 
   if (klazz != XP_THEME_CLASS__SIZEOF)
@@ -537,7 +540,7 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
         }
       break;
 
-    XP_THEME_ELEMENT_DEFAULT_BUTTON:
+    case XP_THEME_ELEMENT_DEFAULT_BUTTON:
       switch(state)
         {
         case GTK_STATE_ACTIVE:
@@ -643,7 +646,7 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
 {
   HTHEME theme;
   RECT rect, clip, *pClip;
-  int xoff, yoff, state;
+  int xoff, yoff;
   HDC dc;
   GdkDrawable *drawable;
   int part_state;

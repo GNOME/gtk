@@ -565,8 +565,6 @@ setup_msw_rc_style(void)
   GdkColor base_prelight;
   GdkColor text_prelight;
 
-  NONCLIENTMETRICS nc;
-
   /* Prelight */
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHTTEXT, &fg_prelight);
   sys_color_to_gtk_color(XP_THEME_CLASS_TEXT, COLOR_HIGHLIGHT, &bg_prelight);
@@ -974,6 +972,9 @@ draw_expander(GtkStyle      *style,
             (window, style->fg_gc[state], x + expander_semi_size, y + 2,
              x + expander_semi_size, y + expander_size - 2);
           break;
+
+	default:
+	  break;
         }
 
       if (success)
@@ -1509,8 +1510,8 @@ draw_box (GtkStyle      *style,
 
               gdk_draw_rectangle (window, gc, TRUE, x, y, width, height);
 
-              gdk_gc_unref (gc);
-              gdk_drawable_unref (pixmap);
+              g_object_unref (gc);
+              g_object_unref (pixmap);
 
               return;
             }

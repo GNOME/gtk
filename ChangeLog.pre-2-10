@@ -1,3 +1,15 @@
+2005-03-21  Tor Lillqvist  <tml@novell.com>
+
+	* modules/engines/ms-windows/*.c: Silence gcc warnings (unused
+	variables, unhandled enum value in switch). Use g_object_unref()
+	instead of deprecated gdk_gc_unref() and gdk_drawable_unref().
+
+	* modules/engines/ms-windows/xp_theme.c (xp_theme_map_gtk_state): 
+	Add missing "case" keyword.
+
+	* modules/engines/ms-windows/Makefile.am: Link with -lgdi32
+	explicitly.
+
 2005-03-20  Tor Lillqvist  <tml@novell.com>
 
 	* gdk/win32/gdkdisplay-win32.c (gdk_display_get_name): Return the

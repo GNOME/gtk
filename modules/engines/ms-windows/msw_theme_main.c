@@ -28,6 +28,7 @@
 
 #include "msw_style.h"
 #include "msw_rc_style.h"
+#include "xp_theme.h"
 
 #ifndef WM_THEMECHANGED
 #define WM_THEMECHANGED 0x031A /* winxp only */
