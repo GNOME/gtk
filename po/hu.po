@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 1999-02-25 05:04-0600\n"
+"Project-Id-Version: gtk+ 1.2\n"
+"POT-Creation-Date: 1999-03-24 12:36+0100\n"
 "PO-Revision-Date: 1998-12-18 12:15+0100\n"
 "Last-Translator: Shooby Ban <bansz@szif.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -42,14 +42,14 @@ msgid "Opacity:"
 msgstr "Átlátszóság:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3475
+#: gtk/gtkcolorsel.c:1668 gtk/gtkfilesel.c:564 gtk/gtkfontsel.c:3707
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr ""
 
 #. The Cancel button
-#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3488
+#: gtk/gtkcolorsel.c:1674 gtk/gtkfilesel.c:571 gtk/gtkfilesel.c:949
+#: gtk/gtkfilesel.c:1053 gtk/gtkfilesel.c:1168 gtk/gtkfontsel.c:3720
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "Mégsem"
@@ -59,29 +59,29 @@ msgid "Help"
 msgstr "Súgó"
 
 #. The directories clist
-#: gtk/gtkfilesel.c:418
+#: gtk/gtkfilesel.c:513
 msgid "Directories"
 msgstr "Könyvtárak"
 
 #. The files clist
-#: gtk/gtkfilesel.c:437
+#: gtk/gtkfilesel.c:532
 msgid "Files"
 msgstr "Fájlok"
 
-#: gtk/gtkfilesel.c:507 gtk/gtkfilesel.c:1461
+#: gtk/gtkfilesel.c:602 gtk/gtkfilesel.c:1632
 #, c-format
 msgid "Directory unreadable: %s"
 msgstr "Olvashatatlan könyvtár: %s"
 
-#: gtk/gtkfilesel.c:539
+#: gtk/gtkfilesel.c:634
 msgid "Create Dir"
 msgstr "Könyvtár létrehozása"
 
-#: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
+#: gtk/gtkfilesel.c:645 gtk/gtkfilesel.c:1022
 msgid "Delete File"
 msgstr "Fájl törlése"
 
-#: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
+#: gtk/gtkfilesel.c:656 gtk/gtkfilesel.c:1126
 msgid "Rename File"
 msgstr "Fájl átnevezése"
 
@@ -90,261 +90,260 @@ msgstr "Fájl átnevezése"
 #. (GtkSignalFunc) gtk_file_selection_fileop_destroy,
 #. (gpointer) fs);
 #.
-#: gtk/gtkfilesel.c:722
+#: gtk/gtkfilesel.c:820
 msgid "Error"
 msgstr "Hiba"
 
 #. close button
-#: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
+#: gtk/gtkfilesel.c:838 gtk/gtkinputdialog.c:354
 msgid "Close"
 msgstr "Bezár"
 
-#: gtk/gtkfilesel.c:815
+#: gtk/gtkfilesel.c:913
 msgid "Create Directory"
 msgstr "Könyvtár létrehozása"
 
-#: gtk/gtkfilesel.c:829
+#: gtk/gtkfilesel.c:927
 msgid "Directory name:"
 msgstr "Könyvtár neve:"
 
 #. buttons
-#: gtk/gtkfilesel.c:842
+#: gtk/gtkfilesel.c:940
 msgid "Create"
 msgstr "Létrehoz"
 
 #. buttons
-#: gtk/gtkfilesel.c:942
+#: gtk/gtkfilesel.c:1044
 msgid "Delete"
 msgstr "Töröl"
 
 #. buttons
-#: gtk/gtkfilesel.c:1057
+#: gtk/gtkfilesel.c:1159
 msgid "Rename"
 msgstr "Átnevez"
 
-#: gtk/gtkfilesel.c:1440
-#, fuzzy
+#: gtk/gtkfilesel.c:1611
 msgid "Selection: "
-msgstr "Kiválasztva: "
+msgstr "Kiválasztott: "
 
-#: gtk/gtkfontsel.c:210
+#: gtk/gtkfontsel.c:209
 msgid "Foundry:"
 msgstr "Találat:"
 
-#: gtk/gtkfontsel.c:211
+#: gtk/gtkfontsel.c:210
 msgid "Family:"
 msgstr "Család:"
 
-#: gtk/gtkfontsel.c:212
+#: gtk/gtkfontsel.c:211
 msgid "Weight:"
 msgstr "Szélesség:"
 
-#: gtk/gtkfontsel.c:213
+#: gtk/gtkfontsel.c:212
 msgid "Slant:"
 msgstr "Dõlés:"
 
-#: gtk/gtkfontsel.c:214
+#: gtk/gtkfontsel.c:213
 msgid "Set Width:"
 msgstr "Méret megadás:"
 
-#: gtk/gtkfontsel.c:215
+#: gtk/gtkfontsel.c:214
 msgid "Add Style:"
 msgstr "Stílus hozzáadása:"
 
-#: gtk/gtkfontsel.c:216
+#: gtk/gtkfontsel.c:215
 msgid "Pixel Size:"
 msgstr "Képpont méret:"
 
-#: gtk/gtkfontsel.c:217
+#: gtk/gtkfontsel.c:216
 msgid "Point Size:"
 msgstr "Pontméret:"
 
-#: gtk/gtkfontsel.c:218
+#: gtk/gtkfontsel.c:217
 msgid "Resolution X:"
 msgstr "X felbontás:"
 
-#: gtk/gtkfontsel.c:219
+#: gtk/gtkfontsel.c:218
 msgid "Resolution Y:"
 msgstr "Y felbontás:"
 
-#: gtk/gtkfontsel.c:220
+#: gtk/gtkfontsel.c:219
 msgid "Spacing:"
 msgstr "Széthúzás:"
 
-#: gtk/gtkfontsel.c:221
+#: gtk/gtkfontsel.c:220
 msgid "Average Width:"
 msgstr "Átlagos szélesség:"
 
-#: gtk/gtkfontsel.c:222
+#: gtk/gtkfontsel.c:221
 msgid "Charset:"
 msgstr "Karakterkészlet:"
 
 #. Number of internationalized titles here must match number
 #. of NULL initializers above
-#: gtk/gtkfontsel.c:459
+#: gtk/gtkfontsel.c:465
 msgid "Font Property"
 msgstr "Betûtípus tulajdonság"
 
-#: gtk/gtkfontsel.c:460
+#: gtk/gtkfontsel.c:466
 msgid "Requested Value"
 msgstr "Kért érték"
 
-#: gtk/gtkfontsel.c:461
+#: gtk/gtkfontsel.c:467
 msgid "Actual Value"
 msgstr "Jelenlegi érték"
 
-#: gtk/gtkfontsel.c:494
+#: gtk/gtkfontsel.c:500
 msgid "Font"
 msgstr "Betûkészlet"
 
-#: gtk/gtkfontsel.c:504 gtk/gtkfontsel.c:2156 gtk/gtkfontsel.c:2386
+#: gtk/gtkfontsel.c:510 gtk/gtkfontsel.c:2195 gtk/gtkfontsel.c:2425
 msgid "Font:"
 msgstr "Betûkészlet:"
 
-#: gtk/gtkfontsel.c:509
+#: gtk/gtkfontsel.c:515
 msgid "Font Style:"
 msgstr "Betûkészlet stílusa:"
 
-#: gtk/gtkfontsel.c:514
+#: gtk/gtkfontsel.c:520
 msgid "Size:"
 msgstr "Méret:"
 
-#: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
+#: gtk/gtkfontsel.c:652 gtk/gtkfontsel.c:874
 msgid "Reset Filter"
 msgstr "Szûrõ törlése"
 
-#: gtk/gtkfontsel.c:660
+#: gtk/gtkfontsel.c:666
 msgid "Metric:"
 msgstr "Metrikus:"
 
-#: gtk/gtkfontsel.c:664
+#: gtk/gtkfontsel.c:670
 msgid "Points"
 msgstr "Pontok"
 
-#: gtk/gtkfontsel.c:671
+#: gtk/gtkfontsel.c:677
 msgid "Pixels"
 msgstr "Képpontok"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:687
+#: gtk/gtkfontsel.c:693
 msgid "Preview:"
 msgstr "Nézet:"
 
-#: gtk/gtkfontsel.c:716
+#: gtk/gtkfontsel.c:722
 msgid "Font Information"
 msgstr "Betûkészlet információ"
 
-#: gtk/gtkfontsel.c:749
+#: gtk/gtkfontsel.c:755
 msgid "Requested Font Name:"
 msgstr "Kért betûkészlet neve:"
 
-#: gtk/gtkfontsel.c:760
+#: gtk/gtkfontsel.c:766
 msgid "Actual Font Name:"
 msgstr "Jelenlegi betûkészlet neve:"
 
-#: gtk/gtkfontsel.c:771
+#: gtk/gtkfontsel.c:777
 #, c-format
 msgid "%i fonts available with a total of %i styles."
 msgstr "a %i betûkészlet %i stílusban található meg."
 
-#: gtk/gtkfontsel.c:786
+#: gtk/gtkfontsel.c:792
 msgid "Filter"
 msgstr "Szûrõ"
 
-#: gtk/gtkfontsel.c:799
+#: gtk/gtkfontsel.c:805
 msgid "Font Types:"
 msgstr "Betûkészlet típusok:"
 
-#: gtk/gtkfontsel.c:807
+#: gtk/gtkfontsel.c:813
 msgid "Bitmap"
 msgstr "Kép"
 
-#: gtk/gtkfontsel.c:813
+#: gtk/gtkfontsel.c:819
 msgid "Scalable"
 msgstr "Méretezhetõ"
 
-#: gtk/gtkfontsel.c:819
+#: gtk/gtkfontsel.c:825
 msgid "Scaled Bitmap"
 msgstr "Méretezhetõ kép"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
-#: gtk/gtkfontsel.c:1215
+#: gtk/gtkfontsel.c:1221
 msgid "regular"
 msgstr "normál"
 
-#: gtk/gtkfontsel.c:1220 gtk/gtkfontsel.c:1948
+#: gtk/gtkfontsel.c:1226 gtk/gtkfontsel.c:1987
 msgid "italic"
 msgstr "dõlt"
 
-#: gtk/gtkfontsel.c:1221 gtk/gtkfontsel.c:1949
+#: gtk/gtkfontsel.c:1227 gtk/gtkfontsel.c:1988
 msgid "oblique"
 msgstr "kurzív"
 
-#: gtk/gtkfontsel.c:1222 gtk/gtkfontsel.c:1950
+#: gtk/gtkfontsel.c:1228 gtk/gtkfontsel.c:1989
 msgid "reverse italic"
 msgstr "visszafelé dõlt"
 
-#: gtk/gtkfontsel.c:1223 gtk/gtkfontsel.c:1951
+#: gtk/gtkfontsel.c:1229 gtk/gtkfontsel.c:1990
 msgid "reverse oblique"
 msgstr "visszafelé kurzív"
 
-#: gtk/gtkfontsel.c:1224 gtk/gtkfontsel.c:1952
+#: gtk/gtkfontsel.c:1230 gtk/gtkfontsel.c:1991
 msgid "other"
 msgstr "más"
 
-#: gtk/gtkfontsel.c:1231
+#: gtk/gtkfontsel.c:1237
 msgid "[M]"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1232
+#: gtk/gtkfontsel.c:1238
 msgid "[C]"
 msgstr ""
 
-#: gtk/gtkfontsel.c:1780
+#: gtk/gtkfontsel.c:1786
 msgid "The selected font is not available."
 msgstr "A kiválasztott betûkészlet nem elérhetõ."
 
-#: gtk/gtkfontsel.c:1786
+#: gtk/gtkfontsel.c:1792
 msgid "The selected font is not a valid font."
 msgstr "A kiválasztott betûkészlet nem létezik."
 
-#: gtk/gtkfontsel.c:1844
+#: gtk/gtkfontsel.c:1853
 msgid "This is a 2-byte font and may not be displayed correctly."
 msgstr "Ez 2 bájtos betûkészlet, megjelenítése nem biztos."
 
-#: gtk/gtkfontsel.c:1936 gtk/gtkinputdialog.c:607
+#: gtk/gtkfontsel.c:1975 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
 msgstr "(nem ismert)"
 
-#: gtk/gtkfontsel.c:1947
+#: gtk/gtkfontsel.c:1986
 msgid "roman"
 msgstr "román"
 
-#: gtk/gtkfontsel.c:1959
+#: gtk/gtkfontsel.c:1998
 msgid "proportional"
 msgstr "proporcionális"
 
-#: gtk/gtkfontsel.c:1960
+#: gtk/gtkfontsel.c:1999
 msgid "monospaced"
 msgstr "egyméretû"
 
-#: gtk/gtkfontsel.c:1961
+#: gtk/gtkfontsel.c:2000
 msgid "char cell"
 msgstr "karaktercellás"
 
-#: gtk/gtkfontsel.c:2161
+#: gtk/gtkfontsel.c:2200
 msgid "Font: (Filter Applied)"
 msgstr "Betûkészlet: (Szûrt)"
 
-#: gtk/gtkfontsel.c:2637
+#: gtk/gtkfontsel.c:2860
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
 msgstr "A MAX_FONTS túllépve. Hiányzik majd egy pár betûtípus."
 
-#: gtk/gtkfontsel.c:3482
+#: gtk/gtkfontsel.c:3714
 msgid "Apply"
 msgstr "Alkalmaz"
 
-#: gtk/gtkfontsel.c:3504
+#: gtk/gtkfontsel.c:3736
 msgid "Font Selection"
 msgstr "Betûkészlet választó"
 
@@ -439,17 +438,17 @@ msgstr "töröl"
 msgid "Page %u"
 msgstr "%u. lap"
 
-#: gtk/gtkrc.c:1529
+#: gtk/gtkrc.c:1609
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Nem találom a képet a pixmap_path (%s) útvonalon (%d. sor)"
 
-#: gtk/gtkrc.c:1532
+#: gtk/gtkrc.c:1612
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
 
-#: gtk/gtkthemes.c:79
+#: gtk/gtkthemes.c:103
 #, c-format
 msgid "Unable to locate loadable module in module_path: \"%s\","
 msgstr "Nem találom a betölthetõ modult a module_path (%s) útvonalon,"
