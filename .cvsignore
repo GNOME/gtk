@@ -8,6 +8,6 @@ Makefile
 Makefile.in
 aclocal.m4
 configure
-gtk+.xconfig
+gtk-config
 config.cache
 
