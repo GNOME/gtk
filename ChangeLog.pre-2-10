@@ -1,3 +1,13 @@
+Thu Jun  5 16:52:54 2003  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/gtktextview.[ch]: Never scroll on focus in
+	(#81893, Patch from Paolo Maggi)
+
+	* gtk/gtktextview.c (gtk_text_view_scroll_[h]pages): 
+	Scroll to the current cursor location before handling
+	the action, in case the user just tabbed in
+	and the cursor is offscreen.
+
 Thu Jun  5 17:20:40 2003  Owen Taylor  <otaylor@redhat.com>
 	 
 	 #107883, Gustavo Giráldez

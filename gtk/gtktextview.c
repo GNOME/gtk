@@ -184,7 +184,6 @@ static gint gtk_text_view_motion_event         (GtkWidget        *widget,
 static gint gtk_text_view_expose_event         (GtkWidget        *widget,
                                                 GdkEventExpose   *expose);
 static void gtk_text_view_draw_focus           (GtkWidget        *widget);
-static void gtk_text_view_grab_focus           (GtkWidget        *widget);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
@@ -505,7 +504,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->focus_out_event = gtk_text_view_focus_out_event;
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->expose_event = gtk_text_view_expose_event;
-  widget_class->grab_focus = gtk_text_view_grab_focus;
   widget_class->focus = gtk_text_view_focus;
   
   widget_class->drag_begin = gtk_text_view_drag_begin;
@@ -3819,9 +3817,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
 
   text_view = GTK_TEXT_VIEW (widget);
 
-  text_view->disable_scroll_on_focus = TRUE;
   gtk_widget_grab_focus (widget);
-  text_view->disable_scroll_on_focus = FALSE;
 
   if (event->window != text_view->text_window->bin_window)
     {
@@ -4258,21 +4254,6 @@ gtk_text_view_draw_focus (GtkWidget *widget)
           gdk_window_clear (widget->window);
         }
     }
-}
-
-static void
-gtk_text_view_grab_focus (GtkWidget *widget)
-{
-  GtkTextView *text_view;
-
-  text_view = GTK_TEXT_VIEW (widget);
-  
-  GTK_WIDGET_CLASS (parent_class)->grab_focus (widget);
-
-  if (!text_view->disable_scroll_on_focus)
-    gtk_text_view_scroll_mark_onscreen (text_view,
-                                        gtk_text_buffer_get_mark (get_buffer (text_view),
-                                                                  "insert"));
 }
 
 static gboolean
@@ -4773,7 +4754,14 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
   
   adj = text_view->vadjustment;
 
-  /* Validate the region that will be brought into view by the cursor motion
+  /* Make sure we start from the current cursor position, even
+   * if it was offscreen.
+   */
+  gtk_text_view_scroll_mark_onscreen (text_view,
+				      gtk_text_buffer_get_mark (get_buffer (text_view),
+								"insert"));
+  
+/* Validate the region that will be brought into view by the cursor motion
    */
   if (count < 0)
     {
@@ -4849,6 +4837,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
   
   adj = text_view->hadjustment;
 
+  /* Make sure we start from the current cursor position, even
+   * if it was offscreen.
+   */
+  gtk_text_view_scroll_mark_onscreen (text_view,
+				      gtk_text_buffer_get_mark (get_buffer (text_view),
+								"insert"));
+  
   /* Validate the line that we're moving within.
    */
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view),
