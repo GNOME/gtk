@@ -102,6 +102,17 @@ GtkTextBuffer
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_insert_range ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@start: 
+@end: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_delete ##### -->
 <para>
 
@@ -125,6 +136,16 @@ GtkTextBuffer
 @end_iter: 
 @default_editable: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_set_text ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@text: 
+@len: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_get_text ##### -->
@@ -157,15 +178,14 @@ GtkTextBuffer
 @end_iter: 
 
 
-<!-- ##### FUNCTION gtk_text_buffer_insert_pixmap ##### -->
+<!-- ##### FUNCTION gtk_text_buffer_insert_pixbuf ##### -->
 <para>
 
 </para>
 
 @buffer: 
 @iter: 
-@pixmap: 
-@mask: 
+@pixbuf: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_create_mark ##### -->
@@ -199,6 +219,15 @@ GtkTextBuffer
 @mark: 
 
 
+<!-- ##### FUNCTION gtk_text_buffer_delete_mark_by_name ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@name: 
+
+
 <!-- ##### FUNCTION gtk_text_buffer_get_mark ##### -->
 <para>
 
@@ -206,6 +235,15 @@ GtkTextBuffer
 
 @buffer: 
 @name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_buffer_get_insert ##### -->
+<para>
+
+</para>
+
+@buffer: 
 @Returns: 
 
 
@@ -360,36 +398,6 @@ GtkTextBuffer
 @setting: 
 
 
-<!-- ##### FUNCTION gtk_text_buffer_set_clipboard_contents ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@text: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_paste_primary_selection ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@override_location: 
-@time: 
-@interactive: 
-@default_editable: 
-
-
 <!-- ##### FUNCTION gtk_text_buffer_delete_selection ##### -->
 <para>
 
@@ -401,35 +409,16 @@ GtkTextBuffer
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@time: 
-@interactive: 
-@default_editable: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_copy ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@time: 
-
-
 <!-- ##### FUNCTION gtk_text_buffer_paste_clipboard ##### -->
 <para>
 
 </para>
 
 @buffer: 
+@default_editable: 
+<!-- # Unused Parameters # -->
 @time: 
 @interactive: 
-@default_editable: 
 
 
 <!-- ##### FUNCTION gtk_text_buffer_get_selection_bounds ##### -->
@@ -441,39 +430,6 @@ GtkTextBuffer
 @start: 
 @end: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_find_string ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@iter: 
-@str: 
-@start: 
-@end: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_find_regexp ##### -->
-<para>
-
-</para>
-
-@buffer: 
-@regexp: 
-@start: 
-@end: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_buffer_spew ##### -->
-<para>
-
-</para>
-
-@buffer: 
 
 
 <!-- ##### SIGNAL GtkTextBuffer::insert-text ##### -->

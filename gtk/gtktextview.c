@@ -38,7 +38,7 @@
 #include "gtktexttypes.h"
 #include <string.h>
 
-#define FOCUS_EDGE_WIDTH 25
+#define FOCUS_EDGE_WIDTH 1
 #define DRAG_THRESHOLD 8
 
 #define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->text_window)
@@ -1906,7 +1906,7 @@ gtk_text_view_button_press_event (GtkWidget *widget, GdkEventButton *event)
           
           if (gtk_text_buffer_get_selection_bounds (text_view->buffer,
                                                     &start, &end) &&
-              gtk_text_iter_in_region (&iter, &start, &end))
+              gtk_text_iter_in_range (&iter, &start, &end))
             {
               text_view->drag_start_x = event->x;
               text_view->drag_start_y = event->y;
@@ -3202,7 +3202,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
 
   if (gtk_text_buffer_get_selection_bounds (text_view->buffer,
                                             &start, &end) &&
-      gtk_text_iter_in_region (&newplace, &start, &end))
+      gtk_text_iter_in_range (&newplace, &start, &end))
     {
       /* We're inside the selection. */
       gdk_drag_status (context, 0, time);

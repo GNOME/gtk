@@ -158,16 +158,18 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data);
+				 gpointer user_data,
+                                 GError **error);
 void gdk_pixbuf__ico_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size);
+gboolean gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
+                                              GError **error);
 
 
 
 /* Shared library entry point --> Can go when generic_image_load
    enters gdk-pixbuf-io */
 GdkPixbuf *
-gdk_pixbuf__ico_image_load(FILE * f)
+gdk_pixbuf__ico_image_load(FILE * f, GError **error)
 {
 	guchar *membuf;
 	size_t length;
@@ -175,7 +177,11 @@ gdk_pixbuf__ico_image_load(FILE * f)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	State = gdk_pixbuf__ico_image_begin_load(NULL, NULL, NULL,
+                                                 NULL, NULL, error);
+        if (State == NULL)
+          return NULL;
+        
 	membuf = g_malloc(4096);
 
 	g_assert(membuf != NULL);
@@ -183,8 +189,11 @@ gdk_pixbuf__ico_image_load(FILE * f)
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-			gdk_pixbuf__ico_image_load_increment(State, membuf, length);
-
+                        if (!gdk_pixbuf__ico_image_load_increment(State, membuf, length,
+                                                                  error)) {
+                                gdk_pixbuf__ico_image_stop_load (State);
+                                return NULL;
+                        }
 	}
 	g_free(membuf);
 	if (State->pixbuf != NULL)
@@ -370,7 +379,8 @@ gdk_pixbuf__ico_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data)
+				 gpointer user_data,
+                                 GError **error)
 {
 	struct ico_progressive_state *context;
 
@@ -633,7 +643,8 @@ static void OneLine(struct ico_progressive_state *context)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size)
+gdk_pixbuf__ico_image_load_increment(gpointer data, guchar * buf, guint size,
+                                     GError **error)
 {
 	struct ico_progressive_state *context =
 	    (struct ico_progressive_state *) data;

@@ -46,15 +46,14 @@ struct _GtkTextIter {
   gpointer dummy2;
   gint dummy3;
   gint dummy4;
-  gint dummy10;
-  gint dummy11;
   gint dummy5;
   gint dummy6;
-  gpointer dummy7;
-  gpointer dummy8;
-  gint dummy9;
-  gpointer pad1;
-  guint pad2;
+  gint dummy7;
+  gint dummy8;
+  gpointer dummy9;
+  gpointer dummy10;
+  gint dummy11;
+  gint dummy12;
 };
 
 
@@ -164,6 +163,7 @@ void     gtk_text_iter_set_line_offset    (GtkTextIter *iter,
 void     gtk_text_iter_forward_to_end     (GtkTextIter *iter);
 gboolean gtk_text_iter_forward_to_newline (GtkTextIter *iter);
 
+
 /* returns TRUE if a toggle was found; NULL for the tag pointer
    means "any tag toggle", otherwise the next toggle of the
    specified tag is located. */
@@ -183,10 +183,12 @@ gboolean gtk_text_iter_backward_find_char     (GtkTextIter *iter,
 					       GtkTextCharPredicate pred,
 					       gpointer user_data);
 
-gboolean gtk_text_iter_forward_search         (GtkTextIter *iter,
-                                               const char  *str,
-                                               gboolean visible_only,
-                                               gboolean slice);
+gboolean gtk_text_iter_forward_search         (const GtkTextIter *iter,
+                                               const gchar *str,
+                                               gboolean     visible_only,
+                                               gboolean     slice,
+                                               GtkTextIter *match_start,
+                                               GtkTextIter *match_end);
 
 gboolean gtk_text_iter_backward_search        (GtkTextIter *iter,
                                                const char  *str,
@@ -200,7 +202,7 @@ gboolean gtk_text_iter_equal           (const GtkTextIter *lhs,
                                         const GtkTextIter *rhs);
 gint     gtk_text_iter_compare         (const GtkTextIter *lhs,
                                         const GtkTextIter *rhs);
-gboolean gtk_text_iter_in_region       (const GtkTextIter *iter,
+gboolean gtk_text_iter_in_range        (const GtkTextIter *iter,
                                         const GtkTextIter *start,
                                         const GtkTextIter *end);
 

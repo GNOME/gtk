@@ -67,16 +67,18 @@ gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				  ModuleUpdatedNotifyFunc updated_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
 				  ModuleAnimationDoneNotifyFunc
-				  anim_done_func, gpointer user_data);
+				  anim_done_func, gpointer user_data,
+                                  GError **error);
 
 void gdk_pixbuf__wbmp_image_stop_load(gpointer data);
 gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
-					       guint size);
+					       guint size,
+                                               GError **error);
 
 
 /* Shared library entry point --> This should be removed when
    generic_image_load enters gdk-pixbuf-io. */
-GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f)
+GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f, GError **error)
 {
 	size_t length;
 	char membuf[4096];
@@ -84,14 +86,19 @@ GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f)
 
 	GdkPixbuf *pb;
 
-	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	State = gdk_pixbuf__wbmp_image_begin_load(NULL, NULL, NULL, NULL, NULL,
+                                                  error);
 
+        if (State == NULL)
+          return NULL;
+        
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
 		  gdk_pixbuf__wbmp_image_load_increment(State,
 							membuf,
-							length);
+							length,
+                                                        error);
 
 	}
 	if (State->pixbuf != NULL)
@@ -111,10 +118,11 @@ GdkPixbuf *gdk_pixbuf__wbmp_image_load(FILE * f)
 
 gpointer
 gdk_pixbuf__wbmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
-				 ModuleUpdatedNotifyFunc updated_func,
-				 ModuleFrameDoneNotifyFunc frame_done_func,
-				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data)
+                                  ModuleUpdatedNotifyFunc updated_func,
+                                  ModuleFrameDoneNotifyFunc frame_done_func,
+                                  ModuleAnimationDoneNotifyFunc
+                                  anim_done_func, gpointer user_data,
+                                  GError **error)
 {
 	struct wbmp_progressive_state *context;
 
@@ -221,7 +229,7 @@ get_mbi(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, i
  * append image data onto inrecrementally built output image
  */
 gboolean gdk_pixbuf__wbmp_image_load_increment(gpointer data, guchar * buf,
-					      guint size)
+                                               guint size, GError **error)
 {
 	struct wbmp_progressive_state *context =
 	    (struct wbmp_progressive_state *) data;

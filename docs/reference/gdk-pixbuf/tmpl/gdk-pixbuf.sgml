@@ -15,6 +15,25 @@ Information that describes an image.
   <para>
   </para>
 
+<!-- ##### ENUM GdkPixbufError ##### -->
+<para>
+
+</para>
+
+@GDK_PIXBUF_ERROR_CORRUPT_IMAGE: 
+@GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: 
+@GDK_PIXBUF_ERROR_BAD_OPTION_VALUE: 
+@GDK_PIXBUF_ERROR_UNKNOWN_TYPE: 
+@GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION: 
+@GDK_PIXBUF_ERROR_FAILED: 
+
+<!-- ##### MACRO GDK_PIXBUF_ERROR ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### ENUM GdkColorspace ##### -->
   <para>
     This enumeration defines the color spaces that are supported by
@@ -23,6 +42,25 @@ Information that describes an image.
 
 @GDK_COLORSPACE_RGB: Indicates a red/green/blue additive color space.
 
+<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
+  <para>
+    These values can be passed to
+    gdk_pixbuf_render_to_drawable_alpha() to control how the alpha
+    chanel of an image should be handled.  This function can create a
+    bilevel clipping mask (black and white) and use it while painting
+    the image.  In the future, when the X Window System gets an alpha
+    channel extension, it will be possible to do full alpha
+    compositing onto arbitrary drawables.  For now both cases fall
+    back to a bilevel clipping mask.
+  </para>
+
+@GDK_PIXBUF_ALPHA_BILEVEL: A bilevel clipping mask (black and white)
+will be created and used to draw the image.  Pixels below 0.5 opacity
+will be considered fully transparent, and all others will be
+considered fully opaque.
+@GDK_PIXBUF_ALPHA_FULL: For now falls back to #GDK_PIXBUF_ALPHA_BILEVEL.
+In the future it will do full alpha compositing.
+
 <!-- ##### STRUCT GdkPixbuf ##### -->
   <para>
     This is the main structure in the &gdk-pixbuf; library.  It is
@@ -30,23 +68,6 @@ Information that describes an image.
     image's pixel data, its color space, bits per sample, width and
     height, and the rowstride or number of bytes between rows.
   </para>
-
-@parent_instance: 
-@colorspace: 
-@n_channels: 
-@bits_per_sample: 
-@width: 
-@height: 
-@rowstride: 
-@pixels: 
-@destroy_fn: 
-@destroy_fn_data: 
-@has_alpha: 
-
-<!-- ##### STRUCT GdkPixbufClass ##### -->
-<para>
-
-</para>
 
 
 <!-- ##### FUNCTION gdk_pixbuf_get_colorspace ##### -->

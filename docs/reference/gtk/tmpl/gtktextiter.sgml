@@ -29,15 +29,14 @@ gtktextiter
 @dummy2: 
 @dummy3: 
 @dummy4: 
-@dummy10: 
-@dummy11: 
 @dummy5: 
 @dummy6: 
 @dummy7: 
 @dummy8: 
 @dummy9: 
-@pad1: 
-@pad2: 
+@dummy10: 
+@dummy11: 
+@dummy12: 
 
 <!-- ##### FUNCTION gtk_text_iter_get_buffer ##### -->
 <para>
@@ -150,14 +149,12 @@ gtktextiter
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_get_pixmap ##### -->
+<!-- ##### FUNCTION gtk_text_iter_get_pixbuf ##### -->
 <para>
 
 </para>
 
 @iter: 
-@pixmap: 
-@mask: 
 @Returns: 
 
 
@@ -504,6 +501,8 @@ gtktextiter
 @str: 
 @visible_only: 
 @slice: 
+@match_start: 
+@match_end: 
 @Returns: 
 
 
@@ -539,7 +538,7 @@ gtktextiter
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
+<!-- ##### FUNCTION gtk_text_iter_in_range ##### -->
 <para>
 
 </para>

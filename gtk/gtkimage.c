@@ -255,7 +255,7 @@ gtk_image_set_from_file   (GtkImage    *image,
   if (filename == NULL)
     return;
   
-  pixbuf = gdk_pixbuf_new_from_file (filename);
+  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
 
   if (pixbuf == NULL)
     return;

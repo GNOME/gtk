@@ -55,7 +55,8 @@ struct _GdkPixbufModule {
 	char *module_name;
 	gboolean (* format_check) (guchar *buffer, int size);
 	GModule *module;
-	GdkPixbuf *(* load) (FILE *f);
+        GdkPixbuf *(* load) (FILE    *f,
+                             GError **error);
         GdkPixbuf *(* load_xpm_data) (const char **data);
 
         /* Incremental loading */
@@ -64,26 +65,33 @@ struct _GdkPixbufModule {
 				 ModuleUpdatedNotifyFunc update_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data);
+				 gpointer user_data,
+                                 GError **error);
         void (* stop_load)          (gpointer context);
         gboolean (* load_increment) (gpointer      context,
                                      const guchar *buf,
-                                     guint         size);
+                                     guint         size,
+                                     GError      **error);
 
 	/* Animation loading */
-	GdkPixbufAnimation *(* load_animation) (FILE *f);
+	GdkPixbufAnimation *(* load_animation) (FILE    *f,
+                                                GError **error);
 
         gboolean (* save) (FILE      *f,
                            GdkPixbuf *pixbuf,
                            gchar    **param_keys,
                            gchar    **param_values,
-                           GError   **err);
+                           GError   **error);
 };
 
 
-GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size);
-GdkPixbufModule *gdk_pixbuf_get_named_module (const char *name);
-void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
+GdkPixbufModule *gdk_pixbuf_get_module (guchar *buffer, guint size,
+                                        const gchar *filename,
+                                        GError **error);
+GdkPixbufModule *gdk_pixbuf_get_named_module (const char *name,
+                                              GError **error);
+gboolean gdk_pixbuf_load_module (GdkPixbufModule *image_module,
+                                 GError **error);
 
 
 

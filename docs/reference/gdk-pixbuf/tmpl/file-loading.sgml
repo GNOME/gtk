@@ -31,6 +31,7 @@ Loading a pixbuf from a file.
 </para>
 
 @filename: 
+@error: 
 @Returns: <!--
 Local variables:
 mode: sgml

@@ -12,6 +12,30 @@ Debugging
 </para>
 
 
+<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:See_Also ##### -->
+<para>
+<variablelist>
+
+<varlistentry>
+<term>#GtkSelection</term>
+<listitem><para>@GtkClipboard provides a high-level wrapper around the
+	    lower level routines that deal with X selections. It is
+	    also possibly to directly manipulate the X selections,
+	    though it is seldom necessary to do so.</para></listitem>
+</varlistentry>
+
+</variablelist>
+</para>
+
+
+<!-- ##### FUNCTION gtk_clipboard_get ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
 <!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Short_Description ##### -->
 
 
@@ -42,6 +66,14 @@ Debugging
 
 </para>
 
+
+<!-- ##### MACRO gtk_widget_set_default_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+@visual: 
 
 <!-- ##### FUNCTION gtk_window_set_focus ##### -->
 <para>
@@ -117,6 +149,21 @@ A structure used to return values from @gtk_type_query.
 @object_size: 
 @class_size: 
 
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+
+<!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
 <para>
 
@@ -127,6 +174,17 @@ A structure used to return values from @gtk_type_query.
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_text_buffer_paste_primary_selection ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@override_location: 
+@time: 
+@interactive: 
+@default_editable: 
+
 <!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT ##### -->
 <para>
 
@@ -136,6 +194,64 @@ A structure used to return values from @gtk_type_query.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_clipboard_set_with_data ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@targets: 
+@n_targets: 
+@get_func: 
+@clear_func: 
+@user_data: 
+@Returns: 
+
+<!-- ##### SIGNAL GtkTextView::copy-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_text_view_get_iter_at_pixel ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@x: 
+@y: 
+
+<!-- ##### USER_FUNCTION GtkClipboardReceivedFunc ##### -->
+<para>
+    A function to be called when the results of gtk_clipboard_request_text()
+    are received, or when the request fails.
+</para>
+
+@clipboard: the #GtkClipboard
+@selection_data: a #GtkSelectionData containing the data was received.
+                 If retrieving the data failed, then then length field
+                 of @selection_data will be negative.
+@data: the @user_data supplied to gtk_clipboard_request_contents().
+
+<!-- ##### FUNCTION gtk_clipboard_clear ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+
+<!-- ##### FUNCTION gtk_clipboard_wait_for_contents ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@target: 
+@Returns: 
 
 <!-- ##### SECTION ./tmpl/gtkenums.sgml.sgml:Short_Description ##### -->
 
@@ -184,6 +300,14 @@ Get the type of GtkIdentifier.
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_text_mark_deleted ##### -->
+<para>
+
+</para>
+
+@mark: 
+@Returns: 
+
 <!-- ##### MACRO gtk_marshal_BOOL__POINTER_STRING_STRING_POINTER ##### -->
 <para>
 
@@ -196,6 +320,15 @@ Get the type of GtkIdentifier.
 </para>
 
 @ruler: the gtkruler
+
+<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@str: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_themes_init ##### -->
 <para>
@@ -224,6 +357,16 @@ Menu Factory
 
 </para>
 
+
+<!-- ##### MACRO gtk_widget_set_visual ##### -->
+<para>
+
+</para>
+
+@w: 
+@v: 
+@widget: 
+@visual: 
 
 <!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
 <para>
@@ -265,6 +408,17 @@ Convert a gtk type into its sequence number
 </para>
 
 
+<!-- ##### USER_FUNCTION GtkClipboardClearFunc ##### -->
+<para>
+A function that will be called when the contents of the clipboard are changed
+or cleared. Once this has called, the @user_data_or_owner argument
+will not be used again.
+</para>
+
+@clipboard: the #GtkClipboard
+@user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
+                     the @owner argument passed to gtk_clipboard_set_owner()
+
 <!-- ##### MACRO GTK_WIDGET_IS_OFFSCREEN ##### -->
 <para>
 
@@ -282,6 +436,13 @@ Convert a gtk type into its sequence number
 
 
 
+<!-- ##### SIGNAL GtkTextView::cut-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+
 <!-- ##### FUNCTION gtk_marshal_BOOL__POINTER ##### -->
 <para>
 
@@ -292,6 +453,35 @@ Convert a gtk type into its sequence number
 @func_data: 
 @args: 
 
+<!-- ##### ARG GtkTextTag:overstrike_set ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
+@interactive: 
+@default_editable: 
+
+<!-- ##### ENUM GtkTextViewMovementStep ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_MOVEMENT_CHAR: 
+@GTK_TEXT_MOVEMENT_POSITIONS: 
+@GTK_TEXT_MOVEMENT_WORD: 
+@GTK_TEXT_MOVEMENT_WRAPPED_LINE: 
+@GTK_TEXT_MOVEMENT_LINE: 
+@GTK_TEXT_MOVEMENT_LINE_ENDS: 
+@GTK_TEXT_MOVEMENT_BUFFER_ENDS: 
+
 <!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER_INT_INT ##### -->
 <para>
 
@@ -301,6 +491,72 @@ Convert a gtk type into its sequence number
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:Long_Description ##### -->
+  <para>
+    The #GtkClipboard object represents a clipboard of data shared
+    between different processes or between different widgets in
+    the same process. Each clipboard is identified by a name encoded as a
+    #GdkAtom. (Conversion to and from strings can be done with
+    gdk_atom_intern() and gdk_atom_name().) The default clipboard
+    corresponds to the CLIPBOARD atom; another commonly used clipboard
+    is the PRIMARY clipboard, which, in X, traditionally contains
+    the currently selected text. 
+  </para>
+  <para>
+    To support having a number of different formats on the clipboard
+    at the same time, the clipboard mechanism allows providing
+    callbacks instead of the actual data.  When you set the contents
+    of the clipboard, you can either supply the data directly (via
+    functions like gtk_clipboard_set_text()), or you can supply a
+    callback to be called at a later time when the data is needed (via
+    gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().)
+    Providing a callback also avoids having to make copies of the data
+    when it is not needed.
+  </para>
+  <para>
+    gtk_clipboard_set_with_data() and gtk_clipboard_set_with_owner()
+    are quite similar; the choice between the two depends mostly on
+    which is more convenient in a particular situation.
+    The former is most useful when you want to have a blob of data
+    with callbacks to convert it into the various data types that you
+    advertise. When the @clear_func you provided is called, you
+    simply free the data blob. The latter is more useful when the
+    contents of clipboard reflect the internal state of a @GObject
+    (As an example, for the PRIMARY clipboard, when an entry widget
+    provides the clipboard's contents the contents are simply the
+    text within the selected region.) If the contents change, the
+    entry widget can call gtk_clipboard_set_with_owner() to update
+    the timestamp for clipboard ownership, without having to worry
+    about @clear_func being called.
+  </para>
+  <para>
+    Requesting the data from the clipboard is essentially
+    asynchronous. If the contents of the clipboard are provided within
+    the same process, then a direct function call will be made to
+    retrieve the data, but if they are provided by another process,
+    then the data needs to be retrieved from the other process, which
+    may take some time. To avoid blocking the user interface, the call
+    to request the selection, gtk_clipboard_request_contents() takes a
+    callback that will be called when the contents are received (or
+    when the request fails.) If you don't want to deal with providing
+    a separate callback, you can also use gtk_clipboard_wait_for_contents().
+    What this does is run the Glib main loop recursively waiting for
+    the contents. This can simplify the code flow, but you still have
+    to be aware that other callbacks in your program can be called
+    while this recursive mainloop is running.
+  </para>
+  <para>
+    Along with the functions to get the clipboard contents as an
+    arbitrary data chunk, there are also functions to retrieve
+    it as text, gtk_clipboard_request_text() and
+    gtk_clipboard_wait_for_text(). These functions take care of
+    determining which formats are advertised by the clipboard
+    provider, asking for the clipboard in the best available format
+    and converting the results into the UTF-8 encoding. (The standard
+    form for representing strings in GTK+.)
+  </para>
+
 
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:See_Also ##### -->
 <para>
@@ -323,6 +579,18 @@ Convert a gtk type into its sequence number
 @factory: 
 @entries: 
 @nentries: 
+
+<!-- ##### FUNCTION gtk_text_buffer_find_string ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@str: 
+@start: 
+@end: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__INT_POINTER_INT_INT_INT_POINTER ##### -->
 <para>
@@ -429,6 +697,10 @@ Get the number of signals defined by this object.
 @subfactory: 
 @path: 
 
+<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:Short_Description ##### -->
+Storing data on Clipboards.
+
+
 <!-- ##### FUNCTION gtk_type_children_types ##### -->
 <para>
 Return the pointer to the type's children's types.
@@ -446,6 +718,22 @@ Register a new set of flags @values and give them the name in
 @type_name: must not be null.
 @values: GtkFlagValue*
 @Returns: 
+
+<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+
+<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
+<para>
+
+</para>
+
+@widget: 
+@selection: 
 
 <!-- ##### ENUM GtkPrivateFlags ##### -->
 <para>
@@ -484,6 +772,16 @@ show the size if @show_size is true.
 @type: GtkType
 @show_size: gboolean
 
+<!-- ##### FUNCTION gtk_clipboard_request_contents ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@target: 
+@callback: 
+@user_data: 
+
 <!-- ##### FUNCTION gtk_marshal_BOOL__POINTER_INT_INT_INT ##### -->
 <para>
 
@@ -493,6 +791,14 @@ show the size if @show_size is true.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_clipboard_get_owner ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
 
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:Long_Description ##### -->
 <para>
@@ -517,6 +823,16 @@ show the size if @show_size is true.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### FUNCTION gtk_text_iter_get_pixmap ##### -->
+<para>
+
+</para>
+
+@iter: 
+@pixmap: 
+@mask: 
+@Returns: 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_UINT ##### -->
 <para>
@@ -548,6 +864,19 @@ will be shown, or NULL to show all setwidths.
 will be shown, or NULL to show all spacings.
 @charsets: a NULL-terminated array of strings containing charset names which
 will be shown, or NULL to show all charsets.
+
+<!-- ##### SECTION ./tmpl/gtkclipboard.sgml:Title ##### -->
+Clipboards
+
+
+<!-- ##### SIGNAL GtkTextView::delete-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
 
 <!-- ##### FUNCTION gtk_container_get_toplevels ##### -->
 <para>
@@ -596,6 +925,16 @@ The last "flat" (no struct) enumerated type value.
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
+<para>
+
+</para>
+
+@iter: 
+@start: 
+@end: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_type_get_varargs_type ##### -->
 <para>
 Get the varargs type associated with @foreign_type
@@ -603,6 +942,20 @@ Get the varargs type associated with @foreign_type
 
 @foreign_type: GtkType
 @Returns: GtkType
+
+<!-- ##### FUNCTION gtk_clipboard_wait_for_text ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@Returns: 
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gtk-docs.sgml" "book" "refsect2" "")
+End:
+-->
 
 <!-- ##### STRUCT GtkMenuFactory ##### -->
 <para>
@@ -621,6 +974,13 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 </para>
 
 @a: 
+
+<!-- ##### SIGNAL GtkTextView::paste-text ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
 
 <!-- ##### MACRO GTK_PRIVATE_SET_FLAG ##### -->
 <para>
@@ -654,6 +1014,19 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 @GTK_DEBUG_SIGNALS: 
 @GTK_DEBUG_DND: 
 @GTK_DEBUG_PLUGSOCKET: 
+
+<!-- ##### FUNCTION gtk_clipboard_set_with_owner ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@targets: 
+@n_targets: 
+@get_func: 
+@clear_func: 
+@owner: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_menu_factory_remove_paths ##### -->
 <para>
@@ -706,6 +1079,14 @@ Hide the name of gtk_identifier_get_type
 </para>
 
 @wid: 
+
+<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
+<para>
+
+</para>
+
+@selection_data: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
 <para>
@@ -833,6 +1214,21 @@ is enabled.
 @type: 
 @action: 
 
+<!-- ##### ENUM GtkTextViewDeleteType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_DELETE_CHAR: 
+@GTK_TEXT_DELETE_HALF_WORD: 
+@GTK_TEXT_DELETE_WHOLE_WORD: 
+@GTK_TEXT_DELETE_HALF_WRAPPED_LINE: 
+@GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE: 
+@GTK_TEXT_DELETE_HALF_LINE: 
+@GTK_TEXT_DELETE_WHOLE_LINE: 
+@GTK_TEXT_DELETE_WHITESPACE: 
+@GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE: 
+
 <!-- ##### MACRO GTK_TYPE_FLAT_FIRST ##### -->
 <para>
 The first "flat" (no struct) enumerated type value.
@@ -853,12 +1249,50 @@ The first "flat" (no struct) enumerated type value.
 </para>
 
 
+<!-- ##### FUNCTION gtk_text_buffer_spew ##### -->
+<para>
+
+</para>
+
+@buffer: 
+
+<!-- ##### STRUCT GtkTextTabArray ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GtkTextTag:overstrike ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### USER_FUNCTION GtkClipboardTextReceivedFunc ##### -->
+<para>
+    A function to be called when the results of gtk_clipboard_request_text()
+    are received, or when the request fails.
+</para>
+
+@clipboard: the #GtkClipboard
+@text: the text received, as a UTF-8 encoded string, or %NULL
+            if retrieving the data failed.
+@data: the @user_data supplied to gtk_clipboard_request_text().
+
 <!-- ##### MACRO GTK_WIDGET_HAS_SHAPE_MASK ##### -->
 <para>
 
 </para>
 
 @obj: 
+
+<!-- ##### FUNCTION gtk_text_buffer_copy ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@time: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__POINTER_INT ##### -->
 <para>
@@ -891,6 +1325,14 @@ gtkenums.sgml
 @func_data: 
 @args: 
 
+<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
+<para>
+
+</para>
+
+@widget: 
+@user_data: 
+
 <!-- ##### FUNCTION gtk_type_check_object_cast ##### -->
 <para>
 Given a pointer to a GtkTypeObject @type_object, and a GtkType @cast_type,
@@ -900,14 +1342,6 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @type_object: GtkTypeObject*
 @cast_type: GtkType
 @Returns: the same GtkTypeObject* as @type_object
-
-<!-- ##### USER_FUNCTION GtkMenuCallback ##### -->
-<para>
-
-</para>
-
-@widget: 
-@user_data: 
 
 <!-- ##### FUNCTION gtk_themes_exit ##### -->
 <para>
@@ -926,17 +1360,47 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @func_data: 
 @args: 
 
-<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
+<!-- ##### USER_FUNCTION GtkClipboardGetFunc ##### -->
 <para>
-
+A function that will be called to provide the contents of the selection.
+If multiple types of data were advertised, the requested type can
+be determined from the @info parameter or by checking the target field
+of @selection_data. If the data could succesfully be converted into
+then it should be stored into the @selection_data object by
+calling gtk_selection_data_set() (or related functions such
+as gtk_seletion_data_get().) If no data is set, the requestor
+will be informed that the attempt to get the data failed.    
 </para>
 
+@clipboard: the #GtkClipboard
+@selection_data: a #GtkSelectionData argument in which the requested
+                     data should be stored.
+@info: the info field corresponding to the requested
+                     target from the #GtkTargetEntry array passed to
+                     gtk_clipboard_set_with_data() or gtk_clipboard_set_with_owner().
+@user_data_or_owner: the @user_data argument passed to gtk_clipboard_set_with_data(), or
+                     the @owner argument passed to gtk_clipboard_set_owner()
 
 <!-- ##### SECTION ./tmpl/gtkmenufactory.sgml:Long_Description ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_clipboard_set_text ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@text: 
+@len: 
 
 <!-- ##### FUNCTION gtk_type_set_varargs_type ##### -->
 <para>
@@ -946,6 +1410,12 @@ Set the varargs type for a fundamental type @foreign_type.
 @foreign_type: Must be a GtkType with a sequence number of zero.  Must not be a
 fundamental type.
 @varargs_type: Must be a GtkType which is either structured or flag, or NONE.
+
+<!-- ##### STRUCT GtkClipboard ##### -->
+<para>
+
+</para>
+
 
 <!-- ##### FUNCTION gtk_type_check_class_cast ##### -->
 <para>
@@ -963,6 +1433,16 @@ sure that it's okay to cast something of that @klass into a @cast_type.
 </para>
 
 @factory: 
+
+<!-- ##### FUNCTION gtk_text_buffer_insert_pixmap ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@iter: 
+@pixmap: 
+@mask: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK_C_CALLBACK ##### -->
 <para>
@@ -1014,6 +1494,14 @@ Print the types @type inherits from.
 
 @type: GtkType
 
+<!-- ##### FUNCTION gtk_text_buffer_set_clipboard_contents ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@text: 
+
 <!-- ##### ENUM GtkFontFilterType ##### -->
 <para>
 A set of bit flags used to specify the filter being set
@@ -1041,6 +1529,15 @@ Return NULL if anything goes wrong.
 
 @window: 
 @defaultw: 
+
+<!-- ##### FUNCTION gtk_clipboard_request_text ##### -->
+<para>
+
+</para>
+
+@clipboard: 
+@callback: 
+@user_data: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
 <para>
@@ -1140,18 +1637,26 @@ Internal function.
 </para>
 
 
-<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<!-- ##### MACRO gtk_widget_push_visual ##### -->
 <para>
 
 </para>
 
-@container: 
+@v: 
+@visual: 
 
 <!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<para>
+
+</para>
+
+@container: 
 
 <!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
 GtkIMContextSimple
@@ -1180,11 +1685,32 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 @func_data: 
 @args: 
 
+<!-- ##### SIGNAL GtkTextView::move-insert ##### -->
+<para>
+
+</para>
+
+@textview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
 <!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Long_Description ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_text_buffer_find_regexp ##### -->
+<para>
+
+</para>
+
+@buffer: 
+@regexp: 
+@start: 
+@end: 
+@Returns: 
 
 <!-- ##### FUNCTION gtk_menu_factory_add_subfactory ##### -->
 <para>
@@ -1194,4 +1720,14 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 @factory: 
 @subfactory: 
 @path: 
+
+<!-- ##### ENUM GtkTextViewScrollType ##### -->
+<para>
+
+</para>
+
+@GTK_TEXT_SCROLL_TO_TOP: 
+@GTK_TEXT_SCROLL_TO_BOTTOM: 
+@GTK_TEXT_SCROLL_PAGE_DOWN: 
+@GTK_TEXT_SCROLL_PAGE_UP: 
 

@@ -1508,16 +1508,19 @@ gtk_text_buffer_emit_tag(GtkTextBuffer *buffer,
                          const GtkTextIter *start,
                          const GtkTextIter *end)
 {
+  GtkTextIter start_tmp = *start;
+  GtkTextIter end_tmp = *end;
+  
   g_return_if_fail(tag != NULL);
-
-  gtk_text_iter_reorder (start, end);
+  
+  gtk_text_iter_reorder (&start_tmp, &end_tmp);
   
   if (apply)
     gtk_signal_emit (GTK_OBJECT(buffer), signals[APPLY_TAG],
-                     tag, start, end);
+                     tag, &start_tmp, &end_tmp);
   else
     gtk_signal_emit (GTK_OBJECT(buffer), signals[REMOVE_TAG],
-                     tag, start, end);
+                     tag, &start_tmp, &end_tmp);
 }
 
 

@@ -72,10 +72,12 @@ struct _GdkPixbufLoaderClass
 
 GtkType              gdk_pixbuf_loader_get_type      (void) G_GNUC_CONST;
 GdkPixbufLoader *    gdk_pixbuf_loader_new           (void);
-GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type);
+GdkPixbufLoader *    gdk_pixbuf_loader_new_with_type (const char *image_type,
+                                                      GError    **error);
 gboolean             gdk_pixbuf_loader_write         (GdkPixbufLoader *loader,
 						      const guchar    *buf,
-						      gsize            count);
+						      gsize            count,
+                                                      GError         **error);
 GdkPixbuf *          gdk_pixbuf_loader_get_pixbuf    (GdkPixbufLoader *loader);
 GdkPixbufAnimation * gdk_pixbuf_loader_get_animation (GdkPixbufLoader *loader);
 void                 gdk_pixbuf_loader_close         (GdkPixbufLoader *loader);

@@ -140,6 +140,38 @@ setup_png_transformations(png_structp png_read_ptr, png_infop png_info_ptr,
 #endif
 }
 
+static void
+png_simple_error_callback(png_structp png_save_ptr,
+                          png_const_charp error_msg)
+{
+        GError **error;
+        
+        error = png_get_error_ptr(png_save_ptr);
+
+        /* I don't trust libpng to call the error callback only once,
+         * so check for already-set error
+         */
+        if (error && *error == NULL) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_FAILED,
+                             _("Fatal error saving PNG image file: %s"),
+                             error_msg);
+        }
+}
+
+static void
+png_simple_warning_callback(png_structp png_save_ptr,
+                            png_const_charp warning_msg)
+{
+        /* Don't print anything; we should not be dumping junk to
+         * stderr, since that may be bad for some apps. If it's
+         * important enough to display, we need to add a GError
+         * **warning return location wherever we have an error return
+         * location.
+         */
+}
+
 /* Destroy notification function for the pixbuf */
 static void
 free_buffer (guchar *pixels, gpointer data)
@@ -149,7 +181,7 @@ free_buffer (guchar *pixels, gpointer data)
 
 /* Shared library entry point */
 GdkPixbuf *
-gdk_pixbuf__png_image_load (FILE *f)
+gdk_pixbuf__png_image_load (FILE *f, GError **error)
 {
 	png_structp png_ptr;
 	png_infop info_ptr, end_info;
@@ -159,7 +191,10 @@ gdk_pixbuf__png_image_load (FILE *f)
 	png_bytepp rows;
 	guchar *pixels;
 
-	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING,
+                                          error,
+                                          png_simple_error_callback,
+                                          png_simple_warning_callback);
 	if (!png_ptr)
 		return NULL;
 
@@ -197,6 +232,16 @@ gdk_pixbuf__png_image_load (FILE *f)
 
 	pixels = malloc (w * h * bpp);
 	if (!pixels) {
+                /* Check error NULL, normally this would be broken,
+                 * but libpng makes me want to code defensively.
+                 */
+                if (error && *error == NULL) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to load PNG file"));
+                }
+                
 		png_destroy_read_struct (&png_ptr, &info_ptr, &end_info);
 		return NULL;
 	}
@@ -273,6 +318,7 @@ struct _LoadContext {
         
         guint fatal_error_occurred : 1;
 
+        GError **error;
 };
 
 gpointer
@@ -280,7 +326,8 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				  ModuleUpdatedNotifyFunc update_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
 				  ModuleAnimationDoneNotifyFunc anim_done_func,
-				  gpointer user_data)
+				  gpointer user_data,
+                                  GError **error)
 {
         LoadContext* lc;
         
@@ -297,6 +344,7 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
         lc->first_pass_seen_in_chunk = -1;
         lc->last_pass_seen_in_chunk = -1;
         lc->max_row_seen_in_chunk = -1;
+        lc->error = error;
         
         /* Create the main PNG context struct */
 
@@ -308,13 +356,15 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 
         if (lc->png_read_ptr == NULL) {
                 g_free(lc);
+                /* error callback should have set the error */
                 return NULL;
         }
-
+        
 	if (setjmp (lc->png_read_ptr->jmpbuf)) {
 		if (lc->png_info_ptr)
 			png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
                 g_free(lc);
+                /* error callback should have set the error */
                 return NULL;
 	}
 
@@ -325,6 +375,7 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
         if (lc->png_info_ptr == NULL) {
                 png_destroy_read_struct(&lc->png_read_ptr, NULL, NULL);
                 g_free(lc);
+                /* error callback should have set the error */
                 return NULL;
         }
 
@@ -335,6 +386,11 @@ gdk_pixbuf__png_image_begin_load (ModulePreparedNotifyFunc prepare_func,
                                     png_end_callback);
         
 
+        /* We don't want to keep modifying error after returning here,
+         * it may no longer be valid.
+         */
+        lc->error = NULL;
+        
         return lc;
 }
 
@@ -352,7 +408,8 @@ gdk_pixbuf__png_image_stop_load (gpointer context)
 }
 
 gboolean
-gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
+gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size,
+                                     GError **error)
 {
         LoadContext* lc = context;
 
@@ -364,17 +421,20 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
         lc->first_pass_seen_in_chunk = -1;
         lc->last_pass_seen_in_chunk = -1;
         lc->max_row_seen_in_chunk = -1;
+        lc->error = error;
         
         /* Invokes our callbacks as needed */
 	if (setjmp (lc->png_read_ptr->jmpbuf)) {
+                lc->error = NULL;
 		return FALSE;
 	} else {
 		png_process_data(lc->png_read_ptr, lc->png_info_ptr, buf, size);
 	}
 
-        if (lc->fatal_error_occurred)
+        if (lc->fatal_error_occurred) {
+                lc->error = NULL;
                 return FALSE;
-        else {
+        } else {
                 if (lc->first_row_seen_in_chunk >= 0) {
                         /* We saw at least one row */
                         gint pass_diff = lc->last_pass_seen_in_chunk - lc->first_pass_seen_in_chunk;
@@ -417,6 +477,8 @@ gdk_pixbuf__png_image_load_increment(gpointer context, guchar *buf, guint size)
 						  lc->notify_user_data);
                         }
                 }
+
+                lc->error = NULL;
                 
                 return TRUE;
         }
@@ -437,7 +499,6 @@ png_info_callback   (png_structp png_read_ptr,
 
         if (lc->fatal_error_occurred)
                 return;
-        
 
         setup_png_transformations(lc->png_read_ptr,
                                   lc->png_info_ptr,
@@ -458,6 +519,13 @@ png_info_callback   (png_structp png_read_ptr,
         if (lc->pixbuf == NULL) {
                 /* Failed to allocate memory */
                 lc->fatal_error_occurred = TRUE;
+                if (lc->error && *lc->error == NULL) {
+                        g_set_error (lc->error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"),
+                                     width, height);
+                }
                 return;
         }
         
@@ -521,8 +589,17 @@ png_error_callback(png_structp png_read_ptr,
         lc = png_get_error_ptr(png_read_ptr);
         
         lc->fatal_error_occurred = TRUE;
-        
-        fprintf(stderr, "Fatal error loading PNG: %s\n", error_msg);
+
+        /* I don't trust libpng to call the error callback only once,
+         * so check for already-set error
+         */
+        if (lc->error && *lc->error == NULL) {
+                g_set_error (lc->error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Fatal error reading PNG image file: %s"),
+                             error_msg);
+        }
 }
 
 static void
@@ -532,12 +609,18 @@ png_warning_callback(png_structp png_read_ptr,
         LoadContext* lc;
         
         lc = png_get_error_ptr(png_read_ptr);
-        
-        fprintf(stderr, "Warning loading PNG: %s\n", warning_msg);
+
+        /* Don't print anything; we should not be dumping junk to
+         * stderr, since that may be bad for some apps. If it's
+         * important enough to display, we need to add a GError
+         * **warning return location wherever we have an error return
+         * location.
+         */
 }
 
 
 /* Save */
+
 gboolean
 gdk_pixbuf__png_image_save (FILE          *f, 
                             GdkPixbuf     *pixbuf, 
@@ -545,8 +628,6 @@ gdk_pixbuf__png_image_save (FILE          *f,
                             gchar        **values,
                             GError       **error)
 {
-        /* FIXME error handling is broken */
-        
        png_structp png_ptr;
        png_infop info_ptr;
        guchar *ptr;
@@ -583,7 +664,9 @@ gdk_pixbuf__png_image_save (FILE          *f,
        pixels = gdk_pixbuf_get_pixels (pixbuf);
 
        png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING,
-                                          NULL, NULL, NULL);
+                                          error,
+                                          png_simple_error_callback,
+                                          png_simple_warning_callback);
 
        g_return_val_if_fail (png_ptr != NULL, FALSE);
 
@@ -599,8 +682,8 @@ gdk_pixbuf__png_image_save (FILE          *f,
        png_init_io (png_ptr, f);
        if (has_alpha) {
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
-                            PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
-                            PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+                             PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
+                             PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
 #ifdef WORDS_BIGENDIAN
                png_set_swap_alpha (png_ptr);
 #else
@@ -608,9 +691,23 @@ gdk_pixbuf__png_image_save (FILE          *f,
 #endif
        } else {
                png_set_IHDR (png_ptr, info_ptr, w, h, bpc,
-                            PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
-                            PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
+                             PNG_COLOR_TYPE_RGB, PNG_INTERLACE_NONE,
+                             PNG_COMPRESSION_TYPE_BASE, PNG_FILTER_TYPE_BASE);
                data = malloc (w * 3 * sizeof (char));
+
+               if (data == NULL) {
+                       /* Check error NULL, normally this would be broken,
+                        * but libpng makes me want to code defensively.
+                        */
+                       if (error && *error == NULL) {
+                               g_set_error (error,
+                                            GDK_PIXBUF_ERROR,
+                                            GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                            _("Insufficient memory to save PNG file"));
+                       }
+                       png_destroy_write_struct (&png_ptr, (png_infopp) NULL);
+                       return FALSE;
+               }
        }
        sig_bit.red = bpc;
        sig_bit.green = bpc;

@@ -55,12 +55,3 @@ gtktextmark
 @mark: 
 
 
-<!-- ##### FUNCTION gtk_text_mark_deleted ##### -->
-<para>
-
-</para>
-
-@mark: 
-@Returns: 
-
-

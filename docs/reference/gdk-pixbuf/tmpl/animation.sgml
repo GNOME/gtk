@@ -41,28 +41,12 @@ frame.
     action.
   </para>
 
-@pixbuf: 
-@x_offset: 
-@y_offset: 
-@delay_time: 
-@action: 
 
 <!-- ##### STRUCT GdkPixbufAnimation ##### -->
   <para>
     This structure describes an animation, which is represented as a
     list of #GdkPixbufFrame structures.
   </para>
-
-@parent_instance: 
-@n_frames: 
-@frames: 
-@width: 
-@height: 
-
-<!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
-<para>
-
-</para>
 
 
 <!-- ##### FUNCTION gdk_pixbuf_animation_new_from_file ##### -->
@@ -71,6 +55,7 @@ frame.
 </para>
 
 @filename: 
+@error: 
 @Returns: 
 
 

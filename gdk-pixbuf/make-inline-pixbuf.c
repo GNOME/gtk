@@ -187,15 +187,16 @@ main (int argc, char **argv)
   while (i < argc)
     {
       GdkPixbuf *pixbuf;
+      GError *error;
 
       g_assert ((i + 1) < argc);
-      
-      pixbuf = gdk_pixbuf_new_from_file (argv[i+1]);
+
+      error = NULL;
+      pixbuf = gdk_pixbuf_new_from_file (argv[i+1], &error);
 
       if (pixbuf == NULL)
         {
-          fprintf (stderr, "Failed to open image file `%s': %s\n",
-                   argv[i+1], strerror (errno));
+          fprintf (stderr, "%s\n", error->message);
 
           exit (1);
         }

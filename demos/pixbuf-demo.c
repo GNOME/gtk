@@ -65,7 +65,11 @@ load_pixbufs (void)
 {
 	int i;
 
-	background = gdk_pixbuf_new_from_file (BACKGROUND_NAME);
+        /* We pass NULL for the error return location, we don't care
+         * about the error message.
+         */
+        
+	background = gdk_pixbuf_new_from_file (BACKGROUND_NAME, NULL);
 	if (!background)
 		return FALSE;
 
@@ -73,7 +77,7 @@ load_pixbufs (void)
 	back_height = gdk_pixbuf_get_height (background);
 
 	for (i = 0; i < N_IMAGES; i++) {
-		images[i] = gdk_pixbuf_new_from_file (image_names[i]);
+		images[i] = gdk_pixbuf_new_from_file (image_names[i], NULL);
 		if (!images[i])
 			return FALSE;
 	}

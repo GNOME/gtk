@@ -156,7 +156,6 @@ gdk_rgb_set_verbose
 <SECTION>
 <TITLE>Pixbufs</TITLE>
 <FILE>pixbufs</FILE>
-GdkPixbufAlphaMode
 gdk_pixbuf_render_threshold_alpha
 gdk_pixbuf_render_to_drawable
 gdk_pixbuf_render_to_drawable_alpha

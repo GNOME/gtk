@@ -22,6 +22,7 @@
  */
 
 #include <config.h>
+#include <errno.h>
 #include "gdk-pixbuf-io.h"
 #include "gdk-pixbuf-private.h"
 
@@ -92,10 +93,12 @@ gdk_pixbuf_animation_finalize (GObject *object)
 /**
  * gdk_pixbuf_animation_new_from_file:
  * @filename: Name of file to load.
+ * @error: return location for error
  *
  * Creates a new animation by loading it from a file.  The file format is
  * detected automatically.  If the file's format does not support multi-frame
- * images, then an animation with a single frame will be created.
+ * images, then an animation with a single frame will be created. Possible errors
+ * are in the #GDK_PIXBUF_ERROR and #G_FILE_ERROR domains.
  *
  * Return value: A newly created animation with a reference count of 1, or NULL
  * if any of several error conditions ocurred:  the file could not be opened,
@@ -103,7 +106,8 @@ gdk_pixbuf_animation_finalize (GObject *object)
  * allocate the image buffer, or the image file contained invalid data.
  **/
 GdkPixbufAnimation *
-gdk_pixbuf_animation_new_from_file (const char *filename)
+gdk_pixbuf_animation_new_from_file (const char *filename,
+                                    GError    **error)
 {
 	GdkPixbufAnimation *animation;
 	int size;
@@ -114,25 +118,39 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 	g_return_val_if_fail (filename != NULL, NULL);
 
 	f = fopen (filename, "rb");
-	if (!f)
+	if (!f) {
+                g_set_error (error,
+                             G_FILE_ERROR,
+                             g_file_error_from_errno (errno),
+                             _("Failed to open file '%s': %s"),
+                             filename, g_strerror (errno));
 		return NULL;
+        }
 
 	size = fread (&buffer, 1, sizeof (buffer), f);
 
 	if (size == 0) {
+                g_set_error (error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Image file '%s' contains no data"),
+                             filename);
+                
 		fclose (f);
 		return NULL;
 	}
 
-	image_module = gdk_pixbuf_get_module (buffer, size);
+	image_module = gdk_pixbuf_get_module (buffer, size, filename, error);
 	if (!image_module) {
-		g_warning ("Unable to find handler for file: %s", filename);
 		fclose (f);
 		return NULL;
 	}
 
 	if (image_module->module == NULL)
-		gdk_pixbuf_load_module (image_module);
+                if (!gdk_pixbuf_load_module (image_module, error)) {
+                        fclose (f);
+                        return NULL;
+                }
 
 	if (image_module->load_animation == NULL) {
 		GdkPixbuf *pixbuf;
@@ -141,14 +159,35 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 		/* Keep this logic in sync with gdk_pixbuf_new_from_file() */
 
 		if (image_module->load == NULL) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+                                     _("Don't know how to load the animation in file '%s'"),
+                                     filename);                        
 			fclose (f);
 			return NULL;
 		}
 
 		fseek (f, 0, SEEK_SET);
-		pixbuf = (* image_module->load) (f);
+		pixbuf = (* image_module->load) (f, error);
 		fclose (f);
 
+                if (pixbuf == NULL && error != NULL && *error == NULL) {
+                        /* I don't trust these crufty longjmp()'ing image libs
+                         * to maintain proper error invariants, and I don't
+                         * want user code to segfault as a result. We need to maintain
+                         * the invariant that error gets set if NULL is returned.
+                         */
+                        
+                        g_warning ("Bug! gdk-pixbuf loader '%s' didn't set an error on failure.",
+                                   image_module->module_name);
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_FAILED,
+                                     _("Failed to load image '%s': reason not known, probably a corrupt image file"),
+                                     filename);
+                }
+                
 		if (pixbuf == NULL)
                         return NULL;
 
@@ -167,7 +206,26 @@ gdk_pixbuf_animation_new_from_file (const char *filename)
 		animation->height = gdk_pixbuf_get_height (pixbuf);
 	} else {
 		fseek (f, 0, SEEK_SET);
-		animation = (* image_module->load_animation) (f);
+		animation = (* image_module->load_animation) (f, error);
+
+                if (animation == NULL && error != NULL && *error == NULL) {
+                        /* I don't trust these crufty longjmp()'ing
+                         * image libs to maintain proper error
+                         * invariants, and I don't want user code to
+                         * segfault as a result. We need to maintain
+                         * the invariant that error gets set if NULL
+                         * is returned.
+                         */
+                        
+                        g_warning ("Bug! gdk-pixbuf loader '%s' didn't set an error on failure.",
+                                   image_module->module_name);
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_FAILED,
+                                     _("Failed to load animation '%s': reason not known, probably a corrupt animation file"),
+                                     filename);
+                }
+                
 		fclose (f);
 	}
 

@@ -1,3 +1,32 @@
+2000-10-16  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_get_module)
+	(gdk_pixbuf_get_named_module) (gdk_pixbuf_load_module): 
+	add error reporting here also
+
+	* make-inline-pixbuf.c (main): use GError
+
+	* io-xpm.c: include unistd.h
+
+	* gdk-pixbuf-util.c: include string.h
+
+	* io-*.c: add error reporting
+	
+	* gdk-pixbuf-animation.c (gdk_pixbuf_animation_new_from_file): add
+	error reporting
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_new_from_file): Add error reporting
+
+	* gdk-pixbuf-io.h: Add GError** to load_increment and load 
+	methods
+
+	* gdk-pixbuf-io.c (gdk_pixbuf_save) (gdk_pixbuf_savev): return 
+	a G_FILE_ERROR if we fail to write or close the file.
+
+	* gdk-pixbuf.h: remove GDK_PIXBUF_ERROR_IO, instead we'll use
+	G_FILE_ERROR_*. Rename enum to GdkPixbufError, properly following
+	the GError naming rules. Add GError** to load functions.
+
 2000-10-06  Havoc Pennington  <hp@redhat.com>
 
 	* gdk-pixbuf.h: add GdkPixbufAlphaMode

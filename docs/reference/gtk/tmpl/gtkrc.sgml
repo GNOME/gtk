@@ -609,6 +609,9 @@ specific portions of a RC file.
 @GTK_RC_TOKEN_HIGHEST: 
 @GTK_RC_TOKEN_ENGINE: 
 @GTK_RC_TOKEN_MODULE_PATH: 
+@GTK_RC_TOKEN_STOCK: 
+@GTK_RC_TOKEN_LTR: 
+@GTK_RC_TOKEN_RTL: 
 @GTK_RC_TOKEN_LAST: 
 
 <!-- ##### FUNCTION gtk_rc_get_style ##### -->

@@ -1,4 +1,31 @@
-Wed Oct 18 11:14:05 2000  Owen Taylor  <otaylor@redhat.com>
+2000-10-18  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextiter.c (gtk_text_iter_forward_to_newline): Fix a bug 
+	where any number of empty lines would get skipped
+
+	* gtk/gtktextiter.h: Remove padding from GtkTextIter; live on the
+	edge.
+
+	* gtk/gtktextiter.c (gtk_text_iter_make_surreal): enhance the
+	warning about invalid iterators (explain more thoroughly)
+	(gtk_text_iter_in_region): rename gtk_text_iter_in_range
+
+	* gtk/gtktextview.c (FOCUS_EDGE_WIDTH): Make focus rectangle less
+	big
+
+	* demos/*.c: Add error handling
+
+	* gtk/gtktextbuffer.c: don't modify const iterators
+
+	* gtk/gdk-pixbuf-loader.c: Add full error handling here
+
+	* gtk/gtkimage.c (gtk_image_set_from_file): ignore errors
+	on file load
+
+	* gtk/gtkiconfactory.c: Update to reflect addition of error
+	handling to gdk-pixbuf loaders
+
+Wed Oct 18 11:14:05 2000  Owen Taylor  <otaylor@redhat.com>	
 
 	* configure.in demos/Makefile.am demos/testgtk/*: Start of work to
 	move to new modularized testgtk.

@@ -88,6 +88,7 @@ Application-driven progressive image loading.
 </para>
 
 @image_type: 
+@error: 
 @Returns: 
 
 
@@ -99,6 +100,7 @@ Application-driven progressive image loading.
 @loader: 
 @buf: 
 @count: 
+@error: 
 @Returns: 
 
 

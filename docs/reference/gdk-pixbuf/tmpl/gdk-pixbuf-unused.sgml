@@ -1,7 +1,3 @@
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
-Drawables to Pixbufs
-
-
 <!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
   <para>
     A function of this type can be used to override the default
@@ -18,6 +14,10 @@ Drawables to Pixbufs
 
 @pixbuf: The pixbuf that is losing its last reference.
 @data: User closure data.
+
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
+Drawables to Pixbufs
+
 
 <!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
 <para>
@@ -415,13 +415,19 @@ XlibRGB
   </para>
 
 
+<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
   <para>
     gdk_image_get().
   </para>
 
 
-<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:See_Also ##### -->
+<!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
 <para>
 
 </para>
@@ -503,26 +509,7 @@ Getting parts of a drawable's image data into a pixbuf.
 </para>
 
 
-<!-- ##### ENUM GdkPixbufAlphaMode ##### -->
-  <para>
-    These values can be passed to
-    gdk_pixbuf_render_to_drawable_alpha() to control how the alpha
-    chanel of an image should be handled.  This function can create a
-    bilevel clipping mask (black and white) and use it while painting
-    the image.  In the future, when the X Window System gets an alpha
-    channel extension, it will be possible to do full alpha
-    compositing onto arbitrary drawables.  For now both cases fall
-    back to a bilevel clipping mask.
-  </para>
-
-@GDK_PIXBUF_ALPHA_BILEVEL: A bilevel clipping mask (black and white)
-will be created and used to draw the image.  Pixels below 0.5 opacity
-will be considered fully transparent, and all others will be
-considered fully opaque.
-@GDK_PIXBUF_ALPHA_FULL: For now falls back to #GDK_PIXBUF_ALPHA_BILEVEL.
-In the future it will do full alpha compositing.
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
+<!-- ##### STRUCT GdkPixbufClass ##### -->
 <para>
 
 </para>
@@ -695,6 +682,12 @@ In the future it will do full alpha compositing.
       zero and thus be freed.
     </para>
   </refsect2>
+
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Title ##### -->

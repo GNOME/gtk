@@ -27,6 +27,7 @@
 #include "gtkiconfactory.h"
 #include "stock-icons/gtkstockpixbufs.h"
 #include "gtkstock.h"
+#include "gtkintl.h"
 #include <stdlib.h>
 #include <errno.h>
 #include <ctype.h>
@@ -214,7 +215,7 @@ sized_icon_set_from_inline (const guchar *inline_data,
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1);
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
 
   g_assert (source.pixbuf);
 
@@ -236,7 +237,7 @@ unsized_icon_set_from_inline (const guchar *inline_data)
 
   set = gtk_icon_set_new ();
 
-  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1);
+  source.pixbuf = gdk_pixbuf_new_from_inline (inline_data, FALSE, -1, NULL);
 
   g_assert (source.pixbuf);
 
@@ -651,6 +652,7 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
   
   if (source->pixbuf == NULL)
     {
+      GError *error;
       gchar *full;
       
       g_assert (source->filename);
@@ -659,8 +661,9 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
         full = gtk_rc_find_pixmap_in_path (NULL, source->filename);
       else
         full = g_strdup (source->filename);
-      
-      source->pixbuf = gdk_pixbuf_new_from_file (full);
+
+      error = NULL;
+      source->pixbuf = gdk_pixbuf_new_from_file (full, &error);
 
       g_free (full);
       
@@ -669,7 +672,8 @@ find_and_prep_icon_source (GtkIconSet       *icon_set,
           /* Remove this icon source so we don't keep trying to
            * load it.
            */
-          g_warning ("Failed to load icon '%s'", source->filename);
+          g_warning (_("Error loading icon: %s"), error->message);
+          g_error_free (error);
           
           icon_set->sources = g_slist_remove (icon_set->sources, source);
 

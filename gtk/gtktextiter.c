@@ -62,9 +62,6 @@ struct _GtkTextRealIter
      and ditto for char offsets. */
   gint segment_byte_offset;
   gint segment_char_offset;
-  /* Pads are here for binary-compatible expansion space. */
-  gpointer pad1;
-  guint pad2;
 };
 
 /* These "set" functions should not assume any fields
@@ -158,7 +155,10 @@ gtk_text_iter_make_surreal(const GtkTextIter *_iter)
                 "was created.\nYou must use marks, character numbers, "
                 "or line numbers to preserve a position across buffer "
                 "modifications.\nYou can apply tags and insert marks "
-                "without invalidating your iterators, however.");
+                "without invalidating your iterators,\n"
+                "but any mutation that affects 'indexable' buffer contents "
+                "(contents that can be referred to by character offset)\n"
+                "will invalidate all outstanding iterators");
       return NULL;
     }
 
@@ -2048,6 +2048,55 @@ gtk_text_iter_backward_chars(GtkTextIter *iter, gint count)
     }
 }
 
+#if 0
+
+/* These two can't be implemented efficiently (always have to use
+ * a linear scan, since that's the only way to find all the non-text
+ * segments)
+ */
+
+/**
+ * gtk_text_iter_forward_text_chars:
+ * @iter: a #GtkTextIter
+ * @count: number of chars to move
+ * 
+ * Moves forward by @count text characters (pixbufs, widgets,
+ * etc. do not count as characters for this). Equivalent to moving
+ * through the results of gtk_text_iter_get_text(), rather than
+ * gtk_text_iter_get_slice().
+ * 
+ * Return value: whether @iter moved and is dereferenceable
+ **/
+gboolean
+gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
+                                   gint         count)
+{
+
+
+
+}
+
+/**
+ * gtk_text_iter_forward_text_chars:
+ * @iter: a #GtkTextIter
+ * @count: number of chars to move
+ * 
+ * Moves backward by @count text characters (pixbufs, widgets,
+ * etc. do not count as characters for this). Equivalent to moving
+ * through the results of gtk_text_iter_get_text(), rather than
+ * gtk_text_iter_get_slice().
+ * 
+ * Return value: whether @iter moved and is dereferenceable
+ **/
+gboolean
+gtk_text_iter_backward_text_chars (GtkTextIter *iter,
+                                   gint         count)
+{
+
+
+}
+#endif
+
 /**
  * gtk_text_iter_forward_line:
  * @iter: an iterator
@@ -2527,7 +2576,11 @@ gtk_text_iter_forward_to_newline(GtkTextIter *iter)
       /* Move to end of next line. */
       if (gtk_text_iter_forward_line(iter))
         {
-          gtk_text_iter_forward_to_newline(iter);
+          /* We don't want to move past all
+           * empty lines.
+           */
+          if (gtk_text_iter_get_char (iter) != '\n')
+            gtk_text_iter_forward_to_newline(iter);
           return TRUE;
         }
       else
@@ -2760,12 +2813,46 @@ gtk_text_iter_backward_find_char (GtkTextIter *iter,
   return FALSE;
 }
 
+static void
+forward_chars_with_skipping (GtkTextIter *iter,
+                             gint         count,
+                             gboolean     skip_invisible,
+                             gboolean     skip_nontext)
+{
+
+  gint i;
+
+  g_return_if_fail (count >= 0);
+  
+  i = count;
+  
+  while (i > 0)
+    {
+      gboolean ignored = FALSE;
+      
+      if (skip_nontext &&
+          gtk_text_iter_get_char (iter) == gtk_text_unknown_char)
+        ignored = TRUE;
+      
+      if (!ignored &&
+          skip_invisible &&
+          gtk_text_btree_char_is_invisible (iter))
+        ignored = TRUE;
+      
+      gtk_text_iter_next_char (iter);
+      
+      if (!ignored)
+        --i;
+    }
+}
+
 static gboolean
 lines_match (const GtkTextIter *start,
              const gchar **lines,
              gboolean visible_only,
              gboolean slice,
-             GtkTextIter *match_start)
+             GtkTextIter *match_start,
+             GtkTextIter *match_end)
 {
   GtkTextIter next;
   gchar *line_text;
@@ -2773,13 +2860,14 @@ lines_match (const GtkTextIter *start,
   gint offset;
   
   if (*lines == NULL || **lines == '\0')
-    return TRUE;
+    {
+      if (match_end)
+        *match_end = *start;
+      return TRUE;
+    }
   
   next = *start;
   gtk_text_iter_forward_line (&next);
-
-  gtk_text_iter_spew (start, "start");
-  gtk_text_iter_spew (&next, "next");
   
   /* No more text in buffer, but *lines is nonempty */
   if (gtk_text_iter_equal (start, &next))
@@ -2795,9 +2883,7 @@ lines_match (const GtkTextIter *start,
         line_text = gtk_text_iter_get_slice (start, &next);
     }
   else
-    {
-      /* FIXME */
-      g_warning ("Searching for non-slice text is currently broken (you must include 'unknown char' for pixmaps in order to match them)");
+    {      
       if (visible_only)
         line_text = gtk_text_iter_get_visible_text (start, &next);
       else
@@ -2834,22 +2920,28 @@ lines_match (const GtkTextIter *start,
   if (match_start)
     {
       *match_start = next;
-      gtk_text_iter_forward_chars (match_start, offset);
+
+      forward_chars_with_skipping (match_start, offset,
+                                   visible_only, !slice);
     }
 
   /* Go to end of search string */
   offset += g_utf8_strlen (*lines, -1);
 
-  gtk_text_iter_forward_chars (&next, offset);
+  forward_chars_with_skipping (&next, offset,
+                               visible_only, !slice);
   
   g_free (line_text);
 
   ++lines;
 
+  if (match_end)
+    *match_end = next;
+  
   /* pass NULL for match_start, since we don't need to find the
    * start again.
    */
-  return lines_match (&next, lines, visible_only, slice, NULL);
+  return lines_match (&next, lines, visible_only, slice, NULL, match_end);
 }
 
 /* strsplit() that retains the delimiter as part of the string. */
@@ -2909,10 +3001,12 @@ strbreakup (const char *string,
 }
 
 gboolean
-gtk_text_iter_forward_search (GtkTextIter *iter,
-                              const char  *str,
-                              gboolean visible_only,
-                              gboolean slice)
+gtk_text_iter_forward_search (const GtkTextIter *iter,
+                              const gchar       *str,
+                              gboolean           visible_only,
+                              gboolean           slice,
+                              GtkTextIter       *match_start,
+                              GtkTextIter       *match_end)
 {
   gchar **lines = NULL;
   GtkTextIter match;
@@ -2937,12 +3031,18 @@ gtk_text_iter_forward_search (GtkTextIter *iter,
        * gtk_text_iter_get_text() is called repeatedly on
        * a single line.
        */
+      GtkTextIter end;
+      
       if (lines_match (&search, (const gchar**)lines,
-                       visible_only, slice, &match))
+                       visible_only, slice, &match, &end))
         {
           retval = TRUE;
           
-          *iter = match;
+          if (match_start)
+            *match_start = match;
+
+          if (match_end)
+            *match_end = end;
           
           break;
         }
@@ -2963,8 +3063,8 @@ gtk_text_iter_backward_search (GtkTextIter *iter,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (str != NULL, FALSE);
 
-
-
+  
+  
 }
 
 /*
@@ -3057,9 +3157,9 @@ gtk_text_iter_compare(const GtkTextIter *lhs, const GtkTextIter *rhs)
 }
 
 gboolean
-gtk_text_iter_in_region (const GtkTextIter *iter,
-                          const GtkTextIter *start,
-                          const GtkTextIter *end)
+gtk_text_iter_in_range (const GtkTextIter *iter,
+                        const GtkTextIter *start,
+                        const GtkTextIter *end)
 {
   return gtk_text_iter_compare(iter, start) >= 0 &&
     gtk_text_iter_compare(iter, end) < 0;
@@ -3313,6 +3413,8 @@ gtk_text_iter_check (const GtkTextIter *iter)
   
   /* We are going to check our class invariants for the Iter class. */
 
+  g_assert (sizeof (GtkTextIter) == sizeof (GtkTextRealIter));
+  
   if (real->chars_changed_stamp !=
       gtk_text_btree_get_chars_changed_stamp(real->tree))
     g_error("iterator check failed: invalid iterator");

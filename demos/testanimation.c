@@ -408,8 +408,18 @@ main (int argc, char **argv)
 		return 0;
 	} else {
 		for (i = 1; i < argc; i++) {
-			animation = gdk_pixbuf_animation_new_from_file (argv[i]);
+                        GError *error;
 
+                        error = NULL;
+			animation = gdk_pixbuf_animation_new_from_file (argv[i],
+                                                                        &error);
+
+                        if (animation == NULL) {
+                                g_warning ("Failed to load animation: %s",
+                                           error->message);
+                                g_error_free (error);
+                        }
+                        
 			if (animation) {
 				gint i = 0;
 				GList *listptr;

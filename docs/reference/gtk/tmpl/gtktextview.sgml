@@ -20,44 +20,6 @@ GtkTextView
 </para>
 
 
-<!-- ##### ENUM GtkTextViewMovementStep ##### -->
-<para>
-
-</para>
-
-@GTK_TEXT_MOVEMENT_CHAR: 
-@GTK_TEXT_MOVEMENT_POSITIONS: 
-@GTK_TEXT_MOVEMENT_WORD: 
-@GTK_TEXT_MOVEMENT_WRAPPED_LINE: 
-@GTK_TEXT_MOVEMENT_LINE: 
-@GTK_TEXT_MOVEMENT_LINE_ENDS: 
-@GTK_TEXT_MOVEMENT_BUFFER_ENDS: 
-
-<!-- ##### ENUM GtkTextViewScrollType ##### -->
-<para>
-
-</para>
-
-@GTK_TEXT_SCROLL_TO_TOP: 
-@GTK_TEXT_SCROLL_TO_BOTTOM: 
-@GTK_TEXT_SCROLL_PAGE_DOWN: 
-@GTK_TEXT_SCROLL_PAGE_UP: 
-
-<!-- ##### ENUM GtkTextViewDeleteType ##### -->
-<para>
-
-</para>
-
-@GTK_TEXT_DELETE_CHAR: 
-@GTK_TEXT_DELETE_HALF_WORD: 
-@GTK_TEXT_DELETE_WHOLE_WORD: 
-@GTK_TEXT_DELETE_HALF_WRAPPED_LINE: 
-@GTK_TEXT_DELETE_WHOLE_WRAPPED_LINE: 
-@GTK_TEXT_DELETE_HALF_LINE: 
-@GTK_TEXT_DELETE_WHOLE_LINE: 
-@GTK_TEXT_DELETE_WHITESPACE: 
-@GTK_TEXT_DELETE_WHITESPACE_LEAVE_ONE: 
-
 <!-- ##### FUNCTION gtk_text_view_new ##### -->
 <para>
 
@@ -91,17 +53,6 @@ GtkTextView
 
 @text_view: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_view_get_iter_at_pixel ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@iter: 
-@x: 
-@y: 
 
 
 <!-- ##### FUNCTION gtk_text_view_scroll_to_mark ##### -->
@@ -207,7 +158,7 @@ GtkTextView
 @location: 
 
 
-<!-- ##### SIGNAL GtkTextView::move-insert ##### -->
+<!-- ##### SIGNAL GtkTextView::move ##### -->
 <para>
 
 </para>
@@ -224,7 +175,7 @@ GtkTextView
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::scroll-text ##### -->
+<!-- ##### SIGNAL GtkTextView::insert ##### -->
 <para>
 
 </para>
@@ -232,7 +183,7 @@ GtkTextView
 @textview: the object which received the signal.
 @arg1: 
 
-<!-- ##### SIGNAL GtkTextView::delete-text ##### -->
+<!-- ##### SIGNAL GtkTextView::delete ##### -->
 <para>
 
 </para>
@@ -241,21 +192,21 @@ GtkTextView
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkTextView::cut-text ##### -->
+<!-- ##### SIGNAL GtkTextView::cut-clipboard ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::copy-text ##### -->
+<!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
 <para>
 
 </para>
 
 @textview: the object which received the signal.
 
-<!-- ##### SIGNAL GtkTextView::paste-text ##### -->
+<!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
 <para>
 
 </para>

@@ -823,18 +823,6 @@ GtkWidget
 @Returns: 
 
 
-<!-- ##### MACRO gtk_widget_set_visual ##### -->
-<para>
-
-</para>
-
-@w: 
-@v: 
-<!-- # Unused Parameters # -->
-@widget: 
-@visual: 
-
-
 <!-- ##### FUNCTION gtk_widget_get_events ##### -->
 <para>
 
@@ -939,16 +927,6 @@ GtkWidget
 @cmap: 
 
 
-<!-- ##### MACRO gtk_widget_push_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-<!-- # Unused Parameters # -->
-@visual: 
-
-
 <!-- ##### FUNCTION gtk_widget_pop_style ##### -->
 <para>
 
@@ -961,14 +939,6 @@ GtkWidget
 
 </para>
 
-
-
-<!-- ##### MACRO gtk_widget_pop_visual ##### -->
-<para>
-
-</para>
-
-@v: 
 
 
 <!-- ##### FUNCTION gtk_widget_set_default_style ##### -->
@@ -993,16 +963,6 @@ GtkWidget
 </para>
 
 @Returns: 
-
-
-<!-- ##### MACRO gtk_widget_set_default_visual ##### -->
-<para>
-
-</para>
-
-@v: 
-<!-- # Unused Parameters # -->
-@visual: 
 
 
 <!-- ##### FUNCTION gtk_widget_get_default_colormap ##### -->

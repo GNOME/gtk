@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#include <unistd.h>
 #include "gdk-pixbuf-private.h"
 #include "gdk-pixbuf-io.h"
 
@@ -1400,7 +1401,8 @@ gdk_pixbuf__xpm_image_begin_load (ModulePreparedNotifyFunc prepare_func,
                                   ModuleUpdatedNotifyFunc update_func,
                                   ModuleFrameDoneNotifyFunc frame_done_func,
                                   ModuleAnimationDoneNotifyFunc anim_done_func,
-                                  gpointer user_data)
+                                  gpointer user_data,
+                                  GError **error)
 {
        XPMContext *context;
        gint fd;

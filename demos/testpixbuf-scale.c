@@ -62,7 +62,8 @@ main(int argc, char **argv)
 	GtkWidget *hbox, *label, *hscale;
 	GtkAdjustment *adjustment;
 	GtkRequisition scratch_requisition;
-
+        GError *error;
+        
 	pixbuf_init ();
 
 	gtk_init (&argc, &argv);
@@ -73,9 +74,12 @@ main(int argc, char **argv)
 		exit (1);
 	}
 
-	pixbuf = gdk_pixbuf_new_from_file (argv[1]);
+        error = NULL;
+	pixbuf = gdk_pixbuf_new_from_file (argv[1], &error);
 	if (!pixbuf) {
-		fprintf (stderr, "Cannot load %s\n", argv[1]);
+		fprintf (stderr, "Cannot load image: %s\n",
+                         error->message);
+                g_error_free (error);
 		exit(1);
 	}
 

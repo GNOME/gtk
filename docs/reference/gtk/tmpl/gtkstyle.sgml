@@ -71,6 +71,7 @@ Styles
 @clone: 
 @init_from_rc: 
 @set_background: 
+@render_icon: 
 @draw_hline: 
 @draw_vline: 
 @draw_shadow: 

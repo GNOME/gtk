@@ -1299,8 +1299,6 @@ buffer_search_forward (Buffer *buffer, const char *str,
 {
   GtkTextIter iter;
   GtkTextIter start, end;
-  gint char_len;
-  int i = 0;
   GtkWidget *dialog;
   
   /* remove tag from whole buffer */
@@ -1313,22 +1311,17 @@ buffer_search_forward (Buffer *buffer, const char *str,
                                                               "insert"));
 
 
-  char_len = g_utf8_strlen (str, -1);
-
-  if (char_len > 0)
+  if (*str != '\0')
     {
-      while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE))
+      GtkTextIter match_start, match_end;
+      
+      while (gtk_text_iter_forward_search (&iter, str, TRUE, FALSE,
+                                           &match_start, &match_end))
         {
-          GtkTextIter end = iter;
-          
-          gtk_text_iter_forward_chars (&end, char_len);
-          
           gtk_text_buffer_apply_tag (buffer->buffer, buffer->found_text_tag,
-                                     &iter, &end);
+                                     &match_start, &match_end);
 
-          iter = end;
-          
-          ++i;
+          iter = match_end;
         }
     }
 

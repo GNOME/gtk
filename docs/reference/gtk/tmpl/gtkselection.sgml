@@ -184,15 +184,6 @@ for a given widget and selection.
 @ntargets: number of entries in @targets
 
 
-<!-- ##### FUNCTION gtk_selection_clear_targets ##### -->
-<para>
-
-</para>
-
-@widget: 
-@selection: 
-
-
 <!-- ##### FUNCTION gtk_selection_convert ##### -->
 <para>
 Request the contents of a selection. When received, 
@@ -209,29 +200,6 @@ a "selection_received" signal will be generated.
           this widget).
 
 
-<!-- ##### FUNCTION gtk_selection_remove_all ##### -->
-<para>
-Removes all handlers and unsets ownership of all 
-selections for a widget. Called when widget is being
-destroyed. This function will not generally be
-called by applications.
-</para>
-
-@widget: a #GtkWidget
-
-
-<!-- ##### STRUCT GtkSelectionData ##### -->
-<para>
-
-</para>
-
-@selection: 
-@target: 
-@type: 
-@format: 
-@data: 
-@length: 
-
 <!-- ##### FUNCTION gtk_selection_data_set ##### -->
 <para>
 Store new data into a GtkSelectionData object. Should
@@ -246,23 +214,15 @@ Null terminates the stored data.
 @length: length of the data
 
 
-<!-- ##### FUNCTION gtk_selection_data_set_text ##### -->
+<!-- ##### FUNCTION gtk_selection_remove_all ##### -->
 <para>
-
+Removes all handlers and unsets ownership of all 
+selections for a widget. Called when widget is being
+destroyed. This function will not generally be
+called by applications.
 </para>
 
-@selection_data: 
-@str: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_selection_data_get_text ##### -->
-<para>
-
-</para>
-
-@selection_data: 
-@Returns: 
+@widget: a #GtkWidget
 
 
 <!-- ##### FUNCTION gtk_selection_data_copy ##### -->

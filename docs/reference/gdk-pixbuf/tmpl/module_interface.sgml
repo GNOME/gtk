@@ -77,6 +77,8 @@ Module Interface
 
 @buffer: 
 @size: 
+@filename: 
+@error: 
 @Returns: 
 
 
@@ -86,6 +88,7 @@ Module Interface
 </para>
 
 @name: 
+@error: 
 @Returns: 
 
 
@@ -95,5 +98,7 @@ Module Interface
 </para>
 
 @image_module: 
+@error: 
+@Returns: 
 
 

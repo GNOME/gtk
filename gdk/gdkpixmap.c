@@ -473,7 +473,7 @@ gdk_pixmap_colormap_create_from_xpm (GdkWindow   *window,
   if (colormap == NULL)
     colormap = gdk_drawable_get_colormap (window);
   
-  pixbuf = gdk_pixbuf_new_from_file (filename);
+  pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
   if (!pixbuf)
     return NULL;
 

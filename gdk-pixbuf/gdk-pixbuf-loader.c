@@ -338,20 +338,32 @@ gdk_pixbuf_loader_animation_done (GdkPixbuf *pixbuf,
 }
 
 static gint
-gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader, const char *image_type)
+gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader,
+                               const char      *image_type,
+                               GError         **error)
 {
   GdkPixbufLoaderPrivate *priv = loader->private;
 
-  if(image_type)
-    priv->image_module = gdk_pixbuf_get_named_module (image_type);
+  if (image_type)
+    {
+      priv->image_module = gdk_pixbuf_get_named_module (image_type,
+                                                        error);
+    }
   else
-    priv->image_module = gdk_pixbuf_get_module (priv->header_buf, priv->header_buf_offset);
+    {
+      g_return_val_if_fail (priv->header_buf_offset > 0, 0);
+      priv->image_module = gdk_pixbuf_get_module (priv->header_buf,
+                                                  priv->header_buf_offset,
+                                                  NULL,
+                                                  error);
+    }
   
   if (priv->image_module == NULL)
     return 0;
   
   if (priv->image_module->module == NULL)
-    gdk_pixbuf_load_module (priv->image_module);
+    if (!gdk_pixbuf_load_module (priv->image_module, error))
+      return 0;
   
   if (priv->image_module->module == NULL)
     return 0;
@@ -360,8 +372,12 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader, const char *image_type)
       (priv->image_module->stop_load == NULL) ||
       (priv->image_module->load_increment == NULL))
     {
-      g_warning (G_STRLOC ": module %s does not support incremental loading.\n",
-		 priv->image_module->module_name);
+      g_set_error (error,
+                   GDK_PIXBUF_ERROR,
+                   GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
+                   _("Incremental loading of image type '%s' is not supported"),
+                   image_type);
+
       return 0;
     }
   
@@ -369,16 +385,33 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader, const char *image_type)
 						  gdk_pixbuf_loader_update,
 						  gdk_pixbuf_loader_frame_done,
 						  gdk_pixbuf_loader_animation_done,
-						  loader);
+						  loader,
+                                                  error);
   
   if (priv->context == NULL)
     {
-      g_warning (G_STRLOC ": Failed to begin progressive load");
+      /* Defense against broken loaders; DO NOT take this as a GError
+       * example
+       */
+      if (error && *error == NULL)
+        {
+          g_warning ("Bug! loader '%s' didn't set an error on failure",
+                     priv->image_module->module_name);
+          g_set_error (error,
+                       GDK_PIXBUF_ERROR,
+                       GDK_PIXBUF_ERROR_FAILED,
+                       _("Internal error: Image loader module '%s'"
+                         " failed to begin loading an image, but didn't"
+                         " give a reason for the failure"),
+                       priv->image_module->module_name);
+
+        }
+      
       return 0;
     }
   
   if (priv->header_buf_offset
-      && priv->image_module->load_increment (priv->context, priv->header_buf, priv->header_buf_offset))
+      && priv->image_module->load_increment (priv->context, priv->header_buf, priv->header_buf_offset, error))
     return priv->header_buf_offset;
   
   return 0;
@@ -387,7 +420,8 @@ gdk_pixbuf_loader_load_module (GdkPixbufLoader *loader, const char *image_type)
 static int
 gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
 				    const guchar    *buf,
-				    gsize            count)
+				    gsize            count,
+                                    GError         **error)
 {
   gint n_bytes;
   GdkPixbufLoaderPrivate *priv = loader->private;
@@ -399,7 +433,7 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
   
   if (priv->header_buf_offset >= LOADER_HEADER_SIZE)
     {
-      if (gdk_pixbuf_loader_load_module (loader, NULL) == 0)
+      if (gdk_pixbuf_loader_load_module (loader, NULL, error) == 0)
 	return 0;
     }
   
@@ -411,11 +445,14 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
  * @loader: A pixbuf loader.
  * @buf: Pointer to image data.
  * @count: Length of the @buf buffer in bytes.
+ * @error: return location for errors
  *
- * This will cause a pixbuf loader to parse the next @count bytes of an image.
- * It will return TRUE if the data was loaded successfully, and FALSE if an
- * error occurred.  In the latter case, the loader will be closed, and will not
- * accept further writes.
+ * This will cause a pixbuf loader to parse the next @count bytes of
+ * an image.  It will return TRUE if the data was loaded successfully,
+ * and FALSE if an error occurred.  In the latter case, the loader
+ * will be closed, and will not accept further writes. If FALSE is
+ * returned, @error will be set to an error from the #GDK_PIXBUF_ERROR
+ * domain.
  *
  * Return value: #TRUE if the write was successful, or #FALSE if the loader
  * cannot parse the buffer.
@@ -423,7 +460,8 @@ gdk_pixbuf_loader_eat_header_write (GdkPixbufLoader *loader,
 gboolean
 gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
 			 const guchar    *buf,
-			 gsize            count)
+			 gsize            count,
+                         GError         **error)
 {
   GdkPixbufLoaderPrivate *priv;
   
@@ -442,7 +480,7 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
     {
       gint eaten;
       
-      eaten = gdk_pixbuf_loader_eat_header_write(loader, buf, count);
+      eaten = gdk_pixbuf_loader_eat_header_write(loader, buf, count, error);
       if (eaten <= 0)
 	return FALSE;
       
@@ -451,8 +489,27 @@ gdk_pixbuf_loader_write (GdkPixbufLoader *loader,
     }
   
   if (count > 0 && priv->image_module->load_increment)
-    return priv->image_module->load_increment (priv->context, buf, count);
-  
+    {
+      gboolean retval;
+      retval = priv->image_module->load_increment (priv->context, buf, count,
+                                                   error);
+      if (!retval && error && *error == NULL)
+        {
+          /* Fix up busted image loader */
+          g_warning ("Bug! loader '%s' didn't set an error on failure",
+                     priv->image_module->module_name);
+          g_set_error (error,
+                       GDK_PIXBUF_ERROR,
+                       GDK_PIXBUF_ERROR_FAILED,
+                       _("Internal error: Image loader module '%s'"
+                         " failed to begin loading an image, but didn't"
+                         " give a reason for the failure"),
+                       priv->image_module->module_name);
+        }
+
+      return retval;
+    }
+      
   return TRUE;
 }
 
@@ -477,13 +534,22 @@ gdk_pixbuf_loader_new (void)
  * Return value: A newly-created pixbuf loader.
  **/
 GdkPixbufLoader *
-gdk_pixbuf_loader_new_with_type (const char *image_type)
+gdk_pixbuf_loader_new_with_type (const char *image_type,
+                                 GError    **error)
 {
   GdkPixbufLoader *retval;
-
+  GError *tmp;
+  
   retval = g_object_new (GDK_TYPE_PIXBUF_LOADER, NULL);
 
-  gdk_pixbuf_loader_load_module(retval, image_type);
+  tmp = NULL;
+  gdk_pixbuf_loader_load_module(retval, image_type, &tmp);
+  if (tmp != NULL)
+    {
+      g_propagate_error (error, tmp);
+      g_object_unref (G_OBJECT (retval));
+      return NULL;
+    }
 
   return retval;
 }
@@ -579,7 +645,7 @@ gdk_pixbuf_loader_close (GdkPixbufLoader *loader)
   
   /* We have less the 128 bytes in the image.  Flush it, and keep going. */
   if (priv->image_module == NULL)
-    gdk_pixbuf_loader_load_module (loader, NULL);
+    gdk_pixbuf_loader_load_module (loader, NULL, NULL);
   
   if (priv->image_module && priv->image_module->stop_load)
     priv->image_module->stop_load (priv->context);

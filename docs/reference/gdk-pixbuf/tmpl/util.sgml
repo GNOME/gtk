@@ -50,3 +50,14 @@ End:
 -->
 
 
+<!-- ##### FUNCTION gdk_pixbuf_saturate_and_pixelate ##### -->
+<para>
+
+</para>
+
+@src: 
+@dest: 
+@saturation: 
+@pixelate: 
+
+

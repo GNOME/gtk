@@ -176,17 +176,19 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data);
+				 anim_done_func, gpointer user_data,
+                                 GError **error);
 
 void gdk_pixbuf__bmp_image_stop_load(gpointer data);
 gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
-					      guint size);
+					      guint size,
+                                              GError **error);
 
 
 
 /* Shared library entry point --> This should be removed when
    generic_image_load enters gdk-pixbuf-io. */
-GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
+GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f, GError **error)
 {
 	guchar membuf[4096];
 	size_t length;
@@ -195,15 +197,22 @@ GdkPixbuf *gdk_pixbuf__bmp_image_load(FILE * f)
 	GdkPixbuf *pb;
 
 	State =
-	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	    gdk_pixbuf__bmp_image_begin_load(NULL, NULL, NULL, NULL, NULL,
+                                             error);
 
+        if (State == NULL)
+          return NULL;
+        
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
 		if (length > 0)
-			(void)
-			    gdk_pixbuf__bmp_image_load_increment(State,
-								 membuf,
-								 length);
+                  if (!gdk_pixbuf__bmp_image_load_increment(State,
+                                                            membuf,
+                                                            length,
+                                                            error)) {
+                          gdk_pixbuf__bmp_image_stop_load (State);
+                          return NULL;
+                  }
 
 	}
 	if (State->pixbuf != NULL)
@@ -309,7 +318,8 @@ gdk_pixbuf__bmp_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc
-				 anim_done_func, gpointer user_data)
+				 anim_done_func, gpointer user_data,
+                                 GError **error)
 {
 	struct bmp_progressive_state *context;
 
@@ -695,8 +705,10 @@ void DoCompressedByte(struct bmp_progressive_state *context, guchar ** buf,
  *
  * append image data onto inrecrementally built output image
  */
-gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data, guchar * buf,
-					      guint size)
+gboolean gdk_pixbuf__bmp_image_load_increment(gpointer data,
+                                              guchar * buf,
+					      guint size,
+                                              GError **error)
 {
 	struct bmp_progressive_state *context =
 	    (struct bmp_progressive_state *) data;

@@ -1,3 +1,14 @@
+2000-10-18  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtk-sections.txt: Some updates
+
+	* gdk/gdk-sections.txt: remove GdkPixbufAlphaMode
+
+	* gdk-pixbuf/gdk-pixbuf-sections.txt: Add new API, remove 
+	GdkPixbufClass/GdkAnimationClass since those are private
+
+	* gdk-pixbuf/Makefile.am (IGNORE_HFILES): ignore more headers
+
 2000-10-06  Havoc Pennington  <hp@redhat.com>
 
         * gdk-pixbuf/*.sgml, gdk-pixbuf/tmpl/*.sgml: copy in from 1.0

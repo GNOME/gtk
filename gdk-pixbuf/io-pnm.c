@@ -76,17 +76,21 @@ typedef struct {
 	gboolean got_header;   /* have we loaded pnm header? */
 	
 	guint scan_state;
+
+	GError **error;
 	
 } PnmLoaderContext;
 
-GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f);
+GdkPixbuf   *gdk_pixbuf__pnm_image_load          (FILE *f, GError **error);
 gpointer    gdk_pixbuf__pnm_image_begin_load     (ModulePreparedNotifyFunc func, 
 						  ModuleUpdatedNotifyFunc func2,
 						  ModuleFrameDoneNotifyFunc frame_done_func,
 						  ModuleAnimationDoneNotifyFunc anim_done_func,
-						  gpointer user_data);
+						  gpointer user_data,
+						  GError **error);
 void        gdk_pixbuf__pnm_image_stop_load      (gpointer context);
-gboolean    gdk_pixbuf__pnm_image_load_increment (gpointer context, guchar *buf, guint size);
+gboolean    gdk_pixbuf__pnm_image_load_increment (gpointer context, guchar *buf, guint size,
+						  GError **error);
 
 static void explode_bitmap_into_buf              (PnmLoaderContext *context);
 static void explode_gray_into_buf                (PnmLoaderContext *context);
@@ -178,7 +182,7 @@ explode_gray_into_buf (PnmLoaderContext *context)
 
 /* skip over whitespace and comments in input buffer */
 static gint
-pnm_skip_whitespace (PnmIOBuffer *inbuf)
+pnm_skip_whitespace (PnmIOBuffer *inbuf, GError **error)
 {
 	register guchar *inptr;
 	guchar *inend;
@@ -208,7 +212,7 @@ pnm_skip_whitespace (PnmIOBuffer *inbuf)
 
 /* read next number from buffer */
 static gint
-pnm_read_next_value (PnmIOBuffer *inbuf, guint *value)
+pnm_read_next_value (PnmIOBuffer *inbuf, guint *value, GError **error)
 {
 	register guchar *inptr, *word, *p;
 	guchar *inend, buf[128];
@@ -220,7 +224,7 @@ pnm_read_next_value (PnmIOBuffer *inbuf, guint *value)
 	g_return_val_if_fail (value != NULL, PNM_FATAL_ERR);
 	
 	/* skip white space */
-	if ((retval = pnm_skip_whitespace (inbuf)) != PNM_OK)
+	if ((retval = pnm_skip_whitespace (inbuf, error)) != PNM_OK)
 		return retval;
 	
 	inend = inbuf->byte + inbuf->nbytes;
@@ -237,8 +241,13 @@ pnm_read_next_value (PnmIOBuffer *inbuf, guint *value)
 	
 	/* get the value */
 	*value = strtol (buf, &endptr, 10);
-	if (*endptr != '\0')
+	if (*endptr != '\0') {
+		g_set_error (error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("PNM loader expected to find an integer, but didn't"));
 		return PNM_FATAL_ERR;
+	}
 	
 	inbuf->byte = p;
 	inbuf->nbytes = (guint) (inend - p);
@@ -263,8 +272,13 @@ pnm_read_header (PnmLoaderContext *context)
 		if (inbuf->nbytes < 2)
 			return PNM_SUSPEND;
 		
-		if (*inbuf->byte != 'P')
+		if (*inbuf->byte != 'P') {
+			g_set_error (context->error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("PNM file has an incorrect initial byte"));
 			return PNM_FATAL_ERR;
+		}
 		
 		inbuf->byte++;
 		inbuf->nbytes--;
@@ -289,6 +303,10 @@ pnm_read_header (PnmLoaderContext *context)
 			context->type = PNM_FORMAT_PPM_RAW;
 			break;
 		default:
+			g_set_error (context->error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("PNM file is not in a recognized PNM subformat"));
 			return PNM_FATAL_ERR;
 		}
 		
@@ -303,13 +321,19 @@ pnm_read_header (PnmLoaderContext *context)
 		/* read the pixmap width */
 		guint width = 0;
 		
-		retval = pnm_read_next_value (inbuf, &width);
+		retval = pnm_read_next_value (inbuf, &width,
+					      context->error);
 		
-		if (retval != PNM_OK)
+		if (retval != PNM_OK) 
 			return retval;
 		
-		if (!width)
+		if (!width) {
+			g_set_error (context->error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("PNM file has an image width of 0"));
 			return PNM_FATAL_ERR;
+		}
 		
 		context->width = width;
 	}
@@ -318,13 +342,19 @@ pnm_read_header (PnmLoaderContext *context)
 		/* read the pixmap height */
 		guint height = 0;
 		
-		retval = pnm_read_next_value (inbuf, &height);
+		retval = pnm_read_next_value (inbuf, &height,
+					      context->error);
 		
 		if (retval != PNM_OK)
 			return retval;
 		
-		if (!height)
+		if (!height) {
+			g_set_error (context->error,
+				     GDK_PIXBUF_ERROR,
+				     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+				     _("PNM file has an image height of 0"));
 			return PNM_FATAL_ERR;
+		}
 		
 		context->height = height;
 	}
@@ -335,13 +365,19 @@ pnm_read_header (PnmLoaderContext *context)
 	case PNM_FORMAT_PGM:
 	case PNM_FORMAT_PGM_RAW:
 		if (!context->maxval) {
-			retval = pnm_read_next_value (inbuf, &context->maxval);
+			retval = pnm_read_next_value (inbuf, &context->maxval,
+						      context->error);
 			
 			if (retval != PNM_OK)
 				return retval;
 			
-			if (context->maxval == 0)
+			if (context->maxval == 0) {
+				g_set_error (context->error,
+					     GDK_PIXBUF_ERROR,
+					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+					     _("Maximum color value in PNM file is 0"));
 				return PNM_FATAL_ERR;
+			}
 		}
 		break;
 	default:
@@ -375,7 +411,10 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		numpix = inbuf->nbytes / 3;
 		break;
 	default:
-		g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+		g_set_error (context->error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
 	
@@ -400,7 +439,10 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		offset = context->output_col * 3;
 		break;
 	default:
-		g_warning ("io-pnm.c: Illegal raw pnm type!\n");
+		g_set_error (context->error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Raw PNM image type is invalid"));
 		return PNM_FATAL_ERR;
 	}
 	
@@ -429,7 +471,11 @@ pnm_read_raw_scanline (PnmLoaderContext *context)
 		}
 		break;
 	default:
-		g_warning ("Invalid raw pnm format!");
+		g_set_error (context->error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("Raw PNM image type is invalid"));
+		return PNM_FATAL_ERR;
 	}
 	
 	inbuf->byte += numbytes;
@@ -485,7 +531,11 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 		break;
 		
 	default:
-		g_warning ("Can't happen\n");
+		g_set_error (context->error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+			     _("PNM image format is invalid"));
+
 		return PNM_FATAL_ERR;
 	}
 	
@@ -499,7 +549,8 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 		}
 		
 		for (i = context->scan_state; i < numval; i++) {
-			retval = pnm_read_next_value (inbuf, &value);
+			retval = pnm_read_next_value (inbuf, &value,
+						      context->error);
 			if (retval != PNM_OK) {
 				/* save state and return */
 				context->scan_state = i;
@@ -522,7 +573,11 @@ pnm_read_ascii_scanline (PnmLoaderContext *context)
 					*dptr++ = (guchar)(255 * value / context->maxval);
 				break;
 			default:
-				g_warning ("io-pnm.c: Illegal ascii pnm type!\n");
+				g_set_error (context->error,
+					     GDK_PIXBUF_ERROR,
+					     GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+					     _("PNM image format is invalid"));
+				return PNM_FATAL_ERR;
 				break;
 			}
 		}
@@ -577,7 +632,11 @@ pnm_read_scanline (PnmLoaderContext *context)
 			return retval;
 		break;
 	default:
-		g_warning ("Cannot load these image types (yet)\n");
+		g_set_error (context->error,
+			     GDK_PIXBUF_ERROR,
+			     GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+			     _("PNM image loader does not support this PNM subformat"));
+
 		return PNM_FATAL_ERR;
 	}
 	
@@ -586,7 +645,7 @@ pnm_read_scanline (PnmLoaderContext *context)
 
 /* Shared library entry point */
 GdkPixbuf *
-gdk_pixbuf__pnm_image_load (FILE *f)
+gdk_pixbuf__pnm_image_load (FILE *f, GError **error)
 {
 	PnmLoaderContext context;
 	PnmIOBuffer *inbuf;
@@ -608,6 +667,7 @@ gdk_pixbuf__pnm_image_load (FILE *f)
 	context.got_header = FALSE;
 	context.did_prescan = FALSE;
 	context.scan_state = 0;
+	context.error = error;
 	
 	inbuf = &context.inbuf;
 	
@@ -647,7 +707,8 @@ gdk_pixbuf__pnm_image_load (FILE *f)
 		
 		/* scan until we hit image data */
 		if (!context.did_prescan) {
-			retval = pnm_skip_whitespace (inbuf);
+			retval = pnm_skip_whitespace (inbuf,
+						      context.error);
 			if (retval == PNM_FATAL_ERR)
 				return NULL;
 			else if (retval == PNM_SUSPEND)
@@ -675,7 +736,7 @@ gdk_pixbuf__pnm_image_load (FILE *f)
 			} else if (retval == PNM_FATAL_ERR) {
 				if (context.pixbuf)
 					gdk_pixbuf_unref (context.pixbuf);
-				g_warning ("io-pnm.c: error reading rows..\n");
+
 				return NULL;
 			}
 		}
@@ -703,7 +764,8 @@ gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 				  ModuleUpdatedNotifyFunc  updated_func,
 				  ModuleFrameDoneNotifyFunc frame_done_func,
 				  ModuleAnimationDoneNotifyFunc anim_done_func,
-				  gpointer user_data)
+				  gpointer user_data,
+				  GError **error)
 {
 	PnmLoaderContext *context;
 	
@@ -722,6 +784,8 @@ gdk_pixbuf__pnm_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	
 	context->inbuf.nbytes = 0;
 	context->inbuf.byte  = NULL;
+
+	context->error = error;
 	
 	return (gpointer) context;
 }
@@ -752,7 +816,8 @@ gdk_pixbuf__pnm_image_stop_load (gpointer data)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
+gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size,
+				      GError **error)
 {
 	PnmLoaderContext *context = (PnmLoaderContext *)data;
 	PnmIOBuffer *inbuf;
@@ -764,6 +829,8 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
 	
 	g_return_val_if_fail (context != NULL, FALSE);
 	g_return_val_if_fail (buf != NULL, FALSE);
+
+	context->error = error;
 	
 	bufhd = buf;
 	inbuf = &context->inbuf;
@@ -811,7 +878,8 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
 		
 		/* scan until we hit image data */
 		if (!context->did_prescan) {
-			retval = pnm_skip_whitespace (inbuf);
+			retval = pnm_skip_whitespace (inbuf,
+						      context->error);
 			
 			if (retval == PNM_FATAL_ERR)
 				return FALSE;
@@ -850,7 +918,6 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data, guchar *buf, guint size)
 			} else if (retval == PNM_FATAL_ERR) {
 				if (context->pixbuf)
 					gdk_pixbuf_unref (context->pixbuf);
-				g_warning ("io-pnm.c: error reading rows.\n");
 				return FALSE;
 			} else if (retval == PNM_OK) {	
 				/* send updated signal */

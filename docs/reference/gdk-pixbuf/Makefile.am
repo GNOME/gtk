@@ -14,7 +14,7 @@ SECOND_DOC_SOURCE_DIR=$(top_srcdir)/contrib/gdk-pixbuf-xlib
 FIXXREF_OPTIONS=
 
 # Header files to ignore when scanning
-IGNORE_HFILES=pixops.h pixops-internal.h gdk-pixbuf-xlib-private.h
+IGNORE_HFILES=pixops.h pixops-internal.h gdk-pixbuf-xlib-private.h gdk-pixbuf-i18n.h gdk-pixbuf-private.h
 
 # Extra files to add when scanning
 EXTRA_HFILES=			\

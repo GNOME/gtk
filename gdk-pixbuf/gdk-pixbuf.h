@@ -39,8 +39,8 @@ extern "C" {
 /* Alpha compositing mode */
 typedef enum
 {
-  GDK_PIXBUF_ALPHA_BILEVEL,
-  GDK_PIXBUF_ALPHA_FULL
+        GDK_PIXBUF_ALPHA_BILEVEL,
+        GDK_PIXBUF_ALPHA_FULL
 } GdkPixbufAlphaMode;
 
 /* Color spaces; right now only RGB is supported.
@@ -71,14 +71,18 @@ typedef void (* GdkPixbufDestroyNotify) (guchar *pixels, gpointer data);
 #define GDK_PIXBUF_ERROR gdk_pixbuf_error_quark ()
 
 typedef enum {
-        /* some kind of failure reading or writing files */
-        GDK_PIXBUF_ERROR_IO,
+        /* image data hosed */
+        GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+        /* no mem to load image */
+        GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
         /* bad option value passed to save routine */
         GDK_PIXBUF_ERROR_BAD_OPTION_VALUE,
         /* unsupported image type (sort of an ENOSYS) */
         GDK_PIXBUF_ERROR_UNKNOWN_TYPE,
+        /* unsupported operation (load, save) for image type */
+        GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION,
         GDK_PIXBUF_ERROR_FAILED
-} GdkPixbufErrorType;
+} GdkPixbufError;
 
 GQuark gdk_pixbuf_error_quark () G_GNUC_CONST;
 
@@ -114,7 +118,8 @@ GdkPixbuf *gdk_pixbuf_copy (const GdkPixbuf *pixbuf);
 
 /* Simple loading */
 
-GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);
+GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename,
+                                     GError    **error);
 
 GdkPixbuf *gdk_pixbuf_new_from_data (const guchar *data,
 				     GdkColorspace colorspace,
@@ -130,23 +135,24 @@ GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const char **data);
 /* Read an inline pixbuf */
 GdkPixbuf *gdk_pixbuf_new_from_inline   (const guchar *inline_pixbuf,
                                          gboolean      copy_pixels,
-                                         int           length);
+                                         int           length,
+                                         GError      **error);
 
 
 /* Saving */
 
 gboolean gdk_pixbuf_save           (GdkPixbuf  *pixbuf, 
                                     const char *filename, 
-                                    const char *format, 
-                                    GError    **err,
+                                    const char *type, 
+                                    GError    **error,
                                     ...);
 
 gboolean gdk_pixbuf_savev          (GdkPixbuf  *pixbuf, 
                                     const char *filename, 
-                                    const char *format,
+                                    const char *type,
                                     char      **option_keys,
                                     char      **option_values,
-                                    GError    **err);
+                                    GError    **error);
 
 /* Adding an alpha channel */
 GdkPixbuf *gdk_pixbuf_add_alpha (const GdkPixbuf *pixbuf, gboolean substitute_color,
@@ -248,7 +254,8 @@ typedef enum {
 
 GType               gdk_pixbuf_animation_get_type        (void) G_GNUC_CONST;
 
-GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename);
+GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file   (const char         *filename,
+                                                          GError            **error);
 
 GdkPixbufAnimation *gdk_pixbuf_animation_ref             (GdkPixbufAnimation *animation);
 void                gdk_pixbuf_animation_unref           (GdkPixbufAnimation *animation);

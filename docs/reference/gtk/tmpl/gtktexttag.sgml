@@ -32,12 +32,6 @@ GtkTextTag
 </para>
 
 
-<!-- ##### STRUCT GtkTextTabArray ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### ENUM GtkWrapMode ##### -->
 <para>
 
@@ -54,7 +48,6 @@ GtkTextTag
 
 @refcount: 
 @appearance: 
-@border_width: 
 @relief: 
 @justify: 
 @direction: 
@@ -66,7 +59,7 @@ GtkTextTag
 @pixels_above_lines: 
 @pixels_below_lines: 
 @pixels_inside_wrap: 
-@tab_array: 
+@tabs: 
 @wrap_mode: 
 @language: 
 @invisible: 
@@ -127,7 +120,7 @@ GtkTextTag
 @bg_stipple: 
 @fg_stipple: 
 @underline: 
-@overstrike: 
+@strikethrough: 
 @draw_bg: 
 @inside_selection: 
 
@@ -260,11 +253,6 @@ GtkTextTag
 
 </para>
 
-<!-- ##### ARG GtkTextTag:overstrike ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:pixels_above_lines ##### -->
 <para>
 
@@ -285,12 +273,22 @@ GtkTextTag
 
 </para>
 
+<!-- ##### ARG GtkTextTag:strikethrough ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:underline ##### -->
 <para>
 
 </para>
 
 <!-- ##### ARG GtkTextTag:wrap_mode ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:tabs ##### -->
 <para>
 
 </para>
@@ -365,11 +363,6 @@ GtkTextTag
 
 </para>
 
-<!-- ##### ARG GtkTextTag:overstrike_set ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTextTag:pixels_above_lines_set ##### -->
 <para>
 
@@ -385,6 +378,11 @@ GtkTextTag
 
 </para>
 
+<!-- ##### ARG GtkTextTag:strikethrough_set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTextTag:right_margin_set ##### -->
 <para>
 
@@ -396,6 +394,11 @@ GtkTextTag
 </para>
 
 <!-- ##### ARG GtkTextTag:wrap_mode_set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkTextTag:tabs_set ##### -->
 <para>
 
 </para>

@@ -1938,15 +1938,19 @@ gtk_text_buffer_insert
 gtk_text_buffer_insert_at_cursor
 gtk_text_buffer_insert_interactive
 gtk_text_buffer_insert_interactive_at_cursor
+gtk_text_buffer_insert_range
 gtk_text_buffer_delete
 gtk_text_buffer_delete_interactive
+gtk_text_buffer_set_text
 gtk_text_buffer_get_text
 gtk_text_buffer_get_slice
-gtk_text_buffer_insert_pixmap
+gtk_text_buffer_insert_pixbuf
 gtk_text_buffer_create_mark
 gtk_text_buffer_move_mark
 gtk_text_buffer_delete_mark
+gtk_text_buffer_delete_mark_by_name
 gtk_text_buffer_get_mark
+gtk_text_buffer_get_insert
 gtk_text_buffer_place_cursor
 gtk_text_buffer_apply_tag
 gtk_text_buffer_remove_tag
@@ -1970,9 +1974,6 @@ gtk_text_buffer_cut
 gtk_text_buffer_copy
 gtk_text_buffer_paste_clipboard
 gtk_text_buffer_get_selection_bounds
-gtk_text_buffer_find_string
-gtk_text_buffer_find_regexp
-gtk_text_buffer_spew
 <SUBSECTION Standard>
 GTK_TEXT_BUFFER
 GTK_IS_TEXT_BUFFER
@@ -2000,7 +2001,7 @@ gtk_text_iter_get_slice
 gtk_text_iter_get_text
 gtk_text_iter_get_visible_slice
 gtk_text_iter_get_visible_text
-gtk_text_iter_get_pixmap
+gtk_text_iter_get_pixbuf
 gtk_text_iter_get_marks
 gtk_text_iter_get_toggled_tags
 gtk_text_iter_begins_tag
@@ -2040,7 +2041,7 @@ gtk_text_iter_forward_search
 gtk_text_iter_backward_search
 gtk_text_iter_equal
 gtk_text_iter_compare
-gtk_text_iter_in_region
+gtk_text_iter_in_range
 gtk_text_iter_reorder
 gtk_text_iter_spew
 </SECTION>
@@ -2053,7 +2054,7 @@ gtk_text_mark_set_visible
 gtk_text_mark_is_visible
 gtk_text_mark_ref
 gtk_text_mark_unref
-gtk_text_mark_deleted
+gtk_text_mark_get_deleted
 </SECTION>
 
 <SECTION>
@@ -2107,15 +2108,11 @@ GTK_TEXT_TAG_TABLE_GET_CLASS
 <SECTION>
 <FILE>gtktextview</FILE>
 GtkTextView
-GtkTextViewMovementStep
-GtkTextViewScrollType
-GtkTextViewDeleteType
 <TITLE>GtkTextView</TITLE>
 gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
 gtk_text_view_get_buffer
-gtk_text_view_get_iter_at_pixel
 gtk_text_view_scroll_to_mark
 gtk_text_view_move_mark_onscreen
 gtk_text_view_place_cursor_onscreen
@@ -2514,7 +2511,6 @@ gtk_widget_get_ancestor
 gtk_widget_get_colormap
 gtk_widget_set_colormap
 gtk_widget_get_visual
-gtk_widget_set_visual
 gtk_widget_get_events
 gtk_widget_get_pointer
 gtk_widget_is_ancestor
@@ -2527,14 +2523,11 @@ gtk_widget_restore_default_style
 gtk_widget_reset_rc_styles
 gtk_widget_push_style
 gtk_widget_push_colormap
-gtk_widget_push_visual
 gtk_widget_pop_style
 gtk_widget_pop_colormap
-gtk_widget_pop_visual
 gtk_widget_set_default_style
 gtk_widget_set_default_colormap
 gtk_widget_get_default_style
-gtk_widget_set_default_visual
 gtk_widget_get_default_colormap
 gtk_widget_get_default_visual
 gtk_widget_set_direction

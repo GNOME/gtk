@@ -74,6 +74,7 @@ typedef my_source_mgr * my_src_ptr;
 struct error_handler_data {
 	struct jpeg_error_mgr pub;
 	sigjmp_buf setjmp_buffer;
+        GError **error;
 };
 
 /* progressive loader context */
@@ -92,30 +93,51 @@ typedef struct {
 	struct error_handler_data     jerr;
 } JpegProgContext;
 
-GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f);
+GdkPixbuf *gdk_pixbuf__jpeg_image_load (FILE *f, GError **error);
 gpointer gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc func, 
 					    ModuleUpdatedNotifyFunc func2,
 					    ModuleFrameDoneNotifyFunc func3,
 					    ModuleAnimationDoneNotifyFunc func4,
-					    gpointer user_data);
+					    gpointer user_data,
+                                            GError **error);
 void gdk_pixbuf__jpeg_image_stop_load (gpointer context);
-gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context, guchar *buf, guint size);
+gboolean gdk_pixbuf__jpeg_image_load_increment(gpointer context, guchar *buf, guint size,
+                                               GError **error);
 
 
 static void
 fatal_error_handler (j_common_ptr cinfo)
 {
-	/* FIXME:
-	 * We should somehow signal what error occurred to the caller so the
-	 * caller can handle the error message */
 	struct error_handler_data *errmgr;
-
+        char buffer[JMSG_LENGTH_MAX];
+        
 	errmgr = (struct error_handler_data *) cinfo->err;
-	cinfo->err->output_message (cinfo);
+        
+        /* Create the message */
+        (* cinfo->err->format_message) (cinfo, buffer);
+
+        /* broken check for *error == NULL for robustness against
+         * crappy JPEG library
+         */
+        if (errmgr->error && *errmgr->error == NULL) {
+                g_set_error (errmgr->error,
+                             GDK_PIXBUF_ERROR,
+                             GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
+                             _("Error interpreting JPEG image file (%s)"),
+                             buffer);
+        }
+        
 	siglongjmp (errmgr->setjmp_buffer, 1);
 
-	/* incase the jmp buf isn't initted? */
-	exit(1);
+        g_assert_not_reached ();
+}
+
+static void
+output_message_handler (j_common_ptr cinfo)
+{
+  /* This method keeps libjpeg from dumping crap to stderr */
+
+  /* do nothing */
 }
 
 /* Destroy notification function for the pixbuf */
@@ -158,7 +180,7 @@ explode_gray_into_buf (struct jpeg_decompress_struct *cinfo,
 
 /* Shared library entry point */
 GdkPixbuf *
-gdk_pixbuf__jpeg_image_load (FILE *f)
+gdk_pixbuf__jpeg_image_load (FILE *f, GError **error)
 {
 	gint w, h, i;
 	guchar *pixels = NULL;
@@ -175,7 +197,10 @@ gdk_pixbuf__jpeg_image_load (FILE *f)
 	/* setup error handler */
 	cinfo.err = jpeg_std_error (&jerr.pub);
 	jerr.pub.error_exit = fatal_error_handler;
+        jerr.pub.output_message = output_message_handler;
 
+        jerr.error = error;
+        
 	if (sigsetjmp (jerr.setjmp_buffer, 1)) {
 		/* Whoops there was a jpeg error */
 		if (pixels)
@@ -199,6 +224,17 @@ gdk_pixbuf__jpeg_image_load (FILE *f)
 	pixels = malloc (h * w * 3);
 	if (!pixels) {
 		jpeg_destroy_decompress (&cinfo);
+
+                /* broken check for *error == NULL for robustness against
+                 * crappy JPEG library
+                 */
+                if (error && *error == NULL) {
+                        g_set_error (error,
+                                     GDK_PIXBUF_ERROR,
+                                     GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY,
+                                     _("Insufficient memory to load image, try exiting some applications to free memory"));
+                }
+                
 		return NULL;
 	}
 
@@ -286,7 +322,8 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 				   ModuleUpdatedNotifyFunc  updated_func,
 				   ModuleFrameDoneNotifyFunc frame_func,
 				   ModuleAnimationDoneNotifyFunc anim_done_func,
-				   gpointer user_data)
+				   gpointer user_data,
+                                   GError **error)
 {
 	JpegProgContext *context;
 	my_source_mgr   *src;
@@ -308,7 +345,9 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 
 	context->cinfo.err = jpeg_std_error (&context->jerr.pub);
 	context->jerr.pub.error_exit = fatal_error_handler;
-
+        context->jerr.pub.output_message = output_message_handler;
+        context->jerr.error = error;
+        
 	src = (my_src_ptr) context->cinfo.src;
 	src->pub.init_source = init_source;
 	src->pub.fill_input_buffer = fill_input_buffer;
@@ -318,6 +357,8 @@ gdk_pixbuf__jpeg_image_begin_load (ModulePreparedNotifyFunc prepared_func,
 	src->pub.bytes_in_buffer = 0;
 	src->pub.next_input_byte = NULL;
 
+        context->jerr.error = NULL;
+        
 	return (gpointer) context;
 }
 
@@ -364,7 +405,8 @@ gdk_pixbuf__jpeg_image_stop_load (gpointer data)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
+gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size,
+                                       GError **error)
 {
 	JpegProgContext *context = (JpegProgContext *)data;
 	struct jpeg_decompress_struct *cinfo;
@@ -382,6 +424,8 @@ gdk_pixbuf__jpeg_image_load_increment (gpointer data, guchar *buf, guint size)
 
 	cinfo = &context->cinfo;
 
+        context->jerr.error = error;
+        
 	/* XXXXXXX (drmike) - loop(s) below need to be recoded now I
          *                    have a grasp of what the flow needs to be!
          */
@@ -641,12 +685,13 @@ gdk_pixbuf__jpeg_image_save (FILE          *f,
        g_return_val_if_fail (pixels != NULL, FALSE);
 
        /* allocate a small buffer to convert image data */
-       buf = malloc (w * 3 * sizeof (guchar));
-       g_return_val_if_fail (buf != NULL, FALSE);
+       buf = g_malloc (w * 3 * sizeof (guchar));
 
        /* set up error handling */
        jerr.pub.error_exit = fatal_error_handler;
-
+       jerr.pub.output_message = output_message_handler;
+       jerr.error = error;
+       
        cinfo.err = jpeg_std_error (&(jerr.pub));
        if (sigsetjmp (jerr.setjmp_buffer, 1)) {
                jpeg_destroy_compress (&cinfo);

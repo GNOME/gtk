@@ -148,7 +148,8 @@ gdk_pixbuf__tiff_image_begin_load (ModulePreparedNotifyFunc prepare_func,
 				   ModuleUpdatedNotifyFunc update_func,
 				   ModuleFrameDoneNotifyFunc frame_done_func,
 				   ModuleAnimationDoneNotifyFunc anim_done_func,
-				   gpointer user_data)
+				   gpointer user_data,
+                                   GError **error)
 {
 	TiffData *context;
 	gint fd;

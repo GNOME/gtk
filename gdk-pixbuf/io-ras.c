@@ -98,14 +98,16 @@ gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data);
+				 gpointer user_data,
+                                 GError **error);
 void gdk_pixbuf__ras_image_stop_load(gpointer data);
-gboolean gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size);
+gboolean gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size,
+                                              GError **error);
 
 
 
 /* Shared library entry point */
-GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f)
+GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f, GError **error)
 {
 	guchar *membuf;
 	size_t length;
@@ -113,7 +115,8 @@ GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f)
 	
 	GdkPixbuf *pb;
 	
-	State = gdk_pixbuf__ras_image_begin_load(NULL, NULL, NULL, NULL, NULL);
+	State = gdk_pixbuf__ras_image_begin_load(NULL, NULL, NULL,
+                                                 NULL, NULL, error);
 	
 	membuf = g_malloc(4096);
 	
@@ -121,8 +124,12 @@ GdkPixbuf *gdk_pixbuf__ras_image_load(FILE * f)
 	
 	while (feof(f) == 0) {
 		length = fread(membuf, 1, 4096, f);
-		(void)gdk_pixbuf__ras_image_load_increment(State, membuf, length);
-	} 
+                if (!gdk_pixbuf__ras_image_load_increment(State, membuf, length,
+                                                          error)) {
+                        gdk_pixbuf__ras_image_stop_load (State);
+                        return NULL;
+                }
+	}
 	g_free(membuf);
 	if (State->pixbuf != NULL)
 		gdk_pixbuf_ref(State->pixbuf);
@@ -213,7 +220,8 @@ gdk_pixbuf__ras_image_begin_load(ModulePreparedNotifyFunc prepared_func,
 				 ModuleUpdatedNotifyFunc updated_func,
 				 ModuleFrameDoneNotifyFunc frame_done_func,
 				 ModuleAnimationDoneNotifyFunc anim_done_func,
-				 gpointer user_data)
+				 gpointer user_data,
+                                 GError **error)
 {
 	struct ras_progressive_state *context;
 
@@ -385,7 +393,8 @@ static void OneLine(struct ras_progressive_state *context)
  * append image data onto inrecrementally built output image
  */
 gboolean
-gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size)
+gdk_pixbuf__ras_image_load_increment(gpointer data, guchar * buf, guint size,
+                                     GError **error)
 {
 	struct ras_progressive_state *context =
 	    (struct ras_progressive_state *) data;

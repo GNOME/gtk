@@ -17,9 +17,11 @@ GDK_PIXBUF_MICRO
 
 <SECTION>
 <FILE>gdk-pixbuf</FILE>
+GdkPixbufError
+GDK_PIXBUF_ERROR
 GdkColorspace
+GdkPixbufAlphaMode
 GdkPixbuf
-GdkPixbufClass
 gdk_pixbuf_get_colorspace
 gdk_pixbuf_get_n_channels
 gdk_pixbuf_get_has_alpha
@@ -33,12 +35,10 @@ gdk_pixbuf_get_rowstride
 GDK_PIXBUF
 GDK_TYPE_PIXBUF
 GDK_IS_PIXBUF
-GDK_IS_PIXBUF_CLASS
-GDK_PIXBUF_CLASS
-GDK_PIXBUF_GET_CLASS
 
 <SUBSECTION Private>
 gdk_pixbuf_get_type
+gdk_pixbuf_error_quark
 </SECTION>
 
 <SECTION>
@@ -54,10 +54,17 @@ gdk_pixbuf_new_from_file
 </SECTION>
 
 <SECTION>
+<FILE>file-saving</FILE>
+gdk_pixbuf_savev
+gdk_pixbuf_save
+</SECTION>
+
+<SECTION>
 <FILE>creating</FILE>
 gdk_pixbuf_new
 gdk_pixbuf_new_from_data
 gdk_pixbuf_new_from_xpm_data
+gdk_pixbuf_new_from_inline
 gdk_pixbuf_copy
 </SECTION>
 
@@ -65,6 +72,7 @@ gdk_pixbuf_copy
 <FILE>util</FILE>
 gdk_pixbuf_add_alpha
 gdk_pixbuf_copy_area
+gdk_pixbuf_saturate_and_pixelate
 </SECTION>
 
 <SECTION>
@@ -72,7 +80,6 @@ gdk_pixbuf_copy_area
 GdkPixbufFrameAction
 GdkPixbufFrame
 GdkPixbufAnimation
-GdkPixbufAnimationClass
 gdk_pixbuf_animation_new_from_file
 gdk_pixbuf_animation_ref
 gdk_pixbuf_animation_unref
@@ -88,10 +95,7 @@ gdk_pixbuf_frame_get_x_offset
 
 <SUBSECTION Standard>
 GDK_PIXBUF_ANIMATION
-GDK_PIXBUF_ANIMATION_CLASS
 GDK_TYPE_PIXBUF_ANIMATION
-GDK_PIXBUF_ANIMATION_GET_CLASS
-GDK_IS_PIXBUF_ANIMATION_CLASS
 GDK_IS_PIXBUF_ANIMATION
 
 <SUBSECTION Private>

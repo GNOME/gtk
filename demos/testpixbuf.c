@@ -428,22 +428,27 @@ static gint
 update_timeout(gpointer data)
 {
         ProgressFileStatus *status = data;
-	gboolean done, error;
+	gboolean done;
+        GError *error;
         
 	done = FALSE;
         error = FALSE;
 	if (!feof(status->imagefile)) {
 		gint nbytes;
-
+                
 		nbytes = fread(status->buf, 1, status->readlen, 
 			       status->imagefile);
 
 
-                error = !gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes);
-                if (error) {
-                        G_BREAKPOINT();
+                error = NULL;
+                if (!gdk_pixbuf_loader_write (GDK_PIXBUF_LOADER (status->loader), status->buf, nbytes, &error)) {
+                        g_warning ("Error writing to loader: %s",
+                                   error->message);
+                        g_error_free (error);
+                        done = TRUE;
                 }
-
+                        
+                        
         } else { /* Really done */ 
 
                 GdkPixbuf *pixbuf = gdk_pixbuf_loader_get_pixbuf (status->loader); 
@@ -451,11 +456,6 @@ update_timeout(gpointer data)
                 done = TRUE; 
 
         }
-
-        if (error) { 
-                g_warning ("Serious error writing to loader"); 
-                done = TRUE; 
-        } 
 
 	if (done) {
                 gtk_widget_queue_draw(*status->rgbwin);
@@ -556,17 +556,26 @@ main (int argc, char **argv)
                 }
 
                 /* Test loading from inline data. */
-                pixbuf = gdk_pixbuf_new_from_inline (apple_red, FALSE, -1);
+                pixbuf = gdk_pixbuf_new_from_inline (apple_red, FALSE, -1, NULL);
                 new_testrgb_window (pixbuf, "Red apple from inline data");
 
-                pixbuf = gdk_pixbuf_new_from_inline (gnome_foot, TRUE, sizeof (gnome_foot));
+                pixbuf = gdk_pixbuf_new_from_inline (gnome_foot, TRUE, sizeof (gnome_foot), NULL);
                 new_testrgb_window (pixbuf, "Foot from inline data");
                 
 		found_valid = TRUE;
 	} else {
 		for (i = 1; i < argc; i++) {
+                        GError *error;
 
-			pixbuf = gdk_pixbuf_new_from_file (argv[i]);
+                        error = NULL;
+			pixbuf = gdk_pixbuf_new_from_file (argv[i], &error);
+
+                        if (pixbuf == NULL) {
+                                g_warning ("Error loading image: %s",
+                                           error->message);
+                                g_error_free (error);
+                        }
+                        
 #if 0
 			pixbuf = gdk_pixbuf_rotate(pixbuf, 10.0);
 #endif
