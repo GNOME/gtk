@@ -11,7 +11,7 @@ Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>,
 Ian Main <tt><htmlurl url="mailto:imain@gtk.org"
 			      name="&lt;imain@gtk.org&gt;"></tt>
-<date>April 1st, 1999
+<date>April 10th, 1999
 <abstract>
 This is a tutorial on how to use GTK (the GIMP Toolkit) through its C
 interface.
@@ -1221,7 +1221,7 @@ int main( int   argc,
 	gtk_widget_show (box2);
 
 	/* Call our make box function - homogeneous = FALSE, spacing = 0,
-	 * expand = FALSE, fill = FALSE, padding = 0 */
+	 * expand = TRUE, fill = FALSE, padding = 0 */
 	box2 = make_box (FALSE, 0, TRUE, FALSE, 0);
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
@@ -8388,7 +8388,7 @@ int main( int    argc,
 {                                  
     GtkWidget *window;
     GtkWidget *vbox, *hbox;
-    GtkWidget *clist;
+    GtkWidget *scrolled_window, *clist;
     GtkWidget *button_add, *button_clear, *button_hide_show;    
     gchar *titles[2] = { "Ingredients", "Amount" };
 
@@ -8408,6 +8408,14 @@ int main( int    argc,
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
+    /* Create a scrolled window to pack the CList widget into */
+    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+
+    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
+    gtk_widget_show (scrolled_window);
+
     /* Create the CList. For this example we use 2 columns */
     clist = gtk_clist_new_with_titles( 2, titles);
 
@@ -8427,7 +8435,7 @@ int main( int    argc,
     gtk_clist_set_column_width (GTK_CLIST(clist), 0, 150);
 
     /* Add the CList widget to the vertical box and show it. */
-    gtk_box_pack_start(GTK_BOX(vbox), clist, TRUE, TRUE, 0);
+    gtk_container_add(GTK_CONTAINER(scrolled_window), clist);
     gtk_widget_show(clist);
 
     /* Create the buttons and add them to the window. See the button
@@ -8622,7 +8630,7 @@ struct _GtkTree
 The perils associated with accessing the <tt>selection</tt> field
 directly have already been mentioned. The other important fields of
 the struct can also be accessed with handy macros or class functions.
-<tt/GTK_TREE_IS_ROOT_TREE (Tree)/ returns a boolean value which
+<tt/GTK_IS_ROOT_TREE (Tree)/ returns a boolean value which
 indicates whether a tree is the root tree in a Tree hierarchy, while
 <tt/GTK_TREE_ROOT_TREE (Tree)/ returns the root tree, an object of
 type GtkTree (so, remember to cast it using <tt/GTK_WIDGET (Tree)/ if
@@ -14452,7 +14460,7 @@ and various tutorial fixups and improvements.
 The GLib text was in turn based on material developed by Damon Chaplin
 <tt><htmlurl url="mailto:DAChaplin@msn.com" name="DAChaplin@msn.com"></tt>
 
-<item>David King for style checking this entire document.
+<item>David King for style checking the entire document.
 </itemize>
 
 And to all of you who commented on and helped refine this document.

@@ -83,7 +83,7 @@ int main( int    argc,
 {                                  
     GtkWidget *window;
     GtkWidget *vbox, *hbox;
-    GtkWidget *clist;
+    GtkWidget *scrolled_window, *clist;
     GtkWidget *button_add, *button_clear, *button_hide_show;    
     gchar *titles[2] = { "Ingredients", "Amount" };
 
@@ -103,7 +103,15 @@ int main( int    argc,
     gtk_container_add(GTK_CONTAINER(window), vbox);
     gtk_widget_show(vbox);
     
-    /* Create the GtkCList. For this example we use 2 columns */
+    /* Create a scrolled window to pack the CList widget into */
+    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
+                                    GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);
+
+    gtk_box_pack_start(GTK_BOX(vbox), scrolled_window, TRUE, TRUE, 0);
+    gtk_widget_show (scrolled_window);
+
+    /* Create the CList. For this example we use 2 columns */
     clist = gtk_clist_new_with_titles( 2, titles);
 
     /* When a selection is made, we want to know about it. The callback
@@ -121,8 +129,8 @@ int main( int    argc,
      */
     gtk_clist_set_column_width (GTK_CLIST(clist), 0, 150);
 
-    /* Add the GtkCList widget to the vertical box and show it. */
-    gtk_box_pack_start(GTK_BOX(vbox), clist, TRUE, TRUE, 0);
+    /* Add the CList widget to the vertical box and show it. */
+    gtk_container_add(GTK_CONTAINER(scrolled_window), clist);
     gtk_widget_show(clist);
 
     /* Create the buttons and add them to the window. See the button
