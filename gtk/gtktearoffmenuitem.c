@@ -145,14 +145,21 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
       right_max = x + width;
 
       if (widget->state == GTK_STATE_PRELIGHT)
-	gtk_paint_box (widget->style,
-		       widget->window,
-		       GTK_STATE_PRELIGHT,
-		       GTK_SHADOW_OUT,
-		       area, widget, "menuitem",
-		       x, y, width, height);
-       else
-	 gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
+	{
+	  gint selected_shadow_type;
+	  
+	  gtk_widget_style_get (widget,
+				"selected_shadow_type", &selected_shadow_type,
+				NULL);
+	  gtk_paint_box (widget->style,
+			 widget->window,
+			 GTK_STATE_PRELIGHT,
+			 selected_shadow_type,
+			 area, widget, "menuitem",
+			 x, y, width, height);
+	}
+      else
+	gdk_window_clear_area (widget->window, area->x, area->y, area->width, area->height);
 
       if (tearoff_item->torn_off)
 	{

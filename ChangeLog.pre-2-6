@@ -1,3 +1,8 @@
+Wed Oct 16 17:11:46 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_paint): Make
+	tear-off menuitems obey the "selected_shadow_type" style property.
+
 Tue Oct 15 17:25:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/gtkimcontextxim.c (get_im): Don't use 
