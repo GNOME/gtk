@@ -1,5 +1,8 @@
 2004-07-08  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtktreeview.c (gtk_tree_view_set_search_equal_func): Allow
+	to restore the default search function.  (#145365, John Finlay) 
+
 	* gdk/x11/gdkdnd-x11.c (xdnd_send_xevent): Don't leak 
 	references to the drag context.  (#144324, Alex Larsson)
 
