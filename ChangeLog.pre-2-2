@@ -1,3 +1,14 @@
+2002-05-07  Matthias Clasen  <maclas@gmx.de>
+
+	Fix for #79248:
+	
+	* gdk/x11/gdkwindow-x11.c (gdk_window_new): 
+	(gdk_window_set_events): Always select for property notify for
+	maintaining window state.
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Only propagate
+	property notifys if they were selected by gdk_window_set_events.
+
 Mon May  6 23:48:14 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_map_expanded_rows_helper): call

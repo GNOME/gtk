@@ -509,7 +509,7 @@ gdk_event_translate (GdkDisplay *display,
   window = NULL;
   window_private = NULL;
   event->any.window = NULL;
-  
+
   if (_gdk_default_filters)
     {
       /* Apply global filters */
@@ -651,7 +651,7 @@ gdk_event_translate (GdkDisplay *display,
       xoffset = 0;
       yoffset = 0;
     }
-  
+
   switch (xevent->type)
     {
     case KeyPress:
@@ -1453,23 +1453,28 @@ gdk_event_translate (GdkDisplay *display,
 
       if (window_private == NULL)
         {
-          return_val = FALSE;
+	  return_val = FALSE;
           break;
         }
       
-      event->property.type = GDK_PROPERTY_NOTIFY;
-      event->property.window = window;
-      event->property.atom = gdk_x11_xatom_to_atom_for_display (display, xevent->xproperty.atom);
-      event->property.time = xevent->xproperty.time;
-      event->property.state = xevent->xproperty.state;
-
       if (xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE") ||
 	  xevent->xproperty.atom == gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"))
         {
           /* If window state changed, then synthesize those events. */
-          gdk_check_wm_state_changed (event->property.window);
+          gdk_check_wm_state_changed (window);
         }
       
+      if (window_private->event_mask & GDK_PROPERTY_CHANGE_MASK) 
+	{
+	  event->property.type = GDK_PROPERTY_NOTIFY;
+	  event->property.window = window;
+	  event->property.atom = gdk_x11_xatom_to_atom_for_display (display, xevent->xproperty.atom);
+	  event->property.time = xevent->xproperty.time;
+	  event->property.state = xevent->xproperty.state;
+	}
+      else
+	return_val = FALSE;
+
       break;
       
     case SelectionClear:
