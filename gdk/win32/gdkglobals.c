@@ -46,6 +46,6 @@ gint              gdk_error_code;
 gint              gdk_error_warnings = TRUE;
 gint              gdk_null_window_warnings = TRUE;
 
-GMutex *gdk_threads_mutex = NULL;          /* Global GDK lock */
+GMutex           *gdk_threads_mutex = NULL;
 
-PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
+DWORD		  windows_version = 0;

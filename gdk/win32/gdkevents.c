@@ -187,6 +187,11 @@ static gboolean is_AltGr_key = FALSE;
 static IActiveIMMApp *paimmapp = NULL;
 static IActiveIMMMessagePumpOwner *paimmmpo = NULL;
 
+typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
+static PFN_TrackMouseEvent p_TrackMouseEvent = NULL;
+
+static gboolean use_IME_COMPOSITION = FALSE;
+
 LRESULT CALLBACK 
 gdk_WindowProc (HWND hWnd,
 		UINT message,
@@ -381,7 +386,7 @@ void
 gdk_events_init (void)
 {
   HRESULT hres;
-  HMODULE user32;
+  HMODULE user32, imm32;
   HINSTANCE commctrl32;
 
   if (g_pipe_readable_msg == 0)
@@ -430,11 +435,21 @@ gdk_events_init (void)
   if ((p_TrackMouseEvent = GetProcAddress (user32, "TrackMouseEvent")) == NULL)
     {
       if ((commctrl32 = LoadLibrary ("commctrl32.dll")) != NULL)
-	p_TrackMouseEvent = GetProcAddress (commctrl32, "_TrackMouseEvent");
+	p_TrackMouseEvent = (PFN_TrackMouseEvent)
+	  GetProcAddress (commctrl32, "_TrackMouseEvent");
     }
   if (p_TrackMouseEvent != NULL)
     GDK_NOTE (EVENTS, g_print ("Using TrackMouseEvent to detect leave events\n"));
 #endif
+  if (windows_version < 0x80000000 && (windows_version & 0xFF) == 5)
+    {
+      /* On Win2k (Beta 3, at least) WM_IME_CHAR doesn't seem to work
+       * correctly for non-Unicode applications. Handle
+       * WM_IME_COMPOSITION with GCS_RESULTSTR instead, fetch the
+       * Unicode char from the IME with ImmGetCompositionStringW().
+       */
+      use_IME_COMPOSITION = TRUE;
+    }
 }
 
 /*
@@ -1173,6 +1188,8 @@ gdk_add_client_message_filter (GdkAtom       message_type,
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode
  * mapping functions, from the xterm sources.
  */
+
+#if 0 /* Keyval-to-Unicode isn't actually needed  */
 
 struct k2u {
   unsigned short keysym;
@@ -1996,6 +2013,8 @@ keyval_to_unicode (guint keysym)
   /* No matching Unicode value found */
   return -1;
 }
+
+#endif /* 0 */
 
 struct u2k {
   unsigned short keysym;
@@ -2841,6 +2860,7 @@ build_keypress_event (GdkWindowPrivate *window_private,
 		      GdkEvent         *event,
 		      MSG              *xevent)
 {
+  HIMC hIMC;
   gint i, bytesleft, bytecount, ucount, ucleft, len;
   guchar buf[100], *bp;
   wchar_t wbuf[100], *wcp;
@@ -2848,39 +2868,50 @@ build_keypress_event (GdkWindowPrivate *window_private,
   event->key.type = GDK_KEY_PRESS;
   event->key.time = xevent->time;
   
-  if (xevent->message == WM_CHAR)
+  if (xevent->message == WM_IME_COMPOSITION)
     {
-      bytecount = MIN ((xevent->lParam & 0xFFFF), sizeof (buf));
-      for (i = 0; i < bytecount; i++)
-	buf[i] = xevent->wParam;
+      hIMC = ImmGetContext (xevent->hwnd);
+
+      bytecount = ImmGetCompositionStringW (hIMC, GCS_RESULTSTR,
+					    wbuf, sizeof (wbuf));
+      ucount = bytecount / 2;
     }
   else
     {
-      /* WM_IME_CHAR */
-      event->key.keyval = GDK_VoidSymbol;
-      if (xevent->wParam & 0xFF00)
+      if (xevent->message == WM_CHAR)
 	{
-	  /* Contrary to the documentation,
-	   * the lead byte is the msb byte.
-	   */
-	  buf[0] = ((xevent->wParam >> 8) & 0xFF);
-	  buf[1] = (xevent->wParam & 0xFF);
-	  bytecount = 2;
+	  bytecount = MIN ((xevent->lParam & 0xFFFF), sizeof (buf));
+	  for (i = 0; i < bytecount; i++)
+	    buf[i] = xevent->wParam;
 	}
-      else
+      else /* WM_IME_CHAR */
 	{
-	  buf[0] = (xevent->wParam & 0xFF);
-	  bytecount = 1;
+	  event->key.keyval = GDK_VoidSymbol;
+	  if (xevent->wParam & 0xFF00)
+	    {
+	      /* Contrary to some versions of the documentation,
+	       * the lead byte is the most significant byte.
+	       */
+	      buf[0] = ((xevent->wParam >> 8) & 0xFF);
+	      buf[1] = (xevent->wParam & 0xFF);
+	      bytecount = 2;
+	    }
+	  else
+	    {
+	      buf[0] = (xevent->wParam & 0xFF);
+	      bytecount = 1;
+	    }
 	}
-    }
 
-  /* Convert from the window's current code page
-   * to Unicode. Then convert to UTF-8.
-   * We don't handle the surrogate stuff. Should we?
-   */
-  ucount = MultiByteToWideChar (window_private->charset_info.ciACP,
-				0, buf, bytecount, wbuf, 100);
-  
+      /* Convert from the window's current code page
+       * to Unicode. Then convert to UTF-8.
+       * We don't handle the surrogate stuff. Should we?
+       */
+      ucount = MultiByteToWideChar (window_private->charset_info.ciACP,
+				    0, buf, bytecount,
+				    wbuf, sizeof (wbuf) / sizeof (wbuf[0]));
+      
+    }
   if (ucount == 0)
     event->key.keyval = GDK_VoidSymbol;
   else if (xevent->message == WM_CHAR)
@@ -2956,6 +2987,35 @@ build_keypress_event (GdkWindowPrivate *window_private,
       bp += len;
     }
   *bp = 0;
+}
+
+static void
+build_keyrelease_event (GdkWindowPrivate *window_private,
+			GdkEvent         *event,
+			MSG              *xevent)
+{
+  guchar buf;
+  wchar_t wbuf;
+
+  event->key.type = GDK_KEY_RELEASE;
+  event->key.time = xevent->time;
+
+  if (xevent->message == WM_CHAR)
+    if (xevent->wParam < ' ')
+      event->key.keyval = xevent->wParam + '@';
+    else
+      {
+	buf = xevent->wParam;
+	MultiByteToWideChar (window_private->charset_info.ciACP,
+			     0, &buf, 1, &wbuf, 1);
+
+	event->key.keyval = unicode_to_keyval (wbuf);
+      }
+  else
+    event->key.keyval = GDK_VoidSymbol;
+  build_key_event_state (event);
+  event->key.string = NULL;
+  event->key.length = 0;
 }
 
 static void
@@ -3368,7 +3428,7 @@ gdk_event_translate (GdkEvent *event,
   HDC bgdc;
   HGDIOBJ oldbitmap;
   int button;
-  int i, j;
+  int i, j, n, k;
   gchar buf[256];
   gchar *msgname;
   gboolean return_val;
@@ -3835,6 +3895,15 @@ gdk_event_translate (GdkEvent *event,
       return_val = !GDK_DRAWABLE_DESTROYED (window);
       break;
 
+    case WM_IME_COMPOSITION:
+      if (!use_IME_COMPOSITION)
+	break;
+      GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %#x  %#x\n",
+				 xevent->hwnd, xevent->lParam));
+      if (xevent->lParam & GCS_RESULTSTR)
+	goto wm_char;
+      break;
+
     case WM_IME_CHAR:
       GDK_NOTE (EVENTS,
 		g_print ("WM_IME_CHAR: %#x  bytes: %#.04x\n",
@@ -3918,22 +3987,18 @@ gdk_event_translate (GdkEvent *event,
 	      gdk_event_queue_append (event2);
 	      GDK_NOTE (EVENTS, print_event (event2));
 	    }
-	  /* Return the release event.  */
-	  event->key.type = GDK_KEY_RELEASE;
-	  event->key.keyval = xevent->wParam;
-	  event->key.time = xevent->time;
-	  build_key_event_state (event);
-	  event->key.string = NULL;
-	  event->key.length = 0;
+	  /* Return the key release event.  */
+	  build_keyrelease_event (WINDOW_PRIVATE(window), event, xevent);
 	}
       else if (return_val
 	       && (WINDOW_PRIVATE(window)->event_mask & GDK_KEY_PRESS_MASK))
 	{
-	  /* Return just the GDK_KEY_PRESS event. */
+	  /* Return just the key press event. */
 	  build_keypress_event (WINDOW_PRIVATE(window), event, xevent);
 	}
       else
 	return_val = FALSE;
+
 #if 0 /* Don't reset is_AltGr_key here. Othewise we can't type several
        * AltGr-accessed chars while keeping the AltGr pressed down
        * all the time.

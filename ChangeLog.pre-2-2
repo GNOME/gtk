@@ -1,3 +1,43 @@
+1999-11-07  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkprivate.h: New font private structures, related to
+	fontsets.
+
+	* gdk/win32/gdkfont.c: New functions gdk_font_list_new() and
+	gdk_font_list_free(). On X11, will just be wrappers to
+	XListFonts() and XFreeFontNames(). On Win32, the code previously
+	in gtkfontsel.c is now here.
+
+	New function gdk_font_xlfd_create(). On X11 will get the FONT
+	property of the font (for GDK_FONT_FONTs), or call
+	XBaseFontNameListOfFontSet (for GDK_FONT_FONTSETs), on Win32
+	builds a XLFD style name from the font information in the LOGFONT
+	struct(s).
+
+	New function gdk_font_xlfd_free(), which correspondingly frees the
+	string returned by gdk_font_xlfd_create().
+
+	Implement fontsets on Win32. Add a function that iterates over a
+	wide char string and calls a callback function for each substring
+	of wide chars from the same Unicode subrange (and thus probably
+	available in the same real font).
+
+	Improve the XLFD emulation a bit.
+
+	* gdk/win32/gdkim.c (gdk_nmbstowchar_ts): Small bugfix.
+
+	* gdk/win32/gdkevents.c: Workaround for suspected bug on Win2k
+	Beta3, WM_IME_CHAR messages don't seem to contain the composed
+	multi-byte char as with the Active IMM on Win9x. Oh well, handle
+	WM_IME_COMPOSITION with GCS_RESULTSTR instead, use
+	ImmGetCompositionStringW() to get the composed Unicode chars.
+
+	* gdk/win32/gdkgc.c
+	* gdk/win32/gdkdraw.c: Changes needed because of the font private
+	struct changes.
+
+	* gdk/win32/gdk.def: Add the new functions.
+
 1999-11-04  Tor Lillqvist  <tml@iki.fi>
 
 	* config.h.win32: Don't define HAVE_DIMM_H if MSC, as you have to

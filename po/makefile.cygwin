@@ -18,8 +18,8 @@ LOCALEDIR = /WINDOWS/$(PACKAGE)/locale
 endif
 
 # uk (Ukrainian) is skipped, as native2ascii doesn't know the KOI8_U 
-# encoding, sigh
-LANGUAGES= $(basename $(basename .Big5,$(wildcard $(addsuffix .po,ca cs da de el es et eu fi fr ga gl hr hu it ja ko nl no pl pt pt_BR ru sk sl sv wa zh_TW.Big5))))
+# encoding, sigh. Or is it suffuciently similar to KOI8_R?
+LANGUAGES= $(basename $(basename $(wildcard $(addsuffix .po,ca cs da de el es et eu fi fr ga gl hr hu it ja ko nl no pl pt pt_BR ru sk sl sv wa zh_TW.Big5))))
 
 ################################################################
 

@@ -48,7 +48,6 @@
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivate*) cmap)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)
 #define GDK_FONT_XDISPLAY(font)       NULL
-#define GDK_FONT_XFONT(font)          (((GdkFontPrivate*) font)->xfont)
 
 GdkVisual*   gdkx_visual_get   (VisualID xvisualid);
 /* XXX: Do not use this function until it is fixed. An X Colormap

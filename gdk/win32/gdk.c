@@ -235,6 +235,7 @@ gdk_init_check (int    *argc,
   gdk_ProgInstance = GetModuleHandle (NULL);
   gdk_DC = CreateDC ("DISPLAY", NULL, NULL, NULL);
   gdk_root_window = GetDesktopWindow ();
+  windows_version = GetVersion ();
 
   CoInitialize (NULL);
 

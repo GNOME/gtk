@@ -337,13 +337,15 @@ gdk_nmbstowchar_ts (wchar_t     *dest,
 		    gint         src_len,
 		    gint         dest_max)
 {
+  wchar_t *wcp;
   guchar *cp, *end;
   gint n;
   
+  wcp = dest;
   cp = (guchar *) src;
   end = cp + src_len;
   n = 0;
-  while (cp != end && dest != dest + dest_max)
+  while (cp != end && wcp != dest + dest_max)
     {
       gint i, mask = 0, len;
       guchar c = *cp;
@@ -369,19 +371,19 @@ gdk_nmbstowchar_ts (wchar_t     *dest,
       if (cp + len > end)
 	return -1;
 
-      *dest = (cp[0] & mask);
+      *wcp = (cp[0] & mask);
       for (i = 1; i < len; i++)
 	{
 	  if ((cp[i] & 0xc0) != 0x80)
 	    return -1;
-	  *dest <<= 6;
-	  *dest |= (cp[i] & 0x3f);
+	  *wcp <<= 6;
+	  *wcp |= (cp[i] & 0x3f);
 	}
-      if (*dest == 0xFFFF)
+      if (*wcp == 0xFFFF)
 	return -1;
 
       cp += len;
-      dest++;
+      wcp++;
       n++;
     }
   if (cp != end)

@@ -209,8 +209,7 @@ gdk_draw_line (GdkDrawable *drawable,
    * we draw the end pixel separately... With wider pens we don't care.
    * //HB: But the NT developers don't read their API documentation ...
    */
-  if (gc_private->pen_width == 1
-      && GetVersion () > 0x80000000)
+  if (gc_private->pen_width == 1 && windows_version > 0x80000000)
     if (!LineTo (hdc, x2 + 1, y2))
       g_warning ("gdk_draw_line: LineTo #2 failed");
   gdk_gc_postdraw (drawable_private, gc_private);
@@ -423,6 +422,12 @@ gdk_draw_polygon (GdkDrawable *drawable,
   gdk_gc_postdraw (drawable_private, gc_private);
 }
 
+typedef struct
+{
+  gint x, y;
+  HDC hdc;
+} gdk_draw_text_arg;
+
 /* gdk_draw_string
  */
 void
@@ -436,9 +441,35 @@ gdk_draw_string (GdkDrawable *drawable,
   gdk_draw_text (drawable, font, gc, x, y, string, strlen (string));
 }
 
+static void
+gdk_draw_text_handler (GdkWin32SingleFont *singlefont,
+		       const wchar_t      *wcstr,
+		       int                 wclen,
+		       void               *arg)
+{
+  HDC hdc;
+  HGDIOBJ oldfont;
+  SIZE size;
+  GdkDrawablePrivate *drawable_private;
+  GdkGCPrivate *gc_private;
+  gdk_draw_text_arg *argp = (gdk_draw_text_arg *) arg;
+
+  if ((oldfont = SelectObject (argp->hdc, singlefont->xfont)) == NULL)
+    {
+      g_warning ("gdk_draw_text_handler: SelectObject failed");
+      return;
+    }
+  
+  if (!TextOutW (argp->hdc, argp->x, argp->y, wcstr, wclen))
+    g_warning ("gdk_draw_text_handler: TextOutW failed");
+  GetTextExtentPoint32W (argp->hdc, wcstr, wclen, &size);
+  argp->x += size.cx;
+
+  SelectObject (hdc, oldfont);
+}
+
 /* gdk_draw_text
  *
- * Interface changed: add "GdkFont *font" to specify font or fontset explicitely
  */
 void
 gdk_draw_text (GdkDrawable *drawable,
@@ -449,14 +480,12 @@ gdk_draw_text (GdkDrawable *drawable,
 	       const gchar *text,
 	       gint         text_length)
 {
-  GdkDrawablePrivate *drawable_private;
-  GdkFontPrivate *font_private;
-  GdkGCPrivate *gc_private;
   HDC hdc;
-  HFONT xfont;
-  HGDIOBJ oldfont;
+  GdkDrawablePrivate *drawable_private;
+  GdkGCPrivate *gc_private;
   wchar_t *wcstr;
   gint wlen;
+  gdk_draw_text_arg arg;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (font != NULL);
@@ -473,30 +502,26 @@ gdk_draw_text (GdkDrawable *drawable,
 
   drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
-  font_private = (GdkFontPrivate*) font;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
-  xfont = (HFONT) font_private->xfont;
+  arg.x = x;
+  arg.y = y;
+  arg.hdc = gdk_gc_predraw (drawable_private, gc_private);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d) %#x "
-			   "+%d+%d font: %#x \"%.*s\" length: %d\n",
+  GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d,%d) \"%.*s\" (len %d)\n",
 			   drawable_private->xwindow,
-			   gc_private, gc_private->xgc,
-			   x, y, xfont,
+			   x, y,
 			   (text_length > 10 ? 10 : text_length),
 			   text, text_length));
   
-  if ((oldfont = SelectObject (hdc, xfont)) == NULL)
-    g_warning ("gdk_draw_text: SelectObject failed");
-
   wcstr = g_new (wchar_t, text_length);
   if ((wlen = gdk_nmbstowchar_ts (wcstr, text, text_length, text_length)) == -1)
     g_warning ("gdk_draw_text: gdk_nmbstowchar_ts failed");
-  else if (!TextOutW (hdc, x, y, wcstr, wlen))
-    g_warning ("gdk_draw_text: TextOutW failed");
+  else
+    gdk_wchar_text_handle (font, wcstr, wlen,
+			   gdk_draw_text_handler, &arg);
+
   g_free (wcstr);
-  if (oldfont != NULL)
-    SelectObject (hdc, oldfont);
+
   gdk_gc_postdraw (drawable_private, gc_private);
 }
 
@@ -510,13 +535,11 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 		  gint		  text_length)
 {
   HDC hdc;
-  HGDIOBJ oldfont;
   GdkDrawablePrivate *drawable_private;
-  GdkFontPrivate *font_private;
   GdkGCPrivate *gc_private;
   gint i, wlen;
   wchar_t *wcstr;
-  guchar *str;
+  gdk_draw_text_arg arg;
 
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (font != NULL);
@@ -533,19 +556,15 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 
   drawable_private = (GdkDrawablePrivate*) drawable;
   gc_private = (GdkGCPrivate*) gc;
-  font_private = (GdkFontPrivate*) font;
 
-  hdc = gdk_gc_predraw (drawable_private, gc_private);
+  arg.x = x;
+  arg.y = y;
+  arg.hdc = gdk_gc_predraw (drawable_private, gc_private);
 
-  GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d) %#x "
-			   "+%d+%d font: %#x length: %d\n",
+  GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d,%d) len: %d\n",
 			   drawable_private->xwindow,
-			   gc_private, gc_private->xgc,
-			   x, y, font_private->xfont,
-			   text_length));
+			   x, y, text_length));
       
-  if ((oldfont = SelectObject (hdc, font_private->xfont)) == NULL)
-    g_warning ("gdk_draw_text_wc: SelectObject failed");
   if (sizeof (wchar_t) != sizeof (GdkWChar))
     {
       wcstr = g_new (wchar_t, text_length);
@@ -555,13 +574,12 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
   else
     wcstr = (wchar_t *) text;
 
-  if (!TextOutW (hdc, x, y, wcstr, text_length))
-    g_warning ("gdk_draw_text_wc: TextOutW failed");
+  gdk_wchar_text_handle (font, wcstr, text_length,
+			 gdk_draw_text_handler, &arg);
 
   if (sizeof (wchar_t) != sizeof (GdkWChar))
     g_free (wcstr);
-  if (oldfont != NULL)
-    SelectObject (hdc, oldfont);
+
   gdk_gc_postdraw (drawable_private, gc_private);
 }
 

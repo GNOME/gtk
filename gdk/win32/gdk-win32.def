@@ -105,9 +105,13 @@ EXPORTS
 	gdk_flush
 	gdk_font_equal
 	gdk_font_id
+	gdk_font_list_free
+	gdk_font_list_new
 	gdk_font_load
 	gdk_font_ref
 	gdk_font_unref
+	gdk_font_xlfd_create
+	gdk_font_xlfd_free
 	gdk_fontset_load
 	gdk_free_compound_text
 	gdk_free_text_list

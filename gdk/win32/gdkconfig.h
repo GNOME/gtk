@@ -6,3 +6,4 @@
 #define GDK_HAVE_WCTYPE_H 1
 #endif
 #define GDK_USE_UTF8_MBS 1
+

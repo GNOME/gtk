@@ -90,9 +90,12 @@ gdk_gc_new_with_values (GdkWindow	*window,
   if ((values_mask & GDK_GC_FONT) && (values->font->type == GDK_FONT_FONT
 				      || values->font->type == GDK_FONT_FONTSET))
     {
-      private->font = (HFONT) ((GdkFontPrivate*) values->font)->xfont;
+      private->font = values->font;
+      gdk_font_ref (private->font);
       GDK_NOTE (MISC, g_print (" font=%#x", private->font));
     }
+  else
+    private->font = NULL;
 
   if (values_mask & GDK_GC_FUNCTION)
     {
@@ -294,28 +297,17 @@ gdk_gc_unref (GdkGC *gc)
   else
     {
       if (private->values_mask & GDK_GC_FONT)
-	{
-#if 0
-	  if (!DeleteObject (private->font))
-	    g_warning ("gdk_gc_unref: DeleteObject #3 failed");
-#endif
-	}
+	gdk_font_unref (private->font);
 
       if (private->values_mask & GDK_GC_TILE)
-	{
-	  gdk_pixmap_unref (private->tile);
-	}
+	gdk_pixmap_unref (private->tile);
       
       if (private->values_mask & GDK_GC_STIPPLE)
-	{
-	  gdk_pixmap_unref (private->stipple);
-	}
+	gdk_pixmap_unref (private->stipple);
       
       if (private->values_mask & GDK_GC_CLIP_MASK)
-	{
-	  DeleteObject (private->clip_region);
-	}
-      memset (gc, 0, sizeof (GdkGCPrivate));
+	DeleteObject (private->clip_region);
+
       g_free (gc);
     }
 }
@@ -333,7 +325,7 @@ gdk_gc_get_values (GdkGC       *gc,
 
   values->foreground = private->foreground;
   values->background = private->background;
-  values->font = gdk_font_lookup (private->font);
+  values->font = private->font;
 
   switch (private->rop2)
     {
@@ -477,6 +469,7 @@ gdk_gc_set_font (GdkGC	 *gc,
 {
   GdkGCPrivate *gc_private;
   GdkFontPrivate *font_private;
+  gchar *xlfd;
 
   g_return_if_fail (gc != NULL);
   g_return_if_fail (font != NULL);
@@ -485,12 +478,16 @@ gdk_gc_set_font (GdkGC	 *gc,
       || font->type == GDK_FONT_FONTSET)
     {
       gc_private = (GdkGCPrivate*) gc;
-      font_private = (GdkFontPrivate*) font;
       
-      GDK_NOTE (MISC, g_print ("gdk_gc_set_font: (%d) %#x\n",
-			       gc_private, font_private->xfont));
+      GDK_NOTE (MISC, (xlfd = gdk_font_xlfd_create (font),
+		       g_print ("gdk_gc_set_font: (%d) %s\n",
+				gc_private, xlfd),
+		       gdk_font_xlfd_free (xlfd)));
 
-      gc_private->font = font_private->xfont;
+      if (gc_private->font != NULL)
+	gdk_font_unref (gc_private->font);
+      gc_private->font = font;
+      gdk_font_ref (gc_private->font);
       gc_private->values_mask |= GDK_GC_FONT;
     }
 }
@@ -1066,10 +1063,6 @@ gdk_gc_predraw (GdkDrawablePrivate *drawable_private,
   
   if (SetTextAlign (gc_private->xgc, TA_BASELINE) == GDI_ERROR)
     g_warning ("gdk_gc_predraw: SetTextAlign failed");
-  
-  if (gc_private->values_mask & GDK_GC_FONT)
-    if (SelectObject (gc_private->xgc, gc_private->font) == NULL)
-      g_warning ("gdk_gc_predraw: SelectObject #4 failed");
   
   if (gc_private->values_mask & GDK_GC_FUNCTION)
     if (SetROP2 (gc_private->xgc, gc_private->rop2) == 0)

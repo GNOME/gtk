@@ -78,10 +78,6 @@
 #define gdk_window_lookup(xid)	   ((GdkWindow*) gdk_xid_table_lookup (xid))
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 
-/* HFONTs clash with HWNDs, so add dithering to HFONTs... (hack) */
-#define HFONT_DITHER 43
-#define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup ((HANDLE) ((guint) xid + HFONT_DITHER)))
-
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -249,7 +245,7 @@ struct _GdkGCPrivate
   GdkGCValuesMask values_mask;
   GdkColor foreground;
   GdkColor background;
-  HFONT font;
+  GdkFont *font;
   gint rop2;
   GdkFill fill_style;
   GdkPixmap *tile;
@@ -299,20 +295,22 @@ struct _GdkVisualPrivate
   Visual *xvisual;
 };
 
-struct _GdkFontPrivate
+typedef struct
 {
-  GdkFont font;
-  /* For now, both GDK_FONT_FONT and GDK_FONT_FONTSET fonts
-   * just have one Windows font loaded. This will change.
-   */
   HFONT xfont;
-  guint ref_count;
-
-  GSList *names;
   DWORD charset;
   UINT codepage;
   CPINFO cpinfo;
   FONTSIGNATURE fs;
+} GdkWin32SingleFont;
+
+struct _GdkFontPrivate
+{
+  GdkFont font;
+  guint ref_count;
+
+  GSList *fonts;
+  GSList *names;
 };
 
 struct _GdkCursorPrivate
@@ -381,16 +379,25 @@ void    gdk_sel_prop_store (GdkWindow *owner,
 			    guchar    *data,
 			    gint       length);
 
-void       gdk_event_queue_append (GdkEvent *event);
+void gdk_event_queue_append (GdkEvent *event);
 
-gint	   gdk_nmbstowcs (GdkWChar    *dest,
+gint gdk_nmbstowcs (GdkWChar    *dest,
 			  const gchar *src,
 			  gint         src_len,
 			  gint         dest_max);
-gint	   gdk_nmbstowchar_ts (wchar_t     *dest,
+gint gdk_nmbstowchar_ts (wchar_t     *dest,
 			       const gchar *src,
 			       gint         src_len,
 			       gint         dest_max);
+
+void gdk_wchar_text_handle (GdkFont       *font,
+			    const wchar_t *wcstr,
+			    int            wclen,
+			    void         (*handler)(GdkWin32SingleFont *,
+						    const wchar_t *,
+						    int,
+						    void *),
+			    void          *arg);
 
 /* Please see gdkwindow.c for comments on how to use */ 
 HWND gdk_window_xid_at(HWND base, gint bx, gint by, gint x, gint y, GList *excludes, gboolean excl_child);
@@ -420,10 +427,9 @@ extern GdkAtom		 gdk_clipboard_atom;
 extern GdkAtom		 gdk_win32_dropfiles_atom;
 extern GdkAtom		 gdk_ole2_dnd_atom;
 
-typedef BOOL (WINAPI *PFN_TrackMouseEvent) (LPTRACKMOUSEEVENT);
-extern PFN_TrackMouseEvent p_TrackMouseEvent;
-
 extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
+
+extern DWORD		 windows_version;
 
 /* Debugging support */
 
