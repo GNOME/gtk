@@ -64,6 +64,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclist.h		\
+	gtkclipboard.h		\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
@@ -207,6 +208,7 @@ gtk_c_sources = @STRIP_BEGIN@ \
 	gtkcalendar.c		\
 	gtkcheckbutton.c	\
 	gtkcheckmenuitem.c	\
+	gtkclipboard.c		\
 	gtkclist.c		\
 	gtkcolorsel.c		\
 	gtkcolorseldialog.c	\

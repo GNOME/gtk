@@ -44,6 +44,7 @@
 #include <gtk/gtkcalendar.h>
 #include <gtk/gtkcheckbutton.h>
 #include <gtk/gtkcheckmenuitem.h>
+#include <gtk/gtkclipboard.h>
 #include <gtk/gtkclist.h>
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkcolorseldialog.h>
