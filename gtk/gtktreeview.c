@@ -96,6 +96,7 @@ enum
   ROW_EXPANDED,
   ROW_COLLAPSED,
   COLUMNS_CHANGED,
+  CURSOR_CHANGED,
   MOVE_CURSOR,
   SELECT_ALL,
   SELECT_CURSOR_ROW,
@@ -687,6 +688,15 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkTreeViewClass, columns_changed),
+                  NULL, NULL,
+                  gtk_marshal_NONE__NONE,
+                  G_TYPE_NONE, 0);
+
+  tree_view_signals[CURSOR_CHANGED] =
+    g_signal_new ("cursor_changed",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewClass, cursor_changed),
                   NULL, NULL,
                   gtk_marshal_NONE__NONE,
                   G_TYPE_NONE, 0);
@@ -7989,23 +7999,25 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
       gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
       gtk_tree_path_free (cursor_path);
     }
-  gtk_tree_row_reference_free (tree_view->priv->cursor);
 
+  gtk_tree_row_reference_free (tree_view->priv->cursor);
   gtk_get_current_event_state (&state);
 
   tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view),
 							      tree_view->priv->model,
 							      path);
   _gtk_tree_view_find_node (tree_view, path, &tree, &node);
-  if (tree == NULL)
-    return;
+  if (tree != NULL)
+    {
+      if (clear_and_select && !((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK))
+	_gtk_tree_selection_internal_select_node (tree_view->priv->selection,
+						  node, tree, path,
+						  state);
+      gtk_tree_view_clamp_node_visible (tree_view, tree, node);
+      gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+    }
 
-  if (clear_and_select && !((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK))
-    _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
-					      node, tree, path,
-					      state);
-  gtk_tree_view_clamp_node_visible (tree_view, tree, node);
-  gtk_tree_view_queue_draw_node (tree_view, tree, node, NULL);
+  g_signal_emit (G_OBJECT (tree_view), tree_view_signals[CURSOR_CHANGED], 0);
 }
 
 /**

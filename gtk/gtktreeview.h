@@ -84,6 +84,7 @@ struct _GtkTreeViewClass
 				           GtkTreeIter       *iter,
 				           GtkTreePath       *path);
   void     (* columns_changed)            (GtkTreeView       *tree_view);
+  void     (* cursor_changed)             (GtkTreeView       *tree_view);
 
   /* Key Binding signals */
   void     (* move_cursor)                (GtkTreeView       *tree_view,

@@ -1,3 +1,8 @@
+Wed Oct 31 14:05:17 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_class_init): Added a
+	"cursor_changed" signal, #62850.
+
 2001-10-31  Matt Wilson  <msw@redhat.com>
 
 	* gtk/gtktreedatalist.c (_gtk_tree_data_list_alloc): after
