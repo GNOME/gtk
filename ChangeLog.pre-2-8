@@ -1,3 +1,8 @@
+Mon Aug 20 11:39:44 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeselection.c (gtk_tree_selection_class_init): Use
+	correct marshaller.
+
 Sun Aug 19 03:22:59 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkliststore.c: Fix up warnings, #58928.
