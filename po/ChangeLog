@@ -1,3 +1,8 @@
+2001-12-11  Wang Jian  <lark@linux.net.cn>
+
+	* zh_CN.po: Added Simplified Chinese translation by
+	He Qiangqiang <carton@263.net>. The old one is out of date.
+
 2001-12-08  Christian Rose  <menthos@menthos.com>
 
 	* sv.po: Updated Swedish translation.
