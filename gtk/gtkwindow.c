@@ -4586,8 +4586,24 @@ gtk_window_compute_hints (GtkWindow   *window,
   
   if (geometry_info && geometry_info->widget)
     {
-      extra_width = widget->requisition.width - geometry_info->widget->requisition.width;
-      extra_height = widget->requisition.height - geometry_info->widget->requisition.height;
+      GtkRequisition child_requisition;
+
+      /* FIXME: This really isn't right. It gets the min size wrong and forces
+       * callers to do horrible hacks like set a huge usize on the child requisition
+       * to get the base size right. We really want to find the answers to:
+       *
+       *  - If the geometry widget was infinitely big, how much extra space
+       *    would be needed for the stuff around it.
+       *
+       *  - If the geometry widget was infinitely small, how big would the
+       *    window still have to be.
+       *
+       * Finding these answers would be a bit of a mess here. (Bug #68668)
+       */
+      gtk_widget_get_child_requisition (geometry_info->widget, &child_requisition);
+      
+      extra_width = widget->requisition.width - child_requisition.width;
+      extra_height = widget->requisition.height - child_requisition.height;
     }
 
   /* We don't want to set GDK_HINT_POS in here, we just set it
