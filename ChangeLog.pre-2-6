@@ -1,3 +1,8 @@
+Wed Jul 21 21:26:08 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkviewport.c (viewport_set_adjustment): Don't leak
+	the adjustments.  (#148089, Tommi Komulainen)
+
 Wed Jul 21 21:20:21 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c (gtk_tree_view_destroy): Don't leak
