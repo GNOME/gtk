@@ -1,7 +1,28 @@
+2002-02-18  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkevents-win32.c
+	(gdk_event_translate:WM_QUERYNEWPALETTE): Don't do anything if the
+	system visual is static color, i.e. the user has told GDK to use
+	just the 16 static colors. In that case no need to redraw
+	anything, as the colors are static and by definition always
+	correctly mapped in the system palette.
+	(WM_PALETTECHANGED): Ditto, no need to call UpdateColors() either.
+
+2002-02-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkcolor-win32.c (free_colors): Less verbose debugging
+	output.
+
+	* gdk/win32/gdkevents-win32.c (gdk_event_translate:WM_PALETTE):
+	Just check if it was *this* window that caused the palette change.
+	This means that we call UpdateColors() also if window(s) under
+	another top-level window of the same application has realized its
+	palette.
+	
 2002-02-16  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkcursor-win32.c (gdk_cursor_new_from_pixmap): No
-	need to create new images to scan with gdk_image_get(). Use the
+	need to create new GdkImages with gdk_image_get() to scan. Use the
 	GdkImage view of the GdkPixmap always present nowadays with the
 	unified GdkPixmap-GdkImage implementation.
 

@@ -396,6 +396,9 @@ free_colors (GdkColormapPrivateWin32 *cmapp,
 {
   PALETTEENTRY pe;
   gint i;
+#ifdef G_ENABLE_DEBUG
+  gint set_explicit = 0;
+#endif
 
   /* We don't have to do anything for non-palette devices. */
   
@@ -428,16 +431,21 @@ free_colors (GdkColormapPrivateWin32 *cmapp,
 	{
 	  if (cmapp->use[i] == GDK_WIN32_PE_AVAILABLE)
 	    {
-	      GDK_NOTE (COLORMAP,
-			g_print ("free_colors: hpal=%p ix=%d PC_EXPLICIT\n",
-				 cmapp->hpal, i));
 	      *(WORD*)&pe = i;
 	      pe.peFlags = PC_EXPLICIT;
 	      if (!SetPaletteEntries (cmapp->hpal, i, 1, &pe))
 		WIN32_GDI_FAILED ("SetPaletteEntries");
+	      GDK_NOTE (COLORMAP, set_explicit++);
 	    }
 	}
+#if 0
       GDK_NOTE (COLORMAP, gdk_win32_print_hpalette (cmapp->hpal));
+#else
+      GDK_NOTE (COLORMAP, (set_explicit > 0 ?
+			   g_print ("free_colors: %d (%d) PC_EXPLICIT\n",
+				    set_explicit, cmapp->current_size)
+			   : (void) 0));
+#endif
       break;
 
     default:

@@ -4155,8 +4155,11 @@ gdk_event_translate (GdkEvent *event,
     case WM_QUERYNEWPALETTE:
       GDK_NOTE (COLORMAP, g_print ("WM_QUERYNEWPALETTE: %p\n",
 				   xevent->hwnd));
-      synthesize_expose_events_children (window);
-      update_colors_counter = 0;
+      if (gdk_visual_get_system ()->type == GDK_VISUAL_PSEUDO_COLOR)
+	{
+	  synthesize_expose_events_children (window);
+	  update_colors_counter = 0;
+	}
       *ret_val_flagp = TRUE;
       *ret_valp = FALSE;
       break;
@@ -4168,10 +4171,10 @@ gdk_event_translate (GdkEvent *event,
       *ret_val_flagp = TRUE;
       *ret_valp = FALSE;
 
-      /* If this is a window from the same app that has set the
-       * palette, don't do anything.
-       */
-      if (gdk_window_lookup (xevent->wParam) != NULL)
+      if (gdk_visual_get_system ()->type != GDK_VISUAL_PSEUDO_COLOR)
+	break;
+
+      if (xevent->hwnd == (HWND) xevent->wParam)
 	break;
 
       if (++update_colors_counter == 3)
