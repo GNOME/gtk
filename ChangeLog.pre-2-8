@@ -1,3 +1,10 @@
+Tue Feb 26 22:22:37 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbox.c (gtk_box_reorder_child): Clean up
+	the code so < 0 == end wasn't just a side effect,
+	remove most of the manual linked list manipulation
+	code in favor of g_list_* functions.
+
 Tue Feb 26 21:44:01 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* config.status config.guess: Remove these files

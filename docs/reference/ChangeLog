@@ -1,3 +1,8 @@
+Tue Feb 26 22:01:59 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/tmpl/gtkbox.sgml: Fix docs to correspond to the code -
+	negative @position indicates the end of the list.
+
 2002-02-26  Matthias Clasen  <maclas@gmx.de>
 
 	Fixes for #72478:

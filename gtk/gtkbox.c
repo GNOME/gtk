@@ -496,62 +496,43 @@ gtk_box_reorder_child (GtkBox    *box,
 		       GtkWidget *child,
 		       gint       position)
 {
-  GList *list;
+  GList *old_link;
+  GList *new_link;
+  GtkBoxChild *child_info = NULL;
+  gint old_position;
 
   g_return_if_fail (GTK_IS_BOX (box));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  list = box->children;
-  while (list)
+  old_link = box->children;
+  old_position = 0;
+  while (old_link)
     {
-      GtkBoxChild *child_info;
-
-      child_info = list->data;
+      child_info = old_link->data;
       if (child_info->widget == child)
 	break;
 
-      list = list->next;
+      old_link = old_link->next;
+      old_position++;
     }
 
-  if (list && box->children->next)
-    {
-      GList *tmp_list;
+  g_return_if_fail (old_link != NULL);
 
-      if (list->next)
-	list->next->prev = list->prev;
-      if (list->prev)
-	list->prev->next = list->next;
-      else
-	box->children = list->next;
+  if (position == old_position)
+    return;
 
-      tmp_list = box->children;
-      while (position && tmp_list->next)
-	{
-	  position--;
-	  tmp_list = tmp_list->next;
-	}
+  box->children = g_list_delete_link (box->children, old_link);
 
-      if (position)
-	{
-	  tmp_list->next = list;
-	  list->prev = tmp_list;
-	  list->next = NULL;
-	}
-      else
-	{
-	  if (tmp_list->prev)
-	    tmp_list->prev->next = list;
-	  else
-	    box->children = list;
-	  list->prev = tmp_list->prev;
-	  tmp_list->prev = list;
-	  list->next = tmp_list;
-	}
+  if (position < 0)
+    new_link = NULL;
+  else
+    new_link = g_list_nth (box->children, position);
 
-      gtk_widget_child_notify (child, "position");
-      if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
-	gtk_widget_queue_resize (child);
-    }
+  box->children = g_list_insert_before (box->children, new_link, child_info);
+
+  gtk_widget_child_notify (child, "position");
+  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (box))
+    gtk_widget_queue_resize (child);
 }
 
 void
