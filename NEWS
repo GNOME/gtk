@@ -1,3 +1,11 @@
+Overview of Changes in GTK+ 1.0.6:
+
+* Minor documentation fixups.
+* Fixes for Entry, Text, FileSelection, Paned, Table and CList widgets.
+* Configuration fixes on various platforms.
+* Miscellaneous fixes to XInput support.
+* Build with shared library dependencies on Linux
+
 Overview of Changes in GTK+ 1.0.5:
 
 * Minor documentation fixups.

@@ -1,3 +1,7 @@
+Sun Sep 20 18:57:57 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* NEWS: Update for 1.0.6 release.
+
 Sun Sep 20 11:15:44 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* gtk/gtkentry.c: Queue a redraw in gtk_entry_adjust_scroll.
@@ -169,7 +173,6 @@ Sun Aug 02 23:09:56 1998  George Lebl  <jirka@5z.com>
           this fixes a bug when the whole widget is made non-sesitive
           the buttons weren't redrawn
 
->>>>>>> 1.353.2.79
 Sun Jul 26 21:03:54 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.0.5
