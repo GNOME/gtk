@@ -717,11 +717,8 @@ gtk_table_size_request_pass3 (GtkTable *table)
 
                   for (col = child->left_attach; col < child->right_attach; col++)
                     {
-                      extra = width / (child->right_attach - child->left_attach - col);
-                      if ((col + 1) < child->right_attach)
-                        table->cols[col].requisition += extra;
-                      else
-                        table->cols[col].requisition += width;
+                      extra = width / (child->right_attach - col);
+		      table->cols[col].requisition += extra;
                       width -= extra;
                     }
                 }
@@ -752,11 +749,8 @@ gtk_table_size_request_pass3 (GtkTable *table)
 
                   for (row = child->top_attach; row < child->bottom_attach; row++)
                     {
-                      extra = height / (child->bottom_attach - child->top_attach - row);
-                      if ((row + 1) < child->bottom_attach)
-                        table->rows[row].requisition += extra;
-                      else
-                        table->rows[row].requisition += height;
+                      extra = height / (child->bottom_attach - row);
+		      table->rows[row].requisition += extra;
                       height -= extra;
                     }
                 }
