@@ -1,3 +1,11 @@
+Overview of Changes in GTK+ 1.0.5:
+
+* Minor documentation fixups.
+* Fixes for clist (pixmap clipping), notebook, optionmenu, spinbutton
+  and text widgets.
+* Minor ficup about base class initializations in the type system.
+* Fix for a major bug in the signal code that would cause random crashes.
+
 Overview of Changes in GTK+ 1.0.4:
 
 * Documentation changes (Thanks to Tony Gale!)
