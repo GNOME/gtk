@@ -20,7 +20,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:435
 #, c-format
 msgid "Internal error in the GIF loader (%s)"
-msgstr ""
+msgstr "Внутрішня помилка в завантаженні GIF (%s)"
 
 #: gdk-pixbuf/io-gif.c:584
 msgid "Circular table entry in GIF file"
@@ -28,12 +28,12 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:921
 msgid "File does not appear to be a GIF file"
-msgstr ""
+msgstr "Файл не схожий на GIF"
 
 #: gdk-pixbuf/io-gif.c:933
 #, c-format
 msgid "Version %s of the GIF file format is not supported"
-msgstr ""
+msgstr "Формат файлу GIF версії %s не підтримується"
 
 #: gdk-pixbuf/io-gif.c:985
 msgid "GIF animation contained a frame with an incorrect size"
@@ -283,37 +283,35 @@ msgstr ""
 #. KEEP IN SYNC with gtkiconfactory.c stock icons
 #: gtk/gtkstock.c:169
 msgid "Information"
-msgstr ""
+msgstr "Інформація"
 
 #: gtk/gtkstock.c:170
 msgid "Warning"
-msgstr ""
+msgstr "Попередження"
 
 #: gtk/gtkstock.c:172
 msgid "Question"
-msgstr ""
+msgstr "Запитання"
 
 #: gtk/gtkstock.c:174
-#, fuzzy
 msgid "_Apply"
 msgstr "Застосувати"
 
 #: gtk/gtkstock.c:177
-#, fuzzy
 msgid "_Close"
 msgstr "Закрити"
 
 #: gtk/gtkstock.c:178
 msgid "_Yes"
-msgstr ""
+msgstr "Так"
 
 #: gtk/gtkstock.c:179
 msgid "_No"
-msgstr ""
+msgstr "Ні"
 
 #: gtk/gtkstock.c:182
 msgid "Quit"
-msgstr ""
+msgstr "Вийти"
 
 #: gtk/gtkstock.c:183
 msgid "Help"
@@ -325,7 +323,7 @@ msgstr ""
 
 #: gtk/gtkstock.c:185
 msgid "Open"
-msgstr ""
+msgstr "Відкрити"
 
 #: gtk/gtknotebook.c:2059 gtk/gtknotebook.c:4131
 #, c-format
