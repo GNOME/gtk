@@ -1,3 +1,9 @@
+2003-03-05  Stanislav Brabec  <sbrabec@suse.cz>
+
+	* gtk/gtkrc.c: Fixed altering of glibc private locale area
+	(#107634). Makes it usable with glibc-3.2 again, but the code is
+	still not mature.
+
 2003-02-28  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* configure.in: Changed "by" (wrong lang code) to "be"

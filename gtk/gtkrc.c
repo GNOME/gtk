@@ -453,7 +453,7 @@ gtk_rc_init (void)
 
   if (!initted)
     {
-      char *locale = setlocale (LC_CTYPE, NULL);
+      char *locale = g_strdup (setlocale (LC_CTYPE, NULL));
       char *p;
       
       initted = TRUE;
@@ -558,6 +558,7 @@ gtk_rc_init (void)
 
 	  if (tmp) g_free (tmp);
 	}
+      g_free (locale);
     }
   
   i = 0;
