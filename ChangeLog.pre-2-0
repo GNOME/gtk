@@ -1,3 +1,8 @@
+Thu Aug  6 22:37:21 1998  Stefan Jeske  <stefan@gtk.org>
+
+	* gtk/gtkclist.c: Renamed my_merge and my_mergesort to
+ 	gtk_clist_merge and gtk_clist_mergesort. :)
+
 1998-08-06  Martin Baulig  <martin@home-of-linux.org>
 
 	* gtk/gtkclist.c: Renamed `merge' -> `my_merge' and

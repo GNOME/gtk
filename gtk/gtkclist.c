@@ -354,12 +354,12 @@ static void extend_selection (GtkCList      *clist,
 static gint default_compare (GtkCList     *clist,
 			     gconstpointer row1,
 			     gconstpointer row2);
-static GList * my_merge (GtkCList *clist,
-			 GList    *a,
-			 GList    *b);
-static GList * my_mergesort (GtkCList *clist,
-			     GList    *list,
-			     gint      num);
+static GList * gtk_clist_merge (GtkCList *clist,
+				GList    *a,
+				GList    *b);
+static GList * gtk_clist_mergesort (GtkCList *clist,
+				    GList    *list,
+				    gint      num);
 
 /* Fill in data after widget is realized and has style */
 
@@ -6006,10 +6006,10 @@ default_compare (GtkCList     *clist,
   GtkCListRow *row2 = (GtkCListRow *) ptr2;
   char *text1;
   char *text2;
-
+  
   text1 = GTK_CELL_TEXT (row1->cell[clist->sort_column])->text;
   text2 = GTK_CELL_TEXT (row2->cell[clist->sort_column])->text;
-
+  
   return strcmp (text1, text2);
 }
 
@@ -6063,11 +6063,11 @@ gtk_clist_set_sort_column (GtkCList *clist,
 }
 
 static GList *
-my_merge (GtkCList *clist,
-	  GList    *a,         /* first list to merge */
-	  GList    *b)         /* second list to merge */
+gtk_clist_merge (GtkCList *clist,
+		 GList    *a,         /* first list to merge */
+		 GList    *b)         /* second list to merge */
 {
-  GList z = { 0 };          /* auxiliary node */
+  GList z = { 0 };                    /* auxiliary node */
   GList *c;
   gint cmp;
 
@@ -6117,9 +6117,9 @@ my_merge (GtkCList *clist,
 }
 
 static GList *
-my_mergesort (GtkCList *clist,
-	      GList    *list,         /* the list to sort */
-	      gint      num)          /* the list's length */
+gtk_clist_mergesort (GtkCList *clist,
+		     GList    *list,         /* the list to sort */
+		     gint      num)          /* the list's length */
 {
   GList *half;
   gint i;
@@ -6140,9 +6140,9 @@ my_mergesort (GtkCList *clist,
       half->prev = NULL;
 
       /* recursively sort both lists */
-      return my_merge (clist,
-		       my_mergesort (clist, list, num / 2),
-		       my_mergesort (clist, half, num - num / 2));
+      return gtk_clist_merge (clist,
+		       gtk_clist_mergesort (clist, list, num / 2),
+		       gtk_clist_mergesort (clist, half, num - num / 2));
     }
 }
 
@@ -6178,7 +6178,7 @@ gtk_clist_sort (GtkCList *clist)
       thaw = TRUE;
     }
 
-  clist->row_list = my_mergesort (clist, clist->row_list, clist->rows);
+  clist->row_list = gtk_clist_mergesort (clist, clist->row_list, clist->rows);
 
   work = clist->selection;
 
