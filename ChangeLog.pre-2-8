@@ -1,3 +1,24 @@
+2005-02-02  Tor Lillqvist  <tml@novell.com>
+
+	Implement lazy extended input initialization on Win32, by Robert
+	Ögren. Fixes #163163, possibly #162334. Lazy initialization would
+	be a good idea in any case even if it didn't fix any visible
+	problems, though.
+
+	The Wacom tablet driver seems to get confused if Wintab is
+	initialized but no window is shown before the process exits. This
+	is the case for some GIMP plug-ins, for instance. 
+
+	* gdk/win32/gdkinput-win32.c (_gdk_input_wintab_init_check): Made
+	non-static (and renamed).
+	(_gdk_input_init): Don't call _gdk_input_wintab_init_check().
+
+	* gdk/win32/gdkinput-win32.h: Declare _gdk_input_wintab_init_check().
+
+	* gdk/win32/gdkinput.c (gdk_devices_list,
+	gdk_display_list_devices, gdk_input_set_extension_events): Call
+	_gdk_input_wintab_init_check() here instead.
+
 2005-02-02  Ivan, Wong Yat Cheung  <email@ivanwong.info>
 
 	* gdk/win32/gdkselection.c: Use a FIFO list for storing GdkSelProp
