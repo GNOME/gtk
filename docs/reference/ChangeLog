@@ -1,3 +1,8 @@
+2001-10-28  Anders Carlsson  <andersca@gnu.org>
+
+	* gtk/tmpl/gtkadjustment.sgml: Update struct member docs
+	since they're gdouble now instead of gfloat. Fixes #55699.
+
 2001-10-28  Matthias Clasen  <matthiasc@poet.de>
 
 	* docs/reference/gtk/tmpl/gtkmenuitem.sgml,

@@ -37,22 +37,22 @@ The #GtkAdjustment-struct struct contains the following fields.
 <tbody>
 
 <row>
-<entry>#gfloat lower;</entry>
+<entry>#gdouble lower;</entry>
 <entry>the minimum value.</entry>
 </row>
 
 <row>
-<entry>#gfloat upper;</entry>
+<entry>#gdouble upper;</entry>
 <entry>the maximum value.</entry>
 </row>
 
 <row>
-<entry>#gfloat value;</entry>
+<entry>#gdouble value;</entry>
 <entry>the current value.</entry>
 </row>
 
 <row>
-<entry>#gfloat step_increment;</entry>
+<entry>#gdouble step_increment;</entry>
 <entry>the increment to use to make minor changes to the value.
 In a #GtkScrollbar this increment is used when the mouse is clicked on the
 arrows at the top and bottom of the scrollbar, to scroll by a small amount.
@@ -60,7 +60,7 @@ arrows at the top and bottom of the scrollbar, to scroll by a small amount.
 </row>
 
 <row>
-<entry>#gfloat page_increment;</entry>
+<entry>#gdouble page_increment;</entry>
 <entry>the increment to use to make major changes to the value.
 In a #GtkScrollbar this increment is used when the mouse is clicked in the
 trough, to scroll by a large amount.
@@ -68,7 +68,7 @@ trough, to scroll by a large amount.
 </row>
 
 <row>
-<entry>#gfloat page_size;</entry>
+<entry>#gdouble page_size;</entry>
 <entry>the page size.
 In a #GtkScrollbar this is the size of the area which is currently visible.
 </entry>
