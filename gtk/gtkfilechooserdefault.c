@@ -662,17 +662,19 @@ error_dialog (GtkFileChooserDefault *impl,
 	      const GtkFilePath     *path,
 	      GError                *error)
 {
-  char *uri;
-  char *text;
+  g_return_if_fail (path != NULL);
 
-  uri = gtk_file_system_path_to_uri (impl->file_system, path);
-  text = g_strdup_printf (msg,
-			 uri,
-			 error->message);
-  error_message (impl, text);
-  g_free (text);
-  g_free (uri);
-  g_error_free (error);
+  if (error)
+    {
+      char *uri = gtk_file_system_path_to_uri (impl->file_system, path);
+      text = g_strdup_printf (msg,
+			      uri,
+			      error->message);
+      error_message (impl, text);
+      g_free (text);
+      g_free (uri);
+      g_error_free (error);
+    }
 }
 
 /* Displays an error message about not being able to get information for a file.

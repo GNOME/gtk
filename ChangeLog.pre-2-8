@@ -1,3 +1,8 @@
+2004-03-14  Morten Welinder  <terra@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (error_dialog): Don't crash on NULL
+	path; don't crash on NULL error.
+
 2004-03-14  Hans Breuer  <hans@breuer.org>
 
 	gtk/gtkcombobox.c : prototype cell_view_sync_cells() before 
