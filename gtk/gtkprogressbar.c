@@ -138,11 +138,11 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 			   GTK_ARG_READWRITE,
 			   ARG_DISCRETE_BLOCKS);
   gtk_object_add_arg_type ("GtkProgressBar::fraction",
-			   GTK_TYPE_FLOAT,
+			   GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE,
 			   ARG_FRACTION);
   gtk_object_add_arg_type ("GtkProgressBar::pulse_step",
-			   GTK_TYPE_FLOAT,
+			   GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE,
 			   ARG_PULSE_STEP);
   gtk_object_add_arg_type ("GtkProgressBar::text",
@@ -204,10 +204,10 @@ gtk_progress_bar_set_arg (GtkObject           *object,
       gtk_progress_bar_set_discrete_blocks (pbar, GTK_VALUE_UINT (*arg));
       break;
     case ARG_FRACTION:
-      gtk_progress_bar_set_fraction (pbar, GTK_VALUE_FLOAT (*arg));
+      gtk_progress_bar_set_fraction (pbar, GTK_VALUE_DOUBLE (*arg));
       break;
     case ARG_PULSE_STEP:
-      gtk_progress_bar_set_pulse_step (pbar, GTK_VALUE_FLOAT (*arg));
+      gtk_progress_bar_set_pulse_step (pbar, GTK_VALUE_DOUBLE (*arg));
       break;
     case ARG_TEXT:
       gtk_progress_bar_set_text (pbar, GTK_VALUE_STRING (*arg));
@@ -247,10 +247,10 @@ gtk_progress_bar_get_arg (GtkObject           *object,
       GTK_VALUE_UINT (*arg) = pbar->blocks;
       break;
     case ARG_FRACTION:
-      GTK_VALUE_FLOAT (*arg) = gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
+      GTK_VALUE_DOUBLE (*arg) = gtk_progress_get_current_percentage (GTK_PROGRESS (pbar));
       break;
     case ARG_PULSE_STEP:
-      GTK_VALUE_FLOAT (*arg) = pbar->pulse_fraction;
+      GTK_VALUE_DOUBLE (*arg) = pbar->pulse_fraction;
       break;
     case ARG_TEXT:
       GTK_VALUE_STRING (*arg) = g_strdup (gtk_progress_bar_get_text (pbar));
@@ -377,7 +377,7 @@ gtk_progress_bar_real_update (GtkProgress *progress)
       gint in_block;
       
       in_block = -1 + (gint)(gtk_progress_get_current_percentage (progress) *
-			     (gfloat)pbar->blocks);
+			     (gdouble)pbar->blocks);
       
       if (pbar->in_block != in_block)
 	{
@@ -515,7 +515,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
   gint i;
   gint x;
   gint y;
-  gfloat percentage;
+  gdouble percentage;
   gint size;
 
   g_return_if_fail (progress != NULL);
@@ -804,7 +804,7 @@ gtk_progress_bar_paint (GtkProgress *progress)
  **/
 void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
-                               gfloat          fraction)
+                               gdouble         fraction)
 {
   g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
@@ -885,7 +885,7 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
  **/
 void
 gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
-                                   gfloat          fraction)
+                                   gdouble         fraction)
 {
   g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
@@ -897,7 +897,7 @@ gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
 
 void
 gtk_progress_bar_update (GtkProgressBar *pbar,
-			 gfloat          percentage)
+			 gdouble         percentage)
 {
   g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
@@ -965,7 +965,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
  * 
  * Return value: a fraction from 0.0 to 1.0
  **/
-gfloat
+gdouble
 gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);
@@ -981,7 +981,7 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
  * 
  * Return value: a fraction from 0.0 to 1.0
  **/
-gfloat
+gdouble
 gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 {
   g_return_val_if_fail (GTK_IS_PROGRESS_BAR (pbar), 0);

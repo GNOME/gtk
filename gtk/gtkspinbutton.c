@@ -111,15 +111,15 @@ static gint gtk_spin_button_scroll         (GtkWidget          *widget,
 					    GdkEventScroll     *event);
 static void gtk_spin_button_activate       (GtkEntry           *entry);
 static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
-					    gfloat              val);
+					    gdouble             val);
 static void gtk_spin_button_insert_text    (GtkEntry           *entry,
 					    const gchar        *new_text,
 					    gint                new_text_length,
 					    gint               *position);
 static void gtk_spin_button_real_spin      (GtkSpinButton      *spin_button,
-					    gfloat              step);
+					    gdouble             step);
 static gint gtk_spin_button_default_input  (GtkSpinButton      *spin_button,
-					    gfloat             *new_val);
+					    gdouble            *new_val);
 static gint gtk_spin_button_default_output (GtkSpinButton      *spin_button);
 static gint spin_button_get_shadow_type    (GtkSpinButton      *spin_button);
 
@@ -199,7 +199,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 			   GTK_ARG_READWRITE,
 			   ARG_ADJUSTMENT);
   gtk_object_add_arg_type ("GtkSpinButton::climb_rate",
-			   GTK_TYPE_FLOAT,
+			   GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE,
 			   ARG_CLIMB_RATE);
   gtk_object_add_arg_type ("GtkSpinButton::digits",
@@ -223,7 +223,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 			   GTK_ARG_READWRITE,
 			   ARG_UPDATE_POLICY);
   gtk_object_add_arg_type ("GtkSpinButton::value",
-			   GTK_TYPE_FLOAT,
+			   GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE,
 			   ARG_VALUE);
   
@@ -272,7 +272,7 @@ gtk_spin_button_set_arg (GtkObject        *object,
     case ARG_CLIMB_RATE:
       gtk_spin_button_configure (spin_button,
 				 spin_button->adjustment,
-				 GTK_VALUE_FLOAT (*arg),
+				 GTK_VALUE_DOUBLE (*arg),
 				 spin_button->digits);
       break;
     case ARG_DIGITS:
@@ -294,7 +294,7 @@ gtk_spin_button_set_arg (GtkObject        *object,
       gtk_spin_button_set_update_policy (spin_button, GTK_VALUE_ENUM (*arg));
       break;
     case ARG_VALUE:
-      gtk_spin_button_set_value (spin_button, GTK_VALUE_FLOAT (*arg));
+      gtk_spin_button_set_value (spin_button, GTK_VALUE_DOUBLE (*arg));
       break;
     default:
       break;
@@ -316,7 +316,7 @@ gtk_spin_button_get_arg (GtkObject        *object,
       GTK_VALUE_POINTER (*arg) = spin_button->adjustment;
       break;
     case ARG_CLIMB_RATE:
-      GTK_VALUE_FLOAT (*arg) = spin_button->climb_rate;
+      GTK_VALUE_DOUBLE (*arg) = spin_button->climb_rate;
       break;
     case ARG_DIGITS:
       GTK_VALUE_UINT (*arg) = spin_button->digits;
@@ -334,7 +334,7 @@ gtk_spin_button_get_arg (GtkObject        *object,
       GTK_VALUE_ENUM (*arg) = spin_button->update_policy;
       break;
     case ARG_VALUE:
-      GTK_VALUE_FLOAT (*arg) = spin_button->adjustment->value;
+      GTK_VALUE_DOUBLE (*arg) = spin_button->adjustment->value;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -932,7 +932,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 	      if (spin->click_child == GTK_ARROW_UP &&
 		  event->y <= widget->requisition.height / 2)
 		{
-		  gfloat diff;
+		  gdouble diff;
 
 		  diff = spin->adjustment->upper - spin->adjustment->value;
 		  if (diff > EPSILON)
@@ -941,7 +941,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 	      else if (spin->click_child == GTK_ARROW_DOWN &&
 		       event->y > widget->requisition.height / 2)
 		{
-		  gfloat diff;
+		  gdouble diff;
 
 		  diff = spin->adjustment->value - spin->adjustment->lower;
 		  if (diff > EPSILON)
@@ -1152,7 +1152,7 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 
       if (event->state & GDK_CONTROL_MASK)
 	{
-	  gfloat diff = spin->adjustment->upper - spin->adjustment->value;
+	  gdouble diff = spin->adjustment->upper - spin->adjustment->value;
 	  if (diff > EPSILON)
 	    gtk_spin_button_real_spin (spin, diff);
 	}
@@ -1164,7 +1164,7 @@ gtk_spin_button_key_press (GtkWidget     *widget,
 
       if (event->state & GDK_CONTROL_MASK)
 	{
-	  gfloat diff = spin->adjustment->value - spin->adjustment->lower;
+	  gdouble diff = spin->adjustment->value - spin->adjustment->lower;
 	  if (diff > EPSILON)
 	    gtk_spin_button_real_spin (spin, -diff);
 	}
@@ -1196,10 +1196,10 @@ gtk_spin_button_key_release (GtkWidget   *widget,
 
 static void
 gtk_spin_button_snap (GtkSpinButton *spin_button,
-		      gfloat         val)
+		      gdouble        val)
 {
-  gfloat inc;
-  gfloat tmp;
+  gdouble inc;
+  gdouble tmp;
   
   inc = spin_button->adjustment->step_increment;
   tmp = (val - spin_button->adjustment->lower) / inc;
@@ -1310,10 +1310,10 @@ gtk_spin_button_insert_text (GtkEntry    *entry,
 
 static void
 gtk_spin_button_real_spin (GtkSpinButton *spin_button,
-			   gfloat         increment)
+			   gdouble        increment)
 {
   GtkAdjustment *adj;
-  gfloat new_value = 0.0;
+  gdouble new_value = 0.0;
 
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
@@ -1353,7 +1353,7 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
 
 static gint
 gtk_spin_button_default_input (GtkSpinButton *spin_button,
-			       gfloat        *new_val)
+			       gdouble       *new_val)
 {
   gchar *err = NULL;
 
@@ -1386,7 +1386,7 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
 void
 gtk_spin_button_configure (GtkSpinButton  *spin_button,
 			   GtkAdjustment  *adjustment,
-			   gfloat          climb_rate,
+			   gdouble         climb_rate,
 			   guint           digits)
 {
   g_return_if_fail (spin_button != NULL);
@@ -1405,7 +1405,7 @@ gtk_spin_button_configure (GtkSpinButton  *spin_button,
 
 GtkWidget *
 gtk_spin_button_new (GtkAdjustment *adjustment,
-		     gfloat         climb_rate,
+		     gdouble        climb_rate,
 		     guint          digits)
 {
   GtkSpinButton *spin;
@@ -1491,7 +1491,7 @@ gtk_spin_button_set_digits (GtkSpinButton *spin_button,
     }
 }
 
-gfloat
+gdouble
 gtk_spin_button_get_value_as_float (GtkSpinButton *spin_button)
 {
   g_return_val_if_fail (spin_button != NULL, 0.0);
@@ -1503,7 +1503,7 @@ gtk_spin_button_get_value_as_float (GtkSpinButton *spin_button)
 gint
 gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
 {
-  gfloat val;
+  gdouble val;
 
   g_return_val_if_fail (spin_button != NULL, 0);
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0);
@@ -1517,7 +1517,7 @@ gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
 
 void 
 gtk_spin_button_set_value (GtkSpinButton *spin_button, 
-			   gfloat         value)
+			   gdouble        value)
 {
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
@@ -1596,10 +1596,10 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
 void
 gtk_spin_button_spin (GtkSpinButton *spin_button,
 		      GtkSpinType    direction,
-		      gfloat         increment)
+		      gdouble        increment)
 {
   GtkAdjustment *adj;
-  gfloat diff;
+  gdouble diff;
 
   g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
@@ -1666,7 +1666,7 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
 void 
 gtk_spin_button_update (GtkSpinButton *spin_button)
 {
-  gfloat val;
+  gdouble val;
   gint error = 0;
   gint return_val;
 

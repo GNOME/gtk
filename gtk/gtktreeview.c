@@ -985,7 +985,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 
   if (tree_view->priv->vadjustment->value + allocation->height > tree_view->priv->height)
     gtk_adjustment_set_value (tree_view->priv->vadjustment,
-			      (gfloat) MAX (tree_view->priv->height - allocation->height, 0));
+			      MAX (tree_view->priv->height - allocation->height, 0));
 
   gtk_signal_emit_by_name (GTK_OBJECT (tree_view->priv->vadjustment), "changed");
 
@@ -2494,7 +2494,7 @@ gtk_tree_view_focus (GtkContainer     *container,
   /* Case 4. We have focus already.  Move the cursor. */
   if (direction == GTK_DIR_LEFT)
     {
-      gfloat val;
+      gdouble val;
       val = tree_view->priv->hadjustment->value - tree_view->priv->hadjustment->page_size/2;
       val = MAX (val, 0.0);
       gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->hadjustment), val);
@@ -2506,7 +2506,7 @@ gtk_tree_view_focus (GtkContainer     *container,
     }
   if (direction == GTK_DIR_RIGHT)
     {
-      gfloat val;
+      gdouble val;
       val = tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size/2;
       val = MIN (tree_view->priv->hadjustment->upper - tree_view->priv->hadjustment->page_size, val);
       gtk_adjustment_set_value (GTK_ADJUSTMENT (tree_view->priv->hadjustment), val);

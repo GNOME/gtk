@@ -269,11 +269,12 @@ gtk_layout_move (GtkLayout     *layout,
 }
 
 static void
-gtk_layout_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
+gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
+				 gdouble        upper)
 {
   if (upper != adj->upper)
     {
-      gfloat min = MAX (0., upper - adj->page_size);
+      gdouble min = MAX (0., upper - adj->page_size);
       gboolean value_changed = FALSE;
       
       adj->upper = upper;

@@ -274,7 +274,7 @@ gtk_scale_get_value_size (GtkScale *scale,
       PangoLayout *layout;
       PangoRectangle logical_rect;
       gchar buffer[128];
-      gfloat value;
+      gdouble value;
       gint digits;
       gint i, j;
       

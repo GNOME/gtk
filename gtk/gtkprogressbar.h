@@ -76,7 +76,7 @@ struct _GtkProgressBar
   guint activity_step;
   guint activity_blocks;
 
-  gfloat pulse_fraction;
+  gdouble pulse_fraction;
   
   guint activity_dir : 1;
 };
@@ -121,16 +121,16 @@ void       gtk_progress_bar_pulse                (GtkProgressBar *pbar);
 void       gtk_progress_bar_set_text             (GtkProgressBar *pbar,
                                                   const gchar    *text);
 void       gtk_progress_bar_set_fraction         (GtkProgressBar *pbar,
-                                                  gfloat          fraction);
+                                                  gdouble         fraction);
 
 void       gtk_progress_bar_set_pulse_step       (GtkProgressBar *pbar,
-                                                  gfloat          fraction);
+                                                  gdouble         fraction);
 void       gtk_progress_bar_set_orientation      (GtkProgressBar *pbar,
 						  GtkProgressBarOrientation orientation);
 
 G_CONST_RETURN gchar* gtk_progress_bar_get_text       (GtkProgressBar *pbar);
-gfloat                gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
-gfloat                gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
+gdouble               gtk_progress_bar_get_fraction   (GtkProgressBar *pbar);
+gdouble               gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar);
 
 GtkProgressBarOrientation gtk_progress_bar_get_orientation (GtkProgressBar *pbar);
 
@@ -152,7 +152,7 @@ void       gtk_progress_bar_set_activity_step    (GtkProgressBar *pbar,
 void       gtk_progress_bar_set_activity_blocks  (GtkProgressBar *pbar,
 						  guint           blocks);
 void       gtk_progress_bar_update               (GtkProgressBar *pbar,
-						  gfloat          percentage);
+						  gdouble         percentage);
 
 #endif /* GTK_DISABLE_DEPRECATED */
 

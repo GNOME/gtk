@@ -4225,8 +4225,8 @@ adjust_adj (GtkText* text, GtkAdjustment* adj)
   
   gdk_window_get_size (text->text_area, NULL, &height);
   
-  adj->step_increment = MIN (adj->upper, (float) SCROLL_PIXELS);
-  adj->page_increment = MIN (adj->upper, height - (float) KEY_SCROLL_PIXELS);
+  adj->step_increment = MIN (adj->upper, SCROLL_PIXELS);
+  adj->page_increment = MIN (adj->upper, height - KEY_SCROLL_PIXELS);
   adj->page_size      = MIN (adj->upper, height);
   adj->value          = MIN (adj->value, adj->upper - adj->page_size);
   adj->value          = MAX (adj->value, 0.0);
@@ -4254,7 +4254,7 @@ set_vertical_scroll_iterator (GtkText* text, LineParams* lp, void* data)
 	  text->first_cut_pixels = 0;
 	}
       
-      text->vadj->value = (float) text->first_onscreen_ver_pixel;
+      text->vadj->value = text->first_onscreen_ver_pixel;
     }
   
   svdata->pixel_height += LINE_HEIGHT (*lp);
@@ -4300,13 +4300,13 @@ set_vertical_scroll (GtkText* text)
   data.pixel_height = 0;
   line_params_iterate (text, &mark, NULL, FALSE, &data, set_vertical_scroll_iterator);
   
-  text->vadj->upper = (float) data.pixel_height;
+  text->vadj->upper = data.pixel_height;
   orig_value = (gint) text->vadj->value;
   
   gdk_window_get_size (text->text_area, NULL, &height);
   
-  text->vadj->step_increment = MIN (text->vadj->upper, (float) SCROLL_PIXELS);
-  text->vadj->page_increment = MIN (text->vadj->upper, height - (float) KEY_SCROLL_PIXELS);
+  text->vadj->step_increment = MIN (text->vadj->upper, SCROLL_PIXELS);
+  text->vadj->page_increment = MIN (text->vadj->upper, height - KEY_SCROLL_PIXELS);
   text->vadj->page_size      = MIN (text->vadj->upper, height);
   text->vadj->value          = MIN (text->vadj->value, text->vadj->upper - text->vadj->page_size);
   text->vadj->value          = MAX (text->vadj->value, 0.0);
@@ -4332,7 +4332,7 @@ set_vertical_scroll (GtkText* text)
 static void
 scroll_int (GtkText* text, gint diff)
 {
-  gfloat upper;
+  gdouble upper;
   
   text->vadj->value += diff;
   

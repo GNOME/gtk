@@ -140,11 +140,11 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   gint xthickness;
   gint ythickness;
   gint length, ideal_length;
-  gfloat lower, upper;		/* Upper and lower limits, in ruler units */
-  gfloat increment;		/* Number of pixels per unit */
+  gdouble lower, upper;		/* Upper and lower limits, in ruler units */
+  gdouble increment;		/* Number of pixels per unit */
   gint scale;			/* Number of units per major unit */
-  gfloat subd_incr;
-  gfloat start, end, cur;
+  gdouble subd_incr;
+  gdouble start, end, cur;
   gchar unit_str[32];
   gint digit_height;
   gint digit_offset;
@@ -193,7 +193,7 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
 
   if ((upper - lower) == 0)
     return;
-  increment = (gfloat) width / (upper - lower);
+  increment = (gdouble) width / (upper - lower);
 
   /* determine the scale
    *   use the maximum extents of the ruler to determine the largest
@@ -216,8 +216,8 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   length = 0;
   for (i = MAXIMUM_SUBDIVIDE - 1; i >= 0; i--)
     {
-      subd_incr = (gfloat) ruler->metric->ruler_scale[scale] / 
-	          (gfloat) ruler->metric->subdivide[i];
+      subd_incr = (gdouble) ruler->metric->ruler_scale[scale] / 
+	          (gdouble) ruler->metric->subdivide[i];
       if (subd_incr * fabs(increment) <= MINIMUM_INCR) 
 	continue;
 
@@ -287,7 +287,7 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
   gint bs_width, bs_height;
   gint xthickness;
   gint ythickness;
-  gfloat increment;
+  gdouble increment;
 
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_VRULER (ruler));
@@ -317,7 +317,7 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
 			     ruler->xsrc, ruler->ysrc,
 			     bs_width, bs_height);
 
-	  increment = (gfloat) height / (ruler->upper - ruler->lower);
+	  increment = (gdouble) height / (ruler->upper - ruler->lower);
 
 	  x = (width + bs_width) / 2 + xthickness;
 	  y = ROUND ((ruler->position - ruler->lower) * increment) + (ythickness - bs_height) / 2 - 1;

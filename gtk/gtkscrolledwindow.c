@@ -949,7 +949,7 @@ gtk_scrolled_window_scroll_event (GtkWidget *widget,
   if (range && GTK_WIDGET_VISIBLE (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-      gfloat new_value;
+      gdouble new_value;
 
       if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_LEFT)
 	new_value = adj->value - adj->page_increment / 2;

@@ -723,6 +723,37 @@ gtk_item_factory_path_from_widget (GtkWidget	    *widget)
   return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_item_path);
 }
 
+static gchar *
+item_factory_escape_path (const gchar *path)
+{
+  GString *str = g_string_new (NULL);
+
+  while (*path)
+    {
+      gchar c = *path;
+
+      switch (c)
+	{
+	case '\n':
+	  g_string_append (str, "\\n");
+	  break;
+	case '\r':
+	  g_string_append (str, "\\r");
+	  break;
+	case '"':
+	case '\\':
+	  g_string_append_c (str, '\\');
+	  /* Fall through */
+	default:
+	  g_string_append_c (str, c);
+	}
+      
+      path++;
+    }
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 gtk_item_factory_foreach (gpointer hash_key,
 			  gpointer value,
@@ -731,6 +762,7 @@ gtk_item_factory_foreach (gpointer hash_key,
   GtkItemFactoryItem *item;
   GtkIFDumpData *data;
   gchar *string;
+  gchar *path;
   gchar *name;
   gchar comment_prefix[2] = "\000\000";
 
@@ -742,14 +774,16 @@ gtk_item_factory_foreach (gpointer hash_key,
 
   comment_prefix[0] = gtk_item_factory_class->cpair_comment_single[0];
 
+  path = item_factory_escape_path (hash_key);
   name = gtk_accelerator_name (item->accelerator_key, item->accelerator_mods);
   string = g_strconcat (item->modified ? "" : comment_prefix,
 			"(menu-path \"",
-			hash_key,
+			path,
 			"\" \"",
 			name,
 			"\")",
 			NULL);
+  g_free (path);
   g_free (name);
 
   data->print_func (data->func_data, string);
@@ -942,6 +976,60 @@ gtk_item_factory_get_item_by_action (GtkItemFactory *ifactory,
   return GTK_IS_ITEM (widget) ? widget : NULL;
 }
 
+static char *
+item_factory_find_separator_r (char *path)
+{
+  gchar *result = NULL;
+  gboolean escaped = FALSE;
+
+  while (*path)
+    {
+      if (escaped)
+	escaped = FALSE;
+      else
+	{
+	  if (*path == '\\')
+	    escaped = TRUE;
+	  else if (*path == '/')
+	    result = path;
+	}
+      
+      path++;
+    }
+
+  return result;
+}
+
+static char *
+item_factory_unescape_label (const char *label)
+{
+  char *new = g_malloc (strlen (label) + 1);
+  char *p = new;
+  gboolean escaped = FALSE;
+  
+  while (*label)
+    {
+      if (escaped)
+	{
+	  *p++ = *label;
+	  escaped = FALSE;
+	}
+      else
+	{
+	  if (*label == '\\')
+	    escaped = TRUE;
+	  else
+	    *p++ = *label;
+	}
+      
+      label++;
+    }
+
+  *p = '\0';
+
+  return new;
+}
+
 static gboolean
 gtk_item_factory_parse_path (GtkItemFactory *ifactory,
 			     gchar          *str,
@@ -951,14 +1039,21 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
 {
   gchar *translation;
   gchar *p, *q;
-
+  
   *path = g_strdup (str);
 
-  /* FIXME: This does not handle __ correctly !!! */
   p = q = *path;
   while (*p)
     {
-      if (*p != '_')
+      if (*p == '_')
+	{
+	  if (p[1] == '_')
+	    {
+	      p++;
+	      *q++ = '_';
+	    }
+	}
+      else
 	{
 	  *q++ = *p;
 	}
@@ -967,7 +1062,7 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
   *q = 0;
 
   *parent_path = g_strdup (*path);
-  p = strrchr (*parent_path, '/');
+  p = item_factory_find_separator_r (*parent_path);
   if (!p)
     {
       g_warning ("GtkItemFactory: invalid entry path `%s'", str);
@@ -980,13 +1075,13 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
   else
     translation = str;
 			      
-  p = strrchr (translation, '/');
+  p = item_factory_find_separator_r (translation);
   if (p)
     p++;
   else
     p = translation;
 
-  *item = g_strdup (p);
+  *item = item_factory_unescape_label (p);
 
   return TRUE;
 }
@@ -1077,7 +1172,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
       gchar *ppath, *p;
 
       ppath = g_strdup (entry->path);
-      p = strrchr (ppath, '/');
+      p = item_factory_find_separator_r (ppath);
       g_return_if_fail (p != NULL);
       *p = 0;
       pentry.path = ppath;

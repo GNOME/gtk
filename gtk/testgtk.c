@@ -1501,7 +1501,7 @@ create_tree_mode_window(void)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (box5), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new ((gfloat)DEFAULT_NUMBER_OF_ITEM, 1.0, 255.0, 1.0,
+      adj = (GtkAdjustment *) gtk_adjustment_new (DEFAULT_NUMBER_OF_ITEM, 1.0, 255.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_box_pack_start (GTK_BOX (box5), spinner, FALSE, TRUE, 0);
@@ -1515,7 +1515,7 @@ create_tree_mode_window(void)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (box5), label, FALSE, TRUE, 0);
 
-      adj = (GtkAdjustment *) gtk_adjustment_new ((gfloat)DEFAULT_RECURSION_LEVEL, 0.0, 255.0, 1.0,
+      adj = (GtkAdjustment *) gtk_adjustment_new (DEFAULT_RECURSION_LEVEL, 0.0, 255.0, 1.0,
 						  5.0, 0.0);
       spinner = gtk_spin_button_new (adj, 0, 0);
       gtk_box_pack_start (GTK_BOX (box5), spinner, FALSE, TRUE, 0);
@@ -2969,16 +2969,27 @@ gtk_ifactory_cb (gpointer             callback_data,
   g_message ("ItemFactory: activated \"%s\"", gtk_item_factory_path_from_widget (widget));
 }
 
+static void
+dump_accels (gpointer             callback_data,
+	     guint                callback_action,
+	     GtkWidget           *widget)
+{
+  gtk_item_factory_dump_items (NULL, FALSE, gtk_item_factory_print_func, stdout);
+}
+    
 static GtkItemFactoryEntry menu_items[] =
 {
-  { "/_File",            NULL,         0,                     0, "<Branch>" },
-  { "/File/tearoff1",    NULL,         gtk_ifactory_cb,       0, "<Tearoff>" },
-  { "/File/_New",        "<control>N", gtk_ifactory_cb,       0 },
-  { "/File/_Open",       "<control>O", gtk_ifactory_cb,       0 },
-  { "/File/_Save",       "<control>S", gtk_ifactory_cb,       0 },
-  { "/File/Save _As...", NULL,         gtk_ifactory_cb,       0 },
-  { "/File/sep1",        NULL,         gtk_ifactory_cb,       0, "<Separator>" },
-  { "/File/_Quit",       "<control>Q", gtk_ifactory_cb,       0 },
+  { "/_File",                   NULL,         0,                     0, "<Branch>" },
+  { "/File/tearoff1",           NULL,         gtk_ifactory_cb,       0, "<Tearoff>" },
+  { "/File/_New",               "<control>N", gtk_ifactory_cb,       0 },
+  { "/File/_Open",              "<control>O", gtk_ifactory_cb,       0 },
+  { "/File/_Save",              "<control>S", gtk_ifactory_cb,       0 },
+  { "/File/Save _As...",        NULL,         gtk_ifactory_cb,       0 },
+  { "/File/_Dump \"_Accels\"",  NULL,         dump_accels,           0 },
+  { "/File/\\/Test__Escaping/And\\/\n\tWei\\\\rdly",
+                                NULL,         gtk_ifactory_cb,       0 },
+  { "/File/sep1",               NULL,         gtk_ifactory_cb,       0, "<Separator>" },
+  { "/File/_Quit",                "<control>Q", gtk_ifactory_cb,       0 },
 
   { "/_Preferences",     		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/_Color", 		NULL, 0,               0, "<Branch>" },
@@ -3626,8 +3637,8 @@ static gint
 spin_button_time_output_func (GtkSpinButton *spin_button)
 {
   static gchar buf[6];
-  gfloat hours;
-  gfloat minutes;
+  gdouble hours;
+  gdouble minutes;
 
   hours = spin_button->adjustment->value / 60.0;
   minutes = (fabs(floor (hours) - hours) < 1e-5) ? 0.0 : 30;
@@ -3639,7 +3650,7 @@ spin_button_time_output_func (GtkSpinButton *spin_button)
 
 static gint
 spin_button_month_input_func (GtkSpinButton *spin_button,
-			      gfloat        *new_val)
+			      gdouble       *new_val)
 {
   gint i;
   static gchar *month[12] = { "January", "February", "March", "April",
@@ -3666,7 +3677,7 @@ spin_button_month_input_func (GtkSpinButton *spin_button,
       *new_val = 0.0;
       return GTK_INPUT_ERROR;
     }
-  *new_val = (gfloat) i;
+  *new_val = (gdouble) i;
   return TRUE;
 }
 
@@ -3689,14 +3700,14 @@ spin_button_month_output_func (GtkSpinButton *spin_button)
 
 static gint
 spin_button_hex_input_func (GtkSpinButton *spin_button,
-			    gfloat        *new_val)
+			    gdouble       *new_val)
 {
   gchar *buf;
   gchar *err;
-  gfloat res;
+  gdouble res;
 
   buf = gtk_entry_get_text (GTK_ENTRY (spin_button));
-  res = (gfloat)(strtol(buf, &err, 16));
+  res = strtol(buf, &err, 16);
   *new_val = res;
   if (*err)
     return GTK_INPUT_ERROR;
@@ -7970,7 +7981,7 @@ typedef struct _ProgressData {
 gint
 progress_timeout (gpointer data)
 {
-  gfloat new_val;
+  gdouble new_val;
   GtkAdjustment *adj;
 
   adj = GTK_PROGRESS (data)->adjustment;
@@ -8736,9 +8747,9 @@ static gint
 scroll_test_scroll (GtkWidget *widget, GdkEventScroll *event,
 		    GtkAdjustment *adj)
 {
-  gfloat new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ?
-				   -adj->page_increment / 2:
-				   adj->page_increment / 2);
+  gdouble new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ?
+				    -adj->page_increment / 2:
+				    adj->page_increment / 2);
   new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
   gtk_adjustment_set_value (adj, new_value);  
   

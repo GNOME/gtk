@@ -74,7 +74,7 @@ static void gtk_real_range_draw_trough         (GtkRange         *range);
 static void gtk_real_range_draw_slider         (GtkRange         *range);
 static gint gtk_real_range_timer               (GtkRange         *range);
 static gint gtk_range_scroll                   (GtkRange         *range,
-						gfloat            jump_perc);
+						gdouble           jump_perc);
 
 static void gtk_range_add_timer                (GtkRange         *range);
 static void gtk_range_remove_timer             (GtkRange         *range);
@@ -392,10 +392,10 @@ _gtk_range_slider_update (GtkRange *range)
 }
 
 gint
-_gtk_range_trough_click (GtkRange *range,
-                         gint      x,
-                         gint      y,
-                         gfloat   *jump_perc)
+_gtk_range_trough_click (GtkRange  *range,
+                         gint       x,
+                         gint       y,
+                         gdouble   *jump_perc)
 {
   g_return_val_if_fail (range != NULL, GTK_TROUGH_NONE);
   g_return_val_if_fail (GTK_IS_RANGE (range), GTK_TROUGH_NONE);
@@ -534,10 +534,10 @@ _gtk_range_default_vslider_update (GtkRange *range)
 }
 
 gint
-_gtk_range_default_htrough_click (GtkRange *range,
-                                  gint      x,
-                                  gint      y,
-                                  gfloat   *jump_perc)
+_gtk_range_default_htrough_click (GtkRange  *range,
+                                  gint       x,
+                                  gint       y,
+                                  gdouble   *jump_perc)
 {
   gint ythickness;
   gint trough_width;
@@ -583,10 +583,10 @@ _gtk_range_default_htrough_click (GtkRange *range,
 }
 
 gint
-_gtk_range_default_vtrough_click (GtkRange *range,
-                                  gint      x,
-                                  gint      y,
-                                  gfloat   *jump_perc)
+_gtk_range_default_vtrough_click (GtkRange  *range,
+                                  gint       x,
+                                  gint       y,
+                                  gdouble   *jump_perc)
 {
   gint xthickness;
   gint trough_width;
@@ -673,7 +673,7 @@ _gtk_range_default_hmotion (GtkRange *range,
       char buffer[64];
 
       sprintf (buffer, "%0.*f", range->digits, range->adjustment->value);
-      sscanf (buffer, "%f", &range->adjustment->value);
+      sscanf (buffer, "%lf", &range->adjustment->value);
     }
 
   if (old_value != range->adjustment->value)
@@ -741,7 +741,7 @@ _gtk_range_default_vmotion (GtkRange *range,
       char buffer[64];
 
       sprintf (buffer, "%0.*f", range->digits, range->adjustment->value);
-      sscanf (buffer, "%f", &range->adjustment->value);
+      sscanf (buffer, "%lf", &range->adjustment->value);
     }
 
   if (old_value != range->adjustment->value)
@@ -873,7 +873,7 @@ gtk_range_button_press (GtkWidget      *widget,
 {
   GtkRange *range;
   gint trough_part;
-  gfloat jump_perc;
+  gdouble jump_perc;
 
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
@@ -1027,9 +1027,9 @@ gtk_range_scroll_event (GtkWidget      *widget,
   if (GTK_WIDGET_REALIZED (range))
     {
       GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-      gfloat new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ? 
-				       -adj->page_increment / 2: 
-				       adj->page_increment / 2);
+      gdouble new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ? 
+					-adj->page_increment / 2: 
+					adj->page_increment / 2);
       new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
       gtk_adjustment_set_value (adj, new_value);
     }
@@ -1356,10 +1356,10 @@ gtk_real_range_timer (GtkRange *range)
 }
 
 static gint
-gtk_range_scroll (GtkRange *range,
-		  gfloat    jump_perc)
+gtk_range_scroll (GtkRange  *range,
+		  gdouble    jump_perc)
 {
-  gfloat new_value;
+  gdouble new_value;
   gint return_val;
   GtkScrollType scroll_type;
   

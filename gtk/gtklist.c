@@ -582,7 +582,7 @@ gtk_list_motion_notify (GtkWidget      *widget,
 		(x > adj->value + adj->page_size &&
 		 adj->value >= adj->upper - adj->page_size)))
 	    {
-	      gfloat value;
+	      gdouble value;
 
 	      if (x < adj->value)
 		value = adj->value + (x - adj->value) / 2 - 1;

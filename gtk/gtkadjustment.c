@@ -105,12 +105,12 @@ gtk_adjustment_init (GtkAdjustment *adjustment)
 }
 
 GtkObject*
-gtk_adjustment_new (gfloat value,
-		    gfloat lower,
-		    gfloat upper,
-		    gfloat step_increment,
-		    gfloat page_increment,
-		    gfloat page_size)
+gtk_adjustment_new (gdouble value,
+		    gdouble lower,
+		    gdouble upper,
+		    gdouble step_increment,
+		    gdouble page_increment,
+		    gdouble page_size)
 {
   GtkAdjustment *adjustment;
 
@@ -128,7 +128,7 @@ gtk_adjustment_new (gfloat value,
 
 void
 gtk_adjustment_set_value (GtkAdjustment        *adjustment,
-			  gfloat                value)
+			  gdouble               value)
 {
   g_return_if_fail (adjustment != NULL);
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
@@ -163,8 +163,8 @@ gtk_adjustment_value_changed (GtkAdjustment        *adjustment)
 
 void
 gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
-			   gfloat         lower,
-			   gfloat         upper)
+			   gdouble        lower,
+			   gdouble        upper)
 {
   gboolean need_emission;
 

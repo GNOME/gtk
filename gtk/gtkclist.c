@@ -6960,7 +6960,7 @@ static void
 move_horizontal (GtkCList *clist,
 		 gint      diff)
 {
-  gfloat value;
+  gdouble value;
 
   if (!clist->hadjustment)
     return;
@@ -6975,7 +6975,7 @@ move_vertical (GtkCList *clist,
 	       gint      row,
 	       gfloat    align)
 {
-  gfloat value;
+  gdouble value;
 
   if (!clist->vadjustment)
     return;

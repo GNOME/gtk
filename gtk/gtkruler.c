@@ -107,13 +107,13 @@ gtk_ruler_class_init (GtkRulerClass *class)
   class->draw_ticks = NULL;
   class->draw_pos = NULL;
 
-  gtk_object_add_arg_type ("GtkRuler::lower", GTK_TYPE_FLOAT,
+  gtk_object_add_arg_type ("GtkRuler::lower", GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE, ARG_LOWER);
-  gtk_object_add_arg_type ("GtkRuler::upper", GTK_TYPE_FLOAT,
+  gtk_object_add_arg_type ("GtkRuler::upper", GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE, ARG_UPPER);
-  gtk_object_add_arg_type ("GtkRuler::position", GTK_TYPE_FLOAT,
+  gtk_object_add_arg_type ("GtkRuler::position", GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE, ARG_POSITION);
-  gtk_object_add_arg_type ("GtkRuler::max_size", GTK_TYPE_FLOAT,
+  gtk_object_add_arg_type ("GtkRuler::max_size", GTK_TYPE_DOUBLE,
 			   GTK_ARG_READWRITE, ARG_MAX_SIZE);
 }
 
@@ -143,20 +143,20 @@ gtk_ruler_set_arg (GtkObject  *object,
   switch (arg_id)
     {
     case ARG_LOWER:
-      gtk_ruler_set_range (ruler, GTK_VALUE_FLOAT (*arg), ruler->upper,
+      gtk_ruler_set_range (ruler, GTK_VALUE_DOUBLE (*arg), ruler->upper,
 			   ruler->position, ruler->max_size);
       break;
     case ARG_UPPER:
-      gtk_ruler_set_range (ruler, ruler->lower, GTK_VALUE_FLOAT (*arg),
+      gtk_ruler_set_range (ruler, ruler->lower, GTK_VALUE_DOUBLE (*arg),
 			   ruler->position, ruler->max_size);
       break;
     case ARG_POSITION:
       gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
-			   GTK_VALUE_FLOAT (*arg), ruler->max_size);
+			   GTK_VALUE_DOUBLE (*arg), ruler->max_size);
       break;
     case ARG_MAX_SIZE:
       gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
-			   ruler->position,  GTK_VALUE_FLOAT (*arg));
+			   ruler->position,  GTK_VALUE_DOUBLE (*arg));
       break;
     }
 }
@@ -171,16 +171,16 @@ gtk_ruler_get_arg (GtkObject  *object,
   switch (arg_id)
     {
     case ARG_LOWER:
-      GTK_VALUE_FLOAT (*arg) = ruler->lower;
+      GTK_VALUE_DOUBLE (*arg) = ruler->lower;
       break;
     case ARG_UPPER:
-      GTK_VALUE_FLOAT (*arg) = ruler->upper;
+      GTK_VALUE_DOUBLE (*arg) = ruler->upper;
       break;
     case ARG_POSITION:
-      GTK_VALUE_FLOAT (*arg) = ruler->position;
+      GTK_VALUE_DOUBLE (*arg) = ruler->position;
       break;
     case ARG_MAX_SIZE:
-      GTK_VALUE_FLOAT (*arg) = ruler->max_size;
+      GTK_VALUE_DOUBLE (*arg) = ruler->max_size;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -203,10 +203,10 @@ gtk_ruler_set_metric (GtkRuler      *ruler,
 
 void
 gtk_ruler_set_range (GtkRuler *ruler,
-		     gfloat    lower,
-		     gfloat    upper,
-		     gfloat    position,
-		     gfloat    max_size)
+		     gdouble   lower,
+		     gdouble   upper,
+		     gdouble   position,
+		     gdouble   max_size)
 {
   g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));

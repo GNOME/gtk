@@ -1,3 +1,15 @@
+Mon Mar 19 15:53:36 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkitemfactory.c gtk/testgtk.c: Handle quoting of / with \; properly
+	handle __ in paths, quote " and \n in gtk_item_factory_dump_items().
+
+	* gtk/gtkadjustment.[ch] gtk/gtkclist.c gtk/gtkhruler.c gtk/gtklayout.c 
+	  gtk/gtklist.c gtk/gtkprogress.[ch] gtk/gtkprogressbar.[ch] gtk/gtkrange.[ch]
+	  gtk/gtkruler.[ch] gtk/gtkscale.c gtk/gtkscrolledwindow.c gtk/gtkspinbutton.[ch]
+	  gtk/gtktext.c gtk/gtktextview.c gtk/gtkvruler.c gtk/testgtk.c:
+	Change float to double everywhere with the exception of 0<->1.0 alignment
+	and GtkCurve.
+
 2001-03-19  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c

@@ -73,13 +73,13 @@ struct _GtkRuler
   gint slider_size;
 
   /* The upper limit of the ruler (in points) */
-  gfloat lower;
+  gdouble lower;
   /* The lower limit of the ruler */
-  gfloat upper;
+  gdouble upper;
   /* The position of the mark on the ruler */
-  gfloat position;
+  gdouble position;
   /* The maximum size of the ruler */
-  gfloat max_size;
+  gdouble max_size;
 };
 
 struct _GtkRulerClass
@@ -96,8 +96,8 @@ struct _GtkRulerMetric
   gchar *abbrev;
   /* This should be points_per_unit. This is the size of the unit
    * in 1/72nd's of an inch and has nothing to do with screen pixels */
-  gfloat pixels_per_unit;
-  gfloat ruler_scale[10];
+  gdouble pixels_per_unit;
+  gdouble ruler_scale[10];
   gint subdivide[5];        /* five possible modes of subdivision */
 };
 
@@ -106,10 +106,10 @@ GtkType gtk_ruler_get_type   (void) G_GNUC_CONST;
 void    gtk_ruler_set_metric (GtkRuler      *ruler,
 			      GtkMetricType  metric);
 void    gtk_ruler_set_range  (GtkRuler      *ruler,
-			      gfloat         lower,
-			      gfloat         upper,
-			      gfloat         position,
-			      gfloat         max_size);
+			      gdouble        lower,
+			      gdouble        upper,
+			      gdouble        position,
+			      gdouble        max_size);
 void    gtk_ruler_draw_ticks (GtkRuler      *ruler);
 void    gtk_ruler_draw_pos   (GtkRuler      *ruler);
 

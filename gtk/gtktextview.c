@@ -1054,7 +1054,7 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
 }
 
 static gboolean
-set_adjustment_clamped (GtkAdjustment *adj, gfloat val)
+set_adjustment_clamped (GtkAdjustment *adj, gdouble val)
 {
   /* We don't really want to clamp to upper; we want to clamp to
      upper - page_size which is the highest value the scrollbar
@@ -1343,11 +1343,11 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gfloat upper)
+gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gdouble upper)
 {  
   if (upper != adj->upper)
     {
-      gfloat min = MAX (0., upper - adj->page_size);
+      gdouble min = MAX (0., upper - adj->page_size);
       gboolean value_changed = FALSE;
 
       adj->upper = upper;
@@ -3662,7 +3662,7 @@ static void
 gtk_text_view_scroll_pages (GtkTextView *text_view,
                             gint         count)
 {
-  gfloat newval;
+  gdouble newval;
   GtkAdjustment *adj;
   gint cursor_x_pos, cursor_y_pos;
   GtkTextIter new_insert;

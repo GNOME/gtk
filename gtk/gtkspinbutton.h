@@ -83,8 +83,8 @@ struct _GtkSpinButton
   guint32 timer;
   guint32 ev_time;
   
-  gfloat climb_rate;
-  gfloat timer_step;
+  gdouble climb_rate;
+  gdouble timer_step;
   
   GtkSpinButtonUpdatePolicy update_policy;
   
@@ -104,7 +104,7 @@ struct _GtkSpinButtonClass
   GtkEntryClass parent_class;
 
   gint (*input)  (GtkSpinButton *spin_button,
-		  gfloat        *new_value);
+		  gdouble       *new_value);
   gint (*output) (GtkSpinButton *spin_button);
 };
 
@@ -113,11 +113,11 @@ GtkType		gtk_spin_button_get_type	   (void) G_GNUC_CONST;
 
 void		gtk_spin_button_configure	   (GtkSpinButton  *spin_button,
 						    GtkAdjustment  *adjustment,
-						    gfloat	    climb_rate,
+						    gdouble	    climb_rate,
 						    guint	    digits);
 
 GtkWidget*	gtk_spin_button_new		   (GtkAdjustment  *adjustment,
-						    gfloat	    climb_rate,
+						    gdouble	    climb_rate,
 						    guint	    digits);
 
 void		gtk_spin_button_set_adjustment	   (GtkSpinButton  *spin_button,
@@ -128,12 +128,12 @@ GtkAdjustment*	gtk_spin_button_get_adjustment	   (GtkSpinButton  *spin_button);
 void		gtk_spin_button_set_digits	   (GtkSpinButton  *spin_button,
 						    guint	    digits);
 
-gfloat		gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
+gdouble		gtk_spin_button_get_value_as_float (GtkSpinButton  *spin_button);
 
 gint		gtk_spin_button_get_value_as_int   (GtkSpinButton  *spin_button);
 
 void		gtk_spin_button_set_value	   (GtkSpinButton  *spin_button, 
-						    gfloat	    value);
+						    gdouble	    value);
 
 void		gtk_spin_button_set_update_policy  (GtkSpinButton  *spin_button,
 						    GtkSpinButtonUpdatePolicy  policy);
@@ -143,7 +143,7 @@ void		gtk_spin_button_set_numeric	   (GtkSpinButton  *spin_button,
 
 void		gtk_spin_button_spin		   (GtkSpinButton  *spin_button,
 						    GtkSpinType     direction,
-						    gfloat	    increment);
+						    gdouble	    increment);
 
 void		gtk_spin_button_set_wrap	   (GtkSpinButton  *spin_button,
 						    gboolean	    wrap);

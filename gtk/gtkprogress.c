@@ -348,8 +348,8 @@ gtk_progress_value_changed (GtkAdjustment *adjustment,
 
 static gchar *
 gtk_progress_build_string (GtkProgress *progress,
-			   gfloat       value,
-			   gfloat       percentage)
+			   gdouble      value,
+			   gdouble      percentage)
 {
   gchar buf[256] = { 0 };
   gchar tmp[256] = { 0 };
@@ -493,9 +493,9 @@ gtk_progress_set_adjustment (GtkProgress   *progress,
 
 void
 gtk_progress_configure (GtkProgress *progress,
-			gfloat value,
-			gfloat min,
-			gfloat max)
+			gdouble      value,
+			gdouble      min,
+			gdouble      max)
 {
   GtkAdjustment *adj;
   gboolean changed = FALSE;
@@ -523,7 +523,7 @@ gtk_progress_configure (GtkProgress *progress,
 
 void
 gtk_progress_set_percentage (GtkProgress *progress,
-			     gfloat       percentage)
+			     gdouble      percentage)
 {
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
@@ -535,7 +535,7 @@ gtk_progress_set_percentage (GtkProgress *progress,
 		 (progress->adjustment->upper - progress->adjustment->lower));
 }
 
-gfloat
+gdouble
 gtk_progress_get_current_percentage (GtkProgress *progress)
 {
   g_return_val_if_fail (progress != NULL, 0);
@@ -548,9 +548,9 @@ gtk_progress_get_current_percentage (GtkProgress *progress)
 	  (progress->adjustment->upper - progress->adjustment->lower));
 }
 
-gfloat
+gdouble
 gtk_progress_get_percentage_from_value (GtkProgress *progress,
-					gfloat       value)
+					gdouble      value)
 {
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
@@ -568,7 +568,7 @@ gtk_progress_get_percentage_from_value (GtkProgress *progress,
 
 void
 gtk_progress_set_value (GtkProgress *progress,
-			gfloat       value)
+			gdouble      value)
 {
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
@@ -580,7 +580,7 @@ gtk_progress_set_value (GtkProgress *progress,
     gtk_adjustment_set_value (progress->adjustment, value);
 }
 
-gfloat
+gdouble
 gtk_progress_get_value (GtkProgress *progress)
 {
   g_return_val_if_fail (progress != NULL, 0);
@@ -663,7 +663,7 @@ gtk_progress_get_current_text (GtkProgress *progress)
 
 gchar *
 gtk_progress_get_text_from_value (GtkProgress *progress,
-				  gfloat       value)
+				  gdouble      value)
 {
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);

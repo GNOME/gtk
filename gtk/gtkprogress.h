@@ -93,22 +93,22 @@ void       gtk_progress_set_format_string   (GtkProgress   *progress,
 void       gtk_progress_set_adjustment      (GtkProgress   *progress,
 					     GtkAdjustment *adjustment);
 void       gtk_progress_configure           (GtkProgress   *progress,
-					     gfloat         value,
-					     gfloat         min,
-					     gfloat         max);
+					     gdouble        value,
+					     gdouble        min,
+					     gdouble        max);
 void       gtk_progress_set_percentage      (GtkProgress   *progress,
-					     gfloat         percentage);
+					     gdouble        percentage);
 void       gtk_progress_set_value           (GtkProgress   *progress,
-					     gfloat         value);
-gfloat     gtk_progress_get_value           (GtkProgress   *progress);
+					     gdouble        value);
+gdouble    gtk_progress_get_value           (GtkProgress   *progress);
 void       gtk_progress_set_activity_mode   (GtkProgress   *progress,
 					     gboolean       activity_mode);
 gchar*     gtk_progress_get_current_text    (GtkProgress   *progress);
 gchar*     gtk_progress_get_text_from_value (GtkProgress   *progress,
-					     gfloat         value);
-gfloat     gtk_progress_get_current_percentage (GtkProgress *progress);
-gfloat     gtk_progress_get_percentage_from_value (GtkProgress *progress,
-						   gfloat       value);
+					     gdouble        value);
+gdouble    gtk_progress_get_current_percentage (GtkProgress *progress);
+gdouble    gtk_progress_get_percentage_from_value (GtkProgress *progress,
+						   gdouble      value);
 
 #endif /* GTK_DISABLE_DEPRECATED */
 

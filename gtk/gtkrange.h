@@ -73,10 +73,10 @@ struct _GtkRange
   
   guint32 timer;
 
-  gfloat old_value;
-  gfloat old_lower;
-  gfloat old_upper;
-  gfloat old_page_size;
+  gdouble old_value;
+  gdouble old_lower;
+  gdouble old_upper;
+  gdouble old_page_size;
 
   GtkAdjustment *adjustment;
 };
@@ -105,7 +105,7 @@ struct _GtkRangeClass
   gint (* trough_click)    (GtkRange *range,
 			    gint      x,
 			    gint      y,
-			    gfloat   *jump_perc);
+			    gdouble  *jump_perc);
   gint (* trough_keys)     (GtkRange *range,
 			    GdkEventKey *key,
 			    GtkScrollType *scroll,
@@ -138,18 +138,18 @@ void           _gtk_range_slider_update          (GtkRange      *range);
 gint           _gtk_range_trough_click           (GtkRange      *range,
                                                   gint           x,
                                                   gint           y,
-                                                  gfloat        *jump_perc);
+                                                  gdouble       *jump_perc);
 
 void           _gtk_range_default_hslider_update (GtkRange      *range);
 void           _gtk_range_default_vslider_update (GtkRange      *range);
 gint           _gtk_range_default_htrough_click  (GtkRange      *range,
                                                   gint           x,
                                                   gint           y,
-                                                  gfloat        *jump_perc);
+                                                  gdouble       *jump_perc);
 gint           _gtk_range_default_vtrough_click  (GtkRange      *range,
                                                   gint           x,
                                                   gint           y,
-                                                  gfloat        *jump_perc);
+                                                  gdouble       *jump_perc);
 void           _gtk_range_default_hmotion        (GtkRange      *range,
                                                   gint           xdelta,
                                                   gint           ydelta);
