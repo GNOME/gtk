@@ -452,7 +452,7 @@ gdk_pango_get_item_properties (PangoItem      *item,
 			       PangoRectangle *ink_rect,
 			       PangoRectangle *logical_rect)
 {
-  GSList *tmp_list = item->extra_attrs;
+  GSList *tmp_list = item->analysis.extra_attrs;
 
   if (strikethrough)
       *strikethrough = FALSE;

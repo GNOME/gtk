@@ -3248,7 +3248,6 @@ compute_log_attrs (const GtkTextIter *iter,
   gchar *paragraph;
   gint char_len, byte_len;
   PangoLogAttr *attrs = NULL;
-  gchar *lang;
   
   start = *iter;
   end = *iter;
@@ -3267,14 +3266,10 @@ compute_log_attrs (const GtkTextIter *iter,
   
   attrs = g_new (PangoLogAttr, char_len);
   
-  lang = gtk_text_iter_get_language (&start);
-  
   pango_get_log_attrs (paragraph, byte_len, -1,
-                       lang,
+		       gtk_text_iter_get_language (&start),
                        attrs);
   
-  g_free (lang);
-
   g_free (paragraph);
 
   return attrs;

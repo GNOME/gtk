@@ -1492,7 +1492,7 @@ add_cursor (GtkTextLayout      *layout,
 static gboolean
 is_shape (PangoLayoutRun *run)
 {
-  GSList *tmp_list = run->item->extra_attrs;
+  GSList *tmp_list = run->item->analysis.extra_attrs;
     
   while (tmp_list)
     {
@@ -1582,6 +1582,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
       PangoAttribute *insert_attr;
       GSList *extra_attrs = NULL;
       GSList *tmp_list;
+      PangoLanguage *language;
       gint start, end;
 
       pango_attr_iterator_range (iter, &start, &end);
@@ -1590,7 +1591,7 @@ add_preedit_attrs (GtkTextLayout     *layout,
 	end = layout->preedit_len;
       
       pango_attr_iterator_get_font (iter, &style->font,
-				    &font_desc, &extra_attrs);
+				    &font_desc, &language, &extra_attrs);
       
       tmp_list = extra_attrs;
       while (tmp_list)
@@ -1630,6 +1631,15 @@ add_preedit_attrs (GtkTextLayout     *layout,
       insert_attr->end_index = end + offset;
       
       pango_attr_list_insert (attrs, insert_attr);
+
+      if (language)
+	{
+	  insert_attr = pango_attr_language_new (language);
+	  insert_attr->start_index = start + offset;
+	  insert_attr->end_index = end + offset;
+	  
+	  pango_attr_list_insert (attrs, insert_attr);
+	}
 
       add_generic_attrs (layout, &appearance, end - start,
                          attrs, start + offset,

@@ -142,11 +142,11 @@ gboolean gtk_text_iter_is_cursor_position (const GtkTextIter   *iter);
 gint     gtk_text_iter_get_chars_in_line (const GtkTextIter   *iter);
 gint     gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter);
 
-gboolean gtk_text_iter_get_attributes    (const GtkTextIter    *iter,
-                                          GtkTextAttributes    *values);
-gchar*   gtk_text_iter_get_language      (const GtkTextIter    *iter);
-gboolean gtk_text_iter_is_end            (const GtkTextIter    *iter);
-gboolean gtk_text_iter_is_start          (const GtkTextIter    *iter);
+gboolean       gtk_text_iter_get_attributes (const GtkTextIter *iter,
+					     GtkTextAttributes *values);
+PangoLanguage* gtk_text_iter_get_language   (const GtkTextIter *iter);
+gboolean       gtk_text_iter_is_end         (const GtkTextIter *iter);
+gboolean       gtk_text_iter_is_start       (const GtkTextIter *iter);
 
 /*
  * Moving around the buffer

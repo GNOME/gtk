@@ -1036,8 +1036,8 @@ gtk_entry_size_request (GtkWidget      *widget,
   GtkEntry *entry;
   PangoFontMetrics metrics;
   PangoFont *font;
-  gchar *lang;
   gint xborder, yborder;
+  PangoContext *context;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ENTRY (widget));
@@ -1047,11 +1047,11 @@ gtk_entry_size_request (GtkWidget      *widget,
   
   /* hackish for now, get metrics
    */
-  font = pango_context_load_font (gtk_widget_get_pango_context (widget),
-				  widget->style->font_desc);
-  lang = pango_context_get_lang (gtk_widget_get_pango_context (widget));
-  pango_font_get_metrics (font, lang, &metrics);
-  g_free (lang);
+  context = gtk_widget_get_pango_context (widget);
+  font = pango_context_load_font (context, widget->style->font_desc);
+  pango_font_get_metrics (font,
+			  pango_context_get_language (context),
+			  &metrics);
   
   g_object_unref (G_OBJECT (font));
 

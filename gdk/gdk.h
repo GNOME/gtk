@@ -126,6 +126,8 @@ void     gdk_rectangle_union     (GdkRectangle *src1,
 				  GdkRectangle *src2,
 				  GdkRectangle *dest);
 
+GType gdk_rectangle_get_type (void);
+
 #define GDK_TYPE_RECTANGLE (gdk_rectangle_get_type ())
 
 /* Conversion functions between wide char and multibyte strings. 

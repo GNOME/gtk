@@ -1379,17 +1379,17 @@ gtk_text_iter_editable (const GtkTextIter *iter,
  *
  * Return value: language in effect at @iter
  **/
-gchar*
+PangoLanguage *
 gtk_text_iter_get_language (const GtkTextIter *iter)
 {
   GtkTextAttributes *values;
-  gchar *retval;
-
+  PangoLanguage *retval;
+  
   values = gtk_text_attributes_new ();
 
   gtk_text_iter_get_attributes (iter, values);
 
-  retval = g_strdup (values->language);
+  retval = values->language;
 
   gtk_text_attributes_unref (values);
 

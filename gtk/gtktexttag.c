@@ -1088,7 +1088,7 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_LANGUAGE:
       text_tag->language_set = TRUE;
-      text_tag->values->language = g_strdup (g_value_get_string (value));
+      text_tag->values->language = pango_language_from_string (g_value_get_string (value));
       g_object_notify (G_OBJECT (text_tag), "language_set");
       break;
 
@@ -1425,7 +1425,7 @@ gtk_text_tag_get_property (GObject      *object,
       break;
 
     case PROP_LANGUAGE:
-      g_value_set_string (value, tag->values->language);
+      g_value_set_string (value, pango_language_to_string (tag->values->language));
       break;
 
     case PROP_TABS:
@@ -1818,9 +1818,6 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   if (dest->appearance.fg_stipple)
     gdk_bitmap_unref (dest->appearance.fg_stipple);
 
-  if (dest->language)
-    g_free (dest->language);
-
   if (dest->font.family_name)
     g_free (dest->font.family_name);
   
@@ -1832,7 +1829,7 @@ gtk_text_attributes_copy_values (GtkTextAttributes *src,
   if (src->tabs)
     dest->tabs = pango_tab_array_copy (src->tabs);
 
-  dest->language = g_strdup (src->language);
+  dest->language = src->language;
 
   dest->font.family_name = g_strdup (src->font.family_name);
   
@@ -1881,9 +1878,6 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 
       if (values->tabs)
         pango_tab_array_free (values->tabs);
-
-      if (values->language)
-        g_free (values->language);
 
       if (values->font.family_name)
         g_free (values->font.family_name);
@@ -2059,10 +2053,7 @@ _gtk_text_attributes_fill_from_tags (GtkTextAttributes *dest,
         dest->bg_full_height = vals->bg_full_height;
 
       if (tag->language_set)
-        {
-          g_free (dest->language);
-          dest->language = g_strdup (vals->language);
-        }
+	dest->language = vals->language;
 
       ++n;
     }

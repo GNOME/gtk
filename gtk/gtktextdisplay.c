@@ -191,7 +191,7 @@ get_shape_extents (PangoLayoutRun *run,
                    PangoRectangle *ink_rect,
                    PangoRectangle *logical_rect)
 {
-  GSList *tmp_list = run->item->extra_attrs;
+  GSList *tmp_list = run->item->analysis.extra_attrs;
     
   while (tmp_list)
     {
@@ -653,7 +653,7 @@ static void
 get_item_properties (PangoItem          *item,
                      GtkTextAppearance **appearance)
 {
-  GSList *tmp_list = item->extra_attrs;
+  GSList *tmp_list = item->analysis.extra_attrs;
 
   *appearance = NULL;
 

@@ -598,10 +598,11 @@ gtk_set_locale (void)
  * 
  * Return value: the default language as an allocated string, must be freed
  **/
-gchar*
+PangoLanguage *
 gtk_get_default_language (void)
 {
   gchar *lang;
+  PangoLanguage *result;
   gchar *p;
   
   lang = g_strdup (setlocale (LC_CTYPE, NULL));
@@ -612,6 +613,9 @@ gtk_get_default_language (void)
   if (p)
     *p = '\0';
 
+  result = pango_language_from_string (lang);
+  g_free (lang);
+  
   return lang;
 }
 

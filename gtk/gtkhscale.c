@@ -24,7 +24,9 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "gtkhscale.h"
 #include "gtksignal.h"
 #include "gtkintl.h"

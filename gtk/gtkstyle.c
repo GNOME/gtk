@@ -4076,7 +4076,7 @@ get_insensitive_layout (PangoLayout *layout)
 
       if (run)
         {
-          tmp_list = run->item->extra_attrs;
+          tmp_list = run->item->analysis.extra_attrs;
 
           while (tmp_list != NULL)
             {

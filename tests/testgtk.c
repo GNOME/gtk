@@ -2105,9 +2105,14 @@ void create_labels (void)
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
       frame = gtk_frame_new ("Internationalized Label");
-      label = gtk_label_new ("French (Français) Bonjour, Salut\n"
-			     "Korean (한글)   안녕하세요, 안녕하십니까\n"
-			     "Russian (Русский) Здравствуйте!");
+      label = gtk_label_new (NULL);
+      gtk_label_set_markup (GTK_LABEL (label),
+			    "French (Français) Bonjour, Salut\n"
+			    "Korean (한글)   안녕하세요, 안녕하십니까\n"
+			    "Russian (Русский) Здравствуйте!\n"
+			    "Chinese (Simplified) <span lang=\"zh-cn\">元气	开发</span>\n"
+			    "Chinese (Traditional) <span lang=\"zh-tw\">元氣	開發</span>\n"
+			    "Japanese <span lang=\"ja\">元気	開発</span>");
       gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_LEFT);
       gtk_container_add (GTK_CONTAINER (frame), label);
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
