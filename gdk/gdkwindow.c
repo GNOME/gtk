@@ -208,8 +208,8 @@ gdk_window_init (void)
 		&x, &y, &width, &height, &border_width, &depth);
   XGetWindowAttributes (gdk_display, gdk_root_window, &xattributes);
 
-  gdk_root_parent.xdisplay = gdk_display;
   gdk_root_parent.xwindow = gdk_root_window;
+  gdk_root_parent.xdisplay = gdk_display;
   gdk_root_parent.window_type = GDK_WINDOW_ROOT;
   gdk_root_parent.window.user_data = NULL;
   gdk_root_parent.width = width;
@@ -1320,6 +1320,62 @@ gdk_window_get_origin (GdkWindow *window,
     *y = ty;
   
   return return_val;
+}
+
+void
+gdk_window_get_root_origin (GdkWindow *window,
+			    gint      *x,
+			    gint      *y)
+{
+  GdkWindowPrivate *private;
+  Window xwindow;
+  Window xparent;
+  Window root;
+  Window *children;
+  unsigned int nchildren;
+
+  g_return_if_fail (window != NULL);
+
+  private = (GdkWindowPrivate*) window;
+  if (x)
+    *x = 0;
+  if (y)
+    *y = 0;
+  if (private->destroyed)
+    return;
+      
+  while (private->parent && ((GdkWindowPrivate*) private->parent)->parent)
+    private = (GdkWindowPrivate*) private->parent;
+  if (private->destroyed)
+    return;
+
+  xparent = private->xwindow;
+  do
+    {
+      xwindow = xparent;
+      if (!XQueryTree (private->xdisplay, xwindow,
+		       &root, &xparent,
+		       &children, &nchildren))
+	return;
+
+      if (children)
+	XFree (children);
+    }
+  while (xparent != root);
+
+  if (xparent == root)
+    {
+      unsigned int ww, wh, wb, wd;
+      int wx, wy;
+
+      if (XGetGeometry (private->xdisplay, xwindow, &root, &wx, &wy, &ww, &wh, &wb, &wd))
+	{
+	  if (x)
+	    *x = wx;
+	  if (y)
+	    *y = wy;
+	}
+    }
 }
 
 GdkWindow*

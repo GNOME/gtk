@@ -29,7 +29,7 @@ Display          *gdk_display = NULL;
 gint              gdk_screen;
 Window            gdk_root_window;
 Window            gdk_leader_window;
-GdkWindowPrivate  gdk_root_parent;
+GdkWindowPrivate  gdk_root_parent = { { NULL, }, NULL, };
 Atom              gdk_wm_delete_window;
 Atom              gdk_wm_take_focus;
 Atom              gdk_wm_protocols;
