@@ -35,6 +35,9 @@ typedef enum
   XP_THEME_CLASS_TREEVIEW,
   XP_THEME_CLASS_SPIN,
   XP_THEME_CLASS_PROGRESS,
+  XP_THEME_CLASS_TOOLTIP,
+  XP_THEME_CLASS_REBAR,
+  XP_THEME_CLASS_TOOLBAR,
   XP_THEME_CLASS__SIZEOF
 } XpThemeClass;
 
@@ -70,6 +73,11 @@ typedef enum
   XP_THEME_ELEMENT_PROGRESS_BAR_V,
   XP_THEME_ELEMENT_PROGRESS_TROUGH_H,
   XP_THEME_ELEMENT_PROGRESS_TROUGH_V,
+  XP_THEME_ELEMENT_TOOLTIP,
+  XP_THEME_ELEMENT_REBAR,
+  XP_THEME_ELEMENT_GRIPPER_H,
+  XP_THEME_ELEMENT_GRIPPER_V,
+  XP_THEME_ELEMENT_TOOLBAR,
   XP_THEME_ELEMENT__SIZEOF
 } XpThemeElement;
 
@@ -77,9 +85,7 @@ void xp_theme_init();
 void xp_theme_exit();
 gboolean xp_theme_draw(GdkWindow *win, XpThemeElement element, GtkStyle *style,
                        int x, int y, int width, int height, GtkStateType state_type);
-gboolean xp_theme_can_draw(XpThemeElement element, GtkStyle *style,
-                       int x, int y, int width, int height, GtkStateType state_type);
 gboolean xp_theme_is_drawable(XpThemeElement element);
-gboolean xp_theme_get_system_font(LOGFONTW *lf);
+gboolean xp_theme_get_system_font(LOGFONT *lf);
 
 #endif /* XP_THEME_H */

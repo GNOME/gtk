@@ -120,41 +120,16 @@ static gboolean
 get_system_font(LOGFONT *lf)
 {
   gboolean ok;
-  /*
-  if (NULL)//uxtheme_dll)
+
+  NONCLIENTMETRICS ncm;
+  ncm.cbSize = sizeof(NONCLIENTMETRICS);
+  ok = SystemParametersInfo(SPI_GETNONCLIENTMETRICS,
+			    sizeof(NONCLIENTMETRICS), &ncm, 0);
+  if (ok)
     {
-      LOGFONTW lfw;
-      ok = get_system_font_xp(&lfw);
-      if (ok)
-        {
-          memcpy(lf, &lfw, sizeof(*lf));
-          WideCharToMultiByte(CP_ACP, 0, lfw.lfFaceName, -1,
-                              lf->lfFaceName, sizeof(lf->lfFaceName),
-                              NULL, NULL);
-        }
+      *lf = ncm.lfMessageFont;
     }
-  else
-  */
-    {
-      NONCLIENTMETRICS ncm;
-      ncm.cbSize = sizeof(NONCLIENTMETRICS);
-      ok = SystemParametersInfo(SPI_GETNONCLIENTMETRICS,
-                                sizeof(NONCLIENTMETRICS), &ncm, 0);
-      if (ok)
-        {
-          *lf = ncm.lfMessageFont;
-        }
-      /*
-      HGDIOBJ font = GetStockObject(SYSTEM_FONT);
-      if (font)
-        {
-          if (GetObject( font, sizeof( LOGFONT ), lf ))
-            {
-              ok = TRUE;
-            }
-        }
-      */
-    }
+
   return ok;
 }
 
@@ -947,6 +922,18 @@ draw_box (GtkStyle      *style,
             }
         }
     }
+  else if (detail && !strcmp (detail, "handlebox_bin")) {
+	if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR, style, x, y, width, height, state_type))
+	  {
+		return;
+  	  }
+  }
+  else if (!strcmp (gtk_widget_get_name (widget), "gtk-tooltips")) {
+      if (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width, height, state_type))
+        {
+  		return;
+        }
+  }
 
   if (detail && strcmp (detail, "menuitem") == 0)
     shadow_type = GTK_SHADOW_NONE;
@@ -1095,6 +1082,10 @@ draw_tab (GtkStyle      *style,
 	       x, y, indicator_size.width, arrow_height);
 }
 
+/* this is an undefined magic value that, according to the mozilla folks,
+	worked for all the various themes that they tried */
+#define XP_EDGE_SIZE 2
+
 static void
 draw_extension(GtkStyle *style,
                GdkWindow *window,
@@ -1112,17 +1103,26 @@ draw_extension(GtkStyle *style,
   if (detail && !strcmp(detail, "tab"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
+      GtkPositionType pos_type = gtk_notebook_get_tab_pos(notebook);
 
-      /* FIXME: pos != TOP to be implemented */
-      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP
-          && xp_theme_draw (window,
-                            gtk_notebook_get_current_page(notebook)==0
-                            ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
-                            : XP_THEME_ELEMENT_TAB_ITEM,
-                            style, x, y, width, height
-                            /* FIXME: where does the magic number 2 come from? */
-                            + ( state_type == GTK_STATE_NORMAL
-                                ? 2 : 0), state_type))
+      if (pos_type == GTK_POS_TOP)
+	height += XP_EDGE_SIZE;
+
+#if 0
+	/* FIXME: pos != TOP to be implemented */
+      else if (pos_type == GTK_POS_BOTTOM)
+	y -= XP_EDGE_SIZE;
+      else if (pos_type == GTK_POS_RIGHT)
+	width += XP_EDGE_SIZE;
+      else if (pos_type == GTK_POS_LEFT)
+	height -= XP_EDGE_SIZE;
+#endif
+
+      if (xp_theme_draw (window,
+			 gtk_notebook_get_current_page(notebook)==0
+			 ? XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE
+			 : XP_THEME_ELEMENT_TAB_ITEM,
+			 style, x, y, width, height, state_type))
         {
           return;
         }
@@ -1143,10 +1143,9 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
     {
       GtkNotebook *notebook = GTK_NOTEBOOK(widget);
 
-      /* FIXME: pos != TOP to be implemented */
-      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP
-          && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
-                           state_type))
+		/* FIXME: pos != TOP to be implemented */
+      if (gtk_notebook_get_tab_pos(notebook) == GTK_POS_TOP && xp_theme_draw(window, XP_THEME_ELEMENT_TAB_PANE, style,  x, y, width, height,
+			state_type))
         {
           return;
         }
@@ -1171,10 +1170,6 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
         }
     }
 
-  /*      gtk_style_apply_default_background (style, window,
-  				  widget && !GTK_WIDGET_NO_WINDOW (widget),
-  				  state_type, area, x, y, width, height);
-  */
   parent_class->draw_flat_box(style, window, state_type, shadow_type,
                               area, widget, detail, x, y, width, height);
 }
@@ -1194,12 +1189,6 @@ draw_shadow (GtkStyle      *style,
 {
   if(detail && ! strcmp(detail, "entry"))
     {
-      /* Is this necessary?
-      if(GTK_IS_COMBO(widget->parent))
-        width += 10;
-      if(GTK_WIDGET_HAS_FOCUS (widget))
-        state_type = GTK_STATE_PRELIGHT;
-      */
       if (xp_theme_draw(window, XP_THEME_ELEMENT_EDIT_TEXT, style,
                         x, y, width, height, state_type))
         {
@@ -1208,6 +1197,70 @@ draw_shadow (GtkStyle      *style,
     }
   parent_class->draw_shadow (style, window, state_type, shadow_type, area, widget,
                              detail, x, y, width, height);
+}
+
+static void
+draw_hline (GtkStyle		*style,
+	    GdkWindow		*window,
+	    GtkStateType	 state_type,
+	    GdkRectangle	*area,
+	    GtkWidget		*widget,
+	    const gchar		*detail,
+	    gint		 x1,
+	    gint		 x2,
+	    gint		 y)
+{
+  /* TODO: GP_LINEHORIZ : LHS_FLAT, LHS_RAISED, LHS_SUNKEN*/
+  parent_class->draw_hline (style, window, state_type, area, widget,
+			    detail, x1, x2, y);
+}
+
+static void
+draw_vline (GtkStyle		*style,
+	    GdkWindow		*window,
+	    GtkStateType	 state_type,
+	    GdkRectangle	*area,
+	    GtkWidget		*widget,
+	    const gchar		*detail,
+	    gint		 y1,
+	    gint		 y2,
+	    gint		 x)
+{
+  /* TODO: GP_LINEVERT : LVS_FLAT, LVS_RAISED, LVS_SUNKEN */
+  parent_class->draw_vline (style, window, state_type, area, widget,
+			    detail, y1, y2, x);
+}
+
+static void
+draw_handle (GtkStyle        *style,
+	     GdkWindow       *window,
+	     GtkStateType     state_type,
+	     GtkShadowType    shadow_type,
+	     GdkRectangle    *area,
+	     GtkWidget       *widget,
+	     const gchar     *detail,
+	     gint             x,
+	     gint             y,
+	     gint             width,
+	     gint             height,
+	     GtkOrientation   orientation)
+{
+  XpThemeElement hndl;
+
+  if (TRUE) {
+	  if (orientation == GTK_ORIENTATION_VERTICAL)
+	    hndl = XP_THEME_ELEMENT_GRIPPER_V;
+	  else
+	    hndl = XP_THEME_ELEMENT_GRIPPER_H;
+
+	  if (xp_theme_draw(window, hndl, style, x, y, width, height, state_type))
+	    {
+	      return;
+	    }
+	}
+
+  parent_class->draw_handle (style, window, state_type, shadow_type, area, widget,
+						      detail, x, y, width, height, orientation);
 }
 
 static void
@@ -1242,6 +1295,9 @@ wimp_style_class_init (WimpStyleClass *klass)
   style_class->draw_extension = draw_extension;
   style_class->draw_box_gap = draw_box_gap;
   style_class->draw_shadow = draw_shadow;
+  style_class->draw_hline = draw_hline;
+  style_class->draw_vline = draw_vline;
+  style_class->draw_handle = draw_handle;
 }
 
 GType wimp_type_style = 0;

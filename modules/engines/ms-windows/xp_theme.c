@@ -40,6 +40,9 @@ static LPCWSTR class_descriptors[] =
   L"TreeView",
   L"Spin",
   L"Progress",
+  L"Tooltip",
+  L"Rebar",
+  L"Toolbar"
 };
 
 static const short element_part_map[]=
@@ -74,13 +77,18 @@ static const short element_part_map[]=
   PP_CHUNKVERT,
   PP_BAR,
   PP_BARVERT,
+  TTP_STANDARD,
+  RP_BAND,
+  RP_GRIPPER,
+  RP_GRIPPERVERT,
+  TP_BUTTON
 };
 
 static HINSTANCE uxtheme_dll = NULL;
 static HTHEME open_themes[XP_THEME_CLASS__SIZEOF];
 
 typedef HRESULT (FAR PASCAL *GetThemeSysFontFunc)
-     (HTHEME hTheme, int iFontID, FAR LOGFONTW *plf);
+     (HTHEME hTheme, int iFontID, FAR LOGFONT *plf);
 typedef HTHEME (FAR PASCAL *OpenThemeDataFunc)
      (HWND hwnd, LPCWSTR pszClassList);
 typedef HRESULT (FAR PASCAL *CloseThemeDataFunc)(HTHEME theme);
@@ -158,6 +166,20 @@ xp_theme_get_handle_by_element(XpThemeElement element)
 
   switch(element)
     {
+    case XP_THEME_ELEMENT_TOOLTIP:
+      klazz = XP_THEME_CLASS_TOOLTIP;
+      break;
+
+    case XP_THEME_ELEMENT_REBAR:
+    case XP_THEME_ELEMENT_GRIPPER_H:
+    case XP_THEME_ELEMENT_GRIPPER_V:
+      klazz = XP_THEME_CLASS_REBAR;
+      break;
+
+    case XP_THEME_ELEMENT_TOOLBAR:
+      klazz = XP_THEME_CLASS_TOOLBAR;
+      break;
+
     case XP_THEME_ELEMENT_PRESSED_CHECKBOX:
     case XP_THEME_ELEMENT_CHECKBOX:
     case XP_THEME_ELEMENT_BUTTON:
@@ -231,8 +253,22 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
 
   switch(element)
     {
-    case XP_THEME_ELEMENT_TAB_PANE:
+    case XP_THEME_ELEMENT_TOOLTIP:
+      ret = TTSS_NORMAL;
+      break;
+
+    case XP_THEME_ELEMENT_REBAR:
+    case XP_THEME_ELEMENT_GRIPPER_H:
+    case XP_THEME_ELEMENT_GRIPPER_V:
       ret = 0;
+      break;
+
+    case XP_THEME_ELEMENT_TOOLBAR:
+      ret = 1;
+      break;
+
+    case XP_THEME_ELEMENT_TAB_PANE:
+      ret = 1;
       break;
 
     case XP_THEME_ELEMENT_TAB_ITEM_LEFT_EDGE:
@@ -540,7 +576,7 @@ xp_theme_is_drawable(XpThemeElement element)
 }
 
 gboolean
-xp_theme_get_system_font(LOGFONTW *lf)
+xp_theme_get_system_font(LOGFONT *lf)
 {
   gboolean ret = FALSE;
   if (get_theme_sys_font_func != NULL)
