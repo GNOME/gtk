@@ -191,23 +191,82 @@ gdk_selection_send_notify (guint32  requestor,
   gdk_send_xevent (requestor, False, NoEventMask, (XEvent*) &xevent);
 }
 
+
+/* The output of XmbTextPropertyToTextList may include stuff not valid
+ * for COMPOUND_TEXT. This routine tries to correct this by:
+ *
+ * a) Canonicalizing CR LF and CR to LF
+ * b) Stripping out all other non-allowed control characters
+ *
+ * See the COMPOUND_TEXT spec distributed with X for explanations
+ * what is allowed.
+ */
+static gchar *
+sanitize_ctext (const char *str,
+		gint       *length)
+{
+  gchar *result = g_malloc (*length + 1);
+  gint out_length = 0;
+  gint i;
+
+  for (i=0; i < *length; i++)
+    {
+      guchar c = ((guchar *)str)[i];
+      
+      if (c == '\r')
+	{
+	  result[out_length++] = '\n';
+	  if (i + 1 < *length && str[i + 1] == '\n')
+	    i++;
+	}
+      else if (c == '\n' || c == '\t' || c == 27 /* ESC */ ||
+	       (c >= 32 && c <= 127) ||	/* GL */
+	       c == 155 /* CONTROL SEQUENCE INTRODUCER */ ||	
+	       (c >= 160 && c <= 255)) /* GR */
+	{
+	  result[out_length++] = c;
+	}
+    }
+
+  result[out_length] = '\0';
+  *length = out_length;
+  
+  return result;
+}
+
 gint
 gdk_text_property_to_text_list (GdkAtom encoding, gint format, 
-			     guchar *text, gint length,
-			     gchar ***list)
+				guchar *text, gint length,
+				gchar ***list)
 {
   XTextProperty property;
   gint count = 0;
   gint res;
+  gchar *sanitized_text = NULL;
 
   if (!list) 
     return 0;
 
-  property.value = text;
   property.encoding = encoding;
   property.format = format;
-  property.nitems = length;
+
+  if (encoding == gdk_atom_intern ("COMPOUND_TEXT", FALSE) && format == 8)
+    {
+      gint sanitized_text_length = length;
+      
+      property.value = sanitized_text = sanitize_ctext (text, &sanitized_text_length);
+      property.nitems = sanitized_text_length;
+    }
+  else
+    {
+      property.value = text;
+      property.nitems = length;
+    }
+  
   res = XmbTextPropertyToTextList (GDK_DISPLAY(), &property, list, &count);
+
+  if (sanitized_text)
+    g_free (sanitized_text);
 
   if (res == XNoMemory || res == XLocaleNotSupported || 
       res == XConverterNotFound)
@@ -231,6 +290,8 @@ gdk_string_to_compound_text (const gchar *str,
 {
   gint res;
   XTextProperty property;
+  gint sanitized_text_length;
+  gchar *sanitized_text;
 
   res = XmbTextListToTextProperty (GDK_DISPLAY(), 
 				   (char **)&str, 1, XCompoundTextStyle,
@@ -243,14 +304,26 @@ gdk_string_to_compound_text (const gchar *str,
       property.nitems = 0;
     }
 
+  g_assert (property.encoding == gdk_atom_intern ("COMPOUND_TEXT", FALSE) && property.format == 8);
+
   if (encoding)
     *encoding = property.encoding;
   if (format)
     *format = property.format;
+
+  sanitized_text_length = property.nitems;
+  sanitized_text = sanitize_ctext (property.value, &sanitized_text_length);
+
   if (ctext)
-    *ctext = property.value;
+    *ctext = sanitized_text;
+  else
+    g_free (sanitized_text);
+  
   if (length)
-    *length = property.nitems;
+    *length = sanitized_text_length;
+
+  if (property.value)
+    XFree (property.value);
 
   return res;
 }
@@ -258,5 +331,5 @@ gdk_string_to_compound_text (const gchar *str,
 void gdk_free_compound_text (guchar *ctext)
 {
   if (ctext)
-    XFree (ctext);
+    g_free (ctext);
 }

@@ -1,3 +1,41 @@
+Tue Feb  2 11:22:33 2001  Jody Goldberg <jgoldberg@home.com>
+
+	* gtk/gtkstyle.c : Remove duplicate fwd decl for
+	gtk_default_draw_shadow.
+
+Tue Feb 20 11:40:58 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkimage.c (gdk_image_new): Remove excess 
+	warning, make warnings more verbose, treat a error
+	in shmat as permanent, and don't try again.
+	(#51163, Ed Randall.)
+
+Mon Feb 19 20:46:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_key_press): Take key presses
+	of GDK_Left/GDK_Right when there is a selection to mean
+	"move the cursor to the start/end of the selection".
+	(Inspired by #50492, Jay Cox, though the implementation
+	is different for GTK+-1.2.)
+
+Mon Feb 19 20:15:28 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_timer_1st_time): Add an initial
+	delay for the first click before starting to scroll.
+	(based on #51026, gtk-enf-990512-0.patch, Eric Fisher)
+
+	* gtk/gtktext.c: GtkText should have I-beam cursor. 
+	(based on gtk-enf-990513-1.patch, Eric Fisher.)
+
+Mon Feb 19 18:39:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkselection.c (gdk_string_to_compound_text,gdk_text_property_to_text_list):
+	Robustify by stripping control characters not allowed in COMPOUND_TEXT
+	out before passing to XmbTextpropertyToTextList(), and from the
+	result of XmbTextListToTextProperty(). This is in the spirit
+	of "Be lenient in what you receive, strict in what you generate." 
+	(Fixes #1704)
+
 Mon Feb 19 14:20:36 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkrgb.c (gdk_rgb_convert_555_br): Fix incorrect
@@ -9,7 +47,7 @@ Fri Feb 16 20:09:42 2001  Owen Taylor  <otaylor@redhat.com>
 	for unshifted + and shifted = for non-us keyboards.
 	Make <Control>+ and <Control>- work as well as 
 	<Control>KP_Plus, <Control>KP_Minus for recursive
-	open/close. (#2682, RenÃ© Seindal)
+	open/close. (#2682, René Seindal)
 	
 Fri Feb 16 18:50:59 2001  Owen Taylor  <otaylor@redhat.com>
 

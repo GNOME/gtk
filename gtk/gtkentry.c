@@ -1111,17 +1111,35 @@ gtk_entry_key_press (GtkWidget   *widget,
       break;
     case GDK_Left:
       return_val = TRUE;
-      if (event->state & GDK_CONTROL_MASK)
-	gtk_move_backward_word (entry);
+      if (!extend_selection &&
+	  editable->selection_start_pos != editable->selection_end_pos)
+	{
+	  editable->current_pos = MIN (editable->selection_start_pos, editable->selection_end_pos);
+	  initial_pos = (guint)-1; /* Force redraw below */
+	}
       else
-	gtk_move_backward_character (entry);
+	{
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_move_backward_word (entry);
+	  else
+	    gtk_move_backward_character (entry);
+	}
       break;
     case GDK_Right:
       return_val = TRUE;
-      if (event->state & GDK_CONTROL_MASK)
-	gtk_move_forward_word (entry);
+      if (!extend_selection &&
+	  editable->selection_start_pos != editable->selection_end_pos)
+	{
+	  editable->current_pos = MAX (editable->selection_start_pos, editable->selection_end_pos);
+	  initial_pos = (guint)-1; /* Force redraw below */
+	}
       else
-	gtk_move_forward_character (entry);
+	{
+	  if (event->state & GDK_CONTROL_MASK)
+	    gtk_move_forward_word (entry);
+	  else
+	    gtk_move_forward_character (entry);
+	}
       break;
     case GDK_Return:
       return_val = TRUE;

@@ -594,7 +594,6 @@ gtk_editable_selection_clear (GtkWidget         *widget,
   
   return TRUE;
 }
-
 static void
 gtk_editable_selection_get (GtkWidget        *widget,
 			    GtkSelectionData *selection_data,
@@ -728,12 +727,14 @@ gtk_editable_selection_received  (GtkWidget         *widget,
 	gchar **list;
 	gint count;
 	gint i;
+	gint sanitized_text_length;
 
 	count = gdk_text_property_to_text_list (selection_data->type,
 						selection_data->format, 
 	      					selection_data->data,
 						selection_data->length,
 						&list);
+	
 	for (i=0; i<count; i++) 
 	  {
 	    gtk_editable_insert_text (editable, list[i], strlen (list[i]), &tmp_pos);

@@ -5662,7 +5662,7 @@ create_text (void)
        */
       gdk_font_unref (font);
 
-      infile = fopen("testgtk.c", "r");
+      infile = fopen("/tmp/dosfile", "r");
       
       if (infile)
 	{
