@@ -1,3 +1,16 @@
+Fri Oct  3 20:50:48 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_set_model): only set the model
+	on ->priv->cell_view if ->priv->cell_view is non-NULL.
+
+	* gtk/gtkcomboboxentry.c: include gtkintl.h, add text_renderer
+	field to GtkComboBoxEntryPrivate,
+	(gtk_combo_box_entry_class_init), (gtk_combo_box_entry_init),
+	(gtk_combo_box_entry_set_property), (gtk_combo_box_entry_get_property),
+	(gtk_combo_box_entry_set_text_column), (gtk_combo_box_entry_new): add
+	a construct-only "text_column" property and reorder code to use it
+	and support inheriting this widget.
+
 Thu Oct  2 23:28:02 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcombobox.c: Added API doc comments.

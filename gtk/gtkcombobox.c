@@ -498,8 +498,10 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
 
   combo_box->priv->model = model;
   g_object_ref (G_OBJECT (combo_box->priv->model));
-  gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view),
-                           combo_box->priv->model);
+
+  if (combo_box->priv->cell_view)
+    gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->cell_view),
+                             combo_box->priv->model);
   gtk_cell_view_set_model (GTK_CELL_VIEW (combo_box->priv->measurer),
                            combo_box->priv->model);
 }

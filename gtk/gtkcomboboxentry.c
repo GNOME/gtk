@@ -23,20 +23,41 @@
 #include <gtk/gtkentry.h>
 #include <gtk/gtkcellrenderertext.h>
 
+#include "gtkintl.h"
+
 struct _GtkComboBoxEntryPrivate
 {
   GtkWidget *entry;
 
+  GtkCellRenderer *text_renderer;
   gint text_column;
 };
 
 static void gtk_combo_box_entry_class_init       (GtkComboBoxEntryClass *klass);
 static void gtk_combo_box_entry_init             (GtkComboBoxEntry      *entry_box);
 
+static void gtk_combo_box_entry_set_property     (GObject               *object,
+                                                  guint                  prop_id,
+                                                  const GValue          *value,
+                                                  GParamSpec            *pspec);
+static void gtk_combo_box_entry_get_property     (GObject               *object,
+                                                  guint                  prop_id,
+                                                  GValue                *value,
+                                                  GParamSpec            *pspec);
+
 static void gtk_combo_box_entry_active_changed   (GtkComboBox           *combo_box,
                                                   gpointer               user_data);
 static void gtk_combo_box_entry_contents_changed (GtkEntry              *entry,
                                                   gpointer               user_data);
+static void gtk_combo_box_entry_set_text_column  (GtkComboBoxEntry      *entry_box,
+                                                  gint                   text_column);
+
+
+enum
+{
+  PROP_0,
+  PROP_TEXT_COLUMN
+};
 
 
 GType
@@ -71,6 +92,22 @@ gtk_combo_box_entry_get_type (void)
 static void
 gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
 {
+  GObjectClass *object_class;
+
+  object_class = (GObjectClass *)klass;
+  object_class->set_property = gtk_combo_box_entry_set_property;
+  object_class->get_property = gtk_combo_box_entry_get_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_TEXT_COLUMN,
+                                   g_param_spec_int ("text_column",
+                                                     _("Text Column"),
+                                                     _("A column in the data source model to get the strings from"),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
   g_type_class_add_private ((GObjectClass *) klass,
                             sizeof (GtkComboBoxEntryPrivate));
 }
@@ -79,6 +116,61 @@ static void
 gtk_combo_box_entry_init (GtkComboBoxEntry *entry_box)
 {
   entry_box->priv = GTK_COMBO_BOX_ENTRY_GET_PRIVATE (entry_box);
+  entry_box->priv->text_column = -1;
+
+  entry_box->priv->entry = gtk_entry_new ();
+  gtk_container_add (GTK_CONTAINER (entry_box), entry_box->priv->entry);
+  gtk_widget_show (entry_box->priv->entry);
+
+  entry_box->priv->text_renderer = gtk_cell_renderer_text_new ();
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (entry_box),
+                              entry_box->priv->text_renderer, TRUE);
+
+  g_signal_connect (entry_box->priv->entry, "changed",
+                    G_CALLBACK (gtk_combo_box_entry_contents_changed),
+                    entry_box);
+  g_signal_connect (entry_box, "changed",
+                    G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
+}
+
+static void
+gtk_combo_box_entry_set_property (GObject      *object,
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
+{
+  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (object);
+
+  switch (prop_id)
+    {
+      case PROP_TEXT_COLUMN:
+        gtk_combo_box_entry_set_text_column (entry_box,
+                                             g_value_get_int (value));
+        break;
+
+      default:
+        break;
+    }
+}
+
+static void
+gtk_combo_box_entry_get_property (GObject    *object,
+                                  guint       prop_id,
+                                  GValue     *value,
+                                  GParamSpec *pspec)
+{
+  GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (object);
+
+  switch (prop_id)
+    {
+      case PROP_TEXT_COLUMN:
+        g_value_set_int (value, entry_box->priv->text_column);
+        break;
+
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+        break;
+    }
 }
 
 static void
@@ -134,6 +226,22 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
                                      NULL);
 }
 
+static void
+gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
+                                     gint              text_column)
+{
+  g_return_if_fail (text_column >= 0);
+  g_return_if_fail (text_column < gtk_tree_model_get_n_columns (gtk_combo_box_get_model (GTK_COMBO_BOX (entry_box))));
+  g_return_if_fail (entry_box->priv->text_column == -1);
+
+  entry_box->priv->text_column = text_column;
+
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (entry_box),
+                                  entry_box->priv->text_renderer,
+                                  "text", text_column,
+                                  NULL);
+}
+
 /* public API */
 
 /**
@@ -156,7 +264,6 @@ gtk_combo_box_entry_new (GtkTreeModel *model,
                          gint          text_column)
 {
   GtkWidget *ret;
-  GtkCellRenderer *renderer;
 
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
   g_return_val_if_fail (text_column >= 0, NULL);
@@ -164,24 +271,8 @@ gtk_combo_box_entry_new (GtkTreeModel *model,
 
   ret = g_object_new (gtk_combo_box_entry_get_type (),
                       "model", model,
+                      "text_column", text_column,
                       NULL);
-
-  GTK_COMBO_BOX_ENTRY (ret)->priv->entry = gtk_entry_new ();
-  gtk_container_add (GTK_CONTAINER (ret),
-                     GTK_COMBO_BOX_ENTRY (ret)->priv->entry);
-  gtk_widget_show (GTK_COMBO_BOX_ENTRY (ret)->priv->entry);
-
-  GTK_COMBO_BOX_ENTRY (ret)->priv->text_column = text_column;
-  renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (ret), renderer, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (ret), renderer,
-                                  "text", text_column,
-                                  NULL);
-
-  g_signal_connect (GTK_COMBO_BOX_ENTRY (ret)->priv->entry, "changed",
-                    G_CALLBACK (gtk_combo_box_entry_contents_changed), ret);
-  g_signal_connect (ret, "changed",
-                    G_CALLBACK (gtk_combo_box_entry_active_changed), NULL);
 
   return ret;
 }
