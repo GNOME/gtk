@@ -274,6 +274,11 @@ void gdk_draw_layout_with_colors      (GdkDrawable     *drawable,
                                        GdkColor        *foreground,
                                        GdkColor        *background);
 
+#ifndef GDK_DISABLE_DEPRECATED
+#define gdk_draw_pixmap                gdk_draw_drawable
+#define gdk_draw_bitmap                gdk_draw_drawable
+#endif /* GDK_DISABLE_DEPRECATED */
+
 GdkImage* gdk_drawable_get_image (GdkDrawable *drawable,
                                   gint         x,
                                   gint         y,

@@ -1,3 +1,22 @@
+Wed Aug 22 19:15:39 2001  Owen Taylor  <otaylor@redhat.com>
+
+	[ Patch from Sebastian Wilhelmi, 52790 ]
+
+	* gtk/gtkversion.h.in gtk/gtk.h: New file replacing gtkcompat.h
+
+	* gdk/gdkcompat.h gdk/gdk*.h gtk/gtkcompat.h.in gtk/gtk*.h: 
+	Move compatibility macros from g[dt]kcompat.h to within 
+	#ifndef G[DT]K_DISABLE_DEPRECATED in each file.
+
+	* gdk/gdk-pixbuf-csource.c: Fix up include of gtkcompat.h.
+
+	* demos/Makefile.am demos/gtk-demo/Makefile.am 
+	  docs/reference/gdk-pixbuf/Makefile.am modules/input/Makefile.am
+	  tests/Makefile.am: Remove references to -G[DT]K_DISABLE_DEPRECATED.
+
+	* demos/{pixbuf-demo.c,testpixbuf-drawable.c,testpixbuf-save.c,
+	         testpixbuf.c}: Fix usages of deprecated functions.
+
 Wed Aug 22 19:03:27 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_set_model): clean up selection

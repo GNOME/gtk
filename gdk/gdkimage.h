@@ -95,6 +95,10 @@ GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
 				gint          height);
 #endif /* GDK_ENABLE_BROKEN */
 
+#ifndef GDK_DISABLE_DEPRECATED
+#define gdk_image_destroy              gdk_image_unref
+#endif /* GDK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

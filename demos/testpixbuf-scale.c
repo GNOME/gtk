@@ -68,7 +68,6 @@ main(int argc, char **argv)
 	pixbuf_init ();
 
 	gtk_init (&argc, &argv);
-	gdk_rgb_init ();
 
 	if (argc != 2) {
 		fprintf (stderr, "Usage: testpixbuf-scale FILE\n");

@@ -206,6 +206,10 @@ gchar*	gtk_container_child_composite_name   (GtkContainer *container,
 					      GtkWidget	   *child);
 void   _gtk_container_dequeue_resize_handler (GtkContainer *container);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define	gtk_container_border_width		gtk_container_set_border_width
+#endif /* GTK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

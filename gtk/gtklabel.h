@@ -133,12 +133,9 @@ void         gtk_label_get_layout_offsets (GtkLabel *label,
                                            gint     *y);
 
 
-#ifndef	GTK_DISABLE_COMPAT_H
-#  define gtk_label_set				gtk_label_set_text
-#endif	/* GTK_DISABLE_COMPAT_H */
-
 #ifndef GTK_DISABLE_DEPRECATED
-/* Deprecated */
+
+#define  gtk_label_set           gtk_label_set_text
 void       gtk_label_get           (GtkLabel          *label,
                                     char             **str);
 

@@ -252,6 +252,10 @@ void         gdk_gc_set_rgb_fg_color (GdkGC       *gc,
 void         gdk_gc_set_rgb_bg_color (GdkGC       *gc,
 				      GdkColor    *color);
 
+#ifndef GDK_DISABLE_DEPRECATED
+#define gdk_gc_destroy                 gdk_gc_unref
+#endif /* GDK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

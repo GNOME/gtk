@@ -86,9 +86,8 @@ int main(int argc, char **argv)
 
    gtk_init(&argc, &argv);   
    gdk_rgb_set_verbose(TRUE);
-   gdk_rgb_init();
 
-   gtk_widget_set_default_colormap(gdk_rgb_get_cmap());
+   gtk_widget_set_default_colormap(gdk_rgb_get_colormap());
 
    root = GDK_ROOT_PARENT();
    pixbuf = gdk_pixbuf_get_from_drawable(NULL, root, NULL,

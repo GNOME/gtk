@@ -72,10 +72,10 @@ typedef enum	/*< skip >*/
 /* outdated macros that really shouldn't e used anymore,
  * use the GLib type system instead
  */
-#ifndef	GTK_DISABLE_COMPAT_H
+#ifndef GTK_DISABLE_DEPRECATED
 #define	GTK_TYPE_FUNDAMENTAL_LAST        (G_TYPE_LAST_RESERVED_FUNDAMENTAL - 1)
 #define	GTK_TYPE_FUNDAMENTAL_MAX         (G_TYPE_FUNDAMENTAL_MAX)
-#endif /* GTK_DISABLE_COMPAT_H */
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* glib macro wrappers (compatibility) */
 #define GTK_STRUCT_OFFSET	G_STRUCT_OFFSET

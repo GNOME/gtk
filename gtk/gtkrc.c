@@ -47,7 +47,7 @@
 #include <glib.h>
 #include "gdkconfig.h"
 
-#include "gtkcompat.h"
+#include "gtkversion.h"
 #include "gtkrc.h"
 #include "gtkbindings.h"
 #include "gtkthemes.h"

@@ -250,7 +250,8 @@ void       gtk_window_set_policy               (GtkWindow           *window,
 						gint                 allow_shrink,
 						gint                 allow_grow,
 						gint                 auto_shrink);
-#endif
+#define	gtk_window_position			gtk_window_set_position
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Set initial default size of the window (does not constrain user
  * resize operations)

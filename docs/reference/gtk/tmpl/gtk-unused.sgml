@@ -1613,6 +1613,13 @@ Get the type of GtkIdentifier.
 @menu: 
 @Returns: 
 
+<!-- ##### MACRO gtk_notebook_set_page ##### -->
+<para>
+</para>
+
+@notebook: 
+@page_num: 
+
 <!-- ##### FUNCTION gtk_object_arg_get ##### -->
 <para>
 Private function to get an argument and argument info from an object.

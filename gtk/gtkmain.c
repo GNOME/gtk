@@ -40,7 +40,7 @@
 #include <unistd.h>
 #endif
 #include "gtkdnd.h"
-#include "gtkcompat.h"
+#include "gtkversion.h"
 #include "gtkmain.h"
 #include "gtkrc.h"
 #include "gtkselection.h"

@@ -5,7 +5,8 @@ SUBDIRS = gtk-demo
 INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir) 				\
 	-I$(top_builddir)/gdk				\
-	-DGTK_DISABLE_COMPAT_H				\
+	-DG_DISABLE_DEPRECATED	 			\
+	-DGDK_DISABLE_DEPRECATED			\
 	-DGTK_DISABLE_DEPRECATED			\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_DEP_CFLAGS@				\

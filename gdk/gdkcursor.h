@@ -39,6 +39,10 @@ GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 GdkCursor* gdk_cursor_ref                (GdkCursor      *cursor);
 void       gdk_cursor_unref              (GdkCursor      *cursor);
 
+#ifndef GDK_DISABLE_DEPRECATED
+#define gdk_cursor_destroy             gdk_cursor_unref
+#endif /* GDK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

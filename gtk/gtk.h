@@ -54,7 +54,6 @@
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkcolorseldialog.h>
 #include <gtk/gtkcombo.h>
-#include <gtk/gtkcompat.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkctree.h>
 #include <gtk/gtkcurve.h>
@@ -150,6 +149,7 @@
 #include <gtk/gtktypeutils.h>
 #include <gtk/gtkvbox.h>
 #include <gtk/gtkvbbox.h>
+#include <gtk/gtkversion.h>
 #include <gtk/gtkviewport.h>
 #include <gtk/gtkvpaned.h>
 #include <gtk/gtkvruler.h>

@@ -4,7 +4,6 @@ SUBDIRS=stock-icons
 
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
-	-DGTK_DISABLE_COMPAT_H				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
@@ -388,7 +387,7 @@ gtk_built_sources = @STRIP_BEGIN@ \
 # that don't serve as direct make target sources, i.e. they don't have
 # their own .lo rules and don't get publically installed
 gtk_extra_sources = @STRIP_BEGIN@ \
-	gtkcompat.h.in		\
+	gtkversion.h.in		\
 	maketypes.awk		\
 	makeenums.h		\
 	gtk-boxed.defs		\
@@ -399,7 +398,7 @@ gtk_extra_sources = @STRIP_BEGIN@ \
 #
 # setup GTK+ sources and their dependancies
 #
-gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkcompat.h
+gtk_target_headers = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkversion.h
 gtk_target_sources = $(gtk_c_sources) $(gtk_plug_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_sources)
 EXTRA_HEADERS +=

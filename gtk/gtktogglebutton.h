@@ -84,6 +84,10 @@ void       gtk_toggle_button_set_inconsistent  (GtkToggleButton *toggle_button,
 gboolean   gtk_toggle_button_get_inconsistent  (GtkToggleButton *toggle_button);
 
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define	gtk_toggle_button_set_state		gtk_toggle_button_set_active
+#endif /* GTK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

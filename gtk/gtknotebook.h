@@ -222,6 +222,10 @@ void gtk_notebook_reorder_child           (GtkNotebook *notebook,
 					   GtkWidget   *child,
 					   gint         position);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define	gtk_notebook_current_page               gtk_notebook_get_current_page
+#endif /* GTK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

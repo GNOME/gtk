@@ -178,6 +178,12 @@ void       gtk_menu_reorder_child         (GtkMenu             *menu,
                                            GtkWidget           *child,
                                            gint                position);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_menu_append				gtk_menu_shell_append
+#define gtk_menu_prepend			gtk_menu_shell_prepend
+#define gtk_menu_insert				gtk_menu_shell_insert
+#endif /* GTK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

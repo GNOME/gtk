@@ -85,7 +85,6 @@ gdk_OBJECTS = \
 gdk_public_h_sources = \
 	gdk.h		\
 	gdkcolor.h	\
-	gdkcompat.h	\
 	gdkcursor.h     \
 	gdkcursors.h	\
 	gdkdnd.h	\

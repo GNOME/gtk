@@ -29,7 +29,7 @@ DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(A
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
 # Some files use near as an identifier
 # Don't define GTK_COMPILATION here, because it's for gtk-x.x.dll only
-DEFINES = -DG_ENABLE_DEBUG -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
+DEFINES = -DG_ENABLE_DEBUG -DG_LOG_DOMAIN=\"Gtk\" -Dnear=xxnear -DGTK_VERSION=\"$(GTK_VER)\"
 
 TOUCH = copy makefile.msc+nul
 
@@ -341,7 +341,7 @@ gtk_public_h_sources =		\
 
 # these aren't use here, but listed for reference
 gtk_extra_sources = \
-	gtkcompat.h		\
+	gtkversion.h		\
 	maketypes.awk		\
 	makeenums.h		\
 	gtk-boxed.defs		\

@@ -202,7 +202,6 @@ main (int argc, char **argv)
 
 	pixbuf_init ();
 	gtk_init (&argc, &argv);
-	gdk_rgb_init ();
 
 	if (!load_pixbufs ()) {
 		g_message ("main(): Could not load all the pixbufs!");

@@ -86,6 +86,10 @@ void    _gtk_scale_get_value_size  (GtkScale        *scale,
 gchar  *_gtk_scale_format_value   (GtkScale        *scale,
                                    gdouble          value);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define	gtk_scale_value_width                   gtk_scale_get_value_width
+#endif /* GTK_DISABLE_DEPRECATED */
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
