@@ -531,7 +531,7 @@ OneLine24 is the 24 bpp-version.
 */
 static void OneLine32(struct bmp_progressive_state *context)
 {
-	gint X;	int i;
+	int i;
 	guchar *pixels;
 	guchar *src;
 
@@ -966,13 +966,15 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 
 		switch (context->read_state) {
 		case READ_STATE_HEADERS:
-			if (!DecodeHeader (context->buff, context->buff + 14, context))
+			if (!DecodeHeader (context->buff,
+					   context->buff + 14, context,
+					   error))
 				return FALSE;
 
 			break;
 
 		case READ_STATE_PALETTE:
-			DecodeColormap (context->buff, context);
+			DecodeColormap (context->buff, context, error);
 			break;
 
 		case READ_STATE_BITMASKS:
