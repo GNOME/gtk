@@ -1,3 +1,24 @@
+2003-12-10  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	Added toolbar items for the filter separator and the filter item.
+	(toolbar_create): Add the filter widgets here.
+	(filter_create): Renamed from create_filter().  Don't store the
+	alignment in the impl structure, just return it.
+	(toolbar_show_filters): New function.
+	(gtk_file_chooser_default_add_filter): Use toolbar_show_filters().
+	(gtk_file_chooser_default_remove_filter): Likewise.
+	(gtk_file_chooser_default_constructor): Don't create the filter
+	widget here.
+	(struct _GtkFileChooserDefault): Added a field for a current
+	folder label.
+	(gtk_file_chooser_default_constructor): Create the folder label.
+	(gtk_file_chooser_default_set_current_folder): Set the current
+	folder label.
+
+	* tests/testfilechooser.c (main): Dramatically improved the
+	usability of the extra widget through careful word choice.
+
 2003-12-10  Mark McLoughlin  <mark@skynet.ie>
 
 	* gdk/gdk.h: include gdkspawn.h.

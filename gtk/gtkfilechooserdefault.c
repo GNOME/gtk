@@ -41,6 +41,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
+#include "gtkseparatortoolitem.h"
 #include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
@@ -95,12 +96,14 @@ struct _GtkFileChooserDefault
   GtkFilePath *preview_path;
 
   GtkToolItem *up_button;
+  GtkToolItem *filter_separator;
+  GtkToolItem *filter_item;
 
   GtkWidget *preview_frame;
 
   GtkWidget *toolbar;
-  GtkWidget *filter_alignment;
   GtkWidget *filter_combo;
+  GtkWidget *folder_label;
   GtkWidget *tree_scrollwin;
   GtkWidget *tree;
   GtkWidget *shortcuts_scrollwin;
@@ -741,6 +744,38 @@ toolbar_add_item (GtkFileChooserDefault *impl,
   return item;
 }
 
+/* Creates the widgets for the filter combo box */
+static GtkWidget *
+filter_create (GtkFileChooserDefault *impl)
+{
+  GtkWidget *alignment;
+  GtkWidget *hbox;
+  GtkWidget *label;
+
+  alignment = gtk_alignment_new (0.0, 0.5, 0.0, 1.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 12, 0);
+  gtk_widget_show (alignment);
+
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_container_add (GTK_CONTAINER (alignment), hbox);
+  gtk_widget_show (hbox);
+
+  label = gtk_label_new_with_mnemonic (_("Files of _type:"));
+  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+  gtk_widget_show (label);
+
+  impl->filter_combo = gtk_combo_box_new_text ();
+  gtk_box_pack_start (GTK_BOX (hbox), impl->filter_combo, FALSE, FALSE, 0);
+  gtk_widget_show (impl->filter_combo);
+
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->filter_combo);
+
+  g_signal_connect (impl->filter_combo, "changed",
+		    G_CALLBACK (filter_combo_changed), impl);
+
+  return alignment;
+}
+
 /* Creates the toolbar widget */
 static GtkWidget *
 toolbar_create (GtkFileChooserDefault *impl)
@@ -749,6 +784,13 @@ toolbar_create (GtkFileChooserDefault *impl)
   gtk_toolbar_set_style (GTK_TOOLBAR (impl->toolbar), GTK_TOOLBAR_ICONS);
 
   impl->up_button = toolbar_add_item (impl, GTK_STOCK_GO_UP, G_CALLBACK (toolbar_up_cb));
+
+  impl->filter_separator = gtk_separator_tool_item_new ();
+  gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), impl->filter_separator, -1);
+
+  impl->filter_item = gtk_tool_item_new ();
+  gtk_container_add (GTK_CONTAINER (impl->filter_item), filter_create (impl));
+  gtk_toolbar_insert (GTK_TOOLBAR (impl->toolbar), impl->filter_item, -1);
 
   return impl->toolbar;
 }
@@ -773,36 +815,6 @@ toolbar_check_sensitivity (GtkFileChooserDefault *impl)
     }
 
   gtk_widget_set_sensitive (GTK_WIDGET (impl->up_button), has_parent);
-}
-
-/* Creates the widgets for the filter combo box */
-static GtkWidget *
-create_filter (GtkFileChooserDefault *impl)
-{
-  GtkWidget *hbox;
-  GtkWidget *label;
-
-  impl->filter_alignment = gtk_alignment_new (0.0, 0.5, 0.0, 1.0);
-  /* Don't show filter initially -- don't gtk_widget_show() the filter_alignment here */
-
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_container_add (GTK_CONTAINER (impl->filter_alignment), hbox);
-  gtk_widget_show (hbox);
-
-  label = gtk_label_new_with_mnemonic (_("Files of _type:"));
-  gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-  gtk_widget_show (label);
-
-  impl->filter_combo = gtk_combo_box_new_text ();
-  gtk_box_pack_start (GTK_BOX (hbox), impl->filter_combo, FALSE, FALSE, 0);
-  gtk_widget_show (impl->filter_combo);
-
-  gtk_label_set_mnemonic_widget (GTK_LABEL (label), impl->filter_combo);
-
-  g_signal_connect (impl->filter_combo, "changed",
-		    G_CALLBACK (filter_combo_changed), impl);
-
-  return impl->filter_alignment;
 }
 
 /* Creates the widgets for the folder tree */
@@ -1291,7 +1303,6 @@ gtk_file_chooser_default_constructor (GType                  type,
   GtkWidget *table;
   GtkWidget *hpaned;
   GtkWidget *entry_widget;
-  GtkWidget *filter_widget;
   GtkWidget *widget;
   GList *focus_chain;
   GtkWidget *hbox;
@@ -1320,13 +1331,15 @@ gtk_file_chooser_default_constructor (GType                  type,
   gtk_box_pack_start (GTK_BOX (impl), table, TRUE, TRUE, 0);
   gtk_widget_show (table);
 
-  /* Filter */
+  /* Current folder label */
 
-  filter_widget = create_filter (impl);
-  gtk_table_attach (GTK_TABLE (table), filter_widget,
+  impl->folder_label = gtk_label_new (NULL);
+  gtk_misc_set_alignment (GTK_MISC (impl->folder_label), 0.0, 0.5);
+  gtk_table_attach (GTK_TABLE (table), impl->folder_label,
 		    0, 1,                   0, 1,
 		    GTK_EXPAND | GTK_FILL,  0,
 		    0,                      0);
+  gtk_widget_show (impl->folder_label);
 
   /* Paned widget */
 
@@ -1393,7 +1406,6 @@ gtk_file_chooser_default_constructor (GType                  type,
   /* Make the entry the first widget in the focus chain
    */
   focus_chain = g_list_append (NULL, entry_widget);
-  focus_chain = g_list_append (focus_chain, filter_widget);
   focus_chain = g_list_append (focus_chain, hpaned);
   focus_chain = g_list_append (focus_chain, impl->preview_frame);
   gtk_container_set_focus_chain (GTK_CONTAINER (table), focus_chain);
@@ -1815,11 +1827,18 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     const GtkFilePath *path)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
+  char *str;
 
   if (impl->current_folder)
     gtk_file_path_free (impl->current_folder);
 
   impl->current_folder = gtk_file_path_copy (path);
+
+  /* Change the current folder label */
+
+  str = g_strdup_printf (_("Current folder: %s"), gtk_file_path_get_string (path));
+  gtk_label_set_text (GTK_LABEL (impl->folder_label), str);
+  g_free (str);
 
   /* Notify the folder tree */
 
@@ -2057,6 +2076,23 @@ gtk_file_chooser_default_get_file_system (GtkFileChooser *chooser)
   return impl->file_system;
 }
 
+/* Shows or hides the filter widgets */
+static void
+toolbar_show_filters (GtkFileChooserDefault *impl,
+		      gboolean               show)
+{
+  if (show)
+    {
+      gtk_widget_show (GTK_WIDGET (impl->filter_separator));
+      gtk_widget_show (GTK_WIDGET (impl->filter_item));
+    }
+  else
+    {
+      gtk_widget_hide (GTK_WIDGET (impl->filter_separator));
+      gtk_widget_hide (GTK_WIDGET (impl->filter_item));
+    }
+}  
+
 static void
 gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
 				     GtkFileFilter  *filter)
@@ -2083,7 +2119,7 @@ gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
   if (!g_slist_find (impl->filters, impl->current_filter))
     set_current_filter (impl, filter);
 
-  gtk_widget_show (impl->filter_alignment);
+  toolbar_show_filters (impl, TRUE);
 }
 
 static void
@@ -2121,7 +2157,7 @@ gtk_file_chooser_default_remove_filter (GtkFileChooser *chooser,
   g_object_unref (filter);
 
   if (!impl->filters)
-    gtk_widget_hide (impl->filter_alignment);
+    toolbar_show_filters (impl, FALSE);
 }
 
 static GSList *

@@ -370,7 +370,8 @@ main (int argc, char **argv)
 		    G_CALLBACK (update_preview_cb), NULL);
 
   /* Extra widget */
-  extra = gtk_check_button_new_with_mnemonic ("_Frobnicate the file");
+  extra = gtk_check_button_new_with_mnemonic ("Lar_t whoever asks about this button");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (extra), TRUE);
   gtk_file_chooser_set_extra_widget (GTK_FILE_CHOOSER (dialog), extra);
 
   /* Shortcuts */
