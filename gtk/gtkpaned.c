@@ -608,7 +608,11 @@ gtk_paned_enter (GtkWidget        *widget,
   else
     {
       paned->handle_prelit = TRUE;
-      gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw_area (widget,
+				  paned->handle_pos.x,
+				  paned->handle_pos.y,
+				  paned->handle_pos.width,
+				  paned->handle_pos.height);
     }
   
   return TRUE;
@@ -625,7 +629,11 @@ gtk_paned_leave (GtkWidget        *widget,
   else
     {
       paned->handle_prelit = FALSE;
-      gtk_widget_queue_draw (widget);
+      gtk_widget_queue_draw_area (widget,
+				  paned->handle_pos.x,
+				  paned->handle_pos.y,
+				  paned->handle_pos.width,
+				  paned->handle_pos.height);
     }
 
   return TRUE;
