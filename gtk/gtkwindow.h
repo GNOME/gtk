@@ -77,6 +77,7 @@ struct _GtkWindow
    */
   guint use_uposition : 1;
   guint modal : 1;
+  guint window_has_focus : 1;
 };
 
 struct _GtkWindowClass

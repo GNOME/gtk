@@ -419,35 +419,11 @@ gtk_plug_set_focus (GtkWindow *window,
 
   plug = GTK_PLUG (window);
 
-  if (focus && !GTK_WIDGET_CAN_FOCUS (focus))
-    return;
-
-  if (window->focus_widget != focus)
-    {
-      if (window->focus_widget)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = FALSE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
-
-      window->focus_widget = focus;
-
-      if (window->focus_widget)
-	{
-	  event.type = GDK_FOCUS_CHANGE;
-	  event.window = window->focus_widget->window;
-	  event.in = TRUE;
-
-	  gtk_widget_event (window->focus_widget, (GdkEvent*) &event);
-	}
-    }
-
-  /* Ask for focus from parent */
-
-  if (focus && !GTK_WIDGET_HAS_FOCUS(window))
+  GTK_WINDOW_CLASS (parent_class)->set_focus (window, focus);
+  
+  if (focus &&
+      GTK_WIDGET_CAN_FOCUS (focus) &&
+      !GTK_WIDGET_HAS_FOCUS(window))
     {
       XEvent xevent;
 

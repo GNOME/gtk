@@ -1,3 +1,13 @@
+Thu Feb 22 20:50:08 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkplug.c (gtk_plug_set_focus): Change to parent
+	implementation instead of cut-and-paste that was
+	out of sync.
+
+	* gtk/gtkwindow.[ch] (gtk_window_set_focus): Only send 
+	::focus_in_event when the toplevel window actually 
+	has focus on it. (Fixes #50857, Akira Higuchi)
+
 Thu Feb 22 19:53:55 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): Grab
