@@ -82,6 +82,7 @@ gtk/gtkmisc.c
 gtk/gtknotebook.c
 gtk/gtkoptionmenu.c
 gtk/gtkpaned.c
+gtk/gtkpathbar.c
 gtk/gtkpreview.c
 gtk/gtkprogress.c
 gtk/gtkprogressbar.c
