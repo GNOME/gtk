@@ -1,3 +1,16 @@
+2004-01-07  Jan Arne Petersen  <jpetersen@uni-bonn.de>
+
+	* gtk/gtkfilechooserdefault.c: (shortcuts_insert_path),
+	(shortcuts_append_home), (shortcuts_append_desktop),
+	(shortcuts_append_paths), (shortcuts_add_volumes),
+	(shortcuts_append_bookmarks), (create_shortcuts_model),
+	(gtk_file_chooser_default_add_shortcut_folder): add REMOVABLE column
+	to the shortcuts_model.
+
+	(remove_bookmark_button_clicked_cb),
+	(bookmarks_check_remove_sensitivity): use REMOVABLE column to check if
+	bookmarks can be removed. Fixes #129873
+
 Wed Jan  7 02:50:55 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/testpixbuf-save.c: Make s, S, Control-S, p, P, Control-P,

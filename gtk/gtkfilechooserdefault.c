@@ -128,6 +128,7 @@ enum {
   SHORTCUTS_COL_PIXBUF,
   SHORTCUTS_COL_NAME,
   SHORTCUTS_COL_PATH,
+  SHORTCUTS_COL_REMOVABLE,
   SHORTCUTS_COL_NUM_COLUMNS
 };
 
@@ -518,6 +519,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 		       GtkFileSystemVolume   *volume,
 		       const GtkFilePath     *path,
 		       const char            *label,
+		       gboolean               removable,
 		       GError               **error)
 {
   char *label_copy;
@@ -561,6 +563,7 @@ shortcuts_insert_path (GtkFileChooserDefault *impl,
 		      SHORTCUTS_COL_PIXBUF, pixbuf,
 		      SHORTCUTS_COL_NAME, label_copy,
 		      SHORTCUTS_COL_PATH, data,
+		      SHORTCUTS_COL_REMOVABLE, removable,
 		      -1);
 
   g_free (label_copy);
@@ -583,7 +586,7 @@ shortcuts_append_home (GtkFileChooserDefault *impl)
   home_path = gtk_file_system_filename_to_path (impl->file_system, home);
 
   error = NULL;
-  impl->has_home = shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, _("Home"), &error);
+  impl->has_home = shortcuts_insert_path (impl, -1, FALSE, NULL, home_path, _("Home"), FALSE, &error);
   if (!impl->has_home)
     error_getting_info_dialog (impl, home_path, error);
 
@@ -603,7 +606,7 @@ shortcuts_append_desktop (GtkFileChooserDefault *impl)
   path = gtk_file_system_filename_to_path (impl->file_system, name);
   g_free (name);
 
-  impl->has_desktop = shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, NULL);
+  impl->has_desktop = shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, FALSE, NULL);
   /* We do not actually pop up an error dialog if there is no desktop directory
    * because some people may really not want to have one.
    */
@@ -630,7 +633,7 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
 
       /* NULL GError, but we don't really want to show error boxes here */
 
-      if (shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, NULL))
+      if (shortcuts_insert_path (impl, -1, FALSE, NULL, path, NULL, TRUE, NULL))
 	num_inserted++;
     }
 
@@ -746,7 +749,7 @@ shortcuts_add_volumes (GtkFileChooserDefault *impl)
 
       volume = l->data;
 
-      shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, NULL);
+      shortcuts_insert_path (impl, start_row + n, TRUE, volume, NULL, NULL, FALSE, NULL);
       n++;
     }
 
@@ -784,6 +787,7 @@ static void
 shortcuts_append_bookmarks (GtkFileChooserDefault *impl)
 {
   GtkTreeIter iter;
+  GSList *bookmarks;
 
   gtk_tree_store_append (impl->shortcuts_model, &iter, NULL);
   gtk_tree_store_set (impl->shortcuts_model, &iter,
@@ -805,7 +809,8 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
   impl->shortcuts_model = gtk_tree_store_new (SHORTCUTS_COL_NUM_COLUMNS,
 					      GDK_TYPE_PIXBUF,	/* pixbuf */
 					      G_TYPE_STRING,	/* name */
-					      G_TYPE_POINTER);	/* path or volume */
+					      G_TYPE_POINTER,	/* path or volume */
+					      G_TYPE_BOOLEAN);  /* removable */
 
   if (impl->file_system)
     {
@@ -1036,36 +1041,6 @@ add_bookmark_button_clicked_cb (GtkButton *button,
   shortcuts_add_bookmark_from_path (impl, impl->current_folder);
 }
 
-/* Returns the index of the selected row in the shortcuts list, or -1 if nothing
- * is selected.
- */
-static int
-shortcuts_get_selected_index (GtkFileChooserDefault *impl)
-{
-  GtkTreeSelection *selection;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-  int *indices;
-  int idx;
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
-
-  if (!gtk_tree_selection_get_selected (selection, NULL, &iter))
-    return -1;
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
-  g_assert (path != NULL);
-
-  indices = gtk_tree_path_get_indices (path);
-  g_assert (gtk_tree_path_get_depth (path) == 1);
-
-  idx = *indices;
-
-  gtk_tree_path_free (path);
-
-  return idx;
-}
-
 /* Callback used when the "Remove bookmark" button is clicked */
 static void
 remove_bookmark_button_clicked_cb (GtkButton *button,
@@ -1074,26 +1049,29 @@ remove_bookmark_button_clicked_cb (GtkButton *button,
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkFilePath *path;
-  int selected, start_row;
+  gboolean removable;
   GError *error;
 
-  selected = shortcuts_get_selected_index (impl);
-
-  start_row = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
-  if (selected < start_row || selected >= start_row + impl->num_bookmarks)
-    g_assert_not_reached ();
-
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
-  gtk_tree_selection_get_selected (selection, NULL, &iter);
 
-  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, SHORTCUTS_COL_PATH, &path, -1);
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    {
+      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+			  SHORTCUTS_COL_PATH, &path,
+			  SHORTCUTS_COL_REMOVABLE, &removable, -1);
+      if (!removable)
+	{
+	  g_assert_not_reached ();
+	  return;
+	}
 
-  error = NULL;
-  if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
-    error_dialog (impl,
-		  _("Could not remove bookmark for %s:\n%s"),
-		  path,
-		  error);
+      error = NULL;
+      if (!gtk_file_system_remove_bookmark (impl->file_system, path, &error))
+	error_dialog (impl,
+		      _("Could not remove bookmark for %s:\n%s"),
+		      path,
+		      error);
+    }
 }
 
 /* Sensitize the "add bookmark" button if the current folder is not in the
@@ -1167,15 +1145,18 @@ bookmarks_check_add_sensitivity (GtkFileChooserDefault *impl)
 static void
 bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
 {
-  int selected, start_row;
-  gboolean is_bookmark;
+  GtkTreeSelection *selection;
+  GtkTreeIter iter;
+  gboolean removable = FALSE;
 
-  selected = shortcuts_get_selected_index (impl);
-  start_row = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->shortcuts_tree));
 
-  is_bookmark = (selected >= start_row) && (selected < start_row + impl->num_bookmarks);
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+			SHORTCUTS_COL_REMOVABLE, &removable,
+			-1);
 
-  gtk_widget_set_sensitive (impl->remove_bookmark_button, is_bookmark);
+  gtk_widget_set_sensitive (impl->remove_bookmark_button, removable);
 }
 
 /* Converts raw selection data from text/uri-list to a list of strings */
@@ -2303,7 +2284,7 @@ gtk_file_chooser_default_add_shortcut_folder (GtkFileChooser    *chooser,
 
   pos = shortcuts_get_pos_for_shortcut_folder (impl, impl->num_shortcuts);
 
-  result = shortcuts_insert_path (impl, pos, FALSE, NULL, path, NULL, error);
+  result = shortcuts_insert_path (impl, pos, FALSE, NULL, path, NULL, FALSE, error);
 
   if (result)
     impl->num_shortcuts++;
