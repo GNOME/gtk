@@ -1221,39 +1221,6 @@ gtk_entry_completion_get_text_column (GtkEntryCompletion *completion)
 
 /* private */
 
-/* lame copy from gtkentry.c */
-static void
-get_borders (GtkEntry *entry,
-             gint     *xborder,
-             gint     *yborder)
-{
-  GtkWidget *widget = GTK_WIDGET (entry);
-  gint focus_width;
-  gboolean interior_focus;
-
-  gtk_widget_style_get (widget,
-                        "interior-focus", &interior_focus,
-                        "focus-line-width", &focus_width,
-                        NULL);
-
-  if (entry->has_frame)
-    {
-      *xborder = widget->style->xthickness;
-      *yborder = widget->style->ythickness;
-    }
-  else
-    {
-      *xborder = 0;
-      *yborder = 0;
-    }
-
-  if (!interior_focus)
-    {
-      *xborder += focus_width;
-      *yborder += focus_width;
-    }
-}
-
 static gboolean
 gtk_entry_completion_list_enter_notify (GtkWidget        *widget,
 					GdkEventCrossing *event,
@@ -1293,7 +1260,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   gint width;
   
   gdk_window_get_origin (completion->priv->entry->window, &x, &y);
-  get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
+  _gtk_entry_get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
 

@@ -1173,10 +1173,10 @@ gtk_entry_unrealize (GtkWidget *widget)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
-static void
-get_borders (GtkEntry *entry,
-             gint     *xborder,
-             gint     *yborder)
+void
+_gtk_entry_get_borders (GtkEntry *entry,
+			gint     *xborder,
+			gint     *yborder)
 {
   GtkWidget *widget = GTK_WIDGET (entry);
   gint focus_width;
@@ -1223,7 +1223,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   entry->ascent = pango_font_metrics_get_ascent (metrics);
   entry->descent = pango_font_metrics_get_descent (metrics);
   
-  get_borders (entry, &xborder, &yborder);
+  _gtk_entry_get_borders (entry, &xborder, &yborder);
   
   xborder += INNER_BORDER;
   yborder += INNER_BORDER;
@@ -1257,7 +1257,7 @@ get_text_area_size (GtkEntry *entry,
 
   gtk_widget_get_child_requisition (widget, &requisition);
 
-  get_borders (entry, &xborder, &yborder);
+  _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (x)
     *x = xborder;

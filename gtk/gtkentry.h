@@ -215,6 +215,12 @@ void       gtk_entry_set_editable   		(GtkEntry      *entry,
 						 gboolean       editable);
 #endif /* GTK_DISABLE_DEPRECATED */
 
+/* private */
+void      _gtk_entry_get_borders                (GtkEntry *entry,
+						 gint     *xborder,
+						 gint     *yborder);
+
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
