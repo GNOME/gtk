@@ -1,3 +1,9 @@
+Fri Oct 25 18:17:39 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.[ch]: New GtkPaned keyboard navigation. (Shift-)F8
+	now cycles the available handles instead of toggling focus on and
+	off. Fixes #87160, reported by Calum Benson.
+
 Fri Oct 25 10:50:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkitemfactory.c (gtk_item_factory_create_item):

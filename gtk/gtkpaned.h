@@ -43,9 +43,10 @@ extern "C" {
 #define GTK_PANED_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PANED, GtkPanedClass))
 
 
-typedef struct _GtkPaned      GtkPaned;
-typedef struct _GtkPanedClass GtkPanedClass;
-
+typedef struct _GtkPaned        GtkPaned;
+typedef struct _GtkPanedClass   GtkPanedClass;
+typedef struct _GtkPanedPrivate GtkPanedPrivate;
+	
 struct _GtkPaned
 {
   GtkContainer container;
@@ -77,7 +78,7 @@ struct _GtkPaned
 
   GtkWidget *last_child1_focus;
   GtkWidget *last_child2_focus;
-  GtkWidget *saved_focus;
+  GtkPanedPrivate *priv;
 
   gint drag_pos;
   gint original_position;
