@@ -153,13 +153,13 @@ gint       gdk_mbstowcs          (GdkWChar         *dest,
 
 /* Miscellaneous */
 #ifndef GDK_MULTIHEAD_SAFE
-gboolean gdk_event_send_client_message      (GdkEvent  *event,
-					     guint32    xid);
+gboolean gdk_event_send_client_message      (GdkEvent       *event,
+					     GdkNativeWindow winid);
 void     gdk_event_send_clientmessage_toall (GdkEvent  *event);
 #endif
 gboolean gdk_event_send_client_message_for_display (GdkDisplay *display,
-						    GdkEvent   *event,
-						    guint32	xid);
+						    GdkEvent       *event,
+						    GdkNativeWindow winid);
 /* Threading
  */
 

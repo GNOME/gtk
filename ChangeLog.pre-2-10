@@ -1,3 +1,11 @@
+Tue Sep 24 05:26:31 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.h gdk/gdkdisplay.c gdk/linux-fb/gdkevents-fb.c 
+	gdk/x11/gdkevents-x11.c  gdk/win32/gdkevents-win32.c:
+	Change the window parameter for 
+	gdk_event_send_client_message[_for_display] from guint32
+	to GdkNativeWindow. (#79979)
+
 Tue Sep 24 05:16:25 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk+.spec.in: Fix up a bit to look for the loaders

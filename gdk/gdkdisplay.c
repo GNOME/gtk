@@ -270,7 +270,7 @@ gdk_beep (void)
 /**
  * gdk_event_send_client_message:
  * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @xid:  the window to send the X ClientMessage event to.
+ * @winid:  the window to send the X ClientMessage event to.
  * 
  * Sends an X ClientMessage event to a given window (which must be
  * on the default #GdkDisplay.)
@@ -280,12 +280,13 @@ gdk_beep (void)
  * Return value: non-zero on success.
  **/
 gboolean
-gdk_event_send_client_message (GdkEvent *event, guint32 xid)
+gdk_event_send_client_message (GdkEvent        *event,
+			       GdkNativeWindow  winid)
 {
   g_return_val_if_fail (event != NULL, FALSE);
 
   return gdk_event_send_client_message_for_display (gdk_display_get_default (),
-						    event, xid);
+						    event, winid);
 }
 
 /**

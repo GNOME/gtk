@@ -200,9 +200,9 @@ gdk_flush (void)
 }
 
 gboolean
-gdk_event_send_client_message_for_display (GdkDisplay *display,
-					   GdkEvent   *event,
-					   guint32     xid)
+gdk_event_send_client_message_for_display (GdkDisplay      *display,
+					   GdkEvent        *event,
+					   GdkNativeWindow  winid)
 {
   return FALSE;
 }

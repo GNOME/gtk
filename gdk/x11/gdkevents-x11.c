@@ -1837,7 +1837,7 @@ gdk_event_dispatch (GSource    *source,
  * gdk_event_send_client_message_for_display :
  * @display : the #GdkDisplay for the window where the message is to be sent.
  * @event : the #GdkEvent to send, which should be a #GdkEventClient.
- * @xid : the X window to send the X ClientMessage event to.
+ * @winid : the window to send the X ClientMessage event to.
  *
  * Sends an X ClientMessage event to a given window.
  *
@@ -1847,9 +1847,9 @@ gdk_event_dispatch (GSource    *source,
  * Returns : non-zero on success.
  */
 gboolean
-gdk_event_send_client_message_for_display (GdkDisplay *display,
-					   GdkEvent *event,
-					   guint32 xid)
+gdk_event_send_client_message_for_display (GdkDisplay     *display,
+					   GdkEvent       *event,
+					   GdkNativeWindow winid)
 {
   XEvent sev;
   
@@ -1859,11 +1859,11 @@ gdk_event_send_client_message_for_display (GdkDisplay *display,
   sev.xclient.type = ClientMessage;
   sev.xclient.display = GDK_DISPLAY_XDISPLAY (display);
   sev.xclient.format = event->client.data_format;
-  sev.xclient.window = xid;
+  sev.xclient.window = winid;
   memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
   sev.xclient.message_type = gdk_x11_atom_to_xatom_for_display (display, event->client.message_type);
   
-  return _gdk_send_xevent (display, xid, False, NoEventMask, &sev);
+  return _gdk_send_xevent (display, winid, False, NoEventMask, &sev);
 }
 
 

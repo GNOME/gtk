@@ -3519,9 +3519,9 @@ gdk_event_dispatch (GSource     *source,
 
 /* Sends a ClientMessage to all toplevel client windows */
 gboolean
-gdk_event_send_client_message_for_display (GdkDisplay *display,
-                                           GdkEvent   *event, 
-                                           guint32     xid)
+gdk_event_send_client_message_for_display (GdkDisplay     *display,
+                                           GdkEvent       *event, 
+                                           GdkNativeWindow winid)
 {
   /* XXX */
   return FALSE;
