@@ -634,8 +634,8 @@ gtk_file_chooser_dialog_new (const gchar         *title,
  * gtk_file_chooser_dialog_new_with_backend:
  * @title: Title of the dialog, or %NULL
  * @parent: Transient parent of the dialog, or %NULL
- * @backend: The name of the specific filesystem backend to use.
  * @action: Open or save mode for the dialog
+ * @backend: The name of the specific filesystem backend to use.
  * @first_button_text: stock ID or text to go in the first button, or %NULL
  * @Varargs: response ID for the first button, then additional (button, id) pairs, ending with %NULL
  *
