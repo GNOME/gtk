@@ -1607,7 +1607,7 @@ gtk_spin_button_new_with_range (gdouble min,
   GtkSpinButton *spin;
   gint digits;
 
-  g_return_val_if_fail (min < max, NULL);
+  g_return_val_if_fail (min <= max, NULL);
   g_return_val_if_fail (step != 0.0, NULL);
 
   spin = g_object_new (GTK_TYPE_SPIN_BUTTON, NULL);

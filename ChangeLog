@@ -1,3 +1,8 @@
+2004-11-13  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkspinbutton.c (gtk_spin_button_new_with_range): Allow
+	min == max.  (#158225, Vasco Alexandre da Silva Costa)
+
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Add more docs.
