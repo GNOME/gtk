@@ -664,6 +664,20 @@ theme_parse_image(GtkSettings  *settings,
 
   token = g_scanner_get_next_token(scanner);
 
+  if (data->background && !data->background->filename)
+    {
+      g_scanner_warn (scanner, "Background image options specified without filename");
+      theme_pixbuf_destroy (data->background);
+      data->background = NULL;
+    }
+
+  if (data->overlay && !data->overlay->filename)
+    {
+      g_scanner_warn (scanner, "Overlay image options specified without filename");
+      theme_pixbuf_destroy (data->overlay);
+      data->overlay = NULL;
+    }
+
   if (token != G_TOKEN_RIGHT_CURLY)
     {
       /* error - cleanup for exit */

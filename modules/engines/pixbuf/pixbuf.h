@@ -121,7 +121,8 @@ typedef enum {
 
 typedef enum {
   THEME_CONSTANT_ROWS = 1 << 0,
-  THEME_CONSTANT_COLS = 1 << 1
+  THEME_CONSTANT_COLS = 1 << 1,
+  THEME_MISSING = 1 << 2
 } ThemeRenderHints;
 
 struct _ThemePixbuf

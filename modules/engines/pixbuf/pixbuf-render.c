@@ -180,6 +180,9 @@ pixbuf_render (GdkPixbuf    *src,
   rect.width = dest_width;
   rect.height = dest_height;
 
+  if (hints & THEME_MISSING)
+    return;
+
   /* FIXME: Because we use the mask to shape windows, we don't use
    * clip_rect to clip what we draw to the mask, only to clip
    * what we actually draw. But this leads to the horrible ineffiency
@@ -290,8 +293,8 @@ theme_pixbuf_new (void)
 void
 theme_pixbuf_destroy (ThemePixbuf *theme_pb)
 {
-  if (theme_pb->pixbuf)
-    g_cache_remove (pixbuf_cache, theme_pb->pixbuf);
+  theme_pixbuf_set_filename (theme_pb, NULL);
+  g_free (theme_pb);
 }
 
 void         
@@ -307,7 +310,10 @@ theme_pixbuf_set_filename (ThemePixbuf *theme_pb,
   if (theme_pb->filename)
     g_free (theme_pb->filename);
 
-  theme_pb->filename = g_strdup (filename);
+  if (filename)
+    theme_pb->filename = g_strdup (filename);
+  else
+    theme_pb->filename = NULL;
 }
 
 static guint
@@ -318,7 +324,7 @@ compute_hint (GdkPixbuf *pixbuf,
 	      gint       y1)
 {
   int i, j;
-  int hints = THEME_CONSTANT_ROWS | THEME_CONSTANT_COLS;
+  int hints = THEME_CONSTANT_ROWS | THEME_CONSTANT_COLS | THEME_MISSING;
   int n_channels = gdk_pixbuf_get_n_channels (pixbuf);
   
   guchar *data = gdk_pixbuf_get_pixels (pixbuf);
@@ -340,13 +346,21 @@ compute_hint (GdkPixbuf *pixbuf,
 
       for (j = x0 + 1; j < x1 ; j++)
 	{
+	  if (n_channels != 4 || p[4] != 0)
+	    {
+	      hints &= ~THEME_MISSING;
+	      if (!(hints & THEME_CONSTANT_ROWS))
+		goto cols;
+	    }
+	  
 	  if (r != *(p++) ||
 	      g != *(p++) ||
 	      b != *(p++) ||
-	      (n_channels == 4 && a != *(p++)))
+	      (n_channels != 4 && a != *(p++)))
 	    {
 	      hints &= ~THEME_CONSTANT_ROWS;
-	      goto cols;
+	      if (!(hints & THEME_MISSING))
+		goto cols;
 	    }
 	}
     }

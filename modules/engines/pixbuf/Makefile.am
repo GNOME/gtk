@@ -14,3 +14,7 @@ libpixmap_la_SOURCES = 		\
 	pixbuf.h
 
 libpixmap_la_LDFLAGS =  -avoid-version -module
+
+dist-hook:
+	cp -pr examples $(distdir);					\
+        find $(distdir)/examples -name 'CVS' -print | xargs rm -rf 

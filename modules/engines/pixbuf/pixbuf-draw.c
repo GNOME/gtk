@@ -659,9 +659,10 @@ draw_box (GtkStyle     *style,
   match_data.state = state;
 
   if (!draw_simple_image (style, window, area, widget, &match_data, TRUE, TRUE,
-			  x, y, width, height))
+			  x, y, width, height)) {
     parent_class->draw_box (style, window, state, shadow, area, widget, detail,
 			    x, y, width, height);
+  }
 }
 
 static void
