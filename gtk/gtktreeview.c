@@ -4235,6 +4235,21 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
 /* Incremental Reflow
  */
 
+static void
+gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
+				 GtkRBTree   *tree,
+				 GtkRBNode   *node)
+{
+  gint y;
+
+  y = _gtk_rbtree_node_find_offset (tree, node);
+
+  gtk_widget_queue_draw_area (GTK_WIDGET (tree_view),
+			      0, y,
+			      GTK_WIDGET (tree_view)->requisition.width,
+			      GTK_RBNODE_GET_HEIGHT (node));
+}
+
 /* Returns TRUE if it updated the size
  */
 static gboolean
@@ -6786,6 +6801,7 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
       && tree_view->priv->fixed_height >= 0)
     {
       _gtk_rbtree_node_set_height (tree, node, tree_view->priv->fixed_height);
+      gtk_tree_view_node_queue_redraw (tree_view, tree, node);
     }
   else
     {

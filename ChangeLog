@@ -1,3 +1,13 @@
+Tue Jul  6 10:00:22 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	Fix for #136496, Pawel Salek:
+	
+	* gtk/gtktreeview.c (gtk_tree_view_row_changed): Queue a redraw on
+	a node when it changes in fixed_height mode.
+
+	(gtk_tree_view_node_queue_redraw): new function to queue a redraw
+	on a node.
+
 2004-07-06  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmenu.c (gtk_menu_position): Make sure 
