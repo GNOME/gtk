@@ -1260,7 +1260,7 @@ draw_with_images (GdkDrawable       *drawable,
 
   dest_pict = gdk_x11_drawable_get_picture (drawable);  
   
-  pix_gc = gdk_gc_new (pix);
+  pix_gc = _gdk_drawable_get_scratch_gc (pix, FALSE);
 
   for (y0 = 0; y0 < height; y0 += GDK_SCRATCH_IMAGE_HEIGHT)
     {
@@ -1291,7 +1291,6 @@ draw_with_images (GdkDrawable       *drawable,
     XRenderFreePicture (xdisplay, mask);
   
   g_object_unref (pix);
-  g_object_unref (pix_gc);
 }
 
 typedef struct _ShmPixmapInfo ShmPixmapInfo;

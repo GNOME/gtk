@@ -25,6 +25,7 @@
 #include "gdk-pixbuf-private.h"
 #include "gdkpixbuf.h"
 #include "gdkscreen.h"
+#include "gdkinternals.h"
 
 
 
@@ -82,6 +83,7 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
     return;
 
   gc = gdk_gc_new (bitmap);
+  gc = _gdk_drawable_get_scratch_gc (GDK_DRAWABLE (bitmap), FALSE);
 
   if (!pixbuf->has_alpha)
     {
@@ -130,8 +132,6 @@ gdk_pixbuf_render_threshold_alpha (GdkPixbuf *pixbuf,
 		       start + dest_x, y + dest_y,
 		       x - 1 + dest_x, y + dest_y);
     }
-	
-  g_object_unref (gc);
 }
 
 
@@ -305,13 +305,12 @@ gdk_pixbuf_render_pixmap_and_mask_for_colormap (GdkPixbuf   *pixbuf,
 				       gdk_colormap_get_visual (colormap)->depth);
 
       gdk_drawable_set_colormap (GDK_DRAWABLE (*pixmap_return), colormap);
-      gc = gdk_gc_new (*pixmap_return);
+      gc = _gdk_drawable_get_scratch_gc (*pixmap_return, FALSE);
       gdk_draw_pixbuf (*pixmap_return, gc, pixbuf, 
 		       0, 0, 0, 0,
 		       gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf),
 		       GDK_RGB_DITHER_NORMAL,
 		       0, 0);
-      g_object_unref (gc);
     }
   
   if (mask_return)

@@ -1020,7 +1020,7 @@ gdk_window_end_paint (GdkWindow *window)
 
   gdk_region_get_clipbox (paint->region, &clip_box);
 
-  tmp_gc = gdk_gc_new (window);
+  tmp_gc = _gdk_drawable_get_scratch_gc (window, FALSE);
 
   _gdk_windowing_window_get_offsets (window, &x_offset, &y_offset);
 
@@ -1033,7 +1033,6 @@ gdk_window_end_paint (GdkWindow *window)
                      clip_box.x - x_offset, clip_box.y - y_offset,
                      clip_box.width, clip_box.height);
 
-  g_object_unref (tmp_gc);
   g_object_unref (paint->pixmap);
   gdk_region_destroy (paint->region);
   g_free (paint);
@@ -1398,7 +1397,7 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
     return g_object_ref (drawable);
 
   tmp_pixmap = gdk_pixmap_new (drawable, width, height, -1);
-  tmp_gc = gdk_gc_new (tmp_pixmap);
+  tmp_gc = _gdk_drawable_get_scratch_gc (tmp_pixmap, FALSE);
 
   /* Copy the current window contents */
   gdk_draw_drawable (tmp_pixmap,
@@ -1427,8 +1426,6 @@ gdk_window_get_composite_drawable (GdkDrawable *drawable,
   *composite_x_offset = x;
   *composite_y_offset = y;
 
-  g_object_unref (tmp_gc);
-  
   return tmp_pixmap;
 }
 

@@ -210,6 +210,10 @@ GdkImage *_gdk_drawable_copy_to_image (GdkDrawable  *drawable,
 				       gint          width,
 				       gint          height);
 
+/* GC caching */
+GdkGC *_gdk_drawable_get_scratch_gc (GdkDrawable *drawable,
+				     gboolean     graphics_exposures);
+
 /*************************************
  * Interfaces used by windowing code *
  *************************************/

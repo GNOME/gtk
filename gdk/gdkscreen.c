@@ -23,11 +23,11 @@
 
 #include "gdk.h"		/* For gdk_rectangle_intersect() */
 #include "gdkcolor.h"
-#include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkscreen.h"
 
-static void         gdk_screen_class_init  (GdkScreenClass *klass);
+static void gdk_screen_class_init  (GdkScreenClass *klass);
+static void gdk_screen_dispose     (GObject        *object);
 
 enum
 {
@@ -36,6 +36,8 @@ enum
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
+
+static gpointer parent_class = NULL;
 
 GType
 gdk_screen_get_type (void)
@@ -67,6 +69,12 @@ gdk_screen_get_type (void)
 static void
 gdk_screen_class_init (GdkScreenClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+  
+  object_class->dispose = gdk_screen_dispose;
+  
   /**
    * GdkScreen::size-changed:
    * @screen: the object on which the signal is emitted
@@ -85,6 +93,24 @@ gdk_screen_class_init (GdkScreenClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE,
                   0);
+}
+
+static void
+gdk_screen_dispose (GObject *object)
+{
+  GdkScreen *screen = GDK_SCREEN (object);
+  gint i;
+
+  for (i = 0; i < 32; ++i)
+    {
+      if (screen->exposure_gcs[i])
+	g_object_unref (screen->exposure_gcs[i]);
+
+      if (screen->normal_gcs[i])
+	g_object_unref (screen->normal_gcs[i]);
+    }
+
+  G_OBJECT_CLASS (parent_class)->dispose (object);
 }
 
 void 

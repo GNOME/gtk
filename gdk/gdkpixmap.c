@@ -529,12 +529,11 @@ gdk_pixmap_colormap_new_from_pixbuf (GdkColormap    *colormap,
   else
     render_pixbuf = pixbuf;
 
-  tmp_gc = gdk_gc_new (pixmap);
+  tmp_gc = _gdk_drawable_get_scratch_gc (pixmap, FALSE);
   gdk_draw_pixbuf (pixmap, tmp_gc, render_pixbuf, 0, 0, 0, 0,
 		   gdk_pixbuf_get_width (render_pixbuf),
 		   gdk_pixbuf_get_height (render_pixbuf),
 		   GDK_RGB_DITHER_NORMAL, 0, 0);
-  g_object_unref (tmp_gc);
 
   if (render_pixbuf != pixbuf)
     g_object_unref (render_pixbuf);

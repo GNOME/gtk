@@ -1,3 +1,24 @@
+Wed Feb 18 01:44:59 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	GC caching, bug #125645 (based on patch by Brian Cameron)
+	
+	* gdk/gdkscreen.h (struct _GdkScreen): Add GC cache
+	* gdk/gdkscreen.c (gdk_screen_dispose): New function. Unref the
+	cached GC's here.
+	* gdk/gdkdraw.c (_gdk_drawable_get_scratch_gc): New function to
+	get a scratch gc.
+	* gdk/gdkinternals.h: Declare the function here
+
+	* gdk/gdkdraw.c (gdk_drawable_real_draw_pixbuf): Use
+	_gdk_drawable_get_scratch_gc() instead of creating a new GC.
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_copy_area_scroll): same
+	* gdk/x11/gdkdrawable-x11.c (draw_with_images): same
+	* gdk/gdkwindow.c (gdk_window_get_composite_drawable): same
+	* gdk/gdkwindow.c (gdk_window_end_paint): same
+	* gdk/gdkpixmap.c (gdk_pixmap_colormap_new_from_pixbuf): same
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_threshold_alpha): same
+	* gdk/gdkpixbuf-render.c (gdk_pixbuf_render_pixmap_and_mask_for_colormap): same
+
 Tue Feb 17 23:28:33 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenu.c (gtk_menu_init): ...and don't forget to initalize

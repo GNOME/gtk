@@ -226,25 +226,19 @@ gdk_window_copy_area_scroll (GdkWindow    *window,
 
   if (dest_rect->width > 0 && dest_rect->height > 0)
     {
-      GC gc;
-      XGCValues values;
+      GdkGC *gc;
 
-      values.graphics_exposures = True;
-      gc = XCreateGC (GDK_WINDOW_XDISPLAY (window),
-		      GDK_WINDOW_XID (window),
-		      GCGraphicsExposures, &values);
-
+      gc = _gdk_drawable_get_scratch_gc (window, TRUE);
+      
       gdk_window_queue_translation (window, dx, dy);
 
       XCopyArea (GDK_WINDOW_XDISPLAY (window),
 		 GDK_WINDOW_XID (window),
 		 GDK_WINDOW_XID (window),
-		 gc,
+		 gdk_x11_gc_get_xgc (gc),
 		 dest_rect->x - dx, dest_rect->y - dy,
 		 dest_rect->width, dest_rect->height,
 		 dest_rect->x, dest_rect->y);
-
-      XFreeGC (GDK_WINDOW_XDISPLAY (window), gc);
     }
 
   tmp_list = obj->children;
