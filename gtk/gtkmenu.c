@@ -953,6 +953,12 @@ gtk_menu_set_tearoff_hints (GtkMenu *menu,
   if (!menu->tearoff_window)
     return;
 
+  if (GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
+    {
+      gtk_widget_size_request (menu->tearoff_scrollbar, NULL);
+      width += menu->tearoff_scrollbar->requisition.width;
+    }
+
   geometry_hints.min_width = width;
   geometry_hints.max_width = width;
     
@@ -1053,11 +1059,13 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	    }
 	  
 	  gtk_menu_reparent (menu, menu->tearoff_hbox, FALSE);
-	  
-	  gdk_window_get_size (GTK_WIDGET (menu)->window, &width, &height);
-	  if (GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
-	    width += menu->tearoff_scrollbar->requisition.width;
-	    
+
+	  gdk_window_get_size (GTK_WIDGET (menu)->window, &width, NULL);
+
+	  /* Update menu->requisition
+	   */
+	  gtk_widget_size_request (GTK_WIDGET (menu), NULL);
+  
 	  gtk_menu_set_tearoff_hints (menu, width);
 	    
 	  gtk_widget_realize (menu->tearoff_window);
@@ -1252,7 +1260,6 @@ gtk_menu_size_request (GtkWidget      *widget,
   guint max_toggle_size;
   guint max_accel_width;
   GtkRequisition child_requisition;
-  gint width;
   
   g_return_if_fail (GTK_IS_MENU (widget));
   g_return_if_fail (requisition != NULL);
@@ -1304,15 +1311,10 @@ gtk_menu_size_request (GtkWidget      *widget,
 
   /* If the requested width was different than the allocated width, we need to change
    * the geometry hints for the tear off window so that the window can actually be resized.
-   * Don't resize the tearoff if it is not active, beacuse it won't redraw (it is only a background pixmap).
+   * Don't resize the tearoff if it is not active, because it won't redraw (it is only a background pixmap).
    */
   if ((requisition->width != GTK_WIDGET (menu)->allocation.width) && menu->tearoff_active)
-    {
-      width = requisition->width;
-      if (menu->tearoff_scrollbar && GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
-	width += menu->tearoff_scrollbar->requisition.width;
-      gtk_menu_set_tearoff_hints (menu, width);
-    }
+    gtk_menu_set_tearoff_hints (menu, requisition->width);
 }
 
 static void
@@ -1432,9 +1434,8 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 	      
 	      if (!GTK_WIDGET_VISIBLE (menu->tearoff_scrollbar))
 		{
-		  gtk_menu_set_tearoff_hints (menu,
-					      allocation->width + menu->tearoff_scrollbar->requisition.width);
 		  gtk_widget_show (menu->tearoff_scrollbar);
+		  gtk_menu_set_tearoff_hints (menu, allocation->width);
 		  gtk_widget_set_usize (menu->tearoff_window, -1, allocation->height);
 		}
 	    }
@@ -2202,14 +2203,8 @@ gtk_menu_position (GtkMenu *menu)
   if (scroll_offset > 0)
     scroll_offset += MENU_SCROLL_ARROW_HEIGHT;
   
-  /* FIXME: The MAX() here is because gtk_widget_set_uposition
-   * is broken. Once we provide an alternate interface that
-   * allows negative values, then we can remove them.
-   */
-  x = MAX (x, 0);
-  gtk_widget_set_uposition (GTK_MENU_SHELL (menu)->active ?
-			    menu->toplevel : menu->tearoff_window, 
-			    x, y);
+  gtk_window_move (GTK_WINDOW (GTK_MENU_SHELL (menu)->active ? menu->toplevel : menu->tearoff_window), 
+		   x, y);
   gtk_widget_set_usize (GTK_MENU_SHELL (menu)->active ?
 			menu->toplevel : menu->tearoff_hbox,
 			-1, requisition.height);

@@ -1,3 +1,19 @@
+Wed Nov 28 18:19:12 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_hints): Move
+	accounting of menu->tearoff_scrollbar width to here
+	and make sure we have the correct requisition.
+
+	* gtk/gtkmenu.c (gtk_menu_position): Fix fixme
+	by using gtk_window_move().
+
+	* gtk/gtkmenu.c (gtk_menu_set_tearoff_state): Force
+	the requisition to be updated by calling
+	gtk_widget_size_request() (#65440)
+
+	* gtk/gtktearoffmenuitem.c (gtk_tearoff_menu_item_activate): 
+	queue resize before calling gtk_menu_set_tearoff_state().
+
 Wed Nov 28 22:20:44 2001  Kristian Rietveld  <kristian@planet.nl>
 
 	* demos/gtk-demo/editable_cells.c: fix typo
