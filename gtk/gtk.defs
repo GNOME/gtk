@@ -161,6 +161,17 @@
   (center GTK_JUSTIFY_CENTER)
   (fill GTK_JUSTIFY_FILL))
 
+(define-enum GtkButtonBoxStyle
+  (default GTK_BUTTONBOX_DEFAULT_STYLE)
+  (spread GTK_BUTTONBOX_SPREAD)
+  (edge GTK_BUTTONBOX_EDGE)
+  (start GTK_BUTTONBOX_START)
+  (end GTK_BUTTONBOX_END))
+
+(define-enum GtkOrientation
+  (horizontal GTK_ORIENTATION_HORIZONTAL)
+  (vertical GTK_ORIENTATION_VERTICAL))
+
 ;;; Gdk enums
 
 (define-enum GdkWindowType

@@ -24,6 +24,8 @@
   { "GtkCurveType", GTK_TYPE_ENUM },
   { "GtkFundamentalType", GTK_TYPE_ENUM },
   { "GtkJustification", GTK_TYPE_ENUM },
+  { "GtkButtonBoxStyle", GTK_TYPE_ENUM },
+  { "GtkOrientation", GTK_TYPE_ENUM },
   { "GdkWindowType", GTK_TYPE_ENUM },
   { "GdkWindowClass", GTK_TYPE_ENUM },
   { "GdkImageType", GTK_TYPE_ENUM },

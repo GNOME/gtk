@@ -604,7 +604,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_GDK_EVENT);
   widget_signals[PROXIMITY_IN_EVENT] =
     gtk_signal_new ("proximity_in_event",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, proximity_in_event),
 		    gtk_widget_marshal_signal_4,
@@ -644,7 +644,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_GDK_EVENT);
   widget_signals[DROP_ENTER_EVENT] =
     gtk_signal_new ("drop_enter_event",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drop_enter_event),
 		    gtk_widget_marshal_signal_4,
@@ -652,7 +652,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_GDK_EVENT);
   widget_signals[DROP_LEAVE_EVENT] =
     gtk_signal_new ("drop_leave_event",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drop_leave_event),
 		    gtk_widget_marshal_signal_4,
@@ -660,7 +660,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		    GTK_TYPE_GDK_EVENT);
   widget_signals[DROP_DATA_AVAILABLE_EVENT] =
     gtk_signal_new ("drop_data_available_event",
-		    GTK_RUN_FIRST,
+		    GTK_RUN_LAST,
 		    object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkWidgetClass,
 				       drop_data_available_event),

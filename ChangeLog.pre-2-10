@@ -1,3 +1,15 @@
+Mon May 18 04:01:41 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): changed "proximity-in-event",
+	"drop-data-available-event", "drop-enter-event" and "drop-leave-event"
+	to be of runtype GTK_RUN_LAST.
+
+	* gtk/gtkcontainer.c (gtk_container_class_init): likewise for
+ 	"need-resize".
+
+	* gtk/gtktipsquery.c (gtk_tips_query_class_init): likewise for
+	"widget-selected".
+
 Fri May 15 21:20:40 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 1.0.2
