@@ -677,7 +677,7 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   if (!viewport->hadjustment)
     gtk_viewport_set_hadjustment (viewport, NULL);
   if (!viewport->vadjustment)
-    gtk_viewport_set_hadjustment (viewport, NULL);
+    gtk_viewport_set_vadjustment (viewport, NULL);
 
   /* If our size changed, and we have a shadow, queue a redraw on widget->window to
    * redraw the shadow correctly.

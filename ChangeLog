@@ -1,3 +1,9 @@
+Wed Jan  9 13:20:14 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkviewport.c (gtk_viewport_size_allocate): small but important
+	fix to force vadjustments at size_alocate time from Xavier Ordoquy
+	<mcarkan@users.sourceforge.net>.
+
 Wed Jan  9 11:23:39 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtklayout.c (gtk_layout_get_property): 
