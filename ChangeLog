@@ -1,5 +1,14 @@
 2003-12-01  Federico Mena Quintero  <federico@ximian.com>
 
+	Patch from Hans-Petter Jansson <hpj@ximian.com> to align the
+	bookmarks buttons with the location entry.
+
+	* gtk/gtkfilechooserdefault.c
+	(gtk_file_chooser_default_constructor): Use a GtkSizeGroup for the
+	bookmarks buttons and the location entry.
+
+2003-12-01  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c (create_shortcuts_tree): Set the
 	shortcuts tree as a drag destination.
 	(shortcuts_drag_data_received_cb): New callback.

@@ -41,6 +41,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
+#include "gtksizegroup.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtktoolbar.h"
@@ -1062,17 +1063,9 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
 static GtkWidget *
 create_shortcuts_tree (GtkFileChooserDefault *impl)
 {
-  GtkWidget *vbox;
-  GtkWidget *hbox;
-  GtkWidget *hbox2;
-  GtkWidget *widget;
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  GtkWidget *image;
-
-  vbox = gtk_vbox_new (FALSE, 12);
-  gtk_widget_show (vbox);
 
   /* Scrolled window */
 
@@ -1081,7 +1074,6 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
 				  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (impl->shortcuts_scrollwin),
 				       GTK_SHADOW_IN);
-  gtk_box_pack_start (GTK_BOX (vbox), impl->shortcuts_scrollwin, TRUE, TRUE, 0);
   gtk_widget_show (impl->shortcuts_scrollwin);
 
   /* Tree */
@@ -1133,10 +1125,18 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
 
   gtk_tree_view_append_column (GTK_TREE_VIEW (impl->shortcuts_tree), column);
 
-  /* Bookmark buttons */
+  return impl->shortcuts_scrollwin;
+}
+
+static GtkWidget *
+create_shortcuts_buttons (GtkFileChooserDefault *impl)
+{
+  GtkWidget *hbox;
+  GtkWidget *hbox2;
+  GtkWidget *widget;
+  GtkWidget *image;
 
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
   /* "Add bookmark" */
@@ -1168,7 +1168,7 @@ create_shortcuts_tree (GtkFileChooserDefault *impl)
   gtk_box_pack_start (GTK_BOX (hbox), impl->remove_bookmark_button, FALSE, FALSE, 0);
   gtk_widget_show_all (impl->remove_bookmark_button);
 
-  return vbox;
+  return hbox;
 }
 
 /* Creates the widgets for the file list */
@@ -1289,6 +1289,8 @@ gtk_file_chooser_default_constructor (GType                  type,
   GtkWidget *widget;
   GList *focus_chain;
   GtkWidget *hbox;
+  GtkWidget *vbox;
+  GtkSizeGroup *size_group;
 
   object = parent_class->constructor (type,
 				      n_construct_properties,
@@ -1306,7 +1308,7 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   /* Basic table */
 
-  table = gtk_table_new (3, 2, FALSE);
+  table = gtk_table_new (2, 2, FALSE);
   gtk_table_set_col_spacings (GTK_TABLE (table), 12);
   gtk_table_set_row_spacings (GTK_TABLE (table), 12);
   gtk_box_pack_start (GTK_BOX (impl), table, TRUE, TRUE, 0);
@@ -1332,13 +1334,29 @@ gtk_file_chooser_default_constructor (GType                  type,
 
   /* Shortcuts list */
 
+  vbox = gtk_vbox_new (FALSE, 12);
+  gtk_paned_add1 (GTK_PANED (hpaned), vbox);
+  gtk_widget_show (vbox);
+
   widget = create_shortcuts_tree (impl);
-  gtk_paned_add1 (GTK_PANED (hpaned), widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, TRUE, TRUE, 0);
+  gtk_widget_show (widget);
+
+  widget = create_shortcuts_buttons (impl);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+
+  size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
+  gtk_size_group_add_widget (size_group, widget);
 
   /* Folder tree */
 
+  vbox = gtk_vbox_new (FALSE, 12);
+  gtk_paned_add2 (GTK_PANED (hpaned), vbox);
+  gtk_widget_show (vbox);
+
   hbox = gtk_hbox_new (FALSE, 12);
-  gtk_paned_add2 (GTK_PANED (hpaned), hbox);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
   widget = create_folder_tree (impl);
@@ -1352,10 +1370,10 @@ gtk_file_chooser_default_constructor (GType                  type,
   /* Location/filename entry */
 
   entry_widget = create_filename_entry (impl);
-  gtk_table_attach (GTK_TABLE (table), entry_widget,
-		    0, 2,                   2, 3,
-		    GTK_EXPAND | GTK_FILL,  0,
-		    0,                      0);
+  gtk_box_pack_start (GTK_BOX (vbox), entry_widget, FALSE, FALSE, 0);
+
+  gtk_size_group_add_widget (size_group, entry_widget);
+  g_object_unref (size_group);
 
   /* Preview */
 
