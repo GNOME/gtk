@@ -1,3 +1,9 @@
+Thu May 31 12:43:57 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c: Account for the fact that the border
+	width is _outside_ the window. (Fixes #54585, bug found
+        by Bastien Nocera.)
+
 Wed May 30 15:56:30 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtksettings.c (gtk_settings_get_property): Validate
