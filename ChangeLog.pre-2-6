@@ -1,3 +1,8 @@
+Wed Oct 16 15:19:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkkeys-x11.c: Fix from Phil Blundell for
+	compiling without Xkb. (#95909)
+
 Wed Oct 16 14:32:43 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkpixmap.c 

@@ -123,7 +123,10 @@ gdk_keymap_x11_init (GdkKeymapX11 *keymap)
   
   keymap->group_switch_mask = 0;
   keymap->have_direction = FALSE;
+  
+#ifdef HAVE_XKB
   keymap->xkb_desc = NULL;
+#endif
 
   keymap->current_serial = 0;
 }
