@@ -969,8 +969,8 @@ gtk_window_style_set_event (GtkWidget *widget,
     return;
   }
   if(retfmt != sizeof(gushort)*8) {
-    g_warning("retfmt (%d) != sizeof(gushort)*8 (%d)\n", retfmt,
-	sizeof(gushort)*8);
+    g_warning("retfmt (%d) != sizeof(gushort)*8 (%ld)\n", retfmt,
+	(glong)sizeof(gushort)*8);
     return;
   }
   /* We have the color data, now let's interpret it */

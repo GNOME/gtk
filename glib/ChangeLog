@@ -1,5 +1,6 @@
 Mon May 18 22:14:39 1998  Owen Taylor  <otaylor@gtk.org>
-
+(Yasuhiro SHIRASAKI <joke@awa.tohoku.ac.jp> : gtk-joke-980517-0.patch)
+	
 	* gutils.c: Restored a missing prototype for g_vsprintf.
 
 Tue May 12 19:22:58 1998  Owen Taylor  <otaylor@gtk.org>

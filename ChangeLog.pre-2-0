@@ -1,3 +1,9 @@
+Mon May 18 22:26:33 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* gtk/gtkwindow.c (gtk_window_style_set_event): Added a
+	cast (in code scheduled for removal ;-) to suppress a
+	warning on 64 bit machines.
+
 Mon May 18 04:01:41 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): changed "proximity-in-event",
