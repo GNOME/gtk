@@ -1,3 +1,11 @@
+2004-07-13  Federico Mena Quintero  <federico@ximian.com>
+
+	Merged from HEAD:
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_activate_volume): Set a
+	busy cursor while mounting the volume.  Also, ref the chooser
+	while mounting, as we may re-enter.  Fixes #139376.
+
 2004-07-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkmain.h: Add gtk_parse_args(). Its public API.  (#147476, 
