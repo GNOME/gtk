@@ -1,3 +1,7 @@
+2000-06-14  Damon Chaplin  <damon@helixcode.com>
+
+	* gtk/tmpl/gtktooltips.sgml: added a note about no-window widgets.
+
 Mon Jun  5 11:17:25 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/tmpl/general.sgml: Fix gdk_pointer_grab description
