@@ -1,3 +1,9 @@
+Thu May 29 16:14:04 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_start_editing): correct
+	cell_area x/width for the expander if needed. (Fixes #101748,
+	reported by Dave Cook and Mariano Suarez-Alvarez).
+
 Thu May 29 16:01:38 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_real_set_cursor): check
