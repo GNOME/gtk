@@ -2250,6 +2250,19 @@ gtk_entry_paste_clipboard (GtkEntry *entry)
 }
 
 static void
+gtk_entry_delete_cb (GtkEntry *entry)
+{
+  GtkEditable *editable = GTK_EDITABLE (entry);
+  gint start, end;
+
+  if (entry->editable)
+    {
+      if (gtk_editable_get_selection_bounds (editable, &start, &end))
+	gtk_editable_delete_text (editable, start, end);
+    }
+}
+
+static void
 gtk_entry_toggle_overwrite (GtkEntry *entry)
 {
   entry->overwrite_mode = !entry->overwrite_mode;
@@ -3956,7 +3969,18 @@ popup_targets_received (GtkClipboard     *clipboard,
       append_action_signal (entry, entry->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
 			    entry->editable && clipboard_contains_text);
       
-      menuitem = gtk_menu_item_new_with_label (_("Select All"));
+      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      gtk_widget_set_sensitive (menuitem, entry->current_pos != entry->selection_bound);
+      g_signal_connect_swapped (menuitem, "activate",
+			        G_CALLBACK (gtk_entry_delete_cb), entry);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
+      
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
       g_signal_connect_swapped (menuitem, "activate",
 			        G_CALLBACK (gtk_entry_select_all), entry);
       gtk_widget_show (menuitem);
@@ -3966,7 +3990,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (entry->popup_menu), menuitem);
       
-      menuitem = gtk_menu_item_new_with_label (_("Input Methods"));
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Input _Methods"));
       gtk_widget_show (menuitem);
       submenu = gtk_menu_new ();
       gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
@@ -3976,7 +4000,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (entry->im_context),
 					    GTK_MENU_SHELL (submenu));
       
-      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode control character"));
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode Control Character"));
       gtk_widget_show (menuitem);
       
       submenu = gtk_menu_new ();

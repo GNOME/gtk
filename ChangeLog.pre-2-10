@@ -1,3 +1,17 @@
+2003-02-12  Matthias Clasen  <maclas@gmx.de>
+
+	Fix for #82734 and #78216:
+	
+	* gtk/gtktextview.c (delete_cb): 
+	(select_all_cb): New callbacks for context menu items.
+	(popup_targets_received): Add "Delete" and "Select All" to context
+	menu, mnemonics and title caps for all items.
+
+	* gtk/gtkentry.c (gtk_entry_delete_cb): New callback for "Delete"
+	context menu item.
+	(popup_targets_received): Add "Delete" to context menu, mnemonics
+	and title caps for all items.
+
 2003-02-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtkfilesel.c (win32_gtk_add_drives_to_dir_list): Use

@@ -6399,6 +6399,27 @@ append_action_signal (GtkTextView  *text_view,
 }
 
 static void
+select_all_cb (GtkWidget   *menuitem,
+	       GtkTextView *text_view)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter start_iter, end_iter;
+
+  buffer = text_view->buffer;
+  gtk_text_buffer_get_bounds (buffer, &start_iter, &end_iter);
+  gtk_text_buffer_move_mark_by_name (buffer, "insert", &start_iter);
+  gtk_text_buffer_move_mark_by_name (buffer, "selection_bound", &end_iter);
+  gtk_text_buffer_copy_clipboard (buffer, gtk_clipboard_get (GDK_NONE));
+}
+
+static void
+delete_cb (GtkTextView *text_view)
+{
+  gtk_text_buffer_delete_selection (get_buffer (text_view), TRUE,
+				    text_view->editable);
+}
+
+static void
 popup_menu_detach (GtkWidget *attach_widget,
 		   GtkMenu   *menu)
 {
@@ -6553,6 +6574,26 @@ popup_targets_received (GtkClipboard     *clipboard,
       append_action_signal (text_view, text_view->popup_menu, GTK_STOCK_PASTE, "paste_clipboard",
 			    can_insert && clipboard_contains_text);
       
+      menuitem = gtk_image_menu_item_new_from_stock (GTK_STOCK_DELETE, NULL);
+      gtk_widget_set_sensitive (menuitem, 
+				have_selection &&
+				range_contains_editable_text (&sel_start, &sel_end,
+							      text_view->editable));
+      g_signal_connect_swapped (menuitem, "activate",
+			        G_CALLBACK (delete_cb), text_view);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+
+      menuitem = gtk_separator_menu_item_new ();
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+
+      menuitem = gtk_menu_item_new_with_mnemonic (_("Select _All"));
+      g_signal_connect (GTK_OBJECT (menuitem), "activate",
+			GTK_SIGNAL_FUNC (select_all_cb), text_view);
+      gtk_widget_show (menuitem);
+      gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
+
       menuitem = gtk_separator_menu_item_new ();
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (text_view->popup_menu), menuitem);
@@ -6566,7 +6607,7 @@ popup_targets_received (GtkClipboard     *clipboard,
       gtk_im_multicontext_append_menuitems (GTK_IM_MULTICONTEXT (text_view->im_context),
 					    GTK_MENU_SHELL (submenu));
 
-      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode control character"));
+      menuitem = gtk_menu_item_new_with_mnemonic (_("_Insert Unicode Control Character"));
       gtk_widget_show (menuitem);
       gtk_widget_set_sensitive (menuitem, can_insert);
       
