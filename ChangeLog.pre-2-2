@@ -1,3 +1,12 @@
+Wed Sep 19 17:28:47 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_new): Add missing cast.
+
+	* gtk/gtkmenuitem.[ch] gtk/gtkmenushell.c: Underscore prefix
+	non-public _gtk_menu_item_set_placement.
+
+	* gtk/gtktooltips.h: Deprecate gtk_tooltips_set_delay().
+
 Wed Sep 19 16:16:38 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/win32/gdkcolor-win32.c gdk/x11/gdkcolor-x11.c 

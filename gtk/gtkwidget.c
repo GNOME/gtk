@@ -1356,7 +1356,7 @@ gtk_widget_new (GtkType      type,
   g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
   
   va_start (var_args, first_property_name);
-  widget = g_object_new_valist (type, first_property_name, var_args);
+  widget = (GtkWidget *)g_object_new_valist (type, first_property_name, var_args);
   va_end (var_args);
 
   return widget;
