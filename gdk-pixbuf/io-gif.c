@@ -155,7 +155,10 @@ static int count = 0;
 static int
 ReadOK (GifContext *context, guchar *buffer, size_t len)
 {
-	gint retval, i;
+	gint retval;
+#ifdef IO_GIFDEBUG
+	gint i;
+#endif
 	if (context->file) {
 		count += len;
 #ifdef IO_GIFDEBUG
@@ -519,7 +522,8 @@ lwz_read_byte (GifContext *context)
 			int count;
 			unsigned char buf[260];
 
-			g_error (" DID WE EVER EVER GET HERE\n");
+			/*g_error (" DID WE EVER EVER GET HERE\n");*/
+			g_warning ("unhandled case.  This won't load correctly\n");
 			
 			if (ZeroDataBlock)
 				return -2;
@@ -580,6 +584,56 @@ gif_set_get_lzw (GifContext *context)
 	context->draw_pass = 0;
 }
 
+static void
+gif_fill_in_pixels (GifContext *context, guchar *dest, gint offset, guchar v)
+{
+	guchar *pixel = NULL;
+
+	if (context->gif89.transparent) {
+		pixel = dest + (context->draw_ypos + offset) * gdk_pixbuf_get_rowstride (context->pixbuf) + context->draw_xpos * 4;
+		*pixel = context->color_map [0][(guchar) v];
+		*(pixel+1) = context->color_map [1][(guchar) v];
+		*(pixel+2) = context->color_map [2][(guchar) v];
+		*(pixel+3) = (guchar) ((v == context->gif89.transparent) ? 0 : 65535);
+	} else {
+		pixel = dest + (context->draw_ypos + offset) * gdk_pixbuf_get_rowstride (context->pixbuf) + context->draw_xpos * 3;
+		*pixel = context->color_map [0][(guchar) v];
+		*(pixel+1) = context->color_map [1][(guchar) v];
+		*(pixel+2) = context->color_map [2][(guchar) v];
+	}
+}
+
+
+/* only called if progressive and interlaced */
+static void
+gif_fill_in_lines (GifContext *context, guchar *dest, guchar v)
+{
+	switch (context->draw_pass) {
+	case 0:
+		if (context->draw_ypos > 4) {
+			gif_fill_in_pixels (context, dest, -4, v);
+			gif_fill_in_pixels (context, dest, -3, v);
+		}
+		if (context->draw_ypos < (context->frame_height - 4)) {
+			gif_fill_in_pixels (context, dest, 3, v);
+			gif_fill_in_pixels (context, dest, 4, v);
+		}
+	case 1:
+		if (context->draw_ypos > 2)
+			gif_fill_in_pixels (context, dest, -2, v);
+		if (context->draw_ypos < (context->frame_height - 2))
+			gif_fill_in_pixels (context, dest, 2, v);
+	case 2:
+		if (context->draw_ypos > 1)
+			gif_fill_in_pixels (context, dest, -1, v);
+		if (context->draw_ypos < (context->frame_height - 1))
+			gif_fill_in_pixels (context, dest, 1, v);
+	case 3:
+	default:
+		break;
+	}
+}
+
 static int
 gif_get_lzw (GifContext *context)
 {
@@ -619,6 +673,9 @@ gif_get_lzw (GifContext *context)
 			*(temp+2) = context->color_map [2][(guchar) v];
 		}
 
+		if (context->func && context->frame_interlace)
+			gif_fill_in_lines (context, dest, v);
+		
 		context->draw_xpos++;
 		if (context->draw_xpos == context->frame_len) {
 			context->draw_xpos = 0;

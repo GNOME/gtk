@@ -1,3 +1,8 @@
+1999-11-02  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-gif.c (gif_fill_in_lines): Fill in the gif's blank areas
+	for interlacing and progressive loading.
+
 1999-11-02  Cody Russell  <bratsche@dfw.net>
 	* src/gdk-pixbuf-drawable.c (gdk_pixbuf_from_drawable_core): Now
 	calls gdk_pixbuf_new_from_art_pixbuf() instead of gdk_pixbuf_new().
