@@ -1,3 +1,94 @@
+Overview of Changes from GTK+ 2.4.x to GTK+ 2.6.0
+=================================================
+
+* New widgets
+  - GtkIconView
+  - GtkAboutDialog
+  - GtkCellView 
+  - GtkFileChooserButton
+  - GtkMenuToolButton 
+
+* New cell renderers
+  - GtkCellRendererCombo 
+  - GtkCellRendererProgress
+
+* Changes in GtkFileChooser
+  - many tweaks to keynav and other behaviour
+
+* Changes in GtkTreeView 
+  - hover selection
+  - hover expand
+  - separators 
+  - insensitive rows
+  - typeahead
+
+* Changes in GtkComboBox
+  - allow trees in combo boxes
+  - hover selection
+  - hover expand
+  - separators 
+  - insensitive rows
+  - scrolling
+
+* Changes in GtkLabel
+  - rotated text
+  - ellipsisation
+  - dnd from selectable labels
+  - selectable labels in the focus chain
+  - obey the Pango backspace-deletes-character attribute
+
+* Changes in GtkTextView
+  - rotated text
+  - obey the Pango backspace-deletes-character attribute
+
+* Changes in Clipboard/Selection/DND handling
+  - selection ownerchip change notification
+  - API to handle text, image and file targets
+  - support text/plain target
+  - support clipboard persistency
+  - support xdnd v5
+  - reduce clipboard timeout to 30 seconds
+
+* Theming
+  - follow icon theme specification for directory locations
+  - themed window icons
+  - themed images in GtkImage
+  - allow themes to displace focus rectangles on click
+  - various new stock icons
+
+* Window Manager interaction
+  - support do-not-focus-on-map hint
+  - support _NET_WM_USER_TIME
+
+* gdk-pixbuf:
+  - license information for image loaders
+  - disable loaders
+  - simple rotation
+  - make threadsafe
+
+* Performance improvements
+  - increase chunk size for incremental selection transfers
+  - get rid of many PLT entries
+  - icon theme caching
+  - sync counter mechanism to speed up resizes
+  - reimplement GtkListStore on top of a splay tree
+  - fix algorithmic problems in GtkUIManager
+
+* Win32-specific changes
+  - integrate IME input method module
+  - integrate ms-windows (Wimp) theme engine
+
+* Other changes
+  - API for HIG-conform dialogs
+  - API for stock-like buttons
+  - new init API based on GOption
+  - setting for alternative button order
+  - setting for modules to load
+  - integrate pixbuf theme engine
+  - change notebook tabs with the scroll wheel
+  - ellipsisation in GtkCellRendererText, GtkProgressBar, GtkStatusbar
+  - clean up abi and enforce list of exported symbols
+
 Overview of Changes from GTK+ 2.5.6 to GTK+ 2.6.0
 =================================================
 * GtkListStore

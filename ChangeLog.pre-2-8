@@ -1,5 +1,7 @@
 2004-12-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* NEWS: Updates
+
 	* gtk/gtkcellrenderertext.c: Add a width-chars property like
 	GtkLabel has.  (#160496, James M. Cape)
 
