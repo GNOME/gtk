@@ -1,3 +1,15 @@
+Mon Feb 23 02:08:42 2004  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtkfilechooserdefault.c (file_pane_create): Use the
+	GtkPathBar by default now.
+
+	* gtk/gtkpathbar.c (gtk_path_bar_set_path): Correctly set the
+	current path from the path.
+	(gtk_path_bar_class_init): new signal
+	(button_clicked_cb): emit the signal when we're selected.
+	(gtk_path_bar_clear_buttons): Fix a crasher when we weren't
+	clearing thr first_scrolled_button.
+
 Mon Feb 23 02:26:15 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_size_allocate): Fix the 

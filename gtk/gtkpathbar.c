@@ -21,12 +21,23 @@
 #include "gtktogglebutton.h"
 #include "gtkarrow.h"
 #include "gtklabel.h"
+#include "gtkmain.h"
+#include "gtkmarshalers.h"
+
+enum {
+  PATH_CLICKED,
+  LAST_SIGNAL
+};
+
+static guint path_bar_signals [LAST_SIGNAL] = { 0 };
+
 
 G_DEFINE_TYPE (GtkPathBar,
 	       gtk_path_bar,
 	       GTK_TYPE_CONTAINER);
 
-static void gtk_path_bar_destroy (GtkObject *object);
+
+static void gtk_path_bar_finalize (GObject *object);
 static void gtk_path_bar_size_request  (GtkWidget      *widget,
 					GtkRequisition *requisition);
 static void gtk_path_bar_size_allocate (GtkWidget      *widget,
@@ -84,7 +95,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class = (GtkWidgetClass *) path_bar_class;
   container_class = (GtkContainerClass *) path_bar_class;
 
-  object_class->destroy = gtk_path_bar_destroy;
+  gobject_class->finalize = gtk_path_bar_finalize;
 
   widget_class->size_request = gtk_path_bar_size_request;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
@@ -95,19 +106,28 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   container_class->remove = gtk_path_bar_remove;
   /* FIXME: */
   /*  container_class->child_type = gtk_path_bar_child_type;*/
+
+  path_bar_signals [PATH_CLICKED] =
+    g_signal_new ("path_clicked",
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkPathBarClass, path_clicked),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__STRING,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_STRING);
 }
 
 
 static void
-gtk_path_bar_destroy (GtkObject *object)
+gtk_path_bar_finalize (GObject *object)
 {
   GtkPathBar *path_bar;
 
   path_bar = GTK_PATH_BAR (object);
+  g_list_free (path_bar->button_list);
 
-  g_free ((void *) path_bar->path);
-
-  GTK_OBJECT_CLASS (gtk_path_bar_parent_class)->destroy (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /* Size requisition:
@@ -261,7 +281,8 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	{
 	  child = GTK_WIDGET (list->data);
 
-	  if (width + child->requisition.width + path_bar->spacing + slider_space > allocation_width)
+	  if (width + child->requisition.width +
+	      path_bar->spacing + slider_space > allocation_width)
 	    reached_end = TRUE;
 	  else
 	    width += child->requisition.width + path_bar->spacing;
@@ -457,7 +478,8 @@ static void
  gtk_path_bar_scroll_down (GtkWidget *button, GtkPathBar *path_bar)
 {
   GList *list;
-  GList *down_button, *up_button;
+  GList *down_button = NULL;
+  GList *up_button = NULL;
   gint space_available;
   gint space_needed;
   gint border_width;
@@ -532,82 +554,129 @@ gtk_path_bar_clear_buttons (GtkPathBar *path_bar)
     {
       gtk_container_remove (GTK_CONTAINER (path_bar), path_bar->button_list->data);
     }
+  path_bar->first_scrolled_button = NULL;
 }
 
-/* FIXME: Do this right.  Quick hack to get something on the screen.  Get in
- * sync with nautilus-spatial-window.c:location_button_clicked_callback */
-
-static GList *
-gtk_path_bar_get_description_list (const gchar *path)
+static void
+button_clicked_cb (GtkWidget *button,
+		   gpointer   data)
 {
-  GList *description_list = NULL;
-  gchar** str_list;
-  gint i = 0;
+  GtkWidget *path_bar;
 
-  str_list = g_strsplit (path, "/", -1);
+  path_bar = button->parent;
+  g_assert (path_bar);
 
-  while (str_list[i])
+  g_signal_emit (path_bar, path_bar_signals [PATH_CLICKED], 0, (const char *) data);
+}
+
+static GtkWidget *
+make_directory_button (const char  *dir_name,
+		       GtkFilePath *path,
+		       gboolean     current_dir)
+{
+  GtkWidget *button, *label;
+      
+  button = gtk_toggle_button_new ();
+  if (current_dir)
     {
-      if (str_list[i][0] == '\000')
-	g_free (str_list[i]);
-      else
-	description_list = g_list_prepend (description_list, str_list[i]);
-
-      i++;
+      /* Yay gsignal! */
+      g_signal_connect (G_OBJECT (button), "toggled",
+			G_CALLBACK (gtk_toggle_button_set_active),
+			GINT_TO_POINTER (TRUE));
     }
-  g_free (str_list);
-
-  description_list = g_list_append (description_list, " / ");
-
-  return description_list;
-}
-
-/* FIXME: non UTF-8 strings */
-void
-gtk_path_bar_set_path (GtkPathBar  *path_bar,
-		       const gchar *path)
-{
-  GList *button_list = NULL;
-  GList *description_list;
-  GList *list;
-
-  g_return_if_fail (GTK_IS_PATH_BAR (path_bar));
-  g_return_if_fail (path != NULL);
-
-  if (path_bar->path)
-    g_free ((void *) path_bar->path);
-  gtk_path_bar_clear_buttons (path_bar);
-
-  /* New path */
-  path_bar->path = g_strdup (path);
-  description_list = gtk_path_bar_get_description_list (path);
-  for (list = description_list; list; list = list->next)
+  else
     {
-      GtkWidget *button, *label;
+      gchar *str;
+
+      str = g_strdup (gtk_file_path_get_string (path));
+      g_signal_connect (button, "clicked", G_CALLBACK (button_clicked_cb), str);
+      g_object_weak_ref (G_OBJECT (button), (GWeakNotify) g_free, str);
+    }
+
+  label = gtk_label_new (NULL);
+
+  if (current_dir)
+    {
       gchar *label_str;
-
-      button = gtk_toggle_button_new ();
-
-      if (list->prev == NULL)
-	{
-	  label_str = g_strdup_printf ("<span color=\"#000000\"><b>%s</b></span>", (char *)list->data);
-	  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-	}
-      else
-	{
-	  label_str = g_strdup_printf ("<span color=\"#000000\">%s</span>",(char *) list->data);
-	}
-
-      label = gtk_label_new (NULL);
+      
+      label_str = g_markup_printf_escaped ("<b>%s</b>", dir_name);
       gtk_label_set_markup (GTK_LABEL (label), label_str);
-      gtk_container_add (GTK_CONTAINER (button), label);
-      button_list = g_list_prepend (button_list, button);
-      gtk_container_add (GTK_CONTAINER (path_bar), button);
-      gtk_widget_show_all (button);
+      g_free (label_str);
+
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (label), dir_name);
     }
 
-  path_bar->button_list = g_list_reverse (button_list);
-  gtk_widget_queue_resize (GTK_WIDGET (path_bar));
+  gtk_container_add (GTK_CONTAINER (button), label);
+  gtk_widget_show_all (button);
+
+  return button;
 }
 
 
+void
+gtk_path_bar_set_path (GtkPathBar         *path_bar,
+		       const GtkFilePath  *file_path,
+		       GtkFileSystem      *file_system,
+		       GError            **error)
+{
+  gboolean valid = TRUE;
+  GtkFilePath *path;
+  gboolean first_directory = TRUE;
+
+  gtk_path_bar_clear_buttons (path_bar);
+  path = gtk_file_path_copy (file_path);
+
+  while (path != NULL)
+    {
+      GtkFilePath *parent_path = NULL;
+      GtkWidget *button;
+      const gchar *display_name;
+      GError *err = NULL;
+
+      valid = gtk_file_system_get_parent (file_system,
+					  path,
+					  &parent_path,
+					  &err);
+      if (!valid)
+	{
+	  g_propagate_error (error, err);
+	  g_error_free (err);
+	  gtk_file_path_free (path);
+	  break;
+	}
+
+      if (parent_path)
+	{
+	  GtkFileFolder *file_folder;
+	  GtkFileInfo *file_info;
+
+	  file_folder = gtk_file_system_get_folder (file_system, parent_path,
+						    GTK_FILE_INFO_DISPLAY_NAME, NULL);
+	  file_info = gtk_file_folder_get_info (file_folder, path, NULL);
+	  display_name = gtk_file_info_get_display_name (file_info);
+	  button = make_directory_button (display_name, path, first_directory);
+	  gtk_file_info_free (file_info);
+	  /* FIXME: ask owen about mem management. gtk_file_folder_free (file_folder); */
+	}
+      else
+	{
+	  /* We've reached the root node */
+	  /* FIXME: gtk_file_system_get_root_display_name() or something */
+	  button = make_directory_button (gtk_file_path_get_string (path),
+					  path, first_directory);
+	}
+
+      gtk_container_add (GTK_CONTAINER (path_bar), button);
+      path_bar->button_list = g_list_prepend (path_bar->button_list, button);
+      gtk_file_path_free (path);
+
+      path = parent_path;
+      first_directory = FALSE;
+    }
+
+  path_bar->button_list = g_list_reverse (path_bar->button_list);
+}

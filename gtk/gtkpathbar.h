@@ -21,6 +21,7 @@
 #define __GTK_PATH_BAR__
 
 #include "gtkcontainer.h"
+#include "gtkfilesystem.h"
 
 G_BEGIN_DECLS
 
@@ -39,28 +40,29 @@ struct _GtkPathBar
 {
   GtkContainer parent;
 
-  const char *path;
   GList *button_list;
   GList *first_scrolled_button;
+  GtkWidget *up_slider_button;
+  GtkWidget *down_slider_button;
   gint16 slider_width;
   gint16 spacing;
   gint16 button_offset;
   guint slider_visible : 1;
-  GtkWidget *up_slider_button;
-  GtkWidget *down_slider_button;
 };
 
 struct _GtkPathBarClass
 {
   GtkContainerClass parent_class;
 
-  void (* path_clicked) (GtkPathBar *path_bar);
+  void (* path_clicked) (GtkPathBar  *path_bar,
+			 const gchar *file_path);
 };
 
 GType gtk_path_bar_get_type (void) G_GNUC_CONST;
-void  gtk_path_bar_set_path (GtkPathBar  *path_bar,
-			     const gchar *path);
-
+void  gtk_path_bar_set_path (GtkPathBar         *path_bar,
+			     const GtkFilePath  *file_path,
+			     GtkFileSystem      *file_system,
+			     GError            **error);
 G_END_DECLS
 
 #endif /* __GTK_PATH_BAR__ */

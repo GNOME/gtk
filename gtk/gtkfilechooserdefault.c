@@ -102,13 +102,11 @@ struct _GtkFileChooserDefault
   GtkFilePath *current_folder;
   GtkFilePath *preview_path;
 
-  GtkWidget *up_button;
   GtkWidget *new_folder_button;
 
   GtkWidget *preview_frame;
 
   GtkWidget *filter_combo;
-  GtkWidget *folder_label;
   GtkWidget *tree_scrollwin;
   GtkWidget *tree;
   GtkWidget *shortcuts_scrollwin;
@@ -249,7 +247,9 @@ static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkFileChooserDefault *impl);
 static void entry_activate             (GtkEntry              *entry,
 					GtkFileChooserDefault *impl);
-
+static void path_bar_clicked           (GtkPathBar            *path_bar,
+					const char            *file_path,
+					GtkFileChooserDefault *impl);
 static void add_bookmark_button_clicked_cb    (GtkButton             *button,
 					       GtkFileChooserDefault *impl);
 static void remove_bookmark_button_clicked_cb (GtkButton             *button,
@@ -873,30 +873,6 @@ create_shortcuts_model (GtkFileChooserDefault *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (impl->shortcuts_tree), GTK_TREE_MODEL (impl->shortcuts_model));
 }
 
-/* Callback used when the "Up" toolbar button is clicked */
-static void
-up_button_clicked_cb (GtkButton             *button,
-		      GtkFileChooserDefault *impl)
-{
-  GtkFilePath *parent_path;
-  GError *error;
-
-  error = NULL;
-  if (gtk_file_system_get_parent (impl->file_system, impl->current_folder, &parent_path, &error))
-    {
-      if (parent_path) /* If we were on a root, parent_path will be NULL */
-	{
-	  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), parent_path);
-	  gtk_file_path_free (parent_path);
-	}
-    }
-  else
-    error_dialog (impl,
-		  _("Could not go to the parent folder of %s:\n%s"),
-		  impl->current_folder,
-		  error);
-}
-
 /* Callback used when the "New Folder" toolbar button is clicked */
 static void
 new_folder_button_clicked (GtkButton             *button,
@@ -1003,67 +979,6 @@ button_new (GtkFileChooserDefault *impl,
     gtk_widget_show (button);
 
   return button;
-}
-
-/* Creates the widgets for the current folder indicator */
-static GtkWidget *
-current_folder_create (GtkFileChooserDefault *impl)
-{
-  GtkWidget *hbox;
-
-  hbox = gtk_hbox_new (FALSE, 12);
-  gtk_widget_show (hbox);
-
-  /* Up button */
-
-  impl->up_button = button_new (impl,
-				_("Up"),
-				GTK_STOCK_GO_UP,
-				FALSE,
-				TRUE,
-				G_CALLBACK (up_button_clicked_cb));
-  gtk_box_pack_start (GTK_BOX (hbox), impl->up_button, FALSE, FALSE, 0);
-
-  /* Current folder label */
-
-  impl->folder_label = gtk_label_new (NULL);
-  gtk_misc_set_alignment (GTK_MISC (impl->folder_label), 0.0, 0.5);
-  gtk_box_pack_start (GTK_BOX (hbox), impl->folder_label, FALSE, FALSE, 0);
-  gtk_widget_show (impl->folder_label);
-
-  /* New folder button for save mode */
-
-  impl->new_folder_button = gtk_button_new_from_stock (GTK_STOCK_NEW);
-  g_signal_connect (impl->new_folder_button, "clicked",
-		    G_CALLBACK (new_folder_button_clicked), impl);
-  gtk_box_pack_end (GTK_BOX (hbox), impl->new_folder_button, FALSE, FALSE, 0);
-
-  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    gtk_widget_show (impl->new_folder_button);
-
-  return hbox;
-}
-
-/* Sets the sensitivity of the toolbar buttons */
-static void
-toolbar_check_sensitivity (GtkFileChooserDefault *impl)
-{
-  GtkFilePath *parent_path;
-  gboolean has_parent;
-
-  has_parent = FALSE;
-
-  /* I don't think we need to check GError here, do we? */
-  if (gtk_file_system_get_parent (impl->file_system, impl->current_folder, &parent_path, NULL))
-    {
-      if (parent_path)
-	{
-	  gtk_file_path_free (parent_path);
-	  has_parent = TRUE;
-	}
-    }
-
-  gtk_widget_set_sensitive (GTK_WIDGET (impl->up_button), has_parent);
 }
 
 /* Creates the widgets for the folder tree */
@@ -1555,16 +1470,24 @@ file_pane_create (GtkFileChooserDefault *impl)
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_widget_show (vbox);
 
-  /* Current folder indicator */
-
-  widget = current_folder_create (impl);
-  impl->path_bar = g_object_new (gtk_path_bar_get_type (), NULL);
+  /* The path bar and 'Create Folder' button */
+  hbox = gtk_hbox_new (FALSE, 12);
+  gtk_widget_show (hbox);
+  impl->path_bar = g_object_new (GTK_TYPE_PATH_BAR, NULL);
+  g_signal_connect (impl->path_bar, "path_clicked", G_CALLBACK (path_bar_clicked), impl);
   gtk_widget_show_all (impl->path_bar);
-#ifdef USE_PATH_BAR
-  gtk_box_pack_start (GTK_BOX (vbox), impl->path_bar, FALSE, FALSE, 0);
-#else
-  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
-#endif
+  gtk_box_pack_start (GTK_BOX (hbox), impl->path_bar, TRUE, TRUE, 0);
+
+  /* Create Folder */
+  impl->new_folder_button = gtk_button_new_with_mnemonic (_("Create _Folder"));
+  g_signal_connect (impl->new_folder_button, "clicked",
+		    G_CALLBACK (new_folder_button_clicked), impl);
+  gtk_box_pack_end (GTK_BOX (hbox), impl->new_folder_button, FALSE, FALSE, 0);
+
+  if (impl->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+      impl->folder_mode)
+    gtk_widget_show (impl->new_folder_button);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   /* Box for lists and preview */
 
@@ -1810,7 +1733,12 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	    }
 	}
       else
-	gtk_widget_hide (impl->new_folder_button);
+	{
+	  if (impl->folder_mode)
+	    gtk_widget_show (impl->new_folder_button);
+	  else
+	    gtk_widget_hide (impl->new_folder_button);
+	}
 
       break;
     case GTK_FILE_CHOOSER_PROP_FILE_SYSTEM_BACKEND:
@@ -1829,11 +1757,13 @@ gtk_file_chooser_default_set_property (GObject      *object,
 	      {
 		gtk_widget_hide (impl->list_scrollwin);
 		gtk_widget_show (impl->tree_scrollwin);
+		gtk_widget_show (impl->new_folder_button);
 	      }
 	    else
 	      {
 		gtk_widget_hide (impl->tree_scrollwin);
 		gtk_widget_show (impl->list_scrollwin);
+		gtk_widget_hide (impl->new_folder_button);
 	      }
 	  }
       }
@@ -2212,7 +2142,6 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 					     const GtkFilePath *path)
 {
   GtkFileChooserDefault *impl = GTK_FILE_CHOOSER_DEFAULT (chooser);
-  char *str;
 
   if (impl->current_folder)
     gtk_file_path_free (impl->current_folder);
@@ -2220,13 +2149,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   impl->current_folder = gtk_file_path_copy (path);
 
   /* Change the current folder label */
-
-  str = g_strdup_printf (_("Current folder: %s"), gtk_file_path_get_string (path));
-  gtk_label_set_text (GTK_LABEL (impl->folder_label), str);
-#ifdef USE_PATH_BAR
-  gtk_path_bar_set_path (GTK_PATH_BAR (impl->path_bar), gtk_file_path_get_string (path));
-#endif
-  g_free (str);
+  gtk_path_bar_set_path (GTK_PATH_BAR (impl->path_bar), path, impl->file_system, NULL);
 
   /* Update the folder tree */
 
@@ -2249,7 +2172,6 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
   /* Refresh controls */
 
   shortcuts_unselect_all (impl);
-  toolbar_check_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
@@ -3087,6 +3009,19 @@ entry_activate (GtkEntry              *entry,
 
       gtk_file_path_free (new_folder);
     }
+}
+
+
+static void
+path_bar_clicked (GtkPathBar            *path_bar,
+		  const char            *file_path,
+		  GtkFileChooserDefault *impl)
+{
+  GtkFilePath *new_folder = NULL;
+
+  new_folder = gtk_file_path_new_dup (file_path);
+  _gtk_file_chooser_set_current_folder_path (GTK_FILE_CHOOSER (impl), new_folder);
+  gtk_file_path_free (new_folder);
 }
 
 static const GtkFileInfo *
