@@ -694,7 +694,7 @@ gtk_ctree_realize (GtkWidget *widget)
     }
 
   values.foreground = widget->style->fg[GTK_STATE_NORMAL];
-  values.background = widget->style->bg[GTK_STATE_NORMAL];
+  values.background = widget->style->base[GTK_STATE_NORMAL];
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
   values.line_style = GDK_LINE_SOLID;
   ctree->lines_gc = gdk_gc_new_with_values (GTK_CLIST(widget)->clist_window, 
@@ -1392,32 +1392,52 @@ get_cell_style (GtkCList     *clist,
 		GdkGC       **fg_gc,
 		GdkGC       **bg_gc)
 {
+  gint fg_state;
+
+  if ((state == GTK_STATE_NORMAL) &&
+      (GTK_WIDGET (clist)->state == GTK_STATE_INSENSITIVE))
+    fg_state = GTK_STATE_INSENSITIVE;
+  else
+    fg_state = state;
+
   if (clist_row->cell[column].style)
     {
       if (style)
 	*style = clist_row->cell[column].style;
       if (fg_gc)
-	*fg_gc = clist_row->cell[column].style->fg_gc[state];
-      if (bg_gc)
-	*bg_gc = clist_row->cell[column].style->bg_gc[state];
+	*fg_gc = clist_row->cell[column].style->fg_gc[fg_state];
+      if (bg_gc) {
+	if (state == GTK_STATE_SELECTED)
+	  *bg_gc = clist_row->cell[column].style->bg_gc[state];
+	else
+	  *bg_gc = clist_row->cell[column].style->base_gc[state];
+      }
     }
   else if (clist_row->style)
     {
       if (style)
 	*style = clist_row->style;
       if (fg_gc)
-	*fg_gc = clist_row->style->fg_gc[state];
-      if (bg_gc)
-	*bg_gc = clist_row->style->bg_gc[state];
+	*fg_gc = clist_row->style->fg_gc[fg_state];
+      if (bg_gc) {
+	if (state == GTK_STATE_SELECTED)
+	  *bg_gc = clist_row->style->bg_gc[state];
+	else
+	  *bg_gc = clist_row->style->base_gc[state];
+      }
     }
   else
     {
       if (style)
 	*style = GTK_WIDGET (clist)->style;
       if (fg_gc)
-	*fg_gc = GTK_WIDGET (clist)->style->fg_gc[state];
-      if (bg_gc)
-	*bg_gc = GTK_WIDGET (clist)->style->bg_gc[state];
+	*fg_gc = GTK_WIDGET (clist)->style->fg_gc[fg_state];
+      if (bg_gc) {
+	if (state == GTK_STATE_SELECTED)
+	  *bg_gc = GTK_WIDGET (clist)->style->bg_gc[state];
+	else
+	  *bg_gc = GTK_WIDGET (clist)->style->base_gc[state];
+      }
 
       if (state != GTK_STATE_SELECTED)
 	{
@@ -1735,9 +1755,9 @@ gtk_ctree_draw_lines (GtkCTree     *ctree,
 			       &GTK_CTREE_ROW (parent)->row.background);
 			}
 		      else if (state == GTK_STATE_SELECTED)
-			bg_gc = style->bg_gc[state];
+			bg_gc = style->base_gc[state];
 		      else
-			bg_gc = GTK_WIDGET (clist)->style->bg_gc[state];
+			bg_gc = GTK_WIDGET (clist)->style->base_gc[state];
 
 		      if (!area)
 			gdk_draw_rectangle (clist->clist_window, bg_gc, TRUE,
@@ -1802,7 +1822,7 @@ gtk_ctree_draw_lines (GtkCTree     *ctree,
 	  if (!area)
 	    gdk_draw_rectangle (clist->clist_window,
 				GTK_WIDGET
-				(ctree)->style->bg_gc[GTK_STATE_PRELIGHT],
+				(ctree)->style->base_gc[GTK_STATE_NORMAL],
 				TRUE,
 				tree_rectangle.x,
 				tree_rectangle.y,
@@ -1812,7 +1832,7 @@ gtk_ctree_draw_lines (GtkCTree     *ctree,
 					    &tc_rectangle))
 	    gdk_draw_rectangle (clist->clist_window,
 				GTK_WIDGET
-				(ctree)->style->bg_gc[GTK_STATE_PRELIGHT],
+				(ctree)->style->base_gc[GTK_STATE_NORMAL],
 				TRUE,
 				tc_rectangle.x,
 				tc_rectangle.y,
@@ -1993,14 +2013,13 @@ draw_row (GtkCList     *clist,
 
   if (clist_row->state == GTK_STATE_NORMAL)
     {
-      state = GTK_STATE_PRELIGHT;
       if (clist_row->fg_set)
 	gdk_gc_set_foreground (clist->fg_gc, &clist_row->foreground);
       if (clist_row->bg_set)
 	gdk_gc_set_foreground (clist->bg_gc, &clist_row->background);
     }
-  else
-    state = clist_row->state;
+  
+  state = clist_row->state;
 
   gdk_gc_set_foreground (ctree->lines_gc,
 			 &widget->style->fg[clist_row->state]);
@@ -2013,7 +2032,7 @@ draw_row (GtkCList     *clist,
 
       if (gdk_rectangle_intersect (area, &cell_rectangle, crect))
 	gdk_draw_rectangle (clist->clist_window,
-			    widget->style->base_gc[GTK_STATE_NORMAL], TRUE,
+			    widget->style->base_gc[GTK_STATE_ACTIVE], TRUE,
 			    crect->x, crect->y, crect->width, crect->height);
     }
   else
@@ -2022,7 +2041,7 @@ draw_row (GtkCList     *clist,
       crect = &cell_rectangle;
 
       gdk_draw_rectangle (clist->clist_window,
-			  widget->style->base_gc[GTK_STATE_NORMAL], TRUE,
+			  widget->style->base_gc[GTK_STATE_ACTIVE], TRUE,
 			  crect->x, crect->y, crect->width, crect->height);
     }
 
@@ -2069,7 +2088,7 @@ draw_row (GtkCList     *clist,
       if (!area || gdk_rectangle_intersect (area, &cell_rectangle, crect))
 	{
 	  gdk_draw_rectangle (clist->clist_window,
-			      widget->style->base_gc[GTK_STATE_NORMAL], TRUE,
+			      widget->style->base_gc[GTK_STATE_ACTIVE], TRUE,
 			      crect->x, crect->y, crect->width, crect->height);
 
 	  /* horizontal black lines */
@@ -3163,7 +3182,7 @@ cell_size_request (GtkCList       *clist,
 
   ctree = GTK_CTREE (clist);
 
-  get_cell_style (clist, clist_row, GTK_STATE_PRELIGHT, column, &style,
+  get_cell_style (clist, clist_row, GTK_STATE_NORMAL, column, &style,
 		  NULL, NULL);
 
   switch (clist_row->cell[column].type)

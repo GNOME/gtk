@@ -3877,16 +3877,16 @@ insert_row_clist (GtkWidget *widget, gpointer data)
       col2.blue  = 56000;
 
       style1 = gtk_style_copy (GTK_WIDGET (data)->style);
-      style1->bg[GTK_STATE_PRELIGHT] = col1;
-      style1->bg[GTK_STATE_SELECTED] = col2;
+      style1->base[GTK_STATE_NORMAL] = col1;
+      style1->base[GTK_STATE_SELECTED] = col2;
 
       style2 = gtk_style_copy (GTK_WIDGET (data)->style);
-      style2->fg[GTK_STATE_PRELIGHT] = col1;
+      style2->fg[GTK_STATE_NORMAL] = col1;
       style2->fg[GTK_STATE_SELECTED] = col2;
 
       style3 = gtk_style_copy (GTK_WIDGET (data)->style);
-      style3->fg[GTK_STATE_PRELIGHT] = col1;
-      style3->bg[GTK_STATE_PRELIGHT] = col2;
+      style3->fg[GTK_STATE_NORMAL] = col1;
+      style3->base[GTK_STATE_NORMAL] = col2;
       gdk_font_unref (style3->font);
       style3->font =
 	gdk_font_load ("-*-courier-medium-*-*-*-*-120-*-*-*-*-*-*");
@@ -4159,8 +4159,8 @@ create_clist (void)
       col2.blue  = 32000;
 
       style = gtk_style_new ();
-      style->fg[GTK_STATE_PRELIGHT] = col1;
-      style->bg[GTK_STATE_PRELIGHT] = col2;
+      style->fg[GTK_STATE_NORMAL] = col1;
+      style->base[GTK_STATE_NORMAL] = col2;
       
       gdk_font_unref (style->font);
       style->font =
@@ -4397,13 +4397,13 @@ void change_style (GtkWidget *widget, GtkCTree *ctree)
       col2.blue  = 56000;
 
       style1 = gtk_style_new ();
-      style1->bg[GTK_STATE_PRELIGHT] = col1;
+      style1->base[GTK_STATE_NORMAL] = col1;
       style1->fg[GTK_STATE_SELECTED] = col2;
 
       style2 = gtk_style_new ();
-      style2->bg[GTK_STATE_SELECTED] = col2;
-      style2->fg[GTK_STATE_PRELIGHT] = col1;
-      style2->bg[GTK_STATE_PRELIGHT] = col2;
+      style2->base[GTK_STATE_SELECTED] = col2;
+      style2->fg[GTK_STATE_NORMAL] = col1;
+      style2->base[GTK_STATE_NORMAL] = col2;
       gdk_font_unref (style2->font);
       style2->font =
 	gdk_font_load ("-*-courier-medium-*-*-*-*-300-*-*-*-*-*-*");
@@ -4744,19 +4744,19 @@ void build_recursive (GtkCTree *ctree, gint cur_depth, gint depth,
       switch (cur_depth % 3)
 	{
 	case 0:
-	  style->bg[GTK_STATE_PRELIGHT].red   = 10000 * (cur_depth % 6);
-	  style->bg[GTK_STATE_PRELIGHT].green = 0;
-	  style->bg[GTK_STATE_PRELIGHT].blue  = 65535 - ((i * 10000) % 65535);
+	  style->base[GTK_STATE_NORMAL].red   = 10000 * (cur_depth % 6);
+	  style->base[GTK_STATE_NORMAL].green = 0;
+	  style->base[GTK_STATE_NORMAL].blue  = 65535 - ((i * 10000) % 65535);
 	  break;
 	case 1:
-	  style->bg[GTK_STATE_PRELIGHT].red   = 10000 * (cur_depth % 6);
-	  style->bg[GTK_STATE_PRELIGHT].green = 65535 - ((i * 10000) % 65535);
-	  style->bg[GTK_STATE_PRELIGHT].blue  = 0;
+	  style->base[GTK_STATE_NORMAL].red   = 10000 * (cur_depth % 6);
+	  style->base[GTK_STATE_NORMAL].green = 65535 - ((i * 10000) % 65535);
+	  style->base[GTK_STATE_NORMAL].blue  = 0;
 	  break;
 	default:
-	  style->bg[GTK_STATE_PRELIGHT].red   = 65535 - ((i * 10000) % 65535);
-	  style->bg[GTK_STATE_PRELIGHT].green = 0;
-	  style->bg[GTK_STATE_PRELIGHT].blue  = 10000 * (cur_depth % 6);
+	  style->base[GTK_STATE_NORMAL].red   = 65535 - ((i * 10000) % 65535);
+	  style->base[GTK_STATE_NORMAL].green = 0;
+	  style->base[GTK_STATE_NORMAL].blue  = 10000 * (cur_depth % 6);
 	  break;
 	}
       gtk_ctree_node_set_row_data_full (ctree, sibling, style,
@@ -4804,9 +4804,9 @@ void rebuild_tree (GtkWidget *widget, GtkCTree *ctree)
 				  mask1, pixmap2, mask2, FALSE, TRUE);
 
   style = gtk_style_new ();
-  style->bg[GTK_STATE_PRELIGHT].red   = 0;
-  style->bg[GTK_STATE_PRELIGHT].green = 45000;
-  style->bg[GTK_STATE_PRELIGHT].blue  = 55000;
+  style->base[GTK_STATE_NORMAL].red   = 0;
+  style->base[GTK_STATE_NORMAL].green = 45000;
+  style->base[GTK_STATE_NORMAL].blue  = 55000;
   gtk_ctree_node_set_row_data_full (ctree, parent, style,
 				    (GtkDestroyNotify) gtk_style_unref);
 

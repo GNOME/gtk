@@ -1,3 +1,15 @@
+Tue Dec 15 19:50:41 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkctree.c gtk/gtkclist.c gtk/testgtk.c: Use 
+	base[NORMAL] instead of bg[PRELIGHT] so CLists now can be
+	used in detergent commercials.
+
+Tue Dec 15 16:54:09 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtklabel.h: Moved gtk_label_set() compatiblity
+	define from <gtkcompat.h> to <gtklabel.h> for
+	compatibility.
+
 1998-12-15  Jeff Garzik  <jgarzik@pobox.com>
 
 	* configure.in, gdk/Makefile.am, gtk/Makefile.am:
