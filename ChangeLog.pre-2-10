@@ -1,3 +1,8 @@
+2004-03-05  Michael Natterer  <mitch@gimp.org>
+
+	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_show_all):
+	s/object/widget/. Makes it compile again.
+
 Fri Mar  5 03:37:14 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (gtk_file_chooser_default_show_all):

@@ -2615,7 +2615,7 @@ gtk_file_chooser_default_dispose (GObject *object)
 static void
 gtk_file_chooser_default_show_all (GtkWidget *widget)
 {
-  GtkFileChooserDefault *impl = (GtkFileChooserDefault *) object;
+  GtkFileChooserDefault *impl = (GtkFileChooserDefault *) widget;
 
   gtk_widget_show (widget);
 
