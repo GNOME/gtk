@@ -3084,11 +3084,15 @@ get_selection_info (GtkCList * clist,
 }
 
 gint
-gtk_clist_get_selection_info (GtkCList *clist, gint x, gint y, gint *row, gint *column)
+gtk_clist_get_selection_info (GtkCList *clist, 
+			      gint      x, 
+			      gint      y, 
+			      gint *    row, 
+			      gint *    column)
 {
-	g_return_val_if_fail (clist != NULL, 0);
-	g_return_val_if_fail (GTK_IS_CLIST (clist), 0);
-	return get_selection_info (clist, x, y, row, column);
+  g_return_val_if_fail (clist != NULL, 0);
+  g_return_val_if_fail (GTK_IS_CLIST (clist), 0);
+  return get_selection_info (clist, x, y, row, column);
 }
 
 /* 

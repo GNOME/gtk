@@ -1185,7 +1185,7 @@ gtk_signal_connect_by_type (GtkObject       *object,
   while (class)
     {
       GtkType parent;
-      gint *object_signals;
+      guint *object_signals;
       guint nsignals;
       guint i;
       

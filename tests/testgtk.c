@@ -1302,8 +1302,7 @@ cb_create_tree(GtkWidget* w)
     if(GTK_TOGGLE_BUTTON(sTreeSampleSelection.browse_button)->active)
       selection_mode = GTK_SELECTION_BROWSE;
     else
-      if(GTK_TOGGLE_BUTTON(sTreeSampleSelection.multiple_button)->active)
-	selection_mode = GTK_SELECTION_MULTIPLE;
+      selection_mode = GTK_SELECTION_MULTIPLE;
 
   /* get options choice */
   draw_line = GTK_TOGGLE_BUTTON(sTreeSampleSelection.draw_line_button)->active;
@@ -2374,6 +2373,9 @@ create_spins ()
 			  GTK_SIGNAL_FUNC (change_digits),
 			  (gpointer) spinner2);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
+
+      hbox = gtk_hbox_new (FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
       button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
       gtk_signal_connect (GTK_OBJECT (button), "clicked",

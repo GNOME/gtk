@@ -1,3 +1,8 @@
+Tue Mar 10 23:02:42 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdkdnd.c gtk/gtkclist.c gtk/gtksignal.c gtk/testgtk.c:
+	  Various minor cleanups related to -W
+
 1998-03-11  Elliot Lee  <sopwith@bogus.circ.us.eu.org>
 
 	* gtk/gtkentry.h: Keep it consistent - 
