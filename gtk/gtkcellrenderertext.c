@@ -50,7 +50,7 @@ static void gtk_cell_renderer_text_render     (GtkCellRenderer          *cell,
 					       GdkRectangle             *background_area,
 					       GdkRectangle             *cell_area,
 					       GdkRectangle             *expose_area,
-					       guint                     flags);
+					       GtkCellRendererState      flags);
 
 static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 							      GdkEvent             *event,
@@ -1248,13 +1248,13 @@ gtk_cell_renderer_text_get_size (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_text_render (GtkCellRenderer    *cell,
-			       GdkWindow          *window,
-			       GtkWidget          *widget,
-			       GdkRectangle       *background_area,
-			       GdkRectangle       *cell_area,
-			       GdkRectangle       *expose_area,
-			       guint               flags)
+gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
+			       GdkWindow            *window,
+			       GtkWidget            *widget,
+			       GdkRectangle         *background_area,
+			       GdkRectangle         *cell_area,
+			       GdkRectangle         *expose_area,
+			       GtkCellRendererState  flags)
 
 {
   GtkCellRendererText *celltext = (GtkCellRendererText *) cell;

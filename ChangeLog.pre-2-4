@@ -1,3 +1,48 @@
+Sun Nov  3 01:22:01 2002  Kristian Rietveld  <kris@gtk.org>
+
+	Merge fest from HEAD, note that only a selection of bug fixes on
+	HEAD got committed to stable.
+
+	#94868, reported and testcase provided by Daniel Elstner.
+	* gtk/gtktreeselection.c (_gtk_tree_selection_internal_select_node):
+	free anchor if applicable.
+
+	#92014, fixed with help of detailed traces from Morten Welinder.
+	* gtk/gtkliststore.c (gtk_list_store_remove_silently): free the
+	actual link after the node has been removed.
+	
+	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_column_finalize):
+	free the cell_list and the child if it exists.
+
+	#85858, #85859, #85860, #85872, reported by David L. Cooper II.
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_render):
+	s/guint/GtkCellRendererState/.
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_render):
+	ditto.
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render),
+	(gtk_cell_renderer_toggle_activate): ditto.
+
+	* gtk/gtkliststore.c (gtk_list_store_get_flags): a
+	s/guint/GtkTreeModelFlags/ on the return type.
+
+	#93629, fixes a really evil GtkTreeModelSort bug. Reported and
+	testcase by Hans Petter Jansson.
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_row_changed): if we
+	are swapping two rows (re-insertion on row_changed), also *emit*
+	a rows_reordered signal. oops.
+
+	#96851, reported by Jorn Baayen.
+	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_model): remove
+	the second ref command on the child_model, we only have to ref it
+	once here. (#96851, reported by Jorn Baayen). 
+
+	#50263, reported by Havoc Pennington.
+	* gtk/gtktreeselection.c (model_changed): new function,
+	(gtk_tree_selection_selected_foreach): monitor changes in the model,
+	bail out if the model has been changed from the foreach func.
+
 2002-10-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_decorations,

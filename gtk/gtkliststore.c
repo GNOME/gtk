@@ -36,7 +36,7 @@ static void         gtk_list_store_drag_source_init(GtkTreeDragSourceIface *ifac
 static void         gtk_list_store_drag_dest_init  (GtkTreeDragDestIface   *iface);
 static void         gtk_list_store_sortable_init   (GtkTreeSortableIface   *iface);
 static void         gtk_list_store_finalize        (GObject           *object);
-static guint        gtk_list_store_get_flags       (GtkTreeModel      *tree_model);
+static GtkTreeModelFlags gtk_list_store_get_flags  (GtkTreeModel      *tree_model);
 static gint         gtk_list_store_get_n_columns   (GtkTreeModel      *tree_model);
 static GType        gtk_list_store_get_column_type (GtkTreeModel      *tree_model,
 						    gint               index);
@@ -444,7 +444,7 @@ gtk_list_store_finalize (GObject *object)
 }
 
 /* Fulfill the GtkTreeModel requirements */
-static guint
+static GtkTreeModelFlags
 gtk_list_store_get_flags (GtkTreeModel *tree_model)
 {
   g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), 0);
@@ -963,11 +963,12 @@ gtk_list_store_remove_silently (GtkListStore *list_store,
     list_store->root = remove_link_saving_prev (G_SLIST (list_store->root),
                                                 G_SLIST (iter->user_data),
                                                 &prev);
-
     list_store->length -= 1;
 
     if (iter->user_data == list_store->tail)
       list_store->tail = prev;
+
+    g_slist_free (G_SLIST (iter->user_data));
   }
 }
 
