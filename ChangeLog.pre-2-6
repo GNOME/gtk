@@ -2,6 +2,7 @@
 
 	* demos/gtk-demo/stock_browser.c:
 	* gdk/gdkcolor.c:
+	* gdk/gdkfont.c:
 	* gdk/gdkcursor.c:
 	* gdk/gdkevents.c:
 	* gdk/gdkrectangle.c:
