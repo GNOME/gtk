@@ -561,6 +561,34 @@
       <contact>gtk-devel-list@redhat.com</contact>
     </entry>
 
+    <entry size="big" status="0%" target="> 1.4">
+      <title>pseudo-MDI Widget</title>
+      <description>
+	<p>
+          Add a widget that lets you rearrange various views (similar to many
+          IDEs, like Visual SlickEdit or JBuilder). Basically there should be a
+          central slot and 4 slots around the sides; each slot holds one or more
+          views. If two views are dropped in the same slot, then a notebook is
+          created displaying both views. If a view is dropped outside the
+          application window, it becomes a standalone window. It should be
+          possible to restrict whether a view can be dropped on the sides,
+          horizontal/vertical sides only, in the central content area, or in
+          any of those places.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
+
+    <entry size="medium" status="0%" target="> 1.4">
+      <title>Icon List Widget</title>
+      <description>
+	<p>
+          A simple icon list widget, suitable for creating a file selector or
+          the like.
+	</p>
+      </description>
+      <contact>gtk-devel-list@redhat.com</contact>
+    </entry>
 
     <entry size="medium" status="0%" target="> 1.4">
       <title>Dock widget</title>
