@@ -26,7 +26,6 @@
  */
 
 #include <stdlib.h>
-#include "gdkx.h"
 #include "gtkhandlebox.h"
 #include "gtkmain.h"
 #include "gtksignal.h"
@@ -1026,7 +1025,7 @@ gtk_handle_box_motion (GtkWidget      *widget,
    */
   new_x = 0;
   new_y = 0;
-  gdk_window_get_pointer (GDK_ROOT_PARENT(), &new_x, &new_y, NULL);
+  gdk_window_get_pointer (NULL, &new_x, &new_y, NULL);
   new_x += hb->float_allocation.x;
   new_y += hb->float_allocation.y;
 

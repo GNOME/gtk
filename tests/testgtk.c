@@ -6575,8 +6575,6 @@ create_dnd (void)
  * Shaped Windows
  */
 
-static GdkWindow *root_win = NULL;
-
 typedef struct _cursoroffset {gint x,y;} CursorOffset;
 
 static void
@@ -6621,7 +6619,7 @@ shape_motion (GtkWidget      *widget,
    * Can't use event->x / event->y here 
    * because I need absolute coordinates.
    */
-  gdk_window_get_pointer (root_win, &xp, &yp, &mask);
+  gdk_window_get_pointer (NULL, &xp, &yp, &mask);
   gtk_widget_set_uposition (widget, xp  - p->x, yp  - p->y);
 }
 
@@ -6696,8 +6694,6 @@ create_shapes (void)
   static GtkWidget *modeller = NULL;
   static GtkWidget *sheets = NULL;
   static GtkWidget *rings = NULL;
-
-  root_win = gdk_window_foreign_new (GDK_ROOT_WINDOW ());
 
   if (!modeller)
     {

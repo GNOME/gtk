@@ -28,7 +28,7 @@
 #include <limits.h>
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
-#include "gdkx.h"
+#include "gdkx.h"		/* For gdk_progclass */
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtksignal.h"

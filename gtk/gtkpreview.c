@@ -32,7 +32,6 @@
 #ifdef HAVE_SYS_PARAM_H
 #include <sys/param.h>
 #endif
-#include "gdkx.h"
 #include "gdk/gdkrgb.h"
 #include "gtkpreview.h"
 #include "gtksignal.h"

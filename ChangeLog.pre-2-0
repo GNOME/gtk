@@ -1,3 +1,23 @@
+Mon Nov  8 16:40:43 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c: Substitute gdkx.h => gdkprivate.h since
+	we need to accesss only ->children. We need an accessor
+	for the children.
+
+	* gtk/gtkhandlebox.c gtk/testgtk.c: Substitute G
+	DK_ROOT_PARENT() => NULL, in call to gtk_window_get_pointer()
+	to get rid of gdkx.h include.
+	
+	* gtk/gtkctree.c: Get rid of #include <gdk/gdkx.h>
+	and random references to 'None'.
+
+	* gtk/gtkclist.c gtk/gtkeditable.c gtk/gtkpreview.c
+	Get rid of unused #include <gdk/gdkx.h>
+
+	* gtk/gtkrc.c gtk/gtkmain.c: Get rid of #include <gdk/gdkx.h>
+	gdkx.h is _X_ specific stuff. GDK_WINDOWING comes from
+	gdkconfig.h.
+
 1999-11-08  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdraw.c

@@ -36,7 +36,7 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gdk/gdk.h"
-#include "gdkx.h"
+#include "gdkprivate.h"		/* Used in gtk_reset_shapes_recurse to avoid copy */
 
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_CLASS (GTK_OBJECT (w)->klass)
@@ -4784,9 +4784,6 @@ gtk_reset_shapes_recurse (GtkWidget *widget,
 
   private = (GdkWindowPrivate*) window;
 
-  /* FIXME: We do we need this check? */
-  if (GDK_DRAWABLE_DESTROYED (window))
-    return;
   gdk_window_get_user_data (window, &data);
   if (data != widget)
     return;

@@ -26,9 +26,6 @@
 
 #include <ctype.h>
 #include <string.h>
-#ifdef USE_XIM
-#include "gdkx.h"
-#endif
 #include "gdk/gdkkeysyms.h"
 #include "gdk/gdki18n.h"
 #include "gtkeditable.h"

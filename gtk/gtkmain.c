@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdkx.h"		/* For GDK_WINDOWING */
-
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlocale.h>	/* so we get the right setlocale */
 #else

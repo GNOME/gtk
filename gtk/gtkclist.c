@@ -32,7 +32,6 @@
 #include "gtkclist.h"
 #include "gtkbindings.h"
 #include "gtkdnd.h"
-#include "gdkx.h"
 #include <gdk/gdkkeysyms.h>
 
 /* length of button_actions array */

@@ -33,7 +33,6 @@
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkdnd.h"
-#include "gdkx.h"
 #include <gdk/gdkkeysyms.h>
 
 #define PM_SIZE                    8
@@ -708,7 +707,7 @@ gtk_ctree_realize (GtkWidget *widget)
   if (ctree->line_style == GTK_CTREE_LINES_DOTTED)
     {
       gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
-				  GDK_LINE_ON_OFF_DASH, None, None);
+				  GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
       gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
     }
 }
@@ -5346,18 +5345,18 @@ gtk_ctree_set_line_style (GtkCTree          *ctree,
 	case GTK_CTREE_LINES_SOLID:
 	  if (GTK_WIDGET_REALIZED (ctree))
 	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, GDK_LINE_SOLID, 
-					None, None);
+					GDK_CAP_BUTT, GDK_JOIN_MITER);
 	  break;
 	case GTK_CTREE_LINES_DOTTED:
 	  if (GTK_WIDGET_REALIZED (ctree))
 	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, 
-					GDK_LINE_ON_OFF_DASH, None, None);
+					GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	  gdk_gc_set_dashes (ctree->lines_gc, 0, "\1\1", 2);
 	  break;
 	case GTK_CTREE_LINES_TABBED:
 	  if (GTK_WIDGET_REALIZED (ctree))
 	    gdk_gc_set_line_attributes (ctree->lines_gc, 1, GDK_LINE_SOLID, 
-					None, None);
+					GDK_CAP_BUTT, GDK_JOIN_MITER);
 	  break;
 	case GTK_CTREE_LINES_NONE:
 	  break;
