@@ -8319,7 +8319,22 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
 
   if (cursor_path == NULL)
     {
-      cursor_path = gtk_tree_path_new_first ();
+      /* Consult the selection before defaulting to the first element */
+      GtkTreeSelection *selection;
+      GtkTreeModel     *model;
+      GList            *selected_rows;
+
+      selection = gtk_tree_view_get_selection (tree_view);
+      selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+      if (selected_rows)
+	{
+          cursor_path = gtk_tree_path_copy((const GtkTreePath *)(selected_rows->data));
+	  g_list_foreach (selected_rows, (GFunc)gtk_tree_path_free, NULL);
+	  g_list_free (selected_rows);
+        }
+      else
+	cursor_path = gtk_tree_path_new_first ();
+
       gtk_tree_row_reference_free (tree_view->priv->cursor);
       tree_view->priv->cursor = NULL;
 

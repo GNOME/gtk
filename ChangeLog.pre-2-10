@@ -1,3 +1,11 @@
+2004-09-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_focus_to_cursor): Set the cursor
+	to the first selected row instead of always to the first row if there
+	is no cursor.  (#143270, Jean Bréfort)
+
+	* tests/testfilechooser.c (main): Fix a few typos.
+
 2004-09-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkexpander.c: 

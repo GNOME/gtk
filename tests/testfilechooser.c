@@ -535,17 +535,17 @@ main (int argc, char **argv)
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (set_folder_nonexistent_cb), dialog);
 
-  button = gtk_button_new_with_label ("set_current_folder (\"/usr/nonexistent\"");
+  button = gtk_button_new_with_label ("set_current_folder (\"/usr/nonexistent\")");
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (set_folder_existing_nonexistent_cb), dialog);
 
-  button = gtk_button_new_with_label ("set_filename (\"/nonexistent\"");
+  button = gtk_button_new_with_label ("set_filename (\"/nonexistent\")");
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (set_filename_nonexistent_cb), dialog);
 
-  button = gtk_button_new_with_label ("set_filename (\"/usr/nonexistent\"");
+  button = gtk_button_new_with_label ("set_filename (\"/usr/nonexistent\")");
   gtk_container_add (GTK_CONTAINER (vbbox), button);
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
