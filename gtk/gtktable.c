@@ -321,6 +321,7 @@ gtk_table_set_row_spacings (GtkTable *table,
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
 
+  table->row_spacing = spacing;
   for (row = 0; row < table->nrows - 1; row++)
     table->rows[row].spacing = spacing;
 
@@ -337,6 +338,7 @@ gtk_table_set_col_spacings (GtkTable *table,
   g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
 
+  table->column_spacing = spacing;
   for (col = 0; col < table->ncols - 1; col++)
     table->cols[col].spacing = spacing;
 
