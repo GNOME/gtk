@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-01-15 12:29+0100\n"
-"PO-Revision-Date: 2005-02-12 00:03+0200\n"
-"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
+"PO-Revision-Date: 2005-02-20 21:58+0200\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee> \n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -54,23 +54,20 @@ msgid "Width"
 msgstr "Laius"
 
 #: gdk-pixbuf/gdk-pixbuf.c:157
-#, fuzzy
 msgid "The number of columns of the pixbuf"
-msgstr "Akna pealkiri"
+msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:167 gtk/gtklayout.c:660
 msgid "Height"
 msgstr "Kõrgus"
 
 #: gdk-pixbuf/gdk-pixbuf.c:168
-#, fuzzy
 msgid "The number of rows of the pixbuf"
-msgstr "Akna pealkiri"
+msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:185
-#, fuzzy
 msgid "Rowstride"
-msgstr "Read"
+msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:186
 msgid ""
@@ -280,9 +277,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkaction.c:250
-#, fuzzy
 msgid "Visible when overflown"
-msgstr "Nähtav aken"
+msgstr ""
 
 #: gtk/gtkaction.c:251
 msgid ""
@@ -337,7 +333,6 @@ msgid "Whether the action is visible."
 msgstr "Kas tegevus on nähtav või mitte."
 
 #: gtk/gtkaction.c:296
-#, fuzzy
 msgid "Action Group"
 msgstr "Tegevuste grupp"
 
@@ -365,55 +360,48 @@ msgid "Value"
 msgstr "Väärtus"
 
 #: gtk/gtkadjustment.c:116
-#, fuzzy
 msgid "The value of the adjustment"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkadjustment.c:132
 msgid "Minimum Value"
 msgstr "Väikseim väärtus"
 
 #: gtk/gtkadjustment.c:133
-#, fuzzy
 msgid "The minimum value of the adjustment"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkadjustment.c:152
 msgid "Maximum Value"
 msgstr "Suurim väärtus"
 
 #: gtk/gtkadjustment.c:153
-#, fuzzy
 msgid "The maximum value of the adjustment"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkadjustment.c:169
-#, fuzzy
 msgid "Step Increment"
-msgstr "Ekraan"
+msgstr ""
 
 #: gtk/gtkadjustment.c:170
-#, fuzzy
 msgid "The step increment of the adjustment"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkadjustment.c:186
 msgid "Page Increment"
 msgstr ""
 
 #: gtk/gtkadjustment.c:187
-#, fuzzy
 msgid "The page increment of the adjustment"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkadjustment.c:206
 msgid "Page Size"
 msgstr "Lehekülje suurus"
 
 #: gtk/gtkadjustment.c:207
-#, fuzzy
 msgid "The page size of the adjustment"
-msgstr "Valitud kirjatüübi nimi"
+msgstr ""
 
 #: gtk/gtkalignment.c:118
 msgid "Horizontal alignment"
@@ -798,7 +786,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:512
 msgid "Show Day Names"
-msgstr ""
+msgstr "Päevanimede näitamine"
 
 #: gtk/gtkcalendar.c:513
 msgid "If TRUE, day names are displayed"
@@ -806,7 +794,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:526
 msgid "No Month Change"
-msgstr ""
+msgstr "Kuud ei saa muuta"
 
 #: gtk/gtkcalendar.c:527
 msgid "If TRUE, the selected month cannot be changed"
@@ -814,7 +802,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:541
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Nädalanumbrite näitamine"
 
 #: gtk/gtkcalendar.c:542
 msgid "If TRUE, week numbers are displayed"
@@ -830,7 +818,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:215
 msgid "visible"
-msgstr ""
+msgstr "nähtav"
 
 #: gtk/gtkcellrenderer.c:216
 msgid "Display the cell"
@@ -886,7 +874,7 @@ msgstr "kõrgus"
 
 #: gtk/gtkcellrenderer.c:286
 msgid "The fixed height"
-msgstr ""
+msgstr "Fikseeritud kõrgus"
 
 #: gtk/gtkcellrenderer.c:296
 msgid "Is Expander"
@@ -906,19 +894,19 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:315
 msgid "Cell background color name"
-msgstr ""
+msgstr "Lahtri taustavärvi nimi"
 
 #: gtk/gtkcellrenderer.c:316
 msgid "Cell background color as a string"
-msgstr ""
+msgstr "Lahtri taustavärv stringina"
 
 #: gtk/gtkcellrenderer.c:323
 msgid "Cell background color"
-msgstr ""
+msgstr "Lahtri taustavärv"
 
 #: gtk/gtkcellrenderer.c:324
 msgid "Cell background color as a GdkColor"
-msgstr ""
+msgstr "Lahtri taustavärv GdkColor vormingus"
 
 #: gtk/gtkcellrenderer.c:332
 msgid "Cell background set"
@@ -929,9 +917,8 @@ msgid "Whether this tag affects the cell background color"
 msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:88
-#, fuzzy
 msgid "Model"
-msgstr "Modaalne"
+msgstr "Mudel"
 
 #: gtk/gtkcellrenderercombo.c:89
 msgid "The model containing the possible values for the combo box"
@@ -939,7 +926,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:109 gtk/gtkcomboboxentry.c:114
 msgid "Text Column"
-msgstr ""
+msgstr "Tekstiveerg"
 
 #: gtk/gtkcellrenderercombo.c:110 gtk/gtkcomboboxentry.c:115
 msgid "A column in the data source model to get the strings from"
@@ -1003,7 +990,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererprogress.c:116
 msgid "Value of the progress bar"
-msgstr ""
+msgstr "Edenemisriba väärtus"
 
 #: gtk/gtkcellrendererprogress.c:133 gtk/gtkcellrenderertext.c:213
 #: gtk/gtkentry.c:573 gtk/gtkprogressbar.c:220
@@ -1012,7 +999,7 @@ msgstr "Tekst"
 
 #: gtk/gtkcellrendererprogress.c:134
 msgid "Text on the progress bar"
-msgstr ""
+msgstr "Edenemisriba tekst"
 
 #: gtk/gtkcellrenderertext.c:214
 msgid "Text to render"
@@ -1036,52 +1023,52 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:237
 msgid "Single Paragraph Mode"
-msgstr ""
+msgstr "Ühe lõigu stiil"
 
 #: gtk/gtkcellrenderertext.c:238
 msgid "Whether or not to keep all text in a single paragraph"
-msgstr ""
+msgstr "Kas kogu teksti hoitakse ühe lõiguna"
 
 #: gtk/gtkcellrenderertext.c:246 gtk/gtkcellview.c:182 gtk/gtktexttag.c:207
 msgid "Background color name"
-msgstr ""
+msgstr "Taustavärvi nimi"
 
 #: gtk/gtkcellrenderertext.c:247 gtk/gtkcellview.c:183 gtk/gtktexttag.c:208
 msgid "Background color as a string"
-msgstr ""
+msgstr "Taustavärv stringina"
 
 #: gtk/gtkcellrenderertext.c:254 gtk/gtkcellview.c:189 gtk/gtktexttag.c:215
 msgid "Background color"
-msgstr ""
+msgstr "Taustavärv"
 
 #: gtk/gtkcellrenderertext.c:255 gtk/gtkcellview.c:190
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Taustavärv GdkColor väärtusena"
 
 #: gtk/gtkcellrenderertext.c:262 gtk/gtktexttag.c:241
 msgid "Foreground color name"
-msgstr ""
+msgstr "Esiplaanivärvi nimi"
 
 #: gtk/gtkcellrenderertext.c:263 gtk/gtktexttag.c:242
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Esiplaanivärv stringina"
 
 #: gtk/gtkcellrenderertext.c:270 gtk/gtktexttag.c:249
 msgid "Foreground color"
-msgstr ""
+msgstr "Esiplaanivärv"
 
 #: gtk/gtkcellrenderertext.c:271
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Esiplaanivärv GdkColor väärtusena"
 
 #: gtk/gtkcellrenderertext.c:279 gtk/gtkentry.c:505 gtk/gtktexttag.c:275
 #: gtk/gtktextview.c:577
 msgid "Editable"
-msgstr ""
+msgstr "Muudetav"
 
 #: gtk/gtkcellrenderertext.c:280 gtk/gtktexttag.c:276 gtk/gtktextview.c:578
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "Kas tekst on kasutaja poolt muudetav"
 
 #: gtk/gtkcellrenderertext.c:287 gtk/gtkcellrenderertext.c:295
 #: gtk/gtkfontsel.c:222 gtk/gtktexttag.c:283 gtk/gtktexttag.c:291
@@ -1090,11 +1077,11 @@ msgstr "Kirjatüüp"
 
 #: gtk/gtkcellrenderertext.c:288
 msgid "Font description as a string"
-msgstr ""
+msgstr "Kirjatüübi kirjeldus stringina"
 
 #: gtk/gtkcellrenderertext.c:296 gtk/gtktexttag.c:292
 msgid "Font description as a PangoFontDescription struct"
-msgstr ""
+msgstr "Kirjatüübi kirjeldus PangoFontDescription struktuurina"
 
 #: gtk/gtkcellrenderertext.c:304 gtk/gtktexttag.c:300
 msgid "Font family"
@@ -1102,7 +1089,7 @@ msgstr "Kirjaperekond"
 
 #: gtk/gtkcellrenderertext.c:305 gtk/gtktexttag.c:301
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr ""
+msgstr "Kirjaperekonna nimi (näiteks Sans, Helvetica, Times, Monospace)"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtkcellrenderertext.c:313
 #: gtk/gtktexttag.c:308
@@ -1131,7 +1118,7 @@ msgstr "Kirjasuurus"
 
 #: gtk/gtkcellrenderertext.c:359 gtk/gtktexttag.c:366
 msgid "Font points"
-msgstr ""
+msgstr "Kirjapunkte"
 
 #: gtk/gtkcellrenderertext.c:360 gtk/gtktexttag.c:367
 msgid "Font size in points"
@@ -1164,15 +1151,15 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:398 gtk/gtktexttag.c:473
 msgid "Underline"
-msgstr ""
+msgstr "Allajoonimine"
 
 #: gtk/gtkcellrenderertext.c:399 gtk/gtktexttag.c:474
 msgid "Style of underline for this text"
-msgstr ""
+msgstr "Teksti allajoonimise stiil"
 
 #: gtk/gtkcellrenderertext.c:407 gtk/gtktexttag.c:385
 msgid "Language"
-msgstr ""
+msgstr "Keel"
 
 #: gtk/gtkcellrenderertext.c:408
 msgid ""
@@ -1459,19 +1446,19 @@ msgstr ""
 
 #: gtk/gtkcombo.c:145
 msgid "Enable arrow keys"
-msgstr ""
+msgstr "Nooleklahvide lubamine"
 
 #: gtk/gtkcombo.c:146
 msgid "Whether the arrow keys move through the list of items"
-msgstr ""
+msgstr "Kas nooleklahve saab kasutada kirjete loendis liikumiseks"
 
 #: gtk/gtkcombo.c:152
 msgid "Always enable arrows"
-msgstr ""
+msgstr "Nooled on alati lubatud"
 
 #: gtk/gtkcombo.c:153
 msgid "Obsolete property, ignored"
-msgstr ""
+msgstr "Iganenud omadus, mida eiratakse"
 
 #: gtk/gtkcombo.c:159
 msgid "Case sensitive"
