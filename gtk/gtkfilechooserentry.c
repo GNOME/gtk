@@ -665,11 +665,16 @@ gtk_file_chooser_entry_focus (GtkWidget        *widget,
       (GTK_WIDGET_HAS_FOCUS (widget)) &&
       (! control_pressed))
     {
+      gint pos = 0;
+
       if (chooser_entry->has_completion)
-	{
-	  gtk_editable_set_position (GTK_EDITABLE (widget),
-				     GTK_ENTRY (widget)->text_length);
-	}
+	gtk_editable_set_position (GTK_EDITABLE (widget),
+				   GTK_ENTRY (widget)->text_length);
+      /* Trigger the completion window to pop up again by a 
+       * zero-length insertion, a bit of a hack.
+       */
+      gtk_editable_insert_text (GTK_EDITABLE (widget), "", -1, &pos);
+
       return TRUE;
     }
   else
