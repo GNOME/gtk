@@ -90,7 +90,7 @@ Sat Jan 27 15:52:02 2001  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/gtkstyle.c (gtk_default_draw_layout): handle sensitivity
 	using new GDK features
 	
-2001-01-24    <alexl@redhat.com>
+2001-01-24  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkimage.c:
 	Splitted gtk_image_clear into gtk_image_clear() and
@@ -106,7 +106,7 @@ Sat Jan 27 15:52:02 2001  Jonathan Blandford  <jrb@redhat.com>
 	* gtk/testgtk.c (create_clist):
 	Don't leak custom style.
 
-2001-01-23    <alexl@redhat.com>
+2001-01-23  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkcolorsel.c (grab_color_at_mouse):
 	Don't leak image. Simplify using gdk_colormap_query_color().
@@ -115,7 +115,7 @@ Sat Jan 27 15:52:02 2001  Jonathan Blandford  <jrb@redhat.com>
 	* linux-fb/gdkcolor-fb.c:
 	Implemented gdk_colormap_query_color.
 
-2001-01-23    <alexl@redhat.com>
+2001-01-23  Alexander Larsson  <alexl@redhat.com>
 
         * linux-fb/gdkcursor-fb.c:
 	Don't leak built-in cursors.
@@ -163,7 +163,7 @@ Sat Jan 27 15:52:02 2001  Jonathan Blandford  <jrb@redhat.com>
 	
 	* gtk/gtktextlayout.c (set_para_values): Handle char-wise wrapping
 
-2001-01-22    <alexl@redhat.com>
+2001-01-22  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/gdkwindow.c (gdk_window_invalidate_region):
 	Don't leak visible_region. Use visible_region instead of region.
@@ -175,7 +175,7 @@ Sat Jan 27 15:52:02 2001  Jonathan Blandford  <jrb@redhat.com>
 	(gdk_fb_window_send_crossing_events): Watch out for destroyed
 	windows.
 
-2001-01-22    <alexl@redhat.com>
+2001-01-22  Alexander Larsson  <alexl@redhat.com>
 
 	* gtk/gtkwindow-decorate.c (gtk_decorated_window_realize):
 	Don't leak the PangoFontDescriptor.
@@ -1301,7 +1301,6 @@ Tue Jan  2 16:23:05 2001  Owen Taylor  <otaylor@redhat.com>
 	Attach the style to the window so that the style it is not
 	leaked when unrealizing the window.
 
->>>>>>> 1.1626
 2000-12-18  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_delete_from_cursor): do
@@ -1796,7 +1795,6 @@ Mon Dec 11 10:02:26 2000  Owen Taylor  <otaylor@redhat.com>
 	* gtk/gtkcolorsel.h (GTK_COLOR_SELECTION_GET_CLASS): fix typo,
 	reported by Jeff Franks
 
->>>>>>> 1.1623
 2000-12-08  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkmouse-fb.c (gdk_fb_mouse_ms_open):
