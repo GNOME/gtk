@@ -48,13 +48,22 @@
 	(gdk_window_queue_translation,_gdk_windowing_window_queue_antiexpose):
 	Call gdk_window_queue_append().
 
-	Merge from gtk-1-3-win32-production branch:
+	Merge from gtk-1-3-win32-production and gtk-2-0:
 
 	* gdk/win32/gdkevents-win32.c (propagate): Check for parent being
 	NULL before trying to propagate to it, and return FALSE in that
 	case. (If parent is NULL, we are handling gdk_parent_root, and
 	probably should have noticed that and bailed out earlier. But
 	better late than never.)
+
+	* gdk/win32/gdkinput-win32.c (gdk_input_init): Use
+	GetSystemMetrics (SM_C[XY]SCREEN) instead of
+	gdk_screen_{width,height}().
+
+	* gdk/win32/gdkselection-win32.c (gdk_selection_convert): Don't
+	use return value from GlobalSize() as length of string when
+	calling MultiByteToWideChar(). Pass -1 instead (zero-terminated
+	string). Thanks to Iwasa Kazmi.
 
 Wed Sep 11 15:48:38 2002  Jonathan Blandford  <jrb@redhat.com>
 

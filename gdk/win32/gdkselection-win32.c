@@ -394,7 +394,7 @@ gdk_selection_convert (GdkWindow *requestor,
 		}
 
 	      wcs = g_new (wchar_t, length + 1);
-	      wclen = MultiByteToWideChar (cp, 0, ptr, length,
+	      wclen = MultiByteToWideChar (cp, 0, ptr, -1,
 					   wcs, length + 1);
 
 	      /* Strip out \r */
