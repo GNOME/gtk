@@ -1517,12 +1517,40 @@ GdkFont*
 gdk_font_load (const gchar *font_name)
 {
   GdkFont *font;
+  GdkFontPrivateWin32 *private;
+  GdkWin32SingleFont *singlefont;
+  HGDIOBJ oldfont;
+  HANDLE *f;
+  TEXTMETRIC textmetric;
 
   g_return_val_if_fail (font_name != NULL, NULL);
 
   font = gdk_font_hash_lookup (GDK_FONT_FONTSET, font_name);
   if (font)
     return font;
+
+  private = g_new (GdkFontPrivateWin32, 1);
+  font = (GdkFont*) private;
+
+  singlefont = gdk_font_load_internal (font_name);
+
+  private->base.ref_count = 1;
+  private->names = NULL;
+  private->fonts = g_slist_append (NULL, singlefont);
+
+  /* Pretend all fonts are fontsets... Gtktext and gtkentry work better
+   * that way, they use wide chars, which is necessary for non-ASCII
+   * chars to work. (Yes, even Latin-1, as we use Unicode internally.)
+   */
+  font->type = GDK_FONT_FONTSET;
+  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
+  GetTextMetrics (gdk_display_hdc, &textmetric);
+  SelectObject (gdk_display_hdc, oldfont);
+  font->ascent = textmetric.tmAscent;
+  font->descent = textmetric.tmDescent;
+
+  GDK_NOTE (MISC, g_print ("... asc %d desc %d\n",
+			   font->ascent, font->descent));
 
   gdk_font_hash_insert (GDK_FONT_FONTSET, font, font_name);
 

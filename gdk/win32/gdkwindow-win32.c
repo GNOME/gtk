@@ -770,7 +770,10 @@ _gdk_windowing_window_destroy (GdkWindow *window,
 	}
     }
   else if (!recursing && !foreign_destroy)
-    DestroyWindow (GDK_WINDOW_HWND (window));
+    {
+      private->destroyed = TRUE;
+      DestroyWindow (GDK_WINDOW_HWND (window));
+    }
 }
 
 /* This function is called when the window really gone.

@@ -1,3 +1,20 @@
+2001-07-29  Hans Breuer  <hans@breuer.org>
+
+	* gdk/makefile.msc : build in the backend dir after
+	auto-generating files
+
+	* gdk/win32/gdkfont-win32.c (gdk_font_load) : reimplement
+	with code from win32-production-branch.
+
+	*  gdk/win32/gdkwindow-win32.c : set the private->destroyed flag
+	before calling DestroyWindow, which indirectly calls 
+	gdk_window_destroy_notify ()
+
+	(performance patch merged from win32-production-branch)
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_segments): 
+	Use PatBlt() instead of LineTo() when possible (solid single-pixel pen, 
+	R2_COPYPEN rop). It is claimed to be much faster.
+
 Fri Jul 27 11:31:15 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_get_property):

@@ -45,11 +45,17 @@ CFLAGS = -I . -I .. $(GLIB_CFLAGS) $(PANGO_CFLAGS) -I ../gdk-pixbuf \
 EXTRALIBS = $(WTKIT)\lib\i386\wntab32x.lib $(GLIB_LIBS) \
 		..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib $(PANGOWIN32_LIBS)
 
+gdk-win32-backend :
+	cd win32
+	nmake -nologo -f makefile.msc
+	cd ..
+	
 all: \
 	..\config.h \
 	gdkconfig.h \
 	gdkenumtypes.h \
 	gdkenumtypes.c \
+	gdk-win32-backend \
 	gdk-win32-$(GTK_VER).dll \
 	testgdk.exe
 
