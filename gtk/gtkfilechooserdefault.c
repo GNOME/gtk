@@ -1441,11 +1441,14 @@ shortcuts_add_current_folder (GtkFileChooserDefault *impl)
 	  strcmp (gtk_file_path_get_string (base_path), gtk_file_path_get_string (impl->current_folder)) == 0)
 	{
 	  success = shortcuts_insert_path (impl, pos, TRUE, volume, NULL, NULL, FALSE, NULL);
-	  if (!success)
-	    gtk_file_system_volume_free (impl->file_system, volume);
+	  if (success)
+	    volume = NULL;
 	}
       else
 	success = shortcuts_insert_path (impl, pos, FALSE, NULL, impl->current_folder, NULL, FALSE, NULL);
+
+      if (volume)
+	gtk_file_system_volume_free (impl->file_system, volume);
 
       if (base_path)
 	gtk_file_path_free (base_path);

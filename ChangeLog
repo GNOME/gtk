@@ -4,6 +4,8 @@
 	get text unnecessarily.  (#155384, Morten Welinder)
 	(gtk_file_chooser_default_finalize): Don't forget to
 	unref the tooltips.  (#155412, Morten Welinder)
+	(shortcuts_add_current_folder): Don't leak volume. (#155400,
+	Morten Welinder)
 
 2004-10-12  Matthias Clasen  <mclasen@redhat.com>
 
