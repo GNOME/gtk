@@ -245,6 +245,7 @@ gtk_list_store_init (GtkListStore *list_store)
   list_store->stamp = g_random_int ();
   list_store->sort_column_id = -2;
   list_store->columns_dirty = FALSE;
+  list_store->length = 0;
 }
 
 /**
@@ -932,6 +933,8 @@ gtk_list_store_remove (GtkListStore *list_store,
   
   _gtk_tree_data_list_free (_gtk_sequence_ptr_get_data (ptr), list_store->column_headers);
   _gtk_sequence_remove (iter->user_data);
+
+  list_store->length--;
   
   gtk_tree_model_row_deleted (GTK_TREE_MODEL (list_store), path);
   gtk_tree_path_free (path);
@@ -992,6 +995,8 @@ gtk_list_store_insert (GtkListStore *list_store,
 
   g_assert (VALID_ITER (iter, list_store));
 
+  list_store->length++;
+  
   path = gtk_tree_path_new ();
   gtk_tree_path_append_index (path, position);
   gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
