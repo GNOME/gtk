@@ -653,6 +653,7 @@ static GtkEnumValue _gdk_modifier_type_values[] = {
   { GDK_BUTTON3_MASK, "GDK_BUTTON3_MASK", "button3-mask" },
   { GDK_BUTTON4_MASK, "GDK_BUTTON4_MASK", "button4-mask" },
   { GDK_BUTTON5_MASK, "GDK_BUTTON5_MASK", "button5-mask" },
+  { GDK_RELEASE_MASK, "GDK_RELEASE_MASK", "release-mask" },
   { GDK_MODIFIER_MASK, "GDK_MODIFIER_MASK", "modifier-mask" },
   { 0, NULL, NULL }
 };

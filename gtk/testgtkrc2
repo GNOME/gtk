@@ -12,10 +12,10 @@
 
 # this file gets included from testgtkrc
 
-style 'button_list' = 'button'
+style 'main_buttons' = 'button'
 {
   font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 0, 0.75, 0x00 }
+  bg[PRELIGHT] = { 0, 0, 0.75 }
 }
 
-widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
+widget "main window.*GtkButton*" style "main_buttons"

@@ -488,7 +488,7 @@ gtk_rc_add_widget_name_style (GtkStyle	 *style,
   gtk_pattern_spec_init (&rc_set->pspec, pattern);
   rc_set->rc_style = rc_style;
   
-  gtk_rc_sets_widget = g_slist_append (gtk_rc_sets_widget, rc_set);
+  gtk_rc_sets_widget = g_slist_prepend (gtk_rc_sets_widget, rc_set);
 }
 
 void
@@ -515,7 +515,7 @@ gtk_rc_add_widget_class_style (GtkStyle *style,
   gtk_pattern_spec_init (&rc_set->pspec, pattern);
   rc_set->rc_style = rc_style;
   
-  gtk_rc_sets_widget_class = g_slist_append (gtk_rc_sets_widget_class, rc_set);
+  gtk_rc_sets_widget_class = g_slist_prepend (gtk_rc_sets_widget_class, rc_set);
 }
 
 static void
@@ -1404,7 +1404,7 @@ gtk_rc_parse_widget_style (GScanner *scanner)
       return G_TOKEN_STRING;
     }
   
-  gtk_rc_sets_widget = g_slist_append (gtk_rc_sets_widget, rc_set);
+  gtk_rc_sets_widget = g_slist_prepend (gtk_rc_sets_widget, rc_set);
   
   return G_TOKEN_NONE;
 }
@@ -1450,7 +1450,7 @@ gtk_rc_parse_widget_class_style (GScanner *scanner)
       return G_TOKEN_STRING;
     }
   
-  gtk_rc_sets_widget_class = g_slist_append (gtk_rc_sets_widget_class, rc_set);
+  gtk_rc_sets_widget_class = g_slist_prepend (gtk_rc_sets_widget_class, rc_set);
   
   return G_TOKEN_NONE;
 }

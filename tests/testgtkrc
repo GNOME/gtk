@@ -10,8 +10,7 @@
 # widget <widget_set> style <style_name>
 # widget_class <widget_class_set> style <style_name>
 
-# testgtkrc2 introduces the green color in the button list
-
+# testgtkrc2 sets all the buttons in the main window to blue by default
 include "testgtkrc2"
 
 pixmap_path "."
@@ -33,17 +32,11 @@ style "scale"
   bg_pixmap[NORMAL] = "<parent>"
 }
 
-style "button"
+style "button" = "default"
 {
 #  fg[PRELIGHT] = { 1.0, 1.0, 1.0 }
 #  bg[PRELIGHT] = { 0, 0, 0.75 }
-}
-
-# we set all the buttons in the main window to be blue by default
-style 'main_buttons' = 'button'
-{
-  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
-  bg[PRELIGHT] = { 0, 0, 0.75 }
+#  bg[PRELIGHT] = { 0.75, 0, 0x00 }
 }
 
 style "toggle_button" = "button"
@@ -79,6 +72,15 @@ style "curve"
   fg[NORMAL] = { 58000, 0, 0 }			# red
 }
 
+# override testgtk2, introduce the green color in the button list
+style 'button_list' = 'button'
+{
+  font = "-adobe-helvetica-medium-r-normal--*-100-*-*-*-*-*-*"
+  bg[PRELIGHT] = { 0, 0.75, 0x00 }
+}
+widget "main window.*GtkScrolledWindow.*GtkButton*" style "button_list"
+
+widget_class "*" style "default"
 widget_class "GtkWindow" style "window"
 widget_class "GtkDialog" style "window"
 widget_class "GtkFileSelection" style "window"
@@ -88,6 +90,4 @@ widget_class "*GtkRadioButton*" style "toggle_button"
 widget_class "*GtkButton*" style "button"
 widget_class "*Ruler" style "ruler"
 widget_class "*GtkText" style "text"
-widget_class "*" style "default"
-widget "main window.*GtkButton*" style "main_buttons"
 widget "*GtkCurve" style "curve"

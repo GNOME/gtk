@@ -614,6 +614,7 @@
    (button3-mask GDK_BUTTON3_MASK)
    (button4-mask GDK_BUTTON4_MASK)
    (button5-mask GDK_BUTTON5_MASK)
+   (release-mask GDK_RELEASE_MASK)
    (modifier-mask GDK_MODIFIER_MASK))
 
 (define-enum GdkSubwindowMode

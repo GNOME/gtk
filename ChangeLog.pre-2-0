@@ -1,3 +1,9 @@
+Tue Jun 30 14:30:37 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkrc.c: fixed lookup order for rc styles. the latest defined
+	rc set pattern is favoured, this is needed for overriding of style
+	patterns with subsequently parsed rc files.
+
 Tue Jun 30 12:45:19 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkrc.c: code overhaul for simplicity and more descriptive
