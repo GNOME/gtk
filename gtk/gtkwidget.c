@@ -477,7 +477,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 				   PROP_COMPOSITE_CHILD,
 				   g_param_spec_boolean ("composite_child",
  							 _("Composite child"),
- 							 _("Whether the widget is composed of other widgets"),
+ 							 _("Whether the widget is part of a composite widget"),
  							 FALSE,
  							 G_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
