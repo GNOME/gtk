@@ -272,6 +272,9 @@ gtk_tool_item_finalize (GObject *object)
 {
   GtkToolItem *item = GTK_TOOL_ITEM (object);
 
+  if (item->priv->menu_item_id)
+    g_free (item->priv->menu_item_id);
+  
   if (item->priv->menu_item)
     g_object_unref (item->priv->menu_item);
   
