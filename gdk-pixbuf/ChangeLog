@@ -1,3 +1,8 @@
+1999-11-08  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-ras.c (image_load_increment): Final patch from Arjan.
+	Seems to do progressive loading.
+
 1999-11-08  Michael Fulbright  <drmike@redhat.com>
 
 	* src/io-pnm.c image_load (): Fixed so we do not create a separate
@@ -15,6 +20,16 @@
 
 	* doc/tmpl/gnome-canvas-pixbuf.sgml: Finished detailed explanation
 	of the width, height, x, and y setting and pixels arguments.
+
+1999-11-05  Jonathan Blandford  <jrb@redhat.com>
+	
+	* src/io-ras.c (image_load): third patch.  Now it seems to load.
+
+	* src/gdk-pixbuf-io.c: second patch Arjan van de Ven
+	<arjan@fenrus.demon.nl> to autodetect/load the sunras files.
+
+	* src/io-ras.c (image_load): new file from Arjan van de Ven
+	<arjan@fenrus.demon.nl> to begin the ras loader.
 
 1999-11-05  Federico Mena Quintero  <federico@redhat.com>
 
@@ -79,6 +94,8 @@
 	actual update.
 	* src/io-png.c (image_begin_load): add a update_func callback.
 	* src/io-gif.c (image_begin_load): add a update_func callback.
+	(gif_get_lzw): added the update_func ability
+
 	* src/io-tiff.c (image_begin_load): add a update_func callback.
 
 1999-11-04  Federico Mena Quintero  <federico@redhat.com>
