@@ -1,3 +1,11 @@
+2004-07-12  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkentrycompletion.c: Warning fixes.  (#147420,
+	Morten Welinder)
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_key_press): Pop down 
+	first. (#147399, John Cupitt)
+
 Sat Jul 10 23:35:13 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentry.c (paste_received): Make middle-button pasting
