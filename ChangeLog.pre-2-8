@@ -1,3 +1,8 @@
+2004-10-22  Anders Carlsson  <andersca@gnome.org>
+
+	* gtk/gtktexttag.c: (gtk_text_tag_get_property):
+	GdkBitmap is a GObject, not a boxed type.
+	
 Thu Oct 21 15:01:09 2004  Owen Taylor  <otaylor@redhat.com>
 
 	#155952

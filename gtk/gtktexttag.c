@@ -1377,12 +1377,12 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_BACKGROUND_STIPPLE:
       if (tag->bg_stipple_set)
-        g_value_set_boxed (value, tag->values->appearance.bg_stipple);
+        g_value_set_object (value, tag->values->appearance.bg_stipple);
       break;
 
     case PROP_FOREGROUND_STIPPLE:
       if (tag->fg_stipple_set)
-        g_value_set_boxed (value, tag->values->appearance.fg_stipple);
+        g_value_set_object (value, tag->values->appearance.fg_stipple);
       break;
 
     case PROP_FONT:
