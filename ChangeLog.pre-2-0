@@ -1,3 +1,12 @@
+Wed Sep  9 02:48:44 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* configure.in: added -posix check for NeXTStep
+
+	* gtk/testthreads.c: applied part of gtk-joke-980907-0 to use
+	a unique buffer for each thread.
+
+	* docs/gtk-config.1: clarified copyright
+
 Tue Sep  8 05:19:51 1998  Tim Janik  <timj@gtk.org>
 
 	* gdk/gdk.c (gdk_init): use g_atexit() instead of ATEXIT.
