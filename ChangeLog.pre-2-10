@@ -1,5 +1,12 @@
 2001-12-31  Havoc Pennington  <hp@pobox.com>
 
+	* tests/testtext.c (do_insert_and_scroll): remove backward_char
+	since we no longer have bogus newline
+	(dialog_response_callback): remove another backward_char horkage, 
+	reported by Matthias Clasen #63065
+
+2001-12-31  Havoc Pennington  <hp@pobox.com>
+
 	* gtk/gtktextbtree.c (gtk_text_btree_node_view_check_consistency):
 	fix an incorrect assertion that the "valid" flag is always correct
 	in a node and add explanatory comment. This keeps me from 

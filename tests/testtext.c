@@ -874,7 +874,6 @@ do_insert_and_scroll (gpointer             callback_data,
   gtk_text_buffer_get_bounds (buffer, &start, &end);
   mark = gtk_text_buffer_create_mark (buffer, NULL, &end, /* right grav */ FALSE);
 
-  gtk_text_iter_backward_char (&end);
   gtk_text_buffer_insert (buffer, &end,
                           "Hello this is multiple lines of text\n"
                           "Line 1\n"  "Line 2\n"
@@ -1161,13 +1160,10 @@ dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
   buffer = g_object_get_data (G_OBJECT (dialog), "buffer");
 
   gtk_text_buffer_get_bounds (buffer, &start, &end);
-
-  /* Remove trailing newline */
-  gtk_text_iter_backward_char (&end);
   
   search_string = gtk_text_iter_get_text (&start, &end);
 
-  printf ("Searching for `%s'\n", search_string);
+  g_print ("Searching for `%s'\n", search_string);
 
   if (response_id == RESPONSE_FORWARD)
     buffer_search_forward (view->buffer, search_string, view);
