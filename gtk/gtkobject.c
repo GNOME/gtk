@@ -52,6 +52,7 @@ struct _GtkArgInfo
   GtkType type;
   GtkType class_type;
   guint arg_id;
+  guint seq_id;
 };
 
 
@@ -464,28 +465,33 @@ gtk_object_query_args (GtkType	class_type,
   if (query_data.arg_list)
     {
       register GList	*list;
-      register guint	i;
+      register guint	len;
 
       list = query_data.arg_list;
-      
-      i = g_list_length (list);
-      args = g_new0 (GtkArg, i);
-      *nargs = i;
+      len = 1;
+      while (list->next)
+	{
+	  len++;
+	  list = list->next;
+	}
+      g_assert (len == ((GtkObjectClass*) gtk_type_class (class_type))->n_args); /* paranoid */
+
+      args = g_new0 (GtkArg, len);
+      *nargs = len;
 
       do
 	{
 	  GtkArgInfo *info;
 
-	  i--;
 	  info = list->data;
-	  list = list->next;
+	  list = list->prev;
 
-	  args[i].type = info->type;
-	  args[i].name = info->name;
+	  g_assert (info->seq_id > 0 && info->seq_id <= len); /* paranoid */
+
+	  args[info->seq_id - 1].type = info->type;
+	  args[info->seq_id - 1].name = info->name;
 	}
-      while (i > 0);
-
-      g_assert (list == NULL); /* paranoid */
+      while (list);
 
       g_list_free (query_data.arg_list);
     }
@@ -634,6 +640,8 @@ gtk_object_add_arg_type (const char *arg_name,
   info->type = arg_type;
   info->class_type = class_type;
   info->arg_id = arg_id;
+  info->seq_id = ++((GtkObjectClass*) gtk_type_class (class_type))->n_args;
+  printf ("arg seq id: %d for %s\n", info->seq_id, info->name);
 
   if (!arg_info_ht)
     arg_info_ht = g_hash_table_new (g_str_hash, g_str_equal);
