@@ -17,5 +17,3 @@ Makefile.in
 *.vrs
 html
 text
-texinfo.tex
-gtk-config.1

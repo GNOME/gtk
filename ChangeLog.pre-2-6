@@ -1,3 +1,22 @@
+Wed Jun 21 12:50:58 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* docs/es/: Removed mistakenly added generated sgml
+
+	* docs/{gdk.texi,gtk.texi,gdk.sgml} macros.texi texinfo.tex:
+	Remove outdated info files.
+
+	* docs/gtk_tut* docs/package_tutorial.sh docs/tutorial:
+	Moved tutorial files into subdir
+
+	* docs/gtkfaq.sgml docs/faq/gtkfaq.sgml: Move FAQ into
+	subdir.
+
+	* docs/man/gtk_button.pod: Remove. (contents will be
+	integrated into gtk-reference button page.)
+
+	* configure.in docs/Makefile.am docs/tutorial/Makefile.am
+	docs/faq/Makefile.am: Adjust for new organization
+
 2000-06-21 Christopher Blizzard  <blizzard@redhat.com>
 
         * gdk/x11/Makefile.am (install-data-local): use $(mkinstalldirs)
