@@ -386,7 +386,7 @@ gdk_im_real_open (void)
 
       destroy_cb.callback = gdk_im_destroy_cb;
       destroy_cb.client_data = NULL;
-      if (NULL != XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL))
+      if (NULL != (void *) XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL))
 	GDK_NOTE (XIM, g_warning ("Could not set destroy callback to IM. Be careful to not destroy your input method."));
 #endif
 

@@ -1,3 +1,10 @@
+Tue May  4 11:12:56 PDT 1999 Manish Singh <yosh@gimp.org>
+
+	* gdk/gdkim.c (gdk_im_real_open): cast the return value of
+	XSetIMValues to (void *) when comparing to NULL, to workaround
+	the problem of some compilers barfing since older X headers don't
+	have the prototype for it.
+
 Tue May  4 09:32:08 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/Makefile.am gtk/gtkrc.iso-8859-2: Add a gtkrc
