@@ -1,3 +1,11 @@
+Wed Jul 15 14:20:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtksignal.c (gtk_signal_real_emit): pass only the signal_id
+	to this function. it needs to relookup the signal multiple times.
+	this fixes spurious segfaults that could show up with signal intensive
+	code, when classes are created during a pending emission (which is
+	normal case).
+
 Tue Jul 14 19:12:12 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkbutton.c (gtk_button_set_arg): don't destroy a buttons

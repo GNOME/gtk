@@ -130,7 +130,7 @@ static void	    gtk_signal_handler_unref   (GtkHandler    *handler,
 static void	    gtk_signal_handler_insert  (GtkObject     *object,
 						GtkHandler    *handler);
 static void	    gtk_signal_real_emit       (GtkObject     *object,
-						GtkSignal     *signal,
+						guint	       signal_id,
 						GtkArg	      *params);
 static GtkHandler*  gtk_signal_get_handlers    (GtkObject     *object,
 						guint	       signal_type);
@@ -486,7 +486,7 @@ gtk_signal_emitv (GtkObject           *object,
   if (signal->nparams > 0)
     g_return_if_fail (params != NULL);
 
-  gtk_signal_real_emit (object, signal, params);
+  gtk_signal_real_emit (object, signal_id, params);
 }
 
 void
@@ -515,7 +515,7 @@ gtk_signal_emit (GtkObject *object,
   va_end (args);
 
   if (!abort)
-    gtk_signal_real_emit (object, signal, params);
+    gtk_signal_real_emit (object, signal_id, params);
 }
 
 void
@@ -539,7 +539,7 @@ gtk_signal_emitv_by_name (GtkObject           *object,
       g_return_if_fail (signal != NULL);
       g_return_if_fail (gtk_type_is_a (GTK_OBJECT_TYPE (object), signal->object_type));
 
-      gtk_signal_real_emit (object, signal, params);
+      gtk_signal_real_emit (object, signal_id, params);
     }
   else
     {
@@ -581,7 +581,7 @@ gtk_signal_emit_by_name (GtkObject	 *object,
       va_end (args);
 
       if (!abort)
-	gtk_signal_real_emit (object, signal, params);
+	gtk_signal_real_emit (object, signal_id, params);
     }
   else
     {
@@ -1354,13 +1354,15 @@ static GtkObject *gtk_trace_signal_object = NULL;
 
 static void
 gtk_signal_real_emit (GtkObject *object,
-		      GtkSignal *signal,
+		      guint      signal_id,
 		      GtkArg	*params)
 {
+  GtkSignal *signal;
   GtkHandler	*handlers;
   GtkHandlerInfo info;
   guchar       **signal_func_offset;
-  register guint signal_id = signal->signal_id;
+
+  signal = LOOKUP_SIGNAL_ID (signal_id);
 
 #ifdef  G_ENABLE_DEBUG
   if (gtk_debug_flags & GTK_DEBUG_SIGNALS ||
@@ -1388,8 +1390,11 @@ gtk_signal_real_emit (GtkObject *object,
       signal_func_offset = (guchar**) ((guchar*) object->klass +
 				       signal->function_offset);
       if (*signal_func_offset)
-	(* signal->marshaller) (object, (GtkSignalFunc) *signal_func_offset,
-				NULL, params);
+	{
+	  (* signal->marshaller) (object, (GtkSignalFunc) *signal_func_offset,
+				  NULL, params);
+	  signal = LOOKUP_SIGNAL_ID (signal_id);
+	}
     }
   
   if (GTK_OBJECT_CONNECTED (object))
@@ -1397,6 +1402,8 @@ gtk_signal_real_emit (GtkObject *object,
       handlers = gtk_signal_get_handlers (object, signal_id);
       if (handlers)
 	{
+	  gint return_val;
+
 	  info.object = object;
 	  info.marshaller = signal->marshaller;
 	  info.params = params;
@@ -1406,7 +1413,9 @@ gtk_signal_real_emit (GtkObject *object,
 	  info.signal_flags = signal->signal_flags;
 	  info.signal_id = signal_id;
 
-	  switch (gtk_handlers_run (handlers, &info, FALSE))
+	  return_val = gtk_handlers_run (handlers, &info, FALSE);
+	  signal = LOOKUP_SIGNAL_ID (signal_id);
+	  switch (return_val)
 	    {
 	    case  EMISSION_CONTINUE:
 	      break;
@@ -1427,8 +1436,11 @@ gtk_signal_real_emit (GtkObject *object,
       signal_func_offset = (guchar**) ((guchar*) object->klass +
 				       signal->function_offset);
       if (*signal_func_offset)
-	(* signal->marshaller) (object, (GtkSignalFunc) *signal_func_offset,
-				NULL, params);
+	{
+	  (* signal->marshaller) (object, (GtkSignalFunc) *signal_func_offset,
+				  NULL, params);
+	  signal = LOOKUP_SIGNAL_ID (signal_id);
+	}
     }
   
   if (GTK_OBJECT_CONNECTED (object))
@@ -1436,6 +1448,8 @@ gtk_signal_real_emit (GtkObject *object,
       handlers = gtk_signal_get_handlers (object, signal_id);
       if (handlers)
 	{
+	  gint return_val;
+
 	  if (!info.object)
 	    {
 	      info.object = object;
@@ -1447,7 +1461,9 @@ gtk_signal_real_emit (GtkObject *object,
 	      info.signal_flags = signal->signal_flags;
 	      info.signal_id = signal_id;
 	    }
-	  switch (gtk_handlers_run (handlers, &info, TRUE))
+	  return_val = gtk_handlers_run (handlers, &info, TRUE);
+	  signal = LOOKUP_SIGNAL_ID (signal_id);
+	  switch (return_val)
 	    {
 	    case  EMISSION_CONTINUE:
 	      break;
