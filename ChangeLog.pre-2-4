@@ -1,3 +1,9 @@
+Mon Sep 30 14:46:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkbindings.c (gtk_binding_set_new): Initialize
+	->parsed field. (#94536, patch from Sebastian Ritau. Maybe 
+	fixes #87411?)
+
 2002-09-30  Stanislav Brabec  <sbrabec@suse.cz>
 
 	* gtk/gtkimcontextsimple.c: Completed ISO-8859-2 characters
