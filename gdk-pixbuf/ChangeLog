@@ -1,3 +1,10 @@
+Sun May 16 22:53:47 2004  Matthias Clasen  <maclas@gmx.de>
+
+        Merged from 2.4
+
+	* io-pnm.c (pnm_read_next_value): Don't read integers 
+	partially.  (#142584, Kouichirou Hiratsuka) 
+
 2004-05-10  Matthias Clasen  <mclasen@redhat.com>
 
 	Merged from 2.4:

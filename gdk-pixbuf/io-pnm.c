@@ -237,7 +237,7 @@ pnm_read_next_value (PnmIOBuffer *inbuf, guint *value, GError **error)
 	*word = '\0';
 	
 	/* hmmm, there must be more data to this 'word' */
-	if (!g_ascii_isspace (*p) && (*p != '#')  && (p - inptr < 128))
+	if (p == inend || (!g_ascii_isspace (*p) && (*p != '#')  && (p - inptr < 128)))
 	    return PNM_SUSPEND;
 	
 	/* get the value */
