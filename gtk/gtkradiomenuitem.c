@@ -78,7 +78,6 @@ void
 gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
 			       GSList           *group)
 {
-  g_return_if_fail (radio_menu_item != NULL);
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
   g_return_if_fail (!g_slist_find (group, radio_menu_item));
   
@@ -172,7 +171,6 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 GSList*
 gtk_radio_menu_item_group (GtkRadioMenuItem *radio_menu_item)
 {
-  g_return_val_if_fail (radio_menu_item != NULL, NULL);
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item), NULL);
 
   return radio_menu_item->group;
@@ -212,7 +210,6 @@ gtk_radio_menu_item_destroy (GtkObject *object)
   GtkRadioMenuItem *tmp_menu_item;
   GSList *tmp_list;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (object));
 
   radio_menu_item = GTK_RADIO_MENU_ITEM (object);
@@ -242,7 +239,6 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   GSList *tmp_list;
   gint toggled;
 
-  g_return_if_fail (menu_item != NULL);
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (menu_item));
 
   radio_menu_item = GTK_RADIO_MENU_ITEM (menu_item);
@@ -305,7 +301,6 @@ gtk_radio_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   gint width, height;
   gint x, y;
 
-  g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (check_menu_item));
 
   if (GTK_WIDGET_DRAWABLE (check_menu_item))

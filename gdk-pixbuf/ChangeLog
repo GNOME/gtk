@@ -1,3 +1,50 @@
+2001-07-20  Hans Breuer  <hans@breuer.org>
+
+	* gdk-pixdata.c : don't 'g_tohl (*istream++)', but move
+	pointer increment out of the macro, because  at least one
+	compiler (msvc 5.0) gets confused otherwise (applies the
+	wrong increment).
+
+	* gdk_pixbuf.def : updated exports
+
+	* makefile.msc : reflect gdk-pixbuf-csource changes
+ 
+2001-07-17  Darin Adler  <darin@bentspoon.com>
+
+	* gdk-pixbuf-csource.c: Add missing <stdlib.h> include.
+	* io-png.c: (setup_png_transformations): Add ifdef so we compile
+	without warnings with G_DISABLE_CHECKS on.
+	* io-pnm.c: (gdk_pixbuf__pnm_image_load_increment): Add a missing
+	const.
+	* io-wbmp.c: (getin), (get_mbi): Add a missing const.
+	* io-xbm.c: (gdk_pixbuf__xbm_image_load_real): Get rid of some
+	unused locals and add an initial value to quiet the compiler's
+	unintialized variable warning.
+	* pixops/pixops.c: Put an ifdef around some dead code.
+
+Thu Jul  5 10:17:15 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/Makefile.am (noinst_LTLIBRARIES): Switch
+	over to the new include flags AC_SUBST(). (Problem
+	pointed out by Mikael Hermansson.)
+
+2001-06-29  Havoc Pennington  <hp@redhat.com>
+
+	* gdk-pixbuf-loader.c (gdk_pixbuf_loader_class_init): fix for
+	G_DISABLE_COMPAT
+
+Thu Jun 28 21:54:19 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* make-inline-pixbuf.c test-gdk-pixbuf.c test-loaders.c
+	gdk-pixbuf-csource.c: Fix args to g_type_init ().
+
+2001-06-28  Havoc Pennington  <hp@pobox.com>
+
+	* gdk-pixdata.c: <string.h>
+
+	* gdk-pixbuf-io.c (get_libdir): fix typo in dll name (aren't we
+	also leaking memory here from g_strdup_printf?)
+
 Tue Jun 26 09:48:02 2001  Tim Janik  <timj@gtk.org>
 
 	* Makefile.am (noinst_PROGRAMS): get rid of make-inline-pixbuf
@@ -113,7 +160,6 @@ Sun May 20 12:53:49 2001  Owen Taylor  <otaylor@redhat.com>
 	* Makefile.am (libgdk_pixbuf_1_3_la_LDFLAGS): Remove an
 	excess $(GLIB_LIBS).
 
->>>>>>> 1.305
 Sun May 13 11:59:11 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* Makefile.am: Make modules depend on libgdk_pixbuf.la.

@@ -77,31 +77,6 @@ static GdkWindow *wintab_window;
 
 #endif /* HAVE_WINTAB */
 
-gboolean
-gdk_device_get_history  (GdkDevice         *device,
-			 GdkWindow         *window,
-			 guint32            start,
-			 guint32            stop,
-			 GdkTimeCoord    ***events,
-			 gint              *n_events)
-{
-  g_return_val_if_fail (window != NULL, FALSE);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-  g_return_val_if_fail (events != NULL, FALSE);
-  g_return_val_if_fail (n_events != NULL, FALSE);
-
-  *n_events = 0;
-  *events = NULL;
-
-  if (GDK_WINDOW_DESTROYED (window))
-    return FALSE;
-    
-  if (GDK_IS_CORE (device))
-    return FALSE;
-  else
-    return _gdk_device_get_history (device, window, start, stop, events, n_events);
-}
-
 #ifdef HAVE_WINTAB
 
 static GdkDevicePrivate *
@@ -1222,10 +1197,11 @@ gdk_input_init (void)
   gdk_input_ignore_core = FALSE;
   gdk_input_devices = NULL;
 
+  _gdk_init_input_core ();
 #ifdef HAVE_WINTAB
   gdk_input_wintab_init ();
 #endif /* HAVE_WINTAB */
 
-  gdk_input_devices = g_list_append (gdk_input_devices, &gdk_input_core_info);
+  gdk_input_devices = g_list_append (gdk_input_devices, gdk_core_pointer);
 }
 

@@ -36,13 +36,20 @@
 #include <gtk/gtkenums.h>
 
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 
-typedef struct _GtkAccelGroup	GtkAccelGroup;
-typedef struct _GtkAccelEntry	GtkAccelEntry;
+#define GTK_TYPE_ACCEL_GROUP              (gtk_accel_group_get_type ())
+#define GTK_ACCEL_GROUP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_ACCEL_GROUP, GtkAccelGroup))
+#define GTK_ACCEL_GROUP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupClass))
+#define GTK_IS_ACCEL_GROUP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_ACCEL_GROUP))
+#define GTK_IS_ACCEL_GROUP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ACCEL_GROUP))
+#define GTK_ACCEL_GROUP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ACCEL_GROUP, GtkAccelGroupClass))
+
+
+typedef struct _GtkAccelGroup	   GtkAccelGroup;
+typedef struct _GtkAccelGroupClass GtkAccelGroupClass;
+typedef struct _GtkAccelEntry	   GtkAccelEntry;
 
 typedef enum
 {
@@ -63,10 +70,15 @@ typedef enum
 
 struct _GtkAccelGroup
 {
-  guint	          ref_count;
+  GObject         parent;
   guint	          lock_count;
   GdkModifierType modifier_mask;
   GSList         *attach_objects;
+};
+
+struct _GtkAccelGroupClass
+{
+  GObjectClass parent_class;
 };
 
 struct _GtkAccelEntry
@@ -78,7 +90,7 @@ struct _GtkAccelEntry
   GdkModifierType	 accelerator_mods;
   
   GtkAccelFlags		 accel_flags;
-  GtkObject		*object;
+  GObject		*object;
   guint			 signal_id;
 };
 
@@ -98,13 +110,14 @@ guint	 gtk_accelerator_get_default_mod_mask (void);
 
 /* Accelerator Groups
  */
+GType           gtk_accel_group_get_type        (void);
 GtkAccelGroup*  gtk_accel_group_new	      	(void);
 GtkAccelGroup*  gtk_accel_group_get_default    	(void);
 GtkAccelGroup*  gtk_accel_group_ref	     	(GtkAccelGroup	*accel_group);
 void	        gtk_accel_group_unref	      	(GtkAccelGroup	*accel_group);
 void		gtk_accel_group_lock		(GtkAccelGroup	*accel_group);
 void		gtk_accel_group_unlock		(GtkAccelGroup	*accel_group);
-gboolean        gtk_accel_groups_activate      	(GtkObject	*object,
+gboolean        gtk_accel_groups_activate      	(GObject	*object,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods);
 
@@ -114,9 +127,9 @@ gboolean        gtk_accel_group_activate	(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods);
 void		gtk_accel_group_attach		(GtkAccelGroup	*accel_group,
-						 GtkObject	*object);
+						 GObject	*object);
 void		gtk_accel_group_detach		(GtkAccelGroup	*accel_group,
-						 GtkObject	*object);
+						 GObject	*object);
 
 /* Accelerator Group Entries (internal)
  */
@@ -133,42 +146,39 @@ void		gtk_accel_group_add		(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods,
 						 GtkAccelFlags	 accel_flags,
-						 GtkObject	*object,
+						 GObject	*object,
 						 const gchar	*accel_signal);
 void		gtk_accel_group_remove		(GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods,
-						 GtkObject	*object);
+						 GObject	*object);
 
 /* Accelerator Signals (internal)
  */
-void		gtk_accel_group_handle_add	(GtkObject	*object,
+void		gtk_accel_group_handle_add	(GObject	*object,
 						 guint		 accel_signal_id,
 						 GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods,
 						 GtkAccelFlags   accel_flags);
-void		gtk_accel_group_handle_remove	(GtkObject	*object,
+void		gtk_accel_group_handle_remove	(GObject	*object,
 						 GtkAccelGroup	*accel_group,
 						 guint		 accel_key,
 						 GdkModifierType accel_mods);
-guint		gtk_accel_group_create_add	(GtkType	 class_type,
-						 GtkSignalRunType signal_flags,
+guint		gtk_accel_group_create_add	(GType		 class_type,
+						 GSignalFlags    signal_flags,
 						 guint		 handler_offset);
-guint		gtk_accel_group_create_remove	(GtkType	 class_type,
-						 GtkSignalRunType signal_flags,
+guint		gtk_accel_group_create_remove	(GType		 class_type,
+						 GSignalFlags    signal_flags,
 						 guint		 handler_offset);
 
 /* Miscellaneous (internal)
  */
-GSList*	gtk_accel_groups_from_object		(GtkObject	*object);
-GSList*	gtk_accel_group_entries_from_object	(GtkObject	*object);
+GSList*	gtk_accel_groups_from_object		(GObject	*object);
+GSList*	gtk_accel_group_entries_from_object	(GObject	*object);
 
 
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 
 #endif /* __GTK_ACCEL_GROUP_H__ */

@@ -22,6 +22,7 @@
 #include "gdk-pixbuf.h"
 #include "gdk-pixdata.h"
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 
@@ -76,7 +77,7 @@ main (int   argc,
   GError *error = NULL;
 
   /* initialize glib/GdkPixbuf */
-  g_type_init (0);
+  g_type_init ();
 
   /* parse args and do fast exits */
   parse_args (&argc, &argv);

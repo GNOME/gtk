@@ -71,7 +71,6 @@ gtk_accessible_connect_widget_destroyed (GtkAccessible *accessible)
 {
   GtkAccessibleClass *class;
 
-  g_return_if_fail (accessible != NULL);
   g_return_if_fail (GTK_IS_ACCESSIBLE (accessible));
 
   class = GTK_ACCESSIBLE_GET_CLASS (accessible);

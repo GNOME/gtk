@@ -102,7 +102,6 @@ gtk_event_box_realize (GtkWidget *widget)
   gint attributes_mask;
   gint border_width;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -140,7 +139,6 @@ gtk_event_box_size_request (GtkWidget      *widget,
 {
   GtkBin *bin;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -167,7 +165,6 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
   GtkBin *bin;
   GtkAllocation child_allocation;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_EVENT_BOX (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -208,7 +205,6 @@ static gint
 gtk_event_box_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_EVENT_BOX (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

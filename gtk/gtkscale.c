@@ -133,14 +133,14 @@ gtk_scale_class_init (GtkScaleClass *class)
   range_class->get_range_border = gtk_scale_get_range_border;
   
   signals[FORMAT_VALUE] =
-    g_signal_newc ("format_value",
-		   G_TYPE_FROM_CLASS (object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkScaleClass, format_value),
-		   single_string_accumulator, NULL,
-		   gtk_marshal_STRING__DOUBLE,
-		   G_TYPE_STRING, 1,
-		   G_TYPE_DOUBLE);
+    g_signal_new ("format_value",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkScaleClass, format_value),
+                  single_string_accumulator, NULL,
+                  gtk_marshal_STRING__DOUBLE,
+                  G_TYPE_STRING, 1,
+                  G_TYPE_DOUBLE);
 
   g_object_class_install_property (gobject_class,
                                    PROP_DIGITS,
@@ -416,7 +416,6 @@ void
 gtk_scale_set_draw_value (GtkScale *scale,
 			  gboolean  draw_value)
 {
-  g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   draw_value = draw_value != FALSE;
@@ -513,7 +512,6 @@ _gtk_scale_get_value_size (GtkScale *scale,
 {
   GtkRange *range;
 
-  g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
   if (scale->draw_value)

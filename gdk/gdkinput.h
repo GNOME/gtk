@@ -7,9 +7,17 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GDK_TYPE_DEVICE              (gdk_device_get_type ())
+#define GDK_DEVICE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DEVICE, GdkDevice))
+#define GDK_DEVICE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DEVICE, GdkDeviceClass))
+#define GDK_IS_DEVICE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DEVICE))
+#define GDK_IS_DEVICE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DEVICE))
+#define GDK_DEVICE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DEVICE, GdkDeviceClass))
+
 typedef struct _GdkDeviceKey	    GdkDeviceKey;
 typedef struct _GdkDeviceAxis	    GdkDeviceAxis;
 typedef struct _GdkDevice	    GdkDevice;
+typedef struct _GdkDeviceClass	    GdkDeviceClass;
 typedef struct _GdkTimeCoord	    GdkTimeCoord;
 
 typedef enum
@@ -61,6 +69,7 @@ struct _GdkDeviceAxis
 
 struct _GdkDevice
 {
+  GObject parent_instance;
   /* All fields are read-only */
 	  
   gchar *name;
@@ -85,6 +94,8 @@ struct _GdkTimeCoord
   guint32 time;
   gdouble axes[GDK_MAX_TIMECOORD_AXES];
 };
+
+GType          gdk_device_get_type      (void);
 
 /* Returns a list of GdkDevice * */	  
 GList *        gdk_devices_list         (void);

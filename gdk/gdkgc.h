@@ -237,6 +237,9 @@ void   gdk_gc_set_dashes          (GdkGC            *gc,
 				   gint	             dash_offset,
 				   gint8             dash_list[],
 				   gint              n);
+void   gdk_gc_offset              (GdkGC            *gc,
+				   gint              x_offset,
+				   gint              y_offset);
 void   gdk_gc_copy		  (GdkGC	    *dst_gc,
 				   GdkGC	    *src_gc);
 

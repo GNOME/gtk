@@ -561,9 +561,9 @@ gtk_input_dialog_set_key (GtkInputKeyInfo *key,
       str = g_string_new("");
       
       if (modifiers & GDK_SHIFT_MASK)
-	g_string_append (str, "Shft+");
+	g_string_append (str, "Shift+");
       if (modifiers & GDK_CONTROL_MASK)
-	g_string_append (str, "Ctl+");
+	g_string_append (str, "Ctrl+");
       if (modifiers & GDK_MOD1_MASK)
 	g_string_append (str, "Alt+");
       

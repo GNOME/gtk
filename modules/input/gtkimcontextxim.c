@@ -261,7 +261,7 @@ gtk_im_context_xim_new (void)
 {
   GtkXIMInfo *info;
   GtkIMContextXIM *result;
-  gchar *charset;
+  const gchar *charset;
 
   info = get_im (setlocale (LC_CTYPE, NULL));
   if (!info)

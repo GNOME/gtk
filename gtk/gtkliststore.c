@@ -27,6 +27,7 @@
 
 #define G_SLIST(x) ((GSList *) x)
 #define GTK_LIST_STORE_IS_SORTED(list) (GTK_LIST_STORE (list)->sort_column_id != -1)
+#define VALID_ITER(iter, list_store) (iter!= NULL && iter->user_data != NULL && list_store->stamp == iter->stamp)
 
 static void         gtk_list_store_init            (GtkListStore      *list_store);
 static void         gtk_list_store_class_init      (GtkListStoreClass *class);
@@ -63,6 +64,13 @@ static gboolean     gtk_list_store_iter_nth_child  (GtkTreeModel      *tree_mode
 static gboolean     gtk_list_store_iter_parent     (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter,
 						    GtkTreeIter       *child);
+
+
+static void gtk_list_store_set_n_columns   (GtkListStore *list_store,
+					    gint          n_columns);
+static void gtk_list_store_set_column_type (GtkListStore *list_store,
+					    gint          column,
+					    GType         type);
 
 
 /* Drag and Drop */
@@ -235,38 +243,18 @@ gtk_list_store_init (GtkListStore *list_store)
 
 /**
  * gtk_list_store_new:
- *
- * Creates a new #GtkListStore. A #GtkListStore implements the
- * #GtkTreeModel interface, and stores a linked list of
- * rows; each row can have any number of columns. Columns are of uniform type,
- * i.e. all cells in a column have the same type such as #G_TYPE_STRING or
- * #GDK_TYPE_PIXBUF. Use #GtkListStore to store data to be displayed in a
- * #GtkTreeView.
- *
- * Return value: a new #GtkListStore
- **/
-GtkListStore *
-gtk_list_store_new (void)
-{
-  return GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
-}
-
-/**
- * gtk_list_store_new_with_types:
  * @n_columns: number of columns in the list store
  * @Varargs: all #GType types for the columns, from first to last
  *
- * Creates a new list store as with gtk_list_store_new(), simultaneously setting
- * up the columns and column types as with gtk_list_store_set_n_columns() and
- * gtk_list_store_set_column_type().  As an example,
- * gtk_tree_store_new_with_types (3, G_TYPE_INT, G_TYPE_STRING,
- * GTK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
- * int, string and GtkPixbuf respectively.
+ * Creates a new list store as with @n_columns columns each of the types passed
+ * in.  As an example, gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
+ * int, string and GDkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
  **/
 GtkListStore *
-gtk_list_store_new_with_types (gint n_columns,
+gtk_list_store_new (gint n_columns,
 			       ...)
 {
   GtkListStore *retval;
@@ -275,7 +263,7 @@ gtk_list_store_new_with_types (gint n_columns,
 
   g_return_val_if_fail (n_columns > 0, NULL);
 
-  retval = gtk_list_store_new ();
+  retval = GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
   gtk_list_store_set_n_columns (retval, n_columns);
 
   va_start (args, n_columns);
@@ -298,21 +286,49 @@ gtk_list_store_new_with_types (gint n_columns,
   return retval;
 }
 
+
 /**
- * gtk_list_store_set_n_columns:
- * @store: a #GtkListStore
- * @n_columns: number of columns
+ * gtk_list_store_newv:
+ * @n_columns: number of columns in the list store
+ * @types: an array of #GType types for the columns, from first to last
  *
- * Sets the number of columns in the #GtkListStore.
+ * Non vararg creation function.  Used primarily by language bindings.
  *
+ * Return value: a new #GtkListStore
  **/
-void
+GtkListStore *
+gtk_list_store_newv (gint   n_columns,
+		     GType *types)
+{
+  GtkListStore *retval;
+  gint i;
+
+  g_return_val_if_fail (n_columns > 0, NULL);
+
+  retval = GTK_LIST_STORE (g_object_new (gtk_list_store_get_type (), NULL));
+  gtk_list_store_set_n_columns (retval, n_columns);
+
+  for (i = 0; i < n_columns; i++)
+    {
+      if (! _gtk_tree_data_list_check_type (types[i]))
+	{
+	  g_warning ("%s: Invalid type %s passed to gtk_list_store_new_with_types\n", G_STRLOC, g_type_name (types[i]));
+	  g_object_unref (G_OBJECT (retval));
+	  return NULL;
+	}
+
+      gtk_list_store_set_column_type (retval, i, types[i]);
+    }
+
+  return retval;
+}
+
+static void
 gtk_list_store_set_n_columns (GtkListStore *list_store,
 			      gint          n_columns)
 {
   GType *new_columns;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (n_columns > 0);
 
@@ -340,24 +356,11 @@ gtk_list_store_set_n_columns (GtkListStore *list_store,
   list_store->n_columns = n_columns;
 }
 
-/**
- * gtk_list_store_set_column_type:
- * @store: a #GtkListStore
- * @column: column number
- * @type: type of the data stored in @column
- *
- * Supported types include: %G_TYPE_UINT, %G_TYPE_INT, %G_TYPE_UCHAR,
- * %G_TYPE_CHAR, %G_TYPE_BOOLEAN, %G_TYPE_POINTER, %G_TYPE_FLOAT,
- * %G_TYPE_DOUBLE, %G_TYPE_STRING, %G_TYPE_OBJECT, and %G_TYPE_BOXED, along with
- * subclasses of those types such as %GDK_TYPE_PIXBUF.
- *
- **/
-void
+static void
 gtk_list_store_set_column_type (GtkListStore *list_store,
 				gint          column,
 				GType         type)
 {
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (column >=0 && column < list_store->n_columns);
   if (!_gtk_tree_data_list_check_type (type))
@@ -520,12 +523,12 @@ static gint
 gtk_list_store_iter_n_children (GtkTreeModel *tree_model,
 				GtkTreeIter  *iter)
 {
-  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, -1);
-
-  if (iter->user_data == NULL)
+  g_return_val_if_fail (GTK_IS_LIST_STORE (tree_model), -1);
+  if (iter == NULL)
     return GTK_LIST_STORE (tree_model)->length;
-  else
-    return 0;
+
+  g_return_val_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp, -1);
+  return 0;
 }
 
 static gboolean
@@ -592,7 +595,7 @@ gtk_list_store_set_value (GtkListStore *list_store,
   gint orig_column = column;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter != NULL);
+  g_return_if_fail (VALID_ITER (iter, list_store));
   g_return_if_fail (column >= 0 && column < list_store->n_columns);
   g_return_if_fail (G_IS_VALUE (value));
 
@@ -693,6 +696,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
   gint column;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (VALID_ITER (iter, list_store));
 
   column = va_arg (var_args, gint);
 
@@ -753,6 +757,8 @@ gtk_list_store_set (GtkListStore *list_store,
   va_list var_args;
 
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (iter->stamp == list_store->stamp);
 
   va_start (var_args, iter);
   gtk_list_store_set_valist (list_store, iter, var_args);
@@ -836,9 +842,8 @@ gtk_list_store_remove (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (iter->user_data != NULL);
+  g_return_if_fail (VALID_ITER (iter, list_store));
 
   path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
 
@@ -892,7 +897,6 @@ gtk_list_store_insert (GtkListStore *list_store,
   GtkTreePath *path;
   GSList *new_list;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   g_return_if_fail (position >= 0);
@@ -947,9 +951,11 @@ gtk_list_store_insert_before (GtkListStore *list_store,
   GSList *list, *prev, *new_list;
   gint i = 0;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
+  if (sibling)
+    g_return_if_fail (VALID_ITER (sibling, list_store));
+
 
   if (GTK_LIST_STORE_IS_SORTED (list_store))
     {
@@ -1032,11 +1038,10 @@ gtk_list_store_insert_after (GtkListStore *list_store,
   GSList *list, *new_list;
   gint i = 0;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
   if (sibling)
-    g_return_if_fail (sibling->stamp == list_store->stamp);
+    g_return_if_fail (VALID_ITER (sibling, list_store));
 
   if (sibling == NULL ||
       GTK_LIST_STORE_IS_SORTED (list_store))
@@ -1081,7 +1086,6 @@ gtk_list_store_prepend (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
 
@@ -1120,7 +1124,6 @@ gtk_list_store_append (GtkListStore *list_store,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (list_store != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (list_store));
   g_return_if_fail (iter != NULL);
 
@@ -1646,7 +1649,6 @@ gtk_list_store_get_sort_column_id (GtkTreeSortable  *sortable,
 {
   GtkListStore *list_store = (GtkListStore *) sortable;
 
-  g_return_val_if_fail (sortable != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_LIST_STORE (sortable), FALSE);
 
   if (list_store->sort_column_id == -1)
@@ -1667,7 +1669,6 @@ gtk_list_store_set_sort_column_id (GtkTreeSortable  *sortable,
   GtkListStore *list_store = (GtkListStore *) sortable;
   GList *list;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (sortable));
 
   for (list = list_store->sort_list; list; list = list->next)
@@ -1702,7 +1703,6 @@ gtk_list_store_set_sort_func (GtkTreeSortable        *sortable,
   GtkTreeDataSortHeader *header = NULL;
   GList *list;
 
-  g_return_if_fail (sortable != NULL);
   g_return_if_fail (GTK_IS_LIST_STORE (sortable));
   g_return_if_fail (func != NULL);
 

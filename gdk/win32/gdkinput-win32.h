@@ -52,6 +52,11 @@ struct _GdkAxisInfo
   gint min_value, max_value;
 };
 
+struct _GdkDeviceClass
+{
+  GObjectClass parent_class;
+};
+
 #define GDK_INPUT_NUM_EVENTC 6
 
 struct _GdkDevicePrivate
@@ -123,9 +128,8 @@ extern GList *gdk_input_windows;
 
 extern gint   gdk_input_ignore_core;
 
-extern GdkDevice gdk_input_core_info;
-
 /* Function declarations */
+void             _gdk_init_input_core (void);
 
 void gdk_input_window_destroy (GdkWindow *window);
 GdkTimeCoord ** _gdk_device_allocate_history (GdkDevice *device,

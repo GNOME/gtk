@@ -12,6 +12,7 @@ extern "C" {
 
 typedef struct _GdkGeometry           GdkGeometry;
 typedef struct _GdkWindowAttr	      GdkWindowAttr;
+typedef struct _GdkPointerHooks	      GdkPointerHooks;
 
 /* Classes of windows.
  *   InputOutput: Almost every window should be of this type. Such windows
@@ -193,6 +194,16 @@ struct _GdkGeometry
   gdouble min_aspect;
   gdouble max_aspect;
   GdkGravity win_gravity;
+};
+
+struct _GdkPointerHooks 
+{
+  GdkWindow* (*get_pointer)       (GdkWindow	   *window,
+			           gint	           *x,
+			           gint   	   *y,
+			           GdkModifierType *mask);
+  GdkWindow* (*window_at_pointer) (gint            *win_x,
+                                   gint            *win_y);
 };
 
 typedef struct _GdkWindowObject GdkWindowObject;
@@ -504,6 +515,14 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
                                            gint         *new_height);
 void	    gdk_window_set_screen	  (GdkWindow	*window,
 					   GdkScreen	*screen);
+
+void gdk_window_get_internal_paint_info (GdkWindow    *window,
+					 GdkDrawable **real_drawable,
+					 gint         *x_offset,
+					 gint         *y_offset);
+
+GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

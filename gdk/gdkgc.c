@@ -367,6 +367,39 @@ gdk_gc_set_dashes (GdkGC *gc,
 }
 
 /**
+ * gdk_gc_offset:
+ * @gc: a #GdkGC
+ * @x_offset: amount by which to offset the GC in the X direction
+ * @y_offset: amount by which to offset the GC in the Y direction
+ * 
+ * Offset attributes such as the clip and tile-stipple origins
+ * of the GC so that drawing at x - x_offset, y - y_offset with
+ * the offset GC  has the same effect as drawing at x, y with the original
+ * GC.
+ **/
+void
+gdk_gc_offset (GdkGC *gc,
+	       gint   x_offset,
+	       gint   y_offset)
+{
+  if (x_offset != 0 || y_offset != 0)
+    {
+      GdkGCValues values;
+
+      values.clip_x_origin = gc->clip_x_origin - x_offset;
+      values.clip_y_origin = gc->clip_y_origin - y_offset;
+      values.ts_x_origin = gc->ts_x_origin - x_offset;
+      values.ts_y_origin = gc->ts_y_origin - y_offset;
+      
+      gdk_gc_set_values (gc, &values,
+			 GDK_GC_CLIP_X_ORIGIN |
+			 GDK_GC_CLIP_Y_ORIGIN |
+			 GDK_GC_TS_X_ORIGIN |
+			 GDK_GC_TS_Y_ORIGIN);
+    }
+}
+
+/**
  * gdk_gc_set_colormap:
  * @gc: a #GdkGC
  * @colormap: a #GdkColormap

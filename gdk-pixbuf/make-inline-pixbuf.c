@@ -153,7 +153,7 @@ main (int argc, char **argv)
   gchar *outfilename;
   int i;
   
-  g_type_init (0);
+  g_type_init ();
   
   
   if (argc < 4)

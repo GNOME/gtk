@@ -124,7 +124,7 @@ connect_controller (GObject *controller,
 
   p->modified_id = g_signal_connect_data (controller, signal, func, p,
 					  (GClosureNotify)free_object_property,
-					  FALSE, FALSE);
+					  0);
   g_object_set_data (controller, "object-property", p);
 }
 

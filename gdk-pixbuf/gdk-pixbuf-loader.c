@@ -112,35 +112,35 @@ gdk_pixbuf_loader_class_init (GdkPixbufLoaderClass *class)
   object_class->finalize = gdk_pixbuf_loader_finalize;
 
   pixbuf_loader_signals[AREA_PREPARED] =
-    g_signal_newc ("area_prepared",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_prepared),
-		   NULL, NULL,
-                   gdk_pixbuf_marshal_VOID__VOID,
-                   G_TYPE_NONE, 0);
+    g_signal_new ("area_prepared",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_prepared),
+                  NULL, NULL,
+                  gdk_pixbuf_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
   
   pixbuf_loader_signals[AREA_UPDATED] =
-    g_signal_newc ("area_updated",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_updated),
-		   NULL, NULL,
-                   gdk_pixbuf_marshal_VOID__INT_INT_INT_INT,
-                   G_TYPE_NONE, 4,
-                   G_TYPE_INT,
-                   G_TYPE_INT,
-                   G_TYPE_INT,
-                   G_TYPE_INT);
+    g_signal_new ("area_updated",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkPixbufLoaderClass, area_updated),
+                  NULL, NULL,
+                  gdk_pixbuf_marshal_VOID__INT_INT_INT_INT,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_INT,
+                  G_TYPE_INT,
+                  G_TYPE_INT,
+                  G_TYPE_INT);
   
   pixbuf_loader_signals[CLOSED] =
-    g_signal_newc ("closed",
-                   G_TYPE_FROM_CLASS (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GdkPixbufLoaderClass, closed),
-		   NULL, NULL,
-                   gdk_pixbuf_marshal_VOID__VOID,
-                   G_TYPE_NONE, 0);
+    g_signal_new ("closed",
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkPixbufLoaderClass, closed),
+                  NULL, NULL,
+                  gdk_pixbuf_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 }
 
 static void

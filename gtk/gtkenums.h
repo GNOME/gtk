@@ -115,6 +115,15 @@ typedef enum
   GTK_DIR_RIGHT
 } GtkDirectionType;
 
+/* Expander styles */
+typedef enum
+{
+  GTK_EXPANDER_COLLAPSED,
+  GTK_EXPANDER_SEMI_COLLAPSED,
+  GTK_EXPANDER_SEMI_EXPANDED,
+  GTK_EXPANDER_EXPANDED
+} GtkExpanderStyle;
+
 /* Built-in stock icon sizes */
 typedef enum
 {
@@ -221,6 +230,7 @@ typedef enum
   GTK_PATH_PRIO_LOWEST      = 0,
   GTK_PATH_PRIO_GTK	    = 4,
   GTK_PATH_PRIO_APPLICATION = 8,
+  GTK_PATH_PRIO_THEME       = 10,
   GTK_PATH_PRIO_RC          = 12,
   GTK_PATH_PRIO_HIGHEST     = 15,
   GTK_PATH_PRIO_MASK        = 0x0f

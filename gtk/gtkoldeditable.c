@@ -517,7 +517,7 @@ gtk_old_editable_get_public_chars (GtkOldEditable   *old_editable,
 
   if (old_editable->visible)
     {
-      GError *error;
+      GError *error = NULL;
       gchar *tmp = gtk_editable_get_chars (GTK_EDITABLE (old_editable), start, end);
 
       if (need_conversion)
@@ -636,7 +636,7 @@ gtk_old_editable_paste_received (GtkOldEditable *old_editable,
 
   if (text)
     {
-      GError *error;
+      GError *error = NULL;
       
       need_conversion = !g_get_charset (&charset);
 
@@ -747,7 +747,6 @@ gtk_old_editable_claim_selection (GtkOldEditable *old_editable,
 				  gboolean        claim, 
 				  guint32         time)
 {
-  g_return_if_fail (old_editable != NULL);
   g_return_if_fail (GTK_IS_OLD_EDITABLE (old_editable));
   g_return_if_fail (GTK_WIDGET_REALIZED (old_editable));
 
@@ -852,7 +851,6 @@ gtk_old_editable_real_paste_clipboard (GtkOldEditable *old_editable)
 void
 gtk_old_editable_changed (GtkOldEditable *old_editable)
 {
-  g_return_if_fail (old_editable != NULL);
   g_return_if_fail (GTK_IS_OLD_EDITABLE (old_editable));
   
   gtk_signal_emit (GTK_OBJECT (old_editable), editable_signals[CHANGED]);

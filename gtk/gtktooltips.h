@@ -66,6 +66,7 @@ struct _GtkTooltips
 
   guint   delay : 30;
   guint	  enabled : 1;
+  guint   have_grab : 1;
   gint	  timer_tag;
   gboolean use_sticky_delay;
   GTimeVal last_popdown;
@@ -87,13 +88,11 @@ void		 gtk_tooltips_set_tip	   (GtkTooltips   *tooltips,
 					    GtkWidget	  *widget,
 					    const gchar   *tip_text,
 					    const gchar   *tip_private);
-void		 gtk_tooltips_set_colors   (GtkTooltips   *tooltips,
-					    GdkColor	  *background,
-					    GdkColor	  *foreground);
 GtkTooltipsData* gtk_tooltips_data_get	   (GtkWidget	  *widget);
 void             gtk_tooltips_force_window (GtkTooltips   *tooltips);
 
 
+void             _gtk_tooltips_show_tip    (GtkWidget    *widget);
 
 #ifdef __cplusplus
 }

@@ -143,17 +143,6 @@ Adds a tooltip containing the message @tip_text to the specified #GtkWidget.
 @tip_private: a string of any further information that may be useful if the user gets stuck.
 
 
-<!-- ##### FUNCTION gtk_tooltips_set_colors ##### -->
-<para>
-This function is unimplemented because tooltip colors are instead
-determined by the theme.
-</para>
-
-@tooltips: a #GtkTooltip
-@background: a #GdkColor that your tooltip text will be shown in.
-@foreground: a #GdkColor that your tooltip backgrounds will be shown in.
-
-
 <!-- ##### FUNCTION gtk_tooltips_data_get ##### -->
 <para>
 Retrieves any #GtkTooltipsData previously associated with the given widget.

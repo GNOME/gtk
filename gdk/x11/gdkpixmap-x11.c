@@ -152,7 +152,8 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
   GdkDrawableImplX11 *draw_impl;
   GdkPixmapImplX11 *pix_impl;
   GdkColormap *cmap;
-
+  gint window_depth;
+  
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail ((window != NULL) || (depth != -1), NULL);
   g_return_val_if_fail ((width != 0) && (height != 0), NULL);
@@ -167,8 +168,9 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
   if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
+  window_depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
   if (depth == -1)
-    depth = gdk_drawable_get_depth (GDK_DRAWABLE (window));
+    depth = window_depth;
 
   pixmap = g_object_new (gdk_pixmap_get_type (), NULL);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (GDK_PIXMAP_OBJECT (pixmap)->impl);
@@ -191,6 +193,13 @@ gdk_pixmap_new (GdkWindow * window, gint width, gint height, gint depth)
       gdk_drawable_set_colormap (pixmap, cmap);
   }
 
+  if (depth == window_depth)
+    {
+      cmap = gdk_drawable_get_colormap (window);
+      if (cmap)
+        gdk_drawable_set_colormap (pixmap, cmap);
+    }
+  
   gdk_xid_table_insert (&GDK_PIXMAP_XID (pixmap), pixmap);
 
   return pixmap;

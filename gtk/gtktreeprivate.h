@@ -101,7 +101,7 @@ struct _GtkTreeViewPrivate
   GtkTreeViewColumn *drag_column;
   gint drag_column_x;
 
-  gint expander_column;
+  GtkTreeViewColumn *expander_column;
 
   /* Focus code */
   GtkTreeViewColumn *focus_column;
@@ -120,6 +120,11 @@ struct _GtkTreeViewPrivate
   /* Prelight information */
   GtkRBNode *prelight_node;
   GtkRBTree *prelight_tree;
+
+  /* The node that's currently being collapsed or expanded */
+  GtkRBNode *expanded_collapsed_node;
+  GtkRBTree *expanded_collapsed_tree;
+  guint expand_collapse_timeout;
 
   /* Selection information */
   GtkTreeSelection *selection;

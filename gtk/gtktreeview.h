@@ -174,8 +174,8 @@ void                   gtk_tree_view_move_column_after             (GtkTreeView 
 								    GtkTreeViewColumn         *column,
 								    GtkTreeViewColumn         *base_column);
 void                   gtk_tree_view_set_expander_column           (GtkTreeView               *tree_view,
-								    gint                       col);
-gint                   gtk_tree_view_get_expander_column           (GtkTreeView               *tree_view);
+								    GtkTreeViewColumn         *column);
+GtkTreeViewColumn     *gtk_tree_view_get_expander_column           (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_column_drag_function      (GtkTreeView               *tree_view,
 								    GtkTreeViewColumnDropFunc  func,
 								    gpointer                   user_data,

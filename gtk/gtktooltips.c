@@ -167,7 +167,6 @@ gtk_tooltips_destroy (GtkObject *object)
 void
 gtk_tooltips_force_window (GtkTooltips *tooltips)
 {
-  g_return_if_fail (tooltips != NULL);
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
 
   if (!tooltips->tip_window)
@@ -240,7 +239,6 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
 {
   GtkTooltipsData *tooltipsdata;
 
-  g_return_if_fail (tooltips != NULL);
   g_return_if_fail (GTK_IS_TOOLTIPS (tooltips));
   g_return_if_fail (widget != NULL);
 
@@ -285,24 +283,13 @@ gtk_tooltips_set_tip (GtkTooltips *tooltips,
     }
 }
 
-void
-gtk_tooltips_set_colors (GtkTooltips *tooltips,
-			 GdkColor    *background,
-			 GdkColor    *foreground)
-{
-  g_return_if_fail (tooltips != NULL);
-
-  g_warning ("gtk_tooltips_set_colors is deprecated and does nothing.\n"
-	     "The colors for tooltips are now taken from the style.");
-}
-
 static gint
 gtk_tooltips_paint_window (GtkTooltips *tooltips)
 {
   gtk_paint_flat_box (tooltips->tip_window->style, tooltips->tip_window->window,
-		     GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
-		     NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
-		     0, 0, -1, -1);
+		      GTK_STATE_NORMAL, GTK_SHADOW_OUT, 
+		      NULL, GTK_WIDGET(tooltips->tip_window), "tooltip",
+		      0, 0, -1, -1);
 
   return FALSE;
 }
@@ -521,4 +508,26 @@ gtk_tooltips_widget_remove (GtkWidget *widget,
   tooltips->tips_data_list = g_list_remove (tooltips->tips_data_list,
 					    tooltipsdata);
   gtk_tooltips_destroy_data (tooltipsdata);
+}
+
+void
+_gtk_tooltips_show_tip (GtkWidget *widget)
+{
+  /* Showing the tip from the keyboard */
+
+  /* FIXME this function is completely broken right now,
+   * popdown doesn't occur when it should.
+   */
+  
+  GtkTooltipsData *tooltipsdata;
+
+  tooltipsdata = gtk_tooltips_data_get (widget);
+
+  if (tooltipsdata == NULL)
+    return;
+
+  gtk_tooltips_set_active_widget (tooltipsdata->tooltips,
+                                  widget);
+
+  gtk_tooltips_timeout (tooltipsdata->tooltips);
 }

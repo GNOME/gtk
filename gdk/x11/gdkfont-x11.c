@@ -208,8 +208,8 @@ gdk_font_load (const gchar *font_name)
    return gdk_font_load_for_display (gdk_get_default_display(), font_name);
 }
 
-char *
-gdk_font_charset_for_locale ()
+static char *
+gdk_font_charset_for_locale (void)
 {
   static char *charset_map[][2] = {
     { "ANSI_X3.4-1968", "iso8859-1" },
@@ -226,7 +226,7 @@ gdk_font_charset_for_locale ()
     { "UTF-8",      "iso8859-1" }
   };
 
-  char *codeset;
+  const char *codeset;
   char *result = NULL;
   int i;
 

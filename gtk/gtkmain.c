@@ -178,7 +178,8 @@ gtk_check_version (guint required_major,
 }
 
 #ifdef __EMX__
-static gchar *add_dll_suffix (gchar *module_name)
+static gchar *
+add_dll_suffix (gchar *module_name)
 {
     gchar *suffix = strrchr (module_name, '.');
     
@@ -873,7 +874,7 @@ gtk_main_do_event (GdkEvent *event)
 	{
 	  gtk_widget_ref (event_widget);
 	  if (!gtk_widget_event (event_widget, event) &&
-	      !GTK_OBJECT_DESTROYED (event_widget))
+	      GTK_WIDGET_REALIZED (event_widget))
 	    gtk_widget_destroy (event_widget);
 	  gtk_widget_unref (event_widget);
 	}
@@ -1232,7 +1233,6 @@ gtk_quit_add_destroy (guint              main_level,
   GtkObject **object_p;
 
   g_return_if_fail (main_level > 0);
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
   object_p = g_new (GtkObject*, 1);
@@ -1372,9 +1372,9 @@ gtk_idle_add (GtkFunction function,
 }
 
 guint	    
-gtk_idle_add_priority	 (gint		    priority,
-			 GtkFunction	    function,
-			 gpointer	    data)
+gtk_idle_add_priority (gint        priority,
+		       GtkFunction function,
+		       gpointer	   data)
 {
   return g_idle_add_full (priority, function, data, NULL);
 }
@@ -1611,7 +1611,6 @@ gtk_propagate_event (GtkWidget *widget,
 {
   gint handled_event;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (event != NULL);
   
@@ -1629,9 +1628,8 @@ gtk_propagate_event (GtkWidget *widget,
        */
       GtkWidget *window;
 
-      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
-
-      if (window)
+      window = gtk_widget_get_toplevel (widget);
+      if (window && GTK_IS_WINDOW (window))
 	{
 	  /* If there is a grab within the window, give the grab widget
 	   * a first crack at the key event
@@ -1641,8 +1639,8 @@ gtk_propagate_event (GtkWidget *widget,
 	  
 	  if (!handled_event)
 	    {
-	      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
-	      if (window)
+	      window = gtk_widget_get_toplevel (widget);
+	      if (window && GTK_IS_WINDOW (window))
 		{
 		  if (GTK_WIDGET_IS_SENSITIVE (window))
 		    gtk_widget_event (window, event);

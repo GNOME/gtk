@@ -3,6 +3,7 @@ EXPORTS
 	gdk_atom_name
 	gdk_beep
 	gdk_bitmap_create_from_data
+	gdk_cap_style_get_type
 	gdk_char_height
 	gdk_char_measure
 	gdk_char_width
@@ -13,6 +14,7 @@ EXPORTS
 	gdk_color_copy
 	gdk_color_equal
 	gdk_color_free
+	gdk_color_get_type
 	gdk_color_hash
 	gdk_color_parse
 	gdk_color_white
@@ -24,8 +26,8 @@ EXPORTS
 	gdk_colormap_get_system_size
 	gdk_colormap_get_type
 	gdk_colormap_get_visual
-	gdk_colormap_query_color
 	gdk_colormap_new
+	gdk_colormap_query_color
 	gdk_colormap_ref
 	gdk_colormap_unref
 	gdk_colors_alloc
@@ -35,6 +37,7 @@ EXPORTS
 	gdk_cursor_new
 	gdk_cursor_new_from_pixmap
 	gdk_cursor_ref
+	gdk_cursor_type_get_type
 	gdk_cursor_unref
 	gdk_device_free_history
 	gdk_device_get_axis
@@ -47,6 +50,7 @@ EXPORTS
 	gdk_devices_list
 	gdk_dnd_init
 	gdk_drag_abort
+	gdk_drag_action_get_type
 	gdk_drag_begin
 	gdk_drag_context_get_type
 	gdk_drag_context_new
@@ -57,6 +61,7 @@ EXPORTS
 	gdk_drag_get_protocol
 	gdk_drag_get_selection
 	gdk_drag_motion
+	gdk_drag_protocol_get_type
 	gdk_drag_status
 	gdk_draw_arc
 	gdk_draw_drawable
@@ -82,6 +87,7 @@ EXPORTS
 	gdk_draw_text
 	gdk_draw_text_wc
 	gdk_drawable_get_colormap
+	gdk_drawable_get_depth
 	gdk_drawable_get_image
 	gdk_drawable_get_size
 	gdk_drawable_get_type
@@ -107,7 +113,9 @@ EXPORTS
 	gdk_event_get_graphics_expose
 	gdk_event_get_state
 	gdk_event_get_time
+	gdk_event_get_type
 	gdk_event_handler_set
+	gdk_event_mask_get_type
 	gdk_event_new
 	gdk_event_peek
 	gdk_event_put
@@ -119,11 +127,14 @@ EXPORTS
 	gdk_event_unqueue
 	gdk_events_pending
 	gdk_exit
+	gdk_extension_mode_get_type
+	gdk_fill_get_type
 	gdk_flush
 	gdk_font_equal
 	gdk_font_from_description
 	gdk_font_full_name_free
 	gdk_font_full_name_get
+	gdk_font_get_type
 	gdk_font_id
 	gdk_font_load
 	gdk_font_ref
@@ -131,7 +142,10 @@ EXPORTS
 	gdk_fontset_load
 	gdk_free_compound_text
 	gdk_free_text_list
+	gdk_function_get_type
 	gdk_gc_copy
+	gdk_gc_get_colormap
+	gdk_gc_get_type
 	gdk_gc_get_values
 	gdk_gc_new
 	gdk_gc_new_with_values
@@ -159,6 +173,7 @@ EXPORTS
 	gdk_get_display
 	gdk_get_show_events
 	gdk_get_use_xshm
+	gdk_gravity_get_type
 	gdk_image_get
 	gdk_image_get_pixel
 	gdk_image_get_type
@@ -166,16 +181,19 @@ EXPORTS
 	gdk_image_new_bitmap
 	gdk_image_put_pixel
 	gdk_image_ref
+	gdk_image_type_get_type
 	gdk_image_unref
 	gdk_init
 	gdk_init_check
 	gdk_input_add
 	gdk_input_add_full
+	gdk_input_condition_get_type
 	gdk_input_exit
 	gdk_input_init
 	gdk_input_motion_events
 	gdk_input_remove
 	gdk_input_set_extension_events
+	gdk_join_style_get_type
 	gdk_key_repeat_disable
 	gdk_key_repeat_restore
 	gdk_keyboard_grab
@@ -195,8 +213,10 @@ EXPORTS
 	gdk_keyval_to_lower
 	gdk_keyval_to_unicode
 	gdk_keyval_to_upper
+	gdk_line_style_get_type
 	gdk_list_visuals
 	gdk_mbstowcs
+	gdk_modifier_type_get_type
 	gdk_null_window_warnings
 	gdk_pango_attr_embossed_new
 	gdk_pango_attr_stipple_new
@@ -221,6 +241,7 @@ EXPORTS
 	gdk_pointer_is_grabbed
 	gdk_pointer_ungrab
 	gdk_progclass
+	gdk_prop_mode_get_type
 	gdk_property_change
 	gdk_property_delete
 	gdk_property_get
@@ -248,6 +269,7 @@ EXPORTS
 	gdk_rgb_cmap_free
 	gdk_rgb_cmap_new
 	gdk_rgb_colormap_ditherable
+	gdk_rgb_dither_get_type
 	gdk_rgb_ditherable
 	gdk_rgb_gc_set_background
 	gdk_rgb_gc_set_foreground
@@ -268,15 +290,19 @@ EXPORTS
 	gdk_selection_property
 	gdk_selection_property_get
 	gdk_selection_send_notify
+	gdk_set_double_click_time
 	gdk_set_locale
 	gdk_set_show_events
 	gdk_set_sm_client_id
 	gdk_set_use_xshm
+	gdk_setting_get
 	gdk_string_extents
 	gdk_string_height
 	gdk_string_measure
 	gdk_string_to_compound_text
 	gdk_string_width
+	gdk_subwindow_mode_get_type
+	gdk_synthesize_window_state
 	gdk_text_extents
 	gdk_text_extents_wc
 	gdk_text_height
@@ -298,8 +324,8 @@ EXPORTS
 	gdk_visual_get_best_with_depth
 	gdk_visual_get_best_with_type
 	gdk_visual_get_system
-	gdk_visual_ref
-	gdk_visual_unref
+	gdk_visual_get_type
+	gdk_visual_type_get_type
 	gdk_wcstombs
 	gdk_win32_handle_table_lookup
 	gdk_win32_hdc_get
@@ -314,10 +340,13 @@ EXPORTS
 	gdk_window_clear_area
 	gdk_window_clear_area_e
 	gdk_window_constrain_size
+	gdk_window_deiconify
 	gdk_window_destroy
 	gdk_window_destroy_notify
 	gdk_window_end_paint
+	gdk_window_focus
 	gdk_window_foreign_new
+	gdk_window_freeze_updates
 	gdk_window_get_children
 	gdk_window_get_deskrelative_origin
 	gdk_window_get_events
@@ -331,12 +360,15 @@ EXPORTS
 	gdk_window_get_toplevel
 	gdk_window_get_toplevels
 	gdk_window_get_user_data
+	gdk_window_get_window_type
 	gdk_window_hide
+	gdk_window_iconify
 	gdk_window_invalidate_rect
 	gdk_window_invalidate_region
 	gdk_window_is_viewable
 	gdk_window_is_visible
 	gdk_window_lower
+	gdk_window_maximize
 	gdk_window_merge_child_shapes
 	gdk_window_move
 	gdk_window_move_resize
@@ -364,55 +396,23 @@ EXPORTS
 	gdk_window_set_hints
 	gdk_window_set_icon
 	gdk_window_set_icon_name
+	gdk_window_set_modal_hint
 	gdk_window_set_override_redirect
 	gdk_window_set_role
 	gdk_window_set_static_gravities
 	gdk_window_set_title
 	gdk_window_set_transient_for
+	gdk_window_set_type_hint
 	gdk_window_set_user_data
 	gdk_window_shape_combine_mask
 	gdk_window_shape_combine_region
 	gdk_window_show
-	gdk_window_withdraw
-	gdk_window_deiconify
-	gdk_window_focus
-	gdk_window_iconify
-	gdk_window_maximize
-	gdk_window_set_modal_hint
-	gdk_window_set_type_hint
 	gdk_window_stick
+	gdk_window_thaw_updates
+	gdk_window_type_hint_get_type
 	gdk_window_unmaximize
 	gdk_window_unstick
-gdk_color_get_type
-gdk_event_get_type
-gdk_event_mask_get_type
-gdk_extension_mode_get_type
-gdk_input_condition_get_type
-gdk_modifier_type_get_type
-gdk_set_double_click_time
-gdk_setting_get
-gdk_cap_style_get_type
-gdk_cursor_type_get_type
-gdk_drag_action_get_type
-gdk_drag_protocol_get_type
-gdk_drawable_get_depth
-gdk_fill_get_type
-gdk_font_get_type
-gdk_function_get_type
-gdk_gc_get_colormap
-gdk_gc_get_type
-gdk_gravity_get_type
-gdk_image_type_get_type
-gdk_join_style_get_type
-gdk_line_style_get_type
-gdk_prop_mode_get_type
-gdk_rgb_dither_get_type
-gdk_subwindow_mode_get_type
-gdk_visual_get_type
-gdk_visual_type_get_type
-gdk_window_freeze_updates
-gdk_window_get_window_type
-gdk_window_thaw_updates
-gdk_window_type_hint_get_type
-gdk_wm_decoration_get_type
-gdk_wm_function_get_type
+	gdk_window_withdraw
+	gdk_wm_decoration_get_type
+	gdk_wm_function_get_type
+

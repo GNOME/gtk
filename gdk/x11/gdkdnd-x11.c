@@ -936,7 +936,7 @@ motif_find_drag_window_for_display (gboolean create, GdkDisplay *dpy)
 
 	  XGrabServer (dpy_impl->xdisplay);
 	  
-	   dpy_impl->motif_drag_window = motif_lookup_drag_window_for_display (dpy);
+	  dpy_impl->motif_drag_window = motif_lookup_drag_window_for_display (dpy);
 
 	  if (!dpy_impl->motif_drag_window)
 	    {

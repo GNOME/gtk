@@ -583,7 +583,10 @@ gdk_event_translate (GdkEvent *event,
        * it as a foreign window
        */
       if (window == NULL)
-        return FALSE;
+	{
+	  return_val = FALSE;
+	  goto done;
+	}
     }
       
   if (g_object_get_data (G_OBJECT(dpy), "moveresize_window") &&
@@ -591,8 +594,9 @@ gdk_event_translate (GdkEvent *event,
        xevent->xany.type == ButtonRelease))
     {
       _gdk_moveresize_handle_event (xevent);
-      gdk_window_unref (window);
-      return FALSE;
+      
+      return_val = FALSE;
+      goto done;
     }
   
   /* We do a "manual" conversion of the XEvent to a
@@ -1257,14 +1261,20 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_message ("destroy notify:\twindow: %ld",
 			   xevent->xdestroywindow.window));
-      
-      event->any.type = GDK_DESTROY;
-      event->any.window = window;
-      
-      return_val = window_private && !GDK_WINDOW_DESTROYED (window);
-      
-      if (window && GDK_WINDOW_XID (window) !=	scr_impl->xroot_window)
-	gdk_window_destroy_notify (window);
+
+      /* Ignore DestroyNotify from SubstructureNotifyMask */
+      if (xevent->xdestroywindow.window == xevent->xdestroywindow.event)
+	{
+	  event->any.type = GDK_DESTROY;
+	  event->any.window = window;
+	  
+	  return_val = window_private && !GDK_WINDOW_DESTROYED (window);
+	  
+	  if (window && GDK_WINDOW_XID (window) != scr_impl->xroot_window)
+	    gdk_window_destroy_notify (window);
+	}
+      else
+	return_val = FALSE;
       break;
       
     case UnmapNotify:
@@ -2088,7 +2098,9 @@ static struct
   { "Gtk/ToolbarStyle", "gtk-toolbar-style" },
   { "Gtk/ToolbarIconSize", "gtk-toolbar-icon-size" },
   { "Net/CursorBlink", "gtk-cursor-blink" },
-  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" }
+  { "Net/CursorBlinkTime", "gtk-cursor-blink-time" },
+  { "Net/ThemeName", "gtk-theme-name" },
+  { "Gtk/KeyThemeName", "gtk-key-theme-name" }
 };
 
 static void

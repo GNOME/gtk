@@ -551,7 +551,7 @@ run_tests (GtkTextBuffer *buffer)
 }
 
 
-static char  *book_closed_xpm[] = {
+static const char  *book_closed_xpm[] = {
 "16 16 6 1",
 "       c None s None",
 ".      c black",

@@ -221,7 +221,6 @@ gtk_preview_size (GtkPreview *preview,
 		  gint        width,
 		  gint        height)
 {
-  g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
 
   if ((width != GTK_WIDGET (preview)->requisition.width) ||
@@ -253,7 +252,6 @@ gtk_preview_put (GtkPreview   *preview,
   guint bpp;
   guint rowstride;
 
-  g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
   g_return_if_fail (window != NULL);
 
@@ -313,7 +311,6 @@ gtk_preview_draw_row (GtkPreview *preview,
   guint bpp;
   guint rowstride;
 
-  g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
   g_return_if_fail (data != NULL);
   g_return_if_fail (preview_class->info.visual != NULL);
@@ -362,7 +359,6 @@ void
 gtk_preview_set_expand (GtkPreview *preview,
 			gboolean    expand)
 {
-  g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
 
   expand = expand != FALSE;
@@ -473,7 +469,6 @@ gtk_preview_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
@@ -515,7 +510,6 @@ gtk_preview_size_allocate (GtkWidget        *widget,
   GtkPreview *preview;
   gint width, height;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (widget));
 
   preview = GTK_PREVIEW (widget);
@@ -548,7 +542,6 @@ gtk_preview_expose (GtkWidget      *widget,
   GtkPreview *preview;
   gint width, height;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PREVIEW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -576,7 +569,6 @@ gtk_preview_make_buffer (GtkPreview *preview)
   gint width;
   gint height;
 
-  g_return_if_fail (preview != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (preview));
 
   widget = GTK_WIDGET (preview);

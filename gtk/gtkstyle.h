@@ -379,7 +379,7 @@ struct _GtkStyleClass
 				 const gchar		*detail,
 				 gint			 x,
 				 gint			 y,
-                                 gboolean                is_open);
+                                 GtkExpanderStyle        expander_style);
   void (*draw_layout)		(GtkStyle		*style,
 				 GdkWindow		*window,
 				 GtkStateType		 state_type,
@@ -587,7 +587,7 @@ void gtk_draw_expander   (GtkStyle        *style,
                           GtkStateType     state_type,
                           gint             x,
                           gint             y,
-                          gboolean         is_open);
+			  GtkExpanderStyle expander_style);
 void gtk_draw_layout     (GtkStyle        *style,
                           GdkWindow       *window,
                           GtkStateType     state_type,
@@ -804,7 +804,7 @@ void gtk_paint_expander   (GtkStyle        *style,
                            const gchar     *detail,
                            gint             x,
                            gint             y,
-                           gboolean         is_open);
+			   GtkExpanderStyle expander_style);
 void gtk_paint_layout     (GtkStyle        *style,
                            GdkWindow       *window,
                            GtkStateType     state_type,

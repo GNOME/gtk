@@ -38,7 +38,6 @@ static void
 iter_remove (GtkWidget *button, GtkTreeView *tree_view)
 {
   GtkTreeIter selected;
-  GtkTreeIter s_selected;
   GtkTreeModel *model;
 
   model = gtk_tree_view_get_model (tree_view);
@@ -201,19 +200,6 @@ iter_append (GtkWidget *button, GtkTreeView *tree_view)
 }
 
 static void
-uppercase_value (const GValue *src, GValue *dest, gpointer data)
-{
-  gchar *str;
-  
-  g_value_init (dest, G_TYPE_STRING);
-  str = g_strdup (g_value_get_string (src));
-  if (str)
-    g_strup (str);
-  g_value_set_string (dest, str);
-  g_free (str);
-}
-
-static void
 make_window (gint view_type)
 {
   GtkWidget *window;
@@ -257,6 +243,7 @@ make_window (gint view_type)
       break;
     default:
       g_assert_not_reached ();
+      tree_view = NULL; /* Quiet compiler */
       break;
     }
 
@@ -276,10 +263,10 @@ make_window (gint view_type)
   /* buttons */
   button = gtk_button_new_with_label ("gtk_tree_store_remove");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  g_signal_connectc (G_OBJECT (selection),
-		     "changed",
-		     selection_changed,
-		     button, FALSE);
+  g_signal_connect (G_OBJECT (selection),
+                    "changed",
+                    selection_changed,
+                    button);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_remove, tree_view);
   gtk_widget_set_sensitive (button, FALSE);
 
@@ -296,19 +283,19 @@ make_window (gint view_type)
   button = gtk_button_new_with_label ("gtk_tree_store_insert_before");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert_before, tree_view);
-  g_signal_connectc (G_OBJECT (selection),
-		     "changed",
-		     selection_changed,
-		     button, FALSE);
+  g_signal_connect (G_OBJECT (selection),
+                    "changed",
+                    selection_changed,
+                    button);
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_insert_after");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
   gtk_signal_connect (GTK_OBJECT (button), "clicked", iter_insert_after, tree_view);
-  g_signal_connectc (G_OBJECT (selection),
-		     "changed",
-		     selection_changed,
-		     button, FALSE);
+  g_signal_connect (G_OBJECT (selection),
+                    "changed",
+                    selection_changed,
+                    button);
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_prepend");
@@ -353,7 +340,7 @@ main (int argc, char *argv[])
 {
   gtk_init (&argc, &argv);
 
-  base_model = gtk_tree_store_new_with_types (2, G_TYPE_STRING, G_TYPE_STRING);
+  base_model = gtk_tree_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
 
   /* FIXME: reverse this */
   make_window (0);

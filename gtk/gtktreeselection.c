@@ -133,7 +133,6 @@ _gtk_tree_selection_new_with_tree_view (GtkTreeView *tree_view)
 {
   GtkTreeSelection *selection;
 
-  g_return_val_if_fail (tree_view != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
 
   selection = _gtk_tree_selection_new ();
@@ -154,7 +153,6 @@ void
 _gtk_tree_selection_set_tree_view (GtkTreeSelection *selection,
                                    GtkTreeView      *tree_view)
 {
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   if (tree_view != NULL)
     g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
@@ -175,7 +173,6 @@ void
 gtk_tree_selection_set_mode (GtkTreeSelection     *selection,
 			     GtkTreeSelectionMode  type)
 {
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
 
   if (selection->type == type)
@@ -251,7 +248,6 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 					gpointer              data,
 					GtkDestroyNotify      destroy)
 {
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (func != NULL);
 
@@ -271,7 +267,6 @@ gtk_tree_selection_set_select_function (GtkTreeSelection     *selection,
 gpointer
 gtk_tree_selection_get_user_data (GtkTreeSelection *selection)
 {
-  g_return_val_if_fail (selection != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), NULL);
 
   return selection->user_data;
@@ -309,7 +304,6 @@ gtk_tree_selection_get_selected (GtkTreeSelection  *selection,
   GtkTreePath *anchor_path;
   gboolean retval;
 
-  g_return_val_if_fail (selection != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_SELECTION (selection), FALSE);
   g_return_val_if_fail (selection->type == GTK_TREE_SELECTION_SINGLE, FALSE);
   g_return_val_if_fail (selection->tree_view != NULL, FALSE);
@@ -374,7 +368,6 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   GtkRBNode *node;
   GtkTreeIter iter;
 
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->model != NULL);
@@ -386,14 +379,19 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 
   if (selection->type == GTK_TREE_SELECTION_SINGLE)
     {
-      if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-	(* func) (selection->tree_view->priv->model, &iter, data);
+      if (gtk_tree_row_reference_valid (selection->tree_view->priv->anchor))
+	{
+	  path = gtk_tree_row_reference_get_path (selection->tree_view->priv->anchor);
+	  gtk_tree_model_get_iter (selection->tree_view->priv->model, &iter, path);
+	  (* func) (selection->tree_view->priv->model, path, &iter, data);
+	  gtk_tree_path_free (path);
+	}
       return;
     }
 
   tree = selection->tree_view->priv->tree;
   node = selection->tree_view->priv->tree->root;
-
+  
   while (node->left != tree->nil)
     node = node->left;
 
@@ -401,12 +399,11 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
   path = gtk_tree_path_new_root ();
   gtk_tree_model_get_iter (selection->tree_view->priv->model,
 			   &iter, path);
-  gtk_tree_path_free (path);
 
   do
     {
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_SELECTED))
-	(* func) (selection->tree_view->priv->model, &iter, data);
+	(* func) (selection->tree_view->priv->model, path, &iter, data);
       if (node->children)
 	{
 	  gboolean has_child;
@@ -418,7 +415,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 	    node = node->left;
 	  tmp = iter;
 	  has_child = gtk_tree_model_iter_children (selection->tree_view->priv->model, &iter, &tmp);
-
+	  gtk_tree_path_append_index (path, 0);
 	  /* Sanity Check! */
 	  TREE_VIEW_INTERNAL_ASSERT_VOID (has_child);
 	}
@@ -434,6 +431,7 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 
 		  has_next = gtk_tree_model_iter_next (selection->tree_view->priv->model, &iter);
 		  done = TRUE;
+		  gtk_tree_path_next (path);
 
 		  /* Sanity Check! */
 		  TREE_VIEW_INTERNAL_ASSERT_VOID (has_next);
@@ -446,11 +444,14 @@ gtk_tree_selection_selected_foreach (GtkTreeSelection            *selection,
 		  node = tree->parent_node;
 		  tree = tree->parent_tree;
 		  if (tree == NULL)
-		    /* we've run out of tree */
-		    /* We're done with this function */
-		    return;
+		    {
+		      gtk_tree_path_free (path);
+		      /* we've run out of tree */
+		      /* We're done with this function */
+		      return;
+		    }
 		  has_parent = gtk_tree_model_iter_parent (selection->tree_view->priv->model, &iter, &tmp_iter);
-
+		  gtk_tree_path_up (path);
 		  /* Sanity check */
 		  TREE_VIEW_INTERNAL_ASSERT_VOID (has_parent);
 		}
@@ -476,7 +477,6 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
   GtkRBTree *tree;
   GdkModifierType state = 0;
 
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (path != NULL);
@@ -513,7 +513,6 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
   GtkRBNode *node;
   GtkRBTree *tree;
 
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (path != NULL);
@@ -546,7 +545,6 @@ gtk_tree_selection_select_iter (GtkTreeSelection *selection,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->model != NULL);
@@ -576,7 +574,6 @@ gtk_tree_selection_unselect_iter (GtkTreeSelection *selection,
 {
   GtkTreePath *path;
 
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->model != NULL);
@@ -658,7 +655,6 @@ gtk_tree_selection_real_select_all (GtkTreeSelection *selection)
 void
 gtk_tree_selection_select_all (GtkTreeSelection *selection)
 {
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->tree != NULL);
@@ -758,7 +754,6 @@ gtk_tree_selection_real_unselect_all (GtkTreeSelection *selection)
 void
 gtk_tree_selection_unselect_all (GtkTreeSelection *selection)
 {
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
   g_return_if_fail (selection->tree_view->priv->tree != NULL);
@@ -872,12 +867,11 @@ gtk_tree_selection_select_range (GtkTreeSelection *selection,
 				 GtkTreePath      *start_path,
 				 GtkTreePath      *end_path)
 {
-  g_return_if_fail (selection != NULL);
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
 
   if (gtk_tree_selection_real_select_range (selection, start_path, end_path))
-    gtk_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
+    g_signal_emit (G_OBJECT (selection), tree_selection_signals[CHANGED], 0);
 }
 
 /* Called internally by gtktreeview.c It handles actually selecting the tree.

@@ -152,7 +152,6 @@ gtk_im_context_set_client_window (GtkIMContext *context,
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
@@ -184,7 +183,6 @@ gtk_im_context_get_preedit_string (GtkIMContext   *context,
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
   
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
@@ -210,7 +208,6 @@ gtk_im_context_filter_keypress (GtkIMContext *context,
 {
   GtkIMContextClass *klass;
   
-  g_return_val_if_fail (context != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
   g_return_val_if_fail (key != NULL, FALSE);
 
@@ -232,7 +229,6 @@ gtk_im_context_focus_in (GtkIMContext   *context)
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
   
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
@@ -254,7 +250,6 @@ gtk_im_context_focus_out (GtkIMContext   *context)
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
@@ -275,7 +270,6 @@ gtk_im_context_reset (GtkIMContext   *context)
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
@@ -298,7 +292,6 @@ gtk_im_context_set_cursor_location (GtkIMContext *context,
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);
@@ -322,7 +315,6 @@ gtk_im_context_set_use_preedit (GtkIMContext *context,
 {
   GtkIMContextClass *klass;
   
-  g_return_if_fail (context != NULL);
   g_return_if_fail (GTK_IS_IM_CONTEXT (context));
 
   klass = GTK_IM_CONTEXT_GET_CLASS (context);

@@ -1739,10 +1739,10 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 }
 
 GdkWindow*
-gdk_window_get_pointer (GdkWindow       *window,
-			gint            *x,
-			gint            *y,
-			GdkModifierType *mask)
+_gdk_windowing_window_get_pointer (GdkWindow       *window,
+				   gint            *x,
+				   gint            *y,
+				   GdkModifierType *mask)
 {
   GdkWindow *return_val;
   POINT pointc, point;
@@ -1801,8 +1801,8 @@ gdk_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-gdk_window_at_pointer (gint *win_x,
-		       gint *win_y)
+_gdk_windowing_window_at_pointer (gint *win_x,
+				  gint *win_y)
 {
   GdkWindow *window;
   POINT point, pointc;

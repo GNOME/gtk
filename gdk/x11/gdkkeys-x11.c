@@ -126,7 +126,6 @@ update_keymaps_for_display (GdkDisplay * display)
 	      (1 << (i / dpy_impl->mod_keymap->max_keypermod));
 	    break;
 	  }
-
 	  ++j;
 	}
       }
@@ -134,8 +133,6 @@ update_keymaps_for_display (GdkDisplay * display)
     }
   }
 }
-
-
 
 #ifdef HAVE_XKB
 

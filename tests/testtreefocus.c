@@ -154,15 +154,15 @@ make_model (void)
   TreeStruct *month = toplevel;
   GtkTreeIter iter;
 
-  model = gtk_tree_store_new_with_types (NUM_COLUMNS,
-					 G_TYPE_STRING,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN,
-					 G_TYPE_BOOLEAN);
+  model = gtk_tree_store_new (NUM_COLUMNS,
+			      G_TYPE_STRING,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN);
 
   while (month->label)
     {
@@ -309,7 +309,6 @@ main (int argc, char *argv[])
   GtkCellRenderer *renderer;
   gint col_offset;
   GtkTreeViewColumn *column;
-  GtkTreeSelection *selection;
 
   gtk_init (&argc, &argv);
 
@@ -342,7 +341,7 @@ main (int argc, char *argv[])
 
   /* Alex Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (renderer), "toggled", G_CALLBACK (alex_toggled), model, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (alex_toggled), model);
 
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -360,7 +359,7 @@ main (int argc, char *argv[])
 
   /* Havoc Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (renderer), "toggled", G_CALLBACK (havoc_toggled), model, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (havoc_toggled), model);
 
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -377,7 +376,7 @@ main (int argc, char *argv[])
 
   /* Tim Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (renderer), "toggled", G_CALLBACK (tim_toggled), model, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (tim_toggled), model);
 
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
@@ -395,7 +394,7 @@ main (int argc, char *argv[])
 
   /* Owen Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (renderer), "toggled", G_CALLBACK (owen_toggled), model, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (owen_toggled), model);
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Owen",
@@ -411,7 +410,7 @@ main (int argc, char *argv[])
 
   /* Owen Column */
   renderer = gtk_cell_renderer_toggle_new ();
-  g_signal_connect_data (G_OBJECT (renderer), "toggled", G_CALLBACK (dave_toggled), model, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (renderer), "toggled", G_CALLBACK (dave_toggled), model);
   g_object_set (G_OBJECT (renderer), "xalign", 0.0, NULL);
   col_offset = gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
 					       -1, "Dave",

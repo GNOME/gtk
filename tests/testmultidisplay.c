@@ -90,7 +90,6 @@ make_selection_dialog (GdkScreen * screen,
 		    NULL);
 
 
-  gtk_widget_set_screen (window, screen);
   gtk_widget_show_all (window);
 }
 

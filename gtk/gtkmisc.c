@@ -206,7 +206,6 @@ gtk_misc_set_alignment (GtkMisc *misc,
 			gfloat   xalign,
 			gfloat   yalign)
 {
-  g_return_if_fail (misc != NULL);
   g_return_if_fail (GTK_IS_MISC (misc));
 
   if (xalign < 0.0)
@@ -271,7 +270,6 @@ gtk_misc_set_padding (GtkMisc *misc,
 {
   GtkRequisition *requisition;
   
-  g_return_if_fail (misc != NULL);
   g_return_if_fail (GTK_IS_MISC (misc));
   
   if (xpad < 0)
@@ -330,7 +328,6 @@ gtk_misc_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MISC (widget));
 
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);

@@ -29,17 +29,17 @@
 
 
 #include <gtk/gtkstyle.h>
-#include <gtk/gtkwidget.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
 
-/* Forward declaration */
-typedef struct _GtkIconFactory GtkIconFactory;
+/* Forward declarations */
+typedef struct _GtkIconFactory  GtkIconFactory;
+typedef struct _GtkRcContext    GtkRcContext;
+typedef struct _GtkSettings     GtkSettings;
 
 typedef struct _GtkRcStyleClass GtkRcStyleClass;
-typedef struct _GtkRCContext    GtkRcContext;
 
 #define GTK_TYPE_RC_STYLE              (gtk_rc_style_get_type ())
 #define GTK_RC_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_RC_STYLE, GtkRcStyle))
@@ -74,7 +74,7 @@ struct _GtkRcStyle
 
   gint xthickness;
   gint ythickness;
-  
+
   /*< private >*/
   GBSearchArray *rc_properties;
   
@@ -99,8 +99,9 @@ struct _GtkRcStyleClass
    * of brackets. Returns G_TOKEN_NONE if succesful, otherwise returns
    * the token it expected but didn't get.
    */
-  guint     (*parse)  (GtkRcStyle *rc_style,
-		       GScanner   *scanner);
+  guint     (*parse)  (GtkRcStyle   *rc_style,
+		       GtkSettings  *settings,
+		       GScanner     *scanner);
   
   /* Combine RC style data from src into dest. If overriden, this
    * function should chain to the parent.
@@ -117,18 +118,30 @@ void	  _gtk_rc_init			(void);
 void      gtk_rc_add_default_file	(const gchar *filename);
 void      gtk_rc_set_default_files      (gchar **filenames);
 gchar**   gtk_rc_get_default_files      (void);
+GtkStyle* gtk_rc_get_style		(GtkWidget   *widget);
+GtkStyle* gtk_rc_get_style_by_paths     (GtkSettings *settings,
+					 const char  *widget_path,
+					 const char  *class_path,
+					 GType        type);
+
+gboolean gtk_rc_reparse_all_for_settings (GtkSettings *settings,
+					  gboolean     force_load);
+gchar*   gtk_rc_find_pixmap_in_path (GtkSettings  *context,
+				     GScanner     *scanner,
+				     const gchar  *pixmap_file);
+
 void	  gtk_rc_parse			(const gchar *filename);
 void	  gtk_rc_parse_string		(const gchar *rc_string);
-GtkStyle* gtk_rc_get_style		(GtkWidget   *widget);
-
 gboolean  gtk_rc_reparse_all		(void);
-void	  gtk_rc_add_widget_name_style	(GtkRcStyle  *rc_style,
-					 const gchar *pattern);
-void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
-					 const gchar *pattern);
-void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
-					 const gchar *pattern);
 
+#ifndef GTK_DISABLE_DEPRECATED
+void	  gtk_rc_add_widget_name_style	(GtkRcStyle   *rc_style,
+					 const gchar  *pattern);
+void	  gtk_rc_add_widget_class_style (GtkRcStyle   *rc_style,
+					 const gchar  *pattern);
+void	  gtk_rc_add_class_style	(GtkRcStyle   *rc_style,
+					 const gchar  *pattern);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 
 GType       gtk_rc_style_get_type   (void) G_GNUC_CONST;
@@ -137,8 +150,6 @@ GtkRcStyle* gtk_rc_style_copy       (GtkRcStyle *orig);
 void        gtk_rc_style_ref        (GtkRcStyle *rc_style);
 void        gtk_rc_style_unref      (GtkRcStyle *rc_style);
 
-gchar*		gtk_rc_find_pixmap_in_path	(GScanner    	*scanner,
-						 const gchar	*pixmap_file);
 gchar*		gtk_rc_find_module_in_path	(const gchar 	*module_file);
 gchar*		gtk_rc_get_theme_dir		(void);
 gchar*		gtk_rc_get_module_dir		(void);
@@ -174,6 +185,7 @@ typedef enum {
   GTK_RC_TOKEN_LOWEST,
   GTK_RC_TOKEN_GTK,
   GTK_RC_TOKEN_APPLICATION,
+  GTK_RC_TOKEN_THEME,
   GTK_RC_TOKEN_RC,
   GTK_RC_TOKEN_HIGHEST,
   GTK_RC_TOKEN_ENGINE,
@@ -211,7 +223,6 @@ struct _GtkRcProperty
 const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
 						       GQuark      type_name,
 						       GQuark      property_name);
-
 
 #ifdef G_OS_WIN32
 gchar*  gtk_win32_get_installation_directory (void);

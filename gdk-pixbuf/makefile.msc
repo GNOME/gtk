@@ -18,8 +18,9 @@ PKG_CFLAGS = -I. -I.. $(GLIB_CFLAGS) \
 
 
 PKG_LINK = $(GLIB_LIBS) \
-	$(JPEG_LIBS) $(PNG_LIBS) $(TIFF_LIBS) $(INTL_LIBS) \
-	pixops\pixops.lib
+#	$(TIFF_LIBS) \
+	$(JPEG_LIBS) $(PNG_LIBS) $(INTL_LIBS) \
+	pixops\pixops.lib \
  
 OBJECTS = \
 	gdk-pixbuf-animation.obj \
@@ -29,14 +30,16 @@ OBJECTS = \
 	gdk-pixbuf-scale.obj \
 	gdk-pixbuf-util.obj \
 	gdk-pixbuf.obj \
+	gdk-pixdata.obj \
 	io-bmp.obj \
 	io-wbmp.obj \
 	io-gif.obj \
+	io-gif-animation.obj \
 	io-ico.obj \
 	io-png.obj \
 	io-pnm.obj \
 	io-ras.obj \
-	io-tiff.obj \
+#	io-tiff.obj \
 	io-xpm.obj \
 	io-jpeg.obj \
 
@@ -49,7 +52,7 @@ gdk-pixbuf-marshal.c: gdk-pixbuf-marshal.list
 ## common stuff
 
 # cl -? describes the options
-CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
+CC = cl -G5 -GF $(OPTIMIZE) $(CRUNTIME) -W3 -nologo
 
 # No general LDFLAGS needed
 LDFLAGS = /link $(LINKDEBUG)
@@ -63,7 +66,8 @@ all : \
 	gdk-pixbuf-marshal.c \
 	gdk-pixbuf-marshal.h \
 	$(PACKAGE)-$(PKG_VER).dll \
-	make-inline-pixbuf.exe \
+#	make-inline-pixbuf.exe \
+	gdk-pixbuf-csource.exe \
 	test-gdk-pixbuf.exe
 
 $(PACKAGE).lib : $(OBJECTS)
@@ -74,6 +78,9 @@ $(PACKAGE)-$(PKG_VER).dll : $(OBJECTS) $(PACKAGE).def
 
 make-inline-pixbuf.exe : make-inline-pixbuf.c
 	$(CC) $(PKG_CFLAGS) -Femake-inline-pixbuf.exe make-inline-pixbuf.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib
+
+gdk-pixbuf-csource.exe : gdk-pixbuf-csource.c
+	$(CC) $(PKG_CFLAGS) -Fegdk-pixbuf-csource.exe gdk-pixbuf-csource.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib
 
 test-gdk-pixbuf.exe : test-gdk-pixbuf.c
 	$(CC) $(PKG_CFLAGS) -Fetest-gdk-pixbuf.exe test-gdk-pixbuf.c $(PKG_LINK) $(PACKAGE)-$(PKG_VER).lib

@@ -228,6 +228,8 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
                            GdkColormap *cmap)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
+  g_return_if_fail (cmap == NULL || gdk_drawable_get_depth (drawable)
+                    == cmap->visual->depth);
 
   GDK_DRAWABLE_GET_CLASS (drawable)->set_colormap (drawable, cmap);
 }
@@ -627,6 +629,10 @@ gdk_draw_glyphs (GdkDrawable      *drawable,
  * If the X server or other windowing system backend is on the local
  * machine, this function may use shared memory to avoid copying
  * the image data.
+ *
+ * If the source drawable is a #GdkWindow and partially offscreen
+ * or obscured, then the obscured portions of the returned image
+ * will contain undefined data.
  * 
  * Return value: a #GdkImage containing the contents of @drawable
  **/
@@ -641,6 +647,7 @@ gdk_drawable_get_image (GdkDrawable *drawable,
   gint composite_x_offset = 0;
   gint composite_y_offset = 0;
   GdkImage *retval;
+  GdkColormap *cmap;
   
   g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
   g_return_val_if_fail (x >= 0, NULL);
@@ -669,6 +676,11 @@ gdk_drawable_get_image (GdkDrawable *drawable,
 
   g_object_unref (G_OBJECT (composite));
 
+  cmap = gdk_drawable_get_colormap (drawable);
+  
+  if (retval && cmap)
+    gdk_image_set_colormap (retval, cmap);
+  
   return retval;
 }
 

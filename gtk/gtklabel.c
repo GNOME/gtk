@@ -115,7 +115,8 @@ static void set_markup                           (GtkLabel      *label,
 						  const gchar   *str,
 						  gboolean       with_uline);
 static void gtk_label_recalculate                (GtkLabel      *label);
-static void gtk_label_hierarchy_changed          (GtkWidget     *widget);
+static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
+						  GtkWidget     *old_toplevel);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -493,8 +494,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
     return;
   
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (label));
-  
-  if (GTK_IS_WINDOW (toplevel))
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
     {
       gtk_window_add_mnemonic (GTK_WINDOW (toplevel),
 			       label->mnemonic_keyval,
@@ -504,7 +504,8 @@ gtk_label_setup_mnemonic (GtkLabel *label,
 }
 
 static void
-gtk_label_hierarchy_changed (GtkWidget *widget)
+gtk_label_hierarchy_changed (GtkWidget *widget,
+			     GtkWidget *old_toplevel)
 {
   GtkLabel *label = GTK_LABEL (widget);
   
@@ -899,7 +900,6 @@ gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
 G_CONST_RETURN gchar *
 gtk_label_get_text (GtkLabel *label)
 {
-  g_return_val_if_fail (label != NULL, NULL);
   g_return_val_if_fail (GTK_IS_LABEL (label), NULL);
 
   return label->text;
@@ -953,7 +953,10 @@ gtk_label_set_pattern_internal (GtkLabel    *label,
   g_return_if_fail (GTK_IS_LABEL (label));
   
   attrs = gtk_label_pattern_to_attrs (label, pattern);
-  gtk_label_set_attributes_internal (label, attrs);
+
+  if (label->effective_attrs)
+    pango_attr_list_unref (label->effective_attrs);
+  label->effective_attrs = attrs;
 }
 
 void
@@ -1056,7 +1059,6 @@ void
 gtk_label_get (GtkLabel *label,
 	       gchar   **str)
 {
-  g_return_if_fail (label != NULL);
   g_return_if_fail (GTK_IS_LABEL (label));
   g_return_if_fail (str != NULL);
   
@@ -1092,7 +1094,7 @@ gtk_label_finalize (GObject *object)
     pango_attr_list_unref (label->attrs);
 
   if (label->effective_attrs)
-    pango_attr_list_unref (label->attrs);
+    pango_attr_list_unref (label->effective_attrs);
 
   g_free (label->select_info);
 

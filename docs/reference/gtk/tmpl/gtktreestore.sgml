@@ -34,38 +34,9 @@ GtkTreeStore
 
 </para>
 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_store_new_with_types ##### -->
-<para>
-
-</para>
-
 @n_columns: 
 @Varargs: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_store_set_n_columns ##### -->
-<para>
-
-</para>
-
-@tree_store: 
-@n_columns: 
-
-
-<!-- ##### FUNCTION gtk_tree_store_set_column_type ##### -->
-<para>
-
-</para>
-
-@tree_store: 
-@column: 
-@type: 
-<!-- # Unused Parameters # -->
-@store: 
 
 
 <!-- ##### FUNCTION gtk_tree_store_set_value ##### -->

@@ -53,6 +53,7 @@ gdk_input_init(void)
 {
   GList *tmp_list;
   
+  _gdk_init_input_core ();
   gdk_input_ignore_core = FALSE;
   gdk_input_core_pointer = NULL;
 

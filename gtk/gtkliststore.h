@@ -60,14 +60,10 @@ struct _GtkListStoreClass
 
 
 GtkType       gtk_list_store_get_type        (void);
-GtkListStore *gtk_list_store_new             (void);
-GtkListStore *gtk_list_store_new_with_types  (gint          n_columns,
+GtkListStore *gtk_list_store_new             (gint          n_columns,
 					      ...);
-void          gtk_list_store_set_n_columns   (GtkListStore *store,
-					      gint          n_columns);
-void          gtk_list_store_set_column_type (GtkListStore *store,
-					      gint          column,
-					      GType         type);
+GtkListStore *gtk_list_store_newv            (gint          n_columns,
+					      GType        *types);
 void          gtk_list_store_set_value       (GtkListStore *store,
 					      GtkTreeIter  *iter,
 					      gint          column,

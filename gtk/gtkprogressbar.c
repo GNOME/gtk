@@ -331,7 +331,6 @@ gtk_progress_bar_new_with_adjustment (GtkAdjustment *adjustment)
 {
   GtkWidget *pbar;
 
-  g_return_val_if_fail (adjustment != NULL, NULL);
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), NULL);
 
   pbar = gtk_widget_new (GTK_TYPE_PROGRESS_BAR,
@@ -347,7 +346,6 @@ gtk_progress_bar_real_update (GtkProgress *progress)
   GtkProgressBar *pbar;
   GtkWidget *widget;
 
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
   pbar = GTK_PROGRESS_BAR (progress);
@@ -453,7 +451,6 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   PangoRectangle logical_rect;
   PangoLayout *layout;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -573,7 +570,6 @@ gtk_progress_bar_paint (GtkProgress *progress)
   gdouble percentage;
   gint size;
 
-  g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (progress));
 
   pbar = GTK_PROGRESS_BAR (progress);
@@ -862,7 +858,6 @@ void
 gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
                                gdouble         fraction)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   /* If we know the percentage, we don't want activity mode. */
@@ -890,7 +885,6 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
 void
 gtk_progress_bar_pulse (GtkProgressBar *pbar)
 {  
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   /* If we don't know the percentage, we must want activity mode. */
@@ -911,7 +905,6 @@ void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
                            const gchar    *text)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   
   /* We don't support formats in this interface */
@@ -943,7 +936,6 @@ void
 gtk_progress_bar_set_pulse_step   (GtkProgressBar *pbar,
                                    gdouble         fraction)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   
   pbar->pulse_fraction = fraction;
@@ -955,7 +947,6 @@ void
 gtk_progress_bar_update (GtkProgressBar *pbar,
 			 gdouble         percentage)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   /* Use of gtk_progress_bar_update() is deprecated ! 
@@ -977,7 +968,6 @@ void
 gtk_progress_bar_set_orientation (GtkProgressBar           *pbar,
 				  GtkProgressBarOrientation orientation)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   if (pbar->orientation != orientation)
@@ -1065,7 +1055,6 @@ void
 gtk_progress_bar_set_bar_style (GtkProgressBar     *pbar,
 				GtkProgressBarStyle bar_style)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   if (pbar->bar_style != bar_style)
@@ -1083,7 +1072,6 @@ void
 gtk_progress_bar_set_discrete_blocks (GtkProgressBar *pbar,
 				      guint           blocks)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   g_return_if_fail (blocks > 1);
 
@@ -1102,7 +1090,6 @@ void
 gtk_progress_bar_set_activity_step (GtkProgressBar *pbar,
                                     guint           step)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
 
   if (pbar->activity_step != step)
@@ -1116,7 +1103,6 @@ void
 gtk_progress_bar_set_activity_blocks (GtkProgressBar *pbar,
 				      guint           blocks)
 {
-  g_return_if_fail (pbar != NULL);
   g_return_if_fail (GTK_IS_PROGRESS_BAR (pbar));
   g_return_if_fail (blocks > 1);
 

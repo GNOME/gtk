@@ -40,7 +40,9 @@ setup_png_transformations(png_structp png_read_ptr, png_infop png_info_ptr,
 {
         png_uint_32 width, height;
         int bit_depth, color_type, interlace_type, compression_type, filter_type;
+#ifndef G_DISABLE_CHECKS
         int channels;
+#endif
         
         /* Get the image info */
 

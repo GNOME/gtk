@@ -112,5 +112,4 @@ extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
 extern gboolean		 gdk_synchronize;
 
-
 #endif /* __GDK_PRIVATE_X11_H__ */

@@ -86,7 +86,6 @@ testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 
 testgtk_SOURCES =	\
-	prop-editor.c	\
 	testgtk.c 
 
 testtreeview_SOURCES =	\
@@ -96,6 +95,14 @@ testtreeview_SOURCES =	\
 testtext_SOURCES =	\
 	prop-editor.c	\
 	testtext.c 
+
+testsocket_SOURCES =    	\
+	testsocket.c		\
+	testsocket_common.c
+
+testsocket_child_SOURCES =    	\
+	testsocket_child.c	\
+	testsocket_common.c
 
 EXTRA_DIST += @STRIP_BEGIN@ 	\
 	prop-editor.h		\

@@ -181,6 +181,7 @@ test_gdk_pixbuf_LDADD = $(LDADDS)
 test_loaders_LDADD = $(LDADDS)
 
 test_loaders_SOURCES = test-loaders.c test-images.h
+
 #noinst_PROGRAMS=make-inline-pixbuf
 #make_inline_pixbuf_SOURCES=make-inline-pixbuf.c
 #make_inline_pixbuf_LDADD = $(LDADDS)
@@ -188,7 +189,6 @@ test_loaders_SOURCES = test-loaders.c test-images.h
 bin_PROGRAMS = gdk-pixbuf-csource
 gdk_pixbuf_csource_SOURCES = gdk-pixbuf-csource.c
 gdk_pixbuf_csource_LDADD = $(LDADDS)
-
 
 
 #
@@ -210,6 +210,7 @@ libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
 	gdk-pixbuf-util.c	\
 	gdk-pixdata.c		\
 @STRIP_END@
+
 
 $(libgdk_pixbuf_1_3_la_OBJECTS): gdk-pixbuf-marshal.h gdk-pixbuf-marshal.c
 

@@ -840,7 +840,7 @@ gdk_pixbuf__pnm_image_load_increment (gpointer data,
 	PnmIOBuffer *inbuf;
 	guchar *old_byte;
 	guint old_nbytes;
-	guchar *bufhd;
+	const guchar *bufhd;
 	guint num_left, spinguard;
 	gint retval;
 	

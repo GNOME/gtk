@@ -150,6 +150,7 @@ gtk_hbutton_box_size_request (GtkWidget      *widget,
   
   _gtk_button_box_child_requisition (widget,
                                      &nvis_children,
+				     NULL,
                                      &child_width,
                                      &child_height);
 
@@ -196,9 +197,11 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
   GList *children;
   GtkAllocation child_allocation;
   gint nvis_children;
+  gint n_secondaries;
   gint child_width;
   gint child_height;
   gint x = 0;
+  gint secondary_x = 0;
   gint y = 0;
   gint width;
   gint childspace;
@@ -218,6 +221,7 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
 	  ? box->layout_style : default_layout_style;
   _gtk_button_box_child_requisition (widget,
                                      &nvis_children,
+				     &n_secondaries,
                                      &child_width,
                                      &child_height);
   widget->allocation = *allocation;
@@ -225,39 +229,46 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
   switch (layout)
   {
   case GTK_BUTTONBOX_SPREAD:
-    childspacing = (width - (nvis_children*child_width)) / (nvis_children+1);
+    childspacing = (width - (nvis_children * child_width)) / (nvis_children + 1);
     x = allocation->x + GTK_CONTAINER (box)->border_width + childspacing;
+    secondary_x = x + ((nvis_children - n_secondaries) * (child_width + childspacing));
     break;
   case GTK_BUTTONBOX_EDGE:
     if (nvis_children >= 2)
-    {
-      childspacing =
-	      (width - (nvis_children*child_width)) / (nvis_children-1);
-      x = allocation->x + GTK_CONTAINER (box)->border_width;
-    }
+      {
+	childspacing = (width - (nvis_children * child_width)) / (nvis_children - 1);
+	x = allocation->x + GTK_CONTAINER (box)->border_width;
+	secondary_x = x + ((nvis_children - n_secondaries) * (child_width + childspacing));
+      }
     else
       {
-		      /* one or zero children, just center */
+	/* one or zero children, just center */
         childspacing = width;
-	x = allocation->x + (allocation->width - child_width) / 2;
+	x = secondary_x = allocation->x + (allocation->width - child_width) / 2;
       }
     break;
   case GTK_BUTTONBOX_START:
     childspacing = spacing;
     x = allocation->x + GTK_CONTAINER (box)->border_width;
+    secondary_x = allocation->x + allocation->width 
+      - child_width * n_secondaries
+      - spacing * (n_secondaries - 1)
+      - GTK_CONTAINER (box)->border_width;
     break;
   case GTK_BUTTONBOX_END:
     childspacing = spacing;
-    x = allocation->x + allocation->width - child_width * nvis_children
-	    - spacing *(nvis_children-1)
-	    - GTK_CONTAINER (box)->border_width;
+    x = allocation->x + allocation->width 
+      - child_width * (nvis_children - n_secondaries)
+      - spacing * (nvis_children - n_secondaries - 1)
+      - GTK_CONTAINER (box)->border_width;
+    secondary_x = allocation->x + GTK_CONTAINER (box)->border_width;
     break;
   default:
     g_assert_not_reached();
     break;
   }
+
 		  
-  
   y = allocation->y + (allocation->height - child_height) / 2;
   childspace = child_width + childspacing;
 
@@ -272,16 +283,23 @@ gtk_hbutton_box_size_allocate (GtkWidget     *widget,
 	{
 	  child_allocation.width = child_width;
 	  child_allocation.height = child_height;
-
-	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	    child_allocation.x = x;
-	  else
-	    child_allocation.x = allocation->x + allocation->width - (x - allocation->x + child_width);
-	  
 	  child_allocation.y = y;
+	  
+	  if (child->is_secondary)
+	    {
+	      child_allocation.x = secondary_x;
+	      secondary_x += childspace;
+	    }
+	  else
+	    {
+	      child_allocation.x = x;
+	      x += childspace;
+	    }
 
+	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+	    child_allocation.x = (allocation->x + allocation->width) - (child_allocation.x + child_width - allocation->x);
+	  
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
-	  x += childspace;
 	}
     }
 }

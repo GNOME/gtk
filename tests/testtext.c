@@ -390,10 +390,10 @@ tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
 static void
 setup_tag (GtkTextTag *tag)
 {
-  g_signal_connect_data (G_OBJECT (tag),
-                         "event",
-                         G_CALLBACK (tag_event_handler),
-                         NULL, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (tag),
+		    "event",
+		    G_CALLBACK (tag_event_handler),
+		    NULL);
 }
 
 static const char  *book_closed_xpm[] = {
@@ -2187,10 +2187,10 @@ create_view (Buffer *buffer)
                       GTK_SIGNAL_FUNC (tab_stops_expose),
                       NULL);  
 
-  g_signal_connect_data (G_OBJECT (view->buffer->buffer),
-                         "mark_set",
-                         GTK_SIGNAL_FUNC (cursor_set_callback),
-                         view->text_view, NULL, FALSE, FALSE);
+  g_signal_connect (G_OBJECT (view->buffer->buffer),
+		    "mark_set",
+		    GTK_SIGNAL_FUNC (cursor_set_callback),
+		    view->text_view);
   
   /* Draw line numbers in the side windows; we should really be
    * more scientific about what width we set them to.

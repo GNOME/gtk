@@ -35,7 +35,6 @@ extern "C" {
 
 
 /* --- typedefs --- */
-typedef struct    _GtkSettings      GtkSettings;
 typedef struct    _GtkSettingsClass GtkSettingsClass;
 typedef struct    _GtkSettingsValue GtkSettingsValue;
 
@@ -47,6 +46,8 @@ struct _GtkSettings
 
   GData  *queued_settings;	/* of type GtkSettingsValue* */
   GValue *property_values;
+
+  GtkRcContext *rc_context;
 };
 struct _GtkSettingsClass
 {
@@ -69,11 +70,9 @@ struct _GtkSettingsValue
 
 /* --- functions --- */
 GType		gtk_settings_get_type		     (void);
-GtkSettings*	gtk_settings_get_global		     (void);	/* singleton */
-void		gtk_settings_install_property	     (GtkSettings	 *settings,
-						      GParamSpec         *pspec);
-void		gtk_settings_install_property_parser (GtkSettings        *settings,
-						      GParamSpec         *pspec,
+GtkSettings*	gtk_settings_get_default	     (void);
+void		gtk_settings_install_property	     (GParamSpec         *pspec);
+void		gtk_settings_install_property_parser (GParamSpec         *pspec,
 						      GtkRcPropertyParser parser);
 
 /* --- precoded parsing functions --- */

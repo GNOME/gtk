@@ -44,6 +44,14 @@ struct _GdkWindowPaint
   gint x_offset;
   gint y_offset;
 };
+
+static const GdkPointerHooks default_pointer_hooks = {
+  _gdk_windowing_window_get_pointer,
+  _gdk_windowing_window_at_pointer
+};
+
+const GdkPointerHooks *current_pointer_hooks = &default_pointer_hooks;
+
 static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
                                          GdkGCValues     *values,
                                          GdkGCValuesMask  mask);
@@ -299,7 +307,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
       if (!GDK_WINDOW_DESTROYED (window))
 	{
 	  private->state |= GDK_WINDOW_STATE_WITHDRAWN;
-	  private->destroyed = TRUE;
 	  
 	  if (private->parent)
 	    {
@@ -338,6 +345,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    }
 	  
 	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
+	  private->destroyed = TRUE;
 
 	  if (private->filters)
 	    {
@@ -987,6 +995,59 @@ gdk_window_get_offsets (GdkWindow *window,
     _gdk_windowing_window_get_offsets (window, x_offset, y_offset);
 }
 
+/**
+ * gdk_window_get_internal_paint_info:
+ * @window: a #GdkWindow
+ * @real_drawable: location to store the drawable to which drawing should be done.
+ * @x_offset: location to store the X offset between coordinates in @window, and
+ *            the underlying window system primitive coordinates for *@real_drawable.
+ * @y_offset: location to store the Y offset between coordinates in @window, and
+ *            the underlying window system primitive coordinates for *@real_drawable.
+ * 
+ * If you bypass the GDK layer and use windowing system primitives to
+ * draw directly onto a #GdkWindow, then you need to deal with two
+ * details: there may be an offset between GDK coordinates and windowing
+ * system coordinates, and GDK may have redirected drawing to a offscreen
+ * pixmap as the result of a gdk_window_begin_paint_region() calls.
+ * This function allows retrieving the information you need to compensate
+ * for these effects.
+ *
+ * This function exposes details of the GDK implementation, and is thus
+ * likely to change in future releases of GDK.
+ **/
+void
+gdk_window_get_internal_paint_info (GdkWindow    *window,
+				    GdkDrawable **real_drawable,
+				    gint         *x_offset,
+				    gint         *y_offset)
+{
+  gint x_off, y_off;
+  
+  GdkWindowObject *private;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  private = (GdkWindowObject *)window;
+
+  if (real_drawable)
+    {
+      if (private->paint_stack)
+	{
+	  GdkWindowPaint *paint = private->paint_stack->data;
+	  *real_drawable = paint->pixmap;
+	}
+      else
+	*real_drawable = window;
+    }
+
+  gdk_window_get_offsets (window, &x_off, &y_off);
+
+  if (x_offset)
+    *x_offset = x_off;
+  if (y_offset)
+    *y_offset = y_off;
+}
+
 #define OFFSET_GC(gc)                                         \
     gint x_offset, y_offset; 				      \
     gint old_clip_x = gc->clip_x_origin;    \
@@ -1332,6 +1393,8 @@ gdk_window_get_clip_region (GdkDrawable *drawable)
 	  GdkWindowPaint *paint = tmp_list->data;
 	  
 	  gdk_region_union (paint_region, paint->region);
+
+          tmp_list = tmp_list->next;
 	}
 
       gdk_region_intersect (result, paint_region);
@@ -2308,3 +2371,47 @@ gdk_window_constrain_size (GdkGeometry *geometry,
   *new_height = height;
 }
 
+/**
+ * gdk_set_pointer_hooks:
+ * @new_hooks: a table of pointer to functions for getting
+ *   quantities related to the current pointer position,
+ *   or %NULL to restore the default table.
+ * 
+ * This function allows for hooking into the operation
+ * of getting the current location of the pointer. This
+ * is only useful for such low-level tools as an
+ * event recorder. Applications should never have any
+ * reason to use this facility
+ * 
+ * Return value: the previous pointer hook table
+ **/
+GdkPointerHooks *
+gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)
+{
+  const GdkPointerHooks *result = current_pointer_hooks;
+
+  if (new_hooks)
+    current_pointer_hooks = new_hooks;
+  else
+    current_pointer_hooks = &default_pointer_hooks;
+
+  return (GdkPointerHooks *)result;
+}
+
+GdkWindow*
+gdk_window_get_pointer (GdkWindow	  *window,
+			gint		  *x,
+			gint		  *y,
+			GdkModifierType *mask)
+{
+  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), NULL);
+  
+  return current_pointer_hooks->get_pointer (window, x, y, mask); 
+}
+
+GdkWindow*
+gdk_window_at_pointer (gint *win_x,
+		       gint *win_y)
+{
+  return current_pointer_hooks->window_at_pointer (win_x, win_y);
+}

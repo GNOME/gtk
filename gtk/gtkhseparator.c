@@ -86,7 +86,6 @@ static gint
 gtk_hseparator_expose (GtkWidget      *widget,
 		       GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_HSEPARATOR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

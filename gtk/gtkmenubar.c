@@ -48,7 +48,8 @@ static void gtk_menu_bar_paint         (GtkWidget       *widget,
 					GdkRectangle    *area);
 static gint gtk_menu_bar_expose        (GtkWidget       *widget,
 					GdkEventExpose  *event);
-static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget);                                            
+static void gtk_menu_bar_hierarchy_changed (GtkWidget   *widget,
+					    GtkWidget   *old_toplevel);
 static GtkShadowType get_shadow_type   (GtkMenuBar      *menubar);
 
 static GtkMenuShellClass *parent_class = NULL;
@@ -107,7 +108,17 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_PREV);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Left, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PREV);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_Right, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_NEXT);
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Right, 0,
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_NEXT);
@@ -117,13 +128,22 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_PARENT);
   gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Up, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_PARENT);
+  gtk_binding_entry_add_signal (binding_set,
 				GDK_Down, 0,
 				"move_current", 1,
 				GTK_TYPE_MENU_DIRECTION_TYPE,
 				GTK_MENU_DIR_CHILD);
-
-  gtk_settings_install_property (gtk_settings_get_global (),
-                                 g_param_spec_string ("gtk-menu-bar-accel",
+  gtk_binding_entry_add_signal (binding_set,
+				GDK_KP_Down, 0,
+				"move_current", 1,
+				GTK_TYPE_MENU_DIRECTION_TYPE,
+				GTK_MENU_DIR_CHILD);
+  
+  gtk_settings_install_property (g_param_spec_string ("gtk-menu-bar-accel",
                                                       _("Menu bar accelerator"),
                                                       _("Keybinding to activate the menu bar"),
                                                       "F10",
@@ -189,7 +209,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
   GtkRequisition child_requisition;
   gint ipadding;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -262,7 +281,6 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   guint offset;
   gint ipadding;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -329,7 +347,6 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 static void
 gtk_menu_bar_paint (GtkWidget *widget, GdkRectangle *area)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MENU_BAR (widget));
 
   if (GTK_WIDGET_DRAWABLE (widget))
@@ -353,7 +370,6 @@ static gint
 gtk_menu_bar_expose (GtkWidget      *widget,
 		     GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_MENU_BAR (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -375,7 +391,7 @@ window_key_press_handler (GtkWidget   *widget,
   gchar *accel = NULL;
   gboolean retval = FALSE;
   
-  g_object_get (G_OBJECT (gtk_settings_get_global ()),
+  g_object_get (G_OBJECT (gtk_widget_get_settings (widget)),
                 "gtk-menu-bar-accel",
                 &accel,
                 NULL);
@@ -437,38 +453,24 @@ add_to_window (GtkWindow  *window,
                      "gtk-menu-bar",
                      menubar);
 
-  g_signal_connect_data (G_OBJECT (window),
-                         "key_press_event",
-                         G_CALLBACK (window_key_press_handler),
-                         menubar,
-                         NULL, FALSE, FALSE);
-
-  menubar->toplevel = GTK_WIDGET (window);
+  g_signal_connect (G_OBJECT (window),
+		    "key_press_event",
+		    G_CALLBACK (window_key_press_handler),
+		    menubar);
 }
-
-/* Hack-around */
-#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
 
 static void
 remove_from_window (GtkWindow  *window,
                     GtkMenuBar *menubar)
 {
-  g_return_if_fail (menubar->toplevel == GTK_WIDGET (window));
-
   g_signal_handlers_disconnect_by_func (G_OBJECT (window),
                                         G_CALLBACK (window_key_press_handler),
                                         menubar);
-
-  /* dnotify zeroes menubar->toplevel */
-  g_object_set_data (G_OBJECT (window),
-                     "gtk-menu-bar",
-                     NULL);
-
-  menubar->toplevel = NULL;
 }
 
 static void
-gtk_menu_bar_hierarchy_changed (GtkWidget *widget)
+gtk_menu_bar_hierarchy_changed (GtkWidget *widget,
+				GtkWidget *old_toplevel)
 {
   GtkWidget *toplevel;  
   GtkMenuBar *menubar;
@@ -477,19 +479,11 @@ gtk_menu_bar_hierarchy_changed (GtkWidget *widget)
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (menubar->toplevel &&
-      toplevel != menubar->toplevel)
-    {
-      remove_from_window (GTK_WINDOW (menubar->toplevel),
-                          menubar);
-    }
+  if (old_toplevel)
+    remove_from_window (GTK_WINDOW (old_toplevel), menubar);
   
-  if (toplevel &&
-      GTK_IS_WINDOW (toplevel))
-    {
-      add_to_window (GTK_WINDOW (toplevel),
-                     menubar);
-    }
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    add_to_window (GTK_WINDOW (toplevel), menubar);
 }
 
 static GtkShadowType

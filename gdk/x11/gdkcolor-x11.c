@@ -611,7 +611,7 @@ gdk_colormap_alloc1 (GdkColormap *colormap,
 	    {
 	      XFreeColors (GDK_SCREEN_IMPL_X11(colormap->screen)->xdisplay,
 			   private->xcolormap,
-			   (unsigned long*)&ret->pixel, 1, 0);
+			   &xcolor.pixel, 1, 0);
 	    }
 	  else
 	    {

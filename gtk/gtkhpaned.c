@@ -91,7 +91,6 @@ gtk_hpaned_init (GtkHPaned *hpaned)
 {
   GtkPaned *paned;
 
-  g_return_if_fail (hpaned != NULL);
   g_return_if_fail (GTK_IS_PANED (hpaned));
 
   paned = GTK_PANED (hpaned);
@@ -248,7 +247,6 @@ gtk_hpaned_expose (GtkWidget      *widget,
   GtkPaned *paned;
   guint16 border_width;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_PANED (widget), FALSE);
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget)) 

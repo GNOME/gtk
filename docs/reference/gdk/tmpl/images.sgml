@@ -71,6 +71,7 @@ The #GdkImage struct contains information on the image and the pixel data.
 @bpl: the number of bytes per line of the image.
 @bits_per_pixel: 
 @mem: the pixel data.
+@colormap: 
 @windowing_data: 
 
 <!-- ##### FUNCTION gdk_image_new ##### -->

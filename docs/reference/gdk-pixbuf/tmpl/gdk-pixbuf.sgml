@@ -17,22 +17,28 @@ Information that describes an image.
 
 <!-- ##### ENUM GdkPixbufError ##### -->
 <para>
-
+An error code in the #GDK_PIXBUF_ERROR domain. Many &gdk-pixbuf;
+operations can cause errors in this domain, or in the #G_FILE_ERROR
+domain.
 </para>
 
 @GDK_PIXBUF_ERROR_HEADER_CORRUPT: 
 @GDK_PIXBUF_ERROR_PIXEL_CORRUPT: 
 @GDK_PIXBUF_ERROR_UNKNOWN_FORMAT: 
-@GDK_PIXBUF_ERROR_CORRUPT_IMAGE: 
-@GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: 
-@GDK_PIXBUF_ERROR_BAD_OPTION_VALUE: 
-@GDK_PIXBUF_ERROR_UNKNOWN_TYPE: 
-@GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION: 
-@GDK_PIXBUF_ERROR_FAILED: 
+@GDK_PIXBUF_ERROR_CORRUPT_IMAGE: An image file was broken somehow.
+@GDK_PIXBUF_ERROR_INSUFFICIENT_MEMORY: Not enough memory.
+@GDK_PIXBUF_ERROR_BAD_OPTION_VALUE: An option passed to
+gdk_pixbuf_save() had a bad value.
+@GDK_PIXBUF_ERROR_UNKNOWN_TYPE: Unknown image type.
+@GDK_PIXBUF_ERROR_UNSUPPORTED_OPERATION: Don't know how to perform the
+given operation on the type of image at hand.
+@GDK_PIXBUF_ERROR_FAILED: Generic failure code, something went wrong.
 
 <!-- ##### MACRO GDK_PIXBUF_ERROR ##### -->
 <para>
-
+Error domain used for pixbuf operations. Indicates that the error code
+will be in the #GdkPixbufError enumeration. See #GError for
+information on error domains and error codes.
 </para>
 
 

@@ -36,6 +36,7 @@ typedef struct _GtkTreePath         GtkTreePath;
 typedef struct _GtkTreeRowReference GtkTreeRowReference;
 typedef struct _GtkTreeModel        GtkTreeModel; /* Dummy typedef */
 typedef struct _GtkTreeModelIface   GtkTreeModelIface;
+typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
 
 
 typedef enum
@@ -213,6 +214,11 @@ void              gtk_tree_model_get             (GtkTreeModel *tree_model,
 void              gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  va_list       var_args);
+
+
+void              gtk_tree_model_foreach         (GtkTreeModel            *model,
+						  GtkTreeModelForeachFunc  func,
+						  gpointer                 user_data);
 
 
 /* Signals */

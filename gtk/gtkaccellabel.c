@@ -36,7 +36,7 @@
 
 enum {
   PROP_0,
-  PROP_ACCEL_WIDGET
+  PROP_ACCEL_OBJECT
 };
 
 static void     gtk_accel_label_class_init   (GtkAccelLabelClass *klass);
@@ -110,11 +110,11 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   object_class->destroy = gtk_accel_label_destroy;
   
   g_object_class_install_property (G_OBJECT_CLASS(object_class),
-                                   PROP_ACCEL_WIDGET,
-                                   g_param_spec_object ("accel_widget",
-                                                        _("Accelerator widget"),
-                                                        _("The widget monitored by this accelerator label"),
-                                                        GTK_TYPE_WIDGET,
+                                   PROP_ACCEL_OBJECT,
+                                   g_param_spec_object ("accel_object",
+                                                        _("Accelerator object"),
+                                                        _("The object monitored by this accelerator label"),
+                                                        G_TYPE_OBJECT,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
 
    
@@ -123,8 +123,8 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
 
   class->signal_quote1 = g_strdup ("<:");
   class->signal_quote2 = g_strdup (":>");
-  class->mod_name_shift = g_strdup ("Shft");
-  class->mod_name_control = g_strdup ("Ctl");
+  class->mod_name_shift = g_strdup ("Shift");
+  class->mod_name_control = g_strdup ("Ctrl");
   class->mod_name_alt = g_strdup ("Alt");
   class->mod_separator = g_strdup ("+");
   class->accel_seperator = g_strdup (" / ");
@@ -143,8 +143,8 @@ gtk_accel_label_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACCEL_WIDGET:
-      gtk_accel_label_set_accel_widget (accel_label, (GtkWidget*) g_value_get_object (value));
+    case PROP_ACCEL_OBJECT:
+      gtk_accel_label_set_accel_object (accel_label, g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -163,8 +163,8 @@ static void gtk_accel_label_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACCEL_WIDGET:
-       g_value_set_object (value, G_OBJECT (accel_label->accel_widget));
+    case PROP_ACCEL_OBJECT:
+       g_value_set_object (value, accel_label->accel_object);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -177,7 +177,7 @@ gtk_accel_label_init (GtkAccelLabel *accel_label)
 {
   accel_label->queue_id = 0;
   accel_label->accel_padding = 3;
-  accel_label->accel_widget = NULL;
+  accel_label->accel_object = NULL;
   accel_label->accel_string = NULL;
   
   gtk_accel_label_refetch (accel_label);
@@ -202,12 +202,11 @@ gtk_accel_label_destroy (GtkObject *object)
 {
   GtkAccelLabel *accel_label;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (object));
   
   accel_label = GTK_ACCEL_LABEL (object);
 
-  gtk_accel_label_set_accel_widget (accel_label, NULL);
+  gtk_accel_label_set_accel_object (accel_label, NULL);
   
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
@@ -227,27 +226,26 @@ gtk_accel_label_finalize (GObject *object)
 }
 
 /**
- * gtk_accel_label_get_accel_widget:
+ * gtk_accel_label_get_accel_object:
  * @accel_label: a #GtkAccelLabel
  *
  * Fetches the widget monitored by this accelerator label. See
- * gtk_accel_label_set_accel_widget().
+ * gtk_accel_label_set_accel_object().
  *
- * Return value: the widget monitored by the accelerator label,
+ * Return value: the object monitored by the accelerator label,
  *               or %NULL.
  **/
-GtkWidget *
-gtk_accel_label_get_accel_widget (GtkAccelLabel *accel_label)
+GObject *
+gtk_accel_label_get_accel_object (GtkAccelLabel *accel_label)
 {
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), NULL);
 
-  return accel_label->accel_widget;
+  return accel_label->accel_object;
 }
 
 guint
 gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 {
-  g_return_val_if_fail (accel_label != NULL, 0);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), 0);
   
   return (accel_label->accel_string_width +
@@ -262,7 +260,6 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   PangoLayout *layout;
   gint width;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (widget));
   g_return_if_fail (requisition != NULL);
   
@@ -286,7 +283,6 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
   GtkAccelLabel *accel_label;
   PangoLayout *layout;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -343,7 +339,6 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 static void
 gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
 {
-  g_return_if_fail (accel_label != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
 
   if (accel_label->queue_id == 0)
@@ -353,42 +348,42 @@ gtk_accel_label_queue_refetch (GtkAccelLabel *accel_label)
 }
 
 void
-gtk_accel_label_set_accel_widget (GtkAccelLabel *accel_label,
-				  GtkWidget	*accel_widget)
+gtk_accel_label_set_accel_object (GtkAccelLabel *accel_label,
+				  GObject	*accel_object)
 {
-  g_return_if_fail (accel_label != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (accel_label));
-  if (accel_widget != NULL)
-    g_return_if_fail (GTK_IS_WIDGET (accel_widget));
-  
-  if (accel_widget != accel_label->accel_widget)
+  g_return_if_fail (accel_object == NULL || G_IS_OBJECT (accel_object));
+    
+  if (accel_object != accel_label->accel_object)
     {
-      if (accel_label->accel_widget)
+      if (accel_label->accel_object)
 	{
-	  gtk_signal_disconnect_by_func (GTK_OBJECT (accel_label->accel_widget),
-					 GTK_SIGNAL_FUNC (gtk_accel_label_queue_refetch),
-					 accel_label);
-	  gtk_widget_unref (accel_label->accel_widget);
+	  g_signal_handlers_disconnect_by_func (accel_label->accel_object,
+						G_CALLBACK (gtk_accel_label_queue_refetch),
+						accel_object);
+	  g_object_unref (accel_label->accel_object);
 	}
       if (accel_label->queue_id)
 	{
 	  gtk_idle_remove (accel_label->queue_id);
 	  accel_label->queue_id = 0;
 	}
-      accel_label->accel_widget = accel_widget;
-      if (accel_label->accel_widget)
+      accel_label->accel_object = accel_object;
+      if (accel_label->accel_object)
 	{
-	  gtk_widget_ref (accel_label->accel_widget);
-	  gtk_signal_connect_object_after (GTK_OBJECT (accel_label->accel_widget),
-					   "add-accelerator",
-					   GTK_SIGNAL_FUNC (gtk_accel_label_queue_refetch),
-					   GTK_OBJECT (accel_label));
-	  gtk_signal_connect_object_after (GTK_OBJECT (accel_label->accel_widget),
-					   "remove-accelerator",
-					   GTK_SIGNAL_FUNC (gtk_accel_label_queue_refetch),
-					   GTK_OBJECT (accel_label));
+	  g_object_ref (accel_label->accel_object);
+	  g_signal_connect_object (accel_label->accel_object,
+				   "add-accelerator",
+				   G_CALLBACK (gtk_accel_label_queue_refetch),
+				   accel_label,
+				   G_CONNECT_AFTER | G_CONNECT_SWAPPED);
+	  g_signal_connect_object (accel_label->accel_object,
+				   "remove-accelerator",
+				   G_CALLBACK (gtk_accel_label_queue_refetch),
+				   accel_label,
+				   G_CONNECT_AFTER | G_CONNECT_SWAPPED);
 	}
-       g_object_notify (G_OBJECT (accel_label), "accel_widget");
+       g_object_notify (G_OBJECT (accel_label), "accel_object");
     }
 }
 
@@ -409,7 +404,6 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelClass *class;
 
-  g_return_val_if_fail (accel_label != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
   class = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
@@ -417,12 +411,12 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
   g_free (accel_label->accel_string);
   accel_label->accel_string = NULL;
   
-  if (accel_label->accel_widget)
+  if (accel_label->accel_object)
     {
       GtkAccelEntry *entry = NULL;
       GSList *slist;
       
-      slist = gtk_accel_group_entries_from_object (GTK_OBJECT (accel_label->accel_widget));
+      slist = gtk_accel_group_entries_from_object (accel_label->accel_object);
       for (; slist; slist = slist->next)
 	{
 	  entry = slist->data;

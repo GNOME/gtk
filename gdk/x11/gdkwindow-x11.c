@@ -325,6 +325,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
   GdkVisual *visual;
   Window xparent;
   Visual *xvisual;
+  Window xid;
 
   XSetWindowAttributes xattributes;
   long xattributes_mask;
@@ -377,7 +378,21 @@ gdk_window_new_for_screen (GdkScreen * screen,
   private->y = y;
   impl->width = (attributes->width > 1) ? (attributes->width) : (1);
   impl->height = (attributes->height > 1) ? (attributes->height) : (1);
-  private->window_type = attributes->window_type;
+
+  if (attributes->wclass == GDK_INPUT_ONLY)
+    {
+      /* Backwards compatiblity - we've always ignored
+       * attributes->window_type for input-only windows
+       * before
+       */
+      if (GDK_WINDOW_TYPE (parent) == GDK_WINDOW_ROOT &&
+	  GDK_WINDOW_TYPE (parent) == GDK_WINDOW_FOREIGN)
+	private->window_type = GDK_WINDOW_TEMP;
+      else
+	private->window_type = GDK_WINDOW_CHILD;
+    }
+  else
+    private->window_type = attributes->window_type;
 
   _gdk_window_init_position (GDK_WINDOW (private));
   if (impl->position_info.big)
@@ -410,8 +425,29 @@ gdk_window_new_for_screen (GdkScreen * screen,
     xattributes.win_gravity = StaticGravity;
     xattributes_mask |= CWWinGravity;
   }
+  
+ /* Sanity checks */
+  switch (private->window_type)
+    {
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP:
+      if (GDK_WINDOW_TYPE (parent) != GDK_WINDOW_ROOT &&
+	  GDK_WINDOW_TYPE (parent) != GDK_WINDOW_FOREIGN)
+	{
+	  g_warning (G_STRLOC "Toplevel windows must be created as children of\n"
+		     "of a window of type GDK_WINDOW_ROOT or GDK_WINDOW_FOREIGN");
+	  xparent = scr_impl->xroot_window;
+	}
+    case GDK_WINDOW_CHILD:
+      break;
+    default:
+      g_warning (G_STRLOC "cannot make windows of type %d", private->window_type);
+      return NULL;
+    }
 
-  if (attributes->wclass == GDK_INPUT_OUTPUT) {
+  if (attributes->wclass == GDK_INPUT_OUTPUT) 
+  {
     class = InputOutput;
     depth = visual->depth;
 
@@ -421,8 +457,9 @@ gdk_window_new_for_screen (GdkScreen * screen,
     if (attributes_mask & GDK_WA_COLORMAP) {
       draw_impl->colormap = attributes->colormap;
       gdk_colormap_ref (attributes->colormap);
-    }
-    else {
+  }
+  else 
+  {
       if ((((GdkVisualPrivate *) gdk_visual_get_system_for_screen (screen))->
 	   xvisual) == xvisual) {
 	draw_impl->colormap = gdk_colormap_get_system_for_screen (screen);
@@ -431,7 +468,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
       else {
 	draw_impl->colormap = gdk_colormap_new (visual, FALSE);
       }
-    }
+  }
 
     private->bg_color.pixel =
       BlackPixel (scr_impl->xdisplay, scr_impl->scr_num);
@@ -450,58 +487,35 @@ gdk_window_new_for_screen (GdkScreen * screen,
 
     xattributes_mask |= CWBitGravity;
 
-    switch (private->window_type) {
-    case GDK_WINDOW_TOPLEVEL:
-      xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-      xattributes_mask |= CWColormap;
-
-      xparent = scr_impl->xroot_window;
-      break;
-
-    case GDK_WINDOW_CHILD:
-      xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-      xattributes_mask |= CWColormap;
-      break;
-
-    case GDK_WINDOW_DIALOG:
-      xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-      xattributes_mask |= CWColormap;
-
-      xparent = scr_impl->xroot_window;
-      break;
-
-    case GDK_WINDOW_TEMP:
-      xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
-      xattributes_mask |= CWColormap;
-
-      xparent = scr_impl->xroot_window;
-
-      xattributes.save_under = True;
-      xattributes.override_redirect = True;
-      xattributes.cursor = None;
-      xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
-      break;
-    case GDK_WINDOW_ROOT:
-      g_error ("cannot make windows of type GDK_WINDOW_ROOT");
-      break;
+    xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
+    xattributes_mask |= CWColormap;
+ 
+    if (private->window_type == GDK_WINDOW_TEMP)
+	{
+	  xattributes.save_under = True;
+	  xattributes.override_redirect = True;
+	  xattributes.cursor = None;
+	  xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
+	}
     }
-  }
-  else {
-    depth = 0;
-    private->depth = 0;
-    class = InputOnly;
-    private->input_only = TRUE;
-    draw_impl->colormap = gdk_colormap_get_system_for_screen (screen);
-    gdk_colormap_ref (draw_impl->colormap);
-  }
-
-  draw_impl->xid = XCreateWindow (GDK_WINDOW_XDISPLAY (parent),
-				  xparent,
-				  impl->position_info.x,
-				  impl->position_info.y,
-				  impl->position_info.width,
-				  impl->position_info.height, 0, depth, class,
-				  xvisual, xattributes_mask, &xattributes);
+  else
+    {
+      depth = 0;
+      private->depth = 0;
+      class = InputOnly;
+      private->input_only = TRUE;
+      draw_impl->colormap = gdk_colormap_get_system ();
+      gdk_colormap_ref (draw_impl->colormap);
+    }
+  
+  xid = draw_impl->xid = XCreateWindow (GDK_WINDOW_XDISPLAY (parent),
+					xparent,
+					impl->position_info.x,
+					impl->position_info.y,
+					impl->position_info.width,
+					impl->position_info.height, 0, depth, 
+					class, xvisual, xattributes_mask, 
+					&xattributes);
 
   gdk_drawable_ref (window);
   gdk_xid_table_insert (&GDK_WINDOW_XID (window), window);
@@ -515,12 +529,10 @@ gdk_window_new_for_screen (GdkScreen * screen,
 
   switch (GDK_WINDOW_TYPE (private)) {
   case GDK_WINDOW_DIALOG:
-    XSetTransientForHint (GDK_WINDOW_XDISPLAY (window),
-			  GDK_WINDOW_XID (window), xparent);
+    XSetTransientForHint (GDK_WINDOW_XDISPLAY (window), xid, xparent);
   case GDK_WINDOW_TOPLEVEL:
   case GDK_WINDOW_TEMP:
-    XSetWMProtocols (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
+    XSetWMProtocols (GDK_WINDOW_XDISPLAY (window), xid,
 		     GDK_DISPLAY_IMPL_X11 (scr_impl->display)->
 		     gdk_wm_window_protocols, 3);
     break;
@@ -573,11 +585,9 @@ gdk_window_new_for_screen (GdkScreen * screen,
      * attention to PSize, and even if they do, is this the
      * correct value???
    */
-  XSetWMNormalHints (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window), &size_hints);
+  XSetWMNormalHints (GDK_WINDOW_XDISPLAY (window), xid, &size_hints);
 
-  XSetWMHints (GDK_WINDOW_XDISPLAY (window),
-	       GDK_WINDOW_XID (window), &wm_hints);
+  XSetWMHints (GDK_WINDOW_XDISPLAY (window), xid, &wm_hints);
 
   if (!GDK_DISPLAY_IMPL_X11 (scr_impl->display)->wm_client_leader_atom)
     GDK_DISPLAY_IMPL_X11 (scr_impl->display)->wm_client_leader_atom =
@@ -603,8 +613,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
     class_hint = XAllocClassHint ();
     class_hint->res_name = attributes->wmclass_name;
     class_hint->res_class = attributes->wmclass_class;
-    XSetClassHint (GDK_WINDOW_XDISPLAY (window),
-		   GDK_WINDOW_XID (window), class_hint);
+    XSetClassHint (GDK_WINDOW_XDISPLAY (window), xid, class_hint);
     XFree (class_hint);
   }
 
@@ -1104,6 +1113,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
+  g_return_if_fail (GDK_WINDOW_TYPE (window) != GDK_WINDOW_ROOT);
   
   if (!new_parent)
     new_parent = GDK_SCREEN_IMPL_X11 (GDK_WINDOW_SCREEN (window))->root_window;
@@ -1119,7 +1129,38 @@ gdk_window_reparent (GdkWindow *window,
 		     x, y);
   
   window_private->parent = (GdkWindowObject *)new_parent;
-  
+
+  /* Switch the window type as appropriate */
+
+  switch (GDK_WINDOW_TYPE (new_parent))
+    {
+    case GDK_WINDOW_ROOT:
+    case GDK_WINDOW_FOREIGN:
+      /* Now a toplevel */
+      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+	{
+	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
+	  XSetWMProtocols (GDK_WINDOW_XDISPLAY (window),
+			   GDK_WINDOW_XID (window),
+			   GDK_DISPLAY_IMPL_X11 (GDK_WINDOW_DISPLAY (window))->gdk_wm_window_protocols,
+			   3);
+	}
+    case GDK_WINDOW_TOPLEVEL:
+    case GDK_WINDOW_CHILD:
+    case GDK_WINDOW_DIALOG:
+    case GDK_WINDOW_TEMP:
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
+	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	{
+	  /* If we were being sophisticated, we'd save the old window type
+	   * here, and restore it if we were reparented back to the
+	   * toplevel. However, the difference between different types
+	   * of toplevels only really matters on creation anyways.
+	   */
+	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
+	}
+    }
+
   if (old_parent_private)
     old_parent_private->children = g_list_remove (old_parent_private->children, window);
   
@@ -2049,10 +2090,10 @@ gdk_window_get_frame_extents (GdkWindow    *window,
 }
 
 GdkWindow*
-gdk_window_get_pointer (GdkWindow       *window,
-			gint            *x,
-			gint            *y,
-			GdkModifierType *mask)
+_gdk_windowing_window_get_pointer (GdkWindow       *window,
+				   gint            *x,
+				   gint            *y,
+				   GdkModifierType *mask)
 {
   GdkWindow *return_val;
   Window root;
@@ -2094,8 +2135,8 @@ gdk_window_get_pointer (GdkWindow       *window,
 }
 
 GdkWindow*
-gdk_window_at_pointer (gint *win_x,
-		       gint *win_y)
+_gdk_windowing_window_at_pointer (gint *win_x,
+				  gint *win_y)
 {
   GDK_NOTE (MULTIHEAD,
 	   g_message("Use gdk_screen_get_window_at_pointer instead\n"));
@@ -2348,7 +2389,7 @@ gdk_window_set_override_redirect (GdkWindow *window,
  * gdk_window_set_icon_list:
  * @window: The #GdkWindow toplevel window to set the icon of.
  * @pixbufs: A list of pixbufs, of different sizes.
- * @Returns: TRUE if the icons were set, false otherwise
+ * @Returns: %TRUE if the icons were set, false otherwise
  *
  * Sets a list of icons for the window. One of these will be used
  * to represent the window when it has been iconified. The icon is
@@ -4002,5 +4043,3 @@ void gdk_window_set_screen (GdkWindow *window, GdkScreen *screen)
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->screen = screen;
 }
-
-

@@ -87,8 +87,6 @@ enum {
 static void gtk_hsv_class_init     (GtkHSVClass    *class);
 static void gtk_hsv_init           (GtkHSV         *hsv);
 static void gtk_hsv_destroy        (GtkObject      *object);
-static void gtk_hsv_map            (GtkWidget      *widget);
-static void gtk_hsv_unmap          (GtkWidget      *widget);
 static void gtk_hsv_realize        (GtkWidget      *widget);
 static void gtk_hsv_unrealize      (GtkWidget      *widget);
 static void gtk_hsv_size_request   (GtkWidget      *widget,
@@ -162,8 +160,6 @@ gtk_hsv_class_init (GtkHSVClass *class)
   
   object_class->destroy = gtk_hsv_destroy;
   
-  widget_class->map = gtk_hsv_map;
-  widget_class->unmap = gtk_hsv_unmap;
   widget_class->realize = gtk_hsv_realize;
   widget_class->unrealize = gtk_hsv_unrealize;
   widget_class->size_request = gtk_hsv_size_request;
@@ -264,42 +260,6 @@ gtk_hsv_destroy (GtkObject *object)
 }
 
 /* Default signal handlers */
-
-/* Map handler for the HSV color selector */
-static void
-gtk_hsv_map (GtkWidget *widget)
-{
-  GtkHSV *hsv;
-  HSVPrivate *priv;
-  
-  hsv = GTK_HSV (widget);
-  priv = hsv->priv;
-  
-  if (GTK_WIDGET_MAPPED (widget))
-    return;
-  
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  
-  gdk_window_show (priv->window);
-}
-
-/* Unmap handler for the HSV color selector */
-static void
-gtk_hsv_unmap (GtkWidget *widget)
-{
-  GtkHSV *hsv;
-  HSVPrivate *priv;
-  
-  hsv = GTK_HSV (widget);
-  priv = hsv->priv;
-  
-  if (!GTK_WIDGET_MAPPED (widget))
-    return;
-  
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  
-  gdk_window_hide (priv->window);
-}
 
 /* Realize handler for the HSV color selector */
 static void
@@ -1480,7 +1440,6 @@ gtk_hsv_get_color (GtkHSV *hsv, double *h, double *s, double *v)
 {
   HSVPrivate *priv;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   
   priv = hsv->priv;
@@ -1511,7 +1470,6 @@ gtk_hsv_set_metrics (GtkHSV *hsv,
   HSVPrivate *priv;
   int same_size;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   g_return_if_fail (size > 0);
   g_return_if_fail (ring_width > 0);
@@ -1545,7 +1503,6 @@ gtk_hsv_get_metrics (GtkHSV *hsv,
 {
   HSVPrivate *priv;
   
-  g_return_if_fail (hsv != NULL);
   g_return_if_fail (GTK_IS_HSV (hsv));
   
   priv = hsv->priv;
@@ -1575,7 +1532,6 @@ gtk_hsv_is_adjusting (GtkHSV *hsv)
 {
   HSVPrivate *priv;
   
-  g_return_val_if_fail (hsv != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_HSV (hsv), FALSE);
   
   priv = hsv->priv;

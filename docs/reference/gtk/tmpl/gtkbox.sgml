@@ -190,6 +190,7 @@ the start (top/left) or end (bottom/right) of the GtkBox.</entry>
 @expand: 
 @fill: 
 @pack: 
+@is_secondary: 
 
 <!-- ##### FUNCTION gtk_box_pack_start ##### -->
 <para>

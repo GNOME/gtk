@@ -272,9 +272,9 @@ gdk_pixbuf__xbm_image_load_real (FILE *f, XBMData *context, GError **error)
 	guchar *pixels;
 	guint row_stride;
 	int x, y;
-	int reg, bits;
+	int reg = 0; /* Quiet compiler */
+	int bits;
 
-	int num_pixs;
 	GdkPixbuf *pixbuf;
 
 	if (!read_bitmap_file_data (f, &w, &h, &data, &x_hot, &y_hot)) {

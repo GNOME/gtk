@@ -159,17 +159,17 @@ gtk_tips_query_class_init (GtkTipsQueryClass *class)
 		    GTK_TYPE_STRING,
 		    GTK_TYPE_STRING);
   tips_query_signals[SIGNAL_WIDGET_SELECTED] =
-    g_signal_newc ("widget_selected",
-		   G_TYPE_FROM_CLASS(object_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET(GtkTipsQueryClass, widget_selected),
-		   _gtk_boolean_handled_accumulator, NULL,
-		   gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED,
-		   G_TYPE_BOOLEAN, 4,
-		   GTK_TYPE_WIDGET,
-		   G_TYPE_STRING,
-		   G_TYPE_STRING,
-		   GDK_TYPE_EVENT);
+    g_signal_new ("widget_selected",
+                  G_TYPE_FROM_CLASS(object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET(GtkTipsQueryClass, widget_selected),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  gtk_marshal_BOOLEAN__OBJECT_STRING_STRING_BOXED,
+                  G_TYPE_BOOLEAN, 4,
+                  GTK_TYPE_WIDGET,
+                  G_TYPE_STRING,
+                  G_TYPE_STRING,
+                  GDK_TYPE_EVENT);
 }
 
 static void
@@ -248,7 +248,6 @@ gtk_tips_query_destroy (GtkObject	*object)
 {
   GtkTipsQuery *tips_query;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (object));
 
   tips_query = GTK_TIPS_QUERY (object);
@@ -284,7 +283,6 @@ gtk_tips_query_set_labels (GtkTipsQuery   *tips_query,
 {
   gchar *old;
 
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   g_return_if_fail (label_inactive != NULL);
   g_return_if_fail (label_no_tip != NULL);
@@ -301,7 +299,6 @@ void
 gtk_tips_query_set_caller (GtkTipsQuery   *tips_query,
 			   GtkWidget	   *caller)
 {
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   g_return_if_fail (tips_query->in_query == FALSE);
   if (caller)
@@ -319,7 +316,6 @@ gtk_tips_query_set_caller (GtkTipsQuery   *tips_query,
 void
 gtk_tips_query_start_query (GtkTipsQuery *tips_query)
 {
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   g_return_if_fail (tips_query->in_query == FALSE);
   g_return_if_fail (GTK_WIDGET_REALIZED (tips_query));
@@ -331,7 +327,6 @@ gtk_tips_query_start_query (GtkTipsQuery *tips_query)
 void
 gtk_tips_query_stop_query (GtkTipsQuery *tips_query)
 {
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   g_return_if_fail (tips_query->in_query == TRUE);
 
@@ -344,7 +339,6 @@ gtk_tips_query_real_start_query (GtkTipsQuery *tips_query)
 {
   gint failure;
   
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   
   tips_query->query_cursor = gdk_cursor_new (GDK_QUESTION_ARROW);
@@ -366,7 +360,6 @@ gtk_tips_query_real_start_query (GtkTipsQuery *tips_query)
 static void
 gtk_tips_query_real_stop_query (GtkTipsQuery *tips_query)
 {
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
   
   gtk_grab_remove (GTK_WIDGET (tips_query));
@@ -392,7 +385,6 @@ gtk_tips_query_widget_entered (GtkTipsQuery   *tips_query,
 			       const gchar    *tip_text,
 			       const gchar    *tip_private)
 {
-  g_return_if_fail (tips_query != NULL);
   g_return_if_fail (GTK_IS_TIPS_QUERY (tips_query));
 
   if (!tip_text)
@@ -449,7 +441,6 @@ gtk_tips_query_event (GtkWidget	       *widget,
   GtkWidget *event_widget;
   gboolean event_handled;
   
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TIPS_QUERY (widget), FALSE);
 
   tips_query = GTK_TIPS_QUERY (widget);

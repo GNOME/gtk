@@ -110,7 +110,6 @@ gtk_vruler_motion_notify (GtkWidget      *widget,
   GtkRuler *ruler;
   gint y;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_VRULER (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -154,7 +153,6 @@ gtk_vruler_draw_ticks (GtkRuler *ruler)
   PangoLayout *layout;
   PangoRectangle logical_rect, ink_rect;
 
-  g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_VRULER (ruler));
 
   if (!GTK_WIDGET_DRAWABLE (ruler)) 
@@ -291,7 +289,6 @@ gtk_vruler_draw_pos (GtkRuler *ruler)
   gint ythickness;
   gdouble increment;
 
-  g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_VRULER (ruler));
 
   if (GTK_WIDGET_DRAWABLE (ruler))

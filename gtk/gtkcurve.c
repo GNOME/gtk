@@ -385,7 +385,7 @@ gtk_curve_draw (GtkCurve *c, gint width, gint height)
 
   /* clear the pixmap: */
   gtk_paint_flat_box (style, c->pixmap, GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-		      NULL, GTK_WIDGET(c), "curve_bg",
+		      NULL, GTK_WIDGET (c), "curve_bg",
 		      0, 0, width + RADIUS * 2, height + RADIUS * 2);
   /* draw the grid lines: (XXX make more meaningful) */
   for (i = 0; i < 5; i++)
@@ -1016,7 +1016,6 @@ gtk_curve_finalize (GObject *object)
 {
   GtkCurve *curve;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_CURVE (object));
 
   curve = GTK_CURVE (object);

@@ -38,6 +38,7 @@ static void gdk_input_none_get_pointer (GdkWindow       *window,
 void
 gdk_input_init (void)
 {
+  _gdk_init_input_core ();
   gdk_input_vtable.set_mode           = NULL;
   gdk_input_vtable.set_axes           = NULL;
   gdk_input_vtable.set_key            = NULL;

@@ -63,7 +63,7 @@ extern "C"
     /* Visual Part */
     gboolean visual_initialised;
     GdkVisualPrivate *system_visual;
-    GdkVisualPrivate *visuals;
+    GdkVisualPrivate **visuals;
     gint nvisuals;
     gint available_depths[7];
     gint navailable_depths;

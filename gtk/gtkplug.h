@@ -28,6 +28,7 @@
 
 
 #include <gdk/gdk.h>
+#include <gtk/gtksocket.h>
 #include <gtk/gtkwindow.h>
 
 
@@ -55,19 +56,27 @@ struct _GtkPlug
   GdkWindow *socket_window;
   GtkWidget *modality_window;
   GtkWindowGroup *modality_group;
-  gboolean   same_app;
+  guint same_app : 1;
 };
 
 struct _GtkPlugClass
 {
   GtkWindowClass parent_class;
+
+  void (*embedded) (GtkPlug *plug);
 };
 
 
 GtkType    gtk_plug_get_type  (void) G_GNUC_CONST;
 void       gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id);
-GtkWidget* gtk_plug_new       (GdkNativeWindow socket_id);
 
+GtkWidget*      gtk_plug_new    (GdkNativeWindow  socket_id);
+GdkNativeWindow gtk_plug_get_id (GtkPlug         *plug);
+
+void _gtk_plug_add_to_socket      (GtkPlug   *plug,
+				   GtkSocket *socket);
+void _gtk_plug_remove_from_socket (GtkPlug   *plug,
+				   GtkSocket *socket);
 
 #ifdef __cplusplus
 }

@@ -70,6 +70,7 @@ struct _GtkBoxChild
   guint expand : 1;
   guint fill : 1;
   guint pack : 1;
+  guint is_secondary : 1;
 };
 
 

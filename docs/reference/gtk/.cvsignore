@@ -8,6 +8,7 @@ gtk.hierarchy
 gtk.signals
 gtk-decl.txt
 gtk-decl-list.txt
+gtk-undocumented.txt
 gtk-unused.txt
 gtk-scan.lo
 *.stamp

@@ -249,7 +249,6 @@ gtk_alignment_set (GtkAlignment *alignment,
 {
   gboolean values_changed = FALSE; 
   
-  g_return_if_fail (alignment != NULL);
   g_return_if_fail (GTK_IS_ALIGNMENT (alignment));
 
   xalign = CLAMP (xalign, 0.0, 1.0);
@@ -297,7 +296,6 @@ gtk_alignment_size_request (GtkWidget      *widget,
   GtkAlignment *alignment;
   GtkBin *bin;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ALIGNMENT (widget));
   g_return_if_fail (requisition != NULL);
 
@@ -329,7 +327,6 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
   gint width, height;
   gint x, y;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_ALIGNMENT (widget));
   g_return_if_fail (allocation != NULL);
 

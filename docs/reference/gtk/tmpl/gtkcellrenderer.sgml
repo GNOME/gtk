@@ -30,12 +30,14 @@ GtkCellRenderer
 </para>
 
 @parent: 
-@can_activate: 
-@visible: 
 @xalign: 
 @yalign: 
+@width: 
+@height: 
 @xpad: 
 @ypad: 
+@can_activate: 
+@visible: 
 
 <!-- ##### FUNCTION gtk_cell_renderer_get_size ##### -->
 <para>

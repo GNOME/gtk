@@ -230,7 +230,6 @@ void
 gtk_ruler_set_metric (GtkRuler      *ruler,
 		      GtkMetricType  metric)
 {
-  g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
   ruler->metric = (GtkRulerMetric *) &ruler_metrics[metric];
@@ -270,7 +269,6 @@ gtk_ruler_set_range (GtkRuler *ruler,
 		     gdouble   position,
 		     gdouble   max_size)
 {
-  g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
   if (ruler->lower != lower)
@@ -332,7 +330,6 @@ gtk_ruler_get_range (GtkRuler *ruler,
 void
 gtk_ruler_draw_ticks (GtkRuler *ruler)
 {
-  g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
   if (GTK_RULER_GET_CLASS (ruler)->draw_ticks)
@@ -342,7 +339,6 @@ gtk_ruler_draw_ticks (GtkRuler *ruler)
 void
 gtk_ruler_draw_pos (GtkRuler *ruler)
 {
-  g_return_if_fail (ruler != NULL);
   g_return_if_fail (GTK_IS_RULER (ruler));
 
   if (GTK_RULER_GET_CLASS (ruler)->draw_pos)
@@ -357,7 +353,6 @@ gtk_ruler_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RULER (widget));
 
   ruler = GTK_RULER (widget);
@@ -392,7 +387,6 @@ gtk_ruler_unrealize (GtkWidget *widget)
 {
   GtkRuler *ruler;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RULER (widget));
 
   ruler = GTK_RULER (widget);
@@ -415,7 +409,6 @@ gtk_ruler_size_allocate (GtkWidget     *widget,
 {
   GtkRuler *ruler;
 
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_RULER (widget));
 
   ruler = GTK_RULER (widget);
@@ -437,7 +430,6 @@ gtk_ruler_expose (GtkWidget      *widget,
 {
   GtkRuler *ruler;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RULER (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 

@@ -844,6 +844,8 @@ animation_timeout (gpointer data)
 {
   GtkImage *image;
 
+  GDK_THREADS_ENTER ();
+
   image = GTK_IMAGE (data);
   
   image->data.anim.frame_timeout = 0;
@@ -858,6 +860,8 @@ animation_timeout (gpointer data)
   
   gtk_widget_queue_draw (GTK_WIDGET (image));
 
+  GDK_THREADS_LEAVE ();
+
   return FALSE;
 }
 
@@ -865,7 +869,6 @@ static gint
 gtk_image_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_IMAGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
   
@@ -874,7 +877,7 @@ gtk_image_expose (GtkWidget      *widget,
     {
       GtkImage *image;
       GtkMisc *misc;
-      GdkRectangle area, image_bound, intersection;
+      GdkRectangle area, image_bound;
       gint x, y;
       GdkBitmap *mask = NULL;
       GdkPixbuf *stock_pixbuf = NULL;

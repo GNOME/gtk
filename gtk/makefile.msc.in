@@ -13,6 +13,7 @@ TOP = ..\..
 GTK_VER = @GTK_MAJOR_VERSION@.@GTK_MINOR_VERSION@
 GDK_PIXBUF_VER = @GDK_PIXBUF_MAJOR@.@GDK_PIXBUF_MINOR@
 
+
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = gtk-win32-$(GTK_VER).lib
 GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
@@ -32,21 +33,20 @@ DEFINES = -DG_ENABLE_DEBUG -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=
 
 TOUCH = copy makefile.msc+nul
 
-GTK_VER=1.3
-
 all :						\
 	..\config.h				\
 	generated				\
 	gtk-win32-$(GTK_VER).dll		\
+	gtk-win32-$(GTK_VER)s.lib
 
 gtk_OBJECTS = 					\
 	fnmatch.obj				\
 #	gdk-pixbuf-loader.obj			\
 	gtkaccelgroup.obj			\
 	gtkaccellabel.obj			\
+	gtkaccessible.obj \
 	gtkadjustment.obj			\
 	gtkalignment.obj			\
-	gtkarg.obj				\
 	gtkarrow.obj				\
 	gtkaspectframe.obj			\
 	gtkbin.obj				\
@@ -70,7 +70,6 @@ gtk_OBJECTS = 					\
 	gtkcontainer.obj			\
 	gtkctree.obj				\
 	gtkcurve.obj				\
-	gtkdata.obj				\
 	gtkdialog.obj				\
 	gtkdnd.obj				\
 	gtkdrawingarea.obj			\
@@ -119,7 +118,7 @@ gtk_OBJECTS = 					\
 	gtkobject.obj				\
 	gtkoldeditable.obj			\
 	gtkoptionmenu.obj			\
-	gtkpacker.obj				\
+#	gtkpacker.obj				\
 	gtkpaned.obj				\
 	gtkpixmap.obj				\
 	gtkplug.obj				\
@@ -140,6 +139,7 @@ gtk_OBJECTS = 					\
 	gtkseparatormenuitem.obj \
 	gtksettings.obj \
 	gtksignal.obj				\
+	gtksizegroup.obj \
 	gtksocket.obj				\
 	gtkspinbutton.obj			\
 	gtkstyle.obj				\
@@ -195,9 +195,9 @@ gtk_public_h_sources =		\
 	gtk.h			\
 	gtkaccelgroup.h		\
 	gtkaccellabel.h		\
+	gtkaccessible.h \
 	gtkadjustment.h		\
 	gtkalignment.h		\
-	gtkarg.h		\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkbin.h		\
@@ -213,7 +213,6 @@ gtk_public_h_sources =		\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombo.h		\
-	gtkcompat.h		\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
@@ -222,7 +221,6 @@ gtk_public_h_sources =		\
 	gtkcellrenderertextpixbuf.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellrendererpixbuf.h	\
-	gtkdata.h		\
 	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -271,7 +269,7 @@ gtk_public_h_sources =		\
 	gtkoldeditable.h	\
 	gtkobject.h		\
 	gtkoptionmenu.h		\
-	gtkpacker.h		\
+#	gtkpacker.h		\
 	gtkpaned.h		\
 #	gdk-pixbuf-loader.h	\
 	gtkpixmap.h		\
@@ -290,6 +288,7 @@ gtk_public_h_sources =		\
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
 	gtkseparator.h		\
+	gtksizegroup.h	\
 	gtksignal.h		\
 	gtksocket.h		\
 	gtkspinbutton.h		\
@@ -315,7 +314,7 @@ gtk_public_h_sources =		\
 	gtktree.h		\
 	gtktreeitem.h		\
 	gtktreemodel.h		\
-	gtktreemodelsimple.h	\
+#	gtktreemodelsimple.h	\
 	gtktreemodelsort.h	\
 	gtktreeselection.h	\
 	gtktreesortable.h	\
@@ -334,6 +333,14 @@ gtk_public_h_sources =		\
 	gtkwidget.h		\
 	gtkwindow.h
 
+# these aren't use here, but listed for reference
+gtk_extra_sources = \
+	gtkcompat.h		\
+	maketypes.awk		\
+	makeenums.h		\
+	gtk-boxed.defs		\
+	gtkmarshal.list		\
+
 ..\config.h : ..\config.h.win32
 	copy ..\config.h.win32 ..\config.h
 
@@ -345,7 +352,7 @@ GENERATED = gtk.defs gtktypebuiltins.h gtktypebuiltins_vars.c gtktypebuiltins_id
 generated : $(GENERATED)
 	$(TOUCH) generated
 
-gtk.defs : makeenums.pl gtk-boxed.defs $(gtk_public_h_sources)
+gtk.defs : makeenums.pl gtk-boxed.defs $(gtk_public_h_sources) makefile.msc
 	$(PERL) makeenums.pl defs $(gtk_public_h_sources) >gd.tmp
 	copy gd.tmp+gtk-boxed.defs gtk.defs
 	@erase gd.tmp
@@ -379,7 +386,10 @@ gtksignal.obj : gtksignal.c gtkmarshal.c gtkmarshal.h
 # Linking:
 #
 gtk-win32-$(GTK_VER).dll : $(gtk_OBJECTS) gtk.def
-	$(CC) $(CFLAGS) -LD -Fegtk-win32-$(GTK_VER).dll $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
+	$(CC) $(CFLAGS) -LD -Fm -Fegtk-win32-$(GTK_VER).dll $(gtk_OBJECTS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) gdi32.lib user32.lib advapi32.lib $(LDFLAGS) /def:gtk.def
+
+gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)
+	lib /out:gtk-win32-$(GTK_VER)s.lib $(gtk_OBJECTS)
 
 # General rule for compiling the objects into the DLL
 .c.obj :

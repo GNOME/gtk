@@ -54,8 +54,6 @@ enum
 static void gtk_table_class_init    (GtkTableClass  *klass);
 static void gtk_table_init	    (GtkTable	    *table);
 static void gtk_table_finalize	    (GObject	    *object);
-static void gtk_table_map	    (GtkWidget	    *widget);
-static void gtk_table_unmap	    (GtkWidget	    *widget);
 static void gtk_table_size_request  (GtkWidget	    *widget,
 				     GtkRequisition *requisition);
 static void gtk_table_size_allocate (GtkWidget	    *widget,
@@ -141,8 +139,6 @@ gtk_table_class_init (GtkTableClass *class)
   gobject_class->get_property = gtk_table_get_property;
   gobject_class->set_property = gtk_table_set_property;
   
-  widget_class->map = gtk_table_map;
-  widget_class->unmap = gtk_table_unmap;
   widget_class->size_request = gtk_table_size_request;
   widget_class->size_allocate = gtk_table_size_allocate;
   
@@ -577,9 +573,7 @@ gtk_table_attach (GtkTable	  *table,
 {
   GtkTableChild *table_child;
   
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (child->parent == NULL);
   
@@ -612,17 +606,6 @@ gtk_table_attach (GtkTable	  *table,
   table->children = g_list_prepend (table->children, table_child);
   
   gtk_widget_set_parent (child, GTK_WIDGET (table));
-  
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 void
@@ -646,7 +629,6 @@ gtk_table_set_row_spacing (GtkTable *table,
 			   guint     row,
 			   guint     spacing)
 {
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (row < table->nrows);
   
@@ -686,7 +668,6 @@ gtk_table_set_col_spacing (GtkTable *table,
 			   guint     column,
 			   guint     spacing)
 {
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
   g_return_if_fail (column < table->ncols);
   
@@ -727,7 +708,6 @@ gtk_table_set_row_spacings (GtkTable *table,
 {
   guint row;
   
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
   
   table->row_spacing = spacing;
@@ -762,7 +742,6 @@ gtk_table_set_col_spacings (GtkTable *table,
 {
   guint col;
   
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
   
   table->column_spacing = spacing;
@@ -795,7 +774,6 @@ void
 gtk_table_set_homogeneous (GtkTable *table,
 			   gboolean  homogeneous)
 {
-  g_return_if_fail (table != NULL);
   g_return_if_fail (GTK_IS_TABLE (table));
 
   homogeneous = (homogeneous != 0);
@@ -841,63 +819,12 @@ gtk_table_finalize (GObject *object)
 }
 
 static void
-gtk_table_map (GtkWidget *widget)
-{
-  GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  
-  table = GTK_TABLE (widget);
-  GTK_WIDGET_SET_FLAGS (table, GTK_MAPPED);
-  
-  children = table->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
-}
-
-static void
-gtk_table_unmap (GtkWidget *widget)
-{
-  GtkTable *table;
-  GtkTableChild *child;
-  GList *children;
-  
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TABLE (widget));
-  
-  table = GTK_TABLE (widget);
-  GTK_WIDGET_UNSET_FLAGS (table, GTK_MAPPED);
-  
-  children = table->children;
-  while (children)
-    {
-      child = children->data;
-      children = children->next;
-      
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_unmap (child->widget);
-    }
-}
-
-static void
 gtk_table_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
   GtkTable *table;
   gint row, col;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TABLE (widget));
   g_return_if_fail (requisition != NULL);
   
@@ -932,7 +859,6 @@ gtk_table_size_allocate (GtkWidget     *widget,
 {
   GtkTable *table;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TABLE (widget));
   g_return_if_fail (allocation != NULL);
   
@@ -948,7 +874,6 @@ static void
 gtk_table_add (GtkContainer *container,
 	       GtkWidget    *widget)
 {
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TABLE (container));
   g_return_if_fail (widget != NULL);
   
@@ -963,7 +888,6 @@ gtk_table_remove (GtkContainer *container,
   GtkTableChild *child;
   GList *children;
   
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TABLE (container));
   g_return_if_fail (widget != NULL);
   
@@ -1001,7 +925,6 @@ gtk_table_forall (GtkContainer *container,
   GtkTableChild *child;
   GList *children;
   
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TABLE (container));
   g_return_if_fail (callback != NULL);
   

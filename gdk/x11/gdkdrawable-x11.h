@@ -58,7 +58,6 @@ struct _GdkDrawableImplX11
   GdkScreen *screen;
   
   Window xid;
-/*  Display *xdisplay;*/
 };
  
 struct _GdkDrawableImplX11Class 

@@ -160,7 +160,6 @@ void
 gtk_radio_button_set_group (GtkRadioButton *radio_button,
 			    GSList         *group)
 {
-  g_return_if_fail (radio_button != NULL);
   g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
   g_return_if_fail (!g_slist_find (group, radio_button));
 
@@ -302,7 +301,6 @@ gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *group,
 GSList*
 gtk_radio_button_get_group (GtkRadioButton *radio_button)
 {
-  g_return_val_if_fail (radio_button != NULL, NULL);
   g_return_val_if_fail (GTK_IS_RADIO_BUTTON (radio_button), NULL);
 
   return radio_button->group;
@@ -316,7 +314,6 @@ gtk_radio_button_destroy (GtkObject *object)
   GtkRadioButton *tmp_button;
   GSList *tmp_list;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_RADIO_BUTTON (object));
 
   radio_button = GTK_RADIO_BUTTON (object);
@@ -346,7 +343,6 @@ gtk_radio_button_clicked (GtkButton *button)
   GSList *tmp_list;
   gint toggled;
 
-  g_return_if_fail (button != NULL);
   g_return_if_fail (GTK_IS_RADIO_BUTTON (button));
 
   radio_button = GTK_RADIO_BUTTON (button);
@@ -428,7 +424,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   gint x, y;
   gint indicator_size, indicator_spacing;
 
-  g_return_if_fail (check_button != NULL);
   g_return_if_fail (GTK_IS_RADIO_BUTTON (check_button));
 
   if (GTK_WIDGET_VISIBLE (check_button) && GTK_WIDGET_MAPPED (check_button))

@@ -35,12 +35,13 @@ gdk_pango_context_get_for_screen (GdkScreen * screen)
   PangoContext *context;
 #ifdef HAVE_XFT
   static gint use_xft = -1;
-  if (use_xft == -1) {
-    char *val = g_getenv ("GDK_USE_XFT");
+  if (use_xft == -1)
+    {
+      const char *val = g_getenv ("GDK_USE_XFT");
 
-    use_xft = val && (atoi (val) != 0);
-  }
-
+      use_xft = val && (atoi (val) != 0);
+    }
+  
   if (use_xft)
     context = pango_xft_get_context (GDK_SCREEN_XDISPLAY (screen),
 				  GDK_SCREEN_IMPL_X11 (screen)->scr_num);

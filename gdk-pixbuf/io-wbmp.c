@@ -160,7 +160,7 @@ static gboolean gdk_pixbuf__wbmp_image_stop_load(gpointer data,
 }
 
 static gboolean
-getin(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, guchar *ptr, int datum_size)
+getin(struct wbmp_progressive_state *context, const guchar **buf, guint *buf_size, guchar *ptr, int datum_size)
 {
   int last_num, buf_num;
 
@@ -195,7 +195,7 @@ save_rest(struct wbmp_progressive_state *context, const guchar *buf, guint buf_s
 }
 
 static gboolean
-get_mbi(struct wbmp_progressive_state *context, guchar **buf, guint *buf_size, int *val)
+get_mbi(struct wbmp_progressive_state *context, const guchar **buf, guint *buf_size, int *val)
 {
   guchar intbuf[16];
   int i, n;

@@ -60,6 +60,7 @@ struct _GtkTreeViewColumnCellInfo
   GtkTreeCellDataFunc func;
   gpointer func_data;
   GtkDestroyNotify destroy;
+  gint requested_width;
   guint16 padding;
   guint expand : 1;
   guint fill : 1;
@@ -156,13 +157,13 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
   object_class->get_property = gtk_tree_view_column_get_property;
   
   tree_column_signals[CLICKED] =
-    g_signal_newc ("clicked",
-                   GTK_CLASS_TYPE (object_class),
-                   G_SIGNAL_RUN_LAST,
-                   G_STRUCT_OFFSET (GtkTreeViewColumnClass, clicked),
-		   NULL, NULL,
-		   gtk_marshal_VOID__VOID,
-                   GTK_TYPE_NONE, 0);
+    g_signal_new ("clicked",
+                  GTK_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTreeViewColumnClass, clicked),
+                  NULL, NULL,
+                  gtk_marshal_VOID__VOID,
+                  GTK_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
                                    PROP_VISIBLE,
@@ -490,7 +491,6 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 
   tree_view = (GtkTreeView *) tree_column->tree_view;
 
-  g_return_if_fail (tree_view != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (tree_column->button == NULL);
 
@@ -499,9 +499,9 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_pop_composite_child ();
 
   /* make sure we own a reference to it as well. */
-  gtk_widget_set_parent (tree_column->button, GTK_WIDGET (tree_view));
   if (tree_view->priv->header_window)
     gtk_widget_set_parent_window (tree_column->button, tree_view->priv->header_window);
+  gtk_widget_set_parent (tree_column->button, GTK_WIDGET (tree_view));
   
   gtk_signal_connect (GTK_OBJECT (tree_column->button), "realize",
 		      (GtkSignalFunc) gtk_tree_view_column_button_realize,
@@ -681,7 +681,11 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     {
       GTK_WIDGET_UNSET_FLAGS (tree_column->button, GTK_CAN_FOCUS);
       if (GTK_WIDGET_HAS_FOCUS (tree_column->button))
-	gtk_window_set_focus (GTK_WINDOW (gtk_widget_get_toplevel (tree_column->tree_view)), NULL);
+	{
+	  GtkWidget *toplevel = gtk_widget_get_toplevel (tree_column->tree_view);
+	  if (GTK_WIDGET_TOPLEVEL (toplevel))
+	    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
+	}
     }
 
   tree_column->dirty = TRUE;
@@ -849,10 +853,10 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
 
       if (tree_column->sort_column_changed_signal == 0)
 	tree_column->sort_column_changed_signal =
-	  g_signal_connectc (G_OBJECT (model), "sort_column_changed",
-			     GTK_SIGNAL_FUNC (gtk_tree_view_model_sort_column_changed),
-			     tree_column, FALSE);
-
+	  g_signal_connect (G_OBJECT (model), "sort_column_changed",
+                            GTK_SIGNAL_FUNC (gtk_tree_view_model_sort_column_changed),
+                            tree_column);
+      
       if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE (model),
 						&real_sort_column_id,
 						&real_order) &&
@@ -880,7 +884,6 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 
   tree_view = (GtkTreeView *)column->tree_view;
 
-  g_return_if_fail (tree_view != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
   g_return_if_fail (tree_view->priv->header_window != NULL);
@@ -939,10 +942,10 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
   gtk_tree_view_column_create_button (column);
 
   column->property_changed_signal =
-	  g_signal_connect_data (GTK_OBJECT (tree_view),
-				 "notify::model",
-				 GTK_SIGNAL_FUNC (gtk_tree_view_column_setup_sort_column_id_callback),
-				 column, NULL, TRUE, FALSE);
+	  g_signal_connect_swapped (GTK_OBJECT (tree_view),
+				    "notify::model",
+				    GTK_SIGNAL_FUNC (gtk_tree_view_column_setup_sort_column_id_callback),
+				    column);
 
   gtk_tree_view_column_setup_sort_column_id_callback (column);
 }
@@ -1188,7 +1191,6 @@ gtk_tree_view_column_add_attribute (GtkTreeViewColumn *tree_column,
 {
   GtkTreeViewColumnCellInfo *info;
 
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   info = gtk_tree_view_column_get_cell_info (tree_column, cell_renderer);
   g_return_if_fail (info != NULL);
@@ -1334,6 +1336,47 @@ gtk_tree_view_column_clear_attributes (GtkTreeViewColumn *tree_column,
     }
 }
 
+
+/**
+ * gtk_tree_view_column_set_spacing:
+ * @tree_column: A #GtkTreeViewColumn.
+ * @spacing: distance between cell renderers in pixels.
+ * 
+ * Sets the spacing field of @tree_column, which is the number of pixels to
+ * place between cell renderers packed into it.
+ **/
+void
+gtk_tree_view_column_set_spacing (GtkTreeViewColumn *tree_column,
+				  gint               spacing)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
+  g_return_if_fail (spacing >= 0);
+
+  if (tree_column->spacing == spacing)
+    return;
+
+  tree_column->spacing = spacing;
+  if (tree_column->tree_view)
+    {
+      tree_column->dirty = TRUE;
+      gtk_widget_queue_resize (tree_column->tree_view);
+    }
+}
+
+/**
+ * gtk_tree_view_column_get_spacing:
+ * @tree_column: A #GtkTreeViewColumn.
+ * 
+ * Returns the spacing of @tree_column.
+ **/
+gint
+gtk_tree_view_column_get_spacing (GtkTreeViewColumn *tree_column)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
+
+  return tree_column->spacing;
+}
+
 /* Options for manipulating the columns */
 
 /**
@@ -1347,7 +1390,6 @@ void
 gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 				  gboolean           visible)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   visible = !! visible;
@@ -1373,7 +1415,6 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 gboolean
 gtk_tree_view_column_get_visible (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), FALSE);
 
   return tree_column->visible;
@@ -1390,7 +1431,6 @@ void
 gtk_tree_view_column_set_sizing (GtkTreeViewColumn       *tree_column,
                                  GtkTreeViewColumnSizing  type)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   if (type == tree_column->column_type)
@@ -1420,7 +1460,6 @@ gtk_tree_view_column_set_sizing (GtkTreeViewColumn       *tree_column,
 GtkTreeViewColumnSizing
 gtk_tree_view_column_get_sizing (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
 
   return tree_column->column_type;
@@ -1437,7 +1476,6 @@ gtk_tree_view_column_get_sizing (GtkTreeViewColumn *tree_column)
 gint
 gtk_tree_view_column_get_size (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, 0);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), 0);
 
   return tree_column->width;
@@ -1457,7 +1495,6 @@ void
 gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
                                 gint               width)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (width > 0);
 
@@ -1498,7 +1535,6 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
 {
   gint real_min_width;
 
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (min_width >= -1);
 
@@ -1547,7 +1583,6 @@ gtk_tree_view_column_set_min_width (GtkTreeViewColumn *tree_column,
 gint
 gtk_tree_view_column_get_min_width (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), -1);
 
   return tree_column->min_width;
@@ -1567,7 +1602,6 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
 {
   gint real_max_width;
 
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (max_width >= -1);
 
@@ -1609,7 +1643,6 @@ gtk_tree_view_column_set_max_width (GtkTreeViewColumn *tree_column,
 gint
 gtk_tree_view_column_get_max_width (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, -1);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), -1);
 
   return tree_column->max_width;
@@ -1645,7 +1678,6 @@ void
 gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
 				const gchar       *title)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   g_free (tree_column->title);
@@ -1669,7 +1701,6 @@ gtk_tree_view_column_set_title (GtkTreeViewColumn *tree_column,
 G_CONST_RETURN gchar *
 gtk_tree_view_column_get_title (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
 
   return tree_column->title;
@@ -1755,7 +1786,6 @@ gtk_tree_view_column_set_widget (GtkTreeViewColumn *tree_column,
 GtkWidget *
 gtk_tree_view_column_get_widget (GtkTreeViewColumn *tree_column)
 {
-  g_return_val_if_fail (tree_column != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column), NULL);
 
   return tree_column->child;
@@ -1772,7 +1802,6 @@ void
 gtk_tree_view_column_set_alignment (GtkTreeViewColumn *tree_column,
                                     gfloat             xalign)
 {
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   if (tree_column->xalign == xalign)
@@ -1870,10 +1899,10 @@ gtk_tree_view_column_set_sort_column_id (GtkTreeViewColumn *tree_column,
   gtk_tree_view_column_set_clickable (tree_column, TRUE);
 
   if (! tree_column->sort_clicked_signal)
-    tree_column->sort_clicked_signal = g_signal_connectc (G_OBJECT (tree_column),
-							  "clicked",
-							  G_CALLBACK (gtk_tree_view_column_sort),
-							  NULL, FALSE);
+    tree_column->sort_clicked_signal = g_signal_connect (G_OBJECT (tree_column),
+                                                         "clicked",
+                                                         G_CALLBACK (gtk_tree_view_column_sort),
+                                                         NULL);
 
   gtk_tree_view_column_setup_sort_column_id_callback (tree_column);
 }
@@ -1985,9 +2014,6 @@ gtk_tree_view_column_get_sort_order      (GtkTreeViewColumn     *tree_column)
   return tree_column->sort_order;
 }
 
-
-
-
 /**
  * gtk_tree_view_column_cell_set_cell_data:
  * @tree_column: A #GtkTreeViewColumn.
@@ -2008,7 +2034,6 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
   GValue value = { 0, };
   GList *cell_list;
 
-  g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
   g_return_if_fail (tree_column->cell_list != NULL);
 

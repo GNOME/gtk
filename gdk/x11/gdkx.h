@@ -39,10 +39,10 @@
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkscreen.h>
 
-typedef struct _GdkColormapPrivateX11 GdkColormapPrivateX11;
+typedef struct _GdkColormapPrivateX11  GdkColormapPrivateX11;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkFontPrivateX        GdkFontPrivateX;
-typedef struct _GdkImagePrivateX11    GdkImagePrivateX11;
+typedef struct _GdkImagePrivateX11     GdkImagePrivateX11;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 struct _GdkCursorPrivate
@@ -67,6 +67,11 @@ struct _GdkVisualPrivate
 {
   GdkVisual visual;
   Visual *xvisual;
+};
+
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
 };
 
 struct _GdkColormapPrivateX11

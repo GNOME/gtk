@@ -248,9 +248,12 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer    *cell,
 				     &pix_rect.y,
 				     &pix_rect.width,
 				     &pix_rect.height);
+  
   pix_rect.x += cell_area->x;
   pix_rect.y += cell_area->y;
-
+  pix_rect.width -= cell->xpad * 2;
+  pix_rect.height -= cell->ypad * 2;
+  
   if (gdk_rectangle_intersect (cell_area, &pix_rect, &draw_rect))
     gdk_pixbuf_render_to_drawable_alpha (pixbuf,
                                          window,

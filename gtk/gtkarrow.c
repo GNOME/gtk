@@ -196,7 +196,6 @@ gtk_arrow_set (GtkArrow      *arrow,
 {
   gboolean changed = FALSE;
    
-  g_return_if_fail (arrow != NULL);
   g_return_if_fail (GTK_IS_ARROW (arrow));
 
   if ((GtkArrowType) arrow->arrow_type != arrow_type)

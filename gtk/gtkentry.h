@@ -82,6 +82,8 @@ struct _GtkEntry
   guint        activates_default : 1;
 
   guint        cursor_visible : 1;
+
+  guint        in_click : 1;	/* Flag so we don't select all when clicking in entry to focus in */
   
   guint   button;
   guint   blink_timeout;

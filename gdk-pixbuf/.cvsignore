@@ -8,7 +8,10 @@ makefile.mingw
 *.lo
 gdk-pixbuf-marshal.c
 gdk-pixbuf-marshal.h
+gdk-pixbuf-csource
 make-inline-pixbuf
+stamp-gdk-pixbuf-marshal.c
+stamp-gdk-pixbuf-marshal.h
 test-gdk-pixbuf
 test-loaders
 gdk-pixbuf-features.h

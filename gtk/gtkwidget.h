@@ -32,6 +32,7 @@
 #include <gtk/gtkobject.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtksettings.h>
 #include <atk/atkobject.h>
 
 #ifdef __cplusplus
@@ -77,6 +78,13 @@ typedef enum
 
   GTK_DOUBLE_BUFFERED  = 1 << 21
 } GtkWidgetFlags;
+
+/* Kinds of widget-specific help */
+typedef enum
+{
+  GTK_WIDGET_HELP_TOOLTIP,
+  GTK_WIDGET_HELP_WHATS_THIS
+} GtkWidgetHelpType;
 
 /* Macro for casting a pointer to a GtkWidget or GtkWidgetClass pointer.
  * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.
@@ -257,7 +265,8 @@ struct _GtkWidgetClass
 				GtkStateType   	  previous_state);
   void (* parent_set)	       (GtkWidget        *widget,
 				GtkWidget        *previous_parent);
-  void (* hierarchy_changed)   (GtkWidget        *widget);
+  void (* hierarchy_changed)   (GtkWidget        *widget,
+				GtkWidget        *previous_toplevel);
   void (* style_set)	       (GtkWidget        *widget,
 				GtkStyle         *previous_style);
   void (* direction_changed)   (GtkWidget        *widget,
@@ -390,7 +399,14 @@ struct _GtkWidgetClass
 
   /* Signals used only for keybindings */
   void (* popup_menu)              (GtkWidget          *widget);
-  
+
+  /* If a widget has multiple tooltips/whatsthis, it should show the
+   * one for the current focus location, or if that doesn't make
+   * sense, should cycle through them showing each tip alongside
+   * whatever piece of the widget it applies to.
+   */
+  void (* show_help)               (GtkWidget          *widget,
+                                    GtkWidgetHelpType   help_type);
   
   /* accessibility support 
    */
@@ -537,6 +553,10 @@ void	   gtk_widget_set_parent	  (GtkWidget	       *widget,
 					   GtkWidget	       *parent);
 void	   gtk_widget_set_parent_window	  (GtkWidget	       *widget,
 					   GdkWindow	       *parent_window);
+void       gtk_widget_set_child_visible   (GtkWidget           *widget,
+					   gboolean             is_visible);
+gboolean   gtk_widget_get_child_visible   (GtkWidget           *widget);
+     
 GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
@@ -565,6 +585,8 @@ GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GtkType	widget_type);
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
+
+GtkSettings* gtk_widget_get_settings    (GtkWidget      *widget);
 
 
 /* Accessibility support */
@@ -595,10 +617,8 @@ gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
  */
 void	   gtk_widget_set_style		(GtkWidget	*widget,
 					 GtkStyle	*style);
-void	   gtk_widget_set_rc_style	(GtkWidget	*widget);
 void	   gtk_widget_ensure_style	(GtkWidget	*widget);
 GtkStyle*  gtk_widget_get_style		(GtkWidget	*widget);
-void	   gtk_widget_restore_default_style (GtkWidget	*widget);
 
 void        gtk_widget_modify_style       (GtkWidget            *widget,
 					   GtkRcStyle           *style);
@@ -617,6 +637,11 @@ void        gtk_widget_modify_base        (GtkWidget            *widget,
 					   GdkColor             *color);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
+
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_widget_set_rc_style(widget)          (gtk_widget_set_style (widget, NULL))
+#define gtk_widget_restore_default_style(widget) (gtk_widget_set_style (widget, NULL))
+#endif
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
@@ -642,11 +667,9 @@ void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
  */
-void	     gtk_widget_push_style	     (GtkStyle	 *style);
 void	     gtk_widget_push_colormap	     (GdkColormap *cmap);
 void	     gtk_widget_push_composite_child (void);
 void	     gtk_widget_pop_composite_child  (void);
-void	     gtk_widget_pop_style	     (void);
 void	     gtk_widget_pop_colormap	     (void);
 
 /* widget style properties
@@ -715,8 +738,10 @@ void            gtk_requisition_free (GtkRequisition       *requisition);
 #  define gtk_widget_unref gtk_object_unref
 #endif	/* GTK_TRACE_OBJECTS && __GNUC__ */
 
-GtkWidgetAuxInfo *_gtk_widget_get_aux_info (GtkWidget *widget,
-					    gboolean   create);
+GtkWidgetAuxInfo *_gtk_widget_get_aux_info                (GtkWidget    *widget,
+							   gboolean      create);
+void              _gtk_widget_propagate_hierarchy_changed (GtkWidget    *widget,
+							   GtkWidget    *previous_toplevel);
 
 #ifdef __cplusplus
 }

@@ -243,7 +243,6 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
 {
   gboolean needs_resize = FALSE;
    
-  g_return_if_fail (aspect_frame != NULL);
   g_return_if_fail (GTK_IS_ASPECT_FRAME (aspect_frame));
   
   xalign = CLAMP (xalign, 0.0, 1.0);

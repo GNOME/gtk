@@ -31,7 +31,7 @@ from being run.)
 </para>
 <para>
 Signals are used by everyone, but they are only
-created on a per class basis-- so you should call
+created on a per class basis-- so you should not call
 call gtk_signal_new() unless you are writing
 a new #GtkObject type.  However, if you want to make a new signal
 for an existing type, you may use gtk_object_class_user_signal_new()

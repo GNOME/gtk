@@ -70,8 +70,6 @@ struct _GtkColorSelectionClass
 
 GtkType    gtk_color_selection_get_type                (void) G_GNUC_CONST;
 GtkWidget *gtk_color_selection_new                     (void);
-void       gtk_color_selection_set_update_policy       (GtkColorSelection *colorsel,
-							GtkUpdateType      policy);
 gboolean   gtk_color_selection_get_has_opacity_control (GtkColorSelection *colorsel);
 void       gtk_color_selection_set_has_opacity_control (GtkColorSelection *colorsel,
 							gboolean           has_opacity);
@@ -107,10 +105,12 @@ GtkColorSelectionChangePaletteFunc gtk_color_selection_set_change_palette_hook (
 
 #ifndef GTK_DISABLE_DEPRECATED
 /* Deprecated calls: */
-void       gtk_color_selection_set_color        (GtkColorSelection    *colorsel,
-						 gdouble               *color);
-void       gtk_color_selection_get_color        (GtkColorSelection    *colorsel,
-						 gdouble              *color);
+void gtk_color_selection_set_color         (GtkColorSelection *colorsel,
+					    gdouble           *color);
+void gtk_color_selection_get_color         (GtkColorSelection *colorsel,
+					    gdouble           *color);
+void gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
+					    GtkUpdateType      policy);
 #endif /* GTK_DISABLE_DEPRECATED */
 
 #ifdef __cplusplus

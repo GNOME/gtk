@@ -29,8 +29,6 @@
 
 static void gtk_bin_class_init (GtkBinClass    *klass);
 static void gtk_bin_init       (GtkBin         *bin);
-static void gtk_bin_map        (GtkWidget      *widget);
-static void gtk_bin_unmap      (GtkWidget      *widget);
 static void gtk_bin_add        (GtkContainer   *container,
 			        GtkWidget      *widget);
 static void gtk_bin_remove     (GtkContainer   *container,
@@ -83,9 +81,6 @@ gtk_bin_class_init (GtkBinClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  widget_class->map = gtk_bin_map;
-  widget_class->unmap = gtk_bin_unmap;
-
   container_class->add = gtk_bin_add;
   container_class->remove = gtk_bin_remove;
   container_class->forall = gtk_bin_forall;
@@ -111,52 +106,12 @@ gtk_bin_child_type (GtkContainer *container)
 }
 
 static void
-gtk_bin_map (GtkWidget *widget)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_BIN (widget));
-
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  bin = GTK_BIN (widget);
-
-  if (bin->child &&
-      GTK_WIDGET_VISIBLE (bin->child) &&
-      !GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_map (bin->child);
-
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_show (widget->window);
-}
-
-static void
-gtk_bin_unmap (GtkWidget *widget)
-{
-  GtkBin *bin;
-
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_BIN (widget));
-
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
-  bin = GTK_BIN (widget);
-
-  if (!GTK_WIDGET_NO_WINDOW (widget))
-    gdk_window_hide (widget->window);
-
-  if (bin->child && GTK_WIDGET_MAPPED (bin->child))
-    gtk_widget_unmap (bin->child);
-}
-
-static void
 gtk_bin_add (GtkContainer *container,
 	     GtkWidget    *child)
 {
   GtkBin *bin;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
@@ -175,17 +130,6 @@ gtk_bin_add (GtkContainer *container,
 
   gtk_widget_set_parent (child, GTK_WIDGET (bin));
   bin->child = child;
-
-  if (GTK_WIDGET_REALIZED (child->parent))
-    gtk_widget_realize (child);
-
-  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
-    {
-      if (GTK_WIDGET_MAPPED (child->parent))
-	gtk_widget_map (child);
-
-      gtk_widget_queue_resize (child);
-    }
 }
 
 static void
@@ -195,9 +139,7 @@ gtk_bin_remove (GtkContainer *container,
   GtkBin *bin;
   gboolean widget_was_visible;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
-  g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   bin = GTK_BIN (container);
@@ -223,7 +165,6 @@ gtk_bin_forall (GtkContainer *container,
 {
   GtkBin *bin;
 
-  g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_BIN (container));
   g_return_if_fail (callback != NULL);
 

@@ -40,6 +40,8 @@ enum {
   PROP_YALIGN,
   PROP_XPAD,
   PROP_YPAD,
+  PROP_WIDTH,
+  PROP_HEIGHT,
 };
 
 
@@ -78,6 +80,8 @@ gtk_cell_renderer_init (GtkCellRenderer *cell)
 
   cell->can_activate = FALSE;
   cell->visible = TRUE;
+  cell->width = -1;
+  cell->height = -1;
   cell->xalign = 0.5;
   cell->yalign = 0.5;
   cell->xpad = 0;
@@ -156,6 +160,28 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      2,
 						      G_PARAM_READABLE |
 						      G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_WIDTH,
+				   g_param_spec_int ("width",
+						     _("width"),
+						     _("The fixed width."),
+						     -1,
+						     100,
+						     -1,
+						     G_PARAM_READABLE |
+						     G_PARAM_WRITABLE));
+
+  g_object_class_install_property (object_class,
+				   PROP_HEIGHT,
+				   g_param_spec_int ("height",
+						     _("height"),
+						     _("The fixed height."),
+						     -1,
+						     100,
+						     -1,
+						     G_PARAM_READABLE |
+						     G_PARAM_WRITABLE));
 }
 
 static void
@@ -185,6 +211,12 @@ gtk_cell_renderer_get_property (GObject     *object,
       break;
     case PROP_YPAD:
       g_value_set_uint (value, cell->ypad);
+      break;
+    case PROP_WIDTH:
+      g_value_set_int (value, cell->width);
+      break;
+    case PROP_HEIGHT:
+      g_value_set_int (value, cell->height);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -227,6 +259,14 @@ gtk_cell_renderer_set_property (GObject      *object,
       cell->ypad = g_value_get_uint (value);
       g_object_notify (object, "ypad");
       break;
+    case PROP_WIDTH:
+      cell->width = g_value_get_int (value);
+      g_object_notify (object, "width");
+      break;
+    case PROP_HEIGHT:
+      cell->height = g_value_get_int (value);
+      g_object_notify (object, "height");
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -257,10 +297,29 @@ gtk_cell_renderer_get_size (GtkCellRenderer *cell,
 			    gint            *width,
 			    gint            *height)
 {
+  gint *real_width = NULL;
+  gint *real_height = NULL;
+
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->get_size != NULL);
 
-  GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, cell_area, x_offset, y_offset, width, height);
+  if (width)
+    {
+      if (cell->width == -1)
+	real_width = width;
+      else
+	*width = cell->width;
+    }
+  if (height)
+    {
+      if (cell->height == -1)
+	real_height = height;
+      else
+	*height = cell->height;
+    }
+
+  if (real_width || real_height)
+    GTK_CELL_RENDERER_GET_CLASS (cell)->get_size (cell, widget, cell_area, x_offset, y_offset, real_width, real_height);
 }
 
 /**
@@ -353,3 +412,52 @@ gtk_cell_renderer_event (GtkCellRenderer     *cell,
 						    flags);
 }
 
+/**
+ * gtk_cell_renderer_set_fixed_size:
+ * @cell: A #GtkCellRenderer
+ * @width: the width of the cell renderer, or -1
+ * @height: the height of the cell renderer, or -1
+ * 
+ * Sets the renderer size to be explicit, independent of the properties set.
+ **/
+void
+gtk_cell_renderer_set_fixed_size (GtkCellRenderer *cell,
+				  gint             width,
+				  gint             height)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (width >= -1 && height >= -1);
+
+  if (width != cell->width)
+    {
+      cell->width = width;
+      g_object_notify (G_OBJECT (cell), "width");
+    }
+
+  if (height != cell->height)
+    {
+      cell->height = height;
+      g_object_notify (G_OBJECT (cell), "height");
+    }
+}
+
+/**
+ * gtk_cell_renderer_get_fixed_size:
+ * @cell: A #GtkCellRenderer
+ * @width: location to fill in with the fixed width of the widget, or %NULL
+ * @height: location to fill in with the fixed height of the widget, or %NULL
+ * 
+ * Fills in @width and @height with the appropriate size of @cell.
+ **/
+void
+gtk_cell_renderer_get_fixed_size (GtkCellRenderer *cell,
+				  gint            *width,
+				  gint            *height)
+{
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  if (width)
+    (* width) = cell->width;
+  if (height)
+    (* height) = cell->height;
+}
