@@ -1,3 +1,9 @@
+Fri Mar 15 12:51:42 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_new_with_attributes): add example to docs,
+	as people are seeming to have trouble with this function.
+
 2002-03-15  Tor Lillqvist  <tml@iki.fi>
 
 	* configure.in: Set MATH_LIB to empty also on Win32.

@@ -329,12 +329,6 @@ types related to the text widget and how they work together.
 </para>
 
 
-<!-- ##### STRUCT GtkTextChildAnchorClass ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION gtk_text_child_anchor_new ##### -->
 <para>
 

@@ -285,6 +285,13 @@ has the focus.
 
 @klass: 
 
+<!-- ##### MACRO GTK_OBJECT_CONNECTED ##### -->
+<para>
+Tests whether a #GtkObject has had a signal connected to it.
+</para>
+
+@obj: the object to examine.
+
 <!-- ##### MACRO GTK_OBJECT_CONSTRUCTED ##### -->
 <para>
 Test whether a GtkObject's arguments have been prepared.
@@ -637,14 +644,6 @@ Control-Return for #GtkText.)
 
 @editable: the object which received the signal.
 
-<!-- ##### SIGNAL GtkEditable::changed ##### -->
-<para>
-Indicates that the user has changed the contents
-of the widget.
-</para>
-
-@editable: the object which received the signal.
-
 <!-- ##### SIGNAL GtkEditable::copy-clipboard ##### -->
 <para>
 An action signal. Causes the characters in the current selection to
@@ -661,42 +660,6 @@ the widget.
 </para>
 
 @editable: the object which received the signal.
-
-<!-- ##### SIGNAL GtkEditable::delete-text ##### -->
-<para>
-This signal is emitted when text is deleted from
-the widget by the user. The default handler for
-this signal will normally be responsible for inserting
-the text, so by connecting to this signal and then
-stopping the signal with gtk_signal_emit_stop(), it
-is possible to modify the inserted text, or prevent
-it from being inserted entirely. The @start_pos
-and @end_pos parameters are interpreted as for
-gtk_editable_delete_text()
-</para>
-
-@editable: the object which received the signal.
-@start_pos: the starting position.
-@end_pos: the end position.
-
-<!-- ##### SIGNAL GtkEditable::insert-text ##### -->
-<para>
-This signal is emitted when text is inserted into
-the widget by the user. The default handler for
-this signal will normally be responsible for inserting
-the text, so by connecting to this signal and then
-stopping the signal with gtk_signal_emit_stop(), it
-is possible to modify the inserted text, or prevent
-it from being inserted entirely.
-</para>
-
-@editable: the object which received the signal.
-@new_text: the new text to insert.
-@new_text_length: the length of the new text.
-@position: the position at which to insert the new text.
-           this is an in-out paramter. After the signal
-           emission is finished, it should point after   
-           the newly inserted text.
 
 <!-- ##### SIGNAL GtkEditable::kill-char ##### -->
 <para>
@@ -902,6 +865,12 @@ a RC file.
 @filename: filename to load
 @Returns: a #GtkPixmap representing @filename
 
+<!-- ##### STRUCT GtkImageMenuItemClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkLabel:accel-keyval ##### -->
 <para>
 
@@ -1090,7 +1059,19 @@ after other user handlers and the default handler.
 @PRIVATE_GTK_DIRECTION_SET: 
 @PRIVATE_GTK_DIRECTION_LTR: 
 
+<!-- ##### STRUCT GtkRcStyleClass ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### ARG GtkScrolledWindow:shadow ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkSettingsClass ##### -->
 <para>
 
 </para>
@@ -1162,7 +1143,60 @@ Holds the data for a statusbar message. <structfield>text</structfield> holds th
 @context_id: 
 @message_id: 
 
+<!-- ##### STRUCT GtkStyleClass ##### -->
+<para>
+
+</para>
+
+@parent_class: 
+@realize: 
+@unrealize: 
+@copy: 
+@clone: 
+@init_from_rc: 
+@set_background: 
+@render_icon: 
+@draw_hline: 
+@draw_vline: 
+@draw_shadow: 
+@draw_polygon: 
+@draw_arrow: 
+@draw_diamond: 
+@draw_string: 
+@draw_box: 
+@draw_flat_box: 
+@draw_check: 
+@draw_option: 
+@draw_tab: 
+@draw_shadow_gap: 
+@draw_box_gap: 
+@draw_extension: 
+@draw_focus: 
+@draw_slider: 
+@draw_handle: 
+@draw_expander: 
+@draw_layout: 
+@draw_resize_grip: 
+@_gtk_reserved1: 
+@_gtk_reserved2: 
+@_gtk_reserved3: 
+@_gtk_reserved4: 
+@_gtk_reserved5: 
+@_gtk_reserved6: 
+@_gtk_reserved7: 
+@_gtk_reserved8: 
+@_gtk_reserved9: 
+@_gtk_reserved10: 
+@_gtk_reserved11: 
+@_gtk_reserved12: 
+
 <!-- ##### STRUCT GtkTextBTreeNode ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GtkTextChildAnchorClass ##### -->
 <para>
 
 </para>
@@ -1212,51 +1246,6 @@ produce superscript and subscript.
 
 </para>
 
-
-<!-- ##### SIGNAL GtkTreeModel::row-changed ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-deleted ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-has-child-toggled ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::row-inserted ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-
-<!-- ##### SIGNAL GtkTreeModel::rows-reordered ##### -->
-<para>
-
-</para>
-
-@treemodel: the object which received the signal.
-@arg1: 
-@arg2: 
-@arg3: 
 
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
