@@ -482,9 +482,6 @@ extern HDC		 gdk_DC;
 extern HINSTANCE	 gdk_DLLInstance;
 extern HINSTANCE	 gdk_ProgInstance;
 
-extern UINT		 gdk_selection_notify_msg;
-extern UINT		 gdk_selection_request_msg;
-extern UINT		 gdk_selection_clear_msg;
 GDKVAR GdkAtom		 gdk_selection_property;
 extern GdkAtom		 text_uri_list_atom;
 extern GdkAtom		 compound_text_atom;

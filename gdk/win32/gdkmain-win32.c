@@ -84,10 +84,6 @@ _gdk_windowing_init_check (int    argc,
 
   CoInitialize (NULL);
 
-  gdk_selection_request_msg = RegisterWindowMessage ("gdk-selection-request");
-  gdk_selection_notify_msg = RegisterWindowMessage ("gdk-selection-notify");
-  gdk_selection_clear_msg = RegisterWindowMessage ("gdk-selection-clear");
-
   gdk_selection_property = gdk_atom_intern ("GDK_SELECTION", FALSE);
   text_uri_list_atom = gdk_atom_intern ("text/uri-list", FALSE);
   compound_text_atom = gdk_atom_intern ("COMPOUND_TEXT", FALSE);

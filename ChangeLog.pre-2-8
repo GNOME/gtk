@@ -1,13 +1,24 @@
 2002-01-09  Tor Lillqvist  <tml@iki.fi>
 
+	* gdk/win32/gdkprivate-win32.h
+	* gdk/win32/gdkglobals-win32.c
+	* gdk/win32/gdkmain-win32.c
+	* gdk/win32/gdkevents-win32.c: Remove declaration, definition,
+	initialisation and handling of gdk_selection_notify_msg,
+	gdk_selection_request_msg and gdk_selection_clear_msg. They aren't
+	generated any longer.
+
+2002-01-09  Tor Lillqvist  <tml@iki.fi>
+
 	* gdk/win32/gdkevents-win32.c (event_mask_string, print_event,
 	print_event_state): Use nifty macros.
 	(print_event_mask): Remove, use event_mask_string().
 
 	* gdk/win32/gdkselection-win32.c (gdk_text_property_to_text_list,
 	gdk_free_text_list, gdk_string_to_compound_text,
-	gdk_free_compound_text): Implement trivially, always as
-	single-element text list or single-component compound text.
+	gdk_free_compound_text): Implement trivially, witrh a text_list
+	always having a single element, and a compound text always
+	consisting of just a single (UTF-8!) string.
 
 2002-01-09  Tor Lillqvist  <tml@iki.fi>
 

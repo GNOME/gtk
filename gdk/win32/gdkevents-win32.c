@@ -3329,59 +3329,7 @@ gdk_event_translate (GdkEvent *event,
 	}
     }
 
-  if (xevent->message == gdk_selection_notify_msg)
-    {
-      g_print ("gdk_selection_notify_msg: %#x\n",
-	       (guint) xevent->hwnd);
-
-      g_assert_not_reached ();	/* Isn't sent any longer */
-
-      event->selection.type = GDK_SELECTION_NOTIFY;
-      event->selection.window = window;
-      event->selection.selection = xevent->wParam;
-      event->selection.target = xevent->lParam;
-      event->selection.property = gdk_selection_property;
-      event->selection.time = xevent->time;
-
-      return_val = !GDK_DRAWABLE_DESTROYED (window);
-
-      goto bypass_switch;
-    }
-  else if (xevent->message == gdk_selection_request_msg)
-    {
-      g_print ("gdk_selection_request_msg: %#x\n",
-	       (guint) xevent->hwnd);
-
-      g_assert_not_reached ();
-
-      event->selection.type = GDK_SELECTION_REQUEST;
-      event->selection.window = window;
-      event->selection.selection = gdk_clipboard_atom;
-      event->selection.target = GDK_TARGET_STRING;
-      event->selection.property = gdk_selection_property;
-      event->selection.requestor = (guint32) xevent->hwnd;
-      event->selection.time = xevent->time;
-
-      return_val = !GDK_DRAWABLE_DESTROYED (window);
-
-      goto bypass_switch;
-    }
-  else if (xevent->message == gdk_selection_clear_msg)
-    {
-      g_print ("gdk_selection_clear_msg: %#x\n",
-	       (guint) xevent->hwnd);
-
-      g_assert_not_reached ();
-      event->selection.type = GDK_SELECTION_CLEAR;
-      event->selection.window = window;
-      event->selection.selection = xevent->wParam;
-      event->selection.time = xevent->time;
-
-      return_val = !GDK_DRAWABLE_DESTROYED (window);
-
-      goto bypass_switch;
-    }
-  else if (xevent->message == msh_mousewheel_msg)
+  if (xevent->message == msh_mousewheel_msg)
     {
       GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#x %d\n",
 				 (guint) xevent->hwnd, xevent->wParam));
