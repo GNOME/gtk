@@ -1,5 +1,17 @@
 Sun Jan 18 03:57:52 1998  Tim Janik  <timj@psynet.net>
 
+	* gtk/gtkframe.c: gtk_*_get_arg() and gtk_*_set_arg() implementations.
+	* gtk/gtkobject.c: new arg `GtkObject::object_signal' similar to
+	  `GtkObject::signal'. check for class type in gtk_object_{setv|getv}.
+
+	* gtk/gtkobject.c:
+	* gtk/gtksignal.c:
+	* gtk/gtktypeutils.h:
+	* gtk/gtktypeutils.c: added GTK_TYPE_DOUBLE.
+
+	* gtk/gtkwidget.c: new args `has_focus' and `has_default'.
+	* gtk/gtkwindow.c: new arg `window_position'.
+
 	* gtk/gtkbox.h:
 	* gtk/gtkbox.c: new functions gtk_box_reorder_child,
 	gtk_box_query_child_packing and gtk_box_set_child_packing to
