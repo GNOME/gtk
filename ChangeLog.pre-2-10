@@ -1,5 +1,17 @@
 2004-09-13  Matthias Clasen  <mclasen@redhat.com>
 
+	Fix some problems reported by Morten Welinder:
+	
+	* gtk/gtkfilesystem.c: Include gtkmodules.h, not gtkmain.h, since
+	the modules stuff moved.
+
+	* gtk/gtkmain.c (gtk_arg_no_debug_cb): Add a missing return
+
+	* gtk/gtksettings.c: Add missing include. 
+	(settings_update_modules): Remove an unused variable.
+
+2004-09-13  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
 	Improve positioning of entry completion popup.
 

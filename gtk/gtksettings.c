@@ -18,6 +18,7 @@
 
 #include <config.h>
 #include "gtkalias.h"
+#include "gtkmodules.h"
 #include "gtksettings.h"
 #include "gtkrc.h"
 #include "gtkintl.h"
@@ -1382,7 +1383,6 @@ settings_update_double_click (GtkSettings *settings)
 static void
 settings_update_modules (GtkSettings *settings)
 {
-  GdkDisplay *display = gdk_screen_get_display (settings->screen);
   gchar *modules;
   
   g_object_get (settings, 

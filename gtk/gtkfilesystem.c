@@ -23,7 +23,7 @@
 #include "gtkalias.h"
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
-#include "gtkmain.h"
+#include "gtkmodules.h"
 
 #include <string.h>
 

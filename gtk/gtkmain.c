@@ -367,6 +367,8 @@ gtk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data)
   gtk_debug_flags &= ~g_parse_debug_string (value,
 					    gtk_debug_keys,
 					    gtk_ndebug_keys);
+
+  return TRUE;
 }
 #endif /* G_ENABLE_DEBUG */
 
