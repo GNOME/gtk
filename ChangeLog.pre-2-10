@@ -1,3 +1,12 @@
+2004-08-26  Bill Haneman <billh@gnome.org>
+
+	* gtk/gtktreeview:
+	(gtk_tree_view_move_cursor_up_down):
+	If a multi-selection list contains only one item,
+	select it on cursor_up or cursor_down.
+	Fixes bug #131226.
+	[patch from Padraig O'Briain]
+
 2004-08-26  Matthias Clasen  <mclasen@redhat.com>
 
 	Make gdk_window_process_[all]_updates() respect 

@@ -8378,6 +8378,31 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
     _gtk_rbtree_next_full (cursor_tree, cursor_node,
 			   &new_cursor_tree, &new_cursor_node);
 
+  /*
+   * If the list has only one item and multi-selection is set then select
+   * the row.
+   */
+  if (tree_view->priv->selection->type == GTK_SELECTION_MULTIPLE &&
+      new_cursor_node == NULL)
+    {
+      if (count == -1)
+        _gtk_rbtree_next_full (cursor_tree, cursor_node,
+    			       &new_cursor_tree, &new_cursor_node);
+      else
+        _gtk_rbtree_prev_full (cursor_tree, cursor_node,
+			       &new_cursor_tree, &new_cursor_node);
+
+      if (new_cursor_node == NULL)
+        {
+          new_cursor_node = cursor_node;
+          new_cursor_tree = cursor_tree;
+        }
+      else
+        {
+          new_cursor_node = NULL;
+        }
+    }
+
   if (new_cursor_node)
     {
       cursor_path = _gtk_tree_view_find_path (tree_view, new_cursor_tree, new_cursor_node);
