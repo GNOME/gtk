@@ -144,33 +144,45 @@ libpixbufloader_tga_la_LIBADD = $(module_libs)
 
 if HAVE_PNG
 PNG_LIB = libpixbufloader-png.la
+STATIC_PNG_LIB = libpixbufloader-static-png.la
 endif
 
 if HAVE_JPEG
 JPEG_LIB = libpixbufloader-jpeg.la
+STATIC_JPEG_LIB = libpixbufloader-static-jpeg.la
 endif
 
 GIF_LIB = libpixbufloader-gif.la
+STATIC_GIF_LIB = libpixbufloader-static-gif.la
 
 ICO_LIB = libpixbufloader-ico.la
+STATIC_ICO_LIB = libpixbufloader-static-ico.la
 
 RAS_LIB = libpixbufloader-ras.la
+STATIC_RAS_LIB = libpixbufloader-static-ras.la
 
 if HAVE_TIFF
 TIFF_LIB = libpixbufloader-tiff.la
+STATIC_TIFF_LIB = libpixbufloader-static-tiff.la
 endif
 
 XPM_LIB = libpixbufloader-xpm.la
+STATIC_XPM_LIB = libpixbufloader-static-xpm.la
 
 PNM_LIB = libpixbufloader-pnm.la
+STATIC_PNM_LIB = libpixbufloader-static-pnm.la
 
 BMP_LIB = libpixbufloader-bmp.la
+STATIC_BMP_LIB = libpixbufloader-static-bmp.la
 
 WBMP_LIB = libpixbufloader-wbmp.la
+STATIC_WBMP_LIB = libpixbufloader-static-wbmp.la
 
 XBM_LIB = libpixbufloader-xbm.la
+STATIC_XBM_LIB = libpixbufloader-static-xbm.la
 
 TGA_LIB = libpixbufloader-tga.la
+STATIC_TGA_LIB = libpixbufloader-static-tga.la
 
 if BUILD_DYNAMIC_MODULES
 
@@ -194,19 +206,19 @@ builtin_objs =
 else
 loader_LTLIBRARIES = 
 
-noinst_LTLIBRARIES =  	\
-	libpixbufloader-static-png.la \
-	libpixbufloader-static-jpeg.la \
-	libpixbufloader-static-gif.la  \
-	libpixbufloader-static-ico.la  \
-	libpixbufloader-static-ras.la  \
-	libpixbufloader-static-tiff.la \
-	libpixbufloader-static-xpm.la  \
-	libpixbufloader-static-pnm.la  \
-	libpixbufloader-static-bmp.la  \
-	libpixbufloader-static-wbmp.la \
-	libpixbufloader-static-xbm.la  \
-	libpixbufloader-static-tga.la
+noinst_LTLIBRARIES =		\
+	$(STATIC_PNG_LIB)	\
+	$(STATIC_JPEG_LIB)	\
+	$(STATIC_GIF_LIB)	\
+	$(STATIC_ICO_LIB)	\
+	$(STATIC_RAS_LIB)	\
+	$(STATIC_XPM_LIB)	\
+	$(STATIC_TIFF_LIB)	\
+	$(STATIC_PNM_LIB)	\
+	$(STATIC_BMP_LIB)	\
+	$(STATIC_WBMP_LIB)	\
+	$(STATIC_XBM_LIB)	\
+	$(STATIC_TGA_LIB)
 
 builtin_objs = @INCLUDED_LOADER_OBJ@
 
