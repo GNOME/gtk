@@ -47,6 +47,8 @@ extern "C" {
 
 #define GTK_HAVE_ACCEL_GROUP				1-1-0
 
+#define GTK_HAVE_RELIEF_STYLE				1-1-0
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

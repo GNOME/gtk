@@ -1,3 +1,7 @@
+Fri Jul  3 14:55:31 PDT 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkfeatures.h.in: added GTK_HAVE_RELIEF_STYLE
+
 Wed Jul  1 20:58:46 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwidget.h:
