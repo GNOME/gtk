@@ -1,3 +1,17 @@
+Wed Jan  8 18:43:03 2003  Manish Singh  <yosh@gimp.org>
+
+	* gdk/x11/gdkdisplay-x11.c: #include <stdlib.h> for putenv,
+	<string.h> for strlen.
+
+	* gdk/x11/gdkscreen-x11.c: #include <stdlib.h> for getenv,
+	<string.h> for strrchr.
+
+	* tests/testgtk.c (create_saved_position): "x" and "y" properties
+	for widgets no longer exist, use gtk_window_move instead.
+
+	* test/testtextbuffer.c (check_get_set_text): cast strlen to
+	int for g_error.
+
 2003-01-08  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktextdisplay.c (gtk_text_layout_draw): Fix display of
