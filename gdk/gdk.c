@@ -103,7 +103,6 @@ gdk_arg_context_parse (GdkArgContext *context, gint *argc, gchar ***argv)
 {
   int i, j, k;
 
-  /* Save a copy of the original argc and argv */
   if (argc && argv)
     {
       for (i = 1; i < *argc; i++)
@@ -294,6 +293,7 @@ gdk_parse_args (int    *argc,
 
   gdk_initialized = TRUE;
 
+  /* Save a copy of the original argc and argv */
   if (argc && argv)
     {
       gdk_argc = *argc;
@@ -302,17 +302,17 @@ gdk_parse_args (int    *argc,
       for (i = 0; i < gdk_argc; i++)
 	gdk_argv[i] = g_strdup ((*argv)[i]);
       gdk_argv[gdk_argc] = NULL;
+    }
 
-      if (*argc > 0)
-	{
-	  gchar *d;
-	  
-	  d = strrchr((*argv)[0], G_DIR_SEPARATOR);
-	  if (d != NULL)
-	    g_set_prgname (d + 1);
-	  else
-	    g_set_prgname ((*argv)[0]);
-	}
+  if (argc && argv && *argc > 0)
+    {
+      gchar *d;
+      
+      d = strrchr((*argv)[0], G_DIR_SEPARATOR);
+      if (d != NULL)
+	g_set_prgname (d + 1);
+      else
+	g_set_prgname ((*argv)[0]);
     }
   else
     {
