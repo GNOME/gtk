@@ -33,9 +33,15 @@ DEFINES = -DG_ENABLE_DEBUG -DGTK_DISABLE_COMPAT_H -DG_LOG_DOMAIN=\"Gtk\" -Dnear=
 
 TOUCH = copy makefile.msc+nul
 
+gtk-stocks-icons :
+	cd stock-icons
+	nmake -nologo -f makefile.msc
+	cd ..
+
 all :						\
 	..\config.h				\
 	generated				\
+	gtk-stocks-icons			\
 	gtk-win32-$(GTK_VER).dll		\
 	gtk-win32-$(GTK_VER)s.lib
 
