@@ -1,5 +1,10 @@
 2005-03-30  Matthias Clasen  <mclasen@redhat.com>
-	
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_start_interactive_search): 
+	Make enable_search control only typeahead, not C-f.  (#170435,
+	Sven Neumann)
+	(gtk_tree_view_start_interactive_search): Pass keybinding == TRUE.
+
 	* gdk/gdkpixbuf.h: Include cairo.h
 
 	* gtk/gtkclipboard.c (gtk_clipboard_set_can_store): 
