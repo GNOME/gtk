@@ -1,3 +1,12 @@
+Thu Aug 12 21:02:57 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* demos/gtk-demo/appwindow.c (about_cb): Adjust to GtkAboutDialog API changes.
+
+	* gtk/gtkaboutdialog.h: 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_set_email_hook): 
+	(gtk_about_dialog_set_url_hook): Add callback data and destroy notify 
+	for language bindings.  (#149999, Olivier Andrieu)
+
 2004-08-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilesystem.c: Underscore-prefix gtk_file_system_module_get_type().

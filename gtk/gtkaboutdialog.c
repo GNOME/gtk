@@ -155,7 +155,12 @@ static void                 display_license_dialog          (GtkWidget          
 				 
 				 				       
 static GtkAboutDialogActivateLinkFunc activate_email_hook = NULL;
+static gpointer activate_email_hook_data = NULL;
+static GDestroyNotify activate_email_hook_destroy = NULL;
+
 static GtkAboutDialogActivateLinkFunc activate_url_hook = NULL;
+static gpointer activate_url_hook_data = NULL;
+static GDestroyNotify activate_url_hook_destroy = NULL;
 
 G_DEFINE_TYPE (GtkAboutDialog, gtk_about_dialog, GTK_TYPE_DIALOG);
 
@@ -1284,7 +1289,7 @@ activate_url (GtkWidget *widget,
   gchar *url = g_object_get_data (G_OBJECT (widget), "url");
   
   if (activate_url_hook != NULL)
-    (* activate_url_hook) (about, url);
+    (* activate_url_hook) (about, url, activate_url_hook_data);
 }
 
 static void
@@ -1349,13 +1354,13 @@ follow_if_link (GtkAboutDialog *about,
 
       if (email != NULL && activate_email_hook != NULL)
         {
-	  (* activate_email_hook) (about, email);
+	  (* activate_email_hook) (about, email, activate_email_hook_data);
 	  break;
         }
 
       if (url != NULL && activate_url_hook != NULL)
         {
-	  (* activate_url_hook) (about, url);
+	  (* activate_url_hook) (about, url, activate_url_hook_data);
 	  break;
         }
     }
@@ -1523,7 +1528,6 @@ add_credits_page (GtkAboutDialog *about,
   gchar *q0, *q1, *q2, *r1, *r2;
   GtkWidget *sw, *view;
   GtkTextBuffer *buffer;
-  GtkStyle *style;
   gboolean linkify_email, linkify_urls;
   GdkColor *style_link_color;
   GdkColor link_color = { 0, 0, 0, 0xffff };
@@ -1789,6 +1793,8 @@ gtk_about_dialog_new (void)
 /**
  * gtk_about_dialog_set_email_hook:
  * @func: a function to call when an email link is activated.
+ * @data: data to pass to @func
+ * @destroy: #GDestroyNotify for @data
  * 
  * Installs a global function to be called whenever the user activates an
  * email link in an about dialog. 
@@ -1798,13 +1804,20 @@ gtk_about_dialog_new (void)
  * Since: 2.6
  */
 GtkAboutDialogActivateLinkFunc      
-gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func)
+gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func, 
+				 gpointer                       data, 
+				 GDestroyNotify                 destroy)
 {
   GtkAboutDialogActivateLinkFunc old;
+
+  if (activate_email_hook_destroy != NULL)
+    (* activate_email_hook_destroy) (activate_url_hook_data);
 
   old = activate_email_hook;
 
   activate_email_hook = func;
+  activate_email_hook_data = data;
+  activate_email_hook_destroy = destroy;
 
   return old;
 }
@@ -1812,6 +1825,8 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func)
 /**
  * gtk_about_dialog_set_url_hook:
  * @func: a function to call when a URL link is activated.
+ * @data: data to pass to @func
+ * @destroy: #GDestroyNotify for @data
  * 
  * Installs a global function to be called whenever the user activates a
  * URL link in an about dialog.
@@ -1821,13 +1836,20 @@ gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func)
  * Since: 2.6
  */
 GtkAboutDialogActivateLinkFunc      
-gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func)
+gtk_about_dialog_set_url_hook (GtkAboutDialogActivateLinkFunc func, 
+			       gpointer                       data, 
+			       GDestroyNotify                 destroy)
 {
   GtkAboutDialogActivateLinkFunc old;
+
+  if (activate_url_hook_destroy != NULL)
+    (* activate_url_hook_destroy) (activate_email_hook_data);
 
   old = activate_url_hook;
 
   activate_url_hook = func;
+  activate_url_hook_data = data;
+  activate_url_hook_destroy = destroy;
 
   return old;
 }
@@ -1882,10 +1904,3 @@ gtk_show_about_dialog (GtkWindow   *parent,
   
   gtk_window_present (GTK_WINDOW (dialog));
 }
-
-
-
-
-
-
-

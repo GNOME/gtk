@@ -102,10 +102,15 @@ void                   gtk_about_dialog_set_logo               (GtkAboutDialog  
 								GdkPixbuf       *logo);
 
 typedef void (* GtkAboutDialogActivateLinkFunc) (GtkAboutDialog *about,
-						 const gchar    *link);
+						 const gchar    *link,
+						 gpointer        data);
 
-GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func);
-GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_url_hook   (GtkAboutDialogActivateLinkFunc func);
+GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_email_hook (GtkAboutDialogActivateLinkFunc func,
+								gpointer                       data,
+								GDestroyNotify                 destroy);
+GtkAboutDialogActivateLinkFunc gtk_about_dialog_set_url_hook   (GtkAboutDialogActivateLinkFunc func,
+								gpointer                       data,
+								GDestroyNotify                 destroy);
 
 G_END_DECLS
 
