@@ -1641,19 +1641,13 @@ egg_icon_list_paint_item (EggIconList     *icon_list,
 				      &GTK_WIDGET (icon_list)->style->base[state]);
   else
     pixbuf = g_object_ref (item->icon);
-	
-  gdk_pixbuf_render_to_drawable_alpha (pixbuf,
-				       icon_list->priv->bin_window,
-				       0, 0,
-				       item->pixbuf_x,
-				       item->pixbuf_y,
-				       item->pixbuf_width,
-				       item->pixbuf_height,
-				       GDK_PIXBUF_ALPHA_FULL,
-				       0,
-				       GDK_RGB_DITHER_NORMAL,
-				       item->pixbuf_width,
-				       item->pixbuf_height);
+
+  gdk_draw_pixbuf (icon_list->priv->bin_window, NULL, pixbuf,
+		   0, 0,
+		   item->pixbuf_x, item->pixbuf_y,
+		   item->pixbuf_width, item->pixbuf_height,
+		   GDK_RGB_DITHER_NORMAL,
+		   item->pixbuf_width, item->pixbuf_height);
   g_object_unref (pixbuf);
 
   if (item->selected)
@@ -1732,15 +1726,12 @@ egg_icon_list_paint_rubberband (EggIconList     *icon_list,
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, rect.width, rect.height);
   gdk_pixbuf_fill (pixbuf, fill_color);
 
-  gdk_pixbuf_render_to_drawable_alpha (pixbuf,
-				       icon_list->priv->bin_window,
-				       0, 0,
-				       rect.x,rect.y,
-				       rect.width, rect.height,
-				       GDK_PIXBUF_ALPHA_FULL,
-				       0,
-				       GDK_RGB_DITHER_NONE,
-				       0, 0);
+  gdk_draw_pixbuf (icon_list->priv->bin_window, NULL, pixbuf,
+		   0, 0, 
+		   rect.x,rect.y,
+		   rect.width, rect.height,
+		   GDK_RGB_DITHER_NONE,
+		   0, 0);
   g_object_unref (pixbuf);
   gc = gdk_gc_new (icon_list->priv->bin_window);
   gdk_gc_set_rgb_fg_color (gc, fill_color_gdk);
@@ -1877,6 +1868,9 @@ egg_icon_list_item_unref (EggIconListItem *item)
 
   if (item->ref_count == 0)
     {
+      if (item->destroy_notify)
+	item->destroy_notify (item->user_data);
+	
       g_free (item->label);
       g_object_unref (item->icon);
       g_free (item);
