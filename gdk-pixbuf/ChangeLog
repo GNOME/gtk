@@ -1,4 +1,11 @@
+1999-11-02  Federico Mena Quintero  <federico@redhat.com>
+
+	* src/gnome-canvas-pixbuf.c (compute_render_affine): Moved the
+	affine computation code from ::draw() to here, since it is needed
+	by ::point() as well.
+
 1999-11-02 Elliot Lee <sopwith@redhat.com>
+
 	* src/gdk-pixbuf-loader.c: Reorganize gdk_pixbuf_loader_write into
  	three functions, and eliminate duplication of code from write()
  	and close(). Also fix bug where the 128-byte header was being

@@ -397,6 +397,68 @@ compute_xform_vectors (GnomeCanvasPixbuf *gcp, double *i2c, ArtPoint *i_c, ArtPo
 	}
 }
 
+/* Computes the affine transformation with which the pixbuf needs to be
+ * transformed to render it on the canvas.  This is not the same as the
+ * item_to_canvas transformation because we may need to scale the pixbuf by some
+ * other amount.
+ */
+static void
+compute_render_affine (GnomeCanvasPixbuf *gcp, double *render_affine, double *i2c)
+{
+	PixbufPrivate *priv;
+	ArtPoint i_c, j_c;
+	double i_len, j_len;
+	double scale[6];
+	double w, h;
+
+	priv = gcp->priv;
+
+	/* Compute scaling vectors and required width/height */
+
+	compute_xform_scaling (i2c, &i_c, &j_c);
+
+	i_len = sqrt (i_c.x * i_c.x + i_c.y * i_c.y);
+	j_len = sqrt (j_c.x * j_c.x + j_c.y * j_c.y);
+
+	if (priv->width_set)
+		w = priv->width;
+	else
+		w = priv->pixbuf->art_pixbuf->width;
+
+	if (priv->height_set)
+		h = priv->height;
+	else
+		h = priv->pixbuf->art_pixbuf->height;
+
+	/* Convert i_len and j_len into scaling factors */
+
+	if (priv->width_pixels) {
+		if (i_len > GNOME_CANVAS_EPSILON)
+			i_len = 1.0 / i_len;
+		else
+			i_len = 0.0;
+	} else
+		i_len = 1.0;
+
+	i_len *= w / priv->pixbuf->art_pixbuf->width;
+
+	if (priv->height_pixels) {
+		if (j_len > GNOME_CANVAS_EPSILON)
+			j_len = 1.0 / j_len;
+		else
+			j_len = 0.0;
+	} else
+		j_len = 1.0;
+
+	j_len *= h / priv->pixbuf->art_pixbuf->height;
+
+	/* Compute the final affine */
+
+	art_affine_scale (scale, i_len, j_len);
+	art_affine_multiply (render_affine, scale, i2c);
+}
+
+
 /* Recomputes the bounding box of a pixbuf canvas item.  The horizontal and
  * vertical dimensions may be specified in units or pixels, separately, so we
  * have to compute the components individually for each dimension.
@@ -616,11 +678,7 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 {
 	GnomeCanvasPixbuf *gcp;
 	PixbufPrivate *priv;
-	double i2c[6];
-	ArtPoint i_c, j_c;
-	double i_len, j_len;
-	double scale[6], final[6];
-	double w, h;
+	double i2c[6], render_affine[6];
 	guchar *buf;
 	GdkPixbuf *pixbuf;
 
@@ -630,53 +688,11 @@ gnome_canvas_pixbuf_draw (GnomeCanvasItem *item, GdkDrawable *drawable,
 	if (!priv->pixbuf)
 		return;
 
-	/* Compute scaling factors and build the final affine */
-
 	gnome_canvas_item_i2c_affine (item, i2c);
-	compute_xform_scaling (i2c, &i_c, &j_c);
-
-	i_len = sqrt (i_c.x * i_c.x + i_c.y * i_c.y);
-	j_len = sqrt (j_c.x * j_c.x + j_c.y * j_c.y);
-
-	if (priv->width_set)
-		w = priv->width;
-	else
-		w = priv->pixbuf->art_pixbuf->width;
-
-	if (priv->height_set)
-		h = priv->height;
-	else
-		h = priv->pixbuf->art_pixbuf->height;
-
-	/* Convert i_len and j_len into scaling factors */
-
-	if (priv->width_pixels) {
-		if (i_len > GNOME_CANVAS_EPSILON)
-			i_len = 1.0 / i_len;
-		else
-			i_len = 0.0;
-	} else
-		i_len = 1.0;
-
-	i_len *= w / priv->pixbuf->art_pixbuf->width;
-
-	if (priv->height_pixels) {
-		if (j_len > GNOME_CANVAS_EPSILON)
-			j_len = 1.0 / j_len;
-		else
-			j_len = 0.0;
-	} else
-		j_len = 1.0;
-
-	j_len *= h / priv->pixbuf->art_pixbuf->height;
-
-	/* Compute the final affine */
-
-	art_affine_scale (scale, i_len, j_len);
-	art_affine_multiply (final, scale, i2c);
+	compute_render_affine (gcp, render_affine, i2c);
 
 	buf = g_new0 (guchar, width * height * 4);
-	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, final);
+	transform_pixbuf (buf, x, y, width, height, width * 4, priv->pixbuf, render_affine);
 
 	pixbuf = gdk_pixbuf_new_from_data (buf, ART_PIX_RGB, TRUE,
 					   width, height, width * 4,
@@ -704,13 +720,22 @@ gnome_canvas_pixbuf_point (GnomeCanvasItem *item, double x, double y, int cx, in
 {
 	GnomeCanvasPixbuf *gcp;
 	PixbufPrivate *priv;
+	double i2c[6], render_affine[6], inv[6];
+	ArtPoint c, p;
 
 	gcp = GNOME_CANVAS_PIXBUF (item);
 	priv = gcp->priv;
 
 	*actual_item = item;
 
-	return 2 * item->canvas->close_enough;
+	gnome_canvas_item_i2c_affine (item, i2c);
+	compute_render_affine (gcp, render_affine, i2c);
+	art_affine_invert (inv, render_affine);
+
+	c.x = cx;
+	c.y = cy;
+	art_affine_point (&p, &c, inv);
+
 }
 
 
