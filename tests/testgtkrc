@@ -144,3 +144,4 @@ binding "clist-test"
 }
 
 class "GtkCList" binding "clist-test"
+

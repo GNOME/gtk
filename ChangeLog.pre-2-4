@@ -1,3 +1,7 @@
+2000-11-10 Elliot Lee <sopwith@redhat.com>
+	* gtk/gtksocket.c: To handle a really weird error case (race condition),
+	check if socket->plug_window is there before doing things with it.
+
 Fri Nov 03  Pablo Saratxaga <pablo@mandrakesoft.com>
 
 	* gtk/gtkrc.zh_TW.*: moved gtkrc.zh_TW.Big5 to gtkrc.zh_TW.big5;
