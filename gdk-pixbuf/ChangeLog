@@ -1,3 +1,8 @@
+2000-01-05  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk-pixbuf/pixops/timescale.c: quick fix for initializing
+	arrays in benchmark.
+
 2000-01-05  Jonathan Blandford  <jrb@redhat.com>
 
 	* gdk-pixbuf/gdk-pixbuf-io.h: Change the order of the update func

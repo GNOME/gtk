@@ -33,7 +33,6 @@ for a number of the most common special cases:
  compositing from RGBA to RGBx
  compositing against a color from RGBA and storing in a RGBx buffer
 
-
 TODO
 ====
 

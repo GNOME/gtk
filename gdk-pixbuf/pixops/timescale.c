@@ -41,7 +41,7 @@ init_array (double times[3][3][4])
   
   for (i=0; i<3; i++)
     for (j=0; j<3; j++)
-      for (k=0; j<4; k++)
+      for (k=0; k<4; k++)
 	times[i][j][k] = -1;
 }
 
@@ -128,6 +128,10 @@ int main (int argc, char **argv)
 
 
   printf ("Scaling from (%d, %d) to (%d, %d)\n\n", src_width, src_height, dest_width, dest_height);
+
+  init_array (scale_times);
+  init_array (composite_times);
+  init_array (composite_color_times);
 
   for (src_index = 0; src_index < 3; src_index++)
     for (dest_index = 0; dest_index < 3; dest_index++)
