@@ -308,10 +308,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   add_scroll_binding (binding_set, GDK_Page_Up,   0,                GTK_SCROLL_PAGE_BACKWARD, FALSE);
   add_scroll_binding (binding_set, GDK_Page_Down, 0,                GTK_SCROLL_PAGE_FORWARD,  FALSE);
 
-  add_scroll_binding (binding_set, GDK_Home, 0,                GTK_SCROLL_START, TRUE);
-  add_scroll_binding (binding_set, GDK_End,  0,                GTK_SCROLL_END,   TRUE);
-  add_scroll_binding (binding_set, GDK_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, FALSE);
-  add_scroll_binding (binding_set, GDK_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   FALSE);
+  add_scroll_binding (binding_set, GDK_Home, GDK_CONTROL_MASK, GTK_SCROLL_START, TRUE);
+  add_scroll_binding (binding_set, GDK_End,  GDK_CONTROL_MASK, GTK_SCROLL_END,   TRUE);
+  add_scroll_binding (binding_set, GDK_Home, 0,                GTK_SCROLL_START, FALSE);
+  add_scroll_binding (binding_set, GDK_End,  0,                GTK_SCROLL_END,   FALSE);
 
   add_tab_bindings (binding_set, GDK_CONTROL_MASK, GTK_DIR_TAB_FORWARD);
   add_tab_bindings (binding_set, GDK_CONTROL_MASK | GDK_SHIFT_MASK, GTK_DIR_TAB_BACKWARD);

@@ -1,3 +1,11 @@
+Tue Feb 26 19:38:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init):
+	Switch control-home/end and home/end with
+	the idea that scrolled windows more typically contain
+	vertical sets of controls and to correspond to the bindings
+	in GtkTreeView.
+
 Tue Feb 26 19:32:42 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtk[hv]vscale.c (gtk_[hv]scale_expose): Chain
