@@ -1,3 +1,8 @@
+Sun Oct 13 20:20:51 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktooltips.c (gtk_tooltips_force_window): Make tooltip
+	window not resizable. Fixes #95675.
+
 Sun Oct 13 18:50:14 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtkmenu.c, gtkmenu.sgml, gtkitemfactory.c, gdkwindow.c,

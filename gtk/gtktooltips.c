@@ -190,6 +190,7 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
       gtk_window_set_screen (GTK_WINDOW (tooltips->tip_window),
 			     gtk_widget_get_screen (tooltips->active_tips_data->widget));
       gtk_widget_set_app_paintable (tooltips->tip_window, TRUE);
+      gtk_window_set_resizable (GTK_WINDOW (tooltips->tip_window), FALSE);
       gtk_widget_set_name (tooltips->tip_window, "gtk-tooltips");
       gtk_container_set_border_width (GTK_CONTAINER (tooltips->tip_window), 4);
 
