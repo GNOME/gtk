@@ -1,3 +1,11 @@
+Sun Nov  3 01:39:20 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodel.c (release_row_references): took out the useless
+	check for refs->list (#97353, reported by Morten Welinder).
+
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_get_size):
+	check if width isn't zero instead of calc_width ...
+
 Sat Nov  2 23:48:52 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreemodelsort.c (gtk_tree_model_sort_set_model): remove
