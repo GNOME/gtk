@@ -1,3 +1,8 @@
+Wed Jul 21 22:24:10 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellview.c (gtk_cell_view_finalize): Don't leak
+	tree model and tree row reference.  (#148125, Crispin Flowerday)
+
 Wed Jul 21 22:17:06 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* tests/testcombo.c (main): Don't leak models.  (#148128,
