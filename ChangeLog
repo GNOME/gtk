@@ -1,3 +1,15 @@
+Wed Jan 31 18:49:33 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_item_state_changed_cb):
+	Make the sensitivity of the reparented child track that of
+	the original parent menu item. (#34218, David Hodson)
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_item_destroy_cb): Handle
+	the case where the current item is destroyed properly.
+
+	* gtk/gtkoptionmenu.c: Some additional code cleanups and fix
+	some edge cases with child-less menuitems.
+	
 Wed Jan 31 17:16:13 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcombo.c (gtk_combo_window_key_press): Make Return
