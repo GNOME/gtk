@@ -36,7 +36,7 @@
 #include "gdkprivate.h"
 #include "gdkwin32.h"
 
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
 #include <wintab.h>
 #define PACKETDATA (PK_CONTEXT | PK_CURSOR | PK_BUTTONS | PK_X | PK_Y  | PK_NORMAL_PRESSURE | PK_ORIENTATION)
 #define PACKETMODE (PK_BUTTONS)
@@ -64,7 +64,7 @@ struct _GdkDevicePrivate {
 
   gint *last_axis_data;
   gint last_buttons;
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
   /* WINTAB stuff: */
   HCTX hctx;
   /* Cursor number */
@@ -90,7 +90,7 @@ struct _GdkDevicePrivate {
 				 * good at all.
 				 */
 
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
 #define DEBUG_WINTAB 1
 #endif
 
@@ -113,7 +113,7 @@ static void gdk_input_none_get_pointer (GdkWindow       *window,
 
 static GdkDevicePrivate *gdk_input_find_device (guint32 deviceid);
 
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
 
 static gint gdk_input_win32_set_mode (guint32      deviceid,
 				      GdkInputMode mode);
@@ -148,7 +148,7 @@ static GdkInputWindow *gdk_input_window_find_within (GdkWindow *window);
 #endif
 static GdkDevicePrivate *gdk_input_find_dev_from_ctx (HCTX hctx,
 						      UINT id);
-#endif /* HAVE_WINTAB */
+#endif /* HAVE_WINTAB_H */
 
 /* Local variables */
 
@@ -258,15 +258,15 @@ print_lc(LOGCONTEXT *lc)
   if (lc->lcMoveMask & PK_ORIENTATION) g_print (" PK_ORIENTATION");
   if (lc->lcMoveMask & PK_ROTATION) g_print (" PK_ROTATION");
   g_print ("\n");
-  g_print ("lcBtnDnMask = %#x, lcBtnUpMask = %#x\n",
+  g_print ("lcBtnDnMask = %#lx, lcBtnUpMask = %#lx\n",
 	  lc->lcBtnDnMask, lc->lcBtnUpMask);
-  g_print ("lcInOrgX = %d, lcInOrgY = %d, lcInOrgZ = %d\n",
+  g_print ("lcInOrgX = %ld, lcInOrgY = %ld, lcInOrgZ = %ld\n",
 	  lc->lcInOrgX, lc->lcInOrgY, lc->lcInOrgZ);
-  g_print ("lcInExtX = %d, lcInExtY = %d, lcInExtZ = %d\n",
+  g_print ("lcInExtX = %ld, lcInExtY = %ld, lcInExtZ = %ld\n",
 	  lc->lcInExtX, lc->lcInExtY, lc->lcInExtZ);
-  g_print ("lcOutOrgX = %d, lcOutOrgY = %d, lcOutOrgZ = %d\n",
+  g_print ("lcOutOrgX = %ld, lcOutOrgY = %ld, lcOutOrgZ = %ld\n",
 	  lc->lcOutOrgX, lc->lcOutOrgY, lc->lcOutOrgZ);
-  g_print ("lcOutExtX = %d, lcOutExtY = %d, lcOutExtZ = %d\n",
+  g_print ("lcOutExtX = %ld, lcOutExtY = %ld, lcOutExtZ = %ld\n",
 	  lc->lcOutExtX, lc->lcOutExtY, lc->lcOutExtZ);
   g_print ("lcSensX = %g, lcSensY = %g, lcSensZ = %g\n",
 	  lc->lcSensX / 65536., lc->lcSensY / 65536., lc->lcSensZ / 65536.);
@@ -285,7 +285,7 @@ void
 gdk_input_init (void)
 {
   guint32 deviceid_counter = 0;
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
   GdkDevicePrivate *gdkdev;
   GdkWindowAttr wa;
   WORD specversion;
@@ -294,7 +294,7 @@ gdk_input_init (void)
   UINT ndevices, ncursors, ncsrtypes, firstcsr, hardware;
   BOOL active;
   AXIS axis_x, axis_y, axis_npressure, axis_or[3];
-  int i, j, k;
+  int i, k;
   int devix, cursorix;
   char devname[100], csrname[100];
 
@@ -421,7 +421,7 @@ gdk_input_init (void)
 	      g_warning ("gdk_input_init: WTOpen failed");
 	      return;
 	    }
-	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %#x\n",
+	  GDK_NOTE (MISC, g_print ("opened Wintab device %d %p\n",
 				   devix, *hctx));
 
 	  wintab_contexts = g_list_append (wintab_contexts, hctx);
@@ -568,11 +568,11 @@ gdk_input_init (void)
 	    }
 	}
     }
-#endif /* HAVE_WINTAB */
+#endif /* HAVE_WINTAB_H */
 
   if (deviceid_counter > 0)
     {
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
       gdk_input_vtable.set_mode           = gdk_input_win32_set_mode;
       gdk_input_vtable.set_axes           = NULL;
       gdk_input_vtable.set_key            = NULL;
@@ -675,7 +675,7 @@ gdk_input_none_get_pointer (GdkWindow       *window,
     *ytilt = 0;
 }
 
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
 
 static void
 gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
@@ -799,7 +799,6 @@ gdk_input_win32_get_pointer (GdkWindow       *window,
   GdkDevicePrivate *gdkdev;
   GdkInputWindow *input_window;
   gint x_int, y_int;
-  gint i;
 
   if (deviceid == GDK_CORE_POINTER)
     {
@@ -984,7 +983,6 @@ static gint
 gdk_input_win32_other_event (GdkEvent  *event,
 			     MSG       *xevent)
 {
-  GdkWindow *current_window;
   GdkInputWindow *input_window;
   GdkWindow *window;
   GdkDevicePrivate *gdkdev;
@@ -1009,7 +1007,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
 
   GDK_NOTE (EVENTS,
 	    g_print ("gdk_input_win32_other_event: window=%#x (%d,%d)\n",
-		     GDK_DRAWABLE_XID (window), x, y));
+		     (guint) GDK_DRAWABLE_XID (window), x, y));
   
 #else
   /* ??? This code is pretty bogus */
@@ -1112,7 +1110,7 @@ gdk_input_win32_other_event (GdkEvent  *event,
 	  x = pt.x;
 	  y = pt.y;
 	  GDK_NOTE (EVENTS, g_print ("...propagating to %#x, (%d,%d)\n",
-				     GDK_DRAWABLE_XID (window), x, y));
+				     (guint) GDK_DRAWABLE_XID (window), x, y));
 	  goto dijkstra;
 	}
 
@@ -1283,9 +1281,9 @@ gdk_input_win32_grab_pointer (GdkWindow    *window,
   need_ungrab = FALSE;
 
   GDK_NOTE (MISC, g_print ("gdk_input_win32_grab_pointer: %#x %d %#x\n",
-			   GDK_DRAWABLE_XID (window),
+			   (guint) GDK_DRAWABLE_XID (window),
 			   owner_events,
-			   (confine_to ? GDK_DRAWABLE_XID (confine_to) : 0)));
+			   (confine_to ? (guint) GDK_DRAWABLE_XID (confine_to) : 0)));
 
   while (tmp_list)
     {
@@ -1391,7 +1389,7 @@ gdk_input_win32_ungrab_pointer (guint32 time)
     }
 }
 
-#endif /* HAVE_WINTAB */
+#endif /* HAVE_WINTAB_H */
 
 GList *
 gdk_input_list_devices (void)
@@ -1572,7 +1570,7 @@ gdk_input_window_destroy (GdkWindow *window)
 void
 gdk_input_exit (void)
 {
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
   GList *tmp_list;
   GdkDevicePrivate *gdkdev;
 

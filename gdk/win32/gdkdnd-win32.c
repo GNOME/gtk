@@ -646,7 +646,7 @@ gdk_dropfiles_filter (GdkXEvent *xev,
 
   if (msg->message == WM_DROPFILES)
     {
-      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", msg->hwnd));
+      GDK_NOTE (DND, g_print ("WM_DROPFILES: %#x\n", (guint) msg->hwnd));
 
       context = gdk_drag_context_new ();
       private = (GdkDragContextPrivate *) context;
@@ -797,7 +797,7 @@ gdk_drag_find_window (GdkDragContext  *context,
   POINT pt;
 
   GDK_NOTE (DND, g_print ("gdk_drag_find_window: %#x +%d+%d\n",
-			  (drag_window ? GDK_DRAWABLE_XID (drag_window) : 0),
+			  (drag_window ? (guint) GDK_DRAWABLE_XID (drag_window) : 0),
 			  x_root, y_root));
 
   pt.x = x_root;
@@ -881,7 +881,7 @@ gdk_destroy_filter (GdkXEvent *xev,
     {
       IDropTarget *idtp = (IDropTarget *) data;
 
-      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", msg->hwnd));
+      GDK_NOTE (DND, g_print ("gdk_destroy_filter: WM_DESTROY: %#x\n", (guint) msg->hwnd));
       RevokeDragDrop (msg->hwnd);
       CoLockObjectExternal (idtp, FALSE, TRUE);
     }
@@ -900,7 +900,7 @@ gdk_window_register_dnd (GdkWindow      *window)
   g_return_if_fail (window != NULL);
 
   GDK_NOTE (DND, g_print ("gdk_window_register_dnd: %#x\n",
-			  GDK_DRAWABLE_XID (window)));
+			  (guint) GDK_DRAWABLE_XID (window)));
 
   /* We always claim to accept dropped files, but in fact we might not,
    * of course. This function is called in such a way that it cannot know

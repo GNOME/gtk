@@ -56,6 +56,12 @@
 #include "gtkdebug.h"
 #include "gtkintl.h"
 
+#ifdef G_OS_WIN32
+#define STRICT
+#include <windows.h>
+#undef STRICT
+#endif
+
 /* Private type definitions
  */
 typedef struct _GtkInitFunction		 GtkInitFunction;
@@ -194,6 +200,14 @@ static gchar *add_dll_suffix(gchar *module_name)
 #endif
 
 #undef gtk_init_check
+
+G_WIN32_DLLMAIN_FOR_DLL_NAME(static, dll_name)
+
+G_HARDCODED_PATH_WRAPPER (GTK_LIBDIR, "gtk+", _gtk_get_libdir, dll_name, "lib")
+G_HARDCODED_PATH_WRAPPER (GTK_LOCALEDIR, "gtk+", _gtk_get_localedir, dll_name, "lib/locale")
+G_HARDCODED_PATH_WRAPPER (GTK_SYSCONFDIR, "gtk+", _gtk_get_sysconfdir, dll_name, "etc")
+G_HARDCODED_PATH_WRAPPER (GTK_EXE_PREFIX, "gtk+", _gtk_get_exe_prefix, dll_name, "")
+G_HARDCODED_PATH_WRAPPER (GTK_DATA_PREFIX, "gtk+", _gtk_get_data_prefix, dll_name, "")
 
 gboolean
 gtk_init_check (int	 *argc,
@@ -402,13 +416,7 @@ gtk_init_check (int	 *argc,
     }
 
 #ifdef ENABLE_NLS
-#ifndef G_OS_WIN32
-  bindtextdomain("gtk+", GTK_LOCALEDIR);
-#else
-  /* GTk+ locale dir is %GtkDir%\locale */
-  bindtextdomain ("gtk+", g_win32_get_package_installation_subdirectory
-		  ("gtk+", "gtk-1.3.dll", "locale"));
-#endif
+  bindtextdomain("gtk+", _gtk_get_localedir ());
 #endif  
 
   /* Initialize the default visual and colormap to be

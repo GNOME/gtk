@@ -173,7 +173,7 @@
 /* #undef WITH_SYMBOL_UNDERSCORE */
 
 /* Define if you have the Wintab programmer's kit */
-#define HAVE_WINTAB 1
+#define HAVE_WINTAB_H 1
 
 /* Define if you have the <dimm.h> header file
  * (available in the Platform SDK)

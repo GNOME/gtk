@@ -59,6 +59,7 @@
 #include "gtkbindings.h"
 #include "gtkthemes.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
@@ -245,34 +246,16 @@ static GtkImageLoader image_loader = NULL;
 /* RC file handling */
 
 
-#ifdef G_OS_WIN32
-
-static gchar *
-get_themes_directory (void)
-{
-  /* This is pretty hypothetical, themes aren't supported any longer
-   * in this "production" version of GTK+ 1.3 for Win32.
-   */
-  return g_win32_get_package_installation_subdirectory ("gtk+", "gtk-1.3.dll",
-							"themes");
-}
-
-#endif
- 
 gchar *
 gtk_rc_get_theme_dir(void)
 {
   gchar *var, *path;
 
-#ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/themes");
   else
-    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/themes");
-#else
-  path = get_themes_directory ();
-#endif
+    path = g_strdup_printf("%s%s", _gtk_get_data_prefix (), "/share/themes");
 
   return path;
 }
@@ -282,15 +265,11 @@ gtk_rc_get_module_dir(void)
 {
   gchar *var, *path;
 
-#ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
-#else
-  path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
-#endif
+    path = g_strdup_printf("%s%s", _gtk_get_exe_prefix (), "/lib/gtk/themes/engines");
 
   return path;
 }
@@ -301,15 +280,11 @@ gtk_rc_append_default_pixmap_path(void)
   gchar *var, *path;
   gint n;
 
-#ifndef G_OS_WIN32
   var = getenv("GTK_DATA_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/share/gtk/themes");
   else
-    path = g_strdup_printf("%s%s", GTK_DATA_PREFIX, "/share/gtk/themes");
-#else
-  path = g_strdup (get_themes_directory ());
-#endif      
+    path = g_strdup_printf("%s%s", _gtk_get_data_prefix (), "/share/gtk/themes");
   
   for (n = 0; pixmap_path[n]; n++) ;
   if (n >= GTK_RC_MAX_PIXMAP_PATHS - 1)
@@ -331,25 +306,17 @@ gtk_rc_append_default_module_path(void)
   if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
     return;
   
-#ifndef G_OS_WIN32
   var = getenv("GTK_EXE_PREFIX");
   if (var)
     path = g_strdup_printf("%s%s", var, "/lib/gtk/themes/engines");
   else
-    path = g_strdup_printf("%s%s", GTK_EXE_PREFIX, "/lib/gtk/themes/engines");
-#else
-  path = g_strdup_printf ("%s%s", get_themes_directory (), "\\engines");
-#endif
+    path = g_strdup_printf("%s%s", _gtk_get_exe_prefix (), "/lib/gtk/themes/engines");
   module_path[n++] = path;
 
   var = g_get_home_dir ();
   if (var)
     {
-#ifndef G_OS_WIN32
       path = g_strdup_printf ("%s%s", var, "/.gtk/lib/themes/engines");
-#else
-      path = g_strdup_printf ("%s%s", var, "\\_gtk\\themes\\engines");
-#endif
       module_path[n++] = path;
     }
   module_path[n] = NULL;
@@ -383,11 +350,7 @@ gtk_rc_add_initial_default_files (void)
     }
   else
     {
-#ifndef G_OS_WIN32
-      str = g_strdup (GTK_SYSCONFDIR G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc");
-#else
-      str = g_strdup_printf ("%s\\gtkrc", g_win32_get_package_installation_directory ("gtk+", "gtk-1.3.dll"));
-#endif
+      str = g_strconcat (_gtk_get_sysconfdir (), G_DIR_SEPARATOR_S "gtk" G_DIR_SEPARATOR_S "gtkrc", NULL);
       gtk_rc_add_default_file (str);
       g_free (str);
 

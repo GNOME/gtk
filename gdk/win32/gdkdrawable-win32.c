@@ -155,8 +155,8 @@ gdk_drawable_set_colormap (GdkDrawable *drawable,
 			    ((GdkColormapPrivate *) (drawable_private->colormap))->visual);
 	  /* XXX ??? */
 	  GDK_NOTE (MISC, g_print ("gdk_drawable_set_colormap: %#x %#x\n",
-				   GDK_DRAWABLE_XID (drawable),
-				   colormap_private->xcolormap));
+				   (guint) GDK_DRAWABLE_XID (drawable),
+				   (guint) colormap_private->xcolormap));
 	}
       if (drawable_private->colormap)
 	gdk_colormap_unref (drawable_private->colormap);
@@ -194,8 +194,8 @@ gdk_win32_draw_rectangle (GdkDrawable *drawable,
   HBRUSH stipple;
   gboolean ok = TRUE;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%d) %s%dx%d@+%d+%d\n",
-			   GDK_DRAWABLE_XID (drawable),
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_rectangle: %#x (%p) %s%dx%d@+%d+%d\n",
+			   (guint) GDK_DRAWABLE_XID (drawable),
 			   gc_private,
 			   (filled ? "fill " : ""),
 			   width, height, x, y));
@@ -329,7 +329,7 @@ gdk_win32_draw_arc (GdkDrawable *drawable,
   gc_private = (GdkGCPrivate*) gc;
 
   GDK_NOTE (MISC, g_print ("gdk_draw_arc: %#x  %d,%d,%d,%d  %d %d\n",
-			   GDK_DRAWABLE_XID (drawable),
+			   (guint) GDK_DRAWABLE_XID (drawable),
 			   x, y, width, height, angle1, angle2));
 
   /* Seems that drawing arcs with width or height <= 2 fails, at least
@@ -401,8 +401,8 @@ gdk_win32_draw_polygon (GdkDrawable *drawable,
   gboolean ok = TRUE;
   int i;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %#x (%d) %d\n",
-			   GDK_DRAWABLE_XID (drawable), gc_private,
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_polygon: %#x (%p) %d\n",
+			   (guint) GDK_DRAWABLE_XID (drawable), gc_private,
 			   npoints));
 
   if (npoints < 2)
@@ -551,7 +551,7 @@ gdk_win32_draw_text (GdkDrawable *drawable,
 			    GDK_GC_FOREGROUND|GDK_GC_FONT);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text: %#x (%d,%d) \"%.*s\" (len %d)\n",
-			   GDK_DRAWABLE_XID (drawable),
+			   (guint) GDK_DRAWABLE_XID (drawable),
 			   x, y,
 			   (text_length > 10 ? 10 : text_length),
 			   text, text_length));
@@ -602,7 +602,7 @@ gdk_win32_draw_text_wc (GdkDrawable	 *drawable,
 			    GDK_GC_FOREGROUND|GDK_GC_FONT);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_text_wc: %#x (%d,%d) len: %d\n",
-			   GDK_DRAWABLE_XID (drawable),
+			   (guint) GDK_DRAWABLE_XID (drawable),
 			   x, y, text_length));
       
   if (sizeof (wchar_t) != sizeof (GdkWChar))
@@ -648,10 +648,10 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: dest: %#x "
 			   "src: %#x %dx%d@+%d+%d"
 			   " dest: %#x @+%d+%d\n",
-			   GDK_DRAWABLE_XID (drawable),
-			   GDK_DRAWABLE_XID (src),
+			   (guint) GDK_DRAWABLE_XID (drawable),
+			   (guint) GDK_DRAWABLE_XID (src),
 			   width, height, xsrc, ysrc,
-			   GDK_DRAWABLE_XID (drawable), xdest, ydest));
+			   (guint) GDK_DRAWABLE_XID (drawable), xdest, ydest));
 
   hdc = gdk_gc_predraw (drawable, gc_private, 0);
 
@@ -671,7 +671,7 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	  OffsetRgn (outside_rgn, xdest, ydest);
 	  GDK_NOTE (MISC, (GetRgnBox (outside_rgn, &r),
 			   g_print ("...calling InvalidateRgn, "
-				    "bbox: %dx%d@+%d+%d\n",
+				    "bbox: %ldx%ld@+%ld+%ld\n",
 				    r.right - r.left - 1, r.bottom - r.top - 1,
 				    r.left, r.top)));
 	  InvalidateRgn (GDK_DRAWABLE_XID (drawable), outside_rgn, TRUE);
@@ -783,7 +783,7 @@ gdk_win32_draw_points (GdkDrawable *drawable,
   fg = gdk_colormap_color (colormap_private, gc_data->foreground);
 
   GDK_NOTE (MISC, g_print ("gdk_draw_points: %#x %dx%.06x\n",
-			   GDK_DRAWABLE_XID (drawable), npoints, fg));
+			   (guint) GDK_DRAWABLE_XID (drawable), npoints, (guint) fg));
 
   for (i = 0; i < npoints; i++)
     SetPixel (hdc, points[i].x, points[i].y, fg);
@@ -804,7 +804,7 @@ gdk_win32_draw_segments (GdkDrawable *drawable,
   int i;
 
   GDK_NOTE (MISC, g_print ("gdk_win32_draw_segments: %#x nsegs: %d\n",
-			   GDK_DRAWABLE_XID (drawable), nsegs));
+			   (guint) GDK_DRAWABLE_XID (drawable), nsegs));
 
   hdc = gdk_gc_predraw (drawable, gc_private,
 			GDK_GC_FOREGROUND|GDK_GC_BACKGROUND);
@@ -962,10 +962,10 @@ gdk_win32_print_dc_attributes (HDC hdc)
 
   g_print ("current brush: style = %s, color = 0x%.08x\n",
 	   (lbr.lbStyle == BS_SOLID ? "SOLID" : "???"),
-	   lbr.lbColor);
+	   (guint) lbr.lbColor);
   g_print ("current pen: style = %s, width = %d, color = 0x%.08x\n",
 	   (lpen.lopnStyle == PS_SOLID ? "SOLID" : "???"),
 	   lpen.lopnWidth,
-	   lpen.lopnColor);
+	   (guint) lpen.lopnColor);
 }
 

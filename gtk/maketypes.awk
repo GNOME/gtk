@@ -81,7 +81,7 @@ function generate (generate_1)
     }
   if (gen_vars)
     {
-      printf ("GtkType %s = 0;\n", type_macro);
+      printf ("GTKTYPEBUILTINS_VAR GtkType %s = 0;\n", type_macro);
     }
 }
 

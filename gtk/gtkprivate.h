@@ -76,5 +76,10 @@ typedef enum
 }
 #endif /* __cplusplus */
 
+const gchar *_gtk_get_libdir ();
+const gchar *_gtk_get_sysconfdir ();
+const gchar *_gtk_get_localedir ();
+const gchar *_gtk_get_exe_prefix ();
+const gchar *_gtk_get_data_prefix ();
 
 #endif /* __GTK_PRIVATE_H__ */

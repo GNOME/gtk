@@ -3,6 +3,7 @@
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_DISABLE_COMPAT_H				\
+	-DGTK_COMPILATION				\
 	-DGTK_EXE_PREFIX=\"$(exec_prefix)\"		\
 	-DGTK_DATA_PREFIX=\"$(prefix)\"			\
 	-DGTK_SYSCONFDIR=\"$(sysconfdir)\"		\
@@ -23,19 +24,52 @@ INCLUDES = @STRIP_BEGIN@ \
 #
 lib_LTLIBRARIES = libgtk.la
 
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+endif
+
+if OS_WIN32
+gtk_symbols = -export-symbols gtk.def
+
+gtk_win32res_lo = gtk-win32res.lo
+
+gtk-win32res.lo : gtk.rc
+	$(top_srcdir)/build/win32/lt-compile-resource gtk.rc gtk-win32res.lo
+
+install-data-local-libtool-import-lib:
+	$(INSTALL) .libs/libgtk.dll.a $(DESTDIR)$(libdir)
+uninstall-libtool-import-lib:
+	-rm $(DESTDIR)$(libdir)/libgtk.dll.a
+endif
+
 # libtool stuff: set version and export symbols for resolving
 libgtkincludedir = $(includedir)/gtk
 libgtk_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)	\
-	-release $(LT_RELEASE) 					\
 	-export-dynamic						\
-	@GLIB_DEPLIBS@ 						\
+	$(no_undefined)						\
+	$(gtk_symbols)						\
+	@GLIB_LIBS@ 						\
 	@x_ldflags@						\
 	@x_libs@ 						\
 	-lm							\
 @STRIP_END@
-#	$(top_builddir)/gdk/libgdk.la
 
+
+libgtk_la_LIBADD = $(gtk_win32res_lo) ../gdk/libgdk.la
+
+if MS_LIB_AVAILABLE
+noinst_DATA = gtk.lib
+
+install-data-local-ms-lib:
+	$(INSTALL) gtk.lib $(DESTDIR)$(libdir)
+
+uninstall-local-ms-lib:
+	-rm $(DESTDIR)$(libdir)/gtk.lib
+else
+install-data-local-ms-lib:
+uninstall-local-ms-lib:
+endif
 
 #
 # setup source file variables
@@ -404,7 +438,7 @@ gtkconf_DATA = gtkrc.bg gtkrc.el gtkrc.eo gtkrc.he gtkrc.hy gtkrc.ja \
 	gtkrc.vi_VN.tcvn gtkrc.vi_VN.viscii
 
 # We create a dummy theme for the default GTK+ theme
-install-data-local:
+install-data-local: install-data-local-ms-lib install-data-local-libtool-import-lib
 	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk
 	echo "# Empty gtkrc for default theme" > \
 	    $(DESTDIR)$(datadir)/themes/Default/gtk/gtkrc
@@ -429,8 +463,11 @@ install-data-local:
 	ln -s gtkrc.vi_VN.tcvn gtkrc.vi_VN.tcvn5712 ; \
 	ln -s gtkrc.vi_VN.tcvn5712 gtkrc.vi 
 
-uninstall-local:
+uninstall-local: uninstall-local-ms-lib uninstall-local-libtool-import-lib
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtkrc
+
+gtk.lib: libgtk.la gtk.def
+	lib -name:libgtk-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
 
 #
 # test programs, not to be installed

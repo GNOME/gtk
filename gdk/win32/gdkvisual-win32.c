@@ -26,6 +26,8 @@
 
 #include "config.h"
 
+#include <stdlib.h>
+
 #include "gdkvisual.h"
 #include "gdkprivate-win32.h"
 
@@ -38,20 +40,6 @@ static GdkVisualPrivate *system_visual;
 static gint available_depths[1];
 
 static GdkVisualType available_types[1];
-
-#ifdef G_ENABLE_DEBUG
-
-static const gchar* visual_names[] =
-{
-  "static gray",
-  "grayscale",
-  "static color",
-  "pseudo color",
-  "true color",
-  "direct color",
-};
-
-#endif /* G_ENABLE_DEBUG */
 
 void
 gdk_visual_init (void)

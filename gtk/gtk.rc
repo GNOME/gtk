@@ -16,10 +16,10 @@ VS_VERSION_INFO VERSIONINFO
 	VALUE "CompanyName", "The GTk+ developer community"
 	VALUE "FileDescription", "GIMP Toolkit"
 	VALUE "FileVersion", "1.3.0.BUILDNUMBER"
-	VALUE "InternalName", "gtk-1.3"
+	VALUE "InternalName", "libgtk-0"
 	VALUE "LegalCopyright", "Copyright © 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald. Modified by the GTK+ Team and others 1997-2000."
-	VALUE "OriginalFilename", "gtk-1.3.dll"
-	VALUE "ProductName", "GTk+"
+	VALUE "OriginalFilename", "libgtk-0.dll"
+	VALUE "ProductName", "GTK"
 	VALUE "ProductVersion", "1.3.0"
       END
     END

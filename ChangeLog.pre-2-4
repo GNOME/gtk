@@ -1,3 +1,48 @@
+2001-10-23  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk-config.in: Remove.
+
+	* gdk-1.3-win32-production.pc.in
+	* gtk+-1.3-win32-production.pc.in: New files, use pkg-config.
+
+	* gdk/win32/libwntab32x.la: New file, handwritten libtool archive
+	for the Wintab library when available.
+
+	* Makefile.am: Install the pkgconfig files.
+
+	* config.h.win32
+	* acconfig.h: Add HAVE_WINTAB_H.
+
+	* acinclude.m4: Copy from HEAD.
+
+	* configure.in: Enable Win32 (mingw) builds. Test for Wintab API
+	(header and library). Changes to be more like the HEAD version.
+
+	* ltconfig
+	* ltmain.sh: Remove, not needed by libtool 1.4c, which I use for this.
+
+	* gdk/Makefile.am
+	* gdk/win32/Makefile.am
+	* gtk/Makefile.am: Changes for Win32 (mingw) builds. Install MS
+	and mingw import libraries.
+
+	* gtk/Makefile.am: Don't pass -release to libtool in
+	gtk/Makefile.am. This keeps DLL name simpler.
+
+	* {gdk,gtk}/makefile.{mingw,msc}: Remove.
+
+	* {gdk,gtk}/makefile.{mingw,msc}.in: Add these instead. Generate
+	same name DLLs as libtool does (libgdk-0.dll and
+	libgtk-0.dll). Import libraries are just libgdk.la and
+	libgtk.la.
+
+	* gdk/win32/*.c: Lint cleanups.
+
+	* gtk/gtkmain.c
+	* gtk/gtkrc.c: Use the G_WIN32_DLLMAIN_FOR_DLL_NAME and
+	G_HARDCODED_PATH_WRAPPER macros to get DLL name at runtime, and
+	determine installation subdirectories.
+
 2001-09-28  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/makefile.{mingw,msc}

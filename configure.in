@@ -1,23 +1,12 @@
 # Process this file with autoconf to produce a configure script.
 AC_INIT(gdk/gdktypes.h)
 
-# In the following, there are a the following variants
-# of GLib cflags and libs variables
-#
-# GLIB_CFLAGS:  cflags for compiling libraries and example progs
-# GLIB_LIBS:    libraries for linking example programs
-# GLIB_DEPLIBS: libraries for linking libraries against
-# glib_cflags:  cflags to store in gtk-config
-# glib_libs:    libs to store in gtk-config
-# glib_thread_cflags: cflags to store in gtk-config for gtk-config gthread
-# glib_thread_libs:   libs to store in gtk-config for gtk-config gthread
-
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
 
 dnl we to AC_DIVERT_PUSH/AC_DIVERT_POP these variable definitions so they
 dnl are available for $ac_help expansion (don't we all *love* autoconf?)
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+GLIB_AC_DIVERT_BEFORE_HELP([
 #
 # Making releases:
 #   GTK_MICRO_VERSION += 1;
@@ -34,7 +23,7 @@ GTK_INTERFACE_AGE=0
 GTK_BINARY_AGE=0
 GTK_VERSION=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION.$GTK_MICRO_VERSION
 dnl
-AC_DIVERT_POP()dnl
+])dnl
 
 AC_SUBST(GTK_MAJOR_VERSION)
 AC_SUBST(GTK_MINOR_VERSION)
@@ -48,10 +37,12 @@ LT_RELEASE=$GTK_MAJOR_VERSION.$GTK_MINOR_VERSION
 LT_CURRENT=`expr $GTK_MICRO_VERSION - $GTK_INTERFACE_AGE`
 LT_REVISION=$GTK_INTERFACE_AGE
 LT_AGE=`expr $GTK_BINARY_AGE - $GTK_INTERFACE_AGE`
+LT_CURRENT_MINUS_AGE=`expr $LT_CURRENT - $LT_AGE`
 AC_SUBST(LT_RELEASE)
 AC_SUBST(LT_CURRENT)
 AC_SUBST(LT_REVISION)
 AC_SUBST(LT_AGE)
+AC_SUBST(LT_CURRENT_MINUS_AGE)
 
 # For automake.
 VERSION=$GTK_VERSION
@@ -67,6 +58,7 @@ AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 AM_CONFIG_HEADER(config.h)
 
 dnl Initialize libtool
+AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
 
 dnl Initialize maintainer mode
@@ -74,15 +66,44 @@ AM_MAINTAINER_MODE
 
 AC_CANONICAL_HOST
 
+AC_MSG_CHECKING([for some Win32 platform])
+case "$host" in
+  *-*-mingw*|*-*-cygwin*)
+    platform_win32=yes
+    ;;
+  *)
+    platform_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$platform_win32])
+AM_CONDITIONAL(PLATFORM_WIN32, test "$platform_win32" = "yes")
+
+AC_MSG_CHECKING([for native Win32])
+case "$host" in
+  *-*-mingw*)
+    os_win32=yes
+    ;;
+  *)
+    os_win32=no
+    ;;
+esac
+AC_MSG_RESULT([$os_win32])
+AM_CONDITIONAL(OS_WIN32, test "$os_win32" = "yes")
+
+if test "$os_win32" = "yes"; then
+  AC_CHECK_PROG(ms_librarian, lib.exe, yes, no)
+fi
+AM_CONDITIONAL(MS_LIB_AVAILABLE, test x$ms_librarian = xyes)
+
 dnl figure debugging default, prior to $ac_help setup
 dnl
-AC_DIVERT_PUSH(AC_DIVERSION_NOTICE)dnl
+GLIB_AC_DIVERT_BEFORE_HELP([
 if test `expr $GTK_MINOR_VERSION \% 2` = 1 ; then
         debug_default=yes
 else
         debug_default=minimum
 fi
-AC_DIVERT_POP()dnl
+])dnl
 
 dnl declare --enable-* args and collect ac_help strings
 AC_ARG_ENABLE(debug, [  --enable-debug=[no/minimum/yes] turn on debugging [default=$debug_default]],,enable_debug=$debug_default)
@@ -90,7 +111,6 @@ AC_ARG_ENABLE(shm, [  --enable-shm            support shared memory if available
 		   echo $enable_shm, enable_shm="yes")
 AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]],
 		    , enable_ansi=no)
-AC_ARG_WITH(glib, [  --with-glib=DIR         Use uninstalled copy of glib])
 AC_ARG_ENABLE(xim, [  --enable-xim            support XIM [default=yes]],
 			, enable_xim="yes")
 AC_ARG_ENABLE(xim_inst, [  --disable-xim-inst      does not use xim instantiate callback],
@@ -99,6 +119,8 @@ AC_ARG_ENABLE(rebuilds, [  --disable-rebuilds      disable all source autogenera
 AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
+
+AC_ARG_WITH(wintab, [  --with-wintab=DIRECTORY use Wintab API])
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -139,6 +161,13 @@ if test "x$GCC" = "xyes"; then
     case " $CFLAGS " in
     *[\ \	]-pedantic[\ \	]*) ;;
     *) CFLAGS="$CFLAGS -pedantic" ;;
+    esac
+  fi
+
+  if test "$os_win32" = "yes"; then
+    case " $CFLAGS " in
+    *[[\ \	]]-fnative-struct[[\ \	]]*) ;;
+    *) CFLAGS="$CFLAGS -fnative-struct" ;;
     esac
   fi
 fi
@@ -182,10 +211,10 @@ AC_SUBST(STRIP_END)
 
 # i18n stuff
 ALL_LINGUAS="ca cs da de el es et eu fi fr ga gl hr hu it ja ko lt nl no pl pt pt_BR ru sk sl sv tr uk wa zh_TW.Big5 zh_CN.GB2312"
-AM_GTK_GNU_GETTEXT
+AM_GLIB_GNU_GETTEXT
 LIBS="$LIBS $INTLLIBS"
 
-# AM_GTK_GNU_GETTEXT above substs $DATADIRNAME
+# AM_GLIB_GNU_GETTEXT above substs $DATADIRNAME
 # this is the directory where the *.{mo,gmo} files are installed
 gtklocaledir='${prefix}/${DATADIRNAME}/locale'
 AC_SUBST(gtklocaledir)
@@ -242,73 +271,52 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
     CFLAGS=$gtk_save_CFLAGS
     AC_MSG_WARN([Could not determine POSIX flag. (-posix didn't work.)])))
 
-if test x$with_glib = xyes ; then
+AM_PATH_GLIB_2_0(1.3.0,,
   AC_MSG_ERROR([
-*** Directory must be specified for --with-glib])
-fi
-
-if test x$with_glib = x ; then 
-  # Look for separately installed glib
-
-  AM_PATH_GLIB(1.3.0,,
-    AC_MSG_ERROR([
 *** GLIB 1.3.0 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
-    gmodule gthread)
-
-  # we do not want to make all gtk progs to link to thread libraries.
-  glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
-  glib_thread_cflags="$GLIB_CFLAGS"
-  glib_libs=`$GLIB_CONFIG glib gmodule --libs`
-  glib_thread_libs="$GLIB_LIBS"
-  GLIB_LIBS="$glib_libs"
-  GLIB_DEPLIBS="$glib_libs"
-else
-  # Use uninstalled glib (assume they got the version right)
-
-  GLIB_CONFIG=$with_glib/glib-config
-  if test -x $GLIB_CONFIG ; then 
-    :
-  else
-    AC_MSG_ERROR([GLIB directory ($with_glib) not present or not configured])
-  fi
-
-  # For use in gtk-config
-  glib_cflags=`$GLIB_CONFIG --cflags gmodule`
-  glib_thread_cflags=`$GLIB_CONFIG --cflags gmodule gthread`
-  glib_libs=`$GLIB_CONFIG --libs gmodule`
-  glib_thread_libs=`$GLIB_CONFIG --libs gmodule gthread`
-
-  glib_release=`$GLIB_CONFIG --version | sed 's%\\.[[0-9]]*$%%'`
-
-  # canonicalize relative paths
-  case $with_glib in 
-    /*)
-      glib_dir=$with_glib
-      ;;
-    *)
-      glib_dir="\$(top_builddir)/$with_glib"
-      ;;
-  esac
-
-  GLIB_CFLAGS="-I$glib_dir -I$glib_dir/gmodule"
-  GLIB_LIBS="$glib_dir/libglib.la $glib_dir/gmodule/libgmodule.la"
-  GLIB_DEPLIBS=
-
-  AC_SUBST(GLIB_CFLAGS)
-  AC_SUBST(GLIB_LIBS)
-fi
-
-AC_SUBST(glib_cflags)
-AC_SUBST(glib_libs)
-AC_SUBST(glib_thread_cflags)
-AC_SUBST(glib_thread_libs)
-AC_SUBST(GLIB_DEPLIBS)
+  gmodule gthread)
 
 AC_CHECK_HEADERS(dirent.h, AC_DEFINE(HAVE_DIRENT_H))
 AC_CHECK_HEADERS(pwd.h, AC_DEFINE(HAVE_PWD_H))
 AC_CHECK_HEADERS(sys/time.h, AC_DEFINE(HAVE_SYS_TIME_H))
+AC_CHECK_HEADERS(dimm.h, AC_DEFINE(HAVE_DIMM_H))
+if test ${with_wintab+set} = set && test $with_wintab != no; then
+  AC_MSG_CHECKING([for wintab.h])
+  saved_CFLAGS="$CFLAGS"
+  CFLAGS="$CFLAGS -I$with_wintab/include"
+  AC_TRY_COMPILE([#include <windows.h>
+#include <wintab.h>], 
+   [],
+   [AC_MSG_RESULT(yes)
+    AC_CHECK_FILE([$with_wintab/lib/i386/wntab32x.lib],
+      [have_wintab=yes
+       AC_DEFINE(HAVE_WINTAB_H)
+       WINTAB_LIB="$with_wintab/lib/i386/wntab32x.lib"
+       AC_SUBST(WINTAB_LIB)],
+      [have_wintab=no])
+    ],
+   [AC_MSG_RESULT(no)
+    have_wintab=no])
+  CFLAGS="$saved_cflags"
+fi
+AM_CONDITIONAL(HAVE_WINTAB, test x$have_wintab = xyes)
 
+# Assume on Win32 we use Win32 backend, otherwise X11.
+# But note that this is the gtk-1-3-win32-production branch
+# anyway, so the X11 stuff is mostly just left here to make diffs smaller
+# in case somebody wants to compare
+
+if test "$platform_win32" = "yes"; then
+  gdktarget=win32
+  x_libs="-lgdi32 -luser32 -limm32 -lshell32 -lole32 -luuid"
+  if test x$have_wintab = xyes; then
+    x_includes="-I $with_wintab/include"
+  fi
+  AC_SUBST(x_includes)
+  AC_SUBST(x_libs)
+else
+gdktarget=x11
 # Find the X11 include and library directories
 AC_PATH_X
 AC_PATH_XTRA
@@ -463,6 +471,9 @@ if test $need_x_locale = yes; then
   GTK_LOCALE_FLAGS="-DX_LOCALE"
 fi
 
+fi # !platform_win32
+AC_SUBST(gdktarget)
+
 # Checks for header files.
 AC_HEADER_STDC
 
@@ -599,9 +610,13 @@ _______EOF
 	fi ;;
 esac
 ],[
-# Currently we always use X11 on those systems where we run configure...
-gdk_windowing='
+if test "$os_win32" = "yes"; then
+  gdk_windowing='
+#define GDK_WINDOWING_WIN32'
+else
+  gdk_windowing='
 #define GDK_WINDOWING_X11'
+fi
 if test x$gdk_wchar_h = xyes; then
   gdk_wc='
 #define GDK_HAVE_WCHAR_H 1'
@@ -619,16 +634,18 @@ fi
 ])
 
 AC_OUTPUT([
-gtk+.spec
-docs/gtk-config.1
 Makefile
-gtk-config
+gtk+-1.3-win32-production.pc
+gdk-1.3-win32-production.pc
 po/Makefile.in
 docs/Makefile
 gdk/Makefile
+gdk/makefile.mingw
+gdk/makefile.msc
 gdk/x11/Makefile
 gdk/win32/Makefile
+gdk/win32/rc/Makefile
 gtk/Makefile
 gtk/gtkfeatures.h
 gtk/gtkcompat.h
-], [chmod +x gtk-config])
+])

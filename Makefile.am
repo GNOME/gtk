@@ -3,7 +3,8 @@
 SRC_SUBDIRS = gdk gtk
 SUBDIRS = po $(SRC_SUBDIRS) docs
 
-bin_SCRIPTS = gtk-config
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA= gdk-1.3-win32-production.pc gtk+-1.3-win32-production.pc
 
 # require automake 1.4
 AUTOMAKE_OPTIONS = 1.4
@@ -18,6 +19,8 @@ EXTRA_DIST =	\
 	ChangeLog.pre-1-0	\
 	README.cvs-commits	\
 	README.win32	\
+	gtk+-1.3-win32-production.pc.in \
+	gdk-1.3-win32-production.pc.in \
 	intl/libgettext.h	\
 	intl/po2tbl.sed.in	\
 	examples/aspectframe/Makefile  \

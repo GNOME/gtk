@@ -66,7 +66,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
     {
       data->foreground = values->foreground.pixel;
       data->values_mask |= GDK_GC_FOREGROUND;
-      GDK_NOTE (MISC, (g_print ("fg=%.06x", data->foreground),
+      GDK_NOTE (MISC, (g_print ("fg=%.06lx", data->foreground),
 		       s = ","));
     }
   
@@ -74,7 +74,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
     {
       data->background = values->background.pixel;
       data->values_mask |= GDK_GC_BACKGROUND;
-      GDK_NOTE (MISC, (g_print ("%sbg=%.06x", s, data->background),
+      GDK_NOTE (MISC, (g_print ("%sbg=%.06lx", s, data->background),
 		       s = ","));
     }
 
@@ -98,7 +98,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
       else
 	{
 	  data->values_mask &= ~GDK_GC_FONT;
-	  GDK_NOTE (MISC, (g_print ("%sfont=NULL"),
+	  GDK_NOTE (MISC, (g_print ("%sfont=NULL", s),
 			   s = ","));
 	}
     }
@@ -198,7 +198,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	  gdk_drawable_ref (data->tile);
 	  data->values_mask |= GDK_GC_TILE;
 	  GDK_NOTE (MISC, (g_print ("%stile=%#x", s,
-				    GDK_DRAWABLE_XID (data->tile)),
+				    (guint) GDK_DRAWABLE_XID (data->tile)),
 			   s = ","));
 	}
       else
@@ -248,7 +248,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	    gdk_drawable_ref (data->stipple);
 	  data->values_mask |= GDK_GC_STIPPLE;
 	  GDK_NOTE (MISC, (g_print ("%sstipple=%#x", s,
-				    GDK_DRAWABLE_XID (data->stipple)),
+				    (guint) GDK_DRAWABLE_XID (data->stipple)),
 			   s = ","));
 	}
       else
@@ -275,7 +275,7 @@ gdk_win32_gc_values_to_win32values (GdkGCValues    *values,
 	  data->clip_region = NULL;
 	  data->values_mask &= ~GDK_GC_CLIP_MASK;
 	}
-      GDK_NOTE (MISC, (g_print ("%sclip=%#x", s, data->clip_region),
+      GDK_NOTE (MISC, (g_print ("%sclip=%#x", s, (guint) data->clip_region),
 		       s = ","));
     }
 
@@ -687,7 +687,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
   if (rectangle)
     {
       GDK_NOTE (MISC,
-		g_print ("gdk_gc_set_clip_rectangle: (%d) %dx%d@+%d+%d\n",
+		g_print ("gdk_gc_set_clip_rectangle: (%p) %dx%d@+%d+%d\n",
 			 data,
 			 rectangle->width, rectangle->height,
 			 rectangle->x, rectangle->y));
@@ -701,7 +701,7 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
     }
   else
     {
-      GDK_NOTE (MISC, g_print ("gdk_gc_set_clip_rectangle: (%d) NULL\n",
+      GDK_NOTE (MISC, g_print ("gdk_gc_set_clip_rectangle: (%p) NULL\n",
 			       data));
       data->clip_region = NULL;
       data->values_mask &= ~GDK_GC_CLIP_MASK;
@@ -719,7 +719,7 @@ gdk_gc_set_clip_region (GdkGC		 *gc,
 
   data = GDK_GC_WIN32DATA (gc);
 
-  GDK_NOTE (MISC, g_print ("gdk_gc_set_clip_region: (%d) %s\n",
+  GDK_NOTE (MISC, g_print ("gdk_gc_set_clip_region: (%p) %s\n",
 			   data, (region != NULL ? "xxx" : "None")));
 
   if (data->clip_region != NULL)
@@ -1362,15 +1362,12 @@ gdk_gc_postdraw (GdkDrawable    *drawable,
 		 GdkGCValuesMask usage)
 {
   GdkDrawablePrivate *drawable_private = (GdkDrawablePrivate *) drawable;
-  GdkColormapPrivateWin32 *colormap_private =
-    (GdkColormapPrivateWin32 *) drawable_private->colormap;
   GdkGCWin32Data *data = GDK_GC_WIN32DATA (gc_private);
-  HGDIOBJ hpen = NULL;
-  HGDIOBJ hbr = NULL;
-  HWND active_hwnd = NULL;
-
     
 #if 0
+  GdkColormapPrivateWin32 *colormap_private =
+    (GdkColormapPrivateWin32 *) drawable_private->colormap;
+
   if (colormap_private != NULL
       && colormap_private->xcolormap->rc_palette
       && colormap_private->xcolormap->stale)

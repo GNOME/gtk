@@ -90,7 +90,7 @@ gdk_cursor_new (GdkCursorType cursor_type)
   if (xcursor == NULL)
     g_warning ("gdk_cursor_new: no cursor %d found", cursor_type);
   else
-    GDK_NOTE (MISC, g_print ("gdk_cursor_new: %d: %#x\n", cursor_type, xcursor));
+    GDK_NOTE (MISC, g_print ("gdk_cursor_new: %d: %#x\n", cursor_type, (guint) xcursor));
 
   private = g_new (GdkCursorPrivate, 1);
   private->xcursor = xcursor;
@@ -219,11 +219,11 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
 			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   GDK_DRAWABLE_XID (source),
+			   (guint) GDK_DRAWABLE_XID (source),
 			   source_private->width, source_private->height,
-			   GDK_DRAWABLE_XID (mask),
+			   (guint) GDK_DRAWABLE_XID (mask),
 			   mask_private->width, mask_private->height,
-			   xcursor, cursor_width, cursor_height));
+			   (guint) xcursor, cursor_width, cursor_height));
 
   g_free (XORmask);
   g_free (ANDmask);
@@ -248,7 +248,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor != NULL);
   private = (GdkCursorPrivate *) cursor;
 
-  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n", private->xcursor));
+  GDK_NOTE (MISC, g_print ("_gdk_cursor_destroy: %#x\n", (guint) private->xcursor));
 
   if (!DestroyCursor (private->xcursor))
     WIN32_API_FAILED ("DestroyCursor");

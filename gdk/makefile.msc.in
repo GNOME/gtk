@@ -28,16 +28,13 @@ CC = cl -G5 -GF $(OPTIMIZE) -W3 -nologo
 
 LDFLAGS = /link $(LINKDEBUG)
 
-GLIB_VER=1.3
-GTK_VER=1.3
-
 GLIB = ..\..\glib
-CFLAGS = -I . -I .. -I $(GLIB) -I$(GLIB)\glib -DG_ENABLE_DEBUG -DHAVE_CONFIG_H -DGDK_VERSION=\"$(GTK_VER)\"
+CFLAGS = -I . -I .. -I $(GLIB) -I$(GLIB)\glib -DG_ENABLE_DEBUG -DHAVE_CONFIG_H
 
 all: \
 	..\config.h \
 	gdkconfig.h \
-	gdk-$(GTK_VER).dll
+	libgdk-@LT_CURRENT_MINUS_AGE@.dll
 
 gdk_OBJECTS = \
 	gdk.obj \
@@ -59,8 +56,8 @@ gdk_OBJECTS = \
 gdkconfig.h : gdkconfig.h.win32
 	copy gdkconfig.h.win32 gdkconfig.h
 
-gdk-$(GTK_VER).dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
-	$(CC) $(CFLAGS) -LD -Fegdk-$(GTK_VER).dll $(gdk_OBJECTS) win32\gdk-win32.lib $(WTKIT)\lib\i386\wntab32x.lib $(GLIB)\glib\glib-$(GLIB_VER).lib gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /def:gdk.def
+libgdk-@LT_CURRENT_MINUS_AGE@.dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
+	$(CC) $(CFLAGS) -LD -Felibgdk-@LT_CURRENT_MINUS_AGE@.dll $(gdk_OBJECTS) win32\gdk-win32.lib $(WTKIT)\lib\i386\wntab32x.lib $(GLIB)\glib\glib-$(GLIB_VER).lib gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res $(LDFLAGS) /implib:gdk.lib /def:gdk.def
 
 .c.obj :
 	$(CC) $(CFLAGS) -GD -c -DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\" $<

@@ -1,15 +1,17 @@
 ## Makefile.am for gtk+/gdk
 
-SUBDIRS=x11 win32
+SUBDIRS=$(gdktarget)
+DIST_SUBDIRS=x11 win32
 
 EXTRA_DIST =	\
 	gdkconfig.h.win32 \
 	gdk.def \
-	makefile.cygwin \
+	makefile.mingw \
 	makefile.msc
 
 INCLUDES = @STRIP_BEGIN@ \
 	-DG_LOG_DOMAIN=\"Gdk\"	\
+	-DGDK_COMPILATION	\
 	-I$(top_srcdir)		\
 	@GTK_DEBUG_FLAGS@ 	\
 	@GTK_XIM_FLAGS@		\
@@ -23,20 +25,54 @@ INCLUDES = @STRIP_BEGIN@ \
 #
 lib_LTLIBRARIES = libgdk.la
 
+if PLATFORM_WIN32
+no_undefined = -no-undefined
+
+if HAVE_WINTAB
+wintab_lib = -Lwin32 -lwntab32x
+endif
+endif
+
+if OS_WIN32
+gdk_symbols = -export-symbols gdk.def
+
+install-data-local-libtool-import-lib:
+	$(INSTALL) .libs/libgdk.dll.a $(DESTDIR)$(libdir)
+uninstall-libtool-import-lib:
+	-rm $(DESTDIR)$(libdir)/libgdk.dll.a
+endif
+
 # libtool stuff: set version and export symbols for resolving
 libgdkincludedir = $(includedir)/gdk
 libgdk_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
-	-release $(LT_RELEASE) \
 	-export-dynamic \
-	@GLIB_DEPLIBS@	\
+	$(no_undefined) \
+	$(gdk_symbols)	\
+	@GLIB_LIBS@	\
 	@x_ldflags@	\
 	@x_libs@	\
 	-lm		\
 @STRIP_END@
 
 libgdk_la_LIBADD = \
-	x11/libgdk-x11.la	
+	$(gdktarget)/libgdk-$(gdktarget).la $(wintab_lib)
+
+if MS_LIB_AVAILABLE
+noinst_DATA = gdk.lib
+
+install-data-local-ms-lib:
+	$(INSTALL) gdk.lib $(DESTDIR)$(libdir)
+
+uninstall-local-ms-lib:
+	-rm $(DESTDIR)$(libdir)/gdk.lib
+else
+install-data-local-ms-lib:
+uninstall-local-ms-lib:
+endif
+
+install-data-local: install-data-local-ms-lib install-data-local-libtool-import-lib
+uninstall-local: uninstall-local-ms-lib uninstall-local-libtool-import-lib
 
 #
 # setup source file variables
@@ -121,6 +157,9 @@ install-exec-local: gdkconfig.h
 	file=$(DESTDIR)$(configexecincludedir)/gdkconfig.h; \
 	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \
 	else $(INSTALL_DATA) gdkconfig.h $$file; fi
+
+gdk.lib: libgdk.la gdk.def
+	lib -name:libgdk-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 BUILT_SOURCES = stamp-gc-h #note: not gdkconfig.h
 gdkconfig.h: stamp-gc-h

@@ -55,7 +55,7 @@
 #include "surrogate-dimm.h"
 #endif
 
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
 #include <wintab.h>
 #endif
 
@@ -287,12 +287,12 @@ gdk_WindowProc (HWND hWnd,
   gint tid = GetCurrentThreadId ();
 
   GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x %s\n",
-			     tid, hWnd, gdk_win32_message_name (message)));
+			     (guint) tid, (guint) hWnd, gdk_win32_message_name (message)));
 
   retval = inner_window_proc (hWnd, message, wParam, lParam);
 
   GDK_NOTE (EVENTS, g_print ("gdk_WindowProc: thread %#x hwnd %#x returns %d\n",
-			     tid, hWnd, retval));
+			     (guint) tid, (guint) hWnd, retval));
   return retval;
 }
 
@@ -543,9 +543,9 @@ gdk_pointer_grab (GdkWindow *	  window,
       if (!GDK_DRAWABLE_DESTROYED (window))
 	{
 	  GDK_NOTE (EVENTS, g_print ("gdk_pointer_grab: %#x %s %#x %s\n",
-				     xwindow,
+				     (guint) xwindow,
 				     (owner_events ? "TRUE" : "FALSE"),
-				     xcursor,
+				     (guint) xcursor,
 				     event_mask_string (event_mask)));
 	  p_grab_mask = event_mask;
 	  p_grab_owner_events = (owner_events != 0);
@@ -706,7 +706,7 @@ gdk_keyboard_grab (GdkWindow *	   window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
   GDK_NOTE (EVENTS, g_print ("gdk_keyboard_grab %#x\n",
-			     GDK_DRAWABLE_XID (window)));
+			     (guint) GDK_DRAWABLE_XID (window)));
 
   if (!GDK_DRAWABLE_DESTROYED (window))
     {
@@ -2766,7 +2766,7 @@ print_event (GdkEvent *event)
     case GDK_NO_EXPOSE: g_print ("GDK_NO_EXPOSE "); break;
     case GDK_SCROLL: g_print ("GDK_SCROLL "); break;
     }
-  g_print ("%#x ", GDK_DRAWABLE_XID (event->any.window));
+  g_print ("%#x ", (guint) GDK_DRAWABLE_XID (event->any.window));
 
   switch (event->any.type)
     {
@@ -3097,7 +3097,7 @@ propagate (GdkWindow  **window,
       else
 	{
 	  GDK_NOTE (EVENTS, g_print ("...sending to grabber %#x\n",
-				     GDK_DRAWABLE_XID (grab_window)));
+				     (guint) GDK_DRAWABLE_XID (grab_window)));
 	  gdk_window_unref (*window);
 	  *window = grab_window;
 	  gdk_window_ref (*window);
@@ -3126,7 +3126,7 @@ propagate (GdkWindow  **window,
 		    {
 		      /* Grabbed! */
 		      GDK_NOTE (EVENTS, g_print ("...sending to grabber %#x\n",
-						 GDK_DRAWABLE_XID (grab_window)));
+						 (guint) GDK_DRAWABLE_XID (grab_window)));
 		      gdk_window_unref (*window);
 		      *window = grab_window;
 		      gdk_window_ref (*window);
@@ -3145,7 +3145,7 @@ propagate (GdkWindow  **window,
 	      *window = ((GdkWindowPrivate *) *window)->parent;
 	      gdk_window_ref (*window);
 	      GDK_NOTE (EVENTS, g_print ("...propagating to %#x\n",
-					 GDK_DRAWABLE_XID (*window)));
+					 (guint) GDK_DRAWABLE_XID (*window)));
 	      /* The only branch where we actually continue the loop */
 	    }
 	}
@@ -3318,7 +3318,7 @@ gdk_win32_erase_background (GdkWindow *window,
           GDK_NOTE (EVENTS, g_print ("...blitting pixmap %#x (%dx%d) "
                                      "all over the place,\n"
                                      "...clip box = %dx%d@+%d+%d\n",
-                                     GDK_DRAWABLE_XID (pixmap),
+                                     (guint) GDK_DRAWABLE_XID (pixmap),
                                      pixmap_private->width, pixmap_private->height,
                                      rect.right - rect.left, rect.bottom - rect.top,
                                      rect.left, rect.top));
@@ -3440,7 +3440,7 @@ gdk_event_translate (GdkEvent *event,
   if (xevent->message == gdk_selection_notify_msg)
     {
       GDK_NOTE (EVENTS, g_print ("gdk_selection_notify_msg: %#x\n",
-				 xevent->hwnd));
+				 (guint) xevent->hwnd));
 
       event->selection.type = GDK_SELECTION_NOTIFY;
       event->selection.window = window;
@@ -3456,7 +3456,7 @@ gdk_event_translate (GdkEvent *event,
   else if (xevent->message == gdk_selection_request_msg)
     {
       GDK_NOTE (EVENTS, g_print ("gdk_selection_request_msg: %#x\n",
-				 xevent->hwnd));
+				 (guint) xevent->hwnd));
 
       event->selection.type = GDK_SELECTION_REQUEST;
       event->selection.window = window;
@@ -3473,7 +3473,7 @@ gdk_event_translate (GdkEvent *event,
   else if (xevent->message == gdk_selection_clear_msg)
     {
       GDK_NOTE (EVENTS, g_print ("gdk_selection_clear_msg: %#x\n",
-				 xevent->hwnd));
+				 (guint) xevent->hwnd));
 
       event->selection.type = GDK_SELECTION_CLEAR;
       event->selection.window = window;
@@ -3487,7 +3487,7 @@ gdk_event_translate (GdkEvent *event,
   else if (xevent->message == msh_mousewheel_msg)
     {
       GDK_NOTE (EVENTS, g_print ("MSH_MOUSEWHEEL: %#x %d\n",
-				 xevent->hwnd, xevent->wParam));
+				 (guint) xevent->hwnd, xevent->wParam));
       
       event->scroll.type = GDK_SCROLL;
 
@@ -3588,7 +3588,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_INPUTLANGCHANGE:
       GDK_NOTE (EVENTS,
 		g_print ("WM_INPUTLANGCHANGE: %#x  charset %d locale %x\n",
-			 xevent->hwnd, xevent->wParam, xevent->lParam));
+			 (guint) xevent->hwnd, xevent->wParam, xevent->lParam));
       GDK_WINDOW_WIN32DATA (window)->input_locale = (HKL) xevent->lParam;
       TranslateCharsetInfo ((DWORD FAR *) xevent->wParam,
 			    &GDK_WINDOW_WIN32DATA (window)->charset_info,
@@ -3600,7 +3600,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS,
 		g_print ("WM_SYSKEY%s: %#x  %s %#x %s\n",
 			 (xevent->message == WM_SYSKEYUP ? "UP" : "DOWN"),
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -3628,7 +3628,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS, 
 		g_print ("WM_KEY%s: %#x  %s %#x %s\n",
 			 (xevent->message == WM_KEYUP ? "UP" : "DOWN"),
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 (GetKeyNameText (xevent->lParam, buf,
 					  sizeof (buf)) > 0 ?
 			  buf : ""),
@@ -3908,7 +3908,7 @@ gdk_event_translate (GdkEvent *event,
       if (!use_IME_COMPOSITION)
 	break;
       GDK_NOTE (EVENTS, g_print ("WM_IME_COMPOSITION: %#x  %#x\n",
-				 xevent->hwnd, xevent->lParam));
+				 (guint) xevent->hwnd, xevent->lParam));
       if (xevent->lParam & GCS_RESULTSTR)
 	goto wm_char;
       break;
@@ -3916,7 +3916,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_IME_CHAR:
       GDK_NOTE (EVENTS,
 		g_print ("WM_IME_CHAR: %#x  bytes: %#.04x\n",
-			 xevent->hwnd, xevent->wParam));
+			 (guint) xevent->hwnd, xevent->wParam));
       goto wm_char;
       
     case WM_CHAR:
@@ -3924,7 +3924,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS, 
 		g_print ("WM_%sCHAR: %#x  %#x %#s %s\n",
 			 (xevent->message == WM_CHAR ? "" : "SYS"),
-			 xevent->hwnd, xevent->wParam,
+			 (guint) xevent->hwnd, xevent->wParam,
 			 decode_key_lparam (xevent->lParam),
 			 (ignore_WM_CHAR ? "ignored" : "")));
 
@@ -3994,7 +3994,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS, 
 		g_print ("WM_%cBUTTONDOWN: %#x  (%d,%d)\n",
 			 " LMR"[button],
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       window = find_window_for_pointer_event(window, xevent);
@@ -4065,7 +4065,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS, 
 		g_print ("WM_%cBUTTONUP: %#x  (%d,%d)\n",
 			 " LMR"[button],
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       window = find_window_for_pointer_event(window, xevent);
@@ -4116,7 +4116,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
 		g_print ("WM_MOUSEMOVE: %#x  %#x (%d,%d)\n",
-			 xevent->hwnd, xevent->wParam,
+			 (guint) xevent->hwnd, xevent->wParam,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       window = find_window_for_pointer_event(window, xevent);
@@ -4178,7 +4178,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_NCMOUSEMOVE:
       GDK_NOTE (EVENTS,
 		g_print ("WM_NCMOUSEMOVE: %#x  x,y: %d %d\n",
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (p_TrackMouseEvent != NULL)
@@ -4196,7 +4196,7 @@ gdk_event_translate (GdkEvent *event,
      */
     case WM_ACTIVATE:
       GDK_NOTE (EVENTS, g_print ("WM_ACTIVATE: %#x %d\n",
-				 xevent->hwnd, xevent->wParam));
+				 (guint) xevent->hwnd, xevent->wParam));
       /* If being activated, just ignore it, let other messages
        * generate the enter event when pointer is really in some of
        * our window.
@@ -4214,7 +4214,7 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_CAPTURECHANGED:
       GDK_NOTE (EVENTS, g_print ("WM_CAPTURECHANGED: %#x %#x\n",
-				 xevent->hwnd, xevent->lParam));
+				 (guint) xevent->hwnd, xevent->lParam));
       if (p_grab_window != NULL)
 	{
 	  /* We aren't calling gdk_pointer_ungrab() ourselves. */
@@ -4240,7 +4240,7 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_MOUSEWHEEL:
       GDK_NOTE (EVENTS, g_print ("WM_MOUSEWHEEL: %#x %d\n",
-				 xevent->hwnd, HIWORD (xevent->wParam)));
+				 (guint) xevent->hwnd, HIWORD (xevent->wParam)));
 
       event->scroll.type = GDK_SCROLL;
       
@@ -4299,7 +4299,8 @@ gdk_event_translate (GdkEvent *event,
 
 #ifdef USE_TRACKMOUSEEVENT
     case WM_MOUSELEAVE:
-      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %#x\n", xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_MOUSELEAVE: %#x\n",
+				 (guint) xevent->hwnd));
 
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_LEAVE_NOTIFY_MASK))
 	break;
@@ -4340,7 +4341,7 @@ gdk_event_translate (GdkEvent *event,
       GDK_NOTE (EVENTS, g_print ("WM_%sFOCUS: %#x\n",
 				 (xevent->message == WM_SETFOCUS ?
 				  "SET" : "KILL"),
-				 xevent->hwnd));
+				 (guint) xevent->hwnd));
       
       if (xevent->message == WM_SETFOCUS)
 	curFocusWnd = window;
@@ -4361,7 +4362,7 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_ERASEBKGND:
       GDK_NOTE (EVENTS, g_print ("WM_ERASEBKGND: %#x  dc %#x\n",
-				 xevent->hwnd, xevent->wParam));
+				 (guint) xevent->hwnd, xevent->wParam));
       
       if (GDK_DRAWABLE_DESTROYED (window))
 	break;
@@ -4376,7 +4377,7 @@ gdk_event_translate (GdkEvent *event,
 
       GDK_NOTE (EVENTS,
 		g_print ("WM_PAINT: %#x  %dx%d@+%d+%d %s dc %#x\n",
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 paintstruct.rcPaint.right - paintstruct.rcPaint.left,
 			 paintstruct.rcPaint.bottom - paintstruct.rcPaint.top,
 			 paintstruct.rcPaint.left, paintstruct.rcPaint.top,
@@ -4414,7 +4415,7 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_SETCURSOR:
       GDK_NOTE (EVENTS, g_print ("WM_SETCURSOR: %#x %#x %#x\n",
-				 xevent->hwnd,
+				 (guint) xevent->hwnd,
 				 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (LOWORD (xevent->lParam) != HTCLIENT)
@@ -4432,7 +4433,7 @@ gdk_event_translate (GdkEvent *event,
 
       if (xcursor != NULL)
 	{
-	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n", xcursor));
+	  GDK_NOTE (EVENTS, g_print ("...SetCursor(%#x)\n", (guint) xcursor));
 	  SetCursor (xcursor);
 	  *ret_val_flagp = TRUE;
 	  *ret_valp = TRUE;
@@ -4441,7 +4442,7 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_SHOWWINDOW:
       GDK_NOTE (EVENTS, g_print ("WM_SHOWWINDOW: %#x  %d\n",
-				 xevent->hwnd,
+				 (guint) xevent->hwnd,
 				 xevent->wParam));
 
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_STRUCTURE_MASK))
@@ -4464,7 +4465,7 @@ gdk_event_translate (GdkEvent *event,
     case WM_SIZE:
       GDK_NOTE (EVENTS,
 		g_print ("WM_SIZE: %#x  %s %dx%d\n",
-			 xevent->hwnd,
+			 (guint) xevent->hwnd,
 			 (xevent->wParam == SIZE_MAXHIDE ? "MAXHIDE" :
 			  (xevent->wParam == SIZE_MAXIMIZED ? "MAXIMIZED" :
 			   (xevent->wParam == SIZE_MAXSHOW ? "MAXSHOW" :
@@ -4523,7 +4524,8 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_GETMINMAXINFO:
-      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %#x\n", xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_GETMINMAXINFO: %#x\n",
+				 (guint) xevent->hwnd));
 
       lpmmi = (MINMAXINFO*) xevent->lParam;
       if (GDK_WINDOW_WIN32DATA (window)->hint_flags & GDK_HINT_MIN_SIZE)
@@ -4543,7 +4545,7 @@ gdk_event_translate (GdkEvent *event,
 
     case WM_MOVE:
       GDK_NOTE (EVENTS, g_print ("WM_MOVE: %#x  (%d,%d)\n",
-				 xevent->hwnd,
+				 (guint) xevent->hwnd,
 				 LOWORD (xevent->lParam), HIWORD (xevent->lParam)));
 
       if (!(GDK_WINDOW_WIN32DATA (window)->event_mask & GDK_STRUCTURE_MASK))
@@ -4570,7 +4572,7 @@ gdk_event_translate (GdkEvent *event,
       break;
 
     case WM_CLOSE:
-      GDK_NOTE (EVENTS, g_print ("WM_CLOSE: %#x\n", xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_CLOSE: %#x\n", (guint) xevent->hwnd));
 
       event->any.type = GDK_DELETE;
       event->any.window = window;
@@ -4596,7 +4598,7 @@ gdk_event_translate (GdkEvent *event,
 	g_print ("WM_%s: %#x %#x (%s)\n",
 		 (xevent->message == WM_RENDERFORMAT ? "RENDERFORMAT" :
 		  "RENDERALLFORMATS"),
-		 xevent->hwnd,
+		 (guint) xevent->hwnd,
 		 xevent->wParam,
 		 (xevent->wParam == CF_TEXT ? "CF_TEXT" :
 		  (xevent->wParam == CF_DIB ? "CF_DIB" :
@@ -4638,7 +4640,7 @@ gdk_event_translate (GdkEvent *event,
 #endif /* No delayed rendering */
 
     case WM_DESTROY:
-      GDK_NOTE (EVENTS, g_print ("WM_DESTROY: %#x\n", xevent->hwnd));
+      GDK_NOTE (EVENTS, g_print ("WM_DESTROY: %#x\n", (guint) xevent->hwnd));
 
       event->any.type = GDK_DESTROY;
       event->any.window = window;
@@ -4660,26 +4662,26 @@ gdk_event_translate (GdkEvent *event,
 	gdk_window_destroy_notify (window);
       break;
 
-#ifdef HAVE_WINTAB
+#ifdef HAVE_WINTAB_H
       /* Handle WINTAB events here, as we know that gdkinput.c will
        * use the fixed WT_DEFBASE as lcMsgBase, and we thus can use the
        * constants as case labels.
        */
     case WT_PACKET:
       GDK_NOTE (EVENTS, g_print ("WT_PACKET: %#x %d %#x\n",
-				 xevent->hwnd,
+				 (guint) xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
       goto wintab;
       
     case WT_CSRCHANGE:
       GDK_NOTE (EVENTS, g_print ("WT_CSRCHANGE: %#x %d %#x\n",
-				 xevent->hwnd,
+				 (guint) xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
       goto wintab;
       
     case WT_PROXIMITY:
       GDK_NOTE (EVENTS, g_print ("WT_PROXIMITY: %#x %#x %d %d\n",
-				 xevent->hwnd, xevent->wParam,
+				 (guint) xevent->hwnd, xevent->wParam,
 				 LOWORD (xevent->lParam),
 				 HIWORD (xevent->lParam)));
       /* Fall through */
@@ -4692,7 +4694,7 @@ gdk_event_translate (GdkEvent *event,
     default:
       GDK_NOTE (EVENTS, g_print ("%s: %#x %#x %#x\n",
 				 gdk_win32_message_name (xevent->message),
-				 xevent->hwnd,
+				 (guint) xevent->hwnd,
 				 xevent->wParam, xevent->lParam));
     }
 
@@ -4734,7 +4736,8 @@ gdk_events_queue (void)
 	 && PeekMessage (&msg, NULL, 0, 0, PM_REMOVE))
     {
       GDK_NOTE (EVENTS, g_print ("PeekMessage: %#x %#x\n",
-				 msg.hwnd, gdk_win32_message_name (msg.message)));
+				 (guint) msg.hwnd,
+				 gdk_win32_message_name (msg.message)));
 
       if (paimmmpo == NULL
 	  || (paimmmpo->lpVtbl->OnTranslateMessage) (paimmmpo, &msg) != S_OK)
