@@ -205,6 +205,76 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   gtk_preview_dither_init (klass);
 }
 
+void
+gtk_preview_reset (void)
+{
+  GtkPreviewInfo *info;
+
+  if (!preview_class || !preview_info)
+    return;
+  
+  info = &preview_class->info;
+
+  gtk_preview_uninit();
+
+  if (info->color_pixels)
+    {
+      gdk_colors_free (info->cmap,
+		       info->color_pixels,
+		       info->nred_shades *
+		         info->ngreen_shades *
+		         info->nblue_shades, 
+		       0);
+
+      gdk_colors_free (info->cmap,
+		       info->gray_pixels,
+		       info->ngray_shades, 0);
+      
+      g_free (info->color_pixels);
+      g_free (info->gray_pixels);
+    }
+
+  if (info->reserved_pixels)
+    {
+      gdk_colors_free (info->cmap,
+		       info->reserved_pixels,
+		       info->nreserved, 0);
+      g_free (info->reserved_pixels);
+    }
+
+  if (info->cmap && info->cmap_alloced)
+    gdk_colormap_unref (info->cmap);
+
+  if (info->lookup_red)
+    {
+      g_free (info->lookup_red);
+      g_free (info->lookup_green);
+      g_free (info->lookup_blue);
+    }
+
+  if (info->dither_matrix)
+    {
+      int i, j;
+
+      for (i= 0 ; i < 8 ; i++)
+	{
+	  for (j = 0; j < 8 ; j++)
+	    g_free (info->dither_matrix[i][j]);
+	  g_free (info->dither_matrix[i]);
+	}
+      g_free (info->dither_matrix);
+      g_free (info->dither_red);
+      g_free (info->dither_green);
+      g_free (info->dither_blue);
+    }
+
+  preview_class->info = *preview_info;
+
+  gtk_preview_get_visuals (preview_class);
+  gtk_preview_get_cmaps (preview_class);
+  gtk_preview_dither_init (preview_class);
+}
+
 static void
 gtk_preview_init (GtkPreview *preview)
 {
@@ -221,6 +291,8 @@ gtk_preview_uninit ()
 {
   GtkPreviewProp *prop;
   GdkAtom property;
+
+  /* FIXME: need to grab the server here to prevent a race condition */
 
   if (preview_class && !install_cmap && preview_class->info.visual &&
       (preview_class->info.visual->type != GDK_VISUAL_TRUE_COLOR) &&
@@ -557,8 +629,6 @@ gtk_preview_set_expand (GtkPreview *preview,
 void
 gtk_preview_set_gamma (double _gamma)
 {
-  g_return_if_fail (preview_class == NULL);
-
   if (!preview_info)
     {
       preview_info = g_new0 (GtkPreviewInfo, 1);
@@ -577,8 +647,6 @@ gtk_preview_set_color_cube (guint nred_shades,
 			    guint nblue_shades,
 			    guint ngray_shades)
 {
-  g_return_if_fail (preview_class == NULL);
-
   if (!preview_info)
     {
       preview_info = g_new0 (GtkPreviewInfo, 1);
@@ -594,8 +662,6 @@ gtk_preview_set_color_cube (guint nred_shades,
 void
 gtk_preview_set_install_cmap (gint _install_cmap)
 {
-  /* g_return_if_fail (preview_class == NULL); */
-
   install_cmap = _install_cmap;
 }
 
@@ -891,8 +957,10 @@ gtk_preview_get_cmaps (GtkPreviewClass *klass)
       if (klass->info.visual == gdk_visual_get_system ())
 	klass->info.cmap = gdk_colormap_get_system ();
       else
-	klass->info.cmap = gdk_colormap_new (klass->info.visual, FALSE);
-      klass->info.cmap_alloced = TRUE;
+	{
+	  klass->info.cmap = gdk_colormap_new (klass->info.visual, FALSE);
+	  klass->info.cmap_alloced = TRUE;
+	}
 
       klass->info.nred_shades = 0;
       klass->info.ngreen_shades = 0;
@@ -1245,6 +1313,7 @@ gtk_create_8_bit (GtkPreviewClass *klass)
 	  pixels[i] = color.pixel;
         }
 
+
   pixels = klass->info.gray_pixels;
 
   for (i = 0; i < (int) klass->info.ngray_shades; i++)
@@ -1430,6 +1499,8 @@ gtk_get_preview_prop (guint *nred,
 {
   GtkPreviewProp *prop;
   GdkAtom property;
+
+  /* FIXME: need to grab the server here to prevent a race condition */
 
   property = gdk_atom_intern ("GTK_PREVIEW_INFO", FALSE);
 

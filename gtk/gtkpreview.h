@@ -135,6 +135,13 @@ GdkVisual*      gtk_preview_get_visual         (void);
 GdkColormap*    gtk_preview_get_cmap           (void);
 GtkPreviewInfo* gtk_preview_get_info           (void);
 
+/* This function reinitializes the preview colormap and visual from
+ * the current gamma/color_cube/install_cmap settings. It must only
+ * be called if there are no previews or users's of the preview
+ * colormap in existence.
+ */
+void            gtk_preview_reset              (void);
+
 
 #ifdef __cplusplus
 }
