@@ -1,5 +1,10 @@
 2004-03-14  Morten Welinder  <terra@gnome.org>
 
+	* gtk/gtkfilesystemunix.c (get_parent_dir): Don't turn "/" into
+	"".
+	(gtk_file_system_unix_get_folder): Use the same value for lookup
+	as for insertion.  Make sure we have a directory.
+
 	* gtk/gtkfilechooserdefault.c (error_dialog): Don't crash on NULL
 	path; don't crash on NULL error.
 

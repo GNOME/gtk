@@ -345,6 +345,7 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   GtkFileSystemUnix *system_unix;
   GtkFileFolderUnix *folder_unix;
   const char *filename;
+  char *filename_copy;
 
   system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
 
@@ -352,18 +353,35 @@ gtk_file_system_unix_get_folder (GtkFileSystem     *file_system,
   g_return_val_if_fail (filename != NULL, NULL);
   g_return_val_if_fail (g_path_is_absolute (filename), NULL);
 
-  folder_unix = g_hash_table_lookup (system_unix->folder_hash, filename);
+  filename_copy = remove_trailing_slash (filename);
+  folder_unix = g_hash_table_lookup (system_unix->folder_hash, filename_copy);
 
   if (folder_unix)
     {
+      g_free (filename_copy);
       folder_unix->types |= types;
       return g_object_ref (folder_unix);
     }
   else
     {
+      if (!g_file_test (filename, G_FILE_TEST_IS_DIR))
+	{
+	  int save_errno = errno;
+	  gchar *filename_utf8 = g_filename_to_utf8 (filename, -1, NULL, NULL, NULL);
+	  g_set_error (error,
+		       GTK_FILE_SYSTEM_ERROR,
+		       GTK_FILE_SYSTEM_ERROR_NONEXISTENT,
+		       _("error getting information for '%s': %s"),
+		       filename_utf8 ? filename_utf8 : "???",
+		       g_strerror (save_errno));
+	  g_free (filename_utf8);
+	  g_free (filename_copy);
+	  return NULL;
+	}
+
       folder_unix = g_object_new (GTK_TYPE_FILE_FOLDER_UNIX, NULL);
       folder_unix->system_unix = system_unix;
-      folder_unix->filename = remove_trailing_slash (filename);
+      folder_unix->filename = filename_copy;
       folder_unix->types = types;
 
       g_hash_table_insert (system_unix->folder_hash, folder_unix->filename, folder_unix);
@@ -615,7 +633,7 @@ get_parent_dir (const char *filename)
   len = strlen (filename);
   
   /* Ignore trailing slashes */
-  if (filename[len - 1] == '/')
+  if (len > 1 && filename[len - 1] == '/')
     {
       char *tmp, *parent;
       
