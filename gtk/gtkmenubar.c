@@ -257,10 +257,10 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	}
 
       requisition->width += (GTK_CONTAINER (menu_bar)->border_width +
-			     widget->style->klass->xthickness +
+			     widget->style->xthickness +
 			     BORDER_SPACING) * 2;
       requisition->height += (GTK_CONTAINER (menu_bar)->border_width +
-			      widget->style->klass->ythickness +
+			      widget->style->ythickness +
 			      BORDER_SPACING) * 2;
 
       if (nchildren > 0)
@@ -296,12 +296,12 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
   if (menu_shell->children)
     {
       child_allocation.x = (GTK_CONTAINER (menu_bar)->border_width +
-			    widget->style->klass->xthickness +
+			    widget->style->xthickness +
 			    BORDER_SPACING);
       offset = child_allocation.x; 	/* Window edge to menubar start */
 
       child_allocation.y = (GTK_CONTAINER (menu_bar)->border_width +
-			    widget->style->klass->ythickness +
+			    widget->style->ythickness +
 			    BORDER_SPACING);
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
 

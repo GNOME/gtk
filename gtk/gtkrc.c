@@ -64,7 +64,6 @@
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
 typedef struct _GtkRcFile   GtkRcFile;
-typedef struct _GtkRcStylePrivate  GtkRcStylePrivate;
 
 struct _GtkRcSet
 {
@@ -80,68 +79,63 @@ struct _GtkRcFile
   gboolean reload;
 };
 
-struct _GtkRcStylePrivate
-{
-  GtkRcStyle style;
-
-  guint ref_count;
-  /* list of RC style lists including this RC style */
-  GSList *rc_style_lists;
-};
-
-static guint	   gtk_rc_style_hash		   (const char   *name);
-static gint	   gtk_rc_style_compare		   (const char   *a,
-						    const char   *b);
-static guint	   gtk_rc_styles_hash		   (const GSList *rc_styles);
-static gint	   gtk_rc_styles_compare	   (const GSList *a,
-						    const GSList *b);
-static GtkRcStyle* gtk_rc_style_find		   (const char   *name);
-static GSList *    gtk_rc_styles_match             (GSList       *rc_styles,
-						    GSList       *sets,
-						    guint         path_length,
-						    gchar        *path,
-						    gchar        *path_reversed);
-static GtkStyle *  gtk_rc_style_to_style           (GtkRcStyle   *rc_style);
-static GtkStyle*   gtk_rc_style_init		   (GSList       *rc_styles);
-static void        gtk_rc_parse_file               (const gchar  *filename,
-						    gboolean      reload);
-
-static void	   gtk_rc_parse_any		   (const gchar  *input_name,
-						    gint	  input_fd,
-						    const gchar  *input_string);
-static guint	   gtk_rc_parse_statement	   (GScanner	 *scanner);
-static guint	   gtk_rc_parse_style		   (GScanner	 *scanner);
-static guint	   gtk_rc_parse_base		   (GScanner	 *scanner,
-						    GtkRcStyle	 *style);
-static guint	   gtk_rc_parse_bg		   (GScanner	 *scanner,
-						    GtkRcStyle	 *style);
-static guint	   gtk_rc_parse_fg		   (GScanner	 *scanner,
-						    GtkRcStyle	 *style);
-static guint	   gtk_rc_parse_text		   (GScanner	 *scanner,
-						    GtkRcStyle	 *style);
-static guint	   gtk_rc_parse_bg_pixmap	   (GScanner	 *scanner,
-						    GtkRcStyle	 *rc_style);
-static guint	   gtk_rc_parse_font		   (GScanner	 *scanner,
-						    GtkRcStyle	 *rc_style);
-static guint	   gtk_rc_parse_fontset		   (GScanner	 *scanner,
-						    GtkRcStyle	 *rc_style);
-static guint	   gtk_rc_parse_font_name	   (GScanner	 *scanner,
-						    GtkRcStyle	 *rc_style);
-static guint	   gtk_rc_parse_engine		   (GScanner	 *scanner,
-						    GtkRcStyle	 *rc_style);
-static guint	   gtk_rc_parse_pixmap_path	   (GScanner	 *scanner);
-static void	   gtk_rc_parse_pixmap_path_string (gchar *pix_path);
-static guint	   gtk_rc_parse_module_path	   (GScanner	 *scanner);
-static void	   gtk_rc_parse_module_path_string (gchar *mod_path);
-static guint	   gtk_rc_parse_path_pattern	   (GScanner     *scanner);
-static void        gtk_rc_clear_hash_node          (gpointer   key, 
-						    gpointer   data, 
-						    gpointer   user_data);
+static guint       gtk_rc_style_hash                 (const char      *name);
+static gint        gtk_rc_style_compare              (const char      *a,
+                                                      const char      *b);
+static guint       gtk_rc_styles_hash                (const GSList    *rc_styles);
+static gint        gtk_rc_styles_compare             (const GSList    *a,
+                                                      const GSList    *b);
+static GtkRcStyle* gtk_rc_style_find                 (const char      *name);
+static GSList *    gtk_rc_styles_match               (GSList          *rc_styles,
+                                                      GSList          *sets,
+                                                      guint            path_length,
+                                                      gchar           *path,
+                                                      gchar           *path_reversed);
+static GtkStyle *  gtk_rc_style_to_style             (GtkRcStyle      *rc_style);
+static GtkStyle*   gtk_rc_init_style                 (GSList          *rc_styles);
+static void        gtk_rc_parse_file                 (const gchar     *filename,
+                                                      gboolean         reload);
+static void        gtk_rc_parse_any                  (const gchar     *input_name,
+                                                      gint             input_fd,
+                                                      const gchar     *input_string);
+static guint       gtk_rc_parse_statement            (GScanner        *scanner);
+static guint       gtk_rc_parse_style                (GScanner        *scanner);
+static guint       gtk_rc_parse_base                 (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_bg                   (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_fg                   (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_text                 (GScanner        *scanner,
+                                                      GtkRcStyle      *style);
+static guint       gtk_rc_parse_bg_pixmap            (GScanner        *scanner,
+                                                      GtkRcStyle      *rc_style);
+static guint       gtk_rc_parse_font                 (GScanner        *scanner,
+                                                      GtkRcStyle      *rc_style);
+static guint       gtk_rc_parse_fontset              (GScanner        *scanner,
+                                                      GtkRcStyle      *rc_style);
+static guint       gtk_rc_parse_font_name            (GScanner        *scanner,
+                                                      GtkRcStyle      *rc_style);
+static guint       gtk_rc_parse_engine               (GScanner        *scanner,
+                                                      GtkRcStyle      *rc_style);
+static guint       gtk_rc_parse_pixmap_path          (GScanner        *scanner);
+static void        gtk_rc_parse_pixmap_path_string   (gchar           *pix_path);
+static guint       gtk_rc_parse_module_path          (GScanner        *scanner);
+static void        gtk_rc_parse_module_path_string   (gchar           *mod_path);
+static guint       gtk_rc_parse_path_pattern         (GScanner        *scanner);
+static void        gtk_rc_clear_hash_node            (gpointer         key,
+                                                      gpointer         data,
+                                                      gpointer         user_data);
 static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
 static void        gtk_rc_add_initial_default_files  (void);
 
+static void        gtk_rc_style_init                 (GtkRcStyle      *style);
+static void        gtk_rc_style_class_init           (GtkRcStyleClass *klass);
+static void        gtk_rc_style_finalize             (GObject         *object);
+
+static gpointer parent_class = NULL;
 
 static const GScannerConfig	gtk_rc_scanner_config =
 {
@@ -726,23 +720,48 @@ gtk_rc_parse (const gchar *filename)
 
 /* Handling of RC styles */
 
-GtkRcStyle *
-gtk_rc_style_new              (void)
+GType
+gtk_rc_style_get_type (void)
 {
-  GtkRcStylePrivate *new_style;
+  static GType object_type = 0;
 
-  new_style = g_new0 (GtkRcStylePrivate, 1);
-  new_style->ref_count = 1;
-
-  return (GtkRcStyle *)new_style;
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GtkRcStyleClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_rc_style_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkRcStyle),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_rc_style_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GtkRcStyle",
+                                            &object_info);
+    }
+  
+  return object_type;
 }
 
-void      
-gtk_rc_style_ref (GtkRcStyle  *rc_style)
+static void
+gtk_rc_style_init (GtkRcStyle *style)
 {
-  g_return_if_fail (rc_style != NULL);
+  
+}
 
-  ((GtkRcStylePrivate *)rc_style)->ref_count++;
+static void
+gtk_rc_style_class_init (GtkRcStyleClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gtk_rc_style_finalize;
 }
 
 /* Like g_slist_remove, but remove all copies of data */
@@ -783,72 +802,91 @@ gtk_rc_slist_remove_all (GSList   *list,
   return list;
 }
 
+static void
+gtk_rc_style_finalize (GObject *object)
+{
+  gint i;
+  GSList *tmp_list1, *tmp_list2;
+  GtkRcStyle *rc_style;
+
+  rc_style = GTK_RC_STYLE (object);
+  
+  if (rc_style->engine)
+    {
+      rc_style->engine->destroy_rc_style (rc_style);
+      gtk_theme_engine_unref (rc_style->engine);
+    }
+
+  if (rc_style->name)
+    g_free (rc_style->name);
+  if (rc_style->font_desc)
+    pango_font_description_free (rc_style->font_desc);
+      
+  for (i=0 ; i<5 ; i++)
+    if (rc_style->bg_pixmap_name[i])
+      g_free (rc_style->bg_pixmap_name[i]);
+  
+  /* Now remove all references to this rc_style from
+   * realized_style_ht
+   */
+  tmp_list1 = rc_style->rc_style_lists;
+  while (tmp_list1)
+    {
+      GSList *rc_styles = tmp_list1->data;
+      GtkStyle *style = g_hash_table_lookup (realized_style_ht, rc_styles);
+      gtk_style_unref (style);
+
+      /* Remove the list of styles from the other rc_styles
+       * in the list
+       */
+      tmp_list2 = rc_styles;
+      while (tmp_list2)
+        {
+          GtkRcStyle *other_style = tmp_list2->data;
+
+          if (other_style != rc_style)
+            other_style->rc_style_lists =
+              gtk_rc_slist_remove_all (other_style->rc_style_lists, rc_styles);
+		  
+          tmp_list2 = tmp_list2->next;
+        }
+
+      /* And from the hash table itself
+       */
+      g_hash_table_remove (realized_style_ht, rc_styles);
+      g_slist_free (rc_styles);
+
+      tmp_list1 = tmp_list1->next;
+    }
+  g_slist_free (rc_style->rc_style_lists);
+
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+GtkRcStyle *
+gtk_rc_style_new              (void)
+{
+  GtkRcStyle *style;
+  
+  style = GTK_RC_STYLE (g_type_create_instance (gtk_rc_style_get_type ()));
+  
+  return style;
+}
+
+void      
+gtk_rc_style_ref (GtkRcStyle  *rc_style)
+{
+  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
+
+  g_object_ref (G_OBJECT (rc_style));
+}
+
 void      
 gtk_rc_style_unref (GtkRcStyle  *rc_style)
 {
-  GtkRcStylePrivate *private = (GtkRcStylePrivate *)rc_style;
-  gint i;
+  g_return_if_fail (GTK_IS_RC_STYLE (rc_style));
 
-  g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (private->ref_count > 0);
-
-  private->ref_count--;
-
-  if (private->ref_count == 0)
-    {
-      GSList *tmp_list1, *tmp_list2;
-	
-      if (rc_style->engine)
-	{
-	  rc_style->engine->destroy_rc_style (rc_style);
-	  gtk_theme_engine_unref (rc_style->engine);
-	}
-
-      if (rc_style->name)
-	g_free (rc_style->name);
-      if (rc_style->font_desc)
-	pango_font_description_free (rc_style->font_desc);
-      
-      for (i=0 ; i<5 ; i++)
-	if (rc_style->bg_pixmap_name[i])
-	  g_free (rc_style->bg_pixmap_name[i]);
-      
-      /* Now remove all references to this rc_style from
-       * realized_style_ht
-       */
-      tmp_list1 = private->rc_style_lists;
-      while (tmp_list1)
-	{
-	  GSList *rc_styles = tmp_list1->data;
-	  GtkStyle *style = g_hash_table_lookup (realized_style_ht, rc_styles);
-	  gtk_style_unref (style);
-
-	  /* Remove the list of styles from the other rc_styles
-	   * in the list
-	   */
-	  tmp_list2 = rc_styles;
-	  while (tmp_list2)
-	    {
-	      GtkRcStylePrivate *other_style = tmp_list2->data;
-
-	      if (other_style != private)
-		other_style->rc_style_lists =
-		  gtk_rc_slist_remove_all (other_style->rc_style_lists, rc_styles);
-		  
-	      tmp_list2 = tmp_list2->next;
-	    }
-
-	  /* And from the hash table itself
-	   */
-	  g_hash_table_remove (realized_style_ht, rc_styles);
-	  g_slist_free (rc_styles);
-
-	  tmp_list1 = tmp_list1->next;
-	}
-      g_slist_free (private->rc_style_lists);
-
-      g_free (private);
-    }
+  g_object_unref (G_OBJECT (rc_style));
 }
 
 static void
@@ -1032,7 +1070,7 @@ gtk_rc_get_style (GtkWidget *widget)
     }
   
   if (rc_styles)
-    return gtk_rc_style_init (rc_styles);
+    return gtk_rc_init_style (rc_styles);
 
   return NULL;
 }
@@ -1288,7 +1326,7 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
 
 /* Reuses or frees rc_styles */
 static GtkStyle *
-gtk_rc_style_init (GSList *rc_styles)
+gtk_rc_init_style (GSList *rc_styles)
 {
   gint i;
 
@@ -1311,7 +1349,6 @@ gtk_rc_style_init (GSList *rc_styles)
       while (tmp_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
-	  GtkRcStylePrivate *rc_style_private;
 
 	  for (i=0; i<5; i++)
 	    {
@@ -1359,9 +1396,8 @@ gtk_rc_style_init (GSList *rc_styles)
 
 	  /* Point from each rc_style to the list of styles */
 
-	  rc_style_private = (GtkRcStylePrivate *)rc_style;
-	  if (!g_slist_find (rc_style_private->rc_style_lists, rc_styles))
-	    rc_style_private->rc_style_lists = g_slist_prepend (rc_style_private->rc_style_lists, rc_styles);
+	  if (!g_slist_find (rc_style->rc_style_lists, rc_styles))
+	    rc_style->rc_style_lists = g_slist_prepend (rc_style->rc_style_lists, rc_styles);
 
 	  tmp_styles = tmp_styles->next;
 	}

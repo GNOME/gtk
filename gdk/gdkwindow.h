@@ -28,6 +28,28 @@ typedef enum
   GDK_INPUT_ONLY
 } GdkWindowClass;
 
+/* Types of windows.
+ *   Root: There is only 1 root window and it is initialized
+ *	   at startup. Creating a window of type GDK_WINDOW_ROOT
+ *	   is an error.
+ *   Toplevel: Windows which interact with the window manager.
+ *   Child: Windows which are children of some other type of window.
+ *	    (Any other type of window). Most windows are child windows.
+ *   Dialog: A special kind of toplevel window which interacts with
+ *	     the window manager slightly differently than a regular
+ *	     toplevel window. Dialog windows should be used for any
+ *	     transient window.
+ *   Foreign: A window that actually belongs to another application
+ */
+typedef enum
+{
+  GDK_WINDOW_ROOT,
+  GDK_WINDOW_TOPLEVEL,
+  GDK_WINDOW_CHILD,
+  GDK_WINDOW_DIALOG,
+  GDK_WINDOW_TEMP,
+  GDK_WINDOW_FOREIGN
+} GdkWindowType;
 
 /* Window attribute mask values.
  *   GDK_WA_TITLE: The "title" field is valid.
@@ -97,7 +119,7 @@ struct _GdkWindowAttr
   GdkWindowClass wclass;
   GdkVisual *visual;
   GdkColormap *colormap;
-  GdkDrawableType window_type;
+  GdkWindowType window_type;
   GdkCursor *cursor;
   gchar *wmclass_name;
   gchar *wmclass_class;
@@ -118,61 +140,114 @@ struct _GdkGeometry {
   /* GdkGravity gravity; */
 };
 
+typedef struct _GdkWindowObject GdkWindowObject;
+typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
+
+#define GDK_TYPE_WINDOW              (gdk_window_object_get_type ())
+#define GDK_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW, GdkWindow))
+#define GDK_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+#define GDK_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW))
+#define GDK_IS_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW))
+#define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+#define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
+
+struct _GdkWindowObject
+{
+  GdkDrawable parent_instance;
+
+  gpointer user_data;
+
+  GdkDrawable *impl; /* window-system-specific delegate object */  
+  
+  GdkWindowObject *parent;
+
+  gint x;
+  gint y;
+  
+  gint extension_events;
+
+  GList *filters;
+  GList *children;
+
+  GdkColor bg_color;
+  GdkPixmap *bg_pixmap;
+  
+  GSList *paint_stack;
+  
+  GdkRegion *update_area;
+  guint update_freeze_count;
+  
+  guint8 window_type;
+  guint8 depth;
+  guint8 resize_count;
+  guint mapped : 1;
+  guint guffaw_gravity : 1;
+  guint input_only : 1;
+  
+  guint destroyed : 2;
+};
+
+struct _GdkWindowObjectClass
+{
+  GdkDrawableClass parent_class;
+
+
+};
+
 /* Windows
  */
-GdkWindow* gdk_window_new                   (GdkWindow     *parent,
-					     GdkWindowAttr *attributes,
-					     gint           attributes_mask);
-void       gdk_window_destroy               (GdkWindow     *window);
-
-GdkWindow* gdk_window_at_pointer            (gint          *win_x,
-					     gint          *win_y);
-void       gdk_window_show                  (GdkWindow     *window);
-void       gdk_window_hide                  (GdkWindow     *window);
-void       gdk_window_withdraw              (GdkWindow     *window);
-void       gdk_window_move                  (GdkWindow     *window,
-					     gint           x,
-					     gint           y);
-void       gdk_window_resize                (GdkWindow     *window,
-					     gint           width,
-					     gint           height);
-void       gdk_window_move_resize           (GdkWindow     *window,
-					     gint           x,
-					     gint           y,
-					     gint           width,
-					     gint           height);
-void       gdk_window_scroll                (GdkWindow     *window,
-					     gint           dx,
-					     gint           dy);
-void       gdk_window_reparent              (GdkWindow     *window,
-					     GdkWindow     *new_parent,
-					     gint           x,
-					     gint           y);
-void       gdk_window_clear                 (GdkWindow     *window);
-void       gdk_window_clear_area            (GdkWindow     *window,
-					     gint           x,
-					     gint           y,
-					     gint           width,
-					     gint           height);
-void       gdk_window_clear_area_e          (GdkWindow     *window,
-					     gint           x,
-					     gint           y,
-					     gint           width,
-					     gint           height);
-void       gdk_window_raise                 (GdkWindow     *window);
-void       gdk_window_lower                 (GdkWindow     *window);
-
-void       gdk_window_set_user_data         (GdkWindow     *window,
-					     gpointer       user_data);
-void       gdk_window_set_override_redirect (GdkWindow     *window,
-					     gboolean       override_redirect);
-
-void       gdk_window_add_filter            (GdkWindow     *window,
-					     GdkFilterFunc  function,
-					     gpointer       data);
-void       gdk_window_remove_filter         (GdkWindow     *window,
-					     GdkFilterFunc  function,
-					     gpointer       data);
+GType         gdk_window_object_get_type       (void);
+GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
+                                                GdkWindowAttr *attributes,
+                                                gint           attributes_mask);
+void          gdk_window_destroy               (GdkWindow     *window);
+GdkWindowType gdk_window_get_window_type       (GdkWindow     *window);
+GdkWindow*    gdk_window_at_pointer            (gint          *win_x,
+                                                gint          *win_y);
+void          gdk_window_show                  (GdkWindow     *window);
+void          gdk_window_hide                  (GdkWindow     *window);
+void          gdk_window_withdraw              (GdkWindow     *window);
+void          gdk_window_move                  (GdkWindow     *window,
+                                                gint           x,
+                                                gint           y);
+void          gdk_window_resize                (GdkWindow     *window,
+                                                gint           width,
+                                                gint           height);
+void          gdk_window_move_resize           (GdkWindow     *window,
+                                                gint           x,
+                                                gint           y,
+                                                gint           width,
+                                                gint           height);
+void          gdk_window_reparent              (GdkWindow     *window,
+                                                GdkWindow     *new_parent,
+                                                gint           x,
+                                                gint           y);
+void          gdk_window_clear                 (GdkWindow     *window);
+void          gdk_window_clear_area            (GdkWindow     *window,
+                                                gint           x,
+                                                gint           y,
+                                                gint           width,
+                                                gint           height);
+void          gdk_window_clear_area_e          (GdkWindow     *window,
+                                                gint           x,
+                                                gint           y,
+                                                gint           width,
+                                                gint           height);
+void          gdk_window_raise                 (GdkWindow     *window);
+void          gdk_window_lower                 (GdkWindow     *window);
+void          gdk_window_set_user_data         (GdkWindow     *window,
+                                                gpointer       user_data);
+void          gdk_window_set_override_redirect (GdkWindow     *window,
+                                                gboolean       override_redirect);
+void          gdk_window_add_filter            (GdkWindow     *window,
+                                                GdkFilterFunc  function,
+                                                gpointer       data);
+void          gdk_window_remove_filter         (GdkWindow     *window,
+                                                GdkFilterFunc  function,
+                                                gpointer       data);
+void          gdk_window_scroll                (GdkWindow *window,
+                                                gint       dx,
+                                                gint       dy);
 
 /* 
  * This allows for making shaped (partially transparent) windows
@@ -279,6 +354,7 @@ GdkWindow *   gdk_window_get_parent      (GdkWindow       *window);
 GdkWindow *   gdk_window_get_toplevel    (GdkWindow       *window);
 
 GList *	      gdk_window_get_children	 (GdkWindow	  *window);
+GList *       gdk_window_peek_children   (GdkWindow       *window);
 GdkEventMask  gdk_window_get_events	 (GdkWindow	  *window);
 void	      gdk_window_set_events	 (GdkWindow	  *window,
 					  GdkEventMask	   event_mask);

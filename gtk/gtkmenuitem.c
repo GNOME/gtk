@@ -348,10 +348,10 @@ gtk_menu_item_size_request (GtkWidget      *widget,
   menu_item = GTK_MENU_ITEM (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->klass->xthickness +
+			widget->style->xthickness +
 			BORDER_SPACING) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->klass->ythickness) * 2;
+			 widget->style->ythickness) * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -393,10 +393,10 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   if (bin->child)
     {
       child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-                            widget->style->klass->xthickness +
+                            widget->style->xthickness +
 			    BORDER_SPACING);
       child_allocation.y = (GTK_CONTAINER (widget)->border_width +
-			    widget->style->klass->ythickness);
+			    widget->style->ythickness);
       child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
       child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
       child_allocation.x += GTK_MENU_ITEM (widget)->toggle_size;

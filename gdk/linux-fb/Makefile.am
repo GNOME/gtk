@@ -19,6 +19,8 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-lm		\
 @STRIP_END@
 
+if USE_LINUX_FB
+
 noinst_LTLIBRARIES = libgdk-linux-fb.la
 noinst_PROGRAMS=#test-fb
 
@@ -59,3 +61,7 @@ libgdk_linux_fb_la_SOURCES =    	\
 	mispans.c		\
 	gdkpango-fb.c
 	mispans.c
+
+else
+noinst_LTLIBRARIES =
+endif

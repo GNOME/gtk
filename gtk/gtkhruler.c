@@ -92,8 +92,8 @@ gtk_hruler_init (GtkHRuler *hruler)
   GtkWidget *widget;
 
   widget = GTK_WIDGET (hruler);
-  widget->requisition.width = widget->style->klass->xthickness * 2 + 1;
-  widget->requisition.height = widget->style->klass->ythickness * 2 + RULER_HEIGHT;
+  widget->requisition.width = widget->style->xthickness * 2 + 1;
+  widget->requisition.height = widget->style->ythickness * 2 + RULER_HEIGHT;
 }
 
 
@@ -166,8 +166,8 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
   bg_gc = widget->style->bg_gc[GTK_STATE_NORMAL];
   font = widget->style->font;
 
-  xthickness = widget->style->klass->xthickness;
-  ythickness = widget->style->klass->ythickness;
+  xthickness = widget->style->xthickness;
+  ythickness = widget->style->ythickness;
 
   digit_height = ink_rect.height / PANGO_SCALE + 2;
   digit_offset = ink_rect.y;
@@ -269,7 +269,7 @@ gtk_hruler_draw_ticks (GtkRuler *ruler)
 	}
     }
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -293,8 +293,8 @@ gtk_hruler_draw_pos (GtkRuler *ruler)
       widget = GTK_WIDGET (ruler);
 
       gc = widget->style->fg_gc[GTK_STATE_NORMAL];
-      xthickness = widget->style->klass->xthickness;
-      ythickness = widget->style->klass->ythickness;
+      xthickness = widget->style->xthickness;
+      ythickness = widget->style->ythickness;
       width = widget->allocation.width;
       height = widget->allocation.height - ythickness * 2;
 

@@ -49,6 +49,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
 #include "gdkinputprivate.h"
+#include <pango/pangox.h>
 
 typedef struct _GdkPredicate  GdkPredicate;
 typedef struct _GdkErrorTrap  GdkErrorTrap;
@@ -246,12 +247,12 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   cursor_private = (GdkCursorPrivate*) cursor;
   
-  xwindow = GDK_DRAWABLE_XID (window);
+  xwindow = GDK_WINDOW_XID (window);
   
-  if (!confine_to || GDK_DRAWABLE_DESTROYED (confine_to))
+  if (!confine_to || GDK_WINDOW_DESTROYED (confine_to))
     xconfine_to = None;
   else
-    xconfine_to = GDK_DRAWABLE_XID (confine_to);
+    xconfine_to = GDK_WINDOW_XID (confine_to);
   
   if (!cursor)
     xcursor = None;
@@ -277,8 +278,8 @@ gdk_pointer_grab (GdkWindow *	  window,
   
   if (return_val == Success)
     {
-      if (!GDK_DRAWABLE_DESTROYED (window))
-	return_val = XGrabPointer (GDK_DRAWABLE_XDISPLAY (window),
+      if (!GDK_WINDOW_DESTROYED (window))
+	return_val = XGrabPointer (GDK_WINDOW_XDISPLAY (window),
 				   xwindow,
 				   owner_events,
 				   xevent_mask,
@@ -291,7 +292,7 @@ gdk_pointer_grab (GdkWindow *	  window,
     }
   
   if (return_val == GrabSuccess)
-    gdk_xgrab_window = (GdkWindowPrivate *)window;
+    gdk_xgrab_window = (GdkWindowObject *)window;
   
   return return_val;
 }
@@ -370,9 +371,9 @@ gdk_keyboard_grab (GdkWindow *	   window,
   g_return_val_if_fail (window != NULL, 0);
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
   
-  if (!GDK_DRAWABLE_DESTROYED (window))
-    return XGrabKeyboard (GDK_DRAWABLE_XDISPLAY (window),
-			  GDK_DRAWABLE_XID (window),
+  if (!GDK_WINDOW_DESTROYED (window))
+    return XGrabKeyboard (GDK_WINDOW_XDISPLAY (window),
+			  GDK_WINDOW_XID (window),
 			  owner_events,
 			  GrabModeAsync, GrabModeAsync,
 			  time);

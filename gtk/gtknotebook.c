@@ -647,8 +647,8 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
   if (notebook->show_border || notebook->show_tabs)
     {
-      widget->requisition.width += widget->style->klass->xthickness * 2;
-      widget->requisition.height += widget->style->klass->ythickness * 2;
+      widget->requisition.width += widget->style->xthickness * 2;
+      widget->requisition.height += widget->style->ythickness * 2;
 
       if (notebook->show_tabs)
 	{
@@ -672,10 +672,10 @@ gtk_notebook_size_request (GtkWidget      *widget,
 
 		  page->requisition.width = 
 		    child_requisition.width +
-		    2 * widget->style->klass->xthickness;
+		    2 * widget->style->xthickness;
 		  page->requisition.height = 
 		    child_requisition.height +
-		    2 * widget->style->klass->ythickness;
+		    2 * widget->style->ythickness;
 		  
 		  switch (notebook->tab_pos)
 		    {
@@ -880,12 +880,12 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 
       if (notebook->show_tabs || notebook->show_border)
 	{
-	  child_allocation.x += widget->style->klass->xthickness;
-	  child_allocation.y += widget->style->klass->ythickness;
+	  child_allocation.x += widget->style->xthickness;
+	  child_allocation.y += widget->style->ythickness;
 	  child_allocation.width = MAX (1, (gint)child_allocation.width -
-					(gint) widget->style->klass->xthickness * 2);
+					(gint) widget->style->xthickness * 2);
 	  child_allocation.height = MAX (1, (gint)child_allocation.height -
-					 (gint) widget->style->klass->ythickness * 2);
+					 (gint) widget->style->ythickness * 2);
 
 	  if (notebook->show_tabs && notebook->children && notebook->cur_page)
 	    {
@@ -1881,28 +1881,28 @@ gtk_notebook_expose_tabs (GtkNotebook *notebook)
     case GTK_POS_BOTTOM:
       event.area.y = (widget->allocation.height - border -
 		      page->allocation.height -
-		      widget->style->klass->ythickness);
+		      widget->style->ythickness);
       if (page != notebook->cur_page)
-	event.area.y -= widget->style->klass->ythickness;
+	event.area.y -= widget->style->ythickness;
     case GTK_POS_TOP:
       event.area.width = widget->allocation.width - 2 * border;
       event.area.height = (page->allocation.height +
-			   widget->style->klass->ythickness);
+			   widget->style->ythickness);
       if (page != notebook->cur_page)
-	event.area.height += widget->style->klass->ythickness;
+	event.area.height += widget->style->ythickness;
       break;
     case GTK_POS_RIGHT:
       event.area.x = (widget->allocation.width - border -
 		      page->allocation.width -
-		      widget->style->klass->xthickness);
+		      widget->style->xthickness);
       if (page != notebook->cur_page)
-	event.area.x -= widget->style->klass->xthickness;
+	event.area.x -= widget->style->xthickness;
     case GTK_POS_LEFT:
       event.area.width = (page->allocation.width +
-			  widget->style->klass->xthickness);
+			  widget->style->xthickness);
       event.area.height = widget->allocation.height - 2 * border;
       if (page != notebook->cur_page)
-	event.area.width += widget->style->klass->xthickness;
+	event.area.width += widget->style->xthickness;
       break;
     }	     
   gtk_widget_event (widget, (GdkEvent *) &event);
@@ -2238,14 +2238,14 @@ gtk_notebook_paint (GtkWidget    *widget,
       switch (notebook->tab_pos)
 	{
 	case GTK_POS_TOP:
-	  y += page->allocation.height + widget->style->klass->ythickness;
+	  y += page->allocation.height + widget->style->ythickness;
 	case GTK_POS_BOTTOM:
-	  height -= page->allocation.height + widget->style->klass->ythickness;
+	  height -= page->allocation.height + widget->style->ythickness;
 	  break;
 	case GTK_POS_LEFT:
-	  x += page->allocation.width + widget->style->klass->xthickness;
+	  x += page->allocation.width + widget->style->xthickness;
 	case GTK_POS_RIGHT:
-	  width -= page->allocation.width + widget->style->klass->xthickness;
+	  width -= page->allocation.width + widget->style->xthickness;
 	  break;
 	}
       gtk_paint_box (widget->style, widget->window,
@@ -2511,17 +2511,17 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
 	    {
 	    case GTK_POS_TOP:
 	      y += page->allocation.height +
-		widget->style->klass->ythickness;
+		widget->style->ythickness;
 	    case GTK_POS_BOTTOM:
 	      height -= page->allocation.height +
-		widget->style->klass->ythickness;
+		widget->style->ythickness;
 	      break;
 	    case GTK_POS_LEFT:
 	      x += page->allocation.width +
-		widget->style->klass->xthickness;
+		widget->style->xthickness;
 	    case GTK_POS_RIGHT:
 	      width -= page->allocation.width +
-		widget->style->klass->xthickness;
+		widget->style->xthickness;
 	      break;
 	    }
 	}
@@ -2536,11 +2536,11 @@ gtk_notebook_set_shape (GtkNotebook *notebook)
 	    {
 	      if (notebook->tab_pos == GTK_POS_LEFT)
 		{
-		  x -= widget->style->klass->xthickness * 2;
-		  width += widget->style->klass->xthickness * 2;
+		  x -= widget->style->xthickness * 2;
+		  width += widget->style->xthickness * 2;
 		}
 	      else if (notebook->tab_pos == GTK_POS_RIGHT)
-		width += widget->style->klass->xthickness * 2;
+		width += widget->style->xthickness * 2;
 	    }
 	  switch (notebook->tab_pos)
 	    {
@@ -3061,8 +3061,8 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 
   widget = GTK_WIDGET (notebook);
 
-  xthickness = widget->style->klass->xthickness;
-  ythickness = widget->style->klass->ythickness;
+  xthickness = widget->style->xthickness;
+  ythickness = widget->style->ythickness;
 
   /* If the size of the notebook tabs change, we need to queue
    * a redraw on the tab area

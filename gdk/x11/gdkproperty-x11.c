@@ -117,11 +117,11 @@ gdk_property_get (GdkWindow   *window,
 
   if (window)
     {
-      if (GDK_DRAWABLE_DESTROYED (window))
+      if (GDK_WINDOW_DESTROYED (window))
 	return FALSE;
 
-      xdisplay = GDK_DRAWABLE_XDISPLAY (window);
-      xwindow = GDK_DRAWABLE_XID (window);
+      xdisplay = GDK_WINDOW_XDISPLAY (window);
+      xwindow = GDK_WINDOW_XID (window);
     }
   else
     {
@@ -206,11 +206,11 @@ gdk_property_change (GdkWindow    *window,
 
   if (window)
     {
-      if (GDK_DRAWABLE_DESTROYED (window))
+      if (GDK_WINDOW_DESTROYED (window))
 	return;
 
-      xdisplay = GDK_DRAWABLE_XDISPLAY (window);
-      xwindow = GDK_DRAWABLE_XID (window);
+      xdisplay = GDK_WINDOW_XDISPLAY (window);
+      xwindow = GDK_WINDOW_XID (window);
     }
   else
     {
@@ -234,11 +234,11 @@ gdk_property_delete (GdkWindow *window,
 
   if (window)
     {
-      if (GDK_DRAWABLE_DESTROYED (window))
+      if (GDK_WINDOW_DESTROYED (window))
 	return;
 
-      xdisplay = GDK_DRAWABLE_XDISPLAY (window);
-      xwindow = GDK_DRAWABLE_XID (window);
+      xdisplay = GDK_WINDOW_XDISPLAY (window);
+      xwindow = GDK_WINDOW_XID (window);
     }
   else
     {

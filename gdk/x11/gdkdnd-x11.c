@@ -34,7 +34,7 @@
 #include "gdkinternals.h"
 #include "gdkprivate-x11.h"
 
-typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
+typedef struct _GdkDragContextPrivateX11 GdkDragContextPrivateX11;
 
 typedef enum {
   GDK_DRAG_STATUS_DRAG,
@@ -58,7 +58,7 @@ typedef struct {
 /* Structure that holds information about a drag in progress.
  * this is used on both source and destination sides.
  */
-struct _GdkDragContextPrivate {
+struct _GdkDragContextPrivateX11 {
   GdkDragContext context;
 
   GdkAtom motif_selection;
@@ -81,6 +81,8 @@ struct _GdkDragContextPrivate {
 
   GdkWindowCache *window_cache;
 };
+
+#define PRIVATE_DATA(context) ((GdkDragContextPrivateX11 *) GDK_DRAG_CONTEXT (context)->windowing_data)
 
 GdkDragContext *current_dest_drag = NULL;
 
@@ -121,66 +123,115 @@ static void   xdnd_manage_source_filter (GdkDragContext *context,
 					 GdkWindow      *window,
 					 gboolean        add_filter);
 
-/* Drag Contexts */
+static void gdk_drag_context_init       (GdkDragContext      *dragcontext);
+static void gdk_drag_context_class_init (GdkDragContextClass *klass);
+static void gdk_drag_context_finalize   (GObject              *object);
 
+static gpointer parent_class = NULL;
 static GList *contexts;
+
+GType
+gdk_drag_context_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkDragContextClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_drag_context_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkDragContext),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_drag_context_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkDragContext",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_drag_context_init (GdkDragContext *dragcontext)
+{
+  GdkDragContextPrivateX11 *private;
+
+  private = g_new0 (GdkDragContextPrivateX11, 1);
+
+  dragcontext->windowing_data = private;
+
+  contexts = g_list_prepend (contexts, dragcontext);
+}
+
+static void
+gdk_drag_context_class_init (GdkDragContextClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek_parent (klass);
+
+  object_class->finalize = gdk_drag_context_finalize;
+}
+
+static void
+gdk_drag_context_finalize (GObject *object)
+{
+  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
+  
+  g_list_free (context->targets);
+
+  if (context->source_window)
+    {
+      if ((context->protocol == GDK_DRAG_PROTO_XDND) &&
+          !context->is_source)
+        xdnd_manage_source_filter (context, context->source_window, FALSE);
+      
+      gdk_window_unref (context->source_window);
+    }
+  
+  if (context->dest_window)
+    gdk_window_unref (context->dest_window);
+  
+  if (private->window_cache)
+    gdk_window_cache_destroy (private->window_cache);
+  
+  contexts = g_list_remove (contexts, context);
+
+  g_free (private);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
+/* Drag Contexts */
 
 GdkDragContext *
 gdk_drag_context_new        (void)
 {
-  GdkDragContextPrivate *result;
-
-  result = g_new0 (GdkDragContextPrivate, 1);
-
-  result->ref_count = 1;
-
-  contexts = g_list_prepend (contexts, result);
-
-  return (GdkDragContext *)result;
+  return GDK_DRAG_CONTEXT (g_type_create_instance (gdk_drag_context_get_type ()));
 }
 
 void            
 gdk_drag_context_ref (GdkDragContext *context)
 {
-  g_return_if_fail (context != NULL);
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  ((GdkDragContextPrivate *)context)->ref_count++;
+  g_object_ref (G_OBJECT (context));
 }
 
 void            
 gdk_drag_context_unref (GdkDragContext *context)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
 
-  g_return_if_fail (context != NULL);
-  g_return_if_fail (private->ref_count > 0);
-
-  private->ref_count--;
-  
-  if (private->ref_count == 0)
-    {
-      g_dataset_destroy (private);
-      
-      g_list_free (context->targets);
-
-      if (context->source_window)
-	{
-	  if ((context->protocol == GDK_DRAG_PROTO_XDND) &&
-	      !context->is_source)
-	    xdnd_manage_source_filter (context, context->source_window, FALSE);
-
-	  gdk_window_unref (context->source_window);
-	}
-
-      if (context->dest_window)
-	gdk_window_unref (context->dest_window);
-
-      if (private->window_cache)
-	gdk_window_cache_destroy (private->window_cache);
-
-      contexts = g_list_remove (contexts, private);
-      g_free (private);
-    }
+  g_object_unref (G_OBJECT (context));
 }
 
 static GdkDragContext *
@@ -190,19 +241,19 @@ gdk_drag_context_find (gboolean is_source,
 {
   GList *tmp_list = contexts;
   GdkDragContext *context;
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateX11 *private;
   Window context_dest_xid;
 
   while (tmp_list)
     {
       context = (GdkDragContext *)tmp_list->data;
-      private = (GdkDragContextPrivate *)context;
+      private = PRIVATE_DATA (context);
 
       context_dest_xid = context->dest_window ? 
-	                   (private->drop_xid ?
-			      private->drop_xid :
-			      GDK_DRAWABLE_XID (context->dest_window)) :
-	                   None;
+                            (private->drop_xid ?
+                              private->drop_xid :
+                              GDK_DRAWABLE_XID (context->dest_window)) :
+	                     None;
 
       if ((!context->is_source == !is_source) &&
 	  ((source_xid == None) || (context->source_window &&
@@ -1250,7 +1301,7 @@ motif_dnd_get_flags (GdkDragContext *context)
 static void
 motif_set_targets (GdkDragContext *context)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   MotifDragInitiatorInfo info;
   gint i;
   static GdkAtom motif_drag_initiator_info = GDK_NONE;
@@ -1334,7 +1385,7 @@ motif_send_enter (GdkDragContext  *context,
 		  guint32          time)
 {
   XEvent xev;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE);
@@ -1393,7 +1444,7 @@ motif_send_motion (GdkDragContext  *context,
 {
   gboolean retval;
   XEvent xev;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE);
@@ -1436,7 +1487,7 @@ static void
 motif_send_drop (GdkDragContext *context, guint32 time)
 {
   XEvent xev;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("_MOTIF_DRAG_AND_DROP_MESSAGE", FALSE);
@@ -1537,7 +1588,7 @@ motif_drag_context_new (GdkWindow *dest_window,
 			guint32    atom)
 {
   GdkDragContext *new_context;
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateX11 *private;
 
   /* FIXME, current_dest_drag really shouldn't be NULL'd
    * if we error below.
@@ -1554,7 +1605,7 @@ motif_drag_context_new (GdkWindow *dest_window,
     }
 
   new_context = gdk_drag_context_new ();
-  private = (GdkDragContextPrivate *)new_context;
+  private = PRIVATE_DATA (new_context);
 
   new_context->protocol = GDK_DRAG_PROTO_MOTIF;
   new_context->is_source = FALSE;
@@ -1651,7 +1702,7 @@ motif_motion (GdkEvent *event,
 	      gint16    x_root,
 	      gint16    y_root)
 {
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateX11 *private;
 
   GDK_NOTE(DND, g_message ("Motif DND motion: flags: %#4x time: %d (%d, %d)",
 			   flags, timestamp, x_root, y_root));
@@ -1660,7 +1711,7 @@ motif_motion (GdkEvent *event,
       (current_dest_drag->protocol == GDK_DRAG_PROTO_MOTIF) &&
       (timestamp >= current_dest_drag->start_time))
     {
-      private = (GdkDragContextPrivate *)current_dest_drag;
+      private = PRIVATE_DATA (current_dest_drag);
 
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.context = current_dest_drag;
@@ -1689,7 +1740,7 @@ motif_operation_changed (GdkEvent *event,
 			 guint16   flags, 
 			 guint32   timestamp)
 {
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateX11 *private;
 
   GDK_NOTE(DND, g_message ("Motif DND operation changed: flags: %#4x time: %d",
 			   flags, timestamp));
@@ -1704,7 +1755,7 @@ motif_operation_changed (GdkEvent *event,
       gdk_drag_context_ref (current_dest_drag);
 
       event->dnd.time = timestamp;
-      private = (GdkDragContextPrivate *)current_dest_drag;
+      private = PRIVATE_DATA (current_dest_drag);
 
       motif_dnd_translate_flags (current_dest_drag, flags);
 
@@ -1768,7 +1819,7 @@ motif_drag_status (GdkEvent *event,
 
   if (context)
     {
-      GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+      GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
       if ((private->drag_status == GDK_DRAG_STATUS_MOTION_WAIT) ||
 	  (private->drag_status == GDK_DRAG_STATUS_ACTION_WAIT))
 	private->drag_status = GDK_DRAG_STATUS_DRAG;
@@ -1967,7 +2018,7 @@ xdnd_status_filter (GdkXEvent *xev,
   context = gdk_drag_context_find (TRUE, xevent->xclient.window, dest_window);
   if (context)
     {
-      GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+      GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
       if (private->drag_status == GDK_DRAG_STATUS_MOTION_WAIT)
 	private->drag_status = GDK_DRAG_STATUS_DRAG;
       
@@ -2020,7 +2071,7 @@ xdnd_finished_filter (GdkXEvent *xev,
 static void
 xdnd_set_targets (GdkDragContext *context)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   GdkAtom *atomlist;
   GList *tmp_list = context->targets;
   gint i;
@@ -2049,7 +2100,7 @@ xdnd_set_targets (GdkDragContext *context)
 static void
 xdnd_set_actions (GdkDragContext *context)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   GdkAtom *atomlist;
   gint i;
   gint n_atoms;
@@ -2119,7 +2170,7 @@ static void
 xdnd_send_enter (GdkDragContext *context)
 {
   XEvent xev;
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndEnter", FALSE);
@@ -2171,7 +2222,7 @@ xdnd_send_leave (GdkDragContext *context)
 {
   XEvent xev;
 
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_atom_intern ("XdndLeave", FALSE);
@@ -2199,7 +2250,7 @@ xdnd_send_leave (GdkDragContext *context)
 static void
 xdnd_send_drop (GdkDragContext *context, guint32 time)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -2232,7 +2283,7 @@ xdnd_send_motion (GdkDragContext *context,
 		  GdkDragAction   action,
 		  guint32         time)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   XEvent xev;
 
   xev.xclient.type = ClientMessage;
@@ -2365,7 +2416,7 @@ xdnd_read_actions (GdkDragContext *context)
       for (i=0; i<nitems; i++)
 	context->actions |= xdnd_action_from_atom (data[i]);
 
-      ((GdkDragContextPrivate *)context)->xdnd_have_actions = TRUE;
+      (PRIVATE_DATA (context))->xdnd_have_actions = TRUE;
 
 #ifdef G_ENABLE_DEBUG
       if (gdk_debug_flags & GDK_DEBUG_DND)
@@ -2423,16 +2474,10 @@ xdnd_manage_source_filter (GdkDragContext *context,
 			   gboolean        add_filter)
 {
   gint old_warnings = 0;	/* quiet gcc */
-			       
-  gboolean is_foreign = GDK_DRAWABLE_TYPE (window);
 
-  if (is_foreign)
-    {
-      old_warnings = gdk_error_warnings;
-      gdk_error_warnings = 0;
-    }
+  gdk_error_trap_push ();
 
-  if (!GDK_DRAWABLE_DESTROYED (window))
+  if (!GDK_WINDOW_DESTROYED (window))
     {
       if (add_filter)
 	{
@@ -2454,11 +2499,8 @@ xdnd_manage_source_filter (GdkDragContext *context,
 	}
     }
 
-  if (is_foreign)
-    {
-      gdk_flush();
-      gdk_error_warnings = old_warnings;
-    }
+  gdk_flush ();
+  gdk_error_trap_pop ();  
 }
 
 static GdkFilterReturn 
@@ -2558,7 +2600,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   gdk_drag_context_ref (new_context);
 
   current_dest_drag = new_context;
-  ((GdkDragContextPrivate *)new_context)->xdnd_selection = 
+  (PRIVATE_DATA (new_context))->xdnd_selection = 
     gdk_atom_intern ("XdndSelection", FALSE);
 
   return GDK_FILTER_TRANSLATE;
@@ -2620,14 +2662,14 @@ xdnd_position_filter (GdkXEvent *xev,
       event->dnd.time = time;
 
       current_dest_drag->suggested_action = xdnd_action_from_atom (action);
-      if (!((GdkDragContextPrivate *)current_dest_drag)->xdnd_have_actions)
+      if (!(PRIVATE_DATA (current_dest_drag))->xdnd_have_actions)
 	current_dest_drag->actions = current_dest_drag->suggested_action;
 
       event->dnd.x_root = x_root;
       event->dnd.y_root = y_root;
 
-      ((GdkDragContextPrivate *)current_dest_drag)->last_x = x_root;
-      ((GdkDragContextPrivate *)current_dest_drag)->last_y = y_root;
+      (PRIVATE_DATA (current_dest_drag))->last_x = x_root;
+      (PRIVATE_DATA (current_dest_drag))->last_y = y_root;
       
       return GDK_FILTER_TRANSLATE;
     }
@@ -2652,8 +2694,8 @@ xdnd_drop_filter (GdkXEvent *xev,
       (current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
       (GDK_DRAWABLE_XID (current_dest_drag->source_window) == source_window))
     {
-      GdkDragContextPrivate *private;
-      private = (GdkDragContextPrivate *)current_dest_drag;
+      GdkDragContextPrivateX11 *private;
+      private = PRIVATE_DATA (current_dest_drag);
 
       event->dnd.type = GDK_DROP_START;
 
@@ -2843,7 +2885,7 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkWindow      **dest_window,
 		      GdkDragProtocol *protocol)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
   Window dest;
 
   g_return_if_fail (context != NULL);
@@ -2899,7 +2941,7 @@ gdk_drag_motion (GdkDragContext *context,
 		 GdkDragAction   possible_actions,
 		 guint32         time)
 {
-  GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
+  GdkDragContextPrivateX11 *private = PRIVATE_DATA (context);
 
   g_return_val_if_fail (context != NULL, FALSE);
 
@@ -3073,12 +3115,12 @@ gdk_drag_status (GdkDragContext   *context,
 		 GdkDragAction     action,
 		 guint32           time)
 {
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateX11 *private;
   XEvent xev;
 
   g_return_if_fail (context != NULL);
 
-  private = (GdkDragContextPrivate *)context;
+  private = PRIVATE_DATA (context);
 
   context->action = action;
   
@@ -3167,11 +3209,11 @@ gdk_drop_reply (GdkDragContext   *context,
 		gboolean          ok,
 		guint32           time)
 {
-  GdkDragContextPrivate *private;
+  GdkDragContextPrivateX11 *private;
 
   g_return_if_fail (context != NULL);
 
-  private = (GdkDragContextPrivate *)context;
+  private = PRIVATE_DATA (context);
   
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
     {
@@ -3291,9 +3333,9 @@ gdk_drag_get_selection (GdkDragContext *context)
   g_return_val_if_fail (context != NULL, GDK_NONE);
 
   if (context->protocol == GDK_DRAG_PROTO_MOTIF)
-    return ((GdkDragContextPrivate *)context)->motif_selection;
+    return (PRIVATE_DATA (context))->motif_selection;
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
-    return ((GdkDragContextPrivate *)context)->xdnd_selection;
+    return (PRIVATE_DATA (context))->xdnd_selection;
   else 
     return GDK_NONE;
 }

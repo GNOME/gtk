@@ -33,26 +33,13 @@
 GdkImage *
 gdk_image_ref (GdkImage *image)
 {
-  GdkImagePrivate *private = (GdkImagePrivate *)image;
-  
-  g_return_val_if_fail (image != NULL, NULL);
-
-  private->ref_count++;
-
-  return image;
+  return (GdkImage *) g_object_ref (G_OBJECT (image));
 }
 
 void
 gdk_image_unref (GdkImage *image)
 {
-  GdkImagePrivate *private = (GdkImagePrivate *)image;
-  
-  g_return_if_fail (image != NULL);
-  g_return_if_fail (private->ref_count > 0);
+  g_return_if_fail (GDK_IS_IMAGE (image));
 
-  private->ref_count--;
-  if (private->ref_count == 0)
-    private->klass->destroy (image);
+  g_object_unref (G_OBJECT (image));
 }
-
-

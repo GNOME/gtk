@@ -1,3 +1,179 @@
+2000-06-20  Havoc Pennington  <hp@redhat.com>
+
+	* modules/linux-fb/Makefile.am: Make this compile
+	without framebuffer enabled
+
+	* gdk/linux-fb/Makefile.am: Add conditional to not build
+	framebuffer unless specified in configure
+
+	* gdk/gdkdraw.c (gdk_draw_drawable): Fix bug where I was getting
+	the size of the target instead of source if -1 was passed for
+	width/height
+
+	* gdk/x11/gdkgeometry-x11.c (gdk_window_compute_position): Fix 
+	width/height confusion.
+
+2000-06-19  Havoc Pennington  <hp@redhat.com>
+
+	* gdk/x11/gdkx.h (GDK_WINDOW_XWINDOW): change this to be
+	GDK_DRAWABLE_XID. In the future, we probably want to make it
+	faster with G_DISABLE_CHECKS turned on.
+
+2000-06-14  Havoc Pennington  <hp@redhat.com>
+
+        * gdk/Makefile.am: add gdkpixmap.c
+
+	* gdk/gdk.c: s/gdk_window_init/_gdk_windowing_window_init/
+	s/gdk_image_init/_gdk_windowing_image_init
+
+	* gdk/gdkcolor.c: make ref/unref compat wrappers for GObject
+	ref/unref
+
+	* gdk/gdkcolor.h: make GdkColormap a GObject subclass
+
+	* gdk/gdkcompat.h: remove GdkWindowType compat, since
+	GdkWindowType is now non-deprecated; 
+	change gdk_window_get_type() compat to be
+	gdk_window_get_window_type().
+
+	* gdk/gdkdnd.h: make GdkDragContext a GObject.
+
+	* gdk/gdkdraw.c, gdk/gdkdraw.h: Convert GdkDrawable to a pure
+	virtual GObject. Make all functions call into the vtable.
+	Move gdk_image_put() guts in here. Remove GdkDrawableType
+	and gdk_drawable_get_type(), these are now GdkWindow-specific.
+	draw_image, get_depth, get_size, set_colormap, get_colormap,
+	get_visual added to the vtable.
+	
+	* gdk/gdkgc.h, gdk/gdkgc.c: Convert GdkGC to a pure virtual 
+	GObject. Virtualize everything. 
+	(gdk_gc_new_with_values): remove check for destroyed window,
+	because now GdkWindow::create_gc will check this.
+	(gdk_gc_set_values): New function to set GC values, this 
+	was already implemented but wasn't in the header
+
+	* gdk/gdkimage.h, gdk/gdkimage.c: Convert GdkImage to a GObject.
+
+	* gdk/gdkinternals.h: Remove _gdk_window_alloc(), remove
+	_gdk_window_draw_image(), remove _gdk_windowing_window_class,
+	remove _gdk_window_class; add _gdk_window_impl_get_type() and
+	_gdk_pixmap_impl_get_type(). Rename gdk_window_init to
+	_gdk_windowing_window_init, rename gdk_image_init to
+	_gdk_windowing_image_init.
+	
+	* gdk/gdkpango.c: Reflect GObject-ification of PangoContext.
+	(gdk_draw_layout): Remove check for destroyed window, 
+	because all the drawable methods already check it.
+	
+	* gdk/gdkpixmap.h, gdk/gdkpixmap.c: Convert GdkPixmap to GObject.
+	Add gdkpixmap.c which contains implementation of GdkDrawable
+	virtual table (by chaining to a platform-specific implementation
+	object).
+	
+	* gdk/gdkprivate.h: Remove GDK_IS_WINDOW, GDK_IS_PIXMAP, 
+	GDK_DRAWABLE_DESTROYED. Add GDK_WINDOW_DESTROYED. Replace
+	GDK_DRAWABLE_TYPE with GDK_WINDOW_TYPE. Remove GdkDrawablePrivate,
+	GdkWindowPrivate, GdkImageClass, GdkImagePrivate, GdkGCPrivate,
+	GdkColormapPrivate. 
+
+	* gdk/gdktypes.h: #include <glib-object.h>
+
+	* gdk/gdkwindow.h, gdk/gdkwindow.c: Convert GdkWindow to GObject.
+	Move most functionality to platform-specific implementation
+	object. GdkWindow itself now handles the backing store, then
+	chains to the platform-specific implementation.
+	(gdk_window_get_window_type): return GdkWindowType of the window.
+	(gdk_window_peek_children): New routine, returns the children of 
+	a GdkWindow
+	(gdk_window_get_children): Was in X11-specific code and did 
+	XQueryTree. Changed to simply return a copy of window->children; 
+	so it can go in cross-platform code.
+	
+	* gdk/x11/Makefile.am: fix broken MKINSTALLDIRS path
+
+	* gdk/x11/gdkcolor-x11.c: implement X-specific parts of 
+	GdkColormap; just changed to use the new private data instead
+	of casting to GdkColormapPrivate.
+
+	* gdk/x11/gdkcursor-x11.c: added a couple typechecks to 
+	gdk_cursor_new().
+
+	* gdk/x11/gdkdnd-x11.c: Change the way we access private fields 
+	(private data member in the GObject). 
+	(xdnd_manager_source_filter): Function had broken 
+	error handling, fix it (use gdk_error_trap_push).
+
+	* gdk/x11/gdkdrawable-x11.c: This file now implements
+	a base class for GdkWindowImplX11/GdkPixmapImplX11. This 
+	base class is purely for the convenience of the X port,
+	and not part of the interface to cross-platform GDK.
+
+	* gdk/x11/gdkevents-x11.c: Reflect various renamings.
+	
+	* gdk/x11/gdkgc-x11.c: Implement a subclass of GdkGC that's
+	specific to X, and returned by the create_gc virtual method
+	of GdkDrawableImplX11. 
+	(gdk_x11_gc_set_dashes): Change this to take an array of gint8
+	rather than gchar, this was also changed in the GdkGC vtable.
+	(gdk_x11_gc_values_to_xvalues): If GdkGCValues is NULL, or the
+	mask is 0, return immediately, instead of checking every flag.
+	This is faster, and keeps us from segfaulting if values is NULL
+	and the mask contains some nonzero flags.
+
+	* gdk/x11/gdkgeometry-x11.c: deal with all the rearranging of
+	GdkWindow.
+
+	* gdk/x11/gdkglobals-x11.c: change type of grab window, since 
+	GdkWindowPrivate is gone.
+
+	* gdk/x11/gdkim-x11.c: rename things that got renamed.
+
+	* gdk/x11/gdkimage-x11.c: implement in terms of GObject, and 
+	remove the image_put stuff that got transferred to GdkDrawable.
+	
+	* gdk/x11/gdkinput.c: renamings
+
+	* gdk/x11/gdkmain-x11.c: #include <pango/pangox.h>
+
+	* gdk/x11/gdkpixmap-x11.c: GObject conversion
+
+	* gdk/x11/gdkprivate-x11.h: indentation fixes
+
+	* gdk/x11/gdkproperty-x11.c: renamings
+
+	* gdk/x11/gdkselection-x11.c: renamings
+
+	* gdk/x11/gdkwindow-x11.c: Restructuring and renaming; this now 
+	implements the platform-specific "impl" object.
+	Moved gdk_window_get_children to gdk/gdkwindow.c
+
+	* gdk/x11/gdkx.h: Remove all the private structs and private datas
+	that no longer exist. Add declaration of GdkGCX11 object here.
+	Fix all the macros to still work. 
+
+	* gtk/gtk-boxed.defs: Remove GtkStyle, GdkColormap, GdkWindow,
+	GdkDragContext from the boxed types since they are now GObjects.
+
+	* gtk/gtkstyle.h, gtk/gtkstyle.c: Converted GtkStyle to a GObject,
+	moved xthickness/ythickness into the instance. GtkStyleClass
+	functions are now in the standard vtable for GtkStyle, so you have
+	to create a GObject subclass to write a theme engine.
+	(gtk_style_copy): fixed a leaked PangoFontDescription
+	(gtk_style_init): renamed gtk_style_realize, so gtk_style_init
+	can be the standard GObject function.
+	
+	* Throughout GTK:
+	s/style->klass->[xy]thickness/style->[xy]thickness
+	s/pango_layout_unref/g_object_unref/
+
+	* gtk/gtkrc.h, gtk/gtkrc.c: Converted GtkRcStyle to a GObject.
+	
+	* gtk/gtksocket.c: Use gdk_window_get_user_data() instead of 
+	accessing GDK internals.
+
+	* gtk/gtkwidget.c: Use gdk_window_peek_children() instead of 
+	accessing GDK internals.
+
 2000-06-18  Elliot Lee  <sopwith@redhat.com>
 
 	* gtk/gtkwindow.c: Don't allow creation of a window bigger than the screen.
@@ -84,7 +260,7 @@ Mon Jun  5 19:32:53 CEST 2000 Paolo Molaro <lupus@linuxcare.com>
 	* gdk/nanox/gdk*generic*: delete generic region code.
 	* gdk/linux-fb/gdk*generic*: delete generic region code.
 	* README.nanox: update information.
-
+	
 Tue Jun  6 10:53:59 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_prepend_widget): Fix to

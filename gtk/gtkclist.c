@@ -2044,7 +2044,7 @@ new_column_width (GtkCList *clist,
 		  gint      column,
 		  gint     *x)
 {
-  gint xthickness = GTK_WIDGET (clist)->style->klass->xthickness;
+  gint xthickness = GTK_WIDGET (clist)->style->xthickness;
   gint width;
   gint cx;
   gint dx;
@@ -2530,7 +2530,7 @@ _gtk_clist_create_cell_layout (GtkCList       *clist,
 				      GTK_CELL_PIXTEXT (*cell)->text :
 				      GTK_CELL_TEXT (*cell)->text), -1);
       
-      pango_context_unref (context);
+      g_object_unref (G_OBJECT (context));
 
       return layout;
       
@@ -2562,7 +2562,7 @@ cell_size_request (GtkCList       *clist,
       requisition->width = logical_rect.width / PANGO_SCALE;
       requisition->height = logical_rect.height / PANGO_SCALE;
       
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
   else
     {
@@ -3028,7 +3028,7 @@ gtk_clist_set_row_height (GtkCList *clist,
       
       g_free (lang);
       g_object_unref (G_OBJECT (font));
-      pango_context_unref (context);
+      g_object_unref (G_OBJECT (context));
       
       if (!GTK_CLIST_ROW_HEIGHT_SET(clist))
 	clist->row_height = (metrics.ascent + metrics.descent) / PANGO_SCALE;
@@ -4511,9 +4511,9 @@ gtk_clist_realize (GtkWidget *widget)
 
   /* clist-window */
   attributes.x = (clist->internal_allocation.x +
-		  widget->style->klass->xthickness);
+		  widget->style->xthickness);
   attributes.y = (clist->internal_allocation.y +
-		  widget->style->klass->ythickness +
+		  widget->style->ythickness +
 		  clist->column_title_area.height);
   attributes.width = clist->clist_window_width;
   attributes.height = clist->clist_window_height;
@@ -4801,9 +4801,9 @@ gtk_clist_draw (GtkWidget    *widget,
 		       GTK_STATE_NORMAL, clist->shadow_type,
 		       0, 0, 
 		       clist->clist_window_width +
-		       (2 * widget->style->klass->xthickness),
+		       (2 * widget->style->xthickness),
 		       clist->clist_window_height +
-		       (2 * widget->style->klass->ythickness) +
+		       (2 * widget->style->ythickness) +
 		       clist->column_title_area.height);
 
       gdk_window_clear_area (clist->clist_window, 0, 0, 0, 0);
@@ -4840,9 +4840,9 @@ gtk_clist_expose (GtkWidget      *widget,
 			 GTK_STATE_NORMAL, clist->shadow_type,
 			 0, 0,
 			 clist->clist_window_width +
-			 (2 * widget->style->klass->xthickness),
+			 (2 * widget->style->xthickness),
 			 clist->clist_window_height +
-			 (2 * widget->style->klass->ythickness) +
+			 (2 * widget->style->ythickness) +
 			 clist->column_title_area.height);
 
       /* exposure events on the list */
@@ -5441,11 +5441,11 @@ gtk_clist_size_request (GtkWidget      *widget,
 	    MAX (clist->column_title_area.height,
 		 child_requisition.height);
 	}
-
-  requisition->width += (widget->style->klass->xthickness +
+  
+  requisition->width += (widget->style->xthickness +
 			 GTK_CONTAINER (widget)->border_width) * 2;
   requisition->height += (clist->column_title_area.height +
-			  (widget->style->klass->ythickness +
+			  (widget->style->ythickness +
 			   GTK_CONTAINER (widget)->border_width) * 2);
 
   /* if (!clist->hadjustment) */
@@ -5491,14 +5491,14 @@ gtk_clist_size_allocate (GtkWidget     *widget,
 	
   /* allocate clist window assuming no scrollbars */
   clist_allocation.x = (clist->internal_allocation.x +
-			widget->style->klass->xthickness);
+			widget->style->xthickness);
   clist_allocation.y = (clist->internal_allocation.y +
-			widget->style->klass->ythickness +
+			widget->style->ythickness +
 			clist->column_title_area.height);
   clist_allocation.width = MAX (1, (gint)clist->internal_allocation.width - 
-				(2 * (gint)widget->style->klass->xthickness));
+				(2 * (gint)widget->style->xthickness));
   clist_allocation.height = MAX (1, (gint)clist->internal_allocation.height -
-				 (2 * (gint)widget->style->klass->ythickness) -
+				 (2 * (gint)widget->style->ythickness) -
 				 (gint)clist->column_title_area.height);
   
   clist->clist_window_width = clist_allocation.width;
@@ -5514,8 +5514,8 @@ gtk_clist_size_allocate (GtkWidget     *widget,
     }
   
   /* position the window which holds the column title buttons */
-  clist->column_title_area.x = widget->style->klass->xthickness;
-  clist->column_title_area.y = widget->style->klass->ythickness;
+  clist->column_title_area.x = widget->style->xthickness;
+  clist->column_title_area.y = widget->style->ythickness;
   clist->column_title_area.width = clist_allocation.width;
   
   if (GTK_WIDGET_REALIZED (widget))
@@ -5921,7 +5921,7 @@ draw_row (GtkCList     *clist,
 			       offset,
 			       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 			       layout);
-	      pango_layout_unref (layout);
+              g_object_unref (G_OBJECT (layout));
 	      gdk_gc_set_clip_rectangle (fg_gc, NULL);
 	    }
 	  break;
@@ -6016,7 +6016,7 @@ draw_xor_line (GtkCList *clist)
 
   gdk_draw_line (widget->window, clist->xor_gc,
                  clist->x_drag,
-		 widget->style->klass->ythickness,
+		 widget->style->ythickness,
                  clist->x_drag,
                  clist->column_title_area.height +
 		 clist->clist_window_height + 1);
@@ -7484,7 +7484,7 @@ drag_dest_cell (GtkCList         *clist,
   dest_info->insert_pos = GTK_CLIST_DRAG_NONE;
 
   y -= (GTK_CONTAINER (clist)->border_width +
-	widget->style->klass->ythickness +
+	widget->style->ythickness +
 	clist->column_title_area.height);
 
   dest_info->cell.row = ROW_FROM_YPIXEL (clist, y);
@@ -7495,8 +7495,9 @@ drag_dest_cell (GtkCList         *clist,
     }
   if (dest_info->cell.row < -1)
     dest_info->cell.row = -1;
+  
+  x -= GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
 
-  x -= GTK_CONTAINER (widget)->border_width + widget->style->klass->xthickness;
   dest_info->cell.column = COLUMN_FROM_XPIXEL (clist, x);
 
   if (dest_info->cell.row >= 0)

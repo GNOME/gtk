@@ -209,12 +209,12 @@ gtk_text_layout_destroy (GtkObject *object)
 
   if (layout->ltr_context)
     {
-      pango_context_unref (layout->ltr_context);
+      g_object_unref (G_OBJECT (layout->ltr_context));
       layout->ltr_context = NULL;
     }
   if (layout->rtl_context)
     {
-      pango_context_unref (layout->rtl_context);
+      g_object_unref (G_OBJECT (layout->rtl_context));
       layout->rtl_context = NULL;
     }
   
@@ -298,16 +298,16 @@ gtk_text_layout_set_contexts (GtkTextLayout *layout,
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
 
   if (layout->ltr_context)
-    pango_context_unref (ltr_context);
+    g_object_unref (G_OBJECT (ltr_context));
 
   layout->ltr_context = ltr_context;
-  pango_context_ref (ltr_context);
+  g_object_ref (G_OBJECT (ltr_context));
   
   if (layout->rtl_context)
-    pango_context_unref (rtl_context);
+    g_object_unref (G_OBJECT (rtl_context));
 
   layout->rtl_context = rtl_context;
-  pango_context_ref (rtl_context);
+  g_object_ref (G_OBJECT (rtl_context));
   
   gtk_text_layout_invalidate_all (layout);
 }
@@ -1359,7 +1359,7 @@ gtk_text_layout_free_line_display (GtkTextLayout      *layout,
 {
   if (display != layout->one_display_cache)
     {
-      pango_layout_unref (display->layout);
+      g_object_unref (G_OBJECT (display->layout));
 
       if (display->cursors)
 	{

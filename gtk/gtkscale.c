@@ -332,7 +332,7 @@ gtk_scale_get_value_size (GtkScale *scale,
       if (height)
 	*height = MAX (*height, logical_rect.height / PANGO_SCALE);
 
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
   else
     {

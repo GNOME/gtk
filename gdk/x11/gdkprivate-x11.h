@@ -63,16 +63,15 @@ Window gdk_window_xid_at_coords (gint      x,
 				 gboolean  excl_child);
 
 /* Routines from gdkgeometry-x11.c */
-
-void _gdk_window_init_position     (GdkWindow    *window);
-void _gdk_window_move_resize_child (GdkWindow    *window,
-				    gint          x,
-				    gint          y,
-				    gint          width,
-				    gint          height);
-void _gdk_window_process_expose    (GdkWindow    *window,
-				    gulong        serial,
-				    GdkRectangle *area);
+void _gdk_window_init_position     (GdkWindow     *window);
+void _gdk_window_move_resize_child (GdkWindow     *window,
+                                    gint           x,
+                                    gint           y,
+                                    gint           width,
+                                    gint           height);
+void _gdk_window_process_expose    (GdkWindow     *window,
+                                    gulong         serial,
+                                    GdkRectangle  *area);
 
 extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         gdk_use_xshm;
@@ -85,9 +84,9 @@ extern gboolean          gdk_null_window_warnings;
 extern const int         gdk_nevent_masks;
 extern const int         gdk_event_mask_table[];
 
-extern GdkWindowPrivate *gdk_xgrab_window;  /* Window that currently holds the
-					     * x pointer grab
-					     */
+extern GdkWindowObject *gdk_xgrab_window;  /* Window that currently holds the
+					    * x pointer grab
+					    */
 
 #ifdef USE_XIM
 extern GdkICPrivate *gdk_xim_ic;		/* currently using IC */

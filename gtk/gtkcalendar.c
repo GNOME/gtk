@@ -962,11 +962,11 @@ gtk_calendar_realize_day_names (GtkWidget *widget)
       attributes.colormap = gtk_widget_get_colormap (widget);
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      attributes.x = (widget->style->klass->xthickness + INNER_BORDER);
-      attributes.y = private_data->header_h + (widget->style->klass->ythickness 
+      attributes.x = (widget->style->xthickness + INNER_BORDER);
+      attributes.y = private_data->header_h + (widget->style->ythickness 
 					   + INNER_BORDER);
       attributes.width = (widget->allocation.width 
-			  - (widget->style->klass->xthickness + INNER_BORDER) 
+			  - (widget->style->xthickness + INNER_BORDER) 
 			  * 2);
       attributes.height = private_data->day_name_h;
       private_data->day_name_win = gdk_window_new (widget->window,
@@ -1007,9 +1007,9 @@ gtk_calendar_realize_week_numbers (GtkWidget *widget)
       attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK;
       
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-      attributes.x = + (widget->style->klass->xthickness + INNER_BORDER);
+      attributes.x = + (widget->style->xthickness + INNER_BORDER);
       attributes.y = (private_data->header_h + private_data->day_name_h 
-		      + (widget->style->klass->ythickness + INNER_BORDER));
+		      + (widget->style->ythickness + INNER_BORDER));
       attributes.width = private_data->week_width;
       attributes.height = private_data->main_h;
       private_data->week_win = gdk_window_new (widget->window,
@@ -1075,11 +1075,11 @@ gtk_calendar_realize (GtkWidget *widget)
     attributes.x = private_data->week_width;
   else
     attributes.x = 0;
-  attributes.x += (widget->style->klass->xthickness + INNER_BORDER);
+  attributes.x += (widget->style->xthickness + INNER_BORDER);
   attributes.y = (private_data->header_h + private_data->day_name_h 
-		  + (widget->style->klass->ythickness + INNER_BORDER));
+		  + (widget->style->ythickness + INNER_BORDER));
   attributes.width = (widget->allocation.width - attributes.x 
-		      - (widget->style->klass->xthickness + INNER_BORDER));
+		      - (widget->style->xthickness + INNER_BORDER));
   attributes.height = private_data->main_h;
   private_data->main_win = gdk_window_new (widget->window,
 					   &attributes, attributes_mask);
@@ -1262,7 +1262,7 @@ gtk_calendar_size_request (GtkWidget	  *widget,
 		   : 0));
   
   
-  requisition->width = MAX (header_width+4, main_width + (widget->style->klass->xthickness + INNER_BORDER) *2);
+  requisition->width = MAX (header_width+4, main_width + (widget->style->xthickness + INNER_BORDER) *2);
   
   /*
    * Calculate the requisition height for the widget.
@@ -1312,9 +1312,9 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   height = (private_data->header_h + private_data->day_name_h 
 	    + private_data->main_h);
   
-  requisition->height = height + (widget->style->klass->ythickness + INNER_BORDER) * 2;
+  requisition->height = height + (widget->style->ythickness + INNER_BORDER) * 2;
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1336,17 +1336,17 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
   if (calendar->display_flags & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     {
       private_data->day_width = (private_data->min_day_width
-			     * ((allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2
+			     * ((allocation->width - (widget->style->xthickness + INNER_BORDER) * 2
 				 - (CALENDAR_MARGIN * 2) -  (DAY_XSEP * 7) - CALENDAR_XSEP * 2))
 			     / (7 * private_data->min_day_width + private_data->max_week_char_width * 2));
-      private_data->week_width = ((allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2
+      private_data->week_width = ((allocation->width - (widget->style->xthickness + INNER_BORDER) * 2
 			       - (CALENDAR_MARGIN * 2) - (DAY_XSEP * 7) - CALENDAR_XSEP * 2 )
 			      - private_data->day_width * 7 + CALENDAR_MARGIN + CALENDAR_XSEP);
     } 
   else 
     {
       private_data->day_width = (allocation->width
-			     - (widget->style->klass->xthickness + INNER_BORDER) * 2
+			     - (widget->style->xthickness + INNER_BORDER) * 2
 			     - (CALENDAR_MARGIN * 2)
 			     - (DAY_XSEP * 7))/7;
       private_data->week_width = 0;
@@ -1390,25 +1390,25 @@ gtk_calendar_size_allocate (GtkWidget	  *widget,
 				private_data->header_h - 7);
       if (private_data->day_name_win)
 	gdk_window_move_resize (private_data->day_name_win,
-				widget->style->klass->xthickness + INNER_BORDER,
-				private_data->header_h + (widget->style->klass->ythickness + INNER_BORDER),
-				allocation->width - (widget->style->klass->xthickness + INNER_BORDER) * 2,
+				widget->style->xthickness + INNER_BORDER,
+				private_data->header_h + (widget->style->ythickness + INNER_BORDER),
+				allocation->width - (widget->style->xthickness + INNER_BORDER) * 2,
 				private_data->day_name_h);
       if (private_data->week_win)
 	gdk_window_move_resize (private_data->week_win,
-				(widget->style->klass->xthickness + INNER_BORDER),
+				(widget->style->xthickness + INNER_BORDER),
 				private_data->header_h + private_data->day_name_h
-				+ (widget->style->klass->ythickness + INNER_BORDER),
+				+ (widget->style->ythickness + INNER_BORDER),
 				private_data->week_width,
 				private_data->main_h);
       gdk_window_move_resize (private_data->main_win,
 			      (private_data->week_width ? private_data->week_width + CALENDAR_XSEP :0) 
-			      + (widget->style->klass->xthickness + INNER_BORDER),
+			      + (widget->style->xthickness + INNER_BORDER),
 			      private_data->header_h + private_data->day_name_h
-			      + (widget->style->klass->ythickness + INNER_BORDER),
+			      + (widget->style->ythickness + INNER_BORDER),
 			      allocation->width 
 			      - (private_data->week_width ? private_data->week_width + CALENDAR_XSEP :0) 
-			      - (widget->style->klass->xthickness + INNER_BORDER) * 2,
+			      - (widget->style->xthickness + INNER_BORDER) * 2,
 			      private_data->main_h);
     }
 }
@@ -1602,7 +1602,7 @@ gtk_calendar_paint_header (GtkWidget *widget)
   gtk_calendar_paint_arrow (widget, ARROW_YEAR_LEFT);
   gtk_calendar_paint_arrow (widget, ARROW_YEAR_RIGHT);
 
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1690,7 +1690,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 		       layout);
     }
   
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1779,7 +1779,7 @@ gtk_calendar_paint_week_numbers (GtkWidget *widget)
       gdk_draw_layout (private_data->week_win, gc, x_loc, y_loc, layout);
     }
   
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static void
@@ -1924,8 +1924,7 @@ gtk_calendar_paint_day (GtkWidget *widget,
 			  private_data->day_width-1, day_height-1);
     }
 
-  pango_layout_unref (layout);
-
+  g_object_unref (G_OBJECT (layout));
 }
 
 

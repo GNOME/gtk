@@ -391,7 +391,7 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     SPACE_LINE_END / SPACE_LINE_DIVISION,
 		     child_space->alloc_x +
 		     (toolbar->space_size -
-		      widget->style->klass->xthickness) / 2);
+		      widget->style->xthickness) / 2);
   else
     gtk_paint_hline (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), area, widget,
@@ -402,7 +402,7 @@ gtk_toolbar_paint_space_line (GtkWidget       *widget,
 		     SPACE_LINE_END / SPACE_LINE_DIVISION,
 		     child_space->alloc_y +
 		     (toolbar->space_size -
-		      widget->style->klass->ythickness) / 2);
+		      widget->style->ythickness) / 2);
 }
 
 static void

@@ -321,10 +321,10 @@ gtk_hscale_size_request (GtkWidget      *widget,
   scale = GTK_SCALE (widget);
   
   requisition->width = (SCALE_CLASS (scale)->slider_length +
-                        widget->style->klass->xthickness) * 2;
+                        widget->style->xthickness) * 2;
   requisition->height = (RANGE_CLASS (scale)->slider_width +
-                         widget->style->klass->ythickness * 2);
-
+                         widget->style->ythickness * 2);
+  
   if (scale->draw_value)
     {
       gint value_width, value_height;
@@ -393,7 +393,7 @@ gtk_hscale_pos_trough (GtkHScale *hscale,
   
   *w = widget->allocation.width;
   *h = (RANGE_CLASS (scale)->slider_width +
-        widget->style->klass->ythickness * 2);
+        widget->style->ythickness * 2);
   
   if (scale->draw_value)
     {
@@ -586,7 +586,7 @@ gtk_hscale_draw_value (GtkScale *scale)
 		       GTK_WIDGET (scale)->style->fg_gc [state_type],
 		       x, y, layout);
 
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
 }
 

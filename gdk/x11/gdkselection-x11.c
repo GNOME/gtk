@@ -45,11 +45,11 @@ gdk_selection_owner_set (GdkWindow *owner,
 
   if (owner)
     {
-      if (GDK_DRAWABLE_DESTROYED (owner))
+      if (GDK_WINDOW_DESTROYED (owner))
 	return FALSE;
 
-      xdisplay = GDK_DRAWABLE_XDISPLAY (owner);
-      xwindow = GDK_DRAWABLE_XID (owner);
+      xdisplay = GDK_WINDOW_XDISPLAY (owner);
+      xwindow = GDK_WINDOW_XID (owner);
     }
   else
     {
@@ -80,11 +80,11 @@ gdk_selection_convert (GdkWindow *requestor,
 		       GdkAtom    target,
 		       guint32    time)
 {
-  if (GDK_DRAWABLE_DESTROYED (requestor))
+  if (GDK_WINDOW_DESTROYED (requestor))
     return;
 
-  XConvertSelection (GDK_DRAWABLE_XDISPLAY (requestor), selection, target,
-		     gdk_selection_property, GDK_DRAWABLE_XID (requestor), time);
+  XConvertSelection (GDK_WINDOW_XDISPLAY (requestor), selection, target,
+		     gdk_selection_property, GDK_WINDOW_XID (requestor), time);
 }
 
 gint
@@ -107,12 +107,12 @@ gdk_selection_property_get (GdkWindow  *requestor,
      should be) it would be a win to try first with a buffer of
      moderate length, to avoid two round trips to the server */
 
-  if (GDK_DRAWABLE_DESTROYED (requestor))
+  if (GDK_WINDOW_DESTROYED (requestor))
     return 0;
 
   t = NULL;
-  XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
-		      GDK_DRAWABLE_XID (requestor),
+  XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
+		      GDK_WINDOW_XID (requestor),
 		      gdk_selection_property, 0, 0, False,
 		      AnyPropertyType, &prop_type, &prop_format,
 		      &nitems, &nbytes, &t);

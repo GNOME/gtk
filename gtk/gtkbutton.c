@@ -429,15 +429,15 @@ gtk_button_size_request (GtkWidget      *widget,
   button = GTK_BUTTON (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width + CHILD_SPACING +
-			GTK_WIDGET (widget)->style->klass->xthickness) * 2;
+			GTK_WIDGET (widget)->style->xthickness) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width + CHILD_SPACING +
-			 GTK_WIDGET (widget)->style->klass->ythickness) * 2;
+			 GTK_WIDGET (widget)->style->ythickness) * 2;
 
   if (GTK_WIDGET_CAN_DEFAULT (widget))
     {
-      requisition->width += (GTK_WIDGET (widget)->style->klass->xthickness * 2 +
+      requisition->width += (GTK_WIDGET (widget)->style->xthickness * 2 +
 			     DEFAULT_SPACING);
-      requisition->height += (GTK_WIDGET (widget)->style->klass->ythickness * 2 +
+      requisition->height += (GTK_WIDGET (widget)->style->ythickness * 2 +
 			      DEFAULT_SPACING);
     }
 
@@ -478,8 +478,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
     {
-      child_allocation.x = (CHILD_SPACING + GTK_WIDGET (widget)->style->klass->xthickness);
-      child_allocation.y = (CHILD_SPACING + GTK_WIDGET (widget)->style->klass->ythickness);
+      child_allocation.x = (CHILD_SPACING + GTK_WIDGET (widget)->style->xthickness);
+      child_allocation.y = (CHILD_SPACING + GTK_WIDGET (widget)->style->ythickness);
 
       child_allocation.width = MAX (1, (gint)widget->allocation.width - child_allocation.x * 2 -
 	                         border_width * 2);
@@ -488,14 +488,14 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
       if (GTK_WIDGET_CAN_DEFAULT (button))
 	{
-	  child_allocation.x += (GTK_WIDGET (widget)->style->klass->xthickness +
+	  child_allocation.x += (GTK_WIDGET (widget)->style->xthickness +
 				 DEFAULT_LEFT_POS);
-	  child_allocation.y += (GTK_WIDGET (widget)->style->klass->ythickness +
+	  child_allocation.y += (GTK_WIDGET (widget)->style->ythickness +
 				 DEFAULT_TOP_POS);
 	  child_allocation.width =  MAX (1, (gint)child_allocation.width -
-					 (gint)(GTK_WIDGET (widget)->style->klass->xthickness * 2 + DEFAULT_SPACING));
+					 (gint)(GTK_WIDGET (widget)->style->xthickness * 2 + DEFAULT_SPACING));
 	  child_allocation.height = MAX (1, (gint)child_allocation.height -
-					 (gint)(GTK_WIDGET (widget)->style->klass->xthickness * 2 + DEFAULT_SPACING));
+					 (gint)(GTK_WIDGET (widget)->style->xthickness * 2 + DEFAULT_SPACING));
 	}
 
       gtk_widget_size_allocate (GTK_BIN (button)->child, &child_allocation);
@@ -560,8 +560,8 @@ gtk_button_paint (GtkWidget    *widget,
 
       if (GTK_WIDGET_CAN_DEFAULT (widget))
 	{
-	  x += widget->style->klass->xthickness;
-	  y += widget->style->klass->ythickness;
+	  x += widget->style->xthickness;
+	  y += widget->style->ythickness;
 	  width -= 2 * x + DEFAULT_SPACING;
 	  height -= 2 * y + DEFAULT_SPACING;
 	  x += DEFAULT_LEFT_POS;

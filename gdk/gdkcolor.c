@@ -32,37 +32,21 @@
 GdkColormap*
 gdk_colormap_ref (GdkColormap *cmap)
 {
-  GdkColormapPrivate *private = (GdkColormapPrivate *)cmap;
-
-  g_return_val_if_fail (cmap != NULL, NULL);
-
-  private->ref_count += 1;
-  return cmap;
+  return (GdkColormap *) g_object_ref (G_OBJECT (cmap));
 }
 
 void
 gdk_colormap_unref (GdkColormap *cmap)
 {
-  GdkColormapPrivate *private = (GdkColormapPrivate *)cmap;
-
-  g_return_if_fail (cmap != NULL);
-  g_return_if_fail (private->ref_count > 0);
-
-  private->ref_count -= 1;
-  if (private->ref_count == 0)
-    _gdk_colormap_real_destroy (cmap);
+  g_object_unref (G_OBJECT (cmap));
 }
 
 GdkVisual *
 gdk_colormap_get_visual (GdkColormap *colormap)
 {
-  GdkColormapPrivate *private;
+  g_return_val_if_fail (GDK_IS_COLORMAP (colormap), NULL);
 
-  g_return_val_if_fail (colormap != NULL, NULL);
-  
-  private = (GdkColormapPrivate *)colormap;
-
-  return private->visual;
+  return colormap->visual;
 }
      
 void

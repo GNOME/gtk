@@ -29,6 +29,8 @@
 
 #include "gdkx.h"
 #include "gdkcursor.h"
+#include "gdkpixmap-x11.h"
+#include <gdk/gdkpixmap.h>
 
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
@@ -62,12 +64,13 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
   Cursor xcursor;
   XColor xfg, xbg;
 
-  g_return_val_if_fail (source != NULL, NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (source), NULL);
+  g_return_val_if_fail (GDK_IS_PIXMAP (mask), NULL);
   g_return_val_if_fail (fg != NULL, NULL);
   g_return_val_if_fail (bg != NULL, NULL);
 
-  source_pixmap = GDK_DRAWABLE_XID (source);
-  mask_pixmap   = GDK_DRAWABLE_XID (mask);
+  source_pixmap = GDK_PIXMAP_XID (source);
+  mask_pixmap   = GDK_PIXMAP_XID (mask);
 
   xfg.pixel = fg->pixel;
   xfg.red = fg->red;

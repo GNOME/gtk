@@ -515,9 +515,9 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	{
 	  if (hb->handle_position == GTK_POS_LEFT ||
 	      hb->handle_position == GTK_POS_RIGHT)
-	    requisition->height += widget->style->klass->ythickness;
+	    requisition->height += widget->style->ythickness;
 	  else
-	    requisition->width += widget->style->klass->xthickness;
+	    requisition->width += widget->style->xthickness;
 	}
     }
   else

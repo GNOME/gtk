@@ -247,7 +247,7 @@ gtk_accel_label_size_request (GtkWidget	     *widget,
   pango_layout_get_extents (layout, NULL, &logical_rect);
   
   accel_label->accel_string_width = logical_rect.width / PANGO_SCALE;
-  pango_layout_unref (layout);
+  g_object_unref (G_OBJECT (layout));
 }
 
 static gint
@@ -304,7 +304,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 			   y,
 			   layout);
 
-	  pango_layout_unref (layout);
+          g_object_unref (G_OBJECT (layout));
 	}
       else
 	{

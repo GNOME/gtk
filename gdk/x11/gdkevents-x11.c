@@ -261,7 +261,7 @@ gdk_event_translate (GdkEvent *event,
 {
   
   GdkWindow *window;
-  GdkWindowPrivate *window_private;
+  GdkWindowObject *window_private;
   static XComposeStatus compose;
   KeySym keysym;
   int charcount;
@@ -297,7 +297,7 @@ gdk_event_translate (GdkEvent *event,
   window = gdk_window_lookup (xevent->xany.window);
   /* FIXME: window might be a GdkPixmap!!! */
   
-  window_private = (GdkWindowPrivate *) window;
+  window_private = (GdkWindowObject *) window;
   
   if (window != NULL)
     gdk_window_ref (window);
@@ -305,10 +305,10 @@ gdk_event_translate (GdkEvent *event,
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
   
-  if (window_private && GDK_DRAWABLE_DESTROYED (window))
+  if (window_private && GDK_WINDOW_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
-	return FALSE;
+        return FALSE;
     }
   else
     {
@@ -329,7 +329,7 @@ gdk_event_translate (GdkEvent *event,
 
 #ifdef USE_XIM
   if (window == NULL && gdk_xim_window && xevent->type == KeyPress &&
-      !GDK_DRAWABLE_DESTROYED (gdk_xim_window))
+      !GDK_WINDOW_DESTROYED (gdk_xim_window))
     {
       /*
        * If user presses a key in Preedit or Status window, keypress event
@@ -344,7 +344,7 @@ gdk_event_translate (GdkEvent *event,
       GdkFilterReturn result;
 
       window = gdk_xim_window;
-      window_private = (GdkWindowPrivate *) window;
+      window_private = (GdkWindowObject *) window;
       gdk_window_ref (window);
       event->any.window = window;
 
@@ -626,7 +626,7 @@ gdk_event_translate (GdkEvent *event,
       
       /* Tell XInput stuff about it if appropriate */
       if (window_private &&
-	  !GDK_DRAWABLE_DESTROYED (window) &&
+	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.enter_event)
 	gdk_input_vtable.enter_event (&xevent->xcrossing, window);
@@ -937,9 +937,9 @@ gdk_event_translate (GdkEvent *event,
       event->any.type = GDK_DESTROY;
       event->any.window = window;
       
-      return_val = window_private && !GDK_DRAWABLE_DESTROYED (window);
+      return_val = window_private && !GDK_WINDOW_DESTROYED (window);
       
-      if (window && GDK_DRAWABLE_XID (window) != GDK_ROOT_WINDOW())
+      if (window && GDK_WINDOW_XID (window) != GDK_ROOT_WINDOW())
 	gdk_window_destroy_notify (window);
       break;
       
@@ -992,16 +992,16 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xconfigure.override_redirect,
 			   !window
 			   ? " (discarding)"
-			   : GDK_DRAWABLE_TYPE (window) == GDK_WINDOW_CHILD
+			   : GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD
 			   ? " (discarding child)"
 			   : ""));
       if (window &&
-	  !GDK_DRAWABLE_DESTROYED (window) &&
+	  !GDK_WINDOW_DESTROYED (window) &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.configure_event)
 	gdk_input_vtable.configure_event (&xevent->xconfigure, window);
 
-      if (!window || GDK_DRAWABLE_TYPE (window) == GDK_WINDOW_CHILD)
+      if (!window || GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
 	return_val = FALSE;
       else
 	{
@@ -1012,7 +1012,7 @@ gdk_event_translate (GdkEvent *event,
 	  
 	  if (!xevent->xconfigure.x &&
 	      !xevent->xconfigure.y &&
-	      !GDK_DRAWABLE_DESTROYED (window))
+	      !GDK_WINDOW_DESTROYED (window))
 	    {
 	      gint tx = 0;
 	      gint ty = 0;
@@ -1042,8 +1042,8 @@ gdk_event_translate (GdkEvent *event,
 	    }
 	  window_private->x = event->configure.x;
 	  window_private->y = event->configure.y;
-	  window_private->drawable.width = xevent->xconfigure.width;
-	  window_private->drawable.height = xevent->xconfigure.height;
+	  GDK_WINDOW_IMPL_X11 (window_private->impl)->width = xevent->xconfigure.width;
+	  GDK_WINDOW_IMPL_X11 (window_private->impl)->height = xevent->xconfigure.height;
 	  if (window_private->resize_count > 1)
 	    window_private->resize_count -= 1;
 	}
@@ -1177,7 +1177,7 @@ gdk_event_translate (GdkEvent *event,
       /* something else - (e.g., a Xinput event) */
       
       if (window_private &&
-	  !window_private->drawable.destroyed &&
+	  !GDK_WINDOW_DESTROYED (window_private) &&
 	  (window_private->extension_events != 0) &&
 	  gdk_input_vtable.other_event)
 	return_val = gdk_input_vtable.other_event(event, xevent, window);

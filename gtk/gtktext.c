@@ -1309,8 +1309,8 @@ gtk_text_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, text);
   
-  attributes.x = (widget->style->klass->xthickness + TEXT_BORDER_ROOM);
-  attributes.y = (widget->style->klass->ythickness + TEXT_BORDER_ROOM);
+  attributes.x = (widget->style->xthickness + TEXT_BORDER_ROOM);
+  attributes.y = (widget->style->ythickness + TEXT_BORDER_ROOM);
   attributes.width = MAX (1, (gint)widget->allocation.width - (gint)attributes.x * 2);
   attributes.height = MAX (1, (gint)widget->allocation.height - (gint)attributes.y * 2);
   
@@ -1508,8 +1508,8 @@ clear_focus_area (GtkText *text, gint area_x, gint area_y, gint area_width, gint
 {
   GtkWidget *widget = GTK_WIDGET (text);
   
-  gint ythick = TEXT_BORDER_ROOM + widget->style->klass->ythickness;
-  gint xthick = TEXT_BORDER_ROOM + widget->style->klass->xthickness;
+  gint ythick = TEXT_BORDER_ROOM + widget->style->ythickness;
+  gint xthick = TEXT_BORDER_ROOM + widget->style->xthickness;
   
   gint width, height;
   
@@ -1537,8 +1537,8 @@ gtk_text_draw_focus (GtkWidget *widget)
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      gint ythick = widget->style->klass->ythickness;
-      gint xthick = widget->style->klass->xthickness;
+      gint ythick = widget->style->ythickness;
+      gint xthick = widget->style->xthickness;
       gint xextra = TEXT_BORDER_ROOM;
       gint yextra = TEXT_BORDER_ROOM;
       
@@ -1608,8 +1608,8 @@ gtk_text_size_request (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_TEXT (widget));
   g_return_if_fail (requisition != NULL);
   
-  xthickness = widget->style->klass->xthickness + TEXT_BORDER_ROOM;
-  ythickness = widget->style->klass->ythickness + TEXT_BORDER_ROOM;
+  xthickness = widget->style->xthickness + TEXT_BORDER_ROOM;
+  ythickness = widget->style->ythickness + TEXT_BORDER_ROOM;
   
   char_height = MIN_TEXT_HEIGHT_LINES * (widget->style->font->ascent +
 					 widget->style->font->descent);
@@ -1645,11 +1645,11 @@ gtk_text_size_allocate (GtkWidget     *widget,
 			      allocation->width, allocation->height);
       
       gdk_window_move_resize (text->text_area,
-			      widget->style->klass->xthickness + TEXT_BORDER_ROOM,
-			      widget->style->klass->ythickness + TEXT_BORDER_ROOM,
-			      MAX (1, (gint)widget->allocation.width - (gint)(widget->style->klass->xthickness +
+			      widget->style->xthickness + TEXT_BORDER_ROOM,
+			      widget->style->ythickness + TEXT_BORDER_ROOM,
+			      MAX (1, (gint)widget->allocation.width - (gint)(widget->style->xthickness +
 							  (gint)TEXT_BORDER_ROOM) * 2),
-			      MAX (1, (gint)widget->allocation.height - (gint)(widget->style->klass->ythickness +
+			      MAX (1, (gint)widget->allocation.height - (gint)(widget->style->ythickness +
 							   (gint)TEXT_BORDER_ROOM) * 2));
       
 #ifdef USE_XIM

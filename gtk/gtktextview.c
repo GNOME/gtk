@@ -2403,8 +2403,8 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
       gtk_text_layout_set_contexts (text_view->layout, ltr_context, rtl_context);
 
-      pango_context_unref (ltr_context);
-      pango_context_unref (rtl_context);
+      g_object_unref (G_OBJECT (ltr_context));
+      g_object_unref (G_OBJECT (rtl_context));
 
       style = gtk_text_view_style_values_new ();
 

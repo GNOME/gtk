@@ -993,8 +993,8 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
       info->proxy_data = NULL;
       info->dropped = FALSE;
       info->proxy_drop_wait = FALSE;
-      g_dataset_set_data_full (context,
-			       "gtk-info",
+      g_object_set_qdata_full (G_OBJECT (context),
+			       g_quark_from_static_string ("gtk-info"),
 			       info,
 			       gtk_drag_dest_info_destroy);
     }
@@ -1127,7 +1127,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
   drop_widget = data;
 
   context = gtk_object_get_data (GTK_OBJECT (widget), "drag-context");
-  info = g_dataset_get_data (context, "gtk-info");
+  info = g_object_get_qdata (G_OBJECT (context), g_quark_from_static_string ("gtk-info"));
 
   if (info->proxy_data && 
       info->proxy_data->target == selection_data->target)
@@ -1345,7 +1345,9 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
 
   source_info->proxy_dest = dest_info;
   
-  g_dataset_set_data (source_info->context, "gtk-info", source_info);
+  g_object_set_qdata (G_OBJECT (source_info->context),
+                      g_quark_from_static_string ("gtk-info"),
+                      source_info);
   
   gtk_signal_connect (GTK_OBJECT (source_info->ipc_widget), 
 		      "selection_get",
@@ -1396,7 +1398,8 @@ gtk_drag_dest_leave (GtkWidget      *widget,
 
   if (site->do_proxy)
     {
-      GtkDragDestInfo *info = g_dataset_get_data (context, "gtk-info");
+      GtkDragDestInfo *info = g_object_get_qdata (G_OBJECT (context),
+                                                  g_quark_from_static_string ("gtk-info"));
 
       if (info->proxy_source && !info->dropped)
 	gdk_drag_abort (info->proxy_source->context, time);
@@ -1437,7 +1440,8 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
       GdkWindow *dest_window;
       GdkDragProtocol proto;
 	
-      GtkDragDestInfo *info = g_dataset_get_data (context, "gtk-info");
+      GtkDragDestInfo *info = g_object_get_qdata (G_OBJECT (context),
+                                                 g_quark_from_static_string ("gtk-info"));
 
       if (!info->proxy_source)
 	gtk_drag_proxy_begin (widget, info);
@@ -1534,7 +1538,8 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
   site = gtk_object_get_data (GTK_OBJECT (widget), "gtk-drag-dest");
   g_return_val_if_fail (site != NULL, FALSE);
 
-  info = g_dataset_get_data (context, "gtk-info");
+  info = g_object_get_qdata (G_OBJECT (context),
+                             g_quark_from_static_string ("gtk-info"));
   g_return_val_if_fail (info != NULL, FALSE);
 
   info->drop_x = x;
@@ -1677,7 +1682,8 @@ gtk_drag_begin (GtkWidget         *widget,
   info->context = gdk_drag_begin (info->ipc_widget->window, targets);
   g_list_free (targets);
   
-  g_dataset_set_data (info->context, "gtk-info", info);
+  g_object_set_qdata (G_OBJECT (info->context),
+                     g_quark_from_static_string ("gtk-info"), info);
 
   info->button = button;
   info->target_list = target_list;
@@ -1913,7 +1919,8 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   g_return_if_fail (context != NULL);
   g_return_if_fail (widget != NULL);
 
-  info = g_dataset_get_data (context, "gtk-info");
+  info = g_object_get_qdata (G_OBJECT (context),
+                            g_quark_from_static_string ("gtk-info"));
   gtk_drag_remove_icon (info);
 
   info->icon_window = widget;
@@ -2106,7 +2113,8 @@ gtk_drag_source_handle_event (GtkWidget *widget,
   g_return_if_fail (event != NULL);
 
   context = event->dnd.context;
-  info = g_dataset_get_data (context, "gtk-info");
+  info = g_object_get_qdata (G_OBJECT (context),
+                            g_quark_from_static_string ("gtk-info"));
   if (!info)
     return;
 
@@ -2285,7 +2293,8 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 	  /* Mark the context as dead, so if the destination decides
 	   * to respond really late, we still are OK.
 	   */
-	  g_dataset_set_data (info->context, "gtk-info", NULL);
+	  g_object_set_qdata (G_OBJECT (info->context),
+                             g_quark_from_static_string ("gtk-info"), NULL);
 	  gtk_timeout_add (ANIM_STEP_TIME, gtk_drag_anim_timeout, anim);
 	}
     }
@@ -2419,7 +2428,8 @@ gtk_drag_source_event_cb (GtkWidget      *widget,
 					i, event);
 
 	      
-	      info = g_dataset_get_data (context, "gtk-info");
+	      info = g_object_get_qdata (G_OBJECT (context),
+                                         g_quark_from_static_string ("gtk-info"));
 
 	      if (!info->icon_window)
 		{
@@ -2594,7 +2604,7 @@ gtk_drag_source_info_destroy (gpointer data)
 
   gtk_target_list_unref (info->target_list);
 
-  g_dataset_set_data (info->context, "gtk-info", NULL);
+  g_object_set_qdata (G_OBJECT (info->context), g_quark_from_static_string ("gtk-info"), NULL);
   gdk_drag_context_unref (info->context);
 
   if (info->drop_timeout)

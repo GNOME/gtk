@@ -59,9 +59,6 @@ struct _GtkChildArgInfo
   guint seq_id;
 };
 
-/* The global list of toplevel windows */
-static GList *toplevel_list = NULL;
-
 static void gtk_container_base_class_init   (GtkContainerClass *klass);
 static void gtk_container_class_init        (GtkContainerClass *klass);
 static void gtk_container_init              (GtkContainer      *container);

@@ -74,6 +74,7 @@ gdk_public_h_sources = @STRIP_BEGIN@ \
 	gdkvisual.h	\
 	gdkwindow.h	\
 @STRIP_END@
+
 gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdk.c			\
 	gdkcolor.c		\
@@ -87,6 +88,7 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 	gdkimage.c		\
 	gdkinternals.h  	\
 	gdkpango.c		\
+	gdkpixmap.c		\
 	gdkpoly-generic.h	\
 	gdkpolyreg-generic.c	\
 	gdkrgb.c		\

@@ -449,8 +449,8 @@ gtk_viewport_realize (GtkWidget *widget)
 
   if (viewport->shadow_type != GTK_SHADOW_NONE)
     {
-      attributes.x = widget->style->klass->xthickness;
-      attributes.y = widget->style->klass->ythickness;
+      attributes.x = widget->style->xthickness;
+      attributes.y = widget->style->ythickness;
     }
   else
     {
@@ -564,8 +564,8 @@ gtk_viewport_draw (GtkWidget    *widget,
       
       gtk_viewport_paint (widget, &tmp_area);
 
-      tmp_area.x += viewport->hadjustment->value - widget->style->klass->xthickness;
-      tmp_area.y += viewport->vadjustment->value - widget->style->klass->ythickness;
+      tmp_area.x += viewport->hadjustment->value - widget->style->xthickness;
+      tmp_area.y += viewport->vadjustment->value - widget->style->ythickness;
       
       gtk_paint_flat_box(widget->style, viewport->bin_window, 
 			 GTK_STATE_NORMAL, GTK_SHADOW_NONE,
@@ -654,10 +654,10 @@ gtk_viewport_size_request (GtkWidget      *widget,
   bin = GTK_BIN (widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			GTK_WIDGET (widget)->style->klass->xthickness) * 2 + 5;
+			GTK_WIDGET (widget)->style->xthickness) * 2 + 5;
 
   requisition->height = (GTK_CONTAINER (widget)->border_width * 2 +
-			 GTK_WIDGET (widget)->style->klass->ythickness) * 2 + 5;
+			 GTK_WIDGET (widget)->style->ythickness) * 2 + 5;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -698,8 +698,8 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 
   if (viewport->shadow_type != GTK_SHADOW_NONE)
     {
-      child_allocation.x = GTK_WIDGET (viewport)->style->klass->xthickness;
-      child_allocation.y = GTK_WIDGET (viewport)->style->klass->ythickness;
+      child_allocation.x = GTK_WIDGET (viewport)->style->xthickness;
+      child_allocation.y = GTK_WIDGET (viewport)->style->ythickness;
     }
 
   child_allocation.width = MAX (1, allocation->width - child_allocation.x * 2 - border_width * 2);

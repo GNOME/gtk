@@ -31,6 +31,7 @@
  */
 #include <glib.h>
 #include <pango/pango.h>
+#include <glib-object.h>
 
 #ifdef G_OS_WIN32
 #  ifdef GDK_COMPILATION

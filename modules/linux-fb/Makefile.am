@@ -21,14 +21,17 @@ LDFLAGS = @STRIP_BEGIN@ \
 	-lm		\
 @STRIP_END@
 
-moduledir = $(libdir)/pango/modules
-module_LTLIBRARIES = fb-basic.la
+fb_basic_la_SOURCES = basic.c
 
 fb_basic_la_LDFLAGS = -export-dynamic -avoid-version -module
 fb_basic_la_LIBADD = $(PANGO_LIBS) -L$(top_builddir)/gdk/.libs -lgdk-linux-fb
-fb_basic_la_SOURCES = $(sources)
 
-fb_basic_la_SOURCES = basic.c
+if USE_LINUX_FB
+
+moduledir = $(libdir)/pango/modules
+module_LTLIBRARIES = fb-basic.la
+
+endif
 
 EXTRA_DIST =            \
         tables-big.i    \

@@ -348,7 +348,7 @@ gtk_font_selection_finalize (GObject *object)
   
   fontsel = GTK_FONT_SELECTION (object);
 
-  pango_context_unref (fontsel->context);
+  g_object_unref (G_OBJECT (fontsel->context));
   pango_font_description_free (fontsel->font_desc);
 
   if (fontsel->font)

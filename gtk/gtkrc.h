@@ -35,6 +35,12 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#define GTK_TYPE_RC_STYLE              (gtk_rc_style_get_type ())
+#define GTK_RC_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_RC_STYLE, GtkRcStyle))
+#define GTK_RC_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
+#define GTK_IS_RC_STYLE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_RC_STYLE))
+#define GTK_IS_RC_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RC_STYLE))
+#define GTK_RC_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_RC_STYLE, GtkRcStyleClass))
 
 typedef enum {
   GTK_RC_FG   = 1 << 0,
@@ -43,8 +49,14 @@ typedef enum {
   GTK_RC_BASE = 1 << 3
 } GtkRcFlags;
 
+typedef struct _GtkRcStyleClass GtkRcStyleClass;
+
 struct _GtkRcStyle
 {
+  GObject parent_instance;
+
+  /*< public >*/
+  
   gchar *name;
   gchar *bg_pixmap_name[5];
   PangoFontDescription *font_desc;
@@ -57,6 +69,17 @@ struct _GtkRcStyle
 
   GtkThemeEngine *engine;
   gpointer        engine_data;
+
+  /*< private >*/
+  
+  /* list of RC style lists including this RC style */
+  GSList *rc_style_lists;
+};
+
+struct _GtkRcStyleClass
+{
+  GObjectClass parent_class;
+
 };
 
 void	  gtk_rc_init			(void);
@@ -74,6 +97,7 @@ void	  gtk_rc_add_widget_class_style (GtkRcStyle  *rc_style,
 void	  gtk_rc_add_class_style	(GtkRcStyle  *rc_style,
 					 const gchar *pattern);
 
+GType       gtk_rc_style_get_type         (void);
 GtkRcStyle* gtk_rc_style_new              (void);
 void        gtk_rc_style_ref              (GtkRcStyle  *rc_style);
 void        gtk_rc_style_unref            (GtkRcStyle  *rc_style);

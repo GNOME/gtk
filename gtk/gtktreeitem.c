@@ -499,7 +499,7 @@ gtk_tree_item_size_request (GtkWidget      *widget,
   item = GTK_TREE_ITEM(widget);
 
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->klass->xthickness) * 2;
+			widget->style->xthickness) * 2;
   requisition->height = GTK_CONTAINER (widget)->border_width * 2;
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
@@ -546,7 +546,7 @@ gtk_tree_item_size_allocate (GtkWidget     *widget,
   if (bin->child)
     {
       border_width = (GTK_CONTAINER (widget)->border_width +
-		      widget->style->klass->xthickness);
+		      widget->style->xthickness);
 
       child_allocation.x = border_width + GTK_TREE(widget->parent)->current_indent;
       child_allocation.y = GTK_CONTAINER (widget)->border_width;

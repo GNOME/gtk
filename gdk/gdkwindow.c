@@ -44,63 +44,61 @@ struct _GdkWindowPaint
   gint x_offset;
   gint y_offset;
 };
-
-static void   gdk_window_draw_destroy   (GdkDrawable     *drawable);
-static GdkGC *gdk_window_draw_create_gc (GdkDrawable     *drawable,
-					 GdkGCValues     *values,
-					 GdkGCValuesMask  mask);
+static GdkGC *gdk_window_create_gc      (GdkDrawable     *drawable,
+                                         GdkGCValues     *values,
+                                         GdkGCValuesMask  mask);
 static void   gdk_window_draw_rectangle (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             filled,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height);
+                                         GdkGC           *gc,
+                                         gint             filled,
+                                         gint             x,
+                                         gint             y,
+                                         gint             width,
+                                         gint             height);
 static void   gdk_window_draw_arc       (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             filled,
-					 gint             x,
-					 gint             y,
-					 gint             width,
-					 gint             height,
-					 gint             angle1,
-					 gint             angle2);
+                                         GdkGC           *gc,
+                                         gint             filled,
+                                         gint             x,
+                                         gint             y,
+                                         gint             width,
+                                         gint             height,
+                                         gint             angle1,
+                                         gint             angle2);
 static void   gdk_window_draw_polygon   (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 gint             filled,
-					 GdkPoint        *points,
-					 gint             npoints);
+                                         GdkGC           *gc,
+                                         gint             filled,
+                                         GdkPoint        *points,
+                                         gint             npoints);
 static void   gdk_window_draw_text      (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const gchar     *text,
-					 gint             text_length);
+                                         GdkFont         *font,
+                                         GdkGC           *gc,
+                                         gint             x,
+                                         gint             y,
+                                         const gchar     *text,
+                                         gint             text_length);
 static void   gdk_window_draw_text_wc   (GdkDrawable     *drawable,
-					 GdkFont         *font,
-					 GdkGC           *gc,
-					 gint             x,
-					 gint             y,
-					 const GdkWChar  *text,
-					 gint             text_length);
+                                         GdkFont         *font,
+                                         GdkGC           *gc,
+                                         gint             x,
+                                         gint             y,
+                                         const GdkWChar  *text,
+                                         gint             text_length);
 static void   gdk_window_draw_drawable  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPixmap       *src,
-					 gint             xsrc,
-					 gint             ysrc,
-					 gint             xdest,
-					 gint             ydest,
-					 gint             width,
-					 gint             height);
+                                         GdkGC           *gc,
+                                         GdkPixmap       *src,
+                                         gint             xsrc,
+                                         gint             ysrc,
+                                         gint             xdest,
+                                         gint             ydest,
+                                         gint             width,
+                                         gint             height);
 static void   gdk_window_draw_points    (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkPoint        *points,
-					 gint             npoints);
+                                         GdkGC           *gc,
+                                         GdkPoint        *points,
+                                         gint             npoints);
 static void   gdk_window_draw_segments  (GdkDrawable     *drawable,
-					 GdkGC           *gc,
-					 GdkSegment      *segs,
-					 gint             nsegs);
+                                         GdkGC           *gc,
+                                         GdkSegment      *segs,
+                                         gint             nsegs);
 static void   gdk_window_draw_lines     (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
@@ -112,74 +110,131 @@ static void   gdk_window_draw_glyphs    (GdkDrawable      *drawable,
 					 gint              y,
 					 PangoGlyphString *glyphs);
 
+static void   gdk_window_draw_image     (GdkDrawable     *drawable,
+                                         GdkGC           *gc,
+                                         GdkImage        *image,
+                                         gint             xsrc,
+                                         gint             ysrc,
+                                         gint             xdest,
+                                         gint             ydest,
+                                         gint             width,
+                                         gint             height);
+
+
+static void   gdk_window_real_get_size  (GdkDrawable     *drawable,
+                                         gint            *width,
+                                         gint            *height);
+
+static GdkVisual*   gdk_window_real_get_visual   (GdkDrawable *drawable);
+static gint         gdk_window_real_get_depth    (GdkDrawable *drawable);
+static void         gdk_window_real_set_colormap (GdkDrawable *drawable,
+                                             GdkColormap *cmap);
+static GdkColormap* gdk_window_real_get_colormap (GdkDrawable *drawable);
+     
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
-/* All drawing operations on windows are forwarded through the following
- * class to enable the automatic-backing-store feature.
- */
-GdkDrawableClass _gdk_window_class = {
-  gdk_window_draw_destroy,
-  gdk_window_draw_create_gc,
-  gdk_window_draw_rectangle,
-  gdk_window_draw_arc,
-  gdk_window_draw_polygon,
-  gdk_window_draw_text,
-  gdk_window_draw_text_wc,
-  gdk_window_draw_drawable,
-  gdk_window_draw_points,
-  gdk_window_draw_segments,
-  gdk_window_draw_lines,
-  gdk_window_draw_glyphs,
-};
+static void gdk_window_init       (GdkWindowObject      *window);
+static void gdk_window_class_init (GdkWindowObjectClass *klass);
+static void gdk_window_finalize   (GObject              *object);
 
-GdkWindow *
-_gdk_window_alloc (void)
+static gpointer parent_class = NULL;
+
+GType
+gdk_window_object_get_type (void)
 {
-  GdkWindowPrivate *private = g_new (GdkWindowPrivate, 1);
-  GdkWindow *window = (GdkWindow*) private;
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkWindowObjectClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_window_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkWindowObject),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_window_init,
+      };
+      
+      object_type = g_type_register_static (GDK_TYPE_DRAWABLE,
+                                            "GdkWindow",
+                                            &object_info);
+    }
   
-  window->user_data = NULL;
+  return object_type;
+}
 
-  private->drawable.ref_count = 1;
-  private->drawable.destroyed = FALSE;
-  private->drawable.klass = NULL;
-  private->drawable.klass_data = NULL;
-  private->drawable.window_type = GDK_WINDOW_CHILD;
+static void
+gdk_window_init (GdkWindowObject *window)
+{
+  /* 0-initialization is good for all other fields. */
 
-  private->drawable.width = 1;
-  private->drawable.height = 1;
+  window->window_type = GDK_WINDOW_CHILD;
 
-  private->drawable.colormap = NULL;
+  window->impl =
+    GDK_DRAWABLE (g_type_create_instance (_gdk_window_impl_get_type ()));
+}
 
-  private->parent = NULL;
-  private->x = 0;
-  private->y = 0;
-  private->resize_count = 0;
-
-  private->mapped = FALSE;
-  private->guffaw_gravity = FALSE;
-  private->extension_events = FALSE;
+static void
+gdk_window_class_init (GdkWindowObjectClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
-  private->filters = NULL;
-  private->children = NULL;
+  parent_class = g_type_class_peek_parent (klass);
 
-  private->bg_color.pixel = 0;
-  private->bg_color.red = 0;
-  private->bg_color.green = 0;
-  private->bg_color.blue = 0;
+  object_class->finalize = gdk_window_finalize;
 
-  private->bg_pixmap = NULL;
+  drawable_class->create_gc = gdk_window_create_gc;
+  drawable_class->draw_rectangle = gdk_window_draw_rectangle;
+  drawable_class->draw_arc = gdk_window_draw_arc;
+  drawable_class->draw_polygon = gdk_window_draw_polygon;
+  drawable_class->draw_text = gdk_window_draw_text;
+  drawable_class->draw_text_wc = gdk_window_draw_text_wc;
+  drawable_class->draw_drawable = gdk_window_draw_drawable;
+  drawable_class->draw_points = gdk_window_draw_points;
+  drawable_class->draw_segments = gdk_window_draw_segments;
+  drawable_class->draw_lines = gdk_window_draw_lines;
+  drawable_class->draw_glyphs = gdk_window_draw_glyphs;
+  drawable_class->draw_image = gdk_window_draw_image;
+  drawable_class->get_depth = gdk_window_real_get_depth;
+  drawable_class->get_size = gdk_window_real_get_size;
+  drawable_class->set_colormap = gdk_window_real_set_colormap;
+  drawable_class->get_colormap = gdk_window_real_get_colormap;
+  drawable_class->get_visual = gdk_window_real_get_visual;
+}
 
-  private->paint_stack = NULL;
-
-  private->update_area = NULL;
-  private->update_freeze_count = 0;
+static void
+gdk_window_finalize (GObject *object)
+{
+  GdkWindow *window = GDK_WINDOW (object);
+  GdkWindowObject *obj = (GdkWindowObject *) object;
   
-  return window;
+  if (!GDK_WINDOW_DESTROYED (window))
+    {
+      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+	{
+	  g_warning ("losing last reference to undestroyed window\n");
+	  _gdk_window_destroy (window, FALSE);
+	}
+      else
+	/* We use TRUE here, to keep us from actually calling
+	 * XDestroyWindow() on the window
+	 */
+	_gdk_window_destroy (window, TRUE);
+    }
+
+  g_object_unref (G_OBJECT (obj->impl));
+  obj->impl = NULL;
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /**
- * _gdk_window_destroy_heirarchy:
+ * _gdk_window_destroy_hierarchy:
  * @window: a #GdkWindow
  * @recursing: If TRUE, then this is being called because a parent
  *            was destroyed. This generally means that the call to the windowing system
@@ -195,37 +250,37 @@ _gdk_window_alloc (void)
  * drop the reference count created by gdk_window_new().
  **/
 static void
-_gdk_window_destroy_heirarchy (GdkWindow *window,
+_gdk_window_destroy_hierarchy (GdkWindow *window,
 			       gboolean   recursing,
 			       gboolean   foreign_destroy)
 {
-  GdkWindowPrivate *private;
-  GdkWindowPrivate *temp_private;
+  GdkWindowObject *private;
+  GdkWindowObject *temp_private;
   GdkWindow *temp_window;
   GList *children;
   GList *tmp;
   
   g_return_if_fail (window != NULL);
   
-  private = (GdkWindowPrivate*) window;
+  private = (GdkWindowObject*) window;
   
-  switch (private->drawable.window_type)
+  switch (GDK_WINDOW_TYPE (window))
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
     case GDK_WINDOW_FOREIGN:
-      if (!GDK_DRAWABLE_DESTROYED (window))
+      if (!GDK_WINDOW_DESTROYED (window))
 	{
 	  private->mapped = FALSE;
-	  private->drawable.destroyed = TRUE;
+	  private->destroyed = TRUE;
 	  
 	  _gdk_windowing_window_destroy (window, recursing, foreign_destroy);
 
 	  if (private->parent)
 	    {
-	      GdkWindowPrivate *parent_private = (GdkWindowPrivate *)private->parent;
+	      GdkWindowObject *parent_private = (GdkWindowObject *)private->parent;
 	      if (parent_private->children)
 		parent_private->children = g_list_remove (parent_private->children, window);
 	    }
@@ -239,7 +294,7 @@ _gdk_window_destroy_heirarchy (GdkWindow *window,
 	      private->bg_pixmap = NULL;
 	    }
 	  
-	  if (GDK_DRAWABLE_TYPE (window) != GDK_WINDOW_FOREIGN)
+	  if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
 	    {
 	      children = tmp = private->children;
 	      private->children = NULL;
@@ -249,9 +304,9 @@ _gdk_window_destroy_heirarchy (GdkWindow *window,
 		  temp_window = tmp->data;
 		  tmp = tmp->next;
 		  
-		  temp_private = (GdkWindowPrivate*) temp_window;
+		  temp_private = (GdkWindowObject*) temp_window;
 		  if (temp_private)
-		    _gdk_window_destroy_heirarchy (temp_window, TRUE, foreign_destroy);
+		    _gdk_window_destroy_hierarchy (temp_window, TRUE, foreign_destroy);
 		}
 	      
 	      g_list_free (children);
@@ -270,21 +325,13 @@ _gdk_window_destroy_heirarchy (GdkWindow *window,
 	      g_list_free (private->filters);
 	      private->filters = NULL;
 	    }
-	  
-	  if (private->drawable.colormap)
-	    {
-	      gdk_colormap_unref (private->drawable.colormap);
-	      private->drawable.colormap = NULL;
-	    }
+
+          gdk_drawable_set_colormap (GDK_DRAWABLE (window), NULL);
 	}
       break;
       
     case GDK_WINDOW_ROOT:
       g_error ("attempted to destroy root window");
-      break;
-      
-    case GDK_WINDOW_PIXMAP:
-      g_error ("called gdk_window_destroy on a pixmap (use gdk_pixmap_unref)");
       break;
     }
 }
@@ -304,13 +351,13 @@ void
 _gdk_window_destroy (GdkWindow *window,
 		     gboolean   foreign_destroy)
 {
-  _gdk_window_destroy_heirarchy (window, FALSE, foreign_destroy);
+  _gdk_window_destroy_hierarchy (window, FALSE, foreign_destroy);
 }
 
 void
 gdk_window_destroy (GdkWindow *window)
 {
-  _gdk_window_destroy_heirarchy (window, FALSE, FALSE);
+  _gdk_window_destroy_hierarchy (window, FALSE, FALSE);
   gdk_drawable_unref (window);
 }
 
@@ -320,7 +367,7 @@ gdk_window_set_user_data (GdkWindow *window,
 {
   g_return_if_fail (window != NULL);
   
-  window->user_data = user_data;
+  ((GdkWindowObject*)window)->user_data = user_data;
 }
 
 void
@@ -329,7 +376,15 @@ gdk_window_get_user_data (GdkWindow *window,
 {
   g_return_if_fail (window != NULL);
   
-  *data = window->user_data;
+  *data = ((GdkWindowObject*)window)->user_data;
+}
+
+GdkWindowType
+gdk_window_get_window_type (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), (GdkWindowType) -1);
+  
+  return GDK_WINDOW_TYPE (window);
 }
 
 void
@@ -337,41 +392,60 @@ gdk_window_get_position (GdkWindow *window,
 			 gint      *x,
 			 gint      *y)
 {
-  GdkWindowPrivate *window_private;
+  GdkWindowObject *obj;
   
-  g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  window_private = (GdkWindowPrivate*) window;
+  obj = (GdkWindowObject*) window;
   
   if (x)
-    *x = window_private->x;
+    *x = obj->x;
   if (y)
-    *y = window_private->y;
+    *y = obj->y;
 }
 
 GdkWindow*
 gdk_window_get_parent (GdkWindow *window)
 {
-  g_return_val_if_fail (window != NULL, NULL);
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   
-  return ((GdkWindowPrivate*) window)->parent;
+  return (GdkWindow*) ((GdkWindowObject*) window)->parent;
 }
 
 GdkWindow*
 gdk_window_get_toplevel (GdkWindow *window)
 {
-  GdkWindowPrivate *private;
+  GdkWindowObject *obj;
   
-  g_return_val_if_fail (window != NULL, NULL);
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  private = (GdkWindowPrivate *)window;
-  while (GDK_DRAWABLE_TYPE (private) == GDK_WINDOW_CHILD)
-    private = (GdkWindowPrivate *)private->parent;
+  obj = (GdkWindowObject *)window;
+  while (GDK_WINDOW_TYPE (obj) == GDK_WINDOW_CHILD)
+    obj = (GdkWindowObject *)obj->parent;
   
-  return (GdkWindow *)window;
+  return GDK_WINDOW (obj);
+}
+
+GList*
+gdk_window_get_children (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  return g_list_copy (GDK_WINDOW_OBJECT (window)->children);
+}
+
+GList *
+gdk_window_peek_children (GdkWindow       *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  if (GDK_WINDOW_DESTROYED (window))
+    return NULL;
+
+  return GDK_WINDOW_OBJECT (window)->children;
 }
 
 void          
@@ -379,15 +453,15 @@ gdk_window_add_filter (GdkWindow     *window,
 		       GdkFilterFunc  function,
 		       gpointer       data)
 {
-  GdkWindowPrivate *private;
+  GdkWindowObject *private;
   GList *tmp_list;
   GdkEventFilter *filter;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  private = (GdkWindowPrivate*) window;
-  if (private && GDK_DRAWABLE_DESTROYED (window))
+  private = (GdkWindowObject*) window;
+  if (private && GDK_WINDOW_DESTROYED (window))
     return;
   
   if (private)
@@ -418,14 +492,14 @@ gdk_window_remove_filter (GdkWindow     *window,
 			  GdkFilterFunc  function,
 			  gpointer       data)
 {
-  GdkWindowPrivate *private;
+  GdkWindowObject *private;
   GList *tmp_list, *node;
   GdkEventFilter *filter;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  private = (GdkWindowPrivate*) window;
+  private = (GdkWindowObject*) window;
   
   if (private)
     tmp_list = private->filters;
@@ -458,7 +532,7 @@ gdk_window_get_toplevels (void)
   GList *new_list = NULL;
   GList *tmp_list;
   
-  tmp_list = ((GdkWindowPrivate *)gdk_parent_root)->children;
+  tmp_list = ((GdkWindowObject *)gdk_parent_root)->children;
   while (tmp_list)
     {
       new_list = g_list_prepend (new_list, tmp_list->data);
@@ -480,7 +554,7 @@ gdk_window_get_toplevels (void)
 gboolean 
 gdk_window_is_visible (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
@@ -503,19 +577,19 @@ gdk_window_is_visible (GdkWindow *window)
 gboolean 
 gdk_window_is_viewable (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
   while (private && 
-	 (private != (GdkWindowPrivate *)gdk_parent_root) &&
-	 (private->drawable.window_type != GDK_WINDOW_FOREIGN))
+	 (private != (GdkWindowObject *)gdk_parent_root) &&
+	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
       if (!private->mapped)
 	return FALSE;
       
-      private = (GdkWindowPrivate *)private->parent;
+      private = (GdkWindowObject *)private->parent;
     }
   
   return TRUE;
@@ -538,7 +612,7 @@ gdk_window_begin_paint_rect (GdkWindow    *window,
 static GdkGC *
 gdk_window_get_bg_gc (GdkWindow *window, GdkWindowPaint *paint)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   guint gc_mask = 0;
   GdkGCValues gc_values;
@@ -549,7 +623,7 @@ gdk_window_get_bg_gc (GdkWindow *window, GdkWindowPaint *paint)
       tmp_paint.x_offset += private->x;
       tmp_paint.y_offset += private->y;
       
-      return gdk_window_get_bg_gc (private->parent, &tmp_paint);
+      return gdk_window_get_bg_gc (GDK_WINDOW (private->parent), &tmp_paint);
     }
   else if (private->bg_pixmap && private->bg_pixmap != GDK_PARENT_RELATIVE_BG && private->bg_pixmap != GDK_NO_BG)
     {
@@ -586,7 +660,7 @@ gdk_window_begin_paint_region (GdkWindow *window,
 			       GdkRegion *region)
 {
 #ifdef USE_BACKING_STORE
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRectangle clip_box;
   GdkWindowPaint *paint;
   GdkRegion *init_region;
@@ -595,7 +669,7 @@ gdk_window_begin_paint_region (GdkWindow *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return;
   
   paint = g_new (GdkWindowPaint, 1);
@@ -681,7 +755,7 @@ void
 gdk_window_end_paint (GdkWindow *window)
 {
 #ifdef USE_BACKING_STORE
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint;
   GdkGC *tmp_gc;
   GdkRectangle clip_box;
@@ -690,7 +764,7 @@ gdk_window_end_paint (GdkWindow *window)
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return;
   
   g_return_if_fail (private->paint_stack != NULL);
@@ -707,11 +781,11 @@ gdk_window_end_paint (GdkWindow *window)
   gdk_gc_set_clip_region (tmp_gc, paint->region);
   gdk_gc_set_clip_origin (tmp_gc, -x_offset, -y_offset);
 
-  _gdk_windowing_window_class.draw_drawable (window, tmp_gc, paint->pixmap,
-					     clip_box.x - paint->x_offset,
-					     clip_box.y - paint->y_offset,
-					     clip_box.x - x_offset, clip_box.y - y_offset,
-					     clip_box.width, clip_box.height);
+  gdk_draw_drawable (private->impl, tmp_gc, paint->pixmap,
+                     clip_box.x - paint->x_offset,
+                     clip_box.y - paint->y_offset,
+                     clip_box.x - x_offset, clip_box.y - y_offset,
+                     clip_box.width, clip_box.height);
   gdk_gc_unref (tmp_gc);
 
   if (private->paint_stack)
@@ -736,7 +810,7 @@ gdk_window_end_paint (GdkWindow *window)
 static void
 gdk_window_free_paint_stack (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   
   if (private->paint_stack)
     {
@@ -765,7 +839,7 @@ gdk_window_get_offsets (GdkWindow *window,
 			gint      *x_offset,
 			gint      *y_offset)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   
   if (private->paint_stack)
     {
@@ -779,10 +853,10 @@ gdk_window_get_offsets (GdkWindow *window,
 
 #define OFFSET_GC(gc)                                         \
     gint x_offset, y_offset; 				      \
-    gint old_clip_x = ((GdkGCPrivate *)gc)->clip_x_origin;    \
-    gint old_clip_y = ((GdkGCPrivate *)gc)->clip_y_origin;    \
-    gint old_ts_x = ((GdkGCPrivate *)gc)->ts_x_origin;        \
-    gint old_ts_y = ((GdkGCPrivate *)gc)->ts_y_origin;        \
+    gint old_clip_x = gc->clip_x_origin;    \
+    gint old_clip_y = gc->clip_y_origin;    \
+    gint old_ts_x = gc->ts_x_origin;        \
+    gint old_ts_y = gc->ts_y_origin;        \
     gdk_window_get_offsets (drawable, &x_offset, &y_offset);  \
     if (x_offset != 0 || y_offset != 0)             	      \
       {                                                       \
@@ -799,18 +873,18 @@ gdk_window_get_offsets (GdkWindow *window,
        gdk_gc_set_ts_origin (gc, old_ts_x, old_ts_y);       \
      }
 
-static void
-gdk_window_draw_destroy (GdkDrawable *drawable)
-{
-  _gdk_windowing_window_class.destroy (drawable);
-}
-
 static GdkGC *
-gdk_window_draw_create_gc (GdkDrawable     *drawable,
-			   GdkGCValues     *values,
-			   GdkGCValuesMask  mask)
+gdk_window_create_gc (GdkDrawable     *drawable,
+                      GdkGCValues     *values,
+                      GdkGCValuesMask  mask)
 {
-  return _gdk_windowing_window_class.create_gc (drawable, values, mask);
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
+  
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return NULL;
+
+  return gdk_gc_new_with_values (((GdkWindowObject *) drawable)->impl,
+                                 values, mask);
 }
 
 static void
@@ -822,8 +896,11 @@ gdk_window_draw_rectangle (GdkDrawable *drawable,
 			   gint         width,
 			   gint         height)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
   
   if (private->paint_stack)
     {
@@ -832,8 +909,8 @@ gdk_window_draw_rectangle (GdkDrawable *drawable,
 			  x - x_offset, y - y_offset, width, height);
     }
   else
-    _gdk_windowing_window_class.draw_rectangle (drawable, gc, filled,
-						x - x_offset, y - y_offset, width, height);
+    gdk_draw_rectangle (private->impl, gc, filled,
+                        x - x_offset, y - y_offset, width, height);
 
   RESTORE_GC (gc);
 }
@@ -849,9 +926,12 @@ gdk_window_draw_arc (GdkDrawable *drawable,
 		     gint         angle1,
 		     gint         angle2)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
@@ -860,9 +940,9 @@ gdk_window_draw_arc (GdkDrawable *drawable,
 		    width, height, angle1, angle2);
     }
   else
-    _gdk_windowing_window_class.draw_arc (drawable, gc, filled,
-					  x - x_offset, y - y_offset,
-					  width, height, angle1, angle2);
+    gdk_draw_arc (private->impl, gc, filled,
+                  x - x_offset, y - y_offset,
+                  width, height, angle1, angle2);
   RESTORE_GC (gc);
 }
 
@@ -873,11 +953,14 @@ gdk_window_draw_polygon (GdkDrawable *drawable,
 			 GdkPoint    *points,
 			 gint         npoints)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkPoint *new_points;
   
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (x_offset != 0 || y_offset != 0)
     {
       int i;
@@ -899,8 +982,8 @@ gdk_window_draw_polygon (GdkDrawable *drawable,
 
     }
   else
-    _gdk_windowing_window_class.draw_polygon (drawable, gc, filled, new_points, npoints);
-
+    gdk_draw_polygon (private->impl, gc, filled, new_points, npoints);
+  
   if (new_points != points)
     g_free (new_points);
 
@@ -916,9 +999,12 @@ gdk_window_draw_text (GdkDrawable *drawable,
 		      const gchar *text,
 		      gint         text_length)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
@@ -927,8 +1013,8 @@ gdk_window_draw_text (GdkDrawable *drawable,
 
     }
   else
-    _gdk_windowing_window_class.draw_text (drawable, font, gc,
-					   x - x_offset, y - y_offset, text, text_length);
+    gdk_draw_text (private->impl, font, gc,
+                   x - x_offset, y - y_offset, text, text_length);
 
   RESTORE_GC (gc);
 }
@@ -942,9 +1028,12 @@ gdk_window_draw_text_wc (GdkDrawable    *drawable,
 			 const GdkWChar *text,
 			 gint            text_length)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
@@ -952,9 +1041,9 @@ gdk_window_draw_text_wc (GdkDrawable    *drawable,
 			x - x_offset, y - y_offset, text, text_length);
     }
   else
-    _gdk_windowing_window_class.draw_text_wc (drawable, font, gc,
-					      x - x_offset, y - y_offset, text, text_length);
-
+    gdk_draw_text_wc (private->impl, font, gc,
+                      x - x_offset, y - y_offset, text, text_length);
+  
   RESTORE_GC (gc);
 }
 
@@ -969,9 +1058,12 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 			  gint         width,
 			  gint         height)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
@@ -980,9 +1072,9 @@ gdk_window_draw_drawable (GdkDrawable *drawable,
 
     }
   else
-    _gdk_windowing_window_class.draw_drawable (drawable, gc, src, xsrc, ysrc,
-					       xdest - x_offset, ydest - y_offset,
-					       width, height);
+    gdk_draw_drawable (private->impl, gc, src, xsrc, ysrc,
+                       xdest - x_offset, ydest - y_offset,
+                       width, height);
   RESTORE_GC (gc);
 }
 
@@ -992,11 +1084,14 @@ gdk_window_draw_points (GdkDrawable *drawable,
 			GdkPoint    *points,
 			gint         npoints)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkPoint *new_points;
   
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (x_offset != 0 || y_offset != 0)
     {
       gint i;
@@ -1017,7 +1112,7 @@ gdk_window_draw_points (GdkDrawable *drawable,
       gdk_draw_points (paint->pixmap, gc, new_points, npoints);
     }
   else
-    _gdk_windowing_window_class.draw_points (drawable, gc, points, npoints);
+    gdk_draw_points (private->impl, gc, points, npoints);
 
   if (new_points != points)
     g_free (new_points);
@@ -1031,11 +1126,14 @@ gdk_window_draw_segments (GdkDrawable *drawable,
 			  GdkSegment  *segs,
 			  gint         nsegs)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkSegment *new_segs;
 
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (x_offset != 0 || y_offset != 0)
     {
       gint i;
@@ -1058,8 +1156,8 @@ gdk_window_draw_segments (GdkDrawable *drawable,
       gdk_draw_segments (paint->pixmap, gc, new_segs, nsegs);
     }
   else
-    _gdk_windowing_window_class.draw_segments (drawable, gc, new_segs, nsegs);
-
+    gdk_draw_segments (private->impl, gc, new_segs, nsegs);
+  
   if (new_segs != segs)
     g_free (new_segs);
 
@@ -1072,11 +1170,14 @@ gdk_window_draw_lines (GdkDrawable *drawable,
 		       GdkPoint    *points,
 		       gint         npoints)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
   GdkPoint *new_points;
 
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (x_offset != 0 || y_offset != 0)
     {
       gint i;
@@ -1097,7 +1198,7 @@ gdk_window_draw_lines (GdkDrawable *drawable,
       gdk_draw_lines (paint->pixmap, gc, new_points, npoints);
     }
   else
-    _gdk_windowing_window_class.draw_lines (drawable, gc, new_points, npoints);
+    gdk_draw_lines (private->impl, gc, new_points, npoints);
 
   if (new_points != points)
     g_free (new_points);
@@ -1113,10 +1214,13 @@ gdk_window_draw_glyphs (GdkDrawable      *drawable,
 			gint              y,
 			PangoGlyphString *glyphs)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
 
   OFFSET_GC (gc);
 
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
@@ -1124,8 +1228,8 @@ gdk_window_draw_glyphs (GdkDrawable      *drawable,
       gdk_draw_glyphs (paint->pixmap, gc, font, x - x_offset, y - y_offset, glyphs);
     }
   else
-    _gdk_windowing_window_class.draw_glyphs (drawable, gc, font,
-					     x - x_offset, y - y_offset, glyphs);
+    gdk_draw_glyphs (private->impl, gc, font,
+                     x - x_offset, y - y_offset, glyphs);
 
   RESTORE_GC (gc);
 }
@@ -1138,10 +1242,13 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowPaint *paint = private->paint_stack->data;
   GdkGC *tmp_gc;
 
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+  
   tmp_gc = gdk_window_get_bg_gc (window, paint);
   gdk_draw_rectangle (paint->pixmap, tmp_gc, TRUE,
 		      x - paint->x_offset, y - paint->y_offset, width, height);
@@ -1151,13 +1258,15 @@ gdk_window_clear_backing_rect (GdkWindow *window,
 void
 gdk_window_clear (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
-
+  gint width, height;
+  
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
+  gdk_drawable_get_size (GDK_DRAWABLE (window), &width, &height);
+  
   gdk_window_clear_area (window, 0, 0,
-			 private->drawable.width, private->drawable.height);
+                         width, height);
 }
 
 void
@@ -1167,7 +1276,7 @@ gdk_window_clear_area (GdkWindow *window,
 		       gint       width,
 		       gint       height)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1185,7 +1294,7 @@ gdk_window_clear_area_e (GdkWindow *window,
 		         gint       width,
 		         gint       height)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1196,36 +1305,102 @@ gdk_window_clear_area_e (GdkWindow *window,
   _gdk_windowing_window_clear_area_e (window, x, y, width, height);
 }
 
-void
-_gdk_window_draw_image (GdkDrawable *drawable,
-			GdkGC       *gc,
-			GdkImage    *image,
-			gint         xsrc,
-			gint         ysrc,
-			gint         xdest,
-			gint         ydest,
-			gint         width,
-			gint         height)
+static void
+gdk_window_draw_image (GdkDrawable *drawable,
+                       GdkGC       *gc,
+                       GdkImage    *image,
+                       gint         xsrc,
+                       gint         ysrc,
+                       gint         xdest,
+                       gint         ydest,
+                       gint         width,
+                       gint         height)
 {
-  GdkImagePrivate *image_private = (GdkImagePrivate*) image;
-  GdkWindowPrivate *private = (GdkWindowPrivate *)drawable;
+  GdkWindowObject *private = (GdkWindowObject *)drawable;
 
   OFFSET_GC (gc);
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
   
   if (private->paint_stack)
     {
       GdkWindowPaint *paint = private->paint_stack->data;
-      image_private->klass->image_put (image, paint->pixmap, gc, xsrc, ysrc,
-				       xdest - x_offset, ydest - y_offset,
-				       width, height);
+      gdk_draw_image (paint->pixmap, gc, image, xsrc, ysrc,
+                      xdest - x_offset, ydest - y_offset,
+                      width, height);
 
     }
   else
-    image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
-				     xdest - x_offset, ydest - y_offset,
-				     width, height);
+    gdk_draw_image (private->impl, gc, image, xsrc, ysrc,
+                    xdest - x_offset, ydest - y_offset,
+                    width, height);
 
   RESTORE_GC (gc);
+}
+
+
+static void
+gdk_window_real_get_size (GdkDrawable *drawable,
+                          gint *width,
+                          gint *height)
+{
+  g_return_if_fail (GDK_IS_WINDOW (drawable));
+
+  gdk_drawable_get_size (GDK_WINDOW_OBJECT (drawable)->impl,
+                         width, height);
+}
+
+static GdkVisual*
+gdk_window_real_get_visual (GdkDrawable *drawable)
+{
+  GdkColormap *colormap;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
+
+  colormap = gdk_drawable_get_colormap (drawable);
+  return colormap ? gdk_colormap_get_visual (colormap) : NULL;
+}
+
+static gint
+gdk_window_real_get_depth (GdkDrawable *drawable)
+{
+  gint depth;
+  
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), 0);
+
+  depth = ((GdkWindowObject *)GDK_WINDOW (drawable))->depth;
+
+  if (depth == 0)
+    {
+      g_print ("0 depth for type %s\n", g_type_name (G_OBJECT_TYPE (drawable)));
+      G_BREAKPOINT ();
+    }
+
+  return depth;
+}
+
+static void
+gdk_window_real_set_colormap (GdkDrawable *drawable,
+                              GdkColormap *cmap)
+{
+  g_return_if_fail (GDK_IS_WINDOW (drawable));  
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return;
+  
+  gdk_drawable_set_colormap (((GdkWindowObject*)drawable)->impl, cmap);
+}
+
+static GdkColormap*
+gdk_window_real_get_colormap (GdkDrawable *drawable)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (drawable), NULL);
+
+  if (GDK_WINDOW_DESTROYED (drawable))
+    return NULL;
+  
+  return gdk_drawable_get_colormap (((GdkWindowObject*)drawable)->impl);
 }
 
 /* Code for dirty-region queueing
@@ -1237,7 +1412,7 @@ static guint update_idle = 0;
 static void
 gdk_window_process_updates_internal (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   gboolean save_region = FALSE;
 
   /* If an update got queued during update processing, we can get a
@@ -1253,11 +1428,14 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	{
 	  GdkEvent event;
 	  GdkRectangle window_rect;
-	  
+          gint width, height;
+
+          gdk_drawable_get_size (GDK_DRAWABLE (private), &width, &height);
+          
 	  window_rect.x = 0;
 	  window_rect.y = 0;
-	  window_rect.width = private->drawable.width;
-	  window_rect.height = private->drawable.height;
+	  window_rect.width = width;
+	  window_rect.height = height;
 
 	  save_region = _gdk_windowing_window_queue_antiexpose (window, update_area);
       
@@ -1314,7 +1492,7 @@ void
 gdk_window_process_updates (GdkWindow *window,
 			    gboolean   update_children)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1342,20 +1520,21 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
 			      gboolean      invalidate_children)
 {
   GdkRectangle window_rect;
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return;
   
   if (!rect)
     {
       window_rect.x = 0;
       window_rect.y = 0;
-      window_rect.width = private->drawable.width;
-      window_rect.height = private->drawable.height;
+      gdk_drawable_get_size (GDK_DRAWABLE (window),
+                             &window_rect.width,
+                             &window_rect.height);
       rect = &window_rect;
     }
   
@@ -1382,18 +1561,20 @@ gdk_window_invalidate_rect   (GdkWindow    *window,
       tmp_list = private->children;
       while (tmp_list)
 	{
-	  GdkWindowPrivate *child = tmp_list->data;
+	  GdkWindowObject *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  /* FIXME: this is a HACK to figure out if the child is
-	   *        input-only.
-	   */
-	  if (child->drawable.colormap)
+	  if (!child->input_only)
 	    {
+              gint width, height;
+
+              gdk_drawable_get_size (GDK_DRAWABLE (child),
+                                     &width, &height);
+              
 	      child_rect.x = child->x;
 	      child_rect.y = child->y;
-	      child_rect.width = child->drawable.width;
-	      child_rect.height = child->drawable.height;
+	      child_rect.width = width;
+	      child_rect.height = height;
 	      
 	      if (gdk_rectangle_intersect (rect, &child_rect, &new_rect))
 		{
@@ -1412,12 +1593,12 @@ gdk_window_invalidate_region (GdkWindow *window,
 			      GdkRegion *region,
 			      gboolean   invalidate_children)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return;
   
   if (private->input_only)
@@ -1446,15 +1627,20 @@ gdk_window_invalidate_region (GdkWindow *window,
       tmp_list = private->children;
       while (tmp_list)
 	{
-	  GdkWindowPrivate *child = tmp_list->data;
+	  GdkWindowObject *child = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
 	  if (child->input_only)
 	    {
+              gint width, height;
+
+              gdk_drawable_get_size (GDK_DRAWABLE (child),
+                                     &width, &height);
+              
 	      child_rect.x = child->x;
 	      child_rect.y = child->y;
-	      child_rect.width = child->drawable.width;
-	      child_rect.height = child->drawable.height;
+	      child_rect.width = width;
+	      child_rect.height = height;
 	      
 	      child_region = gdk_region_rectangle (&child_rect);
 	      gdk_region_intersect (child_region, region);
@@ -1474,7 +1660,7 @@ gdk_window_invalidate_region (GdkWindow *window,
 GdkRegion *
 gdk_window_get_update_area (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkRegion *tmp_region;
 
   g_return_val_if_fail (window != NULL, NULL);
@@ -1503,7 +1689,7 @@ gdk_window_get_update_area (GdkWindow *window)
 void
 _gdk_window_clear_update_area (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1520,7 +1706,7 @@ _gdk_window_clear_update_area (GdkWindow *window)
 void
 gdk_window_freeze_updates (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1531,7 +1717,7 @@ gdk_window_freeze_updates (GdkWindow *window)
 void
 gdk_window_thaw_updates (GdkWindow *window)
 {
-  GdkWindowPrivate *private = (GdkWindowPrivate *)window;
+  GdkWindowObject *private = (GdkWindowObject *)window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));

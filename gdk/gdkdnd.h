@@ -31,10 +31,24 @@ typedef enum
   GDK_DRAG_PROTO_LOCAL            /* Intra-app */
 } GdkDragProtocol;
 
-/* Structure that holds information about a drag in progress.
+/* Object that holds information about a drag in progress.
  * this is used on both source and destination sides.
  */
+
+typedef struct _GdkDragContextClass GdkDragContextClass;
+
+#define GDK_TYPE_DRAG_CONTEXT              (gdk_drag_context_get_type ())
+#define GDK_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG_CONTEXT, GdkDragContext))
+#define GDK_DRAG_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
+#define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
+#define GDK_IS_DRAG_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAG_CONTEXT))
+#define GDK_DRAG_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
+
 struct _GdkDragContext {
+  GObject parent_instance;
+
+  /*< public >*/
+  
   GdkDragProtocol protocol;
   
   gboolean is_source;
@@ -48,10 +62,21 @@ struct _GdkDragContext {
   GdkDragAction action; 
 
   guint32 start_time;
+
+  /*< private >*/
+  
+  gpointer windowing_data;
+};
+
+struct _GdkDragContextClass {
+  GObjectClass parent_class;
+
+  
 };
 
 /* Drag and Drop */
 
+GType            gdk_drag_context_get_type   (void);
 GdkDragContext * gdk_drag_context_new        (void);
 void             gdk_drag_context_ref        (GdkDragContext *context);
 void             gdk_drag_context_unref      (GdkDragContext *context);

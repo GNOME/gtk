@@ -129,16 +129,6 @@ void   gdk_im_close		 (void);
 void   gdk_ic_cleanup		 (void);
 #endif /* USE_XIM */
 
-GdkWindow* _gdk_window_alloc             (void);
-void       _gdk_window_draw_image        (GdkDrawable *drawable,
-					  GdkGC       *gc,
-					  GdkImage    *image,
-					  gint         xsrc,
-					  gint         ysrc,
-					  gint         xdest,
-					  gint         ydest,
-					  gint         width,
-					  gint         height);
 void       _gdk_window_destroy           (GdkWindow   *window,
 					  gboolean     foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow   *window);
@@ -155,15 +145,6 @@ void _gdk_font_destroy (GdkFont *font);
 void _gdk_colormap_real_destroy (GdkColormap *colormap);
 
 void _gdk_cursor_destroy (GdkCursor *cursor);
-
-/* Class supplied by windowing-system-dependent code for GdkWindow.
- */
-extern GdkDrawableClass _gdk_windowing_window_class;
-
-/* Class for covering over windowing-system-dependent and backing-store
- * code for GdkWindow
- */
-extern GdkDrawableClass _gdk_window_class;
 
 extern GdkArgDesc _gdk_windowing_args[];
 gboolean _gdk_windowing_init_check              (int         argc,
@@ -208,15 +189,19 @@ void _gdk_windowing_window_destroy (GdkWindow *window,
 				    gboolean   recursing,
 				    gboolean   foreign_destroy);
 
+/* Implementation types */
+GType _gdk_window_impl_get_type (void);
+GType _gdk_pixmap_impl_get_type (void);
+
 /************************************
  * Initialization and exit routines *
  ************************************/
 
-void gdk_window_init (void);
+void _gdk_windowing_window_init (void);
 void gdk_visual_init (void);
 void gdk_dnd_init    (void);
 
-void gdk_image_init  (void);
+void _gdk_windowing_image_init  (void);
 void gdk_image_exit  (void);
 
 void gdk_input_init  (void);

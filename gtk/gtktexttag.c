@@ -174,11 +174,11 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_BACKGROUND_GDK);
   gtk_object_add_arg_type ("GtkTextTag::foreground_gdk", GTK_TYPE_GDK_COLOR,
                            GTK_ARG_READWRITE, ARG_FOREGROUND_GDK);
-  /* FIXME should be GTK_TYPE_GDK_BITMAP but that doesn't exist? */
-  gtk_object_add_arg_type ("GtkTextTag::background_stipple", GTK_TYPE_GDK_WINDOW,
+  gtk_object_add_arg_type ("GtkTextTag::background_stipple",
+                           GDK_TYPE_PIXMAP,
                            GTK_ARG_READWRITE, ARG_BACKGROUND_STIPPLE);
-  /* FIXME GDK_BITMAP */
-  gtk_object_add_arg_type ("GtkTextTag::foreground_stipple", GTK_TYPE_GDK_WINDOW,
+  gtk_object_add_arg_type ("GtkTextTag::foreground_stipple",
+                           GDK_TYPE_PIXMAP,
                            GTK_ARG_READWRITE, ARG_FOREGROUND_STIPPLE);
   gtk_object_add_arg_type ("GtkTextTag::font", GTK_TYPE_STRING,
                            GTK_ARG_READWRITE, ARG_FONT);

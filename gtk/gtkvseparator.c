@@ -71,7 +71,7 @@ gtk_vseparator_class_init (GtkVSeparatorClass *klass)
 static void
 gtk_vseparator_init (GtkVSeparator *vseparator)
 {
-  GTK_WIDGET (vseparator)->requisition.width = GTK_WIDGET (vseparator)->style->klass->xthickness;
+  GTK_WIDGET (vseparator)->requisition.width = GTK_WIDGET (vseparator)->style->xthickness;
   GTK_WIDGET (vseparator)->requisition.height = 1;
 }
 
@@ -96,7 +96,7 @@ gtk_vseparator_expose (GtkWidget      *widget,
 		     widget->allocation.y,
 		     widget->allocation.y + widget->allocation.height,
 		     widget->allocation.x + (widget->allocation.width -
-					     widget->style->klass->xthickness) / 2);
+					     widget->style->xthickness) / 2);
 
   return FALSE;
 }

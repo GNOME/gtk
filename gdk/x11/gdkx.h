@@ -33,58 +33,19 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-typedef struct _GdkGCXData          GdkGCXData;
-typedef struct _GdkDrawableXData    GdkDrawableXData;
-typedef struct _GdkWindowXData      GdkWindowXData;
-typedef struct _GdkXPositionInfo    GdkXPositionInfo;
-typedef struct _GdkColormapPrivateX GdkColormapPrivateX;
-typedef struct _GdkCursorPrivate    GdkCursorPrivate;
-typedef struct _GdkFontPrivateX     GdkFontPrivateX;
-typedef struct _GdkImagePrivateX    GdkImagePrivateX;
-typedef struct _GdkVisualPrivate    GdkVisualPrivate;
+#include <gdk/x11/gdkwindow-x11.h>
+#include <gdk/x11/gdkpixmap-x11.h>
+
+typedef struct _GdkGCXData             GdkGCXData;
+typedef struct _GdkColormapPrivateX11 GdkColormapPrivateX11;
+typedef struct _GdkCursorPrivate       GdkCursorPrivate;
+typedef struct _GdkFontPrivateX        GdkFontPrivateX;
+typedef struct _GdkImagePrivateX11    GdkImagePrivateX11;
+typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 #ifdef USE_XIM
 typedef struct _GdkICPrivate        GdkICPrivate;
 #endif /* USE_XIM */
-
-#define GDK_DRAWABLE_XDATA(win) ((GdkDrawableXData *)(((GdkDrawablePrivate*)(win))->klass_data))
-#define GDK_WINDOW_XDATA(win) ((GdkWindowXData *)(((GdkDrawablePrivate*)(win))->klass_data))
-#define GDK_GC_XDATA(gc) ((GdkGCXData *)(((GdkGCPrivate*)(gc))->klass_data))
-
-struct _GdkGCXData
-{
-  GC xgc;
-  Display *xdisplay;
-  GdkRegion *clip_region;
-  guint dirty_mask;
-};
-
-struct _GdkDrawableXData
-{
-  Window xid;
-  Display *xdisplay;
-};
-
-struct _GdkXPositionInfo
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint x_offset;		/* Offsets to add to X coordinates within window */
-  gint y_offset;		/*   to get GDK coodinates within window */
-  gboolean big : 1;
-  gboolean mapped : 1;
-  gboolean no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
-  GdkRectangle clip_rect;	/* visible rectangle of window */
-};
-
-struct _GdkWindowXData
-{
-  GdkDrawableXData drawable_data;
-  GdkXPositionInfo position_info;
-};
 
 struct _GdkCursorPrivate
 {
@@ -110,10 +71,8 @@ struct _GdkVisualPrivate
   Visual *xvisual;
 };
 
-struct _GdkColormapPrivateX
+struct _GdkColormapPrivateX11
 {
-  GdkColormapPrivate base;
-
   Colormap xcolormap;
   Display *xdisplay;
   gint private_val;
@@ -123,10 +82,8 @@ struct _GdkColormapPrivateX
   time_t last_sync_time;
 };
 
-struct _GdkImagePrivateX
+struct _GdkImagePrivateX11
 {
-  GdkImagePrivate base;
-  
   XImage *ximage;
   Display *xdisplay;
   gpointer x_shm_info;
@@ -144,25 +101,56 @@ struct _GdkICPrivate
 
 #endif /* USE_XIM */
 
+
+typedef struct _GdkGCX11      GdkGCX11;
+typedef struct _GdkGCX11Class GdkGCX11Class;
+
+#define GDK_TYPE_GC_X11              (gdk_gc_x11_get_type ())
+#define GDK_GC_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC_X11, GdkGCX11))
+#define GDK_GC_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC_X11, GdkGCX11Class))
+#define GDK_IS_GC_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC_X11))
+#define GDK_IS_GC_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC_X11))
+#define GDK_GC_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC_X11, GdkGCX11Class))
+
+struct _GdkGCX11
+{
+  GdkGC parent_instance;
+  
+  GC xgc;
+  Display *xdisplay;
+  GdkRegion *clip_region;
+  guint dirty_mask;
+};
+
+struct _GdkGCX11Class
+{
+  GdkGCClass parent_class;
+
+};
+
+GType gdk_gc_x11_get_type (void);
+
 #define GDK_ROOT_WINDOW()             gdk_root_window
 #define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
 #define GDK_DISPLAY()                 gdk_display
-#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_DRAWABLE_XDATA(win)->xdisplay)
-#define GDK_DRAWABLE_XID(win)         (GDK_DRAWABLE_XDATA(win)->xid)
-#define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
-#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
-#define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)
-#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX *)cmap)->xdisplay)
-#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX *)cmap)->xcolormap)
-#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)
-#define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate*) font)->xdisplay)
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xdisplay)
+#define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)
+#define GDK_PIXMAP_XDISPLAY(win)      (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xdisplay)
+#define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xid)
+#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
+#define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
+#define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->xdisplay)
+#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivateX11 *) GDK_IMAGE (image)->windowing_data)->ximage)
+#define GDK_GC_XDISPLAY(gc)           (GDK_GC_X11(gc)->xdisplay)
+#define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
+#define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateX11 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
+#define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
+#define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate *) font)->xdisplay)
 #define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
 
-#define GDK_GC_XGC(gc)       (GDK_GC_XDATA(gc)->xgc)
-#define GDK_GC_GET_XGC(gc)   (GDK_GC_XDATA(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
-
-#define GDK_WINDOW_XWINDOW            GDK_DRAWABLE_XID
-#define GDK_WINDOW_XDISPLAY           GDK_DRAWABLE_XDISPLAY
+#define GDK_GC_XGC(gc)       (GDK_GC_X11(gc)->xgc)
+#define GDK_GC_GET_XGC(gc)   (GDK_GC_X11(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
+#define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
 extern Display		*gdk_display;
 extern Window		 gdk_root_window;

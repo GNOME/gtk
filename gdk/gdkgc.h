@@ -151,14 +151,27 @@ struct _GdkGCValues
   GdkJoinStyle	    join_style;
 };
 
+#define GDK_TYPE_GC              (gdk_gc_get_type ())
+#define GDK_GC(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_GC, GdkGC))
+#define GDK_GC_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_GC, GdkGCClass))
+#define GDK_IS_GC(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_GC))
+#define GDK_IS_GC_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_GC))
+#define GDK_GC_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_GC, GdkGCClass))
+
 struct _GdkGC
 {
-  gint dummy_var;
+  GObject parent_instance;
+
+  gint clip_x_origin;
+  gint clip_y_origin;
+  gint ts_x_origin;
+  gint ts_y_origin;
 };
 
 struct _GdkGCClass 
 {
-  void (*destroy)        (GdkGC          *gc);
+  GObjectClass parent_class;
+  
   void (*get_values)     (GdkGC          *gc,
 			  GdkGCValues    *values);
   void (*set_values)     (GdkGC          *gc,
@@ -166,23 +179,23 @@ struct _GdkGCClass
 			  GdkGCValuesMask mask);
   void (*set_dashes)     (GdkGC          *gc,
 			  gint	          dash_offset,
-			  gchar           dash_list[],
+			  gint8           dash_list[],
 			  gint            n);
 };
 
 
+GType  gdk_gc_get_type            (void);
 GdkGC *gdk_gc_new		  (GdkDrawable	    *drawable);
-GdkGC *gdk_gc_alloc		  (void);
-
 GdkGC *gdk_gc_new_with_values	  (GdkDrawable	    *drawable,
 				   GdkGCValues	    *values,
 				   GdkGCValuesMask   values_mask);
-void   gdk_gc_init                (GdkGC            *gc,
-				   GdkGCClass       *klass);
 GdkGC *gdk_gc_ref		  (GdkGC	    *gc);
 void   gdk_gc_unref		  (GdkGC	    *gc);
 void   gdk_gc_get_values	  (GdkGC	    *gc,
 				   GdkGCValues	    *values);
+void   gdk_gc_set_values          (GdkGC           *gc,
+                                   GdkGCValues	   *values,
+                                   GdkGCValuesMask  values_mask);
 void   gdk_gc_set_foreground	  (GdkGC	    *gc,
 				   GdkColor	    *color);
 void   gdk_gc_set_background	  (GdkGC	    *gc,

@@ -108,10 +108,10 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
   tearoff = GTK_TEAROFF_MENU_ITEM (widget);
   
   requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->klass->xthickness +
+			widget->style->xthickness +
 			BORDER_SPACING) * 2;
   requisition->height = (GTK_CONTAINER (widget)->border_width +
-			 widget->style->klass->ythickness) * 2;
+			 widget->style->ythickness) * 2;
 
   if (tearoff->torn_off)
     {
@@ -119,7 +119,7 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
     }
   else
     {
-      requisition->height += widget->style->klass->ythickness;
+      requisition->height += widget->style->ythickness;
     }
 }
 
@@ -188,7 +188,7 @@ gtk_tearoff_menu_item_paint (GtkWidget   *widget,
 	{
 	  gtk_draw_hline (widget->style, widget->window, GTK_STATE_NORMAL,
 			  x, MIN (x+TEAR_LENGTH, right_max),
-			  y + (height - widget->style->klass->ythickness)/2);
+			  y + (height - widget->style->ythickness)/2);
 	  x += 2 * TEAR_LENGTH;
 	}
     }

@@ -39,6 +39,13 @@ extern "C" {
 typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
 
+#define GTK_TYPE_STYLE              (gtk_style_get_type ())
+#define GTK_STYLE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GTK_TYPE_STYLE, GtkStyle))
+#define GTK_STYLE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STYLE, GtkStyleClass))
+#define GTK_IS_STYLE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GTK_TYPE_STYLE))
+#define GTK_IS_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STYLE))
+#define GTK_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STYLE, GtkStyleClass))
+
 /* Some forward declarations needed to rationalize the header
  * files.
  */
@@ -60,8 +67,10 @@ typedef struct _GtkWidget      GtkWidget;
 
 struct _GtkStyle
 {
-  GtkStyleClass *klass;
+  GObject parent_instance;
 
+  /*< public >*/
+  
   GdkColor fg[5];
   GdkColor bg[5];
   GdkColor light[5];
@@ -86,10 +95,12 @@ struct _GtkStyle
   GdkGC *white_gc;
   
   GdkPixmap *bg_pixmap[5];
+
+  gint xthickness;
+  gint ythickness;
   
-  /* private */
+  /*< private >*/
   
-  gint ref_count;
   gint attach_count;
   
   gint depth;
@@ -107,8 +118,7 @@ struct _GtkStyle
 
 struct _GtkStyleClass
 {
-  gint xthickness;
-  gint ythickness;
+  GObjectClass parent_class;
   
   void (*draw_hline)		(GtkStyle		*style,
 				 GdkWindow		*window,
@@ -346,6 +356,7 @@ struct _GtkStyleClass
 				 GtkOrientation		 orientation);
 };
 
+GType     gtk_style_get_type                 (void);
 GtkStyle* gtk_style_new			     (void);
 GtkStyle* gtk_style_copy		     (GtkStyle	    *style);
 GtkStyle* gtk_style_attach		     (GtkStyle	    *style,

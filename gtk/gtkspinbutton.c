@@ -427,7 +427,7 @@ gtk_spin_button_realize (GtkWidget *widget)
   spin_button = GTK_SPIN_BUTTON (widget);
 
   real_width = widget->allocation.width;
-  widget->allocation.width -= ARROW_SIZE + 2 * widget->style->klass->xthickness;
+  widget->allocation.width -= ARROW_SIZE + 2 * widget->style->xthickness;
   gtk_widget_set_events (widget, gtk_widget_get_events (widget) |
 			 GDK_KEY_RELEASE_MASK);
   GTK_WIDGET_CLASS (parent_class)->realize (widget);
@@ -446,10 +446,10 @@ gtk_spin_button_realize (GtkWidget *widget)
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
   attributes.x = (widget->allocation.x + widget->allocation.width - ARROW_SIZE -
-		  2 * widget->style->klass->xthickness);
+		  2 * widget->style->xthickness);
   attributes.y = widget->allocation.y + (widget->allocation.height -
 					 widget->requisition.height) / 2;
-  attributes.width = ARROW_SIZE + 2 * widget->style->klass->xthickness;
+  attributes.width = ARROW_SIZE + 2 * widget->style->xthickness;
   attributes.height = widget->requisition.height;
   
   spin_button->panel = gdk_window_new (gtk_widget_get_parent_window (widget), 
@@ -496,7 +496,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
   GTK_WIDGET_CLASS (parent_class)->size_request (widget, requisition);
   
   requisition->width = MIN_SPIN_BUTTON_WIDTH + ARROW_SIZE 
-    + 2 * widget->style->klass->xthickness;
+    + 2 * widget->style->xthickness;
 }
 
 static void
@@ -510,11 +510,11 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   g_return_if_fail (allocation != NULL);
 
   child_allocation = *allocation;
-  if (child_allocation.width > ARROW_SIZE + 2 * widget->style->klass->xthickness)
-    child_allocation.width -= ARROW_SIZE + 2 * widget->style->klass->xthickness;
+  if (child_allocation.width > ARROW_SIZE + 2 * widget->style->xthickness)
+    child_allocation.width -= ARROW_SIZE + 2 * widget->style->xthickness;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    child_allocation.x += ARROW_SIZE + 2 * widget->style->klass->xthickness;
+    child_allocation.x += ARROW_SIZE + 2 * widget->style->xthickness;
 
   GTK_WIDGET_CLASS (parent_class)->size_allocate (widget, &child_allocation);
 
@@ -522,15 +522,15 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      child_allocation.width = ARROW_SIZE + 2 * widget->style->klass->xthickness;
+      child_allocation.width = ARROW_SIZE + 2 * widget->style->xthickness;
       child_allocation.height = widget->requisition.height;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
 	child_allocation.x = (allocation->x + allocation->width - ARROW_SIZE - 
-			      2 * widget->style->klass->xthickness);
+			      2 * widget->style->xthickness);
       else
-	child_allocation.x = allocation->x;
-      
+	child_allocation.x = allocation->x;      
+
       child_allocation.y = allocation->y + (allocation->height - widget->requisition.height) / 2;
 
       gdk_window_move_resize (GTK_SPIN_BUTTON (widget)->panel, 
@@ -559,7 +559,7 @@ gtk_spin_button_paint (GtkWidget    *widget,
 		       GTK_STATE_NORMAL, spin->shadow_type,
 		       area, widget, "spinbutton",
 		       0, 0, 
-		       ARROW_SIZE + 2 * widget->style->klass->xthickness,
+		       ARROW_SIZE + 2 * widget->style->xthickness,
 		       widget->requisition.height); 
       else
 	 {
@@ -648,31 +648,31 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 	{
 	  if (spin_button->shadow_type != GTK_SHADOW_NONE)
 	    {
-	      x = widget->style->klass->xthickness;
-	      y = widget->style->klass->ythickness;
+	      x = widget->style->xthickness;
+	      y = widget->style->ythickness;
 	    }
 	  else
 	    {
-	      x = widget->style->klass->xthickness - 1;
-	      y = widget->style->klass->ythickness - 1;
+	      x = widget->style->xthickness - 1;
+	      y = widget->style->ythickness - 1;
 	    }
 	  gtk_paint_arrow (widget->style, spin_button->panel,
 			   state_type, shadow_type, 
 			   NULL, widget, "spinbutton",
 			   arrow, TRUE, 
 			   x, y, ARROW_SIZE, widget->requisition.height / 2 
-			   - widget->style->klass->ythickness);
+			   - widget->style->ythickness);
 	}
       else
 	{
 	  if (spin_button->shadow_type != GTK_SHADOW_NONE)
 	    {
-	      x = widget->style->klass->xthickness;
+	      x = widget->style->xthickness;
 	      y = widget->requisition.height / 2;
 	    }
 	  else
 	    {
-	      x = widget->style->klass->xthickness - 1;
+	      x = widget->style->xthickness - 1;
 	      y = widget->requisition.height / 2 + 1;
 	    }
 	  gtk_paint_arrow (widget->style, spin_button->panel,
@@ -680,7 +680,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 			   NULL, widget, "spinbutton",
 			   arrow, TRUE, 
 			   x, y, ARROW_SIZE, widget->requisition.height / 2 
-			   - widget->style->klass->ythickness);
+			   - widget->style->ythickness);
 	}
     }
 }
@@ -913,7 +913,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
 	{
 	  if (event->y >= 0 && event->x >= 0 && 
 	      event->y <= widget->requisition.height &&
-	      event->x <= ARROW_SIZE + 2 * widget->style->klass->xthickness)
+	      event->x <= ARROW_SIZE + 2 * widget->style->xthickness)
 	    {
 	      if (spin->click_child == GTK_ARROW_UP &&
 		  event->y <= widget->requisition.height / 2)

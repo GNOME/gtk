@@ -83,7 +83,7 @@ gxid_LDADD = $(LDADDS)
 endif
 
 install-data-local:
-	../../$(MKINSTALLDIRS) $(includedir)/gdk
+	$(MKINSTALLDIRS) $(includedir)/gdk
 	$(INSTALL_DATA) $(srcdir)/gdkx.h $(includedir)/gdk
-	../../$(MKINSTALLDIRS) $(includedir)/gdk/x11
+	$(MKINSTALLDIRS) $(includedir)/gdk/x11
 	$(INSTALL_DATA) $(srcdir)/gdkprivate-x11.h $(includedir)/gdk/x11

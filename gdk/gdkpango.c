@@ -48,14 +48,17 @@ gdk_pango_context_destroy (GdkPangoContextInfo *info)
 static GdkPangoContextInfo *
 gdk_pango_context_get_info (PangoContext *context, gboolean create)
 {
-  GdkPangoContextInfo *info = pango_context_get_data (context, GDK_INFO_KEY);
+  GdkPangoContextInfo *info =
+    g_object_get_qdata (G_OBJECT (context),
+                        g_quark_try_string (GDK_INFO_KEY));
   if (!info && create)
     {
       info = g_new (GdkPangoContextInfo, 1);
       info->colormap = NULL;
 
-      pango_context_set_data (context, GDK_INFO_KEY,
-			      info, (GDestroyNotify)gdk_pango_context_destroy);
+      g_object_set_qdata_full (G_OBJECT (context),
+                               g_quark_from_static_string (GDK_INFO_KEY),
+                               info, (GDestroyNotify)gdk_pango_context_destroy);
     }
 
   return info;
@@ -156,9 +159,6 @@ gdk_draw_layout_line (GdkDrawable      *drawable,
   g_return_if_fail (gc != NULL);
   g_return_if_fail (line != NULL);
 
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-
   context = pango_layout_get_context (line->layout);
   
   pango_layout_line_get_extents (line,NULL, &overall_rect);
@@ -258,11 +258,6 @@ gdk_draw_layout (GdkDrawable     *drawable,
   
   g_return_if_fail (drawable != NULL);
   g_return_if_fail (gc != NULL);
-  g_return_if_fail (layout != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-
   g_return_if_fail (layout != NULL);
 
   indent = pango_layout_get_indent (layout);

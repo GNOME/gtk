@@ -115,7 +115,7 @@ gdk_input_motion_events (GdkWindow *window,
   g_return_val_if_fail (window != NULL, NULL);
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   
-  if (GDK_DRAWABLE_DESTROYED (window))
+  if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   if (deviceid == GDK_CORE_POINTER)
@@ -200,15 +200,15 @@ void
 gdk_input_set_extension_events (GdkWindow *window, gint mask,
 				GdkExtensionMode mode)
 {
-  GdkWindowPrivate *window_private;
+  GdkWindowObject *window_private;
   GList *tmp_list;
   GdkInputWindow *iw;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  window_private = (GdkWindowPrivate*) window;
-  if (GDK_DRAWABLE_DESTROYED (window))
+  window_private = (GdkWindowObject*) window;
+  if (GDK_WINDOW_DESTROYED (window))
     return;
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)

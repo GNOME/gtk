@@ -1880,7 +1880,7 @@ draw_row (GtkCList     *clist,
 				       row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 				       layout);
 		      gdk_gc_set_clip_rectangle (fg_gc, NULL);
-		      pango_layout_unref (layout);
+		      g_object_unref (G_OBJECT (layout));
 		    }
 		  break;
 		default:
@@ -1901,7 +1901,7 @@ draw_row (GtkCList     *clist,
 					    &intersect_rectangle))
 	{
 	  if (layout)
-	    pango_layout_unref (layout);
+            g_object_unref (G_OBJECT (layout));
 	  continue;
 	}
 
@@ -1955,7 +1955,7 @@ draw_row (GtkCList     *clist,
 			   row_rectangle.y + row_center_offset + clist_row->cell[i].vertical,
 			   layout);
 
-	  pango_layout_unref (layout);
+          g_object_unref (G_OBJECT (layout));
 	}
       gdk_gc_set_clip_rectangle (fg_gc, NULL);
     }
@@ -2820,7 +2820,7 @@ cell_size_request (GtkCList       *clist,
       requisition->width = logical_rect.width / PANGO_SCALE;
       requisition->height = logical_rect.height / PANGO_SCALE;
       
-      pango_layout_unref (layout);
+      g_object_unref (G_OBJECT (layout));
     }
   else
     {
@@ -5879,7 +5879,7 @@ drag_dest_cell (GtkCList         *clist,
   dest_info->insert_pos = GTK_CLIST_DRAG_NONE;
 
   y -= (GTK_CONTAINER (widget)->border_width +
-	widget->style->klass->ythickness + clist->column_title_area.height);
+	widget->style->ythickness + clist->column_title_area.height);
   dest_info->cell.row = ROW_FROM_YPIXEL (clist, y);
 
   if (dest_info->cell.row >= clist->rows)
@@ -5889,8 +5889,9 @@ drag_dest_cell (GtkCList         *clist,
     }
   if (dest_info->cell.row < -1)
     dest_info->cell.row = -1;
+  
+  x -= GTK_CONTAINER (widget)->border_width + widget->style->xthickness;
 
-  x -= GTK_CONTAINER (widget)->border_width + widget->style->klass->xthickness;
   dest_info->cell.column = COLUMN_FROM_XPIXEL (clist, x);
 
   if (dest_info->cell.row >= 0)

@@ -510,7 +510,7 @@ gtk_entry_finalize (GObject *object)
   entry = GTK_ENTRY (object);
 
   if (entry->layout)
-    pango_layout_unref (entry->layout);
+    g_object_unref (G_OBJECT (entry->layout));
 
   gtk_object_unref (GTK_OBJECT (entry->im_context));
 
@@ -568,8 +568,8 @@ gtk_entry_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  attributes.x = widget->style->klass->xthickness;
-  attributes.y = widget->style->klass->ythickness;
+  attributes.x = widget->style->xthickness;
+  attributes.y = widget->style->ythickness;
   attributes.width = widget->allocation.width - attributes.x * 2;
   attributes.height = requisition.height - attributes.y * 2;
   attributes.cursor = entry->cursor = gdk_cursor_new (GDK_XTERM);
@@ -668,12 +668,12 @@ gtk_entry_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
 
   entry = GTK_ENTRY (widget);
-
+  
   /* We do this to deal with direction changes - should that be a signal?
    */
   if (entry->layout)
     {
-      pango_layout_unref (entry->layout);
+      g_object_unref (G_OBJECT (entry->layout));
       entry->layout = NULL;
     }
 
@@ -691,9 +691,9 @@ gtk_entry_size_request (GtkWidget      *widget,
 
   entry->ascent = metrics.ascent;
   
-  requisition->width = MIN_ENTRY_WIDTH + (widget->style->klass->xthickness + INNER_BORDER) * 2;
+  requisition->width = MIN_ENTRY_WIDTH + (widget->style->xthickness + INNER_BORDER) * 2;
   requisition->height = ((metrics.ascent + metrics.descent) / PANGO_SCALE + 
-			 (widget->style->klass->ythickness + INNER_BORDER) * 2);
+			 (widget->style->ythickness + INNER_BORDER) * 2);
 }
 
 static void
@@ -725,10 +725,10 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 			      allocation->y + (allocation->height - requisition.height) / 2,
 			      allocation->width, requisition.height);
       gdk_window_move_resize (entry->text_area,
-			      widget->style->klass->xthickness,
-			      widget->style->klass->ythickness,
-			      allocation->width - widget->style->klass->xthickness * 2,
-			      requisition.height - widget->style->klass->ythickness * 2);
+			      widget->style->xthickness,
+			      widget->style->ythickness,
+			      allocation->width - widget->style->xthickness * 2,
+			      requisition.height - widget->style->ythickness * 2);
 
     }
 
@@ -752,8 +752,8 @@ gtk_entry_draw (GtkWidget    *widget,
     {
       GdkRectangle tmp_area = *area;
 
-      tmp_area.x -= widget->style->klass->xthickness;
-      tmp_area.y -= widget->style->klass->xthickness;
+      tmp_area.x -= widget->style->xthickness;
+      tmp_area.y -= widget->style->xthickness;
       
       gdk_window_begin_paint_rect (entry->text_area, &tmp_area);
       gtk_widget_draw_focus (widget);
@@ -1377,7 +1377,7 @@ entry_adjust_scroll (GtkEntry *entry)
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
   widget = GTK_WIDGET (entry);
-  text_area_width = widget->allocation.width - 2 * (widget->style->klass->xthickness + INNER_BORDER);
+  text_area_width = widget->allocation.width - 2 * (widget->style->xthickness + INNER_BORDER);
 
   if (!entry->layout)
     return;

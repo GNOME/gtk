@@ -2,10 +2,39 @@
 #define __GDK_PIXMAP_H__
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkdrawable.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
+
+typedef struct _GdkPixmapObject GdkPixmapObject;
+typedef struct _GdkPixmapObjectClass GdkPixmapObjectClass;
+
+#define GDK_TYPE_PIXMAP              (gdk_pixmap_get_type ())
+#define GDK_PIXMAP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_PIXMAP, GdkPixmap))
+#define GDK_PIXMAP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_PIXMAP, GdkPixmapObjectClass))
+#define GDK_IS_PIXMAP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_PIXMAP))
+#define GDK_IS_PIXMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_PIXMAP))
+#define GDK_PIXMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_PIXMAP, GdkPixmapClass))
+#define GDK_PIXMAP_OBJECT(object)    ((GdkPixmapObject *) GDK_PIXMAP (object))
+
+struct _GdkPixmapObject
+{
+  GdkDrawable parent_instance;
+  
+  GdkDrawable *impl;  /* window-system-specific delegate object */
+
+  gint depth;
+};
+
+struct _GdkPixmapObjectClass
+{
+  GdkDrawableClass parent_class;
+
+};
+
+GType      gdk_pixmap_get_type          (void);
 
 /* Pixmaps
  */
