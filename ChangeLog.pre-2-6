@@ -1,3 +1,9 @@
+Mon Feb  5 12:47:09 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_state)
+	  gtk/gtkmain.c (gtk_grab_add): Don't allow insensitive widgets to
+	have a grab.
+
 2001-02-10  Ian Peters  <itp@ximian.com>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_size_request): use the

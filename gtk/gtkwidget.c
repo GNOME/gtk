@@ -4681,9 +4681,12 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
   if (old_state != GTK_WIDGET_STATE (widget))
     {
+      if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_HAS_GRAB (widget))
+	gtk_grab_remove (widget);
+      
       gtk_widget_ref (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED], old_state);
-      
+
       if (GTK_IS_CONTAINER (widget))
 	{
 	  data->parent_sensitive = (GTK_WIDGET_IS_SENSITIVE (widget) != FALSE);
