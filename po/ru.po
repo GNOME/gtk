@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-03-16 14:27-0500\n"
-"PO-Revision-Date: 2004-03-16 08:55+0300\n"
+"POT-Creation-Date: 2004-03-16 08:52+0300\n"
+"PO-Revision-Date: 2004-03-17 16:10+0300\n"
 "Last-Translator: Dmitry G. Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1637,7 +1637,7 @@ msgstr "Найти и _заменить"
 
 #: gtk/gtkstock.c:290
 msgid "_Floppy"
-msgstr "_Флоппи-диск"
+msgstr "_Дискета"
 
 #: gtk/gtkstock.c:291
 msgid "_Bottom"
@@ -1805,7 +1805,7 @@ msgstr "Проверить право_писание"
 
 #: gtk/gtkstock.c:333
 msgid "_Stop"
-msgstr "О_становить"
+msgstr "Ос_тановить"
 
 #: gtk/gtkstock.c:334
 msgid "_Strikethrough"
@@ -1817,7 +1817,7 @@ msgstr "Вос_становить удалённое"
 
 #: gtk/gtkstock.c:336
 msgid "_Underline"
-msgstr "По_дчеркивание"
+msgstr "По_дчёркивание"
 
 #: gtk/gtkstock.c:337
 msgid "_Undo"
@@ -1829,7 +1829,7 @@ msgstr "_Да"
 
 #: gtk/gtkstock.c:339
 msgid "_Normal Size"
-msgstr "О_бычный размер"
+msgstr "В обы_чном размере"
 
 #: gtk/gtkstock.c:340
 msgid "Best _Fit"
@@ -1837,11 +1837,11 @@ msgstr "Наилучшее _заполнение"
 
 #: gtk/gtkstock.c:341
 msgid "Zoom _In"
-msgstr "У_величить масштаб"
+msgstr "У_величить"
 
 #: gtk/gtkstock.c:342
 msgid "Zoom _Out"
-msgstr "У_меньшить масштаб"
+msgstr "У_меньшить"
 
 #: gtk/gtktextutil.c:47
 msgid "LRM _Left-to-right mark"
