@@ -241,7 +241,7 @@ gtk_tree_selection_set_mode (GtkTreeSelection *selection,
 						  node,
 						  tree,
 						  anchor_path,
-						  0,
+                                                  0,
 						  FALSE);
       if (anchor_path)
 	gtk_tree_path_free (anchor_path);
@@ -771,8 +771,8 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
 {
   GtkRBNode *node;
   GtkRBTree *tree;
-  GdkModifierType state = 0;
   gboolean ret;
+  GtkTreeSelectMode mode = 0;
 
   g_return_if_fail (GTK_IS_TREE_SELECTION (selection));
   g_return_if_fail (selection->tree_view != NULL);
@@ -788,13 +788,13 @@ gtk_tree_selection_select_path (GtkTreeSelection *selection,
     return;
 
   if (selection->type == GTK_SELECTION_MULTIPLE)
-    state = GDK_CONTROL_MASK;
+    mode = GTK_TREE_SELECT_MODE_TOGGLE;
 
   _gtk_tree_selection_internal_select_node (selection,
 					    node,
 					    tree,
 					    path,
-					    state,
+                                            mode,
 					    FALSE);
 }
 
@@ -830,7 +830,7 @@ gtk_tree_selection_unselect_path (GtkTreeSelection *selection,
 					    node,
 					    tree,
 					    path,
-					    GDK_CONTROL_MASK,
+                                            GTK_TREE_SELECT_MODE_TOGGLE,
 					    TRUE);
 }
 
@@ -1289,7 +1289,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 					  GtkRBNode        *node,
 					  GtkRBTree        *tree,
 					  GtkTreePath      *path,
-					  GdkModifierType   state,
+                                          GtkTreeSelectMode mode,
 					  gboolean          override_browse_mode)
 {
   gint flags;
@@ -1314,7 +1314,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
       else if (selection->type == GTK_SELECTION_SINGLE &&
 	       anchor_path && gtk_tree_path_compare (path, anchor_path) == 0)
 	{
-	  if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+	  if ((mode & GTK_TREE_SELECT_MODE_TOGGLE) == GTK_TREE_SELECT_MODE_TOGGLE)
 	    {
 	      dirty = gtk_tree_selection_real_unselect_all (selection);
 	    }
@@ -1376,7 +1376,8 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
     }
   else if (selection->type == GTK_SELECTION_MULTIPLE)
     {
-      if (((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK) && (anchor_path == NULL))
+      if ((mode & GTK_TREE_SELECT_MODE_EXTEND) == GTK_TREE_SELECT_MODE_EXTEND
+          && (anchor_path == NULL))
 	{
 	  if (selection->tree_view->priv->anchor)
 	    gtk_tree_row_reference_free (selection->tree_view->priv->anchor);
@@ -1385,13 +1386,13 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	    gtk_tree_row_reference_new_proxy (G_OBJECT (selection->tree_view), selection->tree_view->priv->model, path);
 	  dirty = gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
 	}
-      else if ((state & (GDK_CONTROL_MASK|GDK_SHIFT_MASK)) == (GDK_SHIFT_MASK|GDK_CONTROL_MASK))
+      else if ((mode & (GTK_TREE_SELECT_MODE_EXTEND | GTK_TREE_SELECT_MODE_TOGGLE)) == (GTK_TREE_SELECT_MODE_EXTEND | GTK_TREE_SELECT_MODE_TOGGLE))
 	{
 	  gtk_tree_selection_select_range (selection,
 					   anchor_path,
 					   path);
 	}
-      else if ((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
+      else if ((mode & GTK_TREE_SELECT_MODE_TOGGLE) == GTK_TREE_SELECT_MODE_TOGGLE)
 	{
 	  flags = node->flags;
 	  if (selection->tree_view->priv->anchor)
@@ -1405,7 +1406,7 @@ _gtk_tree_selection_internal_select_node (GtkTreeSelection *selection,
 	  else
 	    dirty |= gtk_tree_selection_real_select_node (selection, tree, node, TRUE);
 	}
-      else if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
+      else if ((mode & GTK_TREE_SELECT_MODE_EXTEND) == GTK_TREE_SELECT_MODE_EXTEND)
 	{
 	  dirty = gtk_tree_selection_real_unselect_all (selection);
 	  dirty |= gtk_tree_selection_real_modify_range (selection,
