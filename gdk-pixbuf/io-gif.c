@@ -354,7 +354,7 @@ gif_get_extension (GifContext *context)
 				if ((context->block_buf[0] & 0x1) != 0) {
 					context->gif89.transparent = context->block_buf[3];
 				} else {
-					context->gif89.transparent = FALSE;
+					context->gif89.transparent = -1;
 				}
 			}
 
@@ -607,7 +607,7 @@ gif_fill_in_pixels (GifContext *context, guchar *dest, gint offset, guchar v)
 {
 	guchar *pixel = NULL;
 
-	if (context->gif89.transparent) {
+	if (context->gif89.transparent != -1) {
 		pixel = dest + (context->draw_ypos + offset) * gdk_pixbuf_get_rowstride (context->pixbuf) + context->draw_xpos * 4;
 		*pixel = context->color_map [0][(guchar) v];
 		*(pixel+1) = context->color_map [1][(guchar) v];
@@ -667,7 +667,7 @@ gif_get_lzw (GifContext *context)
 
 	if (context->pixbuf == NULL) {
 		context->pixbuf = gdk_pixbuf_new (ART_PIX_RGB,
-						  context->gif89.transparent,
+						  context->gif89.transparent != -1,
 						  8,
 						  context->width,
 						  context->height);
@@ -714,7 +714,7 @@ gif_get_lzw (GifContext *context)
 		}
 		bound_flag = TRUE;
 
-		if (context->gif89.transparent) {
+		if (context->gif89.transparent != -1) {
 			temp = dest + context->draw_ypos * gdk_pixbuf_get_rowstride (context->pixbuf) + context->draw_xpos * 4;
 			*temp = context->color_map [0][(guchar) v];
 			*(temp+1) = context->color_map [1][(guchar) v];
