@@ -15,7 +15,6 @@ EXTRA_DIST =			\
 	ChangeLog.pre-1-2	\
 	README.cvs-commits	\
 	README.win32		\
-	README.nanox		\
 	config.h.win32		\
 	gtk-zip.sh		\
 	sanitize-la.sh		\

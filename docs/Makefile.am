@@ -3,7 +3,6 @@
 SUBDIRS = tutorial faq reference
 
 EXTRA_DIST = \
-	debugging.txt			\
 	defsformat.txt			\
 	developers.txt			\
 	dnd_internals.txt		\

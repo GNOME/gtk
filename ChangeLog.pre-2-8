@@ -1,3 +1,13 @@
+2002-04-20  Matthias Clasen  <maclas@gmx.de>
+
+	* TODO, TODO.xml, README.nanox, docs/Changes-1.2.txt,
+	docs/Changes-2.0.txt, docs/gtk-config.txt, docs/debugging.txt,
+	gdk/TODO: Remove some files whose content is either obsolete or
+	has been moved elsewhere.
+
+	* Makefile.am, gtk+.spec.in, docs/Makefile.am: Remove references
+	to these files.
+	
 Fri Apr 19 21:31:04 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_row_changed): cancel editing
