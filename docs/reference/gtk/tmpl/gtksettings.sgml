@@ -45,6 +45,11 @@ Sharing settings between applications
 
 </para>
 
+<!-- ##### ARG GtkSettings:gtk-double-click-distance ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkSettings:gtk-double-click-time ##### -->
 <para>
 

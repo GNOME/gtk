@@ -171,6 +171,11 @@ linkend="GtkTreeModel">GtkTreeModel</link> interface.
 
 </para>
 
+<!-- ##### ARG GtkTreeView:fixed-height-mode ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkTreeView:hadjustment ##### -->
 <para>
 

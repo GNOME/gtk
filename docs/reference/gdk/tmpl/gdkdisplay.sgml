@@ -213,6 +213,15 @@ of an X display. All its fields are private and should not be accessed directly.
 @msec: 
 
 
+<!-- ##### FUNCTION gdk_display_set_double_click_distance ##### -->
+<para>
+
+</para>
+
+@display: 
+@distance: 
+
+
 <!-- ##### FUNCTION gdk_display_get_pointer ##### -->
 <para>
 
@@ -304,5 +313,14 @@ Applications should never have any reason to use this facility
 @display: 
 @width: 
 @height: 
+
+
+<!-- ##### FUNCTION gdk_display_get_default_group ##### -->
+<para>
+
+</para>
+
+@display: 
+@Returns: 
 
 

@@ -52,3 +52,14 @@ End:
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_get_file_info ##### -->
+<para>
+
+</para>
+
+@filename: 
+@width: 
+@height: 
+@Returns: 
+
+

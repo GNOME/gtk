@@ -254,3 +254,51 @@ when GDK gets multihead support.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_spawn_on_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@working_directory: 
+@argv: 
+@envp: 
+@flags: 
+@child_setup: 
+@user_data: 
+@child_pid: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_spawn_on_screen_with_pipes ##### -->
+<para>
+
+</para>
+
+@screen: 
+@working_directory: 
+@argv: 
+@envp: 
+@flags: 
+@child_setup: 
+@user_data: 
+@child_pid: 
+@standard_input: 
+@standard_output: 
+@standard_error: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_spawn_command_line_on_screen ##### -->
+<para>
+
+</para>
+
+@screen: 
+@command_line: 
+@error: 
+@Returns: 
+
+

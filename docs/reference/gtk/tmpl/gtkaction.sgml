@@ -62,21 +62,10 @@ and should not be accessed directly.
 
 @action: the object which received the signal.
 
-<!-- ##### SIGNAL GtkAction::connect-proxy ##### -->
+<!-- ##### ARG GtkAction:action-group ##### -->
 <para>
 
 </para>
-
-@action: the object which received the signal.
-@widget: 
-
-<!-- ##### SIGNAL GtkAction::disconnect-proxy ##### -->
-<para>
-
-</para>
-
-@action: the object which received the signal.
-@widget: 
 
 <!-- ##### ARG GtkAction:hide-if-empty ##### -->
 <para>
@@ -123,7 +112,65 @@ and should not be accessed directly.
 
 </para>
 
+<!-- ##### ARG GtkAction:visible-horizontal ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkAction:visible-vertical ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION gtk_action_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@label: 
+@tooltip: 
+@stock_id: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_action_get_name ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_is_sensitive ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_get_sensitive ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_is_visible ##### -->
+<para>
+
+</para>
+
+@action: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_action_get_visible ##### -->
 <para>
 
 </para>

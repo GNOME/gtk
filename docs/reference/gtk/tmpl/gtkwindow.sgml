@@ -66,6 +66,11 @@ Toplevel which can contain other widgets
 @window: the object which received the signal.
 @widget: 
 
+<!-- ##### ARG GtkWindow:accept-focus ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkWindow:allow-grow ##### -->
 <para>
 
@@ -702,6 +707,15 @@ Deprecated alias for gtk_window_set_position().
 @setting: 
 
 
+<!-- ##### FUNCTION gtk_window_set_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@setting: 
+
+
 <!-- ##### FUNCTION gtk_window_get_decorated ##### -->
 <para>
 
@@ -864,6 +878,15 @@ Deprecated alias for gtk_window_set_position().
 
 
 <!-- ##### FUNCTION gtk_window_get_skip_pager_hint ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_window_get_accept_focus ##### -->
 <para>
 
 </para>

@@ -507,6 +507,16 @@ Since: 2.2
 @display: 
 
 
+<!-- ##### FUNCTION gdk_x11_register_standard_event_type ##### -->
+<para>
+
+</para>
+
+@display: 
+@event_base: 
+@n_events: 
+
+
 <!-- ##### FUNCTION gdk_x11_drawable_get_xdisplay ##### -->
 <para>
 

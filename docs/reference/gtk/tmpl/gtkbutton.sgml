@@ -97,6 +97,16 @@ mouse cursor is.
 
 </para>
 
+<!-- ##### ARG GtkButton:xalign ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkButton:yalign ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkButton:child-displacement-x ##### -->
 <para>
 
@@ -290,5 +300,25 @@ Returns the current relief style of the given #GtkButton.
 
 @button: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_button_set_alignment ##### -->
+<para>
+
+</para>
+
+@button: 
+@xalign: 
+@yalign: 
+
+
+<!-- ##### FUNCTION gtk_button_get_alignment ##### -->
+<para>
+
+</para>
+
+@button: 
+@xalign: 
+@yalign: 
 
 

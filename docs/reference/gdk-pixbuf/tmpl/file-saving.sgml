@@ -57,3 +57,63 @@ will fail with the same error.
 @data: user data passed to gdk_pixbuf_save_to_callback().
 @Returns: %TRUE if successful, %FALSE (with @error set) if failed.
 @Since: 2.4
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_callback ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@save_func: 
+@user_data: 
+@type: 
+@error: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_callbackv ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@save_func: 
+@user_data: 
+@type: 
+@option_keys: 
+@option_values: 
+@error: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_buffer ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@buffer: 
+@buffer_size: 
+@type: 
+@error: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_save_to_bufferv ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@buffer: 
+@buffer_size: 
+@type: 
+@option_keys: 
+@option_values: 
+@error: 
+@Returns: 
+
+

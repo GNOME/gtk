@@ -294,6 +294,7 @@ is loaded and must set the function pointers of the #GdkPixbufModule.
 @load_increment: continues an incremental load.
 @load_animation: loads an animation from a file.
 @save: saves a #GdkPixbuf to a file.
+@save_to_callback: 
 
 <!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
 <para>

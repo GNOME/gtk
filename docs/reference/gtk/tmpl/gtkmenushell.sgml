@@ -166,6 +166,14 @@ Activates the menu item within the menu shell.
 after the menu item is activated.
 
 
+<!-- ##### FUNCTION gtk_menu_shell_cancel ##### -->
+<para>
+
+</para>
+
+@menu_shell: 
+
+
 <!-- ##### ENUM GtkMenuDirectionType ##### -->
 <para>
 An enumeration representing directional movements within a menu.

@@ -44,6 +44,12 @@ The #GtkToolbar struct only contains private data and should only be
 accessed through the function described below.
 </para>
 
+@num_children: 
+@children: 
+@orientation: 
+@style: 
+@icon_size: 
+@tooltips: 
 
 <!-- ##### SIGNAL GtkToolbar::focus-home-or-end ##### -->
 <para>

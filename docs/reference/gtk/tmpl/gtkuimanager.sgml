@@ -199,6 +199,40 @@ members and should not be accessed directly.
 @uimanager: the object which received the signal.
 @widget: 
 
+<!-- ##### SIGNAL GtkUIManager::connect-proxy ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+@arg1: 
+@widget: 
+
+<!-- ##### SIGNAL GtkUIManager::disconnect-proxy ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+@arg1: 
+@widget: 
+
+<!-- ##### SIGNAL GtkUIManager::post-activate ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL GtkUIManager::pre-activate ##### -->
+<para>
+
+</para>
+
+@uimanager: the object which received the signal.
+@arg1: 
+
 <!-- ##### ARG GtkUIManager:add-tearoffs ##### -->
 <para>
 
@@ -279,6 +313,16 @@ members and should not be accessed directly.
 
 @self: 
 @path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_ui_manager_get_toplevels ##### -->
+<para>
+
+</para>
+
+@self: 
+@types: 
 @Returns: 
 
 

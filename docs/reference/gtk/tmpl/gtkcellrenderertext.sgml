@@ -94,6 +94,16 @@ Renders text in a cell
 
 </para>
 
+<!-- ##### ARG GtkCellRendererText:language ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:language-set ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererText:markup ##### -->
 <para>
 
@@ -115,6 +125,11 @@ Renders text in a cell
 </para>
 
 <!-- ##### ARG GtkCellRendererText:scale-set ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG GtkCellRendererText:single-paragraph-mode ##### -->
 <para>
 
 </para>

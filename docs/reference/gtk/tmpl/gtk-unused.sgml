@@ -550,6 +550,22 @@ This is a private struct used by GTK+ internally, don't worry about it.
 @old_accel_key: 
 @old_accel_mods: 
 
+<!-- ##### SIGNAL GtkAction::connect-proxy ##### -->
+<para>
+
+</para>
+
+@action: the object which received the signal.
+@widget: 
+
+<!-- ##### SIGNAL GtkAction::disconnect-proxy ##### -->
+<para>
+
+</para>
+
+@action: the object which received the signal.
+@widget: 
+
 <!-- ##### USER_FUNCTION GtkArgGetFunc ##### -->
 <para>
 Define a function pointer.  Deprecated.

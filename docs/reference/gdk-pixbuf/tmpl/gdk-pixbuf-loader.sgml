@@ -80,13 +80,13 @@ fields.
   <para>
   </para>
 
-@gdkpixbufloader:
+@gdkpixbufloader: 
 
 <!-- ##### SIGNAL GdkPixbufLoader::area-updated ##### -->
   <para>
   </para>
 
-@gdkpixbufloader:
+@gdkpixbufloader: 
 @arg1: 
 @arg2: 
 @arg3: 

@@ -66,6 +66,13 @@ it cannot be individually modified.
 </para>
 
 
+<!-- ##### SIGNAL GtkCellRenderer::editing-canceled ##### -->
+<para>
+
+</para>
+
+@cellrenderer: the object which received the signal.
+
 <!-- ##### ARG GtkCellRenderer:cell-background ##### -->
 <para>
 

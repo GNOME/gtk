@@ -212,6 +212,24 @@ Adds a child to the bottom or right pane.
 @shrink: can this child be made smaller than its requsition.
 
 
+<!-- ##### FUNCTION gtk_paned_get_child1 ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_paned_get_child2 ##### -->
+<para>
+
+</para>
+
+@paned: 
+@Returns: 
+
+
 <!-- ##### MACRO gtk_paned_set_gutter_size ##### -->
 <para>
 In older versions of GTK+, this function used to set the width of the 

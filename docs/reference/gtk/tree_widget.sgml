@@ -15,47 +15,44 @@
   <refsect1>
     <title>Overview</title>
     <para>
-      To create a tree or list in GTK+, you need to use the <link
-      linkend="GtkTreeModel">GtkTreeModel</link> interface, in
+      To create a tree or list in GTK+, use the <link
+      linkend="GtkTreeModel">GtkTreeModel</link> interface in
       conjunction with the <link
-      linkend="GtkTreeView">GtkTreeView</link> widget.
-    </para>
-    <para>
-      This widget is designed around a
-      <firstterm>Model/View/Controller</firstterm> design and consists
-      of four major parts:
+      linkend="GtkTreeView">GtkTreeView</link> widget.  This widget is
+      designed around a <firstterm>Model/View/Controller</firstterm>
+      design and consists of four major parts:
       <simplelist>
-	<member>the tree view widget (<structname>GtkTreeView</structname>)</member>
-	<member>the view column (<structname>GtkTreeViewColumn</structname>)</member>
-	<member>the cell renderers (<structname>GtkCellRenderer</structname> etc.)</member>
-	<member>and the model interface (<structname>GtkTreeModel</structname>)</member>
+	<member>The tree view widget (<structname>GtkTreeView</structname>)</member>
+	<member>The view column (<structname>GtkTreeViewColumn</structname>)</member>
+	<member>The cell renderers (<structname>GtkCellRenderer</structname> etc.)</member>
+	<member>The model interface (<structname>GtkTreeModel</structname>)</member>
       </simplelist>
-      The <emphasis>View</emphasis> is composed of the first three,
-	while the last is the <emphasis>Model</emphasis>.  One of the
-	prime benefits of the MVC design is that multiple views can be
-	created of a single model.  For example, a model mapping the file
-	system could be created for a file manager.  Many views could be
-	created to display various parts of the file system, but only one
-	copy need be kept in memory.
+      The <emphasis>View</emphasis> is composed of the first three
+	objects, while the last is the <emphasis>Model</emphasis>.  One
+	of the prime benefits of the MVC design is that multiple views
+	can be created of a single model.  For example, a model mapping
+	the file system could be created for a file manager.  Many views
+	could be created to display various parts of the file system,
+	but only one copy need be kept in memory.
     </para>
     <para>
         The purpose of the cell renderers is to provide extensibility to the
         widget and to allow multiple ways of rendering the same type of data.
-        For example, consider how to render a boolean variable.  Should you
+        For example, consider how to render a boolean variable.  Should it
         render it as a string of "True" or "False", "On" or "Off", or should
-        you render it as a checkbox?
+        it be rendered as a checkbox?
     </para>
   </refsect1>
   <refsect1>
     <title>Creating a model</title>
     <para>
-      GTK+ 2.0 provides two types of models that can be used:
-      <link linkend="GtkListStore">GtkListStore</link> and
-      <link linkend="GtkTreeStore">GtkTreeStore</link>.  GtkListStore is
-      used to model columned list widgets, while GtkTreeStore models
-      columned tree widgets.  It is possible to develop a new type of model,
-      but the existing models should be satisfactory for all but the most
-      specialized of situations.  Creating the model is quite simple:
+      GTK+ provides two simple models that can be used: the <link
+      linkend="GtkListStore">GtkListStore</link> and the <link
+      linkend="GtkTreeStore">GtkTreeStore</link>.  GtkListStore is used
+      to model list widgets, while the GtkTreeStore models trees.  It
+      is possible to develop a new type of model, but the existing
+      models should be satisfactory for all but the most specialized of
+      situations.  Creating the model is quite simple:
     </para>
       <informalexample><programlisting><![CDATA[
 GtkListStore *store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_BOOLEAN);

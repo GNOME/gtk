@@ -32,6 +32,7 @@ GtkCellLayout
 @add_attribute: 
 @set_cell_data_func: 
 @clear_attributes: 
+@reorder: 
 
 <!-- ##### USER_FUNCTION GtkCellLayoutDataFunc ##### -->
 <para>

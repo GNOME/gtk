@@ -741,6 +741,15 @@ Registers a window as a potential drop destination.
 @override_redirect: 
 
 
+<!-- ##### FUNCTION gdk_window_set_accept_focus ##### -->
+<para>
+
+</para>
+
+@window: 
+@accept_focus: 
+
+
 <!-- ##### FUNCTION gdk_window_add_filter ##### -->
 <para>
 
@@ -1218,6 +1227,15 @@ Like the X Window System, GDK supports 8 modifier keys and 5 mouse buttons.
 
 @window: 
 @leader: 
+
+
+<!-- ##### FUNCTION gdk_window_get_group ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_window_set_decorations ##### -->

@@ -31,10 +31,28 @@ only private members and should not be accessed directly.
 @radioaction: the object which received the signal.
 @arg1: 
 
+<!-- ##### ARG GtkRadioAction:group ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkRadioAction:value ##### -->
 <para>
 
 </para>
+
+<!-- ##### FUNCTION gtk_radio_action_new ##### -->
+<para>
+
+</para>
+
+@name: 
+@label: 
+@tooltip: 
+@stock_id: 
+@value: 
+@Returns: 
+
 
 <!-- ##### FUNCTION gtk_radio_action_get_group ##### -->
 <para>

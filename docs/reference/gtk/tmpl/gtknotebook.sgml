@@ -201,6 +201,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @notebook: 
 @child: 
 @tab_label: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_append_page_menu ##### -->
@@ -211,6 +212,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @child: 
 @tab_label: 
 @menu_label: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_prepend_page ##### -->
@@ -220,6 +222,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @notebook: 
 @child: the
 @tab_label: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_prepend_page_menu ##### -->
@@ -230,6 +233,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @child: 
 @tab_label: 
 @menu_label: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_insert_page ##### -->
@@ -240,6 +244,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @child: 
 @tab_label: 
 @position: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_insert_page_menu ##### -->
@@ -251,6 +256,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 @tab_label: 
 @menu_label: 
 @position: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_remove_page ##### -->
