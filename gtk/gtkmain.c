@@ -2331,8 +2331,17 @@ gtk_propagate_event (GtkWidget *widget,
       while (TRUE)
 	{
 	  GtkWidget *tmp;
-	  
-	  handled_event = !GTK_WIDGET_IS_SENSITIVE (widget) || gtk_widget_event (widget, event);
+
+	  /* Scroll events are special cased here because it
+	   * feels wrong when scrolling a GtkViewport, say,
+	   * to have children of the viewport eat the scroll
+	   * event
+	   */
+	  if (!GTK_WIDGET_IS_SENSITIVE (widget))
+	    handled_event = event->type != GDK_SCROLL;
+	  else
+	    handled_event = gtk_widget_event (widget, event);
+	      
 	  tmp = widget->parent;
 	  g_object_unref (widget);
 
