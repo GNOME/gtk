@@ -1,3 +1,9 @@
+2002-09-25  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_impl_x11_get_colormap):
+	Replace leftover gdk_colormap_lookup () by
+	gdk_x11_colormap_foreign_new () to make the linker happy.
+
 Tue Sep 24 17:49:52 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelgroup.[ch] (gtk_accel_group_find): 

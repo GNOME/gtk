@@ -203,7 +203,8 @@ gdk_window_impl_x11_get_colormap (GdkDrawable *drawable)
                             drawable_impl->xid,
                             &window_attributes);
       drawable_impl->colormap =
-        gdk_colormap_lookup (window_attributes.colormap);
+	gdk_x11_colormap_foreign_new (gdk_drawable_get_visual (drawable),
+				      window_attributes.colormap);
     }
   
   return drawable_impl->colormap;
