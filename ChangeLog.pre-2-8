@@ -1,3 +1,10 @@
+2001-02-14  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_remove): add
+	"static" to a private function
+	(gtk_image_menu_item_class_init): remove destroy handler,
+	add "image" object property
+
 2001-02-13  Alexander Larsson  <alla@lysator.liu.se>
 
 	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_clip_region):

@@ -27,11 +27,10 @@
 #include "gtkimagemenuitem.h"
 #include "gtkaccellabel.h"
 #include "gtksignal.h"
+#include "gtkintl.h"
 
 static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
 static void gtk_image_menu_item_init                 (GtkImageMenuItem      *image_menu_item);
-
-static void gtk_image_menu_item_destroy              (GtkObject        *object);
 static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
                                                       GtkRequisition   *requisition);
 static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
@@ -49,6 +48,23 @@ static void gtk_image_menu_item_forall     (GtkContainer   *container,
                                             gboolean	    include_internals,
                                             GtkCallback     callback,
                                             gpointer        callback_data);
+
+static void gtk_image_menu_item_set_property (GObject         *object,
+                                              guint            prop_id,
+                                              const GValue    *value,
+                                              GParamSpec      *pspec,
+                                              const gchar     *trailer);
+static void gtk_image_menu_item_get_property (GObject         *object,
+                                              guint            prop_id,
+                                              GValue          *value,
+                                              GParamSpec      *pspec,
+                                              const gchar     *trailer);
+
+
+enum {
+  PROP_ZERO,
+  PROP_IMAGE
+};
 
 static GtkMenuItemClass *parent_class = NULL;
 
@@ -80,19 +96,19 @@ gtk_image_menu_item_get_type (void)
 static void
 gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 {
+  GObjectClass *gobject_class;
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMenuItemClass *menu_item_class;
   GtkContainerClass *container_class;
-  
+
+  gobject_class = (GObjectClass*) klass;
   object_class = (GtkObjectClass*) klass;
   widget_class = (GtkWidgetClass*) klass;
   menu_item_class = (GtkMenuItemClass*) klass;
   container_class = (GtkContainerClass*) klass;
   
   parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
-
-  object_class->destroy = gtk_image_menu_item_destroy;
   
   widget_class->expose_event = gtk_image_menu_item_expose;
   widget_class->size_request = gtk_image_menu_item_size_request;
@@ -104,6 +120,17 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
   container_class->remove = gtk_image_menu_item_remove;
   
   menu_item_class->toggle_size_request = gtk_image_menu_item_toggle_size_request;
+
+  gobject_class->set_property = gtk_image_menu_item_set_property;
+  gobject_class->get_property = gtk_image_menu_item_get_property;
+  
+  g_object_class_install_property (gobject_class,
+                                   PROP_IMAGE,
+                                   g_param_spec_object ("image",
+                                                        _("Image widget"),
+                                                        _("Child widget to appear next to the menu text"),
+                                                        GTK_TYPE_WIDGET,
+                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
 }
 
 static void
@@ -113,19 +140,62 @@ gtk_image_menu_item_init (GtkImageMenuItem *image_menu_item)
 }
 
 static void
-gtk_image_menu_item_destroy (GtkObject *object)
+gtk_image_menu_item_set_property (GObject         *object,
+                                  guint            prop_id,
+                                  const GValue    *value,
+                                  GParamSpec      *pspec,
+                                  const gchar     *trailer)
 {
-  GtkImageMenuItem *image_menu_item;
-
-  image_menu_item = GTK_IMAGE_MENU_ITEM (object);  
-
-  /* If you change forall to treat the image widget as
-   * an internal, then you have to destroy the image widget
-   * here.
-   */
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
   
-  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  switch (prop_id)
+    {
+    case PROP_IMAGE:
+      {
+        GtkWidget *child;
+
+        child = (GtkWidget*) g_value_get_object (value);
+
+        if (child != image_menu_item->image)
+          {
+            if (image_menu_item->image)
+              gtk_container_remove (GTK_CONTAINER (image_menu_item),
+                                    image_menu_item->image);
+            
+            if (child)
+              {
+                gtk_image_menu_item_add_image (image_menu_item,
+                                               child);
+              }
+          }
+      }
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
+static void
+gtk_image_menu_item_get_property (GObject         *object,
+                                  guint            prop_id,
+                                  GValue          *value,
+                                  GParamSpec      *pspec,
+                                  const gchar     *trailer)
+{
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (object);
+  
+  switch (prop_id)
+    {
+    case PROP_IMAGE:
+      g_value_set_object (value,
+                          (GObject*) image_menu_item->image);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
 
 static void
 gtk_image_menu_item_toggle_size_request (GtkMenuItem *menu_item,
@@ -331,9 +401,11 @@ gtk_image_menu_item_add_image (GtkImageMenuItem *image_menu_item,
   gtk_widget_set_parent (child, GTK_WIDGET (image_menu_item));
   image_menu_item->image = child;
 
+  g_object_notify (G_OBJECT (image_menu_item), "image");
+  
   if (GTK_WIDGET_REALIZED (child->parent))
     gtk_widget_realize (child);
-
+  
   if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
     {
       if (GTK_WIDGET_MAPPED (child->parent))
@@ -351,7 +423,7 @@ gtk_image_menu_item_get_image (GtkImageMenuItem *image_menu_item)
   return image_menu_item->image;
 }
 
-void
+static void
 gtk_image_menu_item_remove (GtkContainer *container,
                             GtkWidget    *child)
 {
@@ -368,11 +440,10 @@ gtk_image_menu_item_remove (GtkContainer *container,
       gtk_widget_unparent (child);
       image_menu_item->image = NULL;
       
-      /* queue resize regardless of GTK_WIDGET_VISIBLE (container),
-       * since that's what is needed by toplevels, which derive from GtkBin.
-       */
-      if (widget_was_visible)
+      if (GTK_WIDGET_VISIBLE (container) && widget_was_visible)
         gtk_widget_queue_resize (GTK_WIDGET (container));
+
+      g_object_notify (G_OBJECT (image_menu_item), "image");
     }
   else
     {
