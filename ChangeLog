@@ -8,6 +8,7 @@
 	* gdk/x11/gdkproperty-x11.c
 	* gdk/x11/gdkvisual-x11.c
 	* gdk-pixbuf/gdk-pixbuf.c
+	* gdk-pixbuf/gdk-pixbuf-features.h.in
 	* gtk/gtkaction.c
 	* gtk/gtkbindings.c
 	* gtk/gtkcolorbutton.c
