@@ -1,3 +1,12 @@
+Thu Jan 22 21:45:24 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkmenu.c (gtk_menu_remove): Remove the attach 
+	info after calling gtk_menu_do_remove(), since that function
+	uses the attach info. Doh!
+
+	* gtk/gtkmenu.c (gtk_menu_do_remove): Don't check priv->columns 
+	for being 1 directly after setting it to 0.
+
 Thu Jan 22 21:38:52 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* NEWS: Updates

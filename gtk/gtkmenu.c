@@ -941,10 +941,12 @@ gtk_menu_do_remove (GtkMenuShell *menu_shell,
   GList *children;
   GtkMenuPrivate *priv;
   gint delta;
+  gboolean single_column;
 
   ai = get_attach_info (G_OBJECT (child));
   priv = gtk_menu_get_private (GTK_MENU (menu_shell));
   delta = ai->bottom_attach - ai->top_attach;
+  single_column = priv->columns == 1;
 
   /* recalculate these, assuming the child has already been removed */
   priv->rows = 0;
@@ -955,7 +957,7 @@ gtk_menu_do_remove (GtkMenuShell *menu_shell,
       AttachInfo *child_ai = get_attach_info (children->data);
       
       /* Do not move items in table menus */
-      if (priv->columns == 1 && child_ai->bottom_attach > ai->bottom_attach)
+      if (single_column && child_ai->bottom_attach > ai->bottom_attach)
         gtk_container_child_set (GTK_CONTAINER (menu_shell), children->data,
                                  "top_attach", child_ai->top_attach - delta,
                                  "bottom_attach", child_ai->bottom_attach - delta,
@@ -987,10 +989,9 @@ gtk_menu_remove (GtkContainer *container,
       menu->old_active_menu_item = NULL;
     }
 
-  g_object_set_data (G_OBJECT (widget), ATTACH_INFO_KEY, NULL);
-
   GTK_CONTAINER_CLASS (parent_class)->remove (container, widget);
   gtk_menu_do_remove (GTK_MENU_SHELL (container), widget);
+  g_object_set_data (G_OBJECT (widget), ATTACH_INFO_KEY, NULL);
 }
 
 
