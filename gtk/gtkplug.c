@@ -363,12 +363,13 @@ gtk_plug_construct_for_display (GdkDisplay	*display,
       gpointer user_data = NULL;
 
       plug->socket_window = gdk_window_lookup_for_display (display, socket_id);
-
+      
       if (plug->socket_window)
 	gdk_window_get_user_data (plug->socket_window, &user_data);
       else
 	plug->socket_window = 
 	  gdk_window_foreign_new_for_display (display, socket_id);
+	  
       if (user_data)
 	{
 	  if (GTK_IS_SOCKET (user_data))
@@ -509,8 +510,13 @@ gtk_plug_realize (GtkWidget *widget)
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
 
       gdk_error_trap_push ();
-      widget->window = gdk_window_new (gtk_widget_get_root_window (widget), 
-				       &attributes, attributes_mask);
+      if (plug->socket_window)
+	widget->window = gdk_window_new (plug->socket_window, 
+					 &attributes, attributes_mask);
+      else  /* if it's a passive plug revert to root window */
+	 widget->window = gdk_window_new (gtk_widget_get_root_window (widget),
+					  &attributes, attributes_mask);
+
       gdk_display_sync (gtk_widget_get_display (widget));
       if (gdk_error_trap_pop ()) /* Uh-oh */
 	{
@@ -942,7 +948,7 @@ send_xembed_message (GtkPlug *plug,
       xevent.xclient.window = GDK_WINDOW_XWINDOW (plug->socket_window);
       xevent.xclient.type = ClientMessage;
       xevent.xclient.message_type = gdk_x11_get_xatom_by_name_for_display 
-	(gtk_widget_get_display (GTK_WIDGET (plug)), "_XEMBED");
+	(gdk_drawable_get_display (plug->socket_window), "_XEMBED");
       xevent.xclient.format = 32;
       xevent.xclient.data.l[0] = time;
       xevent.xclient.data.l[1] = message;
@@ -1012,7 +1018,7 @@ xembed_set_info (GdkWindow     *gdk_window,
   Display *display = GDK_WINDOW_XDISPLAY (gdk_window);
   Window window = GDK_WINDOW_XWINDOW (gdk_window);
   unsigned long buffer[2];
-  
+
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display 
     (gdk_drawable_get_display (gdk_window), "_XEMBED_INFO");
 
@@ -1171,7 +1177,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		 * be invisible to the app.
 		 */
 
-		if (xre->parent == GDK_WINDOW_XROOTWIN (plug->socket_window))
+		if (xre->parent == GDK_WINDOW_XROOTWIN (event->any.window))
 		  {
 		    GdkEvent event;
 		    
@@ -1189,7 +1195,7 @@ gtk_plug_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	      break;
 	  }
 
-	if (xre->parent !=  GDK_WINDOW_XROOTWIN (plug->socket_window))
+	if (xre->parent !=  GDK_WINDOW_XROOTWIN (event->any.window))
 	  {
 	    /* Start of embedding protocol */
 
