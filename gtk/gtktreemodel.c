@@ -1235,6 +1235,58 @@ gtk_tree_row_ref_deleted_callback (GObject     *object,
 }
 
 static void
+gtk_tree_row_ref_reordered_callback (GObject     *object,
+				     GtkTreePath *path,
+				     GtkTreeIter *iter,
+				     gint        *new_order,
+				     gpointer     data)
+{
+  RowRefList *refs = g_object_get_data (data, ROW_REF_DATA_STRING);
+  GSList *tmp_list;
+  gint length;
+
+  if (refs == NULL)
+    return;
+
+  tmp_list = refs->list;
+
+  while (tmp_list != NULL)
+    {
+      GtkTreeRowReference *reference = tmp_list->data;
+
+      length = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (reference->model), iter);
+
+      if (length < 2)
+	return;
+
+      if ((reference->path) &&
+	  (gtk_tree_path_is_ancestor (path, reference->path)))
+	{
+	  gint ref_depth = gtk_tree_path_get_depth (reference->path);
+	  gint depth = gtk_tree_path_get_depth (path);
+
+	  if (ref_depth > depth)
+	    {
+	      gint i;
+	      gint *indices = gtk_tree_path_get_indices (reference->path);
+
+	      for (i = 0; i < length; i++)
+		{
+		  if (new_order[i] == indices[depth])
+		    {
+		      indices[depth] = i;
+		      return;
+		    }
+		}
+	    }
+	}
+
+      tmp_list = g_slist_next (tmp_list);
+    }
+  
+}
+     
+static void
 connect_ref_callbacks (GtkTreeModel *model)
 {
   g_signal_connect_data (G_OBJECT (model),
@@ -1248,6 +1300,14 @@ connect_ref_callbacks (GtkTreeModel *model)
   g_signal_connect_data (G_OBJECT (model),
                          "deleted",
                          (GCallback) gtk_tree_row_ref_deleted_callback,
+			 model,
+                         NULL,
+                         FALSE,
+                         FALSE);
+
+  g_signal_connect_data (G_OBJECT (model),
+                         "reordered",
+                         (GCallback) gtk_tree_row_ref_reordered_callback,
 			 model,
                          NULL,
                          FALSE,
@@ -1266,6 +1326,11 @@ disconnect_ref_callbacks (GtkTreeModel *model)
                                         G_SIGNAL_MATCH_FUNC,
                                         0, 0, NULL,
 					gtk_tree_row_ref_deleted_callback,
+					NULL);
+  g_signal_handlers_disconnect_matched (G_OBJECT (model),
+                                        G_SIGNAL_MATCH_FUNC,
+                                        0, 0, NULL,
+					gtk_tree_row_ref_reordered_callback,
 					NULL);
 }
 
@@ -1288,9 +1353,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
   GtkTreeRowReference *reference;
   RowRefList *refs;
 
-  g_return_val_if_fail (proxy != NULL, NULL);
   g_return_val_if_fail (G_IS_OBJECT (proxy), NULL);
-  g_return_val_if_fail (model != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TREE_MODEL (model), NULL);
   g_return_val_if_fail (path != NULL, NULL);
 
@@ -1372,7 +1435,6 @@ void
 gtk_tree_row_reference_inserted (GObject     *proxy,
 				 GtkTreePath *path)
 {
-  g_return_if_fail (proxy != NULL);
   g_return_if_fail (G_IS_OBJECT (proxy));
 
   gtk_tree_row_ref_inserted_callback (NULL, path, NULL, proxy);
@@ -1383,8 +1445,19 @@ void
 gtk_tree_row_reference_deleted (GObject     *proxy,
 				GtkTreePath *path)
 {
-  g_return_if_fail (proxy != NULL);
   g_return_if_fail (G_IS_OBJECT (proxy));
 
   gtk_tree_row_ref_deleted_callback (NULL, path, proxy);
 }
+
+void
+gtk_tree_row_reference_reordered (GObject     *proxy,
+				  GtkTreePath *path,
+				  GtkTreeIter *iter,
+				  gint        *new_order)
+{
+  g_return_if_fail (G_IS_OBJECT (proxy));
+
+  gtk_tree_row_ref_reordered_callback (NULL, path, iter, new_order, proxy);
+}
+  

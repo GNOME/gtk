@@ -3025,6 +3025,11 @@ gtk_tree_view_reordered (GtkTreeModel *model,
   if (len < 2)
     return;
 
+  gtk_tree_row_reference_reordered (G_OBJECT (data),
+				    parent,
+				    iter,
+				    new_order);
+
   if (_gtk_tree_view_find_node (tree_view,
 				parent,
 				&tree,

@@ -154,6 +154,10 @@ void                 gtk_tree_row_reference_inserted  (GObject     *proxy,
 						       GtkTreePath *path);
 void                 gtk_tree_row_reference_deleted   (GObject     *proxy,
 						       GtkTreePath *path);
+void                 gtk_tree_row_reference_reordered (GObject     *proxy,
+						       GtkTreePath *path,
+						       GtkTreeIter *iter,
+						       gint        *new_order);
 						       
 /* GtkTreeIter operations */
 GtkTreeIter *     gtk_tree_iter_copy             (GtkTreeIter  *iter);

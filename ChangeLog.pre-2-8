@@ -1,3 +1,8 @@
+Thu Mar 29 20:20:38 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_reordered_callback): Now we
+	listen to the reorder signal.
+
 Wed Mar 28 20:30:26 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.[ch] (_gtk_widget_get_aux_info): Add private function

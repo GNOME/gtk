@@ -79,6 +79,7 @@ static gboolean gtk_list_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
                                                    GtkTreePath       *src_path,
                                                    GtkTreePath       *dest_path);
 
+
 /* sortable */
 static void     gtk_list_store_sort                    (GtkListStore           *list_store);
 static void     gtk_list_store_sort_iter_changed       (GtkListStore           *list_store,
@@ -94,8 +95,6 @@ static void     gtk_list_store_sort_column_id_set_func (GtkTreeSortable        *
 							GtkTreeIterCompareFunc  func,
 							gpointer                data,
 							GtkDestroyNotify        destroy);
-
-
 
 
 static void

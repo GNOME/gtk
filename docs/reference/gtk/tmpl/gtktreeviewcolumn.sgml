@@ -34,6 +34,7 @@ GtkTreeViewColumn
 @alignment: 
 @window: 
 @xalign: 
+@model_changed_signal: 
 @width: 
 @min_width: 
 @max_width: 
@@ -45,7 +46,8 @@ GtkTreeViewColumn
 @cell: 
 @attributes: 
 @column_type: 
-@sort_signal: 
+@sort_clicked_signal: 
+@sort_column_changed_signal: 
 @sort_column_id: 
 @sort_order: 
 @visible: 
