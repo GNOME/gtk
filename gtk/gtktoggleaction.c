@@ -309,6 +309,8 @@ gtk_toggle_action_set_active (GtkToggleAction *action,
  * gtk_toggle_action_get_active:
  * @action: the action object
  *
+ * Returns the checked state of the toggle action.
+
  * Returns: the checked state of the toggle action
  *
  * Since: 2.4
@@ -351,6 +353,8 @@ gtk_toggle_action_set_draw_as_radio (GtkToggleAction *action,
 /**
  * gtk_toggle_action_get_draw_as_radio:
  * @action: the action object
+ *
+ * Returns whether the action should have proxies like a radio action.
  *
  * Returns: whether the action should have proxies like a radio action.
  *

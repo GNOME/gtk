@@ -1,3 +1,7 @@
+2003-10-02  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktoggleaction.c: Documentation tweaks.
+
 Wed Oct  1 22:43:40 2003  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtkcellview.[ch]: implement the GtkCellLayout interface, drop
