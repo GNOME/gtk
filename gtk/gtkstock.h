@@ -89,7 +89,7 @@ void          gtk_stock_item_free (GtkStockItem       *item);
 #define GTK_STOCK_GO_BACK          "gtk-go-back"
 #define GTK_STOCK_GO_DOWN          "gtk-go-down"
 #define GTK_STOCK_GO_FORWARD       "gtk-go-forward"
-#define GTK_STOCK_GO_UP            "gtk-up"
+#define GTK_STOCK_GO_UP            "gtk-go-up"
 #define GTK_STOCK_HELP             "gtk-help"
 #define GTK_STOCK_HOME             "gtk-home"
 #define GTK_STOCK_INDEX            "gtk-index"

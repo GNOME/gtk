@@ -37,6 +37,7 @@ IMAGES = @STRIP_BEGIN@ 			\
 	stock_last.png 			\
 	stock_left_arrow.png 		\
 	stock_menu_print_preview.png 	\
+	stock_menu_sort_ascending.png 	\
 	stock_menu_sort_descending.png 	\
 	stock_new.png			\
 	stock_open.png			\
@@ -109,6 +110,7 @@ VARIABLES = @STRIP_BEGIN@ 									\
                 stock_last			$(srcdir)/stock_last.png             		\
                 stock_left_arrow		$(srcdir)/stock_left_arrow.png             	\
                 stock_menu_print_preview	$(srcdir)/stock_menu_print_preview.png    	\
+                stock_menu_sort_ascending	$(srcdir)/stock_menu_sort_ascending.png        \
                 stock_menu_sort_descending	$(srcdir)/stock_menu_sort_descending.png        \
 		stock_new			$(srcdir)/stock_new.png				\
 		stock_open			$(srcdir)/stock_open.png  			\

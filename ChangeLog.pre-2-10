@@ -1,3 +1,23 @@
+2001-05-27  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gtk/gtkstock.h (GTK_STOCK_GO_UP):
+	Rename to the more correct gtk-go-up.
+
+	* gtk/stock-icons/stock_menu_sort_ascending.png:
+	Added new file.
+	
+	* gtk/stock-icons/stock_menu_sort_descending.png:
+	Changed to show descending instead of ascending.
+
+	* gtk/gtkiconfactory.c:
+	Added menu size icon to sort ascending.
+
+	* gtk/stock-icons/Makefile.am:
+	Added stock_menu_sort_ascending.png.
+	
+	* gtk/gtkseparatormenuitem.c:
+	Use correct typenames.
+
 Sun May 20 20:07:35 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.[hc] (gtk_signal_connect_full): make hanlder id a

@@ -489,7 +489,14 @@ get_default_icons (GtkIconFactory *factory)
                            GTK_ICON_SIZE_MENU,
                            GTK_STOCK_SORT_DESCENDING);
   
-  /* Generic size only */
+
+  add_sized_with_fallback (factory,
+                           stock_sort_ascending,
+                           stock_menu_sort_ascending,
+                           GTK_ICON_SIZE_MENU,
+                           GTK_STOCK_SORT_ASCENDING);
+  
+/* Generic size only */
 
   add_unsized (factory, stock_add, GTK_STOCK_ADD);
   add_unsized (factory, stock_align_center, GTK_STOCK_JUSTIFY_CENTER);
@@ -530,7 +537,6 @@ get_default_icons (GtkIconFactory *factory)
   add_unsized (factory, stock_save_as, GTK_STOCK_SAVE_AS);
   add_unsized (factory, stock_search, GTK_STOCK_FIND);
   add_unsized (factory, stock_search_replace, GTK_STOCK_FIND_AND_REPLACE);
-  add_unsized (factory, stock_sort_ascending, GTK_STOCK_SORT_ASCENDING);
   add_unsized (factory, stock_spellcheck, GTK_STOCK_SPELL_CHECK);
   add_unsized (factory, stock_stop, GTK_STOCK_STOP);
   add_unsized (factory, stock_text_bold, GTK_STOCK_BOLD);

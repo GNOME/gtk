@@ -39,13 +39,13 @@ gtk_separator_menu_item_get_type (void)
     {
       static const GTypeInfo separator_menu_item_info =
       {
-	sizeof (GtkMenuItemClass),
+	sizeof (GtkSeparatorMenuItemClass),
 	NULL,           /* base_init */
 	NULL,           /* base_finalize */
 	(GClassInitFunc) gtk_separator_menu_item_class_init,
 	NULL,           /* class_finalize */
 	NULL,           /* class_data */
-	sizeof (GtkMenuItem),
+	sizeof (GtkSeparatorMenuItem),
 	16,             /* n_preallocs */
 	(GInstanceInitFunc) NULL,
       };
