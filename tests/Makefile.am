@@ -38,6 +38,7 @@ noinst_PROGRAMS = 		\
 	testtreeedit		\
 	testtreeview		\
 	testtreefocus		\
+	testtreeflow		\
 	testtreecolumns		\
 	testtreesort		\
 	treestoretest
@@ -56,6 +57,7 @@ testtextbuffer_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIS = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
 testtreefocus_DEPENDENCIES = $(DEPS)
+testtreeflow_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
@@ -73,6 +75,7 @@ testtextbuffer_LDADD = $(LDADDS)
 testtreeedit_LDADD = $(LDADDS)
 testtreeview_LDADD = $(LDADDS)
 testtreefocus_LDADD = $(LDADDS)
+testtreeflow_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
 testtext_LDADD = $(LDADDS)

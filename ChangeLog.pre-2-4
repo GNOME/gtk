@@ -1,3 +1,7 @@
+Thu Oct 18 14:58:14 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* tests/testtreeflow.c: new test program for the tree.
+
 Thu Oct 18 14:22:10 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_remove): fix small bug
