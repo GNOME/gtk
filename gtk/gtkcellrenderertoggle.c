@@ -171,7 +171,15 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 G_PARAM_READABLE |
 							 G_PARAM_WRITABLE));
 
-
+  
+  /**
+   * GtkCellRendererToggle::toggled:
+   * @cell_renderer: the object which received the signal
+   * @path: string representation of #GtkTreePath describing the 
+   *        event location
+   *
+   * The ::toggled signal is emitted when the cell is toggled. 
+   **/
   toggle_cell_signals[TOGGLED] =
     g_signal_new ("toggled",
 		  G_OBJECT_CLASS_TYPE (object_class),

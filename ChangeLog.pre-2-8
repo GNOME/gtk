@@ -1,3 +1,8 @@
+Tue May 11 00:38:25 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_class_init): 
+	Document the ::toggled signal.
+
 Mon May 10 23:04:25 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkwidget.h: Add prototype for _gtk_widget_grab_notify()
