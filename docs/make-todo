@@ -124,6 +124,8 @@ class TodoParser (xmllib.XMLParser):
         self.data = ""
         self.section = None
         self.entry = None
+        self.logourl = None
+        self.title = None
         self.sections = []
 
         self.entitydefs = {}
@@ -131,6 +133,8 @@ class TodoParser (xmllib.XMLParser):
     def start_todo(self,attributes):
         if self.in_todo:
             raise ParseError, "<todo> tags may not be nested"
+        if attributes.has_key ("logourl"):
+            self.logourl = attributes["logourl"]
         self.in_todo = 1
 
     def end_todo(self):
@@ -150,8 +154,8 @@ class TodoParser (xmllib.XMLParser):
         self.section = None
 
     def start_title(self,attributes):
-        if not self.section and not self.entry:
-            raise ParseError, "<title> tag must be in <section> or <entry>"
+        if not self.in_todo:
+            raise ParseError, "<title> tag must be in <todo>, <section> or <entry>"
         if self.in_data:
             raise ParseError, "Unexpected <title> tag in content"
         self.in_data = 1
@@ -160,10 +164,11 @@ class TodoParser (xmllib.XMLParser):
         self.in_data = 0
         if self.entry:
             self.entry.title = self.data
-            self.data = ""
-        else:
+        elif self.section:
             self.section.title = self.data
-            self.data = ""
+        else:
+            self.title = self.data
+        self.data = ""
             
     def start_description(self,attributes):
         if not self.entry:
@@ -295,18 +300,21 @@ while 1:
     lineno = lineno + 1
 
 parser.close()
+if parser.title == None:
+    sys.stderr.write ("<todo> Document must have a <title>\n")
+    sys.exit (1)
 
 print '''<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
 <html>
 <head>
-<title>GTK+ TODO List</title>
+<title>%s</title>
 </head>
 <body bgcolor="#ffffff">
-<table width="100%" cellspacing="0" cellpadding="0" border="0">
+<table width="100%%" cellspacing="0" cellpadding="0" border="0">
   <tbody>
     <tr valign="top">
       <td>
-        <h1>GTK+ TODO List</h1>'''
+        <h1>%s</h1>''' % (parser.title, parser.title)
 
 
 for section in parser.sections:
@@ -318,14 +326,16 @@ for section in parser.sections:
         print '<a href="#%s">%s</a> (%d items)<br>' % (id,section.title,ntasks)
 
 print '''
-      </td>
-      <td align="right">
-        <img src="gtk-logo-rgb.gif" alt="GTK+ Logo"></img>
-      </td>
+      </td>'''
+if parser.logourl != None:
+    print '''      <td align="right">
+       <img src="%s" alt="Logo"></img>
+      </td>''' % parser.logourl
+print '''
     </tr>
   </tbody>
 </table>
-'''
+''' 
 
 first = 1
 for section in parser.sections:

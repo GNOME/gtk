@@ -7,7 +7,8 @@
      $ docs/make-todo > /dev/null
 
      before committing, or you may screw up the online version --> 
-<todo>
+<todo logourl="gtk-logo-rgb.gif">
+  <title>GTK+ TODO list</title>
   <section>
     <title>GDK</title>
     

@@ -1,3 +1,10 @@
+2000-02-25  Jonathan Blandford  <jrb@redhat.com>
+
+	* docs/make-todo (lineno): let title and logo be configurable so
+	that GNOME can use this script too.
+
+	* TODO.xml: added logourl and a title
+
 Fri Feb 25 11:12:00 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* TODO.xml: Added some UI items, and an explanatory
