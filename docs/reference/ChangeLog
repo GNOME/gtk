@@ -1,3 +1,7 @@
+Tue Mar  5 14:28:28 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/compiling.sgml: Update version numbers in example.
+
 2002-03-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: Move GtkOldEditable to the "Deprecated" 

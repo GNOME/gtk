@@ -43,7 +43,7 @@ Creates a new #GtkEntry widget.
 <para>
 </para>
 
-@max:
+@max: 
 @Returns: 
 
 
@@ -165,8 +165,8 @@ use gtk_editable_set_editable() instead.
 <para>
 </para>
 
-@entry:
-@max:
+@entry: 
+@max: 
 
 
 <!-- ##### FUNCTION gtk_entry_get_activates_default ##### -->

@@ -1,3 +1,17 @@
+Tue Mar  5 15:47:54 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* configure.in test/makefile.msc **.pc.in **/*.am:
+	Update version to 2.0.0
+
+	* gtk/Makefile.am (MAINTAINERCLEANFILES): Add stamp
+	files.
+
+	* configure.in (GDK_PIXBUF_VERSION): Require GLib 2.0.0,
+	Pango, Atk, 1.0.0.
+
+	* m4macros/gtk-2.0.m4: Default to 2.0.0 as the minimum
+	version.
+
 2002-03-05  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_size_allocate): don't assign

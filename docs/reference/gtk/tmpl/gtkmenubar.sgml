@@ -64,11 +64,3 @@ Adds a new #GtkMenuItem to the GtkMenuBar at the position defined by @position
 @position: the position in the item list where the @child is added.
 
 
-<!-- ##### SIGNAL GtkMenuBar::cycle-focus ##### -->
-<para>
-
-</para>
-
-@menubar: the object which received the signal.
-@arg1: 
-

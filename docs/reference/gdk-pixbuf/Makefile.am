@@ -58,11 +58,11 @@ GTKDOC_CFLAGS = @STRIP_BEGIN@ 				\
 	@GTK_DEP_CFLAGS@				\
 @STRIP_END@
 
-GTKDOC_LIBS = @STRIP_BEGIN@ 				\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la	\
-	$(top_builddir)/gdk/@gdktargetlib@        	\
-	$(top_builddir)/gtk/@gtktargetlib@ 		\
-	@GTK_DEP_LIBS@					\
+GTKDOC_LIBS = @STRIP_BEGIN@ 						\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la	\
+	$(top_builddir)/gdk/@gdktargetlib@        			\
+	$(top_builddir)/gtk/@gtktargetlib@ 				\
+	@GTK_DEP_LIBS@							\
 @STRIP_END@
 
 GTKDOC_CC=$(LIBTOOL) --mode=compile $(CC)

@@ -7,5 +7,5 @@ Name: GdkPixbuf Xlib
 Description: GdkPixbuf rendering for Xlib
 Version: @VERSION@
 Requires: gobject-2.0,gmodule-2.0,gdk-pixbuf-2.0
-Libs: -L${libdir} -lgdk_pixbuf_xlib-1.3
+Libs: -L${libdir} -lgdk_pixbuf_xlib-@GTK_API_VERSION@
 Cflags: -I${includedir}

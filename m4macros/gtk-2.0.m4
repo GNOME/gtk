@@ -38,7 +38,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
     no_gtk=yes
   fi
 
-  min_gtk_version=ifelse([$1], ,1.3.3,$1)
+  min_gtk_version=ifelse([$1], ,2.0.0,$1)
   AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
 
   if test x$PKG_CONFIG != xno ; then

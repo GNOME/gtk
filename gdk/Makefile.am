@@ -40,25 +40,25 @@ if OS_WIN32
 gdk_win32_symbols = -export-symbols gdk.def
 
 install-libtool-import-lib:
-	$(INSTALL) .libs/libgdk-win32-1.3.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) .libs/libgdk-win32-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libdk-win32-1.3.dll.a
+	-rm $(DESTDIR)$(libdir)/libdk-win32-$(GTK_API_VERSION).dll.a
 else
 install-libtool-import-lib:
 uninstall-libtool-import-lib:
 endif
 
 if MS_LIB_AVAILABLE
-noinst_DATA = gdk-win32-1.3.lib
+noinst_DATA = gdk-win32-$(GTK_API_VERSION).lib
 
-gdk-win32-1.3.lib: libgdk-win32-1.3.la gdk.def
-	lib -name:libgdk-win32-1.3-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
+gdk-win32-$(GTK_API_VERSION).lib: libgdk-win32-$(GTK_API_VERSION).la gdk.def
+	lib -name:libgdk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk.def -out:$@
 
 install-ms-lib:
-	$(INSTALL) gdk-win32-1.3.lib $(DESTDIR)$(libdir)
+	$(INSTALL) gdk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
 
 uninstall-ms-lib:
-	-rm $(DESTDIR)$(libdir)/gdk-win32-1.3.lib
+	-rm $(DESTDIR)$(libdir)/gdk-win32-$(GTK_API_VERSION).lib
 else
 install-ms-lib:
 uninstall-ms-lib:
@@ -67,15 +67,15 @@ endif
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
-LDFLAGS = @STRIP_BEGIN@ 					\
-	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 	\
-	-export-dynamic 					\
-	-rpath $(libdir) 					\
-	$(no_undefined)						\
-	@LIBTOOL_EXPORT_OPTIONS@				\
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-1.3.la		\
-	$(gdk_win32_symbols)					\
-	@GDK_DEP_LIBS@						\
+LDFLAGS = @STRIP_BEGIN@ 						\
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) 		\
+	-export-dynamic 						\
+	-rpath $(libdir) 						\
+	$(no_undefined)							\
+	@LIBTOOL_EXPORT_OPTIONS@					\
+	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION)	\
+	$(gdk_win32_symbols)						\
+	@GDK_DEP_LIBS@							\
 @STRIP_END@
 
 #
@@ -151,18 +151,18 @@ gdk_c_sources = @STRIP_BEGIN@ 	\
 gdkincludedir = $(includedir)/gtk-2.0/gdk
 gdkinclude_HEADERS = $(gdk_headers)
 
-libgdk_x11_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
-libgdk_linux_fb_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
-libgdk_win32_1_3_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
+libgdk_x11_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
+libgdk_linux_fb_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
+libgdk_win32_2_0_la_SOURCES = $(gdk_c_sources) gdkenumtypes.c
 
-libgdk_x11_1_3_la_LIBADD = x11/libgdk-x11.la	
-libgdk_linux_fb_1_3_la_LIBADD = linux-fb/libgdk-linux-fb.la	
-libgdk_win32_1_3_la_LIBADD = \
+libgdk_x11_2_0_la_LIBADD = x11/libgdk-x11.la	
+libgdk_linux_fb_2_0_la_LIBADD = linux-fb/libgdk-linux-fb.la	
+libgdk_win32_2_0_la_LIBADD = \
 	win32/libgdk-win32.la $(wintab_lib) $(ie55uuid_lib)
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
-EXTRA_LTLIBRARIES = libgdk-x11-1.3.la libgdk-linux-fb-1.3.la libgdk-win32-1.3.la
+EXTRA_LTLIBRARIES = libgdk-x11-2.0.la libgdk-linux-fb-2.0.la libgdk-win32-2.0.la
 
 MAINTAINERCLEANFILES =
 EXTRA_HEADERS =

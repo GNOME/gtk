@@ -15,36 +15,36 @@ gdk_pixbuf-win32res.lo : gdk_pixbuf.rc
 	$(top_srcdir)/build/win32/lt-compile-resource gdk_pixbuf.rc gdk_pixbuf-win32res.lo
 
 install-libtool-import-lib:
-	$(INSTALL) .libs/libgdk_pixbuf-1.3.dll.a $(DESTDIR)$(libdir)
+	$(INSTALL) .libs/libgdk_pixbuf-$(GTK_API_VERSION).dll.a $(DESTDIR)$(libdir)
 uninstall-libtool-import-lib:
-	-rm $(DESTDIR)$(libdir)/libdk_pixbuf-1.3.dll.a
+	-rm $(DESTDIR)$(libdir)/libdk_pixbuf-$(GTK_API_VERSION).dll.a
 else
 install-libtool-import-lib:
 uninstall-libtool-import-lib:
 endif
 
 if MS_LIB_AVAILABLE
-noinst_DATA = gdk_pixbuf-1.3.lib
+noinst_DATA = gdk_pixbuf-$(GTK_API_VERSION).lib
 
-gdk_pixbuf-1.3.lib: libgdk_pixbuf-1.3.la gdk_pixbuf.def
-	lib -name:libgdk_pixbuf-1.3-@LT_CURRENT_MINUS_AGE@.dll -def:gdk_pixbuf.def -out:$@
+gdk_pixbuf-$(GTK_API_VERSION).lib: libgdk_pixbuf-$(GTK_API_VERSION).la gdk_pixbuf.def
+	lib -name:libgdk_pixbuf-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gdk_pixbuf.def -out:$@
 
 install-ms-lib:
-	$(INSTALL) gdk_pixbuf-1.3.lib $(DESTDIR)$(libdir)
+	$(INSTALL) gdk_pixbuf-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
 
 uninstall-ms-lib:
-	-rm $(DESTDIR)$(libdir)/gdk_pixbuf-1.3.lib
+	-rm $(DESTDIR)$(libdir)/gdk_pixbuf-$(GTK_API_VERSION).lib
 else
 install-ms-lib:
 uninstall-ms-lib:
 endif
 
 lib_LTLIBRARIES = 		\
-	libgdk_pixbuf-1.3.la
+	libgdk_pixbuf-2.0.la
 
 loaderdir = $(libdir)/gtk-2.0/$(GTK_BINARY_VERSION)/loaders
 
-module_libs = libgdk_pixbuf-1.3.la $(GDK_PIXBUF_DEP_LIBS)
+module_libs = libgdk_pixbuf-$(GTK_API_VERSION).la $(GDK_PIXBUF_DEP_LIBS)
 
 #
 # The PNG plugin.
@@ -212,7 +212,7 @@ builtin_objs = @INCLUDED_LOADER_OBJ@
 
 endif
 
-DEPS = libgdk_pixbuf-1.3.la
+DEPS = libgdk_pixbuf-$(GTK_API_VERSION).la
 INCLUDES = @STRIP_BEGIN@ 			\
 	-DG_LOG_DOMAIN=\"GdkPixbuf\"		\
 	-I$(top_srcdir) -I$(top_builddir) 	\
@@ -227,7 +227,7 @@ INCLUDES = @STRIP_BEGIN@ 			\
 @STRIP_END@
 
 AM_CPPFLAGS = "-DPIXBUF_LIBDIR=\"$(loaderdir)\"" "-DBUILT_MODULES_DIR=\"$(srcdir)/.libs\""
-LDADDS = libgdk_pixbuf-1.3.la
+LDADDS = libgdk_pixbuf-$(GTK_API_VERSION).la
 
 noinst_PROGRAMS = test-gdk-pixbuf test-loaders
 test_gdk_pixbuf_LDADD = $(LDADDS)
@@ -248,7 +248,7 @@ man_MANS = gdk-pixbuf-csource.1
 # The GdkPixBuf library
 #
 libgdk_pixbufincludedir = $(includedir)/gtk-2.0/gdk-pixbuf
-libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
+libgdk_pixbuf_2_0_la_SOURCES = @STRIP_BEGIN@ \
 	gdk-pixbuf-i18n.h	\
 	gdk-pixbuf.c		\
 	gdk-pixbuf-animation.c	\
@@ -260,15 +260,15 @@ libgdk_pixbuf_1_3_la_SOURCES = @STRIP_BEGIN@ \
 	gdk-pixdata.c		\
 	$(gdk_pixbuf_built_cfiles) \
 @STRIP_END@
-libgdk_pixbuf_1_3_la_LDFLAGS = @STRIP_BEGIN@ \
+libgdk_pixbuf_2_0_la_LDFLAGS = @STRIP_BEGIN@ \
 	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE)    \
 	@LIBTOOL_EXPORT_OPTIONS@				\
 	$(no_undefined)						\
 	$(gdk_pixbuf_symbols)					\
 @STRIP_END@
 
-libgdk_pixbuf_1_3_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_win32res_lo) $(GDK_PIXBUF_DEP_LIBS)
-libgdk_pixbuf_1_3_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def)
+libgdk_pixbuf_2_0_la_LIBADD = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_win32res_lo) $(GDK_PIXBUF_DEP_LIBS)
+libgdk_pixbuf_2_0_la_DEPENDENCIES = pixops/libpixops.la $(builtin_objs) $(gdk_pixbuf_def)
 
 gdk_pixbuf_headers = 			\
 	gdk-pixbuf.h			\
@@ -286,7 +286,7 @@ noinst_HEADERS = 		\
 
 gdk_pixbuf_built_headers = gdk-pixbuf-enum-types.h gdk-pixbuf-marshal.h
 gdk_pixbuf_built_cfiles = gdk-pixbuf-enum-types.c 
-$(libgdk_pixbuf_1_3_la_OBJECTS) $(OBJECTS): $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
+$(libgdk_pixbuf_2_0_la_OBJECTS) $(OBJECTS): $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c
 
 CLEANFILES =
 MAINTAINERCLEANFILES = $(gdk_pixbuf_built_headers) $(gdk_pixbuf_built_cfiles) gdk-pixbuf-marshal.c

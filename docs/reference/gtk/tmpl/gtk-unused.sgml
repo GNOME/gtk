@@ -908,6 +908,14 @@ a RC file.
 </para>
 
 
+<!-- ##### SIGNAL GtkMenuBar::cycle-focus ##### -->
+<para>
+
+</para>
+
+@menubar: the object which received the signal.
+@arg1: 
+
 <!-- ##### ARG GtkObject:object-signal ##### -->
 <para>
 Setting this with a GtkType of GTK_TYPE_SIGNAL connects
