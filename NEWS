@@ -17,6 +17,11 @@ Overview of Changes in GTK+ 2.1.1
 * Add tag_table construct property to GtkTextBuffer [Daniel Elstner]
 * gtk_window_set_[default_]icon_from_file [Owen, Havoc]
 * Fix handling of GtkSettings set from RC files on reload [Owen]
+* GtkTreeView work [Kristian Rietveld]
+  - Stop editing on a focus out event for GtkCellRendererText 
+    [Andreas J. Guelzow]
+  - Don't accept drops on auto-sorted models
+  - Fix evil bug with insertions to GtkTreeModelSort [Hans Petter Jansson]
 * Fixes for GtkIMContextXIM 
   [Takuro Ashie, Motonobu Ichimura, Owen, HideToshi Tajima]
 * Documentation fixes [Soeren Sandmann, Matthias Clasen; Joost Faassen, 
@@ -25,7 +30,8 @@ Overview of Changes in GTK+ 2.1.1
 * Some performance tweaks [Soeren, Padraig O'Briain]
 * Miscellaneous bug fixes
 
-Other contributors: Jacob Berkman, Phil Blundell, Kenneth Christiansen, Murray Cumming, Bill Haneman, Jon-Kare Hellan, Kristian Rietveld, Hema Seetharamaiah
+Other contributors: Jacob Berkman, Phil Blundell, Kenneth Christiansen, 
+  Murray Cumming, Bill Haneman, Jon-Kare Hellan, Hema Seetharamaiah
 
 Overview of Changes from GTK+-2.0.x to GTK+-2.1.0
 =================================================
