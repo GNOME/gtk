@@ -576,6 +576,12 @@ translate_key_event (GdkDisplay *display,
       if (event->key.string)
 	event->key.length = bytes_written;
     }
+  else if (event->key.keyval == GDK_Return ||
+	  event->key.keyval == GDK_KP_Enter)
+    {
+      event->key.length = 1;
+      event->key.string = g_strdup ("\n");
+    }
 
   if (!event->key.string)
     {
