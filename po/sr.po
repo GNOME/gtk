@@ -7,10 +7,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.2.0\n"
+"Project-Id-Version: gtk+ 2.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-10-04 03:23+0200\n"
-"PO-Revision-Date: 2003-10-04 03:25+0200\n"
+"POT-Creation-Date: 2003-10-04 21:30+0200\n"
+"PO-Revision-Date: 2003-10-04 21:57+0200\n"
 "Last-Translator: Данило Шеган <danilo@prevod.org>\n"
 "Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -127,6 +127,7 @@ msgstr "Непознат начин записа слике"
 msgid "Image pixel data corrupt"
 msgstr "Оштећени подаци о тачкама слике"
 
+# bug: plural-forms
 #: gdk-pixbuf/gdk-pixdata.c:402
 #, c-format
 msgid "failed to allocate image buffer of %u bytes"
@@ -282,7 +283,7 @@ msgstr "Показивач курзора је ван слике"
 #: gdk-pixbuf/io-ico.c:955
 #, c-format
 msgid "Unsupported depth for ICO file: %d"
-msgstr "Непоржана дубина за ICO датотеку: %d"
+msgstr "Неподржана дубина за ICO датотеку: %d"
 
 #
 #: gdk-pixbuf/io-ico.c:1184
@@ -783,6 +784,82 @@ msgstr "Елемент за пречицу"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Елемент који треба пратити ради измена пречица"
 
+#: gtk/gtkaction.c:185
+msgid "Name"
+msgstr "Име"
+
+#: gtk/gtkaction.c:186
+msgid "A unique name for the action."
+msgstr "Јединствено име за акцију."
+
+#: gtk/gtkaction.c:193 gtk/gtkbutton.c:190 gtk/gtkexpander.c:194
+#: gtk/gtkframe.c:125 gtk/gtklabel.c:290 gtk/gtktoolbutton.c:179
+msgid "Label"
+msgstr "Ознака"
+
+#: gtk/gtkaction.c:194
+msgid "The label used for menu items and buttons that activate this action."
+msgstr "Ознака која се користи за ставке менија и дугмад који покрећу ову акцију."
+
+#: gtk/gtkaction.c:200
+msgid "Short label"
+msgstr "Кратка ознака"
+
+#: gtk/gtkaction.c:201
+msgid "A shorter label that may be used on toolbar buttons."
+msgstr "Краћа ознака која се може користити на думгадима алатки."
+
+#: gtk/gtkaction.c:207
+msgid "Tooltip"
+msgstr "Облачић"
+
+#: gtk/gtkaction.c:208
+msgid "A tooltip for this action."
+msgstr "Облачић за ову акцију."
+
+#: gtk/gtkaction.c:214
+msgid "Stock Icon"
+msgstr "Испоручена икона"
+
+#: gtk/gtkaction.c:215
+msgid "The stock icon displayed in widgets representing this action."
+msgstr "Испоручена икона која се приказује у елементима који представљају ову акцију."
+
+#: gtk/gtkaction.c:221 gtk/gtktoolitem.c:169
+msgid "Is important"
+msgstr "Важно је"
+
+#: gtk/gtkaction.c:222
+msgid ""
+"Whether the action is considered important. When TRUE, toolitem proxies for "
+"this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
+msgstr "Да ли се акција сматра важном. Ако је постављено, посредници за ставке алатки ове акције приказују текст у режиму GTK_TOOLBAR_BOTH_HORIZ."
+
+#: gtk/gtkaction.c:228
+msgid "Hide if empty"
+msgstr "Сакриј ако је празно"
+
+#: gtk/gtkaction.c:229
+msgid "When TRUE, empty menu proxies for this action are hidden."
+msgstr "Ако је постављено, празни посредници менија за ову акцију се сакривају."
+
+#: gtk/gtkaction.c:235 gtk/gtkwidget.c:442
+msgid "Sensitive"
+msgstr "Осетљив"
+
+#: gtk/gtkaction.c:236
+msgid "Whether the action is enabled."
+msgstr "Да ли је акција укључена."
+
+#: gtk/gtkaction.c:242 gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219
+#: gtk/gtkwidget.c:435
+msgid "Visible"
+msgstr "Видљив"
+
+#: gtk/gtkaction.c:243
+msgid "Whether the action is visible."
+msgstr "Да ли је акција видљива."
+
 #: gtk/gtkalignment.c:116
 msgid "Horizontal alignment"
 msgstr "Водоравно поравнање"
@@ -970,7 +1047,7 @@ msgstr ""
 "Уколико је постављено, садржани елемент се појављује међу другим елементима, "
 "што је одговарајуће за нпр. дугмиће за помоћ."
 
-#: gtk/gtkbox.c:128
+#: gtk/gtkbox.c:128 gtk/gtkexpander.c:210
 msgid "Spacing"
 msgstr "Размаци"
 
@@ -1036,21 +1113,18 @@ msgstr "Место"
 msgid "The index of the child in the parent"
 msgstr "Индекс садржаног елемента у садржаоцу"
 
-#: gtk/gtkbutton.c:190 gtk/gtkframe.c:125 gtk/gtklabel.c:290
-msgid "Label"
-msgstr "Ознака"
-
 #: gtk/gtkbutton.c:191
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
 msgstr "Садржај ознаке унутар дугмета, уколико дугме садржи ознаку"
 
-#: gtk/gtkbutton.c:198 gtk/gtklabel.c:311
+#: gtk/gtkbutton.c:198 gtk/gtkexpander.c:202 gtk/gtklabel.c:311
+#: gtk/gtktoolbutton.c:186
 msgid "Use underline"
 msgstr "Користи подвлаку"
 
-#: gtk/gtkbutton.c:199 gtk/gtklabel.c:312
+#: gtk/gtkbutton.c:199 gtk/gtkexpander.c:203 gtk/gtklabel.c:312
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
 "for the mnemonic accelerator key"
@@ -1380,19 +1454,19 @@ msgstr "Особине"
 msgid "A list of style attributes to apply to the text of the renderer"
 msgstr "Списак стилских особина текста који се исцртава"
 
-#: gtk/gtkcellrenderertext.c:199 gtk/gtktexttag.c:205
+#: gtk/gtkcellrenderertext.c:199 gtk/gtkcellview.c:174 gtk/gtktexttag.c:205
 msgid "Background color name"
 msgstr "Име боје позадине"
 
-#: gtk/gtkcellrenderertext.c:200 gtk/gtktexttag.c:206
+#: gtk/gtkcellrenderertext.c:200 gtk/gtkcellview.c:175 gtk/gtktexttag.c:206
 msgid "Background color as a string"
 msgstr "Боја позадине као низ знакова"
 
-#: gtk/gtkcellrenderertext.c:207 gtk/gtktexttag.c:213
+#: gtk/gtkcellrenderertext.c:207 gtk/gtkcellview.c:181 gtk/gtktexttag.c:213
 msgid "Background color"
 msgstr "Боја позадине"
 
-#: gtk/gtkcellrenderertext.c:208
+#: gtk/gtkcellrenderertext.c:208 gtk/gtkcellview.c:182
 msgid "Background color as a GdkColor"
 msgstr "Боја позадине као GdkColor"
 
@@ -1511,11 +1585,11 @@ msgstr "Подвлачење"
 msgid "Style of underline for this text"
 msgstr "Начин подвлачења за овај текст"
 
-#: gtk/gtkcellrenderertext.c:362 gtk/gtktexttag.c:508
+#: gtk/gtkcellrenderertext.c:362 gtk/gtkcellview.c:189 gtk/gtktexttag.c:508
 msgid "Background set"
 msgstr "Постављена позадина"
 
-#: gtk/gtkcellrenderertext.c:363 gtk/gtktexttag.c:509
+#: gtk/gtkcellrenderertext.c:363 gtk/gtkcellview.c:190 gtk/gtktexttag.c:509
 msgid "Whether this tag affects the background color"
 msgstr "Да ли ове поставке утичу на боју позадине"
 
@@ -1657,7 +1731,7 @@ msgstr "Величина показатеља"
 msgid "Size of check or radio indicator"
 msgstr "Величина показатеља означавања или једноизборника"
 
-#: gtk/gtkcheckbutton.c:106 gtk/gtkoptionmenu.c:203
+#: gtk/gtkcheckbutton.c:106 gtk/gtkexpander.c:236 gtk/gtkoptionmenu.c:203
 msgid "Indicator Spacing"
 msgstr "Размаци показатеља"
 
@@ -1931,6 +2005,62 @@ msgstr "Вредност са списка"
 msgid "Whether entered values must already be present in the list"
 msgstr "Да ли унете вредности морају већ бити присутне на списку"
 
+#: gtk/gtkcombobox.c:333
+msgid "ComboBox model"
+msgstr "Модел падајуће листе"
+
+#: gtk/gtkcombobox.c:334
+msgid "The model for the combo box"
+msgstr "Модел за падајућу листу"
+
+#: gtk/gtkcombobox.c:341
+msgid "Wrap width"
+msgstr "Ширина за прелом"
+
+#: gtk/gtkcombobox.c:342
+msgid "Wrap width for layouting the items in a grid"
+msgstr "Ширина за прелом при распоређивању ставки у мрежи"
+
+#: gtk/gtkcombobox.c:351
+msgid "Row span column"
+msgstr "Ред обухвата колону"
+
+#: gtk/gtkcombobox.c:352
+msgid "TreeModel column containing the row span values"
+msgstr "Модел колоне дрвета који садржи вредности обухватања редова"
+
+#: gtk/gtkcombobox.c:361
+msgid "Column span column"
+msgstr "Колона обухвата колону"
+
+#: gtk/gtkcombobox.c:362
+msgid "TreeModel column containing the column span values"
+msgstr "Модел колоне дрвета који садржи вредности обухватања колона"
+
+#: gtk/gtkcombobox.c:371
+msgid "Active item"
+msgstr "Активна ставка"
+
+#: gtk/gtkcombobox.c:372
+msgid "The item which is currently active"
+msgstr "Ставка која је тренутно активна"
+
+#: gtk/gtkcombobox.c:380
+msgid "ComboBox appareance"
+msgstr "Изглед падајуће листе"
+
+#: gtk/gtkcombobox.c:381
+msgid "ComboBox appearance, where TRUE means Windows-style."
+msgstr "Изглед падајуће листе, ако је постављено означава Windows стил."
+
+#: gtk/gtkcomboboxentry.c:104
+msgid "Text Column"
+msgstr "Текстуална колона"
+
+#: gtk/gtkcomboboxentry.c:105
+msgid "A column in the data source model to get the strings from"
+msgstr "Колона у моделу извора података из којег се извлаче ниске"
+
 #: gtk/gtkcontainer.c:203
 msgid "Resize mode"
 msgstr "Промена величине"
@@ -2151,6 +2281,63 @@ msgstr "Најмања дужина кључа"
 #: gtk/gtkentrycompletion.c:199
 msgid "Minimum length of the search key in order to look up matches"
 msgstr "Најмања дужина кључа за претрагу ради налажења поклапања"
+
+#: gtk/gtkeventbox.c:119
+msgid "Visible Window"
+msgstr "Видљив прозор"
+
+#: gtk/gtkeventbox.c:120
+msgid ""
+" Whether the event box is visible, as opposed to invisible and only used to "
+"trap events."
+msgstr "Да ли се види поље са догађајима, насупрот невидљивом и коришћеном само за реаговање на догађаје."
+
+#: gtk/gtkeventbox.c:126
+msgid "Above child"
+msgstr "Изнад садржаног"
+
+#: gtk/gtkeventbox.c:127
+msgid ""
+"Whether the event-trapping window of the eventbox is above the window of the "
+"child widget as opposed to below it."
+msgstr "Да ли је прозор за праћење догађаја изнад прозора садржаног елемента уместо испод."
+
+#: gtk/gtkexpander.c:186
+msgid "Expanded"
+msgstr "Раширено"
+
+#: gtk/gtkexpander.c:187
+msgid "Whether the expander has been opened to reveal the child widget"
+msgstr "Да ли је отворен разграник ради приказа садржаних елемената"
+
+#: gtk/gtkexpander.c:195
+msgid "Text of the expander's label"
+msgstr "Текст ознаке разграника"
+
+#: gtk/gtkexpander.c:211
+msgid "Space to put between the label and the child"
+msgstr "Размак који се ставља између ознаке и садржаног елемента"
+
+#: gtk/gtkexpander.c:220 gtk/gtkframe.c:169 gtk/gtktoolbutton.c:193
+msgid "Label widget"
+msgstr "Елемент ознаке"
+
+#: gtk/gtkexpander.c:221
+msgid "A widget to display in place of the usual expander label"
+msgstr "Елемент који се приказује наместо уобичајене ознаке разграника"
+
+# Ovo je LOSE!
+#: gtk/gtkexpander.c:227 gtk/gtktreeview.c:607
+msgid "Expander Size"
+msgstr "Величина разграника"
+
+#: gtk/gtkexpander.c:228 gtk/gtktreeview.c:608
+msgid "Size of the expander arrow"
+msgstr "Величина стрелице за гранање"
+
+#: gtk/gtkexpander.c:237
+msgid "Spacing around expander arrow"
+msgstr "Размаци око стрелица за гранање"
 
 #: gtk/gtkfilesel.c:556 gtk/gtkimage.c:167
 msgid "Filename"
@@ -2503,10 +2690,6 @@ msgstr "Сенка оквира"
 #: gtk/gtkframe.c:161
 msgid "Appearance of the frame border"
 msgstr "Изглед ивице оквира"
-
-#: gtk/gtkframe.c:169
-msgid "Label widget"
-msgstr "Елемент ознаке"
 
 #: gtk/gtkframe.c:170
 msgid "A widget to display in place of the usual frame label"
@@ -3385,6 +3568,16 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr "Текст који се приказује у елементу напретка"
 
+#: gtk/gtkradioaction.c:137
+msgid "The value"
+msgstr "Вредност"
+
+#: gtk/gtkradioaction.c:138
+msgid ""
+"The value returned by gtk_radio_action_get_current_value() when this action "
+"is the current action of its group."
+msgstr "Вредност коју враћа gtk_radio_action_get_current_value() када је ова акција текућа акција своје групе."
+
 #: gtk/gtkradiobutton.c:109
 msgid "Group"
 msgstr "Група"
@@ -3478,7 +3671,7 @@ msgstr "Не може пронаћи датотеку са сликом у пу�
 #: gtk/gtkrc.c:3461
 #, c-format
 msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Део путање за слике: „%s“ мора бити апсолутна путања, %s, ред %d"
+msgstr "Део путање за слике: „%s“ мора бити апсолутна путања, %s, %d. ред"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -4622,6 +4815,14 @@ msgstr "Не може да пронађе мотор теме у путањи з
 msgid "--- No Tip ---"
 msgstr "—— Нема савета ——"
 
+#: gtk/gtktoggleaction.c:129
+msgid "Create the same proxies as a radio action"
+msgstr "Направи исте посреднике као и радио-акција"
+
+#: gtk/gtktoggleaction.c:130
+msgid "Whether the proxies for this action look like radio action proxies"
+msgstr "Да ли посредници за ову акцију изгледају као посредници за радио-акције"
+
 #: gtk/gtktogglebutton.c:133
 msgid "If the toggle button should be pressed in or not"
 msgstr "Да ли жабица треба да буде притиснута или не"
@@ -4727,6 +4928,62 @@ msgstr "Величина икона за алатке"
 msgid "Size of icons in default toolbars"
 msgstr "Величина икона за уобичајене линије са алаткама"
 
+#: gtk/gtktoolbutton.c:180
+msgid "Text to show in the item."
+msgstr "Текст који се приказује у ставци."
+
+#: gtk/gtktoolbutton.c:187
+msgid ""
+"If set, an underline in the label property indicates that the next character "
+"should be used for the mnemonic accelerator key in the overflow menu"
+msgstr "Уколико је постављено, подвлачење означава да се следећи знак користи као пречица у приказаном менију"
+
+#: gtk/gtktoolbutton.c:194
+msgid "Widget to use as the item label"
+msgstr "Елемент који се користи као ознака ставке"
+
+#: gtk/gtktoolbutton.c:200
+msgid "Stock Id"
+msgstr "ID испоручене"
+
+#: gtk/gtktoolbutton.c:201
+msgid "The stock icon displayed on the item"
+msgstr "Испоручена икона приказана уз ставку"
+
+#: gtk/gtktoolbutton.c:207
+msgid "Icon widget"
+msgstr "Елемент иконе"
+
+#: gtk/gtktoolbutton.c:208
+msgid "Icon widget to display in the item"
+msgstr "Елемент иконе који се приказује уз ставку"
+
+#: gtk/gtktoolitem.c:155
+msgid "Visible when horizontal"
+msgstr "Видљиво када је водоравно"
+
+#: gtk/gtktoolitem.c:156
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a horizontal "
+"orientation."
+msgstr "Да ли се приказује ставка алатки када су постављене водоравно."
+
+#: gtk/gtktoolitem.c:162
+msgid "Visible when vertical"
+msgstr "Видљиво када је усправно"
+
+#: gtk/gtktoolitem.c:163
+msgid ""
+"Whether the toolbar item is visible when the toolbar is in a vertical "
+"orientation."
+msgstr "Да ли се приказује ставка алатки када су постављене усправно."
+
+#: gtk/gtktoolitem.c:170
+msgid ""
+"Whether the toolbar item is considered important. When TRUE, toolbar buttons "
+"show text in GTK_TOOLBAR_BOTH_HORIZ mode"
+msgstr "Да ли се ставка алатки сматра важном. Ако је постављено, дугмад алатке приказују и текст у режиму GTK_TOOLBAR_BOTH_HORIZ"
+
 #: gtk/gtktreemodelsort.c:306
 msgid "TreeModelSort Model"
 msgstr "TreeModelSort модел"
@@ -4750,10 +5007,6 @@ msgstr "Водоравна поправка за елемент"
 #: gtk/gtktreeview.c:538
 msgid "Vertical Adjustment for the widget"
 msgstr "Усправна поправка за елемент"
-
-#: gtk/gtktreeview.c:545 gtk/gtktreeviewcolumn.c:219 gtk/gtkwidget.c:435
-msgid "Visible"
-msgstr "Видљив"
 
 #: gtk/gtktreeview.c:546
 msgid "Show the column header buttons"
@@ -4808,15 +5061,6 @@ msgstr "Колона за претрагу"
 #: gtk/gtktreeview.c:594
 msgid "Model column to search through when searching through code"
 msgstr "Колона кроз коју се претражује када се претражује помоћу кода"
-
-# Ovo je LOSE!
-#: gtk/gtktreeview.c:607
-msgid "Expander Size"
-msgstr "Величина разграника"
-
-#: gtk/gtktreeview.c:608
-msgid "Size of the expander arrow"
-msgstr "Величина стрелице за гранање"
 
 #: gtk/gtktreeview.c:616
 msgid "Vertical Separator Width"
@@ -4967,6 +5211,41 @@ msgstr "Редослед уређења"
 msgid "Sort direction the sort indicator should indicate"
 msgstr "Смер уређивања који показатељ уређења треба да показује"
 
+#: gtk/gtkuimanager.c:213
+msgid "Add tearoffs to menus"
+msgstr "Додај отцепљивање у меније"
+
+#: gtk/gtkuimanager.c:214
+msgid "Whether tearoff menu items should be added to menus"
+msgstr "Да ли се додају ставке менија за отцепљивање у меније"
+
+#: gtk/gtkuimanager.c:221
+msgid "Merged UI definition"
+msgstr "Спојена дефиниција сучеља"
+
+#: gtk/gtkuimanager.c:222
+msgid "An XML string describing the merged UI"
+msgstr "XML ниска која описује спојено сучеље"
+
+#: gtk/gtkuimanager.c:865
+#, c-format
+msgid "Unknown attribute '%s' on line %d char %d"
+msgstr "Непознат атрибут „%s“ у %d. реду, %d. знак"
+
+#: gtk/gtkuimanager.c:1074
+#, c-format
+msgid "Unexpected start tag '%s' on line %d char %d"
+msgstr "Неочекивана почетна ознака „%s“ у %d. реду, %d. знак"
+
+#: gtk/gtkuimanager.c:1158
+#, c-format
+msgid "Unexpected character data on line %d char %d"
+msgstr "Неочекивани знаковни подаци у %d. реду, %d. знак"
+
+#: gtk/gtkuimanager.c:1916
+msgid "Empty"
+msgstr "Празно"
+
 #: gtk/gtkviewport.c:135
 msgid ""
 "The GtkAdjustment that determines the values of the horizontal position for "
@@ -5026,10 +5305,6 @@ msgstr ""
 #: gtk/gtkwidget.c:436
 msgid "Whether the widget is visible"
 msgstr "Да ли је елемент видљив"
-
-#: gtk/gtkwidget.c:442
-msgid "Sensitive"
-msgstr "Осетљив"
 
 #: gtk/gtkwidget.c:443
 msgid "Whether the widget responds to input"
