@@ -91,8 +91,8 @@ set on all X windows created by the application to point to the leader window.
 <para>
 See the X Session Management Library documentation for more information on
 session management and the Inter-Client Communication Conventions Manual
-(ICCCM) for information on the <literal>WM_CLIENT_LEADER property</literal>. (Both documents are
-part of the X Windows distribution.)
+(ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
+(Both documents are part of the X Windows distribution.)
 </para>
 
 @sm_client_id: the client id assigned by the session manager when the

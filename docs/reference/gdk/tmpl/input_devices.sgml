@@ -50,10 +50,7 @@ tilt to the right or down.)
 One additional field in each event is the
 <structfield>source</structfield> field, which contains an
 enumeration value describing the type of device; this currently
-can be one of 
-%GDK_SOURCE_MOUSE,
- %GDK_SOURCE_PEN,
-%GDK_SOURCE_ERASER,
+can be one of %GDK_SOURCE_MOUSE, %GDK_SOURCE_PEN, %GDK_SOURCE_ERASER,
 or %GDK_SOURCE_CURSOR. This field is present to allow simple
 applications to (for instance) delete when they detect eraser
 devices without having to keep track of complicated per-device
@@ -83,7 +80,8 @@ gdk_device_set_key().
 <para>
 The interfaces in this section will most likely be considerably
 modified in the future to accomodate devices that may have different
-sets of additional valuators than the pressure xtilt and ytilt.
+sets of additional valuators than the pressure <structfield>xtilt</structfield>
+and <structfield>ytilt</structfield>.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -93,18 +91,23 @@ sets of additional valuators than the pressure xtilt and ytilt.
 
 <!-- ##### STRUCT GdkDevice ##### -->
 <para>
-
+A <structname>GdkDevice</structname> structure contains
+a detailed description of an extended input device. All
+fields are read-only; but you can use gdk_device_set_source(),
+gdk_device_set_mode(), gdk_device_set_key() and gdk_device_set_axis_use()
+to configure various aspects of the device.
 </para>
 
 @parent_instance: 
-@name: 
-@source: 
-@mode: 
-@has_cursor: 
-@num_axes: 
-@axes: 
-@num_keys: 
-@keys: 
+@name: the name of this device. 
+@source: the type of this device.
+@mode: the mode of this device
+@has_cursor: %TRUE if the pointer follows device motion.
+@num_axes: the length of the @axes array.
+@axes: an array of #GdkDeviceAxis, describing the axes of this device.
+@num_keys: the length of the @keys array.
+@keys: an array of #GdkDeviceKey, describing the mapped macro buttons 
+  of this device.
 
 <!-- ##### STRUCT GdkDeviceClass ##### -->
 <para>
@@ -140,9 +143,9 @@ An enumeration that describes the mode of an input device.
 
 <!-- ##### STRUCT GdkDeviceKey ##### -->
 <para>
-The #GdkDeviceKey structure contains information
-about the mapping of one device macro button onto
-a normal X key event. It has the following fields:
+The <structname>GdkDeviceKey</structname> structure contains information
+about the mapping of one device macro button onto a normal X key event. 
+It has the following fields:
 </para>
 
 @keyval: the keyval to generate when the macro button is pressed.
@@ -151,12 +154,13 @@ a normal X key event. It has the following fields:
 
 <!-- ##### STRUCT GdkDeviceAxis ##### -->
 <para>
-
+The <structname>GdkDeviceAxis</structname> structure contains information
+about the range and mapping of a device axis.
 </para>
 
-@use: 
-@min: 
-@max: 
+@use: specifies how the axis is used.
+@min: the minimal value that will be reported by this axis. 
+@max: the maximal value that will be reported by this axis.
 
 <!-- ##### ENUM GdkAxisUse ##### -->
 <para>
@@ -249,16 +253,16 @@ Gets the current state of a device.
 
 <!-- ##### FUNCTION gdk_device_get_history ##### -->
 <para>
-
+Obtains the motion history for a device.
 </para>
 
-@device: 
-@window: 
-@start: 
-@stop: 
-@events: 
-@n_events: 
-@Returns: 
+@device: a #GdkDevice.
+@window: the window wrt. which the event coordinates will be translated. 
+@start: only return events newer than this timestamp. 
+@stop: only return events older than this timestamp. 
+@events: location to return a newly-allocated array of #GdkTimeCoord.
+@n_events: location to return the length of @events.
+@Returns: %TRUE if the @events were successfully filled.
 
 
 <!-- ##### FUNCTION gdk_device_free_history ##### -->
@@ -277,7 +281,7 @@ motion history. It contains the following fields:
 </para>
 
 @time: The timestamp for this event.
-@axes: 
+@axes: the values of the device's axes.
 
 <!-- ##### FUNCTION gdk_device_get_axis ##### -->
 <para>

@@ -1,3 +1,8 @@
+2001-12-03  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk/tmpl/input_devices.sgml, 
+	gdk/gdk-sections.txt, gdk/tmpl/windows.sgml: Updates.
+
 2001-12-02  Matthias Clasen  <matthiasc@poet.de>
 
 	* gdk/tmpl/dnd.sgml: Updates.

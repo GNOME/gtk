@@ -47,75 +47,34 @@ gdk_color_change() will probably become aliases.
 <para>
 The #GdkColor structure is used to describe an 
 allocated or unallocated color.
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry><structfield>pixel</structfield></entry>
-<entry>For allocated colors, the value used to
-draw this color on the screen.</entry>
-</row>
-
-<row>
-<entry><structfield>red</structfield></entry>
-<entry>The red component of the color. This is
-a value between 0 and 65535, with 65535 indicating
-full intensitiy.</entry>
-</row>
-
-<row>
-<entry><structfield>green</structfield></entry>
-<entry>the blue component of the color.</entry>
-</row>
-
-<row>
-<entry><structfield>blue</structfield></entry>
-<entry>the green component of the color..</entry>
-</row>
-
-</tbody></tgroup></informaltable>
 </para>
 
-@pixel: 
-@red: 
-@green: 
-@blue: 
+@pixel: For allocated colors, the value used to
+  draw this color on the screen.
+@red: The red component of the color. This is
+  a value between 0 and 65535, with 65535 indicating
+  full intensitiy.
+@green: The blue component of the color.
+@blue: The green component of the color.
+
 
 <!-- ##### STRUCT GdkColormap ##### -->
 <para>
-The colormap structure contains the following public
-fields.
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry><structfield>size</structfield></entry>
-<entry>For pseudo-color colormaps, the number of colors
-in the colormap..</entry>
-</row>
-
-<row>
-<entry><structfield>colors</structfield></entry>
-<entry>An array containing the current values in the
-colormap. This can be used to map from pixel values
-back to RGB values. This is only meaningful for
-pseudo-color colormaps.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
+The colormap structure contains the following public fields.
 </para>
 
 @parent_instance: 
-@size: 
-@colors: 
+@size: For pseudo-color colormaps, the number of colors
+  in the colormap.
+@colors: An array containing the current values in the
+  colormap. This can be used to map from pixel values
+  back to RGB values. This is only meaningful for
+  pseudo-color colormaps.
+
 
 <!-- ##### FUNCTION gdk_colormap_new ##### -->
 <para>
-Create a new colormap for the given visual.
+Creates a new colormap for the given visual.
 </para>
 
 @visual: a #GdkVisual.
@@ -162,7 +121,7 @@ explanation of the size of a colormap.)
 
 <!-- ##### FUNCTION gdk_colormap_change ##### -->
 <para>
-Change the value of the first @ncolors in a private colormap
+Changes the value of the first @ncolors in a private colormap
 to match the values in the <structfield>colors</structfield>
 array in the color map. This function is obsolete and
 should not be used. See gdk_color_change().
@@ -196,7 +155,7 @@ Allocates colors from a colormap.
 
 <!-- ##### FUNCTION gdk_colormap_alloc_color ##### -->
 <para>
-Allocate a single color from a colormap.
+Allocates a single color from a colormap.
 </para>
 
 @colormap: a #GdkColormap.
@@ -214,7 +173,7 @@ filled in if allocation succeeds.
 
 <!-- ##### FUNCTION gdk_colormap_free_colors ##### -->
 <para>
-Free previously allocated colors.
+Frees previously allocated colors.
 </para>
 
 @colormap: a #GdkColormap.
@@ -234,7 +193,7 @@ Free previously allocated colors.
 
 <!-- ##### FUNCTION gdk_colormap_get_visual ##### -->
 <para>
-Return the visual for which a given colormap was created.
+Returns the visual for which a given colormap was created.
 </para>
 
 @colormap: a #GdkColormap.
@@ -243,7 +202,7 @@ Return the visual for which a given colormap was created.
 
 <!-- ##### FUNCTION gdk_colors_store ##### -->
 <para>
-Change the value of the first @ncolors colors in
+Changes the value of the first @ncolors colors in
 a private colormap. This function is obsolete and
 should not be used. See gdk_color_change().
 </para>
@@ -255,7 +214,7 @@ should not be used. See gdk_color_change().
 
 <!-- ##### FUNCTION gdk_color_copy ##### -->
 <para>
-Make a copy of a color structure. The result
+Makes a copy of a color structure. The result
 must be freed using gdk_color_free().
 </para>
 
@@ -265,7 +224,7 @@ must be freed using gdk_color_free().
 
 <!-- ##### FUNCTION gdk_color_free ##### -->
 <para>
-Free a color structure created with 
+Frees a color structure created with 
 gdk_color_copy().
 </para>
 
@@ -274,10 +233,10 @@ gdk_color_copy().
 
 <!-- ##### FUNCTION gdk_colors_alloc ##### -->
 <para>
-Allocate colors from a colormap. This function
+Allocates colors from a colormap. This function
 is obsolete. See gdk_colormap_alloc_colors().
 For full documentation of the fields, see 
-the Xlib documentation for XAllocColorCells.
+the Xlib documentation for <function>XAllocColorCells()</function>.
 </para>
 
 @colormap: a #GdkColormap.
@@ -295,7 +254,7 @@ the Xlib documentation for XAllocColorCells.
 
 <!-- ##### FUNCTION gdk_colors_free ##### -->
 <para>
-Free colors allocated with gdk_colors_alloc(). This
+Frees colors allocated with gdk_colors_alloc(). This
 function is obsolete. See gdk_colormap_free_colors().
 </para>
 
@@ -308,7 +267,7 @@ function is obsolete. See gdk_colormap_free_colors().
 
 <!-- ##### FUNCTION gdk_color_white ##### -->
 <para>
-Return the white color for a given colormap. The resulting
+Returns the white color for a given colormap. The resulting
 value has already allocated been allocated. 
 </para>
 
@@ -319,7 +278,7 @@ value has already allocated been allocated.
 
 <!-- ##### FUNCTION gdk_color_black ##### -->
 <para>
-Return the black color for a given colormap. The resulting
+Returns the black color for a given colormap. The resulting
 value has already benn allocated. 
 </para>
 
@@ -330,7 +289,7 @@ value has already benn allocated.
 
 <!-- ##### FUNCTION gdk_color_parse ##### -->
 <para>
-Parse a textual specification of a color and fill in
+Parses a textual specification of a color and fill in
 the <structfield>red</structfield>,
 <structfield>green</structfield>, and 
 <structfield>blue</structfield> fields of a 
@@ -350,7 +309,7 @@ such as <literal>305050</literal>.
 
 <!-- ##### FUNCTION gdk_color_alloc ##### -->
 <para>
-Allocate a single color from a colormap.
+Allocates a single color from a colormap.
 This function is obsolete. See gdk_colormap_alloc_color().
 </para>
 
@@ -363,7 +322,7 @@ filled in.
 
 <!-- ##### FUNCTION gdk_color_change ##### -->
 <para>
-Change the value of a color that has already
+Changes the value of a color that has already
 been allocated. If @colormap is not a private
 colormap, then the color must have been allocated
 using gdk_colormap_alloc_colors() with the 
@@ -379,7 +338,7 @@ and the new value in the remaining fields.
 
 <!-- ##### FUNCTION gdk_color_equal ##### -->
 <para>
-Compare two colors. 
+Compares two colors. 
 </para>
 
 @colora: a #GdkColor.
@@ -395,7 +354,5 @@ table that stores #GdkColor's.
 
 @colora: a #GdkColor.
 @Returns: The hash function appled to @colora
-<!-- # Unused Parameters # -->
-@colorb: NOT USED.
 
 

@@ -155,6 +155,7 @@ gdk_image_unref
 gdk_image_destroy
 gdk_image_get_colormap
 gdk_image_set_colormap
+
 <SUBSECTION>
 gdk_image_put_pixel
 gdk_image_get_pixel
@@ -317,7 +318,6 @@ gdk_font_get_type
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkDrawable
-GdkDrawableClass
 gdk_drawable_ref
 gdk_drawable_unref
 gdk_drawable_set_data
@@ -365,6 +365,7 @@ GDK_DRAWABLE_CLASS
 GDK_IS_DRAWABLE_CLASS
 
 <SUBSECTION Private>
+GdkDrawableClass
 gdk_draw_bitmap
 </SECTION>
 
@@ -372,7 +373,6 @@ gdk_draw_bitmap
 <TITLE>Graphics Contexts</TITLE>
 <FILE>gcs</FILE>
 GdkGC
-GdkGCClass
 GdkGCValues
 GdkGCValuesMask
 
@@ -418,7 +418,6 @@ gdk_gc_offset
 GDK_GC
 GDK_TYPE_GC
 GDK_IS_GC
-gdk_gc_get_type
 GDK_GC_CLASS
 GDK_GC_GET_CLASS
 GDK_IS_GC_CLASS
@@ -430,6 +429,10 @@ GDK_TYPE_GC_VALUES_MASK
 GDK_TYPE_JOIN_STYLE
 GDK_TYPE_LINE_STYLE
 GDK_TYPE_SUBWINDOW_MODE
+
+<SUBSECTION Private>
+GdkGCClass
+gdk_gc_get_type
 </SECTION>
 
 <SECTION>
@@ -458,12 +461,12 @@ GDK_TYPE_VISUAL_TYPE
 GDK_TYPE_VISUAL
 GDK_IS_VISUAL
 GDK_IS_VISUAL_CLASS
-GdkVisualClass
 GDK_VISUAL
 GDK_VISUAL_CLASS
 GDK_VISUAL_GET_CLASS
 
 <SUBSECTION Private>
+GdkVisualClass
 gdk_visual_get_type
 </SECTION>
 
@@ -713,6 +716,8 @@ gdk_region_spans_intersect_foreach
 <SUBSECTION Standard>
 GDK_TYPE_OVERLAP_TYPE
 GDK_TYPE_RECTANGLE
+
+<SUBSECTION Private>
 gdk_rectangle_get_type
 </SECTION>
 
@@ -730,7 +735,6 @@ gdk_threads_mutex
 <TITLE>Keyboard Handling</TITLE>
 <FILE>keys</FILE>
 GdkKeymap
-GdkKeymapClass
 GdkKeymapKey
 GdkKeyInfo
 gdk_keymap_get_default
@@ -754,21 +758,24 @@ gdk_keyval_is_lower
 <SUBSECTION>
 gdk_keyval_to_unicode
 gdk_unicode_to_keyval
+
 <SUBSECTION Standard>
 GDK_KEYMAP
 GDK_IS_KEYMAP
 GDK_TYPE_KEYMAP
-gdk_keymap_get_type
 GDK_KEYMAP_CLASS
 GDK_IS_KEYMAP_CLASS
 GDK_KEYMAP_GET_CLASS
+
+<SUBSECTION Private>
+GdkKeymapClass
+gdk_keymap_get_type
 </SECTION>
 
 <SECTION>
 <TITLE>Input Devices</TITLE>
 <FILE>input_devices</FILE>
 GdkDevice
-GdkDeviceClass
 GdkInputSource
 GdkInputMode
 GdkDeviceKey
@@ -803,9 +810,10 @@ GDK_DEVICE_GET_CLASS
 GDK_IS_DEVICE
 GDK_IS_DEVICE_CLASS
 GDK_TYPE_DEVICE
-gdk_device_get_type
 
 <SUBSECTION Private>
+GdkDeviceClass
+gdk_device_get_type
 GDK_MAX_TIMECOORD_AXES
 </SECTION>
 
@@ -917,6 +925,8 @@ gdk_cursor_destroy
 <SUBSECTION Standard>
 GDK_TYPE_CURSOR_TYPE
 GDK_TYPE_CURSOR
+
+<SUBSECTION Private>
 gdk_cursor_get_type
 </SECTION>
 

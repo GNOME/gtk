@@ -838,9 +838,10 @@ backend, <type>MSG</type>s for Win32).
 
 <!-- ##### MACRO GDK_PARENT_RELATIVE ##### -->
 <para>
-
+A special value for <literal>GdkPixmap*</literal> variables, indicating
+that the background pixmap for a window should be inherited from the parent
+window.
 </para>
-
 
 
 <!-- ##### FUNCTION gdk_window_set_cursor ##### -->

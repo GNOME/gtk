@@ -10,8 +10,8 @@ Key values are the codes which are sent whenever a key is pressed or released.
 They appear in the <structfield>keyval</structfield> field of the
 #GdkEventKey structure, which is passed to signal handlers for the
 "key-press-event" and "key-release-event" signals.
-The complete list of key values can be found in the &lt;gdk/gdkkeysyms.h&gt;
-header file. &lt;gdk/gdkkeysyms.h&gt; is not included in &lt;gtk/gtk.h&gt;, 
+The complete list of key values can be found in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename>
+header file. <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> is not included in <filename>&lt;gtk/gtk.h&gt;</filename>, 
 it must be included independently, because the file is quite large.
 </para>
 <para>
@@ -81,7 +81,12 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 
 <!-- ##### STRUCT GdkKeymap ##### -->
 <para>
-
+A <structname>GdkKeymap</structname> defines the translation from keyboard state
+(including a hardware key, a modifier mask, and active keyboard group)
+to a keyval. This translation has two phases. The first phase is
+to determine the effective keyboard group and level for the keyboard
+state; the second phase is to look up the keycode/group/level triplet
+in the keymap and see what keyval it corresponds to.
 </para>
 
 @parent_instance: 
@@ -94,12 +99,21 @@ gdk_keymap_translate_keyboard_state() just to get the keyval.
 
 <!-- ##### STRUCT GdkKeymapKey ##### -->
 <para>
-
+A <structname>GdkKeymapKey</structname> is a hardware key that can 
+be mapped to a keyval.
 </para>
 
-@keycode: 
-@group: 
-@level: 
+@keycode: the hardware keycode. This is an identifying number for a 
+  physical key.
+@group: indicates movement in a horizontal direction. Usually groups are used 
+  for two different languages. In group 0, a key might have two English 
+  characters, and in group 1 it might have two Hebrew characters. The Hebrew 
+  characters will be printed on the key next to the English characters.
+@level: indicates which symbol on the key will be used, in a vertical direction.  So on a standard US keyboard, the key with the number "1" on it also has the 
+  exclamation point ("!") character on it. The level indicates whether to use 
+  the "1" or the "!" symbol. The letter keys are considered to have a lowercase
+  letter at level 0, and an uppercase letter at level 1, though only the 
+  uppercase letter is printed. 
 
 <!-- ##### STRUCT GdkKeyInfo ##### -->
 <para>
@@ -182,12 +196,12 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 <!-- ##### FUNCTION gdk_keyval_name ##### -->
 <para>
 Converts a key value into a symbolic name.
-The names are the same as those in the &lt;gdk/gdkkeysyms.h&gt; header file
+The names are the same as those in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
 but without the leading "GDK_".
 </para>
 
 @keyval: a key value.
-@Returns: a string containing the name of the key, or NULL if @keyval is not
+@Returns: a string containing the name of the key, or %NULL if @keyval is not
 a valid key. The string should not be modified.
 
 
@@ -233,21 +247,21 @@ in lower case or it is not subject to case conversion.
 
 <!-- ##### FUNCTION gdk_keyval_is_upper ##### -->
 <para>
-Returns TRUE if the given key value is in upper case.
+Returns %TRUE if the given key value is in upper case.
 </para>
 
 @keyval: a key value.
-@Returns: TRUE if @keyval is in upper case, or if @keyval is not subject to
+@Returns: %TRUE if @keyval is in upper case, or if @keyval is not subject to
 case conversion.
 
 
 <!-- ##### FUNCTION gdk_keyval_is_lower ##### -->
 <para>
-Returns TRUE if the given key value is in lower case.
+Returns %TRUE if the given key value is in lower case.
 </para>
 
 @keyval: a key value.
-@Returns: TRUE if @keyval is in lower case, or if @keyval is not subject to
+@Returns: %TRUE if @keyval is in lower case, or if @keyval is not subject to
 case conversion.
 
 
