@@ -501,7 +501,7 @@ gtk_style_get_type (void)
  * @style: a #GtkStyle
  * @settings: a #GtkSettings
  * 
- * Initializes the font description in @style accoridng to the default
+ * Initializes the font description in @style according to the default
  * font name of @settings. This is called for gtk_style_new() with
  * the settings for the default screen (if any); if we are creating
  * a style for a particular screen, we then call it again in a
