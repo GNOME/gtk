@@ -6815,7 +6815,7 @@ gtk_tree_view_row_inserted (GtkTreeModel *model,
   GtkRBNode *tmpnode = NULL;
   gint depth;
   gint i = 0;
-  gint height;
+  gint height = 0;
   gboolean free_path = FALSE;
 
   g_return_if_fail (path != NULL || iter != NULL);
