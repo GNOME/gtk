@@ -296,6 +296,9 @@ EXPORTS
 	gdk_pixmap_create_from_xpm_d
 	gdk_pixmap_foreign_new
 	gdk_pixmap_get_type
+	gdk_pixmap_foreign_new_for_display
+	gdk_pixmap_lookup
+	gdk_pixmap_lookup_for_display
 	gdk_pixmap_new
 	gdk_pointer_grab
 	gdk_pointer_grab_info_libgtk_only
@@ -359,6 +362,7 @@ EXPORTS
 	gdk_screen_get_root_window
 	gdk_screen_get_setting
 	gdk_screen_get_system_colormap
+	gdk_screen_get_system_visual
 	gdk_screen_get_toplevel_windows
 	gdk_screen_get_type
 	gdk_screen_get_width

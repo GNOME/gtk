@@ -1,3 +1,14 @@
+2003-02-01  Tor Lillqvist  <tml@iki.fi>
+
+	Merge from stable:
+
+	* gdk/win32/gdkpixmap-win32.c (gdk_pixmap_foreign_new_for_display,
+	gdk_pixmap_lookup, gdk_pixmap_lookup_for_display): Implement.
+	(#104108, Naofumi Yasufuku)
+
+	* gdk/gdk.def: Export the above. Export
+	gdk_screen_get_system_visual, noticed by Ed Woods.
+
 Fri Jan 31 17:45:22 2003  Manish Singh  <yosh@gimp.org>
 
 	* demos/pixbuf-demo.c

@@ -30,6 +30,8 @@
 #include <string.h>
 
 #include "gdkpixmap.h"
+#include "gdkdisplay.h"
+
 #include "gdkprivate-win32.h"
 
 static void gdk_pixmap_impl_win32_get_size   (GdkDrawable        *drawable,
@@ -440,6 +442,16 @@ gdk_pixmap_create_from_data (GdkDrawable *drawable,
   return result;
 }
 
+GdkPixmap *
+gdk_pixmap_foreign_new_for_display (GdkDisplay      *display,
+				    GdkNativeWindow  anid)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (display == _gdk_display, NULL);
+
+  return gdk_pixmap_foreign_new (anid);
+}
+
 GdkPixmap*
 gdk_pixmap_foreign_new (GdkNativeWindow anid)
 {
@@ -478,4 +490,19 @@ gdk_pixmap_foreign_new (GdkNativeWindow anid)
   gdk_win32_handle_table_insert (&GDK_PIXMAP_HBITMAP (pixmap), pixmap);
 
   return pixmap;
+}
+
+GdkPixmap*
+gdk_pixmap_lookup (GdkNativeWindow anid)
+{
+  return (GdkPixmap*) gdk_win32_handle_table_lookup (anid);
+}
+
+GdkPixmap*
+gdk_pixmap_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (display == _gdk_display, NULL);
+
+  return gdk_pixmap_lookup (anid);
 }
