@@ -1886,7 +1886,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
   gtk_widget_show (widget);
 
   impl->save_file_name_entry = gtk_entry_new ();
-  gtk_entry_set_width_chars (GTK_ENTRY (impl->save_file_name_entry), 25);
+  gtk_entry_set_width_chars (GTK_ENTRY (impl->save_file_name_entry), 45);
   gtk_entry_set_activates_default (GTK_ENTRY (impl->save_file_name_entry), TRUE);
   gtk_table_attach (GTK_TABLE (table), impl->save_file_name_entry,
 		    1, 2, 0, 1,
@@ -3193,7 +3193,10 @@ gtk_file_chooser_default_get_resizable_hints (GtkFileChooserEmbed *chooser_embed
 	  impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
 	{
 	  if (! gtk_expander_get_expanded (GTK_EXPANDER (impl->save_expander)))
-	    *resize_vertically = FALSE;
+	    {
+	      *resize_vertically = FALSE;
+	      *resize_horizontally = FALSE;
+	    }
 	}
     }
 }

@@ -1,3 +1,9 @@
+Mon Mar  1 16:51:21 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkfilechooserdialog.c
+	(file_chooser_widget_default_size_changed): only store the size if
+	we can resize in that direction.
+
 Mon Mar  1 16:32:52 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkfilechooserwidget.c

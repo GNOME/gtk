@@ -184,6 +184,8 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
   gint extra_height;
   gint width, height;
   GtkRequisition req;
+  gboolean resize_horizontally;
+  gboolean resize_vertically;
 
   priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
 
@@ -221,8 +223,15 @@ file_chooser_widget_default_size_changed (GtkWidget            *widget,
     {
       gtk_window_resize (GTK_WINDOW (dialog), width, height);
     }
-  priv->default_width = width;
-  priv->default_height = height;
+
+  _gtk_file_chooser_embed_get_resizable_hints (GTK_FILE_CHOOSER_EMBED (priv->widget),
+					       &resize_horizontally,
+					       &resize_vertically);
+  /* Only store the size if we can resize in that direction. */
+  if (resize_horizontally)
+    priv->default_width = width;
+  if (resize_vertically)
+    priv->default_height = height;
 }
 
 
