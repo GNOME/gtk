@@ -1610,13 +1610,10 @@ gtk_image_clear (GtkImage *image)
       break;
 
     case GTK_IMAGE_ANIMATION:
-      if (image->data.anim.frame_timeout)
-        g_source_remove (image->data.anim.frame_timeout);
+      gtk_image_reset_anim_iter (image);
       
       if (image->data.anim.anim)
         g_object_unref (image->data.anim.anim);
-
-      image->data.anim.frame_timeout = 0;
       image->data.anim.anim = NULL;
       
       g_object_notify (G_OBJECT (image), "pixbuf_animation");

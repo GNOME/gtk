@@ -1,3 +1,8 @@
+Wed Sep  1 00:55:56 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkimage.c (gtk_image_clear): Don't leak the iter
+	of a running animation.  (#151542)
+
 Tue Aug 31 23:40:29 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/win32/gdkproperty-win32.c (gdk_screen_get_setting): Make
