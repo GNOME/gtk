@@ -1,3 +1,9 @@
+2003-06-30  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcontainer.sgml: Write a bit about size negotiation.
+
+	* gtk/tmpl/gtkwidget.sgml: Some additions.
+
 2003-06-24  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtk-docs.sgml: Move GtkIMContext to "Abstract Base Classes", since its abstract.

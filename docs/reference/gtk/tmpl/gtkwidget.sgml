@@ -313,7 +313,7 @@ Evaluates to %TRUE if the #GTK_APP_PAINTABLE flag has been set on the widget.
 Evaluates to %TRUE if the #GTK_DOUBLE_BUFFERED flag has been set on the widget.
 </para>
 
-@wid: 
+@wid: a #GtkWidget.
 
 
 <!-- ##### MACRO GTK_WIDGET_SET_FLAGS ##### -->
@@ -336,30 +336,34 @@ Turns off certain widget flags.
 
 <!-- ##### USER_FUNCTION GtkCallback ##### -->
 <para>
-
+The type of the callback functions used for e.g. iterating over
+the children of a container, see gtk_container_foreach(). 
 </para>
 
-@widget: 
-@data: 
+@widget: the widget to operate on
+@data: user-supplied data
 
 
 <!-- ##### STRUCT GtkRequisition ##### -->
 <para>
-
+A <structname>GtkRequisition</structname> represents the desired size of a widget. See 
+<xref linkend="size-requisition"/> for more information.
 </para>
 
-@width: 
-@height: 
+@width: the widget's desired width
+@height: the widget's desired height 
 
 <!-- ##### STRUCT GtkAllocation ##### -->
 <para>
-
+A <structname>GtkAllocation</structname> of a widget represents region which has been allocated to the 
+widget by its parent. It is a subregion of its parents allocation. See 
+<xref linkend="size-allocation"/> for more information.
 </para>
 
-@x: 
-@y: 
-@width: 
-@height: 
+@x: the X position of the widgets area relative to its parents allocation.
+@y: the Y position of the widgets area relative to its parents allocation.
+@width: the width of the widgets allocated area.
+@height: the height of the widgets allocated area.
 
 <!-- ##### STRUCT GtkSelectionData ##### -->
 <para>
