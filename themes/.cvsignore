@@ -1,0 +1,13 @@
+*.lo
+*.la
+Makefile
+Makefile.in
+config.log
+config.h
+libtool
+config.status
+aclocal.m4
+configure
+config.cache
+.deps
+.libs
