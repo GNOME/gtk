@@ -340,6 +340,7 @@ struct _GtkStyleClass
 				 GtkPositionType	 gap_side);
   void (*draw_focus)		(GtkStyle		*style,
 				 GdkWindow		*window,
+                                 GtkStateType            state_type,
 				 GdkRectangle		*area,
 				 GtkWidget		*widget,
 				 const gchar		*detail,
@@ -775,6 +776,7 @@ void gtk_paint_extension  (GtkStyle        *style,
 			   GtkPositionType  gap_side);
 void gtk_paint_focus      (GtkStyle        *style,
 			   GdkWindow       *window,
+			   GtkStateType     state_type,
 			   GdkRectangle    *area,
 			   GtkWidget       *widget,
 			   const gchar     *detail,

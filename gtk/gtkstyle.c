@@ -239,6 +239,7 @@ static void gtk_default_draw_extension  (GtkStyle        *style,
 					 GtkPositionType  gap_side);
 static void gtk_default_draw_focus      (GtkStyle        *style,
 					 GdkWindow       *window,
+					 GtkStateType     state_type,
 					 GdkRectangle    *area,
 					 GtkWidget       *widget,
 					 const gchar     *detail,
@@ -1061,7 +1062,7 @@ gtk_draw_focus (GtkStyle      *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, NULL, NULL, NULL, x, y, width, height);
+  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, GTK_STATE_NORMAL, NULL, NULL, NULL, x, y, width, height);
 }
 
 void 
@@ -3778,6 +3779,7 @@ gtk_default_draw_extension (GtkStyle       *style,
 static void 
 gtk_default_draw_focus (GtkStyle      *style,
 			GdkWindow     *window,
+			GtkStateType   state_type,
 			GdkRectangle  *area,
 			GtkWidget     *widget,
 			const gchar   *detail,
@@ -3787,34 +3789,114 @@ gtk_default_draw_focus (GtkStyle      *style,
 			gint           height)
 {
   GdkPoint points[5];
+  GdkGC    *gc;
+  gint line_width = 1;
+  gchar *dash_list = "\1\1";
+  gint dash_len;
+
+  gc = style->fg_gc[state_type];
+
+  if (widget)
+    gtk_widget_style_get (widget,
+			  "focus-line-width", &line_width,
+			  "focus-line-pattern", (gchar *)&dash_list,
+			  NULL);
   
   sanitize_size (window, &width, &height);
   
   if (area)
-    gdk_gc_set_clip_rectangle (style->black_gc, area);
+    gdk_gc_set_clip_rectangle (gc, area);
 
-  gdk_gc_set_line_attributes (style->black_gc, 1, GDK_LINE_ON_OFF_DASH, 0, 0);
+  gdk_gc_set_line_attributes (gc, line_width,
+			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+
 
   if (detail && !strcmp (detail, "add-mode"))
-    gdk_gc_set_dashes (style->black_gc, 0, "\4\4", 2);
-  else
-    gdk_gc_set_dashes (style->black_gc, 0, "\1\1", 2);
+    dash_list = "\4\4";
 
-  points[0].x = x;
-  points[0].y = y;
-  points[1].x = x + width;
-  points[1].y = y;
-  points[2].x = x + width;
-  points[2].y = y + height;
-  points[3].x = x;
-  points[3].y = y + height;
+  points[0].x = x + line_width / 2;
+  points[0].y = y + line_width / 2;
+  points[1].x = x + width - line_width + line_width / 2;
+  points[1].y = y + line_width / 2;
+  points[2].x = x + width - line_width + line_width / 2;
+  points[2].y = y + height - line_width + line_width / 2;
+  points[3].x = x + line_width / 2;
+  points[3].y = y + height - line_width + line_width / 2;
   points[4] = points[0];
-  
-  gdk_draw_polygon (window, style->black_gc, FALSE, points, 4);
-  gdk_gc_set_line_attributes (style->black_gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+  if (!dash_list[0])
+    {
+      gdk_draw_lines (window, gc, points, 5);
+    }
+  else
+    {
+      /* We go through all the pain below because the X rasterization
+       * rules don't really work right for dashed lines if you
+       * want continuity in segments that go between top/right
+       * and left/bottom. For instance, a top left corner
+       * with a 1-1 dash is drawn as:
+       *
+       *  X X X 
+       *  X
+       *
+       *  X
+       *
+       * This is because pixels on the top and left boundaries
+       * of polygons are drawn, but not on the bottom and right.
+       * So, if you have a line going up that turns the corner
+       * and goes right, there is a one pixel shift in the pattern.
+       *
+       * So, to fix this, we drawn the top and right in one call,
+       * then the left and bottom in another call, fixing up
+       * the dash offset for the second call ourselves to get
+       * continuity at the upper left.
+       *
+       * It's not perfect since we really should have a join at
+       * the upper left and lower right instead of two intersecting
+       * lines but that's only really apparent for no-dashes,
+       * which (for this reason) are done as one polygon and
+       * don't to through this code path.
+       */
+      
+      dash_len = strlen (dash_list);
+      
+      if (dash_list[0])
+	gdk_gc_set_dashes (gc, 0, dash_list, dash_len);
+      
+      gdk_draw_lines (window, gc, points, 3);
+      
+      /* We draw this line one farther over than it is "supposed" to
+       * because of another rasterization problem ... if two 1 pixel
+       * unjoined lines meet at the lower right, there will be a missing
+       * pixel.
+       */
+      points[2].x += 1;
+      
+      if (dash_list[0])
+	{
+	  gint dash_pixels = 0;
+	  gint i;
+	  
+	  /* Adjust the dash offset for the bottom and left so we
+	   * match up at the upper left.
+	   */
+	  for (i = 0; i < dash_len; i++)
+	    dash_pixels += dash_list[i];
+      
+	  if (dash_len % 2 == 1)
+	    dash_pixels *= 2;
+	  
+	  gdk_gc_set_dashes (gc, dash_pixels - (width + height - 2 * line_width) % dash_pixels, dash_list, dash_len);
+	}
+      
+      gdk_draw_lines (window, gc, points + 2, 3);
+    }
+
+  gdk_gc_set_line_attributes (gc, 0, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 
   if (area)
-    gdk_gc_set_clip_rectangle (style->black_gc, NULL);
+    gdk_gc_set_clip_rectangle (gc, NULL);
 }
 
 static void 
@@ -4847,6 +4929,7 @@ gtk_paint_extension (GtkStyle       *style,
 void
 gtk_paint_focus (GtkStyle      *style,
                  GdkWindow     *window,
+		 GtkStateType   state_type,
                  GdkRectangle  *area,
                  GtkWidget     *widget,
                  const gchar   *detail,
@@ -4858,7 +4941,7 @@ gtk_paint_focus (GtkStyle      *style,
   g_return_if_fail (GTK_IS_STYLE (style));
   g_return_if_fail (GTK_STYLE_GET_CLASS (style)->draw_focus != NULL);
   
-  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, area, widget, detail, x, y, width, height);
+  GTK_STYLE_GET_CLASS (style)->draw_focus (style, window, state_type, area, widget, detail, x, y, width, height);
 }
 
 void
@@ -5114,4 +5197,3 @@ _gtk_draw_insertion_cursor (GdkDrawable      *drawable,
 	}
     }
 }
-

@@ -591,6 +591,13 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       gint string_len;
       gint max_string_len;
       gint digit_width;
+      gboolean interior_focus;
+      gint focus_width;
+
+      gtk_widget_style_get (widget,
+			    "interior-focus", &interior_focus,
+			    "focus-line-width", &focus_width,
+			    NULL);
 
       context = gtk_widget_get_pango_context (widget);
       metrics = pango_context_get_metrics (context,
@@ -617,11 +624,14 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       w = MIN (string_len, max_string_len) * digit_width;
       width = MAX (width, w);
       
-      requisition->width = (width + arrow_size +
-			    2 * widget->style->xthickness);
+      requisition->width = width + arrow_size + 2 * widget->style->xthickness;
+      if (interior_focus)
+	requisition->width += 2 * focus_width;
     }
   else
-    requisition->width += arrow_size + 2 * widget->style->xthickness;
+    {
+      requisition->width += arrow_size + 2 * widget->style->xthickness;
+    }
 }
 
 static void

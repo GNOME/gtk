@@ -1054,6 +1054,27 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 								 _("Whether to draw the focus indicator inside widgets."),
 								 TRUE,
 								 G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_int ("focus-line-width",
+							     _("Focus linewidth"),
+							     _("Width, in pixels, of the focus indicator line."),
+							     0, G_MAXINT, 1,
+							     G_PARAM_READWRITE));
+
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_string ("focus-line-pattern",
+								_("Focus line dash pattern"),
+								_("Dash pattern used to draw the focus indicator."),
+								"\1\1",
+								G_PARAM_READWRITE));
+  gtk_widget_class_install_style_property (klass,
+					   g_param_spec_int ("focus-padding",
+							     _("Focus padding"),
+							     _("Width, in pixels, between focus indicator and the widget 'box'."),
+							     0, G_MAXINT, 1,
+							     G_PARAM_READWRITE));
+
 }
 
 static void

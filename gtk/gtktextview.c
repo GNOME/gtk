@@ -2377,16 +2377,20 @@ gtk_text_view_size_request (GtkWidget      *widget,
   GtkTextView *text_view;
   GSList *tmp_list;
   gint focus_edge_width;
+  gint focus_width;
   gboolean interior_focus;
   
   text_view = GTK_TEXT_VIEW (widget);
 
-  gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
+  gtk_widget_style_get (widget,
+			"interior_focus", &interior_focus,
+			"focus_line_width", &focus_width,
+			NULL);
 
   if (interior_focus)
     focus_edge_width = 0;
   else
-    focus_edge_width = 1;
+    focus_edge_width = focus_width;
 
   if (text_view->layout)
     {
@@ -2588,6 +2592,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GdkRectangle top_rect;
   GdkRectangle bottom_rect;
   gint focus_edge_width;
+  gint focus_width;
   gboolean interior_focus;
   gboolean size_changed;
   
@@ -2612,12 +2617,15 @@ gtk_text_view_size_allocate (GtkWidget *widget,
    * windows get at least a 1x1 allocation.
    */
 
-  gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
-  
+  gtk_widget_style_get (widget,
+			"interior_focus", &interior_focus,
+			"focus_line_width", &focus_width,
+			NULL);
+
   if (interior_focus)
     focus_edge_width = 0;
   else
-    focus_edge_width = 1;
+    focus_edge_width = focus_width;
   
   width = allocation->width - focus_edge_width * 2 - GTK_CONTAINER (text_view)->border_width * 2;
 
@@ -3779,17 +3787,19 @@ gtk_text_view_draw_focus (GtkWidget *widget)
   gboolean interior_focus;
 
   /* We clear the focus if we are in interior focus mode. */
-  gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
+  gtk_widget_style_get (widget,
+			"interior_focus", &interior_focus,
+			NULL);
   
   if (GTK_WIDGET_DRAWABLE (widget))
     {
       if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
         {          
-          gtk_paint_focus (widget->style, widget->window,
+          gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
                            NULL, widget, "textview",
                            0, 0,
-                           widget->allocation.width - 1,
-                           widget->allocation.height - 1);
+                           widget->allocation.width,
+                           widget->allocation.height);
         }
       else
         {
@@ -6140,13 +6150,17 @@ buffer_to_widget (GtkTextView      *text_view,
 {
   gint focus_edge_width;
   gboolean interior_focus;
+  gint focus_width;
   
-  gtk_widget_style_get (GTK_WIDGET (text_view), "interior_focus", &interior_focus, NULL);
+  gtk_widget_style_get (GTK_WIDGET (text_view),
+			"interior_focus", &interior_focus,
+		        "focus_line_width", &focus_width,
+			NULL);
 
   if (interior_focus)
     focus_edge_width = 0;
   else
-    focus_edge_width = 1;
+    focus_edge_width = focus_width;
   
   if (window_x)
     {
@@ -6287,13 +6301,17 @@ widget_to_buffer (GtkTextView *text_view,
 {
   gint focus_edge_width;
   gboolean interior_focus;
+  gint focus_width;
   
-  gtk_widget_style_get (GTK_WIDGET (text_view), "interior_focus", &interior_focus, NULL);
+  gtk_widget_style_get (GTK_WIDGET (text_view),
+			"interior_focus", &interior_focus,
+		        "focus_line_width", &focus_width,
+			NULL);
 
   if (interior_focus)
     focus_edge_width = 0;
   else
-    focus_edge_width = 1;
+    focus_edge_width = focus_width;
   
   if (buffer_x)
     {

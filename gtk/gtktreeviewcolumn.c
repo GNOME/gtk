@@ -2419,13 +2419,14 @@ gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
 
       gtk_paint_focus (tree_column->tree_view->style,
 		       window,
+		       GTK_WIDGET_STATE (tree_column->tree_view),
 		       NULL,
 		       tree_column->tree_view,
 		       "treeview",
 		       cell_area->x - 1,
 		       cell_area->y - 1,
-		       cell_area->width + 2 - 1,
-		       cell_area->height + 2 - 1);
+		       cell_area->width + 2,
+		       cell_area->height + 2);
       
     }
   else
@@ -2442,13 +2443,14 @@ gtk_tree_view_column_cell_draw_focus (GtkTreeViewColumn       *tree_column,
       
       gtk_paint_focus (tree_column->tree_view->style,
 		       window,
+		       GTK_WIDGET_STATE (tree_column->tree_view),
 		       NULL,
 		       tree_column->tree_view,
 		       "treeview",
 		       focus_rectangle.x,
 		       focus_rectangle.y,
-		       focus_rectangle.width - 1,
-		       focus_rectangle.height - 1);
+		       focus_rectangle.width,
+		       focus_rectangle.height);
     }
 }
 

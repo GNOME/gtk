@@ -1,3 +1,51 @@
+Mon Dec  3 16:39:17 2001  Owen Taylor  <otaylor@redhat.com>
+
+	Patch from Bill Haneman (with many modifications) to make
+	the focus color work on dark themes and to make the
+	focus line width configurable. (#61079, #63074)
+
+        * gtk/gtkwidget.c: Add style properties, 
+	::focus-widget, ::focus-line-width, and ::focus-padding.
+
+	* gtk/gtkstyle.[ch]: Make gtk_paint_focus() take a 
+	state argument as well so we can use fg[STATE] to
+	draw instead of always drawing with black. 
+	Cange paint_focus() to respect GtkWidget::focus-width
+	and GtkWidget::focus-line-pattern. Fix continuity
+	problem where the default 1-1 stipple had a blob
+	in one corner and a gap in the other. Change the
+	interpretation of x/y/width/height to be the bounding
+	box of the focus rect instead of the rectangle
+	passed to gdk_draw_rectangle.
+
+	* gtk/gtkcheckbutton.c gtk/gtklistitem.c gtk/gtknotebook.c 
+	gtk/gtkoptionmenu.c gtk/gtkradiobutton.c gtk/gtkspinbutton.c 
+	gtk/gtktextview.c gtk/gtktreeview.c: Handle ::focus-width 
+	and ::focus-line-padding.
+
+	* gtk/gtkentry.c: Handle :;focus-width property; cleanup
+	and remove duplicated code; fix drawing of focus rectangle
+	when interior-focus = FALSE. (#63072, #63073)
+
+	* gtk/gtkrange.c gtk/gtktext.c gtk/gtktreeitem.c
+	gtk/gtktreeviewcolumn.c: Basic fixups to make compile;
+	Range and TreeViewColumn will need more extensive fixing.
+
+	* gtk/gtkcolorsel.c: Honor focus line attributes when
+	drawing the focus on the color swatches. (#63071)
+
+	* gtk/gtkhsv.c: Honor focus line attributes when
+	drawing the focus for the ring and triangle.
+
+	* docs/widget_geometry.txt: Start at documenting how 
+	various widgets are drawn.
+
+	* gtk/gtkbutton.c (_gtk_button_paint): Export 
+	_gtk_button_paint() librarywide, so we don't have 
+	duplicate a bunch of code in gtktogglebutton.c.
+
+	* gtk/gtktogglebutton.c: Use _gtk_button_paint().
+
 Mon Dec  3 21:04:13 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkmarshalers.list: remove VOID:BOXED,POINTER and

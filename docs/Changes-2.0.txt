@@ -546,3 +546,14 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
   to store the difference between world and window coordinates for
   layout->bin_window. These coordinate systems are now always
   the same.
+
+* gtk_paint_focus(), gtk_draw_focus() and GtkStyle::draw_focus()
+  have been changed a bit:
+
+   - A GtkStateType argument has been added to gtk_paint_focus()
+   - The default implementation of GtkStyle::draw_focus virtual
+     function now draws a focus rectangle whose width is 
+     determinted by the GtkWidget::focus-width style property.
+   - The rectangle passed in is the bounding box, instead of
+     the rectangle used in the gdk_draw_rectangle() call, so it is
+     no longer necessary to subtract 1 from the width and height.

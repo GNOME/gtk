@@ -33,7 +33,7 @@
 #include "gdk/gdkkeysyms.h"
 
 
-#define CHILD_LEFT_SPACING        5
+#define CHILD_LEFT_SPACING        4
 #define CHILD_RIGHT_SPACING       1
 #define CHILD_TOP_SPACING         1
 #define CHILD_BOTTOM_SPACING      1
@@ -45,12 +45,16 @@ struct _GtkOptionMenuProps
   gboolean interior_focus;
   GtkRequisition indicator_size;
   GtkBorder indicator_spacing;
+  gint focus_width;
+  gint focus_pad;
 };
 
 static GtkOptionMenuProps default_props = {
-  FALSE,
+  TRUE,
   { 7, 13 },
-  { 7, 5, 2, 2 }		/* Left, right, top, bottom */
+  { 7, 5, 2, 2 },		/* Left, right, top, bottom */
+  1,
+  0
 };
 
 static void gtk_option_menu_class_init      (GtkOptionMenuClass *klass);
@@ -409,6 +413,8 @@ gtk_option_menu_get_props (GtkOptionMenu       *option_menu,
 			"indicator_size", &indicator_size,
 			"indicator_spacing", &indicator_spacing,
 			"interior_focus", &props->interior_focus,
+			"focus_line_width", &props->focus_width,
+			"focus_padding", &props->focus_pad,
 			NULL);
 
   if (indicator_size)
@@ -445,15 +451,15 @@ gtk_option_menu_size_request (GtkWidget      *widget,
     }
   
   requisition->width = ((GTK_CONTAINER (widget)->border_width +
-			 GTK_WIDGET (widget)->style->xthickness) * 2 +
+			 GTK_WIDGET (widget)->style->xthickness + props.focus_pad) * 2 +
 			MAX (child_requisition.width, option_menu->width) +
  			props.indicator_size.width +
  			props.indicator_spacing.left + props.indicator_spacing.right +
-			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + 2);
+			CHILD_LEFT_SPACING + CHILD_RIGHT_SPACING + props.focus_width * 2);
   requisition->height = ((GTK_CONTAINER (widget)->border_width +
-			  GTK_WIDGET (widget)->style->ythickness) * 2 +
+			  GTK_WIDGET (widget)->style->ythickness + props.focus_pad) * 2 +
 			 MAX (child_requisition.height, option_menu->height) +
-			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + 2);
+			 CHILD_TOP_SPACING + CHILD_BOTTOM_SPACING + props.focus_width * 2);
 
   tmp = (requisition->height - option_menu->height +
 	 props.indicator_size.height + props.indicator_spacing.top + props.indicator_spacing.bottom);
@@ -483,16 +489,15 @@ gtk_option_menu_size_allocate (GtkWidget     *widget,
   if (child && GTK_WIDGET_VISIBLE (child))
     {
       gint xthickness = GTK_WIDGET (widget)->style->xthickness;
+      gint ythickness = GTK_WIDGET (widget)->style->ythickness;
     
-      child_allocation.x = widget->allocation.x + border_width + xthickness + 1;
-      child_allocation.y = widget->allocation.y + 2 * border_width + 1;
-      child_allocation.width = MAX (1, (gint)allocation->width - (xthickness + 1) * 2 - border_width * 2 -
+      child_allocation.x = widget->allocation.x + border_width + xthickness + props.focus_width + props.focus_pad + CHILD_LEFT_SPACING;
+      child_allocation.y = widget->allocation.y + border_width + ythickness + props.focus_width + props.focus_pad + CHILD_TOP_SPACING;
+      child_allocation.width = MAX (1, allocation->width - (border_width + xthickness + props.focus_width + props.focus_pad) * 2 -
 				    props.indicator_size.width - props.indicator_spacing.left - props.indicator_spacing.right -
-				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING - 2);
-      child_allocation.height = MAX (1, (gint)allocation->height - (border_width + 1) * 2 - border_width * 2 -
-				     CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING - 2);
-      child_allocation.x += CHILD_LEFT_SPACING;
-      child_allocation.y += CHILD_TOP_SPACING;
+				    CHILD_LEFT_SPACING - CHILD_RIGHT_SPACING);
+      child_allocation.height = MAX (1, allocation->height - (border_width + ythickness + props.focus_width + props.focus_pad) * 2 -
+				     CHILD_TOP_SPACING - CHILD_BOTTOM_SPACING);
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
@@ -519,14 +524,14 @@ gtk_option_menu_paint (GtkWidget    *widget,
       button_area.width = widget->allocation.width - 2 * border_width;
       button_area.height = widget->allocation.height - 2 * border_width;
 
-      if (!props.interior_focus)
+      if (!props.interior_focus && GTK_WIDGET_HAS_FOCUS (widget))
 	{
-	  button_area.x += 1;
-	  button_area.y += 1;
-	  button_area.width -= 2;
-	  button_area.height -= 2;
+	  button_area.x += props.focus_width + props.focus_pad;
+	  button_area.y += props.focus_width + props.focus_pad;
+	  button_area.width -= 2 * (props.focus_width + props.focus_pad);
+	  button_area.height -= 2 * (props.focus_width + props.focus_pad);
 	}
-
+      
       gtk_paint_box (widget->style, widget->window,
 		     GTK_WIDGET_STATE (widget), GTK_SHADOW_OUT,
 		     area, widget, "optionmenu",
@@ -546,26 +551,28 @@ gtk_option_menu_paint (GtkWidget    *widget,
 	{
 	  if (props.interior_focus)
 	    {
-	      button_area.x += widget->style->xthickness + 1;
-	      button_area.y += widget->style->ythickness + 1;
-	      button_area.width -= 2 * (widget->style->xthickness + 1)
-		+ props.indicator_spacing.left + props.indicator_spacing.right + props.indicator_size.width;
-	      button_area.height -= 2 * (widget->style->ythickness + 1);
+	      button_area.x += widget->style->xthickness + props.focus_pad;
+	      button_area.y += widget->style->ythickness + props.focus_pad;
+	      button_area.width -= 2 * (widget->style->xthickness + props.focus_pad) +
+		      props.indicator_spacing.left +
+		      props.indicator_spacing.right +
+		      props.indicator_size.width;
+	      button_area.height -= 2 * (widget->style->ythickness + props.focus_pad);
 	    }
 	  else
 	    {
-	      button_area.x -= 1;
-	      button_area.y -= 1;
-	      button_area.width += 2;
-	      button_area.height += 2;
+	      button_area.x -= props.focus_width + props.focus_pad;
+	      button_area.y -= props.focus_width + props.focus_pad;
+	      button_area.width += 2 * (props.focus_width + props.focus_pad);
+	      button_area.height += 2 * (props.focus_width + props.focus_pad);
 	    }
 	    
-	  gtk_paint_focus (widget->style, widget->window,
+	  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 			   area, widget, "button",
 			   button_area.x, 
 			   button_area.y, 
-			   button_area.width - 1,
-			   button_area.height - 1);
+			   button_area.width,
+			   button_area.height);
 	}
     }
 }

@@ -50,8 +50,6 @@ enum {
 
 static void gtk_toggle_button_class_init    (GtkToggleButtonClass *klass);
 static void gtk_toggle_button_init          (GtkToggleButton      *toggle_button);
-static void gtk_toggle_button_paint         (GtkWidget            *widget,
-					     GdkRectangle         *area);
 static gint gtk_toggle_button_expose        (GtkWidget            *widget,
 					     GdkEventExpose       *event);
 static void gtk_toggle_button_pressed       (GtkButton            *button);
@@ -369,63 +367,20 @@ gtk_toggle_button_get_inconsistent (GtkToggleButton *toggle_button)
   return toggle_button->inconsistent;
 }
 
-static void
-gtk_toggle_button_paint (GtkWidget    *widget,
-			 GdkRectangle *area)
+static gint
+gtk_toggle_button_expose (GtkWidget      *widget,
+			  GdkEventExpose *event)
 {
-  GtkButton *button;
-  GtkToggleButton *toggle_button;
-  GtkShadowType shadow_type;
-  GtkStateType state_type;
-  gint width, height;
-  gboolean interior_focus;
-  gint border_width;
-  gint x, y;
-
-  button = GTK_BUTTON (widget);
-  toggle_button = GTK_TOGGLE_BUTTON (widget);
-
   if (GTK_WIDGET_DRAWABLE (widget))
     {
-      border_width = GTK_CONTAINER (widget)->border_width;
-      
-      gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
-      
-      x = widget->allocation.x + border_width;
-      y = widget->allocation.y + border_width;
-      width = widget->allocation.width - border_width * 2;
-      height = widget->allocation.height - border_width * 2;
-
-      if (GTK_WIDGET_HAS_DEFAULT (widget) &&
-          GTK_BUTTON (widget)->relief == GTK_RELIEF_NORMAL)
-        {
-          gtk_paint_box (widget->style, widget->window,
-                         GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                         area, widget, "togglebuttondefault",
-                         x, y, width, height);
-        }
-
-      if (GTK_WIDGET_CAN_DEFAULT (widget))
-        {
-          x += widget->style->xthickness;
-          y += widget->style->ythickness;
-          width -= 2 * x + DEFAULT_SPACING;
-          height -= 2 * y + DEFAULT_SPACING;
-          x += DEFAULT_LEFT_POS;
-          y += DEFAULT_TOP_POS;
-        }
-
-      if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
-	{
-	  x += 1;
-	  y += 1;
-	  width -= 2;
-	  height -= 2;
-	}
+      GtkWidget *child = GTK_BIN (widget)->child;
+      GtkButton *button = GTK_BUTTON (widget);
+      GtkStateType state_type;
+      GtkShadowType shadow_type;
 
       state_type = GTK_WIDGET_STATE (widget);
       
-      if (toggle_button->inconsistent)
+      if (GTK_TOGGLE_BUTTON (widget)->inconsistent)
         {
           if (state_type == GTK_STATE_ACTIVE)
             state_type = GTK_STATE_NORMAL;
@@ -434,47 +389,8 @@ gtk_toggle_button_paint (GtkWidget    *widget,
       else
 	shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
-      if (button->relief != GTK_RELIEF_NONE ||
-	  (GTK_WIDGET_STATE(widget) != GTK_STATE_NORMAL &&
-	   GTK_WIDGET_STATE(widget) != GTK_STATE_INSENSITIVE))
-	gtk_paint_box (widget->style, widget->window,
-                       state_type,
-		       shadow_type, area, widget, "togglebutton",
-		       x, y, width, height);
-      
-      if (GTK_WIDGET_HAS_FOCUS (widget))
-	{
-	  if (interior_focus)
-	    {
-	      x += widget->style->xthickness + 1;
-	      y += widget->style->xthickness + 1;
-	      width -= 2 * (widget->style->xthickness + 1);
-	      height -= 2 * (widget->style->ythickness + 1);
-	    }
-	  else
-	    {
-	      x -= 1;
-	      y -= 1;
-	      width += 2;
-	      height += 2;
-	    }
-
-	  gtk_paint_focus (widget->style, widget->window,
-			   area, widget, "togglebutton",
-			   x, y, width - 1, height - 1);
-	}
-    }
-}
-
-static gint
-gtk_toggle_button_expose (GtkWidget      *widget,
-			  GdkEventExpose *event)
-{
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {
-      GtkWidget *child = GTK_BIN (widget)->child;
-
-      gtk_toggle_button_paint (widget, &event->area);
+      _gtk_button_paint (button, &event->area, state_type, shadow_type,
+			 "togglebutton", "togglebuttondefault");
 
       if (child)
 	gtk_container_propagate_expose (GTK_CONTAINER (widget), child, event);

@@ -1526,11 +1526,11 @@ gtk_text_draw_focus (GtkWidget *widget)
 	  xextra -= 1;
 	  yextra -= 1;
 
-	  gtk_paint_focus (widget->style, widget->window,
+	  gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 			   NULL, widget, "text",
 			   0, 0,
-			   widget->allocation.width - 1,
-			   widget->allocation.height - 1);
+			   widget->allocation.width,
+			   widget->allocation.height);
 	}
 
       gtk_paint_shadow (widget->style, widget->window,

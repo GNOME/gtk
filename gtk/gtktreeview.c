@@ -2766,11 +2766,12 @@ gtk_tree_view_bin_expose (GtkWidget      *widget,
 				     &width, NULL);
 	      gtk_paint_focus (widget->style,
 			       tree_view->priv->bin_window,
+			       GTK_WIDGET_STATE (widget),
 			       NULL,
 			       widget,
 			       "treeview-drop-indicator",
 			       0, BACKGROUND_FIRST_PIXEL (tree_view, tree, node),
-			       width - 1, BACKGROUND_HEIGHT (node) - 1);
+			       width, BACKGROUND_HEIGHT (node));
 
               break;
             }

@@ -103,8 +103,15 @@ gboolean              gtk_button_get_use_underline (GtkButton   *button);
 void                  gtk_button_set_use_stock     (GtkButton   *button,
 						    gboolean     use_stock);
 gboolean              gtk_button_get_use_stock     (GtkButton   *button);
-void                  _gtk_button_set_depressed    (GtkButton   *button,
-						    gboolean     depressed);
+
+void _gtk_button_set_depressed (GtkButton    *button,
+				gboolean      depressed);
+void _gtk_button_paint         (GtkButton    *button,
+				GdkRectangle *area,
+				GtkStateType  state_type,
+				GtkShadowType shadow_type,
+				const gchar  *main_detail,
+				const gchar  *default_detail);
 
 #ifdef __cplusplus
 }

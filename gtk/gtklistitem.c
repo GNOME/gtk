@@ -458,15 +458,22 @@ gtk_list_item_size_request (GtkWidget      *widget,
 {
   GtkBin *bin;
   GtkRequisition child_requisition;
+  gint focus_width;
+  gint focus_pad;
 
   g_return_if_fail (GTK_IS_LIST_ITEM (widget));
   g_return_if_fail (requisition != NULL);
 
   bin = GTK_BIN (widget);
+  gtk_widget_style_get (widget,
+			"focus-line-width", &focus_width,
+			"focus-padding", &focus_pad,
+			NULL);
 
-  requisition->width = (GTK_CONTAINER (widget)->border_width +
-			widget->style->xthickness) * 2;
-  requisition->height = GTK_CONTAINER (widget)->border_width * 2;
+  requisition->width = 2 * (GTK_CONTAINER (widget)->border_width +
+			    widget->style->xthickness + focus_width + focus_pad - 1);
+  requisition->height = 2 * (GTK_CONTAINER (widget)->border_width +
+			     focus_width + focus_pad - 1);
 
   if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
     {
@@ -532,6 +539,7 @@ gtk_list_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
   GtkBin *bin;
+  gint focus_width;
 
   g_return_val_if_fail (widget != NULL, FALSE);
 
@@ -558,17 +566,13 @@ gtk_list_item_expose (GtkWidget      *widget,
       if (GTK_WIDGET_HAS_FOCUS (widget))
         {
           if (GTK_IS_LIST (widget->parent) && GTK_LIST (widget->parent)->add_mode)
-            gtk_paint_focus (widget->style, widget->window,
+            gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
                              NULL, widget, "add-mode",
-                             0, 0,
-                             widget->allocation.width - 1,
-                             widget->allocation.height - 1);
+                             0, 0, widget->allocation.width, widget->allocation.height);
           else
-            gtk_paint_focus (widget->style, widget->window,
+            gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
                              NULL, widget, NULL,
-                             0, 0,
-                             widget->allocation.width - 1,
-                             widget->allocation.height - 1);
+                             0, 0, widget->allocation.width, widget->allocation.height);
         }
     }
 

@@ -125,7 +125,7 @@ static void   gtk_entry_size_request         (GtkWidget        *widget,
 					      GtkRequisition   *requisition);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
-static void   gtk_entry_draw_focus           (GtkWidget        *widget);
+static void   gtk_entry_draw_frame           (GtkWidget        *widget);
 static gint   gtk_entry_expose               (GtkWidget        *widget,
 					      GdkEventExpose   *event);
 static gint   gtk_entry_button_press         (GtkWidget        *widget,
@@ -290,6 +290,16 @@ static gboolean     gtk_entry_mnemonic_activate        (GtkWidget      *widget,
 							gboolean        group_cycling);
 static void         gtk_entry_check_cursor_blink       (GtkEntry       *entry);
 static void         gtk_entry_pend_cursor_blink        (GtkEntry       *entry);
+static void         get_text_area_size                 (GtkEntry       *entry,
+							gint           *x,
+							gint           *y,
+							gint           *width,
+							gint           *height);
+static void         get_widget_window_size             (GtkEntry       *entry,
+							gint           *x,
+							gint           *y,
+							gint           *width,
+							gint           *height);
 
 static GtkWidgetClass *parent_class = NULL;
 
@@ -985,7 +995,6 @@ gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
   GtkEditable *editable;
-  GtkRequisition requisition;
   GdkWindowAttr attributes;
   gint attributes_mask;
 
@@ -995,14 +1004,10 @@ gtk_entry_realize (GtkWidget *widget)
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
 
-  gtk_widget_get_child_requisition (widget, &requisition);
-  
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y + (widget->allocation.height -
-					 requisition.height) / 2;
-  attributes.width = widget->allocation.width;
-  attributes.height = requisition.height;
+  
+  get_widget_window_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
+
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
@@ -1020,19 +1025,8 @@ gtk_entry_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
   gdk_window_set_user_data (widget->window, entry);
 
-  if (entry->has_frame)
-    {
-      attributes.x = widget->style->xthickness;
-      attributes.y = widget->style->ythickness;
-    }
-  else
-    {
-      attributes.x = 0;
-      attributes.y = 0;
-    }
-  
-  attributes.width = widget->allocation.width - attributes.x * 2;
-  attributes.height = requisition.height - attributes.y * 2;
+  get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
+
   attributes.cursor = gdk_cursor_new (GDK_XTERM);
   attributes_mask |= GDK_WA_CURSOR;
 
@@ -1090,6 +1084,40 @@ gtk_entry_unrealize (GtkWidget *widget)
 }
 
 static void
+get_borders (GtkEntry *entry,
+             gint     *xborder,
+             gint     *yborder)
+{
+  GtkWidget *widget;
+  gint focus_width;
+  gboolean interior_focus;
+
+  widget = GTK_WIDGET (entry);
+  
+  gtk_widget_style_get (widget,
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			NULL);
+
+  if (entry->has_frame)
+    {
+      *xborder = widget->style->xthickness;
+      *yborder = widget->style->ythickness;
+    }
+  else
+    {
+      *xborder = 0;
+      *yborder = 0;
+    }
+
+  if (!interior_focus)
+    {
+      *xborder += focus_width;
+      *yborder += focus_width;
+    }
+}
+
+static void
 gtk_entry_size_request (GtkWidget      *widget,
 			GtkRequisition *requisition)
 {
@@ -1102,7 +1130,7 @@ gtk_entry_size_request (GtkWidget      *widget,
   g_return_if_fail (requisition != NULL);
 
   entry = GTK_ENTRY (widget);
-  
+
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
 				       widget->style->font_desc,
@@ -1111,21 +1139,11 @@ gtk_entry_size_request (GtkWidget      *widget,
   entry->ascent = pango_font_metrics_get_ascent (metrics);
   entry->descent = pango_font_metrics_get_descent (metrics);
 
-  xborder = INNER_BORDER;
-  yborder = INNER_BORDER;
+  get_borders (entry, &xborder, &yborder);
   
-  if (entry->has_frame)
-    {
-      xborder += widget->style->xthickness;
-      yborder += widget->style->ythickness;
-    }
-  else
-    {
-      /* add 1 pixel to draw focus rect in widget->window */
-      xborder += 1;
-      yborder += 1;
-    }
-
+  xborder += INNER_BORDER;
+  yborder += INNER_BORDER;
+  
   if (entry->width_chars < 0)
     requisition->width = MIN_ENTRY_WIDTH + xborder * 2;
   else
@@ -1140,32 +1158,6 @@ gtk_entry_size_request (GtkWidget      *widget,
 }
 
 static void
-get_borders (GtkEntry *entry,
-             gint     *xborder,
-             gint     *yborder)
-{
-  GtkWidget *widget;
-
-  widget = GTK_WIDGET (entry);
-  
-  if (entry->has_frame)
-    {
-      if (xborder)
-        *xborder = widget->style->xthickness;
-      if (yborder)
-        *yborder = widget->style->ythickness;
-    }
-  else
-    {
-      /* 1 pixel for focus rect */
-      if (xborder)
-        *xborder = 1;
-      if (yborder)
-        *yborder = 1;
-    }
-}
-
-static void
 get_text_area_size (GtkEntry *entry,
                     gint     *x,
                     gint     *y,
@@ -1177,7 +1169,7 @@ get_text_area_size (GtkEntry *entry,
   GtkWidget *widget;
 
   widget = GTK_WIDGET (entry);
-  
+
   gtk_widget_get_child_requisition (widget, &requisition);
 
   get_borders (entry, &xborder, &yborder);
@@ -1269,65 +1261,46 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_entry_draw_focus (GtkWidget *widget)
+gtk_entry_draw_frame (GtkWidget *widget)
 {
+  gint x = 0, y = 0;
   gint width, height;
-  GtkEntry *entry;
   gboolean interior_focus;
+  gint focus_width;
   
-  g_return_if_fail (GTK_IS_ENTRY (widget));
-
-  gtk_widget_style_get (widget, "interior_focus", &interior_focus, NULL);
-
-  entry = GTK_ENTRY (widget);
+  gtk_widget_style_get (widget,
+			"interior-focus", &interior_focus,
+			"focus-line-width", &focus_width,
+			NULL);
   
-  if (GTK_WIDGET_DRAWABLE (widget))
-    {      
-      if (entry->has_frame)
-        {
-          gint x = 0, y = 0;
-
-          gdk_window_get_size (widget->window, &width, &height);
-
-          if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
-            {
-              x += 1;
-              y += 1;
-              width -= 2;
-              height -= 2;
-            }
-
-          gtk_paint_shadow (widget->style, widget->window,
-                            GTK_STATE_NORMAL, GTK_SHADOW_IN,
-                            NULL, widget, "entry",
-                            x, y, width, height);
-        }
-      else
-        gdk_window_clear (widget->window);
-        
-      if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
-        {
-          gdk_window_get_size (widget->window, &width, &height);
-          gtk_paint_focus (widget->style, widget->window, 
-                           NULL, widget, "entry",
-                           0, 0, width - 1, height - 1);
-        }
+  gdk_window_get_size (widget->window, &width, &height);
+  
+  if (GTK_WIDGET_HAS_FOCUS (widget) && !interior_focus)
+    {
+      gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget), 
+		       NULL, widget, "entry",
+		       0, 0, width, height);
+      
+      x += focus_width;
+      y += focus_width;
+      width -= 2 * focus_width;
+      height -= 2 * focus_width;
     }
+
+  gtk_paint_shadow (widget->style, widget->window,
+		    GTK_STATE_NORMAL, GTK_SHADOW_IN,
+		    NULL, widget, "entry",
+		    x, y, width, height);
 }
 
 static gint
 gtk_entry_expose (GtkWidget      *widget,
 		  GdkEventExpose *event)
 {
-  GtkEntry *entry;
-
-  g_return_val_if_fail (GTK_IS_ENTRY (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
-  entry = GTK_ENTRY (widget);
+  GtkEntry *entry = GTK_ENTRY (widget);
 
   if (widget->window == event->window)
-    gtk_entry_draw_focus (widget);
+    gtk_entry_draw_frame (widget);
   else if (entry->text_area == event->window)
     {
       gtk_entry_draw_text (GTK_ENTRY (widget));
@@ -1598,7 +1571,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_entry_queue_draw (entry);
+  gtk_widget_queue_draw (widget);
   
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_in (entry->im_context);
@@ -1608,7 +1581,7 @@ gtk_entry_focus_in (GtkWidget     *widget,
 		    G_CALLBACK (gtk_entry_keymap_direction_changed), entry);
 
   gtk_entry_check_cursor_blink (entry);
-  
+
   return FALSE;
 }
 
@@ -1619,7 +1592,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
-  gtk_entry_queue_draw (entry);
+  gtk_widget_queue_draw (widget);
 
   entry->need_im_reset = TRUE;
   gtk_im_context_focus_out (entry->im_context);
@@ -1629,7 +1602,7 @@ gtk_entry_focus_out (GtkWidget     *widget,
   g_signal_handlers_disconnect_by_func (gdk_keymap_get_default (),
                                         gtk_entry_keymap_direction_changed,
                                         entry);
-
+  
   return FALSE;
 }
 

@@ -664,11 +664,11 @@ gtk_tree_item_paint (GtkWidget    *widget,
 	}
 
       if (GTK_WIDGET_HAS_FOCUS (widget))
-	gtk_paint_focus (widget->style, widget->window,
+	gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
 			 NULL, widget, "treeitem",
 			 0, 0,
-			 widget->allocation.width - 1,
-			 widget->allocation.height - 1);
+			 widget->allocation.width,
+			 widget->allocation.height);
       
     }
 }

@@ -164,6 +164,8 @@ static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colo
                                                          GdkColor          *color);
 static void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
                                                          gint               index);
+static GdkGC   *get_focus_gc                            (GtkWidget         *drawing_area,
+							 gint              *focus_width);
 static void     default_change_palette_func             (const GdkColor    *colors,
 							 gint               n_colors);
 
@@ -637,23 +639,45 @@ palette_paint (GtkWidget    *drawing_area,
   
   if (GTK_WIDGET_HAS_FOCUS (drawing_area))
     {
-      GdkGC *gc;
-      gdouble color[4];
-      
-      palette_get_color (drawing_area, color);
-      
-      if (INTENSITY (color[0], color[1], color[2]) > 0.5)
-	gc = drawing_area->style->black_gc;
-      else
-	gc = drawing_area->style->white_gc;
-
+      gint focus_width;
+      GdkGC *gc = get_focus_gc (drawing_area, &focus_width);
       gdk_draw_rectangle (drawing_area->window,
-			  gc, FALSE, 0, 0,
-			  drawing_area->allocation.width - 1,
-			  drawing_area->allocation.height - 1);
+			  gc, FALSE, focus_width / 2, focus_width / 2,
+			  drawing_area->allocation.width - focus_width,
+			  drawing_area->allocation.height - focus_width);
+      g_object_unref (gc);
     }
 }
 
+static GdkGC *
+get_focus_gc (GtkWidget *drawing_area,
+	      gint      *focus_width)
+{
+  GdkGC *gc = gdk_gc_new (drawing_area->window);
+  gdouble color[4];
+  gint8 *dash_list;
+  
+  gtk_widget_style_get (drawing_area,
+			"focus-line-width", focus_width,
+			"focus-line-pattern", (gchar *)&dash_list,
+			NULL);
+      
+  palette_get_color (drawing_area, color);
+      
+  if (INTENSITY (color[0], color[1], color[2]) > 0.5)
+    gdk_gc_copy (gc, drawing_area->style->black_gc);
+  else
+    gdk_gc_copy (gc, drawing_area->style->white_gc);
+
+  gdk_gc_set_line_attributes (gc, *focus_width,
+			      dash_list[0] ? GDK_LINE_ON_OFF_DASH : GDK_LINE_SOLID,
+			      GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+  if (dash_list[0])
+    gdk_gc_set_dashes (gc, 0, dash_list, strlen (dash_list));
+
+  return gc;
+}
 
 static void
 palette_drag_begin (GtkWidget      *widget,
@@ -2738,6 +2762,3 @@ gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc 
 
   return old;
 }
-
-
-

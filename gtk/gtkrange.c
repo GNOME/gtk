@@ -918,8 +918,7 @@ gtk_range_expose (GtkWidget      *widget,
                  
       if (sensitive &&
           GTK_WIDGET_HAS_FOCUS (range))
-        gtk_paint_focus (widget->style,
-                         widget->window,
+        gtk_paint_focus (widget->style, widget->window, GTK_WIDGET_STATE (widget),
                          &area, widget, "trough",
                          widget->allocation.x + range->range_rect.x,
                          widget->allocation.y + range->range_rect.y,
