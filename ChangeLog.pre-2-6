@@ -1,3 +1,38 @@
+Sun Jan 25 19:15:32 1998  Tim Janik  <timj@gimp.org>
+
+	* gtk/gtkwidget.h (enum): added new widget flag GTK_LEAVE_PENDING.
+	* gtk/gtkmain.c (gtk_main_iteration_do): if a widget has
+ 	  GTK_LEAVE_PENDING set, send it its LEAVE_NOTIFY event, regardless
+ 	  of a grab or sensitivity.
+	  changed the compression code for enter/leave notify events to
+	  free *both* compressed event, and removed an unneccessary call
+	  to g_list_remove.
+
+	* ChangeLog: finally catched up with the recent changes on my part.
+
+	* gtk/gtkobject.h: new element n_args in GtkObjectClass.
+	* gtk/gtkobject.c (gtk_object_query_args): this function now returns
+ 	  the arguments in the correct order.
+
+        * gtk/gtkbox.c:
+ 	* gtk/gtkbutton.c:
+ 	* gtk/gtkcontainer.c:
+ 	* gtk/gtkframe.c:
+	* gtk/gtklabel.c:
+ 	* gtk/gtkobject.c:
+ 	* gtk/gtkwidget.c:
+ 	* gtk/gtkwindow.c: various fixes and additions to the gtk_*_set_arg
+ 	  and gtk_*_get_arg() functions.
+
+	* gdk/gdk.h:
+	* gdk/gdk.c (gdk_pointer_is_grabbed): new function.
+
+	* gtk/gtkmain.h:
+	* gtk/gtkmain.c: implementations of gtk_invoke_key_snoopers(),
+	  gtk_key_snooper_install() and gtk_key_snooper_remove(). this
+	  mechanism allowes applications to track global hot keys that need
+ 	  to bypass accelerator tables and else key processing stuff.
+
 Thu Jan 22 18:58:44 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gdk/gdkcc.c: Switched the file to GNU indentation, for consistency.

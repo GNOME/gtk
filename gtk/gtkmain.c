@@ -103,7 +103,6 @@ static gint done;
 static guint main_level = 0;
 static gint initialized = FALSE;
 static GdkEvent *next_event = NULL;
-static GdkEvent *current_event = NULL;
 static GList *current_events = NULL;
 
 static GSList *grabs = NULL;		   /* A stack of unique grabs. The grabbing
@@ -321,11 +320,9 @@ gtk_main_iteration_do (gboolean blocking)
 	    (next_event->type != event->type) &&
 	    (next_event->any.window == event->any.window))
 	  {
-	    tmp_list = current_events;
-	    current_events = g_list_remove_link (current_events, tmp_list);
-	    g_list_free_1 (tmp_list);
-
 	    gdk_event_free (event);
+	    gdk_event_free (next_event);
+	    next_event = NULL;
 
 	    return done;
 	  }
@@ -373,15 +370,19 @@ gtk_main_iteration_do (gboolean blocking)
 	case GDK_DELETE:
  	  gtk_object_ref (GTK_OBJECT (event_widget));
 	  if (gtk_widget_event (event_widget, event))
-	    gtk_widget_destroy (event_widget);
- 	  gtk_object_unref (GTK_OBJECT (event_widget));
+	    {
+	      gtk_object_unref (GTK_OBJECT (event_widget));
+	      gtk_widget_destroy (event_widget);
+	    }
+	  else
+	    gtk_object_unref (GTK_OBJECT (event_widget));
 	  break;
 	  
 	case GDK_DESTROY:
  	  gtk_object_ref (GTK_OBJECT (event_widget));
 	  gtk_widget_event (event_widget, event);
-	  gtk_widget_destroy (event_widget);
  	  gtk_object_unref (GTK_OBJECT (event_widget));
+	  gtk_widget_destroy (event_widget);
 	  break;
 	  
 	case GDK_PROPERTY_NOTIFY:
@@ -399,7 +400,6 @@ gtk_main_iteration_do (gboolean blocking)
 	      break;
 	    }
 	  /* otherwise fall through */
-	  
 	case GDK_EXPOSE:
 	case GDK_NO_EXPOSE:
 	case GDK_FOCUS_CHANGE:
@@ -439,8 +439,21 @@ gtk_main_iteration_do (gboolean blocking)
 	  break;
 	  
 	case GDK_ENTER_NOTIFY:
-	case GDK_LEAVE_NOTIFY:
 	  if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
+	    {
+	      gtk_widget_event (grab_widget, event);
+	      if (event_widget == grab_widget)
+		GTK_WIDGET_SET_FLAGS (event_widget, GTK_LEAVE_PENDING);
+	    }
+	  break;
+
+	case GDK_LEAVE_NOTIFY:
+	  if (event_widget && GTK_WIDGET_LEAVE_PENDING (event_widget))
+	    {
+	      GTK_WIDGET_UNSET_FLAGS (event_widget, GTK_LEAVE_PENDING);
+	      gtk_widget_event (event_widget, event);
+	    }
+	  else if (grab_widget && GTK_WIDGET_IS_SENSITIVE (grab_widget))
 	    gtk_widget_event (grab_widget, event);
 	  break;
 	}
@@ -450,8 +463,6 @@ gtk_main_iteration_do (gboolean blocking)
       g_list_free_1 (tmp_list);
 
       gdk_event_free (event);
-      
-      current_event = NULL;
     }
   else
     {

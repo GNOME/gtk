@@ -54,7 +54,8 @@ enum
   GTK_REDRAW_PENDING   = 1 << 19,
   GTK_RESIZE_PENDING   = 1 << 20,
   GTK_RESIZE_NEEDED    = 1 << 21,
-  GTK_HAS_SHAPE_MASK   = 1 << 22
+  GTK_HAS_SHAPE_MASK   = 1 << 22,
+  GTK_LEAVE_PENDING    = 1 << 23
 };
 
 
@@ -96,6 +97,7 @@ enum
 #define GTK_WIDGET_RESIZE_PENDING(obj)    (GTK_OBJECT_FLAGS (obj) & GTK_RESIZE_PENDING)
 #define GTK_WIDGET_RESIZE_NEEDED(obj)     (GTK_OBJECT_FLAGS (obj) & GTK_RESIZE_NEEDED)
 #define GTK_WIDGET_HAS_SHAPE_MASK(obj)    (GTK_OBJECT_FLAGS (obj) & GTK_HAS_SHAPE_MASK)
+#define GTK_WIDGET_LEAVE_PENDING(obj)     (GTK_OBJECT_FLAGS (obj) & GTK_LEAVE_PENDING)
 
 #define GTK_TYPE_WIDGET                   (gtk_widget_get_type ())
 

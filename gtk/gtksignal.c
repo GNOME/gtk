@@ -427,6 +427,7 @@ gtk_signal_connect_object (GtkObject     *object,
   gint type;
 
   g_return_val_if_fail (object != NULL, 0);
+  /* slot_object needs to be treated as ordinary pointer */
 
   if (initialize)
     gtk_signal_init ();
