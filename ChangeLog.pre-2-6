@@ -1,3 +1,14 @@
+Wed Jun  4 21:25:35 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Merged from stable.
+
+	* gtk/gtktreeview.c (gtk_tree_view_drag_begin): use a silent
+	assert for get_info. (reported by Michael Natterer),
+	(gtk_tree_view_expand_all_emission_helper),
+	(gtk_tree_view_expand_all_helper): emit row_expanded for all
+	expanded rows during an _expand_all operation. (Fixes #111280,
+	reported by Benjamin Bayart).
+
 Tue Jun  3 18:32:30 2003  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkevents-x11.c (gdk_wm_protocols_filter): Don't

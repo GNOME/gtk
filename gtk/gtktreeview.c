@@ -5160,7 +5160,9 @@ gtk_tree_view_drag_begin (GtkWidget      *widget,
 
   tree_view = GTK_TREE_VIEW (widget);
 
-  g_return_if_fail (get_info (tree_view) != NULL);
+  /* if the user uses a custom DnD impl, we don't set the icon here */
+  if (!get_info (tree_view))
+    return;
 
   gtk_tree_view_get_path_at_pos (tree_view,
                                  tree_view->priv->press_start_x,
@@ -9079,6 +9081,35 @@ gtk_tree_view_row_activated (GtkTreeView       *tree_view,
 
 
 static void
+gtk_tree_view_expand_all_emission_helper (GtkRBTree *tree,
+                                          GtkRBNode *node,
+                                          gpointer   data)
+{
+  GtkTreeView *tree_view = data;
+
+  if ((node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT &&
+      node->children)
+    {
+      GtkTreePath *path;
+      GtkTreeIter iter;
+
+      path = _gtk_tree_view_find_path (tree_view, tree, node);
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+
+      g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
+
+      gtk_tree_path_free (path);
+    }
+
+  if (node->children)
+    _gtk_rbtree_traverse (node->children,
+                          node->children->root,
+                          G_PRE_ORDER,
+                          gtk_tree_view_expand_all_emission_helper,
+                          tree_view);
+}
+
+static void
 gtk_tree_view_expand_all_helper (GtkRBTree  *tree,
 				 GtkRBNode  *node,
 				 gpointer  data)
@@ -9108,6 +9139,13 @@ gtk_tree_view_expand_all_helper (GtkRBTree  *tree,
 				&child,
 				gtk_tree_path_get_depth (path) + 1,
 				TRUE);
+
+      g_signal_emit (tree_view, tree_view_signals[ROW_EXPANDED], 0, &iter, path);
+      _gtk_rbtree_traverse (node->children,
+                            node->children->root,
+                            G_PRE_ORDER,
+                            gtk_tree_view_expand_all_emission_helper,
+                            tree_view);
       gtk_tree_path_free (path);
     }
 }
