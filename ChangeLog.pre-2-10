@@ -1,9 +1,12 @@
 2002-08-25  Tor Lillqvist  <tml@iki.fi>
 
+	* gtk/gtkfilesel.c: Don't include <winsock.h> on Cygwin (#91654,
+	Masahiro Sakai).
+
 	* gtk/gtkmain.c: Compile gtk_init_abi_check and
 	gtk_init_check_abi_check when on G_PLATFORM_WIN32, not just on
 	G_OS_WIN32, to match gtkmain.h (#91649, Masahiro Sakai).
-	(check_sizeof_GtkWIndow, check_sizeof_GtkBox): Mention the
+	(check_sizeof_GtkWindow, check_sizeof_GtkBox): Mention the
 	-mms-bitfields swicth in addition to -fnative-struct.
 
 Sun Aug 25 11:58:27 BST 2002  Tony Gale <gale@gtk.org>
