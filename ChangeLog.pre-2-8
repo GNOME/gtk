@@ -1,3 +1,11 @@
+Fri Mar  1 10:31:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_reorder_child):
+	Fix signed-unsigned error that was accidentally causing
+	negative values to append, do it intentionally. Fix docs 
+	to say that negative values append. (Alexey A. Malyshev,
+	#73108) 
+
 2002-03-01 Alexey Malyshev <maa@sparc.spb.su>
 	
         * gtk+/gtk/gtkitemfactory.c
