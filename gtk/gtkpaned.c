@@ -484,6 +484,15 @@ gtk_paned_forall (GtkContainer *container,
     (*callback) (paned->child2, callback_data);
 }
 
+gint
+gtk_paned_get_position (GtkPaned  *paned)
+{
+  g_return_if_fail (paned != NULL);
+  g_return_if_fail (GTK_IS_PANED (paned));
+
+  return paned->child1_size;
+}
+
 void
 gtk_paned_set_position (GtkPaned *paned,
 			gint      position)

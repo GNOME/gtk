@@ -99,6 +99,7 @@ void    gtk_paned_pack2           (GtkPaned  *paned,
 				   GtkWidget *child,
 				   gboolean   resize,
 				   gboolean   shrink);
+gint    gtk_paned_get_position    (GtkPaned  *paned);
 void    gtk_paned_set_position    (GtkPaned  *paned,
 				   gint       position);
 void    gtk_paned_set_handle_size (GtkPaned  *paned,

@@ -1,3 +1,7 @@
+2000-03-23  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_get_position): add getter.
+
 2000-03-17  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c: Remove the #ifndef
