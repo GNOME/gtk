@@ -33,7 +33,10 @@ GtkWidget *sample_tree_view_bottom;
 
 #define column_data "my_column_data"
 
-
+static void move_row  (GtkTreeModel *src,
+		       GtkTreeIter  *src_iter,
+		       GtkTreeModel *dest,
+		       GtkTreeIter  *dest_iter);
 
 /* Kids, don't try this at home.  */
 
@@ -246,6 +249,102 @@ view_column_model_tree_model_init (GtkTreeModelIface *iface)
   iface->iter_parent = view_column_model_iter_parent;
 }
 
+static gboolean
+view_column_model_drag_data_get (GtkTreeDragSource   *drag_source,
+				 GtkTreePath         *path,
+				 GtkSelectionData    *selection_data)
+{
+  if (gtk_tree_set_row_drag_data (selection_data,
+				  GTK_TREE_MODEL (drag_source),
+				  path))
+    return TRUE;
+  else
+    return FALSE;
+}
+
+static gboolean
+view_column_model_drag_data_delete (GtkTreeDragSource *drag_source,
+				    GtkTreePath       *path)
+{
+  /* Nothing -- we handle moves on the dest side */
+  
+  return TRUE;
+}
+
+static gboolean
+view_column_model_row_drop_possible (GtkTreeDragDest   *drag_dest,
+				     GtkTreePath       *dest_path,
+				     GtkSelectionData  *selection_data)
+{
+  GtkTreeModel *src_model;
+  
+  if (gtk_tree_get_row_drag_data (selection_data,
+				  &src_model,
+				  NULL))
+    {
+      if (src_model == left_tree_model ||
+	  src_model == top_right_tree_model ||
+	  src_model == bottom_right_tree_model)
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+view_column_model_drag_data_received (GtkTreeDragDest   *drag_dest,
+				      GtkTreePath       *dest,
+				      GtkSelectionData  *selection_data)
+{
+  GtkTreeModel *src_model;
+  GtkTreePath *src_path = NULL;
+  gboolean retval = FALSE;
+  
+  if (gtk_tree_get_row_drag_data (selection_data,
+				  &src_model,
+				  &src_path))
+    {
+      GtkTreeIter src_iter;
+      GtkTreeIter dest_iter;
+      gboolean have_dest;
+
+      /* We are a little lazy here, and assume if we can't convert dest
+       * to an iter, we need to append. See gtkliststore.c for a more
+       * careful handling of this.
+       */
+      have_dest = gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_dest), &dest_iter, dest);
+
+      if (gtk_tree_model_get_iter (src_model, &src_iter, src_path))
+	{
+	  if (src_model == left_tree_model ||
+	      src_model == top_right_tree_model ||
+	      src_model == bottom_right_tree_model)
+	    {
+	      move_row (src_model, &src_iter, GTK_TREE_MODEL (drag_dest),
+			have_dest ? &dest_iter : NULL);
+	      retval = TRUE;
+	    }
+	}
+
+      gtk_tree_path_free (src_path);
+    }
+  
+  return retval;
+}
+
+static void
+view_column_model_drag_source_init (GtkTreeDragSourceIface *iface)
+{
+  iface->drag_data_get = view_column_model_drag_data_get;
+  iface->drag_data_delete = view_column_model_drag_data_delete;
+}
+
+static void
+view_column_model_drag_dest_init (GtkTreeDragDestIface *iface)
+{
+  iface->drag_data_received = view_column_model_drag_data_received;
+  iface->row_drop_possible = view_column_model_row_drop_possible;
+}
 
 GType
 view_column_model_get_type (void)
@@ -274,10 +373,30 @@ view_column_model_get_type (void)
 	NULL
       };
 
+      static const GInterfaceInfo drag_source_info =
+      {
+	(GInterfaceInitFunc) view_column_model_drag_source_init,
+	NULL,
+	NULL
+      };
+
+      static const GInterfaceInfo drag_dest_info =
+      {
+	(GInterfaceInitFunc) view_column_model_drag_dest_init,
+	NULL,
+	NULL
+      };
+
       view_column_model_type = g_type_register_static (G_TYPE_OBJECT, "ViewModelColumn", &view_column_model_info, 0);
       g_type_add_interface_static (view_column_model_type,
 				   GTK_TYPE_TREE_MODEL,
 				   &tree_model_info);
+      g_type_add_interface_static (view_column_model_type,
+				   GTK_TYPE_TREE_DRAG_SOURCE,
+				   &drag_source_info);
+      g_type_add_interface_static (view_column_model_type,
+				   GTK_TYPE_TREE_DRAG_DEST,
+				   &drag_dest_info);
     }
 
   return view_column_model_type;
@@ -470,20 +589,18 @@ set_visible (GtkCellRendererToggle *cell,
 }
 
 static void
-add_left_clicked (GtkWidget *button,
-		  gpointer data)
+move_to_left (GtkTreeModel *src,
+	      GtkTreeIter  *src_iter,
+	      GtkTreeIter  *dest_iter)
 {
   GtkTreeIter iter;
-  gchar *label;
   GtkTreeViewColumn *column;
+  GtkTreeSelection *selection;
+  gchar *label;
 
-  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data));
+  gtk_tree_model_get (src, src_iter, 0, &label, 1, &column, -1);
 
-  gtk_tree_selection_get_selected (selection, NULL, &iter);
-  gtk_tree_model_get (gtk_tree_view_get_model (GTK_TREE_VIEW (data)),
-		      &iter, 0, &label, 1, &column, -1);
-
-  if (GTK_WIDGET (data) == top_right_tree_view)
+  if (src == top_right_tree_model)
     gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_top), column);
   else
     gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_bottom), column);
@@ -491,33 +608,116 @@ add_left_clicked (GtkWidget *button,
   /*  gtk_list_store_remove (GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (data))), &iter);*/
 
   /* Put it back on the left */
-  gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
+  if (dest_iter)
+    gtk_list_store_insert_before (GTK_LIST_STORE (left_tree_model),
+				  &iter, dest_iter);
+  else
+    gtk_list_store_append (GTK_LIST_STORE (left_tree_model), &iter);
+  
   gtk_list_store_set (GTK_LIST_STORE (left_tree_model), &iter, 0, label, 1, column, -1);
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view));
   gtk_tree_selection_select_iter (selection, &iter);
+
   g_free (label);
 }
 
+static void
+move_to_right (GtkTreeIter  *src_iter,
+	       GtkTreeModel *dest,
+	       GtkTreeIter  *dest_iter)
+{
+  gchar *label;
+  GtkTreeViewColumn *column;
+  gint before = -1;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (left_tree_model),
+		      src_iter, 0, &label, 1, &column, -1);
+  gtk_list_store_remove (GTK_LIST_STORE (left_tree_model), src_iter);
+
+  if (dest_iter)
+    {
+      GtkTreePath *path = gtk_tree_model_get_path (dest, dest_iter);
+      before = (gtk_tree_path_get_indices (path))[0];
+      gtk_tree_path_free (path);
+    }
+  
+  if (dest == top_right_tree_model)
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (sample_tree_view_top), column, before);
+  else
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (sample_tree_view_bottom), column, before);
+
+  g_free (label);
+}
+
+static void
+move_up_or_down (GtkTreeModel *src,
+		 GtkTreeIter  *src_iter,
+		 GtkTreeModel *dest,
+		 GtkTreeIter  *dest_iter)
+{
+  GtkTreeViewColumn *column;
+  gchar *label;
+  gint before = -1;
+  
+  gtk_tree_model_get (src, src_iter, 0, &label, 1, &column, -1);
+
+  if (dest_iter)
+    {
+      GtkTreePath *path = gtk_tree_model_get_path (dest, dest_iter);
+      before = (gtk_tree_path_get_indices (path))[0];
+      gtk_tree_path_free (path);
+    }
+  
+  if (src == top_right_tree_model)
+    gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_top), column);
+  else
+    gtk_tree_view_remove_column (GTK_TREE_VIEW (sample_tree_view_bottom), column);
+
+  if (dest == top_right_tree_model)
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (sample_tree_view_top), column, before);
+  else
+    gtk_tree_view_insert_column (GTK_TREE_VIEW (sample_tree_view_bottom), column, before);
+
+  g_free (label);
+}
+
+static void
+move_row  (GtkTreeModel *src,
+	   GtkTreeIter  *src_iter,
+	   GtkTreeModel *dest,
+	   GtkTreeIter  *dest_iter)
+{
+  if (src == left_tree_model)
+    move_to_right (src_iter, dest, dest_iter);
+  else if (dest == left_tree_model)
+    move_to_left (src, src_iter, dest_iter);
+  else 
+    move_up_or_down (src, src_iter, dest, dest_iter);
+}
+
+static void
+add_left_clicked (GtkWidget *button,
+		  gpointer data)
+{
+  GtkTreeIter iter;
+
+  GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (data));
+
+  gtk_tree_selection_get_selected (selection, NULL, &iter);
+
+  move_to_left (gtk_tree_view_get_model (GTK_TREE_VIEW (data)), &iter, NULL);
+}
 
 static void
 add_right_clicked (GtkWidget *button, gpointer data)
 {
   GtkTreeIter iter;
-  gchar *label;
-  GtkTreeViewColumn *column;
 
   GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (left_tree_view));
 
   gtk_tree_selection_get_selected (selection, NULL, &iter);
-  gtk_tree_model_get (GTK_TREE_MODEL (left_tree_model),
-		      &iter, 0, &label, 1, &column, -1);
-  gtk_list_store_remove (GTK_LIST_STORE (left_tree_model), &iter);
 
-  if (GTK_WIDGET (data) == top_right_tree_view)
-    gtk_tree_view_append_column (GTK_TREE_VIEW (sample_tree_view_top), column);
-  else
-    gtk_tree_view_append_column (GTK_TREE_VIEW (sample_tree_view_bottom), column);
-  g_free (label);
+  move_to_right (&iter, gtk_tree_view_get_model (GTK_TREE_VIEW (data)), NULL);
 }
 
 static void
@@ -689,41 +889,35 @@ main (int argc, char *argv[])
 
   
   /* Drag and Drop */
-  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (left_tree_view),
-                                      GDK_BUTTON1_MASK,
-                                      row_targets,
-                                      G_N_ELEMENTS (row_targets),
-                                      GDK_ACTION_MOVE,
-                                      NULL, NULL);
-  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (left_tree_view),
-                                    row_targets,
-                                    G_N_ELEMENTS (row_targets),
-                                    GDK_ACTION_MOVE,
-                                    NULL, NULL);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (left_tree_view),
+					  GDK_BUTTON1_MASK,
+					  row_targets,
+					  G_N_ELEMENTS (row_targets),
+					  GDK_ACTION_MOVE);
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (left_tree_view),
+					row_targets,
+					G_N_ELEMENTS (row_targets),
+					GDK_ACTION_MOVE);
 
-  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (top_right_tree_view),
-                                      GDK_BUTTON1_MASK,
-                                      row_targets,
-                                      G_N_ELEMENTS (row_targets),
-                                      GDK_ACTION_MOVE,
-                                      NULL, NULL);
-  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (top_right_tree_view),
-				    row_targets,
-				    G_N_ELEMENTS (row_targets),
-				    GDK_ACTION_MOVE,
-				      NULL, NULL);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (top_right_tree_view),
+					  GDK_BUTTON1_MASK,
+					  row_targets,
+					  G_N_ELEMENTS (row_targets),
+					  GDK_ACTION_MOVE);
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (top_right_tree_view),
+					row_targets,
+					G_N_ELEMENTS (row_targets),
+					GDK_ACTION_MOVE);
 
-  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (bottom_right_tree_view),
-                                      GDK_BUTTON1_MASK,
-                                      row_targets,
-                                      G_N_ELEMENTS (row_targets),
-                                      GDK_ACTION_MOVE,
-                                      NULL, NULL);
-  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (bottom_right_tree_view),
-				    row_targets,
-				    G_N_ELEMENTS (row_targets),
-				    GDK_ACTION_MOVE,
-				    NULL, NULL);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (bottom_right_tree_view),
+					  GDK_BUTTON1_MASK,
+					  row_targets,
+					  G_N_ELEMENTS (row_targets),
+					  GDK_ACTION_MOVE);
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (bottom_right_tree_view),
+					row_targets,
+					G_N_ELEMENTS (row_targets),
+					GDK_ACTION_MOVE);
 
 
   gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);

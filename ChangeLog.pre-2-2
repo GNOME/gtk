@@ -1,3 +1,33 @@
+Mon Nov  5 22:34:29 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktreednd.[ch] (struct _GtkTreeDragSourceIface): 
+	Add row_draggable() vfunc, and wrapper function.
+
+	* gtk/gtktreednd.[ch] (struct _GtkTreeDragDestIface): Make
+	row_drop_possible take a GtkSelectionData, rather than
+	model/row pair.
+
+	* gtk/gtktreestore.c gtk/gtkliststore.c: Update for 
+	new DND interfaces.
+
+	* gtk/gtktreeview.[ch]: Remove the row_draggable_func
+	location_dropable_func from gtk_tree_view_set_rows_drag_source/dest.
+	and rename them to enable_model_drag_source/dest.
+
+	* gtk/treeviewcolumn.c: Add DND of columns between rows.
+	Still can't drop _to_ the left tree, but other places
+	work.
+
+	* gtk/gtktreeview.c (unset_reorderable): Unset the
+	reorderable property if unset/enable_model_drag_source/dest
+	are called manually.
+
+	* gtk/gtktreestore.c (gtk_tree_store_row_drop_possible): 
+	Correct for change in depth count handling.
+
+	* gtk/gtktreeview.c (gtk_tree_view_create_row_drag_icon):
+	Pass in a expose area to gtk_tree_view_column_cell_render()
+
 2001-11-06  Havoc Pennington  <hp@redhat.com>
 
 	* demos/gtk-demo/textview.c (easter_egg_callback): wacky easter egg

@@ -656,18 +656,16 @@ main (int    argc,
 
   tv = gtk_tree_view_new_with_model (models[0]);
   
-  gtk_tree_view_set_rows_drag_source (GTK_TREE_VIEW (tv),
-                                      GDK_BUTTON1_MASK,
-                                      row_targets,
-                                      G_N_ELEMENTS (row_targets),
-                                      GDK_ACTION_MOVE | GDK_ACTION_COPY,
-                                      NULL, NULL);
+  gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tv),
+					  GDK_BUTTON1_MASK,
+					  row_targets,
+					  G_N_ELEMENTS (row_targets),
+					  GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
-  gtk_tree_view_set_rows_drag_dest (GTK_TREE_VIEW (tv),
-                                    row_targets,
-                                    G_N_ELEMENTS (row_targets),
-                                    GDK_ACTION_MOVE | GDK_ACTION_COPY,
-                                    NULL, NULL);
+  gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tv),
+					row_targets,
+					G_N_ELEMENTS (row_targets),
+					GDK_ACTION_MOVE | GDK_ACTION_COPY);
   
   /* Model menu */
 

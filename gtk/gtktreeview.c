@@ -77,10 +77,8 @@ struct _TreeViewDragInfo
   GdkModifierType start_button_mask;
   GtkTargetList *source_target_list;
   GdkDragAction source_actions;
-  GClosure *row_draggable_closure;
 
   GtkTargetList *dest_target_list;
-  GClosure *location_droppable_closure;
 
   guint source_set : 1;
   guint dest_set : 1;
@@ -2463,6 +2461,9 @@ gtk_tree_view_motion (GtkWidget      *widget,
 
 /* Warning: Very scary function.
  * Modify at your own risk
+ *
+ * KEEP IN SYNC WITH gtk_tree_view_create_row_drag_icon()!
+ * FIXME: It's not...
  */
 static gboolean
 gtk_tree_view_bin_expose (GtkWidget      *widget,
@@ -3127,23 +3128,15 @@ clear_source_info (TreeViewDragInfo *di)
   if (di->source_target_list)
     gtk_target_list_unref (di->source_target_list);
 
-  if (di->row_draggable_closure)
-    g_closure_unref (di->row_draggable_closure);
-
   di->source_target_list = NULL;
-  di->row_draggable_closure = NULL;
 }
 
 static void
 clear_dest_info (TreeViewDragInfo *di)
 {
-  if (di->location_droppable_closure)
-    g_closure_unref (di->location_droppable_closure);
-
   if (di->dest_target_list)
     gtk_target_list_unref (di->dest_target_list);
 
-  di->location_droppable_closure = NULL;
   di->dest_target_list = NULL;
 }
 
@@ -3464,25 +3457,26 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   gint button;
   gint cell_x, cell_y;
   GtkTreeModel *model;
+  gboolean retval = FALSE;
 
   di = get_info (tree_view);
 
   if (di == NULL)
-    return FALSE;
+    goto out;
 
   if (tree_view->priv->pressed_button < 0)
-    return FALSE;
+    goto out;
 
   if (!gtk_drag_check_threshold (GTK_WIDGET (tree_view),
                                  tree_view->priv->press_start_x,
                                  tree_view->priv->press_start_y,
                                  event->x, event->y))
-    return FALSE;
+    goto out;
 
   model = gtk_tree_view_get_model (tree_view);
 
   if (model == NULL)
-    return FALSE;
+    goto out;
 
   button = tree_view->priv->pressed_button;
   tree_view->priv->pressed_button = -1;
@@ -3497,15 +3491,20 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
                                  &cell_y);
 
   if (path == NULL)
-    return FALSE;
+    goto out;
 
-  /* FIXME if the path doesn't match the row_draggable predicate,
-   * return FALSE and free path
-   */
+  if (!GTK_IS_TREE_DRAG_SOURCE (model) ||
+      !gtk_tree_drag_source_row_draggable (GTK_TREE_DRAG_SOURCE (model),
+					   path))
+    goto out;
 
   /* FIXME Check whether we're a start button, if not return FALSE and
    * free path
    */
+
+  /* Now we can begin the drag */
+
+  retval = TRUE;
 
   context = gtk_drag_begin (GTK_WIDGET (tree_view),
                             di->source_target_list,
@@ -3533,9 +3532,12 @@ gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
   }
 
   set_source_row (context, model, path);
-  gtk_tree_path_free (path);
 
-  return TRUE;
+ out:
+  if (path)
+    gtk_tree_path_free (path);
+
+  return retval;
 }
 
 
@@ -3822,24 +3824,10 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
 
       if (suggested_action)
         {
-          GtkTreeModel *src_model = NULL;
-          GtkTreePath *src_path = NULL;
-
-          if (!gtk_tree_get_row_drag_data (selection_data,
-					   &src_model,
-					   &src_path))
-            suggested_action = 0;
-
-          if (suggested_action)
-            {
-              if (!gtk_tree_drag_dest_row_drop_possible (GTK_TREE_DRAG_DEST (model),
-                                                         src_model,
-                                                         src_path,
-                                                         path))
-                suggested_action = 0;
-
-              gtk_tree_path_free (src_path);
-            }
+	  if (!gtk_tree_drag_dest_row_drop_possible (GTK_TREE_DRAG_DEST (model),
+						     path,
+						     selection_data))
+	    suggested_action = 0;
         }
 
       gdk_drag_status (context, suggested_action, time);
@@ -7996,17 +7984,15 @@ gtk_tree_view_set_reorderable (GtkTreeView *tree_view,
 
   if (reorderable)
     {
-      gtk_tree_view_set_rows_drag_source (tree_view,
-					  GDK_BUTTON1_MASK,
-					  row_targets,
-					  G_N_ELEMENTS (row_targets),
-					  GDK_ACTION_MOVE,
-					  NULL, NULL);
-      gtk_tree_view_set_rows_drag_dest (tree_view,
-					row_targets,
-					G_N_ELEMENTS (row_targets),
-					GDK_ACTION_MOVE,
-					NULL, NULL);
+      gtk_tree_view_enable_model_drag_source (tree_view,
+					      GDK_BUTTON1_MASK,
+					      row_targets,
+					      G_N_ELEMENTS (row_targets),
+					      GDK_ACTION_MOVE);
+      gtk_tree_view_enable_model_drag_dest (tree_view,
+					    row_targets,
+					    G_N_ELEMENTS (row_targets),
+					    GDK_ACTION_MOVE);
     }
   else
     {
@@ -8475,15 +8461,22 @@ gtk_tree_view_tree_to_widget_coords (GtkTreeView *tree_view,
     *wy = ty - tree_view->priv->vadjustment->value;
 }
 
+static void
+unset_reorderable (GtkTreeView *tree_view)
+{
+  if (tree_view->priv->reorderable)
+    {
+      tree_view->priv->reorderable = FALSE;
+      g_object_notify (G_OBJECT (tree_view), "reorderable");
+    }
+}
 
 void
-gtk_tree_view_set_rows_drag_source (GtkTreeView              *tree_view,
-                                    GdkModifierType           start_button_mask,
-                                    const GtkTargetEntry     *targets,
-                                    gint                      n_targets,
-                                    GdkDragAction             actions,
-                                    GtkTreeViewDraggableFunc  row_draggable_func,
-                                    gpointer                  user_data)
+gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
+					GdkModifierType           start_button_mask,
+					const GtkTargetEntry     *targets,
+					gint                      n_targets,
+					GdkDragAction             actions)
 {
   TreeViewDragInfo *di;
 
@@ -8496,24 +8489,16 @@ gtk_tree_view_set_rows_drag_source (GtkTreeView              *tree_view,
   di->source_target_list = gtk_target_list_new (targets, n_targets);
   di->source_actions = actions;
 
-  if (row_draggable_func)
-    {
-      di->row_draggable_closure = g_cclosure_new ((GCallback) row_draggable_func,
-                                                  user_data, NULL);
-      g_closure_ref (di->row_draggable_closure);
-      g_closure_sink (di->row_draggable_closure);
-    }
-
   di->source_set = TRUE;
+
+  unset_reorderable (tree_view);
 }
 
 void
-gtk_tree_view_set_rows_drag_dest (GtkTreeView              *tree_view,
-                                  const GtkTargetEntry     *targets,
-                                  gint                      n_targets,
-                                  GdkDragAction             actions,
-                                  GtkTreeViewDroppableFunc  location_droppable_func,
-                                  gpointer                  user_data)
+gtk_tree_view_enable_model_drag_dest (GtkTreeView              *tree_view,
+				      const GtkTargetEntry     *targets,
+				      gint                      n_targets,
+				      GdkDragAction             actions)
 {
   TreeViewDragInfo *di;
 
@@ -8531,15 +8516,9 @@ gtk_tree_view_set_rows_drag_dest (GtkTreeView              *tree_view,
   if (targets)
     di->dest_target_list = gtk_target_list_new (targets, n_targets);
 
-  if (location_droppable_func)
-    {
-      di->location_droppable_closure = g_cclosure_new ((GCallback) location_droppable_func,
-                                                       user_data, NULL);
-      g_closure_ref (di->location_droppable_closure);
-      g_closure_sink (di->location_droppable_closure);
-    }
-
   di->dest_set = TRUE;
+
+  unset_reorderable (tree_view);
 }
 
 void
@@ -8562,6 +8541,8 @@ gtk_tree_view_unset_rows_drag_source (GtkTreeView *tree_view)
       if (!di->dest_set && !di->source_set)
         remove_info (tree_view);
     }
+  
+  unset_reorderable (tree_view);
 }
 
 void
@@ -8585,6 +8566,8 @@ gtk_tree_view_unset_rows_drag_dest (GtkTreeView *tree_view)
       if (!di->dest_set && !di->source_set)
         remove_info (tree_view);
     }
+
+  unset_reorderable (tree_view);
 }
 
 void
@@ -8754,6 +8737,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   gint cell_offset;
   GList *list;
   GdkRectangle background_area;
+  GdkRectangle expose_area;
   GtkWidget *widget;
   gint depth;
   /* start drawing inside the black outline */
@@ -8790,6 +8774,11 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                              bin_window_width + 2,
                              background_area.height + 2,
                              -1);
+
+  expose_area.x = 0;
+  expose_area.y = 0;
+  expose_area.width = bin_window_width + 2;
+  expose_area.height = background_area.height + 2;
 
   gdk_draw_rectangle (drawable,
                       widget->style->base_gc [GTK_WIDGET_STATE (widget)],
@@ -8839,7 +8828,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 					  drawable,
 					  &background_area,
 					  &cell_area,
-					  NULL,
+					  &expose_area,
 					  0);
 
       cell_offset += column->width;

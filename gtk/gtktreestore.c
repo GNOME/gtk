@@ -83,9 +83,8 @@ static gboolean gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 						   GtkTreePath       *dest,
 						   GtkSelectionData  *selection_data);
 static gboolean gtk_tree_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
-						   GtkTreeModel      *src_model,
-						   GtkTreePath       *src_path,
-						   GtkTreePath       *dest_path);
+						   GtkTreePath       *dest_path,
+						   GtkSelectionData  *selection_data);
 
 /* Sortable Interfaces */
 
@@ -1587,45 +1586,55 @@ gtk_tree_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 }
 
 static gboolean
-gtk_tree_store_row_drop_possible (GtkTreeDragDest *drag_dest,
-                                  GtkTreeModel    *src_model,
-                                  GtkTreePath     *src_path,
-                                  GtkTreePath     *dest_path)
+gtk_tree_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
+                                  GtkTreePath      *dest_path,
+				  GtkSelectionData *selection_data)
 {
+  GtkTreeModel *src_model = NULL;
+  GtkTreePath *src_path = NULL;
+  GtkTreePath *tmp = NULL;
+  gboolean retval = FALSE;
+  
+  if (!gtk_tree_get_row_drag_data (selection_data,
+				   &src_model,
+				   &src_path))
+    goto out;
+    
   /* can only drag to ourselves */
   if (src_model != GTK_TREE_MODEL (drag_dest))
-    return FALSE;
+    goto out;
 
   /* Can't drop into ourself. */
   if (gtk_tree_path_is_ancestor (src_path,
                                  dest_path))
-    return FALSE;
+    goto out;
 
   /* Can't drop if dest_path's parent doesn't exist */
   {
     GtkTreeIter iter;
-    GtkTreePath *tmp = gtk_tree_path_copy (dest_path);
 
-    /* if we can't go up, we know the parent exists, the root
-     * always exists.
-     */
-    if (gtk_tree_path_up (tmp))
+    if (gtk_tree_path_get_depth (dest_path) > 1)
       {
-        if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_dest),
-                                      &iter, tmp))
-          {
-            if (tmp)
-              gtk_tree_path_free (tmp);
-            return FALSE;
-          }
+	tmp = gtk_tree_path_copy (dest_path);
+	gtk_tree_path_up (tmp);
+	
+	if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (drag_dest),
+				      &iter, tmp))
+	  goto out;
       }
-
-    if (tmp)
-      gtk_tree_path_free (tmp);
   }
-
+  
   /* Can otherwise drop anywhere. */
-  return TRUE;
+  retval = TRUE;
+
+ out:
+
+  if (src_path)
+    gtk_tree_path_free (src_path);
+  if (tmp)
+    gtk_tree_path_free (tmp);
+
+  return retval;
 }
 
 /* Sorting */

@@ -84,9 +84,8 @@ static gboolean gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
                                                    GtkTreePath       *dest,
                                                    GtkSelectionData  *selection_data);
 static gboolean gtk_list_store_row_drop_possible  (GtkTreeDragDest   *drag_dest,
-                                                   GtkTreeModel      *src_model,
-                                                   GtkTreePath       *src_path,
-                                                   GtkTreePath       *dest_path);
+                                                   GtkTreePath       *dest_path,
+						   GtkSelectionData  *selection_data);
 
 
 /* sortable */
@@ -1407,29 +1406,39 @@ gtk_list_store_drag_data_received (GtkTreeDragDest   *drag_dest,
 }
 
 static gboolean
-gtk_list_store_row_drop_possible (GtkTreeDragDest *drag_dest,
-                                  GtkTreeModel    *src_model,
-                                  GtkTreePath     *src_path,
-                                  GtkTreePath     *dest_path)
+gtk_list_store_row_drop_possible (GtkTreeDragDest  *drag_dest,
+                                  GtkTreePath      *dest_path,
+				  GtkSelectionData *selection_data)
 {
   gint *indices;
+  GtkTreeModel *src_model = NULL;
+  GtkTreePath *src_path = NULL;
+  gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_LIST_STORE (drag_dest), FALSE);
 
+  if (!gtk_tree_get_row_drag_data (selection_data,
+				   &src_model,
+				   &src_path))
+    goto out;
+    
   if (src_model != GTK_TREE_MODEL (drag_dest))
-    return FALSE;
+    goto out;
 
   if (gtk_tree_path_get_depth (dest_path) != 1)
-    return FALSE;
+    goto out;
 
   /* can drop before any existing node, or before one past any existing. */
 
   indices = gtk_tree_path_get_indices (dest_path);
 
   if (indices[0] <= GTK_LIST_STORE (drag_dest)->length)
-    return TRUE;
-  else
-    return FALSE;
+    retval = TRUE;
+
+ out:
+  gtk_tree_path_free (src_path);
+  
+  return retval;
 }
 
 

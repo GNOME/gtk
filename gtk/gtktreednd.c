@@ -73,6 +73,31 @@ gtk_tree_drag_dest_get_type (void)
   return our_type;
 }
 
+/**
+ * gtk_tree_drag_source_row_draggable:
+ * @drag_source: a #GtkTreeDragSource
+ * @path: row on which user is initiating a drag
+ * 
+ * Asks the #GtkTreeDragSource whether a particular row can be used as
+ * the source of a DND operation. If the source doesn't implement
+ * this interface, the row is assumed draggable.
+ *
+ * Return value: %TRUE if the row can be dragged
+ **/
+gboolean
+gtk_tree_drag_source_row_draggable (GtkTreeDragSource *drag_source,
+                                    GtkTreePath       *path)
+{
+  GtkTreeDragSourceIface *iface = GTK_TREE_DRAG_SOURCE_GET_IFACE (drag_source);
+
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (iface->row_draggable)
+    return (* iface->row_draggable) (drag_source, path);
+  else
+    return TRUE;
+}
+
 
 /**
  * gtk_tree_drag_source_drag_data_delete:
@@ -159,13 +184,12 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
 /**
  * gtk_tree_drag_dest_drop_possible:
  * @drag_dest: a #GtkTreeDragDest
- * @src_model: #GtkTreeModel being dragged from
- * @src_path: row being dragged
  * @dest_path: destination row
+ * @selection_data: the data being dragged
  * 
  * Determines whether a drop is possible before the given @dest_path,
- * at the same depth as @dest_path. i.e., can we drop @src_model such
- * that it now resides at @dest_path. @dest_path does not have to
+ * at the same depth as @dest_path. i.e., can we drop the data in
+ * @selection_data at that location. @dest_path does not have to
  * exist; the return value will almost certainly be %FALSE if the
  * parent of @dest_path doesn't exist, though.
  * 
@@ -173,18 +197,16 @@ gtk_tree_drag_dest_drag_data_received (GtkTreeDragDest  *drag_dest,
  **/
 gboolean
 gtk_tree_drag_dest_row_drop_possible (GtkTreeDragDest   *drag_dest,
-                                      GtkTreeModel      *src_model,
-                                      GtkTreePath       *src_path,
-                                      GtkTreePath       *dest_path)
+                                      GtkTreePath       *dest_path,
+				      GtkSelectionData  *selection_data)
 {
   GtkTreeDragDestIface *iface = GTK_TREE_DRAG_DEST_GET_IFACE (drag_dest);
 
   g_return_val_if_fail (iface->row_drop_possible != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_TREE_MODEL (src_model), FALSE);
-  g_return_val_if_fail (src_path != NULL, FALSE);
+  g_return_val_if_fail (selection_data != NULL, FALSE);
   g_return_val_if_fail (dest_path != NULL, FALSE);
 
-  return (* iface->row_drop_possible) (drag_dest, src_model, src_path, dest_path);
+  return (* iface->row_drop_possible) (drag_dest, dest_path, selection_data);
 }
 
 typedef struct _TreeRowData TreeRowData;
