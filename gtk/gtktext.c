@@ -4466,8 +4466,8 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 {
   GList *cache = text->line_start_cache;
   gint pixels = - text->first_cut_pixels;
-  gint min_y = area->y;
-  gint max_y = area->y + area->height;
+  gint min_y = MAX (0, area->y);
+  gint max_y = MAX (0, area->y + area->height);
   gint height;
 
   gdk_window_get_size (text->text_area, NULL, &height);
@@ -4479,7 +4479,7 @@ expose_text (GtkText* text, GdkRectangle *area, gboolean cursor)
 
   for (; pixels < height; cache = cache->next)
     {
-      if (pixels < max_y && (pixels + LINE_HEIGHT(CACHE_DATA(cache))) >= min_y)
+      if (pixels < max_y && (pixels + (gint)LINE_HEIGHT(CACHE_DATA(cache))) >= min_y)
 	{
 	  draw_line (text, pixels, &CACHE_DATA(cache));
 

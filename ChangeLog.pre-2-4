@@ -1,3 +1,9 @@
+Sat Apr 11 01:41:55 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtktext.c (expose_text): Fixed a sign problem 
+	(typedef gint guint!). Added some checks to make sure things
+	are positive.
+
 Sat Apr 11 05:51:22 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktooltips.c (gtk_tooltips_event_handler): don't shut down the
