@@ -535,22 +535,22 @@ gtk_cell_view_get_cell_info (GtkCellView     *cellview,
 }
 
 void
-gtk_cell_view_set_cell_data (GtkCellView *cellview)
+gtk_cell_view_set_cell_data (GtkCellView *cell_view)
 {
   GList *i;
   GtkTreeIter iter;
   GtkTreePath *path;
 
-  g_return_if_fail (cellview->priv->displayed_row != NULL);
+  g_return_if_fail (cell_view->priv->displayed_row != NULL);
 
-  path = gtk_tree_row_reference_get_path (cellview->priv->displayed_row);
+  path = gtk_tree_row_reference_get_path (cell_view->priv->displayed_row);
   if (!path)
     return;
 
-  gtk_tree_model_get_iter (cellview->priv->model, &iter, path);
+  gtk_tree_model_get_iter (cell_view->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
-  for (i = cellview->priv->cell_list; i; i = i->next)
+  for (i = cell_view->priv->cell_list; i; i = i->next)
     {
       GSList *j;
       GtkCellViewCellInfo *info = i->data;
@@ -563,7 +563,7 @@ gtk_cell_view_set_cell_data (GtkCellView *cellview)
           gint column = GPOINTER_TO_INT (j->next->data);
           GValue value = {0, };
 
-          gtk_tree_model_get_value (cellview->priv->model, &iter,
+          gtk_tree_model_get_value (cell_view->priv->model, &iter,
                                     column, &value);
           g_object_set_property (G_OBJECT (info->cell),
                                  property, &value);
@@ -571,9 +571,9 @@ gtk_cell_view_set_cell_data (GtkCellView *cellview)
         }
 
       if (info->func)
-	(* info->func) (GTK_CELL_LAYOUT (cellview),
+	(* info->func) (GTK_CELL_LAYOUT (cell_view),
 			info->cell,
-			cellview->priv->model,
+			cell_view->priv->model,
 			&iter,
 			info->func_data);
 
@@ -1064,7 +1064,7 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
 
 /**
  * gtk_cell_view_set_background_color:
- * @view: a #GtkCellView
+ * @cell_view: a #GtkCellView
  * @color: the new background color
  *
  * Sets the background color of @view.
@@ -1072,27 +1072,27 @@ gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
  * Since: 2.6
  */
 void
-gtk_cell_view_set_background_color (GtkCellView    *view,
+gtk_cell_view_set_background_color (GtkCellView    *cell_view,
                                     const GdkColor *color)
 {
-  g_return_if_fail (GTK_IS_CELL_VIEW (view));
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
 
   if (color)
     {
-      if (!view->priv->background_set)
+      if (!cell_view->priv->background_set)
         {
-          view->priv->background_set = TRUE;
-          g_object_notify (G_OBJECT (view), "background_set");
+          cell_view->priv->background_set = TRUE;
+          g_object_notify (G_OBJECT (cell_view), "background_set");
         }
 
-      view->priv->background = *color;
+      cell_view->priv->background = *color;
     }
   else
     {
-      if (view->priv->background_set)
+      if (cell_view->priv->background_set)
         {
-          view->priv->background_set = FALSE;
-          g_object_notify (G_OBJECT (view), "background_set");
+          cell_view->priv->background_set = FALSE;
+          g_object_notify (G_OBJECT (cell_view), "background_set");
         }
     }
 }

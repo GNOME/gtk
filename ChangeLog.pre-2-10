@@ -1,5 +1,10 @@
 2004-10-25  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkdialog.c (gtk_dialog_set_alternative_button_order): Fix the 
+	doc formatting.
+
+	* gtk/gtkcellview.[hc]: Make function parameter names consistent.
+
 	* tests/Makefile.am (noinst_PROGRAMS): Add testimage.
 
 	* tests/testicontheme.c (main): Use gtk_image_new_from_icon_name().
