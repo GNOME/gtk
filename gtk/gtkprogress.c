@@ -198,6 +198,7 @@ gtk_progress_init (GtkProgress *progress)
   progress->y_align = 0.5;
   progress->show_text = FALSE;
   progress->activity_mode = FALSE;
+  progress->use_text_format = TRUE;
 }
 
 static void
@@ -357,6 +358,13 @@ gtk_progress_build_string (GtkProgress *progress,
   gchar fmt[10];
 
   src = progress->format;
+
+  /* This is the new supported version of this function */
+  if (!progress->use_text_format)
+    return g_strdup (src);
+
+  /* And here's all the deprecated goo. */
+  
   dest = buf;
  
   while (src && *src)
@@ -624,6 +632,11 @@ gtk_progress_set_format_string (GtkProgress *progress,
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
+  /* Turn on format, in case someone called
+   * gtk_progress_bar_set_text() and turned it off.
+   */
+  progress->use_text_format = TRUE;
+  
   if (format)
     {
       if (progress->format)
