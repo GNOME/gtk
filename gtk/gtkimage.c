@@ -466,7 +466,7 @@ gtk_image_get_property (GObject     *object,
       break;
     case PROP_ICON_NAME:
       if (image->storage_type != GTK_IMAGE_ICON_NAME)
-	g_value_set_object (value, NULL);
+	g_value_set_string (value, NULL);
       else
 	g_value_set_string (value,
 			    image->data.name.icon_name);
