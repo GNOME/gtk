@@ -36,6 +36,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <gmodule.h>
+#ifdef G_OS_UNIX
+#include <unistd.h>
+#endif
 #include "gtkdnd.h"
 #include "gtkcompat.h"
 #include "gtkmain.h"
