@@ -87,6 +87,7 @@
 #include <gtk/gtkseparator.h>
 #include <gtk/gtksignal.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtkstatusbar.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktext.h>
 #include <gtk/gtktogglebutton.h>
