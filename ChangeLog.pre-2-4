@@ -1,3 +1,11 @@
+2003-03-06  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktextmark.c (gtk_text_mark_get_buffer): 
+	* gtk/gtkeditable.c (gtk_editable_get_chars): 
+	* gtk/gtkctree.c (gtk_ctree_find_node_ptr): 
+	* demos/gtk-demo/main.c (demo_find_file): Fix NULL/FALSE confusion
+	(#107648, Morten Welinder)
+
 2003-03-04  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkobject.h: Add deprecation guards for gtk_object_new ().
