@@ -976,26 +976,24 @@ gtk_object_remove_data (GtkObject   *object,
 }
 
 void
-gtk_object_set_data_destroy_by_id (GtkObject      *object,
-				   GQuark          key_id,
-				   GDestroyNotify  destroy_func)
+gtk_object_remove_no_notify_by_id (GtkObject      *object,
+				   GQuark          key_id)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  g_datalist_id_set_destroy (&object->object_data, key_id, destroy_func);
+  g_datalist_id_remove_no_notify (&object->object_data, key_id);
 }
 
 void
 gtk_object_set_data_destroy (GtkObject       *object,
-			     const gchar     *key,
-			     GDestroyNotify   destroy_func)
+			     const gchar     *key)
 {
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
 
-  g_datalist_set_destroy (&object->object_data, key, destroy_func);
+  g_datalist_remove_no_notify (&object->object_data, key);
 }
 
 void

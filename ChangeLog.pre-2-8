@@ -1,3 +1,14 @@
+Thu Oct  8 07:07:10 1998  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkobject.h: 
+	* gtk/gtkobject.c:
+	removed functions gtk_object_set_data_destroy and
+ 	gtk_object_set_data_destroy_by_id.
+	added functions gtk_object_remove_no_notify and
+ 	gtk_object_remove_no_notify_by_id which will remove a certain data
+ 	portion without invokation of its destroy notifier, this should only
+ 	be used in very controled circumstances.
+
 Wed Oct  7 23:59:37 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_set_column_resizeable): added

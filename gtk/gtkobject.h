@@ -279,9 +279,8 @@ void	 gtk_object_remove_data	    (GtkObject	     *object,
 				     const gchar     *key);
 gpointer gtk_object_get_data	    (GtkObject	     *object,
 				     const gchar     *key);
-void	 gtk_object_set_data_destroy(GtkObject	     *object,
-				     const gchar     *key,
-				     GDestroyNotify   destroy_func);
+void	 gtk_object_remove_no_notify(GtkObject	     *object,
+				     const gchar     *key);
 
 /* Set/get the "user_data" object data field of "object". It should
  *  be noted that these functions are no different than calling
@@ -317,9 +316,8 @@ gpointer gtk_object_get_data_by_id	(GtkObject	*object,
 					 GQuark		 data_id);
 void  gtk_object_remove_data_by_id	(GtkObject	*object,
 					 GQuark		 data_id);
-void  gtk_object_set_data_destroy_by_id	(GtkObject	*object,
-					 GQuark		 key_id,
-					 GDestroyNotify	 destroy_func);
+void  gtk_object_remove_no_notify_by_id	(GtkObject	*object,
+					 GQuark		 key_id);
 #define	gtk_object_data_try_key	    g_quark_try_string
 #define	gtk_object_data_force_id    g_quark_from_string
 
