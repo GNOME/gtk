@@ -31,13 +31,15 @@ extern "C"
 {
 #endif				/* __cplusplus */
 
-#define GTK_CTREE(obj)          (GTK_CHECK_CAST ((obj), gtk_ctree_get_type (), GtkCTree))
-#define GTK_CTREE_CLASS(klass)  (GTK_CHECK_CLASS_CAST ((klass), gtk_ctree_get_type (), GtkCTreeClass))
-#define GTK_IS_CTREE(obj)       (GTK_CHECK_TYPE ((obj), gtk_ctree_get_type ()))
-
-#define GTK_CTREE_ROW(glist)  ((GtkCTreeRow *)((glist)->data))
-#define GTK_CTREE_TREE(_ctree_, _glist_)  ((GtkCellTree *) &(((GtkCTreeRow *)((_glist_)->data))->cell[(_ctree_)->tree_col]))
-
+#define GTK_CTREE(obj) \
+  (GTK_CHECK_CAST ((obj), gtk_ctree_get_type (), GtkCTree))
+#define GTK_CTREE_CLASS(klass) \
+  (GTK_CHECK_CLASS_CAST ((klass), gtk_ctree_get_type (), GtkCTreeClass))
+#define GTK_IS_CTREE(obj) \
+  (GTK_CHECK_TYPE ((obj), gtk_ctree_get_type ()))
+#define GTK_CTREE_ROW(glist) ((GtkCTreeRow *)((glist)->data))
+#define GTK_CTREE_TREE(_ctree_, _glist_) \
+  ((GtkCellTree *) &(((GtkCTreeRow *)((_glist_)->data))->cell[(_ctree_)->tree_col]))
 
 #define GTK_CTREE_FUNC(_func_) ((GtkCTreeFunc)(_func_))
 
@@ -60,12 +62,12 @@ typedef struct _GtkCTreeClass GtkCTreeClass;
 typedef struct _GtkCTreeRow   GtkCTreeRow;
 
 typedef void (*GtkCTreeFunc) (GtkCTree *ctree,
-			      GList    *list,
+			      GList    *node,
 			      gpointer  data);
 
 typedef gint (*GtkCTreeCompareFunc) (GtkCTree    *ctree,
-				     const GList *list1,
-				     const GList *list2);
+				     const GList *node1,
+				     const GList *node2);
 
 struct _GtkCTree
 {
@@ -99,19 +101,19 @@ struct _GtkCTreeClass
   GtkCListClass parent_class;
 
   void (*tree_select_row)   (GtkCTree *ctree,
-			     GList *row,
-			     gint column);
+			     GList    *row,
+			     gint      column);
   void (*tree_unselect_row) (GtkCTree *ctree,
-			     GList *row,
-			     gint column);
+			     GList    *row,
+			     gint      column);
   void (*tree_expand)       (GtkCTree *ctree,
-			     GList *child);
+			     GList    *child);
   void (*tree_collapse)     (GtkCTree *ctree,
-			     GList *child);
+			     GList    *child);
   void (*tree_move)         (GtkCTree *ctree,
-			     GList *child,
-			     GList *parent,
-			     GList *sibling);
+			     GList    *child,
+			     GList    *parent,
+			     GList    *sibling);
 };
 
 struct _GtkCTreeRow
@@ -122,14 +124,15 @@ struct _GtkCTreeRow
   GList *sibling;
   GList *children;
 
-  guint16 level;
-  guint is_leaf  : 1;
-  guint expanded : 1;
-
   GdkPixmap *pixmap_closed;
   GdkBitmap *mask_closed;
   GdkPixmap *pixmap_opened;
   GdkBitmap *mask_opened;
+
+  guint16 level;
+
+  guint is_leaf  : 1;
+  guint expanded : 1;
 };
 
 
@@ -301,6 +304,11 @@ void       gtk_ctree_set_row_data_full      (GtkCTree     *ctree,
 					     GtkDestroyNotify destroy);
 gpointer   gtk_ctree_get_row_data           (GtkCTree     *ctree,
 					     GList        *node);
+void       gtk_ctree_scroll_to              (GtkCTree     *ctree,
+					     GList        *node,
+					     gint          column,
+					     gfloat        row_align,
+					     gfloat        col_align);
 
 /***********************************************************
  *             GtkCTree specific functions                 *
