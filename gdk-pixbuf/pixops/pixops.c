@@ -1077,6 +1077,25 @@ pixops_process (guchar         *dest_buf,
   g_free (line_bufs);
 }
 
+static void 
+correct_total (int    *weights, 
+	       int    n_x, 
+	       int    n_y,
+	       int    total, 
+	       double overall_alpha)
+{
+  int correction = (int)(0.5 + 65536 * overall_alpha) - total;
+  int i;
+  for (i = n_x * n_y - 1; i >= 0; i--) 
+    {
+      if (*(weights + i) + correction >= 0) 
+	{
+	  *(weights + i) += correction;
+	  break;
+	}
+    }
+}  
+
 static void
 tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double overall_alpha)
 {
@@ -1143,8 +1162,8 @@ tile_make_weights (PixopsFilter *filter, double x_scale, double y_scale, double 
 		total += weight;
 		*(pixel_weights + n_x * i + j) = weight;
 	      }
-
-	    *(pixel_weights + n_x * n_y - 1) += (int)(0.5 + 65536 * overall_alpha) - total;
+	    
+	    correct_total (pixel_weights, n_x, n_y, total, overall_alpha);
 	  }
       }
 }
@@ -1193,7 +1212,7 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
 	int total = 0;
-	
+
 	if (x_scale > 1.0)	/* Bilinear */
 	  {
 	    for (i = 0; i < n_x; i++)
@@ -1266,7 +1285,7 @@ bilinear_make_fast_weights (PixopsFilter *filter, double x_scale, double y_scale
 	      total += weight;
 	    }
 
-	*(pixel_weights + n_x * n_y - 1) += (int)(0.5 + 65536 * overall_alpha) - total;
+	correct_total (pixel_weights, n_x, n_y, total, overall_alpha);
       }
 
   g_free (x_weights);
@@ -1352,13 +1371,13 @@ bilinear_make_weights (PixopsFilter *filter, double x_scale, double y_scale, dou
 	double y = (double)i_offset / SUBSAMPLE;
 	int i,j;
 	int total = 0;
-	
+
 	for (i = 0; i < n_y; i++)
 	  for (j = 0; j < n_x; j++)
 	    {
 	      double w;
 	      int weight;
-
+	      
 	      w = bilinear_quadrant  (0.5 + j - (x + 1 / x_scale), 0.5 + j - x, 0.5 + i - (y + 1 / y_scale), 0.5 + i - y);
 	      w += bilinear_quadrant (1.5 + x - j, 1.5 + (x + 1 / x_scale) - j, 0.5 + i - (y + 1 / y_scale), 0.5 + i - y);
 	      w += bilinear_quadrant (0.5 + j - (x + 1 / x_scale), 0.5 + j - x, 1.5 + y - i, 1.5 + (y + 1 / y_scale) - i);
@@ -1367,8 +1386,8 @@ bilinear_make_weights (PixopsFilter *filter, double x_scale, double y_scale, dou
 	      *(pixel_weights + n_x * i + j) = weight;
 	      total += weight;
 	    }
-
-	*(pixel_weights + n_x * n_y - 1) += (int)(0.5 + 65536 * overall_alpha) - total;
+	
+	correct_total (pixel_weights, n_x, n_y, total, overall_alpha);
       }
 }
 
@@ -1444,7 +1463,7 @@ pixops_composite_color (guchar         *dest_buf,
       dest_channels == 4 && src_channels == 4 && src_has_alpha && !dest_has_alpha && found_mmx)
     line_func = composite_line_color_22_4a4_mmx_stub;
   else
-#endif    
+#endif
     line_func = composite_line_color;
   
   pixops_process (dest_buf, render_x0, render_y0, render_x1, render_y1,

@@ -1,3 +1,11 @@
+2002-02-15  Matthias Clasen  <matthias@YAST_ASK>
+
+	* pixops/pixops.c (correct_total): New function to make sure
+	that the weights sum up to the correct total without introducing
+	negative weights.
+	(tile_make_weights, bilinear_make_fast_weights, 
+	bilinear_make_weights): Use correct_total.
+
 2002-02-10  Matthias Clasen  <matthias@local>
 
 	* test-images.h (tiff1_test_3), test-loaders.c (main): Add a
