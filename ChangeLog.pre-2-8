@@ -1,3 +1,8 @@
+2004-11-15  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkimagemenuitem.c (gtk_image_menu_item_set_image): Add 
+	some more docs.
+
 Mon Nov 15 14:25:21 2004  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeviewcolumn.c (_gtk_tree_view_column_cell_set_dirty):
@@ -18,7 +23,7 @@ Mon Nov 15 14:25:21 2004  Jonathan Blandford  <jrb@redhat.com>
 	depth is 0 (noticed by Tim Janik)
 
 2004-11-15 Erwann Chenede - <erwann.chenede@sun.com>
-      
+
 	* gtk/gtkfilesel.c: fix unselect in multiple selection (#156805)
 
 2004-11-15  Matthias Clasen  <mclasen@redhat.com>

@@ -467,6 +467,8 @@ gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
  * @image: a widget to set as the image for the menu item.
  * 
  * Sets the image of @image_menu_item to the given widget.
+ * Note that it depends on the show-menu-images setting whether
+ * the image will be displayed or not.
  **/ 
 void
 gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
