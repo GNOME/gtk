@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-14 20:37+0000\n"
-"PO-Revision-Date: 2004-11-14 20:37+0100\n"
+"POT-Creation-Date: 2004-11-21 21:46+0000\n"
+"PO-Revision-Date: 2004-11-21 21:46+0100\n"
 "Last-Translator: David Lodge <dave@cirt.net>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -223,7 +223,7 @@ msgstr "A unique name for the action."
 #: gtk/gtkbutton.c:220
 #: gtk/gtkexpander.c:206
 #: gtk/gtkframe.c:127
-#: gtk/gtklabel.c:314
+#: gtk/gtklabel.c:318
 #: gtk/gtktoolbutton.c:181
 msgid "Label"
 msgstr "Label"
@@ -630,14 +630,14 @@ msgstr "Text of the label widget inside the button, if the button contains a lab
 
 #: gtk/gtkbutton.c:228
 #: gtk/gtkexpander.c:214
-#: gtk/gtklabel.c:335
+#: gtk/gtklabel.c:339
 #: gtk/gtktoolbutton.c:188
 msgid "Use underline"
 msgstr "Use underline"
 
 #: gtk/gtkbutton.c:229
 #: gtk/gtkexpander.c:215
-#: gtk/gtklabel.c:336
+#: gtk/gtklabel.c:340
 msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
 msgstr "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
 
@@ -674,51 +674,60 @@ msgstr "Horizontal alignment for child"
 msgid "Vertical alignment for child"
 msgstr "Vertical alignment for child"
 
-#: gtk/gtkbutton.c:358
+#: gtk/gtkbutton.c:306
+#: gtk/gtkimagemenuitem.c:131
+msgid "Image widget"
+msgstr "Image widget"
+
+#: gtk/gtkbutton.c:307
+msgid "Child widget to appear next to the button text"
+msgstr "Child widget to appear next to the button text"
+
+#: gtk/gtkbutton.c:373
 msgid "Default Spacing"
 msgstr "Default Spacing"
 
-#: gtk/gtkbutton.c:359
+#: gtk/gtkbutton.c:374
 msgid "Extra space to add for CAN_DEFAULT buttons"
 msgstr "Extra space to add for CAN_DEFAULT buttons"
 
-#: gtk/gtkbutton.c:365
+#: gtk/gtkbutton.c:380
 msgid "Default Outside Spacing"
 msgstr "Default Outside Spacing"
 
-#: gtk/gtkbutton.c:366
+#: gtk/gtkbutton.c:381
 msgid "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"
 msgstr "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the border"
 
-#: gtk/gtkbutton.c:371
+#: gtk/gtkbutton.c:386
 msgid "Child X Displacement"
 msgstr "Child X Displacement"
 
-#: gtk/gtkbutton.c:372
+#: gtk/gtkbutton.c:387
 msgid "How far in the x direction to move the child when the button is depressed"
 msgstr "How far in the x direction to move the child when the button is depressed"
 
-#: gtk/gtkbutton.c:379
+#: gtk/gtkbutton.c:394
 msgid "Child Y Displacement"
 msgstr "Child Y Displacement"
 
-#: gtk/gtkbutton.c:380
+#: gtk/gtkbutton.c:395
 msgid "How far in the y direction to move the child when the button is depressed"
 msgstr "How far in the y direction to move the child when the button is depressed"
 
-#: gtk/gtkbutton.c:396
+#: gtk/gtkbutton.c:411
 msgid "Displace focus"
 msgstr "Displace focus"
 
-#: gtk/gtkbutton.c:397
+#: gtk/gtkbutton.c:412
 msgid "Whether the child_displacement_x/_y properties should also affect the focus rectangle"
 msgstr "Whether the child_displacement_x/_y properties should also affect the focus rectangle"
 
-#: gtk/gtkbutton.c:402
+#: gtk/gtkbutton.c:417
 msgid "Show button images"
 msgstr "Show button images"
 
-#: gtk/gtkbutton.c:403
+#: gtk/gtkbutton.c:418
 msgid "Whether stock icons should be shown in buttons"
 msgstr "Whether stock icons should be shown in buttons"
 
@@ -989,7 +998,7 @@ msgid "Marked up text to render"
 msgstr "Marked up text to render"
 
 #: gtk/gtkcellrenderertext.c:220
-#: gtk/gtklabel.c:321
+#: gtk/gtklabel.c:325
 msgid "Attributes"
 msgstr "Attributes"
 
@@ -1175,7 +1184,7 @@ msgid "The language this text is in, as an ISO code. Pango can use this as a hin
 msgstr "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"
 
 #: gtk/gtkcellrenderertext.c:407
-#: gtk/gtklabel.c:427
+#: gtk/gtklabel.c:431
 #: gtk/gtkprogressbar.c:242
 msgid "Ellipsize"
 msgstr "Ellipsise"
@@ -1690,22 +1699,22 @@ msgid "Width of border around the button area at the bottom of the dialog"
 msgstr "Width of border around the button area at the bottom of the dialog"
 
 #: gtk/gtkentry.c:485
-#: gtk/gtklabel.c:392
+#: gtk/gtklabel.c:396
 msgid "Cursor Position"
 msgstr "Cursor Position"
 
 #: gtk/gtkentry.c:486
-#: gtk/gtklabel.c:393
+#: gtk/gtklabel.c:397
 msgid "The current position of the insertion cursor in chars"
 msgstr "The current position of the insertion cursor in chars"
 
 #: gtk/gtkentry.c:495
-#: gtk/gtklabel.c:402
+#: gtk/gtklabel.c:406
 msgid "Selection Bound"
 msgstr "Selection Bound"
 
 #: gtk/gtkentry.c:496
-#: gtk/gtklabel.c:403
+#: gtk/gtklabel.c:407
 msgid "The position of the opposite end of the selection from the cursor in chars"
 msgstr "The position of the opposite end of the selection from the cursor in chars"
 
@@ -1857,12 +1866,12 @@ msgid "Text of the expander's label"
 msgstr "Text of the expander's label"
 
 #: gtk/gtkexpander.c:222
-#: gtk/gtklabel.c:328
+#: gtk/gtklabel.c:332
 msgid "Use markup"
 msgstr "Use markup"
 
 #: gtk/gtkexpander.c:223
-#: gtk/gtklabel.c:329
+#: gtk/gtklabel.c:333
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr "The text of the label includes XML markup. See pango_parse_markup()"
 
@@ -1999,11 +2008,11 @@ msgstr "Width In Characters"
 msgid "The desired width of the button widget, in characters."
 msgstr "The desired width of the button widget, in characters."
 
-#: gtk/gtkfilechooserdefault.c:595
+#: gtk/gtkfilechooserdefault.c:609
 msgid "Default file chooser backend"
 msgstr "Default file chooser backend"
 
-#: gtk/gtkfilechooserdefault.c:596
+#: gtk/gtkfilechooserdefault.c:610
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Name of the GtkFileChooser backend to use by default"
 
@@ -2337,19 +2346,15 @@ msgstr "Storage type"
 msgid "The representation being used for image data"
 msgstr "The representation being used for image data"
 
-#: gtk/gtkimagemenuitem.c:139
-msgid "Image widget"
-msgstr "Image widget"
-
-#: gtk/gtkimagemenuitem.c:140
+#: gtk/gtkimagemenuitem.c:132
 msgid "Child widget to appear next to the menu text"
 msgstr "Child widget to appear next to the menu text"
 
-#: gtk/gtkimagemenuitem.c:145
+#: gtk/gtkimagemenuitem.c:137
 msgid "Show menu images"
 msgstr "Show menu images"
 
-#: gtk/gtkimagemenuitem.c:146
+#: gtk/gtkimagemenuitem.c:138
 msgid "Whether images should be shown in menus"
 msgstr "Whether images should be shown in menus"
 
@@ -2363,83 +2368,91 @@ msgstr "Screen"
 msgid "The screen where this window will be displayed"
 msgstr "The screen where this window will be displayed"
 
-#: gtk/gtklabel.c:315
+#: gtk/gtklabel.c:319
 msgid "The text of the label"
 msgstr "The text of the label"
 
-#: gtk/gtklabel.c:322
+#: gtk/gtklabel.c:326
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A list of style attributes to apply to the text of the label"
 
-#: gtk/gtklabel.c:343
+#: gtk/gtklabel.c:347
 #: gtk/gtktexttag.c:376
 #: gtk/gtktextview.c:594
 msgid "Justification"
 msgstr "Justification"
 
-#: gtk/gtklabel.c:344
+#: gtk/gtklabel.c:348
 msgid "The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that"
 msgstr "The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkMisc::xalign for that"
 
-#: gtk/gtklabel.c:352
+#: gtk/gtklabel.c:356
 msgid "Pattern"
 msgstr "Pattern"
 
-#: gtk/gtklabel.c:353
+#: gtk/gtklabel.c:357
 msgid "A string with _ characters in positions correspond to characters in the text to underline"
 msgstr "A string with _ characters in positions correspond to characters in the text to underline"
 
-#: gtk/gtklabel.c:360
+#: gtk/gtklabel.c:364
 msgid "Line wrap"
 msgstr "Line wrap"
 
-#: gtk/gtklabel.c:361
+#: gtk/gtklabel.c:365
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "If set, wrap lines if the text becomes too wide"
 
-#: gtk/gtklabel.c:367
+#: gtk/gtklabel.c:371
 msgid "Selectable"
 msgstr "Selectable"
 
-#: gtk/gtklabel.c:368
+#: gtk/gtklabel.c:372
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Whether the label text can be selected with the mouse"
 
-#: gtk/gtklabel.c:374
+#: gtk/gtklabel.c:378
 msgid "Mnemonic key"
 msgstr "Mnemonic key"
 
-#: gtk/gtklabel.c:375
+#: gtk/gtklabel.c:379
 msgid "The mnemonic accelerator key for this label"
 msgstr "The mnemonic accelerator key for this label"
 
-#: gtk/gtklabel.c:383
+#: gtk/gtklabel.c:387
 msgid "Mnemonic widget"
 msgstr "Mnemonic widget"
 
-#: gtk/gtklabel.c:384
+#: gtk/gtklabel.c:388
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "The widget to be activated when the label's mnemonic key is pressed"
 
-#: gtk/gtklabel.c:428
+#: gtk/gtklabel.c:432
 msgid "The preferred place to ellipsize the string, if the label does not have enough room to display the entire string, if at all"
 msgstr "The preferred place to ellipsise the string, if the label does not have enough room to display the entire string, if at all"
 
-#: gtk/gtklabel.c:445
+#: gtk/gtklabel.c:449
 msgid "Width In Chararacters"
 msgstr "Width In Chararacters"
 
-#: gtk/gtklabel.c:446
+#: gtk/gtklabel.c:450
 msgid "The desired width of the label, in characters"
 msgstr "The desired width of the label, in characters"
 
-#: gtk/gtklabel.c:466
+#: gtk/gtklabel.c:470
 msgid "Single Line Mode"
 msgstr "Single Line Mode"
 
-#: gtk/gtklabel.c:467
+#: gtk/gtklabel.c:471
 msgid "Whether the label is in single line mode"
 msgstr "Whether the label is in single line mode"
+
+#: gtk/gtklabel.c:488
+msgid "Angle"
+msgstr "Angle"
+
+#: gtk/gtklabel.c:489
+msgid "Angle at which the label is rotated"
+msgstr "Angle at which the label is rotated"
 
 #: gtk/gtklayout.c:635
 #: gtk/gtkviewport.c:136
