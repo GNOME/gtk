@@ -1,3 +1,12 @@
+Wed Jan 16 20:28:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c: Fix "deleting" filename by adding
+	another boolean parameter to file_selection_populate() -
+	whether to clear the entry. Also, never fill in the
+	entry when the user clicks on something in the 
+	directory list. (#6791, Reported by Jos Dehaes and many,
+	many, many others.)
+
 2002-01-16  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextview.c (gtk_text_view_scroll_pages): update

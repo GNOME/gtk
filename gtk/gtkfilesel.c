@@ -381,7 +381,8 @@ static void gtk_file_selection_dir_button (GtkWidget *widget,
 
 static void gtk_file_selection_populate      (GtkFileSelection      *fs,
 					      gchar                 *rel_path,
-					      gint                   try_complete);
+					      gboolean               try_complete,
+					      gboolean               reset_entry);
 static void gtk_file_selection_abort         (GtkFileSelection      *fs);
 
 static void gtk_file_selection_update_history_menu (GtkFileSelection       *fs,
@@ -733,7 +734,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
     }
   else
     {
-      gtk_file_selection_populate (filesel, "", FALSE);
+      gtk_file_selection_populate (filesel, "", FALSE, TRUE);
     }
 
   gtk_widget_grab_focus (filesel->selection_entry);
@@ -1064,7 +1065,7 @@ gtk_file_selection_set_filename (GtkFileSelection *filesel,
       name = last_slash + 1;
     }
 
-  gtk_file_selection_populate (filesel, buf, FALSE);
+  gtk_file_selection_populate (filesel, buf, FALSE, TRUE);
 
   if (filesel->selection_entry)
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), name);
@@ -1120,7 +1121,7 @@ gtk_file_selection_complete (GtkFileSelection *filesel,
 
   if (filesel->selection_entry)
     gtk_entry_set_text (GTK_ENTRY (filesel->selection_entry), pattern);
-  gtk_file_selection_populate (filesel, (gchar*) pattern, TRUE);
+  gtk_file_selection_populate (filesel, (gchar*) pattern, TRUE, TRUE);
 }
 
 static void
@@ -1169,7 +1170,7 @@ gtk_file_selection_map (GtkWidget *widget)
   GtkFileSelection *filesel = GTK_FILE_SELECTION (widget);
 
   /* Refresh the contents */
-  gtk_file_selection_populate (filesel, "", FALSE);
+  gtk_file_selection_populate (filesel, "", FALSE, FALSE);
   
   GTK_WIDGET_CLASS (parent_class)->map (widget);
 }
@@ -1270,7 +1271,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget,
   g_free (sys_full_path);
   
   gtk_widget_destroy (fs->fileop_dialog);
-  gtk_file_selection_populate (fs, "", FALSE);
+  gtk_file_selection_populate (fs, "", FALSE, FALSE);
 }
   
 static void
@@ -1392,7 +1393,7 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget,
   g_free (sys_full_path);
   
   gtk_widget_destroy (fs->fileop_dialog);
-  gtk_file_selection_populate (fs, "", FALSE);
+  gtk_file_selection_populate (fs, "", FALSE, TRUE);
 }
 
 static void
@@ -1531,7 +1532,11 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
 			     sys_old_filename, sys_new_filename,
 			     g_strerror (errno));
       gtk_file_selection_fileop_error (fs, buf);
+      goto out2;
     }
+  
+  gtk_file_selection_populate (fs, "", FALSE, FALSE);
+  gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), file);
   
  out2:
   g_free (sys_old_filename);
@@ -1542,7 +1547,6 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget,
   g_free (sys_new_filename);
   
   gtk_widget_destroy (fs->fileop_dialog);
-  gtk_file_selection_populate (fs, "", FALSE);
 }
   
 static void
@@ -1672,7 +1676,7 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 #endif
       text = g_strdup (gtk_entry_get_text (GTK_ENTRY (fs->selection_entry)));
 
-      gtk_file_selection_populate (fs, text, TRUE);
+      gtk_file_selection_populate (fs, text, TRUE, TRUE);
 
       g_free (text);
 
@@ -1681,7 +1685,6 @@ gtk_file_selection_key_press (GtkWidget   *widget,
 
   return FALSE;
 }
-
 
 static void
 gtk_file_selection_history_callback (GtkWidget *widget,
@@ -1700,7 +1703,7 @@ gtk_file_selection_history_callback (GtkWidget *widget,
     
     if (callback_arg->menu_item == widget)
       {
-	gtk_file_selection_populate (fs, callback_arg->directory, FALSE);
+	gtk_file_selection_populate (fs, callback_arg->directory, FALSE, FALSE);
 	break;
       }
     
@@ -1846,34 +1849,17 @@ gtk_file_selection_dir_button (GtkWidget      *widget,
 			       gpointer        user_data)
 {
   GtkFileSelection *fs = NULL;
-  gchar *filename, *temp = NULL;
+  gchar *filename = NULL;
 
   g_return_if_fail (GTK_IS_CLIST (widget));
 
   fs = GTK_FILE_SELECTION (user_data);
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
-  gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &temp);
-  filename = g_strdup (temp);
+  gtk_clist_get_text (GTK_CLIST (fs->dir_list), row, 0, &filename);
 
-  if (filename)
-    {
-      if (bevent)
-	switch (bevent->type)
-	  {
-	  case GDK_2BUTTON_PRESS:
-	    gtk_file_selection_populate (fs, filename, FALSE);
-	    break;
-	  
-	  default:
-	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-	    break;
-	  }
-      else
-	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), filename);
-
-      g_free (filename);
-    }
+  if (filename && bevent && bevent->type == GDK_2BUTTON_PRESS)
+    gtk_file_selection_populate (fs, filename, FALSE, FALSE);
 }
 
 #if defined(G_OS_WIN32) || defined(G_WITH_CYGWIN)
@@ -1923,7 +1909,8 @@ win32_gtk_add_drives_to_dir_list (GtkWidget *the_dir_list)
 static void
 gtk_file_selection_populate (GtkFileSelection *fs,
 			     gchar            *rel_path,
-			     gint              try_complete)
+			     gboolean          try_complete,
+			     gboolean          reset_entry)
 {
   CompletionState *cmpl_state;
   PossibleCompletion* poss;
@@ -2016,7 +2003,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 
               did_recurse = TRUE;
 
-              gtk_file_selection_populate (fs, dir_name, TRUE);
+              gtk_file_selection_populate (fs, dir_name, TRUE, TRUE);
 
               g_free (dir_name);
             }
@@ -2035,7 +2022,7 @@ gtk_file_selection_populate (GtkFileSelection *fs,
 	    gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), rem_path);
         }
     }
-  else
+  else if (reset_entry)
     {
       if (fs->selection_entry)
 	gtk_entry_set_text (GTK_ENTRY (fs->selection_entry), "");
