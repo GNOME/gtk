@@ -2,14 +2,15 @@
 # Copyright (C) 1999-2003 Free Software Foundation, Inc.
 # Lauris Kaplinski <lauris@ariman.ee>, 1999.
 # Tõivo Leedjärv <toivo@linux.ee>, 2002 - 2004.
+# Ivar Smolin <okul@linux.ee>, 2005.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-02-04 13:26-0500\n"
-"PO-Revision-Date: 2004-01-02 23:50+0200\n"
-"Last-Translator: Tõivo Leedjärv <toivo@linux.ee>\n"
+"POT-Creation-Date: 2005-01-15 12:29+0100\n"
+"PO-Revision-Date: 2005-02-12 00:03+0200\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,16 +19,15 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:108
 msgid "Number of Channels"
-msgstr ""
+msgstr "Kanalite arv"
 
 #: gdk-pixbuf/gdk-pixbuf.c:109
 msgid "The number of samples per pixel"
 msgstr ""
 
 #: gdk-pixbuf/gdk-pixbuf.c:119
-#, fuzzy
 msgid "Colorspace"
-msgstr "ühelaiune"
+msgstr "Värviruum"
 
 #: gdk-pixbuf/gdk-pixbuf.c:120
 msgid "The colorspace in which the samples are interpreted"
@@ -101,120 +101,116 @@ msgstr "Ekraan"
 msgid "the GdkScreen for the renderer"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:202
+#: gtk/gtkaboutdialog.c:195
 msgid "Program name"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:203
+#: gtk/gtkaboutdialog.c:196
 msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:217
+#: gtk/gtkaboutdialog.c:210
 msgid "Program version"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:218
-#, fuzzy
+#: gtk/gtkaboutdialog.c:211
 msgid "The version of the program"
-msgstr "Valitud kirjatüübi nimi"
+msgstr "Programmi versioon"
 
-#: gtk/gtkaboutdialog.c:232
+#: gtk/gtkaboutdialog.c:225
 msgid "Copyright string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:233
+#: gtk/gtkaboutdialog.c:226
 msgid "Copyright information for the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:250
+#: gtk/gtkaboutdialog.c:243
 msgid "Comments string"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:251
+#: gtk/gtkaboutdialog.c:244
 msgid "Comments about the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:284
+#: gtk/gtkaboutdialog.c:276
 msgid "Website URL"
-msgstr ""
+msgstr "Veebisaidi URL"
 
-#: gtk/gtkaboutdialog.c:285
+#: gtk/gtkaboutdialog.c:277
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "Programmi veebisaidi URL"
 
-#: gtk/gtkaboutdialog.c:301
+#: gtk/gtkaboutdialog.c:293
 msgid "Website label"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:302
+#: gtk/gtkaboutdialog.c:294
 msgid ""
 "The label for the link to the website of the program. If this is not set, it "
 "defaults to the URL"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:318
+#: gtk/gtkaboutdialog.c:310
 msgid "Authors"
-msgstr ""
+msgstr "Autorid"
 
-#: gtk/gtkaboutdialog.c:319
-#, fuzzy
+#: gtk/gtkaboutdialog.c:311
 msgid "List of authors of the program"
-msgstr "Valitud kirjatüübi nimi"
+msgstr "Programmi autorite nimekiri"
 
-#: gtk/gtkaboutdialog.c:335
+#: gtk/gtkaboutdialog.c:327
 msgid "Documenters"
-msgstr ""
+msgstr "Dokumenteerijad"
 
-#: gtk/gtkaboutdialog.c:336
+#: gtk/gtkaboutdialog.c:328
 msgid "List of people documenting the program"
-msgstr ""
+msgstr "Programmi dokumenteerijate nimekiri"
 
-#: gtk/gtkaboutdialog.c:352
+#: gtk/gtkaboutdialog.c:344
 msgid "Artists"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:353
+#: gtk/gtkaboutdialog.c:345
 msgid "List of people who have contributed artwork to the program"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:370
+#: gtk/gtkaboutdialog.c:362
 msgid "Translator credits"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:371
+#: gtk/gtkaboutdialog.c:363
 msgid ""
 "Credits to the translators. This string should be marked as translatable"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:386
+#: gtk/gtkaboutdialog.c:378
 msgid "Logo"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:387
+#: gtk/gtkaboutdialog.c:379
 msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
 
-#: gtk/gtkaboutdialog.c:402
-#, fuzzy
+#: gtk/gtkaboutdialog.c:394
 msgid "Logo Icon Name"
-msgstr "Kirjatüübi nimi"
+msgstr "Logoikooni nimi"
+
+#: gtk/gtkaboutdialog.c:395
+msgid "A named icon to use as the logo for the about box."
+msgstr "Nimeline ikoon, mida kasutatakse programmi lähema teabe kastis."
+
+#: gtk/gtkaboutdialog.c:402
+msgid "Link Color"
+msgstr "Viida värv"
 
 #: gtk/gtkaboutdialog.c:403
-msgid "A named icon to use as the logo for the about box."
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:410
-#, fuzzy
-msgid "Link Color"
-msgstr "Praegune värv"
-
-#: gtk/gtkaboutdialog.c:411
 msgid "Color of hyperlinks"
-msgstr ""
+msgstr "Hüperviitade värv"
 
 #: gtk/gtkaccellabel.c:139
 msgid "Accelerator Closure"
@@ -343,7 +339,7 @@ msgstr "Kas tegevus on nähtav või mitte."
 #: gtk/gtkaction.c:296
 #, fuzzy
 msgid "Action Group"
-msgstr "Tegevus"
+msgstr "Tegevuste grupp"
 
 #: gtk/gtkaction.c:297
 msgid ""
@@ -356,19 +352,17 @@ msgid "A name for the action group."
 msgstr ""
 
 #: gtk/gtkactiongroup.c:143
-#, fuzzy
 msgid "Whether the action group is enabled."
-msgstr "Kas tegevus on lubatud või mitte."
+msgstr "Kas tegevuste grupp on lubatud või mitte."
 
 #: gtk/gtkactiongroup.c:150
-#, fuzzy
 msgid "Whether the action group is visible."
-msgstr "Kas tegevus on nähtav või mitte."
+msgstr "Kas tegevuste grupp on nähtav või mitte."
 
 #: gtk/gtkadjustment.c:115 gtk/gtkcellrendererprogress.c:115
 #: gtk/gtkspinbutton.c:303
 msgid "Value"
-msgstr ""
+msgstr "Väärtus"
 
 #: gtk/gtkadjustment.c:116
 #, fuzzy
@@ -376,9 +370,8 @@ msgid "The value of the adjustment"
 msgstr "Valitud kirjatüübi nimi"
 
 #: gtk/gtkadjustment.c:132
-#, fuzzy
 msgid "Minimum Value"
-msgstr "Minimaalne laius"
+msgstr "Väikseim väärtus"
 
 #: gtk/gtkadjustment.c:133
 #, fuzzy
@@ -386,9 +379,8 @@ msgid "The minimum value of the adjustment"
 msgstr "Valitud kirjatüübi nimi"
 
 #: gtk/gtkadjustment.c:152
-#, fuzzy
 msgid "Maximum Value"
-msgstr "Maksimaalne laius"
+msgstr "Suurim väärtus"
 
 #: gtk/gtkadjustment.c:153
 #, fuzzy
@@ -415,9 +407,8 @@ msgid "The page increment of the adjustment"
 msgstr "Valitud kirjatüübi nimi"
 
 #: gtk/gtkadjustment.c:206
-#, fuzzy
 msgid "Page Size"
-msgstr "Suurus"
+msgstr "Lehekülje suurus"
 
 #: gtk/gtkadjustment.c:207
 #, fuzzy
@@ -1975,11 +1966,11 @@ msgstr "Kirjatüübi valiku dialoogiakna pealkiri"
 msgid "The desired width of the button widget, in characters."
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:622
+#: gtk/gtkfilechooserdefault.c:625
 msgid "Default file chooser backend"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:623
+#: gtk/gtkfilechooserdefault.c:626
 #, fuzzy
 msgid "Name of the GtkFileChooser backend to use by default"
 msgstr "Vaikimisi kasutatava kirjatüübi nimi"
@@ -2495,107 +2486,107 @@ msgstr ""
 msgid "The height of the layout"
 msgstr ""
 
-#: gtk/gtkmenu.c:528
+#: gtk/gtkmenu.c:526
 msgid "Tearoff Title"
 msgstr ""
 
-#: gtk/gtkmenu.c:529
+#: gtk/gtkmenu.c:527
 msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
 
-#: gtk/gtkmenu.c:543
+#: gtk/gtkmenu.c:541
 msgid "Tearoff State"
 msgstr ""
 
-#: gtk/gtkmenu.c:544
+#: gtk/gtkmenu.c:542
 msgid "A boolean that indicates whether the menu is torn-off"
 msgstr ""
 
-#: gtk/gtkmenu.c:550
+#: gtk/gtkmenu.c:548
 msgid "Vertical Padding"
 msgstr ""
 
-#: gtk/gtkmenu.c:551
+#: gtk/gtkmenu.c:549
 msgid "Extra space at the top and bottom of the menu"
 msgstr ""
 
-#: gtk/gtkmenu.c:559
+#: gtk/gtkmenu.c:557
 msgid "Vertical Offset"
 msgstr ""
 
-#: gtk/gtkmenu.c:560
+#: gtk/gtkmenu.c:558
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
 
-#: gtk/gtkmenu.c:568
+#: gtk/gtkmenu.c:566
 msgid "Horizontal Offset"
 msgstr ""
 
-#: gtk/gtkmenu.c:569
+#: gtk/gtkmenu.c:567
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
 msgstr ""
 
-#: gtk/gtkmenu.c:579
+#: gtk/gtkmenu.c:577
 msgid "Left Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:580 gtk/gtktable.c:205
+#: gtk/gtkmenu.c:578 gtk/gtktable.c:205
 msgid "The column number to attach the left side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:587
+#: gtk/gtkmenu.c:585
 msgid "Right Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:588
+#: gtk/gtkmenu.c:586
 msgid "The column number to attach the right side of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:595
+#: gtk/gtkmenu.c:593
 msgid "Top Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:596
+#: gtk/gtkmenu.c:594
 msgid "The row number to attach the top of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:603
+#: gtk/gtkmenu.c:601
 msgid "Bottom Attach"
 msgstr ""
 
-#: gtk/gtkmenu.c:604 gtk/gtktable.c:226
+#: gtk/gtkmenu.c:602 gtk/gtktable.c:226
 msgid "The row number to attach the bottom of the child to"
 msgstr ""
 
-#: gtk/gtkmenu.c:691
+#: gtk/gtkmenu.c:689
 msgid "Can change accelerators"
 msgstr ""
 
-#: gtk/gtkmenu.c:692
+#: gtk/gtkmenu.c:690
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
 
-#: gtk/gtkmenu.c:697
+#: gtk/gtkmenu.c:695
 msgid "Delay before submenus appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:698
+#: gtk/gtkmenu.c:696
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
 
-#: gtk/gtkmenu.c:705
+#: gtk/gtkmenu.c:703
 msgid "Delay before hiding a submenu"
 msgstr ""
 
-#: gtk/gtkmenu.c:706
+#: gtk/gtkmenu.c:704
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
@@ -4532,61 +4523,61 @@ msgstr ""
 msgid "Whether gtk_widget_show_all() should not affect this widget"
 msgstr ""
 
-#: gtk/gtkwidget.c:1417
+#: gtk/gtkwidget.c:1407
 msgid "Interior Focus"
 msgstr ""
 
-#: gtk/gtkwidget.c:1418
+#: gtk/gtkwidget.c:1408
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr ""
 
-#: gtk/gtkwidget.c:1424
+#: gtk/gtkwidget.c:1414
 msgid "Focus linewidth"
 msgstr ""
 
-#: gtk/gtkwidget.c:1425
+#: gtk/gtkwidget.c:1415
 msgid "Width, in pixels, of the focus indicator line"
 msgstr ""
 
-#: gtk/gtkwidget.c:1431
+#: gtk/gtkwidget.c:1421
 msgid "Focus line dash pattern"
 msgstr ""
 
-#: gtk/gtkwidget.c:1432
+#: gtk/gtkwidget.c:1422
 msgid "Dash pattern used to draw the focus indicator"
 msgstr ""
 
-#: gtk/gtkwidget.c:1437
+#: gtk/gtkwidget.c:1427
 msgid "Focus padding"
 msgstr ""
 
-#: gtk/gtkwidget.c:1438
+#: gtk/gtkwidget.c:1428
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr ""
 
-#: gtk/gtkwidget.c:1443
+#: gtk/gtkwidget.c:1433
 msgid "Cursor color"
 msgstr ""
 
-#: gtk/gtkwidget.c:1444
+#: gtk/gtkwidget.c:1434
 msgid "Color with which to draw insertion cursor"
 msgstr ""
 
-#: gtk/gtkwidget.c:1449
+#: gtk/gtkwidget.c:1439
 msgid "Secondary cursor color"
 msgstr ""
 
-#: gtk/gtkwidget.c:1450
+#: gtk/gtkwidget.c:1440
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
 msgstr ""
 
-#: gtk/gtkwidget.c:1455
+#: gtk/gtkwidget.c:1445
 msgid "Cursor line aspect ratio"
 msgstr ""
 
-#: gtk/gtkwidget.c:1456
+#: gtk/gtkwidget.c:1446
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
@@ -4785,6 +4776,3 @@ msgstr ""
 msgid "How to draw the input method statusbar"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Whether the browse dialog is visible or not."
-#~ msgstr "Kas tegevus on nähtav või mitte."
