@@ -1679,7 +1679,7 @@ gdk_window_focus (GdkWindow *window,
     }
   else
     {
-      XRaiseWindow (GDK_DISPLAY_XDISPLAY (window), GDK_WINDOW_XID (window));
+      XRaiseWindow (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window));
 
       /* There is no way of knowing reliably whether we are viewable;
        * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
