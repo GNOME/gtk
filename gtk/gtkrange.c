@@ -2390,12 +2390,15 @@ gtk_range_real_change_value (GtkRange     *range,
 
   if (range->round_digits >= 0)
     {
-      char buffer[128];
+      glong power;
+      gint i;
 
-      /* This is just so darn lame. */
-      g_snprintf (buffer, 128, "%0.*f",
-                  range->round_digits, value);
-      sscanf (buffer, "%lf", &value);
+      i = range->round_digits;
+      power = 1;
+      while (i--)
+        power *= 10;
+      
+      value = floor ((value * power) + 0.5) / power;
     }
   
   if (range->adjustment->value != value)

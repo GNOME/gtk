@@ -1,3 +1,9 @@
+2004-10-06  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkrange.c (gtk_range_real_change_value): Replace a really
+	gross way of rounding to a specified number of digits.  (#145232,
+	Peter Zelezny, patch by Soeren Sandmann)
+
 Wed Oct  6 00:45:04 2004    <timj@birnet.org>
 
 	* gdk/gdkwindow.c (gdk_window_is_viewable): check the iteration window
