@@ -32,23 +32,6 @@ enum {
   LAST_SIGNAL
 };
 
-
-typedef enum
-{
-  CHILD_SPACE,
-  CHILD_BUTTON,
-  CHILD_WIDGET
-} ChildType;
-
-typedef struct
-{
-  ChildType type;
-  GtkWidget *widget;
-  GtkWidget *icon;
-  GtkWidget *label;
-} Child;
-
-
 typedef void (*GtkToolbarSignal1) (GtkObject *object,
 				   gint       arg1,
 				   gpointer   data);
@@ -199,7 +182,7 @@ gtk_toolbar_destroy (GtkObject *object)
 {
   GtkToolbar *toolbar;
   GList      *children;
-  Child      *child;
+  GtkToolbarChild      *child;
 
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (object));
@@ -212,7 +195,7 @@ gtk_toolbar_destroy (GtkObject *object)
     {
       child = children->data;
 
-      if (child->type != CHILD_SPACE)
+      if (child->type != GTK_TOOLBAR_CHILD_SPACE)
 	{
 	  child->widget->parent = NULL;
 	  gtk_object_unref (GTK_OBJECT (child->widget));
@@ -233,7 +216,7 @@ gtk_toolbar_map (GtkWidget *widget)
 {
   GtkToolbar *toolbar;
   GList      *children;
-  Child      *child;
+  GtkToolbarChild      *child;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
@@ -245,7 +228,7 @@ gtk_toolbar_map (GtkWidget *widget)
     {
       child = children->data;
 
-      if ((child->type != CHILD_SPACE)
+      if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
 	  && GTK_WIDGET_VISIBLE (child->widget) && !GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_map (child->widget);
     }
@@ -256,7 +239,7 @@ gtk_toolbar_unmap (GtkWidget *widget)
 {
   GtkToolbar *toolbar;
   GList      *children;
-  Child      *child;
+  GtkToolbarChild      *child;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (widget));
@@ -268,7 +251,7 @@ gtk_toolbar_unmap (GtkWidget *widget)
     {
       child = children->data;
 
-      if ((child->type != CHILD_SPACE)
+      if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
 	  && GTK_WIDGET_VISIBLE (child->widget) && GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_unmap (child->widget);
     }
@@ -280,7 +263,7 @@ gtk_toolbar_draw (GtkWidget    *widget,
 {
   GtkToolbar   *toolbar;
   GList        *children;
-  Child        *child;
+  GtkToolbarChild        *child;
   GdkRectangle  child_area;
 
   g_return_if_fail (widget != NULL);
@@ -294,7 +277,7 @@ gtk_toolbar_draw (GtkWidget    *widget,
 	{
 	  child = children->data;
 
-	  if ((child->type != CHILD_SPACE)
+	  if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
 	      && gtk_widget_intersect (child->widget, area, &child_area))
 	    gtk_widget_draw (child->widget, &child_area);
 	}
@@ -307,7 +290,7 @@ gtk_toolbar_expose (GtkWidget      *widget,
 {
   GtkToolbar     *toolbar;
   GList          *children;
-  Child          *child;
+  GtkToolbarChild          *child;
   GdkEventExpose  child_event;
 
   g_return_val_if_fail (widget != NULL, FALSE);
@@ -324,7 +307,7 @@ gtk_toolbar_expose (GtkWidget      *widget,
 	{
 	  child = children->data;
 
-	  if ((child->type != CHILD_SPACE)
+	  if ((child->type != GTK_TOOLBAR_CHILD_SPACE)
 	      && GTK_WIDGET_NO_WINDOW (child->widget)
 	      && gtk_widget_intersect (child->widget, &event->area, &child_event.area))
 	    gtk_widget_event (child->widget, (GdkEvent *) &child_event);
@@ -340,7 +323,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 {
   GtkToolbar *toolbar;
   GList      *children;
-  Child      *child;
+  GtkToolbarChild      *child;
   gint        nbuttons;
   gint        button_maxw, button_maxh;
   gint        widget_maxw, widget_maxh;
@@ -365,7 +348,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 
       switch (child->type)
 	{
-	case CHILD_SPACE:
+	case GTK_TOOLBAR_CHILD_SPACE:
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    requisition->width += toolbar->space_size;
 	  else
@@ -373,7 +356,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 
 	  break;
 
-	case CHILD_BUTTON:
+	case GTK_TOOLBAR_CHILD_BUTTON:
 	  if (GTK_WIDGET_VISIBLE (child->widget))
 	    {
 	      gtk_widget_size_request (child->widget, &child->widget->requisition);
@@ -385,7 +368,7 @@ gtk_toolbar_size_request (GtkWidget      *widget,
 
 	  break;
 
-	case CHILD_WIDGET:
+	case GTK_TOOLBAR_CHILD_WIDGET:
 	  if (GTK_WIDGET_VISIBLE (child->widget))
 	    {
 	      gtk_widget_size_request (child->widget, &child->widget->requisition);
@@ -427,7 +410,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 {
   GtkToolbar     *toolbar;
   GList          *children;
-  Child          *child;
+  GtkToolbarChild          *child;
   GtkAllocation   alloc;
   gint            border_width;
 
@@ -451,7 +434,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
       switch (child->type)
 	{
-	case CHILD_SPACE:
+	case GTK_TOOLBAR_CHILD_SPACE:
 	  if (toolbar->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    alloc.x += toolbar->space_size;
 	  else
@@ -459,7 +442,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
 	  break;
 
-	case CHILD_BUTTON:
+	case GTK_TOOLBAR_CHILD_BUTTON:
 	  alloc.width = toolbar->button_maxw;
 	  alloc.height = toolbar->button_maxh;
 
@@ -477,7 +460,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
 	  break;
 
-	case CHILD_WIDGET:
+	case GTK_TOOLBAR_CHILD_WIDGET:
 	  alloc.width = child->widget->requisition.width;
 	  alloc.height = child->widget->requisition.height;
 
@@ -518,7 +501,7 @@ gtk_toolbar_remove (GtkContainer *container,
 {
   GtkToolbar *toolbar;
   GList      *children;
-  Child      *child;
+  GtkToolbarChild      *child;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (container));
@@ -530,7 +513,7 @@ gtk_toolbar_remove (GtkContainer *container,
     {
       child = children->data;
 
-      if ((child->type != CHILD_SPACE) && (child->widget == widget))
+      if ((child->type != GTK_TOOLBAR_CHILD_SPACE) && (child->widget == widget))
 	{
 	  gtk_widget_unparent (widget);
 
@@ -554,7 +537,7 @@ gtk_toolbar_foreach (GtkContainer *container,
 {
   GtkToolbar *toolbar;
   GList      *children;
-  Child      *child;
+  GtkToolbarChild      *child;
 
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (container));
@@ -566,7 +549,7 @@ gtk_toolbar_foreach (GtkContainer *container,
     {
       child = children->data;
 
-      if (child->type != CHILD_SPACE)
+      if (child->type != GTK_TOOLBAR_CHILD_SPACE)
 	(*callback) (child->widget, callback_data);
     }
 }
@@ -604,15 +587,15 @@ gtk_toolbar_insert_item (GtkToolbar    *toolbar,
 			 gpointer       user_data,
 			 gint           position)
 {
-  Child     *child;
+  GtkToolbarChild     *child;
   GtkWidget *vbox;
 
   g_return_val_if_fail (toolbar != NULL, NULL);
   g_return_val_if_fail (GTK_IS_TOOLBAR (toolbar), NULL);
 
-  child = g_new (Child, 1);
+  child = g_new (GtkToolbarChild, 1);
 
-  child->type = CHILD_BUTTON;
+  child->type = GTK_TOOLBAR_CHILD_BUTTON;
   child->widget = gtk_button_new ();
 
   if (callback)
@@ -707,13 +690,13 @@ void
 gtk_toolbar_insert_space (GtkToolbar *toolbar,
 			  gint        position)
 {
-  Child *child;
+  GtkToolbarChild *child;
 
   g_return_if_fail (toolbar != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
 
-  child = g_new (Child, 1);
-  child->type   = CHILD_SPACE;
+  child = g_new (GtkToolbarChild, 1);
+  child->type   = GTK_TOOLBAR_CHILD_SPACE;
   child->widget = NULL;
   child->icon   = NULL;
   child->label  = NULL;
@@ -747,13 +730,13 @@ gtk_toolbar_insert_widget (GtkToolbar *toolbar,
 			   const char *tooltip_text,
 			   gint        position)
 {
-  Child *child;
+  GtkToolbarChild *child;
 
   g_return_if_fail (toolbar != NULL);
   g_return_if_fail (widget != NULL);
 
-  child = g_new (Child, 1);
-  child->type   = CHILD_WIDGET;
+  child = g_new (GtkToolbarChild, 1);
+  child->type   = GTK_TOOLBAR_CHILD_WIDGET;
   child->widget = widget;
   child->icon   = NULL;
   child->label  = NULL;
@@ -854,7 +837,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 				GtkToolbarStyle  style)
 {
   GList *children;
-  Child *child;
+  GtkToolbarChild *child;
 
   g_return_if_fail (toolbar != NULL);
   g_return_if_fail (GTK_IS_TOOLBAR (toolbar));
@@ -867,7 +850,7 @@ gtk_real_toolbar_style_changed (GtkToolbar      *toolbar,
 	{
 	  child = children->data;
 
-	  if (child->type == CHILD_BUTTON)
+	  if (child->type == GTK_TOOLBAR_CHILD_BUTTON)
 	    switch (style)
 	      {
 	      case GTK_TOOLBAR_ICONS:
