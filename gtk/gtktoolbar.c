@@ -1089,7 +1089,7 @@ elide_underscores (const gchar *original)
   const gchar *p;
   gboolean last_underscore;
 
-  q = result = g_malloc (strlen (original + 1));
+  q = result = g_malloc (strlen (original) + 1);
   last_underscore = FALSE;
   
   for (p = original; *p; p++)

@@ -1,3 +1,8 @@
+2002-11-26  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	* gtk/gtktoolbar.c (elide_underscores): Fix nasty typo (#99653):
+	strlen (original + 1) -> strlen (original) + 1
+
 Tue Nov 26 22:26:04 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtk{tree,list}store.c (gtk_{tree,list}_store_real_set_value):
