@@ -3,6 +3,9 @@
 	* gtk/gtkwindow.c (gtk_window_set_icon_list): 
 	(gtk_window_set_default_icon_list): Ref the new icons
 	before unreffing the old ones.  (#154468, Morten Welinder)
+	(gtk_window_realize_icon): Only set using_themed_icon if
+	we actually got an icon list from the theme.  (#154472, Morten
+	Welinder)
 
 2004-10-03  Matthias Clasen  <mclasen@redhat.com>
 

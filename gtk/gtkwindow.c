@@ -2713,7 +2713,8 @@ gtk_window_realize_icon (GtkWindow *window)
   if (icon_list == NULL && info->icon_name) 
     {
       icon_list = icon_list_from_theme (widget, info->icon_name);
-      info->using_themed_icon = TRUE;  
+      if (icon_list)
+	info->using_themed_icon = TRUE;
     }
 
   /* Inherit from transient parent */
