@@ -1,3 +1,8 @@
+Fri May 28 14:14:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkevents-x11.c: Fix off-by-one errors.  (#143337,
+	Billy Biggs)
+	
 Thu May 27 00:12:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenuitem.c (gtk_menu_item_size_request): Fix a typo.
