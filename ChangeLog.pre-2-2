@@ -1,7 +1,11 @@
-Wed Sep 25 08:16:59 2002  Owen Taylor  <otaylor@redhat.com>
+Fri Sep 27 15:27:45 2002  Owen Taylor  <otaylor@redhat.com>
 
-	* gtk/gtkprogressbar.c (gtk_progress_bar_set_text): Don't
-	turn a value of "" into NULL. (#94157, Vitaly Tishkov)
+	* gtk/gtkimage.c (gtk_image_unrealize): Reset the
+	animation iter on unrealize as well as unmap.
+	(#94336)
+
+	* gtk/gtkprogressbar.c: Back out change that should
+	have been applied on HEAD.
 
 Tue Sep 24 23:43:10 2002  Manish Singh  <yosh@gimp.org>
 
