@@ -1,3 +1,58 @@
+2005-03-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkviewport.c (gtk_viewport_class_init): 
+	* gtk/gtkuimanager.c (gtk_ui_manager_class_init): 
+	* gtk/gtktreemodelfilter.c (gtk_tree_model_filter_class_init): 
+	* gtk/gtktipsquery.c (gtk_tips_query_class_init): 
+	* gtk/gtktext.c (gtk_text_class_init): 
+	* gtk/gtkstatusbar.c (gtk_statusbar_class_init): 
+	* gtk/gtkspinbutton.c (gtk_spin_button_class_init): 
+	* gtk/gtktoggleaction.c (gtk_toggle_action_class_init): 
+	* gtk/gtkoptionmenu.c (gtk_option_menu_class_init): 
+	* gtk/gtkoldeditable.c (gtk_old_editable_class_init): 
+	* gtk/gtkmessagedialog.c (gtk_message_dialog_class_init): 
+	* gtk/gtktoolbutton.c (gtk_tool_button_class_init): 
+	* gtk/gtktoolitem.c (gtk_tool_item_class_init): 
+	* gtk/gtkimage.c (gtk_image_class_init): 
+	* gtk/gtkruler.c (gtk_ruler_class_init): 
+	* gtk/gtkiconview.c (gtk_icon_view_class_init): 
+	* gtk/gtkprogressbar.c (gtk_progress_bar_class_init): 
+	* gtk/gtkprogress.c (gtk_progress_class_init): 
+	* gtk/gtkmenu.c (gtk_menu_class_init): 
+	* gtk/gtkscale.c (gtk_scale_class_init): 
+	* gtk/gtkpaned.c (gtk_paned_class_init): 
+	* gtk/gtkhandlebox.c (gtk_handle_box_class_init): 
+	* gtk/gtkfontbutton.c (gtk_font_button_class_init): 
+	* gtk/gtkfontsel.c (gtk_font_selection_class_init): 
+	* gtk/gtkfilesel.c (gtk_file_selection_class_init): 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_class_init): 
+	* gtk/gtkcurve.c (gtk_curve_class_init): 
+	* gtk/gtkcombo.c (gtk_combo_class_init): 
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): 
+	* gtk/gtkcolorbutton.c (gtk_color_button_class_init): 
+	* gtk/gtkcheckmenuitem.c (gtk_check_menu_item_class_init): 
+	* gtk/gtkmenuitem.c (gtk_menu_item_class_init): 
+	* gtk/gtkcheckbutton.c (gtk_check_button_class_init): 
+	* gtk/gtktogglebutton.c (gtk_toggle_button_class_init): 
+	* gtk/gtkcellview.c (gtk_cell_view_class_init): 
+	* gtk/gtktoolbar.c (gtk_toolbar_class_init): 
+	* gtk/gtkmenubar.c (gtk_menu_bar_class_init): 
+	* gtk/gtkclist.c (gtk_clist_class_init): 
+	* gtk/gtkctree.c (gtk_ctree_class_init): 
+	* gtk/gtkcolorsel.c (gtk_color_selection_class_init): 
+	* gtk/gtkcellrendererpixbuf.c (gtk_cell_renderer_pixbuf_class_init): 
+	* gtk/gtkcellrenderercombo.c (gtk_cell_renderer_combo_class_init): 
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_class_init): 
+	* gtk/gtkcalendar.c (gtk_calendar_class_init): 
+	* gtk/gtkbbox.c (gtk_button_box_class_init): 
+	* gtk/gtktable.c (gtk_table_class_init): 
+	* gtk/gtkaspectframe.c (gtk_aspect_frame_class_init): 
+	* gtk/gtkframe.c (gtk_frame_class_init): 
+	* gtk/gtkaction.c (gtk_action_class_init): 
+	* gtk/gtkaccellabel.c (gtk_accel_label_class_init): 
+	* gtk/gtkaboutdialog.c (gtk_about_dialog_class_init): 
+	* gtk/gtkdialog.c (gtk_dialog_class_init): More of the same.
+
 2005-03-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_class_init): 
@@ -14,7 +69,7 @@
 	* gtk/gtkbutton.c (gtk_button_class_init): 
 	* gtk/gtklabel.c (gtk_label_class_init): 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_class_init): 
-	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init): x
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_class_init):
 	* gtk/gtkcellrenderer.c (gtk_cell_renderer_class_init): 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): 
 	* gtk/gtkbox.c (gtk_box_class_init): 
