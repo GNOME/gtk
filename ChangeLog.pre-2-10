@@ -1,3 +1,10 @@
+2004-12-09  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkliststore.h: 
+	* gtk/gtkliststore.c (gtk_list_store_insert_with_values): 
+	(gtk_list_store_insert_with_valuesv): Add functions which allow
+	faster insertion of rows in sorted list stores.  (#160063)
+
 2004-12-08  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_set_wrap_width): Fix a typo

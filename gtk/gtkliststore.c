@@ -778,28 +778,15 @@ gtk_list_store_set_value (GtkListStore *list_store,
     }
 }
 
-/**
- * gtk_list_store_set_valist:
- * @list_store: A #GtkListStore
- * @iter: A valid #GtkTreeIter for the row being modified
- * @var_args: va_list of column/value pairs
- *
- * See gtk_list_store_set(); this version takes a va_list for use by language
- * bindings.
- *
- **/
-void
-gtk_list_store_set_valist (GtkListStore *list_store,
-                           GtkTreeIter  *iter,
-                           va_list	 var_args)
+static void
+gtk_list_store_set_valist_internal (GtkListStore *list_store,
+				    GtkTreeIter  *iter,
+				    gboolean     *emit_signal,
+				    gboolean     *maybe_need_sort,
+				    va_list	  var_args)
 {
   gint column;
-  gboolean emit_signal = FALSE;
-  gboolean maybe_need_sort = FALSE;
   GtkTreeIterCompareFunc func = NULL;
-
-  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
-  g_return_if_fail (VALID_ITER (iter, list_store));
 
   column = va_arg (var_args, gint);
 
@@ -821,7 +808,7 @@ gtk_list_store_set_valist (GtkListStore *list_store,
     }
 
   if (func != _gtk_tree_data_list_compare_func)
-    maybe_need_sort = TRUE;
+    *maybe_need_sort = TRUE;
 
   while (column != -1)
     {
@@ -848,20 +835,47 @@ gtk_list_store_set_valist (GtkListStore *list_store,
 	}
 
       /* FIXME: instead of calling this n times, refactor with above */
-      emit_signal = gtk_list_store_real_set_value (list_store,
-						   iter,
-						   column,
-						   &value,
-						   FALSE) || emit_signal;
-
+      *emit_signal = gtk_list_store_real_set_value (list_store,
+						    iter,
+						    column,
+						    &value,
+						    FALSE) || *emit_signal;
+      
       if (func == _gtk_tree_data_list_compare_func &&
 	  column == list_store->sort_column_id)
-	maybe_need_sort = TRUE;
+	*maybe_need_sort = TRUE;
 
       g_value_unset (&value);
 
       column = va_arg (var_args, gint);
     }
+}
+
+/**
+ * gtk_list_store_set_valist:
+ * @list_store: A #GtkListStore
+ * @iter: A valid #GtkTreeIter for the row being modified
+ * @var_args: va_list of column/value pairs
+ *
+ * See gtk_list_store_set(); this version takes a va_list for use by language
+ * bindings.
+ *
+ **/
+void
+gtk_list_store_set_valist (GtkListStore *list_store,
+                           GtkTreeIter  *iter,
+                           va_list	 var_args)
+{
+  gboolean emit_signal = FALSE;
+  gboolean maybe_need_sort = FALSE;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (VALID_ITER (iter, list_store));
+
+  gtk_list_store_set_valist_internal (list_store, iter, 
+				      &emit_signal, 
+				      &maybe_need_sort,
+				      var_args);
 
   if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
     gtk_list_store_sort_iter_changed (list_store, iter, list_store->sort_column_id);
@@ -960,9 +974,9 @@ gtk_list_store_remove (GtkListStore *list_store,
  *
  * Creates a new row at @position.  @iter will be changed to point to this new
  * row.  If @position is larger than the number of rows on the list, then the
- * new row will be appended to the list.  The row will be empty before this
- * function is called.  To fill in values, you need to call gtk_list_store_set()
- * or gtk_list_store_set_value().
+ * new row will be appended to the list. The row will be empty after this
+ * function is called.  To fill in values, you need to call 
+ * gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1009,10 +1023,10 @@ gtk_list_store_insert (GtkListStore *list_store,
  * @iter: An unset #GtkTreeIter to set to the new row
  * @sibling: A valid #GtkTreeIter, or %NULL
  *
- * Inserts a new row before @sibling. If @sibling is %NULL, then the row will be
- * appended to the end of the list. @iter will be changed to point to this new 
- * row. The row will be empty before this function is called. To fill in values,
- * you need to call gtk_list_store_set() or gtk_list_store_set_value().
+ * Inserts a new row before @sibling. If @sibling is %NULL, then the row will 
+ * be appended to the end of the list. @iter will be changed to point to this 
+ * new row. The row will be empty after this function is called. To fill in 
+ * values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
  **/
 void
@@ -1133,8 +1147,8 @@ gtk_list_store_clear (GtkListStore *list_store)
  * @list_store: A #GtkListStore.
  * @iter: A #GtkTreeIter.
  *
- * WARNING: This function is slow. Only use it for debugging and/or testing
- * purposes.
+ * <warning>This function is slow. Only use it for debugging and/or testing
+ * purposes.</warning>
  *
  * Checks if the given iter is a valid iter for this #GtkListStore.
  *
@@ -1869,4 +1883,190 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
   g_return_val_if_fail (GTK_IS_LIST_STORE (sortable), FALSE);
 
   return (list_store->default_sort_func != NULL);
+}
+
+
+/**
+ * gtk_list_store_insert_with_values:
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the new row
+ * @position: position to insert the new row
+ * @Varargs: pairs of column number and value, terminated with -1
+ *
+ * Creates a new row at @position.  @iter will be changed to point to this new
+ * row.  If @position is larger than the number of rows on the list, then the
+ * new row will be appended to the list. The row will be filled with the 
+ * values given to this function. 
+ * 
+ * Calling
+ * <literal>gtk_list_store_insert_with_values(list_store, iter, position...)</literal> 
+ * has the same effect as calling 
+ * <informalexample><programlisting>
+ * gtk_list_store_insert (list_store, iter, position);
+ * gtk_list_store_set (list_store_iter, ...);
+ * </programlisting></informalexample>
+ * with the difference that the former will only emit a row_inserted signal,
+ * while the latter will emit row_inserted, row_changed and, if the list store
+ * is sorted, rows_reordered. Since emitting the rows_reordered signal
+ * repeatedly can affect the performance of the program, 
+ * gtk_list_store_insert_with_values() should generally be preferred when
+ * inserting rows in a sorted list store.
+ *
+ * Since: 2.6
+ */
+void
+gtk_list_store_insert_with_values (GtkListStore *list_store,
+				   GtkTreeIter  *iter,
+				   gint          position,
+				   ...)
+{
+  GtkTreePath *path;
+  GtkSequence *seq;
+  GtkSequencePtr ptr;
+  gint length;
+  gboolean changed = FALSE;
+  gboolean maybe_need_sort = FALSE;
+  va_list var_args;
+
+  /* FIXME: refactor to reduce overlap with gtk_list_store_set() */
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (iter != NULL);
+
+  list_store->columns_dirty = TRUE;
+
+  seq = list_store->seq;
+
+  length = _gtk_sequence_get_length (seq);
+  if (position > length)
+    position = length;
+
+  ptr = _gtk_sequence_get_ptr_at_pos (seq, position);
+  ptr = _gtk_sequence_insert (ptr, NULL);
+
+  iter->stamp = list_store->stamp;
+  iter->user_data = ptr;
+
+  g_assert (VALID_ITER (iter, list_store));
+
+  list_store->length++;  
+
+  va_start (var_args, position);
+  gtk_list_store_set_valist_internal (list_store, iter, 
+				      &changed, &maybe_need_sort,
+				      var_args);
+  va_end (var_args);
+
+  /* Don't emit rows_reordered here */
+  if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
+    _gtk_sequence_sort_changed (iter->user_data,
+				gtk_list_store_compare_func,
+				list_store);
+
+  /* Just emit row_inserted */
+  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_path_free (path);
+}
+
+
+/**
+ * gtk_list_store_insert_with_valuesv:
+ * @list_store: A #GtkListStore
+ * @iter: An unset #GtkTreeIter to set to the new row
+ * @position: position to insert the new row
+ * @columns: an array of column numbers
+ * @values: an array of GValues 
+ * @n_values: the length of the @columns and @values arrays
+ * 
+ * A variant of gtk_list_Store_insert_with_values() which
+ * takes the columns and values as two arrays, instead of
+ * varargs. This function is mainly intended for 
+ * language-bindings.
+ *
+ * Since: 2.6
+ */
+void
+gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
+				    GtkTreeIter  *iter,
+				    gint          position,
+				    gint         *columns, 
+				    GValue       *values,
+				    gint          n_values)
+{
+  GtkTreePath *path;
+  GtkSequence *seq;
+  GtkSequencePtr ptr;
+  gint length;
+  gboolean changed = FALSE;
+  gboolean maybe_need_sort = FALSE;
+  GtkTreeIterCompareFunc func = NULL;
+  gint i;
+
+  /* FIXME refactor to reduce overlap with 
+   * gtk_list_store_insert_with_values() 
+   */
+  g_return_if_fail (GTK_IS_LIST_STORE (list_store));
+  g_return_if_fail (iter != NULL);
+
+  list_store->columns_dirty = TRUE;
+
+  seq = list_store->seq;
+
+  length = _gtk_sequence_get_length (seq);
+  if (position > length)
+    position = length;
+
+  ptr = _gtk_sequence_get_ptr_at_pos (seq, position);
+  ptr = _gtk_sequence_insert (ptr, NULL);
+
+  iter->stamp = list_store->stamp;
+  iter->user_data = ptr;
+
+  g_assert (VALID_ITER (iter, list_store));
+
+  list_store->length++;  
+
+  if (GTK_LIST_STORE_IS_SORTED (list_store))
+    {
+      if (list_store->sort_column_id != -1)
+	{
+	  GtkTreeDataSortHeader *header;
+	  header = _gtk_tree_data_list_get_header (list_store->sort_list,
+						   list_store->sort_column_id);
+	  g_return_if_fail (header != NULL);
+	  g_return_if_fail (header->func != NULL);
+	  func = header->func;
+	}
+      else
+	{
+	  func = list_store->default_sort_func;
+	}
+    }
+
+  if (func != _gtk_tree_data_list_compare_func)
+    maybe_need_sort = TRUE;
+
+  for (i = 0; i < n_values; i++)
+    {
+      changed = gtk_list_store_real_set_value (list_store, 
+					       iter, 
+					       columns[i],
+					       &values[i],
+					       FALSE) || changed;
+
+      if (func == _gtk_tree_data_list_compare_func &&
+	  columns[i] == list_store->sort_column_id)
+	maybe_need_sort = TRUE;
+    }
+
+  /* Don't emit rows_reordered here */
+  if (maybe_need_sort && GTK_LIST_STORE_IS_SORTED (list_store))
+    _gtk_sequence_sort_changed (iter->user_data,
+				gtk_list_store_compare_func,
+				list_store);
+
+  /* Just emit row_inserted */
+  path = gtk_list_store_get_path (GTK_TREE_MODEL (list_store), iter);
+  gtk_tree_model_row_inserted (GTK_TREE_MODEL (list_store), path, iter);
+  gtk_tree_path_free (path);
 }

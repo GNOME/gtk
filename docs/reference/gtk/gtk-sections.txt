@@ -4268,6 +4268,8 @@ gtk_list_store_remove
 gtk_list_store_insert
 gtk_list_store_insert_before
 gtk_list_store_insert_after
+gtk_list_store_insert_with_values
+gtk_list_store_insert_with_valuesv
 gtk_list_store_prepend
 gtk_list_store_append
 gtk_list_store_clear

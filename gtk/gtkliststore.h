@@ -101,6 +101,16 @@ void          gtk_list_store_insert_before    (GtkListStore *list_store,
 void          gtk_list_store_insert_after     (GtkListStore *list_store,
 					       GtkTreeIter  *iter,
 					       GtkTreeIter  *sibling);
+void          gtk_list_store_insert_with_values  (GtkListStore *list_store,
+						  GtkTreeIter  *iter,
+						  gint          position,
+						  ...);
+void          gtk_list_store_insert_with_valuesv (GtkListStore *list_store,
+						  GtkTreeIter  *iter,
+						  gint          position,
+						  gint         *columns, 
+						  GValue       *values,
+						  gint          n_values);
 void          gtk_list_store_prepend          (GtkListStore *list_store,
 					       GtkTreeIter  *iter);
 void          gtk_list_store_append           (GtkListStore *list_store,
