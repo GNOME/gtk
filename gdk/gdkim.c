@@ -1588,7 +1588,7 @@ gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
       gint i;
 
       for (i=0; i<dest_max && src[i]; i++)
-	dest[i] = src[i];
+	dest[i] = (guchar)src[i];
 
       return i;
     }
