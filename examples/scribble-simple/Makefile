@@ -1,8 +1,8 @@
 
 CC = gcc
 
-scribble-simple: scribble-simple.c
-	$(CC) `gtk-config --cflags` `gtk-config --libs` scribble-simple.c -o scribble-simple 
+scribble-simple: scribble-simple.c 
+	$(CC) `gtk-config --cflags`  scribble-simple.c -o scribble-simple `gtk-config --libs`
 
 clean: 
-	rm -f scribble-simple
+	rm -f *.o scribble-simple

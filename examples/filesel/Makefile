@@ -1,7 +1,8 @@
+
 CC = gcc
 
 filesel: filesel.c 
-	$(CC) `gtk-config --cflags` `gtk-config --libs` filesel.c -o filesel
+	$(CC) `gtk-config --cflags`  filesel.c -o filesel `gtk-config --libs`
 
 clean: 
 	rm -f *.o filesel

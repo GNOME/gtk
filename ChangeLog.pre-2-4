@@ -1,3 +1,9 @@
+1998-11-07  Jay Cox  <jaycox@earthlink.net>
+
+	* gtk/gtkwindow.c: forward declaration for gtk_window_paint
+	* gdk/gdkxid.c: declare xid_ht static
+	* examples/*/Makefile: get the link ordering right.
+
 Sat Nov  7 16:31:56 1998  Stefan Jeske  <stefan@gtk.org>
 
 	* gtk/gtkclist.c (gtk_clist_realize): Set background of

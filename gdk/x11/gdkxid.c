@@ -24,7 +24,7 @@ static gint  gdk_xid_compare (XID *a,
 			      XID *b);
 
 
-GHashTable *xid_ht = NULL;
+static GHashTable *xid_ht = NULL;
 
 
 void

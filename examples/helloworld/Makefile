@@ -1,8 +1,8 @@
 
 CC = gcc
 
-helloworld: helloworld.c
-	$(CC) `gtk-config --cflags` `gtk-config --libs` helloworld.c -o helloworld
+helloworld: helloworld.c 
+	$(CC) `gtk-config --cflags`  helloworld.c -o helloworld `gtk-config --libs`
 
 clean: 
-	rm -f helloworld
+	rm -f *.o helloworld

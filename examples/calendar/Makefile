@@ -2,7 +2,7 @@
 CC = gcc
 
 gcalendar: gcalendar.c
-	$(CC) `gtk-config --cflags` `gtk-config --libs` gcalendar.c -o gcalendar
+	$(CC) `gtk-config --cflags` gcalendar.c -o gcalendar `gtk-config --libs`
 
 clean: 
 	rm -f gcalendar

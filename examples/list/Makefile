@@ -2,7 +2,7 @@
 CC = gcc
 
 list: list.c 
-	$(CC) `gtk-config --cflags` `gtk-config --libs` list.c -o list
+	$(CC) `gtk-config --cflags`  list.c -o list `gtk-config --libs`
 
 clean: 
 	rm -f *.o list

@@ -91,6 +91,8 @@ static void gtk_window_read_rcfiles       (GtkWidget         *widget,
 					   GdkEventClient    *event);
 static void gtk_window_draw               (GtkWidget         *widget,
 				           GdkRectangle      *area);
+static void gtk_window_paint              (GtkWidget         *widget,
+					   GdkRectangle      *area);
 static gint gtk_window_expose             (GtkWidget         *widget,
 				           GdkEventExpose    *event);
 static void gtk_window_style_set          (GtkWidget         *widget,

@@ -2,7 +2,7 @@
 CC = gcc
 
 buttons: buttons.c 
-	$(CC) `gtk-config --cflags` `gtk-config --libs` buttons.c -o buttons
+	$(CC) `gtk-config --cflags`  buttons.c -o buttons `gtk-config --libs`
 
 clean: 
 	rm -f *.o buttons

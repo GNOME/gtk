@@ -1,8 +1,8 @@
 
 CC = gcc
 
-pack: pack.c
-	$(CC) `gtk-config --cflags` `gtk-config --libs` pack.c -o pack
+packer: packer.c 
+	$(CC) `gtk-config --cflags`  pack.c -o packer `gtk-config --libs`
 
 clean: 
-	rm -f pack
+	rm -f *.o packer

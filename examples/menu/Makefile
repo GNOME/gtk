@@ -4,7 +4,7 @@ CC = gcc
 all: menu menufactory
 
 menu: menu.c 
-	$(CC) `gtk-config --cflags` `gtk-config --libs` menu.c -o menu
+	$(CC) `gtk-config --cflags` menu.c -o menu `gtk-config --libs`
 
 menufactory: menufactory.o mfmain.o
 	$(CC) `gtk-config --libs` menufactory.o mfmain.o -o menufactory
