@@ -2,7 +2,7 @@
 <book>
 
 <bookinfo>
-  <date>June 28th 2000</date>
+  <date>January 16th 2001</date>
   <title>GTK+ FAQ</title>
   <authorgroup>
     <author>
@@ -226,39 +226,16 @@ post questions is to the GTK+ mailing list.</para>
 <title>How to report bugs in GTK+</title>
 
 <para>Bugs should be reported to the GNOME bug tracking system
-(<ulink
-url="http://bugs.gnome.org">http://bugs.gnome.org</ulink>). To
-report a problem about GTK+, send mail to submit@bugs.gnome.org.</para>
+(<ulink url="http://bugzilla.gnome.org">http://bugzilla.gnome.org</ulink>).
+You will need to enter your email address and receive a password before
+you can use the system to register a new bug report.</para>
 
-<para>The subject of the mail should describe your problem. In
-the body of the mail, you should first include a
-"pseudo-header" that gives the package and version
-number. This should be separated by a blank line from the
-actual headers.</para>
-
-<para><literallayout>
-<literal>Package: gtk+</literal>
-<literal>Version: 1.2.0</literal>
-</literallayout></para>
-
-<para>Substitute 1.2.0 with the version of GTK+ that you have
-installed.</para>
-
-<para>Then describe the bug. Include:</para>
+<para>There are a number of options to select and boxes to fill in when
+submitting a bug report. Please remember that the more information you
+give, the easier it will be to track the problem down. Extra information
+that may prove useful includes:</para>
 
 <itemizedlist>
-<listitem><simpara> Information about your system. For
-instance:</simpara>
-<itemizedlist spacing=compact>
-<listitem><simpara> What operating system and version</simpara>
-</listitem>
-<listitem><simpara> What version of X</simpara>
-</listitem>
-<listitem><simpara> For Linux, what version of the C library</simpara>
-</listitem>
-</itemizedlist>
-<para>And anything else you think is relevant.</para>
-</listitem>
 <listitem><simpara> How to reproduce the bug.</simpara>
 <simpara>If you can reproduce it with the testgtk program
 that is built in the gtk/ subdirectory, that will be most
@@ -272,9 +249,11 @@ testgtk. If you are reporting a bug found with the GIMP,
 please include the version number of the GIMP you are
 using)</simpara>
 </listitem>
+
 <listitem><simpara> If the bug was a crash, the exact text that was
-printed out when the crash occured.</simpara>
+printed out when the crash occurred.</simpara>
 </listitem>
+
 <listitem><simpara> Further information such as stack traces
 may be useful, but are not necessary. If you do send a stack trace,
 and the error is an X error, it will be more useful if the stacktrace is
@@ -899,6 +878,21 @@ the basics of all the GTK+ widgets you should look at the file
 gtk/testgtk.c (and associated source files) within the GTK+
 distribution. Looking at these examples will give you a good
 grounding on what the widgets can do.</para>
+
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>How do I write security sensitive/SUID/SGID programs with GTK+?
+Is GTK+ secure? What's this GTK_MODULES security hole I heard about?</title>
+
+<para>The short answer to this question is: Don't write SUID/SGID
+programs with GTK+</para>
+
+<para>For a more thorough explanation of the GTK+ Developers position on
+this issue see <ulink
+url="http://www.gtk.org/setuid.html">http://www.gtk.org/setuid.html</ulink>.</para>
 
 </sect1>
 
@@ -1672,12 +1666,12 @@ for example)?</title>
 
 <programlisting role="C">
 gint
-signal_handler_event(GtkWiget *widget, GdkEvenButton *event, gpointer func_data)
+signal_handler_event(GtkWidget *widget, GdkEventButton *event, gpointer func_data)
 {
   if (GTK_IS_LIST_ITEM(widget) &&
        (event->type==GDK_2BUTTON_PRESS ||
         event->type==GDK_3BUTTON_PRESS) ) {
-    printf("I feel %s clicked on button %d\",
+    printf("I feel %s clicked on button %d\n",
            event->type==GDK_2BUTTON_PRESS ? "double" : "triple",
            event->button);
   }
@@ -2268,6 +2262,24 @@ used, as in:</para>
   gdk_pixmap_unref (pixmap);
   gdk_pixmap_unref (pixmap_mask);
 </programlisting>
+
+</sect1>
+
+<!-- ----------------------------------------------------------------- -->
+
+<sect1>
+<title>How do I do drag-and-drop?</title>
+
+<para>GTK+ has a high level set of functions for doing inter-process
+communication via the drag-and-drop system. GTK+ can perform
+drag-and-drop on top of the low level Xdnd and Motif drag-and-drop
+protocols.</para>
+
+<para>The documentation on GTK+ drag-and-drop isn't complete, but there
+is some information in the <ulink
+url="http://www.gtk.org/tutorial/">Tutorial</ulink>. You should also
+look at the drag-and-drop example code that is part of the GTK+ source
+distribution, in the file <filename>gtk/testdnd.c</filename>.</para>
 
 </sect1>
 
