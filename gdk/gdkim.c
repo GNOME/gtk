@@ -17,6 +17,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include <X11/Xlocale.h>
 #include "gdk.h"
 #include "gdkprivate.h"
 #include "gdki18n.h"
@@ -39,6 +40,12 @@ typedef struct {
   gpointer value;
 } GdkImArg;
 
+/* If this variable is FALSE, it indicates that we should
+ * avoid trying to use multibyte conversion functions and
+ * assume everything is 1-byte per character
+ */
+gboolean gdk_use_mb;
+
 #ifdef USE_XIM
 
 static void   gdk_im_instantiate_cb      (Display *display,
@@ -60,6 +67,69 @@ static XIMStyle xim_best_allowed_style;
 static GList* xim_ic_list;
 
 #endif /* USE_XIM */
+
+/*
+ *--------------------------------------------------------------
+ * gdk_set_locale
+ *
+ * Arguments:
+ *
+ * Results:
+ *
+ * Side effects:
+ *
+ *--------------------------------------------------------------
+ */
+
+gchar*
+gdk_set_locale (void)
+{
+  wchar_t result;
+  gchar *current_locale;
+
+  gdk_use_mb = FALSE;
+
+  if (!setlocale (LC_ALL,""))
+    g_message ("locale not supported by C library");
+  
+  if (!XSupportsLocale ())
+    {
+      g_message ("locale not supported by Xlib, locale set to C");
+      setlocale (LC_ALL, "C");
+    }
+  
+  if (!XSetLocaleModifiers (""))
+    g_message ("can not set locale modifiers");
+
+  current_locale = setlocale (LC_ALL, "");
+
+  if ((strcmp (current_locale, "C")) && (strcmp (current_locale, "POSIX")))
+    {
+      gdk_use_mb = TRUE;
+
+#ifndef X_LOCALE
+      /* Detect GNU libc, where mb == UTF8. Not useful unless it's
+       * really a UTF8 locale. The below still probably will
+       * screw up on Greek, Cyrillic, etc, encoded as UTF8.
+       */
+      
+      if ((MB_CUR_MAX == 2) &&
+	  (mbstowcs (&result, "\xdd\xa5", 1) > 0) &&
+	  result == 0x765)
+	{
+	  if ((strlen (current_locale) < 4) ||
+	      g_strcasecmp (current_locale + strlen(current_locale) - 4, "utf8"))
+	    gdk_use_mb = FALSE;
+	}
+#endif /* X_LOCALE */
+    }
+
+  GDK_NOTE (XIM,
+	    g_message ("%s multi-byte string functions.", 
+		       gdk_use_mb ? "Using" : "Not using"));
+  
+  return setlocale (LC_ALL,NULL);
+}
 
 /*
  *--------------------------------------------------------------
@@ -1374,37 +1444,56 @@ gchar *
 gdk_wcstombs (const GdkWChar *src)
 {
   gchar *mbstr;
-  XTextProperty tpr;
-  if (sizeof(wchar_t) != sizeof(GdkWChar))
+
+  if (gdk_use_mb)
     {
-      gint i;
-      wchar_t *src_alt;
-      for (i=0; src[i]; i++);
-      src_alt = g_new (wchar_t, i+1);
-      for (; i>=0; i--)
-      src_alt[i] = src[i];
-      if (XwcTextListToTextProperty (gdk_display, &src_alt, 1, XTextStyle, &tpr)
-	  != Success)
+      XTextProperty tpr;
+
+      if (sizeof(wchar_t) != sizeof(GdkWChar))
 	{
+	  gint i;
+	  wchar_t *src_alt;
+	  for (i=0; src[i]; i++);
+	  src_alt = g_new (wchar_t, i+1);
+	  for (; i>=0; i--)
+	    src_alt[i] = src[i];
+	  if (XwcTextListToTextProperty (gdk_display, &src_alt, 1, XTextStyle, &tpr)
+	      != Success)
+	    {
+	      g_free (src_alt);
+	      return NULL;
+	    }
 	  g_free (src_alt);
-	  return NULL;
 	}
-      g_free (src_alt);
+      else
+	{
+	  if (XwcTextListToTextProperty (gdk_display, (wchar_t**)&src, 1,
+					 XTextStyle, &tpr) != Success)
+	    {
+	      return NULL;
+	    }
+	}
+      /*
+       * We must copy the string into an area allocated by glib, because
+       * the string 'tpr.value' must be freed by XFree().
+       */
+      mbstr = g_strdup(tpr.value);
+      XFree (tpr.value);
     }
   else
     {
-      if (XwcTextListToTextProperty (gdk_display, (wchar_t**)&src, 1,
-				     XTextStyle, &tpr) != Success)
-	{
-	  return NULL;
-	}
+      gint length = 0;
+      gint i;
+
+      while (src[length++] != 0)
+	;
+      
+      mbstr = g_new (gchar, length + 1);
+
+      for (i=0; i<length+1; i++)
+	mbstr[i] = src[i];
     }
-  /*
-   * We must copy the string into an area allocated by glib, because
-   * the string 'tpr.value' must be freed by XFree().
-   */
-  mbstr = g_strdup(tpr.value);
-  XFree (tpr.value);
+
   return mbstr;
 }
   
@@ -1418,28 +1507,40 @@ gdk_wcstombs (const GdkWChar *src)
 gint
 gdk_mbstowcs (GdkWChar *dest, const gchar *src, gint dest_max)
 {
-  XTextProperty tpr;
-  wchar_t **wstrs, *wstr_src;
-  gint num_wstrs;
-  gint len_cpy;
-  if (XmbTextListToTextProperty (gdk_display, (char **)&src, 1, XTextStyle,
-				 &tpr)
-      != Success)
+  if (gdk_use_mb)
     {
-      /* NoMem or LocaleNotSupp */
-      return -1;
+      XTextProperty tpr;
+      wchar_t **wstrs, *wstr_src;
+      gint num_wstrs;
+      gint len_cpy;
+      if (XmbTextListToTextProperty (gdk_display, (char **)&src, 1, XTextStyle,
+				     &tpr)
+	  != Success)
+	{
+	  /* NoMem or LocaleNotSupp */
+	  return -1;
+	}
+      if (XwcTextPropertyToTextList (gdk_display, &tpr, &wstrs, &num_wstrs)
+	  != Success)
+	{
+	  /* InvalidChar */
+	  return -1;
+	}
+      if (num_wstrs == 0)
+	return 0;
+      wstr_src = wstrs[0];
+      for (len_cpy=0; len_cpy<dest_max && wstr_src[len_cpy]; len_cpy++)
+	dest[len_cpy] = wstr_src[len_cpy];
+      XwcFreeStringList (wstrs);
+      return len_cpy;
     }
-  if (XwcTextPropertyToTextList (gdk_display, &tpr, &wstrs, &num_wstrs)
-      != Success)
+  else
     {
-      /* InvalidChar */
-      return -1;
+      gint i;
+
+      for (i=0; i<dest_max && src[i]; i++)
+	dest[i] = src[i];
+
+      return i;
     }
-  if (num_wstrs == 0)
-    return 0;
-  wstr_src = wstrs[0];
-  for (len_cpy=0; len_cpy<dest_max && wstr_src[len_cpy]; len_cpy++)
-    dest[len_cpy] = wstr_src[len_cpy];
-  XwcFreeStringList (wstrs);
-  return len_cpy;
 }

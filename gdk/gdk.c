@@ -18,7 +18,6 @@
  */
 #include "config.h"
 
-#include <X11/Xlocale.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -446,39 +445,6 @@ gdk_exit (int errorcode)
   /* de-initialisation is done by the gdk_exit_funct(),
      no need to do this here (Alex J.) */
   exit (errorcode);
-}
-
-/*
- *--------------------------------------------------------------
- * gdk_set_locale
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-
-gchar*
-gdk_set_locale (void)
-{
-  if (!setlocale (LC_ALL,""))
-    g_message ("locale not supported by C library");
-  
-  if (!XSupportsLocale ())
-    {
-      g_message ("locale not supported by Xlib, locale set to C");
-      setlocale (LC_ALL, "C");
-    }
-  
-  if (!XSetLocaleModifiers (""))
-    {
-      g_message ("can not set locale modifiers");
-    }
-  
-  return setlocale (LC_ALL,NULL);
 }
 
 void

@@ -1,3 +1,8 @@
+Wed Dec 16 22:50:52 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdk.c gdk/gdkim.c: Check for broken glibc 2.0 
+	mb functions, and avoid them.
+
 Wed Dec 16 16:57:55 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkevents.c (gdk_events_queue): Don't
