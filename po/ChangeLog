@@ -1,3 +1,8 @@
+2001-07-09  Christian Rose  <menthos@menthos.com>
+
+	* sv.po: Updated Swedish translation.
+	* .cvsignore: Added gtk+.pot to the list of files.
+
 2001-07-06  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* az.po: Updated Azeri file
