@@ -129,16 +129,6 @@ void   gdk_im_close		 (void);
 void   gdk_ic_cleanup		 (void);
 #endif /* USE_XIM */
 
-GdkWindow* _gdk_window_alloc             (void);
-void       _gdk_window_draw_image        (GdkDrawable *drawable,
-					  GdkGC       *gc,
-					  GdkImage    *image,
-					  gint         xsrc,
-					  gint         ysrc,
-					  gint         xdest,
-					  gint         ydest,
-					  gint         width,
-					  gint         height);
 void       _gdk_window_destroy           (GdkWindow   *window,
 					  gboolean     foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow   *window);

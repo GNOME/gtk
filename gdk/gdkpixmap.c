@@ -86,6 +86,17 @@ static void   gdk_pixmap_draw_lines     (GdkDrawable     *drawable,
 					 GdkGC           *gc,
 					 GdkPoint        *points,
 					 gint             npoints);
+
+static void   gdk_pixmap_draw_image     (GdkDrawable     *drawable,
+                                         GdkGC           *gc,
+                                         GdkImage        *image,
+                                         gint             xsrc,
+                                         gint             ysrc,
+                                         gint             xdest,
+                                         gint             ydest,
+                                         gint             width,
+                                         gint             height);
+
 static void   gdk_pixmap_real_get_size  (GdkDrawable     *drawable,
                                          gint            *width,
                                          gint            *height);
@@ -158,6 +169,7 @@ gdk_pixmap_class_init (GdkPixmapObjectClass *klass)
   drawable_class->draw_points = gdk_pixmap_draw_points;
   drawable_class->draw_segments = gdk_pixmap_draw_segments;
   drawable_class->draw_lines = gdk_pixmap_draw_lines;
+  drawable_class->draw_image = gdk_pixmap_draw_image;
   drawable_class->get_depth = gdk_pixmap_real_get_depth;
   drawable_class->get_size = gdk_pixmap_real_get_size;
   drawable_class->set_colormap = gdk_pixmap_real_set_colormap;
@@ -309,6 +321,23 @@ gdk_pixmap_draw_lines (GdkDrawable *drawable,
   GdkPixmapObject *private = (GdkPixmapObject *)drawable;
 
   gdk_draw_lines (private->impl, gc, points, npoints);
+}
+
+static void
+gdk_pixmap_draw_image (GdkDrawable     *drawable,
+                       GdkGC           *gc,
+                       GdkImage        *image,
+                       gint             xsrc,
+                       gint             ysrc,
+                       gint             xdest,
+                       gint             ydest,
+                       gint             width,
+                       gint             height)
+{
+  GdkPixmapObject *private = (GdkPixmapObject *)drawable;
+
+  gdk_draw_image (private->impl, gc, image, xsrc, ysrc, xdest, ydest,
+                  width, height);
 }
 
 static void

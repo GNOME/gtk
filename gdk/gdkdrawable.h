@@ -86,6 +86,16 @@ struct _GdkDrawableClass
 			  GdkPoint     *points,
 			  gint          npoints);
 
+  void (*draw_image)     (GdkDrawable *drawable,
+                          GdkGC	      *gc,
+                          GdkImage    *image,
+                          gint	       xsrc,
+                          gint	       ysrc,
+                          gint	       xdest,
+                          gint	       ydest,
+                          gint	       width,
+                          gint	       height);
+  
   gint (*get_depth)      (GdkDrawable  *drawable);
   void (*get_size)       (GdkDrawable  *drawable,
                           gint         *width,

@@ -84,6 +84,15 @@ static void gdk_x11_draw_lines     (GdkDrawable    *drawable,
 				    GdkGC          *gc,
 				    GdkPoint       *points,
 				    gint            npoints);
+static void gdk_x11_draw_image     (GdkDrawable     *drawable,
+                                    GdkGC           *gc,
+                                    GdkImage        *image,
+                                    gint             xsrc,
+                                    gint             ysrc,
+                                    gint             xdest,
+                                    gint             ydest,
+                                    gint             width,
+                                    gint             height);
 
 static void gdk_x11_set_colormap   (GdkDrawable    *drawable,
                                     GdkColormap    *colormap);
@@ -153,7 +162,8 @@ gdk_drawable_impl_class_init (GdkDrawableImplClass *klass)
   drawable_class->draw_points = gdk_x11_draw_points;
   drawable_class->draw_segments = gdk_x11_draw_segments;
   drawable_class->draw_lines = gdk_x11_draw_lines;
-
+  drawable_class->draw_image = gdk_x11_draw_image;
+  
   drawable_class->set_colormap = gdk_x11_set_colormap;
   drawable_class->get_colormap = gdk_x11_get_colormap;
 
@@ -561,6 +571,33 @@ gdk_x11_draw_lines (GdkDrawable *drawable,
 	      CoordModeOrigin);
 
   g_free (tmp_points);
+}
+
+static void
+gdk_x11_draw_image     (GdkDrawable     *drawable,
+                        GdkGC           *gc,
+                        GdkImage        *image,
+                        gint             xsrc,
+                        gint             ysrc,
+                        gint             xdest,
+                        gint             ydest,
+                        gint             width,
+                        gint             height)
+{
+  GdkDrawableImpl *impl;
+
+  g_return_if_fail (GDK_IS_DRAWABLE_IMPL (drawable));
+
+  impl = GDK_DRAWABLE_IMPL (drawable);
+
+  if (image->type == GDK_IMAGE_SHARED)
+    XShmPutImage (impl->xdisplay, impl->xid,
+                  GDK_GC_GET_XGC (gc), GDK_IMAGE_XIMAGE (image),
+                  xsrc, ysrc, xdest, ydest, width, height, False);
+  else
+    XPutImage (impl->xdisplay, impl->xid,
+               GDK_GC_GET_XGC (gc), GDK_IMAGE_XIMAGE (image),
+               xsrc, ysrc, xdest, ydest, width, height);
 }
 
 static gint

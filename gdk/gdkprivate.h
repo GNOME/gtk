@@ -51,35 +51,11 @@ extern "C" {
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
-typedef struct _GdkImageClass	       GdkImageClass;
-typedef struct _GdkImagePrivate	       GdkImagePrivate;
 typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
 typedef struct _GdkClientFilter	       GdkClientFilter;
-
-struct _GdkImageClass 
-{
-  void (*destroy)   (GdkImage    *image);
-  void (*image_put) (GdkImage	 *image,
-		     GdkDrawable *window,
-		     GdkGC	 *gc,
-		     gint	  xsrc,
-		     gint	  ysrc,
-		     gint	  xdest,
-		     gint	  ydest,
-		     gint	  width,
-		     gint	  height);
-};
-
-struct _GdkImagePrivate
-{
-  GdkImage image;
-
-  guint ref_count;
-  GdkImageClass *klass;
-};
 
 struct _GdkFontPrivate
 {

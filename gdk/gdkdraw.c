@@ -396,26 +396,17 @@ gdk_draw_image (GdkDrawable *drawable,
 		gint         width,
 		gint         height)
 {
-  GdkImagePrivate *image_private;
-
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (image != NULL);
   g_return_if_fail (gc != NULL);
-
-  image_private = (GdkImagePrivate*) image;
 
   if (width == -1)
     width = image->width;
   if (height == -1)
     height = image->height;
 
-
-  if (GDK_IS_WINDOW (drawable))
-    _gdk_window_draw_image (drawable, gc, image, xsrc, ysrc,
-			    xdest, ydest, width, height);
-  else
-    image_private->klass->image_put (image, drawable, gc, xsrc, ysrc,
-				     xdest, ydest, width, height);
+  GDK_DRAWABLE_GET_CLASS (drawable)->draw_image (drawable, gc, image, xsrc, ysrc,
+                                                 xdest, ydest, width, height);
 }
 
 void

@@ -29,8 +29,19 @@ typedef enum
   GDK_IMAGE_SHARED_PIXMAP
 } GdkImageType;
 
+typedef struct _GdkImageClass GdkImageClass;
+
+#define GDK_TYPE_IMAGE              (gdk_image_get_type ())
+#define GDK_IMAGE(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_IMAGE, GdkImage))
+#define GDK_IMAGE_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_IMAGE, GdkImageClass))
+#define GDK_IS_IMAGE(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_IMAGE))
+#define GDK_IS_IMAGE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_IMAGE))
+#define GDK_IMAGE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_IMAGE, GdkImageClass))
+
 struct _GdkImage
 {
+  GObject parent_instance;
+  
   GdkImageType	type;
   GdkVisual    *visual;	    /* visual used to create the image */
   GdkByteOrder	byte_order;
@@ -40,9 +51,18 @@ struct _GdkImage
   guint16	bpp;	    /* bytes per pixel */
   guint16	bpl;	    /* bytes per line */
   gpointer	mem;
+
+  gpointer windowing_data;
 };
 
-GdkImage* gdk_image_new_bitmap(GdkVisual     *visual,
+struct _GdkImageClass
+{
+  GObjectClass parent_class;
+};
+
+GType     gdk_image_get_type   (void);
+
+GdkImage* gdk_image_new_bitmap (GdkVisual     *visual,
 				gpointer      data,
 				gint          width,
 				gint          height);
@@ -73,7 +93,6 @@ void	   gdk_image_put_pixel (GdkImage     *image,
 guint32	   gdk_image_get_pixel (GdkImage     *image,
 				gint	      x,
 				gint	      y);
-
 
 #ifdef __cplusplus
 }

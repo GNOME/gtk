@@ -40,7 +40,7 @@ typedef struct _GdkGCXData             GdkGCXData;
 typedef struct _GdkColormapPrivateData GdkColormapPrivateData;
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 typedef struct _GdkFontPrivateX        GdkFontPrivateX;
-typedef struct _GdkImagePrivateX       GdkImagePrivateX;
+typedef struct _GdkImagePrivateData    GdkImagePrivateData;
 typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 
 #ifdef USE_XIM
@@ -93,10 +93,8 @@ struct _GdkColormapPrivateData
   time_t last_sync_time;
 };
 
-struct _GdkImagePrivateX
+struct _GdkImagePrivateData
 {
-  GdkImagePrivate base;
-  
   XImage *ximage;
   Display *xdisplay;
   gpointer x_shm_info;
@@ -123,8 +121,8 @@ struct _GdkICPrivate
 #define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL(((GdkPixmapObject*)win)->impl)->xid)
 #define GDK_DRAWABLE_XDISPLAY(win)    (GDK_IS_WINDOW (win) ? GDK_WINDOW_XDISPLAY (win) : GDK_PIXMAP_XDISPLAY (win))
 #define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
-#define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivate*) image)->xdisplay)
-#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivate*) image)->ximage)
+#define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivateData*) GDK_IMAGE (image)->windowing_data)->xdisplay)
+#define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivateData*) GDK_IMAGE (image)->windowing_data)->ximage)
 #define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)
 #define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateData *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateData *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
