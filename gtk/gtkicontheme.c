@@ -747,8 +747,8 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
   priv->search_path_len++;
   priv->search_path = g_renew (gchar *, priv->search_path, priv->search_path_len);
 
-  for (i = 0; i < priv->search_path_len - 1; i++)
-    priv->search_path[i+1] = priv->search_path[i];
+  for (i = priv->search_path_len - 1; i > 0; i--)
+    priv->search_path[i] = priv->search_path[i - 1];
   
   priv->search_path[0] = g_strdup (path);
 
