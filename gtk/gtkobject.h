@@ -135,7 +135,7 @@ struct _GtkObjectClass
   /* The type identifier for the objects class. There is
    *  one unique identifier per class.
    */
-  guint type;
+  GtkType type;
 
   /* The signals this object class handles. "signals" is an
    *  array of signal ID's.
@@ -198,6 +198,15 @@ void	gtk_object_set		(GtkObject	*object,
 void	gtk_object_setv		(GtkObject	*object,
 				 guint		nargs,
 				 GtkArg		*args);
+
+/* Allocate a GtkArg array of size nargs that hold the
+ * names and types of the args that can be used with
+ * gtk_object_set/gtk_object_get.
+ * It is the callers response to do a
+ * g_free (returned_args).
+ */
+GtkArg* gtk_object_query_args   (GtkType	class_type,
+				 guint          *nargs);
 
 void	gtk_object_add_arg_type	(const gchar	*arg_name,
 				 GtkType	arg_type,

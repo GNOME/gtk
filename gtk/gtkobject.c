@@ -372,6 +372,88 @@ gtk_object_getv (GtkObject           *object,
 }
 
 /*****************************************
+ * gtk_object_query_args:
+ *
+ *   arguments:
+ *
+ *   results:
+ *****************************************/
+
+struct _GtkQueryArgData
+{
+  GList *arg_list;
+  GtkType class_type;
+};
+typedef	struct	_GtkQueryArgData	GtkQueryArgData;
+
+static void
+gtk_query_arg_foreach (gpointer key,
+		       gpointer value,
+		       gpointer user_data)
+{
+  register GtkArgInfo *info;
+  register GtkQueryArgData *data;
+
+  info = value;
+  data = user_data;
+
+  if (info->class_type == data->class_type)
+    data->arg_list = g_list_prepend (data->arg_list, info);
+}
+
+GtkArg*
+gtk_object_query_args (GtkType	class_type,
+		       guint    *nargs)
+{
+  GtkArg *args;
+  GtkQueryArgData query_data;
+
+  g_return_val_if_fail (nargs != NULL, NULL);
+  *nargs = 0;
+  g_return_val_if_fail (gtk_type_is_a (class_type, gtk_object_get_type ()), NULL);
+
+  if (!arg_info_ht)
+    return NULL;
+
+  query_data.arg_list = NULL;
+  query_data.class_type = class_type;
+  g_hash_table_foreach (arg_info_ht, gtk_query_arg_foreach, &query_data);
+
+  if (query_data.arg_list)
+    {
+      register GList	*list;
+      register guint	i;
+
+      list = query_data.arg_list;
+      
+      i = g_list_length (list);
+      args = g_new0 (GtkArg, i);
+      *nargs = i;
+
+      do
+	{
+	  GtkArgInfo *info;
+
+	  i--;
+	  info = list->data;
+	  list = list->next;
+
+	  args[i].type = info->type;
+	  args[i].name = info->name;
+	}
+      while (i > 0);
+
+      g_assert (list == NULL); /* paranoid */
+
+      g_list_free (query_data.arg_list);
+    }
+  else
+    args = NULL;
+
+  return args;
+}
+
+/*****************************************
  * gtk_object_set:
  *
  *   arguments:

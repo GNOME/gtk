@@ -1,3 +1,10 @@
+Sat Jan 17 06:24:05 1998  Tim Janik  <timj@psynet.net>
+
+	* gtk/gtktypeutils.h (gtk_type_get_arg): new function.
+	* gtk/gtkobject.h (gtk_object_query_args): new function.
+	* gtk/gtkobject.h (gtk_object_getv): new function.
+	* gtk/gtkwidget.h (gtk_widget_get): new function.
+
 Fri Jan 16 00:36:31 1998  Federico Mena  <federico@bananoid.nuclecu.unam.mx>
 
 	* gtk/gtkhandlebox.c: Now we use a GtkWindow of type
