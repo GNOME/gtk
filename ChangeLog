@@ -1,5 +1,10 @@
 2004-07-19  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkentrycompletion.c (gtk_entry_completion_set_popup_completion):
+	Fix doc comment.
+	
+2004-07-19  Matthias Clasen  <mclasen@redhat.com>
+
 	Make GtkCellView public, since people seem to have uses for it, 
 	it is clean API and we were just conservative in not making it 
 	public initially. At the same time, get rid of GtkCellViewMenuItem,

@@ -1565,7 +1565,7 @@ gtk_entry_completion_get_inline_completion (GtkEntryCompletion *completion)
 /**
  * gtk_entry_completion_set_popup_completion:
  * @completion: a #GtkEntryCompletion
- * @inline_completion: %TRUE to do popup completion
+ * @popup_completion: %TRUE to do popup completion
  * 
  * Sets whether the completions should be presented in a popup window.
  * 
