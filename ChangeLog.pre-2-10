@@ -1,3 +1,8 @@
+Thu Nov  1 12:21:31 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_focus_to_cursor): Fix crash
+	found by Matt Wilson.
+
 Thu Nov  1 00:44:50 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_class_init): Support Shift,
