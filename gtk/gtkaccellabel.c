@@ -320,6 +320,7 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	{
 	  PangoLayout *label_layout;
 	  PangoLayout *accel_layout;
+	  GtkLabel *label = GTK_LABEL (widget);
 
 	  gint x;
 	  gint y;
@@ -327,11 +328,20 @@ gtk_accel_label_expose_event (GtkWidget      *widget,
 	  if (direction == GTK_TEXT_DIR_RTL)
 	    widget->allocation.x += ac_width;
 	  widget->allocation.width -= ac_width;
+	  if (gtk_label_get_ellipsize (label))
+	    pango_layout_set_width (label->layout,
+				    pango_layout_get_width (label->layout) 
+				    - ac_width * PANGO_SCALE);
+	  
 	  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
 	    GTK_WIDGET_CLASS (parent_class)->expose_event (widget, event);
 	  if (direction == GTK_TEXT_DIR_RTL)
 	    widget->allocation.x -= ac_width;
 	  widget->allocation.width += ac_width;
+	  if (gtk_label_get_ellipsize (label))
+	    pango_layout_set_width (label->layout,
+				    pango_layout_get_width (label->layout) 
+				    + ac_width * PANGO_SCALE);
 	  
 	  if (direction == GTK_TEXT_DIR_RTL)
 	    x = widget->allocation.x + misc->xpad;

@@ -1,3 +1,8 @@
+Wed Sep  1 02:38:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_expose_event): Make
+	accel labels ellipsize correctly.  (#151559, Christian Persch)
+
 Wed Sep  1 00:55:56 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkimage.c (gtk_image_clear): Don't leak the iter
