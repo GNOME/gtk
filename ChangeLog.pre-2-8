@@ -1,3 +1,20 @@
+2001-11-06  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk+-zip.sh: Separate runtime and developer packages.
+
+	The following seems to fix Bug#60620:
+
+	* gdk/win32/gdkprivate-win32.h (struct _GdkWindowWin32Data): Add
+	owner thread id.
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_clear_area): Instead of
+	calling sending WM_ERASEBKGND to the window, call the window
+	procedure directly. Clean out the #if 0 cruft.
+
+	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_drawable): If the
+	window is owned by another thread, don't call UpdateWindow(), but
+	post WM_PAINT to the thread.
+
 2001-11-04  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdrawable-win32.c (gdk_win32_draw_drawable): Plug

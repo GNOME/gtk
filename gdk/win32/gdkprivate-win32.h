@@ -307,6 +307,8 @@ struct _GdkWindowWin32Data
 {
   GdkDrawableWin32Data drawable;
 
+  DWORD owner_thread_id;
+
   /* We must keep the event mask here to filter them ourselves */
   gint event_mask;
 

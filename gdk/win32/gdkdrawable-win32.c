@@ -645,10 +645,9 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
   src_private = (GdkDrawablePrivate*) src;
   gc_private = (GdkGCPrivate*) gc;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: dest: %#x "
+  GDK_NOTE (MISC, g_print ("gdk_win32_draw_drawable: "
 			   "src: %#x %dx%d@+%d+%d"
 			   " dest: %#x @+%d+%d\n",
-			   (guint) GDK_DRAWABLE_XID (drawable),
 			   (guint) GDK_DRAWABLE_XID (src),
 			   width, height, xsrc, ysrc,
 			   (guint) GDK_DRAWABLE_XID (drawable), xdest, ydest));
@@ -746,8 +745,14 @@ gdk_win32_draw_drawable (GdkDrawable *drawable,
 	    WIN32_GDI_FAILED ("ScrollDC");
 	  if (!InvalidateRgn (GDK_DRAWABLE_XID (drawable), updateRgn, FALSE))
 	    WIN32_GDI_FAILED ("InvalidateRgn");
-	  if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
-	    WIN32_GDI_FAILED ("UpdateWindow");
+	  if (GDK_WINDOW_WIN32DATA (drawable)->owner_thread_id != GetCurrentThreadId ())
+	    {
+	      if (!PostThreadMessage (GDK_WINDOW_WIN32DATA (drawable)->owner_thread_id, WM_PAINT, 0, 0))
+		WIN32_API_FAILED ("PostThreadMessage");
+	    }
+	  else
+	    if (!UpdateWindow (GDK_DRAWABLE_XID (drawable)))
+	      WIN32_GDI_FAILED ("UpdateWindow");
 	  if (!DeleteObject (updateRgn))
 	    WIN32_GDI_FAILED ("DeleteObject");
 	}
