@@ -242,6 +242,46 @@ _gtk_key_hash_remove_entry (GtkKeyHash *key_hash,
     }
 }
 
+static gint
+lookup_result_compare (gconstpointer a,
+		       gconstpointer b)
+{
+  const GtkKeyHashEntry *entry_a = a;
+  const GtkKeyHashEntry *entry_b = b;
+  guint modifiers;
+
+  gint n_bits_a = 0;
+  gint n_bits_b = 0;
+
+  modifiers = entry_a->modifiers;
+  while (modifiers)
+    {
+      if (modifiers & 1)
+	n_bits_a++;
+      modifiers >>= 1;
+    }
+
+  modifiers = entry_b->modifiers;
+  while (modifiers)
+    {
+      if (modifiers & 1)
+	n_bits_b++;
+      modifiers >>= 1;
+    }
+
+  return n_bits_a < n_bits_b ? -1 : (n_bits_a == n_bits_b ? 0 : 1);
+  
+}
+
+/* Sort a list of results so that matches with less modifiers come
+ * before matches with more modifiers
+ */
+static GSList *
+sort_lookup_results (GSList *slist)
+{
+  return g_slist_sort (slist, lookup_result_compare);
+}
+
 /**
  * _gtk_key_hash_lookup:
  * @key_hash: a #GtkKeyHash
@@ -250,7 +290,8 @@ _gtk_key_hash_remove_entry (GtkKeyHash *key_hash,
  * @group: group field from a #GdkEventKey
  * 
  * Looks up the best matching entry or entries in the hash table for
- * a given event.
+ * a given event. The results are sorted so that entries with less
+ * modifiers come before entries with more modifiers.
  * 
  * Return value: A #GSList of all matching entries. If there were exact
  *  matches, they are returned, otherwise all fuzzy matches are
@@ -328,7 +369,7 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
 	}
     }
 
-  return results;
+  return sort_lookup_results (results);
 }
 
 /**
@@ -339,7 +380,8 @@ _gtk_key_hash_lookup (GtkKeyHash      *key_hash,
  * Looks up the best matching entry or entries in the hash table for a
  * given keyval/modifiers pair. It's better to use
  * _gtk_key_hash_lookup() if you have the original #GdkEventKey
- * available.
+ * available.  The results are sorted so that entries with less
+ * modifiers come before entries with more modifiers.
  * 
  * Return value: A #GSList of all matching entries.
  **/
@@ -377,5 +419,5 @@ _gtk_key_hash_lookup_keyval (GtkKeyHash     *key_hash,
 
   g_free (keys);
 	  
-  return results;
+  return sort_lookup_results (results);
 }

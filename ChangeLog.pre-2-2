@@ -1,3 +1,20 @@
+Fri Mar 22 11:29:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	Partial fix for problem where keypad keys acted
+	as shift-arrows in an entry rather than arrows (#74327)
+
+	* gtk/gtkkeyhash.c (_gtk_key_hash_lookup): Sort lookup
+	results by number of modifiers in the entry. Fixes
+	problem where if a key matched both modified and unmodified
+	key bindings ... e.g., the distinguishing key binding
+	was consumed, then it was random which was used. 
+
+	* gtk/gtkbindings.c (gtk_binding_entries_sort_patterns): 
+	Catch the case where there are multiple entries from the
+	same bindingset (with different modifiers), and use only
+	the first entry, which, with the change in _gtk_key_hash_lookup()
+	will be the preferred value.
+
 Fri Mar 22 10:56:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkaccelmap.c (gtk_accel_map_save_fd): Fix memory

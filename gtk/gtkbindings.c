@@ -954,8 +954,18 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
 				   gboolean     is_release)
 {
   GSList *patterns;
+  GSList *tmp_list;
 
   patterns = NULL;
+  for (tmp_list = entries; tmp_list; tmp_list = tmp_list->next)
+    {
+      GtkBindingEntry *entry = tmp_list->data;
+      GtkBindingSet *binding_set;
+
+      binding_set = entry->binding_set;
+      binding_set->current = NULL;
+    }
+  
   for (; entries; entries = entries->next)
     {
       GtkBindingEntry *entry = entries->data;
@@ -966,6 +976,9 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
 	continue;
 
       binding_set = entry->binding_set;
+
+      if (binding_set->current)
+	continue;
       binding_set->current = entry;
 
       switch (path_id)
