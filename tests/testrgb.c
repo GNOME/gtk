@@ -127,6 +127,8 @@ testrgb_rgb_test (GtkWidget *drawing_area)
 	       NUM_ITERS * (WIDTH * HEIGHT * 1e-6) / total_time);
     }
 
+  g_print ("Please submit these results to http://www.levien.com/gdkrgb/survey.html\n");
+
 #if 1
   for (x = 0; x < WIDTH; x++)
     {

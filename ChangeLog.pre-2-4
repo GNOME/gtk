@@ -1,3 +1,8 @@
+Mon Oct  5 15:26:30 1998  Raph Levien  <raph@gimp.org>
+
+	* gdk/gdkrgb.c (gdk_rgb_convert_0888_br): Fixed a few long's that
+	should have been guint32. Thanks to Tristan Colgate for finding it.
+
 Sun Oct  4 22:47:22 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gtk/gtkcalendar.h:

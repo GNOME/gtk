@@ -1867,7 +1867,7 @@ gdk_rgb_convert_0888 (GdkImage *image,
 	  r = bp2[0];
 	  g = bp2[1];
 	  b = bp2[2];
-	  ((unsigned long *)obuf)[x] = (r << 16) | (g << 8) | b;
+	  ((guint32 *)obuf)[x] = (r << 16) | (g << 8) | b;
 	  bp2 += 3;
 	}
       bptr += rowstride;
@@ -1898,7 +1898,7 @@ gdk_rgb_convert_0888_br (GdkImage *image,
 	  r = bp2[0];
 	  g = bp2[1];
 	  b = bp2[2];
-	  ((unsigned long *)obuf)[x] = (b << 24) | (g << 16) | (r << 8);
+	  ((guint32 *)obuf)[x] = (b << 24) | (g << 16) | (r << 8);
 	  bp2 += 3;
 	}
       bptr += rowstride;
@@ -1929,7 +1929,7 @@ gdk_rgb_convert_8880_br (GdkImage *image,
 	  r = bp2[0];
 	  g = bp2[1];
 	  b = bp2[2];
-	  ((unsigned long *)obuf)[x] = (b << 16) | (g << 8) | r;
+	  ((guint32 *)obuf)[x] = (b << 16) | (g << 8) | r;
 	  bp2 += 3;
 	}
       bptr += rowstride;
