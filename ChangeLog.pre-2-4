@@ -1,3 +1,11 @@
+Sat Apr 20 16:49:26 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gdk/x11/gdkpixmap-x11.c (gdk_pixmap_new): replace GDK_IS_WINDOW
+	with GDK_IS_DRAWABLE in the assert, only check GDK_WINDOW_DESTROYED
+	if window is a GdkWindow,
+	(gdk_bitmap_create_from_data): ditto,
+	(gdk_pixmap_create_from_data): ditto
+
 Fri Apr 19 23:38:16 2002  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #50310.
