@@ -666,7 +666,7 @@ create_text (GtkTextBuffer **buffer,
   
   if (is_source)
     {
-      font_desc = pango_font_description_from_string ("Courier 12");
+      font_desc = pango_font_description_from_string ("monospace");
       gtk_widget_modify_font (text_view, font_desc);
       pango_font_description_free (font_desc);
 

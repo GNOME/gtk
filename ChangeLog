@@ -1,5 +1,8 @@
 2005-01-13  Matthias Clasen  <mclasen@redhat.com>
 
+	* demos/gtk-demo/main.c (create_text): Use monospace for the 
+	source code view.  (#163526, Theerud Lawtrakul)
+
 	* gtk/gtkaboutdialog.c (gtk_about_dialog_init): Use R as mnemonic
 	for the Credits button to avoid duplicate.  (#163465, Tim-Philipp 
 	Müller)
