@@ -58,6 +58,8 @@ static void gtk_toggle_button_get_arg	 (GtkObject	       *object,
 static void gtk_toggle_button_leave      (GtkButton            *button);
 static void gtk_toggle_button_realize    (GtkWidget            *widget);
 static void gtk_toggle_button_unrealize  (GtkWidget            *widget);
+static void gtk_toggle_button_map        (GtkWidget            *widget);
+static void gtk_toggle_button_unmap      (GtkWidget            *widget);
 
 static guint toggle_button_signals[LAST_SIGNAL] = { 0 };
 static GtkContainerClass *parent_class = NULL;
@@ -121,6 +123,8 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   widget_class->draw = gtk_toggle_button_draw;
   widget_class->realize = gtk_toggle_button_realize;
   widget_class->unrealize = gtk_toggle_button_unrealize;
+  widget_class->map = gtk_toggle_button_map;
+  widget_class->unmap = gtk_toggle_button_unmap;
 
   button_class->pressed = gtk_toggle_button_pressed;
   button_class->released = gtk_toggle_button_released;
@@ -521,7 +525,6 @@ gtk_toggle_button_realize (GtkWidget *widget)
       
       toggle_button->event_window = 
 	gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-      gdk_window_show(toggle_button->event_window);
       gdk_window_set_user_data (toggle_button->event_window, toggle_button);
     }
   else
@@ -557,4 +560,30 @@ gtk_toggle_button_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_CLASS (parent_class)->unrealize)
     (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
+}
+
+static void
+gtk_toggle_button_map (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+
+  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
+    if (GTK_TOGGLE_BUTTON (widget)->draw_indicator)
+      gdk_window_show (GTK_TOGGLE_BUTTON (widget)->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->map (widget);
+}
+
+static void
+gtk_toggle_button_unmap (GtkWidget *widget)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_TOGGLE_BUTTON (widget));
+
+  if (GTK_WIDGET_MAPPED (widget))
+    if (GTK_TOGGLE_BUTTON (widget)->draw_indicator)
+      gdk_window_hide (GTK_TOGGLE_BUTTON (widget)->event_window);
+
+  GTK_WIDGET_CLASS (parent_class)->unmap (widget);
 }
