@@ -1,3 +1,8 @@
+Mon Mar 15 13:50:14 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_set_property):
+	Don't leak the temporary font description. (Nils O. Selåsdal)
+
 Mon Mar 15 12:51:17 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkfilechooserdefault.c (location_popup_handler): Only show

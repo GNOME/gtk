@@ -982,6 +982,8 @@ gtk_cell_renderer_text_set_property (GObject      *object,
           font_desc = pango_font_description_from_string (name);
 
         set_font_description (celltext, font_desc);
+
+	pango_font_description_free (font_desc);
         
 	if (celltext->fixed_height_rows != -1)
 	  celltext->calc_fixed_height = TRUE;
