@@ -31,6 +31,7 @@
 #include "gtkhbox.h"
 #include "gtkarrow.h"
 #include "gtkintl.h"
+#include "gtkbindings.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -95,6 +96,7 @@ enum
   EXPAND_ROW,
   COLLAPSE_ROW,
   COLUMNS_CHANGED,
+  MOVE_CURSOR,
   LAST_SIGNAL
 };
 
@@ -208,6 +210,10 @@ static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
 static void     gtk_tree_view_set_adjustments      (GtkTreeView      *tree_view,
 						    GtkAdjustment    *hadj,
 						    GtkAdjustment    *vadj);
+static void     gtk_tree_view_real_move_cursor     (GtkTreeView      *tree_view,
+						    GtkMovementStep   step,
+						    gint              count,
+						    gboolean          extend_selection);
 static void     gtk_tree_view_range_changed        (GtkTreeModel     *model,
 						    GtkTreePath      *path,
 						    GtkTreeIter      *iter,
@@ -231,6 +237,12 @@ static void     gtk_tree_view_reordered            (GtkTreeModel     *model,
 						    gint             *new_order,
 						    gpointer          data);
 /* Internal functions */
+
+static void     gtk_tree_view_add_move_binding     (GtkBindingSet    *binding_set,
+						    guint             keyval,
+						    guint             modmask,
+						    GtkMovementStep   step,
+						    gint              count);
 static void     gtk_tree_view_unref_tree           (GtkTreeView      *tree_view,
 						    GtkRBTree        *tree);
 static void     gtk_tree_view_queue_draw_node      (GtkTreeView      *tree_view,
@@ -284,7 +296,10 @@ static void     gtk_tree_view_clamp_node_visible   (GtkTreeView      *tree_view,
 static gboolean gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
                                                         GdkEventMotion   *event);
 static void     _gtk_tree_view_update_col_width    (GtkTreeView      *tree_view);
-
+static void     gtk_tree_view_set_cursor_focus     (GtkTreeView      *tree_view);
+static void     gtk_tree_view_move_cursor_up_down  (GtkTreeView      *tree_view,
+						    gint              count,
+						    gboolean          extend_selection);
 
 static GtkContainerClass *parent_class = NULL;
 static guint tree_view_signals[LAST_SIGNAL] = { 0 };
@@ -327,8 +342,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
+  GtkBindingSet *binding_set;
 
   parent_class = g_type_class_peek_parent (class);
+  binding_set = gtk_binding_set_by_class (class);
 
   o_class = (GObjectClass *) class;
   object_class = (GtkObjectClass *) class;
@@ -374,6 +391,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   container_class->set_focus_child = gtk_tree_view_set_focus_child;
 
   class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
+  class->move_cursor = gtk_tree_view_real_move_cursor;
+  /* Properties */
 
   g_object_class_install_property (o_class,
                                    PROP_MODEL,
@@ -441,6 +460,50 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 FALSE,
 							 G_PARAM_READWRITE));
 
+  /* Style properties */
+  /* the width of the column resize windows */
+#define _TREE_VIEW_EXPANDER_WIDTH 14
+#define _TREE_VIEW_EXPANDER_HEIGHT 14
+#define _TREE_VIEW_VERTICAL_SEPARATOR 2
+#define _TREE_VIEW_HORIZONTAL_SEPARATOR 0
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("expander_width",
+							     _("Expander Width"),
+							     _("Width of the expander arrow"),
+							     0,
+							     G_MAXINT,
+							     _TREE_VIEW_EXPANDER_WIDTH,
+							     G_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("expander_height",
+							     _("Expander Height"),
+							     _("Height of the expander arrow"),
+							     4,
+							     G_MAXINT,
+							     _TREE_VIEW_EXPANDER_HEIGHT,
+							     G_PARAM_READABLE));
+
+    gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("vertical_separator",
+							     _("Vertical Separator Width"),
+							     _("Vertical space between cells"),
+							     0,
+							     G_MAXINT,
+							     _TREE_VIEW_VERTICAL_SEPARATOR,
+							     G_PARAM_READABLE));
+
+    gtk_widget_class_install_style_property (widget_class,
+					   g_param_spec_int ("horizontal_separator",
+							     _("Horizontal Separator Width"),
+							     _("Horizontal space between cells"),
+							     0,
+							     G_MAXINT,
+							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
+							     G_PARAM_READABLE));
+
+  /* Signals */
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
@@ -491,47 +554,51 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 		   gtk_marshal_NONE__NONE,
 		   G_TYPE_NONE, 0);
 
-/* the width of the column resize windows */
-#define _TREE_VIEW_EXPANDER_WIDTH 14
-#define _TREE_VIEW_EXPANDER_HEIGHT 14
-#define _TREE_VIEW_VERTICAL_SEPARATOR 2
-#define _TREE_VIEW_HORIZONTAL_SEPARATOR 0
+  tree_view_signals[MOVE_CURSOR] =
+    g_signal_newc ("move_cursor",
+		   G_TYPE_FROM_CLASS (object_class),
+ 		   G_SIGNAL_RUN_LAST | GTK_RUN_ACTION,
+		   G_STRUCT_OFFSET (GtkTreeViewClass, move_cursor),
+		   NULL, NULL,
+		   gtk_marshal_VOID__ENUM_INT_BOOLEAN,
+		   GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("expander_width",
-							     _("Expander Width"),
-							     _("Width of the expander arrow"),
-							     0,
-							     G_MAXINT,
-							     _TREE_VIEW_EXPANDER_WIDTH,
-							     G_PARAM_READABLE));
+  /* Key bindings */
+  gtk_tree_view_add_move_binding (binding_set, GDK_Right, 0,
+				  GTK_MOVEMENT_VISUAL_POSITIONS, 1);
 
-  gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("expander_height",
-							     _("Expander Height"),
-							     _("Height of the expander arrow"),
-							     4,
-							     G_MAXINT,
-							     _TREE_VIEW_EXPANDER_HEIGHT,
-							     G_PARAM_READABLE));
+  gtk_tree_view_add_move_binding (binding_set, GDK_Left, 0,
+				  GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
-    gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("vertical_separator",
-							     _("Vertical Separator Width"),
-							     _("Vertical space between cells"),
-							     0,
-							     G_MAXINT,
-							     _TREE_VIEW_VERTICAL_SEPARATOR,
-							     G_PARAM_READABLE));
+  gtk_tree_view_add_move_binding (binding_set, GDK_f, GDK_CONTROL_MASK,
+				  GTK_MOVEMENT_LOGICAL_POSITIONS, 1);
 
-    gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("horizontal_separator",
-							     _("Horizontal Separator Width"),
-							     _("Horizontal space between cells"),
-							     0,
-							     G_MAXINT,
-							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
-							     G_PARAM_READABLE));
+  gtk_tree_view_add_move_binding (binding_set, GDK_b, GDK_CONTROL_MASK,
+				  GTK_MOVEMENT_LOGICAL_POSITIONS, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_Up, 0,
+				  GTK_MOVEMENT_DISPLAY_LINES, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_Down, 0,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_p, GDK_CONTROL_MASK,
+				  GTK_MOVEMENT_DISPLAY_LINES, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_n, GDK_CONTROL_MASK,
+				  GTK_MOVEMENT_DISPLAY_LINES, 1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_Home, 0,
+				  GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_End, 0,
+				  GTK_MOVEMENT_BUFFER_ENDS, 1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Up, 0,
+				  GTK_MOVEMENT_PAGES, -1);
+
+  gtk_tree_view_add_move_binding (binding_set, GDK_Page_Down, 0,
+				  GTK_MOVEMENT_PAGES, 1);
 }
 
 static void
@@ -2538,7 +2605,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	}
       return TRUE;
     }
-  return FALSE;
+  return (* GTK_WIDGET_CLASS (parent_class)->key_press_event) (widget, event);
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -3743,57 +3810,23 @@ gtk_tree_view_focus (GtkContainer     *container,
 
   focus_child = container->focus_child;
 
-  /* Case 1.  Headers have focus. */
+  /* Case 1.  Headers currently have focus. */
   if (focus_child)
     {
       switch (direction)
 	{
 	case GTK_DIR_LEFT:
 	case GTK_DIR_RIGHT:
-	  return (gtk_tree_view_header_focus (tree_view, direction));
+	  gtk_tree_view_header_focus (tree_view, direction);
+	  return TRUE;
 	case GTK_DIR_TAB_BACKWARD:
 	case GTK_DIR_UP:
 	  return FALSE;
 	case GTK_DIR_TAB_FORWARD:
 	case GTK_DIR_DOWN:
-
 	  if (tree_view->priv->tree == NULL)
 	    return FALSE;
-
-	  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
-	  gtk_widget_grab_focus (GTK_WIDGET (container));
-
-	  if (tree_view->priv->selection == NULL)
-	    tree_view->priv->selection =
-              _gtk_tree_selection_new_with_tree_view (tree_view);
-
-	  /* if there is no keyboard focus yet, we select the first node
-	   */
-
-          cursor_path = NULL;
-
-          if (tree_view->priv->cursor)
-            cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
-
-	  if (cursor_path == NULL)
-            {
-              GtkTreePath *tmp_path = gtk_tree_path_new_root ();
-
-              if (tree_view->priv->cursor)
-                gtk_tree_row_reference_free (tree_view->priv->cursor);
-
-              tree_view->priv->cursor =
-                gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, tmp_path);
-              cursor_path = tmp_path;
-            }
-
-	  gtk_tree_selection_select_path (tree_view->priv->selection,
-                                          cursor_path);
-
-          gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-
-          gtk_tree_path_free (cursor_path);
-
+	  gtk_tree_view_set_cursor_focus (tree_view);
 	  return TRUE;
 	}
     }
@@ -3801,56 +3834,35 @@ gtk_tree_view_focus (GtkContainer     *container,
   /* Case 2. We don't have focus at all. */
   if (!GTK_WIDGET_HAS_FOCUS (container))
     {
-      if ((direction == GTK_DIR_TAB_FORWARD) ||
-	  (direction == GTK_DIR_RIGHT) ||
-	  (direction == GTK_DIR_DOWN) ||
-	  (direction == GTK_DIR_LEFT) ||
-	  (tree_view->priv->tree == NULL))
+      if (tree_view->priv->tree == NULL &&
+	  (direction == GTK_DIR_TAB_BACKWARD ||
+	   direction == GTK_DIR_UP))
 	return gtk_tree_view_header_focus (tree_view, direction);
+      if (((direction == GTK_DIR_TAB_FORWARD) ||
+	   (direction == GTK_DIR_RIGHT) ||
+	   (direction == GTK_DIR_DOWN) ||
+	   (direction == GTK_DIR_LEFT)) &&
+	  gtk_tree_view_header_focus (tree_view, direction))
+	return TRUE;
 
-      /* The headers didn't want the focus, so we take it. */
-      GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
-      gtk_widget_grab_focus (GTK_WIDGET (container));
-
-      if (tree_view->priv->selection == NULL)
-	tree_view->priv->selection =
-          _gtk_tree_selection_new_with_tree_view (tree_view);
-
-      cursor_path = NULL;
-      if (tree_view->priv->cursor)
-        cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
-
-      if (cursor_path == NULL)
-        {
-          GtkTreePath *tmp_path = gtk_tree_path_new_root ();
-
-          if (tree_view->priv->cursor)
-            gtk_tree_row_reference_free (tree_view->priv->cursor);
-
-          tree_view->priv->cursor =
-            gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, tmp_path);
-          cursor_path = tmp_path;
-        }
-
-      gtk_tree_selection_select_path (tree_view->priv->selection,
-                                      cursor_path);
-
-      gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
-
-      gtk_tree_path_free (cursor_path);
-
+      if (tree_view->priv->tree == NULL)
+	return FALSE;
+      gtk_tree_view_set_cursor_focus (tree_view);
       return TRUE;
     }
 
   /* Case 3. We have focus already. */
   if (tree_view->priv->tree == NULL)
-    return FALSE;
+    return gtk_tree_view_header_focus (tree_view, direction);
 
   if (direction == GTK_DIR_TAB_BACKWARD)
     return (gtk_tree_view_header_focus (tree_view, direction));
   else if (direction == GTK_DIR_TAB_FORWARD)
     return FALSE;
 
+  /* Other directions caught by the keybindings */
+  return TRUE;
+#if 0
   cursor_path = NULL;
   if (tree_view->priv->cursor)
     cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
@@ -3989,6 +4001,7 @@ gtk_tree_view_focus (GtkContainer     *container,
 
   /* we've reached the end of the tree.  Go on. */
   return FALSE;
+#endif
 }
 
 
@@ -4069,6 +4082,48 @@ gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
     gtk_tree_view_adjustment_changed (NULL, tree_view);
 }
 
+static void
+gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
+				GtkMovementStep    step,
+				gint               count,
+				gboolean           extend_selection)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (step == GTK_MOVEMENT_LOGICAL_POSITIONS ||
+		    step == GTK_MOVEMENT_VISUAL_POSITIONS ||
+		    step == GTK_MOVEMENT_DISPLAY_LINES ||
+		    step == GTK_MOVEMENT_PAGES ||
+		    step == GTK_MOVEMENT_BUFFER_ENDS);
+
+  switch (step)
+    {
+      /* currently we make no distinction.  When we go bi-di, we need to */
+    case GTK_MOVEMENT_LOGICAL_POSITIONS:
+    case GTK_MOVEMENT_VISUAL_POSITIONS:
+      if (count == 1)
+	g_print ("go right\n");
+      else
+	g_print ("go_left\n");
+      break;
+    case GTK_MOVEMENT_DISPLAY_LINES:
+      gtk_tree_view_move_cursor_up_down (tree_view, count, extend_selection);
+      break;
+    case GTK_MOVEMENT_PAGES:
+      if (count == -1)
+	g_print ("page up\n");
+      else
+	g_print ("page_down\n");
+      break;
+    case GTK_MOVEMENT_BUFFER_ENDS:
+      if (count == -1)
+	g_print ("start\n");
+      else
+	g_print ("end\n");
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+}
 
 /* TreeModel Callbacks
  */
@@ -5054,6 +5109,29 @@ _gtk_tree_view_find_node (GtkTreeView  *tree_view,
 }
 
 static void
+gtk_tree_view_add_move_binding (GtkBindingSet  *binding_set,
+				guint           keyval,
+				guint           modmask,
+				GtkMovementStep step,
+				gint            count)
+{
+  g_return_if_fail ((modmask & GDK_SHIFT_MASK) == 0);
+
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask,
+                                "move_cursor", 3,
+                                GTK_TYPE_ENUM, step,
+                                GTK_TYPE_INT, count,
+                                GTK_TYPE_BOOL, FALSE);
+
+  /* Selection-extending version */
+  gtk_binding_entry_add_signal (binding_set, keyval, modmask | GDK_SHIFT_MASK,
+                                "move_cursor", 3,
+                                GTK_TYPE_ENUM, step,
+                                GTK_TYPE_INT, count,
+                                GTK_TYPE_BOOL, TRUE);
+}
+
+static void
 gtk_tree_view_unref_tree_helper (GtkTreeModel *model,
 				 GtkTreeIter  *iter,
 				 GtkRBTree    *tree,
@@ -5433,6 +5511,100 @@ _gtk_tree_view_update_col_width (GtkTreeView *tree_view)
     }
   column = GTK_TREE_VIEW_COLUMN (last_column->data);
   column->displayed_width = MAX (GTK_WIDGET (tree_view)->allocation.width, tree_view->priv->width) - width;
+}
+
+static void
+gtk_tree_view_set_cursor_focus (GtkTreeView *tree_view)
+
+{
+  GtkTreePath *cursor_path;
+
+  if ((tree_view->priv->tree == NULL) ||
+      (! GTK_WIDGET_REALIZED (tree_view)))
+    return;
+
+  if (tree_view->priv->selection == NULL)
+    tree_view->priv->selection =
+      _gtk_tree_selection_new_with_tree_view (tree_view);
+
+  GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS);
+  gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+
+  cursor_path = NULL;
+  if (tree_view->priv->cursor)
+    cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+  if (cursor_path == NULL)
+    {
+      GtkTreePath *tmp_path = gtk_tree_path_new_root ();
+      /* FIXME: Get the first one visible!!! */
+      if (tree_view->priv->cursor)
+	gtk_tree_row_reference_free (tree_view->priv->cursor);
+
+      tree_view->priv->cursor =
+	gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, tmp_path);
+      cursor_path = tmp_path;
+    }
+
+  gtk_tree_selection_select_path (tree_view->priv->selection, cursor_path);
+  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+  gtk_tree_path_free (cursor_path);
+
+}
+
+static void
+gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
+				   gint         count,
+				   gboolean     extend_selection)
+{
+  GtkRBTree *cursor_tree = NULL;
+  GtkRBNode *cursor_node = NULL;
+  GtkTreePath *cursor_path = NULL;
+
+  cursor_path = NULL;
+  if (tree_view->priv->cursor)
+    cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+
+  g_print ("up_down:  cursor path is %s\n", cursor_path?"non NULL":"NULL");
+  _gtk_tree_view_find_node (tree_view, cursor_path,
+			    &cursor_tree,
+			    &cursor_node);
+  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+  if (tree_view->priv->cursor)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->cursor);
+      tree_view->priv->cursor = NULL;
+    }
+
+  if (count == -1)
+    _gtk_rbtree_prev_full (cursor_tree, cursor_node,
+			   &cursor_tree, &cursor_node);
+  else
+    _gtk_rbtree_next_full (cursor_tree, cursor_node,
+			   &cursor_tree, &cursor_node);
+  gtk_tree_path_free (cursor_path);
+
+  if (cursor_node)
+    {
+      cursor_path = _gtk_tree_view_find_path (tree_view,
+					      cursor_tree,
+					      cursor_node);
+      if (cursor_path)
+	{
+	  _gtk_tree_selection_internal_select_node (tree_view->priv->selection,
+						    cursor_node,
+						    cursor_tree,
+						    cursor_path,
+						    extend_selection?0:0);
+
+	  tree_view->priv->cursor = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, cursor_path);
+	  gtk_tree_view_queue_draw_path (tree_view, cursor_path, NULL);
+
+	  gtk_tree_path_free (cursor_path);
+	}
+      gtk_tree_view_clamp_node_visible (tree_view, cursor_tree, cursor_node);
+      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+    }
 }
 
 void
@@ -6165,7 +6337,7 @@ gtk_tree_view_insert_column_with_data_func  (GtkTreeView               *tree_vie
                                              gint                       position,
                                              gchar                     *title,
                                              GtkCellRenderer           *cell,
-                                             GtkCellDataFunc            func,
+                                             GtkTreeCellDataFunc        func,
                                              gpointer                   data,
                                              GDestroyNotify             dnotify)
 {

@@ -77,6 +77,18 @@ struct _GtkTreeViewClass
 				       GtkTreeIter       *iter,
 				       GtkTreePath       *path);
   void     (* columns_changed)        (GtkTreeView       *tree_view);
+
+  /* Key Binding signals */
+  void     (* move_cursor)            (GtkTreeView       *tree_view,
+				       GtkMovementStep    step,
+				       gint               count,
+				       gboolean           extend_selection);
+  void     (* set_anchor)             (GtkTreeView       *tree_view);
+  void     (* expand_selected_row)    (GtkTreeView       *tree_view);
+  void     (* collapse_selected_row)  (GtkTreeView       *tree_view);
+  void     (* expand_all_selected_row)(GtkTreeView       *tree_view);
+  void     (* select_selected_parent) (GtkTreeView       *tree_view);
+  
 };
 
 
@@ -142,7 +154,7 @@ gint                   gtk_tree_view_insert_column_with_data_func  (GtkTreeView 
 								    gint                       position,
 								    gchar                     *title,
 								    GtkCellRenderer           *cell,
-                                                                    GtkCellDataFunc            func,
+                                                                    GtkTreeCellDataFunc        func,
                                                                     gpointer                   data,
                                                                     GDestroyNotify             dnotify);
 GtkTreeViewColumn     *gtk_tree_view_get_column                    (GtkTreeView               *tree_view,

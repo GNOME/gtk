@@ -84,10 +84,6 @@ static void gtk_tree_view_column_button_clicked                (GtkWidget       
 								gpointer                 data);
 
 /* Property handlers */
-static void gtk_tree_view_model_property_changed               (GtkTreeView             *view,
-								guint                    n_pspecs,
-								GParamSpec             **pspecs,
-								GtkTreeViewColumn       *tree_column);
 static void gtk_tree_view_model_sort_column_changed            (GtkTreeSortable         *sortable,
 								GtkTreeViewColumn       *tree_column);
 
@@ -763,23 +759,6 @@ gtk_tree_view_column_button_clicked (GtkWidget *widget, gpointer data)
 }
 
 static void
-gtk_tree_view_model_property_changed (GtkTreeView        *view,
-				      guint               n_pspecs,
-				      GParamSpec        **pspecs,
-				      GtkTreeViewColumn  *tree_column)
-{
-  gint i;
-
-  for (i = 0; i < n_pspecs; i++)
-    {
-      if (! strcmp (pspecs[i]->name, "model"))
-	{
-	  gtk_tree_view_column_setup_sort_column_id_callback (tree_column);
-	}
-    }
-}
-
-static void
 gtk_tree_view_model_sort_column_changed (GtkTreeSortable   *sortable,
 					  GtkTreeViewColumn *column)
 {
@@ -959,10 +938,11 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
   column->tree_view = GTK_WIDGET (tree_view);
   gtk_tree_view_column_create_button (column);
 
-  column->property_changed_signal = gtk_signal_connect (GTK_OBJECT (tree_view),
-							"properties_changed",
-							GTK_SIGNAL_FUNC (gtk_tree_view_model_property_changed),
-							column);
+  column->property_changed_signal =
+	  g_signal_connect_data (GTK_OBJECT (tree_view),
+				 "notify::model",
+				 GTK_SIGNAL_FUNC (gtk_tree_view_column_setup_sort_column_id_callback),
+				 column, NULL, TRUE, FALSE);
 
   gtk_tree_view_column_setup_sort_column_id_callback (column);
 }
@@ -1212,10 +1192,10 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * may be NULL to remove an older one.
  **/
 void
-gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn *tree_column,
-					 GtkCellDataFunc    func,
-					 gpointer           func_data,
-					 GtkDestroyNotify   destroy)
+gtk_tree_view_column_set_cell_data_func (GtkTreeViewColumn   *tree_column,
+					 GtkTreeCellDataFunc  func,
+					 gpointer             func_data,
+					 GtkDestroyNotify     destroy)
 {
   g_return_if_fail (tree_column != NULL);
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));

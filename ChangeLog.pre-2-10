@@ -1,3 +1,19 @@
+Fri Jun  1 18:54:47 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c: (gtk_tree_view_focus): Initial stab at
+	getting the focus code to work.
+	(gtk_tree_view_class_init): Add a bunch of keybindings.
+
+	* gtk/gtktreeviewcolumn.c
+	(gtk_tree_view_column_set_cell_data_func):
+	s/GtkCellDataFunc/GtkTreeCellDataFunc.
+	(_gtk_tree_view_column_set_tree_view): Use "notify::model" instead
+	of "properties_changed" to help justify the death of the latter
+	signal. (-:
+
+	* tests/testtreefocus.c (main): Let some columns be focussable to
+	test focus better.
+
 2001-06-01  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_commit_cb): implement overwrite mode
