@@ -1096,7 +1096,8 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
     }
   else if (g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
-      if (0 == strcmp (g_get_home_dir(), filename))
+      const gchar *home = g_get_home_dir ();
+      if (home != NULL && 0 == strcmp (home, filename))
         icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_HOME);
       else
         icon_set = gtk_style_lookup_icon_set (widget->style, GTK_STOCK_OPEN);

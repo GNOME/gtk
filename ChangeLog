@@ -1,3 +1,11 @@
+2004-08-14  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_append_home,
+	shortcuts_append_desktop, set_local_only)
+	* gtk/gtkfilesystemwin32.c (gtk_file_system_win32_render_icon)
+	* gtk/gtkpathbar.c (find_button_type, _gtk_path_bar_set_file_system): 
+	Guard against g_get_home_dir() returning NULL. (#150007)
+
 2004-08-13  Matthias Clasen  <mclasen@redhat.com>
 
 	* configure.in: Post-release version bump.
