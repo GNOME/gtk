@@ -1311,6 +1311,8 @@ _gtk_style_peek_property_value (GtkStyle           *style,
   if (!rcprop)
     g_param_value_set_default (pspec, &pcache->value);
 
+  g_param_spec_ref (pcache->pspec);
+
   return &pcache->value;
 }
 

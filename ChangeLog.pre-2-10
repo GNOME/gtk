@@ -1,3 +1,12 @@
+Mon Apr  2 15:06:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c (_gtk_style_peek_property_value): Reference 
+	param spec when caching property values, since we unref it
+	later when we free the style.
+
+	* gtk/gtkoptionmenu.c (gtk_option_menu_get_props): Dont' free
+	values since they are retrieved with G_VALUE_NO_COPY_CONTENTS.
+
 Mon Apr  2 10:47:57 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_class_init): Fix 

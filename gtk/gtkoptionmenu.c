@@ -339,15 +339,14 @@ gtk_option_menu_get_props (GtkOptionMenu       *option_menu,
 			NULL);
 
   if (indicator_size)
-    {
-      props->indicator_size = *indicator_size;
-      gtk_requisition_free (indicator_size);
-    }
+    props->indicator_size = *indicator_size;
+  else
+    props->indicator_size = default_props.indicator_size;
+
   if (indicator_spacing)
-    {
-      props->indicator_spacing = *indicator_spacing;
-      gtk_border_free (indicator_spacing);
-    }
+    props->indicator_spacing = *indicator_spacing;
+  else
+    props->indicator_spacing = default_props.indicator_spacing;
 }
 
 static void

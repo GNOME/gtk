@@ -32,7 +32,6 @@ style "global-style-properties"
 {
 #  xthickness = 20
   GtkSpinButton::shadow_type = etched-out
-  GtkOptionMenu::indicator_spacing = { 10, 10, 10, 10 }
 }
 class "GtkWidget" style "global-style-properties"
 
