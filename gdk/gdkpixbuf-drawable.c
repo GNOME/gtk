@@ -1031,7 +1031,7 @@ gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 {
 	GdkWindowType window_type;
 	gint src_width, src_height;
-	ArtPixBuf *apb;
+	ArtPixBuf *apb = NULL;
 	GdkImage *image;
 	int rowstride, bpp, alpha;
 

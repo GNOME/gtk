@@ -1,3 +1,13 @@
+1999-12-10  Jonathan Blandford  <jrb@redhat.com>
+
+	* gdk-pixbuf/gdk-pixbuf-drawable.c (gdk_pixbuf_get_from_drawable):
+	make a warning go away.
+
+	* gdk-pixbuf/gdk-pixbuf.h: added new prototypes for animations.
+
+	* gdk-pixbuf/gdk-pixbuf-loader.h: added new prototypes for
+	animations.
+
 1999-12-09  Michael Zucchi  <zucchi@zedzone.mmc.com.au>
 
 	* gdk-pixbuf/gdk-pixbuf.h: Enable gdk_pixbuf_get_from_drawable()

@@ -35,16 +35,44 @@ extern "C" {
 
 
 
-/* GdkPixbuf structure */
-
+/* GdkPixbuf structures */
 typedef struct _GdkPixbuf GdkPixbuf;
+typedef struct _GdkPixbufFrame GdkPixbufFrame;
+typedef struct _GdkPixbufAnimation GdkPixbufAnimation;
 
-struct _GdkPixbuf {
+typedef enum
+{
+	GDK_PIXBUF_FRAME_RETAIN,
+	GDK_PIXBUF_FRAME_DISPOSE,
+	GDK_PIXBUF_FRAME_REVERT
+} GdkPixbufFrameAction;
+
+struct _GdkPixbuf
+{
 	/* Reference count */
 	int ref_count;
 
 	/* Libart pixbuf */
 	ArtPixBuf *art_pixbuf;
+};
+
+
+struct _GdkPixbufFrame
+{
+	GdkPixbuf *pixbuf;
+
+	GdkPixbufFrame *next;
+	gushort x_offset;
+	gushort y_offset;
+	guint delaytime;
+	GdkPixbufFrameAction action;
+};
+
+
+struct _GdkPixbufAnimation
+{
+        int n_frames;
+        GList *frames;
 };
 
 
@@ -77,11 +105,15 @@ GdkPixbuf *gdk_pixbuf_new (ArtPixFormat format, gboolean has_alpha, int bits_per
 
 /* Simple loading */
 
-GdkPixbuf *gdk_pixbuf_new_from_file (const char *filename);
-GdkPixbuf *gdk_pixbuf_new_from_data (guchar *data, ArtPixFormat format, gboolean has_alpha,
-				     int width, int height, int rowstride,
-				     ArtDestroyNotify dfunc, gpointer dfunc_data);
-GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar **data);
+GdkPixbuf *gdk_pixbuf_new_from_file     (const char        *filename);
+GdkPixbuf *gdk_pixbuf_new_from_data     (guchar *data,
+					 ArtPixFormat format,
+					 gboolean has_alpha,
+					 int width, int height,
+					 int rowstride,
+					 ArtDestroyNotify dfunc,
+					 gpointer dfunc_data);
+GdkPixbuf *gdk_pixbuf_new_from_xpm_data (const gchar      **data);
 
 /* Adding or removing alpha */
 
@@ -125,6 +157,15 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 					 int src_x, int src_y,
 					 int dest_x, int dest_y,
 					 int width, int height);
+
+
+
+/* Animation loading */
+
+GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char         *filename);
+GdkPixbufAnimation *gdk_pixbuf_animation_destroy       (GdkPixbufAnimation *animation,
+							gboolean            free_frames);
+
 
 
 #ifdef __cplusplus
