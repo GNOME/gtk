@@ -1,5 +1,8 @@
 2004-10-05  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkuimanager.c (gtk_ui_manager_add_ui): Set 
+	action_name.  (#154526, John Finlay)
+
 	* gdk/x11/gdkwindow-x11.c (gdk_window_foreign_new_for_display): 
 	Return a new reference to an existing GdkWindow if one already
 	exists.  (#151378, Gustavo Carneiro)

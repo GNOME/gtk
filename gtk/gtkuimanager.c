@@ -1674,7 +1674,7 @@ gtk_ui_manager_add_ui (GtkUIManager        *self,
   node_prepend_ui_reference (NODE_INFO (child), 
 			     merge_id, action_quark);
 
-  if (NODE_INFO (node)->action_name == 0)
+  if (NODE_INFO (child)->action_name == 0)
     NODE_INFO (child)->action_name = action_quark;
 
   NODE_INFO (child)->dirty = TRUE;
