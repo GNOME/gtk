@@ -1,3 +1,7 @@
+2001-08-16  Sven Neumann  <sven@gimp.org>
+
+	* gtk/gtkbox.c (gtk_box_class_init): removed unused widget_class.
+
 2001-08-15  Padraig O'Briain  <padraig.obriain@sun.com>
 
 	* gtk/gtkcellrenderertext.c:
