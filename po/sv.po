@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-07-10 23:41+0200\n"
+"POT-Creation-Date: 1999-07-29 16:44-0400\n"
 "PO-Revision-Date: 1999-01-12 22:50+0100\n"
 "Last-Translator: Tomas Ögren <stric@ing.umu.se>\n"
 "Language-Team: Swedish <sv@li.org>\n"
@@ -433,7 +433,7 @@ msgstr "(avstängd)"
 msgid "clear"
 msgstr "rensa"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4126
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4124
 #, c-format
 msgid "Page %u"
 msgstr "Sida %u"

@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2.3\n"
-"POT-Creation-Date: 1999-07-15 03:11+0900\n"
+"POT-Creation-Date: 1999-07-29 16:44-0400\n"
 "PO-Revision-Date: 1998-07-15 03:12+0900\n"
 "Last-Translator: 白崎 泰弘 <yasuhiro@awa.tohoku.ac.jp>\n"
 "Language-Team: Japanese <ja@li.org>\n"
@@ -434,7 +434,7 @@ msgstr "(無効)"
 msgid "clear"
 msgstr "クリア"
 
-#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4126
+#: gtk/gtknotebook.c:2048 gtk/gtknotebook.c:4124
 #, c-format
 msgid "Page %u"
 msgstr "ページ %u"

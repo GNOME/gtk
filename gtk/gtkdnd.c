@@ -2006,7 +2006,7 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
 	gdk_pixmap_colormap_create_from_xpm_d (NULL,
 					       default_icon_colormap,
 					       &default_icon_mask,
-					       NULL, drag_default_xpm);
+					       NULL, (gchar **)drag_default_xpm);
       default_icon_hot_x = -2;
       default_icon_hot_y = -2;
     }

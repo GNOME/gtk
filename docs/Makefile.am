@@ -133,6 +133,8 @@ EXTRA_DIST =	\
 	$(TUTORIAL_IT_FILES)		\
 	$(FAQ_FILES)
 
+html/gtk_tut_table.gif: gdk.html gtk.html
+
 .PHONY: html htmldir faq tutorial tutorial_it tutorial_fr files
 
 distdocs: gdk.html gtk.html faq tutorial tutorial_it tutorial_fr

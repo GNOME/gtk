@@ -421,7 +421,7 @@ gtk_style_new (void)
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;
-  style->klass = &default_class;
+  style->klass = (GtkStyleClass *)&default_class;
   
   style->black.red = 0;
   style->black.green = 0;
