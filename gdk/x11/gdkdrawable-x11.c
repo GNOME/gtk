@@ -1332,7 +1332,7 @@ draw_with_images (GdkDrawable       *drawable,
 	  image = _gdk_image_get_scratch (screen, width1, height1, 32, &xs0, &ys0);
 	  
 	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
-			     image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
+			     (guchar *)image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
 			     format_type, image->byte_order, 
 			     width1, height1);
 
@@ -1446,7 +1446,7 @@ draw_with_pixmaps (GdkDrawable       *drawable,
 	    return FALSE;
 
 	  convert_to_format (src_rgb + y0 * src_rowstride + 4 * x0, src_rowstride,
-			     image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
+			     (guchar *)image->mem + ys0 * image->bpl + xs0 * image->bpp, image->bpl,
 			     format_type, image->byte_order, 
 			     width1, height1);
 
