@@ -1,3 +1,10 @@
+Tue Nov 26 14:16:15 2002  HideToshi Tajima  <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c
+	(gtk_im_context_xim_filter_keypress):
+	Fix #99593: Fix a memory leak when XmbLookupString returns
+	XBufferOverflow
+
 2002-11-25  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (print_event_state,
