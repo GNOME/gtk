@@ -1,3 +1,10 @@
+Tue Apr  2 13:44:27 2002  Tim Janik  <timj@gtk.org>
+
+	* configure.in: update version to 2.0.2, binary age 2, interface
+	age 2.
+
+	* NEWS: updates for 2.0.2.
+
 Mon Apr  1 22:20:24 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_move_cursor_page_up_down): add

@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ VERSION\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2000-11-07 06:28+0100\n"
 "Last-Translator: Szabolcs BAN <shooby@gnome.hu>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
@@ -106,6 +106,23 @@ msgid ""
 "but didn't give a reason for the failure"
 msgstr ""
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "A kép fejléc hibás"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "A képformátum ismeretlen"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr ""
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr ""
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr ""
@@ -116,45 +133,6 @@ msgstr ""
 
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:207
-#, fuzzy, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Hiba a GIF olvasásánál: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-#, fuzzy
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
 msgstr ""
 
 #: gdk-pixbuf/io-gif.c:218
@@ -222,6 +200,45 @@ msgstr ""
 
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:207
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Hiba a GIF olvasásánál: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+#, fuzzy
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "A GIF fájl egyes adatai hiányoznak (lehet, hogy csonkolódott a fájl?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
 msgstr ""
 
 #: gdk-pixbuf/io-jpeg.c:125
@@ -376,6 +393,19 @@ msgstr ""
 
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
+msgstr ""
+
+#: gdk-pixbuf/io-ras.c:158
+msgid "RAS image has bogus header data"
+msgstr ""
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "A képformátum ismeretlen"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+msgid "Not enough memory to load RAS image"
 msgstr ""
 
 #: gdk-pixbuf/io-tga.c:159
@@ -579,23 +609,6 @@ msgstr ""
 
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "A kép fejléc hibás"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "A képformátum ismeretlen"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr ""
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
 msgstr ""
 
 #. This is the text that should appear next to menu accelerators
@@ -2528,21 +2541,6 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr ""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr ""
@@ -2735,6 +2733,21 @@ msgstr "Ablak"
 #: gtk/gtkrange.c:338
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
+msgstr ""
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Nem találom a pixmap_path (%s) útvonalon a képet"
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkruler.c:118
@@ -2976,6 +2989,16 @@ msgstr "Család:"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
+msgstr ""
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Mód"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
 msgstr ""
 
 #: gtk/gtkspinbutton.c:238
@@ -4297,16 +4320,6 @@ msgstr "Ikon"
 
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
-msgstr ""
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Mód"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
 msgstr ""
 
 #. ID

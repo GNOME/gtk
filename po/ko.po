@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-04-01 12:41+0900\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-04-01 12:42+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -115,6 +115,23 @@ msgstr ""
 "내부 오류: 그림 읽어들이기 모듈 '%s'이(가) 그림 읽어들이기 시작에 실패했지"
 "만, 실패한 이유를 넘겨주지 않았습니다"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "잘못된 그림 헤더"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "알수없는 그림 형식"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "잘못된 그림 픽셀 데이타"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "%u 바이트의 그림 버퍼를 할당하는 데 실패했습니다"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "비트맵 그림을 읽는데 메모리가 충분하지 않습니다"
@@ -126,46 +143,6 @@ msgstr "BMP 그림이 지원되지 않는 헤더 크기를 가지고 있습니�
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP 그림이 잘못된 헤더 데이타를 가지고 있습니다"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "ICO를 읽는 데 실패: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"ICO 파일에 데이타가 부족합니다 (어떤 이유에서인가 중간에 잘린 파일일 것입니"
-"다?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "아이콘을 읽어 들이는 데 메모리가 부족합니다"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "아이콘의 헤더가 잘못되었습니다"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "아이콘의 너비가 0입니다"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "아이콘의 높이가 0입니다"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "압축된 아이콘은 지원하지 않습니다"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "지원하지 않는 아이콘 형식"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "ICO 파일을 읽는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -233,6 +210,46 @@ msgstr "GIF 그림에 전체 컬러맵이 없고, 프레임 내부에 부분 컬
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 그림이 잘려져 있거나 불완전합니다"
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "ICO를 읽는 데 실패: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"ICO 파일에 데이타가 부족합니다 (어떤 이유에서인가 중간에 잘린 파일일 것입니"
+"다?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "아이콘을 읽어 들이는 데 메모리가 부족합니다"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "아이콘의 헤더가 잘못되었습니다"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "아이콘의 너비가 0입니다"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "아이콘의 높이가 0입니다"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "압축된 아이콘은 지원하지 않습니다"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "지원하지 않는 아이콘 형식"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "ICO 파일을 읽는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -394,6 +411,21 @@ msgstr "PNM 그림 데이타가 예기치 못하게 끝났습니다"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM 파일 읽는데 메모리 부족"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "BMP 그림이 잘못된 헤더 데이타를 가지고 있습니다"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "알수없는 그림 형식"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "그림을 읽어들이는데 메모리가 충분하지 않습니다"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -599,23 +631,6 @@ msgstr "XPM 그림을 읽을 메모리를 할당할 수 없습니다"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM 그림을 읽어들이는 데 임시 파일을 쓸 수 없습니다"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "잘못된 그림 헤더"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "알수없는 그림 형식"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "잘못된 그림 픽셀 데이타"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "%u 바이트의 그림 버퍼를 할당하는 데 실패했습니다"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -1916,7 +1931,9 @@ msgstr "선택: "
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
 "environment variable G_BROKEN_FILENAMES): %s"
-msgstr "파일이름 %s을(를) UTF-8으로 바꿀 수 없습니다 (G_BROKEN_FILENAMES 환경변수를 세팅해 보십시오): %s"
+msgstr ""
+"파일이름 %s을(를) UTF-8으로 바꿀 수 없습니다 (G_BROKEN_FILENAMES 환경변수를 "
+"세팅해 보십시오): %s"
 
 #: gtk/gtkfilesel.c:2986
 msgid "Invalid Utf-8"
@@ -2570,22 +2587,6 @@ msgstr "핸들 크기"
 msgid "Width of handle"
 msgstr "핸들의 너비"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "include 파일을 찾을 수 없습니다: \"%s\""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-"픽스맵 경로 구성 요소: \"%s\"은(는) 절대 경로여야 합니다.  %s, %d번째 줄"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "확장"
@@ -2781,6 +2782,22 @@ msgstr "화살표 세로 움직임"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "단추를 눌렀을 때 화살표가 세로 방향으로 움직이는 거리"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "include 파일을 찾을 수 없습니다: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr ""
+"픽스맵 경로 구성 요소: \"%s\"은(는) 절대 경로여야 합니다.  %s, %d번째 줄"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3017,6 +3034,16 @@ msgstr "글꼴 이름"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "기본으로 사용할 글꼴"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "모드"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr "그 구성요소 위젯이 요청한 크기에 영향을 미치는 크기 그룹의 방향"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4349,16 +4376,6 @@ msgstr "아이콘"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "이 창의 아이콘"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "모드"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr "그 구성요소 위젯이 요청한 크기에 영향을 미치는 크기 그룹의 방향"
 
 #. ID
 #: modules/input/imam-et.c:454

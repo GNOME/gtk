@@ -10,7 +10,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.12\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-03-01 01:10+0200\n"
 "Last-Translator: Pauli Virtanen <pauli.virtanen@hut.fi>\n"
 "Language-Team: Finnish <fi@li.org>\n"
@@ -121,6 +121,23 @@ msgstr ""
 "Sisäinen virhe: Kuvanlatainmoduuli \"%s\" ei onnistunut aloittamaan kuvan "
 "latausta mutta ei ilmoittanut virheen syytä"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Kuvan otsikko vioittunut"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Tuntematon kuvamuoto"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Kuvapistetiedot viallisia"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "%u tavun kokoisen kuvapuskurin varaaminen epäonnistui"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Ei tarpeeksi muistia bittikarttakuvan lataamiseen"
@@ -132,45 +149,6 @@ msgstr "BMP-kuvan otsakkeen tätä kokoa ei tueta"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-kuvan otsake on viallinen"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "ICO:n luku epäonnistui: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"ICO-tiedostosta puuttuu joitakin osia (ehkä se on typistynyt jotenkin?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Ei tarpeeksi muistia kuvakkeen lataamiseksi"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Virheellinen otsake kuvakkeessa"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Kuvakkeen leveys on nolla"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Kuvakkeen korkeus on nolla"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Pakattuja kuvakkeita ei tueta"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Tukematon kuvaketyyppi"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Ei tarpeeksi muistia ICO-tiedoston lataamiseksi"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -241,6 +219,45 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-kuva oli typistynyt tai vaillinainen."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "ICO:n luku epäonnistui: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"ICO-tiedostosta puuttuu joitakin osia (ehkä se on typistynyt jotenkin?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Ei tarpeeksi muistia kuvakkeen lataamiseksi"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Virheellinen otsake kuvakkeessa"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Kuvakkeen leveys on nolla"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Kuvakkeen korkeus on nolla"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Pakattuja kuvakkeita ei tueta"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Tukematon kuvaketyyppi"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Ei tarpeeksi muistia ICO-tiedoston lataamiseksi"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -404,6 +421,21 @@ msgstr "Odottamaton PNM-kuvadatan loppu"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Liian vähän muistia PNM-tiedoston lataamiseksi"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "BMP-kuvan otsake on viallinen"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Tuntematon kuvamuoto"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Ei tarpeeksi muistia kuvan lataamiseen"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -610,23 +642,6 @@ msgstr "Ei voi varata muistia XPM-kuvan lataamiseksi"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Väliaikaistiedoston kirjoittaminen epäonnistui XPM-kuvaa ladatessa"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Kuvan otsikko vioittunut"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Tuntematon kuvamuoto"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Kuvapistetiedot viallisia"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "%u tavun kokoisen kuvapuskurin varaaminen epäonnistui"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2602,22 +2617,6 @@ msgstr "Kahvan koko"
 msgid "Width of handle"
 msgstr "Kahvan leveys"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Ei löytänyt sisällytettävää tiedostoa \"%s\"."
-
-# , c-format
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Laajenna"
@@ -2813,6 +2812,22 @@ msgstr "Ikkunan sijoittelu"
 #: gtk/gtkrange.c:338
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
+msgstr ""
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Ei löytänyt sisällytettävää tiedostoa \"%s\"."
+
+# , c-format
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Kuvatiedostoa ei löytynyt pixmap_path:sta: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkruler.c:118
@@ -3056,6 +3071,19 @@ msgstr "Kirjasimen nimi"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Oletuskirjasimen nimi"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Tila"
+
+#: gtk/gtksizegroup.c:243
+#, fuzzy
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"Suunnat, joissa kokoryhmä vaikuttaa komponenttisäädintensä vaatimiin "
+"kokoihin."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4409,19 +4437,6 @@ msgstr "Kuvake"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Tämän ikkunan kuvake"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Tila"
-
-#: gtk/gtksizegroup.c:243
-#, fuzzy
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"Suunnat, joissa kokoryhmä vaikuttaa komponenttisäädintensä vaatimiin "
-"kokoihin."
 
 #. ID
 #: modules/input/imam-et.c:454

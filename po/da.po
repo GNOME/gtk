@@ -28,7 +28,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.0\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-03-28 19:49+0100\n"
 "Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
@@ -140,6 +140,23 @@ msgstr ""
 "Intern fejl: Billedindlæsningsmodulet '%s' begyndte ikke indlæsning af et "
 "billede, men gav ikke nogen årsag til fejlen"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Ødelagt hoved i billede"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Ukendt billedformat"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Ødelagte punktdata i billede"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "kunne ikke allokere billedmellemlager på %u byte"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af bitmap-billede"
@@ -151,44 +168,6 @@ msgstr "BMP-billede har ikke-understøttet filhovedstørrelse"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-billede har ugyldige data i filhoved"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Fejl under læsning af ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "ICO-fil manglede nogle data (måske er den blev afkortet?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Ikke nok hukommelse til indlæsning af ikon"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Ugyldig hoved i ikon"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Ikon har bredden nul"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Ikon har højden nul"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Komprimerede ikoner er ikke understøttet"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Ikke-understøttet ikontype"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -262,6 +241,44 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-billedet er afkortet eller ikke komplet."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Fejl under læsning af ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "ICO-fil manglede nogle data (måske er den blev afkortet?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Ikke nok hukommelse til indlæsning af ikon"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Ugyldig hoved i ikon"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Ikon har bredden nul"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Ikon har højden nul"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Komprimerede ikoner er ikke understøttet"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Ikke-understøttet ikontype"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Ikke tilstrækkelig hukommelse til indlæsning af ICO-fil"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -427,6 +444,21 @@ msgstr "Uventet slutning på PNM-billeddata"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Ikke tilstrækkelig hukommelse til indlæsning af PNM-fil"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "BMP-billede har ugyldige data i filhoved"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Ukendt billedformat"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Ikke tilstrækkelig hukommelse til indlæsning af billede"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -630,23 +662,6 @@ msgstr "Ikke nok hukommelse til indlæsning af XPM-billede"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Fejl ved skrivning til midlertidig fil under indlæsning af XPM-billede"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Ødelagt hoved i billede"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Ukendt billedformat"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Ødelagte punktdata i billede"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "kunne ikke allokere billedmellemlager på %u byte"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2643,21 +2658,6 @@ msgstr "Håndtagsstørrelse"
 msgid "Width of handle"
 msgstr "Bredden af håndtaget"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Kun ikke finde inkluderingsfil: \"%s\""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Element i billedsti: \"%s\" skal være absolut, %s, linje %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Udvid"
@@ -2866,6 +2866,21 @@ msgstr "Lodret flytning af pil"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Hvor lang i y-retningen pilen flyttes når knappen trykkes ned"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Kun ikke finde inkluderingsfil: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Kunne ikke finde billedfil i pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Element i billedsti: \"%s\" skal være absolut, %s, linje %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3103,6 +3118,18 @@ msgstr "Skrifttypenavn"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Navnet på den skrifttype der skal bruges som standard"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Tilstand"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"De retninger som størrelsesgruppen påvirker de forespurgte størrelser for "
+"dens indeholdte kontroller"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4455,18 +4482,6 @@ msgstr "Ikon"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikonet for dette vindue"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Tilstand"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"De retninger som størrelsesgruppen påvirker de forespurgte størrelser for "
-"dens indeholdte kontroller"
 
 #. ID
 #: modules/input/imam-et.c:454

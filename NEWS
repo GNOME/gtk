@@ -1,3 +1,9 @@
+Overview of Changes in GTK+ 2.0.2
+=================================
+
+* GtkTreeView cursor movement fixes [Kristian Rietveld]
+* GtkTreeModelSort iterator stamp fixes [Kristian Rietveld]
+
 Overview of Changes in GTK+ 2.0.1
 =================================
 

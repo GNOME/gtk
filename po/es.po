@@ -8,7 +8,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-03-07 00:15+0100\n"
 "Last-Translator: German Poo Caaman~o <gpoo@ubiobio.cl>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
@@ -121,6 +121,23 @@ msgstr ""
 "Error interno: El módulo de carga de imágenes «%s» ha fallado al comenzar la "
 "carga de una imagen, pero no ha dado ningún motivo del fallo"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "La cabecera de la imagen está corrompida"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "El formato de la imagen es desconocido"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Los datos del pixel de la imagen están corrompidos"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "no se ha podido obtener un buffer para la imagen de %u bytes"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "No existe memoria suficiente para cargar el mapa de bits"
@@ -132,46 +149,6 @@ msgstr "La imagen BMP tiene un tamaño de cabecera no implementado"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "La imagen BMP tiene datos de cabecera erróneos"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Fallo leyendo el ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"Al archivo ICO le faltan algunos de datos (¿quizás se ha truncado en algún "
-"momento?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "No hay memoria suficiente para cargar el icono"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "La cabecera del icono no es válida"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "El ancho del icono es cero"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "El alto del icono es cero"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Los iconos comprimidos no están implementados"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Tipo de icono no implementado"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "No hay memoria suficiente para cargar el archivo ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -249,6 +226,46 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "La imagen GIF fue truncada o incompleta."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Fallo leyendo el ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"Al archivo ICO le faltan algunos de datos (¿quizás se ha truncado en algún "
+"momento?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "No hay memoria suficiente para cargar el icono"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "La cabecera del icono no es válida"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "El ancho del icono es cero"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "El alto del icono es cero"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Los iconos comprimidos no están implementados"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Tipo de icono no implementado"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "No hay memoria suficiente para cargar el archivo ICO"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -421,6 +438,21 @@ msgstr "Final no esperado de los datos de la imagen PNM"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "No hay memoria suficiente para cargar el archivo PNM"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "La imagen BMP tiene datos de cabecera erróneos"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "El formato de la imagen es desconocido"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "No hay memoria suficiente para cargar la imagen"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -634,23 +666,6 @@ msgstr "No puedo obtener memoria para cargar la imagen XPM"
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 "No se ha podido escribir en el archivo temporal al cargar la imagen XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "La cabecera de la imagen está corrompida"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "El formato de la imagen es desconocido"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Los datos del pixel de la imagen están corrompidos"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "no se ha podido obtener un buffer para la imagen de %u bytes"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2604,21 +2619,6 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr ""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr ""
@@ -2813,6 +2813,21 @@ msgstr "TÃ­tulo de Ventana"
 #: gtk/gtkrange.c:338
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
+msgstr ""
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Imposible de encontrar un archivo imagen en pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
 msgstr ""
 
 #: gtk/gtkruler.c:118
@@ -3053,6 +3068,21 @@ msgstr "Nombre de la tipografía"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
+msgstr ""
+
+#: gtk/gtksizegroup.c:242
+#, fuzzy
+msgid "Mode"
+msgstr ""
+"#-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#\n"
+"Modalidad\n"
+"#-#-#-#-#  es.po (gtk+ 1.3.0)  #-#-#-#-#\n"
+"Modo"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
 msgstr ""
 
 #: gtk/gtkspinbutton.c:238
@@ -4403,21 +4433,6 @@ msgstr "Icono"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Icono para esta ventana"
-
-#: gtk/gtksizegroup.c:242
-#, fuzzy
-msgid "Mode"
-msgstr ""
-"#-#-#-#-#  memoria.po (memoria 1.0)  #-#-#-#-#\n"
-"Modalidad\n"
-"#-#-#-#-#  es.po (gtk+ 1.3.0)  #-#-#-#-#\n"
-"Modo"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:454

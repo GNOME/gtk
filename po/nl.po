@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-03-07 17:21+0100\n"
 "Last-Translator: Ronald Hummelink <ronald@hummelink.xs4all.nl>\n"
 "Language-Team: Dutch <nl@li.org>\n"
@@ -119,6 +119,23 @@ msgstr ""
 "Interne fout: afbeeldingslader '%s' starte niet met het laden van een "
 "afbeelding, maar gaf geen reden"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Afbeeldings kop beschadigd"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Afbeeldings formaat onbekend"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Afbeeldings pixel data korrupt"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "Niet mogelijk om afbeeldings buffer van %u bytes te alloceren"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Onvoldoende geheugen voor het laden van de bitmap-afbeelding"
@@ -130,44 +147,6 @@ msgstr "BMP-afbeelding heeft een niet-ondersteunde headergrootte"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP-afbeelding bevat onzinnige headerdata"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Lezen van ICO mislukt: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "ICO-bestand mistte data (misschien was het afgebroken?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Onvoldoende geheugen om icoon te laden"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Ongeldige kop in icoon"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Icoon heeft breedte nul"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Icoon heeft hoogte nul"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Gecomprimeerde iconen worden niet ondersteund"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Niet ondersteund icoon type"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Onvoldoende geheugen om ICO-bestand te laden"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -241,6 +220,44 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF-bestand is afgebroken of onvolledig"
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Lezen van ICO mislukt: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "ICO-bestand mistte data (misschien was het afgebroken?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Onvoldoende geheugen om icoon te laden"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Ongeldige kop in icoon"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Icoon heeft breedte nul"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Icoon heeft hoogte nul"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Gecomprimeerde iconen worden niet ondersteund"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Niet ondersteund icoon type"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Onvoldoende geheugen om ICO-bestand te laden"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -407,6 +424,21 @@ msgstr "Voorbarig einde van PNM afbeeldings gegevens"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Onvoldoende geheugen om PNM bestand te laden"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "BMP-afbeelding bevat onzinnige headerdata"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Afbeeldings formaat onbekend"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Onvoldoende geheugen voor het laden van de afbeelding"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -615,23 +647,6 @@ msgstr "Kan geheugen voor het laden van XPM afbeelding niet alloceren"
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr ""
 "Niet mogelijk om tijdelijk bestand te schrijven bij het laden van XPM bestand"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Afbeeldings kop beschadigd"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Afbeeldings formaat onbekend"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Afbeeldings pixel data korrupt"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "Niet mogelijk om afbeeldings buffer van %u bytes te alloceren"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2628,21 +2643,6 @@ msgstr "Handle grootte"
 msgid "Width of handle"
 msgstr "Grootte van de handle"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Kan include bestand \"%s\" niet vinden."
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" niet vinden"
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pixmap path element \"%s\" moet absoluut zijn, %s, lijn %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Expandeer"
@@ -2861,6 +2861,21 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Hoe ver de pijl in y richting te verplaatsen als de knop wordt losgelaten"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Kan include bestand \"%s\" niet vinden."
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Kan plaatjes bestand in pixmap_path: \"%s\" niet vinden"
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Pixmap path element \"%s\" moet absoluut zijn, %s, lijn %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3116,6 +3131,18 @@ msgstr "Lettertype naam"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Naam van het standaard lettertype om te gebruiken"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Modus: "
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"De richtingen in deze grootte groep heeft invloed op de grvraagde groottes "
+"van zijn onderdeel widgets"
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4467,18 +4494,6 @@ msgstr "Icoon"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Icoon voor dit window"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Modus: "
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"De richtingen in deze grootte groep heeft invloed op de grvraagde groottes "
-"van zijn onderdeel widgets"
 
 #. ID
 #: modules/input/imam-et.c:454

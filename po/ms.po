@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+ 1.3.x\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-02-24 17:27+0800\n"
 "Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
 "Language-Team: Projek Gabai <gabai-penyumbang@list.sourceforge.net>\n"
@@ -113,6 +113,23 @@ msgstr ""
 "Ralat dalaman: modul pemuatan imej  '%s' gagal untuk mulakan pemuatan imej, "
 "tetapi tidak memberi sebab kegagalannya"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Pengepala imej rosak"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Format imej tidak diketahui"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Data piksel imej rosak"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "Gagal memperuntukkan buffer imej sebanyak %u byte"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Tak cukup memori untuk memuatkan imej bitmap"
@@ -124,44 +141,6 @@ msgstr "Imej BMP mempunyai saiz pengepala yang tidak disokong"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Imej BMP mempunyai data pengepala bogus"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Gagal membaca ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Fail ICO kehilangan sebahagian data (mungkin ianya dikerat?)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Tak cukup memori untuk memuatkan ikon"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Pengepala tidak sah dalam ikon"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Ikon mempunyai kelebaran sifar"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Ikon mempunyai ketinggian sifar"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Ikon termampat adalah tidak disokong"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Jenis ikon tidak disokong"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Tak cukup memori untuk memuatkan fail ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -231,6 +210,44 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "Imej GID terkerat atau tidak selepas"
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Gagal membaca ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "Fail ICO kehilangan sebahagian data (mungkin ianya dikerat?)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Tak cukup memori untuk memuatkan ikon"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Pengepala tidak sah dalam ikon"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Ikon mempunyai kelebaran sifar"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Ikon mempunyai ketinggian sifar"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Ikon termampat adalah tidak disokong"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Jenis ikon tidak disokong"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Tak cukup memori untuk memuatkan fail ICO"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -397,6 +414,21 @@ msgstr "Penghujungan tanpa diduga data imej PNM"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Tak cukup memori untuk memuatkan fail PNM"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "Imej BMP mempunyai data pengepala bogus"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Format imej tidak diketahui"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Tak cukup memori untuk memuatkan imej"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -600,23 +632,6 @@ msgstr "Tak dapat memperuntukkan"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Gagal menulis fail sementara bila memuatkan imej XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Pengepala imej rosak"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Format imej tidak diketahui"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Data piksel imej rosak"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "Gagal memperuntukkan buffer imej sebanyak %u byte"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2574,21 +2589,6 @@ msgstr "Saiz Handle"
 msgid "Width of handle"
 msgstr "Lebar handle"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr ""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Gagal menjumpai fail imej di pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Unsur path Pixmap: \"%s\" mestilah mutlak, %s, baris %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Kembang"
@@ -2795,6 +2795,21 @@ msgstr "Sesaran Y anak"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Betapa jauh pada hala y anak digerakkan bila butang ditekan"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Gagal menjumpai fail imej di pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Unsur path Pixmap: \"%s\" mestilah mutlak, %s, baris %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3034,6 +3049,16 @@ msgstr "Nama Font"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Nama bagi font default untuk digunakan"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Mod"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4361,16 +4386,6 @@ msgstr "Ikon"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikon untuk tetingkap ini"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Mod"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:454

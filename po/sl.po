@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ 1.4.0\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-02-26 00:23+0100\n"
 "Last-Translator: Andra¾ Tori <andraz.tori1@guest.arnes.si>\n"
 "Language-Team: slovenian <sl@li.org>\n"
@@ -114,6 +114,23 @@ msgstr ""
 "Notranja napaka: Modul nalagalnika slik '%s' ni uspel zaèeti nalagati slike, "
 "a ni podal razloga za neuspeh"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Glava slike je pokvarjena"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Oblika zapisa slike ni znana"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Podatki o pikslih slike so pokvarjeni"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "nisem uspel rezervirati slikovnega medpomnilnika v velikosti %u bajtov"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
@@ -125,45 +142,6 @@ msgstr "Slika BMP ima nepodprto velikost glave"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Slika BMP ima v glavi neveljavne podatke"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Napaka ob nalaganju ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr ""
-"V datoteki ICO manjkajo podatki (morda je bila na nek naèin skraj¹ana?) "
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Ni dovolj pomnilnika za nalo¾itev ikone"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Ikona ima neveljavno glavo"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Ikona ima ¹irino niè"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Ikona ima vi¹ino niè"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Komprimirane ikone niso podprte"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Nepodprta vrsta ikone"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Ni dovolj pomnilnika za nalo¾itev datoteke ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -234,6 +212,45 @@ msgstr "Slika GIF nima globalne karte barv in okvir nima krajevne karte barv."
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "Slika GIF je bila skraj¹ana ali pa je nepopolna."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Napaka ob nalaganju ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr ""
+"V datoteki ICO manjkajo podatki (morda je bila na nek naèin skraj¹ana?) "
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Ni dovolj pomnilnika za nalo¾itev ikone"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Ikona ima neveljavno glavo"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Ikona ima ¹irino niè"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Ikona ima vi¹ino niè"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Komprimirane ikone niso podprte"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Nepodprta vrsta ikone"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Ni dovolj pomnilnika za nalo¾itev datoteke ICO"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -398,6 +415,21 @@ msgstr "Neprièakovan konec podatkov slike PNM"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Ni dovolj pomnilnika za nalo¾itev slike PNM"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "Slika BMP ima v glavi neveljavne podatke"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Oblika zapisa slike ni znana"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Ni dovolj pomnilnika za nalo¾itev slike"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -605,23 +637,6 @@ msgstr "Ne morem rezervirati pomnilnika za nalo¾itev slike XPM"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nisem uspel pisati v zaèasno datoteko med nalaganjem slike XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Glava slike je pokvarjena"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Oblika zapisa slike ni znana"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Podatki o pikslih slike so pokvarjeni"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "nisem uspel rezervirati slikovnega medpomnilnika v velikosti %u bajtov"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2587,21 +2602,6 @@ msgstr "Velikost roèice"
 msgid "Width of handle"
 msgstr "©irina roèice"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Nisem uspel najti vkljuèene datoteke: \"%s\""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Predmet poti pixmap: \"%s\" mora biti absoluten, %s, vrstica %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Raz¹iri"
@@ -2805,6 +2805,21 @@ msgstr "Premik pu¹èice po Y"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kako daleè v smeri Y naj se premakne pu¹èica, ko je gumb spu¹èen"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Nisem uspel najti vkljuèene datoteke: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Ne najdem datoteke s sliko v poti pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Predmet poti pixmap: \"%s\" mora biti absoluten, %s, vrstica %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3043,6 +3058,18 @@ msgstr "Ime pisave"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Ime privzeto uporabljene pisave"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Naèin"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"Smeri v katerih velikostna skupina vpliva na ¾elene velikosti njenih "
+"gradnikov."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4381,18 +4408,6 @@ msgstr "Ikona"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikona za to okno"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Naèin"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"Smeri v katerih velikostna skupina vpliva na ¾elene velikosti njenih "
-"gradnikov."
 
 #. ID
 #: modules/input/imam-et.c:454

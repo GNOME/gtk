@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-03-26 13:39+0100\n"
 "Last-Translator: Stanislav Višňovský <visnovsky@nenya.ms.mff.cuni.cz>\n"
 "Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
@@ -116,6 +116,23 @@ msgstr ""
 "Interná chyba: Modul pre načítavanie obrázku '%s' nezačal načítavať obrázok, "
 "ale pre toto zlyhanie nepodal žiadny dôvod"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Hlavička obrázku poškodená"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Neznámy formát obrázku"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Dáta obrázku poškodené"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Nedostatok pamäti pre načítanie obrázku"
@@ -127,44 +144,6 @@ msgstr "Obrázok BMP má nepodporovanú veľkosť hlavičky"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Obrázok BMP má neplatné dáta v hlavičke"
-
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Chyba pri čítaní ICO: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Súbor ICO neobsahuje niektoré dáta (možno bola jeho časť odrezaná)"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Nedostatok pamäti pre načítanie ikony"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr "Neplatná hlavička ikony"
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Ikona má nulovú šírku"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Ikona má nulovú výšku"
-
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Komprimované ikony nie sú podporované"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Nepodporovaný typ ikony"
-
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "Nedostatok pamäti pre načítanie súboru ICO"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -234,6 +213,44 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "Obrázok GIF bol skrátený alebo nie je úplný."
+
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Chyba pri čítaní ICO: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "Súbor ICO neobsahuje niektoré dáta (možno bola jeho časť odrezaná)"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Nedostatok pamäti pre načítanie ikony"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr "Neplatná hlavička ikony"
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Ikona má nulovú šírku"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Ikona má nulovú výšku"
+
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Komprimované ikony nie sú podporované"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Nepodporovaný typ ikony"
+
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "Nedostatok pamäti pre načítanie súboru ICO"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -397,6 +414,21 @@ msgstr "Neočakávaný koniec dát obrázku PNM"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Nedostatok pamäti pre načítanie súboru PNM"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "Obrázok BMP má neplatné dáta v hlavičke"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Neznámy formát obrázku"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Nedostatok pamäti pre načítanie obrázku"
 
 #: gdk-pixbuf/io-tga.c:159
 msgid "Can't allocate memory for IOBuffer struct"
@@ -600,23 +632,6 @@ msgstr "Nepodarilo sa alokovať pamäť pre načítanie obrázku XPM"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Nepodarilo sa zapísať dočasný súbor pri načítavaní obrázku XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Hlavička obrázku poškodená"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Neznámy formát obrázku"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Dáta obrázku poškodené"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "nepodarilo sa alokovať pamäť pre obrázok s veľkosťou %u bajtov"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2577,21 +2592,6 @@ msgstr "Veľkosť ovládacieho boxu"
 msgid "Width of handle"
 msgstr "Šírka ovládacieho boxu"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "Nepodarilo sa nájsť vkladaný súbor: \"%s\""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Obrázok nebol nájdený v pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Element cesty k pixmap: \"%s\" musí byť absolútny, %s, riadok %d"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Expandovať"
@@ -2790,6 +2790,21 @@ msgstr "Y posun šipky"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "O koľko sa má v smere Y posunúť šipka pri stlačení tlačidla"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "Nepodarilo sa nájsť vkladaný súbor: \"%s\""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Obrázok nebol nájdený v pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Element cesty k pixmap: \"%s\" musí byť absolútny, %s, riadok %d"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3030,6 +3045,18 @@ msgstr "Meno písma"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr "Meno použitého štandardného písma"
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Režim"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"Režim, ako veľkosť skupiny ovplyvňuje požadované veľkosti jednotlivých "
+"prvkov."
 
 #: gtk/gtkspinbutton.c:238
 msgid "The adjustment that holds the value of the spinbutton"
@@ -4361,18 +4388,6 @@ msgstr "Ikona"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Ikona pre toto okno"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Režim"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"Režim, ako veľkosť skupiny ovplyvňuje požadované veľkosti jednotlivých "
-"prvkov."
 
 #. ID
 #: modules/input/imam-et.c:454

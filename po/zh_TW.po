@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.11\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2001-11-20 07:13+0800\n"
 "Last-Translator: Abel Cheung <maddog@linux.org.hk>\n"
 "Language-Team: traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -108,6 +108,23 @@ msgid ""
 "but didn't give a reason for the failure"
 msgstr "內部錯誤：圖像載入模組 '%s' 無法載入圖像，但沒有提供任何原因"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "圖像標頭損壞"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "不明圖像格式"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "圖像像素資料損壞"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "無法分配 %u 位元組的圖像緩衝區"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "記憶體不足以載入點陣圖像"
@@ -119,48 +136,6 @@ msgstr "不支援的 BMP 圖像標頭大小"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP 圖像有冗餘的標頭資料"
-
-#: gdk-pixbuf/io-ico.c:207
-#, fuzzy, c-format
-msgid "Failure reading ICO: %s"
-msgstr "不能讀入 GIF：%s"
-
-#: gdk-pixbuf/io-ico.c:224
-#, fuzzy
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "GIF 檔缺少了某些資料（可能檔案被截短了？）"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-#, fuzzy
-msgid "Not enough memory to load icon"
-msgstr "記憶體不足以載入 GIF 檔"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:395
-#, fuzzy
-msgid "Compressed icons are not supported"
-msgstr "不支援圖像類型 '%s'"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:499
-#, fuzzy
-msgid "Not enough memory to load ICO file"
-msgstr "記憶體不足以載入 GIF 檔"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -228,6 +203,48 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF 檔案被截短或是不完整。"
+
+#: gdk-pixbuf/io-ico.c:207
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "不能讀入 GIF：%s"
+
+#: gdk-pixbuf/io-ico.c:224
+#, fuzzy
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "GIF 檔缺少了某些資料（可能檔案被截短了？）"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr "記憶體不足以載入 GIF 檔"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:395
+#, fuzzy
+msgid "Compressed icons are not supported"
+msgstr "不支援圖像類型 '%s'"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:499
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "記憶體不足以載入 GIF 檔"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -385,6 +402,21 @@ msgstr "PNM 圖像資料過早完結"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "記憶體不足以載入 PNM 檔"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "BMP 圖像有冗餘的標頭資料"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "不明圖像格式"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "記憶體不足以載入點陣圖像"
 
 #: gdk-pixbuf/io-tga.c:159
 #, fuzzy
@@ -599,23 +631,6 @@ msgstr "無法分配記憶體來載入 XPM 圖像"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "當載入 XPM 圖像時不能寫入暫存檔"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "圖像標頭損壞"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "不明圖像格式"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "圖像像素資料損壞"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "無法分配 %u 位元組的圖像緩衝區"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2543,21 +2558,6 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr ""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "無法在 pixmap_path 找到圖像檔：\"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pixmap 路徑元素：「%s」必須為絕對路徑，%s，第 %d 行"
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr ""
@@ -2750,6 +2750,21 @@ msgstr "視窗標題"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "無法在 pixmap_path 找到圖像檔：\"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Pixmap 路徑元素：「%s」必須為絕對路徑，%s，第 %d 行"
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -2989,6 +3004,16 @@ msgstr "字型名稱"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
+msgstr ""
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "模式"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
 msgstr ""
 
 #: gtk/gtkspinbutton.c:238
@@ -4307,16 +4332,6 @@ msgstr ""
 
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
-msgstr ""
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "模式"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
 msgstr ""
 
 #. ID

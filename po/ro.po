@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.11\n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2001-12-22 14:10+0200\n"
 "Last-Translator: Marius Andreiana <mandreiana@yahoo.com>\n"
 "Language-Team: Romanian <ro@li.org>\n"
@@ -120,6 +120,23 @@ msgstr ""
 "Eroare internă: Modulul de încărcare imagine '%s' a eşuat la încărcarea unei "
 "imagini, dar nu a dat nici un motiv pentru eşec"
 
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Antet imagine corupt"
+
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Format imagine necunoscut"
+
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Datele pixel ale imaginii sunt corupte"
+
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "eşuare la alocarea memoriei tampon de %u octeţi"
+
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
 msgstr "Memorie insuficientă pentru a încarca imaginea bitmap"
@@ -131,48 +148,6 @@ msgstr "Imaginea BMP are mărimea antet nesuportată"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "Imaginea BMP are datele din antet greşite"
-
-#: gdk-pixbuf/io-ico.c:207
-#, fuzzy, c-format
-msgid "Failure reading ICO: %s"
-msgstr "Eşuare la citirea GIF: %s"
-
-#: gdk-pixbuf/io-ico.c:224
-#, fuzzy
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "Din fişierul GIF lipseau nişte date"
-
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-#, fuzzy
-msgid "Not enough memory to load icon"
-msgstr "Memorie insuficientă pentru a încarca fişierul GIF"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:395
-#, fuzzy
-msgid "Compressed icons are not supported"
-msgstr "Tipul de imagine '%s' nu este suportat"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:499
-#, fuzzy
-msgid "Not enough memory to load ICO file"
-msgstr "Memorie insuficientă pentru a încarca fişierul GIF"
 
 #: gdk-pixbuf/io-gif.c:218
 #, c-format
@@ -243,6 +218,48 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "Imaginea GIF era truncată sau incompletă."
+
+#: gdk-pixbuf/io-ico.c:207
+#, fuzzy, c-format
+msgid "Failure reading ICO: %s"
+msgstr "Eşuare la citirea GIF: %s"
+
+#: gdk-pixbuf/io-ico.c:224
+#, fuzzy
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "Din fişierul GIF lipseau nişte date"
+
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+#, fuzzy
+msgid "Not enough memory to load icon"
+msgstr "Memorie insuficientă pentru a încarca fişierul GIF"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:395
+#, fuzzy
+msgid "Compressed icons are not supported"
+msgstr "Tipul de imagine '%s' nu este suportat"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:499
+#, fuzzy
+msgid "Not enough memory to load ICO file"
+msgstr "Memorie insuficientă pentru a încarca fişierul GIF"
 
 #: gdk-pixbuf/io-jpeg.c:125
 #, c-format
@@ -412,6 +429,21 @@ msgstr "Sfârşit neaşteptat al datelor imaginii PNM"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "Memorie insuficientă pentru a încărca fişierul PNM"
+
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "Imaginea BMP are datele din antet greşite"
+
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Format imagine necunoscut"
+
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Memorie insuficientă pentru a încarca imaginea bitmap"
 
 #: gdk-pixbuf/io-tga.c:159
 #, fuzzy
@@ -628,23 +660,6 @@ msgstr "Nu pot aloca memorie pentru încărcarea fişierului imagine XPM"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "Eşuare la scrierea fişierului temporar când încărcam imaginea XPM"
-
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Antet imagine corupt"
-
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Format imagine necunoscut"
-
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Datele pixel ale imaginii sunt corupte"
-
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "eşuare la alocarea memoriei tampon de %u octeţi"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -2616,21 +2631,6 @@ msgstr ""
 msgid "Width of handle"
 msgstr ""
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr ""
-
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Nu pot localiza fişierul imagine în pixmap_path: \"%s\""
-
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr ""
-
 #: gtk/gtkpreview.c:129
 msgid "Expand"
 msgstr "Extinde"
@@ -2834,6 +2834,21 @@ msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Cât de mult să fie mutat copilul în direcţia Y cand butonul este apăsat"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr ""
+
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Nu pot localiza fişierul imagine în pixmap_path: \"%s\""
+
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr ""
 
 #: gtk/gtkruler.c:118
 msgid "Lower"
@@ -3075,6 +3090,16 @@ msgstr "Nume font"
 
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
+msgstr ""
+
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Mod"
+
+#: gtk/gtksizegroup.c:243
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
 msgstr ""
 
 #: gtk/gtkspinbutton.c:238
@@ -4410,16 +4435,6 @@ msgstr "Icon"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Icon pentru această fereastră"
-
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Mod"
-
-#: gtk/gtksizegroup.c:243
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:454

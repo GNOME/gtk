@@ -7,7 +7,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ \n"
-"POT-Creation-Date: 2002-03-29 18:18-0500\n"
+"POT-Creation-Date: 2002-04-02 13:13+0200\n"
 "PO-Revision-Date: 2002-02-20 17:56+0200\n"
 "Last-Translator: Nilgün Belma Bugüner <nilgun@fide.org>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
@@ -132,6 +132,27 @@ msgstr ""
 "İç hata: Resim yükleme modülü '%s' bir resmi yüklemeye başlayamadı, ama "
 "başarısızlık sebebi de verilmedi"
 
+# gdk-pixbuf/gdk-pixdata.c:145
+#: gdk-pixbuf/gdk-pixdata.c:146
+msgid "Image header corrupt"
+msgstr "Resim başlığı bozuk"
+
+# gdk-pixbuf/gdk-pixdata.c:150
+#: gdk-pixbuf/gdk-pixdata.c:151
+msgid "Image format unknown"
+msgstr "Resim biçemi bilinmiyor"
+
+# gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:432
+#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
+msgid "Image pixel data corrupt"
+msgstr "Resmin piksel verisi bozuk"
+
+# gdk-pixbuf/gdk-pixdata.c:378
+#: gdk-pixbuf/gdk-pixdata.c:403
+#, c-format
+msgid "failed to allocate image buffer of %u bytes"
+msgstr "%u baytlık resim tamponu ayrılamadı"
+
 # gdk-pixbuf/io-bmp.c:325
 #: gdk-pixbuf/io-bmp.c:249 gdk-pixbuf/io-bmp.c:349
 msgid "Not enough memory to load bitmap image"
@@ -146,51 +167,6 @@ msgstr "Bu BMP resminin başlık uzunluğu desteklenmiyor"
 #: gdk-pixbuf/io-bmp.c:300 gdk-pixbuf/io-bmp.c:323 gdk-pixbuf/io-bmp.c:382
 msgid "BMP image has bogus header data"
 msgstr "BMP resminin başlığı hatalı veri içeriyor"
-
-# gdk-pixbuf/io-gif.c:218
-#: gdk-pixbuf/io-ico.c:207
-#, c-format
-msgid "Failure reading ICO: %s"
-msgstr "ICO okunurken hata: %s"
-
-# gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
-#: gdk-pixbuf/io-ico.c:224
-msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
-msgstr "ICO dosyasında veri eksik (Dosya kırpılmış olabilir mi?)"
-
-# gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
-# gdk-pixbuf/io-gif.c:1499
-#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
-#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
-msgid "Not enough memory to load icon"
-msgstr "Simge dosyasını yüklemek için bellek yetersiz"
-
-#: gdk-pixbuf/io-ico.c:303
-msgid "Invalid header in icon"
-msgstr ""
-
-#: gdk-pixbuf/io-ico.c:340
-msgid "Icon has zero width"
-msgstr "Simge sıfır genişlikte"
-
-#: gdk-pixbuf/io-ico.c:350
-msgid "Icon has zero height"
-msgstr "Simge sıfır yükseklikte"
-
-# gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
-#: gdk-pixbuf/io-ico.c:395
-msgid "Compressed icons are not supported"
-msgstr "Sıkıştırılmış simgeler desteklenmiyor"
-
-#: gdk-pixbuf/io-ico.c:428
-msgid "Unsupported icon type"
-msgstr "Desteklenmeyen simge türü"
-
-# gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
-# gdk-pixbuf/io-gif.c:1499
-#: gdk-pixbuf/io-ico.c:499
-msgid "Not enough memory to load ICO file"
-msgstr "ICO dosyasını yüklemek için bellek yetersiz"
 
 # gdk-pixbuf/io-gif.c:218
 #: gdk-pixbuf/io-gif.c:218
@@ -277,6 +253,51 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:1437
 msgid "GIF image was truncated or incomplete."
 msgstr "GIF resmi ya kırpılmış ya da tamamlanmamış."
+
+# gdk-pixbuf/io-gif.c:218
+#: gdk-pixbuf/io-ico.c:207
+#, c-format
+msgid "Failure reading ICO: %s"
+msgstr "ICO okunurken hata: %s"
+
+# gdk-pixbuf/io-gif.c:460 gdk-pixbuf/io-gif.c:1352 gdk-pixbuf/io-gif.c:1511
+#: gdk-pixbuf/io-ico.c:224
+msgid "ICO file was missing some data (perhaps it was truncated somehow?)"
+msgstr "ICO dosyasında veri eksik (Dosya kırpılmış olabilir mi?)"
+
+# gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
+# gdk-pixbuf/io-gif.c:1499
+#: gdk-pixbuf/io-ico.c:262 gdk-pixbuf/io-ico.c:318 gdk-pixbuf/io-ico.c:381
+#: gdk-pixbuf/io-ico.c:443 gdk-pixbuf/io-ico.c:460
+msgid "Not enough memory to load icon"
+msgstr "Simge dosyasını yüklemek için bellek yetersiz"
+
+#: gdk-pixbuf/io-ico.c:303
+msgid "Invalid header in icon"
+msgstr ""
+
+#: gdk-pixbuf/io-ico.c:340
+msgid "Icon has zero width"
+msgstr "Simge sıfır genişlikte"
+
+#: gdk-pixbuf/io-ico.c:350
+msgid "Icon has zero height"
+msgstr "Simge sıfır yükseklikte"
+
+# gdk-pixbuf/gdk-pixbuf-io.c:425 gdk-pixbuf/gdk-pixbuf-io.c:451
+#: gdk-pixbuf/io-ico.c:395
+msgid "Compressed icons are not supported"
+msgstr "Sıkıştırılmış simgeler desteklenmiyor"
+
+#: gdk-pixbuf/io-ico.c:428
+msgid "Unsupported icon type"
+msgstr "Desteklenmeyen simge türü"
+
+# gdk-pixbuf/io-gif.c:746 gdk-pixbuf/io-gif.c:1340 gdk-pixbuf/io-gif.c:1385
+# gdk-pixbuf/io-gif.c:1499
+#: gdk-pixbuf/io-ico.c:499
+msgid "Not enough memory to load ICO file"
+msgstr "ICO dosyasını yüklemek için bellek yetersiz"
 
 # gdk-pixbuf/io-jpeg.c:125
 #: gdk-pixbuf/io-jpeg.c:125
@@ -465,6 +486,24 @@ msgstr "Beklenmeyen PNM resim verisi sonu"
 #: gdk-pixbuf/io-pnm.c:996
 msgid "Insufficient memory to load PNM file"
 msgstr "PNM dosyasını yüklemek için bellek yetersiz"
+
+# gdk-pixbuf/io-bmp.c:278 gdk-pixbuf/io-bmp.c:300
+#: gdk-pixbuf/io-ras.c:158
+#, fuzzy
+msgid "RAS image has bogus header data"
+msgstr "BMP resminin başlığı hatalı veri içeriyor"
+
+# gdk-pixbuf/gdk-pixdata.c:150
+#: gdk-pixbuf/io-ras.c:180
+#, fuzzy
+msgid "RAS image has unknown type"
+msgstr "Resim biçemi bilinmiyor"
+
+# gdk-pixbuf/io-bmp.c:325
+#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#, fuzzy
+msgid "Not enough memory to load RAS image"
+msgstr "Biteşlem resmi yüklemek için bellek yetersiz."
 
 # gdk-pixbuf/io-xpm.c:1321
 #: gdk-pixbuf/io-tga.c:159
@@ -702,27 +741,6 @@ msgstr "XPM resminin yüklenebilmesi için bellek ayrılamadı"
 #: gdk-pixbuf/io-xpm.c:1509
 msgid "Failed to write to temporary file when loading XPM image"
 msgstr "XPM resmi yüklenirken geçici dosyaya yazılamadı"
-
-# gdk-pixbuf/gdk-pixdata.c:145
-#: gdk-pixbuf/gdk-pixdata.c:146
-msgid "Image header corrupt"
-msgstr "Resim başlığı bozuk"
-
-# gdk-pixbuf/gdk-pixdata.c:150
-#: gdk-pixbuf/gdk-pixdata.c:151
-msgid "Image format unknown"
-msgstr "Resim biçemi bilinmiyor"
-
-# gdk-pixbuf/gdk-pixdata.c:155 gdk-pixbuf/gdk-pixdata.c:432
-#: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:457
-msgid "Image pixel data corrupt"
-msgstr "Resmin piksel verisi bozuk"
-
-# gdk-pixbuf/gdk-pixdata.c:378
-#: gdk-pixbuf/gdk-pixdata.c:403
-#, c-format
-msgid "failed to allocate image buffer of %u bytes"
-msgstr "%u baytlık resim tamponu ayrılamadı"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -3082,23 +3100,6 @@ msgstr "Tutamak Boyutu"
 msgid "Width of handle"
 msgstr "Tutamağın genişliği"
 
-#: gtk/gtkrc.c:2270
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "içerilecek dosya bulunamıyor: \"%s\""
-
-# gtk/gtkrc.c:2799
-#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
-#, c-format
-msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Resim dosyası konumlanamadı. pixmap_path: \"%s\""
-
-# gtk/gtkrc.c:3209
-#: gtk/gtkrc.c:3350
-#, c-format
-msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
-msgstr "Pixmap dosya yolu elemanı: \"%s\" mutlak olmalı, %s, %d. satır"
-
 # gtk/gtkpreview.c:134
 #: gtk/gtkpreview.c:129
 msgid "Expand"
@@ -3340,6 +3341,23 @@ msgstr "Astın Y Kayması"
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Düğmeye basıldığında astın y yönünde ne kadar hareket edeceği"
+
+#: gtk/gtkrc.c:2270
+#, c-format
+msgid "Unable to find include file: \"%s\""
+msgstr "içerilecek dosya bulunamıyor: \"%s\""
+
+# gtk/gtkrc.c:2799
+#: gtk/gtkrc.c:2912 gtk/gtkrc.c:2915
+#, c-format
+msgid "Unable to locate image file in pixmap_path: \"%s\""
+msgstr "Resim dosyası konumlanamadı. pixmap_path: \"%s\""
+
+# gtk/gtkrc.c:3209
+#: gtk/gtkrc.c:3350
+#, c-format
+msgid "Pixmap path element: \"%s\" must be absolute, %s, line %d"
+msgstr "Pixmap dosya yolu elemanı: \"%s\" mutlak olmalı, %s, %d. satır"
 
 # gtk/gtkruler.c:118
 #: gtk/gtkruler.c:118
@@ -3635,6 +3653,21 @@ msgstr "Yazı tipi ismi"
 #: gtk/gtksettings.c:216
 msgid "Name of default font to use"
 msgstr ""
+
+# gtk/gtksizegroup.c:241
+#: gtk/gtksizegroup.c:242
+msgid "Mode"
+msgstr "Kip"
+
+# gtk/gtksizegroup.c:242
+#: gtk/gtksizegroup.c:243
+#, fuzzy
+msgid ""
+"The directions in which the size group effects the requested sizes of its "
+"component widgets."
+msgstr ""
+"Kendi bileşen parçalarının istenen boyutlarını etkileyen boyut grubunun "
+"yönleri."
 
 # gtk/gtkspinbutton.c:204
 #: gtk/gtkspinbutton.c:238
@@ -5234,21 +5267,6 @@ msgstr "Simge"
 #: gtk/gtkwindow.c:495
 msgid "Icon for this window"
 msgstr "Bu pencere için simge"
-
-# gtk/gtksizegroup.c:241
-#: gtk/gtksizegroup.c:242
-msgid "Mode"
-msgstr "Kip"
-
-# gtk/gtksizegroup.c:242
-#: gtk/gtksizegroup.c:243
-#, fuzzy
-msgid ""
-"The directions in which the size group effects the requested sizes of its "
-"component widgets."
-msgstr ""
-"Kendi bileşen parçalarının istenen boyutlarını etkileyen boyut grubunun "
-"yönleri."
 
 #. ID
 #: modules/input/imam-et.c:454
