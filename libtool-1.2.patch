@@ -1,0 +1,100 @@
+The ltconfig and ltmain.sh in this directory are those from
+libtool-1.2, with the following patch applied.
+
+This patch includes two patches from libtool-1.2a, to improve checking
+for echo/printf quoting, and to fix a problem with detecting shared
+library support on various compilers. (egcs and SunPro CC)
+
+It also includes a patch from the Debian Linux distribution which
+reenables shared library dependencies on Linux.
+
+                                        Owen Taylor
+                                        20 Sep 1998
+
+diff -ur libtool-1.2/ltconfig.in libtool-1.2.patched/ltconfig.in
+--- libtool-1.2/ltconfig.in	Sun Sep 20 10:34:07 1998
++++ libtool-1.2.patched/ltconfig.in	Sun Sep 20 10:34:22 1998
+@@ -32,23 +32,43 @@
+ echo=echo
+ if test "X`($echo '\t') 2>/dev/null`" = 'X\t'; then :
+ else
+-  # The Solaris and AIX default echo program unquotes backslashes.
+-  # This makes it impossible to quote backslashes using
++  # The Solaris, AIX, and Digital Unix default echo programs unquote
++  # backslashes.  This makes it impossible to quote backslashes using
+   #   echo "$something" | sed 's/\\/\\\\/g'
+-  # So, we emulate echo with printf '%s\n'
+-  echo="printf %s\\n"
+-  if test "X`($echo '\t') 2>/dev/null`" = 'X\t'; then :
+-  else
+-    # Oops.  We have no working printf.  Try to find a not-so-buggy echo.
+-    echo=echo
+-    IFS="${IFS= 	}"; save_ifs="$IFS"; IFS="${IFS}:"
+-    for dir in $PATH /usr/ucb; do
+-      if test -f $dir/echo && test "X`$dir/echo '\t'`" = 'X\t'; then
+-        echo="$dir/echo"
+-        break
++  #
++  # So, first we look for a working echo in the user's PATH.
++  IFS="${IFS= 	}"; save_ifs="$IFS"; IFS="${IFS}:"
++  for dir in $PATH /usr/ucb; do
++    if test -f $dir/echo && test "X`($dir/echo '\t') 2>/dev/null`" = 'X\t'; then
++      echo="$dir/echo"
++      break
++    fi
++  done
++  IFS="$save_ifs"
++
++  if test "X$echo" = Xecho; then
++    # We didn't find a better echo, so look for alternatives.
++    if test "X`(print -r '\t') 2>/dev/null`" = 'X\t'; then
++      # This shell has a builtin print -r that does the trick.
++      echo='print -r'
++#
++# The following is from libtool-1.2a, won't work with this patched
++# libtool-1.2
++#
++#    elif test -f /bin/ksh && test "X$CONFIG_SHELL" != X/bin/ksh; then
++#      # If we have ksh, try running ltconfig again with it.
++#      CONFIG_SHELL=/bin/ksh
++#      export CONFIG_SHELL
++#      exec "$CONFIG_SHELL" "$0" --no-reexec ${1+"$@"}
++    else
++      # Try using printf.
++      echo='printf %s\n'
++      if test "X`($echo '\t') 2>/dev/null`" = 'X\t'; then :
++      else
++        # Oops.  We lost completely, so just stick with echo.
++        echo=echo
+       fi
+-    done
+-    IFS="$save_ifs"
++    fi
+   fi
+ fi
+ 
+@@ -541,7 +561,7 @@
+   # Check to make sure the pic_flag actually works.
+   echo $ac_n "checking if $compiler PIC flag $pic_flag works... $ac_c" 1>&6
+   $rm conftest*
+-  echo > conftest.c
++  echo "int some_variable = 0;" > conftest.c
+   save_CFLAGS="$CFLAGS"
+   CFLAGS="$CFLAGS $pic_flag -DPIC"
+   echo "$progname:@LINENO@: checking if $compiler PIC flag $pic_flag works" >&5
+@@ -716,7 +736,14 @@
+ 
+   # See if GNU ld supports shared libraries.
+   if $LD --help 2>&1 | egrep ': supported targets:.* elf' > /dev/null; then
+-    archive_cmds='$CC -shared ${wl}-soname $wl$soname -o $lib$libobjs'
++    case "$host_os" in
++    linux-gnu*)
++      archive_cmds='$CC -shared ${wl}-soname $wl$soname -o $lib$libobjs $deplibs'
++      ;;
++    *)
++      archive_cmds='$CC -shared ${wl}-soname $wl$soname -o $lib$libobjs'
++      ;;
++    esac
+     runpath_var=LD_RUN_PATH
+     ld_shlibs=yes
+   else

@@ -111,9 +111,9 @@ are in gtk+-devel.
 %build
 # Needed for snapshot releases.
 if [ ! -f configure ]; then
-  CFLAGS="$RPM_OPT_FLAGS" ./autogen.sh --prefix=%prefix
+  CFLAGS="$RPM_OPT_FLAGS" ./autogen.sh --prefix=%prefix --with-xinput=xfree
 else
-  CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%prefix
+  CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%prefix --with-xinput=xfree
 fi
 
 if [ "$SMP" != "" ]; then
