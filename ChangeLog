@@ -1,3 +1,24 @@
+Sat Mar 14 01:36:51 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk-config.in: Added -I $exec_prefix/glib/include to cflags
+
+Sat Mar 14 00:03:34 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/gtkwindow.c:
+          Don't resize windows when request is rejected by WM.
+	  Only use the resize count to guess whether a Configure
+	  event was a rejection by the WM, or a move.
+
+	* gdk/gdk.c gdk/gdktypes.h: 
+	  - Don't XDestroyWindow foreign windows (If they're a child of
+	  one of our windows, reparent them to root and send them a WM 
+	  delete event, otherwise, just delete the GTK structure.) 
+	  Handle notification of their deletion properly.
+          (Made foreign windows a seperate window type to do this)
+	
+	* gtk/gtkobject.c (gtk_object_set_data_full): 
+	  Call the DestroyNotify when replacing the object data.
+
 Sat Mar 14 02:03:13 1998  Tim Janik  <timj@gimp.org>
 
 	* gtk/gtksignal.c: make use of *_by_id() functions for handler key.

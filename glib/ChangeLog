@@ -1,3 +1,8 @@
+Sat Mar 14 01:37:35 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* Makefile.am (configincludedir): Moved glibconfig.h to
+          $(pkglibdir)/include
+
 Tue Mar 10 02:03:12 1998  Tim Janik  <timj@gimp.org>
 
 	* gscanner.c (g_scanner_destroy_symbol_table_entry): new function to

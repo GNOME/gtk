@@ -2,6 +2,7 @@
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
+libdir=@libdir@
 
 usage="\
 Usage: gtk-config [--version] [--libs] [--cflags]"
@@ -16,7 +17,7 @@ case $1 in
     echo @GTK_VERSION@
     ;;
   --cflags)
-    echo -I@includedir@ @x_cflags@
+    echo -I$libdir/glib/include -I@includedir@ @x_cflags@
     ;;
   --libs)
     echo -L@libdir@ @x_ldflags@ -lgtk -lgdk -lglib @x_libs@ -lm
