@@ -225,7 +225,6 @@ enum
   PROP_SHOW_DAY_NAMES,
   PROP_NO_MONTH_CHANGE,
   PROP_SHOW_WEEK_NUMBERS,
-  PROP_WEEK_START_MONDAY,
   PROP_LAST
 };
 
@@ -276,6 +275,8 @@ struct _GtkCalendarPrivateData
 
   guint32 timer;
   gint click_child;
+
+  gint week_start;
 };
 
 #define GTK_CALENDAR_PRIVATE_DATA(widget)  (((GtkCalendarPrivateData*)(GTK_CALENDAR (widget)->private_data)))
@@ -499,22 +500,6 @@ gtk_calendar_class_init (GtkCalendarClass *class)
 							 FALSE,
 							 G_PARAM_READWRITE));
 
-/**
- * GtkCalendar:week-start-monday:
- *
- * If this is %TRUE, Monday is displayed as the first day of the week.
- *
- * Since: 2.4
- */
-  g_object_class_install_property (gobject_class,
-                                   PROP_WEEK_START_MONDAY,
-                                   g_param_spec_boolean ("week_start_monday",
-							 _("Week Start Monday"),
-							 _("If TRUE, Monday is displayed as the first day of the week"),
-							 FALSE,
-							 G_PARAM_READWRITE));
-
-
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     g_signal_new ("month_changed",
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -584,6 +569,7 @@ gtk_calendar_init (GtkCalendar *calendar)
   GtkWidget *widget;
   GtkCalendarPrivateData *private_data;
   gchar *year_before;
+  gchar *week_start;
   
   widget = GTK_WIDGET (calendar);
   GTK_WIDGET_SET_FLAGS (widget, GTK_CAN_FOCUS);
@@ -667,6 +653,19 @@ gtk_calendar_init (GtkCalendar *calendar)
     private_data->year_before = 1;
   else if (strcmp (year_before, "calendar:MY") != 0)
     g_warning ("Whoever translated calendar:MY did so wrongly.\n");
+
+  /* Translate to calendar:week_start:1 if you want Monday to be the
+   * first day of the week; otherwise translate to calendar:week_start:0. 
+   * Do *not* translate it to anything else, if it isn't calendar:week_start:1 
+   * or calendar:week_start:0 it will not work.
+   */
+   week_start = _("calendar:week_start:0");
+   if (strcmp (week_start, "calendar:week_start:1") == 0)
+     private_data->week_start = 1;
+   else if (strcmp (week_start, "calendar:week_start:0") == 0) 
+     private_data->week_start = 0;
+   else
+     g_warning ("Whoever translated calendar:week_start:0 did so wrongly.\n");
 }
 
 GtkWidget*
@@ -1891,7 +1890,7 @@ gtk_calendar_paint_day_names (GtkWidget *widget)
 	day = 6 - i;
       else
 	day = i;
-      if (calendar->display_flags & GTK_CALENDAR_WEEK_START_MONDAY)
+      if (private_data->week_start == 1) 
 	day= (day+1)%7;
       g_snprintf (buffer, sizeof (buffer), "%s", default_abbreviated_dayname[day]);
 
@@ -2196,6 +2195,7 @@ gtk_calendar_paint_main (GtkWidget *widget)
 static void
 gtk_calendar_compute_days (GtkCalendar *calendar)
 {
+  GtkCalendarPrivateData *private_data;
   gint month;
   gint year;
   gint ndays_in_month;
@@ -2206,6 +2206,8 @@ gtk_calendar_compute_days (GtkCalendar *calendar)
   gint day;
   
   g_return_if_fail (GTK_IS_CALENDAR (calendar));
+
+  private_data = GTK_CALENDAR_PRIVATE_DATA (GTK_WIDGET (calendar));
   
   year = calendar->year;
   month = calendar->month + 1;
@@ -2214,7 +2216,7 @@ gtk_calendar_compute_days (GtkCalendar *calendar)
   
   first_day = day_of_week (year, month, 1);
   
-  if (calendar->display_flags & GTK_CALENDAR_WEEK_START_MONDAY)
+  if (private_data->week_start == 1)
     first_day--;
   else
     first_day %= 7;
@@ -2405,19 +2407,9 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
 	      private_data->week_win = NULL;
 	    }
 	}
-      
+
       if ((flags ^ calendar->display_flags) & GTK_CALENDAR_WEEK_START_MONDAY)
-	{
-	  if (calendar->display_flags & GTK_CALENDAR_WEEK_START_MONDAY)
-	    calendar->display_flags &= ~GTK_CALENDAR_WEEK_START_MONDAY;
-	  else
-	    calendar->display_flags |= GTK_CALENDAR_WEEK_START_MONDAY;
-	  
-	  gtk_calendar_compute_days (calendar);
-	  gtk_calendar_paint_main (GTK_WIDGET (calendar));
-	  if (private_data->day_name_win)
-	    gtk_calendar_paint_day_names (GTK_WIDGET (calendar));
-	}
+	g_warning ("GTK_CALENDAR_WEEK_START_MONDAY is ignored; the first day of the week is determined from the locale");
       
       calendar->display_flags = flags;
       if (resize)
@@ -2436,8 +2428,6 @@ gtk_calendar_set_display_options (GtkCalendar	       *calendar,
     g_object_notify (G_OBJECT (calendar), "no_month_change");
   if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_SHOW_WEEK_NUMBERS)
     g_object_notify (G_OBJECT (calendar), "show_week_numbers");
-  if ((old_flags ^ calendar->display_flags) & GTK_CALENDAR_WEEK_START_MONDAY)
-    g_object_notify (G_OBJECT (calendar), "week_start_monday");
   g_object_thaw_notify (G_OBJECT (calendar));
 }
 
@@ -3248,11 +3238,6 @@ gtk_calendar_set_property (GObject      *object,
 				       GTK_CALENDAR_SHOW_WEEK_NUMBERS,
 				       g_value_get_boolean (value));
       break;
-    case PROP_WEEK_START_MONDAY:
-      gtk_calendar_set_display_option (calendar,
-				       GTK_CALENDAR_WEEK_START_MONDAY,
-				       g_value_get_boolean (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3295,10 +3280,6 @@ gtk_calendar_get_property (GObject      *object,
     case PROP_SHOW_WEEK_NUMBERS:
       g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
 								   GTK_CALENDAR_SHOW_WEEK_NUMBERS));
-      break;
-    case PROP_WEEK_START_MONDAY:
-      g_value_set_boolean (value, gtk_calendar_get_display_option (calendar,
-								   GTK_CALENDAR_WEEK_START_MONDAY));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

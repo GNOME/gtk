@@ -1,3 +1,7 @@
+2003-08-09  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkcalendar.sgml: Deprecate GTK_CALENDAR_WEEK_START_MONDAY. (#87977)
+
 2003-08-03  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk-pixbuf/tmpl/gdk-pixbuf.sgml: Clarify misleading explanation of rowstride. (#119000)

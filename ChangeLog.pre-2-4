@@ -6,7 +6,11 @@
 
 	* gtk/gtkcalendar.c: Complete the RTL flipping support for GtkCalendar, make it
 	possible to flip the headings using the "magic translated string" technique. 
-	Translators, note the comment in gtk_calendar_init() explaining this.
+	Translators, note the comment in gtk_calendar_init() explaining this.  (#102416)
+
+	* gtk/gtkcalendar.c: Get the information about the first day of the week from
+	the locale using another instance of the "magic translated string" technique.
+	Ignore the display option GTK_CALENDAR_WEEK_START_MONDAY with a warning.  (#87977)
 	
 2003-08-08  Matthias Clasen  <maclas@gmx.de>
 

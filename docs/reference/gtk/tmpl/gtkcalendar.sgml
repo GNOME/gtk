@@ -67,40 +67,16 @@ are 0-11) while <structfield>selected_day</structfield> is one-based
 
 <!-- ##### ENUM GtkCalendarDisplayOptions ##### -->
 <para>
-<informaltable pgwide="1" frame="none" role="enum">
-<tgroup cols="2"><colspec colwidth="*"/><colspec colwidth="8*"/>
-<tbody>
-
-<row>
-<entry>GTK_CALENDAR_SHOW_HEADING</entry>
-<entry>Specifies that the month and year should be displayed.</entry>
-</row>
-<row>
-<entry>GTK_CALENDAR_SHOW_DAY_NAMES</entry>
-<entry>Specifies that three letter day descriptions should be present.</entry>
-</row>
-<row>
-<entry>GTK_CALENDAR_NO_MONTH_CHANGE</entry>
-<entry>Prevents the user from switching months with the calendar.</entry>
-</row>
-<row>
-<entry>GTK_CALENDAR_SHOW_WEEK_NUMBERS</entry>
-<entry>Displays each week numbers of the current year, down the left side of
-the calendar.</entry>
-</row>
-<row>
-<entry>GTK_CALENDAR_WEEK_START_MONDAY</entry>
-<entry>Starts the calendar week on Monday, instead of the default Sunday.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
+These options can be used to influence the display and behaviour of a #GtkCalendar.
 </para>
 
-@GTK_CALENDAR_SHOW_HEADING: 
-@GTK_CALENDAR_SHOW_DAY_NAMES: 
-@GTK_CALENDAR_NO_MONTH_CHANGE: 
-@GTK_CALENDAR_SHOW_WEEK_NUMBERS: 
-@GTK_CALENDAR_WEEK_START_MONDAY: 
+@GTK_CALENDAR_SHOW_HEADING: Specifies that the month and year should be displayed.
+@GTK_CALENDAR_SHOW_DAY_NAMES: Specifies that three letter day descriptions should be present.
+@GTK_CALENDAR_NO_MONTH_CHANGE: Prevents the user from switching months with the calendar.
+@GTK_CALENDAR_SHOW_WEEK_NUMBERS: Displays each week numbers of the current year, down the left side 
+ of the calendar.
+@GTK_CALENDAR_WEEK_START_MONDAY: Since GTK+ 2.4, this option is deprecated and ignored by GTK+. 
+ The information on which day the calendar week starts is derived from the locale.
 
 <!-- ##### FUNCTION gtk_calendar_new ##### -->
 <para>
@@ -291,11 +267,6 @@ calendar.
 </para>
 
 <!-- ##### ARG GtkCalendar:show-week-numbers ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG GtkCalendar:week-start-monday ##### -->
 <para>
 
 </para>
