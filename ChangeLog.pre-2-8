@@ -1,3 +1,12 @@
+Sun Dec 21 17:34:22 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_reparent): Set the right
+	properties when the window becomes a toplevel. When a window that
+	was previously a toplevel becomes a toplevel again, restore its
+	window type. Also make sure the focus window is removed from the
+	XID hash when it is destroyed. (#117579, reported by Morten
+	Welinder, patch reviewed by Owen Taylor).
+
 Sun Dec 21 01:54:40 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmenushell.h: 

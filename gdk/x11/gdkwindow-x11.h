@@ -71,6 +71,7 @@ struct _GdkWindowImplX11
   
   GdkXPositionInfo position_info;
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
+  gint8 toplevel_window_type;
 };
  
 struct _GdkWindowImplX11Class 

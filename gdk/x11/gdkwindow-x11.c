@@ -1,4 +1,3 @@
-
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
@@ -102,6 +101,10 @@ static void gdk_window_impl_x11_finalize   (GObject            *object);
 
 static gpointer parent_class = NULL;
 
+#define WINDOW_IS_TOPLEVEL(window)		   \
+  (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD && \
+   GDK_WINDOW_TYPE (window) != GDK_WINDOW_TOPLEVEL)
+
 GType
 gdk_window_impl_x11_get_type (void)
 {
@@ -141,6 +144,7 @@ gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {  
   impl->width = 1;
   impl->height = 1;
+  impl->toplevel_window_type = -1;
 }
 
 GdkToplevelX11 *
@@ -343,7 +347,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
 static void
 set_wm_protocols (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkDisplay *display = gdk_drawable_get_display (window);
   Atom protocols[3];
   
@@ -381,6 +384,79 @@ check_leader_window_title (GdkDisplay *display)
     }
 }
 
+static Window
+create_focus_window (Display *xdisplay,
+		     XID      parent)
+{
+  Window focus_window = XCreateSimpleWindow (xdisplay, parent,
+					     -1, -1, 1, 1, 0,
+					     0, 0);
+  
+  /* FIXME: probably better to actually track the requested event mask for the toplevel
+   */
+  XSelectInput (xdisplay, focus_window,
+		KeyPressMask | KeyReleaseMask | FocusChangeMask);
+  
+  XMapWindow (xdisplay, focus_window);
+
+  return focus_window;
+}
+
+static void
+setup_toplevel_window (GdkWindow *window, GdkWindow *parent)
+{
+  GdkWindowObject *obj = (GdkWindowObject *)window;
+  GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
+  GdkWindowImplX11 *impl = (GdkWindowImplX11 *)obj->impl;
+  Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
+  XID xid = GDK_WINDOW_XID (window);
+  XID xparent = GDK_WINDOW_XID (parent);
+  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (parent));
+  XSizeHints size_hints;
+  long pid;
+    
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_DIALOG)
+    XSetTransientForHint (xdisplay, xid, xparent);
+  
+  set_wm_protocols (window);
+  
+  if (!obj->input_only)
+    {
+      /* The focus window is off the visible area, and serves to receive key
+       * press events so they don't get sent to child windows.
+       */
+      toplevel->focus_window = create_focus_window (xdisplay, xid);
+      _gdk_xid_table_insert (screen_x11->display, &toplevel->focus_window, window);
+    }
+  
+  check_leader_window_title (screen_x11->display);
+  
+  /* FIXME: Is there any point in doing this? Do any WM's pay
+   * attention to PSize, and even if they do, is this the
+   * correct value???
+   */
+  size_hints.flags = PSize;
+  size_hints.width = impl->width;
+  size_hints.height = impl->height;
+  
+  XSetWMNormalHints (xdisplay, xid, &size_hints);
+  
+  /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
+  XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
+  
+  pid = getpid ();
+  XChangeProperty (xdisplay, xid,
+		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "_NET_WM_PID"),
+		   XA_CARDINAL, 32,
+		   PropModeReplace,
+		   (guchar *)&pid, 1);
+  
+  XChangeProperty (xdisplay, xid, 
+		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "WM_CLIENT_LEADER"),
+		   XA_WINDOW, 32, PropModeReplace,
+		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
+}
+
 /**
  * gdk_window_new:
  * @parent: a #GdkWindow, or %NULL to create the window as a child of
@@ -404,7 +480,6 @@ gdk_window_new (GdkWindow     *parent,
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
   GdkDrawableImplX11 *draw_impl;
-  GdkToplevelX11 *toplevel;
   GdkScreenX11 *screen_x11;
   GdkScreen *screen;
   
@@ -416,14 +491,12 @@ gdk_window_new (GdkWindow     *parent,
 
   XSetWindowAttributes xattributes;
   long xattributes_mask;
-  XSizeHints size_hints;
   XClassHint *class_hint;
   int x, y, depth;
   
   unsigned int class;
   const char *title;
   int i;
-  long pid;
   
   g_return_val_if_fail (attributes != NULL, NULL);
   
@@ -633,11 +706,27 @@ gdk_window_new (GdkWindow     *parent,
   switch (GDK_WINDOW_TYPE (private))
     {
     case GDK_WINDOW_DIALOG:
-      XSetTransientForHint (xdisplay, xid, xparent);
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
-      set_wm_protocols (window);
+      if (attributes_mask & GDK_WA_TITLE)
+	title = attributes->title;
+      else
+	title = get_default_title ();
+      
+      gdk_window_set_title (window, title);
+      
+      if (attributes_mask & GDK_WA_WMCLASS)
+	{
+	  class_hint = XAllocClassHint ();
+	  class_hint->res_name = attributes->wmclass_name;
+	  class_hint->res_class = attributes->wmclass_class;
+	  XSetClassHint (xdisplay, xid, class_hint);
+	  XFree (class_hint);
+	}
+  
+      setup_toplevel_window (window, parent);
       break;
+
     case GDK_WINDOW_CHILD:
       if ((attributes->wclass == GDK_INPUT_OUTPUT) &&
 	  (draw_impl->colormap != gdk_screen_get_system_colormap (screen)) &&
@@ -646,76 +735,12 @@ gdk_window_new (GdkWindow     *parent,
 	  GDK_NOTE (MISC, g_message ("adding colormap window\n"));
 	  gdk_window_add_colormap_windows (window);
 	}
+      break;
       
-      return window;
     default:
-      
-      return window;
+      break;
     }
 
-  toplevel = _gdk_x11_window_get_toplevel (window);
-
-  if (class != InputOnly)
-    {
-      /* The focus window is off the visible area, and serves to receive key
-       * press events so they don't get sent to child windows.
-       */
-      toplevel->focus_window = XCreateSimpleWindow (xdisplay, xid,
-						    -1, -1, 1, 1, 0,
-						    xattributes.background_pixel,
-						    xattributes.background_pixel);
-      /* FIXME: probably better to actually track the requested event mask for the toplevel
-       */
-      XSelectInput (xdisplay, toplevel->focus_window,
-		    KeyPressMask | KeyReleaseMask | FocusChangeMask);
-      
-      XMapWindow (xdisplay, toplevel->focus_window);
-      _gdk_xid_table_insert (screen_x11->display, &toplevel->focus_window, window);
-    }
-
-  size_hints.flags = PSize;
-  size_hints.width = impl->width;
-  size_hints.height = impl->height;
-
-  check_leader_window_title (screen_x11->display);
-  
-  /* FIXME: Is there any point in doing this? Do any WM's pay
-   * attention to PSize, and even if they do, is this the
-   * correct value???
-   */
-  XSetWMNormalHints (xdisplay, xid, &size_hints);
-  
-  /* This will set WM_CLIENT_MACHINE and WM_LOCALE_NAME */
-  XSetWMProperties (xdisplay, xid, NULL, NULL, NULL, 0, NULL, NULL, NULL);
-
-  pid = getpid ();
-  XChangeProperty (xdisplay, xid,
-		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "_NET_WM_PID"),
-		   XA_CARDINAL, 32,
-		   PropModeReplace,
-		   (guchar *)&pid, 1);
-  
-  XChangeProperty (xdisplay, xid, 
-		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "WM_CLIENT_LEADER"),
-		   XA_WINDOW, 32, PropModeReplace,
-		   (guchar *) &GDK_DISPLAY_X11 (screen_x11->display)->leader_window, 1);
-  
-  if (attributes_mask & GDK_WA_TITLE)
-    title = attributes->title;
-  else
-    title = get_default_title ();
-
-  gdk_window_set_title (window, title);
-  
-  if (attributes_mask & GDK_WA_WMCLASS)
-    {
-      class_hint = XAllocClassHint ();
-      class_hint->res_name = attributes->wmclass_name;
-      class_hint->res_class = attributes->wmclass_class;
-      XSetClassHint (xdisplay, xid, class_hint);
-      XFree (class_hint);
-    }
-  
   return window;
 }
 
@@ -1470,6 +1495,8 @@ gdk_window_reparent (GdkWindow *window,
   GdkWindowObject *window_private;
   GdkWindowObject *parent_private;
   GdkWindowObject *old_parent_private;
+  GdkWindowImplX11 *impl;
+  gboolean was_toplevel;
   
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1484,6 +1511,7 @@ gdk_window_reparent (GdkWindow *window,
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject*)window_private->parent;
   parent_private = (GdkWindowObject*) new_parent;
+  impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
   
   if (!GDK_WINDOW_DESTROYED (window) && !GDK_WINDOW_DESTROYED (new_parent))
     XReparentWindow (GDK_WINDOW_XDISPLAY (window),
@@ -1508,27 +1536,35 @@ gdk_window_reparent (GdkWindow *window,
     {
     case GDK_WINDOW_ROOT:
     case GDK_WINDOW_FOREIGN:
-      /* Now a toplevel */
-      if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
-	set_wm_protocols (window);
+      was_toplevel = WINDOW_IS_TOPLEVEL (window);
+      
+      if (impl->toplevel_window_type != -1)
+	GDK_WINDOW_TYPE (window) = impl->toplevel_window_type;
+      else if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD)
+	GDK_WINDOW_TYPE (window) = GDK_WINDOW_TOPLEVEL;
+
+      if (WINDOW_IS_TOPLEVEL (window) && !was_toplevel)
+	setup_toplevel_window (window, new_parent);
       break;
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_CHILD:
     case GDK_WINDOW_DIALOG:
     case GDK_WINDOW_TEMP:
-      if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&
-	  GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+      if (WINDOW_IS_TOPLEVEL (window))
 	{
-	  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
-	  
-	  /* If we were being sophisticated, we'd save the old window type
-	   * here, and restore it if we were reparented back to the
-	   * toplevel. However, the difference between different types
-	   * of toplevels only really matters on creation anyways.
+	  /* Save the original window type so we can restore it if the
+	   * window is reparented back to be a toplevel
 	   */
+	  impl->toplevel_window_type = GDK_WINDOW_TYPE (window);
 	  GDK_WINDOW_TYPE (window) = GDK_WINDOW_CHILD;
 	  if (impl->toplevel)
 	    {
+	      if (impl->toplevel->focus_window)
+		{
+		  XDestroyWindow (GDK_WINDOW_XDISPLAY (window), impl->toplevel->focus_window);
+		  _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), impl->toplevel->focus_window);
+		}
+		
 	      gdk_toplevel_x11_free_contents (impl->toplevel);
 	      g_free (impl->toplevel);
 	      impl->toplevel = NULL;
