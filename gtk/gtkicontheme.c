@@ -1252,7 +1252,9 @@ gtk_icon_theme_has_icon (GtkIconTheme *icon_theme,
   if (g_hash_table_lookup_extended (priv->all_icons,
 				    icon_name, NULL, NULL))
     return TRUE;
-  if (g_hash_table_lookup_extended (icon_theme_builtin_icons,
+
+  if (icon_theme_builtin_icons &&
+      g_hash_table_lookup_extended (icon_theme_builtin_icons,
 				    icon_name, NULL, NULL))
     return TRUE;
 

@@ -1,3 +1,9 @@
+Sun Dec  7 23:45:40 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkicontheme.c (gtk_icon_theme_has_icon): Don't crash if
+	icon_theme_builtin_icons hasn't been initialized.  (#128726, Diego
+	Gonzalez)
+
 2003-12-07  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_set_icon): Don't use the
