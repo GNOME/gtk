@@ -6,6 +6,7 @@ GObject
     GdkPixmap
   GdkColormap
   GtkSettings
+  GtkRcStyle
   GtkObject
     GtkWidget
       GtkMisc

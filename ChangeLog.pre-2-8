@@ -1,3 +1,17 @@
+Mon Apr  2 16:56:15 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtkmarshal.list (VOID:BOXED,BOXED,BOXED,BOXED): new
+	marshaller.
+
+	* gtk/gtktreemodel.c (gtk_tree_model_range_changed): change
+	"changed" signal to "range_changed".
+
+	* gtk/gtktreeview.c (gtk_tree_view_set_model): fix small bug where
+	removing a tree from one model would remove all trees from that
+	model.
+	* gtk/gtktreeview.c (gtk_tree_view_range_changed): use range
+	changed signal instead.
+
 Mon Apr  2 16:13:58 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkinvisible.c (gtk_invisible_style_set): Avoid

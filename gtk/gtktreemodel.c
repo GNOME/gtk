@@ -72,13 +72,15 @@ gtk_tree_model_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      g_signal_newc ("changed",
+      g_signal_newc ("range_changed",
 		     GTK_TYPE_TREE_MODEL,
 		     G_SIGNAL_RUN_LAST,
-		     G_STRUCT_OFFSET (GtkTreeModelIface, changed),
+		     G_STRUCT_OFFSET (GtkTreeModelIface, range_changed),
 		     NULL, NULL,
-		     gtk_marshal_VOID__BOXED_BOXED,
-		     G_TYPE_NONE, 2,
+		     gtk_marshal_VOID__BOXED_BOXED_BOXED_BOXED,
+		     G_TYPE_NONE, 4,
+		     GTK_TYPE_TREE_PATH,
+		     GTK_TYPE_TREE_ITER,
 		     GTK_TYPE_TREE_PATH,
 		     GTK_TYPE_TREE_ITER);
       g_signal_newc ("inserted",
@@ -1018,16 +1020,22 @@ gtk_tree_model_get_valist (GtkTreeModel *tree_model,
 }
 
 void
-gtk_tree_model_changed (GtkTreeModel *tree_model,
-			GtkTreePath  *path,
-			GtkTreeIter  *iter)
+gtk_tree_model_range_changed (GtkTreeModel *tree_model,
+			      GtkTreePath  *start_path,
+			      GtkTreeIter  *start_iter,
+			      GtkTreePath  *end_path,
+			      GtkTreeIter  *end_iter)
 {
   g_return_if_fail (tree_model != NULL);
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (iter != NULL);
+  g_return_if_fail (start_path != NULL);
+  g_return_if_fail (start_iter != NULL);
+  g_return_if_fail (end_path != NULL);
+  g_return_if_fail (end_iter != NULL);
 
-  g_signal_emit_by_name (tree_model, "changed", path, iter);
+  g_signal_emit_by_name (tree_model, "range_changed",
+			 start_path, start_iter,
+			 end_path, end_iter);
 }
 
 void

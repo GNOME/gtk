@@ -54,9 +54,11 @@ static void         gtk_tree_model_sort_init            (GtkTreeModelSort      *
 static void         gtk_tree_model_sort_class_init      (GtkTreeModelSortClass *tree_model_sort_class);
 static void         gtk_tree_model_sort_tree_model_init (GtkTreeModelIface     *iface);
 static void         gtk_tree_model_sort_finalize        (GObject               *object);
-static void         gtk_tree_model_sort_changed         (GtkTreeModel          *model,
-							 GtkTreePath           *path,
-							 GtkTreeIter           *iter,
+static void         gtk_tree_model_sort_range_changed   (GtkTreeModel          *model,
+							 GtkTreePath           *start_path,
+							 GtkTreeIter           *start_iter,
+							 GtkTreePath           *end_path,
+							 GtkTreeIter           *end_iter,
 							 gpointer               data);
 static void         gtk_tree_model_sort_inserted        (GtkTreeModel          *model,
 							 GtkTreePath           *path,
@@ -253,8 +255,8 @@ gtk_tree_model_sort_set_model (GtkTreeModelSort *tree_model_sort,
     {
       tree_model_sort->changed_id =
 	g_signal_connectc (child_model,
-			   "changed",
-			   gtk_tree_model_sort_changed,
+			   "range_changed",
+			   gtk_tree_model_sort_range_changed,
 			   tree_model_sort,
 			   FALSE);
       tree_model_sort->inserted_id = 
@@ -334,10 +336,12 @@ gtk_tree_model_sort_finalize (GObject *object)
 }
 
 static void
-gtk_tree_model_sort_changed (GtkTreeModel *s_model,
-			     GtkTreePath  *s_path,
-			     GtkTreeIter  *s_iter,
-			     gpointer      data)
+gtk_tree_model_sort_range_changed (GtkTreeModel *s_model,
+				   GtkTreePath  *s_start_path,
+				   GtkTreeIter  *s_start_iter,
+				   GtkTreePath  *s_end_path,
+				   GtkTreeIter  *s_end_iter,
+				   gpointer      data)
 {
   GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (data);
   GtkTreePath *path;
@@ -347,19 +351,19 @@ gtk_tree_model_sort_changed (GtkTreeModel *s_model,
   gboolean free_s_path = FALSE;
   gint index;
 
-  g_return_if_fail (s_path != NULL || s_iter != NULL);
+  g_return_if_fail (s_start_path != NULL || s_start_iter != NULL);
 
-  if (s_path == NULL)
+  if (s_start_path == NULL)
     {
       free_s_path = TRUE;
-      s_path = gtk_tree_model_get_path (s_model, s_iter);
+      s_start_path = gtk_tree_model_get_path (s_model, s_start_iter);
     }
 
-  path = gtk_tree_model_sort_convert_path_real (tree_model_sort, s_path, FALSE);
+  path = gtk_tree_model_sort_convert_path_real (tree_model_sort, s_start_path, FALSE);
   if (path == NULL)
     {
       if (free_s_path)
-	gtk_tree_path_free (s_path);
+	gtk_tree_path_free (s_start_path);
       return;
     }
 
@@ -378,11 +382,11 @@ gtk_tree_model_sort_changed (GtkTreeModel *s_model,
 						 (GtkTreeIter *) elt,
 						 TRUE);
 
-  g_signal_emit_by_name (G_OBJECT (data), "changed", path, &iter);
+  gtk_tree_model_range_changed (GTK_TREE_MODEL (data), path, &iter, path, &iter);
 
   gtk_tree_path_free (path);
   if (free_s_path)
-    gtk_tree_path_free (s_path);
+    gtk_tree_path_free (s_start_path);
 }
 
 /* FALSE if the value was inserted, TRUE otherwise */

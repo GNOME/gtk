@@ -171,9 +171,11 @@ static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
 static void     gtk_tree_view_set_adjustments      (GtkTreeView      *tree_view,
 						    GtkAdjustment    *hadj,
 						    GtkAdjustment    *vadj);
-static void     gtk_tree_view_changed              (GtkTreeModel     *model,
+static void     gtk_tree_view_range_changed        (GtkTreeModel     *model,
 						    GtkTreePath      *path,
 						    GtkTreeIter      *iter,
+						    GtkTreePath      *end_path,
+						    GtkTreeIter      *end_iter,
 						    gpointer          data);
 static void     gtk_tree_view_inserted             (GtkTreeModel     *model,
 						    GtkTreePath      *path,
@@ -2709,10 +2711,12 @@ gtk_tree_view_row_activated (GtkTreeView       *tree_view,
  */
 
 static void
-gtk_tree_view_changed (GtkTreeModel *model,
-		       GtkTreePath  *path,
-		       GtkTreeIter  *iter,
-		       gpointer      data)
+gtk_tree_view_range_changed (GtkTreeModel *model,
+			     GtkTreePath  *path,
+			     GtkTreeIter  *iter,
+			     GtkTreePath  *end_path,
+			     GtkTreeIter  *end_iter,
+			     gpointer      data)
 {
   GtkTreeView *tree_view = (GtkTreeView *)data;
   GtkRBTree *tree;
@@ -3897,8 +3901,8 @@ gtk_tree_view_setup_model (GtkTreeView *tree_view)
   tree_view->priv->tree = NULL;
 
   g_signal_connectc (tree_view->priv->model,
-		     "changed",
-		     gtk_tree_view_changed,
+		     "range_changed",
+		     gtk_tree_view_range_changed,
 		     tree_view,
 		     FALSE);
   g_signal_connectc (tree_view->priv->model,
@@ -3966,25 +3970,25 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
       if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_MODEL_SETUP))
 	{
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC,
+						G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						gtk_tree_view_changed, NULL);
+						NULL, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC,
+						G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						gtk_tree_view_inserted, NULL);
+						NULL, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC,
+						G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						gtk_tree_view_has_child_toggled, NULL);
+						NULL, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC,
+						G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						gtk_tree_view_deleted, NULL);
+						NULL, tree_view);
 	  g_signal_handlers_disconnect_matched (G_OBJECT (tree_view->priv->model),
-						G_SIGNAL_MATCH_FUNC,
+						G_SIGNAL_MATCH_DATA,
 						0, 0, NULL,
-						gtk_tree_view_reordered, NULL);
+						NULL, tree_view);
 	  _gtk_rbtree_free (tree_view->priv->tree);
 	}
 

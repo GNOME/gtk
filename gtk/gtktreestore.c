@@ -652,7 +652,7 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
 	    _gtk_tree_data_list_value_to_node (list, &real_value);
 	  else
 	    _gtk_tree_data_list_value_to_node (list, value);
-	  gtk_tree_model_changed (GTK_TREE_MODEL (tree_store), path, iter);
+	  gtk_tree_model_range_changed (GTK_TREE_MODEL (tree_store), path, iter, path, iter);
 	  gtk_tree_path_free (path);
 	  if (converted)
 	    g_value_unset (&real_value);
@@ -686,7 +686,7 @@ gtk_tree_store_set_value (GtkTreeStore *tree_store,
     _gtk_tree_data_list_value_to_node (list, &real_value);
   else
     _gtk_tree_data_list_value_to_node (list, value);
-  gtk_tree_model_changed (GTK_TREE_MODEL (tree_store), path, iter);
+  gtk_tree_model_range_changed (GTK_TREE_MODEL (tree_store), path, iter, path, iter);
   gtk_tree_path_free (path);
   if (converted)
     g_value_unset (&real_value);
@@ -1136,7 +1136,7 @@ copy_node_data (GtkTreeStore *tree_store,
   G_NODE (dest_iter->user_data)->data = copy_head;
 
   path = gtk_tree_store_get_path (GTK_TREE_MODEL (tree_store), dest_iter);
-  gtk_tree_model_changed (GTK_TREE_MODEL (tree_store), path, dest_iter);
+  gtk_tree_model_range_changed (GTK_TREE_MODEL (tree_store), path, dest_iter, path, dest_iter);
   gtk_tree_path_free (path);
 }
 

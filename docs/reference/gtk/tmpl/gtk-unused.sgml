@@ -756,6 +756,14 @@ produce superscript and subscript.
 
 @widget: the object which received the signal.
 
+<!-- ##### SIGNAL GtkWidget::size-request ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@requisition: 
+
 <!-- ##### FUNCTION gtk_button_box_child_requisition ##### -->
 <para>
 This is an internally used function and should never be called from an

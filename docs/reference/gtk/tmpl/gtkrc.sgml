@@ -496,7 +496,6 @@ This can later be composited together with other
 #GtkRcStyle structures to form a #GtkStyle.
 </para>
 
-@parent_instance: 
 @name: 
 @bg_pixmap_name: 
 @font_desc: 

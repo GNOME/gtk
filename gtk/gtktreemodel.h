@@ -56,9 +56,11 @@ struct _GtkTreeModelIface
   GTypeInterface g_iface;
 
   /* Signals */
-  void         (* changed)           (GtkTreeModel *tree_model,
-				      GtkTreePath  *path,
-				      GtkTreeIter  *iter);
+  void         (* range_changed)     (GtkTreeModel *tree_model,
+				      GtkTreePath  *start_path,
+				      GtkTreeIter  *start_iter,
+				      GtkTreePath  *end_path,
+				      GtkTreeIter  *end_iter);
   void         (* inserted)          (GtkTreeModel *tree_model,
 				      GtkTreePath  *path,
 				      GtkTreeIter  *iter);
@@ -211,9 +213,11 @@ void              gtk_tree_model_get_valist      (GtkTreeModel *tree_model,
 
 
 /* Signals */
-void gtk_tree_model_changed           (GtkTreeModel *tree_model,
-				       GtkTreePath  *path,
-				       GtkTreeIter  *iter);
+void gtk_tree_model_range_changed     (GtkTreeModel *tree_model,
+				       GtkTreePath  *start_path,
+				       GtkTreeIter  *start_iter,
+				       GtkTreePath  *end_path,
+				       GtkTreeIter  *end_iter);
 void gtk_tree_model_inserted          (GtkTreeModel *tree_model,
 				       GtkTreePath  *path,
 				       GtkTreeIter  *iter);
