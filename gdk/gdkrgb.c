@@ -181,7 +181,7 @@ gdk_rgb_make_colorcube (GdkRgbInfo *image_info, gulong *pixels,
     {
       image_info->colorcube[i] = pixels[rt[i >> 8] + gt[(i >> 4) & 0x0f] + bt[i & 0x0f]];
 #ifdef VERBOSE
-      g_print ("%03x %02x %x %x %x\n", i, image-info->colorcube[i], rt[i >> 8], gt[(i >> 4) & 0x0f], bt[i & 0x0f]);
+      g_print ("%03x %02x %x %x %x\n", i, image_info->colorcube[i], rt[i >> 8], gt[(i >> 4) & 0x0f], bt[i & 0x0f]);
 #endif
     }
 }
@@ -3373,7 +3373,7 @@ gdk_rgb_cmap_get_info (GdkRgbCmap *cmap,
 	((rgb & 0xf000) >> 8) |
 	((rgb & 0xf0) >> 4);
 #ifdef VERBOSE
-      g_print ("%d %x %x %d\n", i, j, image_info->colorcube[j]);
+      g_print ("%d %x %x\n", i, j, image_info->colorcube[j]);
 #endif
       cmap_info->lut[i] = image_info->colorcube[j];
     }
