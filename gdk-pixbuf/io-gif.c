@@ -154,7 +154,9 @@ GdkPixBuf *image_load(FILE * f)
 		tmpptr[3] = 0xFF;
 	    tmpptr += (is_trans ? 4 : 3);
 	}
+	g_free(rows[i]);
     }
+    g_free(rows);
 
     /* Ok, now stuff the GdkPixBuf with goodies */
 
@@ -167,6 +169,7 @@ GdkPixBuf *image_load(FILE * f)
 
     /* Ok, I'm anal...shoot me */
     if (!(pixbuf->art_pixbuf)) {
+        art_free(pixels);
         g_free(pixbuf);
 	return NULL;
     }
@@ -178,3 +181,5 @@ GdkPixBuf *image_load(FILE * f)
 }
 
 image_save() {}
+
+

@@ -1,3 +1,12 @@
+1999-07-18  Larry Ewing  <lewing@gimp.org>
+
+	* src/io-xpm.c:
+	* src/io-gif.c:
+	* src/io-png.c:
+	* src/io-jpeg.c: Fix a few memory leaks in the, most of them in
+	error cases but one or two in the common case.  There are probably
+	a few small ones left.
+	
 1999-07-18  Mark Crichton  <crichton@gimp.org>
 
 	* configure.in: removed version.h. 

@@ -329,6 +329,7 @@ static GdkPixBuf *
 	buffer = (*get_buf) (op_cmap, handle);
 	if (!buffer) {
 	    g_warning("Can't load XPM colormap");
+	    g_hash_table_destroy(color_hash);
 	    g_free(name_buf);
 	    g_free(colors);
 	    return NULL;
@@ -396,6 +397,9 @@ static GdkPixBuf *
 	    }
 	}
     }
+    g_hash_table_destroy(color_hash);
+    g_free(colors);
+    g_free(name_buf);
 
     /* Ok, now stuff the GdkPixBuf with goodies */
 
@@ -407,14 +411,14 @@ static GdkPixBuf *
 	pixbuf->art_pixbuf = art_pixbuf_new_rgb(pixels, w, h, (w * 3));
 
     /* Ok, I'm anal...shoot me */
-    if (!(pixbuf->art_pixbuf))
-	return NULL;
+    if (!(pixbuf->art_pixbuf)) {
+        art_free(pixels);
+	g_free(pixbuf);
+        return NULL;
+    }
+
     pixbuf->ref_count = 0;
     pixbuf->unref_func = NULL;
-
-    g_hash_table_destroy(color_hash);
-    g_free(colors);
-    g_free(name_buf);
 
     return pixbuf;
 }
