@@ -31,7 +31,7 @@ m4_define([gtk_api_version], [2.0])
 m4_define([gtk_binary_version], [2.4.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.6.0])
+m4_define([glib_required_version], [2.7.0])
 m4_define([pango_required_version], [1.8.0])
 m4_define([atk_required_version], [1.0.1])
 
@@ -1511,6 +1511,42 @@ AC_SUBST(GTK_DEP_CFLAGS)
 AC_SUBST(GTK_DEBUG_FLAGS)
 AC_SUBST(GTK_XIM_FLAGS)
 
+########################
+# Checks needed for gail
+########################
+old_LIBS="$LIBS"
+dnl Checks for inet libraries:
+AC_SEARCH_LIBS(gethostent, nsl)
+AC_SEARCH_LIBS(setsockopt, socket)
+AC_SEARCH_LIBS(connect, inet)
+
+dnl check for the sockaddr_un.sun_len member
+AC_CHECK_MEMBER([struct sockaddr_un.sun_len],
+		[struct_sockaddr_un_sun_len=true],
+		[struct_sockaddr_un_suin_len=false],
+		[#include <sys/types.h>
+		 #include <sys/un.h>]
+		)
+case $struct_sockaddr_un_sun_len in 
+	true)
+		AC_DEFINE_UNQUOTED(HAVE_SOCKADDR_UN_SUN_LEN, 1, Have the sockaddr_un.sun_len member.)
+		;;
+	*)
+		;;
+esac
+
+INET_LIBS="$LIBS"
+AC_SUBST(INET_LIBS)
+
+LIBS="$old_LIBS"
+
+GAIL_PACKAGES="atk gtk+-2.0 pango libgnomecanvas-2.0" 
+GAIL_DEP_CFLAGS=`$PKG_CONFIG --cflags $GAIL_PACKAGES`
+GAIL_DEP_LIBS=`$PKG_CONFIG --libs $GAIL_PACKAGES`
+
+AC_SUBST(GAIL_DEP_CFLAGS)
+AC_SUBST(GAIL_DEP_LIBS)
+
 ################################################################
 # Strip -export-dynamic from the link lines of various libraries
 ################################################################
@@ -1644,9 +1680,11 @@ Makefile
 gdk-pixbuf-2.0.pc
 gdk-2.0.pc
 gtk+-2.0.pc
+gail.pc
 gdk-pixbuf-2.0-uninstalled.pc
 gdk-2.0-uninstalled.pc
 gtk+-2.0-uninstalled.pc
+gail-uninstalled.pc
 m4macros/Makefile
 po/Makefile.in
 po-properties/Makefile.in
@@ -1665,6 +1703,7 @@ docs/reference/gdk/Makefile
 docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/version.xml
+docs/reference/libgail-util/Makefile
 docs/faq/Makefile
 docs/tools/Makefile
 docs/tutorial/Makefile
@@ -1692,6 +1731,9 @@ modules/engines/pixbuf/Makefile
 modules/engines/ms-windows/Makefile
 modules/engines/ms-windows/Theme/Makefile
 modules/engines/ms-windows/Theme/gtk-2.0/Makefile
+modules/other/Makefile
+modules/other/gail/Makefile
+modules/other/gail/libgail-util/Makefile
 contrib/Makefile
 contrib/gdk-pixbuf-xlib/Makefile
 contrib/gdk-pixbuf-xlib/gdk-pixbuf-xlib-2.0.pc

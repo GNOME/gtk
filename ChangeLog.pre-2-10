@@ -1,5 +1,9 @@
 2005-03-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* configure.in: Require GLib 2.7.0
+
+2005-03-09  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkwidget.h (struct _GtkWidget): Typo fixes in comments.
 	(#169728, Morten Welinder, Owen Taylor)
 
