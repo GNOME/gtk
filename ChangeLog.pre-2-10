@@ -1,3 +1,10 @@
+Wed Sep 26 16:35:59 2001  Owen Taylor  <otaylor@redhat.com>
+
+       Patch from Mark McLoughlin <mark@skynet.ie> (#61233)
+
+       * contrib/gdk-pixbuf-xlib/Makefile.am: install
+       gdk-pixbuf-xlib-2.0.pc.
+
 Wed Sep 26 16:15:25 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtknotebook.c (gtk_notebook_set_tab_label): Fix
