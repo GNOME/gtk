@@ -29,7 +29,7 @@ extern "C" {
 
 /* Initialization, exit and events
  */
-#define	  GDK_PRIORITY_EVENTS		(-10)
+#define	  GDK_PRIORITY_EVENTS		(G_PRIORITY_DEFAULT)
 void 	  gdk_init		   	(gint	   	*argc,
 					 gchar        ***argv);
 void  	  gdk_exit		   	(gint	    	 error_code);

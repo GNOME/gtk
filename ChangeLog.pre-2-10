@@ -1,3 +1,10 @@
+Sat Jan  2 03:54:30 1999  Tim Janik  <timj@gtk.org>
+
+	* gdk/gdk.h (GDK_PRIORITY_EVENTS): make this G_PRIORITY_DEFAULT.
+
+	* gdk/gdkevents.c (gdk_events_init): add the source and the poll fd with
+ 	a priority of GDK_PRIORITY_EVENTS.
+
 1999-01-02  Jeff Garzik  <jgarzik@pobox.com>
 
 	* configure.in, config.h.in, gdk/gdkimage.c:

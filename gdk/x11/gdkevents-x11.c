@@ -130,7 +130,7 @@ gdk_events_init (void)
   GDK_NOTE (MISC,
 	    g_message ("connection number: %d", connection_number));
 
-  g_source_add (G_PRIORITY_DEFAULT, TRUE, &event_funcs, NULL, NULL, NULL);
+  g_source_add (GDK_PRIORITY_EVENTS, TRUE, &event_funcs, NULL, NULL, NULL);
 
   event_poll_fd.fd = connection_number;
   event_poll_fd.events = G_IO_IN;
