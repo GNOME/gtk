@@ -70,8 +70,10 @@ struct _GtkFileChooserButtonClass
 
 
 GType                 gtk_file_chooser_button_get_type         (void) G_GNUC_CONST;
-GtkWidget *           gtk_file_chooser_button_new              (const gchar          *title);
+GtkWidget *           gtk_file_chooser_button_new              (const gchar          *title,
+								GtkFileChooserAction  action);
 GtkWidget *           gtk_file_chooser_button_new_with_backend (const gchar          *title,
+								GtkFileChooserAction  action,
 								const gchar          *backend);
 GtkWidget *           gtk_file_chooser_button_new_with_dialog  (GtkWidget            *dialog);
 G_CONST_RETURN gchar *gtk_file_chooser_button_get_title        (GtkFileChooserButton *button);

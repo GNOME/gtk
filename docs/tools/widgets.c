@@ -444,13 +444,14 @@ create_file_button (void)
   vbox = gtk_vbox_new (FALSE, 12);
   vbox2 = gtk_vbox_new (FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  picker = gtk_file_chooser_button_new ("File Chooser Button");
+  picker = gtk_file_chooser_button_new ("File Chooser Button",
+		  			GTK_FILE_CHOOSER_ACTION_OPEN);
   gtk_widget_set_size_request (picker, 150, -1);
   gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/etc/yum.conf");
   gtk_container_add (GTK_CONTAINER (align), picker);
   gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox2),
-		      gtk_label_new ("File Button (Open)"),
+		      gtk_label_new ("File Button (Files)"),
 		      FALSE, FALSE, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox),
@@ -461,15 +462,14 @@ create_file_button (void)
 
   vbox2 = gtk_vbox_new (FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
-  picker = gtk_file_chooser_button_new ("File Chooser Button");
-  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (picker),
-			       GTK_FILE_CHOOSER_ACTION_SAVE);
+  picker = gtk_file_chooser_button_new ("File Chooser Button",
+		  			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
   gtk_widget_set_size_request (picker, 150, -1);
-  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/etc/yum.conf");
+  gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (picker), "/");
   gtk_container_add (GTK_CONTAINER (align), picker);
   gtk_box_pack_start (GTK_BOX (vbox2), align, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox2),
-		      gtk_label_new ("File Button (Save)"),
+		      gtk_label_new ("File Button (Select Folder)"),
 		      FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
 		      vbox2, TRUE, TRUE, 0);

@@ -74,6 +74,7 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 @title: 
+@action: 
 @Returns: 
 
 
@@ -83,6 +84,7 @@ This should not be accessed directly.  Use the accessor functions below.
 </para>
 
 @title: 
+@action: 
 @backend: 
 @Returns: 
 

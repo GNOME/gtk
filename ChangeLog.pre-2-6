@@ -1,3 +1,44 @@
+2004-12-15  James M. Cape  <jcape@ignore-your.tv>
+
+	* gtk/gtkfilechooserbutton.c (struct _GtkFileChooserButtonPrivate)
+	(gtk_file_chooser_button_init)
+	(gtk_file_chooser_button_file_chooser_iface_init)
+	(gtk_file_chooser_button_add_shortcut_folder)
+	(gtk_file_chooser_button_remove_shortcut_folder) 
+	(gtk_file_chooser_button_constructor)
+	(gtk_file_chooser_button_set_property)
+	(gtk_file_chooser_button_destroy)
+	(gtk_file_chooser_button_finalize)
+	(get_icon_theme) (get_display_name_for_path) (model_get_type_position)
+	(model_free_row_data) (model_add_special) (model_add_other)
+	(model_add_volumes) (model_add_bookmarks)
+	(model_update_current_folder) (model_remove_rows)
+	(filter_model_visible_func) (combo_box_row_separator_func)
+	(name_cell_data_func) (update_combo_box) (fs_volumes_changed_cb)
+	(fs_bookmarks_changed_cb) (combo_box_changed_cb)
+	(change_icon_size): Use a GtkComboBox in SELECT_FOLDER mode (#157726).
+
+	* gtk/gtkfilechooserbutton.c:
+	* gtk/gtkfilechooserbutton.h (gtk_file_chooser_button_new)
+	(gtk_file_chooser_button_new_with_backend): Add @action to constructors
+	to match other GtkFileChooser impls. API CHANGE.
+
+	* docs/tools/widgets.c (create_file_button):
+	* tests/testfilechooserbutton.c (main): Update callers.
+
+	* docs/reference/gtk/tmpl/gtkfilechooserbutton.sgml: Reflect API
+	change.
+
+	* tests/testfilechooserbutton.c: Add LGPL license.
+	(main): Added GOption parser for --backend and --right-to-left cmd line
+	args.
+	(add_pwds_parent_as_shortcut_clicked_cb)
+	(del_pwds_parent_as_shortcut_clicked_cb) (tests_button_clicked_cb):
+	Add shortcut_folders test.
+	(chooser_current_folder_changed_cb) (chooser_selection_changed_cb)
+	(chooser_file_activated_cb) (chooser_update_preview_cb): Print URIS,
+	not filenames.
+
 2004-12-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkfilechooserdefault.c (get_is_file_filtered): Don't 
