@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0.2\n"
 "POT-Creation-Date: 2002-04-02 13:13+0200\n"
-"PO-Revision-Date: 2002-04-14 19:15+0400\n"
+"PO-Revision-Date: 2002-04-15 22:10+0400\n"
 "Last-Translator: Dmitry Mastrukov <dmitry@taurussoft.org>\n"
 "Language-Team: Russian <gnome-cyr@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1690,7 +1690,7 @@ msgstr ""
 # gtk/gtkcolorsel.c:910
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr "Сохранить цвет здесь"
+msgstr "Со_хранить цвет здесь"
 
 # gtk/gtkcolorsel.c:1079
 #: gtk/gtkcolorsel.c:1079
@@ -1710,7 +1710,7 @@ msgstr "Имеет управление непрозрачностью"
 # gtk/gtkcolorsel.c:1705
 #: gtk/gtkcolorsel.c:1705
 msgid "Whether the color selector should allow setting opacity"
-msgstr ""
+msgstr "Должна ли использоваться непрозрачность"
 
 # gtk/gtkcolorsel.c:1711
 #: gtk/gtkcolorsel.c:1711
@@ -1760,6 +1760,8 @@ msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"Выберите желаемый цвет на внешнем круге. Выберите более тёмный или более "
+"светлый оттенки, используя внутренний треугольник."
 
 # gtk/gtkcolorsel.c:1812
 #: gtk/gtkcolorsel.c:1812
@@ -1773,7 +1775,7 @@ msgstr ""
 # gtk/gtkcolorsel.c:1821
 #: gtk/gtkcolorsel.c:1821
 msgid "_Hue:"
-msgstr "Тон:"
+msgstr "То_н:"
 
 # gtk/gtkcolorsel.c:1822
 #: gtk/gtkcolorsel.c:1822
@@ -1783,7 +1785,7 @@ msgstr "Положение цветового круга."
 # gtk/gtkcolorsel.c:1823
 #: gtk/gtkcolorsel.c:1823
 msgid "_Saturation:"
-msgstr "Насыщенность:"
+msgstr "Нас_ыщенность:"
 
 # gtk/gtkcolorsel.c:1824
 #: gtk/gtkcolorsel.c:1824
@@ -1793,7 +1795,7 @@ msgstr "\"Глубина\" цвета."
 # gtk/gtkcolorsel.c:1825
 #: gtk/gtkcolorsel.c:1825
 msgid "_Value:"
-msgstr "Значение:"
+msgstr "Зна_чение:"
 
 # gtk/gtkcolorsel.c:1826
 #: gtk/gtkcolorsel.c:1826
@@ -1803,7 +1805,7 @@ msgstr "Яркость цвета."
 # gtk/gtkcolorsel.c:1827
 #: gtk/gtkcolorsel.c:1827
 msgid "_Red:"
-msgstr "Красный:"
+msgstr "_Красный:"
 
 # gtk/gtkcolorsel.c:1828
 #: gtk/gtkcolorsel.c:1828
@@ -1813,7 +1815,7 @@ msgstr "Количество красного оттенка в цвете."
 # gtk/gtkcolorsel.c:1829
 #: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
-msgstr "Зеленый:"
+msgstr "_Зеленый:"
 
 # gtk/gtkcolorsel.c:1830
 #: gtk/gtkcolorsel.c:1830
@@ -1823,7 +1825,7 @@ msgstr "Количество зелёного оттенка в цвете."
 # gtk/gtkcolorsel.c:1831
 #: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
-msgstr "Синий:"
+msgstr "С_иний:"
 
 # gtk/gtkcolorsel.c:1832
 #: gtk/gtkcolorsel.c:1832
@@ -1833,7 +1835,7 @@ msgstr "Количество синего оттенка в цвете."
 # gtk/gtkcolorsel.c:1835
 #: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
-msgstr "Непрозрачность:"
+msgstr "Не_прозрачность:"
 
 # gtk/gtkcolorsel.c:1843
 #: gtk/gtkcolorsel.c:1843
@@ -1843,7 +1845,7 @@ msgstr "Прозрачность выбранного цвета."
 # gtk/gtkcolorsel.c:1858
 #: gtk/gtkcolorsel.c:1858
 msgid "Color _Name:"
-msgstr "Название цвета:"
+msgstr "Наз_вание цвета:"
 
 # gtk/gtkcolorsel.c:1870
 #: gtk/gtkcolorsel.c:1870
@@ -1858,7 +1860,7 @@ msgstr ""
 # gtk/gtkcolorsel.c:1889
 #: gtk/gtkcolorsel.c:1889
 msgid "_Palette"
-msgstr "Палитра"
+msgstr "Па_литра"
 
 # gtk/gtkcombo.c:139
 #: gtk/gtkcombo.c:139
@@ -1868,7 +1870,7 @@ msgstr "Включить клавиши-стрелки"
 # gtk/gtkcombo.c:140
 #: gtk/gtkcombo.c:140
 msgid "Whether the arrow keys move through the list of items"
-msgstr "Будет ли клавиши управления курсором перемещать по списку элементов"
+msgstr "Будут ли клавиши управления курсором перемещать по списку элементов"
 
 # gtk/gtkcombo.c:146
 #: gtk/gtkcombo.c:146
@@ -2163,7 +2165,7 @@ msgstr "Методы ввода"
 # gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 #: gtk/gtkentry.c:3870 gtk/gtktextview.c:6375
 msgid "_Insert Unicode control character"
-msgstr "Вставить управляющий символ Unicode"
+msgstr "Вс_тавить управляющий символ Unicode"
 
 # gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
 #: gtk/gtkfilesel.c:536 gtk/gtkimage.c:161
@@ -2203,7 +2205,7 @@ msgstr "Каталоги"
 # gtk/gtkfilesel.c:711
 #: gtk/gtkfilesel.c:711
 msgid "Fol_ders"
-msgstr "Каталоги"
+msgstr "_Каталоги"
 
 # gtk/gtkfilesel.c:742
 #: gtk/gtkfilesel.c:742
@@ -2213,7 +2215,7 @@ msgstr "Файлы"
 # gtk/gtkfilesel.c:746
 #: gtk/gtkfilesel.c:746
 msgid "_Files"
-msgstr "Файлы"
+msgstr "Фай_лы"
 
 # gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
 #: gtk/gtkfilesel.c:822 gtk/gtkfilesel.c:2124
@@ -2236,17 +2238,17 @@ msgstr ""
 # gtk/gtkfilesel.c:1076
 #: gtk/gtkfilesel.c:1076
 msgid "_New Folder"
-msgstr "Создать каталог"
+msgstr "_Создать каталог"
 
 # gtk/gtkfilesel.c:1087
 #: gtk/gtkfilesel.c:1087
 msgid "De_lete File"
-msgstr "Удалить файл"
+msgstr "У_далить файл"
 
 # gtk/gtkfilesel.c:1098
 #: gtk/gtkfilesel.c:1098
 msgid "_Rename File"
-msgstr "Переименовать файл"
+msgstr "Переи_меновать файл"
 
 # gtk/gtkfilesel.c:1358
 #: gtk/gtkfilesel.c:1358
@@ -2284,7 +2286,7 @@ msgstr "Создать каталог"
 # gtk/gtkfilesel.c:1418
 #: gtk/gtkfilesel.c:1418
 msgid "_Folder name:"
-msgstr "Имя каталога:"
+msgstr "И_мя каталога:"
 
 # gtk/gtkfilesel.c:1444
 #: gtk/gtkfilesel.c:1444
@@ -2460,23 +2462,23 @@ msgstr "Текст используемый для демонстрации вы
 # gtk/gtkfontsel.c:321
 #: gtk/gtkfontsel.c:321
 msgid "_Family:"
-msgstr "Семейство:"
+msgstr "_Семейство:"
 
 # gtk/gtkfontsel.c:327
 #: gtk/gtkfontsel.c:327
 msgid "_Style:"
-msgstr "Стиль:"
+msgstr "Сти_ль:"
 
 # gtk/gtkfontsel.c:333
 #: gtk/gtkfontsel.c:333
 msgid "Si_ze:"
-msgstr "Размер:"
+msgstr "_Размер:"
 
 # gtk/gtkfontsel.c:462
 #. create the text entry widget
 #: gtk/gtkfontsel.c:462
 msgid "_Preview:"
-msgstr "Просмотр:"
+msgstr "_Просмотр:"
 
 # gtk/gtkfontsel.c:1253
 #: gtk/gtkfontsel.c:1253
@@ -2541,7 +2543,7 @@ msgstr "Гамма"
 # gtk/gtkgamma.c:406
 #: gtk/gtkgamma.c:406
 msgid "_Gamma value"
-msgstr "Гамма-значение"
+msgstr "_Гамма-значение"
 
 # gtk/gtkhandlebox.c:192 gtk/gtkmenubar.c:151 gtk/gtkstatusbar.c:158
 # gtk/gtktoolbar.c:277 gtk/gtkviewport.c:148
@@ -2705,7 +2707,7 @@ msgstr "Нет устройства ввода"
 # gtk/gtkinputdialog.c:221
 #: gtk/gtkinputdialog.c:221
 msgid "_Device:"
-msgstr "Устройство:"
+msgstr "_Устройство:"
 
 # gtk/gtkinputdialog.c:238
 #: gtk/gtkinputdialog.c:238
@@ -2725,19 +2727,19 @@ msgstr "Окно"
 # gtk/gtkinputdialog.c:262
 #: gtk/gtkinputdialog.c:262
 msgid "_Mode: "
-msgstr "Режим: "
+msgstr "_Режим: "
 
 # gtk/gtkinputdialog.c:293
 #. The axis listbox
 #: gtk/gtkinputdialog.c:293
 msgid "_Axes"
-msgstr "Оси"
+msgstr "О_си"
 
 # gtk/gtkinputdialog.c:309
 #. Keys listbox
 #: gtk/gtkinputdialog.c:309
 msgid "_Keys"
-msgstr "Клавиши"
+msgstr "_Клавиши"
 
 # gtk/gtkinputdialog.c:474
 #: gtk/gtkinputdialog.c:474
@@ -3860,318 +3862,318 @@ msgstr "Вопрос"
 #.
 #: gtk/gtkstock.c:275
 msgid "_Add"
-msgstr "Добавить"
+msgstr "_Добавить"
 
 # gtk/gtkstock.c:276
 #: gtk/gtkstock.c:276
 msgid "_Apply"
-msgstr "Применить"
+msgstr "_Применить"
 
 # gtk/gtkstock.c:277
 #: gtk/gtkstock.c:277
 msgid "_Bold"
-msgstr "Полужирный"
+msgstr "Полу_жирный"
 
 # gtk/gtkstock.c:278
 #: gtk/gtkstock.c:278
 msgid "_Cancel"
-msgstr "Отменить"
+msgstr "О_тменить"
 
 # gtk/gtkstock.c:279
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr "CD-Rom"
+msgstr "_CD-Rom"
 
 # gtk/gtkstock.c:280
 #: gtk/gtkstock.c:280
 msgid "_Clear"
-msgstr "Очистить"
+msgstr "О_чистить"
 
 # gtk/gtkstock.c:281
 #: gtk/gtkstock.c:281
 msgid "_Close"
-msgstr "Закрыть"
+msgstr "_Закрыть"
 
 # gtk/gtkstock.c:282
 #: gtk/gtkstock.c:282
 msgid "_Convert"
-msgstr "Преобразовать"
+msgstr "П_реобразовать"
 
 # gtk/gtkstock.c:283
 #: gtk/gtkstock.c:283
 msgid "_Copy"
-msgstr "Скопировать"
+msgstr "С_копировать"
 
 # gtk/gtkstock.c:284
 #: gtk/gtkstock.c:284
 msgid "C_ut"
-msgstr "Вырезать"
+msgstr "_Вырезать"
 
 # gtk/gtkstock.c:285
 #: gtk/gtkstock.c:285
 msgid "_Delete"
-msgstr "Удалить"
+msgstr "У_далить"
 
 # gtk/gtkstock.c:286
 #: gtk/gtkstock.c:286
 msgid "_Execute"
-msgstr "Выполнить"
+msgstr "_Выполнить"
 
 # gtk/gtkstock.c:287
 #: gtk/gtkstock.c:287
 msgid "_Find"
-msgstr "Найти"
+msgstr "_Найти"
 
 # gtk/gtkstock.c:288
 #: gtk/gtkstock.c:288
 msgid "Find and _Replace"
-msgstr "Найти и заменить"
+msgstr "Найти и _заменить"
 
 # gtk/gtkstock.c:289
 #: gtk/gtkstock.c:289
 msgid "_Floppy"
-msgstr "Флоппи"
+msgstr "_Флоппи"
 
 # gtk/gtkstock.c:290
 #: gtk/gtkstock.c:290
 msgid "_Bottom"
-msgstr "В самый низ"
+msgstr "В самый ни_з"
 
 # gtk/gtkstock.c:291
 #: gtk/gtkstock.c:291
 msgid "_First"
-msgstr "В начало"
+msgstr "В _начало"
 
 # gtk/gtkstock.c:292
 #: gtk/gtkstock.c:292
 msgid "_Last"
-msgstr "В конец"
+msgstr "В коне_ц"
 
 # gtk/gtkstock.c:293
 #: gtk/gtkstock.c:293
 msgid "_Top"
-msgstr "На самый верх"
+msgstr "На самый вер_х"
 
 # gtk/gtkstock.c:294
 #: gtk/gtkstock.c:294
 msgid "_Back"
-msgstr "Назад"
+msgstr "На_зад"
 
 # gtk/gtkstock.c:295
 #: gtk/gtkstock.c:295
 msgid "_Down"
-msgstr "Вниз"
+msgstr "В_низ"
 
 # gtk/gtkstock.c:296
 #: gtk/gtkstock.c:296
 msgid "_Forward"
-msgstr "Вперёд"
+msgstr "В_перёд"
 
 # gtk/gtkstock.c:297
 #: gtk/gtkstock.c:297
 msgid "_Up"
-msgstr "Вверх"
+msgstr "_Вверх"
 
 # gtk/gtkstock.c:298
 #: gtk/gtkstock.c:298
 msgid "_Help"
-msgstr "Справка"
+msgstr "_Справка"
 
 # gtk/gtkstock.c:299
 #: gtk/gtkstock.c:299
 msgid "_Home"
-msgstr "Домой"
+msgstr "_Домой"
 
 # gtk/gtkstock.c:300
 #: gtk/gtkstock.c:300
 msgid "_Index"
-msgstr "Индекс"
+msgstr "_Индекс"
 
 # gtk/gtkstock.c:301
 #: gtk/gtkstock.c:301
 msgid "_Italic"
-msgstr "Курсив"
+msgstr "_Курсив"
 
 # gtk/gtkstock.c:302
 #: gtk/gtkstock.c:302
 msgid "_Jump to"
-msgstr "Перейти к"
+msgstr "Перейти _к"
 
 # gtk/gtkstock.c:303
 #: gtk/gtkstock.c:303
 msgid "_Center"
-msgstr "По центру"
+msgstr "По _центру"
 
 # gtk/gtkstock.c:304
 #: gtk/gtkstock.c:304
 msgid "_Fill"
-msgstr "По ширине"
+msgstr "По _ширине"
 
 # gtk/gtkstock.c:305
 #: gtk/gtkstock.c:305
 msgid "_Left"
-msgstr "По левому краю"
+msgstr "По _левому краю"
 
 # gtk/gtkstock.c:306
 #: gtk/gtkstock.c:306
 msgid "_Right"
-msgstr "По правому краю"
+msgstr "По _правому краю"
 
 # gtk/gtkstock.c:307
 #: gtk/gtkstock.c:307
 msgid "_New"
-msgstr "Создать"
+msgstr "_Создать"
 
 # gtk/gtkstock.c:308
 #: gtk/gtkstock.c:308
 msgid "_No"
-msgstr "Нет"
+msgstr "_Нет"
 
 # gtk/gtkstock.c:309
 #: gtk/gtkstock.c:309
 msgid "_OK"
-msgstr "OK"
+msgstr "_OK"
 
 # gtk/gtkstock.c:310
 #: gtk/gtkstock.c:310
 msgid "_Open"
-msgstr "Открыть"
+msgstr "_Открыть"
 
 # gtk/gtkstock.c:311
 #: gtk/gtkstock.c:311
 msgid "_Paste"
-msgstr "Вставить"
+msgstr "Вст_авить"
 
 # gtk/gtkstock.c:312
 #: gtk/gtkstock.c:312
 msgid "_Preferences"
-msgstr "Настроить"
+msgstr "_Настроить"
 
 # gtk/gtkstock.c:313
 #: gtk/gtkstock.c:313
 msgid "_Print"
-msgstr "Напечатать"
+msgstr "На_печатать"
 
 # gtk/gtkstock.c:314
 #: gtk/gtkstock.c:314
 msgid "Print Pre_view"
-msgstr "Посмотреть вид на печати"
+msgstr "Посмотреть _вид на печати"
 
 # gtk/gtkstock.c:315
 #: gtk/gtkstock.c:315
 msgid "_Properties"
-msgstr "Изменить свойства"
+msgstr "_Изменить свойства"
 
 # gtk/gtkstock.c:316
 #: gtk/gtkstock.c:316
 msgid "_Quit"
-msgstr "Выйти"
+msgstr "В_ыйти"
 
 # gtk/gtkstock.c:317
 #: gtk/gtkstock.c:317
 msgid "_Redo"
-msgstr "Возвратиться"
+msgstr "Возв_ратить"
 
 # gtk/gtkstock.c:318
 #: gtk/gtkstock.c:318
 msgid "_Refresh"
-msgstr "Обновить"
+msgstr "Об_новить"
 
 # gtk/gtkstock.c:319
 #: gtk/gtkstock.c:319
 msgid "_Remove"
-msgstr "Убрать"
+msgstr "У_брать"
 
 # gtk/gtkstock.c:320
 #: gtk/gtkstock.c:320
 msgid "_Revert"
-msgstr "Восстановить"
+msgstr "_Восста_новить"
 
 # gtk/gtkstock.c:321
 #: gtk/gtkstock.c:321
 msgid "_Save"
-msgstr "Сохранить"
+msgstr "Со_хранить"
 
 # gtk/gtkstock.c:322
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Сохранить как"
+msgstr "Сохранить _как"
 
 # gtk/gtkstock.c:323
 #: gtk/gtkstock.c:323
 msgid "_Color"
-msgstr "Цвет"
+msgstr "_Цвет"
 
 # gtk/gtkstock.c:324
 #: gtk/gtkstock.c:324
 msgid "_Font"
-msgstr "Шрифт"
+msgstr "_Шрифт"
 
 # gtk/gtkstock.c:325
 #: gtk/gtkstock.c:325
 msgid "_Ascending"
-msgstr "По возрастанию"
+msgstr "По воз_растанию"
 
 # gtk/gtkstock.c:326
 #: gtk/gtkstock.c:326
 msgid "_Descending"
-msgstr "По убыванию"
+msgstr "По _убыванию"
 
 # gtk/gtkstock.c:327
 #: gtk/gtkstock.c:327
 msgid "_Spell Check"
-msgstr "Проверить правописание"
+msgstr "Проверить право_писание"
 
 # gtk/gtkstock.c:328
 #: gtk/gtkstock.c:328
 msgid "_Stop"
-msgstr "Остановить"
+msgstr "О_становить"
 
 # gtk/gtkstock.c:329
 #: gtk/gtkstock.c:329
 msgid "_Strikethrough"
-msgstr "Перечеркивание"
+msgstr "Пере_черкивание"
 
 # gtk/gtkstock.c:330
 #: gtk/gtkstock.c:330
 msgid "_Undelete"
-msgstr "Восстановить удалённое"
+msgstr "Вос_становить удалённое"
 
 # gtk/gtkstock.c:331
 #: gtk/gtkstock.c:331
 msgid "_Underline"
-msgstr "Подчеркивание"
+msgstr "По_дчеркивание"
 
 # gtk/gtkstock.c:332
 #: gtk/gtkstock.c:332
 msgid "_Undo"
-msgstr "Откатить"
+msgstr "_Откатить"
 
 # gtk/gtkstock.c:333
 #: gtk/gtkstock.c:333
 msgid "_Yes"
-msgstr "Да"
+msgstr "_Да"
 
 # gtk/gtkstock.c:334
 #: gtk/gtkstock.c:334
 #, c-format
 msgid "Zoom _100%"
-msgstr "Масштаб 100%"
+msgstr "Масштаб _100%"
 
 # gtk/gtkstock.c:335
 #: gtk/gtkstock.c:335
 msgid "Zoom to _Fit"
-msgstr "Масштабировать до заполнения"
+msgstr "Масштабировать до _заполнения"
 
 # gtk/gtkstock.c:336
 #: gtk/gtkstock.c:336
 msgid "Zoom _In"
-msgstr "Масштаб +"
+msgstr "Масштаб _+"
 
 # gtk/gtkstock.c:337
 #: gtk/gtkstock.c:337
 msgid "Zoom _Out"
-msgstr "Масштаб -"
+msgstr "Масштаб _-"
 
 # gtk/gtktable.c:156
 #: gtk/gtktable.c:156
@@ -4639,7 +4641,7 @@ msgstr "Показывается ли точка вставки"
 # gtk/gtktextview.c:6366
 #: gtk/gtktextview.c:6366
 msgid "Input _Methods"
-msgstr "Методы ввода"
+msgstr "_Методы ввода"
 
 # gtk/gtkthemes.c:69
 #: gtk/gtkthemes.c:69
