@@ -4,7 +4,7 @@ style "wimp-default"
   GtkOptionMenu::indicator_size = { 9, 5 }
   GtkOptionMenu::indicator_spacing = { 7, 5, 2, 2 }
   GtkMenuBar::shadow-type = etched-in
-  GtkToolBar::shadow-type = etched-in
+  GtkToolbar::shadow-type = etched-in
   GtkHandleBox::shadow-type = none
   GtkSpinButton::shadow-type = in
 
