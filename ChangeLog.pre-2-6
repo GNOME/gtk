@@ -1,3 +1,8 @@
+Tue Dec 11 19:18:21 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* tests/testgtk.c (layout_expose_handler): Only draw
+	for events on the bin window.
+
 Tue Dec 11 18:55:16 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtklabel.c (gtk_label_mnemonic_activate): Small fix to let
