@@ -1429,10 +1429,13 @@ pixops_composite_color (guchar         *dest_buf,
     return;
 
   if (!src_has_alpha && overall_alpha == 255)
+    {
     pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
 		  dest_rowstride, dest_channels, dest_has_alpha,
 		  src_buf, src_width, src_height, src_rowstride, src_channels,
 		  src_has_alpha, scale_x, scale_y, interp_type);
+      return;
+    }
 
   switch (interp_type)
     {
@@ -1480,7 +1483,7 @@ pixops_composite_color (guchar         *dest_buf,
  * @render_x0: x0 of region of scaled source to store into @dest_buf
  * @render_y0: y0 of region of scaled source to store into @dest_buf
  * @render_x1: x1 of region of scaled source to store into @dest_buf
- * @render_y1: x1 of region of scaled source to store into @dest_buf
+ * @render_y1: y1 of region of scaled source to store into @dest_buf
  * @dest_rowstride: rowstride of @dest_buf
  * @dest_channels: number of channels in @dest_buf
  * @dest_has_alpha: whether @dest_buf has alpha
@@ -1532,10 +1535,13 @@ pixops_composite (guchar        *dest_buf,
     return;
 
   if (!src_has_alpha && overall_alpha == 255)
+    {
     pixops_scale (dest_buf, render_x0, render_y0, render_x1, render_y1,
 		  dest_rowstride, dest_channels, dest_has_alpha,
 		  src_buf, src_width, src_height, src_rowstride, src_channels,
 		  src_has_alpha, scale_x, scale_y, interp_type);
+      return;
+    }
 
   switch (interp_type)
     {
