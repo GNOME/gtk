@@ -28,6 +28,9 @@
 #include "gtkaccellabel.h"
 #include "gtksignal.h"
 #include "gtkintl.h"
+#include "gtkstock.h"
+#include "gtkiconfactory.h"
+#include "gtkimage.h"
 
 static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
 static void gtk_image_menu_item_init                 (GtkImageMenuItem      *image_menu_item);
@@ -357,6 +360,37 @@ gtk_image_menu_item_new (GtkWidget   *widget,
     gtk_image_menu_item_add_image (image_menu_item, widget);
   
   return GTK_WIDGET(image_menu_item);
+}
+
+GtkWidget*
+gtk_image_menu_item_new_from_stock (const gchar      *stock_id,
+				    GtkAccelGroup    *accel_group)
+{
+  GtkWidget *image;
+  GtkStockItem stock_item;
+  GtkWidget *item;
+
+  g_return_val_if_fail (stock_id != NULL, NULL);
+
+  image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
+
+  if (gtk_stock_lookup (stock_id, &stock_item))
+    {
+      item = gtk_image_menu_item_new (image, stock_item.label);
+      
+      if (stock_item.keyval && accel_group)
+	gtk_widget_add_accelerator (item,
+				    "activate",
+				    accel_group,
+				    stock_item.keyval,
+				    stock_item.modifier,
+				    GTK_ACCEL_VISIBLE);
+    }
+  else
+    item = gtk_image_menu_item_new (image, stock_id);
+  
+  gtk_widget_show (image);
+  return item;
 }
 
 void

@@ -1,3 +1,8 @@
+2001-03-21  Alexander Larsson  <alexl@redhat.com>
+
+	* gtk/gtkimagemenuitem.[c]:
+	Add gtk_image_menu_item_new_from_stock()
+
 Tue Mar 20 15:00:43 2001  Jonathan Blandford  <jrb@webwynk.net>
 
 	* gtk/gtkcellrenderertoggle.c (gtk_cell_renderer_toggle_render):
