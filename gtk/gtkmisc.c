@@ -28,6 +28,7 @@
 #include "gtkcontainer.h"
 #include "gtkmisc.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 
@@ -102,7 +103,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
@@ -112,7 +113,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_XPAD,
@@ -122,7 +123,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_YPAD,
@@ -132,7 +133,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
 }
 
 static void

@@ -35,6 +35,7 @@
 #endif
 
 #include "gtkprogressbar.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -144,7 +145,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                         P_("Adjustment"),
                                                         P_("The GtkAdjustment connected to the progress bar (Deprecated)"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ORIENTATION,
@@ -153,7 +154,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 						      P_("Orientation and growth direction of the progress bar"),
 						      GTK_TYPE_PROGRESS_BAR_ORIENTATION,
 						      GTK_PROGRESS_LEFT_TO_RIGHT,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_BAR_STYLE,
@@ -162,7 +163,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 						      P_("Specifies the visual style of the bar in percentage mode (Deprecated)"),
 						      GTK_TYPE_PROGRESS_BAR_STYLE,
 						      GTK_PROGRESS_CONTINUOUS,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVITY_STEP,
@@ -172,7 +173,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 						      -G_MAXUINT,
 						      G_MAXUINT,
 						      3,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVITY_BLOCKS,
@@ -182,7 +183,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 						      2,
 						      G_MAXUINT,
 						      5,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_DISCRETE_BLOCKS,
@@ -192,7 +193,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 						      2,
 						      G_MAXUINT,
 						      10,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
 				   PROP_FRACTION,
@@ -202,7 +203,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 							0.0,
 							1.0,
 							0.0,
-							G_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));  
   
   g_object_class_install_property (gobject_class,
 				   PROP_PULSE_STEP,
@@ -212,7 +213,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 							0.0,
 							1.0,
 							0.1,
-							G_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));  
   
   g_object_class_install_property (gobject_class,
 				   PROP_TEXT,
@@ -220,7 +221,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 							P_("Text"),
 							P_("Text to be displayed in the progress bar"),
 							"%P %%",
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkProgressBar:ellipsize:
@@ -243,7 +244,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                       P_("The preferred place to ellipsize the string, if the progressbar does not have enough room to display the entire string, if at all"),
 						      PANGO_TYPE_ELLIPSIZE_MODE,
 						      PANGO_ELLIPSIZE_NONE,
-                                                      G_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE));
 
 }
 

@@ -55,10 +55,11 @@
 #include "gtkmenuitem.h"
 #include "gtkmain.h"
 #include "gtksettings.h"
-#include "gtkintl.h"
 #include "gtkimage.h"
 #include "gtkstock.h"
 #include "gtkaccessible.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <string.h>
@@ -1840,28 +1841,28 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 							 P_("Has Opacity Control"),
 							 P_("Whether the color selector should allow setting opacity"),
 							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_PALETTE,
                                    g_param_spec_boolean ("has-palette",
 							 P_("Has palette"),
 							 P_("Whether a palette should be used"),
 							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_CURRENT_COLOR,
                                    g_param_spec_boxed ("current-color",
                                                        P_("Current Color"),
                                                        P_("The current color"),
                                                        GDK_TYPE_COLOR,
-                                                       G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_CURRENT_ALPHA,
                                    g_param_spec_uint ("current-alpha",
 						      P_("Current Alpha"),
 						      P_("The current opacity value (0 fully transparent, 65535 fully opaque)"),
 						      0, 65535, 65535,
-						      G_PARAM_READABLE | G_PARAM_WRITABLE));
+						      GTK_PARAM_READWRITE));
   
   color_selection_signals[COLOR_CHANGED] =
     g_signal_new ("color_changed",
@@ -1876,7 +1877,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                       P_("Custom palette"),
                                                       P_("Palette to use in the color selector"),
                                                       default_colors,
-                                                      G_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE));
 }
 
 /* widget functions */

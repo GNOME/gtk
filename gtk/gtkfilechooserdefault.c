@@ -623,7 +623,7 @@ gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 						      P_("Default file chooser backend"),
 						      P_("Name of the GtkFileChooser backend to use by default"),
 						      NULL,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 }
 
 static void

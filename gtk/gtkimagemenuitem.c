@@ -33,6 +33,7 @@
 #include "gtkimage.h"
 #include "gtkcontainer.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 static void gtk_image_menu_item_class_init           (GtkImageMenuItemClass *klass);
@@ -131,13 +132,13 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
                                                         P_("Image widget"),
                                                         P_("Child widget to appear next to the menu text"),
                                                         GTK_TYPE_WIDGET,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
 
   gtk_settings_install_property (g_param_spec_boolean ("gtk-menu-images",
 						       P_("Show menu images"),
 						       P_("Whether images should be shown in menus"),
 						       TRUE,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
   
 }
 

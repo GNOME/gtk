@@ -46,6 +46,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkcombo.h"
 #include "gtkframe.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -145,21 +146,21 @@ gtk_combo_class_init (GtkComboClass * klass)
                                                          P_("Enable arrow keys"),
                                                          P_("Whether the arrow keys move through the list of items"),
                                                          TRUE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_ENABLE_ARROWS_ALWAYS,
                                    g_param_spec_boolean ("enable-arrows-always",
                                                          P_("Always enable arrows"),
                                                          P_("Obsolete property, ignored"),
                                                          TRUE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_CASE_SENSITIVE,
                                    g_param_spec_boolean ("case-sensitive",
                                                          P_("Case sensitive"),
                                                          P_("Whether list item matching is case sensitive"),
                                                          FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ALLOW_EMPTY,
@@ -167,7 +168,7 @@ gtk_combo_class_init (GtkComboClass * klass)
                                                          P_("Allow empty"),
 							 P_("Whether an empty value may be entered in this field"),
                                                          TRUE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_IN_LIST,
@@ -175,7 +176,7 @@ gtk_combo_class_init (GtkComboClass * klass)
                                                          P_("Value in list"),
                                                          P_("Whether entered values must already be present in the list"),
                                                          FALSE,
-                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                         GTK_PARAM_READWRITE));
   
    
   oclass->destroy = gtk_combo_destroy;

@@ -29,6 +29,7 @@
 #include <math.h>
 #include <string.h>
 #include "gtkprogress.h" 
+#include "gtkprivate.h" 
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -131,7 +132,7 @@ gtk_progress_class_init (GtkProgressClass *class)
 							 P_("Activity mode"),
 							 P_("If TRUE the GtkProgress is in activity mode, meaning that it signals something is happening, but not how much of the activity is finished. This is used when you're doing something that you don't know how long it will take"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_TEXT,
@@ -139,7 +140,7 @@ gtk_progress_class_init (GtkProgressClass *class)
 							 P_("Show text"),
 							 P_("Whether the progress is shown as text"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_TEXT_XALIGN,
@@ -149,7 +150,7 @@ gtk_progress_class_init (GtkProgressClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       G_PARAM_READWRITE));  
+						       GTK_PARAM_READWRITE));  
     g_object_class_install_property (gobject_class,
 				   PROP_TEXT_YALIGN,
 				   g_param_spec_float ("text-yalign",
@@ -158,7 +159,7 @@ gtk_progress_class_init (GtkProgressClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
 }
 
 static void

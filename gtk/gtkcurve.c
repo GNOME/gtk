@@ -35,6 +35,7 @@
 #include "gtkmarshalers.h"
 #include "gtkradiobutton.h"
 #include "gtktable.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -124,8 +125,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						      P_("Is this curve linear, spline interpolated, or free-form"),
 						      GTK_TYPE_CURVE_TYPE,
 						      GTK_CURVE_TYPE_LINEAR,
-						      G_PARAM_READABLE |
-						      G_PARAM_WRITABLE));
+						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_MIN_X,
 				   g_param_spec_float ("min-x",
@@ -134,8 +134,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       -G_MAXFLOAT,
 						       G_MAXFLOAT,
 						       0.0,
-						       G_PARAM_READABLE |
-						       G_PARAM_WRITABLE));
+						       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_MAX_X,
 				   g_param_spec_float ("max-x",
@@ -144,8 +143,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       -G_MAXFLOAT,
 						       G_MAXFLOAT,
                                                        1.0,
-						       G_PARAM_READABLE |
-						       G_PARAM_WRITABLE));
+						       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_MIN_Y,
 				   g_param_spec_float ("min-y",
@@ -154,8 +152,7 @@ gtk_curve_class_init (GtkCurveClass *class)
                                                        -G_MAXFLOAT,
 						       G_MAXFLOAT,
 						       0.0,
-						       G_PARAM_READABLE |
-						       G_PARAM_WRITABLE));  
+						       GTK_PARAM_READWRITE));  
   g_object_class_install_property (gobject_class,
 				   PROP_MAX_Y,
 				   g_param_spec_float ("max-y",
@@ -164,8 +161,7 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       -G_MAXFLOAT,
 						       G_MAXFLOAT,
 						       1.0,
-						       G_PARAM_READABLE |
-						       G_PARAM_WRITABLE));
+						       GTK_PARAM_READWRITE));
 
   curve_type_changed_signal =
     g_signal_new ("curve_type_changed",

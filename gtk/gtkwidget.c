@@ -410,14 +410,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  							P_("Widget name"),
 							P_("The name of the widget"),
 							NULL,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_PARENT,
 				   g_param_spec_object ("parent",
 							P_("Parent widget"), 
 							P_("The parent widget of this widget. Must be a Container widget"),
 							GTK_TYPE_CONTAINER,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH_REQUEST,
@@ -427,7 +427,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     -1,
  						     G_MAXINT,
  						     -1,
- 						     G_PARAM_READWRITE));
+ 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_HEIGHT_REQUEST,
 				   g_param_spec_int ("height-request",
@@ -436,84 +436,84 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						     -1,
  						     G_MAXINT,
  						     -1,
- 						     G_PARAM_READWRITE));
+ 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_VISIBLE,
 				   g_param_spec_boolean ("visible",
  							 P_("Visible"),
  							 P_("Whether the widget is visible"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
  							 P_("Sensitive"),
  							 P_("Whether the widget responds to input"),
  							 TRUE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_APP_PAINTABLE,
 				   g_param_spec_boolean ("app-paintable",
  							 P_("Application paintable"),
  							 P_("Whether the application will paint directly on the widget"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_CAN_FOCUS,
 				   g_param_spec_boolean ("can-focus",
  							 P_("Can focus"),
  							 P_("Whether the widget can accept the input focus"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_FOCUS,
 				   g_param_spec_boolean ("has-focus",
  							 P_("Has focus"),
  							 P_("Whether the widget has the input focus"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_IS_FOCUS,
 				   g_param_spec_boolean ("is-focus",
  							 P_("Is focus"),
  							 P_("Whether the widget is the focus widget within the toplevel"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_CAN_DEFAULT,
 				   g_param_spec_boolean ("can-default",
  							 P_("Can default"),
  							 P_("Whether the widget can be the default widget"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_HAS_DEFAULT,
 				   g_param_spec_boolean ("has-default",
  							 P_("Has default"),
  							 P_("Whether the widget is the default widget"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_RECEIVES_DEFAULT,
 				   g_param_spec_boolean ("receives-default",
  							 P_("Receives default"),
  							 P_("If TRUE, the widget will receive the default action when it is focused"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_COMPOSITE_CHILD,
 				   g_param_spec_boolean ("composite-child",
  							 P_("Composite child"),
  							 P_("Whether the widget is part of a composite widget"),
  							 FALSE,
- 							 G_PARAM_READABLE));
+ 							 GTK_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_STYLE,
 				   g_param_spec_object ("style",
  							P_("Style"),
  							P_("The style of the widget, which contains information about how it will look (colors etc)"),
  							GTK_TYPE_STYLE,
- 							G_PARAM_READWRITE));
+ 							GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_EVENTS,
 				   g_param_spec_flags ("events",
@@ -521,7 +521,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						       P_("The event mask that decides what kind of GdkEvents this widget gets"),
  						       GDK_TYPE_EVENT_MASK,
  						       GDK_STRUCTURE_MASK,
- 						       G_PARAM_READWRITE));
+ 						       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_EXTENSION_EVENTS,
 				   g_param_spec_enum ("extension-events",
@@ -529,14 +529,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						      P_("The mask that decides what kind of extension events this widget gets"),
  						      GDK_TYPE_EXTENSION_MODE,
  						      GDK_EXTENSION_EVENTS_NONE,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_NO_SHOW_ALL,
 				   g_param_spec_boolean ("no-show-all",
  							 P_("No show all"),
  							 P_("Whether gtk_widget_show_all() should not affect this widget"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   widget_signals[SHOW] =
     g_signal_new ("show",
 		  G_TYPE_FROM_CLASS (gobject_class),
@@ -1417,45 +1417,45 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 								 P_("Interior Focus"),
 								 P_("Whether to draw the focus indicator inside widgets"),
 								 TRUE,
-								 G_PARAM_READABLE));
+								 GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-line-width",
 							     P_("Focus linewidth"),
 							     P_("Width, in pixels, of the focus indicator line"),
 							     0, G_MAXINT, 1,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_string ("focus-line-pattern",
 								P_("Focus line dash pattern"),
 								P_("Dash pattern used to draw the focus indicator"),
 								"\1\1",
-								G_PARAM_READABLE));
+								GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_int ("focus-padding",
 							     P_("Focus padding"),
 							     P_("Width, in pixels, between focus indicator and the widget 'box'"),
 							     0, G_MAXINT, 1,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("cursor-color",
 							       P_("Cursor color"),
 							       P_("Color with which to draw insertion cursor"),
 							       GDK_TYPE_COLOR,
-							       G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_boxed ("secondary-cursor-color",
 							       P_("Secondary cursor color"),
 							       P_("Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"),
 							       GDK_TYPE_COLOR,
-							       G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (klass,
 					   g_param_spec_float ("cursor-aspect-ratio",
 							       P_("Cursor line aspect ratio"),
 							       P_("Aspect ratio with which to draw insertion cursor"),
 							       0.0, 1.0, 0.04,
-							       G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
 }
 
 static void

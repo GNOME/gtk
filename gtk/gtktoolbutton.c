@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtktoolbar.h"
 #include "gtkiconfactory.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #include <string.h>
@@ -181,35 +182,35 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 							P_("Label"),
 							P_("Text to show in the item."),
 							NULL,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_USE_UNDERLINE,
 				   g_param_spec_boolean ("use-underline",
 							 P_("Use underline"),
 							 P_("If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_LABEL_WIDGET,
 				   g_param_spec_object ("label-widget",
 							P_("Label widget"),
 							P_("Widget to use as the item label"),
 							GTK_TYPE_WIDGET,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_STOCK_ID,
 				   g_param_spec_string ("stock-id",
 							P_("Stock Id"),
 							P_("The stock icon displayed on the item"),
 							NULL,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_ICON_WIDGET,
 				   g_param_spec_object ("icon-widget",
 							P_("Icon widget"),
 							P_("Icon widget to display in the item"),
 							GTK_TYPE_WIDGET,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
 /**
  * GtkToolButton::clicked:

@@ -28,6 +28,7 @@
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiobutton.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -113,7 +114,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 							P_("Group"),
 							P_("The radio button whose group this widget belongs to."),
 							GTK_TYPE_RADIO_BUTTON,
-							G_PARAM_WRITABLE));
+							GTK_PARAM_WRITABLE));
   object_class->destroy = gtk_radio_button_destroy;
 
   widget_class->focus = gtk_radio_button_focus;

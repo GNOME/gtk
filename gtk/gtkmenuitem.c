@@ -36,6 +36,7 @@
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define MENU_ITEM_CLASS(w)  GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
@@ -210,7 +211,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 								     "Shadow type when item is selected",
 								     GTK_TYPE_SHADOW_TYPE,
 								     GTK_SHADOW_NONE,
-								     G_PARAM_READABLE),
+								     GTK_PARAM_READABLE),
 						  gtk_rc_property_parse_enum);
 
   gtk_widget_class_install_style_property (widget_class,
@@ -220,7 +221,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 							     0,
 							     G_MAXINT,
 							     3,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("toggle-spacing",
@@ -229,7 +230,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 							     0,
 							     G_MAXINT,
 							     5,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("arrow-spacing",
@@ -238,7 +239,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
 							     0,
 							     G_MAXINT,
 							     10,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 }
 
 static void

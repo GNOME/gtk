@@ -508,7 +508,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
  						      P_("The orientation of the toolbar"),
  						      GTK_TYPE_ORIENTATION,
  						      GTK_ORIENTATION_HORIZONTAL,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
 				   PROP_TOOLBAR_STYLE,
@@ -517,14 +517,14 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
  						      P_("How to draw the toolbar"),
  						      GTK_TYPE_TOOLBAR_STYLE,
  						      GTK_TOOLBAR_ICONS,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_ARROW,
 				   g_param_spec_boolean ("show-arrow",
 							 P_("Show Arrow"),
 							 P_("If an arrow should be shown if the toolbar doesn't fit"),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   
   /* child properties */
   gtk_container_class_install_child_property (container_class,
@@ -533,7 +533,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 								    P_("Expand"), 
 								    P_("Whether the item should receive extra space when the toolbar grows"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    GTK_PARAM_READWRITE));
   
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_HOMOGENEOUS,
@@ -541,7 +541,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 								    P_("Homogeneous"), 
 								    P_("Whether the item should be the same size as other homogeneous items"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    GTK_PARAM_READWRITE));
   
   /* style properties */
   gtk_widget_class_install_style_property (widget_class,
@@ -551,7 +551,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_SPACE_SIZE,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("internal-padding",
@@ -560,7 +560,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_IPADDING,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("space-style",
@@ -568,7 +568,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							      P_("Whether spacers are vertical lines or just blank"),
                                                               GTK_TYPE_TOOLBAR_SPACE_STYLE,
                                                               DEFAULT_SPACE_STYLE,
-                                                              G_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_enum ("button-relief",
@@ -576,28 +576,28 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 							      P_("Type of bevel around toolbar buttons"),
                                                               GTK_TYPE_RELIEF_STYLE,
                                                               GTK_RELIEF_NONE,
-                                                              G_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_enum ("shadow-type",
                                                               P_("Shadow type"),
                                                               P_("Style of bevel around the toolbar"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
-                                                              G_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE));
   
   gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-style",
                                                     P_("Toolbar style"),
                                                     P_("Whether default toolbars have text only, text and icons, icons only, etc."),
                                                     GTK_TYPE_TOOLBAR_STYLE,
                                                     DEFAULT_TOOLBAR_STYLE,
-                                                    G_PARAM_READWRITE));
+                                                    GTK_PARAM_READWRITE));
   
   gtk_settings_install_property (g_param_spec_enum ("gtk-toolbar-icon-size",
                                                     P_("Toolbar icon size"),
                                                     P_("Size of icons in default toolbars"),
                                                     GTK_TYPE_ICON_SIZE,
                                                     DEFAULT_ICON_SIZE,
-                                                    G_PARAM_READWRITE));  
+                                                    GTK_PARAM_READWRITE));  
   
   binding_set = gtk_binding_set_by_class (klass);
   

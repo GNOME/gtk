@@ -27,6 +27,7 @@
 #include "gtkstock.h"
 #include "gtkintl.h"
 #include "gtkradiotoolbutton.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define MENU_ID "gtk-toggle-tool-button-menu-id"

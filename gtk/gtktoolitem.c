@@ -28,6 +28,7 @@
 #include "gtkintl.h"
 #include "gtkmain.h"
 #include "gtkalias.h"
+#include "gtkprivate.h"
 
 #include <string.h>
 
@@ -159,21 +160,21 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
 							 P_("Visible when horizontal"),
 							 P_("Whether the toolbar item is visible when the toolbar is in a horizontal orientation."),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE_VERTICAL,
 				   g_param_spec_boolean ("visible-vertical",
 							 P_("Visible when vertical"),
 							 P_("Whether the toolbar item is visible when the toolbar is in a vertical orientation."),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
  				   PROP_IS_IMPORTANT,
  				   g_param_spec_boolean ("is-important",
  							 P_("Is important"),
  							 P_("Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
 
 /**
  * GtkToolItem::create-menu-proxy:

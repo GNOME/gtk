@@ -23,6 +23,7 @@
 #include "gtkintl.h"
 #include "gtktreednd.h"
 #include "gtkalias.h"
+#include "gtkprivate.h"
 #include <string.h>
 
 /* ITER FORMAT:
@@ -327,7 +328,7 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
                                                         ("The child model"),
                                                         ("The model for the filtermodel to filter"),
                                                         GTK_TYPE_TREE_MODEL,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_VIRTUAL_ROOT,
@@ -335,7 +336,7 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
                                                        ("The virtual root"),
                                                        ("The virtual root (relative to the child model) for this filtermodel"),
                                                        GTK_TYPE_TREE_PATH,
-                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                       GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_type_class_add_private (object_class, sizeof (GtkTreeModelFilterPrivate));
 }

@@ -26,8 +26,9 @@
 
 #include <config.h>
 #include "gtkadjustment.h"
-#include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 enum
@@ -102,8 +103,6 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   class->changed = NULL;
   class->value_changed = NULL;
 
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   /**
    * GtkAdjustment:value:
    * 
@@ -119,7 +118,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
   
   /**
    * GtkAdjustment:lower:
@@ -136,7 +135,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0,
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
   
   /**
    * GtkAdjustment:upper:
@@ -156,7 +155,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
   
   /**
    * GtkAdjustment:step-increment:
@@ -173,7 +172,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
   
   /**
    * GtkAdjustment:page-increment:
@@ -190,7 +189,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
   
   /**
    * GtkAdjustment:page-size:
@@ -210,7 +209,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							-G_MAXDOUBLE, 
 							G_MAXDOUBLE, 
 							0.0, 
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
   
 
   adjustment_signals[CHANGED] =

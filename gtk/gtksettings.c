@@ -22,6 +22,7 @@
 #include "gtkrc.h"
 #include "gtkintl.h"
 #include "gtkwidget.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
@@ -270,7 +271,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Double Click Time"),
                                                                P_("Maximum time allowed between two clicks for them to be considered a double click (in milliseconds)"),
                                                                0, G_MAXINT, 250,
-                                                               G_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_TIME);
   result = settings_install_property_parser (class,
@@ -278,7 +279,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Double Click Distance"),
                                                                P_("Maximum distance allowed between two clicks for them to be considered a double click (in pixels)"),
                                                                0, G_MAXINT, 5,
-                                                               G_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DOUBLE_CLICK_DISTANCE);
   result = settings_install_property_parser (class,
@@ -286,7 +287,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   P_("Cursor Blink"),
 								   P_("Whether the cursor should blink"),
 								   TRUE,
-								   G_PARAM_READWRITE),
+								   GTK_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_CURSOR_BLINK);
   result = settings_install_property_parser (class,
@@ -294,7 +295,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                P_("Cursor Blink Time"),
                                                                P_("Length of the cursor blink cycle, in milleseconds"),
                                                                100, G_MAXINT, 1200,
-                                                               G_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_CURSOR_BLINK_TIME);
   result = settings_install_property_parser (class,
@@ -302,7 +303,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   P_("Split Cursor"),
 								   P_("Whether two cursors should be displayed for mixed left-to-right and right-to-left text"),
 								   TRUE,
-								   G_PARAM_READWRITE),
+								   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_SPLIT_CURSOR);
   result = settings_install_property_parser (class,
@@ -310,7 +311,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   P_("Theme Name"),
 								   P_("Name of theme RC file to load"),
 								  "Default",
-								  G_PARAM_READWRITE),
+								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_THEME_NAME);
   result = settings_install_property_parser (class,
@@ -318,7 +319,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  P_("Icon Theme Name"),
 								  P_("Name of icon theme to use"),
 								  "hicolor",
-								  G_PARAM_READWRITE),
+								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_THEME_NAME);
   
@@ -327,7 +328,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  P_("Key Theme Name"),
 								  P_("Name of key theme RC file to load"),
 								  NULL,
-								  G_PARAM_READWRITE),
+								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_KEY_THEME_NAME);    
 
@@ -336,7 +337,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                   P_("Menu bar accelerator"),
                                                                   P_("Keybinding to activate the menu bar"),
                                                                   "F10",
-                                                                  G_PARAM_READWRITE),
+                                                                  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_MENU_BAR_ACCEL);
 
@@ -345,7 +346,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 							       P_("Drag threshold"),
 							       P_("Number of pixels the cursor can move before dragging"),
 							       1, G_MAXINT, 8,
-                                                               G_PARAM_READWRITE),
+                                                               GTK_PARAM_READWRITE),
 					     NULL);
   g_assert (result == PROP_DND_DRAG_THRESHOLD);
 
@@ -354,7 +355,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   P_("Font Name"),
 								   P_("Name of default font to use"),
 								  "Sans 10",
-								  G_PARAM_READWRITE),
+								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_FONT_NAME);
 
@@ -363,7 +364,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   P_("Icon Sizes"),
 								   P_("List of icon sizes (gtk-menu=16,16;gtk-button=20,20..."),
 								  NULL,
-								  G_PARAM_READWRITE),
+								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ICON_SIZES);
 
@@ -372,7 +373,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								  P_("GTK Modules"),
 								  P_("List of currently active GTK modules"),
 								  NULL,
-								  G_PARAM_READWRITE),
+								  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_MODULES);
 
@@ -382,7 +383,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       P_("Xft Antialias"),
  							       P_("Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"),
  							       -1, 1, -1,
- 							       G_PARAM_READWRITE),
+ 							       GTK_PARAM_READWRITE),
 					     NULL);
  
   g_assert (result == PROP_XFT_ANTIALIAS);
@@ -392,7 +393,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       P_("Xft Hinting"),
  							       P_("Whether to hint Xft fonts; 0=no, 1=yes, -1=default"),
  							       -1, 1, -1,
- 							       G_PARAM_READWRITE),
+ 							       GTK_PARAM_READWRITE),
 					     NULL);
   
   g_assert (result == PROP_XFT_HINTING);
@@ -402,7 +403,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
  								  P_("Xft Hint Style"),
  								  P_("What degree of hinting to use; none, slight, medium, or full"),
  								  NULL,
- 								  G_PARAM_READWRITE),
+ 								  GTK_PARAM_READWRITE),
                                               NULL);
   
   g_assert (result == PROP_XFT_HINTSTYLE);
@@ -412,7 +413,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
  								  P_("Xft RGBA"),
  								  P_("Type of subpixel antialiasing; none, rgb, bgr, vrgb, vbgr"),
  								  NULL,
- 								  G_PARAM_READWRITE),
+ 								  GTK_PARAM_READWRITE),
 					     NULL);
   
   g_assert (result == PROP_XFT_RGBA);
@@ -422,7 +423,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
  							       P_("Xft DPI"),
  							       P_("Resolution for Xft, in 1024 * dots/inch. -1 to use default value"),
  							       -1, 1024*1024, -1,
- 							       G_PARAM_READWRITE),
+ 							       GTK_PARAM_READWRITE),
 					     NULL);
   
   g_assert (result == PROP_XFT_DPI);
@@ -432,7 +433,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
 								   P_("Alternative button order"),
 								   P_("Whether buttons in dialogs should use the alternative button order"),
 								   FALSE,
-								   G_PARAM_READWRITE),
+								   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_ALTERNATIVE_BUTTON_ORDER);
 }

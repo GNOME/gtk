@@ -1,5 +1,13 @@
 2005-03-21  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkprivate.h: Define macros GTK_PARAM_READABLE,
+	GTK_PARAM_WRITABLE, GTK_PARAM_READWRITE which are like
+	their G_ counterparts, but also mark the name, nick
+	and blurb as static.
+
+	* gtk/*.c: Mark param spec strings as static, using
+	the new macros.
+
 	* gtk/gtkspinbutton.h: Fix a typo.
 
 2005-03-21  Matthias Clasen  <mclasen@redhat.com>

@@ -26,6 +26,7 @@
 #include "gtkseparatortoolitem.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define MENU_ID "gtk-separator-tool-item-menu-id"
@@ -136,7 +137,7 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 							 P_("Draw"),
 							 P_("Whether the separator is drawn, or just blank"),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   
   g_type_class_add_private (object_class, sizeof (GtkSeparatorToolItemPrivate));
 }

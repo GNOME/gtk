@@ -36,6 +36,7 @@
 #include "gtksettings.h"
 #include "gtkintl.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 
@@ -201,7 +202,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
  						      P_("The pack direction of the menubar"),
  						      GTK_TYPE_PACK_DIRECTION,
  						      GTK_PACK_DIRECTION_LTR,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   
   /**
    * GtkMenuBar:child-pack-direction:
@@ -218,7 +219,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
  						      P_("The child pack direction of the menubar"),
  						      GTK_TYPE_PACK_DIRECTION,
  						      GTK_PACK_DIRECTION_LTR,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   
 
   gtk_widget_class_install_style_property (widget_class,
@@ -227,7 +228,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                               P_("Style of bevel around the menubar"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_OUT,
-                                                              G_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("internal-padding",
@@ -236,7 +237,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_IPADDING,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-bar-popup-delay",
 						   P_("Delay before drop down menus appear"),
@@ -244,7 +245,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 						   0,
 						   G_MAXINT,
 						   0,
-						   G_PARAM_READWRITE));
+						   GTK_PARAM_READWRITE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));  
 }

@@ -268,8 +268,9 @@ gtk_list_class_init (GtkListClass *class)
 		    GTK_TYPE_NONE, 1,
 		    GTK_TYPE_WIDGET);
   
-  gtk_object_add_arg_type ("GtkList::selection_mode",
-			   GTK_TYPE_SELECTION_MODE, GTK_ARG_READWRITE,
+  gtk_object_add_arg_type ("GtkList::selection-mode",
+			   GTK_TYPE_SELECTION_MODE, 
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_SELECTION_MODE);
 }
 

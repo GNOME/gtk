@@ -33,6 +33,7 @@
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkmain.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -133,22 +134,20 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   class->accel_seperator = g_strdup (" / ");
   class->latin1_to_char = TRUE;
   
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_CLOSURE,
                                    g_param_spec_boxed ("accel-closure",
 						       P_("Accelerator Closure"),
 						       P_("The closure to be monitored for accelerator changes"),
 						       G_TYPE_CLOSURE,
-						       G_PARAM_READWRITE|STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_WIDGET,
                                    g_param_spec_object ("accel-widget",
                                                         P_("Accelerator Widget"),
                                                         P_("The widget to be monitored for accelerator changes"),
                                                         GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE|STATIC_STRINGS));
+                                                        GTK_PARAM_READWRITE));
 }
 
 static void

@@ -50,6 +50,7 @@
 #include "gtkwindow.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
+#include "gtkprivate.h"
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"
 #include "gtkalias.h"
@@ -487,7 +488,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      0,
                                                      MAX_SIZE,
                                                      0,
-                                                     G_PARAM_READABLE));
+                                                     GTK_PARAM_READABLE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_SELECTION_BOUND,
@@ -497,7 +498,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      0,
                                                      MAX_SIZE,
                                                      0,
-                                                     G_PARAM_READABLE));
+                                                     GTK_PARAM_READABLE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_EDITABLE,
@@ -505,7 +506,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Editable"),
 							 P_("Whether the entry contents can be edited"),
                                                          TRUE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_LENGTH,
@@ -515,14 +516,14 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      0,
                                                      MAX_SIZE,
                                                      0,
-                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_VISIBILITY,
                                    g_param_spec_boolean ("visibility",
 							 P_("Visibility"),
 							 P_("FALSE displays the \"invisible char\" instead of the actual text (password mode)"),
                                                          TRUE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_HAS_FRAME,
@@ -530,7 +531,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Has Frame"),
 							 P_("FALSE removes outside bevel from entry"),
                                                          TRUE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVISIBLE_CHAR,
@@ -538,7 +539,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Invisible character"),
 							 P_("The character to use when masking entry contents (in \"password mode\")"),
 							 '*',
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_ACTIVATES_DEFAULT,
@@ -546,7 +547,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							 P_("Activates default"),
 							 P_("Whether to activate the default widget (such as the default button in a dialog) when Enter is pressed"),
                                                          FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_WIDTH_CHARS,
                                    g_param_spec_int ("width-chars",
@@ -555,7 +556,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                     GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_SCROLL_OFFSET,
@@ -565,7 +566,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                      0,
                                                      G_MAXINT,
                                                      0,
-                                                     G_PARAM_READABLE));
+                                                     GTK_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_TEXT,
@@ -573,7 +574,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 							P_("Text"),
 							P_("The contents of the entry"),
 							"",
-							G_PARAM_READABLE | G_PARAM_WRITABLE));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkEntry:xalign:
@@ -591,7 +592,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       0.0,
 						       1.0,
 						       0.0,
-						       G_PARAM_READABLE | G_PARAM_WRITABLE));
+						       GTK_PARAM_READWRITE));
   
   signals[POPULATE_POPUP] =
     g_signal_new ("populate_popup",
@@ -828,7 +829,7 @@ gtk_entry_class_init (GtkEntryClass *class)
 						       P_("Select on focus"),
 						       P_("Whether to select the contents of an entry when it is focused"),
 						       TRUE,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
 }

@@ -35,6 +35,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 
@@ -403,7 +404,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						     0,
  						     G_MAXINT,
  						     0,
- 						     G_PARAM_READWRITE));
+ 						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_POS,
 				   g_param_spec_enum ("tab-pos",
@@ -411,7 +412,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      P_("Which side of the notebook holds the tabs"),
  						      GTK_TYPE_POSITION_TYPE,
  						      GTK_POS_TOP,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_BORDER,
 				   g_param_spec_uint ("tab-border",
@@ -420,7 +421,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      0,
  						      G_MAXUINT,
  						      2,
- 						      G_PARAM_WRITABLE));
+ 						      GTK_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_HBORDER,
 				   g_param_spec_uint ("tab-hborder",
@@ -429,7 +430,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      0,
  						      G_MAXUINT,
  						      2,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_TAB_VBORDER,
 				   g_param_spec_uint ("tab-vborder",
@@ -438,42 +439,42 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  						      0,
  						      G_MAXUINT,
  						      2,
- 						      G_PARAM_READWRITE));
+ 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_TABS,
 				   g_param_spec_boolean ("show-tabs",
  							 P_("Show Tabs"),
  							 P_("Whether tabs should be shown or not"),
  							 TRUE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_BORDER,
 				   g_param_spec_boolean ("show-border",
  							 P_("Show Border"),
  							 P_("Whether the border should be shown or not"),
  							 TRUE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SCROLLABLE,
 				   g_param_spec_boolean ("scrollable",
  							 P_("Scrollable"),
  							 P_("If TRUE, scroll arrows are added if there are too many tabs to fit"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_ENABLE_POPUP,
 				   g_param_spec_boolean ("enable-popup",
  							 P_("Enable Popup"),
  							 P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
  							 FALSE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_HOMOGENEOUS,
 				   g_param_spec_boolean ("homogeneous",
  							 P_("Homogeneous"),
  							 P_("Whether tabs should have homogeneous sizes"),
  							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_LABEL,
@@ -481,42 +482,42 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								   P_("Tab label"),
 								   P_("The string displayed on the child's tab label"),
 								   NULL,
-								   G_PARAM_READWRITE));
+								   GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_MENU_LABEL,
 					      g_param_spec_string ("menu-label", 
 								   P_("Menu label"), 
 								   P_("The string displayed in the child's menu entry"),
 								   NULL,
-								   G_PARAM_READWRITE));
+								   GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_POSITION,
 					      g_param_spec_int ("position", 
 								P_("Position"), 
 								P_("The index of the child in the parent"),
 								-1, G_MAXINT, 0,
-								G_PARAM_READWRITE));
+								GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_EXPAND,
 					      g_param_spec_boolean ("tab-expand", 
 								    P_("Tab expand"), 
 								    P_("Whether to expand the child's tab or not"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_FILL,
 					      g_param_spec_boolean ("tab-fill", 
 								    P_("Tab fill"), 
 								    P_("Whether the child's tab should fill the allocated area or not"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_PACK,
 					      g_param_spec_enum ("tab-pack", 
 								 P_("Tab pack type"),
 								 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
 								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
 
 /**
  * GtkNotebook:has-secondary-backward-stepper:
@@ -533,7 +534,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 P_("Display a second backward arrow button on the opposite end of the tab area"),
 								 FALSE,
 								 
-								 G_PARAM_READABLE));
+								 GTK_PARAM_READABLE));
 
 /**
  * GtkNotebook:has-secondary-forward-stepper:
@@ -550,7 +551,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 P_("Display a second forward arrow button on the opposite end of the tab area"),
 								 FALSE,
 								 
-								 G_PARAM_READABLE));
+								 GTK_PARAM_READABLE));
 
 /**
  * GtkNotebook:has-backward-stepper:
@@ -566,7 +567,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 P_("Display the standard backward arrow button"),
 								 TRUE,
 								 
-                                                                   G_PARAM_READABLE));
+                                                                   GTK_PARAM_READABLE));
 
 /**
  * GtkNotebook:has-forward-stepper:
@@ -582,7 +583,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								 P_("Display the standard forward arrow button"),
 								 TRUE,
 								 
-                                                                   G_PARAM_READABLE));
+                                                                   GTK_PARAM_READABLE));
 
   notebook_signals[SWITCH_PAGE] =
     g_signal_new ("switch_page",

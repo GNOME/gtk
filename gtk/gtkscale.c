@@ -32,6 +32,7 @@
 #include "gtkmarshalers.h"
 #include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 
@@ -174,7 +175,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 						     -1,
 						     MAX_DIGITS,
 						     1,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_DRAW_VALUE,
@@ -182,7 +183,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 							 P_("Draw Value"),
 							 P_("Whether the current value is displayed as a string next to the slider"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_VALUE_POS,
@@ -191,7 +192,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 						      P_("The position in which the current value is displayed"),
 						      GTK_TYPE_POSITION_TYPE,
 						      GTK_POS_LEFT,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-length",
@@ -200,7 +201,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 							     0,
 							     G_MAXINT,
 							     31,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("value-spacing",
@@ -209,7 +210,7 @@ gtk_scale_class_init (GtkScaleClass *class)
 							     0,
 							     G_MAXINT,
 							     2,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   
   /* All bindings (even arrow keys) are on both h/v scale, because
    * blind users etc. don't care about scale orientation.

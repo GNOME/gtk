@@ -406,31 +406,31 @@ gtk_ctree_class_init (GtkCTreeClass *klass)
 
   gtk_object_add_arg_type ("GtkCTree::n-columns", /* overrides GtkCList::n_columns!! */
 			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME,
 			   ARG_N_COLUMNS);
   gtk_object_add_arg_type ("GtkCTree::tree-column",
 			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME,
 			   ARG_TREE_COLUMN);
   gtk_object_add_arg_type ("GtkCTree::indent",
 			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_INDENT);
   gtk_object_add_arg_type ("GtkCTree::spacing",
 			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_SPACING);
   gtk_object_add_arg_type ("GtkCTree::show-stub",
 			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_SHOW_STUB);
   gtk_object_add_arg_type ("GtkCTree::line-style",
 			   GTK_TYPE_CTREE_LINE_STYLE,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_LINE_STYLE);
   gtk_object_add_arg_type ("GtkCTree::expander-style",
-			   GTK_TYPE_CTREE_EXPANDER_STYLE,
-			   GTK_ARG_READWRITE,
+			   GTK_TYPE_CTREE_EXPANDER_STYLE | G_PARAM_STATIC_NAME,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_EXPANDER_STYLE);
 
   ctree_signals[TREE_SELECT_ROW] =

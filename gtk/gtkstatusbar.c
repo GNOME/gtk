@@ -31,6 +31,7 @@
 #include "gtkmarshalers.h"
 #include "gtkstatusbar.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -177,7 +178,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
  							 P_("Has Resize Grip"),
  							 P_("Whether the statusbar has a grip for resizing the toplevel"),
  							 TRUE,
- 							 G_PARAM_READWRITE));
+ 							 GTK_PARAM_READWRITE));
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
     g_signal_new ("text_pushed",
 		  G_OBJECT_CLASS_TYPE (class),
@@ -205,7 +206,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
                                                               P_("Style of bevel around the statusbar text"),
                                                               GTK_TYPE_SHADOW_TYPE,
                                                               GTK_SHADOW_IN,
-                                                              G_PARAM_READABLE));
+                                                              GTK_PARAM_READABLE));
 }
 
 static void

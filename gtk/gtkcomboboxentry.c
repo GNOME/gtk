@@ -24,6 +24,7 @@
 #include "gtkentry.h"
 #include "gtkcellrenderertext.h"
 
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -116,7 +117,7 @@ gtk_combo_box_entry_class_init (GtkComboBoxEntryClass *klass)
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
-                                                     G_PARAM_READWRITE));
+                                                     GTK_PARAM_READWRITE));
 
   g_type_class_add_private ((GObjectClass *) klass,
                             sizeof (GtkComboBoxEntryPrivate));

@@ -26,8 +26,9 @@
 
 #include <config.h>
 #include "gtkcheckbutton.h"
-#include "gtkintl.h"
 #include "gtklabel.h"
+#include "gtkprivate.h"
+#include "gtkintl.h"
 #include "gtkalias.h"
 
 
@@ -102,7 +103,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     0,
 							     G_MAXINT,
 							     INDICATOR_SIZE,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("indicator-spacing",
 							     P_("Indicator Spacing"),
@@ -110,7 +111,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 							     0,
 							     G_MAXINT,
 							     INDICATOR_SPACING,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 }
 
 static void

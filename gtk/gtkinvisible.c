@@ -27,6 +27,7 @@
 #include <config.h>
 #include <gdk/gdk.h>
 #include "gtkinvisible.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -116,7 +117,7 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
  							P_("Screen"),
  							P_("The screen where this window will be displayed"),
 							GDK_TYPE_SCREEN,
- 							G_PARAM_READWRITE));
+ 							GTK_PARAM_READWRITE));
 }
 
 static void

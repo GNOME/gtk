@@ -55,6 +55,7 @@
 #include "gtkfilesystemwin32.h"
 #endif
 
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 /* **************** *
@@ -337,7 +338,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 							P_("Dialog"),
 							P_("The file chooser dialog to use."),
 							GTK_TYPE_FILE_CHOOSER_DIALOG,
-							(G_PARAM_WRITABLE |
+							(GTK_PARAM_WRITABLE |
 							 G_PARAM_CONSTRUCT_ONLY)));
 
   /**
@@ -352,7 +353,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 							P_("Title"),
 							P_("The title of the file chooser dialog."),
 							_(DEFAULT_TITLE),
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkFileChooserButton:width-chars:
@@ -366,7 +367,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
 						     P_("Width In Characters"),
 						     P_("The desired width of the button widget, in characters."),
 						     -1, G_MAXINT, -1,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
 
   _gtk_file_chooser_install_properties (gobject_class);
 

@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtktable.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -162,7 +163,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     0,
 						     G_MAXUINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_N_COLUMNS,
                                    g_param_spec_uint ("n-columns",
@@ -171,7 +172,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     0,
 						     G_MAXUINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_ROW_SPACING,
                                    g_param_spec_uint ("row-spacing",
@@ -180,7 +181,7 @@ gtk_table_class_init (GtkTableClass *class)
 						     0,
 						     G_MAXUINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_COLUMN_SPACING,
                                    g_param_spec_uint ("column-spacing",
@@ -189,14 +190,14 @@ gtk_table_class_init (GtkTableClass *class)
 						     0,
 						     G_MAXUINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_HOMOGENEOUS,
                                    g_param_spec_boolean ("homogeneous",
 							 P_("Homogenous"),
 							 P_("If TRUE this means the table cells are all the same width/height"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_LEFT_ATTACH,
@@ -204,56 +205,56 @@ gtk_table_class_init (GtkTableClass *class)
 								 P_("Left attachment"), 
 								 P_("The column number to attach the left side of the child to"),
 								 0, 65535, 0,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_RIGHT_ATTACH,
 					      g_param_spec_uint ("right-attach", 
 								 P_("Right attachment"), 
 								 P_("The column number to attach the right side of a child widget to"),
 								 1, 65535, 1,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TOP_ATTACH,
 					      g_param_spec_uint ("top-attach", 
 								 P_("Top attachment"), 
 								 P_("The row number to attach the top of a child widget to"),
 								 0, 65535, 0,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_BOTTOM_ATTACH,
 					      g_param_spec_uint ("bottom-attach",
 								 P_("Bottom attachment"), 
 								 P_("The row number to attach the bottom of the child to"),
 								 1, 65535, 1,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_X_OPTIONS,
 					      g_param_spec_flags ("x-options", 
 								  P_("Horizontal options"), 
 								  P_("Options specifying the horizontal behaviour of the child"),
 								  GTK_TYPE_ATTACH_OPTIONS, GTK_EXPAND | GTK_FILL,
-								  G_PARAM_READWRITE));
+								  GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_Y_OPTIONS,
 					      g_param_spec_flags ("y-options", 
 								  P_("Vertical options"), 
 								  P_("Options specifying the vertical behaviour of the child"),
 								  GTK_TYPE_ATTACH_OPTIONS, GTK_EXPAND | GTK_FILL,
-								  G_PARAM_READWRITE));
+								  GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_X_PADDING,
 					      g_param_spec_uint ("x-padding", 
 								 P_("Horizontal padding"), 
 								 P_("Extra space to put between the child and its left and right neighbors, in pixels"),
 								 0, 65535, 0,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_Y_PADDING,
 					      g_param_spec_uint ("y-padding", 
 								 P_("Vertical padding"), 
 								 P_("Extra space to put between the child and its upper and lower neighbors, in pixels"),
 								 0, 65535, 0,
-								 G_PARAM_READWRITE));
+								 GTK_PARAM_READWRITE));
 }
 
 static GType

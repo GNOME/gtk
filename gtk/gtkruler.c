@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkruler.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -122,7 +123,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0.0,
-							G_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));  
 
   g_object_class_install_property (gobject_class,
                                    PROP_UPPER,
@@ -132,7 +133,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0.0,
-							G_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));  
 
   g_object_class_install_property (gobject_class,
                                    PROP_POSITION,
@@ -142,7 +143,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0.0,
-							G_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));  
 
   g_object_class_install_property (gobject_class,
                                    PROP_MAX_SIZE,
@@ -152,7 +153,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
 							-G_MAXDOUBLE,
 							G_MAXDOUBLE,
 							0.0,
-							G_PARAM_READWRITE));  
+							GTK_PARAM_READWRITE));  
 }
 
 static void

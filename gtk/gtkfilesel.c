@@ -561,23 +561,21 @@ gtk_file_selection_class_init (GtkFileSelectionClass *class)
                                                         P_("Filename"),
                                                         P_("The currently selected filename"),
                                                         NULL,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SHOW_FILEOPS,
 				   g_param_spec_boolean ("show-fileops",
 							 P_("Show file operations"),
 							 P_("Whether buttons for creating/manipulating files should be displayed"),
 							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_SELECT_MULTIPLE,
 				   g_param_spec_boolean ("select-multiple",
 							 P_("Select multiple"),
 							 P_("Whether to allow multiple files to be selected"),
 							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   object_class->destroy = gtk_file_selection_destroy;
   widget_class->map = gtk_file_selection_map;
 }

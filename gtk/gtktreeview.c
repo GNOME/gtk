@@ -41,6 +41,7 @@
 #include "gtkentry.h"
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
@@ -558,7 +559,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							P_("TreeView Model"),
 							P_("The model for the tree view"),
 							GTK_TYPE_TREE_MODEL,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HADJUSTMENT,
@@ -566,7 +567,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							P_("Horizontal Adjustment"),
                                                         P_("Horizontal Adjustment for the widget"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_VADJUSTMENT,
@@ -574,7 +575,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							P_("Vertical Adjustment"),
                                                         P_("Vertical Adjustment for the widget"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_VISIBLE,
@@ -582,7 +583,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 P_("Headers Visible"),
 							 P_("Show the column header buttons"),
 							 TRUE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_CLICKABLE,
@@ -590,7 +591,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 P_("Headers Clickable"),
 							 P_("Column headers respond to click events"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_EXPANDER_COLUMN,
@@ -598,7 +599,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							P_("Expander Column"),
 							P_("Set the column for the expander column"),
 							GTK_TYPE_TREE_VIEW_COLUMN,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_REORDERABLE,
@@ -606,7 +607,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 P_("Reorderable"),
 							 P_("View is reorderable"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_RULES_HINT,
@@ -614,7 +615,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 P_("Rules Hint"),
 							 P_("Set a hint to the theme engine to draw rows in alternating colors"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
     g_object_class_install_property (o_class,
 				     PROP_ENABLE_SEARCH,
@@ -622,7 +623,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							   P_("Enable Search"),
 							   P_("View allows user to search through columns interactively"),
 							   TRUE,
-							   G_PARAM_READWRITE));
+							   GTK_PARAM_READWRITE));
 
     g_object_class_install_property (o_class,
 				     PROP_SEARCH_COLUMN,
@@ -632,7 +633,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 						       -1,
 						       G_MAXINT,
 						       -1,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
 
     /**
      * GtkTreeView:fixed-height-mode:
@@ -651,7 +652,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            P_("Fixed Height Mode"),
                                                            P_("Speeds up GtkTreeView by assuming that all rows have the same height"),
                                                            FALSE,
-                                                           G_PARAM_READWRITE));
+                                                           GTK_PARAM_READWRITE));
     
     /**
      * GtkTreeView:hover-selection:
@@ -672,7 +673,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            P_("Hover Selection"),
                                                            P_("Whether the selection should follow the pointer"),
                                                            FALSE,
-                                                           G_PARAM_READWRITE));
+                                                           GTK_PARAM_READWRITE));
 
     /**
      * GtkTreeView:hover-expand:
@@ -692,7 +693,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                            P_("Hover Expand"),
                                                            P_("Whether rows should be expanded/collapsed when the pointer moves over them"),
                                                            FALSE,
-                                                           G_PARAM_READWRITE));
+                                                           GTK_PARAM_READWRITE));
 
   /* Style properties */
 #define _TREE_VIEW_EXPANDER_SIZE 12
@@ -706,7 +707,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_EXPANDER_SIZE,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-separator",
@@ -715,7 +716,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_VERTICAL_SEPARATOR,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("horizontal-separator",
@@ -724,35 +725,35 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							     0,
 							     G_MAXINT,
 							     _TREE_VIEW_HORIZONTAL_SEPARATOR,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("allow-rules",
 								 P_("Allow Rules"),
 								 P_("Allow drawing of alternating color rows"),
 								 TRUE,
-								 G_PARAM_READABLE));
+								 GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boolean ("indent-expanders",
 								 P_("Indent Expanders"),
 								 P_("Make the expanders indented"),
 								 TRUE,
-								 G_PARAM_READABLE));
+								 GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boxed ("even-row-color",
                                                                P_("Even Row Color"),
                                                                P_("Color to use for even rows"),
 							       GDK_TYPE_COLOR,
-G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boxed ("odd-row-color",
                                                                P_("Odd Row Color"),
                                                                P_("Color to use for odd rows"),
 							       GDK_TYPE_COLOR,
-G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
 
   /* Signals */
   widget_class->set_scroll_adjustments_signal =

@@ -42,6 +42,7 @@
 #include "gtkhbox.h"
 #include "gtkvscrollbar.h"
 #include "gtksettings.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -528,7 +529,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                         P_("Tearoff Title"),
                                                         P_("A title that may be displayed by the window manager when this menu is torn-off"),
                                                         "",
-                                                        G_PARAM_READWRITE));
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkMenu:tearoff-state:
@@ -543,7 +544,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 							 P_("Tearoff State"),
 							 P_("A boolean that indicates whether the menu is torn-off"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-padding",
@@ -552,7 +553,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 							     0,
 							     G_MAXINT,
 							     1,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("vertical-offset",
@@ -561,7 +562,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("horizontal-offset",
@@ -570,7 +571,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 							     G_MININT,
 							     G_MAXINT,
 							     -2,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 
 
  gtk_container_class_install_child_property (container_class,
@@ -579,7 +580,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                P_("Left Attach"),
                                                                P_("The column number to attach the left side of the child to"),
 								-1, INT_MAX, -1,
-                                                               G_PARAM_READWRITE));
+                                                               GTK_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_RIGHT_ATTACH,
@@ -587,7 +588,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                P_("Right Attach"),
                                                                P_("The column number to attach the right side of the child to"),
 								-1, INT_MAX, -1,
-                                                               G_PARAM_READWRITE));
+                                                               GTK_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_TOP_ATTACH,
@@ -595,7 +596,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                P_("Top Attach"),
                                                                P_("The row number to attach the top of the child to"),
 								-1, INT_MAX, -1,
-                                                               G_PARAM_READWRITE));
+                                                               GTK_PARAM_READWRITE));
 
  gtk_container_class_install_child_property (container_class,
                                              CHILD_PROP_BOTTOM_ATTACH,
@@ -603,7 +604,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                P_("Bottom Attach"),
                                                                P_("The row number to attach the bottom of the child to"),
 								-1, INT_MAX, -1,
-                                                               G_PARAM_READWRITE));
+                                                               GTK_PARAM_READWRITE));
 
   binding_set = gtk_binding_set_by_class (class);
   gtk_binding_entry_add_signal (binding_set,
@@ -691,7 +692,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 						       P_("Can change accelerators"),
 						       P_("Whether menu accelerators can be changed by pressing a key over the menu item"),
 						       FALSE,
-						       G_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-popup-delay",
 						   P_("Delay before submenus appear"),
@@ -699,7 +700,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 						   0,
 						   G_MAXINT,
 						   DEFAULT_POPUP_DELAY,
-						   G_PARAM_READWRITE));
+						   GTK_PARAM_READWRITE));
 
   gtk_settings_install_property (g_param_spec_int ("gtk-menu-popdown-delay",
 						   P_("Delay before hiding a submenu"),
@@ -707,7 +708,7 @@ gtk_menu_class_init (GtkMenuClass *class)
 						   0,
 						   G_MAXINT,
 						   DEFAULT_POPDOWN_DELAY,
-						   G_PARAM_READWRITE));
+						   GTK_PARAM_READWRITE));
 						   
 }
 

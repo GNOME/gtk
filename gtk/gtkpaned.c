@@ -33,6 +33,7 @@
 #include "gtkwindow.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 enum {
@@ -242,14 +243,14 @@ gtk_paned_class_init (GtkPanedClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     G_PARAM_READABLE | G_PARAM_WRITABLE));
+						     GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_POSITION_SET,
 				   g_param_spec_boolean ("position-set",
 							 P_("Position Set"),
 							 P_("TRUE if the Position property should be used"),
 							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 				   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("handle-size",
@@ -258,7 +259,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 							     0,
 							     G_MAXINT,
 							     5,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   /**
    * GtkPaned:min-position:
    *
@@ -275,7 +276,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 						     0,
 						     G_MAXINT,
 						     0,
-						     G_PARAM_READABLE));
+						     GTK_PARAM_READABLE));
 
   /**
    * GtkPaned:max-position:
@@ -293,7 +294,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 						     0,
 						     G_MAXINT,
 						     G_MAXINT,
-						     G_PARAM_READABLE));
+						     GTK_PARAM_READABLE));
 
 /**
  * GtkPaned:resize:
@@ -309,7 +310,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 								    P_("Resize"),
 								    P_("If TRUE, the child expands and shrinks along with the paned widget"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    GTK_PARAM_READWRITE));
 
 /**
  * GtkPaned:shrink:
@@ -325,7 +326,7 @@ gtk_paned_class_init (GtkPanedClass *class)
 								    P_("Shrink"),
 								    P_("If TRUE, the child can be made smaller than its requisition"),
 								    TRUE,
-								    G_PARAM_READWRITE));
+								    GTK_PARAM_READWRITE));
 
   signals [CYCLE_CHILD_FOCUS] =
     g_signal_new ("cycle_child_focus",

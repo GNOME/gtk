@@ -617,7 +617,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
                                                                 G_MININT,
                                                                 G_MAXINT,
                                                                 0,
-                                                                G_PARAM_READWRITE));
+                                                                GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_Y,
@@ -627,7 +627,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
                                                                 G_MININT,
                                                                 G_MAXINT,
                                                                 0,
-                                                                G_PARAM_READWRITE));
+                                                                GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
 				   PROP_HADJUSTMENT,
@@ -635,7 +635,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 							P_("Horizontal adjustment"),
 							P_("The GtkAdjustment for the horizontal position"),
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
 				   PROP_VADJUSTMENT,
@@ -643,7 +643,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 							P_("Vertical adjustment"),
 							P_("The GtkAdjustment for the vertical position"),
 							GTK_TYPE_ADJUSTMENT,
-							G_PARAM_READWRITE));
+							GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH,
@@ -653,7 +653,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 						     0,
 						     G_MAXINT,
 						     100,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_HEIGHT,
 				   g_param_spec_uint ("height",
@@ -662,7 +662,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 						     0,
 						     G_MAXINT,
 						     100,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;

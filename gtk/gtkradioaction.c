@@ -35,6 +35,7 @@
 #include "gtktoggleactionprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define GTK_RADIO_ACTION_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_RADIO_ACTION, GtkRadioActionPrivate))
@@ -141,7 +142,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 						     G_MININT,
 						     G_MAXINT,
 						     0,
-						     G_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE));
 
   /**
    * GtkRadioAction:group:
@@ -156,7 +157,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 							P_("Group"),
 							P_("The radio action whose group this action belongs to."),
 							GTK_TYPE_RADIO_ACTION,
-							G_PARAM_WRITABLE));
+							GTK_PARAM_WRITABLE));
 
   /**
    * GtkRadioAction::changed:

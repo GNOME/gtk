@@ -47,6 +47,7 @@
 #include "gtkvbox.h"
 #include "gtkviewport.h"
 #include "gtkiconfactory.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 
 #include "gtkalias.h"
@@ -189,8 +190,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   widget_class->style_set = gtk_about_dialog_style_set;
 
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   /**
    * GtkAboutDialog:name:
    *
@@ -205,7 +204,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Program name"),
 							P_("The name of the program. If this is not set, it defaults to g_get_application_name()"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:version:
@@ -220,7 +219,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Program version"),
 							P_("The version of the program"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:copyright:
@@ -235,7 +234,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Copyright string"),
 							P_("Copyright information for the program"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 	
 
   /**
@@ -253,7 +252,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Comments string"),
 							P_("Comments about the program"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:license:
@@ -271,7 +270,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							_("License"),
 							_("The license of the program"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:website:
@@ -287,7 +286,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Website URL"),
 							P_("The URL for the link to the website of the program"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:website-label:
@@ -304,7 +303,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Website label"),
 							P_("The label for the link to the website of the program. If this is not set, it defaults to the URL"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:authors:
@@ -321,7 +320,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 						       P_("Authors"),
 						       P_("List of authors of the program"),
 						       G_TYPE_STRV,
-						       G_PARAM_READWRITE|STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:documenters:
@@ -338,7 +337,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 						       P_("Documenters"),
 						       P_("List of people documenting the program"),
 						       G_TYPE_STRV,
-						       G_PARAM_READWRITE|STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:artists:
@@ -355,7 +354,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 						       P_("Artists"),
 						       P_("List of people who have contributed artwork to the program"),
 						       G_TYPE_STRV,
-						       G_PARAM_READWRITE|STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
 
 
   /**
@@ -373,7 +372,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Translator credits"),
 							P_("Credits to the translators. This string should be marked as translatable"),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 	
   /**
    * GtkAboutDialog:logo:
@@ -389,7 +388,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Logo"),
 							P_("A logo for the about box. If this is not set, it defaults to gtk_window_get_default_icon_list()"),
 							GDK_TYPE_PIXBUF,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /**
    * GtkAboutDialog:logo-icon-name:
@@ -405,7 +404,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 							P_("Logo Icon Name"),
 							P_("A named icon to use as the logo for the about box."),
 							NULL,
-							G_PARAM_READWRITE|STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   /* Style properties */
   gtk_widget_class_install_style_property (widget_class,
@@ -413,7 +412,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                                                                P_("Link Color"),
                                                                P_("Color of hyperlinks"),
                                                                GDK_TYPE_COLOR,
-                                                               G_PARAM_READABLE|STATIC_STRINGS));
+                                                               GTK_PARAM_READABLE));
 
   g_type_class_add_private (object_class, sizeof (GtkAboutDialogPrivate));
 }

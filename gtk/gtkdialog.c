@@ -36,6 +36,7 @@
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_DIALOG, GtkDialogPrivate))
@@ -148,7 +149,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 							 P_("Has separator"),
 							 P_("The dialog has a separator bar above its buttons"),
                                                          TRUE,
-                                                         G_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE));
   
   dialog_signals[RESPONSE] =
     g_signal_new ("response",
@@ -176,7 +177,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              2,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("button-spacing",
                                                              P_("Button spacing"),
@@ -184,7 +185,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              10,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
   
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("action-area-border",
@@ -193,7 +194,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              5,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
 
   binding_set = gtk_binding_set_by_class (class);
   

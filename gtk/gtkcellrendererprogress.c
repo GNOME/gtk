@@ -29,6 +29,7 @@
 #include <stdlib.h>
 
 #include "gtkcellrendererprogress.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -101,8 +102,6 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
   cell_class->get_size = gtk_cell_renderer_progress_get_size;
   cell_class->render = gtk_cell_renderer_progress_render;
   
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   /**
    * GtkCellRendererProgress:value:
    * 
@@ -117,7 +116,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 						     P_("Value"),
 						     P_("Value of the progress bar"),
 						     0, 100, 0,
-						     G_PARAM_READWRITE | STATIC_STRINGS));
+						     GTK_PARAM_READWRITE));
 
   /**
    * GtkCellRendererProgress:text:
@@ -135,7 +134,7 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
 							P_("Text"),
 							P_("Text on the progress bar"),
 							NULL,
-							G_PARAM_READWRITE | STATIC_STRINGS));
+							GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, 
 			    sizeof (GtkCellRendererProgressPrivate));

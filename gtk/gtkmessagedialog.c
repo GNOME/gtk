@@ -26,6 +26,8 @@
  */
 
 #include <config.h>
+#include <string.h>
+
 #include "gtkmessagedialog.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
@@ -34,7 +36,7 @@
 #include "gtkstock.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
-#include <string.h>
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define GTK_MESSAGE_DIALOG_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_MESSAGE_DIALOG, GtkMessageDialogPrivate))
@@ -126,7 +128,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              12,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
   /**
    * GtkMessageDialog::use_separator
    *
@@ -140,7 +142,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 								 P_("Use separator"),
 								 P_("Whether to put a separator between the message dialog's text and the buttons"),
 								 FALSE,
-								 G_PARAM_READABLE));
+								 GTK_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_MESSAGE_TYPE,
                                    g_param_spec_enum ("message-type",
@@ -148,7 +150,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      P_("The type of message"),
 						      GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE | G_PARAM_CONSTRUCT));
+                                                      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   g_object_class_install_property (gobject_class,
                                    PROP_BUTTONS,
                                    g_param_spec_enum ("buttons",
@@ -156,7 +158,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
 						      P_("The buttons shown in the message dialog"),
 						      GTK_TYPE_BUTTONS_TYPE,
                                                       GTK_BUTTONS_NONE,
-                                                      G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+                                                      GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_type_class_add_private (gobject_class,
 			    sizeof (GtkMessageDialogPrivate));
 }

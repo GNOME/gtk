@@ -324,8 +324,8 @@ gtk_old_editable_class_init (GtkOldEditableClass *class)
 		    _gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
-  gtk_object_add_arg_type ("GtkOldEditable::text-position", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_TEXT_POSITION);
-  gtk_object_add_arg_type ("GtkOldEditable::editable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_EDITABLE);
+  gtk_object_add_arg_type ("GtkOldEditable::text-position", GTK_TYPE_INT, GTK_ARG_READWRITE | G_PARAM_STATIC_NAME, ARG_TEXT_POSITION);
+  gtk_object_add_arg_type ("GtkOldEditable::editable", GTK_TYPE_BOOL, GTK_ARG_READWRITE | G_PARAM_STATIC_NAME, ARG_EDITABLE);
 }
 
 static void

@@ -578,35 +578,35 @@ gtk_clist_class_init (GtkCListClass *klass)
 
   gtk_object_add_arg_type ("GtkCList::n-columns",
 			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY,
+			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME,
 			   ARG_N_COLUMNS);
   gtk_object_add_arg_type ("GtkCList::shadow-type",
 			   GTK_TYPE_SHADOW_TYPE,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_SHADOW_TYPE);
   gtk_object_add_arg_type ("GtkCList::selection-mode",
 			   GTK_TYPE_SELECTION_MODE,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_SELECTION_MODE);
   gtk_object_add_arg_type ("GtkCList::row-height",
 			   GTK_TYPE_UINT,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_ROW_HEIGHT);
   gtk_object_add_arg_type ("GtkCList::reorderable",
 			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_REORDERABLE);
   gtk_object_add_arg_type ("GtkCList::titles-active",
 			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_TITLES_ACTIVE);
   gtk_object_add_arg_type ("GtkCList::use-drag-icons",
 			   GTK_TYPE_BOOL,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_USE_DRAG_ICONS);
   gtk_object_add_arg_type ("GtkCList::sort-type",
 			   GTK_TYPE_SORT_TYPE,
-			   GTK_ARG_READWRITE,
+			   GTK_ARG_READWRITE | G_PARAM_STATIC_NAME,
 			   ARG_SORT_TYPE);  
 
   widget_class->set_scroll_adjustments_signal =

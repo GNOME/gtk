@@ -21,6 +21,7 @@
 #include "gtkcellrenderer.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtktreeprivate.h"
 #include "gtkalias.h"
 
@@ -199,8 +200,6 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 		  GTK_TYPE_CELL_EDITABLE,
 		  G_TYPE_STRING);
 
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   g_object_class_install_property (object_class,
 				   PROP_MODE,
 				   g_param_spec_enum ("mode",
@@ -208,7 +207,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      P_("Editable mode of the CellRenderer"),
 						      GTK_TYPE_CELL_RENDERER_MODE,
 						      GTK_CELL_RENDERER_MODE_INERT,
-						      G_PARAM_READWRITE | STATIC_STRINGS));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_VISIBLE,
@@ -216,14 +215,14 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("visible"),
 							 P_("Display the cell"),
 							 TRUE,
-							 G_PARAM_READWRITE | STATIC_STRINGS));
+							 GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
 				   PROP_SENSITIVE,
 				   g_param_spec_boolean ("sensitive",
 							 P_("Sensitive"),
 							 P_("Display the cell sensitive"),
 							 TRUE,
-							 G_PARAM_READWRITE | STATIC_STRINGS));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_XALIGN,
@@ -233,7 +232,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       G_PARAM_READWRITE | STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_YALIGN,
@@ -243,7 +242,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       G_PARAM_READWRITE | STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_XPAD,
@@ -253,7 +252,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      0,
 						      G_MAXUINT,
 						      0,
-						      G_PARAM_READWRITE | STATIC_STRINGS));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_YPAD,
@@ -263,7 +262,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						      0,
 						      G_MAXUINT,
 						      0,
-						      G_PARAM_READWRITE | STATIC_STRINGS));
+						      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_WIDTH,
@@ -273,7 +272,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     G_PARAM_READWRITE | STATIC_STRINGS));
+						     GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_HEIGHT,
@@ -283,7 +282,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						     -1,
 						     G_MAXINT,
 						     -1,
-						     G_PARAM_READWRITE | STATIC_STRINGS));
+						     GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_IS_EXPANDER,
@@ -291,7 +290,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("Is Expander"),
 							 P_("Row has children"),
 							 FALSE,
-							 G_PARAM_READWRITE | STATIC_STRINGS));
+							 GTK_PARAM_READWRITE));
 
 
   g_object_class_install_property (object_class,
@@ -300,7 +299,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							 P_("Is Expanded"),
 							 P_("Row is an expander row, and is expanded"),
 							 FALSE,
-							 G_PARAM_READWRITE | STATIC_STRINGS));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND,
@@ -308,7 +307,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 							P_("Cell background color name"),
 							P_("Cell background color as a string"),
 							NULL,
-							G_PARAM_WRITABLE | STATIC_STRINGS));
+							GTK_PARAM_WRITABLE));
 
   g_object_class_install_property (object_class,
 				   PROP_CELL_BACKGROUND_GDK,
@@ -316,10 +315,10 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       P_("Cell background color"),
 						       P_("Cell background color as a GdkColor"),
 						       GDK_TYPE_COLOR,
-						       G_PARAM_READWRITE | STATIC_STRINGS));
+						       GTK_PARAM_READWRITE));
 
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READWRITE | STATIC_STRINGS))
+#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
   ADD_SET_PROP ("cell-background-set", PROP_CELL_BACKGROUND_SET,
                 P_("Cell background set"),

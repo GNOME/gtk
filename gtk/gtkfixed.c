@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkfixed.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -124,7 +125,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
                                                                 G_MININT,
                                                                 G_MAXINT,
                                                                 0,
-                                                                G_PARAM_READWRITE));
+                                                                GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_Y,
@@ -134,7 +135,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
                                                                 G_MININT,
                                                                 G_MAXINT,
                                                                 0,
-                                                                G_PARAM_READWRITE));
+                                                                GTK_PARAM_READWRITE));
 }
 
 static GType

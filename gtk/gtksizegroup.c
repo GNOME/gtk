@@ -245,7 +245,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
 							" of its component widgets"),
 						      GTK_TYPE_SIZE_GROUP_MODE,
 						      GTK_SIZE_GROUP_HORIZONTAL,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
 }
 
 static void

@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkalignment.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -112,8 +113,6 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
   widget_class->size_request = gtk_alignment_size_request;
   widget_class->size_allocate = gtk_alignment_size_allocate;
 
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float("xalign",
@@ -122,7 +121,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
                                                       0.5,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
    
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
@@ -132,7 +131,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
 						      0.5,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_XSCALE,
                                    g_param_spec_float("xscale",
@@ -141,7 +140,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
                                                       1.0,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_YSCALE,
                                    g_param_spec_float("yscale",
@@ -150,7 +149,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.0,
                                                       1.0,
                                                       1.0,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
 
 
 /**
@@ -168,7 +167,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
 
 /**
  * GtkAlignment:bottom-padding:
@@ -185,7 +184,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
 
 /**
  * GtkAlignment:left-padding:
@@ -202,7 +201,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
 
 /**
  * GtkAlignment:right-padding:
@@ -219,7 +218,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0,
                                                       G_MAXINT,
                                                       0,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkAlignmentPrivate));  
 }

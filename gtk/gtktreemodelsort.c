@@ -45,6 +45,7 @@
 #include "gtktreestore.h"
 #include "gtktreedatalist.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtktreednd.h"
 #include "gtkalias.h"
 
@@ -330,7 +331,7 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
 							P_("TreeModelSort Model"),
 							P_("The model for the TreeModelSort to sort"),
 							GTK_TYPE_TREE_MODEL,
-							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void

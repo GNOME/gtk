@@ -37,6 +37,7 @@
 #include "gtktextbuffer.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -184,7 +185,7 @@ gtk_text_buffer_class_init (GtkTextBufferClass *klass)
                                                         P_("Tag Table"),
                                                         P_("Text Tag Table"),
                                                         GTK_TYPE_TEXT_TAG_TABLE,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   signals[INSERT_TEXT] =
     g_signal_new ("insert_text",

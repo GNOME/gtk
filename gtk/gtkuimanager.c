@@ -41,6 +41,7 @@
 #include "gtktearoffmenuitem.h"
 #include "gtktoolbar.h"
 #include "gtkuimanager.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #undef DEBUG_UI_MANAGER
@@ -229,7 +230,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
 							 P_("Add tearoffs to menus"),
 							 P_("Whether tearoff menu items should be added to menus"),
                                                          FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
 				   PROP_UI,
@@ -237,7 +238,7 @@ gtk_ui_manager_class_init (GtkUIManagerClass *klass)
  							P_("Merged UI definition"),
 							P_("An XML string describing the merged UI"),
 							NULL,
-							G_PARAM_READABLE));
+							GTK_PARAM_READABLE));
 
 
   /**

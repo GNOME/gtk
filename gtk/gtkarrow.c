@@ -27,6 +27,7 @@
 #include <config.h>
 #include <math.h>
 #include "gtkarrow.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -94,8 +95,6 @@ gtk_arrow_class_init (GtkArrowClass *class)
   gobject_class->set_property = gtk_arrow_set_property;
   gobject_class->get_property = gtk_arrow_get_property;
 
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-  
   g_object_class_install_property (gobject_class,
                                    PROP_ARROW_TYPE,
                                    g_param_spec_enum ("arrow-type",
@@ -103,7 +102,7 @@ gtk_arrow_class_init (GtkArrowClass *class)
                                                       P_("The direction the arrow should point"),
 						      GTK_TYPE_ARROW_TYPE,
 						      GTK_ARROW_RIGHT,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
@@ -111,7 +110,7 @@ gtk_arrow_class_init (GtkArrowClass *class)
                                                       P_("Appearance of the shadow surrounding the arrow"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_OUT,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
   
   widget_class->expose_event = gtk_arrow_expose;
 }

@@ -32,6 +32,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -200,7 +201,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       P_("Deprecated property, use shadow_type instead"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_ETCHED_OUT,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
                                    g_param_spec_enum ("shadow-type",
@@ -208,7 +209,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       P_("Appearance of the shadow that surrounds the container"),
 						      GTK_TYPE_SHADOW_TYPE,
 						      GTK_SHADOW_ETCHED_OUT,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_HANDLE_POSITION,
@@ -217,7 +218,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       P_("Position of the handle relative to the child widget"),
 						      GTK_TYPE_POSITION_TYPE,
 						      GTK_POS_LEFT,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_SNAP_EDGE,
@@ -226,7 +227,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
                                                       P_("Side of the handlebox that's lined up with the docking point to dock the handlebox"),
 						      GTK_TYPE_POSITION_TYPE,
 						      GTK_POS_TOP,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE));
 
   g_object_class_install_property (gobject_class,
                                    PROP_SNAP_EDGE_SET,
@@ -234,7 +235,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
 							 P_("Snap edge set"),
 							 P_("Whether to use the value from the snap_edge property or a value derived from handle_position"),
 							 FALSE,
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   object_class->destroy = gtk_handle_box_destroy;
 

@@ -24,6 +24,7 @@
 #include "gtkradiotoolbutton.h"
 #include "gtkradiobutton.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 enum {
@@ -91,7 +92,7 @@ gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
 							_("Group"),
 							_("The radio tool button whose group this button belongs to."),
 							GTK_TYPE_RADIO_TOOL_BUTTON,
-							G_PARAM_WRITABLE));
+							GTK_PARAM_WRITABLE));
 
 }
 

@@ -24,6 +24,7 @@
 #include "gtksignal.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
+#include "gtkprivate.h"
 #include <gobject/gmarshal.h>
 #include "gtkalias.h"
 
@@ -182,16 +183,16 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                         P_("Background color name"),
                                                         P_("Background color as a string"),
                                                         NULL,
-                                                        G_PARAM_WRITABLE));
+                                                        GTK_PARAM_WRITABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND_GDK,
                                    g_param_spec_boxed ("background-gdk",
                                                       P_("Background color"),
                                                       P_("Background color as a GdkColor"),
                                                       GDK_TYPE_COLOR,
-                                                      G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                      GTK_PARAM_READWRITE));
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, G_PARAM_READABLE | G_PARAM_WRITABLE))
+#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
                 P_("Background set"),

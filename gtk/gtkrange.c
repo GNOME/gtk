@@ -34,6 +34,7 @@
 #include "gtkrange.h"
 #include "gtkintl.h"
 #include "gtkscrollbar.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define SCROLL_INITIAL_DELAY 250  /* must hold button this long before ... */
@@ -326,7 +327,7 @@ gtk_range_class_init (GtkRangeClass *class)
 						      P_("How the range should be updated on the screen"),
 						      GTK_TYPE_UPDATE_TYPE,
 						      GTK_UPDATE_CONTINUOUS,
-						      G_PARAM_READWRITE));
+						      GTK_PARAM_READWRITE));
   
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
@@ -334,7 +335,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							P_("Adjustment"),
 							P_("The GtkAdjustment that contains the current value of this range object"),
                                                         GTK_TYPE_ADJUSTMENT,
-                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVERTED,
@@ -342,7 +343,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							P_("Inverted"),
 							P_("Invert direction slider moves to increase range value"),
                                                          FALSE,
-                                                         G_PARAM_READWRITE));
+                                                         GTK_PARAM_READWRITE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-width",
@@ -351,7 +352,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     G_MAXINT,
 							     14,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("trough-border",
                                                              P_("Trough Border"),
@@ -359,7 +360,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                              0,
                                                              G_MAXINT,
                                                              1,
-                                                             G_PARAM_READABLE));
+                                                             GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("stepper-size",
 							     P_("Stepper Size"),
@@ -367,7 +368,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     0,
 							     G_MAXINT,
 							     14,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("stepper-spacing",
 							     P_("Stepper Spacing"),
@@ -375,7 +376,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                                              0,
 							     G_MAXINT,
 							     0,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("arrow-displacement-x",
 							     P_("Arrow X Displacement"),
@@ -383,7 +384,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("arrow-displacement-y",
 							     P_("Arrow Y Displacement"),
@@ -391,7 +392,7 @@ gtk_range_class_init (GtkRangeClass *class)
 							     G_MININT,
 							     G_MAXINT,
 							     0,
-							     G_PARAM_READABLE));
+							     GTK_PARAM_READABLE));
 }
 
 static void

@@ -31,6 +31,7 @@
 #include "gtkobject.h"
 #include "gtkmarshalers.h"
 #include "gtksignal.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 
@@ -228,7 +229,7 @@ gtk_object_add_arg_type (const gchar *arg_name,
     g_return_if_fail ((arg_flags & G_PARAM_CONSTRUCT_ONLY) == 0);
   if (arg_flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
     g_return_if_fail (arg_flags & G_PARAM_WRITABLE);
-  g_return_if_fail ((arg_flags & ~(G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
+  g_return_if_fail ((arg_flags & ~(G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME)) == 0);
 
   pname = strchr (arg_name, ':');
   g_return_if_fail (pname && pname[1] == ':');
@@ -330,7 +331,7 @@ gtk_object_class_init (GtkObjectClass *class)
 				   PROP_USER_DATA,
 				   g_param_spec_pointer ("user-data", "User Data",
 							 "Anonymous User Data Pointer",
-							 G_PARAM_READABLE | G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   object_signals[DESTROY] =
     g_signal_new ("destroy",
 		  G_TYPE_FROM_CLASS (gobject_class),

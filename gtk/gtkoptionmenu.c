@@ -35,6 +35,7 @@
 #include "gtkoptionmenu.h"
 #define GTK_DISABLE_DEPRECATED
 
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 #define CHILD_LEFT_SPACING        4
@@ -195,20 +196,20 @@ gtk_option_menu_class_init (GtkOptionMenuClass *class)
                                                         P_("Menu"),
                                                         P_("The menu of options"),
                                                         GTK_TYPE_MENU,
-                                                        G_PARAM_READABLE | G_PARAM_WRITABLE));
+                                                        GTK_PARAM_READWRITE));
   
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("indicator-size",
 							       P_("Indicator Size"),
 							       P_("Size of dropdown indicator"),
 							       GTK_TYPE_REQUISITION,
-							       G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_boxed ("indicator-spacing",
 							       P_("Indicator Spacing"),
 							       P_("Spacing around indicator"),
 							       GTK_TYPE_BORDER,
-							       G_PARAM_READABLE));
+							       GTK_PARAM_READABLE));
 }
 
 static GType

@@ -24,6 +24,7 @@
 #include "gtkfilesystem.h"
 #include "gtkintl.h"
 #include "gtktypebuiltins.h"
+#include "gtkprivate.h"
 #include "gtkalias.h"
 
 static void gtk_file_chooser_class_init (gpointer g_iface);
@@ -177,62 +178,62 @@ gtk_file_chooser_class_init (gpointer g_iface)
 							  P_("The type of operation that the file selector is performing"),
 							  GTK_TYPE_FILE_CHOOSER_ACTION,
 							  GTK_FILE_CHOOSER_ACTION_OPEN,
-							  G_PARAM_READWRITE));
+							  GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_string ("file-system-backend",
 							    P_("File System Backend"),
 							    P_("Name of file system backend to use"),
 							    NULL, 
-							    G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+							    GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_object ("filter",
 							    P_("Filter"),
 							    P_("The current filter for selecting which files are displayed"),
 							    GTK_TYPE_FILE_FILTER,
-							    G_PARAM_READWRITE));
+							    GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("local-only",
 							     P_("Local Only"),
 							     P_("Whether the selected file(s) should be limited to local file: URLs"),
 							     TRUE,
-							     G_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_object ("preview-widget",
 							    P_("Preview widget"),
 							    P_("Application supplied widget for custom previews."),
 							    GTK_TYPE_WIDGET,
-							    G_PARAM_READWRITE));
+							    GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("preview-widget-active",
 							     P_("Preview Widget Active"),
 							     P_("Whether the application supplied widget for custom previews should be shown."),
 							     TRUE,
-							     G_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("use-preview-label",
 							     P_("Use Preview Label"),
 							     P_("Whether to display a stock label with the name of the previewed file."),
 							     TRUE,
-							     G_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_object ("extra-widget",
 							    P_("Extra widget"),
 							    P_("Application supplied widget for extra options."),
 							    GTK_TYPE_WIDGET,
-							    G_PARAM_READWRITE));
+							    GTK_PARAM_READWRITE));
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("select-multiple",
 							     P_("Select Multiple"),
 							     P_("Whether to allow multiple files to be selected"),
 							     FALSE,
-							     G_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE));
   
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boolean ("show-hidden",
 							     P_("Show Hidden"),
 							     P_("Whether the hidden files and folders should be displayed"),
 							     FALSE,
-							     G_PARAM_READWRITE));
+							     GTK_PARAM_READWRITE));
 }
 
 /**

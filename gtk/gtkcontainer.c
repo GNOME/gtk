@@ -206,7 +206,7 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       P_("Specify how resize events are handled"),
                                                       GTK_TYPE_RESIZE_MODE,
                                                       GTK_RESIZE_PARENT,
-                                                      G_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_BORDER_WIDTH,
                                    g_param_spec_uint ("border-width",
@@ -215,14 +215,14 @@ gtk_container_class_init (GtkContainerClass *class)
 						      0,
 						      G_MAXINT,
 						      0,
-                                                      G_PARAM_READWRITE));
+                                                      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
                                    g_param_spec_object ("child",
                                                       P_("Child"),
                                                       P_("Can be used to add a new child to the container"),
                                                       GTK_TYPE_WIDGET,
-						      G_PARAM_WRITABLE));
+						      GTK_PARAM_WRITABLE));
   container_signals[ADD] =
     g_signal_new ("add",
 		  G_OBJECT_CLASS_TYPE (object_class),

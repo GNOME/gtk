@@ -22,6 +22,7 @@
 #include "gtkcellrenderertoggle.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkprivate.h"
 #include "gtktreeprivate.h"
 #include "gtkalias.h"
 
@@ -142,8 +143,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Toggle state"),
 							 P_("The toggle state of the button"),
 							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 		                   PROP_INCONSISTENT,
@@ -151,8 +151,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 					                 P_("Inconsistent state"),
 							 P_("The inconsistent state of the button"),
 							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
   
   g_object_class_install_property (object_class,
 				   PROP_ACTIVATABLE,
@@ -160,8 +159,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Activatable"),
 							 P_("The toggle button can be activated"),
 							 TRUE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_RADIO,
@@ -169,8 +167,7 @@ gtk_cell_renderer_toggle_class_init (GtkCellRendererToggleClass *class)
 							 P_("Radio state"),
 							 P_("Draw the toggle button as a radio button"),
 							 FALSE,
-							 G_PARAM_READABLE |
-							 G_PARAM_WRITABLE));
+							 GTK_PARAM_READWRITE));
 
   
   /**

@@ -26,6 +26,7 @@
 
 #include <config.h>
 #include "gtkbbox.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -115,8 +116,6 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   /* FIXME we need to override the "spacing" property on GtkBox once
    * libgobject allows that.
    */
-#define STATIC_STRINGS G_PARAM_STATIC_NAME|G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB
-
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-min-width",
 							     P_("Minimum child width"),
@@ -124,7 +123,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_MIN_WIDTH,
-							     G_PARAM_READABLE | STATIC_STRINGS));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-min-height",
@@ -133,7 +132,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_MIN_HEIGHT,
-							     G_PARAM_READABLE | STATIC_STRINGS));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-internal-pad-x",
@@ -142,7 +141,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_X,
-							     G_PARAM_READABLE | STATIC_STRINGS));
+							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("child-internal-pad-y",
@@ -151,7 +150,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 							     0,
 							     G_MAXINT,
                                                              DEFAULT_CHILD_IPAD_Y,
-							     G_PARAM_READABLE | STATIC_STRINGS));
+							     GTK_PARAM_READABLE));
   g_object_class_install_property (gobject_class,
                                    PROP_LAYOUT_STYLE,
                                    g_param_spec_enum ("layout-style",
@@ -159,7 +158,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
                                                       P_("How to layout the buttons in the box. Possible values are default, spread, edge, start and end"),
 						      GTK_TYPE_BUTTON_BOX_STYLE,
 						      GTK_BUTTONBOX_DEFAULT_STYLE,
-                                                      G_PARAM_READWRITE | STATIC_STRINGS));
+                                                      GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_SECONDARY,
@@ -167,7 +166,7 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 								    P_("Secondary"),
 								    P_("If TRUE, the child appears in a secondary group of children, suitable for, e.g., help buttons"),
 								    FALSE,
-								    G_PARAM_READWRITE | STATIC_STRINGS));
+								    GTK_PARAM_READWRITE));
 }
 
 static void

@@ -38,6 +38,7 @@
 #include "gdk/gdkrgb.h"
 #include "gtkpreview.h"
 #include "gtksignal.h"
+#include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
 
@@ -133,7 +134,7 @@ gtk_preview_class_init (GtkPreviewClass *klass)
 							 P_("Expand"),
 							 P_("Whether the preview widget should take up the entire space it is allocated"),
 							 FALSE,
-							 G_PARAM_READWRITE));
+							 GTK_PARAM_READWRITE));
 }
 
 static void
