@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: nn\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2003-12-25 01:51+0100\n"
-"PO-Revision-Date: 2003-12-26 17:15+0100\n"
+"POT-Creation-Date: 2003-12-27 17:16+0100\n"
+"PO-Revision-Date: 2003-12-28 12:40+0100\n"
 "Last-Translator: Åsmund Skjæveland <aasmunds@fys.uio.no>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -27,7 +27,7 @@ msgstr "Klarte ikkje å opna fila «%s»: %s"
 #: gdk-pixbuf/gdk-pixbuf-animation.c:158 gdk-pixbuf/gdk-pixbuf-io.c:741
 #, c-format
 msgid "Image file '%s' contains no data"
-msgstr "Biletefila «%s» inneheld ikkje noko data"
+msgstr "Biletefila «%s» inneheld ikkje data"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:198 gdk-pixbuf/gdk-pixbuf-io.c:775
 #: gdk-pixbuf/gdk-pixbuf-io.c:901 tests/testfilechooser.c:237
@@ -35,7 +35,7 @@ msgstr "Biletefila «%s» inneheld ikkje noko data"
 msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr ""
 "Klarte ikkje å lasta biletet «%s». Årsaken er ukjent, men truleg ei "
-"øydelelagt biletefil"
+"øydelagt biletefil"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:226
 #, c-format
@@ -44,7 +44,7 @@ msgid ""
 "animation file"
 msgstr ""
 "Klarte ikkje å lasta animasjonen «%s». Årsaken er ukjent, men truleg ei "
-"øydelelagt animasjonsfil"
+"øydelagt animasjonsfil"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:377
 #, c-format
@@ -68,7 +68,7 @@ msgstr "Biletetypen «%s» er ikkje støtta"
 #: gdk-pixbuf/gdk-pixbuf-io.c:619
 #, c-format
 msgid "Couldn't recognize the image file format for file '%s'"
-msgstr "Klarte ikkje å kjenne att biletefilformatet på fila «%s»"
+msgstr "Klarte ikkje å kjenna att biletefilformatet på fila «%s»"
 
 #: gdk-pixbuf/gdk-pixbuf-io.c:625
 msgid "Unrecognized image file format"
@@ -3265,8 +3265,8 @@ msgstr "Snøggtastelement"
 #: gtk/gtklabel.c:360
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr ""
-"Skjermelementet som skal aktiverast når snøggtasten til merkelappen "
-"vert trykt"
+"Skjermelementet som skal aktiverast når snøggtasten til merkelappen vert "
+"trykt"
 
 #: gtk/gtklabel.c:3225
 msgid "Select All"
@@ -4113,8 +4113,8 @@ msgid ""
 "Maximum time allowed between two clicks for them to be considered a double "
 "click (in milliseconds)"
 msgstr ""
-"Største tid (i millisekund) mellom to klikk for at det skal reknast "
-"som eit dobbeltklikk "
+"Største tid (i millisekund) mellom to klikk for at det skal reknast som eit "
+"dobbeltklikk "
 
 #: gtk/gtksettings.c:178
 msgid "Double Click Distance"
@@ -4125,8 +4125,8 @@ msgid ""
 "Maximum distance allowed between two clicks for them to be considered a "
 "double click (in pixels)"
 msgstr ""
-"Største avstand (i pikslar) mellom to klikk for at det skal reknast "
-"som eit dobbeltklikk"
+"Største avstand (i pikslar) mellom to klikk for at det skal reknast som eit "
+"dobbeltklikk"
 
 #: gtk/gtksettings.c:186
 msgid "Cursor Blink"
@@ -5337,7 +5337,9 @@ msgstr "Modus for fast høgde"
 
 #: gtk/gtktreeview.c:610
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr "Får GtkTreeView til å gå raskare ved å gå ut ifrå at alle radene har same høgd"
+msgstr ""
+"Får GtkTreeView til å gå raskare ved å gå ut ifrå at alle radene har same "
+"høgd"
 
 #: gtk/gtktreeview.c:630
 msgid "Vertical Separator Width"
@@ -5851,7 +5853,7 @@ msgstr "Ikon"
 
 #: gtk/gtkwindow.c:535
 msgid "Icon for this window"
-msgstr "Ikon for dette vindauget"
+msgstr "Ikonet til dette vindauget"
 
 #: gtk/gtkwindow.c:550
 msgid "Is Active"
@@ -5878,7 +5880,7 @@ msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
 msgstr ""
-"Hint som skal hjelpa skrivebordsmiljået til å skjøna kva slags vindauge "
+"Hint som skal hjelpa skrivebordsmiljøet til å skjøna kva slags vindauge "
 "dette er, og korleis det skal handsamast"
 
 #: gtk/gtkwindow.c:575
