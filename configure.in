@@ -1230,6 +1230,15 @@ if test "x$gdktarget" = "xx11"; then
 	  :, [#include <X11/Xlib.h>])], : ,
        $X_LIBS -lXrandr -lXrender -lX11 $X_EXTRA_LIBS)
 
+  # Checks for Xcursor library
+  have_xcursor=false
+  PKG_CHECK_MODULES(XCURSOR, xcursor, have_xcursor=true, :)
+
+  if $have_xcursor ; then
+    AC_DEFINE(HAVE_XCURSOR, 1, Have the Xcursor library)
+    GDK_EXTRA_LIBS="$XCURSOR_LIBS $GDK_EXTRA_LIBS";
+  fi
+    
   # Xshm checks
 
   if test "x$enable_shm" = "xyes"; then

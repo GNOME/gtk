@@ -1,3 +1,14 @@
+2003-07-01  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Check for Xcursor.
+	
+	* gdk/x11/gdkcursor-x11.c:
+	* gdk/gdkdisplay.h: 
+	* gdk/gdkcursor.h: RGBA cursor support based on Xcursor. New functions:
+	gdk_cursor_new_from_pixbuf(), gdk_display_supports_cursor_alpha(), 
+	gdk_display_supports_cursor_color(), gdk_display_get_default_cursor_size() and
+	gdk_display_get_maximal_cursor_size().  (#69436)
+
 2003-06-30  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkdnd-win32.c (find_window_enum_proc): New function,

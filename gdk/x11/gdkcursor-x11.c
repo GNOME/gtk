@@ -24,14 +24,20 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include "config.h"
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>
+#ifdef HAVE_XCURSOR
+#include <X11/Xcursor/Xcursor.h>
+#endif
 
 #include "gdkprivate-x11.h"
 #include "gdkcursor.h"
 #include "gdkpixmap-x11.h"
 #include "gdkx.h"
 #include <gdk/gdkpixmap.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 
 /**
  * gdk_cursor_new_for_display:
@@ -294,3 +300,299 @@ gdk_cursor_get_display (GdkCursor *cursor)
 
   return ((GdkCursorPrivate *)cursor)->display;
 }
+
+
+#ifdef HAVE_XCURSOR
+
+static XcursorImage*
+create_cursor_image (GdkPixbuf *pixbuf, 
+		     gint       x, 
+		     gint       y)
+{
+  guint width, height, rowstride, n_channels;
+  guchar *pixels, *src;
+  XcursorImage *xcimage;
+  XcursorPixel *dest;
+  guchar a;
+  gint i, j;
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+
+  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+  pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+  xcimage = XcursorImageCreate (width, height);
+      
+  xcimage->xhot = x;
+  xcimage->yhot = y;
+
+  dest = xcimage->pixels;
+
+  for (j = 0; j < height; j++) 
+    {
+      src = pixels + j * rowstride;
+      for (i = 0; i < width; i++) 
+	{
+	  if (n_channels == 3) 
+	    a = 0xff;
+	  else
+	    a = src[3];
+	  
+	  *dest =  (a << 24) | (src[0] << 16) | (src[1] << 8) | src[2];
+	  src += n_channels;
+	  dest++;
+	}
+    }
+
+  return xcimage;
+}
+
+
+/**
+ * gdk_cursor_new_from_pixbuf:
+ * @display: the #GdkDisplay for which the cursor will be created
+ * @pixbuf: the #GdkPixbuf containing the cursor image
+ * @x: the horizontal offset of the 'hotspot' of the cursor. 
+ * @y: the vertical offset of the 'hotspot' of the cursor.
+ *
+ * Creates a new cursor from a pixbuf. 
+ *
+ * Not all GDK backends support RGBA cursors. If they are not 
+ * supported, a monochrome approximation will be displayed. 
+ * The functions gdk_display_supports_cursor_alpha() and 
+ * gdk_display_supports_cursor_color() can be used to determine
+ * whether RGBA cursors are supported; 
+ * gdk_display_get_default_cursor_size() and 
+ * gdk_display_get_maximal_cursor_size() give information about 
+ * cursor sizes.
+ *
+ * On the X backend, support for RGBA cursors requires a
+ * sufficently new version of the X Render extension. 
+ *
+ * Returns: a new #GdkCursor.
+ * 
+ * Since: 2.4
+ */
+GdkCursor *
+gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
+			    GdkPixbuf  *pixbuf,
+			    gint        x,
+			    gint        y)
+{
+  XcursorImage *xcimage;
+  Cursor xcursor;
+  GdkCursorPrivate *private;
+  GdkCursor *cursor;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+  g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
+  g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
+
+  if (display->closed)
+    xcursor = None;
+  else 
+    {
+      xcimage = create_cursor_image (pixbuf, x, y);
+      xcursor = XcursorImageLoadCursor (GDK_DISPLAY_XDISPLAY (display), xcimage);
+      XcursorImageDestroy (xcimage);
+    }
+
+  private = g_new (GdkCursorPrivate, 1);
+  private->display = display;
+  private->xcursor = xcursor;
+  cursor = (GdkCursor *) private;
+  cursor->type = GDK_CURSOR_IS_PIXMAP;
+  cursor->ref_count = 1;
+  
+  return cursor;
+}
+
+/**
+ * gdk_display_supports_cursor_alpha:
+ * @display: a #GdkDisplay
+ *
+ * Returns %TRUE if cursors can use an 8bit alpha channel 
+ * on @display. Otherwise, cursors are restricted to bilevel 
+ * alpha (i.e. a mask).
+ *
+ * Returns: whether cursors can have alpha channels.
+ *
+ * Since: 2.4
+ */
+gboolean 
+gdk_display_supports_cursor_alpha (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return XcursorSupportsARGB (GDK_DISPLAY_XDISPLAY (display));
+}
+
+/**
+ * gdk_display_supports_cursor_color:
+ * @display: a #GdkDisplay
+ *
+ * Returns %TRUE if multicolored cursors are supported
+ * on @display. Otherwise, cursors have only a forground
+ * and a background color.
+ *
+ * Returns: whether cursors can have multiple colors.
+ *
+ * Since: 2.4
+ */
+gboolean 
+gdk_display_supports_cursor_color (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return XcursorSupportsARGB (GDK_DISPLAY_XDISPLAY (display));
+}
+
+/**
+ * gdk_display_get_default_cursor_size:
+ * @display: a #GdkDisplay
+ *
+ * Returns the default size to use for cursors on @display.
+ *
+ * Returns: the default cursor size.
+ *
+ * Since: 2.4
+ */
+guint     
+gdk_display_get_default_cursor_size (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return XcursorGetDefaultSize (GDK_DISPLAY_XDISPLAY (display));
+}
+
+#else
+
+GdkCursor *
+gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
+			    GdkPixbuf  *pixbuf,
+			    gint        x,
+			    gint        y)
+{
+  GdkCursor *cursor;
+  GdkPixmap *pixmap, *mask;
+  guint width, height, n_channels, rowstride, i, j;
+  guint8 *data, *mask_data, *pixels;
+  GdkColor fg = { 0, 0, 0, 0 };
+  GdkColor bg = { 0, 0xffff, 0xffff, 0xffff };
+  GdkScreen *screen;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+
+  g_return_val_if_fail (0 <= x && x < width, NULL);
+  g_return_val_if_fail (0 <= y && y < height, NULL);
+
+  n_channels = gdk_pixbuf_get_n_channels (pixbuf);
+  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+  pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+  data = g_new0 (guint8, (width + 7) / 8 * height);
+  mask_data = g_new0 (guint8, (width + 7) / 8 * height);
+
+  for (j = 0; j < height; j++)
+    {
+      guint8 *src = pixels + j * rowstride;
+      guint8 *d = data + (width + 7) / 8 * j;
+      guint8 *md = mask_data + (width + 7) / 8 * j;
+	
+      for (i = 0; i < width; i++)
+	{
+	  if (src[1] < 0x80)
+	    *d |= 1 << (i % 8);
+	  
+	  if (n_channels == 3 || src[3] >= 0x80)
+	    *md |= 1 << (i % 8);
+	  
+	  src += n_channels;
+	  if (i % 8 == 0)
+	    {
+	      d++; 
+	      md++;
+	    }
+	}
+    }
+      
+  screen = gdk_display_get_default_screen (display);
+  pixmap = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen), 
+					data, width, height);
+ 
+  mask = gdk_bitmap_create_from_data (gdk_screen_get_root_window (screen),
+				      mask_data, width, height);
+   
+  cursor = gdk_cursor_new_from_pixmap (pixmap, mask, &fg, &bg, x, y);
+   
+  g_object_unref (pixmap);
+  g_object_unref (mask);
+
+  g_free (data);
+  g_free (mask_data);
+  
+  return cursor;
+}
+
+gboolean 
+gdk_display_supports_cursor_alpha (GdkDisplay    *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return FALSE;
+}
+
+gboolean 
+gdk_display_supports_cursor_color (GdkDisplay    *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return FALSE;
+}
+
+guint     
+gdk_display_default_cursor_size (GdkDisplay    *display)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  
+  /* no idea, really */
+  return 20; 
+}
+
+#endif
+
+
+/**
+ * gdk_display_get_maximal_cursor_size:
+ * @display: a #GdkDisplay
+ * @width: the return location for the maximal cursor width
+ * @height: the return location for the maximal cursor height
+ *
+ * Returns the maximal size to use for cursors on @display.
+ *
+ * Since: 2.4
+ */
+void     
+gdk_display_get_maximal_cursor_size (GdkDisplay *display,
+				     guint       *width,
+				     guint       *height)
+{
+  GdkScreen *screen;
+  GdkWindow *window;
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+  
+  screen = gdk_display_get_default_screen (display);
+  window = gdk_screen_get_root_window (screen);
+  XQueryBestCursor (GDK_DISPLAY_XDISPLAY (display), 
+		    GDK_WINDOW_XWINDOW (window), 
+		    128, 128, width, height);
+}
+

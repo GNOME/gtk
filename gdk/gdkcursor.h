@@ -2,6 +2,7 @@
 #define __GDK_CURSOR_H__
 
 #include <gdk/gdktypes.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -116,6 +117,10 @@ GdkCursor* gdk_cursor_new_from_pixmap	 (GdkPixmap	  *source,
 					  GdkColor	  *bg,
 					  gint		   x,
 					  gint		   y);
+GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
+					  GdkPixbuf       *pixbuf,
+					  gint             x,
+					  gint             y);
 GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
 GdkCursor*  gdk_cursor_ref               (GdkCursor       *cursor);
 void        gdk_cursor_unref             (GdkCursor       *cursor);

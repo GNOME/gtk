@@ -148,6 +148,13 @@ GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay               
 
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 
+gboolean gdk_display_supports_cursor_alpha     (GdkDisplay    *display);
+gboolean gdk_display_supports_cursor_color     (GdkDisplay    *display);
+guint    gdk_display_get_default_cursor_size   (GdkDisplay    *display);
+void     gdk_display_get_maximal_cursor_size   (GdkDisplay    *display,
+						guint         *width,
+						guint         *height);
+
 G_END_DECLS
 
 #endif				/* __GDK_DISPLAY_H__ */
