@@ -4915,6 +4915,8 @@ gtk_widget_add_events (GtkWidget *widget,
 	      if (user_data == widget)
 		gdk_window_set_events (window, gdk_window_get_events (window) | events);
 	    }
+
+	  g_list_free (children);
 	}
       else
 	{

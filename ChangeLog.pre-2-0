@@ -1,7 +1,12 @@
+Tue Jan  8 14:45:43 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_add_events): Fix
+	leak of result of gtk_container_get_children().
+
 Tue Jan  8 14:42:19 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtktoolbar.c: Fix leaks of results of
-	gtk_container_get_children(). (#68199, Damon Chaplin.)
+	gtk_container_get_children(). (#68199, Damon Chaplin)
 
 Tue Jan  8 14:19:43 2002  Owen Taylor  <otaylor@redhat.com>
 
