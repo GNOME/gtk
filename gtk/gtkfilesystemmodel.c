@@ -1124,8 +1124,8 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
  * then unrefs all the parent nodes.
  *
  * The reason for doing this operation as a callback
- * is so that if the operation performed with the the
- * path and iter results in referencing the the node
+ * is so that if the operation performed with the
+ * path and iter results in referencing the node
  * and/or parent nodes, we don't load all the information
  * about the nodes.
  *

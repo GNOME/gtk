@@ -2700,7 +2700,7 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
  * @hot_x: the X offset within the icon of the hotspot.
  * @hot_y: the Y offset within the icon of the hotspot.
  * 
- * Sets the the icon for a given drag from a stock ID.
+ * Sets the icon for a given drag from a stock ID.
  **/
 void 
 gtk_drag_set_icon_stock  (GdkDragContext *context,
@@ -3500,7 +3500,7 @@ gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
 					gtk_drag_key_cb,
 					info);
 
-  /* Send on a release pair to the the original 
+  /* Send on a release pair to the original 
    * widget to convince it to release its grab. We need to
    * call gtk_propagate_event() here, instead of 
    * gtk_widget_event() because widget like GtkList may

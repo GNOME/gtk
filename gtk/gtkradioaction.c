@@ -440,7 +440,7 @@ gtk_radio_action_set_group (GtkRadioAction *action,
  * gtk_radio_action_get_current_value:
  * @action: a #GtkRadioAction
  * 
- * Obtains the value property of the the currently active member of 
+ * Obtains the value property of the currently active member of 
  * the group to which @action belongs.
  * 
  * Return value: The value of the currently active group member

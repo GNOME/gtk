@@ -6670,7 +6670,7 @@ gtk_window_is_active (GtkWindow *window)
  * For real toplevel windows, this is identical to gtk_window_is_active(),
  * but for embedded windows, like #GtkPlug, the results will differ.
  * 
- * Return value: %TRUE if the the input focus is within this GtkWindow
+ * Return value: %TRUE if the input focus is within this GtkWindow
  *
  * Since: 2.4
  **/

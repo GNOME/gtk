@@ -610,7 +610,7 @@ MODULE_ENTRY (tiff, fill_info) (GdkPixbufFormat *info)
 	info->description = N_("The TIFF image format");
 	info->mime_types = mime_types;
 	info->extensions = extensions;
-        /* not threadsafe, due the the error handler handling */
+        /* not threadsafe, due to the error handler handling */
 	info->flags = 0;
 	info->license = "LGPL";
 }

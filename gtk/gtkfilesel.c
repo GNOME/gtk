@@ -3056,7 +3056,7 @@ open_user_dir (const gchar     *text_to_complete,
 
 #endif
 
-/* open a directory relative the the current relative directory */
+/* open a directory relative to the current relative directory */
 static CompletionDir*
 open_relative_dir (gchar           *dir_name,
 		   CompletionDir   *dir,

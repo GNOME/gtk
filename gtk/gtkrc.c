@@ -2086,7 +2086,7 @@ gtk_rc_init_style (GtkRcContext *context,
       GSList *tmp_styles;
       GType rc_style_type = GTK_TYPE_RC_STYLE;
 
-      /* Find the the first style where the RC file specified engine "" {}
+      /* Find the first style where the RC file specified engine "" {}
        * or the first derived style and use that to create the
        * merged style. If we only have raw GtkRcStyles, use the first
        * style to create the merged style.

@@ -3391,7 +3391,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
    * the right, when the scroll is at the utmost right. This
    * looks better to to me than confining the cursor inside the
    * border entirely, though it means that the cursor gets one
-   * pixel closer to the the edge of the widget on the right than
+   * pixel closer to the edge of the widget on the right than
    * on the left. This might need changing if one changed
    * INNER_BORDER from 2 to 1, as one would do on a
    * small-screen-real-estate display.

@@ -1364,7 +1364,7 @@ gtk_container_set_focus_child (GtkContainer *container,
  * gtk_container_get_children:
  * @container: a #GtkContainer.
  * 
- * Returns the the container's non-internal children. See
+ * Returns the container's non-internal children. See
  * gtk_container_forall() for details on what constitutes an "internal" child. 
  *
  * Return value: a newly-allocated list of the container's non-internal children.

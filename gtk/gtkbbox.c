@@ -376,7 +376,7 @@ gtk_button_box_get_child_secondary (GtkButtonBox *widget,
  *
  * This group appears after the other children if the style
  * is %GTK_BUTTONBOX_START, %GTK_BUTTONBOX_SPREAD or
- * %GTK_BUTTONBOX_EDGE, and before the the other children if the style
+ * %GTK_BUTTONBOX_EDGE, and before the other children if the style
  * is %GTK_BUTTONBOX_END. For horizontal button boxes, the definition
  * of before/after depends on direction of the widget (see
  * gtk_widget_set_direction()). If the style is %GTK_BUTTONBOX_START

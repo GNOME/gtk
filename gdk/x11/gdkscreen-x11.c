@@ -352,7 +352,7 @@ gdk_screen_get_n_monitors (GdkScreen *screen)
  * @dest : a #GdkRectangle to be filled with the monitor geometry
  *
  * Retrieves the #GdkRectangle representing the size and position of 
- * the individual monitor within the the entire screen area.
+ * the individual monitor within the entire screen area.
  * 
  * Note that the size of the entire screen area can be retrieved via 
  * gdk_screen_get_width() and gdk_screen_get_height().

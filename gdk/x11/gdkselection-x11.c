@@ -104,7 +104,7 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
 /**
  * gdk_selection_owner_set_for_display:
  * @display: the #GdkDisplay.
- * @owner: a #GdkWindow or %NULL to indicate that the the owner for
+ * @owner: a #GdkWindow or %NULL to indicate that the owner for
  *         the given should be unset.
  * @selection: an atom identifying a selection.
  * @time_: timestamp to use when setting the selection. 
@@ -250,7 +250,7 @@ gdk_selection_convert (GdkWindow *requestor,
        If the retrieval failed, %NULL we be stored here, otherwise, it
        will be non-%NULL and the returned data should be freed with g_free()
        when you are finished using it. The length of the
-       allocated memory is one more than the the length
+       allocated memory is one more than the length
        of the returned data, and the final byte will always
        be zero, to ensure nul-termination of strings.
  * @prop_type: location to store the type of the property.
