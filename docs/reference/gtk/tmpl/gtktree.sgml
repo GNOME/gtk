@@ -2,7 +2,7 @@
 GtkTree
 
 <!-- ##### SECTION Short_Description ##### -->
-Deprecated tree widget (use #GtkTreeView instead).
+Deprecated tree widget, use #GtkTreeView instead.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -10,7 +10,7 @@ Deprecated tree widget (use #GtkTreeView instead).
 <para>
 #GtkTree is deprecated and unsupported. It is known to be
 buggy. To use it, you must define the symbol %GTK_ENABLE_BROKEN
-prior to including the GTK+ header files. Use #GtkTreeView intead.
+prior to including the GTK+ header files. Use #GtkTreeView instead.
 </para>
 </warning>
 The #GtkTree widget is a container that shows users a list of items, in a tree format complete with branches and leafnodes. Branches can be expanded to show their child items, or collapsed to hide them.
@@ -113,7 +113,7 @@ Adds the #GtkTreeItem in @tree_item to the list of items in @tree at the positio
 
 @tree: A pointer to a #GtkTree.
 @tree_item: A pointer to the #GtkWidget that is to be added to the tree.
-@position: A #gint that indicates the position in the tree, that the tree_item is to be added at.
+@position: A #gint that indicates the position in the tree, that the @tree_item is to be added at.
 
 
 <!-- ##### FUNCTION gtk_tree_remove_items ##### -->
@@ -140,8 +140,8 @@ Removing an item from a #GtkTree dereferences the item, and thus usually destroy
 </para>
 
 @tree: A pointer to a #GtkTree.
-@start: A gint.
-@end: A gint.
+@start: A #gint.
+@end: A #gint.
 
 
 <!-- ##### FUNCTION gtk_tree_select_item ##### -->
@@ -150,7 +150,7 @@ Emits the #select_item signal for the child at position @item, and thus selects 
 </para>
 
 @tree: A pointer to a #GtkTree.
-@item: A gint.
+@item: A #gint.
 
 
 <!-- ##### FUNCTION gtk_tree_unselect_item ##### -->
@@ -159,7 +159,7 @@ Emits the #unselect_item for the child at position @item, and thus unselects it.
 </para>
 
 @tree: A pointer to a #GtkTree.
-@item: A gint.
+@item: A #gint.
 
 
 <!-- ##### FUNCTION gtk_tree_select_child ##### -->
@@ -190,7 +190,7 @@ If @child is not a child of @tree, then -1 is returned.
 
 @tree: A pointer to a #GtkTree.
 @child: A pointer to a #GtkWidget.
-@Returns: A gint.
+@Returns: A #gint.
 
 
 <!-- ##### FUNCTION gtk_tree_set_selection_mode ##### -->
@@ -266,7 +266,7 @@ Sets whether or not the connecting lines between branches and children are drawn
 </para>
 
 @tree: A pointer to a #GtkTree.
-@flag: A guint, indicating %TRUE, or %FALSE.
+@flag: A #guint, indicating %TRUE, or %FALSE.
 
 
 <!-- ##### FUNCTION gtk_tree_remove_item ##### -->

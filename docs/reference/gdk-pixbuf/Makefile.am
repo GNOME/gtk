@@ -10,7 +10,7 @@ DOC_MAIN_SGML_FILE=gdk-pixbuf.sgml
 DOC_SOURCE_DIR=../../../gdk-pixbuf
 
 # Extra options to supply to gtkdoc-scan
-SCAN_OPTIONS=--source-dir=../../../contrib/gdk-pixbuf-xlib
+SCAN_OPTIONS=--source-dir=../../../contrib/gdk-pixbuf-xlib --deprecated-guards="GDK_PIXBUF_ENABLE_BROKEN|GDK_PIXBUF_DISABLE_DEPRECATED"
 
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS=--sgml-mode --source-dir=../../../contrib/gdk-pixbuf-xlib

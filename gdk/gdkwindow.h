@@ -435,9 +435,13 @@ void	      gdk_window_get_position	 (GdkWindow	  *window,
 gint	      gdk_window_get_origin	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
+
+#ifndef GDK_DISABLE_DEPRECATED
 gboolean      gdk_window_get_deskrelative_origin (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);
+#endif
+
 void	      gdk_window_get_root_origin (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y);

@@ -2,7 +2,7 @@
 GtkText
 
 <!-- ##### SECTION Short_Description ##### -->
-deprecated text widget, use #GtkTextView instead
+Deprecated text widget, use #GtkTextView instead.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
@@ -27,27 +27,13 @@ other functions as outlined below.  It is inherited from #GtkEditable.
 <para>
 Most of the #GtkText-struct struct members should not be accessed directly.
 Listed below are a few exceptions and how to use them.
-
-<informaltable pgwide=1 frame="none" role="struct">
-<tgroup cols="2"><colspec colwidth="2*"><colspec colwidth="8*">
-<tbody>
-
-<row>
-<entry>GtkAdjustment *hadj;</entry>
-<entry>Allows you to see the state of an attached horizontal #GtkScrollbar.
-See #GtkAdjustment for more info. This allows easy access to the adjustments
-of the #GtkText struct without having to keep track of ones that you initialize
-at widget creation.</entry>
-</row>
-
-<row>
-<entry>GtkAdjustment *vadj;</entry>
-<entry>Same as hadj except it involves the vertical #GtkScrollbar.</entry>
-</row>
-
-</tbody></tgroup></informaltable>
-
 </para>
+
+@hadj: Allows you to see the state of an attached horizontal #GtkScrollbar.
+  See #GtkAdjustment for more info. This allows easy access to the adjustments
+  of the #GtkText struct without having to keep track of ones that you 
+  initialize at widget creation.
+@vadj: Same as @hadj except it involves the vertical #GtkScrollbar.
 
 
 <!-- ##### STRUCT GtkTextFont ##### -->
@@ -59,7 +45,7 @@ Internal #GtkText data type.
 
 <!-- ##### STRUCT GtkPropertyMark ##### -->
 <para>
-Internal #GtkText data type.  Should not be access directly.
+Internal #GtkText data type.  Should not be accessed directly.
 <!-- FIXME: unsure about this  -->
 </para>
 
@@ -71,9 +57,9 @@ Internal #GtkText data type.  Should not be access directly.
 <para>
 Creates a new #GtkText widget, initialized with the given pointers to
 #GtkAdjustments.  These pointers can be used to track the viewing position
-of the #GtkText widget.  Passing NULL to either or both of them will make
+of the #GtkText widget.  Passing %NULL to either or both of them will make
 the #GtkText create it's own.  You can set these later with the function
-<function>gtk_text_set_adjustment()</function>
+gtk_text_set_adjustment().
 </para>
 
 @hadj: horizontal adjustment.
@@ -83,7 +69,7 @@ the #GtkText create it's own.  You can set these later with the function
 
 <!-- ##### FUNCTION gtk_text_set_editable ##### -->
 <para>
-Set whether the #GtkText widget can be edited by the user or not.  This
+Sets whether the #GtkText widget can be edited by the user or not.  This
 still allows you the programmer to make changes with the various #GtkText
 functions.
 </para>

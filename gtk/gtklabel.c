@@ -600,7 +600,8 @@ gtk_label_init (GtkLabel *label)
  * gtk_label_new:
  * @str: The text of the label
  *
- * Creates a new #GtkLabel, containing the text in @str.
+ * Creates a new label with the given text inside it. You can
+ * pass %NULL to get an empty label widget.
  *
  * Return value: the new #GtkLabel
  **/
@@ -896,9 +897,10 @@ gtk_label_recalculate (GtkLabel *label)
 /**
  * gtk_label_set_text:
  * @label: a #GtkLabel
- * @str: a string
+ * @str: The text you want to set.
  *
- * Sets the text of the label to @str.
+ * Sets the text within the #GtkLabel widget.  It overwrites any text that
+ * was there before.  
  *
  * This will also clear any previously set mnemonic accelerators.
  **/
@@ -1184,7 +1186,8 @@ gtk_label_set_pattern (GtkLabel	   *label,
  * @jtype: a #GtkJustification
  *
  * Sets the alignment of the lines in the text of the label relative to
- * each other.
+ * each other.  %GTK_JUSTIFY_CENTER is the default value when the
+ * widget is first created with gtk_label_new().
  **/
 void
 gtk_label_set_justify (GtkLabel        *label,
@@ -1226,8 +1229,10 @@ gtk_label_get_justify (GtkLabel *label)
  * @label: a #GtkLabel
  * @wrap: the setting
  *
- * If true, the lines will be wrapped if the text becomes too wide.
- */
+ * Toggles line wrapping within the #GtkLabel widget.  %TRUE makes it break
+ * lines if text exceeds the widget's size.  %FALSE lets the text get cut off
+ * by the edge of the widget if it exceeds the widget size.
+ **/
 void
 gtk_label_set_line_wrap (GtkLabel *label,
 			 gboolean  wrap)

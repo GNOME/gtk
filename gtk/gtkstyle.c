@@ -652,23 +652,22 @@ gtk_style_new (void)
   return style;
 }
 
-/*************************************************************
+/**
  * gtk_style_attach:
- *     Attach a style to a window; this process allocates the
- *     colors and creates the GC's for the style - it specializes
- *     it to a particular visual and colormap. The process
- *     may involve the creation of a new style if the style
- *     has already been attached to a window with a different
- *     style and colormap.
- *   arguments:
- *     style:
- *     window: 
- *   results:
- *     Either the style parameter, or a newly created style.
- *     If the style is newly created, the style parameter
- *     will be dereferenced, and the new style will have
- *     a reference count belonging to the caller.
+ * @style: a #GtkStyle.
+ * @window: a #GtkWindow.
+ * @returns: Either @style, or a newly-created #GtkStyle.
+ *   If the style is newly created, the style parameter
+ *   will be dereferenced, and the new style will have
+ *   a reference count belonging to the caller.
  *
+ * Attaches a style to a window; this process allocates the
+ * colors and creates the GC's for the style - it specializes
+ * it to a particular visual and colormap. The process may 
+ * involve the creation of a new style if the style has already 
+ * been attached to a window with a different style and colormap.
+ **/
+ /*
  * FIXME: The sequence - 
  *    create a style => s1
  *    attach s1 to v1, c1 => s1
@@ -683,8 +682,7 @@ gtk_style_new (void)
  * passes through the linked list when attaching (one to check for 
  * matching styles, one to look for empty unattached styles - but 
  * it will almost never be longer than 2 elements.
- *************************************************************/
-
+ */
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
                   GdkWindow *window)

@@ -1,3 +1,24 @@
+2001-12-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/gtklabel.c: Fix docs. (#66383)
+
+	* gtk/gtkbbox.c (gtk_button_box_set_child_secondary): Fix docs. 
+     	(#66278, #66280)
+	
+	* gdk/gdkwindow.h (gdk_window_get_deskrelative_origin),
+	gdk/gdkimage.h (gdk_image_get): Deprecate. (#66208)
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_set_update_policy):
+	Don't emit a g_warning() about being deprecated. (#66208)	
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_set_accel_widget): Add docs.
+
+	* gtk/gtkcontainer.c: Doc fixes.
+	
+	* gtk/gtkliststore.c (gtk_list_store_clear): Add docs; misc doc fixes.
+
+	* gtk/gtkstyle.c (gtk_style_attach): Add docs.
+
 2001-12-05  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtkwidget.c (gtk_widget_reset_shapes): close comment.

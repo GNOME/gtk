@@ -1,3 +1,14 @@
+2001-12-06  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/tmpl/gtklabel.sgml: Remove redundant docs. (#66383)
+
+	* gtk/tree_widget.sgml: Typo fix. (#66256)
+
+	* gdk-pixbuf/Makefile.am (SCAN_OPTIONS): Add --deprecated-guards.
+	
+	* gtk/tmpl/gtktext.sgml, gtk/tmpl/gtktree.sgml, 
+	gtk/tmpl/gtktreeitem.sgml: Updates.
+
 2001-12-04  Matthias Clasen  <matthiasc@poet.de>
 
 	* gtk/tmpl/gtkwidget.sgml: Updates.

@@ -9,7 +9,7 @@
     <refname>Tree and List Widget Overview</refname>
     <refpurpose>Overview of <link
     linkend="GtkTreeModel">GtkTreeModel</link>, <link
-    linkend="GtkTreeView">GtkTreeView</link>, and other assocoiated widgets</refpurpose>
+    linkend="GtkTreeView">GtkTreeView</link>, and other associated widgets</refpurpose>
   </refnamediv>
 
   <refsect1>

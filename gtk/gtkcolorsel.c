@@ -2021,8 +2021,6 @@ gtk_color_selection_set_update_policy (GtkColorSelection *colorsel,
 				       GtkUpdateType      policy)
 {
   g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-  /* */
-  g_warning (G_STRLOC ": This function is deprecated.");
 }
 
 /**

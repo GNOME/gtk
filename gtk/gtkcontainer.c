@@ -2085,7 +2085,7 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
  * Retrieves the horizontal focus adjustment for the container. See
  * gtk_container_set_focus_hadjustment ().
  *
- * Return value: the horizontal focus adjustment, or %NULL if none
+ * Return value: the horizontal focus adjustment, or %NULL if
  *   none has been set.
  **/
 GtkAdjustment *
@@ -2211,9 +2211,9 @@ gtk_container_unmap (GtkWidget *widget)
  * @event: a expose event sent to container
  *
  *  When a container receives an expose event, it must send synthetic
- * expose events to all children that don't have their own GdkWindows.
+ * expose events to all children that don't have their own #GdkWindows.
  * This function provides a convenient way of doing this. A container,
- * when it receives an expose event, gtk_container_propagate_expose() 
+ * when it receives an expose event, calls gtk_container_propagate_expose() 
  * once for each child, passing in the event the container received.
  *
  * gtk_container_propagate_expose() takes care of deciding whether
@@ -2221,7 +2221,7 @@ gtk_container_unmap (GtkWidget *widget)
  * the event's area with the child area, and sending the event.
  * 
  * In most cases, a container can simply either simply inherit the
- * ::expose implementation from GtkContainer, or, do some drawing 
+ * ::expose implementation from #GtkContainer, or, do some drawing 
  * and then chain to the ::expose implementation from GtkContainer.
  **/
 void

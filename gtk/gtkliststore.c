@@ -261,9 +261,9 @@ gtk_list_store_init (GtkListStore *list_store)
  * @Varargs: all #GType types for the columns, from first to last
  *
  * Creates a new list store as with @n_columns columns each of the types passed
- * in.  As an example, gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
- * GDK_TYPE_PIXBUF); will create a new GtkListStore with three columns, of type
- * int, string and GDkPixbuf respectively.
+ * in.  As an example, <literal>gtk_tree_store_new (3, G_TYPE_INT, G_TYPE_STRING,
+ * GDK_TYPE_PIXBUF);</literal> will create a new #GtkListStore with three columns, of type
+ * int, string and #GdkPixbuf respectively.
  *
  * Return value: a new #GtkListStore
  **/
@@ -306,7 +306,7 @@ gtk_list_store_new (gint n_columns,
  * @n_columns: number of columns in the list store
  * @types: an array of #GType types for the columns, from first to last
  *
- * Non vararg creation function.  Used primarily by language bindings.
+ * Non-vararg creation function.  Used primarily by language bindings.
  *
  * Return value: a new #GtkListStore
  **/
@@ -341,11 +341,11 @@ gtk_list_store_newv (gint   n_columns,
  * gtk_list_store_set_column_types:
  * @list_store: A #GtkListStore
  * @n_columns: Number of columns for the list store
- * @types: An array length n of @GTypes
+ * @types: An array length n of #GTypes
  * 
- * This function is meant primarily for GObjects that inherit from GtkListStore,
- * and should only be used when constructing a new @GtkListStore.  It will not
- * function after a row has been added, or a method on the @GtkTreeModel
+ * This function is meant primarily for #GObjects that inherit from #GtkListStore,
+ * and should only be used when constructing a new #GtkListStore.  It will not
+ * function after a row has been added, or a method on the #GtkTreeModel
  * interface is called.
  **/
 void
@@ -854,8 +854,8 @@ gtk_list_store_set_valist (GtkListStore *list_store,
  * The variable argument list should contain integer column numbers,
  * each column number followed by the value to be set.
  * The list is terminated by a -1. For example, to set column 0 with type
- * %G_TYPE_STRING to "Foo", you would write gtk_list_store_set (store, iter,
- * 0, "Foo", -1).
+ * %G_TYPE_STRING to "Foo", you would write <literal>gtk_list_store_set (store, iter,
+ * 0, "Foo", -1)</literal>.
  **/
 void
 gtk_list_store_set (GtkListStore *list_store,
@@ -1205,7 +1205,7 @@ gtk_list_store_insert_after (GtkListStore *list_store,
  * @list_store: A #GtkListStore
  * @iter: An unset #GtkTreeIter to set to the prepend row
  *
- * Prepend a new row to @list_store. @iter will be changed to point to this new
+ * Prepends a new row to @list_store. @iter will be changed to point to this new
  * row. The row will be empty after this function is called. To fill in
  * values, you need to call gtk_list_store_set() or gtk_list_store_set_value().
  *
@@ -1287,6 +1287,13 @@ gtk_list_store_append (GtkListStore *list_store,
   gtk_tree_path_free (path);
 }
 
+/**
+ * gtk_list_store_clear:
+ * @list_store: a #GtkListStore.
+ *
+ * Removes all rows from the list store.  
+ *
+ **/
 void
 gtk_list_store_clear (GtkListStore *list_store)
 {

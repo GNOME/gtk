@@ -1,3 +1,9 @@
+2001-12-05  Matthias Clasen  <matthiasc@poet.de>
+
+	* gdk-pixbuf.h (gdk_pixbuf_ref, gdk_pixbuf_unref,
+	gdk_pixbuf_animation_ref, gdk_pixbuf_animation_unref):
+	Deprecate. (#66208)
+
 Tue Dec  4 11:45:45 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* io-xpm.c (pixbuf_create_from_xpm): Fill in color 
