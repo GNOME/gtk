@@ -528,7 +528,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
  * Since: 2.4
  */  
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_boolean ("has_secondary backward_stepper",
+					   g_param_spec_boolean ("has_secondary_backward_stepper",
 								 P_("Secondary backward stepper"),
 								 P_("Display a second backward arrow button on the opposite end of the tab area"),
 								 FALSE,

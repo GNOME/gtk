@@ -1,3 +1,9 @@
+2004-09-26  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtknotebook.c (gtk_notebook_class_init): Add a missing _
+	to the name of the has_secondary_backward_stepper property.
+	Noticed by Michèle Garoche.
+
 Sun Sep 26 02:06:43 2004  Jonathan Blandford  <jrb@gnome.org>
 
 	* gtk/gtkpathbar.h (struct _GtkPathBar): add missing structures.
