@@ -484,7 +484,6 @@ gboolean
 gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 {
   GtkAccelLabelClass *class;
-  gchar *utf8;
 
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 

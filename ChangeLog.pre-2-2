@@ -1,3 +1,16 @@
+2001-12-15  Darin Adler  <darin@bentspoon.com>
+
+	Fix some warnings.
+
+	* gdk/x11/gdkproperty-x11.c: (gdk_property_get): Fix wrong type in
+	g_new -- bug if sizeof (GtkAtom) != sizeof (GtkAtom *).
+	* gdk/x11/gdkwindow-x11.c: (create_moveresize_window): FALSE -> NULL
+	* gtk/gtkaccellabel.c: (gtk_accel_label_refetch): Remove unused local.
+	* gtk/gtklistitem.c: (gtk_list_item_expose): Remove unused local.
+	* gtk/gtktextiter.c: (_gtk_text_iter_backward_indexable_segment):
+	Restructure loop to get rid of uninitialized variable warning. Also
+	gives a tiny efficiency gain.
+
 2001-12-15  Murray Cumming  <murrayc@usa.net>
 
 	* Fixed first arg type of GtkScale's "format_value" signal's

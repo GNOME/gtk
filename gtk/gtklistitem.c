@@ -539,7 +539,6 @@ gtk_list_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
   GtkBin *bin;
-  gint focus_width;
 
   g_return_val_if_fail (widget != NULL, FALSE);
 

@@ -388,7 +388,7 @@ gdk_property_get (GdkWindow   *window,
 	   * to an array of GDK Atoms
 	   */
 	  gint i;
-	  GdkAtom *ret_atoms = g_new (GdkAtom *, ret_nitems);
+	  GdkAtom *ret_atoms = g_new (GdkAtom, ret_nitems);
 	  Atom *xatoms = (Atom *)ret_data;
 
 	  data = (guchar *)ret_atoms;

@@ -2109,7 +2109,7 @@ _gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
    * segment just before our current segment.
    */
   g_assert (seg != real->segment);
-  while (seg != real->segment)
+  do
     {
       prev_seg = seg;
       prev_any_seg = any_seg;
@@ -2119,6 +2119,7 @@ _gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
       while (seg->char_count == 0)
         seg = seg->next;
     }
+  while (seg != real->segment);
 
   g_assert (prev_seg != NULL);
   g_assert (prev_any_seg != NULL);

@@ -4397,7 +4397,7 @@ create_moveresize_window (guint32 timestamp)
                              FALSE,
                              GDK_BUTTON_RELEASE_MASK |
                              GDK_POINTER_MOTION_MASK,
-                             FALSE,
+                             NULL,
                              NULL,
                              timestamp);
 
