@@ -1,3 +1,9 @@
+Sat Nov 18 11:58:17 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkrgb.c (gdk_rgb_allocate_images): Fix 
+	off-by-one error when destroying allocated segments
+	on failure. (Elliot)
+
 Sat Nov 18 11:45:09 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkcalendar.c: Patch from ChiDeok Hwang to fix

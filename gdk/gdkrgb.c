@@ -629,7 +629,7 @@ gdk_rgb_allocate_images (GdkRgbInfo *image_info,
 	{
 	  gint j;
 
-	  for (j = 0; j <= i; j++)
+	  for (j = 0; j < i; j++)
 	    gdk_image_unref (image_info->static_image[i]);
 
 	  return FALSE;
