@@ -1,3 +1,21 @@
+Fri Jul 18 18:43:01 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	By popular request give toolbuttons a border.
+	
+	* gtk/gtktoolitem.c
+	(gtk_tool_item_size_allocate):
+	(gtk_tool_item_size_request): don't request and allocate a border
+	around the child
+
+	* gtk/gtktoolbutton.c 
+	(gtk_tool_button_size_allocate):
+	(gtk_tool_button_size_request): remove these functions
+
+	* gtk/gtktoolbar.c 
+	(gtk_toolbar_size_request):
+	(gtk_toolbar_size_allocate): request and allocate a border if we
+	have a shadow.
+
 Thu Jul 17 19:24:51 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Merged from stable.

@@ -54,10 +54,6 @@ enum {
 static void gtk_tool_button_init          (GtkToolButton      *button,
 					   GtkToolButtonClass *klass);
 static void gtk_tool_button_class_init    (GtkToolButtonClass *klass);
-static void gtk_tool_button_size_request  (GtkWidget          *widget,
-					   GtkRequisition     *requisition);
-static void gtk_tool_button_size_allocate (GtkWidget          *widget,
-					   GtkAllocation      *allocation);
 static void gtk_tool_button_set_property  (GObject            *object,
 					   guint               prop_id,
 					   const GValue       *value,
@@ -133,9 +129,6 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   object_class->set_property = gtk_tool_button_set_property;
   object_class->get_property = gtk_tool_button_get_property;
   object_class->finalize = gtk_tool_button_finalize;
-
-  widget_class->size_request = gtk_tool_button_size_request;
-  widget_class->size_allocate = gtk_tool_button_size_allocate;
 
   tool_item_class->create_menu_proxy = gtk_tool_button_create_menu_proxy;
   tool_item_class->toolbar_reconfigured = gtk_tool_button_toolbar_reconfigured;
@@ -239,56 +232,6 @@ gtk_tool_button_init (GtkToolButton      *button,
 
   gtk_container_add (GTK_CONTAINER (button), button->priv->button);
   gtk_widget_show (button->priv->button);
-}
-
-static void
-gtk_tool_button_size_request (GtkWidget      *widget,
-			      GtkRequisition *requisition)
-{
-  GtkWidget *child = GTK_BIN (widget)->child;
-
-  if (child && GTK_WIDGET_VISIBLE (child))
-    {
-      gtk_widget_size_request (child, requisition);
-    }
-  else
-    {
-      requisition->width = 0;
-      requisition->height = 0;
-    }
-  
-  requisition->width += GTK_CONTAINER (widget)->border_width * 2;
-  requisition->height += GTK_CONTAINER (widget)->border_width * 2;  
-}
-
-static void
-gtk_tool_button_size_allocate (GtkWidget     *widget,
-			       GtkAllocation *allocation)
-{
-  GtkToolItem *toolitem = GTK_TOOL_ITEM (widget);
-  GtkAllocation child_allocation;
-  gint border_width;
-  GtkWidget *child = GTK_BIN (widget)->child;
-
-  widget->allocation = *allocation;
-  border_width = GTK_CONTAINER (widget)->border_width;
-
-  if (gtk_tool_item_get_use_drag_window (toolitem) && GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (_gtk_tool_item_get_drag_window (toolitem),
-                            widget->allocation.x + border_width,
-                            widget->allocation.y + border_width,
-                            widget->allocation.width - border_width * 2,
-                            widget->allocation.height - border_width * 2);
-  
-  if (child && GTK_WIDGET_VISIBLE (child))
-    {
-      child_allocation.x = allocation->x + border_width;
-      child_allocation.y = allocation->y + border_width;
-      child_allocation.width = allocation->width - 2 * border_width;
-      child_allocation.height = allocation->height - 2 * border_width;
-      
-      gtk_widget_size_allocate (child, &child_allocation);
-    }
 }
 
 static void

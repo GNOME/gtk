@@ -400,13 +400,10 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
   
   if (child && GTK_WIDGET_VISIBLE (child))
     {
-      gint xthickness = widget->style->xthickness;
-      gint ythickness = widget->style->ythickness;
-      
-      child_allocation.x = allocation->x + border_width + xthickness;
-      child_allocation.y = allocation->y + border_width + ythickness;
-      child_allocation.width = allocation->width - 2 * (xthickness + border_width);
-      child_allocation.height = allocation->height - 2 * (ythickness + border_width);
+      child_allocation.x = allocation->x + border_width;
+      child_allocation.y = allocation->y + border_width;
+      child_allocation.width = allocation->width - 2 * border_width;
+      child_allocation.height = allocation->height - 2 * border_width;
       
       gtk_widget_size_allocate (child, &child_allocation);
     }
