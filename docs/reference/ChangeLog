@@ -2,8 +2,8 @@
 
 	* gtk/tmpl/gtksocket.sgml: 
 	* gtk/tmpl/gtkplug.sgml: Add note on limited
-	availability.
-
+	availability.  (#164347, Roger Light)
+	
 2005-01-15  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/building.sgml: Some updates.  (#164147, #164108, 
