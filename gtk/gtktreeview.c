@@ -6797,13 +6797,8 @@ gtk_tree_view_row_changed (GtkTreeModel *model,
     }
 
  done:
-  if (tree_view->priv->fixed_height_mode)
-    {
-      if (height > 0) /* we have the size now, ready for resize */
-	gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-    }
-  else
-      install_presize_handler (tree_view);
+  if (!tree_view->priv->fixed_height_mode)
+    install_presize_handler (tree_view);
   if (free_path)
     gtk_tree_path_free (path);
 }
