@@ -354,7 +354,7 @@ chars_changed (GtkTextBTree *tree)
 
 GtkTextBTree*
 _gtk_text_btree_new (GtkTextTagTable *table,
-                    GtkTextBuffer *buffer)
+                     GtkTextBuffer *buffer)
 {
   GtkTextBTree *tree;
   GtkTextBTreeNode *root_node;

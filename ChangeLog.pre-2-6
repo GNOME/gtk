@@ -1,3 +1,15 @@
+2001-09-20  Havoc Pennington  <hp@pobox.com>
+
+	* configure.in (PANGO_REQUIRED_VERSION)
+	(ATK_REQUIRED_VERSION): add variables and checks for specific 
+	versions of dependencies. Previously we didn't verify the 
+	Pango or ATk versions.
+
+2001-09-09  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextiter.c: fool with indentation
+	(gtk_text_iter_in_range): add g_return_if_fail
+
 Thu Sep 20 17:45:54 2001  Joshua N Pritikin  <vishnu@pobox.com>
 
 	* gtk/gtktextbuffer.c (gtk_text_buffer_create_tag): Fix

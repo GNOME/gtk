@@ -336,7 +336,7 @@ sized_icon_set_from_inline (const guchar *inline_data,
   set = gtk_icon_set_new ();
 
   source.pixbuf = gdk_pixbuf_new_from_stream (-1, inline_data, FALSE, NULL);
-
+  
   g_assert (source.pixbuf);
 
   gtk_icon_set_add_source (set, &source);

@@ -77,6 +77,11 @@ AC_SUBST(GDK_PIXBUF_MINOR)
 AC_SUBST(GDK_PIXBUF_MICRO)
 AC_SUBST(GDK_PIXBUF_VERSION)
 
+## Versions of dependencies
+GLIB_REQUIRED_VERSION=1.3.8
+PANGO_REQUIRED_VERSION=0.19
+ATK_REQUIRED_VERSION=0.4
+
 # For automake.
 VERSION=$GTK_VERSION
 PACKAGE=gtk+
@@ -192,6 +197,14 @@ changequote([,])dnl
 # Honor aclocal flags
 ACLOCAL="$ACLOCAL $ACLOCAL_FLAGS"
 
+## Initial sanity check, done here so that users get told they 
+## have the wrong dependencies as early in the process as possible.
+## Later on we actually use the cflags/libs from separate pkg-config
+## calls. Oh, also the later pkg-config calls don't include 
+## the version requirements since those make the module lists 
+## annoying to construct
+PKG_CHECK_MODULES(BASE_DEPENDENCIES, glib-2.0 >= $GLIB_REQUIRED_VERSION atk >= $ATK_REQUIRED_VERSION pango >= $PANGO_REQUIRED_VERSION)
+
 # libtool option to control which symbols are exported
 # right now, symbols starting with _ are not exported
 LIBTOOL_EXPORT_OPTIONS='-export-symbols-regex "^[[^_]].*"'
@@ -295,7 +308,6 @@ AC_TRY_COMPILE([#include <dirent.h>], [DIR *dir;],
 # 
 
 GLIB_PACKAGES="gobject-2.0 gmodule-2.0"
-GLIB_REQUIRED_VERSION=1.3.8
 
 AM_PATH_GLIB_2_0($GLIB_REQUIRED_VERSION, :,
   AC_MSG_ERROR([

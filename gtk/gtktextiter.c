@@ -4744,9 +4744,8 @@ gtk_text_iter_compare (const GtkTextIter *lhs,
  * @start: start of range
  * @end: end of range
  * 
- * @start and @end must be in order, unlike most text buffer
- * functions, for efficiency reasons. The function returns %TRUE if
- * @iter falls in the range [@start, @end).
+ * Checks whether @iter falls in the range [@start, @end).
+ * @start and @end must be in ascending order.
  * 
  * Return value: %TRUE if @iter is in the range
  **/
@@ -4755,6 +4754,11 @@ gtk_text_iter_in_range (const GtkTextIter *iter,
                         const GtkTextIter *start,
                         const GtkTextIter *end)
 {
+  g_return_val_if_fail (iter != NULL, FALSE);
+  g_return_val_if_fail (start != NULL, FALSE);
+  g_return_val_if_fail (end != NULL, FALSE);
+  g_return_val_if_fail (gtk_text_iter_compare (start, end) <= 0, FALSE);
+  
   return gtk_text_iter_compare (iter, start) >= 0 &&
     gtk_text_iter_compare (iter, end) < 0;
 }
@@ -4879,8 +4883,8 @@ _gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
 
 gboolean
 _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
-                                         GtkTextIter    *iter,
-                                         GtkTextTag     *tag)
+                                          GtkTextIter    *iter,
+                                          GtkTextTag     *tag)
 {
   GtkTextLine *line;
 
@@ -4907,8 +4911,8 @@ _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
 
 gboolean
 _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
-                                         GtkTextIter    *iter,
-                                         GtkTextTag     *tag)
+                                          GtkTextIter    *iter,
+                                          GtkTextTag     *tag)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (tree != NULL, FALSE);
@@ -4922,8 +4926,8 @@ _gtk_text_btree_get_iter_at_last_toggle  (GtkTextBTree   *tree,
 
 gboolean
 _gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
-                                      GtkTextIter *iter,
-                                      const gchar *mark_name)
+                                       GtkTextIter *iter,
+                                       const gchar *mark_name)
 {
   GtkTextMark *mark;
 
@@ -4944,8 +4948,8 @@ _gtk_text_btree_get_iter_at_mark_name (GtkTextBTree *tree,
 
 void
 _gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
-                                 GtkTextIter *iter,
-                                 GtkTextMark *mark)
+                                  GtkTextIter *iter,
+                                  GtkTextMark *mark)
 {
   GtkTextLineSegment *seg;
 
@@ -4963,8 +4967,8 @@ _gtk_text_btree_get_iter_at_mark (GtkTextBTree *tree,
 
 void
 _gtk_text_btree_get_iter_at_child_anchor (GtkTextBTree       *tree,
-                                         GtkTextIter        *iter,
-                                         GtkTextChildAnchor *anchor)
+                                          GtkTextIter        *iter,
+                                          GtkTextChildAnchor *anchor)
 {
   GtkTextLineSegment *seg;
 
