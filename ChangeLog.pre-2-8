@@ -1,3 +1,10 @@
+Tue Oct 28 09:50:25 2003  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkscreen-x11.c: #include <X11/extensions/Xrandr.h> if
+	we have RandR support, for XRRUpdateConfiguration declaration.
+	(Change by Manish Singh from head; fixes #122711, 
+	Kjartan Maraas)
+
 Tue Oct 28 09:44:16 2003  Owen Taylor  <otaylor@redhat.com>
  
  	* gtk/gtkxembed.c (_gtk_xembed_send_focus_message): Silently
