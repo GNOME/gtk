@@ -580,6 +580,7 @@ gtk_text_init (GtkText *text)
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
   
   text->line_start_cache = NULL;
+  text->first_cut_pixels = 0;
   
   text->line_wrap = TRUE;
   text->word_wrap = FALSE;
@@ -884,6 +885,7 @@ gtk_text_forward_delete (GtkText *text,
       compute_lines_pixels (text, nchars, &old_lines, &old_height);
     }
   
+  /* FIXME, or resizing after deleting will be odd */
   if (text->point.index < text->first_line_start_index)
     {
       if (text->point.index + nchars >= text->first_line_start_index)
@@ -1092,8 +1094,8 @@ gtk_text_realize (GtkWidget *widget)
   
   attributes.x = (widget->style->klass->xthickness + TEXT_BORDER_ROOM);
   attributes.y = (widget->style->klass->ythickness + TEXT_BORDER_ROOM);
-  attributes.width = widget->allocation.width - attributes.x * 2;
-  attributes.height = widget->allocation.height - attributes.y * 2;
+  attributes.width = MAX (1, (gint)widget->allocation.width - (gint)attributes.x * 2);
+  attributes.height = MAX (1, (gint)widget->allocation.height - (gint)attributes.y * 2);
   
   text->text_area = gdk_window_new (widget->window, &attributes, attributes_mask);
   gdk_window_set_user_data (text->text_area, text);
@@ -1192,8 +1194,7 @@ gtk_text_realize (GtkWidget *widget)
   if (editable->selection_start_pos != editable->selection_end_pos)
     gtk_editable_claim_selection (editable, TRUE, GDK_CURRENT_TIME);
   
-  if ((widget->allocation.width > 1) || (widget->allocation.height > 1))
-    recompute_geometry (text);
+  recompute_geometry (text);
 }
 
 static void 
@@ -1211,8 +1212,7 @@ gtk_text_style_set	(GtkWidget      *widget,
       gdk_window_set_background (widget->window, &widget->style->base[GTK_STATE_NORMAL]);
       gdk_window_set_background (text->text_area, &widget->style->base[GTK_STATE_NORMAL]);
       
-      if ((widget->allocation.width > 1) || (widget->allocation.height > 1))
-	recompute_geometry (text);
+      recompute_geometry (text);
     }
 
   if (text->current_font)
@@ -1431,10 +1431,10 @@ gtk_text_size_allocate (GtkWidget     *widget,
       gdk_window_move_resize (text->text_area,
 			      widget->style->klass->xthickness + TEXT_BORDER_ROOM,
 			      widget->style->klass->ythickness + TEXT_BORDER_ROOM,
-			      widget->allocation.width - (widget->style->klass->xthickness +
-							  TEXT_BORDER_ROOM) * 2,
-			      widget->allocation.height - (widget->style->klass->ythickness +
-							   TEXT_BORDER_ROOM) * 2);
+			      MAX (1, (gint)widget->allocation.width - (gint)(widget->style->klass->xthickness +
+							  (gint)TEXT_BORDER_ROOM) * 2),
+			      MAX (1, (gint)widget->allocation.height - (gint)(widget->style->klass->ythickness +
+							   (gint)TEXT_BORDER_ROOM) * 2));
       
 #ifdef USE_XIM
       if (editable->ic && (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
@@ -2065,11 +2065,8 @@ gtk_text_adjustment (GtkAdjustment *adjustment,
   g_return_if_fail (text != NULL);
   g_return_if_fail (GTK_IS_TEXT (text));
   
-  /* Just ignore it if we haven't been size-allocated yet, or
-   * if something weird has happened */
-  if ((text->line_start_cache == NULL) || 
-      (GTK_WIDGET (text)->allocation.height <= 1) || 
-      (GTK_WIDGET (text)->allocation.width <= 1))
+  /* Just ignore it if we haven't been size-allocated and realized yet */
+  if (text->line_start_cache == NULL) 
     return;
   
   if (adjustment == text->hadj)
@@ -3536,8 +3533,6 @@ find_cursor (GtkText* text, gboolean scroll)
     {
       find_line_containing_point (text, text->cursor_mark.index, scroll);
       
-      g_assert (text->cursor_mark.index >= text->first_line_start_index);
-      
       if (text->current_line)
 	find_cursor_at_line (text,
 			     &CACHE_DATA(text->current_line),
@@ -4098,12 +4093,27 @@ adjust_adj (GtkText* text, GtkAdjustment* adj)
 static gint
 set_vertical_scroll_iterator (GtkText* text, LineParams* lp, void* data)
 {
-  gint *pixel_count = (gint*) data;
+  SetVerticalScrollData *svdata = (SetVerticalScrollData *) data;
   
-  if (text->first_line_start_index == lp->start.index)
-    text->vadj->value = (float) *pixel_count;
+  if ((text->first_line_start_index >= lp->start.index) &&
+      (text->first_line_start_index <= lp->end.index))
+    {
+      svdata->mark = lp->start;
   
-  *pixel_count += LINE_HEIGHT (*lp);
+      if (text->first_line_start_index == lp->start.index)
+	{
+	  text->first_onscreen_ver_pixel = svdata->pixel_height + text->first_cut_pixels;
+	}
+      else
+	{
+	  text->first_onscreen_ver_pixel = svdata->pixel_height;
+	  text->first_cut_pixels = 0;
+	}
+      
+      text->vadj->value = (float) text->first_onscreen_ver_pixel;
+    }
+  
+  svdata->pixel_height += LINE_HEIGHT (*lp);
   
   return FALSE;
 }
@@ -4114,9 +4124,6 @@ set_vertical_scroll_find_iterator (GtkText* text, LineParams* lp, void* data)
   SetVerticalScrollData *svdata = (SetVerticalScrollData *) data;
   gint return_val;
   
-  if (svdata->last_didnt_wrap)
-    svdata->last_line_start = lp->start.index;
-  
   if (svdata->pixel_height <= (gint) text->vadj->value &&
       svdata->pixel_height + LINE_HEIGHT(*lp) > (gint) text->vadj->value)
     {
@@ -4124,7 +4131,7 @@ set_vertical_scroll_find_iterator (GtkText* text, LineParams* lp, void* data)
       
       text->first_cut_pixels = (gint)text->vadj->value - svdata->pixel_height;
       text->first_onscreen_ver_pixel = svdata->pixel_height;
-      text->first_line_start_index = svdata->last_line_start;
+      text->first_line_start_index = lp->start.index;
       
       return_val = TRUE;
     }
@@ -4135,11 +4142,6 @@ set_vertical_scroll_find_iterator (GtkText* text, LineParams* lp, void* data)
       return_val = FALSE;
     }
   
-  if (!lp->wraps)
-    svdata->last_didnt_wrap = TRUE;
-  else
-    svdata->last_didnt_wrap = FALSE;
-  
   return return_val;
 }
 
@@ -4149,12 +4151,12 @@ set_vertical_scroll (GtkText* text)
   GtkPropertyMark mark = find_mark (text, 0);
   SetVerticalScrollData data;
   gint height;
-  gint pixel_count = 0;
   gint orig_value;
   
-  line_params_iterate (text, &mark, NULL, FALSE, &pixel_count, set_vertical_scroll_iterator);
+  data.pixel_height = 0;
+  line_params_iterate (text, &mark, NULL, FALSE, &data, set_vertical_scroll_iterator);
   
-  text->vadj->upper = (float) pixel_count;
+  text->vadj->upper = (float) data.pixel_height;
   orig_value = (gint) text->vadj->value;
   
   gdk_window_get_size (text->text_area, NULL, &height);
@@ -4166,7 +4168,6 @@ set_vertical_scroll (GtkText* text)
   text->vadj->value          = MAX (text->vadj->value, 0.0);
   
   text->last_ver_value = (gint)text->vadj->value;
-  text->first_cut_pixels = 0;
   
   gtk_signal_emit_by_name (GTK_OBJECT (text->vadj), "changed");
   
@@ -4179,13 +4180,9 @@ set_vertical_scroll (GtkText* text)
       line_params_iterate (text, &mark, NULL,
 			   FALSE, &data,
 			   set_vertical_scroll_find_iterator);
-      
-      return data.mark;
     }
-  else
-    {
-      return find_mark (text, text->first_line_start_index);
-    }
+
+  return data.mark;
 }
 
 static void
@@ -4448,7 +4445,8 @@ find_line_params (GtkText* text,
       
       ch_width = find_char_width (text, &lp.end, &tab_mark);
       
-      if (ch_width + lp.pixel_width > max_display_pixels)
+      if ((ch_width + lp.pixel_width > max_display_pixels) &&
+	  (lp.end.index > lp.start.index))
 	{
 	  lp.wraps = 1;
 	  
@@ -5104,12 +5102,30 @@ recompute_geometry (GtkText* text)
     decrement_mark (&mark);
 
   gdk_window_get_size (text->text_area, &width, &height);
-  
+
+  /* Fetch an entire line, to make sure that we get all the text
+   * we backed over above, in addition to enough text to fill up
+   * the space vertically
+   */
+
   new_lines = fetch_lines (text,
 			   &mark,
 			   NULL,
-			   FetchLinesPixels,
-			   height + text->first_cut_pixels);
+			   FetchLinesCount,
+			   1);
+
+  mark = CACHE_DATA (g_list_last (new_lines)).end;
+  if (!LAST_INDEX (text, mark))
+    {
+      advance_mark (&mark);
+
+      new_lines = g_list_concat (new_lines, 
+				 fetch_lines (text,
+					      &mark,
+					      NULL,
+					      FetchLinesPixels,
+					      height + text->first_cut_pixels));
+    }
 
   /* Now work forward to the actual first onscreen line */
 

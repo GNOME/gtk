@@ -1,3 +1,35 @@
+Tue Sep 15 11:06:13 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwindow.c (gtk_window_move_resize): Don't request
+	a new size from the WM if we asked for the same size
+	before and our request was rejected.
+
+	* gtk/gtkwindow.c (gtk_window_configure_event): If
+	in response to a request, we get a configure event
+	with unchanged dimensions, send a synthetic expose
+	since ForgetGravity won't expose our window.
+
+Mon Sep 14 14:28:24 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c (adjust_adj): Change the way we
+	set the adjustments on resize so that it tries to
+	keep the beginning of the text in approximately
+	the same place. 
+
+	Removed assertion that the above change made invalid.
+
+Thu Sep 10 22:19:35 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: - Save first_cut_pixels when switching
+	sizes, so that if we switch to the _same_ size,
+	we don't move lines around.
+
+	- Make sure that the text area always has a size of at
+	least 1x1, then do all computations when realized.
+
+        - When fetching lines in recompute_geometry, make
+	sure we fetch enough lines to cover the screen.
+	
 Mon Sep 14 21:47:35 CDT 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* gdk/gdkimage.c: changed g_new()s to malloc()s and 

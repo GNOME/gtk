@@ -689,6 +689,7 @@ gtk_window_configure_event (GtkWidget         *widget,
 {
   GtkWindow *window;
   GtkAllocation allocation;
+  gboolean need_expose = FALSE;
   
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_WINDOW (widget), FALSE);
@@ -698,9 +699,21 @@ gtk_window_configure_event (GtkWidget         *widget,
 
   /* If the window was merely moved, do nothing */
   if ((widget->allocation.width == event->width) &&
-      (widget->allocation.height == event->height) &&
-      (window->resize_count == 0))
-    return FALSE;
+      (widget->allocation.height == event->height))
+    {
+      if (window->resize_count == 0)      /* The window was merely moved */
+	return FALSE;
+      else
+	{
+	  /* We asked for a new size, which was rejected, so the
+	   * WM sent us a synthetic configure event. We won't
+	   * get the expose event we would normally get (since
+	   * we have ForgetGravity), so we need to fake it.
+	   */
+	  need_expose = TRUE;
+	}
+    }
+	
   
   window->handling_resize = TRUE;
   
@@ -719,6 +732,21 @@ gtk_window_configure_event (GtkWidget         *widget,
   if (window->resize_count > 0)
       window->resize_count -= 1;
   
+  if (need_expose)
+    {
+      GdkEvent temp_event;
+      temp_event.type = GDK_EXPOSE;
+      temp_event.expose.window = widget->window;
+      temp_event.expose.send_event = TRUE;
+      temp_event.expose.area.x = 0;
+      temp_event.expose.area.y = 0;
+      temp_event.expose.area.width = event->width;
+      temp_event.expose.area.height = event->height;
+      temp_event.expose.count = 0;
+      
+      gtk_widget_event (widget, &temp_event);
+    }
+
   window->handling_resize = FALSE;
   
   return FALSE;
@@ -991,6 +1019,7 @@ gtk_window_move_resize (GtkWindow *window)
   gint screen_width;
   gint screen_height;
   gboolean needed_resize;
+  gboolean size_changed;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -1003,8 +1032,10 @@ gtk_window_move_resize (GtkWindow *window)
   height = widget->requisition.height;
   gtk_widget_size_request (widget, &widget->requisition);
 
-  if ((width != widget->requisition.width ||
-       height != widget->requisition.height))
+  size_changed = ((width != widget->requisition.width) ||
+		  (height != widget->requisition.height));
+  
+  if (size_changed)
     {
       gboolean saved_use_upos;
 
@@ -1077,11 +1108,16 @@ gtk_window_move_resize (GtkWindow *window)
   
   gdk_window_get_geometry (widget->window, NULL, NULL, &width, &height, NULL);
   
-  if ((window->auto_shrink &&
-       ((width != widget->requisition.width) ||
-	(height != widget->requisition.height))) ||
-      (width < widget->requisition.width) ||
-      (height < widget->requisition.height))
+  /* As an optimization, we don't try to get a new size from the
+   * window manager if we asked for the same size last time and
+   * didn't get it */
+
+  if (size_changed && 
+      (((window->auto_shrink &&
+	((width != widget->requisition.width) ||
+	 (height != widget->requisition.height)))) ||
+       ((width < widget->requisition.width) ||
+	(height < widget->requisition.height))))
     {
       window->resize_count += 1;
       if ((x != -1) && (y != -1))
