@@ -292,3 +292,57 @@ gdk_pixbuf_get_rowstride (GdkPixbuf *pixbuf)
 
 	return (pixbuf->art_pixbuf->rowstride);
 }
+
+
+/**
+ * gdk_pixbuf_animation_new_from_file:
+ * @filename: The filename.
+ * 
+ * Creates a new @GdkPixbufAnimation with @filename loaded as the animation.  If
+ * @filename doesn't exist or is an invalid file, the @n_frames member will be
+ * 0.  If @filename is a static image (and not an animation) then the @n_frames
+ * member will be 1.
+ * 
+ * Return value: A newly created GdkPixbufAnimation.
+ **/
+GdkPixbufAnimation *
+gdk_pixbuf_animation_new_from_file (const char *filename)
+{
+	GdkPixbufAnimation *retval;
+
+	g_return_val_if_fail (filename != NULL, NULL);
+
+	retval = g_new (GdkPixbufAnimation, 1);
+	retval->n_frames = 0;
+	retval->frames = NULL;
+
+	return retval;
+}
+
+/**
+ * gdk_pixbuf_animation_destroy:
+ * @animation: An animation.
+ * @free_frames: Keep the frames.
+ * 
+ * Destroys the animation.  If @free_frames is set, then the actual image data
+ * will be free'd as well.
+ *
+ **/
+void
+gdk_pixbuf_animation_destroy (GdkPixbufAnimation *animation,
+			      gboolean free_frames)
+{
+	GList *ptr;
+
+	g_return_if_fail (animation != NULL);
+
+	for (ptr = animation->frames; ptr; ptr = g_list_next (ptr)) {
+		if (free_frames)
+			gdk_pixbuf_unref (((GdkPixbufFrame *)ptr->data)->pixbuf);
+		g_free (ptr->data);
+	}
+	g_list_free (animation->frames);
+
+	g_free (animation);
+}
+

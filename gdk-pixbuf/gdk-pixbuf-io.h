@@ -52,11 +52,16 @@ struct _GdkPixbufModule {
         gpointer   (* begin_load)    (ModulePreparedNotifyFunc prepare_func, ModuleUpdatedNotifyFunc update_func, gpointer user_data);
         void       (* stop_load)     (gpointer context);
         gboolean   (* load_increment)(gpointer context, const gchar *buf, guint size);
+
+	/* Animation loading */
+	GdkPixbufAnimation *(* load_animation) (FILE *f);
 };
 
 
-GdkPixbufModule *gdk_pixbuf_get_module (gchar *buffer, gint size);
-void gdk_pixbuf_load_module (GdkPixbufModule *image_module);
+GdkPixbufModule *gdk_pixbuf_get_module  (gchar           *buffer,
+					 gint             size);
+void             gdk_pixbuf_load_module (GdkPixbufModule *image_module);
+
 
 
 

@@ -61,7 +61,6 @@ struct _GdkPixbufFrame
 {
 	GdkPixbuf *pixbuf;
 
-	GdkPixbufFrame *next;
 	gushort x_offset;
 	gushort y_offset;
 	guint delaytime;
@@ -163,8 +162,9 @@ GdkPixbuf *gdk_pixbuf_get_from_drawable (GdkPixbuf *dest,
 /* Animation loading */
 
 GdkPixbufAnimation *gdk_pixbuf_animation_new_from_file (const char         *filename);
-GdkPixbufAnimation *gdk_pixbuf_animation_destroy       (GdkPixbufAnimation *animation,
+void                gdk_pixbuf_animation_destroy       (GdkPixbufAnimation *animation,
 							gboolean            free_frames);
+
 
 
 

@@ -1,5 +1,7 @@
 1999-12-10  Jonathan Blandford  <jrb@redhat.com>
 
+	* gdk-pixbuf/gdk-pixbuf-io.h: thinking about the new loading API.
+
 	* gdk-pixbuf/gdk-pixbuf-drawable.c (gdk_pixbuf_get_from_drawable):
 	make a warning go away.
 
