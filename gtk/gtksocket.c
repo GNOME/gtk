@@ -47,14 +47,6 @@ static GdkFilterReturn gtk_socket_filter_func   (GdkXEvent *gdk_xevent,
 						 GdkEvent *event, 
 						 gpointer data);
 
-#define DEBUG_PLUGSOCKET
-
-#ifdef DEBUG_PLUGSOCKET
-#define DPRINTF(arg) g_print arg
-#else
-#define DPRINTF(arg)
-#endif
-
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
 
@@ -320,16 +312,18 @@ gtk_socket_size_allocate (GtkWidget     *widget,
 	      (allocation->height == socket->current_height))
 	    {
 	      gtk_socket_send_configure_event (socket);
-	      DPRINTF(( "No change: %d %d\n",
-		      allocation->width, allocation->height));
+	      GTK_NOTE(PLUGSOCKET, 
+		       g_message ("GtkSocket - allocated no change: %d %d",
+				  allocation->width, allocation->height));
 	    }
 	  else
 	    {
 	      gdk_window_move_resize (socket->plug_window,
 				      0, 0,
 				      allocation->width, allocation->height);
-	      DPRINTF(("configuring: %d %d\n",
-		      allocation->width, allocation->height));
+	      GTK_NOTE(PLUGSOCKET,
+		       g_message ("GtkSocket - allocated: %d %d",
+				  allocation->width, allocation->height));
 	      socket->current_width = allocation->width;
 	      socket->current_height = allocation->height;
 	    }
@@ -350,8 +344,6 @@ gtk_socket_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
   GtkSocket *socket;
   g_return_val_if_fail (GTK_IS_SOCKET (widget), FALSE);
   socket = GTK_SOCKET (widget);
-
-  DPRINTF (( "Got focus\n"));
 
   if (socket->focus_in && socket->plug_window)
     XSetInputFocus (GDK_DISPLAY (),
@@ -565,10 +557,11 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	    socket->request_width = xcwe->width;
 	    socket->request_height = xcwe->height;
 	    socket->have_size = TRUE;
-	    
-	    DPRINTF(("Window created with size: %d %d\n",
-		     socket->request_width,
-		     socket->request_height));
+
+	    GTK_NOTE(PLUGSOCKET,
+		     g_message ("GtkSocket - window created with size: %d %d",
+				socket->request_width,
+				socket->request_height));
 	    
 	    gtk_widget_queue_resize (widget);
 	  }
@@ -593,9 +586,10 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 		socket->request_height = xcre->height;
 		socket->have_size = TRUE;
 		
-		DPRINTF(("Configure request: %d %d\n",
-			socket->request_width,
-			socket->request_height));
+		GTK_NOTE(PLUGSOCKET,
+			 g_message ("GtkSocket - configure request: %d %d",
+				    socket->request_width,
+				    socket->request_height));
 		
 		gtk_widget_queue_resize (widget);
 	      }
@@ -618,8 +612,9 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	    (xdwe->window == GDK_WINDOW_XWINDOW (socket->plug_window)))
 	  {
 	    GtkWidget *toplevel;
-	    
-	    DPRINTF(("Destroy Notify\n"));
+
+	    GTK_NOTE(PLUGSOCKET,
+		     g_message ("GtkSocket - destroy notify"));
 	    
 	    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
 	    if (toplevel && GTK_IS_WINDOW (toplevel))
@@ -665,7 +660,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
       if (xevent->xmaprequest.window ==
 	  GDK_WINDOW_XWINDOW (socket->plug_window))
 	{
-	  DPRINTF(("Map Request\n"));
+	  GTK_NOTE(PLUGSOCKET,
+		   g_message ("GtkSocket - Map Request"));
 	    
 	  gdk_window_show (socket->plug_window);
 

@@ -137,7 +137,8 @@ static const GDebugKey gtk_debug_keys[] = {
   {"objects", GTK_DEBUG_OBJECTS},
   {"misc", GTK_DEBUG_MISC},
   {"signals", GTK_DEBUG_SIGNALS},
-  {"dnd", GTK_DEBUG_DND}
+  {"dnd", GTK_DEBUG_DND},
+  {"plugsocket", GTK_DEBUG_PLUGSOCKET}
 };
 
 static const guint gtk_ndebug_keys = sizeof (gtk_debug_keys) / sizeof (GDebugKey);

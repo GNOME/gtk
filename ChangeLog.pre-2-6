@@ -1,3 +1,14 @@
+Thu Feb 18 11:46:57 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk.m4: Fix glib_config_args gtk_config_args
+	  confusion. (pointed out by
+	  Roland Dreier <droland@mail.math.okstate.edu>)
+
+	* gtk/gtksocket.c gtk/gtkmain.c gtk/gtkdebug.h
+	  (gtk_socket_filter_func): Move the plug-socket
+	  debugging code to a new "plugsocket" debug keys
+	  from the previous hardcoded DPRINTF.
+
 Thu Feb 18 00:54:46 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkclist.c: added widget arg ::titles_active.

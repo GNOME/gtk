@@ -19,7 +19,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       Do not try to compile and run 
   do
       case "$module" in
          gthread) 
-             glib_config_args="$glib_config_args gthread"
+             gtk_config_args="$gtk_config_args gthread"
          ;;
       esac
   done
