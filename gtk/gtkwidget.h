@@ -597,6 +597,12 @@ GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 
 GtkSettings* gtk_widget_get_settings    (GtkWidget      *widget);
 
+#ifndef GTK_DISABLE_DEPRECATED
+#define gtk_widget_set_visual(widget,visual)  ((void) 0)
+#define gtk_widget_push_visual(visual)        ((void) 0)
+#define gtk_widget_pop_visual()               ((void) 0)
+#define gtk_widget_set_default_visual(visual) ((void) 0)
+#endif /* GTK_DISABLE_DEPRECATED */
 
 /* Accessibility support */
 AtkObject*       gtk_widget_get_accessible               (GtkWidget          *widget);

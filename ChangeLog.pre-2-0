@@ -1,3 +1,9 @@
+Sat Aug 11 14:32:14 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.h (gtk_widget_set_default_visual): Add some
+	compat macros for push/pop/set_visual that were supposed
+	to be added a long time ago, but got dropped. 
+
 Fri Aug 10 16:55:53 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c (gtk_window_set_policy): coalesce multiple
