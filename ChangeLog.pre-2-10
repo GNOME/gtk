@@ -1,3 +1,16 @@
+Mon Nov 24 1997 Owen Taylor <owt1@cornell.edu>
+	gtk/gtkaspectframe.c:
+	Some minor improvements to rounding in aspectframes.
+	Make sure that child allocation is always >= 0
+	Always trigger size allocation with gtk_widget_queue_resize
+	to prevent calling size_allocate before allocation done.
+
+Mon Nov 24 1997 Owen Taylor <owt1@cornell.edu>
+	gtk/gtkframe.c:
+	Changed tests for drawability to GTK_WIDGET_DRAWABLE
+	Always trigger size allocation with gtk_widget_queue_resize
+	to prevent calling size_allocate before allocation done.
+
 Mon Nov 24 1997 Jay Painter <jpaint@serv.net>
 	gtk-dairiki-971117-2.patch
 	gtk/gtkaspectframe.c (gtk_aspect_frame_size_allocate): When

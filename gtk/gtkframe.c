@@ -144,8 +144,9 @@ gtk_frame_set_label (GtkFrame *frame,
                              widget->allocation.width - GTK_CONTAINER (frame)->border_width,
                              widget->allocation.y + frame->label_height);
 
-      gtk_widget_queue_resize (GTK_WIDGET (frame));
     }
+  
+  gtk_widget_queue_resize (GTK_WIDGET (frame));
 }
 
 void
@@ -164,7 +165,7 @@ gtk_frame_set_label_align (GtkFrame *frame,
       frame->label_xalign = xalign;
       frame->label_yalign = yalign;
 
-      if (GTK_WIDGET_VISIBLE (frame))
+      if (GTK_WIDGET_DRAWABLE (frame))
 	{
           GtkWidget *widget;
 
@@ -177,9 +178,8 @@ gtk_frame_set_label_align (GtkFrame *frame,
                                  widget->allocation.width - GTK_CONTAINER (frame)->border_width,
                                  widget->allocation.y + frame->label_height);
 
-	  gtk_widget_size_allocate (GTK_WIDGET (frame), &(GTK_WIDGET (frame)->allocation));
-	  gtk_widget_queue_draw (GTK_WIDGET (frame));
 	}
+      gtk_widget_queue_resize (GTK_WIDGET (frame));
     }
 }
 
@@ -194,16 +194,15 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
     {
       frame->shadow_type = type;
 
-      if (GTK_WIDGET_MAPPED (frame))
+      if (GTK_WIDGET_DRAWABLE (frame))
 	{
 	  gdk_window_clear_area (GTK_WIDGET (frame)->window,
 				 GTK_WIDGET (frame)->allocation.x,
 				 GTK_WIDGET (frame)->allocation.y,
 				 GTK_WIDGET (frame)->allocation.width,
 				 GTK_WIDGET (frame)->allocation.height);
-	  gtk_widget_size_allocate (GTK_WIDGET (frame), &(GTK_WIDGET (frame)->allocation));
-	  gtk_widget_queue_draw (GTK_WIDGET (frame));
 	}
+      gtk_widget_queue_resize (GTK_WIDGET (frame));
     }
 }
 

@@ -124,22 +124,21 @@ gtk_aspect_frame_set (GtkAspectFrame *aspect_frame,
       (aspect_frame->ratio != ratio) ||
       (aspect_frame->obey_child != obey_child))
     {
-      GtkWidget * this = GTK_WIDGET(aspect_frame);
-  
+      GtkWidget *widget = GTK_WIDGET(aspect_frame);
+
       aspect_frame->xalign = xalign;
       aspect_frame->yalign = yalign;
       aspect_frame->ratio = ratio;
       aspect_frame->obey_child = obey_child;
 
-      if (GTK_WIDGET_MAPPED(this))
-	  gdk_window_clear_area (this->window,
-				 this->allocation.x,
-				 this->allocation.y,
-				 this->allocation.width,
-				 this->allocation.height);
+      if (GTK_WIDGET_DRAWABLE(widget))
+	gdk_window_clear_area (widget->window,
+			       widget->allocation.x,
+			       widget->allocation.y,
+			       widget->allocation.width,
+			       widget->allocation.height);
 
-      gtk_widget_size_allocate (this, &this->allocation);
-      gtk_widget_queue_draw (this);
+      gtk_widget_queue_resize (widget);
     }
 }
 
@@ -275,7 +274,7 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
   frame = GTK_FRAME (widget);
   bin = GTK_BIN (widget);
 
-  if (GTK_WIDGET_MAPPED (widget) &&
+  if (GTK_WIDGET_DRAWABLE (widget) &&
       ((widget->allocation.x != allocation->x) ||
        (widget->allocation.y != allocation->y) ||
        (widget->allocation.width != allocation->width) ||
@@ -319,14 +318,19 @@ gtk_aspect_frame_size_allocate (GtkWidget     *widget,
 				 GTK_CONTAINER (frame)->border_width -
 				 GTK_WIDGET (frame)->style->klass->ythickness);
 
-      if (height > width / ratio)
+      /* make sure we don't allocate a negative width or height,
+       * since that will be cast to a (very big) guint16 */
+      width = MAX (0, width);
+      height = MAX (0, height);
+
+      if (ratio * height > width)
 	{
 	  child_allocation.width = width;
 	  child_allocation.height = width/ratio + 0.5;
 	}
-      else if (width > height * ratio)
+      else
 	{
-	  child_allocation.width = ratio * height + 0.5;
+	  child_allocation.width = ratio*height + 0.5;
 	  child_allocation.height = height;
 	}
 
