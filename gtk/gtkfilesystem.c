@@ -772,6 +772,56 @@ gtk_file_system_list_bookmarks (GtkFileSystem *file_system)
   return GTK_FILE_SYSTEM_GET_IFACE (file_system)->list_bookmarks (file_system);
 }
 
+/**
+ * gtk_file_system_get_bookmark_label:
+ * @file_system: a #GtkFileSystem
+ * @path: path of the bookmark 
+ *
+ * Gets the label to display for a bookmark, or %NULL.
+ *
+ * Returns: the label for the bookmark @path
+ *
+ * Since: 2.8
+ */
+gchar *
+gtk_file_system_get_bookmark_label (GtkFileSystem     *file_system,
+				    const GtkFilePath *path)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_bookmark_label)
+    return GTK_FILE_SYSTEM_GET_IFACE (file_system)->get_bookmark_label (file_system, 
+									path);
+
+  return NULL;
+}
+
+/**
+ * gtk_file_system_set_bookmark_label:
+ * @file_system: a #GtkFileSystem
+ * @path: path of the bookmark 
+ * @label: the label for the bookmark, or %NULL to display
+ *   the path itself
+ *
+ * Sets the label to display for a bookmark.
+ *
+ * Since: 2.8
+ */
+void
+gtk_file_system_set_bookmark_label (GtkFileSystem     *file_system,
+				    const GtkFilePath *path,
+				    const gchar       *label)
+{
+  g_return_val_if_fail (GTK_IS_FILE_SYSTEM (file_system), NULL);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  if (GTK_FILE_SYSTEM_GET_IFACE (file_system)->set_bookmark_label)
+    GTK_FILE_SYSTEM_GET_IFACE (file_system)->set_bookmark_label (file_system, 
+								 path,
+								 label);
+}
+
 /*****************************************
  *             GtkFileFolder             *
  *****************************************/

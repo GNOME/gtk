@@ -133,7 +133,6 @@ struct _GtkFileSystemIface
 
   /* Volumes
    */
-
   void          (*volume_free)             (GtkFileSystem        *file_system,
 					    GtkFileSystemVolume  *volume);
   GtkFilePath * (*volume_get_base_path)    (GtkFileSystem        *file_system,
@@ -176,16 +175,16 @@ struct _GtkFileSystemIface
   GtkFilePath *(*filename_to_path) (GtkFileSystem      *file_system,
 				    const gchar        *path);
 
-  /* Icons */
-
+  /* Icons 
+   */
   GdkPixbuf *  (*render_icon)    (GtkFileSystem     *file_system,
 				  const GtkFilePath *path,
 				  GtkWidget         *widget,
 				  gint               pixel_size,
 				  GError           **error);
 
-  /* Bookmarks */
-
+  /* Bookmarks 
+   */
   gboolean       (*insert_bookmark)        (GtkFileSystem     *file_system,
 					    const GtkFilePath *path,
 					    gint               position,
@@ -193,12 +192,20 @@ struct _GtkFileSystemIface
   gboolean       (*remove_bookmark)        (GtkFileSystem     *file_system,
 					    const GtkFilePath *path,
 					    GError           **error);
-  GSList *       (*list_bookmarks)         (GtkFileSystem *file_system);
+  GSList *       (*list_bookmarks)         (GtkFileSystem     *file_system);
 
-  /* Signals
+  /* Signals 
    */
   void (*volumes_changed)   (GtkFileSystem *file_system);
   void (*bookmarks_changed) (GtkFileSystem *file_system);
+
+  /* Bookmark labels 
+   */
+  gchar *        (*get_bookmark_label)     (GtkFileSystem     *file_system,
+					    const GtkFilePath *path);
+  void           (*set_bookmark_label)     (GtkFileSystem     *file_system,
+					    const GtkFilePath *path,
+					    const gchar       *label);
 };
 
 GType             gtk_file_system_get_type       (void) G_GNUC_CONST;
@@ -274,6 +281,11 @@ gboolean gtk_file_system_remove_bookmark (GtkFileSystem     *file_system,
 					  GError           **error);
 GSList  *gtk_file_system_list_bookmarks  (GtkFileSystem     *file_system);
 
+gchar   *gtk_file_system_get_bookmark_label (GtkFileSystem     *file_system,
+					     const GtkFilePath *path);
+void     gtk_file_system_set_bookmark_label (GtkFileSystem     *file_system,
+					     const GtkFilePath *path,
+					     const gchar       *label);
 
 /*
  * Detailed information about a particular folder

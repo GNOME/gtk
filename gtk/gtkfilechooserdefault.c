@@ -120,6 +120,9 @@ struct _GtkFileChooserDefault
   GtkWidget *browse_shortcuts_tree_view;
   GtkWidget *browse_shortcuts_add_button;
   GtkWidget *browse_shortcuts_remove_button;
+  GtkWidget *browse_shortcuts_popup_menu;
+  GtkWidget *browse_shortcuts_popup_menu_remove_item;
+  GtkWidget *browse_shortcuts_popup_menu_rename_item;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
@@ -1323,6 +1326,7 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
 {
   int start_row;
   int num_inserted;
+  gchar *label;
 
   /* As there is no separator now, we want to start there.
    */
@@ -1341,9 +1345,13 @@ shortcuts_append_paths (GtkFileChooserDefault *impl,
 	  !gtk_file_system_path_is_local (impl->file_system, path))
 	continue;
 
+      label = gtk_file_system_get_bookmark_label (impl->file_system, path);
+
       /* NULL GError, but we don't really want to show error boxes here */
-      if (shortcuts_insert_path (impl, start_row + num_inserted, FALSE, NULL, path, NULL, TRUE, NULL))
+      if (shortcuts_insert_path (impl, start_row + num_inserted, FALSE, NULL, path, label, TRUE, NULL))
 	num_inserted++;
+
+      g_free (label);
     }
 
   return num_inserted;
@@ -2289,6 +2297,24 @@ bookmarks_check_remove_sensitivity (GtkFileChooserDefault *impl)
   g_free (name);
 }
 
+static void
+shortcuts_check_popup_sensitivity (GtkFileChooserDefault *impl)
+{
+  GtkTreeIter iter;
+  gboolean removable = FALSE;
+
+  if (impl->browse_shortcuts_popup_menu == NULL)
+    return;
+
+  if (shortcuts_get_selected (impl, &iter))
+    gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+			SHORTCUTS_COL_REMOVABLE, &removable,
+			-1);
+
+  gtk_widget_set_sensitive (impl->browse_shortcuts_popup_menu_remove_item, removable);
+  gtk_widget_set_sensitive (impl->browse_shortcuts_popup_menu_rename_item, removable);
+}
+
 /* GtkWidget::drag-begin handler for the shortcuts list. */
 static void
 shortcuts_drag_begin_cb (GtkWidget             *widget,
@@ -2809,6 +2835,7 @@ shortcuts_selection_changed_cb (GtkTreeSelection      *selection,
 				GtkFileChooserDefault *impl)
 {
   bookmarks_check_remove_sensitivity (impl);
+  shortcuts_check_popup_sensitivity (impl);
 }
 
 static gboolean
@@ -2847,6 +2874,170 @@ tree_view_keybinding_cb (GtkWidget             *tree_view,
   return FALSE;
 }
 
+/* Callback used when the file list's popup menu is detached */
+static void
+shortcuts_popup_menu_detach_cb (GtkWidget *attach_widget,
+				GtkMenu   *menu)
+{
+  GtkFileChooserDefault *impl;
+  
+  impl = g_object_get_data (G_OBJECT (attach_widget), "GtkFileChooserDefault");
+  g_assert (GTK_IS_FILE_CHOOSER_DEFAULT (impl));
+
+  impl->browse_shortcuts_popup_menu = NULL;
+  impl->browse_shortcuts_popup_menu_remove_item = NULL;
+  impl->browse_shortcuts_popup_menu_rename_item = NULL;
+}
+
+static void
+remove_shortcut_cb (GtkMenuItem           *item,
+		    GtkFileChooserDefault *impl)
+{
+  remove_selected_bookmarks (impl);
+}
+
+static void
+rename_shortcut_cb (GtkMenuItem           *item,
+		    GtkFileChooserDefault *impl)
+{
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
+  GList *renderers;
+
+  if (shortcuts_get_selected (impl, &iter))
+    {
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
+      column = gtk_tree_view_get_column (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), 0);
+      renderers = gtk_tree_view_column_get_cell_renderers (column);
+      cell = g_list_nth_data (renderers, 1);
+      g_list_free (renderers);
+      g_object_set (cell, "editable", TRUE, NULL);
+      gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view),
+					path, column, cell, TRUE);
+      gtk_tree_path_free (path);
+    }
+}
+
+/* Constructs the popup menu for the file list if needed */
+static void
+shortcuts_build_popup_menu (GtkFileChooserDefault *impl)
+{
+  GtkWidget *item;
+
+  if (impl->browse_shortcuts_popup_menu)
+    return;
+
+  impl->browse_shortcuts_popup_menu = gtk_menu_new ();
+  gtk_menu_attach_to_widget (GTK_MENU (impl->browse_shortcuts_popup_menu),
+			     impl->browse_shortcuts_tree_view,
+			     shortcuts_popup_menu_detach_cb);
+
+  item = gtk_image_menu_item_new_with_label (_("Remove"));
+  impl->browse_shortcuts_popup_menu_remove_item = item;
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item),
+				 gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_MENU));
+  g_signal_connect (item, "activate",
+		    G_CALLBACK (remove_shortcut_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
+
+  item = gtk_menu_item_new_with_label (_("Rename..."));
+  impl->browse_shortcuts_popup_menu_rename_item = item;
+  g_signal_connect (item, "activate",
+		    G_CALLBACK (rename_shortcut_cb), impl);
+  gtk_widget_show (item);
+  gtk_menu_shell_append (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu), item);
+
+  shortcuts_check_popup_sensitivity (impl);
+}
+
+static void
+shortcuts_update_popup_menu (GtkFileChooserDefault *impl)
+{
+  shortcuts_build_popup_menu (impl);  
+}
+
+static void
+popup_position_func (GtkMenu   *menu,
+                     gint      *x,
+                     gint      *y,
+                     gboolean  *push_in,
+                     gpointer	user_data);
+
+static void
+shortcuts_popup_menu (GtkFileChooserDefault *impl,
+		      GdkEventButton        *event)
+{
+  shortcuts_update_popup_menu (impl);
+  if (event)
+    gtk_menu_popup (GTK_MENU (impl->browse_shortcuts_popup_menu),
+		    NULL, NULL, NULL, NULL,
+		    event->button, event->time);
+  else
+    {
+      gtk_menu_popup (GTK_MENU (impl->browse_shortcuts_popup_menu),
+		      NULL, NULL,
+		      popup_position_func, impl->browse_shortcuts_tree_view,
+		      0, GDK_CURRENT_TIME);
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (impl->browse_shortcuts_popup_menu),
+				   FALSE);
+    }
+}
+
+/* Callback used for the GtkWidget::popup-menu signal of the shortcuts list */
+static gboolean
+shortcuts_popup_menu_cb (GtkWidget *widget,
+			 GtkFileChooserDefault *impl)
+{
+  shortcuts_popup_menu (impl, NULL);
+  return TRUE;
+}
+
+/* Callback used when a button is pressed on the shortcuts list.  
+ * We trap button 3 to bring up a popup menu.
+ */
+static gboolean
+shortcuts_button_press_event_cb (GtkWidget             *widget,
+				 GdkEventButton        *event,
+				 GtkFileChooserDefault *impl)
+{
+  if (event->button != 3)
+    return FALSE;
+
+  shortcuts_popup_menu (impl, event);
+  return TRUE;
+}
+
+static void
+shortcuts_edited (GtkCellRenderer       *cell,
+		  gchar                 *path_string,
+		  gchar                 *new_text,
+		  GtkFileChooserDefault *impl)
+{
+  GtkTreePath *path;
+  GtkTreeIter iter;
+  GtkFilePath *shortcut;
+
+  g_object_set (cell, "editable", FALSE, NULL);
+
+  path = gtk_tree_path_new_from_string (path_string);
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path);
+  gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter,
+		      SHORTCUTS_COL_DATA, &shortcut,
+		      -1);
+  gtk_tree_path_free (path);
+  
+  gtk_file_system_set_bookmark_label (impl->file_system, shortcut, new_text);
+}
+
+static void
+shortcuts_editing_canceled (GtkCellRenderer       *cell,
+			    GtkFileChooserDefault *impl)
+{
+  g_object_set (cell, "editable", FALSE, NULL);
+}
 
 /* Creates the widgets for the shortcuts and bookmarks tree */
 static GtkWidget *
@@ -2871,6 +3062,10 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
   g_signal_connect (impl->browse_shortcuts_tree_view, "key-press-event",
 		    G_CALLBACK (tree_view_keybinding_cb), impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "popup-menu",
+		    G_CALLBACK (shortcuts_popup_menu_cb), impl);
+  g_signal_connect (impl->browse_shortcuts_tree_view, "button-press-event",
+		    G_CALLBACK (shortcuts_button_press_event_cb), impl);
   atk_object_set_name (gtk_widget_get_accessible (impl->browse_shortcuts_tree_view), _("Shortcuts"));
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
 
@@ -2935,6 +3130,10 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
 				       NULL);
 
   renderer = gtk_cell_renderer_text_new ();
+  g_signal_connect (renderer, "edited", 
+		    G_CALLBACK (shortcuts_edited), impl);
+  g_signal_connect (renderer, "editing-canceled", 
+		    G_CALLBACK (shortcuts_editing_canceled), impl);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", SHORTCUTS_COL_NAME,
@@ -3701,6 +3900,7 @@ bookmarks_changed_cb (GtkFileSystem         *file_system,
 
   bookmarks_check_add_sensitivity (impl);
   bookmarks_check_remove_sensitivity (impl);
+  shortcuts_check_popup_sensitivity (impl);
 }
 
 /* Sets the file chooser to multiple selection mode */

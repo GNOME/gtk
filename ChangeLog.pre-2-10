@@ -1,5 +1,26 @@
 2005-03-22  Matthias Clasen  <mclasen@redhat.com>
 
+	Implement bookmark renaming  (#136216, Sean Middleditch)
+	
+	* gtk/gtkfilesystem.h (struct _GtkFileSystemIface): Add 
+	get_bookmark_label and set_bookmark_label vfuncs.
+
+	* gtk/gtkfilesystem.h:
+	* gtk/gtkfilesystem.c (gtk_file_system_set_bookmark_label): 
+	(gtk_file_system_get_bookmark_label): Wrappers for the
+	vfuncs.
+
+	* gtk/gtk.symbols: Add new exported symbols.
+
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_set_bookmark_label): 
+	(gtk_file_system_unix_get_bookmark_label): Implementations
+	for the Unix backend.
+
+	* gtk/gtkfilechooserdefault.c: Add a context menu to
+	the bookmarks pane, and allow to rename bookmarks.
+
+2005-03-22  Matthias Clasen  <mclasen@redhat.com>
+
 	* gtk/gtkpathbar.c (gtk_path_bar_unmap): 
 	* gtk/gtkspinbutton.c (gtk_spin_button_unmap): 
 	* gtk/gtknotebook.c (gtk_notebook_unmap): 

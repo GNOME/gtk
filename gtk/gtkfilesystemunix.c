@@ -42,7 +42,6 @@
 #include <time.h>
 
 #define BOOKMARKS_FILENAME ".gtk-bookmarks"
-#define BOOKMARKS_TMP_FILENAME ".gtk-bookmarks-XXXXXX"
 
 #define FOLDER_CACHE_LIFETIME 2 /* seconds */
 
@@ -192,7 +191,12 @@ static gboolean gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_sy
 static gboolean gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 						      const GtkFilePath *path,
 						      GError           **error);
-static GSList * gtk_file_system_unix_list_bookmarks  (GtkFileSystem *file_system);
+static GSList * gtk_file_system_unix_list_bookmarks  (GtkFileSystem     *file_system);
+static gchar  * gtk_file_system_unix_get_bookmark_label (GtkFileSystem     *file_system,
+							 const GtkFilePath *path);
+static void     gtk_file_system_unix_set_bookmark_label (GtkFileSystem     *file_system,
+							 const GtkFilePath *path,
+							 const gchar       *label);
 
 static GType gtk_file_folder_unix_get_type   (void);
 static void  gtk_file_folder_unix_class_init (GtkFileFolderUnixClass *class);
@@ -309,6 +313,8 @@ gtk_file_system_unix_iface_init   (GtkFileSystemIface *iface)
   iface->insert_bookmark = gtk_file_system_unix_insert_bookmark;
   iface->remove_bookmark = gtk_file_system_unix_remove_bookmark;
   iface->list_bookmarks = gtk_file_system_unix_list_bookmarks;
+  iface->get_bookmark_label = gtk_file_system_unix_get_bookmark_label;
+  iface->set_bookmark_label = gtk_file_system_unix_set_bookmark_label;
 }
 
 static void
@@ -1300,7 +1306,7 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
 }
 
 static void
-bookmark_list_free (GSList *list)
+string_list_free (GSList *list)
 {
   GSList *l;
 
@@ -1330,25 +1336,25 @@ is_local_uri (const char *uri)
 }
 
 static char *
-bookmark_get_filename (gboolean tmp_file)
+bookmark_get_filename (void)
 {
   char *filename;
 
-  filename = g_build_filename (g_get_home_dir (),
-			       tmp_file ? BOOKMARKS_TMP_FILENAME : BOOKMARKS_FILENAME,
-			       NULL);
+  filename = g_build_filename (g_get_home_dir (), BOOKMARKS_FILENAME, NULL);
+
   g_assert (filename != NULL);
+
   return filename;
 }
 
 static gboolean
-bookmark_list_read (GSList **bookmarks, GError **error)
+string_list_read (const gchar  *filename, 
+		  GSList      **bookmarks, 
+		  GError      **error)
 {
-  gchar *filename;
   gchar *contents;
   gboolean result = FALSE;
 
-  filename = bookmark_get_filename (FALSE);
   *bookmarks = NULL;
 
   if (g_file_get_contents (filename, &contents, NULL, error))
@@ -1376,25 +1382,22 @@ bookmark_list_read (GSList **bookmarks, GError **error)
       result = TRUE;
     }
 
-  g_free (filename);
-
   return result;
 }
 
 static gboolean
-bookmark_list_write (GSList *bookmarks, GError **error)
+string_list_write (gchar   *filename,
+		   GSList  *bookmarks, 
+		   GError **error)
 {
   char *tmp_filename;
-  char *filename;
   gboolean result = TRUE;
   FILE *file;
   int fd;
   int saved_errno;
 
-  /* First, write a temporary file */
-
-  tmp_filename = bookmark_get_filename (TRUE);
-  filename = bookmark_get_filename (FALSE);
+  /* First, write a temporary file */  
+  tmp_filename = g_strdup_printf ("%s-XXXXXX", filename);
 
   fd = g_mkstemp (tmp_filename);
   if (fd == -1)
@@ -1443,7 +1446,8 @@ bookmark_list_write (GSList *bookmarks, GError **error)
   g_set_error (error,
 	       GTK_FILE_SYSTEM_ERROR,
 	       GTK_FILE_SYSTEM_ERROR_FAILED,
-	       _("Bookmark saving failed: %s"),
+	       _("Writing %s failed: %s"),
+	       filename,
 	       g_strerror (saved_errno));
   result = FALSE;
 
@@ -1452,9 +1456,36 @@ bookmark_list_write (GSList *bookmarks, GError **error)
 
  out:
 
-  g_free (filename);
   g_free (tmp_filename);
 
+  return result;
+}
+
+static gboolean
+bookmark_list_read (GSList **bookmarks, 
+		    GError **error)
+{
+  gchar *filename;
+  gboolean result;
+
+  filename = bookmark_get_filename ();
+  result = string_list_read (filename, bookmarks, error);
+  g_free (filename);
+
+  return result;
+}
+
+static gboolean
+bookmark_list_write (GSList  *bookmarks, 
+		     GError **error)
+{
+  gchar *filename;
+  gboolean result;
+
+  filename = bookmark_get_filename ();
+  result = string_list_write (filename, bookmarks, error);
+  g_free (filename);
+  
   return result;
 }
 
@@ -1487,10 +1518,19 @@ gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
 
   for (l = bookmarks; l; l = l->next)
     {
-      const char *bookmark;
+      char *bookmark, *space;
 
       bookmark = l->data;
-      if (strcmp (bookmark, uri) == 0)
+      
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
 	{
 	  g_set_error (error,
 		       GTK_FILE_SYSTEM_ERROR,
@@ -1511,7 +1551,7 @@ gtk_file_system_unix_insert_bookmark (GtkFileSystem     *file_system,
  out:
 
   g_free (uri);
-  bookmark_list_free (bookmarks);
+  string_list_free (bookmarks);
 
   return result;
 }
@@ -1535,10 +1575,19 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 
   for (l = bookmarks; l; l = l->next)
     {
-      const char *bookmark;
+      char *bookmark, *space;
 
-      bookmark = l->data;
-      if (strcmp (bookmark, uri) == 0)
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
 	{
 	  g_free (l->data);
 	  bookmarks = g_slist_remove_link (bookmarks, l);
@@ -1547,7 +1596,8 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
 	  if (bookmark_list_write (bookmarks, error))
 	    {
 	      result = TRUE;
-	      g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+
+	      g_signal_emit_by_name (file_system, "bookmarks-changed", 0);	      
 	    }
 
 	  goto out;
@@ -1563,7 +1613,7 @@ gtk_file_system_unix_remove_bookmark (GtkFileSystem     *file_system,
  out:
 
   g_free (uri);
-  bookmark_list_free (bookmarks);
+  string_list_free (bookmarks);
 
   return result;
 }
@@ -1582,18 +1632,107 @@ gtk_file_system_unix_list_bookmarks (GtkFileSystem *file_system)
 
   for (l = bookmarks; l; l = l->next)
     {
-      const char *name;
+      char *bookmark, *space;
 
-      name = l->data;
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
 
-      if (is_local_uri (name))
-	result = g_slist_prepend (result, gtk_file_system_unix_uri_to_path (file_system, name));
+      if (is_local_uri (bookmark))
+	result = g_slist_prepend (result, gtk_file_system_unix_uri_to_path (file_system, bookmark));
     }
 
-  bookmark_list_free (bookmarks);
+  string_list_free (bookmarks);
 
   result = g_slist_reverse (result);
   return result;
+}
+
+static gchar *
+gtk_file_system_unix_get_bookmark_label (GtkFileSystem     *file_system,
+					 const GtkFilePath *path)
+{
+  GSList *labels;
+  gchar *label;
+  GSList *l;
+  char *bookmark, *space, *uri;
+  
+  labels = NULL;
+  label = NULL;
+
+  uri = gtk_file_system_path_to_uri (file_system, path);
+  bookmark_list_read (&labels, NULL);
+
+  for (l = labels; l && !label; l = l->next) 
+    {
+      bookmark = (char *)l->data;
+      space = strchr (bookmark, ' ');
+      if (!space)
+	continue;
+
+      *space = '\0';
+
+      if (strcmp (uri, bookmark) == 0)
+	label = g_strdup (space + 1);
+    }
+
+  string_list_free (labels);
+  g_free (uri);
+
+  return label;
+}
+
+static void
+gtk_file_system_unix_set_bookmark_label (GtkFileSystem     *file_system,
+					 const GtkFilePath *path,
+					 const gchar       *label)
+{
+  GSList *labels;
+  GSList *l;
+  gchar *bookmark, *space, *uri;
+  gboolean found;
+
+  labels = NULL;
+
+  uri = gtk_file_system_path_to_uri (file_system, path);
+  bookmark_list_read (&labels, NULL);
+
+  found = FALSE;
+  for (l = labels; l && !found; l = l->next) 
+    {
+      bookmark = (gchar *)l->data;
+      space = strchr (bookmark, ' ');
+      if (space)
+	*space = '\0';
+
+      if (strcmp (bookmark, uri) != 0)
+	{
+	  if (space)
+	    *space = ' ';
+	}
+      else
+	{
+	  g_free (bookmark);
+	  
+	  if (label && *label)
+	    l->data = g_strdup_printf ("%s %s", uri, label);
+	  else
+	    l->data = g_strdup (uri);
+
+	  found = TRUE;
+	  break;
+	}
+    }
+
+  if (found)
+    {
+      if (bookmark_list_write (labels, NULL))
+	g_signal_emit_by_name (file_system, "bookmarks-changed", 0);
+    }
+  
+  string_list_free (labels);
+  g_free (uri);
 }
 
 /*

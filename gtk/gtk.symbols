@@ -1331,6 +1331,8 @@ gtk_file_system_volume_get_display_name
 gtk_file_system_volume_get_is_mounted
 gtk_file_system_volume_mount
 gtk_file_system_volume_render_icon
+gtk_file_system_get_bookmark_label
+gtk_file_system_set_bookmark_label
 #endif
 #endif
 
