@@ -60,5 +60,24 @@ Incompatible Changes from GTK+-1.0 to GTK+-1.2:
      If you need to do that, use a GtkDrawingArea or (for a 
      toplevel) the new GtkDrawWindow widget.
 
-
-
+* Scrolled windows do not create an automatic viewport anymore, and
+  self scrolling widgets do not provide their own scrollbars any
+  further. Self scrolling widgets of the Gtk+ core currently are
+  GtkViewport, GtkCList, GtkCTree, GtkText and GtkLayout. All of
+  these widgets can be added to a scrolled window as normal children
+  with gtk_container_add() and their scrolling abilities will be setup
+  appropriatedly in an automatic manner.
+  Widgets that do not implement own scrolling abilities but get added
+  to a scrolled window in order to have their allocations scrollable
+  inside of the scrolled window (e.g. a GtkList) have first to be added
+  to a GtkViewport, and then the viewport needs to be added to the
+  scrolled window.
+  However, the scrolled window code provides a convenience function to
+  achive this:
+  gtk_scrolled_window_add_with_viewport() which will do exactly what
+  it says, add a child widget to a viewport and put that viewport into
+  the scrolled window.
+  Scrollbar policy adjustment needs to be perfomed on the scrolled window
+  with gtk_scrolled_window_set_policy() and is not longer maintained for
+  the child widgets (e.g. GtkCList's gtk_clist_set_policy() got removed).
+  
