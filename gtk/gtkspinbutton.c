@@ -1220,81 +1220,83 @@ static void
 gtk_spin_button_real_change_value (GtkSpinButton *spin,
 				   GtkScrollType  scroll)
 {
-  if (GTK_ENTRY (spin)->editable)
+  /* We don't test whether the entry is editable, since
+   * this key binding conceptually corresponds to changing
+   * the value with the buttons using the mouse, which
+   * we allow for non-editable spin buttons.
+   */
+  switch (scroll)
     {
-      switch (scroll)
-        {
-        case GTK_SCROLL_STEP_BACKWARD:
-        case GTK_SCROLL_STEP_DOWN:
-        case GTK_SCROLL_STEP_LEFT:
-	  gtk_spin_button_real_spin (spin, -spin->timer_step);
-	  
-	  if (spin->climb_rate > 0.0 && spin->timer_step
-	      < spin->adjustment->page_increment)
-	    {
-	      if (spin->timer_calls < MAX_TIMER_CALLS)
-		spin->timer_calls++;
-	      else 
-		{
-		  spin->timer_calls = 0;
-		  spin->timer_step += spin->climb_rate;
-		}
-	    }
-	  break;
-
-        case GTK_SCROLL_STEP_FORWARD:
-        case GTK_SCROLL_STEP_UP:
-        case GTK_SCROLL_STEP_RIGHT:
-	  gtk_spin_button_real_spin (spin, spin->timer_step);
-	  
-	  if (spin->climb_rate > 0.0 && spin->timer_step
-	      < spin->adjustment->page_increment)
-	    {
-	      if (spin->timer_calls < MAX_TIMER_CALLS)
-		spin->timer_calls++;
-	      else 
-		{
-		  spin->timer_calls = 0;
-		  spin->timer_step += spin->climb_rate;
-		}
-	    }
-          break;
-
-        case GTK_SCROLL_PAGE_BACKWARD:
-        case GTK_SCROLL_PAGE_DOWN:
-        case GTK_SCROLL_PAGE_LEFT:
-	  gtk_spin_button_real_spin (spin, -spin->adjustment->page_increment);
-          break;
-
-        case GTK_SCROLL_PAGE_FORWARD:
-        case GTK_SCROLL_PAGE_UP:
-        case GTK_SCROLL_PAGE_RIGHT:
-	  gtk_spin_button_real_spin (spin, spin->adjustment->page_increment);
-          break;
-          
-	case GTK_SCROLL_START:
-	  {
-	    gdouble diff = spin->adjustment->value - spin->adjustment->lower;
-	    if (diff > EPSILON)
-	      gtk_spin_button_real_spin (spin, -diff);
-	    break;
-	  }
-
-	case GTK_SCROLL_END:
-	  {
-	    gdouble diff = spin->adjustment->upper - spin->adjustment->value;
-	    if (diff > EPSILON)
-	      gtk_spin_button_real_spin (spin, diff);
-	    break;
-	  }
-	  
-        default:
-	  g_warning ("Invalid scroll type %d for GtkSpinButton::change-value", scroll);
-          break;
-        }
+    case GTK_SCROLL_STEP_BACKWARD:
+    case GTK_SCROLL_STEP_DOWN:
+    case GTK_SCROLL_STEP_LEFT:
+      gtk_spin_button_real_spin (spin, -spin->timer_step);
       
-      gtk_spin_button_update (spin);
+      if (spin->climb_rate > 0.0 && spin->timer_step
+	  < spin->adjustment->page_increment)
+	{
+	  if (spin->timer_calls < MAX_TIMER_CALLS)
+	    spin->timer_calls++;
+	  else 
+	    {
+	      spin->timer_calls = 0;
+	      spin->timer_step += spin->climb_rate;
+	    }
+	}
+      break;
+      
+    case GTK_SCROLL_STEP_FORWARD:
+    case GTK_SCROLL_STEP_UP:
+    case GTK_SCROLL_STEP_RIGHT:
+      gtk_spin_button_real_spin (spin, spin->timer_step);
+      
+      if (spin->climb_rate > 0.0 && spin->timer_step
+	  < spin->adjustment->page_increment)
+	{
+	  if (spin->timer_calls < MAX_TIMER_CALLS)
+	    spin->timer_calls++;
+	  else 
+	    {
+	      spin->timer_calls = 0;
+	      spin->timer_step += spin->climb_rate;
+	    }
+	}
+      break;
+      
+    case GTK_SCROLL_PAGE_BACKWARD:
+    case GTK_SCROLL_PAGE_DOWN:
+    case GTK_SCROLL_PAGE_LEFT:
+      gtk_spin_button_real_spin (spin, -spin->adjustment->page_increment);
+      break;
+      
+    case GTK_SCROLL_PAGE_FORWARD:
+    case GTK_SCROLL_PAGE_UP:
+    case GTK_SCROLL_PAGE_RIGHT:
+      gtk_spin_button_real_spin (spin, spin->adjustment->page_increment);
+      break;
+      
+    case GTK_SCROLL_START:
+      {
+	gdouble diff = spin->adjustment->value - spin->adjustment->lower;
+	if (diff > EPSILON)
+	  gtk_spin_button_real_spin (spin, -diff);
+	break;
+      }
+      
+    case GTK_SCROLL_END:
+      {
+	gdouble diff = spin->adjustment->upper - spin->adjustment->value;
+	if (diff > EPSILON)
+	  gtk_spin_button_real_spin (spin, diff);
+	break;
+      }
+      
+    default:
+      g_warning ("Invalid scroll type %d for GtkSpinButton::change-value", scroll);
+      break;
     }
+  
+  gtk_spin_button_update (spin);
 }
 
 static gint
