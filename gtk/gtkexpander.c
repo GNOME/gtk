@@ -44,6 +44,7 @@ enum
   PROP_EXPANDED,
   PROP_LABEL,
   PROP_USE_UNDERLINE,
+  PROP_USE_MARKUP,
   PROP_PADDING,
   PROP_LABEL_WIDGET
 };
@@ -59,6 +60,7 @@ struct _GtkExpanderPrivate
 
   guint             expanded : 1;
   guint             use_underline : 1;
+  guint             use_markup : 1; 
   guint             button_down : 1;
   guint             prelight : 1;
 };
@@ -211,6 +213,14 @@ gtk_expander_class_init (GtkExpanderClass *klass)
 							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (gobject_class,
+				   PROP_USE_MARKUP,
+				   g_param_spec_boolean ("use_markup",
+							 _("Use markup"),
+							 _("The text of the label includes XML markup. See pango_parse_markup()"),
+							 FALSE,
+							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (gobject_class,
 				   PROP_PADDING,
 				   g_param_spec_int ("spacing",
 						     _("Spacing"),
@@ -275,6 +285,7 @@ gtk_expander_init (GtkExpander *expander)
 
   priv->expanded = FALSE;
   priv->use_underline = FALSE;
+  priv->use_markup = FALSE;
   priv->button_down = FALSE;
   priv->prelight = FALSE;
 }
@@ -297,6 +308,9 @@ gtk_expander_set_property (GObject      *object,
       break;
     case PROP_USE_UNDERLINE:
       gtk_expander_set_use_underline (expander, g_value_get_boolean (value));
+      break;
+    case PROP_USE_MARKUP:
+      gtk_expander_set_use_markup (expander, g_value_get_boolean (value));
       break;
     case PROP_PADDING:
       gtk_expander_set_spacing (expander, g_value_get_int (value));
@@ -329,6 +343,9 @@ gtk_expander_get_property (GObject    *object,
       break;
     case PROP_USE_UNDERLINE:
       g_value_set_boolean (value, priv->use_underline);
+      break;
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, priv->use_markup);
       break;
     case PROP_PADDING:
       g_value_set_int (value, priv->spacing);
@@ -1339,6 +1356,7 @@ gtk_expander_set_label (GtkExpander *expander,
 
       child = gtk_label_new (label);
       gtk_label_set_use_underline (GTK_LABEL (child), expander->priv->use_underline);
+      gtk_label_set_use_markup (GTK_LABEL (child), expander->priv->use_markup);
       gtk_widget_show (child);
 
       gtk_expander_set_label_widget (expander, child);
@@ -1428,6 +1446,60 @@ gtk_expander_get_use_underline (GtkExpander *expander)
   g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
 
   return expander->priv->use_underline;
+}
+
+/**
+ * gtk_expander_set_use_markup:
+ * @expander: a #GtkExpander
+ * @use_markup: %TRUE if the label's text should be parsed for markup
+ *
+ * Sets whether the text of the label contains markup in <link
+ * linkend="PangoMarkupFormat">Pango's text markup
+ * language</link>. See gtk_label_set_markup().
+ *
+ * Since: 2.4
+ **/
+void
+gtk_expander_set_use_markup (GtkExpander *expander,
+			     gboolean     use_markup)
+{
+  GtkExpanderPrivate *priv;
+
+  g_return_if_fail (GTK_IS_EXPANDER (expander));
+
+  priv = expander->priv;
+
+  use_markup = use_markup != FALSE;
+
+  if (priv->use_markup != use_markup)
+    {
+      priv->use_markup = use_markup;
+
+      if (priv->label_widget && GTK_IS_LABEL (priv->label_widget))
+	gtk_label_set_use_markup (GTK_LABEL (priv->label_widget), use_markup);
+
+      g_object_notify (G_OBJECT (expander), "use_markup");
+    }
+}
+
+/**
+ * gtk_expander_get_use_markup:
+ * @expander: a #GtkExpander
+ *
+ * Returns whether the label's text is interpreted as marked up with
+ * the <link linkend="PangoMarkupFormat">Pango text markup
+ * language</link>. See gtk_expander_set_use_markup ().
+ *
+ * Return value: %TRUE if the label's text will be parsed for markup
+ *
+ * Since: 2.4
+ **/
+gboolean
+gtk_expander_get_use_markup (GtkExpander *expander)
+{
+  g_return_val_if_fail (GTK_IS_EXPANDER (expander), FALSE);
+
+  return expander->priv->use_markup;
 }
 
 /**

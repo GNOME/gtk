@@ -1,3 +1,16 @@
+2003-11-17  Mark McLoughlin  <mark@skynet.ie>
+
+	Patch from Jaiserca <jaiserca@inf.upv.es> to add a
+	"use_markup" property. See bug #124449.
+
+	* gtk/gtkexpander.c:
+	(gtk_expander_class_init),
+	(gtk_expander_init), (gtk_expander_set_property),
+	(gtk_expander_get_property), (gtk_expander_set_label),
+	(gtk_expander_set_use_markup),	(gtk_expander_get_use_markup):
+	Add a "use_markup" property and use it when creating the
+	child label.
+
 Mon Nov 17 12:58:32 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Temporary size requisition fix. Will fix it for real tonight.
