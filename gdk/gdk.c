@@ -2556,7 +2556,8 @@ gdk_event_translate (GdkEvent *event,
 	      event->configure.height = xevent->xconfigure.height;
 	      
 	      if (!xevent->xconfigure.x &&
-		  !xevent->xconfigure.y)
+		  !xevent->xconfigure.y &&
+		  !window_private->destroyed)
 		{
 		  gint tx = 0;
 		  gint ty = 0;

@@ -1,3 +1,13 @@
+Fri Mar 27 21:01:17 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gdk/gdk.c (gdk_event_translate): Don't call
+	XTranslateCoordinates on a destroyed window. (Why do we
+	do event processing at all on destroyed windows when we
+	throw out the results?)
+
+	* gtk/gtklabel.c: Clear the background when changing style/
+	state.
+
 Fri Mar 27 16:35:00 PST 1998 Shawn T. Amundson <amundson@gtk.org>
 
 	* Released GTK+ 0.99.9
