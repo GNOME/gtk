@@ -1,3 +1,11 @@
+Tue Jul 13 01:16:20 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/tmpl/gtkiconview.sgml: Updates.
+
+Tue Jul 13 00:45:14 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtk-docs.sgml: Move GtkAboutDialog to Windows section. 
+
 2004-07-12  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/glossary.xml: Start of the GTK+ glossary.

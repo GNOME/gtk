@@ -330,11 +330,11 @@ that is, GUI components such as <link linkend="GtkButton">GtkButton</link> or
         &GtkMessageDialog;
         &GtkWindow;
         &GtkWindowGroup;
+        &GtkAboutDialog;
     </chapter>
 
     <chapter id="DisplayWidgets">
       <title>Display Widgets</title>
-        &GtkAboutDialog;
         &GtkAccelLabel;
         &GtkImage;
         &GtkLabel;

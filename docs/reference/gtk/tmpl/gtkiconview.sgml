@@ -6,7 +6,12 @@ A widget which displays a list of icons in a grid
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+#GtkIconView provides an alternative view on a list model. 
+It displays the model as a grid of icons with labels. Like 
+#GtkTreeView, it allows to select one or multiple items 
+(depending on the selection mode, see gtk_icon_view_set_selection_mode()).
+In addition to selection with the arrow keys, #GtkIconView supports
+rubberband selection, which is controlled by dragging the pointer.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -16,7 +21,8 @@ A widget which displays a list of icons in a grid
 
 <!-- ##### STRUCT GtkIconView ##### -->
 <para>
-
+The <structname>GtkIconView</structname> struct contains only
+private fields and should not be directly accessed.
 </para>
 
 
@@ -133,12 +139,13 @@ A widget which displays a list of icons in a grid
 
 <!-- ##### USER_FUNCTION GtkIconViewForeachFunc ##### -->
 <para>
-
+A function used by gtk_icon_view_selected_foreach() to map all
+selected rows.  It will be called on every selected row in the view.
 </para>
 
-@icon_view: 
-@path: 
-@data: 
+@model: The #GtkTreeModel being viewed
+@path: The #GtkTreePath of a selected row
+@data: user data
 
 
 <!-- ##### FUNCTION gtk_icon_view_new ##### -->
