@@ -1,7 +1,11 @@
+2002-02-26  Tor Lillqvist  <tml@iki.fi>
+
+	* gtk/gtk.def: A couple of name changes.
+
 Mon Feb 25 22:10:47 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkscrolledwindow.c (gtk_scrolled_window_class_init): Fix
-	double set of bindings for page-up/down. (#72605, Tor Lillquist)
+	double set of bindings for page-up/down. (#72605, Tor Lillqvist)
 
 	* gtk/gtkmenu.c (gtk_menu_key_press): Remove consumed modiifers
 	when setting up accelerator to make accelerators look prettier.

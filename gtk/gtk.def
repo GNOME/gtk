@@ -1723,8 +1723,8 @@ EXPORTS
 	gtk_tree_model_get_column_type
 	gtk_tree_model_get_flags
 	gtk_tree_model_get_iter
+	gtk_tree_model_get_iter_first
 	gtk_tree_model_get_iter_from_string
-	gtk_tree_model_get_iter_root
 	gtk_tree_model_get_n_columns
 	gtk_tree_model_get_path
 	gtk_tree_model_get_type
@@ -1763,8 +1763,8 @@ EXPORTS
 	gtk_tree_path_is_ancestor
 	gtk_tree_path_is_descendant
 	gtk_tree_path_new
+	gtk_tree_path_new_first
 	gtk_tree_path_new_from_string
-	gtk_tree_path_new_root
 	gtk_tree_path_next
 	gtk_tree_path_prepend_index
 	gtk_tree_path_prev
