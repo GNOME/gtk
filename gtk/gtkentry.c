@@ -5178,7 +5178,8 @@ gtk_entry_completion_changed (GtkWidget *entry,
     return;
 
   /* no need to normalize for this test */
-  if (! strcmp ("", gtk_entry_get_text (GTK_ENTRY (entry))))
+  if (completion->priv->minimum_key_length > 0 &&
+      strcmp ("", gtk_entry_get_text (GTK_ENTRY (entry))) == 0)
     {
       if (GTK_WIDGET_VISIBLE (completion->priv->popup_window))
         _gtk_entry_completion_popdown (completion);
