@@ -1,5 +1,8 @@
 2004-05-18  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkintl.h: Include glib/gi18n-lib.h and only define
+	the P_() macros ourselves.
+
 	* gtk/gtkentrycompletion.c (_gtk_entry_completion_resize_popup): 
 	Restrict the width of the popup to be no larger than the
 	monitor.  (#142678, DmD Ljungmark)
