@@ -1,3 +1,13 @@
+2002-02-13  Joe Shaw  <joe@ximian.com>
+
+	* gtk/gtktreeitem.c (gtk_tree_item_expose): Don't chain up to the
+	container's expose event.  Instead call
+	gtk_tree_item_expose_child() on each child.  Avoids a failed
+	g_assert() in gtk_container_propagate_expose().
+	(gtk_tree_item_expose_child): Added.  Synthesize an expose event
+	for our children.  Basically gtk_container_propagate_expose()
+	minus the g_assert().  (#71396)
+
 2002-02-13  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkinternals.h: Add some more GdkDebugFlags, for more

@@ -689,10 +689,42 @@ gtk_tree_item_button_press (GtkWidget      *widget,
   return (event->type == GDK_BUTTON_PRESS && GTK_WIDGET_IS_SENSITIVE(widget));
 }
 
+static void
+gtk_tree_item_expose_child (GtkWidget *child,
+                            gpointer   client_data)
+{
+  struct {
+    GtkWidget *container;
+    GdkEventExpose *event;
+  } *data = client_data;
+  GdkEventExpose child_event;
+
+  if (GTK_WIDGET_DRAWABLE (child) &&
+      GTK_WIDGET_NO_WINDOW (child) &&
+      (child->window == data->event->window))
+    {
+      child_event = *data->event;
+
+      child_event.region = gtk_widget_region_intersect (child,
+                                                        data->event->region);
+      if (!gdk_region_empty (child_event.region))
+        {
+          gdk_region_get_clipbox (child_event.region, &child_event.area);
+          gtk_widget_send_expose (child, (GdkEvent *) &child_event);
+	}
+      gdk_region_destroy (child_event.region);
+    }
+}
+
 static gint
 gtk_tree_item_expose (GtkWidget      *widget,
 		      GdkEventExpose *event)
 {
+  struct {
+    GtkWidget *container;
+    GdkEventExpose *event;
+  } data;
+  
   g_return_val_if_fail (GTK_IS_TREE_ITEM (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -700,7 +732,12 @@ gtk_tree_item_expose (GtkWidget      *widget,
     {
       gtk_tree_item_paint (widget, &event->area);
 
-      (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+      data.container = widget;
+      data.event = event;
+
+      gtk_container_forall (GTK_CONTAINER (widget),
+                            gtk_tree_item_expose_child,
+                            &data);
    }
 
   return FALSE;
