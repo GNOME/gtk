@@ -1077,9 +1077,15 @@ gtk_file_system_unix_add_bookmark (GtkFileSystem     *file_system,
   GSList *l;
   char *uri;
   gboolean result;
+  GError *err;
 
-  if (!bookmark_list_read (&bookmarks, error))
-    return FALSE;
+  err = NULL;
+  if (!bookmark_list_read (&bookmarks, &err) && err->code != G_FILE_ERROR_NOENT)
+    {
+      g_propagate_error (error, err);
+      g_error_free (err);
+      return FALSE;
+    }
 
   result = FALSE;
 

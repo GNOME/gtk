@@ -1,5 +1,11 @@
 2004-02-13  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilesystemunix.c (gtk_file_system_unix_add_bookmark):
+	Duh, duh, duh!  Don't bail out if the bookmarks file doesn't exist
+	the very first time you try to save one.
+
+2004-02-13  Federico Mena Quintero  <federico@ximian.com>
+
 	Fix #129020.
 
 	* gtk/gtkfilechooserdialog.c
