@@ -3,9 +3,9 @@
 # Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.15\n"
-"POT-Creation-Date: 1999-04-13 16:43-0500\n"
-"PO-Revision-Date: 1999-02-09 06:07+0900\n"
+"Project-Id-Version: gtk+ 1.2.2\n"
+"POT-Creation-Date: 1999-04-24 23:03+0900\n"
+"PO-Revision-Date: 1999-04-24 23:03+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@adam.kaist.ac.kr>\n"
 "Language-Team: Korean <ko@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -41,14 +41,14 @@ msgid "Opacity:"
 msgstr "불투명:"
 
 #. The OK button
-#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3477
+#: gtk/gtkcolorsel.c:1672 gtk/gtkfilesel.c:469 gtk/gtkfontsel.c:3467
 #: gtk/gtkgamma.c:416
 msgid "OK"
 msgstr "확인"
 
 #. The Cancel button
 #: gtk/gtkcolorsel.c:1678 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:851
-#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3490
+#: gtk/gtkfilesel.c:951 gtk/gtkfilesel.c:1066 gtk/gtkfontsel.c:3480
 #: gtk/gtkgamma.c:424
 msgid "Cancel"
 msgstr "취소"
@@ -74,11 +74,11 @@ msgstr "자료방을 읽을 수 없음: %s"
 
 #: gtk/gtkfilesel.c:539
 msgid "Create Dir"
-msgstr "자료방 생성"
+msgstr "자료방 만들기"
 
 #: gtk/gtkfilesel.c:550 gtk/gtkfilesel.c:920
 msgid "Delete File"
-msgstr "파일 삭제"
+msgstr "파일 지우기"
 
 #: gtk/gtkfilesel.c:561 gtk/gtkfilesel.c:1024
 msgid "Rename File"
@@ -91,7 +91,7 @@ msgstr "파일명 바꿈"
 #.
 #: gtk/gtkfilesel.c:722
 msgid "Error"
-msgstr "에러"
+msgstr "오류"
 
 #. close button
 #: gtk/gtkfilesel.c:740 gtk/gtkinputdialog.c:354
@@ -100,7 +100,7 @@ msgstr "닫기"
 
 #: gtk/gtkfilesel.c:815
 msgid "Create Directory"
-msgstr "자료방 생성"
+msgstr "자료방 만들기"
 
 #: gtk/gtkfilesel.c:829
 msgid "Directory name:"
@@ -109,17 +109,17 @@ msgstr "자료방 이름:"
 #. buttons
 #: gtk/gtkfilesel.c:842
 msgid "Create"
-msgstr "생성"
+msgstr "만들기"
 
 #. buttons
 #: gtk/gtkfilesel.c:942
 msgid "Delete"
-msgstr "삭제"
+msgstr "지우기"
 
 #. buttons
 #: gtk/gtkfilesel.c:1057
 msgid "Rename"
-msgstr "새이름"
+msgstr "파일명 바꿈"
 
 #: gtk/gtkfilesel.c:1440
 msgid "Selection: "
@@ -147,11 +147,11 @@ msgstr "폭 결정:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
-msgstr "스타일 추가:"
+msgstr "모양새 추가:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "화소 크기:"
+msgstr "픽셀 크기:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
@@ -209,7 +209,7 @@ msgstr "크기"
 
 #: gtk/gtkfontsel.c:646 gtk/gtkfontsel.c:868
 msgid "Reset Filter"
-msgstr "필터 리셋"
+msgstr "필터 다시 고침"
 
 #: gtk/gtkfontsel.c:660
 msgid "Metric:"
@@ -243,7 +243,7 @@ msgstr "실제 글꼴 이름:"
 #: gtk/gtkfontsel.c:771
 #, c-format
 msgid "%i fonts available with a total of %i styles."
-msgstr "%i개의 폰트가 있고, 전부 %i개의 스타일이 있습니다."
+msgstr "%i개의 글꼴이 있고, 전부 %i개의 모양새가 있습니다."
 
 #: gtk/gtkfontsel.c:786
 msgid "Filter"
@@ -263,7 +263,7 @@ msgstr "크기 조정 가능"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr "크기 조정한 비트맵"
+msgstr "비트맵 크기 조정"
 
 #. Convert '(nil)' weights to 'regular', since it looks nicer.
 #: gtk/gtkfontsel.c:1215
@@ -336,13 +336,13 @@ msgstr "글꼴: (필터 적용)"
 
 #: gtk/gtkfontsel.c:2639
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "MAX_FONTS 초과. 몇몇 글꼴은 잃어버릴 수 있음."
+msgstr "MAX_FONTS 넘어감. 몇몇 글꼴은 잃어버릴 수 있음."
 
-#: gtk/gtkfontsel.c:3484
+#: gtk/gtkfontsel.c:3474
 msgid "Apply"
 msgstr "적용"
 
-#: gtk/gtkfontsel.c:3506
+#: gtk/gtkfontsel.c:3496
 msgid "Font Selection"
 msgstr "글꼴 선택"
 
@@ -373,7 +373,7 @@ msgstr "사용 안함"
 
 #: gtk/gtkinputdialog.c:261
 msgid "Screen"
-msgstr "스크린"
+msgstr "화면"
 
 #: gtk/gtkinputdialog.c:269
 msgid "Window"
@@ -437,15 +437,15 @@ msgstr "지움"
 msgid "Page %u"
 msgstr "페이지 %u"
 
-#: gtk/gtkrc.c:1529
+#: gtk/gtkrc.c:1531
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
-msgstr "이미지 파일을 pixmap_path에서 찾을 수 없음: \"%s\" 라인 %d"
+msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\" %d번째 줄"
 
-#: gtk/gtkrc.c:1532
+#: gtk/gtkrc.c:1534
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "이미지 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
+msgstr "그림 파일을 pixmap_path에서 찾을 수 없음: \"%s\""
 
 #: gtk/gtkthemes.c:79
 #, c-format
