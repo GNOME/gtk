@@ -6,20 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.2\n"
 "POT-Creation-Date: 2000-05-19 07:11+0200\n"
-"PO-Revision-Date: 1998-12-18 12:15+0100\n"
+"PO-Revision-Date: 2001-01-25 10:40+0100\n"
 "Last-Translator: Shooby Ban <bansz@szif.hu>\n"
-"Language-Team: Hungarian <hu@li.org>\n"
+"Language-Team: Hungarian <hu@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-2\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: gtk/gtkcolorsel.c:221
 msgid "Hue:"
-msgstr "Szín:"
+msgstr "Színezet:"
 
 #: gtk/gtkcolorsel.c:222
 msgid "Saturation:"
-msgstr "Színesség:"
+msgstr "Telítettség:"
 
 #: gtk/gtkcolorsel.c:223
 msgid "Value:"
@@ -51,8 +51,9 @@ msgstr "OK"
 #: gtk/gtkcolorsel.c:1733 gtk/gtkfilesel.c:476 gtk/gtkfilesel.c:856
 #: gtk/gtkfilesel.c:956 gtk/gtkfilesel.c:1071 gtk/gtkfontsel.c:3505
 #: gtk/gtkgamma.c:424
+# Emese akarta!!
 msgid "Cancel"
-msgstr "Mégsem"
+msgstr "Mégse"
 
 #: gtk/gtkcolorsel.c:1738
 msgid "Help"
@@ -97,7 +98,7 @@ msgstr "Hiba"
 #. close button
 #: gtk/gtkfilesel.c:745 gtk/gtkinputdialog.c:354
 msgid "Close"
-msgstr "Bezár"
+msgstr "Bezárás"
 
 #: gtk/gtkfilesel.c:820
 msgid "Create Directory"
@@ -110,17 +111,17 @@ msgstr "Könyvtár neve:"
 #. buttons
 #: gtk/gtkfilesel.c:847
 msgid "Create"
-msgstr "Létrehoz"
+msgstr "Létrehozás"
 
 #. buttons
 #: gtk/gtkfilesel.c:947
 msgid "Delete"
-msgstr "Töröl"
+msgstr "Törlés"
 
 #. buttons
 #: gtk/gtkfilesel.c:1062
 msgid "Rename"
-msgstr "Átnevez"
+msgstr "Átnevezés"
 
 #: gtk/gtkfilesel.c:1445
 msgid "Selection: "
@@ -144,7 +145,7 @@ msgstr "Dõlés:"
 
 #: gtk/gtkfontsel.c:214
 msgid "Set Width:"
-msgstr "Méret megadás:"
+msgstr "Méret megadása:"
 
 #: gtk/gtkfontsel.c:215
 msgid "Add Style:"
@@ -152,7 +153,7 @@ msgstr "Stílus hozzáadása:"
 
 #: gtk/gtkfontsel.c:216
 msgid "Pixel Size:"
-msgstr "Képpont méret:"
+msgstr "Képpontméret:"
 
 #: gtk/gtkfontsel.c:217
 msgid "Point Size:"
@@ -182,7 +183,7 @@ msgstr "Karakterkészlet:"
 #. of NULL initializers above
 #: gtk/gtkfontsel.c:459
 msgid "Font Property"
-msgstr "Betûtípus tulajdonság"
+msgstr "Betûkészlet tulajdonság"
 
 #: gtk/gtkfontsel.c:460
 msgid "Requested Value"
@@ -227,7 +228,7 @@ msgstr "Képpontok"
 #. create the text entry widget
 #: gtk/gtkfontsel.c:687
 msgid "Preview:"
-msgstr "Nézet:"
+msgstr "Elõnézet:"
 
 #: gtk/gtkfontsel.c:716
 msgid "Font Information"
@@ -252,11 +253,11 @@ msgstr "Szûrõ"
 
 #: gtk/gtkfontsel.c:799
 msgid "Font Types:"
-msgstr "Betûkészlet típusok:"
+msgstr "Betûkészlet-típusok:"
 
 #: gtk/gtkfontsel.c:807
 msgid "Bitmap"
-msgstr "Kép"
+msgstr "Bitmap"
 
 #: gtk/gtkfontsel.c:813
 msgid "Scalable"
@@ -264,7 +265,7 @@ msgstr "Méretezhetõ"
 
 #: gtk/gtkfontsel.c:819
 msgid "Scaled Bitmap"
-msgstr "Méretezhetõ kép"
+msgstr "Méretezhetõ bitmap"
 
 #: gtk/gtkfontsel.c:890
 msgid "*"
@@ -317,15 +318,15 @@ msgstr "A kiválasztott betûkészlet nem létezik."
 
 #: gtk/gtkfontsel.c:1857
 msgid "This is a 2-byte font and may not be displayed correctly."
-msgstr "Ez 2 bájtos betûkészlet, megjelenítése nem biztos."
+msgstr "Ez 2 bájtos betûkészlet, nem biztos, hogy jól megjeleníthetõ."
 
 #: gtk/gtkfontsel.c:1961 gtk/gtkinputdialog.c:607
 msgid "(unknown)"
-msgstr "(nem ismert)"
+msgstr "(ismeretlen)"
 
 #: gtk/gtkfontsel.c:1972
 msgid "roman"
-msgstr "román"
+msgstr "roman"
 
 #: gtk/gtkfontsel.c:1984
 msgid "proportional"
@@ -345,7 +346,7 @@ msgstr "Betûkészlet: (Szûrt)"
 
 #: gtk/gtkfontsel.c:2662
 msgid "MAX_FONTS exceeded. Some fonts may be missing."
-msgstr "A MAX_FONTS túllépve. Hiányzik majd egy pár betûtípus."
+msgstr "A MAX_FONTS túllépve. Hiányzik majd egy pár betûkészlet."
 
 #: gtk/gtkfontsel.c:3499
 msgid "Apply"
@@ -353,7 +354,7 @@ msgstr "Alkalmaz"
 
 #: gtk/gtkfontsel.c:3521
 msgid "Font Selection"
-msgstr "Betûkészlet választó"
+msgstr "Betûkészlet-választó"
 
 #: gtk/gtkgamma.c:396
 msgid "Gamma"
@@ -395,7 +396,7 @@ msgstr "Mód:"
 #. The axis listbox
 #: gtk/gtkinputdialog.c:307
 msgid "Axes"
-msgstr "Szögek"
+msgstr "Tengelyek"
 
 #. Keys listbox
 #: gtk/gtkinputdialog.c:323
@@ -406,7 +407,7 @@ msgstr "Billentyûk"
 #. connect to it, without paying attention to whether it exits
 #: gtk/gtkinputdialog.c:345
 msgid "Save"
-msgstr "Ment"
+msgstr "Mentés"
 
 #: gtk/gtkinputdialog.c:500
 msgid "X"
@@ -463,4 +464,4 @@ msgstr "Nem találom a betölthetõ modult a module_path (%s) útvonalon,"
 
 #: gtk/gtktipsquery.c:180
 msgid "--- No Tip ---"
-msgstr "-- Nincs hintszöveg --"
+msgstr "-- Nincs tipp --"
