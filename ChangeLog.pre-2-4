@@ -1,3 +1,12 @@
+Fri Feb 19 14:59:45 EST 1999 Sergey Panov  <sipan@mit.edu>
+
+        * gtk/gtkrc,gtk/gtkrc.ja, gtk/gtkrc.ko,
+	gtk/gtkrc.ru: Collecttion of the locale dependent
+	gtkrc files and
+
+	* gtk/Makefile.am: patched to get that collection
+	installed in to $(prefix)/etc/gtk/
+
 Fri Feb 19 17:52:28 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtksignal.h: grouped function names into application-level,

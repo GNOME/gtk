@@ -1,0 +1,6 @@
+style "default" {
+       fontset = "-adobe-helvetica-medium-r-normal--14-100-100-100-p-76-iso8859-1,\
+                  -*-*-medium-*-*--14-*-*-*-*-*-ksc5601.1987-*"
+}
+class "GtkWidget" style "default"
+

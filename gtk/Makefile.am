@@ -311,6 +311,8 @@ libgtk_la_LDFLAGS = \
 	-lm
 #	$(top_builddir)/gdk/libgdk.la
 
+gtkconfdir = $(sysconfdir)/gtk
+gtkconf_DATA = gtkrc gtkrc.ja gtkrc.ko gtkrc.ru
 
 # We create a dummy theme for the default GTK+ theme
 
