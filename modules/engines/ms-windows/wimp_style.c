@@ -345,12 +345,12 @@ setup_system_styles(GtkStyle *style)
           (font_ptr ? font_ptr : " font name should go here"));
   gtk_rc_parse_string(buf);
 
-  /* enable tooltip fonts - waiting for GTK 2.4 */
-  font_ptr = sys_font_to_pango_font (CAPTION_FONT,font_buf);
+  /* enable tooltip fonts */
+  font_ptr = sys_font_to_pango_font (STATUS_FONT,font_buf);
   sprintf(buf, "style \"wimp-tooltips-caption\"\n"
 	  "{fg[NORMAL] = { %d, %d, %d }\n"
 	  "%s = \"%s\"\n"
-	  "}widget \"gtk-tooltips-caption*\" style \"wimp-tooltips-caption\"\n",
+	  "}widget \"gtk-tooltips.GtkLabel\" style \"wimp-tooltips-caption\"\n",
           tooltip_fore.red,
           tooltip_fore.green,
           tooltip_fore.blue,
