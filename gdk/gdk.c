@@ -345,7 +345,7 @@ gdk_parse_args (int    *argc,
 
   /* Do any setup particular to the windowing system
    */
-  _gdk_windowing_init ();
+  _gdk_windowing_init (argc, argv);
 }
 
 /** 

@@ -1,3 +1,12 @@
+2002-07-16  Sven Neumann  <sven@gimp.org>
+
+	* gdk/gdk.c
+	* gdk/gdkinternals.h
+	* gdk/win32/gdkmain-win32.c
+	* gdk/x11/gdkmain-x11.c: pass argc and argv to the GDK backend in
+	_gdk_windowing_init() so that the backend has a chance to process
+	the command-line arguments (GTK+-DirectFB needs this).
+
 2002-07-10  jacob berkman  <jacob@ximian.com>
 
 	* gtk/gtkoptionmenu.c (gtk_option_menu_scroll_event): activate the

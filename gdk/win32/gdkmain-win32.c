@@ -67,7 +67,8 @@ DllMain(HINSTANCE hinstDLL,
 }
 
 void
-_gdk_windowing_init (void)
+_gdk_windowing_init (gint    *argc,
+                     gchar ***argv)
 {
   gchar buf[10];
 

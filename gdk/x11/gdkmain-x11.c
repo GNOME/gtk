@@ -96,7 +96,8 @@ GdkArgDesc _gdk_windowing_args[] = {
 };
 
 void
-_gdk_windowing_init (void)
+_gdk_windowing_init (gint    *argc,
+                     gchar ***argv)
 {
   _gdk_x11_initialize_locale ();
   
