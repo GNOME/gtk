@@ -1,3 +1,12 @@
+Overview of Changes in GTK+ 1.2.9:
+
+* Addition of .pc files
+* Minor i18n improvements
+* Improved submenu navigation
+* Some DEFAULT widget shuffeling
+* Minor GtkTable improvements
+* Selection and DND bug fixes
+
 Overview of Changes in GTK+ 1.2.8:
 
 * GNU Make 3.79 bug workaround
