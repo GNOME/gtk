@@ -1024,35 +1024,49 @@ gtk_text_motion_notify (GtkWidget      *widget,
 }
 
 static void
-gtk_text_insert_1_at_point (GtkText* text, char key)
+gtk_text_insert_1_at_point (GtkText* text, gchar key)
 {
+  guint old_height= total_line_height (text, text->current_line, 1);
   gtk_text_insert (text,
 		   MARK_CURRENT_FONT (&text->point),
 		   MARK_CURRENT_FORE (&text->point),
 		   MARK_CURRENT_BACK (&text->point),
 		   &key, 1);
 
-  insert_char_line_expose (text, key, 
-			   total_line_height (text, text->current_line, 1));
+
+  insert_char_line_expose (text, key, old_height );
 
 }
 
 static void
-gtk_text_backward_delete_1_at_point (GtkText* text, char key)
+gtk_text_backward_delete_1_at_point (GtkText* text)
 {
-  gtk_text_backward_delete (text, 1);
+  guint old_height;
+  gchar key= TEXT_INDEX(text,text->cursor_mark.index-1);
 
-  delete_char_line_expose (text, key, 
-			   total_line_height (text, text->current_line, 1));
+  if (1 > text->point.index )
+    return;
+
+  gtk_text_set_point (text, text->point.index - 1);
+  find_line_containing_point (text, text->cursor_mark.index-1);
+
+  old_height= total_line_height (text, text->current_line, 1 + (key == LINE_DELIM));
+
+  gtk_text_forward_delete (text, 1);
+  
+  delete_char_line_expose (text, key, old_height);
 }
 
 static void
-gtk_text_forward_delete_1_at_point (GtkText* text, char key)
+gtk_text_forward_delete_1_at_point (GtkText* text)
 {
+  guint old_height;
+  gchar key= TEXT_INDEX(text,text->cursor_mark.index);
+
+  old_height= total_line_height (text, text->current_line, 1 + (key == LINE_DELIM));
   gtk_text_forward_delete (text, 1);
 
-  delete_char_line_expose (text, key, 
-			   total_line_height (text, text->current_line, 1));
+  delete_char_line_expose (text, key, old_height);
 }
 
 static gint
@@ -1108,13 +1122,13 @@ gtk_text_key_press (GtkWidget   *widget,
 	      if (!text->has_cursor || text->cursor_mark.index == 0)
 		break;
 
-	      gtk_text_backward_delete_1_at_point (text, key);
+	      gtk_text_backward_delete_1_at_point (text);
 	      break;
 	    case GDK_Delete:
 	      if (!text->has_cursor || LAST_INDEX (text, text->cursor_mark))
 		break;
 
-	      gtk_text_forward_delete_1_at_point (text, key);
+	      gtk_text_forward_delete_1_at_point (text);
 	      break;
 	    case GDK_Tab:
 	      if (!text->has_cursor)
@@ -3493,6 +3507,10 @@ static void
 gtk_text_show_cache (GtkText *text, const char* func, gint line)
 {
   GList *l = text->line_start_cache;
+
+  if (!l) {
+    return;
+  }
 
   /* back up to the absolute beginning of the line cache */
   while (l->prev)

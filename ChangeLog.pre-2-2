@@ -1,3 +1,22 @@
+Thu Feb 19 12:18:24 1998  Owen Taylor  <owt1@cornell.edu>
+
+	* gtk/testgtk.c : Use POINTER_MOTION_HINT when dragging
+	shapes around. 
+	(gtk-wille-980203-0 
+	 Stefan Wille  <1wille@vsys1.informatik.uni-hamburg.de>)
+
+	* gtk/gtktext.c : Fixes to inserting and deleting characters
+	on line breaks.
+	(gtk-magnus-980210-0 Magnus Hulthen <magnus@axiom.se>)
+
+	* glib/configure.in glib/glibconfig.h.in: the value of
+	---enable_debug is written into glibconfig.h so everything
+	is recompiled when it changes. (HACK)
+
+	* gtk/gtkmain.c gdk/gdk.c docs/debugging.txt:
+	Added --gdk-no-debug and --gtk-no-debug switches. Effect
+	of switches is no cumulative.
+
 Thu Feb 19 06:56:52 1998  Tim Janik  <timj@gimp.org>
 
         * gtkbox.c:

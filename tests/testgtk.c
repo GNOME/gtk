@@ -3063,7 +3063,8 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
   gtk_grab_add (widget);
   gdk_pointer_grab (widget->window, TRUE,
 		    GDK_BUTTON_RELEASE_MASK |
-		    GDK_BUTTON_MOTION_MASK,
+		    GDK_BUTTON_MOTION_MASK |
+		    GDK_POINTER_MOTION_HINT_MASK,
 		    NULL, NULL, 0);
 }
 
@@ -3085,6 +3086,10 @@ shape_motion (GtkWidget      *widget,
 
   p = gtk_object_get_user_data (GTK_OBJECT (widget));
 
+  /*
+   * Can't use event->x / event->y here 
+   * because I need absolute coordinates.
+   */
   gdk_window_get_pointer (root_win, &xp, &yp, &mask);
   gtk_widget_set_uposition (widget, xp  - p->x, yp  - p->y);
 }
@@ -3122,6 +3127,7 @@ shape_create_icon (char     *xpm_file,
   gtk_widget_set_events (window, 
 			 gtk_widget_get_events (window) |
 			 GDK_BUTTON_MOTION_MASK |
+			 GDK_POINTER_MOTION_HINT_MASK |
 			 GDK_BUTTON_PRESS_MASK);
 
   gtk_widget_realize (window);
