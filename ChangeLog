@@ -1,6 +1,14 @@
 Thu Apr 30 10:22:59 1998  Owen Taylor  <otaylor@gtk.org>
 
 	* glib/ltmain.sh glib/ltconfig glib/config.sub glib/config.guess:
+	  ltmain.sh ltconfig config.sub config.guess:
+
+	Reverted back to libtool-1.2 (plus minor patches) so as not to
+	force the issue for everyone else.
+
+Thu Apr 30 10:22:59 1998  Owen Taylor  <otaylor@gtk.org>
+
+	* glib/ltmain.sh glib/ltconfig glib/config.sub glib/config.guess:
 	Updated to libtool 1.2a.
 
 	* gtk/gtkclist.c: Draw the in-between lines with style->base
