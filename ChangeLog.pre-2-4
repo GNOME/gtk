@@ -1,3 +1,10 @@
+2004-02-09  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (set_list_model): Request
+	GTK_FILE_INFO_ALL from the file system model, so that arbitrary
+	filtering will work.  Perhaps we should have a way of aggregating
+	info types to the model as filters get installed.
+
 Mon Feb  9 22:22:19 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcellview.c (gtk_cell_view_cell_layout_clear_attributes): 

@@ -2027,13 +2027,7 @@ set_list_model (GtkFileChooserDefault *impl)
 
   impl->list_model = _gtk_file_system_model_new (impl->file_system,
 						 impl->current_folder, 0,
-#if 0
-						 GTK_FILE_INFO_ICON |
-#endif
-						 GTK_FILE_INFO_DISPLAY_NAME |
-						 GTK_FILE_INFO_IS_FOLDER |
-						 GTK_FILE_INFO_SIZE |
-						 GTK_FILE_INFO_MODIFICATION_TIME);
+						 GTK_FILE_INFO_ALL);
   _gtk_file_system_model_set_show_hidden (impl->list_model, impl->show_hidden);
   install_list_model_filter (impl);
 
