@@ -15,36 +15,40 @@
 
   <para>
     Prior to GTK+ 2.4, there were several APIs in use to create menus
-    and toolbars.  GTK+ itself included #GtkItemFactory, which was
+    and toolbars.  GTK+ itself included <link
+    linkend="GtkItemFactory">GtkItemFactory</link>, which was
     historically used in the GIMP; libgnomeui provided the gnome-ui
     set of macros; libbonoboui provided a complex mechanism to do menu
     merging across embedded components.  GTK+ 2.4 includes a system
     for creating menus and toolbars, with merging of items, based
-    around the #GtkAction mechanism.
+    around the <link linkend="GtkAction">GtkAction</link> mechanism.
   </para>
 
   <section id="actions-and-action-groups">
     <title>Actions and Action Groups</title>
 
     <para>
-      A #GtkAction represents an operation that the user can perform
-      from the menus and toolbars of an application.  It is similar to
-      "verbs" in other menu systems.  A #GtkAction has a name, which
-      is its identifier, and it can have several widgets that
-      represent it in the user interface.  For example, an action for
-      <symbol>EditCopy</symbol> can have a menu item as well as a
+      A <link linkend="GtkAction">GtkAction</link> represents an
+      operation that the user can perform from the menus and toolbars
+      of an application.  It is similar to "verbs" in other menu
+      systems.  A <link linkend="GtkAction">GtkAction</link> has a
+      name, which is its identifier, and it can have several widgets
+      that represent it in the user interface.  For example, an action
+      for <symbol>EditCopy</symbol> can have a menu item as well as a
       toolbar button associated to it.  If there is nothing selected
       in the document, the application can simply de-sensitize the
       <symbol>EditCopy</symbol> action; this will cause both the menu
       item and the toolbar button to be de-sensitized automatically.
       Similarly, whenever the user selects the menu item or the
       toolbar button associated to the <symbol>EditCopy</symbol>
-      action, the corresponding #GtkAction object will emit an
+      action, the corresponding <link
+      linkend="GtkAction">GtkAction</link> object will emit an
       "activate" signal.
     </para>
 
     <para>
-      #GtkActionGroup is simply a group of #GtkAction objects.  An
+      <link linkend="GtkActionGroup">GtkActionGroup</link> is simply a
+      group of <link linkend="GtkAction">GtkAction</link> objects.  An
       application may want to have several groups:  one for global
       actions such as "new document", "about", and "exit"; then one
       group for each open document with actions specific to the
@@ -68,20 +72,22 @@
     <title>User Interface Manager Object</title>
 
     <para>
-      #GtkUIManager is an object that can construct menu and toolbar
-      widgets from an XML description.  These widgets are in turn
-      associated to corresponding actions and action groups.
+      <link linkend="GtkUIManager">GtkUIManager</link> is an object
+      that can construct menu and toolbar widgets from an XML
+      description.  These widgets are in turn associated to
+      corresponding actions and action groups.
     </para>
 
     <para>
-      #GtkUIManager supports merging of menus and toolbars for
-      applications that have multiple components, each with separate
-      sets of commands.  For example, a word processor that can embed
-      images may want to have toolbar buttons for Bold and Italic when
-      the cursor is on a text block, but Crop and Brightness/Contrast
-      buttons when the cursor is on an image.  These actions, which
-      change depending on the state of the application, can be merged
-      and de-merged from a #GtkUIManager as appropriate.
+      <link linkend="GtkUIManager">GtkUIManager</link> supports
+      merging of menus and toolbars for applications that have
+      multiple components, each with separate sets of commands.  For
+      example, a word processor that can embed images may want to have
+      toolbar buttons for Bold and Italic when the cursor is on a text
+      block, but Crop and Brightness/Contrast buttons when the cursor
+      is on an image.  These actions, which change depending on the
+      state of the application, can be merged and de-merged from a
+      <link linkend="GtkUIManager">GtkUIManager</link> as appropriate.
     </para>
   </section>
 
@@ -135,25 +141,28 @@
       <listitem>
 	<para>
 	  Separate your existing GnomeUIInfo entries into normal
-	  actions, toggle actions, and radio actions, and then create a
-	  separate array of #GtkActionEntry structures for each
-	  group.  This will allow you to create the necessary
-	  #GtkActionGroup objects.  Note that this does not describe
-	  the actual "shape" that your menus and toolbars will have;
-	  it simply defines the set of commands that will appear in them.
+	  actions, toggle actions, and radio actions, and then create
+	  a separate array of <link
+	  linkend="GtkActionEntry">GtkActionEntry</link> structures
+	  for each group.  This will allow you to create the necessary
+	  <link linkend="GtkActionGroup">GtkActionGroup</link>
+	  objects.  Note that this does not describe the actual
+	  "shape" that your menus and toolbars will have; it simply
+	  defines the set of commands that will appear in them.
 	</para>
       </listitem>
       <listitem>
 	<para>
 	  Create an XML description of your menus and toolbars for use
-	  with #GtkUIManager.  This defines the actual shape of the
-	  menus and toolbars.
+	  with <link linkend="GtkUIManager">GtkUIManager</link>.  This
+	  defines the actual shape of the menus and toolbars.
 	</para>
       </listitem>
       <listitem>
 	<para>
 	  Port the code that uses gnome-app and gnome-app-helper to
-	  #GtkAction and #GtkUIManager.
+	  <link linkend="GtkAction">GtkAction</link> and <link
+	  linkend="GtkUIManager">GtkUIManager</link>.
 	</para>
       </listitem>
     </orderedlist>
@@ -248,14 +257,14 @@ static GnomeUIInfo menubar[] = {
 	The following code is the set of actions that are present in
 	the <link linkend="gnomeuiinfo-example">previous
 	example</link>.  Note that the toggle and radio entries are
-	separate from normal actions.  Also, note that #GtkActionEntry
-	structures take key names in the format of
-	gdk_accelerator_parse() rather than key values plus modifiers;
-	you will have to convert these values by hand.  For example,
-	<constant>GDK_F11</constant> with no modifiers is equivalent
-	to a key name of <literal>"F11"</literal>.  Likewise,
-	<literal>"o"</literal> with
-	<constant>GDK_CONTROL_MASK</constant> is equivalent to
+	separate from normal actions.  Also, note that <link
+	linkend="GtkActionEntry">GtkActionEntry</link> structures take
+	key names in the format of gdk_accelerator_parse() rather than
+	key values plus modifiers; you will have to convert these
+	values by hand.  For example, <constant>GDK_F11</constant>
+	with no modifiers is equivalent to a key name of
+	<literal>"F11"</literal>.  Likewise, <literal>"o"</literal>
+	with <constant>GDK_CONTROL_MASK</constant> is equivalent to
 	<literal>"&lt;ontrol&gt;O"</literal>.
       </para>
 
@@ -290,15 +299,15 @@ static GtkRadioActionEntry radio_entries[] = {
       <para>
 	After extracting the actions, you will need to create an XML
 	description of the actual layout of your menus and toolbars
-	for use with #GtkUIManager.  The following code shows a simple
-	menu bar that corresponds to the <link
-	linkend="gnomeuiinfo-example">previous example</link>.  Note
-	that the <guimenu>File</guimenu> and <guimenu>View</guimenu>
-	menus have their names specified in the <link
-	linkend="gnomeuiinfo-action-entries">action entries</link>,
-	not in the XML itself.  This is because the XML description
-	only contains <emphasis>identifiers</emphasis> for the items
-	in the GUI, rather than human-readable names.
+	for use with <link linkend="GtkUIManager">GtkUIManager</link>.
+	The following code shows a simple menu bar that corresponds to
+	the <link linkend="gnomeuiinfo-example">previous
+	example</link>.  Note that the <guimenu>File</guimenu> and
+	<guimenu>View</guimenu> menus have their names specified in
+	the <link linkend="gnomeuiinfo-action-entries">action
+	entries</link>, not in the XML itself.  This is because the
+	XML description only contains <emphasis>identifiers</emphasis>
+	for the items in the GUI, rather than human-readable names.
       </para>
 
       <programlisting>
@@ -328,13 +337,16 @@ static const char *ui_description =
       <title>Creating the Menu Bar</title>
 
       <para>
-	In this last example, we will create a #GtkActionGroup based
-	on the <link linkend="gnomeuiinfo-action-entries">action
-	entries</link> we created above.  We will then create a
-	#GtkUIManager with the <link linkend="gnomeuiinfo-xml">XML
-	description</link> of the menu layout.  We will also extract
-	the accelerator group and the widgets from the #GtkUIManager
-	put them into a window.
+	In this last example, we will create a <link
+	linkend="GtkActionGroup">GtkActionGroup</link> based on the
+	<link linkend="gnomeuiinfo-action-entries">action
+	entries</link> we created above.  We will then create a <link
+	linkend="GtkUIManager">GtkUIManager</link> with the <link
+	linkend="gnomeuiinfo-xml">XML description</link> of the menu
+	layout.  We will also extract the accelerator group and the
+	widgets from the <link
+	linkend="GtkUIManager">GtkUIManager</link> put them into a
+	window.
       </para>
 
       <programlisting>

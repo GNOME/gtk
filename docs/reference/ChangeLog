@@ -1,3 +1,14 @@
+2004-02-27  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/migrating-GtkAction.sgml: Put explicit <link> elements
+	instead of #Symbol, because the latter doesn't get substituted by
+	gtk-doc outside of template files.  Thanks to Matthias for
+	pointing this out.
+
+	* gtk/migrating-GtkFileChooser.sgml: Likewise.
+
+	* gtk/gtk-sections.txt: Removed gtk_file_chooser_{set,get}_folder_mode.
+
 Fri Feb 27 22:51:35 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/tmpl/gtkoptionmenu.sgml: 
