@@ -1,3 +1,7 @@
+2003-01-05  Havoc Pennington  <hp@pobox.com>
+
+	* configure.in: fix a stray bracket that was breaking the build
+
 2003-01-05  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk-zip.sh.in: Use correct DLL and import library names, with

@@ -473,7 +473,7 @@ if test "${with_ie55+set}" = set && test $with_ie55 != no; then
   AC_MSG_CHECKING([for dimm.h])
   saved_CFLAGS="$CFLAGS"
   CFLAGS="$CFLAGS -idirafter $with_ie55/Include"
-  AC_TRY_COMPILE([[/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
+  AC_TRY_COMPILE([/* The w32api imm.h clashes a bit with the IE5.5 dimm.h */
 #ifdef __GNUC__
 #define IMEMENUITEMINFOA hidden_IMEMENUITEMINFOA
 #define IMEMENUITEMINFOW hidden_IMEMENUITEMINFOW
