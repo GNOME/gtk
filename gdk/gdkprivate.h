@@ -51,7 +51,6 @@ extern "C" {
 #define gdk_pixmap_lookup(xid)	   ((GdkPixmap*) gdk_xid_table_lookup (xid))
 #define gdk_font_lookup(xid)	   ((GdkFont*) gdk_xid_table_lookup (xid))
 
-typedef struct _GdkGCPrivate	       GdkGCPrivate;
 typedef struct _GdkColorInfo           GdkColorInfo;
 typedef struct _GdkFontPrivate	       GdkFontPrivate;
 typedef struct _GdkEventFilter	       GdkEventFilter;
@@ -61,18 +60,6 @@ struct _GdkFontPrivate
 {
   GdkFont font;
   guint ref_count;
-};
-
-struct _GdkGCPrivate
-{
-  guint ref_count;
-  GdkGCClass *klass;
-  gpointer klass_data;
-
-  gint clip_x_origin;
-  gint clip_y_origin;
-  gint ts_x_origin;
-  gint ts_y_origin;
 };
 
 typedef enum {

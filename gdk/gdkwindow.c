@@ -823,10 +823,10 @@ gdk_window_get_offsets (GdkWindow *window,
 
 #define OFFSET_GC(gc)                                         \
     gint x_offset, y_offset; 				      \
-    gint old_clip_x = ((GdkGCPrivate *)gc)->clip_x_origin;    \
-    gint old_clip_y = ((GdkGCPrivate *)gc)->clip_y_origin;    \
-    gint old_ts_x = ((GdkGCPrivate *)gc)->ts_x_origin;        \
-    gint old_ts_y = ((GdkGCPrivate *)gc)->ts_y_origin;        \
+    gint old_clip_x = (gc)->clip_x_origin;    \
+    gint old_clip_y = (gc)->clip_y_origin;    \
+    gint old_ts_x = (gc)->ts_x_origin;        \
+    gint old_ts_y = (gc)->ts_y_origin;        \
     gdk_window_get_offsets (drawable, &x_offset, &y_offset);  \
     if (x_offset != 0 || y_offset != 0)             	      \
       {                                                       \

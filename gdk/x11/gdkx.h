@@ -47,17 +47,6 @@ typedef struct _GdkVisualPrivate       GdkVisualPrivate;
 typedef struct _GdkICPrivate        GdkICPrivate;
 #endif /* USE_XIM */
 
-#define GDK_WINDOW_XDATA(win) ((GdkWindowXData *)(((GdkDrawablePrivate*)(win))->klass_data))
-#define GDK_GC_XDATA(gc) ((GdkGCXData *)(((GdkGCPrivate*)(gc))->klass_data))
-
-struct _GdkGCXData
-{
-  GC xgc;
-  Display *xdisplay;
-  GdkRegion *clip_region;
-  guint dirty_mask;
-};
-
 struct _GdkCursorPrivate
 {
   GdkCursor cursor;
@@ -112,6 +101,35 @@ struct _GdkICPrivate
 
 #endif /* USE_XIM */
 
+
+typedef struct _GdkWindowingGC      GdkWindowingGC;
+typedef struct _GdkWindowingGCClass GdkWindowingGCClass;
+
+#define GDK_TYPE_WINDOWING_GC              (gdk_windowing_gc_get_type ())
+#define GDK_WINDOWING_GC(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOWING_GC, GdkWindowingGC))
+#define GDK_WINDOWING_GC_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOWING_GC, GdkWindowingGCClass))
+#define GDK_IS_WINDOWING_GC(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOWING_GC))
+#define GDK_IS_WINDOWING_GC_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOWING_GC))
+#define GDK_WINDOWING_GC_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOWING_GC, GdkWindowingGCClass))
+
+struct _GdkWindowingGC
+{
+  GdkGC parent_instance;
+  
+  GC xgc;
+  Display *xdisplay;
+  GdkRegion *clip_region;
+  guint dirty_mask;
+};
+
+struct _GdkWindowingGCClass
+{
+  GdkGCClass parent_class;
+
+};
+
+GType gdk_windowing_gc_get_type (void);
+
 #define GDK_ROOT_WINDOW()             gdk_root_window
 #define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
 #define GDK_DISPLAY()                 gdk_display
@@ -123,15 +141,15 @@ struct _GdkICPrivate
 #define GDK_DRAWABLE_XID(win)         (GDK_IS_WINDOW (win) ? GDK_WINDOW_XID (win) : GDK_PIXMAP_XID (win))
 #define GDK_IMAGE_XDISPLAY(image)     (((GdkImagePrivateData*) GDK_IMAGE (image)->windowing_data)->xdisplay)
 #define GDK_IMAGE_XIMAGE(image)       (((GdkImagePrivateData*) GDK_IMAGE (image)->windowing_data)->ximage)
-#define GDK_GC_XDISPLAY(gc)           (GDK_GC_XDATA(gc)->xdisplay)
+#define GDK_GC_XDISPLAY(gc)           (GDK_WINDOWING_GC(gc)->xdisplay)
 #define GDK_COLORMAP_XDISPLAY(cmap)   (((GdkColormapPrivateData *)GDK_COLORMAP (cmap)->windowing_data)->xdisplay)
 #define GDK_COLORMAP_XCOLORMAP(cmap)  (((GdkColormapPrivateData *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate*) vis)->xvisual)
 #define GDK_FONT_XDISPLAY(font)       (((GdkFontPrivate*) font)->xdisplay)
 #define GDK_FONT_XFONT(font)          (((GdkFontPrivateX *)font)->xfont)
 
-#define GDK_GC_XGC(gc)       (GDK_GC_XDATA(gc)->xgc)
-#define GDK_GC_GET_XGC(gc)   (GDK_GC_XDATA(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
+#define GDK_GC_XGC(gc)       (GDK_WINDOWING_GC(gc)->xgc)
+#define GDK_GC_GET_XGC(gc)   (GDK_WINDOWING_GC(gc)->dirty_mask ? _gdk_x11_gc_flush (gc) : GDK_GC_XGC (gc))
 #define GDK_WINDOW_XWINDOW    GDK_WINDOW_XID
 
 extern Display		*gdk_display;

@@ -29,21 +29,62 @@
 #include "gdkgc.h"
 #include "gdkprivate.h"
 
-GdkGC*
-gdk_gc_alloc (void)
+static void gdk_gc_init       (GdkGC      *gc);
+static void gdk_gc_class_init (GdkGCClass *klass);
+static void gdk_gc_finalize   (GObject           *object);
+
+static gpointer parent_class = NULL;
+
+GType
+gdk_gc_get_type (void)
 {
-  GdkGCPrivate *private;
+  static GType object_type = 0;
 
-  private = g_new (GdkGCPrivate, 1);
-  private->ref_count = 1;
-  private->klass = NULL;
-  private->klass_data = NULL;
-  private->clip_x_origin = 0;
-  private->clip_y_origin = 0;
-  private->ts_x_origin = 0;
-  private->ts_y_origin = 0;
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkGCClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_gc_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkGC),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_gc_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT,
+                                            "GdkGC",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
 
-  return (GdkGC *)private;
+static void
+gdk_gc_init (GdkGC *gc)
+{
+
+}
+
+static void
+gdk_gc_class_init (GdkGCClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  parent_class = g_type_class_peek (G_TYPE_OBJECT);
+
+  object_class->finalize = gdk_gc_finalize;
+}
+
+static void
+gdk_gc_finalize (GObject *object)
+{
+  GdkGC *gc = GDK_GC (object);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 GdkGC*
@@ -63,7 +104,6 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 			GdkGCValuesMask	 values_mask)
 {
   GdkGC *gc;
-  GdkGCPrivate *private;
 
   g_return_val_if_fail (drawable != NULL, NULL);
 
@@ -73,16 +113,14 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
   gc = GDK_DRAWABLE_GET_CLASS (drawable)->create_gc (drawable,
                                                      values,
                                                      values_mask);
-  private = (GdkGCPrivate *)gc;
-  
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
-    private->clip_x_origin = values->clip_x_origin;
+    gc->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
-    private->clip_y_origin = values->clip_y_origin;
+    gc->clip_y_origin = values->clip_y_origin;
   if (values_mask & GDK_GC_TS_X_ORIGIN)
-    private->ts_x_origin = values->ts_x_origin;
+    gc->ts_x_origin = values->ts_x_origin;
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
-    private->ts_y_origin = values->ts_y_origin;
+    gc->ts_y_origin = values->ts_y_origin;
 
   return gc;
 }
@@ -90,10 +128,7 @@ gdk_gc_new_with_values (GdkDrawable	*drawable,
 GdkGC *
 gdk_gc_ref (GdkGC *gc)
 {
-  GdkGCPrivate *private = (GdkGCPrivate*) gc;
-
-  g_return_val_if_fail (gc != NULL, NULL);
-  private->ref_count += 1;
+  g_object_ref (G_OBJECT (gc));
 
   return gc;
 }
@@ -101,28 +136,17 @@ gdk_gc_ref (GdkGC *gc)
 void
 gdk_gc_unref (GdkGC *gc)
 {
-  GdkGCPrivate *private = (GdkGCPrivate*) gc;
-  
-  g_return_if_fail (gc != NULL);
-  g_return_if_fail (private->ref_count > 0);
-  
-  private->ref_count--;
-
-  if (private->ref_count == 0)
-    {
-      private->klass->destroy (gc);
-      g_free (private);
-    }
+  g_object_unref (G_OBJECT (gc));
 }
 
 void
 gdk_gc_get_values (GdkGC       *gc,
 		   GdkGCValues *values)
 {
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (values != NULL);
 
-  ((GdkGCPrivate *)gc)->klass->get_values (gc, values);
+  GDK_GC_GET_CLASS (gc)->get_values (gc, values);
 }
 
 void
@@ -130,21 +154,19 @@ gdk_gc_set_values (GdkGC           *gc,
 		   GdkGCValues	   *values,
 		   GdkGCValuesMask  values_mask)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
-  
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (values != NULL);
 
   if (values_mask & GDK_GC_CLIP_X_ORIGIN)
-    private->clip_x_origin = values->clip_x_origin;
+    gc->clip_x_origin = values->clip_x_origin;
   if (values_mask & GDK_GC_CLIP_Y_ORIGIN)
-    private->clip_y_origin = values->clip_y_origin;
+    gc->clip_y_origin = values->clip_y_origin;
   if (values_mask & GDK_GC_TS_X_ORIGIN)
-    private->ts_x_origin = values->ts_x_origin;
+    gc->ts_x_origin = values->ts_x_origin;
   if (values_mask & GDK_GC_TS_Y_ORIGIN)
-    private->ts_y_origin = values->ts_y_origin;
+    gc->ts_y_origin = values->ts_y_origin;
   
-  private->klass->set_values (gc, values, values_mask);
+  GDK_GC_GET_CLASS (gc)->set_values (gc, values, values_mask);
 }
 
 void
@@ -153,7 +175,7 @@ gdk_gc_set_foreground (GdkGC	*gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (color != NULL);
 
   values.foreground = *color;
@@ -166,7 +188,7 @@ gdk_gc_set_background (GdkGC	*gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (color != NULL);
 
   values.background = *color;
@@ -179,7 +201,7 @@ gdk_gc_set_font (GdkGC	 *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (font != NULL);
 
   values.font = font;
@@ -192,7 +214,7 @@ gdk_gc_set_function (GdkGC	 *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.function = function;
   gdk_gc_set_values (gc, &values, GDK_GC_FUNCTION);
@@ -204,7 +226,7 @@ gdk_gc_set_fill (GdkGC	 *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.fill = fill;
   gdk_gc_set_values (gc, &values, GDK_GC_FILL);
@@ -216,7 +238,7 @@ gdk_gc_set_tile (GdkGC	   *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.tile = tile;
   gdk_gc_set_values (gc, &values, GDK_GC_TILE);
@@ -228,7 +250,7 @@ gdk_gc_set_stipple (GdkGC     *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.stipple = stipple;
   gdk_gc_set_values (gc, &values, GDK_GC_STIPPLE);
@@ -241,7 +263,7 @@ gdk_gc_set_ts_origin (GdkGC *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.ts_x_origin = x;
   values.ts_y_origin = y;
@@ -257,7 +279,7 @@ gdk_gc_set_clip_origin (GdkGC *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.clip_x_origin = x;
   values.clip_y_origin = y;
@@ -272,7 +294,7 @@ gdk_gc_set_clip_mask (GdkGC	*gc,
 {
   GdkGCValues values;
   
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   
   values.clip_mask = mask;
   gdk_gc_set_values (gc, &values, GDK_GC_CLIP_MASK);
@@ -285,7 +307,7 @@ gdk_gc_set_subwindow (GdkGC	       *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.subwindow_mode = mode;
   gdk_gc_set_values (gc, &values, GDK_GC_SUBWINDOW);
@@ -297,7 +319,7 @@ gdk_gc_set_exposures (GdkGC     *gc,
 {
   GdkGCValues values;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   values.graphics_exposures = exposures;
   gdk_gc_set_values (gc, &values, GDK_GC_EXPOSURES);
@@ -330,8 +352,8 @@ gdk_gc_set_dashes (GdkGC *gc,
 		   gint8  dash_list[],
 		   gint   n)
 {
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (dash_list != NULL);
 
-  ((GdkGCPrivate *)gc)->klass->set_dashes (gc, dash_offset, dash_list, n);
+  GDK_GC_GET_CLASS (gc)->set_dashes (gc, dash_offset, dash_list, n);
 }

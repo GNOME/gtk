@@ -61,7 +61,7 @@
 static GList *image_list = NULL;
 static gpointer parent_class = NULL;
 
-static void gdk_image_destroy    (GdkImage      *image);
+static void gdk_x11_image_destroy    (GdkImage      *image);
 static void gdk_image_init       (GdkImage      *image);
 static void gdk_image_class_init (GdkImageClass *klass);
 static void gdk_image_finalize   (GObject       *object);
@@ -118,7 +118,7 @@ gdk_image_finalize (GObject *object)
 {
   GdkImage *image = GDK_IMAGE (object);
 
-  gdk_image_destroy (image);
+  gdk_x11_image_destroy (image);
   
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -132,7 +132,7 @@ gdk_image_exit (void)
   while (image_list)
     {
       image = image_list->data;
-      gdk_image_destroy (image);
+      gdk_x11_image_destroy (image);
     }
 }
 
@@ -439,7 +439,7 @@ gdk_image_put_pixel (GdkImage *image,
 }
 
 static void
-gdk_image_destroy (GdkImage *image)
+gdk_x11_image_destroy (GdkImage *image)
 {
   GdkImagePrivateData *private;
 #ifdef USE_SHM

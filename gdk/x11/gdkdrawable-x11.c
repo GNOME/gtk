@@ -24,6 +24,36 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+
+#include <config.h>
+
+/* gcc -ansi -pedantic on GNU/Linux causes warnings and errors
+ * unless this is defined:
+ * warning: #warning "Files using this header must be compiled with _SVID_SOURCE or _XOPEN_SOURCE"
+ */
+#ifndef _XOPEN_SOURCE
+#  define _XOPEN_SOURCE 1
+#endif
+
+#include <stdlib.h>
+#include <sys/types.h>
+
+#if defined (HAVE_IPC_H) && defined (HAVE_SHM_H) && defined (HAVE_XSHM_H)
+#define USE_SHM
+#endif
+
+#ifdef USE_SHM
+#include <sys/ipc.h>
+#include <sys/shm.h>
+#endif /* USE_SHM */
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+#ifdef USE_SHM
+#include <X11/extensions/XShm.h>
+#endif /* USE_SHM */
+
 #include "gdkprivate-x11.h"
 #include "gdkdrawable-x11.h"
 #include "gdkpixmap-x11.h"

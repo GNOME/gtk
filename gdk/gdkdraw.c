@@ -184,13 +184,10 @@ gdk_draw_point (GdkDrawable *drawable,
                 gint         x,
                 gint         y)
 {
-  GdkGCPrivate *gc_private;
   GdkPoint point;
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (gc != NULL);
-
-  gc_private = (GdkGCPrivate*) gc;
+  g_return_if_fail (GDK_IS_GC (gc));
 
   point.x = x;
   point.y = y;
@@ -206,13 +203,10 @@ gdk_draw_line (GdkDrawable *drawable,
 	       gint         x2,
 	       gint         y2)
 {
-  GdkGCPrivate *gc_private;
   GdkSegment segment;
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (gc != NULL);
-
-  gc_private = (GdkGCPrivate*) gc;
+  g_return_if_fail (GDK_IS_GC (gc));
 
   segment.x1 = x1;
   segment.y1 = y1;
@@ -231,7 +225,7 @@ gdk_draw_rectangle (GdkDrawable *drawable,
 		    gint         height)
 {  
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   if (width < 0 || height < 0)
     {
@@ -262,7 +256,7 @@ gdk_draw_arc (GdkDrawable *drawable,
 	      gint         angle2)
 {  
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   if (width < 0 || height < 0)
     {
@@ -289,7 +283,7 @@ gdk_draw_polygon (GdkDrawable *drawable,
 		  gint         npoints)
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_polygon (drawable, gc, filled,
 							 points, npoints);
@@ -329,7 +323,7 @@ gdk_draw_text (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (font != NULL);
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (text != NULL);
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_text (drawable, font, gc, x, y, text, text_length);
@@ -346,7 +340,7 @@ gdk_draw_text_wc (GdkDrawable	 *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (font != NULL);
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (text != NULL);
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_text_wc (drawable, font, gc, x, y, text, text_length);
@@ -365,7 +359,7 @@ gdk_draw_drawable (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (src != NULL);
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   if (width < 0 || height < 0)
     {
@@ -398,7 +392,7 @@ gdk_draw_image (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (image != NULL);
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
   if (width == -1)
     width = image->width;
@@ -417,7 +411,7 @@ gdk_draw_points (GdkDrawable *drawable,
 {
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail ((points != NULL) && (npoints > 0));
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (npoints >= 0);
 
   if (npoints == 0)
@@ -438,7 +432,7 @@ gdk_draw_segments (GdkDrawable *drawable,
     return;
 
   g_return_if_fail (segs != NULL);
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (nsegs >= 0);
 
   GDK_DRAWABLE_GET_CLASS (drawable)->draw_segments (drawable, gc, segs, nsegs);
@@ -453,7 +447,7 @@ gdk_draw_lines (GdkDrawable *drawable,
 
   g_return_if_fail (GDK_IS_DRAWABLE (drawable));
   g_return_if_fail (points != NULL);
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (npoints >= 0);
 
   if (npoints == 0)

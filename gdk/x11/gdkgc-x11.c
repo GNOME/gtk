@@ -11,8 +11,7 @@ static void gdk_x11_gc_values_to_xvalues (GdkGCValues    *values,
 					  GdkGCValuesMask mask,
 					  XGCValues      *xvalues,
 					  unsigned long  *xvalues_mask);
-     
-static void gdk_x11_gc_destroy    (GdkGC           *gc);
+
 static void gdk_x11_gc_get_values (GdkGC           *gc,
 				   GdkGCValues     *values);
 static void gdk_x11_gc_set_values (GdkGC           *gc,
@@ -23,12 +22,74 @@ static void gdk_x11_gc_set_dashes (GdkGC           *gc,
 				   gchar            dash_list[],
 				   gint             n);
 
-static GdkGCClass gdk_x11_gc_class = {
-  gdk_x11_gc_destroy,
-  gdk_x11_gc_get_values,
-  gdk_x11_gc_set_values,
-  gdk_x11_gc_set_dashes
-};
+static void gdk_windowing_gc_init       (GdkWindowingGC      *windowing_gc);
+static void gdk_windowing_gc_class_init (GdkWindowingGCClass *klass);
+static void gdk_windowing_gc_finalize   (GObject           *object);
+
+static gpointer parent_class = NULL;
+
+GType
+gdk_windowing_gc_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+        sizeof (GdkWindowingGCClass),
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gdk_windowing_gc_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GdkWindowingGC),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gdk_windowing_gc_init,
+      };
+      
+      object_type = g_type_register_static (GDK_TYPE_GC,
+                                            "GdkWindowingGC",
+                                            &object_info);
+    }
+  
+  return object_type;
+}
+
+static void
+gdk_windowing_gc_init (GdkWindowingGC *windowing_gc)
+{
+
+}
+
+static void
+gdk_windowing_gc_class_init (GdkWindowingGCClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkGCClass *gc_class = GDK_GC_CLASS (klass);
+  
+  parent_class = g_type_class_peek (GDK_TYPE_GC);
+
+  object_class->finalize = gdk_windowing_gc_finalize;
+
+  gc_class->get_values = gdk_x11_gc_get_values;
+  gc_class->set_values = gdk_x11_gc_set_values;
+  gc_class->set_dashes = gdk_x11_gc_set_dashes;
+}
+
+static void
+gdk_windowing_gc_finalize (GObject *object)
+{
+  GdkWindowingGC *windowing_gc = GDK_WINDOWING_GC (object);
+  
+  if (windowing_gc->clip_region)
+    gdk_region_destroy (windowing_gc->clip_region);
+  
+  XFreeGC (GDK_GC_XDISPLAY (windowing_gc), GDK_GC_XGC (windowing_gc));
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 
 GdkGC *
 _gdk_x11_gc_new (GdkDrawable      *drawable,
@@ -36,8 +97,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 		 GdkGCValuesMask   values_mask)
 {
   GdkGC *gc;
-  GdkGCPrivate *private;
-  GdkGCXData *data;
+  GdkWindowingGC *private;
   
   XGCValues xvalues;
   unsigned long xvalues_mask;
@@ -47,27 +107,24 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
    */
   g_return_val_if_fail (GDK_IS_DRAWABLE_IMPL (drawable), NULL);
   
-  gc = gdk_gc_alloc ();
-  private = (GdkGCPrivate *)gc;
+  gc = GDK_GC (g_type_create_instance (gdk_windowing_gc_get_type ()));
+  private = GDK_WINDOWING_GC (gc);
 
-  private->klass = &gdk_x11_gc_class;
-  private->klass_data = data = g_new (GdkGCXData, 1);
-
-  data->dirty_mask = 0;
-  data->clip_region = NULL;
+  private->dirty_mask = 0;
+  private->clip_region = NULL;
     
-  GDK_GC_XDATA (gc)->xdisplay = GDK_DRAWABLE_IMPL (drawable)->xdisplay;
+  private->xdisplay = GDK_DRAWABLE_IMPL (drawable)->xdisplay;
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
     {
       values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
-      data->dirty_mask |= GDK_GC_DIRTY_CLIP;
+      private->dirty_mask |= GDK_GC_DIRTY_CLIP;
     }
 
   if (values_mask & (GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN))
     {
       values_mask &= ~(GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
-      data->dirty_mask |= GDK_GC_DIRTY_TS;
+      private->dirty_mask |= GDK_GC_DIRTY_TS;
     }
 
   xvalues.function = GXcopy;
@@ -79,62 +136,51 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 
   gdk_x11_gc_values_to_xvalues (values, values_mask, &xvalues, &xvalues_mask);
   
-  data->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
-                         GDK_DRAWABLE_IMPL (drawable)->xid,
-			 xvalues_mask, &xvalues);
+  private->xgc = XCreateGC (GDK_GC_XDISPLAY (gc),
+                            GDK_DRAWABLE_IMPL (drawable)->xid,
+                            xvalues_mask, &xvalues);
 
   return gc;
-}
-
-static void
-gdk_x11_gc_destroy (GdkGC *gc)
-{
-  if (GDK_GC_XDATA (gc)->clip_region)
-    gdk_region_destroy (GDK_GC_XDATA (gc)->clip_region);
-  
-  XFreeGC (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc));
-  g_free (GDK_GC_XDATA (gc));
 }
 
 GC
 _gdk_x11_gc_flush (GdkGC *gc)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
-  GdkGCXData *data = GDK_GC_XDATA (gc);
+  GdkWindowingGC *private = GDK_WINDOWING_GC (gc);
 
-  if (data->dirty_mask & GDK_GC_DIRTY_CLIP)
+  if (private->dirty_mask & GDK_GC_DIRTY_CLIP)
     {
-      if (!data->clip_region)
+      if (!private->clip_region)
 	XSetClipOrigin (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc),
-			private->clip_x_origin, private->clip_y_origin);
+			gc->clip_x_origin, gc->clip_y_origin);
       else
 	{
-	  XRectangle *rectangles = g_new (XRectangle, data->clip_region->numRects);
-	  GdkRegionBox *boxes = data->clip_region->rects;
+	  XRectangle *rectangles = g_new (XRectangle, private->clip_region->numRects);
+	  GdkRegionBox *boxes = private->clip_region->rects;
 	  int i;
 
-	  for (i=0; i<data->clip_region->numRects; i++)
+	  for (i=0; i<private->clip_region->numRects; i++)
 	    {
-	      rectangles[i].x = CLAMP (boxes[i].x1 + private->clip_x_origin, G_MINSHORT, G_MAXSHORT);
-	      rectangles[i].y = CLAMP (boxes[i].y1 + private->clip_y_origin, G_MINSHORT, G_MAXSHORT);
-	      rectangles[i].width = CLAMP (boxes[i].x2 + private->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
-	      rectangles[i].height = CLAMP (boxes[i].y2 + private->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
+	      rectangles[i].x = CLAMP (boxes[i].x1 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT);
+	      rectangles[i].y = CLAMP (boxes[i].y1 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT);
+	      rectangles[i].width = CLAMP (boxes[i].x2 + gc->clip_x_origin, G_MINSHORT, G_MAXSHORT) - rectangles[i].x;
+	      rectangles[i].height = CLAMP (boxes[i].y2 + gc->clip_y_origin, G_MINSHORT, G_MAXSHORT) - rectangles[i].y;
 	    }
 	  
 	  XSetClipRectangles(GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), 0, 0, rectangles,
-			     data->clip_region->numRects, YXBanded);
+			     private->clip_region->numRects, YXBanded);
 
 	  g_free (rectangles);
 	}
     }
 
-  if (data->dirty_mask & GDK_GC_DIRTY_TS)
+  if (private->dirty_mask & GDK_GC_DIRTY_TS)
     {
       XSetTSOrigin (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc),
-		    private->ts_x_origin, private->ts_y_origin);
+		    gc->ts_x_origin, gc->ts_y_origin);
     }
 
-  data->dirty_mask = 0;
+  private->dirty_mask = 0;
   return GDK_GC_XGC (gc);
 }
 
@@ -287,32 +333,32 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 		       GdkGCValues     *values,
 		       GdkGCValuesMask  values_mask)
 {
-  GdkGCXData *data;
+  GdkWindowingGC *windowing_gc;
   XGCValues xvalues;
   unsigned long xvalues_mask = 0;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
-  data = GDK_GC_XDATA (gc);
+  windowing_gc = GDK_WINDOWING_GC (gc);
 
   if (values_mask & (GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN))
     {
       values_mask &= ~(GDK_GC_CLIP_X_ORIGIN | GDK_GC_CLIP_Y_ORIGIN);
-      data->dirty_mask |= GDK_GC_DIRTY_CLIP;
+      windowing_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
     }
 
   if (values_mask & (GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN))
     {
       values_mask &= ~(GDK_GC_TS_X_ORIGIN | GDK_GC_TS_Y_ORIGIN);
-      data->dirty_mask |= GDK_GC_DIRTY_TS;
+      windowing_gc->dirty_mask |= GDK_GC_DIRTY_TS;
     }
 
   if (values_mask & GDK_GC_CLIP_MASK)
     {
-      if (data->clip_region)
+      if (windowing_gc->clip_region)
 	{
-	  gdk_region_destroy (data->clip_region);
-	  data->clip_region = NULL;
+	  gdk_region_destroy (windowing_gc->clip_region);
+	  windowing_gc->clip_region = NULL;
 	}
     }
 
@@ -330,7 +376,7 @@ gdk_x11_gc_set_dashes (GdkGC *gc,
 		       gchar  dash_list[],
 		       gint   n)
 {
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
   g_return_if_fail (dash_list != NULL);
 
   XSetDashes (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc),
@@ -552,64 +598,62 @@ void
 gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			   GdkRectangle *rectangle)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
-  GdkGCXData *data;
+  GdkWindowingGC *windowing_gc;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
-  data = GDK_GC_XDATA (gc);
+  windowing_gc = GDK_WINDOWING_GC (gc);
 
-  if (data->clip_region)
-    gdk_region_destroy (data->clip_region);
+  if (windowing_gc->clip_region)
+    gdk_region_destroy (windowing_gc->clip_region);
 
   if (rectangle)
-    data->clip_region = gdk_region_rectangle (rectangle);
+    windowing_gc->clip_region = gdk_region_rectangle (rectangle);
   else
     {
-      data->clip_region = NULL;
+      windowing_gc->clip_region = NULL;
       XSetClipMask (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), None);
     }
 
-  private->clip_x_origin = 0;
-  private->clip_y_origin = 0;
+  gc->clip_x_origin = 0;
+  gc->clip_y_origin = 0;
   
-  data->dirty_mask |= GDK_GC_DIRTY_CLIP;
+  windowing_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
 } 
 
 void
 gdk_gc_set_clip_region (GdkGC	  *gc,
 			GdkRegion *region)
 {
-  GdkGCPrivate *private = (GdkGCPrivate *)gc;
-  GdkGCXData *data;
+  GdkWindowingGC *windowing_gc;
 
-  g_return_if_fail (gc != NULL);
+  g_return_if_fail (GDK_IS_GC (gc));
 
-  data = GDK_GC_XDATA (gc);
+  windowing_gc = GDK_WINDOWING_GC (gc);
 
-  if (data->clip_region)
-    gdk_region_destroy (data->clip_region);
+  if (windowing_gc->clip_region)
+    gdk_region_destroy (windowing_gc->clip_region);
 
   if (region)
-    data->clip_region = gdk_region_copy (region);
+    windowing_gc->clip_region = gdk_region_copy (region);
   else
     {
-      data->clip_region = NULL;
+      windowing_gc->clip_region = NULL;
       XSetClipMask (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), None);
     }
   
-  private->clip_x_origin = 0;
-  private->clip_y_origin = 0;
+  gc->clip_x_origin = 0;
+  gc->clip_y_origin = 0;
   
-  data->dirty_mask |= GDK_GC_DIRTY_CLIP;
+  windowing_gc->dirty_mask |= GDK_GC_DIRTY_CLIP;
 }
 
 
 void
 gdk_gc_copy (GdkGC *dst_gc, GdkGC *src_gc)
 {
-  g_return_if_fail (dst_gc != NULL);
-  g_return_if_fail (src_gc != NULL);
+  g_return_if_fail (GDK_IS_WINDOWING_GC (dst_gc));
+  g_return_if_fail (GDK_IS_WINDOWING_GC (src_gc));
   
   XCopyGC (GDK_GC_XDISPLAY (src_gc), GDK_GC_XGC (src_gc), ~((~1) << GCLastBit),
 	   GDK_GC_XGC (dst_gc));
