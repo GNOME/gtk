@@ -1,3 +1,7 @@
+2001-02-06  Christophe Merlet  <redfox@eikonex.org>
+
+	* gdk-pixbuf-data.c: Fixes a minor typo.
+
 Sun Feb  4 07:59:57 2001  Tim Janik  <timj@gtk.org>
 
 	* gdk-pixbuf.h: DOH! don't include glib/gobject.h but glib-object.h,

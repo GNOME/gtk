@@ -164,7 +164,7 @@ read_raw_inline (const guchar *data,
                 g_set_error (error,
                              GDK_PIXBUF_ERROR,
                              GDK_PIXBUF_ERROR_CORRUPT_IMAGE,
-                             _("Image data is partially missing, probably it was ocorrupted somehow."));
+                             _("Image data is partially missing, probably it was corrupted somehow."));
                 
                 return NULL;
         }
