@@ -3627,7 +3627,28 @@ gtk_tree_view_expose (GtkWidget      *widget,
   tree_view = GTK_TREE_VIEW (widget);
 
   if (event->window == tree_view->priv->bin_window)
-    return gtk_tree_view_bin_expose (widget, event);
+    {
+      gboolean retval;
+      GList *tmp_list;
+
+      retval = gtk_tree_view_bin_expose (widget, event);
+
+      /* We can't just chain up to Container::expose as it will try to send the
+       * event to the headers, so we handle propagating it to our children
+       * (eg. widgets being edited) ourselves.
+       */
+      tmp_list = tree_view->priv->children;
+      while (tmp_list)
+	{
+	  GtkTreeViewChild *child = tmp_list->data;
+	  tmp_list = tmp_list->next;
+
+	  gtk_container_propagate_expose (GTK_CONTAINER (tree_view), child->widget, event);
+	}
+
+      return retval;
+    }
+
   else if (event->window == tree_view->priv->header_window)
     {
       GList *list;
