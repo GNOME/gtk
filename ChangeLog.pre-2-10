@@ -1,3 +1,7 @@
+Fri Nov 15 19:12:56 2002  Jonathan Blandford  <jrb@gnome.org>
+
+	* gtk/gtksettings.c: Allow g_object_set to work with GtkSettings.
+
 2002-11-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdk.def: Reflect recent renamings and removals of functions. 

@@ -23,16 +23,23 @@
 
 typedef struct _GtkSettingsValuePrivate GtkSettingsValuePrivate;
 
+typedef enum
+{
+  GTK_SETTINGS_SOURCE_DEFAULT,
+  GTK_SETTINGS_SOURCE_RC_FILE,
+  GTK_SETTINGS_SOURCE_APPLICATION
+} GtkSettingsSource;
+
 struct _GtkSettingsValuePrivate
 {
   GtkSettingsValue public;
-  guint from_rc : 1;
+  GtkSettingsSource source;
 };
 
 struct _GtkSettingsPropertyValue
 {
   GValue value;
-  guint from_rc : 1;
+  GtkSettingsSource source;
 };
 
 enum {
@@ -133,7 +140,7 @@ gtk_settings_init (GtkSettings *settings)
       g_value_init (&settings->property_values[i].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       g_param_value_set_default (pspec, &settings->property_values[i].value);
       g_object_notify (G_OBJECT (settings), pspec->name);
-      settings->property_values[i].from_rc = FALSE;
+      settings->property_values[i].source = GTK_SETTINGS_SOURCE_DEFAULT;
       i++;
     }
   g_object_thaw_notify (G_OBJECT (settings));
@@ -312,8 +319,9 @@ gtk_settings_set_property (GObject      *object,
 			   GParamSpec   *pspec)
 {
   GtkSettings *settings = GTK_SETTINGS (object);
-  
+
   g_value_copy (value, &settings->property_values[property_id - 1].value);
+  settings->property_values[property_id - 1].source = GTK_SETTINGS_SOURCE_APPLICATION;
 }
 
 static void
@@ -335,7 +343,9 @@ gtk_settings_get_property (GObject     *object,
       g_value_type_transformable (G_TYPE_STRING, G_VALUE_TYPE (value)) ||
       g_value_type_transformable (GDK_TYPE_COLOR, G_VALUE_TYPE (value)))
     {
-      if (gdk_screen_get_setting (settings->screen, pspec->name, value))
+      if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
+        g_value_copy (&settings->property_values[property_id - 1].value, value);
+      else if (gdk_screen_get_setting (settings->screen, pspec->name, value))
         g_param_value_validate (pspec, value);
       else
         g_value_copy (&settings->property_values[property_id - 1].value, value);
@@ -348,7 +358,23 @@ gtk_settings_get_property (GObject     *object,
       
       g_value_init (&val, G_TYPE_STRING);
 
-      if (!gdk_screen_get_setting (settings->screen, pspec->name, &val))
+      if (settings->property_values[property_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
+	{
+          GValue tmp_value = { 0, };
+          GValue gstring_value = { 0, };
+          
+          g_value_init (&gstring_value, G_TYPE_GSTRING);
+
+          g_value_set_boxed (&gstring_value,
+                             g_string_new (g_value_get_string (&val)));
+
+          g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+	  g_value_copy (&settings->property_values[property_id - 1].value, value);
+
+          g_value_unset (&gstring_value);
+          g_value_unset (&tmp_value);
+	}
+      else if (!gdk_screen_get_setting (settings->screen, pspec->name, &val))
         {
           g_value_copy (&settings->property_values[property_id - 1].value, value);
         }
@@ -489,7 +515,7 @@ apply_queued_setting (GtkSettings             *data,
   if (_gtk_settings_parse_convert (parser, &qvalue->public.value,
 				   pspec, &tmp_value))
     {
-      data->property_values[pspec->param_id - 1].from_rc = qvalue->from_rc;
+      data->property_values[pspec->param_id - 1].source = qvalue->source;
       g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
     }
   else
@@ -557,7 +583,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
       settings->property_values[class_n_properties - 1].value.g_type = 0;
       g_value_init (&settings->property_values[class_n_properties - 1].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       g_param_value_set_default (pspec, &settings->property_values[class_n_properties - 1].value);
-      settings->property_values[class_n_properties - 1].from_rc = FALSE;
+      settings->property_values[class_n_properties - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
       g_object_notify (G_OBJECT (settings), pspec->name);
       
       qvalue = g_datalist_get_data (&settings->queued_settings, pspec->name);
@@ -627,7 +653,7 @@ static void
 gtk_settings_set_property_value_internal (GtkSettings            *settings,
 					  const gchar            *prop_name,
 					  const GtkSettingsValue *new_value,
-					  gboolean                from_rc)
+					  GtkSettingsSource       source)
 {
   GtkSettingsValuePrivate *qvalue;
   GParamSpec *pspec;
@@ -662,7 +688,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   qvalue->public.origin = g_strdup (new_value->origin);
   g_value_init (&qvalue->public.value, G_VALUE_TYPE (&new_value->value));
   g_value_copy (&new_value->value, &qvalue->public.value);
-  qvalue->from_rc = from_rc;
+  qvalue->source = source;
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), g_quark_to_string (name_quark));
   if (pspec)
     apply_queued_setting (settings, pspec, qvalue);
@@ -1021,7 +1047,7 @@ reset_rc_values_foreach (GQuark    key_id,
   GtkSettingsValuePrivate *qvalue = data;
   GSList **to_reset = user_data;
 
-  if (qvalue->from_rc)
+  if (qvalue->source == GTK_SETTINGS_SOURCE_RC_FILE)
     *to_reset = g_slist_prepend (*to_reset, GUINT_TO_POINTER (key_id));
 }
 
@@ -1053,7 +1079,7 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
   g_object_freeze_notify (G_OBJECT (settings));
   for (p = pspecs; *p; p++)
     {
-      if (settings->property_values[i].from_rc)
+      if (settings->property_values[i].source == GTK_SETTINGS_SOURCE_RC_FILE)
 	{
 	  GParamSpec *pspec = *p;
 
