@@ -1,3 +1,18 @@
+2005-03-14  Matthias Clasen  <mclasen@redhat.com>
+
+	Make PLT-reduction work with gcc4, and don't include
+	everything in gdk-pixbuf-alias.h:
+	
+	* gdk-pixbuf.symbols: Group symbols by header and source file.
+	* /makegdkpixbufalias.pl: Protect definitions by the same 
+	preprocessor symbols used to guard the headers. Move
+	the alias declarations to a separate file which is 
+	produced when calling makegdkpixbufalias.pl -def
+	* Makefile.am (gdk-pixbuf-aliasdef.c): Add a rule to generate 
+	this file.
+	* *.c: Include gdk-pixbuf-alias.h after the other headers,
+	include gdk-pixbuf-aliasdef.c at the bottom.
+
 2005-03-10  Tor Lillqvist  <tml@novell.com>
 
 	* Makefile.am: Use grep | head -n 1 instead of grep -m 1 which

@@ -22,8 +22,8 @@
  */
 
 #include <config.h>
-#include "gdk-pixbuf-alias.h"
 #include "gdk-pixbuf-private.h"
+#include "gdk-pixbuf-alias.h"
 #include <string.h>
 
 
@@ -244,3 +244,7 @@ gdk_pixbuf_saturate_and_pixelate(const GdkPixbuf *src,
                 }
         }
 }
+
+#define __GDK_PIXBUF_UTIL_C__
+#include "gdk-pixbuf-aliasdef.c"
+
