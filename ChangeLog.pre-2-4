@@ -1,3 +1,37 @@
+Thu Jul  3 03:13:20 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtkpaned.c (gtk_paned_set_child_property): Insert cast to
+	fix warning. Assign something to old_value to quiet gcc
+
+	* gtk/gtkcalendar.c 
+	(start_spinning): gtk_timeout_add->g_timeout_add
+
+	* gtk/gtkicontheme.c 
+	(theme_lookup_icon): Make it compile (remove double semicolon)
+
+	* gtk/gtktoolbutton.c
+	(gtk_tool_button_class_init): Long comment about properties.
+	(gtk_tool_button_class_init): Improve text for "use_underline"
+	property
+	(gtk_tool_button_create_menu_proxy): Fix up to use_mnemonic based
+	on whether the passed-in label has use_mnemonic set
+	(gtk_tool_button_create_menu_proxy): Split image cloning out in
+	new function. Make that function also handle image with pixbuf
+	storage.
+	(gtk_tool_button_construct_contents): Use gtk_widget_destroy()
+	instead of gtk_container_remove().
+	(gtk_tool_button_construct_contents): Fix eliding bug
+
+	* gtk/gtktoolbar.c
+	(gtk_toolbar_finalize): New function. Unref tooltips, pointed out
+	by Morten Welinder
+	(gtk_toolbar_button_press): Make popup_context_menu signal provide
+	coordinates and button number
+
+	* tests/testtoolbar.c (main): Add new pixbuf toolbutton
+
+	* tests/apple-red.png: new file
+
 Wed Jul  2 18:00:56 2003  Owen Taylor  <otaylor@redhat.com>
 	 
         * gtk/gtkicontheme.[ch]: Implement a loader for

@@ -31,6 +31,7 @@
 #include "gtkvbox.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
+#include "gtkiconfactory.h"
 
 #include <string.h>
 
@@ -129,6 +130,37 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   
   klass->button_type = GTK_TYPE_BUTTON;
 
+  /* Properties are interpreted like this:
+   *
+   *          - if the tool button has an icon_widget, then that widget
+   *            will be used as the icon. Otherwise, if the tool button
+   *            has a stock id, the corresponding stock icon will be
+   *            used. Otherwise, the tool button will not have an icon.
+   *
+   *          - if the tool button has a label_widget then that widget
+   *            will be used as the label. Otherwise, if the tool button
+   *            has a label text, that text will be used as label. Otherwise,
+   *            if the toolbutton has a stock id, the corresponding text
+   *            will be used as label. Otherwise, the toolbutton will
+   *            have an empty label.
+   *
+   *	      - The use_underline property only has an effect when the label
+   *            on the toolbutton comes from the label property (ie. not from
+   *            label_widget or from stock_id).
+   *
+   *            In that case, if use_underline is set,
+   *
+   *			- underscores are removed from the label text before
+   *                      the label is shown on the toolbutton unless the
+   *                      underscore is followed by another underscore
+   *
+   *			- an underscore indicates that the next character when
+   *                      used in the overflow menu should be used as a mnemonic.
+   *
+   *		In short: use_underline = TRUE means that the label text has
+   *            the form "_Open" and the toolbar should take appropriate action.
+   */
+
   g_object_class_install_property (object_class,
 				   PROP_LABEL,
 				   g_param_spec_string ("label",
@@ -140,7 +172,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
 				   PROP_USE_UNDERLINE,
 				   g_param_spec_boolean ("use_underline",
 							 _("Use underline"),
-							 _("Interpret underlines in the item label"),
+							 _("If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"),
 							 FALSE,
 							 G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
@@ -277,8 +309,10 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
   if (GTK_BIN (button->button)->child)
     {
-      gtk_container_remove (GTK_CONTAINER (button->button),
-			    GTK_BIN (button->button)->child);
+      /* Note: we are not destroying the label_widget or icon_widget
+       * here because they were removed from their containers above
+       */
+      gtk_widget_destroy (GTK_BIN (button->button)->child);
     }
 
   style = gtk_tool_item_get_toolbar_style (GTK_TOOL_ITEM (button));
@@ -298,7 +332,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
       else
 	{
 	  GtkStockItem stock_item;
-	  gboolean elide = TRUE;
+	  gboolean elide;
 	  gchar *label_text;
 
 	  if (button->label_text)
@@ -307,9 +341,15 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	      elide = button->use_underline;
 	    }
 	  else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
-	    label_text = stock_item.label;
+	    {
+	      label_text = stock_item.label;
+	      elide = TRUE;
+	    }
 	  else
-	    label_text = "";
+	    {
+	      label_text = "";
+	      elide = FALSE;
+	    }
 
 	  if (elide)
 	    label_text = _gtk_toolbar_elide_underscores (label_text);
@@ -333,25 +373,9 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	  
 	  if (GTK_IS_IMAGE (icon))
 	    {
-	      GtkImage *image = GTK_IMAGE (icon);
-	      GtkImageType storage_type = gtk_image_get_storage_type (image);
-	      
-	      if (storage_type == GTK_IMAGE_STOCK)
-		{
-		  gchar *stock_id;
-		  gtk_image_get_stock (image, &stock_id, NULL);
-
-		  icon = gtk_image_new_from_stock (stock_id, icon_size);
-		  gtk_widget_show (icon);
-		}
-	      else if (storage_type == GTK_IMAGE_ICON_SET)
-		{
-		  GtkIconSet *icon_set;
-		  gtk_image_get_icon_set (image, &icon_set, NULL);
-		  
-		  icon = gtk_image_new_from_icon_set (icon_set, icon_size);
-		  gtk_widget_show (icon);
-		}
+	      g_object_set (G_OBJECT (button->icon_widget),
+			    "icon-size", icon_size,
+			    NULL);
 	    }
 	}
       else if (button->stock_id)
@@ -467,6 +491,44 @@ gtk_tool_button_finalize (GObject *object)
   parent_class->finalize (object);
 }
 
+static GtkWidget *
+clone_image_menu_size (GtkImage *image, GtkSettings *settings)
+{
+  GtkImageType storage_type = gtk_image_get_storage_type (image);
+
+  if (storage_type == GTK_IMAGE_STOCK)
+    {
+      gchar *stock_id;
+      gtk_image_get_stock (image, &stock_id, NULL);
+      return gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
+    }
+  else if (storage_type == GTK_IMAGE_ICON_SET)
+    {
+      GtkIconSet *icon_set;
+      gtk_image_get_icon_set (image, &icon_set, NULL);
+      return gtk_image_new_from_icon_set (icon_set, GTK_ICON_SIZE_MENU);
+    }
+  else if (storage_type == GTK_IMAGE_PIXBUF)
+    {
+      gint width, height;
+      
+      if (settings &&
+	  gtk_icon_size_lookup_for_settings (settings, GTK_ICON_SIZE_MENU,
+					     &width, &height))
+	{
+	  GdkPixbuf *src_pixbuf, *dest_pixbuf;
+
+	  src_pixbuf = gtk_image_get_pixbuf (image);
+	  dest_pixbuf = gdk_pixbuf_scale_simple (src_pixbuf, width, height,
+						 GDK_INTERP_BILINEAR);
+
+	  return gtk_image_new_from_pixbuf (dest_pixbuf);
+	}
+    }
+
+  return NULL;
+}
+      
 static gboolean
 gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 {
@@ -475,17 +537,28 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
   GtkWidget *menu_image = NULL;
   GtkStockItem stock_item;
   gboolean use_mnemonic = TRUE;
-  const char *label = "";
+  const char *label;
 
   if (button->label_widget && GTK_IS_LABEL (button->label_widget))
-    label = gtk_label_get_label (GTK_LABEL (button->label_widget));
+    {
+      label = gtk_label_get_label (GTK_LABEL (button->label_widget));
+      use_mnemonic = gtk_label_get_use_underline (GTK_LABEL (button->label_widget));
+    }
   else if (button->label_text)
     {
       label = button->label_text;
       use_mnemonic = button->use_underline;
     }
   else if (button->stock_id && gtk_stock_lookup (button->stock_id, &stock_item))
-    label = stock_item.label;
+    {
+      label = stock_item.label;
+      use_mnemonic = FALSE;
+    }
+  else
+    {
+      label = "";
+      use_mnemonic = FALSE;
+    }
   
   if (use_mnemonic)
     menu_item = gtk_image_menu_item_new_with_mnemonic (label);
@@ -494,21 +567,8 @@ gtk_tool_button_create_menu_proxy (GtkToolItem *item)
 
   if (button->icon_widget && GTK_IS_IMAGE (button->icon_widget))
     {
-      GtkImage *image = GTK_IMAGE (button->icon_widget);
-      GtkImageType storage_type = gtk_image_get_storage_type (image);
-      
-      if (storage_type == GTK_IMAGE_STOCK)
-	{
-	  gchar *stock_id;
-	  gtk_image_get_stock (image, &stock_id, NULL);
-	  menu_image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_MENU);
-	}
-      else if (storage_type == GTK_IMAGE_ICON_SET)
-	{
-	  GtkIconSet *icon_set;
-	  gtk_image_get_icon_set (image, &icon_set, NULL);
-	  menu_image = gtk_image_new_from_icon_set (icon_set, GTK_ICON_SIZE_MENU);
-	}
+      menu_image = clone_image_menu_size (GTK_IMAGE (button->icon_widget),
+					  gtk_widget_get_settings (GTK_WIDGET (button)));
     }
   else if (button->stock_id)
     {

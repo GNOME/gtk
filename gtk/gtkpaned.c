@@ -547,10 +547,11 @@ gtk_paned_set_child_property (GtkContainer    *container,
       break;
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      old_value = -1; /* quiet gcc */
       break;
     }
   if (old_value != new_value)
-    gtk_widget_queue_resize (container);    
+    gtk_widget_queue_resize (GTK_WIDGET (container));
 }
 
 static void

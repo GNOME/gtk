@@ -131,6 +131,8 @@ static void    gtk_toolbar_get_child_property (GtkContainer    *container,
 					       guint            property_id,
 					       GValue          *value,
 					       GParamSpec      *pspec);
+static void gtk_toolbar_finalize (GObject *object);
+
 
 static void  gtk_toolbar_add        (GtkContainer *container,
 				     GtkWidget    *widget);
@@ -281,6 +283,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   gobject_class->set_property = gtk_toolbar_set_property;
   gobject_class->get_property = gtk_toolbar_get_property;
+  gobject_class->finalize = gtk_toolbar_finalize;
 
   widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->expose_event = gtk_toolbar_expose;
@@ -332,7 +335,7 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
 		  G_SIGNAL_RUN_FIRST,
 		  G_STRUCT_OFFSET (GtkToolbarClass, popup_context_menu),
 		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
+		  _gtk_marshal_VOID__INT_INT_INT,
 		  G_TYPE_NONE, 0);
   toolbar_signals[MOVE_FOCUS] =
     _gtk_binding_signal_new ("move_focus",
@@ -1983,7 +1986,10 @@ gtk_toolbar_button_press (GtkWidget      *toolbar,
     			  GdkEventButton *event)
 {
   if (event->button == 3)
-    g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0, NULL);
+    {
+      g_signal_emit (toolbar, toolbar_signals[POPUP_CONTEXT_MENU], 0,
+		     (int)event->x_root, (int)event->y_root, event->button, NULL);
+    }
 
   return FALSE;
 }
@@ -2761,4 +2767,15 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
   gtk_toolbar_insert_tool_item (toolbar, item, position);
 
   return child->widget;
+}
+
+static void
+gtk_toolbar_finalize (GObject *object)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+
+  if (toolbar->tooltips)
+    g_object_unref (toolbar->tooltips);
+  
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }

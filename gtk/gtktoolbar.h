@@ -121,7 +121,10 @@ struct _GtkToolbarClass
 				GtkOrientation    orientation);
   void (* style_changed)       (GtkToolbar       *toolbar,
 				GtkToolbarStyle   style);
-  void (* popup_context_menu)  (GtkToolbar       *toolbar);
+  void (* popup_context_menu)  (GtkToolbar       *toolbar,
+				gint		   x,
+				gint		   y,
+				gint		   button_number);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

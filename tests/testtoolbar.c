@@ -532,15 +532,19 @@ main (gint argc, gchar **argv)
   
   item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_CENTER);  make_prop_editor (G_OBJECT (item));
 
-  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));  
+  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Center");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_RIGHT);
-  
   add_item_to_list (store, item, "Right");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
+  item = gtk_tool_button_new ("_Apple", gtk_image_new_from_file ("apple-red.png"));
+  add_item_to_list (store, item, "Apple");
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
+  
   hbox = gtk_hbox_new (FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_table_attach (GTK_TABLE (table), hbox,

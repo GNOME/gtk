@@ -2496,9 +2496,10 @@ arrow_action (GtkCalendar *calendar,
     }
 }
 
-static gint
-calendar_timer (GtkCalendar *calendar)
+static gboolean
+calendar_timer (gpointer data)
 {
+  GtkCalendar *calendar = data;
   GtkCalendarPrivateData *private_data = GTK_CALENDAR_PRIVATE_DATA (calendar);
   gboolean retval = FALSE;
   
@@ -2535,9 +2536,9 @@ start_spinning (GtkWidget *widget,
   if (!private_data->timer)
     {
       private_data->need_timer = TRUE;
-      private_data->timer = gtk_timeout_add (CALENDAR_INITIAL_TIMER_DELAY, 
-					     (GtkFunction) calendar_timer,
-					     (gpointer) widget);
+      private_data->timer = g_timeout_add (CALENDAR_INITIAL_TIMER_DELAY, 
+					   calendar_timer,
+					   (gpointer) widget);
     }
 }
 

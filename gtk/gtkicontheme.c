@@ -1517,7 +1517,7 @@ theme_lookup_icon (IconTheme          *theme,
   IconThemeDir *dir, *min_dir;
   char *file;
   int min_difference, difference;
-  BuiltinIcon *closest_builtin = NULL;;
+  BuiltinIcon *closest_builtin = NULL;
   gboolean smaller, has_larger;
   IconSuffix suffix;
 
