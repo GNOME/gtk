@@ -1,5 +1,9 @@
 2003-12-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkdialog.c: Sigh, revert the change.
+
+2003-12-15  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkdialog.c (dialog_has_cancel): Removed.
 	(gtk_dialog_close): Don't call dialog_has_cancel().  At least
 	allows sane behavior for #101293.

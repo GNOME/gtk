@@ -354,6 +354,30 @@ gtk_dialog_style_set (GtkWidget *widget,
   update_spacings (GTK_DIALOG (widget));
 }
 
+static gboolean
+dialog_has_cancel (GtkDialog *dialog)
+{
+  GList *children, *tmp_list;
+  gboolean ret = FALSE;
+      
+  children = gtk_container_get_children (GTK_CONTAINER (dialog->action_area));
+
+  for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
+    {
+      ResponseData *rd = get_response_data (tmp_list->data);
+      
+      if (rd && rd->response_id == GTK_RESPONSE_CANCEL)
+	{
+	  ret = TRUE;
+	  break;
+	}
+    }
+
+  g_list_free (children);
+
+  return ret;
+}
+
 static void
 gtk_dialog_close (GtkDialog *dialog)
 {
@@ -361,6 +385,9 @@ gtk_dialog_close (GtkDialog *dialog)
   
   GtkWidget *widget = GTK_WIDGET (dialog);
   GdkEvent *event;
+
+  if (!dialog_has_cancel (dialog))
+    return;
 
   event = gdk_event_new (GDK_DELETE);
   
