@@ -812,6 +812,7 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
   /* Validate backwards from the anchor line to y0
    */
   line = _gtk_text_iter_get_text_line (anchor);
+  line = _gtk_text_line_previous (line);
   seen = 0;
   while (line && seen < -y0)
     {
@@ -827,11 +828,11 @@ gtk_text_layout_validate_yrange (GtkTextLayout *layout,
           delta_height += line_data->height - old_height;
           
           first_line = line;
-          first_line_y = -seen;
+          first_line_y = -seen - line_data->height;
           if (!last_line)
             {
               last_line = line;
-              last_line_y = -seen + line_data->height;
+              last_line_y = -seen;
             }
         }
 
