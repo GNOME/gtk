@@ -1982,7 +1982,6 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	  GdkEvent *send_event = gdk_event_new (GDK_ENTER_NOTIFY);
 	  gboolean result;
 
-	  send_event->crossing.type = GDK_ENTER_NOTIFY;
 	  send_event->crossing.window = g_object_ref (event->window);
 	  send_event->crossing.time = event->time;
 	  send_event->crossing.send_event = TRUE;
@@ -1997,7 +1996,7 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
 	   * menuitem is a child of the active menu or some parent
 	   * menu of the active menu.
 	   */
-	  result = gtk_widget_event (widget, &send_event);
+	  result = gtk_widget_event (widget, send_event);
 	  gdk_event_free (send_event);
 
 	  return result;

@@ -295,35 +295,54 @@ gdk_selection_property_get (GdkWindow  *requestor,
 	*ret_type = gdk_x11_xatom_to_atom_for_display (display, prop_type);
       if (ret_format)
 	*ret_format = prop_format;
-      
-      /* Add on an extra byte to handle null termination.  X guarantees
-	 that t will be 1 longer than nitems and null terminated */
-      length = nitems + 1;
 
-      if (data)
+      if (prop_type == XA_ATOM ||
+	  prop_type == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
 	{
-	  *data = g_new (guchar, length);
-      
-	  if (prop_type == XA_ATOM ||
-	      prop_type == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
+	  Atom* atoms = (Atom*) t;
+	  GdkAtom* atoms_dest;
+	  gint num_atom, i;
+
+	  if (prop_format != 32)
+	    goto err;
+	  
+	  num_atom = nitems;
+	  length = sizeof (GdkAtom) * num_atom + 1;
+
+	  if (data)
 	    {
-	      Atom* atoms = (Atom*) t;
-	      GdkAtom* atoms_dest;
-	      gint num_atom, i;
-	      
-	      num_atom = (length - 1) / sizeof (Atom);
-	      length = sizeof (GdkAtom) * num_atom + 1;
 	      *data = g_malloc (length);
 	      (*data)[length - 1] = '\0';
 	      atoms_dest = (GdkAtom *)(*data);
-	      
+	  
 	      for (i=0; i < num_atom; i++)
 		atoms_dest[i] = gdk_x11_xatom_to_atom_for_display (display, atoms[i]);
 	    }
-	  else
+	}
+      else
+	{
+	  switch (prop_format)
 	    {
-	      *data = g_memdup (t, length);
+	    case 8:
+	      length = nitems;
+	      break;
+	    case 16:
+	      length = sizeof(short) * nitems;
+	      break;
+	    case 32:
+	      length = sizeof(long) * nitems;
+	      break;
+	    default:
+	      g_assert_not_reached ();
+	      break;
 	    }
+	  
+	  /* Add on an extra byte to handle null termination.  X guarantees
+	     that t will be 1 longer than nitems and null terminated */
+	  length += 1;
+
+	  if (data)
+	    *data = g_memdup (t, length);
 	}
       
       if (t)

@@ -1,3 +1,12 @@
+Thu Oct  3 19:00:55 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkselection-x11.c (gdk_selection_property_get): 
+	Fix error in computing length and a memory leak.
+	(Fixes #94072, reported by Hema Seetharamaiah)
+
+	* gtk/gtkmenu.c (gtk_menu_motion_notify): Fix &event
+	used instead of event.
+
 2002-10-04  Matthias Clasen  <maclas@gmx.de>
 
 	* demos/gtk-demo/main.c (main): 

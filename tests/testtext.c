@@ -1715,9 +1715,11 @@ create_buffer (void)
       
       ++i;
     }
-  
+
+#if 0  
   buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL,
                                                       "invisible", TRUE, NULL);
+#endif  
   
   buffer->not_editable_tag =
     gtk_text_buffer_create_tag (buffer->buffer, NULL,
