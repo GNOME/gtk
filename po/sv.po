@@ -1,5 +1,5 @@
 # Swedish translation of GTK+.
-# Copyright (C) 1999-2001 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001 Free Software Foundation, Inc.
 # Tomas Ögren <stric@ing.umu.se>, 1999.
 # Christian Rose <menthos@menthos.com>, 2000-2001.
 #
@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
-"POT-Creation-Date: 2001-05-03 09:56-0400\n"
-"PO-Revision-Date: 2001-04-12 02:54+0200\n"
+"POT-Creation-Date: 2001-05-07 03:08+0200\n"
+"PO-Revision-Date: 2001-05-07 03:26+0200\n"
 "Last-Translator: Christian Rose <menthos@menthos.com>\n"
 "Language-Team: Swedish <sv@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -724,43 +724,54 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
+"Den färg som valdes tidigare, för att du ska kunna jämföra med den färg du "
+"väljer nu. Du kan dra färgen till en palettpost, eller välja denna färg som "
+"den aktuella genom att dra den till det andra färgprovet."
 
 #: gtk/gtkcolorsel.c:557
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
+"Färgen som du valt. Du kan dra den här färgen till en palettpost för att "
+"spara den för framtida bruk."
 
 #: gtk/gtkcolorsel.c:862
 msgid "_Save color here"
-msgstr ""
+msgstr "_Spara färgen här"
 
 #: gtk/gtkcolorsel.c:1029
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
+"Klicka på denna palettpost för att göra den till aktuell färg. För att ändra "
+"denna post kan du dra ett färgprov hit eller högerklicka och välja \"Spara "
+"färg här\"."
 
 #: gtk/gtkcolorsel.c:1643
-#, fuzzy
 msgid "Custom palette"
 msgstr "Anpassad palett"
 
 #: gtk/gtkcolorsel.c:1644
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "Palett att använda i färgväljaren"
 
 #: gtk/gtkcolorsel.c:1693
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
 msgstr ""
+"Välj den färg som du vill ha från den yttre ringen. Välj mörkheten eller "
+"ljusheten på den färgen genom att använda den inre triangeln."
 
 #: gtk/gtkcolorsel.c:1721
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
+"Klicka på pipetten, och klicka sedan på en färg någonstans på din skärm för "
+"att välja den färgen."
 
 #: gtk/gtkcolorsel.c:1730
 msgid "_Hue:"
@@ -768,7 +779,7 @@ msgstr "_Nyans:"
 
 #: gtk/gtkcolorsel.c:1731
 msgid "Position on the color wheel."
-msgstr ""
+msgstr "Position på färghjulet."
 
 #: gtk/gtkcolorsel.c:1732
 msgid "_Saturation:"
@@ -776,7 +787,7 @@ msgstr "_Mättnad"
 
 #: gtk/gtkcolorsel.c:1733
 msgid "\"Deepness\" of the color."
-msgstr ""
+msgstr "\"Djup\" på färgen."
 
 #: gtk/gtkcolorsel.c:1734
 msgid "_Value:"
@@ -784,7 +795,7 @@ msgstr "_Värde:"
 
 #: gtk/gtkcolorsel.c:1735
 msgid "Brightness of the color."
-msgstr ""
+msgstr "Ljushet på färgen."
 
 #: gtk/gtkcolorsel.c:1736
 msgid "_Red:"
@@ -792,7 +803,7 @@ msgstr "_Röd:"
 
 #: gtk/gtkcolorsel.c:1737
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "Mängd rött ljus i färgen."
 
 #: gtk/gtkcolorsel.c:1738
 msgid "_Green:"
@@ -800,7 +811,7 @@ msgstr "_Grön:"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "Mängd grönt ljus i färgen."
 
 #: gtk/gtkcolorsel.c:1740
 msgid "_Blue:"
@@ -808,31 +819,31 @@ msgstr "_Blå:"
 
 #: gtk/gtkcolorsel.c:1741
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "Mängd blått ljus i bilden."
 
 #: gtk/gtkcolorsel.c:1744
 msgid "_Opacity:"
 msgstr "_Opacitet:"
 
 #: gtk/gtkcolorsel.c:1752
-#, fuzzy
 msgid "Transparency of the currently-selected color."
-msgstr "Filnamnet som är valt för tillfället."
+msgstr "Genomskinlighet på den färg som är vald för tillfället."
 
 #: gtk/gtkcolorsel.c:1767
 msgid "Color _Name:"
-msgstr ""
+msgstr "Färg_namn:"
 
 #: gtk/gtkcolorsel.c:1779
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
+"Du kan ange ett hexadecimalt färgvärde i HTML-stil, eller helt enkelt ange "
+"ett engelskt namn på färgen som exempelvis \"orange\" i detta fält."
 
 #: gtk/gtkcolorsel.c:1798
-#, fuzzy
 msgid "_Palette"
-msgstr "Anpassad palett"
+msgstr "_Palett"
 
 #: gtk/gtkentry.c:372
 msgid "Text Position"
