@@ -1,3 +1,11 @@
+Thu Jun 13 18:11:11 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* pixops/pixops.c: Fix problem where when no alpha was
+	involved, we scaled rather than composited, but then
+	went ahead and composited anyways. (#76958, Patch
+	from Matthias Clasen). Needs to be merged to GNOME
+	1.4 gdk-pixbuf.
+
 2002-06-13  Matthias Clasen  <maclas@gmx.de>
 
 	* io-jpeg.c: Use libjpeg in buffered-image mode in order to
