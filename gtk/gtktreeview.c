@@ -1100,7 +1100,7 @@ gtk_tree_view_destroy (GtkObject *object)
 
   if (tree_view->priv->scroll_to_path != NULL)
     {
-      gtk_tree_path_free (tree_view->priv->scroll_to_path);
+      gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
       tree_view->priv->scroll_to_path = NULL;
     }
 
@@ -1675,23 +1675,6 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
     }
 
   gtk_tree_view_size_allocate_columns (widget);
-  
-  if (tree_view->priv->scroll_to_path != NULL ||
-      tree_view->priv->scroll_to_column != NULL)
-    {
-      gtk_tree_view_scroll_to_cell (tree_view,
-				    tree_view->priv->scroll_to_path,
-				    tree_view->priv->scroll_to_column,
-				    tree_view->priv->scroll_to_use_align,
-				    tree_view->priv->scroll_to_row_align,
-				    tree_view->priv->scroll_to_col_align);
-      if (tree_view->priv->scroll_to_path)
-	{
-	  gtk_tree_path_free (tree_view->priv->scroll_to_path);
-	  tree_view->priv->scroll_to_path = NULL;
-	}
-      tree_view->priv->scroll_to_column = NULL;
-    }
 }
 
 static gboolean
@@ -3673,40 +3656,84 @@ validate_row (GtkTreeView *tree_view,
 static void
 validate_visible_area (GtkTreeView *tree_view)
 {
-  GtkTreePath *path;
+  GtkTreePath *path = NULL;
+  GtkTreePath *above_path = NULL;
   GtkTreeIter iter;
-  GtkRBTree *tree;
-  GtkRBNode *node;
-  gint y, height, offset;
+  GtkRBTree *tree = NULL;
+  GtkRBNode *node = NULL;
   gboolean validated_area = FALSE;
   gboolean size_changed = FALSE;
-  
+  gboolean modify_dy = FALSE;
+  gint total_height;
+  gint area_above = 0;
+  gint area_below = 0;
+
   if (tree_view->priv->tree == NULL)
     return;
-  
-  if (! GTK_RBNODE_FLAG_SET (tree_view->priv->tree->root, GTK_RBNODE_DESCENDANTS_INVALID))
-    return;
-  
-  height = GTK_WIDGET (tree_view)->allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
 
-  y = TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, 0);
+  total_height = GTK_WIDGET (tree_view)->allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
 
-  offset = _gtk_rbtree_find_offset (tree_view->priv->tree, y,
-				    &tree, &node);
-  if (node == NULL)
+  /* First, we check to see if we need to scroll anywhere
+   */
+  if (tree_view->priv->scroll_to_path)
     {
-      path = gtk_tree_path_new_root ();
-      _gtk_tree_view_find_node (tree_view, path, &tree, &node);
+      path = gtk_tree_row_reference_get_path (tree_view->priv->scroll_to_path);
+      if (!_gtk_tree_view_find_node (tree_view, path, &tree, &node))
+	{
+	  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+	  if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
+	      GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
+	    {
+	      validated_area = TRUE;
+	      if (validate_row (tree_view, tree, node, &iter, path))
+		size_changed = TRUE;
+	    }
+	  if (tree_view->priv->scroll_to_use_align)
+	    {
+	      area_above = (total_height - MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size)) *
+		tree_view->priv->scroll_to_row_align;
+	      area_below = total_height - MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size) - area_above;
+	      area_above = MAX (area_above, 0);
+	      area_below = MAX (area_below, 0);
+	    }
+	  else
+	    {
+	      g_warning ("non use_align not implemented yet");
+	      gtk_tree_path_free (path);
+	      path = NULL;
+	    }
+	}
+      else
+	/* the scroll to isn't valid; ignore it.
+	 */
+	{
+	  gtk_tree_path_free (path);
+	  path = NULL;
+	}      
     }
-  else
-    {
-      path = _gtk_tree_view_find_path (tree_view, tree, node);
-      height += offset;
-    }
 
-  gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
-  do
+  /* We didn't have a scroll_to set, so we just handle things normally
+   */
+  if (path == NULL)
     {
+      gint offset;
+
+      offset = _gtk_rbtree_find_offset (tree_view->priv->tree,
+					TREE_WINDOW_Y_TO_RBTREE_Y (tree_view, 0),
+					&tree, &node);
+      if (node == NULL)
+	{
+	  /* In this case, nothing has been validated */
+	  path = gtk_tree_path_new_root ();
+	}
+      else
+	{
+	  path = _gtk_tree_view_find_path (tree_view, tree, node);
+	  total_height += offset;
+	}
+
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, path);
+
       if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
 	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
 	{
@@ -3714,8 +3741,19 @@ validate_visible_area (GtkTreeView *tree_view)
 	  if (validate_row (tree_view, tree, node, &iter, path))
 	    size_changed = TRUE;
 	}
-      height -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+      area_above = 0;
+      area_below = total_height - MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+    }
 
+  above_path = gtk_tree_path_copy (path);
+
+  /* Now, we walk forwards and backwards, measuring rows. Unfortunately,
+   * backwards is much slower then forward, as there is no iter_prev function.
+   * We go forwards first in case we run out of tree.  Then we go backwards to
+   * fill out the top.
+   */
+  while (node && area_below > 0)
+    {
       if (node->children)
 	{
 	  GtkTreeIter parent = iter;
@@ -3767,16 +3805,82 @@ validate_visible_area (GtkTreeView *tree_view)
 	    }
 	  while (!done);
 	}
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
+	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
+	{
+	  validated_area = TRUE;
+	  if (validate_row (tree_view, tree, node, &iter, path))
+	    size_changed = TRUE;
+	}
+      if (node)
+	area_below -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
     }
-  while (node && height > 0);
+  gtk_tree_path_free (path);
 
+  /* If we ran out of tree, and have extra area_below left, we need to remove it from the area_above */
+  if (area_below > 0)
+    area_above += area_below;
+
+  _gtk_tree_view_find_node (tree_view, above_path, &tree, &node);
+  _gtk_rbtree_prev_full (tree, node, &tree, &node);
+  if (! gtk_tree_path_prev (above_path) && node != NULL)
+    {
+      gtk_tree_path_free (above_path);
+      above_path = _gtk_tree_view_find_path (tree_view, tree, node);
+    }
+
+  while (node != NULL && area_above > 0)
+    {
+      /* We walk ever so slowly backwards... */
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, above_path);
+
+      if (GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_INVALID) ||
+	  GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_COLUMN_INVALID))
+	{
+	  validated_area = TRUE;
+	  if (validate_row (tree_view, tree, node, &iter, above_path))
+	    size_changed = TRUE;
+	}
+      area_above -= MAX (GTK_RBNODE_GET_HEIGHT (node), tree_view->priv->expander_size);
+
+      _gtk_rbtree_prev_full (tree, node, &tree, &node);
+      if (! gtk_tree_path_prev (above_path))
+	{
+	  gtk_tree_path_free (above_path);
+	  above_path = _gtk_tree_view_find_path (tree_view, tree, node);
+	}
+      modify_dy = TRUE;
+    }
+
+  /* if we walk backwards at all, then we need to reset our dy. */
+  if (modify_dy && node != NULL)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->top_row);
+      tree_view->priv->top_row =
+	gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, above_path);
+      tree_view->priv->top_row_dy = - area_above;
+    }
+  else
+    {
+      /* hrm. */
+    }
+
+  if (tree_view->priv->scroll_to_path)
+    {
+      gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
+      tree_view->priv->scroll_to_path = NULL;
+    }
+
+  if (tree_view->priv->scroll_to_column)
+    {
+      tree_view->priv->scroll_to_column = NULL;
+    }
   if (size_changed)
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
   if (validated_area)
     gtk_widget_queue_draw (GTK_WIDGET (tree_view));
-  if (path)
-    gtk_tree_path_free (path);
 }
+
 
 /* Our strategy for finding nodes to validate is a little convoluted.  We find
  * the left-most uninvalidated node.  We then try walking right, validating
@@ -8107,12 +8211,16 @@ gtk_tree_view_scroll_to_point (GtkTreeView *tree_view,
  *
  * Moves the alignments of @tree_view to the position specified by @column and
  * @path.  If @column is %NULL, then no horizontal scrolling occurs.  Likewise,
- * if @path is %NULL no vertical scrolling occurs.  @row_align determines where
- * the row is placed, and @col_align determines where @column is placed.  Both
- * are expected to be between 0.0 and 1.0. 0.0 means left/top alignment, 1.0
- * means right/bottom alignment, 0.5 means center.  If @use_align is %FALSE,
- * then the alignment arguments are ignored, and the tree does the minimum
- * amount of work to scroll the cell onto the screen.
+ * if @path is %NULL no vertical scrolling occurs.  At a minimum, one of @column
+ * or @path need to be non-%NULL.  @row_align determines where the row is
+ * placed, and @col_align determines where @column is placed.  Both are expected
+ * to be between 0.0 and 1.0. 0.0 means left/top alignment, 1.0 means
+ * right/bottom alignment, 0.5 means center.
+ *
+ * If @use_align is %FALSE, then the alignment arguments are ignored, and the
+ * tree does the minimum amount of work to scroll the cell onto the screen.
+ * This means that the cell will be scrolled to the edge closest to it's current
+ * position.  If the cell is currently visible on the screen, nothing is done.
  **/
 void
 gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
@@ -8122,15 +8230,6 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
                               gfloat             row_align,
                               gfloat             col_align)
 {
-  GdkRectangle cell_rect;
-  GdkRectangle vis_rect;
-  gint dest_x, dest_y;
-  gfloat within_margin = 0;
-
-  /* FIXME work on unmapped/unrealized trees? maybe implement when
-   * we do incremental reflow for trees
-   */
-
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (row_align >= 0.0 && row_align <= 1.0);
   g_return_if_fail (col_align >= 0.0 && col_align <= 1.0);
@@ -8139,19 +8238,23 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
   row_align = CLAMP (row_align, 0.0, 1.0);
   col_align = CLAMP (col_align, 0.0, 1.0);
 
-  if (! GTK_WIDGET_REALIZED (tree_view))
-    {
-      if (path)
-	tree_view->priv->scroll_to_path = gtk_tree_path_copy (path);
-      if (column)
-	tree_view->priv->scroll_to_column = column;
-      tree_view->priv->scroll_to_use_align = use_align;
-      tree_view->priv->scroll_to_row_align = row_align;
-      tree_view->priv->scroll_to_col_align = col_align;
+  if (tree_view->priv->scroll_to_path)
+    gtk_tree_row_reference_free (tree_view->priv->scroll_to_path);
 
-      return;
-    }
+  tree_view->priv->scroll_to_path = NULL;
+  tree_view->priv->scroll_to_column = NULL;
 
+  if (path)
+    tree_view->priv->scroll_to_path = gtk_tree_row_reference_new_proxy (G_OBJECT (tree_view), tree_view->priv->model, path);
+  if (column)
+    tree_view->priv->scroll_to_column = column;
+  tree_view->priv->scroll_to_use_align = use_align;
+  tree_view->priv->scroll_to_row_align = row_align;
+  tree_view->priv->scroll_to_col_align = col_align;
+
+  install_presize_handler (tree_view);
+}
+#if 0
   gtk_tree_view_get_cell_area (tree_view, path, column, &cell_rect);
   gtk_tree_view_get_visible_rect (tree_view, &vis_rect);
 
@@ -8189,7 +8292,7 @@ gtk_tree_view_scroll_to_cell (GtkTreeView       *tree_view,
     }
 
   gtk_tree_view_scroll_to_point (tree_view, dest_x, dest_y);
-}
+#endif
 
 
 /**
@@ -8439,8 +8542,7 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
       GTK_RBNODE_SET_FLAG (node, GTK_RBNODE_IS_SEMI_COLLAPSED);
     }
 
-  if (GTK_WIDGET_MAPPED (tree_view))
-    install_presize_handler (tree_view);
+  install_presize_handler (tree_view);
 
   g_signal_emit (G_OBJECT (tree_view), tree_view_signals[ROW_EXPANDED], 0, &iter, path);
   return TRUE;

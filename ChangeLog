@@ -1,3 +1,11 @@
+Wed Feb 20 16:44:05 2002  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_scroll_to_cell): delay
+	scrolling until we try to draw the window.
+
+	* gtk/gtktreeview.c (validate_visible_area): Implement
+	scroll_to_cell.
+
 2002-02-23  Tor Lillqvist  <tml@iki.fi>
 
 	* gtk/gtk.def: Add missing gtk_file_selection_get_select_multiple.

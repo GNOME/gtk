@@ -2,7 +2,7 @@
 
 GtkTreeModel *model = NULL;
 GRand *rand = NULL;
-
+GtkTreeSelection *selection = NULL;
 enum
 {
   TEXT_COLUMN,
@@ -56,6 +56,8 @@ futz_row (void)
   gtk_tree_model_get_iter (model, &iter, path);
   gtk_tree_path_free (path);
 
+  if (gtk_tree_selection_iter_is_selected (selection, &iter))
+    return;
   switch (g_rand_int_range (rand, 0, 3))
     {
     case 0:
@@ -74,6 +76,7 @@ futz_row (void)
       break;
     case 2:
       /* modify */
+      return;
       if (gtk_tree_model_iter_n_children (model, NULL) == 0)
 	return;
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
@@ -103,9 +106,11 @@ main (int argc, char *argv[])
   GtkWidget *tree_view;
   GtkWidget *hbox;
   GtkWidget *button;
+  GtkTreePath *path;
 
   gtk_init (&argc, &argv);
 
+  path = gtk_tree_path_new_from_string ("80");
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Reflow test");
   gtk_signal_connect (GTK_OBJECT (window), "destroy", gtk_main_quit, NULL);
@@ -121,6 +126,8 @@ main (int argc, char *argv[])
   
   initialize_model ();
   tree_view = gtk_tree_view_new_with_model (model);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tree_view), path, NULL, TRUE, 0.5, 0.0);
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view));
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (tree_view), TRUE);
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),

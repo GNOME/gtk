@@ -169,7 +169,7 @@ struct _GtkTreeViewPrivate
   gint press_start_y;
 
   /* Scroll-to functionality when unrealized */
-  GtkTreePath *scroll_to_path;
+  GtkTreeRowReference *scroll_to_path;
   GtkTreeViewColumn *scroll_to_column;
   gfloat scroll_to_row_align;
   gfloat scroll_to_col_align;
