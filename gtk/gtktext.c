@@ -255,7 +255,7 @@ static void move_cursor_page_ver (GtkText *text, int dir);
 static void move_cursor_ver (GtkText *text, int count);
 static void move_cursor_hor (GtkText *text, int count);
 
-/*#define DEBUG_GTK_TEXT*/
+/* #define DEBUG_GTK_TEXT */
 
 #if defined(DEBUG_GTK_TEXT) && defined(__GNUC__)
 /* Debugging utilities. */
@@ -386,7 +386,7 @@ gtk_text_init (GtkText *text)
   text->tab_stops = g_list_prepend (text->tab_stops, (void*)8);
 
   text->line_wrap = TRUE;
-  text->is_editable = TRUE;
+  text->is_editable = FALSE;
 }
 
 GtkWidget*
@@ -410,7 +410,6 @@ gtk_text_set_editable (GtkText *text,
   g_return_if_fail (GTK_IS_TEXT (text));
 
   text->is_editable = (editable != FALSE);
-  text->is_editable = FALSE; /* UNTIL JOSH FIXES IT */
 }
 
 void
@@ -1021,6 +1020,28 @@ gtk_text_insert_1_at_point (GtkText* text, char key)
 		   MARK_CURRENT_FORE (&text->point),
 		   MARK_CURRENT_BACK (&text->point),
 		   &key, 1);
+
+  insert_char_line_expose (text, key, 
+			   total_line_height (text, text->current_line, 1));
+
+}
+
+static void
+gtk_text_backward_delete_1_at_point (GtkText* text, char key)
+{
+  gtk_text_backward_delete (text, 1);
+
+  delete_char_line_expose (text, key, 
+			   total_line_height (text, text->current_line, 1));
+}
+
+static void
+gtk_text_forward_delete_1_at_point (GtkText* text, char key)
+{
+  gtk_text_forward_delete (text, 1);
+
+  delete_char_line_expose (text, key, 
+			   total_line_height (text, text->current_line, 1));
 }
 
 static gint
@@ -1076,13 +1097,13 @@ gtk_text_key_press (GtkWidget   *widget,
 	      if (!text->has_cursor || text->cursor_mark.index == 0)
 		break;
 
-	      gtk_text_backward_delete (text, 1);
+	      gtk_text_backward_delete_1_at_point (text, key);
 	      break;
 	    case GDK_Delete:
 	      if (!text->has_cursor || LAST_INDEX (text, text->cursor_mark))
 		break;
 
-	      gtk_text_forward_delete (text, 1);
+	      gtk_text_forward_delete_1_at_point (text, key);
 	      break;
 	    case GDK_Tab:
 	      if (!text->has_cursor)
@@ -3436,6 +3457,12 @@ gtk_text_show_cache_line (GtkText *text, GList *cache,
   LineParams *lp = &CACHE_DATA(cache);
   gint i;
 
+  if (cache == text->line_start_cache)
+    g_print ("Line Start Cache: ");
+
+  if (cache == text->current_line)
+    g_print("Current Line: ");
+
   g_print ("%s:%d: cache line %s s=%d,e=%d,lh=%d (",
 	   func,
 	   line,
@@ -3454,6 +3481,10 @@ static void
 gtk_text_show_cache (GtkText *text, const char* func, gint line)
 {
   GList *l = text->line_start_cache;
+
+  /* back up to the absolute beginning of the line cache */
+  while (l->prev)
+    l = l->prev;
 
   g_print ("*** line cache ***\n");
   for (; l; l = l->next)

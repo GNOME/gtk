@@ -1690,6 +1690,15 @@ select_clist (GtkWidget *widget,
 }
 
 void
+list_selection_clist (GtkWidget *widget, gpointer data)
+{
+  GList *list;
+  GtkCListRow *clist_row;
+  GtkCList *clist;
+
+}
+
+void
 create_clist ()
 {
   gint i;
@@ -2261,6 +2270,7 @@ create_text ()
       gtk_widget_show (table);
 
       text = gtk_text_new (NULL, NULL);
+      gtk_text_set_editable (text, TRUE);
       gtk_table_attach_defaults (GTK_TABLE (table), text, 0, 1, 0, 1);
       gtk_widget_show (text);
 
@@ -2270,7 +2280,6 @@ create_text ()
       gtk_widget_show (hscrollbar);
 
       vscrollbar = gtk_vscrollbar_new (GTK_TEXT (text)->vadj);
-      gtk_widget_set_usize(vscrollbar, 30, -1);
       gtk_table_attach (GTK_TABLE (table), vscrollbar, 1, 2, 0, 1,
 			GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (vscrollbar);
@@ -2279,47 +2288,47 @@ create_text ()
 
       gtk_widget_realize (text);
 
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "spencer blah blah blah\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "kimball\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "is\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "a\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "wuss.\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "but\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL,
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL,
 		       "josephine\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "(his\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "girlfriend\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "is\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "not).\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "why?\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "because\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "spencer\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "puked\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "last\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "night\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "but\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "josephine\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "did\n", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->white, NULL, 
+      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
 		       "not", -1);
 
       gtk_text_thaw (GTK_TEXT (text));

@@ -410,10 +410,12 @@ gtk_clist_new (int columns,
   /* initalize memory chunks */
   clist->row_mem_chunk = g_mem_chunk_new ("clist row mem chunk",
                                           sizeof (GtkCListRow),
-                                          1024, G_ALLOC_AND_FREE);
+                                          sizeof (GtkCListRow) * 1024, 
+					  G_ALLOC_AND_FREE);
   clist->cell_mem_chunk = g_mem_chunk_new ("clist cell mem chunk",
 					   sizeof (GtkCell) * columns,
-					   1024, G_ALLOC_AND_FREE);
+					   sizeof (GtkCell) * columns * 1024, 
+					   G_ALLOC_AND_FREE);
 
   /* set number of columns, allocate memory */
   clist->columns = columns;

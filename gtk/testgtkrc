@@ -47,8 +47,8 @@ style "toggle_button" = "button"
 
 style "text"
 {
-  bg_pixmap[NORMAL] = "marble.xpm"
-  fg[NORMAL] = { 1.0, 1.0, 1.0 }
+#  bg_pixmap[NORMAL] = "marble.xpm"
+#  fg[NORMAL] = { 1.0, 1.0, 1.0 }
 }
 
 style "ruler"
@@ -70,6 +70,6 @@ widget_class "*GtkCheckButton*" style "toggle_button"
 widget_class "*GtkRadioButton*" style "toggle_button"
 widget_class "*GtkButton*" style "button"
 widget_class "*Ruler" style "ruler"
-widget_class "*GtkText" style "text"
+#widget_class "*GtkText" style "text"
 widget "main window.*GtkButton*" style "main_button"
 widget "*GtkCurve" style "curve"
