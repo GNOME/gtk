@@ -38,6 +38,7 @@
 #include <gmodule.h>
 #ifdef G_OS_UNIX
 #include <unistd.h>
+#include <sys/types.h>		/* For uid_t, gid_t */
 #endif
 #ifdef G_OS_WIN32
 #define STRICT

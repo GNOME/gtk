@@ -1,3 +1,11 @@
+Sat Jan 19 08:47:41 2002  Jeff Garzik  <jgarzik@mandrakesoft.com>
+
+	* gdk/linux-fb/gdkproperty-fb.c (gdk_atom_name):
+	Wrap case values in GPOINTER_TO_UINT().  Fixes build with gcc 3.x.
+
+	* gtk/gtkmain.c:  Include sys/types.h if G_OS_UNIX.
+	Fixes build with gcc 3.x and -ansi.
+
 Fri Jan 18 23:01:37 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrc.c (gtk_rc_parse_style): Fix problems when

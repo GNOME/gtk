@@ -72,17 +72,28 @@ gdk_atom_name (GdkAtom atom)
       
       switch (GPOINTER_TO_UINT (atom))
 	{
-	case GDK_SELECTION_PRIMARY: return g_strdup ("PRIMARY");
-	case GDK_SELECTION_SECONDARY: return g_strdup ("SECONDARY");
-	case GDK_SELECTION_CLIPBOARD: return g_strdup ("CLIPBOARD");
-	case GDK_SELECTION_TYPE_ATOM: return g_strdup ("ATOM");
-	case GDK_SELECTION_TYPE_BITMAP: return g_strdup ("BITMAP");
-	case GDK_SELECTION_TYPE_COLORMAP: return g_strdup ("COLORMAP");
-	case GDK_SELECTION_TYPE_DRAWABLE: return g_strdup ("DRAWABLE");
-	case GDK_SELECTION_TYPE_INTEGER: return g_strdup ("INTEGER");
-	case GDK_SELECTION_TYPE_PIXMAP: return g_strdup ("PIXMAP");
-	case GDK_SELECTION_TYPE_WINDOW: return g_strdup ("WINDOW");
-	case GDK_SELECTION_TYPE_STRING: return g_strdup ("STRING");
+	case GPOINTER_TO_UINT (GDK_SELECTION_PRIMARY):
+	  return g_strdup ("PRIMARY");
+	case GPOINTER_TO_UINT (GDK_SELECTION_SECONDARY):
+	  return g_strdup ("SECONDARY");
+	case GPOINTER_TO_UINT (GDK_SELECTION_CLIPBOARD):
+	  return g_strdup ("CLIPBOARD");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_ATOM):
+	  return g_strdup ("ATOM");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_BITMAP):
+	  return g_strdup ("BITMAP");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_COLORMAP):
+	  return g_strdup ("COLORMAP");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_DRAWABLE):
+	  return g_strdup ("DRAWABLE");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_INTEGER):
+	  return g_strdup ("INTEGER");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_PIXMAP):
+	  return g_strdup ("PIXMAP");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_WINDOW):
+	  return g_strdup ("WINDOW");
+	case GPOINTER_TO_UINT (GDK_SELECTION_TYPE_STRING):
+	  return g_strdup ("STRING");
 	default:
 	  g_warning (G_STRLOC "Invalid atom");
 	  return g_strdup ("<invalid>");
