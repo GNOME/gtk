@@ -1,3 +1,8 @@
+2000-03-29  Federico Mena Quintero  <federico@helixcode.com>
+
+	* gdk-pixbuf/gdk-pixbuf.c (gdk_pixbuf_get_has_alpha): Return
+	gboolean instead of int.
+
 2000-03-27  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk-pixbuf/pixops/pixops.c: Fix problem with 

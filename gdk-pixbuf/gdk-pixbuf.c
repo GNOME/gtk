@@ -201,7 +201,7 @@ gdk_pixbuf_get_n_channels (GdkPixbuf *pixbuf)
  *
  * Return value: TRUE if it has an alpha channel, FALSE otherwise.
  **/
-int
+gboolean
 gdk_pixbuf_get_has_alpha (GdkPixbuf *pixbuf)
 {
 	g_return_val_if_fail (pixbuf != NULL, -1);

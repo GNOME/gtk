@@ -88,7 +88,7 @@ struct _GdkPixbufAnimation {
 
 ArtPixFormat gdk_pixbuf_get_format          (GdkPixbuf *pixbuf);
 int          gdk_pixbuf_get_n_channels      (GdkPixbuf *pixbuf);
-int          gdk_pixbuf_get_has_alpha       (GdkPixbuf *pixbuf);
+gboolean     gdk_pixbuf_get_has_alpha       (GdkPixbuf *pixbuf);
 int          gdk_pixbuf_get_bits_per_sample (GdkPixbuf *pixbuf);
 guchar      *gdk_pixbuf_get_pixels          (GdkPixbuf *pixbuf);
 int          gdk_pixbuf_get_width           (GdkPixbuf *pixbuf);
