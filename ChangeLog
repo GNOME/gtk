@@ -25,7 +25,8 @@
 	* README.win32: Updates. Don't mention the now removed
 	makefile.mingw files.
 
-	* gdk/gdk.def: Add a couple of missing entries.
+	* gdk/gdk.def
+	* gtk/gtk.def: Add a couple of missing entries.
 
 	* gdk/gdkkeynames.c: Include <string.h> for strcmp() and memcpy().
 
