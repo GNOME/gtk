@@ -1,3 +1,9 @@
+2002-12-08  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcolorsel.c (gtk_color_selection_set_previous_color): 
+	(gtk_color_selection_set_previous_alpha): Reset priv->changing 
+	before returning.  (#100443)
+
 Sat Dec  7 14:45:50 GMT 2002  Tony Gale <gale@gtk.org>
 
 	* docs/tutorial/gtk-tut.sgml: minor fixes
