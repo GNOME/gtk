@@ -1,32 +1,118 @@
 This file contains some notes as to how the widget system does
 and should work. It consists of three parts:
 
- I) A list of invariants about the states of the widgets. 
+ I) A description of the meaning of the various flags
+
+ II) A list of invariants about the states of the widgets. 
     (Throughout this document, we refer to the states of the
      widgets by referring to the flags for gtkwidget)
 
- II) Some notes about the ways that a widget changes states
+ III) Some notes about the ways that a widget changes states
 
- III) A list of responsibilities of various widget signals when
+ IV) A list of responsibilities of various widget signals when
     the states change.
 
-Any necessary actions which is implied by the I) section but not
-mentioned in III) are the responsibility of the core GTK code, 
-which is roughly defined as:
+Any action necessary to maintain the invariants in II which is not
+explicitly mentioned in IV), is the responsibility of the core GTK
+code, which is roughly defined as:
 
   gtkobject.c
   gtkwidget.c
   gtkcontainer.c
   gtkmain.c
+  gtksignal.c
 
-I. Invariants:
--------------
+Section II is mostly of interest to those maintaining GTK, the
+other sections may also be interesting to people writing
+new widgets.
 
-1)  GTK_DESTROYED => !GTK_REALIZED
-                  => !GTK_VISIBLE
+                            Owen Taylor <owt1@cornell.edu>
+          		    98/02/03
+
+I. Flags
+--------
+
+GTK_REALIZED:
+	set by gtk_widget_realize, unset by gtk_widget_unrealize
+	relies on ((widget->parent && widget->parent->window)
+	           || GTK_WIDGET_TOPLEVEL (widget);
+	means: widget has an associated GdkWindow (XWindow)
+
+GTK_MAPPED:
+	set by gtk_widget_map, unset by gtk_widget_unmap
+	may only be set if GTK_WIDGET_REALIZED(widget)
+	means: gdk_window_show() has been called on the widgets window(s).
+
+GTK_VISIBLE:
+	set by gtk_widget_show
+	implies that a widget will be GTK_MAPPED as soon as it's
+	parent is GTK_MAPPED.
+!GTK_VISIBLE:
+	set by gtk_widget_hide
+	implies that a widget is not onscreen, therefore !GTK_MAPPED
+
+GTK_REDRAW_PENDING:
+	relies on GTK_WIDGET_MAPPED(widget)
+	[this is not really enforced throughout the code, but should
+	 be. it only requires a few checks for GTK_WIDGET_MAPPED and
+	 minor changes to gtk_widget_unmap, we can then remove the check
+	 in gtk_widget_real_destroy]
+	means: there is an idle handler waiting for the widget, that
+	will cause a full redraw (gtk_widget_draw(widget, NULL))
+
+GTK_RESIZE_PENDING:
+	first, this is only valid for GtkContainers.
+	[some of the code should move to gtkcontainer.c therefore]
+	relies on GTK_WIDGET_REALIZED(widget)
+	[this is not really enforced throughout the code, but should
+	 be. it only requires a few checks for GTK_WIDGET_RELIZED and
+	 minor changes to gtk_widget_unrealize, we can then remove the check
+	 in gtk_widget_real_destroy]
+	means: there is an idle handler waiting for the container to
+	resize it.
+
+GTK_RESIZE_NEEDED:
+	relies on GTK_WIDGET_REALIZED(widget)
+	[puhhh, this isn't rely enforced either..., bla bla ...remove check
+	 in gtk_widget_real_destroy]
+	means: a widget has been added to the resize_widgets list of
+	its _toplevel_ container (keep this in mind for GtkViewport).
+	remark: this flag is also used internaly by gtkwindow.c.
+
+GTK_LEAVE_PENDING:
+	a widget is flagged as such if there is a leave_notify event
+	pending for it. it receives this event regardless of a grab or
+	its current sensitivity.
+	[this should be made relying on GTK_REALIZED]
+
+GTK_HAS_GRAB:
+	set by gtk_grab_add, unset by gtk_grab_remove
+	means: widget is in the grab_widgets stack.
+
+GTK_WIDGET_DRAWABLE:
+	a widget is flagged as GTK_WIDGET_VISIBLE and GTK_WIDGET_MAPPED
+	means: it _makes sense_ to draw in a widgets window.
+
+
+
+II. Invariants:
+---------------
+
+This section describes various constraints on the states of 
+the widget:
+
+In the following
+
+  A => B     means  if A is true, than B is true
+  A <=> B    means  A is true, if and only if B is true
+                    (equivalent to A => B and B <= A)
+
+
+1)  GTK_WIDGET_DESTROYED (widget) => !GTK_WIDGET_REALIZED (widget)
+                                  => !GTK_WIDGET_VISIBLE (widget)
 [ The latter is not currently in place, but it should be ] 
  
-2) GTK_MAPPED => GTK_REALIZED
+2) GTK_WIDGET_MAPPED (widget) => GTK_WIDGET_REALIZED (widget)
 
 3) if GTK_WIDGET_TOPLEVEL (widget):
    GTK_WIDGET_VISIBLE (widget) <=> GTK_WIDGET_MAPPED (widget)
@@ -35,24 +121,26 @@ I. Invariants:
   widget->parent && GTK_WIDGET_REALIZED (widget->parent) <=>
      GTK_WIDGET_REALIZED (widget)
 
-(When a widget is force-unrealized, to maintain this invariant,
- the widget is removed from its parent. Not currently implemented)
-
 5) if !GTK_WIDGET_TOPLEVEL (widget):
-   widget->parent && GTK_WIDGET_MAPPED (widget->parent) && 
-   GTK_WIDGET_VISIBLE (widget) <=>
-     GTK_WIDGET_MAPPED (widget)
 
+   GTK_WIDGET_MAPPED (widget) => GTK_WIDGET_VISIBLE (widget)
+                              => GTK_WIDGET_REALIZED (widget)
+
+   widget->parent && GTK_WIDGET_MAPPED (widget->parent) && 
+     GTK_WIDGET_VISIBLE (widget) => GTK_WIDGET_MAPPED (widget)
 
 Note:, the definition
 
-  GTK_WIDGET_DRAWABLE = GTK_WIDGET_VISIBLE && GTK_WIDGET_MAPPED
-  is made in gtkwidget.c, but by 3) and 5), 
+[  GTK_WIDGET_DRAWABLE = GTK_WIDGET_VISIBLE && GTK_WIDGET_MAPPED
+   is made in gtkwidget.c, but by 3) and 5), 
      
-     GTK_WIDGET_MAPPED => GTK_WIDGET_VISIBLE
+      GTK_WIDGET_MAPPED => GTK_WIDGET_VISIBLE
+]
 
-II. How states are changed:
----------------------------
+
+
+III. How states are changed:
+----------------------------
 
 How can the user control the state of a widget:
 -----------------------------------------------
@@ -81,14 +169,19 @@ gtk_container_add (container, widget) [ and container-specific variants ]
 gtk_container_remove (container, widget)
  unsets widget->parent
 
+gtk_widget_reparent (widget, new_parent)
+ Equivalent to removing widget from old parent and adding it to
+ the new parent, except that the widget will not be temporarily 
+ unrealized if both the old parent and the new parent are realized.
+
 
 gtk_widget_unrealize
- sets !GTK_REALIZED for widget
-(can we say this is never to be called from user code?)
+gtk_widget_map
+gtk_widget_unmap
 
-gtk_widget_(un)map are not to be called from applications.
-(can we get rid of them completely?)
-
+These functions are not meant to be used by applications - they
+are used only by GTK and widgets to enforce invariants on the
+state.
 
 When The X window corresponding to a GTK window is destroyed:
 -------------------------------------------------------------
@@ -96,7 +189,8 @@ When The X window corresponding to a GTK window is destroyed:
 gtk_widget_destroy is called (as above).
 
 
-III. Responsibilities of widgets
+
+IV. Responsibilities of widgets
 --------------------------------
 
 Adding to a container
@@ -108,8 +202,9 @@ When a widget is added to a container, the container:
   2) calls gtk_widget_set_parent_window (widget, window) if 
      the widget is being added to something other than container->window
   3) if container is realized, and not widget, realizes widget
-  4) if container is mapped, and not widget, realizes widget
-  5) Queues a resize
+  4) if container is mapped, and not widget and widget is GTK_VISIBLE,
+     maps widget
+  5) Queues a resize if the widget is mapped
 
 Note: It would be nice to remove 3) and 4) out of widget specific code
   since they are of the invariant-enforcing nature, but it is
@@ -128,11 +223,7 @@ When a widget is removed to a container, the container:
 Notes:
 
  gtk_widget_unparent unrealizes the widget except in the 
- special case GTK_IN_REPARENT is set. (Special case)
-
- gtk_widget_unparent is quite different than
- gtk_widget_set_parent (widget, NULL) which is for setting
-   up toplevel windows.
+   special case GTK_IN_REPARENT is set.
 
 
 At widget creation
@@ -141,6 +232,7 @@ At widget creation
 Widgets are created in an unrealized state. 
 
  1) The widget should allocate and initialize needed data structures
+
 
 The Realize signal
 ------------------
@@ -169,9 +261,9 @@ The Map signal
 --------------
 
   1) Set the MAPPED flag
-  2) If the widget has a window, gdk_window_show that window
-  3) If the widget does not hae a window, then map all child
-     windows.
+  2) If the widget has any windows, gdk_window_show those windows
+  3) call gtk_widget_map for all child windows that are 
+     VISIBLE and !MAPPED.
   3) Do any other functions related to putting the widget onscreen.
      (for instance, showing extra popup windows...)
 
@@ -181,15 +273,11 @@ The Unmap signal
 When a widget receives the unmap signal, it must:
 
  1) If the widget has a window, gdk_window_hide that window, 
-
  2) If the widget does not have a window, unmap all child widgets
-
  3) Do any other functions related to taking the widget offscreen
      (for instance, removing popup windows...)
-
  3) Unset GTK_MAPPED
 
-Note: Could we do a better job at providing default map/unmap handlers?
 
 The Unrealize signal
 --------------------
@@ -204,8 +292,9 @@ When a widget receives the unrealize signal, it must
  2) Call the parent's unrealize handler
 
 
-As a side effect of the unrealize signal, the widget will be
-removed from its parent
+The Widget class unrealize handler will take care of unrealizing
+all children if necessary. [should this be made consistent with
+unmap???]
 
 
 The Destroy Signal
@@ -235,7 +324,7 @@ When a widget receives the destroy signal, it must:
 
   1) If the widget "owns" any widgets other than its child
      widgets, (for instance popup windows) it should
-     destroy them.
+     call gtk_widget_destroy () for them.
 
   2) Call the parent class's destroy handler.
 
@@ -261,7 +350,7 @@ cannot make any GTK calls with the widget as a parameter.
 1) Free any memory allocated by the widget. (But _not_
    the widget structure itself.
 
-2) Call the parent classes finalize signal
+2) Call the parent class's finalize signal
 
 
 A note on chaining "destroy" signals and finalize signals:
