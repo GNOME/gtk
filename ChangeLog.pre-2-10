@@ -1,3 +1,9 @@
+Wed Jan 31 15:46:13 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/Makefile.am (libgtkinclude_HEADERS): Move gtkfeatures.h from
+	gtk_public_h_sources to directly here to avoid warning when
+	building srcdir != builddir. (#9656)
+
 Tue Jan 30 19:49:02 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkrange.c: Patch from Kipp Hickman to make the event

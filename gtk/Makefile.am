@@ -72,7 +72,6 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkentry.h		\
 	gtkenums.h		\
 	gtkeventbox.h		\
-	gtkfeatures.h		\
 	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontsel.h		\
@@ -310,7 +309,7 @@ gdk_headers = @STRIP_BEGIN@ \
 #
 # setup GTK+ sources and their dependancies
 #
-libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources)
+libgtkinclude_HEADERS = $(gtk_public_h_sources) $(gtk_built_public_sources) gtkfeatures.h
 libgtk_la_SOURCES = $(gtk_c_sources)
 MAINTAINERCLEANFILES += $(gtk_built_public_sources) $(gtk_built_sources)
 EXTRA_HEADERS +=
