@@ -88,7 +88,7 @@ Release notes
   If you have filenames encoded in the encoding of your locale, then you 
   may want to set the G_FILENAME_ENCODING environment variable:
   
-   G_FILENAME_ENCODING=@local
+   G_FILENAME_ENCODING=@locale
    export G_FILENAME_ENCODING
 
   (Earlier versions of GLib 2.x required a different environment variable
