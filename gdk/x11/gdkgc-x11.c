@@ -140,6 +140,7 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
   private = GDK_GC_X11 (gc);
 
   private->dirty_mask = 0;
+  private->have_clip_mask = FALSE;
   private->clip_region = NULL;
     
   private->screen = GDK_DRAWABLE_IMPL_X11 (drawable)->screen;
@@ -158,7 +159,10 @@ _gdk_x11_gc_new (GdkDrawable      *drawable,
 
   if (values_mask & GDK_GC_FOREGROUND)
     private->fg_pixel = values->foreground.pixel;
-  
+
+  if ((values_mask & GDK_GC_CLIP_MASK) && values->clip_mask)
+    private->have_clip_mask = TRUE;
+
   xvalues.function = GXcopy;
   xvalues.fill_style = FillSolid;
   xvalues.arc_mode = ArcPieSlice;
@@ -394,6 +398,8 @@ gdk_x11_gc_set_values (GdkGC           *gc,
 	  gdk_region_destroy (x11_gc->clip_region);
 	  x11_gc->clip_region = NULL;
 	}
+
+      x11_gc->have_clip_mask = values->clip_mask != NULL;
     }
 
   if (values_mask & GDK_GC_FOREGROUND)
@@ -643,20 +649,30 @@ gdk_gc_set_clip_rectangle (GdkGC	*gc,
 			   GdkRectangle *rectangle)
 {
   GdkGCX11 *x11_gc;
-
+  gboolean had_region = FALSE;
+  
   g_return_if_fail (GDK_IS_GC (gc));
 
   x11_gc = GDK_GC_X11 (gc);
 
   if (x11_gc->clip_region)
-    gdk_region_destroy (x11_gc->clip_region);
+    {
+      had_region = TRUE;
+      gdk_region_destroy (x11_gc->clip_region);
+    }
 
   if (rectangle)
     x11_gc->clip_region = gdk_region_rectangle (rectangle);
   else
+    x11_gc->clip_region = NULL;
+
+  /* Unset immediately, to make sure Xlib doesn't keep the
+   * XID of an old clip mask cached
+   */
+  if ((had_region && !rectangle) || x11_gc->have_clip_mask)
     {
-      x11_gc->clip_region = NULL;
       XSetClipMask (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), None);
+      x11_gc->have_clip_mask = FALSE;
     }
 
   gc->clip_x_origin = 0;
@@ -670,22 +686,32 @@ gdk_gc_set_clip_region (GdkGC	  *gc,
 			GdkRegion *region)
 {
   GdkGCX11 *x11_gc;
+  gboolean had_region = FALSE;
 
   g_return_if_fail (GDK_IS_GC (gc));
 
   x11_gc = GDK_GC_X11 (gc);
 
   if (x11_gc->clip_region)
-    gdk_region_destroy (x11_gc->clip_region);
+    {
+      had_region = TRUE;
+      gdk_region_destroy (x11_gc->clip_region);
+    }
 
   if (region)
     x11_gc->clip_region = gdk_region_copy (region);
   else
+    x11_gc->clip_region = NULL;    
+
+  /* Unset immediately, to make sure Xlib doesn't keep the
+   * XID of an old clip mask cached
+   */
+  if ((had_region && !region) || x11_gc->have_clip_mask)
     {
-      x11_gc->clip_region = NULL;
       XSetClipMask (GDK_GC_XDISPLAY (gc), GDK_GC_XGC (gc), None);
+      x11_gc->have_clip_mask = FALSE;
     }
-  
+
   gc->clip_x_origin = 0;
   gc->clip_y_origin = 0;
   

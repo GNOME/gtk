@@ -371,30 +371,6 @@ render_layout_line (GdkDrawable        *drawable,
               if (gdk_rectangle_intersect (&pixbuf_rect, &render_state->clip_rect,
                                            &draw_rect))
                 {
-                  GdkBitmap *mask = NULL;
-              
-                  if (gdk_pixbuf_get_has_alpha (pixbuf))
-                    {
-                      mask = gdk_pixmap_new (drawable,
-                                             gdk_pixbuf_get_width (pixbuf),
-                                             gdk_pixbuf_get_height (pixbuf),
-                                             1);
-
-                      gdk_pixbuf_render_threshold_alpha (pixbuf, mask,
-                                                         0, 0, 0, 0,
-                                                         gdk_pixbuf_get_width (pixbuf),
-                                                         gdk_pixbuf_get_height (pixbuf),
-                                                         128);
-
-                    }
-
-                  if (mask)
-                    {
-                      gdk_gc_set_clip_mask (render_state->fg_gc, mask);
-                      gdk_gc_set_clip_origin (render_state->fg_gc,
-                                              pixbuf_rect.x, pixbuf_rect.y);
-                    }
-
                   gdk_draw_pixbuf (drawable,
 				   render_state->fg_gc,
 				   pixbuf,
@@ -405,13 +381,6 @@ render_layout_line (GdkDrawable        *drawable,
 				   draw_rect.height,
 				   GDK_RGB_DITHER_NORMAL,
 				   0, 0);
-
-                  if (mask)
-                    {
-                      gdk_gc_set_clip_rectangle (render_state->fg_gc,
-                                                 &render_state->clip_rect);
-                      g_object_unref (mask);
-                    }
                 }
 
               shaped_width_pixels = width;
