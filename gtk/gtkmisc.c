@@ -19,9 +19,23 @@
 #include "gtkmisc.h"
 
 
+enum {
+  ARG_0,
+  ARG_XALIGN,
+  ARG_YALIGN,
+  ARG_XPAD,
+  ARG_YPAD,
+};
+
 static void gtk_misc_class_init (GtkMiscClass *klass);
 static void gtk_misc_init       (GtkMisc      *misc);
 static void gtk_misc_realize    (GtkWidget    *widget);
+static void gtk_misc_set_arg    (GtkMisc      *misc,
+				 GtkArg       *arg,
+				 guint         arg_id);
+static void gtk_misc_get_arg    (GtkMisc      *misc,
+				 GtkArg       *arg,
+				 guint         arg_id);
 
 
 guint
@@ -38,8 +52,8 @@ gtk_misc_get_type ()
 	sizeof (GtkMiscClass),
 	(GtkClassInitFunc) gtk_misc_class_init,
 	(GtkObjectInitFunc) gtk_misc_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	(GtkArgSetFunc) gtk_misc_set_arg,
+        (GtkArgGetFunc) gtk_misc_get_arg,
       };
 
       misc_type = gtk_type_unique (gtk_widget_get_type (), &misc_info);
@@ -55,6 +69,11 @@ gtk_misc_class_init (GtkMiscClass *class)
 
   widget_class = (GtkWidgetClass*) class;
 
+  gtk_object_add_arg_type ("GtkMisc::xalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_XALIGN);
+  gtk_object_add_arg_type ("GtkMisc::yalign", GTK_TYPE_DOUBLE, GTK_ARG_READWRITE, ARG_YALIGN);
+  gtk_object_add_arg_type ("GtkMisc::xpad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_XPAD);
+  gtk_object_add_arg_type ("GtkMisc::ypad", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_YPAD);
+  
   widget_class->realize = gtk_misc_realize;
 }
 
@@ -67,6 +86,56 @@ gtk_misc_init (GtkMisc *misc)
   misc->yalign = 0.5;
   misc->xpad = 0;
   misc->ypad = 0;
+}
+
+static void
+gtk_misc_set_arg (GtkMisc        *misc,
+		  GtkArg         *arg,
+		  guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      gtk_misc_set_alignment (misc, GTK_VALUE_DOUBLE (*arg), misc->yalign);
+      break;
+    case ARG_YALIGN:
+      gtk_misc_set_alignment (misc, misc->xalign, GTK_VALUE_DOUBLE (*arg));
+      break;
+    case ARG_XPAD:
+      gtk_misc_set_alignment (misc, GTK_VALUE_INT (*arg), misc->ypad);
+      break;
+    case ARG_YPAD:
+      gtk_misc_set_alignment (misc, misc->xpad, GTK_VALUE_INT (*arg));
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
+static void
+gtk_misc_get_arg (GtkMisc        *misc,
+		  GtkArg         *arg,
+		  guint           arg_id)
+{
+  switch (arg_id)
+    {
+    case ARG_XALIGN:
+      GTK_VALUE_DOUBLE (*arg) = misc->xalign;
+      break;
+    case ARG_YALIGN:
+      GTK_VALUE_DOUBLE (*arg) = misc->yalign;
+      break;
+    case ARG_XPAD:
+      GTK_VALUE_INT (*arg) = misc->xpad;
+      break;
+    case ARG_YPAD:
+      GTK_VALUE_INT (*arg) = misc->ypad;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void

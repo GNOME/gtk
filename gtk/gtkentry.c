@@ -434,12 +434,13 @@ gtk_entry_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
   entry = GTK_ENTRY (widget);
   editable = GTK_EDITABLE (widget);
-
+  
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
+  attributes.y = widget->allocation.y + (widget->allocation.height -
+					 widget->requisition.height) / 2;
   attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+  attributes.height = widget->requisition.height;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.colormap = gtk_widget_get_colormap (widget);
