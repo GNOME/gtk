@@ -1,3 +1,9 @@
+2004-02-05  Christian Rose  <menthos@menthos.com>
+
+	* POTFILES.in: Removed modules/input/imhangul.c; it's not present
+	anymore.
+	* sv.po: Updated Swedish translation.
+
 2004-02-02  Pablo Saratxaga  <pablo@mandrakesoft.com>
 
 	* uz*.po: changed default for Uzbek; now just "uz"
