@@ -3625,7 +3625,7 @@ shortcuts_row_activated_cb (GtkTreeView           *tree_view,
   if (!gtk_tree_model_get_iter (impl->shortcuts_filter_model, &iter, path))
     return;
 
-  gtk_tree_model_filter_convert_child_iter_to_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model),
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_filter_model),
 						    &child_iter,
 						    &iter);
   child_path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &child_iter);
