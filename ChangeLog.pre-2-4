@@ -1,3 +1,10 @@
+Wed Jan 27 20:51:25 PST 1999 Manish Singh <yosh@gimp.org>
+
+	* acinclude.m4: Xsed isn't valid here, don't use it
+
+	* ltmain.sh
+	* ltconfig: better file magic regexp for Linux libs
+
 Wed Jan 27 23:05:55 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklayout.[ch] (gtk_layout_realize): Move 
