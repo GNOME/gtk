@@ -1999,6 +1999,11 @@ gtk_clist_draw (GtkWidget * widget,
 			     0, 0, -1, -1);
 
       draw_rows (clist, NULL);
+
+      for (i = 0; i < clist->columns; i++)
+	{
+	  gtk_widget_queue_draw (clist->column[i].button);
+	}
     }
 }
 
