@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk20 1.3.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2004-03-30 15:08+0200\n"
-"PO-Revision-Date: 2004-03-30 18:02+0200\n"
+"PO-Revision-Date: 2004-04-06 16:36+0200\n"
 "Last-Translator: Pablo Saratxaga <pablo@walon.org>\n"
 "Language-Team: Walloon <linux-wa@walon.org>\n"
 "MIME-Version: 1.0\n"
@@ -800,7 +800,7 @@ msgstr "Grandeu"
 
 #: gtk/gtkcellrendererpixbuf.c:170
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
-msgstr "Li valixhance GtkIconSize ki dene li grandeu del imådjete håynêye"
+msgstr "Li valixhance GtkIconSize ki dene li grandeu d' l' imådjete håynêye"
 
 #: gtk/gtkcellrendererpixbuf.c:179
 msgid "Detail"
@@ -1797,7 +1797,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:127
 msgid "Text of the frame's label"
-msgstr "Li tecse del etikete do cåde"
+msgstr "Li tecse di l' etikete do cåde"
 
 #: gtk/gtkframe.c:134
 msgid "Label xalign"
@@ -1805,7 +1805,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:135
 msgid "The horizontal alignment of the label"
-msgstr "L' aroyaedje di coûtchî del etikete"
+msgstr "L' aroyaedje di coûtchî d' l' etikete"
 
 #: gtk/gtkframe.c:144
 msgid "Label yalign"
@@ -1813,7 +1813,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:145
 msgid "The vertical alignment of the label"
-msgstr "L' aroyaedje d' astampé del etikete"
+msgstr "L' aroyaedje d' astampé d' l' etikete"
 
 #: gtk/gtkframe.c:154 gtk/gtkhandlebox.c:196
 msgid "Deprecated property, use shadow_type instead"
@@ -1910,15 +1910,15 @@ msgstr ""
 
 #: gtk/gtkimage.c:185
 msgid "Icon set"
-msgstr ""
+msgstr "Eshonna d' imådjetes"
 
 #: gtk/gtkimage.c:186
 msgid "Icon set to display"
-msgstr ""
+msgstr "Eshonna d' imådjetes a håyner"
 
 #: gtk/gtkimage.c:193
 msgid "Icon size"
-msgstr "Grandeu del imådjete"
+msgstr "Grandeu d' l' imådjete"
 
 #: gtk/gtkimage.c:194
 msgid "Size to use for stock icon or icon set"
@@ -1966,7 +1966,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:293
 msgid "The text of the label"
-msgstr "Li tecse del etikete"
+msgstr "Li tecse di l' etikete"
 
 #: gtk/gtklabel.c:300
 msgid "A list of style attributes to apply to the text of the label"
@@ -3144,7 +3144,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:196
 msgid "Tag name"
-msgstr "No del etikete"
+msgstr "No d' l' etikete"
 
 #: gtk/gtktexttag.c:197
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
@@ -3439,31 +3439,31 @@ msgstr "Veyåve cursoe"
 
 #: gtk/gtktextview.c:651
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "Definixhe si l' cursoe di stitchaedje est veyåve ou nén"
 
 #: gtk/gtktextview.c:658
 msgid "Buffer"
-msgstr ""
+msgstr "Tampon"
 
 #: gtk/gtktextview.c:659
 msgid "The buffer which is displayed"
-msgstr ""
+msgstr "Li tampon k' est håyné"
 
 #: gtk/gtktextview.c:666
 msgid "Overwrite mode"
-msgstr ""
+msgstr "Môde sipotchaedje"
 
 #: gtk/gtktextview.c:667
 msgid "Whether entered text overwrites existing contents"
-msgstr ""
+msgstr "Definixhe si l' tecse tapé vént replaecî l' tecse k' egzistêye dedja ou nén"
 
 #: gtk/gtktextview.c:674
 msgid "Accepts tab"
-msgstr ""
+msgstr "Accepter les tabulåcions"
 
 #: gtk/gtktextview.c:675
 msgid "Whether Tab will result in a tab character being entered"
-msgstr ""
+msgstr "Definixhe si l' tape di tabulåcion dene on caractere di tabulåcion ou nén"
 
 #: gtk/gtktextview.c:684
 msgid "Error underline color"
@@ -3875,11 +3875,11 @@ msgstr ""
 
 #: gtk/gtkwidget.c:409
 msgid "Widget name"
-msgstr "No del ahesse"
+msgstr "No d' l' ahesse"
 
 #: gtk/gtkwidget.c:410
 msgid "The name of the widget"
-msgstr "Li no del ahesse"
+msgstr "Li no d' l' ahesse"
 
 #: gtk/gtkwidget.c:416
 msgid "Parent widget"
@@ -4120,7 +4120,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:483
 msgid "If TRUE, users can resize the window"
-msgstr ""
+msgstr "Si VRAIY, les uzeus polèt candjî l' grandeu des purneas"
 
 #: gtk/gtkwindow.c:490
 msgid "Modal"
@@ -4130,7 +4130,7 @@ msgstr "Modå"
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
-msgstr ""
+msgstr "Si VRAIY, li purnea est modå (les ôtes purneas n' ont nén l' focusse tant k' ci-chal est en alaedje)"
 
 #: gtk/gtkwindow.c:498
 msgid "Window Position"
@@ -4158,11 +4158,11 @@ msgstr "Li prémetowe hôteu do purnea, pol prumî côp k' il est håyné"
 
 #: gtk/gtkwindow.c:527
 msgid "Destroy with Parent"
-msgstr ""
+msgstr "Distrure avou l' parint"
 
 #: gtk/gtkwindow.c:528
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
+msgstr "Definixhe ci ç' purnea chal ooet esse distrût cwand l' parint est distrût"
 
 #: gtk/gtkwindow.c:535
 msgid "Icon"
@@ -4200,35 +4200,35 @@ msgstr ""
 
 #: gtk/gtkwindow.c:576
 msgid "Skip taskbar"
-msgstr ""
+msgstr "Passer houte del bår des bouyes"
 
 #: gtk/gtkwindow.c:577
 msgid "TRUE if the window should not be in the task bar."
-msgstr ""
+msgstr "VRAIY si l' purnea èn doet nén esse el bår des bouyes."
 
 #: gtk/gtkwindow.c:584
 msgid "Skip pager"
-msgstr ""
+msgstr "Passer houte do padjeu"
 
 #: gtk/gtkwindow.c:585
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "VRAIY si l' purnea èn doet nén esse sol pådjeu."
 
 #: gtk/gtkwindow.c:599
 msgid "Accept focus"
-msgstr ""
+msgstr "Accepter l' focusse"
 
 #: gtk/gtkwindow.c:600
 msgid "TRUE if the window should receive the input focus."
-msgstr ""
+msgstr "VRAIY si l' prunea doet rçure li focusse d' intrêye"
 
 #: gtk/gtkwindow.c:614
 msgid "Decorated"
-msgstr ""
+msgstr "Gåyoté"
 
 #: gtk/gtkwindow.c:615
 msgid "Whether the window should be decorated by the window manager"
-msgstr ""
+msgstr "Definixhe si les gåyotaedjes des purneas dvént esse manaedjîs po manaedjeu di purneas"
 
 #: gtk/gtkwindow.c:630
 msgid "Gravity"
@@ -4236,21 +4236,21 @@ msgstr "Gravité"
 
 #: gtk/gtkwindow.c:631
 msgid "The window gravity of the window"
-msgstr ""
+msgstr "Li gravité do prunea"
 
 #: modules/input/gtkimcontextxim.c:326
 msgid "IM Preedit style"
-msgstr ""
+msgstr "Stîle tapaedje del metôde d' intrêye"
 
 #: modules/input/gtkimcontextxim.c:327
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "Kimint dessiner l' tchinne di tecse k' est tapêye dins l' metôde d' intrêye, divant d' l' evoyî å programe"
 
 #: modules/input/gtkimcontextxim.c:335
 msgid "IM Status style"
-msgstr ""
+msgstr "Stîle d' estat del metôde d' intrêye"
 
 #: modules/input/gtkimcontextxim.c:336
 msgid "How to draw the input method statusbar"
-msgstr ""
+msgstr "Kimint dessiner l' båre d' estat del metôde d' intrêye"
 

@@ -129,7 +129,7 @@ msgstr ""
 
 #: gdk-pixbuf/gdk-pixdata.c:146
 msgid "Image header corrupt"
-msgstr "Li tiestire del imådje est crombe"
+msgstr "Li tiestire di l' imådje est crombe"
 
 #: gdk-pixbuf/gdk-pixdata.c:151
 msgid "Image format unknown"
@@ -137,7 +137,7 @@ msgstr "Cogne d' imådje nén cnoxhowe"
 
 #: gdk-pixbuf/gdk-pixdata.c:156 gdk-pixbuf/gdk-pixdata.c:459
 msgid "Image pixel data corrupt"
-msgstr "Les dnêyes di picsels del imådje sont crombes"
+msgstr "Les dnêyes di picsels di l' imådje sont crombes"
 
 #: gdk-pixbuf/gdk-pixdata.c:403
 #, c-format
@@ -191,7 +191,7 @@ msgstr ""
 #: gdk-pixbuf/io-gif.c:220
 #, c-format
 msgid "Failure reading GIF: %s"
-msgstr "Li léjhaedje del imådje GIF a fwait berwete: %s"
+msgstr "Li léjhaedje di l' imådje GIF a fwait berwete: %s"
 
 #: gdk-pixbuf/io-gif.c:492 gdk-pixbuf/io-gif.c:1442 gdk-pixbuf/io-gif.c:1603
 msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
@@ -498,7 +498,7 @@ msgstr "Dji n' pou alouwer del memwere po tcherdjî l' imådje PNM"
 
 #: gdk-pixbuf/io-pnm.c:820
 msgid "Insufficient memory to load PNM context struct"
-msgstr "Nén del memwere assez po tcherdjî li structeure di contecse del imådje PNM"
+msgstr "Nén del memwere assez po tcherdjî li structeure di contecse di l' imådje PNM"
 
 #: gdk-pixbuf/io-pnm.c:871
 msgid "Unexpected end of PNM image data"
@@ -1624,7 +1624,7 @@ msgstr "_Monter"
 
 #: gtk/gtkstock.c:299
 msgid "_Harddisk"
-msgstr ""
+msgstr "_Deure plake"
 
 #: gtk/gtkstock.c:300
 msgid "_Help"
