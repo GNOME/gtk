@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Gtk+\n"
-"POT-Creation-Date: 2002-09-10 02:53+0300\n"
-"PO-Revision-Date: 2002-09-10 02:55+0300\n"
+"POT-Creation-Date: 2002-09-29 20:52+0300\n"
+"PO-Revision-Date: 2002-09-29 21:00+0300\n"
 "Last-Translator: Borislav Aleksandrov <B.Aleksandrov@cnsys.bg>\n"
 "Language-Team: Bulgarian <dict@linux.zonebg.com>\n"
 "MIME-Version: 1.0\n"
@@ -250,16 +250,16 @@ msgstr "Компресирани икони не се поддържат"
 msgid "Unsupported icon type"
 msgstr "Неподдържан тип икона"
 
-#: gdk-pixbuf/io-ico.c:499
+#: gdk-pixbuf/io-ico.c:500
 msgid "Not enough memory to load ICO file"
 msgstr "Няма достатъчно памет за да заредя ICO файл"
 
-#: gdk-pixbuf/io-jpeg.c:126
+#: gdk-pixbuf/io-jpeg.c:111
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "Грешка при интерпретация на JPEG файл с картинка (%s)"
 
-#: gdk-pixbuf/io-jpeg.c:307
+#: gdk-pixbuf/io-jpeg.c:346
 msgid ""
 "Insufficient memory to load image, try exiting some applications to free "
 "memory"
@@ -267,11 +267,16 @@ msgstr ""
 "Незадоволителна памет за да заредя картинка, опитайте се да излезете от "
 "някои приложения за да освободите памет."
 
-#: gdk-pixbuf/io-jpeg.c:417 gdk-pixbuf/io-jpeg.c:600 gdk-pixbuf/io-jpeg.c:767
+#: gdk-pixbuf/io-jpeg.c:380 gdk-pixbuf/io-jpeg.c:730
+#, c-format
+msgid "Unsupported JPEG color space (%s)"
+msgstr "Неподдържано JPEG цветово пространство (%s)"
+
+#: gdk-pixbuf/io-jpeg.c:476 gdk-pixbuf/io-jpeg.c:668 gdk-pixbuf/io-jpeg.c:844
 msgid "Couldn't allocate memory for loading JPEG file"
 msgstr "Не мога да разпределя памет за зареждане на JPEG файл"
 
-#: gdk-pixbuf/io-jpeg.c:721
+#: gdk-pixbuf/io-jpeg.c:798
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%s' could not be "
@@ -280,7 +285,7 @@ msgstr ""
 "JPEG качеството трябва да бъде между 0 и 100; стойност '%s' не може да бъде "
 "обработена."
 
-#: gdk-pixbuf/io-jpeg.c:736
+#: gdk-pixbuf/io-jpeg.c:813
 #, c-format
 msgid ""
 "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
@@ -1750,11 +1755,11 @@ msgstr "Избор на фокус"
 msgid "Whether to select the contents of an entry when it is focused."
 msgstr "Дали избраното съдържание ще се отдели при фокусиране."
 
-#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3177
+#: gtk/gtkentry.c:3877 gtk/gtklabel.c:3179
 msgid "Select All"
 msgstr "Избира Всичко"
 
-#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3187
+#: gtk/gtkentry.c:3887 gtk/gtklabel.c:3189
 msgid "Input Methods"
 msgstr "Режими на въвеждане"
 
@@ -1762,7 +1767,7 @@ msgstr "Режими на въвеждане"
 msgid "_Insert Unicode control character"
 msgstr "_Вмъква Уникод контролен символ"
 
-#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:161
+#: gtk/gtkfilesel.c:513 gtk/gtkimage.c:163
 msgid "Filename"
 msgstr "Име на файл"
 
@@ -1948,7 +1953,7 @@ msgstr "Преименува"
 msgid "Selection: "
 msgstr "Избор:"
 
-#: gtk/gtkfilesel.c:2997
+#: gtk/gtkfilesel.c:3004
 #, c-format
 msgid ""
 "The filename \"%s\" couldn't be converted to UTF-8 (try setting the "
@@ -1957,15 +1962,15 @@ msgstr ""
 "Името на файла \"%s\" не може да бъде конвертирано към UTF-8 (опитайте се да "
 "смените променливата на средата G_BROKEN_FILENAMES): %s"
 
-#: gtk/gtkfilesel.c:3000
+#: gtk/gtkfilesel.c:3007
 msgid "Invalid Utf-8"
 msgstr "Грешен Utf-8"
 
-#: gtk/gtkfilesel.c:3866
+#: gtk/gtkfilesel.c:3873
 msgid "Name too long"
 msgstr "Името е твърде дълго"
 
-#: gtk/gtkfilesel.c:3868
+#: gtk/gtkfilesel.c:3875
 msgid "Couldn't convert filename"
 msgstr "Не мога да конвертирам името на файла"
 
@@ -2118,80 +2123,80 @@ msgstr ""
 msgid "Error loading icon: %s"
 msgstr "Грешка при зареждане на икона: %s"
 
-#: gtk/gtkimage.c:129
+#: gtk/gtkimage.c:131
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: gtk/gtkimage.c:130
+#: gtk/gtkimage.c:132
 msgid "A GdkPixbuf to display."
 msgstr "GdkPixbuf за показване."
 
-#: gtk/gtkimage.c:137
+#: gtk/gtkimage.c:139
 msgid "Pixmap"
 msgstr "Растерна картинка"
 
-#: gtk/gtkimage.c:138
+#: gtk/gtkimage.c:140
 msgid "A GdkPixmap to display."
 msgstr "Растерна картинка на Gdk за показване."
 
-#: gtk/gtkimage.c:145
+#: gtk/gtkimage.c:147
 msgid "Image"
 msgstr "Картинка"
 
-#: gtk/gtkimage.c:146
+#: gtk/gtkimage.c:148
 msgid "A GdkImage to display."
 msgstr "Gdk картинка за показване."
 
-#: gtk/gtkimage.c:153
+#: gtk/gtkimage.c:155
 msgid "Mask"
 msgstr "Маска"
 
-#: gtk/gtkimage.c:154
+#: gtk/gtkimage.c:156
 msgid "Mask bitmap to use with GdkImage or GdkPixmap"
 msgstr "Битова маска използвана с GdkImage или GdkPixmap"
 
-#: gtk/gtkimage.c:162
+#: gtk/gtkimage.c:164
 msgid "Filename to load and display."
 msgstr "Име на файл за зареждане или показване."
 
-#: gtk/gtkimage.c:170
+#: gtk/gtkimage.c:172
 msgid "Stock ID"
 msgstr "Номенклатурно ID"
 
-#: gtk/gtkimage.c:171
+#: gtk/gtkimage.c:173
 msgid "Stock ID for a stock image to display."
 msgstr ""
 "ID от номенклатурата за номенклатурната картинка, която да се изобрази."
 
-#: gtk/gtkimage.c:178
+#: gtk/gtkimage.c:180
 msgid "Icon set"
 msgstr "Набор икони"
 
-#: gtk/gtkimage.c:179
+#: gtk/gtkimage.c:181
 msgid "Icon set to display."
 msgstr "Набор от икони за показване"
 
-#: gtk/gtkimage.c:186
+#: gtk/gtkimage.c:188
 msgid "Icon size"
 msgstr "Размер на икона"
 
-#: gtk/gtkimage.c:187
+#: gtk/gtkimage.c:189
 msgid "Size to use for stock icon or icon set."
 msgstr "Размер за използване на икони."
 
-#: gtk/gtkimage.c:195
+#: gtk/gtkimage.c:197
 msgid "Animation"
 msgstr "Анимация"
 
-#: gtk/gtkimage.c:196
+#: gtk/gtkimage.c:198
 msgid "GdkPixbufAnimation to display."
 msgstr "Gdk Анимация за показване."
 
-#: gtk/gtkimage.c:203
+#: gtk/gtkimage.c:205
 msgid "Storage type"
 msgstr "Тип на запазване"
 
-#: gtk/gtkimage.c:204
+#: gtk/gtkimage.c:206
 msgid "The representation being used for image data."
 msgstr "Презентацията започва с използване на представените данни."
 
@@ -2574,7 +2579,7 @@ msgstr ""
 msgid "Whether tabs should have homogeneous sizes"
 msgstr "Дали панелите ще имат еднакви размери"
 
-#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4696
+#: gtk/gtknotebook.c:2450 gtk/gtknotebook.c:4706
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -3214,7 +3219,7 @@ msgid "_Copy"
 msgstr "_Копира"
 
 #: gtk/gtkstock.c:284
-msgid "C_ut"
+msgid "Cu_t"
 msgstr "О_трязва"
 
 #: gtk/gtkstock.c:285
@@ -3414,7 +3419,6 @@ msgid "_Yes"
 msgstr "_Да"
 
 #: gtk/gtkstock.c:334
-#, c-format
 msgid "Zoom _100%"
 msgstr "Мащаб _100%"
 
