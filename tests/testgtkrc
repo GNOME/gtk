@@ -13,11 +13,9 @@
 # testgtkrc2 sets all the buttons in the main window to blue by default
 include "testgtkrc2"
 
-#include "/usr/local/share/themes/Pixmap/gtk/gtkrc"
-#include "/usr/local/share/themes/Redmond95/gtk/gtkrc"
-#include "/usr/local/share/themes/Metal/gtk/gtkrc"
-#include "/usr/local/share/themes/Notif/gtk/gtkrc"
-#include "/usr/local/share/themes/Default/gtk/gtkrc"
+#include "/usr/local/share/themes/Redmond95/gtk-2.0/gtkrc"
+#include "/usr/local/share/themes/Metal/gtk-2.0/gtkrc"
+#include "/usr/local/share/themes/Default/gtk-2.0/gtkrc"
 
 double-click_timeout = 42
 bell-duration = 39
@@ -198,6 +196,7 @@ style "testgtk-green-style" {
 style "testgtk-blue-style" {
  fg[NORMAL] = "blue"
 }
+
 
 widget_class "*.GtkAspectFrame.*.GtkLabel" style "testgtk-green-style"
 widget_class "*.GtkAspectFrame.*.GtkLabel" style "testgtk-blue-style"  # override because it's later

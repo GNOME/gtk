@@ -1,5 +1,7 @@
 2002-10-29  Matthias Clasen  <maclas@gmx.de>
 
+	* tests/testgtkrc: Adjust for current gtk-engines.
+
 	* gdk/x11/gdkcolor-x11.c (gdk_colors_free): Use the same parameter
 	names in header, docs and implementation.
 
