@@ -1843,7 +1843,6 @@ create_pixmap (void)
   GtkWidget *pixmapwid;
   GdkPixmap *pixmap;
   GdkBitmap *mask;
-  GtkStyle *style;
 
   if (!window)
     {

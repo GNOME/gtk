@@ -4429,7 +4429,8 @@ gtk_clist_draw (GtkWidget    *widget,
 	{
 	  if (!clist->column[i].visible)
 	    continue;
-	  if (gtk_widget_intersect(clist->column[i].button, area, &child_area))
+	  if (clist->column[i].button &&
+	      gtk_widget_intersect(clist->column[i].button, area, &child_area))
 	    gtk_widget_draw (clist->column[i].button, &child_area);
 	}
     }

@@ -463,7 +463,7 @@ gtk_type_describe_tree (GtkType	 type,
     }
 }
 
-gint
+gboolean
 gtk_type_is_a (GtkType type,
 	       GtkType is_a_type)
 {

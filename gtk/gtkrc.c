@@ -612,7 +612,7 @@ gtk_rc_get_style (GtkWidget *widget)
 					       rc_style_key_id);
 
   if (widget_rc_style)
-    rc_styles = g_list_prepend (rc_styles, widget_rc_style);
+    rc_styles = g_slist_prepend (rc_styles, widget_rc_style);
   
   if (gtk_rc_sets_widget)
     {

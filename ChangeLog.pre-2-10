@@ -1,3 +1,15 @@
+Sat Nov  7 21:55:00 PST 1998 Manish Singh <yosh@gimp.org>
+
+	* gtk/gtkclist.c: check if column[i].button is valid before calling
+	gtk_widget_intersect on it in gtk_clist_draw
+
+	* gtk/gtkdnd.c: removed unused variable empty_bits
+
+	* gtk/gtkrc.c: we should use gslist_* functions with GSLists...
+
+	* gtk/gtktypeutils.[ch]: makes more send for gtk_type_is_a to return
+	a boolean (thanks to Elrond for noticing this)
+
 1998-11-07  Jay Cox  <jaycox@earthlink.net>
 
 	* gtk/gtkwindow.c: forward declaration for gtk_window_paint

@@ -325,7 +325,7 @@ void		gtk_type_free			(GtkType	 type,
 void		gtk_type_describe_heritage	(GtkType	 type);
 void		gtk_type_describe_tree		(GtkType	 type,
 						 gboolean	 show_size);
-gint		gtk_type_is_a			(GtkType	 type,
+gboolean	gtk_type_is_a			(GtkType	 type,
 						 GtkType	 is_a_type);
 GtkTypeObject*	gtk_type_check_object_cast	(GtkTypeObject	*type_object,
 						 GtkType         cast_type);
