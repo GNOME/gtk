@@ -9,6 +9,10 @@ INCLUDES = @STRIP_BEGIN@ \
 	-I$(top_srcdir)/gdk				\
 	-I$(top_builddir)/gdk				\
 	-DGTK_LOCALEDIR=\"$(gtklocaledir)\"		\
+	-DG_DISABLE_DEPRECATED	 			\
+	-DGDK_PIXBUF_DISABLE_DEPRECATED			\
+	-DGDK_DISABLE_DEPRECATED			\
+	-DGTK_DISABLE_DEPRECATED 			\
 	@GTK_DEBUG_FLAGS@				\
 	@GTK_XIM_FLAGS@					\
 	@GTK_DEP_CFLAGS@				\

@@ -49,7 +49,7 @@ hangul_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (GtkIMContextSimple),
     0,
-    (GtkObjectInitFunc) hangul_init,
+    (GInstanceInitFunc) hangul_init,
   };
 
   type_hangul = 

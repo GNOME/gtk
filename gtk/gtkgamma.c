@@ -34,11 +34,10 @@
 #include "gtkdrawingarea.h"
 #include "gtkentry.h"
 #include "gtkhbox.h"
+#include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
-#include "gtkpixmap.h"
 #include "gtkradiobutton.h"
-#include "gtksignal.h"
 #include "gtkstock.h"
 #include "gtktable.h"
 #include "gtkvbox.h"
@@ -212,26 +211,28 @@ static const char *xpm[][27] =
     }
   };
 
-GtkType
+GType
 gtk_gamma_curve_get_type (void)
 {
-  static GtkType gamma_curve_type = 0;
+  static GType gamma_curve_type = 0;
   
   if (!gamma_curve_type)
     {
-      static const GtkTypeInfo gamma_curve_info =
+      static const GTypeInfo gamma_curve_info =
       {
-	"GtkGammaCurve",
-	sizeof (GtkGammaCurve),
 	sizeof (GtkGammaCurveClass),
-	(GtkClassInitFunc) gtk_gamma_curve_class_init,
-	(GtkObjectInitFunc) gtk_gamma_curve_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_gamma_curve_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkGammaCurve),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_gamma_curve_init,
       };
       
-      gamma_curve_type = gtk_type_unique (GTK_TYPE_VBOX, &gamma_curve_info);
+      gamma_curve_type = g_type_register_static (GTK_TYPE_VBOX, "GtkGammaCurve",
+						 &gamma_curve_info, 0);
     }
   return gamma_curve_type;
 }
@@ -241,7 +242,7 @@ gtk_gamma_curve_class_init (GtkGammaCurveClass *class)
 {
   GtkObjectClass *object_class;
 
-  parent_class = gtk_type_class (GTK_TYPE_VBOX);
+  parent_class = g_type_class_peek_parent (class);
 
   object_class = (GtkObjectClass *) class;
   object_class->destroy = gtk_gamma_curve_destroy;
@@ -260,8 +261,8 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   gtk_container_add (GTK_CONTAINER (curve), curve->table);
 
   curve->curve = gtk_curve_new ();
-  gtk_signal_connect (GTK_OBJECT (curve->curve), "curve_type_changed",
-		      (GtkSignalFunc) curve_type_changed_callback, curve);
+  g_signal_connect (curve->curve, "curve_type_changed",
+		    G_CALLBACK (curve_type_changed_callback), curve);
   gtk_table_attach_defaults (GTK_TABLE (curve->table), curve->curve, 0, 1, 0, 1);
 
   vbox = gtk_vbox_new (/* homogeneous */ FALSE, /* spacing */ 3);
@@ -271,13 +272,13 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   for (i = 0; i < 3; ++i)
     {
       curve->button[i] = gtk_toggle_button_new ();
-      gtk_object_set_data (GTK_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
-			   GINT_TO_POINTER (i));
+      g_object_set_data (G_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
+			 GINT_TO_POINTER (i));
       gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
-      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "realize",
-			  (GtkSignalFunc) button_realize_callback, 0);
-      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "toggled",
-			  (GtkSignalFunc) button_toggled_callback, curve);
+      g_signal_connect (curve->button[i], "realize",
+			G_CALLBACK (button_realize_callback), NULL);
+      g_signal_connect (curve->button[i], "toggled",
+			G_CALLBACK (button_toggled_callback), curve);
       gtk_widget_show (curve->button[i]);
     }
 
@@ -285,13 +286,13 @@ gtk_gamma_curve_init (GtkGammaCurve *curve)
   for (i = 3; i < 5; ++i)
     {
       curve->button[i] = gtk_button_new ();
-      gtk_object_set_data (GTK_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
-			   GINT_TO_POINTER (i));
+      g_object_set_data (G_OBJECT (curve->button[i]), "_GtkGammaCurveIndex",
+			 GINT_TO_POINTER (i));
       gtk_container_add (GTK_CONTAINER (vbox), curve->button[i]);
-      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "realize",
-			  (GtkSignalFunc) button_realize_callback, 0);
-      gtk_signal_connect (GTK_OBJECT (curve->button[i]), "clicked",
-			  (GtkSignalFunc) button_clicked_callback, curve);
+      g_signal_connect (curve->button[i], "realize",
+			G_CALLBACK (button_realize_callback), NULL);
+      g_signal_connect (curve->button[i], "clicked",
+			G_CALLBACK (button_clicked_callback), curve);
       gtk_widget_show (curve->button[i]);
     }
 
@@ -308,16 +309,16 @@ button_realize_callback (GtkWidget *w)
   GdkPixmap *pm;
   int i;
 
-  i = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
+  i = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "_GtkGammaCurveIndex"));
   pm = gdk_pixmap_create_from_xpm_d (w->window, &mask,
 				     &w->style->bg[GTK_STATE_NORMAL], (gchar **)xpm[i]);
 
-  pixmap = gtk_pixmap_new (pm, mask);
+  pixmap = gtk_image_new_from_pixmap (pm, mask);
   gtk_container_add (GTK_CONTAINER (w), pixmap);
   gtk_widget_show (pixmap);
 
-  gdk_pixmap_unref (pm);
-  gdk_bitmap_unref (mask);   /* a bitmap is really just a special pixmap */
+  g_object_unref (pm);
+  g_object_unref (mask);
 }
 
 static void
@@ -330,7 +331,7 @@ button_toggled_callback (GtkWidget *w, gpointer data)
   if (!GTK_TOGGLE_BUTTON (w)->active)
     return;
 
-  active = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
+  active = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "_GtkGammaCurveIndex"));
 
   for (i = 0; i < 3; ++i)
     if ((i != active) && GTK_TOGGLE_BUTTON (c->button[i])->active)
@@ -381,7 +382,7 @@ button_clicked_callback (GtkWidget *w, gpointer data)
   GtkGammaCurve *c = data;
   int active;
 
-  active = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
+  active = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (w), "_GtkGammaCurveIndex"));
   if (active == 3)
     {
       /* set gamma */
@@ -420,15 +421,15 @@ button_clicked_callback (GtkWidget *w, gpointer data)
 	  hbox = GTK_DIALOG (c->gamma_dialog)->action_area;
 
           button = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
-	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			      (GtkSignalFunc) gamma_cancel_callback, c);
+	  g_signal_connect (button, "clicked",
+			    G_CALLBACK (gamma_cancel_callback), c);
 	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 	  gtk_widget_show (button);
 	  
           button = gtk_button_new_from_stock (GTK_STOCK_OK);
 	  GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
-	  gtk_signal_connect (GTK_OBJECT (button), "clicked",
-			      (GtkSignalFunc) gamma_ok_callback, c);
+	  g_signal_connect (button, "clicked",
+			    G_CALLBACK (gamma_ok_callback), c);
 	  gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
 	  gtk_widget_grab_default (button);
 	  gtk_widget_show (button);
@@ -464,7 +465,7 @@ curve_type_changed_callback (GtkWidget *w, gpointer data)
 GtkWidget*
 gtk_gamma_curve_new (void)
 {
-  return gtk_type_new (GTK_TYPE_GAMMA_CURVE);
+  return g_object_new (GTK_TYPE_GAMMA_CURVE, NULL);
 }
 
 static void

@@ -25,6 +25,7 @@
  *
  */
 
+#include <stdio.h>
 #include <string.h>
 
 #include <gdk/gdkkeysyms.h>
@@ -32,8 +33,6 @@
 #include "gtk/gtkintl.h"
 #include "gtk/gtkimcontextsimple.h"
 #include "gtk/gtkimmodule.h"
-
-#include<stdio.h>
 
 GType type_ti_et_translit = 0;
 
@@ -53,7 +52,7 @@ ti_et_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (GtkIMContextSimple),
     0,
-    (GtkObjectInitFunc) ti_et_init,
+    (GInstanceInitFunc) ti_et_init,
   };
 
   type_ti_et_translit = 

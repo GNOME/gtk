@@ -90,11 +90,11 @@ typedef enum
  * Macros for testing whether `widget' or `klass' are of type GTK_TYPE_WIDGET.
  */
 #define GTK_TYPE_WIDGET			  (gtk_widget_get_type ())
-#define GTK_WIDGET(widget)		  (GTK_CHECK_CAST ((widget), GTK_TYPE_WIDGET, GtkWidget))
-#define GTK_WIDGET_CLASS(klass)		  (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET, GtkWidgetClass))
-#define GTK_IS_WIDGET(widget)		  (GTK_CHECK_TYPE ((widget), GTK_TYPE_WIDGET))
-#define GTK_IS_WIDGET_CLASS(klass)	  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET))
-#define GTK_WIDGET_GET_CLASS(obj)         (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_WIDGET, GtkWidgetClass))
+#define GTK_WIDGET(widget)		  (G_TYPE_CHECK_INSTANCE_CAST ((widget), GTK_TYPE_WIDGET, GtkWidget))
+#define GTK_WIDGET_CLASS(klass)		  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_WIDGET, GtkWidgetClass))
+#define GTK_IS_WIDGET(widget)		  (G_TYPE_CHECK_INSTANCE_TYPE ((widget), GTK_TYPE_WIDGET))
+#define GTK_IS_WIDGET_CLASS(klass)	  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_WIDGET))
+#define GTK_WIDGET_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_WIDGET, GtkWidgetClass))
 
 /* Macros for extracting various fields from GtkWidget and GtkWidgetClass.
  */
@@ -426,8 +426,8 @@ struct _GtkWidgetShapeInfo
   GdkBitmap *shape_mask;
 };
 
-GtkType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
-GtkWidget* gtk_widget_new		  (GtkType		type,
+GType	   gtk_widget_get_type		  (void) G_GNUC_CONST;
+GtkWidget* gtk_widget_new		  (GType		type,
 					   const gchar	       *first_property_name,
 					   ...);
 GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
@@ -576,7 +576,7 @@ void	   gtk_widget_set_extension_events (GtkWidget		*widget,
 GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
-					 GtkType	widget_type);
+					 GType		 widget_type);
 GdkColormap* gtk_widget_get_colormap	(GtkWidget	*widget);
 GdkVisual*   gtk_widget_get_visual	(GtkWidget	*widget);
 

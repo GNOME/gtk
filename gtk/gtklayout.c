@@ -31,7 +31,6 @@
 #include "gdkconfig.h"
 
 #include "gtklayout.h"
-#include "gtksignal.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
@@ -208,39 +207,43 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
   
   if (layout->hadjustment && (layout->hadjustment != hadj))
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (layout->hadjustment), layout);
-      gtk_object_unref (GTK_OBJECT (layout->hadjustment));
+      g_signal_handlers_disconnect_by_func (layout->hadjustment,
+					    gtk_layout_adjustment_changed,
+					    layout);
+      g_object_unref (layout->hadjustment);
     }
   
   if (layout->vadjustment && (layout->vadjustment != vadj))
     {
-      gtk_signal_disconnect_by_data (GTK_OBJECT (layout->vadjustment), layout);
-      gtk_object_unref (GTK_OBJECT (layout->vadjustment));
+      g_signal_handlers_disconnect_by_func (layout->vadjustment,
+					    gtk_layout_adjustment_changed,
+					    layout);
+      g_object_unref (layout->vadjustment);
     }
   
   if (layout->hadjustment != hadj)
     {
       layout->hadjustment = hadj;
-      gtk_object_ref (GTK_OBJECT (layout->hadjustment));
+      g_object_ref (layout->hadjustment);
       gtk_object_sink (GTK_OBJECT (layout->hadjustment));
       gtk_layout_set_adjustment_upper (layout->hadjustment, layout->width, FALSE);
       
-      gtk_signal_connect (GTK_OBJECT (layout->hadjustment), "value_changed",
-			  (GtkSignalFunc) gtk_layout_adjustment_changed,
-			  layout);
+      g_signal_connect (layout->hadjustment, "value_changed",
+			G_CALLBACK (gtk_layout_adjustment_changed),
+			layout);
       need_adjust = TRUE;
     }
   
   if (layout->vadjustment != vadj)
     {
       layout->vadjustment = vadj;
-      gtk_object_ref (GTK_OBJECT (layout->vadjustment));
+      g_object_ref (layout->vadjustment);
       gtk_object_sink (GTK_OBJECT (layout->vadjustment));
       gtk_layout_set_adjustment_upper (layout->vadjustment, layout->height, FALSE);
       
-      gtk_signal_connect (GTK_OBJECT (layout->vadjustment), "value_changed",
-			  (GtkSignalFunc) gtk_layout_adjustment_changed,
-			  layout);
+      g_signal_connect (layout->vadjustment, "value_changed",
+			G_CALLBACK (gtk_layout_adjustment_changed),
+			layout);
       need_adjust = TRUE;
     }
 
@@ -255,8 +258,8 @@ gtk_layout_finalize (GObject *object)
 {
   GtkLayout *layout = GTK_LAYOUT (object);
 
-  gtk_object_unref (GTK_OBJECT (layout->hadjustment));
-  gtk_object_unref (GTK_OBJECT (layout->vadjustment));
+  g_object_unref (layout->hadjustment);
+  g_object_unref (layout->vadjustment);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -442,9 +445,9 @@ gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
     }
   
   if (changed || always_emit_changed)
-    gtk_signal_emit_by_name (GTK_OBJECT (adj), "changed");
+    gtk_adjustment_changed (adj);
   if (value_changed)
-    gtk_signal_emit_by_name (GTK_OBJECT (adj), "value_changed");
+    gtk_adjustment_value_changed (adj);
 }
 
 /**
@@ -542,33 +545,40 @@ gtk_layout_thaw (GtkLayout *layout)
   g_return_if_fail (GTK_IS_LAYOUT (layout));
 
   if (layout->freeze_count)
-    if (!(--layout->freeze_count))
-      gtk_widget_draw (GTK_WIDGET (layout), NULL);
+    {
+      if (!(--layout->freeze_count))
+	{
+	  gtk_widget_queue_draw (GTK_WIDGET (layout));
+	  gdk_window_process_updates (GTK_WIDGET (layout)->window, TRUE);
+	}
+    }
+
 }
 
 /* Basic Object handling procedures
  */
-GtkType
+GType
 gtk_layout_get_type (void)
 {
-  static GtkType layout_type = 0;
+  static GType layout_type = 0;
 
   if (!layout_type)
     {
       static const GTypeInfo layout_info =
       {
 	sizeof (GtkLayoutClass),
-	NULL,           /* base_init */
-	NULL,           /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_layout_class_init,
-	NULL,           /* class_finalize */
-	NULL,           /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
 	sizeof (GtkLayout),
-	16,             /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_layout_init,
       };
 
-      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout", &layout_info, 0);
+      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout",
+					    &layout_info, 0);
     }
 
   return layout_type;
@@ -578,16 +588,14 @@ static void
 gtk_layout_class_init (GtkLayoutClass *class)
 {
   GObjectClass *gobject_class;
-  GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
 
   gobject_class = (GObjectClass*) class;
-  object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
 
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+  parent_class = g_type_class_peek_parent (class);
 
   gobject_class->set_property = gtk_layout_set_property;
   gobject_class->get_property = gtk_layout_get_property;
@@ -665,12 +673,15 @@ gtk_layout_class_init (GtkLayoutClass *class)
   class->set_scroll_adjustments = gtk_layout_set_adjustments;
 
   widget_class->set_scroll_adjustments_signal =
-    gtk_signal_new ("set_scroll_adjustments",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
-		    _gtk_marshal_VOID__OBJECT_OBJECT,
-		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
+    g_signal_new ("set_scroll_adjustments",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkLayoutClass, set_scroll_adjustments),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_ADJUSTMENT,
+		  GTK_TYPE_ADJUSTMENT);
 }
 
 static void

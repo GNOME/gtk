@@ -1,3 +1,15 @@
+Sun Oct 13 13:43:16 2002  Manish Singh  <yosh@gimp.org>
+
+	* gtk/gtkcurve.[ch] gtk/gtkgamma.[ch] gtk/gtklayout.[ch]
+	gtk/gtkwidget.[ch] modules/input/gtkimcontextxim.c
+	modules/input/imam-et.c modules/input/imcyrillic-translit.c
+	modules/input/imhangul.c modules/input/iminuktitut.c
+	modules/input/imipa.c modules/input/imthai-broken.c
+	modules/input/imti-er.c modules/input/imti-et.c
+	modules/input/imviqr.c: Deprecation cleanup
+
+	* modules/input/Makefile.am: Added disable deprecation flags
+
 Sun Oct 13 12:29:15 2002  Manish Singh  <yosh@gimp.org>
 
 	* gtk/gtkcolorsel.[ch] gtk/gtkcombo.[ch] gtk/gtkplug.[ch]

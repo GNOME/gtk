@@ -33,7 +33,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkradiobutton.h"
-#include "gtksignal.h"
 #include "gtktable.h"
 #include "gtkintl.h"
 
@@ -78,26 +77,28 @@ static gint gtk_curve_graph_events (GtkWidget     *widget,
 				    GtkCurve      *c);
 static void gtk_curve_size_graph   (GtkCurve      *curve);
 
-GtkType
+GType
 gtk_curve_get_type (void)
 {
-  static GtkType curve_type = 0;
+  static GType curve_type = 0;
 
   if (!curve_type)
     {
-      static const GtkTypeInfo curve_info =
+      static const GTypeInfo curve_info =
       {
-	"GtkCurve",
-	sizeof (GtkCurve),
 	sizeof (GtkCurveClass),
-	(GtkClassInitFunc) gtk_curve_class_init,
-	(GtkObjectInitFunc) gtk_curve_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_curve_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkCurve),
+	0,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_curve_init,
       };
 
-      curve_type = gtk_type_unique (GTK_TYPE_DRAWING_AREA, &curve_info);
+      curve_type = g_type_register_static (GTK_TYPE_DRAWING_AREA, "GtkCurve",
+					   &curve_info, 0);
     }
   return curve_type;
 }
@@ -106,9 +107,8 @@ static void
 gtk_curve_class_init (GtkCurveClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   
-  parent_class = gtk_type_class (GTK_TYPE_DRAWING_AREA);
+  parent_class = g_type_class_peek_parent (class);
   
   gobject_class->finalize = gtk_curve_finalize;
 
@@ -166,9 +166,13 @@ gtk_curve_class_init (GtkCurveClass *class)
 						       G_PARAM_WRITABLE));
 
   curve_type_changed_signal =
-    gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
-		    _gtk_marshal_VOID__VOID, GTK_TYPE_NONE, 0);
+    g_signal_new ("curve_type_changed",
+		   G_OBJECT_CLASS_TYPE (gobject_class),
+		   G_SIGNAL_RUN_FIRST,
+		   G_STRUCT_OFFSET (GtkCurveClass, curve_type_changed),
+		   NULL, NULL,
+		   _gtk_marshal_VOID__VOID,
+		   G_TYPE_NONE, 0);
 }
 
 static void
@@ -195,8 +199,8 @@ gtk_curve_init (GtkCurve *curve)
 
   old_mask = gtk_widget_get_events (GTK_WIDGET (curve));
   gtk_widget_set_events (GTK_WIDGET (curve), old_mask | GRAPH_MASK);
-  gtk_signal_connect (GTK_OBJECT (curve), "event",
-		      (GtkSignalFunc) gtk_curve_graph_events, curve);
+  g_signal_connect (curve, "event",
+		    G_CALLBACK (gtk_curve_graph_events), curve);
   gtk_curve_size_graph (curve);
 }
 
@@ -416,8 +420,8 @@ gtk_curve_draw (GtkCurve *c, gint width, gint height)
 	gdk_draw_arc (c->pixmap, style->fg_gc[state], TRUE, x, y,
 		      RADIUS * 2, RADIUS*2, 0, 360*64);
       }
-  gdk_draw_pixmap (GTK_WIDGET (c)->window, style->fg_gc[state], c->pixmap,
-		   0, 0, 0, 0, width + RADIUS * 2, height + RADIUS * 2);
+  gdk_draw_drawable (GTK_WIDGET (c)->window, style->fg_gc[state], c->pixmap,
+		     0, 0, 0, 0, width + RADIUS * 2, height + RADIUS * 2);
 }
 
 static gint
@@ -465,8 +469,8 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
     {
     case GDK_CONFIGURE:
       if (c->pixmap)
-	gdk_pixmap_unref (c->pixmap);
-      c->pixmap = 0;
+	g_object_unref (c->pixmap);
+      c->pixmap = NULL;
       /* fall through */
     case GDK_EXPOSE:
       if (!c->pixmap)
@@ -655,7 +659,7 @@ gtk_curve_graph_events (GtkWidget *widget, GdkEvent *event, GtkCurve *c)
 	  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (w),
 					      c->cursor_type);
 	  gdk_window_set_cursor (w->window, cursor);
-	  gdk_cursor_destroy (cursor);
+	  gdk_cursor_unref (cursor);
 	}
       retval = TRUE;
       break;
@@ -712,7 +716,7 @@ gtk_curve_set_curve_type (GtkCurve *c, GtkCurveType new_type)
 	  c->curve_type = new_type;
 	  gtk_curve_interpolate (c, width, height);
 	}
-      gtk_signal_emit (GTK_OBJECT (c), curve_type_changed_signal);
+      g_signal_emit (c, curve_type_changed_signal, 0);
       g_object_notify (G_OBJECT (c), "curve_type");
       gtk_curve_draw (c, width, height);
     }
@@ -738,8 +742,9 @@ gtk_curve_size_graph (GtkCurve *curve)
   else
     height = width / aspect;
 
-  gtk_drawing_area_size (GTK_DRAWING_AREA (curve),
-			 width + RADIUS * 2, height + RADIUS * 2);
+  gtk_widget_set_size_request (GTK_WIDGET (curve),
+			       width + RADIUS * 2,
+			       height + RADIUS * 2);
 }
 
 static void
@@ -785,7 +790,7 @@ gtk_curve_reset (GtkCurve *c)
 
   if (old_type != GTK_CURVE_TYPE_SPLINE)
     {
-       gtk_signal_emit (GTK_OBJECT (c), curve_type_changed_signal);
+       g_signal_emit (c, curve_type_changed_signal, 0);
        g_object_notify (G_OBJECT (c), "curve_type");
     }
 }
@@ -818,7 +823,7 @@ gtk_curve_set_gamma (GtkCurve *c, gfloat gamma)
     }
 
   if (old_type != GTK_CURVE_TYPE_FREE)
-    gtk_signal_emit (GTK_OBJECT (c), curve_type_changed_signal);
+    g_signal_emit (c, curve_type_changed_signal, 0);
 
   gtk_curve_draw (c, c->num_points, c->height);
 }
@@ -890,7 +895,7 @@ gtk_curve_set_vector (GtkCurve *c, int veclen, gfloat vector[])
     }
   if (old_type != GTK_CURVE_TYPE_FREE)
     {
-       gtk_signal_emit (GTK_OBJECT (c), curve_type_changed_signal);
+       g_signal_emit (c, curve_type_changed_signal, 0);
        g_object_notify (G_OBJECT (c), "curve_type");
     }
 
@@ -1017,7 +1022,7 @@ gtk_curve_get_vector (GtkCurve *c, int veclen, gfloat vector[])
 GtkWidget*
 gtk_curve_new (void)
 {
-  return gtk_type_new (gtk_curve_get_type ());
+  return g_object_new (GTK_TYPE_CURVE, NULL);
 }
 
 static void
@@ -1029,7 +1034,7 @@ gtk_curve_finalize (GObject *object)
 
   curve = GTK_CURVE (object);
   if (curve->pixmap)
-    gdk_pixmap_unref (curve->pixmap);
+    g_object_unref (curve->pixmap);
   if (curve->point)
     g_free (curve->point);
   if (curve->ctlpoint)

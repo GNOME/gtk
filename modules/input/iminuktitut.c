@@ -49,7 +49,7 @@ inuktitut_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (GtkIMContextSimple),
     0,
-    (GtkObjectInitFunc) inuktitut_init,
+    (GInstanceInitFunc) inuktitut_init,
   };
 
   type_inuktitut_translit = 

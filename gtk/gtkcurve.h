@@ -47,11 +47,11 @@ extern "C" {
 
 
 #define GTK_TYPE_CURVE                  (gtk_curve_get_type ())
-#define GTK_CURVE(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_CURVE, GtkCurve))
-#define GTK_CURVE_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_CURVE, GtkCurveClass))
-#define GTK_IS_CURVE(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_CURVE))
-#define GTK_IS_CURVE_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CURVE))
-#define GTK_CURVE_GET_CLASS(obj)        (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_CURVE, GtkCurveClass))
+#define GTK_CURVE(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CURVE, GtkCurve))
+#define GTK_CURVE_CLASS(klass)          (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CURVE, GtkCurveClass))
+#define GTK_IS_CURVE(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CURVE))
+#define GTK_IS_CURVE_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CURVE))
+#define GTK_CURVE_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CURVE, GtkCurveClass))
 
 
 typedef struct _GtkCurve	GtkCurve;
@@ -96,7 +96,7 @@ struct _GtkCurveClass
 };
 
 
-GtkType		gtk_curve_get_type	(void) G_GNUC_CONST;
+GType		gtk_curve_get_type	(void) G_GNUC_CONST;
 GtkWidget*	gtk_curve_new		(void);
 void		gtk_curve_reset		(GtkCurve *curve);
 void		gtk_curve_set_gamma	(GtkCurve *curve, gfloat gamma);

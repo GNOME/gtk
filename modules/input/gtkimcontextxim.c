@@ -105,7 +105,7 @@ gtk_im_context_xim_register_type (GTypeModule *type_module)
     NULL,           /* class_data */
     sizeof (GtkIMContextXIM),
     0,
-    (GtkObjectInitFunc) gtk_im_context_xim_init,
+    (GInstanceInitFunc) gtk_im_context_xim_init,
   };
 
   gtk_type_im_context_xim = 
@@ -1223,7 +1223,7 @@ status_window_get (GtkIMContextXIM *context_xim,
 
   window = status_window->window;
 
-  gtk_window_set_policy (GTK_WINDOW (window), FALSE, FALSE, FALSE);
+  gtk_window_set_resizable (GTK_WINDOW (status_window), FALSE);
   gtk_widget_set_app_paintable (window, TRUE);
 
   status_label = gtk_label_new ("");

@@ -38,7 +38,6 @@
 #include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
-#include "gtksignal.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkbindings.h"
@@ -243,25 +242,25 @@ GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
 /* --- functions --- */
-GtkType
+GType
 gtk_widget_get_type (void)
 {
-  static GtkType widget_type = 0;
+  static GType widget_type = 0;
   
   if (!widget_type)
     {
       static const GTypeInfo widget_info =
       {
 	sizeof (GtkWidgetClass),
-	NULL,            /* base_init */
-	NULL,            /* base_finalize */
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
 	(GClassInitFunc) gtk_widget_class_init,
-	NULL,            /* class_finalize */
-	NULL,            /* class_data */
+	NULL,		/* class_finalize */
+	NULL,		/* class_init */
 	sizeof (GtkWidget),
-	0,               /* n_preallocs */
+	0,		/* n_preallocs */
 	(GInstanceInitFunc) gtk_widget_init,
-	NULL,            /* value_table */
+	NULL,		/* value_table */
       };
       
       static const GInterfaceInfo accessibility_info =
@@ -515,346 +514,361 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						      GDK_EXTENSION_EVENTS_NONE,
  						      G_PARAM_READWRITE));
   widget_signals[SHOW] =
-    gtk_signal_new ("show",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("show",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, show),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[HIDE] =
-    gtk_signal_new ("hide",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hide),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("hide",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, hide),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[MAP] =
-    gtk_signal_new ("map",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, map),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("map",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, map),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[UNMAP] =
-    gtk_signal_new ("unmap",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unmap),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("unmap",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, unmap),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[REALIZE] =
-    gtk_signal_new ("realize",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, realize),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("realize",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, realize),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[UNREALIZE] =
-    gtk_signal_new ("unrealize",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("unrealize",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, unrealize),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[SIZE_REQUEST] =
     g_signal_new ("size_request",
-		   G_OBJECT_CLASS_TYPE (object_class),
-		   G_SIGNAL_RUN_FIRST,
-		   G_STRUCT_OFFSET (GtkWidgetClass, size_request),
-		   NULL, NULL,
-		   _gtk_marshal_VOID__BOXED,
-		   GTK_TYPE_NONE, 1,
-		   GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, size_request),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__BOXED,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SIZE_ALLOCATE] = 
-    gtk_signal_new ("size_allocate",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_allocate),
-		    _gtk_marshal_VOID__BOXED,
-		    GTK_TYPE_NONE, 1,
-		    GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
+    g_signal_new ("size_allocate",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, size_allocate),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__BOXED,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_RECTANGLE | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[STATE_CHANGED] =
-    gtk_signal_new ("state_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, state_changed),
-		    _gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STATE_TYPE);
+    g_signal_new ("state_changed",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, state_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_STATE_TYPE);
   widget_signals[PARENT_SET] =
-    gtk_signal_new ("parent_set",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
+    g_signal_new ("parent_set",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, parent_set),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
   widget_signals[HIERARCHY_CHANGED] =
-    gtk_signal_new ("hierarchy_changed",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hierarchy_changed),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_WIDGET);
+    g_signal_new ("hierarchy_changed",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, hierarchy_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_WIDGET);
   widget_signals[STYLE_SET] =
-    gtk_signal_new ("style_set",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STYLE);
+    g_signal_new ("style_set",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, style_set),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_STYLE);
   widget_signals[DIRECTION_CHANGED] =
-    gtk_signal_new ("direction_changed",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, direction_changed),
-		    _gtk_marshal_VOID__ENUM,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_TEXT_DIRECTION);
+    g_signal_new ("direction_changed",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, direction_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_TEXT_DIRECTION);
   widget_signals[GRAB_NOTIFY] =
-    gtk_signal_new ("grab_notify",
-		    GTK_RUN_FIRST,
-		    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_notify),
-		    _gtk_marshal_VOID__BOOLEAN,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_BOOL);
+    g_signal_new ("grab_notify",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, grab_notify),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__BOOLEAN,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_BOOLEAN);
   widget_signals[CHILD_NOTIFY] =
     g_signal_new ("child_notify",
-		   G_TYPE_FROM_CLASS (klass),
+		   G_TYPE_FROM_CLASS (gobject_class),
 		   G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE | G_SIGNAL_DETAILED | G_SIGNAL_NO_HOOKS,
 		   G_STRUCT_OFFSET (GtkWidgetClass, child_notify),
 		   NULL, NULL,
 		   g_cclosure_marshal_VOID__PARAM,
-		   G_TYPE_NONE,
-		   1, G_TYPE_PARAM);
+		   G_TYPE_NONE, 1,
+		   G_TYPE_PARAM);
   widget_signals[MNEMONIC_ACTIVATE] =
     g_signal_new ("mnemonic_activate",
-                  GTK_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  GTK_SIGNAL_OFFSET (GtkWidgetClass, mnemonic_activate),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOOLEAN,
-                  GTK_TYPE_BOOL, 1,
-                  GTK_TYPE_BOOL);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, mnemonic_activate),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOOLEAN,
+		  G_TYPE_BOOLEAN, 1,
+		  G_TYPE_BOOLEAN);
   widget_signals[GRAB_FOCUS] =
-    gtk_signal_new ("grab_focus",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
-		    _gtk_marshal_VOID__VOID,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("grab_focus",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkWidgetClass, grab_focus),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
   widget_signals[FOCUS] =
     g_signal_new ("focus",
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkWidgetClass, focus),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__ENUM,
-                  G_TYPE_BOOLEAN, 1,
-                  GTK_TYPE_DIRECTION_TYPE);
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, focus),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__ENUM,
+		  G_TYPE_BOOLEAN, 1,
+		  GTK_TYPE_DIRECTION_TYPE);
   widget_signals[EVENT] =
     g_signal_new ("event",
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EVENT_AFTER] =
     g_signal_new ("event-after",
-                  G_TYPE_FROM_CLASS (object_class),
-                  0,
-                  0,
-                  NULL, NULL,
-                  _gtk_marshal_VOID__BOXED,
-                  G_TYPE_NONE, 1, GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  0,
+		  0,
+		  NULL, NULL,
+		  _gtk_marshal_VOID__BOXED,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[BUTTON_PRESS_EVENT] =
     g_signal_new ("button_press_event",
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, button_press_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, button_press_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[BUTTON_RELEASE_EVENT] =
     g_signal_new ("button_release_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, button_release_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, button_release_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SCROLL_EVENT] =
     g_signal_new ("scroll_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, scroll_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, scroll_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[MOTION_NOTIFY_EVENT] =
     g_signal_new ("motion_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, motion_notify_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, motion_notify_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DELETE_EVENT] =
     g_signal_new ("delete_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, delete_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, delete_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DESTROY_EVENT] =
     g_signal_new ("destroy_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, destroy_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, destroy_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[EXPOSE_EVENT] =
     g_signal_new ("expose_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, expose_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, expose_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[KEY_PRESS_EVENT] =
     g_signal_new ("key_press_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, key_press_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, key_press_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[KEY_RELEASE_EVENT] =
     g_signal_new ("key_release_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, key_release_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, key_release_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[ENTER_NOTIFY_EVENT] =
     g_signal_new ("enter_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, enter_notify_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, enter_notify_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[LEAVE_NOTIFY_EVENT] =
     g_signal_new ("leave_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, leave_notify_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, leave_notify_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[CONFIGURE_EVENT] =
     g_signal_new ("configure_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, configure_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, configure_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[FOCUS_IN_EVENT] =
     g_signal_new ("focus_in_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, focus_in_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, focus_in_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[FOCUS_OUT_EVENT] =
     g_signal_new ("focus_out_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, focus_out_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, focus_out_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[MAP_EVENT] =
     g_signal_new ("map_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, map_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, map_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[UNMAP_EVENT] =
     g_signal_new ("unmap_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, unmap_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, unmap_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[PROPERTY_NOTIFY_EVENT] =
     g_signal_new ("property_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, property_notify_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, property_notify_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_CLEAR_EVENT] =
     g_signal_new ("selection_clear_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, selection_clear_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, selection_clear_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_REQUEST_EVENT] =
     g_signal_new ("selection_request_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, selection_request_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, selection_request_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_NOTIFY_EVENT] =
     g_signal_new ("selection_notify_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, selection_notify_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, selection_notify_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[SELECTION_RECEIVED] =
     g_signal_new ("selection_received",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_received),
 		  NULL, NULL,
@@ -864,7 +878,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[SELECTION_GET] =
     g_signal_new ("selection_get",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, selection_get),
 		  NULL, NULL,
@@ -875,61 +889,65 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[PROXIMITY_IN_EVENT] =
     g_signal_new ("proximity_in_event",
-                  G_TYPE_FROM_CLASS (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, proximity_in_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_in_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[PROXIMITY_OUT_EVENT] =
     g_signal_new ("proximity_out_event",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, proximity_out_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, proximity_out_event),
+		  _gtk_boolean_handled_accumulator, NULL,
+		  _gtk_marshal_BOOLEAN__BOXED,
+		  G_TYPE_BOOLEAN, 1,
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[DRAG_LEAVE] =
-    gtk_signal_new ("drag_leave",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_leave),
-		    _gtk_marshal_VOID__OBJECT_UINT,
-		    GTK_TYPE_NONE, 2,
-		    GDK_TYPE_DRAG_CONTEXT,
-		    GTK_TYPE_UINT);
+    g_signal_new ("drag_leave",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_leave),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_UINT,
+		  G_TYPE_NONE, 2,
+		  GDK_TYPE_DRAG_CONTEXT,
+		  G_TYPE_UINT);
   widget_signals[DRAG_BEGIN] =
-    gtk_signal_new ("drag_begin",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GDK_TYPE_DRAG_CONTEXT);
+    g_signal_new ("drag_begin",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_begin),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_END] =
-    gtk_signal_new ("drag_end",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GDK_TYPE_DRAG_CONTEXT);
+    g_signal_new ("drag_end",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_end),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_DATA_DELETE] =
-    gtk_signal_new ("drag_data_delete",
-		    GTK_RUN_LAST,
-		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_delete),
-		    _gtk_marshal_VOID__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GDK_TYPE_DRAG_CONTEXT);
+    g_signal_new ("drag_data_delete",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_delete),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GDK_TYPE_DRAG_CONTEXT);
   widget_signals[DRAG_MOTION] =
     g_signal_new ("drag_motion",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, drag_motion),
-                  _gtk_boolean_handled_accumulator, NULL,
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_motion),
+		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		  G_TYPE_BOOLEAN, 4,
 		  GDK_TYPE_DRAG_CONTEXT,
@@ -938,10 +956,10 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[DRAG_DROP] =
     g_signal_new ("drag_drop",
-                  G_TYPE_FROM_CLASS(object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWidgetClass, drag_drop),
-                  _gtk_boolean_handled_accumulator, NULL,
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  G_SIGNAL_RUN_LAST,
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_drop),
+		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__OBJECT_INT_INT_UINT,
 		  G_TYPE_BOOLEAN, 4,
 		  GDK_TYPE_DRAG_CONTEXT,
@@ -950,7 +968,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[DRAG_DATA_GET] =
     g_signal_new ("drag_data_get",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_get),
 		  NULL, NULL,
@@ -962,9 +980,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[DRAG_DATA_RECEIVED] =
     g_signal_new ("drag_data_received",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
+		  G_STRUCT_OFFSET (GtkWidgetClass, drag_data_received),
 		  NULL, NULL,
 		  _gtk_marshal_VOID__OBJECT_INT_INT_BOXED_UINT_UINT,
 		  G_TYPE_NONE, 6,
@@ -976,63 +994,65 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_UINT);
   widget_signals[VISIBILITY_NOTIFY_EVENT] =
     g_signal_new ("visibility_notify_event",
-		  G_TYPE_FROM_CLASS(object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET(GtkWidgetClass, visibility_notify_event),
-                  _gtk_boolean_handled_accumulator, NULL,
+		  G_STRUCT_OFFSET (GtkWidgetClass, visibility_notify_event),
+		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
+		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[CLIENT_EVENT] =
     g_signal_new ("client_event",
-		  G_TYPE_FROM_CLASS(object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET(GtkWidgetClass, client_event),
+		  G_STRUCT_OFFSET (GtkWidgetClass, client_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[NO_EXPOSE_EVENT] =
     g_signal_new ("no_expose_event",
-		  G_TYPE_FROM_CLASS(object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET(GtkWidgetClass, no_expose_event),
+		  G_STRUCT_OFFSET (GtkWidgetClass, no_expose_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[WINDOW_STATE_EVENT] =
     g_signal_new ("window_state_event",
-		  G_TYPE_FROM_CLASS(object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET(GtkWidgetClass, window_state_event),
+		  G_STRUCT_OFFSET (GtkWidgetClass, window_state_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   widget_signals[POPUP_MENU] =
     g_signal_new ("popup_menu",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  GTK_SIGNAL_OFFSET (GtkWidgetClass, popup_menu),
+		  G_STRUCT_OFFSET (GtkWidgetClass, popup_menu),
 		  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__VOID,
+		  _gtk_marshal_BOOLEAN__VOID,
 		  G_TYPE_BOOLEAN, 0);
   widget_signals[SHOW_HELP] =
     g_signal_new ("show_help",
-		  G_TYPE_FROM_CLASS (object_class),
+		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  GTK_SIGNAL_OFFSET (GtkWidgetClass, show_help),
+		  G_STRUCT_OFFSET (GtkWidgetClass, show_help),
 		  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__ENUM,
-		  G_TYPE_BOOLEAN, 1, GTK_TYPE_WIDGET_HELP_TYPE);
+		  _gtk_marshal_BOOLEAN__ENUM,
+		  G_TYPE_BOOLEAN, 1,
+		  GTK_TYPE_WIDGET_HELP_TYPE);
   widget_signals[ACCEL_CLOSURES_CHANGED] =
-    gtk_signal_new ("accel_closures_changed",
-		    0,
-		    GTK_CLASS_TYPE (object_class),
-		    0,
-                    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
+    g_signal_new ("accel_closures_changed",
+		  G_TYPE_FROM_CLASS (gobject_class),
+		  0,
+		  0,
+		  NULL, NULL,
+		  _gtk_marshal_NONE__NONE,
+		  G_TYPE_NONE, 0);
   
   binding_set = gtk_binding_set_by_class (klass);
   gtk_binding_entry_add_signal (binding_set, GDK_F10, GDK_SHIFT_MASK,
@@ -1263,14 +1283,14 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_object (value, gtk_widget_get_style (widget));
       break;
     case PROP_EVENTS:
-      eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+      eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
       if (!eventp)
 	g_value_set_flags (value, 0);
       else
 	g_value_set_flags (value, *eventp);
       break;
     case PROP_EXTENSION_EVENTS:
-      modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
+      modep = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
       if (!modep)
  	g_value_set_enum (value, 0);
       else
@@ -1406,20 +1426,20 @@ gtk_widget_thaw_child_notify (GtkWidget *widget)
  * its properties in one go. For example you might write:
  * <literal>gtk_widget_new (GTK_TYPE_LABEL, "label", "Hello World", "xalign",
  * 0.0, NULL)</literal> to create a left-aligned label. Equivalent to
- * gtk_object_new(), but returns a widget so you don't have to
+ * g_object_new(), but returns a widget so you don't have to
  * cast the object yourself.
  * 
  * Return value: a new #GtkWidget of type @widget_type
  **/
 GtkWidget*
-gtk_widget_new (GtkType      type,
+gtk_widget_new (GType        type,
 		const gchar *first_property_name,
 		...)
 {
   GtkWidget *widget;
   va_list var_args;
   
-  g_return_val_if_fail (gtk_type_is_a (type, GTK_TYPE_WIDGET), NULL);
+  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), NULL);
   
   va_start (var_args, first_property_name);
   widget = (GtkWidget *)g_object_new_valist (type, first_property_name, var_args);
@@ -1434,8 +1454,8 @@ gtk_widget_new (GtkType      type,
  * @first_property_name: name of first property to set
  * @Varargs: value of first property, followed by more properties, %NULL-terminated
  * 
- * Like gtk_object_set() - there's no reason to use this instead of
- * gtk_object_set().
+ * Like g_object_set() - there's no reason to use this instead of
+ * g_object_set().
  **/
 void
 gtk_widget_set (GtkWidget   *widget,
@@ -1556,7 +1576,7 @@ gtk_widget_unparent (GtkWidget *widget)
   old_parent = widget->parent;
   widget->parent = NULL;
   gtk_widget_set_parent_window (widget, NULL);
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], old_parent);
+  g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
   if (toplevel)
     {
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
@@ -1568,7 +1588,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (!widget->parent)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
-  gtk_widget_unref (widget);
+  g_object_unref (widget);
 }
 
 /**
@@ -1584,7 +1604,7 @@ gtk_widget_unparent (GtkWidget *widget)
  * reference GTK+ holds to it will be removed. Removing a
  * widget from its container or the list of toplevels results in the
  * widget being finalized, unless you've added additional references
- * to the widget with gtk_object_ref().
+ * to the widget with g_object_ref().
  *
  * In most cases, only toplevel widgets (windows) require explicit
  * destruction, because when you destroy a toplevel its children will
@@ -1649,12 +1669,12 @@ gtk_widget_show (GtkWidget *widget)
   
   if (!GTK_WIDGET_VISIBLE (widget))
     {
-      g_object_ref (G_OBJECT (widget));
+      g_object_ref (widget);
       if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
+      g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify (G_OBJECT (widget), "visible");
-      g_object_unref (G_OBJECT (widget));
+      g_object_unref (widget);
     }
 }
 
@@ -1677,7 +1697,9 @@ static void
 gtk_widget_show_map_callback (GtkWidget *widget, GdkEvent *event, gint *flag)
 {
   *flag = TRUE;
-  gtk_signal_disconnect_by_data (GTK_OBJECT (widget), flag);
+  g_signal_handlers_disconnect_by_func (widget,
+					gtk_widget_show_map_callback, 
+					flag);
 }
 
 /**
@@ -1703,12 +1725,12 @@ gtk_widget_show_now (GtkWidget *widget)
     {
       gtk_widget_show (widget);
 
-      gtk_signal_connect (GTK_OBJECT (widget), "map_event",
-			  GTK_SIGNAL_FUNC (gtk_widget_show_map_callback), 
-			  &flag);
+      g_signal_connect (widget, "map_event",
+			G_CALLBACK (gtk_widget_show_map_callback), 
+			&flag);
 
       while (!flag)
-	gtk_main_iteration();
+	gtk_main_iteration ();
     }
   else
     gtk_widget_show (widget);
@@ -1728,12 +1750,12 @@ gtk_widget_hide (GtkWidget *widget)
   
   if (GTK_WIDGET_VISIBLE (widget))
     {
-      gtk_widget_ref (widget);
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
+      g_object_ref (widget);
+      g_signal_emit (widget, widget_signals[HIDE], 0);
       if (!GTK_WIDGET_TOPLEVEL (widget))
 	gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "visible");
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
     }
 }
 
@@ -1832,7 +1854,7 @@ gtk_widget_map (GtkWidget *widget)
       if (!GTK_WIDGET_REALIZED (widget))
 	gtk_widget_realize (widget);
 
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[MAP]);
+      g_signal_emit (widget, widget_signals[MAP], 0);
 
       if (GTK_WIDGET_NO_WINDOW (widget))
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
@@ -1856,7 +1878,7 @@ gtk_widget_unmap (GtkWidget *widget)
     {
       if (GTK_WIDGET_NO_WINDOW (widget))
 	gdk_window_invalidate_rect (widget->window, &widget->allocation, FALSE);
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNMAP]);
+      g_signal_emit (widget, widget_signals[UNMAP], 0);
     }
 }
 
@@ -1880,7 +1902,7 @@ gtk_widget_unmap (GtkWidget *widget)
  * isn't very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
- * "expose_event". Or simply gtk_signal_connect_after() to the
+ * "expose_event". Or simply g_signal_connect_after() to the
  * "realize" signal.
  *  
  **/
@@ -1897,7 +1919,7 @@ gtk_widget_realize (GtkWidget *widget)
     {
       /*
 	if (GTK_IS_CONTAINER (widget) && !GTK_WIDGET_NO_WINDOW (widget))
-	  g_message ("gtk_widget_realize(%s)", gtk_type_name (GTK_WIDGET_TYPE (widget)));
+	  g_message ("gtk_widget_realize(%s)", g_type_name (GTK_WIDGET_TYPE (widget)));
       */
 
       if (widget->parent == NULL &&
@@ -1911,11 +1933,11 @@ gtk_widget_realize (GtkWidget *widget)
 
       gtk_widget_ensure_style (widget);
       
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[REALIZE]);
+      g_signal_emit (widget, widget_signals[REALIZE], 0);
       
       if (GTK_WIDGET_HAS_SHAPE_MASK (widget))
 	{
-	  shape_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_shape_info);
+	  shape_info = g_object_get_qdata (G_OBJECT (widget), quark_shape_info);
 	  gdk_window_shape_combine_mask (widget->window,
 					 shape_info->shape_mask,
 					 shape_info->offset_x,
@@ -1954,10 +1976,10 @@ gtk_widget_unrealize (GtkWidget *widget)
 
   if (GTK_WIDGET_REALIZED (widget))
     {
-      gtk_widget_ref (widget);
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[UNREALIZE]);
+      g_object_ref (widget);
+      g_signal_emit (widget, widget_signals[UNREALIZE], 0);
       GTK_WIDGET_UNSET_FLAGS (widget, GTK_REALIZED | GTK_MAPPED);
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
     }
 }
 
@@ -2077,7 +2099,7 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 	  x -= wx - widget->allocation.x;
 	  y -= wy - widget->allocation.y;
 	  
-	  gdk_window_get_size (widget->window, &wwidth, &wheight);
+	  gdk_drawable_get_size (widget->window, &wwidth, &wheight);
 
 	  if (x + width <= 0 || y + height <= 0 ||
 	      x >= wwidth || y >= wheight)
@@ -2344,7 +2366,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   if (!alloc_needed && !size_changed && !position_changed)
     return;
   
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
+  g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
   if (GTK_WIDGET_MAPPED (widget))
     {
@@ -2877,10 +2899,11 @@ gtk_widget_mnemonic_activate (GtkWidget *widget,
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
     handled = TRUE;
   else
-    gtk_signal_emit (GTK_OBJECT (widget),
-		     widget_signals[MNEMONIC_ACTIVATE],
-		     group_cycling,
-		     &handled);
+    g_signal_emit (widget,
+		   widget_signals[MNEMONIC_ACTIVATE],
+		   0,
+		   group_cycling,
+		   &handled);
   return handled;
 }
 
@@ -3010,9 +3033,9 @@ gtk_widget_event_internal (GtkWidget *widget,
 {
   gboolean return_val = FALSE;
 
-  gtk_widget_ref (widget);
+  g_object_ref (widget);
 
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT], event, &return_val);
+  g_signal_emit (widget, widget_signals[EVENT], 0, event, &return_val);
   return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
   if (!return_val)
     {
@@ -3106,14 +3129,14 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	}
       if (signal_num != -1)
-	gtk_signal_emit (GTK_OBJECT (widget), widget_signals[signal_num], event, &return_val);
+	g_signal_emit (widget, widget_signals[signal_num], 0, event, &return_val);
     }
   if (WIDGET_REALIZED_FOR_EVENT (widget, event))
-    gtk_signal_emit (GTK_OBJECT (widget), widget_signals[EVENT_AFTER], event);
+    g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
   else
     return_val = TRUE;
 
-  gtk_widget_unref (widget);
+  g_object_unref (widget);
 
   return return_val;
 }
@@ -3138,7 +3161,7 @@ gtk_widget_activate (GtkWidget *widget)
   if (WIDGET_CLASS (widget)->activate_signal)
     {
       /* FIXME: we should eventually check the signals signature here */
-      gtk_signal_emit (GTK_OBJECT (widget), WIDGET_CLASS (widget)->activate_signal);
+      g_signal_emit (widget, WIDGET_CLASS (widget)->activate_signal, 0);
 
       return TRUE;
     }
@@ -3174,9 +3197,9 @@ gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
   if (WIDGET_CLASS (widget)->set_scroll_adjustments_signal)
     {
       /* FIXME: we should eventually check the signals signature here */
-      gtk_signal_emit (GTK_OBJECT (widget),
-		       WIDGET_CLASS (widget)->set_scroll_adjustments_signal,
-		       hadjustment, vadjustment);
+      g_signal_emit (widget,
+		     WIDGET_CLASS (widget)->set_scroll_adjustments_signal, 0,
+		     hadjustment, vadjustment);
       return TRUE;
     }
   else
@@ -3220,10 +3243,10 @@ gtk_widget_reparent_fixup_child (GtkWidget *widget,
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
       if (widget->window)
-        gdk_window_unref (widget->window);
+	g_object_unref (widget->window);
       widget->window = (GdkWindow*) client_data;
       if (widget->window)
-        gdk_window_ref (widget->window);
+	g_object_ref (widget->window);
 
       if (GTK_IS_CONTAINER (widget))
         gtk_container_forall (GTK_CONTAINER (widget),
@@ -3258,10 +3281,10 @@ gtk_widget_reparent (GtkWidget *widget,
       if (GTK_WIDGET_REALIZED (widget) && GTK_WIDGET_REALIZED (new_parent))
 	GTK_PRIVATE_SET_FLAG (widget, GTK_IN_REPARENT);
       
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
       gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
       gtk_container_add (GTK_CONTAINER (new_parent), widget);
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
       
       if (GTK_WIDGET_IN_REPARENT (widget))
 	{
@@ -3368,10 +3391,10 @@ gtk_widget_grab_focus (GtkWidget *widget)
   if (!GTK_WIDGET_IS_SENSITIVE (widget))
     return;
   
-  g_object_ref (G_OBJECT (widget));
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[GRAB_FOCUS]);
+  g_object_ref (widget);
+  g_signal_emit (widget, widget_signals[GRAB_FOCUS], 0);
   g_object_notify (G_OBJECT (widget), "has_focus");
-  g_object_unref (G_OBJECT (widget));
+  g_object_unref (widget);
 }
 
 static void
@@ -3581,7 +3604,7 @@ gtk_widget_get_name (GtkWidget *widget)
   
   if (widget->name)
     return widget->name;
-  return gtk_type_name (GTK_WIDGET_TYPE (widget));
+  return g_type_name (GTK_WIDGET_TYPE (widget));
 }
 
 /**
@@ -3788,7 +3811,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   /* keep this function in sync with gtk_menu_attach_to_widget()
    */
 
-  gtk_widget_ref (widget);
+  g_object_ref (widget);
   gtk_object_sink (GTK_OBJECT (widget));
   widget->parent = parent;
 
@@ -3804,7 +3827,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   
   gtk_widget_reset_rc_styles (widget);
 
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[PARENT_SET], NULL);
+  g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
   if (GTK_WIDGET_ANCHORED (widget->parent))
     _gtk_widget_propagate_hierarchy_changed (widget, NULL);
   g_object_notify (G_OBJECT (widget), "parent");
@@ -3975,13 +3998,12 @@ gtk_widget_modify_style (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_RC_STYLE (style));
   
-  old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					 quark_rc_style);
+  old_style = g_object_get_qdata (G_OBJECT (widget), quark_rc_style);
 
-  gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-                                  quark_rc_style,
-                                  gtk_rc_style_copy (style),
-                                  (GtkDestroyNotify)gtk_rc_style_unref);
+  g_object_set_qdata_full (G_OBJECT (widget),
+			   quark_rc_style,
+			   gtk_rc_style_copy (style),
+			   (GDestroyNotify) gtk_rc_style_unref);
 
   /* note that "style" may be invalid here if it was the old
    * modifier style and the only reference was our own.
@@ -4019,16 +4041,15 @@ gtk_widget_get_modifier_style (GtkWidget      *widget)
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  rc_style = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					quark_rc_style);
+  rc_style = g_object_get_qdata (G_OBJECT (widget), quark_rc_style);
 
   if (!rc_style)
     {
       rc_style = gtk_rc_style_new ();
-      gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				      quark_rc_style,
-				      rc_style,
-				      (GtkDestroyNotify)gtk_rc_style_unref);
+      g_object_set_qdata_full (G_OBJECT (widget),
+			       quark_rc_style,
+			       rc_style,
+			       (GDestroyNotify) gtk_rc_style_unref);
     }
 
   return rc_style;
@@ -4222,7 +4243,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
 			       GtkStyle	 *style,
 			       gboolean   initial_emission)
 {
-  g_object_ref (G_OBJECT (widget));
+  g_object_ref (widget);
   g_object_freeze_notify (G_OBJECT (widget));
 
   if (widget->style != style || initial_emission)
@@ -4249,21 +4270,23 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       if (GTK_WIDGET_REALIZED (widget))
 	widget->style = gtk_style_attach (widget->style, widget->window);
 
-      gtk_signal_emit (GTK_OBJECT (widget),
-		       widget_signals[STYLE_SET],
-		       initial_emission ? NULL : previous_style);
+      g_signal_emit (widget,
+		     widget_signals[STYLE_SET],
+		     0,
+		     initial_emission ? NULL : previous_style);
       g_object_unref (previous_style);
 
       if (widget->parent && !initial_emission)
 	gtk_widget_queue_resize (widget);
     }
   else if (initial_emission)
-    gtk_signal_emit (GTK_OBJECT (widget),
-		     widget_signals[STYLE_SET],
-		     NULL);
+    g_signal_emit (widget,
+		   widget_signals[STYLE_SET],
+		   0,
+		   NULL);
   g_object_notify (G_OBJECT (widget), "style");
   g_object_thaw_notify (G_OBJECT (widget));
-  g_object_unref (G_OBJECT (widget));
+  g_object_unref (widget);
 }
 
 static void
@@ -4277,22 +4300,21 @@ gtk_widget_propagate_hierarchy_changed_recurse (GtkWidget *widget,
 
   if (GTK_WIDGET_ANCHORED (widget) != new_anchored)
     {
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
       
       if (new_anchored)
 	GTK_PRIVATE_SET_FLAG (widget, GTK_ANCHORED);
       else
 	GTK_PRIVATE_UNSET_FLAG (widget, GTK_ANCHORED);
       
-      g_signal_emit (GTK_OBJECT (widget), widget_signals[HIERARCHY_CHANGED],
-		     0, client_data);
+      g_signal_emit (widget, widget_signals[HIERARCHY_CHANGED], 0, client_data);
   
       if (GTK_IS_CONTAINER (widget))
 	gtk_container_forall (GTK_CONTAINER (widget),
 			      gtk_widget_propagate_hierarchy_changed_recurse,
 			      client_data);
       
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
     }
 }
 
@@ -4361,7 +4383,7 @@ gtk_widget_get_default_style (void)
 static PangoContext *
 gtk_widget_peek_pango_context (GtkWidget *widget)
 {
-  return gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_pango_context);
+  return g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
 }
 
 /**
@@ -4389,7 +4411,7 @@ gtk_widget_get_pango_context (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
-  context = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_pango_context);
+  context = g_object_get_qdata (G_OBJECT (widget), quark_pango_context);
   if (context)
     {
       screen = g_object_get_data (G_OBJECT (context), "gdk-pango-screen");
@@ -4400,8 +4422,10 @@ gtk_widget_get_pango_context (GtkWidget *widget)
   if (!context)
     {
       context = gtk_widget_create_pango_context (GTK_WIDGET (widget));
-      gtk_object_set_data_by_id_full (GTK_OBJECT (widget), quark_pango_context, context,
-				      (GDestroyNotify) g_object_unref);
+      g_object_set_qdata_full (G_OBJECT (widget),
+			       quark_pango_context,
+			       context,
+			       g_object_unref);
     }
 
   return context;
@@ -4537,17 +4561,17 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  old_parent_window = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-						 quark_parent_window);
+  old_parent_window = g_object_get_qdata (G_OBJECT (widget),
+					  quark_parent_window);
 
   if (parent_window != old_parent_window)
     {
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_parent_window, 
-				 parent_window);
+      g_object_set_qdata (G_OBJECT (widget), quark_parent_window, 
+			  parent_window);
       if (old_parent_window)
-	gdk_window_unref (old_parent_window);
+	g_object_unref (old_parent_window);
       if (parent_window)
-	gdk_window_ref (parent_window);
+	g_object_ref (parent_window);
     }
 }
 
@@ -4755,8 +4779,7 @@ gtk_widget_get_parent_window   (GtkWidget           *widget)
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (widget->parent != NULL, NULL);
   
-  parent_window = gtk_object_get_data_by_id (GTK_OBJECT (widget),
-					     quark_parent_window);
+  parent_window = g_object_get_qdata (G_OBJECT (widget), quark_parent_window);
 
   return (parent_window != NULL) ? parent_window : widget->parent->window;
 }
@@ -4814,9 +4837,10 @@ gtk_widget_child_focus (GtkWidget       *widget,
       !GTK_WIDGET_CAN_FOCUS (widget))
     return FALSE;
   
-  gtk_signal_emit (GTK_OBJECT (widget),
-                   widget_signals[FOCUS],
-                   direction, &return_val);
+  g_signal_emit (widget,
+		 widget_signals[FOCUS],
+		 0,
+		 direction, &return_val);
 
   return return_val;
 }
@@ -4852,6 +4876,8 @@ gtk_widget_set_uposition (GtkWidget *widget,
   /* FIXME this function is the only place that aux_info->x and
    * aux_info->y are even used I believe, and this function is
    * deprecated. Should be cleaned up.
+   *
+   * (Actually, size_allocate uses them) -Yosh
    */
   
   GtkWidgetAuxInfo *aux_info;
@@ -5061,7 +5087,7 @@ gtk_widget_set_events (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   
-  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+  eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
   
   if (events)
     {
@@ -5069,12 +5095,12 @@ gtk_widget_set_events (GtkWidget *widget,
 	eventp = g_new (gint, 1);
       
       *eventp = events;
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_event_mask, eventp);
+      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, eventp);
     }
   else if (eventp)
     {
       g_free (eventp);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, NULL);
     }
 
   g_object_notify (G_OBJECT (widget), "events");
@@ -5097,7 +5123,7 @@ gtk_widget_add_events (GtkWidget *widget,
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  eventp = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+  eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
   
   if (events)
     {
@@ -5108,12 +5134,12 @@ gtk_widget_add_events (GtkWidget *widget,
 	}
       
       *eventp |= events;
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_event_mask, eventp);
+      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, eventp);
     }
   else if (eventp)
     {
       g_free (eventp);
-      gtk_object_remove_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+      g_object_set_qdata (G_OBJECT (widget), quark_event_mask, NULL);
     }
 
   if (GTK_WIDGET_REALIZED (widget))
@@ -5162,13 +5188,13 @@ gtk_widget_set_extension_events (GtkWidget *widget,
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
   
-  modep = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
+  modep = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
   
   if (!modep)
     modep = g_new (GdkExtensionMode, 1);
   
   *modep = mode;
-  gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode, modep);
+  g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode, modep);
   g_object_notify (G_OBJECT (widget), "extension_events");
 }
 
@@ -5230,14 +5256,14 @@ gtk_widget_get_toplevel (GtkWidget *widget)
  **/
 GtkWidget*
 gtk_widget_get_ancestor (GtkWidget *widget,
-			 GtkType    widget_type)
+			 GType      widget_type)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   
-  while (widget && !gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type))
+  while (widget && !g_type_is_a (GTK_WIDGET_TYPE (widget), widget_type))
     widget = widget->parent;
   
-  if (!(widget && gtk_type_is_a (GTK_WIDGET_TYPE (widget), widget_type)))
+  if (!(widget && g_type_is_a (GTK_WIDGET_TYPE (widget), widget_type)))
     return NULL;
   
   return widget;
@@ -5262,7 +5288,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
   
   if (widget->window)
     {
-      colormap = gdk_window_get_colormap (widget->window);
+      colormap = gdk_drawable_get_colormap (widget->window);
       /* If window was destroyed previously, we'll get NULL here */
       if (colormap)
 	return colormap;
@@ -5271,7 +5297,7 @@ gtk_widget_get_colormap (GtkWidget *widget)
   tmp_widget = widget;
   while (tmp_widget)
     {
-      colormap = gtk_object_get_data_by_id (GTK_OBJECT (tmp_widget), quark_colormap);
+      colormap = g_object_get_qdata (G_OBJECT (tmp_widget), quark_colormap);
       if (colormap)
 	return colormap;
 
@@ -5337,12 +5363,12 @@ gtk_widget_set_colormap (GtkWidget   *widget,
   g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
   g_return_if_fail (GDK_IS_COLORMAP (colormap));
 
-  g_object_ref (G_OBJECT (colormap));
+  g_object_ref (colormap);
   
   g_object_set_qdata_full (G_OBJECT (widget), 
 			   quark_colormap,
 			   colormap,
-			   (GtkDestroyNotify) g_object_unref);
+			   g_object_unref);
 }
 
 /**
@@ -5362,7 +5388,7 @@ gtk_widget_get_events (GtkWidget *widget)
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   
-  events = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+  events = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
   if (events)
     return *events;
   
@@ -5385,7 +5411,7 @@ gtk_widget_get_extension_events (GtkWidget *widget)
   
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   
-  mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
+  mode = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
   if (mode)
     return *mode;
   
@@ -5479,10 +5505,10 @@ gtk_widget_set_composite_name (GtkWidget   *widget,
   if (!quark_composite_name)
     quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
 
-  gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				  quark_composite_name,
-				  g_strdup (name),
-				  g_free);
+  g_object_set_qdata_full (G_OBJECT (widget),
+			   quark_composite_name,
+			   g_strdup (name),
+			   g_free);
 }
 
 /**
@@ -5526,7 +5552,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  *   gtk_widget_pop_composite_child (<!-- -->);
  *   gtk_widget_set_parent (scrolled_window->hscrollbar, 
  *                          GTK_WIDGET (scrolled_window));
- *   gtk_widget_ref (scrolled_window->hscrollbar);
+ *   g_object_ref (scrolled_window->hscrollbar);
  * </programlisting></informalexample>
  **/
 void
@@ -5633,7 +5659,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
 				gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 				  PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
   
-  gtk_signal_emit (GTK_OBJECT (widget), widget_signals[DIRECTION_CHANGED], old_dir);
+  g_signal_emit (widget, widget_signals[DIRECTION_CHANGED], 0, old_dir);
 }
 
 /**
@@ -5705,7 +5731,7 @@ gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
 {
   GtkTextDirection old_dir = GPOINTER_TO_UINT (data);
 
-  g_object_ref (G_OBJECT (widget));
+  g_object_ref (widget);
   
   if (!GTK_WIDGET_DIRECTION_SET (widget))
     gtk_widget_emit_direction_changed (widget, old_dir);
@@ -5715,7 +5741,7 @@ gtk_widget_set_default_direction_recurse (GtkWidget *widget, gpointer data)
 			  gtk_widget_set_default_direction_recurse,
 			  data);
 
-  g_object_unref (G_OBJECT (widget));
+  g_object_unref (widget);
 }
 
 /**
@@ -5822,17 +5848,17 @@ gtk_widget_finalize (GObject *object)
   if (aux_info)
     gtk_widget_aux_info_destroy (aux_info);
   
-  events = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_event_mask);
+  events = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
   if (events)
     g_free (events);
   
-  mode = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_extension_event_mode);
+  mode = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
   if (mode)
     g_free (mode);
 
-  accessible = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_accessible_object);
+  accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
   if (accessible)
-    g_object_unref (G_OBJECT (accessible));
+    g_object_unref (accessible);
 
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -5896,7 +5922,7 @@ gtk_widget_real_realize (GtkWidget *widget)
   if (widget->parent)
     {
       widget->window = gtk_widget_get_parent_window (widget);
-      gdk_window_ref (widget->window);
+      g_object_ref (widget->window);
     }
   widget->style = gtk_style_attach (widget->style, widget->window);
 }
@@ -5917,7 +5943,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
-  /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT (widget)->klass->type));
+  /* printf ("unrealizing %s\n", g_type_name (G_TYPE_FROM_INSTANCE (widget)));
    */
 
    /* We must do unrealize child widget BEFORE container widget.
@@ -5940,7 +5966,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     }
   else
     {
-      gdk_window_unref (widget->window);
+      g_object_unref (widget->window);
       widget->window = NULL;
     }
 
@@ -6027,13 +6053,12 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 
   if (old_state != GTK_WIDGET_STATE (widget))
     {
-      gtk_widget_ref (widget);
+      g_object_ref (widget);
       
       if (!GTK_WIDGET_IS_SENSITIVE (widget) && GTK_WIDGET_HAS_GRAB (widget))
 	gtk_grab_remove (widget);
       
-      gtk_signal_emit (GTK_OBJECT (widget), widget_signals[STATE_CHANGED], old_state);
-      
+      g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
       
       if (GTK_IS_CONTAINER (widget))
 	{
@@ -6048,7 +6073,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 				   (GtkCallback) gtk_widget_propagate_state,
 				   data);
 	}
-      gtk_widget_unref (widget);
+      g_object_unref (widget);
     }
 }
 
@@ -6068,7 +6093,7 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
 {
   GtkWidgetAuxInfo *aux_info;
   
-  aux_info = gtk_object_get_data_by_id (GTK_OBJECT (widget), quark_aux_info);
+  aux_info = g_object_get_qdata (G_OBJECT (widget), quark_aux_info);
   if (!aux_info && create)
     {
       if (!aux_info_mem_chunk)
@@ -6083,7 +6108,7 @@ _gtk_widget_get_aux_info (GtkWidget *widget,
       aux_info->y = 0;
       aux_info->x_set = FALSE;
       aux_info->y_set = FALSE;
-      gtk_object_set_data_by_id (GTK_OBJECT (widget), quark_aux_info, aux_info);
+      g_object_set_qdata (G_OBJECT (widget), quark_aux_info, aux_info);
     }
   
   return aux_info;
@@ -6106,7 +6131,7 @@ gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
 static void
 gtk_widget_shape_info_destroy (GtkWidgetShapeInfo *info)
 {
-  gdk_drawable_unref (info->shape_mask);
+  g_object_unref (info->shape_mask);
   g_free (info);
 }
 
@@ -6150,7 +6175,7 @@ gtk_widget_shape_combine_mask (GtkWidget *widget,
       g_object_set_qdata_full (G_OBJECT (widget), quark_shape_info, shape_info,
 			       (GDestroyNotify) gtk_widget_shape_info_destroy);
       
-      shape_info->shape_mask = gdk_drawable_ref (shape_mask);
+      shape_info->shape_mask = g_object_ref (shape_mask);
       shape_info->offset_x = offset_x;
       shape_info->offset_y = offset_y;
       
@@ -6559,7 +6584,7 @@ gtk_widget_class_path (GtkWidget *widget,
       gchar *d;
       guint l;
       
-      string = gtk_type_name (GTK_WIDGET_TYPE (widget));
+      string = g_type_name (GTK_WIDGET_TYPE (widget));
       l = strlen (string);
       while (tmp_path_len <= len + l + 1)
 	{
@@ -6658,7 +6683,7 @@ gtk_widget_real_get_accessible (GtkWidget *widget)
 
     default_registry = atk_get_default_registry ();
     factory = atk_registry_get_factory (default_registry, 
-                                        GTK_OBJECT_TYPE (widget));
+                                        G_TYPE_FROM_INSTANCE (widget));
     accessible =
       atk_object_factory_create_accessible (factory,
 					    G_OBJECT (widget));
@@ -6686,7 +6711,7 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (implementor));
   if (accessible)
-    g_object_ref (G_OBJECT (accessible));
+    g_object_ref (accessible);
   return accessible;
 }
 

@@ -49,7 +49,7 @@ viqr_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (GtkIMContextSimple),
     0,
-    (GtkObjectInitFunc) viqr_init,
+    (GInstanceInitFunc) viqr_init,
   };
 
   type_viqr_translit = 

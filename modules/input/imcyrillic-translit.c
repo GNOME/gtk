@@ -46,7 +46,7 @@ cyrillic_translit_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (GtkIMContextSimple),
     0,
-    (GtkObjectInitFunc) cyrillic_translit_init,
+    (GInstanceInitFunc) cyrillic_translit_init,
   };
 
   type_cyrillic_translit = 

@@ -48,11 +48,11 @@ extern "C" {
 
 
 #define GTK_TYPE_GAMMA_CURVE            (gtk_gamma_curve_get_type ())
-#define GTK_GAMMA_CURVE(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_GAMMA_CURVE, GtkGammaCurve))
-#define GTK_GAMMA_CURVE_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GAMMA_CURVE, GtkGammaCurveClass))
-#define GTK_IS_GAMMA_CURVE(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_GAMMA_CURVE))
-#define GTK_IS_GAMMA_CURVE_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GAMMA_CURVE))
-#define GTK_GAMMA_CURVE_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_GAMMA_CURVE, GtkGammaCurveClass))
+#define GTK_GAMMA_CURVE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_GAMMA_CURVE, GtkGammaCurve))
+#define GTK_GAMMA_CURVE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_GAMMA_CURVE, GtkGammaCurveClass))
+#define GTK_IS_GAMMA_CURVE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_GAMMA_CURVE))
+#define GTK_IS_GAMMA_CURVE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GAMMA_CURVE))
+#define GTK_GAMMA_CURVE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_GAMMA_CURVE, GtkGammaCurveClass))
 
 typedef struct _GtkGammaCurve		GtkGammaCurve;
 typedef struct _GtkGammaCurveClass	GtkGammaCurveClass;
@@ -83,7 +83,7 @@ struct _GtkGammaCurveClass
 };
 
 
-GtkType    gtk_gamma_curve_get_type (void) G_GNUC_CONST;
+GType      gtk_gamma_curve_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_gamma_curve_new      (void);
 
 

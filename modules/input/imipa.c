@@ -46,7 +46,7 @@ ipa_register_type (GTypeModule *module)
     NULL,           /* class_data */
     sizeof (GtkIMContextSimple),
     0,
-    (GtkObjectInitFunc) ipa_init,
+    (GInstanceInitFunc) ipa_init,
   };
 
   type_ipa = 
