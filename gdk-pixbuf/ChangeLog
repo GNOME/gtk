@@ -1,3 +1,8 @@
+2001-09-21  Matthias Clasen  <matthiasc@poet.de>
+
+	* io-xpm.c (xpm_extract_color): Rewritten to handle
+	xpm colormap entries more thoroughly. (#59939)
+
 2001-09-21  Hans Breuer  <hans@breuer.org>
 
 	* gdk-pixbuf.def : updated externals
