@@ -70,14 +70,15 @@ Creates a new #GtkRadioMenuItem whose child is a simple #GtlLabel.
 @Returns: a new #GtkRadioMenuItem
 
 
-<!-- ##### FUNCTION gtk_radio_menu_item_group ##### -->
+<!-- ##### MACRO gtk_radio_menu_item_group ##### -->
 <para>
 Returns the group to which the radio menu item belongs, as a #GList of
 #GtkRadioMenuItem. The list belongs to GTK+ and should not be freed.
 </para>
 
-@radio_menu_item: the radio menu item
 @Returns: its group
+<!-- # Unused Parameters # -->
+@radio_menu_item: the radio menu item
 
 
 <!-- ##### FUNCTION gtk_radio_menu_item_set_group ##### -->

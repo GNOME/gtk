@@ -1,3 +1,11 @@
+Thu Jul 12 18:29:40 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkradiomenuitem.[ch] (gtk_radio_menu_item_group): 
+	Rename to gtk_radio_menu_item_get_group(), add deprecated
+	alias. (#57044)
+
+	* gtk/gtkfilesel.c: Indentation fix.
+
 Thu Jul 12 17:33:00 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkbbox.h gtk/gtkcompat.h: Patch from Mathias 

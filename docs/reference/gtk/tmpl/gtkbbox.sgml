@@ -75,6 +75,7 @@ Used internally only.
 Retrieves how much space a button box is placing between each child button.
 </para>
 
+@b: 
 @Returns: the current spacing applied to the buttons in @widget.
 <!-- # Unused Parameters # -->
 @widget: a #GtkButtonBox.
@@ -115,6 +116,8 @@ Gets the default number of pixels that pad the buttons in a given button box.
 Sets the amount of spacing between buttons in a given button box.
 </para>
 
+@b: 
+@s: 
 <!-- # Unused Parameters # -->
 @widget: a #GtkButtonBox.
 @spacing: the number of pixels of spacing.

@@ -96,6 +96,8 @@ Creates a new #GtkMenu.
 Adds a new #GtkMenuItem to the end of the menu's item list.
 </para>
 
+@m: 
+@c: 
 <!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.
@@ -106,6 +108,8 @@ Adds a new #GtkMenuItem to the end of the menu's item list.
 Adds a new #GtkMenuItem to the beginning of the menu's item list.
 </para>
 
+@m: 
+@c: 
 <!-- # Unused Parameters # -->
 @menu: a #GtkMenu.
 @child: The #GtkMenuItem to add.

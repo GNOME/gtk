@@ -1568,12 +1568,13 @@ gtk_file_selection_file_button (GtkWidget      *widget,
 
 #ifdef G_WITH_CYGWIN
   /* Check to see if the selection was a drive selector */
-  if (isalpha (filename[0]) && (filename[1] == ':')) {
-    /* It is... map it to a CYGWIN32 drive */
-    gchar *temp_filename = g_strdup_printf ("//%c/", tolower (filename[0]));
-    g_free(filename);
-    filename = temp_filename;
-  }
+  if (isalpha (filename[0]) && (filename[1] == ':'))
+    {
+      /* It is... map it to a CYGWIN32 drive */
+      gchar *temp_filename = g_strdup_printf ("//%c/", tolower (filename[0]));
+      g_free(filename);
+      filename = temp_filename;
+    }
 #endif /* G_WITH_CYGWIN */
 
   if (filename)
