@@ -1,3 +1,11 @@
+Fri Apr 26 21:58:16 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreemodel.c (gtk_tree_row_ref_deleted_callback): if the
+	deleted node was "below" this path, then do not unref all nodes
+	between the deleted parent and the node this rowref is pointing too
+	(see added comment in gtk_tree_row_ref_deleted_callback),
+	(fixes #77977)
+
 2002-04-26  Sven Neumann  <sven@gimp.org>
  
         * tests/testtreecolumns.c
