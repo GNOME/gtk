@@ -492,6 +492,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	{
 	  GString *gstring;
 	  gboolean seen_mod = FALSE;
+	  gunichar ch;
 	  
 	  gstring = g_string_new (accel_label->accel_string);
 	  g_string_append (gstring, gstring->len ? class->accel_seperator : "   ");
@@ -517,12 +518,12 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 	    }
 	  if (seen_mod)
 	    g_string_append (gstring, class->mod_separator);
-	  if (key->accel_key < 0x80 ||
-	      (key->accel_key > 0x80 &&
-	       key->accel_key <= 0xff &&
-	       class->latin1_to_char))
+
+	  ch = gdk_keyval_to_unicode (key->accel_key);
+	  if (ch && (g_unichar_isgraph (ch) || ch == ' ') &&
+	      (ch < 0x80 || class->latin1_to_char))
 	    {
-	      switch (key->accel_key)
+	      switch (ch)
 		{
 		case ' ':
 		  g_string_append (gstring, "Space");
@@ -531,7 +532,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
 		  g_string_append (gstring, "Backslash");
 		  break;
 		default:
-		  g_string_append_unichar (gstring, g_unichar_toupper (key->accel_key));
+		  g_string_append_unichar (gstring, g_unichar_toupper (ch));
 		  break;
 		}
 	    }

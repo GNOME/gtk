@@ -1,8 +1,14 @@
+Tue Feb 26 18:38:17 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaccellabel.c (gtk_accel_label_refetch): 
+	Display any "g_unicode_isgraph()" char literally,
+	not just latin1. (#65679)
+
 Tue Feb 26 18:01:10 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_grab_focus): Don't
-	to focus insensitive widgets. (#68203)
-
+	focus insensitive widgets. (#68203)
+	
 	* gtk/gtkentry.c (gtk_entry_state_changed): Clear any
 	current selection if we become insensitive. (#68203)
 
