@@ -1285,7 +1285,6 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
 		       int                    n_rows)
 {
   GtkTreePath *path;
-  gchar *text;
 
   path = gtk_tree_path_new_from_indices (start_row, -1);
 
@@ -1296,9 +1295,6 @@ shortcuts_remove_rows (GtkFileChooserDefault *impl,
       if (!gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->shortcuts_model), &iter, path))
 	g_assert_not_reached ();
 
-      gtk_tree_model_get (GTK_TREE_MODEL (impl->shortcuts_model), &iter, 
-			  SHORTCUTS_COL_NAME, &text, -1);
-			  
       shortcuts_free_row_data (impl, &iter);
       gtk_list_store_remove (impl->shortcuts_model, &iter);
     }

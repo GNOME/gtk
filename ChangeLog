@@ -1,3 +1,8 @@
+2004-10-14  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkfilechooserdefault.c (shortcuts_remove_rows): Don't
+	get text unnecessarily.  (#155384, Morten Welinder)
+
 2004-10-12  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkcontainer.c (_gtk_container_queue_resize): Acknowledge 
