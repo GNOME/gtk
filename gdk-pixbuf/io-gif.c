@@ -184,7 +184,7 @@ ReadOK (GifContext *context, guchar *buffer, size_t len)
 #endif
 		if ((context->size - context->ptr) >= len) {
 			count += len;
-			memcpy (buffer, context->buf + context->ptr, len);
+			memmove (buffer, context->buf + context->ptr, len);
 			context->ptr += len;
 			context->amount_needed = 0;
 #ifdef IO_GIFDEBUG
@@ -1030,7 +1030,7 @@ image_load_increment (gpointer data, guchar *buf, guint size)
 		} else {
 			/* copy the left overs to the begining of the buffer */
 			/* and realloc the memory */
-			memcpy (context->buf, context->buf, context->size - context->ptr);
+			memmove (context->buf, context->buf + context->ptr, context->size - context->ptr);
 			context->buf = g_realloc (context->buf, context->amount_needed + (context->size - context->ptr));
 		}
 		context->size = context->size - context->ptr;

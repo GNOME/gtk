@@ -1,3 +1,8 @@
+1999-11-03  Jonathan Blandford  <jrb@redhat.com>
+
+	* src/io-gif.c (image_load_increment): now handle arbitrary buffer
+	sizes.
+
 1999-11-03  Federico Mena Quintero  <federico@redhat.com>
 
 	* src/gnome-canvas-pixbuf.c (gnome_canvas_pixbuf_init):
