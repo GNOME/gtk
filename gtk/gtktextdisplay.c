@@ -698,8 +698,6 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   g_return_if_fail (layout->default_style != NULL);
   g_return_if_fail (layout->buffer != NULL);
   g_return_if_fail (drawable != NULL);
-  g_return_if_fail (x_offset >= 0);
-  g_return_if_fail (y_offset >= 0);
   g_return_if_fail (width >= 0);
   g_return_if_fail (height >= 0);
 
@@ -794,11 +792,13 @@ gtk_text_layout_draw (GtkTextLayout *layout,
               else
                 gc = widget->style->text_gc[GTK_STATE_NORMAL];
 
+              gdk_gc_set_clip_rectangle(gc, &clip);
               gdk_draw_line (drawable, gc,
                              line_display->x_offset + cursor->x - x_offset,
                              current_y + line_display->top_margin + cursor->y,
                              line_display->x_offset + cursor->x - x_offset,
                              current_y + line_display->top_margin + cursor->y + cursor->height - 1);
+              gdk_gc_set_clip_rectangle(gc, NULL);
 
               cursor_list = cursor_list->next;
             }
