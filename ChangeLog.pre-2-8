@@ -1,3 +1,11 @@
+Thu Jun 13 17:50:36 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextview.c gtk/gtkentry.c: Add the obsolete
+	CUA cut/copy/paste bindings. (#79078)
+
+	* gtk/gtktextview.c gtk/gtkentry.c: Make <Shift>BackSpace
+	a synonym for for Backspace. (#80302, Jeff Waugh)
+
 Thu Jun 13 15:02:49 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkdnd-x11.c: Ignore all client events that
