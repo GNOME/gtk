@@ -1,5 +1,5 @@
 /*
- * creates an ArtPixBuf from a Drawable
+ * Creates an GdkPixBuf from a Drawable
  *
  * Author:
  *   Cody Russell <bratsche@dfw.net>
@@ -21,7 +21,7 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 			       gint with_alpha)
 {
 	GdkImage *image;
-	ArtPixBuf *pixbuf;
+	ArtPixBuf *art_pixbuf;
 	GdkColormap *colormap;
 	art_u8 *buff;
 	art_u8 *pixels;
@@ -30,8 +30,38 @@ gdk_pixbuf_from_drawable_core (GdkWindow *window,
 	art_u8 r, g, b;
 	gint xx, yy;
 	gint fatness;
+	gint screen_width, screen_height;
+	gint window_width, window_height, window_x, window_y;
 
 	g_return_val_if_fail (window != NULL, NULL);
+
+	screen_width = gdk_screen_width();
+	screen_height = gdk_screen_height();
+	gdk_window_get_geometry(window, NULL, NULL,
+				&window_width, &window_height, NULL);
+	gdk_window_get_origin(window, &window_x, &window_y);
+
+	if(window_x < 0)
+	{
+		x = ABS(window_x);
+		width = window_width - x;
+	}
+	else
+	{
+		width = CLAMP(window_x + window_width, window_x,
+				screen_width) - window_x;
+	}
+
+	if(window_y < 0)
+	{
+		y = ABS(window_y);
+		height = window_height - y;
+	}
+	else
+	{
+		height = CLAMP(window_y + window_height, window_y,
+				screen_height) - window_y;
+	}
 
 	image = gdk_image_get (window, x, y, width, height);
 	colormap = gdk_rgb_get_cmap ();
