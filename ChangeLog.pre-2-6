@@ -1,3 +1,16 @@
+Thu Aug 26 14:14:42 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): reactivated the sanity
+	checks that ensure that a widget's allocation is at least 1 in width
+	and height. (GNOME note: this doesn't affect old panel code anymore,
+	because GtkSocket will request width and height of at least 1 since
+	Fri Jul 23).
+
+	* gtk/gtkwindow.c (gtk_window_realize): if the widget hasn't been
+	allocated yet (happens if the user realizes the window prematurely),
+	size request and allocate it.
+	(gtk_window_size_allocate): guard against guint underflows.
+
 Wed Aug 25 19:01:36 1999  Lars Hamann  <lars@gtk.org>
 
 	* gtk/Makefile.am (gtk_built_sources): reordered stamp-gtk.defs

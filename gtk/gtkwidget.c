@@ -2427,10 +2427,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 	real_allocation.y = aux_info->y;
     }
 
-  /* FIXME, TODO-1.3: put this back in once the gnome panel is fixed
-     real_allocation.width = MAX (real_allocation.width, 1);
-     real_allocation.height = MAX (real_allocation.height, 1);
-  */
+  real_allocation.width = MAX (real_allocation.width, 1);
+  real_allocation.height = MAX (real_allocation.height, 1);
 
   if (real_allocation.width > 32767 ||
       real_allocation.height > 32767)

@@ -881,11 +881,32 @@ gtk_window_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WINDOW (widget));
+
+  window = GTK_WINDOW (widget);
+
+  /* size_allocate the widget tree if that hasn't happened yet */
+  if (widget->allocation.x == -1 &&
+      widget->allocation.y == -1 &&
+      widget->allocation.width == 1 &&
+      widget->allocation.height == 1)
+    {
+      GtkRequisition requisition;
+      GtkAllocation allocation = { 0, 0, 200, 200 };
+      
+      gtk_widget_size_request (widget, &requisition);
+      if (requisition.width || requisition.height)
+	{
+	  /* non-empty window */
+	  allocation.width = requisition.width;
+	  allocation.height = requisition.height;
+	}
+      gtk_widget_size_allocate (widget, &allocation);
+      
+      g_return_if_fail (!GTK_WIDGET_REALIZED (widget));
+    }
   
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
-  window = GTK_WINDOW (widget);
   
   switch (window->type)
     {
@@ -984,8 +1005,14 @@ gtk_window_size_allocate (GtkWidget     *widget,
     {
       child_allocation.x = GTK_CONTAINER (window)->border_width;
       child_allocation.y = GTK_CONTAINER (window)->border_width;
-      child_allocation.width = allocation->width - child_allocation.x * 2;
-      child_allocation.height = allocation->height - child_allocation.y * 2;
+      if (allocation->width > child_allocation.x * 2)
+	child_allocation.width = allocation->width - child_allocation.x * 2;
+      else
+	child_allocation.width = 1;
+      if (child_allocation.height > child_allocation.y * 2)
+	child_allocation.height = allocation->height - child_allocation.y * 2;
+      else
+	child_allocation.height = 1;
 
       gtk_widget_size_allocate (window->bin.child, &child_allocation);
     }
