@@ -310,20 +310,11 @@ GtkWidget
 </para>
 
 @type: 
-@first_arg_name: 
+@first_property_name: 
 @Varargs: 
 @Returns: 
-
-
-<!-- ##### FUNCTION gtk_widget_newv ##### -->
-<para>
-
-</para>
-
-@type: 
-@nargs: 
-@args: 
-@Returns: 
+<!-- # Unused Parameters # -->
+@first_arg_name: 
 
 
 <!-- ##### FUNCTION gtk_widget_ref ##### -->
@@ -360,43 +351,16 @@ GtkWidget
 @widget_pointer: 
 
 
-<!-- ##### FUNCTION gtk_widget_get ##### -->
-<para>
-
-</para>
-
-@widget: 
-@arg: 
-
-
-<!-- ##### FUNCTION gtk_widget_getv ##### -->
-<para>
-
-</para>
-
-@widget: 
-@nargs: 
-@args: 
-
-
 <!-- ##### FUNCTION gtk_widget_set ##### -->
 <para>
 
 </para>
 
 @widget: 
-@first_arg_name: 
+@first_property_name: 
 @Varargs: 
-
-
-<!-- ##### FUNCTION gtk_widget_setv ##### -->
-<para>
-
-</para>
-
-@widget: 
-@nargs: 
-@args: 
+<!-- # Unused Parameters # -->
+@first_arg_name: 
 
 
 <!-- ##### FUNCTION gtk_widget_unparent ##### -->
@@ -639,6 +603,15 @@ GtkWidget
 @widget: 
 @area: 
 @intersection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_widget_is_focus ##### -->
+<para>
+
+</para>
+
+@widget: 
 @Returns: 
 
 
@@ -1453,14 +1426,6 @@ GtkWidget
 @time: 
 @Returns: 
 
-<!-- ##### SIGNAL GtkWidget::draw ##### -->
-<para>
-
-</para>
-
-@widget: the object which received the signal.
-@area: 
-
 <!-- ##### SIGNAL GtkWidget::draw-default ##### -->
 <para>
 
@@ -1813,37 +1778,37 @@ GtkWidget
 
 </para>
 
-<!-- ##### ARG GtkWidget:app_paintable ##### -->
+<!-- ##### ARG GtkWidget:app-paintable ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:can_focus ##### -->
+<!-- ##### ARG GtkWidget:can-focus ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:has_focus ##### -->
+<!-- ##### ARG GtkWidget:has-focus ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:can_default ##### -->
+<!-- ##### ARG GtkWidget:can-default ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:has_default ##### -->
+<!-- ##### ARG GtkWidget:has-default ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:receives_default ##### -->
+<!-- ##### ARG GtkWidget:receives-default ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkWidget:composite_child ##### -->
+<!-- ##### ARG GtkWidget:composite-child ##### -->
 <para>
 
 </para>
@@ -1858,7 +1823,7 @@ GtkWidget
 
 </para>
 
-<!-- ##### ARG GtkWidget:extension_events ##### -->
+<!-- ##### ARG GtkWidget:extension-events ##### -->
 <para>
 
 </para>

@@ -643,6 +643,15 @@ This macro is deprecated. You should use G_PRIORITY_LOW instead.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_get_current_event_state ##### -->
+<para>
+
+</para>
+
+@state: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_get_event_widget ##### -->
 <para>
 

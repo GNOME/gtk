@@ -406,17 +406,6 @@ as the functions below to access it.
 
 @list: 
 
-<!-- ##### FUNCTION gtk_ctree_construct ##### -->
-<para>
-This function is not usually used by users.
-</para>
-
-@ctree: 
-@columns: 
-@tree_column: 
-@titles: 
-
-
 <!-- ##### FUNCTION gtk_ctree_new_with_titles ##### -->
 <para>
 Create a new #GtkCTree widget with the given titles for the columns.
@@ -1220,12 +1209,12 @@ Emitted when a node is unselected.
 @node: The node  corresponding to the selected row.
 @column: 
 
-<!-- ##### ARG GtkCTree:n_columns ##### -->
+<!-- ##### ARG GtkCTree:n-columns ##### -->
 <para>
 The number of columns in the tree.
 </para>
 
-<!-- ##### ARG GtkCTree:tree_column ##### -->
+<!-- ##### ARG GtkCTree:tree-column ##### -->
 <para>
 The column in which the actual tree graphic appears.
 </para>
@@ -1240,17 +1229,17 @@ The number of pixels to indent the tree levels.
 The number of pixels between the tree and the columns.
 </para>
 
-<!-- ##### ARG GtkCTree:show_stub ##### -->
+<!-- ##### ARG GtkCTree:show-stub ##### -->
 <para>
 FIXME
 </para>
 
-<!-- ##### ARG GtkCTree:line_style ##### -->
+<!-- ##### ARG GtkCTree:line-style ##### -->
 <para>
 The style of the lines in the tree graphic.
 </para>
 
-<!-- ##### ARG GtkCTree:expander_style ##### -->
+<!-- ##### ARG GtkCTree:expander-style ##### -->
 <para>
 The style of the expander buttons.
 </para>

@@ -75,7 +75,7 @@ This sets the range of the ruler using gfloat lower, gfloat upper, gfloat positi
 
 </para>
 
-<!-- ##### ARG GtkRuler:max_size ##### -->
+<!-- ##### ARG GtkRuler:max-size ##### -->
 <para>
 
 </para>

@@ -177,6 +177,7 @@ gdk_colormap_change
 gdk_colormap_alloc_colors
 gdk_colormap_alloc_color
 gdk_colormap_free_colors
+gdk_colormap_query_color
 gdk_colormap_get_visual
 gdk_colors_store
 gdk_color_copy
@@ -257,6 +258,8 @@ gdk_drawable_set_colormap
 gdk_drawable_get_colormap
 gdk_drawable_get_depth
 gdk_drawable_get_size
+gdk_drawable_get_clip_region
+gdk_drawable_get_visible_region
 
 <SUBSECTION>
 gdk_draw_point
@@ -640,23 +643,40 @@ gdk_threads_mutex
 </SECTION>
 
 <SECTION>
-<TITLE>Key Values</TITLE>
+<TITLE>Keyboard Handling</TITLE>
 <FILE>keys</FILE>
-gdk_keyval_name
-gdk_keyval_from_name
+GdkKeymap
+GdkKeymapClass
+GdkKeymapKey
+GdkKeyInfo
+gdk_keymap_get_default
+gdk_keymap_lookup_key
+gdk_keymap_translate_keyboard_state
+gdk_keymap_get_entries_for_keyval
+gdk_keymap_get_entries_for_keycode
 
 <SUBSECTION>
-gdk_keyval_is_upper
-gdk_keyval_is_lower
+gdk_keyval_name
+gdk_keyval_from_name
 
 <SUBSECTION>
 gdk_keyval_convert_case
 gdk_keyval_to_upper
 gdk_keyval_to_lower
+gdk_keyval_is_upper
+gdk_keyval_is_lower
 
 <SUBSECTION>
 gdk_keyval_to_unicode
 gdk_unicode_to_keyval
+<SUBSECTION Standard>
+GDK_KEYMAP
+GDK_IS_KEYMAP
+GDK_TYPE_KEYMAP
+gdk_keymap_get_type
+GDK_KEYMAP_CLASS
+GDK_IS_KEYMAP_CLASS
+GDK_KEYMAP_GET_CLASS
 </SECTION>
 
 <SECTION>
@@ -709,6 +729,7 @@ gdk_event_put
 gdk_event_copy
 gdk_event_free
 gdk_event_get_time
+gdk_event_get_state
 gdk_event_get_axis
 
 <SUBSECTION>
@@ -862,7 +883,6 @@ GDK_GC_X11_CLASS
 GDK_IS_GC_X11_CLASS
 GdkGCX11
 GdkGCX11Class
-GdkGCXData
 GdkColormapPrivateX11
 GdkCursorPrivate
 GdkFontPrivateX

@@ -81,7 +81,22 @@ types related to the text widget and how they work together.
 
 @text_view: 
 @mark: 
+@within_margin: 
+@use_align: 
+@xalign: 
+@yalign: 
+@Returns: 
+<!-- # Unused Parameters # -->
 @mark_within_margin: 
+
+
+<!-- ##### FUNCTION gtk_text_view_scroll_mark_onscreen ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@mark: 
 @Returns: 
 
 
@@ -111,60 +126,6 @@ types related to the text widget and how they work together.
 
 @text_view: 
 @visible_rect: 
-
-
-<!-- ##### FUNCTION gtk_text_view_set_wrap_mode ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@wrap_mode: 
-
-
-<!-- ##### FUNCTION gtk_text_view_get_wrap_mode ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_view_set_editable ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@setting: 
-
-
-<!-- ##### FUNCTION gtk_text_view_get_editable ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_text_view_set_cursor_visible ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@setting: 
-
-
-<!-- ##### FUNCTION gtk_text_view_get_cursor_visible ##### -->
-<para>
-
-</para>
-
-@text_view: 
-@Returns: 
 
 
 <!-- ##### FUNCTION gtk_text_view_get_iter_location ##### -->
@@ -276,6 +237,67 @@ types related to the text widget and how they work together.
 @height: 
 
 
+<!-- ##### FUNCTION gtk_text_view_forward_display_line ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_backward_display_line ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_forward_display_line_end ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_backward_display_line_start ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_starts_display_line ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_move_visually ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@iter: 
+@count: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_view_add_child_at_anchor ##### -->
 <para>
 
@@ -307,6 +329,204 @@ types related to the text widget and how they work together.
 @child: 
 @xpos: 
 @ypos: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_wrap_mode ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@wrap_mode: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_wrap_mode ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_editable ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_editable ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_cursor_visible ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@setting: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_cursor_visible ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_pixels_above_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@pixels_above_lines: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_pixels_above_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_pixels_below_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@pixels_below_lines: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_pixels_below_lines ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_pixels_inside_wrap ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@pixels_inside_wrap: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_pixels_inside_wrap ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_justification ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@justification: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_justification ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_left_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@left_margin: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_left_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_right_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@right_margin: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_right_margin ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_indent ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@indent: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_indent ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_view_set_tabs ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@tabs: 
+
+
+<!-- ##### FUNCTION gtk_text_view_get_tabs ##### -->
+<para>
+
+</para>
+
+@text_view: 
+@Returns: 
 
 
 <!-- ##### SIGNAL GtkTextView::copy-clipboard ##### -->
@@ -380,27 +600,27 @@ types related to the text widget and how they work together.
 
 @textview: the object which received the signal.
 
-<!-- ##### ARG GtkTextView:height_lines ##### -->
+<!-- ##### ARG GtkTextView:height-lines ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextView:width_columns ##### -->
+<!-- ##### ARG GtkTextView:width-columns ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextView:pixels_above_lines ##### -->
+<!-- ##### ARG GtkTextView:pixels-above-lines ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextView:pixels_below_lines ##### -->
+<!-- ##### ARG GtkTextView:pixels-below-lines ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextView:pixels_inside_wrap ##### -->
+<!-- ##### ARG GtkTextView:pixels-inside-wrap ##### -->
 <para>
 
 </para>
@@ -410,7 +630,7 @@ types related to the text widget and how they work together.
 
 </para>
 
-<!-- ##### ARG GtkTextView:wrap_mode ##### -->
+<!-- ##### ARG GtkTextView:wrap-mode ##### -->
 <para>
 
 </para>
@@ -420,12 +640,12 @@ types related to the text widget and how they work together.
 
 </para>
 
-<!-- ##### ARG GtkTextView:left_margin ##### -->
+<!-- ##### ARG GtkTextView:left-margin ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextView:right_margin ##### -->
+<!-- ##### ARG GtkTextView:right-margin ##### -->
 <para>
 
 </para>

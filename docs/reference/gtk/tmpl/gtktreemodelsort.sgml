@@ -44,10 +44,12 @@ GtkTreeModelSort
 
 </para>
 
-@model: 
+@child_model: 
 @func: 
 @sort_col: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@model: 
 
 
 <!-- ##### FUNCTION gtk_tree_model_sort_set_model ##### -->
@@ -56,10 +58,12 @@ GtkTreeModelSort
 </para>
 
 @tree_model_sort: 
+@child_model: 
+<!-- # Unused Parameters # -->
 @model: 
 
 
-<!-- ##### FUNCTION gtk_tree_model_sort_set_sort_col ##### -->
+<!-- ##### FUNCTION gtk_tree_model_sort_set_sort_column ##### -->
 <para>
 
 </para>
@@ -77,21 +81,25 @@ GtkTreeModelSort
 @func: 
 
 
-<!-- ##### FUNCTION gtk_tree_model_sort_resort ##### -->
-<para>
-
-</para>
-
-@tree_model_sort: 
-
-
 <!-- ##### FUNCTION gtk_tree_model_sort_convert_path ##### -->
 <para>
 
 </para>
 
 @tree_model_sort: 
-@path: 
+@child_path: 
 @Returns: 
+<!-- # Unused Parameters # -->
+@path: 
+
+
+<!-- ##### FUNCTION gtk_tree_model_sort_convert_iter ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sort_iter: 
+@child_iter: 
 
 

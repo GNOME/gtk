@@ -210,9 +210,8 @@ there own references, if they believe they are nearly primary
 ownership of the object.
 GTK_CONNECTED: refers to whether are signals are connected to this
 object.
-@GTK_RESERVED: 
-@GTK_CONSTRUCTED: refers to whether the arguments for this object are
-ready.
+@GTK_RESERVED_1: 
+@GTK_RESERVED_2: 
 
 <!-- ##### MACRO GTK_OBJECT_FLAGS ##### -->
 <para>
@@ -244,14 +243,6 @@ refers to decrementing that original reference count.
 <!-- ##### MACRO GTK_OBJECT_CONNECTED ##### -->
 <para>
 Test whether a GtkObject has had a signal connected to it.
-</para>
-
-@obj: the object to examine.
-
-
-<!-- ##### MACRO GTK_OBJECT_CONSTRUCTED ##### -->
-<para>
-Test whether a GtkObject's arguments have been prepared.
 </para>
 
 @obj: the object to examine.
@@ -289,55 +280,6 @@ set.  Hence this flag is not allowed with #GTK_ARG_WRITABLE,
 and is redundant with #GTK_ARG_CONSTRUCT.
 @GTK_ARG_CHILD_ARG: an argument type that applies to (and may be different for)
 each child.  Used by #GtkContainer.
-@GTK_ARG_MASK: the bitwise-OR of all the flags.
-@GTK_ARG_READWRITE: the argument is readable and writable.
-
-<!-- ##### FUNCTION gtk_object_class_user_signal_new ##### -->
-<para>
-Define a signal-handler for a new signal on an already defined
-object.
-</para>
-<para>
-See the signal documentation for more general information.
-</para>
-
-@klass: the object class to define the signal for.
-@name: the name of the signal.
-@signal_flags: the default emission behavior for the signal.
-See gtk_signal_new().
-@marshaller: a function that will take an array of GtkArgs
-and invoke the appropriate handler with the normal calling
-conventions.
-@return_val: specify the return-value type for the signal
-(or GTK_TYPE_NONE for no return-value).
-@nparams: specify the number of parameters the signal
-receives from the caller of gtk_signal_emit().
-@Varargs: list of nparams #GtkTypes to pass to the signal handlers.
-@Returns: the signal id.  (See #GtkSignals)
-
-
-<!-- ##### FUNCTION gtk_object_class_user_signal_newv ##### -->
-<para>
-Define a signal-handler for a new signal on an already defined
-object.
-</para>
-
-@klass: the object class to define the signal for.
-@name: the name of the signal.
-@signal_flags: the default emission behavior for the signal.
-See gtk_signal_new().
-@marshaller: takes a GtkObject, a #GtkSignalFunc, and an array
-of arguments, and invokes the function using the appropriate
-calling conventions.  Usually just select a function
-out of gtkmarshal.h.
-@return_val: specify the return-value type for the signal (possibly
-#GTK_TYPE_NONE).
-@nparams: specify the number of parameters the signal
-receives from the caller of gtk_signal_emit().
-@params: array of #GtkTypes the signal handlers for this signal
-should have in their prototype (of length nparams).
-@Returns: the signal id.  (See #GtkSignals)
-
 
 <!-- ##### FUNCTION gtk_object_new ##### -->
 <para>
@@ -348,63 +290,13 @@ function.
 @type: the type identifying this object.  Returned by gtk_type_unique()
 although (for a properly-written object it should be accessible through
 #GTK_TYPE_FOO.)
-@first_arg_name: name of the first argument to set when constructing
-the object.
+@first_property_name: 
 @Varargs: the first argument's value, followed by any number of
 name/argument-value pairs, terminated with NULL.
 @Returns: the new GtkObject.
-
-
-<!-- ##### FUNCTION gtk_object_newv ##### -->
-<para>
-Construct an object with an array of arguments.
-</para>
-
-@object_type: the type of the object to create.
-@n_args: the number of arguments to set.
-@args: an array of n_args arguments (which are name and value pairs).
-@Returns: the new GtkObject.
-
-
-<!-- ##### FUNCTION gtk_object_constructed ##### -->
-<para>
-Mark an allocated object as constructed.
-This is used for situations
-that require precise control of the construction process.
-</para>
-<para>
-This is done when gtk_object_default_construct() is inadequate.
-In #GtkCList the need arises because #GtkCList does construction work that
-must happen <emphasis>after</emphasis> its derivers.  This work
-cannot be done in an initializer function, so an alternate
-constructor is mandatory.  It calls gtk_object_constructed() to
-indicate it has done its job, so that no other constructor will
-be invoked.
-</para>
-<para>
-Normally this function is just automatically run from
-gtk_object_default_construct().
-</para>
-
-@object: object which has been constructed.  This is usually
-done automatically by gtk_object_new() and gtk_object_newv().
-
-
-<!-- ##### FUNCTION gtk_object_default_construct ##### -->
-<para>
-This function is called to construct arguments that haven't been initialized
-but have the #GTK_ARG_CONSTRUCT flag set.
-</para>
-<para>
-All number arguments are set to 0.  All pointers and strings
-are set to NULL.
-</para>
-<para>
-Normally invoked by gtk_object_new() automatically; gtk_type_new() can
-be used to bypass it.
-</para>
-
-@object: the object to initialize.
+<!-- # Unused Parameters # -->
+@first_arg_name: name of the first argument to set when constructing
+the object.
 
 
 <!-- ##### FUNCTION gtk_object_sink ##### -->
@@ -501,18 +393,10 @@ See gtk_object_unref().
 </para>
 
 @object: 
-@first_arg_name: 
+@first_property_name: 
 @Varargs: 
-
-
-<!-- ##### FUNCTION gtk_object_getv ##### -->
-<para>
-Gets an array of argument values from an object.
-</para>
-
-@object: the object to get arguments from.
-@n_args: the number of arguments to query.
-@args: the arguments to fill in.
+<!-- # Unused Parameters # -->
+@first_arg_name: 
 
 
 <!-- ##### FUNCTION gtk_object_set ##### -->
@@ -537,39 +421,11 @@ void set_box_properties(GtkBox* box)
 </para>
 
 @object: the object whose arguments should be set.
-@first_arg_name: the name of the first argument to set.
+@first_property_name: 
 @Varargs: the value of the first argument, followed optionally
 by more name/value pairs, followed by NULL.
-
-
-<!-- ##### FUNCTION gtk_object_setv ##### -->
-<para>
-Set an array of arguments.
-</para>
-
-@object: the object whose arguments should be set.
-@n_args: the number of arguments to set.
-@args: the desired values, as an array of #GtkArgs (which contain 
-the names, types, and values of the arguments).
-
-
-<!-- ##### FUNCTION gtk_object_query_args ##### -->
-<para>
-Get all the arguments that may be used for a given type.
-</para>
-<para>
-In Java, this type of mechanism is called 
-<wordasword>introspection</wordasword>.  It is used by applications
-like Glade, that have to determine what can be done to an object
-at run-time.
-</para>
-
-@class_type: the GtkType of the ObjectClass
-(returned from GTK_OBJECT_CLASS(class)-&gt;type for example).
-@arg_flags: if non-NULL, obtains the #GtkArgFlags that apply to
-each argument.  You must g_free() this if you request it.
-@n_args: the number of arguments is returned in this field.
-@Returns: an array of arguments, that you must deallocate with g_free().
+<!-- # Unused Parameters # -->
+@first_arg_name: the name of the first argument to set.
 
 
 <!-- ##### FUNCTION gtk_object_set_data ##### -->
@@ -668,17 +524,6 @@ writing applications.
 
 @object: the object.
 @Returns: the user data field for object.
-
-
-<!-- ##### FUNCTION gtk_object_class_add_signals ##### -->
-<para>
-Add an array of signals to a #GtkObjectClass.
-Usually this is called when registering a new type of object.
-</para>
-
-@klass: the object class to append signals to.
-@signals: the signals to append.
-@nsignals: the number of signals being appended.
 
 
 <!-- ##### FUNCTION gtk_object_add_arg_type ##### -->
@@ -802,53 +647,6 @@ so it is good to use this macro.
 
 
 
-<!-- ##### FUNCTION gtk_object_arg_set ##### -->
-<para>
-Private function to set an argument and argument info to an object.
-</para>
-
-@object: the object whose argument should be set.
-@arg: the argument.
-@info: infomation about this type of argument in general.
-
-
-<!-- ##### FUNCTION gtk_object_arg_get ##### -->
-<para>
-Private function to get an argument and argument info from an object.
-</para>
-
-@object: the object whose argument should be retrieved.
-@arg: the argument, for the name on input, the rest is filled on output.
-@info: a #GtkArgInfo structure to optionally fill in.
-
-
-<!-- ##### FUNCTION gtk_object_args_collect ##### -->
-<para>
-Private: Gets an array of #GtkArgs from a va_list C structure.
-</para>
-
-@object_type: the type of object to collect arguments for.
-@arg_list_p: pointer to be filled in with a list of parsed arguments.
-@info_list_p: optional pointer for a returned list #GtkArgInfos.
-@first_arg_name: name of first argument.
-@var_args: value of first argument, followed by more key/value pairs,
-terminated by NULL.
-@Returns: an error message, or NULL on success.
-It is the caller's responsibility to call g_free() in the event of error.
-
-
-<!-- ##### FUNCTION gtk_object_arg_get_info ##### -->
-<para>
-Query information about an argument type.
-</para>
-
-@object_type: type of object to query about.
-@arg_name: name of the argument.
-@info_p: pointer to be filled in with a pointer to the GtkArgInfo.
-@Returns: an error message, or NULL on success.
-It is the caller's responsibility to call g_free() in the event of error.
-
-
 <!-- ##### SIGNAL GtkObject::destroy ##### -->
 <para>
 Indicates that an object is being destroyed.
@@ -856,45 +654,8 @@ Indicates that an object is being destroyed.
 
 @object: the object which received the signal.
 
-<!-- ##### ARG GtkObject:user_data ##### -->
+<!-- ##### ARG GtkObject:user-data ##### -->
 <para>
 A pointer for convenience when programming applications.
-</para>
-
-<!-- ##### ARG GtkObject:signal ##### -->
-<para>
-Setting this with a GtkType of GTK_TYPE_SIGNAL connects
-the signal to the object.
-</para>
-
-<!-- ##### ARG GtkObject:signal_after ##### -->
-<para>
-Setting this with a GtkType of GTK_TYPE_SIGNAL connects
-the signal to the object, so that the signal is always run
-after other user handlers and the default handler.
-</para>
-
-<!-- ##### ARG GtkObject:object_signal ##### -->
-<para>
-Setting this with a GtkType of GTK_TYPE_SIGNAL connects
-the signal to the object, so that the user data and objects
-and swapped when the signal handler is invoked.
-</para>
-<para>
-This is useful for handlers that are primarily notifying
-other objects and could just invoke an already existing function
-if the parameters were swapped.
-See gtk_signal_connect_object() for more details.
-</para>
-
-<!-- ##### ARG GtkObject:object_signal_after ##### -->
-<para>
-Setting this with a GtkType of GTK_TYPE_SIGNAL connects
-the signal to the object, so that the user data and objects
-and swapped when the signal handler is invoked,
-and so that the handler is invoked after all others.
-</para>
-<para>
-See gtk_signal_connect_object_after() for more details.
 </para>
 

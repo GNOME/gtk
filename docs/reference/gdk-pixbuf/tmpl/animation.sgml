@@ -98,6 +98,27 @@ animation
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_frame_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@frame: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_free ##### -->
+<para>
+
+</para>
+
+@frame: 
+<!-- # Unused Parameters # -->
+@src: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_frame_get_pixbuf ##### -->
 <para>
 

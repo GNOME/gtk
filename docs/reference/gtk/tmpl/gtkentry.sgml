@@ -268,7 +268,7 @@ to fit.
 
 @entry: the object which received the signal.
 
-<!-- ##### ARG GtkEntry:text_position ##### -->
+<!-- ##### ARG GtkEntry:text-position ##### -->
 <para>
 
 </para>
@@ -278,7 +278,7 @@ to fit.
 
 </para>
 
-<!-- ##### ARG GtkEntry:max_length ##### -->
+<!-- ##### ARG GtkEntry:max-length ##### -->
 <para>
 Determines the maximum allowed length of the contents
 of the widget. See gtk_entry_set_max_length().
@@ -290,7 +290,7 @@ Determines whether the contents of the entry widget
 are visible or not. See gtk_entry_set_visibility().
 </para>
 
-<!-- ##### ARG GtkEntry:invisible_char ##### -->
+<!-- ##### ARG GtkEntry:invisible-char ##### -->
 <para>
 
 </para>

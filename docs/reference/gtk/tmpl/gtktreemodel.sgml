@@ -28,9 +28,9 @@ gtktreemodel
 </para>
 
 @stamp: 
-@tree_node: 
-@tree_node2: 
-@tree_node3: 
+@user_data: 
+@user_data2: 
+@user_data3: 
 
 <!-- ##### STRUCT GtkTreePath ##### -->
 <para>
@@ -54,6 +54,7 @@ gtktreemodel
 @inserted: 
 @child_toggled: 
 @deleted: 
+@reordered: 
 @get_flags: 
 @get_n_columns: 
 @get_column_type: 

@@ -121,6 +121,16 @@ Colormaps and Colors
 @ncolors: 
 
 
+<!-- ##### FUNCTION gdk_colormap_query_color ##### -->
+<para>
+
+</para>
+
+@colormap: 
+@pixel: 
+@result: 
+
+
 <!-- ##### FUNCTION gdk_colormap_get_visual ##### -->
 <para>
 

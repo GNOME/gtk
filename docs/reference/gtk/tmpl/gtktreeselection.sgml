@@ -14,7 +14,7 @@ GtkTreeSelection
 
 </para>
 
-<!-- ##### ENUM GtkTreeSelectionType ##### -->
+<!-- ##### ENUM GtkTreeSelectionMode ##### -->
 <para>
 
 </para>
@@ -44,15 +44,7 @@ GtkTreeSelection
 @data: 
 
 
-<!-- ##### FUNCTION gtk_tree_selection_new ##### -->
-<para>
-
-</para>
-
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_selection_set_type ##### -->
+<!-- ##### FUNCTION gtk_tree_selection_set_mode ##### -->
 <para>
 
 </para>
@@ -72,6 +64,15 @@ GtkTreeSelection
 
 
 <!-- ##### FUNCTION gtk_tree_selection_get_user_data ##### -->
+<para>
+
+</para>
+
+@selection: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_selection_get_tree_view ##### -->
 <para>
 
 </para>
@@ -161,23 +162,5 @@ GtkTreeSelection
 @selection: 
 @start_path: 
 @end_path: 
-
-
-<!-- ##### FUNCTION gtk_tree_selection_new_with_tree_view ##### -->
-<para>
-
-</para>
-
-@tree_view: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_tree_selection_set_tree_view ##### -->
-<para>
-
-</para>
-
-@selection: 
-@tree_view: 
 
 

@@ -95,6 +95,3 @@ GtkObject
   GtkIMContext
     GtkIMMulticontext
   GtkItemFactory
-  GtkTextBuffer
-  GtkTextTag
-  GtkTextTagTable

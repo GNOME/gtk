@@ -192,27 +192,27 @@ GtkPacker
 
 </para>
 
-<!-- ##### ARG GtkPacker:default_border_width ##### -->
+<!-- ##### ARG GtkPacker:default-border-width ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkPacker:default_pad_x ##### -->
+<!-- ##### ARG GtkPacker:default-pad-x ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkPacker:default_pad_y ##### -->
+<!-- ##### ARG GtkPacker:default-pad-y ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkPacker:default_ipad_x ##### -->
+<!-- ##### ARG GtkPacker:default-ipad-x ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkPacker:default_ipad_y ##### -->
+<!-- ##### ARG GtkPacker:default-ipad-y ##### -->
 <para>
 
 </para>

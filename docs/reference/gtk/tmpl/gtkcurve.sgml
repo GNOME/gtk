@@ -123,27 +123,27 @@ calling gtk_curve_reset() or gtk_curve_set_gamma().
 
 @curve: the object which received the signal.
 
-<!-- ##### ARG GtkCurve:curve_type ##### -->
+<!-- ##### ARG GtkCurve:curve-type ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCurve:min_x ##### -->
+<!-- ##### ARG GtkCurve:min-x ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCurve:max_x ##### -->
+<!-- ##### ARG GtkCurve:max-x ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCurve:min_y ##### -->
+<!-- ##### ARG GtkCurve:min-y ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkCurve:max_y ##### -->
+<!-- ##### ARG GtkCurve:max-y ##### -->
 <para>
 
 </para>

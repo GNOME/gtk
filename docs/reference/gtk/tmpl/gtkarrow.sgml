@@ -77,12 +77,12 @@ Sets the direction and style of the #GtkArrow, @arrow.
 @shadow_type: a valid #GtkShadowType.
 
 
-<!-- ##### ARG GtkArrow:arrow_type ##### -->
+<!-- ##### ARG GtkArrow:arrow-type ##### -->
 <para>
 the arrow direction, one of #GtkArrowType.
 </para>
 
-<!-- ##### ARG GtkArrow:shadow_type ##### -->
+<!-- ##### ARG GtkArrow:shadow-type ##### -->
 <para>
 the arrow style, one of #GtkShadowType.
 </para>

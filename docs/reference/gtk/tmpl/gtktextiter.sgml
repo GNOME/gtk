@@ -25,6 +25,13 @@ types related to the text widget and how they work together.
 
 </para>
 
+@parent_instance: 
+@tag_table: 
+@btree: 
+@clipboard_contents: 
+@log_attr_cache: 
+@user_action_count: 
+@modified: 
 
 <!-- ##### STRUCT GtkTextIter ##### -->
 <para>
@@ -251,6 +258,33 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_starts_word ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_ends_word ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_inside_word ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_starts_line ##### -->
 <para>
 
@@ -269,7 +303,25 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_is_cursor_position ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_get_chars_in_line ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_bytes_in_line ##### -->
 <para>
 
 </para>
@@ -285,6 +337,15 @@ types related to the text widget and how they work together.
 
 @iter: 
 @values: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_get_language ##### -->
+<para>
+
+</para>
+
+@iter: 
 @Returns: 
 
 
@@ -306,7 +367,7 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_next_char ##### -->
+<!-- ##### FUNCTION gtk_text_iter_forward_char ##### -->
 <para>
 
 </para>
@@ -315,7 +376,7 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_prev_char ##### -->
+<!-- ##### FUNCTION gtk_text_iter_backward_char ##### -->
 <para>
 
 </para>
@@ -420,6 +481,44 @@ types related to the text widget and how they work together.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_text_iter_forward_cursor_position ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_cursor_position ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_forward_cursor_positions ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_text_iter_backward_cursor_positions ##### -->
+<para>
+
+</para>
+
+@iter: 
+@count: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_text_iter_set_offset ##### -->
 <para>
 
@@ -464,7 +563,7 @@ types related to the text widget and how they work together.
 @iter: 
 
 
-<!-- ##### FUNCTION gtk_text_iter_forward_to_newline ##### -->
+<!-- ##### FUNCTION gtk_text_iter_forward_to_line_end ##### -->
 <para>
 
 </para>

@@ -156,7 +156,7 @@ Should be connected if you wish to perform an action whenever the
 Sets whether the toggle button should be pressed in or not.
 </para>
 
-<!-- ##### ARG GtkToggleButton:draw_indicator ##### -->
+<!-- ##### ARG GtkToggleButton:draw-indicator ##### -->
 <para>
 A value of TRUE causes the toggle button to be invisible. FALSE displays it
 again.

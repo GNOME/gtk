@@ -179,7 +179,7 @@ GtkOldEditable
 @oldeditable: the object which received the signal.
 @arg1: 
 
-<!-- ##### ARG GtkOldEditable:text_position ##### -->
+<!-- ##### ARG GtkOldEditable:text-position ##### -->
 <para>
 
 </para>

@@ -1,3 +1,13 @@
+Mon Jan  8 15:21:15 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* Makefile.am (SUBDIRS): Restore build.
+
+	* gdk/gdk-sections.txt gdk/gdk-docs.sgml 
+	  gdk-pixbuf/gdk-pixbuf-sections.txt 
+	  gtk/gtk-sections.txt gtk/gtk-docs.sgml: : Update.
+
+	* */tmpl/*: Changes from update.
+
 Wed Oct 25 15:19:40 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/tmpl/gtknotebook.sgml: Moved function docs into .c

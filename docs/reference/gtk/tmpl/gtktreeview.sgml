@@ -28,10 +28,6 @@ GtkTreeView
 </para>
 
 @parent: 
-@tree_view: 
-@type: 
-@user_func: 
-@user_data: 
 
 <!-- ##### STRUCT GtkTreeSelectionClass ##### -->
 <para>
@@ -155,7 +151,7 @@ GtkTreeView
 @tree_view: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_set_headers_active ##### -->
+<!-- ##### FUNCTION gtk_tree_view_set_headers_clickable ##### -->
 <para>
 
 </para>

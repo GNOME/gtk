@@ -14,7 +14,7 @@ GtkModelSimple
 
 </para>
 
-<!-- ##### STRUCT GtkModelSimple ##### -->
+<!-- ##### STRUCT GtkTreeModelSimple ##### -->
 <para>
 
 </para>
@@ -22,7 +22,7 @@ GtkModelSimple
 @parent: 
 @stamp: 
 
-<!-- ##### FUNCTION gtk_model_simple_new ##### -->
+<!-- ##### FUNCTION gtk_tree_model_simple_new ##### -->
 <para>
 
 </para>
@@ -30,7 +30,7 @@ GtkModelSimple
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_model_simple_node_changed ##### -->
+<!-- ##### FUNCTION gtk_tree_model_simple_changed ##### -->
 <para>
 
 </para>
@@ -40,7 +40,7 @@ GtkModelSimple
 @iter: 
 
 
-<!-- ##### FUNCTION gtk_model_simple_node_inserted ##### -->
+<!-- ##### FUNCTION gtk_tree_model_simple_inserted ##### -->
 <para>
 
 </para>
@@ -50,7 +50,7 @@ GtkModelSimple
 @iter: 
 
 
-<!-- ##### FUNCTION gtk_model_simple_node_child_toggled ##### -->
+<!-- ##### FUNCTION gtk_tree_model_simple_child_toggled ##### -->
 <para>
 
 </para>
@@ -60,7 +60,7 @@ GtkModelSimple
 @iter: 
 
 
-<!-- ##### FUNCTION gtk_model_simple_node_deleted ##### -->
+<!-- ##### FUNCTION gtk_tree_model_simple_deleted ##### -->
 <para>
 
 </para>

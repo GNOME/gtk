@@ -380,12 +380,12 @@ GtkContainer
 @container: the object which received the signal.
 @widget: 
 
-<!-- ##### ARG GtkContainer:border_width ##### -->
+<!-- ##### ARG GtkContainer:border-width ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkContainer:resize_mode ##### -->
+<!-- ##### ARG GtkContainer:resize-mode ##### -->
 <para>
 
 </para>
@@ -395,7 +395,7 @@ GtkContainer
 
 </para>
 
-<!-- ##### ARG GtkContainer:reallocate_redraws ##### -->
+<!-- ##### ARG GtkContainer:reallocate-redraws ##### -->
 <para>
 
 </para>

@@ -78,3 +78,10 @@ selected value for the option menu.
 @Returns: 
 
 
+<!-- ##### SIGNAL GtkOptionMenu::changed ##### -->
+<para>
+
+</para>
+
+@optionmenu: the object which received the signal.
+

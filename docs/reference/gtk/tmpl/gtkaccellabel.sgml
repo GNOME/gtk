@@ -125,7 +125,7 @@ accelerators are added or removed from the associated widget.
 @Returns: always returns FALSE.
 
 
-<!-- ##### ARG GtkAccelLabel:accel_widget ##### -->
+<!-- ##### ARG GtkAccelLabel:accel-widget ##### -->
 <para>
 The widget whose accelerators are to be shown by the #GtkAccelLabel.
 </para>

@@ -226,6 +226,16 @@ Gets the timestamp from a #GdkEvent.
 no timestamp.
 
 
+<!-- ##### FUNCTION gdk_event_get_state ##### -->
+<para>
+
+</para>
+
+@event: 
+@state: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gdk_event_get_axis ##### -->
 <para>
 

@@ -201,22 +201,22 @@ changes the homogenous property of table cells. Ie. whether all cells are an equ
 to FALSE if this is not your desired behaviour.
 
 
-<!-- ##### ARG GtkTable:n_rows ##### -->
+<!-- ##### ARG GtkTable:n-rows ##### -->
 <para>
 set or retrieve the number of rows in a table.
 </para>
 
-<!-- ##### ARG GtkTable:n_columns ##### -->
+<!-- ##### ARG GtkTable:n-columns ##### -->
 <para>
 set or retrieve the number of columnsin a table.
 </para>
 
-<!-- ##### ARG GtkTable:row_spacing ##### -->
+<!-- ##### ARG GtkTable:row-spacing ##### -->
 <para>
 set or retrieve the number of pixels of space between each row.
 </para>
 
-<!-- ##### ARG GtkTable:column_spacing ##### -->
+<!-- ##### ARG GtkTable:column-spacing ##### -->
 <para>
 set or retrieve the number of pixels of space between each column.
 </para>

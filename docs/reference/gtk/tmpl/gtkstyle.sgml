@@ -78,14 +78,11 @@ Styles
 @draw_polygon: 
 @draw_arrow: 
 @draw_diamond: 
-@draw_oval: 
 @draw_string: 
 @draw_box: 
 @draw_flat_box: 
 @draw_check: 
 @draw_option: 
-@draw_cross: 
-@draw_ramp: 
 @draw_tab: 
 @draw_shadow_gap: 
 @draw_box_gap: 
@@ -93,6 +90,8 @@ Styles
 @draw_focus: 
 @draw_slider: 
 @draw_handle: 
+@draw_expander: 
+@draw_layout: 
 
 <!-- ##### FUNCTION gtk_style_new ##### -->
 <para>
@@ -299,21 +298,6 @@ Styles
 @height: 
 
 
-<!-- ##### FUNCTION gtk_draw_oval ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@shadow_type: 
-@x: 
-@y: 
-@width: 
-@height: 
-
-
 <!-- ##### FUNCTION gtk_draw_string ##### -->
 <para>
 
@@ -361,21 +345,6 @@ Styles
 
 
 <!-- ##### FUNCTION gtk_draw_check ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@shadow_type: 
-@x: 
-@y: 
-@width: 
-@height: 
-
-
-<!-- ##### FUNCTION gtk_draw_cross ##### -->
 <para>
 
 </para>
@@ -465,22 +434,6 @@ Styles
 @height: 
 
 
-<!-- ##### FUNCTION gtk_draw_ramp ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@shadow_type: 
-@arrow_type: 
-@x: 
-@y: 
-@width: 
-@height: 
-
-
 <!-- ##### FUNCTION gtk_draw_shadow_gap ##### -->
 <para>
 
@@ -528,6 +481,32 @@ Styles
 @y: 
 @width: 
 @height: 
+
+
+<!-- ##### FUNCTION gtk_draw_expander ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@x: 
+@y: 
+@is_open: 
+
+
+<!-- ##### FUNCTION gtk_draw_layout ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@x: 
+@y: 
+@layout: 
 
 
 <!-- ##### FUNCTION gtk_paint_arrow ##### -->
@@ -590,24 +569,6 @@ Styles
 
 
 <!-- ##### FUNCTION gtk_paint_check ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@shadow_type: 
-@area: 
-@widget: 
-@detail: 
-@x: 
-@y: 
-@width: 
-@height: 
-
-
-<!-- ##### FUNCTION gtk_paint_cross ##### -->
 <para>
 
 </para>
@@ -749,24 +710,6 @@ Styles
 @height: 
 
 
-<!-- ##### FUNCTION gtk_paint_oval ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@shadow_type: 
-@area: 
-@widget: 
-@detail: 
-@x: 
-@y: 
-@width: 
-@height: 
-
-
 <!-- ##### FUNCTION gtk_paint_polygon ##### -->
 <para>
 
@@ -782,25 +725,6 @@ Styles
 @points: 
 @npoints: 
 @fill: 
-
-
-<!-- ##### FUNCTION gtk_paint_ramp ##### -->
-<para>
-
-</para>
-
-@style: 
-@window: 
-@state_type: 
-@shadow_type: 
-@area: 
-@widget: 
-@detail: 
-@arrow_type: 
-@x: 
-@y: 
-@width: 
-@height: 
 
 
 <!-- ##### FUNCTION gtk_paint_shadow ##### -->
@@ -909,5 +833,37 @@ Styles
 @y1: 
 @y2: 
 @x: 
+
+
+<!-- ##### FUNCTION gtk_paint_expander ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@area: 
+@widget: 
+@detail: 
+@x: 
+@y: 
+@is_open: 
+
+
+<!-- ##### FUNCTION gtk_paint_layout ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@area: 
+@widget: 
+@detail: 
+@x: 
+@y: 
+@layout: 
 
 

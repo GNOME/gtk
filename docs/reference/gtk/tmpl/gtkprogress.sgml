@@ -186,22 +186,22 @@ the #GtkProgress.
 @max: the maximum progress value.
 
 
-<!-- ##### ARG GtkProgress:activity_mode ##### -->
+<!-- ##### ARG GtkProgress:activity-mode ##### -->
 <para>
 A boolean indicating whether activity mode is enabled.
 </para>
 
-<!-- ##### ARG GtkProgress:show_text ##### -->
+<!-- ##### ARG GtkProgress:show-text ##### -->
 <para>
 A boolean indicating whether the progress is shown as text.
 </para>
 
-<!-- ##### ARG GtkProgress:text_xalign ##### -->
+<!-- ##### ARG GtkProgress:text-xalign ##### -->
 <para>
 A number between 0.0 and 1.0 specifying the horizontal alignment.
 </para>
 
-<!-- ##### ARG GtkProgress:text_yalign ##### -->
+<!-- ##### ARG GtkProgress:text-yalign ##### -->
 <para>
 A number between 0.0 and 1.0 specifying the vertical alignment.
 </para>

@@ -182,17 +182,17 @@ Horizontal adjustment. See gtk_scrolled_window_set_hadjustment(), gtk_scrolled_w
 Vertical adjustment. See gtk_scrolled_window_set_vadjustment(), gtk_scrolled_window_get_vadjustment().
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:hscrollbar_policy ##### -->
+<!-- ##### ARG GtkScrolledWindow:hscrollbar-policy ##### -->
 <para>
 Horizontal scrollbar policy (show scrollbar always, never, or "when appropriate").
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:vscrollbar_policy ##### -->
+<!-- ##### ARG GtkScrolledWindow:vscrollbar-policy ##### -->
 <para>
 Vertical scrollbar policy (show scrollbar always, never, or "when appropriate").
 </para>
 
-<!-- ##### ARG GtkScrolledWindow:window_placement ##### -->
+<!-- ##### ARG GtkScrolledWindow:window-placement ##### -->
 <para>
 Position of child window with respect to scrollbars; top left, top
 right, bottom left, bottom right.

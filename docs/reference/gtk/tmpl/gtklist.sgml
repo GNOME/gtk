@@ -355,7 +355,7 @@ The child @widget has just been unselected.
 @list: the object which received the signal.
 @widget: the newly unselected child.
 
-<!-- ##### ARG GtkList:selection_mode ##### -->
+<!-- ##### ARG GtkList:selection-mode ##### -->
 <para>
 
 </para>

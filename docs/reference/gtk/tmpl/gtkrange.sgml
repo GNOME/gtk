@@ -175,7 +175,7 @@ GtkRange
 @range: 
 
 
-<!-- ##### ARG GtkRange:update_policy ##### -->
+<!-- ##### ARG GtkRange:update-policy ##### -->
 <para>
 
 </para>

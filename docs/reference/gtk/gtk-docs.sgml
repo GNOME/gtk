@@ -100,7 +100,7 @@
 <!entity gtk-GtkTreeStore SYSTEM "sgml/gtktreestore.sgml">
 <!entity gtk-GtkTreeViewColumn SYSTEM "sgml/gtktreeviewcolumn.sgml">
 <!entity gtk-GtkTreeView SYSTEM "sgml/gtktreeview.sgml">
-<!entity gtk-GtkModelSimple SYSTEM "sgml/gtkmodelsimple.sgml">
+<!entity gtk-GtkTreeModelSimple SYSTEM "sgml/gtktreemodelsimple.sgml">
 <!entity gtk-GtkCellRenderer SYSTEM "sgml/gtkcellrenderer.sgml">
 <!entity gtk-GtkCellRendererPixbuf SYSTEM "sgml/gtkcellrendererpixbuf.sgml">
 <!entity gtk-GtkCellRendererText SYSTEM "sgml/gtkcellrenderertext.sgml">
@@ -276,7 +276,7 @@ An advanced widget set.
         &gtk-GtkTreeStore;
         &gtk-GtkTreeViewColumn;
         &gtk-GtkTreeView;
-        &gtk-GtkModelSimple;
+        &gtk-GtkTreeModelSimple;
         &gtk-GtkTreeModelSort;
         &gtk-GtkCellRenderer;
         &gtk-GtkCellRendererPixbuf;

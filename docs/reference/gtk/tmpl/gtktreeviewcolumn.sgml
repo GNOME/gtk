@@ -32,7 +32,7 @@ GtkTreeViewColumn
 @window: 
 @justification: 
 @id: 
-@size: 
+@width: 
 @min_width: 
 @max_width: 
 @func: 
@@ -45,7 +45,7 @@ GtkTreeViewColumn
 @button_active: 
 @dirty: 
 
-<!-- ##### ENUM GtkTreeViewColumnType ##### -->
+<!-- ##### ENUM GtkTreeViewColumnSizing ##### -->
 <para>
 
 </para>
@@ -141,7 +141,7 @@ GtkTreeViewColumn
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_set_col_type ##### -->
+<!-- ##### FUNCTION gtk_tree_view_column_set_sizing ##### -->
 <para>
 
 </para>
@@ -168,15 +168,13 @@ GtkTreeViewColumn
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_set_size ##### -->
+<!-- ##### FUNCTION gtk_tree_view_column_set_width ##### -->
 <para>
 
 </para>
 
 @tree_column: 
 @size: 
-<!-- # Unused Parameters # -->
-@width: 
 
 
 <!-- ##### FUNCTION gtk_tree_view_column_set_min_width ##### -->
@@ -233,7 +231,7 @@ GtkTreeViewColumn
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_tree_view_column_set_header_active ##### -->
+<!-- ##### FUNCTION gtk_tree_view_column_set_header_clickable ##### -->
 <para>
 
 </para>
@@ -276,5 +274,13 @@ GtkTreeViewColumn
 
 @tree_column: 
 @Returns: 
+
+
+<!-- ##### FUNCTION gtk_tree_view_column_clicked ##### -->
+<para>
+
+</para>
+
+@tree_column: 
 
 

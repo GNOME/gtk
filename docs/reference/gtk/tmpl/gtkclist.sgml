@@ -97,15 +97,6 @@ widget's column titles is set.
 @clist: The #GtkCList widget to check.
 
 
-<!-- ##### MACRO GTK_CLIST_CHILD_HAS_FOCUS ##### -->
-<para>
-A macro to check whether a child widget of the CList
-has the focus.
-</para>
-
-@clist: The #GtkCList widget to check.
-
-
 <!-- ##### MACRO GTK_CLIST_ADD_MODE ##### -->
 <para>
 A macro to test whether the CList is in "add mode."
@@ -344,19 +335,6 @@ An enumeration for drag operations.
 @GTK_CLIST_DRAG_BEFORE: 
 @GTK_CLIST_DRAG_INTO: 
 @GTK_CLIST_DRAG_AFTER: 
-
-<!-- ##### FUNCTION gtk_clist_construct ##### -->
-<para>
-Initializes a previously allocated #GtkCList widget for use.  This should not
-normally be used to create a #GtkCList widget.  Use gtk_clist_new() instead.
-</para>
-
-@clist: A pointer to an uninitialized #GtkCList widget.
-@columns: The number of columns the #GtkCList should have.
-@titles: An array of strings that should be used as the titles i
-of the columns.  There should be enough strings in the array for
-the number of columns specified.
-
 
 <!-- ##### FUNCTION gtk_clist_new ##### -->
 <para>
@@ -1279,22 +1257,22 @@ previously selected row in a "single" or "browse" mode CList.
 @column: The column where the selection occured.
 @event: 
 
-<!-- ##### ARG GtkCList:n_columns ##### -->
+<!-- ##### ARG GtkCList:n-columns ##### -->
 <para>
 An integer value for a column.
 </para>
 
-<!-- ##### ARG GtkCList:shadow_type ##### -->
+<!-- ##### ARG GtkCList:shadow-type ##### -->
 <para>
 Sets the shadowing for the CList.
 </para>
 
-<!-- ##### ARG GtkCList:selection_mode ##### -->
+<!-- ##### ARG GtkCList:selection-mode ##### -->
 <para>
 Sets the type of selection mode for the CList.
 </para>
 
-<!-- ##### ARG GtkCList:row_height ##### -->
+<!-- ##### ARG GtkCList:row-height ##### -->
 <para>
 An integer value representing the height of a row in pixels.
 </para>
@@ -1305,19 +1283,19 @@ A boolean value for determining if the user can re-order the CList's
 columns.
 </para>
 
-<!-- ##### ARG GtkCList:titles_active ##### -->
+<!-- ##### ARG GtkCList:titles-active ##### -->
 <para>
 A boolean value for setting whether the column titles can be
 clicked.
 </para>
 
-<!-- ##### ARG GtkCList:use_drag_icons ##### -->
+<!-- ##### ARG GtkCList:use-drag-icons ##### -->
 <para>
 A boolean value for setting whether to use icons during drag
 operations.
 </para>
 
-<!-- ##### ARG GtkCList:sort_type ##### -->
+<!-- ##### ARG GtkCList:sort-type ##### -->
 <para>
 
 </para>

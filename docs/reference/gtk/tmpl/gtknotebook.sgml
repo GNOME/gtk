@@ -41,6 +41,7 @@ will be a popup menu allowing the users to switch pages.
 The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 </para>
 
+
 <!-- ##### FUNCTION gtk_notebook_new ##### -->
 <para>
 </para>
@@ -52,28 +53,28 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 <para>
 </para>
 
-@notebook:
-@child:
-@tab_label:
+@notebook: 
+@child: 
+@tab_label: 
 
 
 <!-- ##### FUNCTION gtk_notebook_append_page_menu ##### -->
 <para>
 </para>
 
-@notebook:
-@child:
-@tab_label:
-@menu_label:
+@notebook: 
+@child: 
+@tab_label: 
+@menu_label: 
 
 
 <!-- ##### FUNCTION gtk_notebook_prepend_page ##### -->
 <para>
 </para>
 
-@notebook:
-@child: the 
-@tab_label:
+@notebook: 
+@child: the
+@tab_label: 
 
 
 <!-- ##### FUNCTION gtk_notebook_prepend_page_menu ##### -->
@@ -82,29 +83,29 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 
 @notebook: 
 @child: 
-@tab_label:
-@menu_label:
+@tab_label: 
+@menu_label: 
 
 
 <!-- ##### FUNCTION gtk_notebook_insert_page ##### -->
 <para>
 </para>
 
-@notebook:
-@child:
-@tab_label:
-@position:
+@notebook: 
+@child: 
+@tab_label: 
+@position: 
 
 
 <!-- ##### FUNCTION gtk_notebook_insert_page_menu ##### -->
 <para>
 </para>
 
-@notebook:
-@child:
-@tab_label:
+@notebook: 
+@child: 
+@tab_label: 
 @menu_label: 
-@position:
+@position: 
 
 
 <!-- ##### FUNCTION gtk_notebook_remove_page ##### -->
@@ -112,7 +113,7 @@ The #GtkNotebookPage is an opaque implementation detail of #GtkNotebook.
 </para>
 
 @notebook: 
-@page_num:
+@page_num: 
 
 
 <!-- ##### MACRO gtk_notebook_current_page ##### -->
@@ -126,31 +127,31 @@ Compatibility macro; in gtkcompat.h.
 <para>
 </para>
 
-@notebook:
-@child:
-@Returns:
+@notebook: 
+@child: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_page ##### -->
 <para>
 </para>
 
-@notebook:
-@page_num:
+@notebook: 
+@page_num: 
 
 
 <!-- ##### FUNCTION gtk_notebook_next_page ##### -->
 <para>
 </para>
 
-@notebook:
+@notebook: 
 
 
 <!-- ##### FUNCTION gtk_notebook_prev_page ##### -->
 <para>
 </para>
 
-@notebook:
+@notebook: 
 
 
 <!-- ##### FUNCTION gtk_notebook_reorder_child ##### -->
@@ -158,8 +159,11 @@ Compatibility macro; in gtkcompat.h.
 </para>
 
 @notebook
-@child:
-@position:
+
+@notebook: 
+@child: 
+@position: 
+
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_pos ##### -->
 <para>
@@ -173,46 +177,47 @@ Compatibility macro; in gtkcompat.h.
 <para>
 </para>
 
-@notebook:
-@show_tabs:
+@notebook: 
+@show_tabs: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_show_border ##### -->
 <para>
 </para>
 
-@notebook:
-@show_border:
+@notebook: 
+@show_border: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_scrollable ##### -->
 <para>
 </para>
 
-@notebook:
-@scrollable:
+@notebook: 
+@scrollable: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_border ##### -->
 <para>
 </para>
 
-@notebook:
-@border_width:
+@notebook: 
+@border_width: 
 
 
 <!-- ##### FUNCTION gtk_notebook_popup_enable ##### -->
 <para>
 </para>
 
-@notebook:
+@notebook: 
 
 
 <!-- ##### FUNCTION gtk_notebook_popup_disable ##### -->
 <para>
 </para>
 
-@notebook:
+@notebook: 
+
 
 <!-- ##### FUNCTION gtk_notebook_get_current_page ##### -->
 <para>
@@ -235,37 +240,37 @@ Compatibility macro; in gtkcompat.h.
 <para>
 </para>
 
-@notebook:
-@page_num:
-@Returns:
+@notebook: 
+@page_num: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_get_tab_label ##### -->
 <para>
 </para>
 
-@notebook:
-@child:
-@Returns:
+@notebook: 
+@child: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_notebook_query_tab_label_packing ##### -->
 <para>
 </para>
 
-@notebook:
-@child:
-@expand:
-@fill:
-@pack_type:
+@notebook: 
+@child: 
+@expand: 
+@fill: 
+@pack_type: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_homogeneous_tabs ##### -->
 <para>
 </para>
 
-@notebook:
-@homogeneous:
+@notebook: 
+@homogeneous: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_menu_label ##### -->
@@ -281,14 +286,17 @@ Compatibility macro; in gtkcompat.h.
 <para>
 </para>
 
+@notebook: 
+@child: 
+@menu_text: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_hborder ##### -->
 <para>
 </para>
 
-@notebook:
-@tab_hborder:
+@notebook: 
+@tab_hborder: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label ##### -->
@@ -296,8 +304,8 @@ Compatibility macro; in gtkcompat.h.
 </para>
 
 @notebook: 
-@child:
-@tab_label:
+@child: 
+@tab_label: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label_packing ##### -->
@@ -306,9 +314,9 @@ Compatibility macro; in gtkcompat.h.
 
 @notebook: 
 @child: 
-@expand:
+@expand: 
 @fill: 
-@pack_type:
+@pack_type: 
 
 
 <!-- ##### FUNCTION gtk_notebook_set_tab_label_text ##### -->
@@ -324,8 +332,8 @@ Compatibility macro; in gtkcompat.h.
 <para>
 </para>
 
-@notebook:
-@tab_vborder:
+@notebook: 
+@tab_vborder: 
 
 
 <!-- ##### SIGNAL GtkNotebook::switch-page ##### -->
@@ -342,32 +350,32 @@ Emitted when the user or a function changes the current page.
 The current page
 </para>
 
-<!-- ##### ARG GtkNotebook:tab_pos ##### -->
+<!-- ##### ARG GtkNotebook:tab-pos ##### -->
 <para>
 The edge at which the tabs for switching pages are drawn.
 </para>
 
-<!-- ##### ARG GtkNotebook:tab_border ##### -->
+<!-- ##### ARG GtkNotebook:tab-border ##### -->
 <para>
 Whether the tab labels have a border on all sides.
 </para>
 
-<!-- ##### ARG GtkNotebook:tab_hborder ##### -->
+<!-- ##### ARG GtkNotebook:tab-hborder ##### -->
 <para>
 Whether the tab labels have a horizontal border.
 </para>
 
-<!-- ##### ARG GtkNotebook:tab_vborder ##### -->
+<!-- ##### ARG GtkNotebook:tab-vborder ##### -->
 <para>
 Whether the tab labels have a vertical border.
 </para>
 
-<!-- ##### ARG GtkNotebook:show_tabs ##### -->
+<!-- ##### ARG GtkNotebook:show-tabs ##### -->
 <para>
 Whether to show tabs for the notebook pages.
 </para>
 
-<!-- ##### ARG GtkNotebook:show_border ##### -->
+<!-- ##### ARG GtkNotebook:show-border ##### -->
 <para>
 Whether to draw a bevel around the noteobook.
 </para>
@@ -378,7 +386,7 @@ Whether the tab label area will have arrows for scrolling if there
 are too many tabs to fit in the area.
 </para>
 
-<!-- ##### ARG GtkNotebook:enable_popup ##### -->
+<!-- ##### ARG GtkNotebook:enable-popup ##### -->
 <para>
 Whether the popup menu for switching pages is enabled.
 </para>

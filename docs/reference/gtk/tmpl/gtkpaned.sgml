@@ -178,7 +178,7 @@ Set the the handle size to @size x @size pixels.
 @Returns: 
 
 
-<!-- ##### ARG GtkPaned:handle_size ##### -->
+<!-- ##### ARG GtkPaned:handle-size ##### -->
 <para>
 
 </para>

@@ -21,6 +21,33 @@ the widget.
 </para>
 
 
+<!-- ##### FUNCTION gtk_model_simple_node_inserted ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
+
+<!-- ##### FUNCTION gtk_widget_newv ##### -->
+<para>
+
+</para>
+
+@type: 
+@nargs: 
+@args: 
+@Returns: 
+
+<!-- ##### MACRO GTK_CLIST_CHILD_HAS_FOCUS ##### -->
+<para>
+A macro to check whether a child widget of the CList
+has the focus.
+</para>
+
+@clist: The #GtkCList widget to check.
+
 <!-- ##### SECTION ./tmpl/gtkmarshal.sgml:Long_Description ##### -->
 <refsect2>
 <title>What are Signal Marshallers?</title>
@@ -91,6 +118,16 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 
 
 
+<!-- ##### FUNCTION gtk_object_class_add_signals ##### -->
+<para>
+Add an array of signals to a #GtkObjectClass.
+Usually this is called when registering a new type of object.
+</para>
+
+@klass: the object class to append signals to.
+@signals: the signals to append.
+@nsignals: the number of signals being appended.
+
 <!-- ##### MACRO gtk_marshal_NONE__UINT_STRING ##### -->
 <para>
 
@@ -119,6 +156,12 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 
 @Returns: 
 
+<!-- ##### ARG GtkTextTag:offset-set ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_theme_engine_create_rc_style ##### -->
 <para>
 
@@ -126,6 +169,14 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 
 @engine: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_tree_selection_set_type ##### -->
+<para>
+
+</para>
+
+@selection: 
+@type: 
 
 <!-- ##### MACRO gtk_marshal_NONE__ENUM_FLOAT ##### -->
 <para>
@@ -172,11 +223,13 @@ void marshal_INT__POINTER_POINTER_INT_INT(GtkObject*    object,
 </para>
 
 
-<!-- ##### ARG GtkTextTag:font_set ##### -->
+<!-- ##### FUNCTION gtk_widget_get ##### -->
 <para>
 
 </para>
 
+@widget: 
+@arg: 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_UINT_ENUM ##### -->
 <para>
@@ -249,6 +302,13 @@ A structure used to return values from @gtk_type_query.
 @object_size: 
 @class_size: 
 
+<!-- ##### MACRO gtk_widget_pop_visual ##### -->
+<para>
+
+</para>
+
+@v: 
+
 <!-- ##### FUNCTION gtk_text_buffer_get_clipboard_contents ##### -->
 <para>
 
@@ -256,13 +316,6 @@ A structure used to return values from @gtk_type_query.
 
 @buffer: 
 @Returns: 
-
-<!-- ##### MACRO gtk_widget_pop_visual ##### -->
-<para>
-
-</para>
-
-@v: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__C_CALLBACK ##### -->
 <para>
@@ -328,6 +381,24 @@ to gtk_signal_remove_emission_hook()).
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_model_simple_node_changed ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_size ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@size: 
+@width: 
+
 <!-- ##### SIGNAL GtkTextView::copy-text ##### -->
 <para>
 
@@ -344,6 +415,15 @@ to gtk_signal_remove_emission_hook()).
 @iter: 
 @x: 
 @y: 
+
+<!-- ##### FUNCTION gtk_object_getv ##### -->
+<para>
+Gets an array of argument values from an object.
+</para>
+
+@object: the object to get arguments from.
+@n_args: the number of arguments to query.
+@args: the arguments to fill in.
 
 <!-- ##### STRUCT GtkThemeEngine ##### -->
 <para>
@@ -379,11 +459,28 @@ Get the type of GtkIdentifier.
 @name: 
 @Returns: 
 
+<!-- ##### STRUCT GtkModelSimple ##### -->
+<para>
+
+</para>
+
+@parent: 
+@stamp: 
+
 <!-- ##### MACRO gtk_marshal_BOOL__POINTER_INT_INT_UINT ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_model_simple_node_child_toggled ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__POINTER_POINTER ##### -->
 <para>
@@ -411,6 +508,15 @@ Get the type of GtkIdentifier.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### ENUM GtkCellRendererType ##### -->
+<para>
+
+</para>
+
+@GTK_CELL_RENDERER_SELECTED: 
+@GTK_CELL_RENDERER_PRELIT: 
+@GTK_CELL_RENDERER_INSENSITIVE: 
 
 <!-- ##### FUNCTION gtk_marshal_NONE__NONE ##### -->
 <para>
@@ -447,6 +553,15 @@ applications.
 @editable: the object which received the signal.
 @is_editable: %TRUE if the user is allowed to edit the text
   in the widget.
+
+<!-- ##### FUNCTION gtk_model_simple_node_deleted ##### -->
+<para>
+
+</para>
+
+@simple: 
+@path: 
+@iter: 
 
 <!-- ##### SIGNAL GtkEditable::delete-text ##### -->
 <para>
@@ -519,6 +634,15 @@ Menu Factory
 @widget: 
 @visual: 
 
+<!-- ##### FUNCTION gtk_widget_setv ##### -->
+<para>
+
+</para>
+
+@widget: 
+@nargs: 
+@args: 
+
 <!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_ENUM_ENUM_POINTER ##### -->
 <para>
 
@@ -572,6 +696,14 @@ Convert a gtk type into its sequence number
 </para>
 
 
+<!-- ##### FUNCTION gtk_text_iter_prev_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
+
 <!-- ##### SECTION ./tmpl/gtkprivate.sgml:Short_Description ##### -->
 
 
@@ -590,6 +722,12 @@ Convert a gtk type into its sequence number
 
 @engine: 
 
+<!-- ##### ARG GtkTextTag:left-wrapped-line-margin-set ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### STRUCT GtkDialogButton ##### -->
 <para>
 Deprecated.
@@ -605,12 +743,6 @@ Deprecated.
 @func: 
 @func_data: 
 @args: 
-
-<!-- ##### ARG GtkTextTag:overstrike_set ##### -->
-<para>
-
-</para>
-
 
 <!-- ##### FUNCTION gtk_text_buffer_cut ##### -->
 <para>
@@ -656,11 +788,35 @@ Control-Return for #GtkText.)
 @func_data: 
 @args: 
 
+<!-- ##### ARG GtkTextTag:left-wrapped-line-margin ##### -->
+<para>
+Pixel width of the left margin of the text for lines after the first
+line in a wrapped paragraph.
+</para>
+
+
 <!-- ##### SECTION ./tmpl/gtkdebug.sgml:See_Also ##### -->
 <para>
 
 </para>
 
+
+<!-- ##### FUNCTION gtk_paint_oval ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@shadow_type: 
+@area: 
+@widget: 
+@detail: 
+@x: 
+@y: 
+@width: 
+@height: 
 
 <!-- ##### MACRO GTK_CONTAINER_RESIZE_PENDING ##### -->
 <para>
@@ -676,6 +832,18 @@ be copied to the clipboard.
 </para>
 
 @editable: the object which received the signal.
+
+<!-- ##### FUNCTION gtk_clist_construct ##### -->
+<para>
+Initializes a previously allocated #GtkCList widget for use.  This should not
+normally be used to create a #GtkCList widget.  Use gtk_clist_new() instead.
+</para>
+
+@clist: A pointer to an uninitialized #GtkCList widget.
+@columns: The number of columns the #GtkCList should have.
+@titles: An array of strings that should be used as the titles i
+of the columns.  There should be enough strings in the array for
+the number of columns specified.
 
 <!-- ##### FUNCTION gtk_menu_factory_remove_entries ##### -->
 <para>
@@ -769,6 +937,20 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_CALLBACK
 </para>
 
 
+<!-- ##### FUNCTION gtk_object_args_collect ##### -->
+<para>
+Private: Gets an array of #GtkArgs from a va_list C structure.
+</para>
+
+@object_type: the type of object to collect arguments for.
+@arg_list_p: pointer to be filled in with a list of parsed arguments.
+@info_list_p: optional pointer for a returned list #GtkArgInfos.
+@first_arg_name: name of first argument.
+@var_args: value of first argument, followed by more key/value pairs,
+terminated by NULL.
+@Returns: an error message, or NULL on success.
+It is the caller's responsibility to call g_free() in the event of error.
+
 <!-- ##### ENUM GtkFontType ##### -->
 <para>
 A set of bit flags used to specify the type of fonts shown
@@ -793,6 +975,15 @@ Get the number of signals defined by this object.
 </para>
 
 @obj: the object to query.
+
+<!-- ##### FUNCTION gtk_object_arg_get ##### -->
+<para>
+Private function to get an argument and argument info from an object.
+</para>
+
+@object: the object whose argument should be retrieved.
+@arg: the argument, for the name on input, the rest is filled on output.
+@info: a #GtkArgInfo structure to optionally fill in.
 
 <!-- ##### FUNCTION gtk_menu_factory_remove_subfactory ##### -->
 <para>
@@ -859,6 +1050,20 @@ Set the mem_chunk size so it will hold @n_chunks of the objects of that @type.
 
 @type: There must be an unlocked TypeNode associated with this type otherwise nothing happens.
 @n_chunks: 
+
+<!-- ##### FUNCTION gtk_draw_oval ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@shadow_type: 
+@x: 
+@y: 
+@width: 
+@height: 
 
 <!-- ##### MACRO GTK_TYPE_STRUCTURED_FIRST ##### -->
 <para>
@@ -977,6 +1182,13 @@ An action signal. Delete a single word.
 </para>
 
 
+<!-- ##### MACRO GTK_OBJECT_CONSTRUCTED ##### -->
+<para>
+Test whether a GtkObject's arguments have been prepared.
+</para>
+
+@obj: the object to examine.
+
 <!-- ##### FUNCTION gtk_font_selection_dialog_set_filter ##### -->
 <para>
 Sets one of the two font filters, to limit the fonts shown.
@@ -1018,12 +1230,6 @@ will be shown, or NULL to show all charsets.
 
 @Returns: 
 
-<!-- ##### ARG GtkTextTag:offset_set ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### MACRO GTK_TYPE_NUM_BUILTINS ##### -->
 <para>
 No idea.
@@ -1047,6 +1253,14 @@ Functions to adapt C structures to native calling convention.
 The last "flat" (no struct) enumerated type value.
 </para>
 
+
+<!-- ##### FUNCTION gtk_tree_selection_set_tree_view ##### -->
+<para>
+
+</para>
+
+@selection: 
+@tree_view: 
 
 <!-- ##### FUNCTION gtk_text_mark_unref ##### -->
 <para>
@@ -1085,13 +1299,6 @@ This function is labeled private.
 </para>
 
 @object: the object whose signal handlers should be destroyed.
-
-<!-- ##### ARG GtkTextTag:left_wrapped_line_margin ##### -->
-<para>
-Pixel width of the left margin of the text for lines after the first
-line in a wrapped paragraph.
-</para>
-
 
 <!-- ##### FUNCTION gtk_text_iter_in_region ##### -->
 <para>
@@ -1146,6 +1353,29 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 
 @a: 
 
+<!-- ##### FUNCTION gtk_object_class_user_signal_new ##### -->
+<para>
+Define a signal-handler for a new signal on an already defined
+object.
+</para>
+<para>
+See the signal documentation for more general information.
+</para>
+
+@klass: the object class to define the signal for.
+@name: the name of the signal.
+@signal_flags: the default emission behavior for the signal.
+See gtk_signal_new().
+@marshaller: a function that will take an array of GtkArgs
+and invoke the appropriate handler with the normal calling
+conventions.
+@return_val: specify the return-value type for the signal
+(or GTK_TYPE_NONE for no return-value).
+@nparams: specify the number of parameters the signal
+receives from the caller of gtk_signal_emit().
+@Varargs: list of nparams #GtkTypes to pass to the signal handlers.
+@Returns: the signal id.  (See #GtkSignals)
+
 <!-- ##### SIGNAL GtkTextView::paste-text ##### -->
 <para>
 
@@ -1168,12 +1398,30 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_FOREIGN
 
 @ruler: the gtkruler
 
+<!-- ##### FUNCTION gtk_object_newv ##### -->
+<para>
+Construct an object with an array of arguments.
+</para>
+
+@object_type: the type of the object to create.
+@n_args: the number of arguments to set.
+@args: an array of n_args arguments (which are name and value pairs).
+@Returns: the new GtkObject.
+
 <!-- ##### MACRO GTK_WIDGET_USER_STYLE ##### -->
 <para>
 
 </para>
 
 @obj: 
+
+<!-- ##### FUNCTION gtk_text_iter_forward_to_newline ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
 
 <!-- ##### ENUM GtkDebugFlag ##### -->
 <para>
@@ -1203,6 +1451,15 @@ Given a type, return various interesting parameters of the type.
 @type: GtkType
 @Returns: GtkTypeQuery*
 
+<!-- ##### ENUM GtkTreeViewColumnType ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_VIEW_COLUMN_RESIZEABLE: 
+@GTK_TREE_VIEW_COLUMN_AUTOSIZE: 
+@GTK_TREE_VIEW_COLUMN_FIXED: 
+
 <!-- ##### SECTION ./tmpl/gtkprivate.sgml:Long_Description ##### -->
 <para>
 
@@ -1231,6 +1488,30 @@ Hide the name of gtk_identifier_get_type
 </para>
 
 
+<!-- ##### FUNCTION gtk_ctree_construct ##### -->
+<para>
+This function is not usually used by users.
+</para>
+
+@ctree: 
+@columns: 
+@tree_column: 
+@titles: 
+
+<!-- ##### FUNCTION gtk_draw_cross ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@shadow_type: 
+@x: 
+@y: 
+@width: 
+@height: 
+
 <!-- ##### FUNCTION gtk_signal_handler_pending_by_id ##### -->
 <para>
 Returns whether a connection id is valid (and optionally not blocked).
@@ -1243,12 +1524,26 @@ handler.
 @Returns: TRUE if the signal exists and wasn't blocked,
 unless #may_be_blocked was specified.  FALSE otherwise.
 
+<!-- ##### FUNCTION gtk_tree_selection_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
 <!-- ##### MACRO GTK_PRIVATE_FLAGS ##### -->
 <para>
 
 </para>
 
 @wid: 
+
+<!-- ##### FUNCTION gtk_model_simple_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
 
 <!-- ##### FUNCTION gtk_marshal_BOOL__NONE ##### -->
 <para>
@@ -1300,6 +1595,12 @@ Given the type of an object and a pointer to it, the object is freed.
 Private Information
 
 
+<!-- ##### ARG GtkEditable:text-position ##### -->
+<para>
+The position of the cursor.
+</para>
+
+
 <!-- ##### FUNCTION gtk_theme_engine_register_type ##### -->
 <para>
 
@@ -1347,6 +1648,36 @@ position.
 
 @window: 
 @xid: 
+
+<!-- ##### FUNCTION gtk_tree_view_column_set_header_active ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@active: 
+
+<!-- ##### FUNCTION gtk_object_class_user_signal_newv ##### -->
+<para>
+Define a signal-handler for a new signal on an already defined
+object.
+</para>
+
+@klass: the object class to define the signal for.
+@name: the name of the signal.
+@signal_flags: the default emission behavior for the signal.
+See gtk_signal_new().
+@marshaller: takes a GtkObject, a #GtkSignalFunc, and an array
+of arguments, and invokes the function using the appropriate
+calling conventions.  Usually just select a function
+out of gtkmarshal.h.
+@return_val: specify the return-value type for the signal (possibly
+#GTK_TYPE_NONE).
+@nparams: specify the number of parameters the signal
+receives from the caller of gtk_signal_emit().
+@params: array of #GtkTypes the signal handlers for this signal
+should have in their prototype (of length nparams).
+@Returns: the signal id.  (See #GtkSignals)
 
 <!-- ##### FUNCTION gtk_marshal_NONE__BOOL ##### -->
 <para>
@@ -1451,6 +1782,15 @@ cursor. (Can be negative).
 @type: 
 @action: 
 
+<!-- ##### FUNCTION gtk_object_arg_set ##### -->
+<para>
+Private function to set an argument and argument info to an object.
+</para>
+
+@object: the object whose argument should be set.
+@arg: the argument.
+@info: infomation about this type of argument in general.
+
 <!-- ##### ENUM GtkTextViewDeleteType ##### -->
 <para>
 
@@ -1483,6 +1823,22 @@ The first "flat" (no struct) enumerated type value.
 </para>
 
 
+<!-- ##### FUNCTION gtk_widget_getv ##### -->
+<para>
+
+</para>
+
+@widget: 
+@nargs: 
+@args: 
+
+<!-- ##### FUNCTION gtk_tree_model_sort_resort ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+
 <!-- ##### FUNCTION gtk_menu_factory_new ##### -->
 <para>
 
@@ -1490,6 +1846,45 @@ The first "flat" (no struct) enumerated type value.
 
 @type: 
 @Returns: 
+
+<!-- ##### FUNCTION gtk_object_constructed ##### -->
+<para>
+Mark an allocated object as constructed.
+This is used for situations
+that require precise control of the construction process.
+</para>
+<para>
+This is done when gtk_object_default_construct() is inadequate.
+In #GtkCList the need arises because #GtkCList does construction work that
+must happen <emphasis>after</emphasis> its derivers.  This work
+cannot be done in an initializer function, so an alternate
+constructor is mandatory.  It calls gtk_object_constructed() to
+indicate it has done its job, so that no other constructor will
+be invoked.
+</para>
+<para>
+Normally this function is just automatically run from
+gtk_object_default_construct().
+</para>
+
+@object: object which has been constructed.  This is usually
+done automatically by gtk_object_new() and gtk_object_newv().
+
+<!-- ##### FUNCTION gtk_object_default_construct ##### -->
+<para>
+This function is called to construct arguments that haven't been initialized
+but have the #GTK_ARG_CONSTRUCT flag set.
+</para>
+<para>
+All number arguments are set to 0.  All pointers and strings
+are set to NULL.
+</para>
+<para>
+Normally invoked by gtk_object_new() automatically; gtk_type_new() can
+be used to bypass it.
+</para>
+
+@object: the object to initialize.
 
 <!-- ##### MACRO gtk_marshal_NONE__UINT_POINTER_UINT_UINT_ENUM ##### -->
 <para>
@@ -1503,6 +1898,39 @@ The first "flat" (no struct) enumerated type value.
 </para>
 
 @buffer: 
+
+<!-- ##### ARG GtkTextTag:font-set ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gtk_object_arg_get_info ##### -->
+<para>
+Query information about an argument type.
+</para>
+
+@object_type: type of object to query about.
+@arg_name: name of the argument.
+@info_p: pointer to be filled in with a pointer to the GtkArgInfo.
+@Returns: an error message, or NULL on success.
+It is the caller's responsibility to call g_free() in the event of error.
+
+<!-- ##### ENUM GtkTreeSelectionType ##### -->
+<para>
+
+</para>
+
+@GTK_TREE_SELECTION_SINGLE: 
+@GTK_TREE_SELECTION_MULTI: 
+
+<!-- ##### ARG GtkObject:signal-after ##### -->
+<para>
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object, so that the signal is always run
+after other user handlers and the default handler.
+</para>
+
 
 <!-- ##### STRUCT GtkTextTabArray ##### -->
 <para>
@@ -1529,6 +1957,16 @@ Causes the "changed" signal to be emitted.
 </para>
 
 @editable: a #GtkEditable widget.
+
+<!-- ##### FUNCTION gtk_object_setv ##### -->
+<para>
+Set an array of arguments.
+</para>
+
+@object: the object whose arguments should be set.
+@n_args: the number of arguments to set.
+@args: the desired values, as an array of #GtkArgs (which contain 
+the names, types, and values of the arguments).
 
 <!-- ##### SIGNAL GtkTextView::move ##### -->
 <para>
@@ -1615,6 +2053,24 @@ Get the array of signals defined for this object.
 
 @obj: the object to fetch the signals from.
 
+<!-- ##### FUNCTION gtk_object_query_args ##### -->
+<para>
+Get all the arguments that may be used for a given type.
+</para>
+<para>
+In Java, this type of mechanism is called 
+<wordasword>introspection</wordasword>.  It is used by applications
+like Glade, that have to determine what can be done to an object
+at run-time.
+</para>
+
+@class_type: the GtkType of the ObjectClass
+(returned from GTK_OBJECT_CLASS(class)-&gt;type for example).
+@arg_flags: if non-NULL, obtains the #GtkArgFlags that apply to
+each argument.  You must g_free() this if you request it.
+@n_args: the number of arguments is returned in this field.
+@Returns: an array of arguments, that you must deallocate with g_free().
+
 <!-- ##### SIGNAL GtkEditable::move-to-column ##### -->
 <para>
 An action signal. Move the cursor to the given column.
@@ -1656,6 +2112,14 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @cast_type: GtkType
 @Returns: the same GtkTypeObject* as @type_object
 
+<!-- ##### FUNCTION gtk_tree_model_sort_set_sort_col ##### -->
+<para>
+
+</para>
+
+@tree_model_sort: 
+@sort_col: 
+
 <!-- ##### FUNCTION gtk_themes_exit ##### -->
 <para>
 
@@ -1672,12 +2136,6 @@ make sure that it's okay to cast @type_object into a @cast_type.
 @func: 
 @func_data: 
 @args: 
-
-<!-- ##### ARG GtkEditable:text_position ##### -->
-<para>
-The position of the cursor.
-</para>
-
 
 <!-- ##### MACRO gtk_marshal_NONE__OBJECT ##### -->
 <para>
@@ -1710,12 +2168,42 @@ sure that it's okay to cast something of that @klass into a @cast_type.
 @cast_type: GtkType
 @Returns: Always return @klass.
 
+<!-- ##### ARG GtkObject:object-signal-after ##### -->
+<para>
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object, so that the user data and objects
+and swapped when the signal handler is invoked,
+and so that the handler is invoked after all others.
+</para>
+<para>
+See gtk_signal_connect_object_after() for more details.
+</para>
+
+
 <!-- ##### FUNCTION gtk_menu_factory_destroy ##### -->
 <para>
 
 </para>
 
 @factory: 
+
+<!-- ##### FUNCTION gtk_paint_ramp ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@shadow_type: 
+@area: 
+@widget: 
+@detail: 
+@arrow_type: 
+@x: 
+@y: 
+@width: 
+@height: 
 
 <!-- ##### FUNCTION gtk_signal_n_emissions ##### -->
 <para>
@@ -1813,6 +2301,30 @@ May be NULL.
 
 @Returns: 
 
+<!-- ##### FUNCTION gtk_paint_cross ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@shadow_type: 
+@area: 
+@widget: 
+@detail: 
+@x: 
+@y: 
+@width: 
+@height: 
+
+<!-- ##### ARG GtkObject:signal ##### -->
+<para>
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object.
+</para>
+
+
 <!-- ##### FUNCTION gtk_type_describe_heritage ##### -->
 <para>
 Print the types @type inherits from.
@@ -1883,6 +2395,24 @@ destroyed.
 @window: 
 @defaultw: 
 
+<!-- ##### SIGNAL GtkTextBuffer::delete-text ##### -->
+<para>
+
+</para>
+
+@textbuffer: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### FUNCTION gtk_tree_selection_new_with_tree_view ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@Returns: 
+
 <!-- ##### FUNCTION gtk_marshal_NONE__INT ##### -->
 <para>
 
@@ -1892,6 +2422,35 @@ destroyed.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### ARG GtkObject:object-signal ##### -->
+<para>
+Setting this with a GtkType of GTK_TYPE_SIGNAL connects
+the signal to the object, so that the user data and objects
+and swapped when the signal handler is invoked.
+</para>
+<para>
+This is useful for handlers that are primarily notifying
+other objects and could just invoke an already existing function
+if the parameters were swapped.
+See gtk_signal_connect_object() for more details.
+</para>
+
+
+<!-- ##### FUNCTION gtk_draw_ramp ##### -->
+<para>
+
+</para>
+
+@style: 
+@window: 
+@state_type: 
+@shadow_type: 
+@arrow_type: 
+@x: 
+@y: 
+@width: 
+@height: 
 
 <!-- ##### MACRO GTK_WIDGET_LEAVE_PENDING ##### -->
 <para>
@@ -1923,6 +2482,20 @@ destroyed.
 @func_data: 
 @args: 
 
+<!-- ##### FUNCTION gtk_tree_view_column_set_col_type ##### -->
+<para>
+
+</para>
+
+@tree_column: 
+@type: 
+
+<!-- ##### ARG GtkTextTag:overstrike-set ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gtk_marshal_INT__POINTER_CHAR_CHAR ##### -->
 <para>
 
@@ -1952,6 +2525,14 @@ destroyed.
 @func: 
 @func_data: 
 @args: 
+
+<!-- ##### SIGNAL GtkWidget::draw ##### -->
+<para>
+
+</para>
+
+@widget: the object which received the signal.
+@area: 
 
 <!-- ##### MACRO gtk_marshal_NONE__STRING_INT_POINTER ##### -->
 <para>
@@ -2012,12 +2593,11 @@ object.
 @arg1: 
 @arg2: 
 
-<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
+<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
 <para>
 
 </para>
 
-@container: 
 
 <!-- ##### MACRO gtk_widget_push_visual ##### -->
 <para>
@@ -2027,23 +2607,18 @@ object.
 @v: 
 @visual: 
 
-<!-- ##### MACRO gtk_marshal_ENUM__ENUM ##### -->
+<!-- ##### FUNCTION gtk_container_register_toplevel ##### -->
 <para>
 
 </para>
 
+@container: 
 
 <!-- ##### SECTION ./tmpl/gtkimcontextsimple.sgml:Title ##### -->
 GtkIMContextSimple
 
 
 <!-- ##### MACRO gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GtkTextTag:left_wrapped_line_margin_set ##### -->
 <para>
 
 </para>
@@ -2082,6 +2657,14 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 </para>
 
 
+<!-- ##### FUNCTION gtk_tree_view_set_headers_active ##### -->
+<para>
+
+</para>
+
+@tree_view: 
+@active: 
+
 <!-- ##### FUNCTION gtk_text_buffer_find_regexp ##### -->
 <para>
 
@@ -2111,6 +2694,14 @@ Use to get the value of a GtkArg whose GtkType is GTK_TYPE_C_CALLBACK
 @GTK_TEXT_SCROLL_TO_BOTTOM: 
 @GTK_TEXT_SCROLL_PAGE_DOWN: 
 @GTK_TEXT_SCROLL_PAGE_UP: 
+
+<!-- ##### FUNCTION gtk_text_iter_next_char ##### -->
+<para>
+
+</para>
+
+@iter: 
+@Returns: 
 
 <!-- ##### STRUCT GtkTextBTree ##### -->
 <para>

@@ -1,17 +1,157 @@
-<!-- ##### ARG GnomeCanvasPixbuf:width_in_pixels ##### -->
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
+Drawables to Pixbufs
+
+
+<!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
   <para>
-    If this argument is %TRUE, then the width of the pixbuf will be
-    considered to be in pixels, that is, it will not be visually
-    scaled even if the item's affine transformation changes.  If this
-    is %FALSE, then the width of the pixbuf will be considered to be
-    in canvas units, and so will be scaled normally by affine
-    transformations.  The default is %FALSE.
+    A function of this type can be used to override the default
+    operation when a pixbuf loses its last reference, i.e. when
+    gdk_pixbuf_unref() is called on a #GdkPixbuf structure that has a
+    reference count of 1.  This function should determine whether to
+    finalize the pixbuf by calling gdk_pixbuf_finalize(), or whether
+    to just resume normal execution.  The last unref handler for a
+    #GdkPixbuf can be set using the
+    gdk_pixbuf_set_last_unref_handler() function.  By default, pixbufs
+    will be finalized automatically if no last unref handler has been
+    defined.
+  </para>
+
+@pixbuf: The pixbuf that is losing its last reference.
+@data: User closure data.
+
+<!-- ##### SECTION ./tmpl/rendering.sgml:See_Also ##### -->
+  <para>
+    GdkRGB
   </para>
 
 
-<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:See_Also ##### -->
+<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Title ##### -->
+X Drawables to Pixbufs
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@pixmap_return: 
+@mask_return: 
+@alpha_threshold: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+<!-- ##### ARG GnomeCanvasPixbuf:width ##### -->
   <para>
-    GdkRGB
+    Indicates the width the pixbuf will be scaled to.  This argument
+    will only be used if the <link
+    linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument
+    is %TRUE.  If the <link
+    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
+    argument is %FALSE, the width will be taken to be in canvas units,
+    and thus will be scaled along with the canvas item's affine
+    transformation.  If width_in_pixels is %TRUE, the width will be
+    taken to be in pixels, and will visually remain a constant size
+    even if the item's affine transformation changes.
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:x-pixels ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
+@gc: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+<!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
+<para>
+
+</para>
+
+@dest: 
+@src: 
+@cmap: 
+@src_x: 
+@src_y: 
+@dest_x: 
+@dest_y: 
+@width: 
+@height: 
+@Returns: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+<!-- ##### ARG GnomeCanvasPixbuf:x ##### -->
+  <para>
+    Indicates the horizontal translation offset of the pixbuf item's
+    image.  This offset may not actually appear horizontal, since it
+    will be affected by the item's affine transformation.  The default
+    is 0.0.
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:y ##### -->
+  <para>
+    Indicates the vertical translation offset of the pixbuf item's
+    image.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x">x</link> argument.  The default is
+    0.0.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-init.sgml:Short_Description ##### -->
+Initializing the &gdk-pixbuf; Xlib library.
+
+
+<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Long_Description ##### -->
+  <para>
+    The functions in this section allow you to take the image data
+    from an X drawable and dump it into a #GdkPixbuf.  This can be
+    used for screenshots and other special effects.  Note that these
+    operations can be expensive, since the image data has to be
+    transferred from the X server to the client program and converted.
+  </para>
+
+  <para>
+    These functions are analogous to those for the Gdk version of
+    &gdk-pixbuf;.
+  </para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
+<para>
+
+</para>
+
+@art_pixbuf: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/xlib-init.sgml:See_Also ##### -->
+  <para>
+    XlibRGB
   </para>
 
 
@@ -21,12 +161,39 @@
   </para>
 
 
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Short_Description ##### -->
+<!-- ##### ARG GnomeCanvasPixbuf:pixbuf ##### -->
+  <para>
+    Contains a pointer to a #GdkPixbuf structure that will be used by
+    the pixbuf canvas item as an image source.  When a pixbuf is set
+    its reference count is incremented; if the pixbuf item kept a
+    pointer to another #GdkPixbuf structure, the reference count of
+    this structure will be decremented.  Also, the GdkPixbuf's
+    reference count will automatically be decremented when the
+    #GnomeCanvasPixbuf item is destroyed.  When a pixbuf is queried, a
+    reference count will not be added to the return value; you must do
+    this yourself if you intend to keep the pixbuf structure around.
+  </para>
 
 
+<!-- ##### ARG GnomeCanvasPixbuf:width-pixels ##### -->
+<para>
 
-<!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Short_Description ##### -->
-Canvas item to display #GdkPixbuf images.
+</para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:See_Also ##### -->
+  <para>
+    GdkRGB
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:x-set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.
+  </para>
 
 
 <!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Long_Description ##### -->
@@ -42,20 +209,272 @@ Canvas item to display #GdkPixbuf images.
   </para>
 
 
-<!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Short_Description ##### -->
+
+
+
+<!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Short_Description ##### -->
+Canvas item to display #GdkPixbuf images.
+
+
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:Long_Description ##### -->
+  <para>
+    The functions in this section allow you to take the image data
+    from a GDK drawable and dump it into a #GdkPixbuf.  This can be
+    used for screenshots and other special effects.  Note that these
+    operations can be expensive, since the image data has to be
+    transferred from the X server to the client program and converted.
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:width-set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--width">width</link> argument is taken
+    into account when scaling the pixbuf item.  If this argument is
+    %FALSE, then the width value of the pixbuf will be used instead.
+    This argument is %FALSE by default.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Long_Description ##### -->
+  <para>
+    The XlibRGB set of functions is a port of the GdkRGB library to
+    use plain Xlib and X drawables.  You can use these functions to
+    render RGB buffers into drawables very quickly with high-quality
+    dithering.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Short_Description ##### -->
+Functions for rendering RGB buffers to X drawables.
+
+
+<!-- ##### MACRO GNOME_CANVAS_PIXBUF ##### -->
+  <para>
+    Casts a #GtkOjbect to a #GnomeCanvasPixbuf.
+  </para>
+
+@obj: A GTK+ object.
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:height-pixels ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:y-in-pixels ##### -->
+  <para>
+    Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x-in-pixels">x_in_pixels</link>
+    argument, but controls whether the <link
+    linkend="GnomeCanvasPixbuf--y">y</link> translation offset is
+    scaled or not.  The default is %FALSE.
+  </para>
+
+<!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+
+<!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Short_Description ##### -->
+Rendering a pixbuf to an X drawable.
+
+
+<!-- ##### FUNCTION gdk_pixbuf_finalize ##### -->
+<para>
+
+</para>
+
+@pixbuf: <!--
+Local variables:
+mode: sgml
+sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
+End:
+-->
+
+<!-- ##### ARG GnomeCanvasPixbuf:x-in-pixels ##### -->
+  <para>
+    If this argument is %TRUE, the pixbuf's translation with respect
+    to its logical origin in item-relative coordinates will be in
+    pixels, that is, the visible offset will not change even if the
+    item's affine transformation changes.  If it is %FALSE, the
+    pixbuf's translation will be taken to be in canvas units, and thus
+    will change along with the item's affine transformation.  The
+    default is %FALSE.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/rendering.sgml:Short_Description ##### -->
+Rendering a pixbuf to a GDK drawable.
+
+
+<!-- ##### FUNCTION gdk_pixbuf_set_last_unref_handler ##### -->
 <para>
 
 </para>
 
 @pixbuf: 
-@bitmap: 
+@last_unref_fn: 
+@last_unref_fn_data: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:y-set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--y">y</link> argument is used to
+    translate the pixbuf from its logical origin in item-relative
+    coordinates.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument.  The
+    default is %FALSE.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-init.sgml:Long_Description ##### -->
+  <para>
+    In addition to the normal Gdk-specific functions, the &gdk-pixbuf;
+    package provides a small library that lets Xlib-only applications
+    use #GdkPixbuf structures and render them to X drawables.  The
+    functions in this section are used to initialize the &gdk-pixbuf;
+    Xlib library.  This library must be initialized near the beginning
+    or the program or before calling any of the other &gdk-pixbuf;
+    Xlib functions; it cannot be initialized automatically since
+    Xlib-only applications do not call gdk_rgb_init() like GNOME
+    applications do.
+  </para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@Returns: 
+
+<!-- ##### SECTION ./tmpl/xlib-rendering.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable_alpha ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@drawable: 
 @src_x: 
 @src_y: 
 @dest_x: 
 @dest_y: 
 @width: 
 @height: 
+@alpha_mode: 
 @alpha_threshold: 
+@dither: 
+@x_dither: 
+@y_dither: 
+
+<!-- ##### ARG GnomeCanvasPixbuf:y-pixels ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-init.sgml:Title ##### -->
+&gdk-pixbuf; Xlib initialization
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:height-set ##### -->
+  <para>
+    Determines whether the <link
+    linkend="GnomeCanvasPixbuf--height">height</link> argument is
+    taken into account when scaling the pixbuf item.  Works in the
+    same way as the <link
+    linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument.
+    The default is %FALSE.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Short_Description ##### -->
+Getting parts of an X drawable's image data into a pixbuf.
+
+
+<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Title ##### -->
+XlibRGB
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:width-in-pixels ##### -->
+  <para>
+    If this argument is %TRUE, then the width of the pixbuf will be
+    considered to be in pixels, that is, it will not be visually
+    scaled even if the item's affine transformation changes.  If this
+    is %FALSE, then the width of the pixbuf will be considered to be
+    in canvas units, and so will be scaled normally by affine
+    transformations.  The default is %FALSE.
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
+  <para>
+    Indicates the height the pixbuf will be scaled to.  This argument
+    will only be used if the <link
+    linkend="GnomeCanvasPixbuf--height-set">height_set</link> argument
+    is %TRUE.  Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--width">width</link> argument.
+  </para>
+
+
+<!-- ##### ARG GnomeCanvasPixbuf:height-in-pixels ##### -->
+  <para>
+    Works in the same way as the <link
+    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
+    argument.  The default is %FALSE.
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
+  <para>
+    gdk_image_get().
+  </para>
+
+
+<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/rendering.sgml:Title ##### -->
+Rendering
+
+
+<!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Title ##### -->
+GnomeCanvasPixbuf
+
+
+<!-- ##### MACRO GDK_PIXBUF_LOADER ##### -->
+  <para>
+    Casts a #GtkObject to a #GdkPixbufLoader.
+  </para>
+
+@obj: A GTK+ object.
 
 <!-- ##### SECTION ./tmpl/rendering.sgml:Long_Description ##### -->
   <para>
@@ -82,98 +501,35 @@ Canvas item to display #GdkPixbuf images.
   </important>
 
 
-<!-- ##### SECTION ./tmpl/xlib-init.sgml:Title ##### -->
-&gdk-pixbuf; Xlib initialization
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_in_pixels ##### -->
-  <para>
-    Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
-    argument.  The default is %FALSE.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/rendering.sgml:Title ##### -->
-Rendering
-
-
-<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Short_Description ##### -->
-Getting parts of an X drawable's image data into a pixbuf.
-
-
 <!-- ##### SECTION ./tmpl/from-drawables.sgml:Short_Description ##### -->
 Getting parts of a drawable's image data into a pixbuf.
 
 
-<!-- ##### FUNCTION gdk_pixbuf_render_pixmap_and_mask ##### -->
+<!-- ##### FUNCTION gdk_pixbuf_render_threshold_alpha ##### -->
 <para>
 
 </para>
 
 @pixbuf: 
-@pixmap_return: 
-@mask_return: 
-@alpha_threshold: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
-<!-- ##### ARG GnomeCanvasPixbuf:y_in_pixels ##### -->
-  <para>
-    Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--x-in-pixels">x_in_pixels</link>
-    argument, but controls whether the <link
-    linkend="GnomeCanvasPixbuf--y">y</link> translation offset is
-    scaled or not.  The default is %FALSE.
-  </para>
-
-<!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
-
-<!-- ##### SECTION ./tmpl/xlib-init.sgml:Short_Description ##### -->
-Initializing the &gdk-pixbuf; Xlib library.
-
-
-<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable_alpha ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@drawable: 
+@bitmap: 
 @src_x: 
 @src_y: 
 @dest_x: 
 @dest_y: 
 @width: 
 @height: 
-@alpha_mode: 
 @alpha_threshold: 
-@dither: 
-@x_dither: 
-@y_dither: 
 
-<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Long_Description ##### -->
-  <para>
-    The XlibRGB set of functions is a port of the GdkRGB library to
-    use plain Xlib and X drawables.  You can use these functions to
-    render RGB buffers into drawables very quickly with high-quality
-    dithering.
-  </para>
+<!-- ##### STRUCT GdkPixbufClass ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
+<para>
+
+</para>
 
 
 <!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Long_Description ##### -->
@@ -345,367 +701,11 @@ Initializing the &gdk-pixbuf; Xlib library.
   </refsect2>
 
 
-<!-- ##### SECTION ./tmpl/rendering.sgml:Short_Description ##### -->
-Rendering a pixbuf to a GDK drawable.
-
-
-<!-- ##### MACRO GDK_PIXBUF_LOADER ##### -->
-  <para>
-    Casts a #GtkObject to a #GdkPixbufLoader.
-  </para>
-
-@obj: A GTK+ object.
-
-<!-- ##### STRUCT GdkPixbufAnimationClass ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:x_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--x">x</link> argument is used to
-    translate the pixbuf from its logical origin in item-relative
-    coordinates.
-  </para>
-
-
-<!-- ##### MACRO GNOME_CANVAS_PIXBUF ##### -->
-  <para>
-    Casts a #GtkOjbect to a #GnomeCanvasPixbuf.
-  </para>
-
-@obj: A GTK+ object.
-
-<!-- ##### ARG GnomeCanvasPixbuf:width_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--width">width</link> argument is taken
-    into account when scaling the pixbuf item.  If this argument is
-    %FALSE, then the width value of the pixbuf will be used instead.
-    This argument is %FALSE by default.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Long_Description ##### -->
-  <para>
-    The functions in this section allow you to take the image data
-    from an X drawable and dump it into a #GdkPixbuf.  This can be
-    used for screenshots and other special effects.  Note that these
-    operations can be expensive, since the image data has to be
-    transferred from the X server to the client program and converted.
-  </para>
-
-  <para>
-    These functions are analogous to those for the Gdk version of
-    &gdk-pixbuf;.
-  </para>
-
-
-<!-- ##### USER_FUNCTION GdkPixbufLastUnref ##### -->
-  <para>
-    A function of this type can be used to override the default
-    operation when a pixbuf loses its last reference, i.e. when
-    gdk_pixbuf_unref() is called on a #GdkPixbuf structure that has a
-    reference count of 1.  This function should determine whether to
-    finalize the pixbuf by calling gdk_pixbuf_finalize(), or whether
-    to just resume normal execution.  The last unref handler for a
-    #GdkPixbuf can be set using the
-    gdk_pixbuf_set_last_unref_handler() function.  By default, pixbufs
-    will be finalized automatically if no last unref handler has been
-    defined.
-  </para>
-
-@pixbuf: The pixbuf that is losing its last reference.
-@data: User closure data.
-
-<!-- ##### SECTION ./tmpl/xlib-init.sgml:See_Also ##### -->
-  <para>
-    XlibRGB
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gdk_pixbuf_new_from_art_pixbuf ##### -->
-<para>
-
-</para>
-
-@art_pixbuf: 
-@Returns: 
-
-<!-- ##### ARG GnomeCanvasPixbuf:height ##### -->
-  <para>
-    Indicates the height the pixbuf will be scaled to.  This argument
-    will only be used if the <link
-    linkend="GnomeCanvasPixbuf--height-set">height_set</link> argument
-    is %TRUE.  Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--width">width</link> argument.
-  </para>
-
-
 <!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Title ##### -->
 Xlib Rendering
 
 
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:See_Also ##### -->
-  <para>
-    gdk_image_get().
-  </para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_pixels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:pixbuf ##### -->
-  <para>
-    Contains a pointer to a #GdkPixbuf structure that will be used by
-    the pixbuf canvas item as an image source.  When a pixbuf is set
-    its reference count is incremented; if the pixbuf item kept a
-    pointer to another #GdkPixbuf structure, the reference count of
-    this structure will be decremented.  Also, the GdkPixbuf's
-    reference count will automatically be decremented when the
-    #GnomeCanvasPixbuf item is destroyed.  When a pixbuf is queried, a
-    reference count will not be added to the return value; you must do
-    this yourself if you intend to keep the pixbuf structure around.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Short_Description ##### -->
-Functions for rendering RGB buffers to X drawables.
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:x ##### -->
-  <para>
-    Indicates the horizontal translation offset of the pixbuf item's
-    image.  This offset may not actually appear horizontal, since it
-    will be affected by the item's affine transformation.  The default
-    is 0.0.
-  </para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:y ##### -->
-  <para>
-    Indicates the vertical translation offset of the pixbuf item's
-    image.  Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--x">x</link> argument.  The default is
-    0.0.
-  </para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:width ##### -->
-  <para>
-    Indicates the width the pixbuf will be scaled to.  This argument
-    will only be used if the <link
-    linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument
-    is %TRUE.  If the <link
-    linkend="GnomeCanvasPixbuf--width-in-pixels">width_in_pixels</link>
-    argument is %FALSE, the width will be taken to be in canvas units,
-    and thus will be scaled along with the canvas item's affine
-    transformation.  If width_in_pixels is %TRUE, the width will be
-    taken to be in pixels, and will visually remain a constant size
-    even if the item's affine transformation changes.
-  </para>
-
-
-<!-- ##### FUNCTION gdk_pixbuf_set_last_unref_handler ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@last_unref_fn: 
-@last_unref_fn_data: 
-
-<!-- ##### ARG GnomeCanvasPixbuf:height_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--height">height</link> argument is
-    taken into account when scaling the pixbuf item.  Works in the
-    same way as the <link
-    linkend="GnomeCanvasPixbuf--width-set">width_set</link> argument.
-    The default is %FALSE.
-  </para>
-
-
-<!-- ##### FUNCTION gdk_pixbuf_render_to_drawable ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@drawable: 
-@gc: 
-@src_x: 
-@src_y: 
-@dest_x: 
-@dest_y: 
-@width: 
-@height: 
-@dither: 
-@x_dither: 
-@y_dither: 
-
-<!-- ##### SECTION ./tmpl/xlib-init.sgml:Long_Description ##### -->
-  <para>
-    In addition to the normal Gdk-specific functions, the &gdk-pixbuf;
-    package provides a small library that lets Xlib-only applications
-    use #GdkPixbuf structures and render them to X drawables.  The
-    functions in this section are used to initialize the &gdk-pixbuf;
-    Xlib library.  This library must be initialized near the beginning
-    or the program or before calling any of the other &gdk-pixbuf;
-    Xlib functions; it cannot be initialized automatically since
-    Xlib-only applications do not call gdk_rgb_init() like GNOME
-    applications do.
-  </para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:y_pixels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-rendering.sgml:See_Also ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Long_Description ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/rendering.sgml:See_Also ##### -->
-  <para>
-    GdkRGB
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-rendering.sgml:Short_Description ##### -->
-Rendering a pixbuf to an X drawable.
-
-
-<!-- ##### FUNCTION gdk_pixbuf_finalize ##### -->
-<para>
-
-</para>
-
-@pixbuf: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
-<!-- ##### FUNCTION gdk_pixbuf_get_from_drawable ##### -->
-<para>
-
-</para>
-
-@dest: 
-@src: 
-@cmap: 
-@src_x: 
-@src_y: 
-@dest_x: 
-@dest_y: 
-@width: 
-@height: 
-@Returns: <!--
-Local variables:
-mode: sgml
-sgml-parent-document: ("../gdk-pixbuf.sgml" "book" "refsect2" "")
-End:
--->
-
 <!-- ##### SECTION ./tmpl/gdk-pixbuf-io.sgml:Title ##### -->
 gdk-pixbuf-io
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:y_set ##### -->
-  <para>
-    Determines whether the <link
-    linkend="GnomeCanvasPixbuf--y">y</link> argument is used to
-    translate the pixbuf from its logical origin in item-relative
-    coordinates.  Works in the same way as the <link
-    linkend="GnomeCanvasPixbuf--x-set">x_set</link> argument.  The
-    default is %FALSE.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/gnome-canvas-pixbuf.sgml:Title ##### -->
-GnomeCanvasPixbuf
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:x_pixels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### FUNCTION gdk_pixbuf_get_format ##### -->
-<para>
-
-</para>
-
-@pixbuf: 
-@Returns: 
-
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:Long_Description ##### -->
-  <para>
-    The functions in this section allow you to take the image data
-    from a GDK drawable and dump it into a #GdkPixbuf.  This can be
-    used for screenshots and other special effects.  Note that these
-    operations can be expensive, since the image data has to be
-    transferred from the X server to the client program and converted.
-  </para>
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:width_pixels ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Title ##### -->
-X Drawables to Pixbufs
-
-
-<!-- ##### STRUCT GdkPixbufClass ##### -->
-<para>
-
-</para>
-
-
-<!-- ##### SECTION ./tmpl/from-drawables.sgml:Title ##### -->
-Drawables to Pixbufs
-
-
-<!-- ##### ARG GnomeCanvasPixbuf:x_in_pixels ##### -->
-  <para>
-    If this argument is %TRUE, the pixbuf's translation with respect
-    to its logical origin in item-relative coordinates will be in
-    pixels, that is, the visible offset will not change even if the
-    item's affine transformation changes.  If it is %FALSE, the
-    pixbuf's translation will be taken to be in canvas units, and thus
-    will change along with the item's affine transformation.  The
-    default is %FALSE.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/xlib-rgb.sgml:Title ##### -->
-XlibRGB
 
 

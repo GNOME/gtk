@@ -13,12 +13,13 @@
 <!entity gdk-Selections SYSTEM "sgml/selections.sgml">
 <!entity gdk-Properties-and-Atoms SYSTEM "sgml/properties.sgml">
 <!entity gdk-Input-Methods SYSTEM "sgml/input_methods.sgml">
-<!entity gdk-Input-Contexts SYSTEM "sgml/input_contexts.sgml">
 <!entity gdk-Pango-Interaction SYSTEM "sgml/pango_interaction.sgml">
+<!entity gdk-Input-Contexts SYSTEM "sgml/input_contexts.sgml">
 <!entity gdk-Color-Contexts SYSTEM "sgml/color_contexts.sgml">
 <!entity gdk-Points-Rectangles-and-Regions SYSTEM "sgml/regions.sgml">
 <!entity gdk-Threads SYSTEM "sgml/threads.sgml">
 <!entity gdk-Key-Values SYSTEM "sgml/keys.sgml">
+<!entity gdk-Keyboard-Handling SYSTEM "sgml/gdkkeys.sgml">
 <!entity gdk-Input-Devices SYSTEM "sgml/input_devices.sgml">
 <!entity gdk-Events SYSTEM "sgml/events.sgml">
 <!entity gdk-Event-Structures SYSTEM "sgml/event_structs.sgml">
@@ -69,7 +70,7 @@
 
     &gdk-Input-Devices;
 
-    &gdk-Key-Values;
+    &gdk-Keyboard-Handling;
 
     &gdk-Pango-Interaction;
     &gdk-Input-Methods;

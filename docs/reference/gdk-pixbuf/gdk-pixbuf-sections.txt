@@ -88,6 +88,8 @@ gdk_pixbuf_animation_get_frames
 gdk_pixbuf_animation_get_width
 gdk_pixbuf_animation_get_num_frames
 gdk_pixbuf_animation_get_height
+gdk_pixbuf_frame_copy
+gdk_pixbuf_frame_free
 gdk_pixbuf_frame_get_pixbuf
 gdk_pixbuf_frame_get_action
 gdk_pixbuf_frame_get_y_offset
@@ -98,8 +100,10 @@ gdk_pixbuf_frame_get_x_offset
 GDK_PIXBUF_ANIMATION
 GDK_TYPE_PIXBUF_ANIMATION
 GDK_IS_PIXBUF_ANIMATION
+GDK_TYPE_PIXBUF_FRAME
 
 <SUBSECTION Private>
+gdk_pixbuf_frame_get_type
 gdk_pixbuf_animation_get_type
 </SECTION>
 

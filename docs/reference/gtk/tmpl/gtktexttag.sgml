@@ -26,6 +26,40 @@ types related to the text widget and how they work together.
 
 </para>
 
+@parent_instance: 
+@table: 
+@name: 
+@priority: 
+@values: 
+@bg_color_set: 
+@bg_stipple_set: 
+@fg_color_set: 
+@family_set: 
+@style_set: 
+@variant_set: 
+@weight_set: 
+@stretch_set: 
+@size_set: 
+@fg_stipple_set: 
+@justify_set: 
+@left_margin_set: 
+@indent_set: 
+@rise_set: 
+@strikethrough_set: 
+@right_margin_set: 
+@pixels_above_lines_set: 
+@pixels_below_lines_set: 
+@pixels_inside_wrap_set: 
+@tabs_set: 
+@underline_set: 
+@wrap_mode_set: 
+@bg_full_height_set: 
+@invisible_set: 
+@editable_set: 
+@language_set: 
+@pad1: 
+@pad2: 
+@pad3: 
 
 <!-- ##### STRUCT GtkTextBTreeNode ##### -->
 <para>
@@ -38,6 +72,10 @@ types related to the text widget and how they work together.
 
 </para>
 
+@parent_instance: 
+@hash: 
+@anonymous: 
+@anon_count: 
 
 <!-- ##### ENUM GtkWrapMode ##### -->
 <para>
@@ -145,6 +183,17 @@ Describes a type of line wrapping.
 </para>
 
 @src: 
+@Returns: 
+<!-- # Unused Parameters # -->
+@dest: 
+
+
+<!-- ##### FUNCTION gtk_text_attributes_copy_values ##### -->
+<para>
+
+</para>
+
+@src: 
 @dest: 
 
 
@@ -186,21 +235,36 @@ when the tag is created.
 Background color, as a string such as "red" or "#FFFFFF"
 </para>
 
-<!-- ##### ARG GtkTextTag:background_gdk ##### -->
+<!-- ##### ARG GtkTextTag:background-gdk ##### -->
 <para>
 Background color, as a #GdkColor.
 </para>
 
-<!-- ##### ARG GtkTextTag:background_full_height ##### -->
+<!-- ##### ARG GtkTextTag:background-full-height ##### -->
 <para>
 Whether to make the background color for each character the height of
 the highest font used on the current line, or the height of the font 
 used for the current character.
 </para>
 
-<!-- ##### ARG GtkTextTag:background_stipple ##### -->
+<!-- ##### ARG GtkTextTag:background-stipple ##### -->
 <para>
 A #GdkBitmap to use for stippling the background color.
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground ##### -->
+<para>
+Foreground color as a string such as "red" or "#FFFFFF".
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground-gdk ##### -->
+<para>
+Foreground color as a #GdkColor.
+</para>
+
+<!-- ##### ARG GtkTextTag:foreground-stipple ##### -->
+<para>
+A #GdkBitmap to use as a stipple pattern for the foreground.
 </para>
 
 <!-- ##### ARG GtkTextTag:direction ##### -->
@@ -218,7 +282,7 @@ Whether the user can modify the tagged text.
 Font as a Pango font name, e.g. "Sans Italic 12"
 </para>
 
-<!-- ##### ARG GtkTextTag:font_desc ##### -->
+<!-- ##### ARG GtkTextTag:font-desc ##### -->
 <para>
 Font as a #PangoFontDescription.
 </para>
@@ -253,24 +317,9 @@ Font as a #PangoFontDescription.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:size_points ##### -->
+<!-- ##### ARG GtkTextTag:size-points ##### -->
 <para>
 
-</para>
-
-<!-- ##### ARG GtkTextTag:foreground ##### -->
-<para>
-Foreground color as a string such as "red" or "#FFFFFF".
-</para>
-
-<!-- ##### ARG GtkTextTag:foreground_gdk ##### -->
-<para>
-Foreground color as a #GdkColor.
-</para>
-
-<!-- ##### ARG GtkTextTag:foreground_stipple ##### -->
-<para>
-A #GdkBitmap to use as a stipple pattern for the foreground.
 </para>
 
 <!-- ##### ARG GtkTextTag:justify ##### -->
@@ -286,9 +335,14 @@ hint when rendering the text. If you don't understand this argument,
 you probably don't need it.
 </para>
 
-<!-- ##### ARG GtkTextTag:left_margin ##### -->
+<!-- ##### ARG GtkTextTag:left-margin ##### -->
 <para>
 Pixel width of left margin of the text.
+</para>
+
+<!-- ##### ARG GtkTextTag:right-margin ##### -->
+<para>
+Pixel width of right margin.
 </para>
 
 <!-- ##### ARG GtkTextTag:indent ##### -->
@@ -301,25 +355,20 @@ Pixel width of left margin of the text.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:pixels_above_lines ##### -->
+<!-- ##### ARG GtkTextTag:pixels-above-lines ##### -->
 <para>
 Pixels of blank space to leave above each newline-terminated line.
 </para>
 
-<!-- ##### ARG GtkTextTag:pixels_below_lines ##### -->
+<!-- ##### ARG GtkTextTag:pixels-below-lines ##### -->
 <para>
 Pixels of blank space to leave below each newline-terminated line.
 </para>
 
-<!-- ##### ARG GtkTextTag:pixels_inside_wrap ##### -->
+<!-- ##### ARG GtkTextTag:pixels-inside-wrap ##### -->
 <para>
 Pixels of blank space to leave between wrapped lines inside the same
 newline-terminated line (paragraph).
-</para>
-
-<!-- ##### ARG GtkTextTag:right_margin ##### -->
-<para>
-Pixel width of right margin.
 </para>
 
 <!-- ##### ARG GtkTextTag:strikethrough ##### -->
@@ -332,7 +381,7 @@ Pixel width of right margin.
 A #PangoUnderline value.
 </para>
 
-<!-- ##### ARG GtkTextTag:wrap_mode ##### -->
+<!-- ##### ARG GtkTextTag:wrap-mode ##### -->
 <para>
 A #GtkWrapMode value. Only used if the tag applies to the first
 character in a paragraph.
@@ -349,142 +398,142 @@ applies to the first character in a paragraph.
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background_set ##### -->
+<!-- ##### ARG GtkTextTag:background-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background_full_height_set ##### -->
+<!-- ##### ARG GtkTextTag:background-full-height-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background_gdk_set ##### -->
+<!-- ##### ARG GtkTextTag:background-gdk-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:background_stipple_set ##### -->
+<!-- ##### ARG GtkTextTag:background-stipple-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:editable_set ##### -->
+<!-- ##### ARG GtkTextTag:foreground-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:family_set ##### -->
+<!-- ##### ARG GtkTextTag:foreground-gdk-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:style_set ##### -->
+<!-- ##### ARG GtkTextTag:foreground-stipple-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:variant_set ##### -->
+<!-- ##### ARG GtkTextTag:editable-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:weight_set ##### -->
+<!-- ##### ARG GtkTextTag:family-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:stretch_set ##### -->
+<!-- ##### ARG GtkTextTag:style-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:size_set ##### -->
+<!-- ##### ARG GtkTextTag:variant-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:foreground_set ##### -->
+<!-- ##### ARG GtkTextTag:weight-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:foreground_gdk_set ##### -->
+<!-- ##### ARG GtkTextTag:stretch-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:foreground_stipple_set ##### -->
+<!-- ##### ARG GtkTextTag:size-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:justify_set ##### -->
+<!-- ##### ARG GtkTextTag:justify-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:language_set ##### -->
+<!-- ##### ARG GtkTextTag:language-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:left_margin_set ##### -->
+<!-- ##### ARG GtkTextTag:left-margin-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:indent_set ##### -->
+<!-- ##### ARG GtkTextTag:indent-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:rise_set ##### -->
+<!-- ##### ARG GtkTextTag:rise-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:pixels_above_lines_set ##### -->
+<!-- ##### ARG GtkTextTag:pixels-above-lines-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:pixels_below_lines_set ##### -->
+<!-- ##### ARG GtkTextTag:pixels-below-lines-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:pixels_inside_wrap_set ##### -->
+<!-- ##### ARG GtkTextTag:pixels-inside-wrap-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:strikethrough_set ##### -->
+<!-- ##### ARG GtkTextTag:strikethrough-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:right_margin_set ##### -->
+<!-- ##### ARG GtkTextTag:right-margin-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:underline_set ##### -->
+<!-- ##### ARG GtkTextTag:underline-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:wrap_mode_set ##### -->
+<!-- ##### ARG GtkTextTag:wrap-mode-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:tabs_set ##### -->
+<!-- ##### ARG GtkTextTag:tabs-set ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkTextTag:invisible_set ##### -->
+<!-- ##### ARG GtkTextTag:invisible-set ##### -->
 <para>
 
 </para>

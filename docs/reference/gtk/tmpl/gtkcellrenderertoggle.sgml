@@ -38,3 +38,21 @@ GtkCellRendererToggle
 @radio: 
 
 
+<!-- ##### FUNCTION gtk_cell_renderer_toggle_get_active ##### -->
+<para>
+
+</para>
+
+@toggle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_toggle_set_active ##### -->
+<para>
+
+</para>
+
+@toggle: 
+@setting: 
+
+

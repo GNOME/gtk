@@ -349,7 +349,7 @@ Refreshes a spin button. The behaviour of the update is determined by gtk_spin_b
 the #GtkAdjustment that defines a spin button's main properties.
 </para>
 
-<!-- ##### ARG GtkSpinButton:climb_rate ##### -->
+<!-- ##### ARG GtkSpinButton:climb-rate ##### -->
 <para>
 the amount a spin button changes when an arrow is clicked.
 </para>
@@ -359,7 +359,7 @@ the amount a spin button changes when an arrow is clicked.
 the number of decimal places to display.
 </para>
 
-<!-- ##### ARG GtkSpinButton:snap_to_ticks ##### -->
+<!-- ##### ARG GtkSpinButton:snap-to-ticks ##### -->
 <para>
 whether erroneous values are automatically changed to a spin button's nearest step increment.
 </para>
@@ -374,12 +374,12 @@ whether non-numeric characters should be ignored.
 whether a spin button should wrap upon reaching its limits.
 </para>
 
-<!-- ##### ARG GtkSpinButton:update_policy ##### -->
+<!-- ##### ARG GtkSpinButton:update-policy ##### -->
 <para>
 how a spin button should be updated.
 </para>
 
-<!-- ##### ARG GtkSpinButton:shadow_type ##### -->
+<!-- ##### ARG GtkSpinButton:shadow-type ##### -->
 <para>
 the type of border that surrounds the arrows of a spin button.
 </para>

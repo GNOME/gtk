@@ -85,12 +85,12 @@ string.
 The number of decimal places that are displayed in the value.
 </para>
 
-<!-- ##### ARG GtkScale:draw_value ##### -->
+<!-- ##### ARG GtkScale:draw-value ##### -->
 <para>
 If the current value is displayed as a string next to the slider.
 </para>
 
-<!-- ##### ARG GtkScale:value_pos ##### -->
+<!-- ##### ARG GtkScale:value-pos ##### -->
 <para>
 The position in which the current value is displayed.
 </para>

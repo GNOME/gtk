@@ -324,17 +324,17 @@ should be used if you wish to perform an action when ever the style of a toolbar
 
 </para>
 
-<!-- ##### ARG GtkToolbar:toolbar_style ##### -->
+<!-- ##### ARG GtkToolbar:toolbar-style ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkToolbar:space_size ##### -->
+<!-- ##### ARG GtkToolbar:space-size ##### -->
 <para>
 
 </para>
 
-<!-- ##### ARG GtkToolbar:space_style ##### -->
+<!-- ##### ARG GtkToolbar:space-style ##### -->
 <para>
 
 </para>
