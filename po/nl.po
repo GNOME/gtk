@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-01-08 02:01-0500\n"
-"PO-Revision-Date: 2005-01-07 22:45+0100\n"
+"POT-Creation-Date: 2005-01-14 12:30+0100\n"
+"PO-Revision-Date: 2005-01-14 18:33+0100\n"
 "Last-Translator: Tino Meinen <a.t.meinen@chello.nl>\n"
 "Language-Team: Dutch <vertaling@vrijschrift.org>\n"
 "MIME-Version: 1.0\n"
@@ -949,10 +949,12 @@ msgstr "calendar:MY"
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
+# het gedeelte voor | is om het bericht meer uniek te maken en mag niet
+# worden vertaald.
 #: gtk/gtkcellrendererprogress.c:235 gtk/gtkcellrendererprogress.c:293
 #, c-format
 msgid "progress bar label|%d %%"
-msgstr "voortgangsbalk label|%d %%"
+msgstr "%d %%"
 
 # 'Kies een kleur'   hier beter dan:  'Een kleur kiezen' ?
 #: gtk/gtkcolorbutton.c:220 gtk/gtkcolorbutton.c:574
@@ -1779,7 +1781,7 @@ msgstr "(onbekend)"
 msgid "clear"
 msgstr "wissen"
 
-#: gtk/gtklabel.c:3930
+#: gtk/gtklabel.c:3931
 msgid "Select All"
 msgstr "Alles selecteren"
 
