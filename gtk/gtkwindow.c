@@ -73,6 +73,8 @@ enum {
   PROP_TYPE_HINT,
   PROP_SKIP_TASKBAR_HINT,
   PROP_SKIP_PAGER_HINT,
+  PROP_DECORATED,
+  PROP_GRAVITY,
   
   /* Readonly properties */
   PROP_IS_ACTIVE,
@@ -459,7 +461,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 						      GTK_TYPE_WINDOW_TYPE,
 						      GTK_WINDOW_TOPLEVEL,
 						      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
   /* Regular Props */
   g_object_class_install_property (gobject_class,
                                    PROP_TITLE,
@@ -603,6 +604,38 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          _("TRUE if the window should not be in the pager."),
                                                          FALSE,
                                                          G_PARAM_READWRITE));  
+
+  /**
+   * GtkWindow:decorated:
+   *
+   * Whether the window should be decorated by the window manager.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DECORATED,
+                                   g_param_spec_boolean ("decorated",
+							 _("Decorated"),
+							 _("Whether the window should be decorated by the window manager"),
+							 TRUE,
+							 G_PARAM_READWRITE));
+
+  /**
+   * GtkWindow:gravity:
+   *
+   * The window gravity of the window. See gtk_window_move() and #GdkGravity for
+   * more details about window gravity.
+   *
+   * Since: 2.4
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_GRAVITY,
+                                   g_param_spec_enum ("gravity",
+						      _("Gravity"),
+						      _("The window gravity of the window"),
+						      GDK_TYPE_GRAVITY,
+						      GDK_GRAVITY_NORTH_WEST,
+						      G_PARAM_READWRITE));
 
   window_signals[SET_FOCUS] =
     g_signal_new ("set_focus",
@@ -823,7 +856,12 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_skip_pager_hint (window,
                                       g_value_get_boolean (value));
       break;
-      
+    case PROP_DECORATED:
+      gtk_window_set_decorated (window, g_value_get_boolean (value));
+      break;
+    case PROP_GRAVITY:
+      gtk_window_set_gravity (window, g_value_get_enum (value));
+      break;
     default:
       break;
     }
@@ -906,6 +944,12 @@ gtk_window_get_property (GObject      *object,
     case PROP_SKIP_PAGER_HINT:
       g_value_set_boolean (value,
                            gtk_window_get_skip_pager_hint (window));
+      break;
+    case PROP_DECORATED:
+      g_value_set_boolean (value, gtk_window_get_decorated (window));
+      break;
+    case PROP_GRAVITY:
+      g_value_set_enum (value, gtk_window_get_gravity (window));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2223,6 +2267,8 @@ gtk_window_set_decorated (GtkWindow *window,
         gdk_window_set_decorations (GTK_WIDGET (window)->window,
                                     0);
     }
+
+  g_object_notify (G_OBJECT (window), "decorated");
 }
 
 /**
@@ -5455,7 +5501,7 @@ gtk_window_expose (GtkWidget      *widget,
  * If this function is called on a window with setting of %TRUE, before
  * it is realized or showed, it will have a "frame" window around
  * @window->window, accessible in @window->frame. Using the signal 
- * frame_event you can recieve all events targeted at the frame.
+ * frame_event you can receive all events targeted at the frame.
  * 
  * This function is used by the linux-fb port to implement managed
  * windows, but it could concievably be used by X-programs that
@@ -5959,6 +6005,8 @@ gtk_window_set_gravity (GtkWindow *window,
       /* gtk_window_move_resize() will adapt gravity
        */
       gtk_widget_queue_resize (GTK_WIDGET (window));
+
+      g_object_notify (G_OBJECT (window), "gravity");
     }
 }
 

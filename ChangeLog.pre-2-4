@@ -1,5 +1,7 @@
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
+	* gtk/gtkwindow.c: Add properties decorated and gravity.  (#80234)
+
 	* gtk/gtktextview.c (gtk_text_view_class_init): Add a new keybinding signal, move_viewport.
 	(gtk_text_view_move_viewport): New function which implements the move_viewport functionality.
 	(gtk_text_view_move_cursor_internal): If the cursor is not visible, move the viewport. (#78669)
