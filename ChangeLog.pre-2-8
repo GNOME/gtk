@@ -1,5 +1,9 @@
 2002-02-16  Manish Singh  <yosh@gimp.org>
 
+	* tests/testgtk.c: hm, check buttons look better for below.
+
+2002-02-16  Manish Singh  <yosh@gimp.org>
+
 	* tests/testgtk.c: redid the filesel test. Added a way to set select
 	multiple as a toggle button, and made show/hide fileops toggle
 	buttons as well. get_selections() is called on OK and all the

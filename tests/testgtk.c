@@ -6533,7 +6533,7 @@ create_file_selection (void)
 				G_CALLBACK (gtk_widget_destroy),
 				window);
       
-      button = gtk_toggle_button_new_with_label ("Show Fileops");
+      button = gtk_check_button_new_with_label ("Show Fileops");
       g_signal_connect (button, "toggled",
 			G_CALLBACK (show_fileops),
 			window);
@@ -6541,7 +6541,7 @@ create_file_selection (void)
 			  button, FALSE, FALSE, 0);
       gtk_widget_show (button);
 
-      button = gtk_toggle_button_new_with_label ("Select Multiple");
+      button = gtk_check_button_new_with_label ("Select Multiple");
       g_signal_connect (button, "clicked",
 			G_CALLBACK (select_multiple),
 			window);
