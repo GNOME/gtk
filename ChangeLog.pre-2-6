@@ -1,3 +1,9 @@
+Thu Jun  3 20:56:19 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_class_init): Fix the allowed
+	values and default value for the ::active property.  (#143669,
+	Olivier Andrieu)
+
 2004-06-03  Michael Natterer  <mitch@gimp.org>
 
 	* gtk/gtkimagemenuitem.c: use gtk_widget_get_child_requisition()
