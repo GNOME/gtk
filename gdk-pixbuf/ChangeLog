@@ -1,5 +1,8 @@
 2003-03-21  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk-pixbuf-animation.c (gdk_pixbuf_non_anim_get_type): Add
+	missing static.  (#108614)
+
 	* io-jpeg.c (gdk_pixbuf__jpeg_image_begin_load): 
 	* io-ico.c (gdk_pixbuf__ico_image_stop_load): Add missing static
 	qualifiers apparently causing problems on some platforms. (#108617)

@@ -563,7 +563,7 @@ static GdkPixbufAnimationIter* gdk_pixbuf_non_anim_get_iter         (GdkPixbufAn
 
 static gpointer non_parent_class;
 
-GType
+static GType
 gdk_pixbuf_non_anim_get_type (void)
 {
         static GType object_type = 0;
