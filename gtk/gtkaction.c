@@ -1398,10 +1398,12 @@ closure_accel_activate (GClosure     *closure,
                         gpointer      marshal_data)
 {
   if (gtk_action_is_sensitive (GTK_ACTION (closure->data)))
-    _gtk_action_emit_activate (GTK_ACTION (closure->data));
-
-  /* we handled the accelerator */
-  g_value_set_boolean (return_value, TRUE);
+    {
+      _gtk_action_emit_activate (GTK_ACTION (closure->data));
+      
+      /* we handled the accelerator */
+      g_value_set_boolean (return_value, TRUE);
+    }
 }
 
 static void

@@ -1,5 +1,9 @@
 2004-11-28  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkaction.c (closure_accel_activate): Don't claim to have
+	handled the accelerator if the action is insensitive.  (#151541,
+	Jody Goldberg)
+
 	* docs/tools/widgets.c: Add a combo box.
 
 2004-11-27  Matthias Clasen  <mclasen@redhat.com>
