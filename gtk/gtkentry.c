@@ -1539,7 +1539,7 @@ gtk_entry_key_release (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
 
-  if (!entry->editable)
+  if (entry->editable)
     {
       if (gtk_im_context_filter_keypress (entry->im_context, event))
 	{

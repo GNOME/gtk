@@ -217,6 +217,8 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 {
   if (!multicontext->slave)
     {
+      GtkIMContext *slave;
+
       if (!global_context_id)
 	{
 	  const char *locale;
@@ -229,7 +231,10 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 	  global_context_id = _gtk_im_module_get_default_context_id (locale);
 	}
 	
-      gtk_im_multicontext_set_slave (multicontext, _gtk_im_module_create (global_context_id), FALSE);
+      slave = _gtk_im_module_create (global_context_id);
+      gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
+      g_object_unref (slave);
+
       multicontext->context_id = global_context_id;
     }
 
