@@ -891,7 +891,7 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
       /* flush the x-queue, so any grabs are removed and
        * the menu is actually taken down
        */
-      gdk_display_sync (GTK_WIDGET_GET_DISPLAY(menu_item));
+      gdk_display_sync (gtk_widget_get_display(menu_item));
     }
 
   gtk_widget_activate (menu_item);

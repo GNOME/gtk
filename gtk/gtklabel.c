@@ -1907,7 +1907,7 @@ gtk_label_select_region_index (GtkLabel *label,
       label->select_info->selection_anchor = anchor_index;
       label->select_info->selection_end = end_index;
 
-      clipboard = gtk_clipboard_get_for_display (GTK_WIDGET_GET_DISPLAY(label), GDK_SELECTION_PRIMARY);      
+      clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display(label), GDK_SELECTION_PRIMARY);      
 
 
       if (anchor_index != end_index)

@@ -33,9 +33,9 @@ extern "C"
     Display *xdisplay;
     Screen *xscreen;
     gint scr_num;
-    Window root_window;
+    Window xroot_window;
     Window leader_window;
-    GdkWindow *parent_root;
+    GdkWindow *root_window;
     Window wmspec_check_window;
     /* Visual Part */
     gboolean visual_initialised;
@@ -64,7 +64,7 @@ extern "C"
 #define DEFAULT_X_SCREEN    GDK_SCREEN_IMPL_X11(DEFAULT_GDK_SCREEN)->xscreen
 #define DEFAULT_GDK_SCREEN_IMPL_X11_FOR_DISPLAY(display)  GDK_SCREEN_IMPL_X11(GDK_DISPLAY_GET_CLASS(display)->get_default_screen(display))
 #define GDK_SCREEN_XDISPLAY(scr)  (GDK_SCREEN_IMPL_X11(scr)->xdisplay)
-#define GDK_SCREEN_XROOTWIN(scr)  (GDK_SCREEN_IMPL_X11(scr)->root_window)
+#define GDK_SCREEN_XROOTWIN(scr)  (GDK_SCREEN_IMPL_X11(scr)->xroot_window)
 #ifdef __cplusplus
 }
 #endif				/* __cplusplus */

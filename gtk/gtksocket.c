@@ -185,7 +185,7 @@ gtk_socket_steal (GtkSocket *socket, GdkNativeWindow id)
     }
   else
     {
-      socket->plug_window = gdk_window_foreign_new_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+      socket->plug_window = gdk_window_foreign_new_for_display (gtk_widget_get_display(widget),
        								id);
       if (!socket->plug_window) /* was deleted before we could get it */
 	{
@@ -844,7 +844,7 @@ gtk_socket_add_window (GtkSocket *socket, GdkNativeWindow xid)
       GdkDragProtocol protocol;
       
       socket->plug_window = 
-      	gdk_window_foreign_new_for_display (GTK_WIDGET_GET_DISPLAY(socket),
+      	gdk_window_foreign_new_for_display (gtk_widget_get_display(socket),
       					    xid);
       if (!socket->plug_window) /* Already gone */
 	return;

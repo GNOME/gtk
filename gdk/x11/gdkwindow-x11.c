@@ -280,23 +280,23 @@ _gdk_windowing_window_init (GdkScreen * scr)
 
   scr_impl = GDK_SCREEN_IMPL_X11 (scr);
 
-  g_assert (scr_impl->parent_root == NULL);
+  g_assert (scr_impl->root_window == NULL);
 
   scr_impl->default_colormap = gdk_colormap_get_system_for_screen(scr);
 
-  XGetGeometry (scr_impl->xdisplay, scr_impl->root_window,
-		&scr_impl->root_window, &x, &y, &width, &height,
+  XGetGeometry (scr_impl->xdisplay, scr_impl->xroot_window,
+		&scr_impl->xroot_window, &x, &y, &width, &height,
 		&border_width, &depth);
-  XGetWindowAttributes (scr_impl->xdisplay, scr_impl->root_window,
+  XGetWindowAttributes (scr_impl->xdisplay, scr_impl->xroot_window,
 			&xattributes);
 
-  scr_impl->parent_root = g_object_new (GDK_TYPE_WINDOW, NULL);
-  private = (GdkWindowObject *) scr_impl->parent_root;
+  scr_impl->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  private = (GdkWindowObject *) scr_impl->root_window;
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
 
   draw_impl->screen = scr;
-  draw_impl->xid = scr_impl->root_window;
+  draw_impl->xid = scr_impl->xroot_window;
   draw_impl->wrapper = GDK_DRAWABLE (private);
 
   private->window_type = GDK_WINDOW_ROOT;
@@ -305,7 +305,7 @@ _gdk_windowing_window_init (GdkScreen * scr)
   impl->height = height;
   scr_impl->colormap_initialised = TRUE;
 
-  gdk_xid_table_insert (&scr_impl->root_window, scr_impl->parent_root);
+  gdk_xid_table_insert (&scr_impl->xroot_window, scr_impl->root_window);
 }
 
 GdkWindow *
@@ -340,7 +340,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
   scr_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   if (!parent)
-    parent = scr_impl->parent_root;
+    parent = scr_impl->root_window;
 
   g_return_val_if_fail (GDK_IS_WINDOW (parent), NULL);
 
@@ -454,7 +454,7 @@ gdk_window_new_for_screen (GdkScreen * screen,
       xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
       xattributes_mask |= CWColormap;
 
-      xparent = scr_impl->root_window;
+      xparent = scr_impl->xroot_window;
       break;
 
     case GDK_WINDOW_CHILD:
@@ -466,14 +466,14 @@ gdk_window_new_for_screen (GdkScreen * screen,
       xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
       xattributes_mask |= CWColormap;
 
-      xparent = scr_impl->root_window;
+      xparent = scr_impl->xroot_window;
       break;
 
     case GDK_WINDOW_TEMP:
       xattributes.colormap = GDK_COLORMAP_XCOLORMAP (draw_impl->colormap);
       xattributes_mask |= CWColormap;
 
-      xparent = scr_impl->root_window;
+      xparent = scr_impl->xroot_window;
 
       xattributes.save_under = True;
       xattributes.override_redirect = True;
@@ -1076,7 +1076,7 @@ gdk_window_reparent (GdkWindow *window,
   g_return_if_fail (new_parent == NULL || GDK_IS_WINDOW (new_parent));
   
   if (!new_parent)
-    new_parent = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->parent_root;
+    new_parent = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->root_window;
   
   window_private = (GdkWindowObject*) window;
   old_parent_private = (GdkWindowObject*)window_private->parent;
@@ -1177,7 +1177,7 @@ gdk_window_focus (GdkWindow *window,
       xev.xclient.data.l[0] = 0;
       
       XSendEvent (GDK_WINDOW_XDISPLAY (window),
-		  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->root_window, False,
+		  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->xroot_window, False,
                   SubstructureRedirectMask | SubstructureNotifyMask,
                   &xev);
     }
@@ -1771,7 +1771,7 @@ gdk_window_get_geometry (GdkWindow *window,
   {
     GDK_NOTE(MULTIHEAD, 
 	     g_message("Window needs to be defined to be multisafe\n"));
-    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->parent_root;
+    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->root_window;
   }
 
   if (!GDK_WINDOW_DESTROYED (window)) {
@@ -1822,7 +1822,7 @@ gdk_window_get_origin (GdkWindow *window,
     {
       return_val = XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
 					  GDK_WINDOW_XID (window),
-				  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->root_window,
+				  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->xroot_window,
 					  0, 0, &tx, &ty,
 					  &child);
       
@@ -2036,7 +2036,7 @@ gdk_window_get_pointer (GdkWindow       *window,
   {
     GDK_NOTE(MULTIHEAD, 
 	     g_message("window arg is need for multihead safe operation\n"));
-    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->parent_root;
+    window = GDK_SCREEN_IMPL_X11 (DEFAULT_GDK_SCREEN)->root_window;
   }
 
   _gdk_windowing_window_get_offsets (window, &xoffset, &yoffset);
@@ -2591,7 +2591,7 @@ gdk_window_stick (GdkWindow *window)
 
       xev.xclient.data.l[0] = 0xFFFFFFFF;
       
-      XSendEvent (GDK_WINDOW_XDISPLAY (window), scr_impl->root_window, False,
+      XSendEvent (GDK_WINDOW_XDISPLAY (window), scr_impl->xroot_window, False,
                   SubstructureRedirectMask | SubstructureNotifyMask,
                   &xev);
     }
@@ -2631,7 +2631,7 @@ gdk_window_unstick (GdkWindow *window)
        * one that matters much in practice.
        */
       XGetWindowProperty (GDK_WINDOW_XDISPLAY (window),
-			  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->root_window,
+			  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->xroot_window,
                           gdk_display_atom (GDK_WINDOW_DISPLAY(window), "_NET_CURRENT_DESKTOP", FALSE),
 
                           0, G_MAXLONG,
@@ -2652,7 +2652,7 @@ gdk_window_unstick (GdkWindow *window)
           xev.xclient.data.l[0] = *current_desktop;
       
           XSendEvent (GDK_WINDOW_XDISPLAY (window),
-		      GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->root_window,
+		      GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(window))->xroot_window,
 		      False,
                       SubstructureRedirectMask | SubstructureNotifyMask,
                       &xev);
@@ -3436,7 +3436,7 @@ gdk_window_xid_at_coords_for_screen (gint     x,
   unsigned int num;
   int i;
 
-  window = GDK_SCREEN_IMPL_X11(screen)->parent_root;
+  window = GDK_SCREEN_IMPL_X11(screen)->root_window;
   xdisplay = GDK_WINDOW_XDISPLAY (window);
   root = GDK_WINDOW_XID (window);
   num = g_list_length (excludes);

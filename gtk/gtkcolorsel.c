@@ -363,7 +363,7 @@ color_sample_drag_handle (GtkWidget        *widget,
   vals[3] = priv->has_opacity ? colsrc[COLORSEL_OPACITY] * 0xffff : 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "application/x-color", FALSE),
+			  gdk_display_atom (gtk_widget_get_display(widget), "application/x-color", FALSE),
 
 			  16, (guchar *)vals, 8);
 }
@@ -684,7 +684,7 @@ palette_drag_handle (GtkWidget        *widget,
   vals[3] = 0xffff;
   
   gtk_selection_data_set (selection_data,
-			  gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "application/x-color", FALSE),
+			  gdk_display_atom (gtk_widget_get_display(widget), "application/x-color", FALSE),
 
 			  16, (guchar *)vals, 8);
 }
@@ -1051,10 +1051,10 @@ initialize_cursor (GdkScreen *screen)
   GdkColor fg, bg;
   
   GdkPixmap *pixmap =
-    gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), dropper_bits, DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data (gdk_screen_get_root_window(screen), dropper_bits, DROPPER_WIDTH, DROPPER_HEIGHT);
 
   GdkPixmap *mask =
-    gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), dropper_mask, DROPPER_WIDTH, DROPPER_HEIGHT);
+    gdk_bitmap_create_from_data (gdk_screen_get_root_window(screen), dropper_mask, DROPPER_WIDTH, DROPPER_HEIGHT);
 
   
   gdk_color_white (gdk_colormap_get_system_for_screen (screen), &bg);
@@ -1079,11 +1079,11 @@ grab_color_at_mouse (GtkWidget *invisible,
   ColorSelectionPrivate *priv;
   GdkColor color;
   GdkColormap *colormap = gdk_colormap_get_system_for_screen (invisible->screen);
-  GdkWindow *root_parent = gdk_screen_get_parent_root(invisible->screen);
+  GdkWindow *root_window = gdk_screen_get_root_window(invisible->screen);
   
   priv = colorsel->private_data;
   
-  image = gdk_image_get (root_parent, x_root, y_root, 1, 1);
+  image = gdk_image_get (root_window, x_root, y_root, 1, 1);
   pixel = gdk_image_get_pixel (image, 0, 0);
   gdk_image_unref (image);
 

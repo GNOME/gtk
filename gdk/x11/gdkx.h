@@ -121,19 +121,16 @@ struct _GdkGCX11Class
 
 GType gdk_gc_x11_get_type (void);
 
-/*#define GDK_ROOT_WINDOW()             gdk_root_window
-#define GDK_ROOT_PARENT()             ((GdkWindow *)gdk_parent_root)
-#define GDK_DISPLAY()                 gdk_display*/
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->display)
 #define GDK_WINDOW_SCREEN(win)	      (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)
 #define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->xdisplay)
-#define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->root_window)
+#define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->screen)->xroot_window)
 #define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)
 
 #define GDK_PIXMAP_DISPLAY(win)       (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->display)
 #define GDK_PIXMAP_SCREEN(win)	      (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)
 #define GDK_PIXMAP_XDISPLAY(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->xdisplay)
-#define GDK_PIXMAP_XROOTWIN(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->root_window)
+#define GDK_PIXMAP_XROOTWIN(win)      (GDK_SCREEN_IMPL_X11(GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->screen)->xroot_window)
 #define GDK_PIXMAP_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkPixmapObject *)win)->impl)->xid)
 
 #define GDK_DRAWABLE_DISPLAY(win)     (GDK_IS_WINDOW (win) ? GDK_WINDOW_DISPLAY (win) : GDK_PIXMAP_DISPLAY (win))
@@ -157,7 +154,7 @@ GType gdk_gc_x11_get_type (void);
 #define GDK_WINDOW_XWINDOW    GDK_DRAWABLE_XID
 
 /*extern Display		*gdk_display;
-extern Window		 gdk_root_window;
+extern Window		 gdk_xroot_window;
 extern gint		 gdk_screen;*/
 extern gchar		*gdk_display_name;
 /*extern Window		 gdk_leader_window;*/

@@ -81,7 +81,6 @@ struct _GdkClientFilter {
 
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
-/*GDKVAR GdkWindow  	*gdk_parent_root;*/
 GDKVAR gint		 gdk_error_code;
 GDKVAR gint		 gdk_error_warnings;
 GDKVAR GdkDisplayManager *dpy_mgr;

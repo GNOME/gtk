@@ -1733,7 +1733,7 @@ gtk_text_button_press (GtkWidget      *widget,
 	    }
 	  
 	  gtk_selection_convert (widget, GDK_SELECTION_PRIMARY,
-				 gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "UTF8_STRING", FALSE),
+				 gdk_display_atom (gtk_widget_get_display(widget), "UTF8_STRING", FALSE),
 
 				 event->time);
 	}
@@ -1751,9 +1751,9 @@ gtk_text_button_press (GtkWidget      *widget,
 	  
 	  old_editable->has_selection = FALSE;
 	  if (gdk_selection_owner_get_for_display (
-		GTK_WIDGET_GET_DISPLAY(widget),GDK_SELECTION_PRIMARY) == 
+		gtk_widget_get_display(widget),GDK_SELECTION_PRIMARY) == 
 	      widget->window)
-	    gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+	    gtk_selection_owner_set_for_display (gtk_widget_get_display(widget),
 						 NULL, 
 						 GDK_SELECTION_PRIMARY, 
 						 event->time);
@@ -1798,7 +1798,7 @@ gtk_text_button_release (GtkWidget      *widget,
       old_editable->has_selection = FALSE;
       if (old_editable->selection_start_pos != old_editable->selection_end_pos)
 	{
-	  if (gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+	  if (gtk_selection_owner_set_for_display (gtk_widget_get_display(widget),
 						   widget,
 						   GDK_SELECTION_PRIMARY,
 						   event->time))
@@ -1810,9 +1810,9 @@ gtk_text_button_release (GtkWidget      *widget,
       else
 	{
 	  if (gdk_selection_owner_get_for_display (
-		GTK_WIDGET_GET_DISPLAY(widget),GDK_SELECTION_PRIMARY) == 
+		gtk_widget_get_display(widget),GDK_SELECTION_PRIMARY) == 
 	      widget->window)
-	    gtk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget), 
+	    gtk_selection_owner_set_for_display (gtk_widget_get_display(widget), 
 						 NULL,
 					    GDK_SELECTION_PRIMARY, event->time);
 	}

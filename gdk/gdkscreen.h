@@ -35,7 +35,7 @@ struct _GdkScreenClass
  gint 		    (*get_height_mm)		(GdkScreen * screen);
  gint 		    (*get_root_depth)		(GdkScreen * screen);
  gint		    (*get_screen_num)		(GdkScreen * screen);
- GdkWindow *	    (*get_parent_root)		(GdkScreen * screen);
+ GdkWindow *	    (*get_root_window)		(GdkScreen * screen);
  GList *	    (*get_list_visuals)		(GdkScreen * screen);
  GdkColormap *	    (*get_default_colormap)	(GdkScreen * screen);
  void		    (*set_default_colormap)	(GdkScreen * screen,
@@ -52,7 +52,7 @@ void		    gdk_screen_unref	(GdkScreen * screen);
 GdkColormap *	    gdk_screen_get_default_colormap	(GdkScreen *screen);
 void		    gdk_screen_set_default_colormap	(GdkScreen *screen,
 							 GdkColormap *colormap);
-GdkWindow *	    gdk_screen_get_parent_root		(GdkScreen *screen);
+GdkWindow *	    gdk_screen_get_root_window		(GdkScreen *screen);
 GdkDisplay *	    gdk_screen_get_display		(GdkScreen *screen);
 gint		    gdk_screen_get_screen_num		(GdkScreen *screen);
 GList *		    gdk_screen_get_list_visuals		(GdkScreen *screen);

@@ -1195,7 +1195,7 @@ gdk_event_translate (GdkEvent *event,
       
       return_val = window_private && !GDK_WINDOW_DESTROYED (window);
       
-      if (window && GDK_WINDOW_XID (window) !=	scr_impl->root_window)
+      if (window && GDK_WINDOW_XID (window) !=	scr_impl->xroot_window)
 	gdk_window_destroy_notify (window);
       break;
       
@@ -1292,7 +1292,7 @@ gdk_event_translate (GdkEvent *event,
 	      gdk_error_trap_push ();
 	      if (XTranslateCoordinates (GDK_DRAWABLE_XDISPLAY (window),
 					 GDK_DRAWABLE_XID (window),
-					 scr_impl->root_window,
+					 scr_impl->xroot_window,
 					 0, 0,
 					 &tx, &ty,
 					 &child_window))
@@ -1554,9 +1554,9 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
     {
       XEvent xev = *xevent;
       
-      xev.xclient.window = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(win))->root_window;
+      xev.xclient.window = GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(win))->xroot_window;
       XSendEvent (GDK_WINDOW_XDISPLAY(win),
-		  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(win))->root_window, 
+		  GDK_SCREEN_IMPL_X11(GDK_WINDOW_SCREEN(win))->xroot_window, 
 		  False, SubstructureRedirectMask | SubstructureNotifyMask, &xev);
     }
 
@@ -1919,7 +1919,7 @@ gdk_net_wm_supports_for_screen (GdkScreen * screen, GdkAtom property)
    */
 
 
-  XGetWindowProperty (scr_impl->xdisplay, scr_impl->root_window,
+  XGetWindowProperty (scr_impl->xdisplay, scr_impl->xroot_window,
 		      dpy_impl->wmspec_check_atom, 0, G_MAXLONG,
 		      False, XA_WINDOW, &type, &format, &nitems,
 		      &bytes_after, (guchar **) & xwindow);
@@ -1941,7 +1941,7 @@ gdk_net_wm_supports_for_screen (GdkScreen * screen, GdkAtom property)
     return FALSE;
   }
 
-  XGetWindowProperty (scr_impl->xdisplay, scr_impl->root_window,
+  XGetWindowProperty (scr_impl->xdisplay, scr_impl->xroot_window,
 		      dpy_impl->wmspec_supported_atom, 0, G_MAXLONG,
 		      False, XA_ATOM, &type, &format, &n_atoms,
 		      &bytes_after, (guchar **) & atoms);

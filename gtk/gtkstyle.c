@@ -4192,7 +4192,7 @@ get_insensitive_layout (PangoLayout *layout, GdkScreen *screen)
             0x02, 0x01
           };
 
-          stipple = gdk_bitmap_create_from_data (gdk_screen_get_parent_root(screen), gray50_bits, gray50_width, gray50_height);
+          stipple = gdk_bitmap_create_from_data (gdk_screen_get_root_window(screen), gray50_bits, gray50_width, gray50_height);
 
         }
       
@@ -4242,7 +4242,7 @@ gtk_default_draw_layout (GtkStyle        *style,
     {
       PangoLayout *ins;
 
-      ins = get_insensitive_layout (layout, gdk_window_get_screen(window));
+      ins = get_insensitive_layout (layout, widget->screen);
       
       gdk_draw_layout (window, gc, x, y, ins);
 

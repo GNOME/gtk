@@ -12,7 +12,7 @@ static gint gdk_X11_screen_get_height (GdkScreen * screen);
 static gint gdk_X11_screen_get_width_mm (GdkScreen * screen);
 static gint gdk_X11_screen_get_height_mm (GdkScreen * screen);
 static gint gdk_X11_screen_get_default_depth (GdkScreen * screen);
-static GdkWindow * gdk_X11_screen_get_parent_root (GdkScreen * screen);
+static GdkWindow * gdk_X11_screen_get_root_window (GdkScreen * screen);
 static gint gdk_X11_screen_get_screen_num (GdkScreen * screen);
 static GdkColormap *gdk_X11_screen_get_default_colormap (GdkScreen * screen);
 static void gdk_X11_screen_set_default_colormap (GdkScreen * screen, 
@@ -57,7 +57,7 @@ void gdk_x11_screen_impl_class_init(GdkScreenImplX11Class *class){
   scr_class->get_height_mm = gdk_X11_screen_get_height_mm;
   scr_class->get_root_depth = gdk_X11_screen_get_default_depth;
   scr_class->get_screen_num = gdk_X11_screen_get_screen_num;
-  scr_class->get_parent_root = gdk_X11_screen_get_parent_root;
+  scr_class->get_root_window = gdk_X11_screen_get_root_window;
   scr_class->get_list_visuals = gdk_list_visuals_for_screen;
   scr_class->get_default_colormap = gdk_X11_screen_get_default_colormap;
   scr_class->set_default_colormap = gdk_X11_screen_set_default_colormap;
@@ -99,9 +99,9 @@ static gint gdk_X11_screen_get_screen_num(GdkScreen * screen){
     return scr_impl->scr_num;
 }
 
-static GdkWindow * gdk_X11_screen_get_parent_root(GdkScreen * screen){
+static GdkWindow * gdk_X11_screen_get_root_window(GdkScreen * screen){
     GdkScreenImplX11* scr_impl = GDK_SCREEN_IMPL_X11(screen);
-    return scr_impl->parent_root;
+    return scr_impl->root_window;
 }
 
 static GdkColormap *gdk_X11_screen_get_default_colormap(GdkScreen * screen){

@@ -5284,7 +5284,8 @@ gtk_clist_motion (GtkWidget      *widget,
 	{
 	  GtkTargetList  *target_list;
 
-	  target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), &clist_target_table, 1);
+	  target_list = gtk_target_list_new_for_display (gtk_widget_get_display(widget),
+							 &clist_target_table, 1);
 
 	  gtk_drag_begin (widget, target_list, GDK_ACTION_MOVE,
 			  clist->drag_button, (GdkEvent *)event);
@@ -7527,7 +7528,7 @@ gtk_clist_drag_leave (GtkWidget      *widget,
 	  gtk_drag_get_source_widget (context) == widget)
 	{
 	  GList *list;
-	  GdkAtom atom = gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "gtk-clist-drag-reorder", FALSE);
+	  GdkAtom atom = gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE);
 
 
 	  list = context->targets;
@@ -7584,7 +7585,7 @@ gtk_clist_drag_motion (GtkWidget      *widget,
   if (GTK_CLIST_REORDERABLE (clist))
     {
       GList *list;
-      GdkAtom atom = gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "gtk-clist-drag-reorder", FALSE);
+      GdkAtom atom = gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE);
 
 
       list = context->targets;
@@ -7662,7 +7663,7 @@ gtk_clist_drag_drop (GtkWidget      *widget,
       gtk_drag_get_source_widget (context) == widget)
     {
       GList *list;
-      GdkAtom atom = gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "gtk-clist-drag-reorder", FALSE);
+      GdkAtom atom = gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE);
 
 
       list = context->targets;
@@ -7697,7 +7698,7 @@ gtk_clist_drag_data_received (GtkWidget        *widget,
   if (GTK_CLIST_REORDERABLE (clist) &&
       gtk_drag_get_source_widget (context) == widget &&
       selection_data->target ==
-      gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "gtk-clist-drag-reorder", FALSE) &&
+      gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE) &&
 
       selection_data->format == GTK_TYPE_POINTER &&
       selection_data->length == sizeof (GtkCListCellInfo))
@@ -7736,7 +7737,7 @@ gtk_clist_drag_data_get (GtkWidget        *widget,
   g_return_if_fail (selection_data != NULL);
 
   if (selection_data->target ==
-      gdk_display_atom (GTK_WIDGET_GET_DISPLAY(widget), "gtk-clist-drag-reorder", FALSE))
+      gdk_display_atom (gtk_widget_get_display(widget), "gtk-clist-drag-reorder", FALSE))
 
     {
       GtkCListCellInfo *info;

@@ -145,7 +145,7 @@ GdkScreen *	gdk_x11_display_impl_get_screen(GdkDisplay *dpy,gint screen_num);
 GdkScreen *	gdk_x11_display_impl_get_default_screen(GdkDisplay *dpy);	
 void		gdk_x11_display_impl_class_init(GdkDisplayImplX11Class *class);
 GType		gdk_x11_display_impl_get_type();
-gboolean	gdk_x11_display_impl_is_root_window(GdkDisplay *dpy, Window root_window);
+gboolean	gdk_x11_display_impl_is_root_window(GdkDisplay *dpy, Window xroot_window);
 
 
 #define DEFAULT_X_DISPLAY   GDK_DISPLAY_IMPL_X11(DEFAULT_GDK_DISPLAY)->xdisplay

@@ -47,9 +47,9 @@ gdk_screen_set_default_colormap(GdkScreen *screen,
   GDK_SCREEN_GET_CLASS(screen)->set_default_colormap(screen, colormap);
 }
 GdkWindow *
-gdk_screen_get_parent_root(GdkScreen *screen)
+gdk_screen_get_root_window(GdkScreen *screen)
 {
-  return GDK_SCREEN_GET_CLASS(screen)->get_parent_root(screen);
+  return GDK_SCREEN_GET_CLASS(screen)->get_root_window(screen);
 }
 GdkDisplay *
 gdk_screen_get_display(GdkScreen *screen)

@@ -1456,7 +1456,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
 				    event->x + entry->scroll_offset, event->y))
 	{
 	  GdkDragContext *context;
-	  GtkTargetList *target_list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), target_table, G_N_ELEMENTS (target_table));
+	  GtkTargetList *target_list = gtk_target_list_new_for_display (gtk_widget_get_display(widget), target_table, G_N_ELEMENTS (target_table));
 
 	  
 	  context = gtk_drag_begin (widget, target_list, GDK_ACTION_COPY | GDK_ACTION_MOVE,
@@ -1964,7 +1964,7 @@ gtk_entry_copy_clipboard (GtkEntry *entry)
   if (gtk_editable_get_selection_bounds (editable, &start, &end))
     {
       gchar *str = gtk_entry_get_public_chars (entry, start, end);
-      gtk_clipboard_set_text (gtk_clipboard_get_for_display (GTK_WIDGET_GET_DISPLAY(entry), GDK_NONE),
+      gtk_clipboard_set_text (gtk_clipboard_get_for_display (gtk_widget_get_display(entry), GDK_NONE),
 
 		      str, -1);
       g_free (str);
@@ -2859,7 +2859,7 @@ gtk_entry_paste (GtkEntry *entry,
 		 GdkAtom   selection)
 {
   g_object_ref (G_OBJECT (entry));
-  gtk_clipboard_request_text (gtk_clipboard_get_for_display (GTK_WIDGET_GET_DISPLAY(entry), selection),
+  gtk_clipboard_request_text (gtk_clipboard_get_for_display (gtk_widget_get_display(entry), selection),
 
 			      paste_received, entry);
 }
@@ -2900,7 +2900,7 @@ gtk_entry_update_primary_selection (GtkEntry *entry)
     { "COMPOUND_TEXT", 0, 0 }
   };
   
-  GtkClipboard *clipboard = gtk_clipboard_get_for_display (GTK_WIDGET_GET_DISPLAY(entry), GDK_SELECTION_PRIMARY);
+  GtkClipboard *clipboard = gtk_clipboard_get_for_display (gtk_widget_get_display(entry), GDK_SELECTION_PRIMARY);
 
   gint start, end;
   

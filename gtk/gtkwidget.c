@@ -3949,7 +3949,7 @@ gtk_widget_peek_style (GtkWidget *widget)
   if (style_stack)
     return (GtkStyle*) style_stack->data;
   else
-    return gtk_widget_get_default_style_for_display (GTK_WIDGET_GET_DISPLAY(widget));
+    return gtk_widget_get_default_style_for_display (gtk_widget_get_display(widget));
 }
 
 void
@@ -4167,14 +4167,15 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
  *   results:
  *************************************************************/
 
-void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
-					   GdkScreen	       *screen)
+void
+gtk_widget_set_screen (GtkWidget    *widget,
+		       GdkScreen    *screen)
 {
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
   widget->screen = screen;
   /* need to check if the style is Ok for the widget's display */
-  if(GTK_WIDGET_GET_DISPLAY(widget) != widget->style->display)
+  if(gtk_widget_get_display(widget) != widget->style->display)
     widget->style = gtk_widget_peek_style(widget);
   g_object_notify (G_OBJECT (widget), "screen");
   if (GTK_IS_CONTAINER (widget))
@@ -4185,7 +4186,7 @@ void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
 }
 /*************************************************************
  * gtk_widget_get_screen :
- *     Set a non default screen for the widget
+ *     Get the screen for the widget
  *
  *   arguments: 
  *     widget:
@@ -4194,12 +4195,33 @@ void	   gtk_widget_set_screen	  (GtkWidget	       *widget,
  *   results: screen
  *************************************************************/
 
-GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget)
+GdkScreen *
+gtk_widget_get_screen (GtkWidget *widget)
 {
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   return widget->screen;
 }
+
+/*************************************************************
+ * gtk_widget_get_display:
+ *     Get the associated GdkDisplay for the widget
+ *
+ *   arguments: 
+ *     widget:
+ *     
+ *     
+ *   results: display
+ *************************************************************/
+
+GdkDisplay*
+gtk_widget_get_display (GtkWidget *widget)
+{
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  return gdk_screen_get_display(widget->screen);
+}
+
 
 
 /*************************************************************

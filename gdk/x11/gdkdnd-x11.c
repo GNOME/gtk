@@ -429,17 +429,17 @@ gdk_window_cache_new_for_display (GdkDisplay *dpy){
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
   result->display = dpy;
 
-  XGetWindowAttributes (scr_impl->xdisplay,scr_impl->root_window,&xwa);
+  XGetWindowAttributes (scr_impl->xdisplay,scr_impl->xroot_window,&xwa);
   result->old_event_mask = xwa.your_event_mask;
-  XSelectInput (scr_impl->xdisplay,scr_impl->root_window,
+  XSelectInput (scr_impl->xdisplay,scr_impl->xroot_window,
 		result->old_event_mask | SubstructureNotifyMask);
-  gdk_window_add_filter (scr_impl->parent_root, 
+  gdk_window_add_filter (scr_impl->root_window, 
 			 gdk_window_cache_filter, result);
   
   gdk_error_code = 0;
   gdk_error_warnings = 0;
 
-  if (XQueryTree(scr_impl->xdisplay,scr_impl->root_window, 
+  if (XQueryTree(scr_impl->xdisplay,scr_impl->xroot_window, 
 		 &root, &parent, &children, &nchildren) == 0)
     return result;
   
@@ -472,8 +472,8 @@ static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
 {
   XSelectInput (GDK_DISPLAY_DND_SCREEN(cache->display)->xdisplay,
-		GDK_DISPLAY_DND_SCREEN(cache->display)->root_window, cache->old_event_mask);
-  gdk_window_remove_filter (GDK_DISPLAY_DND_SCREEN(cache->display)->parent_root, 
+		GDK_DISPLAY_DND_SCREEN(cache->display)->xroot_window, cache->old_event_mask);
+  gdk_window_remove_filter (GDK_DISPLAY_DND_SCREEN(cache->display)->root_window, 
 			    gdk_window_cache_filter, cache);
 
   g_list_foreach (cache->children, (GFunc)g_free, NULL);
@@ -611,7 +611,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_DISPLAY_DND_SCREEN(cache->display)->root_window;
+    return GDK_DISPLAY_DND_SCREEN(cache->display)->xroot_window;
 }
 
 #if 0
@@ -895,7 +895,7 @@ motif_lookup_drag_window_for_display (GdkDisplay *dpy){
   GdkScreenImplX11 *scr_impl = GDK_DISPLAY_DND_SCREEN(dpy);
 
   XGetWindowProperty (scr_impl->xdisplay,
-		      scr_impl->root_window, 
+		      scr_impl->xroot_window, 
 		      GDK_DISPLAY_IMPL_X11(dpy)->motif_drag_window_atom,
 		      0, 1, FALSE,
 		      XA_WINDOW, &type, &format, &nitems, &bytes_after,
@@ -951,7 +951,7 @@ motif_find_drag_window_for_display (gboolean create, GdkDisplay *dpy)
 	      attr.event_mask = PropertyChangeMask;
 	      
 	       dpy_impl->motif_drag_window = 
-		XCreateWindow( dpy_impl->xdisplay, scr_impl->root_window,
+		XCreateWindow( dpy_impl->xdisplay, scr_impl->xroot_window,
 			      -100, -100, 10, 10, 0, 0,
 			      InputOnly, CopyFromParent,
 			      (CWOverrideRedirect | CWEventMask), &attr);
@@ -959,7 +959,7 @@ motif_find_drag_window_for_display (gboolean create, GdkDisplay *dpy)
 	      GDK_NOTE (DND,
 			g_message ("Created drag window %#lx\n", dpy_impl->motif_drag_window));
 	      
-	      XChangeProperty (dpy_impl->xdisplay, scr_impl->root_window,
+	      XChangeProperty (dpy_impl->xdisplay, scr_impl->xroot_window,
 			       dpy_impl->motif_drag_window_atom, XA_WINDOW,
 			       32, PropModeReplace,
 			       (guchar *)&dpy_impl->motif_drag_window_atom, 1);
@@ -2219,7 +2219,7 @@ static gint
 xdnd_send_xevent_for_display (Window window, GdkDisplay* display, gboolean propagate, 
 		  XEvent *event_send)
 {
-  if (window == GDK_DISPLAY_DND_SCREEN(display)->root_window)
+  if (window == GDK_DISPLAY_DND_SCREEN(display)->xroot_window)
     return gdk_send_xevent (window, propagate, ButtonPressMask, event_send);
   else
     return gdk_send_xevent (window, propagate, 0, event_send);

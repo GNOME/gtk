@@ -137,7 +137,7 @@ gtk_plug_construct (GtkPlug *plug, GdkNativeWindow socket_id)
       if (plug->socket_window == NULL)
 	{
 	  plug->socket_window = 
-	    gdk_window_foreign_new_for_display (GTK_WIDGET_GET_DISPLAY(plug),
+	    gdk_window_foreign_new_for_display (gtk_widget_get_display(plug),
 	    					socket_id);
 	  plug->same_app = FALSE;
 	}
@@ -222,12 +222,12 @@ gtk_plug_realize (GtkWidget *widget)
   gdk_error_trap_push ();
   widget->window = gdk_window_new (plug->socket_window, 
 				   &attributes, attributes_mask);
-  gdk_display_sync (GTK_WIDGET_GET_DISPLAY(widget));
+  gdk_display_sync (gtk_widget_get_display(widget));
   if (gdk_error_trap_pop ()) /* Uh-oh */
     {
       gdk_error_trap_push ();
       gdk_window_destroy (widget->window);
-      gdk_display_sync (GTK_WIDGET_GET_DISPLAY(widget));
+      gdk_display_sync (gtk_widget_get_display(widget));
       gdk_error_trap_pop ();
       widget->window = gdk_window_new_for_screen (widget->screen,
       						  NULL,

@@ -555,9 +555,9 @@ gdk_window_get_toplevels_for_screen (GdkScreen *screen)
 {
   GList *new_list = NULL;
   GList *tmp_list;
-  GdkWindow * parent_root = GDK_SCREEN_GET_CLASS(screen)->get_parent_root(screen);
+  GdkWindow * root_window = GDK_SCREEN_GET_CLASS(screen)->get_root_window(screen);
   
-  tmp_list = ((GdkWindowObject *)parent_root)->children;
+  tmp_list = ((GdkWindowObject *)root_window)->children;
   while (tmp_list)
     {
       new_list = g_list_prepend (new_list, tmp_list->data);
@@ -607,13 +607,13 @@ gdk_window_is_viewable (GdkWindow *window)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkScreen * scr = gdk_window_get_screen(window);
-  GdkWindow * parent_root = GDK_SCREEN_GET_CLASS(scr)->get_parent_root(scr);
+  GdkWindow * root_window = GDK_SCREEN_GET_CLASS(scr)->get_root_window(scr);
   
   g_return_val_if_fail (window != NULL, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
   
   while (private && 
-	 (private != (GdkWindowObject *)parent_root) &&
+	 (private != (GdkWindowObject *)root_window) &&
 	 (GDK_WINDOW_TYPE (private) != GDK_WINDOW_FOREIGN))
     {
       if (!GDK_WINDOW_IS_MAPPED (window))

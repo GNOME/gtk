@@ -85,7 +85,7 @@ gdk_pango_get_gc (GdkScreen      *screen,
 {
   GdkGC *result;
   GdkPangoContextInfo *info;
-  GdkWindow *parent_root;
+  GdkWindow *root_window;
   
   g_return_val_if_fail (context != NULL, NULL);
 
@@ -97,8 +97,8 @@ gdk_pango_get_gc (GdkScreen      *screen,
       return NULL;
     }
   
-  parent_root = GDK_SCREEN_GET_CLASS(screen)->get_parent_root(screen);
-  result = gdk_gc_new (parent_root);
+  root_window = GDK_SCREEN_GET_CLASS(screen)->get_root_window(screen);
+  result = gdk_gc_new (root_window);
   gdk_gc_copy (result, base_gc);
   
   if (fg_color)

@@ -1947,7 +1947,7 @@ gtk_menu_position (GtkMenu *menu)
   screen_width = gdk_screen_get_width (widget->screen);
   screen_height = gdk_screen_get_height (widget->screen);
 
-  gdk_window_get_pointer (gdk_screen_get_parent_root(widget->screen),
+  gdk_window_get_pointer (gdk_screen_get_root_window(widget->screen),
   			  &x, &y, NULL);
 
   /* We need the requisition to figure out the right place to

@@ -500,7 +500,7 @@ gtk_selection_target_list_get (GtkWidget    *widget,
 
   sellist = g_new (GtkSelectionTargetList, 1);
   sellist->selection = selection;
-  sellist->list = gtk_target_list_new_for_display (GTK_WIDGET_GET_DISPLAY(widget), NULL, 0);
+  sellist->list = gtk_target_list_new_for_display (gtk_widget_get_display(widget), NULL, 0);
 
 
   lists = g_list_prepend (lists, sellist);
@@ -596,7 +596,7 @@ gtk_selection_add_targets (GtkWidget            *widget,
   g_return_if_fail (targets != NULL);
   
   list = gtk_selection_target_list_get (widget, selection);
-  gtk_target_list_add_table_for_display (GTK_WIDGET_GET_DISPLAY(widget), list, targets, ntargets);
+  gtk_target_list_add_table_for_display (gtk_widget_get_display(widget), list, targets, ntargets);
 
 }
 
@@ -618,7 +618,7 @@ gtk_selection_remove_all (GtkWidget *widget)
   GList *tmp_list;
   GList *next;
   GtkSelectionInfo *selection_info;
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
   
   /* Remove pending requests/incrs for this widget */
   
@@ -659,7 +659,7 @@ gtk_selection_remove_all (GtkWidget *widget)
       
       if (selection_info->widget == widget)
 	{	
-	  gdk_selection_owner_set_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+	  gdk_selection_owner_set_for_display (gtk_widget_get_display(widget),
 					       NULL, 
 					       selection_info->selection,
 				               GDK_CURRENT_TIME, FALSE);
@@ -703,7 +703,7 @@ gtk_selection_convert (GtkWidget *widget,
   GtkRetrievalInfo *info;
   GList *tmp_list;
   GdkWindow *owner_window;
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
   
   g_return_val_if_fail (widget != NULL, FALSE);
   
@@ -737,7 +737,7 @@ gtk_selection_convert (GtkWidget *widget,
      procedure directly to avoid deadlocks with INCR. */
   
   owner_window = gdk_selection_owner_get_for_display (
-		    GTK_WIDGET_GET_DISPLAY(widget),selection);
+		    gtk_widget_get_display(widget),selection);
   
   if (owner_window != NULL)
     {
@@ -748,7 +748,7 @@ gtk_selection_convert (GtkWidget *widget,
       selection_data.target = target;
       selection_data.data = NULL;
       selection_data.length = -1;
-      selection_data.display = GTK_WIDGET_GET_DISPLAY(widget);
+      selection_data.display = gtk_widget_get_display(widget);
       
       gdk_window_get_user_data (owner_window, (gpointer *)&owner_widget);
       
@@ -995,7 +995,7 @@ gtk_selection_clear (GtkWidget         *widget,
    */
   GList *tmp_list;
   GtkSelectionInfo *selection_info = NULL;
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
   tmp_list = cache->current_selections;
   while (tmp_list)
     {
@@ -1036,7 +1036,7 @@ gtk_selection_request (GtkWidget *widget,
   GList *tmp_list;
   guchar *mult_atoms;
   int i;
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
   
   /* Check if we own selection */
   
@@ -1066,7 +1066,7 @@ gtk_selection_request (GtkWidget *widget,
 #if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_FB) 
   info->requestor = gdk_window_lookup (event->requestor);
   if (!info->requestor)
-    info->requestor = gdk_window_foreign_new_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+    info->requestor = gdk_window_foreign_new_for_display (gtk_widget_get_display(widget),
     							  event->requestor);
 #else
   info->requestor = NULL;
@@ -1087,7 +1087,7 @@ gtk_selection_request (GtkWidget *widget,
 			     0, GTK_SELECTION_MAX_SIZE, FALSE,
 			     &type, &format, &length, &mult_atoms))
 	{
-	  gdk_selection_send_notify_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+	  gdk_selection_send_notify_for_display (gtk_widget_get_display(widget),
 						 event->requestor, 
 						 event->selection,
 						 event->target, 
@@ -1128,12 +1128,12 @@ gtk_selection_request (GtkWidget *widget,
       data.target = info->conversions[i].target;
       data.data = NULL;
       data.length = -1;
-      data.display = GTK_WIDGET_GET_DISPLAY(widget);
+      data.display = gtk_widget_get_display(widget);
       
 #ifdef DEBUG_SELECTION
       g_message ("Selection %ld, target %ld (%s) requested by 0x%x (property = %ld)",
 		 event->selection, info->conversions[i].target,
-		 gdk_display_atom_name (GTK_WIDGET_GET_DISPLAY(widget), info->conversions[i].target),
+		 gdk_display_atom_name (gtk_widget_get_display(widget), info->conversions[i].target),
 
 		 event->requestor, event->property);
 #endif
@@ -1215,7 +1215,7 @@ gtk_selection_request (GtkWidget *widget,
       info->conversions[0].property == GDK_NONE)
     {
       /* Reject the entire conversion */
-      gdk_selection_send_notify_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+      gdk_selection_send_notify_for_display (gtk_widget_get_display(widget),
 					     event->requestor, 
 					     event->selection, 
 					     event->target, 
@@ -1224,7 +1224,7 @@ gtk_selection_request (GtkWidget *widget,
     }
   else
     {
-      gdk_selection_send_notify_for_display (GTK_WIDGET_GET_DISPLAY(widget),
+      gdk_selection_send_notify_for_display (gtk_widget_get_display(widget),
 					     event->requestor, 
 					     event->selection,
 					     event->target,
@@ -1375,7 +1375,7 @@ gtk_selection_incr_timeout (GtkIncrInfo *info)
   GList *tmp_list;
   gboolean retval;
   GtkSelectionDisplayCache *cache = 
-	  gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(info->widget));
+	  gtk_selection_get_cache(gtk_widget_get_display(info->widget));
   GDK_THREADS_ENTER ();
   
   /* Determine if retrieval has finished by checking if it still in
@@ -1441,7 +1441,7 @@ gtk_selection_notify (GtkWidget	       *widget,
   gint length;
   GdkAtom type;
   gint	  format;
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
   
   
 #ifdef DEBUG_SELECTION
@@ -1536,7 +1536,7 @@ gtk_selection_property_notify (GtkWidget	*widget,
   g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
-  cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
 
 #if defined(GDK_WINDOWING_WIN32) 
   if ((event->state != GDK_PROPERTY_NEW_VALUE) ||  /* property was deleted */
@@ -1635,7 +1635,7 @@ gtk_selection_retrieval_timeout (GtkRetrievalInfo *info)
   GList *tmp_list;
   gboolean retval;
   GtkSelectionDisplayCache *cache = 
-	  gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(info->widget));
+	  gtk_selection_get_cache(gtk_widget_get_display(info->widget));
 
   GDK_THREADS_ENTER ();
   
@@ -1703,7 +1703,7 @@ gtk_selection_retrieval_report (GtkRetrievalInfo *info,
   
   data.length = length;
   data.data = buffer;
-  data.display = GTK_WIDGET_GET_DISPLAY(info->widget);
+  data.display = gtk_widget_get_display(info->widget);
   
   gtk_signal_emit_by_name (GTK_OBJECT(info->widget),
 			   "selection_received", 
@@ -1766,7 +1766,7 @@ static void
 gtk_selection_default_handler (GtkWidget	*widget,
 			       GtkSelectionData *data)
 {
-  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(GTK_WIDGET_GET_DISPLAY(widget));
+  GtkSelectionDisplayCache *cache = gtk_selection_get_cache(gtk_widget_get_display(widget));
   if (data->target == cache->gtk_selection_atoms[TIMESTAMP])
     {
       /* Time which was used to obtain selection */

@@ -340,7 +340,7 @@ gtk_tooltips_draw_tips (GtkTooltips * tooltips)
   w = requisition.width;
   h = requisition.height;
 
-  gdk_window_get_pointer (gdk_screen_get_parent_root(widget->screen),
+  gdk_window_get_pointer (gdk_screen_get_root_window(widget->screen),
 			  &x, NULL, NULL);
   gdk_window_get_origin (widget->window, NULL, &y);
   if (GTK_WIDGET_NO_WINDOW (widget))

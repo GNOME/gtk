@@ -75,10 +75,10 @@ GdkDisplay *	gdk_x11_display_impl_display_new(gchar * display_name)
       scr_impl->xdisplay = dpy_impl->xdisplay;
       scr_impl->xscreen = ScreenOfDisplay(dpy_impl->xdisplay, i);
       scr_impl->scr_num = i;
-      scr_impl->root_window = (Window) RootWindow (dpy_impl->xdisplay, i);
+      scr_impl->xroot_window = (Window) RootWindow (dpy_impl->xdisplay, i);
       scr_impl->wmspec_check_window = None;
       scr_impl->leader_window =  XCreateSimpleWindow(dpy_impl->xdisplay,
-						     scr_impl->root_window,
+						     scr_impl->xroot_window,
 						     10, 10, 10, 10, 0, 0, 0);
       scr_impl->visual_initialised = FALSE;
       scr_impl->colormap_initialised = FALSE;
@@ -132,14 +132,14 @@ GdkScreen *gdk_x11_display_impl_get_default_screen(GdkDisplay *dpy){
     return dpy_impl->default_screen;
 }
 
-gboolean gdk_x11_display_impl_is_root_window(GdkDisplay *dpy, Window root_window)
+gboolean gdk_x11_display_impl_is_root_window(GdkDisplay *dpy, Window xroot_window)
 {
   GSList * tmp;
   GdkDisplayImplX11 *dpy_impl = GDK_DISPLAY_IMPL_X11(dpy);
   tmp = dpy_impl->screen_list;
   g_assert(tmp != NULL);
   while(tmp){
-      if((((GdkScreenImplX11*)tmp->data)->root_window) == root_window)
+      if((((GdkScreenImplX11*)tmp->data)->xroot_window) == xroot_window)
           return TRUE;
       tmp = g_slist_next(tmp);
   }

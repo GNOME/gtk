@@ -30,7 +30,6 @@
 #include "config.h"
 
 guint             gdk_debug_flags = 0;
-/*GdkWindow        *gdk_parent_root = NULL;*/
 gint              gdk_error_code = 0;
 gint              gdk_error_warnings = TRUE;
 GList            *gdk_default_filters = NULL;

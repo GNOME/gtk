@@ -88,7 +88,7 @@ GdkScreen *  gdk_x11_display_manager_get_screen_for_root (GdkDisplayManager * dp
     g_assert(tmp_scr_list != NULL);
     while(tmp_scr_list != NULL){
       tmp_scr = (GdkScreenImplX11*)tmp_scr_list->data;
-      if(tmp_scr->root_window == root)
+      if(tmp_scr->xroot_window == root)
 	return (GdkScreen *) tmp_scr;
       tmp_scr_list = g_slist_next(tmp_scr_list);
     }
