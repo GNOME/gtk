@@ -805,7 +805,10 @@ _gtk_file_system_model_get_path (GtkFileSystemModel *model,
 {
   FileModelNode *node = iter->user_data;
 
-  return node->path;
+  if (node->is_dummy)
+    return node->parent->path;
+  else
+    return node->path;
 }
 
 static void
