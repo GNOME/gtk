@@ -1,3 +1,9 @@
+2003-08-03  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixbuf.c (gdk_pixbuf_get_rowstride): 
+	* gdk-pixbuf-data.c (gdk_pixbuf_new_from_data): Clarify misleading explanation of 
+	rowstride.  (#119000)
+
 2003-07-18  Matthias Clasen  <maclas@gmx.de>
 
 	* pixops/pixops.c (correct_total): Split correction into multiple pieces if no single weight is large

@@ -395,9 +395,10 @@ gdk_pixbuf_get_height (const GdkPixbuf *pixbuf)
  * gdk_pixbuf_get_rowstride:
  * @pixbuf: A pixbuf.
  *
- * Queries the rowstride of a pixbuf, which is the number of bytes between rows.
+ * Queries the rowstride of a pixbuf, which is the number of bytes between the start of a row
+ * and the start of the next row.
  *
- * Return value: Number of bytes between rows.
+ * Return value: Distance between row starts.
  **/
 int
 gdk_pixbuf_get_rowstride (const GdkPixbuf *pixbuf)
