@@ -20,21 +20,24 @@ Incompatible changes made between version 1.0 and version 1.2
 
 <listitem>
 <para>
-GtkAcceleratorTable has been replaced with GtkAccelGroup.
+<structname>GtkAcceleratorTable</structname> has been replaced with 
+<structname>GtkAccelGroup</structname>.
 </para>
 </listitem>
 
 <listitem>
 <para>
-GtkMenuFactory has been replaced with GtkItemFactory, although
-a version of GtkMenuFactory is currently still provided to ease
-the migration phase.
+<structname>GtkMenuFactory</structname> has been replaced with 
+<structname>GtkItemFactory</structname>, although
+a version of <structname>GtkMenuFactory</structname> is currently still 
+provided to ease the migration phase.
 </para>
 </listitem>
 
 <listitem>
 <para>
-The GtkTypeInfo structures used in the gtk_*_type_init() functions have
+The <stuctname>GtkTypeInfo</structname> structures used in the 
+<function>gtk_*_type_init()</function> functions have
 changed a bit, the old format:
 <programlisting>
       GtkTypeInfo bin_info =
@@ -65,19 +68,22 @@ changed a bit, the old format:
       };
 </programlisting>
 
-  the GtkArgSetFunc and GtkArgGetFunc functions are not supported from the
-  type system anymore, and you should make sure that your code only fills
-  in these fields with NULL and doesn't use the deprecated function typedefs
-  (GtkArgSetFunc) and (GtkArgGetFunc) anymore.
+  the <function>GtkArgSetFunc</function> and <function>GtkArgGetFunc</function>
+  functions are not supported from the type system anymore, and you should make
+  sure that your code only fills in these fields with <literal>NULL</literal> 
+  and doesn't use the deprecated function typedefs 
+  <literal>(GtkArgSetFunc)</literal> and <literal>(GtkArgGetFunc)</literal> 
+  anymore.
 </para>
 </listitem>
 
 <listitem>
 <para>
-A number of Gtk functions were renamed. For compatibility, gtkcompat.h
-  #define's the old 1.0.x function names in terms of the new names.
-  To assure your Gtk program doesn't rely on outdated function
-  variants, compile your program with -DGTK_DISABLE_COMPAT_H to disable
+A number of GTK+ functions were renamed. For compatibility, 
+  <filename>gtkcompat.h</filename> #define's the old 1.0.x function names in 
+  terms of the new names. To assure your GTK+ program doesn't rely on outdated
+  function variants, compile your program with 
+  <option>-DGTK_DISABLE_COMPAT_H</option> to disable
   the compatibility aliases.
 
   Here is the list of the old names and replacements:
@@ -99,16 +105,16 @@ A number of Gtk functions were renamed. For compatibility, gtkcompat.h
   gtk_window_position		      gtk_window_set_position
  
   (1) gtk_style_apply_default_background() has an additional
-      argument, gboolean set_bg. This parameter should be FALSE if
-      the background is being set for a NO_WINDOW widget, otherwise
-      true.
+      argument, gboolean set_bg. This parameter should be 
+      <literal>FALSE</literal> if the background is being set for a 
+      NO_WINDOW widget, otherwise <literal>TRUE</literal>.
 </programlisting>
 </para>
 </listitem>
 
 <listitem>
 <para>
-During the development phase of the 1.1.x line of Gtk certain functions
+During the development phase of the 1.1.x line of GTK+ certain functions
   were deprecated and later removed. Functions affected are:
 
 <programlisting>
@@ -138,17 +144,18 @@ During the development phase of the 1.1.x line of Gtk certain functions
 
 <listitem>
 <para>
-Additionally, all gtk_*_interp functions were removed.
-  gtk_*_full versions were provided as of GTK+-1.0 and should
-  be used instead.
+Additionally, all <function>gtk_*_interp()</function> functions were removed.
+  <function>gtk_*_full()</function> versions were provided as of GTK+ 1.0 and 
+  should be used instead.
 </para>
 </listitem>
 
 <listitem>
 <para>
-GtkButton has been changed to derive from GtkBin.
-  To access a button's child, use GTK_BIN (button)-&gt;child, instead
-  of the old GTK_BUTTON (button)-&gt;child.
+<structname>GtkButton</structname> has been changed to derive from 
+<structname>GtkBin</structname>.
+  To access a button's child, use <literal>GTK_BIN (button)-&gt;child</literal>,
+  instead of the old <literal>GTK_BUTTON (button)-&gt;child</literal>.
 </para>
 </listitem>
 
@@ -156,8 +163,9 @@ GtkButton has been changed to derive from GtkBin.
 <para>
 The selection API has been slightly modified:
 
- gtk_selection_add_handler() and gtk_selection_add_handler_full() 
- have been removed. To supply the selection, one now register
+ <function>gtk_selection_add_handler()</function> and 
+ <function>gtk_selection_add_handler_full()</function> 
+ have been removed. To supply the selection, one now registers
  the targets one is interested in with:
 
 <programlisting>
@@ -212,14 +220,15 @@ Support for Themes has been added. In general, this does
 
 <programlisting>
    - To set a shape for a window, you must use 
-     gtk_widget_shape_combine_mask() instead of 
-     gdk_window_shape_combine_mask(), or the shape will be
+     <function>gtk_widget_shape_combine_mask()</function> instead of 
+     <function>gdk_window_shape_combine_mask()</function>, or the shape will be
      reset when switching themes.
 
    - It is no longer permissable to draw directly on an arbitrary
      widget, or to set an arbitrary widget's background pixmap.
-     If you need to do that, use a GtkDrawingArea or (for a 
-     toplevel) a GtkWindow where gtk_widget_set_app_paintable()
+     If you need to do that, use a <structname>GtkDrawingArea</structname> or 
+     (for a toplevel) a <structname>GtkWindow</structname> where 
+     <function>gtk_widget_set_app_paintable()</function>
      has been called.
 </programlisting>
 </para>
@@ -227,20 +236,24 @@ Support for Themes has been added. In general, this does
 
 <listitem>
 <para>
-The ScrolledWindow widget no longer creates a Viewport
-  automatically. Instead, it has been generalized to accept
-  any "self-scrolling" widget.
+The <structname>GtkScrolledWindow</structname> widget no longer creates a 
+  <structname>GtkViewport</structname> automatically. Instead, it has been 
+  generalized to accept any "self-scrolling" widget.
 </para>
 
 <para>
-  The self-scrolling widgets in the Gtk+ core are GtkViewport,
-  GtkCList, GtkCTree, GtkText, and GtkLayout. All of these widgets can
-  be added to a scrolled window as normal children with
-  gtk_container_add() and scrollbars will be set up automatically.
+  The self-scrolling widgets in the GTK+ core are 
+  <structname>GtkViewport</structname>,
+  <structname>GtkCList</structname>, <structname>GtkCTree</structname>, 
+  <structname>GtkText</structname>, and <structname>GtkLayout</structname>. 
+  All of these widgets can be added to a scrolled window as normal children with
+  <function>gtk_container_add()</function> and scrollbars will be set up 
+  automatically.
 </para>
 
 <para>
-  To add scrollbars to a non self-scrolling widget, (such as a GtkList),
+  To add scrollbars to a non self-scrolling widget, (such as a 
+  <function>GtkList</function>),
   first add it to a viewport, then add the viewport to a scrolled window.
   The scrolled window code provides a convenience function to do this:
 
@@ -249,16 +262,17 @@ The ScrolledWindow widget no longer creates a Viewport
 					      GtkWidget         *child);
 </programlisting>
 
-  This does exactly what it says - it creates a Viewport, adds the child
-  widget to it, then adds the Viewport to the scrolled window.
+  This does exactly what it says - it creates a viewport, adds the child
+  widget to it, then adds the viewport to the scrolled window.
 </para>
 
 <para>
-  The scrollbars have been removed from the GtkCList and GtkCTree,
-  because they are now scrolled by simply adding them to a Scrolled
-  Window. The scrollbar policy is set on the scrolled window with
-  gtk_scrolled_window_set_policy() and not on the child widgets
-  (e.g. GtkCList's gtk_clist_set_policy() was removed).
+  The scrollbars have been removed from the <structname>GtkCList</structname>
+  and <structname>GtkCTree</structname>, because they are now scrolled by simply
+  adding them to a scrolled window. The scrollbar policy is set on the scrolled
+  window with <function>gtk_scrolled_window_set_policy()</function> and not on 
+  the child widgets (e.g. <structname>GtkCList</structname>'s 
+  <function>gtk_clist_set_policy()</function> was removed).
 </para>
 </listitem>  
 
@@ -273,8 +287,9 @@ The "main loop" of GTK+ has been moved to GLib. This should not
 
 <listitem>
 <para>
-the GTK_BASIC flag was removed, and with it the corresponding
-  macro and function GTK_WIDGET_BASIC() and gtk_widget_basic().
+the <literal>GTK_BASIC</literal> flag was removed, and with it the corresponding
+  macro and function <function>GTK_WIDGET_BASIC()</function> and 
+  <function>gtk_widget_basic()</function>.
 </para>
 </listitem>
   
@@ -292,9 +307,11 @@ All freeze/thaw methods are now recursive - that is, if you
   [...]
   if (!frozen)
     gtk_clist_thaw (clist);
+</programlisting>
 
   it will not work anymore. It must be, simply:
 
+<programlisting>
   gtk_clist_freeze (clist);
   [...]
   gtk_clist_thaw (clist);
@@ -314,81 +331,110 @@ The thread safety in GTK+ 1.2 is slightly different than
 <para>
   This means:
 
-<programlisting>
-   - You must call g_thread_init() before executing any
-     other GTK+ or GDK functions in a threaded GTK+ program.
+<itemizedlist>
+   <listitem>
+     <para>You must call <function>g_thread_init()</function> before 
+       executing any other GTK+ or GDK functions in a threaded GTK+ program.
+     </para>
+   </listitem>
 
-   - Idles, timeouts, and input functions are executed outside 
-     of the main GTK+ lock. So, if you need to call GTK+ 
-     inside of such a callback, you must surround the callback
-     with a gdk_threads_enter()/gdk_threads_leave() pair.
+   <listitem>
+     <para>Idles, timeouts, and input functions are executed outside 
+       of the main GTK+ lock. So, if you need to call GTK+ 
+       inside of such a callback, you must surround the callback
+       with a <function>gdk_threads_enter()</function>/<function>gdk_threads_leave()</function> 
+       pair.
+     </para>
 
-     [ However, signals are still executed within the main
-       GTK+ lock ]
+     <para>However, signals are still executed within the main
+       GTK+ lock.
+     </para>
 
-     In particular, this means, if you are writing widgets
-     that might be used in threaded programs, you _must_
-     surround timeouts and idle functions in this matter.
+     <para>In particular, this means, if you are writing widgets
+       that might be used in threaded programs, you _must_
+       surround timeouts and idle functions in this matter.
+     </para>
+     
+     <para>As always, you must also surround any calls to GTK+
+       not made within a signal handler with a 
+       <function>gdk_threads_enter()</function>/<function>gdk_threads_leave()</function> 
+       pair.
+     </para>
+   </listitem>
 
-     As always, you must also surround any calls to GTK+
-     not made within a signal handler with a 
-     gdk_threads_enter()/gdk_threads_leave() pair.
-    
-   - There is no longer a special --with-threads configure
-     option for GTK+. To use threads in a GTK+ program, you
-     must:
+   <listitem>
+     <para>There is no longer a special <option>--with-threads</option> 
+       <command>configure</command> option for GTK+. To use threads in a GTK+ 
+       program, you must:
 
-      a) If you want to use the native thread implementation,
-         make sure GLib found this in configuration, otherwise,
-         call you must provide a thread implementation to
-	 g_thread_init().
-   
-      b) Link with the libraries returned by:
+       <orderedlist>
+         <listitem>
+           <para>If you want to use the native thread implementation,
+              make sure GLib found this in configuration, otherwise,
+              call you must provide a thread implementation to
+	      <function>g_thread_init()</function>.
+           </para>
+         </listitem>
+         <listitem>
+           <para>Link with the libraries returned by:
  
-           gtk-config --libs gthread
+             <command>gtk-config --libs gthread</command>
 
-         and use the cflags from:
+             and use the cflags from:
 
-            gtk-config --cflags gthread
+             <command>gtk-config --cflags gthread</command>
 
-     You can get these CFLAGS and LIBS by passing gthread
-     as the fourth parameter to the AM_PATH_GTK automake
-     macro.
-</programlisting>
+             You can get these <envar>CFLAGS</envar> and <envar>LIBS</envar> by 
+             passing <literal>gthread</literal> as the fourth parameter to the 
+             <literal>AM_PATH_GTK</literal> <application>automake</application>
+             macro.
+           </para>
+         </listitem>
+       </orderedlist>
+     </para>
+   </listitem>
+  </itemizedlist>
 </para>
 </listitem>
 
 <listitem>
 <para>
-Prior to GTK+-1.2, there were two conflicting interpretations
-  of widget->requistion. It was either taken to be
-  the size that the widget requested, or that size
-  modified by calls to gtk_widget_set_usize(). In GTK+-1.2,
+Prior to GTK+ 1.2, there were two conflicting interpretations
+  of <literal>widget->requisition</literal>. It was either taken to be
+  the size that the widget requested, or that size modified by calls to 
+  <function>gtk_widget_set_usize()</function>. In GTK+ 1.2,
   it is always interpreted the first way.
 </para>
 
 <para>
   Container widgets are affected in two ways by this:
 
-<programlisting>
-   1) Container widgets should not pass widget->requisition
-      as the second parameter to gtk_widget_size_request().
-      Instead they should call it like:
-   
-      GtkRequisition child_requisition;
-      gtk_widget_size_request (widget, &amp;child_requisition);
-
-   2) Container widgets should not access child->requisition
-      directly. Either they should use the values returned
-      by gtk_widget_size_request(), or they should call
-      the new function:
-
+  <orderedlist>
+    <listitem>
+      <para>Container widgets should not pass 
+        <literal>widget->requisition</literal> as the second parameter to 
+        <function>gtk_widget_size_request()</function>.
+        Instead they should call it like:
+        <programlisting>
+          GtkRequisition child_requisition;
+          gtk_widget_size_request (widget, &amp;child_requisition);
+        </programlisting>
+      </para>
+    </listitem>
+    <listitem>
+      <para>Container widgets should not access 
+        <literal>child->requisition</literal> directly. Either they should use 
+        the values returned by <function>gtk_widget_size_request()</function>, 
+        or they should call the new function:
+        <programlisting>
     void gtk_widget_get_child_requisition (GtkWidget      *widget,
 					   GtkRequisition *requisition);
-
-      which returns the requisition of the given widget, modified
-      by calls to gtk_widget_set_usize().
-</programlisting>
+        </programlisting>
+        which returns the requisition of the given widget, modified
+        by calls to <function>gtk_widget_set_usize()</function>.
+      </para>
+    </listitem>
+  </orderedlist>
 </para>
 </listitem>
 

@@ -1,3 +1,8 @@
+2002-01-03  Matthias Clasen  <matthiasc@poet.de>
+
+	* gtk/changes-1.2.sgml, gtk/changes-2.0.sgml, 
+	gtk/framebuffer.sgml: Add markup.
+
 2002-01-01  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/framebuffer.sgml: move README.linux-fb in here

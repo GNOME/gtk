@@ -17,7 +17,7 @@ Using embedded GTK+ on the Linux framebuffer
 
 <para>
 The linux-fb port of GTK+, also known as GtkFB is an implementation of
-GDK (and therefore GTK+) that runs on the linux framebuffer. It runs in
+GDK (and therefore GTK+) that runs on the Linux framebuffer. It runs in
 a single process that doesn't need X. It should run most GTK+ programs
 without any changes to the source.
 </para>
@@ -25,17 +25,17 @@ without any changes to the source.
 <refsect2><title>Build requirements</title>
 <para>
 You need GTK+ 2.0; the 1.2.x series does not have framebuffer support.
-To compile GTK+ with framebuffer support you will need freetype 2, we
+To compile GTK+ with framebuffer support you will need FreeType 2, we
 recommend FreeType 2.0.1 or later, as there was some problems with
-freetype-config in 2.0.  Make sure that you install freetype before
-Pango, since Pango also needs it.  Freetype can be found at
-ftp://ftp.freetype.org
+<command>freetype-config</command> in 2.0.  Make sure that you install 
+FreeType before Pango, since Pango also needs it. FreeType can be found at
+<ulink url="ftp://ftp.freetype.org">ftp://ftp.freetype.org</ulink>.
 </para>
 </refsect2>
 
 <refsect2><title>Hardware requirements</title>
 <para>
-You need a graphics card with an availible framebuffer driver that can
+You need a graphics card with an available framebuffer driver that can
 run in 8, 16, 24 or 32 bpp, such as matroxfb or vesafb.  You also need
 a supported mouse. GTK+ currently supports the ps2 mouse, ms serial
 mouse and fidmour touchscreen. Additional hardware support should 
@@ -45,24 +45,25 @@ be simple to add.
 
 <refsect2><title>Building and installing</title>
 <para>
-First build and install glib and pango as usual, in that order.
+First build and install GLib and Pango as usual, in that order.
 
-Then configure Gtk by running configure (or autogen.sh if running from
-CVS) with <literal>--with-gdktarget=linux-fb</literal>.
+Then configure GTK+ by running <command>configure</command> (or 
+<command>autogen.sh</command> if running from
+CVS) with <option>--with-gdktarget=linux-fb</option>.
 </para>
 
-<para>Then compile as ususal: make; make install</para>
+<para>Then compile as usual: <command>make; make install</command></para>
 </refsect2>
 
 <refsect2><title>Fonts</title>
 <para>
-Since GtkFB uses freetype 2 to render fonts it can render truetype and
-postscript type 1 antialiased fonts.
+Since GtkFB uses FreeType 2 to render fonts it can render TrueType and
+Postscript type 1 antialiased fonts.
 </para>
 
 <para>At startup it scans some directories looking for fonts. By default
-it looks in $prefix/lib/ft2fonts, and if you want to change this you
-must add something like:
+it looks in <filename>$prefix/lib/ft2fonts</filename>, and if you want to
+change this you must add something like:
 
 <programlisting>
 [PangoFT2]
@@ -77,7 +78,7 @@ You must also set up font aliases for the fonts Sans, Serif and
 Monotype.  This is done by creating a
 <filename>$prefix/etc/pango/pangoft2.aliases</filename> or
 <filename>~/.pangoft2_aliases</filename> file. You can also set the name of this file using
-the key AliasFiles in the PangoFT2 section in pangorc.
+the key <literal>AliasFiles</literal> in the <literal>PangoFT2</literal> section in <filename>pangorc</filename>.
 </para>
 
 <para>
@@ -90,15 +91,16 @@ monospace normal normal normal normal "nimbus mono l"
 </para>
 
 <para>
-And one using the Windows truetype fonts is:
+And one using the Windows TrueType fonts is:
 <programlisting>
 sans normal normal normal normal "arial"
 serif normal normal normal normal "times new roman"
 monospace normal normal normal normal "courier new"
 </programlisting>
 
-A more detailed example can be found in examples/pangoft2.aliases in the
-pango distribution.
+A more detailed example can be found in 
+<filename>examples/pangoft2.aliases</filename> in the
+Pango distribution.
 </para>
 </refsect2>
 
@@ -106,16 +108,16 @@ pango distribution.
 <para>
 To run a program you should only need to start it, but there are some
 things that can cause problems, and some things that can be controlled
-by environment variables. Try testgtk distributed with GTK+ to test
-if things work.
+by environment variables. Try <application>gtk-demo</application> distributed 
+with GTK+ to test if things work.
 </para>
 
 <para>
-If you use a ps2 mouse, make sure that /dev/psaux is readable and
-writable.
+If you use a ps2 mouse, make sure that <filename>/dev/psaux</filename> is 
+readable and writable.
 </para>
 
-<para>Make sure gpm is not running.</para>
+<para>Make sure <command>gpm</command> is not running.</para>
 
 <para>If you don't specify anything GtkFB will start up in the current
 virtual console in the current resolution and bit-depth. This can be
@@ -124,28 +126,29 @@ changed by specifying environment variables:
 
 <para>
 <programlisting>
-GDK_VT:
+<envar>GDK_VT</envar>:
  unset means open on the current VT.
  0-9: open on the specified VT. Make sure you have read/write rights
       there.
  new: Allocate a new VT after the last currently used one.
 
-GDK_DISPLAY_MODE:
- Specifies the name of a mode in /etc/fb.modes that you want to use.
+<envar>GDK_DISPLAY_MODE</envar>:
+ Specifies the name of a mode in <filename>/etc/fb.modes</filename> that you 
+ want to use.
 
-GDK_DISPLAY_DEPTH:
+<envar>GDK_DISPLAY_DEPTH</envar>:
  Specify the desired bit depth of the framebuffer.
  
-GDK_DISPLAY_WIDTH:
+<envar>GDK_DISPLAY_WIDTH</envar>:
  Specify the desired width of the framebuffer.
  
-GDK_DISPLAY_HEIGHT:
+<envar>GDK_DISPLAY_HEIGHT</envar>:
  Specify the desired height of the framebuffer.
 
-GDK_DISPLAY:
- Specify the framebuffer device to use. Default is /dev/fb0
+<envar>GDK_DISPLAY</envar>:
+ Specify the framebuffer device to use. Default is <filename>/dev/fb0</filename>.
 
-GDK_MOUSE_TYPE:
+<envar>GDK_MOUSE_TYPE</envar>:
  Specify mouse type. Currently supported is:
   ps2 - PS/2 mouse
   imps2 - PS/2 intellimouse (wheelmouse)
@@ -153,7 +156,7 @@ GDK_MOUSE_TYPE:
   fidmour - touch screen
  Default is ps2.
 
-GDK_KEYBOARD_TYPE:
+<envar>GDK_KEYBOARD_TYPE</envar>:
  Specify keyboard type. Currently supported is
   xlate - normal tty mode keyboard.
     Quite limited, cannot detect key up/key down events. Doesn't
