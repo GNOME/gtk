@@ -382,7 +382,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                    PROP_LANGUAGE,
                                    g_param_spec_string ("language",
                                                         P_("Language"),
-                                                        P_("The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If you don't understand this parameter, you probably don't need it"),
+                                                        P_("The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If not set, an appropriate default will be used."),
                                                         NULL,
                                                         G_PARAM_READABLE | G_PARAM_WRITABLE));  
 

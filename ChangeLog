@@ -1,3 +1,8 @@
+Sun Jun  6 23:24:43 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtktexttag.c (gtk_text_tag_class_init): Improve the description
+	of the ::language property.  (#143802, Owen Taylor)
+
 Sat Jun  5 23:07:30 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkentrycompletion.c: (gtk_entry_completion_init),
