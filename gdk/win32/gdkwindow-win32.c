@@ -1579,8 +1579,22 @@ gdk_window_get_geometry (GdkWindow *window,
 
       if (window != gdk_parent_root)
 	{
-	  ClientToScreen (GDK_DRAWABLE_XID (window), &rect);
-	  ScreenToClient (GDK_DRAWABLE_XID (gdk_window_get_parent (window)), &rect);
+	  POINT pt;
+	  GdkWindow *parent = gdk_window_get_parent (window);
+
+	  pt.x = rect.left;
+	  pt.y = rect.top;
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
+	  ScreenToClient (GDK_DRAWABLE_XID (parent), &pt);
+	  rect.left = pt.x;
+	  rect.top = pt.y;
+
+	  pt.x = rect.right;
+	  pt.y = rect.bottom;
+	  ClientToScreen (GDK_DRAWABLE_XID (window), &pt);
+	  ScreenToClient (GDK_DRAWABLE_XID (parent), &pt);
+	  rect.right = pt.x;
+	  rect.bottom = pt.y;
 	}
 
       if (x)
@@ -1976,67 +1990,76 @@ void
 gdk_window_set_decorations (GdkWindow      *window,
 			    GdkWMDecoration decorations)
 {
-  LONG style, exstyle;
+  LONG style, bits;
+  const LONG settable_bits = WS_BORDER|WS_THICKFRAME|WS_CAPTION|WS_SYSMENU|WS_MINIMIZEBOX|WS_MAXIMIZEBOX;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   style = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_STYLE);
-  exstyle = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_EXSTYLE);
 
-  style &= (WS_OVERLAPPED|WS_POPUP|WS_CHILD|WS_MINIMIZE|WS_VISIBLE|WS_DISABLED
-	    |WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_MAXIMIZE);
+  bits = 0;
 
-  exstyle &= (WS_EX_TOPMOST|WS_EX_TRANSPARENT);
+  if (decorations & GDK_DECOR_BORDER)
+    bits |= WS_BORDER;
+  if (decorations & GDK_DECOR_RESIZEH)
+    bits |= WS_THICKFRAME;
+  if (decorations & GDK_DECOR_TITLE)
+    bits |= WS_CAPTION;
+  if (decorations & GDK_DECOR_MENU)
+    bits |= WS_SYSMENU;
+  if (decorations & GDK_DECOR_MINIMIZE)
+    bits |= WS_MINIMIZEBOX;
+  if (decorations & GDK_DECOR_MAXIMIZE)
+    bits |= WS_MAXIMIZEBOX;
 
   if (decorations & GDK_DECOR_ALL)
-    style |= (WS_CAPTION|WS_SYSMENU|WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX);
-  if (decorations & GDK_DECOR_BORDER)
-    style |= (WS_BORDER);
-  if (decorations & GDK_DECOR_RESIZEH)
-    style |= (WS_THICKFRAME);
-  if (decorations & GDK_DECOR_TITLE)
-    style |= (WS_CAPTION);
-  if (decorations & GDK_DECOR_MENU)
-    style |= (WS_SYSMENU);
-  if (decorations & GDK_DECOR_MINIMIZE)
-    style |= (WS_MINIMIZEBOX);
-  if (decorations & GDK_DECOR_MAXIMIZE)
-    style |= (WS_MAXIMIZEBOX);
-  
+    style |= settable_bits, style &= ~bits;
+  else
+    style &= ~settable_bits, style |= bits;
+
   SetWindowLong (GDK_DRAWABLE_XID (window), GWL_STYLE, style);
+
+  SetWindowPos (GDK_DRAWABLE_XID (window), NULL, 0, 0, 0, 0,
+		SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
+		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
 }
 
 void
 gdk_window_set_functions (GdkWindow    *window,
 			  GdkWMFunction functions)
 {
-  LONG style, exstyle;
+  LONG style, bits;
+  const LONG settable_bits = (WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX|WS_SYSMENU);
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
   
   style = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_STYLE);
-  exstyle = GetWindowLong (GDK_DRAWABLE_XID (window), GWL_EXSTYLE);
 
-  style &= (WS_OVERLAPPED|WS_POPUP|WS_CHILD|WS_MINIMIZE|WS_VISIBLE|WS_DISABLED
-	    |WS_CLIPSIBLINGS|WS_CLIPCHILDREN|WS_MAXIMIZE|WS_CAPTION|WS_BORDER
-	    |WS_SYSMENU);
+  bits = 0;
 
-  exstyle &= (WS_EX_TOPMOST|WS_EX_TRANSPARENT);
-
-  if (functions & GDK_FUNC_ALL)
-    style |= (WS_THICKFRAME|WS_MINIMIZEBOX|WS_MAXIMIZEBOX);
   if (functions & GDK_FUNC_RESIZE)
-    style |= (WS_THICKFRAME);
+    bits |= WS_THICKFRAME;
   if (functions & GDK_FUNC_MOVE)
-    style |= (WS_THICKFRAME);
+    bits |= (WS_THICKFRAME|WS_SYSMENU);
   if (functions & GDK_FUNC_MINIMIZE)
-    style |= (WS_MINIMIZEBOX);
+    bits |= WS_MINIMIZEBOX;
   if (functions & GDK_FUNC_MAXIMIZE)
-    style |= (WS_MAXIMIZEBOX);
+    bits |= WS_MAXIMIZEBOX;
+  if (functions & GDK_FUNC_CLOSE)
+    bits |= WS_SYSMENU;
   
+  if (functions & GDK_FUNC_ALL)
+    style |= settable_bits, style &= ~bits;
+  else
+    style &= ~settable_bits, style |= bits;
+
   SetWindowLong (GDK_DRAWABLE_XID (window), GWL_STYLE, style);
+
+  SetWindowPos (GDK_DRAWABLE_XID (window), NULL, 0, 0, 0, 0,
+		SWP_FRAMECHANGED | SWP_NOACTIVATE | SWP_NOMOVE |
+		SWP_NOREPOSITION | SWP_NOSIZE | SWP_NOZORDER);
 }
 
 /* 

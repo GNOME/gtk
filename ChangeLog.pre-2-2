@@ -1,3 +1,14 @@
+2002-12-19  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdkwindow-win32.c (gdk_window_get_geometry): Umm, I
+	wonder where I got that code snippet from. Called ClientToScreen()
+	and ScreenToClient() with a RECT, although they take a POINT.
+
+	(gdk_window_set_decorations, gdk_window_set_functions):
+	Reimplement correctly. The GDK_DECOR_ALL and GDK_FUNC_ALL bits
+	have interesting semantics, see the documentation in GTK+ 2.0.
+	(#79036)
+
 2002-12-15  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkwindow-win32.c (gdk_window_get_geometry): When
