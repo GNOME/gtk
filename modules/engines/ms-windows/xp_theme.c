@@ -448,11 +448,11 @@ xp_theme_map_gtk_state(XpThemeElement element, GtkStateType state)
       break;
 
     case XP_THEME_ELEMENT_TREEVIEW_EXPANDER_OPENED:
-      ret = GLPS_CLOSED;
+      ret = GLPS_OPENED;
       break;
 
     case XP_THEME_ELEMENT_TREEVIEW_EXPANDER_CLOSED:
-      ret = GLPS_OPENED;
+      ret = GLPS_CLOSED;
       break;
 
     case XP_THEME_ELEMENT_PROGRESS_BAR_H:
