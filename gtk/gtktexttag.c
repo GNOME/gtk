@@ -1865,6 +1865,19 @@ gtk_text_attributes_copy (GtkTextAttributes *src)
   return dest;
 }
 
+GType
+gtk_text_attributes_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeTextAttributes",
+					     (GBoxedCopyFunc) gtk_text_attributes_ref,
+					     (GBoxedFreeFunc) gtk_text_attributes_unref);
+
+  return our_type;
+}
+
 /**
  * gtk_text_attributes_copy_values:
  * @src: a #GtkTextAttributes

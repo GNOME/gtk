@@ -6371,6 +6371,19 @@ gtk_requisition_free (GtkRequisition *requisition)
   g_free (requisition);
 }
 
+GType
+gtk_requisition_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeRequisition",
+					     (GBoxedCopyFunc) gtk_requisition_copy,
+					     (GBoxedFreeFunc) gtk_requisition_free);
+
+  return our_type;
+}
+
 AtkObject* 
 gtk_widget_get_accessible (GtkWidget *widget)
 {
@@ -6430,4 +6443,3 @@ gtk_widget_ref_accessible (AtkImplementor *implementor)
     g_object_ref (G_OBJECT (accessible));
   return accessible;
 }
-

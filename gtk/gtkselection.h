@@ -39,6 +39,8 @@ extern "C" {
 typedef struct _GtkTargetList    GtkTargetList;
 typedef struct _GtkTargetEntry   GtkTargetEntry;
 
+#define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
+
 /* The contents of a selection are returned in a GtkSelectionData
  * structure. selection/target identify the request.  type specifies
  * the type of the return; if length < 0, and the data should be
@@ -151,8 +153,10 @@ gboolean gtk_selection_notify		  (GtkWidget         *widget,
 					   GdkEventSelection *event);
 gboolean gtk_selection_property_notify	  (GtkWidget         *widget,
 					   GdkEventProperty  *event);
-GtkSelectionData *gtk_selection_data_copy (GtkSelectionData *data);
-void		  gtk_selection_data_free (GtkSelectionData *data);
+
+GType             gtk_selection_data_get_type (void);
+GtkSelectionData *gtk_selection_data_copy     (GtkSelectionData *data);
+void		  gtk_selection_data_free     (GtkSelectionData *data);
 
 
 

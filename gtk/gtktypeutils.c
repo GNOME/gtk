@@ -101,28 +101,6 @@ gtk_type_new (GtkType type)
   return object;
 }
 
-/* includes for various places
- * with enum definitions
- */
-#define GTK_ENABLE_BROKEN
-#include "makeenums.h"
-/* type variable declarations
- */
-#include "gtktypebuiltins_vars.c"
-GType GTK_TYPE_IDENTIFIER = 0;
-#include "gtktypebuiltins_evals.c"	  /* enum value definition arrays */
-
-/* Hack to communicate with GLib object debugging for now
- */
-#ifdef G_OS_WIN32
-#define IMPORT __declspec(dllimport)
-#else
-#define IMPORT
-#endif
-
-#include <gtk.h>	/* for gtktypebuiltins_ids.c */
-#include <gdk.h>	/* gtktypebuiltins_ids.c */
-
 void
 gtk_type_init (GTypeDebugFlags debug_flags)
 {
@@ -130,19 +108,6 @@ gtk_type_init (GTypeDebugFlags debug_flags)
   
   if (!initialized)
     {
-      static struct {
-	gchar              *type_name;
-	GtkType            *type_id;
-	GtkType             parent;
-	gconstpointer	    pointer1;
-	gpointer	    pointer2;
-      } builtin_info[GTK_TYPE_N_BUILTINS + 1] = {
-#include "gtktypebuiltins_ids.c"	/* type entries */
-	{ NULL }
-      };
-      GTypeInfo tinfo = { 0, };
-      guint i;
-
       initialized = TRUE;
 
       /* initialize GLib type system
@@ -152,36 +117,21 @@ gtk_type_init (GTypeDebugFlags debug_flags)
       /* GTK_TYPE_OBJECT
        */
       gtk_object_get_type ();
-
-      /* GTK_TYPE_IDENTIFIER
-       */
-      GTK_TYPE_IDENTIFIER = g_type_register_static (G_TYPE_STRING, "GtkIdentifier", &tinfo, 0);
-
-      /* enums and flags
-       */
-      for (i = 0; i < GTK_TYPE_N_BUILTINS; i++)
-	{
-	  GtkType type_id = 0;
-
-	  if (builtin_info[i].parent == G_TYPE_ENUM)
-	    type_id = g_enum_register_static (builtin_info[i].type_name, builtin_info[i].pointer1);
-	  else if (builtin_info[i].parent == G_TYPE_FLAGS)
-	    type_id = g_flags_register_static (builtin_info[i].type_name, builtin_info[i].pointer1);
-	  else if (builtin_info[i].parent == GTK_TYPE_BOXED)
-	    {
-	      if (builtin_info[i].pointer1 && builtin_info[i].pointer2)
-		type_id = g_boxed_type_register_static (builtin_info[i].type_name,
-							builtin_info[i].pointer1,
-							builtin_info[i].pointer2);
-	      else
-		type_id = g_type_register_static (GTK_TYPE_BOXED, builtin_info[i].type_name, &tinfo, 0);
-	    }
-	  else
-	    g_assert_not_reached ();
-
-	  *builtin_info[i].type_id = type_id;
-	}
     }
+}
+
+GType
+gtk_identifier_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    {
+      GTypeInfo tinfo = { 0, };
+      our_type = g_type_register_static (G_TYPE_STRING, "GtkIdentifier", &tinfo, 0);
+    }
+
+  return our_type;
 }
 
 GtkEnumValue*
@@ -243,3 +193,4 @@ gtk_type_flags_find_value (GtkType      flags_type,
 
   return value;
 }
+

@@ -1819,6 +1819,19 @@ gtk_selection_data_free (GtkSelectionData *data)
   g_free (data);
 }
 
+GType
+gtk_selection_data_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeSelectionData",
+					     (GBoxedCopyFunc) gtk_selection_data_copy,
+					     (GBoxedFreeFunc) gtk_selection_data_free);
+
+  return our_type;
+}
+
 static int 
 gtk_selection_bytes_per_item (gint format)
 {

@@ -48,6 +48,8 @@ typedef enum {
 
 typedef struct _GtkTextBuffer GtkTextBuffer;
 
+#define GTK_TYPE_TEXT_ITER     (gtk_text_iter_get_type ())
+
 struct _GtkTextIter {
   /* GtkTextIter is an opaque datatype; ignore all these fields.
    * Initialize the iter with gtk_text_buffer_get_iter_*
@@ -82,6 +84,8 @@ GtkTextBuffer *gtk_text_iter_get_buffer (const GtkTextIter *iter);
 
 GtkTextIter *gtk_text_iter_copy     (const GtkTextIter *iter);
 void         gtk_text_iter_free     (GtkTextIter       *iter);
+
+GType        gtk_text_iter_get_type (void);
 
 /*
  * Convert to different kinds of index

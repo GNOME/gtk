@@ -131,6 +131,7 @@ typedef enum
 #define GTK_WIDGET_SET_FLAGS(wid,flag)	  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) |= (flag)); }G_STMT_END
 #define GTK_WIDGET_UNSET_FLAGS(wid,flag)  G_STMT_START{ (GTK_WIDGET_FLAGS (wid) &= ~(flag)); }G_STMT_END
 
+#define GTK_TYPE_REQUISITION              (gtk_requisition_get_type ())
 
 /* forward declaration to avoid excessive includes (and concurrent includes)
  */
@@ -737,8 +738,9 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    gchar    **path,
 					    gchar    **path_reversed);
 
-GtkRequisition *gtk_requisition_copy (const GtkRequisition *requisition);
-void            gtk_requisition_free (GtkRequisition       *requisition);
+GType           gtk_requisition_get_type (void);
+GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
+void            gtk_requisition_free     (GtkRequisition       *requisition);
 
 #if	defined (GTK_TRACE_OBJECTS) && defined (__GNUC__)
 #  define gtk_widget_ref gtk_object_ref

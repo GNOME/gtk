@@ -5545,6 +5545,19 @@ gtk_border_free (GtkBorder *border)
   g_free (border);
 }
 
+GType
+gtk_border_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeBorder",
+					     (GBoxedCopyFunc) gtk_border_copy,
+					     (GBoxedFreeFunc) gtk_border_free);
+
+  return our_type;
+}
+
 /**
  * gtk_style_get_font:
  * @style: a #GtkStyle

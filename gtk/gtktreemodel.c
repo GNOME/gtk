@@ -358,6 +358,19 @@ gtk_tree_path_copy (GtkTreePath *path)
   return retval;
 }
 
+GType
+gtk_tree_path_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeTreePath",
+					     (GBoxedCopyFunc) gtk_tree_path_copy,
+					     (GBoxedFreeFunc) gtk_tree_path_free);
+
+  return our_type;
+}
+
 /**
  * gtk_tree_path_compare:
  * @a: A #GtkTreePath.
@@ -567,6 +580,19 @@ gtk_tree_iter_free (GtkTreeIter *iter)
   g_return_if_fail (iter != NULL);
 
   g_free (iter);
+}
+
+GType
+gtk_tree_iter_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeTreeIter",
+					     (GBoxedCopyFunc) gtk_tree_iter_copy,
+					     (GBoxedFreeFunc) gtk_tree_iter_free);
+
+  return our_type;
 }
 
 /**

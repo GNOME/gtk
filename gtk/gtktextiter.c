@@ -463,6 +463,19 @@ gtk_text_iter_free (GtkTextIter *iter)
   g_free (iter);
 }
 
+GType
+gtk_text_iter_get_type (void)
+{
+  static GType our_type = 0;
+  
+  if (our_type == 0)
+    our_type = g_boxed_type_register_static ("GtkTypeTextIter",
+					     (GBoxedCopyFunc) gtk_text_iter_copy,
+					     (GBoxedFreeFunc) gtk_text_iter_free);
+
+  return our_type;
+}
+
 GtkTextLineSegment*
 _gtk_text_iter_get_indexable_segment (const GtkTextIter *iter)
 {

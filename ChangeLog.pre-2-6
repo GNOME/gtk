@@ -1,3 +1,23 @@
+Sat Mar  2 13:26:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+        * gtk/Makefile.am: Switch style of stamp file usage.
+
+	* gtk/Makefile.am gtk/typeutils.[ch]: Switch all the exported
+	enumeration/fags TYPE variables over to macros for get_type() functions,
+	for lazy definition and to get rid of expensive relocations.
+
+	* gtk/gtkiconfactory.[ch] gtk/gtkselection.[ch] gtk/gtkstyle.[ch]
+	gtk/gtktextiter.[ch] gtk/gtktexttag.[ch] gtk/gtktreemodel.[ch]
+	gtk/gtktypeutils.[ch] gtk/gtkwidget.[ch]: Switch boxed type
+	definitions over manually coded get_type() functions.
+
+	* gtk/gtk.def: Updates for above
+
+	* gtk/{genmarshal.pl,makeenums.awk,makeenums.h,maketypes.awk}:
+	Remove from CVS, no longer used.
+
+	* configure.in: Remove checks for awk.
+	
 Sat Mar  2 04:44:10 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkaccelgroup.c (gtk_accel_group_connect_by_path): fix typo.

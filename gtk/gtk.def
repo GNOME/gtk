@@ -1,91 +1,84 @@
 EXPORTS
-	GTK_TYPE_ACCEL_FLAGS
-	GTK_TYPE_ANCHOR_TYPE
-	GTK_TYPE_ARG_FLAGS
-	GTK_TYPE_ARROW_TYPE
-	GTK_TYPE_ATTACH_OPTIONS
-	GTK_TYPE_BORDER
-	GTK_TYPE_BUTTONS_TYPE
-	GTK_TYPE_BUTTON_ACTION
-	GTK_TYPE_BUTTON_BOX_STYLE
-	GTK_TYPE_CALENDAR_DISPLAY_OPTIONS
-	GTK_TYPE_CELL_RENDERER_MODE
-	GTK_TYPE_CELL_RENDERER_STATE
-	GTK_TYPE_CELL_TYPE
-	GTK_TYPE_CLIST_DRAG_POS
-	GTK_TYPE_CORNER_TYPE
-	GTK_TYPE_CTREE_EXPANDER_STYLE
-	GTK_TYPE_CTREE_EXPANSION_TYPE
-	GTK_TYPE_CTREE_LINE_STYLE
-	GTK_TYPE_CTREE_POS
-	GTK_TYPE_CURVE_TYPE
-	GTK_TYPE_DEBUG_FLAG
-	GTK_TYPE_DELETE_TYPE
-	GTK_TYPE_DEST_DEFAULTS
-	GTK_TYPE_DIALOG_FLAGS
-	GTK_TYPE_DIRECTION_TYPE
-	GTK_TYPE_EXPANDER_STYLE
-	GTK_TYPE_ICON_SET
-	GTK_TYPE_ICON_SIZE
-	GTK_TYPE_IMAGE_TYPE
-	GTK_TYPE_JUSTIFICATION
-	GTK_TYPE_MATCH_TYPE
-	GTK_TYPE_MENU_DIRECTION_TYPE
-	GTK_TYPE_MESSAGE_TYPE
-	GTK_TYPE_METRIC_TYPE
-	GTK_TYPE_MOVEMENT_STEP
-	GTK_TYPE_NOTEBOOK_TAB
-	GTK_TYPE_OBJECT_FLAGS
-	GTK_TYPE_ORIENTATION
-	GTK_TYPE_PACK_TYPE
-	GTK_TYPE_PATH_PRIORITY_TYPE
-	GTK_TYPE_PATH_TYPE
-	GTK_TYPE_POLICY_TYPE
-	GTK_TYPE_POSITION_TYPE
-	GTK_TYPE_PREVIEW_TYPE
-	GTK_TYPE_PRIVATE_FLAGS
-	GTK_TYPE_PROGRESS_BAR_ORIENTATION
-	GTK_TYPE_PROGRESS_BAR_STYLE
-	GTK_TYPE_RC_FLAGS
-	GTK_TYPE_RC_TOKEN_TYPE
-	GTK_TYPE_RELIEF_STYLE
-	GTK_TYPE_REQUISITION
-	GTK_TYPE_RESIZE_MODE
-	GTK_TYPE_RESPONSE_TYPE
-	GTK_TYPE_SCROLL_TYPE
-	GTK_TYPE_SELECTION_DATA
-	GTK_TYPE_SELECTION_MODE
-	GTK_TYPE_SHADOW_TYPE
-	GTK_TYPE_SIDE_TYPE
-	GTK_TYPE_SIGNAL_RUN_TYPE
-	GTK_TYPE_SIZE_GROUP_MODE
-	GTK_TYPE_SORT_TYPE
-	GTK_TYPE_SPIN_BUTTON_UPDATE_POLICY
-	GTK_TYPE_SPIN_TYPE
-	GTK_TYPE_STATE_TYPE
-	GTK_TYPE_SUBMENU_DIRECTION
-	GTK_TYPE_SUBMENU_PLACEMENT
-	GTK_TYPE_TARGET_FLAGS
-	GTK_TYPE_TEXT_ATTRIBUTES
-	GTK_TYPE_TEXT_DIRECTION
-	GTK_TYPE_TEXT_ITER
-	GTK_TYPE_TEXT_WINDOW_TYPE
-	GTK_TYPE_TOOLBAR_CHILD_TYPE
-	GTK_TYPE_TOOLBAR_SPACE_STYLE
-	GTK_TYPE_TOOLBAR_STYLE
-	GTK_TYPE_TREE_ITER
-	GTK_TYPE_TREE_MODEL_FLAGS
-	GTK_TYPE_TREE_PATH
-	GTK_TYPE_TREE_VIEW_COLUMN_SIZING
-	GTK_TYPE_TREE_VIEW_DROP_POSITION
-	GTK_TYPE_TREE_VIEW_MODE
-	GTK_TYPE_UPDATE_TYPE
-	GTK_TYPE_VISIBILITY
-	GTK_TYPE_WIDGET_FLAGS
-	GTK_TYPE_WIDGET_HELP_TYPE
-	GTK_TYPE_WINDOW_POSITION
-	GTK_TYPE_WINDOW_TYPE
-	GTK_TYPE_WRAP_MODE
+	gtk_accel_flags_get_type
+	gtk_anchor_type_get_type
+	gtk_arg_flags_get_type
+	gtk_arrow_type_get_type
+	gtk_attach_options_get_type
+	gtk_buttons_type_get_type
+	gtk_button_action_get_type
+	gtk_button_box_style_get_type
+	gtk_calendar_display_options_get_type
+	gtk_cell_renderer_mode_get_type
+	gtk_cell_renderer_state_get_type
+	gtk_cell_type_get_type
+	gtk_clist_drag_pos_get_type
+	gtk_corner_type_get_type
+	gtk_ctree_expander_style_get_type
+	gtk_ctree_expansion_type_get_type
+	gtk_ctree_line_style_get_type
+	gtk_ctree_pos_get_type
+	gtk_curve_type_get_type
+	gtk_debug_flag_get_type
+	gtk_delete_type_get_type
+	gtk_dest_defaults_get_type
+	gtk_dialog_flags_get_type
+	gtk_direction_type_get_type
+	gtk_expander_style_get_type
+	gtk_icon_size_get_type
+	gtk_image_type_get_type
+	gtk_justification_get_type
+	gtk_match_type_get_type
+	gtk_menu_direction_type_get_type
+	gtk_message_type_get_type
+	gtk_metric_type_get_type
+	gtk_movement_step_get_type
+	gtk_notebook_tab_get_type
+	gtk_object_flags_get_type
+	gtk_orientation_get_type
+	gtk_pack_type_get_type
+	gtk_path_priority_type_get_type
+	gtk_path_type_get_type
+	gtk_policy_type_get_type
+	gtk_position_type_get_type
+	gtk_preview_type_get_type
+	gtk_private_flags_get_type
+	gtk_progress_bar_orientation_get_type
+	gtk_progress_bar_style_get_type
+	gtk_rc_flags_get_type
+	gtk_rc_token_type_get_type
+	gtk_relief_style_get_type
+	gtk_resize_mode_get_type
+	gtk_response_type_get_type
+	gtk_scroll_type_get_type
+	gtk_selection_mode_get_type
+	gtk_shadow_type_get_type
+	gtk_side_type_get_type
+	gtk_signal_run_type_get_type
+	gtk_size_group_mode_get_type
+	gtk_sort_type_get_type
+	gtk_spin_button_update_policy_get_type
+	gtk_spin_type_get_type
+	gtk_state_type_get_type
+	gtk_submenu_direction_get_type
+	gtk_submenu_placement_get_type
+	gtk_target_flags_get_type
+	gtk_text_direction_get_type
+	gtk_text_search_flags_get_type
+	gtk_text_window_type_get_type
+	gtk_toolbar_child_type_get_type
+	gtk_toolbar_space_style_get_type
+	gtk_toolbar_style_get_type
+	gtk_tree_model_flags_get_type
+	gtk_tree_view_column_sizing_get_type
+	gtk_tree_view_drop_position_get_type
+	gtk_tree_view_mode_get_type
+	gtk_update_type_get_type
+	gtk_visibility_get_type
+	gtk_widget_flags_get_type
+	gtk_widget_help_type_get_type
+	gtk_window_position_get_type
+	gtk_window_type_get_type
+	gtk_wrap_mode_get_type
 
 	gtk_accel_group_connect
 	gtk_accel_group_connect_by_path
@@ -157,6 +150,7 @@ EXPORTS
 	gtk_bindings_activate
 	gtk_border_copy
 	gtk_border_free
+	gtk_border_get_type
 	gtk_box_get_homogeneous
 	gtk_box_get_spacing
 	gtk_box_get_type
@@ -678,6 +672,7 @@ EXPORTS
 	gtk_icon_set_add_source
 	gtk_icon_set_copy
 	gtk_icon_set_get_sizes
+	gtk_icon_set_get_type
 	gtk_icon_set_new
 	gtk_icon_set_new_from_pixbuf
 	gtk_icon_set_ref
@@ -698,6 +693,7 @@ EXPORTS
 	gtk_icon_source_get_size_wildcarded
 	gtk_icon_source_get_state
 	gtk_icon_source_get_state_wildcarded
+	gtk_icon_source_get_type
 	gtk_icon_source_new
 	gtk_icon_source_set_direction
 	gtk_icon_source_set_direction_wildcarded
@@ -1203,6 +1199,7 @@ EXPORTS
 	gtk_rc_style_unref
 	gtk_requisition_copy
 	gtk_requisition_free
+	gtk_requisition_get_type
 	gtk_rgb_to_hsv
 	gtk_ruler_draw_pos
 	gtk_ruler_draw_ticks
@@ -1241,6 +1238,7 @@ EXPORTS
 	gtk_selection_data_free
 	gtk_selection_data_get_targets
 	gtk_selection_data_get_text
+	gtk_selection_data_get_type
 	gtk_selection_data_set
 	gtk_selection_data_set_text
 	gtk_selection_data_targets_include_text
@@ -1363,6 +1361,7 @@ EXPORTS
 	gtk_text_anchored_child_set_layout
 	gtk_text_attributes_copy
 	gtk_text_attributes_copy_values
+	gtk_text_attributes_get_type
 	gtk_text_attributes_new
 	gtk_text_attributes_ref
 	gtk_text_attributes_unref
@@ -1493,6 +1492,7 @@ EXPORTS
 	gtk_text_iter_get_tags
 	gtk_text_iter_get_text
 	gtk_text_iter_get_toggled_tags
+	gtk_text_iter_get_type
 	gtk_text_iter_get_visible_line_index
 	gtk_text_iter_get_visible_line_offset
 	gtk_text_iter_get_visible_slice
@@ -1718,6 +1718,7 @@ EXPORTS
 	gtk_tree_item_set_subtree
 	gtk_tree_iter_copy
 	gtk_tree_iter_free
+	gtk_tree_iter_get_type
 	gtk_tree_model_foreach
 	gtk_tree_model_get
 	gtk_tree_model_get_column_type
@@ -1760,6 +1761,7 @@ EXPORTS
 	gtk_tree_path_free
 	gtk_tree_path_get_depth
 	gtk_tree_path_get_indices
+	gtk_tree_path_get_type
 	gtk_tree_path_is_ancestor
 	gtk_tree_path_is_descendant
 	gtk_tree_path_new
