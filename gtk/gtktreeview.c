@@ -317,17 +317,17 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   g_object_class_install_property (o_class,
                                    PROP_MODEL,
-                                   g_param_spec_object ("model",
-							_("TreeView Model"),
-                                                        _("The model for the tree view"),
-							GTK_TYPE_TREE_MODEL,
-                                                        G_PARAM_READWRITE));
+                                   g_param_spec_interface ("model",
+							   _("TreeView Model"),
+							   _("The model for the tree view"),
+							   GTK_TYPE_TREE_MODEL,
+							   G_PARAM_READWRITE));
 
   g_object_class_install_property (o_class,
                                    PROP_HADJUSTMENT,
                                    g_param_spec_object ("hadjustment",
 							_("Horizontal Adjustment"),
-                                                        _("Set horizontal adjustments for the widget"),
+                                                        _("Horizontal Adjustment for the widget"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
@@ -335,7 +335,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                    PROP_VADJUSTMENT,
                                    g_param_spec_object ("vadjustment",
 							_("Vertical Adjustment"),
-                                                        _("Set vertical adjustments for the widget"),
+                                                        _("Vertical Adjustment for the widget"),
                                                         GTK_TYPE_ADJUSTMENT,
                                                         G_PARAM_READWRITE));
 
@@ -343,7 +343,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                    PROP_HEADERS_VISIBLE,
                                    g_param_spec_boolean ("headers_visible",
 							 _("Visible"),
-							 _("If the column headers are visible"),
+							 _("Show the column header buttons"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
@@ -351,7 +351,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                    PROP_HEADERS_CLICKABLE,
                                    g_param_spec_boolean ("headers_clickable",
 							 _("Headers Clickable"),
-							 _("If the column headers respond to click events"),
+							 _("Column headers respond to click events"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
@@ -369,7 +369,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                    PROP_RULES_HINT,
                                    g_param_spec_boolean ("rules_hint",
 							 _("Rules Hint"),
-							 _("If the requires reading across rows"),
+							 _("Set a hint to the theme engine to draw rows in alternating colors"),
 							 FALSE,
 							 G_PARAM_READWRITE));
 
@@ -453,13 +453,13 @@ gtk_tree_view_set_property (GObject         *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      gtk_tree_view_set_model (tree_view, g_value_get_object (value));
+      gtk_tree_view_set_model (tree_view, GTK_TREE_MODEL (g_value_get_object (value)));
       break;
     case PROP_HADJUSTMENT:
-      gtk_tree_view_set_hadjustment (tree_view, g_value_get_object (value));
+      gtk_tree_view_set_hadjustment (tree_view, GTK_ADJUSTMENT (g_value_get_object (value)));
       break;
     case PROP_VADJUSTMENT:
-      gtk_tree_view_set_vadjustment (tree_view, g_value_get_object (value));
+      gtk_tree_view_set_vadjustment (tree_view, GTK_ADJUSTMENT (g_value_get_object (value)));
       break;
     case PROP_HEADERS_VISIBLE:
       gtk_tree_view_set_headers_visible (tree_view, g_value_get_boolean (value));
