@@ -1,5 +1,22 @@
 2004-07-09  Federico Mena Quintero  <federico@ximian.com>
 
+	Fixes #137031:
+
+	* gtk/gtkfilesystemunix.c (get_fallback_icon): New helper
+	function, fetches a stock icon as a fallback.
+	(gtk_file_system_unix_volume_render_icon): Fall back to a stock
+	icon.
+	(gtk_file_system_unix_render_icon): Fall back to a stock icon.
+	Use helper functions rather than being a mega-function.
+	(get_icon_name_for_directory): Renamed from
+	get_icon_for_directory().
+	(get_icon_type_from_path): New helper function; code pulled out
+	from gtk_file_system_unix_render_icon().
+	(get_special_icon): Likewise.
+	(get_icon_for_mime_type): Likewise.
+
+2004-07-09  Federico Mena Quintero  <federico@ximian.com>
+
 	* gdk/x11/gdkdnd-x11.c (xdnd_send_xevent): Fix typo; tmp_event ->
 	temp_event.
 

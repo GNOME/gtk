@@ -24,6 +24,7 @@
 #include "gtkfilesystemunix.h"
 #include "gtkicontheme.h"
 #include "gtkintl.h"
+#include "gtkstock.h"
 
 #define XDG_PREFIX _gtk_xdg
 #include "xdgmime/xdgmime.h"
@@ -63,9 +64,9 @@ struct _GtkFileSystemUnix
 /* Icon type, supplemented by MIME type
  */
 typedef enum {
-  ICON_UNDECIDED,
-  ICON_NONE,
-  ICON_REGULAR,	/* Use mime type for icon */
+  ICON_UNDECIDED, /* Only used while we have not yet computed the icon in a struct stat_info_entry */
+  ICON_NONE,      /* "Could not compute the icon type" */
+  ICON_REGULAR,	  /* Use mime type for icon */
   ICON_BLOCK_DEVICE,
   ICON_BROKEN_SYMBOLIC_LINK,
   ICON_CHARACTER_DEVICE,
@@ -694,6 +695,45 @@ get_cached_icon (GtkWidget   *widget,
   return element->pixbuf ? g_object_ref (element->pixbuf) : NULL;
 }
 
+/* Renders a fallback icon from the stock system */
+static GdkPixbuf *
+get_fallback_icon (GtkWidget *widget,
+		   IconType   icon_type,
+		   GError   **error)
+{
+  const char *stock_name;
+  GdkPixbuf *pixbuf;
+
+  switch (icon_type)
+    {
+    case ICON_BLOCK_DEVICE:
+      stock_name = GTK_STOCK_HARDDISK;
+      break;
+
+    case ICON_DIRECTORY:
+      stock_name = GTK_STOCK_DIRECTORY;
+      break;
+
+    case ICON_EXECUTABLE:
+      stock_name = GTK_STOCK_EXECUTE;
+      break;
+
+    default:
+      stock_name = GTK_STOCK_FILE;
+      break;
+    }
+
+  pixbuf = gtk_widget_render_icon (widget, stock_name, GTK_ICON_SIZE_SMALL_TOOLBAR, NULL);
+  if (!pixbuf)
+    g_set_error (error,
+		 GTK_FILE_SYSTEM_ERROR,
+		 GTK_FILE_SYSTEM_ERROR_FAILED,
+		 _("Could not get a stock icon for %s"),
+		 stock_name);
+
+  return pixbuf;
+}
+
 static GdkPixbuf *
 gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
 					 GtkFileSystemVolume  *volume,
@@ -701,8 +741,16 @@ gtk_file_system_unix_volume_render_icon (GtkFileSystem        *file_system,
 					 gint                  pixel_size,
 					 GError              **error)
 {
-  /* FIXME: set the GError if we can't load the icon */
-  return get_cached_icon (widget, "gnome-fs-blockdev", pixel_size);
+  GdkPixbuf *pixbuf;
+
+  pixbuf = get_cached_icon (widget, "gnome-fs-blockdev", pixel_size);
+  if (pixbuf)
+    return pixbuf;
+
+  pixbuf = get_fallback_icon (widget, ICON_BLOCK_DEVICE, error);
+  g_assert (pixbuf != NULL);
+
+  return pixbuf;
 }
 
 static char *
@@ -1039,8 +1087,11 @@ gtk_file_system_unix_filename_to_path (GtkFileSystem *file_system,
   return filename_to_path (filename);
 }
 
+/* Returns the name of the icon to be used for a path which is known to be a
+ * directory.  This can vary for Home, Desktop, etc.
+ */
 static const char *
-get_icon_for_directory (const char *path)
+get_icon_name_for_directory (const char *path)
 {
   static char *desktop_path = NULL;
 
@@ -1058,33 +1109,33 @@ get_icon_for_directory (const char *path)
     return "gnome-fs-directory";
 }
 
-static GdkPixbuf *
-gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
-				  const GtkFilePath *path,
-				  GtkWidget         *widget,
-				  gint               pixel_size,
-				  GError           **error)
+/* Computes our internal icon type based on a path name; also returns the MIME
+ * type in case we come up with ICON_REGULAR.
+ */
+static IconType
+get_icon_type_from_path (GtkFileSystemUnix *system_unix,
+			 const GtkFilePath *path,
+			 const char       **mime_type)
 {
   const char *filename;
-  IconType icon_type;
-  const char *mime_type = NULL;
   char *dirname;
-  GtkFileSystemUnix *system_unix;
   GtkFileFolderUnix *folder_unix;
+  IconType icon_type;
 
-  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
   filename = gtk_file_path_get_string (path);
   dirname = g_path_get_dirname (filename);
   folder_unix = g_hash_table_lookup (system_unix->folder_hash, dirname);
   g_free (dirname);
+
+  *mime_type = NULL;
 
   if (folder_unix)
     {
       char *basename;
       struct stat_info_entry *entry;
 
-      if (!fill_in_stats (folder_unix, error))
-	return NULL;
+      if (!fill_in_stats (folder_unix, NULL))
+	return ICON_NONE;
 
       basename = g_path_get_basename (filename);
       entry = g_hash_table_lookup (folder_unix->stat_info, basename);
@@ -1092,12 +1143,15 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
       if (entry)
 	{
 	  if (entry->icon_type == ICON_UNDECIDED)
-	    entry->icon_type = get_icon_type_from_stat (&entry->statbuf);
+	    {
+	      entry->icon_type = get_icon_type_from_stat (&entry->statbuf);
+	      g_assert (entry->icon_type != ICON_UNDECIDED);
+	    }
 	  icon_type = entry->icon_type;
 	  if (icon_type == ICON_REGULAR)
 	    {
 	      (void)fill_in_mime_type (folder_unix, NULL);
-	      mime_type = entry->mime_type;
+	      *mime_type = entry->mime_type;
 	    }
 	}
       else
@@ -1105,87 +1159,132 @@ gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
     }
   else
     {
-#if 0
-      g_print ("No folder open for %s\n", filename);
-#endif
-
-      icon_type = get_icon_type (filename, error);
+      icon_type = get_icon_type (filename, NULL);
       if (icon_type == ICON_REGULAR)
-	mime_type = xdg_mime_get_mime_type_for_file (filename);
+	*mime_type = xdg_mime_get_mime_type_for_file (filename);
     }
 
+  return icon_type;
+}
 
-  /* FIXME: this function should not return NULL without setting the GError; we
-   * should perhaps provide a "never fails" generic stock icon for when all else
-   * fails.
-   */
+/* Renders an icon for a non-ICON_REGULAR file */
+static GdkPixbuf *
+get_special_icon (IconType           icon_type,
+		  const GtkFilePath *path,
+		  GtkWidget         *widget,
+		  gint               pixel_size)
+{
+  const char *name;
 
-  if (icon_type == ICON_NONE)
-    return NULL;
+  g_assert (icon_type != ICON_REGULAR);
 
-  if (icon_type != ICON_REGULAR)
+  switch (icon_type)
     {
-      const char *name;
+    case ICON_BLOCK_DEVICE:
+      name = "gnome-fs-blockdev";
+      break;
+    case ICON_BROKEN_SYMBOLIC_LINK:
+      name = "gnome-fs-symlink";
+      break;
+    case ICON_CHARACTER_DEVICE:
+      name = "gnome-fs-chardev";
+      break;
+    case ICON_DIRECTORY: {
+      const char *filename;
 
-      switch (icon_type)
-	{
-	case ICON_BLOCK_DEVICE:
-          name = "gnome-fs-blockdev";
-	  break;
-	case ICON_BROKEN_SYMBOLIC_LINK:
-	  name = "gnome-fs-symlink";
-	  break;
-	case ICON_CHARACTER_DEVICE:
-	  name = "gnome-fs-chardev";
-	  break;
-	case ICON_DIRECTORY:
-	  name = get_icon_for_directory (filename);
-	  break;
-	case ICON_EXECUTABLE:
-	  name ="gnome-fs-executable";
-	  break;
-	case ICON_FIFO:
-	  name = "gnome-fs-fifo";
-	  break;
-	case ICON_SOCKET:
-	  name = "gnome-fs-socket";
-	  break;
-	default:
-	  g_assert_not_reached ();
-	  return NULL;
-	}
-
-      return get_cached_icon (widget, name, pixel_size);
+      filename = gtk_file_path_get_string (path);
+      name = get_icon_name_for_directory (filename);
+      break;
+      }
+    case ICON_EXECUTABLE:
+      name ="gnome-fs-executable";
+      break;
+    case ICON_FIFO:
+      name = "gnome-fs-fifo";
+      break;
+    case ICON_SOCKET:
+      name = "gnome-fs-socket";
+      break;
+    default:
+      g_assert_not_reached ();
+      return NULL;
     }
 
-  if (mime_type)
-    {
-      const char *separator;
-      GString *icon_name;
-      GdkPixbuf *pixbuf;
+  return get_cached_icon (widget, name, pixel_size);
+}
 
-      separator = strchr (mime_type, '/');
-      if (!separator)
-	return NULL;
+static GdkPixbuf *
+get_icon_for_mime_type (GtkWidget  *widget,
+			const char *mime_type,
+			gint        pixel_size)
+{
+  const char *separator;
+  GString *icon_name;
+  GdkPixbuf *pixbuf;
 
-      icon_name = g_string_new ("gnome-mime-");
-      g_string_append_len (icon_name, mime_type, separator - mime_type);
-      g_string_append_c (icon_name, '-');
-      g_string_append (icon_name, separator + 1);
-      pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
-      g_string_free (icon_name, TRUE);
-      if (pixbuf)
-	return pixbuf;
+  separator = strchr (mime_type, '/');
+  if (!separator)
+    return NULL; /* maybe we should return a GError with "invalid MIME-type" */
 
-      icon_name = g_string_new ("gnome-mime-");
-      g_string_append_len (icon_name, mime_type, separator - mime_type);
-      pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
-      g_string_free (icon_name, TRUE);
-      if (pixbuf)
-	return pixbuf;
-    }
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  g_string_append_c (icon_name, '-');
+  g_string_append (icon_name, separator + 1);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+  if (pixbuf)
+    return pixbuf;
 
-  return get_cached_icon (widget, "gnome-fs-regular", pixel_size);
+  icon_name = g_string_new ("gnome-mime-");
+  g_string_append_len (icon_name, mime_type, separator - mime_type);
+  pixbuf = get_cached_icon (widget, icon_name->str, pixel_size);
+  g_string_free (icon_name, TRUE);
+
+  return pixbuf;
+}
+
+static GdkPixbuf *
+gtk_file_system_unix_render_icon (GtkFileSystem     *file_system,
+				  const GtkFilePath *path,
+				  GtkWidget         *widget,
+				  gint               pixel_size,
+				  GError           **error)
+{
+  GtkFileSystemUnix *system_unix;
+  IconType icon_type;
+  const char *mime_type;
+  GdkPixbuf *pixbuf;
+
+  system_unix = GTK_FILE_SYSTEM_UNIX (file_system);
+
+  icon_type = get_icon_type_from_path (system_unix, path, &mime_type);
+
+  switch (icon_type) {
+  case ICON_NONE:
+    goto fallback;
+
+  case ICON_REGULAR:
+    pixbuf = get_icon_for_mime_type (widget, mime_type, pixel_size);
+    break;
+
+  default:
+    pixbuf = get_special_icon (icon_type, path, widget, pixel_size);
+  }
+
+  if (pixbuf)
+    goto out;
+
+ fallback:
+
+  pixbuf = get_cached_icon (widget, "gnome-fs-regular", pixel_size);
+  if (pixbuf)
+    goto out;
+
+  pixbuf = get_fallback_icon (widget, icon_type, error);
+
+ out:
+
+  return pixbuf;
 }
 
 static void
