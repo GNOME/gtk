@@ -405,20 +405,20 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
   GdkPixmap *pixmap = NULL;
   GdkImage *image = NULL;
   GdkVisual *visual;
-  GdkGC *gc;
+  GdkGC *gc = NULL;
   GdkColor tmp_color;
   gint width, height, num_cols, cpp, n, ns, cnt, xcnt, ycnt, wbytes;
   gchar *buffer, pixel_str[32];
   _GdkPixmapColor *color = NULL, *fallbackcolor = NULL;
   gulong index;
   GHashTable *colors = NULL;
-
+  
   if ((window == NULL) && (colormap == NULL))
     g_warning ("Creating pixmap from xpm with NULL window and colormap");
-
+  
   if (window == NULL)
     window = (GdkWindow *)&gdk_root_parent;
-
+  
   if (colormap == NULL)
     {
       colormap = gdk_window_get_colormap (window);
@@ -426,11 +426,11 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
     }
   else
     visual = ((GdkColormapPrivate *)colormap)->visual;
-
+  
   buffer = (*get_buf) (op_header, handle);
   if (buffer == NULL)
     return NULL;
-
+  
   sscanf (buffer,"%d %d %d %d", &width, &height, &num_cols, &cpp);
   if (cpp >= 32)
     {
@@ -441,37 +441,37 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
   colors = g_hash_table_new (g_str_hash, g_str_equal);
   
   if (transparent_color == NULL)
-      {
-        gdk_color_white (colormap, &tmp_color);
-        transparent_color = &tmp_color;
+    {
+      gdk_color_white (colormap, &tmp_color);
+      transparent_color = &tmp_color;
     }
-
+  
   for (cnt = 0; cnt < num_cols; cnt++)
     {
       gchar *color_name;
-
+      
       buffer = (*get_buf) (op_cmap, handle);
       if (buffer == NULL)
 	goto error;
-
+      
       color = g_new (_GdkPixmapColor, 1);
-      color->color_string = g_new(gchar, cpp + 1);
+      color->color_string = g_new (gchar, cpp + 1);
       strncpy (color->color_string, buffer, cpp);
       color->color_string[cpp] = 0;
       buffer += strlen (color->color_string);
       color->transparent = FALSE;
-
+      
       color_name = gdk_pixmap_extract_color (buffer);
-
+      
       if (color_name == NULL ||
 	  gdk_color_parse (color_name, &color->color) == FALSE)
 	{
 	  color->color = *transparent_color;
 	  color->transparent = TRUE;
 	}
-
+      
       g_free (color_name);
-
+      
       /* FIXME: The remaining slowness appears to happen in this
          function. */
       gdk_color_alloc (colormap, &color->color);
@@ -479,11 +479,10 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       if (cnt == 0)
 	fallbackcolor = color;
     }
-
+  
   index = 0;
   image = gdk_image_new (GDK_IMAGE_FASTEST, visual, width, height);
-
-  gc = NULL;
+  
   if (mask)
     {
       /* The pixmap mask is just a bits pattern.
@@ -491,43 +490,43 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
        * We don't care about the colormap, we just need 0 and 1.
        */
       GdkColor mask_pattern;
-
+      
       *mask = gdk_pixmap_new (window, width, height, 1);
       gc = gdk_gc_new (*mask);
-
+      
       mask_pattern.pixel = 0;
       gdk_gc_set_foreground (gc, &mask_pattern);
       gdk_draw_rectangle (*mask, gc, TRUE, 0, 0, -1, -1);
-
+      
       mask_pattern.pixel = 1;
       gdk_gc_set_foreground (gc, &mask_pattern);
     }
-
+  
   wbytes = width * cpp;
   for (ycnt = 0; ycnt < height; ycnt++)
     {
       buffer = (*get_buf) (op_body, handle);
-
+      
       /* FIXME: this slows things down a little - it could be
        * integrated into the strncpy below, perhaps. OTOH, strlen
        * is fast.
        */
       if ((buffer == NULL) || strlen (buffer) < wbytes)
 	continue;
-
+      
       for (n = 0, cnt = 0, xcnt = 0; n < wbytes; n += cpp, xcnt++)
 	{
 	  strncpy (pixel_str, &buffer[n], cpp);
 	  pixel_str[cpp] = 0;
 	  ns = 0;
-
+	  
 	  color = g_hash_table_lookup (colors, pixel_str);
-
+	  
 	  if (!color) /* screwed up XPM file */
 	    color = fallbackcolor;
-
+	  
 	  gdk_image_put_pixel (image, xcnt, ycnt, color->color.pixel);
-
+	  
 	  if (mask && color->transparent)
 	    {
 	      if (cnt < xcnt)
@@ -535,33 +534,33 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
 	      cnt = xcnt + 1;
 	    }
 	}
-
+      
       if (mask && (cnt < xcnt))
 	gdk_draw_line (*mask, gc, cnt, ycnt, xcnt - 1, ycnt);
     }
-
+  
  error:
-
+  
   if (mask)
     gdk_gc_destroy (gc);
-
+  
   if (image != NULL)
     {
       pixmap = gdk_pixmap_new (window, width, height, visual->depth);
-
+      
       gc = gdk_gc_new (pixmap);
       gdk_gc_set_foreground (gc, transparent_color);
       gdk_draw_image (pixmap, gc, image, 0, 0, 0, 0, image->width, image->height);
       gdk_gc_destroy (gc);
       gdk_image_destroy (image);
     }
-
+  
   if (colors != NULL)
     {
       g_hash_table_foreach (colors, free_color, 0);
       g_hash_table_destroy (colors);
     }
-
+  
   return pixmap;
 }
 
