@@ -1,3 +1,10 @@
+2000-04-22  James Henstridge  <james@daa.com.au>
+
+	* gdk-pixbuf.spec.in (%files): moved %{prefix}/bin/* from the main
+	package to the devel package.  The only file installed in bin is
+	gdk-pixbuf-config, which belongs in -devel.  This should allow having
+	multiple versions of the main gdk-pixbuf package installed.
+
 2000-04-17  Karl Eichwalder  <ke@suse.de>
 
 	* gdk-pixbuf/Makefile.am (INCLUDES): Add $(GNOME_CFLAGS).
