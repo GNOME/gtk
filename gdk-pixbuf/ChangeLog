@@ -1,3 +1,11 @@
+1999-10-27  Michael Fulbright  <msf@redhat.com>
+
+	* src/gdk-pixbuf-loader.c: Made sure image_loader struct member of
+	pixbuf_loader properly initialized.
+
+	* src/testpixbuf.c: Made sure we cleanup pixbuf_loader properly
+	when done.
+
 1999-10-26  Jonathan Blandford  <jrb@redhat.com>
 
 	* src/gdk-pixbuf-io.c (image_handler_load): load the vtable fully.
