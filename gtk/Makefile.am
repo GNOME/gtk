@@ -71,6 +71,7 @@ libgtk_la_SOURCES = \
 	gtkseparator.c		\
 	gtksignal.c		\
 	gtkstyle.c		\
+	gtkstatusbar.c		\
 	gtktable.c		\
 	gtktext.c		\
 	gtktogglebutton.c	\
@@ -161,6 +162,7 @@ gtkinclude_HEADERS = \
 	gtkseparator.h		\
 	gtksignal.h		\
 	gtkstyle.h		\
+	gtkstatusbar.h		\
 	gtktable.h		\
 	gtktext.h		\
 	gtktogglebutton.h	\

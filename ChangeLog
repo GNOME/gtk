@@ -1,3 +1,6 @@
+Sun Jan 18 16:54:55 CST 1998 Shawn T. Amundson <amundson@gimp.org>
+	* gtk/gtkstatusbar.[ch] added new widget, the statusbar
+
 Sun Jan 18 09:57:00 1998  Owen Taylor  <owt1@cornell.edu>
 
 	* gtk/gtkbutton.c gtk/gtkclist.c gtk/gtkdrawingarea.c
