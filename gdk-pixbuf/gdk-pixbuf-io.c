@@ -243,7 +243,7 @@ correct_prefix (gchar **path)
     }
 }
 
-#endif
+#endif  /* G_OS_WIN32 */
 
 static gchar *
 gdk_pixbuf_get_module_file (void)
@@ -424,7 +424,7 @@ _gdk_pixbuf_load_module_unlocked (GdkPixbufModule *image_module,
 	char *path;
 	GModule *module;
 	gpointer sym;
-	
+		
         g_return_val_if_fail (image_module->module == NULL, FALSE);
 
 	path = image_module->module_path;
@@ -464,10 +464,10 @@ _gdk_pixbuf_load_module (GdkPixbufModule *image_module,
 	G_LOCK (init_lock);
 	ret = _gdk_pixbuf_load_module_unlocked (image_module, error);
 	G_UNLOCK (init_lock);
-
 	return ret;
 }
-#else
+
+#else  /* !USE_GMODULE */
 
 #define module(type) \
   extern void MODULE_ENTRY (type, fill_info)   (GdkPixbufFormat *info);   \
@@ -631,14 +631,14 @@ gdk_pixbuf_io_init ()
 	for (name = included_formats; *name; name++) {
 		module = g_new0 (GdkPixbufModule, 1);
 		module->module_name = *name;
-		if (_gdk_pixbuf_load_module_unlocked (module, NULL))
+		if (_gdk_pixbuf_load_module (module, NULL))
 			file_formats = g_slist_prepend (file_formats, module);
 		else
 			g_free (module);
 	}
 }
 
-#endif
+#endif  /* !USE_GMODULE */
 
 
 

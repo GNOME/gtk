@@ -1,5 +1,8 @@
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
 
+	* gdk-pixbuf-io.c (gdk_pixbuf_io_init): Don't use 
+	_gdk_pixbuf_load_module_unlocked() in the !USE_GMODULE case.
+
 	* === Released 2.5.5 ===
 	
 2004-11-12  Matthias Clasen  <mclasen@redhat.com>
