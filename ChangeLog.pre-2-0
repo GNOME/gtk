@@ -1,3 +1,8 @@
+Thu Dec 10 02:21:16 1998  Jeff Garzik  <jgarzik@pobox.com>
+
+	* gtk/testdnd.c: use g_snprintf, eliminate need for string.h
+	* gtk/testrgb.c: include string.h, for strlen
+
 Wed Dec  9 17:39:26 1998  Owen Taylor  <otaylor@redhat.com>
 
 	* configure.in: Add a case for success in 

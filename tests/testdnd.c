@@ -1,4 +1,3 @@
-#include <string.h>
 #include "gtk/gtk.h"
 
 /* Target side drag signals */
@@ -454,7 +453,7 @@ popup_cb (gpointer data)
 	    for (j=0; j<3; j++)
 	      {
 		char buffer[128];
-		sprintf(buffer, "%d,%d", i, j);
+		g_snprintf(buffer, sizeof(buffer), "%d,%d", i, j);
 		button = gtk_button_new_with_label (buffer);
 		gtk_table_attach (GTK_TABLE (table), button, i, i+1, j, j+1,
 				  GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
