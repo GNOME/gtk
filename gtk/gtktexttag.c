@@ -1193,6 +1193,7 @@ gtk_text_tag_set_property (GObject      *object,
       break;
 
     case PROP_INVISIBLE:
+      g_warning ("The \"invisible\" property on GtkTextTag is not supported for GTK 2.0, it will be added in a future release. see http://bugzilla.gnome.org bug #66194 for status.");
       text_tag->invisible_set = TRUE;
       text_tag->values->invisible = g_value_get_boolean (value);
       g_object_notify (object, "invisible_set");

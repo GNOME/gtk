@@ -1,3 +1,8 @@
+2001-12-04  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktexttag.c (gtk_text_tag_set_property): add a warning for
+	"invisible" property, #65999
+
 2001-12-04  Matt Wilson  <msw@redhat.com>
 
 	* gtk/gtktreestore.c (gtk_tree_store_insert): fixed docs
