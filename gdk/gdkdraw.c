@@ -1536,7 +1536,7 @@ gdk_drawable_real_draw_pixbuf (GdkDrawable  *drawable,
 /**
  * _gdk_drawable_get_scratch_gc:
  * @drawable: A #GdkDrawable
- * @graphics_exposures: Whether the reutrned #GdkGC should generate graphics exposures 
+ * @graphics_exposures: Whether the returned #GdkGC should generate graphics exposures 
  * 
  * Returns a #GdkGC suitable for drawing on @drawable. The #GdkGC has
  * the standard values for @drawable, except for the graphics_exposures

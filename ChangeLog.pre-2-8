@@ -1,3 +1,7 @@
+2004-04-28  Matthias Clasen  <mclasen@redhat.com>
+
+	* gdk/gdkdraw.c (_gdk_drawable_get_scratch_gc): Docs typo fix.
+
 Sun Apr 25 15:36:02 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbutton.c (gtk_tool_button_set_label_widget): Fix
