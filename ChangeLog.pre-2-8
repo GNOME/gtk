@@ -1,3 +1,8 @@
+2004-09-07  Matthias Clasen  <mclasen@redhat.com>
+
+	* gtk/gtkstyle.c (gtk_default_draw_expander): Draw expanders a bit 
+	better.
+
 Sun Sep  5 17:14:16 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkmain.c: 

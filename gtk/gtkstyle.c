@@ -4966,9 +4966,26 @@ create_expander_affine (gdouble affine[6],
 
   width = expander_size / 4.0;
   height = expander_size / 2.0;
-  
-  s = sin (degrees * G_PI / 180.0);
-  c = cos (degrees * G_PI / 180.0);
+
+  switch (degrees)
+    {
+    case 0:
+      s = 0.0;
+      c = 1.0;
+      break;
+    case 90:
+      s = 1.0;
+      c = 0.0;
+      break;
+    case 180:
+      s = 0.0;
+      c = -1.0;
+      break;
+    default:
+      s = sin (degrees * G_PI / 180.0);
+      c = cos (degrees * G_PI / 180.0);
+      break;
+    }
   
   affine[0] = c;
   affine[1] = s;
@@ -5016,12 +5033,12 @@ gtk_default_draw_expander (GtkStyle        *style,
   gint expander_size;
   GdkPoint points[3];
   gint i;
-  gint line_width;
+  gint line_width, o;
   gdouble affine[6];
   gint degrees = 0;
 
   gtk_widget_style_get (widget,
-			"expander_size", &expander_size,
+			"expander-size", &expander_size,
 			NULL);
   line_width = MAX (1, expander_size/7);
 
@@ -5031,13 +5048,16 @@ gtk_default_draw_expander (GtkStyle        *style,
       gdk_gc_set_clip_rectangle (style->base_gc[GTK_STATE_NORMAL], area);
     }
 
-  expander_size -= (line_width * 2 - 2);
+  /* a rough estimate of how much the joins of the triangle will overshoot. 
+   * 2.4 ~ 1 / tan (45 / 2)
+   */
+  o = ceil (2.4 * line_width / 2.0);
   points[0].x = line_width / 2;
-  points[0].y = line_width / 2;
-  points[1].x = expander_size / 2 + line_width / 2;
-  points[1].y = expander_size / 2 + line_width / 2;
+  points[0].y = o;
+  points[1].x = expander_size / 2 + line_width / 2 - o;
+  points[1].y = expander_size / 2;
   points[2].x = line_width / 2;
-  points[2].y = expander_size + line_width / 2;
+  points[2].y = expander_size - o;
 
   switch (expander_style)
     {
