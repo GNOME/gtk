@@ -953,6 +953,7 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 			     GtkAllocation  *allocation)
 {
   GtkIconView *icon_view;
+  GtkAdjustment *hadjustment, *vadjustment;
 
   widget->allocation = *allocation;
   
@@ -968,19 +969,30 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 			 MAX (icon_view->priv->height, allocation->height));
     }
 
-  icon_view->priv->hadjustment->page_size = allocation->width;
-  icon_view->priv->hadjustment->page_increment = allocation->width * 0.9;
-  icon_view->priv->hadjustment->step_increment = allocation->width * 0.1;
-  icon_view->priv->hadjustment->lower = 0;
-  icon_view->priv->hadjustment->upper = MAX (allocation->width, icon_view->priv->width);
-  gtk_adjustment_changed (icon_view->priv->hadjustment);
+  hadjustment = icon_view->priv->hadjustment;
+  vadjustment = icon_view->priv->vadjustment;
 
-  icon_view->priv->vadjustment->page_size = allocation->height;
-  icon_view->priv->vadjustment->page_increment = allocation->height * 0.9;
-  icon_view->priv->vadjustment->step_increment = allocation->width * 0.1;
-  icon_view->priv->vadjustment->lower = 0;
-  icon_view->priv->vadjustment->upper = MAX (allocation->height, icon_view->priv->height);
-  gtk_adjustment_changed (icon_view->priv->vadjustment);
+  hadjustment->page_size = allocation->width;
+  hadjustment->page_increment = allocation->width * 0.9;
+  hadjustment->step_increment = allocation->width * 0.1;
+  hadjustment->lower = 0;
+  hadjustment->upper = MAX (allocation->width, icon_view->priv->width);
+
+  if (hadjustment->value > hadjustment->upper - hadjustment->page_size)
+    gtk_adjustment_set_value (hadjustment, MAX (0, hadjustment->upper - hadjustment->page_size));
+
+  gtk_adjustment_changed (hadjustment);
+
+  vadjustment->page_size = allocation->height;
+  vadjustment->page_increment = allocation->height * 0.9;
+  vadjustment->step_increment = allocation->height * 0.1;
+  vadjustment->lower = 0;
+  vadjustment->upper = MAX (allocation->height, icon_view->priv->height);
+
+  if (vadjustment->value > vadjustment->upper - vadjustment->page_size)
+    gtk_adjustment_set_value (vadjustment, MAX (0, vadjustment->upper - vadjustment->page_size));
+
+  gtk_adjustment_changed (vadjustment);
 
   gtk_icon_view_layout (icon_view);
 }

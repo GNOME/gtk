@@ -1,5 +1,8 @@
 2005-03-17  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkiconview.c (gtk_icon_view_size_allocate): Clamp
+	adjustment values on resize.  (#170567, Tomislav Jonjic)
+
 	* gtk/gtkicontheme.c (theme_lookup_icon): Don't crash
 	if there is no cache.  (#170652, Diego Gonzalez)
 	
