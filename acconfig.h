@@ -38,6 +38,8 @@
 /* Define to enable POSIX threading awareness */
 #undef USE_PTHREADS
 
+#undef XIM_INST_IS_MISSING_OR_STRANGE
+
 #undef XINPUT_NONE
 #undef XINPUT_GXI
 #undef XINPUT_XFREE

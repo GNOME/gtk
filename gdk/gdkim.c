@@ -54,13 +54,15 @@ typedef struct {
   gpointer value;
 } GdkImArg;
 
+#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
 static void   gdk_im_instantiate_cb      (Display *display,
  					  XPointer client_data,
  					  XPointer call_data);
+#endif
 static void   gdk_im_destroy_cb          (XIM im,
      					  XPointer client_data,
  					  XPointer call_data);
-
+static gint   gdk_im_real_open           (void);
 static void   gdk_ic_real_new            (GdkIC *ic);
 
 static GdkICAttributesType gdk_ic_real_set_attr (GdkIC *ic,
@@ -338,39 +340,57 @@ gdk_im_destroy_cb (XIM im, XPointer client_data, XPointer call_data)
       private->xic = NULL;
     }
 
+#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
   XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
       				  gdk_im_instantiate_cb, NULL);
+#endif
 }
 
+#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
 static void
 gdk_im_instantiate_cb (Display *display,
     		       XPointer client_data, XPointer call_data)
 {
-  XIMCallback destroy_cb;
-  GList *node;
-
   GDK_NOTE (XIM, g_message ("New IM is instantiated."));
   if (display != gdk_display)
     return;
 
-  XUnregisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
-      				    gdk_im_instantiate_cb, NULL);
+  gdk_im_real_open ();
+
+  if (xim_im != NULL)
+    XUnregisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
+				      gdk_im_instantiate_cb, NULL);
+}
+#endif
+
+static gint
+gdk_im_real_open (void)
+{
+  XIMCallback destroy_cb;
+  GList *node;
 
   xim_im = XOpenIM (GDK_DISPLAY(), NULL, NULL, NULL);
   if (xim_im == NULL)
-    GDK_NOTE (XIM, g_warning ("Unable to open open IM."));
-
-  destroy_cb.callback = gdk_im_destroy_cb;
-  destroy_cb.client_data = NULL;
-  XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL);
-
-  XGetIMValues (xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL);
-
-  for (node = xim_ic_list; node != NULL; node = g_list_next(node))
     {
-      GdkICPrivate *private = (GdkICPrivate *) (node->data);
-      if (private->xic == NULL)
-	gdk_ic_real_new ((GdkIC *)private);
+      GDK_NOTE (XIM, g_warning ("Unable to open IM."));
+      return FALSE;
+    }
+  else
+    {
+      destroy_cb.callback = gdk_im_destroy_cb;
+      destroy_cb.client_data = NULL;
+      if (NULL != XSetIMValues (xim_im, XNDestroyCallback, &destroy_cb, NULL))
+	GDK_NOTE (XIM, g_warning ("Could not set destroy callback to IM. Be careful to not destroy your input method."));
+
+      XGetIMValues (xim_im, XNQueryInputStyle, &xim_styles, NULL, NULL);
+
+      for (node = xim_ic_list; node != NULL; node = g_list_next(node))
+	{
+	  GdkICPrivate *private = (GdkICPrivate *) (node->data);
+	  if (private->xic == NULL)
+	    gdk_ic_real_new ((GdkIC *)private);
+	}
+      return TRUE;
     }
 }
 
@@ -388,10 +408,15 @@ gdk_im_open (void)
   if (!(xim_best_allowed_style & GDK_IM_STATUS_MASK))
     gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
 
-  XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
-      				  gdk_im_instantiate_cb, NULL);
+  if (gdk_im_real_open ())
+    return TRUE;
 
-  return (xim_im != NULL);
+#ifndef XIM_INSTANTIATE_IS_MISSING_OR_STRANGE
+  XRegisterIMInstantiateCallback (gdk_display, NULL, NULL, NULL,
+				  gdk_im_instantiate_cb, NULL);
+#endif
+
+  return FALSE;
 }
 
 void 

@@ -64,6 +64,8 @@ AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]]
 AC_ARG_WITH(glib, [  --with-glib=DIR         Use uninstalled copy of glib])
 AC_ARG_ENABLE(xim, [  --enable-xim            support XIM [default=yes]],
 			, enable_xim="yes")
+AC_ARG_ENABLE(xim_inst, [  --disable-xim-inst      does not use xim instantiate callback],
+			, enable_xim_inst="maybe")
 AC_ARG_WITH(locale, [  --with-locale=LOCALE    locale name you want to use ])
 
 AC_ARG_WITH(xinput, [  --with-xinput=[no/gxi/xfree] support XInput ])
@@ -290,11 +292,29 @@ AC_CHECK_LIB(X11, XConvertCase,
 
 AC_CHECK_LIB(X11, XUnregisterIMInstantiateCallback,
 	    : ,
-	    enable_xim=no,
+	    enable_xim_inst="no",
 	    $x_libs)
+
+# On Solaris, calling XRegisterIMInstantiateCallback seems to
+# cause an immediate segfault, so we disable it, unless
+# the user specifically forces it to be on.
+
+if test x$enable_xim_inst = xmaybe ; then
+  case host in
+	*-*-solaris*)
+            enable_xim_inst="no"
+            ;;
+	*)
+	    enable_xim_inst="yes"
+	    ;;
+  esac
+fi
 
 if test "x$enable_xim" = "xyes"; then
   GTK_XIM_FLAGS="-DUSE_XIM"
+  if test "x$enable_xim_inst" = "xno"; then
+    AC_DEFINE(XIM_INST_IS_MISSING_OR_STRANGE)
+  fi
 fi
 
 x_cflags="$X_CFLAGS"

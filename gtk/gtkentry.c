@@ -2189,6 +2189,9 @@ gtk_entry_update_ic_attr (GtkWidget *widget)
   GtkEditable *editable = (GtkEditable *) widget;
   GdkICAttributesType mask = 0;
 
+  if (editable->ic == NULL)
+    return;
+
   gdk_ic_get_attr (editable->ic, editable->ic_attr,
 		   GDK_IC_PREEDIT_FOREGROUND |
 		   GDK_IC_PREEDIT_BACKGROUND |
@@ -2209,6 +2212,8 @@ gtk_entry_update_ic_attr (GtkWidget *widget)
 	= widget->style->base[GTK_STATE_NORMAL];
     }
   if ((gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION) && 
+      widget->style->font != NULL &&
+      widget->style->font->type == GDK_FONT_FONTSET &&
       !gdk_font_equal (editable->ic_attr->preedit_fontset,
 		       widget->style->font))
     {

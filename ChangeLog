@@ -1,3 +1,23 @@
+Wed Jan 27 21:56:07 1999  Owen Taylor  <otaylor@redhat.com>
+
+        [ patch from Takashi Matsuda <matsu@arch.comp.kyutech.ac.jp> ]
+	
+	* acconfig.h configure.in gdk/gdkim.c: Add configure 
+	flag for disabling XRegisterIMInstantiateCallback(), default
+	it to off for Solaris. Always try to open the
+	input method immediately, and only if that fails,
+	register than instantiate callback.
+
+	* gdk/gdkentry.c: Some tweaks to make sure that we
+	only get and set the IC attributes when appropriate.
+	
+Wed Jan 27 20:08:54 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkfilesel.c (open_user_dir): Patch from
+	Sebastian Wilhelmi  <wilhelmi@ira.uka.de> to
+	use g_get_home_dir() instead of calling getpwuid() 
+	ourselves.
+
 Wed Jan 27 20:06:06 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtklayout.c (gtk_layout_adjustment_changed):
