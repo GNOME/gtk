@@ -6,9 +6,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.0.3\n"
-"POT-Creation-Date: 2002-06-16 00:04-0400\n"
-"PO-Revision-Date: 2002-06-15 03:56+0900\n"
+"Project-Id-Version: gtk+ 2.0.5\n"
+"POT-Creation-Date: 2002-07-19 23:20+0900\n"
+"PO-Revision-Date: 2002-07-19 23:57+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -135,15 +135,15 @@ msgstr "画像のピクセルデータが壊れています"
 msgid "failed to allocate image buffer of %u bytes"
 msgstr "%u バイトの画像バッファの確保に失敗"
 
-#: gdk-pixbuf/io-bmp.c:266 gdk-pixbuf/io-bmp.c:366
+#: gdk-pixbuf/io-bmp.c:261 gdk-pixbuf/io-bmp.c:374
 msgid "Not enough memory to load bitmap image"
 msgstr "ビットマップ画像を読みこむための十分なメモリがありません"
 
-#: gdk-pixbuf/io-bmp.c:292
+#: gdk-pixbuf/io-bmp.c:300
 msgid "BMP image has unsupported header size"
 msgstr "BMP 画像にサポートされてないヘッダサイズがあります"
 
-#: gdk-pixbuf/io-bmp.c:317 gdk-pixbuf/io-bmp.c:340 gdk-pixbuf/io-bmp.c:399
+#: gdk-pixbuf/io-bmp.c:325 gdk-pixbuf/io-bmp.c:348 gdk-pixbuf/io-bmp.c:409
 msgid "BMP image has bogus header data"
 msgstr "BMP 画像のヘッダのデータがおかしいです"
 
@@ -425,7 +425,11 @@ msgstr "RAS 画像のヘッダのデータがおかしいです"
 msgid "RAS image has unknown type"
 msgstr "不明なタイプの RAS 画像です"
 
-#: gdk-pixbuf/io-ras.c:195 gdk-pixbuf/io-ras.c:215
+#: gdk-pixbuf/io-ras.c:188
+msgid "unsupported RAS image variation"
+msgstr "サポートしていない RAS 画像の一種です"
+
+#: gdk-pixbuf/io-ras.c:203 gdk-pixbuf/io-ras.c:223
 msgid "Not enough memory to load RAS image"
 msgstr "RAS 画像を読みこむための十分なメモリがありません"
 
@@ -492,81 +496,85 @@ msgstr "TGA コンテキスト構造体用のメモリを確保できません"
 
 #: gdk-pixbuf/io-tga.c:878
 msgid "Excess data in file"
-msgstr ""
+msgstr "ファイルにデータが多すぎます"
 
 #: gdk-pixbuf/io-tga.c:924
 msgid "Can't allocate memory for TGA header"
-msgstr ""
+msgstr "TGA ヘッダ用のメモリが確保できません"
 
 #: gdk-pixbuf/io-tga.c:934
 msgid "Too big value in the infolen field of TGA header."
-msgstr ""
+msgstr "TGA ヘッダの infolen フィールドの値が大きすぎます"
 
 #: gdk-pixbuf/io-tga.c:958
 msgid "Can't allocate memory for TGA cmap temporary buffer"
-msgstr ""
+msgstr "TGA cmap のテンポラリバッファ用のメモリが確保できません"
 
 #: gdk-pixbuf/io-tga.c:970
 msgid "Can't allocate memory for TGA colormap struct"
-msgstr ""
+msgstr "TGA colormap 構造体用のメモリが確保できません"
 
 #: gdk-pixbuf/io-tga.c:979
 msgid "Can't allocate memory for TGA colormap entries"
-msgstr ""
+msgstr "TGA colormap エントリ用のメモリが確保できません"
 
 #: gdk-pixbuf/io-tga.c:989
 msgid "Unexpected bitdepth for TGA colormap"
-msgstr ""
+msgstr "TGA colormap のビット深度がおかしいです"
 
 #: gdk-pixbuf/io-tga.c:1030
 msgid "Pseudo-Color image without colormap"
-msgstr ""
+msgstr "擬似カラー画像なのに colormap がありません"
 
 #: gdk-pixbuf/io-tga.c:1037
 msgid "Can't seek to image offset -- end-of-file probably encountered"
-msgstr ""
+msgstr "画像へのオフセットに seek できません―おそらくファイルの終わりに到達"
 
 #: gdk-pixbuf/io-tga.c:1051 gdk-pixbuf/io-tga.c:1153 gdk-pixbuf/io-tga.c:1223
 msgid "Can't allocate pixbuf"
-msgstr ""
+msgstr "pixbuf を確保できません"
 
 #: gdk-pixbuf/io-tga.c:1293 gdk-pixbuf/io-tga.c:1322
 msgid "Unsupported TGA image type"
-msgstr ""
+msgstr "サポートしていない TGA 画像タイプです"
 
-#: gdk-pixbuf/io-tiff.c:187
+#: gdk-pixbuf/io-tiff.c:191
 msgid "Could not get image width (bad TIFF file)"
-msgstr ""
+msgstr "画像の幅を取得できません (おかしな TIFF ファイル)"
 
-#: gdk-pixbuf/io-tiff.c:194
+#: gdk-pixbuf/io-tiff.c:198
 msgid "Could not get image height (bad TIFF file)"
-msgstr ""
+msgstr "画像の高さを取得できません (おかしな TIFF ファイル)"
 
-#: gdk-pixbuf/io-tiff.c:202
+#: gdk-pixbuf/io-tiff.c:206
 msgid "Width or height of TIFF image is zero"
-msgstr ""
+msgstr "TIFF 画像の幅か高さが 0 です"
 
-#: gdk-pixbuf/io-tiff.c:211 gdk-pixbuf/io-tiff.c:220
+#: gdk-pixbuf/io-tiff.c:215 gdk-pixbuf/io-tiff.c:224
 msgid "Dimensions of TIFF image too large"
-msgstr ""
+msgstr "TIFF 画像の次元が大きすぎます"
 
-#: gdk-pixbuf/io-tiff.c:230 gdk-pixbuf/io-tiff.c:242 gdk-pixbuf/io-tiff.c:536
+#: gdk-pixbuf/io-tiff.c:234 gdk-pixbuf/io-tiff.c:246 gdk-pixbuf/io-tiff.c:552
 msgid "Insufficient memory to open TIFF file"
-msgstr ""
+msgstr "TIFF ファイルを開くためのメモリが足りません"
 
-#: gdk-pixbuf/io-tiff.c:254
+#: gdk-pixbuf/io-tiff.c:258
 msgid "Failed to load RGB data from TIFF file"
-msgstr ""
+msgstr "TIFF ファイルから RGB データを読みこむのに失敗しました"
 
-#: gdk-pixbuf/io-tiff.c:324
+#: gdk-pixbuf/io-tiff.c:266
+msgid "Unsupported TIFF variant"
+msgstr "サポートされてない TIFF の一種です"
+
+#: gdk-pixbuf/io-tiff.c:336
 msgid "Failed to open TIFF image"
-msgstr ""
+msgstr "TIFF 画像を開くのを失敗しました"
 
-#: gdk-pixbuf/io-tiff.c:337
+#: gdk-pixbuf/io-tiff.c:349
 msgid "TIFFClose operation failed"
-msgstr ""
+msgstr "TIFFClose 操作に失敗しました"
 
-#: gdk-pixbuf/io-tiff.c:470 gdk-pixbuf/io-tiff.c:484
+#: gdk-pixbuf/io-tiff.c:482 gdk-pixbuf/io-tiff.c:495
 msgid "Failed to load TIFF image"
 msgstr ""
 
@@ -872,21 +880,21 @@ msgstr "枠の縁のスタイル"
 
 #: gtk/gtkbutton.c:265
 msgid "Default Spacing"
-msgstr ""
+msgstr "デフォルトの間隔"
 
 #: gtk/gtkbutton.c:266
 msgid "Extra space to add for CAN_DEFAULT buttons"
-msgstr ""
+msgstr "CAN_DEFAULT ボタンに加える余分な空白"
 
 #: gtk/gtkbutton.c:272
 msgid "Default Outside Spacing"
-msgstr ""
+msgstr "デフォルトの外部の空白"
 
 #: gtk/gtkbutton.c:273
 msgid ""
 "Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
 "border"
-msgstr ""
+msgstr "ボーダーの外に常に描画するCAN_DEFAULT ボタンに加える余分な空白"
 
 #: gtk/gtkbutton.c:278
 msgid "Child X Displacement"
@@ -1016,7 +1024,7 @@ msgstr "テキスト"
 
 #: gtk/gtkcellrenderertext.c:174
 msgid "Text to render"
-msgstr ""
+msgstr "描画するテキスト"
 
 #: gtk/gtkcellrenderertext.c:181
 msgid "Markup"
@@ -1024,7 +1032,7 @@ msgstr "マークアップ"
 
 #: gtk/gtkcellrenderertext.c:182
 msgid "Marked up text to render"
-msgstr ""
+msgstr "描画するマークアップされたテキスト"
 
 #: gtk/gtkcellrenderertext.c:189 gtk/gtklabel.c:287
 msgid "Attributes"
@@ -1090,7 +1098,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:255 gtk/gtktexttag.c:302
 msgid "Font family"
-msgstr "フォントファミリ"
+msgstr "フォント・ファミリ"
 
 #: gtk/gtkcellrenderertext.c:256 gtk/gtktexttag.c:303
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -1099,35 +1107,35 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:263 gtk/gtkcellrenderertext.c:264
 #: gtk/gtktexttag.c:310 gtk/gtktexttag.c:311
 msgid "Font style"
-msgstr ""
+msgstr "フォント・スタイル"
 
 #: gtk/gtkcellrenderertext.c:272 gtk/gtkcellrenderertext.c:273
 #: gtk/gtktexttag.c:319 gtk/gtktexttag.c:320
 msgid "Font variant"
-msgstr ""
+msgstr "フォント・バリアント"
 
 #: gtk/gtkcellrenderertext.c:281 gtk/gtkcellrenderertext.c:282
 #: gtk/gtktexttag.c:328 gtk/gtktexttag.c:329
 msgid "Font weight"
-msgstr ""
+msgstr "フォント・ウェイト"
 
 #: gtk/gtkcellrenderertext.c:291 gtk/gtkcellrenderertext.c:292
 #: gtk/gtktexttag.c:339 gtk/gtktexttag.c:340
 msgid "Font stretch"
-msgstr ""
+msgstr "フォント・ストレッチ"
 
 #: gtk/gtkcellrenderertext.c:300 gtk/gtkcellrenderertext.c:301
 #: gtk/gtktexttag.c:348 gtk/gtktexttag.c:349
 msgid "Font size"
-msgstr ""
+msgstr "フォント・サイズ"
 
 #: gtk/gtkcellrenderertext.c:310 gtk/gtktexttag.c:368
 msgid "Font points"
-msgstr ""
+msgstr "フォント・ポイント"
 
 #: gtk/gtkcellrenderertext.c:311 gtk/gtktexttag.c:369
 msgid "Font size in points"
-msgstr ""
+msgstr "ポイント単位でのフォントの大きさ"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:358 gtk/gtktexttag.c:359
 msgid "Font scale"
@@ -1337,7 +1345,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:910
 msgid "_Save color here"
-msgstr ""
+msgstr "色をここに保存(_S)"
 
 #: gtk/gtkcolorsel.c:1079
 msgid ""
@@ -1363,19 +1371,19 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:1718
 msgid "Current Color"
-msgstr "現在カラー"
+msgstr "カレント・カラー"
 
 #: gtk/gtkcolorsel.c:1719
 msgid "The current color"
-msgstr ""
+msgstr "カレントの色"
 
 #: gtk/gtkcolorsel.c:1725
 msgid "Current Alpha"
-msgstr ""
+msgstr "カレント・アルファ"
 
 #: gtk/gtkcolorsel.c:1726
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
-msgstr ""
+msgstr "カレントの透明度 (0 で完全透明、65535 で完全不透明)"
 
 #: gtk/gtkcolorsel.c:1739
 msgid "Custom palette"
@@ -1427,7 +1435,7 @@ msgstr "赤(_R):"
 
 #: gtk/gtkcolorsel.c:1828
 msgid "Amount of red light in the color."
-msgstr ""
+msgstr "色中の赤成分の量"
 
 #: gtk/gtkcolorsel.c:1829
 msgid "_Green:"
@@ -1435,7 +1443,7 @@ msgstr "緑(_G):"
 
 #: gtk/gtkcolorsel.c:1830
 msgid "Amount of green light in the color."
-msgstr ""
+msgstr "色中の緑成分の量"
 
 #: gtk/gtkcolorsel.c:1831
 msgid "_Blue:"
@@ -1443,7 +1451,7 @@ msgstr "青(_B):"
 
 #: gtk/gtkcolorsel.c:1832
 msgid "Amount of blue light in the color."
-msgstr ""
+msgstr "色中の青成分の量"
 
 #: gtk/gtkcolorsel.c:1835
 msgid "_Opacity:"
@@ -3315,6 +3323,7 @@ msgid "_Yes"
 msgstr "はい(_Y)"
 
 #: gtk/gtkstock.c:334
+#, c-format
 msgid "Zoom _100%"
 msgstr ""
 
