@@ -176,11 +176,11 @@ gpointer      gdk_xid_table_lookup     (XID              xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 
 /* returns TRUE if we support the given WM spec feature */
-gboolean gdk_net_wm_supports            (GdkAtom    property);
 gboolean gdk_net_wm_supports_for_screen (GdkScreen *screen,
 					 GdkAtom    property);
 
 #ifndef GDK_MULTIHEAD_SAFE
+gboolean gdk_net_wm_supports           (GdkAtom    property);
 void          gdk_x11_grab_server      ();
 void          gdk_x11_ungrab_server    ();
 #endif

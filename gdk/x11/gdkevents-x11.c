@@ -599,7 +599,6 @@ gdk_event_translate (GdkDisplay *display,
     }
 
   if (window &&
-      g_object_get_data (G_OBJECT (display), "moveresize_window") &&
       (xevent->xany.type == MotionNotify ||
        xevent->xany.type == ButtonRelease))
     {
@@ -1410,9 +1409,8 @@ gdk_event_translate (GdkDisplay *display,
 	    {
 	      window_private->resize_count -= 1;
 
-	      if (window_private->resize_count == 0 &&
-		  window == g_object_get_data (G_OBJECT(display), "moveresize_window"))
-		_gdk_moveresize_configure_done (display);
+	      if (window_private->resize_count == 0)
+		_gdk_moveresize_configure_done (display, window);
 	    }
 	}
       break;
@@ -2038,13 +2036,17 @@ gdk_x11_get_server_time (GdkWindow *window)
   return xevent.xproperty.time;
 }
 
+typedef struct
+{
+  Atom *atoms;
+  gulong n_atoms;
+} _NetWmSupportedAtoms;
+  
 
 gboolean
 gdk_net_wm_supports_for_screen (GdkScreen *screen,
 				GdkAtom    property)
 {
-  static GdkAtom *atoms = NULL;
-  static gulong n_atoms = 0;
   Atom type;
   gint format;
   gulong nitems;
@@ -2052,21 +2054,30 @@ gdk_net_wm_supports_for_screen (GdkScreen *screen,
   Window *xwindow;
   gulong i;
   GdkScreenImplX11 *screen_impl;
-  GdkDisplayImplX11 *display_impl;
+  _NetWmSupportedAtoms *supported_atoms;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
   screen_impl = GDK_SCREEN_IMPL_X11 (screen);
-  display_impl = GDK_DISPLAY_IMPL_X11 (screen_impl->display);
+
+  supported_atoms = g_object_get_data (G_OBJECT (screen), 
+				       "net_wm_supported_atom");
+  if (!supported_atoms)
+    {
+      supported_atoms = g_new0 (_NetWmSupportedAtoms, 1);
+      g_object_set_data (G_OBJECT (screen), "net_wm_supported_atom",
+			 supported_atoms);
+    }
 
   if (screen_impl->wmspec_check_window != None)
     {
-      if (atoms == NULL)
+      if (supported_atoms->atoms == NULL)
         return FALSE;
       
       i = 0;
-      while (i < n_atoms)
+      while (i < supported_atoms->n_atoms)
         {
-          if (atoms[i] == gdk_x11_get_real_atom (screen_impl->display, property))
+          if (supported_atoms->atoms[i] == 
+	      gdk_x11_get_real_atom (screen_impl->display, property))
             return TRUE;
           
           ++i;
@@ -2075,11 +2086,11 @@ gdk_net_wm_supports_for_screen (GdkScreen *screen,
       return FALSE;
     }
 
-  if (atoms)
-    XFree (atoms);
+  if (supported_atoms->atoms)
+    XFree (supported_atoms->atoms);
 
-  atoms = NULL;
-  n_atoms = 0;
+  supported_atoms->atoms = NULL;
+  supported_atoms->n_atoms = 0;
   
   /* This function is very slow on every call if you are not running a
    * spec-supporting WM. For now not optimized, because it isn't in
@@ -2115,7 +2126,8 @@ gdk_net_wm_supports_for_screen (GdkScreen *screen,
 		      gdk_x11_get_real_atom_by_name (screen_impl->display, 
 						     "_NET_SUPPORTED"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, 
-		      &n_atoms, &bytes_after, (guchar **)&atoms);
+		      &supported_atoms->n_atoms, &bytes_after,
+		      (guchar **)&supported_atoms->atoms);
   
   if (type != XA_ATOM)
     return FALSE;
@@ -2126,12 +2138,13 @@ gdk_net_wm_supports_for_screen (GdkScreen *screen,
   /* since wmspec_check_window != None this isn't infinite. ;-) */
   return gdk_net_wm_supports_for_screen (screen, property);
 }
-
+#ifndef GDK_MULTIHEAD_SAFE
 gboolean
 gdk_net_wm_supports (GdkAtom property)
 {
   return gdk_net_wm_supports_for_screen (gdk_get_default_screen (), property);
 }
+#endif
 
 static struct
 {

@@ -3830,8 +3830,10 @@ _gdk_moveresize_handle_event (XEvent *event)
   GdkDisplayImplX11 *display= gdk_lookup_xdisplay (event->xany.display);
   _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
 
-  if (mv_resize == NULL)
+  if (!g_object_get_data (G_OBJECT (display), "moveresize_window"))
     return FALSE;
+
+  g_assert (mv_resize != NULL);
 
   window_private = (GdkWindowObject *) mv_resize->_gdk_moveresize_window;
 
@@ -3878,13 +3880,17 @@ _gdk_moveresize_handle_event (XEvent *event)
   return TRUE;
 }
 
-void
-_gdk_moveresize_configure_done (GdkDisplay * display)
+gboolean 
+_gdk_moveresize_configure_done (GdkDisplay * display,
+				GdkWindow  * window)
 {
   XEvent *tmp_event;
   _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
   
   g_assert (mv_resize != NULL);
+
+  if (window != g_object_get_data (G_OBJECT (display), "moveresize_window"))
+    return FALSE;
 
   if (mv_resize->moveresize_pending_event)
     {
