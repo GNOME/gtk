@@ -1,5 +1,9 @@
 2004-10-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkactiongroup.h: 
+	* gtk/gtkactiongroup.c: Reinstate the accidentally lost addition 
+	of gtk_action_group_translate_string().
+
 	* gtk/gtkaccelgroup.h: Declare gtk_accelerator_get_label.
 
 2004-10-08  Matthias Clasen  <mclasen@redhat.com>
