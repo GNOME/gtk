@@ -1452,8 +1452,6 @@ new_folder_button_clicked (GtkButton             *button,
   GtkTreeIter iter;
   GtkTreePath *path;
 
-  /* FIXME: this doesn't work for folder mode, just for file mode */
-
   _gtk_file_system_model_add_editable (impl->browse_files_model, &iter);
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->browse_files_model), &iter);
@@ -3028,7 +3026,6 @@ set_select_multiple (GtkFileChooserDefault *impl,
   impl->select_multiple = select_multiple;
   g_object_notify (G_OBJECT (impl), "select-multiple");
 
-  /* FIXME #132255: See note in check_preview_change() */
   check_preview_change (impl);
 }
 
@@ -4462,30 +4459,28 @@ filter_combo_changed (GtkComboBox           *combo_box,
 static void
 check_preview_change (GtkFileChooserDefault *impl)
 {
-  const GtkFilePath *new_path = NULL;
-  const GtkFileInfo *new_info = NULL;
+  GtkTreePath *cursor_path;
+  const GtkFilePath *new_path;
+  const GtkFileInfo *new_info;
 
-  /* FIXME #132255: Fixing preview for multiple selection involves getting the
-   * full selection and diffing to find out what the most recently selected file
-   * is; there is logic in GtkFileSelection that probably can be
-   * copied.
-   */
-  if (impl->sort_model && !impl->select_multiple)
+  gtk_tree_view_get_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view), &cursor_path, NULL);
+  if (cursor_path)
     {
-      GtkTreeSelection *selection;
       GtkTreeIter iter;
+      GtkTreeIter child_iter;
 
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_files_tree_view));
-      if (gtk_tree_selection_get_selected (selection, NULL, &iter))
-	{
-	  GtkTreeIter child_iter;
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (impl->sort_model), &iter, cursor_path);
+      gtk_tree_path_free (cursor_path);
 
-	  gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model,
-							  &child_iter, &iter);
+      gtk_tree_model_sort_convert_iter_to_child_iter (impl->sort_model, &child_iter, &iter);
 
-	  new_path = _gtk_file_system_model_get_path (impl->browse_files_model, &child_iter);
-	  new_info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
-	}
+      new_path = _gtk_file_system_model_get_path (impl->browse_files_model, &child_iter);
+      new_info = _gtk_file_system_model_get_info (impl->browse_files_model, &child_iter);
+    }
+  else
+    {
+      new_path = NULL;
+      new_info = NULL;
     }
 
   if (new_path != impl->preview_path &&
