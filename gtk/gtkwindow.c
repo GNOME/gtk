@@ -2650,7 +2650,10 @@ gtk_window_get_position (GtkWindow *window,
       
       if (GTK_WIDGET_MAPPED (widget))
         {
-          gdk_window_get_frame_extents (widget->window, &frame_extents);
+	  if (window->frame)
+	    gdk_window_get_frame_extents (window->frame, &frame_extents);
+	  else
+	    gdk_window_get_frame_extents (widget->window, &frame_extents);
           x = frame_extents.x;
           y = frame_extents.y;
           gtk_window_get_size (window, &w, &h);

@@ -866,7 +866,7 @@ gdk_fb_draw_text(GdkDrawable    *drawable,
     {
       gunichar wc = g_utf8_get_char (p);
       p = g_utf8_next_char (p);
-      shaper = pango_font_find_shaper (private->pango_font, "fr", wc);
+      shaper = pango_font_find_shaper (private->pango_font, pango_language_from_string ("fr"), wc);
       if (shaper != last_shaper)
 	{
 	  analysis.shape_engine = shaper;

@@ -1,3 +1,23 @@
+2001-09-07  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkcolor-fb.c:
+	Removed unused function.
+	
+	* gdk/linux-fb/gdkdrawable-fb2.c
+	* gdk/linux-fb/gdkfont-fb.c:
+	Use PangoLanguage functions.
+
+	* gdk/linux-fb/gdkinput.c:
+	* gdk/linux-fb/gdkselection-fb.c:
+	Fix const warnings.
+	
+	* gdk/linux-fb/gdkwindow-fb.c:
+	Fix warning. Implement gdk_window_set_icon_list() and
+	gdk_window_get_frame_extents(). (No icon support yet though.)
+
+	* gtk/gtkwindow.c (gtk_window_get_position):
+	If window->frame is set get the extents of it instead.
+	
 Fri Sep  7 18:50:59 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c (gtk_widget_get_default_colormap): 

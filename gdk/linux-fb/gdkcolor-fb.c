@@ -201,15 +201,6 @@ gdk_colormap_new (GdkVisual *visual,
   return colormap;
 }
 
-#define MIN_SYNC_TIME 2
-
-static void
-gdk_colormap_sync (GdkColormap *colormap,
-		   gboolean     force)
-{
-  
-}		   
-
 GdkColormap*
 gdk_colormap_get_system (void)
 {

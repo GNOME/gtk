@@ -407,7 +407,7 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
       gchar **local_list;
       gint local_count;
       gint i;
-      gchar *charset = NULL;
+      const gchar *charset = NULL;
       gboolean need_conversion = !g_get_charset (&charset);
       gint count = 0;
       GError *error = NULL;

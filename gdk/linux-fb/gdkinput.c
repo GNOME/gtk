@@ -32,7 +32,7 @@
 #include "gdkprivate.h"
 #include "gdkinputprivate.h"
 
-static const GdkDeviceAxis gdk_input_core_axes[] = {
+static GdkDeviceAxis gdk_input_core_axes[] = {
   { GDK_AXIS_X, 0, 0 },
   { GDK_AXIS_Y, 0, 0 }
 };
