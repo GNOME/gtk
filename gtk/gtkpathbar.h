@@ -75,6 +75,8 @@ void     _gtk_path_bar_set_file_system (GtkPathBar         *path_bar,
 gboolean _gtk_path_bar_set_path        (GtkPathBar         *path_bar,
 					const GtkFilePath  *file_path,
 					GError            **error);
+void     _gtk_path_bar_up              (GtkPathBar *path_bar);
+void     _gtk_path_bar_down            (GtkPathBar *path_bar);
 
 G_END_DECLS
 

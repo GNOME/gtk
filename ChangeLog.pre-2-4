@@ -1,5 +1,14 @@
 2004-03-15  Federico Mena Quintero  <federico@ximian.com>
 
+	* gtk/gtkfilechooserdefault.c (shortcuts_find_current_folder):
+	Renamed from shortcuts_unselect_all(); now selects the row that
+	corresponds to the current folder, if any.  Fixes #135916.
+
+	* gtk/gtkpathbar.h: Added prototypes for _gtk_path_bar_up() and
+	_gtk_path_bar_down().
+
+2004-03-15  Federico Mena Quintero  <federico@ximian.com>
+
 	* gtk/gtkfilechooserdefault.c: Surround the
 	drag-outside-to-remove-bookmarks code with "#if 0" blocks; it's
 	too unstable right now.

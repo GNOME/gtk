@@ -887,14 +887,26 @@ shortcuts_reload_icons (GtkFileChooserDefault *impl)
   } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (impl->shortcuts_model),&iter));
 }
 
-/* Clears the selection in the shortcuts tree */
+/* If a shortcut corresponds to the current folder, selects it */
 static void
-shortcuts_unselect_all (GtkFileChooserDefault *impl)
+shortcuts_find_current_folder (GtkFileChooserDefault *impl)
 {
   GtkTreeSelection *selection;
+  int pos;
+  GtkTreePath *path;
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view));
-  gtk_tree_selection_unselect_all (selection);
+
+  pos = shortcut_find_position (impl, impl->current_folder);
+  if (pos == -1)
+    {
+      gtk_tree_selection_unselect_all (selection);
+      return;
+    }
+
+  path = gtk_tree_path_new_from_indices (pos, -1);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_path_free (path);
 }
 
 /* Returns whether a path is a folder */
@@ -3708,7 +3720,7 @@ gtk_file_chooser_default_set_current_folder (GtkFileChooser    *chooser,
 
   /* Refresh controls */
 
-  shortcuts_unselect_all (impl);
+  shortcuts_find_current_folder (impl);
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
