@@ -1,3 +1,8 @@
+Sun Feb  1 16:34:07 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Only start
+	sliding when using the new API.
+
 Sun Feb  1 16:03:39 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtktoolbar.c (gtk_toolbar_size_allocate): Make sure

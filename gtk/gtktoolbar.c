@@ -1513,7 +1513,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 	  new_states[i] != NORMAL)
 	{
 	  /* an item disappeared, begin sliding */
-	  if (!size_changed)
+	  if (!size_changed && priv->api_mode == NEW_API)
 	    gtk_toolbar_begin_sliding (toolbar);
 	}
     }
