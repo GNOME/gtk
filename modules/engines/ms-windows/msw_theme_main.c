@@ -34,11 +34,6 @@
 static GModule * this_module = NULL;
 static void (*msw_reset_rc_styles) (GtkSettings * settings) = NULL;
 
-/* TODO - look into whether we need to handle these:
- *
- * WM_STYLECHANGED
- * WM_PALETTECHANGED
- */
 static GdkFilterReturn
 global_filter_func (void     *xevent,
 		    GdkEvent *event,
@@ -48,21 +43,18 @@ global_filter_func (void     *xevent,
 
   switch (msg->message)
     {
-	/* We need to do something better than this check - if a theme builder has GTK 2.4.x
-		but the user has 2.2.x, he/she will run into trouble wrt unresolved symbols */
-
       /* catch theme changes */
     case WM_THEMECHANGED:
     case WM_SYSCOLORCHANGE:
-
-	  if(msw_reset_rc_styles != NULL) {
-	      xp_theme_reset ();
-	      msw_style_init ();
-
-	      /* force all gtkwidgets to redraw */
-		  (*msw_reset_rc_styles) (gtk_settings_get_default());
-  	  }
-
+      
+      if(msw_reset_rc_styles != NULL) {
+	xp_theme_reset ();
+	msw_style_init ();
+	
+	/* force all gtkwidgets to redraw */
+	(*msw_reset_rc_styles) (gtk_settings_get_default());
+      }
+      
       return GDK_FILTER_REMOVE;
 
     case WM_SETTINGCHANGE:
@@ -82,17 +74,16 @@ theme_init (GTypeModule *module)
   msw_style_register_type (module);
 
   /* this craziness is required because only gtk 2.4.x and later have
-  		gtk_rc_reset_styles(). But we want to be able to run acceptly well
-  		on any GTK 2.x.x platform. */
+     gtk_rc_reset_styles(). But we want to be able to run acceptly well
+     on any GTK 2.x.x platform. */
   if(gtk_check_version(2,4,0) == NULL) {
-	  /* dlopen(this) */
-	  this_module = g_module_open(NULL, 0);
-
-	  if(this_module)
-		  g_module_symbol (this_module, "gtk_rc_reset_styles",
-		  					(gpointer *)(&msw_reset_rc_styles));
+    this_module = g_module_open(NULL, 0);
+    
+    if(this_module)
+      g_module_symbol (this_module, "gtk_rc_reset_styles",
+		       (gpointer *)(&msw_reset_rc_styles));
   }
-
+  
   msw_style_init ();
   gdk_window_add_filter (NULL, global_filter_func, NULL);
 }
@@ -103,8 +94,8 @@ theme_exit (void)
   gdk_window_remove_filter (NULL, global_filter_func, NULL);
 
   if(this_module) {
-	g_module_close(this_module);
-	this_module = NULL;
+    g_module_close(this_module);
+    this_module = NULL;
   }
 }
 
