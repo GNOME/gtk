@@ -1,5 +1,9 @@
 2004-06-22  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkselection.c (GTK_SELECTION_MAX_SIZE): Make sure 
+	this gets defined for all backends, so linux-fb has a 
+	chance of compiling.
+
 	* gdk/x11/gdkgc-x11.c: 
 	* gdk/gdkgc.c: Move function docs inline, add hints about 
 	obtaining rgb colors from gcs.  (#144688, Steve Chaplin)

@@ -67,15 +67,15 @@
 
 /* Maximum size of a sent chunk, in bytes. Also the default size of
    our buffers */
-#ifdef GDK_WINDOWING_WIN32
-/* No chunks on Win32 */
-#define GTK_SELECTION_MAX_SIZE(display) G_MAXINT
-#else
+#ifdef GDK_WINDOWING_X11
 #define GTK_SELECTION_MAX_SIZE(display)                                 \
   MIN(262144,                                                           \
       XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) == 0     \
        ? XMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100         \
        : XExtendedMaxRequestSize (GDK_DISPLAY_XDISPLAY (display)) - 100)
+#else
+/* No chunks on Win32 */
+#define GTK_SELECTION_MAX_SIZE(display) G_MAXINT
 #endif
 
 #define IDLE_ABORT_TIME 300
