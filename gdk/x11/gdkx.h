@@ -65,7 +65,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_IMAGE_XDISPLAY(image)     (gdk_x11_image_get_xdisplay (image))
 #define GDK_IMAGE_XIMAGE(image)       (gdk_x11_image_get_ximage (image))
 
-#define GDK_DISPLAY()                 gdk_get_default_display()
+#define GDK_DISPLAY()                 gdk_x11_get_default_xdisplay()
 
 #ifdef INSIDE_GDK_X11
 
@@ -104,6 +104,7 @@ GdkVisual* gdkx_visual_get_for_screen (GdkScreen *screen,
 				       VisualID   xvisualid);
 #ifndef GDK_MULTIHEAD_SAFE
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
+#define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
 #endif
 #define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkWindowObject *)win)->impl))
 #define GDK_WINDOW_XID(win)           (gdk_x11_drawable_get_xid (win))

@@ -1050,8 +1050,8 @@ gtk_socket_add_window (GtkSocket        *socket,
       
       socket->need_map = socket->is_mapped;
 
-      if (gdk_drag_get_protocol (gtk_widget_get_display (widget), 
-				 xid, &protocol))
+      if (gdk_display_drag_get_protocol (gtk_widget_get_display (widget), 
+					 xid, &protocol))
 	gtk_drag_dest_set_proxy (GTK_WIDGET (socket), 
 				 socket->plug_window, 
 				 protocol, TRUE);
@@ -1424,8 +1424,8 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	       (display, "_MOTIF_DRAG_RECEIVER_INFO")))
 	    {
 	      gdk_error_trap_push ();
-	      if (gdk_drag_get_protocol (display, 
-					 xevent->xproperty.window, &protocol))
+	      if (gdk_display_drag_get_protocol (display, 
+						 xevent->xproperty.window, &protocol))
 		gtk_drag_dest_set_proxy (GTK_WIDGET (socket),
 					 socket->plug_window,
 					 protocol, TRUE);
