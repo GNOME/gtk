@@ -1014,9 +1014,14 @@ gtk_tree_view_destroy (GtkObject *object)
 
  if (tree_view->priv->columns != NULL)
     {
-      for (list = tree_view->priv->columns; list; list = list->next)
-	g_object_unref (G_OBJECT (list->data));
-      g_list_free (tree_view->priv->columns);
+      list = tree_view->priv->columns;
+      while (list)
+	{
+	  GtkTreeViewColumn *column;
+	  column = GTK_TREE_VIEW_COLUMN (list->data);
+	  list = list->next;
+	  gtk_tree_view_remove_column (tree_view, column);
+	}
       tree_view->priv->columns = NULL;
     }
 
@@ -7954,7 +7959,7 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (column == NULL || GTK_IS_TREE_VIEW_COLUMN (column));
   g_return_if_fail (rect != NULL);
-  g_return_if_fail (column->tree_view == tree_view);
+  g_return_if_fail (column->tree_view == (GtkWidget *) tree_view);
   g_return_if_fail (GTK_WIDGET_REALIZED (tree_view));
 
   gtk_widget_style_get (GTK_WIDGET (tree_view), "vertical_separator", &vertical_separator, NULL);

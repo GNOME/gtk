@@ -1,4 +1,8 @@
-Mon Aug 20 23:48:18 2001  Jonathan Blandford  <jrb@webwynk.net>
+Tue Aug 21 00:45:55 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_destroy): Grr... Get it right.
+
+Mon Aug 20 23:48:18 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_get_cell_area): Fix bug
 	reported by Kristian Rietveld <kristian@planet.nl> to handle row

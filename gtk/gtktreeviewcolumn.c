@@ -832,14 +832,7 @@ gtk_tree_view_column_setup_sort_column_id_callback (GtkTreeViewColumn *tree_colu
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_column->tree_view));
 
   if (model == NULL)
-    {
-      if (tree_column->sort_column_changed_signal)
-	{
-	  g_signal_handler_disconnect (G_OBJECT (tree_column), tree_column->sort_column_changed_signal);
-	  tree_column->sort_column_changed_signal = 0;
-	}
-      return;
-    }
+    return;
 
   if (GTK_IS_TREE_SORTABLE (model) &&
       tree_column->sort_column_id != -1)
@@ -961,7 +954,8 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
 
   if (column->sort_column_changed_signal)
     {
-      g_signal_handler_disconnect (G_OBJECT (column), column->sort_column_changed_signal);
+      g_signal_handler_disconnect (G_OBJECT (gtk_tree_view_get_model (GTK_TREE_VIEW (column->tree_view))),
+				   column->sort_column_changed_signal);
       column->sort_column_changed_signal = 0;
     }
 
