@@ -1115,7 +1115,7 @@ gtk_entry_key_press (GtkWidget   *widget,
       break;
     case GDK_Return:
       return_val = TRUE;
-      gtk_signal_emit_by_name (GTK_OBJECT (entry), "activate");
+      gtk_widget_activate (widget);
       break;
     /* The next two keys should not be inserted literally. Any others ??? */
     case GDK_Tab:
@@ -1477,10 +1477,15 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
 	   */
 	  if ((editable->current_pos < entry->text_length) &&
 	      (editable->selection_start_pos == editable->selection_end_pos))
-	    gdk_draw_text_wc (drawable, widget->style->font,
-			      widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
-			      xoffset, yoffset,
-			      entry->text + editable->current_pos, 1);
+	    {
+	      GdkWChar c = editable->visible ?
+		                 *(entry->text + editable->current_pos) :
+		                 '*';
+	      
+	      gdk_draw_text_wc (drawable, widget->style->font,
+				widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
+				xoffset, yoffset, &c, 1);
+	    }
 	}
 
 
@@ -1947,6 +1952,13 @@ gtk_move_forward_word (GtkEntry *entry)
 
   editable = GTK_EDITABLE (entry);
 
+  /* Prevent any leak of information */
+  if (!editable->visible)
+    {
+      editable->current_pos = entry->text_length;
+      return;
+    }
+
   if (entry->text && (editable->current_pos < entry->text_length))
     {
       text = entry->text;
@@ -1977,6 +1989,13 @@ gtk_move_backward_word (GtkEntry *entry)
   gint i;
 
   editable = GTK_EDITABLE (entry);
+
+  /* Prevent any leak of information */
+  if (!editable->visible)
+    {
+      editable->current_pos = 0;
+      return;
+    }
 
   if (entry->text && editable->current_pos > 0)
     {

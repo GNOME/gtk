@@ -308,23 +308,20 @@ gtk_menu_shell_insert (GtkMenuShell *menu_shell,
   g_return_if_fail (child != NULL);
   g_return_if_fail (GTK_IS_MENU_ITEM (child));
 
-  gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
-
-  if (GTK_WIDGET_VISIBLE (child->parent))
-    {
-      if (GTK_WIDGET_REALIZED (child->parent) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-
-      if (GTK_WIDGET_MAPPED (child->parent) &&
-	  !GTK_WIDGET_MAPPED (child))
-	gtk_widget_map (child);
-    }
-
   menu_shell->children = g_list_insert (menu_shell->children, child, position);
 
-  if (GTK_WIDGET_VISIBLE (menu_shell))
-    gtk_widget_queue_resize (GTK_WIDGET (menu_shell));
+  gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
+
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+    {
+      if (GTK_WIDGET_MAPPED (child->parent))
+	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
+    }
 }
 
 void
@@ -805,6 +802,7 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
 			      GtkWidget         *menu_item,
 			      gboolean           force_deactivate)
 {
+  GSList *slist, *shells = NULL;
   gboolean deactivate = force_deactivate;
 
   g_return_if_fail (menu_shell != NULL);
@@ -813,12 +811,23 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
   if (!deactivate)
-    {
-      deactivate = GTK_MENU_ITEM_CLASS (GTK_OBJECT (menu_item)->klass)->hide_on_activate;
-    }
+    deactivate = GTK_MENU_ITEM_CLASS (GTK_OBJECT (menu_item)->klass)->hide_on_activate;
+
+  gtk_widget_ref (GTK_WIDGET (menu_shell));
 
   if (deactivate)
     {
+      GtkMenuShell *parent_menu_shell = menu_shell;
+
+      do
+	{
+	  gtk_widget_ref (GTK_WIDGET (parent_menu_shell));
+	  shells = g_slist_prepend (shells, parent_menu_shell);
+	  parent_menu_shell = (GtkMenuShell*) parent_menu_shell->parent_menu_shell;
+	}
+      while (parent_menu_shell);
+      shells = g_slist_reverse (shells);
+
       gtk_menu_shell_deactivate (menu_shell);
   
       /* flush the x-queue, so any grabs are removed and
@@ -827,11 +836,15 @@ gtk_menu_shell_activate_item (GtkMenuShell      *menu_shell,
       gdk_flush ();
     }
 
-  gtk_widget_ref (GTK_WIDGET (menu_shell));
   gtk_widget_activate (menu_item);
 
-  if (deactivate)
-    gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
+  for (slist = shells; slist; slist = slist->next)
+    {
+      gtk_signal_emit (slist->data, menu_shell_signals[SELECTION_DONE]);
+      gtk_widget_unref (slist->data);
+    }
+  g_slist_free (shells);
+
   gtk_widget_unref (GTK_WIDGET (menu_shell));
 }
 

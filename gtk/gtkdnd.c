@@ -25,6 +25,7 @@
  */
 
 #include "gdkx.h"
+#include "gdk/gdkkeysyms.h"
 
 #include "gtkdnd.h"
 #include "gtkinvisible.h"
@@ -228,8 +229,15 @@ static void gtk_drag_selection_get             (GtkWidget         *widget,
 static gint gtk_drag_anim_timeout              (gpointer           data);
 static void gtk_drag_remove_icon               (GtkDragSourceInfo *info);
 static void gtk_drag_source_info_destroy       (gpointer           data);
+static void gtk_drag_update                    (GtkDragSourceInfo *info,
+						gint               x_root,
+						gint               y_root,
+						GdkEvent          *event);
 static gint gtk_drag_motion_cb                 (GtkWidget         *widget, 
 					        GdkEventMotion    *event, 
+					        gpointer           data);
+static gint gtk_drag_key_cb                    (GtkWidget         *widget, 
+					        GdkEventKey       *event, 
 					        gpointer           data);
 static gint gtk_drag_button_release_cb         (GtkWidget         *widget, 
 					        GdkEventButton    *event, 
@@ -242,70 +250,70 @@ static gint gtk_drag_abort_timeout             (gpointer           data);
 
 #define action_ask_width 16
 #define action_ask_height 16
-static const char action_ask_bits[] = {
+static const guchar action_ask_bits[] = {
   0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x76, 0xf8, 0xb6, 0xf7, 
   0xd6, 0xec, 0x66, 0xdb, 0x66, 0xdb, 0x96, 0xec, 0x76, 0xf7, 0x76, 0xfb, 
   0xf6, 0xfc, 0x72, 0xfb, 0x7a, 0xfb, 0xf8, 0xfc, };
 
 #define action_ask_mask_width 16
 #define action_ask_mask_height 16
-static const char action_ask_mask_bits[] = {
+static const guchar action_ask_mask_bits[] = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x8f, 0x07, 0xcf, 0x0f, 
   0xef, 0x1f, 0xff, 0x3c, 0xff, 0x3c, 0x6f, 0x1f, 0x8f, 0x0f, 0x8f, 0x07, 
   0x0f, 0x03, 0x8f, 0x07, 0x87, 0x07, 0x07, 0x03, };
 
 #define action_copy_width 16
 #define action_copy_height 16
-static const char action_copy_bits[] = {
+static const guchar action_copy_bits[] = {
   0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x76, 0xfb, 0x76, 0xfb, 
   0x76, 0xfb, 0x06, 0x83, 0xf6, 0xbf, 0xf6, 0xbf, 0x06, 0x83, 0x76, 0xfb, 
   0x76, 0xfb, 0x72, 0xfb, 0x7a, 0xf8, 0xf8, 0xff, };
 
 #define action_copy_mask_width 16
 #define action_copy_mask_height 16
-static const char action_copy_mask_bits[] = {
+static const guchar action_copy_mask_bits[] = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x8f, 0x07, 0x8f, 0x07, 
   0x8f, 0x07, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0xff, 0x7f, 0x8f, 0x07, 
   0x8f, 0x07, 0x8f, 0x07, 0x87, 0x07, 0x07, 0x00, };
 
 #define action_move_width 16
 #define action_move_height 16
-static const char action_move_bits[] = {
+static const guchar action_move_bits[] = {
   0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x96, 0xff, 0x26, 0xff, 
   0xc6, 0xf8, 0xd6, 0xe3, 0x96, 0x8f, 0xb6, 0xbf, 0x36, 0xc3, 0x76, 0xfb, 
   0x76, 0xfa, 0xf2, 0xfa, 0xfa, 0xf8, 0xf8, 0xff, };
 
 #define action_move_mask_width 16
 #define action_move_mask_height 16
-static const char action_move_mask_bits[] = {
+static const guchar action_move_mask_bits[] = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x6f, 0x00, 0xff, 0x00, 
   0xff, 0x07, 0xef, 0x1f, 0xef, 0x7f, 0xcf, 0x7f, 0xcf, 0x3f, 0x8f, 0x07, 
   0x8f, 0x07, 0x0f, 0x07, 0x07, 0x07, 0x07, 0x00, };
 
 #define action_link_width 16
 #define action_link_height 16
-static const char action_link_bits[] = {
+static const guchar action_link_bits[] = {
   0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0x36, 0xf8, 0xd6, 0xf7, 
   0x66, 0xec, 0xa6, 0xe8, 0x26, 0xdf, 0xe6, 0xbd, 0xd6, 0xa7, 0xb6, 0xa8, 
   0xb6, 0xb1, 0x72, 0xdf, 0xfa, 0xe0, 0xf8, 0xff, };
 
 #define action_link_mask_width 16
 #define action_link_mask_height 16
-static const char action_link_mask_bits[] = {
+static const guchar action_link_mask_bits[] = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0xcf, 0x07, 0xef, 0x0f, 
   0xff, 0x1f, 0x7f, 0x1f, 0xff, 0x3f, 0xff, 0x7f, 0xef, 0x7f, 0xcf, 0x77, 
   0xcf, 0x7f, 0x8f, 0x3f, 0x07, 0x1f, 0x07, 0x00, };
 
 #define action_none_width 16
 #define action_none_height 16
-static const char action_none_bits[] = {
+static const guchar action_none_bits[] = {
   0x00, 0x00, 0xfe, 0x7f, 0xfe, 0x1f, 0x06, 0xc0, 0xf6, 0xff, 0xf6, 0xff, 
   0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 0xf6, 0xff, 
   0xf6, 0xff, 0xf2, 0xff, 0xfa, 0xff, 0xf8, 0xff, };
 
 #define action_none_mask_width 16
 #define action_none_mask_height 16
-static const char action_none_mask_bits[] = {
+static const guchar action_none_mask_bits[] = {
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x3f, 0x0f, 0x00, 0x0f, 0x00, 
   0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 0x0f, 0x00, 
   0x0f, 0x00, 0x0f, 0x00, 0x07, 0x00, 0x07, 0x00, };
@@ -330,7 +338,7 @@ static struct {
 static const gint n_drag_cursors = sizeof (drag_cursors) / sizeof (drag_cursors[0]);
 
 /* XPM */
-static const char * drag_default_xpm[] = {
+static const char *drag_default_xpm[] = {
 "32 32 3 1",
 " 	c None",
 ".	c #000000",
@@ -414,6 +422,43 @@ static void
 gtk_drag_release_ipc_widget (GtkWidget *widget)
 {
   drag_widgets = g_slist_prepend (drag_widgets, widget);
+}
+
+static guint32
+gtk_drag_get_event_time (GdkEvent *event)
+{
+  guint32 tm = GDK_CURRENT_TIME;
+  
+  if (event)
+    switch (event->type)
+      {
+      case GDK_MOTION_NOTIFY:
+	tm = event->motion.time; break;
+      case GDK_BUTTON_PRESS:
+      case GDK_2BUTTON_PRESS:
+      case GDK_3BUTTON_PRESS:
+      case GDK_BUTTON_RELEASE:
+	tm = event->button.time; break;
+      case GDK_KEY_PRESS:
+      case GDK_KEY_RELEASE:
+	tm = event->key.time; break;
+      case GDK_ENTER_NOTIFY:
+      case GDK_LEAVE_NOTIFY:
+	tm = event->crossing.time; break;
+      case GDK_PROPERTY_NOTIFY:
+	tm = event->property.time; break;
+      case GDK_SELECTION_CLEAR:
+      case GDK_SELECTION_REQUEST:
+      case GDK_SELECTION_NOTIFY:
+	tm = event->selection.time; break;
+      case GDK_PROXIMITY_IN:
+      case GDK_PROXIMITY_OUT:
+	tm = event->proximity.time; break;
+      default:			/* use current time */
+	break;
+      }
+  
+  return tm;
 }
 
 static void
@@ -953,7 +998,17 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	gint tx, ty;
 
 	if (event->type == GDK_DROP_START)
-	  info->dropped = TRUE;
+	  {
+	    info->dropped = TRUE;
+	    /* We send a leave here so that the widget unhighlights
+	     * properly.
+	     */
+	    if (info->widget)
+	      {
+		gtk_drag_dest_leave (info->widget, context, event->dnd.time);
+		info->widget = NULL;
+	      }
+	  }
 
 	gdk_window_get_origin (toplevel->window, &tx, &ty);
 
@@ -969,11 +1024,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	
 	gtk_drag_find_widget (toplevel, &data);
 
-	/* We send a leave here so that the widget unhighlights
-	 * properly
-	 */
-	if (info->widget &&
-	    ((event->type == GDK_DROP_START) || (!data.found)))
+	if (info->widget && !data.found)
 	  {
 	    gtk_drag_dest_leave (info->widget, context, event->dnd.time);
 	    info->widget = NULL;
@@ -986,7 +1037,7 @@ gtk_drag_dest_handle_event (GtkWidget *toplevel,
 	    if (!data.found)
 	      gdk_drag_status (context, 0, event->dnd.time);
 	  }
-	else if (event->type == GDK_DROP_START)
+	else if (event->type == GDK_DROP_START && !info->proxy_source)
 	  {
 	    gdk_drop_reply (context, data.found, event->dnd.time);
             if ((context->protocol == GDK_DRAG_PROTO_MOTIF) && !data.found)
@@ -1332,7 +1383,7 @@ gtk_drag_dest_leave (GtkWidget      *widget,
     }
   else
     {
-      if (site->flags & GTK_DEST_DEFAULT_HIGHLIGHT)
+      if ((site->flags & GTK_DEST_DEFAULT_HIGHLIGHT) && site->have_drag)
 	gtk_drag_unhighlight (widget);
 
       if (!(site->flags & GTK_DEST_DEFAULT_MOTION) || site->have_drag)
@@ -1645,16 +1696,6 @@ gtk_drag_begin (GtkWidget         *widget,
   gtk_signal_emit_by_name (GTK_OBJECT (widget), "drag_begin",
 			   info->context);
   
-  /* We use a GTK grab here to override any grabs that the widget
-   * we are dragging from might have held
-   */
-
-  gtk_grab_add (info->ipc_widget);
-  gdk_pointer_grab (info->ipc_widget->window, FALSE,
-		    GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
-		    GDK_BUTTON_RELEASE_MASK, NULL,
-		    info->cursor, time);
-
   if (event->type == GDK_MOTION_NOTIFY)
     gtk_drag_motion_cb (info->ipc_widget, (GdkEventMotion *)event, info);
 
@@ -1665,8 +1706,36 @@ gtk_drag_begin (GtkWidget         *widget,
 		      GTK_SIGNAL_FUNC (gtk_drag_button_release_cb), info);
   gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "motion_notify_event",
 		      GTK_SIGNAL_FUNC (gtk_drag_motion_cb), info);
+  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "key_press_event",
+		      GTK_SIGNAL_FUNC (gtk_drag_key_cb), info);
+  gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "key_release_event",
+		      GTK_SIGNAL_FUNC (gtk_drag_key_cb), info);
   gtk_signal_connect (GTK_OBJECT (info->ipc_widget), "selection_get",
 		      GTK_SIGNAL_FUNC (gtk_drag_selection_get), info);
+
+  /* We use a GTK grab here to override any grabs that the widget
+   * we are dragging from might have held
+   */
+  gtk_grab_add (info->ipc_widget);
+  if (gdk_pointer_grab (info->ipc_widget->window, FALSE,
+			GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK |
+			GDK_BUTTON_RELEASE_MASK, NULL,
+			info->cursor, time) == 0)
+    {
+      if (gdk_keyboard_grab (info->ipc_widget->window, FALSE, time) != 0)
+	{
+	  /* FIXME: This should be cleaned up... */
+	  GdkEventButton ev;
+
+	  ev.time = time;
+	  ev.type = GDK_BUTTON_RELEASE;
+	  ev.button = info->button;
+
+	  gtk_drag_button_release_cb (widget, &ev, info);
+
+	  return NULL;
+	}
+    }
 
   return info->context;
 }
@@ -1937,7 +2006,7 @@ gtk_drag_set_icon_default (GdkDragContext    *context)
 	gdk_pixmap_colormap_create_from_xpm_d (NULL,
 					       default_icon_colormap,
 					       &default_icon_mask,
-					       NULL, drag_default_xpm);
+					       NULL, (gchar **)drag_default_xpm);
       default_icon_hot_x = -2;
       default_icon_hot_y = -2;
     }
@@ -2032,8 +2101,14 @@ gtk_drag_source_handle_event (GtkWidget *widget,
 	      {
 		if (info->proxy_dest->proxy_drop_wait)
 		  {
+		    gboolean result = context->action != 0;
+		    
 		    /* Aha - we can finally pass the MOTIF DROP on... */
-		    gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
+		    gdk_drop_reply (info->proxy_dest->context, result, info->proxy_dest->proxy_drop_time);
+		    if (result)
+		      gdk_drag_drop (info->context, info->proxy_dest->proxy_drop_time);
+		    else
+		      gtk_drag_finish (info->proxy_dest->context, FALSE, FALSE, info->proxy_dest->proxy_drop_time);
 		  }
 		else
 		  {
@@ -2066,9 +2141,9 @@ gtk_drag_source_handle_event (GtkWidget *widget,
 	    
 	    if (info->last_event)
 	      {
-		gtk_drag_motion_cb (info->widget, 
-				    (GdkEventMotion *)info->last_event, 
-				    info);
+		gtk_drag_update (info,
+				 info->cur_x, info->cur_y,
+				 info->last_event);
 		info->last_event = NULL;
 	      }
 	  }
@@ -2508,6 +2583,124 @@ gtk_drag_source_info_destroy (gpointer data)
 }
 
 /*************************************************************
+ * gtk_drag_update:
+ *     Function to update the status of the drag when the
+ *     cursor moves or the modifier changes
+ *   arguments:
+ *     info: DragSourceInfo for the drag
+ *     x_root, y_root: position of darg
+ *     event: The event that triggered this call
+ *   results:
+ *************************************************************/
+
+static void
+gtk_drag_update (GtkDragSourceInfo *info,
+		 gint               x_root,
+		 gint               y_root,
+		 GdkEvent          *event)
+{
+  GdkDragAction action;
+  GdkDragAction possible_actions;
+  GdkWindow *window = NULL;
+  GdkWindow *dest_window;
+  GdkDragProtocol protocol;
+  GdkAtom selection;
+  guint32 time = gtk_drag_get_event_time (event);
+
+  gtk_drag_get_event_actions (event,
+			      info->button, 
+			      info->possible_actions,
+			      &action, &possible_actions);
+  info->cur_x = x_root;
+  info->cur_y = y_root;
+
+  if (info->icon_window)
+    {
+      gdk_window_raise (info->icon_window->window);
+      gtk_widget_set_uposition (info->icon_window, 
+				info->cur_x - info->hot_x, 
+				info->cur_y - info->hot_y);
+      window = info->icon_window->window;
+    }
+  
+  gdk_drag_find_window (info->context,
+			window, x_root, y_root,
+			&dest_window, &protocol);
+
+  if (gdk_drag_motion (info->context, dest_window, protocol,
+		       x_root, y_root, action, 
+		       possible_actions,
+		       time))
+    {
+      if (info->last_event)
+	gdk_event_free ((GdkEvent *)info->last_event);
+      
+      info->last_event = gdk_event_copy ((GdkEvent *)event);
+    }
+
+  if (dest_window)
+    gdk_window_unref (dest_window);
+
+  selection = gdk_drag_get_selection (info->context);
+  if (selection)
+    gtk_drag_source_check_selection (info, selection, time);
+}
+
+/*************************************************************
+ * gtk_drag_end:
+ *     Called when the user finishes to drag, either by
+ *     releasing the mouse, or by pressing Esc.
+ *   arguments:
+ *     widget: GtkInvisible widget for this drag
+ *     info: 
+ *   results:
+ *************************************************************/
+
+static void
+gtk_drag_end (GtkDragSourceInfo *info, guint32 time)
+{
+  GdkEvent send_event;
+  GtkWidget *source_widget = info->widget;
+
+  gdk_pointer_ungrab (time);
+  gdk_keyboard_ungrab (time);
+
+  gtk_grab_remove (info->ipc_widget);
+
+  gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
+				 GTK_SIGNAL_FUNC (gtk_drag_button_release_cb),
+				 info);
+  gtk_signal_disconnect_by_func (GTK_OBJECT (info->ipc_widget), 
+				 GTK_SIGNAL_FUNC (gtk_drag_motion_cb),
+				 info);
+
+  /* Send on a release pair to the the original 
+   * widget to convince it to release its grab. We need to
+   * call gtk_propagate_event() here, instead of 
+   * gtk_widget_event() because widget like GtkList may
+   * expect propagation.
+   */
+
+  send_event.button.type = GDK_BUTTON_RELEASE;
+  send_event.button.window = GDK_ROOT_PARENT ();
+  send_event.button.send_event = TRUE;
+  send_event.button.time = time;
+  send_event.button.x = 0;
+  send_event.button.y = 0;
+  send_event.button.pressure = 0.;
+  send_event.button.xtilt = 0.;
+  send_event.button.ytilt = 0.;
+  send_event.button.state = 0;
+  send_event.button.button = info->button;
+  send_event.button.source = GDK_SOURCE_PEN;
+  send_event.button.deviceid = GDK_CORE_POINTER;
+  send_event.button.x_root = 0;
+  send_event.button.y_root = 0;
+
+  gtk_propagate_event (source_widget, &send_event);
+}
+
+/*************************************************************
  * gtk_drag_motion_cb:
  *     "motion_notify_event" callback during drag.
  *   arguments:
@@ -2521,12 +2714,6 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 		    gpointer        data)
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-  GdkAtom selection;
-  GdkDragAction action;
-  GdkDragAction possible_actions;
-  GdkWindow *window = NULL;
-  GdkWindow *dest_window;
-  GdkDragProtocol protocol;
   gint x_root, y_root;
 
   if (event->is_hint)
@@ -2536,57 +2723,55 @@ gtk_drag_motion_cb (GtkWidget      *widget,
       event->y_root = y_root;
     }
 
-  gtk_drag_get_event_actions ((GdkEvent *)event, 
-			      info->button, 
-			      info->possible_actions,
-			      &action, &possible_actions);
-  
-  info->cur_x = event->x_root;
-  info->cur_y = event->y_root;
-
-  if (info->icon_window)
-    {
-      gdk_window_raise (info->icon_window->window);
-      gtk_widget_set_uposition (info->icon_window, 
-				info->cur_x - info->hot_x, 
-				info->cur_y - info->hot_y);
-      window = info->icon_window->window;
-    }
-  
-  gdk_drag_find_window (info->context,
-			window, event->x_root, event->y_root,
-			&dest_window, &protocol);
-
-  if (gdk_drag_motion (info->context, dest_window, protocol,
-		       event->x_root, event->y_root, action, 
-		       possible_actions,
-		       event->time))
-    {
-      if (info->last_event)
-	gdk_event_free ((GdkEvent *)info->last_event);
-      
-      info->last_event = gdk_event_copy ((GdkEvent *)event);
-    }
-
-  if (dest_window)
-    gdk_window_unref (dest_window);
-
-  selection = gdk_drag_get_selection (info->context);
-  if (selection)
-    gtk_drag_source_check_selection (info, selection, event->time);
-
-#if 0
-  /* We ignore the response, so we can respond precisely to the drop
-   */
-  if (event->is_hint)
-    gdk_window_get_pointer (widget->window, NULL, NULL, NULL);
-#endif  
+  gtk_drag_update (info, event->x_root, event->y_root, (GdkEvent *)event);
 
   return TRUE;
 }
 
 /*************************************************************
- * gtk_drag_motion_cb:
+ * gtk_drag_key_cb:
+ *     "key_press/release_event" callback during drag.
+ *   arguments:
+ *     
+ *   results:
+ *************************************************************/
+
+static gint 
+gtk_drag_key_cb (GtkWidget         *widget, 
+		 GdkEventKey       *event, 
+		 gpointer           data)
+{
+  GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
+  GdkModifierType state;
+  
+  if (event->type == GDK_KEY_PRESS)
+    {
+      if (event->keyval == GDK_Escape)
+	{
+	  gtk_drag_end (info, event->time);
+	  gdk_drag_abort (info->context, event->time);
+	  gtk_drag_drop_finished (info, FALSE, event->time);
+
+	  return TRUE;
+	}
+    }
+
+  /* Now send a "motion" so that the modifier state is updated */
+
+  /* The state is not yet updated in the event, so we need
+   * to query it here. We could use XGetModifierMapping, but
+   * that would be overkill.
+   */
+  gdk_window_get_pointer (GDK_ROOT_PARENT(), NULL, NULL, &state);
+
+  event->state = state;
+  gtk_drag_update (info, info->cur_x, info->cur_y, (GdkEvent *)event);
+
+  return TRUE;
+}
+
+/*************************************************************
+ * gtk_drag_button_release_cb:
  *     "button_release_event" callback during drag.
  *   arguments:
  *     
@@ -2599,23 +2784,11 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
 			    gpointer        data)
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
-  GtkWidget *source_widget = info->widget;
-  GdkEvent send_event;
-
-  gtk_widget_ref (source_widget);
 
   if (event->button != info->button)
     return FALSE;
 
-  gdk_pointer_ungrab (event->time);
-
-  gtk_grab_remove (widget);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (widget), 
-				 GTK_SIGNAL_FUNC (gtk_drag_button_release_cb),
-				 info);
-  gtk_signal_disconnect_by_func (GTK_OBJECT (widget), 
-				 GTK_SIGNAL_FUNC (gtk_drag_motion_cb),
-				 info);
+  gtk_drag_end (info, event->time);
 
   if ((info->context->action != 0) && (info->context->dest_window != NULL))
     {
@@ -2627,33 +2800,6 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
       gtk_drag_drop_finished (info, FALSE, event->time);
     }
 
-  /* Send on a release pair to the the original 
-   * widget to convince it to release its grab. We need to
-   * call gtk_propagate_event() here, instead of 
-   * gtk_widget_event() because widget like GtkList may
-   * expect propagation.
-   */
-
-  send_event.button.type = GDK_BUTTON_RELEASE;
-  send_event.button.window = GDK_ROOT_PARENT ();
-  send_event.button.send_event = TRUE;
-  send_event.button.time = event->time;
-  send_event.button.x = 0;
-  send_event.button.y = 0;
-  send_event.button.pressure = 0.;
-  send_event.button.xtilt = 0.;
-  send_event.button.ytilt = 0.;
-  send_event.button.state = event->state;
-  send_event.button.button = event->button;
-  send_event.button.source = GDK_SOURCE_PEN;
-  send_event.button.deviceid = GDK_CORE_POINTER;
-  send_event.button.x_root = 0;
-  send_event.button.y_root = 0;
-
-  gtk_propagate_event (source_widget, &send_event);
-
-  gtk_widget_unref (source_widget);
-  
   return TRUE;
 }
 
@@ -2663,11 +2809,15 @@ gtk_drag_abort_timeout (gpointer data)
   GtkDragSourceInfo *info = data;
   guint32 time = GDK_CURRENT_TIME;
 
+  GDK_THREADS_ENTER ();
+
   if (info->proxy_dest)
     time = info->proxy_dest->proxy_drop_time;
 
   info->drop_timeout = 0;
   gtk_drag_drop_finished (info, FALSE, time);
+  
+  GDK_THREADS_LEAVE ();
   
   return FALSE;
 }

@@ -1180,22 +1180,17 @@ gtk_menu_position (GtkMenu *menu)
       screen_width = gdk_screen_width ();
       screen_height = gdk_screen_height ();
 	  
-      x -= 2;
-      y -= 2;
-      
-      if ((x + requisition.width) > screen_width)
-	x -= ((x + requisition.width) - screen_width);
-      if (x < 0)
-	x = 0;
-      if ((y + requisition.height) > screen_height)
-	y -= ((y + requisition.height) - screen_height);
-      if (y < 0)
-	y = 0;
+      x = CLAMP (x - 2, 0, MAX (0, screen_width - requisition.width));
+      y = CLAMP (y - 2, 0, MAX (0, screen_height - requisition.height));
     }
-  
+
+  /* FIXME: The MAX() here is because gtk_widget_set_uposition
+   * is broken. Once we provide an alternate interface that
+   * allows negative values, then we can remove them.
+   */
   gtk_widget_set_uposition (GTK_MENU_SHELL (menu)->active ?
 			        menu->toplevel : menu->tearoff_window, 
-			    x, y);
+			    MAX (x, 0), MAX (y, 0));
 }
 
 /* Reparent the menu, taking care of the refcounting

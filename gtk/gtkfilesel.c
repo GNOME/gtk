@@ -808,7 +808,7 @@ gtk_file_selection_destroy (GtkObject *object)
 /* Begin file operations callbacks */
 
 static void
-gtk_file_selection_fileop_error (gchar *error_message)
+gtk_file_selection_fileop_error (GtkFileSelection *fs, gchar *error_message)
 {
   GtkWidget *label;
   GtkWidget *vbox;
@@ -827,6 +827,11 @@ gtk_file_selection_fileop_error (gchar *error_message)
   gtk_window_set_title (GTK_WINDOW (dialog), _("Error"));
   gtk_window_set_position (GTK_WINDOW (dialog), GTK_WIN_POS_MOUSE);
   
+  /* If file dialog is grabbed, make this dialog modal too */
+  /* When error dialog is closed, file dialog will be grabbed again */
+  if (GTK_WINDOW(fs)->modal)
+      gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+
   vbox = gtk_vbox_new(FALSE, 0);
   gtk_container_set_border_width(GTK_CONTAINER(vbox), 8);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), vbox,
@@ -889,7 +894,7 @@ gtk_file_selection_create_dir_confirmed (GtkWidget *widget, gpointer data)
     {
       buf = g_strconcat ("Error creating directory \"", dirname, "\":  ", 
 			 g_strerror(errno), NULL);
-      gtk_file_selection_fileop_error (buf);
+      gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (full_path);
   
@@ -986,7 +991,7 @@ gtk_file_selection_delete_file_confirmed (GtkWidget *widget, gpointer data)
     {
       buf = g_strconcat ("Error deleting file \"", fs->fileop_file, "\":  ", 
 			 g_strerror(errno), NULL);
-      gtk_file_selection_fileop_error (buf);
+      gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (full_path);
   
@@ -1096,7 +1101,7 @@ gtk_file_selection_rename_file_confirmed (GtkWidget *widget, gpointer data)
     {
       buf = g_strconcat ("Error renaming file \"", file, "\":  ", 
 			 g_strerror(errno), NULL);
-      gtk_file_selection_fileop_error (buf);
+      gtk_file_selection_fileop_error (fs, buf);
     }
   g_free (new_filename);
   g_free (old_filename);

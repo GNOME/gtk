@@ -36,9 +36,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_PREVIEW(obj)          GTK_CHECK_CAST (obj, gtk_preview_get_type (), GtkPreview)
-#define GTK_PREVIEW_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_preview_get_type (), GtkPreviewClass)
-#define GTK_IS_PREVIEW(obj)       GTK_CHECK_TYPE (obj, gtk_preview_get_type ())
+#define GTK_TYPE_PREVIEW            (gtk_preview_get_type ())
+#define GTK_PREVIEW(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_PREVIEW, GtkPreview))
+#define GTK_PREVIEW_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PREVIEW, GtkPreviewClass))
+#define GTK_IS_PREVIEW(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_PREVIEW))
+#define GTK_IS_PREVIEW_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PREVIEW))
 
 
 typedef struct _GtkPreview       GtkPreview;
@@ -109,7 +111,7 @@ void            gtk_preview_draw_row           (GtkPreview      *preview,
 						gint             y,
 						gint             w);
 void            gtk_preview_set_expand         (GtkPreview      *preview,
-						gint             expand);
+						gboolean         expand);
 
 void            gtk_preview_set_gamma          (double           gamma);
 void            gtk_preview_set_color_cube     (guint            nred_shades,

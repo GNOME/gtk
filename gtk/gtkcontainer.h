@@ -60,7 +60,7 @@ struct _GtkContainer
   guint border_width : 16;
   guint need_resize : 1;
   guint resize_mode : 2;
-  
+  guint reallocate_redraws : 1;
   
   /* The list of children that requested a resize
    */
@@ -132,6 +132,8 @@ gint   gtk_container_focus		   (GtkContainer     *container,
 
 /* Widget-level methods */
 
+void   gtk_container_set_reallocate_redraws (GtkContainer    *container,
+					     gboolean         needs_redraws);
 void   gtk_container_set_focus_child	   (GtkContainer     *container,
 					    GtkWidget	     *child);
 void   gtk_container_set_focus_vadjustment (GtkContainer     *container,
@@ -140,7 +142,7 @@ void   gtk_container_set_focus_hadjustment (GtkContainer     *container,
 					    GtkAdjustment    *adjustment);
 void    gtk_container_register_toplevel	   (GtkContainer     *container);
 void    gtk_container_unregister_toplevel  (GtkContainer     *container);
-GList * gtk_container_get_toplevels        (void);
+GList*  gtk_container_get_toplevels        (void);
 
 void    gtk_container_resize_children      (GtkContainer     *container);
 
@@ -200,30 +202,30 @@ void	gtk_container_child_set		   (GtkContainer      *container,
 
 /* Non-public methods */
 
-void	gtk_container_queue_resize	   (GtkContainer *container);
-void    gtk_container_clear_resize_widgets (GtkContainer *container);
-void    gtk_container_arg_set		   (GtkContainer *container,
-					    GtkWidget	 *child,
-					    GtkArg       *arg,
-					    GtkArgInfo   *info);
-void    gtk_container_arg_get		   (GtkContainer *container,
-					    GtkWidget	 *child,
-					    GtkArg       *arg,
-					    GtkArgInfo   *info);
-gchar*	gtk_container_child_args_collect   (GtkType       object_type,
-					    GSList      **arg_list_p,
-					    GSList      **info_list_p,
-					    const gchar	 *first_arg_name,
-					    va_list       args);
-gchar*  gtk_container_child_arg_get_info   (GtkType       object_type,
-					    const gchar  *arg_name,
-					    GtkArgInfo  **info_p);
-void    gtk_container_forall		   (GtkContainer *container,
-					    GtkCallback	  callback,
-					    gpointer	  callback_data);
-gchar*	gtk_container_child_composite_name (GtkContainer *container,
-					    GtkWidget	 *child);
-
+void	gtk_container_queue_resize	     (GtkContainer *container);
+void    gtk_container_clear_resize_widgets   (GtkContainer *container);
+void    gtk_container_arg_set		     (GtkContainer *container,
+					      GtkWidget	   *child,
+					      GtkArg       *arg,
+					      GtkArgInfo   *info);
+void    gtk_container_arg_get		     (GtkContainer *container,
+					      GtkWidget	   *child,
+					      GtkArg       *arg,
+					      GtkArgInfo   *info);
+gchar*	gtk_container_child_args_collect     (GtkType       object_type,
+					      GSList      **arg_list_p,
+					      GSList      **info_list_p,
+					      const gchar  *first_arg_name,
+					      va_list       args);
+gchar*  gtk_container_child_arg_get_info     (GtkType       object_type,
+					      const gchar  *arg_name,
+					      GtkArgInfo  **info_p);
+void    gtk_container_forall		     (GtkContainer *container,
+					      GtkCallback   callback,
+					      gpointer	    callback_data);
+gchar*	gtk_container_child_composite_name   (GtkContainer *container,
+					      GtkWidget	   *child);
+void    gtk_container_dequeue_resize_handler (GtkContainer *container);
 
 #ifdef __cplusplus
 }

@@ -81,7 +81,7 @@ main (int argv, char **argc)
 
     info = g_malloc(sizeof(Info));
 
-    window = gtk_window_new(GTK_TOPLEVEL);
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
                         GTK_SIGNAL_FUNC (destroy), NULL);
 

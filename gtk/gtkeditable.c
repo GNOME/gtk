@@ -183,6 +183,7 @@ gtk_editable_class_init (GtkEditableClass *class)
 		    GTK_SIGNAL_OFFSET (GtkEditableClass, activate),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
+  widget_class->activate_signal = editable_signals[ACTIVATE];
 
   editable_signals[SET_EDITABLE] =
     gtk_signal_new ("set-editable",
@@ -413,12 +414,13 @@ gtk_editable_insert_text (GtkEditable *editable,
 			  gint        *position)
 {
   GtkEditableClass *klass;
-
   gchar buf[64];
   gchar *text;
 
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
+
+  gtk_widget_ref (GTK_WIDGET (editable));
 
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
@@ -434,6 +436,8 @@ gtk_editable_insert_text (GtkEditable *editable,
 
   if (new_text_length > 64)
     g_free (text);
+
+  gtk_widget_unref (GTK_WIDGET (editable));
 }
 
 void
@@ -446,10 +450,14 @@ gtk_editable_delete_text (GtkEditable *editable,
   g_return_if_fail (editable != NULL);
   g_return_if_fail (GTK_IS_EDITABLE (editable));
 
+  gtk_widget_ref (GTK_WIDGET (editable));
+
   klass = GTK_EDITABLE_CLASS (GTK_OBJECT (editable)->klass);
 
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[DELETE_TEXT], start_pos, end_pos);
   gtk_signal_emit (GTK_OBJECT (editable), editable_signals[CHANGED]);
+
+  gtk_widget_unref (GTK_WIDGET (editable));
 }
 
 static void

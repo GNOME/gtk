@@ -22,7 +22,6 @@ gtktypebuiltins_vars.c
 gtktypebuiltins_evals.c
 gtk.defs
 testdnd
-stamp-d
-stamp-t
-stamp-m
-s-*
+stamp-gtktypebuiltins.h
+stamp-gtkmarshal.h
+stamp-gtk.defs

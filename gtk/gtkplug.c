@@ -33,6 +33,7 @@ static void gtk_plug_class_init (GtkPlugClass *klass);
 static void gtk_plug_init       (GtkPlug      *plug);
 
 static void gtk_plug_realize    (GtkWidget *widget);
+static void gtk_plug_unrealize	(GtkWidget *widget);
 static gint gtk_plug_key_press_event (GtkWidget   *widget,
 				      GdkEventKey *event);
 static void gtk_plug_forward_key_press (GtkPlug *plug, GdkEventKey *event);
@@ -43,6 +44,9 @@ static void gtk_plug_set_focus       (GtkWindow         *window,
 
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
+
+  
+static GtkWindowClass *parent_class = NULL;
 
 GtkType
 gtk_plug_get_type ()
@@ -77,7 +81,10 @@ gtk_plug_class_init (GtkPlugClass *class)
   widget_class = (GtkWidgetClass *)class;
   window_class = (GtkWindowClass *)class;
 
+  parent_class = gtk_type_class (gtk_window_get_type ());
+
   widget_class->realize = gtk_plug_realize;
+  widget_class->unrealize = gtk_plug_unrealize;
   widget_class->key_press_event = gtk_plug_key_press_event;
   widget_class->focus_in_event = gtk_plug_focus_in_event;
   widget_class->focus_out_event = gtk_plug_focus_out_event;
@@ -117,6 +124,27 @@ gtk_plug_new (guint32 socket_id)
   plug = GTK_PLUG (gtk_type_new (gtk_plug_get_type ()));
   gtk_plug_construct (plug, socket_id);
   return GTK_WIDGET (plug);
+}
+
+static void
+gtk_plug_unrealize (GtkWidget *widget)
+{
+  GtkPlug *plug;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_PLUG (widget));
+
+  plug = GTK_PLUG (widget);
+
+  if (plug->socket_window != NULL)
+    {
+      gdk_window_set_user_data (plug->socket_window, NULL);
+      gdk_window_unref (plug->socket_window);
+      plug->socket_window = NULL;
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->unrealize)
+    (* GTK_WIDGET_CLASS (parent_class)->unrealize) (widget);
 }
 
 static void

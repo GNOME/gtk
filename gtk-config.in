@@ -99,7 +99,7 @@ if test "$echo_cflags" = "yes"; then
           fi
         done
       fi
-      echo -I@libdir@/gtk+/include $includes @x_cflags@ $glib_cflags
+      echo -I@libdir@/gtk+/include $includes $glib_cflags @x_cflags@ 
 fi
 
 if test "$echo_libs" = "yes"; then

@@ -310,7 +310,7 @@ button_realize_callback (GtkWidget *w)
 
   i = GPOINTER_TO_INT (gtk_object_get_data (GTK_OBJECT (w), "_GtkGammaCurveIndex"));
   pm = gdk_pixmap_create_from_xpm_d (w->window, &mask,
-				     &w->style->bg[GTK_STATE_NORMAL], xpm[i]);
+				     &w->style->bg[GTK_STATE_NORMAL], (gchar **)xpm[i]);
 
   pixmap = gtk_pixmap_new (pm, mask);
   gtk_container_add (GTK_CONTAINER (w), pixmap);

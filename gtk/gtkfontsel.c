@@ -1453,18 +1453,20 @@ gtk_font_selection_show_available_sizes (GtkFontSelection *fontsel)
       can_match = TRUE;
 
       if (nbitmapped_sizes)
-	if (fontsel->metric == GTK_FONT_METRIC_POINTS)
-	  {
-	    if (*bitmapped_sizes % 10 != 0)
-	      can_match = FALSE;
-	    bitmap_size = *bitmapped_sizes / 10;
-	    bitmap_size_float = *bitmapped_sizes / 10;
-	  }
-	else
-	  {
-	    bitmap_size = *bitmapped_sizes;
-	    bitmap_size_float = *bitmapped_sizes;
-	  }
+	{
+	  if (fontsel->metric == GTK_FONT_METRIC_POINTS)
+	    {
+	      if (*bitmapped_sizes % 10 != 0)
+		can_match = FALSE;
+	      bitmap_size = *bitmapped_sizes / 10;
+	      bitmap_size_float = *bitmapped_sizes / 10;
+	    }
+	  else
+	    {
+	      bitmap_size = *bitmapped_sizes;
+	      bitmap_size_float = *bitmapped_sizes;
+	    }
+	}
       
       if (can_match && nstandard_sizes && nbitmapped_sizes
 	  && *standard_sizes == bitmap_size)

@@ -1,6 +1,8 @@
-style "default" {
+style "gtk-default-eo" {
        fontset = "-*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-1,\
-		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-3"
+                  -*-arial-medium-r-normal--12-*-*-*-*-*-iso8859-1,\"
+		  -*-helvetica-medium-r-normal--12-*-*-*-*-*-iso8859-3,\"
+		  -*-arial-medium-r-normal--12-*-*-*-*-*-iso8859-3"
 }
-class "GtkWidget" style "default"
+class "GtkWidget" style "gtk-default-eo"
 

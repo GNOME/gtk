@@ -42,6 +42,15 @@
 #define SPACE_LINE_END      7
 
 enum {
+  ARG_0,
+  ARG_ORIENTATION,
+  ARG_TOOLBAR_STYLE,
+  ARG_SPACE_SIZE,
+  ARG_SPACE_STYLE,
+  ARG_RELIEF
+};
+
+enum {
   ORIENTATION_CHANGED,
   STYLE_CHANGED,
   LAST_SIGNAL
@@ -57,6 +66,12 @@ struct _GtkToolbarChildSpace
 
 static void gtk_toolbar_class_init               (GtkToolbarClass *class);
 static void gtk_toolbar_init                     (GtkToolbar      *toolbar);
+static void gtk_toolbar_set_arg                  (GtkObject       *object,
+						  GtkArg          *arg,
+						  guint            arg_id);
+static void gtk_toolbar_get_arg                  (GtkObject       *object,
+						  GtkArg          *arg,
+						  guint            arg_id);
 static void gtk_toolbar_destroy                  (GtkObject       *object);
 static void gtk_toolbar_map                      (GtkWidget       *widget);
 static void gtk_toolbar_unmap                    (GtkWidget       *widget);
@@ -124,7 +139,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   container_class = (GtkContainerClass *) class;
 
   parent_class = gtk_type_class (gtk_container_get_type ());
-
+  
   toolbar_signals[ORIENTATION_CHANGED] =
     gtk_signal_new ("orientation_changed",
 		    GTK_RUN_FIRST,
@@ -145,6 +160,8 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   gtk_object_class_add_signals (object_class, toolbar_signals, LAST_SIGNAL);
 
   object_class->destroy = gtk_toolbar_destroy;
+  object_class->set_arg = gtk_toolbar_set_arg;
+  object_class->get_arg = gtk_toolbar_get_arg;
 
   widget_class->map = gtk_toolbar_map;
   widget_class->unmap = gtk_toolbar_unmap;
@@ -157,9 +174,20 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   container_class->remove = gtk_toolbar_remove;
   container_class->forall = gtk_toolbar_forall;
   container_class->focus = NULL;
-
+  
   class->orientation_changed = gtk_real_toolbar_orientation_changed;
   class->style_changed = gtk_real_toolbar_style_changed;
+  
+  gtk_object_add_arg_type ("GtkToolbar::orientation", GTK_TYPE_ORIENTATION,
+			   GTK_ARG_READWRITE, ARG_ORIENTATION);
+  gtk_object_add_arg_type ("GtkToolbar::toolbar_style", GTK_TYPE_TOOLBAR_STYLE,
+			   GTK_ARG_READWRITE, ARG_TOOLBAR_STYLE);
+  gtk_object_add_arg_type ("GtkToolbar::space_size", GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE, ARG_SPACE_SIZE);
+  gtk_object_add_arg_type ("GtkToolbar::space_style", GTK_TYPE_TOOLBAR_SPACE_STYLE,
+			   GTK_ARG_READWRITE, ARG_SPACE_STYLE);
+  gtk_object_add_arg_type ("GtkToolbar::relief", GTK_TYPE_RELIEF_STYLE,
+			   GTK_ARG_READWRITE, ARG_RELIEF);
 }
 
 static void
@@ -180,7 +208,64 @@ gtk_toolbar_init (GtkToolbar *toolbar)
   toolbar->button_maxh  = 0;
 }
 
-GtkWidget *
+static void
+gtk_toolbar_set_arg (GtkObject *object,
+		     GtkArg    *arg,
+		     guint      arg_id)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+  
+  switch (arg_id)
+    {
+    case ARG_ORIENTATION:
+      gtk_toolbar_set_orientation (toolbar, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_TOOLBAR_STYLE:
+      gtk_toolbar_set_style (toolbar, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_SPACE_SIZE:
+      gtk_toolbar_set_space_size (toolbar, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_SPACE_STYLE:
+      gtk_toolbar_set_space_style (toolbar, GTK_VALUE_ENUM (*arg));
+      break;	  
+    case ARG_RELIEF:
+      gtk_toolbar_set_button_relief (toolbar, GTK_VALUE_ENUM (*arg));
+      break;
+    }
+}
+
+static void
+gtk_toolbar_get_arg (GtkObject *object,
+		     GtkArg    *arg,
+		     guint      arg_id)
+{
+  GtkToolbar *toolbar = GTK_TOOLBAR (object);
+
+  switch (arg_id)
+    {
+    case ARG_ORIENTATION:
+      GTK_VALUE_ENUM (*arg) = toolbar->orientation;
+      break;
+    case ARG_TOOLBAR_STYLE:
+      GTK_VALUE_ENUM (*arg) = toolbar->style;
+      break;
+    case ARG_SPACE_SIZE:
+      GTK_VALUE_UINT (*arg) = toolbar->space_size;
+      break;		
+    case ARG_SPACE_STYLE:
+      GTK_VALUE_ENUM (*arg) = toolbar->space_style;
+      break;
+    case ARG_RELIEF:
+      GTK_VALUE_ENUM (*arg) = toolbar->relief;
+      break;	
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
+
+GtkWidget*
 gtk_toolbar_new (GtkOrientation  orientation,
 		 GtkToolbarStyle style)
 {
@@ -921,22 +1006,21 @@ gtk_toolbar_insert_element (GtkToolbar          *toolbar,
   toolbar->num_children++;
 
   if (type != GTK_TOOLBAR_CHILD_SPACE)
-    gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
-
-  if ((type != GTK_TOOLBAR_CHILD_SPACE) && GTK_WIDGET_VISIBLE (toolbar))
     {
-      if (GTK_WIDGET_REALIZED (toolbar)
-	  && !GTK_WIDGET_REALIZED (child->widget))
-	gtk_widget_realize (child->widget);
-	
-      if (GTK_WIDGET_MAPPED (toolbar)
-	  && !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
-    }
+      gtk_widget_set_parent (child->widget, GTK_WIDGET (toolbar));
 
-  if (GTK_WIDGET_VISIBLE (toolbar) &&
-      ((type == GTK_TOOLBAR_CHILD_SPACE) ||
-       GTK_WIDGET_VISIBLE (child->widget)))
+      if (GTK_WIDGET_REALIZED (child->widget->parent))
+	gtk_widget_realize (child->widget);
+
+      if (GTK_WIDGET_VISIBLE (child->widget->parent) && GTK_WIDGET_VISIBLE (child->widget))
+	{
+	  if (GTK_WIDGET_MAPPED (child->widget->parent))
+	    gtk_widget_map (child->widget);
+
+	  gtk_widget_queue_resize (child->widget);
+	}
+    }
+  else
     gtk_widget_queue_resize (GTK_WIDGET (toolbar));
 
   return child->widget;

@@ -36,7 +36,7 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gdk/gdk.h"
-#include "gdkprivate.h"		/* Used in gtk_reset_shapes_recurse to avoid copy */
+#include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
 
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_CLASS (GTK_OBJECT (w)->klass)
@@ -1338,17 +1338,7 @@ gtk_widget_unparent (GtkWidget *widget)
 	      if (prev)
 		prev->next = slist;
 	      else
-		{
-		  /* it is really messy to have this signal disconnection
-		   * in gtkwidget.c, the resize_widgets invariants should
-		   * all be taken care off by gtkcontainer.c exclusively.
-		   */
-		  if (!slist)
-		    gtk_signal_disconnect_by_func (GTK_OBJECT (toplevel),
-						   GTK_SIGNAL_FUNC (gtk_container_clear_resize_widgets),
-						   NULL);
-		  GTK_CONTAINER (toplevel)->resize_widgets = slist;
-		}
+		GTK_CONTAINER (toplevel)->resize_widgets = slist;
 	      
 	      g_slist_free_1 (last);
 	    }
@@ -1436,7 +1426,8 @@ gtk_widget_show (GtkWidget *widget)
   
   if (!GTK_WIDGET_VISIBLE (widget))
     {
-      gtk_widget_queue_resize (widget);
+      if (!GTK_WIDGET_TOPLEVEL (widget))
+	gtk_widget_queue_resize (widget);
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SHOW]);
     }
 }
@@ -1451,7 +1442,9 @@ gtk_widget_real_show (GtkWidget *widget)
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_VISIBLE);
 
-      if (widget->parent && GTK_WIDGET_MAPPED (widget->parent))
+      if (widget->parent &&
+	  GTK_WIDGET_MAPPED (widget->parent) &&
+	  !GTK_WIDGET_MAPPED (widget))
 	gtk_widget_map (widget);
     }
 }
@@ -1517,7 +1510,8 @@ gtk_widget_hide (GtkWidget *widget)
   if (GTK_WIDGET_VISIBLE (widget))
     {
       gtk_signal_emit (GTK_OBJECT (widget), widget_signals[HIDE]);
-      gtk_widget_queue_resize (widget);
+      if (!GTK_WIDGET_TOPLEVEL (widget))
+	gtk_widget_queue_resize (widget);
     }
 }
 
@@ -1586,8 +1580,8 @@ gtk_widget_hide_all (GtkWidget *widget)
 void
 gtk_widget_map (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_VISIBLE (widget) == TRUE);
   
   if (!GTK_WIDGET_MAPPED (widget))
     {
@@ -1740,6 +1734,7 @@ gtk_widget_queue_draw_data (GtkWidget *widget,
   GtkDrawData *data;
   
   g_return_if_fail (widget != NULL);
+  g_return_if_fail (!(width < 0 || height < 0) || window == NULL);
 
   if ((width != 0) && (height != 0) && GTK_WIDGET_DRAWABLE (widget))
     {
@@ -1764,6 +1759,11 @@ gtk_widget_queue_draw_data (GtkWidget *widget,
 
       data->rect.x = x;
       data->rect.y = y;
+
+      if ((width < 1 && height < 1) ||
+	  (width >= widget->allocation.width &&
+	   height >= widget->allocation.height))
+	GTK_PRIVATE_SET_FLAG (widget, GTK_FULLDRAW_PENDING);
 
       if ((width < 0) || (height < 0))
 	{
@@ -1870,6 +1870,10 @@ gtk_widget_queue_clear_area (GtkWidget *widget,
 	  y -= wy - widget->allocation.y;
 	  
 	  gdk_window_get_size (widget->window, &wwidth, &wheight);
+
+	  if (x + width <= 0 || y + height <= 0 ||
+	      x >= wwidth || y >= wheight)
+	    return;
 	  
 	  if (x < 0)
 	    {
@@ -1913,6 +1917,7 @@ gtk_widget_redraw_queue_remove (GtkWidget *widget)
 			     NULL);
   
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
+  GTK_PRIVATE_UNSET_FLAG (widget, GTK_FULLDRAW_PENDING);
 }
 
 void	   
@@ -2072,7 +2077,8 @@ gtk_widget_idle_draw (gpointer cb_data)
        * flag GTK_REDRAW_PROCESSING or something.
        */
       GTK_PRIVATE_UNSET_FLAG (widget, GTK_REDRAW_PENDING);
-
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_FULLDRAW_PENDING);
+      
       while (draw_data_list)
 	{
 	  gboolean full_allocation = FALSE;
@@ -2089,23 +2095,23 @@ gtk_widget_idle_draw (gpointer cb_data)
 						       NULL, NULL);
 	      data->window = NULL;
 	    }
-	  else
+	  else if ((data->rect.width == 0) && (data->rect.height == 0))
+	    full_allocation = TRUE;
+
+	  if (full_allocation)
 	    {
-	      if ((data->rect.width == 0) && (data->rect.height == 0))
+	      if (GTK_WIDGET_NO_WINDOW (widget))
 		{
-		  if (GTK_WIDGET_NO_WINDOW (widget))
-		    {
-		      data->rect.x = widget->allocation.x;
-		      data->rect.y = widget->allocation.y;
-		    }
-		  else
-		    {
-		      data->rect.x = 0;
-		      data->rect.y = 0;
-		    }
-		  data->rect.width = widget->allocation.width;
-		  data->rect.height = widget->allocation.height;
+		  data->rect.x = widget->allocation.x;
+		  data->rect.y = widget->allocation.y;
 		}
+	      else
+		{
+		  data->rect.x = 0;
+		  data->rect.y = 0;
+		}
+	      data->rect.width = widget->allocation.width;
+	      data->rect.height = widget->allocation.height;
 	    }
 
 	  draw_data_list = draw_data_list->next;
@@ -2229,7 +2235,7 @@ gtk_widget_idle_draw (gpointer cb_data)
       while (tmp_list)
 	{
 	  GtkDrawData *data = tmp_list->data;
-	  if ((data->rect.width != 0) || (data->rect.height != 0))
+	  if ((data->rect.width != 0) && (data->rect.height != 0))
 	    gtk_widget_draw (widget, &data->rect);
 	  
 	  if (tmp_list->next)
@@ -2261,8 +2267,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (GTK_IS_RESIZE_CONTAINER (widget))
     gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
-  if (GTK_WIDGET_DRAWABLE (widget))
-    gtk_widget_queue_clear (widget);
+  gtk_widget_queue_clear (widget);
 
   if (widget->parent)
     gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
@@ -2362,7 +2367,7 @@ gtk_widget_size_request (GtkWidget	*widget,
 
 #ifdef G_ENABLE_DEBUG
   if (requisition == &widget->requisition)
-    g_warning ("gtk_widget_size_request() called on child widget with widget equal\n to widget->requisition. gtk_widget_set_usize() may not work properly.");
+    g_warning ("gtk_widget_size_request() called on child widget with request equal\n to widget->requisition. gtk_widget_set_usize() may not work properly.");
 #endif /* G_ENABLE_DEBUG */
 
   gtk_widget_ref (widget);
@@ -2385,8 +2390,8 @@ gtk_widget_size_request (GtkWidget	*widget,
  *****************************************/
 
 void
-gtk_widget_get_child_requisition (GtkWidget	   *widget,
-			    GtkRequisition *requisition)
+gtk_widget_get_child_requisition (GtkWidget	 *widget,
+				  GtkRequisition *requisition)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -2434,6 +2439,19 @@ gtk_widget_size_allocate (GtkWidget	*widget,
       if (aux_info->y != -1)
 	real_allocation.y = aux_info->y;
     }
+
+  real_allocation.width = MAX (real_allocation.width, 1);
+  real_allocation.height = MAX (real_allocation.height, 1);
+
+  if (real_allocation.width > 32767 ||
+      real_allocation.height > 32767)
+    {
+      g_warning ("gtk_widget_size_allocate(): attempt to allocate widget with width %d and height %d",
+		 real_allocation.width,
+		 real_allocation.height);
+      real_allocation.width = MIN (real_allocation.width, 32767);
+      real_allocation.height = MIN (real_allocation.height, 32767);
+    }
   
   if (GTK_WIDGET_NO_WINDOW (widget))
     {
@@ -2452,10 +2470,17 @@ gtk_widget_size_allocate (GtkWidget	*widget,
       needs_draw = TRUE;
     }
 
+  if (GTK_IS_RESIZE_CONTAINER (widget))
+    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
+
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
   if (needs_draw)
-    gtk_widget_queue_draw (widget);
+    {
+      gtk_widget_queue_draw (widget);
+      if (widget->parent && GTK_CONTAINER (widget->parent)->reallocate_redraws)
+	gtk_widget_queue_draw (widget->parent);
+    }
 }
 
 static void
@@ -2694,6 +2719,7 @@ gtk_widget_event (GtkWidget *widget,
 
   switch (event->type)
     {
+      GtkWidget *parent;
     case GDK_NOTHING:
       signal_num = -1;
       break;
@@ -2767,8 +2793,37 @@ gtk_widget_event (GtkWidget *widget,
       break;
     case GDK_EXPOSE:
       /* there is no sense in providing a widget with bogus expose events.
+       * also we make the optimization to discard expose events for widgets
+       * that have a full redraw pending (given that the event is !send_event,
+       * otherwise we assume we can trust the event).
        */
-      if (!event->any.window)
+      if (event->any.send_event)
+	parent = NULL;
+      else if (event->any.window)
+	{
+	  parent = widget;
+	  while (parent)
+	    {
+	      if (GTK_WIDGET_FULLDRAW_PENDING (parent))
+		break;
+	      parent = parent->parent;
+	    }
+	  /* <HACK> gnome-dock didn't propagate draws to torn off
+	   *        children. So don't consider those ancestors.
+	   */
+	  if (parent)
+	    {
+	      GdkWindow *parent_window = event->any.window;
+
+	      while (parent_window && parent_window != parent->window)
+		  parent_window = gdk_window_get_parent (parent_window);
+
+	      if (!parent_window)
+		parent = NULL;
+	    }
+	  /* </HACK> */
+	}
+      if (!event->any.window || parent)
 	{
 	  gtk_widget_unref (widget);
 	  return TRUE;
@@ -3156,7 +3211,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
     g_free (widget->name);
   widget->name = g_strdup (name);
 
-  if (!GTK_WIDGET_USER_STYLE (widget))
+  if (GTK_WIDGET_RC_STYLE (widget))
     gtk_widget_set_rc_style (widget);
 }
 
@@ -3461,10 +3516,17 @@ gtk_widget_modify_style (GtkWidget      *widget,
   old_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), rc_style_key_id);
 
   if (style != old_style)
-    gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
-				    rc_style_key_id,
-				    style,
-				    (GtkDestroyNotify)gtk_rc_style_unref);
+    {
+      gtk_rc_style_ref (style);
+      
+      gtk_object_set_data_by_id_full (GTK_OBJECT (widget),
+				      rc_style_key_id,
+				      style,
+				      (GtkDestroyNotify)gtk_rc_style_unref);
+    }
+
+  if (GTK_WIDGET_RC_STYLE (widget))
+    gtk_widget_set_rc_style (widget);
 }
 
 static void
@@ -3696,18 +3758,16 @@ gtk_widget_set_uposition (GtkWidget *widget,
       aux_info = gtk_widget_aux_info_new ();
       gtk_object_set_data_by_id (GTK_OBJECT (widget), aux_info_key_id, aux_info);
     }
+
+  /* keep this in sync with gtk_window_compute_reposition() */
   
   if (x > -2)
     aux_info->x = x;
   if (y > -2)
     aux_info->y = y;
   
-  if (GTK_WIDGET_REALIZED (widget) && GTK_IS_WINDOW (widget) &&
-      (aux_info->x != -1) && (aux_info->y != -1))
-    {
-      gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
-      gdk_window_move (widget->window, aux_info->x, aux_info->y);
-    }
+  if (GTK_IS_WINDOW (widget) && (aux_info->x != -1) && (aux_info->y != -1))
+    gtk_window_reposition (GTK_WINDOW (widget), x, y);
   
   if (GTK_WIDGET_VISIBLE (widget) && widget->parent)
     gtk_widget_size_allocate (widget, &widget->allocation);
@@ -4400,10 +4460,10 @@ gtk_widget_finalize (GtkObject *object)
 static void
 gtk_widget_real_map (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_WIDGET_REALIZED (widget) == TRUE);
   
-  if (GTK_WIDGET_REALIZED (widget) && !GTK_WIDGET_MAPPED (widget))
+  if (!GTK_WIDGET_MAPPED (widget))
     {
       GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
       
@@ -4478,7 +4538,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
   GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 
-  /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT(widget)->klass->type));
+  /* printf ("unrealizing %s\n", gtk_type_name (GTK_OBJECT (widget)->klass->type));
    */
 
    /* We must do unrealize child widget BEFORE container widget.
@@ -4488,9 +4548,9 @@ gtk_widget_real_unrealize (GtkWidget *widget)
     */
 
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_foreach (GTK_CONTAINER (widget),
-			   (GtkCallback) gtk_widget_unrealize,
-			   NULL);
+    gtk_container_forall (GTK_CONTAINER (widget),
+			  (GtkCallback) gtk_widget_unrealize,
+			  NULL);
 
   gtk_style_detach (widget->style);
   if (!GTK_WIDGET_NO_WINDOW (widget))

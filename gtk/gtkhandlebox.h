@@ -43,9 +43,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_HANDLE_BOX(obj)          GTK_CHECK_CAST (obj, gtk_handle_box_get_type (), GtkHandleBox)
-#define GTK_HANDLE_BOX_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_handle_box_get_type (), GtkHandleBoxClass)
-#define GTK_IS_HANDLE_BOX(obj)       GTK_CHECK_TYPE (obj, gtk_handle_box_get_type ())
+#define GTK_TYPE_HANDLE_BOX            (gtk_handle_box_get_type ())
+#define GTK_HANDLE_BOX(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HANDLE_BOX, GtkHandleBox))
+#define GTK_HANDLE_BOX_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HANDLE_BOX, GtkHandleBoxClass))
+#define GTK_IS_HANDLE_BOX(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HANDLE_BOX))
+#define GTK_IS_HANDLE_BOX_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HANDLE_BOX))
 
 
 typedef struct _GtkHandleBox       GtkHandleBox;

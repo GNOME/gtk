@@ -636,20 +636,16 @@ gtk_packer_add_defaults (GtkPacker       *packer,
   
   gtk_widget_set_parent (child, GTK_WIDGET (packer));
   
-  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (packer))) 
-    {
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (packer)) &&
-          !GTK_WIDGET_REALIZED (child)) 
-        gtk_widget_realize (child);
-      
-      if (GTK_WIDGET_MAPPED (GTK_WIDGET (packer)) &&
-          !GTK_WIDGET_MAPPED (child)) 
-        gtk_widget_map (child);
-    }
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
 
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (packer))
-    gtk_widget_queue_resize (child);
-  
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+    {
+      if (GTK_WIDGET_MAPPED (child->parent))
+	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
+    }
 }
 
 void 
@@ -690,20 +686,16 @@ gtk_packer_add (GtkPacker       *packer,
   
   gtk_widget_set_parent (child, GTK_WIDGET (packer));
   
-  if (GTK_WIDGET_VISIBLE (GTK_WIDGET (packer))) 
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
     {
-      if (GTK_WIDGET_REALIZED (GTK_WIDGET (packer)) &&
-          !GTK_WIDGET_REALIZED (child)) 
-        gtk_widget_realize (child);
-      
-      if (GTK_WIDGET_MAPPED (GTK_WIDGET (packer)) &&
-          !GTK_WIDGET_MAPPED (child)) 
-        gtk_widget_map (child);
+      if (GTK_WIDGET_MAPPED (child->parent))
+	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
     }
-  
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (packer))
-    gtk_widget_queue_resize (child);
-  
 }
 
 void
@@ -979,7 +971,6 @@ gtk_packer_size_request (GtkWidget      *widget,
   gint nvis_horz_children;
   gint width, height;
   gint maxWidth, maxHeight;
-  GtkRequisition child_requisition;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_PACKER (widget));

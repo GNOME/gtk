@@ -304,7 +304,8 @@ typedef enum
 {
   GTK_WIN_POS_NONE,
   GTK_WIN_POS_CENTER,
-  GTK_WIN_POS_MOUSE
+  GTK_WIN_POS_MOUSE,
+  GTK_WIN_POS_CENTER_ALWAYS
 } GtkWindowPosition;
 
 /* Window types */

@@ -235,6 +235,9 @@ gtk_item_factory_init (GtkItemFactory	    *ifactory)
   ifactory->accel_group = NULL;
   ifactory->widget = NULL;
   ifactory->items = NULL;
+  ifactory->translate_func = NULL;
+  ifactory->translate_data = NULL;
+  ifactory->translate_notify = NULL;
 }
 
 GtkItemFactory*
@@ -672,7 +675,7 @@ gtk_item_factory_destroy (GtkObject *object)
       GSList *link;
       
       for (link = item->widgets; link; link = link->next)
-	if (gtk_object_get_data_by_id (link->data, quark_item_factory))
+	if (gtk_object_get_data_by_id (link->data, quark_item_factory) == ifactory)
 	  gtk_object_remove_data_by_id (link->data, quark_item_factory);
     }
   g_slist_free (ifactory->items);
@@ -695,7 +698,7 @@ gtk_item_factory_finalize (GtkObject		  *object)
   g_free (ifactory->path);
   g_assert (ifactory->widget == NULL);
 
-  if (ifactory->translate_data && ifactory->translate_notify)
+  if (ifactory->translate_notify)
     ifactory->translate_notify (ifactory->translate_data);
   
   parent_class->finalize (object);
@@ -976,7 +979,10 @@ gtk_item_factory_parse_path (GtkItemFactory *ifactory,
     translation = str;
 			      
   p = strrchr (translation, '/');
-  p++;
+  if (p)
+    p++;
+  else
+    p = translation;
 
   *item = g_strdup (p);
 
@@ -989,6 +995,7 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 			      gpointer		      callback_data,
 			      guint		      callback_type)
 {
+  GtkOptionMenu *option_menu = NULL;
   GtkWidget *parent;
   GtkWidget *widget;
   GSList *radio_group;
@@ -1085,6 +1092,14 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
     }
   g_free (parent_path);
 
+  if (GTK_IS_OPTION_MENU (parent))
+    {
+      option_menu = GTK_OPTION_MENU (parent);
+      if (!option_menu->menu)
+	gtk_option_menu_set_menu (option_menu, gtk_widget_new (GTK_TYPE_MENU, NULL));
+      parent = option_menu->menu;
+    }
+			      
   g_return_if_fail (GTK_IS_CONTAINER (parent));
 
   widget = gtk_widget_new (type,
@@ -1093,6 +1108,8 @@ gtk_item_factory_create_item (GtkItemFactory	     *ifactory,
 						    type_id != quark_type_title),
 			   "GtkWidget::parent", parent,
 			   NULL);
+  if (option_menu && !option_menu->menu_item)
+    gtk_option_menu_set_history (option_menu, 0);
 
   if (type == GTK_TYPE_RADIO_MENU_ITEM)
     gtk_radio_menu_item_set_group (GTK_RADIO_MENU_ITEM (widget), radio_group);
@@ -1427,45 +1444,42 @@ gtk_item_factory_popup_with_data (GtkItemFactory	*ifactory,
 				  guint			 mouse_button,
 				  guint32		 time)
 {
+  MenuPos *mpos;
+
   g_return_if_fail (ifactory != NULL);
   g_return_if_fail (GTK_IS_ITEM_FACTORY (ifactory));
   g_return_if_fail (GTK_IS_MENU (ifactory->widget));
-
-  if (!GTK_WIDGET_VISIBLE (ifactory->widget))
+  
+  mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), quark_if_menu_pos);
+  
+  if (!mpos)
     {
-      MenuPos *mpos;
-
-      mpos = gtk_object_get_data_by_id (GTK_OBJECT (ifactory->widget), quark_if_menu_pos);
-
-      if (!mpos)
-	{
-	  mpos = g_new0 (MenuPos, 1);
-	  gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory->widget),
-					  quark_if_menu_pos,
-					  mpos,
-					  g_free);
-	}
-
-      mpos->x = x;
-      mpos->y = y;
-
-      if (popup_data != NULL)
-	{
-	  gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory),
-					  quark_popup_data,
-					  popup_data,
-					  destroy);
-	  gtk_signal_connect (GTK_OBJECT (ifactory->widget),
-			      "selection-done",
-			      GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
-			      ifactory);
-	}
-
-      gtk_menu_popup (GTK_MENU (ifactory->widget),
-		      NULL, NULL,
-		      gtk_item_factory_menu_pos, mpos,
-		      mouse_button, time);
+      mpos = g_new0 (MenuPos, 1);
+      gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory->widget),
+				      quark_if_menu_pos,
+				      mpos,
+				      g_free);
     }
+  
+  mpos->x = x;
+  mpos->y = y;
+  
+  if (popup_data != NULL)
+    {
+      gtk_object_set_data_by_id_full (GTK_OBJECT (ifactory),
+				      quark_popup_data,
+				      popup_data,
+				      destroy);
+      gtk_signal_connect (GTK_OBJECT (ifactory->widget),
+			  "selection-done",
+			  GTK_SIGNAL_FUNC (ifactory_delete_popup_data),
+			  ifactory);
+    }
+  
+  gtk_menu_popup (GTK_MENU (ifactory->widget),
+		  NULL, NULL,
+		  gtk_item_factory_menu_pos, mpos,
+		  mouse_button, time);
 }
 
 static guint
@@ -1635,11 +1649,7 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
   if (!S_ISREG (g_scanner_stat_mode (file_name)))
     return;
 
-#ifndef __EMX__
   fd = open (file_name, O_RDONLY);
-#else
-  fd = open (file_name, O_RDONLY | O_TEXT);
-#endif
   if (fd < 0)
     return;
 
@@ -1666,7 +1676,7 @@ gtk_item_factory_set_translate_func (GtkItemFactory      *ifactory,
 {
   g_return_if_fail (ifactory != NULL);
   
-  if (ifactory->translate_data && ifactory->translate_notify)
+  if (ifactory->translate_notify)
     ifactory->translate_notify (ifactory->translate_data);
       
   ifactory->translate_func = func;

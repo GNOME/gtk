@@ -1,6 +1,7 @@
 # Note that this is NOT a relocatable package
-%define ver     @VERSION@ 
-%define rel      SNAP
+%define ver      @VERSION@
+%define  RELEASE 1
+%define  rel     %{?CUSTOM_RELEASE} %{!?CUSTOM_RELEASE:%RELEASE}
 %define prefix   /usr
 
 Summary: The Gimp Toolkit

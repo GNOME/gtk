@@ -37,10 +37,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_RULER(obj)          GTK_CHECK_CAST (obj, gtk_ruler_get_type (), GtkRuler)
-#define GTK_RULER_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_ruler_get_type (), GtkRulerClass)
-#define GTK_IS_RULER(obj)       GTK_CHECK_TYPE (obj, gtk_ruler_get_type ())
-
+#define GTK_TYPE_RULER            (gtk_ruler_get_type ())
+#define GTK_RULER(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_RULER, GtkRuler))
+#define GTK_RULER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_RULER, GtkRulerClass))
+#define GTK_IS_RULER(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_RULER))
+#define GTK_IS_RULER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_RULER))
 
 typedef struct _GtkRuler        GtkRuler;
 typedef struct _GtkRulerClass   GtkRulerClass;
@@ -89,16 +90,16 @@ struct _GtkRulerMetric
 };
 
 
-GtkType gtk_ruler_get_type (void);
-void  gtk_ruler_set_metric (GtkRuler       *ruler,
-			    GtkMetricType   metric);
-void  gtk_ruler_set_range  (GtkRuler       *ruler,
-			    gfloat          lower,
-			    gfloat          upper,
-			    gfloat          position,
-			    gfloat          max_size);
-void  gtk_ruler_draw_ticks (GtkRuler       *ruler);
-void  gtk_ruler_draw_pos   (GtkRuler       *ruler);
+GtkType gtk_ruler_get_type   (void);
+void    gtk_ruler_set_metric (GtkRuler      *ruler,
+			      GtkMetricType  metric);
+void    gtk_ruler_set_range  (GtkRuler      *ruler,
+			      gfloat         lower,
+			      gfloat         upper,
+			      gfloat         position,
+			      gfloat         max_size);
+void    gtk_ruler_draw_ticks (GtkRuler      *ruler);
+void    gtk_ruler_draw_pos   (GtkRuler      *ruler);
 
 
 #ifdef __cplusplus

@@ -63,6 +63,7 @@ static void gtk_real_menu_item_select    (GtkItem          *item);
 static void gtk_real_menu_item_deselect  (GtkItem          *item);
 static void gtk_real_menu_item_activate_item  (GtkMenuItem      *item);
 static gint gtk_menu_item_select_timeout (gpointer          data);
+static void gtk_menu_item_select_timeout_unlocked (gpointer     data);
 static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gint             *x,
 					  gint             *y,
@@ -552,7 +553,7 @@ gtk_real_menu_item_select (GtkItem *item)
 					    gtk_menu_item_select_timeout,
 					    menu_item);
       else
-	gtk_menu_item_select_timeout (menu_item);
+	gtk_menu_item_select_timeout_unlocked (menu_item);
       if(event) gdk_event_free(event);
     }
   
@@ -628,9 +629,19 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 static gint
 gtk_menu_item_select_timeout (gpointer data)
 {
-  GtkMenuItem *menu_item;
-
   GDK_THREADS_ENTER ();
+
+  gtk_menu_item_select_timeout_unlocked (data);
+
+  GDK_THREADS_LEAVE ();
+
+  return FALSE;  
+}
+
+static void
+gtk_menu_item_select_timeout_unlocked (gpointer data)
+{
+  GtkMenuItem *menu_item;
 
   menu_item = GTK_MENU_ITEM (data);
   menu_item->timer = 0;
@@ -655,10 +666,6 @@ gtk_menu_item_select_timeout (gpointer data)
 	    gtk_menu_shell_select_item (submenu, submenu->children->data);
 	}
     }
-  
-  GDK_THREADS_LEAVE ();
-
-  return FALSE;
 }
 
 static void
@@ -702,12 +709,6 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
       else
 	ty += GTK_WIDGET (menu_item)->allocation.height;
 
-      if ((tx + twidth) > screen_width)
-	{
-	  tx -= ((tx + twidth) - screen_width);
-	  if (tx < 0)
-	    tx = 0;
-	}
       break;
 
     case GTK_LEFT_RIGHT:
@@ -739,19 +740,16 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 	  break;
 	}
 
-      if ((ty + GTK_WIDGET (menu_item)->allocation.height / 4 + theight) <= screen_height)
-	ty += GTK_WIDGET (menu_item)->allocation.height / 4;
-      else
-	{
-	  ty -= ((ty + theight) - screen_height);
-	  if (ty < 0)
-	    ty = 0;
-	}
+      ty += GTK_WIDGET (menu_item)->allocation.height / 4;
+
       break;
     }
 
-  *x = tx;
-  *y = ty;
+  /* If we have negative, tx, ty here it is because we can't get
+   * the menu all the way on screen. Favor the upper-left portion.
+   */
+  *x = CLAMP (tx, 0, MAX (0, screen_width - twidth));
+  *y = CLAMP (ty, 0, MAX (0, screen_height - theight));
 }
 
 void

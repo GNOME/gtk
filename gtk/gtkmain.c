@@ -265,7 +265,7 @@ gtk_init_check (int	 *argc,
 	      
 	      if (*module_name == '=')
 		module_name++;
-	      else
+	      else if (i + 1 < *argc)
 		{
 		  (*argv)[i] = NULL;
 		  i += 1;
@@ -273,7 +273,8 @@ gtk_init_check (int	 *argc,
 		}
 	      (*argv)[i] = NULL;
 
-	      gtk_modules = g_slist_prepend (gtk_modules, g_strdup (module_name));
+	      if (module_name && *module_name)
+		gtk_modules = g_slist_prepend (gtk_modules, g_strdup (module_name));
 	    }
 	  else if (strcmp ("--g-fatal-warnings", (*argv)[i]) == 0)
 	    {
@@ -530,7 +531,9 @@ gtk_main (void)
 	{
 	  quitf = quit_functions->data;
 
+	  tmp_list = quit_functions;
 	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
+	  g_list_free_1 (tmp_list);
 
 	  if ((quitf->main_level && quitf->main_level != gtk_main_loop_level) ||
 	      gtk_quit_invoke_function (quitf))
@@ -539,7 +542,6 @@ gtk_main (void)
 	    }
 	  else
 	    {
-	      g_list_free (tmp_list);
 	      gtk_quit_destroy (quitf);
 	    }
 	}
@@ -581,13 +583,21 @@ gtk_main_quit (void)
 gint
 gtk_events_pending (void)
 {
-  return g_main_pending();
+  gboolean result;
+  
+  GDK_THREADS_LEAVE ();  
+  result = g_main_pending();
+  GDK_THREADS_ENTER ();
+
+  return result;
 }
 
 gint 
 gtk_main_iteration (void)
 {
+  GDK_THREADS_LEAVE ();
   g_main_iteration (TRUE);
+  GDK_THREADS_ENTER ();
 
   if (main_loops)
     return !g_main_is_running (main_loops->data);
@@ -598,7 +608,9 @@ gtk_main_iteration (void)
 gint 
 gtk_main_iteration_do (gboolean blocking)
 {
+  GDK_THREADS_LEAVE ();
   g_main_iteration (blocking);
+  GDK_THREADS_ENTER ();
 
   if (main_loops)
     return !g_main_is_running (main_loops->data);
@@ -717,11 +729,17 @@ gtk_main_do_event (GdkEvent *event)
       break;
       
     case GDK_DESTROY:
-      gtk_widget_ref (event_widget);
-      gtk_widget_event (event_widget, event);
-      if (!GTK_OBJECT_DESTROYED (event_widget))
-	gtk_widget_destroy (event_widget);
-      gtk_widget_unref (event_widget);
+      /* Unexpected GDK_DESTROY from the outside, ignore for
+       * child windows, handle like a GDK_DELETE for toplevels
+       */
+      if (!event_widget->parent)
+	{
+	  gtk_widget_ref (event_widget);
+	  if (!gtk_widget_event (event_widget, event) &&
+	      !GTK_OBJECT_DESTROYED (event_widget))
+	    gtk_widget_destroy (event_widget);
+	  gtk_widget_unref (event_widget);
+	}
       break;
       
     case GDK_PROPERTY_NOTIFY:

@@ -42,9 +42,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_TOOLBAR(obj)	 GTK_CHECK_CAST (obj, gtk_toolbar_get_type (), GtkToolbar)
-#define GTK_TOOLBAR_CLASS(klass) GTK_CHECK_CLASS_CAST (klass, gtk_toolbar_get_type (), GtkToolbarClass)
-#define GTK_IS_TOOLBAR(obj)      GTK_CHECK_TYPE (obj, gtk_toolbar_get_type ())
+#define GTK_TYPE_TOOLBAR                  (gtk_toolbar_get_type ())
+#define GTK_TOOLBAR(obj)                  (GTK_CHECK_CAST ((obj), GTK_TYPE_TOOLBAR, GtkToolbar))
+#define GTK_TOOLBAR_CLASS(klass)          (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TOOLBAR, GtkToolbarClass))
+#define GTK_IS_TOOLBAR(obj)               (GTK_CHECK_TYPE ((obj), GTK_TYPE_TOOLBAR))
+#define GTK_IS_TOOLBAR_CLASS(klass)       (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOOLBAR))
 
 typedef enum
 {
@@ -103,25 +105,25 @@ struct _GtkToolbarClass
 
 
 GtkType    gtk_toolbar_get_type        (void);
-GtkWidget *gtk_toolbar_new             (GtkOrientation   orientation,
+GtkWidget* gtk_toolbar_new             (GtkOrientation   orientation,
 					GtkToolbarStyle  style);
 
 /* Simple button items */
-GtkWidget *gtk_toolbar_append_item     (GtkToolbar      *toolbar,
+GtkWidget* gtk_toolbar_append_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
 					GtkWidget       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
-GtkWidget *gtk_toolbar_prepend_item    (GtkToolbar      *toolbar,
+GtkWidget* gtk_toolbar_prepend_item    (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
 					GtkWidget       *icon,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
-GtkWidget *gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
+GtkWidget* gtk_toolbar_insert_item     (GtkToolbar      *toolbar,
 					const char      *text,
 					const char      *tooltip_text,
 					const char      *tooltip_private_text,
@@ -137,7 +139,7 @@ void       gtk_toolbar_insert_space    (GtkToolbar      *toolbar,
 					gint             position);
 
 /* Any element type */
-GtkWidget *gtk_toolbar_append_element  (GtkToolbar      *toolbar,
+GtkWidget* gtk_toolbar_append_element  (GtkToolbar      *toolbar,
 					GtkToolbarChildType type,
 					GtkWidget       *widget,
 					const char      *text,
@@ -147,7 +149,7 @@ GtkWidget *gtk_toolbar_append_element  (GtkToolbar      *toolbar,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
 
-GtkWidget *gtk_toolbar_prepend_element (GtkToolbar      *toolbar,
+GtkWidget* gtk_toolbar_prepend_element (GtkToolbar      *toolbar,
 					GtkToolbarChildType type,
 					GtkWidget       *widget,
 					const char      *text,
@@ -157,7 +159,7 @@ GtkWidget *gtk_toolbar_prepend_element (GtkToolbar      *toolbar,
 					GtkSignalFunc    callback,
 					gpointer         user_data);
 
-GtkWidget *gtk_toolbar_insert_element  (GtkToolbar      *toolbar,
+GtkWidget* gtk_toolbar_insert_element  (GtkToolbar      *toolbar,
 					GtkToolbarChildType type,
 					GtkWidget       *widget,
 					const char      *text,

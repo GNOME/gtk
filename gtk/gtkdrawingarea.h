@@ -37,9 +37,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_DRAWING_AREA(obj)          GTK_CHECK_CAST (obj, gtk_drawing_area_get_type (), GtkDrawingArea)
-#define GTK_DRAWING_AREA_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_drawing_area_get_type (), GtkDrawingAreaClass)
-#define GTK_IS_DRAWING_AREA(obj)       GTK_CHECK_TYPE (obj, gtk_drawing_area_get_type ())
+#define GTK_TYPE_DRAWING_AREA            (gtk_drawing_area_get_type ())
+#define GTK_DRAWING_AREA(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_DRAWING_AREA, GtkDrawingArea))
+#define GTK_DRAWING_AREA_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_DRAWING_AREA, GtkDrawingAreaClass))
+#define GTK_IS_DRAWING_AREA(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_DRAWING_AREA))
+#define GTK_IS_DRAWING_AREA_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_DRAWING_AREA))
 
 
 typedef struct _GtkDrawingArea       GtkDrawingArea;

@@ -29,8 +29,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <math.h>
 #include <time.h>
+#include <unistd.h>
 #include "gtk.h"
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
@@ -1559,7 +1561,7 @@ create_handle_box (void)
     gtk_window_set_policy (GTK_WINDOW (window),
 			   TRUE,
 			   TRUE,
-			   FALSE);
+			   TRUE);
     
     gtk_signal_connect (GTK_OBJECT (window), "destroy",
 			GTK_SIGNAL_FUNC(gtk_widget_destroyed),
@@ -2392,12 +2394,12 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Preferences",     		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/_Color", 		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/Color/_Red",      	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Color/_Green",   	NULL, gtk_ifactory_cb, 0, "/Preferences/Color/Red" },
+  { "/_Preferences/Color/_Blue",        NULL, gtk_ifactory_cb, 0, "/Preferences/Color/Red" },
   { "/_Preferences/_Shape", 		NULL, 0,               0, "<Branch>" },
   { "/_Preferences/Shape/_Square",      NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
-  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "<RadioItem>" },
+  { "/_Preferences/Shape/_Rectangle",   NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Square" },
+  { "/_Preferences/Shape/_Oval",        NULL, gtk_ifactory_cb, 0, "/Preferences/Shape/Rectangle" },
 
   { "/_Help",            NULL,         0,                     0, "<LastBranch>" },
   { "/Help/_About",      NULL,         gtk_ifactory_cb,       0 },
@@ -2436,10 +2438,16 @@ create_item_factory (void)
 				item_factory,
 				(GtkDestroyNotify) gtk_object_unref);
       gtk_accel_group_attach (accel_group, GTK_OBJECT (window));
-      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
       gtk_window_set_title (GTK_WINDOW (window), "Item Factory");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-      
+      gtk_item_factory_create_items (item_factory, nmenu_items, menu_items, NULL);
+
+      /* preselect /Preferences/Shape/Oval over the other radios
+       */
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (gtk_item_factory_get_item (item_factory,
+										      "/Preferences/Shape/Oval")),
+				      TRUE);
+
       box1 = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
       
@@ -4774,7 +4782,7 @@ void create_ctree (void)
   GtkWidget *check;
   GtkAdjustment *adj;
   GtkWidget *spinner;
-  GdkColor transparent;
+  GdkColor transparent = { 0 };
 
   char *title[] = { "Tree" , "Info" };
   char buf[80];
@@ -5259,7 +5267,10 @@ void
 font_selection_ok (GtkWidget              *w,
 		   GtkFontSelectionDialog *fs)
 {
-  g_print ("%s\n", gtk_font_selection_dialog_get_font_name (fs));
+  gchar *s = gtk_font_selection_dialog_get_font_name (fs);
+
+  g_print ("%s\n", s);
+  g_free (s);
   gtk_widget_destroy (GTK_WIDGET (fs));
 }
 
@@ -7882,7 +7893,7 @@ create_timeout_test (void)
  * Idle Test
  */
 
-static int idle = 0;
+static int idle_id = 0;
 
 static gint
 idle_test (GtkWidget *label)
@@ -7900,9 +7911,9 @@ static void
 start_idle_test (GtkWidget *widget,
 		 GtkWidget *label)
 {
-  if (!idle)
+  if (!idle_id)
     {
-      idle = gtk_idle_add ((GtkFunction) idle_test, label);
+      idle_id = gtk_idle_add ((GtkFunction) idle_test, label);
     }
 }
 
@@ -7910,10 +7921,10 @@ static void
 stop_idle_test (GtkWidget *widget,
 		gpointer   data)
 {
-  if (idle)
+  if (idle_id)
     {
-      gtk_idle_remove (idle);
-      idle = 0;
+      gtk_idle_remove (idle_id);
+      idle_id = 0;
     }
 }
 
@@ -8465,10 +8476,21 @@ int
 main (int argc, char *argv[])
 {
   GtkBindingSet *binding_set;
+  struct stat statbuf;
 
   srand (time (NULL));
 
   gtk_set_locale ();
+
+  /* Check to see if we are being run from the correct
+   * directory.
+   */
+  if (stat("./testgtkrc", &statbuf) < 0)
+    {
+      fprintf (stderr, "*** The testgtk program must be run from within the\n"
+	               "*** gtk/ subdirectory of the GTK+ distribution.\n");
+      exit (1);
+    }
 
   gtk_rc_add_default_file ("testgtkrc");
 

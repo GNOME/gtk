@@ -671,6 +671,49 @@ gtk_object_getv (GtkObject           *object,
 }
 
 void
+gtk_object_get (GtkObject   *object,
+		const gchar *first_arg_name,
+		...)
+{
+  va_list var_args;
+  gchar *name;
+  
+  g_return_if_fail (GTK_IS_OBJECT (object));
+  
+  va_start (var_args, first_arg_name);
+
+  name = (gchar*) first_arg_name;
+  while (name)
+    {
+      gpointer value_pointer = va_arg (var_args, gpointer);
+
+      if (value_pointer)
+	{
+	  GtkArgInfo *info;
+	  gchar *error;
+	  GtkArg arg;
+	  
+	  error = gtk_arg_get_info (GTK_OBJECT_TYPE (object),
+				    object_arg_info_ht,
+				    name,
+				    &info);
+	  if (error)
+	    {
+	      g_warning ("gtk_object_get(): %s", error);
+	      g_free (error);
+	      return;
+	    }
+	  
+	  arg.name = name;
+	  gtk_object_arg_get (object, &arg, info);
+	  gtk_arg_to_valueloc (&arg, value_pointer);
+	}
+
+      name = va_arg (var_args, gchar*);
+    }
+}
+
+void
 gtk_object_set (GtkObject *object,
 		const gchar    *first_arg_name,
 		...)

@@ -133,8 +133,7 @@ LIST_WIDTH (GtkCList * clist)
 
 
 /* Signals */
-enum
-{
+enum {
   SELECT_ROW,
   UNSELECT_ROW,
   ROW_MOVE,
@@ -154,8 +153,7 @@ enum
   LAST_SIGNAL
 };
 
-enum
-{
+enum {
   SYNC_REMOVE,
   SYNC_INSERT
 };
@@ -168,7 +166,8 @@ enum {
   ARG_ROW_HEIGHT,
   ARG_TITLES_ACTIVE,
   ARG_REORDERABLE,
-  ARG_USE_DRAG_ICONS
+  ARG_USE_DRAG_ICONS,
+  ARG_SORT_TYPE
 };
 
 /* GtkCList Methods */
@@ -451,6 +450,7 @@ static void drag_dest_cell            (GtkCList         *clist,
 				       GtkCListDestInfo *dest_info);
 
 
+
 static GtkContainerClass *parent_class = NULL;
 static guint clist_signals[LAST_SIGNAL] = {0};
 
@@ -523,7 +523,10 @@ gtk_clist_class_init (GtkCListClass *klass)
 			   GTK_TYPE_BOOL,
 			   GTK_ARG_READWRITE,
 			   ARG_USE_DRAG_ICONS);
-  
+  gtk_object_add_arg_type ("GtkCList::sort_type",
+			   GTK_TYPE_SORT_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_SORT_TYPE);  
   object_class->set_arg = gtk_clist_set_arg;
   object_class->get_arg = gtk_clist_get_arg;
   object_class->destroy = gtk_clist_destroy;
@@ -852,7 +855,8 @@ gtk_clist_set_arg (GtkObject      *object,
     case ARG_USE_DRAG_ICONS:
       gtk_clist_set_use_drag_icons (clist, GTK_VALUE_BOOL (*arg));
       break;
-    default:
+    case ARG_SORT_TYPE:
+      gtk_clist_set_sort_type (clist, GTK_VALUE_ENUM (*arg));
       break;
     }
 }
@@ -897,6 +901,9 @@ gtk_clist_get_arg (GtkObject      *object,
       break;
     case ARG_USE_DRAG_ICONS:
       GTK_VALUE_BOOL (*arg) = GTK_CLIST_USE_DRAG_ICONS (clist);
+      break;
+    case ARG_SORT_TYPE:
+      GTK_VALUE_ENUM (*arg) = clist->sort_type;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;
@@ -1296,8 +1303,6 @@ void
 gtk_clist_column_title_active (GtkCList *clist,
 			       gint      column)
 {
-  GtkObject *object;
-
   g_return_if_fail (clist != NULL);
   g_return_if_fail (GTK_IS_CLIST (clist));
 
@@ -2736,8 +2741,7 @@ real_remove_row (GtkCList *clist,
     gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW],
 		     row, -1, NULL);
 
-  /* reset the row end pointer if we're removing at the
-   * end of the list */
+  /* reset the row end pointer if we're removing at the end of the list */
   clist->rows--;
   if (clist->row_list == list)
     clist->row_list = g_list_next (list);
@@ -3871,7 +3875,7 @@ real_undo_selection (GtkCList *clist)
 
   for (work = clist->undo_unselection; work; work = work->next)
     {
-      g_print ("unselect %d\n",GPOINTER_TO_INT (work->data));
+      /* g_print ("unselect %d\n",GPOINTER_TO_INT (work->data)); */
       gtk_signal_emit (GTK_OBJECT (clist), clist_signals[UNSELECT_ROW], 
 		       GPOINTER_TO_INT (work->data), -1, NULL);
     }
@@ -4511,7 +4515,8 @@ gtk_clist_realize (GtkWidget *widget)
   /* We'll use this gc to do scrolling as well */
   gdk_gc_set_exposures (clist->fg_gc, TRUE);
 
-  values.foreground = widget->style->white;
+  values.foreground = (widget->style->white.pixel==0 ?
+		       widget->style->black:widget->style->white);
   values.function = GDK_XOR;
   values.subwindow_mode = GDK_INCLUDE_INFERIORS;
   clist->xor_gc = gdk_gc_new_with_values (widget->window,
@@ -4755,7 +4760,7 @@ gtk_clist_draw (GtkWidget    *widget,
 		       (2 * widget->style->klass->ythickness) +
 		       clist->column_title_area.height);
 
-      gdk_window_clear_area (clist->clist_window, 0, 0, -1, -1);
+      gdk_window_clear_area (clist->clist_window, 0, 0, 0, 0);
       draw_rows (clist, NULL);
 
       for (i = 0; i < clist->columns; i++)
@@ -5948,8 +5953,8 @@ draw_rows (GtkCList     *clist,
     }
 
   if (!area)
-    gdk_window_clear_area (clist->clist_window,
-			   0, ROW_TOP_YPIXEL (clist, i), -1, -1);
+    gdk_window_clear_area (clist->clist_window, 0,
+			   ROW_TOP_YPIXEL (clist, i), 0, 0);
 }
 
 static void                          
@@ -6049,7 +6054,8 @@ adjust_adjustments (GtkCList *clist,
       clist->vadjustment->lower = 0;
       clist->vadjustment->upper = LIST_HEIGHT (clist);
 
-      if (clist->clist_window_height - clist->voffset > LIST_HEIGHT (clist))
+      if (clist->clist_window_height - clist->voffset > LIST_HEIGHT (clist) ||
+	  (clist->voffset + (gint)clist->vadjustment->value) != 0)
 	{
 	  clist->vadjustment->value = MAX (0, (LIST_HEIGHT (clist) -
 					       clist->clist_window_height));
@@ -6067,7 +6073,8 @@ adjust_adjustments (GtkCList *clist,
       clist->hadjustment->lower = 0;
       clist->hadjustment->upper = LIST_WIDTH (clist);
 
-      if (clist->clist_window_width - clist->hoffset > LIST_WIDTH (clist))
+      if (clist->clist_window_width - clist->hoffset > LIST_WIDTH (clist) ||
+	  (clist->hoffset + (gint)clist->hadjustment->value) != 0)
 	{
 	  clist->hadjustment->value = MAX (0, (LIST_WIDTH (clist) -
 					       clist->clist_window_width));

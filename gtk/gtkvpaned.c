@@ -245,7 +245,7 @@ gtk_vpaned_draw (GtkWidget    *widget,
 		GdkRectangle *area)
 {
   GtkPaned *paned;
-  GdkRectangle child_area;
+  GdkRectangle handle_area, child_area;
   guint16 border_width;
 
   g_return_if_fail (widget != NULL);
@@ -253,11 +253,44 @@ gtk_vpaned_draw (GtkWidget    *widget,
 
   if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
     {
+      gint width, height;
+      
       paned = GTK_PANED (widget);
       border_width = GTK_CONTAINER (paned)->border_width;
 
       gdk_window_clear_area (widget->window,
 			     area->x, area->y, area->width, area->height);
+
+      /* Redraw the handle
+       */
+      gdk_window_get_size (paned->handle, &width, &height);
+      
+      handle_area.x = paned->handle_xpos;
+      handle_area.y = paned->handle_ypos;
+      handle_area.width = width;
+      handle_area.height = height;
+
+      if (gdk_rectangle_intersect (&handle_area, area, &child_area))
+	{
+	  child_area.x -= handle_area.x;
+	  child_area.y -= handle_area.y;
+	  gtk_paint_box (widget->style, paned->handle,
+			 GTK_WIDGET_STATE(widget),
+			 GTK_SHADOW_OUT, 
+			 &child_area, widget, "paned",
+			 0, 0,
+			 width, height);
+	}
+
+      /* Redraw the groove
+       */
+      gtk_paint_hline(widget->style, widget->window, GTK_STATE_NORMAL,
+		      area, widget, "vpaned",
+		      0, widget->allocation.width - 1,
+		      border_width + paned->child1_size + paned->gutter_size / 2 - 1);
+
+      /* Redraw the children
+       */
       if (paned->child1 &&
 	  gtk_widget_intersect (paned->child1, area, &child_area))
         gtk_widget_draw (paned->child1, &child_area);
@@ -265,10 +298,6 @@ gtk_vpaned_draw (GtkWidget    *widget,
 	  gtk_widget_intersect (paned->child2, area, &child_area))
         gtk_widget_draw (paned->child2, &child_area);
 
-      gtk_paint_hline(widget->style, widget->window, GTK_STATE_NORMAL,
-		      area, widget, "vpaned",
-		      0, widget->allocation.width - 1,
-		      border_width + paned->child1_size + paned->gutter_size / 2 - 1);
     }
 }
 
@@ -283,12 +312,10 @@ gtk_vpaned_xor_line (GtkPaned *paned)
 
   if (!paned->xor_gc)
     {
-      values.foreground = widget->style->white;
-      values.function = GDK_XOR;
+      values.function = GDK_INVERT;
       values.subwindow_mode = GDK_INCLUDE_INFERIORS;
       paned->xor_gc = gdk_gc_new_with_values (widget->window,
 					      &values,
-					      GDK_GC_FOREGROUND |
 					      GDK_GC_FUNCTION |
 					      GDK_GC_SUBWINDOW);
     }

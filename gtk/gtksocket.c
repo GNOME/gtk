@@ -307,8 +307,8 @@ gtk_socket_size_request (GtkWidget      *widget,
       gdk_error_trap_pop ();
     }
 
-  requisition->width = socket->request_width;
-  requisition->height = socket->request_height;
+  requisition->width = MAX (socket->request_width, 1);
+  requisition->height = MAX (socket->request_height, 1);
 }
 
 static void

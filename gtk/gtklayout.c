@@ -54,6 +54,7 @@ struct _GtkLayoutChild {
 static void     gtk_layout_class_init         (GtkLayoutClass *class);
 static void     gtk_layout_init               (GtkLayout      *layout);
 
+static void     gtk_layout_finalize           (GtkObject      *object);
 static void     gtk_layout_realize            (GtkWidget      *widget);
 static void     gtk_layout_unrealize          (GtkWidget      *widget);
 static void     gtk_layout_map                (GtkWidget      *widget);
@@ -97,9 +98,6 @@ static void     gtk_layout_expose_area        (GtkLayout      *layout,
 					       gint            height);
 static void     gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
 					       GtkLayout      *layout);
-static GdkFilterReturn gtk_layout_filter      (GdkXEvent      *gdk_xevent,
-					       GdkEvent       *event,
-					       gpointer        data);
 static GdkFilterReturn gtk_layout_main_filter (GdkXEvent      *gdk_xevent,
 					       GdkEvent       *event,
 					       gpointer        data);
@@ -199,6 +197,17 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
     gtk_layout_adjustment_changed (NULL, layout);
 }
 
+static void
+gtk_layout_finalize (GtkObject *object)
+{
+  GtkLayout *layout = GTK_LAYOUT (object);
+
+  gtk_object_unref (GTK_OBJECT (layout->hadjustment));
+  gtk_object_unref (GTK_OBJECT (layout->vadjustment));
+
+  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+}
+
 void           
 gtk_layout_set_hadjustment (GtkLayout     *layout,
 			    GtkAdjustment *adjustment)
@@ -249,19 +258,16 @@ gtk_layout_put (GtkLayout     *layout,
   if (!IS_ONSCREEN (x, y))
     GTK_PRIVATE_SET_FLAG (child_widget, GTK_IS_OFFSCREEN);
 
-  if (GTK_WIDGET_VISIBLE (layout))
+  if (GTK_WIDGET_REALIZED (layout))
+    gtk_widget_realize (child_widget);
+    
+  if (GTK_WIDGET_VISIBLE (layout) && GTK_WIDGET_VISIBLE (child_widget))
     {
-      if (GTK_WIDGET_REALIZED (layout) &&
-	  !GTK_WIDGET_REALIZED (child_widget))
-	gtk_widget_realize (child_widget);
-      
-      if (GTK_WIDGET_MAPPED (layout) &&
-	  !GTK_WIDGET_MAPPED (child_widget))
+      if (GTK_WIDGET_MAPPED (layout))
 	gtk_widget_map (child_widget);
-    }
 
-  if (GTK_WIDGET_VISIBLE (child_widget) && GTK_WIDGET_VISIBLE (layout))
-    gtk_widget_queue_resize (child_widget);
+      gtk_widget_queue_resize (child_widget);
+    }
 }
 
 void           
@@ -375,6 +381,8 @@ gtk_layout_class_init (GtkLayoutClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
+  object_class->finalize = gtk_layout_finalize;
+
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
@@ -383,6 +391,11 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->draw = gtk_layout_draw;
   widget_class->expose_event = gtk_layout_expose;
 
+  container_class->remove = gtk_layout_remove;
+  container_class->forall = gtk_layout_forall;
+
+  class->set_scroll_adjustments = gtk_layout_set_adjustments;
+
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
@@ -390,11 +403,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
 		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
-
-  container_class->remove = gtk_layout_remove;
-  container_class->forall = gtk_layout_forall;
-
-  class->set_scroll_adjustments = gtk_layout_set_adjustments;
 }
 
 static void
@@ -465,7 +473,7 @@ gtk_layout_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, layout->bin_window, GTK_STATE_NORMAL);
 
   gdk_window_add_filter (widget->window, gtk_layout_main_filter, layout);
-  gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);
+  /*   gdk_window_add_filter (layout->bin_window, gtk_layout_filter, layout);*/
 
   /* XXX: If we ever get multiple displays for GTK+, then gravity_works
    *      will have to become a widget member. Right now we just
@@ -695,14 +703,14 @@ gtk_layout_remove (GtkContainer *container,
 
   if (tmp_list)
     {
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
+
       gtk_widget_unparent (widget);
 
       layout->children = g_list_remove_link (layout->children, tmp_list);
       g_list_free_1 (tmp_list);
       g_free (child);
     }
-
-  GTK_PRIVATE_UNSET_FLAG (widget, GTK_IS_OFFSCREEN);
 }
 
 static void
@@ -1065,15 +1073,39 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
       GdkEvent event;
       GtkWidget *event_widget;
 
-      if ((xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window)) &&
-	  (gtk_layout_filter (&xevent, &event, layout) == GDK_FILTER_REMOVE))
-	continue;
-      
-      if (xevent.type == Expose)
+      switch (xevent.type)
 	{
-	  event.expose.window = gdk_window_lookup (xevent.xany.window);
-	  gdk_window_get_user_data (event.expose.window, 
-				    (gpointer *)&event_widget);
+	case Expose:
+
+	  if (xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window))
+	    {
+	      /* If the window is unobscured, then we've exposed the
+	       * regions with the following serials already, so we
+	       * can throw out the expose events.
+	       */
+	      if (layout->visibility == GDK_VISIBILITY_UNOBSCURED &&
+		  (((dx > 0 || dy > 0) && 
+		    xevent.xexpose.serial == layout->configure_serial) ||
+		   ((dx < 0 || dy < 0) && 
+		    xevent.xexpose.serial == layout->configure_serial + 1)))
+		continue;
+	      /* The following expose was generated while the origin was
+	       * different from the current origin, so we need to offset it.
+	       */
+	      else if (xevent.xexpose.serial == layout->configure_serial)
+		{
+		  xevent.xexpose.x += layout->scroll_x;
+		  xevent.xexpose.y += layout->scroll_y;
+		}
+	      event.expose.window = layout->bin_window;
+	      event_widget = widget;
+	    }
+	  else
+	    {
+	      event.expose.window = gdk_window_lookup (xevent.xany.window);
+	      gdk_window_get_user_data (event.expose.window, 
+					(gpointer *)&event_widget);
+	    }
 
 	  if (event_widget)
 	    {
@@ -1088,6 +1120,17 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 	      gtk_widget_event (event_widget, &event);
 	      gdk_window_unref (event.expose.window);
 	    }
+	  break;
+
+ 	case ConfigureNotify:
+ 	  if (xevent.xany.window == GDK_WINDOW_XWINDOW (layout->bin_window) &&
+ 	      (xevent.xconfigure.x != 0 || xevent.xconfigure.y != 0))
+ 	    {
+ 	      layout->configure_serial = xevent.xconfigure.serial;
+ 	      layout->scroll_x = xevent.xconfigure.x;
+ 	      layout->scroll_y = xevent.xconfigure.y;
+ 	    }
+ 	  break;
 	}
     }
 #elif defined (GDK_WINDOWING_WIN32)
@@ -1095,9 +1138,10 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
 #endif
 }
 
+#if 0
 /* The main event filter. Actually, we probably don't really need
- * to install this as a filter at all, since we are calling it
- * directly above in the expose-handling hack. But in case scrollbars
+ * this filter at all, since we are calling it directly above in the
+ * expose-handling hack. But in case scrollbars
  * are fixed up in some manner...
  *
  * This routine identifies expose events that are generated when
@@ -1150,6 +1194,7 @@ gtk_layout_filter (GdkXEvent *gdk_xevent,
   
   return GDK_FILTER_CONTINUE;
 }
+#endif 0
 
 /* Although GDK does have a GDK_VISIBILITY_NOTIFY event,
  * there is no corresponding event in GTK, so we have

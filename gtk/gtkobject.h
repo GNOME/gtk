@@ -243,6 +243,14 @@ void gtk_object_destroy	  (GtkObject *object);
 void	gtk_object_getv		(GtkObject	*object,
 				 guint		n_args,
 				 GtkArg		*args);
+/* gtk_object_get() sets the variable values pointed to by the adresses
+ * passed after the argument names according to the arguments value.
+ * if GTK_FUNDAMENTAL_TYPE (arg->type) == GTK_TYPE_STRING, it's
+ * the callers response to do a g_free (retrived_value);
+ */
+void	gtk_object_get		(GtkObject	*object,
+				 const gchar	*first_arg_name,
+				 ...);
 
 /* gtk_object_set() takes a variable argument list of the form:
  * (..., gchar *arg_name, ARG_VALUES, [repeatedly name/value pairs,] NULL)

@@ -26,9 +26,20 @@
 
 #include "gtkpaned.h"
 
+enum {
+  ARG_0,
+  ARG_HANDLE_SIZE,
+  ARG_GUTTER_SIZE
+};
 
 static void gtk_paned_class_init (GtkPanedClass    *klass);
 static void gtk_paned_init       (GtkPaned         *paned);
+static void gtk_paned_set_arg	 (GtkObject        *object,
+				  GtkArg           *arg,
+				  guint             arg_id);
+static void gtk_paned_get_arg	 (GtkObject        *object,
+				  GtkArg           *arg,
+				  guint             arg_id);
 static void gtk_paned_realize    (GtkWidget *widget);
 static void gtk_paned_map        (GtkWidget      *widget);
 static void gtk_paned_unmap      (GtkWidget      *widget);
@@ -87,6 +98,9 @@ gtk_paned_class_init (GtkPanedClass *class)
   
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
   
+  object_class->set_arg = gtk_paned_set_arg;
+  object_class->get_arg = gtk_paned_get_arg;
+
   widget_class->realize = gtk_paned_realize;
   widget_class->map = gtk_paned_map;
   widget_class->unmap = gtk_paned_unmap;
@@ -97,6 +111,11 @@ gtk_paned_class_init (GtkPanedClass *class)
   container_class->remove = gtk_paned_remove;
   container_class->forall = gtk_paned_forall;
   container_class->child_type = gtk_paned_child_type;
+
+  gtk_object_add_arg_type ("GtkPaned::handle_size", GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE, ARG_HANDLE_SIZE);
+  gtk_object_add_arg_type ("GtkPaned::gutter_size", GTK_TYPE_UINT,
+			   GTK_ARG_READWRITE, ARG_GUTTER_SIZE);
 }
 
 static GtkType
@@ -128,6 +147,44 @@ gtk_paned_init (GtkPaned *paned)
   paned->handle_ypos = -1;
 }
 
+static void
+gtk_paned_set_arg (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id)
+{
+  GtkPaned *paned = GTK_PANED (object);
+  
+  switch (arg_id)
+    {
+    case ARG_HANDLE_SIZE:
+      gtk_paned_set_handle_size (paned, GTK_VALUE_UINT (*arg));
+      break;
+    case ARG_GUTTER_SIZE:
+      gtk_paned_set_gutter_size (paned, GTK_VALUE_UINT (*arg));
+      break;
+    }
+}
+
+static void
+gtk_paned_get_arg (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id)
+{
+  GtkPaned *paned = GTK_PANED (object);
+  
+  switch (arg_id)
+    {
+    case ARG_HANDLE_SIZE:
+      GTK_VALUE_UINT (*arg) = paned->handle_size;
+      break;
+    case ARG_GUTTER_SIZE:
+      GTK_VALUE_UINT (*arg) = paned->gutter_size;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
+}
 
 static void
 gtk_paned_realize (GtkWidget *widget)
@@ -308,69 +365,63 @@ gtk_paned_add2 (GtkPaned  *paned,
 
 void
 gtk_paned_pack1 (GtkPaned     *paned,
-		 GtkWidget    *widget,
+		 GtkWidget    *child,
 		 gboolean      resize,
 		 gboolean      shrink)
 {
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
   
   if (!paned->child1)
     {
-      gtk_widget_set_parent (widget, GTK_WIDGET (paned));
-      
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
-	  
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
-	    gtk_widget_map (widget);
-	}
-      
-      paned->child1 = widget;
+      paned->child1 = child;
       paned->child1_resize = resize;
       paned->child1_shrink = shrink;
-      
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (paned))
-        gtk_widget_queue_resize (widget);
+
+      gtk_widget_set_parent (child, GTK_WIDGET (paned));
+
+      if (GTK_WIDGET_REALIZED (child->parent))
+	gtk_widget_realize (child);
+
+      if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+	{
+	  if (GTK_WIDGET_MAPPED (child->parent))
+	    gtk_widget_map (child);
+
+	  gtk_widget_queue_resize (child);
+	}
     }
 }
 
 void
 gtk_paned_pack2 (GtkPaned  *paned,
-		 GtkWidget *widget,
+		 GtkWidget *child,
 		 gboolean   resize,
 		 gboolean   shrink)
 {
   g_return_if_fail (paned != NULL);
   g_return_if_fail (GTK_IS_PANED (paned));
-  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
   
   if (!paned->child2)
     {
-      gtk_widget_set_parent (widget, GTK_WIDGET (paned));
-      
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
-	  
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
-	    gtk_widget_map (widget);
-	}
-      
-      paned->child2 = widget;
+      paned->child2 = child;
       paned->child2_resize = resize;
       paned->child2_shrink = shrink;
       
-      if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (paned))
-        gtk_widget_queue_resize (widget);
+      gtk_widget_set_parent (child, GTK_WIDGET (paned));
+
+      if (GTK_WIDGET_REALIZED (child->parent))
+	gtk_widget_realize (child);
+
+      if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+	{
+	  if (GTK_WIDGET_MAPPED (child->parent))
+	    gtk_widget_map (child);
+
+	  gtk_widget_queue_resize (child);
+	}
     }
 }
 
@@ -455,9 +506,13 @@ gtk_paned_set_position    (GtkPaned  *paned,
 
   if (position >= 0)
     {
-      paned->child1_size = CLAMP (position,
-				  paned->min_position,
-				  paned->max_position);
+      /* We don't clamp here - the assumption is that
+       * if the total allocation changes at the same time
+       * as the position, the position set is with reference
+       * to the new total size. If only the position changes,
+       * then clamping will occur in gtk_paned_compute_position()
+       */
+      paned->child1_size = position;
       paned->position_set = TRUE;
     }
   else
@@ -525,13 +580,16 @@ gtk_paned_compute_position (GtkPaned *paned,
     }
   else
     {
-      if (paned->last_allocation < 0)
-	paned->last_allocation = allocation;
-      
-      if (paned->child1_resize && !paned->child2_resize)
-	paned->child1_size += (allocation - paned->last_allocation);
-      else if (!(!paned->child1_resize && paned->child2_resize))
-	paned->child1_size = allocation * ((gdouble)paned->child1_size / (paned->last_allocation));
+      /* If the position was set before the initial allocation.
+       * (paned->last_allocation < 0) just clamp it and leave it.
+       */
+      if (paned->last_allocation >= 0)
+	{
+	  if (paned->child1_resize && !paned->child2_resize)
+	    paned->child1_size += (allocation - paned->last_allocation);
+	  else if (!(!paned->child1_resize && paned->child2_resize))
+	    paned->child1_size = allocation * ((gdouble)paned->child1_size / (paned->last_allocation));
+	}
     }
 
   paned->child1_size = CLAMP (paned->child1_size,

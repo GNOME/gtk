@@ -74,16 +74,49 @@ gtk_check_menu_item_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      check_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (), &check_menu_item_info);
+      check_menu_item_type = gtk_type_unique (GTK_TYPE_MENU_ITEM, &check_menu_item_info);
     }
 
   return check_menu_item_type;
 }
 
+static void
+gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
+{
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkMenuItemClass *menu_item_class;
+  
+  object_class = (GtkObjectClass*) klass;
+  widget_class = (GtkWidgetClass*) klass;
+  menu_item_class = (GtkMenuItemClass*) klass;
+  
+  parent_class = gtk_type_class (GTK_TYPE_MENU_ITEM);
+  
+  widget_class->draw = gtk_check_menu_item_draw;
+  widget_class->expose_event = gtk_check_menu_item_expose;
+  
+  menu_item_class->activate = gtk_check_menu_item_activate;
+  menu_item_class->toggle_size = 12;
+  menu_item_class->hide_on_activate = FALSE;
+  
+  klass->toggled = NULL;
+  klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
+
+  check_menu_item_signals[TOGGLED] =
+    gtk_signal_new ("toggled",
+                    GTK_RUN_FIRST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
+                    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  gtk_object_class_add_signals (object_class, check_menu_item_signals, LAST_SIGNAL);
+}
+
 GtkWidget*
 gtk_check_menu_item_new (void)
 {
-  return GTK_WIDGET (gtk_type_new (gtk_check_menu_item_get_type ()));
+  return GTK_WIDGET (gtk_type_new (GTK_TYPE_CHECK_MENU_ITEM));
 }
 
 GtkWidget*
@@ -130,41 +163,6 @@ void
 gtk_check_menu_item_toggled (GtkCheckMenuItem *check_menu_item)
 {
   gtk_signal_emit (GTK_OBJECT (check_menu_item), check_menu_item_signals[TOGGLED]);
-}
-
-static void
-gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
-{
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkMenuItemClass *menu_item_class;
-
-  object_class = (GtkObjectClass*) klass;
-  widget_class = (GtkWidgetClass*) klass;
-  menu_item_class = (GtkMenuItemClass*) klass;
-
-  parent_class = gtk_type_class (gtk_menu_item_get_type ());
-
-  check_menu_item_signals[TOGGLED] =
-    gtk_signal_new ("toggled",
-                    GTK_RUN_FIRST,
-                    object_class->type,
-                    GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
-                    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-
-  gtk_object_class_add_signals (object_class, check_menu_item_signals, LAST_SIGNAL);
-
-  widget_class->draw = gtk_check_menu_item_draw;
-  widget_class->expose_event = gtk_check_menu_item_expose;
-
-  menu_item_class->activate = gtk_check_menu_item_activate;
-  menu_item_class->toggle_size = 12;
-
-  menu_item_class->hide_on_activate = FALSE;
-
-  klass->toggled = NULL;
-  klass->draw_indicator = gtk_real_check_menu_item_draw_indicator;
 }
 
 static void

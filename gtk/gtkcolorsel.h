@@ -50,14 +50,17 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_COLOR_SELECTION(obj)          GTK_CHECK_CAST (obj, gtk_color_selection_get_type (), GtkColorSelection)
-#define GTK_COLOR_SELECTION_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_color_selection_get_type (), GtkColorSelectionClass)
-#define GTK_IS_COLOR_SELECTION(obj)       GTK_CHECK_TYPE (obj, gtk_color_selection_get_type ())
+#define GTK_TYPE_COLOR_SELECTION            (gtk_color_selection_get_type ())
+#define GTK_COLOR_SELECTION(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION, GtkColorSelection))
+#define GTK_COLOR_SELECTION_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION, GtkColorSelectionClass))
+#define GTK_IS_COLOR_SELECTION(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION))
+#define GTK_IS_COLOR_SELECTION_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION))
 
-#define GTK_COLOR_SELECTION_DIALOG(obj)          GTK_CHECK_CAST (obj, gtk_color_selection_dialog_get_type (), GtkColorSelectionDialog)
-#define GTK_COLOR_SELECTION_DIALOG_CLASS(klass)  GTK_CHECK_CLASS_CAST (klass, gtk_color_selection_dialog_get_type (), GtkColorSelectionDialogClass)
-#define GTK_IS_COLOR_SELECTION_DIALOG(obj)       GTK_CHECK_TYPE (obj, gtk_color_selection_dialog_get_type ())
-
+#define GTK_TYPE_COLOR_SELECTION_DIALOG            (gtk_color_selection_dialog_get_type ())
+#define GTK_COLOR_SELECTION_DIALOG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialog))
+#define GTK_COLOR_SELECTION_DIALOG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG, GtkColorSelectionDialogClass))
+#define GTK_IS_COLOR_SELECTION_DIALOG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_COLOR_SELECTION_DIALOG))
+#define GTK_IS_COLOR_SELECTION_DIALOG_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_COLOR_SELECTION_DIALOG))
 
 typedef struct _GtkColorSelection             GtkColorSelection;
 typedef struct _GtkColorSelectionClass        GtkColorSelectionClass;
@@ -140,7 +143,7 @@ void       gtk_color_selection_get_color         (GtkColorSelection     *colorse
 
 /* ColorSelectionDialog */
 
-guint      gtk_color_selection_dialog_get_type   (void);
+GtkType    gtk_color_selection_dialog_get_type   (void);
 
 GtkWidget* gtk_color_selection_dialog_new        (const gchar *title);
 

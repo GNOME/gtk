@@ -257,6 +257,11 @@ gtk_tips_query_destroy (GtkObject	*object)
 
   gtk_tips_query_set_caller (tips_query, NULL);
 
+  g_free (tips_query->label_inactive);
+  tips_query->label_inactive = NULL;
+  g_free (tips_query->label_no_tip);
+  tips_query->label_no_tip = NULL;
+
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }

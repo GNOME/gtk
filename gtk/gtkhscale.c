@@ -209,8 +209,8 @@ gtk_hscale_realize (GtkWidget *widget)
   
   gtk_hscale_pos_trough (GTK_HSCALE (widget), &x, &y, &w, &h);
 
-  attributes.x = x + widget->allocation.x;
-  attributes.y = y + widget->allocation.y;
+  attributes.x = x;
+  attributes.y = y;
   attributes.width = w;
   attributes.height = h;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -370,8 +370,7 @@ gtk_hscale_size_allocate (GtkWidget     *widget,
       gtk_hscale_pos_trough (GTK_HSCALE (widget), &x, &y, &width, &height);
       
       gdk_window_move_resize (range->trough, 
-                              x + widget->allocation.x, 
-                              y + widget->allocation.y, width, height);
+                              x, y, width, height);
       gtk_range_slider_update (GTK_RANGE (widget));
     }
 }
@@ -429,6 +428,9 @@ gtk_hscale_pos_trough (GtkHScale *hscale,
     }
   *x += 1;
   *w -= 2;
+  
+  *x += widget->allocation.x;
+  *y += widget->allocation.y;
 }
 
 static void

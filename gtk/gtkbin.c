@@ -167,10 +167,13 @@ gtk_bin_draw (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_BIN (widget));
 
   bin = GTK_BIN (widget);
-  
-  if (bin->child && GTK_WIDGET_VISIBLE (bin->child) &&
-      gtk_widget_intersect (bin->child, area, &child_area))
-    gtk_widget_draw (bin->child, &child_area);
+
+  if (GTK_WIDGET_DRAWABLE (bin))
+    {
+      if (bin->child && GTK_WIDGET_DRAWABLE (bin->child) &&
+	  gtk_widget_intersect (bin->child, area, &child_area))
+	gtk_widget_draw (bin->child, &child_area);
+    }
 }
 
 static gint
@@ -189,7 +192,7 @@ gtk_bin_expose (GtkWidget      *widget,
       bin = GTK_BIN (widget);
 
       child_event = *event;
-      if (bin->child &&
+      if (bin->child && GTK_WIDGET_DRAWABLE (bin->child) &&
 	  GTK_WIDGET_NO_WINDOW (bin->child) &&
 	  gtk_widget_intersect (bin->child, &event->area, &child_event.area))
 	gtk_widget_event (bin->child, (GdkEvent*) &child_event);
@@ -216,19 +219,16 @@ gtk_bin_add (GtkContainer *container,
   gtk_widget_set_parent (child, GTK_WIDGET (bin));
   bin->child = child;
 
-  if (GTK_WIDGET_VISIBLE (child->parent))
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
     {
-      if (GTK_WIDGET_REALIZED (child->parent) &&
-	  !GTK_WIDGET_REALIZED (child))
-	gtk_widget_realize (child);
-      
-      if (GTK_WIDGET_MAPPED (child->parent) &&
-	  !GTK_WIDGET_MAPPED (child))
+      if (GTK_WIDGET_MAPPED (child->parent))
 	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
     }
-  
-  if (GTK_WIDGET_VISIBLE (child) && GTK_WIDGET_VISIBLE (container))
-    gtk_widget_queue_resize (child);
 }
 
 static void

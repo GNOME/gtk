@@ -60,6 +60,7 @@
 typedef struct _GtkRcSet    GtkRcSet;
 typedef struct _GtkRcNode   GtkRcNode;
 typedef struct _GtkRcFile   GtkRcFile;
+typedef struct _GtkRcStylePrivate  GtkRcStylePrivate;
 
 struct _GtkRcSet
 {
@@ -73,6 +74,15 @@ struct _GtkRcFile
   gchar *name;
   gchar *canonical_name;
   gboolean reload;
+};
+
+struct _GtkRcStylePrivate
+{
+  GtkRcStyle style;
+
+  guint ref_count;
+  /* list of RC style lists including this RC style */
+  GSList *rc_style_lists;
 };
 
 static guint	   gtk_rc_style_hash		   (const char   *name);
@@ -124,7 +134,6 @@ static void        gtk_rc_clear_hash_node          (gpointer   key,
 static void        gtk_rc_clear_styles               (void);
 static void        gtk_rc_append_default_pixmap_path (void);
 static void        gtk_rc_append_default_module_path (void);
-static void        gtk_rc_append_pixmap_path         (gchar *dir);
 static void        gtk_rc_add_initial_default_files  (void);
 
 
@@ -219,6 +228,11 @@ static gboolean gtk_rc_auto_parse = TRUE;
 static gchar *pixmap_path[GTK_RC_MAX_PIXMAP_PATHS];
 #define GTK_RC_MAX_MODULE_PATHS 128
 static gchar *module_path[GTK_RC_MAX_MODULE_PATHS];
+
+/* A stack of directories for RC files we are parsing currently.
+ * these are implicitely added to the end of PIXMAP_PATHS
+ */
+GSList *rc_dir_stack = NULL;
 
 /* The files we have parsed, to reread later if necessary */
 GSList *rc_files = NULL;
@@ -316,18 +330,6 @@ gtk_rc_append_default_pixmap_path(void)
       return;
     }
   pixmap_path[n++] = path;
-  pixmap_path[n] = NULL;
-}
-
-static void
-gtk_rc_append_pixmap_path(gchar *dir)
-{
-  gint n;
-
-  for (n = 0; pixmap_path[n]; n++) ;
-  if (n >= GTK_RC_MAX_MODULE_PATHS - 1)
-    return;
-  pixmap_path[n++] = g_strdup(dir);
   pixmap_path[n] = NULL;
 }
 
@@ -459,55 +461,126 @@ gtk_rc_get_default_files (void)
   return gtk_rc_default_files;
 }
 
+ /* The following routine is based on _nl_normalize_codeset from
+  * the GNU C library. Contributed by
+  *
+  * Contributed by Ulrich Drepper <drepper@gnu.ai.mit.edu>, 1995.
+  * Copyright (C) 1995, 1996, 1997, 1998, 1999 Free Software Foundation, Inc.
+  * 
+  * Normalize codeset name.  There is no standard for the codeset
+  * names.  Normalization allows the user to use any of the common
+  * names.
+  */
+ static char *
+ _gtk_normalize_codeset (const char *codeset, int name_len)
+ {
+   int len = 0;
+   int only_digit = 1;
+   char *retval;
+   char *wp;
+   int cnt;
+ 
+   for (cnt = 0; cnt < name_len; ++cnt)
+     if (isalnum (codeset[cnt]))
+       {
+ 	++len;
+ 
+ 	if (isalpha (codeset[cnt]))
+ 	  only_digit = 0;
+       }
+ 
+   retval = g_malloc ((only_digit ? 3 : 0) + len + 1);
+ 
+   if (only_digit)
+     {
+       strcpy (retval, "iso");
+       wp = retval + 3;
+     }
+   else
+     wp = retval;
+   
+   for (cnt = 0; cnt < name_len; ++cnt)
+     if (isalpha (codeset[cnt]))
+       *wp++ = isupper(codeset[cnt]) ? tolower (codeset[cnt]) : codeset[cnt];
+     else if (isdigit (codeset[cnt]))
+       *wp++ = codeset[cnt];
+   
+   *wp = '\0';
+ 
+   return retval;
+ }
+ 
 void
 gtk_rc_init (void)
 {
-  gchar *locale_suffixes[3];
-  gint n_locale_suffixes = 0;
+  static gchar *locale_suffixes[3];
+  static gint n_locale_suffixes = 0;
+
   gint i, j;
-#ifdef G_OS_WIN32
-  char *locale = g_win32_getlocale ();
-#else
-#ifdef HAVE_LC_MESSAGES
-  char *locale = setlocale (LC_MESSAGES, NULL);
-#else
-  char *locale = setlocale (LC_CTYPE, NULL);
-#endif
-#endif
-  guint length;
-  char *p;
 
-  rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
-				  (GCompareFunc) gtk_rc_style_compare);
-  pixmap_path[0] = NULL;
-  module_path[0] = NULL;
-  gtk_rc_append_default_pixmap_path();
-  gtk_rc_append_default_module_path();
+  static gboolean initted = FALSE;
 
-  gtk_rc_add_initial_default_files ();
-
-  if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+  if (!initted)
     {
-      /* Determine locale-specific suffixes for RC files
-       */
-      p = strchr (locale, '@');
-      length = p ? (p -locale) : strlen (locale);
-      
-      p = strchr (locale, '.');
-      if (p)
-	{
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
-	  length = p - locale;
-	}
-      
-      p = strchr (locale, '_');
-      if (p)
-	{
-	  locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
-	  length = p - locale;
-	}
+      gint length;
+      gchar *locale;
+      gchar *p;
 
-      locale_suffixes[n_locale_suffixes++] = g_strndup (locale, length);
+#ifdef G_OS_WIN32      
+      locale = g_win32_getlocale ();
+#else      
+      locale = setlocale (LC_CTYPE, NULL);
+#endif      
+      
+      initted = TRUE;
+
+      pixmap_path[0] = NULL;
+      module_path[0] = NULL;
+      gtk_rc_append_default_pixmap_path();
+      gtk_rc_append_default_module_path();
+      
+      gtk_rc_add_initial_default_files ();
+
+      if (strcmp (locale, "C") && strcmp (locale, "POSIX"))
+	{
+	  /* Determine locale-specific suffixes for RC files
+	   *
+	   * We normalize the charset into a standard form,
+	   * which has all '-' and '_' characters removed,
+	   * and is lowercase.
+	   */
+	  gchar *normalized_locale;
+
+	  p = strchr (locale, '@');
+	  length = p ? (p -locale) : strlen (locale);
+
+	  p = strchr (locale, '.');
+	  if (p)
+	    {
+	      gchar *tmp1 = g_strndup (locale, p - locale + 1);
+	      gchar *tmp2 = _gtk_normalize_codeset (p + 1, length - (p - locale + 1));
+	      
+	      normalized_locale = g_strconcat (tmp1, tmp2, NULL);
+	      g_free (tmp1);
+	      g_free (tmp2);
+						 
+	      locale_suffixes[n_locale_suffixes++] = g_strdup (normalized_locale);
+	      length = p - locale;
+	    }
+	  else
+	    normalized_locale = g_strndup (locale, length);
+	  
+	  p = strchr (normalized_locale, '_');
+	  if (p)
+	    {
+	      locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
+	      length = p - normalized_locale;
+	    }
+	  
+	  locale_suffixes[n_locale_suffixes++] = g_strndup (normalized_locale, length);
+
+	  g_free (normalized_locale);
+	}
     }
   
   i = 0;
@@ -529,7 +602,7 @@ gtk_rc_init (void)
       gtk_rc_parse (gtk_rc_default_files[i]);
       i++;
     }
- }
+}
 
 void
 gtk_rc_parse_string (const gchar *rc_string)
@@ -595,6 +668,7 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
   if (!lstat (rc_file->canonical_name, &statbuf))
     {
       gint fd;
+      GSList *tmp_list;
 
       rc_file->mtime = statbuf.st_mtime;
 
@@ -602,19 +676,18 @@ gtk_rc_parse_file (const gchar *filename, gboolean reload)
       if (fd < 0)
 	return;
 
-	{
-	  gint i;
-	  gchar *dir;
-	  
-	  dir = g_strdup(rc_file->canonical_name);
-	  for (i = strlen(dir) - 1; (i >= 0) && (dir[i] != G_DIR_SEPARATOR); i--)
-	    dir[i] = 0;
-	  if (i >= 0 && dir[i] == G_DIR_SEPARATOR)
-	    dir[i] = 0;
-	  gtk_rc_append_pixmap_path(dir);
-	  g_free(dir);
-	}
+      /* Temporarily push directory name for this file on
+       * a stack of directory names while parsing it
+       */
+      rc_dir_stack = g_slist_prepend (rc_dir_stack,
+ 				      g_dirname (rc_file->canonical_name));
       gtk_rc_parse_any (filename, fd, NULL);
+ 
+      tmp_list = rc_dir_stack;
+      rc_dir_stack = rc_dir_stack->next;
+ 
+      g_free (tmp_list->data);
+      g_slist_free_1 (tmp_list);
 
       close (fd);
     }
@@ -633,12 +706,12 @@ gtk_rc_parse (const gchar *filename)
 GtkRcStyle *
 gtk_rc_style_new              (void)
 {
-  GtkRcStyle *new_style;
+  GtkRcStylePrivate *new_style;
 
-  new_style = g_new0 (GtkRcStyle, 1);
+  new_style = g_new0 (GtkRcStylePrivate, 1);
   new_style->ref_count = 1;
 
-  return new_style;
+  return (GtkRcStyle *)new_style;
 }
 
 void      
@@ -646,21 +719,62 @@ gtk_rc_style_ref (GtkRcStyle  *rc_style)
 {
   g_return_if_fail (rc_style != NULL);
 
-  rc_style->ref_count++;
+  ((GtkRcStylePrivate *)rc_style)->ref_count++;
+}
+
+/* Like g_slist_remove, but remove all copies of data */
+static GSList*
+gtk_rc_slist_remove_all (GSList   *list,
+			 gpointer  data)
+{
+  GSList *tmp;
+  GSList *prev;
+
+  prev = NULL;
+  tmp = list;
+
+  while (tmp)
+    {
+      if (tmp->data == data)
+	{
+	  if (list == tmp)
+	    list = list->next;
+
+	  if (prev) 
+	    prev->next = tmp->next;
+
+	  g_slist_free_1 (tmp);
+
+	  if (prev)
+	    tmp = prev->next;
+	  else
+	    tmp = list;
+	}
+      else
+	{
+	  prev = tmp;
+	  tmp = tmp->next;
+	}
+    }
+
+  return list;
 }
 
 void      
 gtk_rc_style_unref (GtkRcStyle  *rc_style)
 {
+  GtkRcStylePrivate *private = (GtkRcStylePrivate *)rc_style;
   gint i;
 
   g_return_if_fail (rc_style != NULL);
-  g_return_if_fail (rc_style->ref_count > 0);
+  g_return_if_fail (private->ref_count > 0);
 
-  rc_style->ref_count--;
+  private->ref_count--;
 
-  if (rc_style->ref_count == 0)
+  if (private->ref_count == 0)
     {
+      GSList *tmp_list1, *tmp_list2;
+	
       if (rc_style->engine)
 	{
 	  rc_style->engine->destroy_rc_style (rc_style);
@@ -678,16 +792,42 @@ gtk_rc_style_unref (GtkRcStyle  *rc_style)
 	if (rc_style->bg_pixmap_name[i])
 	  g_free (rc_style->bg_pixmap_name[i]);
       
-      g_free (rc_style);
-    }
-}
+      /* Now remove all references to this rc_style from
+       * realized_style_ht
+       */
+      tmp_list1 = private->rc_style_lists;
+      while (tmp_list1)
+	{
+	  GSList *rc_styles = tmp_list1->data;
+	  GtkStyle *style = g_hash_table_lookup (realized_style_ht, rc_styles);
+	  gtk_style_unref (style);
 
-static void
-gtk_rc_clear_realized_node (gpointer key,
-			    gpointer data,
-			    gpointer user_data)
-{
-  gtk_style_unref (data);
+	  /* Remove the list of styles from the other rc_styles
+	   * in the list
+	   */
+	  tmp_list2 = rc_styles;
+	  while (tmp_list2)
+	    {
+	      GtkRcStylePrivate *other_style = tmp_list2->data;
+
+	      if (other_style != private)
+		other_style->rc_style_lists =
+		  gtk_rc_slist_remove_all (other_style->rc_style_lists, rc_styles);
+		  
+	      tmp_list2 = tmp_list2->next;
+	    }
+
+	  /* And from the hash table itself
+	   */
+	  g_hash_table_remove (realized_style_ht, rc_styles);
+	  g_slist_free (rc_styles);
+
+	  tmp_list1 = tmp_list1->next;
+	}
+      g_slist_free (private->rc_style_lists);
+
+      g_free (private);
+    }
 }
 
 static void
@@ -725,13 +865,6 @@ gtk_rc_clear_styles (void)
       rc_style_ht = NULL;
     }
 
-  if (realized_style_ht)
-    {
-      g_hash_table_foreach (realized_style_ht, gtk_rc_clear_realized_node, NULL);
-      g_hash_table_destroy (realized_style_ht);
-      realized_style_ht = NULL;
-    }
-
   gtk_rc_free_rc_sets (gtk_rc_sets_widget);
   g_slist_free (gtk_rc_sets_widget);
   gtk_rc_sets_widget = NULL;
@@ -743,8 +876,6 @@ gtk_rc_clear_styles (void)
   gtk_rc_free_rc_sets (gtk_rc_sets_class);
   g_slist_free (gtk_rc_sets_class);
   gtk_rc_sets_class = NULL;
-
-  gtk_rc_init ();
 }
 
 gboolean
@@ -1081,11 +1212,10 @@ gtk_rc_style_compare (const char *a,
 static GtkRcStyle*
 gtk_rc_style_find (const char *name)
 {
-  GtkRcStyle *rc_style;
-  
-  rc_style = g_hash_table_lookup (rc_style_ht, (gpointer) name);
-  
-  return rc_style;
+  if (rc_style_ht)
+    return g_hash_table_lookup (rc_style_ht, (gpointer) name);
+  else
+    return NULL;
 }
 
 /* Assumes ownership of rc_style */
@@ -1148,7 +1278,6 @@ gtk_rc_style_init (GSList *rc_styles)
   gint i;
 
   GtkStyle *style = NULL;
-  GtkRcStyle *proto_style;
 
   if (!realized_style_ht)
     realized_style_ht = g_hash_table_new ((GHashFunc)gtk_rc_styles_hash,
@@ -1158,13 +1287,16 @@ gtk_rc_style_init (GSList *rc_styles)
 
   if (!style)
     {
-      GSList *tmp_styles = rc_styles;
+      GtkRcStyle *proto_style;
+      GSList *tmp_styles;
       
       proto_style = gtk_rc_style_new ();
 
+      tmp_styles = rc_styles;
       while (tmp_styles)
 	{
 	  GtkRcStyle *rc_style = tmp_styles->data;
+	  GtkRcStylePrivate *rc_style_private;
 
 	  for (i=0; i<5; i++)
 	    {
@@ -1212,6 +1344,12 @@ gtk_rc_style_init (GSList *rc_styles)
 	      (proto_style->engine == rc_style->engine))
 	    proto_style->engine->merge_rc_style (proto_style, rc_style);
 
+	  /* Point from each rc_style to the list of styles */
+
+	  rc_style_private = (GtkRcStylePrivate *)rc_style;
+	  if (!g_slist_find (rc_style_private->rc_style_lists, rc_styles))
+	    rc_style_private->rc_style_lists = g_slist_prepend (rc_style_private->rc_style_lists, rc_styles);
+
 	  tmp_styles = tmp_styles->next;
 	}
 
@@ -1227,6 +1365,8 @@ gtk_rc_style_init (GSList *rc_styles)
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
     }
+  else
+    g_slist_free (rc_styles);
 
   return style;
 }
@@ -1301,7 +1441,7 @@ gtk_rc_parse_style (GScanner *scanner)
     return G_TOKEN_STRING;
   
   insert = FALSE;
-  rc_style = g_hash_table_lookup (rc_style_ht, scanner->value.v_string);
+  rc_style = gtk_rc_style_find (scanner->value.v_string);
   
   if (!rc_style)
     {
@@ -1333,7 +1473,7 @@ gtk_rc_parse_style (GScanner *scanner)
 	  return G_TOKEN_STRING;
 	}
       
-      parent_style = g_hash_table_lookup (rc_style_ht, scanner->value.v_string);
+      parent_style = gtk_rc_style_find (scanner->value.v_string);
       if (parent_style)
 	{
 	  for (i = 0; i < 5; i++)
@@ -1449,7 +1589,13 @@ gtk_rc_parse_style (GScanner *scanner)
     }
   
   if (insert)
-    g_hash_table_insert (rc_style_ht, rc_style->name, rc_style);
+    {
+      if (!rc_style_ht)
+	rc_style_ht = g_hash_table_new ((GHashFunc) gtk_rc_style_hash,
+					(GCompareFunc) gtk_rc_style_compare);
+      
+      g_hash_table_insert (rc_style_ht, rc_style->name, rc_style);
+    }
   
   return G_TOKEN_NONE;
 }
@@ -1586,29 +1732,51 @@ gtk_rc_parse_bg_pixmap (GScanner   *scanner,
   return G_TOKEN_NONE;
 }
 
+static gchar*
+gtk_rc_check_pixmap_dir (const gchar *dir, const gchar *pixmap_file)
+{
+  gchar *buf;
+  gint fd;
+
+  buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s", dir, pixmap_file);
+  
+  fd = open (buf, O_RDONLY);
+  if (fd >= 0)
+    {
+      close (fd);
+      return buf;
+    }
+   
+  g_free (buf);
+ 
+   return NULL;
+ }
+ 
 gchar*
 gtk_rc_find_pixmap_in_path (GScanner *scanner,
-			    const gchar *pixmap_file)
+  			    const gchar *pixmap_file)
 {
   gint i;
-  gint fd;
-  gchar *buf;
-  
+  gchar *filename;
+  GSList *tmp_list;
+    
   for (i = 0; (i < GTK_RC_MAX_PIXMAP_PATHS) && (pixmap_path[i] != NULL); i++)
     {
-      buf = g_strdup_printf ("%s" G_DIR_SEPARATOR_S "%s",
-			     pixmap_path[i], pixmap_file);
-      
-      fd = open (buf, O_RDONLY);
-      if (fd >= 0)
-	{
-	  close (fd);
-	  return buf;
-	}
-      
-      g_free (buf);
+      filename = gtk_rc_check_pixmap_dir (pixmap_path[i], pixmap_file);
+      if (filename)
+ 	return filename;
     }
-
+ 
+  tmp_list = rc_dir_stack;
+  while (tmp_list)
+    {
+      filename = gtk_rc_check_pixmap_dir (tmp_list->data, pixmap_file);
+      if (filename)
+ 	return filename;
+       
+      tmp_list = tmp_list->next;
+    }
+  
   if (scanner)
     g_warning (_("Unable to locate image file in pixmap_path: \"%s\" line %d"),
 	       pixmap_file, scanner->line);

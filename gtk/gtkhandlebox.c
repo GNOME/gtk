@@ -33,7 +33,9 @@
 
 enum {
   ARG_0,
-  ARG_SHADOW
+  ARG_SHADOW,
+  ARG_HANDLE_POSITION,
+  ARG_SNAP_EDGE
 };
 
 #define DRAG_HANDLE_SIZE 10
@@ -41,8 +43,7 @@ enum {
 #define GHOST_HEIGHT 3
 #define TOLERANCE 5
 
-enum
-{
+enum {
   SIGNAL_CHILD_ATTACHED,
   SIGNAL_CHILD_DETACHED,
   SIGNAL_LAST
@@ -151,7 +152,7 @@ gtk_handle_box_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      handle_box_type = gtk_type_unique (gtk_bin_get_type (), &handle_box_info);
+      handle_box_type = gtk_type_unique (GTK_TYPE_BIN, &handle_box_info);
     }
 
   return handle_box_type;
@@ -168,9 +169,11 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class = (GtkWidgetClass *) class;
   container_class = (GtkContainerClass *) class;
 
-  parent_class = gtk_type_class (gtk_bin_get_type ());
-
+  parent_class = gtk_type_class (GTK_TYPE_BIN);
+  
   gtk_object_add_arg_type ("GtkHandleBox::shadow", GTK_TYPE_SHADOW_TYPE, GTK_ARG_READWRITE, ARG_SHADOW);
+  gtk_object_add_arg_type ("GtkHandleBox::handle_position", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_HANDLE_POSITION);
+  gtk_object_add_arg_type ("GtkHandleBox::snap_edge", GTK_TYPE_POSITION_TYPE, GTK_ARG_READWRITE, ARG_SNAP_EDGE);
 
   object_class->set_arg = gtk_handle_box_set_arg;
   object_class->get_arg = gtk_handle_box_get_arg;
@@ -233,37 +236,43 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
 }
 
 static void
-gtk_handle_box_set_arg (GtkObject      *object,
-			GtkArg         *arg,
-			guint           arg_id)
+gtk_handle_box_set_arg (GtkObject *object,
+			GtkArg    *arg,
+			guint      arg_id)
 {
-  GtkHandleBox *handle_box;
-
-  handle_box = GTK_HANDLE_BOX (object);
+  GtkHandleBox *handle_box = GTK_HANDLE_BOX (object);
 
   switch (arg_id)
     {
     case ARG_SHADOW:
       gtk_handle_box_set_shadow_type (handle_box, GTK_VALUE_ENUM (*arg));
       break;
-    default:
+    case ARG_HANDLE_POSITION:
+      gtk_handle_box_set_handle_position (handle_box, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_SNAP_EDGE:
+      gtk_handle_box_set_snap_edge (handle_box, GTK_VALUE_ENUM (*arg));
       break;
     }
 }
 
 static void
-gtk_handle_box_get_arg (GtkObject      *object,
-			GtkArg         *arg,
-			guint           arg_id)
+gtk_handle_box_get_arg (GtkObject *object,
+			GtkArg    *arg,
+			guint      arg_id)
 {
-  GtkHandleBox *handle_box;
-
-  handle_box = GTK_HANDLE_BOX (object);
-
+  GtkHandleBox *handle_box = GTK_HANDLE_BOX (object);
+  
   switch (arg_id)
     {
     case ARG_SHADOW:
       GTK_VALUE_ENUM (*arg) = handle_box->shadow_type;
+      break;
+    case ARG_HANDLE_POSITION:
+      GTK_VALUE_ENUM (*arg) = handle_box->handle_position;
+      break;
+    case ARG_SNAP_EDGE:
+      GTK_VALUE_ENUM (*arg) = handle_box->snap_edge;
       break;
     default:
       arg->type = GTK_TYPE_INVALID;

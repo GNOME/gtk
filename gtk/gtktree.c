@@ -198,7 +198,7 @@ gtk_tree_append (GtkTree   *tree,
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
   
-  gtk_tree_insert(tree, tree_item, -1);
+  gtk_tree_insert (tree, tree_item, -1);
 }
 
 void
@@ -210,7 +210,7 @@ gtk_tree_prepend (GtkTree   *tree,
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
   
-  gtk_tree_insert(tree, tree_item, 0);
+  gtk_tree_insert (tree, tree_item, 0);
 }
 
 void
@@ -225,74 +225,59 @@ gtk_tree_insert (GtkTree   *tree,
   g_return_if_fail (tree_item != NULL);
   g_return_if_fail (GTK_IS_TREE_ITEM (tree_item));
   
-  /* set parent widget to item */
-  gtk_widget_set_parent (tree_item, GTK_WIDGET (tree));
-  
-  if (GTK_WIDGET_VISIBLE (tree_item->parent))
-    {
-      if (GTK_WIDGET_REALIZED (tree_item->parent) &&
-	  !GTK_WIDGET_REALIZED (tree_item))
-	gtk_widget_realize (tree_item);
-      
-      if (GTK_WIDGET_MAPPED (tree_item->parent) &&
-	  !GTK_WIDGET_MAPPED (tree_item))
-	gtk_widget_map (tree_item);
-    }
-  
   nchildren = g_list_length (tree->children);
   
   if ((position < 0) || (position > nchildren))
     position = nchildren;
   
   if (position == nchildren)
-    {
-      tree->children = g_list_append(tree->children, tree_item);
-    }
+    tree->children = g_list_append (tree->children, tree_item);
   else
+    tree->children = g_list_insert (tree->children, tree_item, position);
+  
+  gtk_widget_set_parent (tree_item, GTK_WIDGET (tree));
+  
+  if (GTK_WIDGET_REALIZED (tree_item->parent))
+    gtk_widget_realize (tree_item);
+
+  if (GTK_WIDGET_VISIBLE (tree_item->parent) && GTK_WIDGET_VISIBLE (tree_item))
     {
-      tree->children = g_list_insert(tree->children, tree_item, position);
+      if (GTK_WIDGET_MAPPED (tree_item->parent))
+	gtk_widget_map (tree_item);
+
+      gtk_widget_queue_resize (tree_item);
     }
-  
-  if (GTK_WIDGET_VISIBLE (tree))
-    gtk_widget_queue_resize (GTK_WIDGET (tree));
-  
 }
 
 static void
 gtk_tree_add (GtkContainer *container,
-	      GtkWidget    *widget)
+	      GtkWidget    *child)
 {
   GtkTree *tree;
   
   g_return_if_fail (container != NULL);
   g_return_if_fail (GTK_IS_TREE (container));
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_TREE_ITEM (widget));
+  g_return_if_fail (GTK_IS_TREE_ITEM (child));
   
   tree = GTK_TREE (container);
   
-  gtk_widget_set_parent (widget, GTK_WIDGET (container));
-  if (GTK_WIDGET_VISIBLE (widget->parent))
-    {
-      if (GTK_WIDGET_REALIZED (widget->parent) &&
-	  !GTK_WIDGET_REALIZED (widget))
-	gtk_widget_realize (widget);
-      
-      if (GTK_WIDGET_MAPPED (widget->parent) &&
-	  !GTK_WIDGET_MAPPED (widget))
-	gtk_widget_map (widget);
-    }
+  tree->children = g_list_append (tree->children, child);
   
-  tree->children = g_list_append (tree->children, widget);
+  gtk_widget_set_parent (child, GTK_WIDGET (container));
+  
+  if (GTK_WIDGET_REALIZED (child->parent))
+    gtk_widget_realize (child);
+
+  if (GTK_WIDGET_VISIBLE (child->parent) && GTK_WIDGET_VISIBLE (child))
+    {
+      if (GTK_WIDGET_MAPPED (child->parent))
+	gtk_widget_map (child);
+
+      gtk_widget_queue_resize (child);
+    }
   
   if (!tree->selection && (tree->selection_mode == GTK_SELECTION_BROWSE))
-    {
-      gtk_tree_select_child (tree, widget);
-    }
-  
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
-    gtk_widget_queue_resize (widget);
-  
+    gtk_tree_select_child (tree, child);
 }
 
 static gint

@@ -37,12 +37,22 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  ARG_0,
+  ARG_SELECTION_MODE
+};
+
 #define SCROLL_TIME  100
 
 /** GtkList Methods **/
 static void gtk_list_class_init	     (GtkListClass   *klass);
 static void gtk_list_init	     (GtkList	     *list);
-
+static void gtk_list_set_arg         (GtkObject      *object,
+				      GtkArg         *arg,
+				      guint           arg_id);
+static void gtk_list_get_arg         (GtkObject      *object,
+				      GtkArg         *arg,
+				      guint           arg_id);
 /** GtkObject Methods **/
 static void gtk_list_shutdown	     (GtkObject	     *object);
 
@@ -230,6 +240,8 @@ gtk_list_class_init (GtkListClass *class)
   gtk_object_class_add_signals (object_class, list_signals, LAST_SIGNAL);
 
   object_class->shutdown = gtk_list_shutdown;
+  object_class->set_arg = gtk_list_set_arg;
+  object_class->get_arg = gtk_list_get_arg;
 
   widget_class->map = gtk_list_map;
   widget_class->unmap = gtk_list_unmap;
@@ -254,6 +266,10 @@ gtk_list_class_init (GtkListClass *class)
   class->selection_changed = NULL;
   class->select_child = gtk_real_list_select_child;
   class->unselect_child = gtk_real_list_unselect_child;
+  
+  gtk_object_add_arg_type ("GtkList::selection_mode",
+			   GTK_TYPE_SELECTION_MODE, GTK_ARG_READWRITE,
+			   ARG_SELECTION_MODE);
 }
 
 static void
@@ -278,6 +294,39 @@ gtk_list_init (GtkList *list)
   list->selection_mode = GTK_SELECTION_SINGLE;
   list->drag_selection = FALSE;
   list->add_mode = FALSE;
+}
+
+static void
+gtk_list_set_arg (GtkObject      *object,
+		  GtkArg         *arg,
+		  guint           arg_id)
+{
+  GtkList *list = GTK_LIST (object);
+  
+  switch (arg_id)
+    {
+    case ARG_SELECTION_MODE:
+      gtk_list_set_selection_mode (list, GTK_VALUE_ENUM (*arg));
+      break;
+    }
+}
+
+static void
+gtk_list_get_arg (GtkObject      *object,
+		  GtkArg         *arg,
+		  guint           arg_id)
+{
+  GtkList *list = GTK_LIST (object);
+  
+  switch (arg_id)
+    {
+    case ARG_SELECTION_MODE: 
+      GTK_VALUE_ENUM (*arg) = list->selection_mode; 
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 GtkWidget*
@@ -1104,15 +1153,16 @@ gtk_list_insert_items (GtkList *list,
       gtk_signal_connect (GTK_OBJECT (widget), "toggle",
 			  GTK_SIGNAL_FUNC (gtk_list_signal_item_toggle),
 			  list);
-      if (GTK_WIDGET_VISIBLE (widget->parent))
-	{
-	  if (GTK_WIDGET_REALIZED (widget->parent) &&
-	      !GTK_WIDGET_REALIZED (widget))
-	    gtk_widget_realize (widget);
 
-	  if (GTK_WIDGET_MAPPED (widget->parent) &&
-	      !GTK_WIDGET_MAPPED (widget))
+      if (GTK_WIDGET_REALIZED (widget->parent))
+	gtk_widget_realize (widget);
+
+      if (GTK_WIDGET_VISIBLE (widget->parent) && GTK_WIDGET_VISIBLE (widget))
+	{
+	  if (GTK_WIDGET_MAPPED (widget->parent))
 	    gtk_widget_map (widget);
+
+	  gtk_widget_queue_resize (widget);
 	}
     }
 
@@ -1155,9 +1205,6 @@ gtk_list_insert_items (GtkList *list,
       widget = list->children->data;
       gtk_list_select_child (list, widget);
     }
-
-  if (GTK_WIDGET_VISIBLE (list))
-    gtk_widget_queue_resize (GTK_WIDGET (list));
 }
 
 void
@@ -2409,19 +2456,14 @@ gtk_list_move_focus_child (GtkList       *list,
 static gint
 gtk_list_horizontal_timeout (GtkWidget *list)
 {
-  gint x, y;
-  GdkEventMotion event;
-  GdkModifierType mask;
+  GdkEventMotion event = { 0 };
 
   GDK_THREADS_ENTER ();
 
   GTK_LIST (list)->htimer = 0;
-  gdk_window_get_pointer (list->window, &x, &y, &mask);
 
-  event.is_hint = 0;
-  event.x = x;
-  event.y = y;
-  event.state = mask;
+  event.type = GDK_MOTION_NOTIFY;
+  event.send_event = TRUE;
 
   gtk_list_motion_notify (list, &event);
 
@@ -2433,20 +2475,14 @@ gtk_list_horizontal_timeout (GtkWidget *list)
 static gint
 gtk_list_vertical_timeout (GtkWidget *list)
 {
-  gint x;
-  gint y;
-  GdkEventMotion event;
-  GdkModifierType mask;
+  GdkEventMotion event = { 0 };
 
   GDK_THREADS_ENTER ();
 
   GTK_LIST (list)->vtimer = 0;
-  gdk_window_get_pointer (list->window, &x, &y, &mask);
 
-  event.is_hint = 0;
-  event.x = x;
-  event.y = y;
-  event.state = mask;
+  event.type = GDK_MOTION_NOTIFY;
+  event.send_event = TRUE;
 
   gtk_list_motion_notify (list, &event);
 

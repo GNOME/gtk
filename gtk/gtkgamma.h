@@ -37,12 +37,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-#define GTK_GAMMA_CURVE(obj) \
-   GTK_CHECK_CAST (obj, gtk_gamma_curve_get_type (), GtkGammaCurve)
-#define GTK_GAMMA_CURVE_CLASS(klass) \
-   GTK_CHECK_CLASS_CAST (klass, gtk_gamma_curve_get_type (), GtkGammaCurveClass)
-#define GTK_IS_GAMMA_CURVE(obj) \
-   GTK_CHECK_TYPE (obj, gtk_gamma_curve_get_type ())
+#define GTK_TYPE_GAMMA_CURVE		(gtk_gamma_curve_get_type ())
+#define GTK_GAMMA_CURVE(obj)		(GTK_CHECK_CAST ((obj), GTK_TYPE_GAMMA_CURVE, GtkGammaCurve))
+#define GTK_GAMMA_CURVE_CLASS(klass)	(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_GAMMA_CURVE, GtkGammaCurveClass))
+#define GTK_IS_GAMMA_CURVE(obj)		(GTK_CHECK_TYPE ((obj), GTK_TYPE_GAMMA_CURVE))
+#define GTK_IS_GAMMA_CURVE_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_GAMMA_CURVE))
 
 
 typedef struct _GtkGammaCurve		GtkGammaCurve;

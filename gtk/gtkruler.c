@@ -26,6 +26,13 @@
 
 #include "gtkruler.h"
 
+enum {
+  ARG_0,
+  ARG_LOWER,
+  ARG_UPPER,
+  ARG_POSITION,
+  ARG_MAX_SIZE
+};
 
 static void gtk_ruler_class_init    (GtkRulerClass  *klass);
 static void gtk_ruler_init          (GtkRuler       *ruler);
@@ -36,7 +43,12 @@ static void gtk_ruler_size_allocate (GtkWidget      *widget,
 static gint gtk_ruler_expose        (GtkWidget      *widget,
 				     GdkEventExpose *event);
 static void gtk_ruler_make_pixmap   (GtkRuler       *ruler);
-
+static void gtk_ruler_set_arg       (GtkObject      *object,
+				     GtkArg         *arg,
+				     guint           arg_id);
+static void gtk_ruler_get_arg       (GtkObject      *object,
+				     GtkArg         *arg,
+				     guint           arg_id);
 
 static GtkWidgetClass *parent_class;
 
@@ -67,7 +79,7 @@ gtk_ruler_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      ruler_type = gtk_type_unique (gtk_widget_get_type (), &ruler_info);
+      ruler_type = gtk_type_unique (GTK_TYPE_WIDGET, &ruler_info);
     }
 
   return ruler_type;
@@ -82,7 +94,10 @@ gtk_ruler_class_init (GtkRulerClass *class)
   object_class = (GtkObjectClass*) class;
   widget_class = (GtkWidgetClass*) class;
 
-  parent_class = gtk_type_class (gtk_widget_get_type ());
+  parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+  
+  object_class->set_arg = gtk_ruler_set_arg;
+  object_class->get_arg = gtk_ruler_get_arg;
 
   widget_class->realize = gtk_ruler_realize;
   widget_class->unrealize = gtk_ruler_unrealize;
@@ -91,6 +106,15 @@ gtk_ruler_class_init (GtkRulerClass *class)
 
   class->draw_ticks = NULL;
   class->draw_pos = NULL;
+
+  gtk_object_add_arg_type ("GtkRuler::lower", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_LOWER);
+  gtk_object_add_arg_type ("GtkRuler::upper", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_UPPER);
+  gtk_object_add_arg_type ("GtkRuler::position", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_POSITION);
+  gtk_object_add_arg_type ("GtkRuler::max_size", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_MAX_SIZE);
 }
 
 static void
@@ -107,6 +131,61 @@ gtk_ruler_init (GtkRuler *ruler)
   ruler->max_size = 0;
 
   gtk_ruler_set_metric (ruler, GTK_PIXELS);
+}
+
+static void
+gtk_ruler_set_arg (GtkObject  *object,
+		   GtkArg     *arg,
+		   guint       arg_id)
+{
+  GtkRuler *ruler = GTK_RULER (object);
+
+  switch (arg_id)
+    {
+    case ARG_LOWER:
+      gtk_ruler_set_range (ruler, GTK_VALUE_FLOAT (*arg), ruler->upper,
+			   ruler->position, ruler->max_size);
+      break;
+    case ARG_UPPER:
+      gtk_ruler_set_range (ruler, ruler->lower, GTK_VALUE_FLOAT (*arg),
+			   ruler->position, ruler->max_size);
+      break;
+    case ARG_POSITION:
+      gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
+			   GTK_VALUE_FLOAT (*arg), ruler->max_size);
+      break;
+    case ARG_MAX_SIZE:
+      gtk_ruler_set_range (ruler, ruler->lower, ruler->upper,
+			   ruler->position,  GTK_VALUE_FLOAT (*arg));
+      break;
+    }
+}
+
+static void
+gtk_ruler_get_arg (GtkObject  *object,
+		   GtkArg     *arg,
+		   guint       arg_id)
+{
+  GtkRuler *ruler = GTK_RULER (object);
+  
+  switch (arg_id)
+    {
+    case ARG_LOWER:
+      GTK_VALUE_FLOAT (*arg) = ruler->lower;
+      break;
+    case ARG_UPPER:
+      GTK_VALUE_FLOAT (*arg) = ruler->upper;
+      break;
+    case ARG_POSITION:
+      GTK_VALUE_FLOAT (*arg) = ruler->position;
+      break;
+    case ARG_MAX_SIZE:
+      GTK_VALUE_FLOAT (*arg) = ruler->max_size;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 void

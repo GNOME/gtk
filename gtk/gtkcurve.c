@@ -46,6 +46,15 @@
 			 GDK_BUTTON_RELEASE_MASK |	\
 			 GDK_BUTTON1_MOTION_MASK)
 
+enum {
+  ARG_0,
+  ARG_CURVE_TYPE,
+  ARG_MIN_X,
+  ARG_MAX_X,
+  ARG_MIN_Y,
+  ARG_MAX_Y
+};
+
 static GtkDrawingAreaClass *parent_class = NULL;
 static guint curve_type_changed_signal = 0;
 
@@ -53,6 +62,12 @@ static guint curve_type_changed_signal = 0;
 /* forward declarations: */
 static void gtk_curve_class_init   (GtkCurveClass *class);
 static void gtk_curve_init         (GtkCurve      *curve);
+static void gtk_curve_set_arg     (GtkObject      *object,
+				   GtkArg         *arg,
+				   guint           arg_id);
+static void gtk_curve_get_arg     (GtkObject      *object,
+				   GtkArg         *arg,
+				   guint           arg_id);
 static void gtk_curve_finalize     (GtkObject     *object);
 static gint gtk_curve_graph_events (GtkWidget     *widget, 
 				    GdkEvent      *event, 
@@ -78,7 +93,7 @@ gtk_curve_get_type (void)
         (GtkClassInitFunc) NULL,
       };
 
-      curve_type = gtk_type_unique (gtk_drawing_area_get_type (), &curve_info);
+      curve_type = gtk_type_unique (GTK_TYPE_DRAWING_AREA, &curve_info);
     }
   return curve_type;
 }
@@ -87,18 +102,31 @@ static void
 gtk_curve_class_init (GtkCurveClass *class)
 {
   GtkObjectClass *object_class;
-
-  parent_class = gtk_type_class (gtk_drawing_area_get_type ());
-
+  
+  parent_class = gtk_type_class (GTK_TYPE_DRAWING_AREA);
+  
   object_class = (GtkObjectClass *) class;
-
+  
+  object_class->set_arg = gtk_curve_set_arg;
+  object_class->get_arg = gtk_curve_get_arg;
+  object_class->finalize = gtk_curve_finalize;
+  
   curve_type_changed_signal =
     gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, object_class->type,
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
 		    gtk_marshal_NONE__NONE, GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, &curve_type_changed_signal, 1);
-
-  object_class->finalize = gtk_curve_finalize;
+  
+  gtk_object_add_arg_type ("GtkCurve::curve_type", GTK_TYPE_CURVE_TYPE,
+			   GTK_ARG_READWRITE, ARG_CURVE_TYPE);
+  gtk_object_add_arg_type ("GtkCurve::min_x", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_MIN_X);
+  gtk_object_add_arg_type ("GtkCurve::max_x", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_MAX_X);
+  gtk_object_add_arg_type ("GtkCurve::min_y", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_MIN_Y);
+  gtk_object_add_arg_type ("GtkCurve::max_y", GTK_TYPE_FLOAT,
+			   GTK_ARG_READWRITE, ARG_MAX_Y);
 }
 
 static void
@@ -128,6 +156,67 @@ gtk_curve_init (GtkCurve *curve)
   gtk_signal_connect (GTK_OBJECT (curve), "event",
 		      (GtkSignalFunc) gtk_curve_graph_events, curve);
   gtk_curve_size_graph (curve);
+}
+
+static void
+gtk_curve_set_arg (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id)
+{
+  GtkCurve *curve = GTK_CURVE (object);
+  
+  switch (arg_id)
+    {
+    case ARG_CURVE_TYPE:
+      gtk_curve_set_curve_type (curve, GTK_VALUE_ENUM (*arg));
+      break;
+    case ARG_MIN_X:
+      gtk_curve_set_range (curve, GTK_VALUE_FLOAT (*arg), curve->max_x,
+			   curve->min_y, curve->max_y);
+      break;
+    case ARG_MAX_X:
+      gtk_curve_set_range (curve, curve->min_x, GTK_VALUE_FLOAT (*arg),
+			   curve->min_y, curve->max_y);
+      break;	
+    case ARG_MIN_Y:
+      gtk_curve_set_range (curve, curve->min_x, curve->max_x,
+			   GTK_VALUE_FLOAT (*arg), curve->max_y);
+      break;
+    case ARG_MAX_Y:
+      gtk_curve_set_range (curve, curve->min_x, curve->max_x,
+			   curve->min_y, GTK_VALUE_FLOAT (*arg));
+      break;
+    }
+}
+
+static void
+gtk_curve_get_arg (GtkObject *object,
+		   GtkArg    *arg,
+		   guint      arg_id)
+{
+  GtkCurve *curve = GTK_CURVE (object);
+
+  switch (arg_id)
+    {
+    case ARG_CURVE_TYPE:
+      GTK_VALUE_ENUM (*arg) = curve->curve_type;
+      break;
+    case ARG_MIN_X:
+      GTK_VALUE_FLOAT (*arg) = curve->min_x;
+      break;
+    case ARG_MAX_X:
+      GTK_VALUE_FLOAT (*arg) = curve->max_x;
+      break;
+    case ARG_MIN_Y:
+      GTK_VALUE_FLOAT (*arg) = curve->min_y;
+      break;
+    case ARG_MAX_Y:
+      GTK_VALUE_FLOAT (*arg) = curve->max_y;
+      break;
+    default:
+      arg->type = GTK_TYPE_INVALID;
+      break;
+    }
 }
 
 static int

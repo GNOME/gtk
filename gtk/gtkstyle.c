@@ -28,10 +28,8 @@
 #include "gtkgc.h"
 #include "gtkrc.h"
 #include "gtkstyle.h"
-#include "gtkthemes.h"
 #include "gtkwidget.h"
 #include "gtkthemes.h"
-#include "gdkprivate.h"
 
 
 #define LIGHTNESS_MULT  1.3
@@ -375,7 +373,7 @@ gtk_style_copy (GtkStyle *style)
   if (style->engine)
     {
       new_style->engine = style->engine;
-      gtk_theme_engine_ref(new_style->engine);
+      gtk_theme_engine_ref (new_style->engine);
       new_style->engine->duplicate_style (new_style, style);
     }
 
@@ -422,7 +420,7 @@ gtk_style_new (void)
   style->attach_count = 0;
   style->colormap = NULL;
   style->depth = -1;
-  style->klass = &default_class;
+  style->klass = (GtkStyleClass *)&default_class;
   
   style->black.red = 0;
   style->black.green = 0;
@@ -478,6 +476,39 @@ gtk_style_new (void)
   return style;
 }
 
+/*************************************************************
+ * gtk_style_attach:
+ *     Attach a style to a window; this process allocates the
+ *     colors and creates the GC's for the style - it specializes
+ *     it to a particular visual and colormap. The process
+ *     may involve the creation of a new style if the style
+ *     has already been attached to a window with a different
+ *     style and colormap.
+ *   arguments:
+ *     style:
+ *     window: 
+ *   results:
+ *     Either the style parameter, or a newly created style.
+ *     If the style is newly created, the style parameter
+ *     will be dereferenced, and the new style will have
+ *     a reference count belonging to the caller.
+ *
+ * FIXME: The sequence - 
+ *    create a style => s1
+ *    attach s1 to v1, c1 => s1
+ *    attach s1 to v2, c2 => s2
+ *    detach s1 from v1, c1
+ *    attach s1 to v2, c2 => s3
+ * results in two separate, unlinked styles s2 and s3 which
+ * are identical and could be shared. To fix this, we would
+ * want to never remove a style from the list of linked
+ * styles as long as as it has a reference count. However, the 
+ * disadvantage of doing it this way means that we would need two 
+ * passes through the linked list when attaching (one to check for 
+ * matching styles, one to look for empty unattached styles - but 
+ * it will almost never be longer than 2 elements.
+ *************************************************************/
+
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
                   GdkWindow *window)
@@ -519,9 +550,17 @@ gtk_style_attach (GtkStyle  *style,
       new_style = gtk_style_duplicate (style);
       gtk_style_init (new_style, colormap, depth);
     }
-  
+
+  /* A style gets a refcount from being attached */
   if (new_style->attach_count == 0)
     gtk_style_ref (new_style);
+
+  /* Another refcount belongs to the parent */
+  if (style != new_style) 
+    {
+      gtk_style_unref (style);
+      gtk_style_ref (new_style);
+    }
   
   new_style->attach_count++;
   
@@ -563,6 +602,7 @@ GtkStyle*
 gtk_style_ref (GtkStyle *style)
 {
   g_return_val_if_fail (style != NULL, NULL);
+  g_return_val_if_fail (style->ref_count > 0, NULL);
   
   style->ref_count += 1;
   return style;
@@ -572,6 +612,7 @@ void
 gtk_style_unref (GtkStyle *style)
 {
   g_return_if_fail (style != NULL);
+  g_return_if_fail (style->ref_count > 0);
   
   style->ref_count -= 1;
   if (style->ref_count == 0)

@@ -422,15 +422,38 @@ gtk_arg_copy (GtkArg         *src_arg,
 }
 
 void
-gtk_arg_free (GtkArg        *arg,
-	      gboolean       free_contents)
+gtk_arg_free (GtkArg  *arg,
+	      gboolean free_contents)
 {
   g_return_if_fail (arg != NULL);
 
-  if (free_contents &&
-      GTK_FUNDAMENTAL_TYPE (arg->type) == GTK_TYPE_STRING)
-    g_free (GTK_VALUE_STRING (*arg));
+  if (free_contents)
+    gtk_arg_reset (arg);
   g_free (arg);
+}
+
+void
+gtk_arg_reset (GtkArg *arg)
+{
+  GtkType fundamental_type;
+
+  g_return_if_fail (arg != NULL);
+
+  fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
+  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST)
+    {
+      fundamental_type = gtk_type_get_varargs_type (fundamental_type);
+      if (!fundamental_type)
+        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
+    }
+
+  if (fundamental_type == GTK_TYPE_STRING)
+    {
+      g_free (GTK_VALUE_STRING (*arg));
+      arg->type = GTK_TYPE_INVALID;
+    }
+  else if (arg->type != GTK_TYPE_INVALID)
+    arg->type = GTK_TYPE_INVALID;
 }
 
 gint
@@ -465,4 +488,196 @@ gtk_arg_info_hash (gconstpointer arg_info)
     }
   
   return h;
+}
+
+gboolean
+gtk_arg_values_equal (const GtkArg *arg1,
+		      const GtkArg *arg2)
+{
+  GtkType fundamental_type;
+  gboolean equal;
+  
+  g_return_val_if_fail (arg1 != NULL, FALSE);
+  g_return_val_if_fail (arg2 != NULL, FALSE);
+  g_return_val_if_fail (GTK_FUNDAMENTAL_TYPE (arg1->type) ==
+			GTK_FUNDAMENTAL_TYPE (arg2->type), FALSE);
+  
+  fundamental_type = GTK_FUNDAMENTAL_TYPE (arg1->type);
+  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST)
+    {
+      fundamental_type = gtk_type_get_varargs_type (fundamental_type);
+      if (!fundamental_type)
+        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg1->type);
+    }
+  
+  switch (fundamental_type)
+    {
+    case GTK_TYPE_INVALID:
+      equal = TRUE;
+      break;
+    case GTK_TYPE_CHAR:
+      equal = GTK_VALUE_CHAR (*arg1) == GTK_VALUE_CHAR (*arg2);
+      break;
+    case GTK_TYPE_BOOL:
+      equal = (GTK_VALUE_BOOL (*arg1) != FALSE) == (GTK_VALUE_BOOL (*arg2) != FALSE);
+      break;
+    case GTK_TYPE_INT:
+      equal = GTK_VALUE_INT (*arg1) == GTK_VALUE_INT (*arg2);
+      break;
+    case GTK_TYPE_UINT:
+      equal = GTK_VALUE_UINT (*arg1) == GTK_VALUE_UINT (*arg2);
+      break;
+    case GTK_TYPE_LONG:
+      equal = GTK_VALUE_LONG (*arg1) == GTK_VALUE_LONG (*arg2);
+      break;
+    case GTK_TYPE_ULONG:
+      equal = GTK_VALUE_ULONG (*arg1) == GTK_VALUE_ULONG (*arg2);
+      break;
+    case GTK_TYPE_FLOAT:
+      equal = GTK_VALUE_FLOAT (*arg1) == GTK_VALUE_FLOAT (*arg2);
+      break;
+    case GTK_TYPE_DOUBLE:
+      equal = GTK_VALUE_DOUBLE (*arg1) == GTK_VALUE_DOUBLE (*arg2);
+      break;
+    case GTK_TYPE_STRING:
+      if (!GTK_VALUE_STRING (*arg1) ||
+	  !GTK_VALUE_STRING (*arg2))
+	equal = GTK_VALUE_STRING (*arg1) == GTK_VALUE_STRING (*arg2);
+      else
+	equal = g_str_equal (GTK_VALUE_STRING (*arg1), GTK_VALUE_STRING (*arg2));
+      break;
+    case GTK_TYPE_ENUM:
+      equal = GTK_VALUE_ENUM (*arg1) == GTK_VALUE_ENUM (*arg2);
+      break;
+    case GTK_TYPE_FLAGS:
+      equal = GTK_VALUE_FLAGS (*arg1) == GTK_VALUE_FLAGS (*arg2);
+      break;
+    case GTK_TYPE_BOXED:
+      equal = GTK_VALUE_BOXED (*arg1) == GTK_VALUE_BOXED (*arg2);
+      break;
+    case GTK_TYPE_FOREIGN:
+      equal = (GTK_VALUE_FOREIGN (*arg1).data == GTK_VALUE_FOREIGN (*arg2).data &&
+	       GTK_VALUE_FOREIGN (*arg1).notify == GTK_VALUE_FOREIGN (*arg2).notify);
+      break;
+    case GTK_TYPE_CALLBACK:
+      equal = (GTK_VALUE_CALLBACK (*arg1).marshal == GTK_VALUE_CALLBACK (*arg2).marshal &&
+	       GTK_VALUE_CALLBACK (*arg1).data == GTK_VALUE_CALLBACK (*arg2).data &&
+	       GTK_VALUE_CALLBACK (*arg1).notify == GTK_VALUE_CALLBACK (*arg2).notify);
+      break;
+    case GTK_TYPE_ARGS:
+      equal = (GTK_VALUE_ARGS (*arg1).n_args == GTK_VALUE_ARGS (*arg2).n_args &&
+	       GTK_VALUE_ARGS (*arg1).args == GTK_VALUE_ARGS (*arg2).args);
+      break;
+    case GTK_TYPE_OBJECT:
+      equal = GTK_VALUE_OBJECT (*arg1) == GTK_VALUE_OBJECT (*arg2);
+      break;
+    case GTK_TYPE_POINTER:
+      equal = GTK_VALUE_POINTER (*arg1) == GTK_VALUE_POINTER (*arg2);
+      break;
+    case GTK_TYPE_SIGNAL:
+      equal = (GTK_VALUE_SIGNAL (*arg1).f == GTK_VALUE_SIGNAL (*arg2).f &&
+	       GTK_VALUE_SIGNAL (*arg1).d == GTK_VALUE_SIGNAL (*arg2).d);
+      break;
+    case GTK_TYPE_C_CALLBACK:
+      equal = (GTK_VALUE_C_CALLBACK (*arg1).func == GTK_VALUE_C_CALLBACK (*arg2).func &&
+	       GTK_VALUE_C_CALLBACK (*arg1).func_data == GTK_VALUE_C_CALLBACK (*arg2).func_data);
+      break;
+    default:
+      g_warning ("gtk_arg_values_equal() used with unknown type `%s'", gtk_type_name (arg1->type));
+      equal = FALSE;
+      break;
+    }
+  
+  return equal;
+}
+
+void
+gtk_arg_to_valueloc (GtkArg  *arg,
+		     gpointer value_pointer)
+{
+  GtkType fundamental_type;
+  
+  g_return_if_fail (arg != NULL);
+  g_return_if_fail (value_pointer != NULL);
+  
+  fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
+  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST)
+    {
+      fundamental_type = gtk_type_get_varargs_type (fundamental_type);
+      if (!fundamental_type)
+        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
+    }
+  
+  switch (fundamental_type)
+    {
+      gchar *p_char;
+      guchar *p_uchar;
+      gboolean *p_boolean;
+      gint *p_int;
+      guint *p_uint;
+      glong *p_long;
+      gulong *p_ulong;
+      gfloat *p_float;
+      gdouble *p_double;
+      gpointer *p_pointer;
+    case GTK_TYPE_CHAR:
+      p_char = value_pointer;
+      *p_char = GTK_VALUE_CHAR (*arg);
+      break;
+    case GTK_TYPE_UCHAR:
+      p_uchar = value_pointer;
+      *p_uchar = GTK_VALUE_UCHAR (*arg);
+      break;
+    case GTK_TYPE_BOOL:
+      p_boolean = value_pointer;
+      *p_boolean = GTK_VALUE_BOOL (*arg);
+      break;
+    case GTK_TYPE_INT:
+    case GTK_TYPE_ENUM:
+      p_int = value_pointer;
+      *p_int = GTK_VALUE_INT (*arg);
+      break;
+    case GTK_TYPE_UINT:
+    case GTK_TYPE_FLAGS:
+      p_uint = value_pointer;
+      *p_uint = GTK_VALUE_UINT (*arg);
+      break;
+    case GTK_TYPE_LONG:
+      p_long = value_pointer;
+      *p_long = GTK_VALUE_LONG (*arg);
+      break;
+    case GTK_TYPE_ULONG:
+      p_ulong = value_pointer;
+      *p_ulong = GTK_VALUE_ULONG (*arg);
+      break;
+    case GTK_TYPE_FLOAT:
+      p_float = value_pointer;
+      *p_float = GTK_VALUE_FLOAT (*arg);
+      break;
+    case GTK_TYPE_DOUBLE:
+      p_double = value_pointer;
+      *p_double = GTK_VALUE_DOUBLE (*arg);
+      break;
+    case GTK_TYPE_STRING:
+    case GTK_TYPE_POINTER:
+    case GTK_TYPE_BOXED:
+    case GTK_TYPE_OBJECT:
+      p_pointer = value_pointer;
+      *p_pointer = GTK_VALUE_POINTER (*arg);
+      break;
+    case GTK_TYPE_SIGNAL:
+    case GTK_TYPE_ARGS:
+    case GTK_TYPE_FOREIGN:
+    case GTK_TYPE_CALLBACK:
+    case GTK_TYPE_C_CALLBACK:
+    case GTK_TYPE_NONE:
+    case GTK_TYPE_INVALID:
+      /* it doesn't make much sense to retrive these values,
+       * they either are always read-only args, or require
+       * multiple pointers.
+       */
+      g_warning ("gtk_arg_fill_retloc(): unsupported argument type `%s'",
+		 gtk_type_name (arg->type));
+      break;
+    }
 }
