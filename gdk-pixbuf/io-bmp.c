@@ -1137,10 +1137,14 @@ gdk_pixbuf__bmp_image_load_increment(gpointer data,
 }
 
 /* for our convenience when filling file header */
-#define put16u(buf,data)	{ *(guint16*)(buf) = GUINT16_TO_LE (data); buf += 2; }
-#define put32u(buf,data)	{ *(guint32*)(buf) = GUINT32_TO_LE (data); buf += 4; }
-#define put16(buf,data)		{ *(gint16*)(buf) = GINT16_TO_LE (data); buf += 2; }
-#define put32(buf,data)		{ *(gint32*)(buf) = GINT32_TO_LE (data); buf += 4; }
+#define put16(buf,data)	{ guint16 x; \
+			  x = GUINT16_TO_LE (data); \
+			  memcpy(buf, &x, 2); \
+			  buf += 2; }
+#define put32(buf,data)	{ guint32 x; \
+			  x = GUINT32_TO_LE (data); \
+			  memcpy(buf, &x, 4); \
+			  buf += 4; }
 
 static gboolean
 gdk_pixbuf__bmp_image_save_to_callback (GdkPixbufSaveFunc   save_func,
@@ -1166,22 +1170,22 @@ gdk_pixbuf__bmp_image_save_to_callback (GdkPixbufSaveFunc   save_func,
 	dst = BFH_BIH;
 	*dst++ = 'B';			/* bfType */
 	*dst++ = 'M';
-	put32u (dst, size + 14 + 40);	/* bfSize */
-	put32u (dst, 0);		/* bfReserved1 + bfReserved2 */
-	put32u (dst, 14 + 40);		/* bfOffBits */
+	put32 (dst, size + 14 + 40);	/* bfSize */
+	put32 (dst, 0);			/* bfReserved1 + bfReserved2 */
+	put32 (dst, 14 + 40);		/* bfOffBits */
 
 	/* filling BIH */
-	put32u (dst, 40);		/* biSize */
+	put32 (dst, 40);		/* biSize */
 	put32 (dst, width);		/* biWidth */
 	put32 (dst, height);		/* biHeight */
 	put16 (dst, 1);			/* biPlanes */
 	put16 (dst, 24);		/* biBitCount */
-	put32u (dst, BI_RGB);		/* biCompression */
-	put32u (dst, size);		/* biSizeImage */
+	put32 (dst, BI_RGB);		/* biCompression */
+	put32 (dst, size);		/* biSizeImage */
 	put32 (dst, 0);			/* biXPelsPerMeter */
 	put32 (dst, 0);			/* biYPelsPerMeter */
-	put32u (dst, 0);		/* biClrUsed */
-	put32u (dst, 0);		/* biClrImportant */
+	put32 (dst, 0);			/* biClrUsed */
+	put32 (dst, 0);			/* biClrImportant */
 
 	if (!save_func (BFH_BIH, 14 + 40, error, user_data))
 		return FALSE;
