@@ -1,3 +1,9 @@
+2004-08-04  Matthias Clasen  <mclasen@redhat.com>
+
+	* tests/Makefile.am: Add testiconview.
+	* tests/testiconview.c: A test for GtkIconView
+	* tests/gnome-textfile.png: ...which uses this image.
+
 Wed Aug  4 01:37:57 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtktreeview.c: 

@@ -36,6 +36,7 @@ noinst_PROGRAMS =			\
 	testentrycompletion 		\
 	testfilechooser			\
 	testgtk				\
+	testiconview			\
 	testicontheme			\
 	testinput			\
 	testmenus			\
@@ -66,6 +67,7 @@ noinst_PROGRAMS =			\
 
 simple_DEPENDENCIES = $(TEST_DEPS)
 testicontheme_DEPENDENCIES = $(TEST_DEPS)
+testiconview_DEPENDENCIES = $(TEST_DEPS)
 testcalendar_DEPENDENCIES = $(TEST_DEPS)
 testcombo_DEPENDENCIES = $(TEST_DEPS)
 testcombochange_DEPENDENCIES = $(TEST_DEPS)
@@ -106,6 +108,7 @@ testentrycompletion_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
+testiconview_LDADD = $(LDADDS)
 testinput_LDADD = $(LDADDS)
 testmenus_LDADD = $(LDADDS)
 testmultidisplay_LDADD = $(LDADDS)
@@ -174,6 +177,10 @@ testmerge_SOURCES = 		\
 testactions_SOURCES = 		\
 	testactions.c
 
+testiconview_SOURCES = 		\
+	testiconview.c		\
+	prop-editor.c
+
 EXTRA_DIST = 			\
 	prop-editor.h		\
 	testgtk.1 		\
@@ -193,5 +200,6 @@ EXTRA_DIST = 			\
 	merge-1.ui		\
 	merge-2.ui		\
 	merge-3.ui		\
+	gnome-textfile.png	\
 	makefile.msc
 
