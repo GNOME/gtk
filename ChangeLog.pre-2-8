@@ -1,3 +1,8 @@
+Sun Jul 29 17:14:01 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.c (gtk_item_factory_parse_rc): use g_file_test()
+	instead of long deprecated g_scanner_stat_mode().
+
 2001-07-29  Hans Breuer  <hans@breuer.org>
 
 	* gdk/makefile.msc : build in the backend dir after

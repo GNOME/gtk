@@ -45,7 +45,6 @@
 #include	"gtk/gtkstock.h"
 #include	"gtk/gtkiconfactory.h"
 #include	<string.h>
-#include	<sys/stat.h>
 #include	<fcntl.h>
 #ifdef HAVE_UNISTD_H
 #include	<unistd.h>
@@ -1754,7 +1753,7 @@ gtk_item_factory_parse_rc (const gchar	  *file_name)
 
   g_return_if_fail (file_name != NULL);
 
-  if (!S_ISREG (g_scanner_stat_mode (file_name)))
+  if (!g_file_test (file_name, G_FILE_TEST_IS_REGULAR))
     return;
 
   fd = open (file_name, O_RDONLY);

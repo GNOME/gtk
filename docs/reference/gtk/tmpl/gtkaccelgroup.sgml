@@ -19,10 +19,6 @@ Keyboard Accelerators
 
 </para>
 
-@ref_count: 
-@lock_count: 
-@modifier_mask: 
-@attach_objects: 
 
 <!-- ##### STRUCT GtkAccelEntry ##### -->
 <para>
