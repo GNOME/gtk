@@ -19,11 +19,6 @@ INCLUDES = @STRIP_BEGIN@ 	\
 	@GTK_DEBUG_FLAGS@ 	\
 @STRIP_END@
 
-LDFLAGS = @STRIP_BEGIN@ \
-	@GDK_DEP_LIBS@	\
-	-lm		\
-@STRIP_END@
-
 noinst_LTLIBRARIES = libgdk-linux-fb.la
 
 libgdkinclude_HEADERS= \
