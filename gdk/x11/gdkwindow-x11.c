@@ -2008,7 +2008,7 @@ gdk_window_set_icon (GdkWindow *window,
 		     GdkPixmap *pixmap,
 		     GdkBitmap *mask)
 {
-  XWMHints wm_hints;
+  XWMHints *wm_hints;
   GdkWindowPrivate *window_private;
   GdkWindowPrivate *private;
   
@@ -2016,31 +2016,34 @@ gdk_window_set_icon (GdkWindow *window,
   window_private = (GdkWindowPrivate*) window;
   if (window_private->destroyed)
     return;
-  
-  wm_hints.flags = 0;
-  
+
+  wm_hints = XGetWMHints (window_private->xdisplay, window_private->xwindow);
+  if (!wm_hints)
+    wm_hints = XAllocWMHints ();
+
   if (icon_window != NULL)
     {
       private = (GdkWindowPrivate *)icon_window;
-      wm_hints.flags |= IconWindowHint;
-      wm_hints.icon_window = private->xwindow;
+      wm_hints->flags |= IconWindowHint;
+      wm_hints->icon_window = private->xwindow;
     }
   
   if (pixmap != NULL)
     {
       private = (GdkWindowPrivate *)pixmap;
-      wm_hints.flags |= IconPixmapHint;
-      wm_hints.icon_pixmap = private->xwindow;
+      wm_hints->flags |= IconPixmapHint;
+      wm_hints->icon_pixmap = private->xwindow;
     }
   
   if (mask != NULL)
     {
       private = (GdkWindowPrivate *)mask;
-      wm_hints.flags |= IconMaskHint;
-      wm_hints.icon_mask = private->xwindow;
+      wm_hints->flags |= IconMaskHint;
+      wm_hints->icon_mask = private->xwindow;
     }
-  
-  XSetWMHints (window_private->xdisplay, window_private->xwindow, &wm_hints);
+
+  XSetWMHints (window_private->xdisplay, window_private->xwindow, wm_hints);
+  XFree (wm_hints);
 }
 
 void          
@@ -2075,7 +2078,7 @@ void
 gdk_window_set_group (GdkWindow *window, 
 		      GdkWindow *leader)
 {
-  XWMHints wm_hints;
+  XWMHints *wm_hints;
   GdkWindowPrivate *window_private;
   GdkWindowPrivate *private;
   
@@ -2086,10 +2089,16 @@ gdk_window_set_group (GdkWindow *window,
     return;
   
   private = (GdkWindowPrivate *)leader;
-  wm_hints.flags = WindowGroupHint;
-  wm_hints.window_group = private->xwindow;
-  
-  XSetWMHints (window_private->xdisplay, window_private->xwindow, &wm_hints);
+
+  wm_hints = XGetWMHints (window_private->xdisplay, window_private->xwindow);
+  if (!wm_hints)
+    wm_hints = XAllocWMHints ();
+
+  wm_hints->flags |= WindowGroupHint;
+  wm_hints->window_group = private->xwindow;
+
+  XSetWMHints (window_private->xdisplay, window_private->xwindow, wm_hints);
+  XFree (wm_hints);
 }
 
 static void

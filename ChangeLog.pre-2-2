@@ -1,3 +1,9 @@
+Wed Feb 10 10:43:50 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkwindow.c (gdk_window_set_icon, gdk_window_set_group):
+	 Supplement the existing WMNormalHints, don't 
+	 overwrite them.
+
 Wed Feb 10 08:35:36 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkcolorsel.c (gtk_color_selection_draw_value_bar): asure that
