@@ -52,6 +52,9 @@ struct _GtkNotebook
 struct _GtkNotebookClass
 {
   GtkContainerClass parent_class;
+
+  void (* switch_page)       (GtkNotebook *notebook,
+                              GtkNotebookPage *page);
 };
 
 struct _GtkNotebookPage

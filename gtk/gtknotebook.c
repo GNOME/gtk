@@ -16,12 +16,22 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 #include "gtknotebook.h"
+#include "gtksignal.h"
 
 
 #define CHILD_SPACING  2
 #define TAB_OVERLAP    2
 #define TAB_CURVATURE  1
 
+
+enum {
+  SWITCH_PAGE,
+  LAST_SIGNAL
+};
+
+typedef void (*GtkNotebookSignal) (GtkObject *object,
+				   gpointer   arg1,
+				   gpointer   data);
 
 static void gtk_notebook_class_init     (GtkNotebookClass *klass);
 static void gtk_notebook_init           (GtkNotebook      *notebook);
@@ -60,9 +70,16 @@ static void gtk_notebook_page_allocate  (GtkNotebook      *notebook,
 					 GtkNotebookPage  *page,
 					 GtkAllocation    *allocation);
 
+static void gtk_real_notebook_switch_page (GtkNotebook     *notebook,
+					   GtkNotebookPage *page);
+
+static void gtk_notebook_marshal_signal (GtkObject      *object,
+					 GtkSignalFunc   func,
+					 gpointer        func_data,
+					 GtkArg         *args);
 
 static GtkContainerClass *parent_class = NULL;
-
+static gint notebook_signals[LAST_SIGNAL] = { 0 };
 
 guint
 gtk_notebook_get_type ()
@@ -100,6 +117,17 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 
   parent_class = gtk_type_class (gtk_container_get_type ());
 
+  notebook_signals[SWITCH_PAGE] =
+    gtk_signal_new ("switch_page",
+                    GTK_RUN_LAST,
+                    object_class->type,
+                    GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
+                    gtk_notebook_marshal_signal,
+                    GTK_TYPE_NONE, 1,
+                    GTK_TYPE_POINTER);
+
+  gtk_object_class_add_signals (object_class, notebook_signals, LAST_SIGNAL);
+
   object_class->destroy = gtk_notebook_destroy;
 
   widget_class->map = gtk_notebook_map;
@@ -115,6 +143,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
   container_class->foreach = gtk_notebook_foreach;
+
+  class->switch_page = gtk_real_notebook_switch_page;
 }
 
 static void
@@ -1027,8 +1057,8 @@ gtk_notebook_foreach (GtkContainer *container,
 }
 
 static void
-gtk_notebook_switch_page (GtkNotebook     *notebook,
-			  GtkNotebookPage *page)
+gtk_real_notebook_switch_page (GtkNotebook     *notebook,
+			       GtkNotebookPage *page)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (page != NULL);
@@ -1419,4 +1449,23 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
     }
 
   gtk_widget_size_allocate (page->tab_label, &child_allocation);
+}
+
+static void
+gtk_notebook_switch_page (GtkNotebook *notebook, GtkNotebookPage *page)
+{
+  gtk_signal_emit (GTK_OBJECT (notebook), notebook_signals[SWITCH_PAGE], page);
+}
+
+static void
+gtk_notebook_marshal_signal (GtkObject      *object,
+			     GtkSignalFunc   func,
+			     gpointer        func_data,
+			     GtkArg         *args)
+{
+  GtkNotebookSignal rfunc;
+
+  rfunc = (GtkNotebookSignal) func;
+
+  (* rfunc) (object, GTK_VALUE_OBJECT (args[0]), func_data);
 }
