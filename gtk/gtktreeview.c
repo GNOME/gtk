@@ -1784,7 +1784,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	}
 
       if (column == NULL)
-	return FALSE;
+	{
+	  gtk_tree_path_free (path);
+	  return FALSE;
+	}
 
       /* decide if we edit */
       if (event->type == GDK_BUTTON_PRESS &&
@@ -1841,6 +1844,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 							&area,
 							(GdkEvent *)event,
 							flags);
+		      g_free (path_string);
 		      gtk_tree_path_free (path);
 		      gtk_tree_path_free (anchor);
 		      return TRUE;

@@ -1,3 +1,8 @@
+Fri Jul 26 21:24:03 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_button_press): fix some memleaks,
+	(#84426, patch from Matthias Clasen).
+
 Fri Jul 26 17:11:25 2002  Kristian Rietveld  <kris@gtk.org>
 
 	* gtk/gtktreeview.c (gtk_tree_view_unref_tree_helper): _iter_children
