@@ -1,5 +1,14 @@
 2004-07-20  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testactions.c (main): 
+	* tests/testmerge.c (main): Add some refcount debugging.
+
+	* gtk/gtkuimanager.c (update_node, free_node): Ref an sink
+	all proxies, so that we can properly clean up floating proxies
+	which the app didn't adopt.  (#147926, Tommi Komulainen)
+
+2004-07-20  Matthias Clasen  <mclasen@redhat.com>
+
 	Allow custom initialization of cell editables.  (#147221)
 	
 	* gtk/gtkcellrenderer.h (struct _GtkCellRendererClass): 

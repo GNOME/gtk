@@ -203,7 +203,12 @@ static const gchar *ui_info =
 "    <toolitem name=\"justify-fill\" action=\"justify-fill\" />\n"
 "    <separator name=\"sep11\"/>\n"
 "    <toolitem name=\"quit\" action=\"quit\" />\n"
-"  </toolbar>\n";
+"  </toolbar>\n"
+"  <popup name=\"popup\">\n"
+"    <menuitem name=\"popcut\" action=\"cut\" />\n"
+"    <menuitem name=\"popcopy\" action=\"copy\" />\n"
+"    <menuitem name=\"poppaste\" action=\"paste\" />\n"
+"  </popup>\n";
 
 static void
 add_widget (GtkUIManager *merge,
@@ -308,16 +313,18 @@ create_window (GtkActionGroup *action_group)
   GtkWidget *hbox, *spinbutton, *button;
   GError *error = NULL;
 
+  merge = gtk_ui_manager_new ();
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, -1);
   gtk_window_set_title (GTK_WINDOW (window), "Action Test");
+  g_signal_connect_swapped (window, "destroy", G_CALLBACK (g_object_unref), merge);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
   box = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show (box);
 
-  merge = gtk_ui_manager_new ();
   gtk_ui_manager_insert_action_group (merge, action_group, 0);
   g_signal_connect (merge, "add_widget", G_CALLBACK (add_widget), box);
 
@@ -381,6 +388,21 @@ main (int argc, char **argv)
   create_window (action_group);
 
   gtk_main ();
+
+#ifdef DEBUG_UI_MANAGER
+  {
+    GList *action;
+
+    for (action = gtk_action_group_list_actions (action_group);
+	 action; 
+	 action = action->next)
+      {
+	GtkAction *a = action->data;
+	g_print ("action %s ref count %d\n", 
+		 gtk_action_get_name (a), G_OBJECT (a)->ref_count);
+      }
+  }
+#endif
 
   g_object_unref (action_group);
 

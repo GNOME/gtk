@@ -88,7 +88,6 @@ delayed_toggle_dynamic (GtkUIManager *merge)
 			  "label", "Dynamic action 2",
 			  "stock_id", GTK_STOCK_EXECUTE,
 			  NULL);
-      g_object_set (dyn, "name", "dyn2", NULL);
       gtk_action_group_add_action (dynamic, dyn);
     }
   
@@ -690,8 +689,41 @@ main (int argc, char **argv)
   gtk_widget_show_all (window);
   gtk_main ();
 
-  g_object_unref (action_group);
+#ifdef DEBUG_UI_MANAGER
+  {
+    GList *action;
+    
+    g_print ("\n> before unreffing the ui manager <\n");
+    for (action = gtk_action_group_list_actions (action_group);
+	 action; 
+	 action = action->next)
+      {
+	GtkAction *a = action->data;
+	g_print ("  action %s ref count %d\n", 
+		 gtk_action_get_name (a), G_OBJECT (a)->ref_count);
+      }
+  }
+#endif
+
   g_object_unref (merge);
+
+#ifdef DEBUG_UI_MANAGER
+  {
+    GList *action;
+
+    g_print ("\n> after unreffing the ui manager <\n");
+    for (action = gtk_action_group_list_actions (action_group);
+	 action; 
+	 action = action->next)
+      {
+	GtkAction *a = action->data;
+	g_print ("  action %s ref count %d\n", 
+		 gtk_action_get_name (a), G_OBJECT (a)->ref_count);
+      }
+  }
+#endif
+
+  g_object_unref (action_group);
 
   return 0;
 }
