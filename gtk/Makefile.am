@@ -325,7 +325,7 @@ CLEANFILES += $(gen_sources)
 COPYING: $(gtk_built_public_sources) $(gtk_built_sources)
 $(OBJECTS): COPYING 	# this is our oldest-source-stamp
 gtk.defs: @REBUILD@ # stamp-gtk.defs
-	-test -e "$@" || touch $(srcdir)/gtk.defs
+	-test -e "$(srcdir)/$@" || touch $(srcdir)/gtk.defs
 stamp-gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(gtk_public_h_sources) $(gdk_headers)
 	cd $(srcdir) \
 	&& $(PERL) makeenums.pl defs $(gtk_public_h_sources) $(gdk_headers) > xgen-gdef \
@@ -334,7 +334,7 @@ stamp-gtk.defs: @REBUILD@ makeenums.pl gtk-boxed.defs $(gtk_public_h_sources) $(
 	&& rm -f xgen-gdef \
 	&& echo timestamp > $@
 gtkmarshal.h: @REBUILD@ # stamp-gtkmarshal.h
-	-test -e "$@" || touch $(srcdir)/gtkmarshal.h
+	-test -e "$(srcdir)/$@" || touch $(srcdir)/gtkmarshal.h
 stamp-gtkmarshal.h: @REBUILD@ gtkmarshal.h
 gtkmarshal.c stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list
 	cd $(srcdir) \
@@ -346,7 +346,7 @@ gtkmarshal.c stamp-gtkmarshal.h: @REBUILD@ genmarshal.pl gtkmarshal.list
 	&& rm -f xgen-gmh xgen-gmc \
 	&& echo timestamp > stamp-gtkmarshal.h
 gtktypebuiltins.h: @REBUILD@ # stamp-gtktypebuiltins.h
-	-test -e "$@" || touch $(srcdir)/gtktypebuiltins.h
+	-test -e "$(srcdir)/$@" || touch $(srcdir)/gtktypebuiltins.h
 stamp-gtktypebuiltins.h: @REBUILD@ maketypes.awk gtk.defs gtktypebuiltins.h
 	cd $(srcdir) \
 	&& $(AWK) -f maketypes.awk gtk.defs macros > xgen-gtbh \
