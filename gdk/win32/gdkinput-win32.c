@@ -557,7 +557,7 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 				 gdouble          *x_out,
 				 gdouble          *y_out)
 {
-  GdkWindowImplWin32 *impl;
+  GdkWindowImplWin32 *impl, *root_impl;
 
   int i;
   int x_axis = 0;
@@ -590,8 +590,9 @@ gdk_input_translate_coordinates (GdkDevicePrivate *gdkdev,
 
   if (gdkdev->info.mode == GDK_MODE_SCREEN) 
     {
-      x_scale = GetSystemMetrics (SM_CXSCREEN) / device_width;
-      y_scale = GetSystemMetrics (SM_CYSCREEN) / device_height;
+      root_impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (_gdk_parent_root)->impl);
+      x_scale = root_impl->width / device_width;
+      y_scale = root_impl->height / device_height;
 
       x_offset = - input_window->root_x;
       y_offset = - input_window->root_y;
@@ -658,9 +659,9 @@ gdk_input_get_root_relative_geometry (HWND w,
   GetWindowRect (w, &rect);
 
   if (x_ret)
-    *x_ret = rect.left;
+    *x_ret = rect.left + _gdk_offset_x;
   if (y_ret)
-    *y_ret = rect.top;
+    *y_ret = rect.top + _gdk_offset_y;
 }
 
 void
@@ -927,11 +928,9 @@ _gdk_input_other_event (GdkEvent  *event,
 					   &event->button.y);
 
 	  /* Also calculate root coordinates. Note that input_window->root_x
-	     is in Win32 screen coordinates. */
-	  event->button.x_root = event->button.x + input_window->root_x
-				 + _gdk_offset_x;
-	  event->button.y_root = event->button.y + input_window->root_y
-				 + _gdk_offset_y;
+	     is in GDK root coordinates. */
+	  event->button.x_root = event->button.x + input_window->root_x;
+	  event->button.y_root = event->button.y + input_window->root_y;
 
 	  event->button.state = ((gdkdev->button_state << 8)
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
@@ -960,11 +959,9 @@ _gdk_input_other_event (GdkEvent  *event,
 					   &event->motion.y);
 
 	  /* Also calculate root coordinates. Note that input_window->root_x
-	     is in Win32 screen coordinates. */
-	  event->motion.x_root = event->motion.x + input_window->root_x
-				 + _gdk_offset_x;
-	  event->motion.y_root = event->motion.y + input_window->root_y
-				 + _gdk_offset_y;
+	     is in GDK root coordinates. */
+	  event->motion.x_root = event->motion.x + input_window->root_x;
+	  event->motion.y_root = event->motion.y + input_window->root_y;
 
 	  event->motion.state = ((gdkdev->button_state << 8)
 				 & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK
