@@ -760,6 +760,12 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    gchar    **path,
 					    gchar    **path_reversed);
 
+GList* gtk_widget_get_mnemonic_labels   (GtkWidget *widget);
+void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
+					 GtkWidget *label);
+void   gtk_widget_remove_mnemonic_label (GtkWidget *widget,
+					 GtkWidget *label);
+
 GType           gtk_requisition_get_type (void);
 GtkRequisition *gtk_requisition_copy     (const GtkRequisition *requisition);
 void            gtk_requisition_free     (GtkRequisition       *requisition);
@@ -777,7 +783,6 @@ void              _gtk_widget_propagate_screen_changed    (GtkWidget    *widget,
 							   GdkScreen    *previous_screen);
 
 GdkColormap* _gtk_widget_peek_colormap (void);
-
 
 #ifdef __cplusplus
 }

@@ -249,6 +249,7 @@ static GQuark		quark_colormap = 0;
 static GQuark		quark_pango_context = 0;
 static GQuark		quark_rc_style = 0;
 static GQuark		quark_accessible_object = 0;
+static GQuark		quark_mnemonic_labels = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -322,6 +323,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_pango_context = g_quark_from_static_string ("gtk-pango-context");
   quark_rc_style = g_quark_from_static_string ("gtk-rc-style");
   quark_accessible_object = g_quark_from_static_string ("gtk-accessible-object");
+  quark_mnemonic_labels = g_quark_from_static_string ("gtk-mnemonic-labels");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -6362,6 +6364,9 @@ gtk_widget_real_destroy (GtkObject *object)
   g_object_set_qdata (G_OBJECT (widget), quark_accel_path, NULL);
   g_object_set_qdata (G_OBJECT (widget), quark_accel_closures, NULL);
 
+  /* Callers of add_mnemonic_label() should disconnect on ::destroy */
+  g_object_set_qdata (G_OBJECT (widget), quark_mnemonic_labels, NULL);
+  
   gtk_grab_remove (widget);
   
   g_object_unref (widget->style);
@@ -7308,6 +7313,100 @@ gtk_widget_get_clipboard (GtkWidget *widget, GdkAtom selection)
   
   return gtk_clipboard_get_for_display (gtk_widget_get_display (widget),
 					selection);
+}
+
+/**
+ * gtk_widget_list_mnemonic_labels:
+ * @widget: a #GtkWidget
+ * 
+ * Returns a newly allocated list of the widgets, normally labels, for 
+ * which this widget is a the target of a mnemonic (see for example, 
+ * gtk_label_set_mnemonic_widget()).
+
+ * The widgets in the list are not individually referenced. If you
+ * want to iterate through the list and perform actions involving
+ * callbacks that might destroy the widgets, you
+ * <emphasis>must</emphasis> call <literal>g_list_foreach (result,
+ * (GFunc)g_object_ref, NULL)</literal> first, and then unref all the
+ * widgets afterwards.
+
+ * Return value: the list of mnemonic labels; free this list
+ *  with g_list_free() when you are done with it.
+ *
+ * Since: 2.4
+ **/
+GList *
+gtk_widget_list_mnemonic_labels (GtkWidget *widget)
+{
+  GList *list = NULL;
+  GSList *l;
+  
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  for (l = g_object_get_qdata (G_OBJECT (widget), quark_mnemonic_labels); l; l = l->next)
+    list = g_list_prepend (list, l->data);
+
+  return list;
+}
+
+/**
+ * gtk_widget_remove_mnemonic_label:
+ * @widget: a #GtkWidget
+ * @label: a #GtkWidget that acts as a mnemonic label for @widget.
+ * 
+ * Adds a widget to the list of mnemonic labels for
+ * this widget. (See gtk_widget_get_mnemonic_labels()). Note the
+ * list of mnemonic labels for the widget is cleared when the
+ * widget is destroyed, so the caller must make sure to update
+ * it's internal state at this point as well, by using a connection
+ * to the ::destroy signal or a weak notifier.
+ *
+ * Since: 2.4
+ **/
+void
+gtk_widget_add_mnemonic_label (GtkWidget *widget,
+                               GtkWidget *label)
+{
+  GSList *old_list, *new_list;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (label));
+
+  old_list = g_object_steal_qdata (G_OBJECT (widget), quark_mnemonic_labels);
+  new_list = g_slist_prepend (old_list, label);
+  
+  g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
+			   new_list, (GDestroyNotify) g_slist_free);
+}
+
+/**
+ * gtk_widget_remove_mnemonic_label:
+ * @widget: a #GtkWidget
+ * @label: a #GtkWidget that was previously set as a mnemnic label for
+ *         @widget with gtk_widget_add_mnemonic_label().
+ * 
+ * Removes a widget from the list of mnemonic labels for
+ * this widget. (See gtk_widget_get_mnemonic_labels()). The widget
+ * must have previously been added to the list with
+ * gtk_widget_add_mnemonic_label().
+ *
+ * Since: 2.4
+ **/
+void
+gtk_widget_remove_mnemonic_label (GtkWidget *widget,
+                                  GtkWidget *label)
+{
+  GSList *old_list, *new_list;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_WIDGET (label));
+
+  old_list = g_object_steal_qdata (G_OBJECT (widget), quark_mnemonic_labels);
+  new_list = g_slist_remove (old_list, label);
+
+  if (new_list)
+    g_object_set_qdata_full (G_OBJECT (widget), quark_mnemonic_labels,
+			     new_list, (GDestroyNotify) g_slist_free);
 }
 
 /**

@@ -766,14 +766,20 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
     g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (label->mnemonic_widget)
-    g_object_weak_unref (G_OBJECT (label->mnemonic_widget),
-			 label_mnemonic_widget_weak_notify,
-			 label);
+    {
+      gtk_widget_remove_mnemonic_label (label->mnemonic_widget, GTK_WIDGET (label));
+      g_object_weak_unref (G_OBJECT (label->mnemonic_widget),
+			   label_mnemonic_widget_weak_notify,
+			   label);
+    }
   label->mnemonic_widget = widget;
   if (label->mnemonic_widget)
-    g_object_weak_ref (G_OBJECT (label->mnemonic_widget),
-		       label_mnemonic_widget_weak_notify,
-		       label);
+    {
+      g_object_weak_ref (G_OBJECT (label->mnemonic_widget),
+		         label_mnemonic_widget_weak_notify,
+		         label);
+      gtk_widget_add_mnemonic_label (label->mnemonic_widget, GTK_WIDGET (label));
+    }
   
   g_object_notify (G_OBJECT (label), "mnemonic_widget");
 }

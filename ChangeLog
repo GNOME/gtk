@@ -1,3 +1,9 @@
+Wed Feb 25 12:21:32 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.[ch] gtk/gtklabel.c: Patch from
+	Padraig O'Briain to add gtk_widget_add/remove_mnemonic_label,
+	gtk_widget_get_mnemonic_labels(). (#103456)
+
 2004-02-25  Danilo Šegan  <dsegan@gmx.net>
 
 	* configure.in: Added sr@ije to ALL_LINGUAS.
