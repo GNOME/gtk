@@ -1,3 +1,9 @@
+Tue May 14 15:40:49 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkwindow-{linux-fb,win32,x11.c} (gdk_window_set_back_pixmap):
+	Add a sanity g_return_if_fail() check for the depths
+	for the window and pixmap. (#79191, Shivaram Upadhyayula)
+
 Tue May 14 15:09:33 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkkeys-x11.c: Try adding a #ifndef/#define
