@@ -405,7 +405,7 @@ gtk_file_selection_init (GtkFileSelection *filesel)
   gtk_widget_show (listbox);
 
   filesel->file_list = gtk_list_new ();
-  gtk_list_set_selection_mode (GTK_LIST (filesel->file_list), GTK_SELECTION_BROWSE);
+  gtk_list_set_selection_mode (GTK_LIST (filesel->file_list), GTK_SELECTION_SINGLE);
   gtk_signal_connect (GTK_OBJECT (filesel->file_list), "button_press_event",
 		      (GtkSignalFunc) gtk_file_selection_file_button, filesel);
   key = gtk_signal_connect (GTK_OBJECT (filesel->file_list),
