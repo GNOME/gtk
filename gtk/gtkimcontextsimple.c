@@ -73,19 +73,29 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_acute,	GDK_space,	0,	0,	0,	0x0027,	/* APOSTROPHE */
   GDK_dead_acute,	GDK_apostrophe,	0,	0,	0,	0x00B4,	/* ACUTE_ACCENT */
   GDK_dead_acute,	GDK_A,	0,	0,	0,	0x00C1,	/* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
-  GDK_dead_acute,	GDK_C,	0,	0,	0,	0x00C7,	/* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
+  GDK_dead_acute,	GDK_C,	0,	0,	0,	0x0106,	/* LATIN_CAPITAL_LETTER_C_WITH_ACUTE */
   GDK_dead_acute,	GDK_E,	0,	0,	0,	0x00C9,	/* LATIN_CAPITAL_LETTER_E_WITH_ACUTE */
   GDK_dead_acute,	GDK_I,	0,	0,	0,	0x00CD,	/* LATIN_CAPITAL_LETTER_I_WITH_ACUTE */
+  GDK_dead_acute,	GDK_L,	0,	0,	0,	0x0139,	/* LATIN_CAPITAL_LETTER_L_WITH_ACUTE */
+  GDK_dead_acute,	GDK_N,	0,	0,	0,	0x0143,	/* LATIN_CAPITAL_LETTER_N_WITH_ACUTE */
   GDK_dead_acute,	GDK_O,	0,	0,	0,	0x00D3,	/* LATIN_CAPITAL_LETTER_O_WITH_ACUTE */
+  GDK_dead_acute,	GDK_R,	0,	0,	0,	0x0154,	/* LATIN_CAPITAL_LETTER_R_WITH_ACUTE */
+  GDK_dead_acute,	GDK_S,	0,	0,	0,	0x015A,	/* LATIN_CAPITAL_LETTER_S_WITH_ACUTE */
   GDK_dead_acute,	GDK_U,	0,	0,	0,	0x00DA,	/* LATIN_CAPITAL_LETTER_U_WITH_ACUTE */
   GDK_dead_acute,	GDK_Y,	0,	0,	0,	0x00DD,	/* LATIN_CAPITAL_LETTER_Y_WITH_ACUTE */
+  GDK_dead_acute,	GDK_Z,	0,	0,	0,	0x0179,	/* LATIN_CAPITAL_LETTER_Z_WITH_ACUTE */
   GDK_dead_acute,	GDK_a,	0,	0,	0,	0x00E1,	/* LATIN_SMALL_LETTER_A_WITH_ACUTE */
-  GDK_dead_acute,	GDK_c,	0,	0,	0,	0x00E7,	/* LATIN_SMALL_LETTER_C_WITH_CEDILLA */
+  GDK_dead_acute,	GDK_c,	0,	0,	0,	0x0107,	/* LATIN_SMALL_LETTER_C_WITH_ACUTE */
   GDK_dead_acute,	GDK_e,	0,	0,	0,	0x00E9,	/* LATIN_SMALL_LETTER_E_WITH_ACUTE */
   GDK_dead_acute,	GDK_i,	0,	0,	0,	0x00ED,	/* LATIN_SMALL_LETTER_I_WITH_ACUTE */
+  GDK_dead_acute,	GDK_l,	0,	0,	0,	0x013A,	/* LATIN_SMALL_LETTER_L_WITH_ACUTE */
+  GDK_dead_acute,	GDK_n,	0,	0,	0,	0x0144,	/* LATIN_SMALL_LETTER_N_WITH_ACUTE */
   GDK_dead_acute,	GDK_o,	0,	0,	0,	0x00F3,	/* LATIN_SMALL_LETTER_O_WITH_ACUTE */
+  GDK_dead_acute,	GDK_r,	0,	0,	0,	0x0155,	/* LATIN_SMALL_LETTER_R_WITH_ACUTE */
+  GDK_dead_acute,	GDK_s,	0,	0,	0,	0x015B,	/* LATIN_SMALL_LETTER_S_WITH_ACUTE */
   GDK_dead_acute,	GDK_u,	0,	0,	0,	0x00FA,	/* LATIN_SMALL_LETTER_U_WITH_ACUTE */
   GDK_dead_acute,	GDK_y,	0,	0,	0,	0x00FD,	/* LATIN_SMALL_LETTER_Y_WITH_ACUTE */
+  GDK_dead_acute,	GDK_z,	0,	0,	0,	0x017A,	/* LATIN_SMALL_LETTER_Z_WITH_ACUTE */
   GDK_dead_acute,	GDK_acute,	0,	0,	0,	0x00B4,	/* ACUTE_ACCENT */
   GDK_dead_acute,	GDK_dead_acute,	0,	0,	0,	0x00B4,	/* ACUTE_ACCENT */
   GDK_dead_circumflex,	GDK_space,	0,	0,	0,	0x005E,	/* CIRCUMFLEX_ACCENT */
@@ -126,7 +136,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_macron,	GDK_E,	0,	0,	0,	0x0112,	/* LATIN_CAPITAL_LETTER_E_WITH_MACRON */
   GDK_dead_macron,	GDK_I,	0,	0,	0,	0x012A,	/* LATIN_CAPITAL_LETTER_I_WITH_MACRON */
   GDK_dead_macron,	GDK_O,	0,	0,	0,	0x014C,	/* LATIN_CAPITAL_LETTER_O_WITH_MACRON */
-  GDK_dead_macron,	GDK_U,	0,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
+  GDK_dead_macron,	GDK_U,	0,	0,	0,	0x016A,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_dead_macron,	GDK_a,	0,	0,	0,	0x0101,	/* LATIN_SMALL_LETTER_A_WITH_MACRON */
   GDK_dead_macron,	GDK_e,	0,	0,	0,	0x0113,	/* LATIN_SMALL_LETTER_E_WITH_MACRON */
   GDK_dead_macron,	GDK_i,	0,	0,	0,	0x012B,	/* LATIN_SMALL_LETTER_I_WITH_MACRON */
@@ -134,12 +144,19 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_macron,	GDK_u,	0,	0,	0,	0x016B,	/* LATIN_SMALL_LETTER_U_WITH_MACRON */
   GDK_dead_macron,	GDK_macron,	0,	0,	0,	0x00AF,	/* MACRON */
   GDK_dead_macron,	GDK_dead_macron,	0,	0,	0,	0x00AF,	/* MACRON */
+  GDK_dead_breve,	GDK_space,	0,	0,	0,	0x02D8,	/* BREVE */
+  GDK_dead_breve,	GDK_A,	0,	0,	0,	0x0102,	/* LATIN_CAPITAL_LETTER_A_WITH_BREVE */
   GDK_dead_breve,	GDK_G,	0,	0,	0,	0x011E,	/* LATIN_CAPITAL_LETTER_G_WITH_BREVE */
+  GDK_dead_breve,	GDK_a,	0,	0,	0,	0x0103,	/* LATIN_SMALL_LETTER_A_WITH_BREVE */
   GDK_dead_breve,	GDK_g,	0,	0,	0,	0x011F,	/* LATIN_SMALL_LETTER_G_WITH_BREVE */
+  GDK_dead_breve,	GDK_dead_breve,	0,	0,	0,	0x02D8,	/* BREVE */
+  GDK_dead_abovedot,	GDK_space,	0,	0,	0,	0x02D9,	/* DOT_ABOVE */
   GDK_dead_abovedot,	GDK_E,	0,	0,	0,	0x0116,	/* LATIN_CAPITAL_LETTER_E_WITH_DOT_ABOVE */
   GDK_dead_abovedot,	GDK_I,	0,	0,	0,	0x0130,	/* LATIN_CAPITAL_LETTER_I_WITH_DOT_ABOVE */
+  GDK_dead_abovedot,	GDK_Z,	0,	0,	0,	0x017B,	/* LATIN_CAPITAL_LETTER_Z_WITH_DOT_ABOVE */
   GDK_dead_abovedot,	GDK_e,	0,	0,	0,	0x0117,	/* LATIN_SMALL_LETTER_E_WITH_DOT_ABOVE */
   GDK_dead_abovedot,	GDK_i,	0,	0,	0,	0x0131,	/* LATIN_SMALL_LETTER_DOTLESS_I */
+  GDK_dead_abovedot,	GDK_z,	0,	0,	0,	0x017C,	/* LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE */
   GDK_dead_abovedot,	GDK_abovedot,	0,	0,	0,	0x02D9,	/* DOT_ABOVE */
   GDK_dead_abovedot,	GDK_dead_abovedot,	0,	0,	0,	0x02D9,	/* DOT_ABOVE */
   GDK_dead_diaeresis,	GDK_space,	0,	0,	0,	0x0022,	/* QUOTATION_MARK */
@@ -158,17 +175,34 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_diaeresis,	GDK_y,	0,	0,	0,	0x00FF,	/* LATIN_SMALL_LETTER_Y_WITH_DIAERESIS */
   GDK_dead_diaeresis,	GDK_diaeresis,	0,	0,	0,	0x00A8,	/* DIAERESIS */
   GDK_dead_diaeresis,	GDK_dead_diaeresis,	0,	0,	0,	0x00A8,	/* DIAERESIS */
+  GDK_dead_abovering,	GDK_space,	0,	0,	0,	0x02DA,	/* RING_ABOVE */
   GDK_dead_abovering,	GDK_A,	0,	0,	0,	0x00C5,	/* LATIN_CAPITAL_LETTER_A_WITH_RING_ABOVE */
+  GDK_dead_abovering,	GDK_U,	0,	0,	0,	0x016E,	/* LATIN_CAPITAL_LETTER_U_WITH_RING_ABOVE */
   GDK_dead_abovering,	GDK_a,	0,	0,	0,	0x00E5,	/* LATIN_SMALL_LETTER_A_WITH_RING_ABOVE */
+  GDK_dead_abovering,	GDK_u,	0,	0,	0,	0x016F,	/* LATIN_SMALL_LETTER_U_WITH_RING_ABOVE */
   GDK_dead_abovering,	GDK_dead_abovering,	0,	0,	0,	0x02DA,	/* RING_ABOVE */
+  GDK_dead_caron,	GDK_space,	0,	0,	0,	0x02C7,	/* CARON */
   GDK_dead_caron,	GDK_C,	0,	0,	0,	0x010C,	/* LATIN_CAPITAL_LETTER_C_WITH_CARON */
+  GDK_dead_caron,	GDK_D,	0,	0,	0,	0x010E,	/* LATIN_CAPITAL_LETTER_D_WITH_CARON */
+  GDK_dead_caron,	GDK_E,	0,	0,	0,	0x011A,	/* LATIN_CAPITAL_LETTER_E_WITH_CARON */
+  GDK_dead_caron,	GDK_L,	0,	0,	0,	0x013D,	/* LATIN_CAPITAL_LETTER_L_WITH_CARON */
+  GDK_dead_caron,	GDK_N,	0,	0,	0,	0x0147,	/* LATIN_CAPITAL_LETTER_N_WITH_CARON */
+  GDK_dead_caron,	GDK_R,	0,	0,	0,	0x0158,	/* LATIN_CAPITAL_LETTER_R_WITH_CARON */
   GDK_dead_caron,	GDK_S,	0,	0,	0,	0x0160,	/* LATIN_CAPITAL_LETTER_S_WITH_CARON */
+  GDK_dead_caron,	GDK_T,	0,	0,	0,	0x0164,	/* LATIN_CAPITAL_LETTER_T_WITH_CARON */
   GDK_dead_caron,	GDK_Z,	0,	0,	0,	0x017D,	/* LATIN_CAPITAL_LETTER_Z_WITH_CARON */
   GDK_dead_caron,	GDK_c,	0,	0,	0,	0x010D,	/* LATIN_SMALL_LETTER_C_WITH_CARON */
+  GDK_dead_caron,	GDK_d,	0,	0,	0,	0x010F,	/* LATIN_SMALL_LETTER_D_WITH_CARON */
+  GDK_dead_caron,	GDK_e,	0,	0,	0,	0x011B,	/* LATIN_SMALL_LETTER_E_WITH_CARON */
+  GDK_dead_caron,	GDK_l,	0,	0,	0,	0x013E,	/* LATIN_SMALL_LETTER_L_WITH_CARON */
+  GDK_dead_caron,	GDK_n,	0,	0,	0,	0x0148,	/* LATIN_SMALL_LETTER_N_WITH_CARON */
+  GDK_dead_caron,	GDK_r,	0,	0,	0,	0x0159,	/* LATIN_SMALL_LETTER_R_WITH_CARON */
   GDK_dead_caron,	GDK_s,	0,	0,	0,	0x0161,	/* LATIN_SMALL_LETTER_S_WITH_CARON */
+  GDK_dead_caron,	GDK_t,	0,	0,	0,	0x0165,	/* LATIN_SMALL_LETTER_T_WITH_CARON */
   GDK_dead_caron,	GDK_z,	0,	0,	0,	0x017E,	/* LATIN_SMALL_LETTER_Z_WITH_CARON */
   GDK_dead_caron,	GDK_caron,	0,	0,	0,	0x02C7,	/* CARON */
   GDK_dead_caron,	GDK_dead_caron,	0,	0,	0,	0x02C7,	/* CARON */
+  GDK_dead_cedilla,	GDK_space,	0,	0,	0,	0x00B8,	/* CEDILLA */
   GDK_dead_cedilla,	GDK_comma,	0,	0,	0,	0x00B8,	/* CEDILLA */
   GDK_dead_cedilla,	GDK_minus,	0,	0,	0,	0x00AC,	/* NOT_SIGN */
   GDK_dead_cedilla,	GDK_C,	0,	0,	0,	0x00C7,	/* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
@@ -187,6 +221,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_cedilla,	GDK_s,	0,	0,	0,	0x015F,	/* LATIN_SMALL_LETTER_S_WITH_CEDILLA */
   GDK_dead_cedilla,	GDK_cedilla,	0,	0,	0,	0x00B8,	/* CEDILLA */
   GDK_dead_cedilla,	GDK_dead_cedilla,	0,	0,	0,	0x00B8,	/* CEDILLA */
+  GDK_dead_ogonek,	GDK_space,	0,	0,	0,	0x02DB,	/* OGONEK */
   GDK_dead_ogonek,	GDK_A,	0,	0,	0,	0x0104,	/* LATIN_CAPITAL_LETTER_A_WITH_OGONEK */
   GDK_dead_ogonek,	GDK_E,	0,	0,	0,	0x0118,	/* LATIN_CAPITAL_LETTER_E_WITH_OGONEK */
   GDK_dead_ogonek,	GDK_I,	0,	0,	0,	0x012E,	/* LATIN_CAPITAL_LETTER_I_WITH_OGONEK */
@@ -199,7 +234,9 @@ static guint16 gtk_compose_seqs[] = {
   GDK_dead_ogonek,	GDK_dead_ogonek,	0,	0,	0,	0x02DB,	/* OGONEK */
   GDK_Multi_key,	GDK_space,	GDK_space,	0,	0,	0x00A0,	/* NOxBREAK_SPACE */
   GDK_Multi_key,	GDK_space,	GDK_apostrophe,	0,	0,	0x0027,	/* APOSTROPHE */
+  GDK_Multi_key,	GDK_space,	GDK_parenleft,	0,	0,	0x02D8,	/* BREVE */
   GDK_Multi_key,	GDK_space,	GDK_minus,	0,	0,	0x007E,	/* TILDE */
+  GDK_Multi_key,	GDK_space,	GDK_less,	0,	0,	0x02C7,	/* CARON */
   GDK_Multi_key,	GDK_space,	GDK_greater,	0,	0,	0x005E,	/* CIRCUMFLEX_ACCENT */
   GDK_Multi_key,	GDK_space,	GDK_asciicircum,	0,	0,	0x005E,	/* CIRCUMFLEX_ACCENT */
   GDK_Multi_key,	GDK_space,	GDK_grave,	0,	0,	0x0060,	/* GRAVE_ACCENT */
@@ -224,29 +261,46 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_quotedbl,	GDK_y,	0,	0,	0x00FF,	/* LATIN_SMALL_LETTER_Y_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_apostrophe,	GDK_space,	0,	0,	0x0027,	/* APOSTROPHE */
   GDK_Multi_key,	GDK_apostrophe,	GDK_apostrophe,	0,	0,	0x00B4,	/* ACUTE_ACCENT */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_A,	0,	0,	0x00C1,	/* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_E,	0,	0,	0x00C9,	/* LATIN_CAPITAL_LETTER_E_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_I,	0,	0,	0x00CD,	/* LATIN_CAPITAL_LETTER_I_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_O,	0,	0,	0x00D3,	/* LATIN_CAPITAL_LETTER_O_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_U,	0,	0,	0x00DA,	/* LATIN_CAPITAL_LETTER_U_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_Y,	0,	0,	0x00DD,	/* LATIN_CAPITAL_LETTER_Y_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_a,	0,	0,	0x00E1,	/* LATIN_SMALL_LETTER_A_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_e,	0,	0,	0x00E9,	/* LATIN_SMALL_LETTER_E_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_i,	0,	0,	0x00ED,	/* LATIN_SMALL_LETTER_I_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_o,	0,	0,	0x00F3,	/* LATIN_SMALL_LETTER_O_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_u,	0,	0,	0x00FA,	/* LATIN_SMALL_LETTER_U_WITH_ACUTE */
-  GDK_Multi_key,	GDK_apostrophe,	GDK_y,	0,	0,	0x00FD,	/* LATIN_SMALL_LETTER_Y_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_A,  0,      0,      0x00C1, /* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_C,  0,      0,      0x0106, /* LATIN_CAPITAL_LETTER_C_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_E,  0,      0,      0x00C9, /* LATIN_CAPITAL_LETTER_E_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_I,  0,      0,      0x00CD, /* LATIN_CAPITAL_LETTER_I_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_L,  0,      0,      0x0139, /* LATIN_CAPITAL_LETTER_L_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_N,  0,      0,      0x0143, /* LATIN_CAPITAL_LETTER_N_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_O,  0,      0,      0x00D3, /* LATIN_CAPITAL_LETTER_O_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_R,  0,      0,      0x0154, /* LATIN_CAPITAL_LETTER_R_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_S,  0,      0,      0x015A, /* LATIN_CAPITAL_LETTER_S_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_U,  0,      0,      0x00DA, /* LATIN_CAPITAL_LETTER_U_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_Y,  0,      0,      0x00DD, /* LATIN_CAPITAL_LETTER_Y_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_Z,  0,      0,      0x0179, /* LATIN_CAPITAL_LETTER_Z_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_a,  0,      0,      0x00E1, /* LATIN_SMALL_LETTER_A_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_c,  0,      0,      0x0107, /* LATIN_SMALL_LETTER_C_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_e,  0,      0,      0x00E9, /* LATIN_SMALL_LETTER_E_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_i,  0,      0,      0x00ED, /* LATIN_SMALL_LETTER_I_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_l,  0,      0,      0x013A, /* LATIN_SMALL_LETTER_L_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_n,  0,      0,      0x0144, /* LATIN_SMALL_LETTER_N_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_o,  0,      0,      0x00F3, /* LATIN_SMALL_LETTER_O_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_r,  0,      0,      0x0155, /* LATIN_SMALL_LETTER_R_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_s,  0,      0,      0x015B, /* LATIN_SMALL_LETTER_S_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_u,  0,      0,      0x00FA, /* LATIN_SMALL_LETTER_U_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_y,  0,      0,      0x00FD, /* LATIN_SMALL_LETTER_Y_WITH_ACUTE */
+  GDK_Multi_key,	GDK_apostrophe,	GDK_z,  0,      0,      0x017A, /* LATIN_SMALL_LETTER_Z_WITH_ACUTE */
+  GDK_Multi_key,	GDK_parenleft,	GDK_space,	0,	0,	0x02D8,	/* BREVE */
   GDK_Multi_key,	GDK_parenleft,	GDK_parenleft,	0,	0,	0x005B,	/* LEFT_SQUARE_BRACKET */
   GDK_Multi_key,	GDK_parenleft,	GDK_minus,	0,	0,	0x007B,	/* LEFT_CURLY_BRACKET */
+  GDK_Multi_key,	GDK_parenleft,	GDK_A,	0,	0,	0x0102,	/* LATIN_CAPITAL_LETTER_A_WITH_BREVE */
   GDK_Multi_key,	GDK_parenleft,	GDK_G,	0,	0,	0x011E,	/* LATIN_CAPITAL_LETTER_G_WITH_BREVE */
   GDK_Multi_key,	GDK_parenleft,	GDK_c,	0,	0,	0x00A9,	/* COPYRIGHT_SIGN */
+  GDK_Multi_key,	GDK_parenleft,	GDK_a,	0,	0,	0x0103,	/* LATIN_SMALL_LETTER_A_WITH_BREVE */
   GDK_Multi_key,	GDK_parenleft,	GDK_g,	0,	0,	0x011F,	/* LATIN_SMALL_LETTER_G_WITH_BREVE */
   GDK_Multi_key,	GDK_parenleft,	GDK_r,	0,	0,	0x00AE,	/* REGISTERED_SIGN */
   GDK_Multi_key,	GDK_parenright,	GDK_parenright,	0,	0,	0x005D,	/* RIGHT_SQUARE_BRACKET */
   GDK_Multi_key,	GDK_parenright,	GDK_minus,	0,	0,	0x007D,	/* RIGHT_CURLY_BRACKET */
   GDK_Multi_key,	GDK_asterisk,	GDK_0,	0,	0,	0x00B0,	/* DEGREE_SIGN */
   GDK_Multi_key,	GDK_asterisk,	GDK_A,	0,	0,	0x00C5,	/* LATIN_CAPITAL_LETTER_A_WITH_RING_ABOVE */
+  GDK_Multi_key,	GDK_asterisk,	GDK_U,	0,	0,	0x016E,	/* LATIN_CAPITAL_LETTER_U_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_asterisk,	GDK_a,	0,	0,	0x00E5,	/* LATIN_SMALL_LETTER_A_WITH_RING_ABOVE */
+  GDK_Multi_key,	GDK_asterisk,	GDK_u,	0,	0,	0x016F,	/* LATIN_SMALL_LETTER_U_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_plus,	GDK_plus,	0,	0,	0x0023,	/* NUMBER_SIGN */
   GDK_Multi_key,	GDK_plus,	GDK_minus,	0,	0,	0x00B1,	/* PLUSxMINUS_SIGN */
   GDK_Multi_key,	GDK_comma,	GDK_comma,	0,	0,	0x00B8,	/* CEDILLA */
@@ -287,7 +341,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_minus,	GDK_L,	0,	0,	0x00A3,	/* POUND_SIGN */
   GDK_Multi_key,	GDK_minus,	GDK_N,	0,	0,	0x00D1,	/* LATIN_CAPITAL_LETTER_N_WITH_TILDE */
   GDK_Multi_key,	GDK_minus,	GDK_O,	0,	0,	0x00D5,	/* LATIN_CAPITAL_LETTER_O_WITH_TILDE */
-  GDK_Multi_key,	GDK_minus,	GDK_U,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
+  GDK_Multi_key,	GDK_minus,	GDK_U,	0,	0,	0x016A,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_minus,	GDK_Y,	0,	0,	0x00A5,	/* YEN_SIGN */
   GDK_Multi_key,	GDK_minus,	GDK_asciicircum,	0,	0,	0x00AF,	/* MACRON */
   GDK_Multi_key,	GDK_minus,	GDK_a,	0,	0,	0x00E3,	/* LATIN_SMALL_LETTER_A_WITH_TILDE */
@@ -311,6 +365,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_period,	GDK_P,	0,	0,	0x1E56,	/* LATIN_CAPITAL_LETTER_P_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_period,	GDK_S,	0,	0,	0x1E60,	/* LATIN_CAPITAL_LETTER_S_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_period,	GDK_T,	0,	0,	0x1E6A,	/* LATIN_CAPITAL_LETTER_T_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_period,	GDK_Z,	0,	0,	0x017B,	/* LATIN_CAPITAL_LETTER_Z_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_period,	GDK_asciicircum,	0,	0,	0x00B7,	/* MIDDLE_DOT */
   GDK_Multi_key,	GDK_period,	GDK_b,	0,	0,	0x1E03,	/* LATIN_SMALL_LETTER_B_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_period,	GDK_c,	0,	0,	0x010B,	/* LATIN_SMALL_LETTER_C_WITH_DOT_ABOVE */
@@ -323,6 +378,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_period,	GDK_p,	0,	0,	0x1E57,	/* LATIN_SMALL_LETTER_P_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_period,	GDK_s,	0,	0,	0x1E61,	/* LATIN_SMALL_LETTER_S_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_period,	GDK_t,	0,	0,	0x1E6B,	/* LATIN_SMALL_LETTER_T_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_period,	GDK_z,	0,	0,	0x017C,	/* LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_slash,	GDK_slash,	0,	0,	0x005C,	/* REVERSE_SOLIDUS */
   GDK_Multi_key,	GDK_slash,	GDK_less,	0,	0,	0x005C,	/* REVERSE_SOLIDUS */
   GDK_Multi_key,	GDK_slash,	GDK_C,	0,	0,	0x00A2,	/* CENT_SIGN */
@@ -352,13 +408,26 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_3,	GDK_asciicircum,	0,	0,	0x00B3,	/* SUPERSCRIPT_THREE */
   GDK_Multi_key,	GDK_3,	GDK_s,	0,	0,	0x00B3,	/* SUPERSCRIPT_THREE */
   GDK_Multi_key,	GDK_colon,	GDK_minus,	0,	0,	0x00F7,	/* DIVISION_SIGN */
+  GDK_Multi_key,	GDK_less,	GDK_space,	0,	0,	0x02C7,	/* CARON */
   GDK_Multi_key,	GDK_less,	GDK_slash,	0,	0,	0x005C,	/* REVERSE_SOLIDUS */
   GDK_Multi_key,	GDK_less,	GDK_less,	0,	0,	0x00AB,	/* LEFTxPOINTING_DOUBLE_ANGLE_QUOTATION_MARK */
   GDK_Multi_key,	GDK_less,	GDK_C,	0,	0,	0x010C,	/* LATIN_CAPITAL_LETTER_C_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_D,	0,	0,	0x010E,	/* LATIN_CAPITAL_LETTER_D_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_E,	0,	0,	0x011A,	/* LATIN_CAPITAL_LETTER_E_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_L,	0,	0,	0x013D,	/* LATIN_CAPITAL_LETTER_L_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_N,	0,	0,	0x0147,	/* LATIN_CAPITAL_LETTER_N_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_R,	0,	0,	0x0158,	/* LATIN_CAPITAL_LETTER_R_WITH_CARON */
   GDK_Multi_key,	GDK_less,	GDK_S,	0,	0,	0x0160,	/* LATIN_CAPITAL_LETTER_S_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_T,	0,	0,	0x0164,	/* LATIN_CAPITAL_LETTER_T_WITH_CARON */
   GDK_Multi_key,	GDK_less,	GDK_Z,	0,	0,	0x017D,	/* LATIN_CAPITAL_LETTER_Z_WITH_CARON */
   GDK_Multi_key,	GDK_less,	GDK_c,	0,	0,	0x010D,	/* LATIN_SMALL_LETTER_C_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_d,	0,	0,	0x010F,	/* LATIN_SMALL_LETTER_D_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_e,	0,	0,	0x011B,	/* LATIN_SMALL_LETTER_E_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_l,	0,	0,	0x013E,	/* LATIN_SMALL_LETTER_L_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_n,	0,	0,	0x0148,	/* LATIN_SMALL_LETTER_N_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_r,	0,	0,	0x0159,	/* LATIN_SMALL_LETTER_R_WITH_CARON */
   GDK_Multi_key,	GDK_less,	GDK_s,	0,	0,	0x0161,	/* LATIN_SMALL_LETTER_S_WITH_CARON */
+  GDK_Multi_key,	GDK_less,	GDK_t,	0,	0,	0x0165,	/* LATIN_SMALL_LETTER_T_WITH_CARON */
   GDK_Multi_key,	GDK_less,	GDK_z,	0,	0,	0x017E,	/* LATIN_SMALL_LETTER_Z_WITH_CARON */
   GDK_Multi_key,	GDK_equal,	GDK_C,	0,	0,	0x20AC,	/* EURO_SIGN */
   GDK_Multi_key,	GDK_equal,	GDK_L,	0,	0,	0x00A3,	/* POUND_SIGN */
@@ -381,6 +450,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_question,	GDK_question,	0,	0,	0x00BF,	/* INVERTED_QUESTION_MARK */
   GDK_Multi_key,	GDK_A,	GDK_quotedbl,	0,	0,	0x00C4,	/* LATIN_CAPITAL_LETTER_A_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_A,	GDK_apostrophe,	0,	0,	0x00C1,	/* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
+  GDK_Multi_key,	GDK_A,	GDK_parenleft,	0,	0,	0x0102,	/* LATIN_CAPITAL_LETTER_A_WITH_BREVE */
   GDK_Multi_key,	GDK_A,	GDK_asterisk,	0,	0,	0x00C5,	/* LATIN_CAPITAL_LETTER_A_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_A,	GDK_comma,	0,	0,	0x0104,	/* LATIN_CAPITAL_LETTER_A_WITH_OGONEK */
   GDK_Multi_key,	GDK_A,	GDK_minus,	0,	0,	0x00C3,	/* LATIN_CAPITAL_LETTER_A_WITH_TILDE */
@@ -394,22 +464,25 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_A,	GDK_diaeresis,	0,	0,	0x00C4,	/* LATIN_CAPITAL_LETTER_A_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_A,	GDK_acute,	0,	0,	0x00C1,	/* LATIN_CAPITAL_LETTER_A_WITH_ACUTE */
   GDK_Multi_key,	GDK_B,	GDK_period,	0,	0,	0x1E02,	/* LATIN_CAPITAL_LETTER_B_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_C,  GDK_apostrophe,	0,      0,      0x0106, /* LATIN_CAPITAL_LETTER_C_WITH_ACUTE */
   GDK_Multi_key,	GDK_C,	GDK_comma,	0,	0,	0x00C7,	/* LATIN_CAPITAL_LETTER_C_WITH_CEDILLA */
   GDK_Multi_key,	GDK_C,	GDK_period,	0,	0,	0x010A,	/* LATIN_CAPITAL_LETTER_C_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_C,	GDK_slash,	0,	0,	0x00A2,	/* CENT_SIGN */
-  GDK_Multi_key,	GDK_C,	GDK_0,	0,	0,	0x00A9,	/* COPYRIGHT_SIGN */
   GDK_Multi_key,	GDK_C,	GDK_less,	0,	0,	0x010C,	/* LATIN_CAPITAL_LETTER_C_WITH_CARON */
+  GDK_Multi_key,	GDK_C,	GDK_0,	0,	0,	0x00A9,	/* COPYRIGHT_SIGN */
   GDK_Multi_key,	GDK_C,	GDK_equal,	0,	0,	0x20AC,	/* EURO_SIGN */
   GDK_Multi_key,	GDK_C,	GDK_O,	0,	0,	0x00A9,	/* COPYRIGHT_SIGN */
   GDK_Multi_key,	GDK_C,	GDK_o,	0,	0,	0x00A9,	/* COPYRIGHT_SIGN */
   GDK_Multi_key,	GDK_C,	GDK_bar,	0,	0,	0x00A2,	/* CENT_SIGN */
   GDK_Multi_key,	GDK_D,	GDK_minus,	0,	0,	0x0110,	/* LATIN_CAPITAL_LETTER_D_WITH_STROKE */
   GDK_Multi_key,	GDK_D,	GDK_period,	0,	0,	0x1E0A,	/* LATIN_CAPITAL_LETTER_D_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_D,	GDK_less,	0,	0,	0x010E,	/* LATIN_CAPITAL_LETTER_D_WITH_CARON */
   GDK_Multi_key,	GDK_E,	GDK_quotedbl,	0,	0,	0x00CB,	/* LATIN_CAPITAL_LETTER_E_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_E,	GDK_apostrophe,	0,	0,	0x00C9,	/* LATIN_CAPITAL_LETTER_E_WITH_ACUTE */
   GDK_Multi_key,	GDK_E,	GDK_comma,	0,	0,	0x0118,	/* LATIN_CAPITAL_LETTER_E_WITH_OGONEK */
   GDK_Multi_key,	GDK_E,	GDK_minus,	0,	0,	0x0112,	/* LATIN_CAPITAL_LETTER_E_WITH_MACRON */
   GDK_Multi_key,	GDK_E,	GDK_period,	0,	0,	0x0116,	/* LATIN_CAPITAL_LETTER_E_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_E,	GDK_less,	0,	0,	0x011A,	/* LATIN_CAPITAL_LETTER_E_WITH_CARON */
   GDK_Multi_key,	GDK_E,	GDK_greater,	0,	0,	0x00CA,	/* LATIN_CAPITAL_LETTER_E_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_E,	GDK_asciicircum,	0,	0,	0x00CA,	/* LATIN_CAPITAL_LETTER_E_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_E,	GDK_underscore,	0,	0,	0x0112,	/* LATIN_CAPITAL_LETTER_E_WITH_MACRON */
@@ -435,13 +508,17 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_I,	GDK_diaeresis,	0,	0,	0x00CF,	/* LATIN_CAPITAL_LETTER_I_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_I,	GDK_acute,	0,	0,	0x00CD,	/* LATIN_CAPITAL_LETTER_I_WITH_ACUTE */
   GDK_Multi_key,	GDK_K,	GDK_comma,	0,	0,	0x0136,	/* LATIN_CAPITAL_LETTER_K_WITH_CEDILLA */
+  GDK_Multi_key,	GDK_L,  GDK_apostrophe,	0,      0,      0x0139, /* LATIN_CAPITAL_LETTER_L_WITH_ACUTE */
   GDK_Multi_key,	GDK_L,	GDK_comma,	0,	0,	0x013B,	/* LATIN_CAPITAL_LETTER_L_WITH_CEDILLA */
   GDK_Multi_key,	GDK_L,	GDK_minus,	0,	0,	0x00A3,	/* POUND_SIGN */
+  GDK_Multi_key,	GDK_L,	GDK_less,	0,	0,	0x013D,	/* LATIN_CAPITAL_LETTER_L_WITH_CARON */
   GDK_Multi_key,	GDK_L,	GDK_equal,	0,	0,	0x00A3,	/* POUND_SIGN */
   GDK_Multi_key,	GDK_L,	GDK_V,	0,	0,	0x007C,	/* VERTICAL_LINE */
   GDK_Multi_key,	GDK_M,	GDK_period,	0,	0,	0x1E40,	/* LATIN_CAPITAL_LETTER_M_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_N,  GDK_apostrophe,	0,      0,      0x0143, /* LATIN_CAPITAL_LETTER_N_WITH_ACUTE */
   GDK_Multi_key,	GDK_N,	GDK_comma,	0,	0,	0x0145,	/* LATIN_CAPITAL_LETTER_N_WITH_CEDILLA */
   GDK_Multi_key,	GDK_N,	GDK_minus,	0,	0,	0x00D1,	/* LATIN_CAPITAL_LETTER_N_WITH_TILDE */
+  GDK_Multi_key,	GDK_N,	GDK_less,	0,	0,	0x0147,	/* LATIN_CAPITAL_LETTER_N_WITH_CARON */
   GDK_Multi_key,	GDK_N,	GDK_G,	0,	0,	0x014A,	/* LATIN_CAPITAL_LETTER_ENG */
   GDK_Multi_key,	GDK_N,	GDK_asciitilde,	0,	0,	0x00D1,	/* LATIN_CAPITAL_LETTER_N_WITH_TILDE */
   GDK_Multi_key,	GDK_O,	GDK_quotedbl,	0,	0,	0x00D6,	/* LATIN_CAPITAL_LETTER_O_WITH_DIAERESIS */
@@ -464,9 +541,12 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_O,	GDK_acute,	0,	0,	0x00D3,	/* LATIN_CAPITAL_LETTER_O_WITH_ACUTE */
   GDK_Multi_key,	GDK_P,	GDK_exclam,	0,	0,	0x00B6,	/* PILCROW_SIGN */
   GDK_Multi_key,	GDK_P,	GDK_period,	0,	0,	0x1E56,	/* LATIN_CAPITAL_LETTER_P_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_R,	GDK_apostrophe,	0,	0,	0x0154,	/* LATIN_CAPITAL_LETTER_R_WITH_ACUTE */
   GDK_Multi_key,	GDK_R,	GDK_comma,	0,	0,	0x0156,	/* LATIN_CAPITAL_LETTER_R_WITH_CEDILLA */
+  GDK_Multi_key,	GDK_R,	GDK_less,	0,	0,	0x0158,	/* LATIN_CAPITAL_LETTER_R_WITH_CARON */
   GDK_Multi_key,	GDK_R,	GDK_O,	0,	0,	0x00AE,	/* REGISTERED_SIGN */
   GDK_Multi_key,	GDK_S,	GDK_exclam,	0,	0,	0x00A7,	/* SECTION_SIGN */
+  GDK_Multi_key,	GDK_S,	GDK_apostrophe,	0,      0,      0x015A, /* LATIN_CAPITAL_LETTER_S_WITH_ACUTE */
   GDK_Multi_key,	GDK_S,	GDK_comma,	0,	0,	0x015E,	/* LATIN_CAPITAL_LETTER_S_WITH_CEDILLA */
   GDK_Multi_key,	GDK_S,	GDK_period,	0,	0,	0x1E60,	/* LATIN_CAPITAL_LETTER_S_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_S,	GDK_0,	0,	0,	0x00A7,	/* SECTION_SIGN */
@@ -479,15 +559,17 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_T,	GDK_minus,	0,	0,	0x0166,	/* LATIN_CAPITAL_LETTER_T_WITH_STROKE */
   GDK_Multi_key,	GDK_T,	GDK_period,	0,	0,	0x1E6A,	/* LATIN_CAPITAL_LETTER_T_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_T,	GDK_slash,	0,	0,	0x0166,	/* LATIN_CAPITAL_LETTER_T_WITH_STROKE */
+  GDK_Multi_key,	GDK_t,	GDK_less,	0,	0,	0x0165,	/* LATIN_SMALL_LETTER_T_WITH_CARON */
   GDK_Multi_key,	GDK_T,	GDK_H,	0,	0,	0x00DE,	/* LATIN_CAPITAL_LETTER_THORN */
   GDK_Multi_key,	GDK_U,	GDK_quotedbl,	0,	0,	0x00DC,	/* LATIN_CAPITAL_LETTER_U_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_U,	GDK_apostrophe,	0,	0,	0x00DA,	/* LATIN_CAPITAL_LETTER_U_WITH_ACUTE */
+  GDK_Multi_key,	GDK_U,	GDK_asterisk,	0,	0,	0x016E,	/* LATIN_CAPITAL_LETTER_U_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_U,	GDK_comma,	0,	0,	0x0172,	/* LATIN_CAPITAL_LETTER_U_WITH_OGONEK */
-  GDK_Multi_key,	GDK_U,	GDK_minus,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
+  GDK_Multi_key,	GDK_U,	GDK_minus,	0,	0,	0x016B,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_U,	GDK_slash,	0,	0,	0x00B5,	/* MICRO_SIGN */
   GDK_Multi_key,	GDK_U,	GDK_greater,	0,	0,	0x00DB,	/* LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_U,	GDK_asciicircum,	0,	0,	0x00DB,	/* LATIN_CAPITAL_LETTER_U_WITH_CIRCUMFLEX */
-  GDK_Multi_key,	GDK_U,	GDK_underscore,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
+  GDK_Multi_key,	GDK_U,	GDK_underscore,	0,	0,	0x016B,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_U,	GDK_grave,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
   GDK_Multi_key,	GDK_U,	GDK_asciitilde,	0,	0,	0x0168,	/* LATIN_CAPITAL_LETTER_U_WITH_TILDE */
   GDK_Multi_key,	GDK_U,	GDK_diaeresis,	0,	0,	0x00DC,	/* LATIN_CAPITAL_LETTER_U_WITH_DIAERESIS */
@@ -504,6 +586,8 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_Y,	GDK_asciicircum,	0,	0,	0x0176,	/* LATIN_CAPITAL_LETTER_Y_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_Y,	GDK_diaeresis,	0,	0,	0x0178,	/* LATIN_CAPITAL_LETTER_Y_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_Y,	GDK_acute,	0,	0,	0x00DD,	/* LATIN_CAPITAL_LETTER_Y_WITH_ACUTE */
+  GDK_Multi_key,	GDK_Z,	GDK_apostrophe,	0,	0,	0x0179,	/* LATIN_CAPITAL_LETTER_Z_WITH_ACUTE */
+  GDK_Multi_key,	GDK_Z,	GDK_period,	0,	0,	0x017B,	/* LATIN_CAPITAL_LETTER_Z_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_Z,	GDK_less,	0,	0,	0x017D,	/* LATIN_CAPITAL_LETTER_Z_WITH_CARON */
   GDK_Multi_key,	GDK_asciicircum,	GDK_space,	0,	0,	0x005E,	/* CIRCUMFLEX_ACCENT */
   GDK_Multi_key,	GDK_asciicircum,	GDK_minus,	0,	0,	0x00AF,	/* MACRON */
@@ -532,7 +616,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_underscore,	GDK_E,	0,	0,	0x0112,	/* LATIN_CAPITAL_LETTER_E_WITH_MACRON */
   GDK_Multi_key,	GDK_underscore,	GDK_I,	0,	0,	0x012A,	/* LATIN_CAPITAL_LETTER_I_WITH_MACRON */
   GDK_Multi_key,	GDK_underscore,	GDK_O,	0,	0,	0x00BA,	/* MASCULINE_ORDINAL_INDICATOR */
-  GDK_Multi_key,	GDK_underscore,	GDK_U,	0,	0,	0x00D9,	/* LATIN_CAPITAL_LETTER_U_WITH_GRAVE */
+  GDK_Multi_key,	GDK_underscore,	GDK_U,	0,	0,	0x016A,	/* LATIN_CAPITAL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_underscore,	GDK_asciicircum,	0,	0,	0x00AF,	/* MACRON */
   GDK_Multi_key,	GDK_underscore,	GDK_underscore,	0,	0,	0x00AF,	/* MACRON */
   GDK_Multi_key,	GDK_underscore,	GDK_a,	0,	0,	0x00AA,	/* FEMININE_ORDINAL_INDICATOR */
@@ -553,6 +637,7 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_grave,	GDK_u,	0,	0,	0x00F9,	/* LATIN_SMALL_LETTER_U_WITH_GRAVE */
   GDK_Multi_key,	GDK_a,	GDK_quotedbl,	0,	0,	0x00E4,	/* LATIN_SMALL_LETTER_A_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_a,	GDK_apostrophe,	0,	0,	0x00E1,	/* LATIN_SMALL_LETTER_A_WITH_ACUTE */
+  GDK_Multi_key,	GDK_a,	GDK_parenleft,	0,	0,	0x0103,	/* LATIN_SMALL_LETTER_A_WITH_BREVE */
   GDK_Multi_key,	GDK_a,	GDK_asterisk,	0,	0,	0x00E5,	/* LATIN_SMALL_LETTER_A_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_a,	GDK_comma,	0,	0,	0x0105,	/* LATIN_SMALL_LETTER_A_WITH_OGONEK */
   GDK_Multi_key,	GDK_a,	GDK_minus,	0,	0,	0x00E3,	/* LATIN_SMALL_LETTER_A_WITH_TILDE */
@@ -576,12 +661,14 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_c,	GDK_bar,	0,	0,	0x00A2,	/* CENT_SIGN */
   GDK_Multi_key,	GDK_d,	GDK_minus,	0,	0,	0x0111,	/* LATIN_SMALL_LETTER_D_WITH_STROKE */
   GDK_Multi_key,	GDK_d,	GDK_period,	0,	0,	0x1E0B,	/* LATIN_SMALL_LETTER_D_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_d,	GDK_less,	0,	0,	0x010F,	/* LATIN_SMALL_LETTER_D_WITH_CARON */
   GDK_Multi_key,	GDK_e,	GDK_quotedbl,	0,	0,	0x00EB,	/* LATIN_SMALL_LETTER_E_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_e,	GDK_apostrophe,	0,	0,	0x00E9,	/* LATIN_SMALL_LETTER_E_WITH_ACUTE */
   GDK_Multi_key,	GDK_e,	GDK_comma,	0,	0,	0x0119,	/* LATIN_SMALL_LETTER_E_WITH_OGONEK */
   GDK_Multi_key,	GDK_e,	GDK_minus,	0,	0,	0x0113,	/* LATIN_SMALL_LETTER_E_WITH_MACRON */
   GDK_Multi_key,	GDK_e,	GDK_period,	0,	0,	0x0117,	/* LATIN_SMALL_LETTER_E_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_e,	GDK_equal,	0,	0,	0x20AC,	/* EURO_SIGN */
+  GDK_Multi_key,	GDK_e,	GDK_less,	0,	0,	0x011B,	/* LATIN_SMALL_LETTER_E_WITH_CARON */
   GDK_Multi_key,	GDK_e,	GDK_greater,	0,	0,	0x00EA,	/* LATIN_SMALL_LETTER_E_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_e,	GDK_asciicircum,	0,	0,	0x00EA,	/* LATIN_SMALL_LETTER_E_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_e,	GDK_underscore,	0,	0,	0x0113,	/* LATIN_SMALL_LETTER_E_WITH_MACRON */
@@ -608,13 +695,17 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_i,	GDK_acute,	0,	0,	0x00ED,	/* LATIN_SMALL_LETTER_I_WITH_ACUTE */
   GDK_Multi_key,	GDK_k,	GDK_comma,	0,	0,	0x0137,	/* LATIN_SMALL_LETTER_K_WITH_CEDILLA */
   GDK_Multi_key,	GDK_k,	GDK_k,	0,	0,	0x0138,	/* LATIN_SMALL_LETTER_KRA */
+  GDK_Multi_key,	GDK_l,	GDK_apostrophe,	0,	0,	0x013A,	/* LATIN_SMALL_LETTER_L_WITH_ACUTE */
   GDK_Multi_key,	GDK_l,	GDK_comma,	0,	0,	0x013C,	/* LATIN_SMALL_LETTER_L_WITH_CEDILLA */
   GDK_Multi_key,	GDK_l,	GDK_minus,	0,	0,	0x00A3,	/* POUND_SIGN */
   GDK_Multi_key,	GDK_l,	GDK_equal,	0,	0,	0x00A3,	/* POUND_SIGN */
+  GDK_Multi_key,	GDK_l,	GDK_less,	0,	0,	0x013E,	/* LATIN_SMALL_LETTER_L_WITH_CARON */
   GDK_Multi_key,	GDK_l,	GDK_v,	0,	0,	0x007C,	/* VERTICAL_LINE */
   GDK_Multi_key,	GDK_m,	GDK_period,	0,	0,	0x1E41,	/* LATIN_SMALL_LETTER_M_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_n,	GDK_apostrophe,	0,	0,	0x0144,	/* LATIN_SMALL_LETTER_N_WITH_ACUTE */
   GDK_Multi_key,	GDK_n,	GDK_comma,	0,	0,	0x0146,	/* LATIN_SMALL_LETTER_N_WITH_CEDILLA */
   GDK_Multi_key,	GDK_n,	GDK_minus,	0,	0,	0x00F1,	/* LATIN_SMALL_LETTER_N_WITH_TILDE */
+  GDK_Multi_key,	GDK_n,	GDK_less,	0,	0,	0x0148,	/* LATIN_SMALL_LETTER_N_WITH_CARON */
   GDK_Multi_key,	GDK_n,	GDK_g,	0,	0,	0x014B,	/* LATIN_SMALL_LETTER_ENG */
   GDK_Multi_key,	GDK_n,	GDK_asciitilde,	0,	0,	0x00F1,	/* LATIN_SMALL_LETTER_N_WITH_TILDE */
   GDK_Multi_key,	GDK_o,	GDK_quotedbl,	0,	0,	0x00F6,	/* LATIN_SMALL_LETTER_O_WITH_DIAERESIS */
@@ -636,8 +727,11 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_o,	GDK_acute,	0,	0,	0x00F3,	/* LATIN_SMALL_LETTER_O_WITH_ACUTE */
   GDK_Multi_key,	GDK_p,	GDK_exclam,	0,	0,	0x00B6,	/* PILCROW_SIGN */
   GDK_Multi_key,	GDK_p,	GDK_period,	0,	0,	0x1E57,	/* LATIN_SMALL_LETTER_P_WITH_DOT_ABOVE */
+  GDK_Multi_key,	GDK_r,	GDK_apostrophe,	0,	0,	0x0155,	/* LATIN_SMALL_LETTER_R_WITH_ACUTE */
   GDK_Multi_key,	GDK_r,	GDK_comma,	0,	0,	0x0157,	/* LATIN_SMALL_LETTER_R_WITH_CEDILLA */
+  GDK_Multi_key,	GDK_r,	GDK_less,	0,	0,	0x0159,	/* LATIN_SMALL_LETTER_R_WITH_CARON */
   GDK_Multi_key,	GDK_s,	GDK_exclam,	0,	0,	0x00A7,	/* SECTION_SIGN */
+  GDK_Multi_key,	GDK_s,	GDK_apostrophe,	0,	0,	0x015B,	/* LATIN_SMALL_LETTER_S_WITH_ACUTE */
   GDK_Multi_key,	GDK_s,	GDK_comma,	0,	0,	0x015F,	/* LATIN_SMALL_LETTER_S_WITH_CEDILLA */
   GDK_Multi_key,	GDK_s,	GDK_period,	0,	0,	0x1E61,	/* LATIN_SMALL_LETTER_S_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_s,	GDK_0,	0,	0,	0x00A7,	/* SECTION_SIGN */
@@ -651,9 +745,11 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_t,	GDK_minus,	0,	0,	0x0167,	/* LATIN_SMALL_LETTER_T_WITH_STROKE */
   GDK_Multi_key,	GDK_t,	GDK_period,	0,	0,	0x1E6B,	/* LATIN_SMALL_LETTER_T_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_t,	GDK_slash,	0,	0,	0x0167,	/* LATIN_SMALL_LETTER_T_WITH_STROKE */
+  GDK_Multi_key,	GDK_t,	GDK_less,	0,	0,	0x0165,	/* LATIN_SMALL_LETTER_T_WITH_CARON */
   GDK_Multi_key,	GDK_t,	GDK_h,	0,	0,	0x00FE,	/* LATIN_SMALL_LETTER_THORN */
   GDK_Multi_key,	GDK_u,	GDK_quotedbl,	0,	0,	0x00FC,	/* LATIN_SMALL_LETTER_U_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_u,	GDK_apostrophe,	0,	0,	0x00FA,	/* LATIN_SMALL_LETTER_U_WITH_ACUTE */
+  GDK_Multi_key,	GDK_u,	GDK_asterisk,	0,	0,	0x016F,	/* LATIN_SMALL_LETTER_U_WITH_RING_ABOVE */
   GDK_Multi_key,	GDK_u,	GDK_comma,	0,	0,	0x0173,	/* LATIN_SMALL_LETTER_U_WITH_OGONEK */
   GDK_Multi_key,	GDK_u,	GDK_minus,	0,	0,	0x016B,	/* LATIN_SMALL_LETTER_U_WITH_MACRON */
   GDK_Multi_key,	GDK_u,	GDK_slash,	0,	0,	0x00B5,	/* MICRO_SIGN */
@@ -679,6 +775,8 @@ static guint16 gtk_compose_seqs[] = {
   GDK_Multi_key,	GDK_y,	GDK_asciicircum,	0,	0,	0x0177,	/* LATIN_SMALL_LETTER_Y_WITH_CIRCUMFLEX */
   GDK_Multi_key,	GDK_y,	GDK_diaeresis,	0,	0,	0x00FF,	/* LATIN_SMALL_LETTER_Y_WITH_DIAERESIS */
   GDK_Multi_key,	GDK_y,	GDK_acute,	0,	0,	0x00FD,	/* LATIN_SMALL_LETTER_Y_WITH_ACUTE */
+  GDK_Multi_key,	GDK_z,	GDK_apostrophe,	0,	0,	0x017A,	/* LATIN_SMALL_LETTER_Z_WITH_ACUTE */
+  GDK_Multi_key,	GDK_z,	GDK_period,	0,	0,	0x017C,	/* LATIN_SMALL_LETTER_Z_WITH_DOT_ABOVE */
   GDK_Multi_key,	GDK_z,	GDK_less,	0,	0,	0x017E,	/* LATIN_SMALL_LETTER_Z_WITH_CARON */
   GDK_Multi_key,	GDK_bar,	GDK_C,	0,	0,	0x00A2,	/* CENT_SIGN */
   GDK_Multi_key,	GDK_bar,	GDK_c,	0,	0,	0x00A2,	/* CENT_SIGN */
