@@ -1,3 +1,9 @@
+Wed Oct 17 15:17:20 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkentry.c (gtk_entry_real_insert_text): Fix mistake
+	in truncating length of text to MAX_SIZE. (Found by 
+	Padraig O'Briain, #62055)
+
 Tue Oct 16 17:04:44 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkwidget.c: Rename ACTIVATE_MNEMONIC enum to

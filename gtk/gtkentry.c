@@ -1858,7 +1858,7 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 	      else
 		{
 		  entry->text_size = MAX_SIZE;
-		  new_text_length = entry->text_size - new_text_length - 1;
+		  new_text_length = entry->text_size - entry->n_bytes - 1;
 		  break;
 		}
 	    }
