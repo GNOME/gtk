@@ -1,3 +1,23 @@
+2004-07-28  Federico Mena Quintero  <federico@ximian.com>
+
+	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault):
+	Store signal IDs in gulongs, not guints!
+	(gtk_file_chooser_default_hierarchy_changed): We now monitor the
+	focus widget on our toplevel to know which widget was last focused
+	at the time our "should_respond" method gets called.
+	(shortcuts_activate_selected): New helper function.
+	(shortcuts_get_selected): New helper function.
+	(remove_selected_bookmarks): Use shortcuts_get_selected().
+	(bookmarks_check_remove_sensitivity): Likewise.
+	(shortcuts_reorder): Likewise.
+	(shortcuts_activate_iter): Renamed from shortcuts_activate_item().
+	Activate by iter, not by item number.
+	(save_folder_combo_changed_cb): Use shortcuts_activate_iter().
+	(shortcuts_row_activated_cb): Likewise.
+	(gtk_file_chooser_default_should_respond): If the last focused
+	widget on the toplevel was the shortcuts list, activate the
+	selected shortcut.
+
 2004-07-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* gdk/linux-fb/gdkprivate-fb.h: Make the fb backend compile against
