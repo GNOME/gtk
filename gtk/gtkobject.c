@@ -256,7 +256,6 @@ gtk_object_class_add_signals (GtkObjectClass *class,
   for (i = 0; i < nsignals; i++)
     new_signals[class->nsignals + i] = signals[i];
 
-  /*  g_free (class->signals); FIXME freeing here causes a segfault */
   class->signals = new_signals;
   class->nsignals += nsignals;
 }
