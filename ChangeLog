@@ -1,3 +1,9 @@
+Fri Jul 30 00:56:31 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_active_changed): 
+	Implement this in terms of gtk_combo_box_get_active_iter(),
+	instead of gtk_combo_box_get_active().
+
 2004-07-29  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtkfilechooserdefault.c (struct _GtkFileChooserDefault): Add

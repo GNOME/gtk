@@ -193,36 +193,29 @@ static void
 gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
                                     gpointer     user_data)
 {
-  gint index;
   GtkComboBoxEntry *entry_box = GTK_COMBO_BOX_ENTRY (combo_box);
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gchar *str = NULL;
 
-  index = gtk_combo_box_get_active (combo_box);
-
-  g_signal_handlers_block_by_func (entry_box->priv->entry,
-                                   gtk_combo_box_entry_contents_changed,
-                                   combo_box);
-
-  if (index >= 0)
+  if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
-      gchar *str = NULL;
-      GtkTreeIter iter;
-      GtkTreeModel *model;
+      g_signal_handlers_block_by_func (entry_box->priv->entry,
+				       gtk_combo_box_entry_contents_changed,
+				       combo_box);
 
       model = gtk_combo_box_get_model (combo_box);
 
-      gtk_tree_model_iter_nth_child (model, &iter, NULL, index);
-      gtk_tree_model_get (model, &iter,
-                          entry_box->priv->text_column, &str,
-                          -1);
-
+      gtk_tree_model_get (model, &iter, 
+			  entry_box->priv->text_column, &str, 
+			  -1);
       gtk_entry_set_text (GTK_ENTRY (entry_box->priv->entry), str);
-
       g_free (str);
-    }
 
-  g_signal_handlers_unblock_by_func (entry_box->priv->entry,
-                                     gtk_combo_box_entry_contents_changed,
-                                     combo_box);
+      g_signal_handlers_unblock_by_func (entry_box->priv->entry,
+					 gtk_combo_box_entry_contents_changed,
+					 combo_box);
+    }
 }
 
 static void 
