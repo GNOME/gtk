@@ -771,7 +771,7 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
       else if (g_ascii_isalpha (str[0]) &&
 	       str[1] == ':' &&
 	       G_IS_DIR_SEPARATOR (str[2]))
-	folder_part = g_strdup_printf ("%c:" G_DIR_SEPARATOR_S, str[0]);
+	folder_part = g_strndup (str, last_slash - str + 1);
       else
 	folder_part = g_strndup (str, last_slash - str);
 
@@ -1491,8 +1491,6 @@ static gboolean
 filename_is_drive_root (const char *filename)
 {
   guint len = strlen (filename);
-
-  /* accept both forms */
 
   return (len == 3 && filename[1] == ':' && G_IS_DIR_SEPARATOR (filename[2]));
 }
