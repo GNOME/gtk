@@ -1,3 +1,16 @@
+2005-03-12  Ivan, Wong Yat Cheung  <email@ivanwong.info>
+
+	Big window fix for Win32. Big windows are still emulated within
+	16-bit coordinate limits, though. Big windows now work on NT-based
+	Windows. (#169989)
+
+	* gdk/win32/gdkgc-win32.c (_gdk_win32_gdkregion_to_hrgn): Use
+	32-bit coordinates.
+
+	* gdk/win32/gdkgeometry-win32.c: Largely rewrite.
+
+	* gdk/win32/gdkwindow-win32.c: Minor related changes.
+	
 2005-03-10  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkliststore.c (gtk_list_store_insert_with_valuesv): 
