@@ -1,3 +1,10 @@
+Fri Feb 13 23:54:48 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* configure.in: Remove checks for sgml2html. It was once
+	used for building the linuxdoc version of the tutorial.
+	Nowadays, we use db2html.  (#134164, Julio M. Merino Vidal)
+	
+
 Fri Feb 13 08:17:43 2004  Owen Taylor  <otaylor@redhat.com>
 
 	Fix various compilation problems (#134312, David
