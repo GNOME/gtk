@@ -1834,10 +1834,14 @@ forward_line_leaving_caches_unmodified (GtkTextRealIter *real)
     }
 }
 
-
+#if 0
 /* The return value of this indicates WHETHER WE MOVED.
  * The return value of public functions indicates
  * (MOVEMENT OCCURRED && NEW ITER IS DEREFERENCEABLE)
+ *
+ * This function is currently unused, thus it is #if-0-ed. It is
+ * left here, since it's non-trivial code that might be useful in
+ * the future.
  */
 static gboolean
 backward_line_leaving_caches_unmodified (GtkTextRealIter *real)
@@ -1878,6 +1882,7 @@ backward_line_leaving_caches_unmodified (GtkTextRealIter *real)
       return FALSE;
     }
 }
+#endif 
 
 /* The return value indicates (MOVEMENT OCCURRED && NEW ITER IS
  * DEREFERENCEABLE)

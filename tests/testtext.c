@@ -308,6 +308,7 @@ msgbox_run (GtkWindow  *parent,
   return result;
 }
 
+#ifdef DO_BLINK
 /*
  * Example buffer filling code
  */
@@ -327,6 +328,7 @@ blink_timeout (gpointer data)
 
   return TRUE;
 }
+#endif
 
 static gint
 tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
@@ -442,8 +444,10 @@ fill_example_buffer (GtkTextBuffer *buffer)
   
   tag = gtk_text_buffer_create_tag (buffer, "fg_blue", NULL);
 
-  /*       gtk_timeout_add (1000, blink_timeout, tag); */
-      
+#ifdef DO_BLINK
+  gtk_timeout_add (1000, blink_timeout, tag);
+#endif     
+ 
   setup_tag (tag);
   
   color.red = color.green = 0;

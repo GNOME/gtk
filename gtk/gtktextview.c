@@ -388,8 +388,6 @@ static void           text_window_invalidate_rect (GtkTextWindow     *win,
 
 static gint           text_window_get_width       (GtkTextWindow     *win);
 static gint           text_window_get_height      (GtkTextWindow     *win);
-static void           text_window_get_allocation  (GtkTextWindow     *win,
-                                                   GdkRectangle      *rect);
 
 
 enum
@@ -6780,13 +6778,6 @@ static gint
 text_window_get_height (GtkTextWindow *win)
 {
   return win->allocation.height;
-}
-
-static void
-text_window_get_allocation (GtkTextWindow *win,
-                            GdkRectangle  *rect)
-{
-  *rect = win->allocation;
 }
 
 /* Windows */

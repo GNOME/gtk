@@ -159,15 +159,9 @@ static void gtk_color_selection_realize         (GtkWidget               *widget
 static void gtk_color_selection_unrealize       (GtkWidget               *widget);
 static void gtk_color_selection_show_all        (GtkWidget               *widget);
 
-static gint     gtk_color_selection_get_palette_size    (GtkColorSelection *colorsel);
-static gboolean gtk_color_selection_get_palette_color   (GtkColorSelection *colorsel,
-                                                         gint               index,
-                                                         GdkColor          *color);
 static void     gtk_color_selection_set_palette_color   (GtkColorSelection *colorsel,
                                                          gint               index,
                                                          GdkColor          *color);
-static void     gtk_color_selection_unset_palette_color (GtkColorSelection *colorsel,
-                                                         gint               index);
 static GdkGC   *get_focus_gc                            (GtkWidget         *drawing_area,
 							 gint              *focus_width);
 static void     default_noscreen_change_palette_func    (const GdkColor    *colors,
@@ -2464,86 +2458,6 @@ gtk_color_selection_set_palette_color (GtkColorSelection   *colorsel,
 }
 
 /**
- * gtk_color_selection_get_palette_color:
- * @colorsel: a #GtkColorSelection.
- * @index: the color index of the palette.
- * @color: a #GdkColor to fill in with the color value.
- * 
- * Set @color to have the color found in the palette at @index.  If
- * the palette is unset, it will leave the color unset.
- * 
- * Return value: %TRUE if the palette located at @index has a color set.  %FALSE
- * if it doesn't.
- **/
-static gboolean
-gtk_color_selection_get_palette_color (GtkColorSelection   *colorsel,
-				       gint                 index,
-				       GdkColor            *color)
-{
-  ColorSelectionPrivate *priv;
-  gint x, y;
-  gdouble col[4];
-  
-  g_return_val_if_fail (GTK_IS_COLOR_SELECTION (colorsel), FALSE);
-  g_return_val_if_fail (index >= 0  && index < GTK_CUSTOM_PALETTE_WIDTH*GTK_CUSTOM_PALETTE_HEIGHT, FALSE);
-  
-  priv = colorsel->private_data;
-
-  x = index % GTK_CUSTOM_PALETTE_WIDTH;
-  y = index / GTK_CUSTOM_PALETTE_WIDTH;
-
-  if (GPOINTER_TO_INT (g_object_get_data (G_OBJECT (priv->custom_palette[x][y]), "color_set")) == 0)
-    return FALSE;
-  
-  palette_get_color (priv->custom_palette[x][y], col);
-
-  color->red = UNSCALE (col[0]);
-  color->green = UNSCALE (col[1]);
-  color->blue = UNSCALE (col[2]);
-  
-  return TRUE;
-}
-
-/**
- * gtk_color_selection_unset_palette_color:
- * @colorsel: a #GtkColorSelection.
- * @index: the color index in the palette.
- *
- * Changes the palette located @index to have no color set.
- **/
-static void
-gtk_color_selection_unset_palette_color (GtkColorSelection   *colorsel,
-					 gint                 index)
-{
-  ColorSelectionPrivate *priv;
-  gint x, y;
-  
-  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
-  g_return_if_fail (index >= 0  && index < GTK_CUSTOM_PALETTE_WIDTH*GTK_CUSTOM_PALETTE_HEIGHT);
-  
-  x = index % GTK_CUSTOM_PALETTE_WIDTH;
-  y = index / GTK_CUSTOM_PALETTE_WIDTH;
-  
-  priv = colorsel->private_data;
-  palette_unset_color (priv->custom_palette[x][y]);
-}
-
-/**
- * gtk_color_selection_get_current_alpha:
- * @colorsel: a #GtkColorSelection.
- *
- * Returns the maximum number of palette colors.
- *
- * Return value: the maximum number of palette indexes.
- **/
-static gint
-gtk_color_selection_get_palette_size (GtkColorSelection *colorsel)
-{
-  return GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT;
-}
-
-
-/**
  * gtk_color_selection_is_adjusting:
  * @colorsel: a #GtkColorSelection.
  *
@@ -2787,7 +2701,7 @@ gtk_color_selection_set_change_palette_hook (GtkColorSelectionChangePaletteFunc 
 }
 
 /**
- * gtk_color_selection_set_change_palette_hook:
+ * gtk_color_selection_set_change_palette_with_screen_hook:
  * @func: a function to call when the custom palette needs saving.
  * 
  * Installs a global function to be called whenever the user tries to

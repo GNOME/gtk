@@ -1,3 +1,23 @@
+2002-11-08  Matthias Clasen  <maclas@gmx.de>
+
+	* tests/testtext.c (blink_timeout): Put into #ifdef DO_BLINK to
+	avoid an unused static function.  (#97965)
+
+	* gtk/gtktextiter.c (backward_line_leaving_caches_unmodified): 
+	* gtk/gtkstyle.c (radio_aa_bits):
+	(draw_spin_entry_shadow): #if-0-out unused static functions and
+	variables.  (#97965) 
+
+	* gtk/gtktextview.c (text_window_get_allocation): 
+	* gtk/gtkcolorsel.c (gtk_color_selection_get_palette_size):
+	(gtk_color_selection_get_palette_color):
+	(gtk_color_selection_unset_palette_color): Remove unused static
+	functions.  (#97965)
+
+	* gtk/gtkcolorsel.c
+	(gtk_color_selection_set_change_palette_with_screen_hook): Fix doc
+	comment. 
+	
 Fri Nov  8 17:08:54 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/x11/gdkwindow-x11.c (gdk_window_new): Use
