@@ -383,8 +383,8 @@ gtk_combo_box_entry_new_text (void)
   GtkListStore *store;
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
-
   entry_box = gtk_combo_box_entry_new_with_model (GTK_TREE_MODEL (store), 0);
+  g_object_unref (store);
 
   return entry_box;
 }

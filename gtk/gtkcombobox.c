@@ -2060,7 +2060,7 @@ gtk_combo_box_menu_fill (GtkComboBox *combo_box)
 	{
 	  GtkCellView *cell_view;
 
-	  cell_view = gtk_cell_view_new ();
+	  cell_view = GTK_CELL_VIEW (gtk_cell_view_new ());
 	  gtk_cell_view_set_model (cell_view, combo_box->priv->model);
 	  gtk_cell_view_set_displayed_row (cell_view, path);
 	  gtk_widget_show (GTK_WIDGET (cell_view));
