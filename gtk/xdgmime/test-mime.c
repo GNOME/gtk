@@ -112,7 +112,7 @@ main (int argc, char *argv[])
       printf ("File \"%s\" has a mime-type of %s\n", file_name, result);
     }
 
-#if 0
+#if 1
   xdg_mime_dump ();
 #endif
   return 0;

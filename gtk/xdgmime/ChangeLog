@@ -1,3 +1,15 @@
+2005-04-02  Matthias Clasen  <mclasen@redhat.com>
+
+	Sync to latest upstream, support mmapped
+	mime.cache:
+
+	* xdgmimecache.[hc]: Implement the xgdmime
+	api on top of the mmapped cache. 
+
+	* xdgmime.c: Load caches, and use the cache-based
+	implementation of the api, if cache files are
+	present.
+
 2005-03-28  Matthias Clasen  <mclasen@redhat.com>
 
 	* xdgmimeglob.c: Sync to latest upstream,

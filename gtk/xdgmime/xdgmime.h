@@ -54,6 +54,7 @@ typedef void (*XdgMimeDestroy)  (void *user_data);
 #define xdg_mime_media_type_equal             XDG_ENTRY(media_type_equal)
 #define xdg_mime_mime_type_subclass           XDG_ENTRY(mime_type_subclass)
 #define xdg_mime_get_mime_parents             XDG_ENTRY(get_mime_parents)
+#define xdg_mime_list_mime_parents            XDG_ENTRY(list_mime_parents)
 #define xdg_mime_unalias_mime_type            XDG_ENTRY(unalias_mime_type)
 #define xdg_mime_get_max_buffer_extents       XDG_ENTRY(get_max_buffer_extents)
 #define xdg_mime_shutdown                     XDG_ENTRY(shutdown)
@@ -77,7 +78,13 @@ int          xdg_mime_media_type_equal             (const char *mime_a,
 						    const char *mime_b);
 int          xdg_mime_mime_type_subclass           (const char *mime_a,
 						    const char *mime_b);
+  /* xdg_mime_get_mime_parents() is deprecated since it does
+   * not work correctly with caches. Use xdg_mime_list_parents() 
+   * instead, but notice that that function expects you to free
+   * the array it returns. 
+   */
 const char **xdg_mime_get_mime_parents		   (const char *mime);
+char **      xdg_mime_list_mime_parents		   (const char *mime);
 const char  *xdg_mime_unalias_mime_type		   (const char *mime);
 int          xdg_mime_get_max_buffer_extents       (void);
 void         xdg_mime_shutdown                     (void);
