@@ -1,3 +1,9 @@
+Mon Oct 23 12:07:57 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c (gtk_widget_set_style_internal): Fix problem
+	where font_desc for widget's context lagged widget's font_desc by
+	one step.
+
 2000-10-22  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkgc-win32.c

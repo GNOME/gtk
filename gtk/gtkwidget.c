@@ -3302,7 +3302,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
     {
       PangoContext *context = gtk_widget_peek_pango_context (widget);
       if (context)
-	pango_context_set_font_description (context, widget->style->font_desc);
+	pango_context_set_font_description (context, style->font_desc);
     }
   
   if (widget->style != style)
