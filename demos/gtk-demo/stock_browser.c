@@ -115,13 +115,12 @@ id_to_macro (const gchar *id)
   p = macro->str;
   while (*p)
     {
+      *p = g_ascii_toupper (*p);
       if (*p == '-')
         *p = '_';
       ++p;
     }
 
-  g_ascii_strup (macro->str);
-  
   return g_string_free (macro, FALSE);
 }
 

@@ -1,3 +1,8 @@
+Fri Sep 14 22:26:01 2001  Matthias Clasen  <matthiasc@poet.de>
+
+	* demos/gtk-demo/stock_browser.c (id_to_macro): make
+	the uppercasing work. (#59550)
+
 2001-09-14  Jakub Steiner <jimmac@ximian.com>
 
 	* gtk/stock-icons/dialog_error.png:
