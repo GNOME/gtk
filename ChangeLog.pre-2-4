@@ -1,3 +1,8 @@
+2001-08-07    <matthiasc@waldgeist.poet.de>
+
+	* gtk/gtktextdisplay.c (render_para, gtk_text_layout_draw): Fix
+	some off-by-one issues, fixing selection of line-ends. (#50323)
+
 2001-08-07  Matthias Clasen  <matthiasc@waldgeist.poet.de>
 
 	* gtk/gtkhsv.c (gtk_hsv_map, gtk_hsv_unmap): Reinstate these

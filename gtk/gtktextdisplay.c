@@ -539,7 +539,7 @@ render_para (GdkDrawable        *drawable,
                               y + PANGO_PIXELS (baseline),
                               FALSE);
 
-          if (selection_start_index < byte_offset + line->length &&
+          if (selection_start_index <= byte_offset + line->length &&
               selection_end_index > byte_offset) /* Some selected */
             {
               GdkRegion *clip_region = get_selected_clip (render_state, layout, line,
@@ -746,7 +746,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
             {
               GtkTextIter line_start, line_end;
               gint byte_count;
-
+              
               gtk_text_layout_get_iter_at_line (layout,
                                                 &line_start,
                                                 line, 0);
@@ -757,8 +757,8 @@ gtk_text_layout_draw (GtkTextLayout *layout,
                                                 &line_end,
                                                 line, byte_count - 1);
 
-              if (gtk_text_iter_compare (&selection_start, &line_end) < 0 &&
-                  gtk_text_iter_compare (&selection_end, &line_start) > 0)
+              if (gtk_text_iter_compare (&selection_start, &line_end) <= 0 &&
+                  gtk_text_iter_compare (&selection_end, &line_start) >= 0)
                 {
                   if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
                     selection_start_index = gtk_text_iter_get_line_index (&selection_start);
