@@ -117,7 +117,6 @@ GType GTK_TYPE_IDENTIFIER = 0;
 #else
 #define IMPORT
 #endif
-extern IMPORT gboolean glib_debug_objects;
 
 #include <gtk.h>	/* for gtktypebuiltins_ids.c */
 #include <gdk.h>	/* gtktypebuiltins_ids.c */
@@ -152,8 +151,6 @@ gtk_type_init (GTypeDebugFlags debug_flags)
 
       initialized = TRUE;
 
-      glib_debug_objects = (gtk_debug_flags & GTK_DEBUG_OBJECTS) != 0;
-      
       /* initialize GLib type system
        */
       g_type_init (debug_flags);
