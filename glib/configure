@@ -1297,7 +1297,7 @@ fi
 
 
 if test -n "$DEBUGFLAG"; then
-  CFLAGS="$DEBUGFLAG"
+  test "${CFLAGS+set}" = set || CFLAGS="$DEBUGFLAG"
 fi
 
 # Checks for programs.
@@ -1594,16 +1594,16 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 
 if eval "test x$GCC = xyes"; then
-  if test ! `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
+  if test -z `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
     CFLAGS="$CFLAGS -Wall"
   fi
 
   if eval "test x$enable_ansi = xyes"; then
-    if test ! `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
+    if test -z `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -ansi"
     fi
 
-    if test ! `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
+    if test -z `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -pedantic"
     fi
   fi

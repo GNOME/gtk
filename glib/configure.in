@@ -24,7 +24,7 @@ AC_ARG_ENABLE(ansi, [  --enable-ansi           turn on strict ansi [default=no]]
 		    , enable_ansi=no)
 
 if test -n "$DEBUGFLAG"; then
-  CFLAGS="$DEBUGFLAG"
+  test "${CFLAGS+set}" = set || CFLAGS="$DEBUGFLAG"
 fi
 
 # Checks for programs.
@@ -33,16 +33,16 @@ AM_PROG_CC_STDC
 AC_PROG_INSTALL
 
 if eval "test x$GCC = xyes"; then
-  if test ! `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
+  if test -z `echo "$CFLAGS" | grep "\-Wall" 2> /dev/null` ; then
     CFLAGS="$CFLAGS -Wall"
   fi
 
   if eval "test x$enable_ansi = xyes"; then
-    if test ! `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
+    if test -z `echo "$CFLAGS" | grep "\-ansi" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -ansi"
     fi
 
-    if test ! `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
+    if test -z `echo "$CFLAGS" | grep "\-pedantic" 2> /dev/null` ; then
       CFLAGS="$CFLAGS -pedantic"
     fi
   fi

@@ -1,3 +1,14 @@
+Tue Dec  9 Owen Taylor <owt1@cornell.edu>
+	* configure changes: (configure.in, glib/configure.in)
+	Change test ! `...` to test -z `...`
+	  (Harald Meland <Harald.Meland@usit.uio.no>)
+	Change $gtk_cv_x_locale to $need_x_locale so it isn't cached.
+	With --enable_debug, don't touch CFLAGS if they're already set.
+
+Tue Dec  9 Owen Taylor <owt1@cornell.edu>
+	* gdk/gdkpixmap.c: don't use gdk_black/white for pixmap mask.
+	 From Patrice Fortier <Patrice.Fortier@aquarel.fr>
+
 Mon Dec  8 Owen Taylor <owt1@cornell.edu>
 	* gtk/testselection.c (selection_received): foreward -> forward.
 	* gtk/gtktext.c (gtk_text_forward_delete): Renamed; changed all
