@@ -1,20 +1,18 @@
 <!-- ##### SECTION Title ##### -->
-gtkfilefilter
+GtkFileFilter
 
 <!-- ##### SECTION Short_Description ##### -->
-
+A filter for selecting a file subset
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### STRUCT GtkFileFilter ##### -->
 <para>

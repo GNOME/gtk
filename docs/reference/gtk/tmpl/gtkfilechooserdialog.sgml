@@ -2,6 +2,7 @@
 GtkFileChooserDialog
 
 <!-- ##### SECTION Short_Description ##### -->
+implements GtkFileChooser as a dialog
 
 
 <!-- ##### SECTION Long_Description ##### -->
@@ -9,12 +10,10 @@ GtkFileChooserDialog
 
 </para>
 
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
 </para>
-
 
 <!-- ##### FUNCTION gtk_file_chooser_dialog_new ##### -->
 <para>
