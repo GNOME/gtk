@@ -1045,15 +1045,20 @@ status_window_get (GtkIMContextXIM *context_xim,
   GtkWidget *window;
   StatusWindow *status_window;
   GtkWidget *status_label;
+  GdkScreen *screen;
+  GdkWindow *root_window;
   
   if (!context_xim->client_window)
     return NULL;
 
   toplevel_gdk = context_xim->client_window;
+  screen = gdk_drawable_get_screen (toplevel_gdk);
+  root_window = gdk_screen_get_root_window (screen);
+  
   while (TRUE)
     {
       GdkWindow *parent = gdk_window_get_parent (toplevel_gdk);
-      if (parent == gdk_get_default_root_window ())
+      if (parent == root_window)
 	break;
       else
 	toplevel_gdk = parent;

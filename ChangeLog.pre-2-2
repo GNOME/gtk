@@ -1,3 +1,9 @@
+Mon Sep 23 12:24:14 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/gtkimcontextxim.c (status_window_get): 
+	Fix incorrect usage of gdk_get_default_root_window ()).
+	(#92767)
+
 Mon Sep 23 12:12:48 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkspinbutton.c: Patch from Joshua N Pritikin to
