@@ -1,3 +1,7 @@
+2003-07-23  Matthias Clasen  <maclas@gmx.de>
+
+	* docs/faq/gtk-faq.sgml: Mention Xnest as a way to debug GTK+ apps. 
+
 2003-07-20  Hans Breuer  <hans@breuer.org>
 
 	* makefile.msc : new file to build it all
