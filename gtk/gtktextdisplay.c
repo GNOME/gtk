@@ -92,6 +92,7 @@ struct _GtkTextRenderState
   GtkTextAppearance *last_bg_appearance;
   GdkGC *fg_gc;
   GdkGC *bg_gc;
+  GdkGC *error_gc;
   GdkRectangle clip_rect;
 };
 
@@ -116,6 +117,7 @@ gtk_text_render_state_new (GtkWidget    *widget,
   state->widget = widget;
   state->fg_gc = gdk_gc_new (drawable);
   state->bg_gc = gdk_gc_new (drawable);
+
   state->clip_rect = *clip_rect;
 
   return state;
@@ -126,6 +128,8 @@ gtk_text_render_state_destroy (GtkTextRenderState *state)
 {
   g_object_unref (state->fg_gc);
   g_object_unref (state->bg_gc);
+  if (state->error_gc)
+    g_object_unref (state->error_gc);
 
   g_free (state);
 }
@@ -202,6 +206,36 @@ gtk_text_render_state_update (GtkTextRenderState *state,
     }
 
   state->last_appearance = new_appearance;
+}
+
+static GdkGC *
+gtk_text_render_state_get_error_gc (GtkTextRenderState *state)
+{
+  if (!state->error_gc)
+    {
+      static const GdkColor red = { 0, 0xffff, 0, 0 };
+      
+      GdkGCValues gc_values;
+      GdkGCValuesMask gc_values_mask;
+      GdkColor *underline_color;
+      GtkWidget *widget = state->widget;
+
+      gtk_widget_style_get (widget, "error-underline_color", &underline_color, NULL);
+      
+      gc_values_mask = GDK_GC_FOREGROUND;
+      if (underline_color)
+	{
+	  gc_values.foreground = *underline_color;
+	  gdk_color_free (underline_color);
+	}
+      else
+	gc_values.foreground = red;
+      
+      gdk_rgb_find_color (widget->style->colormap, &gc_values.foreground);
+      state->error_gc = gdk_gc_new_with_values (widget->window, &gc_values, gc_values_mask);
+    }
+
+  return state->error_gc;
 }
 
 static void
@@ -422,6 +456,29 @@ render_layout_line (GdkDrawable        *drawable,
                          risen_y + 1,
                          x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE,
                          risen_y + 1);
+          break;
+        case PANGO_UNDERLINE_ERROR:
+          g_assert (need_ink);
+          {
+	    GdkGC *error_gc = gtk_text_render_state_get_error_gc (render_state);
+
+            int point_x, point_y;
+            int counter = 0;
+	    int end_x = x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE;
+
+            for (point_x = x + (x_off + ink_rect.x) / PANGO_SCALE - 1;
+                 point_x <= end_x;
+                 point_x += 2)
+	      {
+		point_y = counter ? risen_y + 1 : risen_y + 2;
+		
+		gdk_draw_line (drawable, error_gc,
+			       point_x, point_y,
+			       MIN (point_x + 1, end_x), point_y);
+		
+		counter = (counter + 1) % 2;
+	      }
+          }
           break;
         case PANGO_UNDERLINE_LOW:
           g_assert (need_ink);

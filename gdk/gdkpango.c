@@ -186,6 +186,25 @@ draw_underline (GdkDrawable    *drawable,
 		     start_x, baseline_y + 1,
 		     end_x,   baseline_y + 1);
       break;
+    case PANGO_UNDERLINE_ERROR:
+      {
+        int point_x, point_y;
+        int counter = 0;
+
+        for (point_x = start_x;
+             point_x <= end_x;
+             point_x += 2)
+	  {
+	    point_y = counter ? baseline_y + 1 : baseline_y + 2;
+	    
+	    gdk_draw_line (drawable, gc,
+			   point_x, point_y,
+			   MIN (point_x + 1, end_x), point_y);
+	    
+	    counter = (counter + 1) % 2;
+	  }
+      }
+      break;
     case PANGO_UNDERLINE_LOW:
       gdk_draw_line (drawable, gc,
 		     start_x, low_y + 1,

@@ -1,3 +1,12 @@
+Sun Feb 29 16:35:23 2004  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/gdkpango.c gtk/gtktextdisplay.c: Implement
+	PANGO_UNDERLINE_ERROR (Based on a patch by
+	Nicolas Setton, #114237)
+
+	* gtk/gtktextview.c: Add a error-underline-color style
+	property.
+
 Sun Feb 29 19:04:33 2004  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkrange.c (_gtk_range_get_wheel_delta): New internal
