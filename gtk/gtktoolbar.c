@@ -3457,6 +3457,12 @@ gtk_toolbar_internal_insert_element (GtkToolbar          *toolbar,
       break;
     }
 
+  /*
+   * When we are using the old API, consider all items "is_important". That
+   * way BOTH_HORIZ will continue to show both icon and label in old API mode
+   */
+  gtk_tool_item_set_is_important (item, TRUE);
+
   gtk_widget_show (GTK_WIDGET (item));
   
   if (type == GTK_TOOLBAR_CHILD_BUTTON ||

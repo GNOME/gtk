@@ -1,3 +1,10 @@
+Wed Nov 12 01:29:32 2003  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_internal_insert_element): When we
+	are using the old API, make all items "is_important". That way
+	BOTH_HORIZ will continue to show both icon and label in old API
+	mode.
+
 Mon Nov 10 00:40:41 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkeventbox.c (gtk_event_box_set_above_child): 
