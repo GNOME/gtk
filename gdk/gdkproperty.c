@@ -95,17 +95,24 @@ gdk_property_get (GdkWindow   *window,
 		      &ret_nitems, &ret_bytes_after,
 		      &ret_data);
 
-  if ((ret_prop_type == None) && (ret_format == 0))
+  if ((ret_prop_type == None) && (ret_format == 0)) {
+    g_warning("XGetWindowProperty failed\n");
     return FALSE;
+  }
 
   if (actual_property_type)
     *actual_property_type = ret_prop_type;
   if (actual_format_type)
     *actual_format_type = ret_format;
 
-  if (ret_prop_type != property)
+  if (ret_prop_type != type)
     {
+      gchar *rn, *pn;
       XFree (ret_data);
+      rn = gdk_atom_name(ret_prop_type);
+      pn = gdk_atom_name(type);
+      g_warning("Couldn't match property type %s to %s\n", rn, pn);
+      g_free(rn); g_free(pn);
       return FALSE;
     }
 
