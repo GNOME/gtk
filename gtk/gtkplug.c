@@ -54,7 +54,9 @@ static void            gtk_plug_set_focus             (GtkWindow        *window,
 static gboolean        gtk_plug_focus                 (GtkWidget        *widget,
 						       GtkDirectionType  direction);
 static void            gtk_plug_check_resize          (GtkContainer     *container);
+#if 0
 static void            gtk_plug_accel_entries_changed (GtkWindow        *window);
+#endif
 static GdkFilterReturn gtk_plug_filter_func           (GdkXEvent        *gdk_xevent,
 						       GdkEvent         *event,
 						       gpointer          data);

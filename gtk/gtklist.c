@@ -1446,7 +1446,6 @@ void
 gtk_list_select_all (GtkList *list)
 {
   GtkContainer *container;
-  GList *work;
  
   g_return_if_fail (GTK_IS_LIST (list));
 

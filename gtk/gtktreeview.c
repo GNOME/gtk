@@ -286,8 +286,6 @@ static void     gtk_tree_view_get_arrow_xrange               (GtkTreeView       
 static gint     gtk_tree_view_new_column_width               (GtkTreeView       *tree_view,
 							      gint               i,
 							      gint              *x);
-static void     gtk_tree_view_ensure_scroll_timeout          (GtkTreeView       *tree_view,
-							      GFunc              func);
 static void     gtk_tree_view_adjustment_changed             (GtkAdjustment     *adjustment,
 							      GtkTreeView       *tree_view);
 static gint     gtk_tree_view_insert_iter_height             (GtkTreeView       *tree_view,
@@ -3572,8 +3570,6 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 
   if (!set_destination_row (tree_view, context, x, y, &suggested_action, &target))
     return FALSE;
-
-  /*  gtk_tree_view_ensure_scroll_timeout (tree_view); */
 
   gtk_tree_view_get_drag_dest_row (tree_view, &path, &pos);
 

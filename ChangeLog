@@ -1,3 +1,13 @@
+Thu Sep 20 11:03:51 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkobject.c gtk/gtklist.c gtk/gtkplug.c gtk/gtksocket.c
+	gtk/gtktreemodelsort.c gtk/gtktreeview.c: Small warning cleanups.
+
+	* gtk/gtkradiomenuitem.c (gtk_radio_menu_item_get_group): Change
+	the function definition so we don't accidentally rely on
+	the compat #define from gtk_radio_menu_item_group.
+	(#60782, Jeff Franks)
+
 Thu Sep 20 16:51:02 2001  Kristian Rietveld  <kristian@planet.nl>
 
         * gtk/gtkwindow.c (gtk_window_get_frame_dimensions): returned

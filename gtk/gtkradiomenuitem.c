@@ -169,7 +169,7 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 }
 
 GSList*
-gtk_radio_menu_item_group (GtkRadioMenuItem *radio_menu_item)
+gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
 {
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item), NULL);
 

@@ -1549,7 +1549,6 @@ gtk_tree_model_sort_sort_helper (GtkTreeModelSort *tree_model_sort,
     {
       SortElt *elt1;
       SortElt *elt2;
-      SortElt  tmp;
       gint j;
       GArray *c;
 

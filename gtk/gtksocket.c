@@ -1445,9 +1445,7 @@ gtk_socket_filter_func (GdkXEvent *gdk_xevent, GdkEvent *event, gpointer data)
 	    if (socket->plug_window)
 	      {
 		GTK_NOTE(PLUGSOCKET,
-			 g_message ("GtkSocket - window reparented",
-				    socket->request_width,
-				    socket->request_height));
+			 g_message ("GtkSocket - window reparented"));
 	      }
 	    
 	    return_val = GDK_FILTER_REMOVE;
