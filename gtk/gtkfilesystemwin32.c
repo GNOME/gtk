@@ -43,6 +43,10 @@
 #error "The implementation is win32 only."
 #endif /* G_OS_WIN32 */
 
+#ifndef G_IS_DIR_SEPARATOR
+#define G_IS_DIR_SEPARATOR(c) ((c) == G_DIR_SEPARATOR || (c) == '/')
+#endif
+
 typedef struct _GtkFileSystemWin32Class GtkFileSystemWin32Class;
 
 #define GTK_FILE_SYSTEM_WIN32_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_FILE_SYSTEM_WIN32, GtkFileSystemWin32Class))
@@ -173,7 +177,8 @@ static gboolean       gtk_file_folder_win32_list_children    (GtkFileFolder     
 static gchar *        filename_from_path                     (const GtkFilePath        *path);
 static GtkFilePath *  filename_to_path                       (const gchar              *filename);
 
-static gboolean       filename_is_root                       (const char               *filename);
+static gboolean       filename_is_drive_root                 (const char               *filename);
+static gboolean       filename_is_some_root                  (const char               *filename);
 static GtkFileInfo *  filename_get_info                      (const gchar              *filename,
 							      GtkFileInfoType           types,
 							      GError                  **error);
@@ -430,7 +435,7 @@ gtk_file_system_win32_create_folder (GtkFileSystem     *file_system,
 		   g_strerror (errno));
       g_free (filename_utf8);
     }
-  else if (!filename_is_root (filename))
+  else if (!filename_is_drive_root (filename))
     {
       parent = g_path_get_dirname (filename);
       if (parent)
@@ -565,10 +570,13 @@ gtk_file_system_win32_get_parent (GtkFileSystem     *file_system,
 				  GtkFilePath      **parent,
 				  GError           **error)
 {
-  gchar *filename = filename_from_path (path);
-  g_return_val_if_fail (filename != NULL, FALSE);
+  const char *filename;
 
-  if (filename_is_root (filename))
+  filename = gtk_file_path_get_string (path);
+  g_return_val_if_fail (filename != NULL, FALSE);
+  g_return_val_if_fail (g_path_is_absolute (filename), FALSE);
+
+  if (filename_is_some_root (filename))
     {
       *parent = NULL;
     }
@@ -578,8 +586,6 @@ gtk_file_system_win32_get_parent (GtkFileSystem     *file_system,
       *parent = filename_to_path (parent_filename);
       g_free (parent_filename);
     }
-
-  g_free (filename);
 
   return TRUE;
 }
@@ -630,14 +636,27 @@ static void
 canonicalize_filename (gchar *filename)
 {
   gchar *p, *q;
+  gchar *past_root;
   gboolean last_was_slash = FALSE;
+
+#if 0
+  printf("canonicalize_filename: %s ", filename);
+#endif
 
   p = filename;
   q = filename;
 
+  if (g_ascii_isalpha (*filename) &&
+      filename[1] == ':' &&
+      G_IS_DIR_SEPARATOR (filename[2]))
+    past_root = filename + 3;
+  else
+    past_root = filename + 1;
+  
+
   while (*p)
     {
-      if (*p == G_DIR_SEPARATOR)
+      if (G_IS_DIR_SEPARATOR (*p))
 	{
 	  if (!last_was_slash)
 	    *q++ = G_DIR_SEPARATOR;
@@ -648,7 +667,7 @@ canonicalize_filename (gchar *filename)
 	{
 	  if (last_was_slash && *p == '.')
 	    {
-	      if (*(p + 1) == G_DIR_SEPARATOR ||
+	      if (G_IS_DIR_SEPARATOR (*(p + 1)) ||
 		  *(p + 1) == '\0')
 		{
 		  if (*(p + 1) == '\0')
@@ -657,14 +676,14 @@ canonicalize_filename (gchar *filename)
 		  p += 1;
 		}
 	      else if (*(p + 1) == '.' &&
-		       (*(p + 2) == G_DIR_SEPARATOR ||
+		       (G_IS_DIR_SEPARATOR (*(p + 2)) ||
 			*(p + 2) == '\0'))
 		{
-		  if (q > filename + 1)
+		  if (q > past_root)
 		    {
 		      q--;
-		      while (q > filename + 1 &&
-			     *(q - 1) != G_DIR_SEPARATOR)
+		      while (q > past_root &&
+			     !G_IS_DIR_SEPARATOR (*(q - 1)))
 			q--;
 		    }
 
@@ -689,10 +708,13 @@ canonicalize_filename (gchar *filename)
       p++;
     }
 
-  if (q > filename + 1 && *(q - 1) == G_DIR_SEPARATOR)
+  if (q > past_root && G_IS_DIR_SEPARATOR (*(q - 1)))
     q--;
 
   *q = '\0';
+#if 0
+  printf(" => %s\n", filename);
+#endif
 }
 
 static gboolean
@@ -704,14 +726,23 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 			     GError           **error)
 {
   const char *base_filename;
-  gchar *last_slash;
+  gchar *last_backslash, *last_slash;
   gboolean result = FALSE;
+
+#if 0
+  printf("gtk_file_system_win32_parse: base_path=%s str=%s\n",(char*)base_path,str);
+#endif
 
   base_filename = gtk_file_path_get_string (base_path);
   g_return_val_if_fail (base_filename != NULL, FALSE);
   g_return_val_if_fail (g_path_is_absolute (base_filename), FALSE);
   
-  last_slash = strrchr (str, G_DIR_SEPARATOR);
+  last_backslash = strrchr (str, G_DIR_SEPARATOR);
+  last_slash = strrchr (str, '/');
+  if (last_slash == NULL ||
+      (last_backslash != NULL && last_backslash > last_slash))
+    last_slash = last_backslash;
+
   if (!last_slash)
     {
       *folder = gtk_file_path_copy (base_path);
@@ -725,7 +756,19 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
       GError *tmp_error = NULL;
 
       if (last_slash == str)
-	folder_part = g_strdup ("/");
+	{
+	  if (g_ascii_isalpha (base_filename[0]) &&
+	      base_filename[1] == ':')
+	    folder_part = g_strdup_printf ("%c:%c", base_filename[0],
+					   G_DIR_SEPARATOR);
+	  else
+	    folder_part = g_strdup (G_DIR_SEPARATOR_S);
+	}
+      else if (g_ascii_isalpha (str[0]) &&
+	       str[1] == ':' &&
+	       G_IS_DIR_SEPARATOR (str[2]))
+	folder_part = g_filename_from_utf8 (str, last_slash - str + 1,
+					    NULL, NULL, &tmp_error);
       else
 	folder_part = g_filename_from_utf8 (str, last_slash - str,
 					    NULL, NULL, &tmp_error);
@@ -741,7 +784,7 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 	}
       else
 	{
-	  if (folder_part[1] == ':')
+	  if (g_path_is_absolute (folder_part))
 	    folder_path = folder_part;
 	  else
 	    {
@@ -759,6 +802,10 @@ gtk_file_system_win32_parse (GtkFileSystem     *file_system,
 	  result = TRUE;
 	}
     }
+
+#if 0
+  printf("gtk_file_system_win32_parse:returning folder=%s file_part=%s\n",(*folder?(char*)*folder:"NULL"),*file_part);
+#endif
 
   return result;
 }
@@ -985,10 +1032,13 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
   const char* filename = gtk_file_path_get_string (path);
 
   /* handle drives with stock icons */
-  if (filename_is_root (filename))
+  if (filename_is_drive_root (filename))
     {
-      gchar *filename2 = g_strconcat(filename, "\\", NULL);
-      DWORD dt = GetDriveType (filename2);
+      gchar filename2[] = "?:\\";
+      DWORD dt;
+
+      filename2[0] = filename[0];
+      dt = GetDriveType (filename2);
 
       switch (dt)
         {
@@ -1004,7 +1054,6 @@ gtk_file_system_win32_render_icon (GtkFileSystem     *file_system,
         default :
           break;
         }
-      g_free (filename2);
     }
   else if (g_file_test (filename, G_FILE_TEST_IS_DIR))
     {
@@ -1180,7 +1229,7 @@ gtk_file_folder_win32_get_info (GtkFileFolder     *folder,
   
   if (!path)
     {
-      g_return_val_if_fail (filename_is_root (folder_win32->filename), NULL);
+      g_return_val_if_fail (filename_is_some_root (folder_win32->filename), NULL);
 
       /* ??? */
       info = filename_get_info (folder_win32->filename, folder_win32->types, error);
@@ -1276,7 +1325,7 @@ filename_get_info (const gchar     *filename,
 
   info = gtk_file_info_new ();
 
-  if (filename_is_root (filename))
+  if (filename_is_some_root (filename))
     {
       if (types & GTK_FILE_INFO_DISPLAY_NAME)
 	gtk_file_info_set_display_name (info, filename);
@@ -1377,12 +1426,18 @@ filename_to_path (const char *filename)
 }
 
 static gboolean
-filename_is_root (const char *filename)
+filename_is_drive_root (const char *filename)
 {
-  guint len = strlen(filename);
+  guint len = strlen (filename);
 
   /* accept both forms */
 
-  return (len == 3 && filename[1] == ':' && (filename[2] == '\\' || filename[2] == '/'));
+  return (len == 3 && filename[1] == ':' && G_IS_DIR_SEPARATOR (filename[2]));
 }
 
+static gboolean
+filename_is_some_root (const char *filename)
+{
+  return (G_IS_DIR_SEPARATOR (filename[0]) && filename[1] == '\0') ||
+         filename_is_drive_root (filename);
+}    

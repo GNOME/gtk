@@ -99,7 +99,6 @@ static char    *maybe_append_separator_to_path (GtkFileChooserEntry *chooser_ent
 						GtkFilePath         *path,
 						gchar               *display_name);
 
-
 static GObjectClass *parent_class;
 static GtkEditableClass *parent_editable_iface;
 
@@ -317,6 +316,20 @@ completion_match_func (GtkEntryCompletion *comp,
   norm_file_part = g_utf8_normalize (chooser_entry->file_part, -1, G_NORMALIZE_ALL);
   norm_name = g_utf8_normalize (name, -1, G_NORMALIZE_ALL);
 
+#ifdef G_PLATFORM_WIN32
+  {
+    gchar *temp;
+
+    temp = norm_file_part;
+    norm_file_part = g_utf8_casefold (norm_file_part, -1);
+    g_free (temp);
+
+    temp = norm_name;
+    norm_name = g_utf8_casefold (norm_name, -1);
+    g_free (temp);
+  }
+#endif
+
   result = (strncmp (norm_file_part, norm_name, strlen (norm_file_part)) == 0);
 
   g_free (norm_file_part);
@@ -326,10 +339,11 @@ completion_match_func (GtkEntryCompletion *comp,
   return result;
 }
 
-/* This function will append a '/' character to paths to display_name iff the
- * path associated with it is a directory.  maybe_append_separator_to_path will
- * g_free the display_name and return a new one if needed.  Otherwise, it will
- * return the old one.  You should be safe calling
+/* This function will append a directory separator to paths to
+ * display_name iff the path associated with it is a directory.
+ * maybe_append_separator_to_path will g_free the display_name and
+ * return a new one if needed.  Otherwise, it will return the old one.
+ * You should be safe calling
  *
  * display_name = maybe_append_separator_to_path (entry, path, display_name);
  * ...
@@ -352,7 +366,7 @@ maybe_append_separator_to_path (GtkFileChooserEntry *chooser_entry,
 	  if (gtk_file_info_get_is_folder (info))
 	    {
 	      gchar *tmp = display_name;
-	      display_name = g_strconcat (tmp, "/", NULL);
+	      display_name = g_strconcat (tmp, G_DIR_SEPARATOR_S, NULL);
 	      g_free (tmp);
 	    }
 	  

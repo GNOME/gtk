@@ -1,3 +1,32 @@
+2004-04-22  Tor Lillqvist  <tml@iki.fi>
+
+	Fix the file chooser on Windows. I can't make it misbehave or
+	crash any more now. But presumably there are still corner cases
+	not handled. I haven't really checked behaviour of UNC paths, for
+	instance.
+
+	* gtk/gtkfilesystemwin32.c: Accept both backslash and slash in
+	several places. Use G_IS_DIR_SEPARATOR macro (which could be added
+	to GLib in 2.6).
+
+	(gtk_file_system_win32_get_parent): Like the Unix version, assert
+	filename is absolute, and avoid one unnecessary string allocation
+	and freeing.
+	
+	(canonicalize_filename,gtk_file_system_win32_parse): Handle drive
+	letters more correctly.
+
+	(gtk_file_system_win32_render_icon): Assure correct syntax is used
+	for root folder of a drive. (#137962, Morten Welinder)
+
+	(filename_is_some_root): New function that accepts also root
+	without any drive specified.
+
+	(filename_is_drive_root): Rename from filename_is_root.
+
+	* gtk/gtkfilechooserentry.c (completion_match_func): Casefold on
+	Windows.
+
 2004-04-21  Matthias Clasen  <mclasen@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_completion_timeout): Pop down the 
