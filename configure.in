@@ -627,6 +627,7 @@ po/Makefile.in
 docs/Makefile
 gdk/Makefile
 gdk/x11/Makefile
+gdk/win32/Makefile
 gtk/Makefile
 gtk/gtkfeatures.h
 gtk/gtkcompat.h

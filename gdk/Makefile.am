@@ -85,7 +85,6 @@ gdk_c_sources = @STRIP_BEGIN@ \
 	gdkrgb.c	\
 	gdkrectangle.c	\
 	gdkwindow.c	\
-	MwmUtil.h       \
 @STRIP_END@
 
 #

@@ -1,3 +1,13 @@
+2000-01-13  Tor Lillqvist  <tml@iki.fi>
+
+	* configure.in
+	* gdk/Makefile.am
+	* gdk/x11/Makefile.am
+	* gdk/win32/Makefile.am: Small fixes, thanks to Peter Wainwright
+	(bug #5177).
+	* gdk/win32/gdkcc-win32.c: Reintroduce, to be thrown
+	out later.
+
 2000-01-09  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/win32/gdkevents-win32.c (gdk_event_translate): Ignore

@@ -28,7 +28,7 @@ EXTRA_DIST = \
 	makefile.msc \
 	surrogate-dimm.h \
 	rc/gdk.rc \
-	rc/gdk.ico \
+	rc/gtk.ico \
 	rc/cursor00.cur \
 	rc/cursor02.cur \
 	rc/cursor04.cur \
@@ -105,4 +105,4 @@ EXTRA_DIST = \
 	rc/cursor92.cur \
 	rc/cursor94.cur \
 	rc/cursor96.cur \
-	rc/cursor98.cur \
+	rc/cursor98.cur
