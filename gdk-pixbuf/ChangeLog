@@ -1,3 +1,8 @@
+2003-06-01  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk-pixdata.h (struct _GdkPixdata): Fix misleading documentation
+	of rowstride.  (#113924, Noah Levitt)
+
 2003-05-27  Matthias Clasen  <maclas@gmx.de>
 
 	* io-wbmp.c: Remove dubious bitfields of
