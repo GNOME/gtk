@@ -1,3 +1,55 @@
+Mon Aug 24 18:37:15 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktext.c: Reference count the fonts used in
+	the text widget.
+
+	* gdk/gdk.h gdk/gdkcolor.c: Rename the color allocation
+	freeing functions to be more consistent, and more 
+	convenient; leave the old names in for backwards compatibility.
+
+	* gdk/gdkcolor.c gdk/gdkprivate.h: Reference count the
+	allocations in pseudo-color colormaps to greatly reduce
+	calls to XAllocColor. Keep a per-colormap hashtable to
+	speed up finding if there is an already-allocated matching
+	color.
+
+	* gdk/gdkcolor.c: Don't just match read the system colormap
+	when the colormap is created, but synchronize our copy
+	with the system colormap periodically.
+	
+	* gdk/gdk.c gdk/gdktypes.h gtk/gtkentry.c gtk/gtktext.c: 
+	Change XIM constants names to match GDK conventions
+
+	* gtk/testinput.c: Allow the drawing area to get the focus.
+
+	* gtk/testgtk.c: Change around the Text test to demonstrates
+	multiple fonts, use more colors.
+
+	* gtk/gtkwidget.c: Improve gtk_widget_get_colormap()/visual()
+	so they work after a widget is unrealized.
+
+	* gtk/gtktext.[ch]: Remove the requirement that the text
+	widget be realized before adding text (!) Allocate colors
+	ourself, instead of requiring the caller allocate them.
+	Allow changing styles to work properly by keeping track
+	of the values for a certain property are default or
+	set explicitely.
+
+	* gtk/gtkmenu.h: Added some comments.
+
+	* gtk/gtkentry.c: Changes to match XIM constants.
+
+	* gtk/gdk.h gdk/gdkwindow.c: Add gdk_drawable_set_data(),
+	for adding keyed data to drawables. (Uses g_dataset
+	internally)
+
+	* gdk/gdkpixmap.c: Keep track of the colors we allocate,
+	when creating an XPM - store them as user data for the GdkPixmap,
+	so we don't leak colors when we create pixmaps from XPM's.
+
+	Allocate memory for color information in large blocks instead of 
+	as many little pieces.
+	
 Mon Aug 24 11:09:32 PDT 1998 Manish Singh <yosh@gimp.org>
 
 	* gdk/gdkrgb.c: removed some unused variables

@@ -110,6 +110,8 @@
     GTK_TYPE_ENUM, _gtk_fundamental_type_values },
   { "GtkWidgetFlags", &GTK_TYPE_WIDGET_FLAGS,
     GTK_TYPE_FLAGS, _gtk_widget_flags_values },
+  { "GdkColorInfoFlags", &GTK_TYPE_GDK_COLOR_INFO_FLAGS,
+    GTK_TYPE_FLAGS, _gdk_color_info_flags_values },
   { "GdkDebugFlag", &GTK_TYPE_GDK_DEBUG_FLAG,
     GTK_TYPE_FLAGS, _gdk_debug_flag_values },
   { "GdkRgbDither", &GTK_TYPE_GDK_RGB_DITHER,

@@ -446,15 +446,15 @@ gdk_init (int	 *argc,
 		  {
 		    (*argv)[i++] = NULL;
 		    if (strcmp ("none", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMPreeditNone);
+		      gdk_im_set_best_style (GDK_IM_PREEDIT_NONE);
 		    else if (strcmp ("nothing", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMPreeditNothing);
+		      gdk_im_set_best_style (GDK_IM_PREEDIT_NOTHING);
 		    else if (strcmp ("area", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMPreeditArea);
+		      gdk_im_set_best_style (GDK_IM_PREEDIT_AREA);
 		    else if (strcmp ("position", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMPreeditPosition);
+		      gdk_im_set_best_style (GDK_IM_PREEDIT_POSITION);
 		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMPreeditCallbacks);
+		      gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
 		  }
 	      }
 	    else if (strcmp ("--xim-status", (*argv)[i]) == 0)
@@ -463,13 +463,13 @@ gdk_init (int	 *argc,
 		  {
 		    (*argv)[i++] = NULL;
 		    if (strcmp ("none", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMStatusNone);
+		      gdk_im_set_best_style (GDK_IM_STATUS_NONE);
 		    else if (strcmp ("nothing", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMStatusNothing);
+		      gdk_im_set_best_style (GDK_IM_STATUS_NOTHING);
 		    else if (strcmp ("area", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMStatusArea);
+		      gdk_im_set_best_style (GDK_IM_STATUS_AREA);
 		    else if (strcmp ("callbacks", (*argv)[i]) == 0)
-		      gdk_im_set_best_style (GdkIMStatusCallbacks);
+		      gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
 		  }
 	      }
 #endif
@@ -584,10 +584,10 @@ gdk_init (int	 *argc,
   xim_using = FALSE;
   xim_im = NULL;
   xim_styles = NULL;
-  if (!(xim_best_allowed_style & GdkIMPreeditMask))
-    gdk_im_set_best_style (GdkIMPreeditCallbacks);
-  if (!(xim_best_allowed_style & GdkIMStatusMask))
-    gdk_im_set_best_style (GdkIMStatusCallbacks);
+  if (!(xim_best_allowed_style & GDK_IM_PREEDIT_MASK))
+    gdk_im_set_best_style (GDK_IM_PREEDIT_CALLBACKS);
+  if (!(xim_best_allowed_style & GDK_IM_STATUS_MASK))
+    gdk_im_set_best_style (GDK_IM_STATUS_CALLBACKS);
   xim_ic = NULL;
   xim_window = (GdkWindow*)NULL;
   
@@ -3570,34 +3570,34 @@ gdk_im_choose_better_style (GdkIMStyle style1, GdkIMStyle style2)
   
   if (style1 == 0) return style2;
   if (style2 == 0) return style1;
-  if ((style1 & (GdkIMPreeditMask | GdkIMStatusMask))
-      == (style2 & (GdkIMPreeditMask | GdkIMStatusMask)))
+  if ((style1 & (GDK_IM_PREEDIT_MASK | GDK_IM_STATUS_MASK))
+    	== (style2 & (GDK_IM_PREEDIT_MASK | GDK_IM_STATUS_MASK)))
     return style1;
-  
-  s1 = style1 & GdkIMPreeditMask;
-  s2 = style2 & GdkIMPreeditMask;
+
+  s1 = style1 & GDK_IM_PREEDIT_MASK;
+  s2 = style2 & GDK_IM_PREEDIT_MASK;
   u = s1 | s2;
   if (s1 != s2) {
-    if (u & GdkIMPreeditCallbacks)
-      return (s1 == GdkIMPreeditCallbacks)? style1:style2;
-    else if (u & GdkIMPreeditPosition)
-      return (s1 == GdkIMPreeditPosition)? style1:style2;
-    else if (u & GdkIMPreeditArea)
-      return (s1 == GdkIMPreeditArea)? style1:style2;
-    else if (u & GdkIMPreeditNothing)
-      return (s1 == GdkIMPreeditNothing)? style1:style2;
+    if (u & GDK_IM_PREEDIT_CALLBACKS)
+      return (s1 == GDK_IM_PREEDIT_CALLBACKS)? style1:style2;
+    else if (u & GDK_IM_PREEDIT_POSITION)
+      return (s1 == GDK_IM_PREEDIT_POSITION)? style1:style2;
+    else if (u & GDK_IM_PREEDIT_AREA)
+      return (s1 == GDK_IM_PREEDIT_AREA)? style1:style2;
+    else if (u & GDK_IM_PREEDIT_NOTHING)
+      return (s1 == GDK_IM_PREEDIT_NOTHING)? style1:style2;
   } else {
-    s1 = style1 & GdkIMStatusMask;
-    s2 = style2 & GdkIMStatusMask;
+    s1 = style1 & GDK_IM_STATUS_MASK;
+    s2 = style2 & GDK_IM_STATUS_MASK;
     u = s1 | s2;
-    if ( u & GdkIMStatusCallbacks)
-      return (s1 == GdkIMStatusCallbacks)? style1:style2;
-    else if ( u & GdkIMStatusArea)
-      return (s1 == GdkIMStatusArea)? style1:style2;
-    else if ( u & GdkIMStatusNothing)
-      return (s1 == GdkIMStatusNothing)? style1:style2;
-    else if ( u & GdkIMStatusNone)
-      return (s1 == GdkIMStatusNone)? style1:style2;
+    if ( u & GDK_IM_STATUS_CALLBACKS)
+      return (s1 == GDK_IM_STATUS_CALLBACKS)? style1:style2;
+    else if ( u & GDK_IM_STATUS_AREA)
+      return (s1 == GDK_IM_STATUS_AREA)? style1:style2;
+    else if ( u & GDK_IM_STATUS_NOTHING)
+      return (s1 == GDK_IM_STATUS_NOTHING)? style1:style2;
+    else if ( u & GDK_IM_STATUS_NONE)
+      return (s1 == GDK_IM_STATUS_NONE)? style1:style2;
   }
   return 0; /* Get rid of stupid warning */
 }
@@ -3623,39 +3623,39 @@ gdk_im_decide_style (GdkIMStyle supported_style)
 GdkIMStyle
 gdk_im_set_best_style (GdkIMStyle style)
 {
-  if (style & GdkIMPreeditMask)
+  if (style & GDK_IM_PREEDIT_MASK)
     {
-      xim_best_allowed_style &= ~GdkIMPreeditMask;
-      
-      xim_best_allowed_style |= GdkIMPreeditNone;
-      if (!(style & GdkIMPreeditNone))
+      xim_best_allowed_style &= ~GDK_IM_PREEDIT_MASK;
+
+      xim_best_allowed_style |= GDK_IM_PREEDIT_NONE;
+      if (!(style & GDK_IM_PREEDIT_NONE))
 	{
-	  xim_best_allowed_style |= GdkIMPreeditNothing;
-	  if (!(style & GdkIMPreeditNothing))
+	  xim_best_allowed_style |= GDK_IM_PREEDIT_NOTHING;
+	  if (!(style & GDK_IM_PREEDIT_NOTHING))
 	    {
-	      xim_best_allowed_style |= GdkIMPreeditArea;
-	      if (!(style & GdkIMPreeditArea))
+	      xim_best_allowed_style |= GDK_IM_PREEDIT_AREA;
+	      if (!(style & GDK_IM_PREEDIT_AREA))
 		{
-		  xim_best_allowed_style |= GdkIMPreeditPosition;
-		  if (!(style & GdkIMPreeditPosition))
-		    xim_best_allowed_style |= GdkIMPreeditCallbacks;
+		  xim_best_allowed_style |= GDK_IM_PREEDIT_POSITION;
+		  if (!(style & GDK_IM_PREEDIT_POSITION))
+		    xim_best_allowed_style |= GDK_IM_PREEDIT_CALLBACKS;
 		}
 	    }
 	}
     }
-  if (style & GdkIMStatusMask)
+  if (style & GDK_IM_STATUS_MASK)
     {
-      xim_best_allowed_style &= ~GdkIMStatusMask;
-      
-      xim_best_allowed_style |= GdkIMStatusNone;
-      if (!(style & GdkIMStatusNone))
+      xim_best_allowed_style &= ~GDK_IM_STATUS_MASK;
+
+      xim_best_allowed_style |= GDK_IM_STATUS_NONE;
+      if (!(style & GDK_IM_STATUS_NONE))
 	{
-	  xim_best_allowed_style |= GdkIMStatusNothing;
-	  if (!(style & GdkIMStatusNothing))
+	  xim_best_allowed_style |= GDK_IM_STATUS_NOTHING;
+	  if (!(style & GDK_IM_STATUS_NOTHING))
 	    {
-	      xim_best_allowed_style |= GdkIMStatusArea;
-	      if (!(style & GdkIMStatusArea))
-		xim_best_allowed_style |= GdkIMStatusCallbacks;
+	      xim_best_allowed_style |= GDK_IM_STATUS_AREA;
+	      if (!(style & GDK_IM_STATUS_AREA))
+		xim_best_allowed_style |= GDK_IM_STATUS_CALLBACKS;
 	    }
 	}
     }
@@ -3960,13 +3960,13 @@ gdk_im_end (void)
 GdkIMStyle
 gdk_im_decide_style (GdkIMStyle supported_style)
 {
-  return GdkIMPreeditNone | GdkIMStatusNone;
+  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
 }
 
 GdkIMStyle
 gdk_im_set_best_style (GdkIMStyle style)
 {
-  return GdkIMPreeditNone | GdkIMStatusNone;
+  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
 }
 
 gint 
@@ -3991,7 +3991,7 @@ gdk_ic_destroy (GdkIC ic)
 GdkIMStyle
 gdk_ic_get_style (GdkIC ic)
 {
-  return GdkIMPreeditNone | GdkIMStatusNone;
+  return GDK_IM_PREEDIT_NONE | GDK_IM_STATUS_NONE;
 }
 
 void 

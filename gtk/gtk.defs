@@ -416,6 +416,9 @@
 
 ; enumerations from "../gdk/gdkprivate.h"
 
+(define-flags GdkColorInfoFlags
+   (writeable GDK_COLOR_WRITEABLE))
+
 (define-flags GdkDebugFlag
    (misc GDK_DEBUG_MISC)
    (events GDK_DEBUG_EVENTS)
@@ -809,15 +812,17 @@
    (cursor GDK_EXTENSION_EVENTS_CURSOR))
 
 (define-flags GdkIMStyle
-   (preedit-area GdkIMPreeditArea)
-   (preedit-callbacks GdkIMPreeditCallbacks)
-   (preedit-position GdkIMPreeditPosition)
-   (preedit-nothing GdkIMPreeditNothing)
-   (preedit-none GdkIMPreeditNone)
-   (status-area GdkIMStatusArea)
-   (status-callbacks GdkIMStatusCallbacks)
-   (status-nothing GdkIMStatusNothing)
-   (status-none GdkIMStatusNone))
+   (preedit-area GDK_IM_PREEDIT_AREA)
+   (preedit-callbacks GDK_IM_PREEDIT_CALLBACKS)
+   (preedit-position GDK_IM_PREEDIT_POSITION)
+   (preedit-nothing GDK_IM_PREEDIT_NOTHING)
+   (preedit-none GDK_IM_PREEDIT_NONE)
+   (preedit-mask GDK_IM_PREEDIT_MASK)
+   (status-area GDK_IM_STATUS_AREA)
+   (status-callbacks GDK_IM_STATUS_CALLBACKS)
+   (status-nothing GDK_IM_STATUS_NOTHING)
+   (status-none GDK_IM_STATUS_NONE)
+   (status-mask GDK_IM_STATUS_MASK))
 
 (define-flags GdkWMDecoration
    (all GDK_DECOR_ALL)

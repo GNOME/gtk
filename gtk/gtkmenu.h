@@ -73,6 +73,8 @@ struct _GtkMenuClass
 
 GtkType	   gtk_menu_get_type		  (void);
 GtkWidget* gtk_menu_new			  (void);
+
+/* Wrappers for the Menu Shell operations */
 void	   gtk_menu_append		  (GtkMenu	       *menu,
 					   GtkWidget	       *child);
 void	   gtk_menu_prepend		  (GtkMenu	       *menu,
@@ -80,6 +82,8 @@ void	   gtk_menu_prepend		  (GtkMenu	       *menu,
 void	   gtk_menu_insert		  (GtkMenu	       *menu,
 					   GtkWidget	       *child,
 					   gint			position);
+
+/* Display the menu onscreen */
 void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   GtkWidget	       *parent_menu_shell,
 					   GtkWidget	       *parent_menu_item,
@@ -87,17 +91,39 @@ void	   gtk_menu_popup		  (GtkMenu	       *menu,
 					   gpointer		data,
 					   guint		button,
 					   guint32		activate_time);
+
+/* Position the menu according to it's position function. Called
+ * from gtkmenuitem.c when a menu-item changes its allocation
+ */
 void	   gtk_menu_reposition		  (GtkMenu	       *menu);
+
 void	   gtk_menu_popdown		  (GtkMenu	       *menu);
+
+/* Keep track of the last menu item selected. (For the purposes
+ * of the option menu
+ */
 GtkWidget* gtk_menu_get_active		  (GtkMenu	       *menu);
 void	   gtk_menu_set_active		  (GtkMenu	       *menu,
 					   guint		index);
+
 void	   gtk_menu_set_accel_group	  (GtkMenu	       *menu,
 					   GtkAccelGroup       *accel_group);
+
+/* A reference count is kept for a widget when it is attached to
+ * a particular widget. This is typically a menu item; it may also
+ * be a widget with a popup menu - for instance, the Notebook widget.
+ */
 void	   gtk_menu_attach_to_widget	  (GtkMenu	       *menu,
 					   GtkWidget	       *attach_widget,
 					   GtkMenuDetachFunc	detacher);
+void	   gtk_menu_detach		  (GtkMenu	       *menu);
+
+/* This should be dumped in favor of data set when the menu is popped
+ * up - that is currently in the ItemFactory code, but should be
+ * in the Menu code.
+ */
 GtkWidget* gtk_menu_get_attach_widget	  (GtkMenu	       *menu);
+
 void	   gtk_menu_detach		  (GtkMenu	       *menu);
 void       gtk_menu_set_tearoff_state    (GtkMenu              *menu,
 					  gboolean              torn_off);

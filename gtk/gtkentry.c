@@ -587,17 +587,17 @@ gtk_entry_realize (GtkWidget *widget)
       gint width, height;
       GdkEventMask mask;
       GdkIMStyle style;
-      GdkIMStyle supported_style = GdkIMPreeditNone | GdkIMPreeditNothing |
-			GdkIMPreeditPosition |
-			GdkIMStatusNone | GdkIMStatusNothing;
+      GdkIMStyle supported_style = GDK_IM_PREEDIT_NONE | GDK_IM_PREEDIT_NOTHING |
+			GDK_IM_PREEDIT_POSITION |
+			GDK_IM_STATUS_NONE | GDK_IM_STATUS_NOTHING;
 
       if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
-	supported_style &= ~GdkIMPreeditPosition;
+	supported_style &= ~GDK_IM_PREEDIT_POSITION;
 
       style = gdk_im_decide_style (supported_style);
-      switch (style & GdkIMPreeditMask)
+      switch (style & GDK_IM_PREEDIT_MASK)
 	{
-	case GdkIMPreeditPosition:
+	case GDK_IM_PREEDIT_POSITION:
 	  if (widget->style && widget->style->font->type != GDK_FONT_FONTSET)
 	    {
 	      g_warning ("over-the-spot style requires fontset");
@@ -768,7 +768,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
       gtk_entry_adjust_scroll (entry);
       
 #ifdef USE_XIM
-      if (editable->ic && (gdk_ic_get_style (editable->ic) & GdkIMPreeditPosition))
+      if (editable->ic && (gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION))
 	{
 	  gint width, height;
 	  GdkRectangle rect;
@@ -1442,7 +1442,7 @@ gtk_entry_draw_cursor_on_drawable (GtkEntry *entry, GdkDrawable *drawable)
       gdk_draw_line (drawable, gc, xoffset, 0, xoffset, text_area_height);
 #ifdef USE_XIM
       if (gdk_im_ready() && editable->ic && 
-	  gdk_ic_get_style (editable->ic) & GdkIMPreeditPosition)
+	  gdk_ic_get_style (editable->ic) & GDK_IM_PREEDIT_POSITION)
 	{
 	  GdkPoint spot;
 

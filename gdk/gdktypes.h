@@ -618,15 +618,18 @@ typedef enum
 
 typedef enum			/*< flags >*/
 {
-  GdkIMPreeditArea	= 0x0001L, /*< nick=preedit-area >*/
-  GdkIMPreeditCallbacks = 0x0002L, /*< nick=preedit-callbacks >*/
-  GdkIMPreeditPosition	= 0x0004L, /*< nick=preedit-position >*/
-  GdkIMPreeditNothing	= 0x0008L, /*< nick=preedit-nothing >*/
-  GdkIMPreeditNone	= 0x0010L, /*< nick=preedit-none >*/
-  GdkIMStatusArea	= 0x0100L, /*< nick=status-area >*/
-  GdkIMStatusCallbacks	= 0x0200L, /*< nick=status-callbacks >*/
-  GdkIMStatusNothing	= 0x0400L, /*< nick=status-nothing >*/
-  GdkIMStatusNone	= 0x0800L  /*< nick=status-none >*/
+  GDK_IM_PREEDIT_AREA	   = 0x0001, 
+  GDK_IM_PREEDIT_CALLBACKS = 0x0002, 
+  GDK_IM_PREEDIT_POSITION  = 0x0004,
+  GDK_IM_PREEDIT_NOTHING   = 0x0008,
+  GDK_IM_PREEDIT_NONE	   = 0x0010,
+  GDK_IM_PREEDIT_MASK      = 0x001f,
+
+  GDK_IM_STATUS_AREA	   = 0x0100, 
+  GDK_IM_STATUS_CALLBACKS  = 0x0200,
+  GDK_IM_STATUS_NOTHING	   = 0x0400,
+  GDK_IM_STATUS_NONE	   = 0x0800,
+  GDK_IM_STATUS_MASK	   = 0x0f00 
 } GdkIMStyle;
 
 /* The next two enumeration values current match the
@@ -654,15 +657,6 @@ typedef enum
   GDK_FUNC_MAXIMIZE	= 1 << 4,
   GDK_FUNC_CLOSE	= 1 << 5
 } GdkWMFunction;
-
-#define GdkIMPreeditMask \
-	( GdkIMPreeditArea     | GdkIMPreeditCallbacks | \
-	  GdkIMPreeditPosition | GdkIMPreeditNothing | \
-	  GdkIMPreeditNone )
-
-#define GdkIMStatusMask \
-	( GdkIMStatusArea | GdkIMStatusCallbacks | \
-	  GdkIMStatusNothing | GdkIMStatusNone )
 
 typedef void (*GdkInputFunction) (gpointer	    data,
 				  gint		    source,

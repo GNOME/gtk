@@ -369,6 +369,7 @@ main (int argc, char *argv[])
      events for the drawing area */
   gtk_widget_set_extension_events (drawing_area, GDK_EXTENSION_EVENTS_ALL);
 
+  GTK_WIDGET_SET_FLAGS (drawing_area, GTK_CAN_FOCUS);
   gtk_widget_grab_focus (drawing_area);
 
   /* .. And create some buttons */

@@ -3087,15 +3087,19 @@ gtk_widget_get_colormap (GtkWidget *widget)
   
   g_return_val_if_fail (widget != NULL, NULL);
   
-  if (!widget->window)
+  if (widget->window)
     {
-      colormap = gtk_object_get_data (GTK_OBJECT (widget), colormap_key);
+      colormap = gdk_window_get_colormap (widget->window);
+      /* If window was destroyed previously, we'll get NULL here */
       if (colormap)
 	return colormap;
-      return gtk_widget_get_default_colormap ();
     }
   
-  return gdk_window_get_colormap (widget->window);
+  colormap = gtk_object_get_data (GTK_OBJECT (widget), colormap_key);
+  if (colormap)
+    return colormap;
+
+  return gtk_widget_get_default_colormap ();
 }
 
 /*****************************************
@@ -3113,15 +3117,19 @@ gtk_widget_get_visual (GtkWidget *widget)
   
   g_return_val_if_fail (widget != NULL, NULL);
   
-  if (!widget->window)
+  if (widget->window)
     {
-      visual = gtk_object_get_data (GTK_OBJECT (widget), visual_key);
+      visual = gdk_window_get_visual (widget->window);
+      /* If window was destroyed previously, we'll get NULL here */
       if (visual)
 	return visual;
-      return gtk_widget_get_default_visual ();
     }
   
-  return gdk_window_get_visual (widget->window);
+  visual = gtk_object_get_data (GTK_OBJECT (widget), visual_key);
+  if (visual)
+    return visual;
+
+  return gtk_widget_get_default_visual ();
 }
 
 /*****************************************

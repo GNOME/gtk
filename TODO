@@ -271,3 +271,5 @@ Text/Edit widget:
     [ From: Stefan Jeske <jeske@braunschweig.netsurf.de> ]
 
   - "changed" emitted when doing deletes on empty Text widget.
+
+  - Delete IC in editable->unrealize, not editable->finalize?

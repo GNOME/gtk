@@ -307,6 +307,11 @@ void	      gdk_window_set_functions	 (GdkWindow	  *window,
 					  GdkWMFunction	   functions);
 GList *       gdk_window_get_toplevels   (void);
 
+void          gdk_drawable_set_data      (GdkDrawable     *drawable,
+					  const gchar     *key,
+					  gpointer	   data,
+					  GDestroyNotify   destroy_func);
+					  
 
 /* Cursors
  */
@@ -455,6 +460,22 @@ gint	     gdk_colormap_get_system_size  (void);
 
 void gdk_colormap_change (GdkColormap	*colormap,
 			  gint		 ncolors);
+
+
+gint  gdk_colormap_alloc_colors   (GdkColormap *colormap,
+				   GdkColor    *colors,
+				   gint         ncolors,
+				   gboolean     writeable,
+				   gboolean     best_match,
+				   gboolean    *success);
+gboolean gdk_colormap_alloc_color (GdkColormap *colormap,
+				   GdkColor    *color,
+				   gboolean     writeable,
+				   gboolean     best_match);
+void     gdk_colormap_free_colors (GdkColormap *colormap,
+				   GdkColor    *colors,
+				   gint         ncolors);
+     
 void gdk_colors_store	 (GdkColormap	*colormap,
 			  GdkColor	*colors,
 			  gint		 ncolors);
@@ -482,8 +503,10 @@ gint gdk_color_alloc	 (GdkColormap	*colormap,
 			  GdkColor	*color);
 gint gdk_color_change	 (GdkColormap	*colormap,
 			  GdkColor	*color);
-gint gdk_color_equal	 (GdkColor	*colora,
-			  GdkColor	*colorb);
+guint gdk_color_hash     (const GdkColor *colora,
+			  const GdkColor *colorb);
+gint gdk_color_equal	 (const GdkColor *colora,
+			  const GdkColor *colorb);
 
 
 /* Fonts
@@ -722,22 +745,27 @@ GdkTimeCoord *gdk_input_motion_events (GdkWindow *window,
 /* International Input Method Support Functions
  */
 
-gint   gdk_im_ready		(void);
+gint         gdk_im_ready	   (void);
 
-void   gdk_im_begin		(GdkIC ic, GdkWindow* window);
-void   gdk_im_end		(void);
-GdkIMStyle gdk_im_decide_style	(GdkIMStyle supported_style);
-GdkIMStyle gdk_im_set_best_style (GdkIMStyle best_allowed_style);
-GdkIC  gdk_ic_new		(GdkWindow* client_window,
-				 GdkWindow* focus_window,
-				 GdkIMStyle style, ...);
-void   gdk_ic_destroy		(GdkIC ic);
-GdkIMStyle   gdk_ic_get_style	(GdkIC ic);
-void   gdk_ic_set_values	(GdkIC ic, ...);
-void   gdk_ic_get_values	(GdkIC ic, ...);
-void   gdk_ic_set_attr		(GdkIC ic, const char *target, ...);
-void   gdk_ic_get_attr		(GdkIC ic, const char *target, ...);
-GdkEventMask gdk_ic_get_events	(GdkIC ic);
+void         gdk_im_begin	   (GdkIC      ic, 
+				    GdkWindow* window);
+void         gdk_im_end		   (void);
+GdkIMStyle   gdk_im_decide_style   (GdkIMStyle supported_style);
+GdkIMStyle   gdk_im_set_best_style (GdkIMStyle best_allowed_style);
+GdkIC        gdk_ic_new		   (GdkWindow* client_window,
+				    GdkWindow* focus_window,
+				    GdkIMStyle style, ...);
+void         gdk_ic_destroy	   (GdkIC      ic);
+GdkIMStyle   gdk_ic_get_style	   (GdkIC      ic);
+void         gdk_ic_set_values	   (GdkIC      ic,  
+				    ...);
+void         gdk_ic_get_values	   (GdkIC      ic, 
+				    ...);
+void         gdk_ic_set_attr	   (GdkIC      ic, 
+				    const char *target, ...);
+void         gdk_ic_get_attr	   (GdkIC       ic, 
+				    const char *target, ...);
+GdkEventMask gdk_ic_get_events	   (GdkIC       ic);
 
 /* Color Context */
 
@@ -856,6 +884,7 @@ guint    gdk_keyval_to_upper		  (guint	keyval);
 guint    gdk_keyval_to_lower		  (guint	keyval);
 gboolean gdk_keyval_is_upper		  (guint	keyval);
 gboolean gdk_keyval_is_lower		  (guint	keyval);
+
 
 #include <gdk/gdkrgb.h>
 

@@ -1759,6 +1759,8 @@ create_pixmap (void)
 					   &style->bg[GTK_STATE_NORMAL],
 					   "test.xpm");
       pixmapwid = gtk_pixmap_new (pixmap, mask);
+      gdk_pixmap_unref (pixmap);
+      gdk_pixmap_unref (mask);
 
       label = gtk_label_new ("Pixmap\ntest");
       box3 = gtk_hbox_new (FALSE, 0);
@@ -5186,13 +5188,43 @@ text_toggle_word_wrap (GtkWidget *checkbutton,
 			  GTK_TOGGLE_BUTTON(checkbutton)->active);
 }
 
+struct {
+  GdkColor color;
+  gchar *name;
+} text_colors[] = {
+ { { 0, 0x0000, 0x0000, 0x0000 }, "black" },
+ { { 0, 0xFFFF, 0xFFFF, 0xFFFF }, "white" },
+ { { 0, 0xFFFF, 0x0000, 0x0000 }, "red" },
+ { { 0, 0x0000, 0xFFFF, 0x0000 }, "green" },
+ { { 0, 0x0000, 0x0000, 0xFFFF }, "blue" }, 
+ { { 0, 0x0000, 0xFFFF, 0xFFFF }, "cyan" },
+ { { 0, 0xFFFF, 0x0000, 0xFFFF }, "magenta" },
+ { { 0, 0xFFFF, 0xFFFF, 0x0000 }, "yellow" }
+};
+
+int ntext_colors = sizeof(text_colors) / sizeof(text_colors[0]);
+
 /*
  * GtkText
  */
+void
+text_insert_random (GtkWidget *w, GtkText *text)
+{
+  int i;
+  char c;
+   for (i=0; i<10; i++)
+    {
+      c = 'A' + rand() % ('Z' - 'A');
+      gtk_text_set_point (text, rand() % gtk_text_get_length (text));
+      gtk_text_insert (text, NULL, NULL, NULL, &c, 1);
+    }
+}
 
 void
 create_text (void)
 {
+  int i, j;
+
   static GtkWidget *window = NULL;
   GtkWidget *box1;
   GtkWidget *box2;
@@ -5204,6 +5236,7 @@ create_text (void)
   GtkWidget *hscrollbar;
   GtkWidget *vscrollbar;
   GtkWidget *text;
+  GdkFont *font;
 
   FILE *infile;
 
@@ -5259,7 +5292,27 @@ create_text (void)
 
       gtk_text_freeze (GTK_TEXT (text));
 
-      gtk_widget_realize (text);
+      font = gdk_font_load ("-adobe-courier-medium-r-normal--*-120-*-*-*-*-*-*");
+
+      for (i=0; i<ntext_colors; i++)
+	{
+	  gtk_text_insert (GTK_TEXT (text), font, NULL, NULL, 
+			   text_colors[i].name, -1);
+	  gtk_text_insert (GTK_TEXT (text), font, NULL, NULL, "\t", -1);
+
+	  for (j=0; j<ntext_colors; j++)
+	    {
+	      gtk_text_insert (GTK_TEXT (text), font,
+			       &text_colors[j].color, &text_colors[i].color,
+			       "XYZ", -1);
+	    }
+	  gtk_text_insert (GTK_TEXT (text), NULL, NULL, NULL, "\n", -1);
+	}
+
+      /* The Text widget will reference count the font, so we
+       * unreference it here
+       */
+      gdk_font_unref (font);
 
       infile = fopen("testgtk.c", "r");
       
@@ -5281,13 +5334,6 @@ create_text (void)
 	  fclose (infile);
 	}
       
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "And even ", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->bg[GTK_STATE_NORMAL], NULL, 
-		       "colored", -1);
-      gtk_text_insert (GTK_TEXT (text), NULL, &text->style->black, NULL, 
-		       "text", -1);
-
       gtk_text_thaw (GTK_TEXT (text));
 
       hbox = gtk_hbutton_box_new ();
@@ -5318,6 +5364,13 @@ create_text (void)
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);
 
+
+      button = gtk_button_new_with_label ("insert random");
+      gtk_signal_connect (GTK_OBJECT (button), "clicked",
+			  GTK_SIGNAL_FUNC(text_insert_random),
+			  GTK_TEXT (text));
+      gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
+      gtk_widget_show (button);
 
       button = gtk_button_new_with_label ("close");
       gtk_signal_connect_object (GTK_OBJECT (button), "clicked",

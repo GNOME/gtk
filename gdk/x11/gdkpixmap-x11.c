@@ -34,6 +34,13 @@ typedef struct
   gint transparent;
 } _GdkPixmapColor;
 
+typedef struct
+{
+  guint ncolors;
+  GdkColormap *colormap;
+  gulong pixels[1];
+} _GdkPixmapInfo;
+
 GdkPixmap*
 gdk_pixmap_new (GdkWindow *window,
 		gint       width,
@@ -388,13 +395,6 @@ gdk_pixmap_extract_color (gchar *buffer)
   return retcol;
 }
 
-static void
-free_color (gpointer key, gpointer value, gpointer user_data)
-{
-  g_free (key);
-  g_free (value);
-}
-  
 
 enum buffer_op
 {
@@ -403,6 +403,23 @@ enum buffer_op
   op_body
 };
   
+
+static void 
+gdk_xpm_destroy_notify (gpointer data)
+{
+  _GdkPixmapInfo *info = (_GdkPixmapInfo *)data;
+  GdkColor color;
+  int i;
+
+  for (i=0; i<info->ncolors; i++)
+    {
+      color.pixel = info->pixels[i];
+      gdk_colormap_free_colors (info->colormap, &color, 1);
+    }
+
+  gdk_colormap_unref (info->colormap);
+  g_free (info);
+}
   
 static GdkPixmap *
 _gdk_pixmap_create_from_xpm (GdkWindow  *window,
@@ -420,9 +437,12 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
   GdkColor tmp_color;
   gint width, height, num_cols, cpp, n, ns, cnt, xcnt, ycnt, wbytes;
   gchar *buffer, pixel_str[32];
+  gchar *name_buf;
   _GdkPixmapColor *color = NULL, *fallbackcolor = NULL;
+  _GdkPixmapColor *colors = NULL;
   gulong index;
-  GHashTable *colors = NULL;
+  GHashTable *color_hash = NULL;
+  _GdkPixmapInfo *color_info = NULL;
   
   if ((window == NULL) && (colormap == NULL))
     g_warning ("Creating pixmap from xpm with NULL window and colormap");
@@ -449,14 +469,30 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       return NULL;
     }
   
-  colors = g_hash_table_new (g_str_hash, g_str_equal);
+  color_hash = g_hash_table_new (g_str_hash, g_str_equal);
   
   if (transparent_color == NULL)
     {
       gdk_color_white (colormap, &tmp_color);
       transparent_color = &tmp_color;
     }
-  
+
+  /* For pseudo-color and grayscale visuals, we have to remember
+   * the colors we allocated, so we can free them later.
+   */
+  if ((visual->type == GDK_VISUAL_PSEUDO_COLOR) ||
+      (visual->type == GDK_VISUAL_GRAYSCALE))
+    {
+      color_info = g_malloc (sizeof (_GdkPixmapInfo) + 
+			     sizeof(gulong) * (num_cols - 1));
+      color_info->ncolors = num_cols;
+      color_info->colormap = colormap;
+      gdk_colormap_ref (colormap);
+    }
+
+  name_buf = g_new (gchar, num_cols * (cpp+1));
+  colors = g_new (_GdkPixmapColor, num_cols);
+
   for (cnt = 0; cnt < num_cols; cnt++)
     {
       gchar *color_name;
@@ -465,8 +501,8 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       if (buffer == NULL)
 	goto error;
       
-      color = g_new (_GdkPixmapColor, 1);
-      color->color_string = g_new (gchar, cpp + 1);
+      color = &colors[cnt];
+      color->color_string = &name_buf [cnt * (cpp + 1)];
       strncpy (color->color_string, buffer, cpp);
       color->color_string[cpp] = 0;
       buffer += strlen (color->color_string);
@@ -486,7 +522,11 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       /* FIXME: The remaining slowness appears to happen in this
          function. */
       gdk_color_alloc (colormap, &color->color);
-      g_hash_table_insert (colors, color->color_string, color);
+
+      if (color_info)
+	color_info->pixels[cnt] = color->color.pixel;
+      
+      g_hash_table_insert (color_hash, color->color_string, color);
       if (cnt == 0)
 	fallbackcolor = color;
     }
@@ -531,7 +571,7 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
 	  pixel_str[cpp] = 0;
 	  ns = 0;
 	  
-	  color = g_hash_table_lookup (colors, pixel_str);
+	  color = g_hash_table_lookup (color_hash, pixel_str);
 	  
 	  if (!color) /* screwed up XPM file */
 	    color = fallbackcolor;
@@ -558,6 +598,10 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
   if (image != NULL)
     {
       pixmap = gdk_pixmap_new (window, width, height, visual->depth);
+
+      if (color_info)
+	gdk_drawable_set_data (pixmap, "gdk-xpm", color_info, 
+			       gdk_xpm_destroy_notify);
       
       gc = gdk_gc_new (pixmap);
       gdk_gc_set_foreground (gc, transparent_color);
@@ -565,13 +609,18 @@ _gdk_pixmap_create_from_xpm (GdkWindow  *window,
       gdk_gc_destroy (gc);
       gdk_image_destroy (image);
     }
+  else if (color_info)
+    gdk_xpm_destroy_notify (color_info);
   
+  if (color_hash != NULL)
+    g_hash_table_destroy (color_hash);
+
   if (colors != NULL)
-    {
-      g_hash_table_foreach (colors, free_color, 0);
-      g_hash_table_destroy (colors);
-    }
-  
+    g_free (colors);
+
+  if (name_buf != NULL)
+    g_free (name_buf);
+
   return pixmap;
 }
 
@@ -720,6 +769,7 @@ gdk_pixmap_unref (GdkPixmap *pixmap)
     {
       XFreePixmap (private->xdisplay, private->xwindow);
       gdk_xid_table_remove (private->xwindow);
+      g_dataset_destroy (private);
       g_free (private);
     }
 }

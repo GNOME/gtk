@@ -704,8 +704,10 @@ gdk_window_unref (GdkWindow *window)
     {
       if (!private->destroyed)
 	g_warning ("losing last reference to undestroyed window\n");
+      g_dataset_destroy (window);
       g_free (window);
     }
+
 }
 
 void
@@ -2076,3 +2078,11 @@ gdk_window_get_toplevels (void)
   return new_list;
 }
 
+void          
+gdk_drawable_set_data (GdkDrawable   *drawable,
+		       const gchar   *key,
+		       gpointer	      data,
+		       GDestroyNotify destroy_func)
+{
+  g_dataset_set_data_full (drawable, key, data, destroy_func);
+}
