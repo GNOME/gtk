@@ -182,6 +182,8 @@ static void     gtk_combo_box_forall               (GtkContainer     *container,
                                                     gpointer          callback_data);
 static gboolean gtk_combo_box_expose_event         (GtkWidget        *widget,
                                                     GdkEventExpose   *event);
+static gboolean gtk_combo_box_scroll_event         (GtkWidget        *widget,
+                                                    GdkEventScroll   *event);
 
 /* list */
 static void     gtk_combo_box_list_setup           (GtkComboBox      *combo_box);
@@ -313,6 +315,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->size_allocate = gtk_combo_box_size_allocate;
   widget_class->size_request = gtk_combo_box_size_request;
   widget_class->expose_event = gtk_combo_box_expose_event;
+  widget_class->scroll_event = gtk_combo_box_scroll_event;
 
   object_class = (GObjectClass *)klass;
   object_class->set_property = gtk_combo_box_set_property;
@@ -2686,3 +2689,29 @@ gtk_combo_box_prepend_text (GtkComboBox *combo_box,
   gtk_list_store_prepend (store, &iter);
   gtk_list_store_set (store, &iter, 0, text, -1);
 }
+
+static gboolean
+gtk_combo_box_scroll_event (GtkWidget          *widget,
+                            GdkEventScroll     *event)
+{
+  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  gint index;
+  gint items;
+    
+  index = gtk_combo_box_get_active (combo_box);
+
+  if (index != -1)
+    {
+      items = gtk_tree_model_iter_n_children (combo_box->priv->model, NULL);
+      
+      if (event->direction == GDK_SCROLL_UP)
+        index--;
+      else 
+        index++;
+
+      gtk_combo_box_set_active (combo_box, CLAMP (index, 0, items - 1));
+    }
+
+  return TRUE;
+}
+
