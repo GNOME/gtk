@@ -1,3 +1,14 @@
+2002-05-10  Daniel Elstner  <daniel.elstner@gmx.net>
+
+	[ merge from stable ]
+
+	* gtk/gtktreemodel.c: #define INITIALIZE_TREE_ITER(),
+	which zeroes out all GtkTreeIter fields. (#81380)
+	(gtk_tree_model_get_iter): Use it.
+	(gtk_tree_model_iter_children): ditto
+	(gtk_tree_model_iter_nth_child): ditto
+	(gtk_tree_model_iter_parent): ditto
+
 2002-05-08  Michael Natterer  <mitch@gimp.org>
 
 	* configure.in: fixed yesterdays fix for cross compiling: simply

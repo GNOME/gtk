@@ -29,6 +29,15 @@
 #include "gtksignal.h"
 
 
+#define INITIALIZE_TREE_ITER(Iter) \
+    G_STMT_START{ \
+      (Iter)->stamp = 0; \
+      (Iter)->user_data  = NULL; \
+      (Iter)->user_data2 = NULL; \
+      (Iter)->user_data3 = NULL; \
+    }G_STMT_END
+
+
 struct _GtkTreePath
 {
   gint depth;
@@ -674,6 +683,8 @@ gtk_tree_model_get_iter (GtkTreeModel *tree_model,
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter != NULL, FALSE);
   g_return_val_if_fail (path->depth > 0, FALSE);
 
+  INITIALIZE_TREE_ITER (iter);
+
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->get_iter) (tree_model, iter, path);
 }
 
@@ -825,6 +836,8 @@ gtk_tree_model_iter_children (GtkTreeModel *tree_model,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_children != NULL, FALSE);
 
+  INITIALIZE_TREE_ITER (iter);
+
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_children) (tree_model, iter, parent);
 }
 
@@ -894,6 +907,8 @@ gtk_tree_model_iter_nth_child (GtkTreeModel *tree_model,
   g_return_val_if_fail (n >= 0, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_nth_child != NULL, FALSE);
 
+  INITIALIZE_TREE_ITER (iter);
+
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_nth_child) (tree_model, iter, parent, n);
 }
 
@@ -919,6 +934,8 @@ gtk_tree_model_iter_parent (GtkTreeModel *tree_model,
   g_return_val_if_fail (iter != NULL, FALSE);
   g_return_val_if_fail (child != NULL, FALSE);
   g_return_val_if_fail (GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_parent != NULL, FALSE);
+
+  INITIALIZE_TREE_ITER (iter);
 
   return (* GTK_TREE_MODEL_GET_IFACE (tree_model)->iter_parent) (tree_model, iter, child);
 }
