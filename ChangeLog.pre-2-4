@@ -1,3 +1,7 @@
+Fri Jan 21 18:32:43 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkaspectframe.h (struct _GtkAspectFrame): s/gint/gboolean/.
+
 Fri Jan 21 16:24:08 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkgc.c (gdk_gc_set_dashes): Change from
