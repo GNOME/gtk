@@ -24,8 +24,8 @@
 #include "gtksignal.h"
 
 
-#define OBJECT_DATA_ID_CHUNK  1024
-
+#define GTK_OBJECT_DATA_ID_BLOCK_SIZE	(1024)
+#define	GTK_OBJECT_DATA_BLOCK_SIZE	(1024)
 
 enum {
   DESTROY,
@@ -74,7 +74,6 @@ static void           gtk_object_real_destroy  (GtkObject      *object);
 static void           gtk_object_finalize      (GtkObject      *object);
 static void           gtk_object_notify_weaks  (GtkObject      *object);
 
-static void           gtk_object_data_destroy  (GtkObjectData  *odata);
 static guint*         gtk_object_data_id_alloc (void);
 
 GtkArg*               gtk_object_collect_args  (guint   *nargs,
@@ -83,17 +82,25 @@ GtkArg*               gtk_object_collect_args  (guint   *nargs,
 
 static guint object_signals[LAST_SIGNAL] = { 0 };
 
-static GHashTable *object_data_ht = NULL;
-static GMemChunk *object_data_mem_chunk = NULL;
-static GSList *object_data_id_list = NULL;
-static guint object_data_id_index = 0;
-
 static GHashTable *arg_info_ht = NULL;
 
 static const gchar *user_data_key = "user_data";
 static guint user_data_key_id = 0;
 static const gchar *weakrefs_key = "gtk-weakrefs";
 static guint weakrefs_key_id = 0;
+
+static GHashTable *object_data_ht = NULL;
+static GSList *object_data_id_list = NULL;
+static guint object_data_id_index = 0;
+static GtkObjectData *gtk_object_data_free_list = NULL;
+
+#define GTK_OBJECT_DATA_DESTROY( odata )	{ \
+  if (odata->destroy) \
+    odata->destroy (odata->data); \
+  odata->next = gtk_object_data_free_list; \
+  gtk_object_data_free_list = odata; \
+}
+
 
 #ifdef G_ENABLE_DEBUG
 static guint obj_count = 0;
@@ -259,16 +266,15 @@ gtk_object_real_destroy (GtkObject *object)
 static void
 gtk_object_finalize (GtkObject *object)
 {
-  GtkObjectData *odata, *next;
-  
   gtk_object_notify_weaks (object);
 
-  odata = object->object_data;
-  while (odata)
+  while (object->object_data)
     {
-      next = odata->next;
-      gtk_object_data_destroy (odata);
-      odata = next;
+      GtkObjectData *odata;
+
+      odata = object->object_data;
+      object->object_data = odata->next;
+      GTK_OBJECT_DATA_DESTROY (odata);
     }
   
   g_free (object);
@@ -996,11 +1002,11 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
   g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (data_id > 0);
-  
+
+  odata = object->object_data;
   if (!data)
     {
       prev = NULL;
-      odata = object->object_data;
       
       while (odata)
 	{
@@ -1008,10 +1014,10 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 	    {
 	      if (prev)
 		prev->next = odata->next;
-	      if (odata == object->object_data)
+	      else
 		object->object_data = odata->next;
 	      
-	      gtk_object_data_destroy (odata);
+	      GTK_OBJECT_DATA_DESTROY (odata);
 	      break;
 	    }
 	  
@@ -1021,13 +1027,24 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
     }
   else
     {
-      odata = object->object_data;
       while (odata)
 	{
 	  if (odata->id == data_id)
 	    {
+	      /* we need to be unlinked while invoking the destroy function
+	       */
 	      if (odata->destroy)
-		odata->destroy (odata->data);
+		{
+		  if (prev)
+		    prev->next = odata->next;
+		  else
+		    object->object_data = odata->next;
+		  
+		  odata->destroy (odata->data);
+		  
+		  odata->next = object->object_data;
+		  object->object_data = odata;
+		}
 	      
 	      odata->data = data;
 	      odata->destroy = destroy;
@@ -1037,12 +1054,26 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 	  odata = odata->next;
 	}
       
-      if (!object_data_mem_chunk)
-	object_data_mem_chunk = g_mem_chunk_new ("object data mem chunk",
-						 sizeof (GtkObjectData),
-						 1024, G_ALLOC_AND_FREE);
+      if (gtk_object_data_free_list)
+	{
+	  odata = gtk_object_data_free_list;
+	  gtk_object_data_free_list = odata->next;
+	}
+      else
+	{
+	  GtkObjectData *odata_block;
+	  guint i;
+
+	  odata_block = g_new0 (GtkObjectData, GTK_OBJECT_DATA_BLOCK_SIZE);
+	  for (i = 1; i < GTK_OBJECT_DATA_BLOCK_SIZE; i++)
+	    {
+	      (odata_block + i)->next = gtk_object_data_free_list;
+	      gtk_object_data_free_list = (odata_block + i);
+	    }
+
+	  odata = odata_block;
+	}
       
-      odata = g_chunk_new (GtkObjectData, object_data_mem_chunk);
       odata->id = data_id;
       odata->data = data;
       odata->destroy = destroy;
@@ -1159,17 +1190,6 @@ gtk_object_remove_data (GtkObject   *object,
     gtk_object_set_data_by_id_full (object, id, NULL, NULL);
 }
 
-static void
-gtk_object_data_destroy (GtkObjectData *odata)
-{
-  g_return_if_fail (odata != NULL);
-
-  if (odata->destroy)
-    odata->destroy (odata->data);
-
-  g_mem_chunk_free (object_data_mem_chunk, odata);
-}
-
 static guint*
 gtk_object_data_id_alloc (void)
 {
@@ -1177,9 +1197,9 @@ gtk_object_data_id_alloc (void)
   guint *ids;
 
   if (!object_data_id_list ||
-      (object_data_id_index == OBJECT_DATA_ID_CHUNK))
+      (object_data_id_index == GTK_OBJECT_DATA_ID_BLOCK_SIZE))
     {
-      ids = g_new (guint, OBJECT_DATA_ID_CHUNK);
+      ids = g_new (guint, GTK_OBJECT_DATA_ID_BLOCK_SIZE);
       object_data_id_index = 0;
       object_data_id_list = g_slist_prepend (object_data_id_list, ids);
     }
