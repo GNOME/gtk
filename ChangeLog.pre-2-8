@@ -1,3 +1,30 @@
+Fri Aug 17 19:30:14 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeprivate.h:
+	* gtk/gtktreeview.c: (gtk_tree_view_class_init),
+	(gtk_tree_view_init), (gtk_tree_view_set_property),
+	(gtk_tree_view_get_property), (gtk_tree_view_destroy),
+	(gtk_tree_view_key_press), (gtk_tree_view_leave_notify),
+	(gtk_tree_view_focus_out), (gtk_tree_view_set_model),
+	(gtk_tree_view_set_destroy_count_func),
+	(gtk_tree_view_set_enable_search),
+	(gtk_tree_view_get_enable_search),
+	(gtk_tree_view_get_search_column),
+	(gtk_tree_view_set_search_column),
+	(gtk_tree_view_get_search_equal_func),
+	(gtk_tree_view_set_search_equal_func),
+	(gtk_tree_view_search_dialog_destroy),
+	(gtk_tree_view_search_position_func),
+	(gtk_tree_view_interactive_search),
+	(gtk_tree_view_search_delete_event),
+	(gtk_tree_view_search_button_press_event),
+	(gtk_tree_view_search_key_press_event),
+	(gtk_tree_view_search_move), (gtk_tree_view_search_equal_func),
+	(gtk_tree_view_search_iter), (gtk_tree_view_search_init):
+	* gtk/gtktreeview.h:
+	Add heavily modified patch from Kristian Rietveld to handle
+	interactive searching.
+
 Fri Aug 17 17:30:34 2001  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktreemodel.c (gtk_tree_path_new_from_string): const correct

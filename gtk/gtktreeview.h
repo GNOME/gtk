@@ -19,6 +19,7 @@
 #ifndef __GTK_TREE_VIEW_H__
 #define __GTK_TREE_VIEW_H__
 
+#include <gtk/gtkwidget.h>
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreeviewcolumn.h>
@@ -119,6 +120,10 @@ typedef gboolean (* GtkTreeViewDroppableFunc)  (GtkTreeView             *tree_vi
 						GtkTreePath             *path,
 						GtkTreeViewDropPosition *pos,
 						gpointer                 user_data);
+typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
+						gint                     column,
+						gchar                   *key,
+						GtkTreeIter             *iter);
 
 
 /* Creators */
@@ -275,13 +280,25 @@ gboolean               gtk_tree_view_get_dest_row_at_pos           (GtkTreeView 
 GdkPixmap             *gtk_tree_view_create_row_drag_icon          (GtkTreeView               *tree_view,
 								    GtkTreePath               *path);
 
+/* Interactive search */
+void                       gtk_tree_view_set_enable_search     (GtkTreeView                *tree_view,
+								gboolean                    use_search);
+gboolean                   gtk_tree_view_get_enable_search     (GtkTreeView                *tree_view);
+gint                       gtk_tree_view_get_search_column     (GtkTreeView                *tree_view);
+void                       gtk_tree_view_set_search_column     (GtkTreeView                *tree_view,
+								gint                        column);
+GtkTreeViewSearchEqualFunc gtk_tree_view_get_search_equal_func (GtkTreeView                *tree_view);
+void                       gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
+								GtkTreeViewSearchEqualFunc  search_compare_func,
+								gpointer                    search_data,
+								GtkDestroyNotify            search_destroy);
 
 /* This function should really never be used.  It is just for use by ATK.
  */
-typedef void (* GtkTreeDestroyCountFunc) (GtkTreeView *tree_view,
-					  GtkTreePath *path,
-					  gint         children,
-					  gpointer     user_data);
+typedef void (* GtkTreeDestroyCountFunc)  (GtkTreeView             *tree_view,
+					   GtkTreePath             *path,
+					   gint                     children,
+					   gpointer                 user_data);
 void gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
 					   GtkTreeDestroyCountFunc  func,
 					   gpointer                 data,

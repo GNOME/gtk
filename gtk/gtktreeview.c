@@ -32,7 +32,10 @@
 #include "gtkarrow.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"
+#include "gtkcontainer.h"
+#include "gtkentry.h"
 
+#include <string.h>
 #include <gdk/gdkkeysyms.h>
 
 #if defined (GDK_WINDOWING_X11)
@@ -120,7 +123,9 @@ enum {
   PROP_HEADERS_CLICKABLE,
   PROP_EXPANDER_COLUMN,
   PROP_REORDERABLE,
-  PROP_RULES_HINT
+  PROP_RULES_HINT,
+  PROP_ENABLE_SEARCH,
+  PROP_SEARCH_COLUMN,
 };
 
 static void     gtk_tree_view_class_init           (GtkTreeViewClass *klass);
@@ -141,7 +146,6 @@ static void     gtk_tree_view_get_property         (GObject         *object,
 static void     gtk_tree_view_destroy              (GtkObject        *object);
 
 /* gtkwidget signals */
-static void     gtk_tree_view_setup_model          (GtkTreeView      *tree_view);
 static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
@@ -260,93 +264,124 @@ static void gtk_tree_view_reordered                       (GtkTreeModel    *mode
 
 
 /* Internal functions */
-static gboolean gtk_tree_view_is_expander_column   (GtkTreeView      *tree_view,
-						    GtkTreeViewColumn*column);
-static void     gtk_tree_view_add_move_binding     (GtkBindingSet    *binding_set,
-						    guint             keyval,
-						    guint             modmask,
-						    GtkMovementStep   step,
-						    gint              count);
-static gint     gtk_tree_view_unref_and_check_selection_tree (GtkTreeView      *tree_view,
-							      GtkRBTree        *tree);
-static void     gtk_tree_view_queue_draw_node      (GtkTreeView      *tree_view,
-						    GtkRBTree        *tree,
-						    GtkRBNode        *node,
-						    GdkRectangle     *clip_rect);
-static void     gtk_tree_view_queue_draw_path      (GtkTreeView      *tree_view,
-                                                    GtkTreePath      *path,
-                                                    GdkRectangle     *clip_rect);
-static void     gtk_tree_view_queue_draw_arrow     (GtkTreeView      *tree_view,
-						    GtkRBTree        *tree,
-						    GtkRBNode        *node,
-						    GdkRectangle     *clip_rect);
-static void     gtk_tree_view_draw_arrow           (GtkTreeView      *tree_view,
-                                                    GtkRBTree        *tree,
-						    GtkRBNode        *node,
-						    gint              x,
-						    gint              y);
-static void     gtk_tree_view_get_arrow_xrange     (GtkTreeView      *tree_view,
-                                                    gint              *x1,
-                                                    gint              *x2);
-static gint     gtk_tree_view_new_column_width     (GtkTreeView      *tree_view,
-						    gint              i,
-						    gint             *x);
-static void     gtk_tree_view_ensure_scroll_timeout(GtkTreeView      *tree_view,
-						    GFunc             func);
-static void     gtk_tree_view_adjustment_changed   (GtkAdjustment    *adjustment,
-						    GtkTreeView      *tree_view);
-static gint     gtk_tree_view_insert_iter_height   (GtkTreeView      *tree_view,
-						    GtkRBTree        *tree,
-						    GtkTreeIter      *iter,
-						    gint              depth);
-static void     gtk_tree_view_build_tree           (GtkTreeView      *tree_view,
-						    GtkRBTree        *tree,
-						    GtkTreeIter      *iter,
-						    gint              depth,
-						    gboolean          recurse,
-						    gboolean          calc_bounds);
-static void     gtk_tree_view_calc_size            (GtkTreeView      *priv,
-						    GtkRBTree        *tree,
-						    GtkTreeIter      *iter,
-						    gint              depth);
-static gboolean gtk_tree_view_discover_dirty_iter  (GtkTreeView      *tree_view,
-						    GtkTreeIter      *iter,
-						    gint              depth,
-						    gint             *height);
-static void     gtk_tree_view_discover_dirty       (GtkTreeView      *tree_view,
-						    GtkRBTree        *tree,
-						    GtkTreeIter      *iter,
-						    gint              depth);
-static void     gtk_tree_view_check_dirty          (GtkTreeView      *tree_view);
-static void     gtk_tree_view_clamp_node_visible   (GtkTreeView      *tree_view,
-						    GtkRBTree        *tree,
-						    GtkRBNode        *node);
-static gboolean gtk_tree_view_maybe_begin_dragging_row (GtkTreeView      *tree_view,
-                                                        GdkEventMotion   *event);
-static void     _gtk_tree_view_update_col_width    (GtkTreeView      *tree_view);
+static gboolean gtk_tree_view_is_expander_column             (GtkTreeView       *tree_view,
+							      GtkTreeViewColumn *column);
+static void     gtk_tree_view_add_move_binding               (GtkBindingSet     *binding_set,
+							      guint              keyval,
+							      guint              modmask,
+							      GtkMovementStep    step,
+							      gint               count);
+static gint     gtk_tree_view_unref_and_check_selection_tree (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree);
+static void     gtk_tree_view_queue_draw_node                (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkRBNode         *node,
+							      GdkRectangle      *clip_rect);
+static void     gtk_tree_view_queue_draw_path                (GtkTreeView       *tree_view,
+							      GtkTreePath       *path,
+							      GdkRectangle      *clip_rect);
+static void     gtk_tree_view_queue_draw_arrow               (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkRBNode         *node,
+							      GdkRectangle      *clip_rect);
+static void     gtk_tree_view_draw_arrow                     (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkRBNode         *node,
+							      gint               x,
+							      gint               y);
+static void     gtk_tree_view_get_arrow_xrange               (GtkTreeView       *tree_view,
+							      gint              *x1,
+							      gint              *x2);
+static gint     gtk_tree_view_new_column_width               (GtkTreeView       *tree_view,
+							      gint               i,
+							      gint              *x);
+static void     gtk_tree_view_ensure_scroll_timeout          (GtkTreeView       *tree_view,
+							      GFunc              func);
+static void     gtk_tree_view_adjustment_changed             (GtkAdjustment     *adjustment,
+							      GtkTreeView       *tree_view);
+static gint     gtk_tree_view_insert_iter_height             (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkTreeIter       *iter,
+							      gint               depth);
+static void     gtk_tree_view_build_tree                     (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkTreeIter       *iter,
+							      gint               depth,
+							      gboolean           recurse,
+							      gboolean           calc_bounds);
+static void     gtk_tree_view_calc_size                      (GtkTreeView       *priv,
+							      GtkRBTree         *tree,
+							      GtkTreeIter       *iter,
+							      gint               depth);
+static gboolean gtk_tree_view_discover_dirty_iter            (GtkTreeView       *tree_view,
+							      GtkTreeIter       *iter,
+							      gint               depth,
+							      gint              *height);
+static void     gtk_tree_view_discover_dirty                 (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkTreeIter       *iter,
+							      gint               depth);
+static void     gtk_tree_view_check_dirty                    (GtkTreeView       *tree_view);
+static void     gtk_tree_view_clamp_node_visible             (GtkTreeView       *tree_view,
+							      GtkRBTree         *tree,
+							      GtkRBNode         *node);
+static gboolean gtk_tree_view_maybe_begin_dragging_row       (GtkTreeView       *tree_view,
+							      GdkEventMotion    *event);
+static void     _gtk_tree_view_update_col_width              (GtkTreeView       *tree_view);
+static void     gtk_tree_view_focus_to_cursor                (GtkTreeView       *tree_view);
+static void     gtk_tree_view_move_cursor_up_down            (GtkTreeView       *tree_view,
+							      gint               count);
+static void     gtk_tree_view_move_cursor_page_up_down       (GtkTreeView       *tree_view,
+							      gint               count);
+static void     gtk_tree_view_move_cursor_left_right         (GtkTreeView       *tree_view,
+							      gint               count);
+static void     gtk_tree_view_move_cursor_start_end          (GtkTreeView       *tree_view,
+							      gint               count);
+static gboolean gtk_tree_view_real_collapse_row              (GtkTreeView       *tree_view,
+							      GtkTreePath       *path,
+							      GtkRBTree         *tree,
+							      GtkRBNode         *node);
+static gboolean gtk_tree_view_real_expand_row                (GtkTreeView       *tree_view,
+							      GtkTreePath       *path,
+							      GtkRBTree         *tree,
+							      GtkRBNode         *node,
+							      gboolean           open_all);
+static void     gtk_tree_view_real_set_cursor                (GtkTreeView       *tree_view,
+							      GtkTreePath       *path,
+							      gboolean           clear_and_select);
 
 
-static void gtk_tree_view_focus_to_cursor          (GtkTreeView *tree_view);
-static void gtk_tree_view_move_cursor_up_down      (GtkTreeView *tree_view,
-						    gint         count);
-static void gtk_tree_view_move_cursor_page_up_down (GtkTreeView *tree_view,
-						    gint         count);
-static void gtk_tree_view_move_cursor_left_right   (GtkTreeView *tree_view,
-						    gint         count);
-static void gtk_tree_view_move_cursor_start_end    (GtkTreeView *tree_view,
-						    gint         count);
-static gboolean gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
-						 GtkTreePath *path,
-						 GtkRBTree   *tree,
-						 GtkRBNode   *node);
-static gboolean gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
-					       GtkTreePath *path,
-					       GtkRBTree   *tree,
-					       GtkRBNode   *node,
-					       gboolean     open_all);
-static void gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
-					   GtkTreePath     *path,
-					   gboolean         clear_and_select);
+/* interactive search */
+static void     gtk_tree_view_search_dialog_destroy     (GtkWidget        *search_dialog,
+							 GtkTreeView      *tree_view);
+static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_view,
+							 GtkWidget        *search_dialog);
+static gboolean gtk_tree_view_search_delete_event       (GtkWidget        *widget,
+							 GdkEventAny      *event,
+							 GtkTreeView      *tree_view);
+static gboolean gtk_tree_view_search_button_press_event (GtkWidget        *widget,
+							 GdkEventButton   *event,
+							 GtkTreeView      *tree_view);
+static gboolean gtk_tree_view_search_key_press_event    (GtkWidget        *entry,
+							 GdkEventKey      *event,
+							 GtkTreeView      *tree_view);
+static void     gtk_tree_view_search_move               (GtkWidget        *window,
+							 GtkTreeView      *tree_view,
+							 gboolean          up);
+static gboolean gtk_tree_view_search_equal_func         (GtkTreeModel     *model,
+							 gint              column,
+							 gchar            *key,
+							 GtkTreeIter      *iter);
+static gboolean gtk_tree_view_search_iter               (GtkTreeModel     *model,
+							 GtkTreeSelection *selection,
+							 GtkTreeIter      *iter,
+							 gchar            *text,
+							 gint             *count,
+							 gint              n);
+static void     gtk_tree_view_search_init               (GtkWidget        *entry,
+							 GtkTreeView      *tree_view);
+static void     gtk_tree_view_interactive_search        (GtkTreeView      *tree_view,
+							 GdkEventKey      *key);
 
 
 static GtkContainerClass *parent_class = NULL;
@@ -515,6 +550,24 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							 FALSE,
 							 G_PARAM_READWRITE));
 
+    g_object_class_install_property (o_class,
+				     PROP_ENABLE_SEARCH,
+				     g_param_spec_boolean ("enable_search",
+							   _("Enable Search"),
+							   _("View allows user to search through columns interactively"),
+							   TRUE,
+							   G_PARAM_READWRITE));
+    
+    g_object_class_install_property (o_class,
+				     PROP_SEARCH_COLUMN,
+				     g_param_spec_int ("search_column",
+						       _("Search Column"),
+						       _("Model column to search through when searching through code"),
+						       -1,
+						       G_MAXINT,
+						       0,
+						       G_PARAM_READWRITE));
+    
   /* Style properties */
   /* the width of the column resize windows */
 #define _TREE_VIEW_EXPANDER_SIZE 10
@@ -833,6 +886,10 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_tree_view_set_adjustments (tree_view, NULL, NULL);
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
   _gtk_tree_view_update_size (tree_view);
+  tree_view->priv->enable_search = TRUE;
+  tree_view->priv->search_column = -1;
+  tree_view->priv->search_dialog_position_func = gtk_tree_view_search_position_func;
+  tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
 }
 
 
@@ -875,6 +932,11 @@ gtk_tree_view_set_property (GObject         *object,
       break;
     case PROP_RULES_HINT:
       gtk_tree_view_set_rules_hint (tree_view, g_value_get_boolean (value));
+    case PROP_ENABLE_SEARCH:
+      gtk_tree_view_set_enable_search (tree_view, g_value_get_boolean (value));
+      break;
+    case PROP_SEARCH_COLUMN:
+      gtk_tree_view_set_search_column (tree_view, g_value_get_int (value));
       break;
     default:
       break;
@@ -914,6 +976,12 @@ gtk_tree_view_get_property (GObject         *object,
     case PROP_RULES_HINT:
       g_value_set_boolean (value, tree_view->priv->has_rules);
       break;
+    case PROP_ENABLE_SEARCH:
+      g_value_set_boolean (value, tree_view->priv->enable_search);
+      break;
+    case PROP_SEARCH_COLUMN:
+      g_value_set_int (value, tree_view->priv->search_column);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -940,6 +1008,7 @@ static void
 gtk_tree_view_destroy (GtkObject *object)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (object);
+  GtkWidget *search_dialog;
   GList *list;
 
   gtk_tree_view_set_model (tree_view, NULL);
@@ -957,7 +1026,7 @@ gtk_tree_view_destroy (GtkObject *object)
       tree_view->priv->model = NULL;
     }
 
-  if (tree_view->priv->columns != NULL)
+ if (tree_view->priv->columns != NULL)
     {
       for (list = tree_view->priv->columns; list; list = list->next)
 	g_object_unref (G_OBJECT (list->data));
@@ -1004,6 +1073,12 @@ gtk_tree_view_destroy (GtkObject *object)
 
   gtk_tree_row_reference_free (tree_view->priv->anchor);
   tree_view->priv->anchor = NULL;
+
+  /* destroy interactive search dialog */
+  search_dialog = gtk_object_get_data (GTK_OBJECT (tree_view), "search-dialog");
+  if (search_dialog)
+    gtk_tree_view_search_dialog_destroy (search_dialog,
+						     tree_view);
 
   if (GTK_OBJECT_CLASS (parent_class)->destroy)
     (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
@@ -2774,6 +2849,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 			 GdkEventKey *event)
 {
   GtkTreeView *tree_view = (GtkTreeView *) widget;
+  gint retval;
 
   if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IN_COLUMN_DRAG))
     {
@@ -2784,7 +2860,13 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	}
       return TRUE;
     }
-  return (* GTK_WIDGET_CLASS (parent_class)->key_press_event) (widget, event);
+
+  retval = (* GTK_WIDGET_CLASS (parent_class)->key_press_event) (widget, event);
+
+  if (! retval)
+    gtk_tree_view_interactive_search (tree_view, event);
+
+  return retval;
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -2853,8 +2935,8 @@ gtk_tree_view_leave_notify (GtkWidget        *widget,
                                    NULL);
 
   ensure_unprelighted (tree_view);
-
-  return TRUE;
+  
+return TRUE;
 }
 
 
@@ -2881,6 +2963,8 @@ static gint
 gtk_tree_view_focus_out (GtkWidget     *widget,
 			 GdkEventFocus *event)
 {
+  GtkWidget   *search_dialog;
+
   g_return_val_if_fail (GTK_IS_TREE_VIEW (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -2889,6 +2973,12 @@ gtk_tree_view_focus_out (GtkWidget     *widget,
   gtk_widget_queue_draw (widget);
   GTK_TREE_VIEW (widget)->priv->in_extended_selection = FALSE;
   GTK_TREE_VIEW (widget)->priv->in_free_motion = FALSE;
+
+  /* destroy interactive search dialog */
+  search_dialog = gtk_object_get_data (GTK_OBJECT (widget), "search-dialog");
+  if (search_dialog)
+    gtk_tree_view_search_dialog_destroy (search_dialog,
+						     GTK_TREE_VIEW (widget));
   return FALSE;
 }
 
@@ -6133,15 +6223,30 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
 	  tree_view->priv->drag_dest_row = NULL;
 	}
       g_object_unref (tree_view->priv->model);
+      tree_view->priv->search_column = -1;
     }
 
   tree_view->priv->model = model;
 
+
   if (tree_view->priv->model)
     {
+      gint i;
       GtkTreePath *path;
       GtkTreeIter iter;
 
+
+      if (tree_view->priv->search_column == -1)
+	{
+	  for (i = 0; i < gtk_tree_model_get_n_columns (model); i++)
+	    {
+	      if (gtk_tree_model_get_column_type (model, i) == G_TYPE_STRING)
+		{
+		  tree_view->priv->search_column = i;
+		  break;
+		}
+	    }
+	}
       g_object_ref (tree_view->priv->model);
       g_signal_connect (tree_view->priv->model,
 			"range_changed",
@@ -8355,4 +8460,509 @@ gtk_tree_view_set_destroy_count_func (GtkTreeView             *tree_view,
   tree_view->priv->destroy_count_func = func;
   tree_view->priv->destroy_count_data = data;
   tree_view->priv->destroy_count_destroy = destroy;
+}
+
+
+/*
+ * Interactive search 
+ */
+
+/**
+ * gtk_tree_view_set_enable_search:
+ * @tree_view: A #GtkTreeView
+ * @enable_search: %TRUE, if the user can search interactively
+ *
+ * If @enable_search is set, then the user can type in text to search through
+ * the tree interactively.
+ */
+void
+gtk_tree_view_set_enable_search (GtkTreeView *tree_view,
+				 gboolean     enable_search)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+
+  tree_view->priv->enable_search = !!enable_search;
+}
+
+/**
+ * gtk_tree_view_get_enable_search:
+ * @tree_view: A #GtkTreeView
+ *
+ * Returns whether or not the tree allows interactive searching.
+ *
+ * Return value: whether or not to let the user search interactively
+ */
+gboolean
+gtk_tree_view_get_enable_search (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+
+  return tree_view->priv->enable_search;
+}
+
+
+/**
+ * gtk_tree_view_get_search_column:
+ * @tree_view: A #GtkTreeView
+ *
+ * Gets the column searched on by the interactive search code.
+ *
+ * Return value: the column the interactive search code searches in.
+ */
+gint
+gtk_tree_view_get_search_column (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
+  
+  return (tree_view->priv->search_column);
+}
+
+/**
+ * gtk_tree_view_set_search_column:
+ * @tree_view: A #GtkTreeView
+ * @column: the column to search in
+ *
+ * Sets @column as the column where the interactive search code should search
+ * in.  Additionally, turns on interactive searching.
+ */
+void
+gtk_tree_view_set_search_column (GtkTreeView *tree_view,
+				 gint         column)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (column >= 0);
+
+  if (tree_view->priv->search_column == column)
+    return;
+
+  tree_view->priv->search_column = column;
+  
+}
+
+/**
+ * gtk_tree_view_search_get_search_equal_func:
+ * @tree_view: A #GtkTreeView
+ *
+ * Returns the compare function currently in use.
+ *
+ * Return value: the currently used compare function for the search code.
+ */
+
+GtkTreeViewSearchEqualFunc
+gtk_tree_view_get_search_equal_func (GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
+
+  return tree_view->priv->search_equal_func;
+}
+
+/**
+ * gtk_tree_view_set_search_equal_func:
+ * @tree_view: A #GtkTreeView
+ * @compare_func: the compare function to use during the search
+ *
+ * Sets the compare function to use to search the TreeView.
+ */
+void
+gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
+				     GtkTreeViewSearchEqualFunc  search_equal_func,
+				     gpointer                    search_user_data,
+				     GtkDestroyNotify            search_destroy)
+{
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (search_equal_func !=NULL);
+
+  if (tree_view->priv->search_destroy)
+    (* tree_view->priv->search_destroy) (tree_view->priv->search_user_data);
+
+  tree_view->priv->search_equal_func = search_equal_func;
+  tree_view->priv->search_user_data = search_user_data;
+  tree_view->priv->search_destroy = search_destroy;
+  if (tree_view->priv->search_equal_func == NULL)
+    tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
+}
+
+static void
+gtk_tree_view_search_dialog_destroy (GtkWidget   *search_dialog,
+				     GtkTreeView *tree_view)
+{
+  /* remove data from tree_view */
+  gtk_object_remove_data (GTK_OBJECT (tree_view), "search-dialog");
+  
+  gtk_widget_destroy (search_dialog);
+}
+
+static void
+gtk_tree_view_search_position_func (GtkTreeView *tree_view,
+				    GtkWidget   *search_dialog)
+{
+  gint tree_x, tree_y;
+  gint tree_width, tree_height;
+  GdkWindow *tree_window = GTK_WIDGET (tree_view)->window;
+  GtkRequisition requisition;
+
+  /* put window in the lower right corner */
+  gdk_window_get_origin (tree_window, &tree_x, &tree_y);
+  gdk_window_get_size (tree_window,
+		       &tree_width,
+		       &tree_height);
+  gtk_widget_size_request (search_dialog, &requisition);
+  gtk_window_move (GTK_WINDOW (search_dialog),
+		   tree_x + tree_width - requisition.width,
+		   tree_y + tree_height);
+}
+
+static void
+gtk_tree_view_interactive_search (GtkTreeView *tree_view,
+				  GdkEventKey *event)
+{
+  GtkWidget *window;
+  GtkWidget *entry;
+  
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  switch (event->keyval)
+    {
+    case GDK_Shift_L:
+    case GDK_Shift_R:
+    case GDK_Control_L:
+    case GDK_Control_R:
+    case GDK_Caps_Lock:
+    case GDK_Shift_Lock:
+    case GDK_Meta_L:
+    case GDK_Meta_R:
+    case GDK_Alt_L:
+    case GDK_Alt_R:
+    case GDK_Super_L:
+    case GDK_Super_R:
+    case GDK_Hyper_L:
+    case GDK_Hyper_R:
+    case GDK_Mode_switch:
+      return;
+    default:
+      break;
+    }
+
+  if (tree_view->priv->enable_search == FALSE ||
+      tree_view->priv->search_column < 0)
+    return;
+
+  /* set up window */
+  window = gtk_window_new (GTK_WINDOW_POPUP);
+  gtk_window_set_title (GTK_WINDOW (window), "search dialog");
+  gtk_container_set_border_width (GTK_CONTAINER (window), 3);
+  gtk_window_set_modal (GTK_WINDOW (window), TRUE);
+  gtk_signal_connect 
+    (GTK_OBJECT (window), "delete_event",
+     GTK_SIGNAL_FUNC (gtk_tree_view_search_delete_event),
+     tree_view);
+  gtk_signal_connect 
+    (GTK_OBJECT (window), "key_press_event",
+     GTK_SIGNAL_FUNC (gtk_tree_view_search_key_press_event),
+     tree_view);
+  gtk_signal_connect
+    (GTK_OBJECT (window), "button_press_event",
+     GTK_SIGNAL_FUNC (gtk_tree_view_search_button_press_event),
+     tree_view);
+
+  /* add entry */
+  entry = gtk_entry_new ();
+  gtk_widget_show (entry);
+  gtk_signal_connect
+    (GTK_OBJECT (entry), "changed",
+     GTK_SIGNAL_FUNC (gtk_tree_view_search_init),
+     tree_view);
+  gtk_container_add (GTK_CONTAINER (window), entry);
+
+  /* done, show it */
+  tree_view->priv->search_dialog_position_func (tree_view, window);
+  gtk_widget_show_all (window);
+  gtk_widget_grab_focus (entry);
+
+  gtk_widget_event (entry, (GdkEvent *) event);
+
+  /* position window */
+
+  gtk_object_set_data (GTK_OBJECT (window), "text",
+                       gtk_entry_get_text (GTK_ENTRY (entry)));
+  gtk_object_set_data (GTK_OBJECT (tree_view), "search-dialog", window);
+
+  /* search first matching iter */
+  gtk_tree_view_search_init (entry, tree_view);
+}
+
+static gboolean
+gtk_tree_view_search_delete_event (GtkWidget *widget,
+				   GdkEventAny *event,
+				   GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  gtk_tree_view_search_dialog_destroy (widget, tree_view);
+  
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_view_search_button_press_event (GtkWidget *widget,
+					 GdkEventButton *event,
+					 GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  gtk_tree_view_search_dialog_destroy (widget, tree_view);
+  
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_view_search_key_press_event (GtkWidget *widget,
+				      GdkEventKey *event,
+				      GtkTreeView *tree_view)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
+  
+  /* close window */
+  if (event->keyval == GDK_Escape || event->keyval == GDK_Return
+      || event->keyval == GDK_Tab)
+    {
+      gtk_tree_view_search_dialog_destroy (widget, tree_view);
+      return TRUE;
+    }
+
+  /* select previous matching iter */
+  if (event->keyval == GDK_Up)
+    {
+      gtk_tree_view_search_move (widget,
+				 tree_view,
+				 TRUE);
+      return TRUE;
+    }
+
+  /* select next matching iter */
+  if (event->keyval == GDK_Down)
+    {
+      gtk_tree_view_search_move (widget,
+				 tree_view,
+				 FALSE);
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gtk_tree_view_search_move (GtkWidget   *window,
+			   GtkTreeView *tree_view,
+			   gboolean     up)
+{
+  gboolean ret;
+  gint *selected_iter;
+  gint len;
+  gint count = 0;
+  gchar *text;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  GtkTreeSelection *selection;
+
+  text = gtk_object_get_data (GTK_OBJECT (window), "text");
+  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "selected-iter");
+
+  g_return_if_fail (text != NULL);
+
+  if (!selected_iter || (up && *selected_iter == 1))
+    return;
+
+  len = strlen (text);
+  
+  if (len < 1)
+    return;
+
+  model = gtk_tree_view_get_model (tree_view);
+  selection = gtk_tree_view_get_selection (tree_view);
+  
+  /* search */
+  gtk_tree_selection_unselect_all (selection);
+  gtk_tree_model_get_iter_root (model, &iter);
+  
+  ret = gtk_tree_view_search_iter (model, selection, &iter, text,
+				   &count, up?((*selected_iter) - 1):((*selected_iter + 1)));
+  
+  if (ret)
+    /* found */
+    *selected_iter += up?(-1):(1);
+  else
+    {
+      /* return to old iter */
+      count = 0;
+      gtk_tree_model_get_iter_root (model, &iter);
+      gtk_tree_view_search_iter (model, selection,
+				 &iter, text,
+				 &count, *selected_iter);
+
+    }
+}
+
+static gboolean
+gtk_tree_view_search_equal_func (GtkTreeModel *model,
+				 gint          column,
+				 gchar        *key,
+				 GtkTreeIter  *iter)
+{
+  gboolean retval = TRUE;
+  gchar *normalized_string;
+  gchar *normalized_key;
+  gchar *case_normalized_string;
+  gchar *case_normalized_key;
+  GValue value = {0,};
+  gint key_len;
+
+  gtk_tree_model_get_value (model, iter, column, &value);
+  normalized_string = g_utf8_normalize (g_value_get_string (&value), G_NORMALIZE_ALL);
+  normalized_key = g_utf8_normalize (key, G_NORMALIZE_ALL);
+  case_normalized_string = g_utf8_casefold (normalized_string);
+  case_normalized_key = g_utf8_casefold (normalized_key);
+  
+  key_len = strlen (case_normalized_key);
+
+  if (!strncmp (case_normalized_key, case_normalized_string, key_len))
+    retval = FALSE;
+  
+  g_value_unset (&value);
+  g_free (normalized_key);
+  g_free (normalized_string);
+  g_free (case_normalized_key);
+  g_free (case_normalized_string);
+
+  return retval;
+}
+
+static gboolean
+gtk_tree_view_search_iter (GtkTreeModel     *model,
+			   GtkTreeSelection *selection,
+			   GtkTreeIter      *iter,
+			   gchar            *text,
+			   gint             *count,
+			   gint              n)
+{
+  GtkTreeView *tree_view = gtk_tree_selection_get_tree_view (selection);
+  GtkTreeViewColumn *column =
+    gtk_tree_view_get_column (tree_view, tree_view->priv->search_column);
+  
+  if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter))
+    {
+      (*count)++;
+      
+      if (*count == n)
+        {
+          GtkTreePath *path;
+          
+          gtk_tree_selection_select_iter (selection, iter);
+          
+          path = gtk_tree_model_get_path (model, iter);
+	  gtk_tree_view_scroll_to_cell (tree_view, path, column, 0.5, 0.5);
+	  gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
+          gtk_tree_path_free (path);
+          
+          return TRUE;
+        }
+    }
+  
+  if (gtk_tree_model_iter_has_child (model, iter))
+    {
+      gboolean ret;
+      GtkTreeIter child;
+      
+      gtk_tree_model_iter_children (model, &child, iter);
+      ret = gtk_tree_view_search_iter (model, selection,
+				       &child, text,
+				       count, n);
+      
+      if (ret)
+        return TRUE; /* iter found and selected */
+    }
+  
+  while (gtk_tree_model_iter_next (model, iter))
+    {
+      if (! tree_view->priv->search_equal_func (model, tree_view->priv->search_column, text, iter))
+        {
+          (*count)++;
+          if (*count == n)
+            {
+              GtkTreePath *path;
+              
+              gtk_tree_selection_select_iter (selection, iter);
+              
+              path = gtk_tree_model_get_path (model, iter);
+              gtk_tree_view_scroll_to_cell (tree_view, path, column, 0.5, 0.5);
+	      gtk_tree_view_real_set_cursor (tree_view, path, FALSE);
+              gtk_tree_path_free (path);
+              
+              return TRUE;
+            }
+        }
+      
+      if (gtk_tree_model_iter_has_child (model, iter))
+        {
+          gboolean ret;
+          GtkTreeIter child;
+          
+          gtk_tree_model_iter_children (model, &child, iter);
+          ret = gtk_tree_view_search_iter (model, selection,
+					   &child, text,
+					   count, n);
+
+          if (ret)
+            return TRUE; /* iter found and selected */
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_tree_view_search_init (GtkWidget   *entry,
+			   GtkTreeView *tree_view)
+{
+  gint ret;
+  gint *selected_iter;
+  gint len;
+  gint count = 0;
+  gchar *text;
+  GtkWidget *window;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  GtkTreeSelection *selection;
+  
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  
+  window = gtk_widget_get_parent (entry);
+  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  len = strlen (text);
+  model = gtk_tree_view_get_model (tree_view);
+  selection = gtk_tree_view_get_selection (tree_view);
+
+  /* search */
+  gtk_tree_selection_unselect_all (selection);
+  selected_iter = gtk_object_get_data (GTK_OBJECT (window), "selected-iter");
+  if (selected_iter)
+    g_free (selected_iter);
+  gtk_object_remove_data (GTK_OBJECT (window), "selected-iter");
+
+  if (len < 1)
+    return;
+  
+  gtk_tree_model_get_iter_root (model, &iter);
+  
+  ret = gtk_tree_view_search_iter (model, selection,
+				   &iter, text,
+				   &count, 1);
+
+  if (ret) 
+    {
+      selected_iter = g_malloc (sizeof (int));
+      *selected_iter = 1;
+      gtk_object_set_data (GTK_OBJECT (window), "selected-iter",
+                           selected_iter);
+    }
 }
