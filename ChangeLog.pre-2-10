@@ -1,3 +1,8 @@
+Wed May 14 09:06:59 2003    Hidetoshi Tajima <hidetoshi.tajima@sun.com>
+
+	* modules/input/gtkimcontextxim.c (get_ic_real): use type of guint32
+	instead of gumake for XNFilterEvents event mask(#110493).
+
 2003-05-13  Sven Neumann  <sven@gimp.org>
 
 	* gtk/gtktreeviewcolumn.c (gtk_tree_view_column_cell_get_position):
