@@ -258,3 +258,4 @@ stack_trace_sigchld (int signum)
 {
   stack_trace_done = 1;
 }
+

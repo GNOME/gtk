@@ -11,6 +11,7 @@ libglib_la_SOURCES = \
 		ghash.c		\
 		glist.c		\
 		gmem.c		\
+		gmessages.c     \
 		gprimes.c	\
 		gslist.c	\
 		gtimer.c	\
