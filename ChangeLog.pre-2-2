@@ -1,3 +1,9 @@
+Mon Jul 29 16:42:30 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkimcontext.c (gtk_im_context_real_get_surrounding):
+	Unset gtk-im-surrounding-info object data again.
+	(Fix from Yao Zhang, #86811)
+
 Fri Jul 26 17:59:06 2002  Owen Taylor  <otaylor@redhat.com>
  
  	* configure.in: Replace uses of grep \(A\|B\) ... with
