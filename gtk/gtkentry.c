@@ -144,26 +144,26 @@ static gboolean gtk_entry_get_selection_bounds (GtkEditable *editable,
 
 /* Default signal handlers
  */
-static void gtk_entry_real_insert_text (GtkEntry        *entry,
-					const gchar     *new_text,
-					gint             new_text_length,
-					gint            *position);
-static void gtk_entry_real_delete_text (GtkEntry        *entry,
-					gint             start_pos,
-					gint             end_pos);
-static void gtk_entry_move             (GtkEntry        *entry,
-					GtkMovementStep  step,
-					gint             count,
-					gboolean         extend_selection);
-static void gtk_entry_insert           (GtkEntry        *entry,
-					const gchar     *str);
-static void gtk_entry_delete           (GtkEntry        *entry,
-					GtkDeleteType    type,
-					gint             count);
-static void gtk_entry_cut_clipboard    (GtkEntry        *entry);
-static void gtk_entry_copy_clipboard   (GtkEntry        *entry);
-static void gtk_entry_paste_clipboard  (GtkEntry        *entry);
-static void gtk_entry_toggle_overwrite (GtkEntry        *entry);
+static void gtk_entry_real_insert_text   (GtkEntry        *entry,
+					  const gchar     *new_text,
+					  gint             new_text_length,
+					  gint            *position);
+static void gtk_entry_real_delete_text   (GtkEntry        *entry,
+					  gint             start_pos,
+					  gint             end_pos);
+static void gtk_entry_move_cursor        (GtkEntry        *entry,
+					  GtkMovementStep  step,
+					  gint             count,
+					  gboolean         extend_selection);
+static void gtk_entry_insert_at_cursor   (GtkEntry        *entry,
+					  const gchar     *str);
+static void gtk_entry_delete_from_cursor (GtkEntry        *entry,
+					  GtkDeleteType    type,
+					  gint             count);
+static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
+static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
+static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
+static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
 
 /* IM Context Callbacks
  */
@@ -333,7 +333,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       gtk_signal_new ("move_cursor",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkEntryClass, move),
+                      GTK_SIGNAL_OFFSET (GtkEntryClass, move_cursor),
                       gtk_marshal_VOID__ENUM_INT_BOOLEAN,
                       GTK_TYPE_NONE, 3, GTK_TYPE_MOVEMENT_STEP, GTK_TYPE_INT, GTK_TYPE_BOOL);
 
@@ -341,7 +341,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       gtk_signal_new ("insert_at_cursor",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkEntryClass, insert),
+                      GTK_SIGNAL_OFFSET (GtkEntryClass, insert_at_cursor),
                       gtk_marshal_VOID__STRING,
                       GTK_TYPE_NONE, 1, GTK_TYPE_STRING);
 
@@ -349,7 +349,7 @@ gtk_entry_class_init (GtkEntryClass *class)
       gtk_signal_new ("delete_from_cursor",
                       GTK_RUN_LAST | GTK_RUN_ACTION,
                       GTK_CLASS_TYPE (object_class),
-                      GTK_SIGNAL_OFFSET (GtkEntryClass, delete),
+                      GTK_SIGNAL_OFFSET (GtkEntryClass, delete_from_cursor),
                       gtk_marshal_VOID__ENUM_INT,
                       GTK_TYPE_NONE, 2, GTK_TYPE_DELETE_TYPE, GTK_TYPE_INT);
 
@@ -533,9 +533,9 @@ gtk_entry_class_init (GtkEntryClass *class)
 
   class->insert_text = gtk_entry_real_insert_text;
   class->delete_text = gtk_entry_real_delete_text;
-  class->move = gtk_entry_move;
-  class->insert = gtk_entry_insert;
-  class->delete = gtk_entry_delete;
+  class->move_cursor = gtk_entry_move_cursor;
+  class->insert_at_cursor = gtk_entry_insert_at_cursor;
+  class->delete_from_cursor = gtk_entry_delete_from_cursor;
   class->cut_clipboard = gtk_entry_cut_clipboard;
   class->copy_clipboard = gtk_entry_copy_clipboard;
   class->paste_clipboard = gtk_entry_paste_clipboard;
@@ -1377,10 +1377,10 @@ gtk_entry_real_delete_text (GtkEntry *entry,
 
 
 static void
-gtk_entry_move (GtkEntry       *entry,
-		GtkMovementStep step,
-		gint            count,
-		gboolean        extend_selection)
+gtk_entry_move_cursor (GtkEntry       *entry,
+		       GtkMovementStep step,
+		       gint            count,
+		       gboolean        extend_selection)
 {
   gint new_pos = entry->current_pos;
 
@@ -1424,8 +1424,8 @@ gtk_entry_move (GtkEntry       *entry,
 }
 
 static void
-gtk_entry_insert (GtkEntry    *entry,
-		  const gchar *str)
+gtk_entry_insert_at_cursor (GtkEntry    *entry,
+			    const gchar *str)
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint pos = entry->current_pos;
@@ -1437,9 +1437,9 @@ gtk_entry_insert (GtkEntry    *entry,
 }
 
 static void
-gtk_entry_delete (GtkEntry       *entry,
-		  GtkDeleteType   type,
-		  gint            count)
+gtk_entry_delete_from_cursor (GtkEntry       *entry,
+			      GtkDeleteType   type,
+			      gint            count)
 {
   GtkEditable *editable = GTK_EDITABLE (entry);
   gint start_pos = entry->current_pos;

@@ -2392,6 +2392,7 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
 
   gboolean found = FALSE;
   gboolean found_after = FALSE;
+  gboolean first = TRUE;
 
   g_return_if_fail (layout != NULL);
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
@@ -2405,8 +2406,15 @@ gtk_text_layout_move_iter_to_next_line (GtkTextLayout *layout,
       GSList *tmp_list;
 
       display = gtk_text_layout_get_line_display (layout, line, FALSE);
-      line_byte = line_display_iter_to_index (layout, display, iter);
 
+      if (first)
+	{
+	  line_byte = line_display_iter_to_index (layout, display, iter);
+	  first = FALSE;
+	}
+      else
+	line_byte = 0;
+	
       tmp_list = pango_layout_get_lines (display->layout);
       while (tmp_list && !found_after)
         {

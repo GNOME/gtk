@@ -106,20 +106,20 @@ struct _GtkEntryClass
 
   /* Action signals
    */
-  void (* activate)         (GtkEntry       *entry);
-  void (* move)             (GtkEntry       *entry,
-			     GtkMovementStep step,
-			     gint            count,
-			     gboolean        extend_selection);
-  void (* insert)           (GtkEntry       *entry,
-			     const gchar    *str);
-  void (* delete)           (GtkEntry       *entry,
-			     GtkDeleteType   type,
-			     gint            count);
-  void (* cut_clipboard)    (GtkEntry       *entry);
-  void (* copy_clipboard)   (GtkEntry       *entry);
-  void (* paste_clipboard)  (GtkEntry       *entry);
-  void (* toggle_overwrite) (GtkEntry       *entry);
+  void (* activate)           (GtkEntry       *entry);
+  void (* move_cursor)        (GtkEntry       *entry,
+			       GtkMovementStep step,
+			       gint            count,
+			       gboolean        extend_selection);
+  void (* insert_at_cursor)   (GtkEntry       *entry,
+			       const gchar    *str);
+  void (* delete_from_cursor) (GtkEntry       *entry,
+			       GtkDeleteType   type,
+			       gint            count);
+  void (* cut_clipboard)      (GtkEntry       *entry);
+  void (* copy_clipboard)     (GtkEntry       *entry);
+  void (* paste_clipboard)    (GtkEntry       *entry);
+  void (* toggle_overwrite)   (GtkEntry       *entry);
 };
 
 GtkType    gtk_entry_get_type       		(void) G_GNUC_CONST;

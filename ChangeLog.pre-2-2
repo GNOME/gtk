@@ -1,3 +1,11 @@
+Sun Nov 12 19:11:42 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (gtk_text_layout_move_iter_to_next_line):
+	Fix warning when moving between paragraphs.
+
+	* gtk/gtkentry.[ch]: Change move => move_cursor, 
+	delete => delete_from_cursor, insert => insert_at_cursor
+
 Sun Nov 12 22:52:51 2000  Robert Brady  <robert@suse.co.uk>
 
 	* modules/input/imviqr.c: A vietnamese VIQR-based input method.
