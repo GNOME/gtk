@@ -24,11 +24,11 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <config.h>
 #include <stdio.h>
 
 #include "gdktypes.h"
 #include "gdkprivate-fb.h"
-#include <config.h>
 
 GdkWindow *_gdk_fb_pointer_grab_window, *_gdk_fb_keyboard_grab_window, *_gdk_fb_pointer_grab_confine = NULL;
 gboolean _gdk_fb_pointer_grab_owner_events;

@@ -24,8 +24,8 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#include "gdk.h"
 #include <config.h>
+#include "gdk.h"
 
 #include "gdkwindow.h"
 #include "gdkinputprivate.h"

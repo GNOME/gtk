@@ -1,5 +1,12 @@
 2004-03-05  Federico Mena Quintero  <federico@ximian.com>
 
+	* gdk/linux-fb/gdkglobals-fb.c: Make <config.h> the very first
+	include.
+	* gdk/linux-fb/gdkwindow-fb.c: Likewise.
+	* gdk/linux-fb/gdkinput.c: Likewise.
+
+2004-03-05  Federico Mena Quintero  <federico@ximian.com>
+
 	Fixes #136082 and #135265, patch by Morten Welinder.
 
 	* configure.in: Use AC_SYS_LARGEFILE.
