@@ -4646,10 +4646,13 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
       break;
     }
 
+  /* call move_cursor() even if the cursor hasn't moved, since it 
+     cancels the selection
+  */
+  move_cursor (text_view, &newplace, extend_selection);
+
   if (!gtk_text_iter_equal (&insert, &newplace))
     {
-      move_cursor (text_view, &newplace, extend_selection);
-
       DV(g_print (G_STRLOC": scrolling onscreen\n"));
       gtk_text_view_scroll_mark_onscreen (text_view,
                                           gtk_text_buffer_get_mark (get_buffer (text_view),
