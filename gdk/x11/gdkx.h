@@ -171,6 +171,9 @@ G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 
 void	    gdk_x11_display_grab	      (GdkDisplay *display);
 void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
+void        gdk_x11_register_standard_event_type (GdkDisplay *display,
+						  gint        event_base,
+						  gint        n_events);
 
 #if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
 

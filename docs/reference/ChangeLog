@@ -1,3 +1,7 @@
+Sun Dec 14 01:25:49 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/gdk-sections.txt: Add gdk_x11_register_standard_event_type.
+
 Sat Dec 13 22:37:46 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/Makefile.am (HTML_IMAGES): Add 

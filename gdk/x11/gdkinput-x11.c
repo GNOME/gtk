@@ -394,8 +394,8 @@ _gdk_input_common_init (GdkDisplay *display,
   if (XQueryExtension (display_x11->xdisplay, "XInputExtension",
 		       &ignore, &event_base, &ignore))
     {
-      _gdk_x11_register_event_type (display,
-				    event_base, 9 /* Number of events */);
+      gdk_x11_register_standard_event_type (display,
+					    event_base, 9 /* Number of events */);
 
       devices = XListInputDevices(display_x11->xdisplay, &num_devices);
   

@@ -1,3 +1,13 @@
+Sun Dec 14 01:28:23 2003  Matthias Clasen  <maclas@gmx.de>
+
+	* gdk/x11/gdkprivate-x11.h: 
+	* gdk/x11/gdkx.h: 
+	* gdk/x11/gdkevents-x11.c (gdk_x11_register_standard_event_type): 
+	Rename from _gdk_x11_register_event_type(), added API docs.
+	* gdk/x11/gdkinput-x11.c (_gdk_input_common_init): 
+	* gdk/x11/gdkimage-x11.c (_gdk_windowing_image_init): Adjust
+	all callers.  (#121471, Bill Haneman)
+
 Sat Dec 13 23:37:50 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* gdk/gdkdraw.c (gdk_draw_pixbuf): Document that the clip mask

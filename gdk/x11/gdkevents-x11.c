@@ -651,10 +651,31 @@ translate_key_event (GdkDisplay *display,
   return;
 }
 
+/**
+ * gdk_x11_register_standard_event_type:
+ * @display: a #GdkDisplay
+ * @event_base: first event type code to register
+ * @n_events: number of event type codes to register
+ * 
+ * Registers interest in receiving extension events with type codes
+ * between @event_base and <literal>event_base + n_events - 1</literal>.
+ * The registered events must have the window field in the same place
+ * as core X events (this is not the case for e.g. XKB extension events).
+ *
+ * If an event type is registered, events of this type will go through
+ * global and window-specific filters (see gdk_window_add_filter()). 
+ * Unregistered events will only go through global filters.
+ * GDK may register the events of some X extensions on its own.
+ * 
+ * This function should only be needed in unusual circumstances, e.g.
+ * when filtering XInput extension events on the root window.
+ *
+ * Since: 2.4
+ **/
 void
-_gdk_x11_register_event_type (GdkDisplay          *display,
-			      gint                 event_base,
-			      gint                 n_events)
+gdk_x11_register_standard_event_type (GdkDisplay          *display,
+				      gint                 event_base,
+				      gint                 n_events)
 {
   GdkEventTypeX11 *event_type;
   GdkDisplayX11 *display_x11;

@@ -213,8 +213,8 @@ _gdk_windowing_image_init (GdkDisplay *display)
 	  display_x11->have_shm_pixmaps = pixmaps;
 	  event_base = XShmGetEventBase (xdisplay);
 
-	  _gdk_x11_register_event_type (display,
-					event_base, ShmNumberEvents);
+	  gdk_x11_register_standard_event_type (display,
+						event_base, ShmNumberEvents);
 	}
       else
 #endif /* USE_SHM */
