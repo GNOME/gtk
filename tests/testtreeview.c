@@ -1,3 +1,4 @@
+#undef GTK_DISABLE_DEPRECATED
 #include <string.h>
 #include "prop-editor.h"
 #include <gtk/gtk.h>
