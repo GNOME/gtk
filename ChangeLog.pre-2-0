@@ -1,7 +1,8 @@
 Sun Nov 29 06:12:01 1998  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtktypeutils.c (gtk_type_unique): removed default initialization
-	check, people must use gtk_type_init();
+	check, people must use gtk_type_init().
+	fixed up type allocation for foreign fundamentals.
 
 	* gtk/gtkwidget.h: 
 	* gtk/gtkwidget.c: added gtk_widget_set_composite_name() which is meant
