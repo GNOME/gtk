@@ -10,7 +10,7 @@
 			      name="&lt;imain@gtk.org&gt;"></tt>,
 Tony Gale <tt><htmlurl url="mailto:gale@gtk.org"
 			      name="&lt;gale@gtk.org&gt;"></tt>
-<date>April 6th, 1998
+<date>May 24th, 1998
 
 <!-- ***************************************************************** -->
 <sect>Introduction
@@ -319,7 +319,7 @@ The function specified in the third argument is called a "callback
 function", and should be of the form:
 
 <tscreen><verb>
-void callback_func(GtkWidget *widget, gpointer *callback_data);
+void callback_func(GtkWidget *widget, gpointer callback_data);
 </verb></tscreen>
 <p>
 Where the first argument will be a pointer to the widget that emitted the signal, and
@@ -368,7 +368,7 @@ is not hard to do things with them.  The next example will use the data
 argument to tell us which button was pressed.
 
 <tscreen><verb>
-void hello (GtkWidget *widget, gpointer *data)
+void hello (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello World\n");
 }
@@ -401,7 +401,7 @@ gtk_main_quit().  This function tells GTK that it is to exit from gtk_main
 when control is returned to it.
 
 <tscreen><verb>
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -618,13 +618,13 @@ widgets.
 
 /* Our new improved callback.  The data passed to this function is printed
  * to stdout. */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* another callback */
-void delete_event (GtkWidget *widget, gpointer *data)
+void delete_event (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -846,7 +846,7 @@ and play with it.
 #include "gtk/gtk.h"
 
 void
-delete_event (GtkWidget *widget, gpointer *data)
+delete_event (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -1286,13 +1286,13 @@ Here's the source code:
 
 /* our callback.
  * the data passed to this function is printed to stdout */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
 
 /* this callback quits the program */
-void delete_event (GtkWidget *widget, gpointer *data)
+void delete_event (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -1635,7 +1635,7 @@ GtkWidget *xpm_label_box (GtkWidget *parent, gchar *xpm_filename, gchar *label_t
 }
 
 /* our usual callback function */
-void callback (GtkWidget *widget, gpointer *data)
+void callback (GtkWidget *widget, gpointer data)
 {
     g_print ("Hello again - %s was pressed\n", (char *) data);
 }
@@ -1857,7 +1857,7 @@ The following example creates a radio button group with three buttons.
 #include <gtk/gtk.h>
 #include <glib.h>
 
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
   gtk_main_quit();
 }
 
@@ -1989,8 +1989,8 @@ code, take a look at the testgtk.c program distributed with GDK.
 Some widgets (such as the label) will not work with tooltips.
 <p>
 The first call you will use to create a new tooltip.  You only need to do
-this once in a given function.	The GtkTooltip this function returns can be
-used to create multiple tooltips.
+this once in a given function.	The <tt/GtkTooltip/ this function 
+returns can be used to create multiple tooltips.
 
 <tscreen><verb>
 GtkTooltips *gtk_tooltips_new (void);
@@ -2000,14 +2000,15 @@ Once you have created a new tooltip, and the widget you wish to use it on,
 simply use this call to set it.
 
 <tscreen><verb>
-void gtk_tooltips_set_tips   (GtkTooltips *tooltips,
-			      GtkWidget   *widget,
-			      gchar	  *tips_text);
+void gtk_tooltips_set_tip (GtkTooltips *tooltips,
+                           GtkWidget   *widget,
+                           const gchar *tip_text,
+                           const gchar *tip_private);
 </verb></tscreen>
 
 The first argument is the tooltip you've already created, followed by the
 widget you wish to have this tooltip pop up for, and the text you wish it to
-say.
+say. The last argument can be set to NULL.
 <p>
 Here's a short example:
 
@@ -2018,9 +2019,8 @@ GtkWidget *button;
 tooltips = gtk_tooltips_new ();
 button = gtk_button_new_with_label ("button 1");
 ...
-gtk_tooltips_set_tips (tooltips, button, "This is button 1");
+gtk_tooltips_set_tip (tooltips, button, "This is button 1", NULL);
 </verb></tscreen>
-
 
 There are other calls used with tooltips.  I will just list them with a
 brief description of what they do.
@@ -2134,7 +2134,7 @@ void progress_r (void)
     pstat = FALSE;  
 }
 
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -2255,7 +2255,7 @@ GtkWidget* gtk_dialog_new (void);
 So to create a new dialog box, use,
 
 <tscreen><verb>
-GtkWidget window;
+GtkWidget *window;
 window = gtk_dialog_new ();
 </verb></tscreen>
 
@@ -2440,14 +2440,14 @@ static const char * xpm_data[] = {
 
 /* when invoked (via signal delete_event), terminates the application.
  */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
     gtk_main_quit();
 }
 
 
 /* is invoked when the button is clicked.  It just prints a message.
  */
-void button_clicked( GtkWidget *widget, gpointer *data ) {
+void button_clicked( GtkWidget *widget, gpointer data ) {
     printf( "button clicked\n" );
 }
 
@@ -2648,7 +2648,7 @@ static char * WheelbarrowFull_xpm[] = {
 
 /* when invoked (via signal delete_event), terminates the application.
  */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
     gtk_main_quit();
 }
 
@@ -2808,7 +2808,7 @@ Placement of the drawing area and the rulers are done using a table.
 
 /* this routine gets control when the close button is clicked
  */
-void close_application( GtkWidget *widget, gpointer *data ) {
+void close_application( GtkWidget *widget, gpointer data ) {
     gtk_main_quit();
 }
 
@@ -2927,7 +2927,7 @@ onto the statusbar, and one for popping the last item back off.
 
 GtkWidget *status_bar;
 
-void push_item (GtkWidget *widget, gpointer *data)
+void push_item (GtkWidget *widget, gpointer data)
 {
   static int count = 1;
   char buff[20];
@@ -2938,7 +2938,7 @@ void push_item (GtkWidget *widget, gpointer *data)
   return;
 }
 
-void pop_item (GtkWidget *widget, gpointer *data)
+void pop_item (GtkWidget *widget, gpointer data)
 {
   gtk_statusbar_pop( GTK_STATUSBAR(status_bar), (guint) &amp;data );
   return;
@@ -3448,7 +3448,7 @@ void file_ok_sel (GtkWidget *w, GtkFileSelection *fs)
     g_print ("%s\n", gtk_file_selection_get_filename (GTK_FILE_SELECTION (fs)));
 }
 
-void destroy (GtkWidget *widget, gpointer *data)
+void destroy (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -3642,7 +3642,7 @@ void remove_book (GtkButton *button, GtkNotebook *notebook)
     gtk_widget_draw(GTK_WIDGET(notebook), NULL);
 }
 
-void delete (GtkWidget *widget, gpointer *data)
+void delete (GtkWidget *widget, gpointer data)
 {
     gtk_main_quit ();
 }
@@ -3825,7 +3825,7 @@ I've only commented on the parts that may be new to you.
 
 #include <gtk/gtk.h>
 
-void destroy(GtkWidget *widget, gpointer *data)
+void destroy(GtkWidget *widget, gpointer data)
 {
     gtk_main_quit();
 }
@@ -4938,7 +4938,7 @@ void gtk_menu_bar_append( GtkMenuBar *menu_bar, GtkWidget *menu_item);
 which in our case looks like this:
 
 <tscreen><verb>
-gtk_menu_bar_append( menu_bar, file_item );
+gtk_menu_bar_append( GTK_MENU_BAR (menu_bar), file_item );
 </verb></tscreen>
 
 If we wanted the menu right justified on the menubar, such as help menus often are, we can
@@ -5634,7 +5634,7 @@ These all require authors! :)  Please consider contributing to our tutorial.
 If you must use one of these widgets that are undocumented, I strongly
 suggest you take a look at their respective header files in the GTK distro.
 GTK's function names are very descriptive.  Once you have an understanding
-of how things work, it's not easy to figure out how to use a widget simply
+of how things work, it's not difficult to figure out how to use a widget simply
 by looking at it's function declarations.  This, along with a few examples
 from others' code, and it should be no problem.
 
