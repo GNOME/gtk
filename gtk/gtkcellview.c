@@ -403,6 +403,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
   GList *i;
   GtkCellView *cellview;
   GdkRectangle area;
+  gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
 
   cellview = GTK_CELL_VIEW (widget);
 
@@ -439,7 +440,7 @@ gtk_cell_view_expose (GtkWidget      *widget,
   area = widget->allocation;
 
   /* we draw on our very own window, initialize x and y to zero */
-  area.x = widget->allocation.x;
+  area.x = widget->allocation.x + (rtl ? widget->allocation.width : 0); 
   area.y = widget->allocation.y;
 
   /* PACK_START */
@@ -454,6 +455,8 @@ gtk_cell_view_expose (GtkWidget      *widget,
         continue;
 
       area.width = info->real_width;
+      if (rtl)                                             
+         area.x -= area.width;
 
       gtk_cell_renderer_render (info->cell,
                                 event->window,
@@ -461,8 +464,11 @@ gtk_cell_view_expose (GtkWidget      *widget,
                                 /* FIXME! */
                                 &area, &area, &event->area, 0);
 
-      area.x += info->real_width;
+      if (!rtl)                                           
+         area.x += info->real_width;
     }
+
+   area.x = rtl ? widget->allocation.x : (widget->allocation.x + widget->allocation.width);  
 
   /* PACK_END */
   for (i = cellview->priv->cell_list; i; i = i->next)
@@ -476,13 +482,16 @@ gtk_cell_view_expose (GtkWidget      *widget,
         continue;
 
       area.width = info->real_width;
+      if (!rtl)
+         area.x -= area.width;   
 
       gtk_cell_renderer_render (info->cell,
                                 widget->window,
                                 widget,
                                 /* FIXME ! */
                                 &area, &area, &event->area, 0);
-      area.x += info->real_width;
+      if (rtl)
+         area.x += info->real_width;
     }
 
   return FALSE;

@@ -1,3 +1,16 @@
+Fri Dec 12 21:00:12 2003  Kristian Rietveld  <kris@gtk.org>
+
+	Combo box flipping support.
+
+	* gtk/gtkcombobox.c (gtk_combo_box_menu_position),
+	(gtk_combo_box_size_allocate): support RTL flipping (#126518,
+	patch from Matthias Clasen),
+	(gtk_combo_box_popup): fix popup window alignment if there's a
+	cell view frame visible (#126518, patch from Semion Chichelnitsky).
+
+	* gtk/gtkcellview.c (gtk_cell_view_expose): support RTL flipping
+	(#128348, patch from Semion Chichelnitsky).
+
 Fri Dec 12 01:13:34 2003  Matthias Clasen  <maclas@gmx.de>
 
 	* examples/gtkdial/gtkdial.c:

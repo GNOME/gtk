@@ -694,7 +694,10 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
 
   gtk_widget_size_request (GTK_WIDGET (menu), &req);
 
-  *x = sx + child->allocation.width - req.width;
+  if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
+    *x = sx;
+  else
+    *x = sx + child->allocation.width - req.width;
   *y = sy + child->allocation.height;
 
   if (GTK_WIDGET_NO_WINDOW (child))
@@ -742,6 +745,15 @@ gtk_combo_box_popup (GtkComboBox *combo_box)
 
   gdk_window_get_origin (sample->window,
                          &x, &y);
+
+  if (combo_box->priv->cell_view_frame)
+    {
+       x -= GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
+            GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness;
+       width += 2 * (GTK_CONTAINER (combo_box->priv->cell_view_frame)->border_width +
+            GTK_WIDGET (combo_box->priv->cell_view_frame)->style->xthickness);
+    }
+
   gtk_widget_set_size_request (combo_box->priv->popup_window,
                                width, -1);
 
@@ -939,6 +951,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkAllocation child;
   GtkRequisition req;
+  gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   widget->allocation = *allocation;
 
@@ -960,36 +973,54 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
           child.x = allocation->x + border_width + 1 + xthickness + 2;
           child.y = allocation->y + border_width + 1 + ythickness + 2;
 
-          width = allocation->width - (border_width + 1 + ythickness * 2 + 4);
+          width = allocation->width - (border_width + 1 + xthickness * 2 + 4);
 
           /* handle the childs */
           gtk_widget_size_request (combo_box->priv->arrow, &req);
           child.width = req.width;
           child.height = allocation->height - 2 * (child.y - allocation->y);
-          child.x += width - req.width;
+          if (!is_rtl)
+            child.x += width - req.width;
           gtk_widget_size_allocate (combo_box->priv->arrow, &child);
-
+          if (is_rtl)
+            child.x += req.width;
           gtk_widget_size_request (combo_box->priv->separator, &req);
           child.width = req.width;
-          child.x -= req.width;
+          if (!is_rtl)
+            child.x -= req.width;
           gtk_widget_size_allocate (combo_box->priv->separator, &child);
 
-          child.width = child.x;
-          child.x = allocation->x + border_width + 1 + xthickness + 2;
-          child.width -= child.x;
+          if (is_rtl)
+            {
+              child.x += req.width;
+              child.width = allocation->x + allocation->width 
+                - (border_width + 1 + xthickness + 2) - child.x;
+            }
+          else 
+            {
+              child.width = child.x;
+              child.x = allocation->x + border_width + 1 + xthickness + 2;
+              child.width -= child.x;
+            }
 
           gtk_widget_size_allocate (GTK_BIN (widget)->child, &child);
         }
       else
         {
           gtk_widget_size_request (combo_box->priv->button, &req);
-          child.x = allocation->x + allocation->width - req.width;
+          if (is_rtl)
+            child.x = allocation->x;
+          else
+            child.x = allocation->x + allocation->width - req.width;
           child.y = allocation->y;
           child.width = req.width;
           child.height = allocation->height;
           gtk_widget_size_allocate (combo_box->priv->button, &child);
 
-          child.x = allocation->x;
+          if (is_rtl)
+            child.x = allocation->x + req.width;
+          else
+            child.x = allocation->x;
           child.y = allocation->y;
           child.width = allocation->width - req.width;
           gtk_widget_size_allocate (GTK_BIN (widget)->child, &child);
@@ -1001,14 +1032,20 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 
       /* button */
       gtk_widget_size_request (combo_box->priv->button, &req);
-      child.x = allocation->x + allocation->width - req.width;
+      if (is_rtl)
+        child.x = allocation->x;
+      else
+        child.x += allocation->x + allocation->width - req.width;
       child.y = allocation->y;
       child.width = req.width;
       child.height = allocation->height;
       gtk_widget_size_allocate (combo_box->priv->button, &child);
 
       /* frame */
-      child.x = allocation->x;
+      if (is_rtl)
+        child.x = allocation->x + req.width;
+      else
+        child.x = allocation->x;
       child.y = allocation->y;
       child.width = allocation->width - req.width;
       child.height = allocation->height;
