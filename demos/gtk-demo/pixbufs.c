@@ -252,7 +252,7 @@ do_pixbufs (void)
 
 	  gtk_container_add (GTK_CONTAINER (window), da);
 
-	  timeout_id = gtk_timeout_add (FRAME_DELAY, timeout, NULL);
+	  timeout_id = g_timeout_add (FRAME_DELAY, timeout, NULL);
 	}
     }
 

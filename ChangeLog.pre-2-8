@@ -1,3 +1,9 @@
+Fri Jan 31 17:45:22 2003  Manish Singh  <yosh@gimp.org>
+
+	* demos/pixbuf-demo.c
+	* demos/testpixbuf.c
+	* demos/gtk-demo/pixbufs.c: remove deprecated gtk_timeout_* usage.
+
 Fri Jan 31 17:33:00 2003  Manish Singh  <yosh@gimp.org>
                                                                                 
         * gtk/gtknotebook.c (gtk_notebook_remove_tab_label): set_state
