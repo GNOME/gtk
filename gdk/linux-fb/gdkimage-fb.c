@@ -184,7 +184,7 @@ _gdk_fb_get_image (GdkDrawable *drawable,
   image->visual = gdk_drawable_get_visual (drawable);
   image->width = width;
   image->height = height;
-  image->bits_per_pixel = GDK_DRAWABLE_IMPL_FBDATA (gdk_parent_root)->depth;
+  image->bits_per_pixel = GDK_DRAWABLE_FBDATA (drawable)->depth;
   image->depth = image->bits_per_pixel;
 
   if (image->bits_per_pixel <= 8)

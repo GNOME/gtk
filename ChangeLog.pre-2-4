@@ -1,3 +1,12 @@
+2001-07-26  Alex Larsson  <alexl@redhat.com>
+
+	* gdk/linux-fb/gdkimage-fb.c (_gdk_fb_get_image):
+	Initialize image->bits_per_pixel from the drawable, not from
+	the root window.
+
+	* gdk/linux-fb/gdkdrawable-fb2.c (gdk_fb_get_depth):
+	Fix cast. argument is an IMPL already.
+
 2001-07-15  James Henstridge  <james@daa.com.au>
 
 	* gtk/gtkwindow.c (gtk_window_add_accel_group): cast to GObject.
