@@ -1,5 +1,7 @@
 2003-10-01  Matthias Clasen  <maclas@gmx.de>
 
+	* gdk/tmpl/keys.sgml: Add two missing signals.
+
 	* gtk/tmpl/gtkaction.sgml: Fix cross reference to GtkMenuMerge.
 
 	* gtk/gtk-sections.txt: Additions.

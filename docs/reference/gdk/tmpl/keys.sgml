@@ -279,3 +279,18 @@ case conversion.
 @Returns: 
 
 
+<!-- ##### SIGNAL GdkKeymap::direction-changed ##### -->
+<para>
+
+</para>
+
+@keymap: the object which received the signal.
+
+
+<!-- ##### SIGNAL GdkKeymap::keys-changed ##### -->
+<para>
+
+</para>
+
+@keymap: the object which received the signal.
+
