@@ -25,7 +25,8 @@ extern "C" {
 
 typedef enum {
   GTK_DEBUG_OBJECTS = 1<<0,
-  GTK_DEBUG_MISC = 1<<1
+  GTK_DEBUG_MISC = 1<<1,
+  GTK_DEBUG_SIGNALS = 1<<2
 } GtkDebugFlag;
 
 #ifdef G_ENABLE_DEBUG

@@ -1350,6 +1350,10 @@ gtk_signal_real_emit (GtkObject *object,
   GtkHandlerInfo info;
   guchar       **signal_func_offset;
   register guint signal_id = signal->signal_id;
+
+  if(gtk_debug_flags & GTK_DEBUG_SIGNALS)
+	g_print("Sending signal %s to object %p (%s)\n",
+		signal->name, object, gtk_type_name(object->klass->type));
   
   if ((signal->run_type & GTK_RUN_NO_RECURSE) &&
       gtk_emission_check (current_emissions, object, signal_id))
