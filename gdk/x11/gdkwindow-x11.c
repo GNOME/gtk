@@ -1961,10 +1961,9 @@ gdk_window_set_background (GdkWindow *window,
   if (private->bg_pixmap &&
       private->bg_pixmap != GDK_PARENT_RELATIVE_BG &&
       private->bg_pixmap != GDK_NO_BG)
-    {
-      gdk_pixmap_unref (private->bg_pixmap);
-      private->bg_pixmap = NULL;
-    }
+    gdk_pixmap_unref (private->bg_pixmap);
+  
+  private->bg_pixmap = NULL;
 }
 
 /**

@@ -1,3 +1,9 @@
+2002-02-24  Alexander Larsson  <alla@lysator.liu.se>
+
+	* gdk/x11/gdkwindow-x11.c (gdk_window_set_background):
+	Always NULL out bg_pixmap, even when it used to be None
+	or parent relative.
+
 2002-02-24  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtktextbuffer.c (parent_class): parent_class variable was
