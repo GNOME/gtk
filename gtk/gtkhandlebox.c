@@ -838,6 +838,7 @@ gtk_handle_box_draw (GtkWidget    *widget,
 		     GdkRectangle *area)
 {
   GtkHandleBox *hb;
+  GdkRectangle new_area;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_HANDLE_BOX (widget));
@@ -849,19 +850,22 @@ gtk_handle_box_draw (GtkWidget    *widget,
     {
       if (hb->child_detached)
 	{
+	  gint width, height;
+	  
 	  /* The area parameter does not make sense in this case, so we
 	   * repaint everything.
 	   */
 
 	  gtk_handle_box_draw_ghost (hb);
 
-	  area->x = 0;
-	  area->y = 0;
-	  area->width = 2 * GTK_CONTAINER (hb)->border_width + DRAG_HANDLE_SIZE;
-	  area->height = area->width + GTK_BIN (hb)->child->allocation.height;
-	  area->width += GTK_BIN (hb)->child->allocation.width;
+	  gdk_window_get_size (hb->bin_window, &width, &height);
 
-	  gtk_handle_box_paint (widget, NULL, area);
+	  new_area.x = 0;
+	  new_area.y = 0;
+	  new_area.width = width;
+	  new_area.height = height;
+
+	  gtk_handle_box_paint (widget, NULL, &new_area);
 	}
       else
 	gtk_handle_box_paint (widget, NULL, area);
@@ -919,27 +923,29 @@ gtk_handle_box_button_changed (GtkWidget      *widget,
 	return FALSE;
 
       child = GTK_BIN (hb)->child;
-      
-      switch (hb->handle_position)
-	{
-	case GTK_POS_LEFT:
-	  in_handle = event->x < DRAG_HANDLE_SIZE;
-	  break;
-	case GTK_POS_TOP:
-	  in_handle = event->y < DRAG_HANDLE_SIZE;
-	  break;
-	case GTK_POS_RIGHT:
-	  in_handle = event->x > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.width;
-	  break;
-	case GTK_POS_BOTTOM:
-	  in_handle = event->y > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.height;
-	  break;
-	default:
-	  in_handle = FALSE;
-	  break;
-	}
 
-      if (!child)
+      if (child)
+	{
+	  switch (hb->handle_position)
+	    {
+	    case GTK_POS_LEFT:
+	      in_handle = event->x < DRAG_HANDLE_SIZE;
+	      break;
+	    case GTK_POS_TOP:
+	      in_handle = event->y < DRAG_HANDLE_SIZE;
+	      break;
+	    case GTK_POS_RIGHT:
+	      in_handle = event->x > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.width;
+	      break;
+	    case GTK_POS_BOTTOM:
+	      in_handle = event->y > 2 * GTK_CONTAINER (hb)->border_width + child->allocation.height;
+	      break;
+	    default:
+	      in_handle = FALSE;
+	      break;
+	    }
+	}
+      else
 	{
 	  in_handle = FALSE;
 	  event_handled = TRUE;

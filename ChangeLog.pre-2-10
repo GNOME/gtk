@@ -1,3 +1,11 @@
+Wed Jan 31 22:01:04 2001  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_draw): Remove a dependency
+	on bin->child != NULL. (Basically, just a cleanup)
+
+	* gtk/gtkhandlebox.c (gtk_handle_box_button_changed): Handle the case
+	where child == NULL and handle_position == RIGHT or BOTTOM. (#8002)
+
 Wed Jan 31 21:20:39 2001  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkctree.c (real_tree_move): If the node being moved isn't
