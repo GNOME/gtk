@@ -1388,6 +1388,16 @@ hex_changed (GtkWidget *hex_entry,
   g_free (text);
 }
 
+static gboolean
+hex_focus_out (GtkWidget     *hex_entry, 
+	       GdkEventFocus *event,
+	       gpointer       data)
+{
+  hex_changed (hex_entry, data);
+  
+  return FALSE;
+}
+
 static void
 hsv_changed (GtkWidget *hsv,
 	     gpointer   data)
@@ -1897,6 +1907,9 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 
   g_signal_connect (priv->hex_entry, "activate",
                     G_CALLBACK (hex_changed), colorsel);
+
+  g_signal_connect (priv->hex_entry, "focus_out_event",
+                    G_CALLBACK (hex_focus_out), colorsel);
 
   gtk_tooltips_set_tip (priv->tooltips,
                         priv->hex_entry,
