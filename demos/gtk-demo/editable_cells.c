@@ -1,5 +1,5 @@
 /* Tree View/Editable Cells
- * 
+ *
  * This demo demonstrates the use of editable cells in a GtkTreeView. If
  * you're new to the GtkTreeView widgets and associates, look into
  * the GtkListStore example first.
@@ -72,7 +72,7 @@ create_model (void)
 
   /* create array */
   articles = g_array_sized_new (FALSE, FALSE, sizeof (Item), 1);
-  
+
   add_items ();
 
   /* create list store */
@@ -131,11 +131,11 @@ remove_item (GtkWidget *widget, gpointer data)
     {
       gint i;
       GtkTreePath *path;
-      
+
       path = gtk_tree_model_get_path (model, &iter);
       i = gtk_tree_path_get_indices (path)[0];
       gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-      
+
       g_array_remove_index (articles, i);
 
       gtk_tree_path_free (path);
@@ -151,39 +151,41 @@ cell_edited (GtkCellRendererText *cell,
   GtkTreeModel *model = (GtkTreeModel *)data;
   GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
   GtkTreeIter iter;
-  
-  gchar old_text[256]; /* ugly? */
+
   gint *column;
-  
+
   column = g_object_get_data (G_OBJECT (cell), "column");
 
   gtk_tree_model_get_iter (model, &iter, path);
-  gtk_tree_model_get (model, &iter, column, old_text, -1);
 
   switch ((gint) column)
     {
     case COLUMN_NUMBER:
       {
 	gint i;
-	
+
 	i = gtk_tree_path_get_indices (path)[0];
 	g_array_index (articles, Item, i).number = atoi (new_text);
-	
+
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-			    atoi (new_text), -1);
+			    g_array_index (articles, Item, i).number, -1);
       }
       break;
-      
+
     case COLUMN_PRODUCT:
       {
 	gint i;
+	gchar *old_text;
+
+        gtk_tree_model_get (model, &iter, column, &old_text, -1);
+	g_free (old_text);
 
 	i = gtk_tree_path_get_indices (path)[0];
 	g_free (g_array_index (articles, Item, i).product);
 	g_array_index (articles, Item, i).product = g_strdup (new_text);
 
 	gtk_list_store_set (GTK_LIST_STORE (model), &iter, column,
-			    new_text, -1);
+                            g_array_index (articles, Item, i).product, -1);
       }
       break;
     }
@@ -214,7 +216,7 @@ add_columns (GtkTreeView *treeview)
   g_signal_connect (G_OBJECT (renderer), "edited",
 		    G_CALLBACK (cell_edited), model);
   g_object_set_data (G_OBJECT (renderer), "column", (gint *)COLUMN_PRODUCT);
-  
+
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (treeview),
 					       -1, "Product", renderer,
 					       "text", COLUMN_PRODUCT,
@@ -233,7 +235,7 @@ do_editable_cells (void)
       GtkWidget *treeview;
       GtkWidget *button;
       GtkTreeModel *model;
-      
+
       /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_title (GTK_WINDOW (window), "Shopping list");
@@ -261,14 +263,15 @@ do_editable_cells (void)
 
       /* create tree view */
       treeview = gtk_tree_view_new_with_model (model);
+      g_object_unref (G_OBJECT (model));
       gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (treeview), TRUE);
       gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (treeview)),
 				   GTK_SELECTION_SINGLE);
-      
+
       add_columns (GTK_TREE_VIEW (treeview));
-      
+
       gtk_container_add (GTK_CONTAINER (sw), treeview);
-      
+
       /* some buttons */
       hbox = gtk_hbox_new (TRUE, 4);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
@@ -285,7 +288,7 @@ do_editable_cells (void)
 
       gtk_window_set_default_size (GTK_WINDOW (window), 320, 200);
     }
-  
+
   if (!GTK_WIDGET_VISIBLE (window))
     gtk_widget_show_all (window);
   else

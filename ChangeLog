@@ -1,3 +1,16 @@
+Sat Jan 19 20:49:41 2002  Kristian Rietveld  <kris@gtk.org>
+
+	* demos/gtk-demo/editable_cells.c: fix a load of open line ends
+	(cell_edited): modified patch from German Poo Caaman~o
+	to fix up old_text declaration and free the memory
+	(do_editable_cells): unref the model after creating the treeview
+
+	* demos/gtk-demo/list_store.c: fix a load of open line ends,
+	(add_columns): set the sort column id, so we can sort
+
+	* demos/gtk-demo/tree_store.c: fix a load of open line ends,
+	(do_tree_store): unref the model after creating the treeview
+
 2002-01-19  Havoc Pennington  <hp@pobox.com>
 
 	* gtk/gtkwindow.c: link to new X11 section in a lot of places when
