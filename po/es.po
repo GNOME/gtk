@@ -1,22 +1,22 @@
 # GTK+'s Spanish translation.
-# Copyright (C) 1999-2002 GNOME Foundation, Inc.
+# Copyright © 1999-2002 Free Software Foundation, Inc.
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
 # José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001
 # Carlos Perelló Marín <carlos@gnome-db.org>, 2002
 # Germán Poo-Caamaño <gpoo@ubiobio.cl>, 2002
-# Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002
+# Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 1.3.15\n"
-"POT-Creation-Date: 2003-01-22 20:04+0100\n"
-"PO-Revision-Date: 2003-01-16 09:30GMT\n"
+"POT-Creation-Date: 2003-02-08 20:44+0100\n"
+"PO-Revision-Date: 2003-02-08 23:05-0300\n"
 "Last-Translator: Pablo Gonzalo del Campo <pablodc@bigfoot.com>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 0.9.5\n"
+"X-Generator: KBabel 0.9.6\n"
 
 #: gdk-pixbuf/gdk-pixbuf-animation.c:146 gdk-pixbuf/gdk-pixbuf-io.c:736
 #, c-format
@@ -1292,64 +1292,64 @@ msgstr "Indica si el texto puede ser modificado por el usuario"
 #: gtk/gtkcellrenderertext.c:240 gtk/gtkcellrenderertext.c:248
 #: gtk/gtkfontsel.c:217 gtk/gtktexttag.c:281 gtk/gtktexttag.c:289
 msgid "Font"
-msgstr "Tipo de letra"
+msgstr "Tipografía"
 
 #: gtk/gtkcellrenderertext.c:241
 msgid "Font description as a string"
-msgstr "Descripción del tipo de letra como una cadena"
+msgstr "Descripción de la tipografía como una cadena"
 
 #: gtk/gtkcellrenderertext.c:249 gtk/gtktexttag.c:290
 msgid "Font description as a PangoFontDescription struct"
-msgstr "Descripción del tipo de letra como una estructura PangoFontDescription"
+msgstr "Descripción de la tipografía como una estructura PangoFontDescription"
 
 #: gtk/gtkcellrenderertext.c:257 gtk/gtktexttag.c:298
 msgid "Font family"
-msgstr "Familia de tipos de letra"
+msgstr "Familia tipográfica"
 
 #: gtk/gtkcellrenderertext.c:258 gtk/gtktexttag.c:299
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
-msgstr "Nombre de la familia de tipos de letra, ej. Sans,·Helvetica,·Times,·Monospace"
+msgstr "Nombre de la familia tipográfica, ej. Sans,·Helvetica,·Times,·Monospace"
 
 #: gtk/gtkcellrenderertext.c:265 gtk/gtkcellrenderertext.c:266
 #: gtk/gtktexttag.c:306
 msgid "Font style"
-msgstr "Estilo de Tipo de Letra"
+msgstr "Estilo de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:274 gtk/gtkcellrenderertext.c:275
 #: gtk/gtktexttag.c:315
 msgid "Font variant"
-msgstr "Variante del tipo de letra"
+msgstr "Variante de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellrenderertext.c:284
 #: gtk/gtktexttag.c:324
 msgid "Font weight"
-msgstr "Ancho del tipo de letra"
+msgstr "Ancho de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:293 gtk/gtkcellrenderertext.c:294
 #: gtk/gtktexttag.c:335
 msgid "Font stretch"
-msgstr "Estiramiento de los Tipos de Letra"
+msgstr "Estiramiento de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:302 gtk/gtkcellrenderertext.c:303
 #: gtk/gtktexttag.c:344
 msgid "Font size"
-msgstr "Tamaño del tipo de letra"
+msgstr "Tamaño de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:312 gtk/gtktexttag.c:364
 msgid "Font points"
-msgstr "Puntos del tipo de letra"
+msgstr "Puntos de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:313 gtk/gtktexttag.c:365
 msgid "Font size in points"
-msgstr "Tipo de letra en puntos"
+msgstr "Tamaño de la tipografía en puntos"
 
 #: gtk/gtkcellrenderertext.c:322 gtk/gtktexttag.c:354
 msgid "Font scale"
-msgstr "Escala del tipo de letra"
+msgstr "Escala de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:323
 msgid "Font scaling factor"
-msgstr "Factor de escalado del tipo de letra"
+msgstr "Factor de escalado de la tipografía"
 
 #: gtk/gtkcellrenderertext.c:332 gtk/gtktexttag.c:423
 msgid "Rise"
@@ -1403,7 +1403,7 @@ msgstr "Indica si esta marca afecta la editabilidad del texto"
 
 #: gtk/gtkcellrenderertext.c:374 gtk/gtktexttag.c:532
 msgid "Font family set"
-msgstr "Definir la familia de la tipografía"
+msgstr "Conjunto de la familia tipográfica"
 
 #: gtk/gtkcellrenderertext.c:375 gtk/gtktexttag.c:533
 msgid "Whether this tag affects the font family"
@@ -1564,11 +1564,11 @@ msgstr ""
 "El que color elegido.  Puede arrastrar este color a la paleta y guardarla "
 "para usarla en el futuro."
 
-#: gtk/gtkcolorsel.c:926
+#: gtk/gtkcolorsel.c:925
 msgid "_Save color here"
 msgstr "G_uardar color aquí"
 
-#: gtk/gtkcolorsel.c:1129
+#: gtk/gtkcolorsel.c:1128
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1577,49 +1577,49 @@ msgstr ""
 "cambiar esta entrada, arrastre un color de muestra aquí o haga clic con el "
 "botón derecho sobre este y seleccione «Guardar color aquí»."
 
-#: gtk/gtkcolorsel.c:1743
+#: gtk/gtkcolorsel.c:1742
 msgid "Has Opacity Control"
 msgstr "Tiene control de opacidad"
 
-#: gtk/gtkcolorsel.c:1744
+#: gtk/gtkcolorsel.c:1743
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Indica si el selector de color permite seleccionar la opacidad"
 
-#: gtk/gtkcolorsel.c:1750
+#: gtk/gtkcolorsel.c:1749
 msgid "Has palette"
 msgstr "Tiene paleta"
 
-#: gtk/gtkcolorsel.c:1751
+#: gtk/gtkcolorsel.c:1750
 msgid "Whether a palette should be used"
 msgstr "Indica si debe ser usada una paleta"
 
-#: gtk/gtkcolorsel.c:1757
+#: gtk/gtkcolorsel.c:1756
 msgid "Current Color"
 msgstr "Color actual"
 
-#: gtk/gtkcolorsel.c:1758
+#: gtk/gtkcolorsel.c:1757
 msgid "The current color"
 msgstr "El color actual"
 
-#: gtk/gtkcolorsel.c:1764
+#: gtk/gtkcolorsel.c:1763
 msgid "Current Alpha"
 msgstr "Alfa actual"
 
-#: gtk/gtkcolorsel.c:1765
+#: gtk/gtkcolorsel.c:1764
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "El valor de opacidad actual (0 es completamente transparente, 65535 es "
 "completamente opaco)"
 
-#: gtk/gtkcolorsel.c:1779
+#: gtk/gtkcolorsel.c:1778
 msgid "Custom palette"
 msgstr "Paleta personalizada"
 
-#: gtk/gtkcolorsel.c:1780
+#: gtk/gtkcolorsel.c:1779
 msgid "Palette to use in the color selector"
 msgstr "Paleta a usar en el selector de colores"
 
-#: gtk/gtkcolorsel.c:1821
+#: gtk/gtkcolorsel.c:1820
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -1627,7 +1627,7 @@ msgstr ""
 "Seleccione el color que desea desde el anillo exterior. Seleccione la mezcla "
 "mas oscura o mas luminosa usando el triángulo interior."
 
-#: gtk/gtkcolorsel.c:1846
+#: gtk/gtkcolorsel.c:1845
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -1635,67 +1635,67 @@ msgstr ""
 "Seleccione el gotero, luego haga clic sobre cualquier color que haya en su "
 "pantalla para seleccionar ese color."
 
-#: gtk/gtkcolorsel.c:1855
+#: gtk/gtkcolorsel.c:1854
 msgid "_Hue:"
 msgstr "_Hue:"
 
-#: gtk/gtkcolorsel.c:1856
+#: gtk/gtkcolorsel.c:1855
 msgid "Position on the color wheel."
 msgstr "Posición en la rueda de colores."
 
-#: gtk/gtkcolorsel.c:1857
+#: gtk/gtkcolorsel.c:1856
 msgid "_Saturation:"
 msgstr "_Saturación:"
 
-#: gtk/gtkcolorsel.c:1858
+#: gtk/gtkcolorsel.c:1857
 msgid "\"Deepness\" of the color."
 msgstr "«Profundidad» del color."
 
-#: gtk/gtkcolorsel.c:1859
+#: gtk/gtkcolorsel.c:1858
 msgid "_Value:"
 msgstr "_Valor:"
 
-#: gtk/gtkcolorsel.c:1860
+#: gtk/gtkcolorsel.c:1859
 msgid "Brightness of the color."
 msgstr "Brillo del color."
 
-#: gtk/gtkcolorsel.c:1861
+#: gtk/gtkcolorsel.c:1860
 msgid "_Red:"
 msgstr "_Rojo:"
 
-#: gtk/gtkcolorsel.c:1862
+#: gtk/gtkcolorsel.c:1861
 msgid "Amount of red light in the color."
 msgstr "Cantidad de luz roja en el color."
 
-#: gtk/gtkcolorsel.c:1863
+#: gtk/gtkcolorsel.c:1862
 msgid "_Green:"
 msgstr "_Verde:"
 
-#: gtk/gtkcolorsel.c:1864
+#: gtk/gtkcolorsel.c:1863
 msgid "Amount of green light in the color."
 msgstr "Cantidad de luz verde en el color."
 
-#: gtk/gtkcolorsel.c:1865
+#: gtk/gtkcolorsel.c:1864
 msgid "_Blue:"
 msgstr "_Azul:"
 
-#: gtk/gtkcolorsel.c:1866
+#: gtk/gtkcolorsel.c:1865
 msgid "Amount of blue light in the color."
 msgstr "Cantidad de luz azul en en color."
 
-#: gtk/gtkcolorsel.c:1869
+#: gtk/gtkcolorsel.c:1868
 msgid "_Opacity:"
 msgstr "_Opacidad:"
 
-#: gtk/gtkcolorsel.c:1877
+#: gtk/gtkcolorsel.c:1876
 msgid "Transparency of the currently-selected color."
 msgstr "Transparencia del color actualmente seleccionado."
 
-#: gtk/gtkcolorsel.c:1892
+#: gtk/gtkcolorsel.c:1891
 msgid "Color _Name:"
 msgstr "_Nombre del color:"
 
-#: gtk/gtkcolorsel.c:1904
+#: gtk/gtkcolorsel.c:1903
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1703,7 +1703,7 @@ msgstr ""
 "Puede ingresar en esta entrada un valor de color en estilo HTML hexadecimal, "
 "o simplemente un nombre de color como «orange»."
 
-#: gtk/gtkcolorsel.c:1923
+#: gtk/gtkcolorsel.c:1922
 msgid "_Palette"
 msgstr "_Paleta"
 
@@ -1957,7 +1957,7 @@ msgstr "Seleccionar todo"
 msgid "Input Methods"
 msgstr "Métodos de entrada"
 
-#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6517
+#: gtk/gtkentry.c:3977 gtk/gtktextview.c:6543
 msgid "_Insert Unicode control character"
 msgstr "_Insertar caracter de control unicode"
 
@@ -2025,7 +2025,7 @@ msgstr "_Nueva carpeta"
 
 #: gtk/gtkfilesel.c:1118
 msgid "De_lete File"
-msgstr "_Borrar Archivo"
+msgstr "_Borrar archivo"
 
 #: gtk/gtkfilesel.c:1129
 msgid "_Rename File"
@@ -2102,7 +2102,7 @@ msgstr "¿Realmente desea eliminar el archivo «%s»?"
 
 #: gtk/gtkfilesel.c:1619
 msgid "Delete File"
-msgstr "Borrar Archivo"
+msgstr "Borrar archivo"
 
 #: gtk/gtkfilesel.c:1665 gtk/gtkfilesel.c:1679
 #, c-format
@@ -2136,7 +2136,7 @@ msgstr "Error al renombrar el archivo «%s» como «%s»: %s"
 
 #: gtk/gtkfilesel.c:1738
 msgid "Rename File"
-msgstr "Renombrar Archivo"
+msgstr "Renombrar archivo"
 
 #: gtk/gtkfilesel.c:1753
 #, c-format
@@ -2196,7 +2196,7 @@ msgstr "abcdefghijk ABCDEFGHIJK"
 
 #: gtk/gtkfontsel.c:210
 msgid "Font name"
-msgstr "Nombre tipo de letra"
+msgstr "Nombre de la tipografía"
 
 #: gtk/gtkfontsel.c:211
 msgid "The X string that represents this font"
@@ -2281,10 +2281,10 @@ msgstr "Gamma"
 
 #: gtk/gtkgamma.c:409
 msgid "_Gamma value"
-msgstr "Valor _Gamma"
+msgstr "Valor _gamma"
 
 #: gtk/gtkhandlebox.c:202 gtk/gtkmenubar.c:156 gtk/gtkstatusbar.c:161
-#: gtk/gtktoolbar.c:282 gtk/gtkviewport.c:150
+#: gtk/gtktoolbar.c:284 gtk/gtkviewport.c:150
 msgid "Shadow type"
 msgstr "Tipo de sombra"
 
@@ -2660,7 +2660,7 @@ msgstr ""
 msgid "Style of bevel around the menubar"
 msgstr "Estilo del bisel alrededor de la barra de menús"
 
-#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:256
+#: gtk/gtkmenubar.c:164 gtk/gtktoolbar.c:258
 msgid "Internal padding"
 msgstr "Relleno interno"
 
@@ -2858,7 +2858,7 @@ msgstr "Indica si los tabuladores hijos deberían rellenar el área asignada o n
 msgid "Tab pack type"
 msgstr "Tipo de empaquetado de la pestaña"
 
-#: gtk/gtknotebook.c:2439 gtk/gtknotebook.c:4764
+#: gtk/gtknotebook.c:2440 gtk/gtknotebook.c:4787
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2961,7 +2961,7 @@ msgstr "Ajuste"
 msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
 msgstr "El GtkAdjustment conectado a la barra de progreso (obsoleto)"
 
-#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:229
+#: gtk/gtkprogressbar.c:150 gtk/gtktoolbar.c:231
 msgid "Orientation"
 msgstr "Orientación"
 
@@ -3502,7 +3502,7 @@ msgstr "_Cancelar"
 
 #: gtk/gtkstock.c:279
 msgid "_CD-Rom"
-msgstr "_CD-Rom"
+msgstr "_CD-ROM"
 
 #: gtk/gtkstock.c:280
 msgid "_Clear"
@@ -3681,7 +3681,7 @@ msgstr "_Guardar"
 
 #: gtk/gtkstock.c:322
 msgid "Save _As"
-msgstr "Guard_ar Como"
+msgstr "Gu_ardar como"
 
 #: gtk/gtkstock.c:323
 msgid "_Color"
@@ -4266,7 +4266,7 @@ msgstr "Cursor visible"
 msgid "If the insertion cursor is shown"
 msgstr "Si se muestra el cursor de inserción"
 
-#: gtk/gtktextview.c:6508
+#: gtk/gtktextview.c:6534
 msgid "Input _Methods"
 msgstr "Métodos de entrada"
 
@@ -4295,67 +4295,67 @@ msgstr "Indicador de dibujo"
 msgid "If the toggle part of the button is displayed"
 msgstr "Si la parte de activación del botón es mostrada"
 
-#: gtk/gtktoolbar.c:230
+#: gtk/gtktoolbar.c:232
 msgid "The orientation of the toolbar"
 msgstr "La orientación de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:238
+#: gtk/gtktoolbar.c:240
 msgid "Toolbar Style"
 msgstr "Estilo de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:239
+#: gtk/gtktoolbar.c:241
 msgid "How to draw the toolbar"
 msgstr "Cómo dibujar la barra de herramientas"
 
-#: gtk/gtktoolbar.c:247
+#: gtk/gtktoolbar.c:249
 msgid "Spacer size"
 msgstr "Tamaño del espaciador"
 
-#: gtk/gtktoolbar.c:248
+#: gtk/gtktoolbar.c:250
 msgid "Size of spacers"
 msgstr "Tamaño de los espaciadores"
 
-#: gtk/gtktoolbar.c:257
+#: gtk/gtktoolbar.c:259
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Cantidad de espacio del borde entre la sombra de la barra de herramientas y "
 "los botones"
 
-#: gtk/gtktoolbar.c:265
+#: gtk/gtktoolbar.c:267
 msgid "Space style"
 msgstr "Estilo del espacio"
 
-#: gtk/gtktoolbar.c:266
+#: gtk/gtktoolbar.c:268
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Indica si los espaciadores son líneas verticales o sólo blancos"
 
-#: gtk/gtktoolbar.c:274
+#: gtk/gtktoolbar.c:276
 msgid "Button relief"
 msgstr "Relieve del botón"
 
-#: gtk/gtktoolbar.c:275
+#: gtk/gtktoolbar.c:277
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipo de bisel alrededor de los botones de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:283
+#: gtk/gtktoolbar.c:285
 msgid "Style of bevel around the toolbar"
 msgstr "Estilo del bisel alrededor de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:289
+#: gtk/gtktoolbar.c:291
 msgid "Toolbar style"
 msgstr "Estilo de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:290
+#: gtk/gtktoolbar.c:292
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
 msgstr ""
 "Indica si las barras de herramientas predeterminadas tienen sólo texto, "
 "texto y iconos, sólo iconos, etc."
 
-#: gtk/gtktoolbar.c:296
+#: gtk/gtktoolbar.c:298
 msgid "Toolbar icon size"
 msgstr "Tamaño del icono de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:297
+#: gtk/gtktoolbar.c:299
 msgid "Size of icons in default toolbars"
 msgstr "Tamaño de los iconos el las barras de herramientas predeterminadas"
 
@@ -5020,19 +5020,19 @@ msgstr "Vietnamita (VIQR)"
 msgid "X Input Method"
 msgstr "Método de la Entrada X"
 
-#: modules/input/gtkimcontextxim.c:260
+#: modules/input/gtkimcontextxim.c:265
 msgid "IM Preedit style"
 msgstr "IM estilo Preedit"
 
-#: modules/input/gtkimcontextxim.c:261
+#: modules/input/gtkimcontextxim.c:266
 msgid "How to draw the input method preedit string"
 msgstr "Como dibujar la cadena del método de entrada de preedit"
 
-#: modules/input/gtkimcontextxim.c:269
+#: modules/input/gtkimcontextxim.c:274
 msgid "IM Status style"
 msgstr "Estilo del estado IM"
 
-#: modules/input/gtkimcontextxim.c:270
+#: modules/input/gtkimcontextxim.c:275
 msgid "How to draw the input method statusbar"
 msgstr "Como dibujar el método de entrada de la barra de estado"
 
