@@ -57,7 +57,6 @@
 #include "gtkthemes.h"
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
-#include "gtkrcdata.h"
 
 #ifdef G_OS_WIN32
 #include <io.h>
@@ -102,8 +101,6 @@ static void        gtk_rc_parse_any                  (const gchar     *input_nam
                                                       const gchar     *input_string);
 static guint       gtk_rc_parse_statement            (GScanner        *scanner);
 static guint       gtk_rc_parse_style                (GScanner        *scanner);
-static guint       gtk_rc_parse_assignment           (GScanner        *scanner,
-						      const gchar     *var_name);
 static guint       gtk_rc_parse_bg                   (GScanner        *scanner,
                                                       GtkRcStyle      *style);
 static guint       gtk_rc_parse_fg                   (GScanner        *scanner,
@@ -630,14 +627,8 @@ gtk_rc_init (void)
 
 	  g_free (normalized_locale);
 	}
-
-      /* setup global rc-file variables */
-      gtk_rc_data_install_property (g_param_spec_int ("mouse-timeout", NULL, NULL,
-						      0, 1000, 0,
-						      G_PARAM_READABLE | G_PARAM_WRITABLE));
     }
   
-  g_object_freeze_notify (G_OBJECT (gtk_rc_data_get_global ()));
   i = 0;
   while (gtk_rc_default_files[i] != NULL)
     {
@@ -657,11 +648,6 @@ gtk_rc_init (void)
       gtk_rc_parse (gtk_rc_default_files[i]);
       i++;
     }
-  /* setup global rc-file variables after the fact */
-  gtk_rc_data_install_property (g_param_spec_float ("foo-number", NULL, NULL,
-						    -10000, 10000, 0,
-						    G_PARAM_READABLE | G_PARAM_WRITABLE));
-  g_object_thaw_notify (G_OBJECT (gtk_rc_data_get_global ()));
 }
 
 void
@@ -1592,73 +1578,10 @@ gtk_rc_parse_statement (GScanner *scanner)
     case GTK_RC_TOKEN_IM_MODULE_FILE:
       return gtk_rc_parse_im_module_file (scanner);
 
-    case G_TOKEN_IDENTIFIER:
-      is_varname = strchr (G_CSET_a_2_z "_", scanner->next_value.v_identifier[0]) != NULL;
-      for (p = scanner->next_value.v_identifier + 1; *p && is_varname; p++)
-	is_varname &= strchr (G_CSET_a_2_z G_CSET_DIGITS "_-", *p) != NULL;
-      if (is_varname)
-	{
-	  gchar *name;
-
-	  g_scanner_get_next_token (scanner); /* eat identifier */
-	  name = g_strdup (scanner->value.v_identifier);
-
-	  token = gtk_rc_parse_assignment (scanner, name);
-	  g_free (name);
-
-	  return token;
-	}
-      /* fall through */
     default:
       g_scanner_get_next_token (scanner);
       return /* G_TOKEN_SYMBOL */ GTK_RC_TOKEN_STYLE;
     }
-}
-
-static guint
-gtk_rc_parse_assignment (GScanner    *scanner,
-			 const gchar *var_name)
-{
-  guint token;
-  gboolean negate = FALSE;
-  gchar *location;
-
-  if (g_scanner_get_next_token (scanner) != '=')
-    return '=';
-
-  token = g_scanner_get_next_token (scanner);
-  if (token == '-')
-    {
-      negate = TRUE;
-      token = g_scanner_get_next_token (scanner);
-      if (token != G_TOKEN_FLOAT &&
-	  token != G_TOKEN_INT)
-	return G_TOKEN_INT;
-    }
-  location = g_strdup_printf ("%s:%u", scanner->input_name, scanner->line);
-  switch (token)
-    {
-    case G_TOKEN_INT:
-      gtk_rc_data_set_long_property (var_name,
-				     negate ? -scanner->value.v_int : scanner->value.v_int,
-				     location);
-      break;
-    case G_TOKEN_FLOAT:
-      gtk_rc_data_set_double_property (var_name,
-				       negate ? -scanner->value.v_float : scanner->value.v_float,
-				       location);
-      break;
-    case G_TOKEN_STRING:
-      gtk_rc_data_set_string_property (var_name,
-				       scanner->value.v_string,
-				       location);
-      break;
-    default:
-      return G_TOKEN_INT;
-    }
-  g_free (location);
-
-  return G_TOKEN_NONE;
 }
 
 static guint
