@@ -2,11 +2,18 @@
 Drag and Drop
 
 <!-- ##### SECTION Short_Description ##### -->
-
+functions for controlling drag and drop handling.
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+These functions provide a low level interface for drag and drop.
+GDK supports both the Xdnd and Motif drag and drop protocols transparently.
+</para>
+<para>
+GTK+ provides a higher level abstraction based on top of these functions,
+and so they are not normally needed in GTK+ applications.
+See the <link linkend="gtk-Drag-and-Drop">Drag and Drop</link> section of
+the GTK+ documentation for more information.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

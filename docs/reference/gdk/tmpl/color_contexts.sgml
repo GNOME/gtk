@@ -2,11 +2,16 @@
 Color Contexts
 
 <!-- ##### SECTION Short_Description ##### -->
-
+routines for allocating colors (deprecated).
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The #GdkColorContext type is used for allocating groups of colors.
+</para>
+<para>
+It is now deprecated in favor of the gdk_colormap_*() functions described in
+the <link linkend="gdk-Colormaps-and-Colors">Colormaps and Colors</link>
+section.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

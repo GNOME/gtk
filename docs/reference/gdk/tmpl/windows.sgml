@@ -365,6 +365,12 @@ Windows
 @GDK_FILTER_TRANSLATE: 
 @GDK_FILTER_REMOVE: 
 
+<!-- ##### TYPEDEF GdkXEvent ##### -->
+<para>
+
+</para>
+
+
 <!-- ##### FUNCTION gdk_window_shape_combine_mask ##### -->
 <para>
 

@@ -56,9 +56,7 @@ of time. Note that each click also generates a %GDK_BUTTON_PRESS event.
 @GDK_KEY_RELEASE: a key has been released.
 @GDK_ENTER_NOTIFY: the pointer has entered the window.
 @GDK_LEAVE_NOTIFY: the pointer has left the window.
-@GDK_FOCUS_CHANGE: the keyboard focus has entered or left the window. Note that
-in GTK+ keyboard focus is handled mostly within GTK+ itself, so it is usually
-only toplevel windows which receive these events.
+@GDK_FOCUS_CHANGE: the keyboard focus has entered or left the window.
 @GDK_CONFIGURE: the size, position or stacking order of the window has changed.
 Note that GTK+ discards these events for %GDK_WINDOW_CHILD windows.
 @GDK_MAP: the window has been mapped.

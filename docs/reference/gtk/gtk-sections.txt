@@ -2916,6 +2916,7 @@ GtkSortType
 <SECTION>
 <FILE>gtkprivate</FILE>
 <TITLE>Private Information</TITLE>
+<INCLUDE>gtk/gtkprivate.h</INCLUDE>
 GtkPrivateFlags
 GTK_PRIVATE_FLAGS
 GTK_WIDGET_USER_STYLE
