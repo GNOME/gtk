@@ -501,7 +501,7 @@ do_stock_browser (void)
       gtk_tree_selection_set_mode (selection, GTK_TREE_SELECTION_SINGLE);
       
       g_signal_connect_data (G_OBJECT (selection),
-                             "selection_changed",
+                             "changed",
                              G_CALLBACK (selection_changed),
                              NULL, NULL, FALSE, FALSE);
     }

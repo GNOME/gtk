@@ -1,3 +1,8 @@
+2001-06-10  Anders Carlsson  <andersca@codefactory.se>
+
+	* demos/gtk-demo/stock_browser.c (do_stock_browser): Update
+	signal name to be changed instead of selection_changed.
+
 2001-06-08  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtkentry.c (gtk_entry_class_init): add read-only
