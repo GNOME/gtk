@@ -1,5 +1,8 @@
 1999-11-10  Jonathan Blandford  <jrb@redhat.com>
 
+	* src/gdk-pixbuf-loader.c (gdk_pixbuf_loader_close): emit the
+	closed signal.
+
 	* src/io-ras.c (OneLineMapped_file): Now can handle indexing
 	correctly.  Patch from Arjan to do so.
 

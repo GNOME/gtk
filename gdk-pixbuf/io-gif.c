@@ -99,6 +99,9 @@ typedef struct _Gif89 Gif89;
 struct _Gif89
 {
 	int transparent;
+	int delay_time;
+	int input_flag;
+	int disposal;
 };
 
 typedef struct _GifContext GifContext;
@@ -108,6 +111,7 @@ struct _GifContext
 	unsigned int width;
 	unsigned int height;
 	CMap color_map;
+	CMap frame_color_map;
 	unsigned int bit_pixel;
 	unsigned int color_resolution;
 	unsigned int background;
@@ -1002,6 +1006,26 @@ gif_main_loop (GifContext *context)
 	return retval;
 }
 
+static GifContext *
+new_context (void)
+{
+	GifContext *context;
+
+	context = g_new (GifContext, 1);
+	context->pixbuf = NULL;
+	context->file = NULL;
+	context->state = GIF_START;
+	context->prepare_func = NULL;
+	context->update_func = NULL;
+	context->user_data = NULL;
+	context->buf = NULL;
+	context->amount_needed = 0;
+	context->gif89.transparent = -1;
+	context->gif89.delay_time = -1;
+	context->gif89.input_flag = -1;
+	context->gif89.disposal = -1;
+	return context;
+}
 /* Shared library entry point */
 GdkPixbuf *
 image_load (FILE *file)
@@ -1010,12 +1034,8 @@ image_load (FILE *file)
 
 	g_return_val_if_fail (file != NULL, NULL);
 
-	context = g_new (GifContext, 1);
+	context = new_context ();
 	context->file = file;
-	context->pixbuf = NULL;
-	context->state = GIF_START;
-	context->prepare_func = NULL;
-	context->update_func = NULL;
 
 	gif_main_loop (context);
 
@@ -1032,15 +1052,11 @@ image_begin_load (ModulePreparedNotifyFunc prepare_func,
 #ifdef IO_GIFDEBUG
 	count = 0;
 #endif
-	context = g_new (GifContext, 1);
+	context = new_context ();
 	context->prepare_func = prepare_func;
 	context->update_func = update_func;
 	context->user_data = user_data;
-	context->file = NULL;
-	context->pixbuf = NULL;
-	context->state = GIF_START;
-	context->buf = NULL;
-	context->amount_needed = 0;
+
 	return (gpointer) context;
 }
 
