@@ -1,5 +1,11 @@
 2001-09-21  Havoc Pennington  <hp@redhat.com>
 
+	* gtk/gtktextview.c (gtk_text_view_key_press_event): don't pass
+	key press to IM context if cursor isn't in an editable location;
+	bug #58425, patch from Hidetoshi Tajima
+
+2001-09-21  Havoc Pennington  <hp@redhat.com>
+
         Bug #60862
 	
 	* gtk/gtktextbtree.c (gtk_text_btree_node_destroy): 

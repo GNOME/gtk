@@ -3201,12 +3201,17 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 {
   gboolean retval = FALSE;
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  
   if (text_view->layout == NULL ||
       get_buffer (text_view) == NULL)
     return FALSE;
 
-  if (gtk_im_context_filter_keypress (text_view->im_context, event))
+  insert = gtk_text_buffer_get_insert (get_buffer (text_view));
+  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
+  if (gtk_text_iter_editable (&iter, text_view->editable) &&
+      gtk_im_context_filter_keypress (text_view->im_context, event))
     {
       text_view->need_im_reset = TRUE;
       retval = TRUE;
