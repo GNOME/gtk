@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 1.1.9\n"
-"POT-Creation-Date: 1999-01-12 10:38-0800\n"
+"Project-Id-Version: gtk+ 1.1.13\n"
+"POT-Creation-Date: 1999-01-16 00:41+0100\n"
 "PO-Revision-Date: 1998-12-18 22:15+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@fib.hl.no>\n"
 "Language-Team: Norwegian <no@li.org>\n"
@@ -123,9 +123,8 @@ msgid "Rename"
 msgstr "Gi nytt navn"
 
 #: gtk/gtkfilesel.c:1433
-#, fuzzy
 msgid "Selection: "
-msgstr "Valg av skrifttype"
+msgstr "Valg:"
 
 #: gtk/gtkfontsel.c:203
 msgid "Foundry:"
@@ -215,7 +214,7 @@ msgstr "Sett tilbake filter"
 
 #: gtk/gtkfontsel.c:653
 msgid "Metric:"
-msgstr ""
+msgstr "Tyngde:"
 
 #: gtk/gtkfontsel.c:657
 msgid "Points"
@@ -415,11 +414,11 @@ msgstr "Trykk"
 
 #: gtk/gtkinputdialog.c:495
 msgid "X Tilt"
-msgstr ""
+msgstr "X-helling"
 
 #: gtk/gtkinputdialog.c:496
 msgid "Y Tilt"
-msgstr ""
+msgstr "Y-helling"
 
 #: gtk/gtkinputdialog.c:536
 msgid "none"
@@ -434,17 +433,17 @@ msgstr "(slått av)"
 msgid "clear"
 msgstr "tøm"
 
-#: gtk/gtknotebook.c:1966 gtk/gtknotebook.c:3985
+#: gtk/gtknotebook.c:1967 gtk/gtknotebook.c:3986
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: gtk/gtkrc.c:1507
+#: gtk/gtkrc.c:1508
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\" line %d"
 msgstr "Kunne ikke finne bildefilen i pixmap_patg: \"%s\" linje %d"
 
-#: gtk/gtkrc.c:1510
+#: gtk/gtkrc.c:1511
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Kunne ikke finne bildefil i pixmap_path: \"%s\""
