@@ -41,9 +41,21 @@ if USE_X11
 IM_XIM_MODULE=im-xim.la 
 endif
 
+im_am_et_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_am_et_la_SOURCES = imam-et.c
+im_am_et_la_LIBADD = $(LDADDS)
+
 im_cyrillic_translit_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_cyrillic_translit_la_SOURCES = imcyrillic-translit.c
 im_cyrillic_translit_la_LIBADD = $(LDADDS)
+
+im_ti_er_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_ti_er_la_SOURCES = imti-er.c
+im_ti_er_la_LIBADD = $(LDADDS)
+
+im_ti_et_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
+im_ti_et_la_SOURCES = imti-et.c
+im_ti_et_la_LIBADD = $(LDADDS)
 
 im_thai_broken_la_LDFLAGS = -rpath $(moduledir) -avoid-version -module $(no_undefined)
 im_thai_broken_la_SOURCES = imthai-broken.c
@@ -73,8 +85,17 @@ install-data-local:
 	  $(top_builddir)/gtk/gtk-query-immodules-2.0 > $(DESTDIR)$(sysconfdir)/gtk-2.0/gtk.immodules ; \
         fi
 
-module_LTLIBRARIES = im-cyrillic-translit.la $(IM_XIM_MODULE) im-viqr.la im-thai-broken.la \
-                     im-inuktitut.la im-ipa.la im-hangul.la
+module_LTLIBRARIES =				\
+	$(IM_XIM_MODULE)			\
+	im-am-et.la				\
+	im-cyrillic-translit.la			\
+	im-hangul.la				\
+	im-inuktitut.la				\
+	im-ipa.la				\
+	im-thai-broken.la			\
+	im-ti-er.la				\
+	im-ti-et.la				\
+	im-viqr.la
 
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-2.0 .libs/*.$(SOSUFFIX) > gtk.immodules

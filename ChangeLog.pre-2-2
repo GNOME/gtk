@@ -1,3 +1,9 @@
+Sun Feb 10 12:32:44 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* modules/input/Makefile.am modules/input/{imam-et.c, imti-er.c,
+	imti-et.c} po/POTFILES.in: Add three Ethiopic input methods from
+	Daniel Yacob.
+
 2002-02-10  Anders Carlsson  <andersca@gnu.org>
 
 	* gtk/gtkcalendar.c (gtk_calendar_class_init): Set finalize handler;
