@@ -67,6 +67,8 @@ static void gtk_menu_item_paint          (GtkWidget        *widget,
 					  GdkRectangle     *area);
 static gint gtk_menu_item_expose         (GtkWidget        *widget,
 					  GdkEventExpose   *event);
+static void gtk_menu_item_parent_set     (GtkWidget        *widget,
+					  GtkWidget        *previous_parent);
 
 
 static void gtk_real_menu_item_select               (GtkItem     *item);
@@ -151,6 +153,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->show_all = gtk_menu_item_show_all;
   widget_class->hide_all = gtk_menu_item_hide_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
+  widget_class->parent_set = gtk_menu_item_parent_set;
   
   container_class->forall = gtk_menu_item_forall;
 
@@ -1011,6 +1014,23 @@ gtk_menu_item_accel_name_foreach (GtkWidget *widget,
 			       gtk_menu_item_accel_name_foreach,
 			       data);
     }
+}
+
+static void
+gtk_menu_item_parent_set (GtkWidget *widget,
+			  GtkWidget *previous_parent)
+{
+  GtkMenuItem *menu_item = GTK_MENU_ITEM (widget);
+  GtkMenu *menu = GTK_IS_MENU (widget->parent) ? GTK_MENU (widget->parent) : NULL;
+
+  if (menu)
+    _gtk_menu_item_refresh_accel_path (menu_item,
+				       menu->accel_path,
+				       menu->accel_group,
+				       TRUE);
+
+  if (GTK_WIDGET_CLASS (parent_class)->parent_set)
+    GTK_WIDGET_CLASS (parent_class)->parent_set (widget, previous_parent);
 }
 
 void

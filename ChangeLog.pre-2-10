@@ -1,3 +1,8 @@
+Wed Jan  9 15:20:40 2002  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkmenuitem.c (gtk_menu_item_parent_set): update the accel
+	path upon parent changes.
+
 Wed Jan  9 13:20:14 2002  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkviewport.c (gtk_viewport_size_allocate): small but important
