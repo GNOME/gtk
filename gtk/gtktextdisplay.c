@@ -805,18 +805,18 @@ gtk_text_layout_draw (GtkTextLayout *layout,
               line_end = line_start;
 	      if (!gtk_text_iter_ends_line (&line_end))
 		gtk_text_iter_forward_to_line_end (&line_end);
-              byte_count = gtk_text_iter_get_line_index (&line_end);     
+              byte_count = gtk_text_iter_get_visible_line_index (&line_end);     
 
               if (gtk_text_iter_compare (&selection_start, &line_end) <= 0 &&
                   gtk_text_iter_compare (&selection_end, &line_start) >= 0)
                 {
                   if (gtk_text_iter_compare (&selection_start, &line_start) >= 0)
-                    selection_start_index = gtk_text_iter_get_line_index (&selection_start);
+                    selection_start_index = gtk_text_iter_get_visible_line_index (&selection_start);
                   else
                     selection_start_index = -1;
 
                   if (gtk_text_iter_compare (&selection_end, &line_end) <= 0)
-                    selection_end_index = gtk_text_iter_get_line_index (&selection_end);
+                    selection_end_index = gtk_text_iter_get_visible_line_index (&selection_end);
                   else
                     selection_end_index = MAX(byte_count, 1);
                 }
