@@ -1,3 +1,9 @@
+Wed Apr  7 22:59:47 1999  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkpaned.c (gtk_paned_set_position): Don't clamp
+	position here prematurely -- we might not have the
+	right ->min_position and ->max_position yet.
+
 Tue Apr  6 16:38:51 1999  Owen Taylor  <otaylor@redhat.com>
 
 	* gtk/gtkselection.c gdk/gdkselection.c: (gtk_selection_request):

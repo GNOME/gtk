@@ -455,9 +455,13 @@ gtk_paned_set_position    (GtkPaned  *paned,
 
   if (position >= 0)
     {
-      paned->child1_size = CLAMP (position,
-				  paned->min_position,
-				  paned->max_position);
+      /* We don't clamp here - the assumption is that
+       * if the total allocation changes at the same time
+       * as the position, the position set is with reference
+       * to the new total size. If only the position changes,
+       * then clamping will occur in gtk_paned_compute_position()
+       */
+      paned->child1_size = position;
       paned->position_set = TRUE;
     }
   else
@@ -525,13 +529,16 @@ gtk_paned_compute_position (GtkPaned *paned,
     }
   else
     {
-      if (paned->last_allocation < 0)
-	paned->last_allocation = allocation;
-      
-      if (paned->child1_resize && !paned->child2_resize)
-	paned->child1_size += (allocation - paned->last_allocation);
-      else if (!(!paned->child1_resize && paned->child2_resize))
-	paned->child1_size = allocation * ((gdouble)paned->child1_size / (paned->last_allocation));
+      /* If the position was set before the initial allocation.
+       * (paned->last_allocation < 0) just clamp it and leave it.
+       */
+      if (paned->last_allocation >= 0)
+	{
+	  if (paned->child1_resize && !paned->child2_resize)
+	    paned->child1_size += (allocation - paned->last_allocation);
+	  else if (!(!paned->child1_resize && paned->child2_resize))
+	    paned->child1_size = allocation * ((gdouble)paned->child1_size / (paned->last_allocation));
+	}
     }
 
   paned->child1_size = CLAMP (paned->child1_size,
