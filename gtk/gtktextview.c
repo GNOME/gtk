@@ -234,6 +234,9 @@ static void gtk_text_view_forall (GtkContainer *container,
 
 /* FIXME probably need the focus methods. */
 
+/* Hack-around */
+#define g_signal_handlers_disconnect_by_func(obj, func, data) g_signal_handlers_disconnect_matched (obj, G_SIGNAL_MATCH_FUNC | G_SIGNAL_MATCH_DATA, 0, 0, NULL, func, data)
+
 typedef struct _GtkTextViewChild GtkTextViewChild;
 
 struct _GtkTextViewChild
@@ -814,9 +817,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       g_slist_free (copy);
 
-      gtk_signal_disconnect_by_func (GTK_OBJECT (text_view->buffer),
-                                     gtk_text_view_mark_set_handler, text_view);
-      gtk_object_unref (GTK_OBJECT (text_view->buffer));
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->buffer),
+                                            gtk_text_view_mark_set_handler, text_view);
+      g_object_unref (G_OBJECT (text_view->buffer));
       text_view->dnd_mark = NULL;
     }
 
@@ -826,8 +829,7 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
     {
       GtkTextIter start;
 
-      gtk_object_ref (GTK_OBJECT (buffer));
-      gtk_object_sink (GTK_OBJECT (buffer));
+      g_object_ref (G_OBJECT (buffer));
 
       if (text_view->layout)
         gtk_text_layout_set_buffer (text_view->layout, buffer);
@@ -844,8 +846,9 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       text_view->first_para_pixels = 0;
 
-      gtk_signal_connect (GTK_OBJECT (text_view->buffer), "mark_set",
-                          gtk_text_view_mark_set_handler, text_view);
+      g_signal_connect_data (G_OBJECT (text_view->buffer), "mark_set",
+                             gtk_text_view_mark_set_handler, text_view,
+                             NULL, FALSE, FALSE);
     }
 
   if (GTK_WIDGET_VISIBLE (text_view))
@@ -1633,9 +1636,9 @@ gtk_text_view_finalize (GObject *object)
   g_return_if_fail (text_view->buffer == NULL);
 
   if (text_view->hadjustment)
-    gtk_object_unref (GTK_OBJECT (text_view->hadjustment));
+    g_object_unref (G_OBJECT (text_view->hadjustment));
   if (text_view->vadjustment)
-    gtk_object_unref (GTK_OBJECT (text_view->vadjustment));
+    g_object_unref (G_OBJECT (text_view->vadjustment));
 
   text_window_free (text_view->text_window);
 
@@ -1651,7 +1654,7 @@ gtk_text_view_finalize (GObject *object)
   if (text_view->bottom_window)
     text_window_free (text_view->bottom_window);
 
-  gtk_object_unref (GTK_OBJECT (text_view->im_context));
+  g_object_unref (G_OBJECT (text_view->im_context));
 
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
@@ -1875,7 +1878,7 @@ gtk_text_view_child_allocated (GtkTextLayout *layout,
    * window coordinates, then size_allocate the child.
    */
 
-  vc = gtk_object_get_data (GTK_OBJECT (child),
+  vc = g_object_get_data (G_OBJECT (child),
                             "gtk-text-view-child");
 
   g_assert (vc != NULL);
@@ -3746,20 +3749,23 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       
       text_view->layout = gtk_text_layout_new ();
 
-      gtk_signal_connect (GTK_OBJECT (text_view->layout),
-                          "invalidated",
-                          GTK_SIGNAL_FUNC (invalidated_handler),
-                          text_view);
+      g_signal_connect_data (G_OBJECT (text_view->layout),
+                             "invalidated",
+                             invalidated_handler,
+                             text_view,
+                             NULL, FALSE, FALSE);
 
-      gtk_signal_connect (GTK_OBJECT (text_view->layout),
-                          "changed",
-                          GTK_SIGNAL_FUNC (changed_handler),
-                          text_view);
+      g_signal_connect_data (G_OBJECT (text_view->layout),
+                             "changed",
+                             changed_handler,
+                             text_view,
+                             NULL, FALSE, FALSE);
 
-      gtk_signal_connect (GTK_OBJECT (text_view->layout),
-                          "allocate_child",
-                          GTK_SIGNAL_FUNC (gtk_text_view_child_allocated),
-                          text_view);
+      g_signal_connect_data (G_OBJECT (text_view->layout),
+                             "allocate_child",
+                             gtk_text_view_child_allocated,
+                             text_view,
+                             NULL, FALSE, FALSE);
       
       if (get_buffer (text_view))
         gtk_text_layout_set_buffer (text_view->layout, get_buffer (text_view));
@@ -3845,11 +3851,11 @@ gtk_text_view_destroy_layout (GtkTextView *text_view)
       gtk_text_view_stop_cursor_blink (text_view);
       gtk_text_view_end_selection_drag (text_view, NULL);
 
-      gtk_signal_disconnect_by_func (GTK_OBJECT (text_view->layout),
-                                     invalidated_handler, text_view);
-      gtk_signal_disconnect_by_func (GTK_OBJECT (text_view->layout),
-                                     changed_handler, text_view);
-      gtk_object_unref (GTK_OBJECT (text_view->layout));
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
+                                            invalidated_handler, text_view);
+      g_signal_handlers_disconnect_by_func (G_OBJECT (text_view->layout),
+                                            changed_handler, text_view);
+      g_object_unref (G_OBJECT (text_view->layout));
       text_view->layout = NULL;
     }
 }
@@ -4232,19 +4238,19 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
   if (text_view->hadjustment && (text_view->hadjustment != hadj))
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (text_view->hadjustment), text_view);
-      gtk_object_unref (GTK_OBJECT (text_view->hadjustment));
+      g_object_unref (G_OBJECT (text_view->hadjustment));
     }
 
   if (text_view->vadjustment && (text_view->vadjustment != vadj))
     {
       gtk_signal_disconnect_by_data (GTK_OBJECT (text_view->vadjustment), text_view);
-      gtk_object_unref (GTK_OBJECT (text_view->vadjustment));
+      g_object_unref (G_OBJECT (text_view->vadjustment));
     }
 
   if (text_view->hadjustment != hadj)
     {
       text_view->hadjustment = hadj;
-      gtk_object_ref (GTK_OBJECT (text_view->hadjustment));
+      g_object_ref (G_OBJECT (text_view->hadjustment));
       gtk_object_sink (GTK_OBJECT (text_view->hadjustment));
 
       gtk_signal_connect (GTK_OBJECT (text_view->hadjustment), "value_changed",
@@ -4256,7 +4262,7 @@ gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
   if (text_view->vadjustment != vadj)
     {
       text_view->vadjustment = vadj;
-      gtk_object_ref (GTK_OBJECT (text_view->vadjustment));
+      g_object_ref (G_OBJECT (text_view->vadjustment));
       gtk_object_sink (GTK_OBJECT (text_view->vadjustment));
 
       gtk_signal_connect (GTK_OBJECT (text_view->vadjustment), "value_changed",
@@ -4449,7 +4455,7 @@ static void
 activate_cb (GtkWidget   *menuitem,
 	     GtkTextView *text_view)
 {
-  const gchar *signal = gtk_object_get_data (GTK_OBJECT (menuitem), "gtk-signal");
+  const gchar *signal = g_object_get_data (G_OBJECT (menuitem), "gtk-signal");
   gtk_signal_emit_by_name (GTK_OBJECT (text_view), signal);
 }
 
@@ -4461,7 +4467,7 @@ append_action_signal (GtkTextView  *text_view,
 {
   GtkWidget *menuitem = gtk_menu_item_new_with_label (label);
 
-  gtk_object_set_data (GTK_OBJECT (menuitem), "gtk-signal", (char *)signal);
+  g_object_set_data (G_OBJECT (menuitem), "gtk-signal", (char *)signal);
   gtk_signal_connect (GTK_OBJECT (menuitem), "activate",
 		      activate_cb, text_view);
 
@@ -5282,9 +5288,9 @@ text_view_child_new_anchored (GtkWidget          *child,
   g_object_ref (G_OBJECT (vc->widget));
   g_object_ref (G_OBJECT (vc->anchor));
 
-  gtk_object_set_data (GTK_OBJECT (child),
-                       "gtk-text-view-child",
-                       vc);
+  g_object_set_data (G_OBJECT (child),
+                     "gtk-text-view-child",
+                     vc);
 
   gtk_text_child_anchor_register_child (anchor, child, layout);
   
@@ -5319,9 +5325,8 @@ text_view_child_new_window (GtkWidget          *child,
 static void
 text_view_child_free (GtkTextViewChild *child)
 {
-
-  gtk_object_remove_data (GTK_OBJECT (child->widget),
-                          "gtk-text-view-child");
+  g_object_set_data (G_OBJECT (child->widget),
+                     "gtk-text-view-child", NULL);
 
   if (child->anchor)
     {
@@ -5429,8 +5434,8 @@ gtk_text_view_move_child          (GtkTextView          *text_view,
   g_return_if_fail (ypos >= 0);
   g_return_if_fail (child->parent == (GtkWidget*) text_view);
 
-  vc = gtk_object_get_data (GTK_OBJECT (child),
-                            "gtk-text-view-child");
+  vc = g_object_get_data (G_OBJECT (child),
+                          "gtk-text-view-child");
 
   g_assert (vc != NULL);
 

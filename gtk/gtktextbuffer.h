@@ -47,17 +47,17 @@ typedef struct _GtkTextBTree GtkTextBTree;
 typedef struct _GtkTextLogAttrCache GtkTextLogAttrCache;
 
 #define GTK_TYPE_TEXT_BUFFER            (gtk_text_buffer_get_type ())
-#define GTK_TEXT_BUFFER(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBuffer))
-#define GTK_TEXT_BUFFER_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
-#define GTK_IS_TEXT_BUFFER(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_BUFFER))
-#define GTK_IS_TEXT_BUFFER_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_BUFFER))
-#define GTK_TEXT_BUFFER_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
+#define GTK_TEXT_BUFFER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBuffer))
+#define GTK_TEXT_BUFFER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
+#define GTK_IS_TEXT_BUFFER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_BUFFER))
+#define GTK_IS_TEXT_BUFFER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_BUFFER))
+#define GTK_TEXT_BUFFER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_BUFFER, GtkTextBufferClass))
 
 typedef struct _GtkTextBufferClass GtkTextBufferClass;
 
 struct _GtkTextBuffer
 {
-  GtkObject parent_instance;
+  GObject parent_instance;
 
   GtkTextTagTable *tag_table;
   GtkTextBTree *btree;
@@ -72,7 +72,7 @@ struct _GtkTextBuffer
 
 struct _GtkTextBufferClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   void (* insert_text)     (GtkTextBuffer *buffer,
                             GtkTextIter *pos,
@@ -115,7 +115,7 @@ struct _GtkTextBufferClass
 
 };
 
-GtkType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
+GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;
 
 
 

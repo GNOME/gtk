@@ -100,11 +100,11 @@ typedef struct _GtkTextLine     GtkTextLine;
 typedef struct _GtkTextLineData GtkTextLineData;
 
 #define GTK_TYPE_TEXT_LAYOUT             (gtk_text_layout_get_type ())
-#define GTK_TEXT_LAYOUT(obj)             (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayout))
-#define GTK_TEXT_LAYOUT_CLASS(klass)     (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutClass))
-#define GTK_IS_TEXT_LAYOUT(obj)          (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_LAYOUT))
-#define GTK_IS_TEXT_LAYOUT_CLASS(klass)  (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_LAYOUT))
-#define GTK_TEXT_LAYOUT_GET_CLASS(obj)   (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutClass))
+#define GTK_TEXT_LAYOUT(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayout))
+#define GTK_TEXT_LAYOUT_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutClass))
+#define GTK_IS_TEXT_LAYOUT(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_LAYOUT))
+#define GTK_IS_TEXT_LAYOUT_CLASS(klass)  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_LAYOUT))
+#define GTK_TEXT_LAYOUT_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_LAYOUT, GtkTextLayoutClass))
 
 typedef struct _GtkTextLayout         GtkTextLayout;
 typedef struct _GtkTextLayoutClass    GtkTextLayoutClass;
@@ -114,7 +114,7 @@ typedef struct _GtkTextAttrAppearance GtkTextAttrAppearance;
 
 struct _GtkTextLayout
 {
-  GtkObject parent_instance;
+  GObject parent_instance;
 
   /* width of the display area on-screen,
    * i.e. pixels we should wrap to fit inside. */
@@ -167,7 +167,7 @@ struct _GtkTextLayout
 
 struct _GtkTextLayoutClass
 {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   /* Some portion of the layout was invalidated
    */
@@ -239,7 +239,7 @@ struct _GtkTextLineDisplay
 
 extern PangoAttrType gtk_text_attr_appearance_type;
 
-GtkType         gtk_text_layout_get_type    (void) G_GNUC_CONST;
+GType         gtk_text_layout_get_type    (void) G_GNUC_CONST;
 GtkTextLayout*  gtk_text_layout_new         (void);
 void gtk_text_layout_set_buffer             (GtkTextLayout     *layout,
                                              GtkTextBuffer     *buffer);

@@ -405,18 +405,19 @@ _gtk_text_btree_new (GtkTextTagTable *table,
   tree->end_iter_line_stamp = tree->chars_changed_stamp - 1;
   tree->end_iter_line = NULL;
 
-  gtk_object_ref (GTK_OBJECT (tree->table));
-  gtk_object_sink (GTK_OBJECT (tree->table));
+  g_object_ref (G_OBJECT (tree->table));
 
-  tree->tag_changed_handler = gtk_signal_connect (GTK_OBJECT (tree->table),
-                                                  "tag_changed",
-                                                  GTK_SIGNAL_FUNC (tag_changed_cb),
-                                                  tree);
+  tree->tag_changed_handler = g_signal_connect_data (G_OBJECT (tree->table),
+                                                     "tag_changed",
+                                                     tag_changed_cb,
+                                                     tree,
+                                                     NULL, FALSE, FALSE);
 
-  tree->tag_removed_handler = gtk_signal_connect (GTK_OBJECT (tree->table),
-                                                  "tag_removed",
-                                                  GTK_SIGNAL_FUNC (tag_removed_cb),
-                                                  tree);
+  tree->tag_removed_handler = g_signal_connect_data (G_OBJECT (tree->table),
+                                                     "tag_removed",
+                                                     tag_removed_cb,
+                                                     tree,
+                                                     NULL, FALSE, FALSE);
 
   tree->mark_table = g_hash_table_new (g_str_hash, g_str_equal);
   tree->child_anchor_table = NULL;
@@ -505,13 +506,13 @@ _gtk_text_btree_unref (GtkTextBTree *tree)
       g_object_unref (G_OBJECT (tree->insert_mark));
       g_object_unref (G_OBJECT (tree->selection_bound_mark));
 
-      gtk_signal_disconnect (GTK_OBJECT (tree->table),
-                             tree->tag_changed_handler);
+      g_signal_handler_disconnect (G_OBJECT (tree->table),
+                                   tree->tag_changed_handler);
 
-      gtk_signal_disconnect (GTK_OBJECT (tree->table),
-                             tree->tag_removed_handler);
+      g_signal_handler_disconnect (G_OBJECT (tree->table),
+                                   tree->tag_removed_handler);
 
-      gtk_object_unref (GTK_OBJECT (tree->table));
+      g_object_unref (G_OBJECT (tree->table));
 
       g_free (tree);
     }
@@ -5607,7 +5608,7 @@ gtk_text_btree_get_tag_info (GtkTextBTree *tree,
       info = g_new (GtkTextTagInfo, 1);
 
       info->tag = tag;
-      gtk_object_ref (GTK_OBJECT (tag));
+      g_object_ref (G_OBJECT (tag));
       info->tag_root = NULL;
       info->toggle_count = 0;
 
@@ -5643,7 +5644,7 @@ gtk_text_btree_remove_tag_info (GtkTextBTree *tree,
           list->next = NULL;
           g_slist_free (list);
 
-          gtk_object_unref (GTK_OBJECT (info->tag));
+          g_object_unref (G_OBJECT (info->tag));
 
           g_free (info);
           return;

@@ -15,36 +15,47 @@ enum {
   LAST_ARG
 };
 
-static void gtk_text_tag_table_init (GtkTextTagTable *table);
-static void gtk_text_tag_table_class_init (GtkTextTagTableClass *klass);
-static void gtk_text_tag_table_destroy (GtkObject *object);
-static void gtk_text_tag_table_finalize (GObject *object);
-static void gtk_text_tag_table_set_arg (GtkObject *object, GtkArg *arg, guint arg_id);
-static void gtk_text_tag_table_get_arg (GtkObject *object, GtkArg *arg, guint arg_id);
+static void gtk_text_tag_table_init         (GtkTextTagTable      *table);
+static void gtk_text_tag_table_class_init   (GtkTextTagTableClass *klass);
+static void gtk_text_tag_table_finalize     (GObject              *object);
+static void gtk_text_tag_table_set_property (GObject              *object,
+                                             guint                 prop_id,
+                                             const GValue         *value,
+                                             GParamSpec           *pspec,
+                                             const gchar          *trailer);
+static void gtk_text_tag_table_get_property (GObject              *object,
+                                             guint                 prop_id,
+                                             GValue               *value,
+                                             GParamSpec           *pspec,
+                                             const gchar          *trailer);
 
-static GtkObjectClass *parent_class = NULL;
+static GObjectClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
 
-GtkType
+GType
 gtk_text_tag_table_get_type (void)
 {
-  static GtkType our_type = 0;
+  static GType our_type = 0;
 
   if (our_type == 0)
     {
-      static const GtkTypeInfo our_info =
+      static const GTypeInfo our_info =
       {
-        "GtkTextTagTable",
-        sizeof (GtkTextTagTable),
         sizeof (GtkTextTagTableClass),
-        (GtkClassInitFunc) gtk_text_tag_table_class_init,
-        (GtkObjectInitFunc) gtk_text_tag_table_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_text_tag_table_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkTextTagTable),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_text_tag_table_init
       };
 
-      our_type = gtk_type_unique (GTK_TYPE_OBJECT, &our_info);
+      our_type = g_type_register_static (G_TYPE_OBJECT,
+                                         "GtkTextTagTable",
+                                         &our_info,
+                                         0);
     }
 
   return our_type;
@@ -53,47 +64,48 @@ gtk_text_tag_table_get_type (void)
 static void
 gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = gtk_type_class (GTK_TYPE_OBJECT);
+  parent_class = g_type_class_peek_parent (klass);
 
-  object_class->set_arg = gtk_text_tag_table_set_arg;
-  object_class->get_arg = gtk_text_tag_table_get_arg;
-
-  object_class->destroy = gtk_text_tag_table_destroy;
-  gobject_class->finalize = gtk_text_tag_table_finalize;
-
+  object_class->set_property = gtk_text_tag_table_set_property;
+  object_class->get_property = gtk_text_tag_table_get_property;
+  
+  object_class->finalize = gtk_text_tag_table_finalize;
+  
   signals[TAG_CHANGED] =
-    gtk_signal_new ("tag_changed",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_changed),
-                    gtk_marshal_VOID__OBJECT_BOOLEAN,
-                    GTK_TYPE_NONE,
-                    2,
-                    G_TYPE_OBJECT,
-                    GTK_TYPE_BOOL);
+    g_signal_newc ("tag_changed",
+                   G_TYPE_FROM_CLASS (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_changed),
+                   NULL,
+                   gtk_marshal_VOID__OBJECT_BOOLEAN,
+                   G_TYPE_NONE,
+                   2,
+                   G_TYPE_OBJECT,
+                   G_TYPE_BOOLEAN);  
 
   signals[TAG_ADDED] =
-    gtk_signal_new ("tag_added",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_added),
-                    gtk_marshal_VOID__OBJECT,
-                    GTK_TYPE_NONE,
-                    1,
-                    G_TYPE_OBJECT);
+    g_signal_newc ("tag_added",
+                   GTK_CLASS_TYPE (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_added),
+                   NULL,
+                   gtk_marshal_VOID__OBJECT,
+                   GTK_TYPE_NONE,
+                   1,
+                   G_TYPE_OBJECT);
 
   signals[TAG_REMOVED] =
-    gtk_signal_new ("tag_removed",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextTagTableClass, tag_removed),
-                    gtk_marshal_VOID__OBJECT,
-                    GTK_TYPE_NONE,
-                    1,
-                    G_TYPE_OBJECT);
+    g_signal_newc ("tag_removed",                   
+                   GTK_CLASS_TYPE (object_class),
+                   G_SIGNAL_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextTagTableClass, tag_removed),
+                   NULL,
+                   gtk_marshal_VOID__OBJECT,
+                   GTK_TYPE_NONE,
+                   1,
+                   G_TYPE_OBJECT);
 }
 
 void
@@ -115,19 +127,9 @@ gtk_text_tag_table_new (void)
 {
   GtkTextTagTable *table;
 
-  table = GTK_TEXT_TAG_TABLE (gtk_type_new (gtk_text_tag_table_get_type ()));
+  table = GTK_TEXT_TAG_TABLE (g_object_new (gtk_text_tag_table_get_type (), NULL));
 
   return table;
-}
-
-static void
-gtk_text_tag_table_destroy (GtkObject *object)
-{
-  GtkTextTagTable *table;
-
-  table = GTK_TEXT_TAG_TABLE (object);
-
-  (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
 }
 
 static void
@@ -155,35 +157,43 @@ gtk_text_tag_table_finalize (GObject *object)
 
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
-
 static void
-gtk_text_tag_table_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
+gtk_text_tag_table_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec,
+                                 const gchar  *trailer)
 {
   GtkTextTagTable *table;
 
   table = GTK_TEXT_TAG_TABLE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
 
     default:
-      g_assert_not_reached ();
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
+
 static void
-gtk_text_tag_table_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
+gtk_text_tag_table_get_property (GObject      *object,
+                                 guint         prop_id,
+                                 GValue       *value,
+                                 GParamSpec   *pspec,
+                                 const gchar  *trailer)
 {
   GtkTextTagTable *table;
 
   table = GTK_TEXT_TAG_TABLE (object);
 
-  switch (arg_id)
+  switch (prop_id)
     {
 
     default:
-      arg->type = GTK_TYPE_INVALID;
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
@@ -209,8 +219,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
                     g_hash_table_lookup (table->hash, tag->name) == NULL);
   g_return_if_fail (tag->table == NULL);
 
-  gtk_object_ref (GTK_OBJECT (tag));
-  gtk_object_sink (GTK_OBJECT (tag));
+  g_object_ref (G_OBJECT (tag));
 
   if (tag->name)
     g_hash_table_insert (table->hash, tag->name, tag);
@@ -229,7 +238,7 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
   g_assert (size > 0);
   tag->priority = size - 1;
 
-  gtk_signal_emit (GTK_OBJECT (table), signals[TAG_ADDED], tag);
+  g_signal_emit (G_OBJECT (table), signals[TAG_ADDED], 0, tag);
 }
 
 /**
@@ -283,9 +292,9 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
       table->anon_count -= 1;
     }
 
-  gtk_signal_emit (GTK_OBJECT (table), signals[TAG_REMOVED], tag);
+  g_signal_emit (G_OBJECT (table), signals[TAG_REMOVED], 0, tag);
 
-  gtk_object_unref (GTK_OBJECT (tag));
+  g_object_unref (G_OBJECT (tag));
 }
 
 struct ForeachData

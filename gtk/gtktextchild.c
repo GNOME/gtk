@@ -269,16 +269,16 @@ _gtk_widget_segment_unref (GtkTextLineSegment *widget_segment)
 GtkTextLayout*
 _gtk_anchored_child_get_layout (GtkWidget *child)
 {
-  return gtk_object_get_data (GTK_OBJECT (child), "gtk-text-child-anchor-layout");  
+  return g_object_get_data (G_OBJECT (child), "gtk-text-child-anchor-layout");  
 }
 
 static void
 _gtk_anchored_child_set_layout (GtkWidget     *child,
                                 GtkTextLayout *layout)
 {
-  gtk_object_set_data (GTK_OBJECT (child),
-                       "gtk-text-child-anchor-layout",
-                       layout);  
+  g_object_set_data (G_OBJECT (child),
+                     "gtk-text-child-anchor-layout",
+                     layout);  
 }
      
 static void gtk_text_child_anchor_init       (GtkTextChildAnchor      *child_anchor);

@@ -274,9 +274,9 @@ button_press_event_cb (GtkTreeView    *tree_view,
 	      cbdata->path = path;
 
 	      gtk_signal_connect (GTK_OBJECT (window),
-				"destroy",
-				window_closed_cb,
-				cbdata);
+                                  "destroy",
+                                  window_closed_cb,
+                                  cbdata);
 	    }
 	  else
 	    {
@@ -426,16 +426,16 @@ main (int argc, char **argv)
 			    gtk_label_new ("Source"));
 
   tag = gtk_text_buffer_create_tag (info_buffer, "title");
-  gtk_object_set (GTK_OBJECT (tag),
-		 "font", "Sans 18",
-		 NULL);
+  g_object_set (G_OBJECT (tag),
+                "font", "Sans 18",
+                NULL);
 
   tag = gtk_text_buffer_create_tag (info_buffer, "source");
-  gtk_object_set (GTK_OBJECT (tag),
-		  "font", "Courier 10",
-		  "pixels_above_lines", 0,
-		  "pixels_below_lines", 0,
-		 NULL);
+  g_object_set (G_OBJECT (tag),
+                "font", "Courier 10",
+                "pixels_above_lines", 0,
+                "pixels_below_lines", 0,
+                NULL);
 
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   gtk_widget_show_all (window);

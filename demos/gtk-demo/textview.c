@@ -45,11 +45,6 @@ static char gray50_bits[] = {
   0x02, 0x01
 };
 
-/* FIXME once TextTag is a GObject remove these awful hacks ;-) */
-#define g_object_set gtk_object_set
-#undef G_OBJECT
-#define G_OBJECT(x) ((void*)x)
-
 static void
 create_tags (GtkTextBuffer *buffer)
 {

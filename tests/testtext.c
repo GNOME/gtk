@@ -73,7 +73,7 @@ GSList *views = NULL;
 static void
 push_active_window (GtkWindow *window)
 {
-  gtk_object_ref (GTK_OBJECT (window));
+  g_object_ref (G_OBJECT (window));
   active_window_stack = g_slist_prepend (active_window_stack, window);
 }
 
@@ -102,9 +102,9 @@ typedef gboolean (*FileselOKFunc) (const char *filename, gpointer data);
 static void
 filesel_ok_cb (GtkWidget *button, GtkWidget *filesel)
 {
-  FileselOKFunc ok_func = gtk_object_get_data (GTK_OBJECT (filesel), "ok-func");
-  gpointer data = gtk_object_get_data (GTK_OBJECT (filesel), "ok-data");
-  gint *result = gtk_object_get_data (GTK_OBJECT (filesel), "ok-result");
+  FileselOKFunc ok_func = g_object_get_data (G_OBJECT (filesel), "ok-func");
+  gpointer data = g_object_get_data (G_OBJECT (filesel), "ok-data");
+  gint *result = g_object_get_data (G_OBJECT (filesel), "ok-result");
   
   gtk_widget_hide (filesel);
   
@@ -137,9 +137,9 @@ filesel_run (GtkWindow    *parent,
     gtk_file_selection_set_filename (GTK_FILE_SELECTION (filesel), start_file);
 
   
-  gtk_object_set_data (GTK_OBJECT (filesel), "ok-func", func);
-  gtk_object_set_data (GTK_OBJECT (filesel), "ok-data", data);
-  gtk_object_set_data (GTK_OBJECT (filesel), "ok-result", &result);
+  g_object_set_data (G_OBJECT (filesel), "ok-func", func);
+  g_object_set_data (G_OBJECT (filesel), "ok-data", data);
+  g_object_set_data (G_OBJECT (filesel), "ok-result", &result);
 
   gtk_signal_connect (GTK_OBJECT (GTK_FILE_SELECTION (filesel)->ok_button),
 		      "clicked",
@@ -314,7 +314,7 @@ blink_timeout (gpointer data)
   
   tag = GTK_TEXT_TAG (data);
 
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                  "foreground", flip ? "blue" : "purple",
                  NULL);
 
@@ -388,11 +388,10 @@ tag_event_handler (GtkTextTag *tag, GtkWidget *widget, GdkEvent *event,
 static void
 setup_tag (GtkTextTag *tag)
 {
-
-  gtk_signal_connect (GTK_OBJECT (tag),
-                     "event",
-                     GTK_SIGNAL_FUNC (tag_event_handler),
-                     NULL);
+  g_signal_connect_data (G_OBJECT (tag),
+                         "event",
+                         tag_event_handler,
+                         NULL, NULL, FALSE, FALSE);
 }
 
 static char  *book_closed_xpm[] = {
@@ -447,7 +446,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
   color2.red = 0xfff;
   color2.blue = 0x0;
   color2.green = 0;
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
 		 "foreground_gdk", &color,
 		 "background_gdk", &color2,
                   "size_points", 24.0,
@@ -459,7 +458,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       
   color.blue = color.green = 0;
   color.red = 0xffff;
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
 		 "rise", -4 * PANGO_SCALE,
 		 "foreground_gdk", &color,
 		 NULL);
@@ -470,7 +469,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
       
   color.blue = color.red = 0;
   color.green = 0xffff;
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                   "background_gdk", &color,
                   "size_points", 10.0,
                   NULL);
@@ -479,7 +478,7 @@ fill_example_buffer (GtkTextBuffer *buffer)
 
   setup_tag (tag);
       
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                   "strikethrough", TRUE,
                   NULL);
 
@@ -488,25 +487,25 @@ fill_example_buffer (GtkTextBuffer *buffer)
 
   setup_tag (tag);
       
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                   "underline", PANGO_UNDERLINE_SINGLE,
                   NULL);
 
   setup_tag (tag);
       
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                   "underline", PANGO_UNDERLINE_SINGLE,
                   NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "centered");
       
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                   "justify", GTK_JUSTIFY_CENTER,
                   NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "rtl_quote");
       
-  gtk_object_set (GTK_OBJECT (tag),
+  g_object_set (G_OBJECT (tag),
                   "wrap_mode", GTK_WRAPMODE_WORD,
                   "direction", GTK_TEXT_DIR_RTL,
                   "indent", 30,
@@ -708,12 +707,12 @@ view_from_widget (GtkWidget *widget)
   if (GTK_IS_MENU_ITEM (widget))
     {
       GtkItemFactory *item_factory = gtk_item_factory_from_widget (widget);
-      return gtk_object_get_data (GTK_OBJECT (item_factory), "view");      
+      return g_object_get_data (G_OBJECT (item_factory), "view");      
     }
   else
     {
       GtkWidget *app = gtk_widget_get_toplevel (widget);
-      return gtk_object_get_data (GTK_OBJECT (app), "view");
+      return g_object_get_data (G_OBJECT (app), "view");
     }
 }
 
@@ -1089,7 +1088,7 @@ dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
       return;
     }
   
-  buffer = gtk_object_get_data (GTK_OBJECT (dialog), "buffer");
+  buffer = g_object_get_data (G_OBJECT (dialog), "buffer");
 
   gtk_text_buffer_get_bounds (buffer, &start, &end);
 
@@ -1139,7 +1138,7 @@ do_search (gpointer callback_data,
                     search_text,
                     TRUE, TRUE, 0);
 
-  gtk_object_set_data (GTK_OBJECT (dialog), "buffer", buffer);
+  g_object_set_data (G_OBJECT (dialog), "buffer", buffer);
   
   gtk_signal_connect (GTK_OBJECT (dialog),
                       "response",
@@ -1419,17 +1418,17 @@ create_buffer (void)
     }
   
   buffer->invisible_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  gtk_object_set (GTK_OBJECT (buffer->invisible_tag),
+  g_object_set (G_OBJECT (buffer->invisible_tag),
                   "invisible", TRUE,
                   NULL);
   
   buffer->not_editable_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  gtk_object_set (GTK_OBJECT (buffer->not_editable_tag),
+  g_object_set (G_OBJECT (buffer->not_editable_tag),
                   "editable", FALSE,
                   "foreground", "purple", NULL);
 
   buffer->found_text_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  gtk_object_set (GTK_OBJECT (buffer->found_text_tag),
+  g_object_set (G_OBJECT (buffer->found_text_tag),
                   "foreground", "red", NULL);
 
   tabs = pango_tab_array_new_with_positions (4,
@@ -1440,7 +1439,7 @@ create_buffer (void)
                                              PANGO_TAB_LEFT, 120);
   
   buffer->custom_tabs_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
-  gtk_object_set (GTK_OBJECT (buffer->custom_tabs_tag),
+  g_object_set (G_OBJECT (buffer->custom_tabs_tag),
                   "tabs", tabs,
                   "foreground", "green", NULL);
 
@@ -1588,7 +1587,7 @@ buffer_unref (Buffer *buffer)
     {
       buffer_set_colors (buffer, FALSE);
       buffers = g_slist_remove (buffers, buffer);
-      gtk_object_unref (GTK_OBJECT (buffer->buffer));
+      g_object_unref (G_OBJECT (buffer->buffer));
       g_free (buffer->filename);
       g_free (buffer);
     }
@@ -1720,12 +1719,12 @@ buffer_set_colors (Buffer  *buffer,
           
           hue_to_color (hue, &color);
 
-          gtk_object_set (GTK_OBJECT (tmp->data),
+          g_object_set (G_OBJECT (tmp->data),
                           "foreground_gdk", &color,
                           NULL);
         }
       else
-        gtk_object_set (GTK_OBJECT (tmp->data),
+        g_object_set (G_OBJECT (tmp->data),
                         "foreground_set", FALSE,
                         NULL);
 
@@ -1748,9 +1747,9 @@ buffer_cycle_colors (Buffer *buffer)
       
       hue_to_color (hue, &color);
       
-      gtk_object_set (GTK_OBJECT (tmp->data),
-                      "foreground_gdk", &color,
-                      NULL);
+      g_object_set (G_OBJECT (tmp->data),
+                    "foreground_gdk", &color,
+                    NULL);
 
       hue += 1.0 / N_COLORS;
       if (hue > 1.0)
@@ -2114,14 +2113,14 @@ create_view (Buffer *buffer)
   buffer_ref (buffer);
   
   view->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_object_set_data (GTK_OBJECT (view->window), "view", view);
+  g_object_set_data (G_OBJECT (view->window), "view", view);
   
   gtk_signal_connect (GTK_OBJECT (view->window), "delete_event",
 		      GTK_SIGNAL_FUNC (delete_event_cb), NULL);
 
   view->accel_group = gtk_accel_group_new ();
   view->item_factory = gtk_item_factory_new (GTK_TYPE_MENU_BAR, "<main>", view->accel_group);
-  gtk_object_set_data (GTK_OBJECT (view->item_factory), "view", view);
+  g_object_set_data (G_OBJECT (view->item_factory), "view", view);
   
   gtk_item_factory_create_items (view->item_factory, G_N_ELEMENTS (menu_items), menu_items, view);
 
@@ -2158,10 +2157,10 @@ create_view (Buffer *buffer)
                       GTK_SIGNAL_FUNC (tab_stops_expose),
                       NULL);  
 
-  gtk_signal_connect (GTK_OBJECT (view->buffer->buffer),
-                      "mark_set",
-                      GTK_SIGNAL_FUNC (cursor_set_callback),
-                      view->text_view);
+  g_signal_connect_data (G_OBJECT (view->buffer->buffer),
+                         "mark_set",
+                         GTK_SIGNAL_FUNC (cursor_set_callback),
+                         view->text_view, NULL, FALSE, FALSE);
   
   /* Draw line numbers in the side windows; we should really be
    * more scientific about what width we set them to.
@@ -2205,8 +2204,8 @@ view_add_example_widgets (View *view)
   
   buffer = view->buffer;
   
-  anchor = gtk_object_get_data (GTK_OBJECT (buffer->buffer),
-                                "anchor");
+  anchor = g_object_get_data (G_OBJECT (buffer->buffer),
+                              "anchor");
 
   if (anchor && !gtk_text_child_anchor_get_deleted (anchor))
     {

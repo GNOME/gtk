@@ -592,29 +592,29 @@ fill_buffer (GtkTextBuffer *buffer)
   color2.red = 0xfff;
   color2.blue = 0x0;
   color2.green = 0;
-  gtk_object_set (GTK_OBJECT (tag),
-                 "foreground_gdk", &color,
-                 "background_gdk", &color2,
-                 "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
-                 NULL);
+  g_object_set (G_OBJECT (tag),
+                "foreground_gdk", &color,
+                "background_gdk", &color2,
+                "font", "-*-courier-bold-r-*-*-30-*-*-*-*-*-*-*",
+                NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "fg_red");
 
   color.blue = color.green = 0;
   color.red = 0xffff;
-  gtk_object_set (GTK_OBJECT (tag),
-                 "rise", -4,
-                 "foreground_gdk", &color,
-                 NULL);
+  g_object_set (GTK_OBJECT (tag),
+                "rise", -4,
+                "foreground_gdk", &color,
+                NULL);
 
   tag = gtk_text_buffer_create_tag (buffer, "bg_green");
 
   color.blue = color.red = 0;
   color.green = 0xffff;
-  gtk_object_set (GTK_OBJECT (tag),
-                 "background_gdk", &color,
-                 "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
-                 NULL);
+  g_object_set (G_OBJECT (tag),
+                "background_gdk", &color,
+                "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
+                NULL);
 
   pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
 

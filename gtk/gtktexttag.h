@@ -22,18 +22,18 @@ typedef enum
 typedef struct _GtkTextAttributes GtkTextAttributes;
 
 #define GTK_TYPE_TEXT_TAG            (gtk_text_tag_get_type ())
-#define GTK_TEXT_TAG(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_TEXT_TAG, GtkTextTag))
-#define GTK_TEXT_TAG_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
-#define GTK_IS_TEXT_TAG(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_TEXT_TAG))
-#define GTK_IS_TEXT_TAG_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_TAG))
-#define GTK_TEXT_TAG_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
+#define GTK_TEXT_TAG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_TAG, GtkTextTag))
+#define GTK_TEXT_TAG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
+#define GTK_IS_TEXT_TAG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_TAG))
+#define GTK_IS_TEXT_TAG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_TAG))
+#define GTK_TEXT_TAG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
 
 typedef struct _GtkTextTag GtkTextTag;
 typedef struct _GtkTextTagClass GtkTextTagClass;
 
 struct _GtkTextTag
 {
-  GtkObject parent_instance;
+  GObject parent_instance;
 
   GtkTextTagTable *table;
 
@@ -90,7 +90,7 @@ struct _GtkTextTag
 };
 
 struct _GtkTextTagClass {
-  GtkObjectClass parent_class;
+  GObjectClass parent_class;
 
   gint (* event) (GtkTextTag *tag,
                   GObject *event_object,           /* widget, canvas item, whatever */
@@ -98,7 +98,7 @@ struct _GtkTextTagClass {
                   const GtkTextIter *iter);        /* location of event in buffer */
 };
 
-GtkType      gtk_text_tag_get_type     (void) G_GNUC_CONST;
+GType      gtk_text_tag_get_type     (void) G_GNUC_CONST;
 GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
 gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
 void         gtk_text_tag_set_priority (GtkTextTag        *tag,

@@ -1,3 +1,24 @@
+2000-12-16  Havoc Pennington  <hp@pobox.com>
+
+	* gtk/gtktextiter.c: General cleanup of the log attr iteration
+	stuff. This should make e.g. the delete key work again in the
+	text widget...
+	(gtk_text_iter_forward_cursor_positions): handle negative count
+	(gtk_text_iter_backward_cursor_positions): handle negative count
+	(gtk_text_iter_forward_word_ends): handle negative count
+	(gtk_text_iter_backward_word_starts): handle negative count
+
+	* gtk/gtktextlayout.h, gtk/gtktextlayout.c, gtk/gtktexttag.h,
+	gtk/gtktexttag.c, gtk/gtktexttagtable.h, gtk/gtktexttagtable.c, 
+	gtk/gtktextbuffer.h, gtk/gtktextbuffer.c: Convert everything to 
+	GObject. No doubt will cause breakage.
+
+	* demos/gtk-demo/textview.c: remove hacks around
+	non-GObject-ification of the text objects
+
+	* demos/gtk-demo/main.c (main): use g_object_set() to manipulate 
+	the text tag
+	
 2000-12-14  Havoc Pennington  <hp@pobox.com>
 
 	* configure.in: only AC_DEFINE(HAVE_XFT) if we actually determined

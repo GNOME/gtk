@@ -119,10 +119,9 @@ enum {
   LAST_ARG
 };
 
-static void gtk_text_layout_init (GtkTextLayout *text_layout);
+static void gtk_text_layout_init       (GtkTextLayout      *text_layout);
 static void gtk_text_layout_class_init (GtkTextLayoutClass *klass);
-static void gtk_text_layout_destroy (GtkObject *object);
-static void gtk_text_layout_finalize (GObject *object);
+static void gtk_text_layout_finalize   (GObject            *object);
 
 
 static GtkObjectClass *parent_class = NULL;
@@ -130,26 +129,30 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 PangoAttrType gtk_text_attr_appearance_type = 0;
 
-GtkType
+GType
 gtk_text_layout_get_type (void)
 {
-  static GtkType our_type = 0;
+  static GType our_type = 0;
 
   if (our_type == 0)
     {
-      static const GtkTypeInfo our_info =
+      static const GTypeInfo our_info =
       {
-        "GtkTextLayout",
-        sizeof (GtkTextLayout),
         sizeof (GtkTextLayoutClass),
-        (GtkClassInitFunc) gtk_text_layout_class_init,
-        (GtkObjectInitFunc) gtk_text_layout_init,
-        /* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL
+        (GBaseInitFunc) NULL,
+        (GBaseFinalizeFunc) NULL,
+        (GClassInitFunc) gtk_text_layout_class_init,
+        NULL,           /* class_finalize */
+        NULL,           /* class_data */
+        sizeof (GtkTextLayout),
+        0,              /* n_preallocs */
+        (GInstanceInitFunc) gtk_text_layout_init
       };
 
-      our_type = gtk_type_unique (GTK_TYPE_OBJECT, &our_info);
+      our_type = g_type_register_static (G_TYPE_OBJECT,
+                                         "GtkTextLayout",
+                                         &our_info,
+                                         0);
     }
 
   return our_type;
@@ -158,50 +161,51 @@ gtk_text_layout_get_type (void)
 static void
 gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  parent_class = gtk_type_class (GTK_TYPE_OBJECT);
-
-  object_class->destroy = gtk_text_layout_destroy;
-  gobject_class->finalize = gtk_text_layout_finalize;
+  parent_class = g_type_class_peek_parent (klass);
+  
+  object_class->finalize = gtk_text_layout_finalize;
 
   klass->wrap = gtk_text_layout_real_wrap;
   klass->invalidate = gtk_text_layout_real_invalidate;
   klass->free_line_data = gtk_text_layout_real_free_line_data;
 
   signals[INVALIDATED] =
-    gtk_signal_new ("invalidated",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextLayoutClass, invalidated),
-                    gtk_marshal_VOID__VOID,
-                    GTK_TYPE_NONE,
-                    0);
+    g_signal_newc ("invalidated",
+                   G_TYPE_FROM_CLASS (object_class),
+                   GTK_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextLayoutClass, invalidated),
+                   NULL,
+                   gtk_marshal_VOID__VOID,
+                   GTK_TYPE_NONE,
+                   0);
 
   signals[CHANGED] =
-    gtk_signal_new ("changed",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextLayoutClass, changed),
-                    gtk_marshal_VOID__INT_INT_INT,
-                    GTK_TYPE_NONE,
-                    3,
-                    GTK_TYPE_INT,
-                    GTK_TYPE_INT,
-                    GTK_TYPE_INT);
+    g_signal_newc ("changed",
+                   G_TYPE_FROM_CLASS (object_class),
+                   GTK_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextLayoutClass, changed),
+                   NULL,
+                   gtk_marshal_VOID__INT_INT_INT,
+                   GTK_TYPE_NONE,
+                   3,
+                   GTK_TYPE_INT,
+                   GTK_TYPE_INT,
+                   GTK_TYPE_INT);
 
   signals[ALLOCATE_CHILD] =
-    gtk_signal_new ("allocate_child",
-                    GTK_RUN_LAST,
-                    GTK_CLASS_TYPE (object_class),
-                    GTK_SIGNAL_OFFSET (GtkTextLayoutClass, allocate_child),
-                    gtk_marshal_VOID__OBJECT_INT_INT,
-                    GTK_TYPE_NONE,
-                    3,
-                    GTK_TYPE_OBJECT,
-                    GTK_TYPE_INT,
-                    GTK_TYPE_INT);
+    g_signal_newc ("allocate_child",
+                   G_TYPE_FROM_CLASS (object_class),
+                   GTK_RUN_LAST,
+                   G_STRUCT_OFFSET (GtkTextLayoutClass, allocate_child),
+                   NULL,
+                   gtk_marshal_VOID__OBJECT_INT_INT,
+                   GTK_TYPE_NONE,
+                   3,
+                   GTK_TYPE_OBJECT,
+                   GTK_TYPE_INT,
+                   GTK_TYPE_INT);
 }
 
 void
@@ -213,7 +217,7 @@ gtk_text_layout_init (GtkTextLayout *text_layout)
 GtkTextLayout*
 gtk_text_layout_new (void)
 {
-  return GTK_TEXT_LAYOUT (gtk_type_new (gtk_text_layout_get_type ()));
+  return GTK_TEXT_LAYOUT (g_object_new (gtk_text_layout_get_type (), NULL));
 }
 
 static void
@@ -227,7 +231,7 @@ free_style_cache (GtkTextLayout *text_layout)
 }
 
 static void
-gtk_text_layout_destroy (GtkObject *object)
+gtk_text_layout_finalize (GObject *object)
 {
   GtkTextLayout *layout;
 
@@ -249,17 +253,7 @@ gtk_text_layout_destroy (GtkObject *object)
       g_object_unref (G_OBJECT (layout->rtl_context));
       layout->rtl_context = NULL;
     }
-
-  (* parent_class->destroy) (object);
-}
-
-static void
-gtk_text_layout_finalize (GObject *object)
-{
-  GtkTextLayout *text_layout;
-
-  text_layout = GTK_TEXT_LAYOUT (object);
-
+  
   (* G_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
@@ -280,7 +274,7 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
       _gtk_text_btree_remove_view (_gtk_text_buffer_get_btree (layout->buffer),
                                   layout);
 
-      gtk_object_unref (GTK_OBJECT (layout->buffer));
+      g_object_unref (G_OBJECT (layout->buffer));
       layout->buffer = NULL;
     }
 
@@ -288,8 +282,7 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
     {
       layout->buffer = buffer;
 
-      gtk_object_sink (GTK_OBJECT (buffer));
-      gtk_object_ref (GTK_OBJECT (buffer));
+      g_object_ref (G_OBJECT (buffer));
 
       _gtk_text_btree_add_view (_gtk_text_buffer_get_btree (buffer), layout);
     }
@@ -490,7 +483,7 @@ gtk_text_layout_get_size (GtkTextLayout *layout,
 static void
 gtk_text_layout_invalidated (GtkTextLayout *layout)
 {
-  gtk_signal_emit (GTK_OBJECT (layout), signals[INVALIDATED]);
+  g_signal_emit (G_OBJECT (layout), signals[INVALIDATED], 0);
 }
 
 void
@@ -499,7 +492,8 @@ gtk_text_layout_changed (GtkTextLayout *layout,
                          gint           old_height,
                          gint           new_height)
 {
-  gtk_signal_emit (GTK_OBJECT (layout), signals[CHANGED], y, old_height, new_height);
+  g_signal_emit (G_OBJECT (layout), signals[CHANGED], 0,
+                 y, old_height, new_height);
 }
 
 void
@@ -1481,11 +1475,12 @@ allocate_child_widgets (GtkTextLayout      *text_layout,
 
               g_print ("extents at %d,%d\n", extents.x, extents.y);
               
-              gtk_signal_emit (GTK_OBJECT (text_layout),
-                               signals[ALLOCATE_CHILD],
-                               shaped_object,
-                               PANGO_PIXELS (extents.x) + display->x_offset,
-                               PANGO_PIXELS (extents.y) + display->top_margin);
+              g_signal_emit (G_OBJECT (text_layout),
+                             signals[ALLOCATE_CHILD],
+                             0,
+                             shaped_object,
+                             PANGO_PIXELS (extents.x) + display->x_offset,
+                             PANGO_PIXELS (extents.y) + display->top_margin);
             }
         }
     }

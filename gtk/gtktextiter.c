@@ -2390,6 +2390,11 @@ typedef gboolean (* FindLogAttrFunc) (const PangoLogAttr *attrs,
                                       gint                len,
                                       gint               *found_offset);
 
+typedef gboolean (* TestLogAttrFunc) (const PangoLogAttr *attrs,
+                                      gint                offset,
+                                      gint                min_offset,
+                                      gint                len);
+
 static gboolean
 find_word_end_func (const PangoLogAttr *attrs,
                     gint          offset,
@@ -2413,8 +2418,7 @@ static gboolean
 is_word_end_func (const PangoLogAttr *attrs,
                   gint          offset,
                   gint          min_offset,
-                  gint          len,
-                  gint         *found_offset)
+                  gint          len)
 {
   return attrs[offset].is_word_end;
 }
@@ -2442,8 +2446,7 @@ static gboolean
 is_word_start_func (const PangoLogAttr *attrs,
                     gint          offset,
                     gint          min_offset,
-                    gint          len,
-                    gint         *found_offset)
+                    gint          len)
 {
   return attrs[offset].is_word_start;
 }
@@ -2452,8 +2455,7 @@ static gboolean
 inside_word_func (const PangoLogAttr *attrs,
                   gint          offset,
                   gint          min_offset,
-                  gint          len,
-                  gint         *found_offset)
+                  gint          len)
 {
   /* Find next word start or end */
   while (offset >= min_offset &&
@@ -2465,8 +2467,33 @@ inside_word_func (const PangoLogAttr *attrs,
 
 static gboolean
 test_log_attrs (const GtkTextIter *iter,
-                FindLogAttrFunc    func,
-                gint              *found_offset)
+                TestLogAttrFunc    func)
+{
+  gchar *paragraph;
+  gint char_len;
+  const PangoLogAttr *attrs;
+  int offset;
+  gboolean result = FALSE;
+
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  attrs = _gtk_text_buffer_get_line_log_attrs (gtk_text_iter_get_buffer (iter),
+                                               iter, &char_len);
+
+  offset = gtk_text_iter_get_line_offset (iter);
+
+  g_assert (char_len > 0);
+  
+  if (offset < char_len)
+    result = (* func) (attrs, offset, 0, char_len);
+
+  return result;
+}
+
+static gboolean
+find_line_log_attrs (const GtkTextIter *iter,
+                     FindLogAttrFunc    func,
+                     gint              *found_offset)
 {
   gchar *paragraph;
   gint char_len;
@@ -2503,7 +2530,7 @@ find_by_log_attrs (GtkTextIter    *iter,
 
   orig = *iter;
 
-  found = test_log_attrs (iter, func, &offset);
+  found = find_line_log_attrs (iter, func, &offset);
   
   if (!found)
     {
@@ -2552,7 +2579,12 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
                                  gint              count)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (count > 0, FALSE);
+
+  if (count == 0)
+    return FALSE;
+
+  if (count < 0)
+    return gtk_text_iter_backward_word_starts (iter, -count);
 
   if (!gtk_text_iter_forward_word_end (iter))
     return FALSE;
@@ -2572,7 +2604,9 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
                                     gint               count)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (count > 0, FALSE);
+
+  if (count < 0)
+    return gtk_text_iter_forward_word_ends (iter, -count);
 
   if (!gtk_text_iter_backward_word_start (iter))
     return FALSE;
@@ -2591,46 +2625,62 @@ gtk_text_iter_backward_word_starts (GtkTextIter      *iter,
 gboolean
 gtk_text_iter_starts_word (const GtkTextIter *iter)
 {
-  return test_log_attrs (iter, is_word_start_func, NULL);
+  return test_log_attrs (iter, is_word_start_func);
 }
 
 gboolean
 gtk_text_iter_ends_word (const GtkTextIter *iter)
 {
-  return test_log_attrs (iter, is_word_end_func, NULL);
+  return test_log_attrs (iter, is_word_end_func);
 }
 
 gboolean
 gtk_text_iter_inside_word (const GtkTextIter *iter)
 {
-  return test_log_attrs (iter, inside_word_func, NULL);
+  return test_log_attrs (iter, inside_word_func);
 }
 
 static gboolean
-find_cursor_pos_func (const PangoLogAttr *attrs,
-                      gint          offset,
-                      gint          min_offset,
-                      gint          len,
-                      gint         *found_offset)
+find_forward_cursor_pos_func (const PangoLogAttr *attrs,
+                              gint          offset,
+                              gint          min_offset,
+                              gint          len,
+                              gint         *found_offset)
 {
   ++offset; /* We always go to the NEXT position */
 
-  /* Find end of next word */
-  while (offset < min_offset + len &&
+  while (offset < (min_offset + len) &&
          !attrs[offset].is_cursor_position)
     ++offset;
 
   *found_offset = offset;
 
-  return offset < min_offset + len;
+  return offset < (min_offset + len);
+}
+
+static gboolean
+find_backward_cursor_pos_func (const PangoLogAttr *attrs,
+                               gint          offset,
+                               gint          min_offset,
+                               gint          len,
+                               gint         *found_offset)
+{
+  --offset; /* We always go to the NEXT position */
+
+  while (offset > min_offset &&
+         !attrs[offset].is_cursor_position)
+    --offset;
+
+  *found_offset = offset;
+
+  return offset >= min_offset;
 }
 
 static gboolean
 is_cursor_pos_func (const PangoLogAttr *attrs,
                     gint          offset,
                     gint          min_offset,
-                    gint          len,
-                    gint         *found_offset)
+                    gint          len)
 {
   return attrs[offset].is_cursor_position;
 }
@@ -2638,14 +2688,13 @@ is_cursor_pos_func (const PangoLogAttr *attrs,
 gboolean
 gtk_text_iter_forward_cursor_position (GtkTextIter *iter)
 {
-  return find_by_log_attrs (iter, find_cursor_pos_func, TRUE);  
-
+  return find_by_log_attrs (iter, find_forward_cursor_pos_func, TRUE);
 }
 
 gboolean
 gtk_text_iter_backward_cursor_position (GtkTextIter *iter)
 {
-  return find_by_log_attrs (iter, find_cursor_pos_func, FALSE);
+  return find_by_log_attrs (iter, find_backward_cursor_pos_func, FALSE);
 }
 
 gboolean
@@ -2653,8 +2702,13 @@ gtk_text_iter_forward_cursor_positions (GtkTextIter *iter,
                                         gint         count)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (count > 0, FALSE);
 
+  if (count == 0)
+    return FALSE;
+  
+  if (count < 0)
+    return gtk_text_iter_backward_cursor_positions (iter, -count);
+  
   if (!gtk_text_iter_forward_cursor_position (iter))
     return FALSE;
   --count;
@@ -2673,8 +2727,13 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
                                          gint         count)
 {
   g_return_val_if_fail (iter != NULL, FALSE);
-  g_return_val_if_fail (count > 0, FALSE);
 
+  if (count == 0)
+    return FALSE;
+
+  if (count < 0)
+    return gtk_text_iter_forward_cursor_positions (iter, -count);
+  
   if (!gtk_text_iter_backward_cursor_position (iter))
     return FALSE;
   --count;
@@ -2691,7 +2750,7 @@ gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
 gboolean
 gtk_text_iter_is_cursor_position (const GtkTextIter *iter)
 {
-  return test_log_attrs (iter, is_cursor_pos_func, NULL);
+  return test_log_attrs (iter, is_cursor_pos_func);
 }
 
 void
