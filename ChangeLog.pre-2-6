@@ -1,3 +1,7 @@
+2002-10-01  Stanislav Brabec  <sbrabec@suse.cz>
+
+	* gtk/gtkimcontextsimple.c: Fixed alphabetical order (bug #91258).
+
 2002-10-01  Padraig O'Briain <padraig.obriain@sun.com>
 
 	* gtk/gtkmenu.c: Add gtk_menu_focus() so we do not waste time
