@@ -468,7 +468,7 @@ gdk_init (int *argc, char ***argv)
  */
 
 void
-gdk_exit (int errorcode)
+gdk_exit (gint errorcode)
 {
   /* de-initialisation is done by the gdk_exit_funct(),
      no need to do this here (Alex J.) */

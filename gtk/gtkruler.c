@@ -48,10 +48,10 @@ static const GtkRulerMetric ruler_metrics[] =
 };
 
 
-guint
+GtkType
 gtk_ruler_get_type (void)
 {
-  static guint ruler_type = 0;
+  static GtkType ruler_type = 0;
 
   if (!ruler_type)
     {

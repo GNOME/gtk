@@ -57,10 +57,10 @@ static GtkPreviewClass *preview_class = NULL;
 static gint install_cmap = FALSE;
 
 
-guint
+GtkType
 gtk_preview_get_type (void)
 {
-  static guint preview_type = 0;
+  static GtkType preview_type = 0;
 
   if (!preview_type)
     {

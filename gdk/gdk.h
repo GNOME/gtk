@@ -964,8 +964,8 @@ gboolean       gdk_region_empty	    (GdkRegion	   *region);
 gboolean       gdk_region_equal	    (GdkRegion	   *region1,
 				     GdkRegion	   *region2);
 gboolean       gdk_region_point_in  (GdkRegion	   *region,
-				     int		   x,
-				     int		   y);
+				     gint		   x,
+				     gint		   y);
 GdkOverlapType gdk_region_rect_in   (GdkRegion	   *region,
 				     GdkRectangle  *rect);
 

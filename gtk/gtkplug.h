@@ -60,7 +60,7 @@ struct _GtkPlugClass
 };
 
 
-guint      gtk_plug_get_type  (void);
+GtkType    gtk_plug_get_type  (void);
 void       gtk_plug_construct (GtkPlug *plug, guint32 socket_id);
 GtkWidget* gtk_plug_new       (guint32 socket_id);
 

@@ -219,10 +219,10 @@ static const scale_val_type scale_vals[NUM_CHANNELS] =
   {N_("Opacity:"),    0.0,   1.0, 0.01,  0.01, (SF) gtk_color_selection_opacity_updater}
 };
 
-guint
+GtkType
 gtk_color_selection_get_type (void)
 {
-  static guint color_selection_type = 0;
+  static GtkType color_selection_type = 0;
 
   if (!color_selection_type)
     {

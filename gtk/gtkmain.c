@@ -473,7 +473,7 @@ gtk_init (int *argc, char ***argv)
 }
 
 void
-gtk_exit (int errorcode)
+gtk_exit (gint errorcode)
 {
   /* Only if "gtk" has been initialized should we de-initialize.
    */

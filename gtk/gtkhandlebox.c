@@ -133,10 +133,10 @@ static GtkBinClass *parent_class;
 static guint        handle_box_signals[SIGNAL_LAST] = { 0 };
 
 
-guint
+GtkType
 gtk_handle_box_get_type (void)
 {
-  static guint handle_box_type = 0;
+  static GtkType handle_box_type = 0;
 
   if (!handle_box_type)
     {

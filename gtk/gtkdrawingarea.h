@@ -58,7 +58,7 @@ struct _GtkDrawingAreaClass
 };
 
 
-guint      gtk_drawing_area_get_type   (void);
+GtkType    gtk_drawing_area_get_type   (void);
 GtkWidget* gtk_drawing_area_new        (void);
 void       gtk_drawing_area_size       (GtkDrawingArea      *darea,
 					gint                 width,

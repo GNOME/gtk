@@ -40,7 +40,7 @@ extern "C" {
 #define GTK_GAMMA_CURVE(obj) \
    GTK_CHECK_CAST (obj, gtk_gamma_curve_get_type (), GtkGammaCurve)
 #define GTK_GAMMA_CURVE_CLASS(klass) \
-   GTK_CHECK_CLASS_CAST (klass, gtk_gamma_curve_get_type, GtkGammaCurveClass)
+   GTK_CHECK_CLASS_CAST (klass, gtk_gamma_curve_get_type (), GtkGammaCurveClass)
 #define GTK_IS_GAMMA_CURVE(obj) \
    GTK_CHECK_TYPE (obj, gtk_gamma_curve_get_type ())
 
@@ -68,7 +68,7 @@ struct _GtkGammaCurveClass
 };
 
 
-guint      gtk_gamma_curve_get_type (void);
+GtkType    gtk_gamma_curve_get_type (void);
 GtkWidget* gtk_gamma_curve_new      (void);
 
 

@@ -739,10 +739,10 @@ gtk_combo_init (GtkCombo * combo)
 		      GTK_SIGNAL_FUNC (gtk_combo_list_enter), combo);
 }
 
-guint
+GtkType
 gtk_combo_get_type (void)
 {
-  static guint combo_type = 0;
+  static GtkType combo_type = 0;
 
   if (!combo_type)
     {

@@ -63,10 +63,10 @@ static GdkFilterReturn gtk_socket_filter_func   (GdkXEvent *gdk_xevent,
 
 static GtkWidgetClass *parent_class = NULL;
 
-guint
+GtkType
 gtk_socket_get_type ()
 {
-  static guint socket_type = 0;
+  static GtkType socket_type = 0;
 
   if (!socket_type)
     {

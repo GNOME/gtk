@@ -3253,7 +3253,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
 
 void
 gtk_widget_set_sensitive (GtkWidget *widget,
-			  gint       sensitive)
+			  gboolean   sensitive)
 {
   GtkStateData data;
 

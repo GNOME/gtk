@@ -55,7 +55,7 @@ struct _GtkVButtonBoxClass
 };
 
 
-guint      gtk_vbutton_box_get_type (void);
+GtkType    gtk_vbutton_box_get_type (void);
 GtkWidget *gtk_vbutton_box_new      (void);
 
 /* buttons can be added by gtk_container_add() */

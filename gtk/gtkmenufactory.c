@@ -420,7 +420,7 @@ gtk_menu_factory_make_widget (GtkMenuFactory *factory)
 static GtkMenuPath*
 gtk_menu_factory_get (GtkWidget *parent,
 		      const char *path,
-		      int	 flags)
+		      gint	 flags)
 {
   GtkMenuPath *menu_path;
   GList *tmp_list;

@@ -46,10 +46,10 @@ static void gtk_hruler_draw_ticks    (GtkRuler       *ruler);
 static void gtk_hruler_draw_pos      (GtkRuler       *ruler);
 
 
-guint
+GtkType
 gtk_hruler_get_type (void)
 {
-  static guint hruler_type = 0;
+  static GtkType hruler_type = 0;
 
   if (!hruler_type)
     {

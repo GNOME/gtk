@@ -35,10 +35,10 @@ static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
 static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
 
-guint
+GtkType
 gtk_drawing_area_get_type (void)
 {
-  static guint drawing_area_type = 0;
+  static GtkType drawing_area_type = 0;
 
   if (!drawing_area_type)
     {

@@ -64,7 +64,7 @@ struct _GtkSocketClass
 
 
 GtkWidget*     gtk_socket_new      (void);
-guint          gtk_socket_get_type (void );
+GtkType        gtk_socket_get_type (void );
 void           gtk_socket_steal    (GtkSocket *socket,
 				    guint32 wid);
 

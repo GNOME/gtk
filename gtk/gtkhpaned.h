@@ -56,7 +56,7 @@ struct _GtkHPanedClass
 };
 
 
-guint      gtk_hpaned_get_type (void);
+GtkType    gtk_hpaned_get_type (void);
 GtkWidget* gtk_hpaned_new      (void);
 
 

@@ -44,10 +44,10 @@ static gint gtk_vpaned_button_release   (GtkWidget *widget,
 static gint gtk_vpaned_motion           (GtkWidget *widget,
 					 GdkEventMotion *event);
 
-guint
+GtkType
 gtk_vpaned_get_type (void)
 {
-  static guint vpaned_type = 0;
+  static GtkType vpaned_type = 0;
 
   if (!vpaned_type)
     {

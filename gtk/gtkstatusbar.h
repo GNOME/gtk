@@ -77,7 +77,7 @@ struct _GtkStatusbarMsg
   guint message_id;
 };
 
-guint      gtk_statusbar_get_type     	(void);
+GtkType    gtk_statusbar_get_type     	(void);
 GtkWidget* gtk_statusbar_new          	(void);
 guint	   gtk_statusbar_get_context_id	(GtkStatusbar *statusbar,
 					 const gchar  *context_description);

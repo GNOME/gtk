@@ -1,3 +1,46 @@
+1999-09-17  Tor Lillqvist  <tml@iki.fi>
+
+	* gdk/win32/gdk.def: Add gdk_threads_mutex.
+
+	* gtk/makefile.msc: Correct path to libintl.
+
+	Thanks to Tomi Ollila and Bernd Herd: Fix some inconsistencies in
+	use of gint vs. int, and gint vs. gboolean in headers and
+	definitions. Use GtkType for the *_get_type functions. Note that
+	these changes preserve binary compatibility.
+
+	* gdk/gdk.c
+	* gdk/win32/gdk.c
+	* gdk/gdk.h: Fix inconsistencies: gint vs int.
+
+	* gtk/gtkmain.c
+	* gtk/gtkclist.c
+	* gtk/gtkmenufactory.c
+	* gtk/gtknotebook.c
+	* gtk/gtkwidget.c: Fix inconsistencies, also gint
+	vs. gboolean.
+
+	* gtk/gtkcolorsel.[ch]
+	* gtk/gtkcombo.[ch]
+	* gtk/gtkdrawingarea.[ch]
+	* gtk/gtkgamma.[ch]
+	* gtk/gtkhandlebox.[ch]
+	* gtk/gtkhpaned.[ch]
+	* gtk/gtkhruler.[ch]
+	* gtk/gtkplug.[ch]
+	* gtk/gtkpreview.[ch]
+	* gtk/gtkruler.[ch]
+	* gtk/gtksocket.[ch]
+	* gtk/gtkstatusbar.[ch]
+	* gtk/gtktoolbar.[ch]
+	* gtk/gtkvbbox.[ch]
+	* gtk/gtkvpaned.[ch]
+	* gtk/gtkvruler.[ch]: Always use type GtkType for the *_get_type
+	functions.
+
+	* gtk/gtkgamma.h: Fix bug, missing () in call of
+	gtk_gamma_curve_get_type() in GTK_GAMMA_CURVE_CLASS. 
+
 1999-09-14  Tor Lillqvist  <tml@iki.fi>
 
 	* gdk/gdkcolor.c (gdk_colormap_new)

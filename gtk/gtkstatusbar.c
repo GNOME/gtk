@@ -49,10 +49,10 @@ static void gtk_statusbar_update		   (GtkStatusbar      *statusbar,
 static GtkContainerClass *parent_class;
 static guint              statusbar_signals[SIGNAL_LAST] = { 0 };
 
-guint      
+GtkType      
 gtk_statusbar_get_type (void)
 {
-  static guint statusbar_type = 0;
+  static GtkType statusbar_type = 0;
 
   if (!statusbar_type)
     {

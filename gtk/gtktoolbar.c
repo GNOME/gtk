@@ -86,10 +86,10 @@ static GtkContainerClass *parent_class;
 static guint toolbar_signals[LAST_SIGNAL] = { 0 };
 
 
-guint
+GtkType
 gtk_toolbar_get_type (void)
 {
-  static guint toolbar_type = 0;
+  static GtkType toolbar_type = 0;
 
   if (!toolbar_type)
     {

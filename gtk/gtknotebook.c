@@ -3811,7 +3811,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  */
 void
 gtk_notebook_set_show_border (GtkNotebook *notebook,
-			      gint         show_border)
+			      gboolean     show_border)
 {
   g_return_if_fail (notebook != NULL);
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));

@@ -85,7 +85,7 @@ struct _GtkHandleBoxClass
 };
 
 
-guint       gtk_handle_box_get_type        (void);
+GtkType     gtk_handle_box_get_type        (void);
 GtkWidget*  gtk_handle_box_new             (void);
 void        gtk_handle_box_set_shadow_type      (GtkHandleBox    *handle_box,
                                                  GtkShadowType    type);

@@ -122,7 +122,7 @@ struct _GtkColorSelectionDialogClass
 
 /* ColorSelection */
 
-guint      gtk_color_selection_get_type          (void);
+GtkType    gtk_color_selection_get_type          (void);
 
 GtkWidget* gtk_color_selection_new               (void);
 

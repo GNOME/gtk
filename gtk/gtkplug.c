@@ -44,10 +44,10 @@ static void gtk_plug_set_focus       (GtkWindow         *window,
 /* From Tk */
 #define EMBEDDED_APP_WANTS_FOCUS NotifyNormal+20
 
-guint
+GtkType
 gtk_plug_get_type ()
 {
-  static guint plug_type = 0;
+  static GtkType plug_type = 0;
 
   if (!plug_type)
     {

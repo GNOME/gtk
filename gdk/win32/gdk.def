@@ -256,6 +256,7 @@ EXPORTS
 	gdk_text_width_wc
 	gdk_threads_enter
 	gdk_threads_leave
+	gdk_threads_mutex
 	gdk_time_get
 	gdk_timer_disable
 	gdk_timer_enable
