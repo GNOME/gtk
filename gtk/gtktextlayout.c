@@ -156,7 +156,6 @@ gtk_text_layout_class_init (GtkTextLayoutClass *klass)
 void
 gtk_text_layout_init (GtkTextLayout *text_layout)
 {
-
 }
 
 GtkTextLayout*
@@ -699,25 +698,21 @@ set_para_values (GtkTextLayout      *layout,
 
   pango_layout_set_indent (display->layout, style->left_wrapped_line_margin - style->left_margin);
   display->x_offset = MIN (style->left_margin, style->left_wrapped_line_margin);
-  
+
   switch (style->wrap_mode)
     {
     case GTK_WRAPMODE_CHAR:
       /* FIXME: Handle this; for now, fall-through */
     case GTK_WRAPMODE_WORD:
-      *total_width = layout->width - MIN (style->left_margin, style->left_wrapped_line_margin) - style->right_margin;
+      *total_width = layout->screen_width;
       pango_layout_set_width (display->layout, *total_width * PANGO_SCALE);
       break;
     case GTK_WRAPMODE_NONE:
-      *total_width = -1;
+      *total_width = layout->width;
       break;
     }
-  
-  /* Unhandled:
-   * left_margin
-   * left_wrapped_line_margin
-   * right_margin
-  */
+
+  *total_width -= MIN (style->left_margin, style->left_wrapped_line_margin) + style->right_margin;
 }
 
 static PangoAttribute *
@@ -883,6 +878,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   PangoRectangle extents;
   gboolean inside_selection = FALSE;
   gboolean have_selection = FALSE;
+  gboolean para_values_set = FALSE;
   GSList *cursor_byte_offsets = NULL;
   GSList *tmp_list;
 
@@ -911,9 +907,6 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   display->layout = pango_layout_new (layout->context);
 
-  style = get_style (layout, &iter);
-  set_para_values (layout, style, display, &total_width, &align);
-  
   /* Selection handling */
   if (gtk_text_buffer_get_selection_bounds (layout->buffer,
                                             &selection_start,
@@ -937,12 +930,20 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       if (seg->type == &gtk_text_view_char_type ||
 	  seg->type == &gtk_text_pixmap_type)
         {
-          if (!style)
+	  gtk_text_btree_get_iter_at_line (layout->buffer->tree,
+					   &iter, line,
+					   byte_offset);
+	  style = get_style (layout, &iter);
+	  
+	  /* We have to delay setting the paragraph values until we
+	   * hit the first pixmap or text segment because toggles at
+	   * the beginning of the paragraph should affect the
+	   * paragraph-global values
+	   */
+	  if (!para_values_set)
 	    {
-	      gtk_text_btree_get_iter_at_line (layout->buffer->tree,
-					       &iter, line,
-					       byte_offset);
-	      style = get_style (layout, &iter);
+	      set_para_values (layout, style, display, &total_width, &align);
+	      para_values_set = TRUE;
 	    }
 
           /* First see if the chunk is elided, and ignore it if so. Tk
@@ -969,6 +970,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 	      byte_offset += seg->byte_count;
 	    }
 
+	  release_style (layout, style);
         }
 
       /* Toggles */
@@ -1015,15 +1017,16 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
       else
         g_error ("Unknown segment type: %s", seg->type->name);
 
-      if (style)
-	{
-	  release_style (layout, style);
-	  style = NULL;
-	}
-      
       seg = seg->next;
     }
 
+  if (!para_values_set)
+    {
+      style = get_style (layout, &iter);
+      set_para_values (layout, style, display, &total_width, &align);
+      release_style (layout, style);
+    }
+	      
   /* Pango doesn't want the trailing new line */
   if (byte_offset > 0 && text[byte_offset - 1] == '\n')
     byte_offset--;
@@ -1128,10 +1131,12 @@ gtk_text_layout_get_iter_at_pixel (GtkTextLayout *layout,
   
   display = gtk_text_layout_get_line_display (layout, line);
 
+  x -= display->x_offset;
+  y -= line_top + display->top_margin;
+
   /* We clamp y to the area of the actual layout so that the layouts
    * hit testing works OK on the space above and below the layout
    */
-  y -= line_top + display->top_margin;
   y = CLAMP (y, display->top_margin, display->height - display->top_margin - display->bottom_margin - 1);
   
   if (!pango_layout_xy_to_index (display->layout, x * PANGO_SCALE, y * PANGO_SCALE,

@@ -250,6 +250,23 @@ main(int argc, char** argv)
                      "underline", PANGO_UNDERLINE_SINGLE,
                      NULL);
 
+      setup_tag(tag);
+      
+      gtk_object_set(GTK_OBJECT(tag),
+                     "underline", PANGO_UNDERLINE_SINGLE,
+                     NULL);
+
+      tag = gtk_text_buffer_create_tag(buffer, "centered");
+      
+      gtk_object_set(GTK_OBJECT(tag),
+                     "justify", GTK_JUSTIFY_CENTER,
+                     NULL);
+
+      tag = gtk_text_buffer_create_tag(buffer, "wrap");
+      
+      gtk_object_set(GTK_OBJECT(tag),
+                     "wrap_mode", GTK_WRAPMODE_WORD,
+                     NULL);
 
       pixmap = gdk_pixmap_colormap_create_from_xpm_d (NULL,
                                                       gtk_widget_get_default_colormap(),
@@ -279,7 +296,9 @@ main(int argc, char** argv)
                                   /* This is UTF8 stuff, Emacs doesn't
                                      really know how to display it */
                                   "German (Deutsch Süd) Grüß Gott Greek (Ελληνικά) Γειά σας Hebrew   שלום Japanese (日本語)\n", -1);
-          
+
+	  gtk_text_buffer_create_mark (buffer, "tmp_mark", &iter, TRUE);
+
 #if 1
           gtk_text_buffer_get_iter_at_line_char(buffer, &iter, 0, 6);
           gtk_text_buffer_get_iter_at_line_char(buffer, &iter2, 0, 13);
@@ -311,6 +330,13 @@ main(int argc, char** argv)
 
           gtk_text_buffer_apply_tag(buffer, "fg_red", &iter, &iter2);
 #endif
+
+	  gtk_text_buffer_get_iter_at_mark (buffer, &iter, "tmp_mark");
+	  gtk_text_buffer_insert (buffer, &iter, "Centered text!\n", -1);
+	  
+	  gtk_text_buffer_get_iter_at_mark (buffer, &iter2, "tmp_mark");
+	  gtk_text_buffer_apply_tag (buffer, "centered", &iter2, &iter);
+	  
           ++i;
         }
 
@@ -319,6 +345,11 @@ main(int argc, char** argv)
         gdk_bitmap_unref(mask);
     }
 
+
+  /* Set the whole buffer to wrap
+   */
+  gtk_text_buffer_get_bounds (buffer, &iter, &iter2);
+  gtk_text_buffer_apply_tag (buffer, "wrap", &iter, &iter2);
   
 #if 0  
   str = gtk_text_buffer_get_chars_from_line(buffer, 0, 0, -1, TRUE);

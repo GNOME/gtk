@@ -1927,8 +1927,7 @@ gtk_text_view_scroll_calc_now (GtkTextView *tkxt)
   gtk_text_layout_set_screen_width (tkxt->layout,
                                     GTK_WIDGET (tkxt)->allocation.width);
       
-  gtk_text_layout_get_size (tkxt->layout,
-                            &width, &height);
+  gtk_text_layout_get_size (tkxt->layout, &width, &height);
 
   /* If the width is less than the screen width (likely
      if we have wrapping turned on for the whole widget),
@@ -1946,11 +1945,9 @@ gtk_text_view_scroll_calc_now (GtkTextView *tkxt)
     {
 #if 0
       printf ("layout size set, widget width is %d\n",
-             GTK_WIDGET (tkxt)->allocation.width);
+	      GTK_WIDGET (tkxt)->allocation.width);
 #endif     
-      gtk_layout_set_size (GTK_LAYOUT (tkxt),
-                          width,
-                          height);
+      gtk_layout_set_size (GTK_LAYOUT (tkxt), width, height);
 
       /* Set up the step sizes; we'll say that a page is
          our allocation minus one step, and a step is
@@ -2217,9 +2214,9 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
   GtkTextIter end;
   
   tkxt = GTK_TEXT_VIEW (widget);
-  
+
   gtk_text_layout_get_iter_at_pixel (tkxt->layout,
-                                     &newplace,
+                                     &newplace, 
                                      x + GTK_LAYOUT (tkxt)->xoffset,
                                      y + GTK_LAYOUT (tkxt)->yoffset);
 

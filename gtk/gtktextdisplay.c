@@ -192,7 +192,7 @@ render_layout_line (GdkDrawable        *drawable,
 	{
 	  gtk_text_render_state_update (render_state, appearance);
 	  
-	  if (appearance->underline == PANGO_UNDERLINE_NONE)
+	  if (appearance->underline == PANGO_UNDERLINE_NONE && !appearance->overstrike)
 	    pango_glyph_string_extents (run->glyphs, run->item->analysis.font,
 					NULL, &logical_rect);
 	  else
@@ -221,7 +221,7 @@ render_layout_line (GdkDrawable        *drawable,
 	      /* Fall through */
 	    case PANGO_UNDERLINE_SINGLE:
 	      gdk_draw_line (drawable, render_state->fg_gc,
-			 x + (x_off + ink_rect.x) -1, y + 2,
+			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + 2,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + 2);
 	      break;
 	    case PANGO_UNDERLINE_LOW:
@@ -229,6 +229,14 @@ render_layout_line (GdkDrawable        *drawable,
 			 x + (x_off + ink_rect.x) / PANGO_SCALE - 1, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2,
 			 x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, y + (ink_rect.y + ink_rect.height) / PANGO_SCALE + 2);
 	      break;
+	    }
+
+	  if (appearance->overstrike)
+	    {
+	      gint overstrike_y = y + (0.3 * logical_rect.y) / PANGO_SCALE;
+	      gdk_draw_line (drawable, render_state->fg_gc,
+			     x + (x_off + ink_rect.x) / PANGO_SCALE - 1, overstrike_y,
+			     x + (x_off + ink_rect.x + ink_rect.width) / PANGO_SCALE, overstrike_y);
 	    }
 
 	  x_off += logical_rect.width;
@@ -427,7 +435,7 @@ gtk_text_layout_draw (GtkTextLayout *layout,
 			 line_display->x_offset + cursor->x,
 			 current_y + line_display->top_margin + cursor->y,
 			 line_display->x_offset + cursor->x,
-			 current_y + line_display->top_margin + cursor->height);
+			 current_y + line_display->top_margin + cursor->y + cursor->height);
 	  
 	  cursor_list = cursor_list->next;
 	}

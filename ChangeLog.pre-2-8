@@ -1,3 +1,11 @@
+Fri Apr 14 12:54:34 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextdisplay.c (render_layout): Add overstrike handling.
+
+	* gtk/gtktextlayout.c: Fix up alignment.
+
+	* gtk/testtext.c: Add some tests for centering, wrapping.
+
 Fri Apr 14 09:26:22 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* gdk/gdkdrawable.h gdk/gdkdraw.c gdk/gdkwindow.c gdk/x11/gdkdrawable-x11.c:
