@@ -161,34 +161,38 @@ sys_font_to_pango_font (SystemFontType type, char * buf)
       switch (lf.lfWeight) {
       case FW_THIN:
       case FW_EXTRALIGHT:
-	weight = "ultralight";
+	weight = "Ultra-Light";
 	break;
 
       case FW_LIGHT:
-	weight = "light";
+	weight = "Light";
+	break;
+
+      case FW_BOLD:
+	weight = "Bold";
 	break;
 
       case FW_SEMIBOLD:
-      case FW_BOLD:
-	weight = "bold";
+	weight = "Semi-Bold";
 	break;
 
       case FW_ULTRABOLD:
-	weight = "ultrabold";
+	weight = "Ultra-Bold";
 	break;
 
       case FW_HEAVY:
-	weight = "heavy";
+	weight = "Heavy";
+	break;
 
       default:
-	weight = "normal";
+	weight = "";
 	break;
       }
 
       if (lf.lfItalic)
-	style="italic";
+	style="Italic";
       else
-	style="normal";
+	style="";
 
       pt_size = -MulDiv(lf.lfHeight, 72,
                         GetDeviceCaps(GetDC(GetDesktopWindow()),
