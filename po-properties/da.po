@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-11-25 15:53+0100\n"
-"PO-Revision-Date: 2004-11-24 12:03+0100\n"
+"POT-Creation-Date: 2004-11-29 16:33+0100\n"
+"PO-Revision-Date: 2004-11-29 16:32+0100\n"
 "Last-Translator: Martin Willemoes Hansen <mwh@sysrq.dk>\n"
 "Language-Team: Danish <dansk@klid.dk>\n"
 "MIME-Version: 1.0\n"
@@ -114,6 +114,14 @@ msgstr "Standardterminal"
 #: gdk/gdkdisplaymanager.c:128
 msgid "The default display for GDK"
 msgstr "Standardterminalen for GDK"
+
+#: gdk/gdkpango.c:574 gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
+msgid "Screen"
+msgstr "Skærm"
+
+#: gdk/gdkpango.c:575
+msgid "the GdkScreen for the renderer"
+msgstr "Optegnerens GdkScreen"
 
 #: gtk/gtkaboutdialog.c:195
 msgid "Program name"
@@ -1459,7 +1467,7 @@ msgstr "Titel"
 msgid "The title of the color selection dialog"
 msgstr "Titlen på farvevælgervinduet"
 
-#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1782
+#: gtk/gtkcolorbutton.c:233 gtk/gtkcolorsel.c:1839
 msgid "Current Color"
 msgstr "Nuværende farve"
 
@@ -1467,7 +1475,7 @@ msgstr "Nuværende farve"
 msgid "The selected color"
 msgstr "Den valgte farve"
 
-#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1789
+#: gtk/gtkcolorbutton.c:248 gtk/gtkcolorsel.c:1846
 msgid "Current Alpha"
 msgstr "Nuværende alfa"
 
@@ -1477,38 +1485,38 @@ msgstr ""
 "Den valgte uigennemsigtighedsværdi (0 helt gennemsigtig, 65535 helt "
 "uigennemsigtig)"
 
-#: gtk/gtkcolorsel.c:1768
+#: gtk/gtkcolorsel.c:1825
 msgid "Has Opacity Control"
 msgstr "Kontrol til uigennemsigtighed"
 
-#: gtk/gtkcolorsel.c:1769
+#: gtk/gtkcolorsel.c:1826
 msgid "Whether the color selector should allow setting opacity"
 msgstr "Om farvevælgeren understøtter ændring af uigennemsigtigheden"
 
-#: gtk/gtkcolorsel.c:1775
+#: gtk/gtkcolorsel.c:1832
 msgid "Has palette"
 msgstr "Med palet"
 
-#: gtk/gtkcolorsel.c:1776
+#: gtk/gtkcolorsel.c:1833
 msgid "Whether a palette should be used"
 msgstr "Om en palet skal bruges"
 
-#: gtk/gtkcolorsel.c:1783
+#: gtk/gtkcolorsel.c:1840
 msgid "The current color"
 msgstr "Den aktive farve"
 
-#: gtk/gtkcolorsel.c:1790
+#: gtk/gtkcolorsel.c:1847
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Aktuel værdi for uigennemsigtighed (0 helt gennemsigtig, 65535 helt "
 "uigennemsigtig)"
 
 # RETMIG: er dette rigtigt?
-#: gtk/gtkcolorsel.c:1804
+#: gtk/gtkcolorsel.c:1861
 msgid "Custom palette"
 msgstr "Brugerdefineret palet"
 
-#: gtk/gtkcolorsel.c:1805
+#: gtk/gtkcolorsel.c:1862
 msgid "Palette to use in the color selector"
 msgstr "Palet som skal bruges i farvevælgeren"
 
@@ -2391,10 +2399,6 @@ msgstr "Vis menubilleder"
 #: gtk/gtkimagemenuitem.c:138
 msgid "Whether images should be shown in menus"
 msgstr "Om billeder skal vises i menuer"
-
-#: gtk/gtkinvisible.c:116 gtk/gtkwindow.c:574
-msgid "Screen"
-msgstr "Skærm"
 
 #: gtk/gtkinvisible.c:117 gtk/gtkwindow.c:575
 msgid "The screen where this window will be displayed"
