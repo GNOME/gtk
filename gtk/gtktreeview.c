@@ -4514,7 +4514,7 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
 
   gtk_widget_queue_draw_area (GTK_WIDGET (tree_view),
 			      0, y,
-			      GTK_WIDGET (tree_view)->requisition.width,
+			      GTK_WIDGET (tree_view)->allocation.width,
 			      GTK_RBNODE_GET_HEIGHT (node));
 }
 
