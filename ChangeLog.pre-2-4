@@ -1,3 +1,9 @@
+2001-03-06  James Henstridge  <james@daa.com.au>
+
+	* gtk/gtkwidget.c (gtk_widget_class_init): set the class closure
+	offset for the window_state_event to point at window_state_event
+	rather than no_expose_event.
+
 Mon Mar  5 19:10:15 2001  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtkimmodule.h: fix busted /* comment */

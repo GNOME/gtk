@@ -768,7 +768,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     gtk_signal_new ("window_state_event",
 		    GTK_RUN_LAST,
 		    GTK_CLASS_TYPE (object_class),
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, window_state_event),
 		    gtk_marshal_BOOLEAN__POINTER,
 		    GTK_TYPE_BOOL, 1,
 		    GTK_TYPE_GDK_EVENT);
