@@ -1,3 +1,9 @@
+Thu May 29 16:01:38 2003  Kristian Rietveld  <kris@gtk.org>
+
+	* gtk/gtktreeview.c (gtk_tree_view_real_set_cursor): check
+	if tree/node are still the same after _internal_select_node.
+	(Fixes #92256, reported by edscott).
+
 Thu May 29 15:38:30 2003  Kristian Rietveld  <kris@gtk.org>
 
 	Fixes #75745, reported by Richard Hult. Merged from stable.

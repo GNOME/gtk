@@ -9761,10 +9761,22 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
   _gtk_tree_view_find_node (tree_view, path, &tree, &node);
   if (tree != NULL)
     {
+      GtkRBTree *new_tree = NULL;
+      GtkRBNode *new_node = NULL;
+
       if (clear_and_select && !((state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK))
 	_gtk_tree_selection_internal_select_node (tree_view->priv->selection,
 						  node, tree, path,
 						  state, FALSE);
+
+      /* We have to re-find tree and node here again, somebody might have
+       * cleared the node or the whole tree in the GtkTreeSelection::changed
+       * callback. If the nodes differ we bail out here.
+       */
+      _gtk_tree_view_find_node (tree_view, path, &new_tree, &new_node);
+
+      if (tree != new_tree || node != new_node)
+        return;
 
       if (clamp_node)
         {
