@@ -1,27 +1,3 @@
-<!-- ##### SECTION ./tmpl/animation.sgml:Long_Description ##### -->
-  <para>
-    The &gdk-pixbuf; library provides a simple mechanism to load and
-    represent animations, primarily animated GIF files.  Animations
-    are represented as lists of #GdkPixbufFrame structures.  Each
-    frame structure contains a #GdkPixbuf structure and information
-    about the frame's overlay mode and duration.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/animation.sgml:See_Also ##### -->
-  <para>
-    #GdkPixbufLoader
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/animation.sgml:Short_Description ##### -->
-Animations as multi-frame structures.
-
-
-<!-- ##### SECTION ./tmpl/animation.sgml:Title ##### -->
-Animations
-
-
 <!-- ##### SECTION ./tmpl/from-drawables.sgml:Long_Description ##### -->
   <para>
     The functions in this section allow you to take the image data
@@ -567,29 +543,6 @@ Scaling pixbufs and scaling and compositing pixbufs
 
 <!-- ##### SECTION ./tmpl/scaling.sgml:Title ##### -->
 Scaling
-
-
-<!-- ##### SECTION ./tmpl/util.sgml:Long_Description ##### -->
-  <para>
-    These functions provide miscellaneous utilities for manipulating
-    pixbufs.  The pixel data in pixbufs may of course be manipulated
-    directly by applications, but several common operations can be
-    performed by these functions instead.
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/util.sgml:See_Also ##### -->
-  <para>
-    #GdkPixbuf
-  </para>
-
-
-<!-- ##### SECTION ./tmpl/util.sgml:Short_Description ##### -->
-Utility and miscellaneous convenience functions.
-
-
-<!-- ##### SECTION ./tmpl/util.sgml:Title ##### -->
-Utilities
 
 
 <!-- ##### SECTION ./tmpl/xlib-from-drawables.sgml:Long_Description ##### -->

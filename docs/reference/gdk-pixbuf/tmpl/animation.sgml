@@ -112,6 +112,23 @@ frame.
 @Returns: 
 
 
+<!-- ##### FUNCTION gdk_pixbuf_frame_copy ##### -->
+<para>
+
+</para>
+
+@src: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gdk_pixbuf_frame_free ##### -->
+<para>
+
+</para>
+
+@frame: 
+
+
 <!-- ##### FUNCTION gdk_pixbuf_frame_get_pixbuf ##### -->
 <para>
 
