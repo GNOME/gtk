@@ -32,6 +32,7 @@
 #include "gtkwidget.h"
 #include "gtkthemes.h"
 #include "gtkiconfactory.h"
+#include "gtksettings.h"	/* _gtk_settings_parse_convert() */
 
 #define LIGHTNESS_MULT  1.3
 #define DARKNESS_MULT   0.7
@@ -1244,6 +1245,7 @@ _gtk_style_peek_property_value (GtkStyle           *style,
     return &pcache->value;
 
   /* cache miss, initialize value type, then set contents */
+  g_param_spec_ref (pcache->pspec);
   g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
   /* value provided by rc style? */
@@ -1264,54 +1266,24 @@ _gtk_style_peek_property_value (GtkStyle           *style,
     }
 
   /* when supplied by rc style, we need to convert */
-  if (rcprop)
+  if (rcprop && !_gtk_settings_parse_convert (parser, &rcprop->value,
+					      pspec, &pcache->value))
     {
-      if (G_VALUE_TYPE (&rcprop->value) == G_TYPE_GSTRING)
-	{
-	  GString *gstring;
-	  
-	  /* value still unparsed, need to revert to user supplied parser function */
-	  
-	  gstring = g_value_get_boxed (&rcprop->value);
-	  
-	  if (!parser || !parser (pspec, gstring, &pcache->value) ||
-	      g_param_value_validate (pspec, &pcache->value))
-	    {
-	      gchar *contents = g_strescape (gstring->str, NULL);
-
-	      g_message ("%s: failed to parse property `%s::%s' of type `%s' from rc file value \"%s\"",
-			 rcprop->origin,
-			 g_type_name (pspec->owner_type), pspec->name,
-			 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-			 gstring->str);
-	      g_free (contents);
-	      rcprop = NULL;
-	    }
-	}
-      else
-	{
-	  /* we use the normal conversion functionality of param specs */
-	  if (!g_param_value_convert (pspec, &rcprop->value, &pcache->value, TRUE))
-	    {
-	      gchar *contents = g_strdup_value_contents (&rcprop->value);
-	      
-	      g_message ("%s: failed to retrive property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
-			 rcprop->origin,
-			 g_type_name (pspec->owner_type), pspec->name,
-			 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-			 contents,
-			 G_VALUE_TYPE_NAME (&rcprop->value));
-	      g_free (contents);
-	      rcprop = NULL;
-	    }
-	}
+      gchar *contents = g_strdup_value_contents (&rcprop->value);
+      
+      g_message ("%s: failed to retrive property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
+		 rcprop->origin,
+		 g_type_name (pspec->owner_type), pspec->name,
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		 contents,
+		 G_VALUE_TYPE_NAME (&rcprop->value));
+      g_free (contents);
+      rcprop = NULL; /* needs default */
     }
   
   /* not supplied by rc style (or conversion failed), revert to default */
   if (!rcprop)
     g_param_value_set_default (pspec, &pcache->value);
-
-  g_param_spec_ref (pcache->pspec);
 
   return &pcache->value;
 }
@@ -4025,7 +3997,9 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
           }
       }
       break;
-
+    default:
+      g_assert_not_reached ();
+      break;
     }
   
   if (area)

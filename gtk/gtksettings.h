@@ -110,9 +110,15 @@ void		gtk_settings_set_double_property (GtkSettings	*settings,
 						  gdouble	 v_double,
 						  const gchar   *origin);
 
-void            _gtk_settings_handle_event       (GdkEventSetting *event);
 
-GtkRcPropertyParser _gtk_rc_property_parser_for_type (GType type);
+/* implementation details */
+void                _gtk_settings_handle_event        (GdkEventSetting    *event);
+GtkRcPropertyParser _gtk_rc_property_parser_from_type (GType               type);
+gboolean	    _gtk_settings_parse_convert       (GtkRcPropertyParser parser,
+						       const GValue       *src_value,
+						       GParamSpec         *pspec,
+						       GValue	          *dest_value);
+
 
 #ifdef __cplusplus
 }

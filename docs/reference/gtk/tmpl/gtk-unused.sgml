@@ -604,6 +604,18 @@ after other user handlers and the default handler.
 </para>
 
 
+<!-- ##### STRUCT GtkPatternSpec ##### -->
+<para>
+
+</para>
+
+@match_type: 
+@pattern_length: 
+@pattern: 
+@pattern_reversed: 
+@user_data: 
+@seq_id: 
+
 <!-- ##### ENUM GtkPrivateFlags ##### -->
 <para>
 
@@ -1171,6 +1183,50 @@ Set the the handle size to @size x @size pixels.
 
 @paned: a paned widget
 @size: the size in pixels
+
+<!-- ##### FUNCTION gtk_pattern_match ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@string_length: 
+@string: 
+@string_reversed: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_pattern_match_simple ##### -->
+<para>
+
+</para>
+
+@pattern: 
+@string: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_pattern_match_string ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@string: 
+@Returns: 
+
+<!-- ##### FUNCTION gtk_pattern_spec_free_segs ##### -->
+<para>
+
+</para>
+
+@pspec: 
+
+<!-- ##### FUNCTION gtk_pattern_spec_init ##### -->
+<para>
+
+</para>
+
+@pspec: 
+@pattern: 
 
 <!-- ##### FUNCTION gtk_rc_init ##### -->
 <para>

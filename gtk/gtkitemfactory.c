@@ -78,10 +78,10 @@ struct _GtkIFCBData
 };
 struct _GtkIFDumpData
 {
-  GtkPrintFunc	         print_func;
-  gpointer	         func_data;
-  guint		         modified_only : 1;
-  GtkPatternSpec	*pspec;
+  GtkPrintFunc	 print_func;
+  gpointer	 func_data;
+  guint		 modified_only : 1;
+  GPatternSpec	*pspec;
 };
 
 
@@ -777,7 +777,7 @@ gtk_item_factory_foreach (gpointer hash_key,
   item = value;
   data = user_data;
 
-  if (data->pspec && !gtk_pattern_match_string (data->pspec, item->path))
+  if (data->pspec && !g_pattern_match_string (data->pspec, item->path))
     return;
 
   comment_prefix[0] = gtk_item_factory_class->cpair_comment_single[0];
@@ -800,7 +800,7 @@ gtk_item_factory_foreach (gpointer hash_key,
 }
 
 void
-gtk_item_factory_dump_items (GtkPatternSpec	 *path_pspec,
+gtk_item_factory_dump_items (GPatternSpec	 *path_pspec,
 			     gboolean		  modified_only,
 			     GtkPrintFunc	  print_func,
 			     gpointer		  func_data)
@@ -834,9 +834,9 @@ gtk_item_factory_print_func (gpointer     FILE_pointer,
 }
 
 void
-gtk_item_factory_dump_rc (const gchar            *file_name,
-			  GtkPatternSpec         *path_pspec,
-			  gboolean                modified_only)
+gtk_item_factory_dump_rc (const gchar  *file_name,
+			  GPatternSpec *path_pspec,
+			  gboolean      modified_only)
 {
   FILE *f_out;
 
@@ -1319,18 +1319,18 @@ void
 gtk_item_factory_create_menu_entries (guint              n_entries,
 				      GtkMenuEntry      *entries)
 {
-  static GtkPatternSpec pspec_separator = { 42, 0 };
-  static GtkPatternSpec pspec_check = { 42, 0 };
+  static GPatternSpec *pspec_separator = NULL;
+  static GPatternSpec *pspec_check = NULL;
   guint i;
 
   if (!n_entries)
     return;
   g_return_if_fail (entries != NULL);
 
-  if (pspec_separator.pattern_length == 0)
+  if (!pspec_separator)
     {
-      gtk_pattern_spec_init (&pspec_separator, "*<separator>*");
-      gtk_pattern_spec_init (&pspec_check, "*<check>*");
+      pspec_separator = g_pattern_spec_new ("*<separator>*");
+      pspec_check = g_pattern_spec_new ("*<check>*");
     }
 
   for (i = 0; i < n_entries; i++)
@@ -1359,9 +1359,9 @@ gtk_item_factory_create_menu_entries (guint              n_entries,
       entry.accelerator = entries[i].accelerator;
       entry.callback = entries[i].callback;
       entry.callback_action = 0;
-      if (gtk_pattern_match_string (&pspec_separator, path))
+      if (g_pattern_match_string (pspec_separator, path))
 	entry.item_type = "<Separator>";
-      else if (!gtk_pattern_match_string (&pspec_check, path))
+      else if (!g_pattern_match_string (pspec_check, path))
 	entry.item_type = NULL;
       else
 	{

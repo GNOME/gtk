@@ -5411,7 +5411,7 @@ gtk_widget_class_install_style_property (GtkWidgetClass *class,
   g_return_if_fail (GTK_IS_WIDGET_CLASS (class));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
-  parser = _gtk_rc_property_parser_for_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
+  parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
 
   gtk_widget_class_install_style_property_parser (class, pspec, parser);
 }

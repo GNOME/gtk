@@ -32,7 +32,6 @@
 
 
 #include <gtk/gtkwidget.h>
-#include <gtk/gtkbindings.h>	/* for GtkPatternSpec */
 
 
 #ifdef __cplusplus
@@ -171,12 +170,12 @@ GtkWidget*	gtk_item_factory_get_item_by_action   (GtkItemFactory *ifactory,
  * all hash entries. otherwise only those entries will be dumped for which
  * the pattern matches, e.g. "<Image>*...".
  */
-void	gtk_item_factory_dump_items	(GtkPatternSpec		*path_pspec,
+void	gtk_item_factory_dump_items	(GPatternSpec		*path_pspec,
 					 gboolean		 modified_only,
 					 GtkPrintFunc		 print_func,
 					 gpointer		 func_data);
 void	gtk_item_factory_dump_rc	(const gchar		*file_name,
-					 GtkPatternSpec		*path_pspec,
+					 GPatternSpec		*path_pspec,
 					 gboolean		 modified_only);
 void	gtk_item_factory_print_func	(gpointer		 FILE_pointer,
 					 const gchar		*string);

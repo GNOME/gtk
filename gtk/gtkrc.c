@@ -69,8 +69,8 @@ typedef struct _GtkRcFile   GtkRcFile;
 
 struct _GtkRcSet
 {
-  GtkPatternSpec pspec;
-  GtkRcStyle	*rc_style;
+  GPatternSpec *pspec;
+  GtkRcStyle   *rc_style;
 };
 
 struct _GtkRcFile
@@ -1064,7 +1064,7 @@ gtk_rc_free_rc_sets (GSList *slist)
       GtkRcSet *rc_set;
 
       rc_set = slist->data;
-      gtk_pattern_spec_free_segs (&rc_set->pspec);
+      g_pattern_spec_free (rc_set->pspec);
       g_free (rc_set);
 
       slist = slist->next;
@@ -1156,7 +1156,7 @@ gtk_rc_styles_match (GSList       *rc_styles,
       rc_set = sets->data;
       sets = sets->next;
 
-      if (gtk_pattern_match (&rc_set->pspec, path_length, path, path_reversed))
+      if (g_pattern_match (rc_set->pspec, path_length, path, path_reversed))
 	rc_styles = g_slist_append (rc_styles, rc_set->rc_style);
     }
   
@@ -1254,7 +1254,7 @@ gtk_rc_add_rc_sets (GSList      *slist,
     new_style->bg_pixmap_name[i] = g_strdup (rc_style->bg_pixmap_name[i]);
   
   rc_set = g_new (GtkRcSet, 1);
-  gtk_pattern_spec_init (&rc_set->pspec, pattern);
+  rc_set->pspec = g_pattern_spec_new (pattern);
   rc_set->rc_style = rc_style;
   
   return g_slist_prepend (slist, rc_set);
@@ -3002,7 +3002,7 @@ gtk_rc_parse_path_pattern (GScanner   *scanner)
 	}
 
       rc_set = g_new (GtkRcSet, 1);
-      gtk_pattern_spec_init (&rc_set->pspec, pattern);
+      rc_set->pspec = g_pattern_spec_new (pattern);
       rc_set->rc_style = rc_style;
 
       if (path_type == GTK_PATH_WIDGET)

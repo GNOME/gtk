@@ -41,33 +41,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-/* Pattern matching
- */
-typedef struct	_GtkPatternSpec	GtkPatternSpec;
-
-struct _GtkPatternSpec
-{
-  GtkMatchType	 match_type;
-  guint		 pattern_length;
-  gchar		*pattern;
-  gchar		*pattern_reversed;
-  gpointer	 user_data;
-  guint		 seq_id;
-};
-
-void	 gtk_pattern_spec_init	    (GtkPatternSpec	 *pspec,
-				     const gchar	 *pattern);
-void	 gtk_pattern_spec_free_segs (GtkPatternSpec	 *pspec);
-gboolean gtk_pattern_match	    (GtkPatternSpec	 *pspec,
-				     guint		  string_length,
-				     const gchar	 *string,
-				     const gchar	 *string_reversed);
-gboolean gtk_pattern_match_string   (GtkPatternSpec	 *pspec,
-				     const gchar	 *string);
-gboolean gtk_pattern_match_simple   (const gchar	 *pattern,
-				     const gchar	 *string);
-
-
 /* Binding sets
  */
 

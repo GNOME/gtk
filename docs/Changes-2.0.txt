@@ -32,6 +32,10 @@ Incompatible Changes from GTK+-1.2 to GTK+-2.0:
 * gtk_widget_shape_combine_mask() now keeps a reference count on the 
   mask pixmap that is passed in.
 
+* the GtkPatternSpec has been moved to glib as GPatternSpec, the pattern
+  arguments to gtk_item_factory_dump_items() and gtk_item_factory_dump_rc()
+  have thusly been changed to take a GPatternSpec instead of GtkPatternSpec.
+  
 * Type system changes:
   - GTK_TYPE_OBJECT is not a fundamental type anymore. Type checks of the
     style (GTK_FUNDAMENTAL_TYPE (some_type) == GTK_TYPE_OBJECT)

@@ -40,6 +40,14 @@
 #define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
 
 
+/* --- structures --- */
+typedef struct {
+  GPatternSpec *pspec;
+  gpointer user_data;
+  guint seq_id;
+} PatternSpec;
+
+
 /* --- variables --- */
 static GHashTable	*binding_entry_hash_table = NULL;
 static GSList		*binding_set_list = NULL;
@@ -719,7 +727,7 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
 			  const gchar	     *path_pattern,
 			  GtkPathPriorityType priority)
 {
-  GtkPatternSpec *pspec;
+  PatternSpec *pspec;
   GSList **slist_p, *slist;
   static guint seq_id = 0;
   
@@ -745,8 +753,8 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
       break;
     }
   
-  pspec = g_new (GtkPatternSpec, 1);
-  gtk_pattern_spec_init (pspec, path_pattern);
+  pspec = g_new (PatternSpec, 1);
+  pspec->pspec = g_pattern_spec_new (path_pattern);
   pspec->seq_id = seq_id++ & 0x0fffffff;
   pspec->seq_id |= priority << 28;
   pspec->user_data = binding_set;
@@ -754,15 +762,15 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
   slist = *slist_p;
   while (slist)
     {
-      GtkPatternSpec *tmp_pspec;
+      PatternSpec *tmp_pspec;
       
       tmp_pspec = slist->data;
       slist = slist->next;
       
-      if (tmp_pspec->pattern_length == pspec->pattern_length &&
-	  g_str_equal (tmp_pspec->pattern_reversed, pspec->pattern_reversed))
+      if (tmp_pspec->pspec->pattern_length == pspec->pspec->pattern_length &&
+	  g_str_equal (tmp_pspec->pspec->pattern_reversed, pspec->pspec->pattern_reversed))
 	{
-	  gtk_pattern_spec_free_segs (pspec);
+	  g_pattern_spec_free (pspec->pspec);
 	  g_free (pspec);
 	  pspec = NULL;
 	  break;
@@ -783,10 +791,10 @@ binding_match_activate (GSList          *pspec_list,
 
   for (slist = pspec_list; slist; slist = slist->next)
     {
-      GtkPatternSpec *pspec;
+      PatternSpec *pspec;
 
       pspec = slist->data;
-      if (gtk_pattern_match (pspec, path_length, path, path_reversed))
+      if (g_pattern_match (pspec->pspec, path_length, path, path_reversed))
 	{
 	  GtkBindingSet *binding_set;
 
@@ -805,8 +813,8 @@ static gint
 gtk_binding_pattern_compare (gconstpointer new_pattern,
 			     gconstpointer existing_pattern)
 {
-  register const GtkPatternSpec *np  = new_pattern;
-  register const GtkPatternSpec *ep  = existing_pattern;
+  register const PatternSpec *np  = new_pattern;
+  register const PatternSpec *ep  = existing_pattern;
 
   /* walk the list as long as the existing patterns have
    * higher priorities.
@@ -845,7 +853,7 @@ gtk_binding_entries_sort_patterns (GtkBindingEntry    *entries,
 
       for (; slist; slist = slist->next)
 	{
-	  GtkPatternSpec *pspec;
+	  PatternSpec *pspec;
 
 	  pspec = slist->data;
 	  patterns = g_slist_insert_sorted (patterns, pspec, gtk_binding_pattern_compare);
@@ -936,255 +944,6 @@ gtk_bindings_activate (GtkObject      *object,
     }
 
   return handled;
-}
-
-
-
-
-
-
-
-
-
-
-/* Patterns
- */
-
-static inline gboolean
-gtk_pattern_ph_match (const gchar   *match_pattern,
-		      const gchar   *match_string)
-{
-  register const gchar *pattern, *string;
-  register gchar ch;
-  
-  pattern = match_pattern;
-  string = match_string;
-  
-  ch = *pattern;
-  pattern++;
-  while (ch)
-    {
-      switch (ch)
-	{
-	case  '?':
-	  if (!*string)
-	    return FALSE;
-	  string++;
-	  break;
-	  
-	case  '*':
-	  do
-	    {
-	      ch = *pattern;
-	      pattern++;
-	      if (ch == '?')
-		{
-		  if (!*string)
-		    return FALSE;
-		  string++;
-		}
-	    }
-	  while (ch == '*' || ch == '?');
-	  if (!ch)
-	    return TRUE;
-	  do
-	    {
-	      while (ch != *string)
-		{
-		  if (!*string)
-		    return FALSE;
-		  string++;
-		}
-	      string++;
-	      if (gtk_pattern_ph_match (pattern, string))
-		return TRUE;
-	    }
-	  while (*string);
-	  break;
-	  
-	default:
-	  if (ch == *string)
-	    string++;
-	  else
-	    return FALSE;
-	  break;
-	}
-      
-      ch = *pattern;
-      pattern++;
-    }
-  
-  return *string == 0;
-}
-
-gboolean
-gtk_pattern_match (GtkPatternSpec	*pspec,
-		   guint		 string_length,
-		   const gchar		*string,
-		   const gchar		*string_reversed)
-{
-  g_return_val_if_fail (pspec != NULL, FALSE);
-  g_return_val_if_fail (string != NULL, FALSE);
-  g_return_val_if_fail (string_reversed != NULL, FALSE);
-  
-  switch (pspec->match_type)
-    {
-    case  GTK_MATCH_ALL:
-      return gtk_pattern_ph_match (pspec->pattern, string);
-      
-    case  GTK_MATCH_ALL_TAIL:
-      return gtk_pattern_ph_match (pspec->pattern_reversed, string_reversed);
-      
-    case  GTK_MATCH_HEAD:
-      if (pspec->pattern_length > string_length)
-	return FALSE;
-      else if (pspec->pattern_length == string_length)
-	return strcmp (pspec->pattern, string) == 0;
-      else if (pspec->pattern_length)
-	return strncmp (pspec->pattern, string, pspec->pattern_length) == 0;
-      else
-	return TRUE;
-      
-    case  GTK_MATCH_TAIL:
-      if (pspec->pattern_length > string_length)
-	return FALSE;
-      else if (pspec->pattern_length == string_length)
-	return strcmp (pspec->pattern_reversed, string_reversed) == 0;
-      else if (pspec->pattern_length)
-	return strncmp (pspec->pattern_reversed,
-			string_reversed,
-			pspec->pattern_length) == 0;
-      else
-	return TRUE;
-      
-    case  GTK_MATCH_EXACT:
-      if (pspec->pattern_length != string_length)
-	return FALSE;
-      else
-	return strcmp (pspec->pattern_reversed, string_reversed) == 0;
-      
-    default:
-      g_return_val_if_fail (pspec->match_type < GTK_MATCH_LAST, FALSE);
-      return FALSE;
-    }
-}
-
-void
-gtk_pattern_spec_init (GtkPatternSpec	      *pspec,
-		       const gchar	      *pattern)
-{
-  gchar *p;
-  
-  g_return_if_fail (pspec != NULL);
-  
-  pspec->match_type = GTK_MATCH_ALL;
-  pspec->seq_id = 0;
-  pspec->user_data = NULL;
-  
-  if (!pattern)
-    pattern = "";
-  
-  pspec->pattern = g_strdup (pattern);
-  pspec->pattern_length = strlen (pspec->pattern);
-  pspec->pattern_reversed = g_strdup (pspec->pattern);
-  g_strreverse (pspec->pattern_reversed);
-  if (pspec->pattern_reversed[0] != '*')
-    pspec->match_type = GTK_MATCH_ALL_TAIL;
-  
-  if (strchr (pspec->pattern, '?'))
-    return;
-  
-  if (!strchr (pspec->pattern, '*'))
-    {
-      pspec->match_type = GTK_MATCH_EXACT;
-      return;
-    }
-  
-  p = pspec->pattern;
-  while (*p == '*')
-    p++;
-  if (p > pspec->pattern &&
-      !strchr (p, '*'))
-    {
-      gchar *t;
-      
-      pspec->match_type = GTK_MATCH_TAIL;
-      t = pspec->pattern;
-      pspec->pattern = g_strdup (p);
-      g_free (t);
-      g_free (pspec->pattern_reversed);
-      pspec->pattern_reversed = g_strdup (pspec->pattern);
-      g_strreverse (pspec->pattern_reversed);
-      pspec->pattern_length = strlen (pspec->pattern);
-      return;
-    }
-  
-  p = pspec->pattern_reversed;
-  while (*p == '*')
-    p++;
-  if (p > pspec->pattern_reversed &&
-      !strchr (p, '*'))
-    {
-      gchar *t;
-      
-      pspec->match_type = GTK_MATCH_HEAD;
-      t = pspec->pattern_reversed;
-      pspec->pattern_reversed = g_strdup (p);
-      g_free (t);
-      g_free (pspec->pattern);
-      pspec->pattern = g_strdup (pspec->pattern_reversed);
-      g_strreverse (pspec->pattern);
-      pspec->pattern_length = strlen (pspec->pattern);
-    }
-}
-
-gboolean
-gtk_pattern_match_string (GtkPatternSpec	*pspec,
-			  const gchar		*string)
-{
-  gchar *string_reversed;
-  guint length;
-  gboolean ergo;
-  
-  g_return_val_if_fail (pspec != NULL, FALSE);
-  g_return_val_if_fail (string != NULL, FALSE);
-  
-  length = strlen (string);
-  string_reversed = g_strdup (string);
-  g_strreverse (string_reversed);
-  
-  ergo = gtk_pattern_match (pspec, length, string, string_reversed);
-  g_free (string_reversed);
-  
-  return ergo;
-}
-
-gboolean
-gtk_pattern_match_simple (const gchar		*pattern,
-			  const gchar		*string)
-{
-  GtkPatternSpec pspec;
-  gboolean ergo;
-  
-  g_return_val_if_fail (pattern != NULL, FALSE);
-  g_return_val_if_fail (string != NULL, FALSE);
-  
-  gtk_pattern_spec_init (&pspec, pattern);
-  ergo = gtk_pattern_match_string (&pspec, string);
-  gtk_pattern_spec_free_segs (&pspec);
-  
-  return ergo;
-}
-
-void
-gtk_pattern_spec_free_segs (GtkPatternSpec	*pspec)
-{
-  g_return_if_fail (pspec != NULL);
-  
-  g_free (pspec->pattern);
-  pspec->pattern = NULL;
-  g_free (pspec->pattern_reversed);
-  pspec->pattern_reversed = NULL;
 }
 
 static guint
@@ -1447,4 +1206,3 @@ gtk_binding_parse_binding (GScanner       *scanner)
 
   return G_TOKEN_NONE;
 }
-

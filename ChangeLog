@@ -1,3 +1,28 @@
+Tue Apr  3 13:52:57 2001  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkitemfactory.[hc]: changed gtk_item_factory_dump_items()
+	and gtk_item_factory_dump_rc() GtkPatternSpec argument to
+	GPatternSpec. this is actually unlikely to cause breakage in
+	third-party apps since except for gle, pretty much ever caller
+	passes NULL here.
+
+	* gtk/gtkbindings.[hc]: removed gtk_pattern_*() API.
+
+	* *.c: use g_pattern_*() API.
+
+	* docs/Changes-2.0.txt: GtkPatternSpec->GPatternSpec updates.
+
+	* gtk/gtkstyle.c (gtk_default_draw_resize_grip): assert unhandled
+	directions aren't passed in.
+
+	* gtk/gtksettings.[hc] (_gtk_settings_parse_convert): export conversion
+	functionality to be usable from gtkstyle.c as well, give precedence
+	for conversion to user-supplied parsers.
+	s/_gtk_rc_property_parser_for_type/_gtk_rc_property_parser_from_type/;
+
+	* gtk/gtkstyle.c (_gtk_style_peek_property_value): use
+	_gtk_settings_parse_convert() for rcporperty value conversion.
+
 2001-04-03  Alexander Larsson  <alexl@redhat.com>
 
 	* gdk/linux-fb/gdkevents-fb.c:

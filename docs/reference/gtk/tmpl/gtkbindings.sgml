@@ -14,67 +14,6 @@ Bindings
 
 </para>
 
-<!-- ##### STRUCT GtkPatternSpec ##### -->
-<para>
-
-</para>
-
-@match_type: 
-@pattern_length: 
-@pattern: 
-@pattern_reversed: 
-@user_data: 
-@seq_id: 
-
-<!-- ##### FUNCTION gtk_pattern_spec_init ##### -->
-<para>
-
-</para>
-
-@pspec: 
-@pattern: 
-
-
-<!-- ##### FUNCTION gtk_pattern_spec_free_segs ##### -->
-<para>
-
-</para>
-
-@pspec: 
-
-
-<!-- ##### FUNCTION gtk_pattern_match ##### -->
-<para>
-
-</para>
-
-@pspec: 
-@string_length: 
-@string: 
-@string_reversed: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_pattern_match_string ##### -->
-<para>
-
-</para>
-
-@pspec: 
-@string: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_pattern_match_simple ##### -->
-<para>
-
-</para>
-
-@pattern: 
-@string: 
-@Returns: 
-
-
 <!-- ##### STRUCT GtkBindingSet ##### -->
 <para>
 

@@ -259,59 +259,89 @@ gtk_settings_notify (GObject    *object,
 #endif
 }
 
+gboolean
+_gtk_settings_parse_convert (GtkRcPropertyParser parser,
+			     const GValue       *src_value,
+			     GParamSpec         *pspec,
+			     GValue	        *dest_value)
+{
+  gboolean success = FALSE;
+
+  g_return_val_if_fail (G_VALUE_HOLDS (dest_value, G_PARAM_SPEC_VALUE_TYPE (pspec)), FALSE);
+
+  if (parser)
+    {
+      GString *gstring;
+      gboolean free_gstring = TRUE;
+      
+      if (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING))
+	{
+	  gstring = g_value_get_boxed (src_value);
+	  free_gstring = FALSE;
+	}
+      else if (G_VALUE_HOLDS_LONG (src_value))
+	{
+	  gstring = g_string_new ("");
+	  g_string_printfa (gstring, "%ld", g_value_get_long (src_value));
+	}
+      else if (G_VALUE_HOLDS_DOUBLE (src_value))
+	{
+	  gstring = g_string_new ("");
+	  g_string_printfa (gstring, "%f", g_value_get_double (src_value));
+	}
+      else if (G_VALUE_HOLDS_STRING (src_value))
+	{
+	  gchar *tstr = g_strescape (g_value_get_string (src_value), NULL);
+	  
+	  gstring = g_string_new ("\"");
+	  g_string_append (gstring, tstr);
+	  g_string_append_c (gstring, '\"');
+	  g_free (tstr);
+	}
+      else
+	{
+	  g_return_val_if_fail (G_VALUE_HOLDS (src_value, G_TYPE_GSTRING), FALSE);
+	  gstring = NULL; /* silence compiler */
+	}
+
+      success = (parser (pspec, gstring, dest_value) &&
+		 !g_param_value_validate (pspec, dest_value));
+
+      if (free_gstring)
+	g_string_free (gstring, TRUE);
+    }
+  else if (!G_VALUE_HOLDS (src_value, G_TYPE_GSTRING) &&
+	   g_value_type_transformable (G_VALUE_TYPE (src_value), G_VALUE_TYPE (dest_value)))
+    success = g_param_value_convert (pspec, src_value, dest_value, TRUE);
+
+  return success;
+}
+
 static void
 apply_queued_setting (GtkSettings      *data,
 		      GParamSpec       *pspec,
 		      GtkSettingsValue *qvalue)
 {
-  gboolean warn_convert = TRUE;
+  GValue tmp_value = { 0, };
+  GtkRcPropertyParser parser = g_param_spec_get_qdata (pspec, quark_property_parser);
 
-  if (g_value_type_transformable (G_VALUE_TYPE (&qvalue->value), G_PARAM_SPEC_VALUE_TYPE (pspec)))
-    {
-      GValue tmp_value = { 0, };
-
-      warn_convert = FALSE;
-      g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-      if (g_param_value_convert (pspec, &qvalue->value, &tmp_value, TRUE))
-	g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
-      else
-	{
-	  gchar *debug = g_strdup_value_contents (&tmp_value);
-
-	  g_message ("%s: rc-value `%s' for rc-property \"%s\" of type `%s' has invalid contents \"%s\"",
-		     qvalue->origin,
-		     G_VALUE_TYPE_NAME (&qvalue->value),
-		     pspec->name,
-		     g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-		     debug);
-	  g_free (debug);
-	}
-      g_value_unset (&tmp_value);
-    }
+  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+  if (_gtk_settings_parse_convert (parser, &qvalue->value,
+				   pspec, &tmp_value))
+    g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
   else
     {
-      GtkRcPropertyParser parser = g_param_spec_get_qdata (pspec, quark_property_parser);
-
-      if (parser)
-	{
-	  GValue tmp_value = { 0, };
-
-	  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-	  if (parser (pspec, g_value_get_boxed (&qvalue->value), &tmp_value))
-	    {
-	      warn_convert = FALSE;
-	      g_object_set_property (G_OBJECT (data), pspec->name, &tmp_value);
-	    }
-	  g_value_unset (&tmp_value);
-	}
+      gchar *debug = g_strdup_value_contents (&tmp_value);
+      
+      g_message ("%s: failed to retrive property `%s' of type `%s' from rc file value \"%s\" of type `%s'",
+		 qvalue->origin,
+		 pspec->name,
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		 debug,
+		 G_VALUE_TYPE_NAME (&tmp_value));
+      g_free (debug);
     }
-
-  if (warn_convert)
-    g_message ("%s: unable to convert rc-value of type `%s' to rc-property \"%s\" of type `%s'",
-	       qvalue->origin,
-	       G_VALUE_TYPE_NAME (&qvalue->value),
-	       pspec->name,
-	       g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+  g_value_unset (&tmp_value);
 }
 
 static guint
@@ -379,7 +409,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
 }
 
 GtkRcPropertyParser
-_gtk_rc_property_parser_for_type (GType type)
+_gtk_rc_property_parser_from_type (GType type)
 {
   if (type == GDK_TYPE_COLOR)
     return gtk_rc_property_parse_color;
@@ -404,7 +434,7 @@ gtk_settings_install_property (GtkSettings *settings,
   g_return_if_fail (GTK_IS_SETTINGS (settings));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
-  parser = _gtk_rc_property_parser_for_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
+  parser = _gtk_rc_property_parser_from_type (G_PARAM_SPEC_VALUE_TYPE (pspec));
 
   settings_install_property_parser (GTK_SETTINGS_GET_CLASS (settings), pspec, parser);
 }
