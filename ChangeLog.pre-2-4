@@ -1,3 +1,8 @@
+Mon Sep 20 13:17:39 1999  Pablo Saratxaga <pablo@mandrakesoft.com>
+	
+	* configure.in,po/pt_BR.po: added Portuguese Brazilian file from
+	Alex Sandro Queiroz e Silva <asandro@lcg.dc.ufc.br>
+
 Mon Sep 20 01:21:53 1999  Tim Janik  <timj@gtk.org>
 
 	* released Gtk+-1.2.5-pre2, interface age 0, binary age 5.
