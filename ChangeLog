@@ -1,6 +1,13 @@
+Thu Jul 30 11:18:43 1998  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkstyle.c gtk/gtkrc.c: Memory management fixups.
+
+	* themes/th_main.c: Moved messages around so they are
+	  printed before destroying strings.
+
 Wed Jul 29 16:56:07 1998  Owen Taylor  <otaylor@redhat.com>
 
-	* gdk/gdk.c: Fairly implementation of expose compression.
+	* gdk/gdk.c: Fairly simple implementation of expose compression.
 	  (No GraphicsExpose compression yet, always compress
 	  with the equivalent of XtCompressMultiple - no compression
 	  of Expose events across non-Expose events)

@@ -323,7 +323,6 @@ GtkStyleClass default_class =
    gtk_default_draw_handle
 };
 GdkFont *default_font = NULL;
-GSList *unattached_styles = NULL;
 
 static GdkColor gtk_default_normal_fg =      { 0,      0,      0,      0 };
 static GdkColor gtk_default_active_fg =      { 0,      0,      0,      0 };
@@ -359,6 +358,33 @@ gtk_style_copy (GtkStyle     *style)
 
   new_style->font = style->font;
   gdk_font_ref (new_style->font);
+
+  return new_style;
+}
+
+static GtkStyle*
+gtk_style_duplicate (GtkStyle     *style)
+{
+  GtkStyle *new_style;
+
+  g_return_val_if_fail (style != NULL, NULL);
+
+  new_style = gtk_style_copy (style);
+
+  style->styles = g_slist_append (style->styles, new_style);
+  new_style->styles = style->styles;  
+
+  if (style->rc_style)
+    {
+      new_style->rc_style = style->rc_style;
+      gtk_rc_style_ref (style->rc_style);
+    }
+  
+  if (style->engine)
+    {
+      new_style->engine = style->engine;
+      new_style->engine->duplicate_style (new_style, style);
+    }
 
   return new_style;
 }
@@ -422,6 +448,8 @@ gtk_style_new (void)
   style->engine = NULL;
   style->engine_data = NULL;
 
+  style->rc_style = NULL;
+
   for (i = 0; i < 5; i++)
     {
       style->fg_gc[i] = NULL;
@@ -456,7 +484,7 @@ gtk_style_attach (GtkStyle  *style,
     {
       new_style = styles->data;
 
-      if (!new_style->attach_count)
+      if (new_style->attach_count == 0)
 	{
 	  gtk_style_init (new_style, colormap, depth);
 	  break;
@@ -471,16 +499,13 @@ gtk_style_attach (GtkStyle  *style,
 
   if (!new_style)
     {
-      new_style = gtk_style_copy (style);
+      new_style = gtk_style_duplicate (style);
       gtk_style_init (new_style, colormap, depth);
-      style->styles = g_slist_append (style->styles, new_style);
-
-      new_style->engine = style->engine;
-
-      if (new_style->engine)
-	new_style->engine->duplicate_style (new_style, style);
     }
 
+  if (new_style->attach_count == 0)
+    gtk_style_ref (new_style);
+  
   new_style->attach_count++;
 
   return new_style;
@@ -510,7 +535,9 @@ gtk_style_detach (GtkStyle *style)
 	  gtk_gc_release (style->base_gc[i]);
 	}
       if (style->engine)
-	style->engine->unrealize_style (style);	
+	style->engine->unrealize_style (style);
+      
+      gtk_style_unref (style);
     }
 }
 
@@ -633,7 +660,7 @@ gtk_style_init (GtkStyle *style,
 static void
 gtk_style_destroy (GtkStyle *style)
 {
-  g_return_if_fail (style->attach_count != 0);
+  g_return_if_fail (style->attach_count == 0);
 
   if (style->engine)
     style->engine->destroy_style (style);

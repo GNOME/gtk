@@ -525,7 +525,7 @@ theme_rc_style_to_style (GtkStyle   *style,
   style->klass = &th_default_class;
   style->engine_data = style_data;
 
-  g_print ("Theme theme: Creating style for \"%s\"\n", data->name);
+  g_print ("Theme theme: Creating rc style for \"%s\"\n", data->name);
 }
 
 void  
@@ -564,13 +564,13 @@ theme_destroy_rc_style  (GtkRcStyle *rc_style)
 {
   ThemeRcData *data = rc_style->engine_data;
 
+  g_print ("Theme theme: Destroying rc style for \"%s\"\n", data->name);
+
   if (data)
     {
       g_free (data->name);
       g_free (data);
     }
-
-  g_print ("Theme theme: Destroying rc style for \"%s\"\n", data->name);
 }
 
 void  
@@ -578,13 +578,13 @@ theme_destroy_style     (GtkStyle   *style)
 {
   ThemeStyleData *data = style->engine_data;
 
+  g_print ("Theme theme: Destroying style for \"%s\"\n", data->name);
+
   if (data)
     {
       g_free (data->name);
       g_free (data);
     }
-
-  g_print ("Theme theme: Destroying style for \"%s\"\n", data->name);
 }
 
 void

@@ -731,6 +731,7 @@ gtk_rc_style_find (const char *name)
   return rc_style;
 }
 
+/* Assumes ownership of rc_style */
 static GtkStyle *
 gtk_rc_style_to_style (GtkRcStyle *rc_style)
 {
@@ -741,7 +742,6 @@ gtk_rc_style_to_style (GtkRcStyle *rc_style)
   style = gtk_style_new ();
 
   style->rc_style = rc_style;
-  gtk_rc_style_ref (rc_style);
   
   if (rc_style->fontset_name)
     {
@@ -840,9 +840,9 @@ gtk_rc_style_init (GSList *rc_styles)
 	    }
 
 	  if (!proto_style->font_name && rc_style->font_name)
-	    proto_style->font_name = rc_style->font_name;
+	    proto_style->font_name = g_strdup (rc_style->font_name);
 	  if (!proto_style->fontset_name && rc_style->fontset_name)
-	    proto_style->fontset_name = rc_style->fontset_name;
+	    proto_style->fontset_name = g_strdup (rc_style->fontset_name);
 
 	  if (!proto_style->engine && rc_style->engine)
 	    proto_style->engine = rc_style->engine;
@@ -855,6 +855,7 @@ gtk_rc_style_init (GSList *rc_styles)
 	}
 
       style = gtk_rc_style_to_style (proto_style);
+
       style->styles = g_slist_append (NULL, style);
 
       g_hash_table_insert (realized_style_ht, rc_styles, style);
