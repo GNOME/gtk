@@ -1,3 +1,8 @@
+Mon Jun  7 23:07:40 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcombobox.c (gtk_combo_box_remeasure): Handle
+	priv->model being NULL.  (#143856, Mariano Suárez-Alvarez)
+
 2004-06-07  Federico Mena Quintero  <federico@ximian.com>
 
 	* gtk/gtktreeview.c (gtk_tree_view_button_press): Revert the patch
@@ -7,21 +12,22 @@
 
 Sun Jun  6 23:57:21 2004  Matthias Clasen  <maclas@gmx.de>
 
-	Make the entry context menu work in editable text cells. The changes are
-	based on a patch by Kristian Rietveld, which implemented an approach outlined
-	by Owen Taylor.  (#50075)
+	Make the entry context menu work in editable text cells. The changes
+	are based on a patch by Kristian Rietveld, which implemented an 
+	approach outlined by Owen Taylor.  (#50075)
 	
-	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_focus_out_event): Ignore
-	focus out if the entry menu is posted.
-	(gtk_cell_renderer_text_populate_popup): Mark the entry menu as posted, and
-	set up a signal handler to clear the flag if the menu is unmapped.
-	(gtk_cell_renderer_text_popup_unmap): Clear the in_entry_menu flag, set up
-	a timeout to stop editing if the focus is lost.
-	(popdown_timeout): Stop editing if the entry doesn't have focus any more.
-	(gtk_cell_renderer_text_start_editing): Connect to the populate_popup signal
-	on the entry and keep a pointer to the entry.
-	(gtk_cell_renderer_text_editing_done): Disconnect from popuplate_popup, clear
-	the pointer to the entry.
+	* gtk/gtkcellrenderertext.c (gtk_cell_renderer_text_focus_out_event): 
+	Ignore focus out if the entry menu is posted.
+	(gtk_cell_renderer_text_populate_popup): Mark the entry menu as 
+	posted, and set up a signal handler to clear the flag if the menu 
+	is unmapped.
+	(gtk_cell_renderer_text_popup_unmap): Clear the in_entry_menu flag, 
+	set up a timeout to stop editing if the focus is lost.
+	(popdown_timeout): Stop editing if the entry doesn't have focus anymore.
+	(gtk_cell_renderer_text_start_editing): Connect to the populate_popup 
+	signal on the entry and keep a pointer to the entry.
+	(gtk_cell_renderer_text_editing_done): Disconnect from popuplate_popup, 
+	clear the pointer to the entry.
 
 Sun Jun  6 23:24:43 2004  Matthias Clasen  <maclas@gmx.de>
 

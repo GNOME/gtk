@@ -1412,7 +1412,8 @@ gtk_combo_box_remeasure (GtkComboBox *combo_box)
   GtkTreePath *path;
   gint padding = 0;
 
-  if (!gtk_tree_model_get_iter_first (combo_box->priv->model, &iter))
+  if (!combo_box->priv->model ||
+      !gtk_tree_model_get_iter_first (combo_box->priv->model, &iter))
     return;
 
   combo_box->priv->width = 0;
