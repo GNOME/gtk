@@ -118,56 +118,56 @@ gtk_list_item_class_init (GtkListItemClass *class)
   list_item_signals[TOGGLE_FOCUS_ROW] =
     gtk_signal_new ("toggle_focus_row",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_focus_row),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
   list_item_signals[SELECT_ALL] =
     gtk_signal_new ("select_all",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, select_all),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
   list_item_signals[UNSELECT_ALL] =
     gtk_signal_new ("unselect_all",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, unselect_all),
                     gtk_marshal_NONE__NONE,
                     GTK_TYPE_NONE, 0);
   list_item_signals[UNDO_SELECTION] =
     gtk_signal_new ("undo_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, undo_selection),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[START_SELECTION] =
     gtk_signal_new ("start_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, start_selection),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[END_SELECTION] =
     gtk_signal_new ("end_selection",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, end_selection),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[TOGGLE_ADD_MODE] =
     gtk_signal_new ("toggle_add_mode",
 		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListItemClass, toggle_add_mode),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   list_item_signals[EXTEND_SELECTION] =
     gtk_signal_new ("extend_selection",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, extend_selection),
                     gtk_marshal_NONE__ENUM_FLOAT_BOOL,
                     GTK_TYPE_NONE, 3,
@@ -175,14 +175,14 @@ gtk_list_item_class_init (GtkListItemClass *class)
   list_item_signals[SCROLL_VERTICAL] =
     gtk_signal_new ("scroll_vertical",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_vertical),
                     gtk_marshal_NONE__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);
   list_item_signals[SCROLL_HORIZONTAL] =
     gtk_signal_new ("scroll_horizontal",
                     GTK_RUN_LAST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkListItemClass, scroll_horizontal),
                     gtk_marshal_NONE__ENUM_FLOAT,
                     GTK_TYPE_NONE, 2, GTK_TYPE_ENUM, GTK_TYPE_FLOAT);

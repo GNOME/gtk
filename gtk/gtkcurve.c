@@ -68,7 +68,7 @@ static void gtk_curve_set_arg     (GtkObject      *object,
 static void gtk_curve_get_arg     (GtkObject      *object,
 				   GtkArg         *arg,
 				   guint           arg_id);
-static void gtk_curve_finalize     (GtkObject     *object);
+static void gtk_curve_finalize     (GObject       *object);
 static gint gtk_curve_graph_events (GtkWidget     *widget, 
 				    GdkEvent      *event, 
 				    GtkCurve      *c);
@@ -101,18 +101,18 @@ gtk_curve_get_type (void)
 static void
 gtk_curve_class_init (GtkCurveClass *class)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (class);
   
   parent_class = gtk_type_class (GTK_TYPE_DRAWING_AREA);
   
-  object_class = (GtkObjectClass *) class;
-  
+  gobject_class->finalize = gtk_curve_finalize;
+
   object_class->set_arg = gtk_curve_set_arg;
   object_class->get_arg = gtk_curve_get_arg;
-  object_class->finalize = gtk_curve_finalize;
   
   curve_type_changed_signal =
-    gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, object_class->type,
+    gtk_signal_new ("curve_type_changed", GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCurveClass, curve_type_changed),
 		    gtk_marshal_NONE__NONE, GTK_TYPE_NONE, 0);
   gtk_object_class_add_signals (object_class, &curve_type_changed_signal, 1);
@@ -942,7 +942,7 @@ gtk_curve_new (void)
 }
 
 static void
-gtk_curve_finalize (GtkObject *object)
+gtk_curve_finalize (GObject *object)
 {
   GtkCurve *curve;
 
@@ -957,5 +957,5 @@ gtk_curve_finalize (GtkObject *object)
   if (curve->ctlpoint)
     g_free (curve->ctlpoint);
 
-  (*GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }

@@ -145,14 +145,14 @@ gtk_tree_item_class_init (GtkTreeItemClass *class)
   tree_item_signals[EXPAND_TREE] =
     gtk_signal_new ("expand",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, expand),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   tree_item_signals[COLLAPSE_TREE] =
     gtk_signal_new ("collapse",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkTreeItemClass, collapse),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);

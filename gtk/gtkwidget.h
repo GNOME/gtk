@@ -409,7 +409,7 @@ GtkWidget* gtk_widget_new		  (GtkType		type,
 GtkWidget* gtk_widget_newv		  (GtkType		type,
 					   guint		nargs,
 					   GtkArg	       *args);
-void	   gtk_widget_ref		  (GtkWidget	       *widget);
+GtkWidget* gtk_widget_ref		  (GtkWidget	       *widget);
 void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,

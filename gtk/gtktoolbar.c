@@ -143,7 +143,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   toolbar_signals[ORIENTATION_CHANGED] =
     gtk_signal_new ("orientation_changed",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, orientation_changed),
 		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
@@ -151,7 +151,7 @@ gtk_toolbar_class_init (GtkToolbarClass *class)
   toolbar_signals[STYLE_CHANGED] =
     gtk_signal_new ("style_changed",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkToolbarClass, style_changed),
 		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1,
@@ -290,8 +290,11 @@ gtk_toolbar_destroy (GtkObject *object)
 
   toolbar = GTK_TOOLBAR (object);
 
-  gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
-  toolbar->tooltips = NULL;
+  if (toolbar->tooltips)
+    {
+      gtk_object_unref (GTK_OBJECT (toolbar->tooltips));
+      toolbar->tooltips = NULL;
+    }
 
   for (children = toolbar->children; children; children = children->next)
     {
@@ -309,12 +312,10 @@ gtk_toolbar_destroy (GtkObject *object)
 
       g_free (child);
     }
-
   g_list_free (toolbar->children);
   toolbar->children = NULL;
   
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void

@@ -45,7 +45,7 @@ struct _GtkLayoutChild {
 static void     gtk_layout_class_init         (GtkLayoutClass *class);
 static void     gtk_layout_init               (GtkLayout      *layout);
 
-static void     gtk_layout_finalize           (GtkObject      *object);
+static void     gtk_layout_finalize           (GObject        *object);
 static void     gtk_layout_realize            (GtkWidget      *widget);
 static void     gtk_layout_unrealize          (GtkWidget      *widget);
 static void     gtk_layout_map                (GtkWidget      *widget);
@@ -170,14 +170,14 @@ gtk_layout_set_adjustments (GtkLayout     *layout,
 }
 
 static void
-gtk_layout_finalize (GtkObject *object)
+gtk_layout_finalize (GObject *object)
 {
   GtkLayout *layout = GTK_LAYOUT (object);
 
   gtk_object_unref (GTK_OBJECT (layout->hadjustment));
   gtk_object_unref (GTK_OBJECT (layout->vadjustment));
 
-  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 void           
@@ -320,18 +320,20 @@ gtk_layout_get_type (void)
 
   if (!layout_type)
     {
-      static const GtkTypeInfo layout_info =
+      static const GTypeInfo layout_info =
       {
-	"GtkLayout",
-	sizeof (GtkLayout),
 	sizeof (GtkLayoutClass),
-	(GtkClassInitFunc) gtk_layout_class_init,
-	(GtkObjectInitFunc) gtk_layout_init,
-	(GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_layout_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkLayout),
+	16,             /* n_preallocs */
+	(GInstanceInitFunc) gtk_layout_init,
       };
 
-      layout_type = gtk_type_unique (GTK_TYPE_CONTAINER, &layout_info);
+      layout_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkLayout", &layout_info);
     }
 
   return layout_type;
@@ -340,6 +342,7 @@ gtk_layout_get_type (void)
 static void
 gtk_layout_class_init (GtkLayoutClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -350,7 +353,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 
-  object_class->finalize = gtk_layout_finalize;
+  gobject_class->finalize = gtk_layout_finalize;
 
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
@@ -368,7 +371,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkLayoutClass, set_scroll_adjustments),
 		    gtk_marshal_NONE__POINTER_POINTER,
 		    GTK_TYPE_NONE, 2, GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);

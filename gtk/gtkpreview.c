@@ -53,7 +53,7 @@ static void   gtk_preview_set_arg	(GtkObject        *object,
 static void   gtk_preview_get_arg	(GtkObject        *object,
 					 GtkArg           *arg,
 					 guint             arg_id);
-static void   gtk_preview_finalize      (GtkObject        *object);
+static void   gtk_preview_finalize      (GObject          *object);
 static void   gtk_preview_realize       (GtkWidget        *widget);
 static void   gtk_preview_size_allocate (GtkWidget        *widget,
 					 GtkAllocation    *allocation);
@@ -95,6 +95,7 @@ gtk_preview_get_type (void)
 static void
 gtk_preview_class_init (GtkPreviewClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
@@ -104,9 +105,10 @@ gtk_preview_class_init (GtkPreviewClass *klass)
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
   preview_class = klass;
 
+  gobject_class->finalize = gtk_preview_finalize;
+
   object_class->set_arg = gtk_preview_set_arg;
   object_class->get_arg = gtk_preview_get_arg;
-  object_class->finalize = gtk_preview_finalize;
 
   widget_class->realize = gtk_preview_realize;
   widget_class->size_allocate = gtk_preview_size_allocate;
@@ -438,11 +440,10 @@ gtk_preview_get_info (void)
 
 
 static void
-gtk_preview_finalize (GtkObject *object)
+gtk_preview_finalize (GObject *object)
 {
   GtkPreview *preview;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_PREVIEW (object));
 
   preview = GTK_PREVIEW (object);
@@ -450,7 +451,7 @@ gtk_preview_finalize (GtkObject *object)
     g_free (preview->buffer);
   preview->type = (GtkPreviewType) -1;
 
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

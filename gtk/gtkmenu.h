@@ -74,6 +74,7 @@ struct _GtkMenu
   GtkWidget *toplevel;
   GtkWidget *tearoff_window;
 
+  guint needs_destruction_ref_count : 1;
   guint torn_off : 1;
 };
 

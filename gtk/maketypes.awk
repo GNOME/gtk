@@ -124,5 +124,5 @@ function generate (generate_1)
 
 END {
   if (gen_macros)
-    printf("\n#define\tGTK_TYPE_NUM_BUILTINS\t(%u)\n", type_counter);
+    printf("\n#define\tGTK_TYPE_N_BUILTINS\t(%u)\n", type_counter);
 }

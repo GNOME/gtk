@@ -311,9 +311,9 @@ target_drag_motion	   (GtkWidget	       *widget,
     }
 
   source_widget = gtk_drag_get_source_widget (context);
-  g_print("motion, source %s\n", source_widget ?
-	    gtk_type_name (GTK_OBJECT (source_widget)->klass->type) :
-	    "unknown");
+  g_print ("motion, source %s\n", source_widget ?
+	   GTK_OBJECT_TYPE_NAME (source_widget) :
+	   "NULL");
 
   gdk_drag_status (context, context->suggested_action, time);
   return TRUE;

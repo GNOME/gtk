@@ -44,7 +44,7 @@ static void gtk_frame_set_arg       (GtkObject      *object,
 static void gtk_frame_get_arg       (GtkObject      *object,
 				     GtkArg         *arg,
 				     guint           arg_id);
-static void gtk_frame_finalize      (GtkObject      *object);
+static void gtk_frame_finalize      (GObject        *object);
 static void gtk_frame_paint         (GtkWidget      *widget,
 				     GdkRectangle   *area);
 static void gtk_frame_draw          (GtkWidget      *widget,
@@ -90,6 +90,7 @@ gtk_frame_get_type (void)
 static void
 gtk_frame_class_init (GtkFrameClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
@@ -98,6 +99,8 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
 
+  gobject_class->finalize = gtk_frame_finalize;
+
   gtk_object_add_arg_type ("GtkFrame::label", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_LABEL);
   gtk_object_add_arg_type ("GtkFrame::label_xalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_LABEL_XALIGN);
   gtk_object_add_arg_type ("GtkFrame::label_yalign", GTK_TYPE_FLOAT, GTK_ARG_READWRITE, ARG_LABEL_YALIGN);
@@ -105,7 +108,6 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   object_class->set_arg = gtk_frame_set_arg;
   object_class->get_arg = gtk_frame_get_arg;
-  object_class->finalize = gtk_frame_finalize;
 
   widget_class->draw = gtk_frame_draw;
   widget_class->expose_event = gtk_frame_expose;
@@ -314,11 +316,10 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
 
 
 static void
-gtk_frame_finalize (GtkObject *object)
+gtk_frame_finalize (GObject *object)
 {
   GtkFrame *frame;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_FRAME (object));
 
   frame = GTK_FRAME (object);
@@ -326,7 +327,7 @@ gtk_frame_finalize (GtkObject *object)
   if (frame->label)
     g_free (frame->label);
 
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

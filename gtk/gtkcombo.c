@@ -110,13 +110,18 @@ gtk_combo_class_init (GtkComboClass * klass)
 }
 
 static void
-gtk_combo_destroy (GtkObject * combo)
+gtk_combo_destroy (GtkObject *object)
 {
-  gtk_widget_destroy (GTK_COMBO (combo)->popwin);
-  gtk_widget_unref (GTK_COMBO (combo)->popwin);
+  GtkCombo *combo = GTK_COMBO (object);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (*GTK_OBJECT_CLASS (parent_class)->destroy) (combo);
+  if (combo->popwin)
+    {
+      gtk_widget_destroy (combo->popwin);
+      gtk_widget_unref (combo->popwin);
+      combo->popwin = NULL;
+    }
+
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static int
@@ -340,9 +345,8 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
       if (!show_hscroll &&
 	  alloc_width < list_requisition.width)
 	{
-	  work_height += popup->hscrollbar->requisition.height +
-	    GTK_SCROLLED_WINDOW_CLASS 
-	    (GTK_OBJECT (combo->popup)->klass)->scrollbar_spacing;
+	  work_height += (popup->hscrollbar->requisition.height +
+			  GTK_SCROLLED_WINDOW_GET_CLASS (combo->popup)->scrollbar_spacing);
 	  show_hscroll = TRUE;
 	}
       if (!show_vscroll && 
@@ -354,10 +358,8 @@ gtk_combo_get_pos (GtkCombo * combo, gint * x, gint * y, gint * height, gint * w
 	      *y -= (work_height + list_requisition.height + real_height);
 	      break;
 	    }
-	  alloc_width -= 
-	    popup->vscrollbar->requisition.width +
-	    GTK_SCROLLED_WINDOW_CLASS 
-	    (GTK_OBJECT (combo->popup)->klass)->scrollbar_spacing;
+	  alloc_width -= (popup->vscrollbar->requisition.width +
+			  GTK_SCROLLED_WINDOW_GET_CLASS (combo->popup)->scrollbar_spacing);
 	  show_vscroll = TRUE;
 	}
     } while (old_width != alloc_width || old_height != work_height);
@@ -834,7 +836,10 @@ gtk_combo_item_destroy (GtkObject * object)
 
   key = gtk_object_get_data (object, gtk_combo_string_key);
   if (key)
-    g_free (key);
+    {
+      gtk_object_remove_data (object, gtk_combo_string_key);
+      g_free (key);
+    }
 }
 
 void

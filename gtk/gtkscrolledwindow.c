@@ -63,7 +63,7 @@
  *    under A) at least correspond to the space taken up by its scrollbars.
  */
 
-#define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_CLASS (GTK_OBJECT (w)->klass)->scrollbar_spacing)
+#define SCROLLBAR_SPACING(w) (GTK_SCROLLED_WINDOW_GET_CLASS (w)->scrollbar_spacing)
 
 #define DEFAULT_SCROLLBAR_SPACING  3
 
@@ -86,7 +86,7 @@ static void gtk_scrolled_window_get_arg		   (GtkObject              *object,
 						    GtkArg                 *arg,
 						    guint                   arg_id);
 static void gtk_scrolled_window_destroy            (GtkObject              *object);
-static void gtk_scrolled_window_finalize           (GtkObject              *object);
+static void gtk_scrolled_window_finalize           (GObject                *object);
 static void gtk_scrolled_window_map                (GtkWidget              *widget);
 static void gtk_scrolled_window_unmap              (GtkWidget              *widget);
 static void gtk_scrolled_window_draw               (GtkWidget              *widget,
@@ -141,6 +141,7 @@ gtk_scrolled_window_get_type (void)
 static void
 gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -149,6 +150,25 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class = (GtkWidgetClass*) class;
   container_class = (GtkContainerClass*) class;
   parent_class = gtk_type_class (GTK_TYPE_BIN);
+
+  gobject_class->finalize = gtk_scrolled_window_finalize;
+
+  object_class->set_arg = gtk_scrolled_window_set_arg;
+  object_class->get_arg = gtk_scrolled_window_get_arg;
+  object_class->destroy = gtk_scrolled_window_destroy;
+
+  widget_class->map = gtk_scrolled_window_map;
+  widget_class->unmap = gtk_scrolled_window_unmap;
+  widget_class->draw = gtk_scrolled_window_draw;
+  widget_class->size_request = gtk_scrolled_window_size_request;
+  widget_class->size_allocate = gtk_scrolled_window_size_allocate;
+  widget_class->scroll_event = gtk_scrolled_window_scroll_event;
+
+  container_class->add = gtk_scrolled_window_add;
+  container_class->remove = gtk_scrolled_window_remove;
+  container_class->forall = gtk_scrolled_window_forall;
+
+  class->scrollbar_spacing = DEFAULT_SCROLLBAR_SPACING;
 
   gtk_object_add_arg_type ("GtkScrolledWindow::hadjustment",
 			   GTK_TYPE_ADJUSTMENT,
@@ -170,24 +190,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 			   GTK_TYPE_CORNER_TYPE,
 			   GTK_ARG_READWRITE,
 			   ARG_WINDOW_PLACEMENT);
-
-  object_class->set_arg = gtk_scrolled_window_set_arg;
-  object_class->get_arg = gtk_scrolled_window_get_arg;
-  object_class->destroy = gtk_scrolled_window_destroy;
-  object_class->finalize = gtk_scrolled_window_finalize;
-
-  widget_class->map = gtk_scrolled_window_map;
-  widget_class->unmap = gtk_scrolled_window_unmap;
-  widget_class->draw = gtk_scrolled_window_draw;
-  widget_class->size_request = gtk_scrolled_window_size_request;
-  widget_class->size_allocate = gtk_scrolled_window_size_allocate;
-  widget_class->scroll_event = gtk_scrolled_window_scroll_event;
-
-  container_class->add = gtk_scrolled_window_add;
-  container_class->remove = gtk_scrolled_window_remove;
-  container_class->forall = gtk_scrolled_window_forall;
-
-  class->scrollbar_spacing = DEFAULT_SCROLLBAR_SPACING;
 }
 
 static void
@@ -475,16 +477,14 @@ gtk_scrolled_window_destroy (GtkObject *object)
 }
 
 static void
-gtk_scrolled_window_finalize (GtkObject *object)
+gtk_scrolled_window_finalize (GObject *object)
 {
-  GtkScrolledWindow *scrolled_window;
-
-  scrolled_window = GTK_SCROLLED_WINDOW (object);
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (object);
 
   gtk_widget_unref (scrolled_window->hscrollbar);
   gtk_widget_unref (scrolled_window->vscrollbar);
 
-  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

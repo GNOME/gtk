@@ -673,10 +673,7 @@ gtk_file_selection_hide_fileop_buttons (GtkFileSelection *filesel)
   g_return_if_fail (GTK_IS_FILE_SELECTION (filesel));
     
   if (filesel->fileop_ren_file) 
-    {
-      gtk_widget_destroy (filesel->fileop_ren_file);
-      filesel->fileop_ren_file = NULL;
-    }
+    gtk_widget_destroy (filesel->fileop_ren_file);
 
   if (filesel->fileop_del_file)
     {
@@ -770,14 +767,16 @@ gtk_file_selection_destroy (GtkObject *object)
   GtkFileSelection *filesel;
   GList *list;
   HistoryCallbackArg *callback_arg;
-
-  g_return_if_fail (object != NULL);
+  
   g_return_if_fail (GTK_IS_FILE_SELECTION (object));
-
+  
   filesel = GTK_FILE_SELECTION (object);
   
   if (filesel->fileop_dialog)
-	  gtk_widget_destroy (filesel->fileop_dialog);
+    {
+      gtk_widget_destroy (filesel->fileop_dialog);
+      filesel->fileop_dialog = NULL;
+    }
   
   if (filesel->history_list)
     {
@@ -792,12 +791,14 @@ gtk_file_selection_destroy (GtkObject *object)
       g_list_free (filesel->history_list);
       filesel->history_list = NULL;
     }
-  
-  cmpl_free_state (filesel->cmpl_state);
-  filesel->cmpl_state = NULL;
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
+  if (filesel->cmpl_state)
+    {
+      cmpl_free_state (filesel->cmpl_state);
+      filesel->cmpl_state = NULL;
+    }
+  
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 /* Begin file operations callbacks */
@@ -910,10 +911,11 @@ gtk_file_selection_create_dir (GtkWidget *widget, gpointer data)
   g_return_if_fail (GTK_IS_FILE_SELECTION (fs));
 
   if (fs->fileop_dialog)
-	  return;
+    return;
   
   /* main dialog */
-  fs->fileop_dialog = dialog = gtk_dialog_new ();
+  dialog = gtk_dialog_new ();
+  fs->fileop_dialog = dialog;
   gtk_signal_connect (GTK_OBJECT (dialog), "destroy",
 		      (GtkSignalFunc) gtk_file_selection_fileop_destroy, 
 		      (gpointer) fs);
@@ -1818,6 +1820,8 @@ cmpl_free_dir_sent_list(GList* dp0)
 static void
 cmpl_free_state (CompletionState* cmpl_state)
 {
+  g_return_if_fail (cmpl_state != NULL);
+
   cmpl_free_dir_list (cmpl_state->directory_storage);
   cmpl_free_dir_sent_list (cmpl_state->directory_sent_storage);
 

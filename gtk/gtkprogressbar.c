@@ -108,7 +108,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   
   gtk_object_add_arg_type ("GtkProgressBar::adjustment",
 			   GTK_TYPE_ADJUSTMENT,
-			   GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
+			   GTK_ARG_READWRITE,
 			   ARG_ADJUSTMENT);
   gtk_object_add_arg_type ("GtkProgressBar::orientation",
 			   GTK_TYPE_PROGRESS_BAR_ORIENTATION,

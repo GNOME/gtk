@@ -31,8 +31,6 @@
 #define INDICATOR_SIZE     10
 #define INDICATOR_SPACING  2
 
-#define CHECK_BUTTON_CLASS(w)  GTK_CHECK_BUTTON_CLASS (GTK_OBJECT (w)->klass)
-
 
 static void gtk_check_button_class_init          (GtkCheckButtonClass *klass);
 static void gtk_check_button_init                (GtkCheckButton      *check_button);
@@ -229,11 +227,11 @@ gtk_check_button_size_request (GtkWidget      *widget,
   
   if (toggle_button->draw_indicator)
     {
-      requisition->width += (CHECK_BUTTON_CLASS (widget)->indicator_size +
-			     CHECK_BUTTON_CLASS (widget)->indicator_spacing * 3 + 2);
+      requisition->width += (GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size +
+			     GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_spacing * 3 + 2);
       
-      temp = (CHECK_BUTTON_CLASS (widget)->indicator_size +
-	      CHECK_BUTTON_CLASS (widget)->indicator_spacing * 2);
+      temp = (GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size +
+	      GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_spacing * 2);
       requisition->height = MAX (requisition->height, temp) + 2;
     }
 }
@@ -267,15 +265,15 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       if (GTK_BIN (button)->child && GTK_WIDGET_VISIBLE (GTK_BIN (button)->child))
 	{
 	  child_allocation.x = (GTK_CONTAINER (widget)->border_width +
-				CHECK_BUTTON_CLASS (widget)->indicator_size +
-				CHECK_BUTTON_CLASS (widget)->indicator_spacing * 3 + 1 +
+				GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size +
+				GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_spacing * 3 + 1 +
 				widget->allocation.x);
 	  child_allocation.y = GTK_CONTAINER (widget)->border_width + 1 +
 	    widget->allocation.y;
 	  child_allocation.width = MAX (1, allocation->width - 
 					(GTK_CONTAINER (widget)->border_width +
-					 CHECK_BUTTON_CLASS (widget)->indicator_size +
-					 CHECK_BUTTON_CLASS (widget)->indicator_spacing * 3 + 1)  -
+					 GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size +
+					 GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_spacing * 3 + 1)  -
 					GTK_CONTAINER (widget)->border_width - 1);
 	  child_allocation.height = MAX (1, allocation->height - (GTK_CONTAINER (widget)->border_width + 1) * 2);
 	  
@@ -337,7 +335,7 @@ gtk_check_button_draw_indicator (GtkCheckButton *check_button,
   g_return_if_fail (check_button != NULL);
   g_return_if_fail (GTK_IS_CHECK_BUTTON (check_button));
   
-  class = CHECK_BUTTON_CLASS (check_button);
+  class = GTK_CHECK_BUTTON_GET_CLASS (check_button);
   
   if (class->draw_indicator)
     (* class->draw_indicator) (check_button, area);
@@ -387,10 +385,10 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
 				new_area.width, new_area.height);
 	}
       
-      x = widget->allocation.x + CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
-      y = widget->allocation.y + (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
-      width = CHECK_BUTTON_CLASS (widget)->indicator_size;
-      height = CHECK_BUTTON_CLASS (widget)->indicator_size;
+      x = widget->allocation.x + GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
+      y = widget->allocation.y + (widget->allocation.height - GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size) / 2;
+      width = GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size;
+      height = GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size;
       
       if (GTK_TOGGLE_BUTTON (widget)->active)
 	{

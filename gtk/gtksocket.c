@@ -77,18 +77,20 @@ gtk_socket_get_type (void)
 
   if (!socket_type)
     {
-      static const GtkTypeInfo socket_info =
+      static const GTypeInfo socket_info =
       {
-	"GtkSocket",
-	sizeof (GtkSocket),
 	sizeof (GtkSocketClass),
-	(GtkClassInitFunc) gtk_socket_class_init,
-	(GtkObjectInitFunc) gtk_socket_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_socket_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkSocket),
+	16,             /* n_preallocs */
+	(GInstanceInitFunc) gtk_socket_init,
       };
 
-      socket_type = gtk_type_unique (GTK_TYPE_CONTAINER, &socket_info);
+      socket_type = g_type_register_static (GTK_TYPE_CONTAINER, "GtkSocket", &socket_info);
     }
 
   return socket_type;

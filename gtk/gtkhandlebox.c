@@ -181,7 +181,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   handle_box_signals[SIGNAL_CHILD_ATTACHED] =
     gtk_signal_new ("child_attached",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_attached),
 		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -189,7 +189,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   handle_box_signals[SIGNAL_CHILD_DETACHED] =
     gtk_signal_new ("child_detached",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkHandleBoxClass, child_detached),
 		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,

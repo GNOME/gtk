@@ -34,8 +34,6 @@ enum {
   ARG_GROUP
 };
 
-#define CHECK_BUTTON_CLASS(w)  GTK_CHECK_BUTTON_CLASS (GTK_OBJECT (w)->klass)
-
 
 static void gtk_radio_button_class_init     (GtkRadioButtonClass  *klass);
 static void gtk_radio_button_init           (GtkRadioButton       *radio_button);
@@ -409,10 +407,10 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 				new_area.width, new_area.height);
 	}
       
-      x = widget->allocation.x + CHECK_BUTTON_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
-      y = widget->allocation.y + (widget->allocation.height - CHECK_BUTTON_CLASS (widget)->indicator_size) / 2;
-      width = CHECK_BUTTON_CLASS (widget)->indicator_size;
-      height = CHECK_BUTTON_CLASS (widget)->indicator_size;
+      x = widget->allocation.x + GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_spacing + GTK_CONTAINER (widget)->border_width;
+      y = widget->allocation.y + (widget->allocation.height - GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size) / 2;
+      width = GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size;
+      height = GTK_CHECK_BUTTON_GET_CLASS (widget)->indicator_size;
       
       if (GTK_TOGGLE_BUTTON (widget)->active)
 	shadow_type = GTK_SHADOW_IN;

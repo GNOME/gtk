@@ -81,7 +81,6 @@ static void gtk_input_dialog_class_init (GtkInputDialogClass *klass);
 static void gtk_input_dialog_init (GtkInputDialog *inputd);
 static GdkDeviceInfo *gtk_input_dialog_get_device_info(guint32 deviceid);
 static void gtk_input_dialog_set_device(GtkWidget *widget, gpointer data);
-static void gtk_input_dialog_finalize (GtkObject *object);
 static void gtk_input_dialog_set_mapping_mode(GtkWidget *w,
 					      gpointer data);
 static void gtk_input_dialog_set_axis(GtkWidget *widget, gpointer data);
@@ -155,7 +154,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
   input_dialog_signals[ENABLE_DEVICE] =
     gtk_signal_new ("enable_device",
 		    GTK_RUN_LAST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, enable_device),
 		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
@@ -163,7 +162,7 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
   input_dialog_signals[DISABLE_DEVICE] =
     gtk_signal_new ("disable_device",
 		    GTK_RUN_LAST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkInputDialogClass, disable_device),
 		    gtk_marshal_NONE__INT,
 		    GTK_TYPE_NONE, 1, GTK_TYPE_INT);
@@ -172,7 +171,6 @@ gtk_input_dialog_class_init (GtkInputDialogClass *klass)
 				LAST_SIGNAL);
 
 
-  object_class->finalize = gtk_input_dialog_finalize;
   klass->enable_device = NULL;
   klass->disable_device = NULL;
 }
@@ -390,16 +388,6 @@ gtk_input_dialog_set_device(GtkWidget *widget, gpointer data)
 
   gtk_option_menu_set_history(GTK_OPTION_MENU(inputd->mode_optionmenu),
 			      info->mode);
-}
-
-static void
-gtk_input_dialog_finalize (GtkObject *object)
-{
-  /*  GtkInputDialog *inputd = GTK_INPUT_DIALOG (object); */
-
-  /* Clean up ? */
-
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void

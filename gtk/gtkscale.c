@@ -29,8 +29,6 @@
 #include "gtkscale.h"
 
 
-#define SCALE_CLASS(w)  GTK_SCALE_CLASS (GTK_OBJECT (w)->klass)
-
 enum {
   ARG_0,
   ARG_DIGITS,
@@ -330,8 +328,8 @@ gtk_scale_draw_value (GtkScale *scale)
   g_return_if_fail (scale != NULL);
   g_return_if_fail (GTK_IS_SCALE (scale));
 
-  if (SCALE_CLASS (scale)->draw_value)
-    (* SCALE_CLASS (scale)->draw_value) (scale);
+  if (GTK_SCALE_GET_CLASS (scale)->draw_value)
+    GTK_SCALE_GET_CLASS (scale)->draw_value (scale);
 }
 
 

@@ -35,7 +35,7 @@
 #include "gtkwindow.h"
 
 
-#define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
+#define MENU_ITEM_CLASS(w)   GTK_MENU_ITEM_GET_CLASS (w)
 #define	MENU_NEEDS_RESIZE(m) GTK_MENU_SHELL (m)->menu_flag
 
 typedef struct _GtkMenuAttachData	GtkMenuAttachData;
@@ -192,20 +192,20 @@ gtk_menu_init (GtkMenu *menu)
   menu->position_func = NULL;
   menu->position_func_data = NULL;
 
-  menu->toplevel = gtk_window_new (GTK_WINDOW_POPUP);
-  gtk_signal_connect (GTK_OBJECT (menu->toplevel),
-		      "event",
-		      GTK_SIGNAL_FUNC (gtk_menu_window_event), 
-		      GTK_OBJECT (menu));
+  menu->toplevel = gtk_widget_new (GTK_TYPE_WINDOW,
+				   "type", GTK_WINDOW_POPUP,
+				   "signal::event", gtk_menu_window_event, menu,
+				   "signal::destroy", gtk_widget_destroyed, &menu->toplevel,
+				   "child", menu,
+				   NULL);
   gtk_window_set_policy (GTK_WINDOW (menu->toplevel),
 			 FALSE, FALSE, TRUE);
-
-  gtk_container_add (GTK_CONTAINER (menu->toplevel), GTK_WIDGET (menu));
 
   /* Refloat the menu, so that reference counting for the menu isn't
    * affected by it being a child of the toplevel
    */
   GTK_WIDGET_SET_FLAGS (menu, GTK_FLOATING);
+  menu->needs_destruction_ref_count = TRUE;
 
   menu->tearoff_window = NULL;
   menu->torn_off = FALSE;
@@ -214,17 +214,14 @@ gtk_menu_init (GtkMenu *menu)
 }
 
 static void
-gtk_menu_destroy (GtkObject	    *object)
+gtk_menu_destroy (GtkObject *object)
 {
   GtkMenu *menu;
   GtkMenuAttachData *data;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_MENU (object));
 
   menu = GTK_MENU (object);
-  
-  gtk_object_ref (object);
   
   data = gtk_object_get_data (object, attach_data_key);
   if (data)
@@ -239,16 +236,18 @@ gtk_menu_destroy (GtkObject	    *object)
     }
 
   /* Add back the reference count for being a child */
-  gtk_object_ref (object);
+  if (menu->needs_destruction_ref_count)
+    {
+      menu->needs_destruction_ref_count = FALSE;
+      gtk_object_ref (object);
+    }
   
-  gtk_widget_destroy (menu->toplevel);
+  if (menu->toplevel)
+    gtk_widget_destroy (menu->toplevel);
   if (menu->tearoff_window)
     gtk_widget_destroy (menu->tearoff_window);
 
-  if (GTK_OBJECT_CLASS (parent_class)->destroy)
-    (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-  
-  gtk_object_unref (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 
@@ -293,7 +292,7 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
 }
 
 GtkWidget*
-gtk_menu_get_attach_widget (GtkMenu		*menu)
+gtk_menu_get_attach_widget (GtkMenu *menu)
 {
   GtkMenuAttachData *data;
   
@@ -307,7 +306,7 @@ gtk_menu_get_attach_widget (GtkMenu		*menu)
 }
 
 void
-gtk_menu_detach (GtkMenu	     *menu)
+gtk_menu_detach (GtkMenu *menu)
 {
   GtkMenuAttachData *data;
   
@@ -708,7 +707,10 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      GtkWidget *attach_widget;
 	      gchar *title;
 	      
-	      menu->tearoff_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	      menu->tearoff_window = gtk_widget_new (GTK_TYPE_WINDOW,
+						     "type", GTK_WINDOW_TOPLEVEL,
+						     "signal::destroy", gtk_widget_destroyed, &menu->tearoff_window,
+						     NULL);
 	      gtk_widget_set_app_paintable (menu->tearoff_window, TRUE);
 	      gtk_signal_connect (GTK_OBJECT (menu->tearoff_window),  
 				  "event",

@@ -108,20 +108,20 @@ gtk_button_get_type (void)
 
   if (!button_type)
     {
-      static const GtkTypeInfo button_info =
+      static const GTypeInfo button_info =
       {
-	"GtkButton",
-	sizeof (GtkButton),
 	sizeof (GtkButtonClass),
-	(GtkClassInitFunc) gtk_button_class_init,
-	(GtkObjectInitFunc) gtk_button_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,		/* base_init */
+	NULL,		/* base_finalize */
+	(GClassInitFunc) gtk_button_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkButton),
+	16,		/* n_preallocs */
+	(GInstanceInitFunc) gtk_button_init,
       };
 
-      button_type = gtk_type_unique (GTK_TYPE_BIN, &button_info);
-      gtk_type_set_chunk_alloc (button_type, 16);
+      button_type = g_type_register_static (GTK_TYPE_BIN, "GtkButton", &button_info);
     }
 
   return button_type;
@@ -146,35 +146,35 @@ gtk_button_class_init (GtkButtonClass *klass)
   button_signals[PRESSED] =
     gtk_signal_new ("pressed",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, pressed),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[RELEASED] =
     gtk_signal_new ("released",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, released),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[CLICKED] =
     gtk_signal_new ("clicked",
                     GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, clicked),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[ENTER] =
     gtk_signal_new ("enter",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, enter),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   button_signals[LEAVE] =
     gtk_signal_new ("leave",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkButtonClass, leave),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);

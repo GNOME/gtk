@@ -39,7 +39,7 @@
 #include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
 
 
-#define WIDGET_CLASS(w)	 GTK_WIDGET_CLASS (GTK_OBJECT (w)->klass)
+#define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
 
 
@@ -141,9 +141,9 @@ static void gtk_widget_set_arg			 (GtkObject         *object,
 static void gtk_widget_get_arg			 (GtkObject         *object,
 						  GtkArg	    *arg,
 						  guint		     arg_id);
-static void gtk_widget_shutdown			 (GtkObject	    *object);
+static void gtk_widget_shutdown			 (GObject	    *object);
 static void gtk_widget_real_destroy		 (GtkObject	    *object);
-static void gtk_widget_finalize			 (GtkObject	    *object);
+static void gtk_widget_finalize			 (GObject	    *object);
 static void gtk_widget_real_show		 (GtkWidget	    *widget);
 static void gtk_widget_real_hide		 (GtkWidget	    *widget);
 static void gtk_widget_real_map			 (GtkWidget	    *widget);
@@ -183,7 +183,7 @@ static gboolean gtk_widget_is_offscreen           (GtkWidget     *widget);
 static GtkWidgetAuxInfo* gtk_widget_aux_info_new     (void);
 static void		 gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info);
 
-static GtkObjectClass *parent_class = NULL;
+static gpointer parent_class = NULL;
 static guint widget_signals[LAST_SIGNAL] = { 0 };
 
 static GMemChunk *aux_info_mem_chunk = NULL;
@@ -241,7 +241,7 @@ gtk_widget_get_type (void)
 	(GtkClassInitFunc) NULL,
       };
       
-      widget_type = gtk_type_unique (gtk_object_get_type (), &widget_info);
+      widget_type = gtk_type_unique (GTK_TYPE_OBJECT, &widget_info);
     }
   
   return widget_type;
@@ -265,470 +265,17 @@ gtk_widget_debug_msg (GtkWidget          *widget,
 static void
 gtk_widget_class_init (GtkWidgetClass *klass)
 {
-  GtkObjectClass *object_class;
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GtkObjectClass *object_class = GTK_OBJECT_CLASS (klass);
   
-  object_class = (GtkObjectClass*) klass;
-  
-  parent_class = gtk_type_class (gtk_object_get_type ());
-  
-  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
-  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
-  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_X);
-  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_Y);
-  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_WIDTH);
-  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_HEIGHT);
-  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBLE);
-  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SENSITIVE);
-  gtk_object_add_arg_type ("GtkWidget::app_paintable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_APP_PAINTABLE);
-  gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_FOCUS);
-  gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
-  gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::receives_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_RECEIVES_DEFAULT);
-  gtk_object_add_arg_type ("GtkWidget::composite_child", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_COMPOSITE_CHILD);
-  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
-  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
-  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EXTENSION_EVENTS);
-  
-  widget_signals[SHOW] =
-    gtk_signal_new ("show",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[HIDE] =
-    gtk_signal_new ("hide",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hide),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[MAP] =
-    gtk_signal_new ("map",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, map),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[UNMAP] =
-    gtk_signal_new ("unmap",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unmap),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[REALIZE] =
-    gtk_signal_new ("realize",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, realize),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[UNREALIZE] =
-    gtk_signal_new ("unrealize",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[DRAW] =
-    gtk_signal_new ("draw",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
-  widget_signals[DRAW_FOCUS] =
-    gtk_signal_new ("draw_focus",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw_focus),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[DRAW_DEFAULT] =
-    gtk_signal_new ("draw_default",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw_default),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[SIZE_REQUEST] =
-    gtk_signal_new ("size_request",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_request),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
-  widget_signals[SIZE_ALLOCATE] =
-    gtk_signal_new ("size_allocate",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_allocate),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_POINTER);
-  widget_signals[STATE_CHANGED] =
-    gtk_signal_new ("state_changed",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, state_changed),
-		    gtk_marshal_NONE__UINT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STATE_TYPE);
-  widget_signals[PARENT_SET] =
-    gtk_signal_new ("parent_set",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
-		    gtk_marshal_NONE__OBJECT,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_OBJECT);
-  widget_signals[STYLE_SET] =
-    gtk_signal_new ("style_set",
-		    GTK_RUN_FIRST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STYLE);
-  widget_signals[ADD_ACCELERATOR] =
-    gtk_accel_group_create_add (object_class->type, GTK_RUN_LAST,
-				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
-  widget_signals[REMOVE_ACCELERATOR] =
-    gtk_accel_group_create_remove (object_class->type, GTK_RUN_LAST,
-				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
-  widget_signals[GRAB_FOCUS] =
-    gtk_signal_new ("grab_focus",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
-		    gtk_marshal_NONE__NONE,
-		    GTK_TYPE_NONE, 0);
-  widget_signals[EVENT] =
-    gtk_signal_new ("event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[BUTTON_PRESS_EVENT] =
-    gtk_signal_new ("button_press_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, button_press_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[BUTTON_RELEASE_EVENT] =
-    gtk_signal_new ("button_release_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, button_release_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[SCROLL_EVENT] =
-    gtk_signal_new ("scroll_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, scroll_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[MOTION_NOTIFY_EVENT] =
-    gtk_signal_new ("motion_notify_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, motion_notify_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DELETE_EVENT] =
-    gtk_signal_new ("delete_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, delete_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DESTROY_EVENT] =
-    gtk_signal_new ("destroy_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, destroy_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[EXPOSE_EVENT] =
-    gtk_signal_new ("expose_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, expose_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[KEY_PRESS_EVENT] =
-    gtk_signal_new ("key_press_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, key_press_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[KEY_RELEASE_EVENT] =
-    gtk_signal_new ("key_release_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, key_release_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[ENTER_NOTIFY_EVENT] =
-    gtk_signal_new ("enter_notify_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, enter_notify_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[LEAVE_NOTIFY_EVENT] =
-    gtk_signal_new ("leave_notify_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, leave_notify_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[CONFIGURE_EVENT] =
-    gtk_signal_new ("configure_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, configure_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[FOCUS_IN_EVENT] =
-    gtk_signal_new ("focus_in_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, focus_in_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[FOCUS_OUT_EVENT] =
-    gtk_signal_new ("focus_out_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, focus_out_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[MAP_EVENT] =
-    gtk_signal_new ("map_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, map_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[UNMAP_EVENT] =
-    gtk_signal_new ("unmap_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unmap_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[PROPERTY_NOTIFY_EVENT] =
-    gtk_signal_new ("property_notify_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, property_notify_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[SELECTION_CLEAR_EVENT] =
-    gtk_signal_new ("selection_clear_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_clear_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[SELECTION_REQUEST_EVENT] =
-    gtk_signal_new ("selection_request_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_request_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[SELECTION_NOTIFY_EVENT] =
-    gtk_signal_new ("selection_notify_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_notify_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[SELECTION_RECEIVED] =
-    gtk_signal_new ("selection_received",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_received),
-		    gtk_marshal_NONE__POINTER_UINT,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_SELECTION_DATA,
-		    GTK_TYPE_UINT);
-  widget_signals[SELECTION_GET] =
-    gtk_signal_new ("selection_get",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_get),
-		    gtk_marshal_NONE__POINTER_UINT_UINT,
-		    GTK_TYPE_NONE, 3,
-		    GTK_TYPE_SELECTION_DATA,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_UINT);
-  widget_signals[PROXIMITY_IN_EVENT] =
-    gtk_signal_new ("proximity_in_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, proximity_in_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[PROXIMITY_OUT_EVENT] =
-    gtk_signal_new ("proximity_out_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, proximity_out_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DRAG_LEAVE] =
-    gtk_signal_new ("drag_leave",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_leave),
-		    gtk_marshal_NONE__POINTER_UINT,
-		    GTK_TYPE_NONE, 2,
-		    GTK_TYPE_GDK_DRAG_CONTEXT,
-		    GTK_TYPE_UINT);
-  widget_signals[DRAG_BEGIN] =
-    gtk_signal_new ("drag_begin",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_GDK_DRAG_CONTEXT);
-  widget_signals[DRAG_END] =
-    gtk_signal_new ("drag_end",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_GDK_DRAG_CONTEXT);
-  widget_signals[DRAG_DATA_DELETE] =
-    gtk_signal_new ("drag_data_delete",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_delete),
-		    gtk_marshal_NONE__POINTER,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_GDK_DRAG_CONTEXT);
-  widget_signals[DRAG_MOTION] =
-    gtk_signal_new ("drag_motion",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_motion),
-		    gtk_marshal_BOOL__POINTER_INT_INT_UINT,
-		    GTK_TYPE_BOOL, 4,
-		    GTK_TYPE_GDK_DRAG_CONTEXT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_UINT);
-  widget_signals[DRAG_DROP] =
-    gtk_signal_new ("drag_drop",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_drop),
-		    gtk_marshal_BOOL__POINTER_INT_INT_UINT,
-		    GTK_TYPE_BOOL, 4,
-		    GTK_TYPE_GDK_DRAG_CONTEXT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_UINT);
-  widget_signals[DRAG_DATA_GET] =
-    gtk_signal_new ("drag_data_get",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_get),
-		    gtk_marshal_NONE__POINTER_POINTER_UINT_UINT,
-		    GTK_TYPE_NONE, 4,
-		    GTK_TYPE_GDK_DRAG_CONTEXT,
-		    GTK_TYPE_SELECTION_DATA,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_UINT);
-  widget_signals[DRAG_DATA_RECEIVED] =
-    gtk_signal_new ("drag_data_received",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
-		    gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT,
-		    GTK_TYPE_NONE, 6,
-		    GTK_TYPE_GDK_DRAG_CONTEXT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_INT,
-		    GTK_TYPE_SELECTION_DATA,
-		    GTK_TYPE_UINT,
-		    GTK_TYPE_UINT);
-  widget_signals[VISIBILITY_NOTIFY_EVENT] =
-    gtk_signal_new ("visibility_notify_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, visibility_notify_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[CLIENT_EVENT] =
-    gtk_signal_new ("client_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, client_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[NO_EXPOSE_EVENT] =
-    gtk_signal_new ("no_expose_event",
-		    GTK_RUN_LAST,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
-		    gtk_marshal_BOOL__POINTER,
-		    GTK_TYPE_BOOL, 1,
-		    GTK_TYPE_GDK_EVENT);
-  widget_signals[DEBUG_MSG] =
-    gtk_signal_new ("debug_msg",
-		    GTK_RUN_LAST | GTK_RUN_ACTION,
-		    object_class->type,
-		    GTK_SIGNAL_OFFSET (GtkWidgetClass, debug_msg),
-		    gtk_marshal_NONE__STRING,
-		    GTK_TYPE_NONE, 1,
-		    GTK_TYPE_STRING);
+  parent_class = gtk_type_class (GTK_TYPE_OBJECT);
 
-  gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
+  gobject_class->shutdown = gtk_widget_shutdown;
+  gobject_class->finalize = gtk_widget_finalize;
 
   object_class->set_arg = gtk_widget_set_arg;
   object_class->get_arg = gtk_widget_get_arg;
-  object_class->shutdown = gtk_widget_shutdown;
   object_class->destroy = gtk_widget_real_destroy;
-  object_class->finalize = gtk_widget_finalize;
   
   klass->activate_signal = 0;
   klass->set_scroll_adjustments_signal = 0;
@@ -784,6 +331,459 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->no_expose_event = NULL;
 
   klass->debug_msg = gtk_widget_debug_msg;
+  
+  gtk_object_add_arg_type ("GtkWidget::name", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_NAME);
+  gtk_object_add_arg_type ("GtkWidget::parent", GTK_TYPE_CONTAINER, GTK_ARG_READWRITE, ARG_PARENT);
+  gtk_object_add_arg_type ("GtkWidget::x", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_X);
+  gtk_object_add_arg_type ("GtkWidget::y", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_Y);
+  gtk_object_add_arg_type ("GtkWidget::width", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_WIDTH);
+  gtk_object_add_arg_type ("GtkWidget::height", GTK_TYPE_INT, GTK_ARG_READWRITE, ARG_HEIGHT);
+  gtk_object_add_arg_type ("GtkWidget::visible", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBLE);
+  gtk_object_add_arg_type ("GtkWidget::sensitive", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_SENSITIVE);
+  gtk_object_add_arg_type ("GtkWidget::app_paintable", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_APP_PAINTABLE);
+  gtk_object_add_arg_type ("GtkWidget::can_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_FOCUS);
+  gtk_object_add_arg_type ("GtkWidget::has_focus", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_FOCUS);
+  gtk_object_add_arg_type ("GtkWidget::can_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_CAN_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::has_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HAS_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::receives_default", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_RECEIVES_DEFAULT);
+  gtk_object_add_arg_type ("GtkWidget::composite_child", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_COMPOSITE_CHILD);
+  gtk_object_add_arg_type ("GtkWidget::style", GTK_TYPE_STYLE, GTK_ARG_READWRITE, ARG_STYLE);
+  gtk_object_add_arg_type ("GtkWidget::events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EVENTS);
+  gtk_object_add_arg_type ("GtkWidget::extension_events", GTK_TYPE_GDK_EVENT_MASK, GTK_ARG_READWRITE, ARG_EXTENSION_EVENTS);
+  
+  widget_signals[SHOW] =
+    gtk_signal_new ("show",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, show),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[HIDE] =
+    gtk_signal_new ("hide",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, hide),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[MAP] =
+    gtk_signal_new ("map",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, map),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[UNMAP] =
+    gtk_signal_new ("unmap",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unmap),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[REALIZE] =
+    gtk_signal_new ("realize",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, realize),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[UNREALIZE] =
+    gtk_signal_new ("unrealize",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unrealize),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[DRAW] =
+    gtk_signal_new ("draw",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_POINTER);
+  widget_signals[DRAW_FOCUS] =
+    gtk_signal_new ("draw_focus",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw_focus),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[DRAW_DEFAULT] =
+    gtk_signal_new ("draw_default",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, draw_default),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[SIZE_REQUEST] =
+    gtk_signal_new ("size_request",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_request),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_POINTER);
+  widget_signals[SIZE_ALLOCATE] =
+    gtk_signal_new ("size_allocate",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, size_allocate),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_POINTER);
+  widget_signals[STATE_CHANGED] =
+    gtk_signal_new ("state_changed",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, state_changed),
+		    gtk_marshal_NONE__UINT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_STATE_TYPE);
+  widget_signals[PARENT_SET] =
+    gtk_signal_new ("parent_set",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, parent_set),
+		    gtk_marshal_NONE__OBJECT,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_OBJECT);
+  widget_signals[STYLE_SET] =
+    gtk_signal_new ("style_set",
+		    GTK_RUN_FIRST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, style_set),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_STYLE);
+  widget_signals[ADD_ACCELERATOR] =
+    gtk_accel_group_create_add (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
+				GTK_SIGNAL_OFFSET (GtkWidgetClass, add_accelerator));
+  widget_signals[REMOVE_ACCELERATOR] =
+    gtk_accel_group_create_remove (GTK_CLASS_TYPE (object_class), GTK_RUN_LAST,
+				   GTK_SIGNAL_OFFSET (GtkWidgetClass, remove_accelerator));
+  widget_signals[GRAB_FOCUS] =
+    gtk_signal_new ("grab_focus",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, grab_focus),
+		    gtk_marshal_NONE__NONE,
+		    GTK_TYPE_NONE, 0);
+  widget_signals[EVENT] =
+    gtk_signal_new ("event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[BUTTON_PRESS_EVENT] =
+    gtk_signal_new ("button_press_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, button_press_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[BUTTON_RELEASE_EVENT] =
+    gtk_signal_new ("button_release_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, button_release_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[SCROLL_EVENT] =
+    gtk_signal_new ("scroll_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, scroll_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[MOTION_NOTIFY_EVENT] =
+    gtk_signal_new ("motion_notify_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, motion_notify_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[DELETE_EVENT] =
+    gtk_signal_new ("delete_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, delete_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[DESTROY_EVENT] =
+    gtk_signal_new ("destroy_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, destroy_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[EXPOSE_EVENT] =
+    gtk_signal_new ("expose_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, expose_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[KEY_PRESS_EVENT] =
+    gtk_signal_new ("key_press_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, key_press_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[KEY_RELEASE_EVENT] =
+    gtk_signal_new ("key_release_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, key_release_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[ENTER_NOTIFY_EVENT] =
+    gtk_signal_new ("enter_notify_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, enter_notify_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[LEAVE_NOTIFY_EVENT] =
+    gtk_signal_new ("leave_notify_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, leave_notify_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[CONFIGURE_EVENT] =
+    gtk_signal_new ("configure_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, configure_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[FOCUS_IN_EVENT] =
+    gtk_signal_new ("focus_in_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, focus_in_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[FOCUS_OUT_EVENT] =
+    gtk_signal_new ("focus_out_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, focus_out_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[MAP_EVENT] =
+    gtk_signal_new ("map_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, map_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[UNMAP_EVENT] =
+    gtk_signal_new ("unmap_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, unmap_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[PROPERTY_NOTIFY_EVENT] =
+    gtk_signal_new ("property_notify_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, property_notify_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[SELECTION_CLEAR_EVENT] =
+    gtk_signal_new ("selection_clear_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_clear_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[SELECTION_REQUEST_EVENT] =
+    gtk_signal_new ("selection_request_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_request_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[SELECTION_NOTIFY_EVENT] =
+    gtk_signal_new ("selection_notify_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_notify_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[SELECTION_RECEIVED] =
+    gtk_signal_new ("selection_received",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_received),
+		    gtk_marshal_NONE__POINTER_UINT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT);
+  widget_signals[SELECTION_GET] =
+    gtk_signal_new ("selection_get",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, selection_get),
+		    gtk_marshal_NONE__POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 3,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_UINT);
+  widget_signals[PROXIMITY_IN_EVENT] =
+    gtk_signal_new ("proximity_in_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, proximity_in_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[PROXIMITY_OUT_EVENT] =
+    gtk_signal_new ("proximity_out_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, proximity_out_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[DRAG_LEAVE] =
+    gtk_signal_new ("drag_leave",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_leave),
+		    gtk_marshal_NONE__POINTER_UINT,
+		    GTK_TYPE_NONE, 2,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_BEGIN] =
+    gtk_signal_new ("drag_begin",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_begin),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_GDK_DRAG_CONTEXT);
+  widget_signals[DRAG_END] =
+    gtk_signal_new ("drag_end",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_end),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_GDK_DRAG_CONTEXT);
+  widget_signals[DRAG_DATA_DELETE] =
+    gtk_signal_new ("drag_data_delete",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_delete),
+		    gtk_marshal_NONE__POINTER,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_GDK_DRAG_CONTEXT);
+  widget_signals[DRAG_MOTION] =
+    gtk_signal_new ("drag_motion",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_motion),
+		    gtk_marshal_BOOL__POINTER_INT_INT_UINT,
+		    GTK_TYPE_BOOL, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_DROP] =
+    gtk_signal_new ("drag_drop",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_drop),
+		    gtk_marshal_BOOL__POINTER_INT_INT_UINT,
+		    GTK_TYPE_BOOL, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_DATA_GET] =
+    gtk_signal_new ("drag_data_get",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_get),
+		    gtk_marshal_NONE__POINTER_POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 4,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_UINT);
+  widget_signals[DRAG_DATA_RECEIVED] =
+    gtk_signal_new ("drag_data_received",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, drag_data_received),
+		    gtk_marshal_NONE__POINTER_INT_INT_POINTER_UINT_UINT,
+		    GTK_TYPE_NONE, 6,
+		    GTK_TYPE_GDK_DRAG_CONTEXT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_INT,
+		    GTK_TYPE_SELECTION_DATA,
+		    GTK_TYPE_UINT,
+		    GTK_TYPE_UINT);
+  widget_signals[VISIBILITY_NOTIFY_EVENT] =
+    gtk_signal_new ("visibility_notify_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, visibility_notify_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[CLIENT_EVENT] =
+    gtk_signal_new ("client_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, client_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[NO_EXPOSE_EVENT] =
+    gtk_signal_new ("no_expose_event",
+		    GTK_RUN_LAST,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, no_expose_event),
+		    gtk_marshal_BOOL__POINTER,
+		    GTK_TYPE_BOOL, 1,
+		    GTK_TYPE_GDK_EVENT);
+  widget_signals[DEBUG_MSG] =
+    gtk_signal_new ("debug_msg",
+		    GTK_RUN_LAST | GTK_RUN_ACTION,
+		    GTK_CLASS_TYPE (object_class),
+		    GTK_SIGNAL_OFFSET (GtkWidgetClass, debug_msg),
+		    gtk_marshal_NONE__STRING,
+		    GTK_TYPE_NONE, 1,
+		    GTK_TYPE_STRING);
+
+  gtk_object_class_add_signals (object_class, widget_signals, LAST_SIGNAL);
 }
 
 static void
@@ -1553,7 +1553,7 @@ gtk_widget_show_all (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  class = GTK_WIDGET_CLASS (GTK_OBJECT (widget)->klass);
+  class = GTK_WIDGET_GET_CLASS (widget);
 
   if (class->show_all)
     class->show_all (widget);
@@ -1567,7 +1567,7 @@ gtk_widget_hide_all (GtkWidget *widget)
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  class = GTK_WIDGET_CLASS (GTK_OBJECT (widget)->klass);
+  class = GTK_WIDGET_GET_CLASS (widget);
 
   if (class->hide_all)
     class->hide_all (widget);
@@ -2691,7 +2691,7 @@ gtk_widget_grab_default (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_WIDGET_CAN_DEFAULT (widget));
   
-  window_type = gtk_window_get_type ();
+  window_type = GTK_TYPE_WINDOW;
   window = widget->parent;
   
   while (window && !gtk_type_is_a (GTK_WIDGET_TYPE (window), window_type))
@@ -3888,13 +3888,9 @@ gtk_widget_get_default_visual (void)
 }
 
 static void
-gtk_widget_shutdown (GtkObject *object)
+gtk_widget_shutdown (GObject *object)
 {
-  GtkWidget *widget;
-  
-  /* gtk_object_destroy() will already hold a refcount on object
-   */
-  widget = GTK_WIDGET (object);
+  GtkWidget *widget = GTK_WIDGET (object);
 
   if (widget->parent)
     gtk_container_remove (GTK_CONTAINER (widget->parent), widget);
@@ -3903,7 +3899,7 @@ gtk_widget_shutdown (GtkObject *object)
   if (GTK_WIDGET_REALIZED (widget))
     gtk_widget_unrealize (widget);
   
-  parent_class->shutdown (object);
+  G_OBJECT_CLASS (parent_class)->shutdown (object);
 }
 
 static void
@@ -3927,21 +3923,34 @@ gtk_widget_real_destroy (GtkObject *object)
     }
 
   gtk_style_unref (widget->style);
-  widget->style = NULL;
+  widget->style = gtk_widget_peek_style ();
+  gtk_style_ref (widget->style);
 
-  parent_class->destroy (object);
+  GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
-gtk_widget_finalize (GtkObject *object)
+gtk_widget_finalize (GObject *object)
 {
-  GtkWidget *widget;
+  GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetAuxInfo *aux_info;
   gint *events;
   GdkExtensionMode *mode;
+  GtkStyle *saved_style;
   
-  widget = GTK_WIDGET (object);
-  
+  gtk_grab_remove (widget);
+  gtk_selection_remove_all (widget);
+
+  saved_style = gtk_object_get_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+  if (saved_style)
+    {
+      gtk_style_unref (saved_style);
+      gtk_object_remove_data_by_id (GTK_OBJECT (widget), saved_default_style_key_id);
+    }
+
+  gtk_style_unref (widget->style);
+  widget->style = NULL;
+
   if (widget->name)
     g_free (widget->name);
   
@@ -3957,7 +3966,7 @@ gtk_widget_finalize (GtkObject *object)
   if (mode)
     g_free (mode);
 
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 /*****************************************
@@ -4194,7 +4203,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
     {
       GtkWidget *window;
 
-      window = gtk_widget_get_ancestor (widget, gtk_window_get_type ());
+      window = gtk_widget_get_ancestor (widget, GTK_TYPE_WINDOW);
       if (window)
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
@@ -4375,22 +4384,20 @@ gtk_widget_reset_shapes (GtkWidget *widget)
     gtk_reset_shapes_recurse (widget, widget->window);
 }
 
-void
+GtkWidget*
 gtk_widget_ref (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  gtk_object_ref ((GtkObject*) widget);
+  return (GtkWidget*) g_object_ref ((GObject*) widget);
 }
 
 void
 gtk_widget_unref (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_object_unref ((GtkObject*) widget);
+  g_object_unref ((GObject*) widget);
 }
 
 void

@@ -21,9 +21,16 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-
 #ifndef __GTK_HSV_H__
 #define __GTK_HSV_H__
+
+/*
+ * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
+ * file for a list of people on the GTK+ Team.  See the ChangeLog
+ * files for a list of changes.  These files are distributed with
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ */
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,53 +38,69 @@ extern "C" {
 
 #include <gtk/gtkwidget.h>
 
-
 
 #define GTK_TYPE_HSV            (gtk_hsv_get_type ())
 #define GTK_HSV(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_HSV, GtkHSV))
 #define GTK_HSV_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_HSV, GtkHSV))
 #define GTK_IS_HSV(obj)         (GTK_CHECK_TYPE ((obj), GTK_TYPE_HSV))
 #define GTK_IS_HSV_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_HSV))
+#define GTK_HSV_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_HSV, GtkHSVClass))
 
 
-typedef struct _GtkHSV GtkHSV;
+typedef struct _GtkHSV      GtkHSV;
 typedef struct _GtkHSVClass GtkHSVClass;
 
-struct _GtkHSV {
-	GtkWidget widget;
-
-	/* Private data */
-	gpointer priv;
+struct _GtkHSV
+{
+  GtkWidget parent_instance;
+  
+  /* Private data */
+  gpointer priv;
 };
 
-struct _GtkHSVClass {
-	GtkWidgetClass parent_class;
-
-	/* Notification signals */
-
-	void (* changed) (GtkHSV *hsv);
+struct _GtkHSVClass
+{
+  GtkWidgetClass parent_class;
+  
+  /* Notification signals */
+  
+  void (*changed) (GtkHSV *hsv);
 };
 
 
-GtkType gtk_hsv_get_type (void);
+GtkType    gtk_hsv_get_type     (void);
+GtkWidget* gtk_hsv_new          (void);
+void       gtk_hsv_set_color    (GtkHSV    *hsv,
+				 double     h,
+				 double     s,
+				 double     v);
+void       gtk_hsv_get_color    (GtkHSV    *hsv,
+				 gdouble   *h,
+				 gdouble   *s,
+				 gdouble   *v);
+void       gtk_hsv_set_metrics  (GtkHSV    *hsv,
+				 gint       size,
+				 gint       ring_width);
+void       gtk_hsv_get_metrics  (GtkHSV    *hsv,
+				 gint      *size,
+				 gint      *ring_width);
+gboolean   gtk_hsv_is_adjusting (GtkHSV    *hsv);
+void       gtk_hsv_to_rgb       (gdouble    h,
+				 gdouble    s,
+				 gdouble    v,
+				 gdouble   *r,
+				 gdouble   *g,
+				 gdouble   *b);
+void       gtk_rgb_to_hsv       (gdouble    r,
+				 gdouble    g,
+				 gdouble    b,
+				 gdouble   *h,
+				 gdouble   *s,
+				 gdouble   *v);
 
-GtkWidget *gtk_hsv_new (void);
-
-void gtk_hsv_set_color (GtkHSV *hsv, double h, double s, double v);
-void gtk_hsv_get_color (GtkHSV *hsv, double *h, double *s, double *v);
-
-void gtk_hsv_set_metrics (GtkHSV *hsv, int size, int ring_width);
-void gtk_hsv_get_metrics (GtkHSV *hsv, int *size, int *ring_width);
-
-gboolean gtk_hsv_is_adjusting (GtkHSV *hsv);
-
-void gtk_hsv_to_rgb (double h, double s, double v, double *r, double *g, double *b);
-void gtk_rgb_to_hsv (double r, double g, double b, double *h, double *s, double *v);
-
-
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif
+#endif /* __GTK_HSV_H__ */

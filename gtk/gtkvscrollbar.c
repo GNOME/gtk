@@ -31,7 +31,7 @@
 
 #define EPSILON 0.01
 
-#define RANGE_CLASS(w)  GTK_RANGE_CLASS (GTK_OBJECT (w)->klass)
+#define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
   ARG_0,
@@ -97,7 +97,7 @@ gtk_vscrollbar_class_init (GtkVScrollbarClass *class)
   
   gtk_object_add_arg_type ("GtkVScrollbar::adjustment",
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
+                           GTK_ARG_READWRITE,
                            ARG_ADJUSTMENT);
   
   object_class->set_arg = gtk_vscrollbar_set_arg;

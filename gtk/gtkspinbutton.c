@@ -69,7 +69,7 @@ enum
 
 static void gtk_spin_button_class_init     (GtkSpinButtonClass *klass);
 static void gtk_spin_button_init           (GtkSpinButton      *spin_button);
-static void gtk_spin_button_finalize       (GtkObject          *object);
+static void gtk_spin_button_finalize       (GObject            *object);
 static void gtk_spin_button_set_arg        (GtkObject          *object,
 					    GtkArg             *arg,
 					    guint               arg_id);
@@ -158,6 +158,7 @@ gtk_spin_button_get_type (void)
 static void
 gtk_spin_button_class_init (GtkSpinButtonClass *class)
 {
+  GObjectClass     *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass   *object_class;
   GtkWidgetClass   *widget_class;
   GtkEditableClass *editable_class;
@@ -167,6 +168,35 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   editable_class = (GtkEditableClass*) class; 
 
   parent_class = gtk_type_class (GTK_TYPE_ENTRY);
+
+  gobject_class->finalize = gtk_spin_button_finalize;
+
+  object_class->set_arg = gtk_spin_button_set_arg;
+  object_class->get_arg = gtk_spin_button_get_arg;
+
+  widget_class->map = gtk_spin_button_map;
+  widget_class->unmap = gtk_spin_button_unmap;
+  widget_class->realize = gtk_spin_button_realize;
+  widget_class->unrealize = gtk_spin_button_unrealize;
+  widget_class->size_request = gtk_spin_button_size_request;
+  widget_class->size_allocate = gtk_spin_button_size_allocate;
+  widget_class->draw = gtk_spin_button_draw;
+  widget_class->expose_event = gtk_spin_button_expose;
+  widget_class->scroll_event = gtk_spin_button_scroll;
+  widget_class->button_press_event = gtk_spin_button_button_press;
+  widget_class->button_release_event = gtk_spin_button_button_release;
+  widget_class->motion_notify_event = gtk_spin_button_motion_notify;
+  widget_class->key_press_event = gtk_spin_button_key_press;
+  widget_class->key_release_event = gtk_spin_button_key_release;
+  widget_class->enter_notify_event = gtk_spin_button_enter_notify;
+  widget_class->leave_notify_event = gtk_spin_button_leave_notify;
+  widget_class->focus_out_event = gtk_spin_button_focus_out;
+
+  editable_class->insert_text = gtk_spin_button_insert_text;
+  editable_class->activate = gtk_spin_button_activate;
+
+  class->input = NULL;
+  class->output = NULL;
 
   gtk_object_add_arg_type ("GtkSpinButton::adjustment",
 			   GTK_TYPE_ADJUSTMENT,
@@ -205,14 +235,10 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 			   GTK_ARG_READWRITE,
 			   ARG_VALUE);
 
-  object_class->set_arg = gtk_spin_button_set_arg;
-  object_class->get_arg = gtk_spin_button_get_arg;
-  object_class->finalize = gtk_spin_button_finalize;
-
   spinbutton_signals[INPUT] =
     gtk_signal_new ("input",
 		    GTK_RUN_LAST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkSpinButtonClass, input),
 		    gtk_marshal_INT__POINTER,
 		    GTK_TYPE_INT, 1, GTK_TYPE_POINTER);
@@ -220,36 +246,12 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   spinbutton_signals[OUTPUT] =
     gtk_signal_new ("output",
 		    GTK_RUN_LAST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkSpinButtonClass, output),
 		    gtk_marshal_BOOL__NONE,
 		    GTK_TYPE_BOOL, 0);
 
   gtk_object_class_add_signals (object_class, spinbutton_signals, LAST_SIGNAL);
-
-  widget_class->map = gtk_spin_button_map;
-  widget_class->unmap = gtk_spin_button_unmap;
-  widget_class->realize = gtk_spin_button_realize;
-  widget_class->unrealize = gtk_spin_button_unrealize;
-  widget_class->size_request = gtk_spin_button_size_request;
-  widget_class->size_allocate = gtk_spin_button_size_allocate;
-  widget_class->draw = gtk_spin_button_draw;
-  widget_class->expose_event = gtk_spin_button_expose;
-  widget_class->scroll_event = gtk_spin_button_scroll;
-  widget_class->button_press_event = gtk_spin_button_button_press;
-  widget_class->button_release_event = gtk_spin_button_button_release;
-  widget_class->motion_notify_event = gtk_spin_button_motion_notify;
-  widget_class->key_press_event = gtk_spin_button_key_press;
-  widget_class->key_release_event = gtk_spin_button_key_release;
-  widget_class->enter_notify_event = gtk_spin_button_enter_notify;
-  widget_class->leave_notify_event = gtk_spin_button_leave_notify;
-  widget_class->focus_out_event = gtk_spin_button_focus_out;
-
-  editable_class->insert_text = gtk_spin_button_insert_text;
-  editable_class->activate = gtk_spin_button_activate;
-
-  class->input = NULL;
-  class->output = NULL;
 }
 
 static void
@@ -375,14 +377,13 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
 }
 
 static void
-gtk_spin_button_finalize (GtkObject *object)
+gtk_spin_button_finalize (GObject *object)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (object));
 
   gtk_object_unref (GTK_OBJECT (GTK_SPIN_BUTTON (object)->adjustment));
   
-  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void
@@ -1408,7 +1409,6 @@ void
 gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
 				GtkAdjustment *adjustment)
 {
-  g_return_if_fail (spin_button != NULL);
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   if (spin_button->adjustment != adjustment)

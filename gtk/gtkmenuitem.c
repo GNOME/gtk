@@ -88,20 +88,20 @@ gtk_menu_item_get_type (void)
 
   if (!menu_item_type)
     {
-      static const GtkTypeInfo menu_item_info =
+      static const GTypeInfo menu_item_info =
       {
-	"GtkMenuItem",
-	sizeof (GtkMenuItem),
 	sizeof (GtkMenuItemClass),
-	(GtkClassInitFunc) gtk_menu_item_class_init,
-	(GtkObjectInitFunc) gtk_menu_item_init,
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_menu_item_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkMenuItem),
+	16,             /* n_preallocs */
+	(GInstanceInitFunc) gtk_menu_item_init,
       };
 
-      menu_item_type = gtk_type_unique (gtk_item_get_type (), &menu_item_info);
-      gtk_type_set_chunk_alloc (menu_item_type, 16);
+      menu_item_type = g_type_register_static (GTK_TYPE_ITEM, "GtkMenuItem", &menu_item_info);
     }
 
   return menu_item_type;
@@ -125,7 +125,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   menu_item_signals[ACTIVATE] =
     gtk_signal_new ("activate",
                     GTK_RUN_FIRST | GTK_RUN_ACTION,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
@@ -133,7 +133,7 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   menu_item_signals[ACTIVATE_ITEM] =
     gtk_signal_new ("activate_item",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkMenuItemClass, activate_item),
                     gtk_signal_default_marshaller,
 		    GTK_TYPE_NONE, 0);

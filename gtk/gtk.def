@@ -685,8 +685,6 @@ EXPORTS
 	gtk_marshal_INT__POINTER
 	gtk_marshal_INT__POINTER_CHAR_CHAR
 	gtk_marshal_NONE__BOOL
-	gtk_marshal_NONE__C_CALLBACK
-	gtk_marshal_NONE__C_CALLBACK_C_CALLBACK
 	gtk_marshal_NONE__INT
 	gtk_marshal_NONE__INT_FLOAT
 	gtk_marshal_NONE__INT_FLOAT_BOOL

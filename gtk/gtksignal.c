@@ -435,7 +435,7 @@ gtk_signal_lookup (const gchar *name,
   gpointer class = NULL;
 
   g_return_val_if_fail (name != NULL, 0);
-  g_return_val_if_fail (gtk_type_is_a (object_type, GTK_TYPE_OBJECT), 0);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), 0);
   
  relookup:
 
@@ -1393,7 +1393,7 @@ gtk_signal_real_emit (GtkObject *object,
    */
   signal = *LOOKUP_SIGNAL_ID (signal_id);
   if (signal.function_offset)
-    signal_func = G_STRUCT_MEMBER (GtkSignalFunc, object->klass, signal.function_offset);
+    signal_func = G_STRUCT_MEMBER (GtkSignalFunc, ((GTypeInstance*) object)->g_class, signal.function_offset);
   else
     signal_func = NULL;
   
@@ -1723,8 +1723,7 @@ gtk_signal_connect_by_type (GtkObject	    *object,
   gint found_it;
   GtkSignal *signal;
  
-  g_return_val_if_fail (object != NULL, 0);
-  g_return_val_if_fail (object->klass != NULL, 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), 0);
   
   signal = LOOKUP_SIGNAL_ID (signal_id);
 
@@ -1737,7 +1736,7 @@ gtk_signal_connect_by_type (GtkObject	    *object,
    *  return correct signal ids per class-branch.
    */
   found_it = FALSE;
-  class = object->klass;
+  class = GTK_OBJECT_GET_CLASS (object);
   while (class)
     {
       GtkType parent;
@@ -1755,9 +1754,9 @@ gtk_signal_connect_by_type (GtkObject	    *object,
 	    break;
 	  }
       
-      parent = gtk_type_parent (class->type);
-      if (parent)
-	class = gtk_type_class (parent);
+      parent = g_type_parent (GTK_CLASS_TYPE (class));
+      if (GTK_TYPE_IS_OBJECT (parent))
+	class = g_type_class_peek (parent);
       else
 	class = NULL;
     }
@@ -1766,7 +1765,7 @@ gtk_signal_connect_by_type (GtkObject	    *object,
     {
       g_warning ("gtk_signal_connect_by_type(): could not find signal id (%u) in the `%s' class ancestry",
 		 signal_id,
-		 gtk_type_name (object->klass->type));
+		 GTK_OBJECT_TYPE_NAME (object));
       return 0;
     }
   
@@ -1987,9 +1986,7 @@ gtk_signal_collect_params (GtkArg	       *params,
   return_type = GTK_FUNDAMENTAL_TYPE (return_type);
   if (return_type != GTK_TYPE_NONE)
     {
-      if ((return_type >= GTK_TYPE_FLAT_FIRST &&
-	   return_type <= GTK_TYPE_FLAT_LAST) ||
-	  (return_type == GTK_TYPE_OBJECT))
+      if (return_type != 0) // FIXME: check for IS_PARAM
 	{
 	  GTK_VALUE_POINTER (*params) = va_arg (var_args, gpointer);
 	  

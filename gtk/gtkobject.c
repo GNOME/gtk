@@ -45,95 +45,60 @@ enum {
 };
 
 
-void		      gtk_object_init_type       (void);
-static void           gtk_object_base_class_init (GtkObjectClass *klass);
-static void           gtk_object_class_init      (GtkObjectClass *klass);
-static void           gtk_object_init            (GtkObject      *object,
+extern void	  gtk_object_init_type           (void);	/* for gtktypeutils.h */
+static void       gtk_object_base_class_init     (GtkObjectClass *class);
+static void       gtk_object_base_class_finalize (GtkObjectClass *class);
+static void       gtk_object_class_init          (GtkObjectClass *klass);
+static void       gtk_object_init                (GtkObject      *object,
 						  GtkObjectClass *klass);
-static void           gtk_object_set_arg         (GtkObject      *object,
+static void       gtk_object_set_arg             (GtkObject      *object,
 						  GtkArg         *arg,
 						  guint		  arg_id);
-static void           gtk_object_get_arg         (GtkObject      *object,
+static void       gtk_object_get_arg             (GtkObject      *object,
 						  GtkArg         *arg,
 						  guint		  arg_id);
-static void           gtk_object_shutdown        (GtkObject      *object);
-static void           gtk_object_real_destroy    (GtkObject      *object);
-static void           gtk_object_finalize        (GtkObject      *object);
-static void           gtk_object_notify_weaks    (GtkObject      *object);
+static void       gtk_object_shutdown            (GObject        *object);
+static void       gtk_object_real_destroy        (GtkObject      *object);
+static void       gtk_object_finalize            (GObject        *object);
+static void       gtk_object_notify_weaks        (GtkObject      *object);
 
-static guint object_signals[LAST_SIGNAL] = { 0 };
-
+static gpointer    parent_class = NULL;
+static guint       object_signals[LAST_SIGNAL] = { 0 };
 static GHashTable *object_arg_info_ht = NULL;
+static GQuark      quark_user_data = 0;
+static GQuark      quark_weakrefs = 0;
+static GQuark      quark_carg_history = 0;
 
-static GQuark quark_user_data = 0;
-static GQuark quark_weakrefs = 0;
-static GQuark quark_carg_history = 0;
-
-
-#ifdef G_ENABLE_DEBUG
-static guint obj_count = 0;
-static GHashTable *living_objs_ht = NULL;
-static void
-gtk_object_debug_foreach (gpointer key, gpointer value, gpointer user_data)
-{
-  GtkObject *object;
-  
-  object = (GtkObject*) value;
-  g_message ("[%p] %s\tref_count=%d%s%s",
-	     object,
-	     gtk_type_name (GTK_OBJECT_TYPE (object)),
-	     object->ref_count,
-	     GTK_OBJECT_FLOATING (object) ? " (floating)" : "",
-	     GTK_OBJECT_DESTROYED (object) ? " (destroyed)" : "");
-}
-static void
-gtk_object_debug (void)
-{
-  if (living_objs_ht)
-    g_hash_table_foreach (living_objs_ht, gtk_object_debug_foreach, NULL);
-  
-  g_message ("living objects count = %d", obj_count);
-}
-#endif	/* G_ENABLE_DEBUG */
-
-void
-gtk_object_post_arg_parsing_init (void)
-{
-#ifdef G_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
-    g_atexit (gtk_object_debug);
-#endif	/* G_ENABLE_DEBUG */
-}
 
 /****************************************************
  * GtkObject type, class and instance initialization
  *
  ****************************************************/
 
-void
-gtk_object_init_type (void)
-{
-  static const GtkTypeInfo object_info =
-  {
-    "GtkObject",
-    sizeof (GtkObject),
-    sizeof (GtkObjectClass),
-    (GtkClassInitFunc) gtk_object_class_init,
-    (GtkObjectInitFunc) gtk_object_init,
-    /* reserved_1 */ NULL,
-    /* reserved_2 */ NULL,
-    (GtkClassInitFunc) gtk_object_base_class_init,
-  };
-  GtkType object_type;
-
-  object_type = gtk_type_unique (0, &object_info);
-  g_assert (object_type == GTK_TYPE_OBJECT);
-}
-
 GtkType
 gtk_object_get_type (void)
 {
-  return GTK_TYPE_OBJECT;
+  static GtkType object_type = 0;
+
+  if (!object_type)
+    {
+      static const GTypeInfo object_info =
+      {
+	sizeof (GtkObjectClass),
+	(GBaseInitFunc) gtk_object_base_class_init,
+	(GBaseFinalizeFunc) gtk_object_base_class_finalize,
+	(GClassInitFunc) gtk_object_class_init,
+	NULL,		/* class_finalize */
+	NULL,		/* class_data */
+	sizeof (GtkObject),
+	16,			/* n_preallocs */
+	(GInstanceInitFunc) gtk_object_init,
+      };
+      
+      object_type = g_type_register_static (G_TYPE_OBJECT, "GtkObject", &object_info);
+    }
+
+  return object_type;
 }
 
 static void
@@ -151,8 +116,26 @@ gtk_object_base_class_init (GtkObjectClass *class)
 }
 
 static void
+gtk_object_base_class_finalize (GtkObjectClass *class)
+{
+  g_free (class->signals);
+  g_return_if_fail (class->construct_args == NULL);
+}
+
+static void
 gtk_object_class_init (GtkObjectClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+
+  parent_class = g_type_class_ref (G_TYPE_OBJECT);
+
+  gobject_class->shutdown = gtk_object_shutdown;
+  gobject_class->finalize = gtk_object_finalize;
+
+  class->get_arg = gtk_object_get_arg;
+  class->set_arg = gtk_object_set_arg;
+  class->destroy = gtk_object_real_destroy;
+
   quark_carg_history = g_quark_from_static_string ("gtk-construct-arg-history");
 
   gtk_object_add_arg_type ("GtkObject::user_data",
@@ -179,18 +162,12 @@ gtk_object_class_init (GtkObjectClass *class)
   object_signals[DESTROY] =
     gtk_signal_new ("destroy",
                     GTK_RUN_LAST | GTK_RUN_NO_HOOKS,
-                    class->type,
+                    GTK_CLASS_TYPE (class),
                     GTK_SIGNAL_OFFSET (GtkObjectClass, destroy),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
 
   gtk_object_class_add_signals (class, object_signals, LAST_SIGNAL);
-
-  class->get_arg = gtk_object_get_arg;
-  class->set_arg = gtk_object_set_arg;
-  class->shutdown = gtk_object_shutdown;
-  class->destroy = gtk_object_real_destroy;
-  class->finalize = gtk_object_finalize;
 }
 
 static void
@@ -203,26 +180,11 @@ gtk_object_init (GtkObject      *object,
   do
     {
       needs_construction |= klass->construct_args != NULL;
-      klass = gtk_type_parent_class (klass->type);
+      klass = g_type_class_peek_parent (klass);
     }
   while (klass && !needs_construction);
   if (!needs_construction)
     GTK_OBJECT_FLAGS (object) |= GTK_CONSTRUCTED;
-
-  object->ref_count = 1;
-  g_datalist_init (&object->object_data);
-
-#ifdef G_ENABLE_DEBUG
-  if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
-    {
-      obj_count++;
-      
-      if (!living_objs_ht)
-	living_objs_ht = g_hash_table_new (g_direct_hash, NULL);
-
-      g_hash_table_insert (living_objs_ht, object, object);
-    }
-#endif /* G_ENABLE_DEBUG */
 }
 
 /********************************************
@@ -238,21 +200,26 @@ gtk_object_destroy (GtkObject *object)
   
   if (!GTK_OBJECT_DESTROYED (object))
     {
-      /* we will hold a reference on the object in this place, so
-       * to ease all classes shutdown and destroy implementations.
-       * i.e. they don't have to bother about referencing at all.
+      /* need to hold a reference count around all class method
+       * invocations. we guard against reinvocations during
+       * destruction with the GTK_DESTROYED flag.
        */
       gtk_object_ref (object);
-      object->klass->shutdown (object);
+      GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+      G_OBJECT_GET_CLASS (object)->shutdown (G_OBJECT (object));
+      GTK_OBJECT_UNSET_FLAGS (object, GTK_DESTROYED);
       gtk_object_unref (object);
     }
 }
 
 static void
-gtk_object_shutdown (GtkObject *object)
+gtk_object_shutdown (GObject *gobject)
 {
-  GTK_OBJECT_SET_FLAGS (object, GTK_DESTROYED);
+  GtkObject *object = GTK_OBJECT (gobject);
+
   gtk_signal_emit (object, object_signals[DESTROY]);
+
+  G_OBJECT_CLASS (parent_class)->shutdown (gobject);
 }
 
 static void
@@ -263,13 +230,13 @@ gtk_object_real_destroy (GtkObject *object)
 }
 
 static void
-gtk_object_finalize (GtkObject *object)
+gtk_object_finalize (GObject *gobject)
 {
-  gtk_object_notify_weaks (object);
+  GtkObject *object = GTK_OBJECT (gobject);
 
-  g_datalist_clear (&object->object_data);
+  gtk_object_notify_weaks (object);
   
-  gtk_type_free (GTK_OBJECT_TYPE (object), object);
+  G_OBJECT_CLASS (parent_class)->finalize (gobject);
 }
 
 /*****************************************
@@ -396,7 +363,7 @@ gtk_object_class_user_signal_new (GtkObjectClass     *class,
 
   signal_id = gtk_signal_newv (name,
 			       signal_flags,
-			       class->type,
+			       GTK_CLASS_TYPE (class),
 			       0,
 			       marshaller,
 			       return_val,
@@ -429,7 +396,7 @@ gtk_object_class_user_signal_newv (GtkObjectClass     *class,
 
   signal_id = gtk_signal_newv (name,
 			       signal_flags,
-			       class->type,
+			       GTK_CLASS_TYPE (class),
 			       0,
 			       marshaller,
 			       return_val,
@@ -576,7 +543,7 @@ gtk_object_new (GtkType      object_type,
   GSList *info_list = NULL;
   gchar *error;
 
-  g_return_val_if_fail (GTK_FUNDAMENTAL_TYPE (object_type) == GTK_TYPE_OBJECT, NULL);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), NULL);
 
   object = gtk_type_new (object_type);
 
@@ -623,7 +590,7 @@ gtk_object_newv (GtkType  object_type,
   GtkObject *object;
   GtkArg *max_args;
   
-  g_return_val_if_fail (GTK_FUNDAMENTAL_TYPE (object_type) == GTK_TYPE_OBJECT, NULL);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (object_type), NULL);
   if (n_args)
     g_return_val_if_fail (args != NULL, NULL);
   
@@ -872,7 +839,7 @@ gtk_object_default_construct (GtkObject *object)
 
   if (!GTK_OBJECT_CONSTRUCTED (object))
     {
-      for (slist = object->klass->construct_args;
+      for (slist = GTK_OBJECT_GET_CLASS (object)->construct_args;
 	   slist && !GTK_OBJECT_CONSTRUCTED (object);
 	   slist = slist->next)
 	{
@@ -888,7 +855,7 @@ gtk_object_default_construct (GtkObject *object)
 	      /* default application */
 	      arg.type = info->type;
 	      arg.name = info->name;
-	      switch (gtk_type_get_varargs_type (arg.type))
+	      switch (G_TYPE_FUNDAMENTAL (arg.type))
 		{
 		case GTK_TYPE_FLOAT:
 		  GTK_VALUE_FLOAT (arg) = 0.0;
@@ -899,7 +866,7 @@ gtk_object_default_construct (GtkObject *object)
 		case GTK_TYPE_BOXED:
 		case GTK_TYPE_STRING:
 		case GTK_TYPE_POINTER:
-		case GTK_TYPE_OBJECT:
+		case G_TYPE_OBJECT:
 		  GTK_VALUE_POINTER (arg) = NULL;
 		  break;
 		default:
@@ -1004,7 +971,7 @@ gtk_object_query_args (GtkType        class_type,
 {
   g_return_val_if_fail (n_args != NULL, NULL);
   *n_args = 0;
-  g_return_val_if_fail (GTK_FUNDAMENTAL_TYPE (class_type) == GTK_TYPE_OBJECT, NULL);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (class_type), NULL);
 
   return gtk_args_query (class_type, object_arg_info_ht, arg_flags, n_args);
 }
@@ -1019,10 +986,9 @@ gtk_object_set_data_by_id (GtkObject        *object,
 			   GQuark	     data_id,
 			   gpointer          data)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   
-  g_datalist_id_set_data (&object->object_data, data_id, data);
+  g_datalist_id_set_data (&G_OBJECT (object)->qdata, data_id, data);
 }
 
 void
@@ -1030,11 +996,10 @@ gtk_object_set_data (GtkObject        *object,
 		     const gchar      *key,
 		     gpointer          data)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
   
-  g_datalist_set_data (&object->object_data, key, data);
+  g_datalist_set_data (&G_OBJECT (object)->qdata, key, data);
 }
 
 void
@@ -1043,10 +1008,9 @@ gtk_object_set_data_by_id_full (GtkObject        *object,
 				gpointer          data,
 				GtkDestroyNotify  destroy)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  g_datalist_id_set_data_full (&object->object_data, data_id, data, destroy);
+  g_datalist_id_set_data_full (&G_OBJECT (object)->qdata, data_id, data, destroy);
 }
 
 void
@@ -1055,186 +1019,101 @@ gtk_object_set_data_full (GtkObject        *object,
 			  gpointer          data,
 			  GtkDestroyNotify  destroy)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
 
-  g_datalist_set_data_full (&object->object_data, key, data, destroy);
+  g_datalist_set_data_full (&G_OBJECT (object)->qdata, key, data, destroy);
 }
 
 gpointer
 gtk_object_get_data_by_id (GtkObject   *object,
 			   GQuark       data_id)
 {
-  g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
 
-  return g_datalist_id_get_data (&object->object_data, data_id);
+  return g_datalist_id_get_data (&G_OBJECT (object)->qdata, data_id);
 }
 
 gpointer
 gtk_object_get_data (GtkObject   *object,
 		     const gchar *key)
 {
-  g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return g_datalist_get_data (&object->object_data, key);
+  return g_datalist_get_data (&G_OBJECT (object)->qdata, key);
 }
 
 void
 gtk_object_remove_data_by_id (GtkObject   *object,
 			      GQuark       data_id)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  g_datalist_id_remove_data (&object->object_data, data_id);
+  g_datalist_id_remove_data (&G_OBJECT (object)->qdata, data_id);
 }
 
 void
 gtk_object_remove_data (GtkObject   *object,
 			const gchar *key)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
 
-  g_datalist_remove_data (&object->object_data, key);
+  g_datalist_remove_data (&G_OBJECT (object)->qdata, key);
 }
 
 void
 gtk_object_remove_no_notify_by_id (GtkObject      *object,
 				   GQuark          key_id)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
-  g_datalist_id_remove_no_notify (&object->object_data, key_id);
+  g_datalist_id_remove_no_notify (&G_OBJECT (object)->qdata, key_id);
 }
 
 void
 gtk_object_remove_no_notify (GtkObject       *object,
 			     const gchar     *key)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
   g_return_if_fail (key != NULL);
 
-  g_datalist_remove_no_notify (&object->object_data, key);
+  g_datalist_remove_no_notify (&G_OBJECT (object)->qdata, key);
 }
 
 void
 gtk_object_set_user_data (GtkObject *object,
 			  gpointer   data)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
 
   if (!quark_user_data)
     quark_user_data = g_quark_from_static_string ("user_data");
 
-  g_datalist_id_set_data (&object->object_data, quark_user_data, data);
+  g_datalist_id_set_data (&G_OBJECT (object)->qdata, quark_user_data, data);
 }
 
 gpointer
 gtk_object_get_user_data (GtkObject *object)
 {
-  g_return_val_if_fail (object != NULL, NULL);
   g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
 
-  return g_datalist_id_get_data (&object->object_data, quark_user_data);
+  return g_datalist_id_get_data (&G_OBJECT (object)->qdata, quark_user_data);
 }
 
-/*******************************************
- * GtkObject referencing and unreferencing
- *
- *******************************************/
-
-#undef	gtk_object_ref
-#undef	gtk_object_unref
-
-void
+GtkObject*
 gtk_object_ref (GtkObject *object)
 {
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_OBJECT (object));
-  g_return_if_fail (object->ref_count > 0);
+  g_return_val_if_fail (GTK_IS_OBJECT (object), NULL);
 
-  object->ref_count += 1;
+  return (GtkObject*) g_object_ref ((GObject*) object);
 }
 
 void
 gtk_object_unref (GtkObject *object)
 {
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_OBJECT (object));
-  g_return_if_fail (object->ref_count > 0);
-  
-  if (object->ref_count == 1)
-    {
-      gtk_object_destroy (object);
-  
-      g_return_if_fail (object->ref_count > 0);
-    }
 
-  object->ref_count -= 1;
-
-  if (object->ref_count == 0)
-    {
-#ifdef G_ENABLE_DEBUG
-      if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
-	{
-	  g_assert (g_hash_table_lookup (living_objs_ht, object) == object);
-	  g_hash_table_remove (living_objs_ht, object);
-	  obj_count--;
-	}
-#endif /* G_ENABLE_DEBUG */      
-      object->klass->finalize (object);
-    }
-}
-
-static GtkObject *gtk_trace_object = NULL;
-void
-gtk_trace_referencing (GtkObject   *object,
-		       const gchar *func,
-		       guint	   dummy,
-		       guint	   line,
-		       gboolean	   do_ref)
-{
-  if (gtk_debug_flags & GTK_DEBUG_OBJECTS)
-    {
-      gboolean exists = TRUE;
-
-      g_return_if_fail (object != NULL);
-      g_return_if_fail (GTK_IS_OBJECT (object));
-
-#ifdef	G_ENABLE_DEBUG
-      exists = g_hash_table_lookup (living_objs_ht, object) != NULL;
-#endif	/* G_ENABLE_DEBUG */
-      
-      if (exists &&
-	  (object == gtk_trace_object ||
-	   gtk_trace_object == (void*)42))
-	fprintf (stdout, "trace: object_%s: (%s:%p)->ref_count=%d %s (%s:%d)\n",
-		 do_ref ? "ref" : "unref",
-		 gtk_type_name (GTK_OBJECT_TYPE (object)),
-		 object,
-		 object->ref_count,
-		 do_ref ? "+ 1" : "- 1",
-		 func,
-		 line);
-      else if (!exists)
-	fprintf (stdout, "trace: object_%s(%p): no such object! (%s:%d)\n",
-		 do_ref ? "ref" : "unref",
-		 object,
-		 func,
-		 line);
-    }
-  
-  if (do_ref)
-    gtk_object_ref (object);
-  else
-    gtk_object_unref (object);
+  g_object_unref ((GObject*) object);
 }

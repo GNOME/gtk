@@ -29,8 +29,6 @@
 #include "gtksignal.h"
 
 
-#define CHECK_MENU_ITEM_CLASS(w)  GTK_CHECK_MENU_ITEM_CLASS (GTK_OBJECT (w)->klass)
-
 
 enum {
   TOGGLED,
@@ -106,7 +104,7 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
   check_menu_item_signals[TOGGLED] =
     gtk_signal_new ("toggled",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkCheckMenuItemClass, toggled),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
@@ -223,10 +221,10 @@ gtk_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 {
   g_return_if_fail (check_menu_item != NULL);
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (check_menu_item));
-  g_return_if_fail (CHECK_MENU_ITEM_CLASS (check_menu_item) != NULL);
+  g_return_if_fail (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item) != NULL);
 
-  if (CHECK_MENU_ITEM_CLASS (check_menu_item)->draw_indicator)
-    (* CHECK_MENU_ITEM_CLASS (check_menu_item)->draw_indicator) (check_menu_item, area);
+  if (GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator)
+    (* GTK_CHECK_MENU_ITEM_GET_CLASS (check_menu_item)->draw_indicator) (check_menu_item, area);
 }
 
 static void

@@ -64,6 +64,7 @@ struct _GtkWindow
   GtkWindow *transient_parent;
 
   gushort resize_count;
+  guint has_user_ref_count : 1;
   guint allow_shrink : 1;
   guint allow_grow : 1;
   guint auto_shrink : 1;
@@ -126,6 +127,8 @@ void       gtk_window_set_default_size         (GtkWindow           *window,
 /* If window is set modal, input will be grabbed when show and released when hide */
 void       gtk_window_set_modal                (GtkWindow           *window,
                                                 gboolean             modal);
+GList*	   gtk_window_list_toplevels	       (void);
+
 
 /* --- internal functions --- */
 void       gtk_window_set_focus                (GtkWindow           *window,

@@ -39,38 +39,21 @@ extern "C" {
 #endif /* __cplusplus */
 
 
-
-/* Macro for casting a pointer to a GtkObject or GtkObjectClass pointer.
- * The second portion of the ?: statments are just in place to offer
- * descriptive warning message.
+/* macros for casting a pointer to a GtkObject or GtkObjectClass pointer,
+ * and to test whether `object' and `klass' are of type GTK_TYPE_OBJECT.
+ * these are the standard macros for all GtkObject-derived classes.
  */
-#define GTK_OBJECT(object)		( \
-  GTK_IS_OBJECT (object) ? \
-    (GtkObject*) (object) : \
-    (GtkObject*) gtk_type_check_object_cast ((GtkTypeObject*) (object), GTK_TYPE_OBJECT) \
-)
-#define GTK_OBJECT_CLASS(klass)		( \
-  GTK_IS_OBJECT_CLASS (klass) ? \
-    (GtkObjectClass*) (klass) : \
-    (GtkObjectClass*) gtk_type_check_class_cast ((GtkTypeClass*) (klass), GTK_TYPE_OBJECT) \
-)
-
-/* Macro for testing whether `object' and `klass' are of type GTK_TYPE_OBJECT.
- */
-#define GTK_IS_OBJECT(object)		( \
-  (object) != NULL && \
-  GTK_IS_OBJECT_CLASS (((GtkObject*) (object))->klass) \
-)
-#define GTK_IS_OBJECT_CLASS(klass)	( \
-  (klass) != NULL && \
-  GTK_FUNDAMENTAL_TYPE (((GtkObjectClass*) (klass))->type) == GTK_TYPE_OBJECT \
-)
+#define	GTK_TYPE_OBJECT			(gtk_object_get_type ())
+#define GTK_OBJECT(object)		(GTK_CHECK_CAST ((object), GTK_TYPE_OBJECT, GtkObject))
+#define GTK_OBJECT_CLASS(klass)		(GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_OBJECT, GtkObjectClass))
+#define GTK_IS_OBJECT(object)		(GTK_CHECK_TYPE ((object), GTK_TYPE_OBJECT))
+#define GTK_IS_OBJECT_CLASS(klass)	(GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OBJECT))
+#define	GTK_OBJECT_GET_CLASS(object)	(GTK_CHECK_GET_CLASS ((object), GTK_TYPE_OBJECT, GtkObjectClass))
 
 /* Macros for extracting various fields from GtkObject and GtkObjectClass.
  */
-#define GTK_OBJECT_TYPE(obj)		  (GTK_OBJECT (obj)->klass->type)
-#define GTK_OBJECT_SIGNALS(obj)		  (GTK_OBJECT (obj)->klass->signals)
-#define GTK_OBJECT_NSIGNALS(obj)	  (GTK_OBJECT (obj)->klass->nsignals)
+#define GTK_OBJECT_TYPE(object)		  (G_TYPE_FROM_INSTANCE (object))
+#define GTK_OBJECT_TYPE_NAME(object)	  (g_type_name (GTK_OBJECT_TYPE (object)))
 
 /* GtkObject only uses the first 4 bits of the flags field.
  * Derived objects may use the remaining bits. Though this
@@ -124,9 +107,7 @@ typedef struct _GtkObjectClass	GtkObjectClass;
  */
 struct _GtkObject
 {
-  /* GtkTypeObject related fields: */
-  GtkObjectClass *klass;
-  
+  GObject parent_instance;
   
   /* 32 bits of flags. GtkObject only uses 4 of these bits and
    *  GtkWidget uses the rest. This is done because structs are
@@ -134,16 +115,6 @@ struct _GtkObject
    *  used in GtkWidget much space would be wasted.
    */
   guint32 flags;
-  
-  /* reference count.
-   * refer to the file docs/refcounting.txt on this issue.
-   */
-  guint ref_count;
-  
-  /* A list of keyed data pointers, used for e.g. the list of signal
-   * handlers or an object's user_data.
-   */
-  GData *object_data;
 };
 
 /* The GtkObjectClass is the base of the Gtk+ objects classes hierarchy,
@@ -155,9 +126,7 @@ struct _GtkObject
  */
 struct _GtkObjectClass
 {
-  /* GtkTypeClass fields: */
-  GtkType type;
-  
+  GObjectClass parent_class;
   
   /* The signals this object class handles. "signals" is an
    *  array of signal ID's.
@@ -181,7 +150,7 @@ struct _GtkObjectClass
 		   GtkArg    *arg,
 		   guint      arg_id);
   
-  /* The functions that will end an objects life time. In one way ore
+  /* The function that will end an objects life time. In one way ore
    *  another all three of them are defined for all objects. If an
    *  object class overrides one of the methods in order to perform class
    *  specific destruction then it must still invoke its superclass'
@@ -189,10 +158,7 @@ struct _GtkObjectClass
    *  own cleanup. (See the destroy function for GtkWidget for
    *  an example of how to do this).
    */
-  void (* shutdown) (GtkObject *object);
   void (* destroy)  (GtkObject *object);
-  
-  void (* finalize) (GtkObject *object);
 };
 
 
@@ -222,11 +188,11 @@ GtkObject*	gtk_object_new		  (GtkType	       type,
 GtkObject*	gtk_object_newv		  (GtkType	       object_type,
 					   guint	       n_args,
 					   GtkArg	      *args);
+GtkObject*	gtk_object_ref		  (GtkObject	      *object);
+void		gtk_object_unref	  (GtkObject	      *object);
 void gtk_object_default_construct         (GtkObject	      *object);
 void gtk_object_constructed		  (GtkObject	      *object);
 void gtk_object_sink	  (GtkObject	    *object);
-void gtk_object_ref	  (GtkObject	    *object);
-void gtk_object_unref	  (GtkObject	    *object);
 void gtk_object_weakref	  (GtkObject	    *object,
 			   GtkDestroyNotify  notify,
 			   gpointer	     data);
@@ -358,16 +324,6 @@ gchar*	gtk_object_args_collect (GtkType      object_type,
 gchar*	gtk_object_arg_get_info (GtkType      object_type,
 				 const gchar *arg_name,
 				 GtkArgInfo **info_p);
-void	gtk_trace_referencing	(GtkObject   *object,
-				 const gchar *func,
-				 guint	      dummy,
-				 guint	      line,
-				 gboolean     do_ref);
-#if	G_ENABLE_DEBUG
-#  define gtk_object_ref(o)   G_STMT_START{gtk_trace_referencing((o),G_GNUC_PRETTY_FUNCTION,0,__LINE__,1);}G_STMT_END
-#  define gtk_object_unref(o) G_STMT_START{gtk_trace_referencing((o),G_GNUC_PRETTY_FUNCTION,0,__LINE__,0);}G_STMT_END
-#endif	/* G_ENABLE_DEBUG */
-
 
 
 

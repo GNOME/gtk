@@ -34,7 +34,7 @@
 #define SCROLL_INITIAL_DELAY 100
 #define SCROLL_DELAY_LENGTH  300
 
-#define RANGE_CLASS(w)  GTK_RANGE_CLASS (GTK_OBJECT (w)->klass)
+#define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
   ARG_0,
@@ -50,7 +50,6 @@ static void gtk_range_get_arg		       (GtkObject        *object,
 						GtkArg           *arg,
 						guint             arg_id);
 static void gtk_range_destroy                  (GtkObject        *object);
-static void gtk_range_finalize                 (GtkObject        *object);
 static void gtk_range_draw                     (GtkWidget        *widget,
 						GdkRectangle     *area);
 static void gtk_range_draw_focus               (GtkWidget        *widget);
@@ -138,15 +137,9 @@ gtk_range_class_init (GtkRangeClass *class)
 
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
 
-  gtk_object_add_arg_type ("GtkRange::update_policy",
-			   GTK_TYPE_UPDATE_TYPE,
-			   GTK_ARG_READWRITE,
-			   ARG_UPDATE_POLICY);
-
   object_class->set_arg = gtk_range_set_arg;
   object_class->get_arg = gtk_range_get_arg;
   object_class->destroy = gtk_range_destroy;
-  object_class->finalize = gtk_range_finalize;
 
   widget_class->draw = gtk_range_draw;
   widget_class->draw_focus = gtk_range_draw_focus;
@@ -181,6 +174,11 @@ gtk_range_class_init (GtkRangeClass *class)
   class->trough_keys = NULL;
   class->motion = NULL;
   class->timer = gtk_real_range_timer;
+
+  gtk_object_add_arg_type ("GtkRange::update_policy",
+			   GTK_TYPE_UPDATE_TYPE,
+			   GTK_ARG_READWRITE,
+			   ARG_UPDATE_POLICY);
 }
 
 static void
@@ -252,6 +250,9 @@ gtk_range_get_adjustment (GtkRange *range)
 {
   g_return_val_if_fail (range != NULL, NULL);
   g_return_val_if_fail (GTK_IS_RANGE (range), NULL);
+
+  if (!range->adjustment)
+    gtk_range_set_adjustment (range, NULL);
 
   return range->adjustment;
 }
@@ -573,8 +574,8 @@ gtk_range_default_hmotion (GtkRange *range,
   gint slider_x, slider_y;
   gint new_pos;
 
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (GTK_WIDGET_REALIZED (range));
 
   range = GTK_RANGE (range);
 
@@ -638,8 +639,8 @@ gtk_range_default_vmotion (GtkRange *range,
   gint slider_x, slider_y;
   gint new_pos;
 
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (GTK_WIDGET_REALIZED (range));
 
   range = GTK_RANGE (range);
 
@@ -704,27 +705,17 @@ gtk_range_destroy (GtkObject *object)
 
   range = GTK_RANGE (object);
 
+  gtk_range_remove_timer (range);
   if (range->adjustment)
-    gtk_signal_disconnect_by_data (GTK_OBJECT (range->adjustment),
-				   (gpointer) range);
+    {
+      if (range->adjustment)
+	gtk_signal_disconnect_by_data (GTK_OBJECT (range->adjustment),
+				       (gpointer) range);
+      gtk_object_unref (GTK_OBJECT (range->adjustment));
+      range->adjustment = NULL;
+    }
 
   (* GTK_OBJECT_CLASS (parent_class)->destroy) (object);
-}
-
-static void
-gtk_range_finalize (GtkObject *object)
-{
-  GtkRange *range;
-
-  g_return_if_fail (object != NULL);
-  g_return_if_fail (GTK_IS_RANGE (object));
-
-  range = GTK_RANGE (object);
-
-  if (range->adjustment)
-    gtk_object_unref (GTK_OBJECT (range->adjustment));
-
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
 }
 
 static void
@@ -737,7 +728,7 @@ gtk_range_draw (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_RANGE (widget));
   g_return_if_fail (area != NULL);
 
-  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_MAPPED (widget))
+  if (GTK_WIDGET_DRAWABLE (widget))
     {
       range = GTK_RANGE (widget);
 
@@ -844,7 +835,6 @@ gtk_range_button_press (GtkWidget      *widget,
   gint trough_part;
   gfloat jump_perc;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -919,7 +909,6 @@ gtk_range_button_release (GtkWidget      *widget,
 {
   GtkRange *range;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -976,20 +965,20 @@ gtk_range_scroll_event (GtkWidget      *widget,
 {
   GtkRange *range;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
   range = GTK_RANGE (widget);
 
-  if (GTK_WIDGET_VISIBLE (range)) {
-    GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
-    gfloat new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ? 
-				     -adj->page_increment / 2: 
-				     adj->page_increment / 2);
-    new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
-    gtk_adjustment_set_value (adj, new_value);
-  }
+  if (GTK_WIDGET_REALIZED (range))
+    {
+      GtkAdjustment *adj = GTK_RANGE (range)->adjustment;
+      gfloat new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ? 
+				       -adj->page_increment / 2: 
+				       adj->page_increment / 2);
+      new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
+      gtk_adjustment_set_value (adj, new_value);
+    }
 
   return TRUE;
 }
@@ -1002,7 +991,6 @@ gtk_range_motion_notify (GtkWidget      *widget,
   GdkModifierType mods;
   gint x, y, mask;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1053,7 +1041,6 @@ gtk_range_key_press (GtkWidget   *widget,
   GtkScrollType scroll = GTK_SCROLL_NONE;
   GtkTroughType pos = GTK_TROUGH_NONE;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1110,7 +1097,6 @@ gtk_range_enter_notify (GtkWidget        *widget,
 {
   GtkRange *range;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1154,7 +1140,6 @@ gtk_range_leave_notify (GtkWidget        *widget,
 {
   GtkRange *range;
 
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1191,7 +1176,6 @@ static gint
 gtk_range_focus_in (GtkWidget     *widget,
 		    GdkEventFocus *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1205,7 +1189,6 @@ static gint
 gtk_range_focus_out (GtkWidget     *widget,
 		     GdkEventFocus *event)
 {
-  g_return_val_if_fail (widget != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (widget), FALSE);
   g_return_val_if_fail (event != NULL, FALSE);
 
@@ -1218,7 +1201,6 @@ gtk_range_focus_out (GtkWidget     *widget,
 static void
 gtk_real_range_draw_trough (GtkRange *range)
 {
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
 
   if (range->trough)
@@ -1240,7 +1222,6 @@ gtk_real_range_draw_slider (GtkRange *range)
 {
   GtkStateType state_type;
    
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
    
   if (range->slider)
@@ -1324,7 +1305,6 @@ gtk_range_scroll (GtkRange *range,
   gfloat new_value;
   gint return_val;
 
-  g_return_val_if_fail (range != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_RANGE (range), FALSE);
 
   new_value = range->adjustment->value;
@@ -1408,7 +1388,6 @@ gtk_range_scroll (GtkRange *range,
 static void
 gtk_range_add_timer (GtkRange *range)
 {
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
 
   if (!range->timer)
@@ -1423,7 +1402,6 @@ gtk_range_add_timer (GtkRange *range)
 static void
 gtk_range_remove_timer (GtkRange *range)
 {
-  g_return_if_fail (range != NULL);
   g_return_if_fail (GTK_IS_RANGE (range));
 
   if (range->timer)

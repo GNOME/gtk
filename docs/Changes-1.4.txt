@@ -1,26 +1,101 @@
 Incompatible Changes from GTK+-1.2 to GTK+-1.4:
 
-- The gdk_time* functions have been removed. This functionality
+* The gdk_time* functions have been removed. This functionality
   has been unused since the main loop was moved into GLib
   prior to 1.2. 
 
-- The signature for GtkPrintFunc (used for gtk_item_factory_dump_items)
+* The signature for GtkPrintFunc (used for gtk_item_factory_dump_items)
   has been changed to take a 'const gchar *' instead of 'gchar *', to
   match what we do for glib, and other similar cases.
 
-- The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
+* The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
 
-- gtk_paned_set_gutter_size() has been removed, since the small handle tab
+* gtk_paned_set_gutter_size() has been removed, since the small handle tab
   has been changed to include the entire area previously occupied by
   the gutter.
 
-- GDK no longer selects OwnerGrabButtonMask for button presses. This means  
+* GDK no longer selects OwnerGrabButtonMask for button presses. This means  
   that the automatic grab that occurs when the user presses a button
   will have owner_events = FALSE, so all events are redirected to the
   grab window, even events that would normally go to  other windows of the
   window's owner.
 
-- The detail arguments in the GtkStyleClass structure are now 'const gchar *'.
+* GtkColorSelectionDialog has now been moved into it's own set of files,
+  gtkcolorseldialog.c and gtkcolorseldialog.h.
 
-- GtkColorSelectionDialog has now been moved into it's own set of files,
-gtkcolorseldialog.c and gtkcolorseldialog.h. 
+* Type system changes:
+  - GTK_TYPE_OBJECT is not a fundamental type anymore. Type checks of the
+    style (GTK_FUNDAMENTAL_TYPE (some_type) == GTK_TYPE_OBJECT)
+    will not work anymore. As a replacement, (GTK_TYPE_IS_OBJECT (some_type))
+    can be used now.
+  - The following types vanished: GTK_TYPE_ARGS, GTK_TYPE_CALLBACK,
+    GTK_TYPE_C_CALLBACK, GTK_TYPE_FOREIGN. With them, the corresponding GtkARg
+    fields and field access macros vanished as well.
+  - The following type aliases vanished: GTK_TYPE_FLAT_FIRST,
+    GTK_TYPE_FLAT_LAST, GTK_TYPE_STRUCTURED_FIRST, GTK_TYPE_STRUCTURED_LAST.
+  - The type macros GTK_TYPE_MAKE() and GTK_TYPE_SEQNO() vanished, use of
+    GTK_FUNDAMENTAL_TYPE() is discouraged. Instead, the corresponding GType
+    API should be used: G_TYPE_FUNDAMENTAL(), G_TYPE_DERIVE_ID(),
+    G_TYPE_BRANCH_SEQNO(). Note that the GLib type system doesn't build new
+    type ids based on a global incremental sequential number anymore, but
+    numbers new type ids sequentially per fundamental type branch.
+  - The following type functions vanished/were replaced:
+    Old Function		 Replacement
+    gtk_type_query()		 - being investigated -
+    gtk_type_set_varargs_type()	 -
+    gtk_type_get_varargs_type()	 -
+    gtk_type_check_object_cast() g_type_check_instance_cast()
+    gtk_type_check_class_cast()	 g_type_check_class_cast()
+    gtk_type_describe_tree()	 -
+    gtk_type_describe_heritage() -
+    gtk_type_free()		 -
+    gtk_type_children_types()	 g_type_children()
+    gtk_type_set_chunk_alloc()	 GTypeInfo.n_preallocs
+    gtk_type_register_enum()	 g_enum_register_static()
+    gtk_type_register_flags()	 g_flags_register_static()
+    gtk_type_parent_class()	 g_type_parent() / g_type_class_peek_parent()
+    Use of g_type_class_ref() / g_type_class_unref() and g_type_class_peek()
+    is recommended over usage of gtk_type_class().
+    Use of g_type_register_static() / g_type_register_dynamic() is recommended
+    over usage of gtk_type_unique().
+
+* Object system changes:
+  GtkObject derives from GObject, it is not the basic object type anymore.
+  This imposes the following source incompatible changes:
+  - GtkObject has no klass field anymore, an object's class can be retrived
+    with the object's coresponding GTK_<OBJECT>_GET_CLASS (object) macro.
+  - GtkObjectClass has no type field anymore, a class's type can be retrived
+    with the GTK_CLASS_TYPE (class) macro.
+  - GtkObjectClass does not introduce the finalize() or shutdown() method
+    anymore. While shutdown() is intended for Gtk internal use only, finalize()
+    is required by a variety of object implementations. GObjectClass.finalize
+    should be overriden here, e.g.:
+    static void gtk_label_finalize (GObject *gobject)
+    {
+      GtkLabel *label = GTK_LABEL (gobject);
+      
+      G_OBJECT_CLASS (parent_class)->finalize (object);
+    }
+    static void gtk_label_class_init (GtkLabelClass *class)
+    {
+      GObjectClass *gobject_class = G_OBJECT_CLASS (class);
+      
+      gobject_class->finalize = gtk_label_finalize;
+    }
+  - the GtkObject::destroy signal can be emitted multiple times on an object
+    now. ::destroy implementations have to take this into account by
+    conditionalising freeing/release of assorted resources, e.g.:
+    if (object->foo_data)
+      {
+        g_free (object->foo_data);
+        object->foo_data = NULL;
+      }
+    Also, ::destroy implementations have to release peding object references,
+    that is, code portions commonly found in finalize implementations like:
+    if (object->adjustment)
+      {
+        gtk_object_unref (object->adjustment);
+        object->adjustment = NULL;
+      }
+    have to be moved into the ::destroy implementations.
+    This is required to break object reference cycles at destruction time.

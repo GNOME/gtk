@@ -271,7 +271,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   notebook_signals[SWITCH_PAGE] =
     gtk_signal_new ("switch_page",
 		    GTK_RUN_LAST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkNotebookClass, switch_page),
 		    gtk_marshal_NONE__POINTER_UINT,
 		    GTK_TYPE_NONE, 2,

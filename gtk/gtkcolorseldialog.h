@@ -29,7 +29,7 @@
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkcolorsel.h>
 #include <gtk/gtkvbox.h>
-#include "gtkintl.h"
+#include <gtk/gtkintl.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -49,7 +49,7 @@ typedef struct _GtkColorSelectionDialogClass  GtkColorSelectionDialogClass;
 
 struct _GtkColorSelectionDialog
 {
-  GtkDialog dialog;
+  GtkDialog parent_instance;
 
   GtkWidget *colorsel;
   GtkWidget *ok_button;
@@ -64,8 +64,8 @@ struct _GtkColorSelectionDialogClass
 
 
 /* ColorSelectionDialog */ 
-GtkType    gtk_color_selection_dialog_get_type    (void); 
-GtkWidget* gtk_color_selection_dialog_new         (const gchar *title); 
+GtkType    gtk_color_selection_dialog_get_type (void); 
+GtkWidget* gtk_color_selection_dialog_new      (const gchar *title); 
 
 
 #ifdef __cplusplus

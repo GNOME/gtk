@@ -93,9 +93,9 @@ static void gtk_window_set_arg            (GtkObject         *object,
 static void gtk_window_get_arg            (GtkObject         *object,
 					   GtkArg            *arg,
 					   guint	      arg_id);
-static void gtk_window_shutdown           (GtkObject         *object);
+static void gtk_window_shutdown           (GObject           *object);
 static void gtk_window_destroy            (GtkObject         *object);
-static void gtk_window_finalize           (GtkObject         *object);
+static void gtk_window_finalize           (GObject           *object);
 static void gtk_window_show               (GtkWidget         *widget);
 static void gtk_window_hide               (GtkWidget         *widget);
 static void gtk_window_map                (GtkWidget         *widget);
@@ -167,8 +167,9 @@ static GtkWindowGeometryInfo* gtk_window_get_geometry_info (GtkWindow *window,
 							    gboolean   create);
 static void gtk_window_geometry_destroy  (GtkWindowGeometryInfo *info);
 
+static GSList      *toplevel_list = NULL;
 static GtkBinClass *parent_class = NULL;
-static guint window_signals[LAST_SIGNAL] = { 0 };
+static guint        window_signals[LAST_SIGNAL] = { 0 };
 
 
 GtkType
@@ -199,6 +200,7 @@ gtk_window_get_type (void)
 static void
 gtk_window_class_init (GtkWindowClass *klass)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -208,6 +210,9 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class = (GtkContainerClass*) klass;
 
   parent_class = gtk_type_class (gtk_bin_get_type ());
+
+  gobject_class->shutdown = gtk_window_shutdown;
+  gobject_class->finalize = gtk_window_finalize;
 
   gtk_object_add_arg_type ("GtkWindow::type", GTK_TYPE_WINDOW_TYPE, GTK_ARG_READWRITE, ARG_TYPE);
   gtk_object_add_arg_type ("GtkWindow::title", GTK_TYPE_STRING, GTK_ARG_READWRITE, ARG_TITLE);
@@ -222,7 +227,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_signals[SET_FOCUS] =
     gtk_signal_new ("set_focus",
                     GTK_RUN_LAST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkWindowClass, set_focus),
                     gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -232,9 +237,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   object_class->set_arg = gtk_window_set_arg;
   object_class->get_arg = gtk_window_get_arg;
-  object_class->shutdown = gtk_window_shutdown;
   object_class->destroy = gtk_window_destroy;
-  object_class->finalize = gtk_window_finalize;
 
   widget_class->show = gtk_window_show;
   widget_class->hide = gtk_window_hide;
@@ -282,8 +285,11 @@ gtk_window_init (GtkWindow *window)
   window->position = GTK_WIN_POS_NONE;
   window->use_uposition = TRUE;
   window->modal = FALSE;
-  
-  gtk_container_register_toplevel (GTK_CONTAINER (window));
+
+  gtk_widget_ref (GTK_WIDGET (window));
+  gtk_object_sink (GTK_OBJECT (window));
+  window->has_user_ref_count = TRUE;
+  toplevel_list = g_slist_prepend (toplevel_list, window);
 }
 
 static void
@@ -572,6 +578,18 @@ gtk_window_set_modal (GtkWindow *window,
     gtk_grab_remove (GTK_WIDGET (window));
 }
 
+GList*
+gtk_window_list_toplevels (void)
+{
+  GList *list = NULL;
+  GSList *slist;
+
+  for (slist = toplevel_list; slist; slist = slist->next)
+    list = g_list_prepend (list, gtk_widget_ref (slist->data));
+
+  return list;
+}
+
 void
 gtk_window_add_embedded_xid (GtkWindow *window, guint xid)
 {
@@ -649,11 +667,10 @@ gtk_window_reposition (GtkWindow *window,
 }
 
 static void
-gtk_window_shutdown (GtkObject *object)
+gtk_window_shutdown (GObject *object)
 {
   GtkWindow *window;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   window = GTK_WINDOW (object);
@@ -661,7 +678,7 @@ gtk_window_shutdown (GtkObject *object)
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
 
-  GTK_OBJECT_CLASS (parent_class)->shutdown (object);
+  G_OBJECT_CLASS (parent_class)->shutdown (object);
 }
 
 static void
@@ -831,33 +848,38 @@ gtk_window_destroy (GtkObject *object)
 {
   GtkWindow *window;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   window = GTK_WINDOW (object);
-  
-  gtk_container_unregister_toplevel (GTK_CONTAINER (object));
 
   if (window->transient_parent)
     gtk_window_unset_transient_for (window);
+
+  if (window->has_user_ref_count)
+    {
+      window->has_user_ref_count = FALSE;
+      gtk_widget_unref (GTK_WIDGET (window));
+    }
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
-gtk_window_finalize (GtkObject *object)
+gtk_window_finalize (GObject *object)
 {
   GtkWindow *window;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_WINDOW (object));
 
   window = GTK_WINDOW (object);
+
+  toplevel_list = g_slist_remove (toplevel_list, window);
+
   g_free (window->title);
   g_free (window->wmclass_name);
   g_free (window->wmclass_class);
 
-  GTK_OBJECT_CLASS(parent_class)->finalize (object);
+  G_OBJECT_CLASS(parent_class)->finalize (object);
 }
 
 static void
@@ -1406,14 +1428,14 @@ gtk_window_read_rcfiles (GtkWidget *widget,
        * then, the RC file will up to date, so we have to tell
        * them now.
        */
-      GList *toplevels;
-      
-      toplevels = gtk_container_get_toplevels();
-      while (toplevels)
+      GList *list, *toplevels = gtk_window_list_toplevels ();
+
+      for (list = toplevels; list; list = list->next)
 	{
-	  gtk_widget_reset_rc_styles (toplevels->data);
-	  toplevels = toplevels->next;
+	  gtk_widget_reset_rc_styles (list->data);
+	  gtk_widget_unref (list->data);
 	}
+      g_list_free (toplevels);
     }
 }
 

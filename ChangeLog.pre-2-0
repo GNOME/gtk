@@ -1,3 +1,181 @@
+Fri May 12 17:13:32 2000  Tim Janik  <timj@gtk.org>
+
+	* docs/Changes-1.4.txt: documented necessary changes for 1.4 transition.
+
+	* gtk/gtktext.c: made the adjustments no-construct args, simply
+	provide default adjustments.
+	(gtk_text_destroy): release adjustments.
+
+	* gtk/gtkprogressbar.c (gtk_progress_bar_class_init): made the
+	adjustment argument non-construct.
+
+	* gtk/gtkprogress.c (gtk_progress_destroy): release adjustment here,
+	instead of in finalize.
+	(gtk_progress_get_text_from_value): 
+	(gtk_progress_get_current_text): 
+	(gtk_progress_set_value): 
+	(gtk_progress_get_percentage_from_value): 
+	(gtk_progress_get_current_percentage): 
+	(gtk_progress_set_percentage): 
+	(gtk_progress_configure): ensure an adjustment is present.
+
+Thu May 11 01:24:08 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcolorsel.[hc]:
+	* gtk/gtkcolorseldialog.[hc]:
+	* gtk/gtkhsv.[hc]: major code cleanups, destroy handlers need to chain
+	their parent implementation, use bit fields for boolean values, don't
+	create unused widgets, usage of glib types, braces go on their own
+	lines, function argument alignment, #include directives etc. etc. etc..
+
+	* gtk/Makefile.am (gtk_public_h_sources): install gtkhsv.h.
+
+Wed May 10 23:29:52 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtktoolbar.c (gtk_toolbar_destroy): don't unref a NULL tooltips.
+
+	* gtk/gtkfilesel.c (gtk_file_selection_destroy): don't free a cmpl_state
+	of NULL.
+
+	* gtk/gtkcombo.c (gtk_combo_item_destroy): don#t keep references
+	to freed data.
+	(gtk_combo_destroy): don't keep a pointer to a destroyed window.
+
+	* gtk/gtkmenu.c (gtk_menu_init): reset the menu's toplevel pointer
+	to NULL when the toplevel is getting destroyed.
+	(gtk_menu_set_tearoff_state): same here for the tearoff_window.
+	(gtk_menu_destroy): 
+	(gtk_menu_init): store the information of whether we have to
+	readd the initial child ref_count during destruction in a new
+	GtkMenu field needs_destruction_ref_count.
+
+	* gtk/gtkviewport.c: SHAME! ok this one is tricky, so i note it
+	here, those reading: learn from my mistake! ;)
+	in order for set_?adjustment to support a default adjustemnt if
+	invoked with an adjustment pointer of NULL, the code read (pseudo):
+	if (v->adjustment) unref (v->adjustment);
+	if (!adjustment) adjustment = adjustment_new ();
+	if (v->adjustment != adjustment) v->adjustment = ref (adjustment);
+	now imagine the first unref to actually free the old adjustment and
+	adjustment_new() creating a new adjustment from the very same memory
+	portion. here, the latter comparision will unintendedly fail, and
+	all hell breaks loose.
+	(gtk_viewport_set_hadjustment):
+	(gtk_viewport_set_vadjustment): reset viewport->?adjustment to NULL
+	after unreferencing it.
+
+	* gtk/gtkcontainer.[hc]: removed toplevel registration
+	functions: gtk_container_register_toplevel(),
+	gtk_container_unregister_toplevel() and
+	gtk_container_get_toplevels() which had wrong semantics
+	anyways: it didn't reference and copy the list.
+
+	* gtk/gtkwindow.c: we take over the container toplevel registration
+	bussiness now. windows are registered across multiple destructions,
+	untill they are finalized. the initial implicit reference count
+	users are holding on windows is removed with the first destruction
+	though.
+	(gtk_window_init): ref & sink and set has_user_ref_count, got
+	rid of gtk_container_register_toplevel() call. add window to
+	toplevel_list.
+	(gtk_window_destroy): unref the window if has_user_ref_count
+	is still set, got rid of call to
+	gtk_container_unregister_toplevel().
+	(gtk_window_finalize): remove window from toplevel list.
+	(gtk_window_list_toplevels): new function to return a newly
+	created list with referenced toplevels.
+	(gtk_window_read_rcfiles): use gtk_window_list_toplevels().
+
+	* gtk/gtkhscale.c (gtk_hscale_class_init): made the GtkRange
+	adjustment a non-construct arg.
+	* gtk/gtkvscale.c (gtk_vscale_class_init): likewise.
+	* gtk/gtkhscrollbar.c (gtk_vscrollbar_class_init): likewise.
+	* gtk/gtkvscrollbar.c (gtk_vscrollbar_class_init): likewise.
+
+	* gtk/gtkrange.c: added some realized checks.
+	(gtk_range_destroy): get rid of the h/v adjustments in the
+	destroy handler instead of finalize. remove timer.
+	(gtk_range_get_adjustment): demand create adjustment.
+
+	* gtk/gtkviewport.c: made h/v adjustment non-construct args.
+	we simply create them on demand now and get rid of them in
+	the destroy handler.
+	(gtk_viewport_destroy): get rid of the h/v adjustments in the
+	destroy handler instead of finalize.
+	(gtk_viewport_get_hadjustment): 
+	(gtk_viewport_get_vadjustment): 
+	(gtk_viewport_size_allocate): demand create h/v adjustment
+	if required.
+
+	* gtk/gtkwidget.c (gtk_widget_finalize): duplicate part of the
+	gtk_widget_real_destroy () functionality.
+	(gtk_widget_real_destroy): reinitialize with a new style, instead
+	of setting widget->style to NULL.
+
+Fri May  5 13:02:09 2000  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkcalendar.c:
+	* gtk/gtkbutton.c: ported _get_type() implementation over to
+	GType, either to preserve memchunks allocation facilities,
+	or because Gtk+ 1.0 GtkTypeInfo was still being used.
+
+	* gtk/gtkobject.[hc]: derive from GObject. ported various functions
+	over. prepare for ::destroy to be emitted multiple times.
+	removed reference tracer magic. chain into GObjectClass.shutdown()
+	to emit ::destroy signal.
+
+	* gtk/gtksignal.c: removed assumptions about GTK_TYPE_OBJECT being
+	fundamental.
+
+	* gtk/gtkmain.c: removed gtk_object_post_arg_parsing_init()
+	cludge.
+
+	* gtk/gtksocket.c:
+	* gtk/gtkplug.c:
+	* gtk/gtklayout.c:
+	* gtk/gtklabel.c:
+	* gtk/gtkargcollector.c:
+	* gtk/gtkarg.c: various fixups to work with GTK_TYPE_OBJECT
+	not being a fundamental anymore, and to work with the new
+	type system (nuked fundamental type varargs clutter).
+
+	* gtk/*.c: install finalize handlers in the GObjectClass
+	part of the class structure.
+	changed direct GTK_OBJECT()->klass accesses to
+	GTK_*_GET_CLASS().
+	changed direct object_class->type accesses to GTK_CLASS_TYPE().
+
+	* gtktypeutils.[hc]: use the reserved fundamental ids provided by
+	GType. made most of the GTK_*() type macros and Gtk* typedefs
+	simple wrappers around macros and types provided by GType.
+	most notably, a significant portion of the old API vanished:
+	GTK_TYPE_MAKE(),
+	GTK_TYPE_SEQNO(),
+	GTK_TYPE_FLAT_FIRST, GTK_TYPE_FLAT_LAST,
+	GTK_TYPE_STRUCTURED_FIRST, GTK_TYPE_STRUCTURED_LAST,
+	GTK_TYPE_ARGS,
+	GTK_TYPE_CALLBACK,
+	GTK_TYPE_C_CALLBACK,
+	GTK_TYPE_FOREIGN,
+	GtkTypeQuery,
+	gtk_type_query(),
+	gtk_type_set_varargs_type(),
+	gtk_type_get_varargs_type(),
+	gtk_type_check_object_cast(),
+	gtk_type_check_class_cast(),
+	gtk_type_describe_tree(),
+	gtk_type_describe_heritage(),
+	gtk_type_free(),
+	gtk_type_children_types(),
+	gtk_type_set_chunk_alloc(),
+	gtk_type_register_enum(),
+	gtk_type_register_flags(),
+	gtk_type_parent_class().
+	replacements, where available are described in ../docs/Changes-1.4.txt.
+	implemented compatibility functions for the remaining API.
+
+	* configure.in: depend on glib 1.3.1, use gobject module.
+
 Thu May 11 12:39:50 2000  Owen Taylor  <otaylor@redhat.com>
 
 	* TODO.xml: Various updates to current status.

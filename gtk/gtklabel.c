@@ -74,7 +74,7 @@ static void gtk_label_set_arg	   (GtkObject	   *object,
 static void gtk_label_get_arg	   (GtkObject      *object,
 				    GtkArg	   *arg,
 				    guint	    arg_id);
-static void gtk_label_finalize	   (GtkObject	   *object);
+static void gtk_label_finalize	   (GObject	   *object);
 static void gtk_label_size_request (GtkWidget	   *widget,
 				    GtkRequisition *requisition);
 static void gtk_label_style_set    (GtkWidget      *widget,
@@ -101,20 +101,20 @@ gtk_label_get_type (void)
   
   if (!label_type)
     {
-      static const GtkTypeInfo label_info =
+      static const GTypeInfo label_info =
       {
-	"GtkLabel",
-	sizeof (GtkLabel),
 	sizeof (GtkLabelClass),
-	(GtkClassInitFunc) gtk_label_class_init,
-	(GtkObjectInitFunc) gtk_label_init,
-        /* reserved_1 */ NULL,
-	/* reserved_2 */ NULL,
-	(GtkClassInitFunc) NULL,
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_label_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkLabel),
+	32,             /* n_preallocs */
+	(GInstanceInitFunc) gtk_label_init,
       };
-      
-      label_type = gtk_type_unique (GTK_TYPE_MISC, &label_info);
-      gtk_type_set_chunk_alloc (label_type, 32);
+
+      label_type = g_type_register_static (GTK_TYPE_MISC, "GtkLabel", &label_info);
     }
   
   return label_type;
@@ -123,6 +123,7 @@ gtk_label_get_type (void)
 static void
 gtk_label_class_init (GtkLabelClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   
@@ -136,9 +137,10 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_object_add_arg_type ("GtkLabel::justify", GTK_TYPE_JUSTIFICATION, GTK_ARG_READWRITE, ARG_JUSTIFY);
   gtk_object_add_arg_type ("GtkLabel::wrap", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_WRAP);
   
+  gobject_class->finalize = gtk_label_finalize;
+
   object_class->set_arg = gtk_label_set_arg;
   object_class->get_arg = gtk_label_get_arg;
-  object_class->finalize = gtk_label_finalize;
   
   widget_class->size_request = gtk_label_size_request;
   widget_class->style_set = gtk_label_style_set;
@@ -347,11 +349,10 @@ gtk_label_get_text (GtkLabel *label)
 }
 
 static void
-gtk_label_finalize (GtkObject *object)
+gtk_label_finalize (GObject *object)
 {
   GtkLabel *label;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_LABEL (object));
   
   label = GTK_LABEL (object);
@@ -362,7 +363,7 @@ gtk_label_finalize (GtkObject *object)
 
   gtk_label_free_words (label);
 
-  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static GtkLabelULine*

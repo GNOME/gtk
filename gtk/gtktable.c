@@ -52,7 +52,7 @@ enum
 
 static void gtk_table_class_init    (GtkTableClass  *klass);
 static void gtk_table_init	    (GtkTable	    *table);
-static void gtk_table_finalize	    (GtkObject	    *object);
+static void gtk_table_finalize	    (GObject	    *object);
 static void gtk_table_map	    (GtkWidget	    *widget);
 static void gtk_table_unmap	    (GtkWidget	    *widget);
 static void gtk_table_draw	    (GtkWidget	    *widget,
@@ -129,6 +129,7 @@ gtk_table_get_type (void)
 static void
 gtk_table_class_init (GtkTableClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -138,24 +139,11 @@ gtk_table_class_init (GtkTableClass *class)
   container_class = (GtkContainerClass*) class;
   
   parent_class = gtk_type_class (gtk_container_get_type ());
-  
-  gtk_object_add_arg_type ("GtkTable::n_rows", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_ROWS);
-  gtk_object_add_arg_type ("GtkTable::n_columns", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_COLUMNS);
-  gtk_object_add_arg_type ("GtkTable::row_spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_ROW_SPACING);
-  gtk_object_add_arg_type ("GtkTable::column_spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_COLUMN_SPACING);
-  gtk_object_add_arg_type ("GtkTable::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
-  gtk_container_add_child_arg_type ("GtkTable::left_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_LEFT_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::right_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_RIGHT_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::top_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_TOP_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::bottom_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_BOTTOM_ATTACH);
-  gtk_container_add_child_arg_type ("GtkTable::x_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_X_OPTIONS);
-  gtk_container_add_child_arg_type ("GtkTable::y_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_Y_OPTIONS);
-  gtk_container_add_child_arg_type ("GtkTable::x_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_X_PADDING);
-  gtk_container_add_child_arg_type ("GtkTable::y_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_Y_PADDING);
+
+  gobject_class->finalize = gtk_table_finalize;
 
   object_class->get_arg = gtk_table_get_arg;
   object_class->set_arg = gtk_table_set_arg;
-  object_class->finalize = gtk_table_finalize;
   
   widget_class->map = gtk_table_map;
   widget_class->unmap = gtk_table_unmap;
@@ -170,6 +158,20 @@ gtk_table_class_init (GtkTableClass *class)
   container_class->child_type = gtk_table_child_type;
   container_class->set_child_arg = gtk_table_set_child_arg;
   container_class->get_child_arg = gtk_table_get_child_arg;
+  
+  gtk_object_add_arg_type ("GtkTable::n_rows", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_ROWS);
+  gtk_object_add_arg_type ("GtkTable::n_columns", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_N_COLUMNS);
+  gtk_object_add_arg_type ("GtkTable::row_spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_ROW_SPACING);
+  gtk_object_add_arg_type ("GtkTable::column_spacing", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_COLUMN_SPACING);
+  gtk_object_add_arg_type ("GtkTable::homogeneous", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_HOMOGENEOUS);
+  gtk_container_add_child_arg_type ("GtkTable::left_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_LEFT_ATTACH);
+  gtk_container_add_child_arg_type ("GtkTable::right_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_RIGHT_ATTACH);
+  gtk_container_add_child_arg_type ("GtkTable::top_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_TOP_ATTACH);
+  gtk_container_add_child_arg_type ("GtkTable::bottom_attach", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_BOTTOM_ATTACH);
+  gtk_container_add_child_arg_type ("GtkTable::x_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_X_OPTIONS);
+  gtk_container_add_child_arg_type ("GtkTable::y_options", GTK_TYPE_ATTACH_OPTIONS, GTK_ARG_READWRITE, CHILD_ARG_Y_OPTIONS);
+  gtk_container_add_child_arg_type ("GtkTable::x_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_X_PADDING);
+  gtk_container_add_child_arg_type ("GtkTable::y_padding", GTK_TYPE_UINT, GTK_ARG_READWRITE, CHILD_ARG_Y_PADDING);
 }
 
 static GtkType
@@ -655,11 +657,10 @@ gtk_table_set_homogeneous (GtkTable *table,
 }
 
 static void
-gtk_table_finalize (GtkObject *object)
+gtk_table_finalize (GObject *object)
 {
   GtkTable *table;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_TABLE (object));
   
   table = GTK_TABLE (object);
@@ -667,7 +668,7 @@ gtk_table_finalize (GtkObject *object)
   g_free (table->rows);
   g_free (table->cols);
   
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

@@ -324,18 +324,20 @@ gtk_calendar_get_type (void)
   
   if (!calendar_type)
     {
-      static const GtkTypeInfo calendar_info =
+      static const GTypeInfo calendar_info =
       {
-	"GtkCalendar",
-	sizeof (GtkCalendar),
 	sizeof (GtkCalendarClass),
-	(GtkClassInitFunc) gtk_calendar_class_init,
-	(GtkObjectInitFunc) gtk_calendar_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL,
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_calendar_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkCalendar),
+	16,             /* n_preallocs */
+	(GInstanceInitFunc) gtk_calendar_init,
       };
-      
-      calendar_type = gtk_type_unique (GTK_TYPE_WIDGET, &calendar_info);
+
+      calendar_type = g_type_register_static (GTK_TYPE_WIDGET, "GtkCalendar", &calendar_info);
     }
   
   return calendar_type;
@@ -371,37 +373,37 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   
   gtk_calendar_signals[MONTH_CHANGED_SIGNAL] =
     gtk_signal_new ("month_changed",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, month_changed),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_calendar_signals[DAY_SELECTED_SIGNAL] =
     gtk_signal_new ("day_selected",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, day_selected),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_calendar_signals[DAY_SELECTED_DOUBLE_CLICK_SIGNAL] =
     gtk_signal_new ("day_selected_double_click",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, day_selected_double_click),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_calendar_signals[PREV_MONTH_SIGNAL] =
     gtk_signal_new ("prev_month",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, prev_month),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_calendar_signals[NEXT_MONTH_SIGNAL] =
     gtk_signal_new ("next_month",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, next_month),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_calendar_signals[PREV_YEAR_SIGNAL] =
     gtk_signal_new ("prev_year",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, prev_year),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   gtk_calendar_signals[NEXT_YEAR_SIGNAL] =
     gtk_signal_new ("next_year",
-		    GTK_RUN_FIRST, object_class->type,
+		    GTK_RUN_FIRST, GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkCalendarClass, next_year),
 		    gtk_signal_default_marshaller, GTK_TYPE_NONE, 0);
   

@@ -50,7 +50,7 @@ static void gtk_progress_get_arg	 (GtkObject        *object,
 					  GtkArg           *arg,
 					  guint             arg_id);
 static void gtk_progress_destroy         (GtkObject        *object);
-static void gtk_progress_finalize        (GtkObject        *object);
+static void gtk_progress_finalize        (GObject          *object);
 static void gtk_progress_realize         (GtkWidget        *widget);
 static gint gtk_progress_expose          (GtkWidget        *widget,
 				 	  GdkEventExpose   *event);
@@ -90,12 +90,28 @@ gtk_progress_get_type (void)
 static void
 gtk_progress_class_init (GtkProgressClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
 
   object_class = (GtkObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
   parent_class = gtk_type_class (GTK_TYPE_WIDGET);
+
+  gobject_class->finalize = gtk_progress_finalize;
+
+  object_class->set_arg = gtk_progress_set_arg;
+  object_class->get_arg = gtk_progress_get_arg;
+  object_class->destroy = gtk_progress_destroy;
+
+  widget_class->realize = gtk_progress_realize;
+  widget_class->expose_event = gtk_progress_expose;
+  widget_class->size_allocate = gtk_progress_size_allocate;
+
+  /* to be overridden */
+  class->paint = NULL;
+  class->update = NULL;
+  class->act_mode_enter = NULL;
 
   gtk_object_add_arg_type ("GtkProgress::activity_mode",
 			   GTK_TYPE_BOOL,
@@ -113,20 +129,6 @@ gtk_progress_class_init (GtkProgressClass *class)
 			   GTK_TYPE_FLOAT,
 			   GTK_ARG_READWRITE,
 			   ARG_TEXT_YALIGN);
-
-  object_class->set_arg = gtk_progress_set_arg;
-  object_class->get_arg = gtk_progress_get_arg;
-  object_class->destroy = gtk_progress_destroy;
-  object_class->finalize = gtk_progress_finalize;
-
-  widget_class->realize = gtk_progress_realize;
-  widget_class->expose_event = gtk_progress_expose;
-  widget_class->size_allocate = gtk_progress_size_allocate;
-
-  /* to be overridden */
-  class->paint = NULL;
-  class->update = NULL;
-  class->act_mode_enter = NULL;
 }
 
 static void
@@ -245,32 +247,32 @@ gtk_progress_destroy (GtkObject *object)
   progress = GTK_PROGRESS (object);
 
   if (progress->adjustment)
-    gtk_signal_disconnect_by_data (GTK_OBJECT (progress->adjustment),
-				   progress);
+    {
+      gtk_signal_disconnect_by_data (GTK_OBJECT (progress->adjustment),
+				     progress);
+      gtk_object_unref (GTK_OBJECT (progress->adjustment));
+      progress->adjustment = NULL;
+    }
 
   GTK_OBJECT_CLASS (parent_class)->destroy (object);
 }
 
 static void
-gtk_progress_finalize (GtkObject *object)
+gtk_progress_finalize (GObject *object)
 {
   GtkProgress *progress;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (object));
 
   progress = GTK_PROGRESS (object);
 
-  if (progress->adjustment)
-    gtk_object_unref (GTK_OBJECT (GTK_PROGRESS (object)->adjustment));
-  
   if (progress->offscreen_pixmap)
     gdk_pixmap_unref (progress->offscreen_pixmap);
 
   if (progress->format)
     g_free (progress->format);
 
-  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static gint
@@ -332,7 +334,7 @@ gtk_progress_create_pixmap (GtkProgress *progress)
 						   widget->allocation.width,
 						   widget->allocation.height,
 						   -1);
-      GTK_PROGRESS_CLASS (GTK_OBJECT (progress)->klass)->paint (progress);
+      GTK_PROGRESS_GET_CLASS (progress)->paint (progress);
     }
 }
 
@@ -340,7 +342,7 @@ static void
 gtk_progress_value_changed (GtkAdjustment *adjustment,
 			    GtkProgress   *progress)
 {
-  GTK_PROGRESS_CLASS (GTK_OBJECT (progress)->klass)->update (progress);
+  GTK_PROGRESS_GET_CLASS (progress)->update (progress);
 }
 
 static gchar *
@@ -495,6 +497,8 @@ gtk_progress_configure (GtkProgress *progress,
   g_return_if_fail (min <= max);
   g_return_if_fail (value >= min && value <= max);
 
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
   adj = progress->adjustment;
 
   if (fabs (adj->lower - min) > EPSILON || fabs (adj->upper - max) > EPSILON)
@@ -517,6 +521,8 @@ gtk_progress_set_percentage (GtkProgress *progress,
   g_return_if_fail (GTK_IS_PROGRESS (progress));
   g_return_if_fail (percentage >= 0 && percentage <= 1.0);
 
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
   gtk_progress_set_value (progress, progress->adjustment->lower + percentage * 
 		 (progress->adjustment->upper - progress->adjustment->lower));
 }
@@ -527,8 +533,11 @@ gtk_progress_get_current_percentage (GtkProgress *progress)
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
-  return (progress->adjustment->value - progress->adjustment->lower) /
-    (progress->adjustment->upper - progress->adjustment->lower);
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
+
+  return ((progress->adjustment->value - progress->adjustment->lower) /
+	  (progress->adjustment->upper - progress->adjustment->lower));
 }
 
 gfloat
@@ -537,6 +546,9 @@ gtk_progress_get_percentage_from_value (GtkProgress *progress,
 {
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
+
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
 
   if (value >= progress->adjustment->lower &&
       value <= progress->adjustment->upper)
@@ -553,6 +565,9 @@ gtk_progress_set_value (GtkProgress *progress,
   g_return_if_fail (progress != NULL);
   g_return_if_fail (GTK_IS_PROGRESS (progress));
 
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
+
   if (fabs (progress->adjustment->value - value) > EPSILON)
     gtk_adjustment_set_value (progress->adjustment, value);
 }
@@ -563,7 +578,7 @@ gtk_progress_get_value (GtkProgress *progress)
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
-  return progress->adjustment->value;
+  return progress->adjustment ? progress->adjustment->value : 0;
 }
 
 void
@@ -626,8 +641,11 @@ gtk_progress_get_current_text (GtkProgress *progress)
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
+
   return gtk_progress_build_string (progress, progress->adjustment->value,
-		    gtk_progress_get_current_percentage (progress));
+				    gtk_progress_get_current_percentage (progress));
 }
 
 gchar *
@@ -637,8 +655,11 @@ gtk_progress_get_text_from_value (GtkProgress *progress,
   g_return_val_if_fail (progress != NULL, 0);
   g_return_val_if_fail (GTK_IS_PROGRESS (progress), 0);
 
+  if (!progress->adjustment)
+    gtk_progress_set_adjustment (progress, NULL);
+
   return gtk_progress_build_string (progress, value,
-		    gtk_progress_get_percentage_from_value (progress, value));
+				    gtk_progress_get_percentage_from_value (progress, value));
 }
 
 void
@@ -653,8 +674,7 @@ gtk_progress_set_activity_mode (GtkProgress *progress,
       progress->activity_mode = (activity_mode != 0);
 
       if (progress->activity_mode)
-	GTK_PROGRESS_CLASS 
-	  (GTK_OBJECT (progress)->klass)->act_mode_enter (progress);
+	GTK_PROGRESS_GET_CLASS (progress)->act_mode_enter (progress);
 
       if (GTK_WIDGET_DRAWABLE (GTK_WIDGET (progress)))
 	gtk_widget_queue_resize (GTK_WIDGET (progress));

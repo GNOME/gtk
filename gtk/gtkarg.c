@@ -65,7 +65,7 @@ gtk_arg_type_new_static (GtkType      base_class_type,
   gchar *p;
 
   g_return_val_if_fail (arg_name != NULL, NULL);
-  g_return_val_if_fail (GTK_FUNDAMENTAL_TYPE (base_class_type) == GTK_TYPE_OBJECT, NULL);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (base_class_type), NULL);
   g_return_val_if_fail (class_n_args_offset != 0, NULL);
   g_return_val_if_fail (arg_info_hash_table != NULL, NULL);
   g_return_val_if_fail (arg_type > GTK_TYPE_NONE, NULL);
@@ -214,7 +214,7 @@ gtk_arg_get_info (GtkType       object_type,
   else
     {
       otype = object_type;
-      while (!*info_p && GTK_FUNDAMENTAL_TYPE (otype) == GTK_TYPE_OBJECT)
+      while (!*info_p && GTK_TYPE_IS_OBJECT (otype))
 	{
 	  GtkArgInfo info;
 	  
@@ -440,12 +440,6 @@ gtk_arg_reset (GtkArg *arg)
   g_return_if_fail (arg != NULL);
 
   fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
-  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST)
-    {
-      fundamental_type = gtk_type_get_varargs_type (fundamental_type);
-      if (!fundamental_type)
-        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
-    }
 
   if (fundamental_type == GTK_TYPE_STRING)
     {
@@ -503,12 +497,6 @@ gtk_arg_values_equal (const GtkArg *arg1,
 			GTK_FUNDAMENTAL_TYPE (arg2->type), FALSE);
   
   fundamental_type = GTK_FUNDAMENTAL_TYPE (arg1->type);
-  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST)
-    {
-      fundamental_type = gtk_type_get_varargs_type (fundamental_type);
-      if (!fundamental_type)
-        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg1->type);
-    }
   
   switch (fundamental_type)
     {
@@ -555,20 +543,7 @@ gtk_arg_values_equal (const GtkArg *arg1,
     case GTK_TYPE_BOXED:
       equal = GTK_VALUE_BOXED (*arg1) == GTK_VALUE_BOXED (*arg2);
       break;
-    case GTK_TYPE_FOREIGN:
-      equal = (GTK_VALUE_FOREIGN (*arg1).data == GTK_VALUE_FOREIGN (*arg2).data &&
-	       GTK_VALUE_FOREIGN (*arg1).notify == GTK_VALUE_FOREIGN (*arg2).notify);
-      break;
-    case GTK_TYPE_CALLBACK:
-      equal = (GTK_VALUE_CALLBACK (*arg1).marshal == GTK_VALUE_CALLBACK (*arg2).marshal &&
-	       GTK_VALUE_CALLBACK (*arg1).data == GTK_VALUE_CALLBACK (*arg2).data &&
-	       GTK_VALUE_CALLBACK (*arg1).notify == GTK_VALUE_CALLBACK (*arg2).notify);
-      break;
-    case GTK_TYPE_ARGS:
-      equal = (GTK_VALUE_ARGS (*arg1).n_args == GTK_VALUE_ARGS (*arg2).n_args &&
-	       GTK_VALUE_ARGS (*arg1).args == GTK_VALUE_ARGS (*arg2).args);
-      break;
-    case GTK_TYPE_OBJECT:
+    case G_TYPE_OBJECT:
       equal = GTK_VALUE_OBJECT (*arg1) == GTK_VALUE_OBJECT (*arg2);
       break;
     case GTK_TYPE_POINTER:
@@ -577,10 +552,6 @@ gtk_arg_values_equal (const GtkArg *arg1,
     case GTK_TYPE_SIGNAL:
       equal = (GTK_VALUE_SIGNAL (*arg1).f == GTK_VALUE_SIGNAL (*arg2).f &&
 	       GTK_VALUE_SIGNAL (*arg1).d == GTK_VALUE_SIGNAL (*arg2).d);
-      break;
-    case GTK_TYPE_C_CALLBACK:
-      equal = (GTK_VALUE_C_CALLBACK (*arg1).func == GTK_VALUE_C_CALLBACK (*arg2).func &&
-	       GTK_VALUE_C_CALLBACK (*arg1).func_data == GTK_VALUE_C_CALLBACK (*arg2).func_data);
       break;
     default:
       g_warning ("gtk_arg_values_equal() used with unknown type `%s'", gtk_type_name (arg1->type));
@@ -601,12 +572,6 @@ gtk_arg_to_valueloc (GtkArg  *arg,
   g_return_if_fail (value_pointer != NULL);
   
   fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
-  if (fundamental_type > GTK_TYPE_FUNDAMENTAL_LAST)
-    {
-      fundamental_type = gtk_type_get_varargs_type (fundamental_type);
-      if (!fundamental_type)
-        fundamental_type = GTK_FUNDAMENTAL_TYPE (arg->type);
-    }
   
   switch (fundamental_type)
     {
@@ -661,15 +626,11 @@ gtk_arg_to_valueloc (GtkArg  *arg,
     case GTK_TYPE_STRING:
     case GTK_TYPE_POINTER:
     case GTK_TYPE_BOXED:
-    case GTK_TYPE_OBJECT:
+    case G_TYPE_OBJECT:
       p_pointer = value_pointer;
       *p_pointer = GTK_VALUE_POINTER (*arg);
       break;
     case GTK_TYPE_SIGNAL:
-    case GTK_TYPE_ARGS:
-    case GTK_TYPE_FOREIGN:
-    case GTK_TYPE_CALLBACK:
-    case GTK_TYPE_C_CALLBACK:
     case GTK_TYPE_NONE:
     case GTK_TYPE_INVALID:
       /* it doesn't make much sense to retrive these values,

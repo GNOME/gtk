@@ -64,18 +64,20 @@ gtk_plug_get_type ()
 
   if (!plug_type)
     {
-      static const GtkTypeInfo plug_info =
+      static const GTypeInfo plug_info =
       {
-	"GtkPlug",
-	sizeof (GtkPlug),
 	sizeof (GtkPlugClass),
-	(GtkClassInitFunc) gtk_plug_class_init,
-	(GtkObjectInitFunc) gtk_plug_init,
-	(GtkArgSetFunc) NULL,
-	(GtkArgGetFunc) NULL
+	NULL,           /* base_init */
+	NULL,           /* base_finalize */
+	(GClassInitFunc) gtk_plug_class_init,
+	NULL,           /* class_finalize */
+	NULL,           /* class_data */
+	sizeof (GtkPlug),
+	16,             /* n_preallocs */
+	(GInstanceInitFunc) gtk_plug_init,
       };
 
-      plug_type = gtk_type_unique (GTK_TYPE_WINDOW, &plug_info);
+      plug_type = g_type_register_static (GTK_TYPE_WINDOW, "GtkPlug", &plug_info);
     }
 
   return plug_type;

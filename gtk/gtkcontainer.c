@@ -173,7 +173,7 @@ gtk_container_class_init (GtkContainerClass *class)
   container_signals[ADD] =
     gtk_signal_new ("add",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, add),
                     gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -181,7 +181,7 @@ gtk_container_class_init (GtkContainerClass *class)
   container_signals[REMOVE] =
     gtk_signal_new ("remove",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, remove),
                     gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -189,14 +189,14 @@ gtk_container_class_init (GtkContainerClass *class)
   container_signals[CHECK_RESIZE] =
     gtk_signal_new ("check_resize",
                     GTK_RUN_LAST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, check_resize),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   container_signals[FOCUS] =
     gtk_signal_new ("focus",
                     GTK_RUN_LAST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, focus),
                     gtk_marshal_ENUM__ENUM,
 		    GTK_TYPE_DIRECTION_TYPE, 1,
@@ -204,7 +204,7 @@ gtk_container_class_init (GtkContainerClass *class)
   container_signals[SET_FOCUS_CHILD] =
     gtk_signal_new ("set-focus-child",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkContainerClass, set_focus_child),
                     gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -237,7 +237,7 @@ gtk_container_child_type (GtkContainer      *container)
   g_return_val_if_fail (container != NULL, 0);
   g_return_val_if_fail (GTK_IS_CONTAINER (container), 0);
 
-  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
+  class = GTK_CONTAINER_GET_CLASS (container);
   if (class->child_type)
     slot = class->child_type (container);
   else
@@ -1104,7 +1104,7 @@ gtk_container_forall (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
+  class = GTK_CONTAINER_GET_CLASS (container);
 
   if (class->forall)
     class->forall (container, TRUE, callback, callback_data);
@@ -1121,7 +1121,7 @@ gtk_container_foreach (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
-  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
+  class = GTK_CONTAINER_GET_CLASS (container);
 
   if (class->forall)
     class->forall (container, FALSE, callback, callback_data);
@@ -1144,8 +1144,8 @@ gtk_container_foreach_unmarshal (GtkWidget *child,
   
   /* first argument */
   args[0].name = NULL;
-  args[0].type = GTK_OBJECT(child)->klass->type;
-  GTK_VALUE_OBJECT(args[0]) = GTK_OBJECT (child);
+  args[0].type = GTK_OBJECT_TYPE (child);
+  GTK_VALUE_OBJECT (args[0]) = GTK_OBJECT (child);
   
   /* location for return value */
   args[1].name = NULL;
@@ -1227,42 +1227,6 @@ gtk_container_children (GtkContainer *container)
   return g_list_reverse (children);
 }
 
-void
-gtk_container_register_toplevel (GtkContainer *container)
-{
-  g_return_if_fail (container != NULL);
-  
-  toplevel_list = g_list_prepend (toplevel_list, container);
-  
-  gtk_widget_ref (GTK_WIDGET (container));
-  gtk_object_sink (GTK_OBJECT (container));
-}
-
-void
-gtk_container_unregister_toplevel (GtkContainer *container)
-{
-  GList *node;
-
-  g_return_if_fail (container != NULL);
-
-  node = g_list_find (toplevel_list, container);
-  g_return_if_fail (node != NULL);
-
-  toplevel_list = g_list_remove_link (toplevel_list, node);
-  g_list_free_1 (node);
-
-  gtk_widget_unref (GTK_WIDGET (container));
-}
-
-GList*
-gtk_container_get_toplevels (void)
-{
-  /* XXX: fixme we should ref all these widgets and duplicate
-   * the list.
-   */
-  return toplevel_list;
-}
-
 static void
 gtk_container_child_position_callback (GtkWidget *widget,
 				       gpointer   client_data)
@@ -1327,7 +1291,7 @@ gtk_container_child_composite_name (GtkContainer *container,
 	{
 	  GtkContainerClass *class;
 
-	  class = GTK_CONTAINER_CLASS (GTK_OBJECT (container)->klass);
+	  class = GTK_CONTAINER_GET_CLASS (container);
 	  if (class->composite_name)
 	    name = class->composite_name (container, child);
 	}

@@ -55,7 +55,7 @@ static void gtk_entry_set_arg      	  (GtkObject         *object,
 static void gtk_entry_get_arg		  (GtkObject         *object,
 					   GtkArg            *arg,
 					   guint              arg_id);
-static void gtk_entry_finalize            (GtkObject         *object);
+static void gtk_entry_finalize            (GObject           *object);
 static void gtk_entry_realize             (GtkWidget         *widget);
 static void gtk_entry_unrealize           (GtkWidget         *widget);
 static void gtk_entry_draw_focus          (GtkWidget         *widget);
@@ -249,6 +249,7 @@ gtk_entry_get_type (void)
 static void
 gtk_entry_class_init (GtkEntryClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkEditableClass *editable_class;
@@ -258,12 +259,13 @@ gtk_entry_class_init (GtkEntryClass *class)
   editable_class = (GtkEditableClass*) class;
   parent_class = gtk_type_class (GTK_TYPE_EDITABLE);
 
+  gobject_class->finalize = gtk_entry_finalize;
+
   gtk_object_add_arg_type ("GtkEntry::max_length", GTK_TYPE_UINT, GTK_ARG_READWRITE, ARG_MAX_LENGTH);
   gtk_object_add_arg_type ("GtkEntry::visibility", GTK_TYPE_BOOL, GTK_ARG_READWRITE, ARG_VISIBILITY);
 
   object_class->set_arg = gtk_entry_set_arg;
   object_class->get_arg = gtk_entry_get_arg;
-  object_class->finalize = gtk_entry_finalize;
 
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
@@ -513,11 +515,10 @@ gtk_entry_get_text (GtkEntry *entry)
 }
 
 static void
-gtk_entry_finalize (GtkObject *object)
+gtk_entry_finalize (GObject *object)
 {
   GtkEntry *entry;
 
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ENTRY (object));
 
   entry = GTK_ENTRY (object);
@@ -540,7 +541,7 @@ gtk_entry_finalize (GtkObject *object)
   if (entry->backing_pixmap)
     gdk_pixmap_unref (entry->backing_pixmap);
 
-  (* GTK_OBJECT_CLASS (parent_class)->finalize) (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 static void

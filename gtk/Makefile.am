@@ -92,6 +92,7 @@ gtk_public_h_sources = @STRIP_BEGIN@ \
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
+	gtkhsv.h		\
 	gtkimage.h		\
 	gtkinputdialog.h	\
 	gtkinvisible.h		\

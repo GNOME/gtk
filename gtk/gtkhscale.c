@@ -30,8 +30,8 @@
 #include "gdk/gdkkeysyms.h"
 
 
-#define SCALE_CLASS(w)  GTK_SCALE_CLASS (GTK_OBJECT (w)->klass)
-#define RANGE_CLASS(w)  GTK_RANGE_CLASS (GTK_OBJECT (w)->klass)
+#define SCALE_CLASS(w)  GTK_SCALE_GET_CLASS (w)
+#define RANGE_CLASS(w)  GTK_RANGE_GET_CLASS (w)
 
 enum {
   ARG_0,
@@ -111,7 +111,7 @@ gtk_hscale_class_init (GtkHScaleClass *class)
   
   gtk_object_add_arg_type ("GtkHScale::adjustment",
                            GTK_TYPE_ADJUSTMENT,
-                           GTK_ARG_READWRITE | GTK_ARG_CONSTRUCT,
+                           GTK_ARG_READWRITE,
                            ARG_ADJUSTMENT);
   
   object_class->set_arg = gtk_hscale_set_arg;

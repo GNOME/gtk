@@ -48,7 +48,7 @@ static void gtk_accel_label_get_arg	 (GtkObject      *object,
 					  GtkArg	 *arg,
 					  guint		  arg_id);
 static void gtk_accel_label_destroy	 (GtkObject	 *object);
-static void gtk_accel_label_finalize	 (GtkObject	 *object);
+static void gtk_accel_label_finalize	 (GObject	 *object);
 static void gtk_accel_label_size_request (GtkWidget	 *widget,
 					  GtkRequisition *requisition);
 static gint gtk_accel_label_expose_event (GtkWidget	 *widget,
@@ -87,6 +87,7 @@ gtk_accel_label_get_type (void)
 static void
 gtk_accel_label_class_init (GtkAccelLabelClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkMiscClass *misc_class;
@@ -102,10 +103,11 @@ gtk_accel_label_class_init (GtkAccelLabelClass *class)
   
   gtk_object_add_arg_type ("GtkAccelLabel::accel_widget", GTK_TYPE_WIDGET, GTK_ARG_READWRITE, ARG_ACCEL_WIDGET);
 
+  gobject_class->finalize = gtk_accel_label_finalize;
+
   object_class->set_arg = gtk_accel_label_set_arg;
   object_class->get_arg = gtk_accel_label_get_arg;
   object_class->destroy = gtk_accel_label_destroy;
-  object_class->finalize = gtk_accel_label_finalize;
   
   widget_class->size_request = gtk_accel_label_size_request;
   widget_class->expose_event = gtk_accel_label_expose_event;
@@ -200,18 +202,17 @@ gtk_accel_label_destroy (GtkObject *object)
 }
 
 static void
-gtk_accel_label_finalize (GtkObject *object)
+gtk_accel_label_finalize (GObject *object)
 {
   GtkAccelLabel *accel_label;
   
-  g_return_if_fail (object != NULL);
   g_return_if_fail (GTK_IS_ACCEL_LABEL (object));
   
   accel_label = GTK_ACCEL_LABEL (object);
   
   g_free (accel_label->accel_string);
   
-  GTK_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
 guint
@@ -376,7 +377,7 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
   g_return_val_if_fail (accel_label != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_ACCEL_LABEL (accel_label), FALSE);
 
-  class = GTK_ACCEL_LABEL_CLASS (GTK_OBJECT (accel_label)->klass);
+  class = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
   
   g_free (accel_label->accel_string);
   accel_label->accel_string = NULL;

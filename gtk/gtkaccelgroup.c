@@ -656,7 +656,7 @@ gtk_accel_group_create_add (GtkType          class_type,
 			    GtkSignalRunType signal_flags,
 			    guint            handler_offset)
 {
-  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), 0);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (class_type), 0);
 
   return gtk_signal_new ("add-accelerator",
 			 signal_flags,
@@ -676,7 +676,7 @@ gtk_accel_group_create_remove (GtkType          class_type,
 			       GtkSignalRunType signal_flags,
 			       guint            handler_offset)
 {
-  g_return_val_if_fail (gtk_type_is_a (class_type, GTK_TYPE_OBJECT), 0);
+  g_return_val_if_fail (GTK_TYPE_IS_OBJECT (class_type), 0);
 
   return gtk_signal_new ("remove-accelerator",
 			 signal_flags,

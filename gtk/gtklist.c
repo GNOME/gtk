@@ -54,7 +54,7 @@ static void gtk_list_get_arg         (GtkObject      *object,
 				      GtkArg         *arg,
 				      guint           arg_id);
 /** GtkObject Methods **/
-static void gtk_list_shutdown	     (GtkObject	     *object);
+static void gtk_list_shutdown	     (GObject	     *object);
 
 /** GtkWidget Methods **/
 static void gtk_list_size_request    (GtkWidget	     *widget,
@@ -200,6 +200,7 @@ gtk_list_get_type (void)
 static void
 gtk_list_class_init (GtkListClass *class)
 {
+  GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkObjectClass *object_class;
   GtkWidgetClass *widget_class;
   GtkContainerClass *container_class;
@@ -213,17 +214,19 @@ gtk_list_class_init (GtkListClass *class)
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
 
+  gobject_class->shutdown = gtk_list_shutdown;
+
   list_signals[SELECTION_CHANGED] =
     gtk_signal_new ("selection_changed",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, selection_changed),
 		    gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);
   list_signals[SELECT_CHILD] =
     gtk_signal_new ("select_child",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, select_child),
 		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -231,7 +234,7 @@ gtk_list_class_init (GtkListClass *class)
   list_signals[UNSELECT_CHILD] =
     gtk_signal_new ("unselect_child",
 		    GTK_RUN_FIRST,
-		    object_class->type,
+		    GTK_CLASS_TYPE (object_class),
 		    GTK_SIGNAL_OFFSET (GtkListClass, unselect_child),
 		    gtk_marshal_NONE__POINTER,
 		    GTK_TYPE_NONE, 1,
@@ -239,7 +242,6 @@ gtk_list_class_init (GtkListClass *class)
 
   gtk_object_class_add_signals (object_class, list_signals, LAST_SIGNAL);
 
-  object_class->shutdown = gtk_list_shutdown;
   object_class->set_arg = gtk_list_set_arg;
   object_class->get_arg = gtk_list_get_arg;
 
@@ -341,10 +343,11 @@ gtk_list_new (void)
  * gtk_list_shutdown
  */
 static void
-gtk_list_shutdown (GtkObject *object)
+gtk_list_shutdown (GObject *object)
 {
   gtk_list_clear_items (GTK_LIST (object), 0, -1);
-  GTK_OBJECT_CLASS (parent_class)->shutdown (object);
+
+  G_OBJECT_CLASS (parent_class)->shutdown (object);
 }
 
 

@@ -75,7 +75,7 @@ gtk_data_class_init (GtkDataClass *class)
   data_signals[DISCONNECT] =
     gtk_signal_new ("disconnect",
                     GTK_RUN_FIRST,
-                    object_class->type,
+                    GTK_CLASS_TYPE (object_class),
                     GTK_SIGNAL_OFFSET (GtkDataClass, disconnect),
                     gtk_marshal_NONE__NONE,
 		    GTK_TYPE_NONE, 0);

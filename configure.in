@@ -252,16 +252,16 @@ fi
 if test x$with_glib = x ; then 
   # Look for separately installed glib
 
-  AM_PATH_GLIB(1.3.0,,
+  AM_PATH_GLIB(1.3.1,,
     AC_MSG_ERROR([
 *** GLIB 1.3.0 or better is required. The latest version of GLIB
 *** is always available from ftp://ftp.gtk.org/.]),
-    gmodule gthread)
+    gobject gmodule gthread)
 
   # we do not want to make all gtk progs to link to thread libraries.
-  glib_cflags=`$GLIB_CONFIG glib gmodule --cflags`
+  glib_cflags=`$GLIB_CONFIG glib gobject gmodule --cflags`
   glib_thread_cflags="$GLIB_CFLAGS"
-  glib_libs=`$GLIB_CONFIG glib gmodule --libs`
+  glib_libs=`$GLIB_CONFIG glib gobject gmodule --libs`
   glib_thread_libs="$GLIB_LIBS"
   GLIB_LIBS="$glib_libs"
   GLIB_DEPLIBS="$glib_libs"

@@ -458,10 +458,10 @@ gtk_binding_set_by_class (gpointer object_class)
   if (binding_set)
     return binding_set;
 
-  binding_set = gtk_binding_set_new (gtk_type_name (class->type));
+  binding_set = gtk_binding_set_new (gtk_type_name (GTK_CLASS_TYPE (class)));
   gtk_binding_set_add_path (binding_set,
 			    GTK_PATH_CLASS,
-			    gtk_type_name (class->type),
+			    gtk_type_name (GTK_CLASS_TYPE (class)),
 			    GTK_PATH_PRIO_GTK);
   g_dataset_id_set_data (class, key_id_class_binding_set, binding_set);
 

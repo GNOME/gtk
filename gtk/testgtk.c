@@ -3290,7 +3290,7 @@ set_cursor (GtkWidget *spinner,
   guint c;
   GdkCursor *cursor;
   GtkWidget *label;
-  GtkFlagValue *vals;
+  GtkEnumValue *vals;
 
   c = CLAMP (gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spinner)), 0, 152);
   c &= 0xfe;
@@ -5660,13 +5660,11 @@ create_rulers (void)
       gtk_ruler_set_metric (GTK_RULER (ruler), GTK_CENTIMETERS);
       gtk_ruler_set_range (GTK_RULER (ruler), 100, 0, 0, 20);
 
-      gtk_signal_connect_object (
-        GTK_OBJECT (window), 
-	"motion_notify_event",
-	GTK_SIGNAL_FUNC(
-          GTK_WIDGET_CLASS (GTK_OBJECT (ruler)->klass)->motion_notify_event),
-	GTK_OBJECT (ruler));
-
+      gtk_signal_connect_object (GTK_OBJECT (window), 
+				 "motion_notify_event",
+				 GTK_SIGNAL_FUNC (GTK_WIDGET_GET_CLASS (ruler)->motion_notify_event),
+				 GTK_OBJECT (ruler));
+      
       gtk_table_attach (GTK_TABLE (table), ruler, 1, 2, 0, 1,
 			GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
       gtk_widget_show (ruler);
@@ -5675,12 +5673,11 @@ create_rulers (void)
       ruler = gtk_vruler_new ();
       gtk_ruler_set_range (GTK_RULER (ruler), 5, 15, 0, 20);
 
-      gtk_signal_connect_object (
-        GTK_OBJECT (window), 
-	"motion_notify_event",
-	GTK_SIGNAL_FUNC (GTK_WIDGET_CLASS (GTK_OBJECT (ruler)->klass)->motion_notify_event),
-	GTK_OBJECT (ruler));
-
+      gtk_signal_connect_object (GTK_OBJECT (window), 
+				 "motion_notify_event",
+				 GTK_SIGNAL_FUNC (GTK_WIDGET_GET_CLASS (ruler)->motion_notify_event),
+				 GTK_OBJECT (ruler));
+      
       gtk_table_attach (GTK_TABLE (table), ruler, 0, 1, 1, 2,
 			GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
       gtk_widget_show (ruler);
