@@ -241,9 +241,6 @@ gdk_input_exit (void)
 	  gdk_input_set_mode(gdkdev->info.deviceid,GDK_MODE_DISABLED);
 
 	  g_free(gdkdev->info.name);
-#ifndef XINPUT_NONE	  
-	  g_free(gdkdev->axes);
-#endif	  
 	  g_free(gdkdev->info.axes);
 	  g_free(gdkdev->info.keys);
 	  g_free(gdkdev);

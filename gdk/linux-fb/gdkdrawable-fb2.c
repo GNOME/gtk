@@ -831,6 +831,7 @@ gdk_fb_draw_rectangle (GdkDrawable    *drawable,
 
   if(filled)
     {
+#if 0
       static volatile int print_rect = 0;
 
       if(print_rect)
@@ -839,6 +840,7 @@ gdk_fb_draw_rectangle (GdkDrawable    *drawable,
 	  if(y < 0)
 	    G_BREAKPOINT();
 	}
+#endif
 
       rect.x = x;
       rect.y = y;

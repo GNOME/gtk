@@ -40,17 +40,6 @@
 #include "gdkprivate-fb.h"
 #include "gdkinternals.h"
 
-/* 
- * Private function declarations
- */
-
-#ifndef HAVE_XCONVERTCASE
-static void	 gdkx_XConvertCase	(KeySym	       symbol,
-					 KeySym	      *lower,
-					 KeySym	      *upper);
-#define XConvertCase gdkx_XConvertCase
-#endif
-
 /* Private variable declarations
  */
 static int gdk_initialized = 0;			    /* 1 if the library is initialized,

@@ -96,34 +96,6 @@ struct _GdkAxisInfo
 
 struct _GdkDevicePrivate {
   GdkDeviceInfo  info;
-
-#ifndef XINPUT_NONE
-  /* information about the axes */
-  GdkAxisInfo *axes;
-
-  /* reverse lookup on axis use type */
-  gint axis_for_use[GDK_AXIS_LAST];
-  
-  /* Information about XInput device */
-  XDevice       *xdevice;
-
-  /* minimum key code for device */
-  gint min_keycode;	       
-
-  int buttonpress_type, buttonrelease_type, keypress_type,
-      keyrelease_type, motionnotify_type, proximityin_type, 
-      proximityout_type, changenotify_type;
-
-  /* true if we need to select a different set of events, but
-     can't because this is the core pointer */
-  gint needs_update;
-
-  /* Mask of buttons (used for button grabs) */
-  gint button_state;
-
-  /* true if we've claimed the device as active. (used only for XINPUT_GXI) */
-  gint claimed;
-#endif /* !XINPUT_NONE */
 };
 
 struct _GdkInputWindow
@@ -169,50 +141,6 @@ gint               gdk_input_enable_window  (GdkWindow        *window,
 					     GdkDevicePrivate *gdkdev);
 gint               gdk_input_disable_window (GdkWindow        *window,
 					     GdkDevicePrivate *gdkdev);
-
-#ifndef XINPUT_NONE
-
-#define GDK_MAX_DEVICE_CLASSES 13
-
-gint           gdk_input_common_init                (gint              include_core);
-void           gdk_input_get_root_relative_geometry (Display          *dpy,
-						     Window            w,
-						     int              *x_ret,
-						     int              *y_ret,
-						     int              *width_ret,
-						     int              *height_ret);
-void           gdk_input_common_find_events         (GdkWindow        *window,
-						     GdkDevicePrivate *gdkdev,
-						     gint              mask,
-						     XEventClass      *classes,
-						     int              *num_classes);
-void           gdk_input_common_select_events       (GdkWindow        *window,
-						     GdkDevicePrivate *gdkdev);
-gint           gdk_input_common_other_event         (GdkEvent         *event,
-						     XEvent           *xevent,
-						     GdkInputWindow   *input_window,
-						     GdkDevicePrivate *gdkdev);
-void           gdk_input_common_get_pointer         (GdkWindow        *window,
-						     guint32           deviceid,
-						     gdouble          *x,
-						     gdouble          *y,
-						     gdouble          *pressure,
-						     gdouble          *xtilt,
-						     gdouble          *ytilt,
-						     GdkModifierType  *mask);
-void           gdk_input_common_set_key             (guint32           deviceid,
-						     guint             index,
-						     guint             keyval,
-						     GdkModifierType   modifiers);
-void           gdk_input_common_set_axes            (guint32           deviceid,
-						     GdkAxisUse       *axes);
-GdkTimeCoord * gdk_input_common_motion_events       (GdkWindow        *window,
-						     guint32           deviceid,
-						     guint32           start,
-						     guint32           stop,
-						     gint             *nevents_return);
-
-#endif /* !XINPUT_NONE */
 
 GdkDevicePrivate *gdk_input_find_device (guint32 id);
 GdkInputWindow *gdk_input_window_find (GdkWindow *window);
