@@ -1,3 +1,13 @@
+Sun Dec  8 21:22:46 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_alloc_colors_private): 
+	When allocating non-writeable colors, fill in the flags
+	field of the XColor, and insert the returned color into
+	our color hash. (#100023, Naofumi Yasufuku)
+
+	* gdk/x11/gdkcolor-x11.c (gdk_colormap_free_colors): 
+	Fix a typo (my fault) that slipped in in the last patch.
+
 Sun Dec  8 20:32:23 2002  Owen Taylor  <otaylor@redhat.com>
 
 	More fixes for GdkColormapX11 (#100023, Naofumi Yasufuku)

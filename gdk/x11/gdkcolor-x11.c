@@ -715,7 +715,7 @@ gdk_colormap_free_colors (GdkColormap *colormap,
 	}
     }
 
-  if (npixels_to_free && !private->private_val && !private->screen->closed)
+  if (npixels && !private->private_val && !private->screen->closed)
     XFreeColors (GDK_SCREEN_XDISPLAY (private->screen), private->xcolormap,
 		 pixels, npixels, 0);
 
@@ -868,12 +868,18 @@ gdk_colormap_alloc_colors_private (GdkColormap *colormap,
 	      store[nstore].blue = colors[i].blue;
 	      store[nstore].green = colors[i].green;
 	      store[nstore].pixel = index;
+	      store[nstore].flags = DoRed | DoGreen | DoBlue;
 	      nstore++;
 
 	      success[i] = TRUE;
-
 	      colors[i].pixel = index;
+
+	      colormap->colors[i] = colors[i];
 	      private->info[index].ref_count++;
+
+	      g_hash_table_insert (private->hash,
+				   &colormap->colors[index],
+				   &colormap->colors[index]);
 	    }
 	  else
 	    nremaining++;
