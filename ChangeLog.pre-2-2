@@ -1,3 +1,10 @@
+Fri Feb  1 08:57:38 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkmain.c (gtk_exit_func): Remove this useless
+	atexit handler. (existance pointed out by Stefan Kost)
+
+	* gtk/gtkmain.c (gtk_init_check): Warning fixes.
+
 Thu Jan 31 18:46:10 2002  Jonathan Blandford  <jrb@redhat.com>
 
 	* gtk/gtktreemodel.c (gtk_tree_row_reference_free): unref the

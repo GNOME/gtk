@@ -101,7 +101,6 @@ struct _GtkKeySnooperData
   guint id;
 };
 
-static void  gtk_exit_func		 (void);
 static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
 static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
@@ -444,7 +443,7 @@ gtk_init_check (int	 *argc,
   GString *gtk_modules_string = NULL;
   GSList *gtk_modules = NULL;
   GSList *slist;
-  gchar *env_string;
+  const gchar *env_string;
 
   if (gtk_initialized)
     return TRUE;
@@ -630,10 +629,6 @@ gtk_init_check (int	 *argc,
   _gtk_accel_map_init ();  
   _gtk_rc_init ();
   
-  /* Register an exit function to make sure we are able to cleanup.
-   */
-  g_atexit (gtk_exit_func);
-  
   /* Set the 'initialized' flag.
    */
   gtk_initialized = TRUE;
@@ -703,9 +698,6 @@ void
 gtk_exit (gint errorcode)
 {
   /* Only if "gtk" has been initialized should we de-initialize.
-   */
-  /* de-initialisation is done by the gtk_exit_funct(),
-   * no need to do this here (Alex J.)
    */
   gdk_exit (errorcode);
 }
@@ -1722,16 +1714,6 @@ gtk_get_event_widget (GdkEvent *event)
   
   return widget;
 }
-
-static void
-gtk_exit_func (void)
-{
-  if (gtk_initialized)
-    {
-      gtk_initialized = FALSE;
-    }
-}
-
 
 static gint
 gtk_quit_invoke_function (GtkQuitFunction *quitf)
