@@ -5299,12 +5299,19 @@ list_icon_data_func (GtkTreeViewColumn *tree_column,
 						  &child_iter,
 						  iter);
   path = _gtk_file_system_model_get_path (impl->browse_files_model, &child_iter);
-  if (!path)
-    return;
 
-  /* FIXME: NULL GError */
-  pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
-					impl->icon_size, NULL);
+  if (path)
+    {
+      /* FIXME: NULL GError */
+      pixbuf = gtk_file_system_render_icon (impl->file_system, path, GTK_WIDGET (impl),
+					    impl->icon_size, NULL);
+    }
+  else
+    {
+      /* We are on the editable row */
+      pixbuf = NULL;
+    }
+    
   g_object_set (cell,
 		"pixbuf", pixbuf,
 		NULL);
