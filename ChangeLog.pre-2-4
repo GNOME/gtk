@@ -1,3 +1,8 @@
+Tue Jul 31 15:34:57 2001  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeview.c (gtk_tree_view_remove_column): Whoops.  Stupid
+	scoping error pointed out by matthiasc@poet.de.
+
 2001-07-31  Sven Neumann  <sven@gimp.org>
 
 	* demos/gtk-demo/appwindow.c

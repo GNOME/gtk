@@ -6550,9 +6550,11 @@ gtk_tree_view_remove_column (GtkTreeView       *tree_view,
       _gtk_tree_view_column_unrealize_button (column);
       for (list = tree_view->priv->columns; list; list = list->next)
 	{
-	  column = GTK_TREE_VIEW_COLUMN (list->data);
-	  if (column->visible)
-	    column->dirty = TRUE;
+	  GtkTreeViewColumn *tmp_column;
+
+	  tmp_column = GTK_TREE_VIEW_COLUMN (list->data);
+	  if (tmp_column->visible)
+	    tmp_column->dirty = TRUE;
 	}
 
       if (tree_view->priv->n_columns == 0 &&
