@@ -1,3 +1,11 @@
+1999-11-29  Owen Taylor  <otaylor@redhat.com>
+
+	* src/gdk-pixbuf-render.c (gdk_pixbuf_render_to_drawable_alpha):
+	Keep the mask around until after we draw ... since
+	the GC changes aren't flushed to the X server until we
+	draw, destroying it before that may result in BadPixmap
+	errors.
+
 1999-11-30  Havoc Pennington  <hp@pobox.com>
 
 	* configure.in: Add AM_CONDITIONAL for inside gnome-libs

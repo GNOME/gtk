@@ -276,7 +276,7 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 				     int x_dither, int y_dither)
 {
 	ArtPixBuf *apb;
-	GdkBitmap *bitmap;
+	GdkBitmap *bitmap = NULL;
 	GdkGC *gc;
 
 	g_return_if_fail (pixbuf != NULL);
@@ -306,7 +306,6 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 
 		gdk_gc_set_clip_mask (gc, bitmap);
 		gdk_gc_set_clip_origin (gc, dest_x, dest_y);
-		gdk_bitmap_unref (bitmap);
 	}
 
 	gdk_pixbuf_render_to_drawable (pixbuf, drawable, gc,
@@ -316,5 +315,8 @@ gdk_pixbuf_render_to_drawable_alpha (GdkPixbuf *pixbuf, GdkDrawable *drawable,
 				       dither,
 				       x_dither, y_dither);
 
+	if (bitmap)
+	        gdk_bitmap_unref (bitmap);
 	gdk_gc_unref (gc);
 }
+
