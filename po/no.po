@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-01-22 18:01-0500\n"
-"PO-Revision-Date: 2004-01-24 10:26+0100\n"
+"POT-Creation-Date: 2004-01-30 14:34+0100\n"
+"PO-Revision-Date: 2004-01-30 14:35+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian (bokmål) <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -938,7 +938,7 @@ msgstr ""
 "Kunne ikke legge til bokmerke for %s:\n"
 "%s"
 
-#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2917
+#: gtk/gtkfilechooserdefault.c:465 gtk/gtkfilechooserdefault.c:2937
 #, c-format
 msgid ""
 "Could not build file name from '%s' and '%s':\n"
@@ -1032,55 +1032,55 @@ msgid "Preview"
 msgstr "Forhåndsvisning"
 
 #. Change the current folder label
-#: gtk/gtkfilechooserdefault.c:2118
+#: gtk/gtkfilechooserdefault.c:2130
 #, c-format
 msgid "Current folder: %s"
 msgstr "Aktiv mappe: %s"
 
-#: gtk/gtkfilechooserdefault.c:2521
+#: gtk/gtkfilechooserdefault.c:2533
 #, c-format
 msgid "shortcut %s does not exist"
 msgstr "snarvei %s eksisterer ikke"
 
-#: gtk/gtkfilechooserdefault.c:3063
+#: gtk/gtkfilechooserdefault.c:3083
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
-#: gtk/gtkfilechooserdefault.c:3090
+#: gtk/gtkfilechooserdefault.c:3110
 #, c-format
 msgid "%d byte"
 msgid_plural "%d bytes"
 msgstr[0] "%d byte"
 msgstr[1] "%d bytes"
 
-#: gtk/gtkfilechooserdefault.c:3092
+#: gtk/gtkfilechooserdefault.c:3112
 #, c-format
 msgid "%.1f K"
 msgstr "%.1f K"
 
-#: gtk/gtkfilechooserdefault.c:3094
+#: gtk/gtkfilechooserdefault.c:3114
 #, c-format
 msgid "%.1f M"
 msgstr "%.1f M"
 
-#: gtk/gtkfilechooserdefault.c:3096
+#: gtk/gtkfilechooserdefault.c:3116
 #, c-format
 msgid "%.1f G"
 msgstr "%.1f G"
 
-#: gtk/gtkfilechooserdefault.c:3141
+#: gtk/gtkfilechooserdefault.c:3161
 msgid "Today"
 msgstr "I dag"
 
-#: gtk/gtkfilechooserdefault.c:3143
+#: gtk/gtkfilechooserdefault.c:3163
 msgid "Yesterday"
 msgstr "I går"
 
-#: gtk/gtkfilechooserdefault.c:3151
+#: gtk/gtkfilechooserdefault.c:3171
 msgid "%d/%b/%Y"
 msgstr "%b.%d.%Y"
 
-#: gtk/gtkfilechooserdefault.c:3154
+#: gtk/gtkfilechooserdefault.c:3174
 msgid "Unknown"
 msgstr "Ukjent"
 
@@ -1266,38 +1266,35 @@ msgstr "Kunne ikke konvertere filnavnet"
 msgid "(Empty)"
 msgstr "(Tom)"
 
-#: gtk/gtkfilesystemunix.c:335 gtk/gtkfilesystemwin32.c:417
+#: gtk/gtkfilesystemunix.c:346 gtk/gtkfilesystemwin32.c:373
 #, c-format
 msgid "error creating directory '%s': %s"
 msgstr "feil under oppretting av katalog «%s»: %s"
 
-#: gtk/gtkfilesystemunix.c:378 gtk/gtkfilesystemwin32.c:458
+#: gtk/gtkfilesystemunix.c:389 gtk/gtkfilesystemwin32.c:414
 msgid "This file system does not support mounting"
 msgstr "Dette filsystemet støtter ikke montering"
 
-#: gtk/gtkfilesystemunix.c:386
+#: gtk/gtkfilesystemunix.c:397
 msgid "Filesystem"
 msgstr "Filsystem"
 
-#: gtk/gtkfilesystemunix.c:648
-msgid "This file system does not support icons"
-msgstr "Dette filsystemet støtter ikke ikoner"
-
-#: gtk/gtkfilesystemunix.c:661 gtk/gtkfilesystemunix.c:674
-msgid "This file system does not support bookmarks"
-msgstr "Dette filsystemet støtter ikke bokmerker"
-
-#: gtk/gtkfilesystemunix.c:847 gtk/gtkfilesystemwin32.c:1197
+#: gtk/gtkfilesystemunix.c:416 gtk/gtkfilesystemunix.c:1051
+#: gtk/gtkfilesystemwin32.c:1154
 #, c-format
 msgid "error getting information for '%s': %s"
 msgstr "feil under henting av informasjon om «%s»: %s"
 
-#: gtk/gtkfilesystemwin32.c:820
+#: gtk/gtkfilesystemunix.c:868 gtk/gtkfilesystemunix.c:881
+msgid "This file system does not support bookmarks"
+msgstr "Dette filsystemet støtter ikke bokmerker"
+
+#: gtk/gtkfilesystemwin32.c:777
 #, c-format
 msgid "Bookmark saving failed (%s)"
 msgstr "Lagring av bokmerke feilet (%s)"
 
-#: gtk/gtkfilesystemwin32.c:976
+#: gtk/gtkfilesystemwin32.c:933
 msgid "This file system does not support icons for everything"
 msgstr "Dette filsystemet støtter ikke ikoner for alle operasjoner"
 
@@ -1352,7 +1349,7 @@ msgstr "_Gammaverdi"
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1559
+#: gtk/gtkiconfactory.c:1563
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
@@ -1656,126 +1653,130 @@ msgid "_Right"
 msgstr "Høy_re"
 
 #: gtk/gtkstock.c:310
+msgid "_Network"
+msgstr "_Nettverk"
+
+#: gtk/gtkstock.c:311
 msgid "_New"
 msgstr "_Ny"
 
-#: gtk/gtkstock.c:311
+#: gtk/gtkstock.c:312
 msgid "_No"
 msgstr "_Nei"
 
-#: gtk/gtkstock.c:312
+#: gtk/gtkstock.c:313
 msgid "_OK"
 msgstr "_OK"
 
-#: gtk/gtkstock.c:313
+#: gtk/gtkstock.c:314
 msgid "_Open"
 msgstr "_Åpne"
 
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:315
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:316
 msgid "_Preferences"
 msgstr "_Brukervalg"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:317
 msgid "_Print"
 msgstr "S_kriv ut"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:318
 msgid "Print Pre_view"
 msgstr "Utskriftsforhåndsvisning"
 
-#: gtk/gtkstock.c:318
+#: gtk/gtkstock.c:319
 msgid "_Properties"
 msgstr "E_genskaper"
 
-#: gtk/gtkstock.c:319
+#: gtk/gtkstock.c:320
 msgid "_Quit"
 msgstr "_Avslutt"
 
-#: gtk/gtkstock.c:320
+#: gtk/gtkstock.c:321
 msgid "_Redo"
 msgstr "_Gjenopprett"
 
-#: gtk/gtkstock.c:321
+#: gtk/gtkstock.c:322
 msgid "_Refresh"
 msgstr "_Gjenles"
 
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:323
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:324
 msgid "_Revert"
 msgstr "Fo_rkast"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:325
 msgid "_Save"
 msgstr "_Lagre"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:326
 msgid "Save _As"
 msgstr "Lagre s_om"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:327
 msgid "_Color"
 msgstr "_Farge"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:328
 msgid "_Font"
 msgstr "Skri_fttype"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:329
 msgid "_Ascending"
 msgstr "_Stigende"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:330
 msgid "_Descending"
 msgstr "S_ynkende"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:331
 msgid "_Spell Check"
 msgstr "_Stavekontroll"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:332
 msgid "_Stop"
 msgstr "_Stopp"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:333
 msgid "_Strikethrough"
 msgstr "_Gjennomstreking"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:334
 msgid "_Undelete"
 msgstr "_Angre slett"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:335
 msgid "_Underline"
 msgstr "_Understrek"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:336
 msgid "_Undo"
 msgstr "_Angre"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:337
 msgid "_Yes"
 msgstr "_Ja"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:338
 msgid "Zoom _100%"
 msgstr "Zoom _100%"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:339
 msgid "Zoom to _Fit"
 msgstr "Zoom _tilpasset"
 
-#: gtk/gtkstock.c:339
+#: gtk/gtkstock.c:340
 msgid "Zoom _In"
 msgstr "Zoom _inn"
 
-#: gtk/gtkstock.c:340
+#: gtk/gtkstock.c:341
 msgid "Zoom _Out"
 msgstr "Zoom _ut"
 
