@@ -1,3 +1,9 @@
+Sun Mar  3 11:12:16 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtktextlayout.c (add_cursor): When in split cursor
+	mode, always add the cursor as both strong and weak
+	so that it is drawn with the correct non-split color.
+
 Sun Mar  3 11:05:13 2002  Owen Taylor  <otaylor@redhat.com>
 
 	* modules/input/Makefile.am (moduledir): Fix
