@@ -603,10 +603,11 @@ gdk_event_translate (GdkDisplay *display,
       (xevent->xany.type == MotionNotify ||
        xevent->xany.type == ButtonRelease))
     {
-      _gdk_moveresize_handle_event (xevent);
-      
-      return_val = FALSE;
-      goto done;
+      if (_gdk_moveresize_handle_event (xevent))
+	{
+          return_val = FALSE;
+          goto done;
+        }
     }
   
   /* We do a "manual" conversion of the XEvent to a

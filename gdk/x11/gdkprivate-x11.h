@@ -101,7 +101,7 @@ void     _gdk_region_get_xrectangles       (GdkRegion            *region,
                                             XRectangle          **rects,
                                             gint                 *n_rects);
 
-void _gdk_moveresize_handle_event   (XEvent     *event);
+gboolean _gdk_moveresize_handle_event   (XEvent     *event);
 void _gdk_moveresize_configure_done (GdkDisplay *display);
 
 void _gdk_keymap_state_changed      (GdkDisplay *display);

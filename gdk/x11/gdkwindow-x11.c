@@ -3822,7 +3822,7 @@ moveresize_lookahead (XEvent *event)
   return mv_resize->moveresize_process_time == 0;
 }
 	
-void
+gboolean
 _gdk_moveresize_handle_event (XEvent *event)
 {
   guint button_mask = 0;
@@ -3830,7 +3830,8 @@ _gdk_moveresize_handle_event (XEvent *event)
   GdkDisplayImplX11 *display= gdk_lookup_xdisplay (event->xany.display);
   _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
 
-  g_assert (mv_resize != NULL);
+  if (mv_resize == NULL)
+    return FALSE;
 
   window_private = (GdkWindowObject *) mv_resize->_gdk_moveresize_window;
 
@@ -3874,6 +3875,7 @@ _gdk_moveresize_handle_event (XEvent *event)
 	finish_drag_for_display ((GdkDisplay *) display);
       break;
     }
+  return TRUE;
 }
 
 void
