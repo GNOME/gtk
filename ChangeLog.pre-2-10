@@ -1,3 +1,16 @@
+Sat Aug 21 23:29:54 2004  Matthias Clasen  <maclas@gmx.de>
+
+	Fix #150738, Tomislav Jonjic.
+	
+	* gtk/gtktoolitem.h (GTK_IS_TOOL_ITEM_CLASS): 
+	* gtk/gtktoolbutton.h (GTK_IS_TOOL_BUTTON_CLASS): 
+	* gtk/gtktoggleaction.h (GTK_IS_TOGGLE_ACTION_CLASS): 
+	* gtk/gtkseparatortoolitem.h (GTK_IS_SEPARATOR_TOOL_ITEM_CLASS): 
+	* gtk/gtkradiotoolbutton.h (GTK_IS_RADIO_TOOL_BUTTON_CLASS): 
+	* gtk/gtkradioaction.h (GTK_IS_RADIO_ACTION_CLASS): 
+	* gtk/gtkuimanager.h (GTK_IS_UI_MANAGER_CLASS): 
+	* gtk/gtkaction.h (GTK_IS_ACTION_CLASS): Fix macro definitions.
+
 Wed Aug 18 17:25:26 2004  Manish Singh  <yosh@gimp.org>
 
 	* demos/testpixbuf-save.c
@@ -8,9 +21,9 @@ Wed Aug 18 17:25:26 2004  Manish Singh  <yosh@gimp.org>
 
 Wed Aug 18 16:18:00 2004  Manish Singh  <yosh@gimp.org>
 
-        * gtk/gtktreeview.c (gtk_tree_view_row_inserted): Initialize height
-        from fixed_height before we do anything, so it always has a valid
-        value.
+	* gtk/gtktreeview.c (gtk_tree_view_row_inserted): Initialize height
+	from fixed_height before we do anything, so it always has a valid
+	value.
 
 	* gtk/gtkfilechooserdefault.c (shortcuts_reload_icons): Fix call
 	to gtk_tree_model_get (missing "," in param list).
