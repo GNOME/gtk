@@ -1,3 +1,10 @@
+What is new in GTK+ 1.1.9:
+
+* Check for broken glibc 2.0 mb functions and avoid them
+* Label and Entry display fixes 
+* Move main thread back to GDK, for locking when translating events
+* Bug fixes
+
 What is new in GTK+ 1.1.8:
 
 * Added support for gettext and the localization of the standard

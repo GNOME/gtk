@@ -1,3 +1,15 @@
+Thu Dec 17 00:26:01 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.9
+
+	* INSTALL:
+	  NEWS:
+	  README:
+	  configure.in:
+	  gtk+.spec:
+	  gtk/gtkfeatures.h.in:
+	  docs/gtk-config.1: version=1.1.9
+
 Wed Dec 16 21:20:00 PST 1998 Manish Singh <yosh@gimp.org>
 
 	* autogen.sh: rm -rf intl breaks --disable-nls, put it back
