@@ -1,3 +1,8 @@
+Wed Jul 21 22:54:33 2004  Matthias Clasen  <maclas@gmx.de>
+
+	* gtk/gtkcomboboxentry.c (gtk_combo_box_entry_new_text): 
+	Don't leak the list store.  (#148135, Crispin Flowerday)
+	
 Wed Jul 21 22:47:28 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* gtk/gtkcombobox.c (gtk_combo_box_new_text): Don't leak the
