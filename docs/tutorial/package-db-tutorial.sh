@@ -1,124 +1,137 @@
 #! /bin/sh
-# package_tutorial.sh - Package up the tutorial into various formats
-# Copyright (C) Tony Gale 2000
+# package-db-tutorial.sh - Package up the tutorial into various formats
+# Copyright (C) Tony Gale 2000-2002
 # Contact: gale@gtk.org
 #
 # NOTE: This script requires the following to be installed:
 #            o DocBook
+#            o DocBook-Utils
 #            o Jade
 #            o Jadetex
 
-TARGET=`pwd`/gtk-tut.sgml
+TARGETDIR=`pwd`/2.0/
+
+SOURCE=`pwd`/gtk-tut.sgml
 IMAGES="`pwd`/images"
 IMAGESDIR="images"
 EXAMPLES=`pwd`/../../examples
 
+DATE=`date '+%Y%m%d'`
+BUILDDIR=gtk-tutorial.$DATE
+
 PATH=`pwd`:$PATH
 
-DATE=`date '+%Y%m%d'`
-
-# Check top level directory
-if [ ! -d gtk-tutorial.$DATE ]; then
-  if [ -e gtk-tutorial.$DATE ]; then
-    echo "ERROR: gtk-tutorial is not a directory"
+# Check target directory
+if [ ! -d $TARGETDIR ]; then
+  if [ -e $TARGETDIR ]; then
+    echo "ERROR: target directory is not a directory"
     exit
   fi
-  if ! mkdir gtk-tutorial.$DATE; then
-    echo "mkdir failed"
+  if ! mkdir $TARGETDIR; then
+    echo "mkdir for target directory failed"
+    exit
+  fi
+fi
+
+# Check top level build directory
+if [ ! -d $BUILDDIR ]; then
+  if [ -e $BUILDDIR ]; then
+    echo "ERROR: build directory is not a directory"
+    exit
+  fi
+  if ! mkdir $BUILDDIR; then
+    echo "mkdir of build directory failed"
     exit 1
   fi
 fi 
 
-if ! cd gtk-tutorial.$DATE; then
-  echo "cd failed"
+if ! cd $BUILDDIR; then
+  echo "cd to build directory failed"
   exit 1
 fi
 
-cp $TARGET .
+cp $SOURCE .
 cp -R $IMAGES .
 
 # SGML Format
 echo -n "Copy SGML and images.... "
-if [ ! -d sgml ]; then
-  if [ -e sgml ]; then
-    echo "ERROR: html is not a directory"
+if [ ! -d gtk-tutorial.sgml ]; then
+  if [ -e gtk-tutorial.sgml ]; then
+    echo "ERROR: gtk-tutorial.sgml is not a directory"
     exit
   fi
-  mkdir sgml
+  mkdir gtk-tutorial.sgml
 fi
 
-(cd sgml ; cp $TARGET . ; cp -R $IMAGES . ; rm -rf $IMAGESDIR/CVS)
+(cd gtk-tutorial.sgml && cp $SOURCE . && cp -R $IMAGES . && rm -rf $IMAGESDIR/CVS)
+tar cvfz $TARGETDIR/gtk-tutorial.sgml.tgz gtk-tutorial.sgml
 echo "done"
 
 # HTML Format
 echo -n "Formatting into HTML.... " 
-if [ ! -d html ]; then
-  if [ -e html ]; then
-    echo "ERROR: html is not a directory"
+if [ ! -d gtk-tutorial.html ]; then
+  if [ -e gtk-tutorial.html ]; then
+    echo "ERROR: gtk-tutorial.html is not a directory"
     exit
   fi
-  mkdir html
+  mkdir gtk-tutorial.html
 fi
 
-(db2html gtk-tut.sgml ; mv gtk-tut/* html ; cp -R $IMAGES html ; rm html/$IMAGESDIR/*.eps ; rm -rf gtk-tut) > /dev/null
-(cd html ; ln -s book1.html index.html ; rm -rf $IMAGESDIR/CVS)
+(db2html -o gtk-tutorial.html $SOURCE && cp -R $IMAGES gtk-tutorial.html && rm gtk-tutorial.html/$IMAGESDIR/*.eps) > /dev/null
+(cd gtk-tutorial.html && rm -rf $IMAGESDIR/CVS && ln -s book1.html index.html)
+tar cvfz $TARGETDIR/gtk-tutorial.html.tgz gtk-tutorial.html
 echo "done"
 
-# PS, PDF and DVI Format
-echo -n "Formatting into PS, DVI and PDF.... "
-if [ ! -d ps ]; then
-  if [ -e ps ]; then
-    echo "ERROR: ps is not a directory"
+# PS and PDF Format
+echo -n "Formatting into PS and PDF.... "
+if [ ! -d gtk-tutorial.ps ]; then
+  if [ -e gtk-tutorial.ps ]; then
+    echo "ERROR: gtk-tutorial.ps is not a directory"
     exit
   fi
-  mkdir ps
+  mkdir gtk-tutorial.ps
 fi
 
-if [ ! -d pdf ]; then
-  if [ -e pdf ]; then
-    echo "ERROR: pdf is not a directory"
+if [ ! -d gtk-tutorial.pdf ]; then
+  if [ -e gtk-tutorial.pdf ]; then
+    echo "ERROR: gtk-tutorial.pdf is not a directory"
     exit
   fi
-  mkdir pdf
+  mkdir gtk-tutorial.pdf
 fi
 
-sed "s/images\/\(.*\)\.png/images\/\1.eps/g" gtk-tut.sgml > ps/gtk-tut.sgml
-cp -R $IMAGES ps
-(cd ps ; db2dvi gtk-tut.sgml ; dvips gtk-tut.dvi -o gtk-tut.ps ; dvipdf gtk-tut.dvi ../pdf/gtk-tut.pdf) > /dev/null 2>&1
-(cd ps ; rm gtk-tut.aux gtk-tut.log gtk-tut.sgml gtk-tut.tex ; rm -Rf $IMAGESDIR) > /dev/null 2>&1
+sed "s/images\/\(.*\)\.png/images\/\1.eps/g" $SOURCE > gtk-tutorial.ps/gtk-tut.sgml
+cp -R $IMAGES gtk-tutorial.ps
+(cd gtk-tutorial.ps && db2dvi gtk-tut.sgml && dvips gtk-tut.dvi -o gtk-tut.ps && dvipdf gtk-tut.dvi ../gtk-tutorial.pdf/gtk-tut.pdf)
+gzip -c gtk-tutorial.ps/gtk-tut.ps > $TARGETDIR/gtk-tutorial.ps.gz
+gzip -c gtk-tutorial.pdf/gtk-tut.pdf > $TARGETDIR/gtk-tutorial.pdf.gz
 echo "done"
 
 # RTF Format
-echo -n "Formatting into RTF.... "
-if [ ! -d rtf ]; then
-  if [ -e rtf ]; then
-    echo "ERROR: rtf is not a directory"
-    exit
-  fi
-  mkdir rtf
-fi
+#echo -n "Formatting into RTF.... "
+#if [ ! -d gtk-tutorial.rtf ]; then
+#  if [ -e gtk-tutorial.rtf ]; then
+#    echo "ERROR:  is not a directory"
+#    exit
+#  fi
+#  mkdir gtk-tutorial.rtf
+#fi
 
-(db2rtf gtk-tut.sgml ; mv gtk-tut.rtf rtf) > /dev/null
-(cd rtf ; cp -R $IMAGES . ; rm -f $IMAGESDIR/*.eps ; rm -rf $IMAGESDIR/CVS)
-echo "done"
+#cp -R $IMAGES gtk-tutorial.rtf
+#(cd gtk-tutorial.rtf && db2rtf $SOURCE) # > /dev/null
+#gzip -c gtk-tutorial.rtf/gtk-tut.rtf > $TARGETDIR/gtk-tutorial.rtf.gz
+#echo "done"
 
 # Copy examples
 echo -n "Copying examples"
 cp -R $EXAMPLES .
-(cd examples ; make clean ; rm -rf CVS */CVS */.cvsignore README.1ST extract.awk extract.sh find-examples.sh)
+(cd examples && make clean && rm -rf CVS */CVS */.cvsignore README.1ST extract.awk extract.sh find-examples.sh)
+tar cfz $TARGETDIR/examples.tgz examples
 echo "done"
 
-rm -f *
-rm -rf $IMAGESDIR
-
-# Package it all up
-echo -n "Creating packages.... "
 cd ..
-tar cvfz gtk-tutorial.$DATE.tar.gz gtk-tutorial.$DATE
-echo "done"
-
-rm -rf gtk-tutorial.$DATE
+rm -rf $BUILDDIR
 
 echo
-echo Package gtk-tutorial.$DATE.tar.gz created.
+echo Packages created.
 echo

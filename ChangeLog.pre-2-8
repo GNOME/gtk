@@ -1,3 +1,8 @@
+Tue Nov 26 18:28:58 GMT 2002  Tony Gale <gale@gtk.org>
+
+	* docs/tutorial/package-db-tutorial.sh:
+	(see #71679) create split package files
+
 Tue Nov 26 01:55:47 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkprogressbar.c (gtk_progress_bar_paint_text): don't offset
