@@ -1,3 +1,23 @@
+Thu Jul 29 16:36:42 2004  Jonathan Blandford  <jrb@redhat.com>
+
+	* gtk/gtktreeprivate.h: New arguments
+
+	* gtk/gtktreeview.c:
+	(gtk_tree_view_class_init): Add key_release callback
+	(gtk_tree_view_init): Initialize timeout handler
+	(gtk_tree_view_unrealize): clear timeout if needed
+	(gtk_tree_view_key_press): Typeahead support
+	(gtk_tree_view_key_release): Not used yet -- will be needed for
+	typeahead.
+	(gtk_tree_view_search_entry_flush_timeout): Remove typeahead entry
+	in a timeout.
+	(gtk_tree_view_ensure_interactive_directory):
+	(gtk_tree_view_real_start_interactive_search):
+	(gtk_tree_view_search_init):
+	(gtk_tree_view_start_interactive_search): Typeahead support added.
+	(gtk_tree_view_search_dialog_hide): Clear timeout and text when we
+	hide.
+
 Sat Jul 31 23:17:44 2004  Matthias Clasen  <maclas@gmx.de>
 
 	* NEWS: Updates

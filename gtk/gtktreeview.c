@@ -33,6 +33,7 @@
 #include "gtkalignment.h"
 #include "gtklabel.h"
 #include "gtkhbox.h"
+#include "gtkvbox.h"
 #include "gtkarrow.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"
@@ -46,7 +47,7 @@
 #define GTK_TREE_VIEW_NUM_ROWS_PER_IDLE 500
 #define SCROLL_EDGE_SIZE 15
 #define EXPANDER_EXTRA_PADDING 4
-
+#define GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT 5000
 /* The "background" areas of all rows/cells add up to cover the entire tree.
  * The background includes all inter-row and inter-cell spacing.
  * The "cell" areas are the cell_area passed in to gtk_cell_renderer_render(),
@@ -158,6 +159,8 @@ static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 static gboolean gtk_tree_view_expose               (GtkWidget        *widget,
 						    GdkEventExpose   *event);
 static gboolean gtk_tree_view_key_press            (GtkWidget        *widget,
+						    GdkEventKey      *event);
+static gboolean gtk_tree_view_key_release          (GtkWidget        *widget,
 						    GdkEventKey      *event);
 static gboolean gtk_tree_view_motion               (GtkWidget        *widget,
 						    GdkEventMotion   *event);
@@ -365,6 +368,7 @@ static gboolean expand_collapse_timeout                      (gpointer          
 static gboolean do_expand_collapse                           (GtkTreeView       *tree_view);
 
 /* interactive search */
+static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
 static void     gtk_tree_view_search_dialog_hide     (GtkWidget        *search_dialog,
 							 GtkTreeView      *tree_view);
 static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_view,
@@ -372,6 +376,8 @@ static void     gtk_tree_view_search_position_func      (GtkTreeView      *tree_
 static void     gtk_tree_view_search_disable_popdown    (GtkEntry         *entry,
 							 GtkMenu          *menu,
 							 gpointer          data);
+static void     gtk_tree_view_search_preedit_changed    (GtkIMContext     *im_context,
+							 GtkTreeView      *tree_view);
 static gboolean gtk_tree_view_real_search_enable_popdown(gpointer          data);
 static void     gtk_tree_view_search_enable_popdown     (GtkWidget        *widget,
 							 gpointer          data);
@@ -417,7 +423,9 @@ static void gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 					      guint              flags);
 static void gtk_tree_view_stop_editing                  (GtkTreeView *tree_view,
 							 gboolean     cancel_editing);
-static gboolean gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view);
+static gboolean gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
+							     gboolean     keybinding);
+static gboolean gtk_tree_view_start_interactive_search      (GtkTreeView *tree_view);
 static GtkTreeViewColumn *gtk_tree_view_get_drop_column (GtkTreeView       *tree_view,
 							 GtkTreeViewColumn *column,
 							 gint               drop_position);
@@ -502,6 +510,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->motion_notify_event = gtk_tree_view_motion;
   widget_class->expose_event = gtk_tree_view_expose;
   widget_class->key_press_event = gtk_tree_view_key_press;
+  widget_class->key_release_event = gtk_tree_view_key_release;
   widget_class->enter_notify_event = gtk_tree_view_enter_notify;
   widget_class->leave_notify_event = gtk_tree_view_leave_notify;
   widget_class->focus_out_event = gtk_tree_view_focus_out;
@@ -530,7 +539,7 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   class->toggle_cursor_row = gtk_tree_view_real_toggle_cursor_row;
   class->expand_collapse_cursor_row = gtk_tree_view_real_expand_collapse_cursor_row;
   class->select_cursor_parent = gtk_tree_view_real_select_cursor_parent;
-  class->start_interactive_search = gtk_tree_view_real_start_interactive_search;
+  class->start_interactive_search = gtk_tree_view_start_interactive_search;
 
   /* Properties */
 
@@ -1121,8 +1130,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->search_column = -1;
   tree_view->priv->search_dialog_position_func = gtk_tree_view_search_position_func;
   tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
+  tree_view->priv->typeselect_flush_timeout = 0;
   tree_view->priv->init_hadjust_value = TRUE;    
-  tree_view->priv->width = 0;          
+  tree_view->priv->width = 0;
           
   tree_view->priv->hover_selection = FALSE;
 }
@@ -1585,6 +1595,12 @@ gtk_tree_view_unrealize (GtkWidget *widget)
       tree_view->priv->scroll_sync_timer = 0;
     }
 
+  if (tree_view->priv->typeselect_flush_timeout)
+    {
+      g_source_remove (tree_view->priv->typeselect_flush_timeout);
+      tree_view->priv->typeselect_flush_timeout = 0;
+    }
+  
   for (list = tree_view->priv->columns; list; list = list->next)
     _gtk_tree_view_column_unrealize_button (GTK_TREE_VIEW_COLUMN (list->data));
 
@@ -4224,10 +4240,70 @@ gtk_tree_view_key_press (GtkWidget   *widget,
 	}
     }
 
+  /* Chain up to the parent class.  It handles the keybindings. */
   if ((* GTK_WIDGET_CLASS (parent_class)->key_press_event) (widget, event))
     return TRUE;
+							    
+  /* We pass the event to the search_entry.  If its text changes, then we start
+   * the typeahead find capabilities. */
+  if (tree_view->priv->enable_search)
+    {
+      GdkEvent *new_event;
+      char *old_text;
+      const char *new_text;
+      gboolean retval;
+      GdkScreen *screen;
+
+      gtk_tree_view_ensure_interactive_directory (tree_view);
+
+      /* Make a copy of the current text */
+      old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry)));
+      new_event = gdk_event_copy ((GdkEvent *) event);
+      ((GdkEventKey *) new_event)->window = tree_view->priv->search_entry->window;
+      gtk_widget_realize (tree_view->priv->search_window);
+
+      /* Move the entry off screen */
+      screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
+      gtk_window_move (GTK_WINDOW (tree_view->priv->search_window),
+		       gdk_screen_get_width (screen) + 1,
+		       gdk_screen_get_height (screen) + 1);
+      gtk_widget_show (tree_view->priv->search_window);
+
+      /* Send the event to the window.  If the preedit_changed signal is emitted
+       * during this event, we will set priv->imcontext_changed  */
+      tree_view->priv->imcontext_changed = FALSE;
+      retval = gtk_widget_event (tree_view->priv->search_entry, new_event);
+      gtk_widget_hide (tree_view->priv->search_window);
+
+      /* We check to make sure that the entry tried to handle the text, and that
+       * the text has changed.
+       */
+      new_text = gtk_entry_get_text (GTK_ENTRY (tree_view->priv->search_entry));
+      if (tree_view->priv->imcontext_changed ||    /* we're in a preedit */
+	  (retval && strcmp (old_text, new_text))) /* ...or the text was modified */
+	{
+	  g_free (old_text);
+	  if (gtk_tree_view_real_start_interactive_search (tree_view, FALSE))
+	    {
+	      gtk_widget_grab_focus (GTK_WIDGET (tree_view));
+	      return TRUE;
+	    }
+	  else
+	    {
+	      gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+	      return FALSE;
+	    }
+	}
+    }
 
   return FALSE;
+}
+
+static gboolean
+gtk_tree_view_key_release (GtkWidget   *widget,
+			   GdkEventKey *event)
+{
+  return (* GTK_WIDGET_CLASS (parent_class)->key_release_event) (widget, event);
 }
 
 /* FIXME Is this function necessary? Can I get an enter_notify event
@@ -8622,6 +8698,13 @@ gtk_tree_view_real_select_cursor_parent (GtkTreeView *tree_view)
 
   return TRUE;
 }
+static gboolean
+gtk_tree_view_search_entry_flush_timeout (GtkTreeView *tree_view)
+{
+  gtk_tree_view_search_dialog_hide (tree_view->priv->search_window, tree_view);
+  tree_view->priv->typeselect_flush_timeout = 0;
+  return TRUE;
+}
 
 /* Cut and paste from gtkwindow.c */
 static void
@@ -8683,20 +8766,56 @@ gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view)
   /* add entry */
   tree_view->priv->search_entry = gtk_entry_new ();
   gtk_widget_show (tree_view->priv->search_entry);
-  g_signal_connect (tree_view->priv->search_entry, "changed",
-		    G_CALLBACK (gtk_tree_view_search_init),
-		    tree_view);
   g_signal_connect (tree_view->priv->search_entry, "populate_popup",
 		    G_CALLBACK (gtk_tree_view_search_disable_popdown),
 		    tree_view);
+  g_signal_connect (GTK_ENTRY (tree_view->priv->search_entry)->im_context,
+		    "preedit-changed",
+		    G_CALLBACK (gtk_tree_view_search_preedit_changed),
+		    tree_view);
   gtk_container_add (GTK_CONTAINER (vbox),
 		     tree_view->priv->search_entry);
+
+  gtk_widget_realize (tree_view->priv->search_entry);
 }
 
+/* Pops up the interactive search entry.  If keybinding is TRUE then the user
+ * started this by typing the start_interactive_search keybinding.  Otherwise, it came from 
+ */
 static gboolean
-gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
+gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
+					     gboolean     keybinding)
 {
-  if (! GTK_WIDGET_HAS_FOCUS (tree_view))
+  /* We only start interactive search if we have focus or the columns
+   * have focus.  If one of our children have focus, we don't want to
+   * start the search.
+   */
+  GList *list;
+  gboolean found_focus = FALSE;
+  GtkWidgetClass *entry_parent_class;
+  
+  if (GTK_WIDGET_VISIBLE (tree_view->priv->search_window))
+    return TRUE;
+
+  for (list = tree_view->priv->columns; list; list = list->next)
+    {
+      GtkTreeViewColumn *column;
+
+      column = list->data;
+      if (! column->visible)
+	continue;
+
+      if (GTK_WIDGET_HAS_FOCUS (column->button))
+	{
+	  found_focus = TRUE;
+	  break;
+	}
+    }
+  
+  if (GTK_WIDGET_HAS_FOCUS (tree_view))
+    found_focus = TRUE;
+
+  if (! found_focus)
     return FALSE;
 
   if (tree_view->priv->enable_search == FALSE ||
@@ -8704,12 +8823,35 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
     return FALSE;
 
   gtk_tree_view_ensure_interactive_directory (tree_view);
-  gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+
+  if (keybinding)
+    {
+      gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
+    }
 
   /* done, show it */
   tree_view->priv->search_dialog_position_func (tree_view, tree_view->priv->search_window);
   gtk_widget_show (tree_view->priv->search_window);
-  gtk_widget_grab_focus (tree_view->priv->search_entry);
+  if (tree_view->priv->search_entry_changed_id == 0)
+    {
+      tree_view->priv->search_entry_changed_id =
+	g_signal_connect (tree_view->priv->search_entry, "changed",
+			  G_CALLBACK (gtk_tree_view_search_init),
+			  tree_view);
+    }
+  if (! keybinding)
+    {
+      tree_view->priv->typeselect_flush_timeout =
+	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
+		       tree_view);
+    }
+
+  /* Grab focus will select all the text.  We don't want that to happen, so we
+   * call the parent instance and bypass the selection change.  This is probably
+   * really non-kosher. */
+  entry_parent_class = g_type_class_peek_parent (GTK_ENTRY_GET_CLASS (tree_view->priv->search_entry));
+  (entry_parent_class->grab_focus) (tree_view->priv->search_entry);
 
   /* send focus-in event */
   send_focus_change (tree_view->priv->search_entry, TRUE);
@@ -8720,6 +8862,11 @@ gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view)
   return TRUE;
 }
 
+static gboolean
+gtk_tree_view_start_interactive_search (GtkTreeView *tree_view)
+{
+  return gtk_tree_view_real_start_interactive_search (tree_view, FALSE);
+}
 /* this function returns the new width of the column being resized given
  * the column and x position of the cursor; the x cursor position is passed
  * in as a pointer and automagicly corrected if it's beyond min/max limits
@@ -11943,14 +12090,27 @@ gtk_tree_view_set_search_equal_func (GtkTreeView                *tree_view,
 
 static void
 gtk_tree_view_search_dialog_hide (GtkWidget   *search_dialog,
-				     GtkTreeView *tree_view)
+				  GtkTreeView *tree_view)
 {
   if (tree_view->priv->disable_popdown)
     return;
 
+  if (tree_view->priv->search_entry_changed_id)
+    {
+      g_signal_handler_disconnect (tree_view->priv->search_entry,
+				   tree_view->priv->search_entry_changed_id);
+      tree_view->priv->search_entry_changed_id = 0;
+    }
+  if (tree_view->priv->typeselect_flush_timeout)
+    {
+      g_source_remove (tree_view->priv->typeselect_flush_timeout);
+      tree_view->priv->typeselect_flush_timeout = 0;
+    }
+	
   /* send focus-in event */
   send_focus_change (GTK_WIDGET (tree_view->priv->search_entry), FALSE);
   gtk_widget_hide (search_dialog);
+  gtk_entry_set_text (GTK_ENTRY (tree_view->priv->search_entry), "");
 }
 
 static void
@@ -11999,6 +12159,26 @@ gtk_tree_view_search_disable_popdown (GtkEntry *entry,
   tree_view->priv->disable_popdown = 1;
   g_signal_connect (menu, "hide",
 		    G_CALLBACK (gtk_tree_view_search_enable_popdown), data);
+}
+
+/* Because we're visible but offscreen, we just set a flag in the preedit
+ * callback.
+ */
+static void
+gtk_tree_view_search_preedit_changed (GtkIMContext *im_context,
+				      GtkTreeView  *tree_view)
+{
+  g_print ("in gtk_tree_view_search_preedit_changed\n");
+  tree_view->priv->imcontext_changed = 1;
+  if (tree_view->priv->typeselect_flush_timeout)
+    {
+      g_source_remove (tree_view->priv->typeselect_flush_timeout);
+      tree_view->priv->typeselect_flush_timeout =
+	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
+		       tree_view);
+    }
+
 }
 
 static gboolean
@@ -12051,6 +12231,8 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
 				      GdkEventKey *event,
 				      GtkTreeView *tree_view)
 {
+  gboolean retval = FALSE;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), FALSE);
 
@@ -12067,17 +12249,27 @@ gtk_tree_view_search_key_press_event (GtkWidget *widget,
   if (event->keyval == GDK_Up || event->keyval == GDK_KP_Up)
     {
       gtk_tree_view_search_move (widget, tree_view, TRUE);
-      return TRUE;
+      retval = TRUE;
     }
 
   /* select next matching iter */
   if (event->keyval == GDK_Down || event->keyval == GDK_KP_Down)
     {
       gtk_tree_view_search_move (widget, tree_view, FALSE);
-      return TRUE;
+      retval = TRUE;
     }
 
-  return FALSE;
+  /* renew the flush timeout */
+  if (retval && tree_view->priv->typeselect_flush_timeout)
+    {
+      g_source_remove (tree_view->priv->typeselect_flush_timeout);
+      tree_view->priv->typeselect_flush_timeout =
+	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
+		       tree_view);
+    }
+
+  return retval;
 }
 
 static void
@@ -12319,6 +12511,14 @@ gtk_tree_view_search_init (GtkWidget   *entry,
 
   /* search */
   gtk_tree_selection_unselect_all (selection);
+  if (tree_view->priv->typeselect_flush_timeout)
+    {
+      g_source_remove (tree_view->priv->typeselect_flush_timeout);
+      tree_view->priv->typeselect_flush_timeout =
+	g_timeout_add (GTK_TREE_VIEW_SEARCH_DIALOG_TIMEOUT,
+		       (GSourceFunc) gtk_tree_view_search_entry_flush_timeout,
+		       tree_view);
+    }
 
   if (len < 1)
     return;

@@ -210,6 +210,7 @@ struct _GtkTreeViewPrivate
   guint disable_popdown : 1;
   
   guint hover_selection : 1;
+  guint imcontext_changed : 1;
 
   gint selected_iter;
   gint search_column;
@@ -219,6 +220,8 @@ struct _GtkTreeViewPrivate
   GtkDestroyNotify search_destroy;
   GtkWidget *search_window;
   GtkWidget *search_entry;
+  guint search_entry_changed_id;
+  guint typeselect_flush_timeout;
 
   gint prev_width;
 
