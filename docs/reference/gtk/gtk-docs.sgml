@@ -401,6 +401,7 @@ that is, GUI components such as #GtkButton or #GtkTextView.
         &GtkEventBox;
         &GtkHandleBox;
         &GtkIMContext;
+        &GtkIMContextSimple;
         &GtkIMMulticontext;
         &GtkSizeGroup;
         &GtkTooltips;

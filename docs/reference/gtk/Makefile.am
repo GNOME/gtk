@@ -29,7 +29,6 @@ IGNORE_HFILES=			\
 	gtkdebug.h		\
 	gtkhsv.h		\
 	gtkimmodule.h		\
-	gtkimcontextsimple.h	\
 	gtkintl.h		\
 	gtkmarshal.h		\
 	gtkprivate.h		\

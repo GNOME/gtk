@@ -1,3 +1,8 @@
+Fri Oct 19 15:44:52 2001  Owen Taylor  <otaylor@redhat.com>
+
+	*  gtk/Makefile.am gtk/gtk-sections.txt gtk/gtk-docs.sgml:
+	Add gtkimcontextsimple.
+
 2001-10-19  Matthias Clasen   <matthiasc@poet.de>
 
 	* gtk/gtk-docs.sgml: Switch to DocBook 4.1 (for the PNG notation).

@@ -1111,6 +1111,22 @@ GTK_IM_CONTEXT_GET_CLASS
 </SECTION>
 
 <SECTION>
+<FILE>gtkimcontextsimple</FILE>
+<TITLE>GtkIMContextSimple</TITLE>
+GtkIMContextSimple
+gtk_im_context_simple_new
+gtk_im_context_simple_add_table
+<SUBSECTION Standard>
+GTK_IM_CONTEXT_SIMPLE
+GTK_IS_IM_CONTEXT_SIMPLE
+GTK_TYPE_IM_CONTEXT_SIMPLE
+gtk_im_context_simple_get_type
+GTK_IM_CONTEXT_SIMPLE_CLASS
+GTK_IS_IM_CONTEXT_SIMPLE_CLASS
+GTK_IM_CONTEXT_SIMPLE_GET_CLASS
+</SECTION>
+
+<SECTION>
 <FILE>gtkimmulticontext</FILE>
 <TITLE>GtkIMMulticontext</TITLE>
 GtkIMMulticontext
