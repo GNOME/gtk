@@ -110,10 +110,12 @@ gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
 void	   gtk_menu_item_set_accel_path	      (GtkMenuItem	   *menu_item,
 					       const gchar	   *accel_path);
 
+/* private */
 void	  _gtk_menu_item_refresh_accel_path   (GtkMenuItem	   *menu_item,
 					       const gchar	   *prefix,
 					       GtkAccelGroup	   *accel_group,
 					       gboolean		    group_changed);
+gboolean  _gtk_menu_item_is_selectable        (GtkWidget           *menu_item);
 
 #ifndef GTK_DISABLE_DEPRECATED
 #define gtk_menu_item_right_justify(menu_item) gtk_menu_item_set_right_justified ((menu_item), TRUE)

@@ -29,7 +29,6 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
-#include "gtktearoffmenuitem.h" /* FIXME */
 #include "gtkmenushell.h"
 #include "gtksignal.h"
 #include "gtkwindow.h"
@@ -411,12 +410,17 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
 
       menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent *)event);
 
-      if (menu_item &&
-	  GTK_WIDGET_IS_SENSITIVE (menu_item))
+      if (menu_item && _gtk_menu_item_is_selectable (menu_item))
 	{
 	  if ((menu_item->parent == widget) &&
 	      (menu_item != menu_shell->active_menu_item))
-	    gtk_menu_shell_select_item (menu_shell, menu_item);
+	    {
+	      if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
+		g_object_set_data (G_OBJECT (menu_shell),
+				   "gtk-menushell-just-activated",
+				   GUINT_TO_POINTER (1));
+	      gtk_menu_shell_select_item (menu_shell, menu_item);
+	    }
 	}
     }
   else
@@ -446,22 +450,39 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
   menu_shell = GTK_MENU_SHELL (widget);
   if (menu_shell->active)
     {
+      gboolean deactivate_immediately = FALSE;
+
       if (menu_shell->button && (event->button != menu_shell->button))
 	{
 	  menu_shell->button = 0;
 	  if (menu_shell->parent_menu_shell)
 	    return gtk_widget_event (menu_shell->parent_menu_shell, (GdkEvent*) event);
 	}
-      
+
       menu_shell->button = 0;
       menu_item = gtk_menu_shell_get_item (menu_shell, (GdkEvent*) event);
 
       deactivate = TRUE;
 
+      if (menu_item
+	  && GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement == GTK_TOP_BOTTOM)
+	{
+	  if (g_object_get_data (G_OBJECT (menu_shell), "gtk-menushell-just-activated"))
+	    g_object_set_data (G_OBJECT (menu_shell), "gtk-menushell-just-activated", NULL);
+	  else
+	    deactivate_immediately = TRUE;
+	}
+
       if ((event->time - menu_shell->activate_time) > MENU_SHELL_TIMEOUT)
 	{
+	  if (deactivate_immediately)
+	    {
+	      gtk_menu_shell_deactivate (menu_shell);
+	      return TRUE;
+	    }
+	    
 	  if (menu_item && (menu_shell->active_menu_item == menu_item) &&
-	      GTK_WIDGET_IS_SENSITIVE (menu_item))
+	      _gtk_menu_item_is_selectable (menu_item))
 	    {
 	      if (GTK_MENU_ITEM (menu_item)->submenu == NULL)
 		{
@@ -469,7 +490,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
 		  return TRUE;
 		}
 	    }
-	  else if (menu_item && !GTK_WIDGET_IS_SENSITIVE (menu_item))
+	  else if (menu_item && !_gtk_menu_item_is_selectable (menu_item))
 	    deactivate = FALSE;
 	  else if (menu_shell->parent_menu_shell)
 	    {
@@ -562,7 +583,9 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
     {
       menu_item = gtk_get_event_widget ((GdkEvent*) event);
 
-      if (!menu_item || !GTK_WIDGET_IS_SENSITIVE (menu_item))
+      if (!menu_item ||
+	  (GTK_IS_MENU_ITEM (menu_item) && 
+	   !_gtk_menu_item_is_selectable (menu_item)))
 	return TRUE;
       
       if ((menu_item->parent == widget) &&
@@ -614,7 +637,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
 	  return TRUE;
 	}
 
-      if (!GTK_WIDGET_IS_SENSITIVE (menu_item))
+      if (!_gtk_menu_item_is_selectable (event_widget))
 	return TRUE;
 
       if ((menu_shell->active_menu_item == event_widget) &&
@@ -785,7 +808,7 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
 				 GtkWidget    *menu_item)
 {
   gtk_menu_shell_deselect (menu_shell);
-  
+
   menu_shell->active_menu_item = menu_item;
   _gtk_menu_item_set_placement (GTK_MENU_ITEM (menu_shell->active_menu_item),
 			       GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement);
@@ -874,9 +897,7 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 	{
 	  node = node->next;
 	  while (node != start_node && 
-		 (!node ||
-		  !GTK_WIDGET_IS_SENSITIVE (node->data) ||
-		  !GTK_WIDGET_VISIBLE (node->data) ))
+		 (!node || !_gtk_menu_item_is_selectable (node->data)))
 	    {
 	      if (!node)
 		node = menu_shell->children;
@@ -888,9 +909,7 @@ gtk_menu_shell_move_selected (GtkMenuShell  *menu_shell,
 	{
 	  node = node->prev;
 	  while (node != start_node &&
-		 (!node ||
-		  !GTK_WIDGET_IS_SENSITIVE (node->data) ||
-		  !GTK_WIDGET_VISIBLE (node->data) ))
+		 (!node || !_gtk_menu_item_is_selectable (node->data)))
 	    {
 	      if (!node)
 		node = g_list_last (menu_shell->children);
@@ -949,7 +968,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell      *menu_shell,
       
     case GTK_MENU_DIR_CHILD:
       if (menu_shell->active_menu_item &&
-	  GTK_BIN (menu_shell->active_menu_item)->child &&
+	  _gtk_menu_item_is_selectable (menu_shell->active_menu_item) &&
 	  GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu)
 	{
 	  menu_shell = GTK_MENU_SHELL (GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu);
@@ -995,7 +1014,7 @@ gtk_real_menu_shell_activate_current (GtkMenuShell      *menu_shell,
 				      gboolean           force_hide)
 {
   if (menu_shell->active_menu_item &&
-      GTK_WIDGET_IS_SENSITIVE (menu_shell->active_menu_item) &&
+      _gtk_menu_item_is_selectable (menu_shell->active_menu_item) &&
       GTK_MENU_ITEM (menu_shell->active_menu_item)->submenu == NULL)
     {
       gtk_menu_shell_activate_item (menu_shell,
@@ -1014,4 +1033,3 @@ gtk_real_menu_shell_cancel (GtkMenuShell      *menu_shell)
   gtk_menu_shell_deactivate (menu_shell);
   gtk_signal_emit (GTK_OBJECT (menu_shell), menu_shell_signals[SELECTION_DONE]);
 }
-

@@ -1717,7 +1717,8 @@ gtk_menu_motion_notify  (GtkWidget	   *widget,
    * which may be different from 'widget'.
    */
   menu_item = gtk_get_event_widget ((GdkEvent*) event);
-  if (!menu_item || !GTK_IS_MENU_ITEM (menu_item) || !GTK_WIDGET_IS_SENSITIVE (menu_item) ||
+  if (!menu_item || !GTK_IS_MENU_ITEM (menu_item) ||
+      !_gtk_menu_item_is_selectable (menu_item) ||
       !GTK_IS_MENU (menu_item->parent))
     return FALSE;
 

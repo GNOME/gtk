@@ -31,6 +31,8 @@
 #include "gtkmenu.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
+#include "gtktearoffmenuitem.h"
+#include "gtkseparatormenuitem.h"
 #include "gtksignal.h"
 
 
@@ -757,7 +759,13 @@ gtk_real_menu_item_activate_item (GtkMenuItem *menu_item)
 
 	  submenu = GTK_MENU_SHELL (menu_item->submenu);
 	  if (submenu->children)
-	    gtk_menu_shell_select_item (submenu, submenu->children->data);
+	    {
+	      if (submenu->children->next &&
+		  GTK_IS_TEAROFF_MENU_ITEM (submenu->children->data))
+		gtk_menu_shell_select_item (submenu, submenu->children->next->data);
+	      else
+		gtk_menu_shell_select_item (submenu, submenu->children->data);
+	    }
 	}
     }
 }
@@ -1102,4 +1110,17 @@ gtk_menu_item_forall (GtkContainer *container,
 
   if (bin->child)
     callback (bin->child, callback_data);
+}
+
+gboolean
+_gtk_menu_item_is_selectable (GtkWidget *menu_item)
+{
+  if ((!GTK_BIN (menu_item)->child &&
+       G_OBJECT_TYPE (menu_item) == GTK_TYPE_MENU_ITEM) ||
+      GTK_IS_SEPARATOR_MENU_ITEM (menu_item) ||
+      !GTK_WIDGET_IS_SENSITIVE (menu_item) ||
+      !GTK_WIDGET_VISIBLE (menu_item))
+    return FALSE;
+
+  return TRUE;
 }

@@ -1,3 +1,25 @@
+Thu Nov 29 21:35:56 2001  Kristian Rietveld  <kristian@planet.nl>
+
+	* gtk/gtkmenu.c (gtk_menu_motion_notify): add checks for
+	empty menu items to behave like insensitive items (#59456)
+
+	* gtk/gtkmenuitem.c (gtk_real_menu_item_activate_item): select
+	next item if the first item in the menu is a tear off item
+	(#59456-2, suggestion by Matthias Clasen)
+
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_press),
+	(gtk_menu_shell_button_release), (gtk_menu_shell_entry_notify),
+	(gtk_menu_shell_leave_notify), (gtk_real_menu_shell_move_current),
+	(gtk_real_menu_shell_activate_current): add check, so empty
+	menu items behave like insensitive items (#59456)
+        
+	* gtk/gtkmenuitem.[ch]: add _gtk_menu_item_is_selectable to make
+	the checks more readable ...
+	
+	* gtk/gtkmenushell.c (gtk_menu_shell_button_press),
+	(gtk_menu_shell_button_release): causes the menu to dropdown if the
+	caption is clicked again (#64977)
+
 2001-11-29  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextiter.c (_gtk_text_iter_forward_indexable_segment):
