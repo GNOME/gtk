@@ -3722,6 +3722,11 @@ hide_titles_clist (GtkWidget *widget, gpointer data)
   gtk_clist_column_titles_hide (GTK_CLIST (data));
 }
 
+void toggle_reorderable (GtkWidget *widget, GtkCList *clist)
+{
+  gtk_clist_set_reorderable (clist, GTK_TOGGLE_BUTTON (widget)->active);
+}
+
 void
 select_clist (GtkWidget *widget,
 	      gint row, 
@@ -3995,6 +4000,7 @@ create_clist (void)
   GtkWidget *button;
   GtkWidget *separator;
   GtkWidget *scrolled_win;
+  GtkWidget *check;
 
   GtkWidget *undo_button;
   GtkWidget *label;
@@ -4097,6 +4103,12 @@ create_clist (void)
       gtk_signal_connect (GTK_OBJECT (undo_button), "clicked",
                           (GtkSignalFunc) undo_selection, (gpointer) clist);
 
+      check = gtk_check_button_new_with_label ("Reorderable");
+      gtk_signal_connect (GTK_OBJECT (check), "clicked",
+			  GTK_SIGNAL_FUNC (toggle_reorderable), clist);
+      gtk_box_pack_start (GTK_BOX (box2), check, FALSE, TRUE, 0);
+      gtk_toggle_button_set_state (GTK_TOGGLE_BUTTON (check), TRUE);
+
       label = gtk_label_new ("Selection Mode :");
       gtk_box_pack_start (GTK_BOX (box2), label, FALSE, TRUE, 0);
 
@@ -4111,18 +4123,6 @@ create_clist (void)
       /* 
        * the rest of the clist configuration
        */
-
-      /*
-      gtk_signal_connect (GTK_OBJECT (clist), 
-			  "select_row",
-			  (GtkSignalFunc) select_clist, 
-			  undo_button);
-
-      gtk_signal_connect (GTK_OBJECT (clist), 
-			  "unselect_row",
-			  (GtkSignalFunc) unselect_clist, 
-			  undo_button);
-      */
 
       gtk_clist_set_row_height (GTK_CLIST (clist), 18);
       gtk_widget_set_usize (clist, -1, 300);
@@ -4273,74 +4273,6 @@ void after_move (GtkCTree *ctree, GtkCTreeNode *child, GtkCTreeNode *parent,
 
   g_print ("Moving \"%s\" to \"%s\" with sibling \"%s\".\n", source,
 	   (parent) ? target1 : "nil", (sibling) ? target2 : "nil");
-}
-
-gint button_press (GtkCTree *ctree, GdkEventButton *event, gpointer data)
-{
-  gint row;
-  gint column;
-  GtkCTreeNode *work;
-  gint res;
-  
-  res = gtk_clist_get_selection_info (GTK_CLIST (ctree), event->x, event->y, 
-				      &row, &column);
-  if (!res && event->button != 3)
-    return FALSE;
-
-  work = GTK_CTREE_NODE (g_list_nth (GTK_CLIST (ctree)->row_list, row));
-
-  switch (event->button)
-    {
-    case 1:
-      if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_MULTIPLE &&
-	  event->state & GDK_SHIFT_MASK)
-	gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree),"button_press_event");
-      break;
-    case  2:
-      if (GTK_CTREE_ROW (work)->children && 
-	  gtk_ctree_is_hot_spot (ctree, event->x, event->y))
-	{
-	  if (GTK_CTREE_ROW (work)->expanded)
-	    gtk_ctree_collapse_recursive (ctree, work);
-	  else
-	    gtk_ctree_expand_recursive (ctree, work);
-	  after_press (ctree, NULL);
-	  gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree),
-					"button_press_event");
-	}
-      break;
-    default:
-      break;
-    }
-  return FALSE;
-}
-
-gint button_release (GtkCTree *ctree, GdkEventButton *event, gpointer data)
-{
-  gint row;
-  gint column;
-  GtkCTreeNode *work;
-  gint res;
-  
-  res = gtk_clist_get_selection_info (GTK_CLIST (ctree), event->x, event->y, 
-				      &row, &column);
-  if (!res || event->button != 1)
-    return FALSE;
-
-  work = GTK_CTREE_NODE (g_list_nth (GTK_CLIST (ctree)->row_list, row));
-
-  if (GTK_CLIST (ctree)->selection_mode == GTK_SELECTION_MULTIPLE &&
-      event->state & GDK_SHIFT_MASK)
-    {
-      if (GTK_CTREE_ROW (work)->row.state == GTK_STATE_SELECTED) 
-	    gtk_ctree_unselect_recursive (ctree, work);
-      else
-	gtk_ctree_select_recursive (ctree, work);
-      after_press (ctree, NULL);
-      gtk_signal_emit_stop_by_name (GTK_OBJECT (ctree), 
-				    "button_release_event");
-    }
-  return FALSE;
 }
 
 void count_items (GtkCTree *ctree, GtkCTreeNode *list)
@@ -4614,11 +4546,6 @@ void change_spacing (GtkWidget *widget, GtkCTree *ctree)
 void change_row_height (GtkWidget *widget, GtkCList *clist)
 {
   gtk_clist_set_row_height (clist, GTK_ADJUSTMENT (widget)->value);
-}
-
-void toggle_reorderable (GtkWidget *widget, GtkCTree *ctree)
-{
-  gtk_ctree_set_reorderable (ctree, GTK_TOGGLE_BUTTON (widget)->active);
 }
 
 void set_background (GtkCTree *ctree, GtkCTreeNode *node, gpointer data)
@@ -4953,16 +4880,11 @@ void create_ctree (void)
       gtk_ctree_set_line_style (ctree, GTK_CTREE_LINES_DOTTED);
       line_style = GTK_CTREE_LINES_DOTTED;
 
-      gtk_ctree_set_reorderable (ctree, TRUE);
       gtk_signal_connect (GTK_OBJECT (ctree), "click_column",
 			  (GtkSignalFunc) ctree_click_column,
 			  NULL);
-      gtk_signal_connect (GTK_OBJECT (ctree), "button_press_event",
-			  GTK_SIGNAL_FUNC (button_press), NULL);
       gtk_signal_connect_after (GTK_OBJECT (ctree), "button_press_event",
 				GTK_SIGNAL_FUNC (after_press), NULL);
-      gtk_signal_connect (GTK_OBJECT (ctree), "button_release_event",
-			  GTK_SIGNAL_FUNC (button_release), NULL);
       gtk_signal_connect_after (GTK_OBJECT (ctree), "button_release_event",
 				GTK_SIGNAL_FUNC (after_press), NULL);
       gtk_signal_connect_after (GTK_OBJECT (ctree), "tree_move",

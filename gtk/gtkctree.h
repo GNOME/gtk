@@ -100,22 +100,11 @@ struct _GtkCTree
   GtkCList clist;
   
   GdkGC *lines_gc;
-  GdkWindow *drag_icon;
-  gint icon_width;
-  gint icon_height;
   
   gint tree_indent;
   gint tree_spacing;
   gint tree_column;
-  gint drag_row;
-  GtkCTreeNode *drag_source;
-  GtkCTreeNode *drag_target;
-  gint insert_pos;
 
-  guint reorderable    : 1;
-  guint use_icons      : 1;
-  guint in_drag        : 1;
-  guint drag_rect      : 1;
   guint line_style     : 2;
   guint expander_style : 2;
   guint show_stub      : 1;
@@ -418,10 +407,6 @@ void gtk_ctree_set_spacing           (GtkCTree                *ctree,
 				      gint                     spacing);
 void gtk_ctree_set_show_stub         (GtkCTree                *ctree, 
 				      gboolean                 show_stub);
-void gtk_ctree_set_reorderable       (GtkCTree                *ctree,
-				      gboolean                 reorderable);
-void gtk_ctree_set_use_drag_icons    (GtkCTree                *ctree,
-				      gboolean                 use_icons);
 void gtk_ctree_set_line_style        (GtkCTree                *ctree, 
 				      GtkCTreeLineStyle        line_style);
 void gtk_ctree_set_expander_style    (GtkCTree                *ctree, 
@@ -442,7 +427,10 @@ void gtk_ctree_sort_recursive                    (GtkCTree     *ctree,
 /* deprecated*/
 void gtk_ctree_show_stub             (GtkCTree                *ctree, 
 				      gboolean                 show_stub);
-
+void gtk_ctree_set_reorderable       (GtkCTree                *ctree,
+				      gboolean                 reorderable);
+void gtk_ctree_set_use_drag_icons    (GtkCTree                *ctree,
+				      gboolean                 use_icons);
 
 
 #ifdef __cplusplus

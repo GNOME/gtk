@@ -36,14 +36,17 @@ extern "C" {
 /* clist flags */
 enum                    
 {
-  GTK_CLIST_IN_DRAG             = 1 << 0,
-  GTK_CLIST_DRAG_SELECTION      = 1 << 1,
-  GTK_CLIST_ROW_HEIGHT_SET      = 1 << 2,
-  GTK_CLIST_SHOW_TITLES         = 1 << 3,
-  GTK_CLIST_CHILD_HAS_FOCUS     = 1 << 4,
-  GTK_CLIST_ADD_MODE            = 1 << 5,
-  GTK_CLIST_AUTO_SORT           = 1 << 6,
-  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 << 7
+  GTK_CLIST_IN_DRAG             = 1 <<  0,
+  GTK_CLIST_ROW_HEIGHT_SET      = 1 <<  1,
+  GTK_CLIST_SHOW_TITLES         = 1 <<  2,
+  GTK_CLIST_CHILD_HAS_FOCUS     = 1 <<  3,
+  GTK_CLIST_ADD_MODE            = 1 <<  4,
+  GTK_CLIST_AUTO_SORT           = 1 <<  5,
+  GTK_CLIST_AUTO_RESIZE_BLOCKED = 1 <<  6,
+  GTK_CLIST_REORDERABLE         = 1 <<  7,
+  GTK_CLIST_USE_DRAG_ICONS      = 1 <<  8,
+  GTK_CLIST_DRAW_DRAG_LINE      = 1 <<  9,
+  GTK_CLIST_DRAW_DRAG_RECT      = 1 << 10
 }; 
 
 /* cell types */
@@ -55,6 +58,22 @@ typedef enum
   GTK_CELL_PIXTEXT,
   GTK_CELL_WIDGET
 } GtkCellType;
+
+typedef enum
+{
+  GTK_CLIST_DRAG_NONE,
+  GTK_CLIST_DRAG_BEFORE,
+  GTK_CLIST_DRAG_INTO,
+  GTK_CLIST_DRAG_AFTER
+} GtkCListDragPos;
+
+typedef enum
+{
+  GTK_BUTTON_IGNORED = 0,
+  GTK_BUTTON_SELECTS = 1 << 0,
+  GTK_BUTTON_DRAGS   = 1 << 1,
+  GTK_BUTTON_EXPANDS = 1 << 2
+} GtkButtonAction;
 
 #define GTK_TYPE_CLIST            (gtk_clist_get_type ())
 #define GTK_CLIST(obj)            (GTK_CHECK_CAST ((obj), GTK_TYPE_CLIST, GtkCList))
@@ -70,10 +89,13 @@ typedef enum
 #define GTK_CLIST_ROW_HEIGHT_SET(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ROW_HEIGHT_SET)
 #define GTK_CLIST_SHOW_TITLES(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_SHOW_TITLES)
 #define GTK_CLIST_CHILD_HAS_FOCUS(clist)   (GTK_CLIST_FLAGS (clist) & GTK_CLIST_CHILD_HAS_FOCUS)
-#define GTK_CLIST_DRAG_SELECTION(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAG_SELECTION)
 #define GTK_CLIST_ADD_MODE(clist)          (GTK_CLIST_FLAGS (clist) & GTK_CLIST_ADD_MODE)
 #define GTK_CLIST_AUTO_SORT(clist)         (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_SORT)
 #define GTK_CLIST_AUTO_RESIZE_BLOCKED(clist) (GTK_CLIST_FLAGS (clist) & GTK_CLIST_AUTO_RESIZE_BLOCKED)
+#define GTK_CLIST_REORDERABLE(clist)       (GTK_CLIST_FLAGS (clist) & GTK_CLIST_REORDERABLE)
+#define GTK_CLIST_USE_DRAG_ICONS(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_USE_DRAG_ICONS)
+#define GTK_CLIST_DRAW_DRAG_LINE(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAW_DRAG_LINE)
+#define GTK_CLIST_DRAW_DRAG_RECT(clist)    (GTK_CLIST_FLAGS (clist) & GTK_CLIST_DRAW_DRAG_RECT)
 
 #define GTK_CLIST_ROW(_glist_) ((GtkCListRow *)((_glist_)->data))
 
@@ -97,6 +119,21 @@ typedef struct _GtkCellWidget GtkCellWidget;
 typedef gint (*GtkCListCompareFunc) (GtkCList     *clist,
 				     gconstpointer ptr1,
 				     gconstpointer ptr2);
+
+typedef struct _GtkCListCellInfo GtkCListCellInfo;
+typedef struct _GtkCListDestInfo GtkCListDestInfo;
+
+struct _GtkCListCellInfo
+{
+  gint row;
+  gint column;
+};
+
+struct _GtkCListDestInfo
+{
+  GtkCListCellInfo cell;
+  GtkCListDragPos  insert_pos;
+};
 
 struct _GtkCList
 {
@@ -153,6 +190,14 @@ struct _GtkCList
   GList *undo_unselection;
   gint undo_anchor;
   
+  /* mouse buttons */
+  guint8 button_actions[5];
+
+  guint8 drag_button;
+
+  /* dnd */
+  GtkCListCellInfo click_cell;
+
   /* scroll adjustments */
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
@@ -236,6 +281,10 @@ struct _GtkCListClass
 				 GdkRectangle   *area,
 				 gint            row,
 				 GtkCListRow    *clist_row);
+  void   (*draw_drag_highlight) (GtkCList        *clist,
+				 GtkCListRow     *target_row,
+				 gint             target_row_number,
+				 GtkCListDragPos  drag_pos);
   void   (*clear)               (GtkCList       *clist);
   void   (*fake_unselect_all)   (GtkCList       *clist,
 				 gint            row);
@@ -257,6 +306,7 @@ struct _GtkCListClass
 				 GtkCListRow    *clist_row,
 				 gint            column,
 				 GtkRequisition *requisition);
+
 };
 
 struct _GtkCListColumn
@@ -406,6 +456,15 @@ void gtk_clist_set_shadow_type (GtkCList      *clist,
 /* set the clist's selection mode */
 void gtk_clist_set_selection_mode (GtkCList         *clist,
 				   GtkSelectionMode  mode);
+
+/* enable clists reorder ability */
+void gtk_clist_set_reorderable (GtkCList *clist,
+				gboolean  reorderable);
+void gtk_clist_set_use_drag_icons (GtkCList *clist,
+				   gboolean  use_icons);
+void gtk_clist_set_button_actions (GtkCList *clist,
+				   guint     button,
+				   guint8    button_actions);
 
 /* freeze all visual updates of the list, and then thaw the list after
  * you have made a number of changes and the updates wil occure in a
