@@ -1,5 +1,9 @@
 2005-02-03  Matthias Clasen  <mclasen@redhat.com>
 
+	* gtk/gtkmenu.c (gtk_menu_handle_scrolling): Don't do
+	one roundtrip per motion event.  (#166173, pointed out
+	by Chris Lee, patch by Søren Sandmann)
+
 	* gtk/gtk.symbols: 
 	* gtk/gtkstock.h: 
 	* gtk/gtkstock.c (gtk_stock_set_translate_func): 
