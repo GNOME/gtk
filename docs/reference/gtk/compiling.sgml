@@ -49,6 +49,25 @@ $ cc `pkg-config --cflags --libs gtk+-linux-fb-2.0` hello.c -o hello
 </programlisting>
 </para>
 
-</refsect1>
+<para>
+If you want to make sure that your program doesn't use any deprecated 
+functions, you can define the preprocessor symbol GTK_DISABLE_DEPRECATED
+by using the command line option <literal>-DGTK_DISABLE_DEPRECATED=1</literal>.
+There are similar symbols GDK_DISABLE_DEPRECATED, 
+GDK_PIXBUF_DISABLE_DEPRECATED and G_DISABLE_DEPRECATED for GDK, GdkPixbuf and
+GLib. 
+</para>
 
+<para>
+If you want to make sure that your program doesn't use any functions which 
+may be problematic in a multihead setting, you can define the preprocessor
+symbol GDK_MULTIHEAD_SAFE by using the command line option 
+<literal>-DGTK_MULTIHEAD_SAFE=1</literal>.
+</para>
+
+</refsect1>
 </refentry>
+
+
+
+
