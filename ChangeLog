@@ -1,3 +1,7 @@
+Tue Aug  4 22:02:49 PDT 1998 Shawn T. Amundson <amundson@gtk.org>
+
+	* Released GTK+ 1.1.1
+
 Wed Aug  5 02:57:20 1998  Lars Hamann  <lars@gtk.org>
 
 	* gtk/gtkctree.h:
