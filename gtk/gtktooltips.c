@@ -51,8 +51,7 @@ static void gtk_tooltips_widget_remove     (GtkWidget   *widget,
 static void gtk_tooltips_set_active_widget (GtkTooltips *tooltips,
                                             GtkWidget   *widget);
 static gint gtk_tooltips_timeout           (gpointer     data);
-static gint gtk_tooltips_expose            (GtkTooltips    *tooltips, 
-					    GdkEventExpose *event);
+static gint gtk_tooltips_paint_window      (GtkTooltips *tooltips);
 
 static void gtk_tooltips_draw_tips         (GtkTooltips *tooltips);
 
@@ -190,7 +189,11 @@ gtk_tooltips_force_window (GtkTooltips *tooltips)
       gtk_widget_set_name (tooltips->tip_window, "gtk-tooltips");
       gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
 				 "expose_event",
-				 GTK_SIGNAL_FUNC (gtk_tooltips_expose), 
+				 GTK_SIGNAL_FUNC (gtk_tooltips_paint_window), 
+				 GTK_OBJECT (tooltips));
+      gtk_signal_connect_object (GTK_OBJECT (tooltips->tip_window), 
+				 "draw",
+				 GTK_SIGNAL_FUNC (gtk_tooltips_paint_window), 
 				 GTK_OBJECT (tooltips));
 
       gtk_signal_connect (GTK_OBJECT (tooltips->tip_window),
@@ -400,7 +403,7 @@ gtk_tooltips_set_colors (GtkTooltips *tooltips,
 }
 
 static gint
-gtk_tooltips_expose (GtkTooltips *tooltips, GdkEventExpose *event)
+gtk_tooltips_paint_window (GtkTooltips *tooltips)
 {
   GtkStyle *style;
   gint y, baseline_skip, gap;

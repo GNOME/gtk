@@ -1,3 +1,59 @@
+Wed Aug 18 09:20:10 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwindow.c:
+	we use window->need_resize from configure_event now, to indicate that
+	the gtkwindow should keep its allocation (e.g. because the user resized
+	the window through window manager handles). resize_count is now reliably
+	used to figure whether we got the allocation we requested from the
+	window manager.
+	configure events get queued as resizes now, the real stuff (size
+	computation and allocation) now only goes on in gtk_window_move_resize().
+	GtkWindow's requisition now contains its *real* requisition (like all
+	other widgets), *not* taking usize into account.
+	geometry_info->last_{width|height} is now updated from set_hints() only
+	so it always contains the last hints we set for the window manager.
+	made some event handlers return TRUE instead of FALSE.
+	the overall code should be much more straight forward now, and the
+	significant code portions are accompanied by comments now.
+	(gtk_window_set_hints):
+	removed requisition argument and made it
+	fetch the requisition through gtk_widget_get_child_requisition.
+	we also don't move the gdkwindow here anymore, gtk_window_move_resize()
+	does that now.
+	(gtk_window_show):
+	ensure that the widget is realized before calling 
+	gtk_container_check_resize() (and thus gtk_window_move_resize()), also
+	ensure that we got properly size requested and allocated before
+	realization.
+	(gtk_window_configure_event):
+	ignore plain window moves, or reallocate the widget tree through the
+	resize queue otherwise.
+	(gtk_window_move_resize):
+	mostly rewrote this function to figure window manager hints more
+	reliably, coalesce window moves and resizes to reduce configure events
+	and do actuall size allocations.
+
+Tue Aug 17 07:43:04 1999  Tim Janik  <timj@gtk.org>
+
+	* gtk/gtkwidget.c (gtk_widget_event): discard expose events for widgets
+	that have a resize pending, because a redraw is already queued for them.
+
+	* gdk/gdkevents.c (gdk_event_translate): give a debugging note when
+	discarding configure events.
+
+	* gtk/gtkcontainer.c: removed ugly connect_to ::size_allocate signal
+	hack to clear resize_widgets.
+
+	* gtk/gtkwidget.c (gtk_widget_size_allocate): call clear_resize_widgets
+	for resize containers prior to size allocation. (this is also a bit
+	ugly, but avoids side effects for stopped emissions and is thus more
+	reliable).
+	(gtk_widget_unparent): removed disconnect call for clear_resize_widgets.
+
+	* gtk/gtktooltips.c (gtk_tooltips_paint_window): renamed this
+	function from gtk_tooltips_expose, as we connect to ::expose_event
+	*and* ::draw now.
+
 1999-08-18  Federico Mena Quintero  <federico@redhat.com>
 
 	* gtk/gtkselection.c (gtk_target_list_ref): Added missing sanity
@@ -181,7 +237,6 @@ Tue Jun 29 15:59:25 1999  Owen Taylor  <otaylor@redhat.com>
 	* configure.in (LIBS): Look for libgmodule in the
 	right location.
 
->>>>>>> 1.1061.2.97
 Mon Jun 28 09:29:52 1999  Tim Janik  <timj@gtk.org>
 
 	* gtk/gtkwindow.c: add ::default_width and ::default_height arguments.

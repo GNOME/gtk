@@ -735,11 +735,6 @@ gtk_container_clear_resize_widgets (GtkContainer *container)
 
   node = container->resize_widgets;
 
-  if (node)
-    gtk_signal_disconnect_by_func (GTK_OBJECT (container),
-				   GTK_SIGNAL_FUNC (gtk_container_clear_resize_widgets),
-				   NULL);
-
   while (node)
     {
       GtkWidget *widget = node->data;
@@ -860,29 +855,19 @@ gtk_container_queue_resize (GtkContainer *container)
 		}
 	      
 	      GTK_PRIVATE_SET_FLAG (container, GTK_RESIZE_NEEDED);
-	      if (!resize_container->resize_widgets)
-		gtk_signal_connect (GTK_OBJECT (resize_container),
-				    "size_allocate",
-				    GTK_SIGNAL_FUNC (gtk_container_clear_resize_widgets),
-				    NULL);
 	      resize_container->resize_widgets =
 		g_slist_prepend (resize_container->resize_widgets, container);
 	      break;
 
 	    case GTK_RESIZE_IMMEDIATE:
 	      GTK_PRIVATE_SET_FLAG (container, GTK_RESIZE_NEEDED);
-	      if (!resize_container->resize_widgets)
-		gtk_signal_connect (GTK_OBJECT (resize_container),
-				    "size_allocate",
-				    GTK_SIGNAL_FUNC (gtk_container_clear_resize_widgets),
-				    NULL);
 	      resize_container->resize_widgets =
 		g_slist_prepend (resize_container->resize_widgets, container);
 	      gtk_container_check_resize (resize_container);
 	      break;
 
 	    case GTK_RESIZE_PARENT:
-	      /* Ignore */
+	      /* Ignore, should not be reached */
 	      break;
 	    }
 	}
@@ -890,7 +875,7 @@ gtk_container_queue_resize (GtkContainer *container)
 	{
 	  /* We need to let hidden toplevels know that something
 	   * changed while they where hidden. For other resize containers,
-	   * they will get resized when they are shown.
+	   * they will get resized after they are shown.
 	   */
 	  if (GTK_WIDGET_TOPLEVEL (resize_container))
 	    gtk_container_check_resize (resize_container);
@@ -1006,10 +991,6 @@ gtk_container_resize_children (GtkContainer *container)
    * is insufficient, since we don't need to reallocate below that.
    */
   resize_widgets = container->resize_widgets;
-  if (resize_widgets)
-    gtk_signal_disconnect_by_func (GTK_OBJECT (container),
-				   GTK_SIGNAL_FUNC (gtk_container_clear_resize_widgets),
-				   NULL);
   container->resize_widgets = NULL;
   for (node = resize_widgets; node; node = node->next)
     {

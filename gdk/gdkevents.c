@@ -1696,7 +1696,7 @@ gdk_event_translate (GdkEvent *event,
       
       
       GDK_NOTE (EVENTS,
-		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d",
+		g_message ("configure notify:\twindow: %ld  x,y: %d %d	w,h: %d %d  b-w: %d  above: %ld	 ovr: %d%s",
 			   xevent->xconfigure.window,
 			   xevent->xconfigure.x,
 			   xevent->xconfigure.y,
@@ -1704,7 +1704,12 @@ gdk_event_translate (GdkEvent *event,
 			   xevent->xconfigure.height,
 			   xevent->xconfigure.border_width,
 			   xevent->xconfigure.above,
-			   xevent->xconfigure.override_redirect));
+			   xevent->xconfigure.override_redirect,
+			   !window
+			   ? " (discarding)"
+			   : window_private->window_type == GDK_WINDOW_CHILD
+			   ? " (discarding child)"
+			   : ""));
       if (window &&
 	  !window_private->destroyed &&
 	  (window_private->extension_events != 0) &&

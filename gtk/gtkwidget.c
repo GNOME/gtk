@@ -1338,17 +1338,7 @@ gtk_widget_unparent (GtkWidget *widget)
 	      if (prev)
 		prev->next = slist;
 	      else
-		{
-		  /* it is really messy to have this signal disconnection
-		   * in gtkwidget.c, the resize_widgets invariants should
-		   * all be taken care off by gtkcontainer.c exclusively.
-		   */
-		  if (!slist)
-		    gtk_signal_disconnect_by_func (GTK_OBJECT (toplevel),
-						   GTK_SIGNAL_FUNC (gtk_container_clear_resize_widgets),
-						   NULL);
-		  GTK_CONTAINER (toplevel)->resize_widgets = slist;
-		}
+		GTK_CONTAINER (toplevel)->resize_widgets = slist;
 	      
 	      g_slist_free_1 (last);
 	    }
@@ -2387,8 +2377,8 @@ gtk_widget_size_request (GtkWidget	*widget,
  *****************************************/
 
 void
-gtk_widget_get_child_requisition (GtkWidget	   *widget,
-			    GtkRequisition *requisition)
+gtk_widget_get_child_requisition (GtkWidget	 *widget,
+				  GtkRequisition *requisition)
 {
   GtkWidgetAuxInfo *aux_info;
 
@@ -2468,6 +2458,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     {
       needs_draw = TRUE;
     }
+
+  if (GTK_IS_RESIZE_CONTAINER (widget))
+    gtk_container_clear_resize_widgets (GTK_CONTAINER (widget));
 
   gtk_signal_emit (GTK_OBJECT (widget), widget_signals[SIZE_ALLOCATE], &real_allocation);
 
@@ -2784,8 +2777,11 @@ gtk_widget_event (GtkWidget *widget,
       break;
     case GDK_EXPOSE:
       /* there is no sense in providing a widget with bogus expose events.
+       * also we make the optimization to discard expose events for widgets
+       * that have a resize pending, because a redraw is already queued for
+       * them.
        */
-      if (!event->any.window)
+      if (!event->any.window || GTK_WIDGET_RESIZE_NEEDED (widget))
 	{
 	  gtk_widget_unref (widget);
 	  return TRUE;
@@ -3720,6 +3716,7 @@ gtk_widget_set_uposition (GtkWidget *widget,
   if (GTK_WIDGET_REALIZED (widget) && GTK_IS_WINDOW (widget) &&
       (aux_info->x != -1) && (aux_info->y != -1))
     {
+      /* keep this in sync with gtk_window_move_resize() */
       gdk_window_set_hints (widget->window, aux_info->x, aux_info->y, 0, 0, 0, 0, GDK_HINT_POS);
       gdk_window_move (widget->window, aux_info->x, aux_info->y);
     }
