@@ -23,6 +23,7 @@
 #include "prop-editor.h"
 
 #define NUMBER_OF_ITEMS 10
+#define MANY_ITEMS 10000
 
 static void
 fill_model (GtkTreeModel *model)
@@ -116,7 +117,7 @@ add_many (GtkWidget *button, GtkIconView *icon_list)
   pixbuf = gdk_pixbuf_new_from_file ("gnome-textfile.png", NULL);
 
 
-  for (i = 0; i < 100; i++)
+  for (i = 0; i < MANY_ITEMS; i++)
     {
       str = g_strdup_printf ("Icon %d", count);
       str2 = g_strdup_printf ("Icon <b>%d</b>", count);	
@@ -164,19 +165,27 @@ free_item_data (ItemData *data)
 }
 
 static void
-item_cb (GtkWidget *menuitem,
-	 ItemData  *data)
+item_activated (GtkIconView *icon_view,
+		GtkTreePath *path)
 {
   GtkTreeIter iter;
   GtkTreeModel *model;
   gchar *text;
-  model = gtk_icon_view_get_model (data->icon_list);
-  
-  gtk_tree_model_get_iter (model, &iter, data->path);
+
+  model = gtk_icon_view_get_model (icon_view);
+  gtk_tree_model_get_iter (model, &iter, path);
 
   gtk_tree_model_get (model, &iter, 1, &text, -1);
   g_print ("Item activated, text is %s\n", text);
   g_free (text);
+  
+}
+
+static void
+item_cb (GtkWidget *menuitem,
+	 ItemData  *data)
+{
+  item_activated (data->icon_list, data->path);
 }
 
 static void
@@ -278,7 +287,7 @@ main (gint argc, gchar **argv)
 		    G_CALLBACK (popup_menu_handler), NULL);
 
   g_signal_connect (icon_list, "item_activated",
-		    G_CALLBACK (item_cb), icon_list);
+		    G_CALLBACK (item_activated), NULL);
   
   model = create_model ();
   gtk_icon_view_set_model (GTK_ICON_VIEW (icon_list), model);

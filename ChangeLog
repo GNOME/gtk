@@ -1,5 +1,7 @@
 2004-11-09  Matthias Clasen  <mclasen@redhat.com>
 
+	* tests/testiconview.c: Fix double-click activation.
+
 	* gtk/gtkstatusbar.c (gtk_statusbar_init): Raise the grip
 	window when appropriate.
 	(gtk_statusbar_init): Instead of cutting the text of, make
