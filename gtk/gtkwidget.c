@@ -1522,41 +1522,12 @@ gtk_widget_unparent (GtkWidget *widget)
   g_object_freeze_notify (G_OBJECT (widget));
   nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
 
-  /* unset focused and default children properly, this code
-   * should eventually move into some gtk_window_unparent_branch() or
-   * similar function.
-   */
-  
   toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
-    {
-      gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), NULL);
-
-      if (GTK_WIDGET_TOPLEVEL (toplevel))
-	{
-	  GtkWidget *child;
-      
-	  child = GTK_WINDOW (toplevel)->focus_widget;
-	  
-	  while (child && child != widget)
-	    child = child->parent;
-	  
-	  if (child == widget)
-	    gtk_window_set_focus (GTK_WINDOW (toplevel), NULL);
-	}
-    }
   if (GTK_WIDGET_TOPLEVEL (toplevel))
-    {
-      GtkWidget *child;
-      
-      child = GTK_WINDOW (toplevel)->default_widget;
-      
-      while (child && child != widget)
-	child = child->parent;
-      
-      if (child == widget)
-	gtk_window_set_default (GTK_WINDOW (toplevel), NULL);
-    }
+    _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+
+  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+    gtk_container_set_focus_child (GTK_CONTAINER (widget->parent), NULL);
 
   /* If we are unanchoring the child, we save around the toplevel
    * to emit hierarchy changed
@@ -1762,6 +1733,10 @@ gtk_widget_hide (GtkWidget *widget)
   
   if (GTK_WIDGET_VISIBLE (widget))
     {
+      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      if (toplevel != widget && GTK_WIDGET_TOPLEVEL (toplevel))
+	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+
       g_object_ref (widget);
       g_signal_emit (widget, widget_signals[HIDE], 0);
       if (!GTK_WIDGET_TOPLEVEL (widget))
@@ -4405,7 +4380,7 @@ gtk_widget_propagate_screen_changed_recurse (GtkWidget *widget,
   
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
-			  gtk_widget_propagate_hierarchy_changed_recurse,
+			  gtk_widget_propagate_screen_changed_recurse,
 			  client_data);
   
   g_object_unref (widget);
@@ -4709,7 +4684,16 @@ gtk_widget_set_child_visible (GtkWidget *widget,
   if (is_visible)
     GTK_PRIVATE_SET_FLAG (widget, GTK_CHILD_VISIBLE);
   else
-    GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
+    {
+      GtkWidget *toplevel;
+      
+      GTK_PRIVATE_UNSET_FLAG (widget, GTK_CHILD_VISIBLE);
+
+      toplevel = gtk_widget_get_toplevel (widget);
+      if (toplevel != widget && GTK_WIDGET_TOPLEVEL (toplevel))
+	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+    }
+
   if (widget->parent && GTK_WIDGET_REALIZED (widget->parent))
     {
       if (GTK_WIDGET_MAPPED (widget->parent) &&

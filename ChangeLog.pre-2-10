@@ -1,3 +1,21 @@
+Tue Nov 12 15:13:58 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkwidget.c gtk/gtkwindow.[ch]: Add
+	_gtk_window_unset_focus_and_default(), use to clear
+	the focus and default out of parts of the widget
+	heirarchy that we are hiding.
+
+	* gtk/gtkwidget.c (gtk_widget_propagate_screen_changed_recurse): 
+	Fix typo that was resulting in missed screen-change
+	notifies.
+
+	* gtk/gtkwindow.c (do_focus_change): Allow for
+	widget->window == NULL.
+
+	* gtk/gtklabel.c (gtk_label_screen_changed): Clear the
+	layout here not in hierarchy changed to handle the case
+	where the toplevel was moved between screens.
+
 Tue Nov 12 14:20:53 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
 
 	* gtk/gtkmenu.c (gtk_menu_enter_notify): Do not return when

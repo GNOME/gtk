@@ -364,6 +364,9 @@ gboolean        _gtk_window_activate_key       (GtkWindow   *window,
 
 void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
 						    gboolean   has_toplevel_focus);
+void            _gtk_window_unset_focus_and_default (GtkWindow *window,
+						     GtkWidget *widget);
+
 void            _gtk_window_set_is_active          (GtkWindow *window,
 						    gboolean   is_active);
 

@@ -130,6 +130,8 @@ static void set_markup                           (GtkLabel      *label,
 static void gtk_label_recalculate                (GtkLabel      *label);
 static void gtk_label_hierarchy_changed          (GtkWidget     *widget,
 						  GtkWidget     *old_toplevel);
+static void gtk_label_screen_changed             (GtkWidget     *widget,
+						  GdkScreen     *old_screen);
 
 static void gtk_label_create_window       (GtkLabel *label);
 static void gtk_label_destroy_window      (GtkLabel *label);
@@ -244,6 +246,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->button_release_event = gtk_label_button_release;
   widget_class->motion_notify_event = gtk_label_motion;
   widget_class->hierarchy_changed = gtk_label_hierarchy_changed;
+  widget_class->screen_changed = gtk_label_screen_changed;
   widget_class->mnemonic_activate = gtk_label_mnemonic_activate;
   widget_class->focus = gtk_label_focus;
 
@@ -719,10 +722,14 @@ gtk_label_hierarchy_changed (GtkWidget *widget,
 {
   GtkLabel *label = GTK_LABEL (widget);
 
-  /* in case the label has been reparented to another screen */
-  gtk_label_clear_layout (label);
-  
   gtk_label_setup_mnemonic (label, label->mnemonic_keyval);
+}
+
+static void
+gtk_label_screen_changed (GtkWidget *widget,
+			  GdkScreen *old_screen)
+{
+  gtk_label_clear_layout (GTK_LABEL (widget));
 }
 
 static void

@@ -4116,7 +4116,9 @@ do_focus_change (GtkWidget *widget,
     GTK_WIDGET_UNSET_FLAGS (widget, GTK_HAS_FOCUS);
   
   fevent->focus_change.type = GDK_FOCUS_CHANGE;
-  fevent->focus_change.window = g_object_ref (widget->window);
+  fevent->focus_change.window = widget->window;
+  if (widget->window)
+    g_object_ref (widget->window);
   fevent->focus_change.in = in;
   
   gtk_widget_event (widget, fevent);
@@ -4334,6 +4336,41 @@ gtk_window_real_set_focus (GtkWindow *window,
       g_object_thaw_notify (G_OBJECT (focus));
       g_object_unref (focus);
     }
+}
+
+/**
+ * _gtk_window_unset_focus_and_default:
+ * @window: a #GtkWindow
+ * @widget: a widget inside of @window
+ * 
+ * Checks whether the focus and default widgets of @window are
+ * @widget or a descendent of @widget, and if so, unset them.
+ **/
+void
+_gtk_window_unset_focus_and_default (GtkWindow *window,
+				     GtkWidget *widget)
+
+{
+  GtkWidget *child;
+      
+  if (GTK_CONTAINER (widget->parent)->focus_child == widget)
+    {
+      child = window->focus_widget;
+      
+      while (child && child != widget)
+	child = child->parent;
+  
+      if (child == widget)
+	gtk_window_set_focus (GTK_WINDOW (window), NULL);
+    }
+      
+  child = window->default_widget;
+      
+  while (child && child != widget)
+    child = child->parent;
+      
+  if (child == widget)
+    gtk_window_set_default (window, NULL);
 }
 
 /*********************************
