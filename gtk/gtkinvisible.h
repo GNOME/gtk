@@ -27,10 +27,7 @@
 #ifndef __GTK_INVISIBLE_H__
 #define __GTK_INVISIBLE_H__
 
-
-#include <gdk/gdk.h>
-#include <gtk/gtkbin.h>
-
+#include <gtk/gtkwidget.h>
 
 #ifdef __cplusplus
 extern "C" {

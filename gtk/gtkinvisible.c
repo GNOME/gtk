@@ -24,6 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+#include <gdk/gdk.h>
 #include "gtksignal.h"
 #include "gtkinvisible.h"
 
@@ -80,6 +81,7 @@ static void
 gtk_invisible_init (GtkInvisible *invisible)
 {
   GTK_WIDGET_UNSET_FLAGS (invisible, GTK_NO_WINDOW);
+  GTK_WIDGET_SET_FLAGS (invisible, GTK_TOPLEVEL);
 
   gtk_widget_ref (GTK_WIDGET (invisible));
   gtk_object_sink (GTK_OBJECT (invisible));

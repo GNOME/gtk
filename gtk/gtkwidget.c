@@ -1984,7 +1984,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 
   if (widget->parent)
     gtk_container_queue_resize (GTK_CONTAINER (widget->parent));
-  else if (GTK_WIDGET_TOPLEVEL (widget))
+  else if (GTK_WIDGET_TOPLEVEL (widget) && GTK_IS_CONTAINER (widget))
     gtk_container_queue_resize (GTK_CONTAINER (widget));
 }
 

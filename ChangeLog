@@ -1,3 +1,13 @@
+Mon Dec 11 11:41:12 2000  Owen Taylor  <otaylor@redhat.com>
+
+	* gtk/gtkinvisible.c (gtk_invisible_init): Flag invisible
+	widgets as TOPLEVEL.
+
+	* gtk/gtkwidget.c (gtk_widget_queue_resize): Don't assume
+	TOPLEVEL widgets are containers.
+
+	* gtk/gtkinvisible.h: Remove useless include.
+
 2000-12-11  Havoc Pennington  <hp@redhat.com>
 
 	* gtk/gtktextlayout.c (gtk_text_layout_get_line_display): 
