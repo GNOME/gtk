@@ -1,3 +1,10 @@
+Tue Sep 10 09:29:00 2002  Owen Taylor  <otaylor@redhat.com>
+
+	* gdk/x11/gdkevents-x11.c (gdk_event_translate): Take
+	focus mode into account when tracking FocusIn/Out events,
+	so we don't get confused by focus changes while a 
+	keyboard grab is in effect. (Probably fixes #90563)
+
 Mon Sep  9 16:16:25 2002  Shivram U  <shivaram.upadhyayula@wipro.com>
 
 	* gtk/gtktextview.c (gtk_text_view_drag_motion): If the end iter
