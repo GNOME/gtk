@@ -28,7 +28,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
 
-static void         gdk_x11_screen_impl_class_init       (GdkScreenImplX11Class *class);
+static void         gdk_X11_screen_impl_class_init       (GdkScreenImplX11Class *klass);
 static GdkDisplay * gdk_X11_screen_get_display           (GdkScreen             *screen);
 static gint         gdk_X11_screen_get_width             (GdkScreen             *screen);
 static gint         gdk_X11_screen_get_height            (GdkScreen             *screen);
@@ -43,8 +43,10 @@ static void         gdk_X11_screen_set_default_colormap  (GdkScreen             
 static GdkWindow *  gdk_X11_screen_get_window_at_pointer (GdkScreen             *screen,
 							  gint                  *win_x,
 							  gint                  *win_y);
+static void         gdk_X11_screen_finalize		 (GObject		*object);
 
 GType gdk_X11_screen_impl_get_type ();
+static gpointer parent_class = NULL;
 
 GType
 gdk_X11_screen_impl_get_type ()
@@ -56,8 +58,8 @@ gdk_X11_screen_impl_get_type ()
       static const GTypeInfo object_info = {
 	sizeof (GdkScreenImplX11Class),
 	(GBaseInitFunc) NULL,
-	(GBaseFinalizeFunc) NULL,
-	(GClassInitFunc) gdk_x11_screen_impl_class_init,
+	(GBaseFinalizeFunc) gdk_X11_screen_finalize,
+	(GClassInitFunc) gdk_X11_screen_impl_class_init,
 	NULL,			/* class_finalize */
 	NULL,			/* class_data */
 	sizeof (GdkScreenImplX11),
@@ -72,9 +74,9 @@ gdk_X11_screen_impl_get_type ()
 }
 
 void
-gdk_x11_screen_impl_class_init (GdkScreenImplX11Class * class)
+gdk_X11_screen_impl_class_init (GdkScreenImplX11Class * klass)
 {
-  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (class);
+  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
   screen_class->get_display = gdk_X11_screen_get_display;
   screen_class->get_width = gdk_X11_screen_get_width;
   screen_class->get_height = gdk_X11_screen_get_height;
@@ -86,6 +88,8 @@ gdk_x11_screen_impl_class_init (GdkScreenImplX11Class * class)
   screen_class->get_default_colormap = gdk_X11_screen_get_default_colormap;
   screen_class->set_default_colormap = gdk_X11_screen_set_default_colormap;
   screen_class->get_window_at_pointer = gdk_X11_screen_get_window_at_pointer;
+  G_OBJECT_CLASS (klass)->finalize = gdk_X11_screen_finalize;
+  parent_class = g_type_class_peek_parent (klass);
 }
 
 static GdkDisplay *
@@ -211,3 +215,22 @@ gdk_x11_screen_get_root_xwindow  (GdkScreen   *screen)
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
   return GDK_SCREEN_IMPL_X11 (screen)->xroot_window;
 }
+
+static void
+gdk_X11_screen_finalize (GObject *object)
+{
+  GdkScreenImplX11 *screen_impl = GDK_SCREEN_IMPL_X11 (object);
+  int i;
+  g_object_unref (G_OBJECT (screen_impl->root_window));
+  
+  /* Visual Part (Need to implement finalize for Visuals for a clean
+   * finalize) */
+  /* for (i=0;i<screen_impl->nvisuals;i++)
+    g_object_unref (G_OBJECT (screen_impl->visuals[i]));*/
+  g_free (screen_impl->visuals);
+  g_hash_table_destroy (screen_impl->visual_hash);
+  /* X settings */
+  g_free (screen_impl->xsettings_client);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
+}
+

@@ -78,8 +78,7 @@ gint         gdk_screen_get_width             (GdkScreen   *screen);
 gint         gdk_screen_get_height            (GdkScreen   *screen);
 gint         gdk_screen_get_width_mm          (GdkScreen   *screen);
 gint         gdk_screen_get_height_mm         (GdkScreen   *screen);
-
-
+void	     gdk_screen_close		      (GdkScreen   *screen);
 
 #ifdef __cplusplus
 }

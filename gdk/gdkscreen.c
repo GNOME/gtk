@@ -24,8 +24,8 @@
 #include "gdkscreen.h"
 #include "gdkcolor.h"
 
-static void gdk_screen_class_init (GObjectClass * class);
-
+static void gdk_screen_class_init (GObjectClass * klass);
+static gpointer parent_class = NULL;
 
 GType
 gdk_screen_get_type (void)
@@ -54,9 +54,9 @@ gdk_screen_get_type (void)
 }
 
 static void
-gdk_screen_class_init (GObjectClass * class)
+gdk_screen_class_init (GObjectClass * klass)
 {
-
+  parent_class = g_type_class_peek_parent (klass);
 }
 
 GdkColormap *
@@ -131,4 +131,11 @@ gdk_screen_get_height_mm (GdkScreen * screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   return GDK_SCREEN_GET_CLASS (screen)->get_height_mm (screen);
+}
+
+void 
+gdk_screen_close (GdkScreen *screen)
+{
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_object_run_dispose (G_OBJECT (screen));
 }

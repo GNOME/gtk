@@ -234,10 +234,6 @@ static GSList      *toplevel_list = NULL;
 static GHashTable  *mnemonic_hash_table = NULL;
 static GtkBinClass *parent_class = NULL;
 static guint        window_signals[LAST_SIGNAL] = { 0 };
-static GList       *default_icon_list = NULL;
-/* FIXME need to be per-screen */
-static GdkPixmap   *default_icon_pixmap = NULL;
-static GdkPixmap   *default_icon_mask = NULL;
 
 static void gtk_window_set_property (GObject         *object,
 				     guint            prop_id,
@@ -1793,16 +1789,18 @@ get_pixmap_and_mask (GdkWindow		*window,
   GdkPixbuf *best_icon;
   GList *tmp_list;
   int best_size;
-
+  GdkScreen *screen = gdk_drawable_get_screen (window);
+  GdkPixmap *default_icon_pixmap = g_object_get_data (G_OBJECT (screen), 
+						      "gtk-window-default-icon-pixmap");
+  GdkPixmap *default_icon_mask = g_object_get_data (G_OBJECT (screen), 
+						    "gtk-window-default-icon-mask");
   *pmap_return = NULL;
   *mask_return = NULL;
   
   if (is_default_list &&
       default_icon_pixmap != NULL)
     {
-      /* Use shared icon pixmap (eventually will be stored on the
-       * GdkScreen)
-       */
+      /* Use shared icon pixmap */
       if (default_icon_pixmap)
         g_object_ref (G_OBJECT (default_icon_pixmap));
       if (default_icon_mask)
@@ -1885,11 +1883,23 @@ get_pixmap_and_mask (GdkWindow		*window,
           default_icon_mask = *mask_return;
 
           if (default_icon_pixmap)
-            g_object_add_weak_pointer (G_OBJECT (default_icon_pixmap),
-                                       (gpointer*)&default_icon_pixmap);
-          if (default_icon_mask)
-            g_object_add_weak_pointer (G_OBJECT (default_icon_mask),
-                                       (gpointer*)&default_icon_mask);
+	    {
+	      g_object_add_weak_pointer (G_OBJECT (default_icon_pixmap),
+					 (gpointer*)&default_icon_pixmap);
+	      g_object_set_data_full (G_OBJECT (screen), 
+				      "gtk-window-default-icon-pixmap",
+				      default_icon_pixmap,
+				      g_object_unref);
+	    }
+          if (default_icon_mask) 
+	    {
+	      g_object_add_weak_pointer (G_OBJECT (default_icon_mask),
+					 (gpointer*)&default_icon_mask);
+	      g_object_set_data_full (G_OBJECT (screen), 
+				      "gtk-window-default-icon-mask",
+				      default_icon_mask,
+				      g_object_unref);
+	    }
         }
     }
 }
@@ -1935,7 +1945,8 @@ gtk_window_realize_icon (GtkWindow *window)
   /* Inherit from default */
   if (icon_list == NULL)
     {
-      icon_list = default_icon_list;
+      icon_list = g_object_get_data (G_OBJECT (window->screen), 
+				     "gtk-window-default-icon-list");
       if (icon_list)
         info->using_default_icon = TRUE;
     }
@@ -2141,23 +2152,38 @@ gtk_window_get_icon (GtkWindow  *window)
     return NULL;
 }
 
+static void free_default_icon_list (gpointer data)
+{
+  GList *default_icon_list = data;
+  g_list_foreach (default_icon_list,
+                  (GFunc) g_object_unref, NULL);
+  g_list_free (default_icon_list);
+}
+
 /**
- * gtk_window_set_default_icon_list:
+ * gtk_window_set_default_icon_list_for_screen:
+ * @screen: a #GdkScreen
  * @list: a list of #GdkPixbuf
  *
  * Sets an icon list to be used as fallback for windows that haven't
  * had gtk_window_set_icon_list() called on them to set up a
  * window-specific icon list. This function allows you to set up the
- * icon for all windows in your app at once.
+ * icon for all windows on a #GdkScreen at once.
  *
  * See gtk_window_set_icon_list() for more details.
  * 
  **/
 void
-gtk_window_set_default_icon_list (GList *list)
+gtk_window_set_default_icon_list_for_screen (GdkScreen *screen, GList *list)
 {
   GList *toplevels;
   GList *tmp_list;
+  GList *default_icon_list = g_object_get_data (G_OBJECT (screen), 
+						"gtk-window-default-icon-list");
+  GdkPixmap *default_icon_pixmap = g_object_get_data (G_OBJECT (screen),
+						      "gtk-window-default-icon-pixmap");
+  GdkPixmap *default_icon_mask = g_object_get_data (G_OBJECT (screen),
+						    "gtk-window-default-icon-mask");
   if (list == default_icon_list)
     return;
 
@@ -2169,14 +2195,16 @@ gtk_window_set_default_icon_list (GList *list)
   default_icon_pixmap = NULL;
   default_icon_mask = NULL;
   
-  g_list_foreach (default_icon_list,
-                  (GFunc) g_object_unref, NULL);
-
-  g_list_free (default_icon_list);
-
+  free_default_icon_list (default_icon_list);
+  
   default_icon_list = g_list_copy (list);
   g_list_foreach (default_icon_list,
                   (GFunc) g_object_ref, NULL);
+
+  g_object_set_data_full (G_OBJECT (screen), 
+			  "gtk-window-default-icon-list",
+			  default_icon_list,
+			  free_default_icon_list);
   
   /* Update all toplevels */
   toplevels = gtk_window_list_toplevels ();
@@ -2185,18 +2213,53 @@ gtk_window_set_default_icon_list (GList *list)
     {
       GtkWindowIconInfo *info;
       GtkWindow *w = tmp_list->data;
-      
-      info = get_icon_info (w);
-      if (info && info->using_default_icon)
-        {
-          gtk_window_unrealize_icon (w);
-          if (GTK_WIDGET_REALIZED (w))
-            gtk_window_realize_icon (w);
-        }
-
+      if (w->screen == screen)
+	{
+	  info = get_icon_info (w);
+	  if (info && info->using_default_icon)
+	    {
+	      gtk_window_unrealize_icon (w);
+	      if (GTK_WIDGET_REALIZED (w))
+		gtk_window_realize_icon (w);
+	    }
+	}
       tmp_list = tmp_list->next;
     }
   g_list_free (toplevels);
+}
+
+/**
+ * gtk_window_set_default_icon_list:
+ * @list: a list of #GdkPixbuf
+ *
+ * Sets an icon list to be used as fallback for windows that haven't
+ * had gtk_window_set_icon_list() called on them to set up a
+ * window-specific icon list. This function allows you to set up the
+ * icon for all windows on the default screen at once.
+ *
+ * See gtk_window_set_icon_list() for more details.
+ * 
+ **/
+void
+gtk_window_set_default_icon_list (GList *list)
+{
+  gtk_window_set_default_icon_list_for_screen (gdk_get_default_screen (), list);
+}
+/**
+ * gtk_window_get_default_icon_list_for_screen:
+ * 
+ * Gets the value set by gtk_window_set_default_icon_list_for_screen ().
+ * The list is a copy and should be freed with g_list_free(),
+ * but the pixbufs in the list have not had their reference count
+ * incremented.
+ * 
+ * Return value: copy of default icon list 
+ **/
+GList*
+gtk_window_get_default_icon_list_for_screen (GdkScreen *screen)
+{
+  return g_list_copy (g_object_get_data (G_OBJECT (screen), 
+					 "gtk-window-default-icon-list"));
 }
 
 /**
@@ -2212,7 +2275,7 @@ gtk_window_set_default_icon_list (GList *list)
 GList*
 gtk_window_get_default_icon_list (void)
 {
-  return g_list_copy (default_icon_list);
+  return gtk_window_get_default_icon_list_for_screen (gdk_get_default_screen ());
 }
 
 static void
@@ -5095,7 +5158,7 @@ gtk_window_set_screen (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_SCREEN (screen));
 
-  if (GTK_WIDGET_VISIBLE (window))
+  if (GTK_WIDGET_REALIZED (window))
     {
       g_warning ("Trying to change the window's screen while widget is visible");
       return;

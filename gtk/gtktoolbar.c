@@ -354,14 +354,7 @@ gtk_toolbar_realize (GtkWidget *widget)
   GdkScreen *screen = gtk_widget_get_screen (widget);
   GtkToolbarStyle style;
   GtkIconSize icon_size;
-
-  g_object_get (gtk_settings_get_for_screen (screen),
-                "gtk-toolbar-icon-size",
-                &icon_size,
-                "gtk-toolbar-style",
-                &style,
-                NULL);
-  
+   
   toolbar->style_set_connection =
     g_signal_connect (G_OBJECT (gtk_settings_get_for_screen (screen)),
 		      "notify::gtk-toolbar-style",
@@ -374,12 +367,25 @@ gtk_toolbar_realize (GtkWidget *widget)
 		      G_CALLBACK (icon_size_change_notify),
 		      toolbar);
 
-  /* set screen object on the toolbar for finalization purposes */
-  g_object_set_data (G_OBJECT (toolbar), "settings-screen", screen);
-  
+  if (!toolbar->style_set)
+    {
+      g_object_get (gtk_settings_get_for_screen (screen),
+                "gtk-toolbar-style",
+                &style,
+                NULL);
+      gtk_toolbar_set_style (toolbar, style);
+    }
+  if (!toolbar->icon_size_set)
+    {
+      g_object_get (gtk_settings_get_for_screen (screen),
+                "gtk-toolbar-icon-size",
+                &icon_size,
+                NULL);
+      gtk_toolbar_set_icon_size (toolbar, icon_size);
+    }
 
-  gtk_toolbar_set_style (toolbar, style);
-  gtk_toolbar_set_icon_size (toolbar, icon_size);
+  /* set screen object on the toolbar for finalization purposes */
+  g_object_set_data (G_OBJECT (toolbar), "gtk-toolbar-screen", screen);
 
   if (GTK_WIDGET_CLASS( parent_class )->realize)
       (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
@@ -390,7 +396,7 @@ static void
 gtk_toolbar_finalize (GObject *object)
 {
   GtkToolbar *toolbar = GTK_TOOLBAR (object);
-  GdkScreen *screen = g_object_get_data (object, "settings-screen");
+  GdkScreen *screen = g_object_get_data (object, "gtk-toolbar-screen");
   
   g_signal_handler_disconnect (G_OBJECT (gtk_settings_get_for_screen (screen)),
                                toolbar->style_set_connection);

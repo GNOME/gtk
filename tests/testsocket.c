@@ -209,6 +209,8 @@ add_child (GtkWidget *window,
       sprintf(buffer, "%#lx", (gulong) gtk_socket_get_id (GTK_SOCKET (socket->socket)));
       argv[1] = buffer;
     }
+
+      printf ("active %d window %#lx %s\n", active, argv[1], argv[0]);
   
   if (!g_spawn_async_with_pipes (NULL, argv, NULL, 0, NULL, NULL, NULL, NULL, &out_fd, NULL, &error))
     {

@@ -50,7 +50,7 @@ gdk_pango_context_get_for_screen (GdkScreen *screen)
 #endif /* HAVE_XFT */
     context = pango_x_get_context (GDK_SCREEN_XDISPLAY (screen));
   
-  g_object_set_data (G_OBJECT (context), "gdk-screen", screen);
+  g_object_set_data (G_OBJECT (context), "gdk-pango-screen", screen);
   
   return context;
 }

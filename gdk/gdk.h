@@ -144,7 +144,9 @@ gint       gdk_mbstowcs          (GdkWChar         *dest,
 				  gint              dest_max);
 
 /* Miscellaneous */
-void     gdk_event_send_clientmessage_toall (GdkEvent    *event);
+void     gdk_event_send_clientmessage_toall	       (GdkEvent  *event);
+void     gdk_event_send_clientmessage_toall_for_screen (GdkScreen *screen,
+							GdkEvent  *event);
 #ifndef GDK_MULTIHEAD_SAFE
 gboolean gdk_event_send_client_message (GdkEvent    *event,
 					guint32      xid);

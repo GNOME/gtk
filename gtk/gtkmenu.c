@@ -597,16 +597,21 @@ gtk_menu_popup (GtkMenu		    *menu,
   menu_shell->active = TRUE;
   menu_shell->button = button;
 
-  attach_data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
-  if (!attach_data)
-  {
-      g_warning ("gtk_menu_popup No GtkMenuAttachData present\n\
-		  impossible to determine which screen to display on\n");
-      return;
-  }
   
-  gtk_window_set_screen (GTK_WINDOW (menu->toplevel), 
-			 gtk_widget_get_screen (attach_data->attach_widget));
+  if (!g_object_get_data (G_OBJECT (menu), "gtk-menu-explicit-screen"))
+    {
+      /* screen was not set explicitly, if the menu is 
+       * attached to a widget try to get screen from its 
+       * toplevel window else go with the default
+       */
+      attach_data = gtk_object_get_data (GTK_OBJECT (menu), attach_data_key);
+      if (attach_data)
+	{
+	  if (!GTK_WIDGET_REALIZED (menu))
+	  gtk_window_set_screen (GTK_WINDOW (menu->toplevel),
+				 gtk_widget_get_screen (attach_data->attach_widget));
+	}
+    }
 
   /* If we are popping up the menu from something other than, a button
    * press then, as a heuristic, we ignore enter events for the menu
@@ -2414,4 +2419,13 @@ gtk_menu_hide_all (GtkWidget *widget)
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
 }
 
+void
+gtk_menu_set_screen (GtkMenu *menu, 
+		     GdkScreen *screen)
+{
+  g_return_val_if_fail (GTK_IS_MENU (menu), NULL);
+  gtk_window_set_screen (GTK_WINDOW (menu->toplevel), 
+			 screen);
+  g_object_set_data (G_OBJECT (menu), "gtk-menu-explicit-screen", screen);
+}
 

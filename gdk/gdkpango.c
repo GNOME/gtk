@@ -90,7 +90,7 @@ gdk_pango_get_gc (PangoContext   *context,
   
   g_return_val_if_fail (context != NULL, NULL);
 
-  screen = g_object_get_data (G_OBJECT (context), "gdk-screen");
+  screen = g_object_get_data (G_OBJECT (context), "gdk-pango-screen");
 
   info = gdk_pango_context_get_info (context, FALSE);
 

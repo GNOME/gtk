@@ -34,12 +34,14 @@
 #include "gdkinputprivate.h"
 #include "xsettings-client.h"
 
-static void       gdk_x11_display_impl_class_init         (GdkDisplayImplX11Class *class);
+static void       gdk_x11_display_impl_class_init         (GdkDisplayImplX11Class *klass);
 static gint       gdk_x11_display_impl_get_n_screens      (GdkDisplay             *display);
 static GdkScreen *gdk_x11_display_impl_get_screen         (GdkDisplay             *display,
 							   gint                    screen_num);
 static char *     gdk_x11_display_impl_get_display_name   (GdkDisplay             *display);
 static GdkScreen *gdk_x11_display_impl_get_default_screen (GdkDisplay             *display);
+static void	  gdk_x11_display_impl_finalize		  (GObject		  *object);
+
 
 extern void _gdk_xsettings_watch_cb  (Display	       *display,
 				      Window            window,
@@ -52,6 +54,7 @@ extern void _gdk_xsettings_notify_cb (Display	       *display,
 				      XSettingsAction   action,
 				      XSettingsSetting *setting,
 				      void             *data);
+static gpointer parent_class = NULL;
 GType
 gdk_x11_display_impl_get_type ()
 {
@@ -62,7 +65,7 @@ gdk_x11_display_impl_get_type ()
       static const GTypeInfo object_info = {
 	sizeof (GdkDisplayImplX11Class),
 	(GBaseInitFunc) NULL,
-	(GBaseFinalizeFunc) NULL,
+	(GBaseFinalizeFunc) gdk_x11_display_impl_finalize,
 	(GClassInitFunc) gdk_x11_display_impl_class_init,
 	NULL,			/* class_finalize */
 	NULL,			/* class_data */
@@ -78,14 +81,16 @@ gdk_x11_display_impl_get_type ()
 }
 
 static void
-gdk_x11_display_impl_class_init (GdkDisplayImplX11Class * class)
+gdk_x11_display_impl_class_init (GdkDisplayImplX11Class * klass)
 {
-  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
+  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (klass);
   
   display_class->get_display_name = gdk_x11_display_impl_get_display_name;
   display_class->get_n_screens = gdk_x11_display_impl_get_n_screens;
   display_class->get_screen = gdk_x11_display_impl_get_screen;
   display_class->get_default_screen = gdk_x11_display_impl_get_default_screen;
+  G_OBJECT_CLASS (klass)->finalize = gdk_x11_display_impl_finalize;
+  parent_class = g_type_class_peek_parent (klass);
 }
 
 GdkDisplay *
@@ -328,4 +333,60 @@ gdk_display_init_new (int argc, char **argv, char *display_name)
   _gdk_dnd_init (display);
   
   return display;
+}
+
+static void	  
+gdk_x11_display_impl_finalize (GObject *object)
+{
+  GdkDisplayImplX11 *display_impl = GDK_DISPLAY_IMPL_X11 (object);
+  int i;
+  GList *tmp;
+  GSList *stmp;
+
+  /* FIXME need to write GdkKeymap finalize fct 
+  g_object_unref (display_impl->keymap);
+  */
+ 
+  /* Free motif Dnd */
+  if (display_impl->motif_target_lists)
+    {
+      for (i=0; i<display_impl->motif_n_target_lists; i++)
+	g_list_free (display_impl->motif_target_lists[i]);
+      g_free (display_impl->motif_target_lists);
+    }
+
+  /* Atom Hashtable */
+  g_hash_table_destroy (display_impl->atom_from_virtual);
+  g_hash_table_destroy (display_impl->atom_to_virtual);
+  
+  /* Leader Window */
+  XDestroyWindow (display_impl->xdisplay, display_impl->leader_window);
+
+  /* list of filters for client messages */
+  g_list_free (display_impl->client_filters);
+  
+  /* X ID hashtable */
+  g_hash_table_destroy (display_impl->xid_ht);
+
+  /* input GdkDevice list */
+  /* FIXME need to write finalize fct */
+  for (tmp = display_impl->gdk_input_devices; tmp; tmp = tmp->next)
+      g_object_unref (G_OBJECT (tmp->data));
+  g_list_free (display_impl->gdk_input_devices);
+
+  /* input GdkWindow list */
+  for (tmp = display_impl->gdk_input_windows; tmp; tmp = tmp->next)
+      g_object_unref (G_OBJECT (tmp->data));
+  g_list_free (display_impl->gdk_input_windows);
+
+  if  (display_impl->gdk_input_gxid_host)
+    g_free (display_impl->gdk_input_gxid_host);
+
+  /* Free all GdkScreens */
+  for (stmp = display_impl->screen_list; stmp; stmp = stmp->next)
+      g_object_unref (G_OBJECT (stmp->data));
+  g_list_free (display_impl->screen_list);
+  
+  XCloseDisplay (display_impl->xdisplay);
+  G_OBJECT_CLASS (parent_class)->finalize (object);
 }

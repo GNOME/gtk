@@ -98,11 +98,11 @@ GdkVisual* gdkx_visual_get_for_screen (GdkScreen *screen,
 #ifndef GDK_MULTIHEAD_SAFE
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 #endif
-#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (win))
+#define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkWindowObject *)win)->impl))
 #define GDK_WINDOW_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_WINDOW_XWINDOW(win)       (gdk_x11_drawable_get_xid (win))
-#define GDK_WINDOW_XROOTWIN(win)      (gdk_x11_screen_get_root_xwindow (gdk_drawable_get_screen (win)))
-#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (win))
+#define GDK_WINDOW_XROOTWIN(win)      (gdk_x11_screen_get_root_xwindow (gdk_drawable_get_screen (((GdkWindowObject *)win)->impl)))
+#define GDK_PIXMAP_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (((GdkPixmapObject *)win)->impl))
 #define GDK_PIXMAP_XID(win)           (gdk_x11_drawable_get_xid (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_drawable_get_xid (win))

@@ -301,16 +301,15 @@ gtk_plug_construct (GtkPlug         *plug,
       gpointer user_data = NULL;
 
       plug->socket_window = 
-	gdk_window_lookup_for_display (gdk_drawable_get_display (plug->socket_window), 
+	gdk_window_lookup_for_display (gtk_widget_get_display (plug), 
 				       socket_id);
 
       if (plug->socket_window)
 	gdk_window_get_user_data (plug->socket_window, &user_data);
       else
 	plug->socket_window = 
-	  gdk_window_foreign_new_for_display (gdk_drawable_get_display (plug->socket_window),
-					     socket_id);
-
+	  gdk_window_foreign_new_for_display (gtk_widget_get_display (plug),
+					      socket_id);
       if (user_data)
 	{
 	  if (GTK_IS_SOCKET (user_data))
@@ -430,9 +429,9 @@ gtk_plug_realize (GtkWidget *widget)
       attributes.window_type = GDK_WINDOW_TOPLEVEL;
 
       gdk_error_trap_push ();
-      widget->window = gdk_window_new (plug->socket_window, 
+      widget->window = gdk_window_new (gtk_widget_get_root_window (widget), 
 				       &attributes, attributes_mask);
-      gdk_display_sync (gdk_drawable_get_display (widget->window));
+      gdk_display_sync (gtk_widget_get_display (widget));
       if (gdk_error_trap_pop ()) /* Uh-oh */
 	{
 	  gdk_error_trap_push ();

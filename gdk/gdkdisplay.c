@@ -27,7 +27,8 @@
 #include "gdkinternals.h"
 
 
-static void gdk_display_class_init (GdkDisplayClass * class);
+static void gdk_display_class_init (GdkDisplayClass * klass);
+static gpointer parent_class = NULL;
 
 GType
 gdk_display_get_type (void)
@@ -57,10 +58,11 @@ gdk_display_get_type (void)
 
 
 static void
-gdk_display_class_init (GdkDisplayClass * class)
+gdk_display_class_init (GdkDisplayClass * klass)
 {
-/*   class->parent_class = g_type_class_peek_parent (class);*/
+  parent_class = g_type_class_peek_parent (klass);
 }
+
 GdkDisplay *
 gdk_display_new (gchar * display_name)
 {
@@ -93,4 +95,11 @@ gdk_display_get_default_screen (GdkDisplay * display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
+}
+
+void
+gdk_display_close (GdkDisplay *display)
+{
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+  g_object_unref (G_OBJECT (display));
 }

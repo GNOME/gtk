@@ -1932,7 +1932,7 @@ gtk_color_selection_realize (GtkWidget *widget)
                            colorsel, NULL, 0);
   /* needed as there is no way to retrieve screen with 
    * gtk_widget_get_screen in gtk_color_selection_finalize */
-  g_object_set_data (G_OBJECT (widget), "screen", screen);
+  g_object_set_data (G_OBJECT (widget), "gtk-fs-screen", screen);
   
   if (GTK_WIDGET_CLASS( parent_class )->realize)
       (*GTK_WIDGET_CLASS( parent_class )->realize) (widget);
@@ -1972,7 +1972,7 @@ gtk_color_selection_finalize (GObject *object)
 
       g_signal_handler_disconnect (gtk_settings_get_for_screen (
 				   GDK_SCREEN (g_object_get_data (object, 
-								  "screen"))),
+								  "gtk-fs-screen"))),
                                    priv->settings_connection);
       
       g_free (cselection->private_data);

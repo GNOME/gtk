@@ -1969,19 +1969,48 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 {
   XEvent sev;
   gint old_warnings = _gdk_error_warnings;
+  GdkWindow *window;
 
   g_return_if_fail (event != NULL);
-  g_return_if_fail (GDK_IS_DRAWABLE (event->any.window));
+  if(!GDK_IS_DRAWABLE (event->any.window))
+    window = gdk_screen_get_root_window (gdk_get_default_screen ());
+  else
+    window = event->any.window;
   
   /* Set up our event to send, with the exception of its target window */
   sev.xclient.type = ClientMessage;
-  sev.xclient.display = GDK_WINDOW_XDISPLAY (event->any.window);
+  sev.xclient.display = GDK_WINDOW_XDISPLAY (window);
   sev.xclient.format = event->client.data_format;
   memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
-  sev.xclient.message_type = gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (event->any.window),
+  sev.xclient.message_type = gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (window),
 						    event->client.message_type);
 
-  gdk_event_send_client_message_to_all_recurse (&sev, GDK_WINDOW_XROOTWIN (event->any.window), 0);
+  gdk_event_send_client_message_to_all_recurse (&sev, GDK_WINDOW_XROOTWIN (window), 0);
+
+  _gdk_error_warnings = old_warnings;
+}
+
+void
+gdk_event_send_clientmessage_toall_for_screen (GdkScreen *screen, 
+					       GdkEvent  *event)
+{
+  XEvent sev;
+  gint old_warnings = _gdk_error_warnings;
+  GdkWindow *root_window;
+
+  g_return_if_fail (event != NULL);
+  if(!GDK_IS_DRAWABLE (event->any.window))
+    root_window = gdk_screen_get_root_window (screen);
+  
+  /* Set up our event to send, with the exception of its target window */
+  sev.xclient.type = ClientMessage;
+  sev.xclient.display = GDK_WINDOW_XDISPLAY (root_window);
+  sev.xclient.format = event->client.data_format;
+  memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
+  sev.xclient.message_type = gdk_x11_get_real_atom (GDK_WINDOW_DISPLAY (root_window),
+						    event->client.message_type);
+
+  gdk_event_send_client_message_to_all_recurse (&sev, GDK_WINDOW_XID (root_window), 0);
 
   _gdk_error_warnings = old_warnings;
 }
@@ -2095,11 +2124,11 @@ gdk_net_wm_supports_for_screen (GdkScreen *screen,
   screen_impl = GDK_SCREEN_IMPL_X11 (screen);
 
   supported_atoms = g_object_get_data (G_OBJECT (screen), 
-				       "net_wm_supported_atom");
+				       "net-wm-supported-atom");
   if (!supported_atoms)
     {
       supported_atoms = g_new0 (_NetWmSupportedAtoms, 1);
-      g_object_set_data (G_OBJECT (screen), "net_wm_supported_atom",
+      g_object_set_data (G_OBJECT (screen), "net-wm-supported-atom",
 			 supported_atoms);
     }
 

@@ -3726,7 +3726,7 @@ update_pos_for_display (GdkDisplay *display,
 			gint        new_root_y)
 {
   gint dx, dy;
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "gdk-window-moveresize");
 
   g_assert (mv_resize != NULL);
 
@@ -3775,8 +3775,8 @@ update_pos_for_display (GdkDisplay *display,
 static void
 finish_drag_for_display (GdkDisplay * display)
 {
-  _MoveResizeData *mv_resize = g_object_steal_data (G_OBJECT (display), "moveresize");
-  g_object_set_data (G_OBJECT (display), "moveresize_window", NULL);
+  _MoveResizeData *mv_resize = g_object_steal_data (G_OBJECT (display), "gdk-window-moveresize");
+  g_object_set_data (G_OBJECT (display), "gdk-window-moveresize-window", NULL);
   
   g_assert (mv_resize != NULL);
   
@@ -3798,7 +3798,7 @@ lookahead_motion_predicate (Display *display,
 {
   gboolean *seen_release = (gboolean *)arg;
   GdkDisplayImplX11 *gdk_display= gdk_lookup_xdisplay (display);
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (gdk_display), "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (gdk_display), "gdk-window-moveresize");
 
   g_assert (mv_resize != NULL);
 
@@ -3826,7 +3826,7 @@ moveresize_lookahead (XEvent *event)
   XEvent tmp_event;
   gboolean seen_release = FALSE;
   GdkDisplayImplX11 *display= gdk_lookup_xdisplay (event->xany.display);
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "gdk-window-moveresize");
 
   g_assert (mv_resize != NULL);
 
@@ -3853,9 +3853,9 @@ _gdk_moveresize_handle_event (XEvent *event)
   guint button_mask = 0;
   GdkWindowObject *window_private;
   GdkDisplayImplX11 *display= gdk_lookup_xdisplay (event->xany.display);
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "gdk-window-moveresize");
 
-  if (!g_object_get_data (G_OBJECT (display), "moveresize_window"))
+  if (!g_object_get_data (G_OBJECT (display), "gdk-window-moveresize-window"))
     return FALSE;
 
   g_assert (mv_resize != NULL);
@@ -3910,9 +3910,9 @@ _gdk_moveresize_configure_done (GdkDisplay * display,
 				GdkWindow  * window)
 {
   XEvent *tmp_event;
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (display), "gdk-window-moveresize");
   
-  if (window != g_object_get_data (G_OBJECT (display), "moveresize_window"))
+  if (window != g_object_get_data (G_OBJECT (display), "gdk-window-moveresize-window"))
     return FALSE;
   
   g_assert (mv_resize != NULL);
@@ -3934,7 +3934,7 @@ create_moveresize_window_for_screen (GdkScreen *screen,
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkGrabStatus status;
-  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (gdk_screen_get_display (screen)), "moveresize");
+  _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (gdk_screen_get_display (screen)), "gdk-window-moveresize");
   g_assert (mv_resize != NULL);
   g_assert (mv_resize->moveresize_emulation_window == NULL);
 
@@ -3985,7 +3985,7 @@ emulate_resize_drag (GdkWindow     *window,
                      guint32        timestamp)
 {
   _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
-						  "moveresize");
+						  "gdk-window-moveresize");
   g_assert (mv_resize != NULL);
   
   mv_resize->is_resize = TRUE;
@@ -4015,7 +4015,7 @@ emulate_move_drag (GdkWindow     *window,
                    guint32        timestamp)
 {
   _MoveResizeData *mv_resize = g_object_get_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
-						  "moveresize");
+						  "gdk-window-moveresize");
   g_assert (mv_resize != NULL);
   
   mv_resize->is_resize = FALSE;
@@ -4048,9 +4048,9 @@ gdk_window_begin_resize_drag (GdkWindow     *window,
 
   moveresize = g_new0 (_MoveResizeData, 1);
   g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
-		     "moveresize", moveresize);
+		     "gdk-window-moveresize", moveresize);
   g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
-		     "moveresize_window", moveresize->_gdk_moveresize_window);
+		     "gdk-window-moveresize-window", moveresize->_gdk_moveresize_window);
 
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN (window),
 				      gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))
@@ -4075,9 +4075,9 @@ gdk_window_begin_move_drag (GdkWindow *window,
 
   moveresize = g_new0 (_MoveResizeData, 1);
   g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
-		     "moveresize", moveresize);
+		     "gdk-window-moveresize", moveresize);
   g_object_set_data (G_OBJECT (GDK_WINDOW_DISPLAY (window)),
-		     "moveresize_window", moveresize->_gdk_moveresize_window);
+		     "gdk-window-moveresize-window", moveresize->_gdk_moveresize_window);
 
   if (gdk_net_wm_supports_for_screen (GDK_WINDOW_SCREEN (window),
 				      gdk_atom_intern ("_NET_WM_MOVERESIZE", FALSE)))

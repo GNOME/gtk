@@ -78,6 +78,7 @@ void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
 void        gdk_display_beep               (GdkDisplay  *display);
 void        gdk_display_sync               (GdkDisplay  *display);
+void	    gdk_display_close		   (GdkDisplay  *display);
 
 
 #ifdef __cplusplus

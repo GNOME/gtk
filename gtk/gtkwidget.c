@@ -49,6 +49,8 @@
 #include "gtkaccessible.h"
 #include "gtktooltips.h"
 #include "gtkinvisible.h"
+#include "gtkmenu.h"
+#include "gtkoptionmenu.h"
 
 #define WIDGET_CLASS(w)	 GTK_WIDGET_GET_CLASS (w)
 #define	INIT_PATH_SIZE	(512)
@@ -3490,7 +3492,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
 static void
 gtk_widget_reset_rc_style (GtkWidget *widget)
 {
-  GtkStyle *new_style;
+  GtkStyle *new_style = NULL;
   gboolean initial_emission;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -3499,8 +3501,9 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
 
   GTK_PRIVATE_UNSET_FLAG (widget, GTK_USER_STYLE);
   GTK_WIDGET_SET_FLAGS (widget, GTK_RC_STYLE);
-
-  new_style = gtk_rc_get_style (widget);
+  
+  if (gtk_widget_has_screen (widget))
+    new_style = gtk_rc_get_style (widget);
   if (!new_style)
     new_style = gtk_widget_get_default_style ();
 
@@ -4208,10 +4211,56 @@ gtk_widget_get_screen (GtkWidget *widget)
       else if (GTK_IS_INVISIBLE (toplevel))
 	return GTK_INVISIBLE (widget)->screen;
     }
+
+  if (GTK_IS_MENU (toplevel))
+    return GTK_WINDOW (GTK_MENU (toplevel)->toplevel)->screen;
+  if (GTK_IS_OPTION_MENU (toplevel))
+    return GTK_WINDOW (GTK_MENU(GTK_OPTION_MENU (toplevel)->menu)->toplevel)->screen;
       
 	
-  g_warning (G_STRLOC ": Can't get associated screen for a widget unless it is inside a toplevel GtkWindow");
+  g_warning (G_STRLOC ": Can't get associated screen"
+	     " for a widget unless it is inside a toplevel GtkWindow\n"
+	     " widget type is %s associated top level type is %s",
+	     g_type_name (G_OBJECT_TYPE(G_OBJECT (widget))),
+	     g_type_name (G_OBJECT_TYPE(G_OBJECT (toplevel))));
   return NULL;
+}
+/**
+ * gtk_widget_has_screen:
+ * @widget: a #GtkWidget
+ * 
+ * check if the %GdkScreen from the toplevel window is associated with
+ * this widget.  
+ * 
+ * Return value: the %gboolean 
+ **/
+
+gboolean
+gtk_widget_has_screen (GtkWidget *widget)
+{
+
+  GtkWidget *toplevel = NULL;
+  GdkScreen *screen = NULL;
+  
+  g_return_val_if_fail (widget != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_WIDGET_TOPLEVEL (toplevel))
+    {
+      if (GTK_IS_WINDOW (toplevel))
+	screen = GTK_WINDOW (toplevel)->screen;
+      else if (GTK_IS_INVISIBLE (toplevel))
+	screen = GTK_INVISIBLE (widget)->screen;
+    }
+
+  if (GTK_IS_MENU (toplevel))
+    screen = GTK_WINDOW (GTK_MENU (toplevel)->toplevel)->screen;
+  if (GTK_IS_OPTION_MENU (toplevel))
+    screen = GTK_WINDOW (GTK_MENU(GTK_OPTION_MENU (toplevel)->menu)->toplevel)->screen;
+      
+  return (screen != NULL) ? TRUE : FALSE;
 }
 
 /**

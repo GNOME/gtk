@@ -561,6 +561,7 @@ gboolean   gtk_widget_get_child_visible   (GtkWidget           *widget);
 GtkWidget *gtk_widget_get_parent          (GtkWidget           *widget);
 GdkWindow *gtk_widget_get_parent_window	  (GtkWidget	       *widget);
 GdkScreen *gtk_widget_get_screen	  (GtkWidget	       *widget);
+gboolean   gtk_widget_has_screen	  (GtkWidget	       *widget);
 GdkDisplay*gtk_widget_get_display	  (GtkWidget	       *widget);
 GdkWindow *gtk_widget_get_root_window     (GtkWidget	       *widget);
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,

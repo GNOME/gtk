@@ -45,11 +45,6 @@ struct _GtkGCDrawable
   GdkPixmap *drawable;
 };
 
-struct _GtkGCDrawableHash {
-  GdkDisplay *display;
-  GHashTable *gc_drawable_ht;  
-};
-
 static void      gtk_gc_init             (void);
 static GtkGCKey* gtk_gc_key_dup          (GtkGCKey      *key);
 static void      gtk_gc_key_destroy      (GtkGCKey      *key);
@@ -66,7 +61,6 @@ static gint      gtk_gc_drawable_equal   (GtkGCDrawable *a,
 
 static gint initialize = TRUE;
 static GCache *gc_cache = NULL;
-static GSList *gc_drawable_ht_list = NULL;
 
 static GMemChunk *key_mem_chunk = NULL;
 
@@ -102,30 +96,26 @@ gtk_gc_release (GdkGC *gc)
   g_cache_remove (gc_cache, gc);
 }
 
-static GHashTable*
-gtk_gc_get_drawable_ht (GdkDisplay *display)
+void 
+free_gc_drawable (gpointer data)
 {
-  GtkGCDrawableHash* ht;
-  
-  GSList *tmp_list = gc_drawable_ht_list;
-  while (tmp_list)
+  GtkGCDrawable * drawable = data;
+  g_object_unref (G_OBJECT (drawable->drawable));
+  g_free (drawable);
+}
+
+static GHashTable*
+gtk_gc_get_drawable_ht (GdkScreen *screen)
+{
+  GHashTable* ht = g_object_get_data (G_OBJECT (screen), "gtk-gc-drawable-ht");
+  if (!ht)
     {
-      ht = tmp_list->data;
-
-      if (ht->display == display)
-	return ht->gc_drawable_ht;
-
-      tmp_list = tmp_list->next;
+      ht = g_hash_table_new_full ((GHashFunc) gtk_gc_drawable_hash,
+				  (GEqualFunc) gtk_gc_drawable_equal,
+				  NULL, free_gc_drawable);
+      g_object_set_data_full (G_OBJECT (screen), "gtk-gc-drawable-ht", ht, g_hash_table_destroy);
     }
-
-  ht = g_new (GtkGCDrawableHash, 1);
-  ht->display = display;
-  ht->gc_drawable_ht = g_hash_table_new ((GHashFunc) gtk_gc_drawable_hash,
-					 (GEqualFunc) gtk_gc_drawable_equal);
-  
-  gc_drawable_ht_list = g_slist_append (gc_drawable_ht_list, ht);
-  
-  return ht->gc_drawable_ht;
+  return ht;
 }
 
 
@@ -174,14 +164,15 @@ gtk_gc_new (gpointer key)
   GHashTable *ht;
 
   keyval = key;
-  ht = gtk_gc_get_drawable_ht (gdk_screen_get_display (keyval->colormap->screen));
+  ht = gtk_gc_get_drawable_ht (keyval->colormap->screen);
   drawable = g_hash_table_lookup (ht, &keyval->depth);
   if (!drawable)
     {
       drawable = g_new (GtkGCDrawable, 1);
       drawable->depth = keyval->depth;
-      drawable->drawable = gdk_pixmap_new (gdk_screen_get_root_window (keyval->colormap->screen), 1, 1, drawable->depth);
-
+      drawable->drawable = 
+	gdk_pixmap_new (gdk_screen_get_root_window (keyval->colormap->screen), 
+			1, 1, drawable->depth);
       g_hash_table_insert (ht, &drawable->depth, drawable);
     }
 

@@ -234,12 +234,12 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 {
   GtkSettings *settings;
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  settings = g_object_get_data (G_OBJECT (screen), "gtk_settings");
+  settings = g_object_get_data (G_OBJECT (screen), "gtk-settings");
   if (!settings)
     {
       settings = g_object_new (GTK_TYPE_SETTINGS, "screen", screen, NULL);
       settings->screen = screen;
-      g_object_set_data (G_OBJECT (screen), "gtk_settings", settings); 
+      g_object_set_data (G_OBJECT (screen), "gtk-settings", settings); 
       gtk_rc_reparse_all_for_settings (settings, TRUE);
     }
   return settings;

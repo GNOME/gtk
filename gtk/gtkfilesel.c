@@ -1725,8 +1725,8 @@ gtk_file_selection_update_history_menu (GtkFileSelection *fs,
     }
   
   fs->history_menu = gtk_menu_new ();
-  gtk_window_set_screen (GTK_WINDOW (GTK_MENU (fs->history_menu)->toplevel), 
-			 gtk_widget_get_screen (GTK_WIDGET (fs)));
+  gtk_menu_set_screen (GTK_MENU (fs->history_menu),
+		       gtk_widget_get_screen (GTK_WIDGET (fs)));
   
 
   current_dir = g_strdup (current_directory);
