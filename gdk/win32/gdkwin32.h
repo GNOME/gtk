@@ -235,7 +235,7 @@ struct _GdkColormapPrivateWin32
 
 struct _GdkImagePrivateWin32
 {
-  HBITMAP ximage;
+  HBITMAP hbitmap;
 };
 
 typedef struct _GdkGCWin32      GdkGCWin32;
@@ -260,7 +260,7 @@ struct _GdkGCWin32
    * window or pixmap. We thus keep all the necessary values in the
    * GdkGCWin32 object.
    */
-  HDC xgc;
+  HDC hdc;
 
   GdkRegion *clip_region;
   HRGN hcliprgn;
@@ -295,9 +295,9 @@ GType gdk_gc_win32_get_type (void);
 #define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
 #define GDK_ROOT_PARENT()             ((GdkWindow *) gdk_parent_root)
 #define GDK_DISPLAY()                 NULL
-#define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
-#define GDK_PIXMAP_HBM(win)           (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)win)->impl)->handle)
-#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_HWND (win) : GDK_PIXMAP_HBM (win))
+#define GDK_WINDOW_HWND(win)          (HWND) (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
+#define GDK_PIXMAP_HBITMAP(win)       (HBITMAP) (GDK_DRAWABLE_IMPL_WIN32(((GdkPixmapObject *)win)->impl)->handle)
+#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? ((HGDIOBJ) GDK_WINDOW_HWND (win)) : ((HGDIOBJ) GDK_PIXMAP_HBITMAP (win)))
 #define GDK_IMAGE_HBM(image)          (((GdkImagePrivateWin32 *) GDK_IMAGE (image)->windowing_data)->hbm)
 #define GDK_COLORMAP_WIN32COLORMAP(cmap) (((GdkColormapPrivateWin32 *)GDK_COLORMAP (cmap)->windowing_data)->xcolormap)
 #define GDK_VISUAL_XVISUAL(vis)       (((GdkVisualPrivate *) vis)->xvisual)
@@ -310,23 +310,23 @@ GdkPixmap    *gdk_pixmap_foreign_new (guint32     anid);
 GdkWindow    *gdk_window_foreign_new (guint32     anid);
 
 /* Return the Gdk* for a particular HANDLE */
-gpointer      gdk_xid_table_lookup     (HANDLE handle);
+gpointer      gdk_xid_table_lookup   (HANDLE      handle);
 
 /* Return a device context to draw in a drawable, given a GDK GC,
  * and a mask indicating which GC values might be used (for efficiency,
  * no need to muck around with text-related stuff if we aren't going
  * to output text, for instance).
  */
-HDC           gdk_win32_hdc_get (GdkDrawable    *drawable,
-				 GdkGC          *gc,
-				 GdkGCValuesMask usage);
+HDC           gdk_win32_hdc_get      (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkGCValuesMask usage);
 
 /* Each HDC returned from gdk_win32_hdc_get must be released with
  * this function
  */
-void          gdk_win32_hdc_release (GdkDrawable    *drawable,
-				     GdkGC          *gc,
-				     GdkGCValuesMask usage);
+void          gdk_win32_hdc_release  (GdkDrawable    *drawable,
+				      GdkGC          *gc,
+				      GdkGCValuesMask usage);
 
 #ifdef __cplusplus
 }

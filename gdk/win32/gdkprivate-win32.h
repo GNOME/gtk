@@ -93,7 +93,7 @@ void    gdk_win32_api_failed        (const gchar *where,
 #define OTHER_API_FAILED(api) gdk_other_api_failed (__FILE__, __LINE__, api)
 #endif
  
-extern LRESULT CALLBACK gdk_WindowProc (HWND, UINT, WPARAM, LPARAM);
+extern LRESULT CALLBACK gdk_window_procedure (HWND, UINT, WPARAM, LPARAM);
 
 extern GdkDrawableClass  _gdk_win32_drawable_class;
 extern HWND		 gdk_root_window;
@@ -101,7 +101,7 @@ extern gboolean		 gdk_event_func_from_window_proc;
 
 extern HDC		 gdk_display_hdc;
 extern HINSTANCE	 gdk_dll_hinstance;
-extern HINSTANCE	 gdk_app_hinstance;
+extern HINSTANCE	 gdk_app_hmodule;
 
 extern UINT		 gdk_selection_notify_msg;
 extern UINT		 gdk_selection_request_msg;

@@ -37,6 +37,7 @@
 #include "gdkproperty.h"
 #include "gdkinternals.h"
 #include "gdkprivate-win32.h"
+#include "gdkdrawable-win32.h"
 
 #ifdef OLE2_DND
 #include <ole2.h>
@@ -1108,7 +1109,6 @@ gdk_drag_find_window (GdkDragContext  *context,
 		      GdkDragProtocol *protocol)
 {
   GdkDragContextPrivate *private = (GdkDragContextPrivate *)context;
-  GdkDrawablePrivate *drag_window_private = (GdkDrawablePrivate*) drag_window;
   HWND recipient;
   POINT pt;
 
@@ -1233,7 +1233,7 @@ gdk_window_register_dnd (GdkWindow *window)
    * (in gtk, data of type text/uri-list) or not.
    */
   gdk_window_add_filter (window, gdk_dropfiles_filter, NULL);
-  DragAcceptFiles (GDK_DRAWABLE_XID (window), TRUE);
+  DragAcceptFiles (GDK_WINDOW_HWND (window), TRUE);
 
 #ifdef OLE2_DND
   /* Register for OLE2 d&d */

@@ -29,9 +29,9 @@
 
 HWND              gdk_root_window = NULL;
 gint              gdk_event_func_from_window_proc = FALSE;
-HDC		  gdk_DC;
-HINSTANCE	  gdk_DLLInstance;
-HINSTANCE	  gdk_ProgInstance;
+HDC		  gdk_display_hdc;
+HINSTANCE	  gdk_dll_hinstance;
+HINSTANCE	  gdk_app_hmodule; /* Works as a HMODULE, too? */
 UINT		  gdk_selection_notify_msg;
 UINT		  gdk_selection_request_msg;
 UINT		  gdk_selection_clear_msg;
@@ -40,5 +40,4 @@ GdkAtom		  gdk_win32_dropfiles_atom;
 GdkAtom		  gdk_ole2_dnd_atom;
 ATOM              gdk_selection_property;
 gint              gdk_null_window_warnings = TRUE;
-
 DWORD		  windows_version = 0;

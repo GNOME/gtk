@@ -235,14 +235,14 @@ gdk_cursor_new_from_pixmap (GdkPixmap *source,
       q[-1] |= residue;	/* Set left-over bits */
     }
       
-  hcursor = CreateCursor (gdk_app_hinstance, x, y, cursor_width, cursor_height,
+  hcursor = CreateCursor (gdk_app_hmodule, x, y, cursor_width, cursor_height,
 			  and_mask, xor_mask);
 
   GDK_NOTE (MISC, g_print ("gdk_cursor_new_from_pixmap: "
 			   "%#x (%dx%d) %#x (%dx%d) = %#x (%dx%d)\n",
-			   GDK_PIXMAP_HBM (source),
+			   GDK_PIXMAP_HBITMAP (source),
 			   source_impl->width, source_impl->height,
-			   GDK_PIXMAP_HBM (mask),
+			   GDK_PIXMAP_HBITMAP (mask),
 			   mask_impl->width, mask_impl->height,
 			   hcursor, cursor_width, cursor_height));
 

@@ -107,7 +107,10 @@ gdk_image_exit (void)
 }
 
 GdkImage *
-gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
+gdk_image_new_bitmap (GdkVisual *visual,
+		      gpointer   data,
+		      gint       w,
+		      gint       h)
 /*
  * Desc: create a new bitmap image
  */
@@ -162,7 +165,7 @@ gdk_image_new_bitmap (GdkVisual *visual, gpointer data, gint w, gint h)
     bmi.u.bmiColors[1].rgbRed = 0xFF;
   bmi.u.bmiColors[1].rgbReserved = 0x00;
   
-  private->ximage = CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi,
+  private->ximage = CreateDIBSection (gdk_display_hdc, (BITMAPINFO *) &bmi,
 				      DIB_RGB_COLORS, &bits, NULL, 0);
   if (bpl != bpl32)
     {
@@ -284,7 +287,7 @@ gdk_image_new_with_depth (GdkImageType  type,
     }
 
   private->ximage =
-    CreateDIBSection (gdk_DC, (BITMAPINFO *) &bmi, iUsage,
+    CreateDIBSection (gdk_display_hdc, (BITMAPINFO *) &bmi, iUsage,
 		      &image->mem, NULL, 0);
 
   if (private->ximage == NULL)
@@ -587,8 +590,8 @@ gdk_image_get (GdkWindow *window,
 
 guint32
 gdk_image_get_pixel (GdkImage *image,
-		     gint x,
-		     gint y)
+		     gint      x,
+		     gint      y)
 {
   guint32 pixel;
 
@@ -629,9 +632,9 @@ gdk_image_get_pixel (GdkImage *image,
 
 void
 gdk_image_put_pixel (GdkImage *image,
-		     gint x,
-		     gint y,
-		     guint32 pixel)
+		     gint       x,
+		     gint       y,
+		     guint32    pixel)
 {
   g_return_if_fail (image != NULL);
 
@@ -701,107 +704,3 @@ gdk_win32_image_destroy (GdkImage *image)
   g_free (private);
 }
 
-static void
-gdk_image_put (GdkImage    *image,
-	       GdkDrawable *drawable,
-	       GdkGC       *gc,
-	       gint         xsrc,
-	       gint         ysrc,
-	       gint         xdest,
-	       gint         ydest,
-	       gint         width,
-	       gint         height)
-{
-  GdkDrawablePrivate *drawable_private;
-  GdkImagePrivateWin32 *image_private;
-  GdkGCPrivate *gc_private;
-  HDC hdc;
-  GdkColormapPrivateWin32 *colormap_private;
-
-  g_return_if_fail (drawable != NULL);
-  g_return_if_fail (image != NULL);
-  g_return_if_fail (gc != NULL);
-
-  if (GDK_DRAWABLE_DESTROYED (drawable))
-    return;
-  image_private = (GdkImagePrivateWin32 *) image;
-  drawable_private = (GdkDrawablePrivate *) drawable;
-  gc_private = (GdkGCPrivate *) gc;
-
-  hdc = gdk_gc_predraw (drawable, gc_private, 0);
-  colormap_private = (GdkColormapPrivateWin32 *) drawable_private->colormap;
-  if (colormap_private && colormap_private->xcolormap->rc_palette)
-    {
-      DIBSECTION ds;
-      static struct {
-	BITMAPINFOHEADER bmiHeader;
-	WORD bmiIndices[256];
-      } bmi;
-      static gboolean bmi_inited = FALSE;
-      int i;
-
-      if (!bmi_inited)
-	{
-	  for (i = 0; i < 256; i++)
-	    bmi.bmiIndices[i] = i;
-	  bmi_inited = TRUE;
-	}
-
-      if (GetObject (image_private->ximage, sizeof (DIBSECTION),
-		     &ds) != sizeof (DIBSECTION))
-	{
-	  WIN32_GDI_FAILED ("GetObject");
-	}
-#if 0
-      g_print("xdest = %d, ydest = %d, xsrc = %d, ysrc = %d, width = %d, height = %d\n",
-	      xdest, ydest, xsrc, ysrc, width, height);
-      g_print("bmWidth = %d, bmHeight = %d, bmBitsPixel = %d, bmBits = %p\n",
-	      ds.dsBm.bmWidth, ds.dsBm.bmHeight, ds.dsBm.bmBitsPixel, ds.dsBm.bmBits);
-      g_print("biWidth = %d, biHeight = %d, biBitCount = %d, biClrUsed = %d\n",
-	      ds.dsBmih.biWidth, ds.dsBmih.biHeight, ds.dsBmih.biBitCount, ds.dsBmih.biClrUsed);
-#endif
-      bmi.bmiHeader = ds.dsBmih;
-      /* I have spent hours on getting the parameters to
-       * SetDIBitsToDevice right. I wonder what drugs the guys in
-       * Redmond were on when they designed this API.
-       */
-      if (SetDIBitsToDevice (hdc,
-			     xdest, ydest,
-			     width, height,
-			     xsrc, (-ds.dsBmih.biHeight)-height-ysrc,
-			     0, -ds.dsBmih.biHeight,
-			     ds.dsBm.bmBits,
-			     (CONST BITMAPINFO *) &bmi,
-			     DIB_PAL_COLORS) == 0)
-	WIN32_GDI_FAILED ("SetDIBitsToDevice");
-    }
-  else
-    {
-      HDC memdc;
-      HGDIOBJ oldbitmap;
-
-      if ((memdc = CreateCompatibleDC (hdc)) == NULL)
-	{
-	  WIN32_GDI_FAILED ("CreateCompatibleDC");
-	  gdk_gc_postdraw (drawable, gc_private, 0);
-	  return;
-	}
-
-      if ((oldbitmap = SelectObject (memdc, image_private->ximage)) == NULL)
-	{
-	  WIN32_GDI_FAILED ("SelectObject");
-	  gdk_gc_postdraw (drawable, gc_private, 0);
-	  return;
-	}
-      if (!BitBlt (hdc, xdest, ydest, width, height,
-		   memdc, xsrc, ysrc, SRCCOPY))
-	WIN32_GDI_FAILED ("BitBlt");
-
-      if (SelectObject (memdc, oldbitmap) == NULL)
-	WIN32_GDI_FAILED ("SelectObject");
-
-      if (!DeleteDC (memdc))
-	WIN32_GDI_FAILED ("DeleteDC");
-    }
-  gdk_gc_postdraw (drawable, gc_private, 0);
-}

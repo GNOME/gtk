@@ -178,24 +178,24 @@ RegisterGdkClass (GdkDrawableType wtype)
   wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
                   * on WM_SIZE and WM_MOVE. Flicker, Performance!
                   */
-  wcl.lpfnWndProc = gdk_WindowProc;
+  wcl.lpfnWndProc = gdk_window_procedure;
   wcl.cbClsExtra = 0;
   wcl.cbWndExtra = 0;
-  wcl.hInstance = gdk_ProgInstance;
+  wcl.hInstance = gdk_app_hmodule;
   wcl.hIcon = 0;
   /* initialize once! */
   if (0 == hAppIcon)
     {
       gchar sLoc [_MAX_PATH+1];
 
-      if (0 != GetModuleFileName(gdk_ProgInstance, sLoc, _MAX_PATH))
+      if (0 != GetModuleFileName (gdk_app_hmodule, sLoc, _MAX_PATH))
 	{
-	  hAppIcon = ExtractIcon(gdk_ProgInstance, sLoc, 0);
+	  hAppIcon = ExtractIcon (gdk_app_hmodule, sLoc, 0);
 	  if (0 == hAppIcon)
 	    {
 	      char *gdklibname = g_strdup_printf ("gdk-%s.dll", GDK_VERSION);
 
-	      hAppIcon = ExtractIcon(gdk_ProgInstance, gdklibname, 0);
+	      hAppIcon = ExtractIcon (gdk_app_hmodule, gdklibname, 0);
 	      g_free (gdklibname);
 	    }
 	  
@@ -211,7 +211,7 @@ RegisterGdkClass (GdkDrawableType wtype)
 #define ONCE_PER_CLASS() \
   wcl.hIcon = CopyIcon (hAppIcon); \
   wcl.hIconSm = CopyIcon (hAppIcon); \
-  wcl.hbrBackground = CreateSolidBrush( RGB(0,0,0)); \
+  wcl.hbrBackground = CreateSolidBrush (RGB (0,0,0)); \
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW); 
   
   switch (wtype)
@@ -222,7 +222,7 @@ RegisterGdkClass (GdkDrawableType wtype)
 	wcl.lpszClassName = "gdkWindowToplevel";
 
 	ONCE_PER_CLASS();
-	klassTOPLEVEL = RegisterClassEx(&wcl);
+	klassTOPLEVEL = RegisterClassEx (&wcl);
       }
       klass = klassTOPLEVEL;
       break;
@@ -233,7 +233,7 @@ RegisterGdkClass (GdkDrawableType wtype)
 
         wcl.style |= CS_PARENTDC; /* MSDN: ... enhances system performance. */
 	ONCE_PER_CLASS();
-	klassCHILD = RegisterClassEx(&wcl);
+	klassCHILD = RegisterClassEx (&wcl);
       }
       klass = klassCHILD;
       break;
@@ -243,7 +243,7 @@ RegisterGdkClass (GdkDrawableType wtype)
 	wcl.lpszClassName = "gdkWindowDialog";
         wcl.style |= CS_SAVEBITS;
 	ONCE_PER_CLASS();
-	klassDIALOG = RegisterClassEx(&wcl);
+	klassDIALOG = RegisterClassEx (&wcl);
       }
       klass = klassDIALOG;
       break;
@@ -253,7 +253,7 @@ RegisterGdkClass (GdkDrawableType wtype)
 	wcl.lpszClassName = "gdkWindowTemp";
         wcl.style |= CS_SAVEBITS;
 	ONCE_PER_CLASS();
-	klassTEMP = RegisterClassEx(&wcl);
+	klassTEMP = RegisterClassEx (&wcl);
       }
       klass = klassTEMP;
       break;
@@ -449,7 +449,7 @@ gdk_window_new (GdkWindow     *parent,
 		    width, height,
 		    xparent,
 		    NULL,
-		    gdk_ProgInstance,
+		    gdk_app_hmodule,
 		    NULL);
 
   GDK_NOTE (MISC,

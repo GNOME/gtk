@@ -57,10 +57,10 @@ GdkArgDesc _gdk_windowing_args[] = {
 
 int __stdcall
 DllMain(HINSTANCE hinstDLL,
-	DWORD dwReason,
-	LPVOID reserved)
+	DWORD     dwReason,
+	LPVOID    reserved)
 {
-  gdk_DLLInstance = hinstDLL;
+  gdk_dll_hinstance = hinstDLL;
 
   return TRUE;
 }
@@ -80,8 +80,8 @@ _gdk_windowing_init_check (int    argc,
   if (gdk_synchronize)
     GdiSetBatchLimit (1);
 
-  gdk_ProgInstance = GetModuleHandle (NULL);
-  gdk_DC = CreateDC ("DISPLAY", NULL, NULL, NULL);
+  gdk_app_hmodule = GetModuleHandle (NULL);
+  gdk_display_hdc = CreateDC ("DISPLAY", NULL, NULL, NULL);
   gdk_root_window = GetDesktopWindow ();
   windows_version = GetVersion ();
 
@@ -205,7 +205,7 @@ gdk_screen_height (void)
 gint
 gdk_screen_width_mm (void)
 {
-  return GetDeviceCaps (gdk_DC, HORZSIZE);
+  return GetDeviceCaps (gdk_display_hdc, HORZSIZE);
 }
 
 /*
@@ -226,7 +226,7 @@ gdk_screen_width_mm (void)
 gint
 gdk_screen_height_mm (void)
 {
-  return GetDeviceCaps (gdk_DC, VERTSIZE);
+  return GetDeviceCaps (gdk_display_hdc, VERTSIZE);
 }
 
 void
@@ -258,8 +258,8 @@ gdk_windowing_exit (void)
 {
   gdk_win32_dnd_exit ();
   CoUninitialize ();
-  DeleteDC (gdk_DC);
-  gdk_DC = NULL;
+  DeleteDC (gdk_display_hdc);
+  gdk_display_hdc = NULL;
 }
 
 gchar *

@@ -142,7 +142,7 @@ logfont_to_xlfd (const LOGFONT *lfp,
 
   if (logpixelsy == 0)
     {
-      logpixelsy = GetDeviceCaps (gdk_DC, LOGPIXELSY);
+      logpixelsy = GetDeviceCaps (gdk_display_hdc, LOGPIXELSY);
     }
 
   if (lfp->lfWeight >= FW_HEAVY)
@@ -281,7 +281,7 @@ gdk_font_full_name_get (GdkFont *font)
     {
       singlefont = (GdkWin32SingleFont *) list->data;
 
-      if (GetObject (singlefont->xfont, sizeof (LOGFONT), &logfont) == 0)
+      if (GetObject (singlefont->hfont, sizeof (LOGFONT), &logfont) == 0)
 	{
 	  WIN32_GDI_FAILED ("GetObject");
 	  return NULL;
@@ -409,7 +409,7 @@ EnumFontFamExProc (const LOGFONT    *lfp,
 
       lf = *lfp;
 
-      EnumFontFamiliesEx (gdk_DC, &lf, InnerEnumFontFamExProc, lParam, 0);
+      EnumFontFamiliesEx (gdk_display_hdc, &lf, InnerEnumFontFamExProc, lParam, 0);
     }
   else
     InnerEnumFontFamExProc (lfp, metrics, fontType, lParam);
@@ -429,7 +429,7 @@ gdk_font_list_new (const gchar *font_pattern,
   xfontnames = g_new (gchar *, font_names_size);
   memset (&logfont, 0, sizeof (logfont));
   logfont.lfCharSet = DEFAULT_CHARSET;
-  EnumFontFamiliesEx (gdk_DC, &logfont, EnumFontFamExProc,
+  EnumFontFamiliesEx (gdk_display_hdc, &logfont, EnumFontFamExProc,
 		      (LPARAM) font_pattern, 0);
 
   result = g_new (gchar *, num_fonts + 1);
@@ -1234,7 +1234,7 @@ gdk_font_load_internal (const gchar *font_name)
 	  return NULL;
 	}
 
-      logpixelsy = GetDeviceCaps (gdk_DC, LOGPIXELSY);
+      logpixelsy = GetDeviceCaps (gdk_display_hdc, LOGPIXELSY);
 
       if (strcmp (pixel_size, "*") == 0)
 	if (strcmp (point_size, "*") == 0)
@@ -1447,13 +1447,13 @@ gdk_font_load_internal (const gchar *font_name)
     return NULL;
       
   singlefont = g_new (GdkWin32SingleFont, 1);
-  singlefont->xfont = hfont;
-  GetObject (singlefont->xfont, sizeof (logfont), &logfont);
-  oldfont = SelectObject (gdk_DC, singlefont->xfont);
+  singlefont->hfont = hfont;
+  GetObject (singlefont->hfont, sizeof (logfont), &logfont);
+  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
   memset (&singlefont->fs, 0, sizeof (singlefont->fs));
-  singlefont->charset = GetTextCharsetInfo (gdk_DC, &singlefont->fs, 0);
-  GetTextFace (gdk_DC, sizeof (face), face);
-  SelectObject (gdk_DC, oldfont);
+  singlefont->charset = GetTextCharsetInfo (gdk_display_hdc, &singlefont->fs, 0);
+  GetTextFace (gdk_display_hdc, sizeof (face), face);
+  SelectObject (gdk_display_hdc, oldfont);
   if (TranslateCharsetInfo ((DWORD *) singlefont->charset, &csi,
 			    TCI_SRCCHARSET)
       && singlefont->charset != MAC_CHARSET)
@@ -1462,7 +1462,7 @@ gdk_font_load_internal (const gchar *font_name)
     singlefont->codepage = 0;
 
   GDK_NOTE (MISC, (g_print ("... = %#x %s cs %s cp%d\n",
-			    singlefont->xfont, face,
+			    singlefont->hfont, face,
 			    charset_name (singlefont->charset),
 			    singlefont->codepage),
 		   g_print ("... Unicode subranges:"),
@@ -1504,9 +1504,9 @@ gdk_font_load (const gchar *font_name)
    * chars to work. (Yes, even Latin-1, as we use Unicode internally.)
    */
   font->type = GDK_FONT_FONTSET;
-  oldfont = SelectObject (gdk_DC, singlefont->xfont);
-  GetTextMetrics (gdk_DC, &textmetric);
-  SelectObject (gdk_DC, oldfont);
+  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
+  GetTextMetrics (gdk_display_hdc, &textmetric);
+  SelectObject (gdk_display_hdc, oldfont);
   font->ascent = textmetric.tmAscent;
   font->descent = textmetric.tmDescent;
 
@@ -1568,9 +1568,9 @@ gdk_fontset_load (const gchar *fontset_name)
       if (singlefont)
 	{
 	  private->fonts = g_slist_append (private->fonts, singlefont);
-	  oldfont = SelectObject (gdk_DC, singlefont->xfont);
-	  GetTextMetrics (gdk_DC, &textmetric);
-	  SelectObject (gdk_DC, oldfont);
+	  oldfont = SelectObject (gdk_display_hdc, singlefont->hfont);
+	  GetTextMetrics (gdk_display_hdc, &textmetric);
+	  SelectObject (gdk_display_hdc, oldfont);
 	  font->ascent = MAX (font->ascent, textmetric.tmAscent);
 	  font->descent = MAX (font->descent, textmetric.tmDescent);
 	}
@@ -1602,14 +1602,14 @@ _gdk_font_destroy (GdkFont *font)
 
   singlefont = (GdkWin32SingleFont *) private->fonts->data;
   GDK_NOTE (MISC, g_print ("_gdk_font_destroy %#x\n",
-			   singlefont->xfont));
+			   singlefont->hfont));
 
   gdk_font_hash_remove (font->type, font);
   
   switch (font->type)
     {
     case GDK_FONT_FONT:
-      DeleteObject (singlefont->xfont);
+      DeleteObject (singlefont->hfont);
       break;
       
     case GDK_FONT_FONTSET:
@@ -1617,7 +1617,7 @@ _gdk_font_destroy (GdkFont *font)
       while (list)
 	{
 	  singlefont = (GdkWin32SingleFont *) list->data;
-	  DeleteObject (singlefont->xfont);
+	  DeleteObject (singlefont->hfont);
 	  
 	  list = list->next;
 	}
@@ -1647,7 +1647,7 @@ gdk_font_id (const GdkFont *font)
   private = (const GdkFontPrivateWin32 *) font;
 
   if (font->type == GDK_FONT_FONT)
-    return (gint) ((GdkWin32SingleFont *) private->fonts->data)->xfont;
+    return (gint) ((GdkWin32SingleFont *) private->fonts->data)->hfont;
   else
     return 0;
 }
@@ -1666,8 +1666,8 @@ gdk_font_equal (const GdkFont *fonta,
   privateb = (const GdkFontPrivateWin32 *) fontb;
 
   if (fonta->type == GDK_FONT_FONT && fontb->type == GDK_FONT_FONT)
-    return (((GdkWin32SingleFont *) privatea->fonts->data)->xfont
-	    == ((GdkWin32SingleFont *) privateb->fonts->data)->xfont);
+    return (((GdkWin32SingleFont *) privatea->fonts->data)->hfont
+	    == ((GdkWin32SingleFont *) privateb->fonts->data)->hfont);
   else if (fonta->type == GDK_FONT_FONTSET && fontb->type == GDK_FONT_FONTSET)
     {
       GSList *lista = privatea->fonts;
@@ -1675,8 +1675,8 @@ gdk_font_equal (const GdkFont *fonta,
 
       while (lista && listb)
 	{
-	  if (((GdkWin32SingleFont *) lista->data)->xfont
-	      != ((GdkWin32SingleFont *) listb->data)->xfont)
+	  if (((GdkWin32SingleFont *) lista->data)->hfont
+	      != ((GdkWin32SingleFont *) listb->data)->hfont)
 	    return 0;
 	  lista = lista->next;
 	  listb = listb->next;
@@ -1762,7 +1762,7 @@ gdk_wchar_text_handle (GdkFont       *font,
 
       GDK_NOTE (MISC, g_print ("%d:%d:%d:%#x ",
 			       start-wcstr, wcp-wcstr, block,
-			       (singlefont ? singlefont->xfont : 0)));
+			       (singlefont ? singlefont->hfont : 0)));
 
       /* Call the callback function */
       (*handler) (singlefont, start, wcp+1 - start, arg);
@@ -1789,13 +1789,13 @@ gdk_text_size_handler (GdkWin32SingleFont *singlefont,
   if (!singlefont)
     return;
 
-  if ((oldfont = SelectObject (gdk_DC, singlefont->xfont)) == NULL)
+  if ((oldfont = SelectObject (gdk_display_hdc, singlefont->hfont)) == NULL)
     {
       WIN32_GDI_FAILED ("SelectObject");
       return;
     }
-  GetTextExtentPoint32W (gdk_DC, wcstr, wclen, &this_size);
-  SelectObject (gdk_DC, oldfont);
+  GetTextExtentPoint32W (gdk_display_hdc, wcstr, wclen, &this_size);
+  SelectObject (gdk_display_hdc, oldfont);
 
   arg->total.cx += this_size.cx;
   arg->total.cy = MAX (arg->total.cy, this_size.cy);
