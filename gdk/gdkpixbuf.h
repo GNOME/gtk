@@ -1,13 +1,12 @@
 #ifndef __GDK_PIXBUF_H__
 #define __GDK_PIXBUF_H__
 
+#include <cairo.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkrgb.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+G_BEGIN_DECLS
 
 /* Rendering to a drawable */
 
@@ -84,8 +83,6 @@ GdkPixbuf *gdk_pixbuf_get_from_image    (GdkPixbuf   *dest,
 void gdk_pixbuf_set_as_cairo_source (GdkPixbuf *pixbuf,
 				     cairo_t   *cr);
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
 #endif /* __GDK_PIXBUF_H__ */

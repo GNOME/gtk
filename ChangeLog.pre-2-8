@@ -1,4 +1,6 @@
 2005-03-30  Matthias Clasen  <mclasen@redhat.com>
+	
+	* gdk/gdkpixbuf.h: Include cairo.h
 
 	* gtk/gtkclipboard.c (gtk_clipboard_set_can_store): 
 	Don't accept n_targets == -1.
