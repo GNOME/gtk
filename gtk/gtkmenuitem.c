@@ -801,13 +801,13 @@ static gboolean
 gtk_menu_item_mnemonic_activate (GtkWidget *widget,
 				 gboolean   group_cycling)
 {
-  if (group_cycling)
+  if (group_cycling &&
+      widget->parent &&
+      GTK_IS_MENU_SHELL (widget->parent) &&
+      GTK_MENU_SHELL (widget->parent)->active)
     {
-      if (widget->parent &&
-	  GTK_IS_MENU_SHELL (widget->parent))
-	gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent),
-				    widget);
-
+      gtk_menu_shell_select_item (GTK_MENU_SHELL (widget->parent),
+				  widget);
     }
   else
     g_signal_emit (widget, menu_item_signals[ACTIVATE_ITEM], 0);
