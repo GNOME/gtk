@@ -130,11 +130,18 @@ gtk_tree_model_base_init (gpointer g_class)
 
   if (! initialized)
     {
-      GType row_inserted_params[] = { GTK_TYPE_TREE_PATH, GTK_TYPE_TREE_ITER };
-      GType row_deleted_params[] = { GTK_TYPE_TREE_PATH };
-      GType rows_reordered_params[] = { GTK_TYPE_TREE_PATH,
-                                        GTK_TYPE_TREE_ITER,
-                                        G_TYPE_POINTER };
+      GType row_inserted_params[2];
+      GType row_deleted_params[1];
+      GType rows_reordered_params[3];
+
+      row_inserted_params[0] = GTK_TYPE_TREE_PATH;
+      row_inserted_params[1] = GTK_TYPE_TREE_ITER;
+
+      row_deleted_params[0] = GTK_TYPE_TREE_PATH;
+
+      rows_reordered_params[0] = GTK_TYPE_TREE_PATH;
+      rows_reordered_params[1] = GTK_TYPE_TREE_ITER;
+      rows_reordered_params[2] = G_TYPE_POINTER;
 
       tree_model_signals[ROW_CHANGED] =
         g_signal_new ("row_changed",
