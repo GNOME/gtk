@@ -55,6 +55,7 @@
 #include "gtkmain.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 enum {
   EVENT,
@@ -90,6 +91,7 @@ enum {
   ARG_OFFSET,
   ARG_BG_FULL_HEIGHT,
   ARG_LANGUAGE,
+  ARG_TABS,
   
   /* Whether-a-style-arg-is-set args */
   ARG_BACKGROUND_SET,
@@ -113,6 +115,7 @@ enum {
   ARG_OFFSET_SET,
   ARG_BG_FULL_HEIGHT_SET,
   ARG_LANGUAGE_SET,
+  ARG_TABS_SET,
   
   LAST_ARG
 };
@@ -218,6 +221,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_UNDERLINE);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode", GTK_TYPE_ENUM,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE);
+  gtk_object_add_arg_type ("GtkTextTag::tabs", GTK_TYPE_POINTER,
+                           GTK_ARG_READWRITE, ARG_TABS);
   
   /* Style args are set or not */
   gtk_object_add_arg_type ("GtkTextTag::background_set", GTK_TYPE_BOOL,
@@ -262,6 +267,9 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                            GTK_ARG_READWRITE, ARG_UNDERLINE_SET);
   gtk_object_add_arg_type ("GtkTextTag::wrap_mode_set", GTK_TYPE_BOOL,
                            GTK_ARG_READWRITE, ARG_WRAP_MODE_SET);
+  gtk_object_add_arg_type ("GtkTextTag::tabs_set", GTK_TYPE_BOOL,
+                           GTK_ARG_READWRITE, ARG_TABS_SET);
+
   
   signals[EVENT] =
     gtk_signal_new ("event",
@@ -580,6 +588,18 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
       tkxt_tag->language_set = TRUE;
       tkxt_tag->values->language = g_strdup (GTK_VALUE_STRING(*arg));
       break;
+
+    case ARG_TABS:
+      tkxt_tag->tabs_set = TRUE;
+
+      if (tkxt_tag->values->tabs)
+        pango_tab_array_free (tkxt_tag->values->tabs);
+      
+      tkxt_tag->values->tabs =
+        pango_tab_array_copy (GTK_VALUE_POINTER (*arg));
+
+      size_changed = TRUE;
+      break;
       
       /* Whether the value should be used... */
       
@@ -669,6 +689,11 @@ gtk_text_tag_set_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
     case ARG_LANGUAGE_SET:
       tkxt_tag->language_set = GTK_VALUE_BOOL(*arg);
+      size_changed = TRUE;
+      break;
+
+    case ARG_TABS_SET:
+      tkxt_tag->tabs_set = GTK_VALUE_BOOL (*arg);
       size_changed = TRUE;
       break;
       
@@ -800,6 +825,11 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
     case ARG_LANGUAGE:
       GTK_VALUE_STRING(*arg) = g_strdup (tag->values->language);
       break;
+
+    case ARG_TABS:
+      GTK_VALUE_POINTER (*arg) = tag->values->tabs ? 
+        pango_tab_array_copy (tag->values->tabs) : NULL;
+      break;
       
     case ARG_BACKGROUND_SET:
     case ARG_BACKGROUND_GDK_SET:
@@ -877,6 +907,10 @@ gtk_text_tag_get_arg (GtkObject *object, GtkArg *arg, guint arg_id)
 
     case ARG_LANGUAGE_SET:
       GTK_VALUE_BOOL(*arg) = tag->language_set;
+      break;
+
+    case ARG_TABS_SET:
+      GTK_VALUE_BOOL (*arg) = tag->tabs_set;
       break;
       
     case ARG_BACKGROUND:
@@ -1050,7 +1084,7 @@ gtk_text_attributes_new(void)
 
 void
 gtk_text_attributes_copy(GtkTextAttributes *src,
-                           GtkTextAttributes *dest)
+                         GtkTextAttributes *dest)
 {
   guint orig_refcount;
 
@@ -1067,9 +1101,6 @@ gtk_text_attributes_copy(GtkTextAttributes *src,
   if (src->appearance.fg_stipple)
     gdk_bitmap_ref(src->appearance.fg_stipple);
 
-  if (src->tab_array)
-    gtk_text_view_tab_array_ref(src->tab_array);
-
   /* Remove refs */
   
   if (dest->appearance.bg_stipple)
@@ -1078,15 +1109,16 @@ gtk_text_attributes_copy(GtkTextAttributes *src,
   if (dest->appearance.fg_stipple)
     gdk_bitmap_unref(dest->appearance.fg_stipple);
 
-  if (dest->tab_array)
-    gtk_text_view_tab_array_unref(dest->tab_array);
-
   /* Copy */
   orig_refcount = dest->refcount;
   
   *dest = *src;
 
   dest->font_desc = pango_font_description_copy (src->font_desc);
+
+  if (src->tabs)
+    dest->tabs = pango_tab_array_copy (src->tabs);
+
   dest->language = g_strdup (src->language);
   
   dest->refcount = orig_refcount;
@@ -1122,8 +1154,8 @@ gtk_text_attributes_unref(GtkTextAttributes *values)
       if (values->appearance.fg_stipple)
         gdk_bitmap_unref(values->appearance.fg_stipple);
 
-      if (values->tab_array)
-        gtk_text_view_tab_array_unref(values->tab_array);
+      if (values->tabs)
+        pango_tab_array_free (values->tabs);
 
       if (values->language)
         g_free (values->language);
@@ -1197,10 +1229,7 @@ gtk_text_attributes_fill_from_tags(GtkTextAttributes *dest,
           dest->appearance.bg_color = vals->appearance.bg_color;
           
           dest->appearance.draw_bg = TRUE;
-        }
-      
-      if (tag->border_width_set)
-        dest->border_width = vals->border_width;
+        }      
 
       if (tag->relief_set)
         dest->relief = vals->relief;
@@ -1260,12 +1289,11 @@ gtk_text_attributes_fill_from_tags(GtkTextAttributes *dest,
       if (tag->pixels_inside_wrap_set)
         dest->pixels_inside_wrap = vals->pixels_inside_wrap;
 
-      if (tag->tab_array_set)
+      if (tag->tabs_set)
         {
-          gtk_text_view_tab_array_ref(vals->tab_array);
-          if (dest->tab_array)
-            gtk_text_view_tab_array_unref(dest->tab_array);
-          dest->tab_array = vals->tab_array;
+          if (dest->tabs)
+            pango_tab_array_free (dest->tabs);
+          dest->tabs = pango_tab_array_copy (vals->tabs);
         }
 
       if (tag->wrap_mode_set)

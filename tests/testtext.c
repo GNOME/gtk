@@ -22,6 +22,7 @@ struct _Buffer
   gint untitled_serial;
   GtkTextTag *not_editable_tag;
   GtkTextTag *found_text_tag;
+  GtkTextTag *custom_tabs_tag;
 };
 
 struct _View
@@ -895,6 +896,34 @@ do_apply_editable (gpointer callback_data,
     }
 }
 
+
+static void
+do_apply_tabs (gpointer callback_data,
+               guint callback_action,
+               GtkWidget *widget)
+{
+  View *view = view_from_widget (widget);
+  GtkTextIter start;
+  GtkTextIter end;
+  
+  if (gtk_text_buffer_get_selection_bounds (view->buffer->buffer,
+                                            &start, &end))
+    {
+      if (callback_action)
+        {
+          gtk_text_buffer_remove_tag (view->buffer->buffer,
+                                      view->buffer->custom_tabs_tag,
+                                      &start, &end);
+        }
+      else
+        {
+          gtk_text_buffer_apply_tag (view->buffer->buffer,
+                                     view->buffer->custom_tabs_tag,
+                                     &start, &end);
+        }
+    }
+}
+
 static void
 dialog_response_callback (GtkWidget *dialog, gint response_id, gpointer data)
 {
@@ -1033,6 +1062,8 @@ static GtkItemFactoryEntry menu_items[] =
   { "/_Attributes",   	  NULL,         0,                0, "<Branch>" },
   { "/Attributes/Editable",   	  NULL,         do_apply_editable, TRUE, NULL },
   { "/Attributes/Not editable",   	  NULL,         do_apply_editable, FALSE, NULL },
+  { "/Attributes/Custom tabs",   	  NULL,         do_apply_tabs, FALSE, NULL },
+  { "/Attributes/Default tabs",   	  NULL,         do_apply_tabs, TRUE, NULL },
   { "/_Test",   	 NULL,         0,           0, "<Branch>" },
   { "/Test/_Example",  	 NULL,         do_example,  0, NULL },
 };
@@ -1187,7 +1218,8 @@ static Buffer *
 create_buffer (void)
 {
   Buffer *buffer;
-
+  PangoTabArray *tabs;
+  
   buffer = g_new (Buffer, 1);
 
   buffer->buffer = gtk_text_buffer_new (NULL);
@@ -1206,6 +1238,20 @@ create_buffer (void)
   buffer->found_text_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
   gtk_object_set (GTK_OBJECT (buffer->found_text_tag),
                   "foreground", "red", NULL);
+
+  tabs = pango_tab_array_new_with_defaults (4,
+                                            TRUE,
+                                            PANGO_TAB_LEFT, 10,
+                                            PANGO_TAB_LEFT, 30,
+                                            PANGO_TAB_LEFT, 60,
+                                            PANGO_TAB_LEFT, 120);
+  
+  buffer->custom_tabs_tag = gtk_text_buffer_create_tag (buffer->buffer, NULL);
+  gtk_object_set (GTK_OBJECT (buffer->custom_tabs_tag),
+                  "tabs", tabs,
+                  "foreground", "green", NULL);
+
+  pango_tab_array_free (tabs);
   
   buffers = g_slist_prepend (buffers, buffer);
   

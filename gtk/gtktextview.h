@@ -88,7 +88,7 @@ struct _GtkTextViewClass {
   void (* paste_clipboard) (GtkTextView *text_view);
   /* overwrite */
   void (* toggle_overwrite) (GtkTextView *text_view);
-  void  (*set_scroll_adjustments)   (GtkTextView    *text_view,
+  void (* set_scroll_adjustments)   (GtkTextView    *text_view,
 				     GtkAdjustment  *hadjustment,
 				     GtkAdjustment  *vadjustment);
 };

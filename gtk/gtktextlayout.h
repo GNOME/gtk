@@ -46,6 +46,14 @@ struct _GtkTextLayout
   gint width;
   gint height;
 
+  /* Pixel offsets from the left and from the top to be used when we
+   * draw; these allow us to create left/top margins. We don't need
+   * anything special for bottom/right margins, because those don't
+   * affect drawing.
+   */
+  /* gint left_edge; */
+  /* gint top_edge; */
+  
   GtkTextBuffer *buffer;
 
   /* Default style used if no tags override it */

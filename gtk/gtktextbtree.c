@@ -4724,6 +4724,7 @@ gtk_text_btree_node_remove_data(GtkTextBTreeNode *node, gpointer view_id)
       if (nd->view_id == view_id)
         break;
 
+      prev = nd;
       nd = nd->next;
     }
   

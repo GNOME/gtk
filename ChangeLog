@@ -1,3 +1,33 @@
+2000-09-25  Havoc Pennington  <hp@redhat.com>
+
+	* gtk/gtktextview.c: Draw the focus, and leave space to do so.
+
+	* gtk/gtktexttypes.c: Remove Latin1 conversion stuff
+
+	* gtk/gtktextbtree.c (gtk_text_btree_node_remove_data): 
+	Fix a bug when removing node data, we didn't properly 
+	re-splice the linked list after removing the data.
+
+	* gtk/gtktextview.c (gtk_text_view_key_press_event): Pass through 
+	GDK_Tab as literal tab, Ctrl-Tab to tab to focus widget
+
+	* gtk/gtktextbuffer.c (selection_received): fix g_convert usage
+
+	* gtk/gtktextlayout.c (set_para_values): Set tab array 
+	for the layout from the GtkTextTag.
+
+	* gtk/gtktexttypes.h: delete tab and search cruft, 
+	remove g_convert() in favor of GLib version
+
+	* gtk/gtktexttypes.c: remove tab implementation from here,
+	move to Pango
+
+	* gtk/gtktexttag.h, gtk/gtktexttag.c: Implement 
+	tab stuff using new PangoTabArray from Pango
+
+	* gtk/gtktexttag.c (gtk_text_attributes_fill_from_tags): Remove
+	unused border_width stuff
+
 Thu Sep 14 12:21:12 2000  Owen Taylor  <otaylor@redhat.com>
 
         * gtk/gtktexttypes.[ch]: Remove g_convert (moved to

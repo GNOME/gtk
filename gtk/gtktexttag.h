@@ -11,9 +11,9 @@ extern "C" {
 typedef struct _GtkTextIter GtkTextIter;
 typedef struct _GtkTextBTreeNode GtkTextBTreeNode;
 typedef struct _GtkTextTagTable GtkTextTagTable;
-typedef struct _GtkTextTabArray GtkTextTabArray;
 
-typedef enum {
+typedef enum
+{
   GTK_WRAPMODE_NONE,
   GTK_WRAPMODE_CHAR,
   GTK_WRAPMODE_WORD
@@ -54,11 +54,10 @@ struct _GtkTextTag {
 
   GtkTextAttributes *values;  
   
-  /*
-    Flags for whether a given value is set; if a value is unset, then
-    this tag does not affect it.  */
+  /* Flags for whether a given value is set; if a value is unset, then
+   * this tag does not affect it.
+   */
   guint bg_color_set : 1;
-  guint border_width_set : 1;
   guint relief_set : 1;
   guint bg_stipple_set : 1;
   guint fg_color_set : 1;
@@ -73,7 +72,7 @@ struct _GtkTextTag {
   guint pixels_above_lines_set : 1;
   guint pixels_below_lines_set : 1;
   guint pixels_inside_wrap_set : 1;
-  guint tab_array_set : 1;
+  guint tabs_set : 1;
   guint underline_set : 1;
   guint wrap_mode_set : 1;
   guint bg_full_height_set : 1;
@@ -123,7 +122,8 @@ struct _GtkTextAppearance
   /* Whether to use background-related values; this is irrelevant for
    * the values struct when in a tag, but is used for the composite
    * values struct; it's true if any of the tags being composited
-   * had background stuff set. */
+   * had background stuff set.
+   */
   guint draw_bg : 1;
 
   /* This is only used when we are actually laying out and rendering
@@ -139,7 +139,6 @@ struct _GtkTextAttributes
 
   GtkTextAppearance appearance;
   
-  gint border_width;
   GtkShadowType relief;
   GtkJustification justify;
   GtkTextDirection direction;
@@ -163,7 +162,7 @@ struct _GtkTextAttributes
 
   gint pixels_inside_wrap;
 
-  GtkTextTabArray *tab_array;
+  PangoTabArray *tabs;
   
   GtkWrapMode wrap_mode;	/* How to handle wrap-around for this tag.
 				 * Must be GTK_WRAPMODE_CHAR,
@@ -176,7 +175,8 @@ struct _GtkTextAttributes
   guint invisible : 1;
 
   /* Background is fit to full line height rather than
-   * baseline +/- ascent/descent (font height) */
+   * baseline +/- ascent/descent (font height)
+   */
   guint bg_full_height : 1;
   
   /* can edit this text */
@@ -196,7 +196,6 @@ void                gtk_text_attributes_copy      (GtkTextAttributes *src,
                                                    GtkTextAttributes *dest);
 void                gtk_text_attributes_unref     (GtkTextAttributes *values);
 void                gtk_text_attributes_ref       (GtkTextAttributes *values);
-
 
 #ifdef __cplusplus
 }

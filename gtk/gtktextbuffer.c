@@ -1412,9 +1412,8 @@ clipboard_received (GtkClipboard *clipboard,
 	  else
 	    ; /* FIXME Delete selected chars and give up X selection */
 	}
-#endif
-      
-      
+#endif      
+
       if (request_data->interactive)
 	gtk_text_buffer_insert_interactive (buffer, &insert_point,
 					    str, -1, request_data->default_editable);
