@@ -1,3 +1,8 @@
+Tue Feb 19 20:56:32 2002  Soeren Sandmann  <sandmann@daimi.au.dk>
+
+	* gtk/theme-bits/decompose-bits.c (do_part): fix bug (skipping all
+	black pixels).
+
 2002-02-19  Sven Neumann  <sven@gimp.org>
 
 	* examples/*/*.c: finish conversion to g_signal_* functions by
@@ -174,6 +179,7 @@ Sun Feb 17 21:30:49 2002  Owen Taylor  <otaylor@redhat.com>
 	* docs/tutorial/gtk-tut.sgml, examples/paned/paned.c, 
 	examples/paned/Makefile: Make the paned example deprecation-clean.
 
+>>>>>>> 1.3035
 2002-02-17  jacob berkman  <jacob@ximian.com>
 
 	* Makefile.am: remove the packer example files as they don't exist
